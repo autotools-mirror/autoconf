@@ -1,5 +1,11 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_CANONICAL_TARGET, _AC_CANONICAL_BUILD): Rename
+	as (AC_CANONICAL_TARGET, AC_CANONICAL_BUILD), although internal,
+	too much foreign code depends upon them.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (translate_awk): `> "/dev/stderr"' is not portable
 	to systems without a real /dev/stderr in the file system or if not
 	using one of the three free awks.  Use
