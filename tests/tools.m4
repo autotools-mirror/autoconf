@@ -55,11 +55,13 @@ fi
 ]])
 
 if /bin/sh ./syntax.sh; then
-  AT_CHECK([/bin/sh -n autoconf],   0)
-  AT_CHECK([/bin/sh -n autoreconf], 0)
-  AT_CHECK([/bin/sh -n autoupdate], 0)
-  AT_CHECK([/bin/sh -n autoreconf], 0)
-  AT_CHECK([/bin/sh -n ifnames],    0)
+  # Specify the path to the tool, some shells don't honor PATH
+  # when running `sh PROG'.
+  AT_CHECK([/bin/sh -n ../autoconf],   0)
+  AT_CHECK([/bin/sh -n ../autoreconf], 0)
+  AT_CHECK([/bin/sh -n ../autoupdate], 0)
+  AT_CHECK([/bin/sh -n ../autoreconf], 0)
+  AT_CHECK([/bin/sh -n ../ifnames],    0)
 fi
 
 AT_CLEANUP

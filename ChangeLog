@@ -1,3 +1,8 @@
+2000-10-24  Akim Demaille  <akim@epita.fr>
+
+	* tests/tools.m4 (Syntax of the scripts): Specify the path to the
+	tested program, some shells don't honor the PATH with `sh PROG'.
+
 2000-10-23  Akim Demaille  <akim@epita.fr>
 
 	Since GNU M4 now comes with its libm4 (binary), to avoid
