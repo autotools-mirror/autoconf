@@ -981,7 +981,8 @@ For instance:
 
 @example
 AC_CHECK_HEADER([stdio.h],
-                [AC_DEFINE([HAVE_STDIO_H])],
+                [AC_DEFINE([HAVE_STDIO_H], [1],
+                   [Define to 1 if you have <stdio.h>.])],
                 [AC_MSG_ERROR([Sorry, can't do anything for you])])
 @end example
 
@@ -990,7 +991,8 @@ is quoted properly.  You may safely simplify its quotation to:
 
 @example
 AC_CHECK_HEADER(stdio.h,
-                [AC_DEFINE(HAVE_STDIO_H)],
+                [AC_DEFINE(HAVE_STDIO_H, 1,
+                   Define to 1 if you have <stdio.h>.)],
                 [AC_MSG_ERROR([Sorry, can't do anything for you])])
 @end example
 
@@ -1002,7 +1004,8 @@ The following example is wrong and dangerous, as it is underquoted:
 
 @example
 AC_CHECK_HEADER(stdio.h,
-                AC_DEFINE(HAVE_STDIO_H),
+                AC_DEFINE(HAVE_STDIO_H, 1,
+                   Define to 1 if you have <stdio.h>.),
                 AC_MSG_ERROR([Sorry, can't do anything for you]))
 @end example
 
@@ -2347,7 +2350,8 @@ current value of @code{prefix}.
 A corollary is that you should not use these variables except in
 Makefiles.  For instance, instead of trying to evaluate @code{datadir}
 in @file{configure} and hard-coding it in Makefiles using
-e.g., @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
+e.g., @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir", [Data directory.])},
+you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
@@ -2840,7 +2844,7 @@ Specify additional shell commands to run at the end of
 from @command{configure}.  Associate the commands with @var{tag}.
 Since typically the @var{cmds} create a file, @var{tag} should
 naturally be the name of that file.  If needed, the directory hosting
-@var{tag} is created. This macro is one of the instantiating macros;
+@var{tag} is created.  This macro is one of the instantiating macros;
 see @ref{Configuration Actions}.
 
 Here is an unrealistic example:
@@ -3644,7 +3648,7 @@ tradition of it returning @code{int}.
 @c @fuindex free
 @prindex @code{free}
 The ISO C99 standard says a call @code{free(NULL)} does nothing, but
-some old systems don't support this (eg.@: NextStep).
+some old systems don't support this (e.g., NextStep).
 
 @item @code{isinf}
 @itemx @code{isnan}
@@ -3702,20 +3706,20 @@ probably not worth worrying about.
 @c @fuindex malloc
 @prindex @code{malloc}
 The ISO C99 standard says a call @code{malloc(0)} is implementation
-dependent, it may either return @code{NULL} (eg.@: OSF 4) or
-non-@code{NULL} (eg.@: @acronym{GNU} C Library).  @code{AC_FUNC_MALLOC}
+dependent, it may either return @code{NULL} (e.g., OSF 4) or
+non-@code{NULL} (e.g., @acronym{GNU} C Library).  @code{AC_FUNC_MALLOC}
 can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 
 @item @code{putenv}
 @c @fuindex putenv
 @prindex @code{putenv}
 POSIX specifies that @code{putenv} puts the given string directly in
-@code{environ}, but some systems make a copy of it instead (eg.@:
+@code{environ}, but some systems make a copy of it instead (e.g.,
 glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
-not free it, causing a memory leak (eg.@: FreeBSD 4).
+not free it, causing a memory leak (e.g., FreeBSD 4).
 
 POSIX specifies that @code{putenv("FOO")} removes @samp{FOO} from the
-environment, but on some systems (eg.@: FreeBSD 4) this is not the
+environment, but on some systems (e.g., FreeBSD 4) this is not the
 case and instead @code{unsetenv} must be used.
 
 On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
@@ -3725,7 +3729,7 @@ environment, rather than inserting it with an empty value.
 @c @fuindex realloc
 @prindex @code{realloc}
 The ISO C99 standard says a call @code{realloc(NULL,size)} is equivalent
-to a @code{malloc(size)}, but some old systems don't support this (eg.@:
+to a @code{malloc(size)}, but some old systems don't support this (e.g.,
 NextStep).
 
 @item @code{signal} handler
@@ -3780,7 +3784,7 @@ having format strings read-only can be a problem.
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
 POSIX specifies that @code{strerror_r} returns an @code{int}, but many
-systems (eg.@: @acronym{GNU} C Library version 2.2.4) provide a
+systems (e.g., @acronym{GNU} C Library version 2.2.4) provide a
 different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
 can detect which is in use (@pxref{Particular Functions}).
 
@@ -3806,7 +3810,7 @@ strnlen ("foobar", 9) = 6
 @item @code{sysconf}
 @c @fuindex sysconf
 @prindex @code{sysconf}
-@code{_SC_PAGESIZE} is standard, but some older systems (eg.@: HP-UX
+@code{_SC_PAGESIZE} is standard, but some older systems (e.g., HP-UX
 9) have @code{_SC_PAGE_SIZE} instead.  This can be tested with
 @code{#ifdef}.
 
@@ -4021,7 +4025,7 @@ yourself in new code:
 @prindex @code{fseeko}
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
 Define @code{_LARGEFILE_SOURCE} if necessary to make the prototype
-visible on some systems (e.g. glibc 2.2). Otherwise linkage problems
+visible on some systems (e.g., glibc 2.2).  Otherwise linkage problems
 may occur when compiling with @code{AC_SYS_LARGEFILE} on
 largefile-sensitive systems where @code{off_t} does not default to a
 64bit entity.
@@ -5470,7 +5474,7 @@ They tickle a bug in the HP-UX C compiler (checked on HP-UX 10.20,
 @example
 #ifdef __STDC__
 /\
-* A comment with backslash-newlines in it. %@{ %@} *\
+* A comment with backslash-newlines in it.  %@{ %@} *\
 \
 /
 char str[] = "\\
@@ -5885,9 +5889,9 @@ found.
 
 By default, newer dialects are preferred over older dialects, but if
 @code{dialect} is specified then older dialects are preferred starting
-with the specified dialect. @code{dialect} can currently be one of
+with the specified dialect.  @code{dialect} can currently be one of
 Fortran 77, Fortran 90, or Fortran 95.  However, this is only a hint of
-which compiler @emph{name} to prefer (e.g. @code{f90} or @code{f95}),
+which compiler @emph{name} to prefer (e.g., @code{f90} or @code{f95}),
 and no attempt is made to guarantee that a particular language standard
 is actually supported.  Thus, it is preferable that you avoid the
 @code{dialect} option, and use AC_PROG_FC only for code compatible with
@@ -6114,14 +6118,14 @@ to call Fortran routines from some language other than C/C++.
 @acindex{FC_SRCEXT}
 By default, the @code{FC} macros perform their tests using a @file{.f}
 extension for source-code files.  Some compilers, however, only enable
-newer language features for appropriately named files, e.g. Fortran 90
+newer language features for appropriately named files, e.g., Fortran 90
 features only for @file{.f90} files.  On the other hand, some other
 compilers expect all source files to end in @file{.f} and require
 special flags to support other file name extensions.  The
 @code{AC_FC_SRCEXT} macro deals with both of these issues.
 
 The @code{AC_FC_SRCEXT} tries to get the @code{FC} compiler to accept files
-ending with the extension .@var{ext} (i.e. @var{ext} does @emph{not}
+ending with the extension .@var{ext} (i.e., @var{ext} does @emph{not}
 contain the dot).  If any special compiler flags are needed for this, it
 stores them in the output variable @code{FCFLAGS_}@var{ext}.  This
 extension and these flags are then used for all subsequent @code{FC} tests
@@ -6170,7 +6174,7 @@ specify a different extension with @code{AC_FC_SRCEXT}, such as
 succeed without modifying @code{FCFLAGS}.
 
 If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
-calls @ovar{action-if-success} (defaults to nothing). If it fails, it
+calls @ovar{action-if-success} (defaults to nothing).  If it fails, it
 calls @ovar{action-if-failure} (defaults to exiting with an error
 message).
 @end defmac
@@ -6257,7 +6261,7 @@ an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
 
 The LFS introduced the @code{fseeko} and @code{ftello} functions to
 replace their C counterparts @code{fseek} and @code{ftell} that do not
-use @code{off_t}. Take care to use @code{AC_FUNC_FSEEKO} to make their
+use @code{off_t}.  Take care to use @code{AC_FUNC_FSEEKO} to make their
 prototypes available when using them and large-file support is
 enabled.
 @end defmac
@@ -6593,7 +6597,8 @@ For instance executing (observe the double quotation!):
 
 @example
 AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
-AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
+  [Greetings string.])
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
 gcc -E -dD -o - conftest.c
@@ -6631,7 +6636,8 @@ For instance:
 
 @example
 AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
-AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
+  [Greetings string.])
 AC_LANG_CONFTEST(
 [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
                  [[fputs (hw, stdout);]])])
@@ -6723,7 +6729,8 @@ For instance:
 
 @example
 AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
-AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
+  [Greetings string.])
 AC_PREPROC_IFELSE(
    [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
                     [[fputs (hw, stdout);]])],
@@ -6979,16 +6986,22 @@ fstype=no
 # The order of these tests is important.
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statvfs.h>
 #include <sys/fstyp.h>]])],
-                  [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
+                  [AC_DEFINE(FSTYPE_STATVFS, 1,
+                     [Define if statvfs exists.])
+                   fstype=SVR4])
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/fstyp.h>]])],
-                  [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
+                  [AC_DEFINE(FSTYPE_USG_STATFS, 1,
+                     [Define if USG statfs.])
+                   fstype=SVR3])
 fi
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/vmount.h>]])]),
-                  [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
+                  [AC_DEFINE(FSTYPE_AIX_STATFS, 1,
+                     [Define if AIX statfs.])
+                   fstype=AIX])
 fi
 # (more cases omitted here)
 AC_MSG_RESULT([$fstype])
@@ -7029,9 +7042,11 @@ already defined a certain C preprocessor symbol, test the value of the
 appropriate cache variable, as in this example:
 
 @example
-AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF)])
+AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF, 1,
+                          [Define if vprintf exists.])])
 if test "$ac_cv_func_vprintf" != yes; then
-  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
+  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT, 1,
+                            [Define if _doprnt exists.])])
 fi
 @end example
 
@@ -7057,7 +7072,8 @@ The following example defines the C preprocessor variable
 @code{EQUATION} to be the string constant @samp{"$a > $b"}:
 
 @example
-AC_DEFINE(EQUATION, "$a > $b")
+AC_DEFINE(EQUATION, "$a > $b",
+  [Equation string.])
 @end example
 
 If neither @var{value} nor @var{description} are given, then
@@ -7077,9 +7093,12 @@ special meaning.  Use this macro instead of @code{AC_DEFINE} when
 @var{variable} or @var{value} is a shell variable.  Examples:
 
 @example
-AC_DEFINE_UNQUOTED(config_machfile, "$machfile")
-AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
-AC_DEFINE_UNQUOTED($ac_tr_hdr)
+AC_DEFINE_UNQUOTED(config_machfile, "$machfile",
+  [Configuration machine file.])
+AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
+  [getgroups return type.])
+AC_DEFINE_UNQUOTED($ac_tr_hdr, 1,
+  [Translated header name.])
 @end example
 @end defmac
 
@@ -7090,7 +7109,8 @@ in the resulting @command{configure} script.  Use either spaces or
 newlines.  That is, do this:
 
 @example
-AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4) LIBS="$LIBS -lelf"])
+AC_CHECK_HEADER(elf.h,
+  [AC_DEFINE(SVR4, 1, [System V Release 4]) LIBS="$LIBS -lelf"])
 @end example
 
 @noindent
@@ -7098,15 +7118,16 @@ or this:
 
 @example
 AC_CHECK_HEADER(elf.h,
- [AC_DEFINE(SVR4)
-  LIBS="$LIBS -lelf"])
+  [AC_DEFINE(SVR4, 1, [System V Release 4])
+   LIBS="$LIBS -lelf"])
 @end example
 
 @noindent
 instead of this:
 
 @example
-AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
+AC_CHECK_HEADER(elf.h,
+  [AC_DEFINE(SVR4, 1, [System V Release 4]); LIBS="$LIBS -lelf"])
 @end example
 
 @node Setting Output Variables
@@ -8667,7 +8688,7 @@ according to the Webster's Revised Unabridged Dictionary (1913):
 
 @quotation
 Mash \Mash\, n.  [Akin to G. meisch, maisch, meische, maische, mash,
-wash, and prob.@: to AS.@: miscian to mix.  See ``Mix''.]
+wash, and prob.@: to AS. miscian to mix.  See ``Mix''.]
 
 @enumerate 1
 @item
@@ -10746,9 +10767,9 @@ fi
 @c ------------------
 @prindex @command{printf}
 A format string starting with a @samp{-} can cause problems.
-Bash (eg. 2.05b) will interpret it as an options string and
+Bash (e.g., 2.05b) will interpret it as an options string and
 give an error.  And @samp{--} to mark the end of options is not good
-in the NetBSD Almquist shell (eg. 0.4.6) which will take that
+in the NetBSD Almquist shell (e.g., 0.4.6) which will take that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
 or @samp{%s} is probably the easiest way to avoid doubt,
 
