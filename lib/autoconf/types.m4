@@ -1,7 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
-# Copyright 2000, 2001
-# Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -83,8 +82,8 @@
 # Check whether the type TYPE is supported by the system, maybe via the
 # the provided includes.  This macro implements the former task of
 # AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
-# grepping in the headers, which, BTW, led to many problems until
-# the egrep expression was correct and did not given false positives.
+# grepping in the headers, which, BTW, led to many problems until the
+# extended regular expression was correct and did not given false positives.
 # It turned out there are even portability issues with egrep...
 #
 # The most obvious way to check for a TYPE is just to compile a variable
