@@ -11223,10 +11223,15 @@ newline encoding.
 @item @command{cp}
 @c ---------------
 @prindex @command{cp}
+Avoid the @option{-r} option, since its behavior is not specified by
+Posix.  Use @option{-R} instead.  On @acronym{GNU} hosts the two options
+are equivalent, but on Solaris 9 hosts (for example) @command{cp -r}
+reads from pipes instead of replicating them.
+
 Some @command{cp} implementations (e.g., BSD/OS 4.2) do not allow
 trailing slashes at the end of nonexistent destination directories.  To
 avoid this problem, omit the trailing slashes.  For example, use
-@samp{cp -r source /tmp/newdir} rather than @samp{cp -r source
+@samp{cp -R source /tmp/newdir} rather than @samp{cp -R source
 /tmp/newdir/} if @file{/tmp/newdir} does not exist.
 
 @c This is thanks to Ian.
