@@ -207,8 +207,7 @@ sub used ($$;$)
 sub scan_c_file ($)
 {
   my ($filename) = @_;
-  my $filepath = $File::Find::name;
-  push (@cfiles, $filepath);
+  push @cfiles, $File::Find::name;
 
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
@@ -279,33 +278,36 @@ sub scan_c_file ($)
 sub scan_makefile ($)
 {
   my ($filename) = @_;
-  my $filepath = $File::Find::name;
-  push (@makefiles, $filepath);
+  push @makefiles, $File::Find::name;
 
   my $file = new Autom4te::XFile "<$filename";
 
   while ($_ = $file->getline)
     {
-      # Strip out comments and variable references.
+      # Strip out comments.
       s/#.*//;
-      s/\$\([^\)]*\)//g;
-      s/\${[^\}]*}//g;
-      s/@[^@]*@//g;
 
       # Variable assignments.
       while (s/\b([a-zA-Z_]\w*)\s*=/ /)
 	{
 	  used ('makevars', $1);
 	}
-      # Libraries.
-      while (s/\B-l([a-zA-Z_]\w*)\b/ /)
+      # Be sure to catch a whole word.  For instance `lex$U.$(OBJEXT)'
+      # is a single token.  Otherwise we might believe `lex' is needed.
+      foreach my $word (split (/\s+/))
 	{
-	  used ('libraries', $1);
-	}
-      # Tokens in the code.
-      while (s/(?<![-\w.])([a-zA-Z_][\w+.-]+)/ /)
-	{
-	  used ('programs', $1);
+	  # Libraries.
+	  if ($word =~ /^-l([a-zA-Z_]\w*)$/)
+	    {
+	      used ('libraries', $1);
+	    }
+	  # Tokens in the code.
+	  # We allow some additional characters, e.g., `+', since
+	  # autoscan/programs includes `c++'.
+	  if ($word =~ /^[a-zA-Z_][\w+]*$/)
+	    {
+	      used ('programs', $word);
+	    }
 	}
     }
 
@@ -318,8 +320,7 @@ sub scan_makefile ($)
 sub scan_sh_file ($)
 {
   my ($filename) = @_;
-  my $filepath = $File::Find::name;
-  push (@shfiles, $filepath);
+  push @shfiles, $File::Find::name;
 
   my $file = new Autom4te::XFile "<$filename";
 
@@ -390,9 +391,9 @@ sub scan_files ()
 
   if ($verbose)
     {
-      print "cfiles:", join(" ", @cfiles), "\n";
-      print "makefiles:", join(" ", @makefiles), "\n";
-      print "shfiles:", join(" ", @shfiles), "\n";
+      print "cfiles: @cfiles\n";
+      print "makefiles: @makefiles\n";
+      print "shfiles: @shfiles\n";
 
       foreach my $kind (@kinds)
 	{
@@ -595,7 +596,8 @@ if ($configure_ac)
   {
     check_configure_ac ($configure_ac);
   }
-
+# This close is really needed.  For some reason, probably best named
+# a bug, it seems that the dtor of $LOG is not called automatically
+# at END.  It results in a truncated file.
 $log->close;
-
 exit 0;

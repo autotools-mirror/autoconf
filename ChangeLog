@@ -1,5 +1,18 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (&scan_c_file, &scan_sh_file, &scan_makefile):
+	Remove $filepath, useless.
+	(&scan_makefile): Don't remove the $(FOO), ${FOO} and @FOO@
+	variables, they are really part of the tokens.
+	Split the input line on spaces and then look for tokens.
+	Now autoscan ceases to ask for AC_PROG_LEX for the package Bison
+	because of `lex$U.$(OBJEXT)'.
+	(&scan_files): Use "@list" instead of join.
+	* doc/Makefile.am (CLEANFILES): Add *.fns.
+
+	
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	* tests/autoreconf.in, tests/autom4te.in, tests/autoupdate.in:
 	Remove, replaced by...
 	* tests/wrappl.in: Be common for all the Perl executables.
