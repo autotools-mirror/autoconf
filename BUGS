@@ -33,3 +33,11 @@ and use with caution an Autoconf with ``Important bugs''.
                     `--------------------------*/
 
 * No known serious or important bugs.
+
+* Minor Problems
+
+Some Makefile segments do not behave correctly in VPATH builds with proprietary
+`make' programs.  Some BSD `make's will work.  For best results, build in the
+source directory or use GNU `make'.
+
+Parallel builds via `make -jN' do not work.

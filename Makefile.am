@@ -30,7 +30,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
 	     GNUmakefile Makefile.maint Makefile.cfg
 
-MAINTAINERCLEANFILES = INSTALL
+MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 
 ## -------------------- ##
 ## Forwarding targets.  ##
@@ -46,10 +46,10 @@ html:
 ## INSTALL.  ##
 ## --------- ##
 
-pkgdata_DATA = INSTALL
+pkgdata_DATA = $(srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
-INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
+$(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $@ \
 	  $(top_srcdir)/doc/install.texi
 
 ## maintainer-check ##
