@@ -1,5 +1,10 @@
 2001-10-01  Akim Demaille  <akim@epita.fr>
 
+	* tests/testsuite (AT_INIT) <at_pass_list>: New.
+	Don't run twice the same test.
+
+2001-10-01  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT) <--help>: Catch up with reality.
 	No longer output the list of tests.
 	<--list>: New option.

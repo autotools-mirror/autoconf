@@ -51,7 +51,7 @@
                                 Configuring a package
 * config.status: (autoconf)config.status Invocation.
                                 Recreating a configuration
-* testsuite: (autoconf)testsuite invocation
+* testsuite: (autoconf)testsuite Invocation.
                                 Running an Autotest test suite
 @end direntry
 
@@ -410,7 +410,7 @@ Generating Test Suites with Autotest
 
 * testsuite Scripts::           The concepts of Autotest
 * Writing testsuite.at::        Autotest macros
-* testsuite invocation::        Running @command{testsuite} scripts
+* testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 
 Questions About Autoconf
@@ -1058,7 +1058,6 @@ each line consists of a symbol, whitespace, and the Autoconf macro to
 output if that symbol is encountered.  Lines starting with @samp{#} are
 comments.
 
-@code{autoscan} is only installed if you already have Perl installed.
 @code{autoscan} accepts the following options:
 
 @table @option
@@ -11420,7 +11419,7 @@ tool testing, which is probably its main limitation.
 @menu
 * testsuite Scripts::           The concepts of Autotest
 * Writing testsuite.at::        Autotest macros
-* testsuite invocation::        Running @command{testsuite} scripts
+* testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 @end menu
 
@@ -11591,7 +11590,7 @@ Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
 @end defmac
 
 
-@node testsuite invocation
+@node testsuite Invocation
 @section Running @command{testsuite} Scripts
 @cindex @command{testsuite}
 

@@ -459,6 +459,7 @@ done
 at_start_date=`date`
 at_start_time=`(date +%s) 2>/dev/null`
 echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
+at_pass_list=
 at_fail_list=
 at_skip_list=
 at_test_count=0
@@ -468,6 +469,11 @@ for at_test in $at_tests
 do
   at_status=0
   rm -rf $at_data_files
+  # Skip tests we already run (using --keywords makes it easy to get
+  # duplication).
+  case " $at_pass_test $at_skip_test $at_fail_test " in
+    *" $at_test "* ) continue;;
+  esac
   # Clearly separate the tests when verbose.
   test $at_test_count != 0 && $at_verbose
   case $at_test in
@@ -493,14 +499,15 @@ _ATEOF
       at_test_count=`expr 1 + $at_test_count`
       $at_verbose $ECHO_N "$at_test. $at_setup_line: $ECHO_C"
       case $at_status in
-        0) at_msg="ok"
-           ;;
+        0)  at_msg="ok"
+            at_pass_list="$at_pass_list $at_test"
+            ;;
         77) at_msg="ok (skipped near \``cat at-check-line`')"
             at_skip_list="$at_skip_list $at_test"
             ;;
-        *) at_msg="FAILED near \``cat at-check-line`'"
-           at_fail_list="$at_fail_list $at_test"
-           ;;
+        *)  at_msg="FAILED near \``cat at-check-line`'"
+            at_fail_list="$at_fail_list $at_test"
+            ;;
       esac
       echo $at_msg
       at_log_msg="$at_test. $at_setup_line: $at_msg"
