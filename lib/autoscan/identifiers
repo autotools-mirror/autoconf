@@ -20,38 +20,38 @@
 # 02111-1307, USA.
 
 # Keywords.
-const		AC_C_CONST
-inline		AC_C_INLINE
+identifier: const           AC_C_CONST
+identifier: inline          AC_C_INLINE
 
 # Variables.
-sys_siglist	AC_DECL_SYS_SIGLIST
+identifier: sys_siglist     AC_DECL_SYS_SIGLIST
 
 # Types.
-gid_t		AC_TYPE_UID_T
-mode_t		AC_TYPE_MODE_T
-obstack		AC_FUNC_OBSTACK
-off_t		AC_TYPE_OFF_T
-pid_t		AC_TYPE_PID_T
-ptrdiff_t	AC_CHECK_TYPES
-size_t		AC_TYPE_SIZE_T
-timeval		AC_HEADER_TIME
-tm		AC_STRUCT_TM
-uid_t		AC_TYPE_UID_T
+identifier: gid_t           AC_TYPE_UID_T
+identifier: mode_t          AC_TYPE_MODE_T
+identifier: obstack         AC_FUNC_OBSTACK
+identifier: off_t           AC_TYPE_OFF_T
+identifier: pid_t           AC_TYPE_PID_T
+identifier: ptrdiff_t       AC_CHECK_TYPES
+identifier: size_t          AC_TYPE_SIZE_T
+identifier: timeval         AC_HEADER_TIME
+identifier: tm              AC_STRUCT_TM
+identifier: uid_t           AC_TYPE_UID_T
 
 # Macros.
-S_ISBLK		AC_HEADER_STAT
-S_ISCHR		AC_HEADER_STAT
-S_ISDIR		AC_HEADER_STAT
-S_ISFIFO	AC_HEADER_STAT
-S_ISLNK		AC_HEADER_STAT
-S_ISREG		AC_HEADER_STAT
-S_ISSOCK	AC_HEADER_STAT
+identifier: S_ISBLK         AC_HEADER_STAT
+identifier: S_ISCHR         AC_HEADER_STAT
+identifier: S_ISDIR         AC_HEADER_STAT
+identifier: S_ISFIFO        AC_HEADER_STAT
+identifier: S_ISLNK         AC_HEADER_STAT
+identifier: S_ISREG         AC_HEADER_STAT
+identifier: S_ISSOCK        AC_HEADER_STAT
 
 # Members of structures.
-st_blksize	AC_CHECK_MEMBERS([struct stat.st_blksize])
-st_blocks	AC_STRUCT_ST_BLOCKS
-st_rdev		AC_CHECK_MEMBERS([struct stat.st_rdev])
-tm_zone		AC_STRUCT_TIMEZONE
+identifier: st_blksize      AC_CHECK_MEMBERS([struct stat.st_blksize])
+identifier: st_blocks       AC_STRUCT_ST_BLOCKS
+identifier: st_rdev         AC_CHECK_MEMBERS([struct stat.st_rdev])
+identifier: tm_zone         AC_STRUCT_TIMEZONE
 
 # Local Variables:
 # mode: shell-script

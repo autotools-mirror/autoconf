@@ -17,25 +17,25 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-ln		AC_PROG_LN_S
-awk		AC_PROG_AWK
-nawk		AC_PROG_AWK
-gawk		AC_PROG_AWK
-mawk		AC_PROG_AWK
-cc		AC_PROG_CC
-gcc		AC_PROG_CC
-cpp		AC_PROG_CPP
-CC		AC_PROG_CXX
-c++		AC_PROG_CXX
-g++		AC_PROG_CXX
-install		AC_PROG_INSTALL
-lex		AC_PROG_LEX
-flex		AC_PROG_LEX
-ranlib		AC_PROG_RANLIB
-yacc		AC_PROG_YACC
-byacc		AC_PROG_YACC
-bison		AC_PROG_YACC
-make		AC_PROG_MAKE_SET
+program: CC              AC_PROG_CXX
+program: awk             AC_PROG_AWK
+program: bison           AC_PROG_YACC
+program: byacc           AC_PROG_YACC
+program: c++             AC_PROG_CXX
+program: cc              AC_PROG_CC
+program: cpp             AC_PROG_CPP
+program: flex            AC_PROG_LEX
+program: g++             AC_PROG_CXX
+program: gawk            AC_PROG_AWK
+program: gcc             AC_PROG_CC
+program: install         AC_PROG_INSTALL
+program: lex             AC_PROG_LEX
+program: ln              AC_PROG_LN_S
+program: make            AC_PROG_MAKE_SET
+program: mawk            AC_PROG_AWK
+program: nawk            AC_PROG_AWK
+program: ranlib          AC_PROG_RANLIB
+program: yacc            AC_PROG_YACC
 
 # Local Variables:
 # mode: shell-script

@@ -18,157 +18,157 @@
 # 02111-1307, USA.
 
 # Ones that have their own macros.
-alloca          AC_FUNC_ALLOCA
-bcmp            AC_HEADER_STDC
-bcopy           AC_HEADER_STDC
-bzero           AC_CHECK_FUNCS
-bzero           AC_HEADER_STDC
-chown           AC_FUNC_CHOWN
-dcgettext       AM_GNU_GETTEXT
-error           AC_FUNC_ERROR_AT_LINE
-error_at_line   AC_FUNC_ERROR_AT_LINE
-fnmatch         AC_FUNC_FNMATCH
-fork            AC_FUNC_FORK
-fseeko          AC_FUNC_FSEEKO
-ftello          AC_FUNC_FSEEKO
-getgroups       AC_FUNC_GETGROUPS
-getloadavg      AC_FUNC_GETLOADAVG
-getpgrp         AC_FUNC_GETPGRP
-index           AC_HEADER_STDC
-ioctl           AC_PROG_GCC_TRADITIONAL
-lstat           AC_FUNC_LSTAT
-major           AC_HEADER_MAJOR
-makedev         AC_HEADER_MAJOR
-malloc          AC_FUNC_MALLOC
-mbrtowc         AC_FUNC_MBRTOWC
-memchr          AC_CHECK_FUNCS
-memchr          AC_HEADER_STDC
-memcmp          AC_FUNC_MEMCMP
-memcpy          AC_HEADER_STDC
-memmove         AC_CHECK_FUNCS
-memmove         AC_HEADER_STDC
-memset          AC_CHECK_FUNCS
-memset          AC_HEADER_STDC
-minor           AC_HEADER_MAJOR
-mktime          AC_FUNC_MKTIME
-mmap            AC_FUNC_MMAP
-obstack_init    AC_FUNC_OBSTACK
-realloc         AC_FUNC_REALLOC
-rindex          AC_HEADER_STDC
-setpgrp         AC_FUNC_SETPGRP
-setvbuf         AC_FUNC_SETVBUF_REVERSED
-signal          AC_TYPE_SIGNAL
-stat            AC_FUNC_STAT
-strcoll         AC_FUNC_STRCOLL
-strerror_r      AC_FUNC_STRERROR_R
-strftime        AC_FUNC_STRFTIME
-strnlen         AC_FUNC_STRNLEN
-strtod          AC_FUNC_STRTOD
-utime           AC_CHECK_FUNCS
-utime           AC_FUNC_UTIME_NULL
-vfork           AC_FUNC_FORK
-vfprintf        AC_FUNC_VPRINTF
-vprintf         AC_FUNC_VPRINTF
-vsprintf        AC_FUNC_VPRINTF
-wait3           AC_FUNC_WAIT3
+function: alloca          AC_FUNC_ALLOCA
+function: bcmp            AC_HEADER_STDC
+function: bcopy           AC_HEADER_STDC
+function: bzero           AC_CHECK_FUNCS
+function: bzero           AC_HEADER_STDC
+function: chown           AC_FUNC_CHOWN
+function: dcgettext       AM_GNU_GETTEXT
+function: error           AC_FUNC_ERROR_AT_LINE
+function: error_at_line   AC_FUNC_ERROR_AT_LINE
+function: fnmatch         AC_FUNC_FNMATCH
+function: fork            AC_FUNC_FORK
+function: fseeko          AC_FUNC_FSEEKO
+function: ftello          AC_FUNC_FSEEKO
+function: getgroups       AC_FUNC_GETGROUPS
+function: getloadavg      AC_FUNC_GETLOADAVG
+function: getpgrp         AC_FUNC_GETPGRP
+function: index           AC_HEADER_STDC
+function: ioctl           AC_PROG_GCC_TRADITIONAL
+function: lstat           AC_FUNC_LSTAT
+function: major           AC_HEADER_MAJOR
+function: makedev         AC_HEADER_MAJOR
+function: malloc          AC_FUNC_MALLOC
+function: mbrtowc         AC_FUNC_MBRTOWC
+function: memchr          AC_CHECK_FUNCS
+function: memchr          AC_HEADER_STDC
+function: memcmp          AC_FUNC_MEMCMP
+function: memcpy          AC_HEADER_STDC
+function: memmove         AC_CHECK_FUNCS
+function: memmove         AC_HEADER_STDC
+function: memset          AC_CHECK_FUNCS
+function: memset          AC_HEADER_STDC
+function: minor           AC_HEADER_MAJOR
+function: mktime          AC_FUNC_MKTIME
+function: mmap            AC_FUNC_MMAP
+function: obstack_init    AC_FUNC_OBSTACK
+function: realloc         AC_FUNC_REALLOC
+function: rindex          AC_HEADER_STDC
+function: setpgrp         AC_FUNC_SETPGRP
+function: setvbuf         AC_FUNC_SETVBUF_REVERSED
+function: signal          AC_TYPE_SIGNAL
+function: stat            AC_FUNC_STAT
+function: strcoll         AC_FUNC_STRCOLL
+function: strerror_r      AC_FUNC_STRERROR_R
+function: strftime        AC_FUNC_STRFTIME
+function: strnlen         AC_FUNC_STRNLEN
+function: strtod          AC_FUNC_STRTOD
+function: utime           AC_CHECK_FUNCS
+function: utime           AC_FUNC_UTIME_NULL
+function: vfork           AC_FUNC_FORK
+function: vfprintf        AC_FUNC_VPRINTF
+function: vprintf         AC_FUNC_VPRINTF
+function: vsprintf        AC_FUNC_VPRINTF
+function: wait3           AC_FUNC_WAIT3
 
 # Functions we should no longer use.
-getwd          warn: getwd is deprecated, use getcwd instead
+function: getwd          warn: getwd is deprecated, use getcwd instead
 
 # Others, checked with AC_CHECK_FUNCS.
-__argz_count            AC_CHECK_FUNCS
-__argz_next             AC_CHECK_FUNCS
-__argz_stringify        AC_CHECK_FUNCS
-__fpending              AC_CHECK_FUNCS
-acl                     AC_CHECK_FUNCS
-alarm                   AC_CHECK_FUNCS
-atexit                  AC_CHECK_FUNCS
-btowc                   AC_CHECK_FUNCS
-clock_gettime           AC_CHECK_FUNCS
-doprnt                  AC_CHECK_FUNCS
-dup2                    AC_CHECK_FUNCS
-endgrent                AC_CHECK_FUNCS
-endpwent                AC_CHECK_FUNCS
-euidaccess              AC_CHECK_FUNCS
-fchdir                  AC_CHECK_FUNCS
-fdatasync               AC_CHECK_FUNCS
-fesetround              AC_CHECK_FUNCS
-floor                   AC_CHECK_FUNCS
-fs_stat_dev             AC_CHECK_FUNCS
-ftime                   AC_CHECK_FUNCS
-ftruncate               AC_CHECK_FUNCS
-getcwd                  AC_CHECK_FUNCS
-getdelim                AC_CHECK_FUNCS
-gethostbyaddr           AC_CHECK_FUNCS
-gethostbyname           AC_CHECK_FUNCS
-gethostname             AC_CHECK_FUNCS
-gethrtime               AC_CHECK_FUNCS
-getmntent               AC_CHECK_FUNCS
-getmntinfo              AC_CHECK_FUNCS
-getpagesize             AC_CHECK_FUNCS
-getpass                 AC_CHECK_FUNCS
-getspnam                AC_CHECK_FUNCS
-gettimeofday            AC_CHECK_FUNCS
-getusershell            AC_CHECK_FUNCS
-hasmntopt               AC_CHECK_FUNCS
-inet_ntoa               AC_CHECK_FUNCS
-isascii                 AC_CHECK_FUNCS
-iswprint                AC_CHECK_FUNCS
-lchown                  AC_CHECK_FUNCS
-listmntent              AC_CHECK_FUNCS
-localeconv              AC_CHECK_FUNCS
-localtime_r             AC_CHECK_FUNCS
-mblen                   AC_CHECK_FUNCS
-mbrlen                  AC_CHECK_FUNCS
-mempcpy                 AC_CHECK_FUNCS
-mkdir                   AC_CHECK_FUNCS
-mkfifo                  AC_CHECK_FUNCS
-modf                    AC_CHECK_FUNCS
-munmap                  AC_CHECK_FUNCS
-next_dev                AC_CHECK_FUNCS
-nl_langinfo             AC_CHECK_FUNCS
-pathconf                AC_CHECK_FUNCS
-pow                     AC_CHECK_FUNCS
-pstat_getdynamic        AC_CHECK_FUNCS
-putenv                  AC_CHECK_FUNCS
-re_comp                 AC_CHECK_FUNCS
-realpath                AC_CHECK_FUNCS
-regcmp                  AC_CHECK_FUNCS
-regcomp                 AC_CHECK_FUNCS
-resolvepath             AC_CHECK_FUNCS
-rint                    AC_CHECK_FUNCS
-rmdir                   AC_CHECK_FUNCS
-rpmatch                 AC_CHECK_FUNCS
-select                  AC_CHECK_FUNCS
-setenv                  AC_CHECK_FUNCS
-sethostname             AC_CHECK_FUNCS
-setlocale               AC_CHECK_FUNCS
-socket                  AC_CHECK_FUNCS
-sqrt                    AC_CHECK_FUNCS
-stime                   AC_CHECK_FUNCS
-stpcpy                  AC_CHECK_FUNCS
-strcasecmp              AC_CHECK_FUNCS
-strchr                  AC_CHECK_FUNCS
-strcspn                 AC_CHECK_FUNCS
-strdup                  AC_CHECK_FUNCS
-strerror                AC_CHECK_FUNCS
-strncasecmp             AC_CHECK_FUNCS
-strndup                 AC_CHECK_FUNCS
-strpbrk                 AC_CHECK_FUNCS
-strrchr                 AC_CHECK_FUNCS
-strspn                  AC_CHECK_FUNCS
-strstr                  AC_CHECK_FUNCS
-strtol                  AC_CHECK_FUNCS
-strtoul                 AC_CHECK_FUNCS
-strtoull                AC_CHECK_FUNCS
-strtoumax               AC_CHECK_FUNCS
-strverscmp              AC_CHECK_FUNCS
-sysinfo                 AC_CHECK_FUNCS
-tzset                   AC_CHECK_FUNCS
-uname                   AC_CHECK_FUNCS
-utmpname                AC_CHECK_FUNCS
-utmpxname               AC_CHECK_FUNCS
-wcwidth                 AC_CHECK_FUNCS
+function: __argz_count            AC_CHECK_FUNCS
+function: __argz_next             AC_CHECK_FUNCS
+function: __argz_stringify        AC_CHECK_FUNCS
+function: __fpending              AC_CHECK_FUNCS
+function: acl                     AC_CHECK_FUNCS
+function: alarm                   AC_CHECK_FUNCS
+function: atexit                  AC_CHECK_FUNCS
+function: btowc                   AC_CHECK_FUNCS
+function: clock_gettime           AC_CHECK_FUNCS
+function: doprnt                  AC_CHECK_FUNCS
+function: dup2                    AC_CHECK_FUNCS
+function: endgrent                AC_CHECK_FUNCS
+function: endpwent                AC_CHECK_FUNCS
+function: euidaccess              AC_CHECK_FUNCS
+function: fchdir                  AC_CHECK_FUNCS
+function: fdatasync               AC_CHECK_FUNCS
+function: fesetround              AC_CHECK_FUNCS
+function: floor                   AC_CHECK_FUNCS
+function: fs_stat_dev             AC_CHECK_FUNCS
+function: ftime                   AC_CHECK_FUNCS
+function: ftruncate               AC_CHECK_FUNCS
+function: getcwd                  AC_CHECK_FUNCS
+function: getdelim                AC_CHECK_FUNCS
+function: gethostbyaddr           AC_CHECK_FUNCS
+function: gethostbyname           AC_CHECK_FUNCS
+function: gethostname             AC_CHECK_FUNCS
+function: gethrtime               AC_CHECK_FUNCS
+function: getmntent               AC_CHECK_FUNCS
+function: getmntinfo              AC_CHECK_FUNCS
+function: getpagesize             AC_CHECK_FUNCS
+function: getpass                 AC_CHECK_FUNCS
+function: getspnam                AC_CHECK_FUNCS
+function: gettimeofday            AC_CHECK_FUNCS
+function: getusershell            AC_CHECK_FUNCS
+function: hasmntopt               AC_CHECK_FUNCS
+function: inet_ntoa               AC_CHECK_FUNCS
+function: isascii                 AC_CHECK_FUNCS
+function: iswprint                AC_CHECK_FUNCS
+function: lchown                  AC_CHECK_FUNCS
+function: listmntent              AC_CHECK_FUNCS
+function: localeconv              AC_CHECK_FUNCS
+function: localtime_r             AC_CHECK_FUNCS
+function: mblen                   AC_CHECK_FUNCS
+function: mbrlen                  AC_CHECK_FUNCS
+function: mempcpy                 AC_CHECK_FUNCS
+function: mkdir                   AC_CHECK_FUNCS
+function: mkfifo                  AC_CHECK_FUNCS
+function: modf                    AC_CHECK_FUNCS
+function: munmap                  AC_CHECK_FUNCS
+function: next_dev                AC_CHECK_FUNCS
+function: nl_langinfo             AC_CHECK_FUNCS
+function: pathconf                AC_CHECK_FUNCS
+function: pow                     AC_CHECK_FUNCS
+function: pstat_getdynamic        AC_CHECK_FUNCS
+function: putenv                  AC_CHECK_FUNCS
+function: re_comp                 AC_CHECK_FUNCS
+function: realpath                AC_CHECK_FUNCS
+function: regcmp                  AC_CHECK_FUNCS
+function: regcomp                 AC_CHECK_FUNCS
+function: resolvepath             AC_CHECK_FUNCS
+function: rint                    AC_CHECK_FUNCS
+function: rmdir                   AC_CHECK_FUNCS
+function: rpmatch                 AC_CHECK_FUNCS
+function: select                  AC_CHECK_FUNCS
+function: setenv                  AC_CHECK_FUNCS
+function: sethostname             AC_CHECK_FUNCS
+function: setlocale               AC_CHECK_FUNCS
+function: socket                  AC_CHECK_FUNCS
+function: sqrt                    AC_CHECK_FUNCS
+function: stime                   AC_CHECK_FUNCS
+function: stpcpy                  AC_CHECK_FUNCS
+function: strcasecmp              AC_CHECK_FUNCS
+function: strchr                  AC_CHECK_FUNCS
+function: strcspn                 AC_CHECK_FUNCS
+function: strdup                  AC_CHECK_FUNCS
+function: strerror                AC_CHECK_FUNCS
+function: strncasecmp             AC_CHECK_FUNCS
+function: strndup                 AC_CHECK_FUNCS
+function: strpbrk                 AC_CHECK_FUNCS
+function: strrchr                 AC_CHECK_FUNCS
+function: strspn                  AC_CHECK_FUNCS
+function: strstr                  AC_CHECK_FUNCS
+function: strtol                  AC_CHECK_FUNCS
+function: strtoul                 AC_CHECK_FUNCS
+function: strtoull                AC_CHECK_FUNCS
+function: strtoumax               AC_CHECK_FUNCS
+function: strverscmp              AC_CHECK_FUNCS
+function: sysinfo                 AC_CHECK_FUNCS
+function: tzset                   AC_CHECK_FUNCS
+function: uname                   AC_CHECK_FUNCS
+function: utmpname                AC_CHECK_FUNCS
+function: utmpxname               AC_CHECK_FUNCS
+function: wcwidth                 AC_CHECK_FUNCS
 
 # Local Variables:
 # mode: shell-script

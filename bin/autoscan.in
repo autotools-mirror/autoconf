@@ -164,16 +164,17 @@ sub init_tables ()
 	  next
 	    if /^\s*$/ || /^\s*\#/;
 
-	  # '<word>        <macro invocation>' or...
-	  # '<word>        warn: <message>'.
-	  if (/^(\S+)\s+(\S.*)$/)
+	  # '<kind>: <word> <macro invocation>' or...
+	  # '<kind>: <word> warn: <message>'.
+	  if (/^(\S+):\s+(\S+)\s+(\S.*)$/)
 	    {
-	      my $word = $1;
-	      my $macro = $2;
+	      my ($mkind, $word, $macro) = ($1, $2, $3);
+	      die "$mkind:$kind\n"
+		unless "${mkind}s" eq $kind;
 	      # The default macro must be explicitly listed for words
 	      # which have a specific macros.  This allows to enforce
 	      # consistency checks.
-	      if (!defined $2 && exists $macro{$kind}{$word})
+	      if (!defined $word && exists $macro{$kind}{$word})
 		{
 		  warn ("$file:$.: "
 			. "ignoring implicit call to the generic macro for $word\n");

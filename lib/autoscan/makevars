@@ -1,5 +1,5 @@
 # acmakevars -- autoscan's mapping from Make variables to Autoconf macros
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -17,17 +17,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-LN		AC_PROG_LN_S
-AWK		AC_PROG_AWK
-CC		AC_PROG_CC
-CPP		AC_PROG_CPP
-CXX		AC_PROG_CXX
-INSTALL		AC_PROG_INSTALL
-LEX		AC_PROG_LEX
-RANLIB		AC_PROG_RANLIB
-YACC		AC_PROG_YACC
-BISON		AC_PROG_YACC
-MAKE		AC_PROG_MAKE_SET
+makevar: AWK             AC_PROG_AWK
+makevar: BISON           AC_PROG_YACC
+makevar: CC              AC_PROG_CC
+makevar: CPP             AC_PROG_CPP
+makevar: CXX             AC_PROG_CXX
+makevar: INSTALL         AC_PROG_INSTALL
+makevar: LEX             AC_PROG_LEX
+makevar: LN              AC_PROG_LN_S
+makevar: MAKE            AC_PROG_MAKE_SET
+makevar: RANLIB          AC_PROG_RANLIB
+makevar: YACC            AC_PROG_YACC
 
 # Local Variables:
 # mode: shell-script
