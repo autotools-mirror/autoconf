@@ -1,5 +1,11 @@
 2000-10-29  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (AC_CHECK_TOOL): Set VARIABLE also when using the
+	cache. From Jim Meyering.
+	(AC_PATH_TOOL): Likewise.
+
+2000-10-29  Pavel Roskin  <proski@gnu.org>
+
 	* tests/atgeneral.m4 (AT_CHECK): Warn if the expected exit status
 	is different from what we got. Don't preserve exit status other
 	than 77.

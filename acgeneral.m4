@@ -3112,6 +3112,8 @@ if test -z "$ac_cv_path_$1"; then
   ac_pt_$1=$$1
   AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
   $1=$ac_pt_$1
+else
+  $1="$ac_cv_path_$1"
 fi
 ])# AC_PATH_TOOL
 
@@ -3127,6 +3129,8 @@ if test -z "$ac_cv_prog_$1"; then
   ac_ct_$1=$$1
   AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
   $1=$ac_ct_$1
+else
+  $1="$ac_cv_prog_$1"
 fi
 ])# AC_CHECK_TOOL
 
