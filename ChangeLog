@@ -1,3 +1,25 @@
+2004-04-20  Paul Eggert  <eggert@twinsun.com>
+
+	* tests/c.at (C keywords): Don't assume that GCC supports
+	"restrict" and "inline", as sufficiently-old GCC versions do not
+	(also, GCC configured to be in pedantic C89 mode does not).
+	Problem reported by Sumit Pandya in:
+	http://mail.gnu.org/archive/html/autoconf/2004-04/msg00092.html
+
+	* lib/autoconf/c.m4 (_AC_PROG_CC_G, _AC_PROG_CXX_G): Don't
+	consider -g to work if it generates warnings when plain compiles
+	don't.  Problem reported by Braden McDaniel in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00014.html
+
+	* doc/autoconf.texi (Slashes): New section, to document a problem
+	reported by Jim Meyering in:
+	http://mail.gnu.org/archive/html/bug-coreutils/2004-02/msg00060.html
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Remove potential
+	linker output files before linking, to work around IRIX 6 linker bug.
+	Problem reported by Rainer Orth in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00007.html
+
 2004-04-20  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Make the
