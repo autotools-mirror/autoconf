@@ -3577,11 +3577,24 @@ libraries, for Irix 4, PTX, and Unixware, respectively.  Then, if
 @defmac AC_FUNC_GETPGRP
 @acindex FUNC_GETPGRP
 @cvindex GETPGRP_VOID
+@c @fuindex getpgid
 @c @fuindex getpgrp
+@prindex @code{getpgid}
 @prindex @code{getpgrp}
-If @code{getpgrp} takes no argument (the @sc{posix.1} version), define
-@code{GETPGRP_VOID}.  Otherwise, it is the @sc{bsd} version, which takes
-a process ID as an argument.  This macro does not check whether
+Define @code{GETPGRP_VOID} if it is an error to pass 0 to
+@code{getpgrp}; this is the @sc{posix.1} behavior.  On older BSD
+systems, you must pass 0 to @code{getpgrp}, as it takes an argument and
+behaves like @sc{posix.1}'s @code{getpgid}.
+
+@example
+#if GETPGRP_VOID
+  pid = getpgrp ();
+#else
+  pid = getpgrp (0);
+#endif
+@end example
+
+This macro does not check whether
 @code{getpgrp} exists at all; if you need to work in that situation,
 first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @end defmac
