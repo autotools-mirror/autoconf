@@ -1,3 +1,8 @@
+1999-10-05  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (AC_PATH_XTRA): Correctly document the behaviour
+	when X is not available.
+
 1999-10-02  Akim Demaille  <demaille@inf.enst.fr>
 
 	* acgeneral.m4: Instead of just undefining eval, format, include
