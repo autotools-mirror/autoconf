@@ -1,3 +1,8 @@
+2001-11-08  Kevin Ryde  <user42@zip.com.au>
+
+	* autoconf.texi (Limitations of Usual Tools): Note HP-UX cc
+	doesn't accept .S files.	
+
 2001-11-07  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sugar.m4 (m4_pattern_forbid): Accepts $2.

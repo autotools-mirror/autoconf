@@ -8823,6 +8823,10 @@ non-printing characters, @emph{seems} portable, though.
 When a compilation such as @samp{cc foo.c -o foo} fails, some compilers
 (such as @sc{cds} on Reliant @sc{unix}) leave a @file{foo.o}.
 
+HP-UX @command{cc} doesn't accept @file{.S} files to preprocess and
+assemble.  @samp{cc -c foo.S} will appear to succeed, but in fact does
+nothing.
+
 
 @item @command{cmp}
 @c ----------------
