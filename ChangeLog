@@ -1,3 +1,10 @@
+2000-10-30  Pavel Roskin  <proski@gnu.org>
+
+	* m4sh.m4 (AS_EXIT): New macro that exits and makes sure that $?
+	is set correctly within the exit trap.
+	(AS_TMPDIR): Use it.
+	* acgeneral.m4 (AC_MSG_ERROR): Likewise,
+
 2000-10-29  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (AC_CHECK_TOOL): Set VARIABLE also when using the

@@ -2794,7 +2794,7 @@ _AC_ECHO([configure: WARNING: $1], 2); }])
 define([AC_MSG_ERROR],
 [{ _AC_ECHO([configure:__oline__: error: $1], AC_FD_LOG)
   _AC_ECHO([configure: error: $1], 2)
-  exit m4_default([$2], 1); }])
+  AS_EXIT([m4_default([$2], 1)]); }])
 
 
 # AU::AC_CHECKING(FEATURE)

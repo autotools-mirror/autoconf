@@ -98,6 +98,18 @@ define([AS_UNSET],
 [$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
+# AS_EXIT([EXIT-CODE = 1])
+# ------------------------
+# Exit and set exit code to EXIT-CODE in the way that it's seen
+# within "trap 0".
+#
+# We cannot simply use "exit N" because some shells (zsh and Solaris sh)
+# will not set $? to N while running the code set by "trap 0"
+# So we set $? by executing "exit N" in the subshell and then exit.
+define([AS_EXIT],
+[{ (exit m4_default([$1], 1)); exit; }])
+
+
 
 
 ## ------------------------------------------- ##
@@ -189,7 +201,7 @@ define([AS_TMPDIR],
 $debug ||
 {
   trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
-  trap 'exit $?' 1 2 13 15
+  trap 'AS_EXIT([$?])' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -204,6 +216,6 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   exit 1;
+   AS_EXIT
 }dnl
 ])# AS_TMPDIR
