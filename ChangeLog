@@ -1,7 +1,9 @@
-2001-02-26  Pavel Roskin  <proski@gnu.org>
+2001-02-28  Akim Demaille  <akim@epita.fr>
 
-	* autoupdate.in: Preserve exit status of the failed command when
-	die() follows system() by dividing $! by 256.
+	* acgeneral.m4 (_AC_INIT_PREPARE_FS_SEPARATORS): Use `.;.' instead
+	of `.;`pwd`': if pwd is c:/foo, we might walk through `.:c'
+	(fails), and then `/foo' which might succeed, resulting in
+	believing `;' is the right path separator.
 
 2001-02-26  Akim Demaille  <akim@epita.fr>
 

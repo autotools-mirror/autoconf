@@ -1388,7 +1388,7 @@ m4_define([_AC_INIT_PREPARE_FS_SEPARATORS],
 [echo "#! $SHELL" >conftest.sh
 echo  "exit 0"   >>conftest.sh
 chmod +x conftest.sh
-if AC_RUN_LOG([PATH=".;`pwd`"; conftest.sh]); then
+if AC_RUN_LOG([PATH=".;."; conftest.sh]); then
   ac_path_separator=';'
 else
   ac_path_separator=:
