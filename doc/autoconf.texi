@@ -371,21 +371,21 @@ inconvenient when configuring large source trees.  Unlike Metaconfig
 scripts, Autoconf scripts can support cross-compiling, if some care is
 taken in writing them.
 
-There are several jobs related to making portable software packages
-that Autoconf currently does not do.  Among these are automatically
-creating @file{Makefile} files with all of the standard targets, and
-supplying replacements for standard library functions and header files on
-systems that lack them.  Work is in progress to add those features in
-the future.
+@c FIXME: Tom, your cue is here.
+There are several jobs related to making portable software packages that
+Autoconf currently does not do.  Among these are automatically creating
+@file{Makefile} files with all of the standard targets, and supplying
+replacements for standard library functions and header files on systems
+that lack them.  Work is in progress to add those features in the
+future.
 
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
 Autoconf requires GNU @code{m4} in order to generate the scripts.  It
-uses features that some UNIX versions of @code{m4} do not have.  It also
-overflows internal limits of some versions of @code{m4}, including GNU
-@code{m4} 1.0.  You must use version 1.1 or later of GNU @code{m4}.
-Using version 1.3 or later will be much faster than 1.1 or 1.2.
+uses features that some UNIX versions of @code{m4} do not have,
+including GNU @code{m4} 1.3.  You must use version 1.4 or later of GNU
+@code{m4}.
 
 @xref{Upgrading}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.
@@ -510,7 +510,7 @@ called out of order.
 To encourage consistency, here is a suggested order for calling the
 Autoconf macros.  Generally speaking, the things near the end of this
 list could depend on things earlier in it.  For example, library
-functions could be affected by typedefs and libraries.
+functions could be affected by types and libraries.
 
 @display
 @group
@@ -518,7 +518,7 @@ functions could be affected by typedefs and libraries.
 checks for programs
 checks for libraries
 checks for header files
-checks for typedefs
+checks for types
 checks for structures
 checks for compiler characteristics
 checks for library functions
@@ -690,7 +690,9 @@ Print the version number of Autoconf and exit.
 @item --trace=@var{macro}
 @itemx -t @var{macro}
 List the calls to @var{macro}.  Multiple calls to @samp{--trace} list
-several macros.  It is advised to use this feature instead of parsing
+several macros.  It is often needed to check the content of a
+@file{configure.in} file, but it is extremely fragile and error prone to
+try to parse it.  It is suggested to rely upon @samp{--trace} to scan
 @file{configure.in}.
 
 The output is composed of separated lines for each macro call.  Each
@@ -703,7 +705,7 @@ configure.in:3:AM_INIT_AUTOMAKE:autoconf, 2.14a
 
 @item --output=@var{file}
 @itemx -o @var{file}
-Save output (script or traces) to @var{file}.  The file @samp{-} stands
+Save output (script or trace) to @var{file}.  The file @samp{-} stands
 for the standard output.
 @end table
 
@@ -1825,6 +1827,14 @@ features not found in standard @code{install} programs, there is no
 reason to use @code{AC_PROG_INSTALL}; just put the pathname of your
 program into your @file{Makefile.in} files.
 @end defmac
+
+@defmac AC_PROG_GNU_M4
+@maindex PROG_GNU_M4
+@ovindex GNU_M4
+If GNU @code{m4} version 1.4 or above is found, set output variable
+@code{M4} to @samp{m4}.
+@end defmac
+
 
 @defmac AC_PROG_LEX
 @maindex PROG_LEX
@@ -3913,9 +3923,9 @@ already defined a certain C preprocessor symbol, test the value of the
 appropriate cache variable, as in this example:
 
 @example
-AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
+AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF)])
 if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
+AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
 fi
 @end example
 
@@ -3969,7 +3979,7 @@ in the resulting @code{configure} script.  Use either spaces or
 newlines.  That is, do this:
 
 @example
-AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4) LIBS="$LIBS -lelf")
+AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4) LIBS="$LIBS -lelf"])
 @end example
 
 @noindent
@@ -3977,15 +3987,15 @@ or this:
 
 @example
 AC_CHECK_HEADER(elf.h,
-  AC_DEFINE(SVR4)
-  LIBS="$LIBS -lelf")
+ [AC_DEFINE(SVR4)
+  LIBS="$LIBS -lelf"])
 @end example
 
 @noindent
 instead of this:
 
 @example
-AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4); LIBS="$LIBS -lelf")
+AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
 @end example
 
 @node Setting Output Variables, Caching Results, Defining Symbols, Results
@@ -4164,8 +4174,8 @@ can also disable cache loading and saving for a @code{configure} script
 by redefining the cache macros at the start of @file{configure.in}:
 
 @example
-define([AC_CACHE_LOAD], )dnl
-define([AC_CACHE_SAVE], )dnl
+define([AC_CACHE_LOAD])dnl
+define([AC_CACHE_SAVE])dnl
 AC_INIT(@r{whatever})
 @r{ ... rest of configure.in ...}
 @end example
@@ -4386,8 +4396,8 @@ C libraries.
 The full path names to files, including programs.
 @item PROG
 The base names of programs.
-@item STRUCT
-Definitions of C structures in header files.
+@item MEMBER
+Members of aggregates.
 @item SYS
 Operating system features.
 @item TYPE
@@ -4749,7 +4759,8 @@ macro may be called multiple times.
 For example, this call:
 
 @example
-AC_CONFIG_LINKS(host.h:config/$@{machine@}.h object.h:config/$@{obj_format@}.h)
+AC_CONFIG_LINKS(host.h:config/$@{machine@}.h
+                object.h:config/$@{obj_format@}.h)
 @end example
 
 @noindent
@@ -4757,9 +4768,9 @@ creates in the current directory @file{host.h}, which is a link to
 @file{@var{srcdir}/config/$@{machine@}.h}, and @file{object.h}, which is a link
 to @file{@var{srcdir}/config/$@{obj_format@}.h}.
 
-The tempting value @samp{.} for @var{dest} is made invalid: it makes it
+The tempting value @samp{.} for @var{dest} is invalid: it makes it
 impossible for @samp{config.status} to guess the links to establish.  It
-is therefore valid to run
+is then valid to run
 @example
 ./config.status host.h object.h
 @end example
@@ -4772,7 +4783,8 @@ This is an obsolete version of the previous macro.  The previous example
 would have been written:
 
 @example
-AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h, host.h object.h)
+AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h,
+              host.h                object.h)
 @end example
 @end defmac
 
@@ -4962,12 +4974,10 @@ Options}).  The following example will make this clearer.
 
 @example
 AC_DEFUN(TEST_MACRO,
-[
-  AC_ARG_WITH(foo,
-              AC_HELP_STRING([--with-foo], [use foo (default is NO)],
-              ac_cv_use_foo=$withval, ac_cv_use_foo=no)
-  AC_CACHE_CHECK(whether to use foo, ac_cv_use_foo, ac_cv_use_foo=no)
-])
+[AC_ARG_WITH(foo,
+             AC_HELP_STRING([--with-foo], [use foo (default is NO)],
+             ac_cv_use_foo=$withval, ac_cv_use_foo=no)
+AC_CACHE_CHECK(whether to use foo, ac_cv_use_foo, ac_cv_use_foo=no)])
 @end example
 
 Please note that the call to @code{AC_HELP_STRING} is @strong{unquoted}.
@@ -4975,14 +4985,6 @@ Then the last few lines of @samp{configure --help} will appear like
 this:
 
 @example
-Features and packages:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --x-includes=DIR        X include files are in DIR
-  --x-libraries=DIR       X library files are in DIR
-
 --enable and --with options recognized:
   --with-foo              use foo (default is NO)
 @end example
@@ -4993,13 +4995,10 @@ arguments, as shown in the following example.
 
 @example
 AC_DEFUN(MY_ARG_WITH,
-[
-  AC_ARG_WITH($1,
-              AC_HELP_STRING([--with-$1], [use $1 (default is $2)]),
-              ac_cv_use_$1=$withval, ac_cv_use_$1=no)
-
-  AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)
-])
+[AC_ARG_WITH([$1],
+             AC_HELP_STRING([--with-$1], [use $1 (default is $2)]),
+             ac_cv_use_$1=$withval, ac_cv_use_$1=no)
+AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 @end example
 @end defmac
 
@@ -5434,6 +5433,9 @@ __file__
 __line__
 @end example
 
+Autoconf requires version 1.4 or above of GNU @code{m4} because it
+uses frozen state files.
+
 Since only software maintainers need to use Autoconf, and since GNU
 @code{m4} is simple to configure and install, it seems reasonable to
 require GNU @code{m4} to be installed also.  Many maintainers of GNU and
@@ -5444,9 +5446,9 @@ since they prefer them.
 @section How Can I Bootstrap?
 
 @display
-If Autoconf requires GNU @code{m4} and GNU @code{m4} has an
-Autoconf @code{configure} script, how do I bootstrap?  It seems
-like a chicken and egg problem!
+If Autoconf requires GNU @code{m4} and GNU @code{m4} has an Autoconf
+@code{configure} script, how do I bootstrap?  It seems like a chicken
+and egg problem!
 @end display
 
 This is a misunderstanding.  Although GNU @code{m4} does come with a

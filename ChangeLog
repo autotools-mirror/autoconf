@@ -1,5 +1,19 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Introduction): m4 1.4 is now required.
+	(Invoking autoconf): A better help on --trace.
+	(Defining Symbols): Advocate a proper use of the quotes in m4
+	code, including if the quotes are sometimes useless.  It is bad,
+	very bad not to quote properly, so quote all the examples
+	properly.
+	(Cache Files): Use a unary call to define, instead of an empty
+	$2.
+	(Using System Type): Watch out TeX wrapping.
+	(Pretty Help Strings): Don't give too long a snippet of --help.
+	Promote the coding style of Autoconf.  Quote properly.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_PRO): Use AC_PROVIDE instead of defining
 	yourself.  This allows to see everything that is AC_PROVIDEd via
 	autoconf --trace.
