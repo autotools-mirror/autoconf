@@ -1,6 +1,4 @@
-* Major changes in Autoconf 2.51a                       -*- outline -*-
-[2.51]
-* Major changes in Autoconf 2.51
+* Major changes in Autoconf 2.52                       -*- outline -*-
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs
@@ -57,7 +55,6 @@
   a main-like routine is required/possible when linking C/C++ with
   Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
 - AC_FUNC_GETPGRG behaves better when cross-compiling.
-[2.50][2.50a][2.50b][2.50c][2.50d]
 
 * Major changes in Autoconf 2.50
 
