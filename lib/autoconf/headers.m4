@@ -589,6 +589,7 @@ if test $ac_cv_header_stdc = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
   AC_RUN_IFELSE([AC_LANG_SOURCE(
 [[#include <ctype.h>
+#include <stdlib.h>
 #if ((' ' & 0x0FF) == 0x020)
 # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
@@ -608,7 +609,7 @@ main ()
   for (i = 0; i < 256; i++)
     if (XOR (islower (i), ISLOWER (i))
 	|| toupper (i) != TOUPPER (i))
-      exit(2);
+      exit (2);
   exit (0);
 }]])], , ac_cv_header_stdc=no, :)
 fi])

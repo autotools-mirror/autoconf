@@ -255,18 +255,14 @@ old systems that lack `sigaction' and `SA_RESTART'.  Don't bother with
 this macro unless you need to support very old systems like 4.2BSD and
 SVR3.])dnl
 AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
-AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
    after getting the signal.  */
 
-#include <sys/types.h>
+AC_INCLUDES_DEFAULT
 #include <signal.h>
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
 #if HAVE_SYS_WAIT_H
 # include <sys/wait.h>
 #endif

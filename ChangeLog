@@ -1,3 +1,17 @@
+2004-05-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Port to C99, which requires that 'exit' be declared.
+
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Use AC_INCLUDES_DEFAULT
+	to ensure that stdlib.h is included.
+	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA, AC_FUNC_SETPGRP,
+	AC_FUNC_STRTOD, AC_FUNC_SETVBUF_REVERSED, AC_FUNC_FORK, _AC_FUNC_FORK,
+	_AC_FUNC_VFORK, AC_FUNC_WAIT3): Likewise.
+	* lib/autoconf/specific.m4 (AC_SYS_RESTARTABLE_SYSCALLS): Likewise.
+	* lib/autoconf/types.m4 (AC_TYPE_GETGROUPS): Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Include <stdlib.h>
+	when using 'exit' in a test; C99 requires that 'exit' be declared.
+
 2004-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Programs): AC_PROG_GREP

@@ -253,7 +253,7 @@ AC_DEFUN([AC_TYPE_GETGROUPS],
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [[/* Thanks to Mike Rendell for this test.  */
-#include <sys/types.h>
+]AC_INCLUDES_DEFAULT[
 #define NGID 256
 #undef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))

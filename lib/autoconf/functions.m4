@@ -279,7 +279,8 @@ fi
 AC_CACHE_CHECK([stack direction for C alloca],
 	       [ac_cv_c_stack_direction],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
-[int
+[AC_INCLUDES_DEFAULT
+int
 find_stack_direction ()
 {
   static char *addr = 0;
@@ -1387,11 +1388,7 @@ AN_FUNCTION([setpgrp], [AC_FUNC_SETPGRP])
 AC_DEFUN([AC_FUNC_SETPGRP],
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
 [AC_RUN_IFELSE(
-[AC_LANG_PROGRAM(
-[#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-],
+[AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 [/* If this system has a BSD-style setpgrp which takes arguments,
   setpgrp(1, 1) will fail with ESRCH and return -1, in that case
   exit successfully. */
@@ -1462,7 +1459,10 @@ AC_DEFUN([AC_FUNC_STRTOD],
 [AC_SUBST(POW_LIB)dnl
 AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[
+]AC_INCLUDES_DEFAULT[
+#ifndef strtod
 double strtod ();
+#endif
 int
 main()
 {
@@ -1609,7 +1609,7 @@ AC_CACHE_CHECK(whether setvbuf arguments are reversed,
 	 # Try running it.
 	 AC_RUN_IFELSE(
 	   [AC_LANG_PROGRAM(
-	      [[#include <stdio.h>]],
+	      [AC_INCLUDES_DEFAULT],
 	      [[/* This call has the arguments reversed.
 		   A reversed system may check and see that the address of buf
 		   is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
@@ -1699,7 +1699,7 @@ AN_FUNCTION([fork],  [AC_FUNC_FORK])
 AN_FUNCTION([vfork], [AC_FUNC_FORK])
 AC_DEFUN([AC_FUNC_FORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADERS(unistd.h vfork.h)
+AC_CHECK_HEADERS(vfork.h)
 AC_CHECK_FUNCS(fork vfork)
 if test "x$ac_cv_func_fork" = xyes; then
   _AC_FUNC_FORK
@@ -1742,21 +1742,17 @@ fi
 # -------------
 AC_DEFUN([_AC_FUNC_FORK],
   [AC_CACHE_CHECK(for working fork, ac_cv_func_fork_works,
-    [AC_RUN_IFELSE([/* By Ruediger Kuhlmann. */
-      #include <sys/types.h>
-      #if HAVE_UNISTD_H
-      # include <unistd.h>
-      #endif
-      /* Some systems only have a dummy stub for fork() */
-      int main ()
-      {
-	if (fork() < 0)
-	  exit (1);
-	exit (0);
-      }],
-    [ac_cv_func_fork_works=yes],
-    [ac_cv_func_fork_works=no],
-    [ac_cv_func_fork_works=cross])])]
+    [AC_RUN_IFELSE(
+      [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+	[
+	  /* By Ruediger Kuhlmann. */
+	  if (fork() < 0)
+	    exit (1);
+	  exit (0);
+	])],
+      [ac_cv_func_fork_works=yes],
+      [ac_cv_func_fork_works=no],
+      [ac_cv_func_fork_works=cross])])]
 )# _AC_FUNC_FORK
 
 
@@ -1765,14 +1761,8 @@ AC_DEFUN([_AC_FUNC_FORK],
 AC_DEFUN([_AC_FUNC_VFORK],
 [AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+]AC_INCLUDES_DEFAULT[
 #include <sys/wait.h>
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
 #if HAVE_VFORK_H
 # include <vfork.h>
 #endif
@@ -1909,10 +1899,9 @@ Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
 AC_CACHE_CHECK([for wait3 that fills in rusage],
 	       [ac_cv_func_wait3_rusage],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
-[[#include <sys/types.h>
+[AC_INCLUDES_DEFAULT[
 #include <sys/time.h>
 #include <sys/resource.h>
-#include <stdio.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
 int
 main ()
