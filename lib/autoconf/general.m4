@@ -776,8 +776,8 @@ define([AH_OUTPUT], [])
 # TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
 # output as is, with no formating.
 define([AH_VERBATIM],
-[AC_VAR_IF_INDIR([$1],,
-                 [AH_OUTPUT([$1], _AC_SH_QUOTE([[$2]]))])
+[AC_VAR_INDIR_IFELSE([$1],,
+                     [AH_OUTPUT([$1], _AC_SH_QUOTE([[$2]]))])
 ])
 
 
@@ -946,11 +946,11 @@ echo "X$1" | sed '
 #   AC_VAR_SET(ac_$var, val)
 # and expect the right thing to happen.
 
-# AC_VAR_IF_INDIR(EXPRESSION, IF-INDIR, IF-NOT-INDIR)
-# ---------------------------------------------------
+# AC_VAR_INDIR_IFELSE(EXPRESSION, IF-INDIR, IF-NOT-INDIR)
+# -------------------------------------------------------
 # If EXPRESSION has shell indirections ($var or `expr`), expand
 # IF-INDIR, else IF-NOT-INDIR.
-define([AC_VAR_IF_INDIR],
+define([AC_VAR_INDIR_IFELSE],
 [ifelse(regexp([$1], [[`$]]),
         -1, [$3],
         [$2])])
@@ -961,9 +961,9 @@ define([AC_VAR_IF_INDIR],
 # If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
 # perform whenever possible at m4 level, otherwise sh level.
 define([AC_VAR_SET],
-[AC_VAR_IF_INDIR([$1],
-                 [eval "$1=$2"],
-                 [$1=$2])])
+[AC_VAR_INDIR_IFELSE([$1],
+                     [eval "$1=$2"],
+                     [$1=$2])])
 
 
 # AC_VAR_GET(VARIABLE)
@@ -972,9 +972,9 @@ define([AC_VAR_SET],
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
 define([AC_VAR_GET],
-[AC_VAR_IF_INDIR([$1],
-                 [`eval echo '${'patsubst($1, [[\\`]], [\\\&])'}'`],
-                 [$[]$1])])
+[AC_VAR_INDIR_IFELSE([$1],
+                     [`eval echo '${'patsubst($1, [[\\`]], [\\\&])'}'`],
+                     [$[]$1])])
 
 
 # AC_VAR_TEST_SET(VARIABLE)
@@ -982,17 +982,16 @@ define([AC_VAR_GET],
 # Expands into the `test' expression which is true if VARIABLE
 # is set.  Polymorphic.  Should be dnl'ed.
 define([AC_VAR_TEST_SET],
-[AC_VAR_IF_INDIR([$1],
-           [eval "test \"\${$1+set}\" = set"],
-           [test "${$1+set}" = set])])
+[AC_VAR_INDIR_IFELSE([$1],
+                     [eval "test \"\${$1+set}\" = set"],
+                     [test "${$1+set}" = set])])
 
 
-
-# AC_VAR_IF_SET(VARIABLE, IF-TRUE, IF-FALSE)
-# ------------------------------------------
+# AC_VAR_SET_IFELSE(VARIABLE, IF-TRUE, IF-FALSE)
+# ----------------------------------------------
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
-define([AC_VAR_IF_SET],
+define([AC_VAR_SET_IFELSE],
 [AC_SHELL_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
@@ -1028,10 +1027,10 @@ define([AC_VAR_IF_SET],
 # named VALUE.  VALUE does not need to be a valid shell variable name:
 # the transliteration is handled here.  To be dnl'ed.
 define([AC_VAR_PUSHDEF],
-[AC_VAR_IF_INDIR([$2],
-[ac_$1=AC_TR_SH($2)
+[AC_VAR_INDIR_IFELSE([$2],
+                     [ac_$1=AC_TR_SH($2)
 pushdef([$1], [$ac_[$1]])],
-[pushdef([$1], [AC_TR_SH($2)])])])
+                     [pushdef([$1], [AC_TR_SH($2)])])])
 
 
 # AC_VAR_POPDEF(VARNAME)
@@ -1057,12 +1056,12 @@ define([AC_VAR_POPDEF],
 # `#define'.  sh/m4 polymorphic.  Make sure to update the definition
 # of `$ac_tr_cpp' if you change this.
 define([AC_TR_CPP],
-[AC_VAR_IF_INDIR([$1],
-  [`echo "$1" | $ac_tr_cpp`],
-  [patsubst(translit([[$1]],
-                     [*abcdefghijklmnopqrstuvwxyz],
-                     [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-            [[^A-Z0-9_]], [_])])])
+[AC_VAR_INDIR_IFELSE([$1],
+                     [`echo "$1" | $ac_tr_cpp`],
+                     [patsubst(translit([[$1]],
+                                        [*abcdefghijklmnopqrstuvwxyz],
+                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+                               [[^A-Z0-9_]], [_])])])
 
 
 # AC_TR_SH(EXPRESSION)
@@ -1071,10 +1070,10 @@ define([AC_TR_CPP],
 # sh/m4 polymorphic.
 # Make sure to update the definition of `$ac_tr_sh' if you change this.
 define([AC_TR_SH],
-[AC_VAR_IF_INDIR([$1],
-  [`echo "$1" | $ac_tr_sh`],
-  [patsubst(translit([[$1]], [*+], [pp]),
-            [[^a-zA-Z0-9_]], [_])])])
+[AC_VAR_INDIR_IFELSE([$1],
+                     [`echo "$1" | $ac_tr_sh`],
+                     [patsubst(translit([[$1]], [*+], [pp]),
+                               [[^a-zA-Z0-9_]], [_])])])
 
 
 
@@ -2591,9 +2590,9 @@ define([AC_CACHE_VAL],
                [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
-AC_VAR_IF_SET([$1],
-              [echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG],
-              [$2])])
+AC_VAR_SET_IFELSE([$1],
+                  [echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG],
+                  [$2])])
 
 
 # AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
@@ -2977,7 +2976,8 @@ define([AC_INCLUDES_DEFAULT],
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
 AC_DEFUN([AC_CHECK_MEMBER],
-[AC_VAR_IF_INDIR([$1], [AC_FATAL([$0: requires literal arguments])])dnl
+[AC_VAR_INDIR_IFELSE([$1],
+                     [AC_FATAL([$0: requires literal arguments])])dnl
 ifelse(regexp([$1], [\.]), -1,
        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 AC_REQUIRE([AC_HEADER_STDC])dnl
@@ -3718,9 +3718,9 @@ define([AC_LIBOBJ_DECL], [])
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
 define([_AC_LIBOBJ],
-[AC_VAR_IF_INDIR([$1],
-                 [$2],
-                 [AC_LIBOBJ_DECL([$1])])dnl
+[AC_VAR_INDIR_IFELSE([$1],
+                     [$2],
+                     [AC_LIBOBJ_DECL([$1])])dnl
 AC_SUBST([LIBOBJS])dnl
 LIBOBJS="$LIBOBJS $1.$ac_objext"])
 
@@ -3793,7 +3793,8 @@ fi[]dnl
 # AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES])
 # --------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
-[AC_VAR_IF_INDIR([$1], [AC_FATAL([$0: requires literal arguments])])dnl
+[AC_VAR_INDIR_IFELSE([$1],
+                     [AC_FATAL([$0: requires literal arguments])])dnl
 AC_CHECK_TYPE([$1], [], [], [$3])
 AC_CACHE_CHECK([size of $1], AC_TR_SH([ac_cv_sizeof_$1]),
 [if test "$AC_TR_SH([ac_cv_type_$1])" = yes; then
@@ -4380,9 +4381,9 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 [_AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
-AC_VAR_IF_INDIR([$1],
-                [AC_DIAGNOSE(syntax,
-                             [$0: you should use literals])])
+AC_VAR_INDIR_IELSE([$1],
+                   [AC_DIAGNOSE(syntax,
+                               [$0: you should use literals])])
 AC_DIVERT([DEFAULTS], [ac_subdirs_all="$ac_subdirs_all $1"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
 ])

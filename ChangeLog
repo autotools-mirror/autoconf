@@ -1,5 +1,10 @@
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_VAR_IN_INDIR, AC_VAR_IF_SET): Rename as...
+	(AC_VAR_INDIR_IFELSE, AC_VAR_SET_IFELSE): this.
+
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
 	* tests/mktests.sh: Remove tmp files.
 
 2000-10-12  Akim Demaille  <akim@epita.fr>

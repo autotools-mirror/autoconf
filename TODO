@@ -14,8 +14,8 @@ It should be adjusted so that when someone runs it with a failing
 egrep, the output files are touch'ed.
 
 ** AC_EXEEXT, AC_OBJEXT
-We need a good implement.  As much as possible, they should not depend
-upon AC_EMXOS2 etc.
+We need a good implementation.  As much as possible, they should not
+depend upon AC_EMXOS2 etc.
 
 ** More tests
 Check that AC_REQUIRE circular dependencies are caught.
