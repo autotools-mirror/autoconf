@@ -66,6 +66,15 @@ define(AH_DEFUN,
 defn([$1])
 [$2])])
 
+# The definition of `AH_DEFUN' above is used for accumulating the
+# definitions before entering the `autoheader' namespace.  Once we
+# enter the autoheader::, `AH_DEFUN' must be understood as immediatly
+# defining.  This happens when we read user m4 files.
+m4_define([autoheader::AH_DEFUN],
+defn([m4_define]))
+m4_namespace_register([AH_DEFUN], [autoheader])
+
+
 
 # These are alternate definitions of some macros, which produce
 # strings in the output marked with "@@@" so we can easily extract

@@ -44,3 +44,10 @@ AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1),
                    [Define to a long string if your `Autoconf' works
                     properly.])
 AC_SUBST(AC_DUMMY_VAR($1))])
+
+
+# autoheader::AC_TATOOINE
+# -----------------------
+# Template a dummy entries for config header.
+AH_DEFUN(AC_TATOOINE,
+[AH_TEMPLATE(Tatooine, The planet where Luke was raised.)])

@@ -1,5 +1,16 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Open the access to AH_ to users.
+
+	* autoheader.m4 (autoheader::AH_DEFUN): New macro.
+	* tests/tools.m4: New file, in charge of testing the scripts.
+	All the dependencies adapted.
+	* tests/actest.m4 (autoheader::AC_TATOOINE): New macro, used while
+	testing autoheader.
+	* tests/atspecific.m4: Create config.hin instead of config.h.in.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Because of commas and brackets, m4_split must mess with the
 	quotes.
 

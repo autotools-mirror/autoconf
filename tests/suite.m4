@@ -17,6 +17,7 @@ EOF
 dnl Run the tests from the most selective to the easiest.
 
 AT_INCLUDE(torture.m4)
-AT_INCLUDE(base.m4)
 AT_INCLUDE(semantics.m4)
 AT_INCLUDE(syntax.m4)
+AT_INCLUDE(tools.m4)
+AT_INCLUDE(base.m4)
