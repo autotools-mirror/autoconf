@@ -79,6 +79,10 @@ dnl If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 dnl Comparable to ifdef.
 define([ifset], [ifelse([$1],,[$3],[$2])])
 
+dnl m4_default(EXP1, EXP2)
+dnl ----------------------
+dnl Returns EXP1 if non empty, otherwisee EXP2.
+define([m4_default], [ifset([$1], [$1], [$2])])
 
 dnl ### Defining macros
 
@@ -1070,6 +1074,8 @@ AC_DEFUN(AC_INIT_BINSH,
 ])
 
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
+dnl ----------------------------------
+dnl Output the preamble of the `configure' script.
 AC_DEFUN(AC_INIT,
 [sinclude(acsite.m4)dnl
 sinclude(./aclocal.m4)dnl
@@ -1089,6 +1095,15 @@ AC_DEFUN(AC_INCLUDE,
 ])])
 
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
+dnl ------------------------------------------
+dnl Called by AC_INIT to buid the preamble of the `configure' scripts.
+dnl 1. Trap and clean up various tmp files.
+dnl 2. Set up the fd and output files
+dnl 3. Remember the options given to `configure' for `config.status --recheck'.
+dnl 4. Ensure a correct environment
+dnl 5. Find `$srcdir', and check its validity by verifying the presence of
+dnl    UNIQUE-FILE-IN-SOURCE-DIR.
+dnl 6. Required macros (cache, default AC_SUBST etc.)
 AC_DEFUN(AC_INIT_PREPARE,
 [trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
@@ -2140,10 +2155,11 @@ char $2();
 AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))
 LIBS="$ac_save_LIBS"])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_var) = yes,
-               [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
+                m4_default([$3],
+                          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
-  $3],
-               [$4])dnl
+]),
+                [$4])dnl
 AC_VAR_POPDEF([ac_var])dnl
 ])dnl AC_CHECK_LIB
 

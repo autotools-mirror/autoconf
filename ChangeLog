@@ -1,3 +1,10 @@
+1999-09-22  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (m4_default): New macro.
+	(AC_CHECK_LIB): When ACTION-IF-FOUND is specified, don't perform
+	the default action.
+	Reported by Pavel.
+
 1999-09-21  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS, --help message): Use quoted
