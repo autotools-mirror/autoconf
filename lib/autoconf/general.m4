@@ -111,30 +111,33 @@ m4_namespace_push(autoconf)
 # --------------------------
 # Convert a diversion name into its number.  Otherwise, return
 # DIVERSION-NAME which is supposed to be an actual diversion number.
+# Of course it would be nicer to use m4_case here, instead of zillions
+# of little macros, but it then takes twice longer to run `autoconf'!
+define([_AC_DIVERT(KILL)],           -1)
+
+define([_AC_DIVERT(BINSH)],           0)
+define([_AC_DIVERT(NOTICE)],          1)
+define([_AC_DIVERT(DEFAULTS)],        2)
+define([_AC_DIVERT(INIT_PARSE_ARGS)], 3)
+define([_AC_DIVERT(HELP_BEGIN)],      4)
+define([_AC_DIVERT(HELP_ENABLE)],     5)
+define([_AC_DIVERT(HELP_WITH)],       6)
+define([_AC_DIVERT(HELP_VAR)],        7)
+define([_AC_DIVERT(HELP_END)],        8)
+define([_AC_DIVERT(VERSION_BEGIN)],   9)
+define([_AC_DIVERT(VERSION_END)],    10)
+define([_AC_DIVERT(INIT_PREPARE)],   11)
+
+define([_AC_DIVERT(NORMAL_4)],       20)
+define([_AC_DIVERT(NORMAL_3)],       21)
+define([_AC_DIVERT(NORMAL_2)],       22)
+define([_AC_DIVERT(NORMAL_1)],       23)
+define([_AC_DIVERT(NORMAL)],         24)
+
 define([_AC_DIVERT],
-[m4_case([$1],
-         [KILL],           -1,
-
-         [BINSH],           0,
-         [NOTICE],          1,
-         [DEFAULTS],        2,
-         [INIT_PARSE_ARGS], 3,
-         [HELP_BEGIN],      4,
-         [HELP_ENABLE],     5,
-         [HELP_WITH],       6,
-         [HELP_VAR],        7,
-         [HELP_END],        8,
-         [VERSION_BEGIN],   9,
-         [VERSION_END],    10,
-         [INIT_PREPARE],   11,
-
-         [NORMAL_4],       20,
-         [NORMAL_3],       21,
-         [NORMAL_2],       22,
-         [NORMAL_1],       23,
-         [NORMAL],         24,
-
-         [$1])])
+[ifdef([_AC_DIVERT($1)],
+       [indir([_AC_DIVERT($1)])],
+       [$1])])
 
 
 # AC_DIVERT_PUSH(DIVERSION-NAME)
@@ -1895,11 +1898,10 @@ EOF
 # If VARIABLE has not already been AC_SUBST'ed, append the sed PROGRAM
 # to `_AC_SUBST_SED_PROGRAM'.
 define(_AC_SUBST,
-[ifdef([AC_SUBST($1)], [],
-[define([AC_SUBST($1)])dnl
-m4_append([_AC_SUBST_SED_PROGRAM],
+[AC_EXPAND_ONCE([m4_append([_AC_SUBST_SED_PROGRAM],
 [$2
-])])])
+])])dnl
+])
 
 # Initialize.
 define([_AC_SUBST_SED_PROGRAM])

@@ -634,7 +634,7 @@ define([m4_strip],
 #    =>
 #    => active
 define(m4_append,
-[define([$1],
+[m4_define([$1],
 ifdef([$1], [defn([$1])])[$2])])
 
 
@@ -642,7 +642,7 @@ ifdef([$1], [defn([$1])])[$2])])
 # ----------------------------------
 # Same as `m4_append', but each element is separated by `, '.
 define(m4_list_append,
-[define([$1],
+[m4_define([$1],
 ifdef([$1], [defn([$1]), ])[$2])])
 
 

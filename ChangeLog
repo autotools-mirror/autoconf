@@ -1,5 +1,19 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	Speed ups.
+
+	* libm4.m4 (m4_append, m4_list_append): Use m4_define, not define.
+	On my machine the former implementation takes 4mn 40s to run the
+	test suite.  Using m4_define leads to 4mn 15s.
+	* acgeneral.m4 (_AC_SUBST): Use AC_EXPAND_ONCE (which uses
+	m4_define, not define).  4mn.
+	(_AC_DIVERT): Don't use m4_case.  Starting from those 4mn, if you
+	just move NORMAL* first in m4_case, the test suite is run in 3mn.
+	If instead of using m4, you use an `associative array' plus a
+	wrapper (current implementation), it falls to 2mn.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.m4 (autoconf --trace): New test.
 
 2000-03-21  Akim Demaille  <akim@epita.fr>
