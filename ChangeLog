@@ -1,3 +1,8 @@
+2000-03-27  Ralf Corsepius  <corsepiu@faw.uni-ulm.de>
+
+	* acgeneral.m4 (_AC_INIT_HELP, _AC_OUTPUT_SUBDIRS): Fix the DOS
+	absolute path pattern: s/?:[[/\\]]/?:[[/\\]]*/.
+
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_CANONICAL_TARGET, _AC_CANONICAL_BUILD): Rename

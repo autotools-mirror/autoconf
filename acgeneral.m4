@@ -1288,7 +1288,7 @@ if test "$ac_init_help" = "recursive"; then
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
-    [[/\\]]* | ?:[[/\\]] ) # Absolute path.
+    [[/\\]]* | ?:[[/\\]]* ) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
@@ -4616,7 +4616,7 @@ dnl to be created too).
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
-    [[/\\]]* | ?:[[/\\]] ) # Absolute path.
+    [[/\\]]* | ?:[[/\\]]* ) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
