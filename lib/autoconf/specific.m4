@@ -2290,12 +2290,13 @@ dnl AC_STRUCT_TIMEZONE
 dnl ------------------
 AC_DEFUN(AC_STRUCT_TIMEZONE,
 [AC_REQUIRE([AC_STRUCT_TM])dnl
-AC_C_STRUCT_MEMBER(tm_zone, [#include <sys/types.h>
+AC_CHECK_MEMBERS((struct tm.tm_zone),,,[#include <sys/types.h>
 #include <$ac_cv_struct_tm>
-], [struct tm], tm_zone)
-if test "$ac_cv_c_struct_member_tm_zone" = yes; then
+])
+if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
   AC_DEFINE(HAVE_TM_ZONE, 1,
-            [Define if your `struct tm' has `tm_zone'.])
+            [Define if your `struct tm' has `tm_zone'. Deprecated, use
+             `HAVE_STRUCT_TM_TM_ZONE' instead.])
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_TRY_LINK(
@@ -2315,45 +2316,73 @@ fi
 ])dnl AC_STRUCT_TIMEZONE
 
 
+
+dnl FIXME: The following three macros should no longer be supported in the
+dnl future.  They made sense when there was no means to directly check for
+dnl members of aggregates.  In the future, they will be remove, that's why
+dnl they are obsoleted.
+
+
 dnl AC_STRUCT_ST_BLKSIZE
 dnl --------------------
 AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
-[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
+[AC_OBSOLETE([$0], [; replace it with
+  AC_CHECK_MEMBERS((struct stat.st_blksize))
+Please note that it will define `HAVE_STRUCT_STAT_ST_BLKSIZE',
+and not `HAVE_ST_BLKSIZE'.])dnl
+AC_CHECK_MEMBERS((struct stat.st_blksize),
+                  [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
+                             [Define if your `struct stat' has
+                              `st_blksize'.  Deprecated, use
+                              `HAVE_STRUCT_STAT_ST_BLKSIZE' instead.])],,
+                  [#include <sys/types.h>
 #include <sys/stat.h>
-], [struct stat], st_blksize)
-if test $ac_cv_c_struct_member_st_blksize = yes; then
-  AC_DEFINE(HAVE_ST_BLKSIZE, 1,
-            [Define if your `struct stat' has `st_blksize'.])
-fi
+])dnl
 ])dnl AC_STRUCT_ST_BLKSIZE
 
 
 dnl AC_STRUCT_ST_BLOCKS
 dnl -------------------
+dnl If `struct stat' contains an `st_blocks' member, define
+dnl HAVE_STRUCT_STAT_ST_BLOCKS.  Otherwise, add `fileblocks.o' to the
+dnl output variable LIBOBJS.  We still define HAVE_ST_BLOCKS for backward
+dnl compatibility.  In the future, we will activate specializations for
+dnl this macro, so don't obsolete it right now.
+dnl
+dnl AC_OBSOLETE([$0], [; replace it with
+dnl   AC_CHECK_MEMBERS((struct stat.st_blocks), LIBOBJS="$LIBOBJS fileblocks.${ac_objext}")
+dnl Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
+dnl and not `HAVE_ST_BLOCKS'.])dnl
+dnl
 AC_DEFUN(AC_STRUCT_ST_BLOCKS,
-[AC_C_STRUCT_MEMBER(st_blocks, [#include <sys/types.h>
+[AC_CHECK_MEMBERS((struct stat.st_blocks),
+                  [AC_DEFINE(HAVE_ST_BLOCKS, 1,
+                             [Define if your `struct stat' has
+                              `st_blocks'.  Deprecated, use
+                              `HAVE_STRUCT_STAT_ST_BLOCKS' instead.])],
+                  [LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
+AC_SUBST(LIBOBJS)],
+                  [#include <sys/types.h>
 #include <sys/stat.h>
-], [struct stat], st_blocks)
-if test $ac_cv_c_struct_member_st_blocks = yes; then
-  AC_DEFINE(HAVE_ST_BLOCKS, 1,
-            [Define if your `struct stat' has `st_blocks'.])
-else
-  LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
-fi
-AC_SUBST(LIBOBJS)dnl
+])dnl
 ])dnl AC_STRUCT_ST_BLOCKS
 
 
 dnl AC_STRUCT_ST_RDEV
 dnl -----------------
 AC_DEFUN(AC_STRUCT_ST_RDEV,
-[AC_C_STRUCT_MEMBER(st_rdev, [#include <sys/types.h>
+[AC_OBSOLETE([$0], [; replace it with
+  AC_CHECK_MEMBERS((struct stat.st_rdev))
+Please note that it will define `HAVE_STRUCT_STAT_ST_RDEV',
+and not `HAVE_ST_RDEV'.])dnl
+AC_CHECK_MEMBERS((struct stat.st_rdev),
+                  [AC_DEFINE(HAVE_ST_RDEV, 1,
+                             [Define if your `struct stat' has `st_rdev'.
+                              Deprecated, use
+                              `HAVE_STRUCT_STAT_ST_RDEV' instead.])],,
+                  [#include <sys/types.h>
 #include <sys/stat.h>
-], [struct stat], st_rdev)
-if test $ac_cv_c_struct_member_st_rdev = yes; then
-  AC_DEFINE(HAVE_ST_RDEV, 1,
-            [Define if your `struct stat' has `st_rdev'.])
-fi
+])dnl
 ])dnl AC_STRUCT_ST_RDEV
 
 

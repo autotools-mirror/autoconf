@@ -2111,20 +2111,16 @@ AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_VAR_IF_INDIR([$1],
 [AC_FATAL([$0: requires manifest arguments])],
-[pushdef(AC_Member_Aggregate, [patsubst([$1], [\.[^.]*])])dnl
+[ifelse(regexp([$1], [\.]), -1,
+        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
+pushdef(AC_Member_Aggregate, [patsubst([$1], [\.[^.]*])])dnl
 pushdef(AC_Member_Member,     [patsubst([$1], [.*\.])])])dnl
 AC_CACHE_CHECK([for $1], ac_Member,
-[AC_TRY_COMPILE(m4_default([$4
-], [#include <stdio.h>
-#include <sys/types.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#endif
-]),
+[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
 ac_Member_Aggregate foo;
 foo.ac_Member_Member;,
-AC_VAR_SET(ac_Member, yes), AC_VAR_SET(ac_Member, no))])
+                AC_VAR_SET(ac_Member, yes),
+                AC_VAR_SET(ac_Member, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Member) = yes,
                 [$2], [$3])dnl
 popdef([AC_Member_Member])dnl
@@ -2148,14 +2144,6 @@ $2],
                  [$3],
                  [$4])])])
 
-
-dnl Check if a particular structure member exists.
-dnl AC_C_STRUCT_MEMBER(VARIABLE, INCLUDES, TYPE, MEMBER)
-AC_DEFUN(AC_C_STRUCT_MEMBER,
-[AC_CACHE_CHECK([for member $4 in aggregate type $3],ac_cv_c_struct_member_$1,
-  [AC_TRY_COMPILE([$2], [$3 foo; foo.$4;],
-   ac_cv_c_struct_member_$1=yes,ac_cv_c_struct_member_$1=no)])
-$1="$ac_cv_c_struct_member_$1"])
 
 
 dnl ### Default headers.

@@ -2674,25 +2674,43 @@ The following macros check for certain structures or structure members.
 
 @defmac AC_STRUCT_ST_BLKSIZE
 @maindex STRUCT_ST_BLKSIZE
+@cvindex HAVE_STRUCT_STAT_ST_BLKSIZE
 @cvindex HAVE_ST_BLKSIZE
 If @code{struct stat} contains an @code{st_blksize} member, define
-@code{HAVE_ST_BLKSIZE}.
+@code{HAVE_STRUCT STAT_ST_BLKSIZE}.  The former name,
+@code{HAVE_ST_BLKSIZE} is to be avoided, as its support will cease in
+the future.  This macro is obsoleted, and should be replaced by
+@example
+AC_CHECK_MEMBERS((struct stat.st_blksize))
+@end example
+
 @end defmac
 
 @defmac AC_STRUCT_ST_BLOCKS
 @maindex STRUCT_ST_BLOCKS
+@cvindex HAVE_STRUCT_STAT_ST_BLOCKS
 @cvindex HAVE_ST_BLOCKS
 @ovindex LIBOBJS
 If @code{struct stat} contains an @code{st_blocks} member, define
-@code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
-output variable @code{LIBOBJS}.
+@code{HAVE_STRUCT STAT_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o}
+to the output variable @code{LIBOBJS}.  The former name,
+@code{HAVE_ST_BLOCKS} is to be avoided, as its support will cease in the
+future.
 @end defmac
 
 @defmac AC_STRUCT_ST_RDEV
 @maindex STRUCT_ST_RDEV
 @cvindex HAVE_ST_RDEV
+@cvindex HAVE_STRUCT_STAT_ST_RDEV
 If @code{struct stat} contains an @code{st_rdev} member, define
-@code{HAVE_ST_RDEV}.
+@code{HAVE_STRUCT_STAT_ST_RDEV}.  The former name, @code{HAVE_ST_RDEV}
+is to be avoided, as its support will cease in the future.
+
+This macro is obsoleted, and should be replaced by
+@example
+AC_CHECK_MEMBERS((struct stat.st_rdev))
+@end example
+
 @end defmac
 
 @defmac AC_STRUCT_TM
@@ -2708,8 +2726,9 @@ had better define @code{struct tm}.
 @cvindex HAVE_TM_ZONE
 @cvindex HAVE_TZNAME
 Figure out how to get the current timezone.  If @code{struct tm} has a
-@code{tm_zone} member, define @code{HAVE_TM_ZONE}.  Otherwise, if the
-external array @code{tzname} is found, define @code{HAVE_TZNAME}.
+@code{tm_zone} member, define @code{HAVE_STRUCT_TM_TM_ZONE} (and the
+obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
+@code{tzname} is found, define @code{HAVE_TZNAME}.
 @end defmac
 
 @node Generic Structures,  , Particular Structures, Structures
@@ -2718,19 +2737,30 @@ external array @code{tzname} is found, define @code{HAVE_TZNAME}.
 These macros are used to find structure members not covered by the
 particular test macros.
 
-@defmac AC_C_STRUCT_MEMBER (@var{variable}, @var{includes}, @var{type}, @var{member})
-@maindex C_STRUCT_MEMBER
-Check whether @var{member} is a member of the C aggregate @var{type}.
-The value of @var{type} may be the name of any legitimate C data type
-including the keywords @code{struct} and @code{union}. @var{includes} is
-any @code{#include} statements needed to obtain the definition of the
-aggregate type. If @var{member} is present, set @var{variable} to
-@samp{yes}, otherwise @samp{no}.  An example:
+@defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@maindex CHECK_MEMBER
+Check whether @var{member} is a member of the aggregate @var{aggregate}.
+FIXME: Default @var{includes} are provided.
 @example
-AC_C_STRUCT_MEMBER(pw_gecos,
-  [#include <pwd.h>], [struct passwd], pw_gecos)
+AC_CHECK_MEMBER(struct passwd.pw_gecos,,
+                [AC_FATAL([We need `struct passwd.pw_gecos'!])],
+                [#include <pwd.h>])
 @end example
 @end defmac
+
+@defmac AC_CHECK_MEMBERS ((@var{aggregate}.@var{member}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@maindex CHECK_MEMBERS
+Check for the existence of each aggregate members using the previous
+macro.  When @var{member} belong to @var{aggregate}, define
+@code{HAVE_@var{aggregate}_@var{member}} (in all capitals, with spaces
+and dot replaced by underscore).
+
+This macro uses m4 lists:
+@example
+AC_CHECK_MEMBERS((struct stat.st_rdev, struct stat.st_blksize))
+@end example
+@end defmac
+
 
 @node Typedefs, C Compiler Characteristics, Structures, Existing Tests
 @section Typedefs

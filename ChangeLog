@@ -1,5 +1,24 @@
 1999-11-01  Akim Demaille  <akim@epita.fr>
 
+	Clean up the macros for testing members of aggregates.
+
+	* acgeneral.m4 (AC_CHECK_MEMBER): FATAL if $1 has no dot in it.
+	Use AC_INCLUDE_DEFAULTS.
+	(AC_C_STRUCT_MEMBER): Removed.
+	* acspecific.m4 (AC_STRUCT_TIMEZONE): Adapted to AC_CHECK_MEMBERS.
+	(AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_RDEV): Adapted to
+ 	AC_CHECK_MEMBERS and obsoleted.
+	(AC_STRUCT_ST_BLOCKS): Adapted to AC_CHECK_MEMBERS.
+	* autoconf.texi (AC_STRUCT_ST_BLKSIZE, HAVE_STRUCT_STAT_ST_RDEV):
+	Explain they are obsoleted, and how to migrate.
+	(AC_STRUCT_ST_BLOCKS, AC_STRUCT_TIMEZONE): Explain that the
+ 	AC_DEFINE changed (but the former #defines remain defined
+ 	currently).
+	(AC_C_STRUCT_MEMBER): Removed, replaced by the definitions of
+	AC_CHECK_MEMBER and AC_CHECK_MEMBERS.
+
+1999-11-01  Akim Demaille  <akim@epita.fr>
+
 	Install a uniform set of default includes.
 
 	* acgeneral.m4 (AC_INCLUDES_DEFAULT): New macro.  Expands in its
