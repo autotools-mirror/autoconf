@@ -1,3 +1,10 @@
+2001-04-11  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi (AC_F77_WRAPPERS): Mention C++ as well as C.
+	In the example, don't #ifdef F77_FUNC before using it, as that
+	would push any errors to link-time rather than compile-time; note
+	that the user can test this to invoke alternative behavior.
+
 2001-04-11  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh (Task script): Be sure that `forbidden.rx' and
