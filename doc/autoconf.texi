@@ -574,9 +574,9 @@ autoscan}).
 @code{ifnames} scans all of the C source files named on the command line
 (or the standard input, if none are given) and writes to the standard
 output a sorted list of all the identifiers that appear in those files
-in @code{#if}, @code{#elif}, or @code{#ifdef} directives.  It prints
-each identifier on a line, followed by a space-separated list of the
-files in which that identifier occurs.
+in @code{#if}, @code{#elif}, @code{#ifdef}, or @code{#ifndef}
+directives.  It prints each identifier on a line, followed by a
+space-separated list of the files in which that identifier occurs.
 
 @noindent
 @code{ifnames} accepts the following options:
@@ -4647,8 +4647,8 @@ I looked briefly into using the Metaconfig package, by Larry Wall,
 Harlan Stenn, and Raphael Manfredi, but I decided not to for several
 reasons.  The @code{Configure} scripts it produces are interactive,
 which I find quite inconvenient; I didn't like the ways it checked for
-some features (such as library functions); I didn't know whether it was
-being maintained at that time, and the @code{Configure} scripts I had
+some features (such as library functions); I didn't know that it was
+still being maintained, and the @code{Configure} scripts I had
 seen didn't work on many modern systems (such as System V R4 and NeXT);
 it wasn't very flexible in what it could do in response to a feature's
 presence or absence; I found it confusing to learn; and it was too big
