@@ -818,11 +818,7 @@ fi
 # another.  It considers the compiler to be in ANSI C89 mode if it
 # handles function prototypes correctly.
 AC_DEFUN([_AC_PROG_CC_C89],
-[AC_MSG_CHECKING([for $CC option to accept ANSI C89])
-AC_CACHE_VAL(ac_cv_prog_cc_c89,
-[ac_cv_prog_cc_c89=no
-ac_save_CC=$CC
-AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[_AC_C_STD_TRY([c89],
 [[#include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -861,45 +857,54 @@ struct s2 {int (*f) (double a);};
 int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
 int argc;
 char **argv;]],
-[[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];]])])
-# Don't try gcc -ansi; that turns off useful extensions and
-# breaks some systems' header files.
-# AIX circa 2003 	-qlanglvl=extc89
-# old AIX		-qlanglvl=ansi
-# Ultrix, OSF/1, Tru64	-std
-# HP-UX 10.20 and later	-Ae
-# HP-UX older versions	-Aa -D_HPUX_SOURCE
-# SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=extc89 -qlanglvl=ansi -std \
-	-Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+[[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];]],
+dnl Don't try gcc -ansi; that turns off useful extensions and
+dnl breaks some systems' header files.
+dnl AIX circa 2003 	-qlanglvl=extc89
+dnl old AIX		-qlanglvl=ansi
+dnl Ultrix, OSF/1, Tru64	-std
+dnl HP-UX 10.20 and later	-Ae
+dnl HP-UX older versions	-Aa -D_HPUX_SOURCE
+dnl SVR4			-Xc -D__EXTENSIONS__
+[-qlanglvl=extc89 -qlanglvl=ansi -std \
+	-Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"], [$1], [$2])[]dnl
+])# _AC_PROG_CC_C89
+
+
+# _AC_C_STD_TRY(STANDARD, TEST-PROLOGUE, TEST-BODY, OPTION-LIST,
+#		ACTION-IF-AVAILABLE, ACTION-IF-UNAVAILABLE)
+# --------------------------------------------------------------
+# Check whether the C compiler accepts features of STANDARD (e.g `c89', `c99')
+# by trying to compile a program of TEST-PROLOGUE and TEST-BODY.  If this fails,
+# try again with each compiler option in the space-separated OPTION-LIST; if one
+# helps, append it to CC.  If eventually successful, run ACTION-IF-AVAILABLE,
+# else ACTION-IF-UNAVAILABLE.
+AC_DEFUN([_AC_C_STD_TRY],
+[AC_MSG_CHECKING([for $CC option to accept ISO ]m4_translit($1, [c], [C]))
+AC_CACHE_VAL(ac_cv_prog_cc_$1,
+[ac_cv_prog_cc_$1=no
+ac_save_CC=$CC
+AC_LANG_CONFTEST([AC_LANG_PROGRAM([$2], [$3])])
+for ac_arg in '' $4
 do
   CC="$ac_save_CC $ac_arg"
-  _AC_COMPILE_IFELSE([],
-		     [ac_cv_prog_cc_c89=$ac_arg
-break])
+  _AC_COMPILE_IFELSE([], [ac_cv_prog_cc_$1=$ac_arg])
+  test "x$ac_cv_prog_cc_$1" != "xno" && break
 done
-# Because of `break', _AC_COMPILE_IFELSE's cleaning code was skipped.
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-case "x$ac_cv_prog_cc_c89" in
-  x|xno)
-    CC="$ac_save_CC" ;;
-  *)
-    CC="$ac_save_CC $ac_cv_prog_cc_c89" ;;
-esac
-])
-case "x$ac_cv_prog_cc_c89" in
+rm -f conftest.$ac_ext
+CC=$ac_save_CC
+])# AC_CACHE_VAL
+case "x$ac_cv_prog_cc_$1" in
+  x)
+    AC_MSG_RESULT([none needed]) ;;
   xno)
-    AC_MSG_RESULT([unsupported])
-    $2 ;;
+    AC_MSG_RESULT([unsupported]) ;;
   *)
-    if test "x$ac_cv_prog_cc_c89" = x; then
-      AC_MSG_RESULT([none needed])
-    else
-      AC_MSG_RESULT([$ac_cv_prog_cc_c89])
-    fi
-    $1 ;;
+    CC="$CC $ac_cv_prog_cc_$1"
+    AC_MSG_RESULT([$ac_cv_prog_cc_$1]) ;;
 esac
-])# _AC_PROG_CC_C89
+AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$5], [$6])
+])# _AC_C_STD_TRY
 
 
 # _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
@@ -910,11 +915,7 @@ esac
 # considers the compiler to be in ISO C99 mode if it handles mixed
 # code and declarations, _Bool, inline and restrict.
 AC_DEFUN([_AC_PROG_CC_C99],
-[AC_MSG_CHECKING([for $CC option to accept ISO C99])
-AC_CACHE_VAL(ac_cv_prog_cc_c99,
-[ac_cv_prog_cc_c99=no
-ac_save_CC=$CC
-AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[_AC_C_STD_TRY([c99],
 [[#include <stdarg.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -1010,44 +1011,17 @@ test_varargs(const char *format, ...)
 
   int dynamic_array[ni.number];
   dynamic_array[43] = 543;
-]])])
-# Try
-# GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
-# AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
-# Intel ICC	-c99
-# IRIX		-c99
-# Solaris	(unused because it causes the compiler to assume C99 semantics for
-#		library functions, and this is invalid before Solaris 10: -xc99)
-# Tru64		-c99
-# with extended modes being tried first.
-for ac_arg in "" -std=gnu99  -c99 -qlanglvl=extc99
-do
-  CC="$ac_save_CC $ac_arg"
-  _AC_COMPILE_IFELSE([],
-		     [ac_cv_prog_cc_c99=$ac_arg
-break])
-done
-# Because of `break', _AC_COMPILE_IFELSE's cleaning code was skipped.
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-case "x$ac_cv_prog_cc_c99" in
-  x|xno)
-    CC="$ac_save_CC" ;;
-  *)
-    CC="$ac_save_CC $ac_cv_prog_cc_c99" ;;
-esac
-])
-case "x$ac_cv_prog_cc_c99" in
-  xno)
-    AC_MSG_RESULT([unsupported])
-    $2 ;;
-  *)
-    if test "x$ac_cv_prog_cc_c99" = x; then
-      AC_MSG_RESULT([none needed])
-    else
-      AC_MSG_RESULT([$ac_cv_prog_cc_c99])
-    fi
-    $1 ;;
-esac
+]],
+dnl Try
+dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
+dnl AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
+dnl Intel ICC	-c99
+dnl IRIX	-c99
+dnl Solaris	(unused because it causes the compiler to assume C99 semantics for
+dnl		library functions, and this is invalid before Solaris 10: -xc99)
+dnl Tru64	-c99
+dnl with extended modes being tried first.
+[[-std=gnu99 -c99 -qlanglvl=extc99]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C99
 
 
