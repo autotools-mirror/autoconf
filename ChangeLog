@@ -1,8 +1,12 @@
 Wed Mar 20 09:37:31 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
-	* acgeneral.m4 (AC_CHECK_LIB): Omit `char $2' decl when $2 is `main'.
+	* acgeneral.m4 (AC_CHECK_LIB): Put - last in tr set so it is not
+	considered a range.
 
-	* acgeneral.m4 (AC_CHECK_LIB): Use \055 for - in tr command.
+	* acspecific.m4 (AC_C_CONST): Add check for gcc 2.7 bug.
+	From Paul Eggert and Jim Meyering.
+
+	* acgeneral.m4 (AC_CHECK_LIB): Omit `char $2' decl when $2 is `main'.
 
 Wed Mar 13 22:10:42 1996  Andreas Schwab  <schwab@issan.informatik.uni-dortmund.de>
 
