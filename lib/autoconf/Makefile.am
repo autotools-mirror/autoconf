@@ -1,6 +1,6 @@
 ## Process this file with automake to create Makefile.in
 
-## Copyright 2001 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ ETAGS_ARGS = --lang=none \
 
 check-local:
 	if (cd $(srcdir) && \
-	    egrep '^_?EOF' $(dist_autoconflib_DATA)) >eof.log; then \
+	    grep '^_*EOF' $(dist_autoconflib_DATA)) >eof.log; then \
 	  echo "ERROR: user EOF tags were used:" >&2; \
 	  sed "s,^,$*.m4: ," <eof.log >&2; \
 	  echo >&2; \

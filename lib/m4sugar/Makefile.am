@@ -57,7 +57,7 @@ ETAGS_ARGS = --lang=none \
 
 check-local:
 	if (cd $(srcdir) && \
-	    egrep '^_?EOF' $(dist_m4sugarlib_DATA)) >eof.log; then \
+	    grep '^_*EOF' $(dist_m4sugarlib_DATA)) >eof.log; then \
 	  echo "ERROR: user EOF tags were used:" >&2; \
 	  sed "s,^,$*.m4: ," <eof.log >&2; \
 	  echo >&2; \
