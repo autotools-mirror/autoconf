@@ -1445,14 +1445,16 @@ newer than their input files (@file{configure.ac} and, if present,
 
 @item --install
 @itemx -i
-Copy missing auxiliary files.  This option is similar to the option
-@option{--add-missing} in @command{automake}.  By default, file are
-copied; this can be changed with @option{--symlink}.
+Install the missing auxiliary files in the package.  By default, files
+are copied; this can be changed with @option{--symlink}.
+
+This option triggers calls to @samp{automake --add-missing},
+@samp{libtoolize}, @samp{autopoint}, etc.
 
 @item --symlink
 @itemx -s
-When used with @option{--isntall}, install symbolic links to the missing
-auxiliary files instead of copies.
+When used with @option{--install}, install symbolic links to the missing
+auxiliary files instead of copying them.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
