@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.11)
+define(AC_ACVERSION, 2.11.1)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1178,6 +1178,7 @@ ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
 ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+cross_compiling=$ac_cv_prog_cc_cross
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -1188,6 +1189,7 @@ ac_ext=C
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
 ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
 dnl Push the current language on a stack.
@@ -1420,6 +1422,31 @@ fi
 undefine([AC_VAR_NAME])dnl
 ])
 
+dnl Check whether the current compiler produces executables, and
+dnl whether those executables are native to the build system.
+dnl Before calling this, call AC_LANG_* to set the right language.
+dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-CACHE-ID, CROSS-CACHE-ID)
+AC_DEFUN(AC_TRY_COMPILER,
+[cat > conftest.$ac_ext <<EOF
+[#]line __oline__ "configure"
+#include "confdefs.h"
+[$1]
+EOF
+if AC_TRY_EVAL(ac_link) && test -s conftest; then
+  [$2]=yes
+  # If we can't run a trivial program, we are probably using a cross compiler.
+  if (./conftest; exit) 2>/dev/null; then
+    [$3]=no
+  else
+    [$3]=yes
+  fi
+else
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
+  [$2]=no
+fi
+rm -fr conftest*])
+
 
 dnl ### Checking for libraries
 
@@ -1630,8 +1657,7 @@ ifelse([$4], , , [  rm -rf conftest*
   $4
 ])dnl
 fi
-rm -f conftest*]
-)
+rm -f conftest*])
 
 
 dnl ### Checking for run-time features
@@ -1640,8 +1666,7 @@ dnl ### Checking for run-time features
 dnl AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE
 dnl            [, ACTION-IF-CROSS-COMPILING]]])
 AC_DEFUN(AC_TRY_RUN,
-[AC_REQUIRE([AC_C_CROSS])dnl
-if test "$cross_compiling" = yes; then
+[if test "$cross_compiling" = yes; then
   ifelse([$4], ,
     [errprint(__file__:__line__: warning: [AC_TRY_RUN] called without default to allow cross compiling
 )dnl
@@ -1664,9 +1689,10 @@ extern "C" void exit(int);
 ])dnl
 [$1]
 EOF
-AC_TRY_EVAL(ac_link)
-if test -s conftest && (./conftest; exit) 2>/dev/null; then
-  ifelse([$2], , :, [$2])
+if AC_TRY_EVAL(ac_link) && test -s conftest && (./conftest; exit) 2>/dev/null
+then
+  ifelse([$2], , :, [rm -rf conftest*
+  $2])
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
@@ -2081,7 +2107,8 @@ s%@srcdir@%$srcdir%g
 s%@top_srcdir@%$top_srcdir%g
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%g
 ])dnl
-" $ac_given_srcdir/$ac_file_in | eval "$ac_sed_cmds" > $ac_file
+dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
+" $ac_given_srcdir/$ac_file_in | (eval "$ac_sed_cmds") > $ac_file
 dnl This would break Makefile dependencies.
 dnl  if cmp -s $ac_file conftest.out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
@@ -2120,7 +2147,7 @@ ac_eC=' '
 ac_eD='%g'
 changequote([, ])dnl
 
-if test -z "$CONFIG_HEADERS"; then
+if test "${CONFIG_HEADERS+set}" != set; then
 EOF
 dnl Support passing AC_CONFIG_HEADER a value containing shell variables.
 cat >> $CONFIG_STATUS <<EOF

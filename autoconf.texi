@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.11
-@set VERSION 2.11
+@set EDITION 2.11.1
+@set VERSION 2.11.1
 @set UPDATED November 1996
 
 @iftex
@@ -1500,14 +1500,21 @@ fastest implementation.
 @ovindex CC
 @ovindex CFLAGS
 Determine a C compiler to use.  If @code{CC} is not already set in the
-environment, check for @code{gcc}, and use @code{cc} if it's not found.
+environment, check for @code{gcc}, and use @code{cc} if that's not found.
 Set output variable @code{CC} to the name of the compiler found.
 
 If using the GNU C compiler, set shell variable @code{GCC} to
 @samp{yes}, empty otherwise.  If output variable @code{CFLAGS} was
-not already set, set it to @samp{-g -O} for the GNU C compiler
-(@samp{-O} on systems where GCC does not accept @samp{-g}), or @samp{-g}
+not already set, set it to @samp{-g -O2} for the GNU C compiler
+(@samp{-O2} on systems where GCC does not accept @samp{-g}), or @samp{-g}
 for other compilers.
+
+If the C compiler being used does not produce executables that can run
+on the system where @code{configure} is being run, set the shell
+variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
+In other words, this tests whether the build system type is different
+from the host system type (the target system type is irrelevant to this
+test).  @xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
@@ -1544,9 +1551,16 @@ last resort set @code{CXX} to @code{gcc}.
 
 If using the GNU C++ compiler, set shell variable @code{GXX} to
 @samp{yes}, empty otherwise.  If output variable @code{CXXFLAGS} was
-not already set, set it to @samp{-g -O} for the GNU C++ compiler
-(@samp{-O} on systems where G++ does not accept @samp{-g}), or @samp{-g}
+not already set, set it to @samp{-g -O2} for the GNU C++ compiler
+(@samp{-O2} on systems where G++ does not accept @samp{-g}), or @samp{-g}
 for other compilers.
+
+If the C++ compiler being used does not produce executables that can run
+on the system where @code{configure} is being run, set the shell
+variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
+In other words, this tests whether the build system type is different
+from the host system type (the target system type is irrelevant to this
+test).  @xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
@@ -2944,8 +2958,7 @@ compiling.
 If the C compiler being used does not produce executables that run on
 the system where @code{configure} is being run, then the test program is
 not run.  If the optional shell commands @var{action-if-cross-compiling}
-are given, they are run instead and this macro calls @code{AC_C_CROSS}
-if it has not already been called.  Otherwise, @code{configure} prints
+are given, they are run instead.  Otherwise, @code{configure} prints
 an error message and exits.
 @end defmac
 
@@ -2965,18 +2978,13 @@ the correct values for the target system (@pxref{Caching Results}).
 
 To provide a default for calls of @code{AC_TRY_RUN} that are embedded in
 other macros, including a few of the ones that come with Autoconf, you
-can call @code{AC_C_CROSS} before running them.  Then, if the shell
+can call @code{AC_PROG_CC} before running them.  Then, if the shell
 variable @code{cross_compiling} is set to @samp{yes}, use an alternate
 method to get the results instead of calling the macros.
 
 @defmac AC_C_CROSS
 @maindex C_CROSS
-If the C compiler being used does not produce executables that can run
-on the system where @code{configure} is being run, set the shell
-variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
-In other words, this tests whether the build system type is different
-from the host system type (the target system type is irrelevant to this
-test).  @xref{Manual Configuration}, for more on support for cross compiling.
+This macro is obsolete; it does nothing.
 @end defmac
 
 @node Guidelines, Test Functions, Test Programs, Run Time
@@ -3171,13 +3179,17 @@ compiler is used in tests that follow in @file{configure.in}.
 @defmac AC_LANG_C
 @maindex LANG_C
 Do compilation tests using @code{CC} and @code{CPP} and use extension
-@file{.c} for test programs.
+@file{.c} for test programs.  Set the shell variable
+@code{cross_compiling} to the value computed by @code{AC_PROG_CC} if it
+has been run, empty otherwise.
 @end defmac
 
 @defmac AC_LANG_CPLUSPLUS
 @maindex LANG_CPLUSPLUS
 Do compilation tests using @code{CXX} and @code{CXXCPP} and use
-extension @file{.C} for test programs.
+extension @file{.C} for test programs.  Set the shell variable
+@code{cross_compiling} to the value computed by @code{AC_PROG_CXX} if
+it has been run, empty otherwise.
 @end defmac
 
 @defmac AC_LANG_SAVE

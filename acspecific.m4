@@ -79,39 +79,20 @@ if test -z "$CC"; then
 fi
 
 AC_PROG_CC_WORKS
-AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
-[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
-cat > conftest.c <<EOF
-#ifdef __GNUC__
-  yes;
-#endif
-EOF
-if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
-  ac_cv_prog_gcc=yes
-else
-  ac_cv_prog_gcc=no
-fi])
+AC_PROG_CC_GNU
 
 if test $ac_cv_prog_gcc = yes; then
   GCC=yes
-dnl Check whether -g works even if CFLAGS is set, in case the package
+dnl Check whether -g works, even if CFLAGS is set, in case the package
 dnl plays around with CFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
   ac_test_CFLAGS="${CFLAGS+set}"
   ac_save_CFLAGS="$CFLAGS"
   CFLAGS=
-  AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_gcc_g,
-[echo 'void f(){}' > conftest.c
-if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
-  ac_cv_prog_gcc_g=yes
-else
-  ac_cv_prog_gcc_g=no
-fi
-rm -f conftest*
-])
+  AC_PROG_CC_G
   if test "$ac_test_CFLAGS" = set; then
     CFLAGS="$ac_save_CFLAGS"
-  elif test $ac_cv_prog_gcc_g = yes; then
+  elif test $ac_cv_prog_cc_g = yes; then
     CFLAGS="-g -O2"
   else
     CFLAGS="-O2"
@@ -127,39 +108,20 @@ AC_DEFUN(AC_PROG_CXX,
 AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++, gcc)
 
 AC_PROG_CXX_WORKS
-AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
-[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
-cat > conftest.C <<EOF
-#ifdef __GNUC__
-  yes;
-#endif
-EOF
-if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
-  ac_cv_prog_gxx=yes
-else
-  ac_cv_prog_gxx=no
-fi])
+AC_PROG_CXX_GNU
+
 if test $ac_cv_prog_gxx = yes; then
   GXX=yes
-dnl Check whether -g works even if CXXFLAGS is set, in case the package
+dnl Check whether -g works, even if CXXFLAGS is set, in case the package
 dnl plays around with CXXFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
   ac_test_CXXFLAGS="${CXXFLAGS+set}"
   ac_save_CXXFLAGS="$CXXFLAGS"
   CXXFLAGS=
-  AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_gxx_g,
-[echo 'void f(){}' > conftest.cc
-if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
-  ac_cv_prog_gxx_g=yes
-else
-  ac_cv_prog_gxx_g=no
-fi
-rm -f conftest*
-])
-dnl
+  AC_PROG_CXX_G
   if test "$ac_test_CXXFLAGS" = set; then
     CXXFLAGS="$ac_save_CXXFLAGS"
-  elif test $ac_cv_prog_gxx_g = yes; then
+  elif test $ac_cv_prog_cxx_g = yes; then
     CXXFLAGS="-g -O2"
   else
     CXXFLAGS="-O2"
@@ -174,33 +136,81 @@ AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_C
-dnl We can't try running a program here because we don't know yet if
-dnl we're cross-compiling.  And we can't check for that first, because the
-dnl cross-compiling test being fooled by non-working compiler installations
-dnl is the reason we're doing this in the first place.
-AC_TRY_LINK(, , ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no)
+AC_TRY_COMPILER([main(){return(0);}], ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cc_works)
 if test $ac_cv_prog_cc_works = no; then
-  AC_MSG_ERROR([Installation or configuration problem: C compiler cannot create executables.])
+  AC_MSG_ERROR([installation or configuration problem: C compiler cannot create executables.])
 fi
+AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler])
+AC_MSG_RESULT($ac_cv_prog_cc_cross)
+cross_compiling=$ac_cv_prog_cc_cross
 ])
 
 AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-dnl We can't try running a program here because we don't know yet if
-dnl we're cross-compiling.  And we can't check for that first, because the
-dnl cross-compiling test being fooled by non-working compiler installations
-dnl is the reason we're doing this in the first place.
-AC_TRY_LINK(, , ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no)
+AC_TRY_COMPILER([main(){return(0);}], ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then
-  AC_MSG_ERROR([Installation or configuration problem: C++ compiler cannot create executables.])
+  AC_MSG_ERROR([installation or configuration problem: C++ compiler cannot create executables.])
 fi
+AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) is a cross-compiler])
+AC_MSG_RESULT($ac_cv_prog_cxx_cross)
+cross_compiling=$ac_cv_prog_cxx_cross
 ])
+
+AC_DEFUN(AC_PROG_CC_GNU,
+[AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
+[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
+cat > conftest.c <<EOF
+#ifdef __GNUC__
+  yes;
+#endif
+EOF
+if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
+  ac_cv_prog_gcc=yes
+else
+  ac_cv_prog_gcc=no
+fi])])
+
+AC_DEFUN(AC_PROG_CXX_GNU,
+[AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
+[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
+cat > conftest.C <<EOF
+#ifdef __GNUC__
+  yes;
+#endif
+EOF
+if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
+  ac_cv_prog_gxx=yes
+else
+  ac_cv_prog_gxx=no
+fi])])
+
+AC_DEFUN(AC_PROG_CC_G,
+[AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
+[echo 'void f(){}' > conftest.c
+if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
+  ac_cv_prog_cc_g=yes
+else
+  ac_cv_prog_cc_g=no
+fi
+rm -f conftest*
+])])
+
+AC_DEFUN(AC_PROG_CXX_G,
+[AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
+[echo 'void f(){}' > conftest.cc
+if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
+  ac_cv_prog_cxx_g=yes
+else
+  ac_cv_prog_cxx_g=no
+fi
+rm -f conftest*
+])])
 
 AC_DEFUN(AC_PROG_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])dnl
@@ -827,7 +837,8 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
-[AC_CHECK_FUNCS(getpagesize)
+[AC_CHECK_HEADERS(unistd.h)
+AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_TRY_RUN([
 /* Thanks to Mike Haertel and Jim Avera for this test.
@@ -855,25 +866,46 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 #include <fcntl.h>
 #include <sys/mman.h>
 
+/* This mess was copied from the GNU getpagesize.h.  */
 #ifndef HAVE_GETPAGESIZE
-# include <sys/param.h>
-# ifdef EXEC_PAGESIZE
-#  define getpagesize() EXEC_PAGESIZE
-# else
-#  ifdef NBPG
-#   define getpagesize() NBPG * CLSIZE
-#   ifndef CLSIZE
-#    define CLSIZE 1
-#   endif
-#  else
-#   ifdef NBPC
-#    define getpagesize() NBPC
-#   else
-#    define getpagesize() PAGESIZE /* SVR4 */
-#   endif
-#  endif
+# ifdef HAVE_UNISTD_H
+#  include <unistd.h>
 # endif
-#endif
+
+/* Assume that all systems that can run configure have sys/param.h.  */
+# ifndef HAVE_SYS_PARAM_H
+#  define HAVE_SYS_PARAM_H 1
+# endif
+
+# ifdef _SC_PAGESIZE
+#  define getpagesize() sysconf(_SC_PAGESIZE)
+# else /* no _SC_PAGESIZE */
+#  ifdef HAVE_SYS_PARAM_H
+#   include <sys/param.h>
+#   ifdef EXEC_PAGESIZE
+#    define getpagesize() EXEC_PAGESIZE
+#   else /* no EXEC_PAGESIZE */
+#    ifdef NBPG
+#     define getpagesize() NBPG * CLSIZE
+#     ifndef CLSIZE
+#      define CLSIZE 1
+#     endif /* no CLSIZE */
+#    else /* no NBPG */
+#     ifdef NBPC
+#      define getpagesize() NBPC
+#     else /* no NBPC */
+#      ifdef PAGESIZE
+#       define getpagesize() PAGESIZE
+#      endif /* PAGESIZE */
+#     endif /* no NBPC */
+#    endif /* no NBPG */
+#   endif /* no EXEC_PAGESIZE */
+#  else /* no HAVE_SYS_PARAM_H */
+#   define getpagesize() 8192	/* punt totally */
+#  endif /* no HAVE_SYS_PARAM_H */
+# endif /* no _SC_PAGESIZE */
+
+#endif /* no HAVE_GETPAGESIZE */
 
 #ifdef __cplusplus
 extern "C" { void *malloc(unsigned); }
@@ -1533,12 +1565,7 @@ dnl ### Checks for compiler characteristics
 
 
 AC_DEFUN(AC_C_CROSS,
-[# If we cannot run a trivial program, we are probably using a cross compiler.
-AC_CACHE_CHECK(whether using a cross-compiler, ac_cv_c_cross,
-[AC_TRY_RUN([main(){return(0);}],
-  ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_c_cross=yes)])
-cross_compiling=$ac_cv_c_cross
-])
+[AC_OBSOLETE([$0], [; it has been merged into AC_PROG_CC])])
 
 AC_DEFUN(AC_C_CHAR_UNSIGNED,
 [AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,

@@ -61,7 +61,7 @@ M4FILES = autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoheader.m4
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = info Makefile
 # Files to distribute.
-DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL \
+DISTFILES = AUTHORS COPYING ChangeLog ChangeLog.1 INSTALL \
 	Makefile.in NEWS README TODO $(M4FILES) \
 	acconfig.h acfunctions acheaders acidentifiers \
 	acmakevars acprograms autoconf.info* \

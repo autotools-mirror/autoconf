@@ -482,10 +482,7 @@ From: bostic@bsdi.com (Keith Bostic)
 
 ------------------------------------------------------------------------------
 
-Combine AC_PROG_CC_WORKS with AC_C_CROSS.  If the compiler exits with
-a 0 status and produces a non-empty output file, consider it working.
-If the output file is runnable, consider it native, also.
-Perhaps also have AC_PROG_CC_WORKS try to link an invalid program, and
+Perhaps also have AC_TRY_COMPILER try to link an invalid program, and
 die if the compiler seemed to succeed--in which case it's not usable
 with autoconf scripts.
 
@@ -606,6 +603,14 @@ Another thing I wish for is a macro which figures out which libraries are
 needed for BSD-sytle sockets.  AC_PATH_X already detects this 
 correctly...so it's just a matter of seperating out the socket-related code.
 From: "Joel N. Weber II" <nemo@koa.iolani.honolulu.hi.us>
+
+------------------------------------------------------------------------------
+
+Merge the two lex macros, AC_PROG_LEX and AC_DECL_YYTEXT?
+
+------------------------------------------------------------------------------
+
+Is it safe to remove the getpagesize references from AC_FUNC_MMAP?
 
 ------------------------------------------------------------------------------
 

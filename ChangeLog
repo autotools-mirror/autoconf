@@ -1,3 +1,32 @@
+Tue Nov 19 10:29:06 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Fail if linking fails, and
+	remove conftest* before running success code, like in AC_TRY_LINK.
+	(AC_TRY_RUN): Don't require AC_C_CROSS.
+	(AC_TRY_COMPILER): New macro.
+	(AC_LANG_C, AC_LANG_CPLUSPLUS): Set cross_compiling.
+	
+	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): Use
+	AC_TRY_COMPILER instead of AC_TRY_LINK.
+	(AC_PROG_CC_GNU, AC_PROG_CC_G): Split out of AC_PROG_CC.
+	(AC_PROG_CXX_GNU, AC_PROG_CXX_G): Split out of AC_PROG_CXX.
+	For the *_G macros, make the cache variable names non-GNU-specific.
+	(AC_C_CROSS): Mark obsolete, and otherwise a no-op.
+
+	* AUTHORS: New file.
+	* Makefile.in (DISTFILES): Add it.
+
+	* acspecific.m4 (AC_FUNC_MMAP): Update the getpagesize
+	declarations from getpagesize.h.  Check for unistd.h.
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Run the eval in a subshell.
+
+	* acfunctions: Map fnmatch, strftime, getpgrp, setpgrp to their
+	own macros.
+
+	* acgeneral.m4 (AC_OUTPUT_HEADER): Check that $CONFIG_HEADERS is
+	unset, not that it's empty.
+
 Mon Nov 18 10:24:50 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Version 2.11.
