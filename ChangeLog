@@ -1,5 +1,18 @@
 2003-08-20  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoupdate.in, bin/auheader.in, bin/autoreconf.in,
+	* bin/autom4te: Adjust.
+	In particular, be Autoconf tools are really silent when properly
+	working, bind the verbosity of the 'note' channel to $verbose.
+	* lib/Autom4te/General.pm (&find_file, &mtime, &update_file)
+	(&xsystem, &contents): Remove, since they are exported by...
+	* lib/Autom4te/FileUtils.pm: this.
+	More perldoc.
+	* lib/Autom4te/General.pm (&up_to_date_p): Move to...
+	* lib/Autom4te/FileUtils.pm: here.
+
+2003-08-20  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/Channels.pm, lib/Autom4te/ChannelDefs.pm
 	* lib/Autom4te/Configure_ac.pm, lib/Autom4te/FileUtils.pm: New,
 	from CVS Automake.

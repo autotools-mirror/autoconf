@@ -37,9 +37,12 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
-use File::Basename;
+use Autom4te::ChannelDefs;
+use Autom4te::Channels;
+use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
+use File::Basename;
 use strict;
 
 # Lib files.
@@ -100,6 +103,8 @@ sub parse_args ()
   getopt ('I|include=s'         => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
 	  'f|force'             => \$force);
+
+  setup_channel 'note', silent => !$verbose;
 
   if (! @ARGV)
     {

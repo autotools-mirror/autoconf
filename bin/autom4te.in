@@ -43,6 +43,7 @@ BEGIN
 package Request;
 
 use Data::Dumper;
+use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::Struct;
 use Autom4te::XFile;
@@ -235,6 +236,7 @@ sub load
 
 package Autom4te;
 
+use Autom4te::FileUtils;
 use Autom4te::General;
 use File::Basename;
 use Autom4te::XFile;

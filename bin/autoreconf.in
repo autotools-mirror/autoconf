@@ -39,6 +39,7 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
+use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
 # Do not use Cwd::chdir, since it might hang.

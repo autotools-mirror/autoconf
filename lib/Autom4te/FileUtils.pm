@@ -17,6 +17,20 @@
 
 package Autom4te::FileUtils;
 
+=head1 NAME
+
+Autom4te::FileUtils - handling files
+
+=head1 SYNOPSIS
+
+  use Autom4te::FileUtils
+
+=head1 DESCRIPTION
+
+This perl module provides various general purpose file handling functions.
+
+=cut
+
 use strict;
 use Exporter;
 use File::stat;
@@ -27,18 +41,28 @@ use Autom4te::ChannelDefs;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_file &mtime &update_file &xsystem &contents);
+@EXPORT = qw (&contents
+	      &find_file &mtime
+	      &update_file &up_to_date_p
+	      &xsystem &xqx);
 
+
+=item C<find_file ($filename, @include)>
+
+Return the first path for a C<$filename> in the C<include>s.
+
+We match exactly the behavior of GNU M4: first look in the current
+directory (which includes the case of absolute file names), and, if
+the file is not absolute, just fail.  Otherwise, look in C<@include>.
+
+If the file is flagged as optional (ends with C<?>), then return undef
+if absent, otherwise exit with error.
+
+=cut
 
 # $FILENAME
 # find_file ($FILENAME, @INCLUDE)
 # -------------------------------
-# We match exactly the behavior of GNU m4: first look in the current
-# directory (which includes the case of absolute file names), and, if
-# the file is not absolute, just fail.  Otherwise, look in the path.
-#
-# If the file is flagged as optional (ends with `?'), then return undef
-# if absent.
 sub find_file ($@)
 {
   use File::Spec;
@@ -71,11 +95,16 @@ sub find_file ($@)
   return undef;
 }
 
+=item C<mtime ($file)>
+
+Return the mtime of C<$file>.  Missing files, or C<-> standing for
+C<STDIN> or C<STDOUT> are ``obsolete'', i.e., as old as possible.
+
+=cut
+
 # $MTIME
 # MTIME ($FILE)
 # -------------
-# Return the mtime of $FILE.  Missing files, or `-' standing for STDIN
-# or STDOUT are ``obsolete'', i.e., as old as possible.
 sub mtime ($)
 {
   my ($file) = @_;
@@ -90,10 +119,16 @@ sub mtime ($)
 }
 
 
+=item C<update_file ($from, $to)>
+
+Rename C<$from> as C<$to>, preserving C<$to> timestamp if it has not
+changed.  Recognize C<$to> = C<-> standing for C<STDIN>.  C<$from> is
+always removed/renamed.
+
+=cut
+
 # &update_file ($FROM, $TO)
 # -------------------------
-# Rename $FROM as $TO, preserving $TO timestamp if it has not changed.
-# Recognize `$TO = -' standing for stdin.
 sub update_file ($$)
 {
   my ($from, $to) = @_;
@@ -139,9 +174,43 @@ sub update_file ($$)
 }
 
 
+=item C<up_to_date_p ($file, @dep)>
+
+Is C<$file> more recent than C<@dep>?
+
+=cut
+
+# $BOOLEAN
+# &up_to_date_p ($FILE, @DEP)
+# ---------------------------
+sub up_to_date_p ($@)
+{
+  my ($file, @dep) = @_;
+  my $mtime = mtime ($file);
+
+  foreach my $dep (@dep)
+    {
+      if ($mtime < mtime ($dep))
+	{
+	  verb "up_to_date ($file): outdated: $dep";
+	  return 0;
+	}
+    }
+
+  verb "up_to_date ($file): up to date";
+  return 1;
+}
+
+
+=item C<handle_exec_errors ($command)>
+
+Display an error message for C<$command>, based on the content of
+C<$?> and C<$!>.
+
+=cut
+
 # handle_exec_errors ($COMMAND)
 # -----------------------------
-# Display an error message for $COMMAND, based on the content of $? and $!.
 sub handle_exec_errors ($)
 {
   my ($command) = @_;
@@ -159,7 +228,8 @@ sub handle_exec_errors ($)
 	{
 	  my $status = WEXITSTATUS ($?);
 	  # Propagate exit codes.
-	  fatal ("$command failed with exit status: $status",
+	  fatal ('',
+		 "$command failed with exit status: $status",
 		 exit_code => $status);
 	}
       elsif (WIFSIGNALED ($?))
@@ -174,9 +244,14 @@ sub handle_exec_errors ($)
     }
 }
 
+=item C<xqx ($command)>
+
+Same as C<qx> (but in scalar context), but fails on errors.
+
+=cut
+
 # xqx ($COMMAND)
 # --------------
-# Same as `qx' (but in scalar context), but fails on errors.
 sub xqx ($)
 {
   my ($command) = @_;
@@ -192,6 +267,13 @@ sub xqx ($)
 }
 
 
+=item C<xsystem ($command)>
+
+Same as C<system>, but fails on errors, and reports the C<$command>
+in verbose mode.
+
+=cut
+
 # xsystem ($COMMAND)
 # ------------------
 sub xsystem ($)
@@ -206,9 +288,14 @@ sub xsystem ($)
 }
 
 
+=item C<contents ($filename)>
+
+Return the contents of c<$filename>.
+
+=cut
+
 # contents ($FILENAME)
 # --------------------
-# Swallow the contents of file $FILENAME.
 sub contents ($)
 {
   my ($file) = @_;

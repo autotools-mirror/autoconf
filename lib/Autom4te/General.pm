@@ -35,6 +35,7 @@ used in several executables of the Autoconf and Automake packages.
 
 use 5.005_03;
 use Exporter;
+use Autom4te::ChannelDefs;
 use File::Basename;
 use File::Spec;
 use File::stat;
@@ -52,10 +53,10 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&catfile &canonpath &contents &debug &error
-      &file_name_is_absolute &find_configure_ac &find_file
-      &getopt &mktmpdir &mtime
-      &uniq &update_file &up_to_date_p &verbose &xsystem &xqx);
+  qw (&catfile &canonpath &debug &error
+      &file_name_is_absolute &find_configure_ac
+      &getopt &mktmpdir
+      &uniq &verbose);
 
 # Functions we forward (coming from modules we use).
 my @export_forward_subs =
@@ -266,27 +267,6 @@ sub canonpath ($)
 }
 
 
-=item C<contents ($filename)>
-
-Return the contents of c<$filename>.  Exit with diagnostic on failure.
-
-=cut
-
-# &contents ($FILENAME)
-# ---------------------
-# Swallow the contents of file $FILENAME.
-sub contents ($)
-{
-  my ($file) = @_;
-  verbose "reading $file";
-  local $/;			# Turn on slurp-mode.
-  my $f = new Autom4te::XFile "< $file";
-  my $contents = $f->getline;
-  $f->close;
-  return $contents;
-}
-
-
 =item C<debug (@message)>
 
 If the debug mode is enabled (C<$debug> and C<$verbose>), report the
@@ -301,30 +281,6 @@ sub debug (@)
 {
   print STDERR "$me: ", @_, "\n"
     if $verbose && $debug;
-}
-
-
-=item C<error (@message)>
-
-Report the C<@message> on C<STDERR>, signed with the name of the
-program, and exit with failure.  If the debug mode is enabled
-(C<$debug>), then in addition dump the call stack.
-
-=cut
-
-# &error (@MESSAGE)
-# -----------------
-# Same as die or confess, depending on $debug.
-sub error (@)
-{
-  if ($debug)
-    {
-      confess "$me: ", @_, "\n";
-    }
-  else
-    {
-      die "$me: ", @_, "\n";
-    }
 }
 
 
@@ -380,51 +336,6 @@ sub find_configure_ac (;$)
 }
 
 
-=item C<find_file ($filename, @include)>
-
-Return the first path for a C<$filename> in the C<include>s.
-
-We match exactly the behavior of GNU M4: first look in the current
-directory (which includes the case of absolute file names), and, if
-the file is not absolute, just fail.  Otherwise, look in C<@include>.
-
-If the file is flagged as optional (ends with C<?>), then return undef
-if absent, otherwise exit with error.
-
-=cut
-
-# $FILENAME
-# find_file ($FILENAME, @INCLUDE)
-# -------------------------------
-sub find_file ($@)
-{
-  my ($filename, @include) = @_;
-  my $optional = 0;
-
-  $optional = 1
-    if $filename =~ s/\?$//;
-
-  return canonpath ($filename)
-    if -e $filename;
-
-  if (file_name_is_absolute ($filename))
-    {
-      error "no such file or directory: $filename"
-	unless $optional;
-      return undef;
-    }
-
-  foreach my $path (@include)
-    {
-      return canonpath (catfile ($path, $filename))
-	if -e catfile ($path, $filename);
-    }
-
-  error "no such file or directory: $filename"
-    unless $optional;
-
-  return undef;
-}
 
 
 =item C<getopt (%option)>
@@ -508,30 +419,6 @@ sub mktmpdir ($)
 }
 
 
-=item C<mtime ($file)>
-
-Return the mtime of C<$file>.  Missing files, or C<-> standing for
-C<STDIN> or C<STDOUT> are ``obsolete'', i.e., as old as possible.
-
-=cut
-
-# $MTIME
-# MTIME ($FILE)
-# -------------
-sub mtime ($)
-{
-  my ($file) = @_;
-
-  return 0
-    if $file eq '-' || ! -f $file;
-
-  my $stat = stat ($file)
-    or croak "$me: cannot stat $file: $!\n";
-
-  return $stat->mtime;
-}
-
-
 =item C<uniq (@list)>
 
 Return C<@list> with no duplicates, keeping only the first
@@ -555,92 +442,6 @@ sub uniq (@)
 	}
     }
   return wantarray ? @res : "@res";
-}
-
-
-=item C<up_to_date_p ($file, @dep)>
-
-Is C<$file> more recent than C<@dep>?
-
-=cut
-
-# $BOOLEAN
-# &up_to_date_p ($FILE, @DEP)
-# ---------------------------
-sub up_to_date_p ($@)
-{
-  my ($file, @dep) = @_;
-  my $mtime = mtime ($file);
-
-  foreach my $dep (@dep)
-    {
-      if ($mtime < mtime ($dep))
-	{
-	  debug "up_to_date ($file): outdated: $dep";
-	  return 0;
-	}
-    }
-
-  debug "up_to_date ($file): up to date";
-  return 1;
-}
-
-
-=item C<update_file ($from, $to)>
-
-Rename C<$from> as C<$to>, preserving C<$to> timestamp if it has not
-changed.  Recognize C<$to> = C<-> standing for C<STDIN>.  C<$from> is
-always removed/renamed.
-
-=cut
-
-# &update_file ($FROM, $TO)
-# -------------------------
-sub update_file ($$)
-{
-  my ($from, $to) = @_;
-  my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
-  use File::Compare;
-  use File::Copy;
-
-  if ($to eq '-')
-    {
-      my $in = new IO::File ("$from");
-      my $out = new IO::File (">-");
-      while ($_ = $in->getline)
-	{
-	  print $out $_;
-	}
-      $in->close;
-      unlink ($from)
-	or error "cannot not remove $from: $!";
-      return;
-    }
-
-  if (-f "$to" && compare ("$from", "$to") == 0)
-    {
-      # File didn't change, so don't update its mod time.
-      verbose "`$to' is unchanged";
-      unlink ($from)
-	or error "cannot not remove $from: $!";
-      return
-    }
-
-  if (-f "$to")
-    {
-      # Back up and install the new one.
-      move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
-	or error "cannot not backup $to: $!";
-      move ("$from", "$to")
-	or error "cannot not rename $from as $to: $!";
-      verbose "`$to' is updated";
-    }
-  else
-    {
-      move ("$from", "$to")
-	or error "cannot not rename $from as $to: $!";
-      verbose "`$to' is created";
-    }
 }
 
 
@@ -705,50 +506,6 @@ sub handle_exec_errors ($)
 	  error "$command exited abnormally";
 	}
     }
-}
-
-
-=item C<xqx ($command)>
-
-Same as C<qx> (but in scalar context), but fails on errors.
-
-=cut
-
-# xqx ($COMMAND)
-# --------------
-sub xqx ($)
-{
-  my ($command) = @_;
-
-  verbose "running: $command";
-
-  $! = 0;
-  my $res = `$command`;
-  handle_exec_errors $command
-    if $?;
-
-  return $res;
-}
-
-
-=item C<xqx ($command)>
-
-Same as C<xsystem>, but fails on errors, and reports the C<$command>
-in verbose mode.
-
-=cut
-
-# xsystem ($COMMAND)
-# ------------------
-sub xsystem ($)
-{
-  my ($command) = @_;
-
-  verbose "running: $command";
-
-  $! = 0;
-  handle_exec_errors $command
-    if system $command;
 }
 
 =back
