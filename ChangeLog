@@ -1,5 +1,13 @@
 2003-11-24  Akim Demaille  <akim@epita.fr>
 
+	* config/announce-gen (&print_locations, &print_signatures)
+	(&sizes): New.
+	Use them.
+	No longer rely on Gnus to inline the list of signatures: compute
+	them on the fly.
+
+2003-11-24  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Particular Programs): AC_PROG_LEX can
 	override some files.
 	(Input): AC_CONFIG_AUX_DIR(aux) is a bad idea on DOS.
