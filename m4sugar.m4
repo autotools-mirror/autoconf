@@ -1,7 +1,7 @@
 divert(-1)#                                                  -*- Autoconf -*-
 # This file is part of Autoconf.
-# Base m4 layer.
-# Requires GNU m4.
+# Base M4 layer.
+# Requires GNU M4.
 # Copyright 1999, 2000 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ changequote([, ])
 # equivalent functionality by core dumping because of the
 # long macros we define.
 ifdef([__gnu__], ,
-[errprint(Autoconf requires GNU m4. Install it before installing Autoconf or
+[errprint(M4sugar requires GNU M4. Install it before installing M4sugar or
 set the M4 environment variable to its path name.)
 m4exit(2)])
 

@@ -8,10 +8,9 @@
 
 AT_INIT([autoconf])
 
-cat <<EOF
-Some tests might be ignored if you don't have the software which the
-macros are supposed to test (e.g., a Fortran compiler).
-EOF
+AT_BANNER(
+[Some tests might be ignored if you don't have the software which the
+macros are supposed to test (e.g., a Fortran compiler).])
 
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.

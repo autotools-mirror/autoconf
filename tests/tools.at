@@ -1,11 +1,6 @@
 #							-*- autoconf -*-
 
-cat <<EOF
-
-Executables (autoheader, autoupdate...)
-
-EOF
-
+AT_BANNER([Executables (autoheader, autoupdate...).])
 
 ## -------------------------------------------------------- ##
 ## Check that the shell scripts are syntactically correct.  ##

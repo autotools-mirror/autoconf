@@ -1,5 +1,18 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	Provide a means to display banners in the test suite.
+
+	* tests/atgeneral.m4 (AT_INIT): Initialize AT_banner_ordinal.
+	Execute the epilogue of the tests only if a test was run.
+	Don't built the value of `at_tests_all' by a for loop: expand
+	AT_TESTS_ALL.
+	(AT_SETUP): Build AT_TESTS_ALL.
+	(AT_BANNER): New.
+	Adjust all the former banners to use it.
+	(AT_CHECK): Don't trace the decoding of $?.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_DEFINE, AT_UNDEFINE, AT_SHIFT)
 	(AT_INCLUDE): Remove, use the m4_ macros.
 

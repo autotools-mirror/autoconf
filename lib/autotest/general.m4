@@ -93,6 +93,7 @@ m4_define([AT_LINE],
 # should be already preset so the proper executable will be selected.
 m4_define([AT_INIT],
 [m4_define([AT_ordinal], 0)
+m4_define([AT_banner_ordinal], 0)
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -225,20 +226,25 @@ do
 dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
   esac
-  at_test_count=`expr 1 + $at_test_count`
-  $at_verbose $at_n "     $at_test. $srcdir/`cat at-setup-line`: $at_c"
-  case $at_status in
-    0) echo ok
-       ;;
-    77) echo "ignored near \``cat at-check-line`'"
-        at_ignore_count=`expr $at_ignore_count + 1`
-        ;;
-    *) echo "FAILED near \``cat at-check-line`'"
-       at_failed_list="$at_failed_list $at_test"
-       $at_stop_on_error && break
-       ;;
+  case $at_test in
+    banner-*) ;;
+    *)
+      at_test_count=`expr 1 + $at_test_count`
+      $at_verbose $at_n "     $at_test. $srcdir/`cat at-setup-line`: $at_c"
+      case $at_status in
+        0) echo ok
+           ;;
+        77) echo "ignored near \``cat at-check-line`'"
+            at_ignore_count=`expr $at_ignore_count + 1`
+            ;;
+        *) echo "FAILED near \``cat at-check-line`'"
+           at_failed_list="$at_failed_list $at_test"
+           $at_stop_on_error && break
+           ;;
+      esac
+      $at_debug || rm -rf $at_data_files
+      ;;
   esac
-  $at_debug || rm -rf $at_data_files
 done
 
 # Wrap up the testing suite with summary statistics.
@@ -296,7 +302,7 @@ exit 0
 m4_divert_pop()dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
-at_tests_all="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
+at_tests_all="AT_TESTS_ALL "])])dnl
 ])# AT_INIT
 
 
@@ -307,11 +313,12 @@ at_tests_all="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
 # The group is testing what DESCRIPTION says.
 m4_define([AT_SETUP],
 [m4_define([AT_ordinal], m4_incr(AT_ordinal))
+m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
 m4_divert_text([HELP],
                [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
 m4_pushdef([AT_data_files], [stdout stderr ])
 m4_divert_push([TESTS])dnl
-  AT_ordinal )
+  AT_ordinal ) [#] AT_ordinal. AT_LINE: $1
 dnl Here will be inserted the definition of at_data_files.
 m4_divert([TEST])[]dnl
     rm -rf $at_data_files
@@ -371,6 +378,24 @@ m4_divert_pop()dnl
 ])# AT_CLEANUP
 
 
+# AT_BANNER(TEXT)
+# ---------------
+# Output TEXT without any shell expansion.
+m4_define([AT_BANNER],
+[m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
+m4_append([AT_TESTS_ALL], [ banner-]m4_defn([AT_banner_ordinal]))
+m4_divert_push([TESTS])dnl
+  banner-AT_banner_ordinal ) [#] Banner AT_banner_ordinal. AT_LINE
+    cat <<\_ATEOF
+
+$1
+
+_ATEOF
+    ;;
+m4_divert_pop()dnl
+])# AT_BANNER
+
+
 # AT_DATA(FILE, CONTENTS)
 # -----------------------
 # Initialize an input data FILE with given CONTENTS, which should end with
@@ -403,7 +428,8 @@ $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
 $1
 m4_ifval([$2],
-[at_status=$?
+         [at_status=$?
+$at_traceoff
 if test $at_status != $2; then
   $at_verbose "Exit code was $at_status, expected $2" >&6
 dnl Maybe there was an important message to read before it died.
@@ -412,8 +438,8 @@ dnl Preserve exit code 77.
   test $at_status = 77 && exit 77
   exit 1
 fi
-])dnl
-$at_traceoff
+],
+         [$at_traceoff])dnl
 if $at_check_stds; then
 dnl Restore stdout to fd1 and stderr to fd2.
   exec 1>&5 2>&6

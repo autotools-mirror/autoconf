@@ -1,22 +1,18 @@
 #							-*- autoconf -*-
 
-cat <<\EOF
-
-Testing config.status.
+AT_BANNER([[Testing config.status.
 
 ## ---------------------------------------------------------------- ##
 ## This section of torture tests is trying to make Autoconf produce ##
 ## failing `configure' scripts, which must never happen.  If one of ##
 ## these tests ever fails, it is extremely important that you       ##
 ## report the failure to bug-autoconf@gnu.org.                      ##
-## ---------------------------------------------------------------- ##
+## ---------------------------------------------------------------- ##]])
 
-EOF
 
 ## ---------------------------------------------- ##
 ## AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS.  ##
 ## ---------------------------------------------- ##
-
 
 AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
 
@@ -59,11 +55,12 @@ AT_CLEANUP(header file link command header.in file.in link.in command.in configu
 
 
 
-## ------------------------------------------------------ ##
-## Check that config.status detects missing input files.  ##
-## ------------------------------------------------------ ##
+## ------------------- ##
+## Missing templates.  ##
+## ------------------- ##
 
-AT_SETUP([missing templates])
+# Check that config.status detects missing input files
+AT_SETUP([Missing templates])
 
 AT_DATA(configure.in,
 [[AC_INIT
@@ -83,17 +80,18 @@ AT_CLEANUP(configure config.status config.log config.cache config.h defs)
 
 
 
-## ------------------------------------------------------ ##
-## Check that `configure' and `config.status' honor their ##
-## interface.                                             ##
-## ------------------------------------------------------ ##
+## ---------------------- ##
+## configure invocation.  ##
+## ---------------------- ##
 
+# Check that `configure' and `config.status' honor their interface.
+#
 # We run `./configure one=val1 --enable-two=val2 --with-three=val3'
 # and verify that (i) `configure' correctly receives the arguments and
 # (ii) correctly passes them to `config.status', which we check by
 # running `config.status --recheck'.
 
-AT_SETUP([command line interface])
+AT_SETUP([configure invocation])
 
 AT_DATA(configure.in,
 [[AC_INIT

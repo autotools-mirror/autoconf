@@ -1,10 +1,6 @@
 #							-*- autoconf -*-
 
-cat <<EOF
-
-Low level compiling/preprocessing macros.
-
-EOF
+AT_BANNER([Low level compiling/preprocessing macros.])
 
 # Since the macros which compile are required by most tests, check
 # them first.  But remember that looking for a compiler is even more

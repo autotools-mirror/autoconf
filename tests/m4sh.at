@@ -1,10 +1,6 @@
 #							-*- Autoconf -*-
 
-cat <<EOF
-
-M4sh.
-
-EOF
+AT_BANNER([M4sh.])
 
 
 ## ----------------------------- ##

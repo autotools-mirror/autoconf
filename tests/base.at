@@ -1,10 +1,6 @@
 #							-*- autoconf -*-
 
-cat <<EOF
-
-Autoconf base layer.
-
-EOF
+AT_BANNER([Autoconf base layer.])
 
 
 ## ------------------------------- ##
