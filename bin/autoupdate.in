@@ -103,6 +103,141 @@ sub parse_args ()
 }
 
 
+# ------------- #
+# M4 builtins.  #
+# ------------- #
+
+my @m4_builtins;
+
+# HANDLE_M4_SYMBOLS ()
+# --------------------
+# Create the following $tmp files:
+# m4.m4 -- enable the m4 builtins.
+# unm4.m4 -- disable the m4 builtins.
+# savem4.m4 -- save the m4 builtins.
+sub handle_m4_macros ()
+{
+  # Get the list of builtins.
+  xsystem ("echo dumpdef | $m4 2>$tmp/sugar.defs >/dev/null");
+  my $sugar_defs = new IO::File "$tmp/sugar.defs"
+    or die "$me: cannot open $tmp/sugar.defs: $!\n";
+  while ($_ = $sugar_defs->getline)
+    {
+      push @m4_builtins, $1
+        if /^(\w+):/;
+    }
+  $sugar_defs->close
+    or die "$me: cannot close $tmp/sugar.defs: $!\n";
+
+  # Output the files.
+  my $m4_m4 = new IO::File ">$tmp/m4.m4"
+    or die "$me: cannot create $tmp/m4.m4: $!\n";
+  print $m4_m4 "# m4.m4 -- enable the m4 builtins.\n";
+  my $unm4_m4 = new IO::File ">$tmp/unm4.m4"
+    or die "$me: cannot create $tmp/unm4.m4: $!\n";
+  print $unm4_m4 "# unm4.m4 -- disable the m4 builtins.\n";
+  my $m4save_m4 = new IO::File ">$tmp/m4save.m4"
+    or die "$me: cannot create $tmp/unm4.m4: $!\n";
+  print $m4save_m4 "# savem4.m4 -- save the m4 builtins.\n";
+  foreach (@m4_builtins)
+    {
+      print $m4_m4     "_au_define([$_], _au_defn([_au_$_]))\n";
+      print $unm4_m4   "_au_undefine([$_])\n";
+      print $m4save_m4 "define([_au_$_], defn([$_]))\n";
+    }
+  $m4save_m4->close
+    or die "$me: cannot close $tmp/m4save.m4: $!\n";
+  $unm4_m4->close
+    or die "$me: cannot close $tmp/unm4.m4: $!\n";
+  $m4_m4->close
+    or die "$me: cannot close $tmp/m4.m4: $!\n";
+}
+
+
+
+# ----------------- #
+# Autoconf macros.  #
+# ----------------- #
+
+
+# @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
+my (%ac_macros, %au_macros);
+
+
+# HANDLE_AUTOCONF_MACROS ()
+# -------------------------
+# @M4_BUILTINS -- M4 builtins and a useful comment.
+sub handle_autoconf_macros ()
+{
+  my $macros = new IO::File ("$autoconf"
+			     . " --trace AU_DEFUN:'AU:\$f:\$1'"
+			     . " --trace define:'AC:\$f:\$1'"
+			     . " --melt /dev/null |")
+    or die "$me: cannot open definitions reading pipe: $!\n";
+  while ($_ = $macros->getline)
+    {
+      chomp;
+      my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
+      # ../lib/m4sugar/m4sugar.m4  -> m4sugar
+      # ../lib/autoconf/general.m4 -> autoconf
+      # aclocal.m4 -> ignore
+      next
+	if $file eq 'aclocal.m4';
+      my $set = basename (dirname ($file));
+      die "$me: unknown set: $set: $_\n"
+	unless $set =~ /^(m4sugar|autoconf)$/;
+      if ($domain eq "AC")
+	{
+	  $ac_macros{$macro} = $set;
+	}
+      else
+	{
+	  $au_macros{$macro} = $set;
+	}
+    }
+  $macros->close
+    or die ($! ? "$me: cannot close definitions reading pipe: $!\n"
+	    : "$me: definitions reading pipe failed with exit status: $?\n");
+  # Don't keep AU macros in @AC_MACROS.
+  delete $ac_macros{$_}
+    foreach (keys %au_macros);
+  # Don't keep M4sugar macros which are redefined by Autoconf,
+  # such as `builtin', `changequote' etc.  See autoconf/autoconf.m4.
+  delete $ac_macros{$_}
+    foreach (@m4_builtins);
+  die "$me: no current Autoconf macros found\n"
+    unless keys %ac_macros;
+  die "$me: no obsolete Autoconf macros found\n"
+    unless keys %au_macros;
+
+  if ($debug)
+    {
+      print STDERR "Current Autoconf macros:\n";
+      print STDERR join (' ', sort keys %ac_macros) . "\n\n";
+      print STDERR "Obsolete Autoconf macros:\n";
+      print STDERR join (' ', sort keys %au_macros) . "\n\n";
+    }
+
+  # ac.m4 -- autoquoting definitions of the AC macros (M4sugar excluded).
+  # unac.m4 -- undefine the AC macros.
+  my $ac_m4 = new IO::File ">$tmp/ac.m4"
+    or die "$me: cannot create $tmp/ac.m4: $!\n";
+  print $ac_m4 "# ac.m4 -- autoquoting definitions of the AC macros.\n";
+  my $unac_m4 = new IO::File ">$tmp/unac.m4"
+    or die "$me: cannot create $tmp/unac.m4: $!\n";
+  print $unac_m4 "# unac.m4 -- undefine the AC macros.\n";
+  foreach (sort grep { $ac_macros{$_} ne 'm4sugar' } keys %ac_macros)
+    {
+      print $ac_m4   "_au_define([$_], [[\$0(\$\@)]])\n";
+      print $unac_m4 "_au_undefine([$_])\n";
+    }
+  $unac_m4->close
+    or die "$me: cannot close $tmp/unac.m4: $!\n";
+  $ac_m4->close
+    or die "$me: cannot close $tmp/ac.m4: $!\n";
+}
+
+
 ## -------------- ##
 ## Main program.  ##
 ## -------------- ##
@@ -115,80 +250,8 @@ $autoconf .= " --force" if $force;
 $autoconf .= " --verbose" if $verbose;
 
 mktmpdir ('au');
-
-# @M4_BUILTINS -- M4 builtins and a useful comment.
-my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
-map { s/:.*//;s/\W// } @m4_builtins;
-
-
-# m4.m4 -- enable the m4 builtins.
-# unm4.m4 -- disable the m4 builtins.
-# savem4.m4 -- save the m4 builtins.
-open M4_M4, ">$tmp/m4.m4"
-  or die "$me: cannot open $tmp/m4.m4: $!\n";
-open UNM4_M4, ">$tmp/unm4.m4"
-  or die "$me: cannot open $tmp/unm4.m4: $!\n";
-open M4SAVE_M4, ">$tmp/m4save.m4"
-  or die "$me: cannot open $tmp/unm4.m4: $!\n";
-foreach (@m4_builtins)
-  {
-    print M4_M4     "_au_define([$_], _au_defn([_au_$_]))\n";
-    print UNM4_M4   "_au_undefine([$_])\n";
-    print M4SAVE_M4 "define([_au_$_], defn([$_]))\n";
-  }
-close M4SAVE_M4
-  or die "$me: cannot close $tmp/m4save.m4: $!\n";
-close UNM4_M4
-  or die "$me: cannot close $tmp/unm4.m4: $!\n";
-close M4_M4
-  or die "$me: cannot close $tmp/m4.m4: $!\n";
-
-
-# @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
-open MACROS, ("$autoconf "
-	      . "--trace AU_DEFUN:'AU:\$f:\$1' --trace define:'AC:\$f:\$1' "
-	      . "--melt /dev/null |")
-  or die "$me: cannot open definitions reading pipe: $!\n";
-my (%ac_macros, %au_macros);
-while (<MACROS>)
-  {
-    chomp;
-    my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
-    # ../lib/m4sugar/m4sugar.m4  -> m4sugar
-    # ../lib/autoconf/general.m4 -> autoconf
-    # aclocal.m4 -> ignore
-    next
-      if $file eq 'aclocal.m4';
-    my $set = basename (dirname ($file));
-    die "$me: unknown set: $set: $_\n"
-      unless $set =~ /^(m4sugar|autoconf)$/;
-    if ($domain eq "AC")
-      {
-	$ac_macros{$macro} = $set;
-      }
-    else
-      {
-	$au_macros{$macro} = $set;
-      }
-  }
-close MACROS
-  or die ($! ? "$me: cannot close definitions reading pipe: $!\n"
-	  : "$me: definitions reading pipe failed with exit status: $?\n");
-# Don't keep AU macros in @AC_MACROS.
-delete $ac_macros{$_}
-  foreach (keys %au_macros);
-if ($debug)
-  {
-    print STDERR "Current Autoconf macros:\n";
-    print STDERR join (' ', sort keys %ac_macros) . "\n\n";
-    print STDERR "Obsolete Autoconf macros:\n";
-    print STDERR join (' ', sort keys %au_macros) . "\n\n";
-  }
-die "$me: no current Autoconf macros found\n"
-  unless keys %ac_macros;
-die "$me: no obsolete Autoconf macros found\n"
-  unless keys %au_macros;
-
+handle_m4_macros;
+handle_autoconf_macros;
 
 # $au_changequote -- enable the quote `[', `]' right before any AU macro.
 my $au_changequote =
@@ -198,23 +261,6 @@ my $au_changequote =
 xsystem ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
 \@<:\@\$2\@:>\@)' --melt /dev/null "
 	. ">$tmp/au.m4");
-
-# ac.m4 -- autoquoting definitions of the AC macros (M4sugar excluded).
-# disable.m4 -- undefine the macros of AC and m4sugar.
-open AC_M4, ">$tmp/ac.m4"
-  or die "$me: cannot open: $!\n";
-open DISABLE_M4, ">$tmp/disable.m4"
-  or die "$me: cannot open: $!\n";
-foreach (sort keys %ac_macros)
-  {
-    print AC_M4      "_au_define([$_], [[\$0(\$\@)]])\n"
-      unless $ac_macros{$_} eq 'm4sugar';
-    print DISABLE_M4 "_au_undefine([$_])\n";
-  }
-close DISABLE_M4
-  or die "$me: cannot close $tmp/disable.m4: $!\n";
-close AC_M4
-  or die "$me: cannot close $tmp/ac.m4: $!\n";
 
 
 
@@ -239,24 +285,24 @@ foreach my $file (@ARGV)
     # input.m4 -- m4 program to produce the updated file.
     # Load the values, the dispatcher, neutralize m4, and the prepared
     # input file.
-    my $input_m4 = <<EOF;
+    my $input_m4 = <<\EOF;
       divert(-1)                                            -*- Autoconf -*-
       changequote([, ])
 
       # Move all the builtins into the `_au_' pseudo namespace
-      include([$tmp/m4save.m4])
+      include([m4save.m4])
 
       # _au_defun(NAME, BODY)
       # ---------------------
       # Define NAME to BODY, plus AU activation/deactivation.
       _au_define([_au_defun],
-      [_au_define([\$1],
+      [_au_define([$1],
       [_au_enable()dnl
-      \$2[]dnl
+      $2[]dnl
       _au_disable()])])
 
       # Import the definition of the obsolete macros.
-      _au_include([$tmp/au.m4])
+      _au_include([au.m4])
 
 
       ## ------------------------ ##
@@ -281,9 +327,9 @@ foreach my $file (@ARGV)
       _au_changecom([#])
 
       # Enable the m4 builtins, m4sugar and the autoquoting AC macros.
-      _au_include([$tmp/m4.m4])
+      _au_include([m4.m4])
       _au_include([m4sugar/m4sugar.m4])
-      _au_include([$tmp/ac.m4])
+      _au_include([ac.m4])
 
       _au_divert(0)])
 
@@ -304,8 +350,8 @@ foreach my $file (@ARGV)
       _au_define([__au_disable],
       [_au_divert(-1)
       # Disable m4sugar, the AC autoquoting macros, and m4.
-      _au_include([$tmp/disable.m4])
-      _au_include([$tmp/unm4.m4])
+      _au_include([unac.m4])
+      _au_include([unm4.m4])
 
       # Disable special characters.
       _au_changequote()
@@ -327,7 +373,16 @@ foreach my $file (@ARGV)
       ## ------------------------------- ##
       ## Disable, and process the file.  ##
       ## ------------------------------- ##
-      _au_disable()_au_dnl
+      _au_divert(-1)
+      # Disable m4: M4sugar and the AC autoquoting macros are not loaded yet,
+      # hence invoking `_au_disable' is wrong.
+      _au_include([unm4.m4])
+
+      # Disable special characters.
+      _au_changequote()
+      _au_changecom()
+
+      _au_divert(0)_au_dnl
 EOF
 
     $input_m4 =~ s/^      //mg;
@@ -350,7 +405,7 @@ EOF
 
     # Now ask m4 to perform the update.
     xsystem ("$m4"
-	     . join (' --include=', '', @include)
+	     . join (' --include=', '', @include, $tmp)
 	     . " $tmp/input.m4 >$tmp/updated");
     update_file ("$tmp/updated",
 		 "$file" eq "$tmp/stdin" ? '-' : "$file");

@@ -1,3 +1,15 @@
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
+	CVS GNU M4 doesn't like `undefine(undefined)'.
+
+	* bin/autoupdate.in (&handle_m4_macros, &handle_autoconf_macros):
+	New, extracted from main.
+	Use IO::File wherever possible.
+	(input.m4): Be constant, use -I instead of hard coding $tmp.
+	Therefore be a quoted heredoc.
+	Don't invoke `_au_disable', since ac was not loaded, but just
+	`unm4.m4'.
+
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
 	Version 2.52d.
