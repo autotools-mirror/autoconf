@@ -201,6 +201,7 @@ AC_DEFUN([AC_PROG_INSTALL],
 # SunOS /usr/etc/install
 # IRIX /sbin/install
 # AIX /bin/install
+# AmigaOS /C/install, which installs bootblocks on floppy discs
 # AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
@@ -212,7 +213,9 @@ AC_CACHE_VAL(ac_cv_path_install,
   for ac_dir in $PATH; do
     # Account for people who put trailing slashes in PATH elements.
     case $ac_dir/ in
-    /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
+    / | ./ | .// | /[cC]/* \
+    | /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* \
+    | /usr/ucb/* ) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
       # Don't use installbsd from OSF since it installs stuff as root

@@ -1,3 +1,7 @@
+2000-09-12  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
+
+	* acspecific.m4 (AC_PROG_INSTALL): Exclude c:install on AmigaOS.
+
 2000-09-12  Akim Demaille  <akim@epita.fr>
 
 	The test suite fails on some hosts because for instance
