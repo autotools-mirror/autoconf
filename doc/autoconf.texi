@@ -216,19 +216,19 @@ published by the Free Software Foundation raise funds for
 @dircategory Individual utilities
 @direntry
 * autoscan: (autoconf)autoscan Invocation.
-				Semi-automatic @file{configure.ac} writing
+                                Semi-automatic @file{configure.ac} writing
 * ifnames: (autoconf)ifnames Invocation.        Listing conditionals in source.
 * autoconf: (autoconf)autoconf Invocation.
-				How to create configuration scripts
+                                How to create configuration scripts
 * autoreconf: (autoconf)autoreconf Invocation.
-				Remaking multiple @command{configure} scripts
+                                Remaking multiple @command{configure} scripts
 * autoheader: (autoconf)autoheader Invocation.
-				How to create configuration templates
+                                How to create configuration templates
 * autom4te: (autoconf)autom4te Invocation.
-				The Autoconf executables backbone
+                                The Autoconf executables backbone
 * configure: (autoconf)configure Invocation.    Configuring a package.
 * autoupdate: (autoconf)autoupdate Invocation.
-				Automatic update of @file{configure.ac}
+                                Automatic update of @file{configure.ac}
 * config.status: (autoconf)config.status Invocation. Recreating configurations.
 * testsuite: (autoconf)testsuite Invocation.    Running an Autotest test suite.
 @end direntry
@@ -878,9 +878,9 @@ your source files --> [autoscan*] --> [configure.scan] --> configure.ac
 
 @group
 configure.ac --.
-	       |   .------> autoconf* -----> configure
+               |   .------> autoconf* -----> configure
 [aclocal.m4] --+---+
-	       |   `-----> [autoheader*] --> [config.h.in]
+               |   `-----> [autoheader*] --> [config.h.in]
 [acsite.m4] ---'
 @end group
 
@@ -891,11 +891,11 @@ Makefile.in -------------------------------> Makefile.in
 Files used in configuring a software package:
 @example
 @group
-		       .-------------> [config.cache]
+                       .-------------> [config.cache]
 configure* ------------+-------------> config.log
-		       |
+                       |
 [config.h.in] -.       v            .-> [config.h] -.
-	       +--> config.status* -+               +--> make*
+               +--> config.status* -+               +--> make*
 Makefile.in ---'                    `-> Makefile ---'
 @end group
 @end example
@@ -1005,8 +1005,8 @@ For instance:
 
 @example
 AC_CHECK_HEADER([stdio.h],
-		[AC_DEFINE([HAVE_STDIO_H])],
-		[AC_MSG_ERROR([Sorry, can't do anything for you])])
+                [AC_DEFINE([HAVE_STDIO_H])],
+                [AC_MSG_ERROR([Sorry, can't do anything for you])])
 @end example
 
 @noindent
@@ -1014,8 +1014,8 @@ is quoted properly.  You may safely simplify its quotation to:
 
 @example
 AC_CHECK_HEADER(stdio.h,
-		[AC_DEFINE(HAVE_STDIO_H)],
-		[AC_MSG_ERROR([Sorry, can't do anything for you])])
+                [AC_DEFINE(HAVE_STDIO_H)],
+                [AC_MSG_ERROR([Sorry, can't do anything for you])])
 @end example
 
 @noindent
@@ -1026,8 +1026,8 @@ The following example is wrong and dangerous, as it is underquoted:
 
 @example
 AC_CHECK_HEADER(stdio.h,
-		AC_DEFINE(HAVE_STDIO_H),
-		AC_MSG_ERROR([Sorry, can't do anything for you]))
+                AC_DEFINE(HAVE_STDIO_H),
+                AC_MSG_ERROR([Sorry, can't do anything for you]))
 @end example
 
 In other cases, you may have to use text that also resembles a macro
@@ -2010,7 +2010,7 @@ colon-separated list of input files.  Examples:
 
 @example
 AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk]
-		[lib/Makefile:boiler/lib.mk])
+                [lib/Makefile:boiler/lib.mk])
 @end example
 
 @noindent
@@ -2357,24 +2357,24 @@ Makefile snippet similar to:
 @example
 @group
 edit = sed \
-	-e 's,@@datadir\@@,$(pkgdatadir),g' \
-	-e 's,@@prefix\@@,$(prefix),g'
+        -e 's,@@datadir\@@,$(pkgdatadir),g' \
+        -e 's,@@prefix\@@,$(prefix),g'
 @end group
 
 @group
 autoconf: Makefile $(srcdir)/autoconf.in
-	rm -f autoconf autoconf.tmp
-	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
-	chmod +x autoconf.tmp
-	mv autoconf.tmp autoconf
+        rm -f autoconf autoconf.tmp
+        $(edit) $(srcdir)/autoconf.in >autoconf.tmp
+        chmod +x autoconf.tmp
+        mv autoconf.tmp autoconf
 @end group
 
 @group
 autoheader: Makefile $(srcdir)/autoheader.in
-	rm -f autoheader autoheader.tmp
-	$(edit) $(srcdir)/autoconf.in >autoheader.tmp
-	chmod +x autoheader.tmp
-	mv autoheader.tmp autoheader
+        rm -f autoheader autoheader.tmp
+        $(edit) $(srcdir)/autoconf.in >autoheader.tmp
+        chmod +x autoheader.tmp
+        mv autoheader.tmp autoheader
 @end group
 @end example
 
@@ -2407,10 +2407,10 @@ as:
 autoconf autoheader: Makefile
 @group
 .in:
-	rm -f $@@ $@@.tmp
-	$(edit) $< >$@@.tmp
-	chmod +x $@@.tmp
-	mv $@@.tmp $@@
+        rm -f $@@ $@@.tmp
+        $(edit) $< >$@@.tmp
+        chmod +x $@@.tmp
+        mv $@@.tmp $@@
 @end group
 @end example
 
@@ -2462,7 +2462,7 @@ files by prefixing them with @samp{$(srcdir)/}.  For example:
 
 @example
 time.info: time.texinfo
-	$(MAKEINFO) $(srcdir)/time.texinfo
+        $(MAKEINFO) $(srcdir)/time.texinfo
 @end example
 
 @node Automatic Remaking
@@ -2491,23 +2491,23 @@ conflicts etc.).
 @example
 @group
 $(srcdir)/configure: configure.ac aclocal.m4
-	cd $(srcdir) && autoconf
+        cd $(srcdir) && autoconf
 
 # autoheader might not change config.h.in, so touch a stamp file.
 $(srcdir)/config.h.in: stamp-h.in
 $(srcdir)/stamp-h.in: configure.ac aclocal.m4
-	cd $(srcdir) && autoheader
-	echo timestamp > $(srcdir)/stamp-h.in
+        cd $(srcdir) && autoheader
+        echo timestamp > $(srcdir)/stamp-h.in
 
 config.h: stamp-h
 stamp-h: config.h.in config.status
-	./config.status
+        ./config.status
 
 Makefile: Makefile.in config.status
-	./config.status
+        ./config.status
 
 config.status: configure
-	./config.status --recheck
+        ./config.status --recheck
 @end group
 @end example
 
@@ -2783,10 +2783,10 @@ For example:
 
 @example
 AH_TEMPLATE([CRAY_STACKSEG_END],
-	    [Define to one of _getb67, GETB67, getb67
-	     for Cray-2 and Cray-YMP systems.  This
-	     function is required for alloca.c support
-	     on those systems.])
+            [Define to one of _getb67, GETB67, getb67
+             for Cray-2 and Cray-YMP systems.  This
+             function is required for alloca.c support
+             on those systems.])
 @end example
 
 @noindent
@@ -2837,8 +2837,8 @@ Here is an unrealistic example:
 @example
 fubar=42
 AC_CONFIG_COMMANDS([fubar],
-		   [echo this is extra $fubar, and so on.],
-		   [fubar=$fubar])
+                   [echo this is extra $fubar, and so on.],
+                   [fubar=$fubar])
 @end example
 
 Here is a better one:
@@ -2882,7 +2882,7 @@ For example, this call:
 
 @example
 AC_CONFIG_LINKS(host.h:config/$machine.h
-		object.h:config/$obj_format.h)
+                object.h:config/$obj_format.h)
 @end example
 
 @noindent
@@ -3351,7 +3351,7 @@ instead, like this:
 
 @example
 AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
-	     [$PATH:/usr/libexec:/usr/sbin:/usr/etc:etc])
+             [$PATH:/usr/libexec:/usr/sbin:/usr/etc:etc])
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to
@@ -4959,8 +4959,8 @@ If no @var{includes} are specified, the default includes are used
 
 @example
 AC_CHECK_MEMBER(struct passwd.pw_gecos,,
-		[AC_MSG_ERROR([We need `passwd.pw_gecos'!])],
-		[#include <pwd.h>])
+                [AC_MSG_ERROR([We need `passwd.pw_gecos'!])],
+                [#include <pwd.h>])
 @end example
 
 You can use this macro for sub-members:
@@ -6357,7 +6357,7 @@ AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
 AC_LANG_CONFTEST(
 [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
-		 [[fputs (hw, stdout);]])])
+                 [[fputs (hw, stdout);]])])
 gcc -E -dD conftest.c -o -
 @end example
 
@@ -6449,7 +6449,7 @@ AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
 AC_PREPROC_IFELSE(
    [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
-		    [[fputs (hw, stdout);]])],
+                    [[fputs (hw, stdout);]])],
    [AC_MSG_RESULT([OK])],
    [AC_MSG_FAILURE([unexpected preprocessor failure])])
 @end example
@@ -6697,16 +6697,16 @@ fstype=no
 # The order of these tests is important.
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statvfs.h>
 #include <sys/fstyp.h>]])],
-		  [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
+                  [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/fstyp.h>]])],
-		  [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
+                  [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
 fi
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/vmount.h>]])]),
-		  [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
+                  [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
 fi
 # (more cases omitted here)
 AC_MSG_RESULT([$fstype])
@@ -7003,12 +7003,12 @@ instance, the following macro is broken:
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-		[ac_cv_shell_true_works=no
-		 true && ac_cv_shell_true_works=yes
-		 if test $ac_cv_shell_true_works = yes; then
-		   AC_DEFINE([TRUE_WORKS], 1
-			     [Define if `true(1)' works properly.])
-		 fi])
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes
+                 if test $ac_cv_shell_true_works = yes; then
+                   AC_DEFINE([TRUE_WORKS], 1
+                             [Define if `true(1)' works properly.])
+                 fi])
 ])
 @end group
 @end example
@@ -7022,11 +7022,11 @@ is:
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-		[ac_cv_shell_true_works=no
-		 true && ac_cv_shell_true_works=yes])
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes])
  if test $ac_cv_shell_true_works = yes; then
    AC_DEFINE([TRUE_WORKS], 1
-	     [Define if `true(1)' works properly.])
+             [Define if `true(1)' works properly.])
  fi
 ])
 @end group
@@ -7736,9 +7736,9 @@ AC_TRY_LINK(
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif],
-	    [atoi (*tzname);],
-	    [ac_cv_var_tzname=yes],
-	    [ac_cv_var_tzname=no])
+            [atoi (*tzname);],
+            [ac_cv_var_tzname=yes],
+            [ac_cv_var_tzname=no])
 @end example
 
 @noindent
@@ -7772,9 +7772,9 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM(
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif]],
-				[atoi (*tzname);])],
-	       [ac_cv_var_tzname=yes],
-	       [ac_cv_var_tzname=no])
+                                [atoi (*tzname);])],
+               [ac_cv_var_tzname=yes],
+               [ac_cv_var_tzname=no])
 @end example
 
 @xref{Quadrigraphs}, for what to do if you run into a hopeless case
@@ -8831,8 +8831,8 @@ write
 @example
 AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
-		   [ac_cv_emxos2=yes],
-		   [ac_cv_emxos2=no])])
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
 @end example
 
 @noindent
@@ -8840,11 +8840,11 @@ or even
 
 @example
 AC_CACHE_CHECK([for EMX OS/2 environment],
-	       [ac_cv_emxos2],
-	       [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
-						   [return __EMX__;])],
-				  [ac_cv_emxos2=yes],
-				  [ac_cv_emxos2=no])])
+               [ac_cv_emxos2],
+               [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+                                                   [return __EMX__;])],
+                                  [ac_cv_emxos2=yes],
+                                  [ac_cv_emxos2=no])])
 @end example
 
 When using @code{AC_RUN_IFELSE} or any macro that cannot work when
@@ -8967,8 +8967,8 @@ and the new way:
 m4_define([_AC_EMXOS2],
 [AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
-		   [ac_cv_emxos2=yes],
-		   [ac_cv_emxos2=no])])
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
 test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 ])# _AC_EMXOS2
 @end example
@@ -10564,11 +10564,11 @@ Don't leave white spaces before the parentheses in user functions calls;
 
 @example
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
-	BEGIN @{ die () @}'}
+        BEGIN @{ die () @}'}
 gawk: cmd. line:2:         BEGIN @{ die () @}
 gawk: cmd. line:2:                      ^ parse error
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
-	BEGIN @{ die() @}'}
+        BEGIN @{ die() @}'}
 Aaaaarg!
 @end example
 
@@ -11248,8 +11248,8 @@ FOO = one \
 BAR = two
 
 test:
-	: FOO is "$(FOO)"
-	: BAR is "$(BAR)"
+        : FOO is "$(FOO)"
+        : BAR is "$(BAR)"
 @end example
 
 @noindent
@@ -11269,7 +11269,7 @@ and continue until an unescaped newline is reached.
       baz
 
 all:
-	@@echo ok
+        @@echo ok
 % @kbd{make}   # GNU make
 ok
 @end example
@@ -11307,10 +11307,10 @@ will not pass the substitution along to sub-@command{make}s.
 % @kbd{cat Makefile}
 foo = foo
 one:
-	@@echo $(foo)
-	$(MAKE) two
+        @@echo $(foo)
+        $(MAKE) two
 two:
-	@@echo $(foo)
+        @@echo $(foo)
 % @kbd{make foo=bar}            # GNU make 3.79.1
 bar
 make two
@@ -11355,10 +11355,10 @@ manually, from your @file{Makefile}:
 @example
 foo = foo
 one:
-	@@echo $(foo)
-	$(MAKE) foo=$(foo) two
+        @@echo $(foo)
+        $(MAKE) foo=$(foo) two
 two:
-	@@echo $(foo)
+        @@echo $(foo)
 @end example
 
 You need to foresee all macros that a user might want to override if
@@ -11396,8 +11396,8 @@ protect @code{SHELL}, since it doesn't use it.
 SHELL = /bin/sh
 FOO = foo
 all:
-	@@echo $(SHELL)
-	@@echo $(FOO)
+        @@echo $(SHELL)
+        @@echo $(FOO)
 % @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # OSF1 V4.0 Make
 /bin/tcsh
 bar
@@ -11419,7 +11419,7 @@ The @command{make} from Tru64 Unix V5.1 is one of them.  The following
 
 @example
 all:
-	# foo
+        # foo
 @end example
 
 @item The @file{obj/} subdirectory.
@@ -11436,10 +11436,10 @@ current directory will not be read.
 @example
 % @kbd{cat Makefile}
 all:
-	echo Hello
+        echo Hello
 % @kbd{cat obj/Makefile}
 all:
-	echo World
+        echo World
 % @kbd{make}      # GNU make
 echo Hello
 Hello
@@ -11458,7 +11458,7 @@ implementations always succeed.
 @example
 % @kbd{cat Makefile}
 all:
-	false
+        false
 % @kbd{make -k; echo exit status: $?}    # GNU make
 false
 make: *** [all] Error 1
@@ -11508,7 +11508,7 @@ whole thing manually.  For instance, using the following pattern:
 @example
 VPATH = ../src
 foo.o: foo.c
-	cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
 @end example
 
 @item Automatic rule rewriting
@@ -11524,7 +11524,7 @@ For instance
 @example
 VPATH = ../src
 foo.o: foo.c
-	cc -c foo.c -o foo.o
+        cc -c foo.c -o foo.o
 @end example
 
 @noindent
@@ -11537,7 +11537,7 @@ rely on this, and we have to search @code{VPATH} manually:
 @example
 VPATH = ../src
 foo.o: foo.c
-	cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
 @end example
 
 @noindent
@@ -11564,11 +11564,11 @@ in the rule.  For instance these three rules would be safe.
 @example
 VPATH = ../src
 foo.o: foo.c
-	cc -c `test -f ./foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f ./foo.c || echo ../src/`foo.c -o foo.o
 foo2.o: foo2.c
-	cc -c `test -f 'foo2.c' || echo ../src/`foo2.c -o foo2.o
+        cc -c `test -f 'foo2.c' || echo ../src/`foo2.c -o foo2.o
 foo3.o: foo3.c
-	cc -c `test -f "foo3.c" || echo ../src/`foo3.c -o foo3.o
+        cc -c `test -f "foo3.c" || echo ../src/`foo3.c -o foo3.o
 @end example
 
 Things get worse when your prerequisites are in a macro.
@@ -11577,10 +11577,10 @@ Things get worse when your prerequisites are in a macro.
 VPATH = ../src
 HEADERS = foo.h foo2.h foo3.h
 install-HEADERS: $(HEADERS)
-	for i in $(HEADERS); do \
-	  $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
-	    $(DESTDIR)$(includedir)/$$i; \
-	done
+        for i in $(HEADERS); do \
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
 @end example
 
 The above @code{install-HEADERS} rule is not SunOS-proof because @code{for
@@ -11619,10 +11619,10 @@ Trying to quote @code{$(HEADERS)} in some way, as we did for
 
 @example
 install-HEADERS: $(HEADERS)
-	headers='$(HEADERS)'; for i in $$headers; do \
-	  $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
-	    $(DESTDIR)$(includedir)/$$i; \
-	done
+        headers='$(HEADERS)'; for i in $$headers; do \
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
 @end example
 
 Indeed, @code{headers='$(HEADERS)'} expands to @code{headers='foo.h
@@ -11636,11 +11636,11 @@ One workaround is to strip this unwanted @file{../src/} prefix manually:
 VPATH = ../src
 HEADERS = foo.h foo2.h foo3.h
 install-HEADERS: $(HEADERS)
-	headers='$(HEADERS)'; for i in $$headers; do \
-	  i=`expr "$$i" : '../src/\(.*\)'`;
-	  $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
-	    $(DESTDIR)$(includedir)/$$i; \
-	done
+        headers='$(HEADERS)'; for i in $$headers; do \
+          i=`expr "$$i" : '../src/\(.*\)'`;
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
 @end example
 
 Automake does something similar.
@@ -11670,7 +11670,7 @@ search as presented before.
 @example
 VPATH = ..
 all : foo/bar
-	command `test -d foo/bar || echo ../`foo/bar
+        command `test -d foo/bar || echo ../`foo/bar
 @end example
 
 The above @command{command} will be run on the empty @file{foo/bar}
@@ -11712,7 +11712,7 @@ update existing files in the source directory.
 VPATH = ..
 all: foo.x bar.x
 foo.x bar.x: newer.x
-	@@echo Building $@@
+        @@echo Building $@@
 % @kbd{touch ../bar.x}
 % @kbd{touch ../newer.x}
 % @kbd{make}        # GNU make
@@ -11759,10 +11759,10 @@ the @code{bar.x: newer.x} rule.
 VPATH = ..
 all: bar.y
 bar.x: newer.x
-	@@echo Building $@@
+        @@echo Building $@@
 .SUFFIXES: .x .y
 .x.y:
-	cp $< $@@
+        cp $< $@@
 % @kbd{touch ../bar.x}
 % @kbd{touch ../newer.x}
 % @kbd{make}        # GNU make
@@ -11798,7 +11798,7 @@ all: bar.y
 bar.x: newer.x
 .SUFFIXES: .x .y
 .x.y:
-	cp $< $@@
+        cp $< $@@
 % @kbd{touch ../bar.x}
 % @kbd{touch ../newer.x}
 % @kbd{make}        # GNU make
@@ -11842,7 +11842,7 @@ $ @kbd{cat Makefile}
 .SUFFIXES: .in
 foo: foo.in
 .in:
-	cp $< $@
+        cp $< $@
 $ @kbd{touch foo.in}
 $ @kbd{make}
 $ @kbd{ls}
@@ -11865,7 +11865,7 @@ Note it works without the @samp{foo: foo.in} dependency.
 $ @kbd{cat Makefile}
 .SUFFIXES: .in
 .in:
-	cp $< $@
+        cp $< $@
 $ @kbd{make foo}
 cp foo.in foo
 @end example
@@ -11878,7 +11878,7 @@ $ @kbd{cat Makefile}
 foo.out: foo.in
 .SUFFIXES: .in .out
 .in.out:
-	cp $< $@
+        cp $< $@
 $ @kbd{make}
 cp foo.in foo.out
 @end example
@@ -11902,7 +11902,7 @@ Tools}).  Hence you should be wary of rules like this:
 
 @example
 dest: src
-	cp -p src dest
+        cp -p src dest
 @end example
 
 as @file{dest} will often appear to be older than @file{src} after the
@@ -11912,8 +11912,8 @@ problem, you can use a timestamp file, e.g.:
 
 @example
 dest-stamp: src
-	cp -p src dest
-	date >dest-stamp
+        cp -p src dest
+        date >dest-stamp
 @end example
 
 @end table
@@ -12095,7 +12095,7 @@ cases together, like in this fragment:
 @example
 case $target in
 i386-*-mach* | i386-*-gnu*)
-	     obj_format=aout emulation=mach bfd_gas=yes ;;
+             obj_format=aout emulation=mach bfd_gas=yes ;;
 i960-*-bout) obj_format=bout ;;
 esac
 @end example
@@ -12105,7 +12105,7 @@ and later in @file{configure.ac}, use:
 
 @example
 AC_CONFIG_LINKS(host.h:config/$machine.h
-		object.h:config/$obj_format.h)
+                object.h:config/$obj_format.h)
 @end example
 
 Note that the above example uses @code{$target} because it's taken from
@@ -12327,11 +12327,11 @@ Options}).  The following example will make this clearer.
 @example
 AC_DEFUN([TEST_MACRO],
 [AC_ARG_WITH([foo],
-	     AS_HELP_STRING([--with-foo],
-			    [use foo (default is NO)]),
-	     [ac_cv_use_foo=$withval], [ac_cv_use_foo=no])
+             AS_HELP_STRING([--with-foo],
+                            [use foo (default is NO)]),
+             [ac_cv_use_foo=$withval], [ac_cv_use_foo=no])
 AC_CACHE_CHECK([whether to use foo],
-	       [ac_cv_use_foo], [ac_cv_use_foo=no])])
+               [ac_cv_use_foo], [ac_cv_use_foo=no])])
 @end example
 
 Please note that the call to @code{AS_HELP_STRING} is @strong{unquoted}.
@@ -12350,8 +12350,8 @@ arguments, as shown in the following example.
 @example
 AC_DEFUN(MY_ARG_WITH,
 [AC_ARG_WITH([$1],
-	     AS_HELP_STRING([--with-$1], [use $1 (default is $2)]),
-	     ac_cv_use_$1=$withval, ac_cv_use_$1=no),
+             AS_HELP_STRING([--with-$1], [use $1 (default is $2)]),
+             ac_cv_use_$1=$withval, ac_cv_use_$1=no),
 AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 @end example
 @end defmac
@@ -12469,15 +12469,15 @@ Here is how to use the variable @code{program_transform_name} in a
 PROGRAMS = cp ls rm
 transform = @@program_transform_name@@
 install:
-	for p in $(PROGRAMS); do \
-	  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p | \
-					      sed '$(transform)'`; \
-	done
+        for p in $(PROGRAMS); do \
+          $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p | \
+                                              sed '$(transform)'`; \
+        done
 
 uninstall:
-	for p in $(PROGRAMS); do \
-	  rm -f $(DESTDIR)$(bindir)/`echo $$p | sed '$(transform)'`; \
-	done
+        for p in $(PROGRAMS); do \
+          rm -f $(DESTDIR)$(bindir)/`echo $$p | sed '$(transform)'`; \
+        done
 @end example
 
 It is guaranteed that @code{program_transform_name} is never empty, and
@@ -12721,11 +12721,11 @@ that rule:
 @group
 config.h: stamp-h
 stamp-h: config.h.in config.status
-	./config.status config.h
-	echo > stamp-h
+        ./config.status config.h
+        echo > stamp-h
 
 Makefile: Makefile.in config.status
-	./config.status Makefile
+        ./config.status Makefile
 @end group
 @end example
 
@@ -12798,13 +12798,13 @@ would be:
 @group
 config.h: stamp-h
 stamp-h: config.h.in config.status
-	CONFIG_COMMANDS= CONFIG_LINKS= CONFIG_FILES= \
-	  CONFIG_HEADERS=config.h ./config.status
-	echo > stamp-h
+        CONFIG_COMMANDS= CONFIG_LINKS= CONFIG_FILES= \
+          CONFIG_HEADERS=config.h ./config.status
+        echo > stamp-h
 
 Makefile: Makefile.in config.status
-	CONFIG_COMMANDS= CONFIG_LINKS= CONFIG_HEADERS= \
-	  CONFIG_FILES=Makefile ./config.status
+        CONFIG_COMMANDS= CONFIG_LINKS= CONFIG_HEADERS= \
+          CONFIG_FILES=Makefile ./config.status
 @end group
 @end example
 
@@ -12850,12 +12850,12 @@ package for distribution were:
 @example
 @group
 configure.ac --.   .------> autoconf* -----> configure
-	       +---+
+               +---+
 [aclocal.m4] --+   `---.
 [acsite.m4] ---'       |
-		       +--> [autoheader*] -> [config.h.in]
+                       +--> [autoheader*] -> [config.h.in]
 [acconfig.h] ----.     |
-		 +-----'
+                 +-----'
 [config.h.top] --+
 [config.h.bot] --'
 @end group
@@ -12984,9 +12984,9 @@ This macro is equivalent to:
 
 @example
 AC_CHECK_TYPE([@var{type}],,
-	      [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
-				  [Define to `@var{default}' if
-				   <sys/types.h> does not define.])])
+              [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
+                                  [Define to `@var{default}' if
+                                   <sys/types.h> does not define.])])
 @end example
 
 In order to keep backward compatibility, the two versions of
@@ -13061,7 +13061,7 @@ means to check the nature of the host is using
 AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
 case $host_os in
   *cygwin* ) CYGWIN=yes;;
-	 * ) CYGWIN=no;;
+         * ) CYGWIN=no;;
 esac
 @end example
 
@@ -13302,7 +13302,7 @@ version of:
 
 @example
 AC_LINK_FILES(config/$machine.h config/$obj_format.h,
-	      host.h            object.h)
+              host.h            object.h)
 @end example
 
 @noindent
@@ -13310,7 +13310,7 @@ is:
 
 @example
 AC_CONFIG_LINKS(host.h:config/$machine.h
-		object.h:config/$obj_format.h)
+                object.h:config/$obj_format.h)
 @end example
 @end defmac
 
@@ -13414,7 +13414,7 @@ interface is equivalent to:
 @group
 AC_CONFIG_FILES(@var{file}@dots{})
 AC_CONFIG_COMMANDS([default],
-		   @var{extra-cmds}, @var{init-cmds})
+                   @var{extra-cmds}, @var{init-cmds})
 AC_OUTPUT
 @end group
 @end example
@@ -13432,9 +13432,9 @@ Here is an unrealistic example:
 @example
 fubar=27
 AC_OUTPUT_COMMANDS([echo this is extra $fubar, and so on.],
-		   [fubar=$fubar])
+                   [fubar=$fubar])
 AC_OUTPUT_COMMANDS([echo this is another, extra, bit],
-		   [echo init bit])
+                   [echo init bit])
 @end example
 
 Aside from the fact that @code{AC_CONFIG_COMMANDS} requires an
@@ -13765,8 +13765,8 @@ AC_EGREP_CPP(yes,
 [#if defined M_XENIX && !defined M_UNIX
   yes
 #endif],
-	     [AC_MSG_RESULT([yes]); XENIX=yes],
-	     [AC_MSG_RESULT([no]); XENIX=])
+             [AC_MSG_RESULT([yes]); XENIX=yes],
+             [AC_MSG_RESULT([no]); XENIX=])
 @end example
 @end defmac
 
@@ -14030,7 +14030,7 @@ too!
 @example
 AC_INIT
 AC_CHECK_HEADERS(foo.h,,
-		 [AC_MSG_ERROR([cannot find foo.h, bailing out])])
+                 [AC_MSG_ERROR([cannot find foo.h, bailing out])])
 AC_OUTPUT
 @end example
 
@@ -14291,9 +14291,9 @@ Yet another reason why assigning @code{LIBOBJS} directly is discouraged.
 # This is necessary so that .o files in LIBOBJS are also built via
 # the ANSI2KNR-filtering rules.
 LIB@@&t@@OBJS=`echo "$LIB@@&t@@OBJS" |
-	     sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
+             sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
 LTLIBOBJS=`echo "$LIB@@&t@@OBJS" |
-	   sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
+           sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
 AC_SUBST(LTLIBOBJS)
 @end example
 
@@ -14366,8 +14366,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 # error _AIX not defined
 #endif
 ]])],
-		   [is_aix=yes],
-		   [is_aix=no])
+                   [is_aix=yes],
+                   [is_aix=no])
 @end group
 @end example
 
@@ -14524,11 +14524,11 @@ subfile-n.at ->'
 Files used in configuring a software package:
 
 @example
-				     .--> atconfig
-				    /
+                                     .--> atconfig
+                                    /
 [atlocal.in] -->  config.status* --<
-				    \
-				     `--> [atlocal]
+                                    \
+                                     `--> [atlocal]
 @end example
 
 @noindent
@@ -14536,9 +14536,9 @@ Files created during the test suite execution:
 
 @example
 atconfig -->.                    .--> testsuite.log
-	     \                  /
-	      >-- testsuite* --<
-	     /                  \
+             \                  /
+              >-- testsuite* --<
+             /                  \
 [atlocal] ->'                    `--> [testsuite.dir]
 @end example
 
@@ -14826,14 +14826,14 @@ suggest the following Makefile excerpt:
 
 @smallexample
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
-	@{                                      \
-	  echo '# Signature of the current package.'; \
-	  echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])'; \
-	  echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])'; \
-	  echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])'; \
-	  echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])'; \
-	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
-	@} >$(srcdir)/package.m4
+        @{                                      \
+          echo '# Signature of the current package.'; \
+          echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])'; \
+          echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])'; \
+          echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])'; \
+          echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])'; \
+          echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
+        @} >$(srcdir)/package.m4
 @end smallexample
 
 @noindent
@@ -14869,12 +14869,12 @@ check} with a validation suite.
 EXTRA_DIST = testsuite.at testsuite
 TESTSUITE = $(srcdir)/testsuite
 check-local: atconfig atlocal $(TESTSUITE)
-	$(SHELL) $(TESTSUITE)
+        $(SHELL) $(TESTSUITE)
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
-	$(AUTOTEST) -I $(srcdir) $@@.at -o $@@.tmp
-	mv $@@.tmp $@@
+        $(AUTOTEST) -I $(srcdir) $@@.at -o $@@.tmp
+        mv $@@.tmp $@@
 @end example
 
 You might want to list explicitly the dependencies, i.e., the list of
@@ -14887,12 +14887,12 @@ following:
 subdir = tests
 
 atconfig: $(top_builddir)/config.status
-	cd $(top_builddir) && \
-	   $(SHELL) ./config.status $(subdir)/$@@
+        cd $(top_builddir) && \
+           $(SHELL) ./config.status $(subdir)/$@@
 
 atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
-	cd $(top_builddir) && \
-	   $(SHELL) ./config.status $(subdir)/$@@
+        cd $(top_builddir) && \
+           $(SHELL) ./config.status $(subdir)/$@@
 @end example
 
 @noindent
@@ -15101,8 +15101,8 @@ similar.  If I use
 
 @example
 AC_DEFINE_UNQUOTED([DATADIR], [$datadir],
-		   [Define to the read-only architecture-independent
-		    data directory.])
+                   [Define to the read-only architecture-independent
+                    data directory.])
 @end example
 
 @noindent
@@ -15137,7 +15137,7 @@ or create a dedicated header file:
 @example
 DISTCLEANFILES = datadir.h
 datadir.h: Makefile
-	echo '#define DATADIR "$(datadir)"' >$@@
+        echo '#define DATADIR "$(datadir)"' >$@@
 @end example
 
 @item
