@@ -522,14 +522,14 @@ AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
  LIBS="$LIBS $FLIBS"
 
  # First, try linking without a dummy main:
- AC_TRY_LINK([], [],
-             ac_cv_f77_dummy_main=none,
-             ac_cv_f77_dummy_main=unknown)
+ AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+                [ac_cv_f77_dummy_main=none],
+                [ac_cv_f77_dummy_main=unknown])
 
  if test $ac_cv_f77_dummy_main = unknown; then
    for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
-     AC_TRY_LINK([@%:@define F77_DUMMY_MAIN $ac_func],
-                 [], [ac_cv_f77_dummy_main=$ac_func; break])
+     AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@define F77_DUMMY_MAIN $ac_func]])],
+                    [ac_cv_f77_dummy_main=$ac_func; break])
    done
  fi
  rm -f conftest*
@@ -567,8 +567,9 @@ AC_CACHE_CHECK([for alternate main to link with Fortran 77 libraries],
  ac_cv_f77_main="main" # default entry point name
 
  for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
-   AC_TRY_LINK([#undef F77_DUMMY_MAIN
-@%:@define main $ac_func], [], [ac_cv_f77_main=$ac_func; break])
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@undef F77_DUMMY_MAIN
+@%:@define main $ac_func])],
+                  [ac_cv_f77_main=$ac_func; break])
  done
  rm -f conftest*
  LIBS=$ac_f77_m_save_LIBS

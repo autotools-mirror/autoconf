@@ -202,9 +202,11 @@ AC_DEFUN([AC_FUNC_ALLOCA],
 [# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
-[AC_TRY_LINK([@%:@include <alloca.h>],
-  [char *p = (char *) alloca (2 * sizeof (int));],
-  ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
+[AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM([[@%:@include <alloca.h>]],
+                        [[char *p = (char *) alloca (2 * sizeof (int));]])],
+                [ac_cv_working_alloca_h=yes],
+                [ac_cv_working_alloca_h=no])])
 if test $ac_cv_working_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H, 1,
             [Define if you have <alloca.h> and it should be used
@@ -212,8 +214,8 @@ if test $ac_cv_working_alloca_h = yes; then
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
-[AC_TRY_LINK(
-[#ifdef __GNUC__
+[AC_LINK_IFELSE([AC_LANG_PROGRAM(
+[[#ifdef __GNUC__
 # define alloca __builtin_alloca
 #else
 # ifdef _MSC_VER
@@ -233,8 +235,9 @@ char *alloca ();
 #  endif
 # endif
 #endif
-], [char *p = (char *) alloca (1);],
-  ac_cv_func_alloca_works=yes, ac_cv_func_alloca_works=no)])
+]],                               [[char *p = (char *) alloca (1);]])],
+                [ac_cv_func_alloca_works=yes],
+                [ac_cv_func_alloca_works=no])])
 
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,
@@ -316,9 +319,9 @@ fi
 AC_DEFUN([AC_FUNC_ERROR_AT_LINE],
 [AC_LIBSOURCES([error.h, error.c])dnl
 AC_CACHE_CHECK([for error_at_line], ac_cv_lib_error_at_line,
-[AC_TRY_LINK([],[error_at_line (0, 0, "", 0, "");],
-             [ac_cv_lib_error_at_line=yes],
-             [ac_cv_lib_error_at_line=no])])
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([],[error_at_line (0, 0, "", 0, "");])],
+                [ac_cv_lib_error_at_line=yes],
+                [ac_cv_lib_error_at_line=no])])
 if test $ac_cv_lib_error_at_line = no; then
   AC_LIBOBJ(error)
 fi
@@ -375,10 +378,10 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 # in glibc 2.1.3, but that breaks too many other things.
 # If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
 AC_CACHE_CHECK([for fseeko], [ac_cv_func_fseeko],
-               [AC_TRY_LINK([@%:@include <stdio.h>],
-                            [return fseeko && fseeko (stdin, 0, 0);],
-                            [ac_cv_func_fseeko=yes],
-                            [ac_cv_func_fseeko=no])])
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <stdio.h>],
+                                 [[return fseeko && fseeko (stdin, 0, 0);]])],
+                [ac_cv_func_fseeko=yes],
+                [ac_cv_func_fseeko=no])])
 if test $ac_cv_func_fseeko = yes; then
   AC_DEFINE(HAVE_FSEEKO, 1,
     [Define if fseeko (and presumably ftello) exists and is declared.])
@@ -1091,10 +1094,11 @@ AU_ALIAS([AC_MMAP], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_OBSTACK],
 [AC_LIBSOURCES([obstack.h, obstack.c])dnl
 AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
-[AC_TRY_LINK([@%:@include "obstack.h"],
-             [struct obstack *mem; obstack_free(mem,(char *) 0)],
-             [ac_cv_func_obstack=yes],
-             [ac_cv_func_obstack=no])])
+[AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([[@%:@include "obstack.h"]],
+                     [[struct obstack *mem; obstack_free(mem,(char *) 0)]])],
+                [ac_cv_func_obstack=yes],
+                [ac_cv_func_obstack=no])])
 if test $ac_cv_func_obstack = yes; then
   AC_DEFINE(HAVE_OBSTACK, 1, [Define if libc includes obstacks.])
 else

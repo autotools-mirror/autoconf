@@ -1,5 +1,14 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA, AC_FUNC_ERROR_AT_LINE)
+	(AC_FUNC_FSEEKO, AC_FUNC_OBSTACK): Use AC_LANG_IFELSE, not
+	AC_TRY_LINK.
+	* lib/autoconf/headers.m4 (AC_HEADER_MAJOR): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_LANG_PROGRAM_C_F77_HOOKS)
+	(AC_F77_MAIN): Likewise.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	Don't rely on M4sugar outputting the patterns in files, since we
 	might process the output _without_ running m4, hence without these
 	files.

@@ -169,10 +169,11 @@ fi
 # ---------------
 AC_DEFUN([AC_HEADER_MAJOR],
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
-  ac_cv_header_sys_types_h_makedev,
-[AC_TRY_LINK([#include <sys/types.h>
-], [return makedev(0, 0);],
-  ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
+                ac_cv_header_sys_types_h_makedev,
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <sys/types.h>]],
+                                 [[return makedev(0, 0);]])],
+                [ac_cv_header_sys_types_h_makedev=yes],
+                [ac_cv_header_sys_types_h_makedev=no])
 ])
 
 if test $ac_cv_header_sys_types_h_makedev = no; then
