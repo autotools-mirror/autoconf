@@ -3385,7 +3385,7 @@ dnl FIXME: banish uname from this macro!
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.
-    # chad@anasazi.com says the Pyramis MIS-ES running DC/OSx (SVR4)
+    # Chad R. Larson says the Pyramis MIS-ES running DC/OSx (SVR4)
     # needs -lnsl.
     # The nsl library prevents programs from opening the X display
     # on Irix 5.2, according to T.E. Dickey.
@@ -3402,10 +3402,10 @@ dnl FIXME: banish uname from this macro!
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT
     # 2.0.  But -lsocket is broken on IRIX 5.2 (and is not necessary
-    # on later versions), says simon@lia.di.epfl.ch: it contains
-    # gethostby* variants that don't use the nameserver (or something).
-    # -lsocket must be given before -lnsl if both are needed.
-    # We assume that if connect needs -lnsl, so does gethostbyname.
+    # on later versions), says Simon Leinen: it contains gethostby*
+    # variants that don't use the nameserver (or something).  -lsocket
+    # must be given before -lnsl if both are needed.  We assume that
+    # if connect needs -lnsl, so does gethostbyname.
     AC_CHECK_FUNC(connect)
     if test $ac_cv_func_connect = no; then
       AC_CHECK_LIB(socket, connect, X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS", ,
