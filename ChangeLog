@@ -1,3 +1,11 @@
+2003-04-12  Jim Meyering  <jim@meyering.net>
+
+	* NEWS: Mention the new macro.
+	* lib/autoconf/c.m4 (AC_C_RESTRICT): New macro.
+	* doc/autoconf.texi (C Compiler): Describe AC_C_RESTRICT.
+	* tests/c.at: Test AC_C_RESTRICT.
+	* tests/mktests.sh (ac_exclude_list): Add exclusion for AC_C_RESTRICT.
+
 2003-04-08  Akim Demaille  <akim@epita.fr>
 
 	* bin/ifnames.in: Skip C++ comments.
