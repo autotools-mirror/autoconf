@@ -1,3 +1,8 @@
+2001-06-06  Akim Demaille  <akim@epita.fr>
+
+	* tests/semantics.at (AC_CHECK_LIB): Strengthen to reflect
+	PR autoconf/187.
+
 2001-06-05  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): `prefix' and `exec_prefix'
