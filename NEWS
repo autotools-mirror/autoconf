@@ -1,3 +1,8 @@
+Major changes in release 1.8:
+
+* AC_PROG_INSTALL uses install.sh instead of cp if it's found.
+* AC_OUTPUT adds its comments in C format when substituting in C files.
+
 Major changes in release 1.7:
 
 * New macro AC_OBSOLETE.
