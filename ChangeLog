@@ -3,7 +3,7 @@
 	* doc/autoconf.texi (Caching Results): Bigger warning about the
 	extremely frequent action-in-commands bug.
 	Move the documentation of AC_CACHE_SAVE and AC_CACHE_LOAD...
-	(Cache Files): in here.
+	(Cache Files): into here.
 
 2000-06-09  Steven G. Johnson  <stevenj@alum.mit.edu>
 
@@ -288,7 +288,7 @@
 	* doc/autoconf.texi (Limitations of Usual Tools, Limitations of
 	Builtins): Integrate comments from Paul Eggert and Jim Meyering.
 	Add the sed limitation discovered by Philippe De Muyter.
-	Typo from Pavel Roskin.
+	Fix a typo spotted by Pavel Roskin.
 
 2000-05-25  Akim Demaille  <akim@epita.fr>
 
