@@ -1,3 +1,8 @@
+2001-04-17  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Fixes for punctuation and grammar..  Replace
+	"..." with "@dots{}" except when "..." is in literal code.
+
 2001-04-17  Nicolas Joly  <njoly@pasteur.fr>
 
 	* acgeneral.m4 (_AC_LINK_IFELSE): Be sure to remove temporary
