@@ -66,7 +66,7 @@ standards_texi = @standards_texi@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at compile.at semantics.at syntax.at update.at
+SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at compile.at semantics.at syntax.at 	update.at foreign.at
 
 
 # We don't actually distribute the testsuite, since one only
@@ -83,7 +83,8 @@ CLEANFILES = debug-*.sh macro configure configure.in config.status              
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in config.guess \
+config.sub ltconfig ltmain.sh
 
 
 PACKAGE = @PACKAGE@

@@ -46,3 +46,6 @@ m4_include([syntax.at])
 
 # Checking that updating an obsolete macro produces a valid configure.in
 m4_include([update.at])
+
+# Compatibility with foreign tools.
+m4_include([foreign.at])

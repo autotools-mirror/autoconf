@@ -373,6 +373,7 @@ m4_define([AT_CLEANUP],
     )
     at_status=$?
     ;;
+
 m4_divert([TESTS])[]dnl
     at_data_files="AT_data_files"
 m4_undivert([TEST])[]dnl
@@ -395,6 +396,7 @@ $1
 
 _ATEOF
     ;;
+
 m4_divert_pop()dnl
 ])# AT_BANNER
 
