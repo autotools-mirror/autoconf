@@ -269,16 +269,25 @@ AC_SUBST(INSTALL_DATA)dnl
 AC_DEFUN([AC_PROG_LN_S],
 [AC_MSG_CHECKING([whether ln -s works])
 AC_CACHE_VAL(ac_cv_prog_LN_S,
-[rm -f conftest.sym conftest.file
+[rm -f conftest conftest.exe conftest.file
 echo >conftest.file
-if ln -s conftest.file conftest.sym 2>/dev/null; then
-  ac_cv_prog_LN_S="ln -s"
-elif ln conftest.file conftest.sym 2>/dev/null; then
+dnl Don't use conftest.sym to avoid filename issues on DJGPP, where this
+dnl would yield conftest.sym.exe for DJGPP < 2.04.
+if ln -s conftest.file conftest 2>/dev/null; then
+  # We could just check for DJGPP; but this test a) works b) is more generic
+  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+  if test -f conftest.exe; then
+    ac_cv_prog_LN_S="cp -p" # Don't use ln at all; we don't have any links
+  else
+    ac_cv_prog_LN_S="ln -s"
+  fi
+elif ln conftest.file conftest 2>/dev/null; then
   ac_cv_prog_LN_S=ln
 else
   ac_cv_prog_LN_S=cp
 fi
-rm -f conftest.sym conftest.file])dnl
+rm -f conftest conftest.exe conftest.file])dnl
+ac_ln_s=$ac_cv_prog_LN_S
 AC_SUBST([LN_S], [$ac_cv_prog_LN_S])
 if test "$ac_cv_prog_LN_S" = "ln -s"; then
   AC_MSG_RESULT([yes])
