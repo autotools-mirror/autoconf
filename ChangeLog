@@ -1,5 +1,11 @@
 2001-06-11  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_NO_EXECUTABLES): Define the macros with their
+	trailing new line.
+	Reported by Andreas Schwab.
+
+2001-06-11  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am, Makefile.maint: Typos.
 
 2001-06-09  Akim Demaille  <akim@epita.fr>

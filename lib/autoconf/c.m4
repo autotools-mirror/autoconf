@@ -603,9 +603,13 @@ AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
 AC_BEFORE([$0], [_AC_LANG_COMPILER_WORKS])
 AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
 
-m4_define([_AC_LANG_COMPILER_WORKS], [cross_compiling=maybe])
+m4_define([_AC_LANG_COMPILER_WORKS],
+[cross_compiling=maybe
+])
 
-m4_define([_AC_COMPILER_EXEEXT], [EXEEXT=])
+m4_define([_AC_COMPILER_EXEEXT],
+[EXEEXT=
+])
 
 m4_define([AC_LINK_IFELSE],
 [AC_FATAL([All the tests involving linking were disabled by $0])])
