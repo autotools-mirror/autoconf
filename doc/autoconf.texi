@@ -700,7 +700,7 @@ information on Automake.
 
 The book @cite{GNU Autoconf, Automake and Libtool}@footnote{@cite{GNU
 Autoconf, Automake and Libtool}, by G. V. Vaughan, B. Elliston,
-T. Tromey, and I. L. Taylor. New Riders, 2000, ISBN 1578701902.}
+T. Tromey, and I. L. Taylor.  New Riders, 2000, ISBN 1578701902.}
 describes the complete GNU build environment.  You can also find the
 entire book on-line at @href{http://sources.redhat.com/autobook/,``The
 Goat Book'' home page}.
@@ -2654,8 +2654,8 @@ justified.
 
 @example
 /* Define to one of _getb67, GETB67, getb67 for Cray-2 and
-   Cray-YMP systems. This function is required for alloca.c
-   support on those systems. */
+   Cray-YMP systems.  This function is required for alloca.c
+   support on those systems.  */
 #undef CRAY_STACKSEG_END
 @end example
 @end defmac
@@ -3330,7 +3330,7 @@ with the library succeeds; @var{action-if-not-found} is a list of shell
 commands to run if the link fails.  If @var{action-if-found} is not
 specified, the default action will prepend @option{-l@var{library}} to
 @code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all
-capitals). This macro is intended to support building @code{LIBS} in
+capitals).  This macro is intended to support building @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
 library dependencies are satisfied as a natural side-effect of
 consecutive tests.  Some linkers are very sensitive to library ordering
@@ -3776,7 +3776,8 @@ If @code{lstat} behaves properly, define
 @cvindex malloc
 @c @fuindex malloc
 @prindex @code{malloc}
-If the @code{malloc} function works correctly (@samp{malloc (0)} returns a valid
+If the @code{malloc} function is compatible with the @acronym{GNU} C
+library @code{malloc} (i.e., @samp{malloc (0)} returns a valid
 pointer), define @code{HAVE_MALLOC} to 1.  Otherwise define
 @code{HAVE_MALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
 @samp{malloc}, and define @code{malloc} to @code{rpl_malloc} so that the
@@ -3793,12 +3794,12 @@ the @samp{#undef malloc}):
 
 #include <sys/types.h>
 
-char *malloc ();
+void *malloc ();
 
 /* Allocate an N-byte block of memory from the heap.
    If N is zero, allocate a 1-byte block.  */
 
-char *
+void *
 rpl_malloc (size_t n)
 {
   if (n == 0)
@@ -3862,7 +3863,8 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @cvindex realloc
 @c @fuindex realloc
 @prindex @code{realloc}
-If the @code{realloc} function works correctly (@samp{realloc (0, 0)} returns a
+If the @code{realloc} function is compatible with the @acronym{GNU} C
+library @code{realloc} (i.e., @samp{realloc (0, 0)} returns a
 valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
 @code{HAVE_REALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
 @samp{realloc}, and define @code{realloc} to @code{rpl_realloc} so that
@@ -4584,7 +4586,7 @@ with the system's one, you should use:
 
 @example
 #if defined HAVE_DECL_MALLOC && !HAVE_DECL_MALLOC
-char *malloc (size_t *s);
+void *malloc (size_t *s);
 #endif
 @end example
 
@@ -5295,8 +5297,8 @@ a user-provided entry function named (say) @code{MAIN__} to run the
 user's program.  The @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN}
 macro figures out how to deal with this interaction.
 
-When using Fortran for purely numerical functions (no I/O, etc. often
-prefer to provide their own @code{main} and skip the Fortran library
+When using Fortran for purely numerical functions (no I/O, etc.)@: often one
+prefers to provide one's own @code{main} and skip the Fortran library
 initializations.  In this case, however, one may still need to provide a
 dummy @code{MAIN__} routine in order to prevent linking errors on some
 systems.  @code{AC_F77_DUMMY_MAIN} detects whether any such routine is
@@ -5751,7 +5753,7 @@ include any header files containing clashing prototypes.
 #ifdef __cplusplus
 extern "C" void *malloc (size_t);
 #else
-char *malloc ();
+void *malloc ();
 #endif
 @end example
 
@@ -5998,7 +6000,7 @@ program that uses that feature.
 @acindex COMPILE_IFELSE
 Run the compiler of the current language (@pxref{Language Choice}) on
 the @var{input}, run the shell commands @var{action-if-true} on success,
-@var{action-if-false} otherwise. The @var{input} can be made by
+@var{action-if-false} otherwise.  The @var{input} can be made by
 @code{AC_LANG_PROGRAM} and friends.
 
 This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
@@ -6049,7 +6051,7 @@ program.
 @acindex LINK_IFELSE
 Run the compiler and the linker of the current language (@pxref{Language
 Choice}) on the @var{input}, run the shell commands @var{action-if-true}
-on success, @var{action-if-false} otherwise. The @var{input} can be made
+on success, @var{action-if-false} otherwise.  The @var{input} can be made
 by @code{AC_LANG_PROGRAM} and friends.
 
 This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
@@ -7867,7 +7869,7 @@ according to the Webster's Revised Unabridged Dictionary (1913):
 
 @quotation
 Mash \Mash\, n.  [Akin to G. meisch, maisch, meische, maische, mash,
-wash, and prob. to AS.@: miscian to mix.  See ``Mix''.]
+wash, and prob.@: to AS.@: miscian to mix.  See ``Mix''.]
 
 @enumerate 1
 @item
@@ -9483,7 +9485,7 @@ You can't use @command{!}; you'll have to rewrite your code.
 @item @command{break}
 @c ------------------
 @prindex @command{break}
-The use of @samp{break 2} etc. is safe.
+The use of @samp{break 2} etc.@: is safe.
 
 
 @item @command{cd}
@@ -13665,7 +13667,7 @@ and @code{AC_LANG_PROGRAM} on the other hand instead of the deprecated
 @code{AC_TRY_RUN}.  The motivations where:
 @itemize @minus
 @item
-a more consistent interface: @code{AC_TRY_COMPILE} etc. were double
+a more consistent interface: @code{AC_TRY_COMPILE} etc.@: were double
 quoting their arguments;
 
 @item
