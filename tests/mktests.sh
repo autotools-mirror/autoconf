@@ -233,14 +233,14 @@ MK_EOF
 
     echo "# Modern macros."
     for macro in `cat acdefuns`; do
-      if fgrep "$macro" requires >/dev/null 2>&1; then :; else
+      if grep "$macro" requires >/dev/null 2>&1; then :; else
   	echo "AT_CHECK_MACRO([$macro])"
       fi
     done
     echo
     echo "# Obsolete macros."
     for macro in `cat audefuns`; do
-      if fgrep "$macro" requires >/dev/null 2>&1; then :; else
+      if grep "$macro" requires >/dev/null 2>&1; then :; else
   	echo "AT_CHECK_AU_MACRO([$macro])"
       fi
     done
@@ -249,7 +249,7 @@ MK_EOF
   # In one atomic step so that if something above fails, the trap
   # preserves the old version of the file.  If there is nothing to
   # check, output /rien du tout/[1].
-  if fgrep AT_CHECK ac$base.tat >/dev/null 2>&1; then
+  if grep AT_CHECK ac$base.tat >/dev/null 2>&1; then
     mv ac$base.tat ac$base.at
   else
     rm -f ac$base.tat ac$base.at
