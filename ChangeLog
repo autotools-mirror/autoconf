@@ -1,3 +1,9 @@
+2002-09-03  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Configuration Commands): Remove obsolete
+	example for AC_CONFIG_COMMANDS_PRE.  Problem reported by Marcus
+	Brinkmann.
+
 2002-09-03  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Bump to 2.53d.
