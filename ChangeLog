@@ -1,5 +1,14 @@
 2000-03-17  Akim Demaille  <akim@epita.fr>
 
+	Use a single tool to reformat the raw `configure' script output by
+	m4.
+	Suggested by Paul Eggert.
+
+	* autoconf.sh: Stop playing with 2 seds and an AWK to finalize
+	`configure', a single AWK program is enough.
+
+2000-03-17  Akim Demaille  <akim@epita.fr>
+
 	In Autoconf 2.13, although AC_OUTPUT_COMMANDS did double quote its
 	arguments, AC_OUTPUT arguments 2 and 3 were not!  Currently,
 	AC_OUTPUT over quotes too: stop that.

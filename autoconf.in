@@ -253,21 +253,33 @@ case $task in
     chmod +x $outfile
   fi
 
-  # Put the real line numbers into configure to make config.log more helpful.
-  # Because quoting can sometimes get really painful in m4, there are special
-  # @tokens@ to substitute.
-  sed -e 's/[ 	]*$//' <$tmpout |
-    sed -e '/^$/N;/\n$/D' |
-    $AWK '
-      /__oline__/ { printf "%d:", NR + 1 }
-  	          { print }' |
-    sed '
-      /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
-      s/@<:@/[/g
-      s/@:>@/]/g
-      s/@S|@/$/g
-      s/@%:@/#/g
-      ' >&4
+  # Put the real line numbers into configure to make config.log more
+  # helpful.  Because quoting can sometimes get really painful in m4,
+  # there are special @tokens@ to substitute.
+  $AWK '
+    {
+      sub(/[         ]*$/, "")
+      if ($0 == "")
+        {
+          if (!duplicate)
+            print
+          duplicate = 1
+          next
+        }
+      duplicate = 0
+      oline++
+      while (sub(/__oline__/, oline))
+        continue
+      while (sub(/@<:@/, "["))
+        continue
+      while (sub(/@:>@/, "]"))
+        continue
+      while (sub(/@S\|@/, "$"))
+        continue
+      while (sub(/@%:@/, "#"))
+        continue
+      print
+    }' <$tmpout >&4
   ;; # End of the task script.
 
 
