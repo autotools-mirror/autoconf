@@ -32,7 +32,9 @@ AC_DEFUN([TEST3],
 [REQUIRE_AND_CHECK([TEST2a])
 test3=set])
 
-AC_PLAIN_SCRIPT
+AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 TEST1
 test -z "$test1" &&
   AC_MSG_ERROR([\$test1 is empty])
@@ -63,7 +65,9 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT
+AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 TEST
 TEST
 MULTI_TEST
@@ -106,7 +110,9 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT
+AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 MULTI_TEST
 MULTI_TEST
 SINGLE_TEST
@@ -144,7 +150,9 @@ AT_DATA([configure.ac],
 AC_DEFUN([INNER_TEST],
 [inner_test=".$inner_test"])
 
-AC_PLAIN_SCRIPT
+AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 AC_PROVIDE([INNER_TEST])
 TEST
 

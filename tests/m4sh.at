@@ -12,7 +12,9 @@ AT_BANNER([M4sh.])
 AT_SETUP([[AS_DIRNAME & AS_DIRNAME_SED]])
 
 AT_DATA(configure.ac,
-[[AC_PLAIN_SCRIPT
+[[AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 _AS_EXPR_PREPARE
 
 define([AS_DIRNAME_TEST],
@@ -63,7 +65,9 @@ AT_CLEANUP(configure)
 AT_SETUP([[AS_MKDIR_P]])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT
+[[AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 pwd=`pwd`
 set -e
 # Absolute
@@ -95,7 +99,9 @@ AT_CLEANUP(configure 1 a)
 AT_SETUP([Negated classes in globbing])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT
+[[AC_PLAIN_SCRIPT()dnl
+#! /bin/sh
+
 case 'with!two!bangs' in
   *[[!a-z]]*) ;;
            *) AC_MSG_ERROR([[`*[!a-z]*' didn't match `with!two!bangs']]);;
