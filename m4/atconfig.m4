@@ -2,7 +2,7 @@
 ## Prepare for testing.  ##
 ## ----------------------##
 
-#serial 5
+#serial 6
 
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 #
@@ -21,14 +21,15 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+
 # AT_CONFIG(TEST-DIRECTORY, [AUTOTEST-PATH = .])
 # ----------------------------------------------
 # Configure the test suite.
 #
-# AUTOTEST-PATH must help the test suite to find the executables, i.e.,
-# if the test suite is in `tests/' and the executables are in `src/',
-# pass `../src'.  If there are also executables in the source tree, use
-# `../src:$top_srcdir/src'.
+# AUTOTEST-PATH must help the test suite to find the executables,
+# i.e., if the executables are in `src/', pass `src'.  If there are
+# also executables in the source tree, use `src:$top_srcdir/src'.
+
 AC_DEFUN([AT_CONFIG],
 [AC_CONFIG_COMMANDS([$1/atconfig],
 [cat >$1/atconfig <<EOF
@@ -43,8 +44,9 @@ at_bugreport='$at_bugreport'
 at_n='$at_n'
 at_c='$at_c'
 
-srcdir='$srcdir'
-top_srcdir='$top_srcdir'
+at_testdir='$1'
+at_topbuild_2_topsrc='$at_topbuild_2_topsrc'
+
 AUTOTEST_PATH='m4_default([$2], [.])'
 
 SHELL=\${CONFIG_SHELL-'$at_shell'}
@@ -59,8 +61,8 @@ at_bugreport='$PACKAGE_BUGREPORT'
 at_n='$ECHO_N'
 at_c='$ECHO_C'
 
-srcdir='$srcdir'
-top_srcdir=`echo '$1/' | sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g;s,/$,,'`
+# Path from top_build to top_src
+at_topbuild_2_topsrc=$srcdir
 
 at_shell='$SHELL'
 at_path_separator='$PATH_SEPARATOR'

@@ -1,5 +1,12 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Compute top_builddir,
+	top_srcdir and srcdir from at_topbuild_2_topsrc and at_testdir.
+	Load atlocal late enough to dump it in the log.
+	* m4/atconfig.m4 (AT_CONFIG): Pass them to atconfig.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (Configuring subdirectories): New test.
 	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Say what you are
 	looking for.

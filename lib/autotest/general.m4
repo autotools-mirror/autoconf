@@ -94,6 +94,15 @@ AS_SHELL_SANITIZE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 . ./atconfig
+
+# Path to the top builddir: reverse at_testdir
+top_builddir=`echo '$at_testdir' |
+                sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g;s,/$,,'`
+# Path to the top srcdir: to go to top build, then to top src
+top_srcdir=$top_builddir/$at_topbuild_2_topsrc
+# Path to srcdir: from top srcdir to this dir.
+srcdir=$top_srcdir/$at_testdir
+
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`
@@ -111,8 +120,6 @@ done
 IFS=$at_IFS_save
 PATH=$at_path
 export PATH
-
-test -f atlocal && . ./atlocal
 
 # -e sets to true
 at_stop_on_error=false
@@ -197,14 +204,6 @@ else
   at_diff=diff
 fi
 
-# Tester and tested.
-if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
-  AS_BOX([Test suite for $at_package $at_version])
-else
-  AS_BOX([ERROR: Not using the proper version, no tests performed])
-  exit 1
-fi
-
 # Setting up the FDs.
 # 5 is stdout conditioned by verbosity.
 if test $at_verbose = echo; then
@@ -218,6 +217,14 @@ if $at_debug; then
   exec 6>/dev/null
 else
   exec 6>$as_me.log
+fi
+
+# Load the user config file before checking the PATH.
+test -r ./atlocal && . ./atlocal
+
+# Tester and tested.
+if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
+  AS_BOX([Test suite for $at_package $at_version])
   {
     AS_BOX([Test suite log for $at_package $at_version])
     echo
@@ -234,8 +241,19 @@ else
     AS_UNAME
     echo
 
+   # Inform about the contents of the config files.
+   echo "$as_me: atconfig:" >&6
+   sed 's/^/| /' atconfig >&6
+   if test -r ./atlocal; then
+     echo "$as_me: atlocal:" >&6
+     sed 's/^/| /' atlocal >&6
+   fi
+
     AS_BOX([Running silently the tests])
   } >&6
+else
+  AS_BOX([ERROR: Not using the proper version, no tests performed])
+  exit 1
 fi
 
 at_start_date=`date`
