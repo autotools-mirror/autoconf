@@ -7,6 +7,7 @@ configure configure.ac configure.in configure.scan
 confdefs.h
 conftest*
 debug-*.sh
+dst1 dst2 src1 src2
 empty
 macros.m4
 state*
