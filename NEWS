@@ -1,6 +1,11 @@
 * Major changes in Autoconf 2.54a                       -*- outline -*-
 
 
+Tip of the release:
+
+           Did you have your configure.ac checked by autoscan?
+	   Did you try the warning options?
+
 ** Documentation
 
 - AC_CHECK_HEADER, AC_CHECK_HEADERS
@@ -12,6 +17,15 @@
 
 - Produces messages (when --verbose) to be understood by Emacs'
   compile mode.
+
+** Obsolete options
+  Support for the obsoleted options -m, --macrodir, -l, --localdir is
+  dropped in favor of the safer --include/--prepend-include scheme.
+
+** Customization
+
+- ~/.autom4te.cfg makes it possible to disable the caching mechanism
+  (autom4te.cache).  See `Customizing autom4te' in the documentation.
 
 ** Macros
 

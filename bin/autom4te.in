@@ -230,9 +230,8 @@ use File::Basename;
 use Autom4te::XFile;
 use strict;
 
-# Configuration file.
+# Data directory.
 my $datadir = $ENV{'AC_MACRODIR'} || '@datadir@';
-my $autom4te_cfg = $ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg";
 
 # $LANGUAGE{LANGUAGE} -- Automatic options for LANGUAGE.
 my %language;
@@ -247,10 +246,10 @@ my $melt = 0;
 
 # Names of the cache directory, cache directory index, trace cache
 # prefix, and output cache prefix.
-my $cache = "autom4te.cache";
-my $icache = "$cache/requests";
-my $tcache = "$cache/traces.";
-my $ocache = "$cache/output.";
+my $cache;
+my $icache;
+my $tcache;
+my $ocache;
 
 # The macros to trace mapped to their format, as specified by the
 # user.
@@ -368,6 +367,7 @@ Operation modes:
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
   -l, --language=LANG      specify the set of M4 macros to use
+  -C, --cache=[DIRECTORY]  preserve results for future runs in DIRECTORY
   -m, --mode=OCTAL         change the non trace output file mode (0666)
   -M, --melt               don\'t use M4 frozen files
 
@@ -443,14 +443,15 @@ sub files_to_options (@)
 }
 
 
-# load_configuration ()
-# ---------------------
-# Load the configuration file.
-sub load_configuration ()
+# load_configuration ($FILE)
+# --------------------------
+# Load the configuration $FILE.
+sub load_configuration ($)
 {
+  my ($file) = @_;
   use Text::ParseWords;
 
-  my $cfg = new Autom4te::XFile ($autom4te_cfg);
+  my $cfg = new Autom4te::XFile ($file);
   my $lang;
   while ($_ = $cfg->getline)
     {
@@ -467,7 +468,7 @@ sub load_configuration ()
 	}
       elsif ($type eq 'end-language:')
 	{
-	  error "$autom4te_cfg:$.: end-language mismatch: $lang"
+	  error "$file:$.: end-language mismatch: $lang"
 	    if $lang ne lc $words[0];
 	}
       elsif ($type eq 'args:')
@@ -476,7 +477,7 @@ sub load_configuration ()
 	}
       else
 	{
-	  error "$autom4te_cfg:$.: unknown directive: $type";
+	  error "$file:$.: unknown directive: $type";
 	}
     }
 }
@@ -507,6 +508,16 @@ sub parse_args ()
       }
   } while @language;
 
+  # --debug is useless: it is parsed below.
+  if (exists $ENV{'AUTOM4TE_DEBUG'})
+    {
+      print STDERR "$me: concrete arguments:\n";
+      foreach my $arg (@ARGV)
+	{
+	  print STDERR "| $arg\n";
+	}
+    }
+
   # Process the arguments for real this time.
   my @trace;
   my @prepend_include;
@@ -520,7 +531,7 @@ sub parse_args ()
 
      # Library directories:
      "B|prepend-include=s" => \@prepend_include,
-     "I|include=s" => \@include,
+     "I|include=s"         => \@include,
 
      # Tracing:
      # Using a hash for traces is seducing.  Unfortunately, upon `-t FOO',
@@ -531,7 +542,10 @@ sub parse_args ()
      "p|preselect=s" => \@preselect,
 
      # Freezing.
-     "F|freeze"  => \$freeze,
+     "F|freeze" => \$freeze,
+
+     # Caching.
+     "C|cache=s" => \$cache,
     );
 
   error "too few arguments
@@ -547,6 +561,16 @@ Try `$me --help' for more information."
     if $freeze && @trace;
   $melt = 1
     if $freeze;
+
+  # Names of the cache directory, cache directory index, trace cache
+  # prefix, and output cache prefix.  If the cache is not to be
+  # preserved, default to a temporary directory (automatically removed
+  # on exit).
+  $cache = $tmp
+    unless $cache;
+  $icache = "$cache/requests";
+  $tcache = "$cache/traces.";
+  $ocache = "$cache/output.";
 
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
@@ -1110,8 +1134,12 @@ sub freeze ($)
 ## Main program.  ##
 ## -------------- ##
 
-mktmpdir ('t4');
-load_configuration;
+mktmpdir ('am4t');
+load_configuration ($ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg");
+load_configuration ("$ENV{'HOME'}/.autom4te.cfg")
+  if -f "$ENV{'HOME'}/.autom4te.cfg";
+load_configuration (".autom4te.cfg")
+  if -f ".autom4te.cfg";
 parse_args;
 
 # Freezing does not involve the cache.

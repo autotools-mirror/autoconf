@@ -1,5 +1,19 @@
 2002-10-25  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&load_configuration): Take the file as
+	argument.
+	(&parse_args): Handle -C, --cache.
+	($help): Adjust.
+	(MAIN): Load ~/.autom4te.cfg and ./.autom4te.cfg.
+	* lib/autom4te.in (Autoconf): Pass --cache=autom4te.cache.
+	* doc/autoconf.texi (Invoking autom4te): Document --cache.
+	Now a subsection of...
+	(Using autom4te): This new section.
+	(Customizing autom4te): New.
+	(autom4te.cache): Adjust.
+
+2002-10-25  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Generic Headers): More information on how to
 	use AC_CHECK_HEADERS.
 

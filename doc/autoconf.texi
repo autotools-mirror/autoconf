@@ -311,7 +311,7 @@ Caching Results
 Programming in M4
 
 * M4 Quotation::                Protecting macros from unwanted expansion
-* Invoking autom4te::           The Autoconf executables backbone
+* Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common shell Constructs
 
@@ -323,6 +323,11 @@ M4 Quotation
 * Changequote is Evil::         Worse than INTERCAL: M4 + changequote
 * Quadrigraphs::                Another way to escape special characters
 * Quotation Rule Of Thumb::     One parenthesis, one quote
+
+Using @command{autom4te}
+
+* Invoking autom4te::           A GNU M4 wrapper
+* Customizing autom4te::        Customizing the Autoconf package
 
 Programming in M4sugar
 
@@ -6656,7 +6661,7 @@ and their interface might change in the future.  As a matter of fact,
 
 @menu
 * M4 Quotation::                Protecting macros from unwanted expansion
-* Invoking autom4te::           The Autoconf executables backbone
+* Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common shell Constructs
 @end menu
@@ -7159,12 +7164,15 @@ this happens, the resulting @command{configure} script will contain
 unexpanded macros.  The @command{autoconf} program checks for this problem
 by doing @samp{grep AC_ configure}.
 
-@node Invoking autom4te
-@section Invoking @command{autom4te}
 
-The Autoconf suite, including M4sugar, M4sh, and Autotest, in addition to
-Autoconf per se, heavily rely on M4.  All these different uses revealed
-common needs factored into a layer over @command{m4}:
+@c ---------------------------------------- Using autom4te
+
+@node Using autom4te
+@section Using @command{autom4te}
+
+The Autoconf suite, including M4sugar, M4sh, and Autotest, in addition
+to Autoconf per se, heavily rely on M4.  All these different uses
+revealed common needs factored into a layer over @command{m4}:
 @command{autom4te}@footnote{
 @c
 Yet another great name from Lars J. Aas.
@@ -7172,8 +7180,17 @@ Yet another great name from Lars J. Aas.
 }.
 
 @command{autom4te} should basically considered as a replacement of
-@command{m4} itself.  In particular, its handling of command line
-arguments is modeled after M4's:
+@command{m4} itself.
+
+@menu
+* Invoking autom4te::           A GNU M4 wrapper
+* Customizing autom4te::        Customizing the Autoconf package
+@end menu
+
+@node Invoking autom4te
+@subsection Invoking @command{autom4te}
+
+The command line arguments are modeled after M4's:
 
 @example
 autom4te @var{options} @var{files}
@@ -7375,9 +7392,16 @@ be removed} at any moment (especially if for some reason
 @command{autom4te} considers it is trashed).
 
 @table @option
+@item --cache=[@var{directory}]
+@itemx -C
+@itemx -C@var{directory}
+Specify the name of the directory where the result should be cached.
+Passing an empty value disables caching.  Be sure to pass a relative
+path name, as for the time being, global caches are not supported.
+
 @item --force
 @itemx -f
-Do not consider the cache (but update it anyway).
+If a cache is used, consider it obsolete (but update it anyway).
 @end table
 
 @sp 1
@@ -7497,6 +7521,41 @@ is the same as @samp{autom4te --language M4sugar m4sugar/m4sh.m4f
 foo.m4}, i.e., @samp{autom4te --prepend-include /usr/local/share/autoconf
 m4sugar/m4sugar.m4f m4sugar/m4sh.m4f --mode 777 foo.m4}.  The definition
 of the languages is stored in @file{autom4te.cfg}.
+
+@node Customizing autom4te
+@subsection Customizing @command{autom4te}
+
+One can customize @command{autom4te} via @file{~/.autom4te.cfg} (i.e.,
+as found in the user home directory), and @file{./.autom4te.cfg} (i.e.,
+as found in the directory from which @command{autom4te} is run).  The
+order is first reading @file{autom4te.cfg}, then @file{~/.autom4te.cfg},
+then @file{./.autom4te.cfg}, and finally the command line arguments.
+
+In these text files, comments are introduced with @code{#}, and empty
+lines are ignored.  Customization is performed on a per-language basis,
+wrapped in between a @samp{begin-language: "@var{language}"},
+@samp{end-language: "@var{language}"} pair.
+
+Customizing a language stands for appending options (@pxref{Invoking
+autom4te}) to the current definition of the language.  Options, and more
+generally arguments, are introduced by @samp{args: @var{arguments}}.
+You may use the traditional shell syntax to quote the @var{arguments}.
+
+As an example, to disable Autoconf caches (@file{autom4te.cache})
+globally, include the following lines in @file{~/.autom4te.cfg}:
+
+@verbatim
+## ------------------ ##
+## User Preferences.  ##
+## ------------------ ##
+
+begin-language: "Autoconf"
+args: --cache=''
+end-language: "Autoconf"
+@end verbatim
+
+The most typical
+use is probably to disable caches with Autoconf
 
 
 @node Programming in M4sugar
@@ -14188,6 +14247,20 @@ and is increasing with the size of @file{configure.ac}.
 
 But it is and remains being simply a cache: you can safely remove it.
 
+@sp 1
+
+@display
+Can I permanently get rid of it?
+@end display
+
+The creation of this cache can be disabled from @file{~/.autom4te.cfg},
+see @ref{Customizing autom4te}, for more details.  You should be aware
+that disabling the cache slows down the Autoconf test suite by 40%.  The
+more GNU Build System components are used, the more the cache is useful;
+for instance running @samp{autoreconf -f} on the Coreutils is twice
+slower without the cache @emph{although @option{--force} implies that
+the cache is not fully exploited}, and eight times slower than without
+@option{--force}.
 
 
 @c ===================================================== History of Autoconf.

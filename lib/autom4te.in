@@ -162,6 +162,7 @@ end-language: "Autoscan-preselections"
 
 begin-language: "Autoconf"
 args: --prepend-include @datadir@
+args: --cache=automate.cache
 args: autoconf/autoconf.m4f
 args: acsite.m4?
 args: aclocal.m4?

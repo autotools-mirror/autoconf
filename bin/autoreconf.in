@@ -338,9 +338,12 @@ sub autoreconf ($)
      . join (' --trace=', '',
 	     # If you change this list, update the
 	     # `Autoreconf-preselections' section of autom4te.in.
-	     'AC_INIT', 'AM_GNU_GETTEXT', 'AC_PROG_LIBTOOL',
 	     'AC_CONFIG_HEADERS',
-	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1')
+	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1',
+	     'AC_INIT',
+	     'AC_PROG_LIBTOOL',
+	     'AM_GNU_GETTEXT',
+	    )
      . ' |');
   while ($_ = $traces->getline)
     {
