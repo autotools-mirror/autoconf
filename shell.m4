@@ -1,0 +1,209 @@
+divert(-1)                                                   -*- Autoconf -*-
+# This file is part of Autoconf.
+# M4 sugar for common shell constructs.
+# Requires GNU M4 and M4sugar.
+# Copyright 2000 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# As a special exception, the Free Software Foundation gives unlimited
+# permission to copy, distribute and modify the configure scripts that
+# are the output of Autoconf.  You need not follow the terms of the GNU
+# General Public License when using or distributing such scripts, even
+# though portions of the text of Autoconf appear in them.  The GNU
+# General Public License (GPL) does govern all other use of the material
+# that constitutes the Autoconf program.
+#
+# Certain portions of the Autoconf source text are designed to be copied
+# (in certain cases, depending on the input) into the output of
+# Autoconf.  We call these the "data" portions.  The rest of the Autoconf
+# source text consists of comments plus executable code that decides which
+# of the data portions to output in any given case.  We call these
+# comments and executable code the "non-data" portions.  Autoconf never
+# copies any of the non-data portions into its output.
+#
+# This special exception to the GPL applies to versions of Autoconf
+# released by the Free Software Foundation.  When you make and
+# distribute a modified version of Autoconf, you may extend this special
+# exception to the GPL to apply to your modified version as well, *unless*
+# your modified version has the potential to copy into its output some
+# of the text that was the non-data portion of the version that you started
+# with.  (In other words, unless your change moves or copies text from
+# the non-data portions to the data portions.)  If your modification has
+# such potential, you must delete any notice of this special exception
+# to the GPL from your modified version.
+#
+# Written by Akim Demaille, Pavel Roskin, Alexandre Oliva, Lars J. Aas
+# and many other people.
+
+# Set the quotes, whatever the current quoting system.
+changequote()
+changequote([, ])
+
+# Some old m4's don't support m4exit.  But they provide
+# equivalent functionality by core dumping because of the
+# long macros we define.
+ifdef([__gnu__], ,
+[errprint(Autoconf requires GNU m4. Install it before installing Autoconf or
+set the M4 environment variable to its path name.)
+m4exit(2)])
+
+
+
+## ----------------------------- ##
+## 1. Wrappers around builtins.  ##
+## ----------------------------- ##
+
+# This section is lexicographically sorted.
+
+# AS_IFELSE(TEST, [IF-TRUE], [IF-FALSE])
+# --------------------------------------
+# Expand into
+# | if TEST; then
+# |   IF-TRUE
+# | else
+# |   IF-FALSE
+# | fi
+# with simplifications is IF-TRUE and/or IF-FALSE is empty.
+define([AS_IFELSE],
+[ifval([$2$3],
+[if $1; then
+  ifval([$2], [$2], :)
+m4_ifvanl([$3],
+[else
+  $3])dnl
+fi
+])dnl
+])# AS_IFELSE
+
+
+# AS_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
+# --------------------------------------------------
+# Try to unset the env VAR, otherwise set it to
+# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
+define([AS_UNSET],
+[$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
+
+
+
+
+## ------------------------------------------- ##
+## 2. Portable versions of common file utils.  ##
+## ------------------------------------------- ##
+
+# This section is lexicographically sorted.
+
+
+# AS_MKDIR_P(PATH)
+# ----------------
+# Emulate `mkdir -p' with plain `mkdir'.
+define([AS_MKDIR_P],
+[{ case $1 in
+  [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
+  *)                      ac_incr_dir=.;;
+esac
+ac_dummy="$1"
+for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$[@]"`; do
+  ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
+  test -d $ac_incr_dir || mkdir $ac_incr_dir
+done; }
+])# AS_MKDIR_P
+
+
+# AS_DIRNAME(PATHNAME)
+# --------------------
+# Simulate running `dirname(1)' on PATHNAME, not all systems have it.
+# This macro must be usable from inside ` `.
+#
+# Paul Eggert answers:
+# Question: Under UN*X, should `//1' give `/'?
+#
+#   No, under some older flavors of Unix, leading // is a special path
+#   name: it refers to a "super-root" and is used to access other
+#   machines' files.  Leading ///, ////, etc. are equivalent to /; but
+#   leading // is special.  I think this tradition started with Apollo
+#   Domain/OS, an OS that is still in use on some older hosts.
+#
+#   POSIX.2 allows but does not require the special treatment for //.
+#   It says that the behavior of dirname on path names of the form
+#   //([^/]+/*)? is implementation defined.  In these cases, GNU dirname
+#   returns /, but it's more portable to return // as this works even on
+#   those older flavors of Unix.
+#
+#   I have heard rumors that this special treatment of // may be dropped
+#   in future versions of POSIX, but for now it's still the standard.
+#
+# Prefer expr to echo|sed, since expr is usually faster and it handles
+# backslashes and newlines correctly.  However, older expr
+# implementations (e.g. SunOS 4 expr and Solaris 8 /usr/ucb/expr) have
+# a silly length limit that causes expr to fail if the matched
+# substring is longer than 120 bytes.  So fall back on echo|sed if
+# expr fails.
+define([AS_DIRNAME_EXPR],
+[expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
+      X[]$1 : 'X\(//\)[[^/]]' \| \
+      X[]$1 : 'X\(//\)$' \| \
+      X[]$1 : 'X\(/\)' \| \
+      .     : '\(.\)'])
+
+define([AS_DIRNAME_SED],
+[echo "X[]$1" |
+    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q']])
+
+define([AS_DIRNAME],
+[AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
+AS_DIRNAME_SED([$1])])
+
+
+
+## ------------------ ##
+## 3. Common idioms.  ##
+## ------------------ ##
+
+# This section is lexicographically sorted.
+
+# AS_TMPDIR(PREFIX)
+# -----------------
+# Create as safely as possible a temporary directory which name is
+# inspired by PREFIX (should be 2-4 chars max), and set trap
+# mechanisms to remove it.
+define([AS_TMPDIR],
+[# Create a temporary directory, and hook for its removal unless debugging.
+$debug ||
+{
+  trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
+  trap 'exit $?' 1 2 13 15
+}
+
+# Create a (secure) tmp directory for tmp files.
+: ${TMPDIR=/tmp}
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/$1XXXXXX") 2>/dev/null` &&
+  test -n "$tmp" && test -d "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/$1$$-$RANDOM
+  (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   exit 1;
+}dnl
+])# AS_TMPDIR

@@ -2,57 +2,9 @@
 
 cat <<EOF
 
-Base layer.
+Autoconf base layer.
 
 EOF
-
-## ------- ##
-## m4_wrap ##
-## ------- ##
-
-AT_SETUP(m4_wrap)
-
-# m4_wrap is used to display the help strings.  Also, check that
-# commas are not swallowed.  This can easily happen because of
-# m4-listification.
-
-AT_DATA(configure.in,
-[[AC_PLAIN_SCRIPT()dnl
-m4_wrap([Short string */], [   ], [/* ], 20)
-
-m4_wrap([Much longer string */], [   ], [/* ], 20)
-
-m4_wrap([Short doc.], [          ], [  --short ], 30)
-
-m4_wrap([Short doc.], [          ], [  --too-wide], 30)
-
-m4_wrap([Super long documentation.], [          ], [  --too-wide], 30)
-
-m4_wrap([First, second  , third, [,quoted]])
-]])
-
-AT_DATA(expout,
-[[/* Short string */
-
-/* Much longer
-   string */
-
-  --short Short doc.
-
-  --too-wide
-          Short doc.
-
-  --too-wide
-          Super long
-          documentation.
-
-First, second , third, [,quoted]
-]])
-
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -o-], 0, expout)
-
-AT_CLEANUP()
-
 
 
 ## ------------ ##
@@ -87,105 +39,6 @@ test3=set])
 AC_PLAIN_SCRIPT
 TEST1
 test -z "$test1" && exit 1
-exit 0
-]])
-
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0)
-
-AT_CLEANUP(configure)
-
-
-## ------------------ ##
-## AC_SHELL_MKDIR_P.  ##
-## ------------------ ##
-
-# Build nested dirs.
-
-AT_SETUP(AC_SHELL_MKDIR_P)
-
-AT_DATA(configure.in,
-[[AC_PLAIN_SCRIPT
-pwd=`pwd`
-set -e
-# Absolute
-AC_SHELL_MKDIR_P($pwd/1/2/3/4/5/6)
-test -d $pwd/1/2/3/4/5/6 || exit 1
-# Relative
-AC_SHELL_MKDIR_P(a/b/c/d/e/f)
-test -d a/b/c/d/e/f || exit 1
-exit 0
-]])
-
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0)
-
-AT_CLEANUP(configure 1 a)
-
-
-
-## ----------------------------------------- ##
-## AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED.  ##
-## ----------------------------------------- ##
-
-# Build nested dirs.
-
-AT_SETUP(AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED)
-
-AT_DATA(configure.in,
-[[
-
-define([AC_SHELL_DIRNAME_TEST],
-[dir=`AC_SHELL_DIRNAME([$1])`
-test "$dir" = "$2" ||
-  echo "dirname($1) = $dir instead of $2" >&2])
-define([AC_SHELL_DIRNAME_SED_TEST],
-[dir=`AC_SHELL_DIRNAME_SED([$1])`
-test "$dir" = "$2" ||
-  echo "dirname_sed($1) = $dir instead of $2" >&2])
-
-AC_PLAIN_SCRIPT
-AC_SHELL_DIRNAME_TEST([//1],		[//])
-AC_SHELL_DIRNAME_TEST([/1],		[/])
-AC_SHELL_DIRNAME_TEST([./1],		[.])
-AC_SHELL_DIRNAME_TEST([../../2],	[../..])
-AC_SHELL_DIRNAME_TEST([//1/],		[//])
-AC_SHELL_DIRNAME_TEST([/1/],		[/])
-AC_SHELL_DIRNAME_TEST([./1/],		[.])
-AC_SHELL_DIRNAME_TEST([../../2],	[../..])
-AC_SHELL_DIRNAME_TEST([//1/3],		[//1])
-AC_SHELL_DIRNAME_TEST([/1/3],		[/1])
-AC_SHELL_DIRNAME_TEST([./1/3],		[./1])
-AC_SHELL_DIRNAME_TEST([../../2/3],	[../../2])
-AC_SHELL_DIRNAME_TEST([//1/3///],	[//1])
-AC_SHELL_DIRNAME_TEST([/1/3///],	[/1])
-AC_SHELL_DIRNAME_TEST([./1/3///],	[./1])
-AC_SHELL_DIRNAME_TEST([../../2/3///],	[../../2])
-AC_SHELL_DIRNAME_TEST([//1//3/],	[//1])
-AC_SHELL_DIRNAME_TEST([/1//3/],		[/1])
-AC_SHELL_DIRNAME_TEST([./1//3/],	[./1])
-AC_SHELL_DIRNAME_TEST([../../2//3/],	[../../2])
-
-AC_SHELL_DIRNAME_SED_TEST([//1],		[//])
-AC_SHELL_DIRNAME_SED_TEST([/1],			[/])
-AC_SHELL_DIRNAME_SED_TEST([./1],		[.])
-AC_SHELL_DIRNAME_SED_TEST([../../2],		[../..])
-AC_SHELL_DIRNAME_SED_TEST([//1/],		[//])
-AC_SHELL_DIRNAME_SED_TEST([/1/],		[/])
-AC_SHELL_DIRNAME_SED_TEST([./1/],		[.])
-AC_SHELL_DIRNAME_SED_TEST([../../2],		[../..])
-AC_SHELL_DIRNAME_SED_TEST([//1/3],		[//1])
-AC_SHELL_DIRNAME_SED_TEST([/1/3],		[/1])
-AC_SHELL_DIRNAME_SED_TEST([./1/3],		[./1])
-AC_SHELL_DIRNAME_SED_TEST([../../2/3],		[../../2])
-AC_SHELL_DIRNAME_SED_TEST([//1/3///],		[//1])
-AC_SHELL_DIRNAME_SED_TEST([/1/3///],		[/1])
-AC_SHELL_DIRNAME_SED_TEST([./1/3///],		[./1])
-AC_SHELL_DIRNAME_SED_TEST([../../2/3///],	[../../2])
-AC_SHELL_DIRNAME_SED_TEST([//1//3/],		[//1])
-AC_SHELL_DIRNAME_SED_TEST([/1//3/],		[/1])
-AC_SHELL_DIRNAME_SED_TEST([./1//3/],		[./1])
-AC_SHELL_DIRNAME_SED_TEST([../../2//3/],	[../../2])
 exit 0
 ]])
 

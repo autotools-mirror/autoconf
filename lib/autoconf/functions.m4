@@ -69,8 +69,8 @@ AC_CACHE_CHECK([for $1], ac_var,
 [AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
                 [AC_VAR_SET(ac_var, yes)],
                 [AC_VAR_SET(ac_var, no)])])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_var) = yes],
-               [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_var) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_var])dnl
 ])# AC_CHECK_FUNC
 

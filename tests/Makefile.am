@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in.
 
 ## Makefile for Autoconf testsuite.
-## Copyright (C) 2000 Free Software Foundation, Inc.
+## Copyright 2000 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,7 +20,8 @@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = base.m4 tools.m4 semantics.m4 torture.m4 syntax.m4 update.m4
+SUITE = m4sugar.m4 shell.m4 \
+        base.m4 tools.m4 semantics.m4 torture.m4 syntax.m4 update.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
@@ -49,5 +50,5 @@ update.m4: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status \
-config.cache config.log config.h.in config.h
+             config.cache config.log config.h.in config.h
 DISTCLEANFILES = atconfig testsuite

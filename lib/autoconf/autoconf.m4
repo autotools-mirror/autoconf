@@ -23,6 +23,9 @@ include(m4sugar.m4)#                                        -*- Autoconf -*-
 # Do not sinclude acsite.m4 here, because it may not be installed
 # yet when Autoconf is frozen.
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
+
+m4_include(shell.m4)
+
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)
 m4_include(aclang.m4)

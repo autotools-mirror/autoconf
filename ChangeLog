@@ -1,5 +1,24 @@
 2000-10-25  Akim Demaille  <akim@epita.fr>
 
+	Move the Autoconf independent shell macros into the file
+	`shell.m4' and the name space `AS_*'.
+
+	* acgeneral.m4 (AC_SHELL_IFELSE, _AC_SHELL_TMPDIR, AC_SHELL_UNSET)
+	(AC_SHELL_MKDIR_P, AC_SHELL_DIRNAME): Rename and move to...
+	* shell.m4 (AS_IFELSE, AS_TMPDIR, AS_UNSET, AS_MKDIR_P)
+	(AS_DIRNAME): here, a new file.
+	Adjust all dependencies.
+
+	* tests/base.m4 (m4_wrap): Eve out into...
+	* tests/shell.m4: here, new file.
+	* tests/base.m4 (AC_SHELL_MKDIR_P)
+	(AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED): Eve out into...
+	* tests/m4sugar.m4 (AS_MKDIR_P, AS_DIRNAME & AS_DIRNAME_SED):
+	here, new file.
+	Adjust the test suite.
+
+2000-10-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_SHELL_DIRNAME): Split its code into...
 	(AC_SHELL_DIRNAME_EXPR, AC_SHELL_DIRNAME_SED): these new macros.
 	* tests/base.m4 (AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED): New

@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 # Validation suite for Autoconf
 # Copyright 2000 Free Software Foundation, Inc.
 
@@ -17,7 +17,13 @@ EOF
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.
 
-# m4sugar.
+# M4sugar.
+AT_INCLUDE(m4sugar.m4)
+
+# shell.m4.
+AT_INCLUDE(shell.m4)
+
+# Autoconf base macros.
 AT_INCLUDE(base.m4)
 
 # The executables.

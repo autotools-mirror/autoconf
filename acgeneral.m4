@@ -811,133 +811,6 @@ AH_VERBATIM([zzzz]_AH_COUNTER, [$1])])
 define([_AH_COUNTER], [0])
 
 
-## --------------------- ##
-## Some /bin/sh idioms.  ##
-## --------------------- ##
-
-
-# AC_SHELL_IFELSE(TEST, [IF-TRUE], [IF-FALSE])
-# --------------------------------------------
-# Expand into
-# | if TEST; then
-# |   IF-TRUE
-# | else
-# |   IF-FALSE
-# | fi
-# with simplifications is IF-TRUE and/or IF-FALSE is empty.
-define([AC_SHELL_IFELSE],
-[ifval([$2$3],
-[if $1; then
-  ifval([$2], [$2], :)
-m4_ifvanl([$3],
-[else
-  $3])dnl
-fi
-])dnl
-])# AC_SHELL_IFELSE
-
-
-# _AC_SHELL_TMPDIR(PREFIX)
-# ------------------------
-# Create as safely as possible a temporary directory which name is
-# inspired by PREFIX (should be 2-4 chars max), and set trap
-# mechanisms to remove it.
-define([_AC_SHELL_TMPDIR],
-[# Create a temporary directory, and hook for its removal unless debugging.
-$debug ||
-{
-  trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
-  trap 'exit $?' 1 2 13 15
-}
-
-# Create a (secure) tmp directory for tmp files.
-: ${TMPDIR=/tmp}
-{
-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/$1XXXXXX") 2>/dev/null` &&
-  test -n "$tmp" && test -d "$tmp"
-}  ||
-{
-  tmp=$TMPDIR/$1$$-$RANDOM
-  (umask 077 && mkdir $tmp)
-} ||
-{
-   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   exit 1;
-}dnl
-])# _AC_SHELL_TMPDIR
-
-
-# AC_SHELL_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
-# --------------------------------------------------------
-# Try to unset the env VAR, otherwise set it to
-# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
-define([AC_SHELL_UNSET],
-[$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
-
-
-# AC_SHELL_MKDIR_P(PATH)
-# ----------------------
-# Emulate `mkdir -p' with plain `mkdir'.
-define([AC_SHELL_MKDIR_P],
-[{ case $1 in
-  [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
-  *)                      ac_incr_dir=.;;
-esac
-ac_dummy="$1"
-for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$[@]"`; do
-  ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
-  test -d $ac_incr_dir || mkdir $ac_incr_dir
-done; }
-])# AC_SHELL_MKDIR_P
-
-
-# AC_SHELL_DIRNAME(PATHNAME)
-# --------------------------
-# Simulate running `dirname(1)' on PATHNAME, not all systems have it.
-# This macro must be usable from inside ` `.
-#
-# Paul Eggert answers:
-# Question: Under UN*X, should `//1' give `/'?
-#
-#   No, under some older flavors of Unix, leading // is a special path
-#   name: it refers to a "super-root" and is used to access other
-#   machines' files.  Leading ///, ////, etc. are equivalent to /; but
-#   leading // is special.  I think this tradition started with Apollo
-#   Domain/OS, an OS that is still in use on some older hosts.
-#
-#   POSIX.2 allows but does not require the special treatment for //.
-#   It says that the behavior of dirname on path names of the form
-#   //([^/]+/*)? is implementation defined.  In these cases, GNU dirname
-#   returns /, but it's more portable to return // as this works even on
-#   those older flavors of Unix.
-#
-#   I have heard rumors that this special treatment of // may be dropped
-#   in future versions of POSIX, but for now it's still the standard.
-#
-# Prefer expr to echo|sed, since expr is usually faster and it handles
-# backslashes and newlines correctly.  However, older expr
-# implementations (e.g. SunOS 4 expr and Solaris 8 /usr/ucb/expr) have
-# a silly length limit that causes expr to fail if the matched
-# substring is longer than 120 bytes.  So fall back on echo|sed if
-# expr fails.
-define([AC_SHELL_DIRNAME_EXPR],
-[expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
-      X[]$1 : 'X\(//\)[[^/]]' \| \
-      X[]$1 : 'X\(//\)$' \| \
-      X[]$1 : 'X\(/\)' \| \
-      .     : '\(.\)'])
-
-define([AC_SHELL_DIRNAME_SED],
-[echo "X[]$1" |
-    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q']])
-
-define([AC_SHELL_DIRNAME],
-[AC_SHELL_DIRNAME_EXPR([$1]) 2>/dev/null ||
-AC_SHELL_DIRNAME_SED([$1])])
 
 
 ## --------------------------------------------------- ##
@@ -999,7 +872,7 @@ define([AC_VAR_TEST_SET],
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 define([AC_VAR_SET_IFELSE],
-[AC_SHELL_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
+[AS_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
 # AC_VAR_PUSHDEF and AC_VAR_POPDEF
@@ -1946,14 +1819,14 @@ else
 fi
 
 # NLS nuisances.
-AC_SHELL_UNSET([LANG],        [C])
-AC_SHELL_UNSET([LC_ALL],      [C])
-AC_SHELL_UNSET([LC_TIME],     [C])
-AC_SHELL_UNSET([LC_CTYPE],    [C])
-AC_SHELL_UNSET([LANGUAGE],    [C])
-AC_SHELL_UNSET([LC_COLLATE],  [C])
-AC_SHELL_UNSET([LC_NUMERIC],  [C])
-AC_SHELL_UNSET([LC_MESSAGES], [C])
+AS_UNSET([LANG],        [C])
+AS_UNSET([LC_ALL],      [C])
+AS_UNSET([LC_TIME],     [C])
+AS_UNSET([LC_CTYPE],    [C])
+AS_UNSET([LANGUAGE],    [C])
+AS_UNSET([LC_COLLATE],  [C])
+AS_UNSET([LC_NUMERIC],  [C])
+AS_UNSET([LC_MESSAGES], [C])
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -1962,7 +1835,7 @@ ac_nl='
 IFS=" 	$ac_nl"
 
 # CDPATH.
-AC_SHELL_UNSET([CDPATH], [:])
+AS_UNSET([CDPATH], [:])
 ])
 
 
@@ -3052,8 +2925,8 @@ dnl foo.MEMBER;
 foo.patsubst([$1], [^[^.]*\.]);])],
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_Member) = yes],
-                [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_Member) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
@@ -3300,7 +3173,7 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
   AC_PATH_PROG(m4_quote(AC_Prog), [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`AC_SHELL_DIRNAME([$ac_cv_path_[]AC_Prog])`
+    prefix=`AS_DIRNAME([$ac_cv_path_[]AC_Prog])`
   fi
 fi
 popdef([AC_Prog])dnl
@@ -3340,7 +3213,7 @@ AC_TRY_LINK_FUNC([$1],
 break])
 done
 LIBS=$ac_func_search_save_LIBS])
-AC_SHELL_IFELSE([test "$ac_cv_search_$1" != no],
+AS_IFELSE([test "$ac_cv_search_$1" != no],
   [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
   $3],
                 [$4])[]dnl
@@ -3378,9 +3251,9 @@ AC_TRY_LINK_FUNC([$2],
                  [AC_VAR_SET(ac_Lib, yes)],
                  [AC_VAR_SET(ac_Lib, no)])
 LIBS=$ac_check_lib_save_LIBS])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
-                [m4_default([$3],
-                            [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
+AS_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
+          [m4_default([$3],
+                      [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],
                 [$4])dnl
@@ -3659,8 +3532,8 @@ AC_CACHE_CHECK([for $1], ac_Header,
 [AC_TRY_CPP([#include <$1>
 ],
 AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_Header) = yes],
-                [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_Header) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Header])dnl
 ])# AC_CHECK_HEADER
 
@@ -3704,8 +3577,8 @@ if test -r "$1"; then
 else
   AC_VAR_SET(ac_File, no)
 fi])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_File) = yes],
-                [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_File) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_File])dnl
 ])# AC_CHECK_FILE
 
@@ -3740,8 +3613,8 @@ AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
 #endif
 ])],
 AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
-                [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
 
@@ -3972,8 +3845,8 @@ if (sizeof ($1))
   return 0;])],
                 AC_VAR_SET(ac_Type, yes),
                 AC_VAR_SET(ac_Type, no))])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_Type) = yes],
-                [$2], [$3])dnl
+AS_IFELSE([test AC_VAR_GET(ac_Type) = yes],
+          [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
@@ -4716,7 +4589,7 @@ ifset([AC_LIST_COMMANDS], [  : ${CONFIG_COMMANDS=$config_commands}
 ])dnl
 fi
 
-_AC_SHELL_TMPDIR(cs)
+AS_TMPDIR(cs)
 
 EOF
 ])[]dnl ifval
@@ -4872,9 +4745,9 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
-  ac_dir=`AC_SHELL_DIRNAME("$ac_file")`
+  ac_dir=`AS_DIRNAME("$ac_file")`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-    AC_SHELL_MKDIR_P("$ac_dir")
+    AS_MKDIR_P("$ac_dir")
     ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dir_suffix.
     ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
@@ -5194,9 +5067,9 @@ cat >>$CONFIG_STATUS <<\EOF
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
       echo "$ac_file is unchanged"
     else
-      ac_dir=`AC_SHELL_DIRNAME("$ac_file")`
+      ac_dir=`AS_DIRNAME("$ac_file")`
       if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-        AC_SHELL_MKDIR_P("$ac_dir")
+        AS_MKDIR_P("$ac_dir")
       fi
       rm -f $ac_file
       mv $tmp/config.h $ac_file
@@ -5245,9 +5118,9 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   rm -f $ac_dest
 
   # Make relative symlinks.
-  ac_dest_dir=`AC_SHELL_DIRNAME("$ac_dest")`
+  ac_dest_dir=`AS_DIRNAME("$ac_dest")`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
-    AC_SHELL_MKDIR_P("$ac_dest_dir")
+    AS_MKDIR_P("$ac_dest_dir")
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
     ac_dots=`echo $ac_dest_dir_suffix|sed 's,/[[^/]]*,../,g'`
@@ -5356,7 +5229,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     echo configuring in $ac_subdir
     case $srcdir in
     .) ;;
-    *) AC_SHELL_MKDIR_P(./$ac_subdir)
+    *) AS_MKDIR_P(./$ac_subdir)
        if test -d ./$ac_subdir; then :;
        else
          AC_MSG_ERROR(cannot create `pwd`/$ac_subdir)
@@ -5482,5 +5355,5 @@ ifelse([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
     fi
   done
 
-  AC_SHELL_IFELSE([test x"$ac_exists" = xtrue], [$3], [$4])
+  AS_IFELSE([test x"$ac_exists" = xtrue], [$3], [$4])
 ])
