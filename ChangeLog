@@ -1,3 +1,17 @@
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
+	Start revamping `autoconf --trace'.
+
+	* autoconf.sh (debug): New var, new option.
+	Adjust the trap code.
+	(task trace): Instead of decoding `m4 --trace' with sed, decode it
+	with m4 itself.
+	($silent_m4): New file, which disables m4's `errprint'.
+	($trace_m4): New file.  Logistic for the m4 which is in charge of
+	decoding the traces of the first.
+	($translate_awk): Transform a user trace request into $trace_m4
+	code.
+
 2000-03-10  Akim Demaille  <akim@epita.fr>
 
 	Multiple `-e' to egrep are not portable.  On IRIX 6.5 and Solaris
