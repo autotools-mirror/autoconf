@@ -1,3 +1,21 @@
+2001-10-18  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Cast sizeof to unsigned
+	long, to work around a bug in the HP C compiler version HP92453-01
+	B.11.11.23709.GP.
+
+	* lib/m4sugar/m4sh.m4 (AS_DIRNAME): Use 'dirname' if that works.
+	(AS_BASENAME_EXPR): New macro.
+	(AS_BASENAME_SED): Do not assume GNU sed semantics.
+	(AS_BASENAME): Use 'basename' if that works; then try 'expr';
+	and fall back on 'sed' only if the other two fail.  This makes
+	AS_BASENAME act more like AS_DIRNAME.
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR):
+	Use AS_DIRNAME, since I think it's now DOS-friendly.
+	* tests/m4sh.at (DIRNAME_TEST): New arg $3.
+	Allow "dirname //FOO" to return either / or //, as POSIX allows
+	either behavior.
+
 2001-10-10  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Recognize
