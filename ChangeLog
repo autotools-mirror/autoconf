@@ -1,5 +1,11 @@
 Wed Mar 20 09:37:31 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
+	* acgeneral.m4 (AC_CHECK_LIB): Use \055 for -; leading and trailing
+	both lose with some tr.
+
+	* acspecific.m4 (AC_C_CONST): Remove check for gcc 2.7 bug.
+	RMS wants everyone to lose until gcc is fixed.
+
 	* acgeneral.m4 (AC_CHECK_LIB): Put - last in tr set so it is not
 	considered a range.
 
