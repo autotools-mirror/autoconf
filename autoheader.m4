@@ -158,6 +158,17 @@ AH_DEFUN([AH_CHECK_HEADERS],
 AH_DEFUN([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
 AH_DEFUN([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
 
+
+AH_DEFUN([AC_CHECK_FILES],
+[AC_FOREACH([AC_File], [$1],
+  [AH_TEMPLATE(AC_TR_CPP([HAVE_]AC_File),
+               [Define if you have the file `]AC_File['.])
+   # Success
+   $2
+   # Failure
+   $3])])
+
+
 AH_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
   [AH_TEMPLATE(AC_TR_CPP([NEED_]AC_Symbol[_DECL]),

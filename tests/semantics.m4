@@ -96,3 +96,20 @@ AT_TEST_MACRO(AC_CHECK_TYPES,
 /* #undef HAVE_STRUCT_NO */
 #define HAVE_STRUCT_YES 1
 ])])
+
+
+
+dnl AC_CHECK_FILES
+dnl --------------
+dnl FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
+dnl open AH_TEMPLATE to `configure.in', which is not yet the case.
+AT_TEST_MACRO(AC_CHECK_FILES,
+[touch ac-exists1 ac-exists2
+ac_exists2=ac-exists2
+ac_missing2=ac-missing2
+AC_CHECK_FILES(ac-exists1 ac-missing1 $ac_exists2 $ac_missing2)
+rm ac-exists1 ac-exists2],
+[AT_CHECK_DEFINES(
+[#define HAVE_AC_EXISTS1 1
+/* #undef HAVE_AC_MISSING1 */
+])])

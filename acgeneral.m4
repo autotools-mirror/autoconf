@@ -1696,6 +1696,7 @@ define(AC_SUBST_FILE,
 s%@$1@%%;t t])])
 
 
+
 ## --------------------------------------- ##
 ## Printing messages at autoconf runtime.  ##
 ## --------------------------------------- ##
@@ -2633,29 +2634,22 @@ done
 #
 # Check for the existence of FILE.
 AC_DEFUN(AC_CHECK_FILE,
-[AC_VAR_PUSHDEF([ac_var], [ac_cv_file_$1])dnl
+[AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
 dnl FIXME: why was there this line? AC_REQUIRE([AC_PROG_CC])dnl
-AC_MSG_CHECKING([for $1])
-AC_CACHE_VAL(ac_var,
+AC_CACHE_CHECK([for $1], ac_File,
 [if test "$cross_compiling" = yes; then
   AC_WARNING([Cannot check for file existence when cross compiling])dnl
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
 fi
 if test -r "[$1]"; then
-  AC_VAR_SET(ac_var, yes)
+  AC_VAR_SET(ac_File, yes)
 else
-  AC_VAR_SET(ac_var, no)
-fi])dnl
-if test AC_VAR_GET(ac_var) = yes; then
-  AC_MSG_RESULT(yes)
-ifval([$2], [  $2
-])dnl
-else
-  AC_MSG_RESULT(no)
-ifval([$3], [  $3
-])dnl
-fi
-AC_VAR_POPDEF([ac_var])])
+  AC_VAR_SET(ac_File, no)
+fi])
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_File) = yes],
+                [$2], [$3])dnl
+AC_VAR_POPDEF([ac_File])dnl
+])# AC_CHECK_FILE
 
 
 # AC_CHECK_FILES(FILE..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
