@@ -511,7 +511,7 @@ m4_define([AC_TR_SH],
 #    ive  ], [-Var-])end
 #    => -active--b--active-end
 m4_define([AC_FOREACH],
-[m4_foreach([$1], m4_split(m4_strip(m4_join([$2]))), [$3])])
+[m4_foreach([$1], m4_split(m4_strip(m4_flatten([$2]))), [$3])])
 
 
 

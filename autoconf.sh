@@ -434,7 +434,7 @@ EOF
   # MODE can be:
   #  `at'       -- the elements are enclosed in brackets.
   #  `star'     -- the elements are listed as are.
-  #  `percent'  -- the elements are `smashed': spaces are singled out,
+  #  `percent'  -- the elements are `flattened': spaces are singled out,
   #                and no new line remains.
   define([_at_at],
          [at_ifelse([$#], [1], [],
@@ -442,15 +442,15 @@ EOF
                     [[[$2]][$1]$0([$1], at_shift(at_shift($@)))])])
   define([_at_percent],
          [at_ifelse([$#], [1], [],
-                    [$#], [2], [at_smash([$2])],
-                    [at_smash([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
+                    [$#], [2], [at_flatten([$2])],
+                    [at_flatten([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
   define([_at_star],
          [at_ifelse([$#], [1], [],
                     [$#], [2], [[$2]],
                     [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
 
-  # Smash quotes its result.
-  define([at_smash],
+  # FLATTEN quotes its result.
+  define([at_flatten],
          [at_patsubst(at_patsubst(at_patsubst([[[$1]]],
                                               [\\
   ]),
@@ -535,7 +535,7 @@ EOF
     # $*, list of unquoted effective arguments.
     if (arg == "*")
       return "]at_star([" (separator ? separator : ",") "], $@)["
-    # $%, list of smashed unquoted effective arguments.
+    # $%, list of flattened unquoted effective arguments.
     if (arg == "%")
       return "]at_percent([" (separator ? separator : ":") "], $@)["
   }

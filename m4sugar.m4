@@ -1333,17 +1333,17 @@ m4_changequote([, ])
 
 
 
-# m4_join(STRING)
-# ---------------
+# m4_flatten(STRING)
+# ------------------
 # If STRING contains end of lines, replace them with spaces.  If there
 # are backslashed end of lines, remove them.  This macro is safe with
 # active symbols.
 #    m4_define(active, ACTIVE)
-#    m4_join([active
+#    m4_flatten([active
 #    act\
 #    ive])end
 #    => active activeend
-m4_define([m4_join],
+m4_define([m4_flatten],
 [m4_translit(m4_patsubst([[[$1]]], [\\
 ]), [
 ], [ ])])
@@ -1375,6 +1375,17 @@ m4_define([m4_strip],
                             [[ 	]+], [ ]),
                    [^\(..\) ], [\1]),
           [ \(.\)$], [\1])])
+
+
+
+# m4_join(SEP, ARG1, ARG2...)
+# ---------------------------
+# Produce ARG1SEPARG2...SEPARGn.
+m4_defun([m4_join],
+[m4_case([$#],
+         [1], [],
+         [2], [[$2]],
+         [[$2][$1]m4_join([$1], m4_shift(m4_shift($@)))])])
 
 
 
@@ -1484,7 +1495,7 @@ m4_Prefix1[]dnl
 m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
-m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
+m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_flatten([$1])))),
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.

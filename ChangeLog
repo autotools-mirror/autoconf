@@ -1,5 +1,21 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	The SunOS' egrep fails to process properly the `egrep' invocations
+	of the test suite.
+
+	* tests/aclocal.m4 (AC_STATE_SAVE): If egrep fails, remove the
+	output file.
+	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Don't check `state-*'
+	if the files are not present.
+
+	* m4sugar.m4 (m4_join): Rename as...
+	(m4_smash): this.
+	* tests/aclocal.m4 (join): Move as...
+	* m4sugar.m4 (m4_flatten): this.
+	* autoconf.sh (trace.m4): Rename m4_smash as m4_flatten.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (task trace): s/m4/$M4/.
 	* autoheader.sh: When loading trace.sh, catch errors and exit with
 	a decent error message.

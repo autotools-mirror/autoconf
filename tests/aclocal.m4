@@ -1,16 +1,6 @@
 # actest.m4                                              -*- autoconf -*-
 # Additional Autoconf macros to ease testing.
 
-# join(SEP, ARG1, ARG2...)
-# ------------------------
-# Produce ARG1SEPARG2...SEPARGn.
-define([join],
-[m4_case([$#],
-         [1], [],
-         [2], [[$2]],
-         [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
-
-
 # AC_STATE_SAVE(FILE)
 # ------------------
 # Save the environment, but the variables we are allowed to touch.
@@ -28,10 +18,9 @@ define([join],
 #   Some variables some shells use and change
 # - POW_LIB
 #   From acfunctions.m4.
-AC_DEFUN([AC_STATE_SAVE],
+m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
-  egrep -v -e \
-'join([|],
+  egrep -v -e 'm4_join([|],
       [^ac_],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
       [^(LIBS|LIBOBJS|LDFLAGS)=],
@@ -46,11 +35,14 @@ AC_DEFUN([AC_STATE_SAVE],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
-  # lines
+  # lines.
   fgrep = >state-env.$1
-  rm -f state-ls.$1
-  ls -1 | grep -v '^state' | sort > state-ls.$1
-])
+# Some `egrep' choke on such a big regex (e.g., SunOS 4.1.3).  In this
+# case just don't pay attention to the env.
+test $? = 0 || rm -f state-env.$1
+
+ls -1 | grep -v '^state' | sort >state-ls.$1
+])# AC_STATE_SAVE
 
 
 
@@ -58,7 +50,7 @@ AC_DEFUN([AC_STATE_SAVE],
 # ----------------
 # Related VALUE to NAME both with AC_SUBST and AC_DEFINE.  This is
 # used in the torture tests.
-AC_DEFUN([AC_DEFUBST],
+m4_defun([AC_DEFUBST],
 [AC_DUMMY_VAR($1)="AC_DEFUBST_VALUE"
 AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1),
                    "$AC_DUMMY_VAR($1)",
