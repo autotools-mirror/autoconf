@@ -8298,6 +8298,7 @@ the @samp{x} into account later in the pipe.
 @table @asis
 @item @command{.}
 @prindex @command{.}
+@prindex @command{source}
 Use @command{.} only with regular files (use @samp{test -f}).  Bash
 2.03, for instance, chokes on @samp{. /dev/null}.  Also, remember that
 @command{.} is not expected to look in the current directory, hence you
@@ -8549,12 +8550,19 @@ processing as soon as a non-option argument is found.  Therefore, use
 set x $my_list; shift
 @end example
 
+
 @item @command{shift}
 @c ------------------
 @prindex @command{shift}
 Not only is @command{shift}ing a bad idea when there is nothing left to
 shift, but in addition it is not portable: the shell of @sc{mips
 risc/os} 4.52 refuses to do it.
+
+
+@item @command{source}
+@c -------------------
+See the item @command{.} above.
+
 
 @item @command{test}
 @c -----------------
@@ -8574,6 +8582,7 @@ statement, keep in mind that they have equal precedence.
 
 You may use @samp{!} with @command{test}, but not with @command{if}:
 @samp{test ! -r foo || exit 1}.
+
 
 @item @command{test} (files)
 @c -------------------------

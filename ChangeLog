@@ -1,3 +1,8 @@
+2001-10-02  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Just source 40.lineno
+	instead of exec'ing to preserve $0 and $@.
+
 2001-10-01  Akim Demaille  <akim@epita.fr>
 
 	* tests/testsuite (AT_INIT) <at_pass_list>: New.
