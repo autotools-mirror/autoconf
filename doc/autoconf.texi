@@ -590,7 +590,7 @@ The ubiquity of @command{make} means that a @file{Makefile} is almost the
 only viable way to distribute automatic build rules for software, but
 one quickly runs into @command{make}'s numerous limitations.  Its lack of
 support for automatic dependency tracking, recursive builds in
-subdirectories, reliable timestamps (e.g. for network filesystems), and
+subdirectories, reliable timestamps (e.g., for network filesystems), and
 so on, mean that developers must painfully (and often incorrectly)
 reinvent the wheel for each project.  Portability is non-trivial, thanks
 to the quirks of @command{make} on many systems.  On top of all this is the
@@ -623,7 +623,7 @@ in @file{/usr/local/bin} (or whatever prefix was given to
 
 Automake may require that additional tools be present on the
 @emph{developer's} machine.  For example, the @code{Makefile.in} that
-the developer works with may not be portable (e.g. it might use special
+the developer works with may not be portable (e.g., it might use special
 features of your compiler to automatically generate dependency
 information).  Running @code{make dist}, however, produces a
 @file{hello-1.0.tar.gz} package (or whatever the program/version is)
@@ -854,7 +854,7 @@ There are two obvious possibilities: creating a brand new language or
 extending an existing one.  The former option is very attractive: all
 sorts of optimizations could easily be implemented in the compiler and
 many rigorous checks could be performed on the Autoconf program
-(e.g. rejecting any non-portable construct).  Alternatively, you can
+(e.g., rejecting any non-portable construct).  Alternatively, you can
 extend an existing language, such as the @code{sh} (Bourne shell)
 language.
 
@@ -1213,7 +1213,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @code{WARNINGS}, a comma separated list of categories, is
-honored. @samp{autoconf -W @var{category}} will actually
+honored.  @samp{autoconf -W @var{category}} will actually
 behave as if you had run:
 
 @example
@@ -1311,7 +1311,7 @@ The @var{num}th argument of the call to @var{macro}.
 @itemx $@{@var{separator}@}@@
 All the arguments passed to @var{macro}, separated by the character
 @var{sep} or the string @var{separator} (@samp{,} by default).  Each
-argument is quoted, i.e. enclosed in a pair of square brackets.
+argument is quoted, i.e., enclosed in a pair of square brackets.
 
 @item $*
 @itemx $@var{sep}*
@@ -1395,7 +1395,7 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 
 Installing the various components of the @sc{gnu} Build System can be
 tedious: running @command{autopoint} for Gettext, @command{automake} for
-@file{Makefile.in} etc. in each directory.  It may be needed either
+@file{Makefile.in} etc.@: in each directory.  It may be needed either
 because some tools such as @command{automake} have been updated on your
 system, or because some of the sources such as @file{configure.ac} have
 been updated, or finally, simply in order to install the @sc{gnu} Build
@@ -1775,7 +1775,7 @@ and use this instead:
 
 The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
 special @var{tag}s: they may have the form @samp{@var{output}} or
-@samp{@var{output}:@var{inputs}}. The file @var{output} is instantiated
+@samp{@var{output}:@var{inputs}}.  The file @var{output} is instantiated
 from its templates, @var{inputs} (defaulting to @samp{@var{output}.in}).
 
 For instance
@@ -2175,7 +2175,7 @@ The directory for installing C header files for non-gcc compilers.
 
 @defvar prefix
 @ovindex prefix
-The common installation prefix for all files. If @var{exec_prefix}
+The common installation prefix for all files.  If @var{exec_prefix}
 is defined to a different value, @var{prefix} is used only for
 architecture-independent files.
 @end defvar
@@ -2226,8 +2226,8 @@ current value of @code{prefix}.
 
 A corollary is that you should not use these variables except in
 Makefiles.  For instance, instead of trying to evaluate @code{datadir}
-in @file{configure} and hardcoding it in Makefiles using
-e.g. @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
+in @file{configure} and hard-coding it in Makefiles using
+e.g., @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
@@ -2239,8 +2239,8 @@ Makefile snippet similar to:
 @example
 @group
 edit = sed \
-	-e 's,@@datadir\@@,$(pkgdatadir),g' \
-	-e 's,@@prefix\@@,$(prefix),g'
+        -e 's,@@datadir\@@,$(pkgdatadir),g' \
+        -e 's,@@prefix\@@,$(prefix),g'
 @end group
 
 autoconf autoheader: Makefile
@@ -2488,7 +2488,7 @@ directives:
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #else
-/* We are in trouble. */
+/* We are in trouble.  */
 #endif
 @end group
 @end example
@@ -2578,7 +2578,7 @@ Prepend @var{dir} to include path.  Multiple invocations accumulate.
 @itemx -W @var{category}
 @evindex WARNINGS
 Report the warnings related to @var{category} (which can actually be a
-comma separated list). Current categories include:
+comma separated list).  Current categories include:
 
 @table @samp
 @item obsolete
@@ -2811,10 +2811,10 @@ fi
 @end example
 
 If a given @var{dir} contains @command{configure.gnu}, it is run instead
-of @command{configure}. This is for packages that might use a
+of @command{configure}.  This is for packages that might use a
 non-Autoconf script @command{Configure}, which can't be called through a
 wrapper @command{configure} since it would be the same file on
-case-insensitive filesystems. Likewise, if a @var{dir} contains
+case-insensitive filesystems.  Likewise, if a @var{dir} contains
 @file{configure.ac} but no @command{configure}, the Cygnus
 @command{configure} script found by @code{AC_CONFIG_AUX_DIR} is used.
 
@@ -3212,7 +3212,7 @@ AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to
-@code{AC_CHECK_PROG} etc. as precious, @xref{Setting Output Variables},
+@code{AC_CHECK_PROG} etc.@: as precious, @xref{Setting Output Variables},
 @code{AC_ARG_VAR}, for more details.
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
@@ -3259,9 +3259,9 @@ sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 Like @code{AC_CHECK_TOOL}, each of the tools in the list
 @var{progs-to-check-for} are checked with a prefix of the host type as
 determined by @code{AC_CANONICAL_HOST}, followed by a dash
-(@pxref{Canonicalizing}). If none of the tools can be found with a
-prefix, then the first one without a prefix is used. If a tool is found,
-set @var{variable} to the name of that program. If none of the tools in
+(@pxref{Canonicalizing}).  If none of the tools can be found with a
+prefix, then the first one without a prefix is used.  If a tool is found,
+set @var{variable} to the name of that program.  If none of the tools in
 the list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
@@ -3332,19 +3332,19 @@ with the library succeeds; @var{action-if-not-found} is a list of shell
 commands to run if the link fails.  If @var{action-if-found} is not
 specified, the default action will prepend @option{-l@var{library}} to
 @code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all
-capitals). This macro is intended to support building of @code{LIBS} in
+capitals).  This macro is intended to support building of @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
 library dependencies are satisfied as a natural side-effect of
-consecutive tests. Some linkers are very sensitive to library ordering
+consecutive tests.  Some linkers are very sensitive to library ordering
 so the order in which @code{LIBS} is generated is important to reliable
 detection of libraries.
 
 If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
 as the @var{other-libraries} argument, separated by spaces:
-e.g. @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
+e.g., @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
 that @var{library} is present, because linking the test program will
-always fail with unresolved symbols. The @var{other-libraries} argument
+always fail with unresolved symbols.  The @var{other-libraries} argument
 should be limited to cases where it is desirable to test for one library
 in the presence of another that is not already in @code{LIBS}.
 @end defmac
@@ -3363,7 +3363,7 @@ function is not found, run @var{action-if-not-found}.
 If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
 as the @var{other-libraries} argument, separated by spaces:
-e.g. @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
+e.g., @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
 that @var{function} is present, because linking the test program will
 always fail with unresolved symbols.
 @end defmac
@@ -3425,7 +3425,7 @@ instance) they return the buffer pointer instead.
 @item @code{sscanf}
 @c @fuindex sscanf
 @prindex @code{sscanf}
-On various old systems, e.g. HP-UX 9, @code{sscanf} requires that its
+On various old systems, e.g., HP-UX 9, @code{sscanf} requires that its
 input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory
@@ -3467,7 +3467,7 @@ up being written to after the OS has removed it.
 @prindex @code{va_copy}
 The ISO C99 standard provides @code{va_copy} for copying
 @code{va_list} variables.  It may be available in older environments
-too, though possibly as @code{__va_copy} (eg. @command{gcc} in strict
+too, though possibly as @code{__va_copy} (e.g., @command{gcc} in strict
 C89 mode).  These can be tested with @code{#ifdef}.  A fallback to
 @code{memcpy (&dst, &src, sizeof(va_list))} will give maximum
 portability.
@@ -3476,11 +3476,11 @@ portability.
 @c @fuindex va_list
 @prindex @code{va_list}
 @code{va_list} is not necessarily just a pointer.  It can be a
-@code{struct} (eg. @command{gcc} on Alpha), which means @code{NULL} is
-not portable.  Or it can be an array (eg. @command{gcc} in some
+@code{struct} (e.g., @command{gcc} on Alpha), which means @code{NULL} is
+not portable.  Or it can be an array (e.g., @command{gcc} in some
 PowerPC configurations), which means as a function parameter it can be
 effectively call-by-reference and library routines might modify the
-value back in the caller (eg. @code{vsnprintf} in the GNU C Library
+value back in the caller (e.g., @code{vsnprintf} in the GNU C Library
 2.1).
 
 @item Signed @code{>>}
@@ -3616,16 +3616,16 @@ Library 2.1.
 @prindex @code{fork}
 @c @fuindex vfork
 @prindex @code{vfork}
-This macro checks for the @code{fork} and @code{vfork} functions. If a
-working @code{fork} is found, define @code{HAVE_WORKING_FORK}. This macro
+This macro checks for the @code{fork} and @code{vfork} functions.  If a
+working @code{fork} is found, define @code{HAVE_WORKING_FORK}.  This macro
 checks whether @code{fork} is just a stub by trying to run it.
 
-If @file{vfork.h} is found, define @code{HAVE_VFORK_H}. If a working
-@code{vfork} is found, define @code{HAVE_WORKING_VFORK}. Otherwise,
+If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
+@code{vfork} is found, define @code{HAVE_WORKING_VFORK}.  Otherwise,
 define @code{vfork} to be @code{fork} for backward compatibility with
-previous versions of @command{autoconf}. This macro checks for several known
+previous versions of @command{autoconf}.  This macro checks for several known
 errors in implementations of @code{vfork} and considers the system to not
-have a working @code{vfork} if it detects any of them. It is not considered
+have a working @code{vfork} if it detects any of them.  It is not considered
 to be an implementation error if a child's invocation of @code{signal}
 modifies the parent's signal handler, since child processes rarely change
 their signal handlers.
@@ -4093,7 +4093,7 @@ simply call @code{AC_LIBOBJ} with literal arguments.
 
 Note that this macro replaces the obsolete @code{AC_LIBOBJ_DECL}, with
 slightly different semantics: the old macro took the function name,
-e.g. @code{foo}, as its argument rather than the file name.
+e.g., @code{foo}, as its argument rather than the file name.
 @end defmac
 
 @defmac AC_LIBSOURCES (@var{files})
@@ -4161,11 +4161,11 @@ problem they cause.  By definition, this list will always require
 additions.  Please help us keeping it as complete as possible.
 
 @table @asis
-@item @file{inttypes.h} vs. @file{stdint.h}
+@item @file{inttypes.h} vs.@: @file{stdint.h}
 Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
 separately in a standard environment.  Many implementations have
-@file{inttypes.h} but not @file{stdint.h} (e.g. Solaris 7), but I don't
+@file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but I don't
 know of any implementation that has @file{stdint.h} but not
 @file{inttypes.h}.  Nor do I know of any free software that includes
 @file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
@@ -4240,7 +4240,7 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @defmac AC_HEADER_STAT
 @acindex HEADER_STAT
 @acindex STAT_MACROS_BROKEN
-If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
+If the macros @code{S_ISDIR}, @code{S_ISREG}, etc.@: defined in
 @file{sys/stat.h} do not work properly (returning false positives),
 define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
 Amdahl UTS and Motorola System V/88.
@@ -5244,13 +5244,13 @@ making sure to first set the current language to Fortran 77
 @defmac AC_F77_LIBRARY_LDFLAGS
 @acindex F77_LIBRARY_LDFLAGS
 @ovindex FLIBS
-Determine the linker flags (e.g. @option{-L} and @option{-l}) for the
+Determine the linker flags (e.g., @option{-L} and @option{-l}) for the
 @dfn{Fortran 77 intrinsic and run-time libraries} that are required to
 successfully link a Fortran 77 program or shared library.  The output
 variable @code{FLIBS} is set to these flags.
 
 This macro is intended to be used in those situations when it is
-necessary to mix, e.g. C++ and Fortran 77 source code into a single
+necessary to mix, e.g., C++ and Fortran 77 source code into a single
 program or shared library (@pxref{Mixing Fortran 77 With C and C++,,,
 automake, GNU Automake}).
 
@@ -5277,7 +5277,7 @@ also be necessary to link C/C++ with Fortran; see below.
 With many compilers, the Fortran libraries detected by
 @code{AC_F77_LIBRARY_LDFLAGS} provide their own @code{main} entry
 function that initializes things like Fortran I/O, and which then calls
-a user-provided entry function named e.g. @code{MAIN__} to run the
+a user-provided entry function named (say) @code{MAIN__} to run the
 user's program.  The @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN}
 macro figures out how to deal with this interaction.
 
@@ -5291,7 +5291,7 @@ variable @code{F77_DUMMY_MAIN} holds this name, @code{unknown} when no
 solution was found, and @code{none} when no such dummy main is needed.
 
 By default, @var{action-if-found} defines @code{F77_DUMMY_MAIN} to the
-name of this routine (e.g. @code{MAIN__}) @emph{if} it is required.
+name of this routine (e.g., @code{MAIN__}) @emph{if} it is required.
 @ovar{action-if-not-found} defaults to exiting with an error.
 
 In order to link with Fortran routines, the user's C/C++ program should
@@ -5316,7 +5316,7 @@ unless one wants to change the default actions.
 @acindex F77_MAIN
 @cvindex F77_MAIN
 As discussed above for @code{AC_F77_DUMMY_MAIN}, many Fortran libraries
-allow you to provide an entry point called e.g. @code{MAIN__} instead of
+allow you to provide an entry point called (say) @code{MAIN__} instead of
 the usual @code{main}, which is then called by a @code{main} function in
 the Fortran libraries that initializes things like Fortran I/O.  The
 @code{AC_F77_MAIN} macro detects whether it is @emph{possible} to
@@ -5375,7 +5375,7 @@ Although Autoconf tries to be intelligent about detecting the
 name-mangling scheme of the Fortran 77 compiler, there may be Fortran 77
 compilers that it doesn't support yet.  In this case, the above code
 will generate a compile-time error, but some other behavior
-(e.g. disabling Fortran-related features) can be induced by checking
+(e.g., disabling Fortran-related features) can be induced by checking
 whether the @code{F77_FUNC} macro is defined.
 
 Now, to call that routine from a C program, we would do something like:
@@ -5388,7 +5388,7 @@ Now, to call that routine from a C program, we would do something like:
 @end example
 
 If the Fortran 77 identifier contains an underscore
-(e.g. @code{foo_bar}), you should use @code{F77_FUNC_} instead of
+(e.g., @code{foo_bar}), you should use @code{F77_FUNC_} instead of
 @code{F77_FUNC} (with the same arguments).  This is because some Fortran
 77 compilers mangle names differently if they contain an underscore.
 @end defmac
@@ -5603,7 +5603,7 @@ variable, back quote, and backslash substitutions are performed on
 @var{input}.
 
 This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
-@option{-g}, @option{-O}, etc. are not valid options to many C
+@option{-g}, @option{-O}, etc.@: are not valid options to many C
 preprocessors.
 @end defmac
 
@@ -5909,7 +5909,7 @@ That's all dependent on whether the file system is a UFS (case
 sensitive) or HFS+ (case preserving).  By default Apple wants you to
 install the OS on HFS+.  Unfortunately, there are some pieces of
 software which really need to be built on UFS.  We may want to rebuild
-darwin to have both UFS and HFS+ available (and put the /local/build
+Darwin to have both UFS and HFS+ available (and put the /local/build
 tree on the UFS).
 
 @item @sc{qnx 4.25}
@@ -5919,7 +5919,7 @@ tree on the UFS).
 @c QNX Neutrino.
 @sc{qnx} is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to hundred
-processor super-computer.  It claims to be @sc{posix} certified. More
+processor super-computer.  It claims to be @sc{posix} certified.  More
 information is available on the @href{www.qnx.com, @sc{qnx} home page},
 including the @href{http://support.qnx.com/support/docs/qnx4/, @sc{qnx}
 man pages}.
@@ -5979,7 +5979,7 @@ AC_MSG_RESULT([$fstype])
 
 Autoconf-generated @command{configure} scripts check for the C compiler and
 its features by default.  Packages that use other programming languages
-(maybe more than one, e.g. C and C++) need to test features of the
+(maybe more than one, e.g., C and C++) need to test features of the
 compilers for the respective languages.  The following macros determine
 which programming language is used in the subsequent tests in
 @file{configure.ac}.
@@ -6105,7 +6105,7 @@ AC_DEFINE(EQUATION, "$a > $b")
 
 If neither @var{value} nor @var{description} are given, then
 @var{value} defaults to 1 instead of to the empty string.  This is for
-backwards compatiblity with older versions of Autoconf, but this usage
+backwards compatibility with older versions of Autoconf, but this usage
 is obsolescent and may be withdrawn in future versions of Autoconf.
 
 @end defmac
@@ -6318,7 +6318,7 @@ setting the variable @var{cache-id}, see below.
 
 It is very common to find buggy macros using @code{AC_CACHE_VAL} or
 @code{AC_CACHE_CHECK}, because people are tempted to call
-@code{AC_DEFINE} in the @var{commands-to-set-it}. Instead, the code that
+@code{AC_DEFINE} in the @var{commands-to-set-it}.  Instead, the code that
 @emph{follows} the call to @code{AC_CACHE_VAL} should call
 @code{AC_DEFINE}, by examining the value of the cache variable.  For
 instance, the following macro is broken:
@@ -6390,7 +6390,7 @@ For cache values used by the distributed Autoconf macros, this value is
 @samp{ac}.
 
 @item @code{_cv_}
-Indicates that this shell variable is a cache value. This string
+Indicates that this shell variable is a cache value.  This string
 @emph{must} be present in the variable name, including the leading
 underscore.
 
@@ -6449,7 +6449,7 @@ use, instead of the usual per-program cache.  In this case, the cache
 file will gradually accumulate information whenever someone runs a new
 @command{configure} script.  (Running @command{configure} merges the new cache
 results with the existing cache file.)  This may cause problems,
-however, if the system configuration (e.g. the installed libraries or
+however, if the system configuration (e.g., the installed libraries or
 compilers) changes and the stale cache file is not deleted.
 
 @node Cache Checkpointing
@@ -6552,7 +6552,7 @@ This macro prints nothing if @command{configure} is run with the
 
 @defmac AC_MSG_NOTICE (@var{message})
 @acindex MSG_NOTICE
-Deliver the @var{message} to the user. It is useful mainly to print a
+Deliver the @var{message} to the user.  It is useful mainly to print a
 general description of the overall purpose of a group of feature checks,
 e.g.,
 
@@ -7204,7 +7204,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @code{WARNINGS}, a comma separated list of categories, is
-honored. @command{autom4te -W @var{category}} will actually
+honored.  @command{autom4te -W @var{category}} will actually
 behave as if you had run:
 
 @example
@@ -7343,7 +7343,7 @@ cumulative; instead, you should just make @var{format} as long as
 needed.
 
 The @var{format} is a regular string, with newlines if desired, and
-several special escape codes.  It defaults to @samp{$f:$l:$n:$%}. It can
+several special escape codes.  It defaults to @samp{$f:$l:$n:$%}.  It can
 use the following special escapes:
 
 @table @samp
@@ -7371,7 +7371,7 @@ The @var{num}th argument of the call to @var{macro}.
 @itemx $@{@var{separator}@}@@
 All the arguments passed to @var{macro}, separated by the character
 @var{sep} or the string @var{separator} (@samp{,} by default).  Each
-argument is quoted, i.e. enclosed in a pair of square brackets.
+argument is quoted, i.e., enclosed in a pair of square brackets.
 
 @item $*
 @itemx $@var{sep}*
@@ -7396,7 +7396,7 @@ not.
 Cache the traces of @var{macro}, but do not enable traces.  This is
 especially important to save cpu cycles in the future.  For instance,
 when invoked, @command{autoconf} preselects all the macros that
-@command{autoheader}, @command{automake}, @command{autoreconf} etc. will
+@command{autoheader}, @command{automake}, @command{autoreconf} etc.@: will
 trace, so that running @command{m4} is not needed to trace them: the
 cache suffices.  This results in a huge speed-up.
 @end table
@@ -7625,8 +7625,8 @@ scripts.  This name was coined by Lars J. Aas, who notes thats,
 according to the Webster's Revised Unabridged Dictionary (1913):
 
 @quotation
-Mash \Mash\, n. [Akin to G. meisch, maisch, meische, maische, mash,
-wash, and prob. to AS. miscian to mix. See ``Mix''.]
+Mash \Mash\, n.  [Akin to G. meisch, maisch, meische, maische, mash,
+wash, and prob. to AS.@: miscian to mix.  See ``Mix''.]
 
 @enumerate 1
 @item
@@ -7637,7 +7637,7 @@ pressure@enddots{}
 A mixture of meal or bran and water fed to animals.
 
 @item
-A mess; trouble. [Obs.] --Beau. & Fl.
+A mess; trouble.  [Obs.] --Beau.@: & Fl.
 @end enumerate
 @end quotation
 
@@ -8249,7 +8249,7 @@ after the exclamation point in interpreter specifications, like this:
 
 @noindent
 If you omit the space before the path, then 4.2@sc{bsd} based systems
-(such as Sequent DYNIX) will ignore the line, because they interpret
+(such as DYNIX) will ignore the line, because they interpret
 @samp{#! /} as a 4-byte magic number.  Some old systems have quite
 small limits on the length of the @samp{#!} line too, for instance 32
 bytes (not including the newline) on SunOS 4.
@@ -8297,7 +8297,7 @@ Below we describe some of the members of the Bourne shell family.
 @cindex Ash
 @command{ash} is often used on @sc{gnu}/Linux and @sc{bsd} systems as a
 light-weight Bourne-compatible shell.  Ash 0.2 has some bugs that are
-fixed in the 0.3.x series, but portable shell scripts should workaround
+fixed in the 0.3.x series, but portable shell scripts should work around
 them, since version 0.2 is still shipped with many @sc{gnu}/Linux
 distributions.
 
@@ -8331,7 +8331,7 @@ Substitutions}, item ``Command Substitution''.
 @cindex Bash
 To detect whether you are running @command{bash}, test if
 @code{BASH_VERSION} is set.  To disable its extensions and require
-@sc{posix} compatibility, run @samp{set -o posix}. @xref{Bash POSIX
+@sc{posix} compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
 Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
 details.
 
@@ -8356,7 +8356,7 @@ minimal OS install and therefore some folks may not have it.
 To detect whether you are running @command{zsh}, test if
 @code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
 compatible with the Bourne shell: you have to run @samp{emulate sh} and
-set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
+set @code{NULLCMD} to @samp{:}.  @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
 
 Zsh 3.0.8 is the native @command{/bin/sh} on Mac OS X 10.0.3.
@@ -8644,7 +8644,7 @@ as well.
 
 @item Invalid characters
 Some characters are invalid in @sc{dos} filenames, and should therefore
-be avoided. In a @sc{lfn} environment, these are @samp{/}, @samp{\},
+be avoided.  In a @sc{lfn} environment, these are @samp{/}, @samp{\},
 @samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
 In a @sc{sfn} environment, other characters are also invalid.  These
 include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
@@ -8654,7 +8654,7 @@ include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 @section Shell Substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
-systematically split variables and backquoted expressions, in particular
+systematically split variables and back-quoted expressions, in particular
 on the right-hand side of assignments and in the argument of @code{case}.
 For instance, the following code:
 
@@ -8681,7 +8681,7 @@ first attempt, the computation of @code{top_srcdir} is not portable,
 since not all shells properly understand @code{"`@dots{}"@dots{}"@dots{}`"}.
 Worse yet, not all shells understand @code{"`@dots{}\"@dots{}\"@dots{}`"}
 the same way.  There is just no portable way to use double-quoted
-strings inside double-quoted backquoted expressions (pfew!).
+strings inside double-quoted back-quoted expressions (pfew!).
 
 @table @code
 @item $@@
@@ -8700,7 +8700,7 @@ the Bourne shell, Zsh performs word splitting on @samp{$@{1+"$@@"@}}:
 
 @example
 zsh $ @kbd{emulate sh}
-zsh $ @kbd{for i in "$@"; do echo $i; done}
+zsh $ @kbd{for i in "$@@"; do echo $i; done}
 Hello World
 !
 zsh $ @kbd{for i in $@{1+"$@@"@}; do echo $i; done}
@@ -8792,7 +8792,7 @@ default="yu,yaa"
 
 @noindent
 will set @var{var} to @samp{M-yM-uM-,M-yM-aM-a}, i.e., the 8th bit of
-each char will be set. You won't observe the phenomenon using a simple
+each char will be set.  You won't observe the phenomenon using a simple
 @samp{echo $var} since apparently the shell resets the 8th bit when it
 expands $var.  Here are two means to make this shell confess its sins:
 
@@ -9216,7 +9216,7 @@ can be observed by using @command{set}.
 @node Limitations of Builtins
 @section Limitations of Shell Builtins
 
-No, no, we are serious: some shells do have limitations! :)
+No, no, we are serious: some shells do have limitations!  :)
 
 You should always keep in mind that any built-in or command may support
 options, and therefore have a very different behavior with arguments
@@ -9322,7 +9322,7 @@ which are not aiming at portability should use @samp{printf} instead of
 @samp{echo}.
 
 Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
-etc. for a means to simulate @option{-c}.
+etc.@: for a means to simulate @option{-c}.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  On @samp{echo '\n' | wc -l}, the @command{sh} of
@@ -9756,7 +9756,7 @@ fi
 $unset PS1 || PS1='$ '
 @end example
 
-@xref{Special Shell Variables}, for some neutralizing values. Also, see
+@xref{Special Shell Variables}, for some neutralizing values.  Also, see
 @ref{Limitations of Builtins}, documentation of @command{export}, for
 the case of environment variables.
 @end table
@@ -9940,7 +9940,7 @@ This handles a few subtleties in the standard way required by
 @quotation
 No, under some older flavors of Unix, leading @samp{//} is a special
 path name: it refers to a ``super-root'' and is used to access other
-machines' files.  Leading @samp{///}, @samp{////}, etc. are equivalent
+machines' files.  Leading @samp{///}, @samp{////}, etc.@: are equivalent
 to @samp{/}; but leading @samp{//} is special.  I think this tradition
 started with Apollo Domain/OS, an OS that is still in use on some older
 hosts.
@@ -9961,7 +9961,7 @@ but many older hosts do not yet support the @acronym{POSIX}
 replacement @code{grep -E}.  To work around this problem, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
 
-The empty alternative is not portable, use @samp{?} instead. For
+The empty alternative is not portable, use @samp{?} instead.  For
 instance with Digital Unix v5.0:
 
 @example
@@ -10034,7 +10034,7 @@ expr a : b \| ''
 unfortunately this behaves exactly as the original expression, see the
 @samp{@command{expr} (@samp{:})} entry for more information.
 
-Older @command{expr} implementations (e.g. SunOS 4 @command{expr} and
+Older @command{expr} implementations (e.g., SunOS 4 @command{expr} and
 Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
 @command{expr} to fail if the matched substring is longer than 120
 bytes.  In this case, you might want to fall back on @samp{echo|sed} if
@@ -10069,7 +10069,7 @@ $ @kbd{expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'}
 
 @noindent
 will output @samp{a} on most hosts, but @samp{aa} on @sc{qnx} 4.25.  A
-simple work around consists in testing @command{expr} and use a variable
+simple workaround consists in testing @command{expr} and use a variable
 set to @command{expr} or to @command{false} according to the result.
 
 
@@ -10084,7 +10084,7 @@ replacement @code{grep -F}.  To work around this problem, invoke
 
 @item @command{find}
 @c -----------------
-The option @option{-maxdepth} seems to be GNU specific. Tru64 v5.1,
+The option @option{-maxdepth} seems to be GNU specific.  Tru64 v5.1,
 NetBSD 1.5 and Solaris 2.5 @command{find} commands do not understand it.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
@@ -10126,8 +10126,8 @@ are not available on old systems; use @samp{$(LN_S)} as a portable substitute.
 For versions of the DJGPP before 2.04, @command{ln} emulates soft links
 for executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
-Unix spec. So @samp{ln -s file link} will generate @file{link.exe},
-which will attempt to call @file{file.exe} if run. But this feature only
+Unix spec.  So @samp{ln -s file link} will generate @file{link.exe},
+which will attempt to call @file{file.exe} if run.  But this feature only
 works for executables, so @samp{cp -p} is used instead for these
 systems.  DJGPP versions 2.04 and later have full symlink support.
 
@@ -10189,7 +10189,7 @@ a critical section where neither the old nor the new version of
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
 
-Moving/Deleting open files isn't portable. The following can't be done
+Moving/Deleting open files isn't portable.  The following can't be done
 on DOS/WIN32:
 
 @example
@@ -10228,7 +10228,7 @@ an input buffer limited to 4000 bytes.
 
 Alternation, @samp{\|}, is common but @sc{posix}.2 does not require its
 support, so it should be avoided in portable scripts.  Solaris 8
-@command{sed} does not support alternation; e.g. @samp{sed '/a\|b/d'}
+@command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
 deletes only lines that contain the literal string @samp{a|b}.
 
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
@@ -10318,7 +10318,7 @@ kept
 deleted
 @end example
 
-Why? When processing 1, a matches, therefore sets the t flag, b jumps to
+Why?  When processing 1, a matches, therefore sets the t flag, b jumps to
 d, and the output is produced.  When processing line 2, the t flag is
 still set (this is the bug).  Line a fails to match, but @command{sed}
 is not supposed to clear the t flag when a substitution fails.  Line b
@@ -10657,7 +10657,7 @@ prerequisite has been found in a @code{VPATH} dir.  This means that
 @example
 VPATH = ../src
 .c.o:
-        cc -c $< -o $@
+        cc -c $< -o $@@
 @end example
 
 @noindent
@@ -10669,7 +10669,7 @@ This can be fixed as follows.
 @example
 VPATH = ../src
 .c.o:
-        cc -c `test -f $< || echo ../src/`$< -o $@
+        cc -c `test -f $< || echo ../src/`$< -o $@@
 @end example
 
 This kludge was introduced in Automake in 2000, but the exact context
@@ -10900,7 +10900,7 @@ Building ../bar.x
 @end example
 
 Another point worth mentioning is that once GNU @command{make} has
-decided to ignore a @code{VPATH} filename (e.g. it ignored
+decided to ignore a @code{VPATH} filename (e.g., it ignored
 @file{../bar.x} in the above example) it will continue to ignore it when
 the target occurs as a prerequisite of another rule.
 
@@ -11697,7 +11697,7 @@ Require that @var{file} be instantiated as if
 @var{file} and @var{template} may be @samp{-} in which case the standard
 output and/or standard input, respectively, is used.  If a
 @var{template} filename is relative, it is first looked for in the build
-tree, and then in the source tree. @xref{Configuration Actions}, for
+tree, and then in the source tree.  @xref{Configuration Actions}, for
 more details.
 
 This option and the following ones provide one way for separately
@@ -11869,7 +11869,7 @@ if @file{./acconfig.h} contains the string @samp{@@TOP@@},
 if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
 @command{autoheader} copies the lines after that line to the end of the
 file it generates.  Either or both of those strings may be omitted.  An
-even older alternate way to produce the same effect in jurasik versions
+even older alternate way to produce the same effect in ancient versions
 of Autoconf is to create the files @file{@var{file}.top} (typically
 @file{config.h.top}) and/or @file{@var{file}.bot} in the current
 directory.  If they exist, @command{autoheader} copies them to the
@@ -12125,7 +12125,7 @@ header file is found:
 
 @defmac AC_DYNIX_SEQ
 @acindex DYNIX_SEQ
-If on Dynix/PTX (Sequent @sc{unix}), add @option{-lseq} to output variable
+If on DYNIX/ptx, add @option{-lseq} to output variable
 @code{LIBS}.  This macro used to be defined as
 
 @example
@@ -12596,10 +12596,10 @@ now it just calls @code{AC_FUNC_STRFTIME} instead.
 @acindex SYS_RESTARTABLE_SYSCALLS
 @cvindex HAVE_RESTARTABLE_SYSCALLS
 If the system automatically restarts a system call that is interrupted
-by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}. This macro does
+by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}.  This macro does
 not check if system calls are restarted in general--it tests whether a
 signal handler installed with @code{signal} (but not @code{sigaction})
-causes system calls to be restarted. It does not test if system calls
+causes system calls to be restarted.  It does not test if system calls
 can be restarted when interrupted by signals that have no handler.
 
 These days portable programs should use @code{sigaction} with
@@ -13170,7 +13170,7 @@ configure as follows:
 
 
 @node AC_LIBOBJ vs LIBOBJS
-@subsection @code{AC_LIBOBJ} vs. @code{LIBOBJS}
+@subsection @code{AC_LIBOBJ} vs.@: @code{LIBOBJS}
 
 Up to Autoconf 2.13, the replacement of functions was triggered via the
 variable @code{LIBOBJS}.  Since Autoconf 2.50, the macro
@@ -13701,7 +13701,7 @@ Invoke @code{AC_CONFIG_TESTDIR}.
 @defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, @var{directory}})
 @acindex CONFIG_TESTDIR
 An Autotest test suite is to be configured in @var{directory}.  This
-macro requires the instanciation of @file{@var{directory}/atconfig} from
+macro requires the instantiation of @file{@var{directory}/atconfig} from
 @file{@var{directory}/atconfig.in}, and sets the default
 @code{AUTOTEST_PATH} to @var{test-path} (@pxref{testsuite Invocation}).
 @end defmac
@@ -14000,7 +14000,7 @@ automate this task.  For instance, the macro @code{AC_DEFINE_DIR} from
 the @href{http://www.gnu.org/software/ac-archive/, Autoconf Macro
 Archive}.
 
-This solution is not conformant with the GNU Coding Standards.
+This solution does not conform to the GNU Coding Standards.
 
 @item
 Note that all the previous solutions hard wire the absolute path to
