@@ -17,7 +17,7 @@ EOF
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.
 
-# libm4.
+# m4sugar.
 AT_INCLUDE(base.m4)
 
 # The executables.

@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in.
 
 ## Makefile for Autoconf.
-## Copyright (C) 1999, 2000 Free Software Foundation, Inc.
+## Copyright 1999, 2000 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ EXTRA_SCRIPTS = autoscan
 # and adapt dependencies once we use a more recent Automake
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
-                  libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 \
+                  m4sugar.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 \
                   autoconf.m4 aclang.m4 acversion.m4 acfunctions.m4
 
 nodistpkgdataDATA = autoconf.m4f
@@ -143,7 +143,7 @@ editpl = sed \
 .m4.m4f:
 	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
 
-common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
+common = m4sugar.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
          aclang.m4 acfunctions.m4
 
 autoconf.m4f: autoconf.m4 $(common)

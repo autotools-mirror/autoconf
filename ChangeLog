@@ -1,5 +1,18 @@
 2000-10-23  Akim Demaille  <akim@epita.fr>
 
+	Since GNU M4 now comes with its libm4 (binary), to avoid
+	ambiguities let's rename `libm4' (M4 code) as `m4sugar':
+
+		Readability And Greater Understanding Stands 4 M4sugar
+
+	name coined by Lars J. Aas.
+
+	* libm4.m4: Rename as...
+	* m4sugar.m4: this.
+	All dependencies adjusted.
+
+2000-10-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/mktests.sh (update_exclude_list, syntax_exclude_list): Add
 	`AC_PREREQ'.
 	* tests/tools.m4: Globally, don't use `../' to invoke the tested
