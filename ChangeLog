@@ -1,3 +1,8 @@
+2002-02-06  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (Configuring subdirectories): Skip if aclocal
+	is not available.
+
 2002-02-05  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Specific Compiler Characteristics):
@@ -18,7 +23,6 @@
 	* doc/autoconf.texi (Making testsuite Scripts): Document
 	package.m4.
 
-	
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/freeze.mk: New.

@@ -539,6 +539,9 @@ AT_CLEANUP
 AT_SETUP([Configuring subdirectories])
 AT_KEYWORDS(autoreconf)
 
+# We use aclocal (via autoreconf).
+AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+
 # Move into a fresh testSubDir.  But Autotest is not ready for such
 # tricks, albeit most useful :( It expects to find its files
 # (at-setup-line and so on) in the original `.', and it will complain
