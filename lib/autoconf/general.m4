@@ -1993,9 +1993,11 @@ AC_DEFUN([_AC_RUN_LOG],
 
 # _AC_RUN_LOG_STDERR(COMMAND, LOG-COMMANDS)
 # -----------------------------------------
-# Eval COMMAND, save its stderr into conftest.err, save the exit status
-# in ac_status, and log it.
+# Run COMMAND, save its stderr into conftest.err, save the exit status
+# in ac_status, and log it.  Don't forget to clean up conftest.err after
+# use.
 # Note that when tracing, most shells will leave the traces in stderr
+# starting with "+": that's what this macro tries to address.
 AC_DEFUN([_AC_RUN_LOG_STDERR],
 [{ ($2) >&AS_MESSAGE_LOG_FD
   ($1) 2>conftest.er1
@@ -2017,9 +2019,8 @@ AC_DEFUN([_AC_EVAL],
 
 # _AC_EVAL_STDERR(COMMAND)
 # ------------------------
-# Eval COMMAND, save its stderr into conftest.err, save the exit status
-# in ac_status, and log it.
-# Note that when tracing, most shells will leave the traces in stderr
+# Same as _AC_RUN_LOG_STDERR, but evals  (instead of the running) the
+# COMMAND.
 AC_DEFUN([_AC_EVAL_STDERR],
 [_AC_RUN_LOG_STDERR([eval $1],
 		    [eval echo "$as_me:$LINENO: \"$1\""])])
@@ -2158,7 +2159,7 @@ AS_IF([_AC_EVAL_STDERR($ac_compile) &&
       [$2],
       [_AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],[$3])dnl])dnl
-rm -f conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+rm -f conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
 
@@ -2199,7 +2200,8 @@ AS_IF([_AC_EVAL_STDERR($ac_link) &&
       [$2],
       [_AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3], [$3])dnl])[]dnl
-rm -f conftest.$ac_objext conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
 

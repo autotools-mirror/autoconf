@@ -1,5 +1,10 @@
 2003-10-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (_AC_LINK_IFELSE, _AC_COMPILE_IFELSE):
+	Don't forget to remove conftest.err.
+
+2003-10-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_LIBOBJ): Don't insert twice the
 	same object file in $LIBOBJS.
 	Reported by Alexandre Duret-Lutz & Derek Robert Price.
