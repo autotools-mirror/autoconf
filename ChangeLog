@@ -1,5 +1,16 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	Resynchronize `INSTALL' with the current `configure', and
+	conversely...
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Let `configure' support `-h =
+	--help' and `-n = --no-create'.
+	Document -h, -n and -q in configure's help message.
+	* install.texi (Operation Controls): Formatting changes.
+	Document `configure -h'.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	* README: Updated.
 
 2000-02-09  Akim Demaille  <akim@epita.fr>

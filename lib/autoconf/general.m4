@@ -700,7 +700,7 @@ changequote([, ])dnl
     # Obsolete; use --with-gas.
     with_gas=yes ;;
 
-  -help | --help | --hel | --he)
+  -help | --help | --hel | --he | -h)
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
 changequote(, )dnl
@@ -716,11 +716,11 @@ CFLAGS...), give to `configure' the definition as VAR=VALUE.
 Defaults for the options are specified in brackets.
 
 Configuration:
-  --cache-file=FILE   cache test results in FILE
-  --help              print this message
-  --no-create         do not create output files
-  --quiet, --silent   do not print \`checking...' messages
-  --version           print the version of autoconf that created configure
+  -h, --help              print this message
+      --version           print the version of autoconf that created configure
+  -q, --quiet, --silent   do not print \`checking...' messages
+      --cache-file=FILE   cache test results in FILE
+  -n, --no-create         do not create output files
 
 Directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
