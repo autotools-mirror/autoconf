@@ -235,6 +235,13 @@ AC_DEFUN([AC_CHECK_TYPE],
 
 
 
+# ---------------------------- #
+# Types that must be checked.  #
+# ---------------------------- #
+
+AN_IDENTIFIER([ptrdiff_t], [AC_CHECK_TYPES])
+
+
 # ----------------- #
 # Specific checks.  #
 # ----------------- #
@@ -284,6 +291,7 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
 
 
 # AU::AM_TYPE_PTRDIFF_T
+# ---------------------
 AU_DEFUN([AM_TYPE_PTRDIFF_T],
 [AC_CHECK_TYPES(ptrdiff_t)])
 
@@ -311,6 +319,8 @@ AC_DEFUN([AC_TYPE_MBSTATE_T],
 # AC_TYPE_UID_T
 # -------------
 # FIXME: Rewrite using AC_CHECK_TYPE.
+AN_IDENTIFIER([gid_t], [AC_TYPE_UID_T])
+AN_IDENTIFIER([uid_t], [AC_TYPE_UID_T])
 AC_DEFUN([AC_TYPE_UID_T],
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
@@ -322,15 +332,23 @@ fi
 ])
 
 
+AN_IDENTIFIER([size_t], [AC_TYPE_SIZE_T])
 AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned)])
+
+AN_IDENTIFIER([pid_t], [AC_TYPE_PID_T])
 AC_DEFUN([AC_TYPE_PID_T],  [AC_CHECK_TYPE(pid_t,  int)])
+
+AN_IDENTIFIER([off_t], [AC_TYPE_OFF_T])
 AC_DEFUN([AC_TYPE_OFF_T],  [AC_CHECK_TYPE(off_t,  long)])
+
+AN_IDENTIFIER([mode_t], [AC_TYPE_MODE_T])
 AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
 
 
 # AC_TYPE_SIGNAL
 # --------------
 # Note that identifiers starting with SIG are reserved by ANSI C.
+AN_FUNCTION([signal],  [AC_TYPE_SIGNAL])
 AC_DEFUN([AC_TYPE_SIGNAL],
 [AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
 [AC_COMPILE_IFELSE(
@@ -553,6 +571,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev],
 # ------------
 # FIXME: This macro is badly named, it should be AC_CHECK_TYPE_STRUCT_TM.
 # Or something else, but what? AC_CHECK_TYPE_STRUCT_TM_IN_SYS_TIME?
+AN_IDENTIFIER([tm], [AC_STRUCT_TM])
 AC_DEFUN([AC_STRUCT_TM],
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,

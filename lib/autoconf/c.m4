@@ -340,6 +340,8 @@ AS_IF([$ac_preproc_ok], [$1], [$2])])# _AC_PROG_PREPROC_WORKS_IFELSE
 # Find a working C preprocessor.
 # We shouldn't have to require AC_PROG_CC, but this is due to the concurrency
 # between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CC.
+AN_MAKEVAR([CPP], [AC_PROG_CPP])
+AN_PROGRAM([cpp], [AC_PROG_CPP])
 AC_DEFUN([AC_PROG_CPP],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_ARG_VAR([CPP],      [C preprocessor])dnl
@@ -391,6 +393,9 @@ AU_DEFUN([ac_cv_prog_gcc],
 # COMPILER ... is a space separated list of C compilers to search for.
 # This just gives the user an opportunity to specify an alternative
 # search list for the C compiler.
+AN_MAKEVAR([CC],  [AC_PROG_CC])
+AN_PROGRAM([cc],  [AC_PROG_CC])
+AN_PROGRAM([gcc], [AC_PROG_CC])
 AC_DEFUN([AC_PROG_CC],
 [AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC],     [C compiler command])dnl
@@ -471,6 +476,7 @@ fi[]dnl
 
 # AC_PROG_GCC_TRADITIONAL
 # -----------------------
+AN_FUNCTION([ioctl],   [AC_PROG_GCC_TRADITIONAL])
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
 [if test $ac_cv_c_compiler_gnu = yes; then
     AC_CACHE_CHECK(whether $CC needs -traditional,
@@ -614,6 +620,10 @@ AU_DEFUN([ac_cv_prog_gxx],
 # RCC	Rational C++
 # xlC_r	AIX C Set++ (with support for reentrant code)
 # xlC	AIX C Set++
+AN_MAKEVAR([CXX],  [AC_PROG_CXX])
+AN_PROGRAM([CC],   [AC_PROG_CXX])
+AN_PROGRAM([c++],  [AC_PROG_CXX])
+AN_PROGRAM([g++],  [AC_PROG_CXX])
 AC_DEFUN([AC_PROG_CXX],
 [AC_LANG_PUSH(C++)dnl
 AC_ARG_VAR([CXX],      [C++ compiler command])dnl
@@ -941,6 +951,7 @@ esac
 # HP C version B.11.11.04 doesn't allow a typedef as the return value for an
 # inline function, only builtin types.
 #
+AN_IDENTIFIER([inline], [AC_C_INLINE])
 AC_DEFUN([AC_C_INLINE],
 [AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
@@ -967,6 +978,7 @@ esac
 
 # AC_C_CONST
 # ----------
+AN_IDENTIFIER([const],  [AC_C_CONST])
 AC_DEFUN([AC_C_CONST],
 [AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
@@ -1034,6 +1046,7 @@ fi
 # optimizations that could break the user's code.  So, do not #define
 # volatile away unless it is really necessary to allow the user's code
 # to compile cleanly.  Benign compiler failures should be tolerated.
+AN_IDENTIFIER([volatile], [AC_C_VOLATILE])
 AC_DEFUN([AC_C_VOLATILE],
 [AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [

@@ -322,6 +322,7 @@ fi])dnl
 # paths, otherwise set no_x=yes.
 # Uses ac_ vars as temps to allow command line to override cache and checks.
 # --without-x overrides everything else, but does not touch the cache.
+AN_HEADER([X11/Xlib.h],  [AC_PATH_X])
 AC_DEFUN([AC_PATH_X],
 [dnl Document the X abnormal options inherited from history.
 m4_divert_once([HELP_BEGIN], [

@@ -58,6 +58,7 @@
 
 # AC_DECL_SYS_SIGLIST
 # -------------------
+AN_IDENTIFIER([sys_siglist],     [AC_DECL_SYS_SIGLIST])
 AC_DEFUN([AC_DECL_SYS_SIGLIST],
 [AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
   ac_cv_decl_sys_siglist,

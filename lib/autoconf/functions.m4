@@ -130,6 +130,7 @@ AN_FUNCTION([acl],                     [AC_CHECK_FUNCS])
 AN_FUNCTION([alarm],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([atexit],                  [AC_CHECK_FUNCS])
 AN_FUNCTION([btowc],                   [AC_CHECK_FUNCS])
+AN_FUNCTION([bzero],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([clock_gettime],           [AC_CHECK_FUNCS])
 AN_FUNCTION([doprnt],                  [AC_CHECK_FUNCS])
 AN_FUNCTION([dup2],                    [AC_CHECK_FUNCS])
@@ -166,7 +167,10 @@ AN_FUNCTION([localeconv],              [AC_CHECK_FUNCS])
 AN_FUNCTION([localtime_r],             [AC_CHECK_FUNCS])
 AN_FUNCTION([mblen],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([mbrlen],                  [AC_CHECK_FUNCS])
+AN_FUNCTION([memchr],                  [AC_CHECK_FUNCS])
+AN_FUNCTION([memmove],                 [AC_CHECK_FUNCS])
 AN_FUNCTION([mempcpy],                 [AC_CHECK_FUNCS])
+AN_FUNCTION([memset],                  [AC_CHECK_FUNCS])
 AN_FUNCTION([mkdir],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([mkfifo],                  [AC_CHECK_FUNCS])
 AN_FUNCTION([modf],                    [AC_CHECK_FUNCS])
@@ -212,9 +216,14 @@ AN_FUNCTION([strverscmp],              [AC_CHECK_FUNCS])
 AN_FUNCTION([sysinfo],                 [AC_CHECK_FUNCS])
 AN_FUNCTION([tzset],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([uname],                   [AC_CHECK_FUNCS])
+AN_FUNCTION([utime],                   [AC_CHECK_FUNCS])
 AN_FUNCTION([utmpname],                [AC_CHECK_FUNCS])
 AN_FUNCTION([utmpxname],               [AC_CHECK_FUNCS])
 AN_FUNCTION([wcwidth],                 [AC_CHECK_FUNCS])
+
+
+AN_FUNCTION([dcgettext],    [AM_GNU_GETTEXT])
+AN_FUNCTION([getwd],        [warn: getwd is deprecated, use getcwd instead])
 
 
 ## --------------------------------- ##
@@ -307,6 +316,7 @@ AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 # AC_FUNC_ALLOCA
 # --------------
 AN_FUNCTION([alloca], [AC_FUNC_ALLOCA])
+AN_HEADER([alloca.h], [AC_FUNC_ALLOCA])
 AC_DEFUN([AC_FUNC_ALLOCA],
 [# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
@@ -428,6 +438,7 @@ fi
 
 # AC_FUNC_ERROR_AT_LINE
 # ---------------------
+AN_FUNCTION([error],         [AC_FUNC_ERROR_AT_LINE])
 AN_FUNCTION([error_at_line], [AC_FUNC_ERROR_AT_LINE])
 AC_DEFUN([AC_FUNC_ERROR_AT_LINE],
 [AC_LIBSOURCES([error.h, error.c])dnl
@@ -515,6 +526,7 @@ AC_DEFINE(fnmatch, rpl_fnmatch,
 
 # AC_REPLACE_FNMATCH
 # ------------------
+AN_FUNCTION([fnmatch], [AC_REPLACE_FNMATCH])
 AC_DEFUN([AC_REPLACE_FNMATCH],
 [_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
                      [rm -f $ac_config_libobj_dir/fnmatch.h],
@@ -1243,6 +1255,7 @@ AU_ALIAS([AC_MMAP], [AC_FUNC_MMAP])
 # ---------------
 # Ensure obstack support.  Yeah, this is not exactly a `FUNC' check.
 AN_FUNCTION([obstack_init], [AC_FUNC_OBSTACK])
+AN_IDENTIFIER([obstack],    [AC_FUNC_OBSTACK])
 AC_DEFUN([AC_FUNC_OBSTACK],
 [AC_LIBSOURCES([obstack.h, obstack.c])dnl
 AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
@@ -1666,7 +1679,8 @@ AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 
 # AC_FUNC_FORK
 # -------------
-AN_FUNCTION([fork], [AC_FUNC_FORK])
+AN_FUNCTION([fork],  [AC_FUNC_FORK])
+AN_FUNCTION([vfork], [AC_FUNC_FORK])
 AC_DEFUN([AC_FUNC_FORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
 AC_CHECK_HEADERS(unistd.h vfork.h)

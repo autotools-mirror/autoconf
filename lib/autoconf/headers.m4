@@ -285,6 +285,7 @@ AN_HEADER([argz.h],             [AC_CHECK_HEADERS])
 AN_HEADER([arpa/inet.h],        [AC_CHECK_HEADERS])
 AN_HEADER([fcntl.h],            [AC_CHECK_HEADERS])
 AN_HEADER([fenv.h],             [AC_CHECK_HEADERS])
+AN_HEADER([float.h],            [AC_CHECK_HEADERS])
 AN_HEADER([fs_info.h],          [AC_CHECK_HEADERS])
 AN_HEADER([inttypes.h],         [AC_CHECK_HEADERS])
 AN_HEADER([langinfo.h],         [AC_CHECK_HEADERS])
@@ -303,8 +304,11 @@ AN_HEADER([nlist.h],            [AC_CHECK_HEADERS])
 AN_HEADER([paths.h],            [AC_CHECK_HEADERS])
 AN_HEADER([sgtty.h],            [AC_CHECK_HEADERS])
 AN_HEADER([shadow.h],           [AC_CHECK_HEADERS])
+AN_HEADER([stddef.h],           [AC_CHECK_HEADERS])
 AN_HEADER([stdint.h],           [AC_CHECK_HEADERS])
 AN_HEADER([stdio_ext.h],        [AC_CHECK_HEADERS])
+AN_HEADER([stdlib.h],           [AC_CHECK_HEADERS])
+AN_HEADER([string.h],           [AC_CHECK_HEADERS])
 AN_HEADER([strings.h],          [AC_CHECK_HEADERS])
 AN_HEADER([sys/acl.h],          [AC_CHECK_HEADERS])
 AN_HEADER([sys/file.h],         [AC_CHECK_HEADERS])
@@ -373,6 +377,10 @@ m4_define([AH_CHECK_HEADERS_DIRENT],
 
 # AC_HEADER_DIRENT
 # ----------------
+AN_HEADER([dirent.h],   [AC_HEADER_DIRENT])
+AN_HEADER([ndir.h],     [AC_HEADER_DIRENT])
+AN_HEADER([sys/dir.h],  [AC_HEADER_DIRENT])
+AN_HEADER([sys/ndir.h], [AC_HEADER_DIRENT])
 AC_DEFUN([AC_HEADER_DIRENT],
 [AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
 ac_header_dirent=no
@@ -392,6 +400,10 @@ fi
 
 # AC_HEADER_MAJOR
 # ---------------
+AN_FUNCTION([major],     [AC_HEADER_MAJOR])
+AN_FUNCTION([makedev],   [AC_HEADER_MAJOR])
+AN_FUNCTION([minor],     [AC_HEADER_MAJOR])
+AN_HEADER([sys/mkdev.h], [AC_HEADER_MAJOR])
 AC_DEFUN([AC_HEADER_MAJOR],
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
                 ac_cv_header_sys_types_h_makedev,
@@ -467,6 +479,28 @@ fi
 
 # AC_HEADER_STDC
 # --------------
+# FIXME: I find this list very strange.  It comes from the original
+# autoscan list, but I don't think it is useful for the same reason
+# that we don't bind AC_PROG_CC to finding a C function calls: if the
+# user uses bcmp, then she will certainly have the `#include', and
+# therefore, we will trigger AC_HEADER_STDC elsewhere.  --akim 2002-09-28
+# FIXME: Err... index and rindex are _not_ to be used... --akim 2002-09-28
+AN_FUNCTION([bcmp],     [AC_HEADER_STDC])
+AN_FUNCTION([bcopy],    [AC_HEADER_STDC])
+AN_FUNCTION([bzero],    [AC_HEADER_STDC])
+AN_FUNCTION([index],    [AC_HEADER_STDC])
+AN_FUNCTION([memchr],   [AC_HEADER_STDC])
+AN_FUNCTION([memcpy],   [AC_HEADER_STDC])
+AN_FUNCTION([memmove],  [AC_HEADER_STDC])
+AN_FUNCTION([memset],   [AC_HEADER_STDC])
+AN_FUNCTION([rindex],   [AC_HEADER_STDC])
+
+AN_HEADER([float.h],    [AC_HEADER_STDC])
+AN_HEADER([stdarg.h],   [AC_HEADER_STDC])
+AN_HEADER([stddef.h],   [AC_HEADER_STDC])
+AN_HEADER([stdlib.h],   [AC_HEADER_STDC])
+AN_HEADER([string.h],   [AC_HEADER_STDC])
+
 AC_DEFUN([AC_HEADER_STDC],
 [AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 [AC_TRY_CPP([#include <stdlib.h>
@@ -520,6 +554,7 @@ fi
 
 # AC_HEADER_SYS_WAIT
 # ------------------
+AN_HEADER([sys/wait.h], [AC_HEADER_SYS_WAIT])
 AC_DEFUN([AC_HEADER_SYS_WAIT],
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
@@ -547,6 +582,7 @@ fi
 
 # AC_HEADER_TIME
 # --------------
+AN_IDENTIFIER([timeval],  [AC_HEADER_TIME])
 AC_DEFUN([AC_HEADER_TIME],
 [AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
   ac_cv_header_time,
