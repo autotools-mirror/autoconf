@@ -1,3 +1,8 @@
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4: Removed a few addresses, the correspondence is...
+	* THANKS: here.
+
 2000-03-01  Lars Hecking  <lhecking@nmrc.ucc.ie>
 
 	* acspecific.m4 (AC_PATH_XTRA): On LynxOS 3.0.1/i386,

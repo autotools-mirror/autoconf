@@ -65,7 +65,7 @@
 # Idea borrowed from dist 3.0.
 AC_DEFUN(_AC_PROG_ECHO,
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+  # Stardent Vistra SVR4 grep lacks -e, says Kaveh R. Ghazi.
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
     ECHO_N= ECHO_C='
 ' ECHO_T='	'
@@ -1868,7 +1868,7 @@ else
 fi # Do not have getloadavg in system libraries.
 
 # Some definitions of getloadavg require that the program be installed setgid.
-dnl FIXME Don't hardwire the path of getloadavg.c in the top-level directory.
+dnl FIXME: Don't hardwire the path of getloadavg.c in the top-level directory.
 AC_CACHE_CHECK(whether getloadavg requires setgid,
   ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
@@ -2002,8 +2002,7 @@ AC_CHECK_HEADERS(sys/time.h unistd.h)
 AC_CHECK_FUNCS(alarm)
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 [AC_TRY_RUN(
-[/* Test program from Paul Eggert (eggert@twinsun.com)
-   and Tony Leneis (tony@plaza.ds.adp.com).  */
+[/* Test program from Paul Eggert and Tony Leneis.  */
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
@@ -2699,11 +2698,10 @@ AC_SUBST(OBJEXT)])
 # "AC_F77_LIBRARY_LDFLAGS" was created to determine these Fortran 77
 # libraries.
 #
-# This macro was packaged in its current form by Matthew D. Langston
-# <langston@SLAC.Stanford.EDU>.  However, nearly all of this macro
-# came from the "OCTAVE_FLIBS" macro in "octave-2.0.13/aclocal.m4",
-# and full credit should go to John W. Eaton for writing this
-# extremely useful macro.  Thank you John.
+# This macro was packaged in its current form by Matthew D. Langston.
+# However, nearly all of this macro came from the "OCTAVE_FLIBS" macro
+# in "octave-2.0.13/aclocal.m4", and full credit should go to John
+# W. Eaton for writing this extremely useful macro.  Thank you John.
 AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
 [AC_CACHE_CHECK([for Fortran 77 libraries],
                  ac_cv_flibs,
