@@ -11082,8 +11082,9 @@ operators; consequently, Posix does not specify them, so using them
 is nonportable.  If you combine @samp{&&} and @samp{||} in the same
 statement, keep in mind that they have equal precedence.
 
-You may use @samp{!} with @command{test}, but not with @command{if}:
-@samp{test ! -r foo || exit 1}.
+It is safe to use @samp{!} as a @command{test} operator.  For example,
+@samp{if test ! -d foo; @dots{}} is portable even though @samp{if ! test
+-d foo; @dots{}} is not.
 
 
 @item @command{test} (files)
