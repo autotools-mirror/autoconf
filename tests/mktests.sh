@@ -155,10 +155,7 @@ _AC_'
 # ac_exclude_egrep
 # ----------------
 # Build a single extended regular expression out of filter_macros_list.
-# Sed is used to get rid of the trailing `|' coming from the trailing
-# `\n' from `echo'.
-ac_exclude_egrep=`echo "$exclude_list$ac_exclude_list" | tr '
-' '|' | sed 's/.$//'`
+ac_exclude_egrep=$exclude_list$ac_exclude_list
 
 
 # au_exclude_list
@@ -183,10 +180,7 @@ au_exclude_list='^AC_LANG_RESTORE$
 # au_exclude_egrep
 # ----------------
 # Build a single extended regular expression out of filter_macros_list.
-# Sed is used to get rid of the trailing `|' coming from the trailing
-# `\n' from `echo'.
-au_exclude_egrep=`echo "$exclude_list$au_exclude_list" | tr '
-' '|' | sed 's/.$//'`
+au_exclude_egrep=$exclude_list$au_exclude_list
 
 
 # egrep
