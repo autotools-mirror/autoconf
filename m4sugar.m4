@@ -62,9 +62,9 @@ set the M4 environment variable to its path name.)
 m4exit(2)])
 
 
-## --------------------------------- ##
-## Defining macros and name spaces.  ##
-## --------------------------------- ##
+## --------------------------------------------- ##
+## 1. Move some builtins to a safer name space.  ##
+## --------------------------------------------- ##
 
 # m4_rename(SRC, DST)
 # -------------------
@@ -81,9 +81,9 @@ m4_rename([shift],   [m4_shift])
 m4_rename([symbols], [m4_symbols])
 
 
-## --------------------------------------------- ##
-## Move some m4 builtins to a safer name space.  ##
-## --------------------------------------------- ##
+## ------------------- ##
+## 2. Error messages.  ##
+## ------------------- ##
 
 
 # m4_location
@@ -129,6 +129,11 @@ define([m4_assert],
         [])])
 
 
+## ------------------- ##
+## 3. File inclusion.  ##
+## ------------------- ##
+
+
 # We also want to neutralize include (and sinclude for symmetry),
 # but we want to extend them slightly: warn when a file is included
 # several times.  This is in general a dangerous operation because
@@ -170,9 +175,10 @@ undefine([include])
 undefine([sinclude])
 
 
-## --------------------------------------- ##
-## Some additional m4 structural control.  ##
-## --------------------------------------- ##
+
+## ------------------------------------ ##
+## 4. Additional branching constructs.  ##
+## ------------------------------------ ##
 
 # Both `ifval' and `ifset' tests against the empty string.  The
 # difference is that `ifset' is specialized on macros.
@@ -220,25 +226,6 @@ define([ifset],
 # --------------------------------------------
 define([ifndef],
 [ifdef([$1], [$3], [$2])])
-
-
-# m4_default(EXP1, EXP2)
-# ----------------------
-# Returns EXP1 if non empty, otherwise EXP2.
-define([m4_default], [ifval([$1], [$1], [$2])])
-
-
-# m4_shiftn(N, ...)
-# -----------------
-# Returns ... shifted N times.  Useful for recursive "varargs" constructs.
-define([m4_shiftn],
-[m4_assert(($1 >= 0) && ($# > $1))dnl
-_m4_shiftn($@)])
-
-define([_m4_shiftn],
-[ifelse([$1], 0,
-        [m4_shift($@)],
-        [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
 
 
 # m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
@@ -290,6 +277,11 @@ define([m4_match],
         [$3])])
 
 
+
+## ---------------------------------------- ##
+## 5. Enhanced version of some primitives.  ##
+## ---------------------------------------- ##
+
 # m4_do(STRING, ...)
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is
@@ -299,6 +291,27 @@ define([m4_do],
   [ifelse($#, 0, [],
           $#, 1, [$1],
           [$1[]m4_do(m4_shift($@))])])
+
+
+# m4_default(EXP1, EXP2)
+# ----------------------
+# Returns EXP1 if non empty, otherwise EXP2.
+define([m4_default], [ifval([$1], [$1], [$2])])
+
+
+# m4_shiftn(N, ...)
+# -----------------
+# Returns ... shifted N times.  Useful for recursive "varargs" constructs.
+define([m4_shiftn],
+[m4_assert(($1 >= 0) && ($# > $1))dnl
+_m4_shiftn($@)])
+
+define([_m4_shiftn],
+[ifelse([$1], 0,
+        [m4_shift($@)],
+        [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
+
+
 
 
 # _m4_dumpdefs_up(NAME)
@@ -329,9 +342,30 @@ define([m4_dumpdefs],
 _m4_dumpdefs_down([$1])])
 
 
-## --------------------- ##
-## Implementing m4 loops ##
-## --------------------- ##
+# m4_quote(STRING)
+# ----------------
+# Return STRING quoted.
+#
+# It is important to realize the difference between `m4_quote(exp)' and
+# `[exp]': in the first case you obtain the quoted *result* of the
+# expansion of EXP, while in the latter you just obtain the string
+# `exp'.
+define([m4_quote], [[$*]])
+
+
+# m4_noquote(STRING)
+# ------------------
+# Return the result of ignoring all quotes in STRING and invoking the
+# macros it contains.  Amongst other things useful for enabling macro
+# invocations inside strings with [] blocks (for instance regexps and
+# help-strings).
+define([m4_noquote],
+[changequote(-=<{,}>=-)$1-=<{}>=-changequote([,])])
+
+
+## -------------------------- ##
+## 6. Implementing m4 loops.  ##
+## -------------------------- ##
 
 
 # m4_for(VARIABLE, FIRST, LAST, [STEP = +/-1], EXPRESSION)
@@ -464,9 +498,9 @@ define([_m4_foreach],
 
 
 
-## ------------------------ ##
-## More diversion support.  ##
-## ------------------------ ##
+## --------------------------- ##
+## 7. More diversion support.  ##
+## --------------------------- ##
 
 
 # _m4_divert(DIBERSION-NAME or NUMBER)
@@ -510,9 +544,9 @@ m4_divert_pop()dnl
 ])
 
 
-## ----------------- ##
-## Text processing.  ##
-## ----------------- ##
+## -------------------- ##
+## 8. Text processing.  ##
+## -------------------- ##
 
 # m4_tolower(STRING)
 # m4_toupper(STRING)
@@ -527,27 +561,6 @@ define([m4_toupper],
 [translit([$1],
           [abcdefghijklmnopqrstuvwxyz],
           [ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
-
-
-# m4_quote(STRING)
-# ----------------
-# Return STRING quoted.
-#
-# It is important to realize the difference between `m4_quote(exp)' and
-# `[exp]': in the first case you obtain the quoted *result* of the
-# expansion of EXP, while in the latter you just obtain the string
-# `exp'.
-define([m4_quote], [[$*]])
-
-
-# m4_noquote(STRING)
-# ------------------
-# Return the result of ignoring all quotes in STRING and invoking the
-# macros it contains.  Amongst other things useful for enabling macro
-# invocations inside strings with [] blocks (for instance regexps and
-# help-strings).
-define([m4_noquote],
-[changequote(-=<{,}>=-)$1-=<{}>=-changequote([,])])
 
 
 # m4_split(STRING, [REGEXP])
@@ -675,50 +688,6 @@ define([m4_list_append],
 ifdef([$1], [defn([$1]), ])[$2])])
 
 
-
-
-## -------------------- ##
-## Version processing.  ##
-## -------------------- ##
-
-
-# m4_version_unletter(VERSION)
-# ----------------------------
-# Normalize beta version numbers with letters to numbers only for comparison.
-#
-#   Nl -> (N+1).-1.(l#)
-#
-#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
-# This macro is absolutely not robust to active macro, it expects
-# reasonable version numbers and is valid up to `z', no double letters.
-define([m4_version_unletter],
-[translit(patsubst(patsubst(patsubst([$1],
-                                     [\([0-9]+\)\([abcdefghi]\)],
-                                     [m4_eval(\1 + 1).-1.\2]),
-                            [\([0-9]+\)\([jklmnopqrs]\)],
-                            [m4_eval(\1 + 1).-1.1\2]),
-          [\([0-9]+\)\([tuvwxyz]\)],
-          [m4_eval(\1 + 1).-1.2\2]),
-          abcdefghijklmnopqrstuvwxyz,
-          12345678901234567890123456)])
-
-
-# m4_version_compare(VERSION-1, VERSION-2)
-# ----------------------------------------
-# Compare the two version numbers and expand into
-#  -1 if VERSION-1 < VERSION-2
-#   0 if           =
-#   1 if           >
-define([m4_version_compare],
-[m4_list_cmp((m4_split(m4_version_unletter([$1]), [\.])),
-             (m4_split(m4_version_unletter([$2]), [\.])))])
-
-
-
-## ----------------------------------- ##
-## Helping macros to display strings.  ##
-## ----------------------------------- ##
-
 # m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)
 # ---------------------------------------------
 # FIXME: This macro should not exists.  Currently it's used only in
@@ -801,9 +770,9 @@ popdef([m4_Prefix])dnl
 
 
 
-## ------------------- ##
-## Number processing.  ##
-## ------------------- ##
+## ---------------------- ##
+## 9. Number processing.  ##
+## ---------------------- ##
 
 # m4_sign(A)
 # ----------
@@ -845,3 +814,41 @@ define([m4_list_cmp],
                  -1, -1,
                   1, 1,
                   0, [m4_list_cmp((m4_shift$1), (m4_shift$2))])])])
+
+
+
+## ------------------------ ##
+## 10. Version processing.  ##
+## ------------------------ ##
+
+
+# m4_version_unletter(VERSION)
+# ----------------------------
+# Normalize beta version numbers with letters to numbers only for comparison.
+#
+#   Nl -> (N+1).-1.(l#)
+#
+#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
+# This macro is absolutely not robust to active macro, it expects
+# reasonable version numbers and is valid up to `z', no double letters.
+define([m4_version_unletter],
+[translit(patsubst(patsubst(patsubst([$1],
+                                     [\([0-9]+\)\([abcdefghi]\)],
+                                     [m4_eval(\1 + 1).-1.\2]),
+                            [\([0-9]+\)\([jklmnopqrs]\)],
+                            [m4_eval(\1 + 1).-1.1\2]),
+          [\([0-9]+\)\([tuvwxyz]\)],
+          [m4_eval(\1 + 1).-1.2\2]),
+          abcdefghijklmnopqrstuvwxyz,
+          12345678901234567890123456)])
+
+
+# m4_version_compare(VERSION-1, VERSION-2)
+# ----------------------------------------
+# Compare the two version numbers and expand into
+#  -1 if VERSION-1 < VERSION-2
+#   0 if           =
+#   1 if           >
+define([m4_version_compare],
+[m4_list_cmp((m4_split(m4_version_unletter([$1]), [\.])),
+             (m4_split(m4_version_unletter([$2]), [\.])))])

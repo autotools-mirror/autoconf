@@ -1,5 +1,9 @@
 2000-10-30  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4: Formatting changes.
+
+2000-10-30  Akim Demaille  <akim@epita.fr>
+
 	Move the handling of diversions into M4sugar.
 
 	* acgeneral.m4 (_AC_DIVERT, AC_DIVERT, AC_DIVERT_PUSH)
