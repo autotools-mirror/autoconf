@@ -1619,8 +1619,8 @@ header file by substituting the correct values into @code{#define}
 statements in a template file.
 
 For example, suppose your @file{configure.in} calls
-@code{AC_CONFIG_HEADER(conf.h)} and @code{AC_UNISTD_H}.  You could have
-code like this in @file{conf.h.in}:
+@code{AC_CONFIG_HEADER(conf.h)} and @code{AC_HAVE_HEADERS(unistd.h)}.
+You could have code like this in @file{conf.h.in}:
 
 @example
 @group
@@ -2482,8 +2482,7 @@ AC_RSH
 AC_CONST
 AC_UID_T
 AC_STDC_HEADERS
-AC_UNISTD_H
-AC_HAVE_HEADERS(string.h fcntl.h utime.h sys/io/trioctl.h)
+AC_HAVE_HEADERS(string.h fcntl.h utime.h unistd.h sys/io/trioctl.h)
 AC_REPLACE_FUNCS(fnmatch bcopy mkdir strdup)
 AC_HAVE_FUNCS(strerror lchown)
 AC_VPRINTF

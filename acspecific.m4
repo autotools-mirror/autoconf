@@ -153,15 +153,21 @@ define(AC_PROG_INSTALL,
 # or the SunOS /usr/etc/install directory, or the AIX /bin/install,
 # or the AFS install, which mishandles nonexistent args, or
 # /usr/ucb/install on SVR4, which tries to use the nonexistent group
-# `staff'.  On most BSDish systems install is in /usr/bin, not /usr/ucb
-# anyway.  Sigh.
+# `staff', or /sbin/install on IRIX which has incompatible command-line
+# syntax.  Sigh.
+#
+#     On most BSDish systems install is in /usr/bin, not /usr/ucb
+#     anyway.
+# This turns out not to be true, so the mere pathname isn't an indication
+# of whether the program works.  What we really need is a set of tests for
+# the install program to see if it actually works in all the required ways.
 if test "z${INSTALL}" = "z" ; then
   echo checking for install
   IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
   for dir in $PATH; do
     #test -z "$dir" && dir=.
     case "$dir" in
-    ''|.|/etc|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
+    ''|.|/etc|/sbin|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
     *)
       if test -f $dir/installbsd; then
 	INSTALL="$dir/installbsd -c" # OSF1

@@ -174,7 +174,7 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
-compile='${CC-cc} $CFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
+compile='${CC-cc} $CFLAGS $LDFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.

@@ -38,7 +38,7 @@ print_version=
 while test $# -gt 0 ; do
    case "z${1}" in 
       z-h | z--help | z--h* )
-         echo "${usage}" 1>&2; exit 1 ;;
+         echo "${usage}" 1>&2; exit 0 ;;
       z--macrodir=* | z--m*=* )
          AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;

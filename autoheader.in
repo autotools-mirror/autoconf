@@ -184,7 +184,7 @@ for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
   sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
   echo "
 /* Define if you have the ${lib} library (-l${lib}).  */
-#undef HAVE_${sym}"
+#undef HAVE_LIB${sym}"
 done
 
 status=0
