@@ -142,7 +142,8 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Macro Index::                 Index of Autoconf macros
 * Concept Index::               General index
 
-@detailmenu --- The Detailed Node Listing ---
+@detailmenu
+ --- The Detailed Node Listing ---
 
 Making @code{configure} Scripts
 
@@ -234,7 +235,6 @@ Writing Tests
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Portable Shell::              Shell script portability pitfalls
-* Testing Values and Files::    Checking strings and files
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
 
@@ -243,6 +243,12 @@ Checking Run Time Behavior
 * Test Programs::               Running test programs
 * Guidelines::                  General rules for writing test programs
 * Test Functions::              Avoiding pitfalls in test programs
+
+Portable Shell Programming
+
+* Testing Values and Files::    Checking strings and files
+* Shell Substitutions::         Test and assign
+* Limitations of Usual Tools::  Portable use of portable tools
 
 Results of Tests
 
@@ -3971,7 +3977,6 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Portable Shell::              Shell script portability pitfalls
-* Testing Values and Files::    Checking strings and files
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
 @end menu
@@ -4275,7 +4280,7 @@ inlines; for example, @code{memcpy}.  To avoid errors when checking for
 them, either pass them the correct number of arguments or redeclare them
 with a different return type (such as @code{char}).
 
-@node Portable Shell, Testing Values and Files, Run Time, Writing Tests
+@node Portable Shell, Multiple Cases, Run Time, Writing Tests
 @section Portable Shell Programming
 
 When writing your own checks, there are some shell script programming
@@ -4307,16 +4312,16 @@ packages.
 
 Some of these external utilities have a portable subset of features, as
 well; for example, don't rely on @code{ln} having a @samp{-f} option or
-@code{cat} having any options.  @code{sed} scripts should not contain
-comments or use branch labels longer than 8 characters.  Don't use
-@samp{grep -s} to suppress output, because @samp{grep -s} on System V
-does not suppress output, only error messages.  Instead, redirect the
-standard output and standard error (in case the file doesn't exist) of
-@code{grep} to @file{/dev/null}.  Check the exit status of @code{grep}
-to determine whether it found a match.
+@code{cat} having any options.
 
-@node Testing Values and Files, Multiple Cases, Portable Shell, Writing Tests
-@section Testing Values and Files
+@menu
+* Testing Values and Files::    Checking strings and files
+* Shell Substitutions::         Test and assign
+* Limitations of Usual Tools::  Portable use of portable tools
+@end menu
+
+@node Testing Values and Files, Shell Substitutions, Portable Shell, Portable Shell
+@subsection Testing Values and Files
 
 @code{configure} scripts need to test properties of many files and
 strings.  Here are some portability problems to watch out for when doing
@@ -4342,7 +4347,10 @@ whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because 4.3BSD does not have
 it.
 
-Another nonportable shell programming construction is
+@node Shell Substitutions, Limitations of Usual Tools, Testing Values and Files, Portable Shell
+@subsection Shell Substitutions
+
+A nonportable shell programming construct is
 
 @example
 @var{var}=$@{@var{var}:-@var{value}@}
@@ -4351,14 +4359,53 @@ Another nonportable shell programming construction is
 @noindent
 The intent is to set @var{var} to @var{value} only if it is not already
 set, but if @var{var} has any value, even the empty string, to leave it
-alone.  Old BSD shells, including the Ultrix @code{sh}, don't accept
-the colon, and complain and die.  A portable equivalent is
+alone.  Old BSD shells, including the Ultrix @code{sh}, don't accept the
+colon for any shell substitution, and complain and die.  A portable
+equivalent is
 
 @example
 : $@{@var{var}=@var{value}@}
 @end example
 
-@node Multiple Cases, Language Choice, Testing Values and Files, Writing Tests
+If the value is a literal string, it should be quoted:
+
+@example
+: $@{var='Some words'@}
+@end example
+
+@noindent
+otherwise some shells, such as on Digital Unix V 5.0, will die because
+of a @emph{bad substitution}.
+
+
+@node Limitations of Usual Tools,  , Shell Substitutions, Portable Shell
+@subsection Limitations of Usual Tools
+
+The small set of tools you can expect to find on any machine can still
+meet some limitations you should be aware of.
+
+@table @code
+@item grep
+Don't use @samp{grep -s} to suppress output, because @samp{grep -s} on
+System V does not suppress output, only error messages.  Instead,
+redirect the standard output and standard error (in case the file
+doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
+status of @code{grep} to determine whether it found a match.
+
+Don't use multiple regexps with @samp{-e}, as some @code{grep} will only
+honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Instead, use
+alternation and @code{egrep}.
+
+@item sed
+@code{sed} scripts should not use branch labels longer than 8 characters
+and should not contain comments.
+
+@code{sed} input should have reasonably long lines, since some
+@code{sed} have an input buffer limited to 4000 bytes.
+@end table
+
+
+@node Multiple Cases, Language Choice, Portable Shell, Writing Tests
 @section Multiple Cases
 
 Some operations are accomplished in several possible ways, depending on
