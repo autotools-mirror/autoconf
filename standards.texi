@@ -199,11 +199,10 @@ This @value{CHAPTER} discusses some of the issues you should take into
 account when designing your program.
 
 @menu
-* Compatibility::		Compatibility with Other Implementations
-* Using Extensions::		Using Non-standard Features
+* Compatibility::		Compatibility with other implementations
+* Using Extensions::		Using non-standard features
 * ANSI C::                      Using ANSI C features
-* Source Language::		Using Languages Other Than C
-* Portability::			Portability As It Applies to GNU
+* Source Language::		Using languages other than C
 @end menu
 
 @node Compatibility
@@ -218,13 +217,12 @@ behavior.
 When these standards conflict, it is useful to offer compatibility
 modes for each of them.
 
-@sc{ansi} C and @sc{POSIX} prohibit many kinds of extensions.  Feel
-free to make the extensions anyway, and include a @samp{--ansi},
-@samp{--posix}, or
-@samp{--compatible} option to turn them off.  However, if the extension
-has a significant chance of breaking any real programs or scripts,
-then it is not really upward compatible.  Try to redesign its
-interface.
+@sc{ansi} C and @sc{POSIX} prohibit many kinds of extensions.  Feel free
+to make the extensions anyway, and include a @samp{--ansi},
+@samp{--posix}, or @samp{--compatible} option to turn them off.
+However, if the extension has a significant chance of breaking any real
+programs or scripts, then it is not really upward compatible.  Try to
+redesign its interface.
 
 Many GNU programs suppress extensions that conflict with POSIX if the
 environment variable @code{POSIXLY_CORRECT} is defined (even if it is
@@ -334,8 +332,8 @@ There are three exceptions for this rule:
 It is okay to use a special language if the same program contains an
 interpreter for that language.
 
-Thus, it is not a problem that GNU Emacs contains code written in Emacs
-Lisp, because it comes with a Lisp interpreter.
+For example, if your program links with GUILE, it is ok to write part of
+the program in Scheme or another language supported by GUILE.
 
 @item
 It is okay to use another language in a tool specifically intended for
@@ -349,73 +347,6 @@ If an application is not of extremely widespread interest, then perhaps
 it's not important if the application is inconvenient to install.
 @end itemize
 
-@node Portability
-@section Portability As It Applies to GNU
-
-Much of what is called ``portability'' in the Unix world refers to
-porting to different Unix versions.  This is a secondary consideration
-for GNU software, because its primary purpose is to run on top of one
-and only one kernel, the GNU kernel, compiled with one and only one C
-compiler, the GNU C compiler.  The amount and kinds of variation among
-GNU systems on different cpu's will be like the variation among Berkeley
-4.3 systems on different cpu's.
-
-All users today run GNU software on non-GNU systems.  So supporting a
-variety of non-GNU systems is desirable; simply not paramount.
-The easiest way to achieve portability to a reasonable range of systems
-is to use Autoconf.  It's unlikely that your program needs to know more
-information about the host machine than Autoconf can provide, simply
-because most of the programs that need such knowledge have already been
-written.
-
-It is difficult to be sure exactly what facilities the GNU kernel
-will provide, since it isn't finished yet.  Therefore, assume you can
-use anything in 4.3; just avoid using the format of semi-internal data
-bases (e.g., directories) when there is a higher-level alternative
-(@code{readdir}).
-
-You can freely assume any reasonably standard facilities in the C
-language, libraries or kernel, because we will find it necessary to
-support these facilities in the full GNU system, whether or not we
-have already done so.  The fact that there may exist kernels or C
-compilers that lack these facilities is irrelevant as long as the GNU
-kernel and C compiler support them.
-
-It remains necessary to worry about differences among cpu types, such
-as the difference in byte ordering and alignment restrictions.  It's
-unlikely that 16-bit machines will ever be supported by GNU, so there
-is no point in spending any time to consider the possibility that an
-@code{int} will be less than 32 bits.
-
-You can assume that all pointers have the same format, regardless
-of the type they point to, and that this is really an integer.
-There are some weird machines where this isn't true, but they aren't
-important; don't waste time catering to them.  Besides, eventually
-we will put function prototypes into all GNU programs, and that will
-probably make your program work even on weird machines.
-
-Since some important machines (including the 68000) are big-endian,
-it is important not to assume that the address of an @code{int} object
-is also the address of its least-significant byte.  Thus, don't
-make the following mistake:
-
-@example
-int c;
-@dots{}
-while ((c = getchar()) != EOF)
-        write(file_descriptor, &c, 1);
-@end example
-
-You can assume that it is reasonable to use a meg of memory.  Don't
-strain to reduce memory usage unless it can get to that level.  If
-your program creates complicated data structures, just make them in
-core and give a fatal error if @code{malloc} returns zero.
-
-If a program works by lines and could be applied to arbitrary
-user-supplied input files, it should keep only a line in memory, because
-this is not very hard and users will want to be able to operate on input
-files that are bigger than will fit in core all at once.
-
 @node Program Behavior
 @chapter Program Behavior for All Programs
 
@@ -424,10 +355,11 @@ describes general standards for error messages, the command line interface,
 and how libraries should behave.
 
 @menu
-* Semantics::			Writing Robust Programs
-* Libraries::			Library Behavior
-* Errors::			Formatting Error Messages
-* User Interfaces::		Standards for Command Line Interfaces
+* Semantics::			Writing robust programs
+* Libraries::			Library behavior
+* Errors::			Formatting error messages
+* User Interfaces::		Standards for command line interfaces
+* Memory Usage::                When and how to care about memory needs
 @end menu
 
 @node Semantics
@@ -536,8 +468,6 @@ points if you like.
 Static functions and variables can be used as you like and need not
 fit any naming convention.
 
-
-
 @node Errors
 @section Formatting Error Messages
 
@@ -577,7 +507,6 @@ with a period.
 Error messages from interactive programs, and other messages such as
 usage messages, should start with a capital letter.  But they should not
 end with a period.
-
 
 @node User Interfaces
 @section Standards for Command Line Interfaces
@@ -1715,8 +1644,26 @@ Print the version number.
 
 @item zeros
 @samp{-z} in @code{gprof}.
-
 @end table
+
+@node Memory Usage
+@section Memory Usage
+
+If it typically uses just a few meg of memory, don't bother making any
+effort to reduce memory usage.  For example, if it is impractical for
+other reasons to operate on files more than a few meg long, it is
+reasonable to read entire input files into core to operate on them.
+
+However, for programs such as @code{cat} or @code{tail}, that can
+usefully operate on very large files, it is important to avoid using a
+technique that would artificially limit the size of files it can handle.
+If a program works by lines and could be applied to arbitrary
+user-supplied input files, it should keep only a line in memory, because
+this is not very hard and users will want to be able to operate on input
+files that are bigger than will fit in core all at once.
+
+If your program creates complicated data structures, just make them in
+core and give a fatal error if @code{malloc} returns zero.
 
 @node Writing C
 @chapter Making The Best Use of C
@@ -1729,6 +1676,8 @@ when writing GNU software.
 * Comments::			Commenting Your Work
 * Syntactic Conventions::	Clean Use of C Constructs
 * Names::			Naming Variables and Functions
+* System Portability::		Portability between different operating systems
+* CPU Portability::             Supporting the range of CPU types
 * System Functions::            Portability and ``standard'' library functions
 @end menu
 
@@ -2088,6 +2037,97 @@ this.  @code{doschk} also tests for potential name conflicts if the
 files were loaded onto an MS-DOS file system---something you may or may
 not care about.
 
+@node System Portability
+@section Portability between System Types
+
+In the Unix world, ``portability'' refers to porting to different Unix
+versions.  For a GNU program, this kind of portability is desirable, but
+not paramount.
+
+The primary purpose of GNU software is to run on top of the GNU kernel,
+compiled with the GNU C compiler, on various types of @sc{cpu}.  The
+amount and kinds of variation among GNU systems on different @sc{cpu}s
+will be comparable to the variation among Linux-based GNU systems or
+among BSD systems today.  So the kinds of portability that are absolutely
+necessary are quite limited.
+
+But many users do run GNU software on non-GNU Unix or Unix-like systems.
+So supporting a variety of Unix-like systems is desirable, although not
+paramount.
+
+The easiest way to achieve portability to most Unix-like systems is to
+use Autoconf.  It's unlikely that your program needs to know more
+information about the host platform than Autoconf can provide, simply
+because most of the programs that need such knowledge have already been
+written.
+
+Avoid using the format of semi-internal data bases (e.g., directories)
+when there is a higher-level alternative (@code{readdir}).
+
+As for systems that are not like Unix, such as MSDOS, Windows, the
+Macintosh, VMS, and MVS, supporting them is usually so much work that it
+is better if you don't.
+
+The planned GNU kernel is not finished yet, but you can tell which
+facilities it will provide by looking at the GNU C Library Manual.  The
+GNU kernel is based on Mach, so the features of Mach will also be
+available.  However, if you use Mach features, you'll probably have
+trouble debugging your program today.
+
+@node CPU Portability
+@section Portability between @sc{cpu}s
+
+Even GNU systems will differ because of differences among @sc{cpu}
+types---for example, difference in byte ordering and alignment
+requirements.  It is absolutely essential to handle these differences.
+However, don't make any effort to cater to the possibility that an
+@code{int} will be less than 32 bits.  We don't support 16-bit machines
+in GNU.
+
+Don't assume that the address of an @code{int} object is also the
+address of its least-significant byte.  This is false on big-endian
+machines.  Thus, don't make the following mistake:
+
+@example
+int c;
+@dots{}
+while ((c = getchar()) != EOF)
+  write(file_descriptor, &c, 1);
+@end example
+
+When calling functions, you need not worry about the difference between
+pointers of various types, or between pointers an integers.  On most
+machines, there's no difference anyway.  As for the few machines where
+there is a difference, all of them support @sc{ansi} C, so you can use
+prototypes (conditionalized to be active only in @sc{ansi} C) to make
+the code work on those systems.
+
+In certain cases, it is ok to pass integer and pointer arguments
+indiscriminately to the same function, and use no prototype on any
+system.  For example, many GNU programs have error-reporting functions
+that pass their arguments along to @code{printf} and friends:
+
+@example
+error (s, a1, a2, a3)
+     char *s;
+     int a1, a2, a3;
+@{
+  fprintf (stderr, "error: ");
+  fprintf (stderr, s, a1, a2, a3);
+@}
+@end example
+
+@noindent
+In practice, this works on all machines, and it is much simpler than any
+``correct'' alternative.
+
+However, avoid casting pointers to integers unless you really need to.
+These assumptions really reduce portability, and in most programs they
+are easy to avoid.  In the cases where casting pointers to integers is
+essential---such as, a Lisp interpreter which stores type information as
+well as an address in one word---it is ok to do so, but you'll have to
+make explicit provisions to handle different word sizes.
+
 @node System Functions
 @section Calling System Functions
 
@@ -2112,8 +2152,9 @@ remain undeclared.
 
 While it may seem unclean to use a function without declaring it, in
 practice this works fine for most system library functions on the
-systems where this really happens.  The problem is only theoretical.  By
-contrast, actual declarations have frequently caused actual conflicts.
+systems where this really happens; thus, the disadvantage is only
+theoretical.  By contrast, actual declarations have frequently caused
+actual conflicts.
 
 @item
 If you must declare a system function, don't specify the argument types.
@@ -2150,8 +2191,8 @@ If you don't include either strings file, you can't get declarations for
 the string functions from the header file in the usual way.
 
 That causes less of a problem than you might think.  The newer @sc{ansi}
-string functions are off-limits anyway because many systems still don't
-support them.  The string functions you can use are these:
+string functions should be avoided anyway because many systems still
+don't support them.  The string functions you can use are these:
 
 @example
 strcpy   strncpy   strcat   strncat
@@ -2179,12 +2220,12 @@ names, but neither pair works on all systems.
 
 You should pick a single pair of names and use it throughout your
 program.  (Nowadays, it is better to choose @code{strchr} and
-@code{strrchr}, since those are the standard @sc{ansi} names.)  Declare
-both of those names as functions returning @code{char *}.  On systems
-which don't support those names, define them as macros in terms of the
-other pair.  For example, here is what to put at the beginning of your
-file (or in a header) if you want to use the names @code{strchr} and
-@code{strrchr} throughout:
+@code{strrchr} for new programs, since those are the standard @sc{ansi}
+names.)  Declare both of those names as functions returning @code{char
+*}.  On systems which don't support those names, define them as macros
+in terms of the other pair.  For example, here is what to put at the
+beginning of your file (or in a header) if you want to use the names
+@code{strchr} and @code{strrchr} throughout:
 
 @example
 #ifndef HAVE_STRCHR
