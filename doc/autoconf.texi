@@ -6219,11 +6219,18 @@ Being precious means that
 @var{variable} is @code{AC_SUBST}'d.
 
 @item
-@var{variable} is kept in the cache including if it was not specified on
-the @samp{./configure} command line.  Indeed, while @command{configure}
-can notice the definition of @code{CC} in @samp{./configure
-CC=bizarre-cc}, it is impossible to notice it in @samp{CC=bizarre-cc
-./configure}, which, unfortunately, is what most users do.
+The value of @var{variable} when @command{configure} was launched is
+saved in the cache, including if it was not specified on the command
+line but via the environment.  Indeed, while @command{configure} can
+notice the definition of @code{CC} in @samp{./configure CC=bizarre-cc},
+it is impossible to notice it in @samp{CC=bizarre-cc ./configure},
+which, unfortunately, is what most users do.
+
+We emphasize that it is the @emph{initial} value of @var{variable} which
+is saved, not that found during the execution of @command{configure}.
+Indeed, specifying @samp{./configure FOO=foo} and letting
+@samp{./configure} guess that @code{FOO} is @code{foo} can be two very
+different runs.
 
 @item
 @var{variable} is checked for consistency between two

@@ -1,3 +1,9 @@
+2002-09-06  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Setting Output Variables): Clarify what
+	precious variables are.
+	Suggested by Pontus Skoeld.
+
 2002-09-05  Akim Demaille  <akim@epita.fr>
 
 	* bin/Makefile.am (autoconf, autoheader, autoreconf, autoupdate)
