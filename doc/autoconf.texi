@@ -132,7 +132,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 @menu
 * Introduction::                Autoconf's purpose, strengths, and weaknesses
-* The GNU build system::        
+* The GNU build system::        A set of tools for portable software packages
 * Making configure Scripts::    How to organize and produce Autoconf scripts
 * Setup::                       Initialization and output
 * Existing Tests::              Macros that check for particular features
@@ -154,6 +154,12 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 @detailmenu
  --- The Detailed Node Listing ---
+
+The GNU build system
+
+* Automake::                    
+* Libtool::                     
+* Pointers::                    
 
 Making @code{configure} Scripts
 
@@ -431,13 +437,12 @@ inconvenient when configuring large source trees.  Unlike Metaconfig
 scripts, Autoconf scripts can support cross-compiling, if some care is
 taken in writing them.
 
-@c FIXME: Tom, your cue is here.
-There are several jobs related to making portable software packages that
-Autoconf currently does not do.  Among these are automatically creating
-@file{Makefile} files with all of the standard targets, and supplying
-replacements for standard library functions and header files on systems
-that lack them.  Work is in progress to add those features in the
-future.
+Autoconf does not solve all problems related to making portable software
+packages---for a more complete solution, it should be used in concert
+with other GNU build tools like Automake and Libtool.  These other tools
+take on jobs like the creation of a portable, recursive @file{Makefile}
+with all of the standard targets, linking of shared libraries, and so
+on.  @xref{The GNU build system}, for more information.
 
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
@@ -452,7 +457,7 @@ do not have.  You must use version 1.4 or later of @sc{gnu} M4.
 
 
 See the @href{http://www.gnu.org/software/autoconf/autoconf.html,
-Autoconf web page} for up to date information, details on the mailing
+Autoconf web page} for up-to-date information, details on the mailing
 lists, pointers to a list of known bugs, etc.
 
 Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
@@ -466,19 +471,18 @@ not already solved in current development versions, and that it has not
 been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
-Autoconf's development tree is accessible via @sc{cvs}, see the Autoconf
+Autoconf's development tree is accessible via @sc{cvs}; see the Autoconf
 web page for details.  There is also a
 @href{http://subversions.gnu.org/cgi-bin/cvsweb/autoconf/, @sc{cvs}web
-interface to the Autoconf development tree}.
+interface to the Autoconf development tree}.  Patches relative to the
+current @sc{cvs} version can be sent for review to the
+@email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
 
-Patches relative to the current @sc{cvs} version can be sent for review to
-the @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
-
-Because of its mission, Autoconf includes only a set of highly used
+Because of its mission, Autoconf includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@href{http://research.cys.de/autoconf-archive/, Autoconf Macro
-Repository}, which is kindly run by @email{simons@@research.cys.de,
+@href{http://cryp.to/autoconf-archive/, Autoconf Macro
+Repository}, which is kindly run by @email{simons@@computer.org,
 Peter Simons}.
 
 
@@ -487,27 +491,143 @@ Peter Simons}.
 @node The GNU build system, Making configure Scripts, Introduction, Top
 @chapter The GNU build system
 
-@emph{This chapter is still under construction.  It will hopefully be ready
-for the release.}
+Autoconf solves an important problem---reliable discovery of
+system-specific build and runtime information---but this is only one
+piece of the puzzle for the development of portable software.  To this
+end, the GNU project has developed a suite of integrated utilities to
+finish the job Autoconf started: the GNU build system, whose most
+important components are Autoconf, Automake, and Libtool.  In this
+chapter, we introduce you to those tools, point you to sources of more
+information, and try to convince you to use the entire GNU build system
+for your software.
 
-I'm unsure about the title.
+@menu
+* Automake::                    Escaping Makefile hell
+* Libtool::                     Portable shared libraries
+* Pointers::                    More info on the GNU build system
+@end menu
 
-Move the dissertation `A shell script compiler' here.  The text above,
-probably starting at `There are several jobs...', should be moved here.
-Hm?
+@node Automake, Libtool, The GNU build system, The GNU build system
+@section Automake
 
-Talk about Automake, Libtool.
+The ubiquity of @code{make} means that a @code{Makefile} is almost the
+only viable way to distribute automatic build rules for software, but
+one quickly runs into @code{make}'s numerous limitations.  Its lack of
+support for automatic dependency tracking, recursive builds in
+subdirectories, reliable timestamps (e.g. for network filesystems), and
+so on, mean that developers must painfully (and often incorrectly)
+reinvent the wheel for each project.  Portability is non-trivial, thanks
+to the quirks of @code{make} on many systems.  On top of all this is the
+manual labor required to implement the many standard targets that users
+have come to expect (@code{make install}, @code{make distclean},
+@code{make uninstall}, etc.).  Since you are, of course, using Autoconf,
+you also have to insert repetitive code in your @code{Makefile.in} to
+recognize @code{@@CC@@}, @code{@@CFLAGS@@}, and other substitutions
+provided by @code{configure}.  Into this mess steps @dfn{Automake}.
+@cindex Automake
 
-Explain the concept of system.h.
+Automake allows you to specify your build needs in a @code{Makefile.am}
+file with a vastly simpler and more powerful syntax than that of a plain
+@code{Makefile}, and then generates a portable @code{Makefile.in} for
+use with Autoconf.  For example, the @code{Makefile.am} to build and
+install a simple ``Hello world'' program might look like:
 
-Promote Bison, Flex and other GNU tools.
+@example
+bin_PROGRAMS = hello
+hello_SOURCES = hello.c
+@end example
 
-Provide pointers to the various documentations and tutorials (books, web
-etc.).
+@noindent
+The resulting @code{Makefile.in} (~400 lines) automatically supports all
+the standard targets, the substitutions provided by Autoconf, automatic
+dependency tracking, @code{VPATH} building, and so on.  @code{make} will
+build the @code{hello} program, and @code{make install} will install it
+in @file{/usr/local/bin} (or whatever prefix was given to
+@code{configure}, if not @file{/usr/local}).  
 
-Explain that learning is painful, agreed, but getting inspiration is the
-way out.  Fetish, libit, liberty.
+Automake may require that additional tools be present on the
+@emph{developer's} machine.  For example, the @code{Makefile.in} that
+the developer works with may not be portable (e.g. it might use special
+features of your compiler to automatically generate dependency
+information).  Running @code{make dist}, however, produces a
+@file{hello-1.0.tar.gz} package (or whatever the program/version is)
+with a @code{Makefile.in} that will work on any system.
 
+The benefits of Automake increase for larger packages (especially ones
+with subdirectories), but even for small programs the added convenience
+and portability can be substantial.  And that's not all@dots{}
+
+@node Libtool, Pointers, Automake, The GNU build system
+@section Libtool
+
+Very often, one wants to build not only programs, but libraries, so that
+other programs can benefit from the fruits of your labor.  Ideally, one
+would like to produce @emph{shared} (dynamically-linked) libraries,
+which can be used by multiple programs without duplication on disk or in
+memory and can be updated independently of the linked programs.
+Producing shared libraries portably, however, is the stuff of
+nightmares---each system has its own incompatible tools, compiler flags,
+and magic incantations.  Fortunately, GNU provides a solution:
+@dfn{Libtool}.
+@cindex Libtool
+
+Libtool handles all the requirements of building shared libraries for
+you, and at this time seems to be the @emph{only} way to do so with any
+portability.  It also handles many other headaches, such as: the
+interaction of @code{Makefile} rules with the variable suffixes of
+shared libraries, linking reliably to shared libraries before they are
+installed by the superuser, and supplying a consistent versioning system
+(so that different versions of a library can be installed or upgraded
+without breaking binary compatibility).  Although Libtool, like
+Autoconf, can be used on its own, it is most simply utilized in
+conjunction with Automake---there, Libtool is used automatically
+whenever shared libraries are needed, and you need not know its syntax.
+
+@node Pointers,  , Libtool, The GNU build system
+@section Pointers
+
+Developers who are used to the simplicity of @code{make} for small
+projects on a single system might be daunted at the prospect of learning
+to use Automake and Autoconf.  As your software is distributed to more
+and more users, however, you will otherwise quickly find yourself
+putting lots of effort into reinventing the services that the GNU build
+tools provide, and making the same mistakes that they once made and
+overcame.  (Besides, since you're already learning Autoconf, Automake
+will be a piece of cake.)
+
+There are a number of places that you can go to for more information on
+the GNU build tools.
+
+@itemize @minus
+
+@item Web
+
+The home pages for
+@uref{http://www.gnu.org/software/autoconf/,Autoconf},
+@uref{http://www.gnu.org/software/automake/,Automake}, and
+@uref{http://www.gnu.org/software/libtool/,Libtool}.
+
+@item Automake Manual (TeXinfo)
+
+@xref{Top,,Automake,automake,GNU Automake}, for more
+information on Automake.
+
+@item Books
+
+The book @cite{GNU Autoconf, Automake and Libtool}, by G. V. Vaughan,
+B. Elliston, T. Tromey, and I. L. Taylor (New Riders, 2000) (ISBN
+1578701902) describes the complete GNU build environment.  You can also
+find the entire book on-line at
+@uref{http://sources.redhat.com/autobook/,``The Goat Book'' home page}.
+
+@item Tutorials and Examples
+
+The @uref{http://sources.redhat.com/autoconf/,Autoconf Developer Page}
+maintains links to a number of Autoconf/Automake tutorials online, and
+also links to the @uref{http://cryp.to/autoconf-archive/,Autoconf Macro
+Archive}.
+
+@end itemize
 
 @c ================================================= Making configure Scripts.
 
