@@ -10,7 +10,11 @@ Major changes in release 1.8:
   install.sh is distributed with Autoconf.
 * AC_OUTPUT adds its comments in C format when substituting in C files.
 * Relative srcdir values are not made absolute.
-* configure accepts --help, --version, --silent/--quiet options.
+* The values of @prefix@ and @exec_prefix@ get substituted.
+* configure accepts --help, --version, --silent/--quiet, --enable-FEATURE[=VAL]
+  options.
+* configure silently accepts all other Cygnus configure options, and
+  warns about unknown options.
 * config.status accepts --help, --version options.
 * Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
 * autoheader optionally copies config.h.top to the beginning of config.h.in.
