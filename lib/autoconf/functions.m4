@@ -910,7 +910,7 @@ AC_DEFUN([AC_FUNC_MEMCMP],
 [AC_CACHE_CHECK([for working memcmp], ac_cv_func_memcmp_working,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [[
   /* Some versions of memcmp are not 8-bit clean.  */
-  char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+  char c0 = '\100', c1 = '\200', c2 = '\201';
   if (memcmp(&c0, &c2, 1) >= 0 || memcmp(&c1, &c2, 1) >= 0)
     exit (1);
 
