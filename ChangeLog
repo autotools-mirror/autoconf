@@ -1,3 +1,8 @@
+2001-03-04  Pavel Roskin  <proski@gnu.org>
+
+	* tests/atgeneral.m4 (AT_INIT): s/am_me/as_me/. Quote AT_CHECK
+	in the error message.
+
 2001-03-02  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE): Quote `$$*' correctly.
