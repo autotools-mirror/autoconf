@@ -492,6 +492,14 @@ AC_CHECK_HEADERS(nlist.h,
 AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
+# The directory to find getloadavg.c in.
+ac_lib_dir_getloadavg=$srcdir[]m4_ifval([$1], [/$1])
+
+# Make sure getloadavg.c is where it belongs, at configure-time.
+test -f "$ac_lib_dir_getloadavg/getloadavg.c" ||
+  AC_MSG_ERROR([$ac_lib_dir_getloadavg/getloadavg.c is missing])
+# FIXME: Add an autoconf-time test, too?
+
 ac_save_LIBS=$LIBS
 
 # Check for getloadavg, but be sure not to touch the cache variable.
@@ -533,11 +541,10 @@ AC_CHECK_FUNCS(getloadavg, [],
                [_AC_LIBOBJ_GETLOADAVG])
 
 # Some definitions of getloadavg require that the program be installed setgid.
-dnl FIXME: Don't hardwire the path of getloadavg.c in the top-level directory.
 AC_CACHE_CHECK(whether getloadavg requires setgid,
                ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
-[#include "$srcdir/getloadavg.c"
+[#include "$ac_lib_dir_getloadavg/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
 @%:@endif],
