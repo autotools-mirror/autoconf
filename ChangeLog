@@ -1,3 +1,19 @@
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_FUNC_CHOWN): New macro, based on Jim
+	Meyering's `chown.m4' serial 4.
+	(AC_FUNC_GETGROUPS): New macro, based on Jim Meyering's
+	`getgroups.m4' serial 3.
+	(AC_FUNC_MEMCMP): Updated, based on Jim Meyering's `memcmp.m4'
+	serial 3.
+	(AC_FUNC_MALLOC): New macro, based on Jim Meyering's
+	`malloc.m4' serial 3.
+	(AC_FUNC_MMAP): Include `stdlib.h' when `STDC_HEADERS'.
+	* acfunctions: Sort.
+	Add `chown' and `malloc', point `getgroups' to `AC_FUNC_GETGROUPS'
+	instead of `AC_TYPE_GETGROUPS'.
+	* doc/autoconf.texi (Particular Functions): Adjust.
+
 2000-05-22  unknown
 
 	* acgeneral.m4: Quote the names being m4-defined.

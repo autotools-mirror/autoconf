@@ -471,17 +471,17 @@ AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 
 if test $ac_cv_header_stdc = yes; then
   # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-AC_EGREP_HEADER(memchr, string.h, , ac_cv_header_stdc=no)
+  AC_EGREP_HEADER(memchr, string.h, , ac_cv_header_stdc=no)
 fi
 
 if test $ac_cv_header_stdc = yes; then
   # ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
-AC_EGREP_HEADER(free, stdlib.h, , ac_cv_header_stdc=no)
+  AC_EGREP_HEADER(free, stdlib.h, , ac_cv_header_stdc=no)
 fi
 
 if test $ac_cv_header_stdc = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-AC_TRY_RUN(
+  AC_TRY_RUN(
 [#include <ctype.h>
 #if ((' ' & 0x0FF) == 0x020)
 # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
@@ -802,6 +802,48 @@ AC_SUBST(ALLOCA)dnl
 ])# AC_FUNC_ALLOCA
 
 
+# AC_FUNC_CHOWN
+# -------------
+# Determine whether chown accepts arguments of -1 for uid and gid.
+AC_DEFUN([AC_FUNC_CHOWN],
+[AC_REQUIRE([AC_TYPE_UID_T])dnl
+AC_CHECK_HEADERS(unistd.h)
+AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
+[AC_TRY_RUN([
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+
+int
+main ()
+{
+  char *f = "conftestchown";
+  struct stat before, after;
+
+  if (creat (f, 0600) < 0)
+    exit (1);
+  if (stat (f, &before) < 0)
+    exit (1);
+  if (chown (f, (uid_t) -1, (gid_t) -1) == -1)
+    exit (1);
+  if (stat (f, &after) < 0)
+    exit (1);
+  exit ((before.st_uid == after.st_uid
+         && before.st_gid == after.st_gid) ? 0 : 1);
+}],
+            ac_cv_func_chown_works=yes,
+            ac_cv_func_chown_works=no,
+            ac_cv_func_chown_works=no)])
+if test $ac_cv_func_chown_works = yes; then
+  AC_DEFINE(HAVE_CHOWN, 1,
+            [Define if your system has a working `chown' function.])
+fi
+])# AC_FUNC_CHOWN
+
+
 # AC_FUNC_CLOSEDIR_VOID
 # ---------------------
 # Check whether closedir returns void, and #define CLOSEDIR_VOID in
@@ -908,6 +950,46 @@ AC_CHECK_HEADERS(nlist.h,
                   [@%:@include <nlist.h>])
 ])dnl
 ])# _AC_LIBOBJ_GETLOADAVG
+
+
+# AC_FUNC_GETGROUPS
+# -----------------
+# Try to find `getgroups', and check that it works.
+# When crosscompiling, assume getgroups is broken.
+AC_DEFUN([AC_FUNC_GETGROUPS],
+[AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
+AC_REQUIRE([AC_TYPE_SIZE_T])dnl
+AC_CHECK_FUNC(getgroups)
+
+# If we don't yet have getgroups, see if it's in -lbsd.
+# This is reported to be necessary on an ITOS 3000WS running SEIUX 3.1.
+ac_save_LIBS=$LIBS
+if test $ac_cv_func_getgroups = no; then
+  AC_CHECK_LIB(bsd, getgroups, [GETGROUPS_LIB=-lbsd])
+fi
+
+# Run the program to test the functionality of the system-supplied
+# getgroups function only if there is such a function.
+if test $ac_cv_func_getgroups = yes; then
+  AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
+   [AC_TRY_RUN([
+     int
+     main ()
+     {
+       /* On Ultrix 4.3, getgroups (0, 0) always fails.  */
+       exit (getgroups (0, 0) == -1 ? 1 : 0);
+     }],
+               ac_cv_func_getgroups_works=yes,
+               ac_cv_func_getgroups_works=no,
+               ac_cv_func_getgroups_works=no)
+   ])
+  if test $ac_cv_func_getgroups_works = yes; then
+    AC_DEFINE(HAVE_GETGROUPS, 1,
+              [Define if your system has a working `getgroups' function.])
+  fi
+fi
+LIBS=$ac_save_LIBS
+])# AC_FUNC_GETGROUPS
 
 
 # AC_FUNC_GETLOADAVG
@@ -1066,6 +1148,74 @@ if test $ac_cv_func_getpgrp_void = yes; then
             [Define if the `getpgrp' function takes no argument.])
 fi
 ])# AC_FUNC_GETPGRP
+
+
+# AC_FUNC_MALLOC
+# --------------
+# Is `malloc (0)' properly handled?
+AC_DEFUN([AC_FUNC_MALLOC],
+[AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_CACHE_CHECK([for working malloc], ac_cv_func_malloc_works,
+[AC_TRY_RUN(
+[#if STDC_HEADERS || HAVE_STDLIB_H
+# include <stdlib.h>
+#else
+char *malloc ();
+#endif
+
+int
+main ()
+{
+  exit (malloc (0) ? 0 : 1);
+}],
+              ac_cv_func_malloc_works=yes,
+              ac_cv_func_malloc_works=no,
+              ac_cv_func_malloc_works=no)
+  ])
+if test $ac_cv_func_malloc_works = yes; then
+  AC_DEFINE(HAVE_MALLOC, 1,
+            [Define if your system has a working `malloc' function.])
+fi
+])# AC_FUNC_MALLOC
+
+
+# AC_FUNC_MEMCMP
+# --------------
+AC_DEFUN([AC_FUNC_MEMCMP],
+[AC_CACHE_CHECK([for working memcmp], ac_cv_func_memcmp_working,
+[AC_TRY_RUN([
+int
+main ()
+{
+  /* Some versions of memcmp are not 8-bit clean.  */
+  char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+  if (memcmp(&c0, &c2, 1) >= 0 || memcmp(&c1, &c2, 1) >= 0)
+    exit (1);
+
+  /* The Next x86 OpenStep bug shows up only when comparing 16 bytes
+     or more and with at least one buffer not starting on a 4-byte boundary.
+     William Lewis provided this test program.   */
+  {
+    char foo[21];
+    char bar[21];
+    int i;
+    for (i = 0; i < 4; i++)
+      {
+        char *a = foo + i;
+        char *b = bar + i;
+        strcpy (a, "--------01111111");
+        strcpy (b, "--------10000000");
+        if (memcmp (a, b, 16) >= 0)
+          exit (1);
+      }
+    exit (0);
+  }
+}]
+   ac_cv_func_memcmp_working=yes,
+   ac_cv_func_memcmp_working=no,
+   ac_cv_func_memcmp_working=no)])
+test $ac_cv_func_memcmp_working = no && AC_LIBOBJ([memcmp])
+])# AC_FUNC_MEMCMP
 
 
 # AC_FUNC_MKTIME
@@ -1261,7 +1411,7 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 #include <fcntl.h>
 #include <sys/mman.h>
 
-#if HAVE_STDLIB_H
+#if STDC_HEADERS || HAVE_STDLIB_H
 # include <stdlib.h>
 #else
 char *malloc ();
@@ -1373,23 +1523,6 @@ if test $ac_cv_func_mmap_fixed_mapped = yes; then
             [Define if you have a working `mmap' system call.])
 fi
 ])# AC_FUNC_MMAP
-
-
-# AC_FUNC_MEMCMP
-# --------------
-AC_DEFUN([AC_FUNC_MEMCMP],
-[AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,
-[AC_TRY_RUN(
-[int
-main()
-{
-  char c0 = 0x40, c1 = 0x80, c2 = 0x81;
-  exit (memcmp(&c0, &c2, 1) < 0
-        && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
-}], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
-ac_cv_func_memcmp_clean=no)])
-test $ac_cv_func_memcmp_clean = no && AC_LIBOBJ([memcmp])
-])# AC_FUNC_MEMCMP
 
 
 # AC_FUNC_SELECT_ARGTYPES
@@ -1662,7 +1795,7 @@ AC_TRY_RUN(
 [#include <sys/types.h>
 #include <sys/stat.h>
 int
-main()
+main ()
 {
   struct stat s, t;
   exit (!(stat ("conftestdata", &s) == 0

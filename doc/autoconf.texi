@@ -2848,6 +2848,14 @@ char *alloca ();
 @end example
 @end defmac
 
+@defmac AC_FUNC_CHOWN
+@maindex FUNC_CHOWN
+If the @code{chown} function is available and works (in particular it
+should accept @samp{-1} for @code{uid} and @code{gid}), define
+@code{HAVE_CHOWN}.
+@end defmac
+
+
 @defmac AC_FUNC_CLOSEDIR_VOID
 @maindex FUNC_CLOSEDIR_VOID
 @cvindex CLOSEDIR_VOID
@@ -2860,6 +2868,15 @@ return value for an error indicator.
 @maindex FUNC_FNMATCH
 If the @code{fnmatch} function is available and works (unlike the one on
 SunOS 5.4), define @code{HAVE_FNMATCH}.
+@end defmac
+
+@defmac AC_FUNC_GETGROUPS
+@maindex FUNC_GETGROUPS
+@ovindex GETGROUPS_LIBS
+If the @code{getgroups} function is available and works (unlike on
+Ultrix 4.3 where @samp{getgroups (0, 0)} always fails), define
+@code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
+needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @end defmac
 
 @defmac AC_FUNC_GETLOADAVG
@@ -2932,12 +2949,20 @@ a process ID as an argument.  This macro does not check whether
 first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @end defmac
 
+@defmac AC_FUNC_MALLOC
+@maindex FUNC_MALLOC
+If the @code{malloc} works correctly (@samp{malloc (0)} returns a valid
+pointer), define @code{HAVE_MALLOC}.
+@end defmac
+
 @defmac AC_FUNC_MEMCMP
 @maindex FUNC_MEMCMP
 @ovindex LIBOBJS
 If the @code{memcmp} function is not available, or does not work on
-8-bit data (like the one on SunOS 4.1.3), require an @code{AC_LIBOBJ}
-replacement for @samp{memcmp}.
+8-bit data (like the one on SunOS 4.1.3), or fails when comparing 16
+bytes or more and with at least one buffer not starting on a 4-byte
+boundary (such as the one on Next x86 OpenStep), require an
+@code{AC_LIBOBJ} replacement for @samp{memcmp}.
 @end defmac
 
 @defmac AC_FUNC_MKTIME

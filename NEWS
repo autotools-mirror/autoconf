@@ -158,15 +158,20 @@ test cases in this new frame work.
 
 
 ** Specific Macros
+- AC_FUNC_CHOWN, AC_FUNC_MALLOC.
+  New.
+
+- AC_FUNC_GETGROUPS
+  Sets GETGROUPS_LIBS.
+
 - AC_FUNC_GETLOADAVG
   Defines `HAVE_STRUCT_NLIST_N_UN_N_NAME' instead of `NLIST_NAME_UNION'.
 
 - AC_PROG_LEX
   Now integrates `AC_DECL_YYTEXT' which is obsoleted.
 
-- C++ compatibility
-  Almost every single macros has been revisited in order to support at
-  best CC=c++.
+** C++ compatibility
+  Every macro has been revisited in order to support at best CC=c++.
 
 Major changes in Autoconf 2.14:
   There was no release of GNU Autoconf 2.14.
