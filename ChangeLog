@@ -5,10 +5,14 @@
 	* tests/atspecific.m4: Make sure that configure doesn't write
 	anything to stderr.
 
+2000-09-20  Pavel Roskin  <proski@gnu.org>
+
 	* acspecific.m4 (_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H): Cache
 	variable wasn't always set inside AC_CACHE_CHECK.
 	(_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL): Likewise.
 	From Nicolas Joly.
+
+2000-09-20  Pavel Roskin  <proski@gnu.org>
 
 	* libm4.m4 (m4_ifvanl): Don't output a newline for empty
 	arguments.
