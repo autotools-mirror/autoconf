@@ -1,3 +1,10 @@
+2004-05-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Systemology): Standardize on the spelling of
+	"Unix".  Many uses changed.
+	(Limitations of Builtins): Explain better why the ! command isn't
+	portable.
+
 2004-05-22  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autom4te.in (Automake-preselections): Preselect
