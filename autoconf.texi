@@ -3826,13 +3826,13 @@ using the file name @file{Makefile.in} as the templates; adding
 As I got feedback from users, I incorporated many improvements, using
 Emacs to search and replace, cut and paste, similar changes in each of
 the scripts.  As I adapted more GNU utilities packages to use
-@code{configure} scripts, updating them all by hand became burdensome.
+@code{configure} scripts, updating them all by hand became impractical.
 Rich Murphey, the maintainer of the GNU graphics utilities, sent me mail
 saying that the @code{configure} scripts were great, and asking if I had
-a program for generating them that I could send him.  No, I thought, but
+a tool for generating them that I could send him.  No, I thought, but
 I should!  So I started to work out how to generate them.  And the
 journey from the bondage of hand-written @file{configure} scripts to the
-promise of Autoconf began.
+ease of Autoconf began.
 
 Cygnus @code{configure}, which was being developed at around that time,
 is table driven; it is meant to deal mainly with a discrete number of
@@ -3849,7 +3849,8 @@ I considered using an architecture similar to that of Cygnus
 reads pieces of @file{configure.in} when run.  But I didn't want to have
 to distribute all of the feature tests with every package, so I settled
 on having a different @code{configure} made from each
-@file{configure.in} by a preprocessor.
+@file{configure.in} by a preprocessor.  That approach also offered more
+control and flexibility
 
 I looked briefly into using Larry Wall's Metaconfig program, but I
 decided not to for several reasons.  The @code{Configure} scripts it
@@ -3893,13 +3894,15 @@ Fran\c cois
 Pinard, who came up with the idea of making an @file{autoconf} shell
 script to run @code{m4} and check for unresolved macro calls; Karl
 Berry, who championed standardizing the @code{HAVE_@var{feature}} form
-for C preprocessor symbols; and Ian Taylor, who added support for
-creating a C header file as an alternative to putting @samp{-D} options
-in a @file{Makefile}, so he could use it in his UUCP package.  The alpha
-testers cheerfully adjusted their files again and again as the names and
-calling conventions of the Autoconf macros changed from release to
-release.  They all contributed many specific checks, great ideas, and
-bug fixes.
+for C preprocessor symbols; Rich Pixley, who suggested running the
+compiler instead of searching the file system to find include files and
+symbols, for more accurate results; and Ian Taylor, who added support
+for creating a C header file as an alternative to putting @samp{-D}
+options in a @file{Makefile}, so he could use Autoconf in his UUCP
+package.  The alpha testers cheerfully adjusted their files again and
+again as the names and calling conventions of the Autoconf macros
+changed from release to release.  They all contributed many specific
+checks, great ideas, and bug fixes.
 
 @node Numbers, Deuteronomy, Leviticus, History
 @section Numbers
@@ -3918,7 +3921,7 @@ length of the macros that Autoconf defined, and several bugs showed up
 in GNU @code{m4} as well.  Eventually, we realized that we needed to use
 some features that only GNU @code{m4} has.  BSD @code{m4}, in
 particular, has an impoverished set of builtin macros; the System V
-version is better, but still doesn't have everything we need.
+version is better, but still doesn't provide everything we need.
 
 More development occurred as people put Autoconf under more stresses
 (and to uses I hadn't anticipated).  Karl Berry added checks for X11.
@@ -3960,21 +3963,22 @@ the checks between runs, because (particularly when configuring a large
 source tree, like Cygnus does) they were frustratingly slow.  Mike
 Haertel suggested adding site-specific initialization scripts.  People
 distributing software that had to unpack on MS-DOS asked for a way to
-override the @file{.in} extension on the file names.  Jim Avera did an
-extensive examination of the problems with quoting in @code{AC_DEFINE};
-his insights led to significant improvements.  Richard Stallman asked
-that compiler output be sent to @file{config.log} instead of
-@file{/dev/null}, to help people debug the Emacs @code{configure}
-script.
+override the @file{.in} extension on the file names, which produced file
+names like @file{config.h.in} containing two dots.  Jim Avera did an
+extensive examination of the problems with quoting in @code{AC_DEFINE}
+and @code{AC_SUBST}; his insights led to significant improvements.
+Richard Stallman asked that compiler output be sent to @file{config.log}
+instead of @file{/dev/null}, to help people debug the Emacs
+@code{configure} script.
 
 I made some other changes because of my dissatisfaction with the quality
 of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
 macros and cleaned up coding style inconsistencies.  I added some
-useful auxiliary utilities that I had developed to help convert source
-code packages to use Autoconf.  And I began a testsuite, because
-experience had shown that Autoconf has a pronounced tendency to regress
-when we change it.
+auxiliary utilities that I had developed to help convert source code
+packages to use Autoconf.  And I began a testsuite, because experience
+had shown that Autoconf has a pronounced tendency to regress when we
+change it.
 
 Again, several alpha testers gave invaluable feedback, especially
 @ifinfo
@@ -3983,7 +3987,7 @@ Franc,ois
 @tex
 Fran\c cois
 @end tex
-Pinard, Rob Savoye, and Ken Raeburn.
+Pinard, Jim Meyering, Karl Berry, Rob Savoye, and Ken Raeburn.
 
 Finally, version 2.0 was ready.  And there was much rejoicing.
 (And I have free time again.  I think.)
