@@ -171,8 +171,9 @@ AH_DEFUN([AC_CHECK_FILES],
 
 AH_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
-  [AH_TEMPLATE(AC_TR_CPP([NEED_]AC_Symbol[_DECL]),
-               [Define if you need the declaration of `]AC_Symbol['.])
+  [AH_TEMPLATE(AC_TR_CPP([HAVE_DECL_]AC_Symbol),
+               [Define to 1 if you have the declaration of `]AC_Symbol[',
+                and to 0 if you don't.])
    # Success
    $2
    # Failure

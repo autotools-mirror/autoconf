@@ -2691,11 +2691,15 @@ AC_VAR_POPDEF([ac_Symbol])dnl
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                [INCLUDES])
 # --------------------------------------------------------
+# Defines HAVE_DECL_SYMBOL to 1 if declared, 0 otherwise.  See the
+# documentation for a detailed explanation of this difference with
+# other AC_CHECK_*S macros.
 AC_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
   [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
-                 [$2],
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP([NEED_]AC_Symbol[_DECL]))
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 1)
+$2],
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 0)
 $3],
                  [$4])])
 ])# AC_CHECK_DECLS

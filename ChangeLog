@@ -1,5 +1,15 @@
 2000-02-15  Akim Demaille  <akim@epita.fr>
 
+	Define HAVE_DECL_FOO both to 1 if found and 0 otherwise.
+
+	* acgeneral.m4 (AC_CHECK_DECLS): Define HAVE_DECL_FOO to 1 instead
+	of NEED_FOO_DECL if found.  Define to 0 if not found.
+	* autoheader.m4 (AC_CHECK_DECLS): Template HAVE_DECL_FOO.
+	* tests/semantics.m4 (AC_CHECK_DECLS): Adjusted.
+	* doc/autoconf.texi (Generic Declarations): Adjusted.
+
+2000-02-15  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Generic Structures):
 	s/AC_FATAL/AC_MSG_ERROR.
 

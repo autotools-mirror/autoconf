@@ -16,8 +16,8 @@ AT_TEST_MACRO(AC_CHECK_DECLS,
 [AC_CHECK_DECLS((yes, no),,,
                 [int yes = 1;])],
 [AT_CHECK_DEFINES(
-[#define NEED_NO_DECL 1
-/* #undef NEED_YES_DECL */
+[#define HAVE_DECL_NO 0
+#define HAVE_DECL_YES 1
 ])])
 
 

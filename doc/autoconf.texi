@@ -3006,12 +3006,13 @@ introducing extra declarations when not needed.
 
 @defmac AC_CHECK_DECLS ((@var{symbol}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECLS
-@cvindex NEED_@var{symbol}_DECL
+@cvindex HAVE_DECL_@var{symbol}
 For each given @var{symbol} (comma separated list), define
-@code{NEED_@var{symbol}_DECL} (in all capitals) if @var{symbol} has to
-be declared to be used as an r-value.  If @var{action-if-not-found} is
-given, it is additional shell code to execute when one of the function
-declarations is needed, otherwise @var{action-if-found} is executed.
+@code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
+@var{symbol} is declared, otherwise to @samp{0}.  If
+@var{action-if-not-found} is given, it is additional shell code to
+execute when one of the function declarations is needed, otherwise
+@var{action-if-found} is executed.
 
 This macro uses an m4 list as first argument:
 @example
@@ -3019,22 +3020,34 @@ AC_CHECK_DECLS((strlen))
 AC_CHECK_DECLS((malloc, realloc, calloc, free))
 @end example
 
-This macro does not define @code{HAVE_@var{symbol}_DECL} on purpose.
-The following code
+Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not
+declared, @code{HAVE_DECL_@var{symbol}} is defined to @samp{0} instead
+of leaving @code{HAVE_DECL_@var{symbol}} undeclared.
+
+When you are @emph{sure} that the check was performed, use
+@code{HAVE_DECL_@var{symbol}} just like any other result of Autoconf:
+
 @example
-#if NEED_FOO_DECL
-/* Declare foo. */
+#if !HAVE_DECL_SYMBOL
+extern char *symbol;
 #endif
 @end example
-is safer than
+
+@noindent
+But if the test may have not been performed, because it is safer
+@emph{not} to declare a symbol than to use a declaration which conflicts
+with the system's one, you should use:
+
 @example
-#if !HAVE_FOO_DECL
-/* Declare foo. */
+#if defined HAVE_DECL_MALLOC && !HAVE_DECL_MALLOC
+char *malloc (size_t *s);
 #endif
 @end example
-since in this last case, if @code{configure} was not run, then the test
-succeeds, thus @code{foo} is declared, with risks to clash with previous
-declarations.  It is safer not to declare in case of doubts.
+
+@noindent
+You fall into the second category only in extreme situations: either
+your files may be used without being configured, or they are used during
+the configuration.  In most cases the traditional approach is enough.
 @end defmac
 
 
