@@ -1364,28 +1364,22 @@ AC_SUBST(FLIBS)
 #		   underscores are appended to identifiers which
 #		   already contain an underscore somewhere in their
 #		   name, then the value is "double".
-#
-AC_DEFUN(AC_F77_NAME_MANGLING,
-[ AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
-                 ac_cv_f77_mangling,
+AC_DEFUN([AC_F77_NAME_MANGLING],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_F77])dnl
 AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
-
-AC_LANG_SAVE()dnl
+AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
+               ac_cv_f77_mangling,
+[AC_LANG_SAVE()dnl
 AC_LANG(Fortran 77)
-
-cat >conftest.$ac_ext <<EOF
-      subroutine foobar()
+AC_COMPILE_IFELSE(
+[      subroutine foobar()
       return
       end
       subroutine foo_bar()
       return
-      end
-EOF
-
-if AC_TRY_EVAL(ac_compile); then
-  mv conftest.${ac_objext} cf77_test.${ac_objext}
+      end],
+[mv conftest.${ac_objext} cf77_test.${ac_objext}
 
   AC_LANG_SAVE()dnl
   AC_LANG(C)
@@ -1423,13 +1417,7 @@ if AC_TRY_EVAL(ac_compile); then
 
   LIBS=$ac_save_LIBS
   AC_LANG_RESTORE()dnl
-
-  rm -f conftest*
-  rm -f cf77_test*
-else
-  echo "configure: failed program was:" >&AC_FD_LOG
-  cat conftest.$ac_ext >&AC_FD_LOG
-fi
+  rm -f cf77_test*])
 AC_LANG_RESTORE()dnl
 ])
 dnl Get case/underscore from cache variable, in case above tests were skipped:

@@ -1,5 +1,10 @@
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_F77_NAME_MANGLING): Use AC_COMPILE_IFELSE.
+	Move the requirements at the top of the macro.
+
+2000-05-10  Akim Demaille  <akim@epita.fr>
+
 	Update and polish the documentation.
 
 	* doc/autoconf.texi: Use @sc where upper case names were used.
