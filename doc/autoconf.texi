@@ -4943,6 +4943,43 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @node C Compiler
 @subsection C Compiler Characteristics
 
+The following macros provide ways to find and exercise a C Compiler.
+There are a few constructs that ought to be avoided, but do not deserve
+being checked for, since they can easily be worked around.
+
+@table @asis
+@item Don't use lines containing solitary backslashes
+They tickle a bug in the HP-UX C compiler (checked on HP-UX 10.20,
+11.00, and 11i).  Running the compiler on the following source,
+
+@example
+#ifdef __STDC__
+/\
+* A comment with backslash-newlines in it. %@{ %@} *\
+\
+/
+char str[] = "\\
+" A string with backslash-newlines in it %@{ %@} \\
+"";
+char apostrophe = '\\
+\
+'\
+';
+#endif
+@end example
+
+@noindent
+yields
+
+@example
+@error{}cpp: "foo.c", line 13: error 4048: Non-terminating comment at end of file.
+@error{}cpp: "foo.c", line 13: error 4033: Missing #endif at end of file.
+@end example
+
+@noindent
+Removing the lines with solitary backslashes solves the problem.
+@end table
+
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
 @acindex PROG_CC
 @ovindex CC

@@ -1,3 +1,8 @@
+2002-11-14  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (C Compiler): Solitary backslashes.
+	From Paul Eggert and Albert Chin-A-Young.
+
 2002-11-14  Kevin Ryde  <user42@zip.com.au>
 
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Initialize f=$1 rather
