@@ -1,3 +1,10 @@
+1998-12-11  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_ACVERSION): Bump to 2.13.
+
+	* autoconf.texi (EDITION): Likewise.
+	(VERSION): Likewise.
+
 1998-10-30  Jeff Garzik <jgarzik@pobox.com>
 
 	* autoconf.texi: Document AC_CACHE_LOAD and AC_CACHE_SAVE. Explain
