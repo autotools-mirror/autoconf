@@ -526,7 +526,6 @@ cat >expout <<EOF
 AC_PREREQ($at_version)
 EOF
 
-AT_CHECK([autoupdate --version || exit 77], ignore, ignore, ignore)
 AT_CHECK([echo "AC_PREREQ(1.0)" |
             autoupdate --autoconf-dir $at_top_srcdir/lib -],
          0, [expout], [])

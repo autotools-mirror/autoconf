@@ -126,8 +126,7 @@ m4_define([AT_CHECK_DEFINES],
 # AT_CHECK_AUTOUPDATE
 # -------------------
 m4_define([AT_CHECK_AUTOUPDATE],
-[AT_CHECK([autoupdate --version || exit 77], ignore, ignore, ignore)
- AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir/lib], 0,
+[AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir/lib], 0,
           [], [autoupdate: `configure.ac' is updated
 ])])
 
