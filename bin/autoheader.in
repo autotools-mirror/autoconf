@@ -265,7 +265,7 @@ $out->close;
       print STDERR "$me: missing template: $_\n";
       if ($suggest_ac_define)
 	{
-	  print STDERR "Use AC_DEFINE([$_], [], [Description])";
+	  print STDERR "Use AC_DEFINE([$_], [], [Description])\n";
 	  $suggest_ac_define = 0;
 	}
 

@@ -1,3 +1,8 @@
+2003-02-25  Pavel Roskin  <proski@gnu.org>
+
+	* bin/autoheader.in: Add missing newline when printing
+	suggestion how change AC_DEFINE call.
+
 2003-02-24  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix typo in
