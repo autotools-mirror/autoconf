@@ -622,12 +622,11 @@ sub handle_m4 ($@)
     }
 
   # Everything went ok: preserve the outputs.
-  foreach ($tcache, $ocache)
+  foreach my $file (map { $_ . $req->id } ($tcache, $ocache))
     {
       use File::Copy;
-      $_ .= $req->id;
-      move ("${_}t", "$_")
-	or die "$me: cannot not rename ${_}t as $_: $!\n";
+      move ("${file}t", "$file")
+	or die "$me: cannot not rename ${file}t as $file: $!\n";
     }
 }
 
