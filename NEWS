@@ -1,13 +1,32 @@
-Major changes in release 2.14:
+Major changes in release 2.15:
 
-* New macro AC_HELP_STRING to format an Autoconf macro's help string so
-  that it looks pretty when the user executes `configure --help'.  See
-  the Texinfo documentation for details.
+* config.status
+  - much faster on most architectures
+  - now has a useful --help
+  - concurrent executions
+    It is now safe to use `make -j' with configure.
+* New macros
+  - AC_CHECK_DECL and AC_CHECK_DECLS
+    To check whether a symbol is declared.
+  - AC_HELP_STRING
+    To format an Autoconf macro's help string so that it looks pretty
+    when the user executes `configure --help'.
+* Environment variables are kept when reconfiguring.
+  The previous scheme to set envvar before running configure was
+    ENV=VAL ./configure
+  what prevented configure from remembering the environment in which
+  it was run, therefore --recheck was run in an inconsistent environment.
+  Now, one runs
+    ./configure ENV=VAR
+  and the --recheck works correctly.
 * Support for automatically determining a Fortran 77 compilers
   name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
   provided to wrap C/C++ identifiers, thus making it easier and more
   transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
   call C/C++ routines.  See the Texinfo documentation for details.
+
+Major changes in release 2.14:
+  There was no release of GNU Autoconf 2.14.
 
 Major changes in release 2.13:
 
@@ -34,7 +53,7 @@ Major changes in release 2.13:
 * Merge of the FSF version of config.guess and config.sub to modernise
   these scripts. Add support for a few new hosts in config.guess.
   Incorporate latest versions of install-sh, mkinstalldirs and
-  texinfo.tex from the FSF. 
+  texinfo.tex from the FSF.
 * autoreconf is capable of running automake if necessary (and
   applicable).
 * Support for Fortran 77. See the Texinfo documentation for details.
@@ -59,7 +78,7 @@ Major changes in release 2.11:
 * AC_CONFIG_HEADER expands shell variables in its argument.
 * New macros: AC_FUNC_FNMATCH, AC_FUNC_SETPGRP.
 * The "checking..." messages and the source code for test programs that
-  fail are saved in config.log. 
+  fail are saved in config.log.
 * Another workaround has been added for seds with small command length limits.
 * config.sub and config.guess recognize more system types.
 * Bug fixes.

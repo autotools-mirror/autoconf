@@ -1,6 +1,6 @@
 dnl Driver and redefinitions of some Autoconf macros for autoheader.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1994, 1995 Free Software Foundation, Inc.
+dnl Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@ dnl
 dnl Written by Roland McGrath.
 dnl
 include(acgeneral.m4)dnl
-builtin(include, acspecific.m4)dnl
-builtin(include, acoldnames.m4)dnl
+m4_include(acspecific.m4)dnl
+m4_include(acoldnames.m4)dnl
 
 dnl These are alternate definitions of some macros, which produce
 dnl strings in the output marked with "@@@" so we can easily extract
@@ -57,6 +57,17 @@ define([AC_CHECK_HEADERS_DIRENT], [#
 define([AC_CHECK_LIB], [#
   ifelse([$3], , [
 @@@libs="$libs $1"@@@
+], [
+# If it was found, we do:
+$3
+# If it was not found, we do:
+$4
+])
+])
+
+define([AC_CHECK_DECLS], [#
+  ifelse([$3], , [
+@@@decls="$decls $1"@@@
 ], [
 # If it was found, we do:
 $3

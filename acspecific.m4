@@ -167,7 +167,7 @@ dnl AC_PROG_F77 takes an optional first argument which, if specified,
 dnl must be a space separated list of Fortran 77 compilers to search
 dnl for.  This just gives the user an opportunity to specify an
 dnl alternative search list for the Fortran 77 compiler.
-dnl 
+dnl
 dnl AC_PROG_F77()
 AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
@@ -232,7 +232,7 @@ dnl Test whether the Fortran 77 compiler can compile and link a trivial
 dnl Fortran program.  Also, test whether the Fortran 77 compiler is a
 dnl cross-compiler (which may realistically be the case if the Fortran
 dnl compiler is `g77').
-dnl 
+dnl
 dnl AC_PROG_F77_WORKS()
 AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
@@ -283,7 +283,7 @@ fi])])
 dnl Test whether for Fortran 77 compiler is `g77' (the GNU Fortran 77
 dnl Compiler).  This test depends on whether the Fortran 77 compiler can
 dnl do CPP pre-processing.
-dnl 
+dnl
 dnl AC_PROG_F77_GNU()
 AC_DEFUN(AC_PROG_F77_GNU,
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
@@ -322,7 +322,7 @@ rm -f conftest*
 
 dnl Test whether the Fortran 77 compiler can accept the `-g' option to
 dnl enable debugging.
-dnl 
+dnl
 dnl AC_PROG_F77_G()
 AC_DEFUN(AC_PROG_F77_G,
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
@@ -414,7 +414,7 @@ dnl
 dnl The usefulness of this macro is questionable, as I can't really see
 dnl why anyone would use it.  The only reason I include it is for
 dnl completeness, since a similar test exists for the C compiler.
-dnl 
+dnl
 dnl AC_PROG_F77_C_O
 AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
@@ -1806,7 +1806,7 @@ fi
 AC_DEFUN(AC_FUNC_STRFTIME,
 [AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)],
 [# strftime is in -lintl on SCO UNIX.
-AC_CHECK_LIB(intl, strftime, 
+AC_CHECK_LIB(intl, strftime,
 [AC_DEFINE(HAVE_STRFTIME)
 LIBS="-lintl $LIBS"])])])
 
@@ -1854,8 +1854,8 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
   ])dnl AC_CACHE_VAL
  ])dnl AC_CACHE_VAL
  if test "$ac_not_found" = yes; then
-  ac_cv_func_select_arg1=int 
-  ac_cv_func_select_arg234='int *' 
+  ac_cv_func_select_arg1=int
+  ac_cv_func_select_arg234='int *'
   ac_cv_func_select_arg5='struct timeval *'
  fi
  AC_MSG_RESULT([$ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5])
@@ -2988,7 +2988,10 @@ AC_EGREP_CPP(yes,
 [#ifdef _AIX
   yes
 #endif
-], [AC_MSG_RESULT(yes); AC_DEFINE(_ALL_SOURCE)], AC_MSG_RESULT(no))
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(_ALL_SOURCE)],
+AC_MSG_RESULT(no))
 ])
 
 AC_DEFUN(AC_MINIX,

@@ -138,8 +138,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
 * Macro Index::                 Index of Autoconf macros
 
-@detailmenu
- --- The Detailed Node Listing ---
+@detailmenu --- The Detailed Node Listing ---
 
 Making @code{configure} Scripts
 
@@ -176,6 +175,7 @@ Existing Tests
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
 * Header Files::                Header files that might be missing
+* Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Typedefs::                    @code{typedef}s that might be missing
 * C Compiler Characteristics::
@@ -197,6 +197,11 @@ Header Files
 
 * Particular Headers::          Special handling to find certain headers
 * Generic Headers::             How to find other headers
+
+Declarations
+
+* Particular Declarations::     Macros to check for certain declarations
+* Generic Declarations::        How to find other declarations
 
 Structures
 
@@ -800,11 +805,11 @@ for more information.
 @end defmac
 
 Small packages may store all their macros in @code{aclocal.m4}.  As the
-set of macros grows, or for maintenance reasons, a maintainer may prefer 
+set of macros grows, or for maintenance reasons, a maintainer may prefer
 to split the macros in several files.  In this case, Autoconf must be
 told which files to load, and in which order.
 
-@defmac AC_INCLUDE (@var{file(s)})
+@defmac AC_INCLUDE (@var{file}...)
 @maindex AC_INCLUDE
 Read the macro definitions that appear in the listed files.  A list of
 space-separated filenames or shell globbing patterns is expected.  The
@@ -1539,6 +1544,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
 * Header Files::                Header files that might be missing
+* Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Typedefs::                    @code{typedef}s that might be missing
 * C Compiler Characteristics::
@@ -2279,7 +2285,7 @@ declares it in a header file you should be including, so you shouldn't
 redeclare it, lest your declaration conflict.
 @end defmac
 
-@node Header Files, Structures, Library Functions, Existing Tests
+@node Header Files, Declarations, Library Functions, Existing Tests
 @section Header Files
 
 The following macros check for the presence of certain C header files.
@@ -2298,12 +2304,42 @@ it, then you can use one of the general header file check macros.
 These macros check for particular system header files---whether they
 exist, and in some cases whether they declare certain symbols.
 
-@defmac AC_DECL_SYS_SIGLIST
-@maindex DECL_SYS_SIGLIST
-@cvindex SYS_SIGLIST_DECLARED
-Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
-declared in a system header file, either @file{signal.h} or
-@file{unistd.h}.
+@defmac AC_HEADER_STAT
+@maindex HEADER_STAT
+@maindex STAT_MACROS_BROKEN
+If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
+@file{sys/stat.h} do not work properly (returning false positives),
+define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
+Amdahl UTS and Motorola System V/88.
+@end defmac
+
+@defmac AC_HEADER_TIME
+@maindex HEADER_TIME
+@cvindex TIME_WITH_SYS_TIME
+If a program may include both @file{time.h} and @file{sys/time.h},
+define @code{TIME_WITH_SYS_TIME}.  On some older systems,
+@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
+protected against multiple inclusion, so programs should not explicitly
+include both files.  This macro is useful in programs that use, for
+example, @code{struct timeval} or @code{struct timezone} as well as
+@code{struct tm}.  It is best used in conjunction with
+@code{HAVE_SYS_TIME_H}, which can be checked for using
+@code{AC_CHECK_HEADERS(sys/time.h)}.
+
+@example
+@group
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
+@end group
+@end example
 @end defmac
 
 @defmac AC_DIR_HEADER
@@ -2564,7 +2600,58 @@ the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
 @end defmac
 
-@node Structures, Typedefs, Header Files, Existing Tests
+@node Declarations, Structures, Header Files, Existing Tests
+@section Declarations
+
+The following macros check for the declaration of variables and
+functions.  If there is no macro specifically defined to check for a
+symbol you need, then you can use the general macro (@pxref{Generic
+Declarations}) or, for more complex tests, you may use
+@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
+
+@menu
+* Particular Declarations::     Macros to check for certain declarations
+* Generic Declarations::        How to find other declarations
+@end menu
+
+@node Particular Declarations, Generic Declarations, Declarations, Declarations
+@subsection Particular Declaration Checks
+
+The following macros check for certain declarations.
+
+@defmac AC_DECL_SYS_SIGLIST
+@maindex DECL_SYS_SIGLIST
+@cvindex SYS_SIGLIST_DECLARED
+Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist}
+is declared in a system header file, either @file{signal.h} or
+@file{unistd.h}.
+@end defmac
+
+@node Generic Declarations,  , Particular Declarations, Declarations
+@subsection Generic Declaration Checks
+
+These macros are used to find declarations not covered by the particular
+test macros.
+
+@defmac AC_CHECK_DECL (@var{symbol}, @r{[}@var{includes}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]]})
+@maindex CHECK_DECL
+If @var{symbol} (a function or a variable) is declared in
+@var{includes}, run shell commands @var{action-if-found}, otherwise
+@var{action-if-not-found}.
+@end defmac
+
+@defmac AC_CHECK_DECLS (@var{symbol}@dots{}, @r{[}@var{includes} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]]})
+@maindex CHECK_DECLS
+@cvindex @var{symbol}_DECLARED
+For each given @var{symbol} (whitespace-separated), define
+@code{@var{symbol}_DECLARED} (in all capitals) if @var{symbol} is
+declared.  If @var{action-if-found} is given, it is additional shell
+code to execute when one of the function declarations is found,
+otherwise @var{action-if-not-found} is executed.
+@end defmac
+
+
+@node Structures, Typedefs, Declarations, Existing Tests
 @section Structures
 
 The following macros check for the presence of certain members in C
@@ -2582,44 +2669,6 @@ member you need, then you can use the general structure member macro
 @subsection Particular Structure Checks
 
 The following macros check for certain structures or structure members.
-
-@defmac AC_HEADER_STAT
-@maindex HEADER_STAT
-@maindex STAT_MACROS_BROKEN
-If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
-@file{sys/stat.h} do not work properly (returning false positives),
-define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
-Amdahl UTS and Motorola System V/88.
-@end defmac
-
-@defmac AC_HEADER_TIME
-@maindex HEADER_TIME
-@cvindex TIME_WITH_SYS_TIME
-If a program may include both @file{time.h} and @file{sys/time.h},
-define @code{TIME_WITH_SYS_TIME}.  On some older systems,
-@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
-protected against multiple inclusion, so programs should not explicitly
-include both files.  This macro is useful in programs that use, for
-example, @code{struct timeval} or @code{struct timezone} as well as
-@code{struct tm}.  It is best used in conjunction with
-@code{HAVE_SYS_TIME_H}, which can be checked for using
-@code{AC_CHECK_HEADERS(sys/time.h)}.
-
-@example
-@group
-#if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
-#else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
-#endif
-@end group
-@end example
-@end defmac
 
 @defmac AC_STRUCT_ST_BLKSIZE
 @maindex STRUCT_ST_BLKSIZE

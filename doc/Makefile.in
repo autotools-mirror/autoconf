@@ -190,15 +190,12 @@ uninstall:
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
 	then cd $(infodir) && rm -f standards.info*; fi
 
-# Why don't we run ./autoconf here?  There are substitutions performed
-# by autoconf which are necessary.  Now, the Makefile breaks configure,
-# and one has to ./autoconf to have the right thing happen.
 ${srcdir}/configure: configure.in $(M4FILES)
-	echo "FIXME: Why not running ./autoconf -m . ?"
 	cd $(srcdir) && \
 	rm -f configure configure.tmp && \
-	$(M4) autoconf.m4 configure.in > configure.tmp && \
-	chmod +x configure.tmp && mv configure.tmp configure
+	M4=$(M4) AC_MACRODIR=. AWK=$(AWK) \
+	  $(SHELL) ./autoconf.sh
+
 Makefile: Makefile.in config.status
 	$(SHELL) ./config.status
 config.status: configure

@@ -1,3 +1,61 @@
+1999-09-21  Akim Demaille  <akim@epita.fr>
+
+	* NEWS: Updated.
+	* THANKS: Likewise.
+
+	* acgeneral.m4 (AC_CHECK_HEADER): Use AC_VAR_*.
+	(AC_CHECK_HEADERS): Adapted.
+
+	* acgeneral.m4 (AC_TR): Remove, it is useless.
+	(AC_TR_CPP): Updated version of formerly AC_TR_DEFINE, based on
+	the model of AC_TR_SH.
+	All callers changed.
+
+	* autoconf.sh (Checking for Bugs): Remove the indirection that
+	made the `sort -u' useless.
+
+1999-09-21  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (Last sed cmd): Change also @PND@ to `#', since this
+	is also a symbol very hard to quote in m4.
+
+	* acgeneral.m4 (AC_CHECK_LIB): Use AC_VAR_*.
+
+	* acgeneral.m4: Use `m4_BUILTIN' instead of indirection via
+ 	`builtin'.
+
+1999-09-21  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.texi	(Particular Structures): Move documentation of
+	AC_HEADER_STAT and AC_HEADER_TIME from here...
+	(Particular Headers): to here.
+	(Declarations): New section.
+	(Particular Headers): Move doc of AC_DECL_SYS_SIGLIST from here...
+	(Particular Declarations): to here.
+
+1999-09-21  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* acgeneral.m4 (AC_CHECK_FUNC_DECL, AC_CHECK_FUNC_DECLS): New
+ 	macros.
+
+	* autoconf.texi (AC_CHECK_FUNC_DECL, AC_CHECK_FUNC_DECLS):
+ 	Document.
+
+	* autoheader.m4: Add support for AC_CHECK_FUNC_DECLS.
+
+	* autoheader.sh: Likewise.
+
+1999-09-21  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_SHELL_IFELSE): New macro.
+	(AC_VAR_IF_SET): Use it.
+	(AC_CHECK_FUNC): Likewise.
+
+	* Makefile.in (${srcdir}/configure): Use autoconf.sh to build
+ 	Autoconf's configure.  Before the building was performed running
+ 	m4 at hand, but much was not done (e.g., __oline__,
+ 	@BKL@... expansion)
+
 1999-09-21  Ben Elliston  <bje@cygnus.com>
 
 	* THANKS: Update some mail addresses.

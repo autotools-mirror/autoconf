@@ -56,8 +56,6 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
-ac_LF_and_DOT="`echo; echo .`"
-
 localdir=.
 show_version=no
 
@@ -116,6 +114,7 @@ types=
 funcs=
 headers=
 libs=
+decls=
 
 if test "$localdir" != .; then
   use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
@@ -132,9 +131,9 @@ case `$M4 --help < /dev/null 2>&1` in
 *) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
 esac
 
-# Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
-# modified autoconf processing of the input file.  The sed hair is
-# necessary to win for multi-line macro invocations.
+# Extract assignments of SYMS, TYPES, FUNCS, HEADERS, LIBS and DECLS
+# from the modified autoconf processing of the input file.  The sed
+# hair is necessary to win for multi-line macro invocations.
 eval "`$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
        sed -n -e '
 		: again
@@ -215,7 +214,7 @@ $syms
 EOF
    fgrep -f $fgrep_tmp
    rm -f $fgrep_tmp) |
-  tr @. "$ac_LF_and_DOT"
+  tr @. "`echo; echo .`"
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
 # line-breaks from the sub-command output.  A line-break within
@@ -224,7 +223,7 @@ EOF
 # would break.
 fi
 
-echo "$types" | tr ,. "$ac_LF_and_DOT" | sort | uniq | while read ctype; do
+echo "$types" | tr ,. "`echo`." | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
   sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
   echo "
@@ -258,6 +257,15 @@ if test -n "$libs"; then
     echo "
 /* Define if you have the ${lib} library (-l${lib}).  */
 #undef HAVE_LIB${sym}"
+  done
+fi
+
+if test -n "$decls"; then
+  for decl in `for x in $decls; do echo $x; done | sort | uniq`; do
+   sym="`echo ${decl} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
+    echo "
+/* Define if you have the \`${decl}' declaration.  */
+#undef ${sym}_DECLARED"
   done
 fi
 
