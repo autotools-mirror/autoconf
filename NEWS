@@ -1,9 +1,17 @@
-* Major changes in Autoconf 2.56                       -*- outline -*-
+* Major changes in Autoconf 2.57                       -*- outline -*-
+
+  Released 2002-12-03.
+
+Bug fixes for problems with AIX linker, with freestanding C compilers,
+with GNU m4 limitations, and with obsolete copies of GNU documents.
+
+The Free Documentation License has been upgraded from 1.1 to 1.2.
+
+* Major changes in Autoconf 2.56
 
   Released November 15th, 2002.
 
 One packaging problem fixed (config/install-sh was not executable).
-
 
 * Major changes in Autoconf 2.55
 
@@ -109,7 +117,7 @@ Release tips:
   assignments.
 
 
-** Plans for 2.57
+** Plans for later versions
 
 - ./configure <host>
 
@@ -137,7 +145,7 @@ Release tips:
   to be escaped.  This scheme is fragile, and will be removed; the
   only risk is uglified messages.  Please, run `autoreconf -f -Wall'
   to find occurrences that will be affected.
-
+
 * Major changes in Autoconf 2.54
 
   Released September 13th, 2002.
@@ -233,7 +241,6 @@ Release tips:
 - config.log
   Now contains the list of ouput variables and files (AC_SUBST,
   AC_SUBST_FILES).
-
 
 * Major changes in Autoconf 2.53
 
@@ -357,7 +364,6 @@ Release tips:
 
 - AC_FUNC_STRNLEN
   New.
-
 
 * Major changes in Autoconf 2.52
 
