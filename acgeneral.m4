@@ -645,10 +645,7 @@ AC_DEFUN(AC_CANONICAL_SYSTEM,
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
-build_alias=$build
-host_alias=$host
-target_alias=$target
-case $host_alias---$target_alias---$nonopt in
+case $host---$target---$nonopt in
 NONE---*---* | *---NONE---* | *---*---NONE) ;;
 *) AC_MSG_ERROR(can only configure for one host and one target at a time) ;;
 esac
@@ -666,8 +663,10 @@ dnl
 dnl Subroutines of AC_CANONICAL_SYSTEM.
 dnl
 AC_DEFUN(AC_CANONICAL_HOST,
-[AC_MSG_CHECKING(host system type)
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_MSG_CHECKING(host system type)
 
+host_alias=$host
 case "${host_alias}" in
 NONE)
   case $nonopt in
@@ -691,9 +690,12 @@ AC_SUBST(host_vendor)dnl
 AC_SUBST(host_os)dnl
 ])dnl
 dnl
+dnl Internal use only.
 AC_DEFUN(AC_CANONICAL_TARGET,
-[AC_MSG_CHECKING(target system type)
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_MSG_CHECKING(target system type)
 
+target_alias=$target
 case "${target_alias}" in
 NONE)
   case $nonopt in
@@ -714,9 +716,12 @@ AC_SUBST(target_vendor)dnl
 AC_SUBST(target_os)dnl
 ])dnl
 dnl
+dnl Internal use only.
 AC_DEFUN(AC_CANONICAL_BUILD,
-[AC_MSG_CHECKING(build system type)
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_MSG_CHECKING(build system type)
 
+build_alias=$build
 case "${build_alias}" in
 NONE) build= build_alias= ;;
 *)
