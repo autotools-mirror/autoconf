@@ -4124,11 +4124,11 @@ define([AC_CONFIG_IF_MEMBER],
         -1, [$4], [$3])])
 
 
-# AT_FILE_DEPENDENCY(DEST, SOURCE1, [SOURCE2...])
-# -----------------------------------------------
+# AC_FILE_DEPENDENCY_TRACE(DEST, SOURCE1, [SOURCE2...])
+# -----------------------------------------------------
 # This macro does nothing, it's a hook to be read with `autoconf --trace'.
 # It announces DEST depends upon the SOURCE1 etc.
-define([AT_FILE_DEPENDENCY], [])
+define([AC_FILE_DEPENDENCY_TRACE], [])
 
 
 # _AC_CONFIG_DEPENDENCY(DEST, [SOURCE1], [SOURCE2...])
@@ -4137,8 +4137,8 @@ define([AT_FILE_DEPENDENCY], [])
 # `DEST.in'.
 define([_AC_CONFIG_DEPENDENCY],
 [ifval([$2],
-       [AT_FILE_DEPENDENCY($@)],
-       [AT_FILE_DEPENDENCY([$1], [$1.in])])])
+       [AC_FILE_DEPENDENCY_TRACE($@)],
+       [AC_FILE_DEPENDENCY_TRACE([$1], [$1.in])])])
 
 
 # _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]]...)

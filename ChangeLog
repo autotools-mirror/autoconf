@@ -1,3 +1,8 @@
+2000-10-24  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AT_FILE_DEPENDENCY): Rename as...
+	(AC_FILE_DEPENDENCY_TRACE): this.
+
 2000-10-24  Lars J. Aas  <larsa@sim.no>
 
 	* m4sugar.m4: (m4_tolower, m4_toupper): New macros.
