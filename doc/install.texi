@@ -239,7 +239,7 @@ traditionally @file{./config.cache}.  @var{file} defaults to
 
 @item --config-cache
 @itemx -C
-Alias for @option{--cache-file=config.cache}.
+Alias for @option{--cache-file=./config.cache}.
 
 @item --quiet
 @itemx --silent

@@ -1280,7 +1280,7 @@ do
     cache_file=$ac_optarg ;;
 
   --config-cache | -C)
-    cache_file=config.cache ;;
+    cache_file=./config.cache ;;
 
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
@@ -1612,7 +1612,7 @@ Configuration:
   -V, --version           display version information and exit
   -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for \`--cache-file=config.cache'
+  -C, --config-cache      alias for \`--cache-file=./config.cache'
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
