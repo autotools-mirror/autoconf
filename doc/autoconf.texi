@@ -2813,6 +2813,7 @@ variable @code{MINGW32} to @samp{yes}.  If not present, sets
 Checks for the EMX environment on OS/2.  If present, sets shell variable
 @code{EMXOS2} to @samp{yes}.  If not present. sets @code{EMXOS2} to the
 empty string.
+@end defmac
 
 @defmac AC_EXEEXT
 @maindex EXEEXT
