@@ -1234,7 +1234,8 @@ if test -n "$at_traceon"; then
     case "$at_cmd_expanded" in
         *\$\(*\)*)         at_reason='a $(...) command substitution' ;;
         *\`*\`*)           at_reason='a `...` command substitution' ;;
-        *[[^\\]]"$at_lf"*) at_reason='an embedded newline' ;;
+        *\\"$at_lf"*)      at_reason= ;;
+        *"$at_lf"*)        at_reason='an embedded newline' ;;
         *)                 at_reason= ;;
     esac
     if test -n "$at_reason"; then
