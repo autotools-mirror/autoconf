@@ -529,12 +529,14 @@ popdef([ac_width])dnl
 popdef([ac_cursor])])
 
 
-dnl AC_HELP_STRING(LHS, RHS)
-dnl ------------------------
+dnl AC_HELP_STRING(LHS, RHS[, COLUMN])
+dnl ----------------------------------
 dnl
 dnl Format an Autoconf macro's help string so that it looks pretty when
-dnl the user executes "configure --help".  This macro takes two
-dnl arguments, a "left hand side" (LHS), and a "right hand side" (RHS).
+dnl the user executes "configure --help".  This macro takes three
+dnl arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
+dnl the COLUMN which is a string of wide spaces which leads to the
+dnl the RHS column (default: 26 white spaces).
 dnl
 dnl The resulting string is suitable for use in other macros that require
 dnl a help string (e.g. AC_ARG_WITH).
@@ -570,23 +572,28 @@ dnl  column 0                  column 26
 dnl
 dnl This macro is a adhoc version of AC_WRAP.
 define([AC_HELP_STRING],
-[pushdef([ac_prefix], [                          ])dnl 26 spaces
-pushdef([ac_width], m4_eval(79 - len(ac_prefix)))dnl
-pushdef([ac_cursor], 0)dnl
-m4_format([  %-23s ], [$1])dnl
+[pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
+pushdef([AC_Prefix_Len], len(AC_Prefix))dnl Default: 26
+pushdef([AC_Prefix_Format], [  %-]m4_eval(len(AC_Prefix) - 3)[s])dnl [  %-23s]
+pushdef([AC_Width], m4_eval(79 - AC_Prefix_Len))dnl Width of the RHS column.
+pushdef([AC_Cursor], 0)dnl
+m4_format(AC_Prefix_Format, [$1])dnl
 dnl If the option is too wide, leave it alone on the line
-ifelse(m4_eval(len(m4_format([  %-23s ], [$1])) > 26),
+ifelse(m4_eval(len(m4_format(AC_Prefix_Format, [$1])) > AC_Prefix_Len),
        1, [
-]ac_prefix)dnl
-AC_FOREACH([ac_word], $2,
-[define([ac_cursor], m4_eval(ac_cursor + len(ac_word) + 1))dnl
-ifelse(m4_eval(ac_cursor > ac_width),
-       1, [define([ac_cursor], m4_eval(len(ac_word) + 1))]
-ac_prefix)dnl
-ac_word ])dnl
-popdef([ac_prefix])dnl
-popdef([ac_width])dnl
-popdef([ac_cursor])])
+]AC_Prefix)dnl
+AC_FOREACH([AC_Word], $2,
+[define([AC_Cursor], m4_eval(AC_Cursor + len(AC_Word) + 1))dnl
+ifelse(m4_eval(AC_Cursor > AC_Width),
+       1, [define([AC_Cursor], m4_eval(len(AC_Word) + 1))]
+AC_Prefix)dnl
+AC_Word ])dnl
+popdef([AC_Cursor])dnl
+popdef([AC_Width])dnl
+popdef([AC_Prefix_Format])dnl
+popdef([AC_Prefix_Len])dnl
+popdef([AC_Prefix])dnl
+])
 
 
 
@@ -603,7 +610,9 @@ AC_DEFUN(AC_INIT_NOTICE,
 # gives unlimited permission to copy, distribute and modify it.
 
 # Defaults:
-ac_help=
+ac_arg_with_help=
+ac_arg_enable_help=
+ac_arg_var_help=
 ac_default_prefix=/usr/local
 [#] Any additions from configure.in:])
 
@@ -738,21 +747,6 @@ changequote([, ])dnl
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
 
-  -env-* | --env-*)
-    ac_envvar=`echo $ac_option|sed -e 's/^-*env-//' -e 's/=.*//'`
-    # Reject names that are not valid shell variable names.
-changequote(, )dnl
-    if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
-changequote([, ])dnl
-      AC_MSG_ERROR($ac_envvar: invalid variable name)
-    fi
-    case "$ac_option" in
-      *=*) ;;
-      *) AC_MSG_ERROR($ac_envvar: missing value) ;;
-    esac
-    eval "${ac_envvar}='$ac_optarg'"
-    export $ac_envvar ;;
-
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
   | --exec | --exe | --ex)
@@ -783,7 +777,6 @@ Defaults for the options are specified in brackets.
 
 Configuration:
   --cache-file=FILE       cache test results in FILE
-  [--env-]VAR=VALUE       set environment variable VAR to VALUE
   --help                  print this message
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
@@ -832,9 +825,19 @@ Features and packages:
   --x-libraries=DIR       X library files are in DIR
 EOF
 changequote([, ])dnl
-    if test -n "$ac_help"; then
+dnl It would be great to sort, unfortunately, since each entry maybe
+dnl split on several lines, it is not as evident as a simple `| sort'.
+    if test -n "$ac_arg_enable_help"; then
       echo "
---enable and --with options recognized:$ac_help"
+--enable options recognized:$ac_arg_enable_help"
+    fi
+    if test -n "$ac_arg_with_help"; then
+      echo "
+--with options recognized:$ac_arg_with_help"
+    fi
+    if test -n "$ac_arg_var_help"; then
+      echo "
+Some of the influent environment variables:$ac_arg_var_help"
     fi
     exit 0 ;;
 
@@ -1243,7 +1246,7 @@ dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 dnl -----------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-ac_help="$ac_help
+ac_arg_enable_help="$ac_arg_enable_help
 [$2]"
 AC_DIVERT_POP()dnl
 [#] Check whether --enable-[$1] or --disable-[$1] was given.
@@ -1268,7 +1271,7 @@ dnl ### Working with optional software
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_WITH,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-ac_help="$ac_help
+ac_arg_with_help="$ac_arg_with_help
 [$2]"
 AC_DIVERT_POP()dnl
 [#] Check whether --with-[$1] or --without-[$1] was given.
@@ -1285,6 +1288,27 @@ AC_DEFUN(AC_WITH,
 [AC_OBSOLETE([$0], [; instead use AC_ARG_WITH])dnl
 AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
 ])
+
+
+
+dnl ### Remembering env vars for reconfiguring
+
+dnl AC_ARG_VAR(VARNAME, DOCUMENTATION)
+dnl ----------------------------------
+dnl Register VARNAME as a variable configure should remember, and
+dnl document it in --help.
+AC_DEFUN(AC_ARG_VAR,
+[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+ac_arg_var_help="$ac_arg_var_help
+AC_HELP_STRING([$1], [$2], [              ])"
+AC_DIVERT_POP()dnl
+dnl Prepend instead of appending, so that envvars set on the cmd line
+dnl win over the environment.  Don't register envvars not set.
+dnl Don't register several times.
+case "${$1+set} $ac_configure_args" in
+ *" $1="* );;
+ "set "*) ac_configure_args="$1='[$]$1' $ac_configure_args";;
+esac])
 
 
 
@@ -2474,8 +2498,8 @@ AC_SHELL_IFELSE(test AC_VAR_GET(ac_var) = yes,
 AC_VAR_POPDEF([ac_var])dnl
 ])dnl AC_CHECK_DECL
 
-dnl AC_CHECK_DECL(SYMBOL... , [, INCLUDES,
-dnl              [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+dnl AC_CHECK_DECLS(SYMBOL... , [, INCLUDES,
+dnl                [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 AC_DEFUN(AC_CHECK_DECLS,
 [for ac_sym in $1
 do

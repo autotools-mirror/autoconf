@@ -376,7 +376,7 @@ systems that lack them.  Work is in progress to add those features in
 the future.
 
 Autoconf imposes some restrictions on the names of macros used with
-@code{#ifdef} in C programs (@pxref{Preprocessor Symbol Index}).
+@code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
 Autoconf requires GNU @code{m4} in order to generate the scripts.  It
 uses features that some UNIX versions of @code{m4} do not have.  It also

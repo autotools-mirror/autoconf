@@ -67,14 +67,25 @@ other programs in order to regenerate files that came with the distribution.
 @node Compilers and Options
 @section Compilers and Options
 
-Some systems require unusual options for compilation or linking that
-the @code{configure} script does not know about.  You can give
-@code{configure} initial values for variables by setting them in the
-environment.  Using a Bourne-compatible shell, you can do that on the
-command line like this:
+Some systems require unusual options for compilation or linking that the
+@code{configure} script does not know about.  Run @samp{./configure
+--help} for details on some of the pertinent environment variables.
+
+You can give @code{configure} initial values for variables by setting
+them in the environment.  You can do that on the command line like this:
 @example
 ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 @end example
+
+Please, note that the former interface:
+@example
+CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+@end example
+or
+@example
+env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+@end example
+is deprecated and should be avoided.
 
 @node Multiple Architectures
 @section Compiling For Multiple Architectures

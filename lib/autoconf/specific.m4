@@ -76,6 +76,7 @@ dnl just gives the user an opportunity to specify an alternative search
 dnl list for the C compiler.
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
+AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
 ifelse([$1], ,
 [
   AC_CHECK_PROG(CC, gcc, gcc)

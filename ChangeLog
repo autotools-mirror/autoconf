@@ -1,5 +1,23 @@
 1999-09-22  Akim Demaille  <akim@epita.fr>
 
+	* install.texi: Give emore details on envvar handling.
+	* acgeneral.m4 (AC_HELP_STRING): Add a third argument to tune the
+	width of the first column.
+	(AC_INIT_NOTICE): Initialize ac_arg_enable_help, ac_arg_with_help,
+	and ac_arg_var_help.
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Remove the handling of
+ 	--env-var=.  After debate, the solution chosen to specify envvars
+	to configure is a` la make: ./configure VAR=VAL.
+	(AC_INIT_PARSE_ARGS, --help): Output ac_arg_enable_help,
+	ac_arg_with_help, and ac_arg_var_help.
+	* acgeneral.m4 (AC_ARG_VAR): New macro, to register and document
+	influent envvars.
+	* acspecific.m4 (AC_PROG_CC): Document CFLAGS.
+	This is mainly to test AC_ARG_VAR.  Var to document are to be
+	defined.
+
+1999-09-22  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (m4_default): New macro.
 	(AC_CHECK_LIB): When ACTION-IF-FOUND is specified, don't perform
 	the default action.
