@@ -1232,7 +1232,9 @@ AC_CONFIG_HEADER(defines.h:defs.pre:defines.h.in:defs.post)
 @end example
 @noindent
 Doing this allows you to keep your file names acceptable to MS-DOS, or
-to prepend and/or append boilerplate to the file.
+to prepend and/or append boilerplate to the file.  You should be aware
+that @code{autoheader} is unable to determine which file is the actual
+input file and may overwrite one of your boilerplates.
 @end defmac
 
 @menu
