@@ -1,3 +1,13 @@
+2001-06-15  Pavel Roskin  <proski@gnu.org>
+
+	* acheaders.m4 (_AC_CHECK_HEADER_DIRENT): Instead of defining
+	an unused pointer use cast to this type and `if' statement to
+	avoid warnings from the compiler.
+	(AC_HEADER_TIME): Likewise.
+	* actypes.m4 (AC_CHECK_MEMBER): s/foo/ac_aggr/. Use the member
+	in `if' statement to avoid warnings from the compiler. Declare
+	ac_aggr static to avoid the need to initialize it.
+
 2001-06-14  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Portable Shell): Move after `Writing Macros'.

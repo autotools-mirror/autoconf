@@ -423,10 +423,11 @@ AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-[dnl AGGREGATE foo;
-m4_patsubst([$1], [\..*]) foo;
-dnl foo.MEMBER;
-foo.m4_patsubst([$1], [^[^.]*\.]);])],
+[dnl AGGREGATE ac_aggr;
+static m4_patsubst([$1], [\..*]) ac_aggr;
+dnl ac_aggr.MEMBER;
+if (ac_aggr.m4_patsubst([$1], [^[^.]*\.]))
+return 0;])],
                 [AS_VAR_SET(ac_Member, yes)],
                 [AS_VAR_SET(ac_Member, no)])])
 AS_IF([test AS_VAR_GET(ac_Member) = yes], [$2], [$3])dnl

@@ -119,7 +119,8 @@ AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <$1>
 ],
-                                    [DIR *dirp = 0;])],
+                                    [if ((DIR *) 0)
+return 0;])],
                    [AS_VAR_SET(ac_Header, yes)],
                    [AS_VAR_SET(ac_Header, no)])])
 AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
@@ -310,7 +311,8 @@ AC_DEFUN([AC_HEADER_TIME],
 #include <sys/time.h>
 #include <time.h>
 ],
-[struct tm *tp;])],
+[if ((struct tm *) 0)
+return 0;])],
                    [ac_cv_header_time=yes],
                    [ac_cv_header_time=no])])
 if test $ac_cv_header_time = yes; then
