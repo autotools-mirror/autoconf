@@ -91,14 +91,6 @@ check for c89 before cc if it can't find gcc?
 
 hpa@yggdrasil.com (H. Peter Anvin)
 
-** @magic@ expanded in all the AC_SUBST (I think this one is obsoleted
-with the existence of Automake.  Remove this wish?  --akim)
-Perhaps Autoconf could have a single @magic@ frob that gets replaced with
-assignments for all the *dir variables?  There is quite a plethora for each
-Makefile.in to have foodir = @foodir@.
-
-From: Roland McGrath <roland@gnu.ai.mit.edu>
-
 ------------------------------------------------------------------------------
 
 * Autoconf 3
