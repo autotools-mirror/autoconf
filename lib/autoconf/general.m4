@@ -107,11 +107,11 @@ m4_namespace_push(autoconf)
 #   the tests and output code
 
 
-# AC_DIVERT(DIVERSION-NAME)
-# -------------------------
+# _AC_DIVERT(DIVERSION-NAME)
+# --------------------------
 # Convert a diversion name into its number.  Otherwise, return
 # DIVERSION-NAME which is supposed to be an actual diversion number.
-define([AC_DIVERT],
+define([_AC_DIVERT],
 [m4_case([$1],
          [KILL],           -1,
 
@@ -141,7 +141,7 @@ define([AC_DIVERT],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 define(AC_DIVERT_PUSH,
-[pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([$1]))dnl
+[pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([$1]))dnl
 divert(AC_DIVERT_DIVERSION)dnl
 ])
 
@@ -156,10 +156,21 @@ divert(AC_DIVERT_DIVERSION)dnl
 ])
 
 
+# AC_DIVERT(DIVERSION-NAME, CONTENT)
+# ----------------------------------
+# Output CONTENT into DIVERSION-NAME (which may be a number actually).
+# An end of line is appended for free to CONTENT.
+define([AC_DIVERT],
+[AC_DIVERT_PUSH([$1])dnl
+$2
+AC_DIVERT_POP()dnl
+])
+
+
 # Initialize the diversion setup.
-define([AC_DIVERT_DIVERSION], AC_DIVERT([NORMAL]))
+define([AC_DIVERT_DIVERSION], _AC_DIVERT([NORMAL]))
 # Throw away output until AC_INIT is called.
-pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([KILL]))
+pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 
 
 
@@ -173,7 +184,7 @@ pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([KILL]))
 # The prologue for Autoconf macros.
 define(AC_PRO,
 [AC_PROVIDE([$1])dnl
-ifelse(AC_DIVERT_DIVERSION, AC_DIVERT([NORMAL]),
+ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
        [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))],
        [pushdef([AC_DIVERT_DIVERSION], AC_DIVERT_DIVERSION)])dnl
 ])
@@ -184,11 +195,11 @@ ifelse(AC_DIVERT_DIVERSION, AC_DIVERT([NORMAL]),
 # The Epilogue for Autoconf macros.
 define(AC_EPI,
 [AC_DIVERT_POP()dnl
-ifelse(AC_DIVERT_DIVERSION, AC_DIVERT([NORMAL]),
-[undivert(AC_DIVERT([NORMAL_4]))dnl
-undivert(AC_DIVERT([NORMAL_3]))dnl
-undivert(AC_DIVERT([NORMAL_2]))dnl
-undivert(AC_DIVERT([NORMAL_1]))dnl
+ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
+[undivert(_AC_DIVERT([NORMAL_4]))dnl
+undivert(_AC_DIVERT([NORMAL_3]))dnl
+undivert(_AC_DIVERT([NORMAL_2]))dnl
+undivert(_AC_DIVERT([NORMAL_1]))dnl
 ])dnl
 ])
 
@@ -276,10 +287,8 @@ define(AC_BEFORE,
 define(AC_REQUIRE,
 [AC_PROVIDE_IF([$1],
                [],
-               [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))dnl
-$1
-AC_DIVERT_POP()dnl
-])])
+               [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])
+])
 
 
 # AC_EXPAND_ONCE(TEXT)
@@ -634,14 +643,12 @@ define(_AC_COPYRIGHT_SEPARATOR)
 # AC_INIT must be run before, exactly like for AC_REVISION.
 AC_DEFUN(AC_COPYRIGHT,
 [AC_REQUIRE([AC_INIT])dnl
-AC_DIVERT_PUSH([NOTICE])dnl
-patsubst([]_AC_COPYRIGHT_SEPARATOR()dnl
-[$1], [^], [@%:@ ])
-AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH([VERSION_BEGIN])dnl
-_AC_COPYRIGHT_SEPARATOR()dnl
-$1
-AC_DIVERT_POP()dnl
+AC_DIVERT([NOTICE],
+[patsubst([]_AC_COPYRIGHT_SEPARATOR()dnl
+[$1], [^], [@%:@ ])])dnl
+AC_DIVERT([VERSION_BEGIN],
+[_AC_COPYRIGHT_SEPARATOR()dnl
+$1])dnl
 define([_AC_COPYRIGHT_SEPARATOR],
 [
 
@@ -665,9 +672,7 @@ AC_DIVERT_POP()dnl
 # AC_PREFIX_DEFAULT(PREFIX)
 # -------------------------
 AC_DEFUN(AC_PREFIX_DEFAULT,
-[AC_DIVERT_PUSH([DEFAULTS])dnl
-ac_default_prefix=$1
-AC_DIVERT_POP()])
+[AC_DIVERT([DEFAULTS], [ac_default_prefix=$1])])
 
 
 # _AC_INIT_PARSE_ARGS
@@ -1100,15 +1105,13 @@ AC_DIVERT_POP()dnl
 # ----------------
 # Handle the `configure --version' message.
 AC_DEFUN([_AC_INIT_VERSION],
-[AC_DIVERT_PUSH([VERSION_BEGIN])dnl
-if $ac_init_version; then
-  cat <<\EOF
-AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH([VERSION_END])dnl
-EOF
+[AC_DIVERT([VERSION_BEGIN],
+[if $ac_init_version; then
+  cat <<\EOF])dnl
+AC_DIVERT([VERSION_END],
+[EOF
   exit 0
-fi
-AC_DIVERT_POP()dnl
+fi])dnl
 ])# _AC_INIT_VERSION
 
 
@@ -1286,9 +1289,7 @@ AC_DIVERT_POP()dnl
 define([_AC_INIT],
 [m4_sinclude(acsite.m4)dnl
 m4_sinclude(./aclocal.m4)dnl
-AC_DIVERT_PUSH([BINSH])dnl
-#! /bin/sh
-AC_DIVERT_POP()dnl to KILL
+AC_DIVERT([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS()dnl
 AC_DIVERT_POP()dnl to NORMAL
 _AC_INIT_PARSE_ARGS
@@ -1297,9 +1298,8 @@ _AC_INIT_VERSION
 _AC_INIT_PREPARE([$1])dnl
 dnl AC_COPYRIGHT must be called after _AC_INIT_VERSION, since it dumps
 dnl into a diversion prepared by _AC_INIT_VERSION.
-AC_DIVERT_PUSH([NOTICE])dnl
-# Guess values for system-dependent variables and create Makefiles.
-AC_DIVERT_POP()dnl
+AC_DIVERT([NOTICE],
+[@%:@ Guess values for system-dependent variables and create Makefiles.])dnl
 AC_COPYRIGHT(
 [Generated automatically using Autoconf version ]AC_ACVERSION[.
 Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
@@ -1455,11 +1455,11 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 # AC_REVISION(REVISION-INFO)
 # --------------------------
+# The quote in the comment below is just to cope with font-lock-mode
+# which sees the opening of a string.
 AC_DEFUN(AC_REVISION,
 [AC_REQUIRE([AC_INIT])dnl
-AC_DIVERT_PUSH([BINSH])dnl
-@%:@ From configure.in translit([$1], $")
-AC_DIVERT_POP()dnl to KILL
+AC_DIVERT([BINSH], [@%:@ From configure.in translit([$1], $")])dnl "
 ])
 
 
