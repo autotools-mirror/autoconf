@@ -1,3 +1,9 @@
+2003-10-06  Gary V. Vaughan  <gary@gnu.org>
+
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Add
+	-lcrtbegin.o to list of ignored flags and fix underquoting of
+	-lcrt[01].o.
+
 2003-10-04  Steven G. Johnson  <stevenj@ab-initio.mit.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_G): Use language-specific
