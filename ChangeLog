@@ -1,5 +1,14 @@
 2000-10-25  Pavel Roskin  <proski@gnu.org>
 
+	* tests/aclocal.m4 (AC_ENV_SAVE): Rename to ...
+	(AC_STATE_SAVE): ... this.  Save the list of all files
+	in the current directory.
+	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Compare lists of
+	files created by AC_ENV_SAVE. Remove state* before and after
+	the test.
+
+2000-10-25  Pavel Roskin  <proski@gnu.org>
+
 	* Makefile.am: Add acversion.m4.in to EXTRA_DIST.
 
 2000-10-25  Akim Demaille  <akim@epita.fr>

@@ -85,12 +85,13 @@ AT_DATA([configure.in],
 [AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
-AC_ENV_SAVE(expout)
+AC_STATE_SAVE(before)
 $1
-AC_ENV_SAVE(env-after)
+AC_STATE_SAVE(after)
 AC_OUTPUT
 ])
 $2
+rm -f state*
 AT_CHECK([autoconf -W none --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
@@ -98,9 +99,13 @@ test -n "$at_verbose" && echo "--- config.log" && cat config.log
 
 dnl Some tests might exit prematurely when they find a problem, in
 dnl which case `env-after' is probably missing.  Don't check it then.
-if test -f env-after; then
-  AT_CHECK([cat env-after], 0, expout)
+if test -f state-env.after; then
+  cp -f state-env.before expout
+  AT_CHECK([cat state-env.after], 0, expout)
+  cp -f state-ls.before expout
+  AT_CHECK([cat state-ls.after], 0, expout)
 fi
+rm -f state*
 ])# _AT_CHECK_AC_MACRO
 
 

@@ -10,7 +10,7 @@ define([join],
         [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
 
 
-# AC_ENV_SAVE(FILE)
+# AC_STATE_SAVE(FILE)
 # ------------------
 # Save the environment, but the variables we are allowed to touch.
 # This is to check no test touches the user name space.
@@ -27,7 +27,7 @@ define([join],
 #   Some variables some shells use and change
 # - POW_LIB
 #   From acfunctions.m4.
-AC_DEFUN([AC_ENV_SAVE],
+AC_DEFUN([AC_STATE_SAVE],
 [(set) 2>&1 |
   egrep -v -e \
 'join([|],
@@ -46,7 +46,9 @@ AC_DEFUN([AC_ENV_SAVE],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines
-  fgrep = >$1
+  fgrep = >state-env.$1
+  rm -f state-ls.$1
+  ls -1 | grep -v '^state' | sort > state-ls.$1
 ])
 
 
