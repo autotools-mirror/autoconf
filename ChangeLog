@@ -1,3 +1,13 @@
+2000-05-10  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_LIBOBJ_DECL, AC_LIBOBJ): New macros.
+	(AC_REPLACE_FUNCS): Use AC_LIBOBJ.
+	* acspecific.m4 (AC_FUNC_MKTIME, AC_FUNC_MEMCMP,
+	AC_STRUCT_ST_BLOCKS): Use AC_LIBOBJ.
+	* doc/autoconf.texi : Adjust so that the user is not encouraged to
+	use LIBOBJS directly.
+	(Generic Functions): Document AC_LIBOBJ_DECL and AC_LIBOBJ.
+
 2000-05-09  Jim Meyering  <meyering@lucent.com>
 
 	* acgeneral.m4 (AC_SEARCH_LIBS): Remove double quotes around `no'.

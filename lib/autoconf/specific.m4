@@ -1194,7 +1194,7 @@ main ()
 ac_cv_func_working_mktime=yes, ac_cv_func_working_mktime=no,
 ac_cv_func_working_mktime=no)])
 if test $ac_cv_func_working_mktime = no; then
-  LIBOBJS="$LIBOBJS mktime.${ac_objext}"
+  AC_LIBOBJ([mktime])
 fi
 AC_SUBST(LIBOBJS)dnl
 ])# AC_FUNC_MKTIME
@@ -1359,8 +1359,7 @@ main()
         && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
 }], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
 ac_cv_func_memcmp_clean=no)])
-test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.${ac_objext}"
-AC_SUBST(LIBOBJS)dnl
+test $ac_cv_func_memcmp_clean = no && AC_LIBOBJ([memcmp])
 ])# AC_FUNC_MEMCMP
 
 
@@ -1795,7 +1794,7 @@ AC_CHECK_MEMBERS((struct stat.st_blksize),
 #
 # AC_OBSOLETE([$0], [; replace it with
 #   AC_CHECK_MEMBERS((struct stat.st_blocks),
-#                     LIBOBJS="$LIBOBJS fileblocks.${ac_objext}")
+#                     [AC_LIBOBJ([fileblocks])])
 # Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
 # and not `HAVE_ST_BLOCKS'.])dnl
 #
@@ -1805,8 +1804,7 @@ AC_DEFUN(AC_STRUCT_ST_BLOCKS,
                              [Define if your `struct stat' has
                               `st_blocks'.  Deprecated, use
                               `HAVE_STRUCT_STAT_ST_BLOCKS' instead.])],
-                  [LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
-AC_SUBST(LIBOBJS)],
+                  [AC_LIBOBJ([fileblocks])],
                   [#include <sys/types.h>
 #include <sys/stat.h>
 ])dnl

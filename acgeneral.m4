@@ -3159,11 +3159,30 @@ done
 ])
 
 
+# AC_LIBOBJ_DECL(FILENAME-NOEXT)
+# ------------------------------
+# Announce we might need the file `FILENAME-NOEXT.c'.
+define([AC_LIBOBJ_DECL], [])
+
+
+# AC_LIBOBJ(FILENAME-NOEXT)
+# -------------------------
+# We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
+# We don't use AC_SUBST/2 because it forces an unneeded eol.
+define([AC_LIBOBJ],
+[AC_VAR_IF_INDIR([$1],
+                 [AC_DIAGNOSE(syntax,
+                              [$0: you should use literals])],
+                 [AC_LIBOBJ_DECL([$1])])dnl
+AC_SUBST([LIBOBJS])dnl
+LIBOBJS="$LIBOBJS $1.${ac_objext}"])
+
+
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
-AC_DEFUN(AC_REPLACE_FUNCS,
-[AC_CHECK_FUNCS([$1], , [LIBOBJS="$LIBOBJS ${ac_func}.${ac_objext}"])
-AC_SUBST(LIBOBJS)dnl
+AC_DEFUN([AC_REPLACE_FUNCS],
+[AC_FOREACH([AC_Func], [$1], [AC_LIBOBJ_DECL(AC_Func)])dnl
+AC_CHECK_FUNCS([$1], , [AC_LIBOBJ(${ac_func})])
 ])
 
 

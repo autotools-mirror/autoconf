@@ -2834,7 +2834,6 @@ return value for an error indicator.
 
 @defmac AC_FUNC_FNMATCH
 @maindex FUNC_FNMATCH
-@ovindex LIBOBJS
 If the @code{fnmatch} function is available and works (unlike the one on
 SunOS 5.4), define @code{HAVE_FNMATCH}.
 @end defmac
@@ -2856,8 +2855,8 @@ Check how to get the system load averages.  If the system has the
 @code{getloadavg} function, this macro defines @code{HAVE_GETLOADAVG},
 and adds to @code{LIBS} any libraries needed to get that function.
 
-Otherwise, it adds @samp{getloadavg.o} to the output variable
-@code{LIBOBJS}, and possibly defines several other C preprocessor
+Otherwise, it requires an @code{AC_LIBOBJ} replacement of
+@samp{getloadavg}, and possibly defines several other C preprocessor
 macros and output variables:
 
 @enumerate
@@ -2908,15 +2907,15 @@ first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @maindex FUNC_MEMCMP
 @ovindex LIBOBJS
 If the @code{memcmp} function is not available, or does not work on
-8-bit data (like the one on SunOS 4.1.3), add @samp{memcmp.o} to output
-variable @code{LIBOBJS}.
+8-bit data (like the one on SunOS 4.1.3), require an @code{AC_LIBOBJ}
+replacement for @samp{memcmp}.
 @end defmac
 
 @defmac AC_FUNC_MKTIME
 @maindex FUNC_MKTIME
 @ovindex LIBOBJS
 If the @code{mktime} function is not available, or does not work
-correctly, add @samp{mktime.o} to output variable @code{LIBOBJS}.
+correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
 @end defmac
 
 @defmac AC_FUNC_MMAP
@@ -3045,16 +3044,62 @@ execute when one of the functions is found.  You can give it a value of
 functions is not found.
 @end defmac
 
+Autoconf follows a philosophy which was hammered along the years by the
+people who fought for portability: isolate the portability issues in
+specific files, and program as if you were on a @sc{posix} host.  Some
+functions cannot be repaired or are completely missing, your package
+must be ready to replace them.
+
+Use the two following macros to specify the function which might be
+replaced, and use the third one to check and replace a function if
+needed.
+
+@defmac AC_LIBOBJ (@var{function})
+@maindex LIBOBJ
+@ovindex LIBOBJS
+Specify that @samp{@var{function}.c} must be included in the executables
+to replace a missing or broken implementation of @var{function}.
+
+Technically it adds @samp{@var{function}.$@{ac_objext@}} to the output
+variable @code{LIBOBJS}, nevertheless you must not directly change
+@code{LIBOBJS} since this is not traceable.
+@end defmac
+
+@defmac AC_LIBOBJ_DECL (@var{function})
+@maindex LIBOBJ_DECL
+@ovindex LIBOBJS
+Specify that @samp{@var{function}.c} might be needed to compile the
+project.  You must use this macro when you are calling @code{AC_LIBOBJ}
+with a shell variable, since shell variables cannot be traced
+statically.  @var{function} must be a literal.
+
+For instance you might need to:
+
+@example
+AC_LIBOBJ_DECL(foo)
+AC_LIBOBJ_DECL(bar)
+AC_LIBOBJ($foo_or_bar)
+@end example
+
+@noindent
+nevertheless, there is always a means to avoid this, and you are
+encouraged to always uses literals with @code{AC_LIBOBJ}.
+
+Conversely, if you need to know what are the files that might be needed
+by a @file{configure.in}, you should trace @code{AC_LIBOBJ_DECL}.
+@end defmac
+
+
 @defmac AC_REPLACE_FUNCS (@var{function}@dots{})
 @maindex REPLACE_FUNCS
 @ovindex LIBOBJS
-Like calling @code{AC_CHECK_FUNCS} using an @var{action-if-not-found}
-that adds @samp{@var{function}.o} to the value of the output variable
-@code{LIBOBJS}.  You can declare a function for which your replacement
-version is used by enclosing the prototype in @samp{#if
-!HAVE_@var{function}}.  If the system has the function, it probably
-declares it in a header file you should be including, so you shouldn't
-redeclare it, lest your declaration conflict.
+Like calling @code{AC_CHECK_FUNCS} using
+@samp{AC_LIBOBJ(@var{function})} as @var{action-if-not-found}.  You can
+declare a function for which your replacement version is used by
+enclosing the prototype in @samp{#if !HAVE_@var{function}}.  If the
+system has the function, it probably declares it in a header file you
+should be including, so you shouldn't redeclare it, lest your
+declaration conflict.
 @end defmac
 
 @node Header Files, Declarations, Library Functions, Existing Tests
@@ -3455,8 +3500,8 @@ AC_CHECK_MEMBERS((struct stat.st_blksize))
 @cvindex HAVE_ST_BLOCKS
 @ovindex LIBOBJS
 If @code{struct stat} contains an @code{st_blocks} member, define
-@code{HAVE_STRUCT STAT_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o}
-to the output variable @code{LIBOBJS}.  The former name,
+@code{HAVE_STRUCT STAT_ST_BLOCKS}.  Otherwise, require an
+@code{AC_LIBOBJ} replacement of @samp{fileblocks}.  The former name,
 @code{HAVE_ST_BLOCKS} is to be avoided, as its support will cease in the
 future.
 @end defmac
