@@ -1,5 +1,10 @@
 2000-04-03  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Canonicalizing): Officially recognize
+	AC_CANONICAL_TARGET and AC_CANONICAL_BUILD.
+
+2000-04-03  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Writing configure.in): Explain what Autoconf
 	is.  Explain how to use the quotation scheme used in Autoconf.
 	(Quoting): Update.  Do not advocate changequote.

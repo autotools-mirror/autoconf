@@ -5818,10 +5818,14 @@ the variables this macro sets.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
+@defmac AC_CANONICAL_BUILD
+@defmac AC_CANONICAL_TARGET
 @maindex CANONICAL_HOST
+@maindex CANONICAL_BUILD
+@maindex CANONICAL_TARGET
 Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
-host type.  This is all that is needed for programs that are not part of
-a compiler tool chain.
+host or build or target type.  @code{AC_CANONICAL_HOST} is all that is
+needed for programs that are not part of a compiler tool chain.
 @end defmac
 
 @defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
@@ -5836,7 +5840,8 @@ error message.
 
 After calling @code{AC_CANONICAL_SYSTEM}, the following output variables
 contain the system type information.  After @code{AC_CANONICAL_HOST},
-only the @code{host} variables below are set.
+@code{AC_CANONICAL_BUILD}, or @code{AC_CANONICAL_TARGET}, only the
+@code{host}, @code{build}, or @code{target} variables below are set.
 
 @table @code
 @ovindex build
@@ -5866,6 +5871,7 @@ the names the user specified, or the canonical names if
 @ovindex target_os
 the individual parts of the canonical names (for convenience).
 @end table
+
 
 @node Using System Type,  , System Type Variables, Manual Configuration
 @section Using the System Type
