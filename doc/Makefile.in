@@ -24,6 +24,7 @@ VPATH = @srcdir@
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 TEXI2HTML = texi2html
@@ -111,14 +112,14 @@ info: autoconf.info @standards_info@ INSTALL
 
 # Use --no-split to avoid creating filenames > 14 chars.
 autoconf.info: autoconf.texi install.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --no-split --output=$@
+	$(MAKEINFO) -I$(srcdir) --no-split --output=$@ $(srcdir)/autoconf.texi
 
 INSTALL: install.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/install.texi --output=$@ \
-	--no-headers --no-validate
+	$(MAKEINFO) -I$(srcdir) --output=$@ \
+	--no-headers --no-validate $(srcdir)/install.texi
 
 standards.info: standards.texi make-stds.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --no-split --output=$@
+	$(MAKEINFO) -I$(srcdir) --no-split --output=$@ $(srcdir)/standards.texi
 
 dvi: autoconf.dvi @standards_dvi@
 
@@ -150,16 +151,16 @@ installdirs:
 
 install: all $(M4FILES) acconfig.h installdirs install-info
 	for p in $(ASCRIPTS); do \
-	  $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  $(INSTALL_SCRIPT) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 	for i in $(M4FROZEN); do \
-	  $(INSTALL_DATA) $$i $(acdatadir)/$$i; \
+	  test -f $$i && $(INSTALL_DATA) $$i $(acdatadir)/$$i; \
 	done
 	for i in $(M4FILES) acconfig.h; do \
 	  $(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
 	done
 	-if test -f autoscan; then \
-	$(INSTALL_PROGRAM) autoscan $(bindir)/`echo autoscan|sed '$(transform)'`; \
+	$(INSTALL_SCRIPT) autoscan $(bindir)/`echo autoscan|sed '$(transform)'`; \
 	for i in acfunctions acheaders acidentifiers acprograms \
 	  acmakevars; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
