@@ -280,6 +280,7 @@ announcement: NEWS ChangeLog $(rel-files)
 
 WGET = wget
 ftp-gnu = ftp://ftp.gnu.org/gnu
+www-gnu = http://www.gnu.org
 
 # Use mv, if you don't have/want move-if-change.
 move_if_change ?= move-if-change
@@ -334,8 +335,8 @@ ansi2knr.c-url_prefix = ftp://ftp.cs.wisc.edu/ghost/
 
 texinfo.tex-url_prefix = $(ftp-gnu)/texinfo/
 
-standards.texi-url_prefix = $(ftp-gnu)/GNUinfo/
-make-stds.texi-url_prefix = $(ftp-gnu)/GNUinfo/
+standards.texi-url_prefix = $(www-gnu)/prep/
+make-stds.texi-url_prefix = $(standards.texi-url_prefix)
 
 target = $(patsubst get-%, %, $@)
 url = $($(notdir $(target))-url_prefix)$(notdir $(target))
