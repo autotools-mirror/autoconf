@@ -2730,17 +2730,21 @@ m4_popdef([AC_Lib_Name])dnl
 ## ------------------------ ##
 
 
-# _AC_TRY_CPP
-# -----------
+
+# _AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ----------------------------------------------------------------
+# Try to preprocess PROGRAM.
+#
 # Run cpp and set ac_cpp_err to "yes" for an error, to
 # "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if
 # neither warnings nor errors have been detected.  eval is necessary
 # to expand ac_cpp.  It may put trace lines to conftest.err when run
 # under sh -x (e.g. when zsh is used), so we filter them out.
 #
-# Do not require AC_PROG_CPP since this macro is also used by AC_PROG_CPP.
-AC_DEFUN([_AC_TRY_CPP],
-[ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
+# This macro can be used during the selection of a preprocessor.
+AC_DEFUN([_AC_PREPROC_IFELSE],
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
+ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
 if AC_TRY_EVAL(ac_try); then
   if egrep -v '^ *\+' conftest.err | grep . >/dev/null; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
@@ -2750,16 +2754,6 @@ if AC_TRY_EVAL(ac_try); then
 else
   ac_cpp_err=yes
 fi
-])# _AC_TRY_CPP
-
-
-# _AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-# ----------------------------------------------------------------
-# Try to preprocess PROGRAM.
-# This macro can be used during the selection of a preprocessor.
-AC_DEFUN([_AC_PREPROC_IFELSE],
-[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-_AC_TRY_CPP()
 if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
@@ -2772,8 +2766,8 @@ rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
 
 
-# AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------------------
+# AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ---------------------------------------------------------------
 # Try to preprocess PROGRAM.  Requires that the preprocessor for the
 # current language was checked for, hence do not use this macro in macros
 # looking for a preprocessor.
@@ -2785,8 +2779,7 @@ _AC_PREPROC_IFELSE($@)])
 # AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------
 # AC_TRY_CPP is used to check whether particular header files exist.
-# You can check for one at a time, or more than one if you need several
-# header files to all exist for some purpose.
+# (But it actually tests whether INCLUDES produces no CPP errors.)
 #
 # INCLUDES are not defaulted and are double quoted.
 AC_DEFUN([AC_TRY_CPP],

@@ -729,29 +729,22 @@ AC_DEFUN([_AC_PROG_PREPROC_WORKS],
 # with a fresh cross-compiler works.
 # On the NeXT, cc -E runs the code through the compiler's parser,
 # not just through cpp. "Syntax error" is here to catch this case.
-AC_LANG_CONFTEST([AC_LANG_SOURCE([[#include <assert.h>
-Syntax error]])])
 ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=maybe
-_AC_TRY_CPP()
-# Now check whether non-existent headers can be detected and how
+_AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <assert.h>
+Syntax error]])],
+[# Now check whether non-existent headers can be detected and how
 # Skip if ac_cpp_err is not empty - ac_cpp is broken
 if test -z "$ac_cpp_err"; then
-  AC_LANG_CONFTEST([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])])
-  _AC_TRY_CPP()
-  if test -z "$ac_cpp_err"; then
-    # cannot detect missing includes at all
-    ac_cpp_err=yes
-  else
-    if test "x$ac_cpp_err" = xmaybe; then
+  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
+  [# cannot detect missing includes at all
+ac_cpp_err=yes],
+  [if test "x$ac_cpp_err" = xmaybe; then
       ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=yes
     else
       ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=
     fi
-    ac_cpp_err=
-  fi
-fi
-rm -f conftest*
-])# _AC_PROG_PREPROC_WORKS
+    ac_cpp_err=])
+fi])])# _AC_PROG_PREPROC_WORKS
 
 
 # AC_PROG_CPP

@@ -1,5 +1,12 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_PROG_PREPROC_WORKS): Use _AC_PREPROC_IFELSE.
+	* acgeneral.m4 (_AC_TRY_CPP): Its last use was that above, so
+	inline it into...
+	(_AC_PREPROC_IFELSE): here.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_INIT): Forget about `-n'.
 	Adjust so that `./testsuite -h 1 2' explains only tests 1 & 2.
 
