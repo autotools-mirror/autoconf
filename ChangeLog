@@ -1,3 +1,8 @@
+2001-09-19  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4: Englishoes.
+	From Tim Van Holder and Alexey Mahotkin.
+
 2001-09-18  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Common Shell Constructs): New node,

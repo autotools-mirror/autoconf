@@ -720,10 +720,10 @@ $2[]_ATEOF
 #
 # This is an unfortunate limitation inherited from Ultrix which will not
 # let you redirect several times the same FD (see the Autoconf documentation).
-# If you use the `AT_CHECK([command >out])' be sure to have the test
-# suite introduces spurious failures.
+# If you use the `AT_CHECK([command >out])' be sure to get a test suite
+# that will show spurious failures.
 #
-# You might wander why not just use `ignore' and directly use stdout and
+# You might wonder why not just use `ignore' and directly use stdout and
 # stderr left by the test suite.  Firstly because the names of these files
 # is an internal detail, and secondly, because
 #
