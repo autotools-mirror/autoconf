@@ -1,3 +1,9 @@
+Mon Jan 15 15:57:36 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Match `#define foo' without
+	trailing space in confdefs.h.  Before configure would lose if
+	all its trailing whitespace got stripped, and that can happen in mail.
+
 Fri Jan 12 14:38:37 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_TRY_CPP): Use "" instead of '' when setting
