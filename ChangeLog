@@ -1,5 +1,12 @@
 2001-11-12  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL): Use
+	AC_TRY_EVAL to run $LEX, not AC_TRY_COMMAND.  This validates the
+	definition used by Automake where LEX is +/- "${missing} lex" and
+	`missing' itself contains variables.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Push KILL at the end.
 	Now that M4sh pushes BODY, the comments were output at the end of
 	the test suites.
