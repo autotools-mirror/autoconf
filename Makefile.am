@@ -81,6 +81,7 @@ editsh = sed \
 	-e 's,@SHELL\@,$(SHELL),g' \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE\@,$(PACKAGE),g' \
+	-e 's,@bindir\@,$(bindir),g' \
 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g'
 
