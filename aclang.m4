@@ -615,8 +615,7 @@ fi
 if test -z "$CPP"; then
   AC_CACHE_VAL(ac_cv_prog_CPP,
   [dnl
-    for ac_tmp_cpp in '${CC-cc} -E' '${CC-cc} -E -traditional-cpp' \
-                      '${CC-cc} -nologo -E' '/lib/cpp'
+    for ac_tmp_cpp in '${CC-cc} -E' '${CC-cc} -E -traditional-cpp' '/lib/cpp'
     do
       # CPP needs to be expanded
       eval "CPP=\"$ac_tmp_cpp\""

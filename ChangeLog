@@ -1,3 +1,11 @@
+2000-09-14  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (_AC_TRY_CPP): Don't filter out conftest.$ac_ext
+	from the output - it is only printed by Visual C that gives
+	correct exit status.
+	* aclang.m4 (AC_PROG_CPP): Don't try '${CC-cc} -nologo -E'
+	by the same reason.
+
 2000-09-12  Pavel Roskin  <proski@gnu.org>
 
 	* aclocal.m4 (_AC_PROG_CPP_WORKS): Don't use AC_REQUIRE_CPP -

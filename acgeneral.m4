@@ -3294,7 +3294,7 @@ popdef([AC_Lib_Name])dnl
 AC_DEFUN([_AC_TRY_CPP],
 [ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
 if AC_TRY_EVAL(ac_try); then
-  if egrep -v '^( *\+|conftest.'"$ac_ext"'$)' conftest.err | grep . >/dev/null
+  if egrep -v '^ *\+' conftest.err | grep . >/dev/null
   then
     ac_cpp_err=$ac_[]AC_LANG_ABBREV[]_preproc_warn_flag
   else
