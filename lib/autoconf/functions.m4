@@ -713,6 +713,7 @@ fi
 # Is `malloc (0)' properly handled?
 AC_DEFUN([AC_FUNC_MALLOC],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for working malloc], ac_cv_func_malloc_works,
 [AC_TRY_RUN(
 [#if STDC_HEADERS || HAVE_STDLIB_H
@@ -1432,7 +1433,7 @@ AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 # -------------
 AC_DEFUN([AC_FUNC_VFORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADERS(vfork.h)
+AC_CHECK_HEADERS(unistd.h vfork.h)
 AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>

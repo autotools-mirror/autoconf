@@ -808,36 +808,7 @@ ac_exeext=
 # By default assume that objects files use an extension of .o.  Only
 # change it if the script calls AC_OBJEXT.
 ac_objext=o
-# Factoring default headers for most tests.
-dnl If ever you change this variable, please keep autoconf.texi in sync.
-ac_includes_default="\
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# if HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if HAVE_INTTYPES_H
-# include <inttypes.h>
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif"
+
 m4_divert_pop()dnl
 ])# _AC_INIT_DEFAULTS
 
@@ -2264,60 +2235,54 @@ AC_DEFUN([AC_TRY_COMMAND],
 # macros.  It is easier to document, to extend, and to understand than
 # having specific defaults for each macro.
 
-# Of course, one would like to issue these default headers only if
-# they were used, i.e.., AC_INCLUDES_DEFAULT was called, and the
-# default `branch' was run.  Unfortunately AC_INCLUDES_DEFAULT is
-# called unquoted, so it is unsafe to try to divert from there.
-# Therefore, the following *is* buggy, but this is the kind of
-# tradeoff we accept in order to improve configure.
-
-# See _AC_INIT_PREPARE to see the value of `ac_includes_default'.
+# _AC_INCLUDES_DEFAULT_REQUIREMENTS
+# ---------------------------------
+# Required when AC_INCLUDES_DEFAULT uses its default branch.
+AC_DEFUN([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
+[m4_divert_text([DEFAULTS],
+[# Factoring default headers for most tests.
+dnl If ever you change this variable, please keep autoconf.texi in sync.
+ac_includes_default="\
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif"
+])dnl
+AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_CHECK_HEADERS(stdlib.h string.h memory.h strings.h inttypes.h unistd.h)
+])
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
 # -------------------------------
 # If INCLUDES is empty, expand in default includes, otherwise in
 # INCLUDES.
-#
-# The end-of-line after `$[1]' below is meant, and it is actually
-# because this new line is meant that we don't use m4_default.  The
-# problem is that this macro is used *unquoted* in AC_TRY_COMPILE
-# etc.  It is used unquoted because unfortunately (this is a real
-# pain), AC_TRY_COMPILE is over quoting some of its arguments.  This
-# is a sad decision.
-#
-# Still, there are calls such as this
-#
-#      AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([#include <pwd.h>]),
-#                     AC_BLAH_BLAH..)
-#
-# Because AC_INCLUDES_DEFAULT *has* to be unquoted, after evaluation,
-# if there were no end of line, you'd get
-#
-#      AC_TRY_COMPILE(#include <pwd.h>,
-#                     AC_BLAH_BLAH,
-#                     AC_MORE_BLAH_BLAH)
-#
-# i.e. the first argument given to AC_TRY_COMPILE is
-#
-#      #include <pwd.h>,
-#                     AC_BLAH_BLAH
-#
-# (note how the comma was swallowed because of the comment mark) and
-# the second is
-#
-#      AC_MORE_BLAH_BLAH
-#
-# so all the arguments are shifted.
-#
-# Because I don't see any backward compatible means to fix the
-# brokenness of AC_TRY_COMPILE, we are doomed to leave a extra new
-# line here.
-m4_define([AC_INCLUDES_DEFAULT],
-[m4_ifval([$1], [$1
-],
-          [$ac_includes_default])])
-
+AC_DEFUN([AC_INCLUDES_DEFAULT],
+[m4_default([$1], [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
+$ac_includes_default])])
 
 
 
@@ -2338,7 +2303,6 @@ AC_DEFUN([AC_CHECK_MEMBER],
                [AC_FATAL([$0: requires literal arguments])])dnl
 m4_if(m4_regexp([$1], [\.]), -1,
       [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
-AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
@@ -3231,8 +3195,7 @@ AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), $AC_TR_SH([ac_cv_sizeof_$1]),
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
 m4_define([_AC_CHECK_TYPE_NEW],
-[AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
+[AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [if (($1 *) 0)

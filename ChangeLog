@@ -1,3 +1,17 @@
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
+	When default headers are used, check for their presence.
+	Suggested by Jim.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Don't define
+	ac_includes_default, since...
+	(_AC_INCLUDES_DEFAULT_REQUIREMENTS): this new macro does.
+	(AC_INCLUDES_DEFAULT): Require the former when default includes
+	are used.
+	(AC_CHECK_MEMBERS, _AC_CHECK_TYPE_NEW): Don't require
+	AC_HEADERS_STDC, that's a job for stupendous AC_INCLUDES_DEFAULT.
+	* acfunctions.m4 (AC_FUNC_MALLOC): Check for stdlib.h.
+
 2001-01-15  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi: Normalize sh samples.
