@@ -156,7 +156,7 @@ clean:
 mostlyclean: clean
 
 distclean: clean
-	rm -f Makefile config.status
+	rm -f Makefile config.status config.cache
 
 realclean: distclean
 	rm -f TAGS *.info*
