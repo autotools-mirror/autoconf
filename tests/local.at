@@ -30,9 +30,15 @@ AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 ## Testing syntax.  ##
 ## ---------------- ##
 
+# AT_CHECK_SHELL_SYNTAX(PROGRAM, ALT-COMMAND)
+# -------------------------------------------
+# If the shell handles `-n' well, use it to check the syntax of PROGRAM;
+# otherwise, run ALT-COMMAND.  Grep for [^...] negated character classes in
+# shell patterns, an extension to POSIX that many shells do not support.
 m4_define([AT_CHECK_SHELL_SYNTAX],
 [AS_IF([test x"$ac_cv_sh_n_works" != xno],
-  [AT_CHECK([/bin/sh -n $1], 0)], [$2])])
+  [AT_CHECK([/bin/sh -n $1], 0)], [$2])
+AT_CHECK([grep '\@<:@\^.*).*;;' $1], 1)])
 
 m4_define([AT_CHECK_PERL_SYNTAX],
 [AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c $abs_top_builddir/bin/$1],
