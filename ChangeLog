@@ -1,3 +1,14 @@
+2001-01-27  Akim Demaille  <akim@epita.fr>
+
+	Follow Tim Van Holder's suggestions for a uniform handling of
+	symlinks.
+
+	* m4sh.m4: Stay in `as_', not `ac_'.
+	(_AS_LN_S_PREPARE): Eve out from...
+	* acspecific.m4 (AC_PROG_LN_S): here.  Adjust.
+	* m4sh.m4 (AS_LN_S): New.
+	(AS_SHELL_PREPARE): Call _AS_LN_S_PREPARE.
+
 2001-01-26  Assar Westerlund  <assar@sics.se>
 
 	* autoreconf.sh (find): Fix precedence.

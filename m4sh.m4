@@ -67,6 +67,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 _AS_EXPR_PREPARE
+_AS_LN_S_PREPARE
 _AS_TEST_PREPARE
 _AS_UNSET_PREPARE
 
@@ -82,9 +83,9 @@ AS_UNSET([LC_MESSAGES], [C])
 
 # IFS
 # We need space, tab and new line, in precisely that order.
-ac_nl='
+as_nl='
 '
-IFS=" 	$ac_nl"
+IFS=" 	$as_nl"
 
 # CDPATH.
 AS_UNSET([CDPATH], [:])
@@ -149,7 +150,7 @@ fi
 # AS_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
 # --------------------------------------------------
 # Try to unset the env VAR, otherwise set it to
-# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
+# VALUE-IF-UNSET-NOT-SUPPORTED.  `as_unset' must have been computed.
 m4_defun([AS_UNSET],
 [m4_require([_AS_UNSET_PREPARE])dnl
 $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
@@ -313,22 +314,57 @@ fi
 ])# _AS_EXPR_PREPARE
 
 
+# _AS_LN_S_PREPARE
+# ----------------
+# Don't use conftest.sym to avoid filename issues on DJGPP, where this
+# would yield conftest.sym.exe for DJGPP < 2.04.
+m4_defun([_AS_LN_S_PREPARE],
+[rm -f conftest conftest.exe conftest.file
+echo >conftest.file
+if ln -s conftest.file conftest 2>/dev/null; then
+  # We could just check for DJGPP; but this test a) works b) is more generic
+  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+  if test -f conftest.exe; then
+    # Don't use ln at all; we don't have any links
+    as_ln_s='cp -p'
+  else
+    as_ln_s='ln -s'
+  fi
+elif ln conftest.file conftest 2>/dev/null; then
+  as_ln_s=ln
+else
+  as_ln_s='cp -p'
+fi
+rm -f conftest conftest.exe conftest.file
+])# _AS_LN_S_PREPARE
+
+
+# AS_LN_S(FILE, LINK)
+# -------------------
+# FIXME: Should we add the glue code to handle properly relative symlinks
+# simulated with `ln' or `cp'?
+m4_defun([AS_LN_S],
+[m4_require([_AS_LN_S_PREPARE])dnl
+$as_ln_s $1 $2
+])
+
+
 # AS_MKDIR_P(PATH)
 # ----------------
 # Emulate `mkdir -p' with plain `mkdir'.
 m4_define([AS_MKDIR_P],
 [{ case $1 in
-  [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
-  *)                      ac_incr_dir=.;;
+  [[\\/]]* | ?:[[\\/]]* ) as_incr_dir=;;
+  *)                      as_incr_dir=.;;
 esac
-ac_dummy=$1
-for ac_mkdir_dir in `IFS='\\/'; set X $ac_dummy; shift; echo "$[@]"`; do
-  case $ac_mkdir_dir in
+as_dummy=$1
+for as_mkdir_dir in `IFS='\\/'; set X $as_dummy; shift; echo "$[@]"`; do
+  case $as_mkdir_dir in
     # Skip DOS drivespec
-    ?:) ac_incr_dir=$ac_mkdir_dir ;;
+    ?:) as_incr_dir=$as_mkdir_dir ;;
     *)
-      ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
-      test -d "$ac_incr_dir" || mkdir "$ac_incr_dir"
+      as_incr_dir=$as_incr_dir/$as_mkdir_dir
+      test -d "$as_incr_dir" || mkdir "$as_incr_dir"
     ;;
   esac
 done; }
