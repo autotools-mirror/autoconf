@@ -1,5 +1,13 @@
 2000-11-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Shellology): Some about /usr/xpg4/bin/sh on
+	Solaris.
+	Sort the entries.
+	Some words about POSIX vs Bourne shell.
+	From Russ Allbery and Robert Lipe.
+
+2000-11-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Shell Substitutions): Split into...
 	(Shell Substitutions, Assignments): these.
 	Move them before `Special Shell Variables'.

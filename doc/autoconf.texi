@@ -5002,22 +5002,6 @@ family.
 Below we describe some of the members of the Bourne shell family.
 
 @table @asis
-@item @command{bash}
-@cindex @command{bash}
-To detect whether you are running @command{bash}, test if
-@code{BASH_VERSION} is set.  To disable its extensions and require
-@sc{posix} compatibility, run @samp{set -o posix}. @xref{Bash POSIX
-Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
-details.
-
-@item @command{zsh}
-@cindex @command{zsh}
-To detect whether you are running @command{zsh}, test if
-@code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
-compatible with the Bourne shell: you have to run @samp{emulate sh} and
-set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
-zsh, The Z Shell Manual}, for details.
-
 @item @command{ash}
 @cindex @command{ash}
 @command{ash} is often used on @sc{gnu}/Linux and @sc{bsd} systems as a
@@ -5065,8 +5049,58 @@ from exiting:
 `exit 1` || echo "ash won't print it"
 @end example
 
+@item @command{bash}
+@cindex @command{bash}
+To detect whether you are running @command{bash}, test if
+@code{BASH_VERSION} is set.  To disable its extensions and require
+@sc{posix} compatibility, run @samp{set -o posix}. @xref{Bash POSIX
+Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
+details.
+
+@item @command{/usr/xpg4/bin/sh} on Solaris
+@cindex @command{/usr/xpg4/bin/sh} on Solaris
+The @sc{posix}-compliant Bourne shell on a Solaris system is
+@command{/usr/xpg4/bin/sh} and is part of an extra optional package.
+There is no extra charge for this package, but it is also not part of a
+minimal OS install and therefore some folks may not have it.
+
+@item @command{zsh}
+@cindex @command{zsh}
+To detect whether you are running @command{zsh}, test if
+@code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
+compatible with the Bourne shell: you have to run @samp{emulate sh} and
+set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
+zsh, The Z Shell Manual}, for details.
 @end itemize
 @end table
+
+The following discussion between Russ Allbery and Robert Lipe is worth
+reading:
+
+@noindent
+Russ Allbery:
+
+@quotation
+The @sc{gnu} assumption that @command{/bin/sh} is the one and only shell
+leads to a permanent deadlock.  Vendors don't want to break user's
+existant shell scripts, and there are some corner cases in the Bourne
+shell that are not completely compatible with a @sc{posix} shell.  Thus,
+vendors who have taken this route will @emph{never} (OK... ``never say
+never'') replace the Bourne shell (as @command{/bin/sh}) with a
+@sc{posix} shell.
+@end quotation
+
+@noindent
+Robert Lipe:
+
+@quotation
+This is exactly the problem.  While most (at least most System V's) do
+have a bourne shell that accepts shell functions most vendor
+@command{/bin/sh} programs are not the @sc{posix} shell.
+
+So while most modern systems do have a shell _somewhere_ that meets the
+@sc{posix} standard, the challenge is to find it.
+@end quotation
 
 
 @node Shell Substitutions, Assignments, Shellology, Portable Shell
