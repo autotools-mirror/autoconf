@@ -45,8 +45,7 @@ edit = sed \
 	-e 's,@M4\@,$(M4),g' \
 	-e 's,@AWK\@,$(AWK),g' \
 	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g' \
-	-e 's,@SITE_MACRO_DIR\@,$(SITE_MACRO_DIR),g'
+	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
 # autoconf is written in M4sh.
 AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh

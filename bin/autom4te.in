@@ -524,14 +524,6 @@ Try `$me --help' for more information."
   $melt = 1
     if $freeze;
 
-  # Add directories from the appropriate env var to the include path.
-  @include = (@include, split(/:/, $ENV{'AUTOM4TE_PATH'}))
-    if exists($ENV{'AUTOM4TE_PATH'});
-
-  # Also add the site macro directory, if applicable.
-  @include = (@include, '@SITE_MACRO_DIR@')
-    if ('@SITE_MACRO_DIR@' ne 'no');
-
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
   # invalidates the cache.  And strip `.' which is implicit and always

@@ -1183,13 +1183,6 @@ Append @var{dir} to the include path.  Multiple invocations accumulate.
 @item -B @var{dir}
 Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 
-After searching any directories specified using @option{--prepend-include}
-or @option{--include}, @command{autoconf} will also search the directories
-specified in the @code{AUTOM4TE_PATH} environment variable, if set.
-And finally, @command{autoconf} will also search the system-wide site
-macro directory, which is set to
-@samp{$@{datadir@}/autoconf/site_macros} by default.
-
 @item --output=@var{file}
 @itemx -o @var{file}
 Save output (script or trace) to @var{file}.  The file @option{-} stands
