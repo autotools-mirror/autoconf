@@ -166,7 +166,7 @@ TRACE1
 TRACE2
 
 # With arguments, single line.
-TRACE1(foo, bar, baz)
+TRACE1(foo, @bar, @baz)
 TRACE1(foo, TRACE1(bar, baz))
 TRACE1(foo, active, baz)
 TRACE1(foo, [active], TRACE1(active, [active]))
@@ -183,8 +183,8 @@ AT_CHECK_AUTOCONF([-t TRACE1 -t TRACE2], 0,
 [[configure.ac:6:TRACE1:
 configure.ac:6:TRACE2:
 configure.ac:7:TRACE2:
-configure.ac:10:TRACE1:foo:bar:baz
-configure.ac:10:TRACE2:bar:baz
+configure.ac:10:TRACE1:foo:@bar:@baz
+configure.ac:10:TRACE2:@bar:@baz
 configure.ac:11:TRACE1:bar:baz
 configure.ac:11:TRACE2:baz
 configure.ac:11:TRACE1:foo::baz
@@ -205,7 +205,7 @@ AT_CHECK_AUTOCONF([[-t TRACE1:'
 [[
 [], [], [].
 
-[foo], [bar], [baz].
+[foo], [@bar], [@baz].
 
 [bar], [baz], [].
 
@@ -226,7 +226,7 @@ foo], [].
 AT_CHECK_AUTOCONF([-t TRACE2:'${)===(}@'], 0,
 [[[]
 []
-[bar])===([baz]
+[@bar])===([@baz]
 [baz]
 [])===([baz]
 [ACTIVE])===([baz]
@@ -458,14 +458,14 @@ AT_DATA([configure.ac],
 AC_CONFIG_HEADERS(config.h:config.hin)
 AH_TOP([Top1 from configure.ac.])
 AH_TOP([Top2 from configure.ac.])
-AH_TOP([The Cat in a @.])
+AH_TOP([The Cat in a h@t.])
 AH_VERBATIM([Middle], [Middle from configure.ac.])
-AH_VERBATIM([Mouse],  [The Mouse in a @.])
+AH_VERBATIM([Mouse],  [The Mouse in a h@t.])
 AH_BOTTOM([Bottom1 from configure.ac.])
 AH_BOTTOM([Bottom2 from configure.ac.])
-AH_BOTTOM([The Dog in a @.])
+AH_BOTTOM([The Dog in a h@t.])
 
-AC_DEFINE([ANT], [@], [The Ant in a @.])
+AC_DEFINE([ANT], [@], [The Ant in a h@t.])
 ]])
 
 
@@ -484,14 +484,14 @@ Top1 from configure.ac.
 
 Top2 from configure.ac.
 
-The Cat in a @.
+The Cat in a h@t.
 
-/* The Ant in a @. */
+/* The Ant in a h@t. */
 #undef ANT
 
 Middle from configure.ac.
 
-The Mouse in a @.
+The Mouse in a h@t.
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
@@ -512,7 +512,7 @@ Bottom1 from configure.ac.
 
 Bottom2 from configure.ac.
 
-The Dog in a @.
+The Dog in a h@t.
 /* Bottom from acconfig.h. */
 ]])
 

@@ -1,3 +1,16 @@
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (_AS_QUOTE): The warning about quoted
+	characters is a syntax warning now.
+	(_AS_QUOTE): Accept $2 as list of characters to quote.
+	* lib/autoconf/autoheader.m4 (AH_VERBATIM, _AH_VERBATIM_OLD):
+	Quote for Perl, not sh.
+	* bin/autoheader.in: When $debug, report the file which is
+	`do'ne.
+	* tests/tools.at (autom4te, autoheader): Exercise @bar, not merely
+	`@', to tickle Perl's lists.
+	Reported by Carlos Velasco.
+
 2002-10-18  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (handle_m4): Pass --fatal-warning to m4, so that

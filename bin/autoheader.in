@@ -176,6 +176,7 @@ xsystem ("$autoconf "
 	 . " $ARGV[0] >$tmp/traces.pl");
 
 local (%verbatim, %symbol);
+debug "$me: \`do'ing $tmp/traces.pl:\n" . `sed 's/^/| /' $tmp/traces.pl`;
 do "$tmp/traces.pl";
 warn "couldn't parse $tmp/traces.pl: $@" if $@;
 error "error: AC_CONFIG_HEADERS not found in $ARGV[0]"

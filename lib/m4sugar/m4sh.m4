@@ -335,18 +335,15 @@ m4_define([_AS_ECHO_UNQUOTED],
 [echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
-# _AS_QUOTE(STRING)
-# -----------------
+# _AS_QUOTE(STRING, [CHARS = `"])
+# -------------------------------
 # If there are quoted (via backslash) backquotes do nothing, else
 # backslash all the quotes.
-# FIXME: In a distant future (2.51 or +), this warning should be
-# classified as `syntax'.  It is classified as `obsolete' to ease
-# the transition (for Libtool for instance).
 m4_define([_AS_QUOTE],
 [_AS_QUOTE_IFELSE([$1],
-                  [AS_ESCAPE([$1], [`""])],
-                  [m4_warn([obsolete],
-           [back quotes and double quotes should not be escaped in: $1])dnl
+                  [AS_ESCAPE([$1], m4_default([$2], [`""]))],
+                  [m4_warn([syntax],
+           [back quotes and double quotes must not be escaped in: $1])dnl
 $1])])
 
 
