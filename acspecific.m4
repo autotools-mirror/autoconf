@@ -1114,7 +1114,7 @@ if test $ac_have_func = no; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
-AC_CHECK_LIB(elf, elf_read,
+AC_CHECK_LIB(elf, elf_begin,
   [LIBS="$LIBS -lelf" ac_have_func=yes AC_DEFINE(SVR4)
   AC_CHECK_LIB(kvm, kvm_open, LIBS="$LIBS -lkvm")])
 fi
