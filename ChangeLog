@@ -1,3 +1,16 @@
+2000-02-25  Akim Demaille  <akim@epita.fr>
+
+	Export the knowledge on disabling echo's trailing new line.
+
+	* acspecific.m4 (AC_PROG_ECHO_N): Renamed as...
+	(_AC_PROG_ECHO): this.
+	Set ECHO_N, ECHO_C, ECHO_T instead of ac_n, ac_c and ac_t.
+	All dependencies changed.
+	* doc/autoconf.texi (Preset Output Variables): Document ECHO_C,
+	ECHO_N and ECHO_T.
+	* m4/atconfig.m4 (fp_PROG_ECHO): Removed.
+	(AT_CONFIG): Don't use it.
+
 2000-02-24  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh (AC_ACLOCALDIR): Use `(aclocal) 2>/dev/null`, not

@@ -1,6 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Macros that test for specific features.
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+# Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,23 +55,31 @@
 ## --------------------- ##
 
 
+# _AC_PROG_ECHO
+# -------------
 # Check whether to use -n, \c, or newline-tab to separate
 # checking messages from result messages.
+# Don't try to cache, since the results of this macro are needed to
+# display the checking message.  In addition, caching something used once
+# has little interest.
 # Idea borrowed from dist 3.0.
-# Internal use only.
-AC_DEFUN(AC_PROG_ECHO_N,
+AC_DEFUN(_AC_PROG_ECHO,
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  # Stardent Vistra SVR4 grep lacks -e, says Kaveh Ghazi
+  # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
-    ac_n= ac_c='
-' ac_t='	'
+    ECHO_N= ECHO_C='
+' ECHO_T='	'
   else
-    ac_n=-n ac_c= ac_t=
+    ECHO_N=-n ECHO_C= ECHO_T=
   fi
 else
-  ac_n= ac_c='\c' ac_t=
+  ECHO_N= ECHO_C='\c' ECHO_T=
 fi
-])
+AC_SUBST(ECHO_C)dnl
+AC_SUBST(ECHO_N)dnl
+AC_SUBST(ECHO_T)dnl
+])# _AC_PROG_ECHO
+
 
 # AC_PROG_CC([COMPILER ...])
 # --------------------------

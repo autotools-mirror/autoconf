@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 # Requires GNU m4.
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+# Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1139,7 +1140,7 @@ ac_exeext=
 dnl By default assume that objects files use an extension of .o.  Only
 dnl change it if the script calls AC_OBJEXT.
 ac_objext=o
-AC_PROG_ECHO_N
+_AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
 AC_SUBST(SHELL)dnl
 AC_SUBST(CFLAGS)dnl
@@ -1467,7 +1468,7 @@ dnl Set the other $[1] vars.  Propagate the failures of config.sub.
   ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
   ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
 else
-  echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
+  echo $ECHO_N "(cached) $ECHO_C" 1>&AC_FD_MSG
 fi
 
 AC_MSG_RESULT($ac_cv_$1)
@@ -1619,7 +1620,7 @@ define(AC_CACHE_VAL,
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
 AC_VAR_IF_SET([$1],
-              [echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG],
+              [echo $ECHO_N "(cached) $ECHO_C" 1>&AC_FD_MSG],
               [$2])])
 
 
@@ -1756,7 +1757,7 @@ define([_AC_ECHO],
 # _AC_ECHO_N(STRING [ , FD ])
 # Same as _AC_ECHO, but echo doesn't return to a new line.
 define(_AC_ECHO_N,
-[echo $ac_n "_AC_SH_QUOTE($1)$ac_c" 1>&ifelse($2,,AC_FD_MSG,$2)])
+[echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" 1>&ifelse($2,,AC_FD_MSG,$2)])
 
 # AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 define(AC_MSG_CHECKING,
@@ -1770,12 +1771,12 @@ _AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 
 # AC_MSG_RESULT(RESULT-DESCRIPTION)
 define(AC_MSG_RESULT,
-[_AC_ECHO([$ac_t""$1])])
+[_AC_ECHO([$ECHO_T""$1])])
 
 # AC_MSG_RESULT_UNQUOTED(RESULT-DESCRIPTION)
 # Likewise, but perform $ ` \ shell substitutions.
 define(AC_MSG_RESULT_UNQUOTED,
-[_AC_ECHO_UNQUOTED([$ac_t""$1])])
+[_AC_ECHO_UNQUOTED([$ECHO_T""$1])])
 
 # AC_VERBOSE(RESULT-DESCRIPTION)
 define(AC_VERBOSE,
@@ -2204,7 +2205,7 @@ AC_DEFUN(AC_PREFIX_PROGRAM,
 pushdef(AC_Prog, translit($1, a-z, A-Z))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-echo $ac_n "checking for prefix by $ac_c" 1>&AC_FD_MSG
+echo $ECHO_N "checking for prefix by $ECHO_C" 1>&AC_FD_MSG
 AC_PATH_PROG(AC_Prog, $1)
   if test -n "$ac_cv_path_[]AC_Prog"; then
     prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's%/[^/][^/]*//*[^/][^/]*$%%']`

@@ -45,7 +45,7 @@ This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
 
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999 Free Software
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000 Free Software
 Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of this
@@ -80,7 +80,7 @@ approved by the Foundation.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 93, 94, 95, 96, 98, 99 Free Software
+Copyright @copyright{} 1992, 93, 94, 95, 96, 98, 99, 2000 Free Software
 Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of this
@@ -1225,6 +1225,26 @@ set in the environment when @code{configure} runs, the default value is
 set when you call @code{AC_PROG_CXX} (or empty if you don't).
 @code{configure} uses this variable when compiling programs to test for
 C++ features.
+@end defvar
+
+@defvar ECHO_C
+@defvarx ECHO_N
+@defvarx ECHO_T
+@ovindex ECHO_C
+@ovindex ECHO_N
+@ovindex ECHO_T
+How to suppress the trailing newline from @code{echo} for
+question... answer reports:
+
+@example
+echo $ECHO_N "And the winner is... $ECHO_C"
+sleep 100000000000
+echo "$@{ECHO_T@}dead."
+@end example
+
+@noindent
+Some old and uncommon @code{echo} offer no means to achieve this, in
+which case @code{ECHO_T} is set to tab.  You might not want to use it.
 @end defvar
 
 @defvar FFLAGS
