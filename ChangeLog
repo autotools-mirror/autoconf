@@ -1,5 +1,20 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	The Associated Rewriters are proud to present...
+
+	^
+	/ \  U  T  O  U  P  D  A  T  E    I I I
+	/===\
+	/     \      It bells, It whistles...
+
+	* autoupdate.sh: Complete rewrite.  See that file for a detailed
+	explanation.
+	* acgeneral.sh: Don't use AU_DEFINE, but AU_DEFUN.
+	(AC_OUTPUT_COMMANDS_CNT): Renamed as...
+	(_AC_OUTPUT_COMMANDS_CNT): this.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	Get rid of the m4 name spaces.
 
 	* libm4.m4 (m4_changequote, m4_define, m4_defn, m4_dnl, m4_indir,

@@ -3549,13 +3549,13 @@ define([AC_LIST_COMMANDS_COMMANDS])
 # clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
 # depending upon __file__ or the pid).
 AU_DEFUN(AC_OUTPUT_COMMANDS,
-[define([AC_OUTPUT_COMMANDS_CNT], incr(AC_OUTPUT_COMMANDS_CNT))dnl
+[define([_AC_OUTPUT_COMMANDS_CNT], incr(_AC_OUTPUT_COMMANDS_CNT))dnl
 dnl Double quoted since that was the case in the original macro.
-AC_CONFIG_COMMANDS([default-]AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
+AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 ])
 
-# Initialize both in `autoconf::' and `autoupdate::'.
-AU_DEFINE([AC_OUTPUT_COMMANDS_CNT], 0)
+# Initialize.
+AU_DEFUN([_AC_OUTPUT_COMMANDS_CNT], 0)
 
 
 # AC_CONFIG_COMMANDS_PRE(CMDS)
@@ -3681,8 +3681,8 @@ AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
   update, you should probably tune the result yourself.])# AC_LINK_FILES
 
 
-# Initialize both in `autoconf::' and `autoupdate::'.
-AU_DEFINE([_AC_LINK_FILES_CNT], 0)
+# Initialize.
+AU_DEFUN([_AC_LINK_FILES_CNT], 0)
 
 
 
@@ -3738,7 +3738,7 @@ define([AC_LIST_SUBDIRS])
 # If there are arguments given to AC_OUTPUT, dispatch them to the
 # proper modern macros.
 
-AU_DEFINE([AC_OUTPUT],
+AU_DEFUN([AC_OUTPUT],
 [ifval([$1],
       [AC_CONFIG_FILES([$1])
 ])dnl
