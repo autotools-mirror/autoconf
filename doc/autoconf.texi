@@ -327,6 +327,7 @@ M4 Quotation
 Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Evaluation Macros::           More quotation and evaluation control
 * Forbidden Patterns::          Catching unexpanded macros
 
 Writing Autoconf Macros
@@ -6877,6 +6878,7 @@ M4sugar''.
 
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Evaluation Macros::           More quotation and evaluation control
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
@@ -6963,6 +6965,44 @@ m4_wrap([foo])
 @result{}FOOBAR
 @end example
 @end defmac
+
+@node Evaluation Macros
+@subsection Evaluation Macros
+
+The following macros give some control over the order of the evaluation
+by adding or removing levels of quotes.  They are meant for hard core M4
+programmers.
+
+@defmac m4_dquote (@var{arg1}, ...)
+@msindex dquote
+Return the arguments as a quoted list of quoted arguments.
+@end defmac
+
+@defmac m4_quote (@var{arg1}, ...)
+@msindex quote
+Return the arguments as a single entity, i.e., wrap them into a pair of
+quotes.
+@end defmac
+
+The following example aims at emphasing the difference between (i), not
+using these macros, (ii), using @code{m4_quote}, and (iii), using
+@code{m4_dquote}.
+
+@example
+$ @kbd{cat example.m4}
+# Over quote, so that quotes are visible.
+m4_define([show], [$[]1 = [$1], $[]@@ = [$@@]])
+m4_divert(0)dnl
+show(a, b)
+show(m4_quote(a, b))
+show(m4_dquote(a, b))
+$ @kbd{autom4te -l m4sugar example.m4}
+$1 = a, $@@ = [a],[b]
+$1 = a,b, $@@ = [a,b]
+$1 = [a],[b], $@@ = [[a],[b]]
+@end example
+
+
 
 @node Forbidden Patterns
 @subsection Forbidden Patterns

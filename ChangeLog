@@ -1,5 +1,15 @@
 2002-03-04  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Evaluation Macros): New.
+	* lib/m4sugar/m4sugar.m4 (m4_lquote): Remove, it is totally
+	useless.
+	(_m4_foreach): Define the variant with immediate evaluation so
+	that it contains exactly the items, not an expression which
+	evaluation is the current item.
+	(m4_re_string, m4_re_word): Don't over quote them.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
 	Instead of having stacking `shift's evaluated at the end, let
 	`foreach' loops immediately evaluate them.
 

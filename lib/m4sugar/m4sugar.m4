@@ -523,17 +523,14 @@ m4_builtin([popdef], $@)])
 
 # m4_quote(ARGS)
 # --------------
-# Return ARGS quoted.  Note that a list of quoted arguments is returned,
-# not a quoted list.
+# Return ARGS as a single arguments.
 #
 # It is important to realize the difference between `m4_quote(exp)' and
 # `[exp]': in the first case you obtain the quoted *result* of the
 # expansion of EXP, while in the latter you just obtain the string
 # `exp'.
 m4_define([m4_quote],  [[$*]])
-m4_define([m4_lquote], [$@])
-m4_define([m4_dquote], [[$@]])
-
+m4_define([m4_dquote],  [[$@]])
 
 # m4_noquote(STRING)
 # ------------------
@@ -701,9 +698,9 @@ m4_define([m4_car], [[$1]])
 m4_define([m4_cdr], [m4_dquote(m4_shift($@))])
 m4_define([_m4_foreach],
 [m4_if([$2], [[]], [],
-       [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
-                                                     m4_cdr($2),
-                                                     [$3])])])
+       [m4_define([$1], m4_car($2))$3[]_m4_foreach([$1],
+                                                   m4_cdr($2),
+                                                   [$3])])])
 
 
 
@@ -1377,7 +1374,7 @@ m4_define([m4_re_escape],
 # ------------
 # Regexp for `[a-zA-Z_0-9]*'
 m4_define([m4_re_string],
-m4_quote(m4_defn([m4_cr_symbols2]))dnl
+m4_defn([m4_cr_symbols2])dnl
 [*]dnl
 )
 
@@ -1386,7 +1383,7 @@ m4_quote(m4_defn([m4_cr_symbols2]))dnl
 # ----------
 # Regexp for `[a-zA-Z_][a-zA-Z_0-9]*'
 m4_define([m4_re_word],
-m4_quote(m4_defn([m4_cr_symbols1]))dnl
+m4_defn([m4_cr_symbols1])dnl
 m4_defn([m4_re_string])dnl
 )
 
