@@ -86,7 +86,7 @@ AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
-AC_CONFIG_FILES(Makefile m4/Makefile doc/Makefile
+AC_CONFIG_FILES(Makefile doc/Makefile
                 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
                 lib/m4sugar/Makefile
                 lib/autoconf/Makefile lib/autotest/Makefile

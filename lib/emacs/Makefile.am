@@ -18,4 +18,3 @@
 ## 02111-1307, USA.
 
 dist_lisp_LISP = autoconf-mode.el autotest-mode.el
-MAINTAINERCLEANFILES = elisp-comp

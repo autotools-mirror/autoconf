@@ -18,7 +18,32 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-EXTRA_DIST = move-if-change prev-version.txt
+EXTRA_DIST = $(GENERIC_MACROS) $(SPECIFIC_MACROS) $(SPECIFIC_TOOLS) \
+              prev-version.txt
+MAINTAINERCLEANFILES = $(GENERIC_MACROS) $(GENERIC_TOOLS)
 
-MAINTAINERCLEANFILES = config.guess config.sub install-sh mdate-sh missing \
-                       mkinstalldirs texinfo.tex
+GENERIC_MACROS =				\
+auxdir.m4					\
+cond.m4						\
+depend.m4					\
+init.m4						\
+install-sh.m4					\
+lispdir.m4					\
+missing.m4					\
+sanity.m4					\
+strip.m4
+
+SPECIFIC_MACROS =				\
+m4.m4
+
+GENERIC_TOOLS = 				\
+config.guess					\
+config.sub					\
+emacs-comp					\
+install-sh					\
+mdate-sh					\
+missing						\
+mkinstalldirs					\
+texinfo.tex
+
+SPECIFIC_TOOLS = move-if-change

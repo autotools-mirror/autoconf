@@ -20,7 +20,7 @@
 
 AUTOMAKE_OPTIONS = check-news 1.5 dist-bzip2 readme-alpha
 
-SUBDIRS = . lib bin config m4 man doc tests
+SUBDIRS = . lib bin config man doc tests
 
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4

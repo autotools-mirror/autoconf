@@ -1,3 +1,8 @@
+2001-10-24  Akim Demaille  <akim@epita.fr>
+
+	* m4/: Remove, merged into...
+	* config/: here.
+
 2001-10-23  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi (Shellology): Mention the problems with bash
