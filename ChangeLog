@@ -1,3 +1,9 @@
+2003-11-17  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Put at least 14 bytes
+	into the initial confdefs.h, to work around a bug in NextStep 3.3
+	patch 3 reported by Eric Sunshine.
+
 2003-11-15  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Using System Type): Revise, showing $host rather
