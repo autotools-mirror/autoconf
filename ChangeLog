@@ -1,5 +1,11 @@
 2002-09-26  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in: Clarify that -s is meaningless without -i.
+	Reported by Ralf Corsepius.
+	* doc/autoconf.texi (autoreconf Invocation): Likewise.
+
+2002-09-26  Akim Demaille  <akim@epita.fr>
+
 	Single suffix rules and seperated dependencies are not portable.
 
 	* doc/autoconf.texi (Installation Directory Variables): Update.
