@@ -471,7 +471,7 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
     mv "$tmp/conftest.tmp" "$tmp/conftest.in"
     cp "$tmp/conftest.in" "$tmp/conftest.nl"
     echo '$4' >> "$tmp/conftest.nl"
-    $3 < "$tmp/conftest.nl" >"$tmp/conftest.out" || break
+    $3 < "$tmp/conftest.nl" >"$tmp/conftest.out" 2>/dev/null || break
     diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
     if test $ac_count -gt ${$1_max-0}; then
