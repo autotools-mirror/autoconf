@@ -352,7 +352,11 @@ AC_DEFUN([AC_CHECK_SIZEOF],
 AC_CHECK_TYPE([$1], [], [], [$3])
 AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
 [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
-  _AC_COMPUTE_INT([sizeof ($1)],
+  # The cast to unsigned long works around a bug in the HP C Compiler
+  # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+  # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
+  # This bug is HP SR number 8606223364.
+  _AC_COMPUTE_INT([(unsigned long) (sizeof ($1))],
                   [AS_TR_SH([ac_cv_sizeof_$1])],
                   [AC_INCLUDES_DEFAULT([$3])],
                   [AC_MSG_ERROR([cannot compute sizeof ($1), 77])])
