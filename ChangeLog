@@ -1,5 +1,15 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (automake, aclocal): New variables.  Import
+	$AUTOMAKE and $ACLOCAL.
+	Pass --verbose to the tools.
+	Avoid using plenty of variables, just append to existing
+	variables.
+	* doc/autoconf.texi: List options in the order --help, --version,
+	--verbose, --debug, and then specific options.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Various Texinfo adjustments.
 	(Specifying Names): When describing the system triplets, use the
 	same names as the shell variables.

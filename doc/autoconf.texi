@@ -797,20 +797,20 @@ encountered.  Lines starting with @samp{#} are comments.
 @item --help
 Print a summary of the command line options and exit.
 
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+Print the names of the files it examines and the potentially interesting
+symbols it finds in them.  This output can be voluminous.
+
 @item --macrodir=@var{dir}
 @evindex AC_MACRODIR
 Look for the data files in directory @var{dir} instead of the default
 installation directory.  You can also set the @code{AC_MACRODIR}
 environment variable to a directory; this option overrides the
 environment variable.
-
-@item --verbose
-Print the names of the files it examines and the potentially interesting
-symbols it finds in them.  This output can be voluminous.
-
-@item --version
-@itemx -V
-Print the version number of Autoconf and exit.
 @end table
 
 @node ifnames Invocation, autoconf Invocation, autoscan Invocation, Making configure Scripts
@@ -1091,6 +1091,14 @@ properly, but does not pass @option{--macrodir=@var{dir}} or
 @itemx -h
 Print a summary of the command line options and exit.
 
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+Print the name of each directory where @code{autoreconf} runs
+@code{autoconf} (and @code{autoheader}, if appropriate).
+
 @item --force
 @itemx -f
 Remake even @file{configure} scripts and configuration headers that are
@@ -1111,14 +1119,6 @@ Look for the Autoconf macro files in directory @var{dir} instead of the
 default installation directory.  You can also set the @code{AC_MACRODIR}
 environment variable to a directory; this option overrides the
 environment variable.
-
-@item --verbose
-Print the name of each directory where @code{autoreconf} runs
-@code{autoconf} (and @code{autoheader}, if appropriate).
-
-@item --version
-@itemx -V
-Print the version number of Autoconf and exit.
 @end table
 
 

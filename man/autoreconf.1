@@ -45,8 +45,14 @@ set strictness to gnits
 \fB\-\-gnu\fR
 set strictness to gnu
 .TP
-\fB\-i\fR, \fB\-\-include\-deps\fR
+\fB\-\-include\-deps\fR
 include generated dependencies in Makefile.in
+.TP
+\fB\-i\fR
+deprecated alias for \fB\-\-include\-deps\fR
+.PP
+The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, and ACLOCAL
+are honored.
 .SH AUTHOR
 Written by David J. MacKenzie.
 .SH "REPORTING BUGS"

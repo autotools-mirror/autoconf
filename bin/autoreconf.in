@@ -38,11 +38,15 @@ the \`--force' option.
   -f, --force           consider every files are obsolete
 
 The following options are passed to \`automake':
-  --cygnus              assume program is part of Cygnus-style tree
-  --foreign             set strictness to foreign
-  --gnits               set strictness to gnits
-  --gnu                 set strictness to gnu
-  -i, --include-deps    include generated dependencies in Makefile.in
+     --cygnus          assume program is part of Cygnus-style tree
+     --foreign         set strictness to foreign
+     --gnits           set strictness to gnits
+     --gnu             set strictness to gnu
+     --include-deps    include generated dependencies in Makefile.in
+  -i                   deprecated alias for --include-deps
+
+The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, and ACLOCAL
+are honored.
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -75,6 +79,11 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # Variables.
 : ${AC_MACRODIR=@datadir@}
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
+force=no
+localdir=.
+verbose=:
+
+# Looking for autoconf.
 # We test "$dir/autoconf" in case we are in the build tree, in which case
 # the names are not transformed yet.
 for autoconf in "$AUTOCONF" \
@@ -83,17 +92,18 @@ for autoconf in "$AUTOCONF" \
                 "@bindir@/@autoconf-name@"; do
   test -f "$autoconf" && break
 done
+
+# Looking for autoheader.
 for autoheader in "$AUTOHEADER" \
                   "$dir/@autoheader-name@" \
                   "$dir/autoheader" \
                   "@bindir@/@autoheader-name@"; do
   test -f "$autoheader" && break
 done
-automake_mode=--gnu
-automake_deps=
-force=no
-localdir=.
-verbose=:
+# Looking for automake.
+: ${automake=${AUTOMAKE=automake}}
+# Looking for aclocal.
+: ${aclocal=${ACLOCAL=aclocal}}
 
 # Parse command line.
 while test $# -gt 0; do
@@ -127,10 +137,10 @@ while test $# -gt 0; do
 
      --force | -f )
        force=yes; shift ;;
-     --cygnus | --foreign | --gnits | --gnu)
-       automake_mode=$1; shift ;;
-     --include-deps | -i)
-       automake_deps=$1; shift ;;
+
+     # Options of Automake.
+     --cygnus | --foreign | --gnits | --gnu | --include-deps | -i )
+       automake="$automake $1"; shift ;;
 
      -- )     # Stop option processing.
        shift; break ;;
@@ -152,9 +162,12 @@ if test $# -ne 0; then
   exit 1
 fi
 
-# Set up autoconf and autoheader.
-autoconf="$autoconf -l $localdir"
-autoheader="$autoheader -l $localdir"
+# Dispatch autoreconf's option to the tools.
+autoconf="$autoconf -l $localdir `$verbose --verbose`"
+autoheader="$autoheader -l $localdir `$verbose --verbose`"
+test $force = no && automake="$automake --no-force"
+automake="$automake `$verbose --verbose`"
+aclocal="$aclocal `$verbose --verbose`"
 export AC_MACRODIR
 
 # ----------------------- #
@@ -217,19 +230,16 @@ while read dir; do
 	then
 	   aclocal_flags="$aclocal_flags -I $aclocal_dir"
 	fi
-	$verbose "running aclocal $aclocal_flags in $dir, creating $aclocal_m4"
-	aclocal $aclocal_flags --output=$aclocal_m4
+	$verbose "running $aclocal $aclocal_flags in $dir, creating $aclocal_m4"
+	$aclocal $aclocal_flags --output=$aclocal_m4
      fi
   fi
 
   # Re-run automake if required.  Assumes that there is a Makefile.am
   # in the topmost directory.
-  if test -f Makefile.am
-  then
-     amforce=
-     test $force = no && amforce=--no-force
-     $verbose running automake $amforce in $dir
-     automake $amforce $automake_mode $automake_deps
+  if test -f Makefile.am; then
+     $verbose running $automake $amforce in $dir
+     $automake $amforce $automake_mode $automake_deps
   fi
 
   test ! -f $aclocal_m4 && aclocal_m4=
