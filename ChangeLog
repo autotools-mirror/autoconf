@@ -1,3 +1,8 @@
+2001-01-30  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac 
+	from check for ac_sub_configure.
+
 2001-01-30  Akim Demaille  <akim@epita.fr>
 
 	The recent addition of `exit's prototype in confdefs.h causes
