@@ -2048,7 +2048,7 @@ if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   $3
 m4_ifvanl([$4], [else
   $4])dnl
-fi[]dnl
+fi; dnl
 ])# AC_ARG_ENABLE
 
 
@@ -2076,7 +2076,7 @@ if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   $3
 m4_ifvanl([$4], [else
   $4])dnl
-fi[]dnl
+fi; dnl
 ])# AC_ARG_WITH
 
 AU_DEFUN([AC_WITH],
