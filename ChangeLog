@@ -1,3 +1,10 @@
+2003-04-27  Karl Berry  <karl@freefriends.org>
+
+	* doc/autoconf.texi: Make the dir entries in the autoconf manual
+	align better with others.  I also made some of the individual
+	entries on one line, for brevity and to make it easier for me to
+	sort my dir-example file in the Texinfo distribution :).
+
 2003-04-12  Jim Meyering  <jim@meyering.net>
 
 	* NEWS: Mention the new macro.
@@ -5526,7 +5533,7 @@
 
 -----
 
-Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 
