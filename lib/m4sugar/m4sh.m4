@@ -152,7 +152,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Name of the executable.
-as_me=`AS_BASENAME($[0])`
+as_me=`AS_BASENAME("$[0]")`
 
 # Rewrite early, but we need PATH_SEPARATOR.
 _AS_PATH_SEPARATOR_PREPARE
