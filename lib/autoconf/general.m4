@@ -1987,7 +1987,7 @@ undefine([AC_CV_NAME])dnl
 dnl ### Checking for typedefs
 
 
-dnl AC_CHECK_TYPE(TYPE, DEFAULT)
+dnl AC_CHECK_TYPE(TYPE, DEFAULT [, INCLUDES])
 AC_DEFUN(AC_CHECK_TYPE,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_MSG_CHECKING(for $1)
@@ -1995,16 +1995,17 @@ AC_CACHE_VAL(ac_cv_type_$1,
 [AC_EGREP_CPP(dnl
 changequote(<<,>>)dnl
 <<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
-changequote([,]), [#include <sys/types.h>
+changequote([,]), ifelse([$3],,[#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
 #include <stddef.h>
-#endif], eval "ac_cv_type_$1=yes", eval "ac_cv_type_$1=no")])dnl
+#endif],[$3])
+, eval "ac_cv_type_$1=yes", eval "ac_cv_type_$1=no")])dnl
 if eval "test \"`echo '$ac_cv_type_'$1`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE_UNQUOTED($1, $2)
+  AC_DEFINE_UNQUOTED($1, $2, [Define to \`$2' if <sys/types.h> does not define.])
 fi
 ])
 

@@ -2685,12 +2685,13 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 This macro is used to check for typedefs not covered by the particular
 test macros.
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default})
+@defmac AC_CHECK_TYPE (@var{type}, @var{default} @r{[}, @var{includes}@r{]})
 @maindex CHECK_TYPE
 If the type @var{type} is not defined in @file{sys/types.h}, or
 @file{stdlib.h} or @file{stddef.h} if they exist, define it to be the
 C (or C++) builtin type @var{default}; e.g., @samp{short} or
-@samp{unsigned}.
+@samp{unsigned}.  The default header files to search can be replaced
+by supplying the optional argument @var{includes}.
 @end defmac
 
 @node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Typedefs, Existing Tests
