@@ -26,7 +26,7 @@ SUBDIRS = . lib bin config m4 man doc tests
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
-             BUGS INSTALL.txt \
+             BUGS \
              GNUmakefile Makefile.maint
 
 # Automake is unable to look into our special aclocal.m4...

@@ -1,5 +1,9 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (EXTRA_DIST): INSTALL.txt is a dead hack.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* m4/atconfig.m4 (AT_CONFIG): Remove, replaced by...
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): this.
 	New file.
