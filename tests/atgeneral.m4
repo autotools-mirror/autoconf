@@ -384,18 +384,20 @@ dnl Restore stdout to fd1 and stderr to fd2.
   exec 1>&5 2>&6
 dnl If not verbose, neutralize the output of diff.
   $at_verbose || exec 1>/dev/null 2>/dev/null
+  at_failed=false;
   AT_CASE([$3],
           ignore, [$at_verbose && cat stdout;:],
           expout, [AT_DEFINE([AT_data_expout], [ expout])dnl
-$at_diff expout stdout || exit 1],
-          [], [$at_diff empty stdout || exit 1],
-          [echo $at_n "patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || exit 1])
+$at_diff expout stdout || at_failed=:],
+          [], [$at_diff empty stdout || at_failed=:],
+          [echo $at_n "patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || at_failed=:])
   AT_CASE([$4],
           ignore, [$at_verbose && cat stderr;:],
           experr, [AT_DEFINE([AT_data_experr], [ experr])dnl
-$at_diff experr stderr || exit 1],
-          [], [$at_diff empty stderr || exit 1],
-          [echo $at_n "patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || exit 1])
+$at_diff experr stderr || at_failed=:],
+          [], [$at_diff empty stderr || at_failed=:],
+          [echo $at_n "patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
+  $at_failed && exit 1
 fi
 $at_traceon
 ])# AT_CHECK

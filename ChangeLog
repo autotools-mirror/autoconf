@@ -1,5 +1,10 @@
 2000-09-21  Akim Demaille  <akim@epita.fr>
 
+	* src/atgeneral.m4 (AC_CHECK): Display stderr including when the
+	test failed because of stdout.
+
+2000-09-21  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4: Formatting changes.
 	(AT_INIT): Let `at_stop_on_error' and `at_verbose' be `:'/`false'
 	variables instead of `'/`1'.
