@@ -581,6 +581,9 @@ dnl
 dnl FIXME: there is no checking of a longer PREFIX than WIDTH, but do
 dnl we really want to bother with people trying each single corner
 dnl of a software?
+dnl
+dnl FIXME: Currently this macro leaves a white space behind it, which,
+dnl in some cases is quite a pain.  Remove this trailing space.
 define([AC_WRAP],
 [pushdef([AC_Prefix], m4_default([$2], []))dnl
 pushdef([AC_Prefix1], m4_default([$3], [AC_Prefix]))dnl
@@ -1782,11 +1785,14 @@ dnl _AC_SH_QUOTE(STRING)
 dnl --------------------
 dnl If there are quoted (via backslash) backquotes do nothing, else
 dnl backslash all the quotes.
+dnl Note: it is important that both case evaluate STRING the same number
+dnl of times so that both _AC_SH_QUOTE([\`Hello world']) and
+dnl _AC_SH_QUOTE([`Hello world']) answer \`Hello world'.
 define(_AC_SH_QUOTE,
 [ifelse(regexp([$1], [\\`]),
         -1, [patsubst([$1], [`], [\\`])],
-        [AC_WARNING([needlessly backslashed backquotes.])dnl
-[$1]])])
+        [AC_WARNING([backquotes should not be backslashed in: $1])dnl
+$1])])
 
 dnl _AC_ECHO_UNQUOTED(STRING [ , FD ])
 dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG).
@@ -1926,6 +1932,10 @@ define(AC_PROVIDE,
 dnl AC_OBSOLETE(THIS-MACRO-NAME [, SUGGESTION])
 define(AC_OBSOLETE,
 [AC_WARNING([$1] is obsolete[$2])])
+
+dnl AC_HASBEEN(THIS-MACRO-NAME [, SUGGESTION])
+define(AC_HASBEEN,
+[AC_FATAL([$1] is obsolete[$2])])
 
 
 

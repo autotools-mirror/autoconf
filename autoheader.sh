@@ -30,11 +30,12 @@ Create a template file of C \`#define' statements for \`configure' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
 given.
 
+  -h, --help            print this help, then exit
+  --version             print version number, then exit
+  -d, --debug           don't remove temporary files
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -v, --verbose         verbosely report processing
-  -h, --help            print this help, then exit
-  --version             print version number, then exit
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -58,11 +59,16 @@ esac
 
 localdir=.
 show_version=no
+debug=false
 
 while test $# -gt 0 ; do
    case "${1}" in
       -h | --help | --h* )
          echo "${usage}"; exit 0 ;;
+      --version | --v* )
+         show_version=yes; shift ;;
+      -d | --debug | --d* )
+         debug=:; shift ;;
       --localdir=* | --l*=* )
          localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
@@ -79,8 +85,6 @@ while test $# -gt 0 ; do
          test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
          AC_MACRODIR="${1}"
          shift ;;
-      --version | --v* )
-         show_version=yes; shift ;;
       -- )     # Stop option processing
         shift; break ;;
       - )	# Use stdin as input.
@@ -134,16 +138,18 @@ esac
 # Extract assignments of SYMS, TYPES, FUNCS, HEADERS, LIBS and DECLS
 # from the modified autoconf processing of the input file.  The sed
 # hair is necessary to win for multi-line macro invocations.
-eval "`$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
-       sed -n -e '
-		: again
-		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
-		/^@@@/{
-			s/^@@@//p
-			n
-			s/^/@@@/
-			b again
-		}'`"
+$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
+ sed -n -e '
+	: again
+	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
+	/^@@@/{
+		s/^@@@//p
+		n
+		s/^/@@@/
+		b again
+	}' >autoheader.decls
+. ./autoheader.decls
+$debug || rm ./autoheader.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -227,7 +233,7 @@ echo "$types" | tr ,. "`echo`." | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
   sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
   echo "
-/* The number of bytes in a ${ctype}.  */
+/* The number of bytes in a \`${ctype}'.  */
 #undef SIZEOF_${sym}"
 done
 
@@ -236,7 +242,7 @@ if test -n "$funcs"; then
   for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
     sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
     echo "
-/* Define if you have the ${func} function.  */
+/* Define if you have the \`${func}' function.  */
 #undef HAVE_${sym}"
   done
 fi
@@ -255,7 +261,7 @@ if test -n "$libs"; then
   for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
    sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
     echo "
-/* Define if you have the ${lib} library (-l${lib}).  */
+/* Define if you have the \`${lib}' library (-l${lib}).  */
 #undef HAVE_LIB${sym}"
   done
 fi

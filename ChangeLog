@@ -1,5 +1,47 @@
 1999-09-28  Akim Demaille  <akim@epita.fr>
 
+	Start to get rid of acconfig.h.  It is an anachronism.
+
+	* acgeneral.m4 (_AC_SH_QUOTE): Both cases must be evaluated the
+	same number of times.
+
+	* acconfig.h (_ALLOCA, CLOSEDIR_VOID, const, CRAY_STACKSEG_END,
+ 	DGUX, DIRENT, GETGROUPS_T, GETLOADAVG_PRIVILEGED, GETPGRP_VOID,
+ 	gid_t, HAVE_ALLOCA, HAVE_ALLOCA_H, HAVE_DOPRNT, HAVE_FNMATCH,
+ 	HAVE_GETLOADAVG, HAVE_GETMNTENT, HAVE_LONG_DOUBLE,
+ 	HAVE_LONG_FILE_NAMES, HAVE_MMAP, HAVE_RESTARTABLE_SYSCALLS,
+ 	HAVE_ST_BLKSIZE, HAVE_ST_BLOCKS, HAVE_STRCOLL, HAVE_ST_RDEV,
+ 	HAVE_STRFTIME, HAVE_SYS_WAIT_H, HAVE_TM_ZONE, HAVE_TZNAME,
+ 	HAVE_UNISTD_H, HAVE_UTIME_NULL, HAVE_VFORK_H, HAVE_VPRINTF,
+ 	HAVE_WAIT3, inline, INT_16_BITS, LONG_64_BITS, MAJOR_IN_MKDEV,
+ 	MAJOR_IN_SYSMACROS, _MINIX, NDIR, NEED_MEMORY_H, NLIST_NAME_UNION,
+ 	NLIST_STRUCT, NO_MINUS_C_MINUS_O, F77_NO_MINUS_C_MINUS_O,
+ 	_POSIX_1_SOURCE, _POSIX_SOURCE, RETSIGTYPE, SELECT_TYPE_ARG1,
+ 	SELECT_TYPE_ARG234, SELECT_TYPE_ARG5, SETPGRP_VOID,
+ 	SETVBUF_REVERSED, STAT_MACROS_BROKEN, STDC_HEADERS, SVR4, SYSDIR,
+ 	SYSNDIR, SYS_SIGLIST_DECLARED, TIME_WITH_SYS_TIME, TM_IN_SYS_TIME,
+ 	uid_t, UMAX, UMAX4_3, USG, vfork, VOID_CLOSEDIR, WORDS_BIGENDIAN,
+ 	X_DISPLAY_MISSING, YYTEXT_POINTER): Removed their autoheader
+ 	template.  They are now documented with their own AC_DEFINE.
+
+	* acgeneral.m4 (AC_HASBEEN): New macro.  Same as AC_OBSOLETE, but
+	dies.
+
+	* acspecific.m4 (AC_UNISTD_H, AC_USG, AC_MEMORY_H, AC_INT_16_BITS,
+ 	AC_LONG_64_BITS): Promoted from obsolete to hasbeen.
+
+	* autoheader.m4 (AC_DEFINE_UNQUOTED): Define via AC_DEFINE, so
+	that we program things only once.
+	(AC_DEFINE): Use AC_WRAP and _AC_SH_QUOTE.  It is now safe to have
+	backquotes and extra spaces in the third argument, without
+	yielding a bad result.
+
+	* autoheader.m4: Instead of a huge `eval', use a temporary file.
+	(option handling): Added --debug, to keep the temporary files.
+	Fixed a couple of missing quotes.
+
+1999-09-28  Akim Demaille  <akim@epita.fr>
+
 	Make AC_FOREACH be robust to active symbols.
 
 	* acgeneral.m4 (m4_split, m4_join, m4_strip): New macros.

@@ -406,7 +406,8 @@ if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE(NO_MINUS_C_MINUS_O)
+  AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
+            [Define if your C compiler doesn't accept -c and -o together.])
 fi
 ])
 
@@ -445,7 +446,8 @@ if eval "test \"`echo '$ac_cv_prog_f77_'${ac_f77}_c_o`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE(F77_NO_MINUS_C_MINUS_O)
+  AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
+            [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
 fi
 ])
 
@@ -643,7 +645,9 @@ rm -f "${LEX_OUTPUT_ROOT}.c"
 ])
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
-  AC_DEFINE(YYTEXT_POINTER)
+  AC_DEFINE(YYTEXT_POINTER, 1,
+            [Define if `lex' declares `yytext' as a `char *' by default,
+             not a `char[]'.])
 fi
 ])
 
@@ -776,33 +780,21 @@ exit (0); }
 ], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
-  AC_DEFINE(STDC_HEADERS)
+  AC_DEFINE(STDC_HEADERS, 1, [Define if you have the ANSI C header files.])
 fi
 ])
 
 AC_DEFUN(AC_UNISTD_H,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(unistd.h)])dnl
-AC_CHECK_HEADER(unistd.h, AC_DEFINE(HAVE_UNISTD_H))])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_HEADERS(unistd.h)])])dnl
 
 AC_DEFUN(AC_USG,
-[AC_OBSOLETE([$0],
-  [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])dnl
-AC_MSG_CHECKING([for BSD string and memory functions])
-AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);],
-  [AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no); AC_DEFINE(USG)])])
-
+[AC_HASBEEN([$0],
+  [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])])
 
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
 dnl To avoid problems, don't check for gcc2 built-ins.
 AC_DEFUN(AC_MEMORY_H,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])dnl
-AC_MSG_CHECKING(whether string.h declares mem functions)
-AC_EGREP_HEADER(memchr, string.h, ac_found=yes, ac_found=no)
-AC_MSG_RESULT($ac_found)
-if test $ac_found = no; then
-  AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
-fi
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])])
 
 AC_DEFUN(AC_HEADER_MAJOR,
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
@@ -812,10 +804,16 @@ AC_DEFUN(AC_HEADER_MAJOR,
 ])
 
 if test $ac_cv_header_sys_types_h_makedev = no; then
-AC_CHECK_HEADER(sys/mkdev.h, [AC_DEFINE(MAJOR_IN_MKDEV)])
+AC_CHECK_HEADER(sys/mkdev.h,
+                [AC_DEFINE(MAJOR_IN_MKDEV, 1,
+                           [Define if `major', `minor', and `makedev' are
+                            declared in <mkdev.h>.])])
 
   if test $ac_cv_header_sys_mkdev_h = no; then
-AC_CHECK_HEADER(sys/sysmacros.h, [AC_DEFINE(MAJOR_IN_SYSMACROS)])
+    AC_CHECK_HEADER(sys/sysmacros.h,
+                    [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
+                               [Define if `major', `minor', and `makedev' are
+                                declared in <sysmacros.h>.])])
   fi
 fi
 ])
@@ -872,10 +870,18 @@ for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
 done
 
 case "$ac_header_dirent" in
-dirent.h) AC_DEFINE(DIRENT) ;;
-sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
-sys/dir.h) AC_DEFINE(SYSDIR) ;;
-ndir.h) AC_DEFINE(NDIR) ;;
+dirent.h)
+  AC_DEFINE(DIRENT, 1,
+            [Define if you have <dirent.h>.]) ;;
+sys/ndir.h)
+  AC_DEFINE(SYSNDIR, 1,
+            [Define if you don't have <dirent.h>, but have <sys/ndir.h>.]) ;;
+sys/dir.h)
+  AC_DEFINE(SYSDIR, 1,
+            [Define if you don't have <dirent.h>, but have <sys/dir.h>]) ;;
+ndir.h)
+  AC_DEFINE(NDIR, 1,
+            [Define if you don't have <dirent.h>, but have <ndir.h>.]) ;;
 esac
 
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
@@ -884,7 +890,8 @@ AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
 if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(VOID_CLOSEDIR)
+  AC_DEFINE(VOID_CLOSEDIR, 1,
+            [Define if the `closedir' function returns void instead of `int'.])
 fi
 ])
 
@@ -919,7 +926,9 @@ You lose.
 #endif
 ], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
 if test $ac_cv_header_stat_broken = yes; then
-  AC_DEFINE(STAT_MACROS_BROKEN)
+  AC_DEFINE(STAT_MACROS_BROKEN, 1,
+            [Define if the `S_IS*' macros in <sys/stat.h> do not
+             work properly.])
 fi
 ])
 
@@ -934,7 +943,8 @@ AC_DEFUN(AC_DECL_SYS_SIGLIST,
 #endif], [char *msg = *(sys_siglist + 1);],
   ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
 if test $ac_cv_decl_sys_siglist = yes; then
-  AC_DEFINE(SYS_SIGLIST_DECLARED)
+  AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
+            [Define if `sys_siglist' is declared by <signal.h>.])
 fi
 ])
 
@@ -953,7 +963,8 @@ wait (&s);
 s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
 ac_cv_header_sys_wait_h=yes, ac_cv_header_sys_wait_h=no)])
 if test $ac_cv_header_sys_wait_h = yes; then
-  AC_DEFINE(HAVE_SYS_WAIT_H)
+  AC_DEFINE(HAVE_SYS_WAIT_H, 1,
+            [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
 fi
 ])
 
@@ -998,7 +1009,9 @@ if test $ac_cv_type_getgroups = cross; then
   AC_EGREP_HEADER([getgroups.*int.*gid_t], unistd.h,
 		  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)
 fi])
-AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
+AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
+                   [Define to the type of elements in the array set by
+                    `getgroups'. Usually this is either `int' or `gid_t'.])
 ])
 
 AC_DEFUN(AC_TYPE_UID_T,
@@ -1006,8 +1019,8 @@ AC_DEFUN(AC_TYPE_UID_T,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
   ac_cv_type_uid_t=yes, ac_cv_type_uid_t=no)])
 if test $ac_cv_type_uid_t = no; then
-  AC_DEFINE(uid_t, int)
-  AC_DEFINE(gid_t, int)
+  AC_DEFINE(uid_t, int, [Define to `int' if <sys/types.h> doesn't define.])
+  AC_DEFINE(gid_t, int, [Define to `int' if <sys/types.h> doesn't define.])
 fi
 ])
 
@@ -1038,13 +1051,17 @@ void (*signal ()) ();
 #endif
 ],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])
-AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
+AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
+                   [Define as the return type of signal handlers
+                    (`int' or `void').])
 ])
 
 
 dnl ### Checks for functions
 
 
+dnl FIXME: What is going on here?  There are both CLOSEDIR_VOID
+dnl *and* VOID_CLOSEDIR.
 AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
@@ -1053,7 +1070,8 @@ AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
 if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(CLOSEDIR_VOID)
+  AC_DEFINE(CLOSEDIR_VOID, 1,
+            [Define if the `closedir' function returns void instead of `int'.])
 fi
 ])
 
@@ -1066,7 +1084,8 @@ AC_DEFUN(AC_FUNC_FNMATCH,
 ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
 ac_cv_func_fnmatch_works=no)])
 if test $ac_cv_func_fnmatch_works = yes; then
-  AC_DEFINE(HAVE_FNMATCH)
+  AC_DEFINE(HAVE_FNMATCH, 1,
+            [Define if your system has a working `fnmatch' function.])
 fi
 ])
 
@@ -1213,7 +1232,8 @@ main()
 ], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
 ac_cv_func_mmap_fixed_mapped=no)])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
-  AC_DEFINE(HAVE_MMAP)
+  AC_DEFINE(HAVE_MMAP, 1,
+            [Define if you have a working `mmap' system call.])
 fi
 ])
 
@@ -1274,7 +1294,8 @@ main()
    AC_MSG_ERROR(cannot check getpgrp if cross compiling))
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
-  AC_DEFINE(GETPGRP_VOID)
+  AC_DEFINE(GETPGRP_VOID, 1,
+            [Define if the `getpgrp' function takes no argument.])
 fi
 ])
 
@@ -1300,20 +1321,32 @@ main()
    AC_MSG_ERROR(cannot check setpgrp if cross compiling))
 )
 if test $ac_cv_func_setpgrp_void = yes; then
-  AC_DEFINE(SETPGRP_VOID)
+  AC_DEFINE(SETPGRP_VOID, 1,
+            [Define if the `setpgrp' function takes no argument.])
 fi
 ])
 
+dnl Why the heck is that _doprnt does not define HAVE__DOPRNT???
+dnl That the logical name!  In addition, why doesn't it use
+dnl AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
+dnl FIXME: To be changed in Autoconf 3.
 AC_DEFUN(AC_FUNC_VPRINTF,
-[AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
+[AC_CHECK_FUNC(vprintf,
+               AC_DEFINE(HAVE_VPRINTF, 1,
+               [Define if you have the `vprintf' function.]))
 if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
+AC_CHECK_FUNC(_doprnt,
+              AC_DEFINE(HAVE_DOPRNT, 1,
+                        [Define if you don't have `vprintf' but do have
+                         `_doprnt.']))
 fi
 ])
 
 AC_DEFUN(AC_FUNC_VFORK,
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADER(vfork.h, AC_DEFINE(HAVE_VFORK_H))
+AC_CHECK_HEADER(vfork.h,
+                AC_DEFINE(HAVE_VFORK_H, 1,
+                          [Define if you have <vfork.h>.]))
 AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
@@ -1410,7 +1443,7 @@ main() {
 ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
 ac_cv_func_vfork_works=$ac_cv_func_vfork)])
 if test "x$ac_cv_func_vfork_works" = xno; then
-  AC_DEFINE(vfork, fork)
+  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
 fi
 ])
 
@@ -1446,7 +1479,8 @@ main() {
 }], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
 ac_cv_func_wait3_rusage=no)])
 if test $ac_cv_func_wait3_rusage = yes; then
-  AC_DEFINE(HAVE_WAIT3)
+  AC_DEFINE(HAVE_WAIT3, 1,
+            [Define if you have the `wait3' system call.])
 fi
 ])
 
@@ -1458,7 +1492,9 @@ AC_CACHE_CHECK([for working alloca.h], ac_cv_header_alloca_h,
 [AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
   ac_cv_header_alloca_h=yes, ac_cv_header_alloca_h=no)])
 if test $ac_cv_header_alloca_h = yes; then
-  AC_DEFINE(HAVE_ALLOCA_H)
+  AC_DEFINE(HAVE_ALLOCA_H, 1,
+            [Define if you have <alloca.h> and it should be used
+             (not on Ultrix).])
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
@@ -1486,7 +1522,8 @@ char *alloca ();
 ], [char *p = (char *) alloca(1);],
   ac_cv_func_alloca_works=yes, ac_cv_func_alloca_works=no)])
 if test $ac_cv_func_alloca_works = yes; then
-  AC_DEFINE(HAVE_ALLOCA)
+  AC_DEFINE(HAVE_ALLOCA, 1,
+            [Define if you have `alloca', as a function or macro.])
 fi
 
 if test $ac_cv_func_alloca_works = no; then
@@ -1495,7 +1532,7 @@ if test $ac_cv_func_alloca_works = no; then
   # contain a buggy version.  If you still want to use their alloca,
   # use ar to extract alloca.o from them instead of compiling alloca.c.
   ALLOCA=alloca.${ac_objext}
-  AC_DEFINE(C_ALLOCA)
+  AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
 
 AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
 [AC_EGREP_CPP(webecray,
@@ -1507,7 +1544,10 @@ wenotbecray
 ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
 if test $ac_cv_os_cray = yes; then
 for ac_func in _getb67 GETB67 getb67; do
-  AC_CHECK_FUNC($ac_func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func)
+  AC_CHECK_FUNC($ac_func,
+                [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func,
+                [Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP systems.
+   This function is required for alloca.c support on those systems.])
   break])
 done
 fi
@@ -1559,26 +1599,34 @@ fi
 AC_REPLACE_FUNCS(getloadavg)
 
 if test $ac_cv_func_getloadavg = yes; then
-  AC_DEFINE(HAVE_GETLOADAVG)
+  AC_DEFINE(HAVE_GETLOADAVG, 1,
+            [Define if your system has its own `getloadavg' function.])
   ac_have_func=yes
 else
   # Figure out what our getloadavg.c needs.
   ac_have_func=no
   AC_CHECK_HEADER(sys/dg_sys_info.h,
-  [ac_have_func=yes; AC_DEFINE(DGUX)
-  AC_CHECK_LIB(dgc, dg_sys_info)])
+  [ac_have_func=yes;
+   AC_DEFINE(DGUX, 1, [Define for DGUX with <sys/dg_sys_info.h>.])
+   AC_CHECK_LIB(dgc, dg_sys_info)])
 
   # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
   # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
   # Irix 4.0.5F has the header but not the library.
   if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
-    ac_have_func=yes; AC_DEFINE(SVR4)
+    ac_have_func=yes;
+    AC_DEFINE(SVR4, 1,
+              [Define on System V Release 4.])
   fi
 
   if test $ac_have_func = no; then
     AC_CHECK_HEADER(inq_stats/cpustats.h,
-    [ac_have_func=yes; AC_DEFINE(UMAX)
-    AC_DEFINE(UMAX4_3)])
+    [ac_have_func=yes;
+     AC_DEFINE(UMAX, 1,
+               [Define for Encore UMAX.])
+     AC_DEFINE(UMAX4_3, 1,
+               [Define for Encore UMAX 4.3 that has <inq_status/cpustats.h>
+                instead of <sys/cpustats.h>.])])
   fi
 
   if test $ac_have_func = no; then
@@ -1591,13 +1639,14 @@ else
   fi
 
   AC_CHECK_HEADER(nlist.h,
-  [AC_DEFINE(NLIST_STRUCT)
+  [AC_DEFINE(NLIST_STRUCT, 1, [Define if you have <nlist.h>.])
   AC_CACHE_CHECK([for n_un in struct nlist], ac_cv_struct_nlist_n_un,
   [AC_TRY_COMPILE([#include <nlist.h>],
   [struct nlist n; n.n_un.n_name = 0;],
   ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])
   if test $ac_cv_struct_nlist_n_un = yes; then
-    AC_DEFINE(NLIST_NAME_UNION)
+    AC_DEFINE(NLIST_NAME_UNION, 1,
+              [Define if your `struct nlist' has an `n_un' member.])
   fi
   ])dnl
 fi # Do not have getloadavg in system libraries.
@@ -1613,7 +1662,10 @@ Yowza Am I SETGID yet
 #endif],
   ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])
 if test $ac_cv_func_getloadavg_setgid = yes; then
-  NEED_SETGID=true; AC_DEFINE(GETLOADAVG_PRIVILEGED)
+  NEED_SETGID=true;
+  AC_DEFINE(GETLOADAVG_PRIVILEGED, 1,
+            [Define if the `getloadavg' function needs to be run setuid
+             or setgid.])
 else
   NEED_SETGID=false
 fi
@@ -1652,7 +1704,9 @@ exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
   ac_cv_func_utime_null=no)
 rm -f core core.* *.core])
 if test $ac_cv_func_utime_null = yes; then
-  AC_DEFINE(HAVE_UTIME_NULL)
+  AC_DEFINE(HAVE_UTIME_NULL, 1,
+            [Define if `utime(file, NULL)' sets file's timestamp to the
+             present.])
 fi
 ])
 
@@ -1667,7 +1721,9 @@ main ()
 }], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
 ac_cv_func_strcoll_works=no)])
 if test $ac_cv_func_strcoll_works = yes; then
-  AC_DEFINE(HAVE_STRCOLL)
+  AC_DEFINE(HAVE_STRCOLL, 1,
+            [Define if you have the `strcoll' function and it is properly
+             defined.])
 fi
 ])
 
@@ -1687,7 +1743,10 @@ main () {
 }], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
 rm -f core core.* *.core])
 if test $ac_cv_func_setvbuf_reversed = yes; then
-  AC_DEFINE(SETVBUF_REVERSED)
+  AC_DEFINE(SETVBUF_REVERSED, 1,
+            [Define if the `setvbuf' function takes the buffering type as
+             its second argument and the buffer pointer as the third, as on
+             System V before release 3.])
 fi
 ])
 
@@ -1696,7 +1755,9 @@ AC_DEFUN(AC_FUNC_GETMNTENT,
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
   [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
     [AC_CHECK_LIB(gen, getmntent, LIBS="-lgen $LIBS")])])
-AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
+AC_CHECK_FUNC(getmntent,
+              [AC_DEFINE(HAVE_GETMNTENT, 1,
+                         [Define if you have the `getmntent' function.])])])
 
 AC_DEFUN(AC_FUNC_MKTIME,
 [AC_REQUIRE([AC_HEADER_TIME])dnl
@@ -1861,10 +1922,13 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_STRFTIME,
-[AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)],
+[AC_CHECK_FUNC(strftime,
+               [AC_DEFINE(HAVE_STRFTIME, 1,
+                          [Define if you have the `strftime' function.])],
 [# strftime is in -lintl on SCO UNIX.
 AC_CHECK_LIB(intl, strftime,
-[AC_DEFINE(HAVE_STRFTIME)
+[AC_DEFINE(HAVE_STRFTIME, 1,
+           [Define if you have the `strftime' function.])
 LIBS="-lintl $LIBS"])])])
 
 AC_DEFUN(AC_FUNC_MEMCMP,
@@ -1916,9 +1980,12 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
   ac_cv_func_select_arg5='struct timeval *'
  fi
  AC_MSG_RESULT([$ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5])
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1,$ac_cv_func_select_arg1)
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234,($ac_cv_func_select_arg234))
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5,($ac_cv_func_select_arg5))
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1,$ac_cv_func_select_arg1,
+                    [Define to the type of arg1 for `select'.])
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234,($ac_cv_func_select_arg234),
+                    [Define to the type of args 2, 3 and 4 for `select'.])
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5,($ac_cv_func_select_arg5),
+                    [Define to the type of arg5 for `select'.])
 ])
 
 
@@ -1933,7 +2000,8 @@ AC_DEFUN(AC_HEADER_TIME,
 #include <time.h>],
 [struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
 if test $ac_cv_header_time = yes; then
-  AC_DEFINE(TIME_WITH_SYS_TIME)
+  AC_DEFINE(TIME_WITH_SYS_TIME, 1,
+            [Define if you can safely include both <sys/time.h> and <time.h>.])
 fi
 ])
 
@@ -1945,7 +2013,8 @@ AC_DEFUN(AC_STRUCT_TM,
 [struct tm *tp; tp->tm_sec;],
   ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])
 if test $ac_cv_struct_tm = sys/time.h; then
-  AC_DEFINE(TM_IN_SYS_TIME)
+  AC_DEFINE(TM_IN_SYS_TIME, 1,
+            [Define if your <sys/time.h> declares `struct tm'.])
 fi
 ])
 
@@ -1954,7 +2023,8 @@ AC_DEFUN(AC_STRUCT_TIMEZONE,
 AC_C_STRUCT_MEMBER(tm_zone, [#include <sys/types.h>
 #include <$ac_cv_struct_tm>], [struct tm], tm_zone)
 if test "$ac_cv_c_struct_member_tm_zone" = yes; then
-  AC_DEFINE(HAVE_TM_ZONE)
+  AC_DEFINE(HAVE_TM_ZONE, 1,
+            [Define if your `struct tm' has `tm_zone'.])
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_TRY_LINK(
@@ -1966,8 +2036,19 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 changequote([, ])dnl
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
   if test $ac_cv_var_tzname = yes; then
-    AC_DEFINE(HAVE_TZNAME)
+    AC_DEFINE(HAVE_TZNAME, 1,
+              [Define if you don't have `tm_zone' but do have the external
+               array `tzname'.])
   fi
+fi
+])
+
+AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
+[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
+#include <sys/stat.h>], [struct stat], st_blksize)
+if test $ac_cv_c_struct_member_st_blksize = yes; then
+  AC_DEFINE(HAVE_ST_BLKSIZE, 1,
+            [Define if your `struct stat' has `st_blksize'.])
 fi
 ])
 
@@ -1975,26 +2056,20 @@ AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 [AC_C_STRUCT_MEMBER(st_blocks, [#include <sys/types.h>
 #include <sys/stat.h>], [struct stat], st_blocks)
 if test $ac_cv_c_struct_member_st_blocks = yes; then
-  AC_DEFINE(HAVE_ST_BLOCKS)
+  AC_DEFINE(HAVE_ST_BLOCKS, 1,
+            [Define if your `struct stat' has `st_blocks'.])
 else
   LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
 fi
 AC_SUBST(LIBOBJS)dnl
 ])
 
-AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
-[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
-#include <sys/stat.h>], [struct stat], st_blksize)
-if test $ac_cv_c_struct_member_st_blksize = yes; then
-  AC_DEFINE(HAVE_ST_BLKSIZE)
-fi
-])
-
 AC_DEFUN(AC_STRUCT_ST_RDEV,
 [AC_C_STRUCT_MEMBER(st_rdev, [#include <sys/types.h>
 #include <sys/stat.h>], [struct stat], st_rdev)
 if test $ac_cv_c_struct_member_st_rdev = yes; then
-  AC_DEFINE(HAVE_ST_RDEV)
+  AC_DEFINE(HAVE_ST_RDEV, 1,
+            [Define if your `struct stat' has `st_rdev'.])
 fi
 ])
 
@@ -2042,25 +2117,16 @@ exit(sizeof(long double) < sizeof(double)); }],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
-  AC_DEFINE(HAVE_LONG_DOUBLE)
+  AC_DEFINE(HAVE_LONG_DOUBLE, 1,
+            [Define if the `long double' type works.])
 fi
 ])
 
 AC_DEFUN(AC_INT_16_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])dnl
-AC_MSG_CHECKING(whether int is 16 bits)
-AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
- [AC_MSG_RESULT(yes)
- AC_DEFINE(INT_16_BITS)], AC_MSG_RESULT(no))
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(int)])])
 
 AC_DEFUN(AC_LONG_64_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])dnl
-AC_MSG_CHECKING(whether long int is 64 bits)
-AC_TRY_RUN([main() { exit(sizeof(long int) != 8); }],
- [AC_MSG_RESULT(yes)
- AC_DEFINE(LONG_64_BITS)], AC_MSG_RESULT(no))
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(long)])])
 
 AC_DEFUN(AC_C_BIGENDIAN,
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
@@ -2089,7 +2155,9 @@ AC_TRY_RUN([main () {
 }], ac_cv_c_bigendian=no, ac_cv_c_bigendian=yes)
 fi])
 if test $ac_cv_c_bigendian = yes; then
-  AC_DEFINE(WORDS_BIGENDIAN)
+  AC_DEFINE(WORDS_BIGENDIAN, 1,
+            [Define if your processor stores words with the most significant
+             byte first (like Motorola and SPARC, unlike Intel and VAX).])
 fi
 ])
 
@@ -2105,8 +2173,12 @@ done
 ])
 case "$ac_cv_c_inline" in
   inline | yes) ;;
-  no) AC_DEFINE(inline, ) ;;
-  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
+  no) AC_DEFINE(inline,,
+                [Define as `__inline' if that's what the C compiler calls it,
+                 or to nothing if it is not supported.]) ;;
+  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline,
+                         [Define as `__inline' if that's what the C compiler
+                          calls it, or to nothing if it is not supported.]) ;;
 esac
 ])
 
@@ -2162,7 +2234,8 @@ ccp = (char const *const *) p;
 changequote([, ])dnl
 ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
-  AC_DEFINE(const, )
+  AC_DEFINE(const,,
+            [Define to empty if the keyword `const' does not work.])
 fi
 ])
 
@@ -2175,9 +2248,8 @@ AC_EGREP_CPP([#teststring],[
 
 char *s = x(teststring);
 ], ac_cv_c_stringize=no, ac_cv_c_stringize=yes))
-if test "${ac_cv_c_stringize}" = yes
-then
-        AC_DEFINE(HAVE_STRINGIZE)
+if test "${ac_cv_c_stringize}" = yes; then
+  AC_DEFINE(HAVE_STRINGIZE)
 fi
 AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])dnl
@@ -2611,7 +2683,8 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
 done])
 if test $ac_cv_sys_long_file_names = yes; then
-  AC_DEFINE(HAVE_LONG_FILE_NAMES)
+  AC_DEFINE(HAVE_LONG_FILE_NAMES, 1,
+            [Define if you support file names longer than 14 characters.])
 fi
 ])
 
@@ -2634,7 +2707,9 @@ main () {
 }
 ], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
 if test $ac_cv_sys_restartable_syscalls = yes; then
-  AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS)
+  AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS, 1,
+            [Define if system calls automatically restart after interruption
+             by a signal.])
 fi
 ])
 
@@ -2851,7 +2926,8 @@ AC_DEFUN(AC_PATH_XTRA,
 [AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
-  AC_DEFINE(X_DISPLAY_MISSING)
+  AC_DEFINE(X_DISPLAY_MISSING, 1,
+            [Define if the X Window System is missing or not being used.])
   X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
 else
   if test -n "$x_includes"; then
@@ -3056,9 +3132,14 @@ AC_DEFUN(AC_MINIX,
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
-  AC_DEFINE(_POSIX_SOURCE)
-  AC_DEFINE(_POSIX_1_SOURCE, 2)
-  AC_DEFINE(_MINIX)
+  AC_DEFINE(_POSIX_SOURCE, 1,
+            [Define if you need to in order for `stat' and other things to
+             work.])
+  AC_DEFINE(_POSIX_1_SOURCE, 2,
+            [Define if the system does not provide POSIX.1 features except
+             with this defined.])
+  AC_DEFINE(_MINIX, 1,
+            [Define if on MINIX.])
 fi
 ])
 
@@ -3072,7 +3153,9 @@ if test -d /etc/conf/kconfig.d &&
 then
   AC_MSG_RESULT(yes)
   ISC=yes # If later tests want to check for ISC.
-  AC_DEFINE(_POSIX_SOURCE)
+  AC_DEFINE(_POSIX_SOURCE, 1,
+            [Define if you need to in order for stat and other things to
+             work.])
   if test "$GCC" = yes; then
     CC="$CC -posix"
   else

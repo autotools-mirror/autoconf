@@ -106,21 +106,13 @@ dnl Ignore CPP macro arguments.
 @@@syms="$syms patsubst($1, [(.*$])"@@@
 ], [#
 @@@verbatim="$verbatim
-/* $3 */
+dnl Quoted twice because there are two applications.
+AC_WRAP(_AC_SH_QUOTE([[$3 */]]), [   ], [/* ])
 #undef $1
 "@@@
 ])])
 
-define([AC_DEFINE_UNQUOTED], [#
-ifelse([$3],,[#
-dnl Ignore CPP macro arguments.
-@@@syms="$syms patsubst($1, [(.*$])"@@@
-], [#
-@@@verbatim="$verbatim
-/* $3 */
-#undef $1
-"@@@
-])])
+define([AC_DEFINE_UNQUOTED], [AC_DEFINE($@)])
 
 dnl Autoheader is not the right program to complain about cross-compiling
 define([AC_TRY_RUN], [
