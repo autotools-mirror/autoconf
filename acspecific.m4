@@ -1768,10 +1768,12 @@ EOF
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `make acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
-    if test ! -f $ac_im_usrlibdir/libX11.a && test -f $ac_im_libdir/libX11.a
-    then
-      ac_im_usrlibdir=$ac_im_libdir
-    fi
+    for ac_extension in a so sl; do
+      if test ! -f $ac_im_usrlibdir/libX11.$ac_extension &&
+        test -f $ac_im_libdir/libX11.$ac_extension; then
+        ac_im_usrlibdir=$ac_im_libdir; break
+      fi
+    done
     # Screen out bogus values from the imake configuration.
     case "$ac_im_incroot" in
 	/usr/include) ;;
