@@ -215,6 +215,59 @@ sub autoreconf ($)
     }
 
 
+  # ----------------- #
+  # Running aclocal.  #
+  # ----------------- #
+
+  # Run it first: it might discover new macros to add, e.g.,
+  # AC_PROG_LIBTOOL, which we will trace later to see if Libtool is
+  # used.
+  #
+  # Always run it.  Tracking its sources for up-to-dateness is too
+  # complex and too error prone.  The best we can do is avoiding
+  # nuking the time stamp.
+  my $uses_aclocal = 1;
+
+  # Nevertheless, if aclocal.m4 exists and is not made by aclocal,
+  # don't run aclocal.
+
+  if (-f 'aclocal.m4')
+    {
+      my $aclocal_m4 = new Autom4te::XFile 'aclocal.m4';
+      $_ = $aclocal_m4->getline;
+      $uses_aclocal = 0
+	unless /generated.*by aclocal/;
+    }
+
+  # If there are flags for aclocal in Makefile.am, use them.
+  my $aclocal_flags = '';
+  if ($uses_aclocal && -f 'Makefile.am')
+    {
+      my $makefile = new Autom4te::XFile 'Makefile.am';
+      while ($_ = $makefile->getline)
+	{
+	  if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
+	    {
+	      $aclocal_flags = $1;
+	      last;
+	    }
+	}
+    }
+
+  if (!$uses_aclocal)
+    {
+      verbose "$configure_ac: not using aclocal";
+    }
+  else
+    {
+      xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
+      # aclocal may produce no output.
+      update_file ('aclocal.m4t', 'aclocal.m4')
+	if -f 'aclocal.m4t';
+    }
+
+
+
   # ------------------------------- #
   # See what tools will be needed.  #
   # ------------------------------- #
@@ -225,21 +278,20 @@ sub autoreconf ($)
   my $uses_gettext;
   my $uses_libtool;
   my $uses_autoheader;
-  my $uses_aclocal;
   my @subdir;
   my $traces = new Autom4te::XFile
     ("$autoconf"
      . join (' --trace=', '',
-	     'AC_INIT', 'AM_GNU_GETTEXT', 'AM_PROG_LIBTOOL',
+	     'AC_INIT', 'AM_GNU_GETTEXT', 'AC_PROG_LIBTOOL',
 	     'AC_CONFIG_HEADERS',
 	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1')
      . ' |');
   while ($_ = $traces->getline)
     {
-      $uses_autoconf = 1          if /AC_INIT/;
-      $uses_gettext = 1           if /AM_GNU_GETTEXT/;
-      $uses_libtool = 1           if /AM_PROG_LIBTOOL/;
-      $uses_autoheader = 1        if /AC_CONFIG_HEADERS/;
+      $uses_autoconf = 1            if /AC_INIT/;
+      $uses_gettext = 1             if /AM_GNU_GETTEXT/;
+      $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
+      $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
     }
 
@@ -256,6 +308,8 @@ sub autoreconf ($)
 	  verbose "$configure_ac: subdirectory $_ not present";
 	}
     }
+
+
 
   # -------------------- #
   # Running gettexitze.  #
@@ -296,53 +350,6 @@ sub autoreconf ($)
       verbose "$configure_ac: not running libtoolize: --install not given";
     }
 
-
-  # ----------------- #
-  # Running aclocal.  #
-  # ----------------- #
-
-  # Always run aclocal.  Tracking its sources for up-to-dateness is
-  # too complex and too error prone.  The best we can do is avoiding
-  # nuking the time stamp.
-  $uses_aclocal = 1;
-
-  # Nevertheless, if aclocal.m4 exists and is not made by aclocal,
-  # don't run aclocal.
-
-  if (-f 'aclocal.m4')
-    {
-      my $aclocal_m4 = new Autom4te::XFile 'aclocal.m4';
-      $_ = $aclocal_m4->getline;
-      $uses_aclocal = 0
-	unless /generated.*by aclocal/;
-    }
-
-  # If there are flags for aclocal in Makefile.am, use them.
-  my $aclocal_flags = '';
-  if ($uses_aclocal && -f 'Makefile.am')
-    {
-      my $makefile = new Autom4te::XFile 'Makefile.am';
-      while ($_ = $makefile->getline)
-	{
-	  if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
-	    {
-	      $aclocal_flags = $1;
-	      last;
-	    }
-	}
-    }
-
-  if (!$uses_aclocal)
-    {
-      verbose "$configure_ac: not using aclocal";
-    }
-  else
-    {
-      xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-      # aclocal may produce no output.
-      update_file ('aclocal.m4t', 'aclocal.m4')
-	if -f 'aclocal.m4t';
-    }
 
   # ------------------ #
   # Running automake.  #
