@@ -181,6 +181,7 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 if test "${LC_ALL+set}" = 'set' ; then LC_ALL=C; export LC_ALL; fi
 if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
+dnl We use confdefs.h to avoid OS command line length limits that break DEFS.
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
@@ -372,13 +373,13 @@ dnl Which compiler do we use to run test checks?
 dnl
 define(AC_LANG_C,
 [define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
-ac_cpp='${CPP}'
+ac_cpp="${CPP} \$CFLAGS"
 ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
 dnl
 define(AC_LANG_CPLUSPLUS,
 [define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
-ac_cpp='${CXXCPP}'
+ac_cpp="${CXXCPP} \$CXXFLAGS"
 ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
 dnl
@@ -664,8 +665,9 @@ s%^exec_prefix\\([ 	]*\\)=\\([ 	]*\\).*$%exec_prefix\\1=\\2$exec_prefix%"
 fi
 # Any assignment to VPATH causes Sun make to only execute
 # the first set of double-colon rules, so remove it if not needed.
+# If there is a colon in the path, we need to keep it.
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[ 	]*VPATH[ 	]*=[ 	]*/d'
+  ac_vpsub='/^[ 	]*VPATH[ 	]*=[^:]*$/d'
 fi
 
 # Quote sed substitution magic chars in DEFS.
