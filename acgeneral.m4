@@ -791,8 +791,8 @@ cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
-dnl Some shells (Coherent) do redirections in the wrong order, so need
-dnl the parens.
+# Some shells (Coherent) do redirections in the wrong order, so need
+# the parens.
 ac_err=`eval "($ac_cpp conftest.${ac_ext} >/dev/null) 2>&1"`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
