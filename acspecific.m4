@@ -232,7 +232,7 @@ define(AC_PROG_INSTALL,
 # Avoid using ./install, which might have been erroneously created
 # by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
-  AC_CACHE_VAL(ac_cv_program_INSTALL,
+AC_CACHE_VAL(ac_cv_program_INSTALL,
 [  AC_CHECKING(for a BSD compatible install)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
@@ -257,10 +257,10 @@ if test "z${INSTALL}" = "z" ; then
     esac
   done
   IFS="$ac_save_ifs"
+  # As a last resort, use the slow shell script.
+  test -z "$ac_cv_program_INSTALL" && ac_cv_program_INSTALL="$ac_install_sh"])dnl
+  INSTALL="$ac_cv_program_INSTALL"
 fi
-# As a last resort, use the slow shell script.
-test -z "$ac_cv_program_INSTALL" && ac_cv_program_INSTALL="$ac_install_sh"])dnl
-INSTALL="$ac_cv_program_INSTALL"
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
 
