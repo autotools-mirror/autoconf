@@ -11675,6 +11675,24 @@ Don't rely on @option{-w}, as Irix 6.5.16m's @command{grep} does not
 support it.
 
 
+@item @command{join}
+@c -----------------
+@prindex @command{join}
+Solaris 8 @command{join} has bugs when the second operand is standard
+input, and when standard input is a pipe.  For example, the following
+shell script causes Solaris 8 @command{join} to loop forever:
+
+@example
+cat >file <<'EOF'
+1 x
+2 y
+EOF
+cat file | join file -
+@end example
+
+Use @samp{join - file} instead.
+
+
 @item @command{ln}
 @c ---------------
 @prindex @command{ln}
