@@ -1,3 +1,8 @@
+2002-10-16  Paul Eggert  <eggert@twinsun.com>
+
+	* Makefile.maint (wget_files): Remove ansi2knr.c.
+	(ansi2knr.c-url_prefix): Remove.
+
 2002-10-16  Akim Demaille  <akim@epita.fr>
 
 	Because of caching, some files that no longer exist and are no
