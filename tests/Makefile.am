@@ -66,7 +66,7 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # - _AC_
 #   Internal macros are used elsewhere.
 # - AC_OUTPUT
-#   Already tested by `AT_TEST_MACRO'.
+#   Already tested by `AT_CHECK_MACRO'.
 # - AC_FD_CC
 #   Is a number.
 # - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE)
@@ -113,7 +113,7 @@ macros.m4: $(MACRO_FILES) $(srcdir)/Makefile.am
 	  sort | uniq >requires
 	for macro in `cat defuns`; do \
 	  if fgrep "$$macro" requires >/dev/null 2>&1; then :; else \
-	    echo "AT_TEST_MACRO([$$macro])" >>$@-t; \
+	    echo "AT_CHECK_MACRO([$$macro])" >>$@-t; \
 	  fi; \
 	done
 	rm defuns requires

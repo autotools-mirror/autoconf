@@ -29,6 +29,7 @@ AT_DEFINE([m4_shift],
 AT_DEFINE([define],
 [builtin([define], $@)])
 
+
 # m4_for(VARIABLE, FROM, TO, EXPRESSION)
 # --------------------------------------
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
@@ -107,22 +108,20 @@ fi
 ])# _AT_CHECK_AC_MACRO
 
 
-# AT_TEST_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
-# ----------------------------------------------------------------
+# AT_CHECK_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
+# -----------------------------------------------------------------
 # Create a minimalist configure.in running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
 # `config.guess' etc.).
-AT_DEFINE([AT_TEST_MACRO],
+AT_DEFINE([AT_CHECK_MACRO],
 [AT_SETUP([$1])
 
 _AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
 $3
 AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
-])# AT_TEST_MACRO
-
-
+])# AT_CHECK_MACRO
 
 
 # AT_CHECK_DEFINES(CONTENT)

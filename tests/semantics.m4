@@ -9,7 +9,7 @@ EOF
 
 # AC_TRY_LINK_FUNC
 # ----------------
-AT_TEST_MACRO(AC_TRY_LINK_FUNC,
+AT_CHECK_MACRO(AC_TRY_LINK_FUNC,
 [AC_TRY_LINK_FUNC(exit,, exit 1)
 AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
                  exit 1)])
@@ -27,7 +27,7 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
 # in libm.  Nor can I imagine a lib more likely to exists than libm.
 # But there are systems without libm, on which we don't want to have
 # this test fail, so exit successfully if `cos' is in libc.
-AT_TEST_MACRO(AC_CHECK_LIB,
+AT_CHECK_MACRO(AC_CHECK_LIB,
 [AC_TRY_LINK_FUNC(cos, exit 0)
 AC_CHECK_LIB(m, cos,, exit 1)])
 
@@ -36,7 +36,7 @@ AC_CHECK_LIB(m, cos,, exit 1)])
 # --------------
 # Check that it performs the correct actions:
 # Must define NEED_NO_DECL, but not NEED_YES_DECL.
-AT_TEST_MACRO(AC_CHECK_DECLS,
+AT_CHECK_MACRO(AC_CHECK_DECLS,
 [[AC_CHECK_DECLS([yes, no],,,
                  [int yes = 1;])]],
 [AT_CHECK_DEFINES(
@@ -49,7 +49,7 @@ AT_TEST_MACRO(AC_CHECK_DECLS,
 # --------------
 # Check that it performs the correct actions:
 # Must define HAVE_EXIT, but not HAVE_AUTOCONF_TIXE
-AT_TEST_MACRO(AC_CHECK_FUNCS,
+AT_CHECK_MACRO(AC_CHECK_FUNCS,
 [AC_CHECK_FUNCS(exit autoconf_tixe)],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_TIXE */
@@ -62,7 +62,7 @@ AT_TEST_MACRO(AC_CHECK_FUNCS,
 # ----------------
 # Check that it performs the correct actions:
 # Must define HAVE_STDIO_H, but not HAVE_AUTOCONF_IO_H.
-AT_TEST_MACRO(AC_CHECK_HEADERS,
+AT_CHECK_MACRO(AC_CHECK_HEADERS,
 [AC_CHECK_HEADERS(stdio.h autoconf_io.h)],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
@@ -75,7 +75,7 @@ AT_TEST_MACRO(AC_CHECK_HEADERS,
 # ----------------
 # Check that it performs the correct actions.
 # Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
-AT_TEST_MACRO(AC_CHECK_MEMBERS,
+AT_CHECK_MACRO(AC_CHECK_MEMBERS,
 [[AC_CHECK_MEMBERS([struct yes_s.yes, struct yes_s.no],,,
                    [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
@@ -86,7 +86,7 @@ AT_TEST_MACRO(AC_CHECK_MEMBERS,
 
 # AC_CHECK_SIZEOF
 # ---------------
-AT_TEST_MACRO(AC_CHECK_SIZEOF,
+AT_CHECK_MACRO(AC_CHECK_SIZEOF,
 [AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
 [#include <stdio.h>
@@ -124,7 +124,7 @@ AC_CHECK_SIZEOF(ucharcharchar)],
 # Must define HAVE_STRUCT_YES_S, HAVE_INT, but not HAVE_STRUCT_NO_S.
 # `int' and `struct yes_s' are both checked to test both the compiler
 # builtin types, and defined types.
-AT_TEST_MACRO(AC_CHECK_TYPES,
+AT_CHECK_MACRO(AC_CHECK_TYPES,
 [[AC_CHECK_TYPES([int, struct yes_s, struct no_s],,,
                  [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
@@ -178,7 +178,7 @@ AT_CLEANUP(autoconf.err)
 # --------------
 # FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
 # open AH_TEMPLATE to `configure.in', which is not yet the case.
-AT_TEST_MACRO(AC_CHECK_FILES,
+AT_CHECK_MACRO(AC_CHECK_FILES,
 [touch ac-exists1 ac-exists2
 ac_exists2=ac-exists2
 ac_missing2=ac-missing2
@@ -299,7 +299,7 @@ AT_CLEANUP(path config.log config.cache configure)
 # C compiler
 # ----------
 # GCC supports `const', `volatile', and `inline'.
-AT_TEST_MACRO(C keywords,
+AT_CHECK_MACRO(C keywords,
 [[AC_PROG_CC
 AC_C_CONST
 AC_C_INLINE
