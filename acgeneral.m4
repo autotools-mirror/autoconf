@@ -1905,7 +1905,8 @@ if test -z "$CONFIG_SITE"; then
 fi
 for ac_site_file in $CONFIG_SITE; do
   if test -r "$ac_site_file"; then
-    echo "loading site script $ac_site_file"
+    AC_MSG_NOTICE([loading site script $ac_site_file])
+    cat "$ac_site_file" >&AS_MESSAGE_LOG_FD
     . "$ac_site_file"
   fi
 done

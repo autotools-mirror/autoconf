@@ -1,3 +1,7 @@
+2001-01-29  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_SITE_LOAD): Let config.log know what you load.
+
 2001-01-27  Akim Demaille  <akim@epita.fr>
 
 	Follow Tim Van Holder's suggestions for a uniform handling of
