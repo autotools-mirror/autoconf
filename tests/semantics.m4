@@ -321,8 +321,7 @@ AT_SETUP([AC_PROG_CPP with warnings])
 AT_DATA([mycpp],
 [[#! /bin/sh
 echo noise >&2
-${1+"$@"}
-exit $?
+exec ${1+"$@"}
 ]])
 
 chmod +x mycpp
