@@ -6,15 +6,21 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.7.0
-@set VERSION 1.7.0
-@set UPDATED February 1994
+@set EDITION 1.7.3
+@set VERSION 1.7.3
+@set UPDATED March 1994
 
 @iftex
 @finalout
 @end iftex
 
 @ifinfo
+@format
+START-INFO-DIR-ENTRY
+* autoconf: (autoconf).	The Autoconf configuration system.
+END-INFO-DIR-ENTRY
+@end format
+
 This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
@@ -69,7 +75,7 @@ except that this permission notice may be stated in a translation approved
 by the Foundation.
 @end titlepage
 
-@c Define a macro index that @@defmacro doesn't write to.
+@c Define a macro index that @@defmac doesn't write to.
 @defcodeindex ma
 
 @node Top, Introduction, , (dir)
@@ -227,10 +233,10 @@ Autoconf was written by David MacKenzie, with help from Franc,ois
 Autoconf was written by David MacKenzie, with help from Fran\c cois
 @end tex
 Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor, Roland McGrath,
-and Noah Friedman.  It was inspired by Brian Fox's automatic
-configuration system for Bash, by Larry Wall's Metaconfig, and by
-Richard Stallman, Richard Pixley, and John Gilmore's configuration tools
-for the GNU compiler and object file utilities.
+Noah Friedman, and david d zuhn.  It was inspired by Brian Fox's
+automatic configuration system for Bash, by Larry Wall's Metaconfig, and
+by Richard Stallman, Richard Pixley, and John Gilmore's configuration
+tools for the GNU compiler and object file utilities.
 
 Mail suggestions and bug reports for Autoconf to
 @code{bug-gnu-utils@@prep.ai.mit.edu}.  Please include the Autoconf version
@@ -485,8 +491,11 @@ programs:
 @vindex DECLARE_YYTEXT
 Define @code{DECLARE_YYTEXT} to declare @code{yytext} appropriately,
 depending on whether @code{lex} or @code{flex} is being used.  This
-macro calls @code{AC_PROG_CPP} and @code{AC_PROG_LEX} if they haven't
-been called already.
+macro calls @code{AC_PROG_CPP} (or @code{AC_PROG_CXXCPP} if C++ is the
+current language, @pxref{Language Choice}) and @code{AC_PROG_LEX} if
+they haven't been called already.
+
+This macro currently does not work, due to problems with shell quoting.
 @end defmac
 
 @defmac AC_LN_S
@@ -515,11 +524,25 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 Set shell and @code{make} variable @code{CPP} to a command that runs the
 C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
 
-Many of the specific test macros use the value of @code{CPP} indirectly
-by calling @code{AC_TEST_CPP}, @code{AC_HEADER_CHECK},
+If the current language is C (@pxref{Language Choice}), many of the
+specific test macros use the value of @code{CPP} indirectly by calling
+@code{AC_TEST_CPP}, @code{AC_HEADER_CHECK}, @code{AC_HEADER_EGREP}, or
+@code{AC_PROGRAM_EGREP}.  Those macros call this macro first if it
+hasn't been called already.  It calls @code{AC_PROG_CC} if it hasn't
+been called already.
+@end defmac
+
+@defmac AC_PROG_CXXCPP
+@maindex PROG_CXXCPP
+Set shell and @code{make} variable @code{CXXCPP} to a command that runs the
+C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
+
+If the current language is C++ (@pxref{Language Choice}), many of the
+specific test macros use the value of @code{CXXCPP} indirectly by
+calling @code{AC_TEST_CPP}, @code{AC_HEADER_CHECK},
 @code{AC_HEADER_EGREP}, or @code{AC_PROGRAM_EGREP}.  Those macros call
-this macro first if it hasn't been called already.  It calls
-@code{AC_PROG_CC} if it hasn't been called already.
+this macro first if it hasn't been called already.  It macro calls
+@code{AC_PROG_CXX} if it hasn't been called already.
 @end defmac
 
 @defmac AC_PROG_LEX
@@ -542,6 +565,16 @@ finds.
 If @code{gcc} is found, set @code{make} variable @code{CC} to @samp{gcc},
 and set shell variable @code{GCC} to 1 for use by macros such as
 @code{AC_GCC_TRADITIONAL}.
+@end defmac
+
+@defmac AC_PROG_CXX
+@maindex PROG_CXX
+Determine a C++ compiler to use.  Check if the environment variable
+@var{CXX} or @var{CCC} (in that order) is set; if so, set @code{make}
+variable @code{CXX} to its value.  Otherwise search for a C++ compiler
+under likely names (@code{c++}, @code{g++}, @code{gcc}, and @code{CC}).
+If none of those checks succeed, as a last resort set @code{CXX} to
+@code{gcc}.
 @end defmac
 
 @defmac AC_GCC_TRADITIONAL
@@ -714,6 +747,10 @@ Then, in the code, use a test like this:
 This example asssumes that your code uses the BSD style functions.  If
 you use the System V/ANSI C style functions, you will need to replace
 the macro definitions with ones that go in the other direction.
+
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
 @end defmac
 
 @defmac AC_UNISTD_H
@@ -928,6 +965,13 @@ value is @samp{true} if special installation is required, @samp{false}
 if not.  If @code{NEED_SETGID} is @samp{true}, it sets @code{KMEM_GROUP}
 to the name of the group that should own the installed program.
 @end enumerate
+@end defmac
+
+@defmac AC_MMAP
+@maindex MMAP
+@vindex HAVE_MMAP
+If the @code{mmap} function exists and works correctly, define
+@code{HAVE_MMAP}.
 @end defmac
 
 @defmac AC_SETVBUF_REVERSED
@@ -1289,6 +1333,7 @@ These macros are defined in the file @file{acgeneral.m4}.
 * Setup::			Controlling Autoconf operation.
 * General Tests::		Check for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
+* Language Choice::             Determining which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 @end menu
 
@@ -1479,15 +1524,19 @@ consider using @code{AC_HAVE_HEADERS} instead.
 
 @defmac AC_HEADER_EGREP (@var{pattern}, @var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex HEADER_EGREP
-If the output of running the C preprocessor on @var{header-file}
+If the output of running the preprocessor on @var{header-file}
 contains the @code{egrep} regular expression @var{pattern}, execute
 shell commands @var{action-if-found}, otherwise execute
+
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
 @var{action-if-not-found}.
 
 You can not check whether preprocessor symbols are defined this way,
 because they get expanded before @code{egrep} sees them.  But you can
 almost always detect them by simply using @code{#ifdef} directives in
-your C programs.
+your programs.
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -1510,13 +1559,17 @@ it is found, set @var{variable} to @var{value-if-found}, otherwise to
 
 @defmac AC_PROGRAM_EGREP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex PROGRAM_EGREP
-@var{program} is the text of a C program, on which shell variable and
-backquote substitutions are performed.  If the output of running the C
+@var{program} is the text of a C or C++ program, on which shell variable and
+backquote substitutions are performed.  If the output of running the
 preprocessor on @var{program} contains the @code{egrep} regular
 expression @var{pattern}, execute shell commands @var{action-if-found},
 otherwise execute @var{action-if-not-found}.  (It is an unfortunate
 oversight that we use the word @code{PROGRAM} in Autoconf macro names to
-sometimes mean C source code and sometimes mean a UNIX command.)
+sometimes mean C or C++ source code and sometimes mean a UNIX command.)
+
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
 @end defmac
 
 @defmac AC_PROGRAM_PATH (@var{variable}, @var{prog-to-check-for}, @var{value-if-not-found})
@@ -1572,14 +1625,16 @@ if it has not already been called (@pxref{Compiler Characteristics}).
 
 @defmac AC_TEST_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex TEST_CPP
-@var{includes} is C @code{#include} statements and declarations, on
+@var{includes} is C or C++ @code{#include} statements and declarations, on
 which shell variable and backquote substitutions are performed.
 (Actually, it can be any C program, but other statements are probably
-not useful.)  If the C preprocessor produces no error messages while
+not useful.)  If the preprocessor produces no error messages while
 processing it, run shell commands @var{action-if-true}.  Otherwise run
 shell commands @var{action-if-false}.
 
-This macro calls @code{AC_PROG_CPP} if it hasn't been called already.
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
 @end defmac
 
 @defmac AC_WITH (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
@@ -1607,7 +1662,7 @@ AC_WITH(fubar, echo "got --with-fubar=$withval",
 @end example
 @end defmac
 
-@node Setting Variables, Macro Ordering, General Tests, General Purpose Macros
+@node Setting Variables, Language Choice, General Tests, General Purpose Macros
 @section Setting Variables
 
 These macros help other macros to define shell and @code{make}
@@ -1713,7 +1768,54 @@ LIBS="$LIBS -ltermcap"
 @end example
 @end defmac
 
-@node Macro Ordering, , Setting Variables, General Purpose Macros
+@node Language Choice, Macro Ordering, Setting Variables, General Purpose Macros
+@section Language Choice
+
+Programs that use both C and C++ need to test features of both
+compilers.  The following macros determine which language's compiler is
+used in tests that follow in @file{configure.in}.
+
+@defmac AC_LANG_C
+@maindex LANG_C
+Do compilation tests using @code{CC} and @code{CPP} and use extension
+@file{.c} for test programs.
+
+This is the initial state.
+@end defmac
+
+@defmac AC_LANG_CPLUSPLUS
+@maindex LANG_CPLUSPLUS
+Do compilation tests using @code{CXX} and @code{CXXCPP} and use
+extension @file{.C} for test programs.
+@end defmac
+
+@defmac AC_LANG_RESTORE
+@maindex LANG_RESTORE
+Select the language that is saved on the top of the stack, as set by
+@code{AC_LANG_SAVE}, and remove it from the stack.  This macro is
+equivalent to either @code{AC_LANG_C} or @code{AC_LANG_CPLUSPLUS},
+whichever had been run most recently when @code{AC_LANG_SAVE} was last
+called.
+
+Do not call this macro more times than @code{AC_LANG_SAVE}.
+@end defmac
+
+@defmac AC_LANG_SAVE
+@maindex LANG_SAVE
+Remember the current language (as set by @code{AC_LANG_C} or
+@code{AC_LANG_CPLUSPLUS}) on a stack.  Does not change which language is
+current.
+@end defmac
+
+@defmac AC_REQUIRE_CPP
+@maindex REQUIRE_CPP
+Ensure that whichever preprocessor would currently be used for tests has
+been found.  Calls @code{AC_REQUIRE} (@pxref{Macro Ordering}) with an
+argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
+depending on which language is current.
+@end defmac
+
+@node Macro Ordering, , Language Choice, General Purpose Macros
 @section Macro Ordering
 
 These macros provide ways for other macros to make sure that they are
@@ -2291,17 +2393,28 @@ for a package to automatically update the configuration information when
 you change the configuration files.
 
 @example
-# The next rule also takes care of making config.h from config.h.in.
-# If remaking config.h does not change it, its timestamp is untouched.
-Makefile: Makefile.in config.status
+@group
+# Do not also depend on config.status, since if config.status changes,
+# the rule after this one remakes Makefile anyway.
+Makefile: Makefile.in
         $(SHELL) config.status
+
+# This rule also makes config.h from config.h.in.
+# If that does not change it, its timestamp is untouched,
+# so do not add an explicit rule to make config.h from config.h.in.
 config.status: configure
         $(SHELL) config.status --recheck
+
 configure: configure.in
         cd $(srcdir); autoconf
+
 config.h.in: configure.in
         cd $(srcdir); autoheader
+@end group
 @end example
+
+@xref{Running config.status}, for an alternate approach to
+configuration-related dependencies.
 
 @node Running configure Scripts, Example, Makefiles, Top
 @chapter Running @code{configure} Scripts
@@ -2449,6 +2562,29 @@ The files in which to substitute C @code{#define} statements.
 The default is the arguments given to @code{AC_CONFIG_HEADER}; if that
 macro was not called, @file{config.status} ignores this variable.
 @end defvar
+
+These variables also allow you to write @file{Makefile} rules that
+regenerate only some of the files.  For example:
+
+@example
+@group
+config.status: configure
+        CONFIG_FILES= CONFIG_HEADERS= ./configure
+
+# The touch is in case config.h was unchanged, to avoid config.h
+# staying out of date and this rule being re-invoked on every make.
+config.h: config.status config.h.in
+        CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
+        touch config.h
+
+Makefile: config.status Makefile.in
+        CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
+@end group
+@end example
+
+@noindent
+(If @file{configure.in} does not call @code{AC_CONFIG_HEADER}, there is
+no need to set @code{CONFIG_HEADERS} in the @code{make} rules.)
 
 @node Example, Preprocessor Symbol Index, Running configure Scripts, Top
 @chapter An Example
