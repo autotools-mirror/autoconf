@@ -2,6 +2,8 @@ Wed Jun 28 13:45:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Allow an empty value
 	  for --enable and --with args.
+	  (AC_CACHE_CHECK): New macro.
+	* acspecific.m4: Use it where possible.
 
 Tue Jun 27 13:29:54 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 

@@ -1062,6 +1062,12 @@ else
 fi
 ])
 
+dnl AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
+define(AC_CACHE_CHECK,
+[AC_MSG_CHECKING([$1])
+AC_CACHE_VAL([$2], [$3])
+AC_MSG_RESULT([$]$2)])
+
 
 dnl ### Defining symbols
 

@@ -3341,6 +3341,15 @@ before @code{configure} creates its output files.  @xref{Cache
 Variable Names}, for how to choose the name of the @var{cache-id} variable.
 @end defmac
 
+@defmac AC_CACHE_CHECK (@var{message}, @var{cache-id}, @var{commands})
+@maindex CACHE_CHECK
+A wrapper for @code{AC_CACHE_VAL} that takes care of printing the
+messages.  This macro provides a convenient shorthand for the most
+common way to use these macros.  It calls @code{AC_MSG_CHECKING} for
+@var{message}, then @code{AC_CACHE_VAL} with the @var{cache-id} and
+@var{commands} arguments, and @code{AC_MSG_RESULT} with @var{cache-id}.
+@end defmac
+
 @menu
 * Cache Variable Names::        Shell variables used in caches.
 * Cache Files::	        	Files @code{configure} uses for caching.
