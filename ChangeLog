@@ -1,5 +1,10 @@
 2003-10-27  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.cfg (executable-update): New.
+	(local_updates): Call it.
+
+2003-10-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_RUN_IFELSE, _AC_INIT_PREPARE):
 	Don't remove core.* as it may remove valid user files.
 	* lib/autoconf/functions.m4 (AC_FUNC_SETVBUF_REVERSED)
