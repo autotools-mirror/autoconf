@@ -4663,10 +4663,9 @@ support providing a help string.
 Properly formatting the @samp{help strings} which are used in
 @code{AC_ARG_WITH} (@pxref{External Software}) and @code{AC_ARG_ENABLE}
 (@pxref{Package Options}) can be challenging.  Specifically, you want
-your own @samp{help strings}, especially multi-line help strings, to
-wrap and line up in the appropriate columns of @samp{configure --help}
-just like the standard Autoconf @samp{help strings} do.  This is the
-purpose of the @code{AC_HELP_STRING} macro.
+your own @samp{help strings} to line up in the appropriate columns of
+@samp{configure --help} just like the standard Autoconf @samp{help
+strings} do.  This is the purpose of the @code{AC_HELP_STRING} macro.
 
 @defmac AC_HELP_STRING (@var{left-hand-side}, @var{right-hand-side}, @var{formatted-help-string})
 @maindex HELP_STRING
@@ -4720,12 +4719,6 @@ AC_DEFUN(MY_ARG_WITH,
   AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)
 ])
 @end example
-
-Make your help strings as long as you wish, as @code{AC_HELP_STRING}
-will properly wrap them.  However, shorter, more succinct help strings
-are usually easier for the user running @samp{configure --help}, and
-they look better too.
-
 @end defmac
 
 

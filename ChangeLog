@@ -1,3 +1,8 @@
+1999-06-09  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* autoconf.texi (Pretty Help Strings): Synchronize documentation
+	with implementation.
+
 1999-06-04  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Fix sed regexp for handling
