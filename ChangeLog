@@ -1,3 +1,9 @@
+2002-07-18  Akim Demaille  <akim@epita.fr>,
+	    Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Install
+	_AC_AM_CONFIG_HEADER_HOOK for Automake 1.7.
+
 2002-07-17  Russ Allbery  <rra@stanford.edu>
 
 	* doc/autoconf.texi (Initializing configure): Clarify the

@@ -326,8 +326,11 @@ AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
 [m4_append([AC_OUTPUT_COMMANDS_PRE], [$1
 ])])
 
-# Initialize.
-m4_define([AC_OUTPUT_COMMANDS_PRE])
+
+# AC_OUTPUT_COMMANDS_PRE
+# ----------------------
+m4_define([AC_OUTPUT_COMMANDS_PRE],
+[])
 
 
 # AC_CONFIG_COMMANDS_POST(CMDS)
@@ -654,6 +657,11 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     cat $tmp/config.h
     rm -f $tmp/config.h
   fi
+dnl If running for Automake, be ready to perform additional
+dnl commands to set up the timestamp files.
+m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
+         [_AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+])dnl
 m4_ifset([AC_LIST_HEADERS_COMMANDS],
 [  # Run the commands associated with the file.
   case $ac_file in
