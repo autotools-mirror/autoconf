@@ -1,3 +1,13 @@
+1999-10-04  Akim Demaille  <akim@epita.fr>
+
+	Revert partially the previous changes: AC_CHECK_HEADERS_DIRENT is
+	used by AC_HEADER_DIRENT.
+
+	* autoheader.m4: Restablish the hook for AC_CHECK_HEADERS_DIRENT.
+
+	* acspecific.m4 (AC_CHECK_HEADERS_DIRENT, AC_CHECK_HEADER_DIRENT):
+ 	Reinserted.
+
 1999-10-02  Akim Demaille  <akim@epita.fr>
 
 	AC_DIR_HEADERS is hasbeen'ed.

@@ -839,9 +839,41 @@ else
 fi
 ])
 
+dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
+dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
+dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+AC_DEFUN(AC_CHECK_HEADER_DIRENT,
+[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
+AC_MSG_CHECKING([for $1 that defines DIR])
+AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
+[AC_TRY_COMPILE([#include <sys/types.h>
+#include <$1>], [DIR *dirp = 0;],
+  eval "ac_cv_header_dirent_$ac_safe=yes",
+  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
+if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
+  AC_MSG_RESULT(yes)
+  $2
+else
+  AC_MSG_RESULT(no)
+fi
+])
+
+dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
+dnl defines `DIR'.
+dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+define(AC_CHECK_HEADERS_DIRENT,
+[for ac_hdr in $1
+do
+AC_CHECK_HEADER_DIRENT($ac_hdr,
+[changequote(, )dnl
+  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
+changequote([, ])dnl
+  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
+done])
 
 AC_DEFUN(AC_DIR_HEADER,
 [AC_HASBEEN([$0], [; instead use AC_HEADER_DIRENT])])
+
 
 AC_DEFUN(AC_HEADER_STAT,
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
