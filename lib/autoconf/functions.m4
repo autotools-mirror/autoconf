@@ -421,7 +421,7 @@ if test $ac_cv_func_getgroups = yes; then
   AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
    [AC_RUN_IFELSE([AC_LANG_PROGRAM([],
       [[/* On Ultrix 4.3, getgroups (0, 0) always fails.  */
-       exit (getgroups (0, 0) == -1 ? 1 : 0);])]],
+       exit (getgroups (0, 0) == -1 ? 1 : 0);]])],
                   [ac_cv_func_getgroups_works=yes],
                   [ac_cv_func_getgroups_works=no],
                   [ac_cv_func_getgroups_works=no])
