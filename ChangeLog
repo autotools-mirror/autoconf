@@ -1,3 +1,17 @@
+2000-04-05  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Disable caching by default, so as not to cause problems when
+	newbies accidentally use a stale cache file.
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Set cache_file to /dev/null
+	to disable caching by default.
+	(_AC_INIT_HELP): Adjust the --help message.
+	(AC_CACHE_LOAD, AC_CACHE_SAVE): Don't print "loading/updating
+	/dev/null" messages.
+	* autoconf.texi: Note that caching is disabled, how to enable it,
+	and that `./config.cache' is the traditional name of the cache file.
+	* install.texi: Likewise.
+
 2000-04-03  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): If any option waiting for a

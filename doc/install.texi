@@ -12,17 +12,20 @@ those values to create a @file{Makefile} in each directory of the
 package.  It may also create one or more @file{.h} files containing
 system-dependent definitions.  Finally, it creates a shell script
 @file{config.status} that you can run in the future to recreate the
-current configuration, a file @file{config.cache} that saves the results
-of its tests to speed up reconfiguring, and a file @file{config.log}
-containing compiler output (useful mainly for debugging
-@code{configure}).
+current configuration, and a file @file{config.log} containing compiler
+output (useful mainly for debugging @code{configure}).
+
+It can also use an optional file (typically called @file{config.cache}
+and enabled with @samp{--cache-file=./config.cache}) that saves the
+results of its tests to speed up reconfiguring.  (Caching is disabled by
+default to prevent problems with accidental use of stale cache files.)
 
 If you need to do unusual things to compile the package, please try to
 figure out how @code{configure} could check whether to do them, and mail
 diffs or instructions to the address given in the @file{README} so they
-can be considered for the next release.  If at some point
-@file{config.cache} contains results you don't want to keep, you may
-remove or edit it.
+can be considered for the next release.  If you are using the cache, and
+at some point @file{config.cache} contains results you don't want to
+keep, you may remove or edit it.
 
 The file @file{configure.in} is used to create @file{configure} by a
 program called @code{autoconf}.  You only need @file{configure.in} if
@@ -225,10 +228,10 @@ Print the version of Autoconf used to generate the @code{configure}
 script, and exit.
 
 @item --cache-file=@var{file}
-@cindex Cache, disabling
-Use and save the results of the tests in @var{file} instead of
-@file{./config.cache}.  Set @var{file} to @file{/dev/null} to disable
-caching, for debugging @code{configure}.
+@cindex Cache, enabling
+Enable the cache: use and save the results of the tests in @var{file},
+traditionally @file{./config.cache}.  @var{file} defaults to
+@file{/dev/null} to disable caching.
 
 @item --quiet
 @itemx --silent

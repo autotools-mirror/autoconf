@@ -453,8 +453,9 @@ a shell script called @file{config.status} that, when run, will recreate
 the files listed above (@pxref{Invoking config.status});
 
 @item
-a shell script called @file{config.cache} that saves the results of
-running many of the tests (@pxref{Cache Files});
+an optional shell script normally called called @file{config.cache}
+(created when using @samp{configure --cache-file=./config.cache}) that
+saves the results of running many of the tests (@pxref{Cache Files});
 
 @item
 a file called @file{config.log} containing any messages produced by
@@ -500,7 +501,7 @@ Makefile.in -------------------------------> Makefile.in
 Files used in configuring a software package:
 @example
 @group
-                       .-------------> config.cache
+                       .-------------> [config.cache]
 configure* ------------+-------------> config.log
                        |
 [config.h.in] -.       v            .-> [config.h] -.
@@ -4969,17 +4970,21 @@ tests run on one system so they can be shared between configure scripts
 and configure runs.  It is not useful on other systems.  If its contents
 are invalid for some reason, the user may delete or edit it.
 
-By default, configure uses @file{./config.cache} as the cache file,
-creating it if it does not exist already.  @code{configure} accepts the
-@samp{--cache-file=@var{file}} option to use a different cache file;
-that is what @code{configure} does when it calls @code{configure}
-scripts in subdirectories, so they share the cache.
+By default, configure uses no cache file (technically, it uses
+@samp{--cache-file=/dev/null}), so as to forestall problems caused by
+accidental use of stale cache files.
+
+To enable caching, @code{configure} accepts the optional argument
+@samp{--cache-file=@var{file}} where @var{file} is the name of the cache
+file to use, traditionally @file{./config.cache}.  The cache file is
+created if it does not exist already.  When @code{configure} calls
+@code{configure} scripts in subdirectories, it uses the
+@samp{--cache-file} argument so that they share the same cache.
 @xref{Subdirectories}, for information on configuring subdirectories
 with the @code{AC_CONFIG_SUBDIRS} macro.
 
-Giving @samp{--cache-file=/dev/null} disables caching, for debugging
-@code{configure}.  @file{config.status} only pays attention to the cache
-file if it is given the @samp{--recheck} option, which makes it rerun
+@file{config.status} only pays attention to the cache file if it is
+given the @samp{--recheck} option, which makes it rerun
 @code{configure}.  If you are anticipating a long debugging period, you
 can also disable cache loading and saving for a @code{configure} script
 by redefining the cache macros at the start of @file{configure.in}:
@@ -6330,7 +6335,7 @@ test "$localstatedir" = '$@{prefix@}/var' && localstatedir=/var
 #
 # Give Autoconf 2.x generated configure scripts a shared default
 # cache file for feature test results, architecture-specific.
-if test "$cache_file" = ./config.cache; then
+if test "$cache_file" = /dev/null; then
   cache_file="$prefix/var/config.cache"
   # A cache file is only valid for one C compiler.
   CC=gcc

@@ -894,7 +894,7 @@ ac_init_version=false
 # The variables have the same names as the options, with
 # dashes changed to underlines.
 build=NONE
-cache_file=./config.cache
+cache_file=/dev/null
 AC_SUBST(exec_prefix, NONE)dnl
 host=NONE
 no_create=
@@ -1274,7 +1274,7 @@ Configuration:
   -h, --help              print this message
   -V, --version           print the version of autoconf that created configure
   -q, --quiet, --silent   do not print `checking...' messages
-      --cache-file=FILE   cache test results in FILE
+      --cache-file=FILE   cache test results in FILE [disabled]
   -n, --no-create         do not create output files
 
 EOF
@@ -1878,7 +1878,7 @@ done
 # -------------
 define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
-  echo "loading cache $cache_file"
+  test "x$cache_file" != "x/dev/null" && echo "loading cache $cache_file"
   dnl Some versions of bash will fail to source /dev/null, so we
   dnl avoid doing that.
   test -f "$cache_file" && . $cache_file
@@ -1931,7 +1931,7 @@ EOF
   esac >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
-    echo "updating cache $cache_file"
+    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
     cat confcache >$cache_file
   else
     echo "not updating unwritable cache $cache_file"
