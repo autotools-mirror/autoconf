@@ -351,8 +351,15 @@ if test -n "$ac_prev"; then
 fi
 ])dnl
 dnl
+dnl Try to have only one #! line, just so it doesn't look funny.
+dnl
+define(AC_BINSH,
+[AC_PROVIDE([AC_BINSH])dnl
+dnl AC_REQUIRE inserts a newline after this.
+#!/bin/sh])dnl
+dnl
 define(AC_INIT,
-[#!/bin/sh
+[AC_REQUIRE([AC_BINSH])dnl
 AC_NOTICE
 AC_PARSEARGS
 AC_PREPARE($1)])dnl
@@ -465,9 +472,8 @@ dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
 define(AC_CONFIG_HEADER, [define(AC_CONFIG_NAMES, $1)])dnl
 dnl
 dnl AC_REVISION(REVISION-INFO)
-define(AC_REVISION, [translit([#!/bin/sh
-# From configure.in $1
-],$")])dnl
+define(AC_REVISION, [AC_REQUIRE([AC_BINSH])dnl
+[# From configure.in] translit([$1],$")])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
 dnl
