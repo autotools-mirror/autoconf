@@ -45,14 +45,11 @@
 # any notice of this special exception to the GPL from your modified
 # version.
 
-# Snippet (1
 # This debugging script has been automatically generated from `make check'.
 # Call it with `--help' to get a quick usage summary.
 
 at_package=@PACKAGE@
 at_version=@VERSION@
-# Snippet )1
-# Snippet (2
 at_n=@ECHO_N@
 at_c='@ECHO_C@'
 test -f atlocal && . ./atlocal
@@ -79,4 +76,3 @@ fi
 
 # We need GNU m4.
 M4=@M4@
-# Snippet )2

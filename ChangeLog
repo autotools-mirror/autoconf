@@ -1,5 +1,11 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/atconfig.in: Remove the `snippet' marks, there are no
+	longer used.
+	* tests/atgeneral.m4: Likewise.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Factor the epilogue of the tests.
 
 	* tests/atgeneral.m4 (AT_CLEANUP): Move the reading of at_status

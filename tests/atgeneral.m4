@@ -1,5 +1,5 @@
 include(m4sh.m4)					    -*- Autoconf -*-
-# `m4' macros used in building test suites.
+# M4 macros used in building test suites.
 # Copyright 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,6 @@ AT_DEFINE([AT_INIT],
 [m4_divert_push(0)dnl
 AT_DEFINE([AT_ordinal], 0)
 . ./atconfig
-# Snippet (3
 # -e sets to true
 at_stop_on_error=false;
 # Shall we save and check stdout and stderr?
@@ -96,11 +95,8 @@ at_usage="Usage: $[0] [OPTION]...
   -v  Force more detailed output, default for debugging scripts unless -s
   -x  Have the shell to trace command execution; also implies option -n"
 
-# Snippet )3
-
-# Snippet (4
 while test $[#] -gt 0; do
-  case "$[1]" in
+  case $[1] in
     --help) echo "$at_usage"; exit 0 ;;
     --version) echo "$[0] ($at_package) $at_version"; exit 0 ;;
     -d) at_debug=:;;
@@ -139,7 +135,6 @@ fi
 # up files at the beginning only, not at the end.  This is so we can repeat
 # the script many times and browse left over files.  To cope with such left
 # over files, the full test suite cleans up both before and after test groups.
-# Snippet )4
 
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
   at_banner="Testing suite for $at_package, version $at_version"
@@ -278,11 +273,6 @@ m4_divert(2)[]dnl
     fi
     if test -z "$at_skip_mode"; then
   	(
-[#] Snippet (d[]AT_ordinal[](
-[#] Testing $1
-[#] Snippet )d[]AT_ordinal[])
-[#] Snippet (s[]AT_ordinal[](
-[#] starting from `AT_LINE'.
 $at_traceon
 ])
 
@@ -294,8 +284,7 @@ $at_traceon
 # nor files created with AT_DATA.
 AT_DEFINE([AT_CLEANUP],
 $at_traceoff
-[[#] Snippet )s[]AT_ordinal[])
-    	)
+[    	)
     	at_status=$?
       else
         echo 'ignored (skipped)'
@@ -304,10 +293,8 @@ $at_traceoff
       at_test_count=`expr 1 + $at_test_count`
       if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 m4_divert(1)[]dnl
-[#] Snippet (c[]AT_ordinal[](
 
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
-    [#] Snippet )c[]AT_ordinal[])
 m4_undivert(2)[]dnl
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
       fi
