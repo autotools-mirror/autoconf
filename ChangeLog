@@ -1,3 +1,18 @@
+2003-09-23  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Limitations of Builtins): Document test -h
+	versus test -L issues.
+
+2003-09-23  Daniel Jacobowitz  <drow@mvista.com> and
+	    Paul Eggert <eggert@twinsun.com>
+
+	Trivial change to support GCC's configuration procedure.
+        * lib/autoconf/c.m4 (AC_PROG_CPP_WERROR): New macro.
+        * lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Don't warn
+	about inconsistency if the preprocessor is set to give errors for
+	any warning.
+	* doc/autoconf.texi (C Compiler Characteristics): Document this.
+	
 2003-09-13  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* Makefile.am (autom4te-update, autom4te_files): Fetch Struct.pm

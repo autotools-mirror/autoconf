@@ -121,13 +121,13 @@ AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
 AC_MSG_RESULT([$ac_header_preproc])
 
 # So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc in
-  yes:no )
+case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in
+  yes:no: )
     AC_MSG_WARN([$1: accepted by the compiler, rejected by the preprocessor!])
     AC_MSG_WARN([$1: proceeding with the compiler's result])
     ac_header_preproc=yes
     ;;
-  no:yes )
+  no:yes:* )
     AC_MSG_WARN([$1: present but cannot be compiled])
     AC_MSG_WARN([$1:     check for missing prerequisite headers?])
     AC_MSG_WARN([$1: see the Autoconf documentation])

@@ -5302,6 +5302,17 @@ Some preprocessors don't indicate missing include files by the error
 status.  For such preprocessors an internal variable is set that causes
 other macros to check the standard error from the preprocessor and
 consider the test failed if any warnings have been reported.
+For most preprocessors, though, warnings do not cause include-file
+tests to fail unless @code{AC_PROG_CPP_WERROR} is also specified.
+@end defmac
+
+@defmac AC_PROG_CPP_WERROR
+@acindex{PROG_CPP_WERROR}
+@ovindex CPP
+This acts like @code{AC_PROG_CPP}, except it treats warnings from the
+preprocessor as errors even if the preprocessor exit status indicates
+success.  This is useful for avoiding headers that generate mandatory
+warnings, such as deprecation notices.
 @end defmac
 
 
@@ -10209,7 +10220,10 @@ the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because 4.3@acronym{BSD} does not
 have it.  Do not use @samp{test -e} either, because Solaris 2.5 does not
-have it.
+have it.  To test for symbolic links on systems that have them, use
+@samp{test -h} rather than @samp{test -L}; either form conforms to
+@acronym{POSIX} 1003.1-2001, but older shells like Solaris 8
+@code{/bin/sh} support only @option{-h}.
 
 @item @command{test} (strings)
 @c ---------------------------

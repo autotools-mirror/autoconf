@@ -419,6 +419,12 @@ AC_SUBST(CPP)dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CPP
 
+# AC_PROG_CPP_WERROR
+# ------------------
+# Treat warnings from the preprocessor as errors.
+AC_DEFUN([AC_PROG_CPP_WERROR],
+[AC_REQUIRE([AC_PROG_CPP])dnl
+ac_c_preproc_warn_flag=yes])# AC_PROG_CPP_WERROR
 
 # AC_LANG_COMPILER(C)
 # -------------------
