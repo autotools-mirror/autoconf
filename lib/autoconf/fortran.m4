@@ -749,16 +749,19 @@ fi])])# _AC_PROG_PREPROC_WORKS
 
 # AC_PROG_CPP
 # -----------
-# Find a working C preprocessor
+# Find a working C preprocessor.
+# We shouldn't have to require AC_PROG_CC, but this is due to the concurrency
+# between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CC.
 AC_DEFUN([AC_PROG_CPP],
-[AC_MSG_CHECKING([how to run the C preprocessor])
+[AC_REQUIRE([AC_PROG_CC])dnl
+AC_MSG_CHECKING([how to run the C preprocessor])
 AC_LANG_ASSERT(C)dnl
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
   CPP=
 fi
 if test -z "$CPP"; then
-  AC_CACHE_VAL(ac_cv_prog_CPP,
+  AC_CACHE_VAL([ac_cv_prog_CPP],
   [dnl
     # Double quotes because CPP needs to be expanded
     for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
@@ -951,9 +954,12 @@ AC_DEFUN([AC_LANG_PREPROC(C++)],
 
 # AC_PROG_CXXCPP
 # --------------
-# Find a working C++ preprocessor
+# Find a working C++ preprocessor.
+# We shouldn't have to require AC_PROG_CC, but this is due to the concurrency
+# between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CXX.
 AC_DEFUN([AC_PROG_CXXCPP],
-[AC_MSG_CHECKING([how to run the C++ preprocessor])
+[AC_REQUIRE([AC_PROG_CXX])dnl
+AC_MSG_CHECKING([how to run the C++ preprocessor])
 AC_LANG_ASSERT(C++)dnl
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,

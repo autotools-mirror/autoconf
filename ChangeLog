@@ -1,5 +1,9 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_PROG_CXXCPP, AC_PROG_CPP): Require AC_PROG_CXX/CC.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* tests/compile.at (GNU Fortran 77): G77 is a `yes'/`' var.
 	Reported by Ezra Peisach.
 

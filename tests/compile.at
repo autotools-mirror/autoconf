@@ -7,6 +7,36 @@ AT_BANNER([Low level compiling/preprocessing macros.])
 # primitive, so check those first.
 
 
+## ------------ ##
+## C keywords.  ##
+## ------------ ##
+
+# GCC supports `const', `volatile', and `inline'.
+AT_CHECK_MACRO([C keywords],
+[[AC_PROG_CC
+AC_C_CONST
+AC_C_INLINE
+AC_C_VOLATILE
+case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
+ yes,*no*)
+   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
+esac]])
+
+
+
+## --------------------------------- ##
+## AC_PROG_CPP requires AC_PROG_CC.  ##
+## --------------------------------- ##
+
+# Must invoke AC_PROG_CC.
+AT_CHECK_MACRO([AC_PROG_CPP requires AC_PROG_CC],
+[[AC_PROG_CPP
+test -z "$CC" &&
+   AC_MSG_ERROR([looked for a C preprocessor without looking for a compiler])
+]])
+
+
+
 ## --------------------------- ##
 ## AC_PROG_CPP with warnings.  ##
 ## --------------------------- ##
@@ -82,23 +112,6 @@ AT_CHECK_MACRO([AC_TRY_LINK_FUNC],
                   [AC_MSG_ERROR([cannot find `exit'])])
 AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
                  [AC_MSG_ERROR([found a nonexistent function])])])
-
-
-
-## ------------ ##
-## C keywords.  ##
-## ------------ ##
-
-# GCC supports `const', `volatile', and `inline'.
-AT_CHECK_MACRO([C keywords],
-[[AC_PROG_CC
-AC_C_CONST
-AC_C_INLINE
-AC_C_VOLATILE
-case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
- yes,*no*)
-   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
-esac]])
 
 
 
