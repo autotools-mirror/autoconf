@@ -129,12 +129,7 @@ $1])
 # --------------------------------------
 m4_define([AC_LANG_PROGRAM(C)],
 [$1
-#ifdef F77_DUMMY_MAIN
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-#endif
+m4_ifdef([_AC_LANG_PROGRAM_C_F77_HOOKS], [_AC_LANG_PROGRAM_C_F77_HOOKS])[]dnl
 int
 main ()
 {
