@@ -1,5 +1,15 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	Warnings related to obsolete constructs should be properly
+	classified.
+
+	* acspecific.m4 (AC_RSH, AC_USG, AC_MEMORY_H, AC_DIR_HEADER,
+	AC_INT_16_BITS, AC_LONG_64_BITS, AC_STRUCT_ST_BLKSIZE,
+	AC_STRUCT_ST_RDEV, AC_HAVE_POUNDBANG, AC_ARG_ARRAY): Use
+	`AC_DIAGNOSE(obsolete, ...)' instead of `AC_WARNING'.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	autoconf -W error does not work.
 
 	* acgeneral.m4 (_AC_DIAGNOSE): use _AC_WARNING_IFELSE,

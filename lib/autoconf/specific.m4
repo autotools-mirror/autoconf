@@ -289,8 +289,8 @@ AC_SUBST(LN_S)dnl
 # ------
 # I don't know what it used to do, but it no longer does.
 AU_DEFUN([AC_RSH],
-[AC_WARNING([$0: is no longer supported.
-Remove this AC_WARNING when you adjust the code.])])
+[AC_DIAGNOSE([obsolete], [$0: is no longer supported.
+Remove this warning when you adjust the code.])])
 
 
 
@@ -554,7 +554,7 @@ AU_DEFUN([AC_UNISTD_H],
 # ----------
 # Define `USG' if string functions are in strings.h.
 AU_DEFUN([AC_USG],
-[AC_WARNING([$0: Remove `AC_MSG_CHECKING', `AC_TRY_LINK' and this `AC_WARNING'
+[AC_DIAGNOSE([obsolete], [$0: Remove `AC_MSG_CHECKING', `AC_TRY_LINK' and this `AC_WARNING'
 when you ajust your code to use HAVE_STRING_H.])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
@@ -580,7 +580,7 @@ AC_CHECK_HEADERS(string.h)])
 # But it is better to check for both headers, and alias NEED_MEMORY_H to
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
-[AC_WARNING([$0: Remove this `AC_WARNING' and
+[AC_DIAGNOSE([obsolete], [$0: Remove this warning and
 `AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you ajust your code to
 use and HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])dnl
 AC_CHECK_HEADER(memory.h,
@@ -598,7 +598,8 @@ AC_CHECK_HEADERS(string.h memory.h)
 AU_DEFUN([AC_DIR_HEADER],
 [AC_HEADER_DIRENT
 AC_FUNC_CLOSEDIR_VOID
-AC_WARNING([$0: Remove this `AC_WARNING' and the four `AC_DEFINE' when you
+AC_DIAGNOSE([obsolete],
+[$0: Remove this warning and the four `AC_DEFINE' when you
 ajust your code to use `AC_HEADER_DIRENT'.])
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
@@ -687,9 +688,9 @@ AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
 # What a great name :)
 AU_DEFUN([AC_INT_16_BITS],
 [AC_CHECK_SIZEOF([int])
-AC_WARNING([$0:
+AC_DIAGNOSE([obsolete], [$0:
         your code should no longer depend upon `INT_16_BITS', but upon
-        `SIZEOF_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when you
+        `SIZEOF_INT'.  Remove this warning and the `AC_DEFINE' when you
         adjust the code.])dnl
 test $ac_cv_sizeof_int = 2 &&
   AC_DEFINE(INT_16_BITS, 1,
@@ -701,9 +702,9 @@ test $ac_cv_sizeof_int = 2 &&
 # -------------------
 AU_DEFUN([AC_LONG_64_BITS],
 [AC_CHECK_SIZEOF([long int])
-AC_WARNING([$0:
+AC_DIAGNOSE([obsolete], [$0:
         your code should no longer depend upon `LONG_64_BITS', but upon
-        `SIZEOF_LONG_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when
+        `SIZEOF_LONG_INT'.  Remove this warning and the `AC_DEFINE' when
         you adjust the code.])dnl
 test $ac_cv_sizeof_long_int = 8 &&
   AC_DEFINE(LONG_64_BITS, 1,
@@ -2109,9 +2110,9 @@ fi
 # AC_STRUCT_ST_BLKSIZE
 # --------------------
 AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
-[AC_WARNING([$0:
+[AC_DIAGNOSE([obsolete], [$0:
         your code should no longer depend upon `HAVE_ST_BLKSIZE', but
-        `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this AC_WARNING and
+        `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this warning and
         the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS([struct stat.st_blksize],
                   [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
@@ -2154,9 +2155,9 @@ AC_DEFUN([AC_STRUCT_ST_BLOCKS],
 # AC_STRUCT_ST_RDEV
 # -----------------
 AU_DEFUN([AC_STRUCT_ST_RDEV],
-[AC_WARNING([$0:
+[AC_DIAGNOSE([obsolete], [$0:
         your code should no longer depend upon `HAVE_ST_RDEV', but
-        `HAVE_STRUCT_STAT_ST_RDEV'.  Remove this AC_WARNING and
+        `HAVE_STRUCT_STAT_ST_RDEV'.  Remove this warning and
         the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS([struct stat.st_rdev],
                  [AC_DEFINE(HAVE_ST_RDEV, 1,
@@ -2198,12 +2199,14 @@ interpval=$ac_cv_sys_interpreter
 
 AU_DEFUN([AC_HAVE_POUNDBANG],
 [AC_SYS_INTERPRETER
-AC_WARNING([$0: Remove this warning when you adjust your code to use
+AC_DIAGNOSE([obsolete],
+[$0: Remove this warning when you adjust your code to use
       `AC_SYS_INTERPRETER'.])])
 
 
 AU_DEFUN([AC_ARG_ARRAY],
-[AC_WARNING([$0: no longer implemented: don't do unportable things
+[AC_DIAGNOSE([obsolete],
+[$0: no longer implemented: don't do unportable things
 with arguments. Remove this warning when you adjust your code.])])
 
 
