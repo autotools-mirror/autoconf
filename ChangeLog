@@ -1,3 +1,7 @@
+Fri Jun  7 11:54:58 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Identifierize lib name in $ac_tr_lib.
+
 Mon May 27 13:49:02 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): If $TMPDIR names an
