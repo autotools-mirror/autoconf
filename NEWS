@@ -1,5 +1,8 @@
 * Major changes in Autoconf 2.57h                       -*- outline -*-
 
+** core.*
+  core.* files are no longer removed, as they may be valid user files.
+
 * Major changes in Autoconf 2.57g
 
   Released 2003-10-24, by Akim Demaille

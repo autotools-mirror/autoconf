@@ -1618,8 +1618,8 @@ AC_CACHE_CHECK(whether setvbuf arguments are reversed,
 		  exit (1);
 		putchar ('\r');
 		exit (0); /* Non-reversed systems SEGV here.  */]])],
-	   ac_cv_func_setvbuf_reversed=yes,
-	   rm -f core core.* *.core,
+	   [ac_cv_func_setvbuf_reversed=yes],
+	   [rm -f core *.core],
 	   [[: # Assume setvbuf is not reversed when cross-compiling.]])]
 	ac_cv_func_setvbuf_reversed=yes)])])
 if test $ac_cv_func_setvbuf_reversed = yes; then
@@ -1678,7 +1678,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 	      ac_cv_func_utime_null=yes,
 	      ac_cv_func_utime_null=no,
 	      ac_cv_func_utime_null=no)
-rm -f core core.* *.core])
+rm -f core *.core])
 if test $ac_cv_func_utime_null = yes; then
   AC_DEFINE(HAVE_UTIME_NULL, 1,
 	    [Define to 1 if `utime(file, NULL)' sets file's timestamp to the

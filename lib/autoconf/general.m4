@@ -1191,7 +1191,7 @@ trap 'exit_status=$?
       echo "$as_me: caught signal $ac_signal"
     echo "$as_me: exit $exit_status"
   } >&AS_MESSAGE_LOG_FD
-  rm -f core core.* *.core &&
+  rm -f core *.core &&
   rm -rf conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
      ' 0
@@ -2256,7 +2256,7 @@ _AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],
 	  [( exit $ac_status )
 $3])dnl])[]dnl
-rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
 						     [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
