@@ -2039,6 +2039,26 @@ $2],
 ## ----------------------- ##
 
 
+# _AC_WHICH_A(NAME, PATH)
+# -----------------------
+# Work like `which -a NAME' in PATH, even if NAME is not executable.
+# Can be used inside backquotes.
+define([_AC_WHICH_A],
+[IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+dnl $ac_dummy forces splitting on constant user-supplied paths.
+dnl POSIX.2 word splitting is done only on the output of word expansions,
+dnl not every word.  This closes a longstanding sh security hole.
+ac_dummy="$2"
+for ac_dir in $ac_dummy; do
+  test -z "$ac_dir" && ac_dir=.
+  if test -f $ac_dir/$1; then
+    echo "$ac_dir/$1"
+  fi
+done
+IFS="$ac_save_ifs"
+])
+
+
 # AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
 #               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
 #               [PATH], [REJECT])
@@ -2051,28 +2071,19 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 [if test -n "[$]$1"; then
   ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
-ifelse([$6], , , [  ac_prog_rejected=no
+ifval([$6], [  ac_prog_rejected=no
 ])dnl
-dnl $ac_dummy forces splitting on constant user-supplied paths.
-dnl POSIX.2 word splitting is done only on the output of word expansions,
-dnl not every word.  This closes a longstanding sh security hole.
-  ac_dummy="ifelse([$5], , $PATH, [$5])"
-  for ac_dir in $ac_dummy; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-ifelse([$6], , , dnl
-[      if test "[$ac_dir/$ac_word]" = "$6"; then
-        ac_prog_rejected=yes
-	continue
-      fi
-])dnl
-      ac_cv_prog_$1="$3"
-      break
+  for ac_path in `_AC_WHICH_A([$ac_word], [m4_default([$5], [$PATH])])`; do
+ifval([$6],
+[    if test "$ac_path" = "$6"; then
+      ac_prog_rejected=yes
+      continue
     fi
+])dnl
+    ac_cv_prog_$1="$3"
+    break
   done
-  IFS="$ac_save_ifs"
-ifelse([$6], , , [if test $ac_prog_rejected = yes; then
+ifval([$6], [if test $ac_prog_rejected = yes; then
   # We found a bogon in the path, so make sure we never use it.
   set dummy [$]ac_cv_prog_$1
   shift
@@ -2081,10 +2092,10 @@ ifelse([$6], , , [if test $ac_prog_rejected = yes; then
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    set dummy "$ac_dir/$ac_word" "[$]@"
+    set dummy "$ac_path" "[$]@"
     shift
     ac_cv_prog_$1="[$]@"
-ifelse([$2], [$4], dnl
+ifelse([$2], [$4],
 [  else
     # Default is a loser.
     AC_MSG_ERROR([$1=$6 unacceptable, but no other $4 found in dnl
@@ -2095,7 +2106,7 @@ fi
 ])dnl
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_CHECK_PROGS will keep looking.
-ifelse([$4], , , [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
+ifval([$4], [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
 $1="$ac_cv_prog_$1"
@@ -2114,10 +2125,10 @@ AC_SUBST($1)dnl
 AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
 do
-AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, , $4)
+AC_CHECK_PROG([$1], [$]ac_prog, [$]ac_prog, , [$4])
 test -n "[$]$1" && break
 done
-ifelse([$3], , , [test -n "[$]$1" || $1="$3"
+ifval([$3], [test -n "[$]$1" || $1="$3"
 ])])
 
 

@@ -1,3 +1,11 @@
+2000-03-03  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_WHICH_A): New macro.
+	(AC_CHECK_PROG): Use it.  Use ifval.
+	(AC_CHECK_PROGS): Use ifval.  Fix the quoting.
+	* tests/semantics.m4: Test AC_CHECK_PROG.
+	* tests/Makefile.am (EGREP_EXCLUDE): Add /AC_CHECK_PROGS?/.
+
 2000-03-02  Russ Allbery  <rra@stanford.edu>
 
 	* autoscan.pl (parse_args): Add support for -m <macrodir>.

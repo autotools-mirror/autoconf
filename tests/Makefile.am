@@ -49,8 +49,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
 # the macros we don't want to test in syntax.m4.
 #
-# - AC_CHECK decls, files, funcs, members, types, headers
-#   Already performed in the semantical tests.
+# - AC_CHECK decl, file, func, header, member, prog, sizeof, type
+#   Performed in the semantics tests.
 # - AC_CONFIG
 #   They fail when the source does not exist.
 # - AC_INIT
@@ -59,15 +59,15 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
-#   They produce `= val' because $1 is empty.
+#   They produce `= val' because $1, the variable used to store the result,
+#   is empty.
 # - AC_TRY
 #   Used in many places.
 # - _AC_
 #   Internal macros are used elsewhere.
 EGREP_EXCLUDE = egrep -v \
   -e '^AC_ARG_VAR$$' \
-  -e '^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|SIZEOF|TYPE)S?$$' \
-  -e '^AC_CHECK_PROGS$$' \
+  -e '^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$' \
   -e '^AC_CONFIG' \
   -e '^AC_INIT' \
   -e '^AC_LINKER_OPTION$$' \
