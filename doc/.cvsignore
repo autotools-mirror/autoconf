@@ -16,3 +16,4 @@
 *.vr *.vrs
 Makefile
 stamp-vti
+version.texi
