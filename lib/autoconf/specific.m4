@@ -2358,16 +2358,13 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for this one X11 .h file.
-  test -z "$ac_x_direct_test_include" &&
-    ac_x_direct_test_include=X11/Intrinsic.h
-
+  # Guess where to find include files, by looking for Intrinsic.h.
   # First, try using that file with no special directory specified.
-AC_TRY_CPP([#include <$ac_x_direct_test_include>],
+  AC_TRY_CPP([@%:@include <X11/Intrinsic.h>],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
 [for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/$ac_x_direct_test_include"; then
+  if test -r "$ac_dir/X11/Intrinsic.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -2376,15 +2373,11 @@ fi # $ac_x_includes = no
 
 if test "$ac_x_libraries" = no; then
   # Check for the libraries.
-
-  test -z "$ac_x_direct_test_library" && ac_x_direct_test_library=Xt
-  test -z "$ac_x_direct_test_function" && ac_x_direct_test_function=XtMalloc
-
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-l$ac_x_direct_test_library $LIBS"
-AC_TRY_LINK(, [${ac_x_direct_test_function}()],
+  LIBS="-lXt $LIBS"
+  AC_TRY_LINK(, [XtMalloc (0)],
 [LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],
@@ -2393,7 +2386,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/lib${ac_x_direct_test_library}.$ac_extension; then
+    if test -r $ac_dir/libXt.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi

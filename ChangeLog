@@ -1,5 +1,14 @@
 2000-06-07  Akim Demaille  <akim@epita.fr>
 
+	Hard (code) X.
+
+	* acspecific.m4 (_AC_PATH_X_DIRECT): Hard code `X11/Intrinsic.h'
+	instead of using `ac_x_direct_test_include', likewise for `Xt' and
+	`ac_x_direct_test_lib', `XtMalloc' and
+	`ac_x_direct_test_function'.
+
+2000-06-07  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_PATH_X): Use AC_DIVERT.
 	Use `no', not `NO' for ac_x_includes and ac_x_libraries.
 	Adjust dependencies.
