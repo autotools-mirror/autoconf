@@ -1,5 +1,12 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): $2 defaults to $1.
+	* lib/autotest/autotest.m4 (AT_INIT): Expand AUTOTEST_PATH into
+	first the build dirs, then the src dirs.
+	* configure.ac (AC_CONFIG_TESTDIR): Adjust.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Output the definition of
 	at_data_files earlier.
 	(--clean, -c): New option.

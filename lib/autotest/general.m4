@@ -98,15 +98,40 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`
 
-# Don't take risks: use absolute path names.
-at_path=`pwd`
+
+# Don't take risks: use only absolute directories in PATH.
+# AUTOTEST_PATH is expanded into build/src parts, since users
+# may create executables in both places.
+#
+# There might be directories that don't exist, but don't redirect
+# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
 at_IFS_save=$IFS
 IFS=$PATH_SEPARATOR
-for at_dir in $AUTOTEST_PATH $PATH; do
-  # There might be directories that don't exist, but don't redirect
-  # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
+at_sep=
+at_path=
+# Build first.
+for at_dir in $AUTOTEST_PATH; do
+  at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
+done
+# Then source.
+for at_dir in $AUTOTEST_PATH; do
+  at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
+done
+# And finally PATH.
+for at_dir in $PATH; do
   at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  test -n "$at_dir" && at_path="$at_path$PATH_SEPARATOR$at_dir"
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
 done
 IFS=$at_IFS_save
 PATH=$at_path

@@ -50,14 +50,14 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
-# AC_CONFIG_TESTDIR(TEST-DIRECTORY, [AUTOTEST-PATH = .])
-# ------------------------------------------------------
+# AC_CONFIG_TESTDIR(TEST-DIRECTORY, [AUTOTEST-PATH = TEST-DIRECTORY])
+# -------------------------------------------------------------------
 # Configure an Autotest test suite directory.  Invoke it once per dir,
 # even if there are several test suites in there.
 #
-# AUTOTEST-PATH must help the test suite to find the executables,
-# i.e., if the executables are in `src/', pass `src'.  If there are
-# also executables in the source tree, use `src:$top_srcdir/src'.
+# AUTOTEST-PATH must help the test suite to find the executables.
+# It is relative to the top level of the package, and is expanded
+# into all the build dirs of AUTOTEST-PATH, then all the src dirs.
 AC_DEFUN([AC_CONFIG_TESTDIR],
 [AC_CONFIG_COMMANDS([$1/atconfig],
 [cat >$1/atconfig <<ATEOF
@@ -77,7 +77,7 @@ srcdir='$ac_srcdir'
 top_srcdir='$ac_top_srcdir'
 top_builddir='$ac_top_builddir'
 
-AUTOTEST_PATH='m4_default([$2], [.])'
+AUTOTEST_PATH='m4_default([$2], [$1])'
 
 SHELL=\${CONFIG_SHELL-'$at_shell'}
 PATH_SEPARATOR='$at_path_separator'
