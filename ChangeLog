@@ -1,3 +1,7 @@
+2000-09-27  Lars J. Aas  <larsa@sim.no>
+
+	* autoconf.sh: Report full macro name for missing macros.
+
 2000-09-27  J. David Anglin  <dave@hiauly1.hia.nrc.ca>
 
 	* autoheader.sh: Fix trap (EXIT) status.

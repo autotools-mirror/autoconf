@@ -347,7 +347,7 @@ case $task in
       # Dubious feature: we tolerate macro names when commented.
       if (/^[^#]*($pattern)/)
         {
-           match (\$0, /($pattern)[_A-Za-z0-9]*/)
+           match (\$0, /([_A-Za-z0-9]*($pattern)[_A-Za-z0-9]*)/)
            macros [substr (\$0, RSTART, RLENGTH)] = oline
            some_macros_were_not_expanded = 1
         }
