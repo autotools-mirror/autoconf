@@ -1,3 +1,10 @@
+2004-01-04  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/general.m4 (AC_ARG_PROGRAM):
+	Use "rm -f" to remove conftest.sed, not plain "rm".
+	Bug reported by David Relson in
+	<http://mail.gnu.org/archive/html/autoconf/2004-01/msg00011.html>.
+
 2004-01-03  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Mention that cc
@@ -6749,7 +6756,7 @@
 
 -----
 
-Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 
