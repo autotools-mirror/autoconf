@@ -777,7 +777,7 @@ done; }
 # Simulate running `dirname(1)' on PATHNAME, not all systems have it.
 # This macro must be usable from inside ` `.
 define([_AC_SHELL_DIRNAME],
-[echo $1 | sed '/^\/*$/!s,//*$,,;s,[^/]*$,,;s,//*$,/,;/^\/$/!s,/$,,'])
+[echo $1 | sed '/^\/*$/!s,//*$,,;s,[[^/]]*$,,;s,//*$,/,;/^\/$/!s,/$,,'])
 
 
 
