@@ -34,8 +34,8 @@ AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_STATE_SAVE(before)
 $1
-AC_STATE_SAVE(after)
 AC_OUTPUT
+AC_STATE_SAVE(after)
 ])])
 
 

@@ -10,6 +10,11 @@
 # is AC_SUBST.
 # - ^ac_
 #   Autoconf's shell name space.
+# - prefix and exec_prefix
+#   are kept undefined (NONE) until AC_OUTPUT with then sets them to
+#   `/usr/local' and `${prefix}' for make.
+# - CONFIG_STATUS and DEFS
+#   Set by AC_OUTPUT.
 # - ALLOCA|NEED_SETGID|KMEM_GROUP
 #   AC_FUNCs from acspecific.
 # - AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC
@@ -30,6 +35,7 @@ m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
   egrep -v -e 'm4_join([|],
       [^ac_],
+      [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
       [^(LIBS|LIBOBJS|LDFLAGS)=],
       [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
@@ -47,5 +53,5 @@ m4_defun([AC_STATE_SAVE],
   grep '^m4_defn([m4_re_word])=' >state-env.$1
 test $? = 0 || rm -f state-env.$1
 
-ls -1 | grep -v '^state' | sort >state-ls.$1
+ls -1 | egrep -v '^(state.*|config\.)' | sort >state-ls.$1
 ])# AC_STATE_SAVE

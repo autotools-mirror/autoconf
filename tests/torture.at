@@ -294,3 +294,43 @@ AT_DATA(expout,
 ])])
 
 AT_CLEANUP(dummy)
+
+
+## -------- ##
+## srcdir.  ##
+## -------- ##
+
+AT_SETUP([srcdir])
+
+rm -rf at-dir
+mkdir at-dir
+: >at-dir/bar.in
+: >foo.in
+
+AT_DATA([configure.ac],
+[[AC_INIT
+
+AC_CONFIG_FILES([foo at-dir/bar])
+
+AC_CONFIG_COMMANDS([report],
+[test -f $srcdir/configure.ac ||
+   AC_MSG_ERROR([cannot find $srcdir/configure.ac])],
+                   [srcdir=$srcdir])
+
+AC_OUTPUT
+rm -rf foo at-dir/bar
+]])
+
+AT_CHECK_AUTOCONF
+
+# In place.
+AT_CHECK([./configure], [], [ignore])
+
+# Relative path.
+AT_CHECK([cd at-dir && ../configure], [], [ignore])
+
+# Absolute path.
+at_here=`pwd`
+AT_CHECK([cd at-dir && $at_here/configure], [], [ignore])
+
+AT_CLEANUP(at-dir foo.in foo)

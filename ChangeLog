@@ -1,3 +1,19 @@
+2001-01-24  Akim Demaille  <akim@epita.fr>
+
+	While preserved in configure, srcdir is trashed in config.status.
+	Reported by Ralf Corsepius.
+
+	* tests/aclocal.m4 (AC_STATE_SAVE): It is ok to modify
+	CONFIG_STATUS, DEFS, prefix and exec_prefix.
+	It is OK to produce config.* files.
+	* tests/atspecific.m4 (AT_CONFIGURE_AC): Save the env *after*
+	AC_OUTPUT to check that it doesn't break anything by itself.
+	* tests/torture.m4 (srcdir): New test, from Ralf Corsepius.
+	* acgeneral.m4 (_AC_OUTPUT_FILES): Use ac_top_srcdir and ac_srcdir
+	to preserve srcdir and top_srcdir.
+	Remove any use of `ac_given_srcdir' as `$srcdir' being preserved
+	is usable.
+
 2001-01-24  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	configure -q did not work since 2000-11-03.
