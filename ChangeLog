@@ -1,3 +1,9 @@
+2000-12-01  Pavel Roskin  <proski@gnu.org>
+
+	* tests/atgeneral.m4 (AT_INIT): Use ${CONFIG_SHELL-/bin/sh}
+	to run the testsuite from the debug scripts.
+	Suggested by Alexandre Oliva.
+
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Assignments): Don't read $? after an

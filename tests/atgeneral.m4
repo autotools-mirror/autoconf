@@ -265,7 +265,7 @@ elif test $at_debug = false; then
   for at_group in $at_failed_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
-      echo 'exec '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
+      echo 'exec ${CONFIG_SHELL-/bin/sh} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
