@@ -3207,10 +3207,11 @@ fi
 AC_DEFUN(_AC_PATH_X_DIRECT,
 [if test "$ac_x_includes" = NO; then
   # Guess where to find include files, by looking for this one X11 .h file.
-  test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
+  test -z "$ac_x_direct_test_include" &&
+    ac_x_direct_test_include=X11/Intrinsic.h
 
   # First, try using that file with no special directory specified.
-AC_TRY_CPP([#include <$x_direct_test_include>],
+AC_TRY_CPP([#include <$ac_x_direct_test_include>],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
 [# Look for the header file in a standard set of common directories.
@@ -3251,7 +3252,7 @@ ac_x_includes=],
     /usr/openwin/share/include \
     ; \
   do
-    if test -r "$ac_dir/$x_direct_test_include"; then
+    if test -r "$ac_dir/$ac_x_direct_test_include"; then
       ac_x_includes=$ac_dir
       break
     fi
@@ -3261,14 +3262,14 @@ fi # $ac_x_includes = NO
 if test "$ac_x_libraries" = NO; then
   # Check for the libraries.
 
-  test -z "$x_direct_test_library" && x_direct_test_library=Xt
-  test -z "$x_direct_test_function" && x_direct_test_function=XtMalloc
+  test -z "$ac_x_direct_test_library" && ac_x_direct_test_library=Xt
+  test -z "$ac_x_direct_test_function" && ac_x_direct_test_function=XtMalloc
 
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS="$LIBS"
-  LIBS="-l$x_direct_test_library $LIBS"
-AC_TRY_LINK(, [${x_direct_test_function}()],
+  LIBS="-l$ac_x_direct_test_library $LIBS"
+AC_TRY_LINK(, [${ac_x_direct_test_function}()],
 [LIBS="$ac_save_LIBS"
 # We can link X programs with no special library path.
 ac_x_libraries=],
@@ -3314,7 +3315,7 @@ for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
 do
 dnl Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
+    if test -r $ac_dir/lib${ac_x_direct_test_library}.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi

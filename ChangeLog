@@ -1,5 +1,11 @@
 2000-03-02  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_PATH_X_DIRECT): Moved all the shell variable
+	into the ac_ name space.
+	Reported by Nicolas Joly.
+
+2000-03-02  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4: Move some macros to a better place.
 
 2000-03-02  Akim Demaille  <akim@epita.fr>
