@@ -1,6 +1,6 @@
 include(m4sh.m4)					    -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -318,6 +318,7 @@ elif test $at_debug = false; then
   for at_group in $at_fail_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
+      echo '${ZSH_VERSION-:} alias -g '\''${1+"$@"}'\''='\''"$@"'\'''
       echo 'exec ${CONFIG_SHELL-'"$SHELL"'} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
