@@ -134,6 +134,19 @@ m4_define([AS_REQUIRE],
 	       [m4_divert_text([M4SH-INIT], [m4_default([$2], [$1])])])])
 
 
+# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND)
+# --------------------------------------------------
+# BODY-TO-EXPAND is the body of a shell function to be emitted in the
+# M4SH-INIT section when expanded (required or not).  Unlike other
+# xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
+#
+m4_define([AS_REQUIRE_SHELL_FN],
+[m4_provide_if([AS_SHELL_FN_$1], [],
+               [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
+$2
+}])])])
+
+
 # AS_SHELL_SANITIZE
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.

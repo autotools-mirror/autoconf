@@ -350,6 +350,50 @@ AT_CHECK([./script])
 
 AT_CLEANUP
 
+
+## ------------------------------------ ##
+## AS_REQUIRE_SHELL_FN and m4_require.  ##
+## ------------------------------------ ##
+
+# Hypothesis: M4sh expands the requirements of AS_REQUIRE_SHELL_FN
+# in the main diversion, and not in M4SH-INIT.
+
+AT_SETUP([AS@&t@_REQUIRE_SHELL_FN and m4@&t@_require])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+
+m4_defun([in_m4_sh_init], still_in_m4sh_init=yes)
+m4_defun([not_in_m4_sh_init], still_in_m4sh_init=no)
+
+m4_defun([error_if_emitted_in_m4sh_init], [
+  if test x$still_in_m4sh_init = xyes; then
+    AS_ERROR([requirement emitted in M4SH-INIT])
+  fi
+])
+
+m4_defun([TEST_FUNC_BODY], [
+m4_require([error_if_emitted_in_m4sh_init])
+: echo in shell function, with parameter = [$]1
+])
+
+
+m4_defun([test_init], [
+AS_REQUIRE([in_m4_sh_init])
+AS_REQUIRE_SHELL_FN([test_func], [TEST_FUNC_BODY])
+AS_REQUIRE([not_in_m4_sh_init])
+])
+
+test_init
+test_func parameter1
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
+
+
 ## -------------- ##
 ## AS_HELP_STRING ##
 ## -------------- ##
