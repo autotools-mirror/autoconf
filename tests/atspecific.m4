@@ -86,7 +86,7 @@ m4_define([AT_DATA_AUTOCONF],
 # AT_CONFIGURE_AC(BODY)
 # ---------------------
 # Create a full configure.ac running BODY, with a config header set up,
-# AC_OUTPUT, and environement checking hooks.
+# AC_OUTPUT, and environment checking hooks.
 #
 # Here are the exceptions to AC_STATE_SAVE:
 #

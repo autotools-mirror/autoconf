@@ -353,7 +353,7 @@ AT_CLEANUP
 ## autoheader.  ##
 ## ------------ ##
 
-# autoheader is intensively used in its modern form throught this
+# autoheader is intensively used in its modern form throughout this
 # test suite.  But we also have to check that acconfig.h still works.
 # autoheader uses autoconf --trace, so traces first.
 

@@ -1,3 +1,10 @@
+2001-11-25  Joseph S. Myers  <jsm28@cam.ac.uk>
+
+	* doc/autoconf.texi, TODO, lib/autoconf/fortran.m4,
+	lib/autoconf/functions.m4, lib/autoconf/headers.m4,
+	tests/atgeneral.m4, tests/tools.at, tests/atspecific.m4: Fix
+	spelling errors.
+
 2001-11-22  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Using System Type): Add an example of `case

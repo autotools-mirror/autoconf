@@ -437,7 +437,7 @@ AC_PKG_WITH(hesiod,
 ,,-lhesiod,HESIOD,,)
 AC_PKG_WITH(glue,,,-lglue,GLUE,,)
 AC_PKG_WITH(bind,,/usr/local/bind, [lib/resolv.a lib/lib44bsd.a], ,include)
-After the apropriate checks, the existance of the paths, and libs and such
+After the appropriate checks, the existence of the paths, and libs and such
 LIBS=$LIBS $PKG-LIBS
 DEFS=$DEFS $PKG-DEFS
 CPPFLAGS=$PKG-CPPFLAGS $CPPFLAGS

@@ -412,7 +412,7 @@ m4_divert_push([TESTS])dnl
 # So the question is:
 #
 #       Can you write a regexp that matches those four characters,
-#       and respects the M4 quotation contraints?
+#       and respects the M4 quotation constraints?
 #
 # The answer is: (rot13) tvira va gur ertrkc orybj, lbh vqvbg!
 m4_define([AT_CLEANUP_FILE_IFELSE],

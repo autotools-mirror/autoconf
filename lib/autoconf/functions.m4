@@ -903,7 +903,7 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
    VM page cache was not coherent with the file system buffer cache
    like early versions of FreeBSD and possibly contemporary NetBSD.)
    For shared mappings, we should conversely verify that changes get
-   propogated back to all the places they're supposed to be.
+   propagated back to all the places they're supposed to be.
 
    Grep wants private fixed already mapped.
    The main things grep needs to know about mmap are:

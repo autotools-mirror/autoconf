@@ -127,7 +127,7 @@ Free Documentation License''.
 @c   @defcodeindex fu
 @c
 @c
-@c   @c Put the programs and funcions into their own index.
+@c   @c Put the programs and functions into their own index.
 @c   @syncodeindex fu pr
 
 
@@ -11518,7 +11518,7 @@ suite need to get information coming out of the configuration process.
 Some of this information, common for all validation suites, is provided
 through the file @file{atconfig}, automatically created by
 @code{AC_CONFIG_TESTDIR}.  For configuration informations which your
-testing environment specifically needs, you might prepare an optionnal
+testing environment specifically needs, you might prepare an optional
 file named @file{atlocal.in}, instantiated by @code{AC_CONFIG_FILES}.
 The configuration process produces @file{atconfig} and @file{atlocal}
 out of these two input files, and these two produced files are

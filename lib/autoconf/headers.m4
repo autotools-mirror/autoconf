@@ -562,7 +562,7 @@ AU_DEFUN([AC_UNISTD_H],
 AU_DEFUN([AC_USG],
 [AC_DIAGNOSE([obsolete],
 [$0: Remove `AC_MSG_CHECKING', `AC_TRY_LINK' and this `AC_WARNING'
-when you ajust your code to use HAVE_STRING_H.])dnl
+when you adjust your code to use HAVE_STRING_H.])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
   [AC_MSG_RESULT(yes)],
@@ -588,7 +588,7 @@ AC_CHECK_HEADERS(string.h)])
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
 [AC_DIAGNOSE([obsolete], [$0: Remove this warning and
-`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you ajust your code to
+`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you adjust your code to
 use and HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])dnl
 AC_CHECK_HEADER(memory.h,
                 [AC_DEFINE([NEED_MEMORY_H], 1,
@@ -607,7 +607,7 @@ AU_DEFUN([AC_DIR_HEADER],
 AC_FUNC_CLOSEDIR_VOID
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the four `AC_DEFINE' when you
-ajust your code to use `AC_HEADER_DIRENT'.])
+adjust your code to use `AC_HEADER_DIRENT'.])
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
 test ac_cv_header_dirent_sys_ndir_h &&

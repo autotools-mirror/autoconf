@@ -347,7 +347,7 @@ fi
 
 
 # ---------------------------------------- #
-# 4d. Fortan 77 compiler characteristics.  #
+# 4d. Fortran 77 compiler characteristics. #
 # ---------------------------------------- #
 
 
@@ -654,7 +654,7 @@ AC_DEFINE_UNQUOTED([F77_MAIN], $ac_cv_f77_main,
 # by commas:
 #
 # lower case / upper case:
-#    case translation of the Fortan 77 symbols
+#    case translation of the Fortran 77 symbols
 # underscore / no underscore:
 #    whether the compiler appends "_" to symbol names
 # extra underscore / no extra underscore:
