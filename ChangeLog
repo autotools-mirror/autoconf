@@ -208,6 +208,12 @@
 
 	* acspecific.m4 (AC_EXEEXT): Ignore C++ source files.
 
+1999-01-28  Gary V. Vaughan  <gvaughan@oranda.demon.co.uk>
+
+	* acspecific.m4 (AC_PROG_INSTALL): set INSTALL_SCRIPT to
+	${INSTALL} so that automake doesn't propogate install time flags
+	for INSTALL_PROGRAM into INSTALL_SCRIPT.
+	
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
 	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by 
