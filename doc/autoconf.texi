@@ -11702,8 +11702,12 @@ while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
 @item @command{grep}
 @c -----------------
 @prindex @command{grep}
-Don't use @samp{grep -s} to suppress output, because @samp{grep -s} on
-System V does not suppress output, only error messages.  Instead,
+Don't use @samp{grep -q} to suppress output, because many @command{grep}
+implementations (e.g., Solaris 10) do not support @option{-q}.
+Don't use @samp{grep -s} to suppress output either, because Posix
+says @option{-s} does not suppress output, only some error messages;
+also, the @option{-s} option of traditional @command{grep} behaved
+like @option{-q} does in most modern implementations.  Instead,
 redirect the standard output and standard error (in case the file
 doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
@@ -11711,7 +11715,7 @@ status of @code{grep} to determine whether it found a match.
 Some traditional @command{grep} implementations do not work on long
 input lines.  Also, many implementations do not support multiple regexps
 with @option{-e}: they either reject @samp{-e} entirely (e.g., Solaris
-9) or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
+10) or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
