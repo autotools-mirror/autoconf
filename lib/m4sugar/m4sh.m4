@@ -172,7 +172,7 @@ DUALCASE=1; export DUALCASE # for MKS sh
 # This is a spy to detect "in the wild" shells that do not support shell
 # functions correctly.  It is based on the m4sh.at Autotest testcases.
 m4_define([_AS_SHELL_FN_WORK],
-[{ $1 <<\_ASEOF
+[{ $1 2>/dev/null <<\_ASEOF
 _AS_BOURNE_COMPATIBLE
 func_return () {
   (exit [$]1)

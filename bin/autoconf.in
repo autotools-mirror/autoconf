@@ -3,7 +3,6 @@
 ## M4sh Initialization.  ##
 ## --------------------- ##
 
-
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -70,8 +69,7 @@ if test ! -f "$as_myself"; then
    { (exit 1); exit 1; }; }
 fi
 
-if { $SHELL <<\_ASEOF
-
+if { $SHELL 2>/dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -153,8 +151,7 @@ do
   for as_base in sh bash ksh sh5; do
 	 case $as_dir in
 	 /*)
-	   if { $as_dir/$as_base <<\_ASEOF
-
+	   if { $as_dir/$as_base 2>/dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
