@@ -1,4 +1,4 @@
-2001-05-04  Pavel Roskin  <proski@gnu.org>
+2001-05-14  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (Shellology): Document a quirk in
 	here-document handling on OpenBSD.
