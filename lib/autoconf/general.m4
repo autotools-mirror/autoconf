@@ -659,9 +659,9 @@ else
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
-    AC_MSG_ERROR([cannot find sources in $ac_confdir or ..])
+    AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $ac_confdir or ..])
   else
-    AC_MSG_ERROR([cannot find sources in $srcdir])
+    AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
   fi
 fi
 dnl Double slashes in pathnames in object file debugging info

@@ -129,4 +129,4 @@ maintainer-check-c++:
 	CC=g++ make check
 
 clean-local:
-	-rm -rf autom4te.cache
+	-rm -rf autom4te.cache builddir inner

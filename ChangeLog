@@ -1,5 +1,13 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (Configuring subdirectories): New test.
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Say what you are
+	looking for.
+	* m4/atconfig.m4: Be sure the let $[0] be expandable.
+	(top_srcdir): Fix its computation.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_OUTPUT_COMMANDS): Say what you do.
 	* m4/atconfig.m4 (AT_CONFIG): $1 is now the directory where the
 	test suite lives.

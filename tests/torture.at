@@ -389,6 +389,7 @@ AT_DATA([dummy.in],
 # configure.ac #
 # ------------ #
 
+m4_pattern_allow([^m4_(define|defun)$])
 AT_DATA([configure.ac],
 dnl The following lines transfer AT_DUMMY_VAR, AT_DESCRIPTION, and
 dnl AT_BIG_VALUE into the configure.ac as AC_DUMMY_VAR etc.
@@ -497,3 +498,84 @@ AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], 1, ignore, ignore)
 
 AT_CLEANUP
+
+
+## ---------------------------- ##
+## Configuring subdirectories.  ##
+## ---------------------------- ##
+
+# .
+# |-- builddir
+# |   |-- config.log
+# |   |-- config.status
+# |   `-- inner
+# |       |-- config.log
+# |       |-- config.status
+# |       `-- innermost
+# |           `-- config
+# |-- configure
+# |-- configure.ac
+# |-- inner
+# |   |-- configure
+# |   |-- configure.ac
+# |   `-- innermost
+# |       `-- config.in
+# `-- install-sh
+#
+AT_SETUP([Configuring subdirectories])
+
+# The contents of `inner/', and `inner/innermost/'.
+AS_MKDIR_P([inner/innermost])
+
+AT_DATA([inner/configure.ac],
+[AC_INIT(GNU Inner, 1.0)
+AC_CONFIG_SRCDIR([innermost/config.in])
+AC_ARG_VAR([INNER], [an inner variable])
+AC_SUBST([INNER], "inner")
+AC_CONFIG_FILES([innermost/config])
+AC_OUTPUT
+])
+
+AT_DATA([inner/innermost/config.in],
+[INNER=@INNER@
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+])
+
+# The contents of `.'
+AT_DATA([install-sh], [])
+
+AT_DATA([configure.ac],
+[AC_INIT(GNU Outer, 1.0)
+AC_ARG_VAR([OUTER], [an outer variable])
+AC_CONFIG_SUBDIRS([inner])
+AC_OUTPUT
+])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOCONF([-o inner/configure inner/configure.ac])
+AT_CHECK([test -f inner/configure])
+
+# Running the outer configure recursively should provide the innermost
+# help strings.
+AT_CHECK([./configure --help=recursive | grep INNER], 0, [ignore])
+
+# Running the outer configure should trigger the inner.
+AT_CHECK_CONFIGURE
+AT_CHECK([cat inner/innermost/config], 0,
+[INNER=inner
+srcdir=.
+top_srcdir=..
+])
+
+# The same, but from a builddir.
+AS_MKDIR_P([builddir])
+AT_CHECK([cd builddir && ../configure], 0, [ignore])
+AT_CHECK([cat builddir/inner/innermost/config], 0,
+[INNER=inner
+srcdir=../../../inner/innermost
+top_srcdir=../../../inner
+])
+
+
+AT_CLEANUP(inner builddir)
