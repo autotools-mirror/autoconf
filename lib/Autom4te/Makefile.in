@@ -124,7 +124,7 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(
 	      exit 1;; \
 	  esac; \
 	done; \
-        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Autom4te/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Autom4te/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Autom4te/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status

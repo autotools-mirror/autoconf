@@ -183,7 +183,7 @@ $(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../freeze.mk $(top_srcdir)/configu
 	      exit 1;; \
 	  esac; \
 	done; \
-        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/autoscan/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/autoscan/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/autoscan/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status

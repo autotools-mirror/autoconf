@@ -193,7 +193,7 @@ $(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../freeze.mk $(top_srcdir)/configu
 	      exit 1;; \
 	  esac; \
 	done; \
-        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/m4sugar/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/m4sugar/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/m4sugar/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
