@@ -1,3 +1,9 @@
+2002-06-10  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* bin/autom4te.in ($cache): Don't define using `$me', the name
+	of the cache should not depend on the name under which autom4te
+	was installed.
+
 2002-06-07  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.at (autoconf: forbidden tokens, basic)

@@ -247,7 +247,7 @@ my $melt = 0;
 
 # Names of the cache directory, cache directory index, trace cache
 # prefix, and output cache prefix.
-my $cache = "$me.cache";
+my $cache = "autom4te.cache";
 my $icache = "$cache/requests";
 my $tcache = "$cache/traces.";
 my $ocache = "$cache/output.";
