@@ -9,26 +9,10 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Autoconf 2.50
 
-** AC_INIT(PACKAGE)
-Decide with the Automake team whether they prefer that AC_PACKAGE_NAME
-etc. be a macro, or a shell variable ac_package_name.  Had we used
-AC_PACKAGE anywhere in configure.in, we would have had to use an
-shvar.  Also, think of the capitalization!  For instance this package
-is named `Autoconf', but the tarball is `autoconf-'.  What of the
-space?  Do we need another user input for the name of the tarball?
-
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
-
-** AC_FUNC_GETLOADAVG
-We must find a solution for this macro which needs to find
-`getloadavg.c'.
-
-** AC_PROG_CC_STDC
-Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
-Should include more tests (e.g., AC_C_CONST etc.)?
 
 ** Document
 Automake, Libtool.
@@ -42,6 +26,45 @@ English should write it.
 
 
 * Autoconf 2.51 or so
+
+** AC_FUNC_GETLOADAVG
+We must find a solution for this macro which needs to find
+`getloadavg.c'.
+
+** Revamp the language support
+We should probably have a language for C89, and C99.  We must give the
+means to the users to specify some needs over the compilers, and
+actually look for a good compiler, instead of stopping at the first
+compiler we find.
+
+In fact, the AC_CHECK_PROG macro and variations have proved their
+limitation: we really need something more powerful and simpler too.
+
+We must take into account the specific problems of the GCC team.  We
+must extend AC_CHECK_FUNCS in order to use the headers instead of fake
+declarations as we currently do.  Default headers could be triggered
+on when C99, but not with the other languages?
+
+At the end, we should have a simple macro, such as AC_LANG_COMPILER
+for instance, which is built over simpler macros.  Each language
+support should come with these simpler macros, but each language
+should follow the same process.
+
+We also need to check the srcext which are supported by the compiler.
+In fact, this macro is also probably the right place to check for
+objext and exeext.
+
+** AC_PROG_CC_STDC
+Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
+Should include more tests (e.g., AC_C_CONST etc.)?
+
+** AC_INIT(PACKAGE)
+Decide with the Automake team whether they prefer that AC_PACKAGE_NAME
+etc. be a macro, or a shell variable ac_package_name.  Had we used
+AC_PACKAGE anywhere in configure.in, we would have had to use an
+shvar.  Also, think of the capitalization!  For instance this package
+is named `Autoconf', but the tarball is `autoconf-'.  What of the
+space?  Do we need another user input for the name of the tarball?
 
 ** AC_SYS_INTERPRETER
 Defines $interpval.  This is not a standard name.  Do we want to keep
