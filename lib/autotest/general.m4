@@ -257,9 +257,9 @@ Options:
 Tests:
 _ATEOF
   else
-    # "  1 42  45 " => " (1|42|45): "
+    # "  1 42  45 " => "^(1|42|45);"
     at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
-    at_tests_pattern=" (${at_tests_pattern}): "
+    at_tests_pattern="^(${at_tests_pattern});"
   fi
   case $at_help in
   short)
@@ -555,7 +555,9 @@ elif test $at_debug = false; then
     echo
   } >&AS_MESSAGE_LOG_FD
 
+  exec AS_MESSAGE_LOG_FD>/dev/null
   $SHELL $[0] -v -d $at_debug_args $at_fail_list 2>&1 | tee -a $as_me.log
+  exec AS_MESSAGE_LOG_FD>>$as_me.log
 
   {
     echo
@@ -565,7 +567,7 @@ elif test $at_debug = false; then
       for at_file in `find "$top_srcdir" -name config.log -print`
       do
   	echo "$as_me: $at_file:"
-  	sed 's/^/| /;10q' $at_file
+  	sed 's/^/| /' $at_file
   	echo
       done
     fi

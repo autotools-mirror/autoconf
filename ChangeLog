@@ -1,3 +1,10 @@
+2001-09-25  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4 (AT_INIT): Dump the whole config.log.
+	Be sure the close and reopen the LOG fd before and after using tee
+	to extend the log.
+	<at_tests_pattern>: Adjust to the new format of at_help_all.
+
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (parse_args): There can be several invocations
