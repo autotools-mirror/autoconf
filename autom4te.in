@@ -285,6 +285,7 @@ sub mktmpdir ($)
   # If mktemp supports dirs, use it.
   $tmp = `(umask 077 &&
            mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
+  chomp $tmp;
 
   if (!$tmp || ! -d $tmp)
     {

@@ -1,3 +1,8 @@
+2001-07-25  Pavel Roskin  <proski@gnu.org>
+
+	* autom4te.in (mktmpdir): Strip trailing newline from mktemp
+	output.
+
 2001-07-25  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.in: Try to define the variables before using them.
