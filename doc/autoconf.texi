@@ -4047,9 +4047,10 @@ The following macros check for operating system services or capabilities.
 @maindex EMXOS2
 @maindex MINGW32
 Defines substitute variable @code{EXEEXT} based on the output of the
-compiler, after @samp{.c}, @samp{.C}, @samp{.o}, @samp{.obj} and
-@samp{.xcoff} files have been excluded.  Typically set to empty string
-if Unix and @samp{.exe} if Win32 or OS/2.
+compiler, after @samp{.$ac_ext} (i.e. source files of the current
+language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files have been
+excluded.  Typically set to empty string if Unix and @samp{.exe} if
+Win32 or OS/2.
 
 This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in
 the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX

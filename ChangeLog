@@ -1,5 +1,17 @@
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
+	Modernize AC_EXEEXT and AC_OBJEXT.
+	Now work with other languages than C and C++.
+
+	* acspecific.m4 (AC_EXEEXT, AC_OBJEXT): Use
+	AC_COMPILE_IFELSE/AC_LINK_IFELSE and AC_LANG_PROGRAM instead of
+	ad hoc code.
+	Use `$ac_ext' instead of listing `.c', `.C' etc.
+	Use AC_CACHE_CHECK.
+	* doc/autoconf.texi (System Services): Adjust.
+
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
 	Simplify the interface: users shouldn't need to explicitly check
 	for special environments.
 

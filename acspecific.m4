@@ -2554,30 +2554,22 @@ AC_DEFUN([AC_EXEEXT],
 [_AC_CYGWIN
 _AC_MINGW32
 _AC_EMXOS2
-AC_MSG_CHECKING([for executable suffix])
-AC_CACHE_VAL(ac_cv_exeext,
+AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
 [if test "$CYGWIN" = yes || test "$MINGW32" = yes || test "$EMXOS2" = yes; then
   ac_cv_exeext=.exe
 else
-  rm -f conftest*
-  echo 'int main () { return 0; }' >conftest.$ac_ext
-  ac_cv_exeext=
-  if AC_TRY_EVAL(ac_link); then
-    for ac_file in conftest.*; do
-      case $ac_file in
-      *.c | *.C | *.o | *.obj | *.xcoff) ;;
-      *) ac_cv_exeext=`echo $ac_file | sed -e s/conftest//` ;;
-      esac
-    done
-  else
-    AC_MSG_ERROR([installation or configuration problem: compiler cannot create executables.])
-  fi
-  rm -f conftest*
-  test x"${ac_cv_exeext}" = x && ac_cv_exeext=no
+  AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+  [for ac_file in conftest.*; do
+     case $ac_file in
+       *.$ac_ext | *.o | *.obj | *.xcoff) ;;
+       *) ac_cv_exeext=`echo $ac_file | sed -e s/conftest//` ;;
+     esac
+   done],
+  [AC_MSG_ERROR([cannot compile and link])])
+  test -n "$ac_cv_exeext" && ac_cv_exeext=no
 fi])
-EXEEXT=""
-test x"${ac_cv_exeext}" != xno && EXEEXT=${ac_cv_exeext}
-AC_MSG_RESULT(${ac_cv_exeext})
+EXEEXT=
+test "$ac_cv_exeext" != no && EXEEXT=$ac_cv_exeext
 dnl Setting ac_exeext will implicitly change the ac_link command.
 ac_exeext=$EXEEXT
 AC_SUBST(EXEEXT)dnl
@@ -2590,26 +2582,18 @@ AC_SUBST(EXEEXT)dnl
 # .obj.  If this is called, some other behaviour will change,
 # determined by ac_objext.
 AC_DEFUN([AC_OBJEXT],
-[AC_MSG_CHECKING([for object suffix])
-AC_CACHE_VAL(ac_cv_objext,
-[rm -f conftest*
-echo 'int i = 1;' >conftest.$ac_ext
-if AC_TRY_EVAL(ac_compile); then
-  for ac_file in conftest.*; do
+[AC_CACHE_CHECK([for object suffix], ac_cv_objext,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+   [for ac_file in conftest.*; do
     case $ac_file in
-    *.c) ;;
-    *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
+      *.$ac_ext) ;;
+      *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
     esac
-  done
-else
-  AC_MSG_ERROR([installation or configuration problem; compiler does not work])
-fi
-rm -f conftest*])
-AC_MSG_RESULT($ac_cv_objext)
-OBJEXT=$ac_cv_objext
+  done],
+   [AC_MSG_ERROR([cannot compile])])])
+AC_SUBST(OBJEXT, $ac_cv_objext)dnl
 ac_objext=$ac_cv_objext
-AC_SUBST(OBJEXT)])
-
+])
 
 
 
