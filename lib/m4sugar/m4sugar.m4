@@ -463,6 +463,53 @@ define([_m4_foreach],
                                                    [$3])])])
 
 
+
+## ------------------------ ##
+## More diversion support.  ##
+## ------------------------ ##
+
+
+# _m4_divert(DIBERSION-NAME or NUMBER)
+# ------------------------------------
+# If DIVERSION-NAME is the name of a diversion, return its number, otherwise
+# return makeNUMBER.
+define([_m4_divert],
+[ifdef([_m4_divert($1)],
+       [indir([_m4_divert($1)])],
+       [$1])])
+
+
+# m4_divert_push(DIVERSION-NAME)
+# ------------------------------
+# Change the diversion stream to DIVERSION-NAME, while stacking old values.
+define([m4_divert_push],
+[pushdef([_m4_divert_diversion], _m4_divert([$1]))dnl
+divert(_m4_divert_diversion)dnl
+])
+
+
+# m4_divert_pop
+# -------------
+# Change the diversion stream to its previous value, unstacking it.
+define([m4_divert_pop],
+[popdef([_m4_divert_diversion])dnl
+ifndef([_m4_divert_diversion],
+       [m4_fatal([too many m4_divert_pop])])dnl
+divert(_m4_divert_diversion)dnl
+])
+
+
+# m4_divert(DIVERSION-NAME, CONTENT)
+# ----------------------------------
+# Output CONTENT into DIVERSION-NAME (which may be a number actually).
+# An end of line is appended for free to CONTENT.
+define([m4_divert],
+[m4_divert_push([$1])dnl
+$2
+m4_divert_pop()dnl
+])
+
+
 ## ----------------- ##
 ## Text processing.  ##
 ## ----------------- ##

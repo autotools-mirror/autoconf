@@ -1,3 +1,18 @@
+2000-10-30  Akim Demaille  <akim@epita.fr>
+
+	Move the handling of diversions into M4sugar.
+
+	* acgeneral.m4 (_AC_DIVERT, AC_DIVERT, AC_DIVERT_PUSH)
+	(AC_DIVERT_POP): Move to...
+	* m4sugar.m4 (_m4_divert, m4_divert, m4_divert_push)
+	(m4_divert_pop): here.
+	* acgeneral.m4: Adjust to use only the M4sugar macros.
+	Nevertheless...
+	(AC_DIVERT_PUSH, AC_DIVERT_POP): New wrappers around the M4sugar
+	macros.
+	(_AC_DIVERT(...)): Rename all the diversions names as...
+	(_m4_divert(...)): these.
+
 2000-10-30  Pavel Roskin  <proski@gnu.org>
 
 	* m4sh.m4 (AS_EXIT): New macro that exits and makes sure that $?

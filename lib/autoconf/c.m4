@@ -577,7 +577,7 @@ ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
 # configuration.  The introduction of AC_EXEEXT, enabled either by
 # libtool or by CVS autoconf, have just made matters worse.
 AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
-[AC_DIVERT_PUSH([KILL])
+[m4_divert_push([KILL])
 
 AC_BEFORE([$0], [_AC_LANG_COMPILER_WORKS])
 AC_BEFORE([$0], [_AC_EXEEXT])
@@ -589,7 +589,7 @@ define([_AC_EXEEXT], [EXEEXT=])
 define([AC_LINK_IFELSE],
 [AC_FATAL([All the tests involving linking were disabled by $0])])
 
-AC_DIVERT_POP()dnl
+m4_divert_pop()dnl
 ])# # AC_NO_EXECUTABLES
 
 
