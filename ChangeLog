@@ -1,5 +1,9 @@
 2002-03-08  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (AUTOMAKE_OPTIONS): 1.6.
+
+2002-03-08  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&handle_m4): Do not foreach with `$_' as it
 	aliases the actual variables, and modifications of the former
 	affect the latter.
