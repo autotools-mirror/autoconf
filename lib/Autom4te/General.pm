@@ -21,6 +21,7 @@ package Autom4te::General;
 use 5.005_03;
 use Exporter;
 use File::Basename;
+use File::Spec;
 use File::stat;
 use IO::File;
 use Carp;
@@ -36,7 +37,8 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&backname &debug &find_configure_ac &find_file
+  qw (&backname &catfile &canonpath &debug
+      &file_name_is_absolute &find_configure_ac &find_file
       &getopt &mktmpdir &mtime
       &uniq &update_file &up_to_date_p &verbose &xsystem);
 
@@ -131,8 +133,6 @@ sub END
 # Works with non strictly increasing paths, i.e., `src/../lib' => `..'.
 sub backname ($)
 {
-  use File::Spec;
-
   my ($file) = @_;
   my $underscore = $_;
   my @res;
@@ -151,7 +151,27 @@ sub backname ($)
     }
 
   $_ = $underscore;
-  return File::Spec->canonpath (File::Spec->catfile (@res))
+  return canonpath (catfile (@res))
+}
+
+
+# $FILE
+# &catfile (@COMPONENT)
+# ---------------------
+sub catfile (@)
+{
+  my (@component) = @_;
+  return File::Spec->catfile (@component);
+}
+
+
+# $FILE
+# &canonpath ($FILE)
+# ------------------
+sub canonpath ($)
+{
+  my ($file) = @_;
+  return File::Spec->canonpath ($file);
 }
 
 
@@ -165,23 +185,38 @@ sub debug (@)
 }
 
 
-# $CONFIGURE_AC
-# &find_configure_ac ()
-# ---------------------
-sub find_configure_ac ()
+# $BOOLEAN
+# &file_name_is_absolute ($FILE)
+# ------------------------------
+sub file_name_is_absolute ($)
 {
-  if (-f 'configure.ac')
+  my ($file) = @_;
+  return File::Spec->file_name_is_absolute ($file);
+}
+
+
+# $CONFIGURE_AC
+# &find_configure_ac ([$DIRECTORY = `.'])
+# ---------------------------------------
+sub find_configure_ac (;$)
+{
+  my ($directory) = @_;
+  $directory ||= '.';
+  my $configure_ac = canonpath (catfile ($directory, 'configure.ac'));
+  my $configure_in = canonpath (catfile ($directory, 'configure.in'));
+
+  if (-f $configure_ac)
     {
-      if (-f 'configure.in')
+      if (-f $configure_in)
 	{
-	  carp "warning: `configure.ac' and `configure.in' both present.\n";
-	  carp "warning: proceeding with `configure.ac'.\n";
+	  carp "$me: warning: `$configure_ac' and `$configure_in' both present.\n";
+	  carp "$me: warning: proceeding with `$configure_ac'.\n";
 	}
-      return 'configure.ac';
+      return $configure_ac;
     }
-  elsif (-f 'configure.in')
+  elsif (-f $configure_in)
     {
-      return 'configure.in';
+      return $configure_in;
     }
   return;
 }
@@ -198,18 +233,16 @@ sub find_configure_ac ()
 # if absent.
 sub find_file ($@)
 {
-  use File::Spec;
-
   my ($filename, @include) = @_;
   my $optional = 0;
 
   $optional = 1
     if $filename =~ s/\?$//;
 
-  return File::Spec->canonpath ($filename)
+  return canonpath ($filename)
     if -e $filename;
 
-  if (File::Spec->file_name_is_absolute ($filename))
+  if (file_name_is_absolute ($filename))
     {
       die "$me: no such file or directory: $filename\n"
 	unless $optional;
@@ -218,8 +251,8 @@ sub find_file ($@)
 
   foreach my $path (reverse @include)
     {
-      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
-	if -e File::Spec->catfile ($path, $filename)
+      return canonpath (catfile ($path, $filename))
+	if -e catfile ($path, $filename);
     }
 
   die "$me: no such file or directory: $filename\n"
@@ -254,7 +287,7 @@ sub getopt (%)
   GetOptions (%option)
     or exit 1;
 
-    push @ARGV, '-'
+  push @ARGV, '-'
     if $stdin;
 }
 

@@ -1371,36 +1371,24 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 
 @node autoreconf Invocation
 @section Using @code{autoreconf} to Update @code{configure} Scripts
-@cindex @code{autoreconf}
+@cindex @command{autoreconf}
 
-@c FIXME: Now completely outdated.
+Installing the various components of the @sc{gnu} Build System can be
+tedious: running @command{gettextize}, @command{automake} etc. in each
+directory.  It may be needed either because some tools such as
+@command{automake} have been updated on your system, or because some of
+the sources such as @file{configure.ac} have been updated, or finally,
+simply in order to install the @sc{gnu} Build System in a fresh tree.
 
-If you have a lot of Autoconf-generated @code{configure} scripts, the
-@code{autoreconf} program can save you some work.  It runs
-@code{autoconf} (and @code{autoheader}, where appropriate) repeatedly to
-remake the Autoconf @code{configure} scripts and configuration header
-templates in the directory tree rooted at the current directory.  By
-default, it only remakes those files that are older than their
-@file{configure.ac} or (if present) @file{aclocal.m4}.  Since
-@code{autoheader} does not change the timestamp of its output file if
-the file wouldn't be changing, this is not necessarily the minimum
-amount of work.  If you install a new version of Autoconf, you can make
-@code{autoreconf} remake @emph{all} of the files by giving it the
+It runs @command{autoconf}, @command{autoheader}, @command{aclocal},
+@command{automake}, @command{libtoolize}, and @command{gettextize} (when
+appropriate) repeatedly to update the @sc{gnu} Build System in specified
+directories, and their subdirectories (@pxref{Subdirectories}).  By
+default, it only remakes those files that are older than their sources.
+
+If you install a new version of some tools, you can make
+@command{autoreconf} remake @emph{all} of the files by giving it the
 @option{--force} option.
-
-If you give @code{autoreconf} the @option{--autoconf-dir=@var{dir}} or
-@option{--localdir=@var{dir}} options, it passes them down to
-@code{autoconf} and @code{autoheader} (with relative paths adjusted
-properly).
-
-@code{autoreconf} does not support having, in the same directory tree,
-both directories that are parts of a larger package (sharing
-@file{aclocal.m4} and @file{acconfig.h}) and directories that are
-independent packages (each with their own @file{aclocal.m4} and
-@file{acconfig.h}).  It assumes that they are all part of the same
-package if you use @option{--localdir}, or that each directory is a
-separate package if you don't use it.  This restriction may be removed
-in the future.
 
 @xref{Automatic Remaking}, for @file{Makefile} rules to automatically
 remake @code{configure} scripts when their source files change.  That
@@ -1409,7 +1397,7 @@ properly, but does not pass @option{--autoconf-dir=@var{dir}} or
 @option{--localdir=@var{dir}}.
 
 @noindent
-@code{autoreconf} accepts the following options:
+@command{autoreconf} accepts the following options:
 
 @table @option
 @item --help

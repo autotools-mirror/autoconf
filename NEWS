@@ -48,6 +48,12 @@
   Runs gettextize and libtoolize when appropriate.
 - autoreconf
   --m4dir is no longer supported.
+- autoreconf
+  Now runs only in the specified directories, defaulting to `.',
+  but understands AC_CONFIG_SUBDIRS for dependent directories.
+  Before, it used to run on all the `configure.ac' found in the
+  current tree.
+  Independent packages are properly updated.
 
 ** Bug fixes
 

@@ -651,23 +651,6 @@ with autoconf scripts.
 
 ------------------------------------------------------------------------------
 
-autoreconf doesn't support having (in the same tree) both directories
-that are parts of a larger package (sharing aclocal.m4 and
-acconfig.h), and directories that are independent packages (each with
-their own ac*).  It assumes that they are all part of the same
-package, if you use --localdir, or that each directory is a separate
-package, if you don't use it.
-
-autoreconf should automatically figure out which ac* files to use--the
-closest ones up the tree from each directory, probably, unless
-overridden by --localdir.
-
-Also, autoreconf recurses on all subdirectories containing a
-configure.in, not just those given by an AC_CONFIG_SUBDIRS directive.
-This may not be a problem in practice.
-
-------------------------------------------------------------------------------
-
 Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software
 Foundation, Inc.
 

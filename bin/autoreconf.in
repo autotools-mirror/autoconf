@@ -43,12 +43,12 @@ use strict;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [CONFIGURE-AC] ...
+$help = "Usage: $0 [OPTION] ... [CONFIGURE-AC or DIRECTORY] ...
 
 Run `autoconf' (and `autoheader', `aclocal', `automake', `gettextize',
 and `libtoolize' where appropriate) repeatedly to remake the GNU Build
-System files in the directory tree driven by CONFIGURE-AC (defaulting
-to `./configure.ac').
+System files in the DIRECTORIES or the directory trees driven by
+CONFIGURE-AC (defaulting to `.').
 
 By default, it only remakes those files that are older than their
 predecessors.  If you install new versions of the GNU Build System,
@@ -118,8 +118,12 @@ sub parse_args ()
 	  'i|install'                                        => \$install,
 	  's|symlink'                                        => \$symlink);
 
-  push @ARGV, find_configure_ac
-    unless @ARGV;
+  # Even if the user specified a configure.ac, trim to get the
+  # directory, and look for configure.ac again.  Because (i) the code
+  # is simpler, and (ii) we are still able to diagnose simultaneous
+  # presence of configure.ac and configure.in.
+  @ARGV = map { /configure\.(ac|in)$/ ? dirname ($_) : $_ } @ARGV;
+  push @ARGV, '.' unless @ARGV;
 
   if ($verbose && $debug)
     {
@@ -175,17 +179,20 @@ sub parse_args ()
 }
 
 
-# &autoreconf ($CONFIGURE_AC_PATH)
-# --------------------------------
-# Reconf the directory of $CONFIGURE_AC_PATH.
+# &autoreconf ($DIRECTORY)
+# ------------------------
+# Reconf the $DIRECTORY.
 sub autoreconf ($)
 {
-  my ($configure_ac_path) = @_;
-  my ($configure_ac, $subdir) = fileparse ($configure_ac_path);
-  verbose "working in $subdir, on $configure_ac";
-  chdir $subdir
-    or die "$me: cannot chdir to $subdir: $!\n";
+  my ($directory) = @_;
 
+  verbose "working in `$directory'";
+  chdir $directory
+    or die "$me: cannot chdir to $directory: $!\n";
+
+  my $configure_ac = find_configure_ac;
+  die "$me: cannot find `configure.ac' in `$directory'\n"
+    unless $configure_ac;
 
   # ---------------------- #
   # Is it using Autoconf?  #
@@ -219,18 +226,21 @@ sub autoreconf ($)
   my $uses_libtool;
   my $uses_autoheader;
   my $uses_aclocal;
+  my @subdir;
   my $traces = new Autom4te::XFile
     ("$autoconf"
      . join (' --trace=', '',
 	     'AC_INIT', 'AM_GNU_GETTEXT', 'AM_PROG_LIBTOOL',
-	     'AC_CONFIG_HEADERS')
-     . " |");
+	     'AC_CONFIG_HEADERS',
+	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1')
+     . ' |');
   while ($_ = $traces->getline)
     {
-      $uses_autoconf = 1   if /AC_INIT/;
-      $uses_gettext = 1    if /AM_GNU_GETTEXT/;
-      $uses_libtool = 1    if /AM_PROG_LIBTOOL/;
-      $uses_autoheader = 1 if /AC_CONFIG_HEADERS/;
+      $uses_autoconf = 1          if /AC_INIT/;
+      $uses_gettext = 1           if /AM_GNU_GETTEXT/;
+      $uses_libtool = 1           if /AM_PROG_LIBTOOL/;
+      $uses_autoheader = 1        if /AC_CONFIG_HEADERS/;
+      push @ARGV, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
     }
 
 
@@ -381,5 +391,6 @@ parse_args;
 
 # Autoreconf all the given configure.ac.  A while loop, not a for,
 # since the list can change at runtime because of AC_CONFIG_SUBDIRS.
+print STDERR "@ARGV\n";
 autoreconf (shift @ARGV)
   while (@ARGV);

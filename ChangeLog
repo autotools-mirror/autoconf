@@ -1,5 +1,19 @@
 2001-11-03  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm: (&catfile, &canonfile)
+	(&file_name_is_absolute): New, wrappers around routines from
+	File::Spec.
+	Use and export them.
+	(&find_configure_ac): Optionally take a directory where to look at.
+	* bin/autoreconf.in (&parse_args): Trim the configure.ac part of
+	the arguments.
+	Default @ARGV to `.', not find_configure_ac.
+	(&autoreconf): Argument is a directory.
+	Trace AC_CONFIG_SUBDIRS and schedule the subdirs for autoreconf'ing.
+	* doc/autoconf.texi (autoreconf Invocation): Update.
+
+2001-11-03  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm (@export_vars, @export_subs)
 	(@export_forward_subs): New.
 	Add basename, dirname, and fileparse.
