@@ -1288,7 +1288,7 @@ Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
     ac_need_defaults=false;;
   --header | --heade | --head | --hea )
     shift
-    CONFIG_HEADERS="\$CONFIG_FILES \$1"
+    CONFIG_HEADERS="\$CONFIG_HEADERS \$1"
     ac_need_defaults=false;;
 
   # Handling of arguments.

@@ -1,5 +1,10 @@
 2000-03-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Fix the accumulation in
+	CONFIG_HEADERS.
+
+2000-03-31  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.sh: Catch up with the `mktemp -d' changes in
 	autoconf.sh.
 	* autoupdate.sh: Likewise.
