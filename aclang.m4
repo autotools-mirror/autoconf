@@ -1210,13 +1210,19 @@ AU_DEFUN([ac_cv_prog_g77],
 #
 # Compilers are ordered by
 #  1. F77, F90, F95
-#  2. Good native compilers, bad native compilers, wrappers around f2c.
+#  2. Good/tested native compilers, bad/untested native compilers
+#  3. Wrappers around f2c go last.
 #
 # `fort77' and `fc' are wrappers around `f2c', `fort77' being better.
 # It is believed that under HP-UX `fort77' is the name of the native
-# compiler.  NAG f95 is preferred over `fc', so put `fc' last.
-# pgf77 is the Portland Group f77 compiler.
+# compiler.  On some Cray systems, fort77 is a native compiler.
+# cf77 and cft77 are (older) Cray F77 compilers.
+# pgf77 and pgf90 are the Portland Group F77 and F90 compilers.
+# xlf/xlf90/xlf95 are IBM (AIX) F77/F90/F95 compilers.
 # lf95 is the Lahey-Fujitsu compiler.
+# fl32 is the Microsoft Fortran "PowerStation" compiler.
+# af77 is the Apogee F77 compiler for Intergraph hardware running CLIX.
+# epcf90 is the "Edinburgh Portable Compiler" F90.
 AC_DEFUN([AC_PROG_F77],
 [AC_LANG_PUSH(Fortran 77)dnl
 AC_ARG_VAR([F77],    [Fortran 77 compiler command])dnl
@@ -1226,7 +1232,7 @@ AC_ARG_VAR([LDFLAGS],
             nonstandard directory <lib dir>])dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 pgf90 fc])])
+                  [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 xlf95 lf95 g95 fc])])
 
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl

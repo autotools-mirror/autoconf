@@ -1,3 +1,9 @@
+2001-01-29  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_PROG_F77): Improve documentation of the compilers
+	that are tried, add a few new ones (cft77, af77, epcf90, xlf95, g95),
+	and put pgf90 in the right place (before the F95 compilers).
+
 2001-01-29  Jim Meyering  <meyering@lucent.com>
 
 	* autoscan.pl: Do scan `configure.ac' when you claim it.
