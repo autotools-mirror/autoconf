@@ -2401,14 +2401,17 @@ otherwise set it to the empty string.
 @ovindex X_CFLAGS
 @ovindex X_LIBS
 @ovindex X_EXTRA_LIBS
+@ovindex X_PRE_LIBS
 An enhanced version of @code{AC_PATH_X}.  Put the C compiler flags that
 X needs into output variable @code{X_CFLAGS}, and the X linker
 flags into @code{X_LIBS}.  If X is not available, put
 @samp{-DX_DISPLAY_MISSING} into @code{X_CFLAGS}.
 
 Also check for special libraries that some systems need in order to
-compile X programs.  Add any that the system needs to output
-variable @code{X_EXTRA_LIBS}.
+compile X programs.  Add any that the system needs to output variable
+@code{X_EXTRA_LIBS}.  And check for special X11R6 libraries that need to
+be linked with before @samp{-lX11}, and add any found to the output
+variable @code{X_PRE_LIBS}.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
