@@ -537,6 +537,8 @@ if test ! -r $srcdir/$ac_unique_file; then
     AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
   fi
 fi
+(cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
+  AC_MSG_ERROR([sources are in $srcdir, but `cd $srcdir' does not work])
 dnl Double slashes in pathnames in object file debugging info
 dnl mess up M-x gdb in Emacs.
 srcdir=`echo "$srcdir" | sed 's%\([[^\\/]]\)[[\\/]]*$%\1%'`
