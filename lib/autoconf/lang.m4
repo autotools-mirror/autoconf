@@ -490,9 +490,9 @@ AC_DEFUN([AC_PROG_CC],
 AC_LANG_PUSH(C)
 AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
 ifval([$1],
-      [AC_CHECK_PROGS(CC, [$1])],
+      [AC_CHECK_TOOLS(CC, [$1])],
 [
-  AC_CHECK_PROG(CC, gcc, gcc)
+  AC_CHECK_TOOL(CC, gcc)
   if test -z "$CC"; then
     AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
     if test -z "$CC"; then
@@ -681,7 +681,7 @@ AC_SUBST(CXXCPP)dnl
 AC_DEFUN([AC_PROG_CXX],
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_LANG_PUSH(C++)
-AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
+AC_CHECK_TOOLS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
@@ -765,7 +765,7 @@ rm -f conftest*
 AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(Fortran 77)
-AC_CHECK_PROGS(F77,
+AC_CHECK_TOOLS(F77,
                m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c]))
 
 _AC_LANG_COMPILER_WORKS

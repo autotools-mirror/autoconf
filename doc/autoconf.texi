@@ -2485,7 +2485,7 @@ that case, set @var{variable} using the absolute file name of the
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @maindex CHECK_PROGS
 Check for each program in the whitespace-separated list
-@var{progs-to-check-for} exists in @code{PATH}.  If it is found, set
+@var{progs-to-check-for} exists on the @code{PATH}.  If it is found, set
 @var{variable} to the name of that program.  Otherwise, continue
 checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
@@ -2507,6 +2507,18 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 @code{PATH}, or to @samp{ranlib} if that program exists in @code{PATH},
 or to @samp{:} if neither program exists.
+@end defmac
+
+@defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@maindex CHECK_TOOLS
+Like @code{AC_CHECK_TOOL}, each of the tools in the list @var{progs-to-check-for} are
+checked with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
+followed by a dash (@pxref{Canonicalizing}). If none of the tools can be found with a
+prefix, then the first one without a prefix is used. If a tool is found, set
+@var{variable} to the name of that program. If none of the tools in the
+list are found, set @var{variable} to @var{value-if-not-found}; if
+@var{value-if-not-found} is not specified, the value of @var{variable}
+is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
@@ -6120,26 +6132,24 @@ system types are involved.  The options to specify them are:
 @table @code
 @item --build=@var{build-type}
 the type of system on which the package is being configured and
-compiled (rarely needed);
+compiled (rarely needed).
 
 @item --host=@var{host-type}
-the type of system on which the package will run;
+the type of system on which the package will run.
 
 @item --target=@var{target-type}
 the type of system for which any compiler tools in the package will
-produce code.
+produce code (rarely needed).
 @end table
 
 By default, the build system type is guessed (by @code{config.guess}),
 the host system is the build system, and the target is the host system.
 
-Using @samp{--host=@var{host-type}} enables cross-compilation to
-@var{host-type}.  You still have to specify the names of the cross-tools
-you use, in particular the C compiler, on the @code{configure} command
+Using @samp{--host=@var{host-type}} enables cross-compilation.
 line, e.g.,
 
 @example
-./configure --host=m68k-coff CC=m68k-coff-gcc
+./configure --host=m68k-coff
 @end example
 
 @noindent

@@ -1,3 +1,16 @@
+2000-05-24  Mo DeJong  <mdejong@cygnus.com>
+
+	Have --host=sun4 automatically look for CC=sun4-cc etc.
+
+	* acgeneral.m4 (AC_CHECK_TOOLS): New.
+	* aclang.m4 (AC_PROG_CXX, AC_PROG_CC, AC_PROG_F77): Use new
+	AC_CHECK_TOOLS macro instead of AC_CHECK_PROGS so that a cross
+	compiler is found by default with --host.
+	* doc/autoconf.texi (Generic Programs, Manual Configuration):
+	Describe new AC_CHECK_TOOLS macro. Fix unclear working about
+	AC_CHECK_PROGS.
+	* tests/Makefile.am (FILTER_MACROS): Adjust.
+
 2000-04-07  Akim Demaille  <akim@epita.fr>
 
 	The night of the living dead...

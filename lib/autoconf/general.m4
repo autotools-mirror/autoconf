@@ -2638,6 +2638,31 @@ fi])
 ])
 
 
+# AC_CHECK_TOOLS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
+#                [PATH])
+# ------------------------------------------------------------------
+# Check for each compiler in PROGS-TO-CHECK-FOR with the cross
+# prefix. If none can be found with a cross prefix, then use
+# the first one that was found without the cross prefix.
+AC_DEFUN([AC_CHECK_TOOLS],
+[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
+ac_check_tools_first_found=
+for ac_prog in $2
+do
+AC_CHECK_PROG([$1], ${ac_tool_prefix}$ac_prog,
+	       ${ac_tool_prefix}$ac_prog, , [$4])
+if test -z "$$1" && test -z "$ac_check_tools_first_found" ; then
+  AC_CHECK_PROG(ac_check_tools_first_found, $ac_prog, $ac_prog, , [$4])
+elif test -n "$$1" ; then
+  break
+fi
+done
+if test -z "$$1" ; then
+  $1=$ac_check_tools_first_found
+fi
+ifval([$3], [test -n "$$1" || $1="$3"
+])])
+
 # AC_PREFIX_PROGRAM(PROGRAM)
 # --------------------------
 # Guess the value for the `prefix' variable by looking for
