@@ -1,5 +1,14 @@
 2000-08-02  Akim Demaille  <akim@epita.fr>
 
+	Release Automake from being a substitute to Autoconf.
+
+	* acspecific.m4 (_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H,
+	_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL, AC_HEADER_TIOCGWINSZ,
+	AC_SYS_POSIX_TERMIOS): New macros from both Automake and the
+	fileutils.
+
+2000-08-02  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_PROG_CC_G, _AC_PROG_CXX_G): Recent changes
 	inverted the results.  Fix that.
 

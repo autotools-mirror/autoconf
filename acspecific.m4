@@ -542,10 +542,60 @@ fi
 ])# AC_HEADER_TIME
 
 
+# _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
+# ----------------------------------
+define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
+[AC_CACHE_CHECK([whether termios.h defines TIOCGWINSZ],
+                ac_cv_sys_tiocgwinsz_in_termios_h,
+[AC_EGREP_CPP([yes],
+              [#include <sys/types.h>
+#include <termios.h>
+#ifdef TIOCGWINSZ
+  yes
+#endif
+],
+                ac_cv_sys_tiocgwinsz_in_termios_h=yes)])
+])# _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
 
 
-# A few obsolete macros.
+# _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
+# ----------------------------------
+define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
+[AC_CACHE_CHECK([whether sys/ioctl.h defines TIOCGWINSZ],
+                ac_cv_sys_tiocgwinsz_in_sys_ioctl_h,
+[AC_EGREP_CPP([yes],
+              [#include <sys/types.h>
+#include <sys/ioctl.h>
+#ifdef TIOCGWINSZ
+  yes
+#endif
+],
+                ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=yes)])
+])# _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
 
+
+# AC_HEADER_TIOCGWINSZ
+# --------------------
+# Look for a header that defines TIOCGWINSZ.
+# FIXME: Is this the proper name?  Is this the proper implementation?
+# I need more help.
+AC_DEFUN([AC_HEADER_TIOCGWINSZ],
+[AC_REQUIRE([AC_SYS_POSIX_TERMIOS])dnl
+if test $ac_cv_sys_posix_termios = yes; then
+  _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
+fi
+if test $ac_cv_sys_tiocgwinsz_in_termios_h != yes; then
+  _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
+  if test $ac_cv_sys_tiocgwinsz_in_sys_ioctl_h = yes; then
+    AC_DEFINE(GWINSZ_IN_SYS_IOCTL,1,
+              [Define if `TIOCGWINSZ' requires <sys/ioctl.h>])
+  fi
+fi
+])# AC_HEADER_TIOCGWINSZ
+
+
+# AU::AC_UNISTD_H
+# ---------------
 AU_DEFUN([AC_UNISTD_H],
 [AC_CHECK_HEADERS(unistd.h)])
 
@@ -1108,6 +1158,19 @@ if test $ac_cv_sys_restartable_syscalls = yes; then
 fi
 ])# AC_SYS_RESTARTABLE_SYSCALLS
 
+
+# AC_SYS_POSIX_TERMIOS
+# --------------------
+AC_DEFUN([AC_SYS_POSIX_TERMIOS],
+[AC_CACHE_CHECK([POSIX termios], ac_cv_sys_posix_termios,
+[AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>
+@%:@include <termios.h>],
+             [/* SunOS 4.0.3 has termios.h but not the library calls.  */
+   tcgetattr(0, 0);],
+             ac_cv_sys_posix_termios=yes,
+             ac_cv_sys_posix_termios=no)])
+])# AC_SYS_POSIX_TERMIOS
 
 
 

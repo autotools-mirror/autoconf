@@ -3385,36 +3385,6 @@ define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
 Amdahl UTS and Motorola System V/88.
 @end defmac
 
-@defmac AC_HEADER_TIME
-@maindex HEADER_TIME
-@cvindex TIME_WITH_SYS_TIME
-If a program may include both @file{time.h} and @file{sys/time.h},
-define @code{TIME_WITH_SYS_TIME}.  On some older systems,
-@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
-protected against multiple inclusion, so programs should not explicitly
-include both files.  This macro is useful in programs that use, for
-example, @code{struct timeval} or @code{struct timezone} as well as
-@code{struct tm}.  It is best used in conjunction with
-@code{HAVE_SYS_TIME_H}, which can be checked for using
-@code{AC_CHECK_HEADERS(sys/time.h)}.
-
-@example
-@group
-#if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
-#else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
-#endif
-@end group
-@end example
-@end defmac
-
-
 
 @defmac AC_HEADER_STDC
 @maindex HEADER_STDC
@@ -3530,6 +3500,58 @@ The way to check if the system supports @sc{posix.1} is:
 @end group
 @end example
 
+@defmac AC_HEADER_TIME
+@maindex HEADER_TIME
+@cvindex TIME_WITH_SYS_TIME
+If a program may include both @file{time.h} and @file{sys/time.h},
+define @code{TIME_WITH_SYS_TIME}.  On some older systems,
+@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
+protected against multiple inclusion, so programs should not explicitly
+include both files.  This macro is useful in programs that use, for
+example, @code{struct timeval} or @code{struct timezone} as well as
+@code{struct tm}.  It is best used in conjunction with
+@code{HAVE_SYS_TIME_H}, which can be checked for using
+@code{AC_CHECK_HEADERS(sys/time.h)}.
+
+@example
+@group
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
+@end group
+@end example
+@end defmac
+
+
+@defmac AC_HEADER_TIOCGWINSZ
+@maindex HEADER_TIOCGWINSZ
+@cvindex GWINSZ_IN_SYS_IOCTL
+@c FIXME: I need clarifications from Jim.
+If the use of @code{TIOCGWINSZ} requires @file{<sys/ioctl.h>}, then
+define @code{GWINSZ_IN_SYS_IOCTL}.  Otherwise @code{TIOCGWINSZ} can be
+found in @file{<termios.h>}.
+
+Use:
+
+@example
+@group
+#if HAVE_TERMIOS_H
+# include <termios.h>
+#endif
+
+#if GWINSZ_IN_SYS_IOCTL
+# include <sys/ioctl.h>
+#endif
+@end group
+@end example
+@end defmac
 
 @node Generic Headers,  , Particular Headers, Header Files
 @subsection Generic Header Checks
@@ -4429,6 +4451,15 @@ an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
 @cvindex HAVE_LONG_FILE_NAMES
 If the system supports file names longer than 14 characters, define
 @code{HAVE_LONG_FILE_NAMES}.
+@end defmac
+
+@defmac AC_SYS_POSIX_TERMIOS
+@maindex SYS_POSIX_TERMIOS
+@cindex POSIX termios headers
+@cindex termios POSIX headers
+Check to see if POSIX termios headers and functions are available on the
+system.  If so, set the shell variable @code{am_cv_sys_posix_termios} to
+@samp{yes}.  If not, set the variable to @samp{no}.
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS
