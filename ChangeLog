@@ -1,3 +1,10 @@
+2000-06-13  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Caching Results): Bigger warning about the
+	extremely frequent action-in-commands bug.
+	Move the documentation of AC_CACHE_SAVE and AC_CACHE_LOAD...
+	(Cache Files): in here.
+
 2000-06-09  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_TOOL): Even if VALUE-IF-NOT-FOUND is not

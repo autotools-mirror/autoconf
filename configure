@@ -1318,6 +1318,12 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 config_files="\
   acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile tests/Makefile
   tests/atconfig"
+EOF
+# Be careful that the expansion of AC_LIST_LINKS (which may contain
+# uses of shell variables) is itself expanded in an unquoted `here'-document.
+cat >>$CONFIG_STATUS <<EOF
+EOF
+cat >>$CONFIG_STATUS <<\EOF
 
 ac_cs_usage="\
 \`$me' instantiates files from templates according to the
