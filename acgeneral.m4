@@ -3689,6 +3689,10 @@ cat >&AS_MESSAGE_LOG_FD << _ACEOF
 
 This file was extended by $as_me m4_ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
+  CONFIG_FILES    = $CONFIG_FILES
+  CONFIG_HEADERS  = $CONFIG_HEADERS
+  CONFIG_LINKS    = $CONFIG_LINKS
+  CONFIG_COMMANDS = $CONFIG_COMMANDS
   > $ac_cs_invocation
 on `(hostname || uname -n) 2>/dev/null | sed 1q`
 
