@@ -1,3 +1,8 @@
+2005-03-07  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Quotation Rule Of Thumb): Mention that the
+	  macro AC_TRY_LINK is obsolete.
+
 2005-02-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC): Be more careful to skip
