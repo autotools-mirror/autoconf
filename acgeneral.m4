@@ -879,8 +879,8 @@ AC_CACHE_VAL(ac_cv_program_$1,
 fi
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_CHECK will keep looking.
-ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])])dnl
-$1="$ac_cv_program_$1"
+ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])
+$1="$ac_cv_program_$1"])dnl
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -903,8 +903,8 @@ AC_CACHE_VAL(ac_cv_path_$1,
 fi
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_PATH will keep looking.
-ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])])dnl
-$1="$ac_cv_path_$1"
+ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])
+$1="$ac_cv_path_$1"])dnl
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -1107,7 +1107,7 @@ choke me
 extern char $1(); $1();
 #endif
 ], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
-if test "$ac_cv_func_$1" = yes; then
+if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
   ifelse([$2], , :, $2)
 ifelse([$3], , , [else
   $3
