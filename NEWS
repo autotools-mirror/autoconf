@@ -5,7 +5,8 @@ Major changes in release 1.8:
   AC_PROG_CXX, AC_PROG_CXXCPP, AC_REQUIRE_CPP
   for checking both C++ and C features in one configure script.
 * New macros AC_CHECKING, AC_VERBOSE, AC_WARN, AC_ERROR for printing messages.
-* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE, AC_PREREQ, AC_SET_MAKE.
+* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE, AC_PREREQ,
+  AC_SET_MAKE, AC_ENABLE.
 
 ** Changed macros:
 * AC_FIND_X looks for X in more places.
@@ -17,7 +18,7 @@ Major changes in release 1.8:
 * AC_COMPILE_CHECK protects its ECHO-TEXT argument with double quotes.
 
 ** New or changed command line options:
-* configure accepts --enable-FEATURE[=VAL] option; new macro AC_ENABLE.
+* configure accepts --enable-FEATURE[=VAL] and --disable-FEATURE options.
 * configure accepts --without-PACKAGE; giving --with-PACKAGE an
   argument is deprecated, and gives $withval a value of `yes' instead
   of `1' by default for --with-, and `no' for --without-.
