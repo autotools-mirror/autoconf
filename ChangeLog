@@ -1,5 +1,9 @@
 1998-09-28  Ben Elliston  <bje@cygnus.com>
 
+	* config.guess: Detect multiprocessor DC/OSx running on Pyramid
+	MIServer machines.  Contributed by Graham K. Jenkins
+	<Graham.K.Jenkins@corpmail.telstra.com.au>.
+
 	* acgeneral.m4 (AC_CHECK_PROG): Fix a bug if the supplied path
 	contains colons. This was observed with some versions of NetBSD
 	`sh' and some versions of `bash'.
