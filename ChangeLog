@@ -1,3 +1,10 @@
+1999-01-11  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_ACVERSION): Increment to 2.14.
+
+	* autoconf.texi (EDITION): Likewise.
+	(VERSION): Likewise.
+
 1999-01-10  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect Rhapsody on PowerPC and other machines.
