@@ -1,3 +1,8 @@
+2000-09-05  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Consider undefined macros as errors.
+	* tests/base.m4 (unexpanded macros): Expect error, not warning
+
 2000-09-05   Dave Love  <fx@gnu.org>
 
 	* aclang.m4 (_AC_PROG_F77_GNU): Run command from standard input so

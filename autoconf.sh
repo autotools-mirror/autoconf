@@ -313,7 +313,7 @@ case $task in
   cat >$tmp/finalize.awk <<EOF
     function undefined (file, line, macro)
     {
-      print file ":" line ": warning: undefined macro: " macro | "cat >&2"
+      print file ":" line ": error: undefined macro: " macro | "cat >&2"
     }
 
     {
@@ -374,7 +374,7 @@ case $task in
         }
     }
 EOF
-    $AWK -f $tmp/finalize.awk <$tmp/configure >&4
+    $AWK -f $tmp/finalize.awk <$tmp/configure >&4 || exit 1
   ;; # End of the task script.
 
 

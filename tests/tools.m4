@@ -256,9 +256,9 @@ AC_THIS_IS_PROBABLY_NOT_DEFINED
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
-[[configure.in:2: warning: undefined macro: AC_THIS_IS_PROBABLY_NOT_DEFINED
-configure:3: warning: undefined macro: AC_OUTPUT
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
+[[configure.in:2: error: undefined macro: AC_THIS_IS_PROBABLY_NOT_DEFINED
+configure:3: error: undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure)
