@@ -34,7 +34,7 @@
 	prototype checking, topological sort so that functions are defined
 	before being used, and put an Autoconf like nice comment to
 	describe the functions.
-	(output): Accept an CONFIGURE_SCAN parameters, and open CONF.
+	(output): Accept a CONFIGURE_SCAN parameter, and open CONF.
 
 2001-01-29  Akim Demaille  <akim@epita.fr>
 
