@@ -11,7 +11,7 @@
 	`testsuite', enclose the body of the test into a
 	`(..) >stdout 2>stderr'.
 	In every case, when verbose, display the differences between
-	expected and oberved (stdout, stderr, exit status).
+	expected and observed (stdout, stderr, exit status).
 	Let `0' be the default for EXIT-STATUS.
 	Support EXIT-STATUS == `ignore'.
 
