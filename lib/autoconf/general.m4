@@ -33,7 +33,7 @@ dnl
 dnl ### Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.9.4)dnl
+define(AC_ACVERSION, 1.10.1)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -506,10 +506,10 @@ dnl $1 can be either absolute or relative to ${srcdir}.
 define(AC_CONFIG_AUX,
 [AC_CONFIG_AUX_DIRS($1 ${srcdir}/$1)])dnl
 dnl
-dnl The default is `${srcdir}' or `${srcdir}/..'.
+dnl The default is `${srcdir}' or `${srcdir}/..' or `${srcdir}/../..'.
 dnl There's no need to call this macro explicitly; just AC_REQUIRE it.
 define(AC_CONFIG_AUX_DEFAULT,
-[AC_CONFIG_AUX_DIRS(${srcdir} ${srcdir}/..)])dnl
+[AC_CONFIG_AUX_DIRS(${srcdir} ${srcdir}/.. ${srcdir}/../..)])dnl
 dnl
 dnl Internal subroutine.
 dnl Search for the configuration auxiliary files in directory list $1.
@@ -523,7 +523,7 @@ for ac_dir in $1; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  AC_ERROR(can not find install.sh in $1)
+  AC_ERROR([can not find install.sh in $1])
 fi
 ac_config_guess=${ac_aux_dir}/config.guess
 ac_config_sub=${ac_aux_dir}/config.sub
@@ -684,7 +684,10 @@ dnl
 dnl AC_CACHE_VAL(cache-id, commands-to-set-it)
 dnl The name cache-id must contain the string `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
-[if test "${$1+set}" = set; then 
+[dnl We used to use the below line, but it fails if the 1st arg is a
+dnl shell variable, so we need the eval.
+dnl if test "${$1+set}" = set; then 
+if eval "test \"`echo '${'$1'+set}'`\" = set"; then
 dnl This verbose message is just for testing the caching code.
   AC_VERBOSE(using cached value for $1)
 else
@@ -861,8 +864,7 @@ dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
 AC_CACHE_VAL(ac_cv_program_$1,
-[  ac_cv_program_$1=
-  # Extract the first word of `$2', so it can be a program name with args.
+[  # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
@@ -875,6 +877,8 @@ AC_CACHE_VAL(ac_cv_program_$1,
   done
   IFS="$ac_save_ifs"
 fi
+dnl If no 4th arg is given, leave the cache variable unset,
+dnl so AC_PROGRAMS_CHECK will keep looking.
 ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])])dnl
 $1="$ac_cv_program_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
@@ -884,8 +888,7 @@ dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
 AC_CACHE_VAL(ac_cv_path_$1,
-[  ac_cv_path_$1=
-  # Extract the first word of `$2', so it can be a program name with args.
+[  # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
@@ -898,6 +901,8 @@ AC_CACHE_VAL(ac_cv_path_$1,
   done
   IFS="$ac_save_ifs"
 fi
+dnl If no 3rd arg is given, leave the cache variable unset,
+dnl so AC_PROGRAMS_PATH will keep looking.
 ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])])dnl
 $1="$ac_cv_path_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
@@ -930,19 +935,21 @@ define(AC_HAVE_LIBRARY, [dnl
 changequote(/,/)dnl
 define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
+define(/AC_CV_NAME/, ac_cv_lib//AC_LIB_NAME)dnl
 changequote([,])dnl
-AC_CACHE_VAL(ac_cv_lib_[]AC_LIB_NAME,
+AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="${LIBS}"
 LIBS="${LIBS} -l[]AC_LIB_NAME[]"
 AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();],
-ac_cv_lib_[]AC_LIB_NAME=yes, ac_cv_lib_[]AC_LIB_NAME=no)dnl
+AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="${ac_save_LIBS}"
 ])dnl
-if test "${ac_cv_lib_[]AC_LIB_NAME}" = yes; then
+if test "${AC_CV_NAME}" = yes; then
 ifelse($#, 1, [dnl
    AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
    LIBS="${LIBS} -l[]AC_LIB_NAME[]"
 undefine(AC_LIB_NAME)dnl
+undefine(AC_CV_NAME)dnl
 ], [dnl
    :; $2
 else
@@ -1062,9 +1069,18 @@ dnl ### Checking for C features - derived (caching)
 dnl
 dnl
 define(AC_HEADER_CHECK,
+[dnl Do the transliteration at runtime so arg 1 can be a shell variable.
+ac_var=`echo "$1" | tr './' '__'`
+AC_CACHE_VAL(ac_cv_header_$ac_var,
 [AC_CHECKING([for $1])
-ifelse([$3], , [AC_TEST_CPP([#include <$1>], [$2])],
-[AC_TEST_CPP([#include <$1>], [$2], [$3])])
+AC_TEST_CPP([#include <$1>], eval "ac_cv_header_$ac_var=yes",
+  eval "ac_cv_header_$ac_var=no")])dnl
+if eval "test \"`echo '$ac_cv_header_'$ac_var`\" = yes"; then
+  ifelse([$2], , :, $2)
+ifelse([$3], , , [else
+  $3
+])dnl
+fi
 ])dnl
 dnl
 define(AC_REPLACE_FUNCS,
@@ -1072,13 +1088,15 @@ define(AC_REPLACE_FUNCS,
 do
 AC_FUNC_CHECK(${ac_func}, ,
 [LIBOBJS="$LIBOBJS ${ac_func}.o"
-AC_VERBOSE(using ${ac_func}.o instead)])dnl
+AC_VERBOSE(using ${ac_func}.o instead)
+])dnl
 done
 AC_SUBST(LIBOBJS)dnl
 ])dnl
 dnl
 define(AC_FUNC_CHECK,
-[ifelse([$3], , [AC_COMPILE_CHECK($1, [#include <ctype.h>], [
+[AC_CACHE_VAL(ac_cv_func_$1,
+[AC_COMPILE_CHECK($1, [#include <ctype.h>], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
@@ -1088,19 +1106,13 @@ choke me
 /* Override any gcc2 internal prototype to avoid an error.  */
 extern char $1(); $1();
 #endif
-],
-$2)], [AC_COMPILE_CHECK($1, [#include <ctype.h>], [
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$1) || defined (__stub___$1)
-choke me
-#else
-/* Override any gcc2 internal prototype to avoid an error.  */
-extern char $1(); $1();
-#endif
-],
-$2, $3)])dnl
+], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
+if test "$ac_cv_func_$1" = yes; then
+  ifelse([$2], , :, $2)
+ifelse([$3], , , [else
+  $3
+])dnl
+fi
 ])dnl
 dnl
 define(AC_HAVE_FUNCS,
@@ -1126,9 +1138,16 @@ AC_DEFINE(${ac_tr_hdr}))dnl
 done
 ])dnl
 dnl
-define(AC_SIZEOF_TYPE,
+define(AC_SIZEOF_TYPE, [dnl
+changequote(<<,>>)dnl
+dnl The name to #define.
+define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
+dnl The cache variable name.
+define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
+changequote([,])dnl
+AC_CACHE_VAL(AC_CV_NAME,
 [AC_CHECKING(size of $1)
-ac_size=configure_failure
+AC_CV_NAME=configure_failure
 AC_TEST_PROGRAM([#include <stdio.h>
 main()
 {
@@ -1136,8 +1155,11 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], ac_size=`cat conftestval`)
-AC_DEFINE_UNQUOTED(changequote(<<,>>) translit(sizeof_$1, [a-z *], [A-Z_P])<<>>changequote([,]), $ac_size)])dnl
+}], AC_CV_NAME=`cat conftestval`)])dnl
+AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
+undefine(AC_TYPE_NAME)dnl
+undefine(AC_CV_NAME)dnl
+])dnl
 dnl
 dnl
 dnl ### The big finish
