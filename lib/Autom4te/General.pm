@@ -29,7 +29,8 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&debug &find_configure_ac &find_file &getopt &mktmpdir &mtime
+@EXPORT = qw (&backname &debug &find_configure_ac &find_file
+              &getopt &mktmpdir &mtime
               &uniq &update_file &up_to_date_p &verbose &xsystem
 	      $debug $force $help $me $tmp $verbose $version);
 
@@ -66,6 +67,12 @@ $version = undef;
 
 sub verbose (@);
 
+
+## ----- ##
+## END.  ##
+## ----- ##
+
+
 # END
 # ---
 # Exit nonzero whenever closing STDOUT fails.
@@ -99,8 +106,45 @@ sub END
 }
 
 
-# debug(@MESSAGE)
-# ---------------
+## ----------- ##
+## Functions.  ##
+## ----------- ##
+
+
+# $BACKPATH
+# &backname ($REL-DIR)
+# --------------------
+# If I `cd $REL-DIR', then to come back, I should `cd $BACKPATH'.
+# For instance `src/foo' => `../..'.
+# Works with non strictly increasing paths, i.e., `src/../lib' => `..'.
+sub backname ($)
+{
+  use File::Spec;
+
+  my ($file) = @_;
+  my $underscore = $_;
+  my @res;
+
+  foreach (split (/\//, $file))
+    {
+      next if $_ eq '.' || $_ eq '';
+      if ($_ eq '..')
+	{
+	  pop @res;
+	}
+      else
+	{
+	  push (@res, '..');
+	}
+    }
+
+  $_ = $underscore;
+  return File::Spec->canonpath (File::Spec->catfile (@res))
+}
+
+
+# &debug(@MESSAGE)
+# ----------------
 # Messages displayed only if $DEBUG and $VERBOSE.
 sub debug (@)
 {

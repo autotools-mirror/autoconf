@@ -1,5 +1,9 @@
 2001-10-24  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (backname): New.
+
+2001-10-24  Akim Demaille  <akim@epita.fr>
+
 	* m4/: Remove, merged into...
 	* config/: here.
 
