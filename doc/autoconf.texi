@@ -9332,7 +9332,7 @@ Below we describe some of the members of the Bourne shell family.
 @table @asis
 @item Ash
 @cindex Ash
-@command{ash} is often used on @acronym{GNU}/Linux and @acronym{BSD}
+Ash is often used on @acronym{GNU}/Linux and @acronym{BSD}
 systems as a light-weight Bourne-compatible shell.  Ash 0.2 has some
 bugs that are fixed in the 0.3.x series, but portable shell scripts
 should work around them, since version 0.2 is still shipped with many
@@ -9366,7 +9366,7 @@ Substitutions}, item ``Command Substitution''.
 
 @item Bash
 @cindex Bash
-To detect whether you are running @command{bash}, test whether
+To detect whether you are running Bash, test whether
 @code{BASH_VERSION} is set.  To require
 @acronym{POSIX} compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
 Mode,, Bash @acronym{POSIX} Mode, bash, The @acronym{GNU} Bash Reference
@@ -9374,12 +9374,12 @@ Manual}, for details.
 
 @item Bash 2.05 and later
 @cindex Bash 2.05 and later
-Versions 2.05 and later of @command{bash} use a different format for the
+Versions 2.05 and later of Bash use a different format for the
 output of the @command{set} builtin, designed to make evaluating its
 output easier.  However, this output is not compatible with earlier
-versions of @command{bash} (or with many other shells, probably).  So if
-you use @command{bash} 2.05 or higher to execute @command{configure},
-you'll need to use @command{bash} 2.05 for all other build tasks as well.
+versions of Bash (or with many other shells, probably).  So if
+you use Bash 2.05 or higher to execute @command{configure},
+you'll need to use Bash 2.05 for all other build tasks as well.
 
 @item Ksh
 @cindex Ksh
@@ -9394,15 +9394,6 @@ release.  It is usually called @command{ksh}, but is called @command{sh}
 on some hosts if you set your path appropriately.
 
 @itemize @minus
-@item
-@prindex @samp{pdksh}
-A public-domain clone of the Korn shell called @samp{pdksh} is
-widely available: it has most of the @samp{ksh88} features along with
-a few of its own.
-Similarly to @command{bash}, you can detect whether you are running
-@samp{pdksh} by testing whether @code{KSH_VERSION} is set, and you can
-require @acronym{POSIX} compatibility by running @samp{set -o posix}.
-
 @item
 Solaris systems have three variants:
 @prindex @command{/usr/bin/ksh} on Solaris
@@ -9424,6 +9415,30 @@ variable @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
 the standard shell conform to @acronym{POSIX}.
 
 @end itemize
+
+@item Pdksh
+@prindex @samp{pdksh}
+A public-domain clone of the Korn shell called @command{pdksh} is widely
+available: it has most of the @samp{ksh88} features along with a few of
+its own.  Similarly to Bash, you can detect whether you are
+running @command{pdksh} by testing whether @code{KSH_VERSION} is set,
+and you can require @acronym{POSIX} compatibility by running @samp{set
+-o posix}.  Unfortunately, with @command{pdksh} 5.2.14 (the latest
+stable version as of July 2004) @acronym{POSIX} mode is buggy and causes
+@command{pdksh} to depart from @acronym{POSIX} in at least one respect:
+
+@example
+$ echo "`echo \"hello\"`"
+hello
+$ set -o posix
+$ echo "`echo \"hello\"`"
+"hello"
+@end example
+
+The last line of output contains spurious quotes.  This is yet another
+reason why portable shell code should not contain
+@code{"`@dots{}\"@dots{}\"@dots{}`"} constructs (@pxref{Shell
+Substitutions}).
 
 @item Zsh
 @cindex Zsh
@@ -9502,7 +9517,7 @@ bash-2.04$ @kbd{cat <<EOF
 Many older shells (including the Bourne shell) implement here-documents
 inefficiently.  And some shells mishandle large here-documents: for
 example, Solaris 8 @command{dtksh}, which is derived from
-@command{ksh} M-12/28/93d, mishandles variable expansion that occurs
+Korn shell version M-12/28/93d, mishandles variable expansion that occurs
 on 1024-byte buffer boundaries within a here-document.  Users can
 generally fix these problems by using a faster or more reliable
 shell, e.g., by using the command @samp{bash ./configure} rather than
@@ -10336,7 +10351,7 @@ your script might be suspended waiting for data on its standard input.
 @evindex PS4
 These variables should not matter for shell scripts, since they are
 supposed to affect only interactive shells.  However, at least one
-shell (the pre-3.0 @sc{uwin} @command{ksh}) gets confused about
+shell (the pre-3.0 @sc{uwin} Korn shell) gets confused about
 whether it is interactive, which means that (for example) a @env{PS1}
 with a side effect can unexpectedly modify @samp{$?}.  To work around
 this bug, Autoconf-generated scripts do something like this:
@@ -10372,8 +10387,8 @@ variable accordingly.
 
 On DJGPP systems, the @code{PATH_SEPARATOR} environment variable can be
 set to either @samp{:} or @samp{;} to control the path separator
-@command{bash} uses to set up certain environment variables (such as
-@code{PATH}).  Since this only works inside @command{bash}, you want
+Bash uses to set up certain environment variables (such as
+@code{PATH}).  Since this only works inside Bash, you want
 @command{configure} to detect the regular @acronym{DOS} path separator
 (@samp{;}), so it can be safely substituted in files that may not support
 @samp{;} as path separator.  So it is recommended to either unset this
@@ -10472,7 +10487,7 @@ You don't need to quote the argument; no splitting is performed.
 
 You don't need the final @samp{;;}, but you should use it.
 
-Because of a bug in its @code{fnmatch}, @command{bash} fails to properly
+Because of a bug in its @code{fnmatch}, Bash fails to properly
 handle backslashes in character classes:
 
 @example
@@ -10694,7 +10709,7 @@ fi
 @c ------------------
 @prindex @command{printf}
 A format string starting with a @samp{-} can cause problems.
-@command{bash} (eg. 2.05b) will interpret it as an options string and
+Bash (eg. 2.05b) will interpret it as an options string and
 give an error.  And @samp{--} to mark the end of options is not good
 in the NetBSD Almquist shell (eg. 0.4.6) which will take that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
