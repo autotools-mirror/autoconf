@@ -305,7 +305,7 @@ VAL3 iftest1.c
 VAL4 iftest1.c
 ], [])
 
-AT_CLEANUP(configure)
+AT_CLEANUP
 
 
 
@@ -456,7 +456,7 @@ AT_DATA(dst2, dst2
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
          [autoupdate: `configure.in' is updated
 ])
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0)
+AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([cat src1], 0, [dst1
 ])

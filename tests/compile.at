@@ -67,7 +67,7 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP
 
 
 ## ------------------------------ ##
@@ -99,7 +99,7 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP
 
 
 

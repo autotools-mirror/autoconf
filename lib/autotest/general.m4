@@ -455,7 +455,7 @@ m4_case([$2],
   [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
-   *) $at_verbose "Exit code was $at_status, expected $2" >&2
+   *) $at_verbose "$srcdir/AT_LINE: exit code was $at_status, expected $2" >&2
       at_failed=:;;])
 esac
 AS_IFELSE($at_failed, [$5], [$6])

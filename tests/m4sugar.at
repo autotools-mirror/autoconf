@@ -12,7 +12,7 @@ AT_SETUP([[m4_text_wrap]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA(configure.in,
+AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
@@ -45,9 +45,9 @@ AT_DATA(expout,
 First, second , third, [,quoted]
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o-], 0, expout)
+AT_CHECK_AUTOCONF([-o-], [expout])
 
-AT_CLEANUP()
+AT_CLEANUP
 
 
 
@@ -90,4 +90,4 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar,error],
 configure.in:2: the top level
 ])
 
-AT_CLEANUP()
+AT_CLEANUP

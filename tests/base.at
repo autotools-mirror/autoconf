@@ -40,9 +40,9 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
-AT_CLEANUP(configure)
+AT_CLEANUP
 
 
 
@@ -78,14 +78,14 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
+AT_CHECK_AUTOCONF([], [],
 [configure.in:16: warning: SINGLE_TEST invoked multiple times
 configure.in:17: warning: SINGLE_TEST invoked multiple times
 ])
 
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
-AT_CLEANUP(configure)
+AT_CLEANUP
 
 
 
@@ -122,13 +122,12 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
+AT_CHECK_AUTOCONF([], [],
 [configure.in:15: warning: SINGLE_TEST invoked multiple times
 ])
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
-
-AT_CLEANUP(configure)
+AT_CLEANUP
 
 
 
@@ -155,8 +154,7 @@ case $inner_test in
 esac
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0)
-AT_CHECK([./configure], 0)
-
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP(configure)

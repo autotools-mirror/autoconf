@@ -48,7 +48,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP(configure)
 
@@ -78,7 +78,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP(configure 1 a)
 
@@ -107,6 +107,6 @@ esac
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK([./configure], 0)
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP(configure)

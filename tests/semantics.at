@@ -151,7 +151,7 @@ AC_CHECK_TYPE(a,b,c,d)
 AC_OUTPUT
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,,
+AT_CHECK_AUTOCONF([], [],
 [configure.in:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
 ])
 AT_CHECK([[sed -e '/^#(cut-from-here/,/^#to-here)/!d' -e '/^#/d' configure]],
@@ -164,7 +164,7 @@ NEW
 NEW
 ])
 
-AT_CLEANUP(autoconf.err)
+AT_CLEANUP
 
 
 
@@ -310,7 +310,7 @@ AT_SETUP([AC_PATH_XTRA])
 _AT_CHECK_AC_MACRO([AC_PATH_XTRA])
 
 # Check X_DISPLAY_MISSING.
-AT_CHECK([top_srcdir=$top_srcdir ./configure --without-x], 0, ignore)
+AT_CHECK_CONFIGURE([--without-x])
 AT_CHECK_DEFINES(
 [#define X_DISPLAY_MISSING 1
 ])
