@@ -1,3 +1,19 @@
+2000-07-07  Akim Demaille  <akim@epita.fr>
+
+	AC_REVISION must not AC_REQUIRE AC_INIT, it leaves the diversions
+	in a messy state.  Don't even try to emulate AC_REQUIRE: just
+	introduce a diversion just for AC_REVISION, and let the magic
+	happen.
+	Fixes Autoconf PR/134, from Raja R Harinath.
+
+	* acgeneral.m4 (_AC_DIVERT(REVISION)): New diversion.
+	(AC_REVISION): Don't require AC_INIT, dump in your diversion.
+	(_AC_INIT): Delete, inline its body in...
+	(AC_INIT): here.
+	(_AC_INIT_NOTICE, _AC_INIT_COPYRIGHT): New macros so that...
+	(AC_INIT): be more uniform.
+	(AC_INIT, AC_REVISION, AC_COPYRIGHT): `define', don't AC_DEFUN.
+
 2000-07-07  Martin Wilck <martin@tropos.de>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Keep -lm, if a Fortran
