@@ -1412,7 +1412,6 @@ define(AC_AIX,
 AC_BEFORE([$0], [AC_TEST_LINK])dnl
 AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
-AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
 AC_PROGRAM_EGREP(yes,
 [#ifdef _AIX
   yes
@@ -1424,7 +1423,6 @@ define(AC_MINIX,
 [AC_BEFORE([$0], [AC_TEST_LINK])dnl
 AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
-AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
 AC_HEADER_CHECK(minix/config.h, MINIX=yes, MINIX=)
 # The Minix shell can't assign to the same variable on the same line!
 if test "$MINIX" = yes; then
@@ -1439,7 +1437,6 @@ define(AC_ISC_POSIX,
 AC_BEFORE([$0], [AC_TEST_LINK])dnl
 AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
-AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
 AC_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
