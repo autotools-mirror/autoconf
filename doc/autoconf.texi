@@ -15644,10 +15644,14 @@ With Automake, here is a minimal example about how to link @samp{make
 check} with a validation suite.
 
 @example
-EXTRA_DIST = testsuite.at testsuite
+EXTRA_DIST = testsuite.at $(TESTSUITE) atlocal.in
 TESTSUITE = $(srcdir)/testsuite
+
 check-local: atconfig atlocal $(TESTSUITE)
-        $(SHELL) $(TESTSUITE)
+        $(SHELL) $(TESTSUITE) $(TESTSUITEFLAGS)
+
+installcheck-local: atconfig atlocal $(TESTSUITE)
+        $(SHELL) $(TESTSUITE) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
