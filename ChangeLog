@@ -1,5 +1,10 @@
 2000-12-05  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at (autoupdate): Strengthen and check autoupdate's
+	idempotency.
+
+2000-12-05  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): s/cp -f/mv -f/.
 
 2000-12-01  Pavel Roskin  <proski@gnu.org>

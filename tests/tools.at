@@ -165,23 +165,33 @@ AT_CLEANUP
 AT_SETUP([autoupdate])
 
 AT_DATA(configure.in,
-[[AC_INIT
+[[AC_INIT(Test, 1.0)
 AC_CANONICAL_SYSTEM
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 ]])
 
-# Checking `autoupdate'.
-AT_CHECK([autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
-[[AC_INIT
+AT_DATA([expout],
+[[AC_INIT([Test],[1.0])
 AC_CANONICAL_TARGET([])
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_COMMANDS([default],[[echo $fubar]],[[fubar=$fubar]])
 AC_OUTPUT
-]], [])
+]])
+
+# Checking `autoupdate'.
+AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
+         [autoupdate: `configure.in' is updated
+])
+AT_CHECK([cat configure.in], 0, [expout])
+# Checking that `autoupdate' is idempotent
+AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
+         [autoupdate: `configure.in' is unchanged
+])
+AT_CHECK([cat configure.in], 0, [expout])
 
 AT_CLEANUP
 
