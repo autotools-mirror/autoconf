@@ -1802,16 +1802,23 @@ LIBS="$LIBS -ltermcap"
 of information.  The following macros print messages in ways appropriate
 for different kinds of information.  The arguments to all of them get
 enclosed in shell double quotes, so the shell performs variable and
-backquote substitution on them.  These macros are all wrappers around
-the @code{echo} shell command.  Other macros should rarely need to run
-@code{echo} directly to print messages for the @code{configure} user.
+backquote substitution on them.
+
+These macros are all wrappers around the @code{echo} shell command.
+Other macros should rarely need to run @code{echo} directly to print
+messages for the @code{configure} user.  Using these macros makes it
+easy to change how and when each kind of message is printed; such
+changes need only be made to the macro definitions, and all the callers
+change automatically.
 
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
 Tell the user that @code{configure} is checking for a particular
 feature.  This macro prints a message that starts with @samp{checking }.
-The @var{feature-description} should be something like @samp{whether the
-Fortran compiler accepts C++ comments} or @samp{for c89}.
+It prints nothing if @code{configure} is run with the @samp{--silent} or
+@samp{--quiet} option.  The @var{feature-description} should be
+something like @samp{whether the Fortran compiler accepts C++ comments}
+or @samp{for c89}.
 @end defmac
 
 @defmac AC_ERROR (@var{error-description})
