@@ -1,5 +1,15 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoconf.in: Don't bother with `acsite.m4' and `aclocal.m4'.
+	* bin/autom4te.in (&find_file): Support `FILE?' standing for
+	optionally `FILE'.
+	Use -e, not -f, since /dev/null for instance is OK.
+	(&parse_args): Adjust.
+	* lib/autom4te.in (Autoconf): Add `acsite.m4?' and `aclocal.m4?'.
+
+	
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* configure.ac: Also find tested executables in bin.
 	* bin/autoconf.in, bin/autoheader.in, bin/autoreconf.in,
 	* bin/autoscan.in, autoupdate.in: Use exclusively the name of the

@@ -1243,6 +1243,8 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 # some platforms.
 
 # Initialize the test suite.
+# Some of our bins are location independant, e.g., ifnames.
+# We don't need wrappers for them.
 ac_config_commands="$ac_config_commands tests/atconfig"
 
 if test -f $srcdir/tests/atlocal.in; then
@@ -1252,7 +1254,7 @@ fi
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
-echo "$as_me:1255: checking for $ac_word" >&5
+echo "$as_me:1257: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_EXPR+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1269,7 +1271,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_EXPR="$ac_dir/$ac_word"
-   echo "$as_me:1272: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1274: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1280,10 +1282,10 @@ fi
 EXPR=$ac_cv_path_EXPR
 
 if test -n "$EXPR"; then
-  echo "$as_me:1283: result: $EXPR" >&5
+  echo "$as_me:1285: result: $EXPR" >&5
 echo "${ECHO_T}$EXPR" >&6
 else
-  echo "$as_me:1286: result: no" >&5
+  echo "$as_me:1288: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1295,7 +1297,7 @@ for ac_prog in gm4 gnum4 m4
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1298: checking for $ac_word" >&5
+echo "$as_me:1300: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1312,7 +1314,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_M4="$ac_dir/$ac_word"
-   echo "$as_me:1315: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1317: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1323,10 +1325,10 @@ fi
 M4=$ac_cv_path_M4
 
 if test -n "$M4"; then
-  echo "$as_me:1326: result: $M4" >&5
+  echo "$as_me:1328: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6
 else
-  echo "$as_me:1329: result: no" >&5
+  echo "$as_me:1331: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1334,7 +1336,7 @@ fi
 done
 test -n "$M4" || M4="m4"
 
-echo "$as_me:1337: checking whether m4 supports frozen files" >&5
+echo "$as_me:1339: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1346,10 +1348,10 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-echo "$as_me:1349: result: $ac_cv_prog_gnu_m4" >&5
+echo "$as_me:1351: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { { echo "$as_me:1352: error: GNU M4 1.4 is required" >&5
+  { { echo "$as_me:1354: error: GNU M4 1.4 is required" >&5
 echo "$as_me: error: GNU M4 1.4 is required" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1361,7 +1363,7 @@ for ac_prog in mawk gawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1364: checking for $ac_word" >&5
+echo "$as_me:1366: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1376,7 +1378,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   $as_executable_p "$ac_dir/$ac_word" || continue
 ac_cv_prog_AWK="$ac_prog"
-echo "$as_me:1379: found $ac_dir/$ac_word" >&5
+echo "$as_me:1381: found $ac_dir/$ac_word" >&5
 break
 done
 
@@ -1384,10 +1386,10 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "$as_me:1387: result: $AWK" >&5
+  echo "$as_me:1389: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "$as_me:1390: result: no" >&5
+  echo "$as_me:1392: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1401,7 +1403,7 @@ HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "$as_me:1404: checking for $ac_word" >&5
+echo "$as_me:1406: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1418,7 +1420,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_PERL="$ac_dir/$ac_word"
-   echo "$as_me:1421: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1423: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1430,20 +1432,20 @@ fi
 PERL=$ac_cv_path_PERL
 
 if test -n "$PERL"; then
-  echo "$as_me:1433: result: $PERL" >&5
+  echo "$as_me:1435: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "$as_me:1436: result: no" >&5
+  echo "$as_me:1438: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" = no; then
-  { { echo "$as_me:1441: error: perl is not found" >&5
+  { { echo "$as_me:1443: error: perl is not found" >&5
 echo "$as_me: error: perl is not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 $PERL -e 'require 5.005;' || {
-   { { echo "$as_me:1446: error: Perl 5.005 or better is required" >&5
+   { { echo "$as_me:1448: error: Perl 5.005 or better is required" >&5
 echo "$as_me: error: Perl 5.005 or better is required" >&2;}
    { (exit 1); exit 1; }; }
 }
@@ -1562,7 +1564,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:1565: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:1567: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -1757,7 +1759,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:1760: error: ambiguous option: $1
+    { { echo "$as_me:1762: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1776,7 +1778,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:1779: error: unrecognized option: $1
+  -*) { { echo "$as_me:1781: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1827,7 +1829,7 @@ do
   "bin/Makefile" ) CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
   "tests/atconfig" ) CONFIG_COMMANDS="$CONFIG_COMMANDS tests/atconfig" ;;
-  *) { { echo "$as_me:1830: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:1832: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -2015,7 +2017,7 @@ for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$@"`; do
       as_incr_dir=$as_incr_dir/$as_mkdir_dir
       test -d "$as_incr_dir" ||
         mkdir "$as_incr_dir" ||
-	{ { echo "$as_me:2018: error: cannot create \"$ac_dir\"" >&5
+	{ { echo "$as_me:2020: error: cannot create \"$ac_dir\"" >&5
 echo "$as_me: error: cannot create \"$ac_dir\"" >&2;}
    { (exit 1); exit 1; }; }
     ;;
@@ -2052,7 +2054,7 @@ esac
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:2055: creating $ac_file" >&5
+    { echo "$as_me:2057: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -2070,7 +2072,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:2073: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:2075: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -2083,7 +2085,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:2086: error: cannot find input file: $f" >&5
+           { { echo "$as_me:2088: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -2155,7 +2157,7 @@ case $srcdir in
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
 
-  { echo "$as_me:2158: executing $ac_dest commands" >&5
+  { echo "$as_me:2160: executing $ac_dest commands" >&5
 echo "$as_me: executing $ac_dest commands" >&6;}
   case $ac_dest in
     tests/atconfig ) cat >tests/atconfig <<ATEOF
@@ -2175,7 +2177,7 @@ srcdir='$ac_srcdir'
 top_srcdir='$ac_top_srcdir'
 top_builddir='$ac_top_builddir'
 
-AUTOTEST_PATH='bin'
+AUTOTEST_PATH='tests:bin'
 
 SHELL=\${CONFIG_SHELL-'$at_shell'}
 PATH_SEPARATOR='$at_path_separator'

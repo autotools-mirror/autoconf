@@ -224,9 +224,7 @@ run_autom4te="$AUTOM4TE "\
 "--include=$localdir "\
 `test -n "$warnings" && echo "--warning=$warnings "`\
 "--output=$outfile "\
-`$initialization && echo "--melt "`\
-`test -f "$autoconf_dir/acsite.m4" && echo "$autoconf_dir/acsite.m4"`" "\
-`test -f "$localdir/aclocal.m4" && echo "$localdir/aclocal.m4"`
+`$initialization && echo "--melt "`
 
 # Autom4te expansion.
 eval set dummy "$traces"

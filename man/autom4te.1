@@ -9,6 +9,9 @@ autom4te \- Generate files and scripts thanks to M4
 Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
 consists of the traces only, otherwise output the expansion of the FILES.
 The first of the FILES may be an M4 frozen file, but then must end in `.m4f'.
+Some files may be optional, i.e., will only be processed if found in the
+include path, but then must end in `.m4?';  the question mark is not part of
+the actual file name.
 .SS "Operation modes:"
 .TP
 \fB\-h\fR, \fB\-\-help\fR

@@ -28,6 +28,8 @@ begin-language: "Autoconf"
 # patterns: "configure.in"
 args: --include @datadir@
 args: autoconf/autoconf.m4f
+args: acsite.m4?
+args: aclocal.m4?
 args: --mode 777
 args: --warning syntax
 args: --normalize
