@@ -2,7 +2,7 @@ changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 # This file is part of Autoconf.
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -151,6 +151,16 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
+# NLS nuisances.
+_AS_UNSET_PREPARE
+m4_foreach([_AS_var],
+  [LANG, LC_ALL, LC_TIME, LC_CTYPE, LANGUAGE,
+   LC_COLLATE, LC_NUMERIC, LC_MESSAGES],
+  [(set +x; test -n "`(_AS_var=C; export _AS_var) 2>&1`") &&
+    { $as_unset _AS_var || test "${_AS_var+set}" != set; } ||
+      { _AS_var=C; export _AS_var; }
+])
+
 # Name of the executable.
 as_me=`AS_BASENAME("$[0]")`
 
@@ -165,17 +175,6 @@ _AS_LN_S_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
-_AS_UNSET_PREPARE
-
-# NLS nuisances.
-AS_UNSET([LANG],        [C])
-AS_UNSET([LC_ALL],      [C])
-AS_UNSET([LC_TIME],     [C])
-AS_UNSET([LC_CTYPE],    [C])
-AS_UNSET([LANGUAGE],    [C])
-AS_UNSET([LC_COLLATE],  [C])
-AS_UNSET([LC_NUMERIC],  [C])
-AS_UNSET([LC_MESSAGES], [C])
 
 # IFS
 # We need space, tab and new line, in precisely that order.
