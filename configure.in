@@ -17,13 +17,6 @@ else
   AC_MSG_WARN(autoscan will not be built since perl is not found)
 fi
 
-AC_CHECK_PROG(BASH, bash, no-bash)
-if test "$BASH" != no-bash; then
-  PROGS="$PROGS shindent"
-else
-  AC_MSG_WARN(shindent will not be built since bash is not found)
-fi
-
 AC_PROG_INSTALL
 
 # Work with the GNU or Cygnus source tree layout.

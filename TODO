@@ -10,7 +10,7 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Fix up quoting for AC_DEFINE; understand and integrate Jim Avera's patches.
+* Split up AC_SUBST substitutions using a loop to accomodate old seds.
 
 ------------------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ Required for 2.0:
 * Fix AC_ARG_{ENABLE,WITH}, and AC_REQUIRE interrupting messages.
 
 ------------------------------------------------------------------------------
+
 
 Other things:
 
@@ -35,10 +36,6 @@ functions (POSIX, NIS) that do everything necessary, instead.
 ------------------------------------------------------------------------------
 
 * Support copying and adding "dir" commands to .gdbinit.
-
-------------------------------------------------------------------------------
-
-* Add a --indent option to autoconf to call shindent.
 
 ------------------------------------------------------------------------------
 

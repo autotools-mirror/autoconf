@@ -87,6 +87,9 @@ esac
 frob='define([AC_DEFINE],[#
 @@@syms="$syms $1"@@@
 ])dnl
+define([AC_DEFINE_UNQUOTED],[#
+@@@syms="$syms $1"@@@
+])dnl
 define([AC_SIZEOF_TYPE],[#
 @@@types="$types,$1"@@@
 ])dnl

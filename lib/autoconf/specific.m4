@@ -30,7 +30,8 @@ dnl Idea borrowed from dist 3.0.
 dnl Internal use only.
 AC_DEFUN(AC_PROG_ECHO_N,
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  if (echo -n testing; echo 1,2,3) | grep -e -n > /dev/null; then
+  # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn > /dev/null; then
     ac_n= ac_c='
 ' ac_t='	'
   else
@@ -87,15 +88,14 @@ if test $ac_cv_prog_gcc = yes; then
   AC_MSG_CHECKING(whether -traditional is needed)
 AC_CACHE_VAL(ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
-  ac_prog='#include <sgtty.h>
-Autoconf TIOCGETP'
-  AC_EGREP_CPP($ac_pattern, $ac_prog,
+  AC_EGREP_CPP($ac_pattern, [#include <sgtty.h>
+Autoconf TIOCGETP],
   ac_cv_prog_gcc_traditional=yes, ac_cv_prog_gcc_traditional=no)
 
   if test $ac_cv_prog_gcc_traditional = no; then
-    ac_prog='#include <termio.h>
-Autoconf TCGETA'
-    AC_EGREP_CPP($ac_pattern, $ac_prog, ac_cv_prog_gcc_traditional=yes)
+    AC_EGREP_CPP($ac_pattern, [#include <termio.h>
+Autoconf TCGETA],
+    ac_cv_prog_gcc_traditional=yes)
   fi])dnl
   AC_MSG_RESULT($ac_cv_prog_gcc_traditional)
   if test $ac_cv_prog_gcc_traditional = yes; then
@@ -547,9 +547,10 @@ AC_DEFUN(AC_TYPE_GETGROUPS,
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_MSG_CHECKING(type of array argument to getgroups)
 AC_CACHE_VAL(ac_cv_type_getgroups,
-[changequote(, )dnl
-dnl Do not put single quotes in the C program text!
-ac_prog='/* Thanks to Mike Rendell for this test.  */
+[AC_TRY_RUN(
+changequote(<<, >>)dnl
+<<
+/* Thanks to Mike Rendell for this test.  */
 #include <sys/types.h>
 #define NGID 256
 #undef MAX
@@ -568,9 +569,9 @@ main()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short but getgroups modifies an array of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
-}'
+}
+>>,
 changequote([, ])dnl
-AC_TRY_RUN([$ac_prog],
   ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)])dnl
 AC_MSG_RESULT($ac_cv_type_getgroups)
 AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
@@ -1310,9 +1311,10 @@ AC_DEFUN(AC_C_CONST,
 dnl and with the result message.
 AC_MSG_CHECKING([for working const])
 AC_CACHE_VAL(ac_cv_c_const,
-[changequote(, )dnl
-dnl Do not put single quotes in the C program text!
-ac_prog='/* Ultrix mips cc rejects this.  */
+[AC_TRY_LINK(,
+changequote(<<, >>)dnl
+<<
+/* Ultrix mips cc rejects this.  */
 typedef int charset[2]; const charset x;
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
@@ -1349,9 +1351,10 @@ ccp = (char const *const *) p;
 }
 { /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
   const int foo = 10;
-}'
+}
+>>,
 changequote([, ])dnl
-AC_TRY_LINK(, [$ac_prog], ac_cv_c_const=yes, ac_cv_c_const=no)])dnl
+ac_cv_c_const=yes, ac_cv_c_const=no)])dnl
 AC_MSG_RESULT($ac_cv_c_const)
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const, )

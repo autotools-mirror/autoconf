@@ -57,8 +57,7 @@ DISTFILES = COPYING ChangeLog ChangeLog.1 ChangeLog.0 INSTALL \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
 	autoconf.m4 autoconf.sh autoconf.texi install.texi \
-	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh \
-	shindent.sh ifnames.sh \
+	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
 	install.sh mkinstalldirs texinfo.tex \
 	testsuite/Makefile.in testsuite/config/*.exp \
@@ -85,10 +84,6 @@ autoreconf: autoreconf.sh
 autoupdate: autoupdate.sh
 	rm -f $@ $@.tmp
 	$(editsh) $(srcdir)/autoupdate.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
-
-shindent: shindent.sh
-	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/shindent.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
 ifnames: ifnames.sh
 	rm -f $@ $@.tmp
@@ -141,9 +136,6 @@ install: all acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(acdatadir)/acconfig.h
 	-if test -f autoscan; then \
 	$(INSTALL_PROGRAM) autoscan $(bindir)/autoscan; \
-	else :; fi
-	-if test -f shindent; then \
-	$(INSTALL_PROGRAM) shindent $(bindir)/shindent; \
 	$(INSTALL_DATA) $(srcdir)/acfunctions $(acdatadir)/acfunctions; \
 	$(INSTALL_DATA) $(srcdir)/acheaders $(acdatadir)/acheaders; \
 	$(INSTALL_DATA) $(srcdir)/acidentifiers $(acdatadir)/acidentifiers; \
@@ -163,8 +155,7 @@ install-info: info installdirs
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader $(bindir)/autoscan 
-	rm -f $(bindir)/autoreconf $(bindir)/autoupdate
-	rm -f $(bindir)/shindent $(bindir)/ifnames 
+	rm -f $(bindir)/autoreconf $(bindir)/autoupdate $(bindir)/ifnames 
 	rm -fr $(acdatadir)
 	cd $(infodir); rm -f autoconf.info*
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
@@ -188,8 +179,7 @@ clean mostlyclean distclean realclean::
 	done
 
 clean mostlyclean distclean realclean::
-	rm -f autoconf autoheader autoscan autoreconf autoupdate
-	rm -f shindent ifnames *.tmp 
+	rm -f autoconf autoheader autoscan autoreconf autoupdate ifnames *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
 

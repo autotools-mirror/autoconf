@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.100
-@set VERSION 1.100
+@set EDITION 1.101
+@set VERSION 1.101
 @set UPDATED August 1994
 
 @iftex
@@ -120,7 +120,6 @@ Making @code{configure} Scripts
 * Invoking ifnames::            Listing the conditionals in source code.
 * Invoking autoreconf::         Remaking multiple @code{configure} scripts.
 * Invoking autoupdate::         Replacing old macro names in @code{configure.in}.
-* Invoking shindent::           Making @code{configure} scripts more readable.
 
 Specific Tests
 
@@ -383,7 +382,6 @@ Makefile.in ---'                    `-> Makefile ---'
 * Invoking ifnames::            Listing the conditionals in source code.
 * Invoking autoreconf::         Remaking multiple @code{configure} scripts.
 * Invoking autoupdate::         Replacing old macro names in @code{configure.in}.
-* Invoking shindent::           Making @code{configure} scripts more readable.
 @end menu
 
 @node Writing configure.in, Invoking autoconf, , Making configure Scripts
@@ -636,7 +634,7 @@ Print the name of each directory where @code{autoreconf} runs
 Print the version number of @code{autoreconf} and exit.
 @end table
 
-@node Invoking autoupdate, Invoking shindent, Invoking autoreconf, Making configure Scripts
+@node Invoking autoupdate, , Invoking autoreconf, Making configure Scripts
 @section Invoking autoupdate
 
 The @code{autoupdate} program updates a @file{configure.in} file that
@@ -672,56 +670,6 @@ default installation directory.
 @item --version
 @itemx -v
 Print the version number of @code{autoupdate} and exit.
-@end table
-
-@node Invoking shindent, , Invoking autoupdate, Making configure Scripts
-@section Invoking shindent
-
-Autoconf-generated @code{configure} scripts can be somewhat hard to
-read, because they @emph{look} machine-generated---mainly because they
-do not use whitespace rationally.  Unfortunately, it is impossible to do
-proper indentation using a macro processor like @code{m4}.  However, if
-you have GNU @code{bash} installed, you can use the @code{shindent}
-program, which uses @code{bash} to give a Bourne shell script readable
-indentation. 
-
-@code{shindent} indents each script named on the command line, backing
-up the original version with the suffix @file{~} (or the value of the
-environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is set).
-@code{shindent} places some restrictions on its input, due to the way it
-uses @code{bash} to do the indentation:
-
-@itemize @bullet
-@item
-It removes comments and blank lines between cases case statements.
-
-@item
-Doing odd things in case statements might cause odd problems.
-
-@item
-The script must not define any shell functions.
-
-@item
-If any string literals or here-documents contain lines that start
-with four spaces, those spaces will be removed.
-
-@item
-The script must not be @code{shindent} itself.
-@end itemize
-
-@noindent
-@code{shindent} accepts the following options:
-
-@table @code
-@item --help
-Print a summary of the command line options and exit.
-
-@item --macrodir=@var{dir}
-Look for the Autoconf macro files in directory @var{dir} instead of the
-default installation directory.  Only used to get the version number.
-
-@item --version
-Print the version number of @code{shindent} and exit.
 @end table
 
 @node Specific Tests, General Purpose Macros, Making configure Scripts, Top
@@ -2259,18 +2207,26 @@ variables.
 @defmac AC_DEFINE (@var{variable} @r{[}, @var{value}@r{]})
 @maindex DEFINE
 Define C preprocessor variable @var{variable}.  If @var{value} is given,
-set @var{variable} to that value, otherwise set it to 1.  To use a shell
-variable as the value, use @code{AC_DEFINE_UNQUOTED} instead and precede
-double quotes in the value with backslashes.
+set @var{variable} to that value (verbatim), otherwise set it to 1.
+@var{value} should not contain literal newlines, and if you are not
+using @code{AC_CONFIG_HEADER} it should not contain any @samp{#}
+characters, as @code{make} tends to eat them.  To use a shell variable
+as the value, use @code{AC_DEFINE_UNQUOTED} instead.
 
-This macro adds to the shell variable @code{DEFS}.  @code{AC_OUTPUT}
-later substitutes the values in @code{DEFS} into the file(s) that it
-generates (typically @file{Makefile}).  Alternately, if
-@code{AC_CONFIG_HEADER} has been called, @code{AC_OUTPUT} creates a
-header file by substituting the correct values into @code{#define}
-statements in a template file.
+@code{AC_OUTPUT} substitutes the values defined by this macro as the
+variable @code{DEFS} in the file(s) that it generates (typically
+@file{Makefile}).  Unlike in Autoconf version 1, there is no variable
+@code{DEFS} defined while @code{configure} is running, so macros cannot
+check its value for the results of previous tests.  This difference is
+because properly quoting the contents of that variable turned out to be
+too cumbersome and inefficient to do every time @code{AC_DEFINE} is
+called.  Checking cache variable values is a cleaner way to get the
+effect of checking the value of @code{DEFS}.
 
-For example, suppose your @file{configure.in} calls
+If @code{AC_CONFIG_HEADER} has been called, then instead of substituting
+@code{DEFS}, @code{AC_OUTPUT} creates a header file by substituting the
+correct values into @code{#define} statements in a template file.  For
+example, suppose your @file{configure.in} calls
 @code{AC_CONFIG_HEADER(conf.h)} and @code{AC_CHECK_HEADERS(unistd.h)}.
 You could have code like this in @file{conf.h.in}:
 
@@ -2326,15 +2282,14 @@ AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4); LIBS="$LIBS -lelf")
 
 @defmac AC_DEFINE_UNQUOTED (@var{variable} @r{[}, @var{value}@r{]})
 @maindex DEFINE_UNQUOTED
-Like @code{AC_DEFINE}, but it does nothing to quote @var{value} from
-various shell and @code{sed} expansions it will undergo.  @var{value}
-will be used in many different contexts requiring different quoting, and
-it is up to you to make sure it works right.  Use this macro instead of
-@code{AC_DEFINE} when @var{value} contains a shell variable.  For
+Like @code{AC_DEFINE}, but three shell expansions are performed once on
+@var{value}: variable expansion (@samp{$}), command substitution
+(@samp{`}), and backslash escaping (@samp{\}).  Use this macro instead
+of @code{AC_DEFINE} when @var{value} contains a shell variable.  For
 example:
 
 @example
-AC_DEFINE_UNQUOTED(config_machfile,  $@{machfile@})
+AC_DEFINE_UNQUOTED(config_machfile, "$@{machfile@}")
 @end example
 @end defmac
 
@@ -2976,12 +2931,6 @@ if test "$ac_cv_func_vprintf" != yes; then
 AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
 fi
 @end example
-
-@noindent
-Unlike in Autoconf version 1, there is no shell variable @code{DEFS} set
-while @code{configure} is running.  This difference is because properly
-quoting the contents of that variable turned out to be too cumbersome to
-do every time @code{AC_DEFINE} is called.
 
 @node Test Programs, Multiple Cases, Checking for Symbols, Writing Macros
 @section Test Programs

@@ -14,8 +14,8 @@ Autoconf, so that Autoconf's configure script can find it.  The
 configuration scripts produced by Autoconf are self-contained, so
 their users do not need to have Autoconf (or GNU m4).
 
-Also, some optional utilities that come with Autoconf use Perl, Bash,
-TCL, and the TCL packages Expect and DejaGNU.  However, none of those
+Also, some optional utilities that come with Autoconf use Perl, TCL,
+and the TCL packages Expect and DejaGNU.  However, none of those
 are required in order to use the main Autoconf program.  If they are
 not present, the affected Autoconf utilities will not be installed.
 

@@ -66,7 +66,6 @@ while read confin; do
   cd $dir || exit 1
   test $verbose = yes && echo running autoconf in $dir
   autoconf
-  # FIXME maybe we should have an option to run shindent here.
   if grep AC_CONFIG_HEADER configure.in > /dev/null; then
     test $verbose = yes && echo running autoheader in $dir
     autoheader
