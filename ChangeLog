@@ -1,3 +1,9 @@
+2004-06-23  Noah Misch  <noah@cs.caltech.edu>
+
+        * lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): If the shell is
+        zsh, disable GLOB_SUBST to avoid backslash handling problems.
+	(trivial change)
+
 2004-06-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (File System Conventions): Warn about
