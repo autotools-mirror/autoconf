@@ -1,5 +1,11 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (update.sh): New sub program.
+	Use it in the whole process.
+	(acconfig_h): New variable.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh <run_aclocal>: Use false/: instead of no/yes.
 	Formatting and factoring changes.
 
