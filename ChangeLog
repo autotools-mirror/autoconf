@@ -1,3 +1,8 @@
+2004-02-20  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <mkdir>: `mkdir -p'
+	is not always thread-safe.  Report from Nathanael Nerode.
+
 2004-02-18  Paul Eggert  <eggert@twinsun.com>
 
 	Fix a dependencies problem, stemming from a Autoconf 2.59 build
