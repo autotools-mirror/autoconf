@@ -46,13 +46,15 @@ testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
 	mv $@-tmp $@
 
 
-# The files which contains macro we check for syntax.
-MACRO_FILES = $(top_srcdir)/acgeneral.m4 \
-              $(top_srcdir)/acspecific.m4 \
-              $(top_srcdir)/acfunctions.m4 \
-              $(top_srcdir)/aclang.m4 \
-              $(top_srcdir)/acheaders.m4 \
-              $(top_srcdir)/actypes.m4
+# The files which contains macro we check for syntax.  Don't use $(top_srcdir)
+# here since below we explicitly `cd' to $srcdir.  As for the dependencies,
+# thanks God for VPATH.  Hm...
+MACRO_FILES = ../acgeneral.m4 \
+              ../acspecific.m4 \
+              ../acfunctions.m4 \
+              ../aclang.m4 \
+              ../acheaders.m4 \
+              ../actypes.m4
 
 acgeneral.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)

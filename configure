@@ -1792,12 +1792,7 @@ s,@PACKAGE_BUGREPORT@,$PACKAGE_BUGREPORT,;t t
 s,@ECHO_C@,$ECHO_C,;t t
 s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
-s,@CFLAGS@,$CFLAGS,;t t
-s,@CPPFLAGS@,$CPPFLAGS,;t t
-s,@CXXFLAGS@,$CXXFLAGS,;t t
-s,@FFLAGS@,$FFLAGS,;t t
 s,@DEFS@,$DEFS,;t t
-s,@LDFLAGS@,$LDFLAGS,;t t
 s,@LIBS@,$LIBS,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
@@ -1929,7 +1924,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1932: creating $ac_file" >&5
+    { echo "$as_me:1927: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -1947,7 +1942,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]* | ?:[\\/]*)
          # Absolute
-         test -f "$f" || { { echo "$as_me:1950: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:1945: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -1960,7 +1955,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $ac_given_srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:1963: error: cannot find input file: $f" >&5
+           { { echo "$as_me:1958: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -2001,5 +1996,5 @@ test "$no_create" = yes || $SHELL $CONFIG_STATUS || { (exit 1); exit 1; }
 
 # Report the state of this version of Autoconf if this is a beta.
 case 2.49c in
-  *[a-z]*) sed -n '/^\* Status/,$p' BUGS;;
+  *[a-z]*) sed -n '/^\* Status/,$p' $srcdir/BUGS;;
 esac
