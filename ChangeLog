@@ -1,5 +1,33 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/lang.m4 (AC_LANG(C), AC_LANG_C, _AC_LANG_ABBREV(C))
+	(AC_LANG(C++), AC_LANG_CPLUSPLUS, _AC_LANG_ABBREV(C++))
+	(AC_LANG_SOURCE(C), AC_LANG_PROGRAM(C), AC_LANG_CALL(C))
+	(AC_LANG_FUNC_LINK_TRY(C), AC_LANG_BOOL_COMPILE_TRY(C))
+	(AC_LANG_INT_SAVE(C), _AC_ARG_VAR_CPPFLAGS, _AC_ARG_VAR_LDFLAGS)
+	(AC_LANG_PREPROC(C), _AC_PROG_PREPROC_WORKS_IFELSE, AC_PROG_CPP)
+	(AC_LANG_COMPILER(C), ac_cv_prog_gcc, AC_PROG_CC, _AC_PROG_CC_G)
+	(AC_PROG_GCC_TRADITIONAL, AC_PROG_CC_C_O, AC_LANG_PREPROC(C++))
+	(AC_PROG_CXXCPP, AC_LANG_COMPILER(C++), ac_cv_prog_gxx)
+	(AC_PROG_CXX, _AC_PROG_CXX_G, _AC_PROG_CXX_EXIT_DECLARATION)
+	(AC_PROG_CC_STDC, AC_C_CROSS, AC_C_CHAR_UNSIGNED, AC_C_LONG_DOUBLE)
+	(AC_C_BIGENDIAN, AC_C_INLINE, AC_C_CONST, AC_C_VOLATILE)
+	(AC_C_STRINGIZE, AC_C_PROTOTYPES): Move to...
+	* lib/autoconf/c.m4: here, new file.
+
+	* lib/autoconf/lang.m4 (AC_LANG(Fortran 77), AC_LANG_FORTRAN77)
+	(_AC_LANG_ABBREV(Fortran 77), AC_LANG_SOURCE(Fortran 77))
+	(AC_LANG_PROGRAM(Fortran 77), AC_LANG_CALL(Fortran 77))
+	(AC_LANG_PREPROC(Fortran 77), AC_LANG_COMPILER(Fortran 77))
+	(ac_cv_prog_g77, AC_PROG_F77, _AC_PROG_F77_G, AC_PROG_F77_C_O)
+	(_AC_PROG_F77_V_OUTPUT, _AC_PROG_F77_V, AC_F77_LIBRARY_LDFLAGS)
+	(AC_F77_DUMMY_MAIN, _AC_LANG_PROGRAM_C_F77_HOOKS, AC_F77_MAIN)
+	(_AC_F77_NAME_MANGLING, AC_F77_NAME_MANGLING, AC_F77_WRAPPERS)
+	(AC_F77_FUNC): Move to...
+	* lib/autoconf/fortran.m4: here, new file.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4: Rename as...
 	* lib/autoconf/functions.m4: this.
 	* acgeneral.m4: Rename as...

@@ -2,7 +2,8 @@
 
 distautoconflibdir = $(pkgdatadir)/autoconf
 distautoconflib_DATA = autoconf.m4 \
-                       general.m4 oldnames.m4 specific.m4 lang.m4 \
+                       general.m4 oldnames.m4 specific.m4 \
+		       lang.m4 c.m4 fortran.m4 \
                        functions.m4 headers.m4 types.m4
 nodistautoconflibdir = $(pkgdatadir)/autoconf
 # The order matters: we need version.m4 to build autoconf.m4f.

@@ -68,7 +68,7 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at compile.at semantics.at 	acgeneral.at acspecific.at acfunctions.at aclang.at acheaders.at 	actypes.at 	foreign.at
+SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at 	compile.at 	aclang.at acc.at acfortran.at 	semantics.at 	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at 	foreign.at
 
 
 # We don't actually distribute the testsuite, since one only
@@ -81,7 +81,7 @@ AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../autom4te
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
 # thanks God for VPATH.  Hm...
-MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/lib/autoconf/specific.m4               $(top_srcdir)/lib/autoconf/functions.m4               $(top_srcdir)/lib/autoconf/lang.m4               $(top_srcdir)/lib/autoconf/headers.m4               $(top_srcdir)/lib/autoconf/types.m4
+MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/lib/autoconf/specific.m4               $(top_srcdir)/lib/autoconf/functions.m4               $(top_srcdir)/lib/autoconf/lang.m4               $(top_srcdir)/lib/autoconf/c.m4               $(top_srcdir)/lib/autoconf/fortran.m4               $(top_srcdir)/lib/autoconf/headers.m4               $(top_srcdir)/lib/autoconf/types.m4
 
 
 CLEANFILES = debug-*.sh macro configure configure.in configure.ac              config.status config.cache config.log config.h.in config.h              config.hin state-* at-*              stderr stdout empty 	     config.guess config.sub expr libtool ltconfig ltmain.sh install-sh
@@ -89,7 +89,8 @@ CLEANFILES = debug-*.sh macro configure configure.in configure.ac              c
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in configure \
+configure.ac
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -218,6 +219,12 @@ acfunctions.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 aclang.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+acc.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+acfortran.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 acheaders.at: mktests.sh $(MACRO_FILES)
