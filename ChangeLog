@@ -2,8 +2,7 @@
 
 	Clean up `make clean'.
 
-	* doc/Makefile.am (CLEANFILES): Added autoconf.tmp.
-	* Makefile.am (CLEANFILES): Added autoupdate.m4f.
+	* Makefile.am (CLEANFILES): Added autoupdate.m4f and autoconf.tmp.
 	* tests/torture.m4: Rm dummy and dummy.in.
 
 2000-02-09  Akim Demaille  <akim@epita.fr>

@@ -36,9 +36,9 @@ define(DEFINE_Description,
 define(AT_DUMMY_VAR,
 [ac_Dummy_[]patsubst([000$1], [.*\(...\)$], [\1])])
 
-dnl This call was quite delicate to write because we wanted to produce
-dnl the 100 commands at hand.  Be very careful if you want to touch
-dnl something.
+dnl This call was quite delicate to write because we didn't want to
+dnl produce the 100 commands by hand.  Be very careful if you want to
+dnl touch something.
 
 ## Require 100 AC_DEFINE and AC_SUBST with a significantly big value.
 ## This is mostly to check that Autoconf produces portable sed scripts
@@ -76,3 +76,6 @@ AT_DATA(expout,
 [Big_Value
 ])])
 ])
+
+dnl Remove test files.
+rm -f dummy dummy.in

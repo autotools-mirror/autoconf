@@ -58,7 +58,9 @@ $(distpkgdataDATA)
 # Files that should be removed, but which Automake does not know.
 # There are texi2dvi files, frozen files, and the scripts.
 CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
-autoconf.ov autoconf.ovs autoconf.m4f autoheader.m4f $(bin_SCRIPTS)
+autoconf.ov autoconf.ovs autoconf.tmp \
+autoconf.m4f autoheader.m4f autoupdate.m4f \
+$(bin_SCRIPTS)
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
