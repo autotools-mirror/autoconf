@@ -1,6 +1,9 @@
 2001-10-31  Paul Eggert  <eggert@twinsun.com>
 
-	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Use Sed rather than
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_WORKS): Do not surround body
+	with {}, as that triggers a bug in Bash 2.05.
+
+	(_AS_LINENO_PREPARE): Use Sed rather than
 	Awk.  Fix the sed prepass to work even if there are multiple
 	instances of $LINENO on the same line.  Do not substitute for
 	other variables like $LINENOT.  Do not check file dates; such a
