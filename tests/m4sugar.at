@@ -94,14 +94,6 @@ AT_CLEANUP
 ## -------------- ##
 ## m4_text_wrap.  ##
 ## -------------- ##
-#							-*- Autoconf -*-
-
-AT_BANNER([M4sugar.])
-
-## -------------- ##
-## m4_text_wrap.  ##
-## -------------- ##
-
 
 AT_SETUP([[m4_text_wrap]])
 
