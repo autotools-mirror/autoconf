@@ -1,5 +1,12 @@
 2001-08-22  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL): Use
+	AC_TRY_COMMAND.
+	(AC_DECL_YYTEXT): Fix the previous patch: it points to AC_PROG_LEX.
+
+	
+2001-08-22  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (AC_SHELL_PATH_WALK, AC_CHECK_PROG)
 	(AC_CHECK_PROGS, AC_PATH_PROG, AC_PATH_PROGS, AC_CHECK_TOOL_PREFIX)
 	(AC_PATH_TOOL, AC_CHECK_TOOL, AC_CHECK_TOOLS): Move to...
