@@ -9542,7 +9542,8 @@ Substitutions}).
 @cindex Zsh
 To detect whether you are running @command{zsh}, test whether
 @code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
-compatible with the Bourne shell: you have to run @samp{emulate sh} and
+compatible with the Bourne shell: you must execute @samp{emulate sh},
+and for @command{zsh} versions before 3.1.6-dev-18 you must also
 set @code{NULLCMD} to @samp{:}.  @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
 
@@ -10431,9 +10432,10 @@ $ @kbd{sed '=' <lineno |}
 @item NULLCMD
 @evindex NULLCMD
 When executing the command @samp{>foo}, @command{zsh} executes
-@samp{$NULLCMD >foo}.  The Bourne shell considers @code{NULLCMD} to be
-@samp{:}, while @command{zsh}, even in Bourne shell compatibility mode,
-sets @code{NULLCMD} to @samp{cat}.  If you forgot to set @code{NULLCMD},
+@samp{$NULLCMD >foo} unless it is operating in Bourne shell
+compatibility mode and the @command{zsh} version is newer
+than 3.1.6-dev-18.  If are using an older @command{zsh}
+and forget to set @code{NULLCMD},
 your script might be suspended waiting for data on its standard input.
 
 @item ENV

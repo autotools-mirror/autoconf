@@ -4,6 +4,10 @@
 	to "POSIX" or "@acronym{POSIX}"), and similarly for "DOS
 	variants", "Unix", and some related minor wording fixups.
 
+	(Shellology, Special Shell Variables): Document that the Zsh
+	problem with NULLCMD was fixed in zsh 3.1.6-dev-18.  Thanks
+	to Alexandre Duret-Lutz for this info.
+
 2004-10-10  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (One-Shot Macros): New node.
