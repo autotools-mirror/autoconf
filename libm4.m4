@@ -2,7 +2,7 @@ divert(-1)                                                   -*- Autoconf -*-
 # This file is part of Autoconf.
 # Base m4 layer.
 # Requires GNU m4.
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,6 +49,8 @@ divert(-1)                                                   -*- Autoconf -*-
 # Written by Akim Demaille.
 #
 
+# Set the quotes, whatever the current quoting system.
+changequote()
 changequote([, ])
 
 # Some old m4's don't support m4exit.  But they provide
@@ -58,7 +60,6 @@ ifdef([__gnu__], ,
 [errprint(Autoconf requires GNU m4. Install it before installing Autoconf or
 set the M4 environment variable to its path name.)
 m4exit(2)])
-
 
 
 ## --------------------------------- ##
@@ -86,20 +87,20 @@ m4_rename([format], [m4_format])
 # m4_errprint(MSG)
 # ----------------
 # Same as `errprint', but reports the file and line.
-define(m4_errprint, [errprint(__file__:__line__: [$1
+define([m4_errprint], [errprint(__file__:__line__: [$1
 ])])
 
 
 # m4_warn(MSG)
 # ------------
 # Warn the user.
-define(m4_warn, [m4_errprint([warning: $1])])
+define([m4_warn], [m4_errprint([warning: $1])])
 
 
 # m4_fatal(MSG, [EXIT-STATUS])
 # ----------------------------
 # Fatal the user.                                                      :)
-define(m4_fatal,
+define([m4_fatal],
 [m4_errprint([error: $1])dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
@@ -129,7 +130,7 @@ define([m4_assert],
 # -----------------------
 # Declare that the FILE was loading; and warn if it has already
 # been included.
-define(m4_include_unique,
+define([m4_include_unique],
 [ifdef([m4_include($1)],
        [m4_warn([file `$1' included several times])])dnl
 define([m4_include($1)])])
@@ -138,7 +139,7 @@ define([m4_include($1)])])
 # m4_include(FILE)
 # ----------------
 # As the builtin include, but warns against multiple inclusions.
-define(m4_include,
+define([m4_include],
 [m4_include_unique([$1])dnl
 builtin([include], [$1])])
 
@@ -146,7 +147,7 @@ builtin([include], [$1])])
 # m4_sinclude(FILE)
 # -----------------
 # As the builtin sinclude, but warns against multiple inclusions.
-define(m4_sinclude,
+define([m4_sinclude],
 [m4_include_unique([$1])dnl
 builtin([sinclude], [$1])])
 
@@ -233,7 +234,7 @@ define([_m4_shiftn],
 # }.
 # All the values are optional, and the macro is robust to active
 # symbols properly quoted.
-define(m4_case,
+define([m4_case],
 [ifelse([$#], 0, [],
 	[$#], 1, [],
 	[$#], 2, [$2],
@@ -256,7 +257,7 @@ define(m4_case,
 #
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
-define(m4_match,
+define([m4_match],
 [ifelse([$#], 0, [],
 	[$#], 1, [],
 	[$#], 2, [$2],
@@ -546,7 +547,7 @@ define([m4_strip],
 #    => act1
 #    =>
 #    => active
-define(m4_append,
+define([m4_append],
 [define([$1],
 ifdef([$1], [defn([$1])])[$2])])
 
@@ -554,7 +555,7 @@ ifdef([$1], [defn([$1])])[$2])])
 # m4_list_append(MACRO-NAME, STRING)
 # ----------------------------------
 # Same as `m4_append', but each element is separated by `, '.
-define(m4_list_append,
+define([m4_list_append],
 [define([$1],
 ifdef([$1], [defn([$1]), ])[$2])])
 
@@ -569,12 +570,12 @@ ifdef([$1], [defn([$1]), ])[$2])])
 # ---------------------------------------------
 # FIXME: This macro should not exists.  Currently it's used only in
 # m4_wrap, which needs to be rewritten.  But it's godam hard.
-define(m4_foreach_quoted,
+define([m4_foreach_quoted],
 [pushdef([$1], [])_m4_foreach_quoted($@)popdef([$1])])
 
 # Low level macros used to define m4_foreach.
-define(m4_car_quoted, [[$1]])
-define(_m4_foreach_quoted,
+define([m4_car_quoted], [[$1]])
+define([_m4_foreach_quoted],
 [ifelse($2, [()], ,
         [define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
                                                                [(m4_shift$2)],
@@ -655,7 +656,7 @@ popdef([m4_Prefix])dnl
 # ----------
 #
 # The sign of the integer A.
-define(m4_sign,
+define([m4_sign],
 [m4_match([$1],
           [^-], -1,
           [^0+], 0,
@@ -668,7 +669,7 @@ define(m4_sign,
 # A < B -> -1
 # A = B ->  0
 # A > B ->  1
-define(m4_cmp,
+define([m4_cmp],
 [m4_sign(m4_eval([$1 - $2]))])
 
 
@@ -683,7 +684,7 @@ define(m4_cmp,
 #   m4_list_cmp((1, 2, -3), (1, 2)) -> -1
 #   m4_list_cmp((1, 0),     (1, 2)) -> -1
 #   m4_list_cmp((1),        (1, 2)) -> -1
-define(m4_list_cmp,
+define([m4_list_cmp],
 [ifelse([$1$2], [()()], 0,
         [$1], [()], [m4_list_cmp((0), [$2])],
         [$2], [()], [m4_list_cmp([$1], (0))],

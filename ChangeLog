@@ -1,5 +1,12 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4: Be robust to multiple inclusion.
+	Have the first `changequote' robust to the current quotation
+	system.
+	Always quote the first argument of `define'.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	The Associated Rewriters are proud to present...
 
 	^
