@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.9.4
-@set VERSION 1.9.4
+@set EDITION 1.10.1
+@set VERSION 1.10.1
 @set UPDATED May 1994
 
 @iftex
@@ -1656,9 +1656,10 @@ been called already.
 
 @defmac AC_PROGRAM_PATH (@var{variable}, @var{prog-to-check-for}, @var{value-if-not-found})
 @maindex PROGRAM_PATH
-Similar to @code{AC_PROGRAM_CHECK}, but set @var{variable} to the entire path of 
-@var{prog-to-check-for} if found.  Otherwise, set @var{variable} to
-the value @var{value-if-not-found} and perform no path checking.
+Similar to @code{AC_PROGRAM_CHECK}, but set @var{variable} to the entire
+path of @var{prog-to-check-for} if found.  Otherwise, set @var{variable}
+to the value @var{value-if-not-found} and perform no path checking.
+If @var{variable} was already set, do nothing.
 Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
