@@ -1,6 +1,7 @@
 2001-01-30  Akim Demaille  <akim@epita.fr>
 
-	* tests/base.at (AC_CACHE_CHECK): Typo and clea nup.
+	* tests/base.at (AC_CACHE_CHECK): Typo and clean up.
+	Check only --quiet.
 
 2001-01-30  Paul Eggert  <eggert@twinsun.com>
 

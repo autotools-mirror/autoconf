@@ -206,12 +206,12 @@ AT_SETUP([AC_CACHE_CHECK])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CACHE_CHECK([for nothing],[ac_nothing],[ac_nothing=found])
+AC_CACHE_CHECK([for nothing],
+               [ac_nothing],
+               [ac_nothing=found])
 ]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([-q])
-AT_CHECK_CONFIGURE([], 0, [checking for nothing... found
-])
 
 AT_CLEANUP
