@@ -4,7 +4,8 @@ Things it would be nice to maybe do someday:
 
 ------------------------------------------------------------------------------
 
-* Fix AC_REQUIRE interrupting messages.
+* Prevent AC_REQUIRE from interrupting messages.  I have a patch to do this,
+but it makes autoconf take 3 times as long to run.
 
 ------------------------------------------------------------------------------
 
@@ -16,15 +17,16 @@ Things it would be nice to maybe do someday:
 
 ------------------------------------------------------------------------------
 
-* Look at Jim Avera's code to allow [ and ] in patterns and AC_DEFINE args.
+* Look at Jim Avera's code to allow [ and ] in egrep patterns and
+AC_DEFINE args.
 
 ------------------------------------------------------------------------------
 
-* Support host and target dependent hints for things that can't be
-automatically determined.  Perhaps this could replace or supplement
-the current ad-hoc macros for Dynix, SCO, ISC, etc.  Or, perhaps there
-should be macros for certain functions (statfs, wait) or classes of
-functions (POSIX, NIS) that do everything necessary, instead.
+* Replace the current ad-hoc macros for Dynix, SCO, ISC, etc.
+Perhaps there should be macros for certain functions (statfs, wait) or
+classes of functions (POSIX, NIS) that do everything necessary, instead.
+Select the right CONFIG_SHELL automatically (Ultrix, Lynx esp.)
+Select the right C compiler and POSIX/ANSI C options automatically.
 
 ------------------------------------------------------------------------------
 
@@ -72,14 +74,6 @@ config.site.
 
 * autoscan: Tell the files that caused inclusion of each macro,
 in a dnl comment.  (Seems to be hard.)
-
-------------------------------------------------------------------------------
-
-* Select the right CONFIG_SHELL automatically (Ultrix, Lynx esp.)
-
-------------------------------------------------------------------------------
-
-* Select the right C compiler or POSIX/ANSI C options automatically.
 
 ------------------------------------------------------------------------------
 
