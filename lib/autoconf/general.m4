@@ -3919,8 +3919,8 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    AC_MSG_ERROR([ambiguous option: $ac_option
-Try \`$[0] --help' for more information.]);;
+    AC_MSG_ERROR([ambiguous option: $[1]
+Try `$[0] --help' for more information.]);;
   --help | --hel | -h )
     echo "$ac_cs_usage"; exit 0 ;;
   --debug | --d* | -d )
@@ -3954,7 +3954,7 @@ AC_FOREACH([AC_File], AC_LIST_HEADERS,
 
   # This is an error.
   -*) AC_MSG_ERROR([unrecognized option: $[1]
-Try \`$[0] --help' for more information.]) ;;
+Try `$[0] --help' for more information.]) ;;
   *) AC_MSG_ERROR([invalid argument: $[1]]);;
   esac
   shift

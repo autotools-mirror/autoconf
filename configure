@@ -1635,7 +1635,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    {  echo "$as_me: error: ambiguous option: $ac_option
+    {  echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2
   { (exit 1); exit; }; };;
   --help | --hel | -h )
