@@ -771,11 +771,11 @@ AU_ALIAS([AC_GETLOADAVG], [AC_FUNC_GETLOADAVG])
 # -----------------
 AN_FUNCTION([getmntent], [AC_FUNC_GETMNTENT])
 AC_DEFUN([AC_FUNC_GETMNTENT],
-[# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX, -lgen on Unixware.
-AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
-  [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
-    [AC_CHECK_LIB(gen, getmntent, LIBS="-lgen $LIBS")])])
-AC_CHECK_FUNCS(getmntent)
+[# getmntent is in the standard C library on UNICOS, in -lsun on Irix 4,
+# -lseq on Dynix/PTX, -lgen on Unixware.
+AC_SEARCH_LIBS(getmntent, -lsun -lseq -lgen,
+  [AC_DEFINE([HAVE_GETMNTENT], 1,
+     [Define to 1 if you have the `getmntent' function.])])
 ])
 
 

@@ -4127,8 +4127,9 @@ program.
 @cvindex HAVE_GETMNTENT
 @c @fuindex getmntent
 @prindex @code{getmntent}
-Check for @code{getmntent} in the @file{sun}, @file{seq}, and @file{gen}
-libraries, for @sc{irix} 4, PTX, and UnixWare, respectively.  Then, if
+Check for @code{getmntent} in the standard C library, and then in the
+@file{sun}, @file{seq}, and @file{gen} libraries, for @sc{unicos},
+@sc{irix} 4, @sc{ptx}, and UnixWare, respectively.  Then, if
 @code{getmntent} is available, define @code{HAVE_GETMNTENT}.
 @end defmac
 

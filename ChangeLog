@@ -1,3 +1,9 @@
+2004-12-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT): Check libc before
+	looking elsewhere for getmntent.  Problem reported by Mark D. Baushke.
+	* doc/autoconf.texi (Particular Functions): Mention new behavior.
+
 2004-12-03  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_DEFINE, AC_DEFINE_UNQUOTED): Factor
