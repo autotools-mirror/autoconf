@@ -45,6 +45,18 @@ instance).  This is _bad_.  Maybe the #define func rpl_malloc should
 be performed in another file than confdefs.h, say confh.h, which is
 used for config.h generation, but not used in configure's own tests.
 
+** AC_PROG_CC
+Currently it tries to put the C compiler in ANSI C mode by default.
+We should change this spec so that AC_PROG_CC tries to change the
+compiler to be the "nicest" mode, i.e. support for the latest standard
+features (currently ISO C99) plus support for all vendor extensions,
+even if they are slightly incompatible with C99.  The basic idea here
+is that AC_PROG_CC should disable pedanticisms and should enable
+extensions.
+
+** AC_GNU_SOURCE, AC_AIX, and AC_MINIX
+Deprecate these, as they will be superseded by the AC_PROG_CC changes.
+
 
 ** Automake 1.6
 *** AC_LIBOBJ_DECL
