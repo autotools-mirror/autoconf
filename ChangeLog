@@ -1,5 +1,19 @@
 2001-09-17  Paul Eggert  <eggert@twinsun.com>
 
+	* lib/autoconf/c.m4: (AC_LANG_INT_SAVE(C)):
+	Allow expression to return any value that can fit into unsigned long
+	(not int, as before).  Check for output errors.
+
+2001-09-17  Bruno Haible <haible@ilog.fr>
+
+	* lib/autoconf/c.m4: (AC_LANG_INT_SAVE(C)):
+	Always include <stdio.h> and <stdlib.h>. Evaluate
+	the expression in an extra function before these includes. Call
+	fprintf "%d" only after ensuring the argument is of type 'int'.
+	Reported by Wayne Chapeskie <waynec@spinnaker.com>.
+
+2001-09-17  Paul Eggert  <eggert@twinsun.com>
+
 	Fix bug reported by Paul Townsend on AIX 4.3.3.0 with CFLAGS=-O4
 	or CFLAGS=-O5.  In that case, the linker has a relaxed view of
 	fatal errors, and AC_CHECK_LIB causes it to include libraries even
@@ -13,7 +27,7 @@
 	version with the version used by fileutils 4.1, except use
 	AC_SEARCH_LIBS, not AC_CHECK_LIB, so that we don't use -lcposix if
 	we don't need it.
-	
+
 	* doc/autoconf.texi (AC_ISC_POSIX): Describe new behavior.
 
 2001-09-13  Akim Demaille  <akim@epita.fr>
