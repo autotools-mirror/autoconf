@@ -98,7 +98,7 @@ Report bugs to <bug-autoconf\@gnu.org>.
 $version = "autoreconf (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
-Copyright (C) 2003 Free Software Foundation, Inc.
+Copyright (C) 2004 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ";
