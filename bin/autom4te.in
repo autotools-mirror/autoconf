@@ -472,8 +472,13 @@ sub parse_args ()
   Getopt::Long::Configure ("pass_through");
   getopt ("s|language=s" => \$language);
   Getopt::Long::Configure ("defaults");
-  unshift @ARGV, @{$language{$language}}
-    if $language;
+
+  if ($language)
+    {
+      die "$me: unknown language: $language\n"
+	unless exists $language{$language};
+      unshift @ARGV, @{$language{$language}};
+    }
 
   verbose "arguments: @ARGV\n"
     if $debug;

@@ -1,5 +1,12 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&parse_args): Die on unknown languages.
+	* bin/autoheader.in: Run directly autom4te --mode=autoconf, no
+	need for autoconf.
+	Promote --include over --macrodir and other obsolete options.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm ($version, $help, &getopt): New.
 	* bin/autoupdate.in, bin/autoheader.in, bin/autom4te.in: Use them.
 	* bin/autom4te.in ($autoconf): Pass --force.

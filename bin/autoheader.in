@@ -40,8 +40,7 @@ use strict;
 use vars qw ($config_h %verbatim %symbol);
 
 # Lib files.
-my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
-my $autoconf = $ENV{'AUTOCONF'} || '@autoconf-name@';
+my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
 local $config_h;
 my $config_h_in;
 my $localdir = '.';
@@ -66,6 +65,7 @@ or else \`configure.in\'.
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don\'t remove temporary files
+  -I, --include=DIR        look for input files in DIR.  Accumulates
   -f, --force              consider all the files are obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
@@ -75,10 +75,6 @@ Warning categories include:
   \`no-CATEGORY\'   turn off the warnings on CATEGORY
   \`none\'          turn off all the warnings
   \`error\'         warnings are error
-
-Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf\'s macro files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4\' and \`acconfig.h\'
 
 Report bugs to <bug-autoconf\@gnu.org>.
 END
@@ -112,8 +108,7 @@ sub parse_args ()
   # If fixed some day, use this: '' => sub { push @ARGV, "-" }
   my $stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
-  getopt ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
-	  'l|localdir=s' => \$localdir,
+  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
 	  'f|force'   => \$force,
 	  'W|warning' => \@warning);
 
@@ -163,7 +158,8 @@ END
   }
 
 # Set up autoconf.
-$autoconf .= " --include=$autoconf_dir --include=$localdir";
+my $autoconf = "$autom4te --language=autoconf ";
+$autoconf .= join (' ' , map { "--include=$_" } @include);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;
