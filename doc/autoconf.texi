@@ -8,7 +8,7 @@
 
 @set EDITION 1.7.0
 @set VERSION 1.7.0
-@set UPDATED December 1993
+@set UPDATED February 1994
 
 @iftex
 @finalout
@@ -19,7 +19,7 @@ This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
 
-Copyright (C) 1992, 1993 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -52,7 +52,7 @@ by the Foundation.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -753,6 +753,14 @@ Define @code{USG} if the system does not have @file{strings.h},
 The symbol @code{USG} is obsolete.  Instead of this macro, use
 @code{AC_HAVE_HEADERS(string.h)} and use @code{HAVE_STRING_H} in your
 code.  See the example for @code{AC_STDC_HEADERS}.
+@end defmac
+
+@defmac AC_SYS_SIGLIST_DECLARED
+@maindex SYS_SIGLIST_DECLARED
+@vindex SYS_SIGLIST_DECLARED
+Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
+declared in a system header file, either @file{signal.h} or
+@file{unistd.h}.
 @end defmac
 
 @node Typedefs, Library Functions, Header Files, Specific Tests
