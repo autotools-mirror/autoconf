@@ -152,7 +152,7 @@ WGET = wget
 ftp-gnu = ftp://ftp.gnu.org/gnu
 
 # Use mv, if you don't have/want move-if-change.
-move-if-change ?= move-if-change
+move_if_change ?= move-if-change
 
 # The following pseudo table associates a local directory and a URL
 # with each of the files that belongs to some other package and is
@@ -174,12 +174,11 @@ make-stds.texi-url_prefix = $(ftp-gnu)/GNUinfo/
 
 target = $(patsubst get-%, %, $@)
 url = $($(notdir $(target))-url_prefix)$(notdir $(target))
-local_file = $($(target)-local_dir)/$(target)
 
 .PHONY: $(get-targets)
 $(get-targets):
 	$(WGET) $(url) -O $(target).t \
-	  && $(move-if-change) $(target).t $(local_file)
+	  && $(move_if_change) $(target).t $(target)
 
 automake_repo=:pserver:anoncvs@anoncvs.cygnus.com:/cvs/automake
 .PHONY: wget-update
@@ -188,7 +187,7 @@ wget-update: $(get-targets)
 	  test -f $$f || continue;					\
 	  echo checking out $$f...;                                     \
 	  cvs -d $(automake_repo) co -p automake/lib/$$f > $$f.t        \
-	    && $(move-if-change) $$f.t $$f;                             \
+	    && $(move_if_change) $$f.t $$f;                             \
 	done
 
 define emit-rsync-commands

@@ -208,7 +208,7 @@ autoconf.m4f: $(m4sources)
 ## Customizing Makefile.maint.  ##
 ## ---------------------------- ##
 
-move_if_change = $(srcdir)/config/move_if_change
+move_if_change = $(srcdir)/config/move-if-change
 prev_version_file = $(srcdir)/config/prev-version.txt
 
 # Uploading betas.
@@ -219,4 +219,4 @@ alpha_url_dir = gnu/autoconf
 # Files to update automatically.
 wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
 	     $(srcdir)/doc/texinfo.tex \
-	     $(srcdir)/doc/install.texi $(srcdir)/doc/make-stds.texi
+	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
