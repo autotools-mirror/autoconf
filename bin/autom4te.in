@@ -552,26 +552,14 @@ sub handle_output ($$)
   verbose "creating $output";
 
   # Load the forbidden/allowed patterns.
-  #
-  # I'm having fun with grep and map, but it's not extremely safe here...
-  # First of all, I still don't understand why I can't use `map' for
-  # instance to get @PATTERNS: `chop' thinks it's in a scalar context
-  # and returns 1 instead of `$_' :(.
-  #
-  # A potential bad bug is that the grep for $forbidden and $allowed
-  # *do modify @PATTERNS!  So when $FORBIDDEN is computed, @PATTERNS
-  # still contains the forbidden patterns, but without the leading
-  # `forbid:'.  So if some use forbids `allow:FOO', @ALLOW will receive
-  # `FOO', which is _bad_.  But since `:' is not valid in macro names,
-  # this is science fiction.
-  #
-  # Still, if someone could teach me how to write this properly... --akim
   handle_traces ($req, "$tmp/patterns",
 		 ('m4_pattern_forbid' => 'forbid:$1',
 		  'm4_pattern_allow'  => 'allow:$1'));
-  my @patterns = grep { chop } new IO::File ("$tmp/patterns")->getlines;
-  my $forbidden = join ('|', grep { s/^forbid:// } @patterns) || "^\$";
-  my $allowed   = join ('|', grep { s/^allow:// }  @patterns) || "^\$";
+  my @patterns = new IO::File ("$tmp/patterns")->getlines;
+  chomp @patterns;
+  my $forbidden = join ('|', map { /^forbid:(.*)/ } @patterns) || "^\$";
+  my $allowed   = join ('|', map { /^allow:(.*)/  } @patterns) || "^\$";
+
   verbose "forbidden tokens: $forbidden";
   verbose "allowed   tokens: $allowed";
 
