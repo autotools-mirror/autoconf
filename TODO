@@ -1,14 +1,17 @@
 -*- outline -*-
 
-Things it would be nice to maybe do someday:
+Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
 * Replace the current ad-hoc macros for Dynix, SCO, ISC, etc.
 Perhaps there should be macros for certain functions (statfs, wait) or
 classes of functions (POSIX, NIS) that do everything necessary, instead.
-Select the right CONFIG_SHELL automatically (Ultrix, Lynx esp.)
 Select the right C compiler and POSIX/ANSI C options automatically.
+
+------------------------------------------------------------------------------
+
+* Select the right CONFIG_SHELL automatically (for Ultrix, Lynx especially.)
 
 ------------------------------------------------------------------------------
 

@@ -139,8 +139,7 @@ AC_DEFUN(AC_INIT_PARSE_ARGS,
 [# Save the original args to write them into config.status later.
 configure_args="[$]@"
 
-# Omit some internal, obsolete, or unimplemented options to make the
-# list less imposing.
+# Omit some internal or obsolete options to make the list less imposing.
 changequote(, )dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
@@ -150,10 +149,12 @@ Configuration:
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
   --version               print the version of autoconf that created configure
-Directories:
+Directory and file names:
   --exec-prefix=PREFIX    install host dependent files in PREFIX [/usr/local]
   --prefix=PREFIX         install host independent files in PREFIX [/usr/local]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
+  --program-prefix=PREFIX prepend PREFIX to installed program names
+  --program-suffix=SUFFIX append SUFFIX to installed program names
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
@@ -179,9 +180,9 @@ no_create=
 nonopt=NONE
 no_recursion=
 prefix=NONE
-program_prefix=
-program_suffix=
-program_transform_name=
+program_prefix=NONE
+program_suffix=NONE
+program_transform_name=NONE
 silent=
 srcdir=
 target=NONE
@@ -457,8 +458,7 @@ This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
 " 1>&AC_FD_CC
 
-# Save the original args if we used an alternate arg parser.
-ac_configure_temp="${configure_args-[$]@}"
+ac_configure_temp="$configure_args"
 # Strip out --no-create and --no-recursion so they do not pile up.
 # Also quote any args containing spaces.
 configure_args=
@@ -578,6 +578,30 @@ AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
 ])
 
 
+dnl ### Transforming program names.
+
+
+dnl AC_ARG_PROGRAM()
+AC_DEFUN(AC_ARG_PROGRAM,
+[test "${program_transform_name}" = NONE && program_transform_name=
+if test -n "${program_transform_name}"; then
+  # Double any \ or $.
+  echo 's,\\,\\\\,g; s,\$,$$,g' > conftestsed
+  program_transform_name="-e `echo ${program_transform_name} | sed -f conftestsed`"
+  rm -f conftestsed
+fi
+test "${program_prefix}" != NONE &&
+  program_transform_name="-e s,^,${program_prefix}, ${program_transform_name}"
+# Use a double $ so make ignores it.
+test "${program_suffix}" != NONE &&
+  program_transform_name="-e s,\$\$,${program_suffix}, ${program_transform_name}"
+
+# sed with no file args requires a program.
+test "${program_transform_name}" = "" && program_transform_name="-e s,x,x,"
+AC_SUBST(program_transform_name)dnl
+])
+
+
 dnl ### Version numbers
 
 
@@ -655,6 +679,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 dnl Canonicalize the host, target, and build system types.
 AC_DEFUN(AC_CANONICAL_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_BEFORE([$0], [AC_ARG_PROGRAM])
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
 #    configure --host=HOST --target=TARGET --build=BUILD NONOPT
@@ -684,6 +709,9 @@ fi
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 AC_CANONICAL_BUILD
+test "${host_alias}" != "${target_alias}" &&
+  test "${program_prefix}${program_suffix}${program_transform_name}" = \
+    NONENONENONE && program_prefix=${target_alias}-
 ])
 
 dnl Subroutines of AC_CANONICAL_SYSTEM.
@@ -1299,6 +1327,18 @@ ifelse([$3], , , [$3
 fi
 ])
 
+dnl AC_CHECK_HEADERS(HEADER-FILE... [, ACTION])
+AC_DEFUN(AC_CHECK_HEADERS,
+[for ac_hdr in $1
+do
+AC_CHECK_HEADER(${ac_hdr},
+[changequote(, )dnl
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
+changequote([, ])dnl
+  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
+done
+])
+
 dnl AC_CHECK_FUNC(FUNCTION, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_FUNC,
 [AC_MSG_CHECKING([for $1])
@@ -1338,19 +1378,6 @@ AC_CHECK_FUNC(${ac_func},
   ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED(${ac_tr_func}) $2])dnl
-done
-])
-
-dnl AC_CHECK_HEADERS(HEADER-FILE... [, ACTION])
-AC_DEFUN(AC_CHECK_HEADERS,
-[AC_REQUIRE_CPP()dnl Make sure the cpp check happens outside the loop.
-for ac_hdr in $1
-do
-AC_CHECK_HEADER(${ac_hdr},
-[changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
 done
 ])
 

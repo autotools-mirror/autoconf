@@ -133,6 +133,7 @@ Controlling Autoconf Operation
 * Input::                       Where Autoconf should find files.
 * Output::			Controlling Autoconf output files.
 * Package Options::             Selecting optional features.
+* Transforming Names::          Changing program names when installing.
 * Versions::                    Version numbers in producing @code{configure}.
 
 Existing Tests
@@ -169,7 +170,7 @@ Library Functions
 
 Primitives For Building Tests
 
-* C System Output::             Checking output of C compiler system.
+* C System Output::             Checking output of the C compiler system.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
@@ -720,6 +721,7 @@ optional features of the user's package.
 * Input::                       Where Autoconf should find files.
 * Output::			Controlling Autoconf output files.
 * Package Options::             Selecting optional features.
+* Transforming Names::          Changing program names when installing.
 * Versions::                    Version numbers in producing @code{configure}.
 @end menu
 
@@ -835,7 +837,7 @@ substitutions performed on them in @code{configure}.  You can use
 @var{extra-cmds}.
 @end defmac
 
-@node Package Options, Versions, Output, Operation
+@node Package Options, Transforming Names, Output, Operation
 @section Checking for Package Options
 
 These macros check whether the user gave @code{configure} command line
@@ -923,7 +925,75 @@ This is an obsolete version of @code{AC_ARG_WITH} that does not
 support providing a help string.
 @end defmac
 
-@node Versions, , Package Options, Operation
+@node Transforming Names, Versions, Package Options, Operation
+@section Transforming Program Names When Installing
+
+Autoconf supports giving @code{configure} the following command line
+options to change the names of programs being installed:
+
+@table @code
+@item --program-prefix=@var{prefix}
+prepend @var{prefix} to the names;
+
+@item --program-suffix=@var{suffix}
+append @var{suffix} to the names;
+
+@item --program-transform-name=@var{expression}
+perform @code{sed} substitution @var{expression} on the names.  The main
+use for this option is to prevent the automatic addition of a target
+name prefix to program names (see below) by giving an empty
+@var{expression}.  As another possibility,
+@samp{--program-transform-name='s,^\(........\).*,\1.exe,'} could be used to
+truncate installed program names to 8 characters and append @file{.exe}.
+@end table
+
+In order to use the values given to those options, @file{configure.in}
+must call the macro @code{AC_ARG_PROGRAM}.
+
+@defmac AC_ARG_PROGRAM
+@maindex ARG_PROGRAM
+Place in @file{Makefile} variable @code{program_transform_name} a
+sequence of @code{sed} commands for changing the names of installed
+programs.
+
+If any of the above options are given to @code{configure}, program names
+are transformed accordingly.  Otherwise, if @code{AC_CANONICAL_SYSTEM}
+has been called and a @samp{--target} value is given that differs from
+the host type (specified with @samp{--host} or defaulted by
+@code{config.sub}), the target type followed by a dash is used as a
+prefix.  Otherwise, no program name transformation is done.
+
+These transformations are useful with programs that can be part of a
+cross-compilation development environment.  For example, a
+cross-assembler running on a Sun 4 configured with
+@samp{--target=i960-vxworks} is normally installed as
+@file{i960-vxworks-as}, rather than @file{as}, which could be confused
+with a native Sun 4 assembler.
+
+They can also force a program name to begin with @file{g}, if you don't
+want GNU programs installed on your system to shadow system programs by
+the same name.  For example, if GNU @code{make} used this macro, you
+could configure it with @samp{--program-prefix=g} and when you ran
+@samp{make install}, it would be installed as
+@file{/usr/local/bin/gmake}.
+
+Use the variable @code{program_transform_name} as in this example for
+an assembler, compiled as @file{as.new}.  The shell variable @code{t}
+is needed in case @code{program_transform_name} contains any shell
+special characters.  With quoting and variable substitutions, whitespace
+still properly separates @code{sed} arguments, but other special
+characters have no effect.
+
+@example
+program_transform_name=@@program_transform_name@@
+install: all
+        name=`t='$(program_transform_name)'; echo as | sed $$t` ; \
+        $(INSTALL_PROGRAM) as.new $(bindir)/$$name
+@end example
+@end defmac
+
+
+@node Versions, , Transforming Names, Operation
 @section Controlling Autoconf Versions
 
 The following macros manage version numbers for @code{configure} scripts.
@@ -1056,10 +1126,12 @@ finds.
 Determine a C compiler to use.  If @code{CC} is not already set in the
 environment, check for @code{gcc}, and use @code{cc} if it's not found.
 Set @code{make} variable @code{CC} to the name of the compiler found.
-Set shell variable @code{GCC} to @samp{yes} if using the GNU C
-compiler, empty otherwise, and if @code{make} variable @code{CFLAGS} was
-not already set, set it to @samp{-g -O} for the GNU C compiler or
-@samp{-g} for other compilers.
+
+If using the GNU C compiler, set shell variable @code{GCC} to
+@samp{yes}, empty otherwise.  If @code{make} variable @code{CFLAGS} was
+not already set, set it to @samp{-g -O} for the GNU C compiler
+(@samp{-O} on systems where GCC does not accept @samp{-g}), or @samp{-g}
+for other compilers.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
@@ -1091,10 +1163,13 @@ Determine a C++ compiler to use.  Check if the environment variable
 variable @code{CXX} to its value.  Otherwise search for a C++ compiler
 under likely names (@code{c++}, @code{g++}, @code{gcc}, @code{CC}, and
 @code{cxx}).  If none of those checks succeed, as a last resort set
-@code{CXX} to @code{gcc}.  Also set shell variable @code{GXX} to
-@samp{yes} if using the GNU C++ compiler, empty otherwise, and if
-@code{make} variable @code{CXXFLAGS} was not already set, set it to
-@samp{-g -O} for the GNU C++ compiler or @samp{-g} for other compilers.
+@code{CXX} to @code{gcc}.
+
+If using the GNU C++ compiler, set shell variable @code{GXX} to
+@samp{yes}, empty otherwise.  If @code{make} variable @code{CXXFLAGS} was
+not already set, set it to @samp{-g -O} for the GNU C++ compiler
+(@samp{-O} on systems where G++ does not accept @samp{-g}), or @samp{-g}
+for other compilers.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
@@ -1278,10 +1353,7 @@ This macro is equivalent to calling @code{AC_CHECK_LIB} with a
 be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
 all of those cases, the compiler is passed @samp{-lfoo}.  However,
 @var{library} can not be a shell variable; it must be a literal name.
-
-This macro is considered obsolete, because some linkers (e.g., Apollo's)
-do not fail when asked to link with a nonexistent library if there are
-no unresolved sybols.
+This macro is considered obsolete.
 @end defmac
 
 @node Header Files, Typedefs, Libraries, Existing Tests
@@ -1347,7 +1419,7 @@ define @code{VOID_CLOSEDIR}.
 @cvindex HAVE_SYS_DIR_H
 @cvindex HAVE_SYS_NDIR_H
 Check for the the following header files, and for the first one that is
-found, define the listed C preprocessor macro:
+found and defines @samp{DIR}, define the listed C preprocessor macro:
 
 @table @file
 @item dirent.h
@@ -2188,7 +2260,7 @@ kinds of features are available and report the results.  Within each
 section below, the macros are listed in alphabetical order.
 
 @menu
-* C System Output::             Checking output of C compiler system.
+* C System Output::             Checking output of the C compiler system.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
@@ -2842,7 +2914,7 @@ therefore be called after any macros that change which C compiler is
 being used, such as @code{AC_PROG_CC}.  So @code{AC_PROG_CC} contains:
 
 @example
-AC_BEFORE([$0], [AC_PROG_CPP])
+AC_BEFORE([$0], [AC_PROG_CPP])dnl
 @end example
 
 @noindent
@@ -3429,7 +3501,9 @@ values by enclosing their names in @samp{@@} characters.
 @ifinfo
 @xref{Makefiles}, for more information on @samp{@@} substitutions.
 @end ifinfo
-The variables that are defined by the Autoconf macros are:
+The variables that are automatically defined by the Autoconf macros are
+listed here.  Some of the Autoconf macros define additional variables,
+which are mentioned in the descriptions for those macros.
 
 @defvar exec_prefix
 The installation prefix for architecture-specific files.

@@ -61,10 +61,27 @@ fi])dnl
 AC_MSG_RESULT($ac_cv_prog_gcc)
 if test $ac_cv_prog_gcc = yes; then
   GCC=yes
-  test "${CFLAGS+set}" = set || CFLAGS='-g -O'
+  if test "${CFLAGS+set}" != set; then
+    AC_MSG_CHECKING(whether ${CC-cc} accepts -g)
+AC_CACHE_VAL(ac_cv_prog_gcc_g,
+[echo 'void f(){}' > conftest.c
+if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
+  ac_cv_prog_gcc_g=yes
+else
+  ac_cv_prog_gcc_g=no
+fi
+rm -f conftest*
+])dnl
+    AC_MSG_RESULT($ac_cv_prog_gcc_g)
+    if test $ac_cv_prog_gcc_g = yes; then
+      CFLAGS="-g -O"
+    else
+      CFLAGS="-O"
+    fi
+  fi
 else
   GCC=
-  test "${CFLAGS+set}" = set || CFLAGS='-g'
+  test "${CFLAGS+set}" = set || CFLAGS="-g"
 fi
 ])
 
@@ -86,10 +103,27 @@ else
 fi])dnl
 if test $ac_cv_prog_gxx = yes; then
   GXX=yes
-  test "${CXXFLAGS+set}" = set || CXXFLAGS='-g -O'
+  if test "${CXXFLAGS+set}" != set; then
+    AC_MSG_CHECKING(whether ${CXX-gcc} accepts -g)
+AC_CACHE_VAL(ac_cv_prog_gxx_g,
+[echo 'void f(){}' > conftest.cc
+if test -z "`${CXX-gcc} -g -c conftest.cc 2>&1`"; then
+  ac_cv_prog_gxx_g=yes
+else
+  ac_cv_prog_gxx_g=no
+fi
+rm -f conftest*
+])dnl
+    AC_MSG_RESULT($ac_cv_prog_gxx_g)
+    if test $ac_cv_prog_gxx_g = yes; then
+      CXXFLAGS="-g -O"
+    else
+      CXXFLAGS="-O"
+    fi
+  fi
 else
   GXX=
-  test "${CXXFLAGS+set}" = set || CXXFLAGS='-g'
+  test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
 fi
 ])
 
@@ -97,7 +131,7 @@ AC_DEFUN(AC_PROG_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
 if test $ac_cv_prog_gcc = yes; then
-  AC_MSG_CHECKING(whether -traditional is needed)
+  AC_MSG_CHECKING(whether ${CC-cc} needs -traditional)
 AC_CACHE_VAL(ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
   AC_EGREP_CPP($ac_pattern, [#include <sgtty.h>
@@ -288,7 +322,9 @@ AC_SUBST(LEX_OUTPUT_ROOT)dnl
 
 AC_DEFUN(AC_PROG_INSTALL,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-# Make sure to not get an incompatible install:
+# Find a good install program.  We prefer a C program (faster),
+# so one script is as good as another.  But avoid the broken or
+# incompatible versions:
 # SysV /etc/install, /usr/sbin/install
 # SunOS /usr/etc/install
 # IRIX /sbin/install
@@ -305,7 +341,7 @@ AC_CACHE_VAL(ac_cv_path_install,
     ''|.|/etc|/usr/sbin|/usr/etc|/sbin|/usr/afsws/bin|/usr/ucb) ;;
     *)
       # OSF1, X11, and SCO ODT 3.0 have their own names for install.
-      for ac_prog in ginstall installbsd bsdinst scoinst install; do
+      for ac_prog in ginstall installbsd scoinst install; do
         if test -f $ac_dir/$ac_prog; then
 	  if test $ac_prog = install &&
             grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
@@ -445,17 +481,49 @@ fi
 ])
 
 AC_DEFUN(AC_HEADER_DIRENT,
-[ac_header_dir=no
-AC_CHECK_HEADERS(dirent.h sys/ndir.h sys/dir.h ndir.h,
-  [ac_header_dir=$ac_hdr; break])
+[ac_header_dirent=no
+AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
+  [ac_header_dirent=$ac_hdr; break])
 ])
+
+dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
+dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
+dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+AC_DEFUN(AC_CHECK_HEADER_DIRENT,
+[ac_safe=`echo "$1" | tr './' '__'`
+AC_MSG_CHECKING([for $1 that defines DIR])
+AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
+[AC_TRY_LINK([#include <sys/types.h>
+#include <$1>], [DIR *dirp = 0;],
+  eval "ac_cv_header_dirent_$ac_safe=yes",
+  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
+if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
+  AC_MSG_RESULT(yes)
+  $2
+else
+  AC_MSG_RESULT(no)
+fi
+])
+
+dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
+dnl defines `DIR'.
+dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+AC_DEFUN(AC_CHECK_HEADERS_DIRENT,
+[for ac_hdr in $1
+do
+AC_CHECK_HEADER_DIRENT(${ac_hdr},
+[changequote(, )dnl
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
+changequote([, ])dnl
+  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
+done])
 
 AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_header_dir>
+#include <$ac_header_dirent>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
 AC_MSG_RESULT($ac_cv_func_closedir_void)
@@ -466,12 +534,12 @@ fi
 
 dnl Obsolete.
 AC_DEFUN(AC_DIR_HEADER,
-[ac_header_dir=no
+[ac_header_dirent=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
-  AC_CHECK_HEADER($ac_hdr, [ac_header_dir=$ac_hdr; break])
+  AC_CHECK_HEADER_DIRENT($ac_hdr, [ac_header_dirent=$ac_hdr; break])
 done
 
-case "$ac_header_dir" in
+case "$ac_header_dirent" in
 dirent.h) AC_DEFINE(DIRENT) ;;
 sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
 sys/dir.h) AC_DEFINE(SYSDIR) ;;
@@ -481,7 +549,7 @@ esac
 AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_header_dir>
+#include <$ac_header_dirent>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
 AC_MSG_RESULT($ac_cv_func_closedir_void)
@@ -1211,7 +1279,7 @@ AC_DEFUN(AC_C_CROSS,
 [# If we cannot run a trivial program, we must be cross compiling.
 AC_MSG_CHECKING(whether cross-compiling)
 AC_CACHE_VAL(ac_cv_c_cross,
-[AC_TRY_RUN([main(){exit(0);}],
+[AC_TRY_RUN([main(){return(0);}],
   ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_cross=yes)])dnl
 cross_compiling=$ac_cv_c_cross
 AC_MSG_RESULT($ac_cv_c_cross)
@@ -1748,7 +1816,7 @@ AC_EGREP_CPP(yes,
 ], [AC_MSG_RESULT(yes); XENIX=yes], [AC_MSG_RESULT(no); XENIX=])
 if test "$XENIX" = yes; then
   LIBS="$LIBS -lx"
-  if test $ac_header_dir != sys/ndir.h; then
+  if test $ac_header_dirent != sys/ndir.h; then
     LIBS="-ldir $LIBS" # Make sure -ldir precedes -lx.
   fi
 fi
