@@ -8182,7 +8182,11 @@ bash-2.04$ @kbd{cat <<EOF
 
 
 Many older shells (including the Bourne shell) implement here-documents
-inefficiently.  Users can generally speed things up by using a faster
+inefficiently.  And some shells mishandle large here-documents: for
+example, Solaris 8 @command{dtksh}, which is derived from
+@command{ksh} M-12/28/93d, mishandles variable expansion that occurs
+on 1024-byte buffer boundaries within a here-document.  Users can
+generally fix these problems by using a faster or more reliable
 shell, e.g., by using the command @samp{bash ./configure} rather than
 plain @samp{./configure}.
 
