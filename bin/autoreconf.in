@@ -17,8 +17,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 usage="\
-Usage: autoreconf [--help] [--macrodir=dir] [--verbose] [--version]
-       [directory...]"
+Usage: autoreconf [-h] [--help] [-m dir] [--macrodir=dir]
+       [--verbose] [--version] [directory...]"
 verbose=no
 show_version=no
 
@@ -27,7 +27,7 @@ export AC_MACRODIR # Pass it down to autoconf and autoheader.
 
 while test $# -gt 0; do
   case "$1" in 
-  --help | --hel | --he | --h)
+  -h | --help | --hel | --he | --h)
     echo "$usage"; exit 0 ;;
   --macrodir=* | --m*=* )
     AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"

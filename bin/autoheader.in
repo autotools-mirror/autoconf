@@ -41,7 +41,7 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
-print_version=""
+show_version=no
 while test $# -gt 0 ; do
    case "z${1}" in 
       z-h | z--help | z--h* )
@@ -55,8 +55,7 @@ while test $# -gt 0 ; do
          AC_MACRODIR="${1}"
          shift ;;
       z-v | z--version | z--v* )
-         print_version="-DAC_PRINT_VERSION"
-         shift ;;
+         show_version=yes; shift ;;
       z-- )     # Stop option processing
         shift; break ;;
       z- )	# Use stdin as input.
@@ -68,13 +67,18 @@ while test $# -gt 0 ; do
    esac
 done
 
+if test $show_version = yes; then
+  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
+    $AC_MACRODIR/acgeneral.m4`
+  echo "Autoconf version $version"
+  exit 0
+fi
+
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
 test -r acconfig.h && TEMPLATES="${TEMPLATES} acconfig.h"
 
 case $# in
-  0) if test -n "$print_version"
-       then infile=/dev/null
-       else infile=configure.in; fi ;;
+  0) infile=configure.in ;;
   1) infile=$1 ;;
   *) echo "$usage" >&2; exit 1 ;;
 esac
@@ -98,7 +102,7 @@ esac
 # Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-eval "`$M4 -I$AC_MACRODIR $print_version $r autoheader.m4$f $infile |
+eval "`$M4 -I$AC_MACRODIR $r autoheader.m4$f $infile |
        sed -n -e '
 		: again
 		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
@@ -108,8 +112,6 @@ eval "`$M4 -I$AC_MACRODIR $print_version $r autoheader.m4$f $infile |
 			s/^/@@@/
 			b again
 		}'`"
-
-test -n "$print_version" && exit 0
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -170,26 +172,33 @@ echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
 #undef SIZEOF_${sym}"
 done
 
-for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
-  sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
-  echo "
+# /bin/sh on the Alpha gives `for' a random value if $funcs is empty.
+if test -n "$funcs"; then
+  for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
+    sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
+    echo "
 /* Define if you have the ${func} function.  */
 #undef HAVE_${sym}"
-done
+  done
+fi
 
-for header in `for x in $headers; do echo $x; done | sort | uniq`; do
-  sym="`echo ${header} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
-  echo "
+if test -n "$headers"; then
+  for header in `for x in $headers; do echo $x; done | sort | uniq`; do
+    sym="`echo ${header} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
+    echo "
 /* Define if you have the <${header}> header file.  */
 #undef HAVE_${sym}"
-done
+  done
+fi
 
-for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
-  sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
-  echo "
+if test -n "$libs"; then
+  for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
+   sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
+    echo "
 /* Define if you have the ${lib} library (-l${lib}).  */
 #undef HAVE_LIB${sym}"
-done
+  done
+fi
 
 test -r acconfig.h && grep @BOTTOM@ acconfig.h >/dev/null &&
   sed '1,/@BOTTOM@/d' acconfig.h

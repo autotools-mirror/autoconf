@@ -40,7 +40,7 @@ case "${M4}" in
 esac
 
 tmpout=/tmp/acout.$$
-print_version=
+show_version=no
 
 while test $# -gt 0 ; do
    case "${1}" in 
@@ -55,9 +55,7 @@ while test $# -gt 0 ; do
          AC_MACRODIR="${1}"
          shift ;;
       -v | --version | --v* )
-         print_version="-DAC_PRINT_VERSION"
-         infile=/dev/null
-         shift ;;
+         show_version=yes; shift ;;
       -- )     # Stop option processing
         shift; break ;;
       - )	# Use stdin as input.
@@ -69,23 +67,28 @@ while test $# -gt 0 ; do
    esac
 done
 
-if test -z "$print_version"; then
-  case $# in
-    0) infile=configure.in ;;
-    1) infile="$1" ;;
-    *) echo "$usage" >&2; exit 1 ;;
-  esac
+if test $show_version = yes; then
+  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
+    $AC_MACRODIR/acgeneral.m4`
+  echo "Autoconf version $version"
+  exit 0
+fi
 
-  trap 'rm -f $tmpin $tmpout; exit 1' 1 2 15
+case $# in
+  0) infile=configure.in ;;
+  1) infile="$1" ;;
+  *) echo "$usage" >&2; exit 1 ;;
+esac
 
-  if test z$infile = z-; then
-    tmpin=/tmp/acin.$$
-    infile=$tmpin
-    cat > $infile
-  elif test ! -r "${infile}"; then
-    echo "autoconf: ${infile}: No such file or directory" >&2
-    exit 1
-  fi
+trap 'rm -f $tmpin $tmpout; exit 1' 1 2 15
+
+if test z$infile = z-; then
+  tmpin=/tmp/acin.$$
+  infile=$tmpin
+  cat > $infile
+elif test ! -r "${infile}"; then
+  echo "autoconf: ${infile}: No such file or directory" >&2
+  exit 1
 fi
 
 # Use the frozen version of Autoconf if available.
@@ -97,13 +100,7 @@ case `$M4 --help < /dev/null 2>&1` in
 *) echo Autoconf requires GNU m4 1.1 or later >&2; rm -f $tmpin; exit 1 ;;
 esac
 
-$M4 -I$AC_MACRODIR $print_version $r autoconf.m4$f $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
-
-if test -n "$print_version"; then
-  cat $tmpout
-  rm -f $tmpout
-  exit 0
-fi
+$M4 -I$AC_MACRODIR $r autoconf.m4$f $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
 
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.109
-@set VERSION 1.109
+@set EDITION 1.110
+@set VERSION 1.110
 @set UPDATED August 1994
 
 @iftex
@@ -650,9 +650,11 @@ scripts in a directory tree.
 
 @table @code
 @item --help
+@itemx -h
 Print a summary of the command line options and exit.
 
 @item --macrodir=@var{dir}
+@itemx -m @var{dir}
 Look for the Autoconf macro files in directory @var{dir} instead of the
 default installation directory.
 
@@ -700,7 +702,6 @@ Look for the Autoconf macro files in directory @var{dir} instead of the
 default installation directory.
 
 @item --version
-@itemx -v
 Print the version number of @code{autoupdate} and exit.
 @end table
 
@@ -800,7 +801,7 @@ directory).  This macro also sets the shell and @code{make} variable
 subdirectories to recurse into.
 @end defmac
 
-@defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
+@defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{] [,}@var{init-cmds}@r{]})
 @maindex OUTPUT
 Create output files (typically one or more @file{Makefile}s) and
 @file{config.status}.  If @code{AC_CONFIG_HEADER} has been called, also
@@ -821,7 +822,12 @@ AC_OUTPUT(Makefile:templates/top.mk lib/Makefile:templates/lib.mk)
 @end example
 
 If you pass @var{extra-cmds}, those commands will be inserted into
-@file{config.status} to be run after all its other processing.
+@file{config.status} to be run after all its other processing.  If
+@var{init-cmds} are given, they are inserted just before
+@var{extra-cmds}, with shell variable, command, and backslash
+substitutions performed on them in @code{configure}.  You can use
+@var{init-cmds} to pass variables from @code{configure} to the
+@var{extra-cmds}.
 @end defmac
 
 @node Package Options, Versions, Output, Operation
@@ -2054,20 +2060,20 @@ supports @samp{#!}, @samp{no} if not.
 
 @defmac AC_PATH_X
 @maindex PATH_X
-Try to locate the X Window System include files and libraries.  Try
-first by running @code{xmkmf} on a trivial @file{Imakefile} and
-examining the @file{Makefile} that it produces.  If that fails (such as
-if @code{xmkmf} is not present), look for them in several directories
-where they often reside.  If either method is successful, set the shell
-variables @code{x_includes} and @code{x_libraries} to their locations,
-unless they are in directories the compiler searches by default.
+Try to locate the X Window System include files and libraries.  If the
+user gave the command line options @samp{--x-includes=@var{dir}} and
+@samp{--x-libraries=@var{dir}}, use those directories.  If either or
+both were not given, get the missing values by running @code{xmkmf} on a
+trivial @file{Imakefile} and examining the @file{Makefile} that it
+produces.  If that fails (such as if @code{xmkmf} is not present), look
+for them in several directories where they often reside.  If either
+method is successful, set the shell variables @code{x_includes} and
+@code{x_libraries} to their locations, unless they are in directories
+the compiler searches by default.
 
 If both methods fail, or the user gave the command line option
 @samp{--without-x}, set the shell variable @code{no_x} to @samp{yes};
 otherwise set it to the empty string.
-
-The command line options @samp{--x-includes=@var{dir}} and
-@samp{--x-libraries=@var{dir}} override the values chosen by this macro.
 @end defmac
 
 @defmac AC_PATH_XTRA
@@ -2187,9 +2193,10 @@ section below, the macros are listed in alphabetical order.
 These macros check the output of the C compiler system.  They @emph{do
 not} cache the results of their tests for future use (@pxref{Caching
 Values}), because they don't know enough about the information they are
-checking for to generate a cache variable name.  The checks for
-particular kinds of C features call these macros and do cache their
-results.
+checking for to generate a cache variable name.  They also do not print
+any messages, for the same reason.  The checks for particular kinds of C
+features call these macros and do cache their results and print messages
+about what they're checking for.
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex COMPILE_CHECK
@@ -2216,7 +2223,7 @@ been called already.
 If the output of running the preprocessor on the system header file
 @var{header-file} contains the @code{egrep} regular expression
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
-execute
+execute @var{action-if-not-found}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't
@@ -2599,22 +2606,20 @@ macro which is used to constrain the order in which macros are called
 An Autoconf macro definition looks like this:
 
 @example
-AC_DEFUN(@var{macro-name}, [@var{macro-body}])dnl
+AC_DEFUN(@var{macro-name}, [@var{macro-body}])
 @end example
 
 @noindent
 The square brackets here do not indicate optional text: they should
-literally be present in the macro definition.
+literally be present in the macro definition to avoid macro expansion
+problems (@pxref{Quoting}).  You can refer to any arguments passed to
+the macro as @samp{$1}, @samp{$2}, etc.
 
-The @code{m4} builtin @code{dnl} prevents a newline from being inserted
-in the output where the macro is defined; without it, the generated
-@code{configure} script would begin with dozens of blank lines.
-@code{dnl} is also used to introduce comments in @code{m4}; it causes
-@code{m4} to discard the rest of the input line.
-
-You should quote the entire macro body with square brackets to avoid
-macro expansion problems (@pxref{Quoting}).  You can refer to any
-arguments passed to the macro as @samp{$1}, @samp{$2}, etc.
+The @code{m4} builtin @code{dnl} is used to introduce comments in
+@code{m4}; it causes @code{m4} to discard the text through the next
+newline.  It is not needed between macro definitions in @file{acsite.m4}
+and @file{aclocal.m4}, because all output is discarded until
+@code{AC_INIT} is called.
 
 @xref{Definitions, , How to define new macros, m4.info, GNU m4}, for
 more complete information on writing @code{m4} macros.
@@ -2904,15 +2909,19 @@ well; for example, don't rely on @code{ln} having a @samp{-f} option or
 @node Checking for Files, Checking for Symbols, Portable Shell, Writing Macros
 @section Checking for Files
 
-If you need to check whether a file other than a C header file exists,
-use @samp{test -f @var{filename}}.  If you need to make multiple checks
-using @code{test}, combine them with the shell operators @samp{&&} and
-@samp{||} instead of using the @code{test} operators @samp{-a} and
-@samp{-o}.  On System V, the precedence of @samp{-a} and @samp{-o} is
-wrong relative to the unary operators; consequently, POSIX does not
-specify them, so using them is nonportable.  If you combine @samp{&&}
-and @samp{||} in the same statement, keep in mind that they have equal
-precedence.
+To enable @code{configure} scripts to support cross-compilation, they
+shouldn't do anything that tests features of the host system instead of
+the target system.  But occasionally you may find it necessary to check
+whether some arbitrary file exists.
+
+To do so, use @samp{test -f @var{filename}}.  If you need to make
+multiple checks using @code{test}, combine them with the shell operators
+@samp{&&} and @samp{||} instead of using the @code{test} operators
+@samp{-a} and @samp{-o}.  On System V, the precedence of @samp{-a} and
+@samp{-o} is wrong relative to the unary operators; consequently, POSIX
+does not specify them, so using them is nonportable.  If you combine
+@samp{&&} and @samp{||} in the same statement, keep in mind that they
+have equal precedence.
 
 Do not use @samp{test -x}, because 4.3BSD does not have it.  Use
 @samp{test -f} or @samp{test -r} instead.
@@ -2979,10 +2988,6 @@ a test results cache file with the correct values for the target system
 (@pxref{Caching Values}).  But that is a last resort.  Alternatively,
 choose a value for those parameters based on the canonical system name
 (@pxref{Manual Configuration}).
-
-To enable @code{configure} scripts to support cross-compilation, they
-shouldn't do anything that tests features of the host system instead of
-the target system.
 
 @menu
 * Guidelines::			General rules for writing test programs.
@@ -4176,7 +4181,17 @@ of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
 macros and cleaned up coding style inconsistencies.  I added some
 auxiliary utilities that I had developed to help convert source code
-packages to use Autoconf.  And I began a testsuite, because experience
+packages to use Autoconf.  With the help of
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, I made the macros not interrupt each others' messages.
+(That feature revealed some performance bottlenecks in GNU @code{m4},
+which he hastily rewrote!)
+And I began a testsuite, because experience
 had shown that Autoconf has a pronounced tendency to regress when we
 change it.
 
