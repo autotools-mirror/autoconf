@@ -1,3 +1,7 @@
+2000-05-26  Ossama Othman <ossama@ece.uci.edu>
+
+	* aclang.m4 (AC_PROG_CXX): Look for aCC before CC.
+
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (AC_FUNC_STRERROR_R): New, from `strerror_r.m4',
