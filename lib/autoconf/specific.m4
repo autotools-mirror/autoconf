@@ -224,8 +224,11 @@ if test "z${INSTALL}" = "z" ; then
       # OSF1 and SCO ODT 3.0 have their own names for install.
       for ac_prog in installbsd scoinst install; do
         if test -f $ac_dir/$ac_prog; then
-	  if grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
-	    : # AIX
+	  if test $ac_prog = install &&
+            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    # AIX install.  It has an incompatible calling convention.
+	    # OSF/1 installbsd also uses dspmsg, but is usable.
+	    :
 	  else
 	    INSTALL="$ac_dir/$ac_prog -c"
 	    INSTALL_PROGRAM='${INSTALL}'
@@ -1101,25 +1104,26 @@ define(AC_FIND_X_XMKMF,
 rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
+  # Make sure to not put "make" in the Imakefile rules, since we grep it out.
   cat > Imakefile <<'EOF'
 acfindx:
-	@echo 'ac_imake_incroot="${INCROOT}"; ac_imake_usrlibdir="${USRLIBDIR}"; ac_imake_libdir="${LIBDIR}"'
+	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
 EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `make acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
-    if test ! -f $ac_imake_usrlibdir/libX11.a && test -f $ac_imake_libdir/libX11.a; then
-      ac_imake_usrlibdir=$ac_imake_libdir
+    if test ! -f $ac_im_usrlibdir/libX11.a && test -f $ac_im_libdir/libX11.a; then
+      ac_im_usrlibdir=$ac_im_libdir
     fi
-    case "$ac_imake_incroot" in
+    case "$ac_im_incroot" in
 	/usr/include) ;;
-	*) x_includes="${x_includes-$ac_imake_incroot}" ;;
+	*) x_includes="${x_includes-$ac_im_incroot}" ;;
     esac
-    case "$ac_imake_usrlibdir" in
+    case "$ac_im_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) x_libraries="${x_libraries-$ac_imake_usrlibdir}" ;;
+	*) x_libraries="${x_libraries-$ac_im_usrlibdir}" ;;
     esac
   fi
   cd ..
