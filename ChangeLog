@@ -1,3 +1,8 @@
+2000-10-31  Pavel Roskin  <proski@gnu.org>
+
+	* autoupdate.sh: Check that $sed understands the meaning of "\b"
+	instead of checking "--version".
+
 2000-10-31  Akim Demaille  <akim@epita.fr>
 
 	Move the handling of classified warnings into M4sugar.
