@@ -2135,7 +2135,7 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # Protect against Makefile macro expansion.
 cat > conftest.defs <<\EOF
 changequote(<<, >>)dnl
-s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) *\(.*\)%-D\1=\2%g
+s%<<#define>> \([^ 	][^ 	]*\) *\(.*\)%-D\1=\2%g
 s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
