@@ -691,8 +691,7 @@ _AC_LINK_IFELSE([],
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
 # work properly (i.e., refer to `conftest.exe'), while it won't with
 # `rm'.
-for ac_file in `ls conftest$ac_exeext conftest.exe conftest conftest.* \
-                  2>/dev/null`; do
+for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
     *) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
@@ -738,7 +737,7 @@ m4_define([_AC_COMPILER_OBJEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 rm -f conftest.o conftest.obj
 AS_IFELSE([AC_TRY_EVAL(ac_compile)],
-[for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
+[for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
