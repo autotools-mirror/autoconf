@@ -399,13 +399,7 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 if test "$cross_compiling" != yes; then
   AC_PROG_CC_WORKS
 fi
-AC_PROG_CC_GNU
-
-if test $ac_cv_prog_gcc = yes; then
-  GCC=yes
-else
-  GCC=
-fi
+_AC_PROG_CC_GNU
 
 dnl Check whether -g works, even if CFLAGS is set, in case the package
 dnl plays around with CFLAGS (such as to build both debugging and
@@ -453,9 +447,9 @@ fi
 ])# AC_PROG_CC_WORKS
 
 
-# AC_PROG_CC_GNU
-# --------------
-AC_DEFUN(AC_PROG_CC_GNU,
+# _AC_PROG_CC_GNU
+# ---------------
+define([_AC_PROG_CC_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
 cat >conftest.c <<EOF
@@ -467,8 +461,13 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
-fi])[]dnl
-])# AC_PROG_CC_GNU
+fi])
+if test $ac_cv_prog_gcc = yes; then
+  GCC=yes
+else
+  GCC=
+fi[]dnl
+])# _AC_PROG_CC_GNU
 
 
 # AC_PROG_CC_G
@@ -599,13 +598,7 @@ AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
 if test "$cross_compiling" != yes; then
   AC_PROG_CXX_WORKS
 fi
-AC_PROG_CXX_GNU
-
-if test $ac_cv_prog_gxx = yes; then
-  GXX=yes
-else
-  GXX=
-fi
+_AC_PROG_CXX_GNU
 
 dnl Check whether -g works, even if CXXFLAGS is set, in case the package
 dnl plays around with CXXFLAGS (such as to build both debugging and
@@ -653,9 +646,9 @@ fi
 ])# AC_PROG_CXX_WORKS
 
 
-# AC_PROG_CXX_GNU
-# ---------------
-AC_DEFUN(AC_PROG_CXX_GNU,
+# _AC_PROG_CXX_GNU
+# ----------------
+define([_AC_PROG_CXX_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
 cat >conftest.C <<EOF
@@ -667,8 +660,14 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
-fi])[]dnl
-])# AC_PROG_CXX_GNU
+fi])
+
+if test $ac_cv_prog_gxx = yes; then
+  GXX=yes
+else
+  GXX=
+fi[]dnl
+])# _AC_PROG_CXX_GNU
 
 
 # AC_PROG_CXX_G
@@ -703,13 +702,7 @@ AC_CHECK_PROGS(F77,
 if test "$cross_compiling" != yes; then
   AC_PROG_F77_WORKS
 fi
-AC_PROG_F77_GNU
-
-if test $ac_cv_prog_g77 = yes; then
-  G77=yes
-else
-  G77=
-fi
+_AC_PROG_F77_GNU
 
 dnl Check whether -g works, even if FFLAGS is set, in case the package
 dnl plays around with FFLAGS (such as to build both debugging and
@@ -763,12 +756,12 @@ fi
 ])# AC_PROG_F77_WORKS
 
 
-# AC_PROG_F77_GNU
-# ---------------
+# _AC_PROG_F77_GNU
+# ----------------
 # Test whether for Fortran 77 compiler is `g77' (the GNU Fortran 77
 # Compiler).  This test depends on whether the Fortran 77 compiler can
 # do CPP pre-processing.
-AC_DEFUN(AC_PROG_F77_GNU,
+define([_AC_PROG_F77_GNU],
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
 [cat >conftest.fpp <<EOF
 #ifdef __GNUC__
@@ -779,7 +772,13 @@ if AC_TRY_COMMAND($F77 -E conftest.fpp) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no
-fi])])# AC_PROG_F77_GNU
+fi])
+if test $ac_cv_prog_g77 = yes; then
+  G77=yes
+else
+  G77=
+fi[]dnl
+])# _AC_PROG_F77_GNU
 
 
 # AC_PROG_F77_G

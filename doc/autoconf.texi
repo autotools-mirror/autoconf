@@ -2353,10 +2353,9 @@ AC_PROG_CC(cl egcs gcc cc)
 @end example
 
 If using the @sc{gnu} C compiler, set shell variable @code{GCC} to
-@samp{yes}, empty otherwise.  If output variable @code{CFLAGS} was not
-already set, set it to @samp{-g -O2} for the @sc{gnu} C compiler
-(@samp{-O2} on systems where GCC does not accept @samp{-g}), or
-@samp{-g} for other compilers.
+@samp{yes}.  If output variable @code{CFLAGS} was not already set, set
+it to @samp{-g -O2} for the @sc{gnu} C compiler (@samp{-O2} on systems
+where GCC does not accept @samp{-g}), or @samp{-g} for other compilers.
 
 If the compiler being used does not produce executables, fail.  If the
 executables can't be run, and cross-compilation is not enabled, fail.
@@ -2431,10 +2430,9 @@ AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
 @end example
 
 If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
-@samp{yes}, empty otherwise.  If output variable @code{CXXFLAGS} was not
-already set, set it to @samp{-g -O2} for the @sc{gnu} C++ compiler
-(@samp{-O2} on systems where G++ does not accept @samp{-g}), or
-@samp{-g} for other compilers.
+@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
+it to @samp{-g -O2} for the @sc{gnu} C++ compiler (@samp{-O2} on systems
+where G++ does not accept @samp{-g}), or @samp{-g} for other compilers.
 
 If the compiler being used does not produce executables, fail.  If the
 executables can't be run, and cross-compilation is not enabled, fail.
@@ -2477,12 +2475,11 @@ AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90 f2c)
 @end example
 
 If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
-@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes},
-and empty otherwise.  If the output variable @code{FFLAGS} was not
-already set in the environment, then set it to @samp{-g -02} for
-@code{g77} (or @samp{-O2} where @code{g77} does not accept @samp{-g}).
-Otherwise, set @code{FFLAGS} to @samp{-g} for all other Fortran 77
-compilers.
+@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
+If the output variable @code{FFLAGS} was not already set in the
+environment, then set it to @samp{-g -02} for @code{g77} (or @samp{-O2}
+where @code{g77} does not accept @samp{-g}).  Otherwise, set
+@code{FFLAGS} to @samp{-g} for all other Fortran 77 compilers.
 
 If the compiler being used does not produce executables, fail.  If the
 executables can't be run, and cross-compilation is not enabled, fail.
