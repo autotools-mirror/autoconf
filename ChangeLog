@@ -1,5 +1,8 @@
 1998-10-03  Ben Elliston  <bje@cygnus.com>
 
+	* acconfig.h (FC_NO_MINUS_C_MINUS_O): Add to complete the Fortran
+	77 support.
+
 	* README: Update bug reporting address. Include maintainer info.
 
 1998-10-02  Ben Elliston  <bje@cygnus.com>
@@ -87,7 +90,41 @@ Sat Sep 12 16:25:00 1998  Aaron Crane  <aaronc@pobox.com>
 	* acgeneral.m4 (AC_CHECK_TYPE): Changed the egrep regex to avoid
 	incorrectly assuming that if foobar_t is defined, then so is
 	bar_t.
-	
+
+Tue Sep  8 14:06:04 1998  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+        * acgeneral.m4: Make the following macros Fortran 77 aware
+        (i.e. conditionalize whether to `#include "confdefs.h"', etc.):
+        (AC_TRY_COMPILE)
+        (AC_TRY_LINK)
+        (AC_CHECK_LIB)
+
+        * acgeneral.m4 (AC_LANG_FORTRAN77): Rename `AC_LANG_FORTRAN' to
+        `AC_LANG_FORTRAN77'.  Change the Fortran 77 language macro from
+        `FORTRAN' to `FORTRAN77'.
+        (AC_LANG_RESTORE): Change the Fortran 77 language macro from
+        `FORTRAN' to `FORTRAN77'
+
+        * autoconf.texi: Updated Fortran 77 documentation, particularly
+        for `AC_TRY_COMPILE', `AC_TRY_LINK' and `AC_CHECK_LIB'.
+
+Thu Sep  3 09:34:39 1998  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+        * autoconf.texi: Added Fortran 77 documentation.
+
+        * acspecific.m4 (AC_PROG_FC): New macro.  Determine a Fortran
+        compiler to use.
+        (AC_PROG_FC_WORKS): New macro.
+        (AC_PROG_FC_GNU): New macro.
+        (AC_PROG_FC_G): New macro.
+        (AC_PROG_FC_C_O): New macro.
+
+        * acgeneral.m4: Add FFLAGS (Fortran 77 flags).
+        (AC_LANG_FORTRAN): New macro.
+        (AC_LANG_RESTORE): Make Fortran 77 aware.
+        (AC_TRY_COMPILER): Make Fortran 77 aware (i.e. conditionalize
+        whether to `#include "confdefs.h"').
+
 Thu Jun 18 12:13:27 1998  Ian Lance Taylor  <ian@cygnus.com>
 
 	* acspecific.m4 (AC_EXEEXT): Correct setting of ac_exeext when

@@ -1048,6 +1048,15 @@ set when you call @code{AC_PROG_CXX} (or empty if you don't).
 C++ features.
 @end defvar
 
+@defvar FFLAGS
+@ovindex FFLAGS
+Debugging and optimization options for the Fortran 77 compiler.  If it
+is not set in the environment when @code{configure} runs, the default
+value is set when you call @code{AC_PROG_FC} (or empty if you don't).
+@code{configure} uses this variable when compiling programs to test for
+Fortran 77 features.
+@end defvar
+
 @defvar DEFS
 @ovindex DEFS
 @samp{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADER}
@@ -1609,6 +1618,32 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
+@defmac  AC_PROG_FC
+@maindex PROG_FORTRAN
+@ovindex FC
+@ovindex FFLAGS
+Determine a Fortran 77 compiler to use.  If @code{FC} is not already set
+in the environment, check for @code{g77}, @code{f77} and @code{f2c}, in
+that order.  Set the output variable @code{FC} to the name of the
+compiler found.
+
+If using @code{g77} (the GNU Fortran 77 compiler), then
+@code{AC_PROG_FC} will set the shell variable @code{G77} to @samp{yes},
+and empty otherwise.  If the output variable @code{FFLAGS} was not
+already set in the environment, then set it to @samp{-g -02} for
+@code{g77} (or @samp{-O2} where @code{g77} does not accept @samp{-g}).
+Otherwise, set @code{FFLAGS} to @samp{-g} for all other Fortran 77
+compilers.
+@end defmac
+
+@defmac AC_PROG_FC_C_O
+@maindex PROG_FC_C_O
+@cvindex FC_NO_MINUS_C_MINUS_O
+Test if the Fortran 77 compiler accepts the options @samp{-c} and
+@samp{-o} simultaneously, and define @code{FC_NO_MINUS_C_MINUS_O} if it
+does not.
+@end defmac
+
 @defmac AC_PROG_GCC_TRADITIONAL
 @maindex PROG_GCC_TRADITIONAL
 @ovindex CC
@@ -1774,15 +1809,17 @@ found.
 @node Libraries, Library Functions, Alternative Programs, Existing Tests
 @section Library Files
 
-The following macros check for the presence of certain C library archive
-files.
+The following macros check for the presence of certain C, C++ or Fortran
+77 library archive files.
 
 @defmac AC_CHECK_LIB (@var{library}, @var{function} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
 @maindex CHECK_LIB
-Try to ensure that C function @var{function} is available by checking
-whether a test C program can be linked with the library @var{library} to
-get the function.  @var{library} is the base name of the library; e.g.,
-to check for @samp{-lmp}, use @samp{mp} as the @var{library} argument.
+Depending on the current language(@pxref{Language Choice}), try to
+ensure that the C, C++ or Fortran 77 function @var{function} is
+available by checking whether a test program can be linked with the
+library @var{library} to get the function.  @var{library} is the base
+name of the library; e.g., to check for @samp{-lmp}, use @samp{mp} as
+the @var{library} argument.
 
 @var{action-if-found} is a list of shell commands to run if the link
 with the library succeeds; @var{action-if-not-found} is a list of shell
@@ -2883,22 +2920,31 @@ been called already.
 @node Examining Syntax, Examining Libraries, Examining Declarations, Writing Tests
 @section Examining Syntax
 
-To check for a syntax feature of the C or C++ compiler, such as whether
-it recognizes a certain keyword, use @code{AC_TRY_COMPILE} to try to
-compile a small program that uses that feature.  You can also use it to
-check for structures and structure members that are not present on all
-systems.
+To check for a syntax feature of the C, C++ or Fortran 77 compiler, such
+as whether it recognizes a certain keyword, use @code{AC_TRY_COMPILE} to
+try to compile a small program that uses that feature.  You can also use
+it to check for structures and structure members that are not present on
+all systems.
 
 @defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex TRY_COMPILE
-Create a test C program to see whether a function whose body consists of
-@var{function-body} can be compiled; @var{includes} is any
-@code{#include} statements needed by the code in @var{function-body}.
+Create a C, C++ or Fortran 77 test program (depending on which language
+is current, @pxref{Language Choice}), to see whether a function whose
+body consists of @var{function-body} can be compiled.
+
+For C and C++, @var{includes} is any @code{#include} statements needed
+by the code in @var{function-body} (@var{includes} will be ignored if
+the currently selected language is Fortran 77).  This macro also uses
+@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
+selected language, as well as @code{CPPFLAGS}, when compiling.  If
+Fortran 77 is the currently selected language then @code{FFLAGS} will be
+used when compiling.
+
 If the file compiles successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.  This
-macro uses @code{CFLAGS} or @code{CXXFLAGS}, and @code{CPPFLAGS}, when
-compiling.  It does not try to link; use @code{AC_TRY_LINK} if you need
-to do that (@pxref{Examining Libraries}).
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
+
+This macro does not try to link; use @code{AC_TRY_LINK} if you need to
+do that (@pxref{Examining Libraries}).
 @end defmac
 
 @node Examining Libraries, Run Time, Examining Syntax, Writing Tests
@@ -2925,28 +2971,37 @@ solve it by setting @code{LDFLAGS} in the environment to pass whatever
 options the linker needs (for example, @samp{-Wl,-dn} on MIPS RISC/OS).
 
 @code{AC_TRY_LINK} is used to compile test programs to test for
-functions and global variables.  It is also used (by
-@code{AC_CHECK_LIB}) to check for libraries, by adding the library being
+functions and global variables.  It is also used by @code{AC_CHECK_LIB}
+to check for libraries (@pxref{Libraries}), by adding the library being
 checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex TRY_LINK
-Create a test C program to see whether a function whose body consists of
-@var{function-body} can be compiled and linked; @var{includes} is any
-@code{#include} statements needed by the code in @var{function-body}.
+Depending on the current language (@pxref{Language Choice}), create a
+test program to see whether a function whose body consists of
+@var{function-body} can be compiled and linked.
+
+For C and C++, @var{includes} is any @code{#include} statements needed
+by the code in @var{function-body} (@var{includes} will be ignored if
+the currently selected language is Fortran 77).  This macro also uses
+@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
+selected language, as well as @code{CPPFLAGS}, when compiling.  If
+Fortran 77 is the currently selected language then @code{FFLAGS} will be
+used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
+be used during linking in all cases.
+
 If the file compiles and links successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.  This
-macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
-@code{LDFLAGS}, and @code{LIBS} when compiling.
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex COMPILE_CHECK
-This is an obsolete version of @code{AC_TRY_LINK}, with the addition that it
-prints @samp{checking for @var{echo-text}} to the standard output first,
-if @var{echo-text} is non-empty.  Use @code{AC_MSG_CHECKING} and
-@code{AC_MSG_RESULT} instead to print messages (@pxref{Printing Messages}).
+This is an obsolete version of @code{AC_TRY_LINK}, with the addition
+that it prints @samp{checking for @var{echo-text}} to the standard
+output first, if @var{echo-text} is non-empty.  Use
+@code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead to print
+messages (@pxref{Printing Messages}).
 @end defmac
 
 @node Run Time, Portable Shell, Examining Libraries, Writing Tests
@@ -3224,21 +3279,29 @@ extension @file{.C} for test programs.  Set the shell variable
 it has been run, empty otherwise.
 @end defmac
 
+@defmac AC_LANG_FORTRAN77
+@maindex LANG_FORTRAN77
+Do compilation tests using @code{FC} and use extension @file{.f} for
+test programs.  Set the shell variable @code{cross_compiling} to the
+value computed by @code{AC_PROG_FC} if it has been run, empty otherwise.
+@end defmac
+
 @defmac AC_LANG_SAVE
 @maindex LANG_SAVE
-Remember the current language (as set by @code{AC_LANG_C} or
-@code{AC_LANG_CPLUSPLUS}) on a stack.  Does not change which language is
-current.  Use this macro and @code{AC_LANG_RESTORE} in macros that need
-to temporarily switch to a particular language.
+Remember the current language (as set by @code{AC_LANG_C},
+@code{AC_LANG_CPLUSPLUS} or @code{AC_LANG_FORTRAN77}) on a stack.  Does
+not change which language is current.  Use this macro and
+@code{AC_LANG_RESTORE} in macros that need to temporarily switch to a
+particular language.
 @end defmac
 
 @defmac AC_LANG_RESTORE
 @maindex LANG_RESTORE
 Select the language that is saved on the top of the stack, as set by
 @code{AC_LANG_SAVE}, and remove it from the stack.  This macro is
-equivalent to either @code{AC_LANG_C} or @code{AC_LANG_CPLUSPLUS},
-whichever had been run most recently when @code{AC_LANG_SAVE} was last
-called.
+equivalent to either @code{AC_LANG_C}, @code{AC_LANG_CPLUSPLUS} or
+@code{AC_LANG_FORTRAN77}, whichever had been run most recently when
+@code{AC_LANG_SAVE} was last called.
 
 Do not call this macro more times than @code{AC_LANG_SAVE}.
 @end defmac

@@ -700,6 +700,7 @@ AC_SUBST(SHELL)dnl
 AC_SUBST(CFLAGS)dnl
 AC_SUBST(CPPFLAGS)dnl
 AC_SUBST(CXXFLAGS)dnl
+AC_SUBST(FFLAGS)dnl
 AC_SUBST(DEFS)dnl
 AC_SUBST(LDFLAGS)dnl
 AC_SUBST(LIBS)dnl
@@ -1244,6 +1245,15 @@ ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftes
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
+dnl AC_LANG_FORTRAN77()
+AC_DEFUN([AC_LANG_FORTRAN77],
+[define([AC_LANG], [FORTRAN77])dnl
+ac_ext=f
+ac_compile='$FC $FFLAGS -c conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='$FC $FFLAGS $LDFLAGS -c conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC'
+cross_compiling=$ac_cv_prog_fc_cross
+])
+
 dnl Push the current language on a stack.
 dnl AC_LANG_SAVE()
 define(AC_LANG_SAVE,
@@ -1251,8 +1261,10 @@ define(AC_LANG_SAVE,
 
 dnl Restore the current language from the stack.
 dnl AC_LANG_RESTORE()
-define(AC_LANG_RESTORE,
-[ifelse(AC_LANG_STACK, C, [ifelse(AC_LANG, C, , [AC_LANG_C])], [ifelse(AC_LANG, CPLUSPLUS, , [AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])
+pushdef([AC_LANG_RESTORE],
+[ifelse(AC_LANG_STACK, [C], [AC_LANG_C],dnl
+AC_LANG_STACK, [CPLUSPLUS], [AC_LANG_CPLUSPLUS],dnl
+AC_LANG_STACK, [FORTRAN77], [MDL_LANG_FORTRAN77])[]popdef([AC_LANG_STACK])])
 
 
 dnl ### Compiler-running mechanics
@@ -1479,14 +1491,21 @@ fi
 undefine([AC_VAR_NAME])dnl
 ])
 
-dnl Sets WORKING_VAR to yes if the current compiler works, else no;
-dnl sets CROSS-VAR to yes if it produces non-native executables, else no.
-dnl Before calling this, call AC_LANG_* to set the right language.
+dnl Try to compile, link and execute TEST-PROGRAM.  Set WORKING-VAR to
+dnl `yes' if the current compiler works, otherwise set it ti `no'.  Set
+dnl CROSS-VAR to `yes' if the compiler and linker produce non-native
+dnl executables, otherwise set it to `no'.  Before calling
+dnl `AC_TRY_COMPILER()', call `AC_LANG_*' to set-up for the right
+dnl language.
+dnl 
 dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
 AC_DEFUN(AC_TRY_COMPILER,
-[cat > conftest.$ac_ext <<EOF
+[cat > conftest.$ac_ext << EOF
+ifelse(AC_LANG, [FORTRAN77], ,
+[
 [#]line __oline__ "configure"
 #include "confdefs.h"
+])
 [$1]
 EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
@@ -1546,6 +1565,7 @@ AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK(dnl
+ifelse(AC_LANG, [FORTRAN77], ,
 ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
@@ -1555,7 +1575,7 @@ extern "C"
 [/* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
 char $2();
-]),
+])),
 	    [$2()],
 	    eval "ac_cv_lib_$ac_lib_var=yes",
 	    eval "ac_cv_lib_$ac_lib_var=no")
@@ -1681,7 +1701,11 @@ dnl AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
 dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_COMPILE,
 [cat > conftest.$ac_ext <<EOF
-dnl This sometimes fails to find confdefs.h, for some reason.
+ifelse(AC_LANG, [FORTRAN77],
+[      program main
+[$2]
+      end],
+[dnl This sometimes fails to find confdefs.h, for some reason.
 dnl [#]line __oline__ "[$]0"
 [#]line __oline__ "configure"
 #include "confdefs.h"
@@ -1689,7 +1713,7 @@ dnl [#]line __oline__ "[$]0"
 int main() {
 [$2]
 ; return 0; }
-EOF
+])EOF
 if AC_TRY_EVAL(ac_compile); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
@@ -1719,7 +1743,13 @@ dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_LINK,
 [cat > conftest.$ac_ext <<EOF
-dnl This sometimes fails to find confdefs.h, for some reason.
+ifelse(AC_LANG, [FORTRAN77],
+[
+      program main
+      call [$2]
+      end
+],
+[dnl This sometimes fails to find confdefs.h, for some reason.
 dnl [#]line __oline__ "[$]0"
 [#]line __oline__ "configure"
 #include "confdefs.h"
@@ -1727,7 +1757,7 @@ dnl [#]line __oline__ "[$]0"
 int main() {
 [$2]
 ; return 0; }
-EOF
+])EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])

@@ -154,6 +154,56 @@ else
 fi
 ])
 
+dnl Determine a Fortran compiler to use.  If `FC' is not already set in
+dnl the environment, check for `g77', `f77' and `f2c', in that order.
+dnl See the output variable `FC' to the name of the compiler found.
+dnl 
+dnl If using `g77' (the GNU Fortran compiler), then `AC_PROG_FC' will
+dnl set the shell variable `G77' to `yes', and empty otherwise.  If the
+dnl output variable `FFLAGS' was not already set in the environment,
+dnl then set it to `-g -02' for `g77' (or `-O2' where `g77' does not
+dnl accept `-g').  Otherwise, set `FFLAGS' to `-g' for all other Fortran
+dnl compilers.
+dnl 
+dnl AC_PROG_FC()
+AC_DEFUN(AC_PROG_FC,
+[AC_BEFORE([$0], [AC_PROG_CPP])dnl
+if test -z "$FC"; then
+  AC_CHECK_PROG(FC, g77, g77)
+  if test -z "$FC"; then
+    AC_CHECK_PROG(FC, f77, f77)
+    if test -z "$FC"; then
+      AC_CHECK_PROG(FC, f2c, f2c)
+    fi
+    test -z "$FC" && AC_MSG_ERROR([no acceptable Fortran compiler found in \$PATH])
+  fi
+fi
+
+AC_PROG_FC_WORKS
+AC_PROG_FC_GNU
+
+if test $ac_cv_prog_g77 = yes; then
+  G77=yes
+dnl Check whether -g works, even if FFLAGS is set, in case the package
+dnl plays around with FFLAGS (such as to build both debugging and
+dnl normal versions of a library), tasteless as that idea is.
+  ac_test_FFLAGS="${FFLAGS+set}"
+  ac_save_FFLAGS="$FFLAGS"
+  FFLAGS=
+  AC_PROG_FC_G
+  if test "$ac_test_FFLAGS" = set; then
+    FFLAGS="$ac_save_FFLAGS"
+  elif test $ac_cv_prog_fc_g = yes; then
+    FFLAGS="-g -O2"
+  else
+    FFLAGS="-O2"
+  fi
+else
+  G77=
+  test "${FFLAGS+set}" = set || FFLAGS="-g"
+fi
+])
+
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
@@ -184,6 +234,30 @@ AC_MSG_RESULT($ac_cv_prog_cxx_cross)
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
+dnl Test whether the Fortran compiler can compile and link a trivial
+dnl Fortran program.  Also, test whether the Fortran compiler is a
+dnl cross-compiler (which may realistically be the case if the Fortran
+dnl compiler is `g77').
+dnl 
+dnl AC_PROG_FC_WORKS()
+AC_DEFUN(AC_PROG_FC_WORKS,
+[AC_MSG_CHECKING([whether the Fortran compiler ($FC $FFLAGS $LDFLAGS) works])
+AC_LANG_SAVE
+AC_LANG_FORTRAN77
+AC_TRY_COMPILER(dnl
+[       program conftest
+       end
+], ac_cv_prog_fc_works, ac_cv_prog_fc_cross)
+AC_LANG_RESTORE
+AC_MSG_RESULT($ac_cv_prog_fc_works)
+if test $ac_cv_prog_fc_works = no; then
+  AC_MSG_ERROR([installation or configuration problem: Fortran compiler cannot create executables.])
+fi
+AC_MSG_CHECKING([whether the Fortran compiler ($FC $FFLAGS $LDFLAGS) is a cross-compiler])
+AC_MSG_RESULT($ac_cv_prog_fc_cross)
+cross_compiling=$ac_cv_prog_fc_cross
+])
+
 AC_DEFUN(AC_PROG_CC_GNU,
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
@@ -212,6 +286,24 @@ else
   ac_cv_prog_gxx=no
 fi])])
 
+dnl Test whether for Fortran compiler is `g77' (the GNU Fortran
+dnl Compiler).  This test depends on whether the Fortran compiler can do
+dnl CPP pre-processing.
+dnl 
+dnl AC_PROG_FC_GNU()
+AC_DEFUN(AC_PROG_FC_GNU,
+[AC_CACHE_CHECK(whether we are using GNU Fortran, ac_cv_prog_g77,
+[cat > conftest.fpp <<EOF
+#ifdef __GNUC__
+  yes
+#endif
+EOF
+if AC_TRY_COMMAND($FC -E conftest.fpp) | egrep yes >/dev/null 2>&1; then
+  ac_cv_prog_g77=yes
+else
+  ac_cv_prog_g77=no
+fi])])
+
 AC_DEFUN(AC_PROG_CC_G,
 [AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [echo 'void f(){}' > conftest.c
@@ -230,6 +322,24 @@ if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
   ac_cv_prog_cxx_g=yes
 else
   ac_cv_prog_cxx_g=no
+fi
+rm -f conftest*
+])])
+
+dnl Test whether the Fortran compiler can accept the `-g' option to
+dnl enable debugging.
+dnl 
+dnl AC_PROG_FC_G()
+AC_DEFUN(AC_PROG_FC_G,
+[AC_CACHE_CHECK(whether $FC accepts -g, ac_cv_prog_fc_g,
+[cat > conftest.f << EOF
+       program conftest
+       end
+EOF
+if test -z "`$FC -g -c conftest.f 2>&1`"; then
+  ac_cv_prog_fc_g=yes
+else
+  ac_cv_prog_fc_g=no
 fi
 rm -f conftest*
 ])])
@@ -301,6 +411,45 @@ if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
 else
   AC_MSG_RESULT(no)
   AC_DEFINE(NO_MINUS_C_MINUS_O)
+fi
+])
+
+dnl Test if the Fortran compiler accepts the options `-c' and `-o'
+dnl simultaneously, and define `FC_NO_MINUS_C_MINUS_O' if it does not.
+dnl
+dnl The usefulness of this macro is questionable, as I can't really see
+dnl why anyone would use it.  The only reason I include it is for
+dnl completeness, since a similar test exists for the C compiler.
+dnl 
+dnl AC_PROG_FC_C_O
+AC_DEFUN(AC_PROG_FC_C_O,
+[AC_BEFORE([$0], [AC_PROG_FC])dnl
+AC_MSG_CHECKING(whether $FC understand -c and -o together)
+set dummy $FC; ac_fc="`echo [$]2 |
+changequote(, )dnl
+sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
+changequote([, ])dnl
+AC_CACHE_VAL(ac_cv_prog_fc_${ac_fc}_c_o,
+[cat > conftest.f << EOF
+       program conftest
+       end
+EOF
+# We do the `AC_TRY_EVAL' test twice because some compilers refuse to
+# overwrite an existing `.o' file with `-o', although they will create
+# one.
+ac_try='$FC $FFLAGS -c conftest.f -o conftest.o 1>&AC_FD_CC'
+if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
+  eval ac_cv_prog_fc_${ac_fc}_c_o=yes
+else
+  eval ac_cv_prog_fc_${ac_fc}_c_o=no
+fi
+rm -f conftest*
+])dnl
+if eval "test \"`echo '$ac_cv_prog_fc_'${ac_fc}_c_o`\" = yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_DEFINE(FC_NO_MINUS_C_MINUS_O)
 fi
 ])
 

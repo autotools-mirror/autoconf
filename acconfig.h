@@ -169,6 +169,9 @@
 /* Define if your C compiler doesn't accept -c and -o together.  */
 #undef NO_MINUS_C_MINUS_O
 
+/* Define if your Fortran 77 compiler doesn't accept -c and -o together. */
+#undef FC_NO_MINUS_C_MINUS_O
+
 /* Define to `long' if <sys/types.h> doesn't define.  */
 #undef off_t
 
