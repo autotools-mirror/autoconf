@@ -614,32 +614,6 @@ AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
 
-# AC_PROG_SED
-# -----------
-# Check whether the first sed in the path supports long scripts.
-# Set the variable $ac_cv_prog_sed_max_cmd to the maximum number
-# of commands to put in a sed script, `infinite' meaning a priori
-# infinite.
-# This macro is not documented on purpose.
-AC_DEFUN(AC_PROG_SED,
-[AC_CACHE_CHECK([for max sed script length], ac_cv_prog_sed_max_cmd,
-[echo >conftest.s "\
-s/0/1/;s/1/2/;s/2/3/;s/3/4/;s/4/5/;s/5/6/;s/6/7/;s/7/8/;s/8/9/;s/9/0/;s/9/O/;"
-dnl 2^4 = 16 lines of 10 commands.
-for ac_cnt in 0 1 2 3
-do
-  cat conftest.s conftest.s >conftest.s1
-  mv conftest.s1 conftest.s
-done
-if test "`echo 0 | sed -f conftest.s`" != 0; then
-dnl HP-UX sed dies with scripts longer than 100 commands.
-  ac_cv_prog_sed_max_cmd=100
-else
-  ac_cv_prog_sed_max_cmd=infinite
-fi
-])dnl
-])
-
 # AC_PROG_BINSH
 # -------------
 # Check the maximum length of an here document.

@@ -1,5 +1,9 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_PROG_SED): Removed.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	AC_CHECK_FILES has never worked properly.
 
 	* acgeneral.m4 (AC_CHECK_FILE): Use AC_CACHE_CHECK.
