@@ -13,20 +13,12 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
-** AU_
+** AU_, AH_
 Document.
 
 ** m4
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
-
-** config.log
-Instead of >config.log, how about >>config.log?  This would avoid
-having to tell users to rm config.cache before sending us config.log.
-
-** AC_LANG
-I don't understand why we have this weird system of AC_SAVE and
-RESTORE, why not push/pop etc?
 
 ** AC_LANG
 I don't understand why we have this weird system of AC_SAVE and
@@ -44,8 +36,6 @@ this?
 ** Automake
 The test for a recent missing doesn't hide the error messages from the
 old missing.
-
-** Document AH_DEFUN
 
 ** automake
 The section for old macros is not completely up to date.  For
@@ -68,15 +58,6 @@ changed.  The configure.in writer may supply what to do (FATAL, WARN
 etc.).  See VALIDATE CACHE TUPLE.  Write the documentation of
 AC_ARG_VAR.  Where should it go?
 
-** autoconf.texi: config.status in node names.
-The info mode of Emacs seems to have problems with this.  The info
-reader catches this properly, so we should report to the X?Emacs teams.
-Bug triggered by looking for `CONFIG_FILES' in the index.
-
-** AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.
-We still have to discuss a few issues: should the pre-commands be run
-before the cache is created?  Document, see above.
-
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
 
@@ -87,17 +68,6 @@ I've done it, but this is the last opportunity to change this macro
 name: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 
 ** Document GNATS?
-
-** We should remove obsolete things.
-Both in the doc and the code.  Looking for the keyword `obsolete'
-proves to be useful.  Hm, RMS is not happy with this, and I fear we
-can't go against his opinion on this.  Now that we have AU_, maybe we
-should restore the macro that are DEFUNCT?
-
-** Clarify exactly our position wrt `#define' templates.
-The fact that there are `#define' templates forbids many useful
-optimizations.  In fact, who really uses #define template in
-config.h.in?
 
 ** Mention automake, libtool, etc. in the Autoconf manual.
 
@@ -126,14 +96,6 @@ required for the distribution.  One aspect of this is LIBOBJS.  But we
 can imagine going further and provide a mean for macro authors to
 specify various files they need to distribute (headers, files to
 compile and others).
-
-** Improve autoupdate
-Autoupdate is precious: it is thanks to it that we are quite free on
-breaking compatibility.
-
-In particular, it is not normal to code twice the mapping from old
-macro to new macro.  We could have a AU_ series which is used both for
-the AC_OBSOLETE messages, and for autoupdate.
 
 ** Split all those &#@! files.
 acgeneral and acspecific is a bad design.  The split should be done
@@ -251,20 +213,8 @@ require a specific AC_ tests, but a specialized AS_ macro.
 
 ------------------------------------------------------------------------------
 
-* Doc: Add a concept index.
-
-------------------------------------------------------------------------------
-
 * Doc: Centralize information on POSIX, MS-DOS, cross-compiling, and
   other important topics.
-
-------------------------------------------------------------------------------
-
-* Split up AC_SUBST substitutions using a loop to accommodate shells
-  with severely limited here document sizes, if it turns out to be a problem.
-  I'm not sure whether the limit is on lines or bytes; if bytes, it
-  will be less of a problem than it was with the long lines used for
-  creating a header file.
 
 ------------------------------------------------------------------------------
 
@@ -367,17 +317,6 @@ From: "Randall S. Winchester" <rsw@eng.umd.edu>
 
 ------------------------------------------------------------------------------
 
-In libc and make in aclocal.m4 I have AC_CHECK_SYMBOL, which checks for
-sys_siglist et al.  Using AC_CHECK_FUNC doesn't work on some system that
-winds up caring that you reference it as a function and it is really a
-variable.  My version always declares the symbol as a char *[]; if that
-ends up a bad idea, we can have it take an arg with the C decl, but that is
-a bit verbose to write if it's actually superfluous.
-From Roland McGrath.
-[I'd call it AC_CHECK_VAR, I think. -djm]
-
-------------------------------------------------------------------------------
-
 In a future version (after 2.2), make AC_PROG_{CC,RANLIB,anything else}
 use AC_CHECK_TOOL.
 From Roland McGrath.
@@ -469,12 +408,12 @@ probably aren't worried about yet, e.g. shm_open.
 All these functions fail with errno set to ENOSYS (89)
 ``Operation not applicable''.
 
-Perhaps Autoconf should have a
-specific macro for fnmatch, another for glob+globfree, another for
-regcomp+regexec+regerror+regfree, and another for wordexp+wordfree.
-This wouldn't solve the problem in general, but it should work for
-Solaris 2.4.  Or Autoconf could limit itself to fnmatch and regcomp,
-the only two functions that I know have been a problem so far.
+Perhaps Autoconf should have a specific macro for fnmatch, another for
+glob+globfree, another for regcomp+regexec+regerror+regfree, and
+another for wordexp+wordfree.  This wouldn't solve the problem in
+general, but it should work for Solaris 2.4.  Or Autoconf could limit
+itself to fnmatch and regcomp, the only two functions that I know have
+been a problem so far.
 
 From Paul Eggert.
 
