@@ -29,10 +29,11 @@ SUFFIXES = .m4 .m4f .pl .sh
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
-pkgdata_DATA = acfunctions acheaders acidentifiers acmakevars \
-               acprograms autoconf.m4f autoheader.m4f \
-               acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 \
-               autoheader.m4 acversion.m4
+dist_pkgdata_DATA = \
+acfunctions acheaders acidentifiers acmakevars acprograms \
+acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
+
+nodist_pkgdata_DATA = autoconf.m4f autoheader.m4f acversion.m4
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = install.texi
@@ -40,9 +41,6 @@ standards_TEXINFOS = make-stds.texi
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
-            acfunctions acheaders acidentifiers acmakevars \
-             acprograms acgeneral.m4 acoldnames.m4 \
-             acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in \
 	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
 	     ifnames.sh autoscan.pl INSTALL.txt
 

@@ -110,8 +110,12 @@ dnl AM_MISSING_INSTALL_SH()
 AC_DEFUN(AM_MISSING_INSTALL_SH, [
 AC_REQUIRE([AM_MISSING_HAS_RUN])
 if test -z "$install_sh"; then
-   install_sh="${am_missing_run}install-sh"
-   test -f "$install_sh" || install_sh="${am_missing_run}install.sh"
+   install_sh="$ac_aux_dir/install-sh"
+   test -f "$install_sh" || install_sh="$ac_aux_dir/install.sh"
+   test -f "$install_sh" || install_sh="${am_missing_run}${ac_auxdir}/install-sh"
+   dnl FIXME: an evil hack: we remove the SHELL invocation from
+   dnl install_sh because automake adds it back in.  Sigh.
+   install_sh="`echo $install_sh | sed -e 's/\${SHELL}//'`"
 fi
 AC_SUBST(install_sh)])
 
@@ -120,13 +124,12 @@ dnl Define MISSING if not defined so far and test if it supports --run.
 dnl If it does, set am_missing_run to use it, otherwise, to nothing.
 AC_DEFUN([AM_MISSING_HAS_RUN], [
 test x"${MISSING+set}" = xset || \
-  MISSING="\${SHELL} `CDPATH=: && cd $ac_aux_dir && pwd`/missing"
-dnl Use eval to expand $SHELL
+  MISSING=`CDPATH=: && cd $ac_aux_dir && pwd`/missing
 if AC_TRY_COMMAND($MISSING --run : >/dev/null) then
   am_missing_run="$MISSING --run "
 else
   am_missing_run=
-  AC_MSG_WARN([\`missing' script is too old or missing])
+  AC_MSG_WARN([`missing' script is too old or missing])
 fi
 ])
 
@@ -270,10 +273,14 @@ for mf in $CONFIG_FILES; do
     }
     /^DEP_FILES = / s/^DEP_FILES = //p' < "$mf" | \
        sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
+    # Make sure the directory exists.
     test -f "$dirpart/$file" && continue
-    echo "creating $dirpart/$file"
+    fdir=`echo "$file" | sed -e 's|/[^/]*$||'`
+    $ac_aux_dir/mkinstalldirs "$dirpart/$fdir" > /dev/null 2>&1
+    # echo "creating $dirpart/$file"
     echo '# dummy' > "$dirpart/$file"
   done
 done
-], [AMDEP="$AMDEP"])])
+], [AMDEP="$AMDEP"
+ac_aux_dir="$ac_aux_dir"])])
 

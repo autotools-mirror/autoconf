@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (pkgdata_DATA): Split into dist_pkgdata_DATA and
+	nodist_pkgdata_DATA.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_PROG_GNU_M4): New macro.
 	* configure.in: Use it.
 

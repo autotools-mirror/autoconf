@@ -1,6 +1,6 @@
 #! /bin/sh
 # Guess values for system-dependent variables and create Makefiles.
-# Generated automatically using Autoconf version 2.14.1 
+# Generated automatically using Autoconf version 2.14a
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
@@ -15,6 +15,32 @@ ac_default_prefix=/usr/local
 ac_arg_enable_help="$ac_arg_enable_help
   --disable-dependency-tracking Speeds up one-time builds
   --enable-dependency-tracking  Do not reject slow dependency extractors"
+# Factorizing default headers for most tests.
+# Mandatory included if its is not used.
+ac_includes_default='\
+#include <stdio.h>
+#include <sys/types.h>
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif'
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -55,7 +81,7 @@ subdirs=
 MFLAGS= MAKEFLAGS=
 SHELL=${CONFIG_SHELL-/bin/sh}
 # Maximum number of lines to put in a shell here document.
-ac_max_here_lines=12
+: ${ac_max_here_lines=12}
 # Sed expression to map a string onto a valid sh and CPP variable names.
 ac_tr_sh='sed -e y%*+%pp%;s%[^a-zA-Z0-9_]%_%g'
 ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[^A-Z0-9_]%_%g'
@@ -63,7 +89,6 @@ ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[
 ac_prev=
 for ac_option
 do
-
   # If the previous option needs an argument, assign it.
   if test -n "$ac_prev"; then
     eval "$ac_prev=\$ac_option"
@@ -106,7 +131,7 @@ do
   -disable-* | --disable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
-    if test -n "`echo "$ac_feature"| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       { echo "configure: error: $ac_feature: invalid feature name" 1>&2; exit 1; }
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
@@ -115,7 +140,7 @@ do
   -enable-* | --enable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if test -n "`echo "$ac_feature"| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       { echo "configure: error: $ac_feature: invalid feature name" 1>&2; exit 1; }
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
@@ -141,7 +166,7 @@ do
   -help | --help | --hel | --he)
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
-    cat << \EOF
+    cat <<\EOF
 `configure' configures software source code packages to adapt to many kinds
 of systems.
 
@@ -153,13 +178,13 @@ CFLAGS...), give to `configure' the definition as VAR=VALUE.
 Defaults for the options are specified in brackets.
 
 Configuration:
-  --cache-file=FILE       cache test results in FILE
-  --help                  print this message
-  --no-create             do not create output files
-  --quiet, --silent       do not print \`checking...' messages
-  --version               print the version of autoconf that created configure
+  --cache-file=FILE   cache test results in FILE
+  --help              print this message
+  --no-create         do not create output files
+  --quiet, --silent   do not print \`checking...' messages
+  --version           print the version of autoconf that created configure
 
-Directory and file names:
+Directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
@@ -187,26 +212,28 @@ Program names:
                           run sed PROGRAM on installed program names
 
 EOF
-    cat << \EOF
+    cat <<\EOF
 Host type:
-  --build=BUILD           configure for building on BUILD [BUILD=HOST]
-  --host=HOST             configure for HOST [guessed]
-  --target=TARGET         configure for TARGET [TARGET=HOST]
+  --build=BUILD      configure for building on BUILD [BUILD=HOST]
+  --host=HOST        configure for HOST [guessed]
+  --target=TARGET    configure for TARGET [TARGET=HOST]
 
-Features and packages:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --x-includes=DIR        X include files are in DIR
-  --x-libraries=DIR       X library files are in DIR
+X features:
+  --x-includes=DIR    X include files are in DIR
+  --x-libraries=DIR   X library files are in DIR
 EOF
     test -n "$ac_arg_enable_help" && echo "
---enable options recognized:$ac_arg_enable_help"
+Optional features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]\
+$ac_arg_enable_help"
     test -n "$ac_arg_with_help" && echo "
---with options recognized:$ac_arg_with_help"
+Optional packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)\
+$ac_arg_with_help"
     test -n "$ac_arg_var_help" && echo "
-Some of the influent environment variables:$ac_arg_var_help"
+Some influent environment variables:$ac_arg_var_help"
     exit 0 ;;
 
   -host | --host | --hos | --ho)
@@ -356,13 +383,13 @@ Some of the influent environment variables:$ac_arg_var_help"
     verbose=yes ;;
 
   -version | --version | --versio | --versi | --vers)
-    echo "configure generated by autoconf version 2.14.1"
+    echo "configure generated by autoconf version 2.14a"
     exit 0 ;;
 
   -with-* | --with-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if test -n "`echo "$ac_package"| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       { echo "configure: error: $ac_package: invalid package name" 1>&2; exit 1; }
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -375,7 +402,7 @@ Some of the influent environment variables:$ac_arg_var_help"
   -without-* | --without-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
-    if test -n "`echo "$ac_package"| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       { echo "configure: error: $ac_package: invalid package name" 1>&2; exit 1; }
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -412,7 +439,7 @@ Some of the influent environment variables:$ac_arg_var_help"
     export $ac_envvar ;;
 
   *)
-    if test -n "`echo "$ac_option"| sed 's/[-a-z0-9.]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
       echo "configure: warning: $ac_option: invalid host type" 1>&2
     fi
     if test "x$nonopt" != xNONE; then
@@ -480,7 +507,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
-echo > confdefs.h
+echo >confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
@@ -529,7 +556,7 @@ if test -r "$cache_file"; then
       test -f "$cache_file" && . $cache_file
 else
   echo "creating cache $cache_file"
-  > $cache_file
+  >$cache_file
 fi
 
 ac_ext=c
@@ -542,7 +569,7 @@ cross_compiling=$ac_cv_prog_cc_cross
 ac_exeext=
 ac_objext=o
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+  # Stardent Vistra SVR4 grep lacks -e, says Kaveh Ghazi
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
     ac_n= ac_c='
 ' ac_t='	'
@@ -552,7 +579,6 @@ if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
 else
   ac_n= ac_c='\c' ac_t=
 fi
-
 
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
@@ -589,7 +615,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install... $ac_c" 1>&6
-echo "configure:593: checking for a BSD compatible install" 1>&5
+echo "configure:619: checking for a BSD compatible install" 1>&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -646,7 +672,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane... $ac_c" 1>&6
-echo "configure:650: checking whether build environment is sane" 1>&5
+echo "configure:676: checking whether build environment is sane" 1>&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -687,10 +713,10 @@ if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF_SED > conftestsed
+  cat <<\EOF_SED >conftestsed
 s,\\,\\\\,g; s,\$,$$,g
 EOF_SED
-  program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
+  program_transform_name=`echo $program_transform_name|sed -f conftestsed`
   rm -f conftestsed
 fi
 test "$program_prefix" != NONE &&
@@ -702,10 +728,9 @@ test "$program_suffix" != NONE &&
 # sed with no file args requires a program.
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
-
 test x"${MISSING+set}" = xset || \
-  MISSING="\${SHELL} `CDPATH=: && cd $ac_aux_dir && pwd`/missing"
-if { ac_try='$MISSING --run : >/dev/null'; { (eval echo configure:709: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } then
+  MISSING=`CDPATH=: && cd $ac_aux_dir && pwd`/missing
+if { ac_try='$MISSING --run : >/dev/null'; { (eval echo configure:734: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } then
   am_missing_run="$MISSING --run "
 else
   am_missing_run=
@@ -717,7 +742,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:721: checking for $ac_word" 1>&5
+echo "configure:746: checking for $ac_word" 1>&5
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -747,12 +772,12 @@ test -n "$AWK" && break
 done
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}... $ac_c" 1>&6
-echo "configure:751: checking whether ${MAKE-make} sets \${MAKE}" 1>&5
+echo "configure:776: checking whether ${MAKE-make} sets \${MAKE}" 1>&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  cat > conftestmake <<\EOF
+  cat >conftestmake <<\EOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
@@ -772,7 +797,6 @@ else
   echo "$ac_t""no" 1>&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
-
 
 # Check whether --enable-dependency-tracking or --disable-dependency-tracking was given.
 if test "${enable_dependency_tracking+set}" = set; then
@@ -797,18 +821,11 @@ else
   AMDEPBACKSLASH=
 fi
 
-
-
-
-
 if test -d .deps || mkdir .deps 2> /dev/null || test -d .deps; then
   DEPDIR=.deps
 else
   DEPDIR=_deps
 fi
-
-
-
 
 PACKAGE=autoconf
 
@@ -818,63 +835,43 @@ if test "`CDPATH=: && cd $srcdir && pwd`" != "`pwd`" &&
    test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
 fi
-cat >> confdefs.h <<EOF
+cat >>confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
 EOF
 
-cat >> confdefs.h <<EOF
+cat >>confdefs.h <<EOF
 #define VERSION "$VERSION"
 EOF
 
-
-
-
-
 ACLOCAL=${ACLOCAL-"${am_missing_run}aclocal"}
-
-
 
 AUTOCONF=${AUTOCONF-"${am_missing_run}autoconf"}
 
-
-
 AUTOMAKE=${AUTOMAKE-"${am_missing_run}automake"}
-
-
 
 AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}
 
-
-
 MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
-
-
 
 AMTAR=${AMTAR-"${am_missing_run}tar"}
 
-
-
 if test -z "$install_sh"; then
-   install_sh="${am_missing_run}install-sh"
-   test -f "$install_sh" || install_sh="${am_missing_run}install.sh"
+   install_sh="$ac_aux_dir/install-sh"
+   test -f "$install_sh" || install_sh="$ac_aux_dir/install.sh"
+   test -f "$install_sh" || install_sh="${am_missing_run}${ac_auxdir}/install-sh"
+         install_sh="`echo $install_sh | sed -e 's/\${SHELL}//'`"
 fi
 
-
-
-
-
-
    
 
    
-
 
 for ac_prog in gm4 gnum4 m4
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:878: checking for $ac_word" 1>&5
+echo "configure:875: checking for $ac_word" 1>&5
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -907,28 +904,29 @@ test -n "$M4" && break
 done
 test -n "$M4" || M4="m4"
 
-echo $ac_n "checking whether we are using GNU m4... $ac_c" 1>&6
-echo "configure:912: checking whether we are using GNU m4" 1>&5
-if test "${acac_cv_gnu_m4+set}" = set; then
+echo $ac_n "checking whether m4 supports frozen files... $ac_c" 1>&6
+echo "configure:909: checking whether m4 supports frozen files" 1>&5
+if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  acac_cv_gnu_m4=no
+  ac_cv_prog_gnu_m4=no
 if test x"$M4" != x; then
   case `$M4 --help < /dev/null 2>&1` in
-    *traditional*) acac_cv_gnu_m4=yes ;;
+    *reload-state*) ac_cv_prog_gnu_m4=yes ;;
   esac
 fi
 fi
-echo "$ac_t""$acac_cv_gnu_m4" 1>&6
-if test x"$acac_cv_gnu_m4" != xyes; then
+echo "$ac_t""$ac_cv_prog_gnu_m4" 1>&6
+if test x"$ac_cv_prog_gnu_m4" != xyes; then
   { echo "configure: error: GNU m4 is required" 1>&2; exit 1; }
 fi
+
 for ac_prog in mawk gawk nawk awk
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:932: checking for $ac_word" 1>&5
+echo "configure:930: checking for $ac_word" 1>&5
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -957,11 +955,10 @@ fi
 test -n "$AWK" && break
 done
 
-
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:965: checking for $ac_word" 1>&5
+echo "configure:962: checking for $ac_word" 1>&5
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1009,7 +1006,7 @@ fi
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install... $ac_c" 1>&6
-echo "configure:1013: checking for a BSD compatible install" 1>&5
+echo "configure:1010: checking for a BSD compatible install" 1>&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -1065,14 +1062,13 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-
 # Work with the GNU or Cygnus source tree layout.
 if test -f $srcdir/standards.texi; then
   standards_texi=standards.texi
 fi
 
 trap '' 1 2 15
-cat > confcache <<\EOF
+cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
@@ -1106,13 +1102,11 @@ EOF
     # `set' quotes correctly as required by POSIX, so do not add quotes.
     sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
     ;;
-  esac >> confcache
-if cmp -s $cache_file confcache; then
-  :
-else
+  esac >>confcache
+if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     echo "updating cache $cache_file"
-    cat confcache > $cache_file
+    cat confcache >$cache_file
   else
     echo "not updating unwritable cache $cache_file"
   fi
@@ -1132,8 +1126,6 @@ if test "x$srcdir" = x.; then
   ac_vpsub='/^[ 	]*VPATH[ 	]*=[^:]*$/d'
 fi
 
-trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
-
 # Transform confdefs.h into DEFS.
 # Protect against shell expansion while executing Makefile rules.
 # Protect against Makefile macro expansion.
@@ -1141,7 +1133,7 @@ trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat > $ac_cs_root.defs <<\EOF
+cat >$ac_cs_root.defs <<\EOF
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
@@ -1157,17 +1149,14 @@ EOF
 # single-quotes doesn't work because, if this script is created in a
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
-ac_LF_and_DOT="`echo; echo .`"
+ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -f $ac_cs_root.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f $ac_cs_root.defs
 
-
-# Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
-
+trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 echo creating $CONFIG_STATUS
-rm -f $CONFIG_STATUS
-cat > $CONFIG_STATUS <<EOF
+cat >$CONFIG_STATUS <<EOF
 #! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
@@ -1181,9 +1170,7 @@ cat > $CONFIG_STATUS <<EOF
 
 # Files that config.status was made for.
 config_files="\\
-    acversion.m4 Makefile testsuite/Makefile"
-config_links="\\
-    :"
+  acversion.m4 Makefile testsuite/Makefile"
 
 ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
@@ -1194,17 +1181,16 @@ Usage: $CONFIG_STATUS [OPTIONS] FILE...
   --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
+  --file=FILE[:TEMPLATE]
+               Instantiate the configuration file FILE
 
-Files to instantiate:
-  Configuration files:
+Configuration files:
 \$config_files
-  Links to install:
-\$config_links
 
 Report bugs to <bug-autoconf@gnu.org>."
 
 ac_cs_version="\\
-$CONFIG_STATUS generated by autoconf version 2.14.1.
+$CONFIG_STATUS generated by autoconf version 2.14a.
 Configured on host `(hostname || uname -n) 2>/dev/null | sed 1q` by running
   $0 $ac_configure_args"
 
@@ -1213,59 +1199,66 @@ ac_cs_root=cs\$\$
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-for ac_option
+# If no file are specified by the user, then we need to provide default
+# value.  By we need to know if files were specified by the user.
+ac_need_defaults=:
+while test \$# != 0
 do
-  case "\$ac_option" in
+  case "\$1" in
+  --*=*)
+    ac_option=\`echo "\$1" | sed -e 's/=.*//'\`
+    ac_optarg=\`echo "\$1" | sed -e 's/[^=]*=//'\`
+    shift
+    set dummy "\$ac_option" "\$ac_optarg" \${1+"\$@"}
+    shift
+    ;;
+  -*);;
+  *) # This is not an option, so the user has probably given explicit
+     # arguments.
+     ac_need_defaults=false;;
+  esac
+
+  case "\$1" in
+
+  # Handling of the options.
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     echo "running \${CONFIG_SHELL-/bin/sh} $0 `echo "$ac_configure_args" | sed 's/[\\"\`\$]/\\\\&/g'` --no-create --no-recursion"
     exec \${CONFIG_SHELL-/bin/sh} $0 $ac_configure_args --no-create --no-recursion ;;
   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
     echo "\$ac_cs_version"; exit 0 ;;
-  -help | --help | --hel | --he | --h)
+  --he | --h)
+    # Conflict between --help and --header
+    echo "$CONFIG_STATUS: ambiguous option: \$ac_option"; exit 1 ;;
+  -help | --help | --hel )
     echo "\$ac_cs_usage"; exit 0 ;;
-  *) # Find out the files to process.
-    for ac_file in \$config_files
-    do
-      case \$ac_file in
-        \$ac_option | \$ac_option:* )
-          CONFIG_FILES="\$CONFIG_FILES \$ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "\$ac_option" && continue
-    for ac_file in \$config_headers
-    do
-      case \$ac_file in
-        \$ac_option | \$ac_option:* )
-          CONFIG_HEADERS="\$CONFIG_HEADERS \$ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "\$ac_option" && continue
-    for ac_file in \$config_links
-    do
-      case \$ac_file in
-        \$ac_option | \$ac_option:* )
-          CONFIG_LINKS="\$CONFIG_LINKS \$ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "\$ac_option" && continue
-    echo "$CONFIG_STATUS: invalid argument: \$ac_option"; exit 1
-   ;;
+  --file | --fil | --fi | --f )
+    shift
+    CONFIG_FILES="\$CONFIG_FILES \$1"
+    ac_need_defaults=false;;
+  --header | --heade | --head | --hea )
+    shift
+    CONFIG_HEADERS="\$CONFIG_FILES \$1"
+    ac_need_defaults=false;;
+
+  # Handling of arguments.
+  'acversion.m4' ) CONFIG_FILES="\$CONFIG_FILES acversion.m4" ;;
+  'Makefile' ) CONFIG_FILES="\$CONFIG_FILES Makefile" ;;
+  'testsuite/Makefile' ) CONFIG_FILES="\$CONFIG_FILES testsuite/Makefile" ;;
+
+  # This is an error.
+  -*) echo "$CONFIG_STATUS: invalid option: \$1"; exit 1 ;;
+  *) echo "$CONFIG_STATUS: invalid argument: \$1"; exit 1 ;;
   esac
+  shift
 done
 
 EOF
 
-cat >> $CONFIG_STATUS <<EOF
-# If there were arguments, don't assign a default value.
-if test \$# = 0; then
+cat >>$CONFIG_STATUS <<EOF
+# If the user did not use the arguments to specify the items to instantiate,
+# then the envvar interface is used.  Set only those that are not.
+if \$ac_need_defaults; then
   : \${CONFIG_FILES="\$config_files"}
-  : \${CONFIG_LINKS="\$config_links"}
 fi
 
 # Remove all the CONFIG_FILES, and trap to remove the temp files.
@@ -1274,11 +1267,18 @@ trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
 
 EOF
 
-
 cat >>$CONFIG_STATUS <<EOF
-# Protect against being on the right side of a sed subst in config.status.
-sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' > \$ac_cs_root.subs <<\\CEOF
+
+#
+# CONFIG_FILES section.
+#
+
+# No need to generate the scripts if there are no CONFIG_FILES.
+# This happens for instance when ./config.status config.h
+if test -n "\$CONFIG_FILES"; then
+  # Protect against being on the right side of a sed subst in config.status.
+  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
+   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF
 s%@SHELL@%$SHELL%;t t
 s%@CFLAGS@%$CFLAGS%;t t
 s%@CPPFLAGS@%$CPPFLAGS%;t t
@@ -1327,48 +1327,48 @@ CEOF
 
 EOF
 
-cat >> $CONFIG_STATUS <<\EOF
-# Split the substitutions into bite-sized pieces for seds with
-# small command number limits, like on Digital OSF/1 and HP-UX.
-ac_max_sed_lines=48
-ac_sed_frag=1 # Number of current file.
-ac_beg=1 # First line for current file.
-ac_end=$ac_max_sed_lines # Line after last line for current file.
-ac_more_lines=:
-ac_sed_cmds=""
-while $ac_more_lines; do
-  if test $ac_beg -gt 1; then
-    sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs > $ac_cs_root.sfrag
-  else
-    sed "${ac_end}q" $ac_cs_root.subs > $ac_cs_root.sfrag
-  fi
-  if test ! -s $ac_cs_root.sfrag; then
-    ac_more_lines=false
-    rm -f $ac_cs_root.sfrag
-  else
-    # The purpose of the label and of the branching condition is to
-    # speed up the sed processing (if there are no `@' at all, there
-    # is no need to browse any of the substitutions).
-    # These are the two extra sed commands mentioned above.
-    (echo ':t
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $ac_cs_root.sfrag) > $ac_cs_root.s$ac_sed_frag
-    if test -z "$ac_sed_cmds"; then
-      ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
+  cat >>$CONFIG_STATUS <<\EOF
+  # Split the substitutions into bite-sized pieces for seds with
+  # small command number limits, like on Digital OSF/1 and HP-UX.
+  ac_max_sed_lines=48
+  ac_sed_frag=1 # Number of current file.
+  ac_beg=1 # First line for current file.
+  ac_end=$ac_max_sed_lines # Line after last line for current file.
+  ac_more_lines=:
+  ac_sed_cmds=""
+  while $ac_more_lines; do
+    if test $ac_beg -gt 1; then
+      sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
     else
-      ac_sed_cmds="$ac_sed_cmds | sed -f $ac_cs_root.s$ac_sed_frag"
+      sed "${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
     fi
-    ac_sed_frag=`expr $ac_sed_frag + 1`
-    ac_beg=$ac_end
-    ac_end=`expr $ac_end + $ac_max_sed_lines`
+    if test ! -s $ac_cs_root.sfrag; then
+      ac_more_lines=false
+      rm -f $ac_cs_root.sfrag
+    else
+      # The purpose of the label and of the branching condition is to
+      # speed up the sed processing (if there are no `@' at all, there
+      # is no need to browse any of the substitutions).
+      # These are the two extra sed commands mentioned above.
+      (echo ':t
+  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
+      if test -z "$ac_sed_cmds"; then
+  	ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
+      else
+  	ac_sed_cmds="$ac_sed_cmds | sed -f $ac_cs_root.s$ac_sed_frag"
+      fi
+      ac_sed_frag=`expr $ac_sed_frag + 1`
+      ac_beg=$ac_end
+      ac_end=`expr $ac_end + $ac_max_sed_lines`
+    fi
+  done
+  if test -z "$ac_sed_cmds"; then
+    ac_sed_cmds=cat
   fi
-done
-if test -z "$ac_sed_cmds"; then
-  ac_sed_cmds=cat
-fi
+fi # test -n "$CONFIG_FILES"
 
 EOF
-
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
@@ -1408,16 +1408,23 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 
   echo creating "$ac_file"
   rm -f "$ac_file"
-  configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
+  configure_input="Generated automatically from `echo $ac_file_in |
+                                                 sed 's%.*/%%'` by configure."
   case "$ac_file" in
   *[Mm]akefile*) ac_comsub="1i\\
 # $configure_input" ;;
   *) ac_comsub= ;;
   esac
 
-# Don't redirect the output to AC_FILE directly: use `mv' so that updating
-# is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo $ac_file_in | sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  # Don't redirect the output to AC_FILE directly: use `mv' so that updating
+  # is atomic, and doesn't need trapping.
+  ac_file_inputs=`echo $ac_file_in |
+                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
+  for ac_file_input in $ac_file_inputs;
+  do
+    test -f "$ac_file_input" ||
+        { echo "configure: error: cannot find input file \`$ac_file_input'" 1>&2; exit 1; }
+  done
 EOF
 cat >>$CONFIG_STATUS <<EOF
   sed -e "$ac_comsub
@@ -1431,60 +1438,27 @@ s%@configure_input@%$configure_input%;t t
 s%@srcdir@%$srcdir%;t t
 s%@top_srcdir@%$top_srcdir%;t t
 s%@INSTALL@%$INSTALL%;t t
-" $ac_file_inputs | (eval "$ac_sed_cmds") > $ac_cs_root.out
+" $ac_file_inputs | (eval "$ac_sed_cmds") >$ac_cs_root.out
   mv $ac_cs_root.out $ac_file
+
 fi; done
 rm -f $ac_cs_root.s*
 EOF
-cat >> $CONFIG_STATUS <<\EOF
-srcdir=$ac_given_srcdir
 
-for ac_file in : $CONFIG_LINKS; do if test "x$ac_file" != x:; then
-  ac_dest=`echo "$ac_file"|sed 's%:.*%%'`
-  ac_source=`echo "$ac_file"|sed 's%[^:]*:%%'`
+cat >>$CONFIG_STATUS <<EOF
 
-  echo "linking $srcdir/$ac_source to $ac_dest"
-
-  if test ! -r $srcdir/$ac_source; then
-    { echo "configure: error: $srcdir/$ac_source: File not found" 1>&2; exit 1; }
-  fi
-  rm -f $ac_dest
-
-  # Make relative symlinks.
-  # Remove last slash and all that follows it.  Not all systems have dirname.
-  ac_dest_dir=`echo $ac_dest|sed 's%/[^/][^/]*$%%'`
-  if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
-    # The dest file is in a subdirectory.
-    test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
-    ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
-    # A "../" for each directory in $ac_dest_dir_suffix.
-    ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[^/]*%../%g'`
-  else
-    ac_dest_dir_suffix= ac_dots=
-  fi
-
-  case "$srcdir" in
-  [/$]*) ac_rel_source="$srcdir/$ac_source" ;;
-  *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
-  esac
-
-  # Make a symlink if possible; otherwise try a hard link.
-  if ln -s $ac_rel_source $ac_dest 2>/dev/null ||
-     ln $srcdir/$ac_source $ac_dest; then :
-  else
-    { echo "configure: error: cannot link $ac_dest to $srcdir/$ac_source" 1>&2; exit 1; }
-  fi
-fi; done
-EOF
-
-cat >> $CONFIG_STATUS <<EOF
+#
+# CONFIG_COMMANDS section.
+#
 
 EOF
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
 
 exit 0
 EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
+trap 'exit 1' 1 2 15
+
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 
