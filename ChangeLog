@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_FUNC_STAT, AC_FUNC_STAT, AC_FUNC_LSTAT): New
+	macros, from Jim's stat.m4 and lstat.m4 serial 6.
+	* doc/autoconf.texi (Particular Functions): Document
+	* acfunctions: Add them.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	AC_LIBOBJ when used by AC_REPLACE_FUNCS should not complain for
 	variables as argument.
 

@@ -1715,6 +1715,47 @@ fi
 ])# AC_FUNC_SETPGRP
 
 
+# _AC_FUNC_STAT(STAT | LSTAT)
+# ---------------------------
+# Determine whether stat or lstat have the bug that it succeeds when
+# given the zero-length file name argument.  The stat and lstat from
+# SunOS4.1.4 and the Hurd (as of 1998-11-01) do this.
+#
+# If it does, then define HAVE_STAT_EMPTY_STRING_BUG (or
+# HAVE_LSTAT_EMPTY_STRING_BUG) and arrange to compile the wrapper
+# function.
+define([_AC_FUNC_STAT],
+[AC_REQUIRE([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])dnl
+AC_CACHE_CHECK([whether $1 accepts an empty string],
+               [ac_cv_func_$1_empty_string_bug],
+[AC_TRY_RUN(
+[#include <sys/types.h>
+#include <sys/stat.h>
+
+int
+main ()
+{
+  struct stat sbuf;
+  exit ($1 ("", &sbuf) ? 1 : 0);
+}],
+            [ac_cv_func_$1_empty_string_bug=yes],
+            [ac_cv_func_$1_empty_string_bug=no],
+            [ac_cv_func_$1_empty_string_bug=yes])])
+if test $ac_cv_func_$1_empty_string_bug = yes; then
+  AC_LIBOBJ([$1])
+  AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_$1_EMPTY_STRING_BUG]), 1,
+                     [Define if `$1' has the bug that it succeeds when
+                      given the zero-length file name argument.])
+fi
+])# _AC_FUNC_STAT
+
+
+# AC_FUNC_STAT & AC_FUNC_LSTAT
+# ----------------------------
+AC_DEFUN([AC_FUNC_STAT],  [_AC_FUNC_STAT(stat)])
+AC_DEFUN([AC_FUNC_LSTAT], [_AC_FUNC_STAT(lstat)])
+
+
 # AC_FUNC_STRERROR_R
 # ------------------
 AC_DEFUN([AC_FUNC_STRERROR_R],

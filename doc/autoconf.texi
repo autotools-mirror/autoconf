@@ -2900,6 +2900,22 @@ two process ID as arguments.  This macro does not check whether
 first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
 @end defmac
 
+@defmac AC_FUNC_STAT
+@defmacx AC_FUNC_LSTAT
+@maindex FUNC_STAT
+@maindex FUNC_LSTAT
+@cvindex HAVE_STAT_EMPTY_STRING_BUG
+@cvindex HAVE_LSTAT_EMPTY_STRING_BUG
+Determine whether @code{stat} or @code{lstat} have the bug that it
+succeeds when given the zero-length file name argument.  The @code{stat}
+and @code{lstat} from SunOS4.1.4 and the Hurd (as of 1998-11-01) do
+this.
+
+If it does, then define @code{HAVE_STAT_EMPTY_STRING_BUG} (or
+@code{HAVE_LSTAT_EMPTY_STRING_BUG}) and ask for an @code{AC_LIBOBJ}
+replacement of it.
+@end defmac
+
 @defmac AC_FUNC_SETVBUF_REVERSED
 @maindex FUNC_SETVBUF_REVERSED
 @cvindex SETVBUF_REVERSED
