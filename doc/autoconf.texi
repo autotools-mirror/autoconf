@@ -164,13 +164,13 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Questions::                   Questions about Autoconf, with answers
 * History::                     History of Autoconf
 * Copying This Manual::         How to make copies of this manual
-* Environment Variables::       Index of environment variables used
-* Output Variables::            Index of variables set in output files
-* Preprocessor Symbols::        Index of C preprocessor symbols defined
-* Autoconf Macros::             Index of Autoconf macros
-* M4 Macros::                   Index of M4, M4sugar, and M4sh macros
-* Autotest Macros::             Index of Autotest macros
-* Programs and Functions::      Index of those with portability problems
+* Environment Variable Index::  Index of environment variables used
+* Output Variable Index::       Index of variables set in output files
+* Preprocessor Symbol Index::   Index of C preprocessor symbols defined
+* Autoconf Macro Index::        Index of Autoconf macros
+* M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
+* Autotest Macro Index::        Index of Autotest macros
+* Program & Function Index::    Index of those with portability problems
 * Concept Index::               General index
 
 @detailmenu --- The Detailed Node Listing ---
@@ -499,7 +499,7 @@ with all of the standard targets, linking of shared libraries, and so
 on.  @xref{The GNU build system}, for more information.
 
 Autoconf imposes some restrictions on the names of macros used with
-@code{#if} in C programs (@pxref{Preprocessor Symbols}).
+@code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
 Autoconf requires @sc{gnu} M4 in order to generate the scripts.  It uses
 features that some @sc{unix} versions of M4, including @sc{gnu} M4 1.3,
@@ -1907,7 +1907,7 @@ GNU Coding Standards}, for more information on what to put in
 
 Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
-the descriptions for those macros.  @xref{Output Variables}, for a
+the descriptions for those macros.  @xref{Output Variable Index}, for a
 complete list of output variables.  @xref{Installation Directory
 Variables}, for the list of the preset ones related to installation
 directories.  Below are listed the other preset ones.  They all are
@@ -11865,7 +11865,7 @@ have free time again.  I think.  Yeah, right.)
 
 @c ========================================================== Appendices
 
-@node Copying This Manual, Environment Variables, History, Top
+@node Copying This Manual, Environment Variable Index, History, Top
 @appendix Copying This Manual
 
 @menu
@@ -11874,7 +11874,7 @@ have free time again.  I think.  Yeah, right.)
 
 @include fdl.texi
 
-@node Environment Variables, Output Variables, Copying This Manual, Top
+@node Environment Variable Index, Output Variable Index, Copying This Manual, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
@@ -11882,7 +11882,7 @@ checks.
 
 @printindex ev
 
-@node Output Variables, Preprocessor Symbols, Environment Variables, Top
+@node Output Variable Index, Preprocessor Symbol Index, Environment Variable Index, Top
 @unnumbered Output Variable Index
 
 This is an alphabetical list of the variables that Autoconf can
@@ -11892,7 +11892,7 @@ on how this is done.
 
 @printindex ov
 
-@node Preprocessor Symbols, Autoconf Macros, Output Variables, Top
+@node Preprocessor Symbol Index, Autoconf Macro Index, Output Variable Index, Top
 @unnumbered Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
@@ -11901,7 +11901,7 @@ use these names in @code{#if} directives.
 
 @printindex cv
 
-@node Autoconf Macros, M4 Macros, Preprocessor Symbols, Top
+@node Autoconf Macro Index, M4 Macro Index, Preprocessor Symbol Index, Top
 @unnumbered Autoconf Macro Index
 
 This is an alphabetical list of the Autoconf macros.  To make the list
@@ -11909,7 +11909,7 @@ easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ac
 
-@node M4 Macros, Autotest Macros, Autoconf Macros, Top
+@node M4 Macro Index, Autotest Macro Index, Autoconf Macro Index, Top
 @unnumbered M4 Macro Index
 
 This is an alphabetical list of the M4, M4sugar, and M4sh macros.  To
@@ -11918,7 +11918,7 @@ preceding @samp{m4_} or @samp{AS_}.
 
 @printindex ms
 
-@node Autotest Macros, Programs and Functions, M4 Macros, Top
+@node Autotest Macro Index, Program & Function Index, M4 Macro Index, Top
 @unnumbered Autotest Macro Index
 
 This is an alphabetical list of the Autotest macros.  To make the list
@@ -11926,15 +11926,15 @@ easier to use, the macros are listed without their preceding @samp{AT_}.
 
 @printindex at
 
-@node Programs and Functions, Concept Index, Autotest Macros, Top
-@unnumbered Programs and Functions Index
+@node Program & Function Index, Concept Index, Autotest Macro Index, Top
+@unnumbered Program and Function Index
 
 This is an alphabetical list of the programs and functions which
 portability is discussed in this document.
 
 @printindex pr
 
-@node Concept Index,  , Programs and Functions, Top
+@node Concept Index,  , Program & Function Index, Top
 @unnumbered Concept Index
 
 This is an alphabetical list of the files, tools, and concepts
