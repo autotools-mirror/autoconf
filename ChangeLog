@@ -1,3 +1,8 @@
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_PATH_PROG, AC_OUTPUT_FILES, AC_OUTPUT_SUBDIRS):
+	Fix quotation problems in DOS path handling.
+
 2000-03-08   Franz Sirl  <Franz.Sirl-kernel@lauterbach.com>
 
 	* acspecific.m4 (AC_FUNC_MMAP, AC_FUNC_ALLOCA): Make them C++

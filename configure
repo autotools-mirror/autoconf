@@ -848,7 +848,7 @@ if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
   case "$M4" in
-  /\\* | ?:/\\*)
+  [/\\]* | ?:[/\\]*)
   ac_cv_path_M4="$M4" # Let the user override the test with a path.
   ;;
   *)
@@ -951,7 +951,7 @@ if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
   case "$PERL" in
-  /\\* | ?:/\\*)
+  [/\\]* | ?:[/\\]*)
   ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
   ;;
   *)
@@ -1396,7 +1396,7 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   .)  srcdir=.
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
-  /\\* | ?:/\\* )
+  [/\\]* | ?:[/\\]* )
       srcdir="$ac_given_srcdir$ac_dir_suffix";
       top_srcdir=$ac_given_srcdir ;;
   *) # Relative path.
