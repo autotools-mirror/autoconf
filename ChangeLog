@@ -1,6 +1,6 @@
 2000-05-04  Akim Demaille  <akim@epita.fr>
 
-	AC_PREREQ understand `2.14a' as `2.141'.
+	AC_PREREQ understands `2.14a' as `2.141'.
 	Reported by Didier Verna.
 
 	* acgeneral.m4 (AC_PREREQ): Don't quote AC_ACVERSION.
@@ -26,8 +26,9 @@
 
 2000-05-03  Nicolas Joly  <njoly@pasteur.fr>
 
-	* autoheader.sh (config_h): Added templates sort. Under NetBSD 1.4.1
-	/bin/sh `set' command do not return a sorted variables list.
+	* autoheader.sh (config_h): Sort the templates.
+	Under NetBSD 1.4.1 /bin/sh `set' command does not return a sorted
+	variables list.
 
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
@@ -73,6 +74,47 @@
 
 	*  acgeneral.m4 (AC_CANONICALIZE): New macro.
 	(_AC_CANONICAL_THING): Use it.
+
+
+	Change the defaults for build, host, and target systems:
+	build  defaults to `config.guess`.
+	host   defaults to $build.
+	target defaults to $host.
+	Suggested by Mo DeJong, Pavel Roskin, Tom Tromey, Ian Lance
+	Taylor, and many others.
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Set `$build', `$host' and
+	`$target' to nothing instead of NONE.
+	(AC_CANONICAL_SYSTEM): AU_DEFUN'd as `AC_CANONICAL_TARGET'.
+	(_AC_CANONICAL_THING): Use an explicit m4_case to set the defaults
+	depending upon the THING.
+	Implement the default values.
+	(AC_CANONICAL_TARGET): Handle the `AC_ARG_PROGRAM' part
+	`AC_CANONICAL_SYSTEM' used to provide.
+	* doc/autoconf.texi: Adjust.
+
+
+	When receiving an explicit argument, consider this is a default
+	for --build, --host and --target (unless set).
+	Some scripts might still depend on this historical syntax.
+	Suggested by Alexandre Oliva.
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Do that.
+	(_AC_CANONICAL_THING): Drop the support of `$nonopt'.
+
+
+	Documenting --build, --host and --target when configure does not
+	handle them causes confusion.
+	Suggested by Pavel Roskin.
+	Nevertheless configure must not die on such an `unsupported'
+	option: it does happen that people build an entire tree of
+	packages, some of them expecting `--host' etc. some others not.
+	Stressed by Tom Tromey and Ian Lance Taylor.
+
+	* acgeneral.m4 (HELP_CANON): New diversion.
+	(_AC_INIT_PARSE_ARGS): Don't document these options.
+	(AC_CANONICAL_BUILD, AC_CANONICAL_HOST, AC_CANONICAL_TARGET):
+	Document your associated option.
 
 2000-04-28  Akim Demaille  <akim@epita.fr>
 
@@ -880,9 +922,9 @@
 
 	Multiple `-e' to egrep are not portable.  On IRIX 6.5 and Solaris
 	2.5.1 only the last one is honored:
-	  > printf "foo\nbar" | egrep -e 'foo' -e 'bar'
+	  > printf "foo\nbar\n" | egrep -e 'foo' -e 'bar'
 	  bar
-	  > printf "foo\nbar" | egrep -e 'bar' -e 'foo'
+	  > printf "foo\nbar\n" | egrep -e 'bar' -e 'foo'
 	  foo
 	Reported by Nicolas Joly.
 	An alternative would have been to use `sed', unfortunately
