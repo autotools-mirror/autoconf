@@ -261,7 +261,7 @@ Site Configuration
 
 * External Software::           Working with other optional software
 * Package Options::             Selecting optional features
-* Pretty Help Strings::
+* Pretty Help Strings::         Formating help string
 * Site Details::                Configuring site details
 * Transforming Names::          Changing program names when installing
 * Site Defaults::               Giving @code{configure} local defaults

@@ -59,10 +59,7 @@ the `configure' script does not know about.  You can give `configure'
 initial values for variables by setting them in the environment.  Using
 a Bourne-compatible shell, you can do that on the command line like
 this:
-     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-
-Or on systems that have the `env' program, you can do it like this:
-     env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+     ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 
 Compiling For Multiple Architectures
 ====================================
@@ -149,6 +146,18 @@ default values for variables like `CC', `cache_file', and `prefix'.
 `PREFIX/etc/config.site' if it exists.  Or, you can set the
 `CONFIG_SITE' environment variable to the location of the site script.
 A warning: not all `configure' scripts look for a site script.
+
+Environment Variables
+=====================
+
+   Variables not defined in a site shell script can be set in the
+environment passed to configure.  However, some packages may run
+configure again during the build, and the customized values of these
+variables may be lost.  In order to avoid this problem, you can set them
+in the `configure' command line, using `--env-VAR=value' or
+`VAR=value'.  For example, the switch `--env-CC=/usr/local2/bin/gcc'
+will cause the specified gcc to be used as the C compiler (unless it is
+overridden in the site shell script).
 
 Operation Controls
 ==================

@@ -1,3 +1,11 @@
+1999-09-15  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_CHECK_FILE): Use ifset.
+	(AC_CHECK_FUNC): Updated to use AC_VAR_*, and AC_CACHE_CHECK.
+	(AC_CHECK_SIZEOF): Likewise.
+	(AC_CACHE_CHECK): Use AC_MSG_RESULT_UNQUOTED.
+	(AC_MSG_RESULT_UNQUOTED): New macro.
+
 1999-09-14  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Don't assume LF is \012,

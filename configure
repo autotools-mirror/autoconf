@@ -494,9 +494,9 @@ else
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
-    { echo "configure: error: can not find sources in $ac_confdir or .." 1>&2; exit 1; }
+    { echo "configure: error: cannot find sources in $ac_confdir or .." 1>&2; exit 1; }
   else
-    { echo "configure: error: can not find sources in $srcdir" 1>&2; exit 1; }
+    { echo "configure: error: cannot find sources in $srcdir" 1>&2; exit 1; }
   fi
 fi
 srcdir=`echo "${srcdir}" | sed 's%\([^/]\)/*$%\1%'`
@@ -698,7 +698,7 @@ for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
+  { echo "configure: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
 fi
 ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"

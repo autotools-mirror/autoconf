@@ -73,10 +73,10 @@ m4_prefix([include])
 m4_prefix([shift])
 m4_prefix([format])
 
-dnl ifset(COND, IF-TRUE)
-dnl --------------------
-dnl If COND is not the empty string, expand IF-TRUE.
-define([ifset], [ifelse([$1],,,[$2])])
+dnl ifset(COND, IF-TRUE[, IF-FALSE])
+dnl --------------------------------
+dnl If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
+define([ifset], [ifelse([$1],,[$3],[$2])])
 
 
 dnl ### Defining macros
@@ -1135,9 +1135,9 @@ else
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
-    AC_MSG_ERROR(can not find sources in $ac_confdir or ..)
+    AC_MSG_ERROR(cannot find sources in $ac_confdir or ..)
   else
-    AC_MSG_ERROR(can not find sources in $srcdir)
+    AC_MSG_ERROR(cannot find sources in $srcdir)
   fi
 fi
 dnl Double slashes in pathnames in object file debugging info
@@ -1241,7 +1241,7 @@ dnl ### Transforming program names.
 
 
 dnl AC_ARG_PROGRAM()
-dnl FIXME: Must be run only once.
+dnl FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
 AC_DEFUN(AC_ARG_PROGRAM,
 [if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
@@ -1334,7 +1334,7 @@ for ac_dir in $1; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  AC_MSG_ERROR([can not find install-sh or install.sh in $1])
+  AC_MSG_ERROR([cannot find install-sh or install.sh in $1])
 fi
 ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"
@@ -1393,7 +1393,7 @@ if test "x$ac_cv_$1" = "x" || (test "x$$1" != "xNONE" && test "x$$1" != "x$ac_cv
 
 # Make sure we can run config.sub.
   if $ac_config_sub sun4 >/dev/null 2>&1; then :
-    else AC_MSG_ERROR(can not run $ac_config_sub)
+    else AC_MSG_ERROR(cannot run $ac_config_sub)
   fi
 
 dnl Set $1_alias.
@@ -1404,7 +1404,7 @@ dnl Set $1_alias.
     NONE)
 ifelse($1, [host],[dnl
       if ac_cv_$1_alias=`$ac_config_guess`; then :
-      else AC_MSG_ERROR(can not guess $1 type; you must specify one)
+      else AC_MSG_ERROR(cannot guess $1 type; you must specify one)
       fi ;;],[dnl
       ac_cv_$1_alias=$host_alias ;;
 ])
@@ -1570,10 +1570,11 @@ AC_VAR_IF_SET([$1],
               [$2])])
 
 dnl AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
+dnl Do not call this macro with a dnl right behind.
 define(AC_CACHE_CHECK,
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])
-AC_MSG_RESULT([$]$2)])
+AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 
 
 dnl ### Defining symbols
@@ -1647,11 +1648,17 @@ substr(patsubst(<<X$1>>,
                 <<\([^\]\)`>>, <<\1\\`>>), 1)<<>>dnl
 changequote([, ])])
 
+dnl _AC_ECHO_UNQUOTED(STRING [ , FD ])
+dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG).
+dnl The shell perform its expansions on STRING.
+define([_AC_ECHO_UNQUOTED],
+[echo "$1" 1>&ifelse($2,, AC_FD_MSG, $2)])
+
 dnl _AC_ECHO(STRING [ , FD ])
 dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG),
 dnl protecting STRING from backquote expansion.
-define(_AC_ECHO,
-[echo "_AC_SH_QUOTE($1)" 1>&ifelse($2,,AC_FD_MSG,$2)])
+define([_AC_ECHO],
+[_AC_ECHO_UNQUOTED(_AC_SH_QUOTE($1), $2)])
 
 dnl _AC_ECHO_N(STRING [ , FD ])
 dnl Same as _AC_ECHO, but echo doesn't return to a new line.
@@ -1671,6 +1678,11 @@ _AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
 define(AC_MSG_RESULT,
 [_AC_ECHO([$ac_t""$1])])
+
+dnl AC_MSG_RESULT_UNQUOTED(RESULT-DESCRIPTION)
+dnl Likewise, but perform $ ` \ shell substitutions.
+define(AC_MSG_RESULT_UNQUOTED,
+[_AC_ECHO_UNQUOTED([$ac_t""$1])])
 
 dnl AC_VERBOSE(RESULT-DESCRIPTION)
 define(AC_VERBOSE,
@@ -2281,7 +2293,7 @@ AC_DEFUN(AC_TRY_RUN,
 [if test "$cross_compiling" = yes; then
   ifelse([$4], ,
     [AC_WARNING([[AC_TRY_RUN] called without default to allow cross compiling])dnl
-  AC_MSG_ERROR(can not run test program while cross compiling)],
+  AC_MSG_ERROR(cannot run test program while cross compiling)],
   [$4])
 else
   AC_TRY_RUN_NATIVE([$1], [$2], [$3])
@@ -2355,29 +2367,29 @@ dnl --------------------------------------------------------------
 dnl
 dnl Check for the existence of FILE.
 AC_DEFUN(AC_CHECK_FILE,
-[#AC_REQUIRE([AC_PROG_CC])dnl
+[AC_VAR_PUSHDEF([ac_var], [ac_cv_file_$1])dnl
+dnl FIXME: why was there this line? AC_REQUIRE([AC_PROG_CC])dnl
 AC_MSG_CHECKING([for $1])
-AC_VAR_PUSHDEF([var_name], [ac_cv_file_$1])dnl
-AC_CACHE_VAL(var_name,
+AC_CACHE_VAL(ac_var,
 [if test "$cross_compiling" = yes; then
   AC_WARNING([Cannot check for file existence when cross compiling])dnl
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
   fi
 if test -r "[$1]"; then
-  AC_VAR_SET(var_name, yes)
+  AC_VAR_SET(ac_var, yes)
 else
-  AC_VAR_SET(var_name, no)
+  AC_VAR_SET(ac_var, no)
 fi])dnl
-if test AC_VAR_GET(var_name) = yes; then
+if test AC_VAR_GET(ac_var) = yes; then
   AC_MSG_RESULT(yes)
-ifelse([$2], , , [  $2
+ifset([$2], [  $2
 ])dnl
 else
   AC_MSG_RESULT(no)
-ifelse([$3], , , [  $3
+ifset([$3], [  $3
 ])dnl
 fi
-AC_VAR_POPDEF([var_name])])
+AC_VAR_POPDEF([ac_var])])
 
 dnl AC_CHECK_FILES(FILE... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_FILES,
@@ -2400,9 +2412,10 @@ dnl ### Checking for library functions
 
 
 dnl AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl ------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_FUNC,
-[AC_MSG_CHECKING([for $1])
-AC_CACHE_VAL(ac_cv_func_$1,
+[AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
+AC_CACHE_CHECK([for $1], ac_var,
 [AC_TRY_LINK(
 dnl Don't include <ctype.h> because on OSF/1 3.0 it includes <sys/types.h>
 dnl which includes <sys/select.h> which contains a prototype for
@@ -2428,16 +2441,21 @@ choke me
 #else
 f = $1;
 #endif
-], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])
-if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  ifelse([$2], , :, [$2])
+], AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))])
+dnl The riduculous following `:' are coming from the fact that we
+dnl need to have a body for these tests, otherwise some shells will
+dnl die.  FIXME: We should write a macro specifically to handle this kind
+dnl of switches, since they are very common in Autoconf.
+if test AC_VAR_GET(ac_var) = yes; then
+  :
+ifset([$2], [  $2
+])dnl
 else
-  AC_MSG_RESULT(no)
-ifelse([$3], , , [$3
+  :
+ifset([$3], [  $3
 ])dnl
 fi
-])
+AC_VAR_POPDEF([ac_var])])
 
 dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_FUNCS,
@@ -2461,12 +2479,8 @@ dnl ### Checking compiler characteristics
 
 dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE])
 AC_DEFUN(AC_CHECK_SIZEOF,
-[dnl The name to #define.
-define([AC_TYPE_NAME], AC_TR_DEFINE(sizeof_$1))dnl
-dnl The cache variable name.
-define([AC_CV_NAME], AC_TR_SH(ac_cv_sizeof_$1))dnl
-AC_MSG_CHECKING(size of $1)
-AC_CACHE_VAL(AC_CV_NAME,
+[AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
+AC_CACHE_CHECK([size of $1], ac_var,
 [AC_TRY_RUN([#include <stdio.h>
 main()
 {
@@ -2474,11 +2488,12 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0, ifelse([$2], , , AC_CV_NAME=$2))])dnl
-AC_MSG_RESULT($AC_CV_NAME)
-AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
-undefine([AC_TYPE_NAME])dnl
-undefine([AC_CV_NAME])dnl
+}],
+  AC_VAR_SET(ac_var, `cat conftestval`),
+  AC_VAR_SET(ac_var, 0),
+  ifset([$2], AC_VAR_SET(ac_var, $2)))])
+AC_DEFINE_UNQUOTED(AC_TR_DEFINE(sizeof_$1), AC_VAR_GET(ac_var))
+AC_VAR_POPDEF([ac_var])dnl
 ])
 
 
@@ -3025,7 +3040,7 @@ changequote([, ])dnl
   if ln -s $ac_rel_source $ac_dest 2>/dev/null ||
     ln $srcdir/$ac_source $ac_dest; then :
   else
-    AC_MSG_ERROR(can not link $ac_dest to $srcdir/$ac_source)
+    AC_MSG_ERROR(cannot link $ac_dest to $srcdir/$ac_source)
   fi
 done
 ])
@@ -3078,7 +3093,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  ac_given_INSTALL="$INSTALL"
     *)
       if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
       else
-        AC_MSG_ERROR(can not create `pwd`/$ac_config_dir)
+        AC_MSG_ERROR(cannot create `pwd`/$ac_config_dir)
       fi
       ;;
     esac
