@@ -1,5 +1,12 @@
 2000-09-11  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (_AC_WARNING_ERROR_IFELSE)
+	(__AC_WARNING_ERROR_IFELSE): New macros for checking whether
+	warnings should be considered errors.
+	(_AC_DIAGNOSE): Use _AC_WARNING_ERROR_IFELSE.
+
+2000-09-11  Pavel Roskin  <proski@gnu.org>
+
 	* autoconf.sh: Proprerly report names of unexpanded macros that
 	begin with an underscore
 

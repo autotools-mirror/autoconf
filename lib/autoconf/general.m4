@@ -2612,14 +2612,31 @@ define([_AC_WARNING_IFELSE],
         [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
 
 
+# _AC_WARNING_ERROR_IFELSE(IF-TRUE, IF-FALSE)
+# -------------------------------------------
+# The same as AC_WARNING_IFELSE, but scan for `error' only.
+define([_AC_WARNING_ERROR_IFELSE],
+[__AC_WARNING_ERROR_IFELSE([$1], [$2], _AC_WARNINGS)])
+
+
+# __AC_WARNING_ERROR_IFELSE(IF-TRUE, IF-FALSE)
+# --------------------------------------------
+# The same as _AC_WARNING_IFELSE, but scan for `error' only.
+define([__AC_WARNING_ERROR_IFELSE],
+[ifelse([$3],  [error],    [$1],
+        [$3],  [],         [$2],
+        [$3],  [no-error], [$2],
+        [$0([$1], [$2], m4_shiftn(3, $@))])])
+
+
+
 # _AC_DIAGNOSE(MESSAGE)
 # ---------------------
 # Report MESSAGE as a warning, unless the user requested -W error,
 # in which case report a fatal error.
 define([_AC_DIAGNOSE],
-[AC_WARNING_IFELSE([error],
-                   [m4_fatal([$1])],
-                   [m4_warn([$1])])])
+[_AC_WARNING_ERROR_IFELSE([m4_fatal([$1])],
+                          [m4_warn([$1])])])
 
 
 # AC_DIAGNOSE(CATEGORY, MESSAGE)
