@@ -1,3 +1,7 @@
+2000-06-30  Jim Meyering  <meyering@lucent.com>
+
+	* acgeneral.m4 (AC_REQUIRE): Tweak a diagnostic.
+
 2000-06-30  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
 	Re-enable the old behavior of --host and --build.
