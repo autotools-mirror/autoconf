@@ -1,5 +1,9 @@
 2000-08-11  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_NO_EXECUTABLES): New macro.
+
+2000-08-11  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.m4 (AC_SHELL_MKDIR_P): Remove `a' too.
 
 2000-08-11  Akim Demaille  <akim@epita.fr>

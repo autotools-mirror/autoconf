@@ -481,8 +481,8 @@ AC_DEFUN([AC_REQUIRE_CPP],
                  [AC_REQUIRE([AC_PROG_CXXCPP])])])
 
 
-# AC_LANG_COMPILER_WORKS
-# ----------------------
+# _AC_LANG_COMPILER_WORKS
+# -----------------------
 define([_AC_LANG_COMPILER_WORKS],
 [AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 AC_LINK_IFELSE([AC_LANG_PROGRAM()],
@@ -505,7 +505,40 @@ AC_MSG_RESULT(yes)],
 AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])[]dnl
 AC_MSG_CHECKING([whether we are cross compiling])
 AC_MSG_RESULT($cross_compiling)
-])# AC_LANG_COMPILER_WORKS
+])# _AC_LANG_COMPILER_WORKS
+
+
+# AC_NO_EXECUTABLES
+# -----------------
+# FIXME: The GCC team has specific needs which the current Autoconf
+# framework cannot solve elegantly.  This macro implements a dirty
+# hack until Autoconf is abble to provide the services its users
+# needs.
+#
+# Several of the support libraries that are often built with GCC can't
+# assume the tool-chain is already capable of linking a program: the
+# compiler often expects to be able to link with some of such
+# libraries.
+#
+# In several of these libraries, work-arounds have been introduced to
+# avoid the AC_PROG_CC_WORKS test, that would just abort their
+# configuration.  The introduction of AC_EXEEXT, enabled either by
+# libtool or by CVS autoconf, have just made matters worse.
+AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
+[AC_DIVERT_PUSH([KILL])
+
+AC_BEFORE([$0], [_AC_LANG_COMPILER_WORKS])
+AC_BEFORE([$0], [_AC_EXEEXT])
+
+define([_AC_LANG_COMPILER_WORKS], [cross_compiling=maybe])
+
+define([_AC_EXEEXT], [EXEEXT=])
+
+define([AC_LINK_IFELSE],
+[AC_FATAL([All the tests involving linking were disabled by $0])])
+
+AC_DIVERT_POP()dnl
+])# # AC_NO_EXECUTABLES
 
 
 # -------------------- #
