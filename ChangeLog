@@ -1,5 +1,9 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sh.m4: Use AS_REQUIRE.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (AS_DIRNAME_EXPR): Use AS_REQUIRE.
 	* tests/tools.at (AT_DATA_FORBIDDEN): Rename/move/duplicate to...
 	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH): here.

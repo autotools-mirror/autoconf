@@ -51,8 +51,9 @@ changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 
 
 # We heavily use m4's diversions both for the initializations and for
-# required macros (see m4_require), because in both cases we have to
-# issue high in `configure' something which is discovered late.
+# required macros, because in both cases we have to issue soon in
+# output something which is discovered late.
+#
 #
 # KILL is only used to suppress output.
 #
@@ -249,7 +250,7 @@ fi
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `as_unset' must have been computed.
 m4_defun([AS_UNSET],
-[m4_require([_AS_UNSET_PREPARE])dnl
+[AS_REQUIRE([_AS_UNSET_PREPARE])dnl
 $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
@@ -419,11 +420,12 @@ m4_defun([AS_BASENAME_SED],
 m4_defun([AS_BASENAME],
 [AS_BASENAME_SED([$1])])
 
+
 # AS_EXECUTABLE_P
 # ---------------
 # Check whether a file is executable.
 m4_defun([AS_EXECUTABLE_P],
-[m4_require([_AS_TEST_PREPARE])dnl
+[AS_REQUIRE([_AS_TEST_PREPARE])dnl
 $as_executable_p $1[]dnl
 ])# AS_EXECUTABLE_P
 
@@ -549,7 +551,7 @@ rm -f conf$$ conf$$.exe conf$$.file
 # _AS_PATH_SEPARATOR_PREPARE
 # --------------------------
 # Compute the path separator.
-m4_define([_AS_PATH_SEPARATOR_PREPARE],
+m4_defun([_AS_PATH_SEPARATOR_PREPARE],
 [# The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! $SHELL" >conftest.sh
@@ -576,7 +578,8 @@ fi
 # expansions, not every word.  This closes a longstanding sh security
 # hole.  Optimize it away when not needed.
 m4_define([_AS_PATH_WALK],
-[as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+[AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])dnl
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 AS_LITERAL_IF([m4_default([$1], [$PATH])],
 [as_dummy="$1"
 for as_dir in $as_dummy],
@@ -594,7 +597,7 @@ done
 # FIXME: Should we add the glue code to handle properly relative symlinks
 # simulated with `ln' or `cp'?
 m4_defun([AS_LN_S],
-[m4_require([_AS_LN_S_PREPARE])dnl
+[AS_REQUIRE([_AS_LN_S_PREPARE])dnl
 $as_ln_s $1 $2
 ])
 
@@ -794,7 +797,7 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 # _AS_TR_SH_PREPARE
 # -----------------
 m4_defun([_AS_TR_SH_PREPARE],
-[m4_require([_AS_CR_PREPARE])dnl
+[AS_REQUIRE([_AS_CR_PREPARE])dnl
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
 ])
@@ -806,7 +809,7 @@ as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
 # sh/m4 polymorphic.
 # Be sure to update the definition of `$as_tr_sh' if you change this.
 m4_defun([AS_TR_SH],
-[m4_require([_$0_PREPARE])dnl
+[AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
               [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
                            [[^a-zA-Z0-9_]], [_])],
@@ -816,7 +819,7 @@ AS_LITERAL_IF([$1],
 # _AS_TR_CPP_PREPARE
 # ------------------
 m4_defun([_AS_TR_CPP_PREPARE],
-[m4_require([_AS_CR_PREPARE])dnl
+[AS_REQUIRE([_AS_CR_PREPARE])dnl
 # Sed expression to map a string onto a valid CPP name.
 as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
 ])
@@ -828,7 +831,7 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
 # `#define'.  sh/m4 polymorphic.  Be sure to update the definition
 # of `$as_tr_cpp' if you change this.
 m4_defun([AS_TR_CPP],
-[m4_require([_$0_PREPARE])dnl
+[AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
               [m4_patsubst(m4_translit([[$1]],
                                        [*abcdefghijklmnopqrstuvwxyz],
@@ -840,8 +843,8 @@ AS_LITERAL_IF([$1],
 # _AS_TR_PREPARE
 # --------------
 m4_defun([_AS_TR_PREPARE],
-[m4_require([_AS_TR_SH_PREPARE])dnl
-m4_require([_AS_TR_CPP_PREPARE])dnl
+[AS_REQUIRE([_AS_TR_SH_PREPARE])dnl
+AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 ])
 
 
