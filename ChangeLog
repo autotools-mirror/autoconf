@@ -1,3 +1,10 @@
+2001-08-27  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* lib/autotest/general.m4: Reword some messages.
+	(AT_INIT): Check for the `times' builtin before using it.
+	Support test ranges as arguments to the testsuite.
+	Have -e imply -d as the help text suggested.
+
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.maint: Formatting changes.

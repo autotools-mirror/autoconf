@@ -101,6 +101,11 @@ at_cli_args=${1+"$[@]"}
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`
 
+# Not all shells have the 'times' builtin; the subshell is needed to make
+# sure we discard the 'times: not found' message from the shell.
+at_times=:
+(times) >/dev/null 2>&1 && at_times=times
+
 # -e sets to true
 at_stop_on_error=false
 # Shall we be verbose?
@@ -125,12 +130,40 @@ while test $[@%:@] -gt 0; do
 	exit 0;;
 
     -d) at_debug=:;;
-    -e) at_stop_on_error=:;;
+    -e) at_debug=:
+        at_stop_on_error=:;;
     -v) at_verbose=echo; at_quiet=:;;
     -x) at_traceon='set -vx'; at_traceoff='set +vx';;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
         at_tests="$at_tests$[1] ";;
+
+    # Ranges
+    [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
+        at_range_start=`echo $[1] |tr -d '-'`
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,'`
+        at_tests="$at_tests$at_range ";;
+
+    [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
+        at_range_end=`echo $[1] |tr -d '-'`
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's, '$at_range_end' .*$, '$at_range_end','`
+        at_tests="$at_tests$at_range ";;
+
+    [[0-9]-[0-9] | [0-9]-[0-9][0-9] | [0-9]-[0-9][0-9][0-9]] | \
+    [[0-9]-[0-9][0-9][0-9][0-9] | [0-9][0-9]-[0-9][0-9]] | \
+    [[0-9][0-9]-[0-9][0-9][0-9] | [0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9]-[0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] )
+        at_range_start=`echo $[1] |sed 's,-.*,,'`
+        at_range_end=`echo $[1] |sed 's,.*-,,'`
+        # Maybe test to make sure start <= end?
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \
+              -e 's, '$at_range_end' .*$, '$at_range_end','`
+        at_tests="$at_tests$at_range ";;
 
     *=*)
       at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
@@ -161,10 +194,10 @@ Run all the tests, or the selected TESTS.
 Options:
   -h  Display this help message and the description of TESTS
   -c  Remove all the files this test suite might create and exit
-  -e  Abort the full suite and inhibit normal clean up if a test fails
+  -e  Abort the test suite as soon as a test fails; implies -d
   -v  Force more detailed output, default for debugging scripts
   -d  Inhibit clean up and debug script creation, default for debugging scripts
-  -x  Have the shell to trace command execution
+  -x  Have the shell trace command execution
 
 Tests:
 _ATEOF
@@ -306,10 +339,10 @@ if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
     fi
     echo
 
-    AS_BOX([Running silently the tests.])
+    AS_BOX([Silently running the tests])
   } >&6
 else
-  AS_BOX([ERROR: Not using the proper version, no tests performed.])
+  AS_BOX([ERROR: Version mismatch (need $at_package $at_version); no tests performed.])
   exit 1
 fi
 
@@ -342,8 +375,8 @@ m4_divert([TAIL])[]dnl
       if test ! -f at-check-line; then
         sed "s/^ */$as_me: warning: /" <<_ATEOF
         A failure happened in a test group before any test could be
-        run. This test suite is improperly designed, please report
-    	to <$at_bugreport>.
+        run. This means that test suite is improperly designed.  Please
+        report this failure to <$at_bugreport>.
 _ATEOF
     	echo "$at_setup_line" >at-check-line
       fi
@@ -404,7 +437,7 @@ elif test $at_debug = false; then
   # Remove any debugging script resulting from a previous run.
   rm -f debug-*.sh
   echo
-  echo $at_n "Writing \`debug-NN.sh' scripts, NN =$at_c"
+  echo $at_n "Writing \`debug-NN.sh' scripts, with NN =$at_c"
   for at_group in $at_fail_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
@@ -440,7 +473,7 @@ elif test $at_debug = false; then
     fi
     echo
 
-    AS_BOX([Running verbosely the failing tests.])
+    AS_BOX([Verbosely re-running the failing tests])
     echo
   } >&6
 
@@ -448,8 +481,8 @@ elif test $at_debug = false; then
   AS_BOX([$as_me.log is created.])
 
   echo
-  echo "Please send \`$as_me.log' to <$at_bugreport> together with all"
-  echo "the information you think might help."
+  echo "Please send \`$as_me.log' to <$at_bugreport>, along with all"
+  echo "information you think might help."
   exit 1
 fi
 
@@ -530,7 +563,7 @@ m4_define([AT_CLEANUP_FILES],
 # AT_DATA.
 m4_define([AT_CLEANUP],
 [AT_CLEANUP_FILES([$1])dnl
-    times >at-times
+    $at_times >at-times
     )
     at_status=$?
     ;;
