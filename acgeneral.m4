@@ -2393,7 +2393,7 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 define([AC_CACHE_VAL],
-[ifelse(regexp([$2], [AC_DEFINE]), [-1],
+[ifelse(regexp([$2], [AC_DEFINE]), [-1], [],
                [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
@@ -2500,9 +2500,29 @@ s,@$1@,,;t t])])
 # If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
 # IF-FALSE.  CATEGORY is enabled iff `AC_WARNING_ENABLE(CATEGORY)' or
 # `AC_WARNING_ENABLE(all)' is defined.
+#
+# The variable `_AC_WARNINGS' contains a comma separated list of
+# warnings which order is the converse from the one specified by
+# the user, i.e., if she specified `-W error,none,obsolete',
+# `_AC_WARNINGS' is `obsolete,none,error'.  We read it from left to
+# right, and:
+# - if none or noCATEGORY is met, run IF-FALSE
+# - if all or CATEGORY is met, run IF-TRUE
+# - if there is nothing left, run IF-FALSE.
 define([AC_WARNING_IFELSE],
-[ifdef([AC_WARNING_ENABLE($1)], [$2],
-       [ifdef([AC_WARNING_ENABLE(all)], [$2], [$3])])])
+[_AC_WARNING_IFELSE([$1], [$2], [$3], _AC_WARNINGS)])
+
+
+# _AC_WARNING_IFELSE(CATEGORY, IF-TRUE, IF-FALSE, WARNING1, ...)
+# --------------------------------------------------------------
+# Implementation of the loop described above.
+define([_AC_WARNING_IFELSE],
+[ifelse([$4],  [$1],   [$2],
+        [$4],  [all],  [$2],
+        [$4],  [],     [$3],
+        [$4],  [none], [$3],
+        [$4],  [no$1], [$3],
+        [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
 
 
 # _AC_DIAGNOSE(MESSAGE)
@@ -2527,7 +2547,7 @@ define([AC_DIAGNOSE],
 # -------------------
 # Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
 # specified.
-define([AC_WARNING], [AC_DIAGNOSE([], [$1])])
+define([AC_WARNING], [AC_DIAGNOSE([syntax], [$1])])
 
 
 # AC_FATAL(MESSAGE, [EXIT-STATUS])

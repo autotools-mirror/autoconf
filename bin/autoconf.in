@@ -38,14 +38,18 @@ Operation modes:
   -m, --macrodir=DIR       directory storing Autoconf's macro files
   -l, --localdir=DIR       directory storing the \`aclocal.m4' file
   -o, --output=FILE        save output in FILE (stdout is the default)
-  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
-  \`cross'      cross compilation issues
-  \`obsolete'   obsolete constructs
-  \`syntax'     dubious syntactic constructs
-  \`all'        all the warnings
-  \`error'      warnings are error
+  \`cross'        cross compilation issues
+  \`obsolete'     obsolete constructs
+  \`syntax'       dubious syntactic constructs
+  \`all'          all the warnings
+  \`noCATEGORY'   turn off the warnings on CATEGORY
+  \`none'         turn off all the warnings
+  \`error'        warnings are error
+
+The environment variable \`WARNINGS' is honored.
 
 Tracing:
   -t, --trace=MACRO     report the list of calls to MACRO
@@ -127,7 +131,9 @@ verbose=:
 
 # Parse command line.
 while test $# -gt 0 ; do
-  case "$1" in
+  optarg=`expr "$1" : '--[^=]*=\(.*\)' \| \
+               "$1" : '-.\(.*\)'`
+  case $1 in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
     --help | --h* | -h )
@@ -140,7 +146,7 @@ while test $# -gt 0 ; do
        shift;;
 
     --localdir=* | --l*=* )
-       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
+       localdir=$optarg
        shift ;;
     --localdir | --l* | -l )
        test $# = 1 && eval "$exit_missing_arg"
@@ -149,7 +155,7 @@ while test $# -gt 0 ; do
        shift ;;
 
     --macrodir=* | --m*=* )
-       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
+       AC_MACRODIR=$optarg
        shift ;;
     --macrodir | --m* | -m )
        test $# = 1 && eval "$exit_missing_arg"
@@ -169,8 +175,7 @@ while test $# -gt 0 ; do
        shift ;;
     --trace=* )
        task=trace
-       traces="$traces '"`echo "$1" |
-                          sed -e "s/^[^=]*=//;s/:.*//;s/'/'\\\\\\\\''/g"`"'"
+       traces="$traces '"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --initialization | -i )
        initialization=:
@@ -182,22 +187,22 @@ while test $# -gt 0 ; do
        outfile=$1
        shift ;;
     --output=* )
-       outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
+       outfile=$optarg
        shift ;;
     -o* )
-       outfile=`expr "$1" : '-o\(.*\)'`
+       outfile=$optarg
        shift ;;
 
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
+       warnings=$warnings,$1
        shift ;;
     --warnings=* )
-       warnings="$warnings "`echo "$1" | sed -e 's/^[^=]*=//;s/,/ /g'`
+       warnings=$warnings,$optarg
        shift ;;
     -W* ) # People are used to -Wall, -Werror etc.
-       warnings="$warnings "`echo "$1" | sed -e 's/^-W//;s/,/ /g'`
+       warnings=$warnings,$optarg
        shift ;;
 
     -- )     # Stop option processing
@@ -214,8 +219,16 @@ while test $# -gt 0 ; do
   esac
 done
 
-# Support $WARNINGS.
-: ${warnings=`echo $WARNINGS | sed -e 's/,/ /g'`}
+# The warnings are the concatenation of 1. application's defaults,
+# 2. $WARNINGS, $3 command line options, in that order.
+# Set them in the order expected by the M4 macros: the converse.
+_ac_warnings=
+for warning in `IFS=,; echo syntax,$WARNINGS,$warnings | tr [A-Z] [a-z]`
+do
+  test -n $warning || continue
+  _ac_warnings="$warning"`test -n "$_ac_warnings" && echo ",$_ac_warnings"`
+done
+
 
 # Trap on 0 to stop playing with `rm'.
 $debug ||
@@ -283,10 +296,8 @@ case $task in
   ## Generate the `configure' script.  ##
   ## --------------------------------- ##
   script)
-  # Enable the requested warnings.
-  warnings_opt=`echo "$warnings" |
-                sed -e 's/\([^ ][^ ]*\)/-DAC_WARNING_ENABLE(\1) /g'`
-  $run_m4f $warnings_opt $infile >$tmp/configure || exit 2
+  # M4 expansion.
+  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure || exit 2
 
   # You could add your own prefixes to pattern if you wanted to check for
   # them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do

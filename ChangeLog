@@ -1,5 +1,27 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	Set autoconf's default warnings to `syntax'.
+
+	In fact, honor the most recent specification in the concatenation
+	of `syntax',$WARNINGS,<options> in that order.
+	Implement support for `none' and `noCATEGORY' so that the options
+	may override the previous choices.
+	Suggested by Didier Verna.
+
+	* acgeneral.m4 (_AC_WARNING_IFELSE): New macro.
+	(AC_WARNING_IFELSE): Use this macro to implement the new specs.
+	(AC_WARNING): The empty category must not be used, default to
+	`syntax'.
+	* doc/autoconf.texi (autoconf Invocation, Reporting Messages): Adjust.
+	* autoconf.sh: Adjust.
+	Use `optarg' to fetch the arguments of options.
+	Fix a bug in the handling of `--trace='.
+
+	* acgeneral.m4 (AC_CACHE_VAL): Typo: the macro was complaining iff
+	it shouldn't have.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (--install, --symlink): New options.
 
 2000-07-10  Akim Demaille  <akim@epita.fr>

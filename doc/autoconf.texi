@@ -909,13 +909,35 @@ for the standard output.
 @evindex WARNINGS
 Report the warnings related to @var{category} (which can actually be a
 comma separated list).  @xref{Reporting Messages}, macro
-@code{AC_DIAGNOSE}, for a comprehensive list of categories.  The special
-category @samp{all} will report all the warnings, and @samp{error}
-treats warnings as errors.
+@code{AC_DIAGNOSE}, for a comprehensive list of categories.  Special
+values include:
 
-The soon-do-be-standard environment variable @code{WARNINGS} is
-supported: it consists in a comma separated list of categories.  It is
-honored iff @option{--warnings} was not used.
+@table @samp
+@item all
+report all the warnings
+
+@item none
+report none
+
+@item error
+treats warnings as errors
+
+@item no@var{category}
+disable warnings falling into @var{category}
+@end table
+
+Warnings about @samp{syntax} are enabled by default, and the environment
+variable @code{WARNINGS}, a comma separated list of categories, is
+honored. @command{autoconf} will actually behave as if you had run
+
+@example
+autoconf --warnings=syntax,$WARNINGS,@var{categories}
+@end example
+
+@noindent
+If you want to disable @command{autoconf}'s defaults and @code{WARNING}
+but enable the warnings about obsolete constructs, use @samp{-W
+none,obsolete}.
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
@@ -1927,20 +1949,25 @@ Report the warnings related to @var{category} (which can actually be a
 comma separated list). Current categories include:
 
 @table @samp
-@item @samp{obsolete}
+@item obsolete
 report the uses of obsolete constructs
 
-@item @samp{all}
+@item all
 report all the warnings
 
-@item @samp{error}
+@item none
+report none
+
+@item error
 treats warnings as errors
+
+@item no@var{category}
+disable warnings falling into @var{category}
 @end table
 
-The soon-do-be-standard environment variable @code{WARNINGS} is
-supported: it consists in a comma separated list of categories.  It is
-honored iff @option{--warnings} was not used.
 @end table
+
+
 
 @node Autoheader Macros,  , autoheader Invocation, Configuration Headers
 @subsection Autoheader Macros
@@ -6286,7 +6313,7 @@ dubious syntactic constructs, incorrectly ordered macro calls.
 
 @defmac AC_WARNING (@var{message})
 @maindex WARNING
-Equivalent to @samp{AC_DIAGNOSE([], @var{message})}, but you are
+Equivalent to @samp{AC_DIAGNOSE([syntax], @var{message})}, but you are
 strongly encouraged to use a finer grained category.
 @end defmac
 
