@@ -731,9 +731,9 @@ popdef([AC_Prefix])dnl
 
 
 
-# AC_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
-# ------------------------------------------
-AC_DEFUN(AC_PACKAGE,
+# _AC_INIT_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
+# ------------------------------------------------
+define([_AC_INIT_PACKAGE],
 [define([AC_PACKAGE_NAME],     [$1])dnl
 define([AC_PACKAGE_VERSION],   [$2])dnl
 define([AC_PACKAGE_STRING],    [$1 $2])dnl
@@ -751,11 +751,8 @@ define([AC_PACKAGE_BUGREPORT], [$3])dnl
 # would have be to use m4_quote to force an evaluation:
 #
 #     patsubst(m4_quote($1), [^], [# ])
-#
-# AC_INIT must be run before, exactly like for AC_REVISION.
-AC_DEFUN(AC_COPYRIGHT,
-[AC_REQUIRE([AC_INIT])dnl
-AC_DIVERT([NOTICE],
+AC_DEFUN([AC_COPYRIGHT],
+[AC_DIVERT([NOTICE],
 [patsubst([
 $1], [^], [@%:@ ])])dnl
 AC_DIVERT([VERSION_BEGIN],
@@ -1597,15 +1594,27 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 ])# _AC_INIT
 
 
-# AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
-# ------------------------------------
+# AU::AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
+# ----------------------------------------
+# This macro is used only for Autoupdate.
+AU_DEFUN([AC_INIT],
+[ifval([$2], [[AC_INIT($@)]],
+       [ifval([$1],
+[[AC_INIT]
+AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
+])
+
+
+# AC_INIT([PACKAGE, VERSION, [BUG-REPORT])
+# ----------------------------------------
 # Wrapper around _AC_INIT which guarantees _AC_INIT is expanded only
 # once.
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 AC_DEFUN([AC_INIT],
 [AC_EXPAND_ONCE([_AC_INIT()])dnl
-ifval([$1], [AC_CONFIG_SRCDIR([$1])])dnl
+ifval([$2], [_AC_INIT_PACKAGE($@)],
+            [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 ])
 
 
@@ -3776,7 +3785,7 @@ define([_AC_LIST_SUBDIRS])
 
 AU_DEFUN([AC_OUTPUT],
 [ifval([$1],
-      [AC_CONFIG_FILES([$1])
+       [AC_CONFIG_FILES([$1])
 ])dnl
 ifval([$2$3],
       [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])

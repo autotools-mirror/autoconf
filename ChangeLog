@@ -1,5 +1,18 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_PACKAGE): Rename as _AC_INIT_PACKAGE.
+	(AC_INIT): Dispatch your arguments either to _AC_INIT_PACKAGE or
+	to AC_CONFIG_SRCDIR.
+	(AU::AC_INIT): New.
+	* configure.in: Adjust.
+	Use `#', not `dnl'.
+	* doc/autoconf.texi (configure.in Layout): Document the new form
+	of AC_INIT.
+	Document AC_CONFIG_SRCDIR.
+	(Obsolete Macros): Document the old one.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Simplify all the unjustified `[\$]foo' into
 	`\$foo', the quotes are needed only for `\$[1]', `\$[@]' etc.
 	Prefer `$$1' to `[$]$1', `$foo' to `[$]foo', `$[1]' to `[$]1' etc.

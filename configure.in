@@ -1,32 +1,31 @@
-dnl Process this file with autoconf to produce a configure script.
+# Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.14a)
-AC_PACKAGE(Autoconf, 2.14a, bug-autoconf@gnu.org)
-
-AC_INIT(acgeneral.m4)
+AC_INIT(Autoconf, 2.14a, bug-autoconf@gnu.org)
+AC_CONFIG_SRCDIR(acgeneral.m4)
 AM_INIT_AUTOMAKE(autoconf, 2.14a)
 
-dnl Initialize the test suite.
+# Initialize the test suite.
 AT_CONFIG(..)
 
-dnl We use a path for GNU m4 so even if users have another m4 first in
-dnl their path, the installer can configure with a path that has GNU m4
-dnl first and get that path embedded in the installed autoconf and
-dnl autoheader scripts.
+# We use a path for GNU m4 so even if users have another m4 first in
+# their path, the installer can configure with a path that has GNU m4
+# first and get that path embedded in the installed autoconf and
+# autoheader scripts.
 AC_PROG_GNU_M4
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   AC_MSG_ERROR([GNU m4 1.4 is required])
 fi
-dnl This is needed because Automake does not seem to realize there is
-dnl an AC_SUBST inside AC_PROG_GNU_M4.  Grmph!
+# This is needed because Automake does not seem to realize there is
+# an AC_SUBST inside AC_PROG_GNU_M4.  Grmph!
 AC_SUBST(M4)
 
-dnl `autoconf' and `ifnames' use AWK.
+# `autoconf' and `ifnames' use AWK.
 AC_PROG_AWK
 
-dnl Generating man pages.
+# Generating man pages.
 AM_MISSING_PROG(HELP2MAN, help2man, [\${SHELL} \${top_srcdir}])
 
-dnl We use a path for perl so the #! line in autoscan will work.
+# We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)
 AC_SUBST(PERL)dnl
 AC_SUBST(PERLSCRIPTS)dnl
@@ -40,9 +39,8 @@ AC_PROG_INSTALL
 
 # Work with the GNU or Cygnus source tree layout.
 if test -f $srcdir/standards.texi; then
-  standards_texi=standards.texi
+  AC_SUBST(standards_texi, standards.texi)dnl
 fi
-AC_SUBST(standards_texi)dnl
 
 AC_OUTPUT(acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile
           tests/Makefile tests/atconfig)
