@@ -440,29 +440,30 @@ m4_divert_push([PREPARE_TESTS])dnl
 # For embedded test suites, AUTOTEST_PATH is relative to the top level
 # of the package.  Then expand it into build/src parts, since users
 # may create executables in both places.
-#
-# There might be directories that don't exist, but don't redirect
-# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
-AUTOTEST_PATH=`echo $AUTOTEST_PATH | tr ':' $PATH_SEPARATOR`
+AUTOTEST_PATH=`echo $AUTOTEST_PATH | sed "s,:,$PATH_SEPARATOR,g"`
 at_path=
 _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
-[case $as_dir in
+[test -n "$at_path" && at_path=$at_path$PATH_SEPARATOR
+case $as_dir in
   [[\\/]]* | ?:[[\\/]]* )
-    at_path=$at_path$PATH_SEPARATOR$as_dir
+    at_path=$at_path$as_dir
     ;;
   * )
     if test -z "$at_top_builddir"; then
       # Stand-alone test suite.
-      at_path=$at_path$PATH_SEPARATOR$as_dir
+      at_path=$at_path$as_dir
     else
       # Embedded test suite.
-      at_path=$at_path$PATH_SEPARATOR$at_top_builddir/$as_dir
-      at_path=$at_path$PATH_SEPARATOR$at_top_srcdir/$as_dir
+      at_path=$at_path$at_top_builddir/$as_dir$PATH_SEPARATOR
+      at_path=$at_path$at_top_srcdir/$as_dir
     fi
     ;;
 esac])
 
 # Now build and simplify PATH.
+#
+# There might be directories that don't exist, but don't redirect
+# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
 PATH=
 _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`

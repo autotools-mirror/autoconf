@@ -20,9 +20,9 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-# bin/ and tests/ must be run first, as they build the tests executables
-# (tests/autom4te etc.), that we happen to use here.
-SUBDIRS = bin tests . lib config man doc
+# bin/ must be run first, as it builds executables needed for tests.
+# autom4te uses autotest.m4f to generate `testsuite', so build tests last.
+SUBDIRS = bin . lib config man doc tests
 
 ACLOCAL_AMFLAGS = -I config
 

@@ -1,3 +1,10 @@
+2004-12-08  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autotest/general.m4 (AT_INIT): Replace a `tr' with a `sed'.  Join
+	PATH members so as to not prepend an empty element.  Move a comment.
+	* Makefile.am (SUBDIRS): Build in `tests' last.
+        * tests/Makefile.am (installcheck-local): Add check-local dependencies.
+
 2004-12-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/mdate-sh: Don't use "set - x`$ls_command /`", as zsh mishandles

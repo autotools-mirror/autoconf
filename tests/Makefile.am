@@ -105,7 +105,7 @@ check-local: atconfig atlocal $(TESTSUITE)
 	$(SHELL) $(TESTSUITE)
 
 # Run the test suite on the *installed* tree.
-installcheck-local:
+installcheck-local: atconfig atlocal $(TESTSUITE)
 	$(SHELL) $(TESTSUITE) AUTOTEST_PATH=$(exec_prefix)/bin
 
 
