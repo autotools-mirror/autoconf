@@ -8314,7 +8314,7 @@ non-printing characters, @emph{seems} portable, though.
 @item @command{cc}
 @c ---------------
 When a compilation such as @samp{cc foo.c -o foo} fails, some compilers
-(such as @sc{cds} on Reliant Unix) leave a @file{foo.o}.
+(such as @sc{cds} on Reliant @sc{unix}) leave a @file{foo.o}.
 
 
 @item @command{cmp}
