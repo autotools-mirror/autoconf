@@ -91,8 +91,8 @@ esac
 
 trap 'rm -f $tmpin $tmpout; exit 1' 1 2 15
 
+tmpin=/tmp/acin.$$ # Always set this, to avoid bogus errors from some rm's.
 if test z$infile = z-; then
-  tmpin=/tmp/acin.$$
   infile=$tmpin
   cat > $infile
 elif test ! -r "$infile"; then
