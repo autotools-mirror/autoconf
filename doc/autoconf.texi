@@ -9845,7 +9845,7 @@ ash-0.3.8 $ @kbd{case foo in esac;}
 
 Many shells still do not support parenthesized cases, which is a pity
 for those of us using tools that rely on balanced parentheses.  For
-instance, Solaris 2.8's Bourne shell:
+instance, Solaris 8's Bourne shell:
 
 @example
 $ @kbd{case foo in (foo) echo foo;; esac}
