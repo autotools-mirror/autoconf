@@ -8,6 +8,13 @@
 	* tests/local.at (AT_CHECK_CONFIGURE): Use AT_CAPTURE_FILE.
 	* doc/autoconf.texi (Writing testsuite.at): Document AT_CAPTURE_FILE.
 
+2004-12-29  Albert Chin-A-Young  <china@thewrittenword.com>
+
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH):
+	If the variable to set is already set, set ac_cv_path_$1
+	to the preset value so caller can assume ac_cv_path_$1
+	is available.  (trivial change)
+
 2004-12-27  Noah Misch  <noah@cs.caltech.edu>
 
 	* BUGS (Minor Problems): Warn about makefile limitations.
