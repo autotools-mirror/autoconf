@@ -239,3 +239,26 @@ AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
 ]])
 
 AT_CLEANUP
+
+
+
+
+## ----------------------------------------------- ##
+## autoconf's ability to catch unexpanded macros.  ##
+## ----------------------------------------------- ##
+
+AT_SETUP(unexpanded macros)
+
+AT_DATA([configure.in],
+[[AC_PLAIN_SCRIPT()dnl
+AC_THIS_IS_PROBABLY_NOT_DEFINED
+# AC_THIS_IS_A_COMMENT so just shut up.
+It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
+]])
+
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
+[[configure.in:2: warning: undefined macro: AC_THIS_IS_PROBABLY_NOT_DEFINED
+configure:3: warning: undefined macro: AC_OUTPUT
+]])
+
+AT_CLEANUP(configure)
