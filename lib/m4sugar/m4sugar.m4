@@ -1204,15 +1204,14 @@ m4_define([$1],
 # ----------------------
 # Declare that no token matching the extended regular expression ERE
 # should be seen in the output but if...
-m4_define([m4_pattern_forbid],
-[m4_file_append(m4_defn([m4_tmpdir])/forbidden.rx, [$1])])
+m4_define([m4_pattern_forbid], [])
 
 
 # m4_pattern_allow(ERE)
 # ---------------------
 # ... but if that token matches the extended regular expression ERE.
-m4_define([m4_pattern_allow],
-[m4_file_append(m4_defn([m4_tmpdir])/allowed.rx, [$1])])
+# Both used via traces.
+m4_define([m4_pattern_allow], [])
 
 
 ## ----------------------------- ##
@@ -1721,11 +1720,7 @@ m4_if(m4_sysval, [0], [],
 # m4_init
 # -------
 m4_define([m4_init],
-[# We need a tmp directory.
-m4_ifndef([m4_tmpdir],
-          [m4_define([m4_tmpdir], [/tmp])])
-
-# All the M4sugar macros start with `m4_', except `dnl' kept as is
+[# All the M4sugar macros start with `m4_', except `dnl' kept as is
 # for sake of simplicity.
 m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])

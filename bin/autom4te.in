@@ -61,10 +61,8 @@ struct
    'valid' => "\$",
    # The include path.
    'path' => '@',
-   # The set of source files.
-   'source' => '@',
-   # The set of included files.
-   'includes' => '@',
+   # The set of input files.
+   'input' => '@',
    # The set of macros currently traced.
    'macro' => '%',
   );
@@ -73,7 +71,7 @@ struct
 # $REQUEST-OBJ
 # retrieve ($SELF, %ATTR)
 # -----------------------
-# Find a request with the same path and source.
+# Find a request with the same path and input.
 # Private.
 sub retrieve
 {
@@ -85,9 +83,9 @@ sub retrieve
       next
 	if join ("\n", @{$_->path}) ne join ("\n", @{$attr{path}});
 
-      # Same sources.
+      # Same inputs.
       next
-	if join ("\n", @{$_->source}) ne join ("\n", @{$attr{source}});
+	if join ("\n", @{$_->input}) ne join ("\n", @{$attr{input}});
 
       # Found it.
       return $_;
@@ -106,9 +104,9 @@ sub register ($%)
 {
   my ($self, %attr) = @_;
 
-  # path and source are the only ID for a request object.
-  my $obj = $self->new ('path'   => $attr{path},
-			'source' => $attr{source});
+  # path and input are the only ID for a request object.
+  my $obj = $self->new ('path'  => $attr{path},
+			'input' => $attr{input});
   push @request, $obj;
 
   # Assign an id for cache file.
@@ -121,7 +119,7 @@ sub register ($%)
 # $REQUEST-OBJ
 # request($SELF, %REQUEST)
 # ------------------------
-# Return a request corresponding to $REQUEST{path} and $REQUEST{source},
+# Return a request corresponding to $REQUEST{path} and $REQUEST{input},
 # using a cache value if it exists.
 sub request ($%)
 {
@@ -208,20 +206,20 @@ sub save
 }
 
 
-# LOAD ($FILENAME)
-# ----------------
+# LOAD ($FILE)
+# ------------
 sub load
 {
-  my ($self, $filename) = @_;
+  my ($self, $file) = @_;
 
   croak "$me: cannot load a single request\n"
     if ref ($self);
 
-  (my $return) = do "$filename";
+  (my $return) = do "$file";
 
-  croak "$me: cannot parse $filename: $@\n" if $@;
-  croak "$me: cannot do $filename: $!\n"    if $!;
-  croak "$me: cannot run $filename\n"       unless $return;
+  croak "$me: cannot parse $file: $@\n" if $@;
+  croak "$me: cannot do $file: $!\n"    if $!;
+  croak "$me: cannot run $file\n"       unless $return;
 }
 
 
@@ -249,9 +247,11 @@ my $ocache = "$cache/output.";
 my %trace;
 
 # The macros the user will want to trace in the future.
-# We need `include'.
+# We need `include' to get the included file, `m4_pattern_forbid' and
+# `m4_pattern_allow' to check the output.
+#
 # FIXME: What about `sinclude'?
-my @preselect = ('include');
+my @preselect = ('include', 'm4_pattern_allow', 'm4_pattern_forbid');
 
 my $output = '-';
 my @warning;
@@ -524,7 +524,6 @@ sub handle_m4 ($@)
 
   # Run m4.
   my $command = ("$m4"
-		 . " --define m4_tmpdir=$tmp"
 		 . " --define m4_warnings=$m4_warnings"
 		 . ' --debug=aflq'
 		 . " --error-output=$tcache" . $req->id
@@ -553,19 +552,30 @@ sub handle_output ($$)
   verbose "creating $output";
 
   # Load the forbidden/allowed patterns.
-  my $forbidden = "^\$";
-  if (-f "$tmp/forbidden.rx")
-    {
-      my $fh = new IO::File ("$tmp/forbidden.rx");
-      $forbidden = join ('|', grep { chop } $fh->getlines);
-    }
-  my $allowed = "^\$";
-  if (-f "$tmp/allowed.rx")
-    {
-      my $fh = new IO::File ("$tmp/allowed.rx");
-      $allowed = join ('|', grep { chop } $fh->getlines);
-    }
+  #
+  # I'm having fun with grep and map, but it's not extremely safe here...
+  # First of all, I still don't understand why I can't use `map' for
+  # instance to get @PATTERNS: `chop' thinks it's in a scalar context
+  # and returns 1 instead of `$_' :(.
+  #
+  # A potential bad bug is that the grep for $forbidden and $allowed
+  # *do modify @PATTERNS!  So when $FORBIDDEN is computed, @PATTERNS
+  # still contains the forbidden patterns, but without the leading
+  # `forbid:'.  So if some use forbids `allow:FOO', @ALLOW will receive
+  # `FOO', which is _bad_.  But since `:' is not valid in macro names,
+  # this is science fiction.
+  #
+  # Still, if someone could teach me how to write this properly... --akim
+  handle_traces ($req, "$tmp/patterns",
+		 ('m4_pattern_forbid' => 'forbid:$1',
+		  'm4_pattern_allow'  => 'allow:$1'));
+  my @patterns = grep { chop } new IO::File ("$tmp/patterns")->getlines;
+  my $forbidden = join ('|', grep { s/^forbid:// } @patterns) || "^\$";
+  my $allowed   = join ('|', grep { s/^allow:// }  @patterns) || "^\$";
+  verbose "forbidden tokens: $forbidden";
+  verbose "allowed   tokens: $allowed";
 
+  # Read the (cached) raw M4 output, produce the actual result.
   my $out = new IO::File (">$output")
     or die "$me: cannot create $output: $!\n";
   my $in = new IO::File ($ocache . $req->id)
@@ -606,7 +616,7 @@ sub handle_output ($$)
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $oline
-	    if /$forbidden/ && !/$allowed/ && ! exists $prohibited{$_};
+	    if /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
 	}
     }
 
@@ -614,7 +624,7 @@ sub handle_output ($$)
   return
     if ! %prohibited;
 
-  # Locate the forbidden words in the last source file.
+  # Locate the forbidden words in the last input file.
   # This is unsatisfying but...
   my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
   my $file = new IO::File ($ARGV[$#ARGV])
@@ -656,7 +666,7 @@ sub handle_output ($$)
 sub trace_format_to_m4 ($)
 {
   my ($format) = @_;
-  my ($underscore) = $_;
+  my $underscore = $_;
   my %escape = (# File name.
 		'f' => '$1',
 		# Line number.
@@ -859,6 +869,10 @@ EOF
     or die "$me: cannot run $m4: $!\n";
   my $out = new IO::File (">$output")
     or die "$me: cannot run open $output: $!\n";
+
+  # FIXME: Hm... This is dubious: should we really transform the
+  # quadrigraphs in traces?  It might break balanced [ ] etc. in the
+  # output.
   while ($_ = $in->getline)
     {
       # It makes no sense to try to transform __oline__.
@@ -948,9 +962,9 @@ Request->load ($icache)
   if -f $icache;
 
 # Add the new trace requests.
-my $req = Request->request ('source' => \@ARGV,
-			    'path'   => \@include,
-			    'macro'  => [keys %trace, @preselect]);
+my $req = Request->request ('input' => \@ARGV,
+			    'path'  => \@include,
+			    'macro' => [keys %trace, @preselect]);
 
 # If $REQ's cache files are not up to date, declare it invalid.
 $req->valid (0)

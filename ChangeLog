@@ -1,5 +1,21 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	Don't rely on M4sugar outputting the patterns in files, since we
+	might process the output _without_ running m4, hence without these
+	files.
+
+	* lib/m4sugar/m4sugar.m4 (m4_init): No need for `m4_tmpdir'.
+	* bin/autom4te.in (@Request::includes): Remove, unused.
+	(@Request::source): Rename as...
+	(@Request::input): this.
+	(@preselect): Add `m4_pattern_forbid' and `m4_pattern_allow'.
+	(&handle_output): Fetch the patterns from the traces.
+	`$forbidden' and `$allowed' are constant: use m//o.
+	(&handle_m4): M4sugar no longer wants `m4_tmpdir'.
+	(m4_pattern_forbid, m4_pattern_allow): Adjust for tracing only.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	`autoconf && autoheader' is sped up.  Now, speed up `autoheader &&
 	autoconf', i.e., in addition to caching traces, cache the output.
 
