@@ -1221,9 +1221,11 @@ $ac_declaration],
                                       [exit (42);])],
                      [break])
 done
-echo '#ifdef __cplusplus' >>confdefs.h
-echo $ac_declaration      >>confdefs.h
-echo '#endif'             >>confdefs.h
+if test -n "$ac_declaration"; then
+  echo '#ifdef __cplusplus' >>confdefs.h
+  echo $ac_declaration      >>confdefs.h
+  echo '#endif'             >>confdefs.h
+fi
 ])# _AC_PROG_CXX_EXIT_DECLARATION
 
 

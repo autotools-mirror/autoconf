@@ -1,3 +1,8 @@
+2001-06-28  Jens Petersen  <petersen@redhat.com>
+
+	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): Only add declaration to
+	confdefs.h when non-zero.
+
 2001-06-28  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump to 2.50c.
