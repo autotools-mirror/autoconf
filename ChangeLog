@@ -1,3 +1,8 @@
+1999-09-17  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect QNX version 4.
+	* config.sub: Handle `qnx' and `i386-qnx' aliases.
+
 1999-09-17  Erez Zadok  <ezk@cs.columbia.edu>
 
 	* config.guess: Eliminate the trailing dot if ${UNAME_RELEASE} is

@@ -465,6 +465,9 @@ case $basic_machine in
 		basic_machine=i386-unknown
 		os=-mingw32
 		;;
+	i386-qnx | qnx)
+		basic_machine=i386-qnx
+		;;
 	iris | iris4d)
 		basic_machine=mips-sgi
 		case $os in
@@ -967,6 +970,9 @@ case $os in
 		;;
 	-oss*)
 		os=-sysv3
+		;;
+        -qnx)
+		os=-qnx4
 		;;
 	-svr4)
 		os=-sysv4
