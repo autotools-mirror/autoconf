@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright 1999, 2000, 2001 Free Software Foundation, Inc.
+## Copyright 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -18,20 +18,15 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = check-news 1.5 dist-bzip2 readme-alpha
+AUTOMAKE_OPTIONS = check-news 1.5b dist-bzip2 readme-alpha
 
 SUBDIRS = . lib bin config man doc tests
 
-## There is currently no means with Automake not to run aclocal.
-ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
+ACLOCAL_AMFLAGS = -I config
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS \
              GNUmakefile Makefile.maint
-
-# Automake is unable to look into our special aclocal.m4...
-AMTAR = @AMTAR@
-AWK   = @AWK@
 
 MAINTAINERCLEANFILES = COPYING INSTALL
 

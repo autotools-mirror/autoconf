@@ -1,5 +1,14 @@
 2002-01-24  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (AUTOMAKE_OPTIONS): 1.5b.
+	* config/auxdir.m4, config/cond.m4, config/depend.m4,
+	* config/init.m4, config/install-sh.m4, config/lispdir.m4,
+	* config/missing.m4, config/sanity.m4, config/select.m4,
+	* config/strip.m4: Remove, to ease sync'ing with any version of
+	Automake.
+
+2002-01-24  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS)
 	(_AC_INIT_PREPARE): Support -n as --no-create, as documented.
 	Reported by Geir Ove Myhr.
