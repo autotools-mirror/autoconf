@@ -70,6 +70,7 @@ EMACS = @EMACS@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+M4 = @M4@
 PACKAGE = @PACKAGE@
 PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
@@ -106,8 +107,9 @@ subdir = config
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-DIST_COMMON = Makefile.am Makefile.in elisp-comp install-sh mdate-sh \
-	missing mkinstalldirs texinfo.tex
+DIST_COMMON = Makefile.am Makefile.in config.guess config.sub \
+	elisp-comp install-sh mdate-sh missing mkinstalldirs \
+	texinfo.tex
 all: all-am
 
 .SUFFIXES:
