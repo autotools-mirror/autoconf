@@ -1,3 +1,12 @@
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Exiting from Shell Scripts): Move contents
+	into...
+	(Limitations of Builtins): this new node.
+	Document limitations of `exit', `export' and `case'.
+	Welcome the documentation of `test' from...
+	(Limitations of Usual Tools): here.
+
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
 	Load the additions *before* running AC_INIT.
