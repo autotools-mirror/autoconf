@@ -2612,21 +2612,20 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the particular
 test macros.
 
-@defmac AC_CHECK_DECL (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, o@var{includes})
 @maindex CHECK_DECL
 If the declaration of @var{symbol} (a function or a variable) is needed
 because it is not declared in @var{includes}, run the shell commands
 @var{action-if-not-found}, otherwise @var{action-if-found}.  If no
-@var{includes} are given at all, by default @file{stdio.h},
-@file{stdlib.h}, @file{stddef.h}, @file{memory.h}, @file{string.h},
-@file{strings.h}, and @file{unistd.h} will be included.
+@var{includes} are given at all, FIXME: point to a node defining the
+standard include.
 
 This macro actually tests whether it is valid to use @var{symbol} as an
 r-value, not if it is really declared, because it is much safer to avoid
 introducing extra declarations when not needed.
 @end defmac
 
-@defmac AC_CHECK_DECLS (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@defmac AC_CHECK_DECLS (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECLS
 @cvindex NEED_@var{symbol}_DECL
 For each given @var{symbol} (whitespace-separated), define
@@ -2820,8 +2819,7 @@ particular test macros.
 
 @defmac AC_CHECK_TYPES ((@var{type}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_TYPES
-For each given @var{type} that is defined by the @var{includes} (by
-default, @file{sys/types.h}, @file{stdlib.h}, and @file{stddef.h}),
+For each given @var{type} that is defined by the FIXME: @var{includes},
 define @code{HAVE_@var{type}} (in all capitals).  If
 @var{action-if-found} is given, it is additional shell code to execute
 when one of the header files is found.  You can give it a value of
@@ -2845,11 +2843,9 @@ to incompatible code in the case of pointer types.
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default}, @ovar{includes})
 @maindex CHECK_TYPE
-If the type @var{type} is not defined in @file{sys/types.h}, or
-@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the C
-(or C++) builtin type @var{default}; e.g., @samp{short} or
-@samp{unsigned}.  The default header files to search can be replaced by
-supplying the optional argument @var{includes}.
+If the type @var{type} is not defined in FIXME: @ovar{includes}, define
+it to be the C (or C++) builtin type @var{default}; e.g., @samp{short}
+or @samp{unsigned}.
 
 This macro has a broken design.  First, although it is a member of the
 @code{CHECK} clan, singular subfamily, it does more than just checking.

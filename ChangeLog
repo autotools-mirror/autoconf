@@ -1,5 +1,14 @@
 1999-11-01  Akim Demaille  <akim@epita.fr>
 
+	Install a uniform set of default includes.
+
+	* acgeneral.m4 (AC_INCLUDES_DEFAULT): New macro.  Expands in its
+	argument if non empty, otherwise a default list of includes.
+	(AC_CHECK_DECL, AC_CHECK_TYPE_INTERNAL): Use AC_INCLUDES_DEFAULT.
+	* autoconf.texi: Adjusted.
+
+1999-11-01  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.m4 (AH_FUNC_ALLOCA, AH_C_CHAR_UNSIGNED, AH_AIX):
 	Don't leave `[]dnl' in pseudo #-comment (actually CPP directives).
 

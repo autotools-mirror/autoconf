@@ -1229,11 +1229,15 @@ AC_INIT_PREPARE($1)dnl
 AC_DIVERT_POP()dnl to NORMAL
 ])
 
-dnl AC_INCLUDE
+dnl AC_INCLUDE(FILES...)
+dnl --------------------
+dnl Note that there is shell expansion, hence AC_INCLUDE(m4/*.m4) is
+dnl legal.
 AC_DEFUN(AC_INCLUDE,
 [ifelse($1, [], [], [dnl
   esyscmd([for file in $1; do echo "m4_include($file)dnl"; done])dnl
 ])])
+
 
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 dnl ------------------------------------------
@@ -2154,6 +2158,41 @@ AC_DEFUN(AC_C_STRUCT_MEMBER,
 $1="$ac_cv_c_struct_member_$1"])
 
 
+dnl ### Default headers.
+
+dnl Always use the same set of default headers for all the generic macros.
+dnl It is easier to document, to extend, and to understand than having
+dnl specific defaults for each macro.
+
+dnl AC_INCLUDES_DEFAULT([INCLUDES])
+dnl -------------------------------
+dnl If INCLUDES is empty, expand in default includes, otherwise in
+dnl INCLUDES.
+define(AC_INCLUDES_DEFAULT,
+[m4_default([$1],
+[#include <stdio.h>
+#ifdef HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# ifdef HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+])])
 
 
 dnl ### Checking for programs
@@ -2509,6 +2548,7 @@ dnl ### Examining declarations
 
 dnl AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
 dnl ----------------------------------------------------------
+dnl INCLUDES are not defaulted.
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
@@ -2575,8 +2615,9 @@ dnl ### Examining syntax
 
 
 dnl AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
-dnl                [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-dnl ---------------------------------------------------------
+dnl                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl --------------------------------------------------------
+dnl Should INCLUDES be defaulted here?
 AC_DEFUN(AC_TRY_COMPILE,
 [cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
@@ -2625,8 +2666,9 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])
 ])
 
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
-dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-dnl ------------------------------------------------------
+dnl             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl -----------------------------------------------------
+dnl Should the INCLUDES be defaulted here?
 AC_DEFUN(AC_TRY_LINK,
 [cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
@@ -2782,36 +2824,15 @@ $2],
 dnl ### Checking for declared symbols
 
 
-dnl AC_CHECK_DECL(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl              [, INCLUDES,]]])
-dnl -------------------------------------------------------------
+dnl AC_CHECK_DECL(SYMBOL,
+dnl               [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl               [INCLUDES])
+dnl -------------------------------------------------------
 dnl Check if SYMBOL (a variable or a function) is declared.
 AC_DEFUN([AC_CHECK_DECL],
 [AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])dnl
 AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
-[AC_TRY_COMPILE(m4_default([$4], [#include <stdio.h>
-#ifdef HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# ifdef HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#ifdef HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-]),
+[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
 [#ifndef $1
   char *p = (char *) $1;
 #endif
@@ -2822,9 +2843,11 @@ AC_SHELL_IFELSE(test AC_VAR_GET(ac_Symbol) = yes,
 AC_VAR_POPDEF([ac_Symbol])dnl
 ])dnl AC_CHECK_DECL
 
-dnl AC_CHECK_DECLS(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl               [, INCLUDES]]])
-dnl --------------------------------------------------------------
+
+dnl AC_CHECK_DECLS(SYMBOL,
+dnl                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl                [INCLUDES])
+dnl --------------------------------------------------------
 AC_DEFUN([AC_CHECK_DECLS],
 [AC_FOREACH([AC_Symbol], [$1],
   [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
@@ -2898,7 +2921,8 @@ dnl ### Checking compiler characteristics
 dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE, [INCLUDES]])
 dnl ------------------------------------------------
 dnl This macro will probably be obsoleted by the macros of Kaveh.  In
-dnl addition `CHECK' is not a proper name (is not boolean).
+dnl addition `CHECK' is not a proper name (is not boolean). And finally:
+dnl shouldn't we use the default INCLUDES?
 AC_DEFUN(AC_CHECK_SIZEOF,
 [AC_VAR_PUSHDEF([ac_Sizeof], [ac_cv_sizeof_$1])dnl
 AC_CACHE_CHECK([size of $1], ac_Sizeof,
@@ -2923,9 +2947,10 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 dnl ### Checking for typedefs
 
 
-dnl AC_CHECK_TYPE_INTERNAL(TYPE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl AC_CHECK_TYPE_INTERNAL(TYPE,
+dnl                        [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 dnl                        [INCLUDES])
-dnl ----------------------------------------------------------------------
+dnl ----------------------------------------------------------------
 dnl Check whether the type TYPE is supported by the system, maybe via the
 dnl the provided includes.  This macro implements the former task of
 dnl AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
@@ -2940,25 +2965,21 @@ AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
-[AC_TRY_COMPILE(m4_default([$4
-], [#include <stdio.h>
-#include <sys/types.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#endif
-]),
- [$1 foo;],
- AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
+[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
+               [$1 foo;],
+               AC_VAR_SET(ac_Type, yes),
+               AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])dnl AC_CHECK_TYPE_INTERNAL
 
 
-dnl AC_CHECK_TYPES(TYPES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [INCLUDES])
-dnl ---------------------------------------------------------------------------
-dnl TYPES is an m4 list.
+dnl AC_CHECK_TYPES((TYPE, ...),
+dnl                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl                [INCLUDES])
+dnl --------------------------------------------------------
+dnl TYPEs is an m4 list.
 AC_DEFUN(AC_CHECK_TYPES,
 [m4_foreach([AC_Type], [$1],
   [AC_SPECIALIZE([AC_CHECK_TYPE_INTERNAL], AC_Type,
