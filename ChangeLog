@@ -9,6 +9,8 @@ Fri Nov 17 15:23:04 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	  Ian Lance Taylor <ian@cygnus.com>.
 	  (AC_INIT_PARSE_ARGS): Make sure MFLAGS and MAKEFLAGS are empty.
 	  From Paul Townsend (aab@cc.purdue.edu).
+	  (AC_CHECK_LIB, AC_CHECK_HEADERS, AC_CHECK_FUNC): Remove
+	  duplicate `d' from alphabets.
 
 	* acspecific.m4 (AC_USG): Define USG if we don't have rindex and
 	  bzero, not if we do have them.

@@ -1373,7 +1373,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   AC_MSG_RESULT(yes)
   ifelse([$3], ,
 [changequote(, )dnl
-  ac_tr_lib=HAVE_LIB`echo $1 | tr 'abcdedfghijklmnopqrstuvwxyz' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ'`
+  ac_tr_lib=HAVE_LIB`echo $1 | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_lib)
   LIBS="-l$1 $LIBS"
@@ -1603,7 +1603,7 @@ AC_DEFUN(AC_CHECK_HEADERS,
 do
 AC_CHECK_HEADER($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdedfghijklmnopqrstuvwxyz./\055' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ___'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdefghijklmnopqrstuvwxyz./\055' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2], $3)dnl
 done
@@ -1656,7 +1656,7 @@ AC_DEFUN(AC_CHECK_FUNCS,
 do
 AC_CHECK_FUNC($ac_func,
 [changequote(, )dnl
-  ac_tr_func=HAVE_`echo $ac_func | tr 'abcdedfghijklmnopqrstuvwxyz' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ'`
+  ac_tr_func=HAVE_`echo $ac_func | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_func) $2], $3)dnl
 done
