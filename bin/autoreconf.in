@@ -338,7 +338,7 @@ sub autoreconf ($)
       if (-d)
 	{
 	  verbose "$configure_ac: subdirectory $_ to autoreconf";
-	  push @ARGV, $_;
+	  push @ARGV, catfile ($directory, $_);
 	}
       else
 	{

@@ -1,3 +1,9 @@
+2002-04-05  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (autoreconf): Be sure to accumulate the
+	directories when descending in a SUBDIRS.
+	Reported by Ezra Peisach.
+
 2002-04-04  Andreas Schwab  <schwab@suse.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Only simplify if path
