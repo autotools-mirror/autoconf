@@ -1,5 +1,20 @@
 2003-12-03  Paolo Bonzini  <bonzini@gnu.org>
 
+	* configure.ac: Test if sh -n works.
+	* configure: Regenerate.
+	* tests/atlocal.in: Store the result here.
+	* tests/local.at (AT_CHECK_SHELL_SYNTAX): Extracted from
+	tools.at, looking in atlocal's ac_cv_sh_n_works instead
+	of explicitly testing.
+	(AT_CHECK_PERL_SYNTAX): Moved from tools.at.
+	(AT_CHECK_AUTOCONF): Test for the configure script syntax.
+	* tests/tools.at (Syntax of the shell scripts): Simplify
+	using AT_CHECK_SHELL_SYNTAX.
+	(Syntax of the Perl scripts): Remove definition of
+	AT_CHECK_PERL_SYNTAX.
+
+2003-12-03  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK): Redirect
 	stderr to /dev/null.
 	* bin/autoconf.in: Regenerate.

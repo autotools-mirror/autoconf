@@ -26,6 +26,18 @@ m4_pattern_allow([^m4_(define|shift)$])
 
 AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
+## ---------------- ##
+## Testing syntax.  ##
+## ---------------- ##
+
+m4_define([AT_CHECK_SHELL_SYNTAX],
+[AS_IF([test x"$ac_cv_sh_n_works" != xno],
+  [AT_CHECK([/bin/sh -n $1], 0)], [$2])])
+
+m4_define([AT_CHECK_PERL_SYNTAX],
+[AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c $abs_top_builddir/bin/$1],
+          0, [], [ignore])])
+
 ## ------------------ ##
 ## Testing autom4te.  ##
 ## ------------------ ##
@@ -218,8 +230,11 @@ AC_STATE_SAVE(after)
 # AT_CHECK_AUTOCONF(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CHECK([autoconf $1],
-	  [$2], [$3], [$4])])
+[AT_CHECK([autoconf $1], [$2], [$3], [$4])
+if test -s configure; then
+  AT_CHECK_SHELL_SYNTAX(configure)
+fi
+])
 
 
 # AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
@@ -239,7 +254,8 @@ m4_define([AT_CHECK_CONFIGURE],
 [AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
 	  [$2],
 	  m4_default([$3], [ignore]), [$4],
-	  [{ echo "$srcdir/AT_LINE: config.log"; sed 's/^/> /' config.log; } >>$at_group_log ])])
+	  [{ echo "$srcdir/AT_LINE: config.log"; sed 's/^/> /' config.log; } >>$at_group_log ])
+])
 
 
 # AT_CHECK_ENV

@@ -46,41 +46,17 @@ AT_BANNER([Executables (autoheader, autoupdate...).])
 
 AT_SETUP([Syntax of the shell scripts])
 
-# A script that never returns.  We don't care that it never returns,
-# broken /bin/sh loop equally with `false', but it makes it easier to
-# test the robustness in a good environment: just remove the `-n'.
-AT_DATA([endless.sh],
-[[while :
-do
-  :
-done
-]])
-
-# A script in charge of testing `/bin/sh -n'.
-AT_DATA([syntax.sh],
-[[(/bin/sh -n endless.sh) &
-sleep 2
-if kill $! >/dev/null 2>&1; then
-  # We managed to kill the child, which means that we probably
-  # can't trust `/bin/sh -n', hence the test failed.
-  exit 77
-fi
-]])
-
-# If we can't trust sh, just skip.
-AT_CHECK([/bin/sh ./syntax.sh])
-
 # Specify the path to the tool, some shells don't honor PATH when
 # running `sh PROG'.
 
-AT_CHECK([/bin/sh -n $abs_top_builddir/bin/autoconf],   0)
-AT_CHECK([/bin/sh -n $abs_top_builddir/tests/autoconf],   0)
-AT_CHECK([/bin/sh -n $abs_top_builddir/tests/testsuite],   0)
+AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/bin/autoconf], exit 77)
+AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/autoconf], exit 77)
+AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/testsuite], exit 77)
 
 # These are not built, they are in the src tree.
-AT_CHECK([/bin/sh -n $abs_top_srcdir/config/install-sh], 0)
-AT_CHECK([/bin/sh -n $abs_top_srcdir/config/mkinstalldirs], 0)
-AT_CHECK([/bin/sh -n $abs_top_srcdir/config/missing], 0)
+AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/install-sh], exit 77)
+AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/mkinstalldirs], exit 77)
+AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/missing], exit 77)
 
 AT_CLEANUP
 
@@ -92,14 +68,6 @@ AT_CLEANUP
 ## ---------------------------- ##
 
 AT_SETUP([Syntax of the Perl scripts])
-
-# Perl says things like:
-# | % perl -c ./autom4te
-# | ./autom4te syntax OK
-# Ignore it, it might change between releases.
-m4_define([AT_CHECK_PERL_SYNTAX],
-[AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c $abs_top_builddir/bin/$1],
-	  0, [], [ignore])])
 
 AT_CHECK_PERL_SYNTAX([autoheader])
 AT_CHECK_PERL_SYNTAX([autom4te])
