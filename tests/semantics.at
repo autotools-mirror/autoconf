@@ -340,7 +340,7 @@ define([_AC_CHECK_TYPE_OLD], [OLD])
 #(cut-from-here
 AC_CHECK_TYPE(ptrdiff_t)
 AC_CHECK_TYPE(ptrdiff_t, int)
-AC_CHECK_TYPE(quad, long long)
+AC_CHECK_TYPE(quad, long long int)
 AC_CHECK_TYPE(table_42, [int[42]])
 # Nice machine!
 AC_CHECK_TYPE(uint8_t, uint65536_t)

@@ -629,7 +629,7 @@ AC_DEFUN([AC_HEADER_SYS_WAIT],
 [AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/wait.h>
 #ifndef WEXITSTATUS
-# define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+# define WEXITSTATUS(stat_val) ((unsigned int) (stat_val) >> 8)
 #endif
 #ifndef WIFEXITED
 # define WIFEXITED(stat_val) (((stat_val) & 255) == 0)

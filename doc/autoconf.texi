@@ -4784,7 +4784,7 @@ example:
 # include <sys/wait.h>
 #endif
 #ifndef WEXITSTATUS
-# define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+# define WEXITSTATUS(stat_val) ((unsigned int) (stat_val) >> 8)
 #endif
 #ifndef WIFEXITED
 # define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
@@ -5188,7 +5188,7 @@ Equivalent to @samp{AC_CHECK_TYPE(mode_t, int)}.
 @defmac AC_TYPE_OFF_T
 @acindex{TYPE_OFF_T}
 @cvindex off_t
-Equivalent to @samp{AC_CHECK_TYPE(off_t, long)}.
+Equivalent to @samp{AC_CHECK_TYPE(off_t, long int)}.
 @end defmac
 
 @defmac AC_TYPE_PID_T
@@ -5221,7 +5221,7 @@ hup_handler ()
 @defmac AC_TYPE_SIZE_T
 @acindex{TYPE_SIZE_T}
 @cvindex size_t
-Equivalent to @samp{AC_CHECK_TYPE(size_t, unsigned)}.
+Equivalent to @samp{AC_CHECK_TYPE(size_t, unsigned int)}.
 @end defmac
 
 @defmac AC_TYPE_UID_T
@@ -5257,7 +5257,7 @@ it is executed when one of the types is not found.
 This macro uses m4 lists:
 @example
 AC_CHECK_TYPES(ptrdiff_t)
-AC_CHECK_TYPES([unsigned long long, uintmax_t])
+AC_CHECK_TYPES([unsigned long long int, uintmax_t])
 @end example
 
 @end defmac
@@ -5308,14 +5308,14 @@ Some compilers exhibit different behaviors.
 Autoconf relies on a trick to extract one bit of information from the C
 compiler: using negative array sizes.  For instance the following
 excerpt of a C source demonstrates how to test whether @samp{int}s are 4
-bytes long:
+bytes wide:
 
 @example
 int
 main (void)
 @{
   static int test_array [sizeof (int) == 4 ? 1 : -1];
-  test_array [0] = 0
+  test_array [0] = 0;
   return 0;
 @}
 @end example
@@ -5332,7 +5332,7 @@ cc: "conftest.c": error 1879: Variable-length arrays cannot \
 @end example
 
 Autoconf works around this problem by casting @code{sizeof (int)} to
-@code{long} before comparing it.
+@code{long int} before comparing it.
 @end table
 
 @node Generic Compiler Characteristics
@@ -6176,10 +6176,10 @@ Large-file support can be disabled by configuring with the
 @option{--disable-largefile} option.
 
 If you use this macro, check that your program works even when
-@code{off_t} is longer than @code{long}, since this is common when
+@code{off_t} is wider than @code{long int}, since this is common when
 large-file support is enabled.  For example, it is not correct to print
 an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
-(long) X)}.
+(long int) X)}.
 
 The LFS introduced the @code{fseeko} and @code{ftello} functions to
 replace their C counterparts @code{fseek} and @code{ftell} that do not
@@ -13444,7 +13444,7 @@ This use of @code{AC_CHECK_TYPE} is obsolete and discouraged; see
 @ref{Generic Types}, for the description of the current macro.
 
 If the type @var{type} is not defined, define it to be the C (or C++)
-builtin type @var{default}, e.g., @samp{short} or @samp{unsigned}.
+builtin type @var{default}, e.g., @samp{short int} or @samp{unsigned int}.
 
 This macro is equivalent to:
 

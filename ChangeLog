@@ -1,3 +1,21 @@
+2004-03-29  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Particular Headers, Particular Types, Generic
+	Types, Specific Compiler Characteristics, System Services,
+	Obsolete Macros): Use 'long int', 'short int', 'unsigned int'
+	etc. consistently instead of 'long', 'short', 'unsigned' etc.
+	* lib/autoconf/c.m4 (AC_LANG_INT_SAVE(C), AC_C_BIGENDIAN): Likewise.
+	* lib/autoconf/functions.m4 (AC_FUNC_MMAP, AC_FUNC_SELECT_ARGTYPES):
+	Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_SYS_WAIT): Likewise.
+	* lib/autoconf/types.m4 (AC_TYPE_GETGROUPS, AC_TYPE_SIZE_T,
+	AC_TYPE_OFF_T): Likewise.
+	* tests/semantics.at (AC_CHECK_TYPES: backward compatibility):
+	Likewise.
+
+	* tests/foreign.at (Libtool): Create an empty aclocal.m4, to
+	pacify libtool 1.5.2.  Fix quoting problems in sed command.
+
 2004-03-28  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Particular Structures): AC_STRUCT_TIMEZONE

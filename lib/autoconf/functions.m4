@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1227,7 +1227,7 @@ main ()
   data2 = (char *) malloc (2 * pagesize);
   if (!data2)
     exit (1);
-  data2 += (pagesize - ((long) data2 & (pagesize - 1))) & (pagesize - 1);
+  data2 += (pagesize - ((long int) data2 & (pagesize - 1))) & (pagesize - 1);
   if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
 		     MAP_PRIVATE | MAP_FIXED, fd, 0L))
     exit (1);
@@ -1345,7 +1345,7 @@ AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
 AC_CACHE_CHECK([types of arguments for select],
 [ac_cv_func_select_args],
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
- for ac_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
+ for ac_arg1 in 'int' 'size_t' 'unsigned long int' 'unsigned int'; do
   for ac_arg5 in 'struct timeval *' 'const struct timeval *'; do
    AC_COMPILE_IFELSE(
        [AC_LANG_PROGRAM(
@@ -1671,7 +1671,7 @@ AC_DEFUN([AC_FUNC_UTIME_NULL],
 AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 [[struct stat s, t;
   exit (!(stat ("conftest.data", &s) == 0
-	  && utime ("conftest.data", (long *)0) == 0
+	  && utime ("conftest.data", 0) == 0
 	  && stat ("conftest.data", &t) == 0
 	  && t.st_mtime >= s.st_mtime
 	  && t.st_mtime - s.st_mtime < 120));]])],

@@ -263,7 +263,7 @@ main ()
 {
   gid_t gidset[NGID];
   int i, n;
-  union { gid_t gval; long lval; }  val;
+  union { gid_t gval; long int lval; }  val;
 
   val.lval = -1;
   for (i = 0; i < NGID; i++)
@@ -271,7 +271,8 @@ main ()
   n = getgroups (sizeof (gidset) / MAX (sizeof (int), sizeof (gid_t)) - 1,
 		 gidset);
   /* Exit non-zero if getgroups seems to require an array of ints.  This
-     happens when gid_t is short but getgroups modifies an array of ints.  */
+     happens when gid_t is short int but getgroups modifies an array
+     of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
 }]])],
 	       [ac_cv_type_getgroups=gid_t],
@@ -333,13 +334,13 @@ fi
 
 
 AN_IDENTIFIER([size_t], [AC_TYPE_SIZE_T])
-AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned)])
+AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned int)])
 
 AN_IDENTIFIER([pid_t], [AC_TYPE_PID_T])
 AC_DEFUN([AC_TYPE_PID_T],  [AC_CHECK_TYPE(pid_t,  int)])
 
 AN_IDENTIFIER([off_t], [AC_TYPE_OFF_T])
-AC_DEFUN([AC_TYPE_OFF_T],  [AC_CHECK_TYPE(off_t,  long)])
+AC_DEFUN([AC_TYPE_OFF_T],  [AC_CHECK_TYPE(off_t,  long int)])
 
 AN_IDENTIFIER([mode_t], [AC_TYPE_MODE_T])
 AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
