@@ -1,5 +1,11 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	* tests/Makefile.am (all-local): Remove.  It wastes time to have
+	testsuite rebuilt each time an ac*.m4 file changes.  It is enough
+	to build it for each `make check'.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	Leave a diversion exclusively for Copyright notices.
 
 	* acgeneral.m4 (AC_DIVERSION_DEFAULTS): New diversion number.

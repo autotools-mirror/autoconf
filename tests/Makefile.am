@@ -28,8 +28,6 @@ EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
 
 PERL = perl
 
-all-local: atconfig testsuite
-
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
