@@ -4212,7 +4212,7 @@ public domain file @file{acconfig.h}.  @file{config.sub} and
 @file{config.guess} have an exception to the GPL when they are used with
 an Autoconf-generated @code{configure} script, which permits you to
 distribute them under the same terms as the rest of your package.
-@file{install.sh} is not copyrighted.
+@file{install-sh} is from the X Consortium and is not copyrighted.
 
 @node Why GNU m4, Bootstrapping, Distributing, Questions
 @section Why Require GNU @code{m4}?
