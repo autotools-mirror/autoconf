@@ -20,8 +20,10 @@ package Autom4te::General;
 
 use 5.005;
 use Exporter;
+use Getopt::Long;
 use File::Basename;
 use File::stat;
+use IO::File;
 use Carp;
 use strict;
 
@@ -230,7 +232,7 @@ sub update_file ($$)
 	  print $out $_;
 	}
       $in->close;
-      remove ($from)
+      unlink ($from)
 	or die "$me: cannot not remove $from: $!\n";
       return;
     }

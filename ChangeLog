@@ -1,5 +1,13 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoheader.in: Handle the acconfig.h etc. junk files.
+	Check the completeness of the #template.
+	* lib/Autom4te/General.pm (&update_file): s/remove/unlink/.
+	* tests/semantics.at (AC_C_BIGENDIAN): Adjust AT_CHECK_AUTOHEADER
+	invocation.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm (&find_file, &update_file): New.
 	* bin/autoupdate.in, bin/autoheader.in: Adjust.
 	Drop AC_MACRODIR dead for real.

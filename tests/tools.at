@@ -432,6 +432,8 @@ AH_BOTTOM([Bottom2 from configure.ac.])
 # Yes, that's right: the `middle' part of `acconfig.h' is still before
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
+# Ignore STDERR which is the longuish complaint against autoheader junk
+# files.
 AT_CHECK([autoheader -<configure.ac], 0,
 [[/* config.h.in.  Generated automatically from Standard input by autoheader.  */
 /* Top from acconfig.h. */
@@ -448,7 +450,7 @@ Bottom1 from configure.ac.
 
 Bottom2 from configure.ac.
 /* Bottom from acconfig.h. */
-]], [])
+]], [ignore])
 
 
 AT_CLEANUP

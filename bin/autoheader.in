@@ -33,9 +33,6 @@ BEGIN
   unshift @INC, "$perllibdir";
 }
 
-use Getopt::Long;
-use File::Basename;
-use IO::File;
 use Autom4te::General;
 use strict;
 
@@ -194,7 +191,7 @@ $autoconf .= ' --debug' if $debug;
 verbose "$me: running $autoconf to trace from $ARGV[0]";
 xsystem ("$autoconf "
 	 . " --trace AC_CONFIG_HEADERS:'\$\$config_h ||= \"\$1\";'"
-	 . " --trace AH_OUTPUT:'\$\$verbatim{\$1} = \"\\\n\$2\";'"
+	 . " --trace AH_OUTPUT:'\$\$verbatim{\"\$1\"} = \"\\\n\$2\";'"
 	 . " --trace AC_DEFINE_TRACE_LITERAL:'\$\$symbol{\"\$1\"} = 1;'"
 	 . " $ARGV[0] >$tmp/traces.pl");
 
@@ -217,11 +214,26 @@ my $out = new IO::File (">$tmp/config.hin");
 print $out "/* $config_h_in.  Generated from $ARGV[0] by autoheader.  */\n";
 
 # Dump the top.
-# test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
-#
-# # Dump `acconfig.h' but its bottom.
-# test -r $localdir/acconfig.h &&
-#   sed '/@BOTTOM@/,$d;s/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
+if ($config_h_top)
+  {
+    my $in = new IO::File ($config_h_top);
+    while ($_ = $in->getline)
+      {
+	print $out;
+      }
+  }
+
+# Dump `acconfig.h' but its bottom.
+if ($acconfig_h)
+  {
+    my $in = new IO::File ($acconfig_h);
+    while ($_ = $in->getline)
+      {
+	last if /\@BOTTOM\@/;
+	next if /\@TOP\@/;
+	print $out;
+      }
+  }
 
 # Dump the templates from `configure.ac'.
 foreach (sort keys %verbatim)
@@ -229,29 +241,45 @@ foreach (sort keys %verbatim)
     print $out "$verbatim{$_}\n";
   }
 
+# Dump `acconfig.h' bottom.
+if ($acconfig_h)
+  {
+    my $in = new IO::File ($acconfig_h);
+    my $dump = 0;
+    while ($_ = $in->getline)
+      {
+	print $out if $dump;
+	$dump = 1  if /\@BOTTOM\@/;
+      }
+  }
+
+# Dump the bottom.
+if ($config_h_bot)
+  {
+    my $in = new IO::File ($config_h_bot);
+    while ($_ = $in->getline)
+      {
+	print $out;
+      }
+  }
+
 $out->close;
 
-# # Handle the case where @BOTTOM@ is the first line of acconfig.h.
-# test -r $localdir/acconfig.h &&
-#   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-#   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.hin
-# test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
-
-# # Check that all the symbols have a template.
-# $verbose $me: checking completeness of the template >&2
-# # Regexp for a white space.
-# w='[ 	]'
-# if test -n "$syms"; then
-#   for sym in $syms; do
-#     if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.hin >/dev/null; then
-# 	  : # All is well.
-#     else
-# 	  echo "$me: No template for symbol \`$sym'" >&2
-# 	  status=1
-#     fi
-#   done
-# fi
+# Check that all the symbols have a template.
+{
+  my $in = new IO::File ("$tmp/config.hin");
+  while ($_ = $in->getline)
+    {
+      my ($symbol) = /^\#\s*\w+\s+(\w+)/
+	or next;
+      delete $symbol{$symbol};
+    }
+  foreach (sort keys %symbol)
+    {
+      print STDERR "$me: missing template: $_\n";
+    }
+  exit 1
+    if keys %symbol;
+}
 
 update_file ("$tmp/config.hin", "$config_h_in");
-
-__END__
