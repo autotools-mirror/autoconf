@@ -30,14 +30,14 @@
 ** AC_PROG_SED
   New macro that tests for a sed program that truncates as few characters
   as possible.
-
+
 * Major changes in Autoconf 2.59
 
   Released 2003-11-04, by Akim Demaille
 
 ** ac_abs_builddir etc.
   Absolute file names were actually relative in 2.58.
-
+
 * Major changes in Autoconf 2.58
 
   Released 2003-11-04, by Akim Demaille
@@ -546,7 +546,6 @@ Release tips:
 There was no release of Autoconf 2.51 since some packagers had used
 this version number without permission to ship intermediary versions
 of 2.50.  The version was skipped to avoid confusion.
-
 
 * Major changes in Autoconf 2.50
 
@@ -943,7 +942,7 @@ updated configure.in files.
 It's best to use GNU m4 1.3 (or later) with Autoconf version 2.
 Autoconf now makes heavy use of m4 diversions, which were implemented
 inefficiently in GNU m4 releases before 1.3.
-
+
 Major changes in Autoconf 2.0:
 
   Released October 26th, 1994, by David J. MacKenzie
