@@ -581,6 +581,7 @@ sub handle_output ($$)
   my $separate = 0;
   my $oline = 0;
   my %prohibited;
+  my $res;
   while ($_ = $in->getline)
     {
       s/\s+$//;
@@ -599,12 +600,13 @@ sub handle_output ($$)
 
       $oline++;
       s/__oline__/$oline/g;
+
       s/\@<:\@/[/g;
       s/\@:>\@/]/g;
       s/\@S\|\@/\$/g;
       s/\@%:\@/#/g;
 
-      print $out "$_\n";
+      $res = $_;
 
       # Don't complain in comments.  Well, until we have something
       # better, don't consider `#include' etc. are comments.
@@ -615,6 +617,14 @@ sub handle_output ($$)
 	  $prohibited{$_} = $oline
 	    if /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
 	}
+
+      # Performed *last*: the empty quadrigraph.  Handling it last
+      # makes it possible to generate quadrigraphs, e.g. `@<@__@:@'
+      # produces `@<:@'.  In addition, it provides a means to
+      # explicitly allow some *occurrences* of forbidden patterns.
+      $res =~ s/\@__\@//g;
+
+      print $out "$res\n";
     }
 
   # If no forbidden words, we're done.

@@ -1,5 +1,9 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (handle_output): Handle @__@.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autoconf.m4, lib/autoconf/oldnames.m4,
 	* lib/autotest/general.m4: Adjust the license.
 
