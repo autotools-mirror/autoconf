@@ -131,8 +131,8 @@ Free Documentation License''.
 @c   @syncodeindex fu pr
 
 
-@node Top, Introduction, (dir), (dir)
-@comment  node-name,  next,  previous,  up
+@node Top
+@top Autoconf
 
 @ifinfo
 This file documents the GNU Autoconf package for creating scripts to
@@ -434,7 +434,7 @@ Copying This Manual
 
 @c ============================================================= Introduction.
 
-@node Introduction, The GNU build system, Top, Top
+@node Introduction
 @chapter Introduction
 
 @flushright
@@ -536,7 +536,7 @@ Peter Simons}.
 
 @c ================================================= The GNU build system
 
-@node The GNU build system, Making configure Scripts, Introduction, Top
+@node The GNU build system
 @chapter The GNU build system
 
 Autoconf solves an important problem---reliable discovery of
@@ -555,7 +555,7 @@ for your software.
 * Pointers::                    More info on the GNU build system
 @end menu
 
-@node Automake, Libtool, The GNU build system, The GNU build system
+@node Automake
 @section Automake
 
 The ubiquity of @code{make} means that a @code{Makefile} is almost the
@@ -605,7 +605,7 @@ The benefits of Automake increase for larger packages (especially ones
 with subdirectories), but even for small programs the added convenience
 and portability can be substantial.  And that's not all@dots{}
 
-@node Libtool, Pointers, Automake, The GNU build system
+@node Libtool
 @section Libtool
 
 Very often, one wants to build not only programs, but libraries, so that
@@ -631,7 +631,7 @@ Autoconf, can be used on its own, it is most simply utilized in
 conjunction with Automake---there, Libtool is used automatically
 whenever shared libraries are needed, and you need not know its syntax.
 
-@node Pointers,  , Libtool, The GNU build system
+@node Pointers
 @section Pointers
 
 Developers who are used to the simplicity of @code{make} for small
@@ -680,7 +680,7 @@ Autoconf Macro Archive}.
 
 @c ================================================= Making configure Scripts.
 
-@node Making configure Scripts, Setup, The GNU build system, Top
+@node Making configure Scripts
 @chapter Making @code{configure} Scripts
 @cindex @file{aclocal.m4}
 @cindex @code{configure}
@@ -767,7 +767,7 @@ Makefile.in ---'                    `-> Makefile ---'
 * autoreconf Invocation::       Remaking multiple @code{configure} scripts
 @end menu
 
-@node Writing configure.ac, autoscan Invocation, Making configure Scripts, Making configure Scripts
+@node Writing configure.ac
 @section Writing @file{configure.ac}
 
 To produce a @code{configure} script for a software package, create a
@@ -795,7 +795,7 @@ preferred.
 * configure.ac Layout::         Standard organization of configure.ac
 @end menu
 
-@node Shell Script Compiler, Autoconf Language, Writing configure.ac, Writing configure.ac
+@node Shell Script Compiler
 @subsection A Shell Script Compiler
 
 Just as for any other computer language, in order to properly program
@@ -840,7 +840,7 @@ general-purpose macro language, such as M4, and implement the extensions
 as a set of M4 macros.
 
 
-@node Autoconf Language, configure.ac Layout, Shell Script Compiler, Writing configure.ac
+@node Autoconf Language
 @subsection The Autoconf Language
 @cindex quotation
 
@@ -971,7 +971,7 @@ with the @samp{#}.  For example, it is helpful to begin
 # Process this file with autoconf to produce a configure script.
 @end example
 
-@node configure.ac Layout,  , Autoconf Language, Writing configure.ac
+@node configure.ac Layout
 @subsection Standard @file{configure.ac} Layout
 
 The order in which @file{configure.ac} calls the Autoconf macros is not
@@ -1008,7 +1008,7 @@ checks for system services
 @end display
 
 
-@node autoscan Invocation, ifnames Invocation, Writing configure.ac, Making configure Scripts
+@node autoscan Invocation
 @section Using @code{autoscan} to Create @file{configure.ac}
 @cindex @code{autoscan}
 
@@ -1072,7 +1072,7 @@ This option is rarely needed and dangerous; it is only used when one
 plays with different versions of Autoconf simultaneously.
 @end table
 
-@node ifnames Invocation, autoconf Invocation, autoscan Invocation, Making configure Scripts
+@node ifnames Invocation
 @section Using @code{ifnames} to List Conditionals
 @cindex @code{ifnames}
 
@@ -1104,7 +1104,7 @@ Print a summary of the command line options and exit.
 Print the version number of Autoconf and exit.
 @end table
 
-@node autoconf Invocation, autoreconf Invocation, ifnames Invocation, Making configure Scripts
+@node autoconf Invocation
 @section Using @code{autoconf} to Create @code{configure}
 @cindex @code{autoconf}
 
@@ -1371,7 +1371,7 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 @end group
 @end example
 
-@node autoreconf Invocation,  , autoconf Invocation, Making configure Scripts
+@node autoreconf Invocation
 @section Using @code{autoreconf} to Update @code{configure} Scripts
 @cindex @code{autoreconf}
 
@@ -1488,7 +1488,7 @@ Include generated dependencies in @file{Makefile.in}.
 
 @c ========================================= Initialization and Output Files.
 
-@node Setup, Existing Tests, Making configure Scripts, Top
+@node Setup
 @chapter Initialization and Output Files
 
 Autoconf-generated @code{configure} scripts need some information about
@@ -1518,7 +1518,7 @@ Every @code{configure} script must call @code{AC_INIT} before doing
 anything else.  The only other required macro is @code{AC_OUTPUT}
 (@pxref{Output}).
 
-@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report-address})
+@defmac AC_INIT (@var{package})
 @acindex INIT
 Process any command-line arguments and perform various initializations
 and verifications.  Set the name of the @var{package} and its
@@ -1564,7 +1564,7 @@ Exactly @var{bug-report-address}.
 The following macros manage version numbers for @code{configure}
 scripts.  Using them is optional.
 
-@c FIXME: AC_PREREQ should not be here, but where should it go?
+@c FIXME: AC_PREREQ should not be here
 @defmac AC_PREREQ (@var{version})
 @acindex PREREQ
 @cindex Version
@@ -1620,7 +1620,7 @@ produces this in @code{configure}:
 @end defmac
 
 
-@node Input, Output, Notices, Setup
+@node Input
 @section Finding @code{configure} Input
 
 
@@ -1681,7 +1681,7 @@ name is obsolete because some @command{make} have a rule that creates
 @end defmac
 
 
-@node Output, Configuration Actions, Input, Setup
+@node Output
 @section Outputting Files
 
 Every Autoconf-generated @code{configure} script must finish by calling
@@ -1736,7 +1736,7 @@ that runs @code{MAKE} on other directories:
 
 
 
-@node Configuration Actions, Configuration Files, Output, Setup
+@node Configuration Actions
 @section Taking Configuration Actions
 
 @file{configure} is designed so that it appears to do everything itself,
@@ -1877,7 +1877,7 @@ All these macros can be called multiple times, with different
 @var{tag}s, of course!
 
 
-@node Configuration Files, Makefile Substitutions, Configuration Actions, Setup
+@node Configuration Files
 @section Creating Configuration Files
 
 Be sure to read the previous section, @ref{Configuration Actions}.
@@ -1920,7 +1920,7 @@ to prepend and/or append boilerplate to the file.
 
 
 
-@node Makefile Substitutions, Configuration Headers, Configuration Files, Setup
+@node Makefile Substitutions
 @section Substitutions in Makefiles
 
 Each subdirectory in a distribution that contains something to be
@@ -1954,7 +1954,7 @@ GNU Coding Standards}, for more information on what to put in
 * Automatic Remaking::          Makefile rules for configuring
 @end menu
 
-@node Preset Output Variables, Installation Directory Variables, Makefile Substitutions, Makefile Substitutions
+@node Preset Output Variables
 @subsection Preset Output Variables
 
 Some output variables are preset by the Autoconf macros.  Some of the
@@ -2087,7 +2087,7 @@ The top-level source code directory for the package.  In the top-level
 directory, this is the same as @code{srcdir}.
 @end defvar
 
-@node Installation Directory Variables, Build Directories, Preset Output Variables, Makefile Substitutions
+@node Installation Directory Variables
 @subsection Installation Directory Variables
 
 The following variables specify the directories where the package will
@@ -2239,7 +2239,7 @@ some.
 @end table
 
 
-@node Build Directories, Automatic Remaking, Installation Directory Variables, Makefile Substitutions
+@node Build Directories
 @subsection Build Directories
 
 You can support compiling a software package for several architectures
@@ -2282,7 +2282,7 @@ time.info: time.texinfo
         $(MAKEINFO) $(srcdir)/time.texinfo
 @end example
 
-@node Automatic Remaking,  , Build Directories, Makefile Substitutions
+@node Automatic Remaking
 @subsection Automatic Remaking
 
 You can put rules like the following in the top-level @file{Makefile.in}
@@ -2340,7 +2340,7 @@ information about @code{AC_OUTPUT}.
 @xref{config.status Invocation}, for more examples of handling
 configuration-related dependencies.
 
-@node Configuration Headers, Configuration Commands, Makefile Substitutions, Setup
+@node Configuration Headers
 @section Configuration Header Files
 @cindex Configuration Header
 @cindex @file{config.h}
@@ -2402,7 +2402,7 @@ to prepend and/or append boilerplate to the file.
 * Autoheader Macros::           How to specify CPP templates
 @end menu
 
-@node Header Templates, autoheader Invocation, Configuration Headers, Configuration Headers
+@node Header Templates
 @subsection Configuration Header Templates
 @cindex Configuration Header Template
 @cindex @file{config.h.in}
@@ -2452,7 +2452,7 @@ Since it is a tedious task to keep a template header up to date, you may
 use @code{autoheader} to generate it, see @ref{autoheader Invocation}.
 
 
-@node autoheader Invocation, Autoheader Macros, Header Templates, Configuration Headers
+@node autoheader Invocation
 @subsection Using @code{autoheader} to Create @file{config.h.in}
 @cindex @code{autoheader}
 
@@ -2561,7 +2561,7 @@ disable warnings falling into @var{category}
 
 
 
-@node Autoheader Macros,  , autoheader Invocation, Configuration Headers
+@node Autoheader Macros
 @subsection Autoheader Macros
 
 @code{autoheader} scans @file{configure.ac} and figures out which C
@@ -2639,7 +2639,7 @@ Include @var{text} at the bottom of the header template file.
 @end defmac
 
 
-@node Configuration Commands, Configuration Links, Configuration Headers, Setup
+@node Configuration Commands
 @section Running Arbitrary Configuration Commands
 
 You execute arbitrary commands either before, during and after
@@ -2692,7 +2692,7 @@ Execute the @var{cmds} right after creating @file{config.status}.
 
 
 
-@node Configuration Links, Subdirectories, Configuration Commands, Setup
+@node Configuration Links
 @section Creating Configuration Links
 
 You may find it convenient to create links whose destinations depend upon
@@ -2735,7 +2735,7 @@ to create the links.
 
 
 
-@node Subdirectories, Default Prefix, Configuration Links, Setup
+@node Subdirectories
 @section Configuring Other Packages in Subdirectories
 
 In most situations, calling @code{AC_OUTPUT} is sufficient to produce
@@ -2802,7 +2802,7 @@ this variable to determine which subdirectories to recurse into.  This
 macro may be called multiple times.
 @end defmac
 
-@node Default Prefix,  , Subdirectories, Setup
+@node Default Prefix
 @section Default Prefix
 
 By default, @code{configure} sets the prefix for files it installs to
@@ -2842,7 +2842,7 @@ set the prefix to @file{/usr/local/gnu}.
 
 @c ======================================================== Existing tests
 
-@node Existing Tests, Writing Tests, Setup, Top
+@node Existing Tests
 @chapter Existing Tests
 
 These macros test for particular system features that packages might
@@ -2876,7 +2876,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * UNIX Variants::               Special kludges for specific UNIX variants
 @end menu
 
-@node Common Behavior, Alternative Programs, Existing Tests, Existing Tests
+@node Common Behavior
 @section Common Behavior
 
 Much effort has been expended to make Autoconf easy to learn.  The most
@@ -2891,7 +2891,7 @@ rules.
 * Default Includes::            Includes used by the generic macros
 @end menu
 
-@node Standard Symbols, Default Includes, Common Behavior, Common Behavior
+@node Standard Symbols
 @subsection Standard Symbols
 
 All the generic macros that @code{AC_DEFINE} a symbol as a result of
@@ -2910,7 +2910,7 @@ AC_CHECK_TYPES(struct $Expensive*)
 will define the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check succeeds.
 
 
-@node Default Includes,  , Standard Symbols, Common Behavior
+@node Default Includes
 @subsection Default Includes
 @cindex Includes, default
 
@@ -2989,7 +2989,7 @@ For instance, on some systems @file{string.h} and @file{strings.h} both
 exist, but conflict.  Then @code{HAVE_STRING_H} will be defined, but
 @code{HAVE_STRINGS_H} won't.
 
-@node Alternative Programs, Files, Common Behavior, Existing Tests
+@node Alternative Programs
 @section Alternative Programs
 @cindex Programs, checking
 
@@ -3005,7 +3005,7 @@ general program-check macros.
 * Generic Programs::            How to find other programs
 @end menu
 
-@node Particular Programs, Generic Programs, Alternative Programs, Alternative Programs
+@node Particular Programs
 @subsection Particular Program Checks
 
 These macros check for particular programs---whether they exist, and
@@ -3142,7 +3142,7 @@ If @code{bison} is found, set output variable @code{YACC} to @samp{bison
 @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
-@node Generic Programs,  , Particular Programs, Alternative Programs
+@node Generic Programs
 @subsection Generic Program and File Checks
 
 These macros are used to find programs not covered by the ``particular''
@@ -3233,7 +3233,7 @@ path of the program if it is found.
 @end defmac
 
 
-@node Files, Libraries, Alternative Programs, Existing Tests
+@node Files
 @section Files
 @cindex File, checking
 
@@ -3257,7 +3257,7 @@ for each file found.
 @end defmac
 
 
-@node Libraries, Library Functions, Files, Existing Tests
+@node Libraries
 @section Library Files
 @cindex Library, checking
 
@@ -3316,7 +3316,7 @@ always fail with unresolved symbols.
 
 
 
-@node Library Functions, Header Files, Libraries, Existing Tests
+@node Library Functions
 @section Library Functions
 
 The following macros check for particular C library functions.
@@ -3330,7 +3330,7 @@ it, then you can use one of the general function-check macros.
 * Generic Functions::           How to find other functions
 @end menu
 
-@node Function Portability, Particular Functions, Library Functions, Library Functions
+@node Function Portability
 @subsection Portability of C Functions
 
 Most usual functions can either be missing, or be buggy, or be limited
@@ -3383,7 +3383,7 @@ unsigned type.
 @end table
 
 
-@node Particular Functions, Generic Functions, Function Portability, Library Functions
+@node Particular Functions
 @subsection Particular Function Checks
 @cindex Function, checking
 
@@ -3799,7 +3799,7 @@ is available, you may assume that @code{vfprintf} and @code{vsprintf}
 are also available.)
 @end defmac
 
-@node Generic Functions,  , Particular Functions, Library Functions
+@node Generic Functions
 @subsection Generic Function Checks
 
 These macros are used to find functions not covered by the ``particular''
@@ -3905,7 +3905,7 @@ should be including, so you shouldn't redeclare it lest your declaration
 conflict.
 @end defmac
 
-@node Header Files, Declarations, Library Functions, Existing Tests
+@node Header Files
 @section Header Files
 @cindex Header, checking
 
@@ -3919,7 +3919,7 @@ it, then you can use one of the general header-file check macros.
 * Generic Headers::             How to find other headers
 @end menu
 
-@node Particular Headers, Generic Headers, Header Files, Header Files
+@node Particular Headers
 @subsection Particular Header Checks
 
 These macros check for particular system header files---whether they
@@ -4161,7 +4161,7 @@ Use:
 @end example
 @end defmac
 
-@node Generic Headers,  , Particular Headers, Header Files
+@node Generic Headers
 @subsection Generic Header Checks
 
 These macros are used to find system header files not covered by the
@@ -4224,7 +4224,7 @@ Be sure to read the documentation of @code{AC_CHECK_HEADER} to
 understand the influence of @var{includes}.
 @end defmac
 
-@node Declarations, Structures, Header Files, Existing Tests
+@node Declarations
 @section Declarations
 @cindex Declaration, checking
 
@@ -4239,7 +4239,7 @@ Declarations}) or, for more complex tests, you may use
 * Generic Declarations::        How to find other declarations
 @end menu
 
-@node Particular Declarations, Generic Declarations, Declarations, Declarations
+@node Particular Declarations
 @subsection Particular Declaration Checks
 
 The following macros check for certain declarations.
@@ -4252,7 +4252,7 @@ is declared in a system header file, either @file{signal.h} or
 @file{unistd.h}.
 @end defmac
 
-@node Generic Declarations,  , Particular Declarations, Declarations
+@node Generic Declarations
 @subsection Generic Declaration Checks
 
 These macros are used to find declarations not covered by the ``particular''
@@ -4318,7 +4318,7 @@ the configuration.  In most cases the traditional approach is enough.
 @end defmac
 
 
-@node Structures, Types, Declarations, Existing Tests
+@node Structures
 @section Structures
 @cindex Structure, checking
 
@@ -4333,7 +4333,7 @@ member you need, then you can use the general structure-member macro
 * Generic Structures::          How to find other structure members
 @end menu
 
-@node Particular Structures, Generic Structures, Structures, Structures
+@node Particular Structures
 @subsection Particular Structure Checks
 
 The following macros check for certain structures or structure members.
@@ -4396,7 +4396,7 @@ obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
 @code{tzname} is found, define @code{HAVE_TZNAME}.
 @end defmac
 
-@node Generic Structures,  , Particular Structures, Structures
+@node Generic Structures
 @subsection Generic Structure Checks
 
 These macros are used to find structure members not covered by the
@@ -4435,7 +4435,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev, struct stat.st_blksize])
 @end defmac
 
 
-@node Types, Compilers and Preprocessors, Structures, Existing Tests
+@node Types
 @section Types
 
 The following macros check for C types, either builtin or typedefs.  If
@@ -4448,7 +4448,7 @@ use a general type-check macro.
 * Generic Types::               How to find other types
 @end menu
 
-@node Particular Types, Generic Types, Types, Types
+@node Particular Types
 @subsection Particular Type Checks
 
 These macros check for particular C types in @file{sys/types.h},
@@ -4513,7 +4513,7 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @code{gid_t} to be @code{int}.
 @end defmac
 
-@node Generic Types,  , Particular Types, Types
+@node Generic Types
 @subsection Generic Type Checks
 
 These macros are used to check for types not covered by the ``particular''
@@ -4550,7 +4550,7 @@ implemented.  In case of doubt, read the documentation of the former
 @code{AC_CHECK_TYPE}, see @ref{Obsolete Macros}.
 
 
-@node Compilers and Preprocessors, System Services, Types, Existing Tests
+@node Compilers and Preprocessors
 @section Compilers and Preprocessors
 
 @ovindex EXEEXT
@@ -4576,7 +4576,7 @@ compiling.
 * Fortran 77 Compiler::         Likewise
 @end menu
 
-@node Generic Compiler Characteristics, C Compiler, Compilers and Preprocessors, Compilers and Preprocessors
+@node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics
 
 @defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @ovar{includes})
@@ -4601,7 +4601,7 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
 
-@node C Compiler, C++ Compiler, Generic Compiler Characteristics, Compilers and Preprocessors
+@node C Compiler
 @subsection C Compiler Characteristics
 
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
@@ -4831,7 +4831,7 @@ this is becoming a less prevalent problem.
 @end defmac
 
 
-@node C++ Compiler, Fortran 77 Compiler, C Compiler, Compilers and Preprocessors
+@node C++ Compiler
 @subsection C++ Compiler Characteristics
 
 
@@ -4888,7 +4888,7 @@ it is not known whether such broken preprocessors exist for C++.
 
 
 
-@node Fortran 77 Compiler,  , C++ Compiler, Compilers and Preprocessors
+@node Fortran 77 Compiler
 @subsection Fortran 77 Compiler Characteristics
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})
@@ -5099,7 +5099,7 @@ preprocessor as above; for example, to call Fortran routines from some
 language other than C/C++.
 @end defmac
 
-@node System Services, UNIX Variants, Compilers and Preprocessors, Existing Tests
+@node System Services
 @section System Services
 
 The following macros check for operating system services or capabilities.
@@ -5193,7 +5193,7 @@ system.  If so, set the shell variable @code{am_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
 @end defmac
 
-@node UNIX Variants,  , System Services, Existing Tests
+@node UNIX Variants
 @section UNIX Variants
 
 The following macros check for certain operating systems that need
@@ -5235,7 +5235,7 @@ facilities.  Should be called before any macros that run the C compiler.
 
 @c ========================================================= Writing Tests
 
-@node Writing Tests, Results, Existing Tests, Top
+@node Writing Tests
 @chapter Writing Tests
 
 If the existing feature tests don't do something you need, you have to
@@ -5272,7 +5272,7 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Language Choice::             Selecting which language to use for testing
 @end menu
 
-@node Examining Declarations, Examining Syntax, Writing Tests, Writing Tests
+@node Examining Declarations
 @section Examining Declarations
 
 The macro @code{AC_TRY_CPP} is used to check whether particular header
@@ -5332,7 +5332,7 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
-@node Examining Syntax, Examining Libraries, Examining Declarations, Writing Tests
+@node Examining Syntax
 @section Examining Syntax
 
 To check for a syntax feature of the C, C++ or Fortran 77 compiler, such
@@ -5362,7 +5362,7 @@ This macro does not try to link; use @code{AC_TRY_LINK} if you need to
 do that (@pxref{Examining Libraries}).
 @end defmac
 
-@node Examining Libraries, Run Time, Examining Syntax, Writing Tests
+@node Examining Libraries
 @section Examining Libraries
 
 To check for a library, a function, or a global variable, Autoconf
@@ -5424,7 +5424,7 @@ If the file compiles and links successfully, run shell commands
 
 
 
-@node Run Time, Systemology, Examining Libraries, Writing Tests
+@node Run Time
 @section Checking Run Time Behavior
 
 Sometimes you need to find out how a system performs at run time, such
@@ -5445,7 +5445,7 @@ cross-compiling.
 * Test Functions::              Avoiding pitfalls in test programs
 @end menu
 
-@node Test Programs, Guidelines, Run Time, Run Time
+@node Test Programs
 @subsection Running Test Programs
 
 Use the following macro if you need to test run-time behavior of the
@@ -5493,7 +5493,7 @@ variable @code{cross_compiling} is set to @samp{yes}, use an alternate
 method to get the results instead of calling the macros.
 
 
-@node Guidelines, Test Functions, Test Programs, Run Time
+@node Guidelines
 @subsection Guidelines for Test Programs
 
 Test programs should not write anything to the standard output.  They
@@ -5523,7 +5523,7 @@ that starts with @file{conftest}, such as @file{conftest.data}.  The
 @code{configure} script cleans up by running @samp{rm -rf conftest*}
 after running test programs and if the script is interrupted.
 
-@node Test Functions,  , Guidelines, Run Time
+@node Test Functions
 @subsection Test Functions
 
 Function declarations in test programs should have a prototype
@@ -5565,7 +5565,7 @@ inlines; for example, @code{memcpy}.  To avoid errors when checking for
 them, either pass them the correct number of arguments or redeclare them
 with a different return type (such as @code{char}).
 
-@node Systemology, Multiple Cases, Run Time, Writing Tests
+@node Systemology
 @section Systemology
 
 This section aims at presenting some systems and pointers to
@@ -5587,7 +5587,7 @@ man pages}.
 @end table
 
 
-@node Multiple Cases, Language Choice, Systemology, Writing Tests
+@node Multiple Cases
 @section Multiple Cases
 
 Some operations are accomplished in several possible ways, depending on
@@ -5622,7 +5622,7 @@ AC_MSG_RESULT([$fstype])
 @end group
 @end example
 
-@node Language Choice,  , Multiple Cases, Writing Tests
+@node Language Choice
 @section Language Choice
 @cindex Language
 
@@ -5690,7 +5690,7 @@ depending on which language is current.
 
 @c ====================================================== Results of Tests.
 
-@node Results, Programming in M4, Writing Tests, Top
+@node Results
 @chapter Results of Tests
 
 Once @code{configure} has determined whether a feature exists, what can
@@ -5706,7 +5706,7 @@ print a message letting the user know the result of the test.
 * Printing Messages::           Notifying @code{configure} users
 @end menu
 
-@node Defining Symbols, Setting Output Variables, Results, Results
+@node Defining Symbols
 @section Defining C Preprocessor Symbols
 
 A common action to take in response to a feature test is to define a C
@@ -5796,7 +5796,7 @@ instead of this:
 AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
 @end example
 
-@node Setting Output Variables, Caching Results, Defining Symbols, Results
+@node Setting Output Variables
 @section Setting Output Variables
 
 Another way to record the results of tests is to set @dfn{output
@@ -5912,7 +5912,7 @@ running /bin/sh ./configure undeclared_var=raboof --silent \
 @end defmac
 
 
-@node Caching Results, Printing Messages, Setting Output Variables, Results
+@node Caching Results
 @section Caching Results
 @cindex Cache
 
@@ -6005,7 +6005,7 @@ running the shell commands.
 * Cache Checkpointing::         Loading and saving the cache file
 @end menu
 
-@node Cache Variable Names, Cache Files, Caching Results, Caching Results
+@node Cache Variable Names
 @subsection Cache Variable Names
 @cindex Cache variable
 
@@ -6050,7 +6050,7 @@ The values assigned to cache variables may not contain newlines.
 Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
 names of files or functions; so this is not an important restriction.
 
-@node Cache Files, Cache Checkpointing, Cache Variable Names, Caching Results
+@node Cache Files
 @subsection Cache Files
 
 A cache file is a shell script that caches the results of configure
@@ -6089,7 +6089,7 @@ results with the existing cache file.)  This may cause problems,
 however, if the system configuration (e.g. the installed libraries or
 compilers) changes and the stale cache file is not deleted.
 
-@node Cache Checkpointing,  , Cache Files, Caching Results
+@node Cache Checkpointing
 @subsection Cache Checkpointing
 
 If your configure script, or a macro called from configure.ac, happens
@@ -6140,7 +6140,7 @@ AM_PATH_GTKMM(0.9.5,, [AC_MSG_ERROR([GTK not in path])])
 @r{ @dots{} AC_OUTPUT, etc. @dots{}}
 @end example
 
-@node Printing Messages,  , Caching Results, Results
+@node Printing Messages
 @section Printing Messages
 @cindex Messages, from @code{configure}
 
@@ -6227,7 +6227,7 @@ make hard links}.
 
 @c ====================================================== Programming in M4.
 
-@node Programming in M4, Writing Autoconf Macros, Results, Top
+@node Programming in M4
 @chapter Programming in M4
 
 Autoconf is written on top of two layers: @dfn{M4sugar}, which provides
@@ -6243,7 +6243,7 @@ and their interface might change in the future.  As a matter of fact,
 * Programming in M4sugar::      Convenient pure M4 macros
 @end menu
 
-@node M4 Quotation, Programming in M4sugar, Programming in M4, Programming in M4
+@node M4 Quotation
 @section M4 Quotation
 @cindex quotation
 
@@ -6265,7 +6265,7 @@ former helps one to follow the latter.
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 @end menu
 
-@node Active Characters, One Macro Call, M4 Quotation, M4 Quotation
+@node Active Characters
 @subsection Active Characters
 
 To fully understand where proper quotation is important, you first need
@@ -6314,7 +6314,7 @@ How can you correctly output the intended results@footnote{Using
 @code{defn}.}?
 
 
-@node One Macro Call, Quotation and Nested Macros, Active Characters, M4 Quotation
+@node One Macro Call
 @subsection One Macro Call
 
 Let's proceed on the interaction between active characters and macros
@@ -6392,7 +6392,7 @@ With this in mind, we can explore the cases where macros invoke
 macros@dots{}
 
 
-@node Quotation and Nested Macros, Quadrigraphs, One Macro Call, M4 Quotation
+@node Quotation and Nested Macros
 @subsection Quotation and Nested Macros
 
 The examples below use the following macros:
@@ -6522,7 +6522,7 @@ Also, because @code{qar} behaves differently from the other macros,
 it's an exception that should be avoided in Autoconf.
 
 
-@node Quadrigraphs, Quotation Rule Of Thumb, Quotation and Nested Macros, M4 Quotation
+@node Quadrigraphs
 @subsection Quadrigraphs
 @cindex quadrigraphs
 @cindex @samp{@@<:@@}
@@ -6557,7 +6557,7 @@ For example, the string @samp{[^@@<:@@]}, if properly quoted, will
 appear as @samp{[^[]} in the @code{configure} script.
 
 
-@node Quotation Rule Of Thumb,  , Quadrigraphs, M4 Quotation
+@node Quotation Rule Of Thumb
 @subsection Quotation Rule Of Thumb
 
 To conclude, the quotation rule of thumb is:
@@ -6647,7 +6647,7 @@ unexpanded macros.  The @code{autoconf} program checks for this problem
 by doing @samp{grep AC_ configure}.
 
 
-@node Programming in M4sugar,  , M4 Quotation, Programming in M4
+@node Programming in M4sugar
 @section Programming in M4sugar
 
 @cindex M4sugar
@@ -6661,7 +6661,7 @@ M4sugar''.
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
-@node Redefined M4 Macros, Forbidden Patterns, Programming in M4sugar, Programming in M4sugar
+@node Redefined M4 Macros
 @subsection Redefined M4 Macros
 
 With a few exceptions, all the M4 native macros are moved in the
@@ -6731,7 +6731,7 @@ m4_wrap([foo])
 @end example
 @end defmac
 
-@node Forbidden Patterns,  , Redefined M4 Macros, Programming in M4sugar
+@node Forbidden Patterns
 @subsection Forbidden Patterns
 
 M4sugar provides a means to define suspicious patterns, patterns
@@ -6766,7 +6766,7 @@ Any token matching @var{pattern} is allowed, including if it matches an
 
 @c=================================================== Writing Autoconf Macros.
 
-@node Writing Autoconf Macros, Portable Shell, Programming in M4, Top
+@node Writing Autoconf Macros
 @chapter Writing Autoconf Macros
 
 When you write a feature test that could be applicable to more than one
@@ -6782,7 +6782,7 @@ Here are some instructions and guidelines for writing Autoconf macros.
 * Coding Style::                Writing Autoconf macros @`a la Autoconf
 @end menu
 
-@node Macro Definitions, Macro Names, Writing Autoconf Macros, Writing Autoconf Macros
+@node Macro Definitions
 @section Macro Definitions
 
 @acindex DEFUN
@@ -6831,7 +6831,7 @@ Keep in mind that @code{dnl} is rarely needed to introduce comments;
 that produce no output, such as @code{AC_REQUIRE}.
 
 
-@node Macro Names, Reporting Messages, Macro Definitions, Writing Autoconf Macros
+@node Macro Names
 @section Macro Names
 
 All of the Autoconf macros have all-uppercase names starting with
@@ -6897,7 +6897,7 @@ other macro, followed by one or more words saying what the internal
 macro does.  For example, @code{AC_PATH_X} has internal macros
 @code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
 
-@node Reporting Messages, Dependencies Between Macros, Macro Names, Writing Autoconf Macros
+@node Reporting Messages
 @section Reporting Messages
 @cindex Messages, from @code{autoconf}
 
@@ -6942,7 +6942,7 @@ When the user runs @samp{autoconf -W error}, warnings from
 @code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
 @ref{autoconf Invocation}.
 
-@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Autoconf Macros
+@node Dependencies Between Macros
 @section Dependencies Between Macros
 
 Some Autoconf macros depend on other macros having been called first in
@@ -6955,7 +6955,7 @@ called in an order that might cause incorrect operation.
 * Suggested Ordering::          Warning about possible ordering problems
 @end menu
 
-@node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
+@node Prerequisite Macros
 @subsection Prerequisite Macros
 
 A macro that you write might need to use values that have previously
@@ -7053,7 +7053,7 @@ SOME_CHECK
 You are encouraged to put all @code{AC_REQUIRE}s at the beginning of a
 macro.  You can use @code{dnl} to avoid the empty lines they leave.
 
-@node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
+@node Suggested Ordering
 @subsection Suggested Ordering
 
 Some macros should be run before another macro if both are called, but
@@ -7091,7 +7091,7 @@ macro @var{called-macro-name} must have been defined using
 that it has been called.
 @end defmac
 
-@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Autoconf Macros
+@node Obsoleting Macros
 @section Obsoleting Macros
 
 Configuration and portability technology has evolved over the years.
@@ -7117,7 +7117,7 @@ replaced by the modern @var{implementation}.  The additional
 @var{message} is then printed.
 @end defmac
 
-@node Coding Style,  , Obsoleting Macros, Writing Autoconf Macros
+@node Coding Style
 @section Coding Style
 
 The Autoconf macros follow a strict coding style.  You are encouraged to
@@ -7327,7 +7327,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 
 @c ============================================= Portable Shell Programming
 
-@node Portable Shell, Manual Configuration, Writing Autoconf Macros, Top
+@node Portable Shell
 @chapter Portable Shell Programming
 
 When writing your own checks, there are some shell-script programming
@@ -7373,7 +7373,7 @@ Some of these external utilities have a portable subset of features; see
 * Limitations of Make::         Portable Makefiles
 @end menu
 
-@node Shellology, Here-Documents, Portable Shell, Portable Shell
+@node Shellology
 @section Shellology
 
 There are several families of shells, most prominently the Bourne
@@ -7472,7 +7472,7 @@ So while most modern systems do have a shell _somewhere_ that meets the
 @sc{posix} standard, the challenge is to find it.
 @end quotation
 
-@node Here-Documents, File Descriptors, Shellology, Portable Shell
+@node Here-Documents
 @section Here-Documents
 
 Don't rely on @samp{\} being preserved just because it has no special
@@ -7544,7 +7544,7 @@ macro when it was expanded before in a conditional path, and the
 condition turned out to be false at run-time, and we end up not
 executing the macro at all.
 
-@node File Descriptors, File System Conventions, Here-Documents, Portable Shell
+@node File Descriptors
 @section File Descriptors
 
 Some file descriptors shall not be used, since some systems, admittedly
@@ -7616,7 +7616,7 @@ good ones@dots{}
 Don't try to move/delete open files, such as in @samp{exec >foo; mv foo
 bar}, see @xref{Limitations of Builtins}, @command{mv} for more details.
 
-@node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
+@node File System Conventions
 @section File System Conventions
 
 While @command{autoconf} and friends will usually be run on some Unix
@@ -7732,7 +7732,7 @@ In a @sc{sfn} environment, other characters are also invalid.  These
 include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 @end table
 
-@node Shell Substitutions, Assignments, File System Conventions, Portable Shell
+@node Shell Substitutions
 @section Shell Substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
@@ -7926,7 +7926,7 @@ $(echo blah)
 @end table
 
 
-@node Assignments, Special Shell Variables, Shell Substitutions, Portable Shell
+@node Assignments
 @section Assignments
 
 When setting several variables in a row, be aware that the order of the
@@ -7996,7 +7996,7 @@ doubt, just use the latter.  @xref{Shell Substitutions}, items
 for the rationale.
 
 
-@node Special Shell Variables, Limitations of Builtins, Assignments, Portable Shell
+@node Special Shell Variables
 @section Special Shell Variables
 
 Some shell variables should not be used, since they can have a deep
@@ -8124,7 +8124,7 @@ can be observed by using @command{set}.
 @end table
 
 
-@node Limitations of Builtins, Limitations of Usual Tools, Special Shell Variables, Portable Shell
+@node Limitations of Builtins
 @section Limitations of Shell Builtins
 
 No, no, we are serious: some shells do have limitations! :)
@@ -8587,7 +8587,7 @@ $unset CDPATH || CDPATH=:
 the case of environment variables.
 @end table
 
-@node Limitations of Usual Tools, Limitations of Make, Limitations of Builtins, Portable Shell
+@node Limitations of Usual Tools
 @section Limitations of Usual Tools
 
 The small set of tools you can expect to find on any machine can still
@@ -9074,7 +9074,7 @@ on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
 @end table
 
 
-@node Limitations of Make,  , Limitations of Usual Tools, Portable Shell
+@node Limitations of Make
 @section Limitations of Make
 
 Make itself suffers a great number of limitations, only a few of which
@@ -9115,7 +9115,7 @@ Don't use it!  For instance any assignment to @code{VPATH} causes Sun
 
 @c ================================================== Manual Configuration
 
-@node Manual Configuration, Site Configuration, Portable Shell, Top
+@node Manual Configuration
 @chapter Manual Configuration
 
 A few kinds of features can't be guessed automatically by running test
@@ -9132,7 +9132,7 @@ Autoconf provides a uniform method for handling unguessable features.
 * Using System Type::           What to do with the system type
 @end menu
 
-@node Specifying Names, Canonicalizing, Manual Configuration, Manual Configuration
+@node Specifying Names
 @section Specifying the System Type
 
 Like other @sc{gnu} @code{configure} scripts, Autoconf-generated
@@ -9213,7 +9213,7 @@ example, @samp{decstation} can be used instead of
 
 
 
-@node Canonicalizing, Using System Type, Specifying Names, Manual Configuration
+@node Canonicalizing
 @section Getting the Canonical System Type
 
 The following macros make the system type available to @code{configure}
@@ -9293,7 +9293,7 @@ otherwise it defaults to @code{host}.
 @end defmac
 
 
-@node Using System Type,  , Canonicalizing, Manual Configuration
+@node Using System Type
 @section Using the System Type
 
 How do you use a canonical system type?  Usually, you use it in one or
@@ -9327,7 +9327,7 @@ macro which does that.
 
 @c ===================================================== Site Configuration.
 
-@node Site Configuration, Running configure scripts, Manual Configuration, Top
+@node Site Configuration
 @chapter Site Configuration
 
 @code{configure} scripts support several kinds of local configuration
@@ -9345,7 +9345,7 @@ options.
 * Site Defaults::               Giving @code{configure} local defaults
 @end menu
 
-@node External Software, Package Options, Site Configuration, Site Configuration
+@node External Software
 @section Working With External Software
 
 Some packages require, or can optionally use, other software packages
@@ -9425,7 +9425,7 @@ This is an obsolete version of @code{AC_ARG_WITH} that does not
 support providing a help string.
 @end defmac
 
-@node Package Options, Pretty Help Strings, External Software, Site Configuration
+@node Package Options
 @section Choosing Package Options
 
 If a software package has optional compile-time features, the user can
@@ -9494,7 +9494,7 @@ support providing a help string.
 @end defmac
 
 
-@node Pretty Help Strings, Site Details, Package Options, Site Configuration
+@node Pretty Help Strings
 @section Making Your Help Strings Look Pretty
 
 Properly formatting the @samp{help strings} which are used in
@@ -9545,7 +9545,7 @@ AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 @end defmac
 
 
-@node Site Details, Transforming Names, Pretty Help Strings, Site Configuration
+@node Site Details
 @section Configuring Site Details
 
 Some software packages require complex site-specific information.  Some
@@ -9566,7 +9566,7 @@ getting the information while configuring.  @xref{Directory Variables,,
 Variables for Installation Directories, standards, GNU Coding
 Standards}, for more information on where to put data files.
 
-@node Transforming Names, Site Defaults, Site Details, Site Configuration
+@node Transforming Names
 @section Transforming Program Names When Installing
 
 Autoconf supports changing the names of programs when installing them.
@@ -9593,7 +9593,7 @@ program name transformation is done.
 * Transformation Rules::        @file{Makefile} uses of transforming names
 @end menu
 
-@node Transformation Options, Transformation Examples, Transforming Names, Transforming Names
+@node Transformation Options
 @subsection Transformation Options
 
 You can specify name transformations by giving @code{configure} these
@@ -9610,7 +9610,7 @@ append @var{suffix} to the names;
 perform @code{sed} substitution @var{expression} on the names.
 @end table
 
-@node Transformation Examples, Transformation Rules, Transformation Options, Transforming Names
+@node Transformation Examples
 @subsection Transformation Examples
 
 These transformations are useful with programs that can be part of a
@@ -9648,7 +9648,7 @@ programs as @file{/usr/local/bin/autoconf2},
 that only the binaries are renamed, therefore you'd have problems with
 the library files which might overlap.
 
-@node Transformation Rules,  , Transformation Examples, Transforming Names
+@node Transformation Rules
 @subsection Transformation Rules
 
 Here is how to use the variable @code{program_transform_name} in a
@@ -9688,7 +9688,7 @@ conflict with system documentation.  As a compromise, it is probably
 best to do name transformations on @code{man} pages but not on Texinfo
 manuals.
 
-@node Site Defaults,  , Transforming Names, Site Configuration
+@node Site Defaults
 @section Setting Site Defaults
 
 Autoconf-generated @code{configure} scripts allow your site to provide
@@ -9772,7 +9772,7 @@ fi
 
 @c ============================================== Running configure Scripts.
 
-@node Running configure scripts, config.status Invocation, Site Configuration, Top
+@node Running configure scripts
 @chapter Running @code{configure} Scripts
 @cindex @code{configure}
 
@@ -9799,7 +9799,7 @@ may use comes with Autoconf.
 
 @c ============================================== Recreating a Configuration
 
-@node config.status Invocation, Obsolete Constructs, Running configure scripts, Top
+@node config.status Invocation
 @chapter Recreating a Configuration
 @cindex @code{config.status}
 
@@ -9918,7 +9918,7 @@ The calling convention of @file{config.status} has changed, see
 
 @c =================================================== Obsolete Constructs
 
-@node Obsolete Constructs, Using Autotest, config.status Invocation, Top
+@node Obsolete Constructs
 @chapter Obsolete Constructs
 
 Autoconf changes, and throughout the years some constructs are obsoleted.
@@ -9938,7 +9938,7 @@ understanding how to move to more modern constructs.
 * Autoconf 2.13::               Some fresher tips
 @end menu
 
-@node Obsolete config.status Use, acconfig.h, Obsolete Constructs, Obsolete Constructs
+@node Obsolete config.status Use
 @section Obsolete @file{config.status} Invocation
 
 @file{config.status} now supports arguments to specify the files to
@@ -9996,7 +9996,7 @@ no need to set @code{CONFIG_HEADERS} in the @code{make} rules, equally
 for @code{CONFIG_COMMANDS} etc.)
 
 
-@node acconfig.h, autoupdate Invocation, Obsolete config.status Use, Obsolete Constructs
+@node acconfig.h
 @section @file{acconfig.h}
 
 @cindex @file{acconfig.h}
@@ -10047,7 +10047,7 @@ Use only the @code{AH_} macros, @file{configure.ac} should be
 self-contained, and should not depend upon @file{acconfig.h} etc.
 
 
-@node autoupdate Invocation, Obsolete Macros, acconfig.h, Obsolete Constructs
+@node autoupdate Invocation
 @section Using @code{autoupdate} to Modernize @file{configure.ac}
 @cindex @code{autoupdate}
 
@@ -10105,7 +10105,7 @@ Look for the package file @file{aclocal.m4} in directory @var{dir}
 instead of in the current directory.
 @end table
 
-@node Obsolete Macros, Autoconf 1, autoupdate Invocation, Obsolete Constructs
+@node Obsolete Macros
 @section Obsolete Macros
 
 Several macros are obsoleted in Autoconf, for various reasons (typically
@@ -10874,7 +10874,7 @@ AC_EGREP_CPP(yes,
 @code{AC_DECL_YYTEXT}
 @end defmac
 
-@node Autoconf 1, Autoconf 2.13, Obsolete Macros, Obsolete Constructs
+@node Autoconf 1
 @section Upgrading From Version 1
 
 Autoconf version 2 is mostly backward compatible with version 1.
@@ -10895,7 +10895,7 @@ Autoconf distribution.
 * Changed Macro Writing::       Better ways to write your own macros
 @end menu
 
-@node Changed File Names, Changed Makefiles, Autoconf 1, Autoconf 1
+@node Changed File Names
 @subsection Changed File Names
 
 If you have an @file{aclocal.m4} installed with Autoconf (as opposed to
@@ -10911,7 +10911,7 @@ If you were using @file{config.h.top}, @file{config.h.bot}, or
 @file{acconfig.h}, you still can, but you will have less clutter if you
 use the @code{AH_} macros.  @xref{Autoheader Macros}.
 
-@node Changed Makefiles, Changed Macros, Changed File Names, Autoconf 1
+@node Changed Makefiles
 @subsection Changed Makefiles
 
 Add @samp{@@CFLAGS@@}, @samp{@@CPPFLAGS@@}, and @samp{@@LDFLAGS@@} in
@@ -10947,7 +10947,7 @@ exec_prefix = @@exec_prefix@@
 The old behavior of replacing those variables without @samp{@@}
 characters around them has been removed.
 
-@node Changed Macros, Changed Results, Changed Makefiles, Autoconf 1
+@node Changed Macros
 @subsection Changed Macros
 
 Many of the macros were renamed in Autoconf version 2.  You can still
@@ -10971,7 +10971,7 @@ in conjunction with cache variables.  @xref{Caching Results}.
 
 
 
-@node Changed Results, Changed Macro Writing, Changed Macros, Autoconf 1
+@node Changed Results
 @subsection Changed Results
 
 If you were checking the results of previous tests by examining the
@@ -11029,7 +11029,7 @@ though for backward compatibility some use the empty string instead.  If
 you were relying on a shell variable being set to something like 1 or
 @samp{t} for true, you need to change your tests.
 
-@node Changed Macro Writing,  , Changed Results, Autoconf 1
+@node Changed Macro Writing
 @subsection Changed Macro Writing
 
 When defining your own macros, you should now use @code{AC_DEFUN}
@@ -11056,7 +11056,7 @@ See whether any of your tests are of general enough usefulness to
 encapsulate into macros that you can share.
 
 
-@node Autoconf 2.13,  , Autoconf 1, Obsolete Constructs
+@node Autoconf 2.13
 @section Upgrading From Version 2.13
 
 The introduction of the previous section (@pxref{Autoconf 1}) perfectly
@@ -11079,7 +11079,7 @@ features in version 2.50; the changes are summarized in the file
 * New Macros::                  Interaction with foreign macros
 @end menu
 
-@node Changed Quotation, New Macros, Autoconf 2.13, Autoconf 2.13
+@node Changed Quotation
 @subsection Changed Quotation
 
 The most important changes are invisible to you: the implementation of
@@ -11152,7 +11152,7 @@ $
 @end example
 
 
-@node New Macros,  , Changed Quotation, Autoconf 2.13
+@node New Macros
 @subsection New Macros
 
 @cindex @code{undefined macro: _m4_divert_diversion}
@@ -11207,7 +11207,7 @@ $
 
 @c ============================= Generating Test Suites with Autotest
 
-@node Using Autotest, Questions, Obsolete Constructs, Top
+@node Using Autotest
 @chapter Generating Test Suites with Autotest
 
 @cindex Autotest
@@ -11257,7 +11257,7 @@ tool testing, which is probably its main limitation.
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 @end menu
 
-@node testsuite Scripts, Writing testsuite.at, Using Autotest, Using Autotest
+@node testsuite Scripts
 @section @command{testsuite} Scripts
 
 @cindex @command{testsuite}
@@ -11342,7 +11342,7 @@ atconfig.in                                        testsuite.log
 [atlocal.in]                                       debug-@var{nn}.sh*
 @end example
 
-@node Writing testsuite.at, testsuite invocation, testsuite Scripts, Using Autotest
+@node Writing testsuite.at
 @section Writing @file{testsuite.at}
 
 The @file{testsuite.at} is a Bourne shell script making use of special
@@ -11415,7 +11415,7 @@ Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
 @end defmac
 
 
-@node testsuite invocation, Making testsuite Scripts, Writing testsuite.at, Using Autotest
+@node testsuite invocation
 @section Running @command{testsuite} Scripts
 @cindex @command{testsuite}
 
@@ -11466,7 +11466,7 @@ a trace of command execution.  This option also implies option @samp{-n}.
 @end table
 
 
-@node Making testsuite Scripts,  , testsuite invocation, Using Autotest
+@node Making testsuite Scripts
 @section Making @command{testsuite} Scripts
 
 For putting Autotest into movement, you need some configuration and
@@ -11544,7 +11544,7 @@ distributed.
 
 @c ================================================ Questions About Autoconf.
 
-@node Questions, History, Using Autotest, Top
+@node Questions
 @chapter Questions About Autoconf
 
 Several questions about Autoconf come up occasionally.  Here some of them
@@ -11557,7 +11557,7 @@ are addressed.
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 @end menu
 
-@node Distributing, Why GNU m4, Questions, Questions
+@node Distributing
 @section Distributing @code{configure} Scripts
 
 @display
@@ -11580,7 +11580,7 @@ exception to the GPL when they are used with an Autoconf-generated
 same terms as the rest of your package.  @file{install-sh} is from the X
 Consortium and is not copyrighted.
 
-@node Why GNU m4, Bootstrapping, Distributing, Questions
+@node Why GNU m4
 @section Why Require GNU M4?
 
 @display
@@ -11609,7 +11609,7 @@ M4 is simple to configure and install, it seems reasonable to require
 other free software already have most of the @sc{gnu} utilities
 installed, since they prefer them.
 
-@node Bootstrapping, Why Not Imake, Why GNU m4, Questions
+@node Bootstrapping
 @section How Can I Bootstrap?
 
 @display
@@ -11624,7 +11624,7 @@ in order to run the script and install @sc{gnu} M4.  Autoconf is only
 required if you want to change the M4 @code{configure} script, which few
 people have to do (mainly its maintainer).
 
-@node Why Not Imake,  , Bootstrapping, Questions
+@node Why Not Imake
 @section Why Not Imake?
 
 @display
@@ -11734,7 +11734,7 @@ duplicated, even though they normally are in @code{configure} setups.
 
 @c ===================================================== History of Autoconf.
 
-@node History, Copying This Manual, Questions, Top
+@node History
 @chapter History of Autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
@@ -11751,7 +11751,7 @@ then let there be light@dots{}
 * Deuteronomy::                 Approaching the promises of easy configuration
 @end menu
 
-@node Genesis, Exodus, History, History
+@node Genesis
 @section Genesis
 
 In June 1991 I was maintaining many of the @sc{gnu} utilities for the
@@ -11773,7 +11773,7 @@ interface: using the file name @file{Makefile.in} as the templates;
 adding @samp{+srcdir}, the first option (of many); and creating
 @file{config.status} files.
 
-@node Exodus, Leviticus, Genesis, History
+@node Exodus
 @section Exodus
 
 As I got feedback from users, I incorporated many improvements, using
@@ -11827,7 +11827,7 @@ University of Maryland had recently been putting M4 front ends on
 several programs, including @code{tvtwm}, and I was interested in trying
 out a new language.
 
-@node Leviticus, Numbers, Exodus, History
+@node Leviticus
 @section Leviticus
 
 Since my @code{configure} scripts determine the system's capabilities
@@ -11854,7 +11854,7 @@ names and calling conventions of the Autoconf macros changed from
 release to release.  They all contributed many specific checks, great
 ideas, and bug fixes.
 
-@node Numbers, Deuteronomy, Leviticus, History
+@node Numbers
 @section Numbers
 
 In July 1992, after months of alpha testing, I released Autoconf 1.0,
@@ -11888,7 +11888,7 @@ Autoconf''.)  Roland and Noah improved the quoting protection in
 @code{AC_DEFINE} and fixed many bugs, especially when I got sick of
 dealing with portability problems from February through June, 1993.
 
-@node Deuteronomy,  , Numbers, History
+@node Deuteronomy
 @section Deuteronomy
 
 A long wish list for major features had accumulated, and the effect of
@@ -11940,7 +11940,7 @@ have free time again.  I think.  Yeah, right.)
 
 @c ========================================================== Appendices
 
-@node Copying This Manual, Indices, History, Top
+@node Copying This Manual
 @appendix Copying This Manual
 
 @menu
@@ -11949,7 +11949,7 @@ have free time again.  I think.  Yeah, right.)
 
 @include fdl.texi
 
-@node Indices, , Copying This Manual, Top
+@node Indices
 @appendix Indices
 
 @menu
@@ -11963,7 +11963,7 @@ have free time again.  I think.  Yeah, right.)
 * Concept Index::               General index
 @end menu
 
-@node Environment Variable Index, Output Variable Index, Indices, Indices
+@node Environment Variable Index
 @appendixsec Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
@@ -11971,7 +11971,7 @@ checks.
 
 @printindex ev
 
-@node Output Variable Index, Preprocessor Symbol Index, Environment Variable Index, Indices
+@node Output Variable Index
 @appendixsec Output Variable Index
 
 This is an alphabetical list of the variables that Autoconf can
@@ -11981,7 +11981,7 @@ on how this is done.
 
 @printindex ov
 
-@node Preprocessor Symbol Index, Autoconf Macro Index, Output Variable Index, Indices
+@node Preprocessor Symbol Index
 @appendixsec Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
@@ -11990,7 +11990,7 @@ use these names in @code{#if} directives.
 
 @printindex cv
 
-@node Autoconf Macro Index, M4 Macro Index, Preprocessor Symbol Index, Indices
+@node Autoconf Macro Index
 @appendixsec Autoconf Macro Index
 
 This is an alphabetical list of the Autoconf macros.  To make the list
@@ -11998,7 +11998,7 @@ easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ac
 
-@node M4 Macro Index, Autotest Macro Index, Autoconf Macro Index, Indices
+@node M4 Macro Index
 @appendixsec M4 Macro Index
 
 This is an alphabetical list of the M4, M4sugar, and M4sh macros.  To
@@ -12007,7 +12007,7 @@ preceding @samp{m4_} or @samp{AS_}.
 
 @printindex ms
 
-@node Autotest Macro Index, Program & Function Index, M4 Macro Index, Indices
+@node Autotest Macro Index
 @appendixsec Autotest Macro Index
 
 This is an alphabetical list of the Autotest macros.  To make the list
@@ -12015,7 +12015,7 @@ easier to use, the macros are listed without their preceding @samp{AT_}.
 
 @printindex at
 
-@node Program & Function Index, Concept Index, Autotest Macro Index, Indices
+@node Program & Function Index
 @appendixsec Program and Function Index
 
 This is an alphabetical list of the programs and functions which
@@ -12023,7 +12023,7 @@ portability is discussed in this document.
 
 @printindex pr
 
-@node Concept Index,  , Program & Function Index, Indices
+@node Concept Index
 @appendixsec Concept Index
 
 This is an alphabetical list of the files, tools, and concepts
