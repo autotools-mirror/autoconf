@@ -39,19 +39,19 @@ $verbose = 0;
 %programs_macros = ();
 %needed_macros = ();
 
-my @kinds =
-  ('functions', 'headers', 'identifiers', 'programs', 'makevars');
+my @kinds = qw (functions headers identifiers programs makevars);
 
 # For each kind, the default macro.
 my %generic_macro =
   (
-   "functions"   => "AC_CHECK_FUNCS",
-   "headers"     => "AC_CHECK_HEADERS",
-   "identifiers" => "AC_CHECK_TYPES",
-   "programs"    => "AC_CHECK_PROGS"
+   'functions'   => 'AC_CHECK_FUNCS',
+   'headers'     => 'AC_CHECK_HEADERS',
+   'identifiers' => 'AC_CHECK_TYPES',
+   'programs'    => 'AC_CHECK_PROGS'
   );
 
 
+my $configure_scan = 'configure.scan';
 
 # find_autoconf
 # -------------
@@ -88,7 +88,7 @@ sub print_usage ()
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
-common portability problems and create a file `configure.scan' which
+common portability problems and create a file `$configure_scan' which
 is a preliminary `configure.ac' for that package.
 
   -h, --help            print this help, then exit
@@ -434,7 +434,7 @@ sub scan_sh_file ($)
 
 # print_unique ($MACRO, @WHERE)
 # -----------------------------
-# $MACRO is wanted from $WHERE, hence (i) print $MACRO in configure.scan
+# $MACRO is wanted from $WHERE, hence (i) print $MACRO in $configure_scan
 # if it exists and hasn't been printed already, (ii), remember it's needed.
 sub print_unique ($@)
 {
@@ -611,7 +611,7 @@ sub output ($)
   print CONF "AC_OUTPUT\n";
 
   close CONF ||
-    die "$me: closing configure.scan: $!\n";
+    die "$me: closing $configure_scan: $!\n";
 }
 
 
@@ -665,7 +665,7 @@ sub check_configure_ac ($)
 
   foreach $macro (sort keys %needed_macros)
     {
-      print STDERR "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
+      warn "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
     }
 }
 
@@ -687,10 +687,10 @@ if (-f 'configure.ac')
   {
     if (-f 'configure.in')
       {
-	print STDERR "warning: `configure.ac' and `configure.in' both present.\n";
-	print STDERR "warning: proceeding with `configure.ac'.\n";
+	warn "warning: `configure.ac' and `configure.in' both present.\n";
+	warn "warning: proceeding with `configure.ac'.\n";
       }
-    check_configure_ac ('configure.in');
+    check_configure_ac ('configure.ac');
   }
 elsif (-f 'configure.in')
   {

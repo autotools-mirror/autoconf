@@ -1,3 +1,12 @@
+2001-01-29  Jim Meyering  <meyering@lucent.com>
+
+	* autoscan.pl: Do scan `configure.ac' when you claim it.
+	From Raja R Harinath.
+	(@kinds): Use `qw', rather than lots of quotes and commas.
+	(%generic_macro): Use single quotes around literals.
+	($configure_scan): Define global, and use it instead of the literal.
+	Use `warn' in place of `printf STDERR'.
+
 2001-01-29  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.pl: `Formatting++' changes: prototypes all the
@@ -7,7 +16,7 @@
 	describe the functions.
 	(output): Accept an CONFIGURE_SCAN parameters, and open CONF.
 
-	
+
 2001-01-29  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_SITE_LOAD): Let config.log know what you load.
