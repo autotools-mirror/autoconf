@@ -50,6 +50,44 @@ changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 # and many other people.
 
 
+# We heavily use m4's diversions both for the initializations and for
+# required macros (see m4_require), because in both cases we have to
+# issue high in `configure' something which is discovered late.
+#
+# KILL is only used to suppress output.
+#
+# - BINSH
+#   AC_REQUIRE'd #! /bin/sh line
+# - HEADER-REVISION
+#   RCS keywords etc.
+# - HEADER-COMMENT
+#   Purpose of the script etc.
+# - HEADER-COPYRIGHT
+#   Copyright notice(s)
+# - M4SH-INIT
+#   M4sh's initializations
+
+
+
+# _m4_divert(DIVERSION-NAME)
+# --------------------------
+# Convert a diversion name into its number.  Otherwise, return
+# DIVERSION-NAME which is supposed to be an actual diversion number.
+# Of course it would be nicer to use m4_case here, instead of zillions
+# of little macros, but it then takes twice longer to run `autoconf'!
+m4_define([_m4_divert(BINSH)],             0)
+m4_define([_m4_divert(HEADER-REVISION)],   1)
+m4_define([_m4_divert(HEADER-COMMENT)],    2)
+m4_define([_m4_divert(HEADER-COPYRIGHT)],  3)
+m4_define([_m4_divert(M4SH-INIT)],         4)
+
+# Aaarg.  Yet it starts with compatibility issues...  Libtool wants to
+# use NOTICE to insert its own LIBTOOL-INIT stuff.  People should ask
+# before diving into our internals :(
+m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
+
+
+
 ## ------------------------- ##
 ## 1. Sanitizing the shell.  ##
 ## ------------------------- ##
@@ -58,7 +96,12 @@ changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.
 m4_defun([AS_SHELL_SANITIZE],
-[# Be Bourne compatible
+[
+## --------------------- ##
+## M4sh Initialization.  ##
+## --------------------- ##
+
+# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
@@ -127,6 +170,8 @@ m4_define([AS_EXIT],
 # |   IF-FALSE
 # | fi
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
+#
+# FIXME: Be n-ary, just as m4_if.
 m4_define([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then

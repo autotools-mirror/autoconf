@@ -766,8 +766,6 @@ m4_define([m4_undivert],
 [m4_builtin([undivert], _m4_divert([$1]))])
 
 
-
-
 ## -------------------------------------------- ##
 ## 8. Defining macros with bells and whistles.  ##
 ## -------------------------------------------- ##
