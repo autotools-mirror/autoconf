@@ -4,7 +4,6 @@
 	AC_TRY_COMMAND.
 	(AC_DECL_YYTEXT): Fix the previous patch: it points to AC_PROG_LEX.
 
-	
 2001-08-22  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (AC_SHELL_PATH_WALK, AC_CHECK_PROG)
@@ -20,7 +19,6 @@
 	* lib/autoconf/autoconf.m4, lib/autoconf/Makefile.am
 	* tests/Makefile.am, tests/suite.am: Adjust.
 
-	
 2001-08-22  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (AC_LIST_MEMBER_OF, AC_LINKER_OPTION):
