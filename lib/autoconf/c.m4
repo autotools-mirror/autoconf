@@ -544,7 +544,8 @@ AC_SUBST(CPP)dnl
 AC_DEFUN([AC_PROG_CC],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(C)
-AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
+AC_ARG_VAR([CC], [C compiler command])
+AC_ARG_VAR([CFLAGS], [C compiler flags])
 ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
 [
@@ -743,6 +744,8 @@ AC_SUBST(CXXCPP)dnl
 AC_DEFUN([AC_PROG_CXX],
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_LANG_PUSH(C++)
+AC_ARG_VAR([CXX], [C++ compiler command])
+AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])
 AC_CHECK_TOOLS(CXX,
                [$CCC m4_default([$1],
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
@@ -842,6 +845,8 @@ fi[]dnl
 AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(Fortran 77)
+AC_ARG_VAR([F77], [Fortran 77 compiler command])
+AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc])])

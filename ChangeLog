@@ -1,3 +1,20 @@
+2000-07-10  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Improve --help documentation of important environment variables.
+
+	* acgeneral.m4 (_AC_INIT_HELP): Direct reader to descriptions
+	of useful variables at the end of the --help.
+	(AC_ARG_VAR): Emphasize use of environment variables to override
+	and/or help the configure script.  Ensure that a given variable
+	is only documented once in the --help.
+	(AC_CHECK_LIB): Call AC_ARG_VAR to document and register the
+	LDFLAGS variable, and...
+	(AC_CHECK_HEADER): do the same for the CPPFLAGS variable.
+	* aclang.m4 (AC_PROG_CC): Call AC_ARG_VAR to document and register
+	the CC and CFLAGS variables, and do the same for...
+	(AC_PROG_CXX): CXX and CXXFLAGS, and...
+	(AC_PROG_F77): F77 and FFLAGS.
+
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.am (wget-update): New target.

@@ -1642,7 +1642,7 @@ if test "$ac_init_help" = "long"; then
 Usage: $[0] [[OPTION]]... [[VAR=VALUE]]...
 
 [To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.
+VAR=VALUE.  See below for descriptions of useful variables.
 
 Defaults for the options are specified in brackets.
 
@@ -2040,13 +2040,16 @@ AU_DEFUN([AC_WITH],
 # AC_ARG_VAR(VARNAME, DOCUMENTATION)
 # ----------------------------------
 # Register VARNAME as a variable configure should remember, and
-# document it in `configure --help'.
+# document it in `configure --help' (but only once).
 AC_DEFUN([AC_ARG_VAR],
 [AC_DIVERT_PUSH([HELP_VAR])dnl
 AC_EXPAND_ONCE([
-Some influent environment variables:
+Some relevant environment variables, which you can use to override the
+choices made by the configure script or to help it to find libraries and
+programs with nonstandard names/locations:
 ])[]dnl
-AC_HELP_STRING([$1], [$2], [              ])
+ifdef([AC_ARG_VAR_$1],,[AC_HELP_STRING([$1], [$2], [              ])
+define([AC_ARG_VAR_$1])])dnl
 AC_DIVERT_POP()dnl
 dnl Register if set and not yet registered.
 dnl If there are envvars given as arguments, they are already set,
@@ -3098,6 +3101,7 @@ AC_SHELL_IFELSE([test "$ac_cv_search_$1" != no],
 AC_DEFUN([AC_CHECK_LIB],
 [AH_CHECK_LIB([$1])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
+AC_ARG_VAR([LDFLAGS], [linker flags, e.g. -L<lib dir> if you have libraries in a nonstandard directory <lib dir>])
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
@@ -3346,6 +3350,7 @@ fi
 # ----------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADER],
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
+AC_ARG_VAR([CPPFLAGS], [C/C++ preprocessor flags, e.g. -I<include dir> if you have headers in a nonstandard directory <include dir>])
 AC_CACHE_CHECK([for $1], ac_Header,
 [AC_TRY_CPP([#include <$1>
 ],
