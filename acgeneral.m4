@@ -765,7 +765,8 @@ popdef([AC_Prefix])dnl
 dnl ### Initialization
 
 
-dnl AC_INIT_NOTICE()
+dnl AC_INIT_NOTICE
+dnl --------------
 AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using Autoconf version] AC_ACVERSION [
@@ -781,11 +782,14 @@ ac_arg_var_help=
 ac_default_prefix=/usr/local
 [#] Any additions from configure.in:])
 
+
 dnl AC_PREFIX_DEFAULT(PREFIX)
+dnl -------------------------
 AC_DEFUN(AC_PREFIX_DEFAULT,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 ac_default_prefix=$1
 AC_DIVERT_POP()])
+
 
 dnl AC_INIT_PARSE_ARGS
 dnl ------------------
@@ -2524,6 +2528,7 @@ rm -f conftest*])
 
 dnl AC_EGREP_HEADER(PATTERN, HEADER-FILE, ACTION-IF-FOUND [,
 dnl                 ACTION-IF-NOT-FOUND])
+dnl --------------------------------------------------------
 AC_DEFUN(AC_EGREP_HEADER,
 [AC_EGREP_CPP([$1], [#include <$2>], [$3], [$4])])
 
@@ -2553,7 +2558,7 @@ ifelse([$4], , , [else
 ])dnl
 fi
 rm -f conftest*
-])
+])dnl AC_EGREP_CPP
 
 
 dnl ### Examining syntax
@@ -2561,6 +2566,7 @@ dnl ### Examining syntax
 
 dnl AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
 dnl                [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl ---------------------------------------------------------
 AC_DEFUN(AC_TRY_COMPILE,
 [cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
@@ -2594,6 +2600,7 @@ dnl ### Examining libraries
 
 dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
+dnl ---------------------------------------------------------
 AC_DEFUN(AC_COMPILE_CHECK,
 [AC_OBSOLETE([$0], [; instead use AC_TRY_COMPILE or AC_TRY_LINK, and AC_MSG_CHECKING and AC_MSG_RESULT])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
@@ -2603,6 +2610,7 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])
 
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl ------------------------------------------------------
 AC_DEFUN(AC_TRY_LINK,
 [cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
@@ -2630,7 +2638,8 @@ ifelse([$4], , , [  rm -rf conftest*
   $4
 ])dnl
 fi
-rm -f conftest*])
+rm -f conftest*
+])dnl AC_TRY_LINK
 
 
 dnl ### Checking for run-time features
@@ -2672,7 +2681,8 @@ ifelse([$3], , , [  rm -fr conftest*
   $3
 ])dnl
 fi
-rm -fr conftest*])
+rm -fr conftest*
+])dnl AC_TRY_RUN_NATIVE
 
 
 dnl ### Checking for header files
@@ -2785,7 +2795,7 @@ AC_CACHE_CHECK([whether `$1' is declared], ac_Symbol,
 #endif
 ]),
 [#ifndef $1
-char *p = (char *) $1;
+  char *p = (char *) $1;
 #endif
 ],
 AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
@@ -3215,7 +3225,7 @@ dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 dnl so uname gets run too.
 # on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
 #
-[#] [$]0 [$]ac_configure_args
+@PND@ [$]0 [$]ac_configure_args
 #
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.

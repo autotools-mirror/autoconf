@@ -544,10 +544,8 @@ struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};
 int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
 int argc;
-char **argv;
-], [
-return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
-],
+char **argv;],
+[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];],
 [ac_cv_prog_cc_stdc="$ac_arg"; break])
 done
 CC="$ac_save_CC"
@@ -919,21 +917,29 @@ fi
 
 if test $ac_cv_header_stdc = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-AC_TRY_RUN([#include <ctype.h>
+AC_TRY_RUN(
+[#include <ctype.h>
 #if ((' ' & 0x0FF) == 0x020)
-#define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
-#define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+# define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
+# define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
 #else
-#define ISLOWER(c) (('a' <= (c) && (c) <= 'i') \
- || ('j' <= (c) && (c) <= 'r') \
- || ('s' <= (c) && (c) <= 'z'))
-#define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
+# define ISLOWER(c) (('a' <= (c) && (c) <= 'i') \
+                     || ('j' <= (c) && (c) <= 'r') \
+                     || ('s' <= (c) && (c) <= 'z'))
+# define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
 #endif
+
 #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
-int main () { int i; for (i = 0; i < 256; i++)
-if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
-exit (0); }
-], , ac_cv_header_stdc=no, :)
+int
+main ()
+{
+  int i;
+  for (i = 0; i < 256; i++)
+    if (XOR (islower (i), ISLOWER (i))
+        || toupper (i) != TOUPPER (i))
+      exit(2);
+  exit (0);
+}], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
   AC_DEFINE(STDC_HEADERS, 1, [Define if you have the ANSI C header files.])
@@ -1080,16 +1086,18 @@ dnl ------------------
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_TRY_COMPILE(
+[#include <sys/types.h>
 #include <sys/wait.h>
 #ifndef WEXITSTATUS
-#define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+# define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
 #endif
 #ifndef WIFEXITED
-#define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
-#endif], [int s;
-wait (&s);
-s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
+# define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
+#endif],
+[  int s;
+  wait (&s);
+  s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
 ac_cv_header_sys_wait_h=yes, ac_cv_header_sys_wait_h=no)])
 if test $ac_cv_header_sys_wait_h = yes; then
   AC_DEFINE(HAVE_SYS_WAIT_H, 1,
@@ -1120,6 +1128,8 @@ AC_DEFUN(AC_DIR_HEADER,
 dnl ### Checks for typedefs
 
 
+dnl AC_TYPE_GETGROUPS
+dnl -----------------
 AC_DEFUN(AC_TYPE_GETGROUPS,
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
@@ -1145,8 +1155,7 @@ main()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short but getgroups modifies an array of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
-}
->>,
+}>>,
 changequote([, ])dnl
   ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int,
   ac_cv_type_getgroups=cross)
@@ -1161,6 +1170,8 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
                    [Define to the type of elements in the array set by
                     `getgroups'. Usually this is either `int' or `gid_t'.])
 ])dnl AC_TYPE_GETGROUPS
+
+
 
 AC_DEFUN(AC_TYPE_UID_T,
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
@@ -1385,8 +1396,7 @@ main()
 	close(fd);
 	unlink("conftestmmap");
 	exit(0);
-}
-], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
+}], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
 ac_cv_func_mmap_fixed_mapped=no)])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE(HAVE_MMAP, 1,
@@ -1449,8 +1459,7 @@ main()
                 wait(&s);
                 exit(s>>8);
         }
-}
-], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
+}], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
    AC_MSG_ERROR(cannot check getpgrp if cross compiling))
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
@@ -1502,6 +1511,9 @@ AC_CHECK_FUNC(_doprnt,
 fi
 ])
 
+
+dnl AC_FUNC_VFORK
+dnl -------------
 AC_DEFUN(AC_FUNC_VFORK,
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
 AC_CHECK_HEADER(vfork.h,
@@ -1513,10 +1525,10 @@ AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 #ifdef HAVE_VFORK_H
-#include <vfork.h>
+# include <vfork.h>
 #endif
 /* On some sparc systems, changes by the child to local and incoming
    argument registers are propagated back to the parent.
@@ -1527,7 +1539,7 @@ AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 static
 #ifdef __cplusplus
 sparc_address_test (int arg)
-#else
+# else
 sparc_address_test (arg) int arg;
 #endif
 {
@@ -2096,8 +2108,7 @@ main ()
   irix_6_4_bug ();
   spring_forward_gap ();
   exit (0);
-}
->>,
+}>>,
 changequote([, ])dnl
 ac_cv_func_working_mktime=yes, ac_cv_func_working_mktime=no,
 ac_cv_func_working_mktime=no)])
@@ -2300,6 +2311,9 @@ dnl ### Checks for compiler characteristics
 AC_DEFUN(AC_C_CROSS,
 [AC_OBSOLETE([$0], [; it has been merged into AC_PROG_CC])])
 
+
+dnl AC_C_CHAR_UNSIGNED
+dnl ------------------
 AC_DEFUN(AC_C_CHAR_UNSIGNED,
 [AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
 [if test "$GCC" = yes; then
@@ -2332,11 +2346,16 @@ AC_DEFUN(AC_C_LONG_DOUBLE,
 [if test "$GCC" = yes; then
   ac_cv_c_long_double=yes
 else
-AC_TRY_RUN([int main() {
-/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
-long double foo = 0.0;
-/* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
-exit(sizeof(long double) < sizeof(double)); }],
+AC_TRY_RUN(
+[int
+main()
+{
+  /* The Stardent Vistra knows sizeof(long double), but does not
+     support it.  */
+  long double foo = 0.0;
+  /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
+  exit(sizeof(long double) < sizeof(double));
+}],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
@@ -2426,49 +2445,48 @@ dnl and with the result message.
 AC_CACHE_CHECK([for working const], ac_cv_c_const,
 [AC_TRY_COMPILE(,
 changequote(<<, >>)dnl
-<<
-/* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x = {0, 0};
-/* SunOS 4.1.1 cc rejects this.  */
-char const *const *ccp;
-char **p;
-/* NEC SVR4.0.2 mips cc rejects this.  */
-struct point {int x, y;};
-static struct point const zero = {0,0};
-/* AIX XL C 1.02.0.0 rejects this.
-   It does not let you subtract one const X* pointer from another in an arm
-   of an if-expression whose if-part is not a constant expression */
-const char *g = "string";
-ccp = &g + (g ? g-g : 0);
-/* HPUX 7.0 cc rejects these. */
-++ccp;
-p = (char**) ccp;
-ccp = (char const *const *) p;
-{ /* SCO 3.2v4 cc rejects this.  */
-  char *t;
-  char const *s = 0 ? (char *) 0 : (char const *) 0;
+<<  /* Ultrix mips cc rejects this.  */
+  typedef int charset[2]; const charset x = {0, 0};
+  /* SunOS 4.1.1 cc rejects this.  */
+  char const *const *ccp;
+  char **p;
+  /* NEC SVR4.0.2 mips cc rejects this.  */
+  struct point {int x, y;};
+  static struct point const zero = {0,0};
+  /* AIX XL C 1.02.0.0 rejects this.
+     It does not let you subtract one const X* pointer from another in
+     an arm of an if-expression whose if-part is not a constant
+     expression */
+  const char *g = "string";
+  ccp = &g + (g ? g-g : 0);
+  /* HPUX 7.0 cc rejects these. */
+  ++ccp;
+  p = (char**) ccp;
+  ccp = (char const *const *) p;
+  { /* SCO 3.2v4 cc rejects this.  */
+    char *t;
+    char const *s = 0 ? (char *) 0 : (char const *) 0;
 
-  *t++ = 0;
-}
-{ /* Someone thinks the Sun supposedly-ANSI compiler will reject this.  */
-  int x[] = {25, 17};
-  const int *foo = &x[0];
-  ++foo;
-}
-{ /* Sun SC1.0 ANSI compiler rejects this -- but not the above. */
-  typedef const int *iptr;
-  iptr p = 0;
-  ++p;
-}
-{ /* AIX XL C 1.02.0.0 rejects this saying
-     "k.c", line 2.27: 1506-025 (S) Operand must be a modifiable lvalue. */
-  struct s { int j; const int *ap[3]; };
-  struct s *b; b->j = 5;
-}
-{ /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
-  const int foo = 10;
-}
->>,
+    *t++ = 0;
+  }
+  { /* Someone thinks the Sun supposedly-ANSI compiler will reject this.  */
+    int x[] = {25, 17};
+    const int *foo = &x[0];
+    ++foo;
+  }
+  { /* Sun SC1.0 ANSI compiler rejects this -- but not the above. */
+    typedef const int *iptr;
+    iptr p = 0;
+    ++p;
+  }
+  { /* AIX XL C 1.02.0.0 rejects this saying
+       "k.c", line 2.27: 1506-025 (S) Operand must be a modifiable lvalue. */
+    struct s { int j; const int *ap[3]; };
+    struct s *b; b->j = 5;
+  }
+  { /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
+    const int foo = 10;
+  }>>,
 changequote([, ])dnl
 ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
@@ -3330,9 +3348,9 @@ dnl Check for Cygwin.  This is a way to set the right value for
 dnl EXEEXT.
 AC_DEFUN(AC_CYGWIN,
 [AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
-[AC_TRY_COMPILE(,[
-#ifndef __CYGWIN__
-#define __CYGWIN__ __CYGWIN32__
+[AC_TRY_COMPILE(,
+[#ifndef __CYGWIN__
+# define __CYGWIN__ __CYGWIN32__
 #endif
 return __CYGWIN__;],
 ac_cv_cygwin=yes, ac_cv_cygwin=no)])
