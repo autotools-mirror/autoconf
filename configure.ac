@@ -22,10 +22,10 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ(2.52d)
 
-AC_INIT(GNU Autoconf, 2.52d, bug-autoconf@gnu.org)
+AC_INIT(GNU Autoconf, 2.52e, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(autoconf, 2.52d)
+AM_INIT_AUTOMAKE(autoconf, 2.52e)
 
 # Initialize the test suite.
 # Some of our bins are location independant, e.g., ifnames.
