@@ -2,12 +2,12 @@
 @c %**start of header
 @setfilename autoconf.info
 @settitle Autoconf
-@setchapternewpage odd
+@c For double-sided printing, uncomment:
+@c @setchapternewpage odd
 @c %**end of header
-@c For single-sided printing, use on instead of odd in the setchapternewpage.
 
-@set EDITION 1.8
-@set VERSION 1.8
+@set EDITION 1.9
+@set VERSION 1.9
 @set UPDATED April 1994
 
 @iftex
@@ -431,7 +431,8 @@ preprocessor symbols it might define.  It copies comments and
 also uses a file called @file{acconfig.h} in the current directory, if
 present; you must create that file to contain entries for any additional
 symbols that you @code{AC_DEFINE}.  For symbols defined by
-@code{AC_HAVE_HEADERS}, @code{AC_HAVE_FUNCS}, or @code{AC_HAVE_LIBRARY},
+@code{AC_HAVE_HEADERS}, @code{AC_HAVE_FUNCS}, @code{AC_SIZEOF_TYPE},
+or @code{AC_HAVE_LIBRARY},
 @code{autoheader} generates comments and @code{#undef} statements itself
 rather than copying them from a file, since the possible symbols are
 effectively limitless.
