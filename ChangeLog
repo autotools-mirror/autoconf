@@ -1,3 +1,8 @@
+1999-09-20  Ben Elliston  <bje@cygnus.com>
+
+	* autoheader.sh: Bourne shell compatibility fix. From Pavel Roskin
+	<pavel_roskin@geocities.com>.
+	
 1999-09-17  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect QNX version 4.
