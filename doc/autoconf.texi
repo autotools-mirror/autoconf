@@ -10268,8 +10268,8 @@ FOO = one \
 BAR = two
 
 test:
-	: FOO is "$(FOO)"
-	: BAR is "$(BAR)"
+        : FOO is "$(FOO)"
+        : BAR is "$(BAR)"
 @end example
 
 @noindent
