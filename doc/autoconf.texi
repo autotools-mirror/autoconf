@@ -13077,7 +13077,10 @@ AC_DEFUN([MY_ARG_WITH],
   [AC_ARG_WITH([$1],
      [AS_HELP_STRING([--with-$1], [use $1 (default is $2)])],
      [ac_cv_use_$1=$withval],
-     [ac_cv_use_$1=no])])
+     [ac_cv_use_$1=no])
+   AC_CACHE_CHECK([whether to use $1],
+     [ac_cv_use_$1],
+     [ac_cv_use_$1=$2])])
 @end example
 @end defmac
 
