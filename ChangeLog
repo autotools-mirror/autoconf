@@ -1,5 +1,10 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Formatting changes.
+	* acspecific.m4: Likewise.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	Start a new series of tests which check the semantics.
 
 	* acgeneral.m4 (AC_CHECK_MEMBER): It is not smart to define

@@ -3029,6 +3029,9 @@ interpval="$ac_cv_sys_interpreter"
 
 AC_DEFUNCT(AC_HAVE_POUNDBANG, [;use AC_SYS_INTERPRETER, taking no arguments])
 
+
+dnl AC_SYS_LONG_FILE_NAMES
+dnl ----------------------
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,
 [ac_cv_sys_long_file_names=yes
