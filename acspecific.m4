@@ -400,9 +400,9 @@ AC_DEFUN(AC_PROG_CC_C_O,
 else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
-set dummy $CC; ac_cc="`echo [$]2 |
+set dummy $CC; ac_cc=`echo [$]2 |
 changequote(, )dnl
-		       sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
+		      sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [echo 'foo(){}' >conftest.c
@@ -455,9 +455,9 @@ dnl completeness, since a similar test exists for the C compiler.
 AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
-set dummy $F77; ac_f77="`echo [$]2 |
+set dummy $F77; ac_f77=`echo [$]2 |
 changequote(, )dnl
-sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
+sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
 [cat >conftest.f <<EOF

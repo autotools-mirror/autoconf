@@ -32,10 +32,9 @@ identifiers that appear in those files in \`#if', \`#elif', \`#ifdef', or
 \`#ifndef' directives.  Print each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
-  -m, --macrodir=DIR    directory storing macro files
   -v, --verbose         verbosely report processing
   -h, --help            print this help, then exit
-  --version             print version number, then exit
+      --version         print version number, then exit
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -47,20 +46,10 @@ Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
-: ${AC_MACRODIR=@datadir@}
-
 while test $# -gt 0; do
   case "$1" in
   -h | --help | --h* )
     echo "$usage"; exit 0 ;;
-  --macrodir=* | --m*=* )
-    AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
-    shift ;;
-  -m | --macrodir | --m* )
-    shift
-    test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
-    AC_MACRODIR="$1"
-    shift ;;
   --version | --versio | --versi | --vers)
     echo "$version"; exit 0 ;;
   --)     # Stop option processing.

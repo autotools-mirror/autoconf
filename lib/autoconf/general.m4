@@ -1537,7 +1537,7 @@ else
   cat <<\EOF_SED >conftestsed
 s,\\,\\\\,g; s,\$,$$,g
 EOF_SED
-  program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
+  program_transform_name=`echo $program_transform_name|sed -f conftestsed`
   rm -f conftestsed
 fi
 test "$program_prefix" != NONE &&
@@ -3591,7 +3591,7 @@ EOF
 # single-quotes doesn't work because, if this script is created in a
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
-ac_LF_and_DOT="`echo; echo .`"
+ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -f $ac_cs_root.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f $ac_cs_root.defs
 ])

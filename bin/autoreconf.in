@@ -65,7 +65,7 @@ while test $# -gt 0; do
   -h | --help | --h*)
     echo "$usage"; exit 0 ;;
   --localdir=* | --l*=* )
-    localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+    localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
   -l | --localdir | --l*)
     shift
@@ -73,7 +73,7 @@ while test $# -gt 0; do
     localdir="${1}"
     shift ;;
   --macrodir=* | --m*=* )
-    AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
+    AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
   -m | --macrodir | --m*)
     shift

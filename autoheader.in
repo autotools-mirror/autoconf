@@ -30,12 +30,12 @@ Create a template file of C \`#define' statements for \`configure' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
 given.
 
+  -h, --help            print this help, then exit
+      --version         print version number, then exit
   -d, --debug           don't remove temporary files
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -v, --verbose         verbosely report processing
-  -h, --help            print this help, then exit
-  --version             print version number, then exit
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -72,7 +72,7 @@ esac
 # single-quotes doesn't work because, if this script is created in a
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
-ac_LF_and_DOT="`echo; echo .`"
+ac_LF_and_DOT=`echo; echo .`
 
 localdir=.
 debug=0
@@ -86,7 +86,7 @@ while test $# -gt 0 ; do
       -d | --debug | --d* )
          debug=1; shift ;;
       --localdir=* | --l*=* )
-         localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+         localdir=`echo \"${1}\" | sed -e 's/^[^=]*=//'`
          shift ;;
       -l | --localdir | --l*)
          shift
@@ -94,7 +94,7 @@ while test $# -gt 0 ; do
          localdir="${1}"
          shift ;;
       --macrodir=* | --m*=* )
-         AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+         AC_MACRODIR=`echo \"${1}\" | sed -e 's/^[^=]*=//'`
          shift ;;
       -m | --macrodir | --m* )
          shift
@@ -161,7 +161,7 @@ if test $debug -eq 0; then rm ./$ah_base.decls; fi
 # Start each symbol with a blank (to match the blank after "#undef")
 # to reduce the possibility of mistakenly matching another symbol that
 # is a substring of it.
-syms="`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`"
+syms=`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`
 
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in

@@ -1,5 +1,19 @@
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
+	No need for foo="`bar`", foo=`bar` is fine.
+	Simplify ${foo} and ${1} into $foo and $1.
+
+	* acgeneral.m4 (ac_LF_and_DOT): Remove the double quotes.
+	* acspecific.m4 (AC_PROG_CC_C_O, AC_PROG_F77_C_O): Likewise.
+	* autoconf.sh: Likewise.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Remove all the code and messages related to
+	AC_MACRODIR, since ifnames is not related to macros in anyway.
+
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
 	New version of AC_INCLUDE, which does not glob, nor rely upon the
 	shell.  Add AC_INCLUDES too.  Help tracking multiple inclusions.
 
