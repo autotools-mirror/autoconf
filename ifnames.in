@@ -64,25 +64,25 @@ fi
 
 for arg
 do
+# The first two substitutions remove comments.  Not perfect, but close enough.
+# The second is for comments that end on a later line.  The others do:
+# Enclose identifiers in @ and a space.
+# Handle "#if 0" -- there are no @s to trigger removal.
+# Remove non-identifiers.
+# Remove any spaces at the end.
+# Translate any other spaces to newlines.
 sed -n '
-# Remove comments.  Not perfect, but close enough.
 s%/\*[^/]*\*/%%g
-# Comments that end on a later line.
 s%/\*[^/]*%%g
 /^[ 	]*#[ 	]*ifn*def[ 	][ 	]*\([A-Za-z0-9_]*\).*/s//\1/p
 /^[ 	]*#[ 	]*e*l*if[ 	]/{
 	s///
 	s/@//g
-	# Enclose identifiers in @ and a space.
 	s/\([A-Za-z_][A-Za-z_0-9]*\)/@\1 /g
-	# Handle "#if 0" -- there are no @s to trigger removal.
 	s/$/@ /
-	# Remove non-identifiers.
 	s/@defined //g
 	s/[^@]*@\([^ ]* \)[^@]*/\1/g
-	# Remove any spaces at the end.
 	s/ *$//
-	# Translate any other spaces to newlines.
 	s/ /\
 /g
 	p
