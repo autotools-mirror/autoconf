@@ -73,7 +73,7 @@ while test $# -gt 0; do
     test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
-  --verbose | --verb*)
+  -v | --verbose | --verb*)
     verbose=echo; shift ;;
   -f | --force)
     force=yes; shift ;;
