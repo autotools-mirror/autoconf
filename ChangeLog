@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh: When using `mktemp -d', be sure that the directory
+	was created.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* AUTHORS: Update.
 	* doc/autoconf.texi: Free Franc,ois Pinard from iftex and ifinfo,
 	use @,c.

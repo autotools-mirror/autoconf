@@ -167,7 +167,7 @@ $debug ||
 : ${TMPDIR=/tmp}
 {
   tmp=`(umask 077 && mktemp -d -q "$TMPDIR/ahXXXXXX") 2>/dev/null` &&
-  test -n "$tmp"
+  test -n "$tmp" && test -d "$tmp"
 }  ||
 {
   tmp=$TMPDIR/ah$$ && (umask 077 && mkdir $tmp)
