@@ -793,6 +793,29 @@ esac
 AU_DEFUN([AC_PROG_CC_STDC], [])
 
 
+# AC_C_BACKSLASH_A
+# ----------------
+AC_DEFUN([AC_C_BACKSLASH_A],
+[
+  AC_CACHE_CHECK([whether backslash-a works in strings], ac_cv_c_backslash_a,
+   [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+     [[
+#if '\a' == 'a'
+      syntax error;
+#endif
+      char buf['\a' == 'a' ? -1 : 1];
+      buf[0] = '\a';
+      return buf[0] != "\a"[0];
+     ]])],
+     [ac_cv_c_backslash_a=yes],
+     [ac_cv_c_backslash_a=no])])
+  if test $ac_cv_c_backslash_a = yes; then
+    AC_DEFINE(HAVE_C_BACKSLASH_A, 1,
+      [Define if backslash-a works in C strings.])
+  fi
+])
+
+
 # AC_C_CROSS
 # ----------
 # Has been merged into AC_PROG_CC.

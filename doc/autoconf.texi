@@ -4895,6 +4895,12 @@ features.  To check for characteristics not listed here, use
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}) or @code{AC_TRY_RUN}
 (@pxref{Run Time})
 
+@defmac AC_C_BACKSLASH_A
+@acindex HAVE_C_BACKSLASH_A
+Define @samp{HAVE_C_BACKSLASH_A} to 1 if the C compiler understands
+@samp{\a}.
+@end defmac
+
 @defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-unknown})
 @acindex C_BIGENDIAN
 @cvindex WORDS_BIGENDIAN
