@@ -328,7 +328,7 @@ m4_define([_AS_ECHO],
 # has little interest.
 # Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
 # failed there is also a new-line to match.
-m4_define([_AS_ECHO_N_PREPARE],
+m4_defun([_AS_ECHO_N_PREPARE],
 [case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -342,7 +342,8 @@ esac
 # ----------------------------------------
 # Same as _AS_ECHO, but echo doesn't return to a new line.
 m4_define([_AS_ECHO_N],
-[echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
+[AS_REQUIRE([_AS_ECHO_N_PREPARE])dnl
+echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
                                                     [AS_MESSAGE_FD])])
 
 
@@ -812,7 +813,7 @@ m4_defun([AS_TR_SH],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
               [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
-                           [[^a-zA-Z0-9_]], [_])],
+                            [[^a-zA-Z0-9_]], [_])],
               [`echo "$1" | $as_tr_sh`])])
 
 
@@ -834,8 +835,8 @@ m4_defun([AS_TR_CPP],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
               [m4_bpatsubst(m4_translit([[$1]],
-                                       [*abcdefghijklmnopqrstuvwxyz],
-                                       [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+                                        [*abcdefghijklmnopqrstuvwxyz],
+                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
                            [[^A-Z0-9_]], [_])],
               [`echo "$1" | $as_tr_cpp`])])
 
