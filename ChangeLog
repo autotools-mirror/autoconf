@@ -1,5 +1,9 @@
 2001-06-02  Akim Demaille  <akim@epita.fr>
 
+	* configure.in (standards_texi): Remove, dead code.
+
+2001-06-02  Akim Demaille  <akim@epita.fr>
+
 	* autom4te.in: New.
 
 2001-06-02  Pavel Roskin  <proski@gnu.org>

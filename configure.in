@@ -39,11 +39,6 @@ fi
 
 AC_PROG_INSTALL
 
-# Work with the GNU or Cygnus source tree layout.
-if test -f $srcdir/standards.texi; then
-  AC_SUBST(standards_texi, standards.texi)dnl
-fi
-
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
 AC_SUBST(PACKAGE_NAME)

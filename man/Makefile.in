@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p2 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -66,7 +66,6 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
 VERSION = @VERSION@
-standards_texi = @standards_texi@
 
 man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 autoscan.1 config.guess.1 config.sub.1
 
