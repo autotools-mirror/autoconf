@@ -1,5 +1,11 @@
 2000-02-21  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.m4 (syntax.sh): The logic of the previous patch was
+	twisted.  Fix it so that it performs what claims the entry below.
+	From Nicolas Joly.
+
+2000-02-21  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.m4 (syntax.sh): Exit 1 if you managed to kill the
 	child, since it means `/bin/sh -n' went loopy.
 

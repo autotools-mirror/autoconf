@@ -45,10 +45,13 @@ done
 
 # A script in charge of testing `/bin/sh -n'.
 AT_DATA(syntax.sh,
-[[set -e
-(/bin/sh -n endless.sh) &
-cpid=$!
-sleep 2 && kill $cpid >/dev/null 2>&1 || exit 1
+[[(/bin/sh -n endless.sh) &
+sleep 2
+if kill $! >/dev/null 2>&1; then
+  # We managed to kill the child, which means that we probably
+  # can't trust `/bin/sh -n', hence the test failed.
+  exit 1
+fi
 ]])
 
 if /bin/sh ./syntax.sh; then
