@@ -10,11 +10,6 @@
         `config.status --version' to be more compliant with the GNU Coding
         Standards.
 
-2001-04-15  Lars J. Aas  <larsa@sim.no>
-
-	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Show options `--file'
-	and `--header' unconditionally.
-
 2001-04-13  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: Still more minor modifications for clarity,
