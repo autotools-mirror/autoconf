@@ -1,3 +1,13 @@
+2002-02-05  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Specific Compiler Characteristics):
+	Describe HP-UX cc bug workaround more accurately.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Cast to long,
+	not unsigned long.
+	* tests/semantics.at (AC_CHECK_SIZEOF): Check non-GCC
+	cross-compilers, too.  This undoes some of the most recent change
+	to this file.
+
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
 	* tests/Makefile.am (check_SCRIPTS): Use it, instead of WRAPPERS,
