@@ -205,8 +205,9 @@ AC_DEFUN([AC_PROG_INSTALL],
 AC_MSG_CHECKING([for a BSD compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
-[  ac_save_IFS=$IFS; IFS=':'
+[  ac_save_IFS=$IFS; IFS=$ac_path_separator
   for ac_dir in $PATH; do
+    IFS=$ac_save_IFS
     # Account for people who put trailing slashes in PATH elements.
     case $ac_dir/ in
     / | ./ | .// | /[cC]/* \
@@ -235,7 +236,6 @@ AC_CACHE_VAL(ac_cv_path_install,
       ;;
     esac
   done
-  IFS=$ac_save_IFS
 ])dnl
   if test "${ac_cv_path_install+set}" = set; then
     INSTALL=$ac_cv_path_install
