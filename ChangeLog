@@ -1,3 +1,9 @@
+2001-08-20  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Prepare the cross-compile
+	program with AC_LANG_PROGRAM before feeding it to
+	AC_COMPILE_IFELSE.  Cleanup grep usage.
+
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
 	* ChangeLog, ChangeLog.0, ChangeLog.1, ChangeLog.2, AUTHORS, BUGS,
