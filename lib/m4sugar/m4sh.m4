@@ -162,6 +162,7 @@ m4_foreach([_AS_var],
 ])
 
 # Name of the executable.
+_AS_BASENAME_PREPARE
 as_me=`AS_BASENAME("$[0]")`
 
 # PATH needs CR, and LINENO needs CR and PATH.
@@ -431,7 +432,8 @@ m4_defun([AS_BASENAME_SED],
   	  s/.*/./; q']])
 
 m4_defun([AS_BASENAME],
-[(basename $1) 2>/dev/null ||
+[AS_REQUIRE([_$0_PREPARE])dnl
+$as_basename $1 ||
 AS_BASENAME_EXPR([$1]) 2>/dev/null ||
 AS_BASENAME_SED([$1])])
 
@@ -444,6 +446,17 @@ m4_defun([AS_EXECUTABLE_P],
 $as_executable_p $1[]dnl
 ])# AS_EXECUTABLE_P
 
+
+# _AS_BASENAME_PREPARE
+# --------------------
+# Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
+m4_defun([_AS_BASENAME_PREPARE],
+[if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
+  as_basename=basename
+else
+  as_basename=false
+fi
+])# _AS_BASENAME_PREPARE
 
 # _AS_EXPR_PREPARE
 # ----------------
