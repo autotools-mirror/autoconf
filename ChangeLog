@@ -1,5 +1,12 @@
 2000-10-16  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_LANG_COMPILER_GNU): New macro, which unifies...
+	(_AC_PROG_F77_GNU, _AC_PROG_CC_GNU, _AC_PROG_CXX_GNU): Remove.
+	Adjust dependencies.
+	(ac_cv_prog_gcc, ac_cv_prog_gxx, ac_cv_prog_g77): AU_ALIAS'ed.
+
+2000-10-16  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Adjust copyright notice.
 	* acspecific.m4: Likewise.
 	* acoldnames.m4: Likewise.

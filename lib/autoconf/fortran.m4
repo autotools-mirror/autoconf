@@ -176,7 +176,7 @@ define([AC_LANG(C)],
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-ac_gnu_compiler=$ac_cv_prog_gcc
+ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
 
@@ -203,7 +203,7 @@ define([AC_LANG(C++)],
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-ac_gnu_compiler=$ac_cv_prog_gxx
+ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
 
@@ -228,7 +228,7 @@ define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-ac_gnu_compiler=$ac_cv_prog_g77
+ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
 
@@ -542,6 +542,23 @@ AC_MSG_RESULT($cross_compiling)
 ])# _AC_LANG_COMPILER_WORKS
 
 
+# _AC_LANG_COMPILER_GNU
+# ---------------------
+# Check whether the compiler for the current language is GNU.
+define([_AC_LANG_COMPILER_GNU],
+[AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
+                [ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
+[_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#ifndef __GNUC__
+  choke me
+#endif
+]])],
+                   [ac_compiler_gnu=yes],
+                   [ac_compiler_gnu=no])
+ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
+])])# _AC_LANG_COMPILER_GNU
+
+
+
 # AC_NO_EXECUTABLES
 # -----------------
 # FIXME: The GCC team has specific needs which the current Autoconf
@@ -660,6 +677,12 @@ AC_DEFUN([AC_LANG_COMPILER(C)],
 [AC_PROG_CC])
 
 
+# ac_cv_prog_gcc
+# --------------
+# We used to name the cache variable this way.
+AU_ALIAS([ac_cv_prog_gcc], [ac_cv_c_compiler_gnu])
+
+
 # AC_PROG_CC([COMPILER ...])
 # --------------------------
 # COMPILER ... is a space separated list of C compilers to search for.
@@ -687,36 +710,13 @@ fi
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 _AC_LANG_COMPILER_WORKS
-_AC_PROG_CC_GNU
+_AC_LANG_COMPILER_GNU
+GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_CC
-
-
-# _AC_PROG_CC_GNU
-# ---------------
-define([_AC_PROG_CC_GNU],
-[AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
-[# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.$ac_ext <<_ACEOF
-#ifdef __GNUC__
-  yes;
-#endif
-_ACEOF
-if AC_TRY_COMMAND(${CC-cc} -E conftest.$ac_ext) | grep yes >/dev/null; then
-  ac_cv_prog_gcc=yes
-else
-  ac_cv_prog_gcc=no
-fi])
-ac_gnu_compiler=$ac_cv_prog_gcc
-if test $ac_gnu_compiler = yes; then
-  GCC=yes
-else
-  GCC=
-fi[]dnl
-])# _AC_PROG_CC_GNU
 
 
 # _AC_PROG_CC_G
@@ -760,7 +760,7 @@ fi[]dnl
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
-if test $ac_cv_prog_gcc = yes; then
+if test $ac_cv_c_compiler_gnu = yes; then
     AC_CACHE_CHECK(whether ${CC-cc} needs -traditional,
       ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
@@ -877,6 +877,12 @@ AC_DEFUN([AC_LANG_COMPILER(C++)],
 [AC_PROG_CXX])
 
 
+# ac_cv_prog_gxx
+# --------------
+# We used to name the cache variable this way.
+AU_ALIAS([ac_cv_prog_gxx], [ac_cv_cxx_compiler_gnu])
+
+
 # AC_PROG_CXX([LIST-OF-COMPILERS])
 # --------------------------------
 # LIST-OF-COMPILERS is a space separated list of C++ compilers to search
@@ -899,36 +905,13 @@ AC_CHECK_TOOLS(CXX,
                g++)
 
 _AC_LANG_COMPILER_WORKS
-_AC_PROG_CXX_GNU
+_AC_LANG_COMPILER_GNU
+GXX=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CXX_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_CXX
-
-
-# _AC_PROG_CXX_GNU
-# ----------------
-define([_AC_PROG_CXX_GNU],
-[AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
-[# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.$ac_ext <<_ACEOF
-#ifdef __GNUC__
-  yes;
-#endif
-_ACEOF
-if AC_TRY_COMMAND(${CXX-g++} -E conftest.$ac_ext) | grep yes >/dev/null; then
-  ac_cv_prog_gxx=yes
-else
-  ac_cv_prog_gxx=no
-fi])
-ac_gnu_compiler=$ac_cv_prog_gxx
-if test $ac_gnu_compiler = yes; then
-  GXX=yes
-else
-  GXX=
-fi[]dnl
-])# _AC_PROG_CXX_GNU
 
 
 # _AC_PROG_CXX_G
@@ -981,6 +964,12 @@ AC_DEFUN([AC_LANG_COMPILER(Fortran 77)],
 [AC_PROG_F77])
 
 
+# ac_cv_prog_g77
+# --------------
+# We used to name the cache variable this way.
+AU_ALIAS([ac_cv_prog_g77], [ac_cv_f77_compiler_gnu])
+
+
 # AC_PROG_F77([COMPILERS...])
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
@@ -1006,38 +995,13 @@ AC_CHECK_TOOLS(F77,
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc])])
 
 _AC_LANG_COMPILER_WORKS
-_AC_PROG_F77_GNU
+_AC_LANG_COMPILER_GNU
+G77=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_F77_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_F77
-
-
-# _AC_PROG_F77_GNU
-# ----------------
-# Test whether for Fortran 77 compiler is `g77' (the GNU Fortran 77
-# Compiler).  This test depends on whether the Fortran 77 compiler can
-# do CPP pre-processing.
-define([_AC_PROG_F77_GNU],
-[AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
-[cat >conftest.$ac_ext <<_ACEOF
-#ifdef __GNUC__
-  yes
-#endif
-_ACEOF
-if AC_TRY_COMMAND($F77 -E - <conftest.$ac_ext) | grep yes >/dev/null; then
-  ac_cv_prog_g77=yes
-else
-  ac_cv_prog_g77=no
-fi])
-ac_gnu_compiler=$ac_cv_prog_g77
-if test $ac_gnu_compiler = yes; then
-  G77=yes
-else
-  G77=
-fi[]dnl
-])# _AC_PROG_F77_GNU
 
 
 # _AC_PROG_F77_G

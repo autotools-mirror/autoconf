@@ -5393,7 +5393,7 @@ fi
 # doesn't currently support.
 # FIXME: Get rid of this macro.
 AC_DEFUN([AC_LINKER_OPTION],
-[if test "$ac_gnu_compiler" = yes; then
+[if test "$ac_compiler_gnu" = yes; then
   for ac_link_opt in $1; do
     $2="[$]$2 -Xlinker $ac_link_opt"
   done
