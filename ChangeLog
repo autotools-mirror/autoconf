@@ -1,3 +1,11 @@
+2003-10-08  Gary V. Vaughan  <gary@gnu.org>
+
+	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Stub out a macro
+	that future autopoint/aclocal/automake/autoreconf will be able
+	to trace to find where to install local m4 macros.
+	* doc/autoconf.texi (Input): Document it.
+	* NEWS: Updated.
+
 2003-10-06  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Add

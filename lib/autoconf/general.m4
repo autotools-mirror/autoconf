@@ -1538,6 +1538,29 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 
 
 
+## ------------------------ ##
+## Finding aclocal macros.  ##
+## ------------------------ ##
+
+
+# AC_CONFIG_MACRO_DIR(DIR)
+# ------------------------
+# Declare directory containing additional macros for aclocal.
+# DIR can be either absolute or relative to $srcdir.
+AC_DEFUN([AC_CONFIG_MACRO_DIR],
+[case $1 in
+  [[\\/]]* | ?:[[\\/]]* ) ac_macro_dir=$1         ;;
+  *)                      ac_macro_dir=$srcdir/$1 ;;
+esac
+if test -d "$ac_macro_dir"; then :
+else
+  AC_MSG_ERROR([cannot find macro directory `$1'])
+fi
+])# AC_CONFIG_MACRO_DIR
+
+
+
+
 ## ----------------------------------- ##
 ## Getting the canonical system type.  ##
 ## ----------------------------------- ##
