@@ -282,6 +282,9 @@ foreach my $file (@ARGV)
       divert(-1)                                            -*- Autoconf -*-
       changequote([, ])
 
+      # Redefine __file__ to make warnings nicer; $file is replaced below.
+      define([__file__], [$file])
+
       # Move all the builtins into the `_au_' pseudo namespace
       include([m4save.m4])
 
@@ -379,6 +382,7 @@ foreach my $file (@ARGV)
 EOF
 
     $input_m4 =~ s/^      //mg;
+    $input_m4 =~ s/\$file/$file/g;
 
     # prepared input -- input, but reenables the quote before each AU macro.
     open INPUT_M4, ">$tmp/input.m4"
