@@ -6,9 +6,9 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.7
-@set VERSION 1.7
-@set UPDATED October 1993
+@set EDITION 1.7.0
+@set VERSION 1.7.0
+@set UPDATED December 1993
 
 @iftex
 @finalout
@@ -661,12 +661,13 @@ example for @code{AC_STDC_HEADERS}.
 @vindex STDC_HEADERS
 Define @code{STDC_HEADERS} if the system has ANSI C header files.
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
-@file{string.h}, and @file{float.h}; if the system has
-those, it probably has the rest of the ANSI C header files.  This macro
-also checks whether @file{string.h} declares @code{memchr} (and
-thus presumably the other @code{mem} functions) and whether the
-@file{ctype.h} macros work on characters with the high bit set,
-as ANSI C requires.
+@file{string.h}, and @file{float.h}; if the system has those, it
+probably has the rest of the ANSI C header files.  This macro also
+checks whether @file{string.h} declares @code{memchr} (and thus
+presumably the other @code{mem} functions), whether @file{stdlib.h}
+declare @code{free} (and thus presumably @code{malloc} and other related
+functions), and whether the @file{ctype.h} macros work on characters
+with the high bit set, as ANSI C requires.
 
 Use @code{STDC_HEADERS} instead of @code{__STDC__} to determine whether
 the system has ANSI-compliant header files (and probably C library
