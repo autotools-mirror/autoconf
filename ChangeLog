@@ -1,5 +1,10 @@
 2004-12-17  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (_AC_LIBOBJ): We can use AC_SUBST/2,
+	  remove the comment which said we cannot.
+
+2004-12-17  Stepan Kasal  <kasal@ucw.cz>
+
 	Add a specialized check for resolv.h.  Thanks to Gerrit P. Haase,
 	Reini Urban and Paul Eggert for reporting the dependencies.
 

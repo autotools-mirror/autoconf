@@ -2425,27 +2425,23 @@ m4_define([AC_LIBSOURCES],
 # _AC_LIBOBJ(FILE-NAME-NOEXT, ACTION-IF-INDIR)
 # --------------------------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
-# We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
 	       [AC_LIBSOURCE([$1.c])],
 	       [$2])dnl
-AC_SUBST([LIB@&t@OBJS])dnl
 case $LIB@&t@OBJS in
     "$1.$ac_objext"   | \
   *" $1.$ac_objext"   | \
     "$1.$ac_objext "* | \
   *" $1.$ac_objext "* ) ;;
-  *) LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext" ;;
+  *) AC_SUBST([LIB@&t@OBJS], ["$LIB@&t@OBJS $1.$ac_objext"]) ;;
 esac
 ])
-
 
 
 # AC_LIBOBJ(FILE-NAME-NOEXT)
 # -------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
-# We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],
 	    [AC_DIAGNOSE(syntax,
