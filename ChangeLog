@@ -1,3 +1,7 @@
+2001-06-06  Pavel Roskin  <proski@gnu.org>
+
+	* tests/atgeneral.m4 (AT_INIT): Remove "/bin/sh" after $SHELL.
+
 2001-06-06  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Fix the cache var name to work
