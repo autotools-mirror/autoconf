@@ -1,3 +1,13 @@
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.pl: Instead of undefined globals, set them to empty
+	values.
+	(%needed_macros): New.
+	(&check_configure_ac): New.  Call it.
+	(&output_libraries): Eve out from &output_programs.
+	(&print_unique): For the time being register in %needed_macros
+	only argument less macros.
+
 2001-01-22  Lars J. Aas  <somelarsa@sim.no>
 
 	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): First try no declaration,

@@ -38,6 +38,15 @@ longer *ever* try to parse Autoconf files.
 ** Autotest
 Document it.
 
+** Document AC_COMPILE_IFELSE, AC_LANG_PROGRAM etc.
+And make AC_TRY_COMPILE etc. obsolete.
+
+** Autoscan macros
+Can be introduced even before specializing macros.  It just means that
+specializing macros will call them.  OTOH, this doubles our work,
+since specializing macros will save us from additional typing.  But
+the more powerful autoscan is, the better...
+
 * Autoconf 2.51 or later
 
 ** Libtool

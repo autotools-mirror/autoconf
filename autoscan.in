@@ -27,15 +27,17 @@ $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 $verbose = 0;
 
 # Reference these variables to pacify perl -w.
-undef %identifiers_macros;
-undef %makevars_macros;
-undef %programs_macros;
+%identifiers_macros = ();
+%makevars_macros = ();
+%programs_macros = ();
+%needed_macros = ();
 
 &parse_args;
 &init_tables;
 &find('.');
 &scan_files;
 &output;
+&check_configure_ac ('configure.in');
 
 exit 0;
 
@@ -317,7 +319,7 @@ sub scan_sh_file
   }
 }
 
-# Print a configure.ac.
+# Print a proto configure.ac.
 sub output
 {
   local (%unique_makefiles);
@@ -332,6 +334,7 @@ sub output
   }
 
   &output_programs;
+  &output_libraries;
   &output_headers;
   &output_identifiers;
   &output_functions;
@@ -342,7 +345,7 @@ sub output
     $unique_makefiles{$_}++;
   }
   print CONF "\nAC_CONFIG_FILES([",
-    join("\n           ", keys(%unique_makefiles)), "])\n";
+        join("\n                 ", keys(%unique_makefiles)), "])\n";
   print CONF "AC_OUTPUT\n";
 
   close CONF;
@@ -356,6 +359,10 @@ sub print_unique
   if (defined($macro) && !defined($printed{$macro})) {
     print CONF "$macro\n";
     $printed{$macro} = 1;
+
+    # For the time being, just don't bother with macros with arguments.
+    $needed_macros{$macro} = 1
+      if ($macro !~ /]|^AC_CHECK_.*S/);
   }
 }
 
@@ -370,6 +377,12 @@ sub output_programs
   foreach $word (sort keys %makevars) {
     &print_unique($makevars_macros{$word});
   }
+}
+
+sub output_libraries
+{
+  local ($word);
+
   print CONF "\n# Checks for libraries.\n";
   foreach $word (sort keys %libraries) {
     print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
@@ -426,4 +439,34 @@ sub output_functions
   }
   print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
     if defined(@have_funcs);
+}
+
+
+# Use autoconf to check if all the suggested macros are included
+# in `configure.ac'
+sub check_configure_ac
+{
+  local ($configure_ac) = $@;
+  local ($trace_option) = '';
+  local ($word);
+
+  print STDERR "$trace_option\n";
+  foreach $macro (%needed_macros)
+    {
+      $trace_option .= " -t $macro";
+    }
+
+  open (TRACES, "/home/akim/src/ace/autoconf -A $datadir $trace_option $configure_ac|") ||
+    die "$me: cannot create read traces: $!\n";
+
+  while (<TRACES>)
+    {
+      local ($file, $line, $macro, $args) = split (/:/, $_, 4);
+      delete ($needed_macros{$macro});
+    }
+
+  foreach $macro (sort keys %needed_macros)
+    {
+      print STDERR "warning: missing $macro\n";
+    }
 }
