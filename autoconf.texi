@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.9
-@set VERSION 1.9
+@set EDITION 1.9.2
+@set VERSION 1.9.2
 @set UPDATED April 1994
 
 @iftex
@@ -282,7 +282,7 @@ package), from template @file{Makefile.in} files (@pxref{Makefiles});
 
 @item
 optionally, a C header file, the name of which is configurable,
-containing @code{#define} statements (@pxref{Setup});
+containing @code{#define} directives (@pxref{Setup});
 
 @item
 a shell script called @file{config.status} that, when run, will recreate
@@ -290,33 +290,48 @@ the files listed above (@pxref{Invoking config.status}).
 @end itemize
 
 To create a @code{configure} script with Autoconf, you need to write an
-Autoconf input file and run Autoconf on it to produce the script.  And,
-of course, test the resulting script.
+Autoconf input file (@file{configure.in}) and run Autoconf on it to
+produce the script.  If you write your own feature tests to supplement
+those that come with Autoconf, you might also write a file called
+@file{aclocal.m4}.  If you use a C header file to contain @code{#define}
+directives, you might also write @file{config.h.top} and
+@file{acconfig.h}, and you will distribute the Autoconf-generated file
+@file{config.h.in} with the package.
 
 Here is a diagram showing how the files that can be used in
-configuration are produced:
+configuration are produced.  Programs that are executed are suffixed by
+@samp{*}.  Optional files are enclosed in square brackets (@samp{[]}).
+@code{autoconf} and @code{autoheader} also read the installed files
+@file{acgeneral.m4} and @file{acspecific.m4}, and also an installed
+@file{aclocal.m4} if it exists.
 
+@noindent
+Files used in preparing a software package for distribution:
 @example
-aclocal.m4  \
-acgeneral.m4 \                          Makefile.in \
-acspecific.m4 \                                      \
-autoconf*     -> m4* -> configure* -> config.status* -> Makefile \
-configure.in  /                          |    |                   \
-  |    |                                 |    |             make* -> your
-  |    |                                 |    |                   /package
-  |    |                              config.status* -> config.h /
-configure.in \                                       /
-acspecific.m4 \                                    /
-acgeneral.m4   \                                 /
-aclocal.m4      \                              /
-autoheader*     -> m4* - - - --> config.h.in /
-acconfig.h      /
-config.h.top   /
+@group
+configure.in --.   .------> autoconf* -----> configure
+               +---+ 
+[aclocal.m4] --'   `---.
+                       +--> [autoheader*] -> [config.h.in]
+[acconfig.h] ----.     |
+                 +-----'
+[config.h.top] --'
+
+Makefile.in -------------------------------> Makefile.in
+@end group
 @end example
 
 @noindent
-Executables are suffixed by @samp{*}.  Files appearing twice are
-linked with lines of @samp{|}.
+Files used in configuring a software package:
+@example
+@group
+configure* ------------.
+                       |
+[config.h.in] -.       v            .-> [config.h] -.
+               +--> config.status* -+               +--> make*
+Makefile.in ---'                    `-> Makefile ---'
+@end group
+@end example
 
 @menu
 * Writing configure.in::	What to put in an Autoconf input file.
@@ -576,16 +591,19 @@ this macro first if it hasn't been called already.  This macro calls
 @maindex PROG_INSTALL
 Set @code{make} variable @code{INSTALL} to @samp{install -c} if
 @code{install} is found and is compatible with the BSD and GNU versions.
-Otherwise, set @code{INSTALL} to @samp{@@top_srcdir@@/install.sh -c} if that
-script exists, or to @samp{cp} as a last resort.  Screens out the
-false matches @file{/etc/install}, @file{/usr/sbin/install}, and other
-instances of @code{install} known not to work.  Also sets the variable
-@code{INSTALL_PROGRAM} to @samp{$@{INSTALL@}} and
-@code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
+Otherwise, set @code{INSTALL} to @samp{@var{dir}/install.sh -c}, where
+it checks the directories specified to @code{AC_CONFIG_AUX} (or its
+default directories) to determine @var{dir}.
 
-If you need to use your own @file{install.sh} because it has features
+This macro screens out the false matches @file{/etc/install},
+@file{/usr/sbin/install}, and other instances of @code{install} known
+not to work.  It also sets the variable @code{INSTALL_PROGRAM} to
+@samp{$@{INSTALL@}} and @code{INSTALL_DATA} to @samp{$@{INSTALL@} -m
+644}.
+
+If you need to use your own installation program because it has features
 not found in standard @code{install} programs, there is no reason to use
-@code{AC_PROG_INSTALL}; just put the pathname of your script into your
+@code{AC_PROG_INSTALL}; just put the pathname of your program into your
 @file{Makefile.in} files.
 @end defmac
 
@@ -2448,8 +2466,8 @@ called, @code{configure} replaces @samp{@@DEFS@@} with
 @samp{-DHAVE_CONFIG_H}, since the contents of @code{DEFS} would be
 redundant.
 
-@xref{Makefiles, , Makefile Conventions, standards.info, The GNU Coding
-Standards}, for more information on what to put in Makefiles.
+@xref{Makefile Conventions, , Makefile Conventions, standards.info, The
+GNU Coding Standards}, for more information on what to put in Makefiles.
 @xref{Sample Makefile.in}, for an example of a real @file{Makefile.in}.
 
 @menu
