@@ -1,3 +1,19 @@
+2000-07-31  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_DIVERT(INIT_PARSE_ARGS)): Rename as...
+	(_AC_DIVERT(PARSE_ARGS)): this.  Adjust dependencies.
+	(AC_ARG_WITH): Remove spurious newline.
+	(AC_ARG_VAR): No longer save precious variables in
+	ac_configure_args, rather snapshot them twice (one kept
+	unmodified, another one to be written to/overwritten by the cache
+	file).
+	(AC_CACHE_SAVE): Let the cache variables named `ac_cv_env_*'
+	be overwritten when loading the cache (i.e., don't use the
+	: ${foo=...} trick).
+	(_AC_ARG_VAR_VALIDATE): Compare the two snapshots of the precious
+	variables.
+	(_AC_INIT_PREPARE): Call it after having loaded the cache file.
+
 2000-07-28  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_LANG_CONFTEST, _AC_PROG_CC_GNU, _AC_PROG_CXX_GNU,

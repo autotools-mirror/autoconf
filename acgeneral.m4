@@ -75,7 +75,7 @@ define([sinclude], [builtin([sinclude], $@)])
 #   copyright notice(s)
 # - DEFAULTS
 #   early initializations (defaults)
-# - INIT_PARSE_ARGS
+# - PARSE_ARGS
 #   initialization code, option handling loop.
 #
 # - HELP_BEGIN
@@ -132,7 +132,7 @@ define([_AC_DIVERT(BINSH)],           0)
 define([_AC_DIVERT(REVISION)],        1)
 define([_AC_DIVERT(NOTICE)],          2)
 define([_AC_DIVERT(DEFAULTS)],        3)
-define([_AC_DIVERT(INIT_PARSE_ARGS)], 4)
+define([_AC_DIVERT(PARSE_ARGS)],      4)
 
 define([_AC_DIVERT(HELP_BEGIN)],     10)
 define([_AC_DIVERT(HELP_CANON)],     11)
@@ -1226,7 +1226,7 @@ AC_DEFUN([AC_CONFIG_SRCDIR],
 # ---------------
 # Compute `srcdir' based on `$ac_unique_file'.
 define([_AC_INIT_SRCDIR],
-[AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
+[AC_DIVERT_PUSH([PARSE_ARGS])dnl
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -1259,7 +1259,7 @@ AC_DIVERT_POP()dnl
 # _AC_INIT_PARSE_ARGS
 # -------------------
 define([_AC_INIT_PARSE_ARGS],
-[AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
+[AC_DIVERT_PUSH([PARSE_ARGS])dnl
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1899,9 +1899,10 @@ rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo >confdefs.h
 
-dnl Let the site file select an alternate cache file if it wants to.
+# Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
+_AC_ARG_VAR_VALIDATE
 AC_LANG(C)
 
 _AC_PROG_ECHO()dnl
@@ -2021,8 +2022,7 @@ AC_DEFUN([AC_ARG_WITH],
 [AC_DIVERT_ONCE([HELP_WITH], [[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-]])
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 AC_DIVERT_ONCE([HELP_WITH], [$2])dnl
 # Check whether --with-$1 or --without-$1 was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
@@ -2049,6 +2049,17 @@ AU_DEFUN([AC_WITH],
 # ----------------------------------
 # Register VARNAME as a variable configure should remember, and
 # document it in `configure --help' (but only once).
+#
+# Try to diagnose when precious variables have changed.  To do this,
+# make two early snapshots (after the option processing to take
+# explicit variables into account) of those variables: one (ac_env_)
+# which represents the current run, and a second (ac_cv_env_) which,
+# at the first run, will be saved in the cache.  As an exception to
+# the cache mechanism, its loading will override these variables (non
+# `ac_cv_env_' cache value are only set when unset).
+#
+# In subsequent runs, after having loaded the cache, compare
+# ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
 AC_DEFUN([AC_ARG_VAR],
 [AC_DIVERT_ONCE([HELP_VAR], [
 Some influential environment variables:])dnl
@@ -2056,15 +2067,48 @@ AC_DIVERT_ONCE([HELP_VAR_END], [
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.])dnl
 AC_DIVERT_ONCE([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
-# Register if set and not yet registered.
-# If there are envvars given as arguments, they are already set,
-# therefore they won't be set again, which is the right thing.
-case "${$1+set} $ac_configure_args" in
- *" $1="* );;
- "set "*) ac_configure_args="$1='[$]$1' $ac_configure_args";;
-esac[]dnl
+AC_DIVERT_ONCE([PARSE_ARGS],
+[ac_env_$1_set=${$1+set}
+ac_env_$1_value="$$1"
+ac_cv_env_$1_set=${$1+set}
+ac_cv_env_$1_value="$$1"])
 ])# AC_ARG_VAR
 
+
+# _AC_ARG_VAR_VALIDATE
+# --------------------
+define([_AC_ARG_VAR_VALIDATE],
+[# Check that the precious variables saved in the cache have kept the same
+# value.
+ac_suggest_removing_cache=false
+for ac_var in `(set) 2>&1 |
+               sed -n 's/^ac_env_\([[a-zA-Z_0-9]]*\)_set=.*/\1/p'`; do
+  eval ac_old_set=\$ac_cv_env_${ac_var}_set
+  eval ac_new_set=\$ac_env_${ac_var}_set
+  eval ac_old_val="\$ac_cv_env_${ac_var}_value"
+  eval ac_new_val="\$ac_env_${ac_var}_value"
+  case $ac_old_set,$ac_new_set in
+    set,)
+      AC_MSG_WARN([`$ac_var' was set to `$ac_old_val' in the previous run])
+      ac_suggest_removing_cache=: ;;
+    ,set)
+      AC_MSG_WARN([`$ac_var' was not set in the previous run])
+      ac_suggest_removing_cache=: ;;
+    ,);;
+    *)
+      if test "x$ac_old_val" != "x$ac_new_val"; then
+        AC_MSG_WARN([`$ac_var' has changed since the previous run:])
+        AC_MSG_WARN([  former value:  $ac_old_val])
+        AC_MSG_WARN([  current value: $ac_new_val])
+        ac_suggest_removing_cache=:
+      fi;;
+  esac
+done
+if $ac_suggest_removing_cache; then
+  AC_MSG_WARN([changes in the environment can compromise the build])
+  AC_MSG_WARN([consider removing $cache_file and starting over])
+fi
+])# _AC_ARG_VAR_VALIDATE
 
 
 ## ---------------------------- ##
@@ -2370,21 +2414,20 @@ define([AC_CACHE_SAVE],
 [cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
-# scripts and configure runs.  It is not useful on other systems.
-# If it contains results you don't want to keep, you may remove or edit it.
+# scripts and configure runs, see configure's option --config-cache.
+# It is not useful on other systems.  If it contains results you don't
+# want to keep, you may remove or edit it.
 #
-# By default, configure uses `config.cache' as the cache file,
-# creating it if it does not exist already.  You can give configure
-# the --cache-file=FILE option to use a different cache file; that is
-# what configure does when it calls configure scripts in
-# subdirectories, so they share the cache.
-# Giving --cache-file=/dev/null disables caching, for debugging configure.
-# config.status only pays attention to the cache file if you give it the
-# --recheck option to rerun configure.
+# config.status only pays attention to the cache file if you give it
+# the --recheck option to rerun configure.
 #
+# `ac_cv_env_foo' variables (set or unset) will be overriden when
+# loading this file, other *unset* `ac_cv_foo' will be assigned the
+# following values.
+
 EOF
 _AC_CACHE_DUMP() |
-  sed 's/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
+  sed '/^ac_cv_env/!s/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"

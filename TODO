@@ -59,11 +59,6 @@ I think it is the epilogue that should provide, not the prologue.  Not
 clear: there are risks of circular dependencies :(.  In fact the
 relationship AC_BEFORE should be given outside the macro themselves.
 
-** AC_ARG_VAR
-If should check that none of the envvar it is in charge of, has
-changed.  The configure.in writer may supply what to do (FATAL, WARN
-etc.).  See VALIDATE CACHE TUPLE.  Document.  Where?
-
 ** autoupdate
 We should probably install the files which do not depend upon the
 user, just the Autoconf library files.  But conversely autoupdate must
