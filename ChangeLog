@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (run_aclocal): Rename as `uses_aclocal' to avoid
+	the convention clash with autoconf.sh where `run_foo' is the
+	command to run `foo'.
+	(uses_autoheader): New variable.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (update.sh): New sub program.
 	Use it in the whole process.
 	(acconfig_h): New variable.

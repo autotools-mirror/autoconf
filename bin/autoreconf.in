@@ -246,14 +246,14 @@ while read dir; do
   # Running aclocal.  #
   # ----------------- #
 
-  # run_aclocal -- is this package using aclocal?
-  run_aclocal=false
+  # uses_aclocal -- is this package using aclocal?
+  uses_aclocal=false
   aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
   if grep 'generated automatically by aclocal' $aclocal_m4 >/dev/null 2>&1 ||
      test -f "$aclocal_dir/acinclude.m4"; then
-     run_aclocal=:
+     uses_aclocal=:
   fi
-  if $run_aclocal &&
+  if $uses_aclocal &&
      { $force ||
        $update $aclocal_m4 $aclocal_dir/acinclude.m4; } then
      # If there are flags for aclocal in Makefile.am, use them.
@@ -310,10 +310,14 @@ while read dir; do
     stamp=$template_dir/stamp-h$stamp_num.in
     acconfig_h=`echo $localdir_opt | sed -e 's/--localdir=//' \
                                          -e '/./ s%$%/%'`acconfig.h
-    if test ! -f "$template" || grep autoheader "$template" >/dev/null; then
-      if $force ||
+    uses_autoheader=false;
+    if grep autoheader "$template" >/dev/null 2>&1; then
+       uses_autoheader=:
+    fi
+    if $uses_autoheader &&
+       { $force ||
          $update $template $stamp configure.in $aclocal_m4 $acconfig_h ||
-         $update $stamp $template configure.in $aclocal_m4 $acconfig_h; then
+         $update $stamp $template configure.in $aclocal_m4 $acconfig_h; } then
         $verbose running $autoheader $localdir_opt in $dir
         $autoheader $localdir_opt &&
         $verbose "touching $stamp" &&
