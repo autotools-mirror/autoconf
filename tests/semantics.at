@@ -157,7 +157,7 @@ AC_CHECK_TYPE(a,b,c,d)
 AC_OUTPUT
 ]])
 
-AT_CHECK_AUTOCONF([], [],
+AT_CHECK_AUTOCONF([], 0, [],
 [configure.ac:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
 ])
 AT_CHECK([[sed -e '/^#(cut-from-here/,/^#to-here)/!d' -e '/^#/d' configure]],

@@ -78,7 +78,7 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], [],
+AT_CHECK_AUTOCONF([], 0, [],
 [configure.ac:16: warning: SINGLE_TEST invoked multiple times
 configure.ac:17: warning: SINGLE_TEST invoked multiple times
 ])
@@ -122,7 +122,7 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], [],
+AT_CHECK_AUTOCONF([], 0, [],
 [configure.ac:15: warning: SINGLE_TEST invoked multiple times
 ])
 AT_CHECK_CONFIGURE
@@ -157,4 +157,4 @@ esac
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 
-AT_CLEANUP(configure)
+AT_CLEANUP

@@ -22,13 +22,14 @@ include(atgeneral.m4)					-*- Autoconf -*-
 ## ---------------------------------------- ##
 
 
-# AT_CHECK_AUTOCONF(FLAGS, STDOUT, STDERR)
-# ----------------------------------------
+# AT_CHECK_AUTOCONF(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# -----------------------------------------------------------
 # Also remove `configure.in', just in case one remained from a previous
 # run.
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure)dnl
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1], 0, [$2], [$3])])
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1],
+         m4_default([$2], [0]), [$3], [$4])])
 
 
 # AT_CHECK_AUTOHEADER

@@ -123,6 +123,7 @@ m4_rename_m4([eval])
 m4_rename_m4([format])
 m4_rename_m4([ifdef])
 m4_rename([ifelse], [m4_if])
+m4_rename_m4([include])
 m4_rename_m4([incr])
 m4_rename_m4([index])
 m4_rename_m4([indir])
@@ -131,10 +132,11 @@ m4_rename([m4exit], [m4_exit])
 m4_rename([m4wrap], [m4_wrap])
 m4_rename_m4([maketemp])
 m4_rename_m4([patsubst])
-m4_rename_m4([popdef])
+m4_undefine([popdef])
 m4_rename_m4([pushdef])
 m4_rename_m4([regexp])
 m4_rename_m4([shift])
+m4_rename_m4([sinclude])
 m4_rename_m4([substr])
 m4_rename_m4([symbols])
 m4_rename_m4([syscmd])
@@ -261,6 +263,7 @@ m4_define([m4_warn],
 
 
 
+
 ## ------------------- ##
 ## 4. File inclusion.  ##
 ## ------------------- ##
@@ -302,10 +305,6 @@ m4_define([m4_sinclude],
 [m4_include_unique([$1])dnl
 m4_builtin([sinclude], [$1])])
 
-# Neutralize include and sinclude.
-m4_undefine([include])
-m4_undefine([sinclude])
-
 
 
 ## ------------------------------------ ##
@@ -327,7 +326,7 @@ m4_undefine([sinclude])
 
 
 # m4_ifval(COND, [IF-TRUE], [IF-FALSE])
-#--- ----------------------------------
+# -------------------------------------
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 # Comparable to m4_ifdef.
 m4_define([m4_ifval],
@@ -485,6 +484,16 @@ m4_define([m4_dumpdefs],
 _m4_dumpdefs_down([$1])])
 
 
+# m4_popdef(NAME)
+# ---------------
+# Unlike to the original, don't tolerate popping something which is
+# undefined.
+m4_define([m4_popdef],
+[m4_ifndef([$1]
+           [m4_fatal([$0: undefined: $1])])dnl
+m4_builtin([popdef], $@)])
+
+
 # m4_quote(STRING)
 # ----------------
 # Return STRING quoted.
@@ -505,6 +514,16 @@ m4_define([m4_dquote], [[[$*]]])
 # help-strings).
 m4_define([m4_noquote],
 [m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+
+
+# m4_undefine(NAME)
+# -----------------
+# Unlike to the original, don't tolerate undefining something which is
+# undefined.
+m4_define([m4_undefine],
+[m4_ifndef([$1]
+           [m4_fatal([$0: undefined: $1])])dnl
+m4_builtin([undefine], $@)])
 
 
 ## -------------------------- ##
@@ -1018,27 +1037,51 @@ m4_divert_pop()dnl
 # not for define'd macros.
 #
 # The scheme is simplistic: each time we enter an m4_defun'd macros,
-# we m4_pushdef its name in _m4_expansion_stack, and when we exit the
-# macro, we m4_popdef _m4_expansion_stack.
+# we prepend its name in m4_expansion_stack, and when we exit the
+# macro, we remove it (thanks to pushdef/popdef).
 #
 # In addition, we want to use the expansion stack to detect circular
 # m4_require dependencies.  This means we need to browse the stack to
 # check whether a macro being expanded is m4_require'd.  For ease of
 # implementation, and certainly for the benefit of performances, we
-# don't browse the _m4_expansion_stack, rather each time we expand a
-# macro FOO we define _AC_EXPANDING(FOO).  Then m4_require(BAR) simply
-# needs to check whether _AC_EXPANDING(BAR) is defined to diagnose a
+# don't browse the m4_expansion_stack, rather each time we expand a
+# macro FOO we define _m4_expanding(FOO).  Then m4_require(BAR) simply
+# needs to check whether _m4_expanding(BAR) is defined to diagnose a
 # circular dependency.
 #
 # To improve the diagnostic, in addition to keeping track of the stack
-# of macro calls, _m4_expansion_stack also records the m4_require
+# of macro calls, m4_expansion_stack also records the m4_require
 # stack.  Note that therefore an m4_defun'd macro being required will
 # appear twice in the stack: the first time because it is required,
 # the second because it is expanded.  We can avoid this, but it has
 # two small drawbacks: (i) the implementation is slightly more
 # complex, and (ii) it hides the difference between define'd macros
-# (which don't appear in _m4_expansion_stack) and m4_defun'd macros
+# (which don't appear in m4_expansion_stack) and m4_defun'd macros
 # (which do).  The more debugging information, the better.
+
+
+# m4_expansion_stack_push(TEXT)
+# -----------------------------
+m4_define([m4_expansion_stack_push],
+[m4_pushdef([m4_expansion_stack],
+            [$1]
+m4_defn([m4_expansion_stack]))])
+
+
+# m4_expansion_stack_pop
+# ----------------------
+# Dump the expansion stack.
+m4_define([m4_expansion_stack_pop],
+[m4_popdef([m4_expansion_stack])])
+
+
+# m4_expansion_stack_dump
+# -----------------------
+# Dump the expansion stack.
+m4_define([m4_expansion_stack_dump],
+[m4_errprint(m4_defn([m4_expansion_stack]))dnl
+m4_errprintn(m4_location[: the top level])])
+
 
 # _m4_divert(GROW)
 # ----------------
@@ -1058,23 +1101,12 @@ m4_divert_pop()dnl
 
 m4_define([_m4_divert(GROW)],       10000)
 
-# m4_expansion_stack_dump
-# -----------------------
-# Dump the expansion stack.
-m4_define([m4_expansion_stack_dump],
-[m4_ifdef([_m4_expansion_stack],
-          [m4_errprintn(m4_defn([_m4_expansion_stack]))dnl
-m4_popdef([_m4_expansion_stack])dnl
-m4_expansion_stack_dump()],
-          [m4_errprintn(m4_location[: the top level])])])
-
 
 # _m4_defun_pro(MACRO-NAME)
 # -------------------------
 # The prologue for Autoconf macros.
 m4_define([_m4_defun_pro],
-[m4_pushdef([_m4_expansion_stack],
-            m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
+[m4_expansion_stack_push(m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
 m4_pushdef([_m4_expanding($1)])dnl
 m4_ifdef([_m4_divert_dump],
          [m4_divert_push(m4_defn([_m4_divert_diversion]))],
@@ -1092,7 +1124,7 @@ m4_define([_m4_defun_epi],
 m4_if(_m4_divert_dump, _m4_divert_diversion,
       [m4_undivert(_m4_divert([GROW]))dnl
 m4_undefine([_m4_divert_dump])])dnl
-m4_popdef([_m4_expansion_stack])dnl
+m4_expansion_stack_pop()dnl
 m4_popdef([_m4_expanding($1)])dnl
 m4_provide([$1])dnl
 ])
@@ -1158,7 +1190,7 @@ m4_define([m4_before],
 # If NAME-TO-CHECK has never been expanded (actually, if it is not
 # m4_provide'd), expand BODY-TO-EXPAND *before* the current macro
 # expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
-# of the m4_require chain in _m4_expansion_stack.
+# of the m4_require chain in m4_expansion_stack.
 #
 # The normal cases are:
 #
@@ -1186,8 +1218,7 @@ m4_define([m4_before],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([m4_require],
-[m4_pushdef([_m4_expansion_stack],
-            m4_location[: $1 is required by...])dnl
+[m4_expansion_stack_push(m4_location[: $1 is required by...])
 m4_ifdef([_m4_expanding($1)],
          [m4_fatal([$0: circular dependency of $1])])dnl
 m4_ifndef([_m4_divert_dump],
@@ -1202,7 +1233,7 @@ m4_provide_ifelse([$1],
                   [],
                   [m4_warn([syntax],
                            [$1 is m4_require'd but is not m4_defun'd])])dnl
-m4_popdef([_m4_expansion_stack])dnl
+m4_expansion_stack_pop()dnl
 ])
 
 

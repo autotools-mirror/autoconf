@@ -1,3 +1,18 @@
+2001-01-17  Akim Demaille  <akim@epita.fr>
+
+	* m4sugar.m4 (m4_undefine, m4_popdef): Don't tolerate undefined
+	arguments.
+	(_m4_expansion_stack): Rename as...
+	(m4_expansion_stack): this, and change its value: instead of using
+	the pushdef stack to stack each *line* of the stack, each
+	definition contains the whole stack.  I.e., to display the whole
+	stack, instead of popdefing and displaying each definition, just
+	display the current definition.
+	(m4_expansion_stack_push, m4_expansion_stack_pop): New.
+	* tests/atspecific.m4 (AT_CHECK_AUTOCONF): Let $2 be the expected
+	exit status.
+	* tests/m4sugar.m4 (m4_require: circular dependencies): New test.
+
 2001-01-17  Pavel Roskin  <proski@gnu.org>
 
 	* m4sugar.m4 (m4_normalize): New macro - superposition of
@@ -10,8 +25,7 @@
 
 2001-01-17  Tim Van Holder  <tim.van.holder@pandora.be>
 
-	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_sub_srcdir in case
-	it has IFS characters.
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_sub_srcdir uses.
 
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
