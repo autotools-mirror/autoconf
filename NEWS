@@ -25,6 +25,9 @@
   ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
   for ACTION-IF-TRUE is to define WORDS_BIGENDIAN like AC_C_BIGENDIAN
   always did.
+** Generic macros
+- AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
+  Provide the user with srcdir, ac_top_srcdir, ac_top_builddir, ac_srcdir.
 
 * Major changes in Autoconf 2.52
 ** Documentation

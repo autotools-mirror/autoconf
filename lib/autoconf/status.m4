@@ -127,32 +127,33 @@
 #   - `$srcdir' is `top-build -> top-src'
 #
 # Ouputs:
-# - `ac_dots' is `build -> top_build'.  If not empty, has a trailing slash.
+# - `ac_top_builddir' is `build -> top_build'.
+#      If not empty, has a trailing slash.
 # - `ac_srcdir' is `build -> src'.
 # - `ac_top_srcdir' is `build -> top-src'
 m4_define([_AC_SRCPATHS],
 [if test $1 != .; then
   ac_dir_suffix=/`echo $1 | sed 's,^\./,,'`
   # A "../" for each directory in $ac_dir_suffix.
-  ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
+  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
 else
-  ac_dir_suffix= ac_dots=
+  ac_dir_suffix= ac_top_builddir=
 fi
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
     ac_srcdir=.
-    if test -z "$ac_dots"; then
+    if test -z "$ac_top_builddir"; then
        ac_top_srcdir=.
     else
-       ac_top_srcdir=`echo $ac_dots | sed 's,/$,,'`
+       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
     fi ;;
   [[\\/]]* | ?:[[\\/]]* )  # Absolute path.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir ;;
   *) # Relative path.
-    ac_srcdir=$ac_dots$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_dots$srcdir ;;
+    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
 ])# _AC_SRCPATHS
 
@@ -749,7 +750,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
 
   case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
-      *) ac_rel_source=$ac_dots$srcdir/$ac_source ;;
+      *) ac_rel_source=$ac_top_builddir$srcdir/$ac_source ;;
   esac
 
   # Make a symlink if possible; otherwise try a hard link.
@@ -900,7 +901,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [  case $INSTALL in
   [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
-  *) ac_INSTALL=$ac_dots$INSTALL ;;
+  *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
   esac
 ])dnl
 
@@ -1090,7 +1091,7 @@ if test "$no_recursion" != yes; then
       case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
-        ac_sub_cache_file=$ac_dots$cache_file ;;
+        ac_sub_cache_file=$ac_top_builddir$cache_file ;;
       esac
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])

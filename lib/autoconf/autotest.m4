@@ -75,7 +75,7 @@ at_c='$at_c'
 at_testdir='$1'
 srcdir='$ac_srcdir'
 top_srcdir='$ac_top_srcdir'
-top_builddir='$ac_dots'
+top_builddir='$ac_top_builddir'
 
 AUTOTEST_PATH='m4_default([$2], [.])'
 

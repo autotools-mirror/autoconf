@@ -1765,25 +1765,6 @@ where the arguments are:
 A whitespace-separated list of tags, which are typically the names of
 the files to instantiate.
 
-@item commands
-Shell commands output literally into @file{config.status}, and
-associated with a tag that the user can use to tell @file{config.status}
-which the commands to run.  The commands are run each time a @var{tag}
-request is given to @file{config.status}; typically, each time the file
-@file{@var{tag}} is created.
-
-@item init-cmds
-Shell commands output @emph{unquoted} near the beginning of
-@file{config.status}, and executed each time @file{config.status} runs
-(regardless of the tag).  Because they are unquoted, for example,
-@samp{$var} will be output as the value of @code{var}.  @var{init-cmds}
-is typically used by @file{configure} to give @file{config.status} some
-variables it needs to run the @var{commands}.
-@end table
-
-All these macros can be called multiple times, with different
-@var{tag}s, of course!
-
 You are encouraged to use literals as @var{tags}.  In particular, you
 should avoid
 
@@ -1801,11 +1782,10 @@ and use this instead:
 @dots{} && AC_CONFIG_FOOS(foooo)
 @end example
 
-The macro @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
-specials @var{tag}s: they may have the form @samp{@var{output}} or
+The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
+special @var{tag}s: they may have the form @samp{@var{output}} or
 @samp{@var{output}:@var{inputs}}. The file @var{output} is instantiated
-from its templates, @var{inputs} if specified, defaulting to
-@samp{@var{output}.in}.
+from its templates, @var{inputs} (defaulting to @samp{@var{output}.in}).
 
 For instance
 @samp{AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk)} asks for
@@ -1823,6 +1803,78 @@ for more details.
 The @var{inputs} may be absolute or relative filenames.  In the latter
 case they are first looked for in the build tree, and then in the source
 tree.
+
+@item commands
+Shell commands output literally into @file{config.status}, and
+associated with a tag that the user can use to tell @file{config.status}
+which the commands to run.  The commands are run each time a @var{tag}
+request is given to @file{config.status}; typically, each time the file
+@file{@var{tag}} is created.
+
+The variable set during the execution of @command{configure} are
+@emph{not} available here: you first need to set them via the
+@var{init-cmds}.  Nonetheless the following variables are precomputed:
+
+@table @code
+@item srcdir
+The path from the top build directory to the top source directory.  This
+is what @command{configure}'s option @option{--srcdir} sets.
+
+@item ac_top_srcdir
+The path from the current build directory to the top source directory.
+
+
+@item ac_top_builddir
+The path from the current build directory to the top build directory.
+It can be empty, or else ends with a slash, so that you may concatenate
+it.
+
+@item ac_srcdir
+The path from the current build directory to the corresponding source
+directory.
+@end table
+
+@noindent
+The @dfn{current} directory refers to the directory (or
+pseudo-directory) containing the input part of @var{tags}.  For
+instance, running
+
+@example
+AC_CONFIG_COMMANDS([deep/dir/out:in/in.in], [@dots{}], [@dots{}])
+@end example
+
+@noindent
+ with @option{--srcdir=../package} produces the following values:
+
+@example
+# Argument of --srcdir
+srcdir='../package'
+# Reversing deep/dir
+ac_top_builddir='../../'
+# Concatenation of $ac_top_builddir and srcdir
+ac_top_srcdir='../../../package'
+# Concatenation of $ac_top_srcdir and deep/dir
+ac_srcdir='../../../package/deep/dir'
+@end example
+
+@noindent
+independently of @samp{in/in.in}.
+
+@item init-cmds
+Shell commands output @emph{unquoted} near the beginning of
+@file{config.status}, and executed each time @file{config.status} runs
+(regardless of the tag).  Because they are unquoted, for example,
+@samp{$var} will be output as the value of @code{var}.  @var{init-cmds}
+is typically used by @file{configure} to give @file{config.status} some
+variables it needs to run the @var{commands}.
+
+You should be extremely cautious in your variable names: all the
+@var{init-cmds} share the same name space and may overwrite each other
+in unpredictable ways.  Sorry@dots{}
+@end table
+
+All these macros can be called multiple times, with different
+@var{tag}s, of course!
 
 
 @node Configuration Files, Makefile Substitutions, Configuration Actions, Setup
@@ -1849,16 +1901,16 @@ but other files, such as @file{.gdbinit}, can be specified as well.
 Typical calls to @code{AC_CONFIG_FILES} look like this:
 
 @example
-AC_CONFIG_FILES(Makefile src/Makefile man/Makefile X/Imakefile)
-AC_CONFIG_FILES(autoconf, chmod +x autoconf)
+AC_CONFIG_FILES([Makefile src/Makefile man/Makefile X/Imakefile])
+AC_CONFIG_FILES([autoconf], [chmod +x autoconf])
 @end example
 
 You can override an input file name by appending to @var{file} a
 colon-separated list of input files.  Examples:
 
 @example
-AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk
-                lib/Makefile:boiler/lib.mk)
+AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk]
+                [lib/Makefile:boiler/lib.mk])
 @end example
 
 @noindent
@@ -2280,8 +2332,8 @@ config.status: configure
 (Be careful if you copy these lines directly into your Makefile, as you
 will need to convert the indented lines to start with the tab character.)
 
-In addition, you should use @samp{AC_CONFIG_FILES(stamp-h, echo
-timestamp > stamp-h)} so @file{config.status} will ensure that
+In addition, you should use @samp{AC_CONFIG_FILES([stamp-h], [echo
+timestamp > stamp-h])} so @file{config.status} will ensure that
 @file{config.h} is considered up to date.  @xref{Output}, for more
 information about @code{AC_OUTPUT}.
 
@@ -2333,8 +2385,8 @@ override the input file name by appending to @var{header}, a
 colon-separated list of input files.  Examples:
 
 @example
-AC_CONFIG_HEADERS(config.h:config.hin)
-AC_CONFIG_HEADERS(defines.h:defs.pre:defines.h.in:defs.post)
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_CONFIG_HEADERS([defines.h:defs.pre:defines.h.in:defs.post])
 @end example
 
 @noindent
@@ -2361,8 +2413,8 @@ statements which are used as hooks.  For example, suppose your
 @file{configure.ac} makes these calls:
 
 @example
-AC_CONFIG_HEADERS(conf.h)
-AC_CHECK_HEADERS(unistd.h)
+AC_CONFIG_HEADERS([conf.h])
+AC_CHECK_HEADERS([unistd.h])
 @end example
 
 @noindent
@@ -2608,14 +2660,14 @@ see @ref{Configuration Actions}.
 Here is an unrealistic example:
 @example
 fubar=42
-AC_CONFIG_COMMANDS(fubar,
+AC_CONFIG_COMMANDS([fubar],
                    [echo this is extra $fubar, and so on.],
                    [fubar=$fubar])
 @end example
 
 Here is a better one:
 @example
-AC_CONFIG_COMMANDS(time-stamp, [date >time-stamp])
+AC_CONFIG_COMMANDS([time-stamp], [date >time-stamp])
 @end example
 @end defmac
 
@@ -10523,7 +10575,7 @@ Here is an unrealistic example:
 @example
 fubar=27
 AC_OUTPUT_COMMANDS([echo this is extra $fubar, and so on.],
-                   fubar=$fubar)
+                   [fubar=$fubar])
 AC_OUTPUT_COMMANDS([echo this is another, extra, bit],
                    [echo init bit])
 @end example
@@ -10546,7 +10598,7 @@ with @code{AC_OUTPUT_COMMANDS}, you need two with
 @example
 @group
 AC_OUTPUT_COMMANDS([echo "Square brackets: []"])
-AC_CONFIG_COMMANDS(default, [[echo "Square brackets: []"]])
+AC_CONFIG_COMMANDS([default], [[echo "Square brackets: []"]])
 @end group
 @end example
 @end defmac
