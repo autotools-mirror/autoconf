@@ -1,3 +1,9 @@
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
+	* tests/tools.at (autoconf --trace: user macros): Check traces on
+	macros invoked without arguments, and macros invoked with multiple
+	lines arguments.
+
 2001-08-03  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* bin/autom4te.in (handle_traces): Fix rewriting of traces without

@@ -119,32 +119,51 @@ AT_DATA(configure.ac,
 [[m4_define([active], [ACTIVE])
 m4_define([TRACE1], [TRACE2(m4_shift($@))])
 m4_define([TRACE2], [[$2], $1])
+
+# No arguments.
+TRACE1
+TRACE2
+
+# With arguments, single line.
 TRACE1(foo, bar, baz)
 TRACE1(foo, TRACE1(bar, baz))
 TRACE1(foo, active, baz)
 TRACE1(foo, [active], TRACE1(active, [active]))
+
+# With arguments, multiple lines.
+TRACE1(foo
+bar,
+bar
+foo)
 ]])
 
 # Several --traces.
 AT_CHECK_AUTOCONF([-t TRACE1 -t TRACE2], 0,
-[[configure.ac:4:TRACE1:foo:bar:baz
-configure.ac:4:TRACE2:bar:baz
-configure.ac:5:TRACE1:bar:baz
-configure.ac:5:TRACE2:baz
-configure.ac:5:TRACE1:foo::baz
-configure.ac:5:TRACE2::baz
-configure.ac:6:TRACE1:foo:ACTIVE:baz
-configure.ac:6:TRACE2:ACTIVE:baz
-configure.ac:7:TRACE1:ACTIVE:active
-configure.ac:7:TRACE2:active
-configure.ac:7:TRACE1:foo:active::ACTIVE
-configure.ac:7:TRACE2:active::ACTIVE
+[[configure.ac:6:TRACE1:
+configure.ac:6:TRACE2:
+configure.ac:7:TRACE2:
+configure.ac:10:TRACE1:foo:bar:baz
+configure.ac:10:TRACE2:bar:baz
+configure.ac:11:TRACE1:bar:baz
+configure.ac:11:TRACE2:baz
+configure.ac:11:TRACE1:foo::baz
+configure.ac:11:TRACE2::baz
+configure.ac:12:TRACE1:foo:ACTIVE:baz
+configure.ac:12:TRACE2:ACTIVE:baz
+configure.ac:13:TRACE1:ACTIVE:active
+configure.ac:13:TRACE2:active
+configure.ac:13:TRACE1:foo:active::ACTIVE
+configure.ac:13:TRACE2:active::ACTIVE
+configure.ac:19:TRACE1:foo bar:bar foo
+configure.ac:19:TRACE2:bar foo
 ]])
 
 # Several line requests.
 AT_CHECK_AUTOCONF([[-t TRACE1:'
 [$1], [$2], [$3].']], 0,
 [[
+[], [], [].
+
 [foo], [bar], [baz].
 
 [bar], [baz], [].
@@ -156,16 +175,24 @@ AT_CHECK_AUTOCONF([[-t TRACE1:'
 [ACTIVE], [active], [].
 
 [foo], [active], [].
+
+[foo
+bar], [bar
+foo], [].
 ]])
 
 # ${sep}@.
 AT_CHECK_AUTOCONF([-t TRACE2:'${)===(}@'], 0,
-[[[bar])===([baz]
+[[[]
+[]
+[bar])===([baz]
 [baz]
 [])===([baz]
 [ACTIVE])===([baz]
 [active]
 [active])===([])===([ACTIVE]
+[bar
+foo]
 ]])
 
 AT_CLEANUP
