@@ -1,6 +1,7 @@
 # M4 macros used in building Autoconf test suites.        -*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -107,7 +108,8 @@ m4_define([AT_DATA_M4SUGAR],
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
-[AT_CHECK_AUTOM4TE([--language=m4sugar script.4s -o script $1],
+[AT_KEYWORDS([m4sugar])
+AT_CHECK_AUTOM4TE([--language=m4sugar script.4s -o script $1],
 	           [$2], [$3], [$4])])
 
 
@@ -202,7 +204,7 @@ m4_defun([AC_STATE_SAVE],
       [^a[cs]_],
       [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
-      [^(LIBS|LIB@&t@OBJS|LDFLAGS)=],
+      [^(LIBS|LIB@&t@OBJS|LTLIBOBJS|LDFLAGS)=],
       [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
       [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|XENIX|EXEEXT|OBJEXT)=],
       [^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|(have|no)_x)=],
@@ -210,8 +212,10 @@ m4_defun([AC_STATE_SAVE],
       [^(cross_compiling)=],
       [^(interpval|PATH_SEPARATOR)=],
       [^(F77_DUMMY_MAIN|f77_(case|underscore))=],
+      [^(FC_DUMMY_MAIN|FC|FCFLAGS|FCLIBS|FCFLAGS_f)=],
       [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
+      [^(EGREP|FGREP|SED)=],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.

@@ -2,7 +2,7 @@
 
 AT_BANNER([Semantics.])
 
-# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -177,13 +177,11 @@ AT_DATA([header2.h],
 [typedef foo bar;
 ])
 
-AT_CONFIGURE_AC(
-[CPPFLAGS="$CPPFLAGS -I."
-AC_CHECK_HEADERS(header2.h, [], [], -)])
+AT_CONFIGURE_AC([AC_CHECK_HEADERS(header2.h, [], [], -)])
 
 AT_CHECK_AUTOCONF([-W obsolete])
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
+AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [#define HAVE_HEADER2_H 1
@@ -211,12 +209,11 @@ AT_DATA([header3.h],
 ])
 
 AT_CONFIGURE_AC(
-[CPPFLAGS="$CPPFLAGS -I."
-AC_CHECK_HEADERS(header2.h header3.h, [], [], [[@%:@include "header1.h"]])])
+[AC_CHECK_HEADERS(header2.h header3.h, [], [], [[@%:@include "header1.h"]])])
 
 AT_CHECK_AUTOCONF([-W obsolete])
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
+AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [#define HAVE_HEADER2_H 1

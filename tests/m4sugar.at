@@ -20,6 +20,22 @@ AT_BANNER([M4sugar.])
 # 02111-1307, USA.
 
 
+# AT_CHECK_M4SUGAR_TEXT(CODE, STDOUT, STDER)
+# ------------------------------------------
+# Check that m4sugar CODE expands to STDOUT and emits STDERR.
+m4_define([AT_CHECK_M4SUGAR_TEXT],
+[
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_divert_push(0)[]dnl
+]$1[[]dnl
+m4_divert_pop(0)
+]])
+
+AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
+])# AT_CHECK_M4SUGAR_TEXT
+
+
 # Order of the tests:
 # - m4_warn
 #
@@ -32,7 +48,7 @@ AT_BANNER([M4sugar.])
 ## m4_warn.  ##
 ## --------- ##
 
-AT_SETUP([[m4@&t@_warn]])
+AT_SETUP([m4@&t@_warn])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
 # commas are not swallowed.  This can easily happen because of
@@ -83,7 +99,7 @@ AT_CLEANUP
 ## m4_require: circular dependencies.  ##
 ## ----------------------------------- ##
 
-AT_SETUP([[m4@&t@_require: circular dependencies]])
+AT_SETUP([m4@&t@_require: circular dependencies])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
 # commas are not swallowed.  This can easily happen because of
@@ -119,7 +135,7 @@ AT_CLEANUP
 ## m4_text_wrap.  ##
 ## -------------- ##
 
-AT_SETUP([[m4@&t@_text_wrap]])
+AT_SETUP([m4@&t@_text_wrap])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
 # commas are not swallowed.  This can easily happen because of
@@ -159,5 +175,32 @@ First, second , third, [,quoted]
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 0, [expout])
+
+AT_CLEANUP
+
+## ------------------------------ ##
+## Standard regular expressions.  ##
+## ------------------------------ ##
+
+AT_SETUP([Standard regular expressions])
+
+# AT_CHECK_M4RE(RE-NAME, TEXT, INTENT = `ok' | `')
+# ------------------------------------------------
+# Check whether RE-NAME (a macro whose definition is a regular expression)
+# matches TEXT.  INTENT = `ok' if the match should succeed or else empty.
+m4_define([AT_CHECK_M4RE],
+[AT_CHECK_M4SUGAR_TEXT(
+[[m4_bregexp([$2], ^m4_defn([$1])$, [ok])
+]], [$3
+])])
+
+AT_CHECK_M4RE([m4_re_word], [ab9_c], [ok])
+AT_CHECK_M4RE([m4_re_word], [_9abc], [ok])
+AT_CHECK_M4RE([m4_re_word], [9ab_c])
+
+AT_CHECK_M4RE([m4_re_string], [ab9_c], [ok])
+AT_CHECK_M4RE([m4_re_string], [_9abc], [ok])
+AT_CHECK_M4RE([m4_re_string], [9ab_c], [ok])
+AT_CHECK_M4RE([m4_re_string], [9a@_c])
 
 AT_CLEANUP

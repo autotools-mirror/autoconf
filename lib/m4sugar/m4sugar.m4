@@ -1327,8 +1327,9 @@ m4_define([m4_re_escape],
 # m4_re_string
 # ------------
 # Regexp for `[a-zA-Z_0-9]*'
+# m4_dquote provides literal [] for the character class.
 m4_define([m4_re_string],
-m4_defn([m4_cr_symbols2])dnl
+m4_dquote(m4_defn([m4_cr_symbols2]))dnl
 [*]dnl
 )
 
@@ -1337,7 +1338,7 @@ m4_defn([m4_cr_symbols2])dnl
 # ----------
 # Regexp for `[a-zA-Z_][a-zA-Z_0-9]*'
 m4_define([m4_re_word],
-m4_defn([m4_cr_symbols1])dnl
+m4_dquote(m4_defn([m4_cr_symbols1]))dnl
 m4_defn([m4_re_string])dnl
 )
 
