@@ -157,9 +157,9 @@ END
   }
 
 # Set up autoconf.
-my $autoconf = "$autom4te --language=autoconf ";
-$autoconf .= join (' ', map { "--include=$_" } @include);
-$autoconf .= join (' ', map { "--prepend-include=$_" } @prepend_include);
+my $autoconf = "'$autom4te' --language=autoconf ";
+$autoconf .= join (' ', map { "--include='$_'" } @include);
+$autoconf .= join (' ', map { "--prepend-include='$_'" } @prepend_include);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;
