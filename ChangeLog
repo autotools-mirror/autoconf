@@ -1,5 +1,11 @@
+2002-07-17  Akim Demaille  <akim@epita.fr>
+
+	* tests/wrapsh.as, tests/wrappl.as: Merge into...
+	* tests/wrapper.as: this.
+	* tests/Makefile.am, configure.ac: Adjust.
+
 2002-07-17  Mark D. Roth  <roth@feep.net>
- 
+
 	* configure.ac: Add --enable-site-macro-dir option.
 	* bin/Makefile.am: Expand @SITE_MACRO_DIR@.
 	* bin/autom4te.in: Add --prepend-include, --include-envvar, and
@@ -678,7 +684,6 @@
 	* bin/autoconf.in, bin/autoheader.in, bin/autom4te.in,
 	* bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in,
 	* bin/ifnames.in: Copyright update.
-
 
 2002-03-08  Akim Demaille  <akim@epita.fr>
 

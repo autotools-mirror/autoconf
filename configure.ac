@@ -41,19 +41,19 @@ AC_SUBST([SITE_MACRO_DIR], "${enable_site_macro_dir}")
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])
 AC_CONFIG_FILES([tests/Makefile tests/atlocal])
-AC_CONFIG_FILES([tests/autoconf:tests/wrapsh.in],
+AC_CONFIG_FILES([tests/autoconf:tests/wrapper.in],
                 [chmod +x tests/autoconf])
-AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],
+AC_CONFIG_FILES([tests/autoheader:tests/wrapper.in],
                 [chmod +x tests/autoheader])
-AC_CONFIG_FILES([tests/autom4te:tests/wrappl.in],
+AC_CONFIG_FILES([tests/autom4te:tests/wrapper.in],
                 [chmod +x tests/autom4te])
-AC_CONFIG_FILES([tests/autoreconf:tests/wrappl.in],
+AC_CONFIG_FILES([tests/autoreconf:tests/wrapper.in],
                 [chmod +x tests/autoreconf])
-AC_CONFIG_FILES([tests/autoscan:tests/wrappl.in],
+AC_CONFIG_FILES([tests/autoscan:tests/wrapper.in],
                 [chmod +x tests/autoscan])
-AC_CONFIG_FILES([tests/autoupdate:tests/wrappl.in],
+AC_CONFIG_FILES([tests/autoupdate:tests/wrapper.in],
                 [chmod +x tests/autoupdate])
-AC_CONFIG_FILES([tests/ifnames:tests/wrappl.in],
+AC_CONFIG_FILES([tests/ifnames:tests/wrapper.in],
                 [chmod +x tests/ifnames])
 AC_PATH_PROG(EXPR, expr)
 
