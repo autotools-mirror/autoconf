@@ -54,7 +54,8 @@ by the Foundation.
 @subtitle Generating Automatic Configuration Scripts
 @subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
 @subtitle @value{UPDATED}
-@author by David MacKenzie, Roland McGrath, and Noah Friedman
+@author by David MacKenzie
+@c I think I've rewritten all of Noah and Roland's contributions by now.
 
 @page
 @vskip 0pt plus 1filll
@@ -1954,6 +1955,12 @@ If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.  This
 macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
 @code{LDFLAGS}, and @code{LIBS} when compiling.
+
+A few systems have linkers that do not return a failure exit status when
+there are unresolved functions in the link.  This bug makes the
+configuration scripts produced by Autoconf unusable on those systems.
+However, some of them can be given options that make the exit status
+correct.  This is a problem that Autoconf does not currently address.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
