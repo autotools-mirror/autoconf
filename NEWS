@@ -1,10 +1,13 @@
 Major changes in release 1.9:
 
+* AC_YYTEXT_POINTER replaces AC_DECLARE_YYTEXT.
 * AC_SIZEOF_TYPE generates the cpp symbol name automatically,
   and autoheader generates entries for those names automatically.
 * AC_FIND_X gets the result from xmkmf correctly.
+* AC_FIND_X assumes no X if --without-x was given.
+* AC_FIND_XTRA adds libraries to the variable X_EXTRA_LIBS.
 * AC_PROG_INSTALL finds OSF/1 installbsd.
-* A copy of install.sh is placed in ${acdatadir}, for convenience.
+* A copy of install.sh is installed in ${acdatadir}, for convenience.
 
 Major changes in release 1.8:
 
