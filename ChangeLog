@@ -51,13 +51,13 @@
 
 2001-02-21  Lars J. Aas  <larsa@sim.no>
 
-	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): use `AS_EXIT(0)' instead
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use `AS_EXIT(0)' instead
 	of `exit 0' when exiting config.status.
 
 2001-02-21  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi: Add new node discussing issues related to
-	file systems (DOS, specifically). Document DJGPP's bash's special
+	file systems (DOS, specifically).  Document DJGPP's bash's special
 	handling of $PATH_SEPARATOR.
 
 2001-02-21  Akim Demaille  <akim@epita.fr>
@@ -5160,7 +5160,7 @@
 	another, `subdirs' which can be built dynamically for launching
 	sub configurations.
 
-	* acgeneral.m4 	(AC_CONFIG_SUBDIRS): Define `subdirs' dynamically.
+	* acgeneral.m4 (AC_CONFIG_SUBDIRS): Define `subdirs' dynamically.
 	Define `ac_subdirs_all' statically.
 	Warn if the argument is not a literal.
 	(AC_LIST_SUBDIRS): Rename as...
@@ -8043,7 +8043,7 @@
 
 	Be kind to Automake: list the arguments of selected macros
 	(for instance AC_SUBST will list each variable which may be
- 	substitued).
+	substitued).
 
 	* autoconf.sh (--trace, --output): New options.
 	Implement tracing of macros.
@@ -8059,13 +8059,13 @@
 	(AC_C_STRUCT_MEMBER): Removed.
 	* acspecific.m4 (AC_STRUCT_TIMEZONE): Adapted to AC_CHECK_MEMBERS.
 	(AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_RDEV): Adapted to
- 	AC_CHECK_MEMBERS and obsoleted.
+	AC_CHECK_MEMBERS and obsoleted.
 	(AC_STRUCT_ST_BLOCKS): Adapted to AC_CHECK_MEMBERS.
 	* autoconf.texi (AC_STRUCT_ST_BLKSIZE, HAVE_STRUCT_STAT_ST_RDEV):
 	Explain they are obsoleted, and how to migrate.
 	(AC_STRUCT_ST_BLOCKS, AC_STRUCT_TIMEZONE): Explain that the
- 	AC_DEFINE changed (but the former #defines remain defined
- 	currently).
+	AC_DEFINE changed (but the former #defines remain defined
+	currently).
 	(AC_C_STRUCT_MEMBER): Removed, replaced by the definitions of
 	AC_CHECK_MEMBER and AC_CHECK_MEMBERS.
 
@@ -8088,19 +8088,19 @@
 	Fix a bit of the brokenness of AC_CHECK_TYPE.
 
 	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): New macro, inspired from
- 	the former AC_CHECK_TYPE.  This macro is exactly the one that
- 	ought to be named AC_CHECK_TYPE: it just checks, and executes user
- 	actions.  In the future, this macro ought to be renamed
- 	AC_CHECK_TYPE.
+	the former AC_CHECK_TYPE.  This macro is exactly the one that
+	ought to be named AC_CHECK_TYPE: it just checks, and executes user
+	actions.  In the future, this macro ought to be renamed
+	AC_CHECK_TYPE.
 	There is a big difference with the former AC_CHECK_TYPE: instead
- 	of grepping in the headers, it tries to compile a variable
- 	declaration.  This is both safer, slower, and better, since now we
- 	can check for compiler types (e.g., unsigned long long).
+	of grepping in the headers, it tries to compile a variable
+	declaration.  This is both safer, slower, and better, since now we
+	can check for compiler types (e.g., unsigned long long).
 	(AC_CHECK_TYPES): The looping and AC_DEFINEing version of the
- 	previous macro.  Uses m4 loops.
+	previous macro.  Uses m4 loops.
 	(AC_CHECK_TYPE): Reimplemented on top of AC_CHECK_TYPE_INTERNAL.
-  	* autoheader.m4 (AH_CHECK_TYPE, AH_CHECK_TYPES): New macros,
- 	hooked.
+	* autoheader.m4 (AH_CHECK_TYPE, AH_CHECK_TYPES): New macros,
+	hooked.
 	* autoconf.texi (@ovar): New macro, for optional variables.
 	(Generic Typedefs): Document AC_CHECK_TYPES.
 	* autoheader.texi: (AH_CHECK_TYPE, AH_CHECK_TYPES): New macros.
@@ -8112,8 +8112,8 @@
 
 	* acoldnames.m4:  Sort the two sections.
 	* acoldnames.m4 (AM_CYGWIN32, AM_EXEEXT, AM_FUNC_FNMATCH,
- 	AM_FUNC_MKTIME, AM_PROG_LIBTOOL, AM_MINGW32, AM_PROG_INSTALL,
- 	fp_FUNC_FNMATCH): Added their new names.
+	AM_FUNC_MKTIME, AM_PROG_LIBTOOL, AM_MINGW32, AM_PROG_INSTALL,
+	fp_FUNC_FNMATCH): Added their new names.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
@@ -8216,9 +8216,9 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_COMPILE_CHECK, AC_TRY_COMPILE,
- 	AC_TRY_RUN_NATIVE, AC_OUTPUT_CONFIG_STATUS): Use @PND@ instead of
- 	[#]: it looses the editors that try to match the pairs of (), []
- 	etc.
+	AC_TRY_RUN_NATIVE, AC_OUTPUT_CONFIG_STATUS): Use @PND@ instead of
+	[#]: it looses the editors that try to match the pairs of (), []
+	etc.
 	Formatting changes.
 	* acspecific.m4: Formatting changes.
 
@@ -8273,7 +8273,7 @@
 	Fix a bug in templates of AC_CHECK_LIB.
 
 	* autoheader.m4 (AH_CHECK_LIB): Template HAVE_LIBFOO, not
- 	HAVE_FOO.
+	HAVE_FOO.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
@@ -8322,7 +8322,7 @@
 	Remove spurious empty lines appearing in configures.
 
 	* acgeneral.m4 (AC_CONFIG_UNIQUE): Produce no output.  Instead of
- 	fighting with dnl, divert to KILL upon entry, and pop at exit.
+	fighting with dnl, divert to KILL upon entry, and pop at exit.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
@@ -8487,7 +8487,7 @@
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
-   	New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
+	New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
 	that one associates commands to run when a config file is created.
 	For instance for a shell script `foo', one uses
 	AC_CONFIG_FILES(foo, chmod +x foo).
