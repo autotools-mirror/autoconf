@@ -1,3 +1,8 @@
+2001-04-18  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* acgeneral.m4 (_AC_INIT_SRCDIR): Handle
+	backslashes (DOS paths) for $ac_confdir and $srcdir.
+
 2001-04-17  Akim Demaille  <akim@epita.fr>
 
 	Don't mess with FDs.
