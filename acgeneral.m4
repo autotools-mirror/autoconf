@@ -88,7 +88,7 @@ ac_configure_args="[$]*"
 # Only options that might do something get documented.
 changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
-Options: [defaults in brackets]
+Options: [defaults in brackets after descriptions]
 --build=BUILD		configure for building on BUILD [BUILD=HOST]
 --disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
 --enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
@@ -315,7 +315,7 @@ changequote([,])dnl
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries="$ac_optarg" ;;
 
-  -*) AC_WARN([$ac_option: invalid option; use --help to show usage])
+  -*) AC_ERROR([$ac_option: invalid option; use --help to show usage])
     ;;
 
   *) 
