@@ -23,7 +23,7 @@ define(join,
 #   AC_FUNCs from acspecific.
 # - AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC
 #   AC_PROGs from acspecific
-# - _|OLDPWD|PIPESTATUS|SECONDS
+# - _|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
 #   Some variables some shells use and change
 
 AC_DEFUN(AC_ENV_SAVE,
@@ -42,7 +42,7 @@ AC_DEFUN(AC_ENV_SAVE,
       [^(f77_(case|underscore))=],
       [^(ALLOCA|NEED_SETGID|KMEM_GROUP)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
-      [^(_|OLDPWD|PIPESTATUS|SECONDS)=])' |
+      [^(_|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines
   fgrep = >$1
