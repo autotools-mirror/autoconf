@@ -9234,6 +9234,14 @@ processing as soon as a non-option argument is found.  Therefore, use
 set x $my_list; shift
 @end example
 
+Some shells have the "opposite" problem of not recognizing all options
+(e.g., @samp{set -e -x} assigns @samp{-x} to the command line).  It is
+better to elide these:
+
+@example
+set -ex
+@end example
+
 
 @item @command{shift}
 @c ------------------

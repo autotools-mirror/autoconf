@@ -1,3 +1,8 @@
+2002-04-29  Thien-Thi Nguyen  <ttn@gnu.org>
+
+	* doc/autoconf.texi: Mention "set -e -x" lossage
+	under node "Limitations of Builtins".
+
 2002-04-29  Akim Demaille  <akim@epita.fr>
 
 	* doc/install.texi: Better wording for setting variables when
