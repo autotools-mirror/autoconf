@@ -1256,7 +1256,7 @@ do
     continue
   fi
 
-  ac_optarg=`echo "$ac_option" | sed -n 's/^[[^=]]*=//p'`
+  ac_optarg=`expr "x$ac_option" : 'x[[^=]]*=\(.*\)'`
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
 
@@ -1289,7 +1289,7 @@ do
     datadir=$ac_optarg ;;
 
   -disable-* | --disable-*)
-    ac_feature=`echo "$ac_option" |sed -e 's/-*disable-//'`
+    ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
@@ -1297,7 +1297,7 @@ do
     eval "enable_$ac_feature=no" ;;
 
   -enable-* | --enable-*)
-    ac_feature=`echo "$ac_option" | sed -e 's/-*enable-//;s/=.*//'`
+    ac_feature=`expr "x$ac_option" : 'x-*enable-\([[^=]]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
@@ -1480,7 +1480,7 @@ do
     ac_init_version=: ;;
 
   -with-* | --with-*)
-    ac_package=`echo "$ac_option"|sed -e 's/-*with-//;s/=.*//'`
+    ac_package=`expr "x$ac_option" : 'x-*with-\([[^=]]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
@@ -1489,15 +1489,15 @@ do
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
-    eval "with_${ac_package}='$ac_optarg'" ;;
+    eval "with_$ac_package='$ac_optarg'" ;;
 
   -without-* | --without-*)
-    ac_package=`echo "$ac_option" |sed -e 's/-*without-//'`
+    ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package | sed 's/-/_/g'`
-    eval "with_${ac_package}=no" ;;
+    eval "with_$ac_package=no" ;;
 
   --x)
     # Obsolete; use --with-x.
@@ -1522,7 +1522,7 @@ Try `configure --help' for more information.])
     ;;
 
   *=*)
-    ac_envvar=`echo "$ac_option" | sed -e 's/=.*//'`
+    ac_envvar=`expr "x$ac_option" : 'x\([[^=]]*\)='`
     # Reject names that are not valid shell variable names.
     expr "x$ac_envvar" : "[.*[^a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid variable name: $ac_envvar])
@@ -4246,8 +4246,8 @@ while test $[#] != 0
 do
   case $[1] in
   --*=*)
-    ac_option=`echo "$[1]" | sed -e 's/=.*//'`
-    ac_optarg=`echo "$[1]" | sed -e ['s/[^=]*=//']`
+    ac_option=`expr "x$[1]" : 'x\([[^=]]*\)='`
+    ac_optarg=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
     shift
     set dummy "$ac_option" "$ac_optarg" ${1+"$[@]"}
     shift

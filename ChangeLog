@@ -1,5 +1,10 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS, _AC_OUTPUT_CONFIG_STATUS):
+	s/echo | sed/expr/.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CONFIG_LINKS, AC_CONFIG_HEADERS,
 	AC_CONFIG_COMMANDS, AC_CONFIG_FILES): Use a shell variable instead
 	of an m4 variable to store what must be done, so that sh
