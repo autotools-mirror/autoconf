@@ -1,3 +1,30 @@
+Wed Jul 26 00:03:26 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Test release 2.4.2.
+
+	* acgeneral.m4 (AC_CHECK_SIZEOF): Take an optional size to
+	  use when cross-compiling.
+
+	* acspecific.m4 (AC_FUNC_CLOSEDIR_VOID, AC_DIR_HEADER): If
+	  cross-compiling, assume it returns void.  It's not a big loss.
+	  From Karl Berry.
+
+	* acgeneral.m4 autoheader.sh: Change tr [a-z] [A-Z] into expansion
+	  of the full alphabet, to combat losing AIX 4.1.1 tr when LANG
+	  isn't set the way it likes.
+
+	* acspecific.m4 (AC_FUNC_GETMNTENT): Check in -lgen for Unixware.
+	From miguel@roxanne.nuclecu.unam.mx (Miguel de Icaza).
+
+	* autoheader.m4 (AC_CONFIG_HEADER): Set config_h to the first
+	  argument.  From ghudson@mit.edu (Greg Hudson).
+
+	* Makefile.in (all): Depend on info.
+
+	* acgeneral.m4 (AC_CHECK_PROG, AC_PATH_PROG, AC_CHECK_PROGS,
+	  AC_PATH_PROGS, AC_CHECK_TOOL): Add optional PATH
+	  parameter.
+
 Mon Jul 24 17:27:11 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Don't enclose tr args in [], for

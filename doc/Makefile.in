@@ -75,7 +75,7 @@ editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e \
 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g'
 editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
-all: ${SCRIPTS}
+all: ${SCRIPTS} info
 
 .SUFFIXES:
 .SUFFIXES: .sh .pl

@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.4.1
-@set VERSION 2.4.1
-@set UPDATED June 1995
+@set EDITION 2.4.2
+@set VERSION 2.4.2
+@set UPDATED July 1995
 
 @iftex
 @finalout
@@ -794,6 +794,7 @@ Create output files.  The @var{file}@dots{} argument is a
 whitespace-separated list of output files; it may be empty.  This macro
 creates each file @file{@var{file}} by copying an input file (by default
 named @file{@var{file}.in}), substituting the output variable values.
+@c If the file would be unchanged, it is left untouched, to preserve its timestamp.
 @xref{Makefile Substitutions}, for more information on using output variables.
 @xref{Setting Output Variables}, for more information on creating them.  This
 macro creates the directory that the file is in if it doesn't exist (but
@@ -1238,7 +1239,8 @@ symbol).
 The @code{autoheader} program can create a template file of C
 @samp{#define} statements for @code{configure} to use.  If
 @file{configure.in} invokes @code{AC_CONFIG_HEADER(@var{file})},
-@code{autoheader} creates @file{@var{file}.in}.  Otherwise,
+@code{autoheader} creates @file{@var{file}.in}; if multiple file
+arguments are given, the first one is used.  Otherwise,
 @code{autoheader} creates @file{config.h.in}.
 
 If you give @code{autoheader} an argument, it uses that file instead of
@@ -1642,23 +1644,18 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 
 These macros are used to find programs not covered by the particular
 test macros.  If you need to check the behavior of a program as well as
-find out whether it is present, you have to write your own test for
-it (@pxref{Writing Tests}).  If you need to check for a program that
-might not be in the user's @code{PATH}, you can temporarily add to it:
+find out whether it is present, you have to write your own test for it
+(@pxref{Writing Tests}).  By default, these macros use the environment
+variable @code{PATH].  If you need to check for a program that might not
+be in the user's @code{PATH}, you can pass a modified path to use
+instead, like this:
 
 @example
-ac_save_path="$PATH"
-PATH=/usr/libexec:/usr/sbin:/usr/etc:/etc:/usr/bin:/bin
-AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd)
-PATH="$ac_save_path"
+AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd, 
+  $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
 @end example
 
-@noindent
-Keep @file{/usr/bin:/bin} in the @code{PATH} so if if the @code{echo} or
-@code{test} command is in one of those directories, @code{configure} can
-still find it.
-
-@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found}@r{]})
+@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex CHECK_PROG
 Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
@@ -1666,7 +1663,7 @@ it is found, set @var{variable} to @var{value-if-found}, otherwise to
 do nothing.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex CHECK_PROGS
 Check for each program in the whitespace-separated list
 @var{progs-to-check-for} exists in @code{PATH}.  If it is found, set
@@ -1677,7 +1674,7 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex CHECK_TOOL
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
@@ -1692,13 +1689,13 @@ sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 or to @samp{:} if neither program exists.
 @end defmac
 
-@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex PATH_PROG
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the entire
 path of @var{prog-to-check-for} if found.
 @end defmac
 
-@defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex PATH_PROGS
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the entire path of the program
@@ -1875,9 +1872,9 @@ to the name of the group that should own the installed program.
 @defmac AC_FUNC_GETMNTENT
 @maindex FUNC_GETMNTENT
 @cvindex HAVE_GETMNTENT
-Check for @code{getmntent} in the @file{sun} and @file{seq}
-libraries, for Irix 4 and PTX, respectively.  Then, if @code{getmntent} is
-available, define @code{HAVE_GETMNTENT}.
+Check for @code{getmntent} in the @file{sun}, @file{seq}, and @file{gen}
+libraries, for Irix 4, PTX, and Unixware, respectively.  Then, if
+@code{getmntent} is available, define @code{HAVE_GETMNTENT}.
 @end defmac
 
 @defmac AC_FUNC_GETPGRP
@@ -2522,13 +2519,17 @@ If the C compiler supports the @code{long double} type, define
 that define @code{__STDC__} do not support @code{long double}.
 @end defmac
 
-@defmac AC_CHECK_SIZEOF (@var{type})
+@defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{]})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
 @samp{type} is unknown to the compiler, it gets a size of 0.  @var{uctype}
 is @var{type}, with lowercase converted to uppercase, spaces changed to
-underscores, and asterisks changed to @samp{P}.  For example, the call
+underscores, and asterisks changed to @samp{P}.  If cross-compiling, the
+value @var{cross-size} is used if given, otherwise @code{configure}
+exits with an error message.
+
+For example, the call
 @example
 AC_CHECK_SIZEOF(int *)
 @end example
@@ -4028,8 +4029,9 @@ only of alphanumeric characters and dashes.
 
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{withval}, which is
-actually just the value of the shell variable @code{with_@var{package}};
-you may use that variable instead, if you wish.
+actually just the value of the shell variable @code{with_@var{package}},
+with any @samp{-} characters changed into @samp{_}.
+You may use that variable instead, if you wish.
 
 The argument @var{help-string} is a description of the option which
 looks like this:
@@ -4090,9 +4092,10 @@ alphanumeric characters and dashes.
 
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{enableval}, which is
-actually just the value of the shell variable @code{enable_@var{package}};
-you may use that variable instead, if you wish.
-The @var{help-string} argument is like that of @code{AC_ARG_WITH}
+actually just the value of the shell variable
+@code{enable_@var{package}}, with any @samp{-} characters changed into
+@samp{_}.  You may use that variable instead, if you wish.  The
+@var{help-string} argument is like that of @code{AC_ARG_WITH}
 (@pxref{External Software}).
 @end defmac
 

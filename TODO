@@ -138,16 +138,6 @@ From: "K. Berry" <kb@cs.umb.edu>
 
 ------------------------------------------------------------------------------
 
-I would find it a wonderful boon if config.log contained not just the
-output from the compilers, but also the invocation. Almost all
-the errors I've found are due to the wrong options getting passed for
-one reason or another.
-
-Saving the input test file(s) that failed would be useful, too.
-From: "K. Berry" <kb@cs.umb.edu>
-
-------------------------------------------------------------------------------
-
 The default of unlimited permission is fine, but there should be some easy
 way for configure to have copyright terms passed through from configure.in.
 Maybe AC_LICENSE([...]).

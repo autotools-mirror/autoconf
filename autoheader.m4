@@ -72,7 +72,8 @@ define([AC_CHECK_SIZEOF], [#
 ])
 
 define([AC_CONFIG_HEADER], [#
-@@@config_h=$1@@@
+define([AC_CONFIG_H], patsubst($1, [ .*$], []))dnl
+@@@config_h=AC_CONFIG_H@@@
 ])
 
 define([AC_DEFINE], [#

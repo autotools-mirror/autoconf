@@ -553,7 +553,7 @@ define(AC_CHECK_HEADERS_DIRENT,
 do
 AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./\055' '[A-Z]___'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdedfghijklmnopqrstuvwxyz./\055' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ___'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
@@ -576,7 +576,7 @@ AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <$ac_header_dirent>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])
+  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(VOID_CLOSEDIR)
 fi
@@ -743,7 +743,7 @@ AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <$ac_header_dirent>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])
+  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID)
 fi
@@ -1266,9 +1266,10 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_GETMNTENT,
-[# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX.
+[# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX, -lgen on Unixware.
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
-  [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")])
+  [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
+    [AC_CHECK_LIB(gen, getmntent, LIBS="-lgen $LIBS")])])
 AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
 
 AC_DEFUN(AC_FUNC_STRFTIME,

@@ -2,10 +2,13 @@ Major changes in release 2.5:
 
 * New configure options --bindir, --libdir, --datadir, etc., with
   corresponding output variables.
-* New macro: AC_CACHE_CHECK.
+* New macro: AC_CACHE_CHECK, to make using the cache easier.
 * config.log contains the command being run as well as any output from it.
-* AC_CHECK_LIB can check for libraries with "." or "/" in their name.
+* AC_CHECK_LIB can check for libraries with "." or "/" or "+" in their name.
 * AC_PROG_INSTALL doesn't cache a path to install-sh, for sharing caches.
+* AC_CHECK_PROG, AC_PATH_PROG, AC_CHECK_PROGS, AC_PATH_PROGS, and
+  AC_CHECK_TOOL can search a path other than $PATH.
+* AC_CHECK_SIZEOF takes an optional size to use when cross-compiling.
 
 Major changes in release 2.4:
 

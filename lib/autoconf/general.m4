@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.4.1)
+define(AC_ACVERSION, 2.4.2)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1212,7 +1212,7 @@ dnl ### Checking for programs
 
 
 dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
-dnl               [, VALUE-IF-NOT-FOUND])
+dnl               [, VALUE-IF-NOT-FOUND [, PATH]])
 AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -1222,7 +1222,7 @@ AC_CACHE_VAL(ac_cv_prog_$1,
   ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in $PATH; do
+  for ac_dir in ifelse([$4], , $PATH, [$4]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
       ac_cv_prog_$1="$3"
@@ -1244,7 +1244,7 @@ fi
 AC_SUBST($1)dnl
 ])
 
-dnl AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
+dnl AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND [, PATH]])
 AC_DEFUN(AC_PATH_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -1256,7 +1256,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   ;;
   *)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in $PATH; do
+  for ac_dir in ifelse([$4], , $PATH, [$4]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
       ac_cv_path_$1="$ac_dir/$ac_word"
@@ -1279,21 +1279,23 @@ fi
 AC_SUBST($1)dnl
 ])
 
-dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
+dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
+dnl                [, PATH]])
 AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
 do
-AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, )
+AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, , $4)
 test -n "[$]$1" && break
 done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])
 
-dnl AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
+dnl AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
+dnl               [, PATH]])
 AC_DEFUN(AC_PATH_PROGS,
 [for ac_prog in $2
 do
-AC_PATH_PROG($1, [$]ac_prog)
+AC_PATH_PROG($1, [$]ac_prog, , $4)
 test -n "[$]$1" && break
 done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
@@ -1309,11 +1311,11 @@ else
 fi
 ])
 
-dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND])
+dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
 AC_DEFUN(AC_CHECK_TOOL,
 [AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
 AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, 
-	      ifelse([$3], , [$2], ))
+	      ifelse([$3], , [$2], ), $4)
 ifelse([$3], , , [
 if test -z "$ac_cv_prog_$1"; then
 if test -n "$ac_tool_prefix"; then
@@ -1370,7 +1372,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   AC_MSG_RESULT(yes)
   ifelse([$3], , 
 [changequote(, )dnl
-  ac_tr_lib=HAVE_LIB`echo $1 | tr '[a-z]' '[A-Z]'`
+  ac_tr_lib=HAVE_LIB`echo $1 | tr 'abcdedfghijklmnopqrstuvwxyz' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_lib)
   LIBS="-l$1 $LIBS"
@@ -1600,7 +1602,7 @@ AC_DEFUN(AC_CHECK_HEADERS,
 do
 AC_CHECK_HEADER($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./\055' '[A-Z]___'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdedfghijklmnopqrstuvwxyz./\055' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ___'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2], $3)dnl
 done
@@ -1653,7 +1655,7 @@ AC_DEFUN(AC_CHECK_FUNCS,
 do
 AC_CHECK_FUNC($ac_func,
 [changequote(, )dnl
-  ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
+  ac_tr_func=HAVE_`echo $ac_func | tr 'abcdedfghijklmnopqrstuvwxyz' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_func) $2], $3)dnl
 done
@@ -1672,7 +1674,7 @@ AC_SUBST(LIBOBJS)dnl
 dnl ### Checking compiler characteristics
 
 
-dnl AC_CHECK_SIZEOF(TYPE)
+dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE])
 AC_DEFUN(AC_CHECK_SIZEOF,
 [changequote(<<, >>)dnl
 dnl The name to #define.
@@ -1689,7 +1691,7 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0)])dnl
+}], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0, ifelse([$2], , , AC_CV_NAME=$2))])dnl
 AC_MSG_RESULT($AC_CV_NAME)
 AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine([AC_TYPE_NAME])dnl
@@ -1933,6 +1935,14 @@ s%@top_srcdir@%$top_srcdir%g
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%g
 ])dnl
 " -f conftest.subs $ac_given_srcdir/$ac_file_in > $ac_file
+dnl This would break Makefile dependencies.
+dnl  if cmp -s $ac_file conftest.out 2>/dev/null; then
+dnl    echo "$ac_file is unchanged"
+dnl    rm -f conftest.out
+dnl   else
+dnl     rm -f $ac_file
+dnl    mv conftest.out $ac_file
+dnl  fi
 fi; done
 rm -f conftest.subs
 ])
