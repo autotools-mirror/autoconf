@@ -2693,7 +2693,7 @@ The following macros check for certain structures or structure members.
 @cvindex HAVE_STRUCT_STAT_ST_BLKSIZE
 @cvindex HAVE_ST_BLKSIZE
 If @code{struct stat} contains an @code{st_blksize} member, define
-@code{HAVE_STRUCT STAT_ST_BLKSIZE}.  The former name,
+@code{HAVE_STRUCT_STAT_ST_BLKSIZE}.  The former name,
 @code{HAVE_ST_BLKSIZE} is to be avoided, as its support will cease in
 the future.  This macro is obsoleted, and should be replaced by
 @example
@@ -2897,8 +2897,8 @@ This macro has a broken design.  First, although it is a member of the
 @code{CHECK} clan, singular subfamily, it does more than just checking.
 Second, the replacement it performs is done via @samp{#define @var{type}
 @var{default}}, although a @samp{typedef} is expected.  Therefore, in
-the future, this macro shall be removed or replaced.  User are adviced
-to use @code{AC_CHECK_TYPES} preferably.
+the future, this macro shall be removed or replaced.  Users are adviced
+to prefer @code{AC_CHECK_TYPES}.
 @end defmac
 
 

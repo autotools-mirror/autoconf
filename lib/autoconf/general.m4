@@ -3031,26 +3031,78 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 dnl ### Checking for typedefs
 
 
-dnl AC_CHECK_TYPE_INTERNAL(TYPE,
-dnl                        [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-dnl                        [INCLUDES])
-dnl ----------------------------------------------------------------
-dnl Check whether the type TYPE is supported by the system, maybe via the
-dnl the provided includes.  This macro implements the former task of
-dnl AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
-dnl grepping in the headers, what led to many problems, BTW, until
-dnl the egrep expression was correct and did not given false positives.
-dnl Now, we try to compile a variable declaration.  It is probably slower,
-dnl but it is *much* safer, and in addition, allows to check for types
-dnl defined by the compiler (e.g., unsigned long long), not only for
-dnl typedefs.
-dnl FIXME: This is *the* macro which ought to be named AC_CHECK_TYPE.
+# AC_CHECK_TYPE_INTERNAL(TYPE,
+#			 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#			 [INCLUDES])
+# ----------------------------------------------------------------
+# Check whether the type TYPE is supported by the system, maybe via the
+# the provided includes.  This macro implements the former task of
+# AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
+# grepping in the headers, which, BTW, led to many problems until
+# the egrep expression was correct and did not given false positives.
+# It turned out there are even portability issues with egrep...
+#
+# The most obvious way to check for a TYPE is just to compile a variable
+# definition:
+#
+# 	  TYPE my_var;
+#
+# Unfortunately this does not work for const qualified types in C++,
+# where you need an initializer.  So you think of
+#
+# 	  TYPE my_var = (TYPE) 0;
+#
+# Unfortunately, again, this is not valid for some C++ classes.
+#
+# Then you look for another scheme.  For instance you think of declaring
+# a function which uses a parameter of type TYPE:
+#
+# 	  int foo (TYPE param);
+#
+# but of course you soon realize this does not make it with K&R
+# compilers.  And by no ways you want to
+#
+# 	  int foo (param)
+# 	    TYPE param
+# 	  { ; }
+#
+# since this time it's C++ who is not happy.
+#
+# Don't even think of the return type of a function, since K&R cries
+# there too.  So you start thinking of declaring a *pointer* to this TYPE:
+#
+# 	  TYPE *p;
+#
+# but you know fairly well that this is legal in C for aggregates which
+# are unknown (TYPE = struct does-not-exist).
+#
+# Then you think of using sizeof to make sure the TYPE is really
+# defined:
+#
+# 	  sizeof (TYPE);
+#
+# But this succeeds if TYPE is a variable: you get the size of the
+# variable's type!!!
+#
+# This time you tell yourself the last two options *together* will make
+# it.  And indeed this is the solution invented by Alexandre Oliva.
+#
+# Also note that we use
+#
+# 	  if (sizeof (TYPE))
+#
+# to `read' sizeof (to avoid warnings), while not depending on its type
+# (not necessarily size_t etc.).
+#
+# FIXME: This is *the* macro which ought to be named AC_CHECK_TYPE.
 AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
 [AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
-                [$1 foo;],
+[$1 *foo;
+if (sizeof ($1))
+  return 0;],
                 AC_VAR_SET(ac_Type, yes),
                 AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,

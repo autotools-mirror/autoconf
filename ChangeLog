@@ -1,5 +1,12 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): Use the scheme proposed
+	by Alexandre Oliva for testing the definition of TYPE:
+	TYPE *foo;
+	sizeof (TYPE);
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_C_CONST): Don't changequote, there is no need
 	for it.  Just quote properly!
 	condition out the test case if __cpluscplus.
