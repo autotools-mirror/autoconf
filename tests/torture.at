@@ -554,7 +554,10 @@ cd testSubDir
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 
-AT_DATA([inner/configure.ac],
+# We have to use configure.in, not configure.ac, if we still want to
+# be compatible with Automake 1.4: aclocal (run by autoreconf) would
+# die because it can't find configure.in.
+AT_DATA([inner/configure.in],
 [AC_INIT(GNU Inner, 1.0)
 AC_CONFIG_SRCDIR([innermost/config.in])
 AC_ARG_VAR([INNER], [an inner variable])
@@ -573,7 +576,7 @@ top_srcdir=@top_srcdir@
 AT_DATA([install-sh], [])
 
 # nonexistent is allowed not to exist.
-AT_DATA([configure.ac],
+AT_DATA([configure.in],
 [AC_INIT(GNU Outer, 1.0)
 AC_ARG_VAR([OUTER], [an outer variable])
 if false; then
@@ -608,4 +611,4 @@ top_srcdir=../../../inner
 ])
 
 
-AT_CLEANUP(testSubDir)
+AT_CLEANUP

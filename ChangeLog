@@ -1,3 +1,9 @@
+2002-01-29  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (Configuring subdirectories): Use configure.in,
+	so that aclocal 1.4 works.
+	Reported by Alexandre Duret-Lutz and Larry Schmitt.
+
 2002-01-28  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Writing testsuite.at): AT_CLEANUP no longer
