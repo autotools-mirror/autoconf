@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* man/Makefile.am (.x.1): We really have pass
+	autom4te_perllibdir.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Don't pass all the args to
 	debug scripts, in particular passing explicitly listed tests to
 	run is stupid.
