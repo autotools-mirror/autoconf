@@ -1,5 +1,9 @@
 2002-04-22  Akim Demaille  <akim@epita.fr>
 
+	Version 2.53a.
+
+2002-04-22  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (LINENO): Skip the test if LINENO cannot be unset.
 	Fixes false failures on Darwin.
 

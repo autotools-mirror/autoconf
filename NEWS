@@ -13,6 +13,11 @@
 - Spurious complaints from `m4_bmatch' about invalid regular
   expressions are suppressed.
 
+- Empty top_builddirs are properly handled.
+
+- AC_PATH_PROG
+  Now colon in the optional path arguments are properly handled.
+
 ** Improved Zsh portability
   Both Autoconf the package, and the scripts it produces, should run
   more reliably with Zsh.  Bear in mind it is the default Bourne shell
