@@ -51,7 +51,7 @@
 
 
 # Some people depend upon sinclude, disabled by libm4.
-define([sinclude], [buitin([sinclude], $@)])
+define([sinclude], [builtin([sinclude], $@)])
 
 ## ---------------- ##
 ## The diversions.  ##
@@ -1001,9 +1001,9 @@ do
     bindir=$ac_optarg ;;
 
   -build | --build | --buil | --bui | --bu)
-    ac_prev=build ;;
+    ac_prev=build_alias ;;
   -build=* | --build=* | --buil=* | --bui=* | --bu=*)
-    build=$ac_optarg ;;
+    build_alias=$ac_optarg ;;
 
   -cache-file | --cache-file | --cache-fil | --cache-fi \
   | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
@@ -1065,10 +1065,10 @@ do
 
   -host | --host | --hos | --ho)
     cross_compiling=yes
-    ac_prev=host ;;
+    ac_prev=host_alias ;;
   -host=* | --host=* | --hos=* | --ho=*)
     cross_compiling=yes
-    host=$ac_optarg ;;
+    host_alias=$ac_optarg ;;
 
   -includedir | --includedir | --includedi | --included | --include \
   | --includ | --inclu | --incl | --inc)
@@ -1204,9 +1204,9 @@ do
     sysconfdir=$ac_optarg ;;
 
   -target | --target | --targe | --targ | --tar | --ta | --t)
-    ac_prev=target ;;
+    ac_prev=target_alias ;;
   -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
-    target=$ac_optarg ;;
+    target_alias=$ac_optarg ;;
 
   -v | -verbose | --verbose | --verbos | --verbo | --verb)
     verbose=yes ;;
@@ -1273,7 +1273,7 @@ Try `configure --help' for more information.])
       [*[^-a-zA-Z0-9.]*]) AC_MSG_WARN([invalid host type: $ac_option]);;
     esac
     AC_MSG_WARN([you should use --build, --host, --target])
-    : ${build=$ac_option} ${host=$ac_option} ${target=$ac_option}
+    : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
 
   esac
@@ -1296,6 +1296,13 @@ do
     *)  AC_MSG_ERROR([expected an absolute path for --$ac_var: $ac_val]);;
   esac
 done
+
+# There might be people who depend on the old broken behavior: `$host'
+# used to hold the argument of --host etc.
+build=$build_alias
+host=$host_alias
+target=$target_alias
+
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_PARSE_ARGS
 
@@ -1825,59 +1832,26 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # 3. Target defaults to host.
 
 
-# AC_CANONICALIZE(THING)
-# ----------------------
-# Canonicalize the appropriate THING, generating the variables THING,
-# THING_{alias cpu vendor os}, and the associated cache entries.
-AC_DEFUN([AC_CANONICALIZE],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias` || exit 1
-ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
-ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
-ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
-AC_SUBST([$1],        [$ac_cv_$1])dnl
-AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
-AC_SUBST([$1_cpu],    [$ac_cv_$1_cpu])dnl
-AC_SUBST([$1_vendor], [$ac_cv_$1_vendor])dnl
-AC_SUBST([$1_os],     [$ac_cv_$1_os])dnl
-])# AC_CANONICALIZE
-
-
-# _AC_CANONICAL_THING(THING)
+# _AC_CANONICAL_SPLIT(THING)
 # --------------------------
-# Worker routine for AC_CANONICAL_SYSTEM.  THING is one of `host',
-# `target', or `build'.  Canonicalize the appropriate thing.  We also
-# redo the cache entries if the user specifies something different
-# from ac_cv_$THING_alias on the command line.
-define([_AC_CANONICAL_THING],
-[AC_MSG_CHECKING([$1 system type])
-if test "x$ac_cv_$1" = "x" ||
-   (test "x$$1" != "x" && test "x$$1" != "x$ac_cv_$1_alias"); then
-
-dnl Set $1_alias.
-  ac_cv_$1_alias=$$1
-  test "x$ac_cv_$1_alias" = "x" &&
-    m4_case([$1],
-[build],
-  [{ ac_cv_build_alias=`$ac_config_guess` ||
-      AC_MSG_ERROR(
-           [cannot guess build (this machine) type; you must specify one]); }],
-[host],
-  [ac_cv_host_alias=$build_alias],
-[target],
-  [ac_cv_target_alias=$host_alias])
-else
-  echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG
-fi
-AC_CANONICALIZE([$1])
-AC_MSG_RESULT($ac_cv_$1)[]dnl
-])# _AC_CANONICAL_THING
+# Generate the variables THING, THING_{alias cpu vendor os}.
+AC_DEFUN([_AC_CANONICAL_SPLIT],
+[AC_SUBST([$1],       [$ac_cv_$1])dnl
+dnl FIXME: AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
+AC_SUBST([$1_cpu],
+         [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`])dnl
+AC_SUBST([$1_vendor],
+         [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`])dnl
+AC_SUBST([$1_os],
+         [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`])dnl
+])# _AC_CANONICAL_SPLIT
 
 
 # AC_CANONICAL_BUILD
 # ------------------
 AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
-[AC_DIVERT([HELP_CANON],
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_DIVERT([HELP_CANON],
 [[
 Hosts type:
   --build=BUILD     configure for building on BUILD [guessed]]])dnl
@@ -1885,7 +1859,15 @@ Hosts type:
 $ac_config_sub sun4 >/dev/null 2>&1 ||
   AC_MSG_ERROR([cannot run $ac_config_sub])
 
-_AC_CANONICAL_THING(build)[]dnl
+AC_CACHE_CHECK([build system type], [ac_cv_build],
+[ac_cv_build_alias=$build_alias
+test -z "$ac_cv_build_alias" &&
+  ac_cv_build_alias=`$ac_config_guess`
+test -z "$ac_cv_build_alias" &&
+  AC_MSG_ERROR([cannot guess build type; you must specify one])
+ac_cv_build=`$ac_config_sub $ac_cv_build_alias` || exit 1
+])
+_AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD
 
 
@@ -1895,7 +1877,13 @@ AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 [AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_DIVERT([HELP_CANON],
 [[  --host=HOST       cross-compile to build programs running on HOST [BUILD]]])dnl
-_AC_CANONICAL_THING(host)[]dnl
+AC_CACHE_CHECK([host system type], [ac_cv_host],
+[ac_cv_host_alias=$host_alias
+test -z "$ac_cv_host_alias" &&
+  ac_cv_host_alias=$ac_cv_build_alias
+ac_cv_host=`$ac_config_sub $ac_cv_host_alias` || exit 1
+])
+_AC_CANONICAL_SPLIT([host])
 ])# AC_CANONICAL_HOST
 
 
@@ -1906,11 +1894,18 @@ AC_DEFUN_ONCE([AC_CANONICAL_TARGET],
 AC_BEFORE([$0], [AC_ARG_PROGRAM])dnl
 AC_DIVERT([HELP_CANON],
 [[  --target=TARGET   configure for building compilers for TARGET [HOST]]])dnl
-_AC_CANONICAL_THING(target)[]dnl
+AC_CACHE_CHECK([target system type], [ac_cv_target],
+[dnl Set target_alias.
+ac_cv_target_alias=$target_alias
+test "x$ac_cv_target_alias" = "x" &&
+  ac_cv_target_alias=$ac_cv_host_alias
+ac_cv_target=`$ac_config_sub $ac_cv_target_alias` || exit 1
+])
+_AC_CANONICAL_SPLIT([target])
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
-test "$host_alias" != "$target_alias" &&
+test -n "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-[]dnl
@@ -2605,10 +2600,8 @@ ifval([$3], [test -n "$$1" || $1="$3"
 # AC_CHECK_TOOL_PREFIX
 # ---------------------
 AC_DEFUN([AC_CHECK_TOOL_PREFIX],
-[AC_REQUIRE([AC_CANONICAL_HOST])dnl
-AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-if test $host != $build; then
-  ac_tool_prefix=${host_alias}-
+[if test -n "$host_alias"; then
+  ac_tool_prefix=$host_alias-
 else
   ac_tool_prefix=
 fi

@@ -1,3 +1,32 @@
+2000-05-24  Akim Demaille  <akim@epita.fr>
+
+	The options --build etc. used to set `$build'.  *If*
+	AC_CANONICAL_SYSTEM was run, then the value of `$build' given by
+	the user was saved into `$build_alias', and `$build' was
+	normalized using `config.sub'.
+
+	Now, let `--build' set `$build_alias' so that scripts with or
+	without `AC_CANONICAL_BUILD' have the same semantics.  This allows
+	to use `AC_CHECK_TOOL' without requiring `config.guess' and
+	`config.sub' (which was bizarre anyway).
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): --build, --host and --target
+	set `build_alias' etc.
+	After the option handling, set host to $host_alias etc. for
+	bugward compatibility.
+	(AC_CANONICALIZE): Mutate into...
+	(_AC_CANONICAL_SPLIT): this, which does not canonicalize, it just
+	computes `$foo_os' etc.
+	(_AC_CANONICAL_THING): Remove, too confusing.
+	(AC_CANONICAL_BUILD): Adjust.
+	Do not assign any value to `build_alias', just compute `build', and
+	`build_{cpy, vendor, os}'.
+	(AC_CANONICAL_HOST, AC_CANONICAL_TARGET): Likewise.
+	(AC_CHECK_TOOL_PREFIX): Fire your rule when `$host_alias' is
+	given, not when `$host != $build'.
+
+	* acgeneral.m4 (sinclude): Fix typo.
+
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Builtins): More details on
