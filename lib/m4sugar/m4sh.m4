@@ -49,19 +49,6 @@ divert(-1)                                                   -*- Autoconf -*-
 # Written by Akim Demaille, Pavel Roskin, Alexandre Oliva, Lars J. Aas
 # and many other people.
 
-# Set the quotes, whatever the current quoting system.
-changequote()
-changequote([, ])
-
-# Some old m4's don't support m4exit.  But they provide
-# equivalent functionality by core dumping because of the
-# long macros we define.
-ifdef([__gnu__], ,
-[errprint(Autoconf requires GNU m4. Install it before installing Autoconf or
-set the M4 environment variable to its path name.)
-m4exit(2)])
-
-
 
 ## ----------------------------- ##
 ## 1. Wrappers around builtins.  ##
@@ -78,7 +65,7 @@ m4exit(2)])
 # |   IF-FALSE
 # | fi
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
-define([AS_IFELSE],
+m4_define([AS_IFELSE],
 [ifval([$2$3],
 [if $1; then
   ifval([$2], [$2], :)
@@ -94,7 +81,7 @@ fi
 # --------------------------------------------------
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
-define([AS_UNSET],
+m4_define([AS_UNSET],
 [$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
@@ -107,7 +94,7 @@ define([AS_UNSET],
 # will not set $? to N while running the code set by "trap 0"
 # So we set $? by executing "exit N" in the subshell and then exit.
 # "false" is used for exit code 1 (default), ":" is used for 0
-define([AS_EXIT],
+m4_define([AS_EXIT],
 [{ m4_case([$1],
            [0], [:; exit],
            [],  [false; exit],
@@ -127,7 +114,7 @@ define([AS_EXIT],
 # AS_MKDIR_P(PATH)
 # ----------------
 # Emulate `mkdir -p' with plain `mkdir'.
-define([AS_MKDIR_P],
+m4_define([AS_MKDIR_P],
 [{ case $1 in
   [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
   *)                      ac_incr_dir=.;;
@@ -169,14 +156,14 @@ done; }
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-define([AS_DIRNAME_EXPR],
+m4_define([AS_DIRNAME_EXPR],
 [expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
       X[]$1 : 'X\(//\)[[^/]]' \| \
       X[]$1 : 'X\(//\)$' \| \
       X[]$1 : 'X\(/\)' \| \
       .     : '\(.\)'])
 
-define([AS_DIRNAME_SED],
+m4_define([AS_DIRNAME_SED],
 [echo "X[]$1" |
     sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
@@ -184,7 +171,7 @@ define([AS_DIRNAME_SED],
   	  /^X\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q']])
 
-define([AS_DIRNAME],
+m4_define([AS_DIRNAME],
 [AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 AS_DIRNAME_SED([$1])])
 
@@ -201,7 +188,7 @@ AS_DIRNAME_SED([$1])])
 # Create as safely as possible a temporary directory which name is
 # inspired by PREFIX (should be 2-4 chars max), and set trap
 # mechanisms to remove it.
-define([AS_TMPDIR],
+m4_define([AS_TMPDIR],
 [# Create a temporary directory, and hook for its removal unless debugging.
 $debug ||
 {

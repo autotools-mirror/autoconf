@@ -26,6 +26,13 @@ include(m4sugar.m4)#                                        -*- Autoconf -*-
 
 m4_include(m4sh.m4)
 
+# M4sugar and M4sh use exclusively the `m4_' prefix, but Autoconf,
+# for historical reasons, uses the old names.
+
+m4_copy([m4_define],   [define])
+m4_copy([m4_defn],     [defn])
+m4_copy([m4_undefine], [undefine])
+
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)
 m4_include(aclang.m4)

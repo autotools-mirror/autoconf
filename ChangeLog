@@ -1,5 +1,17 @@
 2000-11-01  Akim Demaille  <akim@epita.fr>
 
+	In M4sugar, move `define', `undefine', and `defn' into the `m4_'
+	name space.
+
+	* m4sugar.m4 (m4_define, m4_defn, m4_undefine): New macros.
+	(define, defn, undefine): Undefine.
+	Adjust all uses.
+	* m4sh.m4: Adjust.
+	* autoconf.m4: Reenable these builtins.
+	* m4sugar.m4 (m4_expansion_stack_dump): Use m4_copy.
+
+2000-11-01  Akim Demaille  <akim@epita.fr>
+
 	GNU M4 1.4 improperly handle the traces of copies of builtins.
 
 	* autoconf.sh (task trace): When tracing `BUILTIN' also trace
