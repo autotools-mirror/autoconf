@@ -1,8 +1,14 @@
 #! /bin/sh
-# Running `$0' as if it were installed.
-
-me=`echo "$0" | sed -e 's,.*[\\/],,'`
+# Running `autoheader' as if it were installed.
 
 . ./atconfig
 
-exec ../bin/$me --autoconf-dir ../lib ${1+"$@"}
+# Be sure to use the non installed Perl modules.
+# We need no special protection for the subtools (e.g., autoheader runs
+# autoconf which runs autom4te) because by themselves, they try to use
+# subtools from the same directory (i.e., foo/autoheader will run
+# foo/autoconf etc.).
+autom4te_perllibdir=$top_srcdir/lib
+export autom4te_perllibdir
+
+exec ../bin/autoheader --autoconf-dir ../lib ${1+"$@"}

@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoheader.in: Rewrite in Perl.
+	* tests/autoheader: Adjust.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoconf.in (--include, -I): New option.
 	Map --localdir, --autoconf-dir onto it.
 	Forward autom4te's options instead of interpreting them.

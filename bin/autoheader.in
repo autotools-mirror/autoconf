@@ -1,5 +1,10 @@
-#! @SHELL@
-# -*- shell-script -*-
+#! @PERL@
+# -*- Perl -*-
+# @configure_input@
+
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
 # autoheader -- create `config.h.in' from `configure.ac'
 # Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -20,349 +25,303 @@
 # 02111-1307, USA.
 
 # Written by Roland McGrath.
+# Rewritten in Perl by Akim Demaille.
 
-me=`echo "$0" | sed -e 's,.*[/\\],,'`
+BEGIN
+{
+  my $datadir = ($ENV{'autom4te_perllibdir'}
+		 || $ENV{'AC_MACRODIR'}
+		 || '@datadir@');
+  unshift @INC, "$datadir";
+}
 
-usage="\
+use Getopt::Long;
+use File::Basename;
+use File::Compare;
+use File::Copy;
+use File::Spec;
+use IO::File;
+use Autom4te::General;
+use strict;
+
+# Using `do FILE', we need `local' vars.
+use vars qw ($config_h %verbatim %symbol);
+
+# Lib files.
+my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
+my $autoconf = $ENV{'AUTOCONF'} || '@autoconf-name@';
+local $config_h;
+my $config_h_in;
+my $localdir = '.';
+my $force = 0;
+my @include;
+my @warning;
+# m4.
+my $m4 = $ENV{"M4"} || "@M4@";
+my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
+
+
+## ---------- ##
+## Routines.  ##
+## ---------- ##
+
+
+# $FILENAME
+# find_file ($FILENAME)
+# ---------------------
+# We match exactly the behavior of GNU m4: first look in the current
+# directory (which includes the case of absolute file names), and, if
+# the file is not absolute, just fail.  Otherwise, look in the path.
+#
+# If the file is flagged as optional (ends with `?'), then return undef
+# if absent.
+sub find_file ($)
+{
+  my ($filename) = @_;
+  my $optional = 0;
+
+  $optional = 1
+    if $filename =~ s/\?$//;
+
+  return File::Spec->canonpath ($filename)
+    if -e $filename;
+
+  if (File::Spec->file_name_is_absolute ($filename))
+    {
+      die "$me: no such file or directory: $filename\n"
+	unless $optional;
+      return undef;
+    }
+
+  foreach my $path (@include)
+    {
+      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
+	if -e File::Spec->catfile ($path, $filename)
+    }
+
+  die "$me: no such file or directory: $filename\n"
+    unless $optional;
+
+  return undef;
+}
+
+
+# print_usage ()
+# --------------
+# Display usage (--help).
+sub print_usage ()
+{
+  print <<"END";
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
-Create a template file of C \`#define' statements for \`configure' to
-use.  To this end, scan TEMPLATE-FILE, or \`configure.ac' if present,
-or else \`configure.in'.
+Create a template file of C \`#define\' statements for \`configure\' to
+use.  To this end, scan TEMPLATE-FILE, or \`configure.ac\' if present,
+or else \`configure.in\'.
 
   -h, --help               print this help, then exit
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
-  -d, --debug              don't remove temporary files
+  -d, --debug              don\'t remove temporary files
   -f, --force              consider all the files are obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
-  \`obsolete'      obsolete constructs
-  \`all'           all the warnings
-  \`no-CATEGORY'   turn off the warnings on CATEGORY
-  \`none'          turn off all the warnings
-  \`error'         warnings are error
+  \`obsolete\'      obsolete constructs
+  \`all\'           all the warnings
+  \`no-CATEGORY\'   turn off the warnings on CATEGORY
+  \`none\'          turn off all the warnings
+  \`error\'         warnings are error
 
 Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
+  -A, --autoconf-dir=ACDIR  Autoconf\'s macro files location (rarely needed)
+  -l, --localdir=DIR        location of \`aclocal.m4\' and \`acconfig.h\'
 
-Report bugs to <bug-autoconf@gnu.org>."
+Report bugs to <bug-autoconf\@gnu.org>.
+END
+  exit 0;
+}
 
-version="\
+
+# print_version ()
+# ----------------
+# Display version (--version).
+sub print_version
+{
+  print <<END;
 autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath.
 
 Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-
-help="\
-Try \`$me --help' for more information."
-
-exit_missing_arg="\
-echo \"$me: option \\\`\$1' requires an argument\" >&2
-echo \"\$help\" >&2
-exit 1"
-
-# NLS nuisances.
-# Only set these to C if already set.  These must not be set unconditionally
-# because not all systems understand e.g. LANG=C (notably SCO).
-# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
-# Non-C LC_CTYPE values break the ctype check.
-if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
-if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
-if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
-if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
-
-# Variables.
-: ${AUTOCONF=@autoconf-name@}
-dir=`echo "$0" | sed -e 's,[^/]*$,,'`
-debug=false
-localdir=.
-force=false
-status=0
-tmp=
-verbose=:
-warning_all=false
-warning_error=false
-warning_obsolete=false
-
-# Parse command line.
-while test $# -gt 0 ; do
-  optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
-               "x$1" : 'x-.\(.*\)'`
-  case $1 in
-    --version | -V )
-       echo "$version" ; exit 0 ;;
-    --help | -h )
-       echo "$usage"; exit 0 ;;
-
-    --debug | -d )
-       debug=:; shift ;;
-    --force | -f )
-       force=:; shift ;;
-    --verbose | -v )
-       verbose=echo
-       shift;;
-
-    --localdir=* | -l?* )
-       localdir=$optarg
-       shift ;;
-    --localdir | -l )
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       localdir=$1
-       shift ;;
-
-    --autoconf-dir=* | -A?* )
-       autoconf_dir=$optarg
-       shift ;;
-    --autoconf-dir | -A )
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       autoconf_dir=$1
-       shift ;;
-    --macrodir=* | -m?* )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
-       autoconf_dir=$optarg
-       shift ;;
-    --macrodir | -m )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       autoconf_dir=$1
-       shift ;;
-
-    --warnings=* | -W?* )
-       warnings=$warnings,$optarg
-       shift ;;
-    --warnings | -W )
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       warnings=$warnings,$1
-       shift ;;
-
-    -- )     # Stop option processing
-      shift; break ;;
-    - )     # Use stdin as input.
-      break ;;
-    -* )
-      exec >&2
-      echo "$me: invalid option $1"
-      echo "$help"
-      exit 1 ;;
-    * )
-      break ;;
-  esac
-done
-
-# The warnings are the concatenation of 1. application's defaults
-# (here, none), 2. $WARNINGS, $3 command line options, in that order.
-alphabet='abcdefghijklmnopqrstuvwxyz'
-ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-_ac_warnings=
-for warning in `IFS=,; echo $WARNINGS,$warnings | tr $ALPHABET $alphabet`
-do
-  case $warning in
-  '' | ,)   continue;;
-  no-*) eval warning_`expr x$warning : 'xno-\(.*\)'`=false;;
-  *)    eval warning_$warning=:;;
-  esac
-done
-
-# Trap on 0 to stop playing with `rm'.
-$debug ||
-{
-  trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap '(exit 1); exit 1' 1 2 13 15
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+END
+  exit 0;
 }
 
-# Create a (secure) tmp directory for tmp files.
-: ${TMPDIR=/tmp}
+
+# parse_args ()
+# -------------
+# Process any command line arguments.
+sub parse_args ()
 {
-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/ahXXXXXX") 2>/dev/null` &&
-  test -n "$tmp" && test -d "$tmp"
-}  ||
-{
-  tmp=$TMPDIR/ah$$
-  (umask 077 && mkdir $tmp)
-} ||
-{
-   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   (exit 1); exit 1
+  my $srcdir;
+  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
+  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
+  my $stdin = grep /^-$/, @ARGV;
+  @ARGV = grep !/^-$/, @ARGV;
+  Getopt::Long::config ("bundling");
+  Getopt::Long::GetOptions ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
+			    'l|localdir=s' => \$localdir,
+			    'd|debug'      => \$debug,
+			    'h|help'    => \&print_usage,
+			    'V|version' => \&print_version,
+			    'v|verbose' => \$verbose,
+			    'f|force'   => \$force,
+			    'W|warning' => \@warning)
+    or exit 1;
+
+  push @ARGV, '-'
+    if $stdin;
+
+  if (! @ARGV)
+    {
+      my $configure_ac = find_configure_ac;
+      die "$me: no input file\n"
+	unless $configure_ac;
+      push @ARGV, $configure_ac;
+    }
 }
+
+
+## -------------- ##
+## Main program.  ##
+## -------------- ##
+
+mktmpdir ('ah');
+parse_args;
 
 # Preach.
-if ($warning_all || $warning_obsolete) &&
-    (test -f $config_h.top ||
-     test -f $config_h.bot ||
-     test -f $localdir/acconfig.h); then
-  sed -e "s/^    /$me: WARNING: /" >&2 <<\EOF
-    Using auxiliary files such as `acconfig.h', `config.h.bot'
-    and `config.h.top', to define templates for `config.h.in'
+my $config_h_top = find_file ("config.h.top?");
+my $config_h_bot = find_file ("config.h.bot?");
+my $acconfig_h = find_file ("acconfig.h?");
+if ($config_h_top || $config_h_bot || $acconfig_h)
+  {
+    my $msg = << "END";
+    Using auxiliary files such as \`acconfig.h\', \`config.h.bot\'
+    and \`config.h.top\', to define templates for \`config.h.in\'
     is deprecated and discouraged.
 
-    Using the third argument of `AC_DEFINE' and
-    `AC_DEFINE_UNQUOTED' allows to define a template without
-    `acconfig.h':
+    Using the third argument of \`AC_DEFINE\' and
+    \`AC_DEFINE_UNQUOTED\' allows to define a template without
+    \`acconfig.h\':
 
       AC_DEFINE([NEED_MAIN], 1,
-                [Define if a function `main' is needed.])
+                [Define if a function \`main\' is needed.])
 
     More sophisticated templates can also be produced, see the
     documentation.
-EOF
-  $warning_error && { (exit 1); exit 1; }
-fi
-
-acconfigs=
-test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
-
-# Find the input file.
-case $# in
-  0)
-    case `ls configure.ac configure.in 2>/dev/null` in
-      *ac*in )
-        echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
-        echo "$me: warning: proceeding with \`configure.ac'." >&2
-        infile=configure.ac;;
-      *ac ) infile=configure.ac;;
-      *in ) infile=configure.in;;
-      * )
-        echo "$me: no input file" >&2
-        (exit 1); exit 1;;
-    esac
-    infilename=$infile
-    ;;
-  1) if test "x$1" = "x-"; then
-       cat >$tmp/stdin
-       infile=$tmp/stdin
-     else
-       infile=$1
-     fi
-     infilename="Standard input"
-     ;;
-  *) exec >&2
-     echo "$me: invalid number of arguments."
-     echo "$help"
-     (exit 1); exit 1;;
-esac
+END
+    $msg =~ s/^    /WARNING: /gm;
+    print STDERR $msg;
+  }
 
 # Set up autoconf.
-autoconf="$AUTOCONF --include=$autoconf_dir --include=$localdir "\
-`$verbose "--verbose "`\
-`$debug && echo "--debug "`
+$autoconf .= " --include=$autoconf_dir --include=$localdir";
+$autoconf .= ' --verbose' if $verbose;
+$autoconf .= ' --debug' if $debug;
 
 # ----------------------- #
 # Real work starts here.  #
 # ----------------------- #
 
 # Source what the traces are trying to tell us.
-$verbose $me: running $autoconf to trace from $infile >&2
-$autoconf  \
-  --trace AC_CONFIG_HEADERS:': $${config_h="$1"}' \
-  --trace AH_OUTPUT:'ac_verbatim_$1="\
-$2"' \
-  --trace AC_DEFINE_TRACE_LITERAL:'syms="$$syms $1"' \
-  $infile >$tmp/traces.sh || { (exit 1); exit 1; }
+verbose "$me: running $autoconf to trace from $ARGV[0]";
+xsystem ("$autoconf "
+	 . " --trace AC_CONFIG_HEADERS:'\$\$config_h ||= \"\$1\";'"
+	 . " --trace AH_OUTPUT:'\$\$verbatim{\$1} = \"\\\n\$2\";'"
+	 . " --trace AC_DEFINE_TRACE_LITERAL:'\$\$symbol{\"\$1\"} = 1;'"
+	 . " $ARGV[0] >$tmp/traces.pl");
 
-$verbose $me: sourcing $tmp/traces.sh >&2
-if (set -e && . $tmp/traces.sh) >/dev/null 2>&1; then
-  . $tmp/traces.sh
-else
-  echo "$me: error: shell error while sourcing $tmp/traces.sh" >&2
-  (exit 1); exit 1
-fi
-
-
-# Make SYMS newline-separated rather than blank-separated, and remove dups.
-# Start each symbol with a blank (to match the blank after "#undef")
-# to reduce the possibility of mistakenly matching another symbol that
-# is a substring of it.
-# Beware that some of the symbols might actually be macro with arguments:
-# keep only their name.
-syms=`for sym in $syms; do echo $sym; done |
-  sed -e 's/(.*//' |
-  sort |
-  uniq |
-  sed -e 's@^@ @'`
-
+local (%verbatim, %symbol);
+do "$tmp/traces.pl";
+warn "couldn't parse $tmp/traces.pl: $@" if $@;
+die "$me: error: AC_CONFIG_HEADERS not found in $ARGV[0]\n"
+  unless $config_h;
 
 # We template only the first CONFIG_HEADER.
-config_h=`set X $config_h; echo $2`
+$config_h =~ s/ .*//;
 # Support "outfile[:infile]", defaulting infile="outfile.in".
-case "$config_h" in
-"") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2
-    (exit 1); exit 1 ;;
-*:*) config_h_in=`echo "$config_h" | sed 's/.*://'`
-     config_h=`echo "$config_h" | sed 's/:.*//'` ;;
-*) config_h_in="$config_h.in" ;;
-esac
+($config_h, $config_h_in) = split (':', $config_h, 2);
+$config_h_in ||= "$config_h.in";
+
+my $out = new IO::File (">$tmp/config.hin");
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-cat <<EOF >$tmp/config.hin
-/* $config_h_in.  Generated automatically from $infilename by autoheader.  */
-EOF
+print $out "/* $config_h_in.  Generated from $ARGV[0] by autoheader.  */\n";
 
 # Dump the top.
-test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
-
-# Dump `acconfig.h' but its bottom.
-test -r $localdir/acconfig.h &&
-  sed '/@BOTTOM@/,$d;s/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
+# test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
+#
+# # Dump `acconfig.h' but its bottom.
+# test -r $localdir/acconfig.h &&
+#   sed '/@BOTTOM@/,$d;s/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
 
 # Dump the templates from `configure.ac'.
-for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p' | sort`; do
-  eval value=\$$verb
-  cat >>$tmp/config.hin <<EOF
+foreach (sort keys %verbatim)
+  {
+    print $out "$verbatim{$_}\n";
+  }
 
-$value
-EOF
-done
+$out->close;
 
-# Handle the case where @BOTTOM@ is the first line of acconfig.h.
-test -r $localdir/acconfig.h &&
-  grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.hin
-test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
+# # Handle the case where @BOTTOM@ is the first line of acconfig.h.
+# test -r $localdir/acconfig.h &&
+#   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
+#   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.hin
+# test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
+
+# # Check that all the symbols have a template.
+# $verbose $me: checking completeness of the template >&2
+# # Regexp for a white space.
+# w='[ 	]'
+# if test -n "$syms"; then
+#   for sym in $syms; do
+#     if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.hin >/dev/null; then
+# 	  : # All is well.
+#     else
+# 	  echo "$me: No template for symbol \`$sym'" >&2
+# 	  status=1
+#     fi
+#   done
+# fi
+
+if (compare ("$tmp/config.hin", "$config_h_in") == 0)
+  {
+    # File didn't change, so don't update its mod time.
+    print STDERR "$me: `$config_h_in' is unchanged\n"
+  }
+else
+  {
+    # Back up and install the new one.
+    if (-f $config_h_in)
+      {
+	move ("$config_h_in",  "$config_h_in$SIMPLE_BACKUP_SUFFIX")
+	  or die "$me: cannot not backup $config_h_in: $!\n";
+      }
+    move ("$tmp/config.hin", "$config_h_in")
+      or die "$me: cannot not update $config_h_in: $!\n";
+    # print STDERR "$me: `$config_h_in' is updated\n";
+  }
 
 
-# Check that all the symbols have a template.
-$verbose $me: checking completeness of the template >&2
-# Regexp for a white space.
-w='[ 	]'
-if test -n "$syms"; then
-  for sym in $syms; do
-    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.hin >/dev/null; then
-      : # All is well.
-    else
-      echo "$me: No template for symbol \`$sym'" >&2
-      status=1
-    fi
-  done
-fi
+__END__
 
 
-# If the run was successful, output the result.
-if test $status = 0; then
-  if test $# = 0; then
-    # Output is a file
-    if test -f $config_h_in &&
-        cmp -s $tmp/config.hin $config_h_in &&
-        test "$force" != :; then
-      # File didn't change, so don't update its mod time.
-      echo "$me: $config_h_in is unchanged" >&2
-    else
-      mv -f $tmp/config.hin $config_h_in
-    fi
-  else
-    # Output is stdout
-    cat $tmp/config.hin
-  fi
-fi
+
+
+
+
 
 (exit $status); exit $status
