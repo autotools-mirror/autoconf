@@ -171,8 +171,8 @@ fi
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.
-at_times_skip=:
-(times) >/dev/null 2>&1 && at_times_skip=false
+at_times_p=false
+(times) >/dev/null 2>&1 && at_times_p=:
 
 # CLI Arguments to pass to the debugging scripts.
 at_debug_args=
@@ -221,8 +221,7 @@ at_groups_all='AT_groups_all'
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [.])'
 # Description of all the test groups.
-at_help_all=
-AT_help])])dnl
+at_help_all='AT_help_all'])])dnl
 m4_divert_push([PARSE_ARGS])dnl
 
 at_keywords=
@@ -681,13 +680,14 @@ _ATEOF
       at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
       case $at_status in
 	0|77)
-	  # $at_times_file is only available if the group succeeded or
-	  # was skipped.  We're not including the group log, so the
-	  # success message is written in the global log separately.
-	  # But we also write to the group log in case they're using
-	  # -d.
-	  $at_times_skip ||
+	  # $at_times_file is only available if the group succeeded.
+	  # We're not including the group log, so the success message
+	  # is written in the global log separately.  But we also
+	  # write to the group log in case they're using -d.
+	  if test -f $at_times_file; then
 	    at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
+	    rm -f $at_times_file
+          fi
 	  echo "$at_log_msg" >> $at_group_log
 	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
 
@@ -821,7 +821,7 @@ case $at_skip_count in
   *) at_result="$at_result
 $at_skip_count tests were skipped." ;;
 esac
- 
+
 if test $at_unexpected_count = 0; then
   echo "$at_result"
   echo "$at_result" >&AS_MESSAGE_LOG_FD
@@ -992,7 +992,7 @@ AS_IF([$at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)],,[$5])dnl
 # $at_arg_OPTION will be set to `:' if this option is received, `false' if
 # if --noOPTION is received, and `false' by default.
 #
-# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with 
+# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with
 # $at_optarg set to `:' or `false' as appropriate.  $opt_arg is actually
 # just a copy of $at_arg_OPTION.
 #
@@ -1013,7 +1013,7 @@ m4_defun([AT_ARG_OPTION],[_AT_ARG_OPTION([$1],[$2],,[$3],[$4])])
 # variable $at_arg_OPTION, where OPTION is the first option in OPTIONS with
 # any `-' characters replaced with `_'.
 #
-# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with 
+# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with
 # $at_optarg set.  $at_optarg is actually just a copy of $at_arg_OPTION.
 #
 # ACTION-IF-NOT-GIVEN will be run once after option parsing is complete
@@ -1059,7 +1059,7 @@ m4_divert_push([TEST_SCRIPT])dnl
 m4_define([AT_XFAIL_IF],
 [dnl
 dnl Try to limit the amount of conditionals that we emit.
-m4_case([$1], 
+m4_case([$1],
       [], [],
       [false], [],
       [:], [m4_define([AT_xfail], [at_xfail=yes])],
@@ -1079,9 +1079,8 @@ m4_define([AT_KEYWORDS],
 # ----------
 # Complete a group of related tests.
 m4_define([AT_CLEANUP],
-[m4_append([AT_help],
-at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
-'
+[m4_append([AT_help_all],
+m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
 m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
     AT_xfail
@@ -1090,7 +1089,7 @@ m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
       $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
       $at_traceoff
-      $at_times_skip || times >$at_times_file
+      $at_times_p && times >$at_times_file
     ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
     at_status=`cat $at_status_file`
     ;;

@@ -1,3 +1,21 @@
+2003-09-26  Akim Demaille  <akim@epita.fr>
+
+	The test suite are sometimes assigning timings incorrectly.
+	Reported by Paivio Pollari.
+	Diagnosed by Nicolas Joly.
+
+	* lib/autotest/general.m4 (AT_CLEANUP): Rename AT_help as
+	AT_help_all.
+	Instead of making AT_help a sequence of assignments to grow
+	$at_help_all, just make AT_help_all be the growing contents of
+	$at_help_all, and make a single assignment in...
+	(AT_INIT): here.
+	(at_times_skip): Flip the meaning and rename as...
+	(at_times_p): this.
+	(AT_INIT): When summarizing the test that ran, remove
+	$at_times_file after use, and check it is present before trying to
+	use it.
+
 2003-09-25  Akim Demaille  <akim@epita.fr>
 
 	Version 2.57d.
