@@ -34,36 +34,3 @@ touch install-sh
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP(install-sh ltconfig libtool at-path ltmain.sh config.guess config.sub)
-#							-*- autoconf -*-
-
-AT_BANNER([Compatility with other tools.])
-
-## -------------------- ##
-## Autoconf & Libtool.  ##
-## -------------------- ##
-
-AT_SETUP([[Autoconf & Libtool]])
-
-# Skip this test if there is no libtoolize.
-AT_CHECK([libtoolize --version || exit 77], 0, ignore, ignore)
-
-# Using a configure.in, have libtoolize confess where libtool.m4 is.
-AT_DATA([configure.in],
-[[AC_INIT
-AC_CONFIG_AUX_DIR(.)
-AC_PROG_LIBTOOL
-]])
-AT_CHECK([libtoolize >libtoolize.log 2>&1], 0)
-
-# Build the concatenation of libtool.m4 and configure.in.
-cp `sed -n [s,^.*\`\(/[^\']*\)\'.*/\1/p] libtoolize.log` configure.in
-cat >>configure.in <<_EOF
-AC_INIT
-AC_CONFIG_AUX_DIR(.)
-AC_PROG_LIBTOOL
-_EOF
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE
-
-AT_CLEANUP(libtoolize.log)
