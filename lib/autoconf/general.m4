@@ -132,8 +132,8 @@ AC_DEFUN(AC_INIT_NOTICE,
 # along with this script; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
-# The copying terms for this script do not affect the copying terms
-# for software that it configures.
+# The redistribution and modification terms for this script do not affect
+# the terms for software that it configures.
 
 ac_help=])
 
@@ -647,7 +647,7 @@ define(AC_PREREQ,
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])), [$1])])
 
 
-dnl ### Canonicalizing the system type
+dnl ### Getting the canonical system type
 
 
 dnl Find install-sh, config.sub, config.guess, and Cygnus configure
