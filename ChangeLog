@@ -1,5 +1,9 @@
 2000-08-11  Akim Demaille  <akim@epita.fr>
 
+	Version 2.49a.
+
+2000-08-11  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_NO_EXECUTABLES): New macro.
 
 2000-08-11  Akim Demaille  <akim@epita.fr>
