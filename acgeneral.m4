@@ -306,9 +306,11 @@ Directory and file names:
   --bindir=DIR            user executables in DIR [EPREFIX/bin]
   --sbindir=DIR           system admin executables in DIR [EPREFIX/sbin]
   --libexecdir=DIR        program executables in DIR [EPREFIX/libexec]
-  --datadir=DIR           read-only architecture-independent data in DIR [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data in DIR
+                          [PREFIX/share]
   --sysconfdir=DIR        read-only single-machine data in DIR [PREFIX/etc]
-  --sharedstatedir=DIR    modifiable architecture-independent data in DIR [PREFIX/com]
+  --sharedstatedir=DIR    modifiable architecture-independent data in DIR
+                          [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data in DIR [PREFIX/var]
   --libdir=DIR            object code libraries in DIR [EPREFIX/lib]
   --includedir=DIR        C header files in DIR [PREFIX/include]
@@ -318,7 +320,8 @@ Directory and file names:
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
-  --program-transform-name=PROGRAM run sed PROGRAM on installed program names
+  --program-transform-name=PROGRAM
+                          run sed PROGRAM on installed program names
 EOF
     cat << EOF
 Host type:
@@ -332,9 +335,11 @@ Features and packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --x-includes=DIR        X include files are in DIR
   --x-libraries=DIR       X library files are in DIR
---enable and --with options recognized:$ac_help
 changequote([, ])dnl
 EOF
+    if test -n "$ac_help"; then
+      echo "--enable and --with options recognized:$ac_help"
+    fi
     exit 0 ;;
 
   -host | --host | --hos | --ho)

@@ -1,3 +1,14 @@
+Mon Nov 20 15:26:50 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Prettify usage message somewhat.
+
+	* Makefile.in: Use @bindir@, @datadir@, @infodir@.
+	(install): Find ASCRIPTS in $(srcdir).
+
+Sat Nov 18 14:21:55 1995  Karl Berry  <karl@cs.umb.edu>
+
+        * autoconf.sh: Allow lowercase letters in the undefined-macro name.
+
 Fri Nov 17 15:05:44 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* Version 2.5 released.

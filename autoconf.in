@@ -127,7 +127,7 @@ pattern="AC_"
 status=0
 if grep "${pattern}" $tmpout > /dev/null 2>&1; then
   echo "autoconf: Undefined macros:" >&2
-  grep "${pattern}" $tmpout | sed "s/.*\(${pattern}[_A-Z0-9]*\).*/\1/" |
+  grep "${pattern}" $tmpout | sed "s/.*\(${pattern}[_A-Za-z0-9]*\).*/\1/" |
     while read name; do
       grep -n $name $infile /dev/null
     done | sort -u >&2
