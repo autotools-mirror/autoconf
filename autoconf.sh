@@ -440,21 +440,19 @@ EOF
   fi
 
   # Run m4 on the input file to get traces.
-  $verbose "Running $run_m4_trace $infile" >&2
+  $verbose "Running $run_m4_trace $infile | $M4 $trace_m4" >&2
   $run_m4_trace $infile 2>&1 >/dev/null |
     sed -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \([^(][^(]*\)(\(.*\)$/AT_\4([\1], [\2], [\3], [\4], \5/' \
-        -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' >>$trace_m4
-
+        -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' |
   # Now we are ready to run m4 to process the trace file.
+  $M4 $trace_m4 - |
   # It makes no sense to try to transform __oline__.
-  $verbose "Running $M4 $trace_m4" >&2
-  $M4 $trace_m4 |
-    sed '
-      s/@<:@/[/g
-      s/@:>@/]/g
-      s/@S|@/$/g
-      s/@%:@/#/g
-      ' >&4
+  sed '
+    s/@<:@/[/g
+    s/@:>@/]/g
+    s/@S|@/$/g
+    s/@%:@/#/g
+    ' >&4
   ;;
 
 

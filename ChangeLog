@@ -1,5 +1,11 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (task trace): Pipe the output of the first m4 into
+	the second one, instead of saving to a tmp file, so that we can
+	trace endless configure.in expansion.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	Uniform idioms.
 
 	* acgeneral.m4 (_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS,
