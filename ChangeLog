@@ -15,6 +15,44 @@
 	* acconfig.h (F77_FUNC): Add.
 	(F77_FUNC_): Likewise.
 
+1999-06-01  Akim Demaille  <demaille@inf.enst.fr>
+
+	* acgeneral.m4 (AC_PREFIX_PROGRAM): Use macros of the AC_TR_
+	family.
+	(AC_HAVE_LIBRARY): Likewise.
+	(AC_CHECK_FUNCS): Likewise.
+	(AC_CHECK_FILES): Likewise.
+	(AC_CHECK_SIZEOF): Likewise.
+
+	* acgeneral.m4 (AC_TR): New macro which performs transliteration
+	by m4 when possible, or by `tr' at configure time.
+	(AC_TR_UPCASE_NAME): New macro, transliteration 'a-z' to 'A-Z'.
+	(AC_TR_UPCASE_FILE): New macro, transliteration 'a-z./-' to
+	'A-Z___'.
+	(AC_TR_SH): New macro, transliteration to valid sh var name.
+
+	* acgeneral.m4 (_AC_SH_QUOTE): New macro which protects non
+	protected backquotes against shell expansion.
+	(AC_MSG_CHECKING): Use it.
+	(AC_CHECKING): Use it.
+	(AC_MSG_RESULT): Use it.
+	(AC_VERBOSE): Use it.
+	(AC_MSG_WARN): Use it.
+	(AC_MSG_ERROR): Use it.
+
+	* acgeneral.m4 (_AC_MESSAGE): New macro to report message at m4
+	time.
+	(AC_WARNING): New macro to report warnings at m4 runtime.
+	(AC_FATAL): New macro, to report fatal error at m4 runtime.
+
+	* acspecific.m4 (AC_RSH): Use AC_FATAL.
+	(AC_ARG_ARRAY): Idem.
+	(AC_HAVE_BOUNDBANG): Idem.
+
+	* acgeneral.m4 (AC_VAR_IF_INDIR): New macro.
+	(AC_VAR_SET): Likewise.
+	(AC_VAR_GET): Likewise.
+
 1999-05-30  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* autoheader.m4 (AC_DEFINE): Ignore CPP macro arguments.
