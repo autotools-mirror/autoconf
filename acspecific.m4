@@ -228,8 +228,8 @@ if test "z${INSTALL}" = "z" ; then
 	    : # AIX
 	  else
 	    INSTALL="$ac_dir/$ac_prog -c"
-	    INSTALL_PROGRAM='$(INSTALL)'
-	    INSTALL_DATA='$(INSTALL) -m 644'
+	    INSTALL_PROGRAM='${INSTALL}'
+	    INSTALL_DATA='${INSTALL} -m 644'
 	    break 2
 	  fi
 	fi
@@ -252,10 +252,10 @@ if test -z "$INSTALL"; then
 fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
-INSTALL_PROGRAM=${INSTALL_PROGRAM-'$(INSTALL)'}
+INSTALL_PROGRAM=${INSTALL_PROGRAM-'${INSTALL}'}
 AC_SUBST(INSTALL_PROGRAM)dnl
 AC_VERBOSE(setting INSTALL_PROGRAM to $INSTALL_PROGRAM)
-INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
+INSTALL_DATA=${INSTALL_DATA-'${INSTALL}'}
 AC_SUBST(INSTALL_DATA)dnl
 AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
@@ -1101,7 +1101,7 @@ if mkdir conftestdir; then
   cd conftestdir
   cat > Imakefile <<'EOF'
 acfindx:
-	@echo 'ac_imake_incroot="$(INCROOT)"; ac_imake_usrlibdir="$(USRLIBDIR)"; ac_imake_libdir="$(LIBDIR)"'
+	@echo 'ac_imake_incroot="${INCROOT}"; ac_imake_usrlibdir="${USRLIBDIR}"; ac_imake_libdir="${LIBDIR}"'
 EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
