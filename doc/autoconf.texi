@@ -911,9 +911,10 @@ the buffer pointer as the third, instead of the other way around, define
 @defmac AC_STRCOLL
 @maindex STRCOLL
 @vindex HAVE_STRCOLL
-Check for a proper declaration of the @code{strcoll} function.  This
-does a bit more than @samp{AC_HAVE_FUNCS(strcoll)}, because some systems
-have incorrect definitions of @code{strcoll}, which should not be used.
+If the @code{strcoll} function exists and works correctly, define
+@code{HAVE_STRCOLL}.  This does a bit more than
+@samp{AC_HAVE_FUNCS(strcoll)}, because some systems have incorrect
+definitions of @code{strcoll}, which should not be used.
 @end defmac
 
 @defmac AC_UTIME_NULL
