@@ -1548,7 +1548,7 @@ AC_DEFUN([AC_OBJEXT],   [])
 
 
 # _AC_EXEEXT
-# -_--------
+# ----------
 # Check for the extension used for executables.  This knows that we
 # add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 # executable.  If this is called, the executable extensions will be
@@ -1558,19 +1558,21 @@ define([_AC_EXEEXT],
 _AC_MINGW32
 _AC_EMXOS2
 AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
-[if test "$CYGWIN" = yes || test "$MINGW32" = yes || test "$EMXOS2" = yes; then
-  ac_cv_exeext=.exe
-else
+[case "$CYGWIN $MINGW32 $EMXOS2" in
+  *yes*) ac_cv_exeext=.exe ;;
+  *)
   AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-  [for ac_file in conftest.*; do
-     case $ac_file in
-       *.$ac_ext | *.o | *.obj | *.xcoff) ;;
-       *) ac_cv_exeext=`echo $ac_file | sed s/conftest//` ;;
-     esac
-   done],
+  [if test ! -f conftest; then
+    for ac_file in conftest.*; do
+       case $ac_file in
+         *.$ac_ext | *.o | *.obj | *.xcoff) ;;
+         *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`;;
+       esac
+     done
+   fi],
   [AC_MSG_ERROR([cannot compile and link])])
-  test -n "$ac_cv_exeext" && ac_cv_exeext=no
-fi])
+  test -n "$ac_cv_exeext" && ac_cv_exeext=no;;
+esac])
 EXEEXT=
 test "$ac_cv_exeext" != no && EXEEXT=$ac_cv_exeext
 dnl Setting ac_exeext will implicitly change the ac_link command.

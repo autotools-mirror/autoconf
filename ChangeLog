@@ -1,3 +1,8 @@
+2000-09-06  Bernard Dautrevaux  <dautrevaux@objectlive.com>
+
+	* acspecific.m4 (_AC_EXEEXT): Set extension to void if linking
+	creates both an unsuffixed file and suffixed ones.
+
 2000-09-06  Peter Eisentraut  <peter_e@gmx.net>
 
 	* autoconf.texi: English and typo fixes.
