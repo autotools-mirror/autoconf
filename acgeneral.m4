@@ -772,6 +772,16 @@ done; }
 ])# AC_SHELL_MKDIR_P
 
 
+# _AC_SHELL_DIRNAME(PATHNAME)
+# ---------------------------
+# Remove last slash and trailing text.
+# Not all systems have dirname, so we emulate it with sed.
+# This macro must be usable from inside ` `.
+define([_AC_SHELL_DIRNAME],
+[echo $1 | sed 's%/[[^/][^/]]*$%%'])
+
+
+
 ## --------------------------------------------------- ##
 ## Common m4/sh handling of variables (indirections).  ##
 ## --------------------------------------------------- ##
@@ -4514,9 +4524,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
-
-  # Remove last slash and all that follows it.  Not all systems have dirname.
-  ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
+  ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dir")
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
@@ -4782,8 +4790,7 @@ cat >>$CONFIG_STATUS <<\EOF
   if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
     echo "$ac_file is unchanged"
   else
-    # Remove last slash and all that follows it.  Not all systems have dirname.
-    ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
+    ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
     if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
       AC_SHELL_MKDIR_P("$ac_dir")
     fi
@@ -4830,8 +4837,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   rm -f $ac_dest
 
   # Make relative symlinks.
-  # Remove last slash and all that follows it.  Not all systems have dirname.
-  ac_dest_dir=`echo $ac_dest | sed 's%/[[^/][^/]]*$%%'`
+  ac_dest_dir=`_AC_SHELL_DIRNAME("$ac_dest")`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dest_dir")
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"

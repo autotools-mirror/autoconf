@@ -1,3 +1,9 @@
+2000-07-06  Lars J. Aas  <larsa@sim.no>
+
+	* acgeneral.m4 (_AC_SHELL_DIRNAME): New macro.
+	(_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS, _AC_OUTPUT_LINKS):
+	Use _AC_SHELL_DIRNAME.
+
 2000-07-04 Martin Wilck <martin@tropos.de>
 
 	* aclang.m4 (AC_PROG_F77): Add two compilers,
