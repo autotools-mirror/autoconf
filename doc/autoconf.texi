@@ -10002,7 +10002,7 @@ For instance, the following code:
 
 @example
 case "$given_srcdir" in
-.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`"
+.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`" ;;
 *)  top_srcdir="$dots$given_srcdir" ;;
 esac
 @end example
@@ -10012,7 +10012,7 @@ is more readable when written as:
 
 @example
 case $given_srcdir in
-.)  top_srcdir=`echo "$dots" | sed 's,/$,,'`
+.)  top_srcdir=`echo "$dots" | sed 's,/$,,'` ;;
 *)  top_srcdir=$dots$given_srcdir ;;
 esac
 @end example
@@ -10190,6 +10190,11 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @item `@var{commands}`
 @cindex `@var{commands}`
 @cindex Command Substitution
+Posix requires shells to trim all trailing newlines from command
+output before substituting it, so assignments like
+@samp{dir=`AS_DIRNAME(["$file"])`} will not work as expected if the
+directory of @samp{$file} ends in a newline.
+
 While in general it makes no sense, do not substitute a single builtin
 with side effects, because Ash 0.2, trying to optimize, does not fork a
 subshell to perform the command.
@@ -10210,14 +10215,17 @@ The result of @samp{foo=`exit 1`} is left as an exercise to the reader.
 
 @item $(@var{commands})
 @cindex $(@var{commands})
-This construct is meant to replace @samp{`@var{commands}`}; they can be
+This construct is meant to replace @samp{`@var{commands}`},
+and it has most of the problems listed under @code{`@var{commands}`}.
+
+This construct can be
 nested while this is impossible to do portably with back quotes.
-Unfortunately it is not yet widely supported.  Most notably, even recent
+Unfortunately it is not yet universally supported.  Most notably, even recent
 releases of Solaris don't support it:
 
 @example
 $ @kbd{showrev -c /bin/sh | grep version}
-Command version: SunOS 5.8 Generic 109324-02 February 2001
+Command version: SunOS 5.9 Generic May 2002
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
@@ -11155,7 +11163,7 @@ expr "$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
 or better yet
 
 @example
-expr "x$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
+expr "X$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
   @var{action}
 @end example
 
@@ -11480,6 +11488,10 @@ use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
 dir=`dirname "$file"`       # This is not portable.
 dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @end example
+
+Unfortunately, neither of the above commands work if @code{$file}'s
+directory name ends in newline, since @samp{`@dots{}`} removes all
+trailing newlines.
 
 @noindent
 This handles a few subtleties in the standard way required by
