@@ -1,5 +1,12 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_SETUP): Don't build at-check-line, that's
+	AT_CHECK's job.
+	Remove the code depending upon `at_skip_mode': it's unused.
+
+	
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/atconfig.in: Remove the `snippet' marks, there are no
 	longer used.
 	* tests/atgeneral.m4: Likewise.
