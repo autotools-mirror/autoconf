@@ -572,12 +572,14 @@ sub handle_m4 ($@)
   unlink ($tcache . $req->id);
 
   # Run m4.
+  # Be extremely cautious to reverse the includes when talking to M4:
+  # it doesn't speak the same --include as we do.
   my $command = ("$m4"
-		 . " --define m4_warnings=$m4_warnings"
+		 . join (' --include=', '', reverse @include)
+		 . " --define=m4_warnings=$m4_warnings"
 		 . ' --debug=aflq'
 		 . " --error-output=$tcache" . $req->id
 		 . join (' --trace=',   '', sort @macro)
-		 . join (' --include=', '', @include)
 		 . $files
 		 . " >$ocache" . $req->id);
   verbose "running: $command";

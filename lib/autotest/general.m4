@@ -71,9 +71,23 @@ m4_define([_m4_divert(TAIL)],         60)
 
 # AT_LINE
 # -------
-# Return the current file sans directory, a colon, and the current line.
+# Return the current file sans directory, a colon, and the current
+# line.  Be sure to return a _quoted_ filename, so if, for instance,
+# the user is lunatic enough to have a file named `dnl' (and I, for
+# one, love to be brainless and stubborn sometimes), then we return a
+# quoted name.
+#
+# Gee, we can't use simply
+#
+#  m4_patsubst(__file__, [^.*/\(.*\)], [[\1]])
+#
+# since then, since `dnl' doesn't match the pattern, it is returned
+# with once quotation level less, so you lose, dammit!  And since GNU M4
+# is one of the biggest junk in the whole universe wrt regexp, don't
+# even think about using `?' or `\?'.  Bah, `*' will do.
+# Pleeeeeeeease, Gary, provide us with dirname and ERE!
 m4_define([AT_LINE],
-[m4_patsubst(__file__, ^.*/\(.*\), \1):__line__])
+[m4_patsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
 # AT_INIT(PROGRAM)
@@ -496,12 +510,12 @@ m4_define([AT_SETUP],
 [m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
 m4_divert_text([HELP],
-               [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
+               [m4_format([[ %3d: %-15s %s]], AT_ordinal, AT_LINE, [$1])])
 m4_divert_push([TESTS])dnl
-  AT_ordinal ) [#] AT_ordinal. AT_LINE: $1
+  AT_ordinal ) @%:@ AT_ordinal. AT_LINE: $1
     at_setup_line='AT_LINE'
     $at_verbose "AT_ordinal. $srcdir/AT_LINE: testing $1..."
-    $at_quiet $at_n "m4_format([%3d: %-18s], AT_ordinal, AT_LINE)[]$at_c"
+    $at_quiet $at_n "m4_format([[%3d: %-18s]], AT_ordinal, AT_LINE)[]$at_c"
     (
       $at_traceon
 ])

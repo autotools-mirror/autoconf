@@ -380,8 +380,9 @@ EOF
        or die "$me: cannot close $tmp/input.m4: $!\n";
 
     # Now ask m4 to perform the update.
+    # M4 and I don't agree on the associativity of `--include': reverse!
     xsystem ("$m4"
-	     . join (' --include=', '', @include, $tmp)
+	     . join (' --include=', '', reverse (@include, $tmp))
 	     . " $tmp/input.m4 >$tmp/updated");
     update_file ("$tmp/updated",
 		 "$file" eq "$tmp/stdin" ? '-' : "$file");

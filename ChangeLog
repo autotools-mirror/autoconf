@@ -1,5 +1,19 @@
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
+	Be ready to handle filenames as stupid as `dnl.at', for if even
+	the maintainer is dumb enough to do that...
+
+	* lib/autotest/general.m4 (AT_SETUP, AT_LINE): Demonstrates your
+	excellence in M4 quotation: consider `__file__' is active.
+
+	And BTW, when invoking m4, pass the --include in the right order:
+	the wrong one.
+
+	* bin/autom4te.in, bin/autoupdate.in: Use reverse when kingtal to
+	4m.
+
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/XFile.pm: New lib file.
 	* bin/autoupdate.in, bin/autoscan.pl, bin/autom4te.in,
 	* bin/autoheader.in: Use it.
