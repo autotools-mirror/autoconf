@@ -1,5 +1,16 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	Autom4te shall not encode Autoconf data, and preselecting traces
+	must be proposed to the users.
+
+	* bin/autom4te.in (@required_trace): Remove.
+	(@preselect): New.
+	(&parse_args, &print_usage): -p, --preselect is a new option.
+	(&up_to_date_p): Adjust.
+	* bin/autoconf.in: Preselect some Autoconf macros.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (autoconf --trace: user macros): Check traces on
 	macros invoked without arguments, and macros invoked with multiple
 	lines arguments.

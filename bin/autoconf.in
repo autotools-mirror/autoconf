@@ -219,12 +219,21 @@ esac
 # Unless specified, the output is stdout.
 test -z "$outfile" && outfile=-
 
+# Preselected macros: for autoheader and automake.
+for i in AC_CONFIG_HEADERS AH_OUTPUT AC_DEFINE_TRACE_LITERAL \
+         AC_SUBST AC_LIBSOURCE
+do
+  preselect="$preselect--preselect $i "
+done
+
+
 # Running autom4te.
 run_autom4te="$autom4te "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`\
 "--include $autoconf_dir --include $localdir "\
 "--warning syntax,$warnings "\
+"$preselect"\
 "autoconf/autoconf.m4"`$initialization || echo f`" "\
 `test -f "$autoconf_dir/acsite.m4" && echo "$autoconf_dir/acsite.m4"`" "\
 `test -f "$localdir/aclocal.m4" && echo "$localdir/aclocal.m4"`

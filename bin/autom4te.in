@@ -227,23 +227,14 @@ use File::Basename;
 use IO::File;
 use strict;
 
-# The macros we always trace.
-my @required_trace =
-  (
-   # We need `include' to find the dependencies.
-   'include', 'm4_include',
-   # These are wanted by autoheader.
-   'AC_CONFIG_HEADERS',
-   'AH_OUTPUT',
-   'AC_DEFINE_TRACE_LITERAL',
-   # These will be traced by Automake.
-   'AC_SUBST',
-   'AC_LIBSOURCE',
-  );
-
 # The macros to trace mapped to their format, as specified by the
 # user.
 my %trace;
+
+# The macros the user will want to trace in the future.
+# We need `include'.
+# FIXME: What about `sinclude'?
+my @preselect = ('include');
 
 my $output = '-';
 my @warning;
@@ -391,7 +382,8 @@ Library directories:
   -I, --include=DIR  look in DIR.  Several invocations accumulate
 
 Tracing:
-  -t, --trace=MACRO  report the MACRO invocations
+  -t, --trace=MACRO      report the MACRO invocations
+  -p, --preselect=MACRO  prepare to trace MACRO in a future run
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
@@ -444,7 +436,8 @@ sub parse_args ()
      # instead of mapping `FOO' to undef, Getopt maps it to `1', preventing
      # us from distinguishing `-t FOO' from `-t FOO=1'.  So let's do it
      # by hand.
-     "t|trace=s" => \@trace,
+     "t|trace=s"     => \@trace,
+     "p|preselect=s" => \@preselect,
     )
       or exit 1;
 
@@ -452,7 +445,8 @@ sub parse_args ()
 Try `$me --help' for more information.\n"
     unless @ARGV;
 
-  # Convert @trace to %trace.
+  # Convert @trace to %trace, and work around the M4 builtins tracing
+  # problem.
   # The default format is `$f:$l:$n:$%'.
   foreach (@trace)
     {
@@ -461,6 +455,11 @@ Try `$me --help' for more information.\n"
       $trace{$m4_builtin_alternate_name{$1}} = $trace{$1}
 	if exists $m4_builtin_alternate_name{$1};
     }
+
+  # Work around the M4 builtins tracing problem for @PRESELECT.
+  push (@preselect,
+	map { $m4_builtin_alternate_name{$_} }
+	grep { exists $m4_builtin_alternate_name{$_} } @preselect);
 
   # We don't want to depend upon m4's --include to find the top level
   # files.  Try to get a canonical name, as it's part of the key for caching.
@@ -873,7 +872,9 @@ sub up_to_date_p ($$)
   # Files may include others.  We can use traces since we just checked
   # if they are available.
   # If $FILE is younger than one of its dependencies, it is outdated.
-  handle_traces ($req, "$tmp/dependencies",('include' => '$1'));
+  handle_traces ($req, "$tmp/dependencies",
+		 ('include'    => '$1',
+		  'm4_include' => '$1'));
   my $mtime = (stat ($file))[9];
   my $deps = new IO::File ("$tmp/dependencies");
   push @dep, map { chomp; find_file ($_) } $deps->getlines;
@@ -912,7 +913,7 @@ Request->load ("$me.cache/requests")
 # Add the new trace requests.
 my $req = Request->request ('source' => \@ARGV,
 			    'path' => \@include,
-			    'macro' => [keys %trace, @required_trace]);
+			    'macro' => [keys %trace, @preselect]);
 
 if ($verbose)
   {
