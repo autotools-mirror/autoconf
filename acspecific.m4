@@ -96,7 +96,7 @@ else
 fi
 set dummy $CC; ac_cc=[$]2
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
-[ac_cv_prog_cc_${ac_cc}_c_o=no
+[eval ac_cv_prog_cc_${ac_cc}_c_o=no
 echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
@@ -111,7 +111,7 @@ then
       if cc -c conftest.c -o conftest2.o 1>&6 2>&6 &&
         test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&6 2>&6
       then
-        ac_cv_prog_cc_${ac_cc}_c_o=yes
+        eval ac_cv_prog_cc_${ac_cc}_c_o=yes
       fi
     fi
   fi
@@ -137,9 +137,9 @@ changequote(,)dnl
 eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
 changequote([,])dnl
 if test -n "$ac_maketemp"; then
-  ac_cv_prog_make_${ac_make}_set=yes
+  eval ac_cv_prog_make_${ac_make}_set=yes
 else
-  ac_cv_prog_make_${ac_make}_set=no
+  eval ac_cv_prog_make_${ac_make}_set=no
 fi
 rm -f conftestmake])dnl
 if test $ac_cv_prog_make_${ac_make}_set = yes; then
@@ -218,7 +218,7 @@ define(AC_YYTEXT_POINTER,
 [AC_REQUIRE_CPP()dnl
 AC_REQUIRE([AC_PROG_LEX])dnl
 AC_CHECKING(for yytext declaration)
-AC_CACHE_VALUE(ac_cv_prog_lex_yytext_pointer,
+AC_CACHE_VAL(ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent. Figure out which it is, since
 # not all implementations provide the %pointer and %array declarations.
@@ -409,7 +409,7 @@ dnl To avoid problems, don't check for gcc2 built-ins.
 define(AC_MEMORY_H,
 [AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(memory.h) and HAVE_MEMORY_H])AC_CHECKING(whether string.h declares mem functions)
 AC_HEADER_EGREP(memchr, string.h, ,
-  AC_HEADER_CHECK(memory.h, AC_DEFINE(NEED_MEMORY_H)))]
+  [AC_HEADER_CHECK(memory.h, AC_DEFINE(NEED_MEMORY_H))])]
 )dnl
 dnl
 define(AC_MAJOR_HEADER,

@@ -59,8 +59,7 @@ DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README \
 	config.guess config.sub configure configure.in \
 	install.sh mkinstalldirs texinfo.tex \
 	testsuite/Makefile.in testsuite/config/*.exp \
-	testsuite/lib/*.exp \
-	testsuite/autoconf.0/*.exp \
+	testsuite/lib/*.exp testsuite/autoconf.[gs]/*.exp \
 	standards.texi make-stds.texi standards.info*
 
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
@@ -191,8 +190,9 @@ dist: $(DISTDEP)
 	distname=`sed -e '/define(AC_ACVERSION,/!d' \
 	-e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' -e q acgeneral.m4`; \
 	rm -fr $$distname; \
-	mkdir $$distname $$distname/testsuite $$distname/testsuite/config; \
-	mkdir $$distname/testsuite/lib $$distname/testsuite/autoconf.0; \
+	mkdir $$distname $$distname/testsuite $$distname/testsuite/config \
+	$$distname/testsuite/lib $$distname/testsuite/autoconf.g \
+	$$distname/testsuite/autoconf.s; \
 	for file in $(DISTFILES); do \
 	  ln $$file $$distname/$$file \
 	  || { echo copying $$file instead; cp -p $$file $$distname/$$file;}; \

@@ -124,6 +124,7 @@ verbose=
 x_includes=
 x_libraries=
 
+# Initialize some other variables.
 subdirs=
 
 ac_prev=
@@ -860,12 +861,11 @@ define(AC_DEFINE,[
 {
 dnl Uniformly use AC_DEFINE_[SED]QUOTE, so callers of AC_DEFINE_UNQUOTED
 dnl can use AC_QUOTE_* manually if they want to.
-test "$verbose" = yes && \
 ifelse($#, 2,
 [define([AC_VAL], $2)dnl
-echo "	defining" $1 to be ifelse(AC_VAL,, empty, "AC_QUOTE_SQUOTE(AC_VAL)")],
+echo 1>&5 "	defining" $1 to be ifelse(AC_VAL,, empty, "AC_QUOTE_SQUOTE(AC_VAL)")],
 [define([AC_VAL], 1)dnl
-echo "	defining $1"])
+echo 1>&5 "	defining $1"])
 dnl
 echo "[#][define]" $1 "AC_QUOTE_SQUOTE(AC_VAL)" >> confdefs.h
 dnl Define DEFS even if AC_LIST_HEADERS for use in user case statements.
@@ -1191,7 +1191,7 @@ dnl             [, ACTION-IF-CROSS-COMPILING]])
 define(AC_TEST_RUN,
 [AC_PROVIDE([$0])dnl
 AC_REQUIRE([AC_CROSS_CHECK])dnl
-if test -n "$cross_compiling"; then
+if test "$cross_compiling" = yes; then
   ifelse([$4], , AC_ERROR(can not run test program while cross compiling),
   [AC_VERBOSE(using default for cross-compiling)
 $4

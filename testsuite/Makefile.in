@@ -75,7 +75,7 @@ Makefile: Makefile.in ../config.status
 	cd ..; ./config.status
 
 clean:
-	rm -f autoconf.log autoconf.sum site.exp site.bak
+	rm -f autoconf.log autoconf.sum site.exp site.bak AC* confdummy* 
 mostlyclean: clean
 distclean: clean
 	rm -f Makefile config.status config.cache config.log
