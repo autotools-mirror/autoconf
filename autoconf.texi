@@ -98,7 +98,7 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * General Purpose Macros::	Macros that check for kinds of features.
 * Writing Macros::		How to add your own macros to Autoconf.
 * Makefiles::			Information Autoconf uses in @file{Makefile}s.
-* Running configure Scripts::	How to use the Autoconf output.
+* Invoking configure::  	How to use the Autoconf output.
 * Example::			Sample Autoconf input files.
 * Preprocessor Symbol Index::	Index of C preprocessor symbols defined.
 * Macro Index::			Index of Autoconf macros.
@@ -161,7 +161,7 @@ Makefiles
 Running @code{configure} Scripts
 
 * Overriding variables::        Workarounds for unusual systems.
-* Running config.status::       Recreating a configuration.
+* Invoking config.status::      Recreating a configuration.
 
 An Example
 
@@ -282,7 +282,7 @@ containing @code{#define} statements (@pxref{Setup});
 @item
 a shell script called @file{config.status} that, when run, will recreate
 the current configuration parameter settings
-(@pxref{Running config.status}).
+(@pxref{Invoking config.status}).
 @end itemize
 
 To create a @code{configure} script with Autoconf, you need to write an
@@ -1386,7 +1386,7 @@ Process the command-line arguments and find the source code directory.
 @var{unique-file-in-source-dir} is some file that is in the package's
 source directory; @code{configure} checks for this file's existence to
 make sure that the directory that it is told contains the source code in
-fact does (@pxref{Running configure Scripts}, for more information).
+fact does (@pxref{Invoking configure}, for more information).
 @end defmac
 
 @defmac AC_PREPARE (@var{unique-file-in-source-dir})
@@ -1395,10 +1395,10 @@ Find the source code directory and set up shell variables necessary for
 other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
 file that is in the package's source directory; @code{configure} checks
 for this file's existence to make sure that the directory that it is
-told contains the source code in fact does (@pxref{Running configure
-Scripts}, for more information).  @code{AC_PREPARE} is the last thing
-done by @code{AC_INIT}.  Use @code{AC_PREPARE} instead of @code{AC_INIT}
-if you want to do argument parsing yourself; never use both.
+told contains the source code in fact does (@pxref{Invoking configure},
+for more information).  @code{AC_PREPARE} is the last thing done by
+@code{AC_INIT}.  Use @code{AC_PREPARE} instead of @code{AC_INIT} if you
+want to do argument parsing yourself; never use both.
 @end defmac
 
 @defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
@@ -2315,7 +2315,7 @@ fi
 @end group
 @end example
 
-@node Makefiles, Running configure Scripts, Writing Macros, Top
+@node Makefiles, Invoking configure, Writing Macros, Top
 @chapter Makefiles
 
 Each subdirectory in a distribution should come with a file
@@ -2384,8 +2384,8 @@ Names of object files (ending in @file{.o}).  Set by
 @section Installation Prefixes
 
 If @code{configure} has figured out a value for the installation prefix,
-either by the user supplying one on the command line (@pxref{Running
-configure Scripts}) or with @code{AC_PREFIX}, then it substitutes that
+either by the user supplying one on the command line (@pxref{Invoking
+configure}) or with @code{AC_PREFIX}, then it substitutes that
 value in @file{Makefile}s that it creates.  Wherever a @file{Makefile.in}
 contains lines like
 
@@ -2403,7 +2403,7 @@ value in the @file{Makefile.in} is left alone.
 
 There can be separate installation prefixes for architecture-specific
 files (@code{exec_prefix}) and architecture-independent files
-(@code{prefix}).  @xref{Running configure Scripts}, for more information
+(@code{prefix}).  @xref{Invoking configure}, for more information
 on setting them.
 
 Autoconf @code{configure} scripts replace these two variables without
@@ -2486,10 +2486,10 @@ config.h.in: configure.in
 @end group
 @end example
 
-@xref{Running config.status}, for an alternate approach to
+@xref{Invoking config.status}, for an alternate approach to
 configuration-related dependencies.
 
-@node Running configure Scripts, Example, Makefiles, Top
+@node Invoking configure, Example, Makefiles, Top
 @chapter Running @code{configure} Scripts
 
 A software package that uses a @code{configure} script
@@ -2545,14 +2545,32 @@ Some packages pay attention to @samp{--with-@var{package}} options to
 @samp{x} (for the X Window System).  The README should mention any
 @samp{--with-} options that the package recognizes.
 
+@code{configure} also recognizes the following options:
+
+@table @code
+@item --help
+Print a summary of the options to @code{configure}, and exit.
+
+@itemx --quiet
+@item --silent
+Do not print messages saying which checks are being made.
+
+@item --verbose
+Print the results of the checks.
+
+@item --version
+Print the version of Autoconf used to generate the @code{configure}
+script, and exit.
+@end table
+
 @code{configure} ignores any other arguments that you give it.
 
 @menu
 * Overriding variables::        Workarounds for unusual systems.
-* Running config.status::       Recreating a configuration.
+* Invoking config.status::      Recreating a configuration.
 @end menu
 
-@node Overriding variables, Running config.status, , Running configure Scripts
+@node Overriding variables, Invoking config.status, , Invoking configure
 @section Overriding variables
 
 On systems that require unusual options for compilation or linking that
@@ -2597,7 +2615,7 @@ fixed by updating either the Autoconf macros or the @file{configure.in}
 file for that package.  @xref{Making configure Scripts}, for a
 discussion of that subject.
 
-@node Running config.status, , Overriding variables, Running configure Scripts
+@node Invoking config.status, , Overriding variables, Invoking configure
 @section Recreating a Configuration
 
 The @code{configure} script creates a file named @file{config.status}
@@ -2609,6 +2627,11 @@ You can give @file{config.status} the @samp{--recheck} option, which
 makes it re-run @code{configure} with the same arguments you used
 before.  This option is useful if you change @code{configure}, so that
 the results of some tests might be different from the previous run.
+
+@file{config.status} also accepts the options @samp{--help}, which
+prints a summary of the options to @file{config.status}, and
+@samp{--version}, which prints the version of Autoconf used to create
+the @code{configure} script that generated @file{config.status}.
 
 @file{config.status} checks several optional environment variables that
 can alter its behavior:
@@ -2659,7 +2682,7 @@ Makefile: config.status Makefile.in
 (If @file{configure.in} does not call @code{AC_CONFIG_HEADER}, there is
 no need to set @code{CONFIG_HEADERS} in the @code{make} rules.)
 
-@node Example, Preprocessor Symbol Index, Running configure Scripts, Top
+@node Example, Preprocessor Symbol Index, Invoking configure, Top
 @chapter An Example
 
 Here are sample @file{configure.in} and @file{Makefile.in} files, to
