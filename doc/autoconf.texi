@@ -3560,6 +3560,19 @@ case and instead @code{unsetenv} must be used.
 On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
 environment, rather than inserting it with an empty value.
 
+@item @code{signal} handler
+@c @fuindex signal
+@prindex @code{signal}
+Normally @code{signal} takes a handler function with a return type of
+@code{void}, but some old systems required @code{int} instead.  Any
+actual @code{int} value returned is not used, this is only a
+difference in the function prototype demanded.
+
+All systems we know of in current use take @code{void}.  Presumably
+@code{int} was to support K&R C, where of course @code{void} is not
+available.  @code{AC_TYPE_SIGNAL} (@pxref{Particular Types}) can be
+used to establish the correct type in all cases.
+
 @item @code{snprintf}
 @c @fuindex snprintf
 @prindex @code{snprintf}
