@@ -462,14 +462,18 @@ fi
 # _AS_LINENO_WORKS
 # ---------------
 # Succeed if the currently executing shell supports LINENO.
+# This macro does not expand to a single shell command, so be careful
+# when using it.  Surrounding the body of this macro with {} would
+# cause "bash -c '_ASLINENO_WORKS'" to fail (with Bash 2.05, anyway),
+# but that bug is irrelevant to our use of LINENO.
 m4_define([_AS_LINENO_WORKS],
-[{
+[
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
   as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2"
-}])
+  test "x$as_lineno_3"  = "x$as_lineno_2" dnl
+])
 
 # _AS_LINENO_PREPARE
 # ------------------
