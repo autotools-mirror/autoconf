@@ -62,19 +62,15 @@
 # Don't try to cache, since the results of this macro are needed to
 # display the checking message.  In addition, caching something used once
 # has little interest.
-# Idea borrowed from dist 3.0.
+# Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
+# failed there is also a new-line to match.
 define([_AC_PROG_ECHO],
-[if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  # Stardent Vistra SVR4 grep lacks -e, says Kaveh R. Ghazi.
-  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
-    ECHO_N= ECHO_C='
-' ECHO_T='	'
-  else
-    ECHO_N=-n ECHO_C= ECHO_T=
-  fi
-else
-  ECHO_N= ECHO_C='\c' ECHO_T=
-fi
+[case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
+  *c*,-n*) ECHO_N= ECHO_C='
+' ECHO_T='	' ;;
+  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
+  *)      ECHO_N= ECHO_C='\c' ECHO_T= ;;
+esac
 AC_SUBST(ECHO_C)dnl
 AC_SUBST(ECHO_N)dnl
 AC_SUBST(ECHO_T)dnl

@@ -1,5 +1,9 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_PROG_ECHO): Modernize.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	Stop being ridiculous :*(
 
 	* acgeneral.m4 (AC_SHELL_DIRNAME):  When using m4 the argument
