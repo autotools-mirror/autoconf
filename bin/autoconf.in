@@ -223,7 +223,7 @@ done
 # 2. $WARNINGS, $3 command line options, in that order.
 # Set them in the order expected by the M4 macros: the converse.
 _ac_warnings=
-for warning in `IFS=,; echo syntax,$WARNINGS,$warnings | tr [A-Z] [a-z]`
+for warning in `IFS=,; echo syntax,$WARNINGS,$warnings | tr 'A-Z' 'a-z'`
 do
   test -n $warning || continue
   _ac_warnings="$warning"`test -n "$_ac_warnings" && echo ",$_ac_warnings"`
