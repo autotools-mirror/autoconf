@@ -124,24 +124,20 @@ installdirs:
 
 # References to install-info have been removed until it's released.
 install: all autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
-	installdirs install-info 
-	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
-	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
-	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
-	$(INSTALL_PROGRAM) autoupdate $(bindir)/autoupdate
-	$(INSTALL_PROGRAM) ifnames $(bindir)/ifnames
-	$(INSTALL_DATA) $(srcdir)/autoconf.m4 $(acdatadir)/autoconf.m4
-	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(acdatadir)/acgeneral.m4
-	$(INSTALL_DATA) $(srcdir)/acoldnames.m4 $(acdatadir)/acoldnames.m4
-	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(acdatadir)/acspecific.m4
-	$(INSTALL_DATA) $(srcdir)/acconfig.h $(acdatadir)/acconfig.h
+	installdirs install-info
+	for i in autoconf autoheader autoreconf autoupdate ifnames; do \
+	  $(INSTALL_PROGRAM) $$i $(bindir)/$$i; \
+	done
+	for i in autoconf.m4 acgeneral.m4 acoldnames.m4 \
+	  acspecific.m4 acconfig.h; do \
+	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
+	done
 	-if test -f autoscan; then \
 	$(INSTALL_PROGRAM) autoscan $(bindir)/autoscan; \
-	$(INSTALL_DATA) $(srcdir)/acfunctions $(acdatadir)/acfunctions; \
-	$(INSTALL_DATA) $(srcdir)/acheaders $(acdatadir)/acheaders; \
-	$(INSTALL_DATA) $(srcdir)/acidentifiers $(acdatadir)/acidentifiers; \
-	$(INSTALL_DATA) $(srcdir)/acprograms $(acdatadir)/acprograms; \
-	$(INSTALL_DATA) $(srcdir)/acmakevars $(acdatadir)/acmakevars; \
+	for i in acfunctions acheaders acidentifiers acprograms \
+	  acmakevars; do \
+	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
+	done; \
 	else :; fi
 
 install-info: info installdirs

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.102
-@set VERSION 1.102
+@set EDITION 1.103
+@set VERSION 1.103
 @set UPDATED August 1994
 
 @iftex
@@ -429,7 +429,6 @@ name and the open parentheses.
 
 @display
 @group
-macros that control Autoconf operation
 @code{AC_INIT(@var{file})}
 checks for alternative programs
 checks for UNIX variants that set C preprocessor variables
@@ -1684,10 +1683,6 @@ These macros are defined in the file @file{acgeneral.m4}.
 @section Controlling Autoconf Setup
 
 The following macros control the kind of output that Autoconf produces.
-@file{configure.in} should call them before @code{AC_INIT} or
-@code{AC_INIT_PREPARE}.  Remember to put a @code{dnl} comment at the ends of
-the lines containing their calls, to avoid inserting blank lines at the
-beginning of @file{configure}.
 
 @defmac AC_CONFIG_AUX_DIR(@var{dir})
 @maindex CONFIG_AUX_DIR
@@ -1761,18 +1756,6 @@ make sure that the directory that it is told contains the source code in
 fact does (@pxref{Invoking configure}, for more information).
 @end defmac
 
-@defmac AC_INIT_PREPARE (@var{unique-file-in-source-dir})
-@maindex INIT_PREPARE
-Find the source code directory and set up shell variables necessary for
-other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
-file that is in the package's source directory; @code{configure} checks
-for this file's existence to make sure that the directory that it is
-told contains the source code in fact does (@pxref{Invoking configure},
-for more information).  @code{AC_INIT_PREPARE} is the last thing done by
-@code{AC_INIT}.  Use @code{AC_INIT_PREPARE} instead of @code{AC_INIT} if you
-want to do argument parsing yourself; never use both.
-@end defmac
-
 @defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
 @maindex OUTPUT
 Create output files (typically one or more @file{Makefile}s) and
@@ -1795,12 +1778,6 @@ AC_OUTPUT(Makefile:templates/top.mk lib/Makefile:templates/lib.mk)
 
 If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.
-@end defmac
-
-@defmac AC_PREFIX (@var{program})
-@maindex PREFIX
-This macro is like @code{AC_PREFIX_PROGRAM}, except that it does not
-find the site-wide defaults file correctly, so it is obsolete.
 @end defmac
 
 @defmac AC_PREFIX_PROGRAM (@var{program})
@@ -2301,7 +2278,8 @@ AC_DEFINE_UNQUOTED(config_machfile, "$@{machfile@}")
 Substitute the variable @var{variable} when creating the output files
 (typically one or more @file{Makefile}s).  This means replace instances
 of @samp{@@@var{variable}@@}, e.g. in @file{Makefile.in}, with the
-current value of the shell variable @var{variable}.  If this macro were
+current value of the shell variable @var{variable}.  The value of
+@var{variable} should not contain literal newlines.  If this macro were
 not called, the value of @var{variable} would not be set in the output
 files, even though @code{configure} had figured out a value for it.
 
@@ -3645,9 +3623,9 @@ for backward compatibility, the old names are considered obsolete.
 @item AC_PID_T
 @maindex PID_T
 @code{AC_TYPE_PID_T}
-@item AC_PREPARE
-@maindex PREPARE
-@code{AC_INIT_PREPARE}
+@item AC_PREFIX
+@maindex PREFIX
+@code{AC_PREFIX_PROGRAM}
 @item AC_PROGRAMS_CHECK
 @maindex PROGRAMS_CHECK
 @code{AC_CHECK_PROGS}
@@ -3916,12 +3894,13 @@ A long wish list for major features had accumulated, and the effect of
 several years of patching by various people had left some residual
 cruft.  In April 1994, while working for Cygnus Support, I began a major
 revision of Autoconf.  I added most of the features of the Cygnus
-@code{configure} that Autoconf had lacked; for example, support for
-using @file{config.sub} and options like @samp{--host}, derived from
-work that david zuhn and Ken Raeburn contributed while converting GNU
-@code{as} to use Autoconf.  Rob Savoye required the ability to run
-@code{configure} scripts in subdirectories when he made DejaGNU use
-Autoconf.
+@code{configure} that Autoconf had lacked, largely by adapting the
+relevant parts of Cygnus @code{configure} with the help of david zuhn
+and Ken Raeburn.  These features include support for using
+@file{config.sub}, @file{config.guess}, @samp{--host}, and
+@samp{--target}; making links to files; and running @code{configure}
+scripts in subdirectories.  Adding these features enabled Ken to convert
+GNU @code{as}, and Rob Savoye to convert DejaGNU, to using Autoconf.
 
 I added more features in response to other peoples' requests.  Many
 people had asked for @code{configure} scripts to share the results of

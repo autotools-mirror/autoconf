@@ -1,16 +1,6 @@
 -*- outline -*-
 
-Autoconf work:
-
 Required for 2.0:
-
-------------------------------------------------------------------------------
-
-* Try it on Emacs configure.in, and adapt that to use the new features.
-
-------------------------------------------------------------------------------
-
-* Split up AC_SUBST substitutions using a loop to accomodate old seds.
 
 ------------------------------------------------------------------------------
 
@@ -18,12 +8,30 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Fix AC_ARG_{ENABLE,WITH}, and AC_REQUIRE interrupting messages.
+* Try it on Emacs configure.in, and adapt that to use the new features.
+Add equivalents of CFLAGS and LDFLAGS for the system to set,
+and which CPP will also use?
 
 ------------------------------------------------------------------------------
 
 
 Other things:
+
+------------------------------------------------------------------------------
+
+* Fix AC_REQUIRE interrupting messages.
+
+------------------------------------------------------------------------------
+
+* Split up AC_SUBST substitutions using a loop to accomodate shells
+  with severely limited here document sizes, if it turns out to be a problem.
+  I'm not sure whether the limit is on lines or bytes; if bytes, it
+  will be less of a problem than it was with the long lines used for
+  creating a header file.
+
+------------------------------------------------------------------------------
+
+* Look at Jim Avera's code to allow [ and ] in patterns and AC_DEFINE args.
 
 ------------------------------------------------------------------------------
 

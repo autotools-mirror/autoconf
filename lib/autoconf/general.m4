@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.102)dnl
+define(AC_ACVERSION, 1.103)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -44,12 +44,14 @@ dnl
 dnl ### Controlling Autoconf operation
 dnl
 dnl
-dnl m4 diversions:
-define(AC_DIVERSION_NORMAL, 0)dnl	normal output
-define(AC_DIVERSION_SED, 1)dnl		sed substitutions for config.status
-define(AC_DIVERSION_HELP, 3)dnl		--enable/--with help strings
-define(AC_DIVERSION_ARG, 4)dnl		--enable/--with actions
-divert(AC_DIVERSION_NORMAL)dnl
+dnl m4 output diversions.  We let m4 output them all in order at the end,
+dnl except that we insert AC_DIVERSION_SED into AC_DIVERSION_NORMAL.
+dnl We don't use the default diversion (0) at all.
+define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
+define(AC_DIVERSION_INIT, 2)dnl		initialization code
+define(AC_DIVERSION_NORMAL, 3)dnl	the tests and output code
+define(AC_DIVERSION_SED, 6)dnl		variable substitutions in config.status
+divert(AC_DIVERSION_NOTICE)dnl
 dnl
 dnl Define a macro which automatically provides itself.
 dnl Use instead of define for macros to be used as functions.
@@ -77,7 +79,8 @@ AC_DEFUN(AC_INIT_NOTICE,
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-])dnl
+
+ac_help=])dnl
 dnl
 dnl AC_INIT_PARSE_ARGS()
 AC_DEFUN(AC_INIT_PARSE_ARGS,
@@ -112,9 +115,7 @@ Features and packages:
 --without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)
 --x-includes=DIR	X include files are in DIR
 --x-libraries=DIR	X library files are in DIR
-
---enable/--with options recognized:
-undivert(AC_DIVERSION_HELP)"dnl
+--enable/--with options recognized:$ac_help"
 changequote([, ])dnl
 
 # Initialize some variables set by options.
@@ -372,8 +373,11 @@ dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT,
 [AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_INIT_NOTICE
+divert(AC_DIVERSION_INIT)dnl
 AC_INIT_PARSE_ARGS
-AC_INIT_PREPARE($1)])dnl
+AC_INIT_PREPARE($1)dnl
+divert(AC_DIVERSION_NORMAL)dnl
+])dnl
 dnl
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT_PREPARE,
@@ -465,15 +469,10 @@ if test ! -r $srcdir/$ac_unique_file; then
   fi
 fi
 
-ifdef([AC_LIST_SUBDIRS], [subdirs="AC_LIST_SUBDIRS"
-AC_SUBST(subdirs)])dnl
-ifdef([AC_LIST_PREFIX_PROGRAM], [AC_PREFIX(AC_LIST_PREFIX_PROGRAM)])dnl
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
-
 AC_LANG_C
-undivert(AC_DIVERSION_ARG)dnl
 dnl Substitute for predefined variables.
 AC_SUBST(LIBS)dnl
 AC_SUBST(prefix)dnl
@@ -486,59 +485,49 @@ AC_SUBST_DEFAULT(LDFLAGS, )dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_ENABLE,
-[divert(AC_DIVERSION_HELP)dnl
-$2
-divert(AC_DIVERSION_ARG)dnl
-AC_ENABLE_INTERNAL([$1], [$3], [$4])dnl
+[divert(AC_DIVERSION_NOTICE)dnl
+ac_help="${ac_help}
+[$2]"
 divert(AC_DIVERSION_NORMAL)dnl
+[#] Check whether --enable-$1 or --disable-$1 was given.
+enableval="[$enable_]patsubst($1, -, _)"
+if test -n "$enableval"; then
+  ifelse([$3], , :, [$3])
+ifelse([$4], , , [else
+  $4
+])dnl
+fi
 ])dnl
 dnl
 AC_DEFUN(AC_ENABLE,
-[AC_OBSOLETE([$0], [; instead use AC_ARG_ENABLE before AC_INIT])dnl
-AC_ENABLE_INTERNAL([$1], [$2], [$3])dnl
-])dnl
-dnl
-dnl AC_ENABLE_INTERNAL(FEATURE, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-AC_DEFUN(AC_ENABLE_INTERNAL,
-[[#] Check whether --enable-$1 or --disable-$1 was given.
-enableval="[$enable_]patsubst($1, -, _)"
-if test -n "$enableval"; then
-  ifelse([$2], , :, [$2])
-ifelse([$3], , , [else
-  $3
-])dnl
-fi
+[AC_OBSOLETE([$0], [; instead use AC_ARG_ENABLE])dnl
+AC_ARG_ENABLE([$1], [--enable-$1], [$2], [$3])dnl
 ])dnl
 dnl
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_WITH,
-[divert(AC_DIVERSION_HELP)dnl
-$2
-divert(AC_DIVERSION_ARG)dnl
-AC_WITH_INTERNAL([$1], [$3], [$4])dnl
+[divert(AC_DIVERSION_NOTICE)dnl
+ac_help="${ac_help}
+[$2]"
 divert(AC_DIVERSION_NORMAL)dnl
-])dnl
-dnl
-AC_DEFUN(AC_WITH,
-[AC_OBSOLETE([$0], [; instead use AC_ARG_WITH before AC_INIT])dnl
-AC_WITH_INTERNAL([$1], [$2], [$3])dnl
-])dnl
-dnl
-dnl AC_WITH_INTERNAL(PACKAGE, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-AC_DEFUN(AC_WITH_INTERNAL,
-[[#] Check whether --with-$1 or --without-$1 was given.
+[#] Check whether --with-$1 or --without-$1 was given.
 withval="[$with_]patsubst($1, -, _)"
 if test -n "$withval"; then
-  ifelse([$2], , :, [$2])
-ifelse([$3], , , [else
-  $3
+  ifelse([$3], , :, [$3])
+ifelse([$4], , , [else
+  $4
 ])dnl
 fi
 ])dnl
 dnl
+AC_DEFUN(AC_WITH,
+[AC_OBSOLETE([$0], [; instead use AC_ARG_WITH])dnl
+AC_ARG_WITH([$1], [--with-$1], [$2], [$3])dnl
+])dnl
+dnl
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
 AC_DEFUN(AC_CONFIG_HEADER,
-[define(AC_LIST_HEADERS, $1)])dnl
+[define(AC_LIST_HEADER, $1)])dnl
 dnl
 dnl AC_REVISION(REVISION-INFO)
 AC_DEFUN(AC_REVISION,
@@ -578,16 +567,20 @@ dnl Not actually done until AC_OUTPUT_SUBDIRS.
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 AC_DEFUN(AC_CONFIG_SUBDIRS,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-define([AC_LIST_SUBDIRS], [$1])])dnl
+define([AC_LIST_SUBDIRS], [$1])dnl
+subdirs="AC_LIST_SUBDIRS"
+AC_SUBST(subdirs)dnl
+])dnl
 dnl
 dnl Guess the value for the `prefix' variable by looking for
 dnl the argument program along PATH and taking its parent.
 dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
 dnl set `prefix' to /usr/local/gnu.
+dnl This comes too late to find a site file based on the prefix,
+dnl and it might use a cached value for the path.
+dnl No big loss, I think, since most configures don't use this macro anyway.
 dnl AC_PREFIX_PROGRAM(PROGRAM)
 AC_DEFUN(AC_PREFIX_PROGRAM,
-[define([AC_LIST_PREFIX_PROGRAM], [$1])])dnl
-AC_DEFUN(AC_PREFIX_INTERNAL,
 [if test "x$prefix" = xNONE; then
 changequote(<<, >>)dnl
 define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
@@ -601,9 +594,6 @@ changequote([, ])dnl
 fi
 undefine([AC_VAR_NAME])dnl
 ])dnl
-AC_DEFUN(AC_PREFIX,
-[AC_OBSOLETE([$0], [; instead use AC_PREFIX_PROGRAM before AC_INIT])dnl
-AC_PREFIX_INTERNAL([$1])])dnl
 dnl
 dnl
 dnl ### Canonicalizing the system type
@@ -1150,6 +1140,8 @@ dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_TRY_LINK,
 [dnl We use return because because C++ requires a prototype for exit.
 cat > conftest.${ac_ext} <<EOF
+dnl This sometimes fails to find confdefs.h, for some reason.
+dnl [#]line __LINE__ "[$]0"
 #line __LINE__ "configure"
 #include "confdefs.h"
 [$1]
@@ -1356,7 +1348,7 @@ fi
 
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 
-ifdef([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
+ifdef([AC_LIST_HEADER], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
 # Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
@@ -1396,14 +1388,15 @@ do
 done
 
 ac_given_srcdir=$srcdir
-ac_given_INSTALL="$INSTALL"
+ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
+])dnl
 
-ifdef([AC_LIST_HEADERS],
-[trap 'rm -fr $1 AC_LIST_HEADERS conftest*; exit 1' 1 2 15],
+ifdef([AC_LIST_HEADER],
+[trap 'rm -fr $1 AC_LIST_HEADER conftest*; exit 1' 1 2 15],
 [trap 'rm -f $1; exit 1' 1 2 15])
 
 AC_OUTPUT_FILES($1)
-ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
+ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS, AC_LIST_FILES)])dnl
 $2
 exit 0
@@ -1428,8 +1421,6 @@ s%\[%\\&%g
 s%\]%\\&%g
 # Protect against Makefile macro expansion.
 s%\$%$$%g
-# Protect against being on the right side of a sed subst in config.status. 
-s/[\\&%]/\\&/g
 changequote([, ])dnl
 EOF
 DEFS=`sed -f conftest.defs confdefs.h | tr '\012' ' '`
@@ -1440,7 +1431,11 @@ dnl This is a subroutine of AC_OUTPUT.  It is called inside an unquoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_FILES(FILE...)
 AC_DEFUN(AC_OUTPUT_FILES,
-[cat > conftest.subs <<\CEOF
+[# Protect against being on the right side of a sed subst in config.status. 
+changequote(, )dnl
+sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\\\&%]/\\\\&/g; 
+ s/@@/%@/; s/@@/@%/; s/@g$/%g/' > conftest.subs <<\CEOF
+changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 $ac_vpsub
@@ -1662,7 +1657,8 @@ done
 dnl
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 AC_DEFUN(AC_OUTPUT_SUBDIRS,
-[if test -z "${norecursion}"; then
+[
+if test "${norecursion}" != yes; then
 
   # Remove --cache-file and --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
@@ -1698,7 +1694,7 @@ changequote([, ])dnl
       continue
     fi
 
-    echo configuring ${ac_config_dir}
+    echo configuring in ${ac_config_dir}
 
     case "${srcdir}" in
     .) ;;

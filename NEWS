@@ -41,7 +41,7 @@ Major changes in release 2.0:
   LDFLAGS from the environment, with default values.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
   AC_CONFIG_AUXDIR, or srcdir or srcdir/.. or srcdir/../.. by default.
-* AC_DEFINE and AC_DEFINE_UNQUOTED are more robust and smaller.
+* AC_DEFINE, AC_DEFINE_UNQUOTED, and AC_SUBST are more robust and smaller.
 * AC_DEFINE no longer prints anything, because of the new result reporting
   mechanism (AC_MSG_CHECKING and AC_MSG_RESULT).
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
