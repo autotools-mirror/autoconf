@@ -1,3 +1,11 @@
+2001-05-11  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_PROG_PREPROC_WORKS_IFELSE): No longer use the
+	`maybe' strategy: first try cpp's exit status, then its stderr.
+	(AC_PROG_CPP, AC_PROG_CXXCPP): Adjust.
+	* tests/compile.at (AC_PROG_CPP via CC): Simplify mycc.
+	Remove unrelated code.
+
 2001-05-10  Akim Demaille  <akim@epita.fr>
 
 	* tests/compile.at (AC_PROG_CPP via CC): New.

@@ -832,29 +832,32 @@ AC_DEFUN([AC_LANG_PREPROC(C)],
 # Set ac_cpp_err to a non-empty value if the preprocessor failed.
 # This macro is for all languages, not only C.
 AC_DEFUN([_AC_PROG_PREPROC_WORKS_IFELSE],
-[# We don't know yet if stderr is the criterion (vs exit status).
-ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=maybe
+[ac_preproc_ok=false
+for ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <assert.h>
+                     Syntax error]])],
+                     [],
+                     [# Broken: fails on valid input.
+continue])
 
-# Use a header file that comes with gcc, so configuring glibc
-# with a fresh cross-compiler works.
-# On the NeXT, cc -E runs the code through the compiler's parser,
-# not just through cpp. "Syntax error" is here to catch this case.
-_AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <assert.h>
-Syntax error]])],
-[# OK, works on sane cases.  Now check whether non-existent headers can
-# be detected and how.
-_AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
-[# Broken: cannot detect missing includes.
-m4_default([$2], :)],
-[# OK, detects failures.  How?
-if test "x$ac_cpp_err" = xmaybe; then
-   ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=yes
-else
-   ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=
-fi
-$1])],
-                  [# Broken: fails on valid input.
-m4_default([$2], :)])])# _AC_PROG_PREPROC_WORKS_IFELSE
+  # OK, works on sane cases.  Now check whether non-existent headers
+  # can be detected and how.
+  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
+                     [# Broken: success on invalid input.
+continue],
+                     [# Passes both tests.
+ac_preproc_ok=:
+break])
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_ext
+AS_IF([$ac_preproc_ok], [$1], [$2])])# _AC_PROG_PREPROC_WORKS_IFELSE
 
 
 # AC_PROG_CPP
@@ -878,7 +881,8 @@ if test -z "$CPP"; then
     # Double quotes because CPP needs to be expanded
     for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
     do
-      _AC_PROG_PREPROC_WORKS_IFELSE([break])
+      # break 2 since there is a loop in there.
+      _AC_PROG_PREPROC_WORKS_IFELSE([break 2])
     done
     ac_cv_prog_CPP=$CPP
   ])dnl
@@ -1085,7 +1089,8 @@ if test -z "$CXXCPP"; then
     # Double quotes because CXXCPP needs to be expanded
     for CXXCPP in "$CXX -E" "/lib/cpp"
     do
-      _AC_PROG_PREPROC_WORKS_IFELSE([break])
+      # break 2 since there is a loop in there.
+      _AC_PROG_PREPROC_WORKS_IFELSE([break 2])
     done
     ac_cv_prog_CXXCPP=$CXXCPP
   ])dnl
