@@ -132,6 +132,23 @@ define([AH_CHECK_MEMBERS],
    $3])
 ])
 
+dnl AH_CHECK_TYPES((TYPES, ...))
+dnl ----------------------------
+define([AH_CHECK_TYPES],
+[m4_foreach([AC_Type], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Type),
+               [Define if the system has the type `]AC_Type['.])
+   # Success
+   $2
+   # Failure
+   $3])
+])
+
+
+dnl AC_CHECK_TYPE(TYPE, SUBTITUTE)
+dnl ------------------------------
+define([AH_CHECK_TYPE],
+[AH_TEMPLATE([$1], [Define to `$2' if <sys/types.h> does not define.])])
 
 define([AH_FUNC_ALLOCA],
 [AH_VERBATIM([STACK_DIRECTION],
@@ -161,7 +178,8 @@ define([AH_AIX],
    We just want to avoid a redefinition error message.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
-#endif])])
+#endif[]dnl
+])])
 
 
 define([AH_F77_WRAPPERS],
@@ -239,6 +257,8 @@ AH_HOOK([AC_CHECK_FUNCS], [AH_CHECK_FUNCS])
 AH_HOOK([AC_CHECK_HEADERS], [AH_CHECK_HEADERS])
 AH_HOOK([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS])
 AH_HOOK([AC_CHECK_MEMBERS], [AH_CHECK_MEMBERS])
+AH_HOOK([AC_CHECK_TYPE], [AH_CHECK_TYPE])
+AH_HOOK([AC_CHECK_TYPES], [AH_CHECK_TYPES])
 AH_HOOK([AC_CHECK_LIB], [AH_CHECK_LIB])
 AH_HOOK([AC_PROG_LEX], [AH_PROG_LEX])
 AH_HOOK([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA])

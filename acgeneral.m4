@@ -389,6 +389,7 @@ undivert(AC_DIVERSION_NORMAL_1)dnl
 ])dnl
 ])
 
+
 dnl AC_DEFUN(NAME, [REPLACED-FUNCTION, ARGUMENT, ]EXPANSION)
 dnl --------------------------------------------------------
 dnl Define a macro which automatically provides itself.  Add machinery
@@ -2094,9 +2095,9 @@ define(AC_HASBEEN,
 
 dnl ### Generic structure checks
 
-dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER
-dnl                 [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                 [, INCLUDES ]]])
+dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER,
+dnl                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl                 [INCLUDES])
 dnl ---------------------------------------------------------
 dnl AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 dnl variables are not a valid argument.
@@ -2128,10 +2129,13 @@ AC_VAR_POPDEF([ac_Member])dnl
 ])dnl AC_CHECK_MEMBER
 
 
-dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER...
-dnl                 [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                 [, INCLUDES ]]])
-dnl ---------------------------------------------------------
+dnl AC_CHECK_MEMBER((AGGREGATE.MEMBER, ...),
+dnl                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
+dnl                 [INCLUDES])
+dnl --------------------------------------------------------
+dnl The first argument is an m4 list.  First because we want to
+dnl promote m4 list, and second because anyway there can be spaces
+dnl in some types (struct etc.).
 AC_DEFUN(AC_CHECK_MEMBERS,
 [m4_foreach([AC_Member], [$1],
   [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
@@ -2155,10 +2159,10 @@ $1="$ac_cv_c_struct_member_$1"])
 dnl ### Checking for programs
 
 
-dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR
-dnl               [, VALUE-IF-FOUND [, VALUE-IF-NOT-FOUND]
-dnl               [, PATH [, REJECT]]])
-dnl ------------------------------------------------------
+dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
+dnl               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
+dnl               [PATH], [REJECT])
+dnl -----------------------------------------------------
 AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -2721,6 +2725,7 @@ AC_SHELL_IFELSE(test AC_VAR_GET(ac_Header) = yes,
 AC_VAR_POPDEF([ac_Header])dnl
 ])dnl AC_CHECK_HEADER
 
+
 dnl AC_CHECK_HEADERS(HEADER-FILE...
 dnl                  [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 dnl -------------------------------------------------------------
@@ -2783,7 +2788,7 @@ dnl -------------------------------------------------------------
 dnl Check if SYMBOL (a variable or a function) is declared.
 AC_DEFUN([AC_CHECK_DECL],
 [AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])dnl
-AC_CACHE_CHECK([whether `$1' is declared], ac_Symbol,
+AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
 [AC_TRY_COMPILE(m4_default([$4], [#include <stdio.h>
 #ifdef HAVE_STRING_H
 # if !STDC_HEADERS && HAVE_MEMORY_H
@@ -2918,31 +2923,61 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 dnl ### Checking for typedefs
 
 
-dnl AC_CHECK_TYPE(TYPE, DEFAULT[, INCLUDES])
-dnl ----------------------------------------
-dnl FIXME: This is an extremely badly chosen name, since this
-dnl macro actually performs an AC_REPLACE_TYPE.  Some day we
-dnl have to clean this up.
-AC_DEFUN(AC_CHECK_TYPE,
+dnl AC_CHECK_TYPE_INTERNAL(TYPE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl                        [INCLUDES])
+dnl ----------------------------------------------------------------------
+dnl Check whether the type TYPE is supported by the system, maybe via the
+dnl the provided includes.  This macro implements the former task of
+dnl AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
+dnl grepping in the headers, what led to many problems, BTW, until
+dnl the egrep expression was correct and did not given false positives.
+dnl Now, we try to compile a variable declaration.  It is probably slower,
+dnl but it is *much* safer, and in addition, allows to check for types
+dnl defined by the compiler (e.g., unsigned long long), not only for
+dnl typedefs.
+dnl FIXME: This is *the* macro which ought to be named AC_CHECK_TYPE.
+AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
-[AC_EGREP_CPP(
-changequote(<<,>>)dnl
-<<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
-changequote([,]),
-m4_default([$3], [#include <stdio.h>
+[AC_TRY_COMPILE(m4_default([$4
+], [#include <stdio.h>
 #include <sys/types.h>
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #endif
-]), AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,,
-                [AC_DEFINE_UNQUOTED($1, $2,
-                                    [Define to `$2' if <sys/types.h>
-                                     does not define.])])dnl
+]),
+ [$1 foo;],
+ AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
+AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,
+                [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
+])dnl AC_CHECK_TYPE_INTERNAL
+
+
+dnl AC_CHECK_TYPES(TYPES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND], [INCLUDES])
+dnl ---------------------------------------------------------------------------
+dnl TYPES is an m4 list.
+AC_DEFUN(AC_CHECK_TYPES,
+[m4_foreach([AC_Type], [$1],
+  [AC_SPECIALIZE([AC_CHECK_TYPE_INTERNAL], AC_Type,
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type))
+$2]
+                 [$3],
+                 [$4])])])
+
+
+dnl AC_CHECK_TYPE(TYPE, DEFAULT, [INCLUDES])
+dnl ----------------------------------------
+dnl FIXME: This is an extremely badly chosen name, since this
+dnl macro actually performs an AC_REPLACE_TYPE.  Some day we
+dnl have to clean this up.  The macro AC_TYPE_PTRDIFF_T shows the
+dnl need for a checking only macro.
+AC_DEFUN(AC_CHECK_TYPE,
+[AC_CHECK_TYPE_INTERNAL([$1],,
+                        [AC_DEFINE_UNQUOTED($1, $2)],
+                        [$3])dnl
 ])dnl AC_CHECK_TYPE
 
 

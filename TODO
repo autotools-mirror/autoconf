@@ -13,6 +13,12 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** automake
+The section for old macros is not completely up to date.  For
+instance, there is still AM_PROG_LIBTOOL.  Anyawy, since autoupdate
+takes care of them, it is no longer the role of Automake to handle
+this.  Most should be removed.
+
 ** tests/
 Write the sketch of a new series of tests, written in Autotest,
 cf. recode 3.5 by François Pinard.  It has to be shell scripts so that

@@ -12,6 +12,11 @@
 @finalout
 @end iftex
 
+@c A simple macro for optional variables.
+@macro ovar{varname}
+@r{[}@var{\varname\}@r{]}
+@end macro
+
 @dircategory GNU admin
 @direntry
 * Autoconf: (autoconf).         Create source code configuration scripts
@@ -2810,21 +2815,50 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @node Generic Typedefs,  , Particular Typedefs, Typedefs
 @subsection Generic Typedef Checks
 
-This macro is used to check for typedefs not covered by the particular
-test macros.  This macro does not fit well with the rest of Autoconf,
-and its design will probably change in the future.
+These macros are used to check for typedefs not covered by the
+particular test macros.
 
-One of its main flaws is that missing types are not typedef'd, they are
-defined, which can lead to incompatible code in the case of pointer types.
+@defmac AC_CHECK_TYPES ((@var{type}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@maindex CHECK_TYPES
+For each given @var{type} that is defined by the @var{includes} (by
+default, @file{sys/types.h}, @file{stdlib.h}, and @file{stddef.h}),
+define @code{HAVE_@var{type}} (in all capitals).  If
+@var{action-if-found} is given, it is additional shell code to execute
+when one of the header files is found.  You can give it a value of
+@samp{break} to break out of the loop on the first match.  If
+@var{action-if-not-found} is given, it is executed when one of the
+header files is not found.
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default} @r{[}, @var{includes}@r{]})
+This macro uses m4 lists:
+@example
+AC_CHECK_TYPES((ptrdiff_t))
+AC_CHECK_TYPES((unsigned long long, uintmax_t))
+@end example
+
+@end defmac
+
+
+The following macro does not fit well with the rest of Autoconf, and its
+design will probably change in the future.  One of its main flaws is
+that missing types are not typedef'd, they are defined, which can lead
+to incompatible code in the case of pointer types.
+
+@defmac AC_CHECK_TYPE (@var{type}, @var{default}, @ovar{includes})
 @maindex CHECK_TYPE
 If the type @var{type} is not defined in @file{sys/types.h}, or
-@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the
-C (or C++) builtin type @var{default}; e.g., @samp{short} or
-@samp{unsigned}.  The default header files to search can be replaced
-by supplying the optional argument @var{includes}.
+@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the C
+(or C++) builtin type @var{default}; e.g., @samp{short} or
+@samp{unsigned}.  The default header files to search can be replaced by
+supplying the optional argument @var{includes}.
+
+This macro has a broken design.  First, although it is a member of the
+@code{CHECK} clan, singular subfamily, it does more than just checking.
+Second, the replacement it performs is done via @samp{#define @var{type}
+@var{default}}, although a @samp{typedef} is expected.  Therefore, in
+the future, this macro shall be removed or replaced.  User are adviced
+to use @code{AC_CHECK_TYPES} preferably.
 @end defmac
+
 
 
 @node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Typedefs, Existing Tests
@@ -2937,7 +2971,7 @@ size_t my_strlen PARAMS ((const char *));
 
 @c FIXME: What the heck is this macro doing here?  Move it out of
 @c the way, in its proper section!!!
-@defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{[}, @var{includes}@r{]]})
+@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{cross-size}, @ovar{includes})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If

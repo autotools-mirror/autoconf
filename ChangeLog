@@ -1,5 +1,28 @@
 1999-11-01  Akim Demaille  <akim@epita.fr>
 
+	Fix a bit of the brokenness of AC_CHECK_TYPE.
+
+	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): New macro, inspired from
+ 	the former AC_CHECK_TYPE.  This macro is exactly the one that
+ 	ought to be named AC_CHECK_TYPE: it just checks, and executes user
+ 	actions.  In the future, this macro ought to be renamed
+ 	AC_CHECK_TYPE.
+	There is a big difference with the former AC_CHECK_TYPE: instead
+ 	of grepping in the headers, it tries to compile a variable
+ 	declaration.  This is both safer, slower, and better, since now we
+ 	can check for compiler types (e.g., unsigned long long).
+	(AC_CHECK_TYPES): The looping and AC_DEFINEing version of the
+ 	previous macro.  Uses m4 loops.
+	(AC_CHECK_TYPE): Reimplemented on top of AC_CHECK_TYPE_INTERNAL.
+  	* autoheader.m4 (AH_CHECK_TYPE, AH_CHECK_TYPES): New macros,
+ 	hooked.
+	* autoconf.texi (@ovar): New macro, for optional variables.
+	(Generic Typedefs): Document AC_CHECK_TYPES.
+	* autoheader.texi: (AH_CHECK_TYPE, AH_CHECK_TYPES): New macros.
+	(Epilogue): Hooks them.
+
+1999-11-01  Akim Demaille  <akim@epita.fr>
+
 	Update autoupdate.
 
 	* acoldnames.m4:  Sort the two sections.
