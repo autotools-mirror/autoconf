@@ -232,7 +232,6 @@ AU_DEFUN([ac_cv_prog_g77],
 # `fort77' and `fc' are wrappers around `f2c', `fort77' being better.
 # It is believed that under HP-UX `fort77' is the name of the native
 # compiler.  On some Cray systems, fort77 is a native compiler.
-# cf77 and cft77 are (older) Cray F77 compilers.
 # frt is the Fujitsu F77 compiler.
 # pgf77 and pgf90 are the Portland Group F77 and F90 compilers.
 # xlf/xlf90/xlf95 are IBM (AIX) F77/F90/F95 compilers.
@@ -248,7 +247,7 @@ AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf cf77 cft77 frt pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95 fc])])
+                  [g77 f77 xlf frt pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95 fc])])
 
 # Provide some information about the compiler.
 echo "$as_me:__oline__:" \
