@@ -1,10 +1,10 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
-AC_INIT(GNU Autoconf, 2.52a, bug-autoconf@gnu.org)
+AC_INIT(GNU Autoconf, 2.52b, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(autoconf, 2.52a)
+AM_INIT_AUTOMAKE(autoconf, 2.52b)
 
 # Initialize the test suite.
 AT_CONFIG(../bin)

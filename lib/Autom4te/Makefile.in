@@ -66,7 +66,7 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-perllibdir = $(pkgdatadir)/Autoconf
+perllibdir = $(pkgdatadir)/Autom4te
 perllib_DATA = General.pm Struct.pm
 EXTRA_DIST = $(perllib_DATA)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs

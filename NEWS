@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.52a                       -*- outline -*-
+* Major changes in Autoconf 2.52b                       -*- outline -*-
 ** Requirements
   Perl 5.005 is now required to run Autoconf.
 ** autom4te
