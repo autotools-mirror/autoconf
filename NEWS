@@ -79,6 +79,7 @@ Major changes in release 2.0:
 ** Documentation:
 * Autoconf manual is reorganized to make information easier to find
   and has several new indexes.
+* INSTALL is reorganized and clearer and is now made from Texinfo source.
 
 Major changes in release 1.11:
 
