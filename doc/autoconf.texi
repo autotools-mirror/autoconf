@@ -3121,45 +3121,6 @@ it, then you can use one of the general header file check macros.
 These macros check for particular system header files---whether they
 exist, and in some cases whether they declare certain symbols.
 
-@defmac AC_HEADER_STAT
-@maindex HEADER_STAT
-@maindex STAT_MACROS_BROKEN
-If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
-@file{sys/stat.h} do not work properly (returning false positives),
-define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
-Amdahl UTS and Motorola System V/88.
-@end defmac
-
-@defmac AC_HEADER_TIME
-@maindex HEADER_TIME
-@cvindex TIME_WITH_SYS_TIME
-If a program may include both @file{time.h} and @file{sys/time.h},
-define @code{TIME_WITH_SYS_TIME}.  On some older systems,
-@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
-protected against multiple inclusion, so programs should not explicitly
-include both files.  This macro is useful in programs that use, for
-example, @code{struct timeval} or @code{struct timezone} as well as
-@code{struct tm}.  It is best used in conjunction with
-@code{HAVE_SYS_TIME_H}, which can be checked for using
-@code{AC_CHECK_HEADERS(sys/time.h)}.
-
-@example
-@group
-#if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
-#else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
-#endif
-@end group
-@end example
-@end defmac
-
-
 @defmac AC_HEADER_DIRENT
 @maindex HEADER_DIRENT
 @cvindex HAVE_DIRENT_H
@@ -3169,17 +3130,12 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 Check for the following header files, and for the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
-@c The printed table looks too spaced out with blank lines between the entries.
-@table @file
-@item dirent.h
-@code{HAVE_DIRENT_H}
-@item sys/ndir.h
-@code{HAVE_SYS_NDIR_H}
-@item sys/dir.h
-@code{HAVE_SYS_DIR_H}
-@item ndir.h
-@code{HAVE_NDIR_H}
-@end table
+@multitable {@file{sys/ndir.h}} {@code{HAVE_SYS_NDIR_H}}
+@item @file{dirent.h}   @tab @code{HAVE_DIRENT_H}
+@item @file{sys/ndir.h} @tab @code{HAVE_SYS_NDIR_H}
+@item @file{sys/dir.h}  @tab @code{HAVE_SYS_DIR_H}
+@item @file{ndir.h}     @tab @code{HAVE_NDIR_H}
+@end multitable
 
 The directory library declarations in the source code should look
 something like the following:
@@ -3222,6 +3178,47 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{MAJOR_IN_MKDEV}; otherwise, if @file{sys/sysmacros.h} does, define
 @code{MAJOR_IN_SYSMACROS}.
 @end defmac
+
+
+@defmac AC_HEADER_STAT
+@maindex HEADER_STAT
+@maindex STAT_MACROS_BROKEN
+If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
+@file{sys/stat.h} do not work properly (returning false positives),
+define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
+Amdahl UTS and Motorola System V/88.
+@end defmac
+
+@defmac AC_HEADER_TIME
+@maindex HEADER_TIME
+@cvindex TIME_WITH_SYS_TIME
+If a program may include both @file{time.h} and @file{sys/time.h},
+define @code{TIME_WITH_SYS_TIME}.  On some older systems,
+@file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
+protected against multiple inclusion, so programs should not explicitly
+include both files.  This macro is useful in programs that use, for
+example, @code{struct timeval} or @code{struct timezone} as well as
+@code{struct tm}.  It is best used in conjunction with
+@code{HAVE_SYS_TIME_H}, which can be checked for using
+@code{AC_CHECK_HEADERS(sys/time.h)}.
+
+@example
+@group
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
+@end group
+@end example
+@end defmac
+
+
 
 @defmac AC_HEADER_STDC
 @maindex HEADER_STDC

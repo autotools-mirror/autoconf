@@ -1,5 +1,10 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Particular Headers): Some more sorting.
+	Use `@multitable'.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (_AC_CHECK_HEADER_DIRENT): Use more modern
 	Autoconf idioms.
 	(_AC_CHECK_HEADERS_DIRENT): Removed, instead...
