@@ -2,7 +2,6 @@
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Specify CONFIG_FILES
 	etc. in the log.
-
 	
 2001-07-03  Akim Demaille  <akim@epita.fr>
 
@@ -31,7 +30,7 @@
 	(&wanted): Rename as...
 	(&find_file): this.
 
-2001-06-29  Pavel Roskin  <proski@gnu.org>
+2001-07-01  Pavel Roskin  <proski@gnu.org>
 
 	* aclang.m4 (AC_F77_DUMMY_MAIN): Remove conftest* after using
 	break in the argument to AC_TRY_LINK_FUNC.
