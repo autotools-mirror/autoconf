@@ -1,5 +1,17 @@
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
+	Test suite: instead of using a full list of the AC macros and an
+	AT macro with selects which are the AC macros to test, just
+	produce the list of the AC macros we want to test.
+
+	* tests/atspecific.m4 (TEST_MACRO): Removed.
+	* tests/Makefile.am (EGREP_EXCLUDE): New variable, performing the
+	selection TEST_MACRO used to do.
+	(macros.m4): Use it.  Use AT_TEST_MACRO, not TEST_MACRO.  Check
+	also AU macros.
+
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Tune the use of quotes, add missing
 	@noindents, remove dead FIXME:s, promote #if ! over #ifndef,
 	simplify duplicated text.

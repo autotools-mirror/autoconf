@@ -131,47 +131,6 @@ AT_CLEANUP(configure config.status config.log config.cache config.hin config.h e
 
 
 
-# TEST_MACRO(NAME-OF-THE-MACRO)
-# -----------------------------
-# Run AT_TEST_MACRO(NAME-OF-THE-MACRO) on selected macros only.
-# There are macros which require arguments.  We cannot run them without.
-# Below are some macros directly used with other macros.  It is
-# therefore useless to test them several times.
-# - AC_CHECK decls, files, funcs, members, types, headers
-#   Already performed in the semantical tests.
-# - AC_CONFIG
-#   They fail when the source does not exist.
-# - AC_INIT
-#   AC_INIT includes all the AC_INIT macros.  Note that there is an
-#   infinite m4 recursion if AC_INIT it used twice.
-# - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
-#   are used in AC_PROG_CC etc.
-# - AC_PATH_PROGS?
-#   They produce `= val' because $1 is empty.
-# - AC_TRY
-#   Used in many places.
-# - _AC_
-#   Internal macros are used elsewhere.
-AT_DEFINE(TEST_MACRO,
-[m4_match([$1],
- 	  [^AC_ARG_VAR$],,
- 	  [^AC_CHECK_\(DECL\|FILE\|FUNC\|HEADER\|MEMBER\|SIZEOF\|TYPE\)S?$],,
- 	  [^AC_CHECK_PROGS$],,
- 	  [^AC_CONFIG],,
- 	  [^AC_INIT],,
- 	  [^AC_LINKER_OPTION$],,
- 	  [^AC_LINK_FILES$],,
- 	  [^AC_LIST_MEMBER_OF$],,
- 	  [^AC_PATH_\(TOOL\|PROG\)S?$],,
- 	  [^AC_PROG_\(CC\|CXX\|F77\)_\(GNU\|WORKS\)$],,
- 	  [^AC_REPLACE_FUNCS$],,
- 	  [^AC_SEARCH_LIBS$],,
- 	  [^AC_TRY],,
- 	  [^_AC_],,
-
- 	  [AT_TEST_MACRO([$1])])])
-
-
 # AT_CHECK_DEFINES(CONTENT)
 # -------------------------
 # Verify that config.h, once stripped is CONTENT.

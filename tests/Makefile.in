@@ -73,6 +73,31 @@ EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
 
 PERL = perl
 
+# EGREP_EXCLUDE
+# -------------
+# The test `syntax.m4' tries to run all the macros of Autoconf to check
+# for syntax problems, etc.  Not all the macros can be run without argument,
+# and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
+# the macros we don't want to test in syntax.m4.
+#
+# - AC_CHECK decls, files, funcs, members, types, headers
+#   Already performed in the semantical tests.
+# - AC_CONFIG
+#   They fail when the source does not exist.
+# - AC_INIT
+#   AC_INIT includes all the AC_INIT macros.  Note that there is an
+#   infinite m4 recursion if AC_INIT it used twice.
+# - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
+#   are used in AC_PROG_CC etc.
+# - AC_PATH_PROGS?
+#   They produce `= val' because $1 is empty.
+# - AC_TRY
+#   Used in many places.
+# - _AC_
+#   Internal macros are used elsewhere.
+EGREP_EXCLUDE = egrep -v   -e '^AC_ARG_VAR$$'   -e '^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|SIZEOF|TYPE)S?$$'   -e '^AC_CHECK_PROGS$$'   -e '^AC_CONFIG'   -e '^AC_INIT'   -e '^AC_LINKER_OPTION$$'   -e '^AC_LINK_FILES$$'   -e '^AC_LIST_MEMBER_OF$$'   -e '^AC_PATH_(TOOL|PROG)S?$$'   -e '^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$'   -e '^AC_REPLACE_FUNCS$$'   -e '^AC_SEARCH_LIBS$$'   -e '^AC_TRY'   -e '_AC_'
+
+
 CLEANFILES = debug-*.sh macro configure configure.in config.status config.cache config.log config.h.in config.h
 
 DISTCLEANFILES = atconfig testsuite
@@ -201,8 +226,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 
 macros.m4: $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
-	  sed -ne 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
-	  sort >defuns
+	  sed -ne 's/^A[CU]_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
+	  sort | uniq | $(EGREP_EXCLUDE) >defuns
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
 # them.
@@ -211,7 +236,7 @@ macros.m4: $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 $(srcdir)/Make
 	  sort | uniq >requires
 	for macro in `cat defuns`; do \
 	  if fgrep "$$macro" requires >/dev/null 2>&1; then :; else \
-	    echo "TEST_MACRO([$$macro])" >>$@-t; \
+	    echo "AT_TEST_MACRO([$$macro])" >>$@-t; \
 	  fi; \
 	done
 	rm defuns requires
