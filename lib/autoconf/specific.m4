@@ -1210,7 +1210,8 @@ AC_DEFUN(AC_C_CROSS,
 [# If we cannot run a trivial program, we must be cross compiling.
 AC_MSG_CHECKING(whether cross-compiling)
 AC_CACHE_VAL(ac_cv_c_cross,
-[AC_TRY_RUN([main(){exit(0);}], ac_cv_c_cross=no, ac_cv_c_cross=yes)])dnl
+[AC_TRY_RUN([main(){exit(0);}],
+  ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_cross=yes)])dnl
 cross_compiling=$ac_cv_c_cross
 AC_MSG_RESULT($ac_cv_c_cross)
 ])
