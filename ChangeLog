@@ -1,5 +1,22 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sugar.m4 (_AS_QUOTE_IFELSE, _AS_BOX_INDIR): Use
+	m4_match.
+	(m4_re_escape): New.
+	* lib/autoconf/status.m4 (AC_CONFIG_IF_MEMBER): Use it.
+	* lib/autoconf/general.m4 (AC_CACHE_SAVE): Use m4_match.
+	* lib/autoconf/status.m4 (AC_CONFIG_IF_MEMBER, AC_CONFIG_LINKS):
+	Likewise.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_REPLACEMENT_TYPE_P)
+	(_AC_CHECK_TYPE_MAYBE_TYPE_P, AC_CHECK_MEMBER): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Rename AT_TESTS_ALL as
+	AT_tests_all for consistency.
+	Set at_victims.
+	(AT_VICTIMS): Similar to AT_KEYWORDS.
+	(_AT_CLEANUP_FILE_IF): Use m4_match and m4_re_escape.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Fix stupid bugs.
 
 	

@@ -175,9 +175,8 @@ esac
 # matching.  The big problem is then that the active characters should
 # be quoted.  Currently `+*.' are quoted.
 m4_define([AC_CONFIG_IF_MEMBER],
-[m4_if(m4_regexp($2, [\(^\| \)]m4_patsubst([$1],
-                                           [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
-       -1, [$4], [$3])])
+[m4_match($2, [\(^\| \)]m4_re_escape([$1])[\(:\| \|$\)]),
+          [$3], [$4])])
 
 
 # AC_FILE_DEPENDENCY_TRACE(DEST, SOURCE1, [SOURCE2...])
@@ -661,8 +660,7 @@ AC_DEFUN([AC_CONFIG_LINKS],
 [m4_divert_push([KILL])
 _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
-m4_if(m4_regexp([$1], [^\.:\| \.:]), -1,,
-      [AC_FATAL([$0: invalid destination: `.'])])
+m4_match([$1], [^\.:\| \.:], [m4_fatal([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
 dnl Register the commands
 m4_ifval([$2], [AC_FOREACH([AC_File], [$1],

@@ -237,11 +237,10 @@ m4_define([AS_ESCAPE],
 # Otherwise it's modern.
 # We use two quotes in the pattern to keep highlighting tools at peace.
 m4_define([_AS_QUOTE_IFELSE],
-[m4_if(m4_regexp([$1], [\\[\\$]]),
-       [-1], [m4_if(m4_regexp([$1], [\\[`""]]),
-                    [-1], [$2],
-                    [$3])],
-       [$2])])
+[m4_match([$1],
+          [\\[\\$]], [$2],
+          [\\[`""]], [$3],
+          [$2])])
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
@@ -581,9 +580,8 @@ _ASBOX])
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
 m4_define([AS_LITERAL_IF],
-[m4_if(m4_regexp([$1], [[`$]]),
-       -1, [$2],
-       [$3])])
+[m4_match([$1], [[`$]],
+          [$3], [$2])])
 
 
 # AS_TMPDIR(PREFIX)
@@ -760,7 +758,7 @@ m4_define([AS_VAR_SET],
 # else into the appropriate `eval' sequence.
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
-               [$[]$1],
+               [$$1],
                [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`])])
 
 

@@ -594,8 +594,10 @@ fi
 exit 0
 m4_divert_pop([TAIL])dnl
 m4_wrap([m4_divert_text([DEFAULT],
-                        [# List of the tests.
-at_tests_all="AT_TESTS_ALL "
+                        [# List of the tested programs.
+at_victims="AT_victims"
+# List of the tests.
+at_tests_all="AT_tests_all "
 # Number of the last test.
 at_last_test=AT_ordinal
 # Description of all the tests.
@@ -612,11 +614,7 @@ at_data_files="AT_data_files "])])dnl
 # must correspond to the version of the package..  The PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_VICTIMS],
-[m4_divert_text([DEFAULT],
-[# List of the tested programs.
-at_victims="$1"
-])
-])# AT_VICTIMS
+[m4_append([AT_victims], [$1], [ ])])
 
 
 # AT_SETUP(DESCRIPTION)
@@ -628,7 +626,7 @@ m4_define([AT_SETUP],
 m4_define([AT_line], AT_LINE)
 m4_define([AT_description], [$1])
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
-m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
+m4_append([AT_tests_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
     at_setup_line='m4_defn([AT_line])'
@@ -653,9 +651,8 @@ m4_define([AT_KEYWORDS],
 # We try to build a regular expression matching `[', `]', `*', and
 # `.', i.e., the regexp active characters.
 m4_define([_AT_CLEANUP_FILE_IF],
-[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [[][*.]], [\\\&])),
-       -1,
-       [$3], [$2])])
+[m4_match(AT_data_files, m4_re_escape([ $1 ]),
+          [$2], [$3])])
 
 
 # _AT_CLEANUP_FILE(FILE)
@@ -698,7 +695,7 @@ m4_divert_pop([TESTS])dnl Back to KILL.
 # Output TEXT without any shell expansion.
 m4_define([AT_BANNER],
 [m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
-m4_append([AT_TESTS_ALL], [ banner-]m4_defn([AT_banner_ordinal]))
+m4_append([AT_tests_all], [ banner-]m4_defn([AT_banner_ordinal]))
 m4_divert_text([TESTS],
 [
   banner-AT_banner_ordinal ) @%:@ Banner AT_banner_ordinal. AT_LINE

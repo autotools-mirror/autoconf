@@ -1308,6 +1308,7 @@ m4_define([m4_provide_ifelse],
 ## 9. Text processing.  ##
 ## -------------------- ##
 
+
 # m4_cr_letters
 # m4_cr_LETTERS
 # m4_cr_Letters
@@ -1318,6 +1319,7 @@ m4_define([m4_cr_Letters],
 m4_defn([m4_cr_letters])dnl
 m4_defn([m4_cr_LETTERS])dnl
 )
+
 
 # m4_cr_digits
 # ------------
@@ -1334,6 +1336,14 @@ m4_define([m4_cr_symbols2],
 m4_defn([m4_cr_symbols1])dnl
 m4_defn([m4_cr_digits])dnl
 )
+
+
+# m4_re_escape(STRING)
+# --------------------
+# Escape BRE active characters in STRING.
+m4_define([m4_re_escape],
+[m4_patsubst([$1],
+             [[][+*.]], [\\\&])])
 
 
 # m4_re_string
@@ -1353,19 +1363,15 @@ m4_dquote(m4_defn([m4_cr_symbols1]))dnl
 m4_defn([m4_re_string])dnl
 )
 
+
 # m4_tolower(STRING)
 # m4_toupper(STRING)
 # ------------------
 # These macros lowercase and uppercase strings.
 m4_define([m4_tolower],
-[m4_translit([$1],
-             [ABCDEFGHIJKLMNOPQRSTUVWXYZ],
-             [abcdefghijklmnopqrstuvwxyz])])
-
+[m4_translit([$1], m4_defn([m4_cr_LETTERS]), m4_defn([m4_cr_letters]))])
 m4_define([m4_toupper],
-[m4_translit([$1],
-             [abcdefghijklmnopqrstuvwxyz],
-             [ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
+[m4_translit([$1], m4_defn([m4_cr_letters]), m4_defn([m4_cr_LETTERS]))])
 
 
 # m4_split(STRING, [REGEXP])

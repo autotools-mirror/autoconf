@@ -193,9 +193,9 @@ m4_define([_AC_CHECK_TYPE_OLD],
 # Because many people have used `off_t' and `size_t' too, they are added
 # for better common-useward backward compatibility.
 m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
-[m4_if(m4_regexp([$1],
-                 [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|[_a-zA-Z][_a-zA-Z0-9]*_t\)[][_a-zA-Z0-9() *]*$]),
-       0, 1, 0)dnl
+[m4_match([$1],
+          [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|[_a-zA-Z][_a-zA-Z0-9]*_t\)[][_a-zA-Z0-9() *]*$],
+          1, 0)dnl
 ])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
 
 
@@ -203,8 +203,8 @@ m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # -----------------------------------
 # Return `1' if STRING looks like a C/C++ type.
 m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
-[m4_if(m4_regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
-       0, 1, 0)dnl
+[m4_match([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$],
+          1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
 
@@ -417,8 +417,8 @@ test $ac_cv_sizeof_long_int = 8 &&
 AC_DEFUN([AC_CHECK_MEMBER],
 [AS_LITERAL_IF([$1], [],
                [AC_FATAL([$0: requires literal arguments])])dnl
-m4_if(m4_regexp([$1], [\.]), -1,
-      [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
+m4_match([$1], [\.], ,
+         [m4_fatal([$0: Did not see any dot in `$1'])])dnl
 AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
