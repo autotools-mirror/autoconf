@@ -373,7 +373,7 @@ dnl | echo (2,3)
 dnl
 dnl which is not what is expected.
 dnl
-dnl Once you understood this, you turn yourself into a quopting wizard,
+dnl Once you understood this, you turn yourself into a quoting wizard,
 dnl and come up with the following solution:
 dnl
 dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
@@ -745,8 +745,16 @@ changequote([, ])dnl
     # This message is too long to be a string in the A/UX 3.1 sh.
     cat << EOF
 changequote(, )dnl
-Usage: configure [options] [host]
-Options: [defaults in brackets after descriptions]
+`configure' configures software source code packages to adapt to many
+kinds of systems.
+
+Usage: configure [OPTION]... [VAR=VALUE]... [HOST]
+
+To safely assign special values to environment variables (e.g., CC,
+CFLAGS...), give to `configure' the definition as VAR=VALUE.
+
+Defaults for the options are specified in brackets.
+
 Configuration:
   --cache-file=FILE       cache test results in FILE
   [--env-]VAR=VALUE       set environment variable VAR to VALUE
@@ -754,6 +762,7 @@ Configuration:
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
   --version               print the version of autoconf that created configure
+
 Directory and file names:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
@@ -774,16 +783,20 @@ Directory and file names:
   --infodir=DIR           info documentation in DIR [PREFIX/info]
   --mandir=DIR            man documentation in DIR [PREFIX/man]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
+
+Program names:
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
   --program-transform-name=PROGRAM
                           run sed PROGRAM on installed program names
+
 EOF
     cat << EOF
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
   --target=TARGET         configure for TARGET [TARGET=HOST]
+
 Features and packages:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
@@ -794,7 +807,8 @@ Features and packages:
 changequote([, ])dnl
 EOF
     if test -n "$ac_help"; then
-      echo "--enable and --with options recognized:$ac_help"
+      echo "
+--enable and --with options recognized:$ac_help"
     fi
     exit 0 ;;
 
@@ -995,7 +1009,7 @@ changequote([, ])dnl
   -*) AC_MSG_ERROR([$ac_option: invalid option; use --help to show usage])
     ;;
 
-  *=*) 
+  *=*)
     ac_envvar=`echo $ac_option|sed -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
@@ -1241,6 +1255,7 @@ dnl ### Transforming program names.
 
 
 dnl AC_ARG_PROGRAM()
+dnl ----------------
 dnl FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
 AC_DEFUN(AC_ARG_PROGRAM,
 [if test "$program_transform_name" = s,x,x,; then
@@ -1606,7 +1621,7 @@ define(AC_SUBST,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
-s%@$1@%[$]$1%g
+s%@$1@%[$]$1%;t t
 AC_DIVERT_POP()dnl
 ])])
 
@@ -1616,7 +1631,7 @@ define(AC_SUBST_FILE,
 [define([AC_SUBST_$1], )dnl
 AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
 /@$1@/r [$]$1
-s%@$1@%%g
+s%@$1@%%;t t
 AC_DIVERT_POP()dnl
 ])])
 
@@ -2442,7 +2457,7 @@ choke me
 f = $1;
 #endif
 ], AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))])
-dnl The riduculous following `:' are coming from the fact that we
+dnl The ridiculous following `:' are coming from the fact that we
 dnl need to have a body for these tests, otherwise some shells will
 dnl die.  FIXME: We should write a macro specifically to handle this kind
 dnl of switches, since they are very common in Autoconf.
@@ -2537,10 +2552,11 @@ AC_DEFUN(AC_LINK_FILES,
 define([AC_LIST_FILES], ifdef([AC_LIST_FILES], [AC_LIST_FILES ],)[$1])dnl
 define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2])])
 
+dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
+dnl -----------------------------------------
 dnl Add additional commands for AC_OUTPUT to put into config.status.
 dnl Use diversions instead of macros so we can be robust in the
 dnl presence of commas in $1 and/or $2.
-dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
 AC_DEFUN(AC_OUTPUT_COMMANDS,
 [AC_DIVERT_PUSH(AC_DIVERSION_CMDS)dnl
 [$1]
@@ -2562,6 +2578,8 @@ dnl -------------------------------------------------
 dnl The big finish.
 dnl Produce config.status, config.h, and links; and configure subdirs.
 dnl The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADER.
+dnl Pay special attention not to have too long here docs: some old
+dnl shells die.  Unfortunately the limit is not known precisely...
 define(AC_OUTPUT,
 [trap '' 1 2 15
 AC_CACHE_SAVE
@@ -2646,9 +2664,15 @@ done
 ac_given_srcdir=$srcdir
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
-# Allow concurrent executions
-conftest=cft\$\$
+dnl We use a different name than CONFTEST just to help the maintainers
+dnl to make the difference between `conftest' which is the root of the
+dnl files used by configure, and `confstat' which is the root of the
+dnl files of config.status.
+# Allow concurrent executions.
+confstat=cft\$\$
+EOF
 
+cat >> $CONFIG_STATUS <<EOF
 dnl Remove all of CONFIG_FILES and CONFIG_HEADERS, and trap to remove
 dnl the temp files.  There is no need to trap for the config files
 dnl since they are built from `mv tmp-file config-file', hence their
@@ -2657,12 +2681,14 @@ dnl update is atomic.
 ifdef([AC_LIST_HEADER], [: \${CONFIG_HEADERS=AC_LIST_HEADER}
 ])dnl
 rm -fr \`echo "\$CONFIG_FILES ifdef([AC_LIST_HEADER], \$CONFIG_HEADERS)" | sed "s/:@BKL@^ @BKR@*//g"\`
-trap 'rm -fr \$conftest*; exit 1' 1 2 15
-
+trap 'rm -fr \$confstat*; exit 1' 1 2 15
+EOF
+dnl The following three sections are in charge of their own here
+dnl documenting into $CONFIG_STATUS.
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
-EOF
+
 cat >> $CONFIG_STATUS <<EOF
 undivert(AC_DIVERSION_ICMDS)dnl
 $3
@@ -2677,12 +2703,14 @@ rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
-])dnl
+])dnl AC_OUTPUT
 
+
+dnl AC_OUTPUT_MAKE_DEFS()
+dnl ---------------------
 dnl Set the DEFS variable to the -D options determined earlier.
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called inside configure, outside of config.status.
-dnl AC_OUTPUT_MAKE_DEFS()
 define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
@@ -2692,7 +2720,7 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat > $conftest.defs <<\EOF
+cat > $confstat.defs <<\EOF
 changequote(<<, >>)dnl
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
@@ -2712,29 +2740,28 @@ EOF
 # would break.
 ac_LF_and_DOT="`echo; echo .`"
 DEFS=`sed -f $conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
-rm -f $conftest.defs
+rm -f $confstat.defs
 ])
 
 
 dnl AC_OUTPUT_FILES(CONFIG_FILES...)
 dnl --------------------------------
 dnl Do the variable substitutions to create the Makefiles or whatever.
-dnl This is a subroutine of AC_OUTPUT.  It is called inside an unquoted
-dnl here document whose contents are going into config.status, but
-dnl upon returning, the here document is being quoted.
+dnl This is a subroutine of AC_OUTPUT.
+dnl
+dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
+dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_FILES,
-[# Protect against being on the right side of a sed subst in config.status.
+[cat >>$CONFIG_STATUS <<EOF
+# Protect against being on the right side of a sed subst in config.status.
 changequote(, )dnl
 sed 's/%@/@@/; s/@%/@@/; s/%g\$/@g/; /@g\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > \$conftest.subs <<\\CEOF
+ s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > \$confstat.subs <<\\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
-$ac_vpsub
-dnl Shell code in configure.in might set extrasub.
-$extrasub
 dnl Insert the sed substitutions of variables.
-undivert(AC_DIVERSION_SED)
+undivert(AC_DIVERSION_SED)dnl
 CEOF
 EOF
 
@@ -2742,35 +2769,41 @@ cat >> $CONFIG_STATUS <<\EOF
 
 # Split the substitutions into bite-sized pieces for seds with
 # small command number limits, like on Digital OSF/1 and HP-UX.
-ac_max_sed_cmds=90 # Maximum number of lines to put in a sed script.
-ac_file=1 # Number of current file.
+ac_max_sed_lines=90 # Maximum number of lines to put in a sed script.
+ac_sed_frag=1 # Number of current file.
 ac_beg=1 # First line for current file.
-ac_end=$ac_max_sed_cmds # Line after last line for current file.
+ac_end=$ac_max_sed_lines # Line after last line for current file.
 ac_more_lines=:
 ac_sed_cmds=""
 while $ac_more_lines; do
   if test $ac_beg -gt 1; then
-    sed "1,${ac_beg}d; ${ac_end}q" $conftest.subs > $conftest.s$ac_file
+    sed "1,${ac_beg}d; ${ac_end}q" $confstat.subs > $confstat.sfrag
   else
-    sed "${ac_end}q" $conftest.subs > $conftest.s$ac_file
+    sed "${ac_end}q" $confstat.subs > $confstat.sfrag
   fi
-  if test ! -s $conftest.s$ac_file; then
+  if test ! -s $confstat.sfrag; then
     ac_more_lines=false
-    rm -f $conftest.s$ac_file
+    rm -f $confstat.sfrag
   else
+    # The purpose of the label and of the branching condition is to
+    # speed up the sed processing (if there are no `@' at all, there
+    # is no need to browse any of the substitutions).
+    (echo ':t
+/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $confstat.sfrag) > $confstat.s$ac_sed_frag
     if test -z "$ac_sed_cmds"; then
-      ac_sed_cmds="sed -f $conftest.s$ac_file"
+      ac_sed_cmds="sed -f $confstat.s$ac_sed_frag"
     else
-      ac_sed_cmds="$ac_sed_cmds | sed -f $conftest.s$ac_file"
+      ac_sed_cmds="$ac_sed_cmds | sed -f $confstat.s$ac_sed_frag"
     fi
-    ac_file=`expr $ac_file + 1`
+    ac_sed_frag=`expr $ac_sed_frag + 1`
     ac_beg=$ac_end
-    ac_end=`expr $ac_end + $ac_max_sed_cmds`
+    ac_end=`expr $ac_end + $ac_max_sed_lines`
   fi
 done
 if test -z "$ac_sed_cmds"; then
   ac_sed_cmds=cat
 fi
+
 EOF
 
 cat >> $CONFIG_STATUS <<\EOF
@@ -2790,6 +2823,8 @@ changequote(, )dnl
 changequote([, ])dnl
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
+    dnl FIXME: should actually be mkinstalldirs (parents may have
+    dnl to be created too.
     test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
@@ -2830,35 +2865,50 @@ changequote([, ])dnl
 
 # Don't redirect the output to AC_FILE directly: use `mv' so that updating
 # is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  ac_file_inputs=`echo $ac_file_in | sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+EOF
+cat >>$CONFIG_STATUS <<EOF
   sed -e "$ac_comsub
-s%@configure_input@%$configure_input%g
-s%@srcdir@%$srcdir%g
-s%@top_srcdir@%$top_srcdir%g
-ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%g
+dnl Neutralize VPATH when `$srcdir' = `.'.
+$ac_vpsub
+dnl Shell code in configure.in might set extrasub.
+dnl FIXME: do we really want to maintain this feature?
+$extrasub
+EOF
+cat >>$CONFIG_STATUS <<\EOF
+:t
+/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b
+s%@configure_input@%$configure_input%;t t
+s%@srcdir@%$srcdir%;t t
+s%@top_srcdir@%$top_srcdir%;t t
+ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
-" $ac_file_inputs | (eval "$ac_sed_cmds") > $conftest.out
+" $ac_file_inputs | (eval "$ac_sed_cmds") > $confstat.out
 dnl This would break Makefile dependencies.
-dnl  if cmp -s $ac_file $conftest.out 2>/dev/null; then
+dnl  if cmp -s $ac_file $confstat.out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
-dnl    rm -f $conftest.out
+dnl    rm -f $confstat.out
 dnl   else
 dnl     rm -f $ac_file
-dnl    mv $conftest.out $ac_file
+dnl    mv $confstat.out $ac_file
 dnl  fi
-  mv $conftest.out $ac_file
+  mv $confstat.out $ac_file
 fi; done
-rm -f $conftest.s*
-])
+rm -f $confstat.s*
+EOF
+])dnl AC_OUTPUT_FILES
 
 dnl AC_OUTPUT_HEADER(HEADER-FILE...)
 dnl --------------------------------
 dnl Create the config.h files from the config.h.in files.
-dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
-dnl here document whose contents are going into config.status.
+dnl This is a subroutine of AC_OUTPUT.
+dnl
+dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
+dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_HEADER,
-[changequote(<<, >>)dnl
+[cat >>$CONFIG_STATUS <<\EOF
+changequote(<<, >>)dnl
 # These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
 #
@@ -2899,20 +2949,20 @@ changequote([, ])dnl
 
   echo creating $ac_file
 
-  rm -f $conftest.frag $conftest.in $conftest.out
+  rm -f $confstat.frag $confstat.in $confstat.out
   ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
-  cat $ac_file_inputs > $conftest.in
+  cat $ac_file_inputs > $confstat.in
 
 EOF
 
-# Transform confdefs.h into a sed script $conftest.vals that substitutes
+# Transform confdefs.h into a sed script conftest.vals that substitutes
 # the proper values into config.h.in to produce config.h.  And first:
 # Protect against being on the right side of a sed subst in config.status.
 # Protect against being in an unquoted here document in config.status.
-rm -f $conftest.vals
+rm -f conftest.vals
 dnl Using a here document instead of a string reduces the quoting nightmare.
 dnl Putting comments in sed scripts is not portable.
-cat > $conftest.hdr <<\EOF
+cat > $confstat.hdr <<\EOF
 changequote(<<, >>)dnl
 s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
@@ -2927,50 +2977,50 @@ EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
 # sort them, since we want the *last* AC_DEFINE to be honored.
-uniq confdefs.h | sed -n -f $conftest.hdr > $conftest.vals
-rm -f $conftest.hdr
+uniq confdefs.h | sed -n -f $confstat.hdr > conftest.vals
+rm -f $confstat.hdr
 
 # This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
-cat >> $conftest.vals <<\EOF
+cat >> conftest.vals <<\EOF
 changequote(, )dnl
 s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
 changequote([, ])dnl
 EOF
 
-# Break up $conftest.vals because some shells have a limit on
+# Break up conftest.vals because some shells have a limit on
 # the size of here documents, and old seds have small limits too.
 
-rm -f $conftest.tail
+rm -f conftest.tail
 while :
 do
-  ac_lines=`grep -c . $conftest.vals`
+  ac_lines=`grep -c . conftest.vals`
   # grep -c gives empty output for an empty file on some AIX systems.
   if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
-  # Write a limited-size here document to $conftest.frag.
-  echo '  cat > $conftest.frag <<CEOF' >> $CONFIG_STATUS
-  sed ${ac_max_here_lines}q $conftest.vals >> $CONFIG_STATUS
+  # Write a limited-size here document to $confstat.frag.
+  echo '  cat > $confstat.frag <<CEOF' >> $CONFIG_STATUS
+  sed ${ac_max_here_lines}q conftest.vals >> $CONFIG_STATUS
   echo 'CEOF
-  sed -f $conftest.frag $conftest.in > $conftest.out
-  rm -f $conftest.in
-  mv $conftest.out $conftest.in
+  sed -f $confstat.frag $confstat.in > $confstat.out
+  rm -f $confstat.in
+  mv $confstat.out $confstat.in
 ' >> $CONFIG_STATUS
-  sed 1,${ac_max_here_lines}d $conftest.vals > $conftest.tail
-  rm -f $conftest.vals
-  mv $conftest.tail $conftest.vals
+  sed 1,${ac_max_here_lines}d conftest.vals > conftest.tail
+  rm -f conftest.vals
+  mv conftest.tail conftest.vals
 done
-rm -f $conftest.vals
+rm -f conftest.vals
 
 dnl Now back to your regularly scheduled config.status.
 cat >> $CONFIG_STATUS <<\EOF
-  rm -f $conftest.frag $conftest.h
-  echo "/* $ac_file.  Generated automatically by configure.  */" > $conftest.h
-  cat $conftest.in >> $conftest.h
-  rm -f $conftest.in
-  if cmp -s $ac_file $conftest.h 2>/dev/null; then
+  rm -f $confstat.frag $confstat.h
+  echo "/* $ac_file.  Generated automatically by configure.  */" > $confstat.h
+  cat $confstat.in >> $confstat.h
+  rm -f $confstat.in
+  if cmp -s $ac_file $confstat.h 2>/dev/null; then
     echo "$ac_file is unchanged"
-    rm -f $conftest.h
+    rm -f $confstat.h
   else
     # Remove last slash and all that follows it.  Not all systems have dirname.
   changequote(, )dnl
@@ -2978,23 +3028,25 @@ cat >> $CONFIG_STATUS <<\EOF
   changequote([, ])dnl
     if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
       # The file is in a subdirectory.
+      dnl FIXME: should actually be mkinstalldirs (parents may have
+      dnl to be created too.
       test ! -d "$ac_dir" && mkdir "$ac_dir"
     fi
     rm -f $ac_file
-    mv $conftest.h $ac_file
+    mv $confstat.h $ac_file
   fi
 fi; done
-
-])
+EOF
+])dnl AC_OUTPUT_HEADER
 
 dnl AC_OUTPUT_LINKS(SOURCE..., DEST...)
 dnl -----------------------------------
-dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
-dnl here document whose contents are going into config.status.
+dnl This is a subroutine of AC_OUTPUT.
+dnl
+dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
+dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_LINKS,
-[EOF
-
-cat >> $CONFIG_STATUS <<EOF
+[cat >> $CONFIG_STATUS <<EOF
 ac_sources="$1"
 ac_dests="$2"
 EOF
@@ -3019,6 +3071,8 @@ changequote(, )dnl
 changequote([, ])dnl
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     # The dest file is in a subdirectory.
+    dnl FIXME: should actually be mkinstalldirs (parents may have
+    dnl to be created too.
     test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
@@ -3043,6 +3097,7 @@ changequote([, ])dnl
     AC_MSG_ERROR(cannot link $ac_dest to $srcdir/$ac_source)
   fi
 done
+EOF
 ])
 
 dnl This is a subroutine of AC_OUTPUT.
@@ -3091,6 +3146,8 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  ac_given_INSTALL="$INSTALL"
     case "$srcdir" in
     .) ;;
     *)
+      dnl FIXME: should actually be mkinstalldirs (parents may have
+      dnl to be created too.
       if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
       else
         AC_MSG_ERROR(cannot create `pwd`/$ac_config_dir)

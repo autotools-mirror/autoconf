@@ -150,8 +150,16 @@ do
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
     cat << EOF
-Usage: configure [options] [host]
-Options: [defaults in brackets after descriptions]
+`configure' configures software source code packages to adapt to many
+kinds of systems.
+
+Usage: configure [OPTION]... [VAR=VALUE]... [HOST]
+
+To safely assign special values to environment variables (e.g., CC,
+CFLAGS...), give to `configure' the definition as VAR=VALUE.
+
+Defaults for the options are specified in brackets.
+
 Configuration:
   --cache-file=FILE       cache test results in FILE
   [--env-]VAR=VALUE       set environment variable VAR to VALUE
@@ -159,6 +167,7 @@ Configuration:
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
   --version               print the version of autoconf that created configure
+
 Directory and file names:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
@@ -179,16 +188,20 @@ Directory and file names:
   --infodir=DIR           info documentation in DIR [PREFIX/info]
   --mandir=DIR            man documentation in DIR [PREFIX/man]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
+
+Program names:
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
   --program-transform-name=PROGRAM
                           run sed PROGRAM on installed program names
+
 EOF
     cat << EOF
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
   --target=TARGET         configure for TARGET [TARGET=HOST]
+
 Features and packages:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
@@ -198,7 +211,8 @@ Features and packages:
   --x-libraries=DIR       X library files are in DIR
 EOF
     if test -n "$ac_help"; then
-      echo "--enable and --with options recognized:$ac_help"
+      echo "
+--enable and --with options recognized:$ac_help"
     fi
     exit 0 ;;
 
@@ -395,7 +409,7 @@ EOF
   -*) { echo "configure: error: $ac_option: invalid option; use --help to show usage" 1>&2; exit 1; }
     ;;
 
-  *=*) 
+  *=*)
     ac_envvar=`echo $ac_option|sed -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
     if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
@@ -572,7 +586,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:__oline__: checking for $ac_word" 1>&5
+echo "configure:590: checking for $ac_word" 1>&5
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -613,7 +627,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:__oline__: checking for $ac_word" 1>&5
+echo "configure:631: checking for $ac_word" 1>&5
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -646,7 +660,7 @@ done
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:__oline__: checking for $ac_word" 1>&5
+echo "configure:664: checking for $ac_word" 1>&5
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -716,7 +730,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install... $ac_c" 1>&6
-echo "configure:__oline__: checking for a BSD compatible install" 1>&5
+echo "configure:734: checking for a BSD compatible install" 1>&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -848,7 +862,7 @@ trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat > $conftest.defs <<\EOF
+cat > $confstat.defs <<\EOF
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
@@ -866,7 +880,7 @@ EOF
 # would break.
 ac_LF_and_DOT="`echo; echo .`"
 DEFS=`sed -f $conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
-rm -f $conftest.defs
+rm -f $confstat.defs
 
 
 # Without the "./", some shells look in PATH for config.status.
@@ -887,7 +901,7 @@ cat > $CONFIG_STATUS <<EOF
 # configure, is in ./config.log if it exists.
 
 ac_cs_usage="\
-Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@
+Usage: $CONFIG_STATUS [OPTIONS]
 Configure files from templates according to the current configuration.
 
   --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
@@ -924,50 +938,51 @@ done
 
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
-# Allow concurrent executions
-conftest=cft\$\$
+# Allow concurrent executions.
+confstat=cft\$\$
+EOF
 
+cat >> $CONFIG_STATUS <<EOF
 : \${CONFIG_FILES="Makefile testsuite/Makefile"}
-rm -fr \`echo "\$CONFIG_FILES " | sed "s/:@BKL@^ @BKR@*//g"\`
-trap 'rm -fr \$conftest*; exit 1' 1 2 15
-
+rm -fr \`echo "\$CONFIG_FILES " | sed "s/:[^ ]*//g"\`
+trap 'rm -fr \$confstat*; exit 1' 1 2 15
+EOF
+cat >>$CONFIG_STATUS <<EOF
 # Protect against being on the right side of a sed subst in config.status.
 sed 's/%@/@@/; s/@%/@@/; s/%g\$/@g/; /@g\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > \$conftest.subs <<\\CEOF
-$ac_vpsub
-$extrasub
-s%@SHELL@%$SHELL%g
-s%@CFLAGS@%$CFLAGS%g
-s%@CPPFLAGS@%$CPPFLAGS%g
-s%@CXXFLAGS@%$CXXFLAGS%g
-s%@FFLAGS@%$FFLAGS%g
-s%@DEFS@%$DEFS%g
-s%@LDFLAGS@%$LDFLAGS%g
-s%@LIBS@%$LIBS%g
-s%@exec_prefix@%$exec_prefix%g
-s%@prefix@%$prefix%g
-s%@program_transform_name@%$program_transform_name%g
-s%@bindir@%$bindir%g
-s%@sbindir@%$sbindir%g
-s%@libexecdir@%$libexecdir%g
-s%@datadir@%$datadir%g
-s%@sysconfdir@%$sysconfdir%g
-s%@sharedstatedir@%$sharedstatedir%g
-s%@localstatedir@%$localstatedir%g
-s%@libdir@%$libdir%g
-s%@includedir@%$includedir%g
-s%@oldincludedir@%$oldincludedir%g
-s%@infodir@%$infodir%g
-s%@mandir@%$mandir%g
-s%@M4@%$M4%g
-s%@AWK@%$AWK%g
-s%@PERL@%$PERL%g
-s%@SCRIPTS@%$SCRIPTS%g
-s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
-s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%g
-s%@INSTALL_DATA@%$INSTALL_DATA%g
-s%@standards_info@%$standards_info%g
-s%@standards_dvi@%$standards_dvi%g
+ s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > \$confstat.subs <<\\CEOF
+s%@SHELL@%$SHELL%;t t
+s%@CFLAGS@%$CFLAGS%;t t
+s%@CPPFLAGS@%$CPPFLAGS%;t t
+s%@CXXFLAGS@%$CXXFLAGS%;t t
+s%@FFLAGS@%$FFLAGS%;t t
+s%@DEFS@%$DEFS%;t t
+s%@LDFLAGS@%$LDFLAGS%;t t
+s%@LIBS@%$LIBS%;t t
+s%@exec_prefix@%$exec_prefix%;t t
+s%@prefix@%$prefix%;t t
+s%@program_transform_name@%$program_transform_name%;t t
+s%@bindir@%$bindir%;t t
+s%@sbindir@%$sbindir%;t t
+s%@libexecdir@%$libexecdir%;t t
+s%@datadir@%$datadir%;t t
+s%@sysconfdir@%$sysconfdir%;t t
+s%@sharedstatedir@%$sharedstatedir%;t t
+s%@localstatedir@%$localstatedir%;t t
+s%@libdir@%$libdir%;t t
+s%@includedir@%$includedir%;t t
+s%@oldincludedir@%$oldincludedir%;t t
+s%@infodir@%$infodir%;t t
+s%@mandir@%$mandir%;t t
+s%@M4@%$M4%;t t
+s%@AWK@%$AWK%;t t
+s%@PERL@%$PERL%;t t
+s%@SCRIPTS@%$SCRIPTS%;t t
+s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%;t t
+s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%;t t
+s%@INSTALL_DATA@%$INSTALL_DATA%;t t
+s%@standards_info@%$standards_info%;t t
+s%@standards_dvi@%$standards_dvi%;t t
 
 CEOF
 EOF
@@ -976,35 +991,41 @@ cat >> $CONFIG_STATUS <<\EOF
 
 # Split the substitutions into bite-sized pieces for seds with
 # small command number limits, like on Digital OSF/1 and HP-UX.
-ac_max_sed_cmds=90 # Maximum number of lines to put in a sed script.
-ac_file=1 # Number of current file.
+ac_max_sed_lines=90 # Maximum number of lines to put in a sed script.
+ac_sed_frag=1 # Number of current file.
 ac_beg=1 # First line for current file.
-ac_end=$ac_max_sed_cmds # Line after last line for current file.
+ac_end=$ac_max_sed_lines # Line after last line for current file.
 ac_more_lines=:
 ac_sed_cmds=""
 while $ac_more_lines; do
   if test $ac_beg -gt 1; then
-    sed "1,${ac_beg}d; ${ac_end}q" $conftest.subs > $conftest.s$ac_file
+    sed "1,${ac_beg}d; ${ac_end}q" $confstat.subs > $confstat.sfrag
   else
-    sed "${ac_end}q" $conftest.subs > $conftest.s$ac_file
+    sed "${ac_end}q" $confstat.subs > $confstat.sfrag
   fi
-  if test ! -s $conftest.s$ac_file; then
+  if test ! -s $confstat.sfrag; then
     ac_more_lines=false
-    rm -f $conftest.s$ac_file
+    rm -f $confstat.sfrag
   else
+    # The purpose of the label and of the branching condition is to
+    # speed up the sed processing (if there are no `@' at all, there
+    # is no need to browse any of the substitutions).
+    (echo ':t
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $confstat.sfrag) > $confstat.s$ac_sed_frag
     if test -z "$ac_sed_cmds"; then
-      ac_sed_cmds="sed -f $conftest.s$ac_file"
+      ac_sed_cmds="sed -f $confstat.s$ac_sed_frag"
     else
-      ac_sed_cmds="$ac_sed_cmds | sed -f $conftest.s$ac_file"
+      ac_sed_cmds="$ac_sed_cmds | sed -f $confstat.s$ac_sed_frag"
     fi
-    ac_file=`expr $ac_file + 1`
+    ac_sed_frag=`expr $ac_sed_frag + 1`
     ac_beg=$ac_end
-    ac_end=`expr $ac_end + $ac_max_sed_cmds`
+    ac_end=`expr $ac_end + $ac_max_sed_lines`
   fi
 done
 if test -z "$ac_sed_cmds"; then
   ac_sed_cmds=cat
 fi
+
 EOF
 
 cat >> $CONFIG_STATUS <<\EOF
@@ -1022,7 +1043,7 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
-    test ! -d "$ac_dir" && mkdir "$ac_dir"
+            test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
     ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
@@ -1056,18 +1077,27 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 
 # Don't redirect the output to AC_FILE directly: use `mv' so that updating
 # is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
-  sed -e "$ac_comsub
-s%@configure_input@%$configure_input%g
-s%@srcdir@%$srcdir%g
-s%@top_srcdir@%$top_srcdir%g
-s%@INSTALL@%$INSTALL%g
-" $ac_file_inputs | (eval "$ac_sed_cmds") > $conftest.out
-  mv $conftest.out $ac_file
-fi; done
-rm -f $conftest.s*
-
+  ac_file_inputs=`echo $ac_file_in | sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
 EOF
+cat >>$CONFIG_STATUS <<EOF
+  sed -e "$ac_comsub
+$ac_vpsub
+$extrasub
+EOF
+cat >>$CONFIG_STATUS <<\EOF
+:t
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
+s%@configure_input@%$configure_input%;t t
+s%@srcdir@%$srcdir%;t t
+s%@top_srcdir@%$top_srcdir%;t t
+s%@INSTALL@%$INSTALL%;t t
+" $ac_file_inputs | (eval "$ac_sed_cmds") > $confstat.out
+  mv $confstat.out $ac_file
+fi; done
+rm -f $confstat.s*
+EOF
+
+
 cat >> $CONFIG_STATUS <<EOF
 
 EOF

@@ -1,0 +1,42 @@
+Autoconf was originally written by David J. MacKenzie <djm@uunet.uu.net>.
+It would not be what it is today without the invaluable help of these
+people:
+
+Aaron Crane <aaronc@pobox.com>
+Akim Demaille <akim@epita.fr>
+Alexandre Oliva <oliva@dcc.unicamp.br>
+Andreas Schwab <schwab@issan.informatik.uni-dortmund.de>
+Ben Elliston <bje@cygnus.com>
+Chris Provenzano <proven@cygnus.com>
+Christian Krone <krischan@sql.de>
+Dave Adams <adams@hpesdwa.fc.hp.com>
+Didier Verna <verna@inf.enst.fr>
+Doug Evans <dje@canuck.cygnus.com>
+Eric Mumpower <nocturne@cygnus.com>
+Felix Lee <flee@cygnus.com>
+Gary V. Vaughan <gvaughan@oranda.demon.co.uk>
+Gordon Matzigkeit <gord@trick.fig.org>
+H.J. Lu <hjl@gnu.org>
+Ian Lance Taylor <ian@cygnus.com>
+J"orn Rennecke <amylaar@cygnus.co.uk>
+James A. Lupo <lupoja@feynman.ml.wpafb.af.mil>
+Jason Molenda <crash@cygnus.co.jp>
+Jeff Garzik <jgarzik@pobox.com>
+Jeffrey A Law (law@cygnus.com)
+Karl Berry <karl@cs.umb.edu>
+Matthew D. Langston <langston@SLAC.Stanford.EDU>
+Mike Stump <mrs@wrs.com>
+Miles Bader <miles@gnu.ai.mit.edu>
+Paul Eggert <eggert@twinsun.com>
+Pavel Roskin <pavel_roskin@geocities.com>
+Philipp Thomas <kthomas@gwdg.de>
+Richard Stallman <rms@gnu.org>
+Roland McGrath <roland@gnu.org>
+Scott Bambrough <scottb@corelcomputer.com>
+Steven G. Johnson <stevenj@alum.mit.edu>
+Stu Grossman <grossman@cygnus.com>
+Syd Polk <spolk@cygnus.com>
+Tom Tromey <tromey@cygnus.com>
+
+Many people are not named here because we lost track of them.  We
+thank them!  Please, help us keeping this list up to date.

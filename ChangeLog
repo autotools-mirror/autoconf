@@ -1,3 +1,42 @@
+1999-09-17  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Improve configure's --help.
+
+	* acgeneral.m4 (AC_OUTPUT): Change the root of filenames of
+	config.status from $conftest to $confstat.
+	The previous patch to make config.status reentrant was wrong,
+ 	because it changed some `conftest' that are used by configure into
+ 	`$conftest', while it was for config.status only.  To avoid
+ 	another confusion like this, all the filenames of config.status
+ 	should be `$confstat*', and those of configure should be
+ 	`conftest*'.
+	(AC_OUTPUT): Rename the uses of `ac_file' for the sed fragments as
+	`ac_sed_frag'.
+
+	* acgeneral.m4 (AC_OUTPUT): This macro used to open the here
+ 	documents that configure uses to generate config.status, included
+ 	that of the submacros.  Now, it no longer handles the here
+ 	documents for its subroutines (it was far to hard to track).
+	(AC_OUTPUT_FILES): Open and close your here documents to
+	$CONFIG_STATUS.
+	(AC_OUTPUT_HEADER): Likewise.
+	(AC_OUTPUT_LINKS): Likewise.
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Move $ac_vpsub and $extrasub
+ 	from the AC_SUBST substitutions (i.e., that of @SHELL@ etc.) to
+ 	the specific section (that of @srcdir@ etc.).
+	Now the ``general substitution'' section is absolutely uniform.
+
+	* acgeneral.m4 (AC_SUBST): Change sed call from `s%@from@%to%g'
+ 	into `s%@from@%to%;t t'.
+	(AC_SUBST_FILE): Likewise.
+	(AC_OUTPUT_FILES): Optimize the sed scripts by branching if there
+ 	are no `@' on the line. Impressive speed up.
+
+	* Makefile.in (DISTFILES): Add THANKS.
+
+	* THANKS: New file.
+
 1999-09-15  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_CHECK_FILE): Use ifset.
@@ -988,7 +1027,7 @@ Wed Sep 11 15:35:19 1997  Chris Provenzano  <proven@cygnus.com>
 
 Thu Sep  4 22:30:40 1997  Jeffrey A Law  (law@cygnus.com)
 
-	* acspecific (AC_PROC_INSTALL): Don't use installbsd on OSF..
+	* acspecific (AC_PROC_INSTALL): Don't use installbsd on OSF.
 
 Wed Sep  3 23:00:44 1997  Chris Provenzano  <proven@cygnus.com>
 
