@@ -13,5 +13,6 @@ endless.sh
 macros.m4
 mycc mycpp
 state*
-syntax.sh
-testsuite testsuite.log testsuite.tmp
+syntax.sh expr
+*.log
+testsuite testsuite.tmp
