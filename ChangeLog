@@ -1,5 +1,12 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Work around a currently
+	impossible to describe bug of SunOS 4.1.3 which causes a shell
+	crash when using `VAR=${VAR="$default"}'.
+	Reported and diagnosed by Kevin Ryde.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4 (AC_FUNC_GETGROUPS): Typo :(.
 
 2001-01-22  Lars J. Aas  <larsa@sim.no>

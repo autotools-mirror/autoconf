@@ -3746,18 +3746,20 @@ m4_ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [cat >>$CONFIG_STATUS <<\EOF
 # If the user did not use the arguments to specify the items to instantiate,
 # then the envvar interface is used.  Set only those that are not.
+# We use the long form for the default assignment because of an extremely
+# bizarre bug on SunOS 4.1.3.
 if $ac_need_defaults; then
 m4_ifset([AC_LIST_FILES],
-[  CONFIG_FILES=${CONFIG_FILES="$config_files"}
+[  test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
 ])dnl
 m4_ifset([AC_LIST_HEADERS],
-[  CONFIG_HEADERS=${CONFIG_HEADERS="$config_headers"}
+[  test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
 ])dnl
 m4_ifset([AC_LIST_LINKS],
-[  CONFIG_LINKS=${CONFIG_LINKS="$config_links"}
+[  test "${CONFIG_LINKS+set}" = set || CONFIG_LINKS=$config_links
 ])dnl
 m4_ifset([AC_LIST_COMMANDS],
-[  CONFIG_COMMANDS=${CONFIG_COMMANDS="$config_commands"}
+[  test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
 ])dnl
 fi
 
