@@ -72,7 +72,14 @@ echo X/"$0" |
   	  /^X\/\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
 
-# Rewrite early, but we need PATH_SEPARATOR.
+# PATH needs CR, and LINENO needs CR and PATH.
+# Avoid depending upon Character Ranges.
+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+as_cr_digits='0123456789'
+as_cr_alnum=$as_cr_Letters$as_cr_digits
+
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! $SHELL" >conftest.sh
@@ -153,10 +160,10 @@ done
       N
       s,$,-,
       : loop
-      s,^\([0-9]*\)\(.*\)[$]LINENO\([^a-zA-Z0-9_]\),\1\2\1\3,
+      s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
       t loop
       s,-$,,
-      s,^[0-9]*\n,,
+      s,^['$as_cr_digits']*\n,,
     ' >$as_me.lineno &&
   chmod +x $as_me.lineno ||
     { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
@@ -169,13 +176,6 @@ done
   # Exit status is that of the last command.
   exit
 }
-
-# Avoid depending upon Character Ranges.
-as_cr_letters='abcdefghijklmnopqrstuvwxyz'
-as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-as_cr_Letters=$as_cr_letters$as_cr_LETTERS
-as_cr_digits='0123456789'
-as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
@@ -1841,7 +1841,14 @@ echo X/"$0" |
   	  /^X\/\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
 
-# Rewrite early, but we need PATH_SEPARATOR.
+# PATH needs CR, and LINENO needs CR and PATH.
+# Avoid depending upon Character Ranges.
+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+as_cr_digits='0123456789'
+as_cr_alnum=$as_cr_Letters$as_cr_digits
+
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! $SHELL" >conftest.sh
@@ -1923,10 +1930,10 @@ done
       N
       s,$,-,
       : loop
-      s,^\([0-9]*\)\(.*\)[$]LINENO\([^a-zA-Z0-9_]\),\1\2\1\3,
+      s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
       t loop
       s,-$,,
-      s,^[0-9]*\n,,
+      s,^['$as_cr_digits']*\n,,
     ' >$as_me.lineno &&
   chmod +x $as_me.lineno ||
     { { echo "$as_me:$LINENO: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&5
@@ -1940,13 +1947,6 @@ echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;
   # Exit status is that of the last command.
   exit
 }
-
-# Avoid depending upon Character Ranges.
-as_cr_letters='abcdefghijklmnopqrstuvwxyz'
-as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-as_cr_Letters=$as_cr_letters$as_cr_LETTERS
-as_cr_digits='0123456789'
-as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
