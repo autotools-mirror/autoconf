@@ -1,5 +1,18 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	Leave a diversion exclusively for Copyright notices.
+
+	* acgeneral.m4 (AC_DIVERSION_DEFAULTS): New diversion number.
+	(_AC_INIT_NOTICE): Move definition of `ac_includes_default' from
+	here...
+	(_AC_INIT_PREPARE): to here.
+	(_AC_INIT_NOTICE): Play with your diversion yourself, don't let
+	(AC_INIT): do it for you.
+	(_AC_INIT_DEFAULTS): New macro.
+	(AC_INIT): Use it.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	We don't need _AC_ARG_*_HELP_PROLOGUE.
 
 	* acgeneral.m4 (AC_EXPAND_ONCE): AC_PROVIDE yourself, in case

@@ -64,18 +64,19 @@ m4_namespace_push(autoconf)
 define(AC_DIVERSION_KILL,      	-1)# suppress output
 define(AC_DIVERSION_BINSH,     	 0)# AC_REQUIRE'd #! /bin/sh line
 define(AC_DIVERSION_NOTICE,    	 1)# copyright notice
-define(AC_DIVERSION_INIT,      	 2)# initialization code
-define(AC_DIVERSION_HELP_BEGIN,  3)# Handling `configure --help'
-define(AC_DIVERSION_HELP_ENABLE, 4)# Help msg from AC_ARG_ENABLE
-define(AC_DIVERSION_HELP_WITH,   5)# Help msg from AC_ARG_WITH
-define(AC_DIVERSION_HELP_VAR,    6)# Help msg from AC_ARG_VAR
-define(AC_DIVERSION_HELP_END,    7)# Tail of the handling of --help
-define(AC_DIVERSION_NORMAL_4,    8)# AC_REQUIRE'd code, 4 level deep
-define(AC_DIVERSION_NORMAL_3,    9)# AC_REQUIRE'd code, 3 level deep
-define(AC_DIVERSION_NORMAL_2,   10)# AC_REQUIRE'd code, 2 level deep
-define(AC_DIVERSION_NORMAL_1,   11)# AC_REQUIRE'd code, 1 level deep
-define(AC_DIVERSION_NORMAL,     12)# the tests and output code
-define(AC_DIVERSION_ICMDS,      13)# extra initialization in config.status
+define(AC_DIVERSION_DEFAULTS,  	 2)# early initializations (defaults)
+define(AC_DIVERSION_INIT,      	 3)# initialization code
+define(AC_DIVERSION_HELP_BEGIN,  4)# Handling `configure --help'
+define(AC_DIVERSION_HELP_ENABLE, 5)# Help msg from AC_ARG_ENABLE
+define(AC_DIVERSION_HELP_WITH,   6)# Help msg from AC_ARG_WITH
+define(AC_DIVERSION_HELP_VAR,    7)# Help msg from AC_ARG_VAR
+define(AC_DIVERSION_HELP_END,    8)# Tail of the handling of --help
+define(AC_DIVERSION_NORMAL_4,    9)# AC_REQUIRE'd code, 4 level deep
+define(AC_DIVERSION_NORMAL_3,   10)# AC_REQUIRE'd code, 3 level deep
+define(AC_DIVERSION_NORMAL_2,   11)# AC_REQUIRE'd code, 2 level deep
+define(AC_DIVERSION_NORMAL_1,   12)# AC_REQUIRE'd code, 1 level deep
+define(AC_DIVERSION_NORMAL,     13)# the tests and output code
+define(AC_DIVERSION_ICMDS,      14)# extra initialization in config.status
 
 
 # AC_DIVERT_PUSH(STREAM)
@@ -546,52 +547,34 @@ AC_DIVERT_POP()dnl to KILL
 # _AC_INIT_NOTICE
 # --------------
 AC_DEFUN(_AC_INIT_NOTICE,
-[# Guess values for system-dependent variables and create Makefiles.
+[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using Autoconf version ]AC_ACVERSION[
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
 # Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
+AC_DIVERT_POP()dnl
+])# _AC_INIT_NOTICE
 
+
+# _AC_INIT_DEFAULTS
+# -----------------
+# Values which defaults can be set from `configure.in'.
+AC_DEFUN(_AC_INIT_DEFAULTS,
+[AC_DIVERT_PUSH(AC_DIVERSION_DEFAULTS)dnl
 # Defaults:
 ac_default_prefix=/usr/local
-# Factorizing default headers for most tests.
-dnl If ever you change this variable, please keep autoconf.texi in sync.
-ac_includes_default="\
-#include <stdio.h>
-#include <sys/types.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# if HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if HAVE_INTTYPES_H
-# include <inttypes.h>
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif"
-@%:@ Any additions from configure.in:])# _AC_INIT_NOTICE
+@%:@ Any additions from configure.in:
+AC_DIVERT_POP()dnl
+])# _AC_INIT_DEFAULTS
 
 
 # AC_PREFIX_DEFAULT(PREFIX)
 # -------------------------
 AC_DEFUN(AC_PREFIX_DEFAULT,
-[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+[AC_DIVERT_PUSH(AC_DIVERSION_DEFAULTS)dnl
 ac_default_prefix=$1
 AC_DIVERT_POP()])
 
@@ -1153,6 +1136,36 @@ ac_exeext=
 dnl By default assume that objects files use an extension of .o.  Only
 dnl change it if the script calls AC_OBJEXT.
 ac_objext=o
+# Factoring default headers for most tests.
+dnl If ever you change this variable, please keep autoconf.texi in sync.
+ac_includes_default="\
+#include <stdio.h>
+#include <sys/types.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif"
+
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
 AC_SUBST(SHELL)dnl
@@ -1189,9 +1202,8 @@ AC_DEFUN(AC_INIT,
 [m4_sinclude(acsite.m4)dnl
 m4_sinclude(./aclocal.m4)dnl
 AC_REQUIRE([_AC_INIT_BINSH])dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-_AC_INIT_NOTICE
-AC_DIVERT_POP()dnl to KILL
+_AC_INIT_NOTICE()dnl
+_AC_INIT_DEFAULTS()dnl
 AC_DIVERT_POP()dnl to NORMAL
 AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
 _AC_INIT_PARSE_ARGS
@@ -1984,7 +1996,7 @@ AC_DEFUN(AC_TRY_COMMAND,
 # Therefore, the following *is* buggy, but this is the kind of
 # tradeoff we accept in order to improve configure.
 
-# See _AC_INIT_NOTICE to see the value of the default includes.
+# See _AC_INIT_PREPARE to see the value of `ac_includes_default'.
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
