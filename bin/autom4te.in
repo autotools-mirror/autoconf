@@ -593,7 +593,7 @@ sub handle_m4 ($@)
 			   map { split /,/ } @warning));
 
   # GNU m4 appends when using --error-output.
-  unlink ($tcache . $req->id);
+  unlink ($tcache . $req->id . "t");
 
   # Run m4.
   #
@@ -601,21 +601,33 @@ sub handle_m4 ($@)
   #
   # Be extremely cautious to reverse the includes when talking to M4:
   # it doesn't speak the same --include as we do.
+  #
+  # We don't output directly to the cache files, to avoid problems
+  # when we are interrupted (that leaves corrupted files).
   my $command = ("$m4"
 		 . join (' --include=', '', reverse @include)
 		 . " --define=m4_warnings=$m4_warnings"
 		 . ' --debug=aflq'
-		 . " --error-output=$tcache" . $req->id
+		 . " --error-output=$tcache" . $req->id . "t"
 		 . join (' --trace=',   '', sort @macro)
 		 . " @ARGV"
 		 . ' </dev/null'
-		 . " >$ocache" . $req->id);
+		 . " >$ocache" . $req->id . "t");
   verbose "running: $command";
   system $command;
   if ($?)
     {
       verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
       exit $? >> 8;
+    }
+
+  # Everything went ok: preserve the outputs.
+  foreach ($tcache, $ocache)
+    {
+      use File::Copy;
+      $_ .= $req->id;
+      move ("${_}t", "$_")
+	or die "$me: cannot not rename ${_}t as $_: $!\n";
     }
 }
 

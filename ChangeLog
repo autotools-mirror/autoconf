@@ -1,5 +1,11 @@
 2002-03-08  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&handle_m4): Protect us from corrupted file
+	because of C-c: have m4 output in tmp files, then mv them.
+
+	
+2002-03-08  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoconf.in, bin/autoheader.in, bin/autom4te.in,
 	* bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in,
 	* bin/ifnames.in: Copyright update.
