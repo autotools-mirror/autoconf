@@ -39,6 +39,7 @@ BEGIN
 use Autom4te::ChannelDefs;
 use Autom4te::Configure_ac;
 use Autom4te::General;
+use Autom4te::FileUtils;
 use Autom4te::XFile;
 use File::Basename;
 use File::Find;
