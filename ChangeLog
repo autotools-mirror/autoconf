@@ -1,3 +1,10 @@
+2000-08-01  Didier Verna  <didier@lrde.epita.fr>
+
+	* acgeneral.m4 (AC_REVISION): Put a dot at the end of the line.
+	(_AC_INIT_HELP): Output the bug report address at
+	the end of a `configure --help' output.
+	(_AC_INIT_NOTICE): Ditto, but at the top of `configure'.
+
 2000-07-31  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE_FDS): New macro, pulled out of
