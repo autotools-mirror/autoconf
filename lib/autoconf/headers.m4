@@ -53,7 +53,8 @@
 # Table of contents
 #
 # 1. Generic tests for headers
-# 2. Tests for specific headers
+# 2. Default includes
+# 3. Tests for specific headers
 
 
 ## ------------------------------ ##
@@ -195,8 +196,86 @@ done
 
 
 
+## --------------------- ##
+## 2. Default includes.  ##
+## --------------------- ##
+
+# Always use the same set of default headers for all the generic
+# macros.  It is easier to document, to extend, and to understand than
+# having specific defaults for each macro.
+
+# _AC_INCLUDES_DEFAULT_REQUIREMENTS
+# ---------------------------------
+# Required when AC_INCLUDES_DEFAULT uses its default branch.
+AC_DEFUN([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
+[m4_divert_text([DEFAULTS],
+[# Factoring default headers for most tests.
+dnl If ever you change this variable, please keep autoconf.texi in sync.
+ac_includes_default="\
+#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#if HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#endif
+#if HAVE_STRINGS_H
+# include <strings.h>
+#endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
+#else
+# if HAVE_STDINT_H
+#  include <stdint.h>
+# endif
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif"
+])dnl
+AC_REQUIRE([AC_HEADER_STDC])dnl
+# On IRIX 5.3, sys/types and inttypes.h are conflicting.
+AC_CHECK_HEADERS([sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
+                  inttypes.h stdint.h unistd.h],
+                 [], [], $ac_includes_default)
+])# _AC_INCLUDES_DEFAULT_REQUIREMENTS
+
+
+# AC_INCLUDES_DEFAULT([INCLUDES])
+# -------------------------------
+# If INCLUDES is empty, expand in default includes, otherwise in
+# INCLUDES.
+# In most cases INCLUDES is not double quoted as it should, and if
+# for instance INCLUDES = `#include <stdio.h>' then unless we force
+# a newline, the hash will swallow the closing paren etc. etc.
+# The usual failure.
+# Take no risk: for the newline.
+AC_DEFUN([AC_INCLUDES_DEFAULT],
+[m4_ifval([$1], [$1
+],
+          [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
+$ac_includes_default])])
+
+
+
+
+
 ## ------------------------------- ##
-## 2. Tests for specific headers.  ##
+## 3. Tests for specific headers.  ##
 ## ------------------------------- ##
 
 

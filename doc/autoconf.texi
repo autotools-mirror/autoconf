@@ -4184,7 +4184,7 @@ These macros are used to find system header files not covered by the
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_HEADER
 If the system header file @var{header-file} is usable, execute shell
 commands @var{action-if-found}, otherwise execute
@@ -4224,7 +4224,7 @@ single space, a comment, to check whether @var{header-file} compiles
 with success.
 @end defmac
 
-@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_HEADERS
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
@@ -4273,7 +4273,7 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the ``particular''
 test macros.
 
-@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_DECL
 If @var{symbol} (a function or a variable) is not declared in
 @var{includes} and a declaration is needed, run the shell commands
@@ -4286,7 +4286,7 @@ r-value, not if it is really declared, because it is much safer to avoid
 introducing extra declarations when they are not needed.
 @end defmac
 
-@defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_DECLS
 @cvindex HAVE_DECL_@var{symbol}
 For each of the @var{symbols} (@emph{comma}-separated list), define
@@ -4417,7 +4417,7 @@ obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
 These macros are used to find structure members not covered by the
 ``particular'' test macros.
 
-@defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_MEMBER
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
 If no @var{includes} are specified, the default includes are used
@@ -4436,7 +4436,7 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
 @end defmac
 
-@defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_MEMBERS
 Check for the existence of each @samp{@var{aggregate}.@var{member}} of
 @var{members} using the previous macro.  When @var{member} belongs to
@@ -4534,14 +4534,14 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 These macros are used to check for types not covered by the ``particular''
 test macros.
 
-@defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_TYPE
 Check whether @var{type} is defined.  It may be a compiler builtin type
-or defined by the @ovar{includes} (@pxref{Default Includes}).
+or defined by the @var{includes} (@pxref{Default Includes}).
 @end defmac
 
 
-@defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_TYPES
 For each @var{type} of the @var{types} that is defined, define
 @code{HAVE_@var{type}} (in all capitals).  If no @var{includes} are
@@ -4594,7 +4594,7 @@ compiling.
 @node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics
 
-@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @ovar{includes})
+@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @dvar{includes, default-includes})
 @acindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
 size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
@@ -11559,7 +11559,7 @@ brackets to protect against included commas or spurious @code{m4}
 expansion.  The contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @ovar{stdout}, @ovar{stderr})
+@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @ovar{stdout}, @ovar{stderr})
 @atindex CHECK
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected

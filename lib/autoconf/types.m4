@@ -78,7 +78,7 @@
 
 # _AC_CHECK_TYPE_NEW(TYPE,
 #		     [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#		     [INCLUDES])
+#		     [INCLUDES = DEFAULT-INCLUDES])
 # ------------------------------------------------------------
 # Check whether the type TYPE is supported by the system, maybe via the
 # the provided includes.  This macro implements the former task of
@@ -157,7 +157,7 @@ AS_VAR_POPDEF([ac_Type])dnl
 
 # AC_CHECK_TYPES(TYPES,
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                [INCLUDES])
+#                [INCLUDES = DEFAULT-INCLUDES])
 # --------------------------------------------------------
 # TYPES is an m4 list.  There are no ambiguities here, we mean the newer
 # AC_CHECK_TYPE.
@@ -212,7 +212,7 @@ m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
 #  or
 # AC_CHECK_TYPE(TYPE,
 #	        [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#	        [INCLUDES])
+#	        [INCLUDES = DEFAULT-INCLUDES])
 # -------------------------------------------------------
 #
 # Dispatch respectively to _AC_CHECK_TYPE_OLD or _AC_CHECK_TYPE_NEW.
@@ -344,8 +344,8 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 # ---------------- #
 
 
-# AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES])
-# --------------------------------------------
+# AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES = DEFAULT-INCLUDES])
+# ---------------------------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
 [AS_LITERAL_IF([$1], [],
                [AC_FATAL([$0: requires literal arguments])])dnl
