@@ -82,6 +82,11 @@ edit = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
+
+# All the files below depend on configure.ac so that they are rebuilt
+# when the Autoconf version changes. Unfortunately, suffix rules
+# cannot have additional dependencies, so we have to use explicit rules.
+CLEANFILES = autom4te.cfg
 subdir = lib
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -273,6 +278,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
@@ -332,11 +338,6 @@ uninstall-info: uninstall-info-recursive
 	mostlyclean-recursive tags tags-recursive uninstall \
 	uninstall-am uninstall-info-am uninstall-info-recursive \
 	uninstall-nodist_pkgdataDATA uninstall-recursive
-
-
-# All the files below depend on configure.ac so that they are rebuilt
-# when the Autoconf version changes. Unfortunately, suffix rules
-# cannot have additional dependencies, so we have to use explicit rules.
 
 autom4te.cfg: $(top_srcdir)/configure.ac $(srcdir)/autom4te.in
 	rm -f autom4te.cfg autom4te.tmp

@@ -21,7 +21,7 @@ edit = sed \
 # All the files below depend on configure.ac so that they are rebuilt
 # when the Autoconf version changes. Unfortunately, suffix rules
 # cannot have additional dependencies, so we have to use explicit rules.
-
+CLEANFILES = autom4te.cfg
 autom4te.cfg: $(top_srcdir)/configure.ac $(srcdir)/autom4te.in
 	rm -f autom4te.cfg autom4te.tmp
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp

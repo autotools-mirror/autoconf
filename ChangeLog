@@ -1,5 +1,9 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* lib/Makefile.am (CLEANFILES): Add autom4te.cfg.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Quadrigraphs): Document `@&t@'.
 	(testsuite Scripts): There is no such thing as `atconfig.in'.
 	And actually one diagram is missing: test suite runtime.
