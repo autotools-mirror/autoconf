@@ -391,7 +391,7 @@ m4_define([AC_REVISION],
 # quite complex for autoupdate to import the value of
 # `m4_PACKAGE_VERSION'.  We could `AU_DEFUN' `m4_PACKAGE_VERSION', but
 # this would replace all its occurrences with the current version of
-# Autoconf, which is certainly not what meant the user.
+# Autoconf, which is certainly not what the user intended.
 AU_DEFUN([AC_PREREQ],
 [m4_version_prereq([$1])[]dnl
 [AC_PREREQ(]]m4_defn([m4_PACKAGE_VERSION])[[)]])
