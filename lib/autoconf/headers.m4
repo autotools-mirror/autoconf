@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -124,18 +124,18 @@ AC_MSG_RESULT([$ac_header_preproc])
 case $ac_header_compiler:$ac_header_preproc in
   yes:no )
     AC_MSG_WARN([$1: accepted by the compiler, rejected by the preprocessor!])
-    AC_MSG_WARN([$1: proceeding with the preprocessor's result])
-    (
-      AS_BOX([Report this to bug-autoconf@gnu.org.])
-    ) |
-      sed "s/^/$as_me: WARNING:     /" >&2
+    AC_MSG_WARN([$1: proceeding with the compiler's result])
+    ac_header_preproc=yes
     ;;
   no:yes )
     AC_MSG_WARN([$1: present but cannot be compiled])
     AC_MSG_WARN([$1: check for missing prerequisite headers?])
     AC_MSG_WARN([$1: proceeding with the preprocessor's result])
+    AC_MSG_WARN([$1: in the future, the compiler will take precedence])
     (
-      AS_BOX([Report this to bug-autoconf@gnu.org.])
+      AS_BOX([Report this to ]m4_ifset([AC_PACKAGE_BUGREPORT],
+                                       [AC_PACKAGE_BUGREPORT],
+                                       [the AC_PACKAGE_NAME lists. ]))
     ) |
       sed "s/^/$as_me: WARNING:     /" >&2
     ;;

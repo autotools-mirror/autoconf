@@ -1,3 +1,10 @@
+2003-02-20  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): When
+	compiler says yeah, but preproc says nope, compiler is right.
+	Conversely, prompt the reader to send a bug report to the
+	maintainers of the package, not of Autoconf.
+
 2003-02-20  Klee Dienes  <kdienes@apple.com>
 
 	* bin/autoreconf.in (autoreconf_current_directory): Properly
