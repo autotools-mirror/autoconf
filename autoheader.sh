@@ -92,7 +92,7 @@ r= f=
 case `$M4 --help < /dev/null 2>&1` in
 *reload-state*) test -r $AC_MACRODIR/autoheader.m4f && { r=--reload f=f; } ;;
 *traditional*) ;;
-*) echo Autoconf requires GNU m4 1.1 or later >&2; rm -f $tmpin; exit 1 ;;
+*) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
 esac
 
 # Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
