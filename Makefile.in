@@ -99,11 +99,11 @@ standards.dvi: standards.texi make-stds.texi
 check:
 installcheck:
 
-installdirs: mkinstalldirs $(bindir) $(infodir) $(acdatadir)
+installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 
 # References to install-info have been removed until it's released.
-install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
+install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs install-info
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
 	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
