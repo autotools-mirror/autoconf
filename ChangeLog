@@ -1,5 +1,22 @@
 2000-10-17  Akim Demaille  <akim@epita.fr>
 
+	Give a means to report where the macros have been defined in error
+	messages.
+
+	* libm4.m4 (m4_location): New macro.
+	(m4_errprint): Rename as...
+	(m4_diagnose): this.  Use m4_location.
+	Adjust dependencies.
+	(m4_errprint): New macro, similar to `errprint' but for an
+	additional trailing `\n'.
+	* acgeneral.m4 (AC_DEFUN, AC_DEFUN_ONCE): Define `m4_location($1)'
+	to the current location (i.e., that of the definition of $1).
+	(_AC_DEFUN_PRO, _AC_REQUIRE): Also push the location of the
+	current macro in the stack.
+	(_AC_EXPANSION_STACK_DUMP): Adjust.
+
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
 	Fix autoupdate: updating `AC_OUTPUT_COMMANDS' was failing because
 	it includes another AU defined macro.
 

@@ -85,24 +85,37 @@ m4_rename([symbols], [m4_symbols])
 ## Move some m4 builtins to a safer name space.  ##
 ## --------------------------------------------- ##
 
+
+# m4_location
+# -----------
+define([m4_location], [__file__:__line__])
+
+
 # m4_errprint(MSG)
 # ----------------
-# Same as `errprint', but reports the file and line.
-define([m4_errprint], [errprint(__file__:__line__: [$1
+# Same as `errprint', but with the missing end of line.
+define([m4_errprint], [errprint([$1
 ])])
+
+
+# m4_diagnose(MSG)
+# ----------------
+# Same as `m4_errprint', but reports the file and line.
+define([m4_diagnose],
+[m4_errprint(m4_location: [$1])])
 
 
 # m4_warn(MSG)
 # ------------
 # Warn the user.
-define([m4_warn], [m4_errprint([warning: $1])])
+define([m4_warn], [m4_diagnose([warning: $1])])
 
 
 # m4_fatal(MSG, [EXIT-STATUS])
 # ----------------------------
 # Fatal the user.                                                      :)
 define([m4_fatal],
-[m4_errprint([error: $1])dnl
+[m4_diagnose([error: $1])dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
 

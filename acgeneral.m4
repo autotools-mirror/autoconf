@@ -540,10 +540,10 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # Dump the expansion stack.
 define([_AC_EXPANSION_STACK_DUMP],
 [ifdef([_AC_EXPANSION_STACK],
-       [m4_errprint([  ]defn([_AC_EXPANSION_STACK]))dnl
+       [m4_errprint(defn([_AC_EXPANSION_STACK]))dnl
 popdef([_AC_EXPANSION_STACK])dnl
 _AC_EXPANSION_STACK_DUMP()],
-       [m4_errprint([  the top level])])])
+       [m4_diagnose([the top level])])])
 
 
 # _AC_DEFUN_PRO(MACRO-NAME)
@@ -551,7 +551,8 @@ _AC_EXPANSION_STACK_DUMP()],
 # The prologue for Autoconf macros.
 define([_AC_DEFUN_PRO],
 [AC_PROVIDE([$1])dnl
-pushdef([_AC_EXPANSION_STACK], [$1 is expanded from...])dnl
+pushdef([_AC_EXPANSION_STACK],
+        defn([m4_location($1)])[: $1 is expanded from...])dnl
 pushdef([_AC_EXPANDING($1)])dnl
 ifdef([_AC_DIVERT_DUMP],
       [AC_DIVERT_PUSH(defn([_AC_DIVERT_DIVERSION]))],
@@ -585,7 +586,9 @@ popdef([_AC_EXPANDING($1)])dnl
 # macros that are not involved in ordering constraints, to save m4
 # processing.
 define([AC_DEFUN],
-[define([$1], [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])
+[define([m4_location($1)], m4_location)dnl
+define([$1],
+       [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])
 
 
 # AC_DEFUN_ONCE(NAME, EXPANSION)
@@ -650,9 +653,9 @@ define([AC_BEFORE],
 #   it passes to `AC_LANG_COMPILER(C)'.
 define([_AC_REQUIRE],
 [pushdef([_AC_EXPANSION_STACK],
-         [$1 is required by...])dnl
+         m4_location[: $1 is required by...])dnl
 ifdef([_AC_EXPANDING($1)],
-      [m4_errprint([AC_REQUIRE: circular dependency of $1])dnl
+      [m4_diagnose([AC_REQUIRE: circular dependency of $1])dnl
 _AC_EXPANSION_STACK_DUMP()dnl
 m4exit(1)])dnl
 ifndef([_AC_DIVERT_DUMP],
@@ -2116,7 +2119,7 @@ _AC_INIT_SRCDIR
 _AC_INIT_HELP
 _AC_INIT_VERSION
 _AC_INIT_PREPARE
-dnl _AC__INIT_COPYRIGHT must be called after _AC_INIT_VERSION, since
+dnl _AC_INIT_COPYRIGHT must be called after _AC_INIT_VERSION, since
 dnl it dumps into a diversion prepared by _AC_INIT_VERSION.
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
