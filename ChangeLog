@@ -1,5 +1,10 @@
 2001-05-19  Akim Demaille  <akim@epita.fr>
 
+	* autoheader.sh: Fix file names used in error messages.
+	Reported by Rainer Orth as PR Autoconf/178.
+
+2001-05-19  Akim Demaille  <akim@epita.fr>
+
 	* tests/compile.at (AC_PROG_CPP via CC): Invoke AC_PROG_CC instead
 	if using `cc'.
 

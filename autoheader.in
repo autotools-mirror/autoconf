@@ -266,7 +266,7 @@ $verbose $me: sourcing $tmp/traces.sh >&2
 if (set -e && . $tmp/traces.sh) >/dev/null 2>&1; then
   . $tmp/traces.sh
 else
-  echo "$me: error: shell error while sourcing $tmp/trace.sh" >&2
+  echo "$me: error: shell error while sourcing $tmp/traces.sh" >&2
   (exit 1); exit
 fi
 
