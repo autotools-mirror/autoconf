@@ -8,6 +8,7 @@
 # Free Software Foundation, Inc.
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
+
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -41,6 +42,46 @@ IFS=" 	$ac_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
+
+# File descriptor usage:
+# 0 standard input
+# 1 file creation
+# 2 errors and warnings
+# 3 some systems may open it to /dev/tty
+# 4 used on the Kubota Titan
+# 6 checking for... messages and results
+# 5 compiler messages saved in config.log
+if test "$silent" = yes; then
+  exec 6>/dev/null
+else
+  exec 6>&1
+fi
+exec 5>./config.log
+
+echo "\
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+It was created by configure (Autoconf 2.49b) 2.49b, executed with
+ > $0 $@
+
+on `(hostname || uname -n) 2>/dev/null | sed 1q`:
+
+uname -m = `(uname -m) 2>/dev/null || echo unknown`
+uname -r = `(uname -r) 2>/dev/null || echo unknown`
+uname -s = `(uname -s) 2>/dev/null || echo unknown`
+uname -v = `(uname -v) 2>/dev/null || echo unknown`
+
+/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
+/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
+
+hostinfo               = `(hostinfo) 2>/dev/null`
+/bin/universe          = `(/bin/universe) 2>/dev/null`
+/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
+/bin/arch              = `(/bin/arch) 2>/dev/null`
+/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
+" >&5
 
 #
 # Initializations.
@@ -185,7 +226,7 @@ do
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:188: error: invalid feature name: $ac_feature" >&5
+      { echo "configure:229: error: invalid feature name: $ac_feature" >&5
   echo "configure: error: invalid feature name: $ac_feature" >&2
   { false; exit; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
@@ -195,7 +236,7 @@ do
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:198: error: invalid feature name: $ac_feature" >&5
+      { echo "configure:239: error: invalid feature name: $ac_feature" >&5
   echo "configure: error: invalid feature name: $ac_feature" >&2
   { false; exit; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
@@ -378,7 +419,7 @@ do
     ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:381: error: invalid package name: $ac_package" >&5
+      { echo "configure:422: error: invalid package name: $ac_package" >&5
   echo "configure: error: invalid package name: $ac_package" >&2
   { false; exit; }; }
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -392,7 +433,7 @@ do
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:395: error: invalid package name: $ac_package" >&5
+      { echo "configure:436: error: invalid package name: $ac_package" >&5
   echo "configure: error: invalid package name: $ac_package" >&2
   { false; exit; }; }
     ac_package=`echo $ac_package | sed 's/-/_/g'`
@@ -416,7 +457,7 @@ do
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries=$ac_optarg ;;
 
-  -*) { echo "configure:419: error: unrecognized option: $ac_option
+  -*) { echo "configure:460: error: unrecognized option: $ac_option
 Try \`configure --help' for more information." >&5
   echo "configure: error: unrecognized option: $ac_option
 Try \`configure --help' for more information." >&2
@@ -427,7 +468,7 @@ Try \`configure --help' for more information." >&2
     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
     # Reject names that are not valid shell variable names.
     expr "x$ac_envvar" : ".*[^_$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:430: error: invalid variable name: $ac_envvar" >&5
+      { echo "configure:471: error: invalid variable name: $ac_envvar" >&5
   echo "configure: error: invalid variable name: $ac_envvar" >&2
   { false; exit; }; }
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
@@ -436,10 +477,10 @@ Try \`configure --help' for more information." >&2
 
   *)
     # FIXME: should be removed in autoconf 3.0.
-    { echo "configure:439: WARNING: you should use --build, --host, --target" >&5
+    { echo "configure:480: WARNING: you should use --build, --host, --target" >&5
 echo "configure: WARNING: you should use --build, --host, --target" >&2; }
-    expr "x$ac_option" : ".*[^.$ac_cr_alnum]" >/dev/null &&
-      { echo "configure:442: WARNING: invalid host type: $ac_option" >&5
+    expr "x$ac_option" : ".*[^-._$ac_cr_alnum]" >/dev/null &&
+      { echo "configure:483: WARNING: invalid host type: $ac_option" >&5
 echo "configure: WARNING: invalid host type: $ac_option" >&2; }
     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
@@ -449,7 +490,7 @@ done
 
 if test -n "$ac_prev"; then
   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
-  { echo "configure:452: error: missing argument to $ac_option" >&5
+  { echo "configure:493: error: missing argument to $ac_option" >&5
   echo "configure: error: missing argument to $ac_option" >&2
   { false; exit; }; }
 fi
@@ -463,7 +504,7 @@ do
   case $ac_val in
     [\\/$]* | ?:[\\/]* ) ;;
     NONE ) ;;
-    *)  { echo "configure:466: error: expected an absolute path for --$ac_var: $ac_val" >&5
+    *)  { echo "configure:507: error: expected an absolute path for --$ac_var: $ac_val" >&5
   echo "configure: error: expected an absolute path for --$ac_var: $ac_val" >&2
   { false; exit; }; };;
   esac
@@ -479,7 +520,7 @@ target=$target_alias
 if test "x$host_alias" != x; then
   if test "x$build_alias" = x; then
     cross_compiling=maybe
-    { echo "configure:482: WARNING: If you wanted to set the --build type, don't use --host.
+    { echo "configure:523: WARNING: If you wanted to set the --build type, don't use --host.
     If a cross compiler is detected then cross compile mode will be used." >&5
 echo "configure: WARNING: If you wanted to set the --build type, don't use --host.
     If a cross compiler is detected then cross compile mode will be used." >&2; }
@@ -507,11 +548,11 @@ else
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
-    { echo "configure:510: error: cannot find sources in $ac_confdir or .." >&5
+    { echo "configure:551: error: cannot find sources in $ac_confdir or .." >&5
   echo "configure: error: cannot find sources in $ac_confdir or .." >&2
   { false; exit; }; }
   else
-    { echo "configure:514: error: cannot find sources in $srcdir" >&5
+    { echo "configure:555: error: cannot find sources in $srcdir" >&5
   echo "configure: error: cannot find sources in $srcdir" >&2
   { false; exit; }; }
   fi
@@ -631,7 +672,7 @@ if test "$ac_init_help" = "recursive"; then
       echo
       $ac_configure --help
     else
-      { echo "configure:634: WARNING: no configuration information is in $ac_subdir" >&5
+      { echo "configure:675: WARNING: no configuration information is in $ac_subdir" >&5
 echo "configure: WARNING: no configuration information is in $ac_subdir" >&2; }
     fi
     cd $ac_popdir
@@ -672,46 +713,6 @@ do
   esac
   # Get rid of the leading space.
 done
-
-# File descriptor usage:
-# 0 standard input
-# 1 file creation
-# 2 errors and warnings
-# 3 some systems may open it to /dev/tty
-# 4 used on the Kubota Titan
-# 6 checking for... messages and results
-# 5 compiler messages saved in config.log
-if test "$silent" = yes; then
-  exec 6>/dev/null
-else
-  exec 6>&1
-fi
-exec 5>./config.log
-
-echo "\
-This file contains any messages produced by compilers while
-running configure, to aid debugging if configure makes a mistake.
-
-It was created by configure (Autoconf 2.49b) 2.49b, executed with
- > $0 $ac_configure_args
-
-on $ac_hostname:
-
-uname -m = `(uname -m) 2>/dev/null || echo unknown`
-uname -r = `(uname -r) 2>/dev/null || echo unknown`
-uname -s = `(uname -s) 2>/dev/null || echo unknown`
-uname -v = `(uname -v) 2>/dev/null || echo unknown`
-
-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
-
-hostinfo               = `(hostinfo) 2>/dev/null`
-/bin/universe          = `(/bin/universe) 2>/dev/null`
-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
-/bin/arch              = `(/bin/arch) 2>/dev/null`
-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
-" >&5
 
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.
@@ -774,30 +775,30 @@ for ac_var in `(set) 2>&1 |
   eval ac_new_val="\$ac_env_${ac_var}_value"
   case $ac_old_set,$ac_new_set in
     set,)
-      { echo "configure:777: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
+      { echo "configure:778: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
 echo "configure: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2; }
       ac_suggest_removing_cache=: ;;
     ,set)
-      { echo "configure:781: WARNING: \`$ac_var' was not set in the previous run" >&5
+      { echo "configure:782: WARNING: \`$ac_var' was not set in the previous run" >&5
 echo "configure: WARNING: \`$ac_var' was not set in the previous run" >&2; }
       ac_suggest_removing_cache=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-        { echo "configure:787: WARNING: \`$ac_var' has changed since the previous run:" >&5
+        { echo "configure:788: WARNING: \`$ac_var' has changed since the previous run:" >&5
 echo "configure: WARNING: \`$ac_var' has changed since the previous run:" >&2; }
-        { echo "configure:789: WARNING:   former value:  $ac_old_val" >&5
+        { echo "configure:790: WARNING:   former value:  $ac_old_val" >&5
 echo "configure: WARNING:   former value:  $ac_old_val" >&2; }
-        { echo "configure:791: WARNING:   current value: $ac_new_val" >&5
+        { echo "configure:792: WARNING:   current value: $ac_new_val" >&5
 echo "configure: WARNING:   current value: $ac_new_val" >&2; }
         ac_suggest_removing_cache=:
       fi;;
   esac
 done
 if $ac_suggest_removing_cache; then
-  { echo "configure:798: WARNING: changes in the environment can compromise the build" >&5
+  { echo "configure:799: WARNING: changes in the environment can compromise the build" >&5
 echo "configure: WARNING: changes in the environment can compromise the build" >&2; }
-  { echo "configure:800: WARNING: consider removing $cache_file and starting over" >&5
+  { echo "configure:801: WARNING: consider removing $cache_file and starting over" >&5
 echo "configure: WARNING: consider removing $cache_file and starting over" >&2; }
 fi
 
@@ -831,7 +832,7 @@ for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { echo "configure:834: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
+  { echo "configure:835: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
   echo "configure: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2
   { false; exit; }; }
 fi
@@ -851,7 +852,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "configure:854: checking for a BSD compatible install" >&5
+echo "configure:855: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -900,7 +901,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "configure:903: result: $INSTALL" >&5
+echo "configure:904: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -911,7 +912,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-echo "configure:914: checking whether build environment is sane" >&5
+echo "configure:915: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
@@ -934,7 +935,7 @@ if (
       # if, for instance, CONFIG_SHELL is bash and it inherits a
       # broken ls alias from the environment.  This has actually
       # happened.  Such a system could not be considered "sane".
-      { echo "configure:937: error: ls -t appears to fail.  Make sure there is not a broken
+      { echo "configure:938: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&5
   echo "configure: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&2
@@ -947,17 +948,17 @@ then
    # Ok.
    :
 else
-   { echo "configure:950: error: newly created file is older than distributed files!
+   { echo "configure:951: error: newly created file is older than distributed files!
 Check your system clock" >&5
   echo "configure: error: newly created file is older than distributed files!
 Check your system clock" >&2
   { false; exit; }; }
 fi
 rm -f conftest*
-echo "configure:957: result: yes" >&5
+echo "configure:958: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
-echo "configure:960: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:961: checking whether ${MAKE-make} sets \${MAKE}" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \${MAKE}... $ECHO_C" >&6
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
@@ -977,11 +978,11 @@ fi
 rm -f conftestmake
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  echo "configure:980: result: yes" >&5
+  echo "configure:981: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   SET_MAKE=
 else
-  echo "configure:984: result: no" >&5
+  echo "configure:985: result: no" >&5
 echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
@@ -991,7 +992,7 @@ PACKAGE=autoconf
 VERSION=2.49b
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
-  { echo "configure:994: error: source directory already configured; run \"make distclean\" there first" >&5
+  { echo "configure:995: error: source directory already configured; run \"make distclean\" there first" >&5
   echo "configure: error: source directory already configured; run \"make distclean\" there first" >&2
   { false; exit; }; }
 fi
@@ -1005,78 +1006,78 @@ cat >>confdefs.h <<EOF
 EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
-echo "configure:1008: checking for working aclocal" >&5
+echo "configure:1009: checking for working aclocal" >&5
 echo $ECHO_N "checking for working aclocal... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (aclocal --version) < /dev/null > /dev/null 2>&1; then
    ACLOCAL=aclocal
-   echo "configure:1015: result: found" >&5
+   echo "configure:1016: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    ACLOCAL="$SHELL $missing_dir/missing aclocal"
-   echo "configure:1019: result: missing" >&5
+   echo "configure:1020: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:1023: checking for working autoconf" >&5
+echo "configure:1024: checking for working autoconf" >&5
 echo $ECHO_N "checking for working autoconf... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoconf --version) < /dev/null > /dev/null 2>&1; then
    AUTOCONF=autoconf
-   echo "configure:1030: result: found" >&5
+   echo "configure:1031: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOCONF="$SHELL $missing_dir/missing autoconf"
-   echo "configure:1034: result: missing" >&5
+   echo "configure:1035: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:1038: checking for working automake" >&5
+echo "configure:1039: checking for working automake" >&5
 echo $ECHO_N "checking for working automake... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (automake --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake
-   echo "configure:1045: result: found" >&5
+   echo "configure:1046: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOMAKE="$SHELL $missing_dir/missing automake"
-   echo "configure:1049: result: missing" >&5
+   echo "configure:1050: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:1053: checking for working autoheader" >&5
+echo "configure:1054: checking for working autoheader" >&5
 echo $ECHO_N "checking for working autoheader... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoheader --version) < /dev/null > /dev/null 2>&1; then
    AUTOHEADER=autoheader
-   echo "configure:1060: result: found" >&5
+   echo "configure:1061: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOHEADER="$SHELL $missing_dir/missing autoheader"
-   echo "configure:1064: result: missing" >&5
+   echo "configure:1065: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:1068: checking for working makeinfo" >&5
+echo "configure:1069: checking for working makeinfo" >&5
 echo $ECHO_N "checking for working makeinfo... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
    MAKEINFO=makeinfo
-   echo "configure:1075: result: found" >&5
+   echo "configure:1076: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    MAKEINFO="$SHELL $missing_dir/missing makeinfo"
-   echo "configure:1079: result: missing" >&5
+   echo "configure:1080: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
@@ -1091,7 +1092,7 @@ for ac_prog in gm4 gnum4 m4
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "configure:1094: checking for $ac_word" >&5
+echo "configure:1095: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1118,10 +1119,10 @@ fi
 M4=$ac_cv_path_M4
 
 if test -n "$M4"; then
-  echo "configure:1121: result: $M4" >&5
+  echo "configure:1122: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6
 else
-  echo "configure:1124: result: no" >&5
+  echo "configure:1125: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1129,7 +1130,7 @@ fi
 done
 test -n "$M4" || M4="m4"
 
-echo "configure:1132: checking whether m4 supports frozen files" >&5
+echo "configure:1133: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1141,10 +1142,10 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-echo "configure:1144: result: $ac_cv_prog_gnu_m4" >&5
+echo "configure:1145: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { echo "configure:1147: error: GNU m4 1.4 is required" >&5
+  { echo "configure:1148: error: GNU m4 1.4 is required" >&5
   echo "configure: error: GNU m4 1.4 is required" >&2
   { false; exit; }; }
 fi
@@ -1156,7 +1157,7 @@ for ac_prog in mawk gawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "configure:1159: checking for $ac_word" >&5
+echo "configure:1160: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1178,10 +1179,10 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "configure:1181: result: $AWK" >&5
+  echo "configure:1182: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "configure:1184: result: no" >&5
+  echo "configure:1185: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1189,25 +1190,25 @@ fi
 done
 
 # Generating man pages.
-echo "configure:1192: checking for working help2man" >&5
+echo "configure:1193: checking for working help2man" >&5
 echo $ECHO_N "checking for working help2man... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
-   echo "configure:1199: result: found" >&5
+   echo "configure:1200: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    HELP2MAN="$SHELL $missing_dir/missing help2man"
-   echo "configure:1203: result: missing" >&5
+   echo "configure:1204: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "configure:1210: checking for $ac_word" >&5
+echo "configure:1211: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1235,17 +1236,17 @@ fi
 PERL=$ac_cv_path_PERL
 
 if test -n "$PERL"; then
-  echo "configure:1238: result: $PERL" >&5
+  echo "configure:1239: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "configure:1241: result: no" >&5
+  echo "configure:1242: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" != no; then
   PERLSCRIPTS=autoscan
 else
-  { echo "configure:1248: WARNING: autoscan will not be built since perl is not found" >&5
+  { echo "configure:1249: WARNING: autoscan will not be built since perl is not found" >&5
 echo "configure: WARNING: autoscan will not be built since perl is not found" >&2; }
 fi
 
@@ -1261,7 +1262,7 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "configure:1264: checking for a BSD compatible install" >&5
+echo "configure:1265: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -1310,7 +1311,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "configure:1313: result: $INSTALL" >&5
+echo "configure:1314: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1818,7 +1819,7 @@ done; }
       -) echo $tmp/stdin ;;
       [\\/$]* | ?:[\\/]*)
          # Absolute
-         test -f "$f" || { echo "configure:1821: error: cannot find input file \\\`$f'" >&5
+         test -f "$f" || { echo "configure:1822: error: cannot find input file \\\`$f'" >&5
   echo "configure: error: cannot find input file \\\`$f'" >&2
   { false; exit; }; }
          echo $f;;
@@ -1831,7 +1832,7 @@ done; }
            echo $ac_given_srcdir/$f
          else
            # /dev/null tree
-           { echo "configure:1834: error: cannot find input file \\\`$f'" >&5
+           { echo "configure:1835: error: cannot find input file \\\`$f'" >&5
   echo "configure: error: cannot find input file \\\`$f'" >&2
   { false; exit; }; }
          fi;;

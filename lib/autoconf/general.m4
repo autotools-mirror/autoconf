@@ -740,10 +740,10 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 ])
 
 
-# _AC_INIT_PREPARE_ENVIRONMENT
-# ----------------------------
+# _AC_INIT_DEFAULTS_ENVIRONMENT
+# -----------------------------
 # Tune the behavior of the shell.
-define([_AC_INIT_PREPARE_ENVIRONMENT],
+define([_AC_INIT_DEFAULTS_ENVIRONMENT],
 [# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -772,7 +772,60 @@ IFS=" 	$ac_nl"
 
 # CDPATH.
 AS_UNSET([CDPATH], [:])
-])
+])# _AC_INIT_DEFAULTS_ENVIRONMENT
+
+
+# _AC_INIT_DEFAULTS_FDS
+# ---------------------
+# Set up the file descriptors used by `configure'.
+
+define([AC_FD_MSG], 6)
+define([AC_FD_LOG], 5)
+# That's how it used to be named.
+AU_ALIAS([AC_FD_CC], [AC_FD_LOG])
+
+define([_AC_INIT_DEFAULTS_FDS],
+[# File descriptor usage:
+# 0 standard input
+# 1 file creation
+# 2 errors and warnings
+# 3 some systems may open it to /dev/tty
+# 4 used on the Kubota Titan
+@%:@ AC_FD_MSG checking for... messages and results
+@%:@ AC_FD_LOG compiler messages saved in config.log
+if test "$silent" = yes; then
+  exec AC_FD_MSG>/dev/null
+else
+  exec AC_FD_MSG>&1
+fi
+exec AC_FD_LOG>./config.log
+
+echo "\
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+It was created by configure ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
+ > $[0] $[@]
+
+on `(hostname || uname -n) 2>/dev/null | sed 1q`:
+
+uname -m = `(uname -m) 2>/dev/null || echo unknown`
+uname -r = `(uname -r) 2>/dev/null || echo unknown`
+uname -s = `(uname -s) 2>/dev/null || echo unknown`
+uname -v = `(uname -v) 2>/dev/null || echo unknown`
+
+/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
+/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
+
+hostinfo               = `(hostinfo) 2>/dev/null`
+/bin/universe          = `(/bin/universe) 2>/dev/null`
+/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
+/bin/arch              = `(/bin/arch) 2>/dev/null`
+/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
+" >&AC_FD_LOG
+])# _AC_INIT_DEFAULTS_FDS
 
 
 # _AC_INIT_DEFAULTS
@@ -780,7 +833,10 @@ AS_UNSET([CDPATH], [:])
 # Values which defaults can be set from `configure.in'.
 define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
-_AC_INIT_PREPARE_ENVIRONMENT
+
+_AC_INIT_DEFAULTS_ENVIRONMENT
+_AC_INIT_DEFAULTS_FDS
+
 
 #
 # Initializations.
@@ -1440,59 +1496,6 @@ fi])dnl
 ])# _AC_INIT_VERSION
 
 
-# _AC_INIT_PREPARE_FDS
-# --------------------
-# Set up the file descriptors used by `configure'.
-
-define([AC_FD_MSG], 6)
-define([AC_FD_LOG], 5)
-# That's how it used to be named.
-AU_ALIAS([AC_FD_CC], [AC_FD_LOG])
-
-define([_AC_INIT_PREPARE_FDS],
-[# File descriptor usage:
-# 0 standard input
-# 1 file creation
-# 2 errors and warnings
-# 3 some systems may open it to /dev/tty
-# 4 used on the Kubota Titan
-@%:@ AC_FD_MSG checking for... messages and results
-@%:@ AC_FD_LOG compiler messages saved in config.log
-if test "$silent" = yes; then
-  exec AC_FD_MSG>/dev/null
-else
-  exec AC_FD_MSG>&1
-fi
-exec AC_FD_LOG>./config.log
-
-echo "\
-This file contains any messages produced by compilers while
-running configure, to aid debugging if configure makes a mistake.
-
-It was created by configure ifset([AC_PACKAGE_STRING],
-                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
- > $[0] $ac_configure_args
-
-on $ac_hostname:
-
-uname -m = `(uname -m) 2>/dev/null || echo unknown`
-uname -r = `(uname -r) 2>/dev/null || echo unknown`
-uname -s = `(uname -s) 2>/dev/null || echo unknown`
-uname -v = `(uname -v) 2>/dev/null || echo unknown`
-
-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
-
-hostinfo               = `(hostinfo) 2>/dev/null`
-/bin/universe          = `(/bin/universe) 2>/dev/null`
-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
-/bin/arch              = `(/bin/arch) 2>/dev/null`
-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
-" >&AC_FD_LOG
-])# _AC_INIT_PREPARE_FDS
-
-
 # _AC_INIT_PREPARE
 # ----------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
@@ -1527,8 +1530,6 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
   esac
   # Get rid of the leading space.
 done
-
-_AC_INIT_PREPARE_FDS
 
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.
@@ -3938,7 +3939,7 @@ cat >$CONFIG_STATUS <<\EOF
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.
 
-_AC_INIT_PREPARE_ENVIRONMENT
+_AC_INIT_DEFAULTS_ENVIRONMENT
 debug=false
 me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}

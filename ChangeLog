@@ -1,5 +1,19 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	Set up config.log earlier so that AC_MSG_ERROR and AC_MSG_WARN can
+	be used early.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Call `_AC_INIT_PREPARE_FDS'.
+	(_AC_INIT_PREPARE): Don't.
+	(_AC_INIT_PREPARE_ENVIRONMENT, _AC_INIT_PREPARE_FDS): Rename as...
+	(_AC_INIT_DEFAULTS_ENVIRONMENT, _AC_INIT_DEFAULTS_FDS): these,
+	since they are called from `_AC_INIT_DEFAULTS', not
+	`_AC_INIT_PREPARE'.
+	(_AC_INIT_DEFAULTS_FDS): Dump `$@' in config.log, not
+	`$ac_configure_args' which is not computed yet.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): TRIPLET can include `_' and
 	`-'.
 	Reported by Andreas Jaeger.
