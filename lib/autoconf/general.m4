@@ -27,13 +27,13 @@ undefine([shift])dnl
 undefine([format])dnl
 dnl
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
-)exit(1)])dnl
+)m4exit(2)])dnl
 dnl
 dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.5)dnl
+define(AC_ACVERSION, 1.7.6)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -284,6 +284,28 @@ define(AC_DOREV, [#!/bin/sh
 # From configure.in $1
 ])dnl
 define(AC_REVISION, [AC_DOREV(translit($1,$"))])dnl
+dnl
+dnl Subroutines of AC_PREREQ.
+dnl
+dnl Change the dots in version number $1 into commas.
+define(AC_PREREQ_SPLIT, [translit($1,.,[,])])dnl
+dnl
+dnl Default the ternary version number to 0 (e.g., 1,7 -> 1,7,0).
+define(AC_PREREQ_CANON, [$1,$2,ifelse([$3],,0,[$3])])dnl
+dnl
+dnl Complain and exit if the version number in $1 through $3 is less than
+dnl the version number in $4 through $6.
+dnl $7 is the printable version of the second version number.
+define(AC_PREREQ_COMPARE,
+[ifelse(builtin([eval],
+[$3 + $2 * 100 + $1 * 10000 < $6 + $5 * 100 + $4 * 10000]),1,
+[errprint(Autoconf version $7 or higher is required
+)m4exit(3)])])dnl
+dnl
+dnl Complain if the Autoconf version is less than $1.
+define(AC_PREREQ,
+[AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
+AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
 dnl
 dnl
 dnl Setting variables
