@@ -1,3 +1,8 @@
+2001-03-13  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_PROG_F77_C_O): define F77_NO_MINUS_C_MINUS_O
+	when test fails, not when it succeeds(!).
+
 2001-03-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.at (AWK portability): Use AT_CHECK to check for GNU
