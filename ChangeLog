@@ -13,34 +13,34 @@
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for the kstat_open()
 	function in libkstat (on systems such as Solaris). This family of
 	functions is preferred since they don't require setgid permissions
-	to use them. Fix for autoconf/65.
+	to use them. Fix for PR autoconf/65.
 
 1999-09-27  Ben Elliston  <bje@cygnus.com>
 
 	* autoscan.pl (scan_files): Emit an AC_PROG_CC invocation to
-	configure.scan if there are any C files present. Fix for
+	configure.scan if there are any C files present. Fix for PR
 	autoconf/19.
 
 1999-09-26  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_OUTPUT_LINKS): Eliminate gratuitous spaces from
-	$ac_sources if this variable is otherwise empty. Fix for
+	$ac_sources if this variable is otherwise empty. Fix for PR
 	autoconf/30.
 
 1999-09-25  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (AC_FUNC_SETVBUF): Do not mention which systems
 	might have their setvbuf() arguments reordered. It's difficult to
-	accurately determine and is not essential. Fix for autoconf/7.
+	accurately determine and is not essential. Fix for PR autoconf/7.
 
 	* acgeneral.m4 (AC_LINK_FILES): Emit an error if an incorrect
-	number of arguments are collected. Fix for autoconf/10.
+	number of arguments are collected. Fix for PR autoconf/10.
 
 1999-09-24  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_HEADER_STDC): Define ISLOWER and ISUPPER
 	macros correctly on EBCDIC systems. Contributed by Kurt D.
-	Zeilenga <kurt@openldap.org>. Fix for autoconf/6.
+	Zeilenga <kurt@openldap.org>. Fix for PR autoconf/6.
 
 1999-09-24  Jim Blandy  <jimb@zwingli.cygnus.com>
 
@@ -52,7 +52,7 @@
 
 	* autoreconf.sh: Do not run autoheader if AC_CONFIG_HEADER is
 	commented out in configure.in. Reported by Erez Zadok
-	<ezk@cs.columbia.edu> as a fix for autoconf/21.
+	<ezk@cs.columbia.edu> as a fix for PR autoconf/21.
 
 	* install.texi: Replace `can not' with `cannot'.
 
@@ -76,7 +76,7 @@
 
 	* configure.in: Check if an appropriate version of GNU m4 is
 	installed at configure-time rather than at runtime. From Pavel
-	Roskin <pavel_roskin@geocities.com>. Fix for autoconf/2.
+	Roskin <pavel_roskin@geocities.com>. Fix for PR autoconf/2.
 	* configure: Regenerate.
 
 1999-09-20  Ben Elliston  <bje@cygnus.com>
@@ -92,11 +92,11 @@
 1999-09-17  Erez Zadok  <ezk@cs.columbia.edu>
 
 	* config.guess: Eliminate the trailing dot if ${UNAME_RELEASE} is
-	1.4-<SOMETHING>. Fix for autoconf/22.
+	1.4-<SOMETHING>. Fix for PR autoconf/22.
 
 1999-09-15  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
-	Fix for autoconf/28.
+	Fix for PR autoconf/28.
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Don't assume LF is \012, use
 	`echo` followed by a non-blank, within quotes.
 	* autoheader.sh (syms): Likewise.
@@ -171,22 +171,22 @@
 
 	* acspecific.m4 (AC_C_INLINE): Qualify the return type of the
 	dummy inlined function to satisfy newer C++ compilers. Fix for
-	autoconf/49.
+	PR autoconf/49.
 
 1999-08-26  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (Changed Results): Correct an error in one of the
-	examples. Fix for autoconf/38.
+	examples. Fix for PR autoconf/38.
 
 1999-08-25  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (Cache Variable Names): Be more explicit about the
-	requirements for cache variable names. Fix for autoconf/53.
+	requirements for cache variable names. Fix for PR autoconf/53.
 
 1999-08-25  Alexandre Oliva  <oliva@dcc.unicamp.br>
 
 	* autoreconf.sh: Run aclocal with the -I option only if
-	aclocal_dir != `.'.  Fix for autoconf/44.
+	aclocal_dir != `.'.  Fix for PR autoconf/44.
 	
 1999-08-18  Ben Elliston  <bje@cygnus.com>
 
