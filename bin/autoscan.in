@@ -187,6 +187,15 @@ sub init_tables ()
 }
 
 
+# used($KIND, $WORD, [$WHERE])
+# ----------------------------
+# $WORD is used in $KIND.
+sub used ($$;$)
+{
+  my ($kind, $word, $where) = @_;
+  $where ||= "$File::Find::name:$.";
+  push (@{$used{$kind}{$word}}, $where);
+}
 
 ## ----------------------- ##
 ## Scanning source files.  ##
@@ -198,8 +207,8 @@ sub init_tables ()
 sub scan_c_file ($)
 {
   my ($filename) = @_;
-
-  push (@cfiles, $File::Find::name);
+  my $filepath = $File::Find::name;
+  push (@cfiles, $filepath);
 
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
@@ -229,13 +238,13 @@ sub scan_c_file ($)
 	{
 	  if (/^include\s*<([^>]*)>/)
 	    {
-	      push (@{$used{'headers'}{$1}}, "$File::Find::name:$.");
+	      used ('headers', $1);
 	    }
 	  if (s/^(if|ifdef|ifndef|elif)\s+//)
 	    {
 	      foreach my $word (split (/\W+/))
 		{
-		  push (@{$used{'identifiers'}{$word}}, "$File::Find::name:$.")
+		  used ('identifiers', $word)
 		    unless $word eq 'defined' || $word !~ /^[a-zA-Z_]/;
 		}
 	    }
@@ -251,12 +260,12 @@ sub scan_c_file ($)
       # Maybe we should ignore function definitions (in column 0)?
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
-	  push (@{$used{'functions'}{$1}}, "$File::Find::name:$.")
+	  used ('functions', $1)
 	    if !defined $c_keywords{$1};
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  push (@{$used{'identifiers'}{$1}}, "$File::Find::name:$.")
+	  used ('identifiers', $1)
 	    if !defined $c_keywords{$1};
 	}
     }
@@ -270,7 +279,8 @@ sub scan_c_file ($)
 sub scan_makefile ($)
 {
   my ($filename) = @_;
-  push (@makefiles, $File::Find::name);
+  my $filepath = $File::Find::name;
+  push (@makefiles, $filepath);
 
   my $file = new Autom4te::XFile "<$filename";
 
@@ -285,17 +295,17 @@ sub scan_makefile ($)
       # Variable assignments.
       while (s/\b([a-zA-Z_]\w*)\s*=/ /)
 	{
-	  push (@{$used{'makevars'}{$1}}, "$File::Find::name:$.");
+	  used ('makevars', $1);
 	}
       # Libraries.
       while (s/\B-l([a-zA-Z_]\w*)\b/ /)
 	{
-	  push (@{$used{'libraries'}{$1}}, "$File::Find::name:$.");
+	  used ('libraries', $1);
 	}
       # Tokens in the code.
       while (s/(?<![-\w.])([a-zA-Z_][\w+.-]+)/ /)
 	{
-	  push (@{$used{'programs'}{$1}}, "$File::Find::name:$.");
+	  used ('programs', $1);
 	}
     }
 
@@ -308,7 +318,8 @@ sub scan_makefile ($)
 sub scan_sh_file ($)
 {
   my ($filename) = @_;
-  push (@shfiles, $File::Find::name);
+  my $filepath = $File::Find::name;
+  push (@shfiles, $filepath);
 
   my $file = new Autom4te::XFile "<$filename";
 
@@ -322,7 +333,7 @@ sub scan_sh_file ($)
       # Tokens in the code.
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  push (@{$used{'programs'}{$1}}, "$File::Find::name:$.");
+	  used ('programs', $1);
 	}
     }
 

@@ -1,5 +1,11 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (used): New.
+	Use it.
+
+	
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (&scan_c_file): Better parsing of CPP
 	directives.
 	(&scan_sh_file): Remove a duplicate pattern.
