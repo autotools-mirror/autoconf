@@ -638,15 +638,6 @@ space-separated list of the files in which that identifier occurs.
 @itemx -h
 Print a summary of the command line options and exit.
 
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
-@evindex AC_MACRODIR
-Look for the Autoconf macro files in directory @var{dir} instead of the
-default installation directory.  Only used to get the version number.
-You can also set the @code{AC_MACRODIR}
-environment variable to a directory; this option overrides the
-environment variable.
-
 @item --version
 Print the version number of Autoconf and exit.
 @end table

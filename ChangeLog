@@ -1,3 +1,8 @@
+1999-11-14  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.texi (Invoking ifnames): ifnames no longer supports
+	--macrodir.
+
 1999-11-13  Akim Demaille  <akim@epita.fr>
 
 	Run the `syntax' test on acgeneral macros too.
