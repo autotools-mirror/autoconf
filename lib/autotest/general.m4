@@ -196,7 +196,7 @@ else
 fi
 
 # Use `diff -u' when possible.
-if diff $at_devnull $at_devnull >/dev/null 2>&1; then
+if diff -u $at_devnull $at_devnull >/dev/null 2>&1; then
   at_diff='diff -u'
 else
   at_diff=diff
