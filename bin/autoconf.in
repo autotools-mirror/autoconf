@@ -160,11 +160,12 @@ while test $# -gt 0 ; do
        task=trace
        shift
        test $# = 0 && { echo "$help" >&2; exit 1; }
-       traces="$traces '$1'"
+       traces="$traces '"`echo "$1" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --trace=* )
        task=trace
-       traces="$traces '"`echo "$1" | sed -e 's/^[^=]*=//;s/:.*//'`"'"
+       traces="$traces '"`echo "$1" |
+                          sed -e "s/^[^=]*=//;s/:.*//;s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --initialization | -i )
        initialization=:
@@ -333,30 +334,40 @@ case $task in
   cat >$tmp/trace.m4 <<\EOF
 divert(-1)
   changequote([, ])
+  # _MODE(SEPARATOR, ELT1, ELT2...)
+  # -------------------------------
+  # List the elements, separating then with SEPARATOR.
+  # MODE can be:
+  #  `at'       -- the elements are enclosed in brackets.
+  #  `star'     -- the elements are listed as are.
+  #  `percent'  -- the elements are `smashed': spaces are singled out,
+  #                and no new line remains.
   define([_at],
          [ifelse([$#], [1], [],
                  [$#], [2], [[[$2]]],
-                 [[[$2]][$1]_at([$1], shift(shift($@)))])])
-  define([_star],
+                 [[[$2]][$1]$0([$1], shift(shift($@)))])])
+  define([_percent],
          [ifelse([$#], [1], [],
                  [$#], [2], [smash([$2])],
-                 [smash([$2])[$1]_star([$1], shift(shift($@)))])])
+                 [smash([$2])[$1]$0([$1], shift(shift($@)))])])
+  define([_star],
+         [ifelse([$#], [1], [],
+                 [$#], [2], [[$2]],
+                 [[$2][$1]$0([$1], shift(shift($@)))])])
 
   # Smash quotes its result.
   define([smash],
          [patsubst(patsubst(patsubst([[[$1]]],
                                      [\\
 ]),
-                           [[
+                            [[
      ]+],
-                           [ ]),
+                            [ ]),
     		   [^ *\(.*\) *$], [[\1]])])
-  define([args],
-         [shift(shift(shift(shift(shift($@)))))])
-  define([at],
-         [_at([$1], args($@))])
-  define([star],
-         [_star([$1], args($@))])
+  define([args],    [shift(shift(shift(shift(shift($@)))))])
+  define([at],      [_$0([$1], args($@))])
+  define([percent], [_$0([$1], args($@))])
+  define([star],    [_$0([$1], args($@))])
 EOF
   # A program to translate user tracing requests into m4 macros.
   cat >$tmp/translate.awk <<\EOF
@@ -383,7 +394,10 @@ function trans (arg, sep)
     return "]at([" (separator ? separator : ",") "], $@)["
   # $*, list of unquoted effective arguments.
   if (arg == "*")
-    return "]star([" (separator ? separator : ":") "], $@)["
+    return "]star([" (separator ? separator : ",") "], $@)["
+  # $%, list of smashed unquoted effective arguments.
+  if (arg == "%")
+    return "]percent([" (separator ? separator : ":") "], $@)["
 }
 
 function error (message)
@@ -403,7 +417,7 @@ END {
   # The default request is `$f:$l:$n:$*'.
   colon   = index (request, ":")
   macro   = colon ? substr (request, 1, colon - 1) : request
-  request = colon ? substr (request, colon + 1)    : "$f:$l:$n:$*"
+  request = colon ? substr (request, colon + 1)    : "$f:$l:$n:$%"
 
   res = ""
 
@@ -418,7 +432,7 @@ END {
 	      res = res "$" (substr (cp, 2, RLENGTH - 1) + 4)
 	      cp = substr (cp, RLENGTH)
 	    }
-	  else if (substr (cp, 2, 1) ~ /[fldn$@*]/)
+	  else if (substr (cp, 2, 1) ~ /[fldn$@%*]/)
 	    {
 	      # $x, no separator given.
 	      res = res trans(substr (cp, 2, 1))
@@ -431,13 +445,13 @@ END {
 	      if (!end)
 	        error("invalid escape: " cp)
 	      separator = substr (cp, 3, end - 3)
-	      if (substr (cp, end + 1, 1) ~ /[*@]/)
+	      if (substr (cp, end + 1, 1) ~ /[*@%]/)
                 res = res trans(substr (cp, end + 1, 1), separator)
 	      else
 	        error("invalid escape: " cp)
 	      cp = substr (cp, end + 1)
 	    }
-          else if (substr (cp, 3, 1) ~ /[$@]/)
+          else if (substr (cp, 3, 1) ~ /[*@%]/)
 	    {
 	      # $sx, short separator `s'.
 	      res = res trans(substr (cp, 3, 1), substr (cp, 2, 1))

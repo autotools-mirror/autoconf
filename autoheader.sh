@@ -165,7 +165,9 @@ syms=
 autoconf=`echo "$0" | sed -e 's/autoheader$/autoconf/'`
 test -n "$localdir" && autoconf="$autoconf -l $localdir"
 export AC_MACRODIR
-$autoconf --trace AH_OUTPUT:'$1' --trace AC_CONFIG_HEADERS:'config_h="$1"' \
+$autoconf  --trace AC_CONFIG_HEADERS:'config_h="$1"' \
+ --trace AH_OUTPUT:'ac_verbatim_$1="\
+$2"' \
   $infile >$tmp/traces.sh
 . $tmp/traces.sh
 
@@ -189,14 +191,14 @@ esac
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-cat <<EOF >$tmp/config.h
+cat <<EOF >$tmp/config.hin
 /* $config_h_in.  Generated automatically from $infile by autoheader.  */
 EOF
 
-test -r ${config_h}.top && cat ${config_h}.top  >>$tmp/config.h
+test -r ${config_h}.top && cat ${config_h}.top  >>$tmp/config.hin
 test -r $localdir/acconfig.h &&
   grep @TOP@ $localdir/acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmp/config.h
+  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmp/config.hin
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
@@ -232,19 +234,19 @@ if test -n "$syms"; then
 $syms
 EOF
    fgrep -f $tmp/syms.fgrep) |
-  tr @. "$ac_LF_and_DOT" >>$tmp/config.h
+  tr @. "$ac_LF_and_DOT" >>$tmp/config.hin
 fi
 
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
-  echo >>$tmp/config.h
-  eval echo '"${'$verb'}"' >>$tmp/config.h
+  echo >>$tmp/config.hin
+  eval echo '"${'$verb'}"' >>$tmp/config.hin
 done
 
 # Handle the case where @BOTTOM@ is the first line of acconfig.h.
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.h
-test -f ${config_h}.bot && cat ${config_h}.bot >>$tmp/config.h
+  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.hin
+test -f ${config_h}.bot && cat ${config_h}.bot >>$tmp/config.hin
 
 
 # Check that all the symbols have a template.
@@ -253,7 +255,7 @@ status=0
 w='[ 	]'
 if test -n "$syms"; then
   for sym in $syms; do
-    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.h >/dev/null; then
+    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.hin >/dev/null; then
       : # All is well.
     else
       echo "$0: No template for symbol \`$sym'" >&2
@@ -267,15 +269,15 @@ fi
 if test $status = 0; then
   if test $# = 0; then
     # Output is a file
-    if test -f $config_h_in && cmp -s $tmp/config.h $config_h_in; then
+    if test -f $config_h_in && cmp -s $tmp/config.hin $config_h_in; then
       # File didn't change, so don't update its mod time.
       echo "$0: $config_h_in is unchanged" >&2
     else
-      mv -f $tmp/config.h $config_h_in
+      mv -f $tmp/config.hin $config_h_in
     fi
   else
     # Output is stdout
-    cat $tmp/config.h
+    cat $tmp/config.hin
   fi
 fi
 

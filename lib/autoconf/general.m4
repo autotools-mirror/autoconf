@@ -388,11 +388,8 @@ define([AH_OUTPUT], [])
 # output as is, with no formating.
 define([AH_VERBATIM],
 [AC_VAR_IF_INDIR([$1],,
-[#
-AH_OUTPUT(ac_verbatim_$1="\
-_AC_SH_QUOTE([$2])"
-)
-])])
+                 [AH_OUTPUT([$1], _AC_SH_QUOTE([[$2]]))])
+])
 
 
 # AH_TEMPLATE(KEY, DESCRIPTION)
@@ -1685,7 +1682,7 @@ test "$program_suffix" != NONE &&
   program_transform_name="s,\$\$,${program_suffix},;$program_transform_name"
 
 # sed with no file args requires a program.
-test "$program_transform_name" = "" && program_transform_name="s,x,x,"
+test -z "$program_transform_name" && program_transform_name="s,x,x,"
 ])# AC_ARG_PROGRAM
 
 
@@ -2128,48 +2125,54 @@ define([AC_FATAL], [m4_fatal([$1], [$2])])
 ## Printing messages at configure runtime.  ##
 ## ---------------------------------------- ##
 
+
+# _AC_SH_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
+# ------------------------------------------------------------------
+# Compatibility glue between the old AC_MSG suite which did not
+# quote anything, and the modern suite which quotes the quotes.
+# If STRING contains `\\' or `\$', it's modern.
+# If STRING contains `\"' or `\`', it's old.
+# Otherwise it's modern.
+# We use two quotes in the pattern to keep highlighting tools at peace.
+define([_AC_SH_QUOTE_IFELSE],
+[ifelse(regexp([$1], [\\[\\$]]),
+        [-1], [ifelse(regexp([$1], [\\[`""]]),
+                      [-1], [$2],
+                      [$3])],
+        [$2])])
+
+
 # _AC_SH_QUOTE(STRING)
 # --------------------
 # If there are quoted (via backslash) backquotes do nothing, else
-# backslash all the quotes.  This macro is robust to active symbols.
-# Both cases (with or without back quotes) *must* evaluate STRING the
-# same number of times.
-#
-#   | define(active, ACTIVE)
-#   | _AC_SH_QUOTE([`active'])
-#   | => \`active'
-#   | _AC_SH_QUOTE([\`active'])
-#   | => \`active'
-#   | error-->c.in:8: warning: backquotes should not be backslashed\
-#   ...                        in: \`active'
-#
+# backslash all the quotes.
 define([_AC_SH_QUOTE],
-[ifelse(regexp([[$1]], [\\`]),
-        -1, [patsubst([[$1]], [`], [\\`])],
-        [AC_DIAGNOSE([syntax],
-                     [backquotes should not be backslashed in: $1])dnl
-[$1]])])
+[_AC_SH_QUOTE_IFELSE([$1],
+                     [patsubst([$1], [\([`""]\)], [\\\1])],
+                     [AC_DIAGNOSE([syntax],
+           [backquotes and double quotes should not be backslashed in: $1])dnl
+$1])])
 
 
 # _AC_ECHO_UNQUOTED(STRING, [FD = AC_FD_MSG])
 # -------------------------------------------
 # Perform shell expansions on STRING and echo the string to FD.
 define([_AC_ECHO_UNQUOTED],
-[echo "[$1]" >&m4_default([$2], [AC_FD_MSG])])
+[echo "$1" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # _AC_ECHO(STRING, [FD = AC_FD_MSG])
 # ----------------------------------
 # Protect STRING from backquote expansion, echo the result to FD.
 define([_AC_ECHO],
-[_AC_ECHO_UNQUOTED(_AC_SH_QUOTE([$1]), $2)])
+[_AC_ECHO_UNQUOTED([_AC_SH_QUOTE([$1])], $2)])
 
 
 # _AC_ECHO_N(STRING, [FD = AC_FD_MSG])
 # ------------------------------------
 # Same as _AC_ECHO, but echo doesn't return to a new line.
 define([_AC_ECHO_N],
-[echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
+[echo $ECHO_N "_AC_SH_QUOTE([$1])$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # AC_MSG_CHECKING(FEATURE)
@@ -2190,7 +2193,7 @@ AU_DEFUN([AC_CHECKING],
 # ---------------------
 define([AC_MSG_RESULT],
 [_AC_ECHO([configure:__oline__: result: $1], AC_FD_LOG)
-_AC_ECHO([$ECHO_T""$1])[]dnl
+_AC_ECHO([${ECHO_T}$1])[]dnl
 ])
 
 
@@ -2199,7 +2202,7 @@ _AC_ECHO([$ECHO_T""$1])[]dnl
 # Likewise, but perform $ ` \ shell substitutions.
 define([AC_MSG_RESULT_UNQUOTED],
 [_AC_ECHO_UNQUOTED([configure:__oline__: result: $1], AC_FD_LOG)
-_AC_ECHO_UNQUOTED([$ECHO_T""$1])[]dnl
+_AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
 
 
@@ -4013,7 +4016,7 @@ dnl Here, there are 2 cmd per line, and two cmd are added later.
   ac_beg=1 # First line for current file.
   ac_end=$ac_max_sed_lines # Line after last line for current file.
   ac_more_lines=:
-  ac_sed_cmds=""
+  ac_sed_cmds=
   while $ac_more_lines; do
     if test $ac_beg -gt 1; then
       sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag

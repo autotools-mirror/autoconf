@@ -8,16 +8,21 @@ various system-dependent variables used during compilation.  It uses
 those values to create a `Makefile' in each directory of the package.
 It may also create one or more `.h' files containing system-dependent
 definitions.  Finally, it creates a shell script `config.status' that
-you can run in the future to recreate the current configuration, a file
-`config.cache' that saves the results of its tests to speed up
-reconfiguring, and a file `config.log' containing compiler output
-(useful mainly for debugging `configure').
+you can run in the future to recreate the current configuration, and a
+file `config.log' containing compiler output (useful mainly for
+debugging `configure').
+
+   It can also use an optional file (typically called `config.cache'
+and enabled with `--cache-file=./config.cache') that saves the results
+of its tests to speed up reconfiguring.  (Caching is disabled by
+default to prevent problems with accidental use of stale cache files.)
 
    If you need to do unusual things to compile the package, please try
 to figure out how `configure' could check whether to do them, and mail
 diffs or instructions to the address given in the `README' so they can
-be considered for the next release.  If at some point `config.cache'
-contains results you don't want to keep, you may remove or edit it.
+be considered for the next release.  If you are using the cache, and at
+some point `config.cache' contains results you don't want to keep, you
+may remove or edit it.
 
    The file `configure.in' is used to create `configure' by a program
 called `autoconf'.  You only need `configure.in' if you want to change
@@ -75,7 +80,7 @@ directory where you want the object files and executables to go and run
 the `configure' script.  `configure' automatically checks for the
 source code in the directory that `configure' is in and in `..'.
 
-   If you have to use a `make' that does not supports the `VPATH'
+   If you have to use a `make' that does not support the `VPATH'
 variable, you have to compile the package for one architecture at a time
 in the source code directory.  After you have installed the package for
 one architecture, use `make distclean' before reconfiguring for another
@@ -158,15 +163,21 @@ environment passed to configure.  However, some packages may run
 configure again during the build, and the customized values of these
 variables may be lost.  In order to avoid this problem, you should set
 them in the `configure' command line, using `VAR=value'.  For example:
+
      ./configure CC=/usr/local2/bin/gcc
-   will cause the specified gcc to be used as the C compiler (unless it
-is overridden in the site shell script).
+
+will cause the specified gcc to be used as the C compiler (unless it is
+overridden in the site shell script).
 
    Please, note that the former interface:
+
      CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-   or
+
+or
+
      env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-   should be avoided.
+
+should be avoided.
 
 Operation Controls
 ==================
@@ -174,13 +185,19 @@ Operation Controls
    `configure' recognizes the following options to control how it
 operates.
 
-`--cache-file=FILE'
-     Use and save the results of the tests in FILE instead of
-     `./config.cache'.  Set FILE to `/dev/null' to disable caching, for
-     debugging `configure'.
-
 `--help'
+`-h'
      Print a summary of the options to `configure', and exit.
+
+`--version'
+`-V'
+     Print the version of Autoconf used to generate the `configure'
+     script, and exit.
+
+`--cache-file=FILE'
+     Enable the cache: use and save the results of the tests in FILE,
+     traditionally `./config.cache'.  FILE defaults to `/dev/null' to
+     disable caching.
 
 `--quiet'
 `--silent'
@@ -193,9 +210,6 @@ operates.
      Look for the package's source code in directory DIR.  Usually
      `configure' can determine that directory automatically.
 
-`--version'
-     Print the version of Autoconf used to generate the `configure'
-     script, and exit.
-
-`configure' also accepts some other, not widely useful, options.
+`configure' also accepts some other, not widely useful, options.  Run
+`configure --help' for more details.
 

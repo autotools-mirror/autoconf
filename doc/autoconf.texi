@@ -920,7 +920,7 @@ several macros.  Multiple @samp{--trace} for a single macro do not
 accumulate, nevertheless, @var{format} can be arbitrarily long.
 
 The @var{format} is a regular string, with new lines if wanted.  It
-defaults to @samp{$f:$l:$n:$@@}, see below for details on the
+defaults to @samp{$f:$l:$n:$%}, see below for details on the
 @var{format}.
 
 @item --initialization
@@ -968,11 +968,17 @@ argument is quoted, i.e. enclosed in a pair of square bracket.
 @item $*
 @itemx $@var{sep}*
 @itemx $@{@var{separator}@}*
+As above, but the arguments are not quoted.
+
+@item $%
+@itemx $@var{sep}%
+@itemx $@{@var{separator}@}%
 As above, but the arguments are not quoted, all new line characters in
 the arguments are smashed, and the default separator is @samp{:}.
 
-The escape @samp{$*} produces traces that hold in a single line (unless
-you put new lines in the @samp{separator}), while @samp{$@@} does not.
+The escape @samp{$%} produces traces that hold in a single line (unless
+you put new lines in the @samp{separator}), while @samp{$@@} and
+@samp{$*} do not.
 @end table
 
 For instance, to know the list of variables which are substituted:
@@ -988,19 +994,22 @@ configure.in:2:AC_SUBST:ECHO_T
 @end example
 
 @noindent
-The example below highlights the difference between @samp{$@@} and
-@samp{$*} wrt white spaces.  One line was wrapped by hand to cope with
-the high standards set in typography which state that no line should be
-wider that the sheet, but in real life it is not.
+The example below highlights the difference between @samp{$@@},
+@samp{$*}, and @strong{$%}.
 
 @example
 @group
-% autoconf -t 'AC_OUTPUT:$@@'
-[acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile
-          tests/Makefile tests/atconfig]
-% autoconf -m . -t 'AC_OUTPUT:$*'
-acversion.m4 Makefile m4/Makefile man/Makefile doc/Make
-file tests/Makefile tests/atconfig
+% cat configure.in
+AC_DEFINE(This, is, [an
+[example]])
+% autoconf -t 'AC_DEFINE:@: $@
+*: $*
+%: $%'
+@@: [This],[is],[an
+[example]]
+*: This,is,an
+[example]
+%: This:is:an [example]
 @end group
 @end example
 
@@ -1023,10 +1032,10 @@ structures:
 
 @example
 @group
-% autoconf -t 'AM_MISSING_PROG:$@{:::::::@}*'
-ACLOCAL:::::::aclocal:::::::$missing_dir
-AUTOCONF:::::::autoconf:::::::$missing_dir
-AUTOMAKE:::::::automake:::::::$missing_dir
+% autoconf -t 'AM_MISSING_PROG:$@{|:::::|@}*'
+ACLOCAL|:::::|aclocal|:::::|$missing_dir
+AUTOCONF|:::::|autoconf|:::::|$missing_dir
+AUTOMAKE|:::::|automake|:::::|$missing_dir
 @i{More traces deleted}
 @end group
 @end example

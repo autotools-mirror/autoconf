@@ -1,5 +1,29 @@
 2000-04-28  Akim Demaille  <akim@epita.fr>
 
+	Don't double quote in AC_MSG_*.
+
+	* acgeneral.m4 (_AC_SH_QUOTE): Don't double quote.  Escape the
+	double quotes too.
+	(_AC_ECHO_UNQUOTED): Don't double quote :).
+	(_AC_ECHO, _AC_ECHO_N): Quote the call to _AC_SH_QUOTE.
+
+	The autoheader chain needs to be adjusted.
+
+	* acgeneral.m4 (AH_VERBATIM): Just pass two arguments to AH_OUTPUT
+	instead of trying to build what `autoheader' needs: let it handle
+	the format by itself.
+	* autoheader.m4: Adjust.
+	s,tmp/config.h,tmp/config.hin.
+
+	The adjustment revealed that `autoconf --trace' is not robust to
+	single quotes in its argument.
+
+	* autoconf.sh: Fix this issue.
+	Rename the escape `$*' as `$%'.  Implement `$@'.
+	* doc/autoconf.texi: Adjust.
+
+2000-04-28  Akim Demaille  <akim@epita.fr>
+
 	mawk suffers a severe performance loss when using `sub' with a
 	changing value.  On the `configure' script of the fileutils:
 	mawk '{ sub (/foo/, foo++) }'                  -> 14s.
