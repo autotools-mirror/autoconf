@@ -1,5 +1,12 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	In `info', it is easier to type `autoconf <TAB>' to reach the list
+	of options, that `Invoking autoc<TAB>'.
+
+	* doc/autoconf.texi: s/Invoking foo/foo Invocation/.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	Merge `Upgrading' and `Obsolete Constructs' together.
 
 	* doc/autoconf.texi (Obsolete Constructs): Move right after

@@ -24,17 +24,17 @@
 
 @dircategory Individual utilities
 @direntry
-* autoscan: (autoconf)Invoking autoscan.
+* autoscan: (autoconf)autoscan Invocation.
                                 Semi-automatic @file{configure.in} writing
-* ifnames: (autoconf)Invoking ifnames.
+* ifnames: (autoconf)ifnames Invocation.
                                 Listing the conditionals in source code
-* autoconf: (autoconf)Invoking autoconf.
+* autoconf: (autoconf)autoconf Invocation.
                                 How to create configuration scripts
-* autoreconf: (autoconf)Invoking autoreconf.
+* autoreconf: (autoconf)autoreconf Invocation.
                                 Remaking multiple @code{configure} scripts
-* configure: (autoconf)Invoking configure.
+* configure: (autoconf)configure Invocation.
                                 Configuring a package
-* config.status: (autoconf)Invoking config.status.
+* config.status: (autoconf)config.status Invocation.
                                 Recreating a configuration
 @end direntry
 
@@ -131,7 +131,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @code{configure}
 * Running configure scripts::   How to use the Autoconf output
-* Invoking config.status::      Recreating a configuration
+* config.status Invocation::    Recreating a configuration
 * Obsolete Constructs::         Kept for backward compatibility
 * Questions::                   Questions about Autoconf, with answers
 * History::                     History of Autoconf
@@ -146,10 +146,10 @@ package.  This is edition @value{EDITION}, for Autoconf version
 Making @code{configure} Scripts
 
 * Writing configure.in::        What to put in an Autoconf input file
-* Invoking autoscan::           Semi-automatic @file{configure.in} writing
-* Invoking ifnames::            Listing the conditionals in source code
-* Invoking autoconf::           How to create configuration scripts
-* Invoking autoreconf::         Remaking multiple @code{configure} scripts
+* autoscan Invocation::         Semi-automatic @file{configure.in} writing
+* ifnames Invocation::          Listing the conditionals in source code
+* autoconf Invocation::         How to create configuration scripts
+* autoreconf Invocation::       Remaking multiple @code{configure} scripts
 
 Writing @file{configure.in}
 
@@ -180,7 +180,7 @@ Substitutions in Makefiles
 Configuration Header Files
 
 * Header Templates::            Input for the configuration headers
-* Invoking autoheader::         How to create configuration templates
+* autoheader Invocation::       How to create configuration templates
 * Autoheader Macros::           How to specify CPP templates
 
 Existing Tests
@@ -323,13 +323,13 @@ Running @code{configure} Scripts
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* Invoking configure::          Changing how @code{configure} runs
+* configure Invocation::          Changing how @code{configure} runs
 
 Obsolete Constructs
 
 * Obsolete config.status Use::  Different calling convention
 * acconfig.h::                  Additional entries in @file{config.h.in}
-* Invoking autoupdate::         Automatic update of @file{configure.in}
+* autoupdate Invocation::       Automatic update of @file{configure.in}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
 
@@ -461,7 +461,7 @@ containing @code{#define} directives (@pxref{Configuration Headers});
 
 @item
 a shell script called @file{config.status} that, when run, will recreate
-the files listed above (@pxref{Invoking config.status});
+the files listed above (@pxref{config.status Invocation});
 
 @item
 an optional shell script normally called called @file{config.cache}
@@ -523,13 +523,13 @@ Makefile.in ---'                    `-> Makefile ---'
 
 @menu
 * Writing configure.in::        What to put in an Autoconf input file
-* Invoking autoscan::           Semi-automatic @file{configure.in} writing
-* Invoking ifnames::            Listing the conditionals in source code
-* Invoking autoconf::           How to create configuration scripts
-* Invoking autoreconf::         Remaking multiple @code{configure} scripts
+* autoscan Invocation::         Semi-automatic @file{configure.in} writing
+* ifnames Invocation::          Listing the conditionals in source code
+* autoconf Invocation::         How to create configuration scripts
+* autoreconf Invocation::       Remaking multiple @code{configure} scripts
 @end menu
 
-@node Writing configure.in, Invoking autoscan, Making configure Scripts, Making configure Scripts
+@node Writing configure.in, autoscan Invocation, Making configure Scripts, Making configure Scripts
 @section Writing @file{configure.in}
 
 To produce a @code{configure} script for a software package, create a
@@ -541,7 +541,7 @@ you can use Autoconf template macros to produce custom checks; see
 @ref{Writing Tests}, for information about them.  For especially tricky
 or specialized features, @file{configure.in} might need to contain some
 hand-crafted shell commands.  The @code{autoscan} program can give you a
-good start in writing @file{configure.in} (@pxref{Invoking autoscan},
+good start in writing @file{configure.in} (@pxref{autoscan Invocation},
 for more information).
 
 
@@ -764,7 +764,7 @@ checks for system services
 @end display
 
 
-@node Invoking autoscan, Invoking ifnames, Writing configure.in, Making configure Scripts
+@node autoscan Invocation, ifnames Invocation, Writing configure.in, Making configure Scripts
 @section Using @code{autoscan} to Create @file{configure.in}
 @cindex @code{autoscan}
 
@@ -784,7 +784,7 @@ to move such macros manually.  Also, if you want the package to use a
 configuration header file, you must add a call to
 @code{AC_CONFIG_HEADERS} (@pxref{Configuration Headers}).  You might also
 have to change or add some @code{#if} directives to your program in
-order to make it work with Autoconf (@pxref{Invoking ifnames}, for
+order to make it work with Autoconf (@pxref{ifnames Invocation}, for
 information about a program that can help with that job).
 
 @code{autoscan} uses several data files, which are installed along with the
@@ -817,7 +817,7 @@ symbols it finds in them.  This output can be voluminous.
 Print the version number of Autoconf and exit.
 @end table
 
-@node Invoking ifnames, Invoking autoconf, Invoking autoscan, Making configure Scripts
+@node ifnames Invocation, autoconf Invocation, autoscan Invocation, Making configure Scripts
 @section Using @code{ifnames} to List Conditionals
 @cindex @code{ifnames}
 
@@ -849,7 +849,7 @@ Print a summary of the command line options and exit.
 Print the version number of Autoconf and exit.
 @end table
 
-@node Invoking autoconf, Invoking autoreconf, Invoking ifnames, Making configure Scripts
+@node autoconf Invocation, autoreconf Invocation, ifnames Invocation, Making configure Scripts
 @section Using @code{autoconf} to Create @code{configure}
 @cindex @code{autoconf}
 
@@ -1050,7 +1050,7 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 @end group
 @end example
 
-@node Invoking autoreconf,  , Invoking autoconf, Making configure Scripts
+@node autoreconf Invocation,  , autoconf Invocation, Making configure Scripts
 @section Using @code{autoreconf} to Update @code{configure} Scripts
 @cindex @code{autoreconf}
 
@@ -1746,7 +1746,7 @@ timestamp > stamp-h)} so @file{config.status} will ensure that
 @file{config.h} is considered up to date.  @xref{Output}, for more
 information about @code{AC_OUTPUT}.
 
-@xref{Invoking config.status}, for more examples of handling
+@xref{config.status Invocation}, for more examples of handling
 configuration-related dependencies.
 
 @node Configuration Headers, Configuration Commands, Makefile Substitutions, Setup
@@ -1804,11 +1804,11 @@ to prepend and/or append boilerplate to the file.
 
 @menu
 * Header Templates::            Input for the configuration headers
-* Invoking autoheader::         How to create configuration templates
+* autoheader Invocation::       How to create configuration templates
 * Autoheader Macros::           How to specify CPP templates
 @end menu
 
-@node Header Templates, Invoking autoheader, Configuration Headers, Configuration Headers
+@node Header Templates, autoheader Invocation, Configuration Headers, Configuration Headers
 @subsection Configuration Header Templates
 @cindex Configuration Header Template
 @cindex @file{config.h.in}
@@ -1855,10 +1855,10 @@ The use of old form templates, with @samp{#define} instead of
 @samp{#undef} is strongly discouraged.
 
 Since it is a tedious task to keep a template header up to date, you may
-use @code{autoheader} to generate it, see @ref{Invoking autoheader}.
+use @code{autoheader} to generate it, see @ref{autoheader Invocation}.
 
 
-@node Invoking autoheader, Autoheader Macros, Header Templates, Configuration Headers
+@node autoheader Invocation, Autoheader Macros, Header Templates, Configuration Headers
 @subsection Using @code{autoheader} to Create @file{config.h.in}
 @cindex @code{autoheader}
 
@@ -1925,7 +1925,7 @@ supported: it consists in a comma separated list of categories.  It is
 honored iff @samp{--warnings} was not used.
 @end table
 
-@node Autoheader Macros,  , Invoking autoheader, Configuration Headers
+@node Autoheader Macros,  , autoheader Invocation, Configuration Headers
 @subsection Autoheader Macros
 
 @code{autoheader} scans @file{configure.in} and figures out which C
@@ -6010,7 +6010,7 @@ Report a severe error @var{message}, and have @code{autoconf} die.
 
 When the user runs @samp{autoconf -W error}, warnings from
 @code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
-@ref{Invoking autoconf}.
+@ref{autoconf Invocation}.
 
 @node Dependencies Between Macros,  , Reporting Messages, Writing Macros
 @section Dependencies Between Macros
@@ -6781,7 +6781,7 @@ fi
 
 @c ============================================== Running configure Scripts.
 
-@node Running configure scripts, Invoking config.status, Site Configuration, Top
+@node Running configure scripts, config.status Invocation, Site Configuration, Top
 @chapter Running @code{configure} Scripts
 @cindex @code{configure}
 
@@ -6799,7 +6799,7 @@ may use comes with Autoconf.
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* Invoking configure::          Changing how @code{configure} runs
+* configure Invocation::          Changing how @code{configure} runs
 @end menu
 
 @include install.texi
@@ -6807,7 +6807,7 @@ may use comes with Autoconf.
 
 @c ============================================== Recreating a Configuration
 
-@node Invoking config.status, Obsolete Constructs, Running configure scripts, Top
+@node config.status Invocation, Obsolete Constructs, Running configure scripts, Top
 @chapter Recreating a Configuration
 @cindex @code{config.status}
 
@@ -6921,7 +6921,7 @@ The calling convention of @file{config.status} has changed, see
 
 @c =================================================== Obsolete Constructs
 
-@node Obsolete Constructs, Questions, Invoking config.status, Top
+@node Obsolete Constructs, Questions, config.status Invocation, Top
 @chapter Obsolete Constructs
 
 Autoconf changes, and along the years, some constructs are obsoleted.
@@ -6935,7 +6935,7 @@ understanding how to move to more modern constructs.
 @menu
 * Obsolete config.status Use::  Different calling convention
 * acconfig.h::                  Additional entries in @file{config.h.in}
-* Invoking autoupdate::         Automatic update of @file{configure.in}
+* autoupdate Invocation::       Automatic update of @file{configure.in}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
 @end menu
@@ -6944,7 +6944,7 @@ understanding how to move to more modern constructs.
 @section Obsolete @file{config.status} Invocation
 
 @file{config.status} now supports arguments to specify the files to
-instantiate, see @ref{Invoking config.status}, for more details.
+instantiate, see @ref{config.status Invocation}, for more details.
 Before, environment variables had to be used.
 
 @defvar CONFIG_COMMANDS
@@ -6975,7 +6975,7 @@ The symbolic links to establish.  The default is the arguments given to
 @file{config.status} ignores this variable.
 @end defvar
 
-In @ref{Invoking config.status}, using this old interface, the example
+In @ref{config.status Invocation}, using this old interface, the example
 would be:
 
 @example
@@ -6998,7 +6998,7 @@ no need to set @code{CONFIG_HEADERS} in the @code{make} rules, equally
 for @code{CONFIG_COMMANDS} etc.)
 
 
-@node acconfig.h, Invoking autoupdate, Obsolete config.status Use, Obsolete Constructs
+@node acconfig.h, autoupdate Invocation, Obsolete config.status Use, Obsolete Constructs
 @section @file{acconfig.h}
 
 @cindex @file{acconfig.h}
@@ -7034,7 +7034,7 @@ another directory, they give you a way to put custom boilerplate in each
 individual @file{config.h.in}.
 
 
-@node Invoking autoupdate, Obsolete Macros, acconfig.h, Obsolete Constructs
+@node autoupdate Invocation, Obsolete Macros, acconfig.h, Obsolete Constructs
 @section Using @code{autoupdate} to Modernize @code{configure}
 @cindex @code{autoupdate}
 
@@ -7089,7 +7089,7 @@ Look for the package file @file{aclocal.m4} in directory @var{dir}
 instead of in the current directory.
 @end table
 
-@node Obsolete Macros, Autoconf 1, Invoking autoupdate, Obsolete Constructs
+@node Obsolete Macros, Autoconf 1, autoupdate Invocation, Obsolete Constructs
 @section Obsolete Macros
 
 Several macros are obsoleted in Autoconf, for various reasons (typically
@@ -7801,7 +7801,7 @@ Autoconf distribution.
 
 If you have an @file{aclocal.m4} installed with Autoconf (as opposed to
 in a particular package's source directory), you must rename it to
-@file{acsite.m4}.  @xref{Invoking autoconf}.
+@file{acsite.m4}.  @xref{autoconf Invocation}.
 
 If you distribute @file{install.sh} with your package, rename it to
 @file{install-sh} so @code{make} builtin rules won't inadvertently
@@ -7810,7 +7810,7 @@ looks for the script under both names, but it is best to use the new name.
 
 If you were using @file{config.h.top} or @file{config.h.bot}, you still
 can, but you will have less clutter if you merge them into
-@file{acconfig.h}.  @xref{Invoking autoheader}.
+@file{acconfig.h}.  @xref{autoheader Invocation}.
 
 @node Changed Makefiles, Changed Macros, Changed File Names, Autoconf 1
 @subsection Changed Makefiles
@@ -7856,7 +7856,7 @@ use the old names, but the new ones are clearer, and it's easier to find
 the documentation for them.  @xref{Obsolete Macros}, for a table showing the
 new names for the old macros.  Use the @code{autoupdate} program to
 convert your @file{configure.in} to using the new macro names.
-@xref{Invoking autoupdate}.
+@xref{autoupdate Invocation}.
 
 Some macros have been superseded by similar ones that do the job better,
 but are not call-compatible.  If you get warnings about calling obsolete
