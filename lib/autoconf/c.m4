@@ -204,15 +204,27 @@ _array_ @<:@0@:>@ = 0
 
 # AC_LANG_INT_SAVE(C)(PROLOGUE, EXPRESSION)
 # -----------------------------------------
-# We need `stdio.h' to open a `FILE', so the prologue defaults to the
-# inclusion of `stdio.h'.
+# We need `stdio.h' to open a `FILE' and `stdlib.h' for `exit'.
+# But we include them only after the EXPRESSION has been evaluated.
 m4_define([AC_LANG_INT_SAVE(C)],
-[AC_LANG_PROGRAM([m4_default([$1], [@%:@include <stdio.h>])],
-[FILE *f = fopen ("conftest.val", "w");
-if (!f)
+[AC_LANG_PROGRAM([$1
+unsigned long conftestval () { return $2; }
+@%:@include <stdio.h>
+@%:@include <stdlib.h>],
+[
+  FILE *f = fopen ("conftest.val", "w");
+  if (f)
+    {
+      unsigned long i = conftestval ();
+      if (0 <= ($2) && i == ($2))
+	{
+	  fprintf (f, "%lu\n", i);
+	  if (! ferror (f) && fclose (f) == 0)
+	    exit (0);
+	}
+    }
   exit (1);
-fprintf (f, "%d", ($2));
-fclose (f);])])
+])])
 
 
 # ----------------- #
