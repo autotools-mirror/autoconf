@@ -12,13 +12,17 @@ those values to create a @file{Makefile} in each directory of the
 package.  It may also create one or more @file{.h} files containing
 system-dependent definitions.  Finally, it creates a shell script
 @file{config.status} that you can run in the future to recreate the
-current configuration, and a file @file{config.log} containing compiler
-output (useful mainly for debugging @code{configure}).
+current configuration, a file @file{config.cache} that saves the results
+of its tests to speed up reconfiguring, and a file @file{config.log}
+containing compiler output (useful mainly for debugging
+@code{configure}).
 
 If you need to do unusual things to compile the package, please try to
 figure out how @code{configure} could check whether to do them, and mail
 diffs or instructions to the address given in the @file{README} so they
-can be considered for the next release.
+can be considered for the next release.  If at some point
+@file{config.cache} contains results you don't want to keep, you may
+remove or edit it.
 
 The file @file{configure.in} is used to create @file{configure} by a
 program called @code{autoconf}.  You only need @file{configure.in} if
@@ -155,6 +159,10 @@ optional part of the package.  The @file{README} should mention any
 @code{configure} also recognizes the following options:
 
 @table @code
+@item --cache-file=@var{file}
+Save the results of the tests in @var{file} instead of @file{config.cache}.
+Set @var{file} to @file{/dev/null} to disable caching, for debugging configure.
+
 @item --help
 Print a summary of the options to @code{configure}, and exit.
 

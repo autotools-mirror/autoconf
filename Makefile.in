@@ -211,6 +211,6 @@ dist: $(DISTDEP)
 	  ln $$file $$distname/$$file \
 	  || { echo copying $$file instead; cp -p $$file $$distname/$$file;}; \
 	done; \
-	chmod -R a+rX $$distname; \
+	chmod -R a+rwX $$distname; \
 	tar -chz -f $$distname.tar.gz $$distname; \
 	rm -fr $$distname

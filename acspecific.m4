@@ -186,6 +186,7 @@ AC_SUBST([SET_MAKE])dnl
 AC_DEFUN(AC_PROG_RANLIB,
 [AC_CHECK_PROG(RANLIB, ranlib, ranlib, :)])
 
+dnl Check for mawk first since it's said to be faster.
 AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
@@ -303,8 +304,8 @@ AC_CACHE_VAL(ac_cv_path_install,
     case "$ac_dir" in
     ''|.|/etc|/usr/sbin|/usr/etc|/sbin|/usr/afsws/bin|/usr/ucb) ;;
     *)
-      # OSF1 and SCO ODT 3.0 have their own names for install.
-      for ac_prog in ginstall installbsd scoinst install; do
+      # OSF1, X11, and SCO ODT 3.0 have their own names for install.
+      for ac_prog in ginstall installbsd bsdinst scoinst install; do
         if test -f $ac_dir/$ac_prog; then
 	  if test $ac_prog = install &&
             grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
@@ -447,7 +448,10 @@ AC_DEFUN(AC_HEADER_DIRENT,
 [ac_header_dir=no
 AC_CHECK_HEADERS(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dir=$ac_hdr; break])
+])
 
+AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
+[AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
@@ -690,7 +694,7 @@ main()
       exit(1);
   exit(0);
 }
-], ac_cv_func_mmap=yes, ac_cv_func_mmap=no)])dnl
+], ac_cv_func_mmap=yes, ac_cv_func_mmap=no, ac_cv_func_mmap=no)])dnl
 AC_MSG_RESULT($ac_cv_func_mmap)
 if test $ac_cv_func_mmap = yes; then
   AC_DEFINE(HAVE_MMAP)
@@ -814,7 +818,7 @@ main() {
 	 || fstat(fileno(stdout), &st) != 0
 	 );
   }
-}], ac_cv_func_vfork=yes, ac_cv_func_vfork=no)])dnl
+}], ac_cv_func_vfork=yes, ac_cv_func_vfork=no, ac_cv_func_vfork=no)])dnl
 AC_MSG_RESULT($ac_cv_func_vfork)
 if test $ac_cv_func_vfork = no; then
   AC_DEFINE(vfork, fork)
@@ -850,7 +854,7 @@ main() {
     exit(r.ru_nvcsw == 0
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
-}], ac_cv_func_wait3=yes, ac_cv_func_wait3=no)])dnl
+}], ac_cv_func_wait3=yes, ac_cv_func_wait3=no, ac_cv_func_wait3=no)])dnl
 AC_MSG_RESULT($ac_cv_func_wait3)
 if test $ac_cv_func_wait3 = yes; then
   AC_DEFINE(HAVE_WAIT3)
@@ -1005,6 +1009,9 @@ if test $ac_cv_struct_nlist_n_un = yes; then
 fi
 ])dnl
 
+dnl FIXME two bugs here:
+dnl Hardwiring the path of getloadavg.c in the top-level directory,
+dnl and not checking whether a getloadavg from a library needs privileges.
 AC_MSG_CHECKING(whether getloadavg requires setgid)
 AC_CACHE_VAL(ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
@@ -1052,7 +1059,8 @@ struct stat s, t;
 exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
 && stat("conftestdata", &t) == 0 && t.st_mtime >= s.st_mtime
 && t.st_mtime - s.st_mtime < 120));
-}], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no)
+}], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
+  ac_cv_func_utime_null=no)
 rm -f core])dnl
 AC_MSG_RESULT($ac_cv_func_utime_null)
 if test $ac_cv_func_utime_null = yes; then
@@ -1069,7 +1077,7 @@ main ()
   exit (strcoll ("abc", "def") >= 0 ||
 	strcoll ("ABC", "DEF") >= 0 ||
 	strcoll ("123", "456") >= 0);
-}], ac_cv_func_strcoll=yes, ac_cv_func_strcoll=no)])dnl
+}], ac_cv_func_strcoll=yes, ac_cv_func_strcoll=no, ac_cv_func_strcoll=no)])dnl
 AC_MSG_RESULT($ac_cv_func_strcoll)
 if test $ac_cv_func_strcoll = yes; then
   AC_DEFINE(HAVE_STRCOLL)
@@ -1443,6 +1451,7 @@ AC_DEFUN(AC_PATH_X,
 # --without-x overrides everything else, but does not touch the cache.
 AC_MSG_CHECKING(for X)
 
+AC_ARG_WITH(x, [  --with-x                use the X Window System])
 if test "x$with_x" = xno; then
   no_x=yes
 else
