@@ -55,9 +55,6 @@ dnl Ignore CPP macro arguments.
 @@@syms="$syms patsubst($1, [(.*$])"@@@
 ])])
 
-dnl AC_VERBATIM
-define([AC_VERBATIM], [])
-
 dnl AH_TEMPLATE(KEY, DESCRIPTION)
 dnl Issue an autoheader template for KEY, i.e., a comment composed
 dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
@@ -171,14 +168,12 @@ define([AC_CONFIG_H], patsubst($1, [ .*$], []))dnl
 @@@config_h=AC_CONFIG_H@@@
 ])
 
-define([AC_VERBATIM], [AH_VERBATIM($@)])
 define([AC_DEFINE], [AH_DEFINE($@)])
 define([AC_DEFINE_UNQUOTED], [AH_DEFINE($@)])
 define([AC_NEED_DECLS], [AH_NEED_DECLS($@)])
 define([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF($@)])
 define([AC_CHECK_FUNCS], [AH_CHECK_FUNCS($@)])
 define([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
-define([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
 define([AC_CHECK_LIB], [AH_CHECK_LIB($@)])
 define([AC_PROG_LEX], [AH_PROG_LEX($@)])
 define([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA($@)])

@@ -8,7 +8,7 @@
 
 @set EDITION 2.14.1
 @set VERSION 2.14.1
-@set UPDATED June 1999
+@set UPDATED October 1999
 
 @iftex
 @finalout
@@ -800,8 +800,8 @@ Process any command-line arguments and find the source code directory.
 source directory; @code{configure} checks for this file's existence to
 make sure that the directory that it is told contains the source code in
 fact does.  Occasionally people accidentally specify the wrong directory
-with @samp{--srcdir}; this is a safety check.  @xref{Invoking configure},
-for more information.
+with @samp{--srcdir}; this is a safety check.  @xref{Invoking
+configure}, for more information.
 @end defmac
 
 Small packages may store all their macros in @code{aclocal.m4}.  As the
@@ -893,7 +893,8 @@ If you pass @var{extra-cmds}, those commands will be inserted into
 substitutions performed on them in @code{configure}.  You can use
 @var{init-cmds} to pass variables from @code{configure} to the
 @var{extra-cmds}.  If @code{AC_OUTPUT_COMMANDS} has been called, the
-commands given to it are run just before the commands passed to this macro.
+commands given to it are run just before the commands passed to this
+macro.
 @end defmac
 
 @defmac AC_OUTPUT_COMMANDS (@var{extra-cmds} @r{[}, @var{init-cmds}@r{]})
@@ -948,8 +949,8 @@ variables that are set in @code{configure}.  To make @code{configure}
 substitute a particular variable into the output files, the macro
 @code{AC_SUBST} must be called with that variable name as an argument.
 Any occurrences of @samp{@@@var{variable}@@} for other variables are
-left unchanged.  @xref{Setting Output Variables}, for more information on
-creating output variables with @code{AC_SUBST}.
+left unchanged.  @xref{Setting Output Variables}, for more information
+on creating output variables with @code{AC_SUBST}.
 
 A software package that uses a @code{configure} script should be
 distributed with a file @file{Makefile.in}, but no @file{Makefile}; that
@@ -973,9 +974,9 @@ Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
 complete list of output variables.  Here is what each of the preset ones
-contains.  @xref{Directory Variables, , Variables for Installation Directories,
-standards, The GNU Coding Standards}, for more information about
-the variables with names that end in @samp{dir}.
+contains.  @xref{Directory Variables, , Variables for Installation
+Directories, standards, The GNU Coding Standards}, for more information
+about the variables with names that end in @samp{dir}.
 
 @defvar bindir
 @ovindex bindir
@@ -1798,8 +1799,8 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 @defmac AC_PROG_LN_S
 @maindex PROG_LN_S
 @ovindex LN_S
-If @samp{ln -s} works on the current filesystem (the operating system
-and filesystem support symbolic links), set output variable @code{LN_S}
+If @samp{ln -s} works on the current file system (the operating system
+and file system support symbolic links), set output variable @code{LN_S}
 to @samp{ln -s}, otherwise set it to @samp{ln}.
 
 If the link is put in a directory other than the current directory, its
@@ -2332,33 +2333,6 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 @end example
 @end defmac
 
-@defmac AC_DIR_HEADER
-@maindex DIR_HEADER
-@cvindex DIRENT
-@cvindex SYSDIR
-@cvindex SYSNDIR
-@cvindex NDIR
-@cvindex VOID_CLOSEDIR
-Like calling @code{AC_HEADER_DIRENT} and @code{AC_FUNC_CLOSEDIR_VOID},
-but defines a different set of C preprocessor macros to indicate which
-header file is found.  This macro and the names it defines are
-considered obsolete.  The names it defines are:
-
-@c The printed table looks too spaced out with blank lines between the entries.
-@table @file
-@item dirent.h
-@code{DIRENT}
-@item sys/ndir.h
-@code{SYSNDIR}
-@item sys/dir.h
-@code{SYSDIR}
-@item ndir.h
-@code{NDIR}
-@end table
-
-In addition, if the @code{closedir} function does not return a
-meaningful value, define @code{VOID_CLOSEDIR}.
-@end defmac
 
 @defmac AC_HEADER_DIRENT
 @maindex HEADER_DIRENT
@@ -3658,7 +3632,7 @@ track of whether the remaining cases need to be checked.
 
 @example
 @group
-AC_MSG_CHECKING(how to get filesystem type)
+AC_MSG_CHECKING(how to get file system type)
 fstype=no
 # The order of these tests is important.
 AC_TRY_CPP([#include <sys/statvfs.h>
@@ -4214,8 +4188,9 @@ for the name of your organization or software package.
 Most of the Autoconf macros' names follow a structured naming convention
 that indicates the kind of feature check by the name.  The macro names
 consist of several words, separated by underscores, going from most
-general to most specific.   The names of their cache variables use the
-same convention (@pxref{Cache Variable Names}, for more information on them).
+general to most specific.  The names of their cache variables use the
+same convention (@pxref{Cache Variable Names}, for more information on
+them).
 
 The first word of the name after @samp{AC_} usually tells the category
 of feature being tested.  Here are the categories used in Autoconf for
@@ -4837,6 +4812,7 @@ Features and packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --x-includes=DIR        X include files are in DIR
   --x-libraries=DIR       X library files are in DIR
+
 --enable and --with options recognized:
   --with-foo              use foo (default is NO)
 @end example
@@ -6064,8 +6040,8 @@ checks.
 
 This is an alphabetical list of the variables that Autoconf can
 substitute into files that it creates, typically one or more
-@file{Makefile}s.  @xref{Setting Output Variables}, for more information on how
-this is done.
+@file{Makefile}s.  @xref{Setting Output Variables}, for more information
+on how this is done.
 
 @printindex ov
 

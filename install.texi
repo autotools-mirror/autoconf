@@ -77,15 +77,8 @@ them in the environment.  You can do that on the command line like this:
 ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 @end example
 
-Please, note that the former interface:
-@example
-CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-@end example
-or
-@example
-env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-@end example
-is deprecated and should be avoided.
+@xref{Environment Variables}, for more details.
+
 
 @node Multiple Architectures
 @section Compiling For Multiple Architectures
@@ -185,12 +178,25 @@ script.  A warning: not all @code{configure} scripts look for a site script.
 Variables not defined in a site shell script can be set in the
 environment passed to configure.  However, some packages may run
 configure again during the build, and the customized values of these
-variables may be lost.  In order to avoid this problem, you can set them
-in the @code{configure} command line, using @samp{--env-VAR=value} or
-@samp{VAR=value}.  For example, the switch
-@samp{--env-CC=/usr/local2/bin/gcc} will cause the specified gcc to be
-used as the C compiler (unless it is overridden in the site shell
-script).
+variables may be lost.  In order to avoid this problem, you should set
+them in the @code{configure} command line, using @samp{VAR=value}.  For
+example:
+@example
+./configure CC=/usr/local2/bin/gcc
+@end example
+will cause the specified gcc to be used as the C compiler (unless it is
+overridden in the site shell script).
+
+Please, note that the former interface:
+@example
+CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+@end example
+or
+@example
+env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+@end example
+should be avoided.
+
 
 @node Operation Controls
 @section Operation Controls

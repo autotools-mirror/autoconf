@@ -1,5 +1,22 @@
 1999-10-02  Akim Demaille  <akim@epita.fr>
 
+	AC_DIR_HEADERS is hasbeen'ed.
+
+	* acspecific.m4 (AC_DIR_HEADER): Raised from obsolete to hasbeen.
+
+	* acspecific.m4 (AC_CHECK_HEADERS_DIRENT, AC_CHECK_HEADER_DIRENT):
+ 	Removed, were used only by AC_DIR_HEADER and were not documented.
+
+	* autoheader.m4: Remove the hooks for AC_CHECK_HEADERS_DIRENT.
+
+	* autoconf.texi (Particular Headers): Removed the documentation of
+	AC_DIR_HEADER.
+
+	* autoconf.texi (Environment Variables): Remove the very last
+	traces of documentation of --env-VAR.
+
+1999-10-02  Akim Demaille  <akim@epita.fr>
+
 	Remove hasbeen'ed macros from the documentation.
 
 	* autoconf.texi (Obsolete Macros): Document AC_HASBEEN.

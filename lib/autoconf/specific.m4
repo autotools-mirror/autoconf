@@ -833,76 +833,15 @@ AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
-AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
 else
-AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
+  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
 fi
 ])
 
-dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
-dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
-AC_DEFUN(AC_CHECK_HEADER_DIRENT,
-[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
-AC_MSG_CHECKING([for $1 that defines DIR])
-AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <$1>], [DIR *dirp = 0;],
-  eval "ac_cv_header_dirent_$ac_safe=yes",
-  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
-if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  $2
-else
-  AC_MSG_RESULT(no)
-fi
-])
-
-dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
-dnl defines `DIR'.
-dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
-define(AC_CHECK_HEADERS_DIRENT,
-[for ac_hdr in $1
-do
-AC_CHECK_HEADER_DIRENT($ac_hdr,
-[changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
-done])
 
 AC_DEFUN(AC_DIR_HEADER,
-[AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
-ac_header_dirent=no
-for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
-  AC_CHECK_HEADER_DIRENT($ac_hdr, [ac_header_dirent=$ac_hdr; break])
-done
-
-case "$ac_header_dirent" in
-dirent.h)
-  AC_DEFINE(DIRENT, 1,
-            [Define if you have <dirent.h>.]) ;;
-sys/ndir.h)
-  AC_DEFINE(SYSNDIR, 1,
-            [Define if you don't have <dirent.h>, but have <sys/ndir.h>.]) ;;
-sys/dir.h)
-  AC_DEFINE(SYSDIR, 1,
-            [Define if you don't have <dirent.h>, but have <sys/dir.h>]) ;;
-ndir.h)
-  AC_DEFINE(NDIR, 1,
-            [Define if you don't have <dirent.h>, but have <ndir.h>.]) ;;
-esac
-
-AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
-[AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_header_dirent>
-int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
-if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(VOID_CLOSEDIR, 1,
-            [Define if the `closedir' function returns void instead of `int'.])
-fi
-])
+[AC_HASBEEN([$0], [; instead use AC_HEADER_DIRENT])])
 
 AC_DEFUN(AC_HEADER_STAT,
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
@@ -1115,7 +1054,7 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
    back from the file, nor mmap's back from the file at a different
    address.  (There have been systems where private was not correctly
    implemented like the infamous i386 svr4.0, and systems where the
-   VM page cache was not coherent with the filesystem buffer cache
+   VM page cache was not coherent with the file system buffer cache
    like early versions of FreeBSD and possibly contemporary NetBSD.)
    For shared mappings, we should conversely verify that changes get
    propogated back to all the places they're supposed to be.

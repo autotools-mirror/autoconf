@@ -62,11 +62,7 @@ for details on some of the pertinent environment variables.
 them in the environment.  You can do that on the command line like this:
      ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 
-   Please, note that the former interface:
-     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-   or
-     env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-   is deprecated and should be avoided.
+   *Note Environment Variables::, for more details.
 
 Compiling For Multiple Architectures
 ====================================
@@ -160,11 +156,17 @@ Environment Variables
    Variables not defined in a site shell script can be set in the
 environment passed to configure.  However, some packages may run
 configure again during the build, and the customized values of these
-variables may be lost.  In order to avoid this problem, you can set them
-in the `configure' command line, using `--env-VAR=value' or
-`VAR=value'.  For example, the switch `--env-CC=/usr/local2/bin/gcc'
-will cause the specified gcc to be used as the C compiler (unless it is
-overridden in the site shell script).
+variables may be lost.  In order to avoid this problem, you should set
+them in the `configure' command line, using `VAR=value'.  For example:
+     ./configure CC=/usr/local2/bin/gcc
+   will cause the specified gcc to be used as the C compiler (unless it
+is overridden in the site shell script).
+
+   Please, note that the former interface:
+     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+   or
+     env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+   should be avoided.
 
 Operation Controls
 ==================
