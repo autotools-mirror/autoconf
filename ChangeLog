@@ -1,5 +1,13 @@
 2001-08-13  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am: Remove dead code and dead comments.
+	(pdf, html): New targets.
+	* doc/autoconf.texi (Using Autotest): New chapter.
+	* doc/Makefile.am (pdf): New targets.
+	(CLEANFILES): Adjust.
+
+2001-08-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Log the start/stop dates and
 	duration of the test suite.
 

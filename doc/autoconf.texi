@@ -46,6 +46,8 @@
                                 Configuring a package
 * config.status: (autoconf)config.status Invocation.
                                 Recreating a configuration
+* testsuite: (autoconf)testsuite invocation
+                                Running an Autotest test suite
 @end direntry
 
 @ifinfo
@@ -97,6 +99,8 @@ Free Documentation License''.
 @defcodeindex cv
 @c Define an Autoconf macro index that @defmac doesn't write to.
 @defcodeindex ma
+@c Define an Autotest macro index that @defmac doesn't write to.
+@defcodeindex at
 @c Define an M4sugar macro index that @defmac doesn't write to.
 @defcodeindex ms
 
@@ -129,6 +133,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Running configure scripts::   How to use the Autoconf output
 * config.status Invocation::    Recreating a configuration
 * Obsolete Constructs::         Kept for backward compatibility
+* Using Autotest::              Creating portable test suites
 * Questions::                   Questions about Autoconf, with answers
 * History::                     History of Autoconf
 * Copying This Manual::         How to make copies of this manual
@@ -137,6 +142,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
 * Autoconf Macro Index::        Index of Autoconf macros
 * M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
+* Autotest Macro Index::        Index of Autotest macros
 * Concept Index::               General index
 
 @detailmenu --- The Detailed Node Listing ---
@@ -375,6 +381,13 @@ Upgrading From Version 2.13
 
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
+
+Generating Test Suites with Autotest
+
+* testsuite Scripts::           The concepts of Autotest
+* Writing testsuite.at::        Autotest macros
+* testsuite invocation::        Running @command{testsuite} scripts
+* Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 
 Questions About Autoconf
 
@@ -6548,6 +6561,8 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
 @end defmac
 
+
+
 @c=================================================== Writing Autoconf Macros.
 
 @node Writing Autoconf Macros, Portable Shell, Programming in M4, Top
@@ -9694,7 +9709,7 @@ The calling convention of @file{config.status} has changed, see
 
 @c =================================================== Obsolete Constructs
 
-@node Obsolete Constructs, Questions, config.status Invocation, Top
+@node Obsolete Constructs, Using Autotest, config.status Invocation, Top
 @chapter Obsolete Constructs
 
 Autoconf changes, and throughout the years some constructs are obsoleted.
@@ -10980,9 +10995,344 @@ $ autoconf
 $
 @end example
 
+
+@c ============================= Generating Test Suites with Autotest
+
+@node Using Autotest, Questions, Obsolete Constructs, Top
+@chapter Generating Test Suites with Autotest
+
+@cindex Autotest
+
+@display
+@strong{Note: This section describes an experimental features which will
+officially part of Autoconf in a forthcoming release.  Although we
+believe Autotest is stabilizing, the documentation below describes an
+interface which might change in the future: do not depend upon Autotest
+without subscribing to the Autoconf mailings lists.}
+@end display
+
+It is paradoxical that portable projects depend on nonportable tools to
+run their test suite.  Autoconf by itself is the paragon of this
+problem: although it aims at perfectly portability, up to 2.13, its test
+suite was using DejaGNU, a rich and complex testing framework, but which
+is far from being standard on Unix systems.  Worse yet, it was likely to
+be missing on the most fragile platforms, the very platforms that are
+most likely to torture Autoconf and exhibit deficiencies.
+
+To circumvent this problem many package maintainers have developed their
+own testing framework, based on simple shell scripts whose sole output
+are their exit status: the test succeeded, or failed.  In addition, most
+of these tests share some common patterns, what results in lots of
+duplicated code, tedious maintenance etc.
+
+Following exactly the same reasoning that yielded to the inception of
+Autoconf, Autotest provides a test suite generation frame work, based on
+M4 macros, building a portable shell script.  The suite itself is
+equipped with automatic logging and tracing facilities which greatly
+diminish the interaction with bug reporters, and simple timing reports.
+
+Autoconf itself has been using Autotest for years, and we do attest that
+it has considerably improved the strength of the test suite, and the
+quality of bug reports.  Other projects are known to use some generation
+of Autotest, such as Bison, Free Recode, Free Wdiff, GNU Tar, each of
+them having different needs, what slowly polishes Autotest as a general
+testing framework.
+
+Nonetheless, compared to DejaGNU, Autotest is inadequate for interactive
+tool testing, which is probably its main limitation.
+
+@menu
+* testsuite Scripts::           The concepts of Autotest
+* Writing testsuite.at::        Autotest macros
+* testsuite invocation::        Running @command{testsuite} scripts
+* Making testsuite Scripts::    Using autom4te to create @command{testsuite}
+@end menu
+
+@node testsuite Scripts, Writing testsuite.at, Using Autotest, Using Autotest
+@section @command{testsuite} Scripts
+
+@cindex @command{testsuite}
+
+Generating testing or validation suites using Autotest is rather easy.
+The whole validation suite is held in a file to be processed through
+@command{autom4te}@footnote{@c
+@c
+@cindex @command{autom4te}
+It is on purpose that we don't document @command{autom4te} which is yet
+another forthcoming Autoconf feature: it is being developed and
+polished.  It will be documented when ready for wide spread use.  Do not
+use it without at least being member of the Autoconf mailing lists.
+@c
+}, itself using GNU @code{m4} under the scene, to produce a stand-alone
+Bourne shell script which then gets distributed.  Neither
+@command{autom4te} nor GNU @code{m4} are not needed anymore at the
+installer end.
+
+@cindex test group
+Each test of the validation suite should be part of some test group.  A
+@dfn{test group} is a sequence of interwoven tests that ought to be
+executed together, usually because one test in the group creates data
+files than a later test in the same group needs to read.  Complex test
+groups make later debugging more tedious.  It is much better keeping
+keep only a few tests per test group, and if you can put only one test
+per test group, this is just ideal.
+
+For all but the simplest packages, some file such as @file{testsuite.at}
+does not fully hold all test sources, as these are often easier to
+maintain in separate files.  Each of these separate files holds a single
+test group, or a sequence of test groups all addressing some common
+functionality in the package.  In such cases, file @file{testsuite.at}
+only initializes the whole validation suite, and sometimes do elementary
+health checking, before listing include statements for all other test
+files.
+
+The validation scripts that Autotest produces are by convention called
+@command{testsuite}.  When run, @command{testsuite} executes each test
+group in turn, producing only one summary line per test to say if that
+particular test succeeded or failed.  At end of all tests, summarizing
+counters get printed.  If any test failed, one debugging script gets
+automatically generated for each test group which failed.  These
+debugging scripts are named @file{debug-@var{nn}.sh}, using for @var{nn}
+the sequence number of the test group.  In the ideal situation, none of
+the tests tests fail, and consequently, no debugging script is generated
+out of validation.
+
+The automatic generation of debugging scripts for failed test has the
+purpose of easing the chase for bugs.
+
+@c FIXME: This is not accurate today: we have a single atconfig.in.
+It often happens in practice that individual tests in the validation
+suite need to get information coming out of the configuration process.
+Some of this information, common for all validation suites, is provided
+through the file @file{atconfig.in}, which your package should distribute
+verbatim, unchanged.  For configuration informations which your testing
+environment specifically needs, you might prepare an optionnal file named
+@file{atlocal.in}.  The configuration process produces @file{atconfig}
+and @file{atlocal} out of these two input files, and these two produced
+files are automatically read by the @file{testsuite} script.
+
+Here is a diagram showing the relationship between files.
+
+@noindent
+Files used in preparing a software package for distribution:
+
+@example
+testsuite.at --> autom4te* --> testsuite
+@end example
+
+@noindent
+Files used in configuring a software package:
+
+@example
+atconfig.in                                        testsuite.log
+    |                                                   ^
+    v                    .-> atconfig --.               |
+    +--> config.status* -+              +-> testsuite* -+
+    ^                    `-> [atlocal] -'               |
+    |                                                   v
+[atlocal.in]                                       debug-@var{nn}.sh*
+@end example
+
+@node Writing testsuite.at, testsuite invocation, testsuite Scripts, Using Autotest
+@section Writing @file{testsuite.at}
+
+The @file{testsuite.at} is a Bourne shell script making use of special
+Autotest M4 macros.  It often contains a call to @code{AT_INIT} nears
+its beginning followed by one call to @code{m4_include} per source file
+for tests.  Each such included file, or the remainder of
+@file{testsuite.at} if include files are not used, contain a sequence of
+test groups.  Each test group begins with one call to @code{AT_SETUP},
+it contains an arbitrary number of shell commands or calls to
+@code{AT_CHECK}, and it completes with one call to @code{AT_CLEANUP}.
+
+@defmac AT_INIT (@var{program})
+@atindex INIT
+@c FIXME: Not clear, plus duplication of the information.
+Initialize Autotest. This macro accepts a single argument, which is the
+file name of the executable program to use for checking version.  At the
+time the validation suite gets executed, the program search path should
+be already preset so the proper executable will be selected.  This is
+usually guaranteed through some @file{Makefile} magic.
+
+@var{program} is then used to check that the test suite is ready to be
+run (@var{program} was found), and corresponds to the current version of
+the package (@samp{@var{program} --version} is run and checked against
+the package version).
+@end defmac
+
+@defmac AT_SETUP (@var{test-group-name})
+@atindex SETUP
+This macro starts a group of related tests, all to be executed in the same
+subshell.  It accepts a single argument, which holds a few words (no more
+than about 30 or 40 characters) quickly describing the purpose of the test
+group being started.
+@end defmac
+
+@defmac AT_CLEANUP (@ovar{generated-files})
+@atindex CLEANUP
+This macro completes a group of related tests.  It accepts a single argument,
+which is a white separated list of files which have been created within the
+test group.  It has the effect of recursively removing those listed files.
+There is no need to list @file{stdout}, @file{stderr}, nor files created
+with @code{AT_DATA}.
+@end defmac
+
+@defmac AT_DATA (@var{file}, @var{contents})
+@atindex DATA
+Initialize an input data @var{file} with given @var{contents}.  Of
+course, @var{contents} might have to be properly quoted between square
+brackets to protect against included commas or spurious @code{m4}
+expansion.  The contents ought to end with an end of line.
+@end defmac
+
+@defmac AT_CHECK (@var{commands}, @ovar{status = 0}, @ovar{stdout}, @ovar{stderr})
+@atindex CHECK
+This macro has up to four arguments: @var{commands}, @var{status},
+@var{stdout} and @var{stderr}.  The @var{commands} argument is
+mandatory, and @code{m4} quoting is often useful.
+
+The macro executes a test by performing given shell @var{commands}.
+These commands should normally exit with @var{status}, while producing
+expected @var{stdout} and @var{stderr} contents.  Unless empty,
+@var{status} is a decimal integer; exit status is not checked if
+@var{status} is empty.  The special word @code{expout} for @var{stdout}
+means that file @file{expout} contents has been preset to the expected
+standard output.  The special word @code{experr} for @var{stderr} means
+that file @file{experr} contents has been preset to the expected
+standard error output.
+@end defmac
+
+
+@node testsuite invocation, Making testsuite Scripts, Writing testsuite.at, Using Autotest
+@section Running @command{testsuite} Scripts
+@cindex @command{testsuite}
+
+The @command{testsuite} script, as well as all generated debugging
+scripts, accept the following options.
+
+@c FIXME: Completely obsolete now...
+
+@table @samp
+
+@item --help
+This option inhibits normal execution of the script, and merely gives a
+summary of available options instead.
+
+@item --version
+This option inhibits normal execution of the script, and gives the package
+name and version numbers to be tested.
+
+@item -e
+This option is only meaningful for the full testsuite, it is not really
+useful for generated debugging scripts.  If any test fails in the suite,
+immediately abort testing and inhibit normal clean up.  The default action
+is to clean up and proceed with the following tests, as the usual goal of
+the whole validation suite is to produce result counts and debugging scripts.
+
+@item -n
+For checking the contents of standard output and standard error output, their
+contents are normally redirected into special files named @file{stdout}
+and @file{stderr}.  This option prevents the redirection to occur, so
+standard error output and standard error output appear @emph{normally}.
+This option causes any testing of the contents of standard output or
+standard error output to be bypassed.
+
+@item -s
+When the full test suite is generating debugging scripts, or when the
+generated debugging scripts get executed, many informative details are given
+about what is being done.  This option inhibits those informative details.
+
+@item -v
+This option is only meaningful for the full testsuite, as it is automatically
+selected in the generated debugging scripts (unless option @samp{-s} is
+also used).  It has the purpose of forcing more verbosity in the detailed
+output of what is being done.
+
+@item -x
+This option is transmitted to the shell at appropriate places, and asks for
+a trace of command execution.  This option also implies option @samp{-n}.
+@end table
+
+
+@node Making testsuite Scripts,  , testsuite invocation, Using Autotest
+@section Making @command{testsuite} Scripts
+
+For putting Autotest into movement, you need some configuration and
+Makefile machinery.  We recommend, at least if your package uses deep or
+shallow hierarchies, that you use @file{tests/} as the name of the
+directory holding all your tests and their @file{Makefile}.  Here is a
+check list of things to do.
+
+@itemize @minus
+
+@item
+Ensure that configuration defines @code{PACKAGE} and @code{VERSION}.
+This is already guaranteed if you are using Automake through the
+@code{AM_INIT_AUTOMAKE} call, but with straight Autoconf, it means that
+you should at least use @code{AC_SUBST} for these two variables, after
+having initialized them to proper values.
+
+@item
+@c FIXME: This macro should become part of Autoconf.  AC_AUTOTEST_PATH?
+Use the @code{AT_CONFIG} macro from within file @file{configure.ac}.
+This macro accepts one argument, which is the directory, relative to the
+test directory, where the executables are prepared.
+
+@item
+Still within @file{configure.ac}, ensure that some
+@code{AC_CONFIG_FILES} command includes substitution for
+@file{tests/atconfig} and also, as appropriate, @file{tests/atlocal}.
+
+@item
+The @file{tests/Makefile.in} should be modified so the validation in
+your package is triggered by @samp{make check}.  An example is provided
+below.
+
+@end itemize
+
+With Automake, here is a minimal example about how to link @samp{make check}
+with a validation suite.
+
+@example
+EXTRA_DIST = testsuite.at testsuite
+
+all-local: atconfig testsuite
+
+check-local: atconfig testsuite
+        $(SHELL) $(srcdir)/testsuite
+
+AUTOM4TE = autom4te -I /usr/local/share/autoconf/lib
+$(srcdir)/testsuite: $(srcdir)/testsuite.at
+        $(AUTOM4TE) -I $(srcdir) autotest/general.m4 $@.at -o $@.tmp
+        chmod +x $@.tmp
+        mv $@.tmp $@
+@end example
+assuming Autoconf was installed with @code{prefix} being
+@samp{/usr/local}.  You might want to list explicitly the dependencies,
+i.e., the list of the files @file{testsuite.at} includes.
+
+With strict Autoconf, you might need to add lines inspired from the
+following:
+
+@example
+subdir = tests
+
+check: check-local
+
+atconfig: $(top_builddir)/config.status atconfig.in
+	cd $(top_builddir) && \
+           $(SHELL) ./config.status --file$(subdir)/$@
+@end example
+
+@noindent
+and manage to have @file{atconfig.in} and @code{$(EXTRA_DIST)}
+distributed.
+
+
+
 @c ================================================ Questions About Autoconf.
 
-@node Questions, History, Obsolete Constructs, Top
+@node Questions, History, Using Autotest, Top
 @chapter Questions About Autoconf
 
 Several questions about Autoconf come up occasionally.  Here some of them
@@ -11422,7 +11772,7 @@ easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ma
 
-@node M4 Macro Index, Concept Index, Autoconf Macro Index, Top
+@node M4 Macro Index, Autotest Macro Index, Autoconf Macro Index, Top
 @unnumbered M4 Macro Index
 
 This is an alphabetical list of the M4, M4sugar, and M4sh macros.  To
@@ -11431,7 +11781,15 @@ preceding @samp{m4_} or @samp{AS_}.
 
 @printindex ms
 
-@node Concept Index,  , M4 Macro Index, Top
+@node Autotest Macro Index, Concept Index, M4 Macro Index, Top
+@unnumbered Autotest Macro Index
+
+This is an alphabetical list of the Autotest macros.  To make the list
+easier to use, the macros are listed without their preceding @samp{AT_}.
+
+@printindex at
+
+@node Concept Index,  , Autotest Macro Index, Top
 @unnumbered Concept Index
 
 This is an alphabetical list of the files, tools, and concepts

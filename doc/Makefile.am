@@ -20,6 +20,7 @@
 
 MAKEINFO = @MAKEINFO@ --no-split
 TEXI2HTML = texi2html
+TEXI2HTML_FLAGS = -split_chapter
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = fdl.texi install.texi
@@ -27,15 +28,34 @@ standards_TEXINFOS = make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
-CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
-             autoconf.ov autoconf.ovs autoconf.ms autoconf.mss autoconf.tmp
+CLEANFILES = autoconf.cvs \
+	     autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
+             autoconf.ov autoconf.ovs autoconf.ms autoconf.mss \
+	     autoconf.at autoconf.ats \
+	     autoconf.tmp \
+	     autoconf*.html standards*.html \
+	     autoconf*.pdf standards*.pdf
 
-# The documentation
+
+## ----------------------------- ##
+## Other documentation formats.  ##
+## ----------------------------- ##
 
 html: autoconf_1.html standards_1.html
 
 autoconf_1.html: autoconf.texi install.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/autoconf.texi
+	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/autoconf.texi
 
 standards_1.html: standards.texi make-stds.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/standards.texi
+	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/standards.texi
+
+
+pdf: autoconf.pdf standards.pdf
+
+autoconf.pdf: autoconf.texi install.texi
+	$(TEXI2DVI) --pdf --batch $(srcdir)/autoconf.texi
+
+standards.pdf: standards.texi make-stds.texi
+	$(TEXI2DVI) --pdf --batch $(srcdir)/standards.texi
+
+.PHONY: html pdf

@@ -68,6 +68,7 @@ VERSION = @VERSION@
 
 MAKEINFO = @MAKEINFO@ --no-split
 TEXI2HTML = texi2html
+TEXI2HTML_FLAGS = -split_chapter
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = fdl.texi install.texi
@@ -75,7 +76,7 @@ standards_TEXINFOS = make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
-CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas              autoconf.ov autoconf.ovs autoconf.ms autoconf.mss autoconf.tmp
+CLEANFILES = autoconf.cvs 	     autoconf.ev autoconf.evs autoconf.ma autoconf.mas              autoconf.ov autoconf.ovs autoconf.ms autoconf.mss 	     autoconf.at autoconf.ats 	     autoconf.tmp 	     autoconf*.html standards*.html 	     autoconf*.pdf standards*.pdf
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = 
@@ -343,15 +344,23 @@ mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
-# The documentation
-
 html: autoconf_1.html standards_1.html
 
 autoconf_1.html: autoconf.texi install.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/autoconf.texi
+	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/autoconf.texi
 
 standards_1.html: standards.texi make-stds.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/standards.texi
+	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/standards.texi
+
+pdf: autoconf.pdf standards.pdf
+
+autoconf.pdf: autoconf.texi install.texi
+	$(TEXI2DVI) --pdf --batch $(srcdir)/autoconf.texi
+
+standards.pdf: standards.texi make-stds.texi
+	$(TEXI2DVI) --pdf --batch $(srcdir)/standards.texi
+
+.PHONY: html pdf
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

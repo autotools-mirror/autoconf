@@ -24,17 +24,20 @@ SUBDIRS = . lib bin config m4 man doc tests
 
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
-WGET = wget
-
-# FIXME:
-# s/distpackageDATA/dist_pkgdata_DATA/
-# s/nodistpackageDATA/nodist_pkgdata_DATA/
-# and adapt dependencies once we use a more recent Automake
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
              GNUmakefile Makefile.maint
 
+
+## -------------------- ##
+## Forwarding targets.  ##
+## -------------------- ##
+
+html pdf:
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@
+
+.PHONY: html pdf
 
 ## ------------------ ##
 ## Maintainer rules.  ##
