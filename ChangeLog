@@ -1,5 +1,10 @@
 2004-12-02  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_MEMCMP): Use
+	"char c = '\200';" rather than "char c = 0x80;" as the
+	latter doesn't conform to the strict C standard due to
+	overflow on signed char hosts.
+
 	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Prefer -qlanglvl=extc89
 	to -qlanglvl=ansi.  We don't want to disable extensions.
 
