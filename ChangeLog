@@ -1,3 +1,7 @@
+2001-01-25  Assar Westerlund  <assar@sics.se>
+
+	* autoreconf.sh: Also find configure.in.
+
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump to 2.49d.
