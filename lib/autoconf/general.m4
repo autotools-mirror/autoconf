@@ -126,7 +126,7 @@ changequote([,])dnl
 changequote(,)dnl
 	srcdir=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
-     -srcdir | --srcdir | --srcdi | --srcd | --src | --sr | --s)
+     -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
 	if test $[#] -eq 1; then
 	  AC_ERROR(missing argument to $ac_arg)
         else shift; srcdir=$[1]; fi ;;
@@ -156,6 +156,10 @@ changequote([,])dnl
 
      -v | -verbose | --verbose | --verbos | --verbo | --verb | --ver | --ve | --v)
        ac_verbose=yes ;;
+
+     -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+	| -silent | --silent | --silen | --sile | --sil | --si)
+       ac_silent=yes ;;
 
      *) ;;
   esac
@@ -361,7 +365,7 @@ dnl Printing messages
 dnl
 dnl
 define(AC_CHECKING,
-[echo "checking $1"])dnl
+[test -n "$ac_silent" || echo "checking $1"])dnl
 dnl
 define(AC_VERBOSE,
 [test -n "$ac_verbose" && echo "	$1"])dnl
