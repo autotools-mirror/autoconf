@@ -1026,26 +1026,26 @@ Then, in the code, use a test like this:
 @example
 @group
 #if STDC_HEADERS || HAVE_STRING_H
-#include <string.h>
+# include <string.h>
 /* An ANSI string.h and pre-ANSI memory.h might conflict.  */
-#if !STDC_HEADERS && HAVE_MEMORY_H
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif /* not STDC_HEADERS and HAVE_MEMORY_H */
 #else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
+# include <strings.h>
 /* memory.h and strings.h conflict on some systems.  */
-#ifndef strchr
-#define strchr index
-#endif
-#ifndef strrchr
-#define strrchr rindex
-#endif
-#ifndef memcpy
-#define memcpy(d, s, n) bcopy ((s), (d), (n))
-#endif
-#ifndef memcmp
-#define memcmp(s1, s2, n) bcmp ((s1), (s2), (n))
-#endif
+# ifndef strchr
+#  define strchr index
+# endif
+# ifndef strrchr
+#  define strrchr rindex
+# endif
+# ifndef memcpy
+#  define memcpy(d, s, n) bcopy ((s), (d), (n))
+# endif
+# ifndef memcmp
+#  define memcmp(s1, s2, n) bcmp ((s1), (s2), (n))
+# endif
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 @end group
 @end example
@@ -1217,19 +1217,19 @@ rather than choke on it.
 @group
 /* AIX requires this to be the first thing in the file.  */
 #ifdef __GNUC__
-#define alloca __builtin_alloca
+# define alloca __builtin_alloca
 #else /* not __GNUC__ */
-#if HAVE_ALLOCA_H
-#include <alloca.h>
-#else /* not HAVE_ALLOCA_H */
-#ifdef _AIX
+# if HAVE_ALLOCA_H
+#  include <alloca.h>
+# else /* not HAVE_ALLOCA_H */
+#  ifdef _AIX
  #pragma alloca
-#else /* not _AIX */
-#ifndef alloca /* predefined by HP cc +Olibcalls */
+#  else /* not _AIX */
+#   ifndef alloca /* predefined by HP cc +Olibcalls */
 char *alloca ();
-#endif /* not defined(alloca) */
-#endif /* not _AIX */
-#endif /* not HAVE_ALLOCA_H */
+#   endif /* not defined(alloca) */
+#  endif /* not _AIX */
+# endif /* not HAVE_ALLOCA_H */
 #endif /* not __GNUC__ */
 @end group
 @end example
@@ -2314,13 +2314,43 @@ LIBS="$LIBS -ltermcap"
 @end example
 @end defmac
 
-@defmac AC_SUBST_FILE (@var{variable}, @var{file})
+@defmac AC_SUBST_DEFAULT (@var{variable}, @var{default-value})
+@maindex SUBST_DEFAULT
+Like @code{AC_SUBST}, but if @var{variable} is not set in the
+environment when @code{configure} is run, give it the value
+@var{default-value}.  @var{default-value} is evaluated in shell double
+quotes, so it may refer to other variables or even the output of a
+command.  As an example, Autoconf automatically calls this macro like this:
+
+@example
+AC_SUBST_DEFAULT(CFLAGS, -g)dnl
+AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
+AC_SUBST_DEFAULT(LDFLAGS, )dnl
+@end example
+@end defmac
+
+@defmac AC_SUBST_FILE (@var{variable})
 @maindex SUBST_FILE
-Substitute the contents of the file @file{@var{srcdir}/@var{file}} into
-@file{Makefile} variable @var{variable} when creating the output files
-(typically one or more @file{Makefile}s).  This macro is useful for
-inserting @file{Makefile} fragments for particular host or tartet types
-into @file{Makefile}s.
+Substitute the contents of the file named by shell variable
+@var{variable} into @file{Makefile} variable @var{variable} when
+creating the output files (typically one or more @file{Makefile}s).
+This macro is useful for inserting @file{Makefile} fragments containing
+special dependencies or other @code{make} directives for particular host
+or target types into @file{Makefile}s.
+
+For example, @file{configure.in} could contain:
+
+@example
+AC_SUBST_FILE(host_frag)dnl
+host_frag=$srcdir/conf/sun4.mh
+@end example
+
+@noindent
+and then a @file{Makefile.in} could contain:
+
+@example
+@@host_frag@@
+@end example
 @end defmac
 
 @node Printing Messages, Language Choice, Setting Variables, General Purpose Macros
@@ -3219,11 +3249,34 @@ The top-level source code directory for the package.  In the top-level
 directory, this is the same as @code{srcdir}.
 @end defvar
 
+@defvar CFLAGS
+Debugging, optimization, header file search directory, and other
+miscellaneous options for the C compiler.  The default value is
+@samp{-g} if it is not set in the environment when @code{configure} runs.
+@code{configure} uses this variable when compiling programs to test
+for C features.
+@end defvar
+
+@defvar CXXFLAGS
+Debugging, optimization, header file search directory, and other
+miscellaneous options for the C++ compiler.  The default value is
+@samp{-g} if it is not set in the environment when @code{configure} runs.
+@code{configure} uses this variable when compiling programs to test
+for C++ features.
+@end defvar
+
 @defvar DEFS
 @samp{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADER}
 is called, @code{configure} replaces @samp{@@DEFS@@} with
-@samp{-DHAVE_CONFIG_H}, since the contents of @code{DEFS} would be
-redundant.
+@samp{-DHAVE_CONFIG_H} instead.
+@end defvar
+
+@defvar LDFLAGS
+Stripping, library search directories, and other miscellaneous options
+for the linker.  The default value is empty if it is not set in the
+environment when @code{configure} runs.
+@code{configure} uses this variable when linking programs to test
+for C features.
 @end defvar
 
 @defvar LIBS

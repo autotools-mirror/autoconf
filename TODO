@@ -6,7 +6,7 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Add AC_{INCLUDE,LIB}_DIR?  (Noah Friedman's suggestion.)
+* Try it on Emacs configure.in, and adapt that to use the new features.
 
 ------------------------------------------------------------------------------
 

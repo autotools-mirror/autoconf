@@ -25,6 +25,8 @@ Major changes in release 2.0:
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
 * AC_SUBST_FILE, to insert one file into another.
+* AC_SUBST_DEFAULT, to copy a variable from the configure environment into
+  Makefiles with a default fallback value.
 
 ** Changed macros:
 * Many macros renamed, but old names are accepted for backward compatibility.
@@ -35,6 +37,8 @@ Major changes in release 2.0:
 * AC_OUTPUT allows the optional environment variable CONFIG_STATUS to
   override the file name "config.status".
 * AC_OUTPUT and AC_CONFIG_HEADER allow you to override the input-file names.
+* AC_OUTPUT automatically substitutes the values of CFLAGS, CXXFLAGS, and
+  LDFLAGS from the environment, with default values.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
   AC_CONFIG_AUXDIR, or srcdir or srcdir/.. or srcdir/../.. by default.
 * AC_DEFINE and AC_DEFINE_UNQUOTED are more robust and smaller.

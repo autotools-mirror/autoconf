@@ -309,8 +309,8 @@ AC_CACHE_VAL(ac_cv_path_install,
   test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
   INSTALL="$ac_cv_path_install"
 fi
-dnl We do this instead of AC_SUBST, to get relative paths right.
-ac_given_INSTALL=$INSTALL
+dnl We do special magic for INSTALL instead of AC_SUBST, to get
+dnl relative paths right. 
 AC_MSG_RESULT($INSTALL)
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -407,21 +407,20 @@ fi
 ])dnl
 dnl
 AC_DEFUN(AC_HEADER_MAJOR,
-[AC_MSG_CHECKING([for major, minor and makedev header])
-AC_CACHE_VAL(ac_cv_header_major,
-[AC_TRY_LINK([#include <sys/types.h>],
-[return makedev(0, 0);], ac_cv_header_major=sys/types.h, ac_cv_header_major=no)
-if test $ac_cv_header_major = no; then
-AC_CHECK_HEADER(sys/mkdev.h, ac_cv_header_major=sys/mkdev.h)
+[AC_MSG_CHECKING(whether sys/types.h defines makedev)
+AC_CACHE_VAL(ac_cv_header_sys_types_h_makedev,
+[AC_TRY_LINK([#include <sys/types.h>], [return makedev(0, 0);],
+  ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
+])dnl
+AC_MSG_RESULT($ac_cv_header_sys_types_h_makedev)
+
+if test $ac_cv_header_sys_types_h_makedev = no; then
+AC_CHECK_HEADER(sys/mkdev.h, [AC_DEFINE(MAJOR_IN_MKDEV)])
+
+  if test $ac_cv_header_sys_mkdev_h = no; then
+AC_CHECK_HEADER(sys/sysmacros.h, [AC_DEFINE(MAJOR_IN_SYSMACROS)])
+  fi
 fi
-if test $ac_cv_header_major = no; then
-AC_CHECK_HEADER(sys/sysmacros.h, ac_cv_header_major=sys/sysmacros.h)
-fi])dnl
-AC_MSG_RESULT($ac_cv_header_major)
-case "$ac_cv_header_major" in
-sys/mkdev.h) AC_DEFINE(MAJOR_IN_MKDEV) ;;
-sys/sysmacros.h) AC_DEFINE(MAJOR_IN_SYSMACROS) ;;
-esac
 ])dnl
 dnl
 AC_DEFUN(AC_HEADER_DIRENT,

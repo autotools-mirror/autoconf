@@ -363,14 +363,14 @@ fi
 ])dnl
 dnl
 dnl Try to have only one #! line, so the script doesn't look funny.
-dnl AC_BINSH()
-AC_DEFUN(AC_BINSH,
+dnl AC_INIT_BINSH()
+AC_DEFUN(AC_INIT_BINSH,
 [#!/bin/sh
 ])dnl
 dnl
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT,
-[AC_REQUIRE([AC_BINSH])dnl
+[AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_INIT_NOTICE
 AC_INIT_PARSE_ARGS
 AC_INIT_PREPARE($1)])dnl
@@ -479,6 +479,9 @@ AC_SUBST(LIBS)dnl
 AC_SUBST(prefix)dnl
 AC_SUBST(exec_prefix)dnl
 AC_SUBST(DEFS)dnl
+AC_SUBST_DEFAULT(CFLAGS, -g)dnl
+AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
+AC_SUBST_DEFAULT(LDFLAGS, )dnl
 ])dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
@@ -539,7 +542,7 @@ AC_DEFUN(AC_CONFIG_HEADER,
 dnl
 dnl AC_REVISION(REVISION-INFO)
 AC_DEFUN(AC_REVISION,
-[AC_REQUIRE([AC_BINSH])dnl
+[AC_REQUIRE([AC_INIT_BINSH])dnl
 [# From configure.in] translit([$1], $")])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
@@ -866,18 +869,8 @@ s%@$1@%[$]$1%g
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
 dnl
-dnl AC_SUBST_FILE(VARIABLE, FILE)
+dnl AC_SUBST_FILE(VARIABLE)
 AC_DEFUN(AC_SUBST_FILE,
-[if test -f $2; then
-  echo using $2 for $1)
-  AC_INSERT_FILE($1, $2)
-elif test -f ${srcdir}/$2; then
-  echo using ${srcdir}/$2 for $1)
-  AC_INSERT_FILE($1, ${srcdir}/$2)
-fi
-])dnl
-dnl Internal subroutine of AC_SUBST_FILE.
-AC_DEFUN(AC_INSERT_FILE,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 divert(AC_DIVERSION_SED)dnl
@@ -885,6 +878,12 @@ divert(AC_DIVERSION_SED)dnl
 s%@$1@%%g
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
+dnl
+dnl AC_SUBST_DEFAULT(VARIABLE [, DEFAULT-VALUE])
+AC_DEFUN(AC_SUBST_DEFAULT,
+[$1=${$1-"$2"}
+AC_SUBST($1)dnl
+])dnl
 dnl
 dnl
 dnl ### Printing messages
@@ -1120,6 +1119,7 @@ dnl              ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.${ac_ext} <<EOF
+#line __LINE__ "configure"
 #include "confdefs.h"
 [$2]
 EOF
@@ -1150,6 +1150,7 @@ dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_TRY_LINK,
 [dnl We use return because because C++ requires a prototype for exit.
 cat > conftest.${ac_ext} <<EOF
+#line __LINE__ "configure"
 #include "confdefs.h"
 [$1]
 int main() { return 0; }
@@ -1179,6 +1180,7 @@ $4
 ])
 else
 cat > conftest.${ac_ext} <<EOF
+#line __LINE__ "configure"
 #include "confdefs.h"
 [$1]
 EOF
@@ -1196,6 +1198,7 @@ dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.${ac_ext} <<EOF
+#line __LINE__ "configure"
 #include "confdefs.h"
 [$1]
 EOF
@@ -1219,12 +1222,12 @@ dnl
 dnl AC_CHECK_HEADER(HEADER-FILE, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_HEADER,
 [dnl Do the transliteration at runtime so arg 1 can be a shell variable.
-ac_var=`echo "$1" | tr './' '__'`
+ac_safe=`echo "$1" | tr './' '__'`
 AC_MSG_CHECKING([for $1])
-AC_CACHE_VAL(ac_cv_header_$ac_var,
-[AC_TRY_CPP([#include <$1>], eval "ac_cv_header_$ac_var=yes",
-  eval "ac_cv_header_$ac_var=no")])dnl
-if eval "test \"`echo '$ac_cv_header_'$ac_var`\" = yes"; then
+AC_CACHE_VAL(ac_cv_header_$ac_safe,
+[AC_TRY_CPP([#include <$1>], eval "ac_cv_header_$ac_safe=yes",
+  eval "ac_cv_header_$ac_safe=no")])dnl
+if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
   AC_MSG_RESULT(yes)
   ifelse([$2], , :, [$2])
 else
@@ -1393,6 +1396,7 @@ do
 done
 
 ac_given_srcdir=$srcdir
+ac_given_INSTALL="$INSTALL"
 
 ifdef([AC_LIST_HEADERS],
 [trap 'rm -fr $1 AC_LIST_HEADERS conftest*; exit 1' 1 2 15],

@@ -111,10 +111,17 @@ if grep "${pattern}" $tmpout > /dev/null 2>&1; then
   status=1
 fi
 
-case $# in
-  0) cat $tmpout > configure; chmod +x configure ;;
-  1) cat $tmpout ;;
-esac
+if test $# -eq 0; then
+  exec > configure; chmod +x configure
+fi
+
+# Put the real line numbers into configure to make config.log more helpful.
+awk '
+/__LINE__/ { printf "%d:", NR + 1 }
+           { print }
+' $tmpout | sed '
+/__LINE__/s/^\([0-9][0-9]*\):\(.*\)__LINE__\(.*\)$/\2\1\3/
+'
 
 rm -f $tmpout
 exit $status
