@@ -1,3 +1,9 @@
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (_AS_QUOTE): The warning about quoted
+	characters is a back as an `obsolete' warning now.
+	Reported by Ralf Corsepius.
+
 2002-10-28  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Bumpto 2.54c.

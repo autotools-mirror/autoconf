@@ -342,7 +342,7 @@ m4_define([_AS_ECHO_UNQUOTED],
 m4_define([_AS_QUOTE],
 [_AS_QUOTE_IFELSE([$1],
                   [AS_ESCAPE([$1], m4_default([$2], [`""]))],
-                  [m4_warn([syntax],
+                  [m4_warn([obsolete],
            [back quotes and double quotes must not be escaped in: $1])dnl
 $1])])
 
