@@ -68,7 +68,7 @@
 	`config.status'.  Fix and test.
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use
-	`$ac_configure_args' directly, no via a tmp variable.
+	`$ac_configure_args' directly, not via a tmp variable.
 	* tests/torture.m4 (command line interface): Test with more than
 	one argument.
 
@@ -81,7 +81,7 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_PACKAGE): Rename as _AC_INIT_PACKAGE.
-	(AC_INIT): Dispatch your arguments either to _AC_INIT_PACKAGE or
+	(AC_INIT): Dispatch arguments either to _AC_INIT_PACKAGE or
 	to AC_CONFIG_SRCDIR.
 	(AU::AC_INIT): New.
 	* configure.in: Adjust.
