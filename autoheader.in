@@ -23,6 +23,8 @@
 # With one arg, create a header file on standard output from
 # the given template file.
 
+me=`echo "$0" | sed -e 's,.*/,,'`
+
 usage="\
 Usage: autoheader [OPTION] ... [TEMPLATE-FILE]
 
@@ -46,6 +48,9 @@ Written by Roland McGrath.
 Copyright (C) 1992-1994, 1996, 1998-1999 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+
+help="\
+Try \`$me --help' for more information."
 
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally
@@ -77,53 +82,59 @@ ac_LF_and_DOT=`echo; echo .`
 localdir=.
 debug=0
 # Basename for temporary files.
-ah_base=autoh$$
+ah_base=ah$$
 
 while test $# -gt 0 ; do
-   case "${1}" in
+   case "$1" in
       -h | --help | --h* )
          echo "$usage"; exit 0 ;;
+      --version | --v* )
+         echo "$version"; exit 0 ;;
       -d | --debug | --d* )
-         debug=1; shift ;;
+         debug=:; shift ;;
       --localdir=* | --l*=* )
-         localdir=`echo \"${1}\" | sed -e 's/^[^=]*=//'`
+         localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
          shift ;;
       -l | --localdir | --l*)
          shift
-         test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
-         localdir="${1}"
+         test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
+         localdir=$1
          shift ;;
       --macrodir=* | --m*=* )
-         AC_MACRODIR=`echo \"${1}\" | sed -e 's/^[^=]*=//'`
+         AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
          shift ;;
       -m | --macrodir | --m* )
          shift
-         test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
-         AC_MACRODIR="${1}"
+         test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
+         AC_MACRODIR=$1
          shift ;;
-      --version | --v* )
-         echo "$version"; exit 0 ;;
       -- )     # Stop option processing
         shift; break ;;
-      - )	# Use stdin as input.
+      - )     # Use stdin as input.
         break ;;
       -* )
-        echo "${usage}" 1>&2; exit 1 ;;
+        exec 1>&2
+        echo "$me: invalid option $1"
+        echo "$help"
+        exit 1 ;;
       * )
         break ;;
    esac
 done
 
 acconfigs=
-test -r $localdir/acconfig.h && acconfigs="${acconfigs} $localdir/acconfig.h"
+test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 
 case $# in
   0) infile=configure.in ;;
   1) infile=$1 ;;
-  *) echo "$usage" >&2; exit 1 ;;
+  *) exec 1>&2
+     echo "$me: invalid number of arguments."
+     echo "$help"
+     exit 1 ;;
 esac
 
-config_h=undefined
+config_h=
 syms=
 
 if test "$localdir" != .; then
@@ -135,15 +146,15 @@ fi
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help < /dev/null 2>&1` in
 *reload-state*);;
-*) echo Autoconf requires GNU m4 1.4 or later >&2; exit 1 ;;
+*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
 esac
 run_m4="$M4 --reload $AC_MACRODIR/autoheader.m4f $use_localdir"
 
-# Extract assignments of `ah_verbatim_SYMBOL' and `syms' from the
-# modified autoconf processing of the input file.  The sed hair is
-# necessary to win for multi-line macro invocations.
-$run_m4 $infile |
- sed -n -e '
+# Extract assignments of `ah_verbatim_SYMBOL' from the modified
+# autoconf processing of the input file.  The sed hair is necessary to
+# win for multi-line macro invocations.
+$run_m4 $infile >$ah_base.exp
+sed -n -e '
 	: again
 	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
 	/^@@@/{
@@ -151,9 +162,9 @@ $run_m4 $infile |
 		n
 		s/^/@@@/
 		b again
-	}' >$ah_base.decls
+	}' $ah_base.exp >$ah_base.decls
 . ./$ah_base.decls
-if test $debug -eq 0; then rm ./$ah_base.decls; fi
+$debug || rm $ah_base.exp $ah_base.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -163,10 +174,10 @@ syms=`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`
 
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
-undefined) echo "error: AC_CONFIG_HEADERS not found in $infile" >&2; exit 1 ;;
-*:*) config_h_in=`echo "$config_h"|sed 's%.*:%%'`
-     config_h=`echo "$config_h"|sed 's%:.*%%'` ;;
-*) config_h_in="${config_h}.in" ;;
+"") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2; exit 1 ;;
+*:*) config_h_in=`echo "$config_h" | sed 's/.*://'`
+     config_h=`echo "$config_h" | sed 's/:.*//'` ;;
+*) config_h_in="$config_h.in" ;;
 esac
 
 tmpout=$ah_base.out
@@ -174,7 +185,7 @@ if test $debug -eq 0; then trap "rm -f $ah_base*; exit 1" 1 2 15; fi
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmpout
-/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
+/* $config_h_in.  Generated automatically from $infile by autoheader.  */
 EOF
 
 test -r ${config_h}.top && cat ${config_h}.top  >>$tmpout
@@ -241,7 +252,7 @@ if test -n "$syms"; then
     if grep "^#[a-z]*[ 	][ 	]*$sym[ 	]*$" $tmpout >/dev/null; then
       : # All is well.
     else
-      echo "$0: No template for symbol \`${sym}'" >&2
+      echo "$0: No template for symbol \`$sym'" >&2
       status=1
     fi
   done
@@ -251,11 +262,11 @@ fi
 if test $status -eq 0; then
   if test $# -eq 0; then
     # Output is a file
-    if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
+    if test -f $config_h_in && cmp -s $tmpout $config_h_in; then
       # File didn't change, so don't update its mod time.
       echo "$0: $config_h_in is unchanged" >&2
     else
-      mv -f $tmpout ${config_h_in}
+      mv -f $tmpout $config_h_in
     fi
   else
     # Output is stdout

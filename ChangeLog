@@ -1,5 +1,20 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Clean up a bit the user interface.
+
+	* autoconf.sh: Give your name while reporting errors.
+	Don't spit --help for errors on arguments.
+	* autoreconf.sh: Likewise.
+	* autoheader.sh: Likewise.
+	More temporary files that one can browse when debugging.
+	Don't ${var}, just $var.
+	Don't dump --help when the arguments are invalid.
+	(config_h): Use the empty value instead of `undefined' to check
+	that it is defined.
+	* acspecific.m4: Formatting changes.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Introduce name spaces in libm4.
 
 	* libm4.m4 (m4_namespace_push, m4_namespace_pop,

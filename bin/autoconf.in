@@ -21,6 +21,8 @@
 # With one arg, create a configure script on standard output from
 # the given template file.
 
+me=`echo "$0" | sed -e 's,.*/,,'`
+
 usage="\
 Usage: autoconf [OPTION] ... [TEMPLATE-FILE]
 
@@ -46,6 +48,9 @@ Written by David J. MacKenzie.
 Copyright (C) 1992, 1993, 1994, 1996, 1999 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+
+help="\
+Try \`$me --help' for more information."
 
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally
@@ -91,22 +96,22 @@ verbose=:
 
 while test $# -gt 0 ; do
   case "$1" in
-    -h | --help | --h* )
+    --help | --h* | -h )
        echo "$usage"; exit 0 ;;
     --localdir=* | --l*=* )
        localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
-    -l | --localdir | --l*)
+    --localdir | --l* | -l )
        shift
-       test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
+       test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
        localdir="$1"
        shift ;;
     --macrodir=* | --m*=* )
        AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
-    -m | --macrodir | --m* )
+    --macrodir | --m* | -m )
        shift
-       test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
+       test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
        AC_MACRODIR="$1"
        shift ;;
     --install )
@@ -145,7 +150,10 @@ while test $# -gt 0 ; do
     - )	# Use stdin as input.
        break ;;
     -* )
-       echo "$usage" 1>&2; exit 1 ;;
+        exec 1>&2
+        echo "$me: invalid option $1"
+        echo "$help"
+        exit 1 ;;
     * )
        break ;;
   esac
@@ -155,7 +163,10 @@ case $# in
   0) infile=configure.in
      test $task = script && test "x$outfile" = x && outfile=configure;;
   1) infile="$1" ;;
-  *) echo "$usage" >&2; exit 1 ;;
+  *) exec 1>&2
+     echo "$me: invalid number of arguments."
+     echo "$help"
+     exit 1 ;;
 esac
 
 trap 'rm -f $tmpin $tmpout' 0 1 2 15
@@ -176,7 +187,7 @@ fi
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help < /dev/null 2>&1` in
 *reload-state*);;
-*) echo Autoconf requires GNU m4 1.4 or later >&2; exit 1 ;;
+*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
 esac
 run_m4="$M4 --reload $AC_MACRODIR/autoconf.m4f $use_localdir"
 
@@ -311,7 +322,7 @@ EOF
   	  ln -s "$file" "$localdir/$filename" ||
   	  cp "$file" "$localdir/$filename" ||
   	  {
-  	    echo "$0: cannot link from $file to $localdir/$filename" >&2
+  	    echo "$me: cannot link from $file to $localdir/$filename" >&2
   	    exit 1
   	  }
   	fi
@@ -351,7 +362,7 @@ EOF
   ## Unknown task ##
   ## ------------ ##
 
-  *)echo "$0: internal error: unknown task: $task" >&2
+  *)echo "$me: internal error: unknown task: $task" >&2
     exit 1
 esac
 

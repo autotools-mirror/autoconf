@@ -17,6 +17,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+me=`echo "$0" | sed -e 's,.*/,,'`
+
 usage="\
 Usage: autoreconf [OPTION] ... [TEMPLATE-FILE]
 
@@ -52,6 +54,9 @@ Copyright (C) 1994, 1999 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
+help="\
+Try \`$me --help' for more information."
+
 localdir=
 verbose=:
 force=no
@@ -62,22 +67,22 @@ test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
 
 while test $# -gt 0; do
   case "$1" in
-  -h | --help | --h*)
+  --help | --h* | -h )
     echo "$usage"; exit 0 ;;
   --localdir=* | --l*=* )
     localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
-  -l | --localdir | --l*)
+  --localdir | --l* | -l )
     shift
-    test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
+    test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
     localdir="${1}"
     shift ;;
   --macrodir=* | --m*=* )
     AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
-  -m | --macrodir | --m*)
+  --macrodir | --m* | -m )
     shift
-    test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
+    test $# -eq 0 && { echo "help" 1>&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
   -v | --verbose | --verb*)
@@ -92,13 +97,20 @@ while test $# -gt 0; do
     automake_deps=$1; shift ;;
   --)     # Stop option processing.
     shift; break ;;
-  -*) echo "$usage" 1>&2; exit 1 ;;
+  -*)
+    exec 1>&2
+    echo "$me: invalid option $1"
+    echo "$help"
+    exit 1 ;;
   *) break ;;
   esac
 done
 
 if test $# -ne 0; then
-  echo "$usage" 1>&2; exit 1
+  exec 1>&2
+  echo "$me: invalid number of arguments."
+  echo "$help"
+  exit 1 ;;
 fi
 
 # The paths to the autoconf and autoheader scripts, at the top of the tree.
