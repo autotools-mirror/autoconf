@@ -1,3 +1,14 @@
+2000-09-21  Akim Demaille  <akim@epita.fr>
+
+	* tests/atgeneral.m4: Formatting changes.
+	(AT_INIT): Let `at_stop_on_error' and `at_verbose' be `:'/`false'
+	variables instead of `'/`1'.
+	`at_check_stds' replaces `at_no_redirs'.
+	Rename `Snippet 3' as `Snippet 4'.
+	Introduce `Snippet 3' for variable initializations.
+	Adjust the dependencies.
+	(AT_CHECK): Don't show diff's result unless verbose.
+
 2000-09-20  Pavel Roskin  <proski@gnu.org>
 
 	* tests/Makefile.am: AC_PREFIX_PROGRAM and AC_F77_FUNC excluded
