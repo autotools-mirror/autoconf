@@ -1,5 +1,10 @@
 2001-09-28  Akim Demaille  <akim@epita.fr>
 
+	* lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el: New.
+	* configure.ac: Adjust.
+
+2001-09-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_VICTIMS): Rename as...
 	(AT_TESTED): this.
 	(AT_INIT): More the wrapped section to where it will be expanded.

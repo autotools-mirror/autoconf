@@ -36,7 +36,7 @@ oldincludedir = /usr/include
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ..
+top_builddir = ../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -63,41 +63,71 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-EXTRA_DIST = \
-auxdir.m4					\
-cond.m4						\
-depend.m4					\
-init.m4						\
-install-sh.m4					\
-m4.m4						\
-lispdir.m4					\
-missing.m4					\
-sanity.m4					\
-strip.m4
-
-subdir = m4
+dist_lisp_LISP = autoconf-mode.el autotest-mode.el
+subdir = lib/emacs
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-DIST_COMMON = Makefile.am Makefile.in
+LISP = $(dist_lisp_LISP)
+
+ELCFILES = autoconf-mode.elc autotest-mode.elc
+DIST_COMMON = $(dist_lisp_LISP) Makefile.am Makefile.in elisp-comp
 all: all-am
 
 .SUFFIXES:
+.SUFFIXES: .el .elc
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  m4/Makefile
+	  $(AUTOMAKE) --gnu  lib/emacs/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \
 	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
 uninstall-info-am:
+
+EMACS = @EMACS@
+lispdir = @lispdir@
+
+.el.elc:
+	@echo 'WARNING: Warnings can be ignored. :-)'
+	if test $(EMACS) != no; then \
+	  EMACS=$(EMACS) $(SHELL) $(srcdir)/elisp-comp $<; \
+	else : ; fi
+install-dist_lispLISP: $(dist_lisp_LISP) $(ELCFILES)
+	@$(NORMAL_INSTALL)
+	@if test -n "$(lispdir)"; then \
+	  $(mkinstalldirs) $(DESTDIR)$(lispdir); \
+	  list='$(dist_lisp_LISP)'; for p in $$list; do \
+	    if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	    f="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(lispdir)/$$f"; \
+	    $(INSTALL_DATA) $$d$$p $(DESTDIR)$(lispdir)/$$f; \
+	    if test -f $${p}c; then \
+	      echo " $(INSTALL_DATA) $${p}c $(DESTDIR)$(lispdir)/$${f}c"; \
+	      $(INSTALL_DATA) $${p}c $(DESTDIR)$(lispdir)/$${f}c; \
+	    else : ; fi; \
+	  done; \
+	else : ; fi
+
+uninstall-dist_lispLISP:
+	@$(NORMAL_UNINSTALL)
+	@if test -n "$(lispdir)"; then \
+	  list='$(dist_lisp_LISP)'; for p in $$list; do \
+	    f="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " rm -f $(DESTDIR)$(lispdir)/$$f $(DESTDIR)$(lispdir)/$${f}c"; \
+	    rm -f $(DESTDIR)$(lispdir)/$$f $(DESTDIR)$(lispdir)/$${f}c; \
+	  done; \
+	else : ; fi
+
+clean-lisp:
+	-test -z "$(ELCFILES)" || rm -f $(ELCFILES)
 tags: TAGS
 TAGS:
 
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-top_distdir = ..
+top_distdir = ../..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
@@ -118,9 +148,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile
+all-am: Makefile $(LISP) $(ELCFILES)
 
 installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(lispdir)
 
 install: install-am
 install-exec: install-exec-am
@@ -147,7 +178,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic mostlyclean-am
+clean-am: clean-generic clean-lisp mostlyclean-am
 
 distclean: distclean-am
 
@@ -161,7 +192,7 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-dist_lispLISP
 
 install-exec-am:
 
@@ -179,15 +210,17 @@ mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-generic
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-dist_lispLISP uninstall-info-am
 
-.PHONY: all all-am check check-am clean clean-generic distclean \
-	distclean-generic distdir dvi dvi-am info info-am install \
-	install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic uninstall uninstall-am uninstall-info-am
+.PHONY: all all-am check check-am clean clean-generic clean-lisp \
+	distclean distclean-generic distdir dvi dvi-am info info-am \
+	install install-am install-data install-data-am \
+	install-dist_lispLISP install-exec install-exec-am install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	uninstall uninstall-am uninstall-dist_lispLISP \
+	uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

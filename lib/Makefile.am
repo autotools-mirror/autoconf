@@ -1,6 +1,6 @@
 ## Process this file with automake to create Makefile.in
 
-SUBDIRS = Autom4te m4sugar autoconf autotest autoscan
+SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
 nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in
 

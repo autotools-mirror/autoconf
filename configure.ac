@@ -20,15 +20,19 @@
 # 02111-1307, USA.
 
 # We need AC_CONFIG_TESTDIR.
-AC_PREREQ(2.52d)
+AC_PREREQ(2.52e)
 
 AC_INIT(GNU Autoconf, 2.52e, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
+
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_FILES(config/Makefile)
+
 AM_INIT_AUTOMAKE(autoconf, 2.52e)
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR(tests)
+AC_CONFIG_FILES(tests/Makefile)
 AC_CONFIG_FILES([tests/autoconf:tests/wrapsh.in],
                 [chmod +x tests/autoconf])
 AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],
@@ -45,6 +49,7 @@ AC_CONFIG_FILES([tests/ifnames:tests/wrappl.in],
                 [chmod +x tests/ifnames])
 AC_PATH_PROG(EXPR, expr)
 
+
 # We use a path for GNU m4 so even if users have another m4 first in
 # their path, the installer can configure with a path that has GNU m4
 # first and get that path embedded in the installed autoconf and
@@ -57,7 +62,8 @@ fi
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 AC_SUBST(M4)
 
-# Generating man pages.
+# Man pages.
+AC_CONFIG_FILES(man/Makefile)
 AM_MISSING_PROG(HELP2MAN, help2man)
 
 # We use a path for perl so the #! line in autoscan will work.
@@ -70,18 +76,21 @@ $PERL -e 'require 5.005;' || {
    AC_MSG_ERROR([Perl 5.005 or better is required])
 }
 
+# Emacs modes.
+AC_CONFIG_FILES(lib/emacs/Makefile)
+AM_PATH_LISPDIR
+
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
 AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
-AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
+AC_CONFIG_FILES(Makefile m4/Makefile doc/Makefile
                 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
                 lib/m4sugar/Makefile
                 lib/autoconf/Makefile lib/autotest/Makefile
-                bin/Makefile
-                tests/Makefile)
+                bin/Makefile)
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.

@@ -63,7 +63,7 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-SUBDIRS = Autom4te m4sugar autoconf autotest autoscan
+SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
 nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in
 

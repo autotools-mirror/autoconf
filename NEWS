@@ -23,6 +23,9 @@
   @builddir@, @top_builddir@, @srcpath@, @top_srcpath@, @buildpath@,
   @top_buildpath@.
 
+** Emacs
+  Autoconf and Autotest modes are provided.
+
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
   most processing.
