@@ -1,3 +1,13 @@
+2000-12-14  Pavel Roskin  <proski@gnu.org>
+
+	* tests/semantics.at (AC_CHECK_TYPES): There are two tests with
+	this name. Rename the second one to "AC_CHECK_TYPES: backward
+	compatibility"
+	(AC_TRY_LINK_FUNC): Removed. It's now in tests/compile.at.
+	(C keywords): Likewise.
+	(AC_PROG_CPP with warnings): Likewise.
+	(AC_PROG_CPP without warnings): Likewise.
+
 2000-12-14  Akim Demaille  <akim@epita.fr>
 
 	Put back AC_CYGWIN etc. under the responsibility of the
