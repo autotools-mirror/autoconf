@@ -105,10 +105,10 @@ AS_UNSET([CDPATH], [:])
 # | fi
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
 m4_define([AS_IFELSE],
-[ifval([$2$3],
+[m4_ifval([$2$3],
 [if $1; then
-  ifval([$2], [$2], :)
-m4_ifvanl([$3],
+  m4_ifval([$2], [$2], :)
+m4_ifvaln([$3],
 [else
   $3])dnl
 fi
@@ -213,28 +213,28 @@ m4_define([_AS_ECHO],
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # --------------------------------------------
 m4_define([AS_MESSAGE],
-[ifset([AS_MESSAGE_LOG_FD],
-       [{ _AS_ECHO([$as_me:__oline__: $1], [AS_MESSAGE_LOG_FD])
+[m4_ifset([AS_MESSAGE_LOG_FD],
+          [{ _AS_ECHO([$as_me:__oline__: $1], [AS_MESSAGE_LOG_FD])
 _AS_ECHO($@);}],
-       [_AS_ECHO($@)])[]dnl
+          [_AS_ECHO($@)])[]dnl
 ])
 
 
 # AS_WARN(PROBLEM)
 # ----------------
 m4_define([AS_WARN],
-[ifset([AS_MESSAGE_LOG_FD],
-       [{ _AS_ECHO([$as_me:__oline__: WARNING: $1], [AS_MESSAGE_LOG_FD])
+[m4_ifset([AS_MESSAGE_LOG_FD],
+          [{ _AS_ECHO([$as_me:__oline__: WARNING: $1], [AS_MESSAGE_LOG_FD])
 _AS_ECHO([$as_me: warning: $1], 2); }],
-       [_AS_ECHO([$as_me: warning: $1], 2)])[]dnl
+          [_AS_ECHO([$as_me: warning: $1], 2)])[]dnl
 ])# AS_WARN
 
 
 # AS_ERROR(ERROR, [EXIT-STATUS = 1])
 # ----------------------------------
 m4_define([AS_ERROR],
-[{ifset([AC_LOG_FD],
-        [_AS_ECHO([$as_me:__oline__: error: $1], [AS_MESSAGE_LOG_FD])
+[{m4_ifset([AC_LOG_FD],
+           [_AS_ECHO([$as_me:__oline__: error: $1], [AS_MESSAGE_LOG_FD])
 ])[]dnl
   _AS_ECHO([$as_me: error: $1], 2)
   AS_EXIT([$2]); }[]dnl

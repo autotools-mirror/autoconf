@@ -103,7 +103,7 @@ m4_define([AC_LANG_CASE],
 # Call the specialization of MACRO for LANG with ARGS.  Complain if
 # unavailable.
 m4_define([_AC_LANG_DISPATCH],
-[ifdef([$1($2)],
+[m4_ifdef([$1($2)],
        [m4_indir([$1($2)], m4_shiftn(2, $@))],
        [AC_FATAL([$1: unknown language: $2])])])
 
@@ -466,7 +466,7 @@ m4_define([AC_LANG_SOURCE(Fortran 77)],
 # -----------------------------------------------
 # Yes, we discard the PROLOGUE.
 m4_define([AC_LANG_PROGRAM(Fortran 77)],
-[ifval([$1],
+[m4_ifval([$1],
        [m4_warn([syntax], [$0: ignoring PROLOGUE: $1])])dnl
       program main
 $2
@@ -724,7 +724,7 @@ AC_DEFUN([AC_PROG_CC],
 [AC_LANG_PUSH(C)
 AC_ARG_VAR([CC], [C compiler command])
 AC_ARG_VAR([CFLAGS], [C compiler flags])
-ifval([$1],
+m4_ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
 [AC_CHECK_TOOL(CC, gcc)
 if test -z "$CC"; then

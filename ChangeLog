@@ -1,5 +1,13 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (ifval, ifset, ifdef, ifndef, m4_ifvanl): Rename as...
+	(m4_ifval, m4_ifset, m4_ifdef, m4_ifndef, m4_ifvaln): this.
+	(m4_n): New macro.
+	(m4_ifvaln): Use it.
+	* autoconf.m4 (ifdef): Restore it.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_errprint, divnum, errprint, esyscmd): Rename as...
 	(m4_errprintn, m4_divnum, m4errprint, m4_esyscmd): this.
 	* autoconf.m4: Restore them.

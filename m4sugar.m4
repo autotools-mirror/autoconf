@@ -121,6 +121,7 @@ m4_rename_m4([errprint])
 m4_rename_m4([esyscmd])
 m4_rename_m4([eval])
 m4_rename_m4([format])
+m4_rename_m4([ifdef])
 m4_rename_m4([incr])
 m4_rename_m4([index])
 m4_rename_m4([indir])
@@ -150,13 +151,15 @@ m4_undefine([undivert])
 
 # m4_location
 # -----------
-m4_define([m4_location], [__file__:__line__])
+m4_define([m4_location],
+[__file__:__line__])
 
 
 # m4_errprintn(MSG)
 # -----------------
 # Same as `errprint', but with the missing end of line.
-m4_define([m4_errprintn], [m4_errprint([$1
+m4_define([m4_errprintn],
+[m4_errprint([$1
 ])])
 
 
@@ -277,9 +280,8 @@ m4_define([m4_warn],
 # Declare that the FILE was loading; and warn if it has already
 # been included.
 m4_define([m4_include_unique],
-[ifdef([m4_include($1)],
-       [m4_warn([syntax],
-                [file `$1' included several times])])dnl
+[m4_ifdef([m4_include($1)],
+          [m4_warn([syntax], [file `$1' included several times])])dnl
 m4_define([m4_include($1)])])
 
 
@@ -308,52 +310,62 @@ m4_undefine([sinclude])
 ## 5. Additional branching constructs.  ##
 ## ------------------------------------ ##
 
-# Both `ifval' and `ifset' tests against the empty string.  The
-# difference is that `ifset' is specialized on macros.
+# Both `m4_ifval' and `m4_ifset' tests against the empty string.  The
+# difference is that `m4_ifset' is specialized on macros.
 #
 # In case of arguments of macros, eg $[1], it makes little difference.
-# In the case of a macro `FOO', you don't want to check `ifval(FOO,
+# In the case of a macro `FOO', you don't want to check `m4_ifval(FOO,
 # TRUE)', because if `FOO' expands with commas, there is a shifting of
-# the arguments.  So you want to run `ifval([FOO])', but then you just
+# the arguments.  So you want to run `m4_ifval([FOO])', but then you just
 # compare the *string* `FOO' against `', which, of course fails.
 #
-# So you want a variation of `ifset' that expects a macro name as $[1].
+# So you want a variation of `m4_ifset' that expects a macro name as $[1].
 # If this macro is both defined and defined to a non empty value, then
 # it runs TRUE etc.
 
 
-# ifval(COND, [IF-TRUE], [IF-FALSE])
-# ----------------------------------
+# m4_ifval(COND, [IF-TRUE], [IF-FALSE])
+#--- ----------------------------------
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
-# Comparable to ifdef.
-m4_define([ifval], [ifelse([$1], [], [$3], [$2])])
+# Comparable to m4_ifdef.
+m4_define([m4_ifval],
+[ifelse([$1], [], [$3], [$2])])
 
 
-# m4_ifvanl(COND, [IF-TRUE], [IF-FALSE])
+# m4_n(TEXT)
+# ----------
+# If TEXT is not empty, return TEXT and a new line, otherwise nothing.
+m4_define([m4_n],
+[ifelse([$1],
+        [], [],
+            [$1
+])])
+
+
+# m4_ifvaln(COND, [IF-TRUE], [IF-FALSE])
 # --------------------------------------
-# Same as `ifval', but add an extra newline to IF-TRUE or IF-FALSE
+# Same as `m4_ifval', but add an extra newline to IF-TRUE or IF-FALSE
 # unless that argument is empty.
-m4_define([m4_ifvanl], [ifelse([$1], [],
-[ifelse([$3], [], [], [$3
-])],
-[ifelse([$2], [], [], [$2
-])])])
+m4_define([m4_ifvaln],
+[ifelse([$1],
+        [],   [m4_n([$3])],
+              [m4_n([$2])])])
 
 
-# ifset(MACRO, [IF-TRUE], [IF-FALSE])
-# -----------------------------------
+# m4_ifset(MACRO, [IF-TRUE], [IF-FALSE])
+# --------------------------------------
 # If MACRO has no definition, or of its definition is the empty string,
 # expand IF-FALSE, otherwise IF-TRUE.
-m4_define([ifset],
-[ifdef([$1],
-       [ifelse(m4_defn([$1]), [], [$3], [$2])],
-       [$3])])
+m4_define([m4_ifset],
+[m4_ifdef([$1],
+          [ifelse(m4_defn([$1]), [], [$3], [$2])],
+          [$3])])
 
 
 # ifndef(NAME, [IF-NOT-DEFINED], [IF-DEFINED])
-# --------------------------------------------
-m4_define([ifndef],
-[ifdef([$1], [$3], [$2])])
+# -----------------------------------------------
+m4_define([m4_ifndef],
+[m4_ifdef([$1], [$3], [$2])])
 
 
 # m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
@@ -424,7 +436,8 @@ m4_define([m4_do],
 # m4_default(EXP1, EXP2)
 # ----------------------
 # Returns EXP1 if non empty, otherwise EXP2.
-m4_define([m4_default], [ifval([$1], [$1], [$2])])
+m4_define([m4_default],
+[m4_ifval([$1], [$1], [$2])])
 
 
 # m4_shiftn(N, ...)
@@ -445,8 +458,8 @@ m4_define([_m4_shiftn],
 # _m4_dumpdefs_up(NAME)
 # ---------------------
 m4_define([_m4_dumpdefs_up],
-[ifdef([$1],
-       [m4_pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
+[m4_ifdef([$1],
+          [m4_pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
 m4_dumpdef([$1])dnl
 m4_popdef([$1])dnl
 _m4_dumpdefs_up([$1])])])
@@ -455,8 +468,8 @@ _m4_dumpdefs_up([$1])])])
 # _m4_dumpdefs_down(NAME)
 # -----------------------
 m4_define([_m4_dumpdefs_down],
-[ifdef([_m4_dumpdefs],
-       [m4_pushdef([$1], m4_defn([_m4_dumpdefs]))dnl
+[m4_ifdef([_m4_dumpdefs],
+          [m4_pushdef([$1], m4_defn([_m4_dumpdefs]))dnl
 m4_popdef([_m4_dumpdefs])dnl
 _m4_dumpdefs_down([$1])])])
 
@@ -636,9 +649,9 @@ m4_define([_m4_foreach],
 # If DIVERSION-NAME is the name of a diversion, return its number, otherwise
 # return makeNUMBER.
 m4_define([_m4_divert],
-[ifdef([_m4_divert($1)],
-       [m4_indir([_m4_divert($1)])],
-       [$1])])
+[m4_ifdef([_m4_divert($1)],
+          [m4_indir([_m4_divert($1)])],
+          [$1])])
 
 # KILL is only used to suppress output.
 m4_define([_m4_divert(KILL)],           -1)
@@ -674,8 +687,8 @@ m4_divert(_m4_divert_diversion)dnl
 # Change the diversion stream to its previous value, unstacking it.
 m4_define([m4_divert_pop],
 [m4_popdef([_m4_divert_diversion])dnl
-ifndef([_m4_divert_diversion],
-       [m4_fatal([too many m4_divert_pop])])dnl
+m4_ifndef([_m4_divert_diversion],
+          [m4_fatal([too many m4_divert_pop])])dnl
 m4_divert(_m4_divert_diversion)dnl
 ])
 
@@ -1046,11 +1059,11 @@ m4_define([_m4_divert(GROW)],       10000)
 # -----------------------
 # Dump the expansion stack.
 m4_define([m4_expansion_stack_dump],
-[ifdef([_m4_expansion_stack],
-       [m4_errprintn(m4_defn([_m4_expansion_stack]))dnl
+[m4_ifdef([_m4_expansion_stack],
+          [m4_errprintn(m4_defn([_m4_expansion_stack]))dnl
 m4_popdef([_m4_expansion_stack])dnl
 m4_expansion_stack_dump()],
-       [m4_errprintn(m4_location[: the top level])])])
+          [m4_errprintn(m4_location[: the top level])])])
 
 
 # _m4_defun_pro(MACRO-NAME)
@@ -1060,9 +1073,9 @@ m4_define([_m4_defun_pro],
 [m4_pushdef([_m4_expansion_stack],
             m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
 m4_pushdef([_m4_expanding($1)])dnl
-ifdef([_m4_divert_dump],
-      [m4_divert_push(m4_defn([_m4_divert_diversion]))],
-      [m4_copy([_m4_divert_diversion], [_m4_divert_dump])dnl
+m4_ifdef([_m4_divert_dump],
+         [m4_divert_push(m4_defn([_m4_divert_diversion]))],
+         [m4_copy([_m4_divert_diversion], [_m4_divert_dump])dnl
 m4_divert_push([GROW])])dnl
 ])
 
@@ -1165,10 +1178,10 @@ m4_define([m4_before],
 m4_define([m4_require],
 [m4_pushdef([_m4_expansion_stack],
             m4_location[: $1 is required by...])dnl
-ifdef([_m4_expanding($1)],
-      [m4_fatal([$0: circular dependency of $1])])dnl
-ifndef([_m4_divert_dump],
-    [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
+m4_ifdef([_m4_expanding($1)],
+         [m4_fatal([$0: circular dependency of $1])])dnl
+m4_ifndef([_m4_divert_dump],
+          [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
 m4_provide_ifelse([$1],
                   [],
                   [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
@@ -1205,8 +1218,8 @@ m4_define([m4_provide],
 # check macros which are provided without letting her know how the
 # information is coded.
 m4_define([m4_provide_ifelse],
-[ifdef([m4_provide($1)],
-       [$2], [$3])])
+[m4_ifdef([m4_provide($1)],
+          [$2], [$3])])
 
 
 ## -------------------- ##
@@ -1342,7 +1355,7 @@ m4_define([m4_strip],
 #    => active
 m4_define([m4_append],
 [m4_define([$1],
-           ifdef([$1], [m4_defn([$1])])[$2])])
+           m4_ifdef([$1], [m4_defn([$1])])[$2])])
 
 
 # m4_list_append(MACRO-NAME, STRING)
@@ -1350,7 +1363,7 @@ m4_define([m4_append],
 # Same as `m4_append', but each element is separated by `, '.
 m4_define([m4_list_append],
 [m4_define([$1],
-           ifdef([$1], [m4_defn([$1]), ])[$2])])
+           m4_ifdef([$1], [m4_defn([$1]), ])[$2])])
 
 
 # m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)
