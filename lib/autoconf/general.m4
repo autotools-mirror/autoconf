@@ -789,10 +789,10 @@ EOF_SED
   rm -f conftestsed
 fi
 test "$program_prefix" != NONE &&
-  program_transform_name="s,^,${program_prefix},; $program_transform_name"
+  program_transform_name="s,^,${program_prefix},;$program_transform_name"
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
-  program_transform_name="s,\$\$,${program_suffix},; $program_transform_name"
+  program_transform_name="s,\$\$,${program_suffix},;$program_transform_name"
 
 # sed with no file args requires a program.
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"

@@ -16,6 +16,11 @@
 	(AC_MINGW32): Move.
 	(UPDATED): Update.
 
+1999-04-02  Mike Stump  <mrs@wrs.com>
+
+	* acgeneral.m4 (AC_ARG_PROGRAM): Remove spaces, as there is one
+	more pass through sh than you think.
+
 1999-04-01  Ben Elliston  <bje@cygnus.com>
 
 	* standards.texi: Update from FSF.
