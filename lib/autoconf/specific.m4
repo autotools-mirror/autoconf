@@ -631,7 +631,15 @@ main()
 }
 >>,
 changequote([, ])dnl
-  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)])dnl
+  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int,
+  ac_cv_type_getgroups=cross)
+if test $ac_cv_type_getgroups = cross; then
+  dnl When we can't run the test program (we are cross compiling), presume
+  dnl that <unistd.h> has either an accurate prototype for getgroups or none.
+  dnl Old systems without prototypes probably use int.
+  AC_EGREP_HEADER([getgroups.*int.*gid_t], unistd.h,
+		  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)
+fi])dnl
 AC_MSG_RESULT($ac_cv_type_getgroups)
 AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
 ])
