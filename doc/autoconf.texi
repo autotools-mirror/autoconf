@@ -1503,7 +1503,15 @@ work.  It prefers to find a C program rather than a shell script, for
 speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
 but that name is obsolete because some @code{make} programs have a rule
 that creates @file{install} from it if there is no @file{Makefile}.
-A copy of @file{install-sh} which you may use comes with Autoconf.
+
+A copy of @file{install-sh} which you may use comes with Autoconf.  If
+you use @code{AC_PROG_INSTALL}, you must include either
+@file{install-sh} or @file{install.sh} in your distribution, or
+@code{configure} will produce an error message saying it can't find
+them---even if the system you're on has a good @code{install} program.
+This check is a safety measure to prevent you from accidentally leaving
+that file out, which would prevent your package from installing on
+systems that don't have a BSD-compatible @code{install} program.
 
 If you need to use your own installation program because it has
 features not found in standard @code{install} programs, there is no
