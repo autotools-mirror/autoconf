@@ -1,5 +1,13 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_PROG_CC): Don't require AC_PROG_F77, require
+	AC_PROG_CC instead.
+	From Martin Wilck.
+	(AC_PROG_F77_C_O): Require AC_PROG_F77.
+	Use a cache variable independent of $F77.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh: Accept --symbolic and -s.
 
 2000-07-19  Akim Demaille  <akim@epita.fr>

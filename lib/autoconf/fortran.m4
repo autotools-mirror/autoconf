@@ -657,7 +657,7 @@ fi
 # AC_PROG_CC_C_O
 # --------------
 AC_DEFUN([AC_PROG_CC_C_O],
-[AC_REQUIRE([AC_PROG_F77])dnl
+[AC_REQUIRE([AC_PROG_CC])dnl
 if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
 else
@@ -929,10 +929,9 @@ fi[]dnl
 # why anyone would use it.  The only reason I include it is for
 # completeness, since a similar test exists for the C compiler.
 AC_DEFUN([AC_PROG_F77_C_O],
-[AC_MSG_CHECKING(whether $F77 understand -c and -o together)
-set dummy $F77; ac_f77=`echo $[2] |
-sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
-AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
+[AC_REQUIRE([AC_PROG_F77])dnl
+AC_CACHE_CHECK([whether $F77 understand -c and -o together],
+               [ac_cv_prog_f77_c_o],
 [cat >conftest.f <<EOF
        program conftest
        end
@@ -942,16 +941,13 @@ EOF
 # one.
 ac_try='$F77 $FFLAGS -c conftest.f -o conftest.o >&AC_FD_LOG'
 if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
-  eval ac_cv_prog_f77_${ac_f77}_c_o=yes
+  ac_cv_prog_f77_c_o=yes
 else
-  eval ac_cv_prog_f77_${ac_f77}_c_o=no
+  ac_cv_prog_f77_c_o=no
 fi
 rm -f conftest*
 ])dnl
-if eval "test \"`echo '$ac_cv_prog_f77_'${ac_f77}_c_o`\" = yes"; then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
+if test $ac_cv_prog_f77_c_o = yes; then
   AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
             [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
 fi
