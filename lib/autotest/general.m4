@@ -97,7 +97,6 @@ AS_INIT
 AS_PREPARE
 m4_divert_push([DEFAULT])dnl
 
-AS_PREPARE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
