@@ -9,6 +9,10 @@
 - config.status 2.53 may fail on some architectures where `mkdir -p'
   fails on existing directories.
 
+** Macros
+
+- AC_PROG_CC_STDC is integrated into AC_PROG_CC.
+
 
 * Major changes in Autoconf 2.53
 

@@ -152,11 +152,14 @@ ac_exclude_egrep=`echo "$exclude_list$ac_exclude_list" | tr '
 #    need arguments and are tested elsewhere.
 # AC_INIT and AC_OUTPUT
 #    are already in `configure.ac'.
+# AC_C_CROSS and AC_PROG_CC_STDC
+#    are empty.
 # AC_CYGWIN, AC_MINGW32, AC_EMXOS2
 #    are using AC_REQUIRE.
 au_exclude_list='^AC_LANG_RESTORE$
 ^AC_LINK_FILES|AC_PREREQ$
 ^AC_(INIT|OUTPUT)$
+^AC_C_CROSS|AC_PROG_CC_STDC$
 ^AC_(CYGWIN|MINGW32|EMXOS2)$'
 
 

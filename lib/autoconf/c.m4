@@ -432,6 +432,7 @@ m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
+_AC_PROG_CC_STDC
 # Some people use a C++ compiler to compile C.  Since we use `exit',
 # in C++ we need to declare it.  In case someone uses the same compiler
 # for both compiling C and C++ we need to have the C++ compiler decide
@@ -723,24 +724,15 @@ fi
 # 4b. C compiler characteristics.  #
 # -------------------------------- #
 
-# AC_PROG_CC_STDC
-# ---------------
+# _AC_PROG_CC_STDC
+# ----------------
 # If the C compiler in not in ANSI C mode by default, try to add an
 # option to output variable @code{CC} to make it so.  This macro tries
 # various options that select ANSI C on some system or another.  It
 # considers the compiler to be in ANSI C mode if it handles function
 # prototypes correctly.
-AC_DEFUN([AC_PROG_CC_STDC],
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_BEFORE([$0], [AC_C_INLINE])dnl
-AC_BEFORE([$0], [AC_C_CONST])dnl
-dnl Force this before AC_PROG_CPP.  Some cpp's, eg on HPUX, require
-dnl a magic option to avoid problems with ANSI preprocessor commands
-dnl like #elif.
-dnl FIXME: can't do this because then AC_AIX won't work due to a
-dnl circular dependency.
-dnl AC_BEFORE([$0], [AC_PROG_CPP])
-AC_MSG_CHECKING([for $CC option to accept ANSI C])
+AC_DEFUN([_AC_PROG_CC_STDC],
+[AC_MSG_CHECKING([for $CC option to accept ANSI C])
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
 ac_save_CC=$CC
@@ -784,8 +776,8 @@ char **argv;]],
 for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
 do
   CC="$ac_save_CC $ac_arg"
-  AC_COMPILE_IFELSE([],
-                    [ac_cv_prog_cc_stdc=$ac_arg
+  _AC_COMPILE_IFELSE([],
+                     [ac_cv_prog_cc_stdc=$ac_arg
 break])
 done
 rm -f conftest.$ac_ext conftest.$ac_objext
@@ -798,7 +790,13 @@ case "x$ac_cv_prog_cc_stdc" in
     AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
     CC="$CC $ac_cv_prog_cc_stdc" ;;
 esac
-])# AC_PROG_CC_STDC
+])# _AC_PROG_CC_STDC
+
+
+# AC_PROG_CC_STDC
+# ---------------
+# Has been merged into AC_PROG_CC.
+AU_DEFUN([AC_PROG_CC_STDC], [])
 
 
 # AC_C_CROSS
@@ -927,8 +925,7 @@ esac
 # inline function, only builtin types.
 #
 AC_DEFUN([AC_C_INLINE],
-[AC_REQUIRE([AC_PROG_CC_STDC])dnl
-AC_CACHE_CHECK([for inline], ac_cv_c_inline,
+[AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
@@ -954,8 +951,7 @@ esac
 # AC_C_CONST
 # ----------
 AC_DEFUN([AC_C_CONST],
-[AC_REQUIRE([AC_PROG_CC_STDC])dnl
-AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
+[AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 [[/* FIXME: Include the comments suggested by Paul. */
 #ifndef __cplusplus
@@ -1022,8 +1018,7 @@ fi
 # volatile away unless it is really necessary to allow the user's code
 # to compile cleanly.  Benign compiler failures should be tolerated.
 AC_DEFUN([AC_C_VOLATILE],
-[AC_REQUIRE([AC_PROG_CC_STDC])dnl
-AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
+[AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 volatile int x;
 int * volatile y;])],
@@ -1063,7 +1058,7 @@ fi
 # Check if the C compiler supports prototypes, included if it needs
 # options.
 AC_DEFUN([AC_C_PROTOTYPES],
-[AC_REQUIRE([AC_PROG_CC_STDC])dnl
+[AC_REQUIRE([AC_PROG_CC])dnl
 AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT([yes])

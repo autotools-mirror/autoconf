@@ -4770,6 +4770,19 @@ this:
 AC_PROG_CC(cl egcs gcc cc)
 @end example
 
+If the C compiler is not in @sc{ansi} C mode by default, try to add an
+option to output variable @code{CC} to make it so.  This macro tries
+various options that select @sc{ansi} C on some system or another.  It
+considers the compiler to be in @sc{ansi} C mode if it handles function
+prototypes correctly.
+
+After calling this macro you can check whether the C compiler has been
+set to accept @sc{ansi} C; if not, the shell variable
+@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
+code in @sc{ansi} C, you can make an un-@sc{ansi}fied copy of it by
+using the program @code{ansi2knr}, which comes with Automake.  See also
+under @code{AC_C_PROTOTYPES} below.
+
 If using the @sc{gnu} C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
 it to @option{-g -O2} for the @sc{gnu} C compiler (@option{-O2} on systems
@@ -4785,22 +4798,6 @@ tests both the compiler found by @code{AC_PROG_CC}, and, if different,
 the first @code{cc} in the path.  The test fails if one fails.  This
 macro was created for @sc{gnu} Make to choose the default C compilation
 rule.
-@end defmac
-
-@defmac AC_PROG_CC_STDC
-@acindex PROG_CC_STDC
-@ovindex CC
-If the C compiler is not in @sc{ansi} C mode by default, try to add an
-option to output variable @code{CC} to make it so.  This macro tries
-various options that select @sc{ansi} C on some system or another.  It
-considers the compiler to be in @sc{ansi} C mode if it handles function
-prototypes correctly.
-
-If you use this macro, you should check after calling it whether the C
-compiler has been set to accept @sc{ansi} C; if not, the shell variable
-@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
-code in @sc{ansi} C, you can make an un-@sc{ansi}fied copy of it by
-using the program @code{ansi2knr}, which comes with Automake.
 @end defmac
 
 
@@ -4941,8 +4938,8 @@ found in macros such as this:
 @cvindex PROTOTYPES
 @cvindex __PROTOTYPES
 @cvindex PARAMS
-Check to see if function prototypes are understood by the compiler.  If
-so, define @code{PROTOTYPES} and @code{__PROTOTYPES}.
+If function prototypes are understood by the compiler (as determined by
+@code{AC_PROG_CC}), define @code{PROTOTYPES} and @code{__PROTOTYPES}.
 In the case the compiler does not handle
 prototypes, you should use @code{ansi2knr}, which comes with the
 Automake distribution, to unprotoize function definitions.  For
@@ -11817,6 +11814,11 @@ AC_CONFIG_COMMANDS([default], [[echo "Square brackets: []"]])
 @defmac AC_PREFIX
 @acindex PREFIX
 @code{AC_PREFIX_PROGRAM}
+@end defmac
+
+@defmac AC_PROG_CC_STDC
+@acindex PROG_CC_STDC
+This macro has been integrated into @code{AC_PROG_CC_STDC}.
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK

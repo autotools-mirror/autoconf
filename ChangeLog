@@ -1,3 +1,18 @@
+2002-04-02  Peter Eisentraut  <peter_e@gmx.net>
+
+	Integrate AC_PROG_CC_STDC into AC_PROG_CC.
+
+	* lib/autoconf/c.m4 (AC_PROG_CC_STDC): Rename to _AC_PROG_CC_STDC.
+	AU_DEFUN old name.  Use _AC_COMPILE_IFELSE.
+	(AC_PROG_CC): Call _AC_PROG_CC_STDC.
+	(AC_C_INLINE): Do not require AC_PROG_CC_STDC.
+	(AC_C_CONST): Same.
+	(AC_C_INLINE): Same.
+	(AC_C_PROTOTYPES): Same.  Require AC_PROG_CC instead.
+	* doc/autoconf.texi, NEWS: Document.
+	* tests/mktests.sh (au_exclude_list): Add AC_PROG_CC_STDC and
+	AC_C_CROSS.
+
 2002-04-02  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Invoke
