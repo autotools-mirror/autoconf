@@ -577,14 +577,14 @@ Print the version number of Autoconf and exit.
 @end table
 
 @node Invoking autoconf, Invoking autoreconf, Invoking ifnames, Making configure Scripts
-@section Using @code{autoconf} to Create @file{configure}
+@section Using @code{autoconf} to Create @code{configure}
 
 To create @code{configure} from @file{configure.in}, run the
 @code{autoconf} program with no arguments.  @code{autoconf} processes
 @file{configure.in} with the @code{m4} macro processor, using the
 Autoconf macros.  If you give @code{autoconf} an argument, it reads that
 file instead of @file{configure.in} and writes the configuration script
-to the standard output instead of to @file{configure}.  If you give
+to the standard output instead of to @code{configure}.  If you give
 @code{autoconf} the argument @samp{-}, it reads the standard input
 instead of @file{configure.in} and writes the configuration script on
 the standard output.
@@ -616,7 +616,7 @@ Print the version number of Autoconf and exit.
 @end table
 
 @node Invoking autoreconf, , Invoking autoconf, Making configure Scripts
-@section Using @code{autoreconf} to Update @file{configure} Scripts
+@section Using @code{autoreconf} to Update @code{configure} Scripts
 
 If you have a lot of Autoconf-generated @code{configure} scripts and you
 get a new version of Autoconf, the @code{autoreconf} program can be
@@ -692,7 +692,7 @@ it looks are correct for most cases.
 @defmac AC_CONFIG_AUX_DIR(@var{dir})
 @maindex CONFIG_AUX_DIR
 Use the @file{install-sh}, @file{config.sub}, @file{config.guess}, and
-Cygnus @file{configure} scripts that are in directory @var{dir}.  These
+Cygnus @code{configure} scripts that are in directory @var{dir}.  These
 are auxiliary files used in configuration.  @var{dir} can be either
 absolute or relative to @file{@var{srcdir}}.  The default is
 @file{@var{srcdir}} or @file{@var{srcdir}/..} or
@@ -1116,7 +1116,7 @@ Run @code{configure} in each subdirectory @var{dir} in the given
 whitespace-separated list.  If a given @var{dir} is not found, no error
 is reported, so a @code{configure} script can configure whichever parts
 of a large source tree are present.  If a given @var{dir} contains
-@file{configure.in} but no @file{configure}, the Cygnus @code{configure}
+@file{configure.in} but no @code{configure}, the Cygnus @code{configure}
 script found by @code{AC_CONFIG_AUXDIR} is used.  The subdirectory
 @code{configure} scripts are given the same command line options that
 were given to this @code{configure} script, with minor changes if needed
@@ -1154,18 +1154,18 @@ version of Autoconf older than when @code{AC_PREREQ} was added.
 
 @defmac AC_REVISION (@var{revision-info})
 @maindex REVISION
-Copy revision stamp @var{revision-info} into the @file{configure}
+Copy revision stamp @var{revision-info} into the @code{configure}
 script, with any dollar signs or double-quotes removed.  This macro lets
-you put a revision stamp from @file{configure.in} into @file{configure}
-without RCS or CVS changing it when you check in @file{configure}.  That
+you put a revision stamp from @file{configure.in} into @code{configure}
+without RCS or CVS changing it when you check in @code{configure}.  That
 way, you can determine easily which revision of @file{configure.in} a
-particular @file{configure} corresponds to.
+particular @code{configure} corresponds to.
 
 It is a good idea to call this macro before @code{AC_INIT} so that the
 revision number is near the top of both @file{configure.in} and
-@file{configure}.  To support doing that, the @code{AC_REVISION} output
+@code{configure}.  To support doing that, the @code{AC_REVISION} output
 begins with @samp{#!/bin/sh}, like the normal start of a
-@file{configure} script does.
+@code{configure} script does.
 
 For example, this line in @file{configure.in}:
 
@@ -1175,7 +1175,7 @@ AC_REVISION($@asis{Revision: 1.30 }$)dnl
 @end example
 
 @noindent
-produces this in @file{configure}:
+produces this in @code{configure}:
 
 @example
 #!/bin/sh
@@ -1240,10 +1240,7 @@ Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
 of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
 the base of the file name that the lexer generates; usually
 @file{lex.yy}, but sometimes something else.  These results vary
-according to whether @code{lex} or @code{flex} is being used.  This
-macro calls @code{AC_PROG_CPP} (or @code{AC_PROG_CXXCPP} if C++ is the
-current language, @pxref{Language Choice}) and @code{AC_PROG_LEX} if
-they haven't been called already.
+according to whether @code{lex} or @code{flex} is being used.
 @end defmac
 
 @defmac AC_PROG_AWK
@@ -1288,9 +1285,7 @@ extension.
 If the current language is C (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CPP} indirectly by calling
 @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER}, @code{AC_EGREP_HEADER}, or
-@code{AC_EGREP_CPP}.  Those macros call this macro first if it
-hasn't been called already.  It calls @code{AC_PROG_CC} if it hasn't
-been called already.
+@code{AC_EGREP_CPP}.
 @end defmac
 
 @defmac AC_PROG_CXX
@@ -1322,9 +1317,7 @@ It is only portable to run @code{CXXCPP} on files with a @file{.c},
 If the current language is C++ (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CXXCPP} indirectly by
 calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
-@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.  Those macros call
-this macro first if it hasn't been called already.  This macro calls
-@code{AC_PROG_CXX} if it hasn't been called already.
+@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
 @defmac AC_PROG_GCC_TRADITIONAL
@@ -1335,9 +1328,7 @@ GNU C compiler and @code{ioctl} does not work properly without
 @samp{-traditional}.  That usually happens when the fixed header files
 have not been installed on an old system.  Since recent versions of the
 GNU C compiler fix the header files automatically when installed, this
-is becoming a less prevalent problem.  This macro calls
-@code{AC_PROG_CC} and @code{AC_PROG_CPP} if they haven't been called
-already.
+is becoming a less prevalent problem.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -1587,9 +1578,7 @@ char *alloca ();
 @cvindex CLOSEDIR_VOID
 If the @code{closedir} function does not return a meaningful value,
 define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
-return value for an error indicator.  This macro calls
-@code{AC_HEADER_DIRENT} if it has not been called yet already
-(@pxref{Particular Headers}).
+return value for an error indicator.
 @end defmac
 
 @defmac AC_FUNC_GETLOADAVG
@@ -1941,10 +1930,6 @@ way to incorporate your implementations only when needed (since the ones
 in system C libraries may be hand optimized) is to, taking @code{memchr}
 for example, put it in @file{memchr.c} and use
 @samp{AC_REPLACE_FUNCS(memchr)}.
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
 @end defmac
 
 @defmac AC_MEMORY_H
@@ -2103,8 +2088,7 @@ had better define @code{struct tm}.
 @cvindex HAVE_TZNAME
 Figure out how to get the current timezone.  If @code{struct tm} has a
 @code{tm_zone} member, define @code{HAVE_TM_ZONE}.  Otherwise, if the
-external array @code{tzname} is found, define @code{HAVE_TZNAME}.  This
-macro calls @code{AC_STRUCT_TM} if it hasn't been called already.
+external array @code{tzname} is found, define @code{HAVE_TZNAME}.
 @end defmac
 
 @node Typedefs, Compiler Characteristics, Structures, Existing Tests
@@ -2233,8 +2217,7 @@ it as empty.
 @cvindex inline
 If the C compiler is a version of GCC that supports the keyword
 @code{__inline} but not @code{inline} (such as some NeXT versions),
-define @code{inline} to be @code{__inline}.  This macro calls
-@code{AC_PROG_CC} if it hasn't been called already.
+define @code{inline} to be @code{__inline}.
 @end defmac
 
 @defmac AC_C_CHAR_UNSIGNED
@@ -2327,10 +2310,7 @@ flags into @code{X_LIBS}.  If X is not available, put
 
 Also check for special libraries that some systems need in order to
 compile X programs.  Add any that the system needs to output
-variable @code{X_EXTRA_LIBS}.  This macro calls @code{AC_PATH_X} and
-@code{AC_ISC_POSIX} (@pxref{UNIX Variants}) if they have not already
-been called.  Because of the macro dependencies, if you call this macro,
-you should let it call @code{AC_PATH_X} rather than doing that yourself.
+variable @code{X_EXTRA_LIBS}.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -2364,7 +2344,7 @@ functions.  Should be called before any macros that run the C compiler.
 @end defmac
 
 @defmac AC_DYNIX_SEQ
-@maindex OS_DYNIX_SEQ
+@maindex DYNIX_SEQ
 If on Dynix/PTX (Sequent UNIX), add @samp{-lseq} to output
 variable @code{LIBS}.  This macro is obsolete; instead, use
 @code{AC_FUNC_GETMNTENT}.
@@ -2412,8 +2392,7 @@ This macro is obsolete; instead, use @code{AC_FUNC_STRFTIME}.
 @ovindex LIBS
 If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
 @file{dirent.h} is being used, add @samp{-ldir} to @code{LIBS}.  This
-macro calls @code{AC_DIR_HEADER} if it hasn't been called already.  It
-is obsolete; use @code{AC_HEADER_DIRENT} instead.
+macro is obsolete; use @code{AC_HEADER_DIRENT} instead.
 @end defmac
 
 @node Writing Tests, Results, Existing Tests, Top
@@ -2452,9 +2431,9 @@ about what they're checking for.
 @node Examining Declarations, Examining Libraries, , Writing Tests
 @section Examining Declarations
 
-Here is how to check whether particular header files exist.  You can
-check for one at a time, or more than one if you need several header
-files to all exist for some purpose.
+The macro @code{AC_TRY_CPP} is used to check whether particular header
+files exist.  You can check for one at a time, or more than one if you
+need several header files to all exist for some purpose.
 
 @defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex TRY_CPP
@@ -2465,10 +2444,8 @@ probably not useful.)  If the preprocessor produces no error messages
 while processing it, run shell commands @var{action-if-true}.  Otherwise
 run shell commands @var{action-if-false}.
 
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.  It uses @code{CPPFLAGS}, but not @code{CFLAGS},
-because @samp{-g}, @samp{-O}, etc. are not valid options to many C
+This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
+@samp{-g}, @samp{-O}, etc. are not valid options to many C
 preprocessors.
 @end defmac
 
@@ -2484,11 +2461,6 @@ If the output of running the preprocessor on the system header file
 @var{header-file} matches the @code{egrep} regular expression
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
 execute @var{action-if-not-found}.
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
-@var{action-if-not-found}.
 @end defmac
 
 To check for C preprocessor symbols, either defined by header files or
@@ -2519,16 +2491,16 @@ been called already.
 @node Examining Libraries, Run Time, Examining Declarations, Writing Tests
 @section Examining Libraries
 
-To find out whether a library function or global variable is available,
-Autoconf tries to compile and link a small program that uses it.  This
-is unlike Larry Wall's Metaconfig, which uses @code{nm} or @code{ar} on
-the C library to try to figure out which functions are available.
-Trying to link with the function is usually a more reliable approach
-because it avoids dealing with the variations in the options and output
-formats of @code{nm} and @code{ar} and in the location of the standard
-libraries.  It also allows configuring for cross-compilation or checking
-a function's runtime behavior if needed.  On the other hand, it can be
-slower than scanning the libraries once.
+To check for a library, a function, or a global variable, Autoconf
+@code{configure} scripts try to compile and link a small program that
+uses it.  This is unlike Larry Wall's Metaconfig, which uses @code{nm}
+or @code{ar} on the C library to try to figure out which functions are
+available.  Trying to link with the function is usually a more reliable
+approach because it avoids dealing with the variations in the options
+and output formats of @code{nm} and @code{ar} and in the location of the
+standard libraries.  It also allows configuring for cross-compilation or
+checking a function's runtime behavior if needed.  On the other hand, it
+can be slower than scanning the libraries once.
 
 A few systems have linkers that do not return a failure exit status when
 there are unresolved functions in the link.  This bug makes the
@@ -2539,7 +2511,7 @@ automatically.
 
 The below macro is used to compile test programs to test for functions
 and global variables.  It is also used to check for libraries, by adding
-the library being checked for to @samp{$LIBS} temporarily and trying to
+the library being checked for to @code{LIBS} temporarily and trying to
 link a small program.  And it is used to check matters of C syntax, such
 as whether a particular keyword is recognized---a test program using a
 keyword does not compile on systems that don't support it.
@@ -3417,8 +3389,8 @@ the documentation.
 Autoconf provides the @code{AC_BEFORE} macro to warn users when macros
 with this kind of dependency appear out of order in a
 @file{configure.in} file.  The warning occurs when creating
-@file{configure} from @file{configure.in}, not when running
-@file{configure}.
+@code{configure} from @file{configure.in}, not when running
+@code{configure}.
 For example, @code{AC_PROG_CPP} checks whether the C compiler
 can run the C preprocessor when given the @samp{-E} option.  It should
 therefore be called after any macros that change which C compiler is
@@ -3983,7 +3955,7 @@ option.  It must be Bourne-compatible.  The default is @file{/bin/sh}.
 @evindex CONFIG_STATUS
 The file name to use for the shell script that records the
 configuration.  The default is @file{./config.status}.  This variable is
-useful when one package uses parts of another and the @file{configure}
+useful when one package uses parts of another and the @code{configure}
 scripts shouldn't be merged because they are maintained separately.
 @end defvar
 
@@ -4057,7 +4029,7 @@ distributed under the terms of the GPL.  As applied to Autoconf, the GPL
 just means that you need to distribute @file{configure.in}, and
 @file{acsite.m4}, @file{aclocal.m4}, @file{acconfig.h}, and
 @file{@var{config}.h.top} and @file{@var{config}.h.bot} if you use them,
-along with @file{configure}.
+along with @code{configure}.
 
 Programs that use Autoconf scripts to configure themselves do not
 automatically come under the GPL.  Distributing an Autoconf
@@ -4207,7 +4179,7 @@ Messages}.  Those macros work best in conjunction with cache variables.
 @xref{Caching Values}.
 
 @node Invoking autoupdate, Changed Results, Changed Macros, Upgrading
-@section Using @code{autoupdate} to Modernize @file{configure}
+@section Using @code{autoupdate} to Modernize @code{configure}
 
 The @code{autoupdate} program updates a @file{configure.in} file that
 calls Autoconf macros by their old names to use the current macro names.
@@ -4382,7 +4354,7 @@ Rich Murphey, the maintainer of the GNU graphics utilities, sent me mail
 saying that the @code{configure} scripts were great, and asking if I had
 a tool for generating them that I could send him.  No, I thought, but
 I should!  So I started to work out how to generate them.  And the
-journey from the slavery of hand-written @file{configure} scripts to the
+journey from the slavery of hand-written @code{configure} scripts to the
 abundance and ease of Autoconf began.
 
 Cygnus @code{configure}, which was being developed at around that time,
