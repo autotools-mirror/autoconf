@@ -1,5 +1,12 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* tests/actest.m4 (AC_ENV_SAVE): OpenBSD-2.3's /bin/sh defines an
+	envvar SECONDS which does change with time.
+	KMEM_GROUP is set by AC_FUNC_GETLOADAVG.
+	Reported by Volker Borchert.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* tests/Makefile.am (macros.m4): Better regex to build `macro'.
 	Depend upon acgeneral.m4.
 

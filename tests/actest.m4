@@ -18,14 +18,14 @@ AC_DEFUN(AC_ENV_SAVE,
   egrep -v '^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=' |
   egrep -v '^INSTALL(_(DATA|PROGRAM|SCRIPT))?=' |
   egrep -v '^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=' |
-  egrep -v '^(NEED_SETGID)=' |
+  egrep -v '^(NEED_SETGID|KMEM_GROUP)=' |
   egrep -v '^(X_(CFLAGS|LIBS|PRE_LIBS)|x_(includes|libraries)|have_x)=' |
   egrep -v '^(host|build|target)(_(alias|cpu|vendor|os))?=' |
   egrep -v '^(cross_compiling)=' |
   egrep -v '^(interpval)=' |
   egrep -v '^(f77_(case|underscore))=' |
-  # Some variables some shells use and change
-  egrep -v '^(_|PIPESTATUS|OLDPWD)=' |
+  # Some variables some shells use and change.
+  egrep -v '^(_|OLDPWD|PIPESTATUS|SECONDS)=' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines
   fgrep = >$1
