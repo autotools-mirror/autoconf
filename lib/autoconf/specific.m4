@@ -1091,7 +1091,8 @@ main () {
 ])dnl
 dnl
 define(AC_FIND_X,
-[AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
+[AC_REQUIRE_CPP()dnl Set CPP; we run AC_FIND_X_DIRECT conditionally.
+AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
 no_x=true
 if test "x$with_x" != xno; then
 AC_FIND_X_XMKMF
