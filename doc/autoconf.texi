@@ -3737,10 +3737,40 @@ If @code{lstat} behaves properly, define
 
 @defmac AC_FUNC_MALLOC
 @acindex FUNC_MALLOC
+@cvindex HAVE_MALLOC
+@cvindex malloc
 @c @fuindex malloc
 @prindex @code{malloc}
 If the @code{malloc} works correctly (@samp{malloc (0)} returns a valid
-pointer), define @code{HAVE_MALLOC}.
+pointer), define @code{HAVE_MALLOC} to 1.  Otherwise define
+@code{HAVE_MALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
+@samp{malloc}, and define @code{malloc} to @code{rpl_malloc} so that the
+native @code{malloc} is not used in the main project.
+
+Typically, the replacement file @file{malloc.c} should look like (note
+the @samp{#undef malloc}:
+
+@verbatim
+#if HAVE_CONFIG_H
+# include <config.h>
+#endif
+#undef malloc
+
+#include <sys/types.h>
+
+char *malloc ();
+
+/* Allocate an N-byte block of memory from the heap.
+   If N is zero, allocate a 1-byte block.  */
+
+char *
+rpl_malloc (size_t n)
+{
+  if (n == 0)
+    n = 1;
+  return malloc (n);
+}
+@end verbatim
 @end defmac
 
 @defmac AC_FUNC_MEMCMP
@@ -3780,6 +3810,20 @@ memory.
 @cindex obstack
 If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @code{AC_LIBOBJ} replacement for @samp{obstack}.
+@end defmac
+
+@defmac AC_FUNC_REALLOC
+@acindex FUNC_REALLOC
+@cvindex HAVE_REALLOC
+@cvindex realloc
+@c @fuindex realloc
+@prindex @code{realloc}
+If the @code{realloc} works correctly (@samp{realloc (0, 0)} returns a
+valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
+@code{HAVE_REALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
+@samp{realloc}, and define @code{realloc} to @code{rpl_realloc} so that
+the native @code{realloc} is not used in the main project.  See
+@code{AC_FUNC_MALLOC} for details.
 @end defmac
 
 @defmac AC_FUNC_SELECT_ARGTYPES

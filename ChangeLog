@@ -1,3 +1,11 @@
+2002-07-17  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_REALLOC, _AC_FUNC_REALLOC)
+	(_AC_FUNC_MALLOC): New.
+	(AC_FUNC_MALLOC): Use the latter.
+	Define HAVE_MALLOC to 0 if broken.
+	* doc/autoconf.texi (Particular Functions): Adjust.
+
 2002-07-16  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/c.m4 (AC_C_BACKSLASH_A): New.

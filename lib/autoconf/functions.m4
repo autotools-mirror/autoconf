@@ -714,10 +714,10 @@ fi
 ])
 
 
-# AC_FUNC_MALLOC
-# --------------
-# Is `malloc (0)' properly handled?
-AC_DEFUN([AC_FUNC_MALLOC],
+# _AC_FUNC_MALLOC_IF(IF-WORKS, IF-NOT)
+# ------------------------------------
+# If `malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
+AC_DEFUN([_AC_FUNC_MALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for working malloc], ac_cv_func_malloc_works,
@@ -733,10 +733,23 @@ char *malloc ();
                [ac_cv_func_malloc_works=yes],
                [ac_cv_func_malloc_works=no],
                [ac_cv_func_malloc_works=no])])
-if test $ac_cv_func_malloc_works = yes; then
-  AC_DEFINE(HAVE_MALLOC, 1,
-            [Define to 1 if your system has a working `malloc' function.])
-fi
+AS_IF([test $ac_cv_func_malloc_works = yes], [$1], [$2])
+])# AC_FUNC_MALLOC
+
+
+# AC_FUNC_MALLOC
+# --------------
+# Report whether `malloc (0)' properly handled, and replace malloc if
+# needed.
+AC_DEFUN([AC_FUNC_MALLOC],
+[_AC_FUNC_MALLOC_IF(
+  [AC_DEFINE([HAVE_MALLOC], 1,
+             [Define to 1 if your system has a working `malloc' function,
+              and to 0 otherwise.])],
+  [AC_DEFINE([HAVE_MALLOC], 0)
+   AC_LIBOBJ(malloc)
+   AC_DEFINE([malloc], [rpl_malloc],
+      [Define to rpl_malloc if the replacement function should be used.])])
 ])# AC_FUNC_MALLOC
 
 
@@ -1113,6 +1126,46 @@ fi
 # AU::AM_FUNC_OBSTACK
 # -------------------
 AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
+
+
+
+# _AC_FUNC_REALLOC_IF(IF-WORKS, IF-NOT)
+# -------------------------------------
+# If `realloc (0, 0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
+AC_DEFUN([_AC_FUNC_REALLOC_IF],
+[AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_CHECK_HEADERS(stdlib.h)
+AC_CACHE_CHECK([for working realloc], ac_cv_func_realloc_works,
+[AC_RUN_IFELSE(
+[AC_LANG_PROGRAM(
+[[#if STDC_HEADERS || HAVE_STDLIB_H
+# include <stdlib.h>
+#else
+char *realloc ();
+#endif
+]],
+                 [exit (realloc (0, 0) ? 0 : 1);])],
+               [ac_cv_func_realloc_works=yes],
+               [ac_cv_func_realloc_works=no],
+               [ac_cv_func_realloc_works=no])])
+AS_IF([test $ac_cv_func_realloc_works = yes], [$1], [$2])
+])# AC_FUNC_REALLOC
+
+
+# AC_FUNC_REALLOC
+# ---------------
+# Report whether `realloc (0, 0)' properly handled, and replace realloc if
+# needed.
+AC_DEFUN([AC_FUNC_REALLOC],
+[_AC_FUNC_REALLOC_IF(
+  [AC_DEFINE([HAVE_REALLOC], 1,
+             [Define to 1 if your system has a working `realloc' function,
+              and to 0 otherwise.])],
+  [AC_DEFINE([HAVE_REALLOC], 0)
+   AC_LIBOBJ([realloc])
+   AC_DEFINE([realloc], [rpl_realloc],
+      [Define to rpl_realloc if the replacement function should be used.])])
+])# AC_FUNC_REALLOC
 
 
 # AC_FUNC_SELECT_ARGTYPES

@@ -1,5 +1,5 @@
 # functions -- autoscan's mapping from functions to Autoconf macros
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -51,6 +51,7 @@ minor		AC_HEADER_MAJOR
 mktime		AC_FUNC_MKTIME
 mmap		AC_FUNC_MMAP
 obstack_init	AC_FUNC_OBSTACK
+realloc		AC_FUNC_REALLOC
 rindex		AC_HEADER_STDC
 setpgrp		AC_FUNC_SETPGRP
 setvbuf		AC_FUNC_SETVBUF_REVERSED

@@ -26,10 +26,14 @@
 
   AC_C_BACKSLASH_A, AC_CONFIG_LIBOBJ_DIR, AC_GNU_SOURCE,
   AC_PROG_EGREP, AC_PROG_FGREP, AC_REPLACE_FNMATCH,
-  AC_FUNC_FNMATCH_GNU, AC_TYPE_MBSTATE_T.
+  AC_FUNC_FNMATCH_GNU, AC_FUNC_REALLOC, AC_TYPE_MBSTATE_T.
 
 - AC_FUNC_GETLOADAVG
   looks for getloadavg.c in the CONFIG_LIBOBJ_DIR.
+
+- AC_FUNC_MALLOC
+   Now defines HAVE_MALLOC to 0 if `malloc' does not work, and asks
+   for an AC_LIBOBJ replacement.
 
 ** Bug fixes
 
