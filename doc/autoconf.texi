@@ -4892,8 +4892,8 @@ shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because @sc{4.3bsd} does not
-have it.  Do not use @samp{test -e} either.
-@c FIXME: Jim, what was the system?
+have it.  Do not use @samp{test -e} either, because Solaris 2.5 does not
+have it.
 
 @item @command{test} (strings)
 Avoid @samp{test "@var{string}"}, in particular if @var{string} might
