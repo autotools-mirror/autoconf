@@ -389,6 +389,17 @@ define(m4_match,
         regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
         [$3])])
 
+# m4_do(STRING, ...)
+# ------------------
+# This macro invokes all its arguments (in sequence, of course).  It is
+# useful for making your macros more structured and readable by dropping
+# unecessary dnl's and have the macros indented properly.
+
+define([m4_do],
+  [ifelse($#, 0, [],
+          $#, 1, [$1],
+          [$1[]m4_do(m4_shift($@))])])
+
 ## --------------------- ##
 ## Implementing m4 loops ##
 ## --------------------- ##
