@@ -42,15 +42,15 @@ AT_SETUP([LINENO])
 # UNSET-LINENO is a shell condition to make sure the scripts have the
 # same number of lines in the output, so that their outputs be identical.
 m4_define([AT_DATA_LINENO],
-[AT_DATA_M4SH([$1],
-[[AS_INIT
+[AT_DATA([$1],
+[[AS@&t@_INIT
 if $2; then
-  AS_UNSET([LINENO])
+  AS@&t@_UNSET([LINENO])
 fi
-AS_SHELL_SANITIZE
+AS@&t@_SHELL_SANITIZE
 echo "Line: $3"
 grep 'Line: .*$4' $[0] >/dev/null ||
-  AS_ERROR([cannot find original script])
+  AS@&t@_ERROR([cannot find original script])
 exit 0
 ]])
 ])# AT_DATA_LINENO

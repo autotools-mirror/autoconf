@@ -1,5 +1,11 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sh.at (LINENO): Protect from autom4te's substitution by
+	hand.
+	* tests/tools.at: Don't protect dnl, AT_DATA_M4SH does.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): After having run the test
 	group, go back to the initial directory, not to at_suite_dir.
 

@@ -255,7 +255,7 @@ AT_DATA_M4SH([experr],
 configure.ac:3: error: possibly undefined macro: _m4_bar
 configure.ac:4: error: possibly undefined macro: AS_FOO
 configure.ac:5: error: possibly undefined macro: _AS_BAR
-configure.ac:6: error: possibly undefined macro: d@&t@nl
+configure.ac:6: error: possibly undefined macro: dnl
 ]])
 
 AT_CHECK_AUTOCONF([], 1, [], experr)
