@@ -1,3 +1,9 @@
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
+	* m4sugar.m4 (m4_errprint, divnum, errprint, esyscmd): Rename as...
+	(m4_errprintn, m4_divnum, m4errprint, m4_esyscmd): this.
+	* autoconf.m4: Restore them.
+
 2000-11-28  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (Fortran 77 Compiler Characteristics):

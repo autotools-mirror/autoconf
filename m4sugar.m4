@@ -115,7 +115,10 @@ m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
 m4_undefine([divert])
+m4_rename_m4([divnum])
 m4_rename_m4([dumpdef])
+m4_rename_m4([errprint])
+m4_rename_m4([esyscmd])
 m4_rename_m4([eval])
 m4_rename_m4([format])
 m4_rename_m4([incr])
@@ -150,10 +153,10 @@ m4_undefine([undivert])
 m4_define([m4_location], [__file__:__line__])
 
 
-# m4_errprint(MSG)
-# ----------------
+# m4_errprintn(MSG)
+# -----------------
 # Same as `errprint', but with the missing end of line.
-m4_define([m4_errprint], [errprint([$1
+m4_define([m4_errprintn], [m4_errprint([$1
 ])])
 
 
@@ -161,14 +164,14 @@ m4_define([m4_errprint], [errprint([$1
 # ---------------
 # Warn the user.
 m4_define([m4_warning],
-[m4_errprint(m4_location[: warning: $1])])
+[m4_errprintn(m4_location[: warning: $1])])
 
 
 # m4_fatal(MSG, [EXIT-STATUS])
 # ----------------------------
 # Fatal the user.                                                      :)
 m4_define([m4_fatal],
-[m4_errprint(m4_location[: error: $1])dnl
+[m4_errprintn(m4_location[: error: $1])dnl
 m4_expansion_stack_dump()dnl
 m4_exit(ifelse([$2],, 1, [$2]))])
 
@@ -1044,10 +1047,10 @@ m4_define([_m4_divert(GROW)],       10000)
 # Dump the expansion stack.
 m4_define([m4_expansion_stack_dump],
 [ifdef([_m4_expansion_stack],
-       [m4_errprint(m4_defn([_m4_expansion_stack]))dnl
+       [m4_errprintn(m4_defn([_m4_expansion_stack]))dnl
 m4_popdef([_m4_expansion_stack])dnl
 m4_expansion_stack_dump()],
-       [m4_errprint(m4_location[: the top level])])])
+       [m4_errprintn(m4_location[: the top level])])])
 
 
 # _m4_defun_pro(MACRO-NAME)
