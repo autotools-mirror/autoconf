@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.12)
+define(AC_ACVERSION, 2.12.2)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -208,6 +208,7 @@ mandir='${prefix}/man'
 # Initialize some other variables.
 subdirs=
 MFLAGS= MAKEFLAGS=
+SHELL=${CONFIG_SHELL-/bin/sh}
 # Maximum number of lines to put in a shell here document.
 ac_max_here_lines=12
 
@@ -687,8 +688,15 @@ dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
 AC_LANG_C
+dnl By default always use an empty string as the executable
+dnl extension.  Only change it if the script calls AC_EXEEXT.
+ac_exeext=
+dnl By default assume that objects files use an extension of .o.  Only
+dnl change it if the script calls AC_OBJEXT.
+ac_objext=o
 AC_PROG_ECHO_N
 dnl Substitute for predefined variables.
+AC_SUBST(SHELL)dnl
 AC_SUBST(CFLAGS)dnl
 AC_SUBST(CPPFLAGS)dnl
 AC_SUBST(CXXFLAGS)dnl
@@ -909,7 +917,7 @@ AC_DEFUN(AC_CANONICAL_HOST,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 
 # Make sure we can run config.sub.
-if $ac_config_sub sun4 >/dev/null 2>&1; then :
+if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
 else AC_MSG_ERROR(can not run $ac_config_sub)
 fi
 
@@ -921,7 +929,7 @@ case "$host_alias" in
 NONE)
   case $nonopt in
   NONE)
-    if host_alias=`$ac_config_guess`; then :
+    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
     else AC_MSG_ERROR(can not guess host type; you must specify one)
     fi ;;
   *) host_alias=$nonopt ;;
@@ -930,7 +938,7 @@ esac
 
 dnl Set the other host vars.
 changequote(<<, >>)dnl
-host=`$ac_config_sub $host_alias`
+host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
 host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
 host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
@@ -960,7 +968,7 @@ esac
 
 dnl Set the other target vars.
 changequote(<<, >>)dnl
-target=`$ac_config_sub $target_alias`
+target=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $target_alias`
 target_cpu=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
 target_vendor=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
@@ -990,7 +998,7 @@ esac
 
 dnl Set the other build vars.
 changequote(<<, >>)dnl
-build=`$ac_config_sub $build_alias`
+build=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $build_alias`
 build_cpu=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
 build_vendor=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
 build_os=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
@@ -1196,7 +1204,7 @@ ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
@@ -1207,7 +1215,7 @@ ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
@@ -1276,7 +1284,7 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 [if test -n "[$]$1"; then
   ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
 ifelse([$6], , , [  ac_prog_rejected=no
 ])dnl
 dnl $ac_dummy forces splitting on constant user-supplied paths.
@@ -1341,8 +1349,11 @@ AC_CACHE_VAL(ac_cv_path_$1,
   /*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
   ;;
+  ?:/*)			 
+  ac_cv_path_$1="[$]$1" # Let the user override the test with a dos path.
+  ;;
   *)
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl bash word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
@@ -1451,7 +1462,7 @@ AC_DEFUN(AC_TRY_COMPILER,
 #include "confdefs.h"
 [$1]
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest; then
+if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   [$2]=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
@@ -1563,7 +1574,7 @@ dnl that breaks under sh -x, which writes compile commands starting
 dnl with ` +' to stderr in eval and subshells.
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 AC_TRY_EVAL(ac_try)
-ac_err=`grep -v '^ *+' conftest.out`
+ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
   $2])
@@ -1665,7 +1676,7 @@ int main() {
 [$2]
 ; return 0; }
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest; then
+if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 else
@@ -1707,7 +1718,7 @@ extern "C" void exit(int);
 ])dnl
 [$1]
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest && (./conftest; exit) 2>/dev/null
+if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
 dnl Don't remove the temporary files here, so they can be examined.
   ifelse([$2], , :, [$2])
@@ -1811,7 +1822,7 @@ done
 
 dnl AC_REPLACE_FUNCS(FUNCTION...)
 AC_DEFUN(AC_REPLACE_FUNCS,
-[AC_CHECK_FUNCS([$1], , [LIBOBJS="$LIBOBJS ${ac_func}.o"])
+[AC_CHECK_FUNCS([$1], , [LIBOBJS="$LIBOBJS ${ac_func}.${ac_objext}"])
 AC_SUBST(LIBOBJS)dnl
 ])
 
