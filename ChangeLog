@@ -1,3 +1,7 @@
+2001-04-25  Nicolas Joly  <njoly@pasteur.fr>
+
+	* acgeneral.m4 (_AC_RUN_IFELSE): Clean `core' files.
+
 2001-04-24  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi (The GNU build system): Add this chapter
