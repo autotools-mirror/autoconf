@@ -2377,7 +2377,7 @@ if test "$ac_x_libraries" = no; then
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
   LIBS="-lXt $LIBS"
-  AC_TRY_LINK(, [XtMalloc (0)],
+  AC_TRY_LINK([@%:@include <X11/Intrinsic.h>], [XtMalloc (0)],
 [LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],

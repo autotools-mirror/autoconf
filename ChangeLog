@@ -1,3 +1,9 @@
+2000-06-07  Morten Eriksen  <mortene@sim.no>
+
+	* acspecific.m4 (_AC_PATH_X_DIRECT): Include `X11/Intrinsic.h'
+	when trying to use `XtMalloc' to actually have a chance of
+	succeeding.
+
 2000-06-07  Akim Demaille  <akim@epita.fr>
 
 	Hard (code) X.
