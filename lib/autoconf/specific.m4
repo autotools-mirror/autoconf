@@ -2,18 +2,18 @@ dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
-dnl This file is free software; you can redistribute it and/or modify
+dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2, or (at your option)
 dnl any later version.
 dnl
-dnl This file is distributed in the hope that it will be useful,
+dnl This program is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this file; if not, write to the Free Software
+dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
 dnl As a special exception, the Free Software Foundation gives unlimited
@@ -35,7 +35,7 @@ dnl
 dnl This special exception to the GPL applies to versions of Autoconf
 dnl released by the Free Software Foundation.  When you make and
 dnl distribute a modified version of Autoconf, you may extend this special
-dnl exception to the GPL to apply to your modified version well, *unless*
+dnl exception to the GPL to apply to your modified version as well, *unless*
 dnl your modified version has the potential to copy into its output some
 dnl of text that was the non-data portion of the version that you started
 dnl with.  (In other words, unless your change moves or copies text from
