@@ -3962,7 +3962,7 @@ fi # test -n "$CONFIG_FILES"
 
 EOF
 cat >>$CONFIG_STATUS <<\EOF
-for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
+for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
@@ -4059,7 +4059,7 @@ ifset([AC_LIST_FILES_COMMANDS],
 AC_LIST_FILES_COMMANDS()dnl
   esac
 ])dnl
-fi; done
+done
 rm -f $ac_cs_root.s*
 EOF
 ])# _AC_OUTPUT_FILES
@@ -4131,7 +4131,7 @@ ac_uB='$%\1#\2define\3'
 ac_uC=' '
 ac_uD='%;t']
 
-for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
+for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
@@ -4279,7 +4279,7 @@ ifset([AC_LIST_HEADERS_COMMANDS],
 AC_LIST_HEADERS_COMMANDS()dnl
   esac
 ])dnl
-fi; done
+done
 EOF
 ])# _AC_OUTPUT_HEADERS
 
@@ -4301,7 +4301,7 @@ srcdir=$ac_given_srcdir
 dnl Here we use : instead of .. because if AC_LINK_FILES was used
 dnl with empty parameters (as in gettext.m4), then we obtain here
 dnl `:', which we want to skip.  So let's keep a single exception: `:'.
-for ac_file in : $CONFIG_LINKS; do if test "x$ac_file" != x:; then
+for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
   ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
 
@@ -4344,7 +4344,7 @@ ifset([AC_LIST_LINKS_COMMANDS],
 AC_LIST_LINKS_COMMANDS()dnl
   esac
 ])dnl
-fi; done
+done
 EOF
 ])# _AC_OUTPUT_LINKS
 
@@ -4362,7 +4362,7 @@ define(_AC_OUTPUT_COMMANDS,
 #
 # CONFIG_COMMANDS section.
 #
-for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
+for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
   ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
 
@@ -4373,7 +4373,7 @@ dnl  echo "executing commands of $ac_dest"
   case "$ac_dest" in
 AC_LIST_COMMANDS_COMMANDS()dnl
   esac
-fi;done
+done
 EOF
 ])# _AC_OUTPUT_COMMANDS
 
