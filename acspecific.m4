@@ -129,19 +129,16 @@ AC_DEFUN([AC_PROG_YACC],
 # Look for flex or lex.  Set its associated library to LEXLIB.
 # Check if lex declares yytext as a char * by default, not a char[].
 AC_DEFUN_ONCE([AC_PROG_LEX],
-[AH_CHECK_LIB(fl)dnl
-AH_CHECK_LIB(l)dnl
-AC_CHECK_PROG(LEX, flex, flex, lex)
+[AC_CHECK_PROGS(LEX, flex lex, :)
 if test -z "$LEXLIB"
 then
-  case $LEX in
-  flex*) ac_lib=fl ;;
-  *) ac_lib=l ;;
-  esac
-  AC_CHECK_LIB($ac_lib, yywrap, LEXLIB="-l$ac_lib")
+  AC_CHECK_LIB(fl, yywrap, LEXLIB="-lfl",
+    [AC_CHECK_LIB(l, yywrap, LEXLIB="-ll")])
 fi
 AC_SUBST(LEXLIB)
-_AC_DECL_YYTEXT])
+if test "x$LEX" != "x:"; then
+  _AC_DECL_YYTEXT
+fi])
 
 
 # _AC_DECL_YYTEXT

@@ -1,3 +1,9 @@
+2000-10-12  Pavel Roskin  <proski@gnu.org>
+
+	* acspecific.m4 (AC_PROG_LEX): Don't assume that lex exists.
+	Don't run _AC_DECL_YYTEXT if it doesn't. Always check libl and
+	libfl regardless of the $LEX value.
+
 2000-10-12  Morten Eriksen <mortene@sim.no>
 
 	* acgeneral.m4 (AC_CONFIG_SUBDIRS): Fixed nasty typo.
