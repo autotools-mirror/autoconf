@@ -1514,6 +1514,7 @@ dnl ACTION-IF-NOT-FOUND.
 
 AC_DEFUN(AC_TRY_LINK_FUNC,
 AC_TRY_LINK(dnl
+ifelse(AC_LANG, [FORTRAN77], ,
 ifelse([$1], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
@@ -1523,7 +1524,7 @@ extern "C"
 [/* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
 char $1();
-]),
+])),
 [$1()],
 [$2],
 [$3]))

@@ -1,3 +1,7 @@
+1999-04-19  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acgeneral.m4 (AC_TRY_LINK_FUNC): Add support for Fortran 77.
+
 1999-04-11  Philipp Thomas  <kthomas@gwdg.de>
 
 	* config.sub: Set basic_machine to i586 when target_alias = k6-*.
