@@ -1,3 +1,14 @@
+2002-07-29  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/install.texi: Include copyright symbol in copyright notice.
+
+	* Makefile.am (MAKEINFO): Remove; it's a user-specified macro.
+	Replace with:
+	(AM_MAKEINFOFLAGS): New macro.
+	* doc/Makefile.am (MAKEINFO, AM_MAKEINFOFLAGS): Likewise.
+	* Makefile.am (INSTALL): Use the new macros.
+	Use -o rather than --output, since "missing" does not grok --output.
+
 2002-07-25  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Make): Escaped newlines in
