@@ -1,5 +1,10 @@
 2000-09-11  Pavel Roskin  <proski@gnu.org>
 
+	* autoconf.sh: Proprerly report names of unexpanded macros that
+	begin with an underscore
+
+2000-09-11  Pavel Roskin  <proski@gnu.org>
+
 	* doc/autoconf.texi (Preset Output Variables): Correctly specify
 	what languages are affected by CPPFLAGS, LDFLAGS and LIBS.
 	Extended description of LDFLAGS and LIBS.

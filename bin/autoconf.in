@@ -301,7 +301,7 @@ case $task in
 
   # You can add your own prefixes to pattern if you want to check for
   # them too.
-  pattern="A[CHM]_|m4_"
+  pattern="_?A[CHM]_|m4_"
 
   if test "x$outfile" != x-; then
     chmod +x $outfile
