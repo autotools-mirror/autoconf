@@ -1,3 +1,8 @@
+2004-09-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Function Portability): Fix misdescription
+	of putenv.  Problem reported by Michael Wardle.
+
 2004-09-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (auindex): New macro.
