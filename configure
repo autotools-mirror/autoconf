@@ -205,7 +205,7 @@ done
 
 
       for as_shell in $as_candidate_shells $SHELL; do
-	 if { $as_shell 2> /dev/null <<\_ASEOF
+	 if { ($as_shell) 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -225,7 +225,7 @@ _ASEOF
 }; then
   CONFIG_SHELL=$as_shell
 	       as_have_required=yes
-	       if { $as_shell 2> /dev/null <<\_ASEOF
+	       if { ($as_shell) 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -3072,7 +3072,7 @@ $debug ||
 }  ||
 {
   tmp=./conf$$-$RANDOM
-  (umask 077 && mkdir $tmp)
+  (umask 077 && mkdir "$tmp")
 } ||
 {
    echo "$me: cannot create a temporary directory in ." >&2
@@ -3092,7 +3092,7 @@ cat >>$CONFIG_STATUS <<_ACEOF
 if test -n "\$CONFIG_FILES"; then
   # Protect against being on the right side of a sed subst in config.status.
   sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
-   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF
+   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >"\$tmp/subs.sed" <<\\CEOF
 s,@SHELL@,$SHELL,;t t
 s,@PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
 s,@PACKAGE_NAME@,$PACKAGE_NAME,;t t
@@ -3172,11 +3172,11 @@ _ACEOF
   ac_sed_cmds=
   while $ac_more_lines; do
     if test $ac_beg -gt 1; then
-      sed "1,${ac_beg}d; ${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
+      sed "1,${ac_beg}d; ${ac_end}q" "$tmp/subs.sed" >"$tmp/subs.frag"
     else
-      sed "${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
+      sed "${ac_end}q" "$tmp/subs.sed" >"$tmp/subs.frag"
     fi
-    if test ! -s $tmp/subs.frag; then
+    if test ! -s "$tmp/subs.frag"; then
       ac_more_lines=false
     else
       # The purpose of the label and of the branching condition is to
@@ -3184,11 +3184,11 @@ _ACEOF
       # is no need to browse any of the substitutions).
       # These are the two extra sed commands mentioned above.
       (echo ':t
-  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
+  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat "$tmp/subs.frag") >"$tmp/subs-$ac_sed_frag.sed"
       if test -z "$ac_sed_cmds"; then
-	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
+	ac_sed_cmds="sed -f '$tmp/subs-$ac_sed_frag.sed'"
       else
-	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
+	ac_sed_cmds="$ac_sed_cmds | sed -f '$tmp/subs-$ac_sed_frag.sed'"
       fi
       ac_sed_frag=`expr $ac_sed_frag + 1`
       ac_beg=$ac_end
@@ -3206,7 +3206,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-	cat >$tmp/stdin
+	cat >"$tmp/stdin"
 	ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
 	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   *:* ) ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
@@ -3344,7 +3344,7 @@ echo "$as_me: creating $ac_file" >&6;}
   ac_file_inputs=`IFS=:
     for f in $ac_file_in; do
       case $f in
-      -) echo $tmp/stdin ;;
+      -) echo "$tmp/stdin" ;;
       [\\/$]*)
 	 # Absolute (can't be DOS-style, as IFS=:)
 	 test -f "$f" || { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
@@ -3384,13 +3384,13 @@ s,@abs_builddir@,$ac_abs_builddir,;t t
 s,@top_builddir@,$ac_top_builddir,;t t
 s,@abs_top_builddir@,$ac_abs_top_builddir,;t t
 s,@INSTALL@,$ac_INSTALL,;t t
-" $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
-  rm -f $tmp/stdin
+" $ac_file_inputs | (eval "$ac_sed_cmds") >"$tmp/out"
+  rm -f "$tmp/stdin"
   if test x"$ac_file" != x-; then
-    mv $tmp/out $ac_file
+    mv "$tmp/out" $ac_file
   else
-    cat $tmp/out
-    rm -f $tmp/out
+    cat "$tmp/out"
+    rm -f "$tmp/out"
   fi
 
 done
