@@ -60,6 +60,7 @@
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
 - AC_TRY_RUN
   Under the user pressure, $? is finally available.  Probably a mistake.
+- AC_F77_LIBRARY_LDFLAGS now supports the HP/UX f90 compiler.
 
 ** C Macros
 
