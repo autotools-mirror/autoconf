@@ -1,3 +1,8 @@
+2004-12-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Libraries): Clarify problems with AC_CHECK_LIB
+	and suggest AC_SEARCH_LIBS.  Suggested by Noah Misch and Stepan Kasal.
+
 2004-12-08  Noah Misch  <noah@cs.caltech.edu>
 
 	* configure.ac (test suite): Cease to generate wrapper scripts.
