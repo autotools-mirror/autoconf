@@ -163,7 +163,7 @@ Software Foundation raise funds for GNU development.''
 * config.status Invocation::    Recreating a configuration
 * Obsolete Constructs::         Kept for backward compatibility
 * Using Autotest::              Creating portable test suites
-* Questions::                   Questions about Autoconf, with answers
+* FAQ::                         Frequent Questions about Autoconf, with answers
 * History::                     History of Autoconf
 * Copying This Manual::         How to make copies of this manual
 * Indices::                     Indices of symbols, concepts, etc.
@@ -426,12 +426,13 @@ Using an Autotest Test Suite
 * testsuite Scripts::           The concepts of Autotest
 * Autotest Logs::               Their contents
 
-Questions About Autoconf
+Frequently Asked Questions About Autoconf
 
 * Distributing::                Distributing @command{configure} scripts
 * Why GNU m4::                  Why not use the standard M4?
 * Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @command{configure} instead of Imake
+* Defining Directories::        Passing @code{datadir} to program
 
 History of Autoconf
 
@@ -527,8 +528,8 @@ features that some @sc{unix} versions of M4, including @sc{gnu} M4 1.3,
 do not have.  You must use version 1.4 or later of @sc{gnu} M4.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
-@xref{History}, for the story of Autoconf's development.
-@xref{Questions}, for answers to some common questions about Autoconf.
+@xref{History}, for the story of Autoconf's development.  @xref{FAQ},
+for answers to some common questions about Autoconf.
 
 
 See the @href{http://www.gnu.org/software/autoconf/autoconf.html,
@@ -13750,10 +13751,10 @@ distributed.
 
 
 
-@c ================================================ Questions About Autoconf.
+@c =============================== Frequently Asked Questions About Autoconf
 
-@node Questions
-@chapter Questions About Autoconf
+@node FAQ
+@chapter Frequently Asked Questions About Autoconf
 
 Several questions about Autoconf come up occasionally.  Here some of them
 are addressed.
@@ -13763,6 +13764,7 @@ are addressed.
 * Why GNU m4::                  Why not use the standard M4?
 * Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @command{configure} instead of Imake
+* Defining Directories::        Passing @code{datadir} to program
 @end menu
 
 @node Distributing
@@ -13937,6 +13939,74 @@ entire tree.  This means that a lot of common things don't have to be
 duplicated, even though they normally are in @command{configure} setups.
 @end quotation
 
+
+@node Defining Directories
+@section How Do I @code{#define} Installation Directories?
+
+@display
+My program needs library files, installed in @code{datadir} and
+similar.  If I use
+
+@example
+AC_DEFINE_UNQUOTED([DATADIR], [$datadir],
+                   [Define to the read-only architecture-independent
+                    data directory.])
+@end example
+
+@noindent
+I get
+
+@example
+#define DATADIR "$@{prefix@}/share"
+@end example
+@end display
+
+As already explained, this behavior is on purpose, mandated by the GNU
+Coding Standards, see @ref{Installation Directory Variables}.  There are
+several means to acheive a similar goal:
+
+@itemize @minus
+@item
+Do not use @code{AC_DEFINE} but use your @file{Makefile} to pass the
+actual value of @code{datadir} via compilation flags, see
+@ref{Installation Directory Variables}, for the details.
+
+@item
+This solution can be simplified when compiling a program: you may either
+extend the @code{CPPFLAGS}:
+
+@example
+CPPFLAGS = -DDATADIR=\"$(datadir)\" @@CPPFLAGS@@
+@end example
+
+@noindent
+or create a dedicated header file:
+
+@example
+DISTCLEANFILES = datadir.h
+datadir.h: Makefile
+        echo '#define DATADIR "$(datadir)"' >$@@
+@end example
+
+@item
+Use @code{AC_DEFINE} but have @command{configure} compute the literal
+value of @code{datadir} and others.  Many people have wrapped macros to
+automate this task.  For instance, the macro @code{AC_DEFINE_DIR} from
+the @href{http://www.gnu.org/software/ac-archive/, Autoconf Macro
+Archive}.
+
+This solution is not conformant with the GNU Coding Standards.
+
+@item
+Note that all the previous solutions hard wire the absolute path to
+these directories in the executables, which is not a good property.  You
+may try to compute the paths relatively to @code{prefix}, and try to
+find @code{prefix} at runtime, this way your package is relocatable.
+Some macros are already available to address this issue: see
+@code{adl_COMPUTE_RELATIVE_PATHS} and
+@code{adl_COMPUTE_STANDARD_RELATIVE_PATHS} on the
+@href{http://www.gnu.org/software/ac-archive/, Autoconf Macro Archive}.
+@end itemize
 
 
 
