@@ -64,30 +64,6 @@ define(_m4_foreach,
                                                  [(m4_shift$2)],
                                                  [$3])])])
 
-# m4_match(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
-# ----------------------------------------------------
-# m4 equivalent of
-#
-# if (SWITCH =~ RE1)
-#   VAL1;
-# elif (SWITCH =~ RE2)
-#   VAL2;
-# elif ...
-#   ...
-# else
-#   DEFAULT
-#
-# All the values are optional, and the macro is robust to active symbols
-# properly quoted.
-AT_DEFINE(m4_match,
-[ifelse([$#], 0, [],
-	[$#], 1, [],
-	[$#], 2, [$2],
-        regexp([$1], [$2]), -1, [m4_match([$1],
-                                          m4_shift(m4_shift(m4_shift($@))))],
-        [$3])])
-
-
 
 
 ## ---------------------------------------- ##
