@@ -3985,15 +3985,16 @@ AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
 
 If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
 @samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @option{-g -O2} for the @sc{gnu} C++ compiler (@option{-O2} on systems
-where G++ does not accept @option{-g}), or @option{-g} for other compilers.
+it to @option{-g -O2} for the @sc{gnu} C++ compiler (@option{-O2} on
+systems where G++ does not accept @option{-g}), or @option{-g} for other
+compilers.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
 @maindex PROG_CXXCPP
 @ovindex CXXCPP
-Set output variable @code{CXXCPP} to a command that runs the
-C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
+Set output variable @code{CXXCPP} to a command that runs the C++
+preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
 It is only portable to run @code{CXXCPP} on files with a @file{.c},
 @file{.C}, or @file{.cc} extension.
 

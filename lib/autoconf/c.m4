@@ -591,7 +591,7 @@ cat >conftest.$ac_ext <<_ACEOF
   yes;
 #endif
 _ACEOF
-if AC_TRY_COMMAND(${CC-cc} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CC-cc} -E conftest.$ac_ext) | grep yes >/dev/null; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -783,7 +783,7 @@ cat >conftest.$ac_ext <<_ACEOF
   yes;
 #endif
 _ACEOF
-if AC_TRY_COMMAND(${CXX-g++} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CXX-g++} -E conftest.$ac_ext) | grep yes >/dev/null; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
@@ -885,7 +885,7 @@ define([_AC_PROG_F77_GNU],
   yes
 #endif
 _ACEOF
-if AC_TRY_COMMAND($F77 -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND($F77 -E conftest.$ac_ext) | grep yes >/dev/null; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no

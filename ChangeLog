@@ -1,5 +1,10 @@
 2000-08-01  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_PROG_CXX_GNU, _AC_PROG_CC_GNU, _AC_PROG_F77_GNU):
+	Use grep instead of egrep, don't redirect stderr.
+
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_NOTICE): Adjust so that there are no
 	empty lines in the header comments (should be `#' alone instead).
 	Reported by Didier Verna.
