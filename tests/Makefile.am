@@ -39,14 +39,14 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 $(SUITE)
 
 
 # The files which contains macro we check for syntax.
-MACRO_FILES = $(top_srcdir)/acgeneral.m4   $(top_srcdir)/acspecific.m4 \
-              $(top_srcdir)/acfunctions.m4 $(top_srcdir)/aclang.m4
+MACRO_FILES = ../acgeneral.m4   ../acspecific.m4 \
+              ../acfunctions.m4 ../aclang.m4
 
 syntax.m4: mktests.sh $(MACRO_FILES)
-	./mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 update.m4: mktests.sh $(MACRO_FILES)
-	./mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status \
 config.cache config.log config.h.in config.h

@@ -1,3 +1,31 @@
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
+	Fix autoupdate: updating `AC_OUTPUT_COMMANDS' was failing because
+	it includes another AU defined macro.
+
+	* autoupdate.sh (input.m4:_au_defun): New macro.
+	(au.m4): Use it instead of inlining _au_enable/_au_disable
+	invocations in the definition of all these macros.
+	(input.m4:__au_enable, input.m4:__au_disable): New macros.
+	(input.m4:_au_enable, input.m4:_au_disable): Use them.
+	* tests/mktests.sh (update_exclude_list): Add `AC_OUTPUT'.
+	Running it twice in a configure.in is not valid.
+	Add `AC_LINK_FILES' since it requires arguments.
+	* tests/tools.m4 (autoupdating AC_LINK_FILES): New test.
+
+2000-10-17  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* Makefile.am (MAINTAINERCLEANFILES): Add acversion.m4.
+	(INSTALL.txt): Put into $(srcdir).
+	(acversion.m4): Build here ...
+	* configure.in (AC_OUTPUT): Not here.
+
+	* tests/Makefile.am (MACRO_FILES): Don't use $(top_srcdir).
+	(syntax.m4): Create in $(srcdir).
+	(update.m4): Likewise.
+	* tests/atspecific.m4 (AT_CHECK_UPDATE): Look for autoconf
+	macros in the top source directory.
+
 2000-10-16  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (_AC_LANG_COMPILER_GNU): New macro, which unifies...

@@ -131,7 +131,7 @@ AT_DEFINE([AT_CHECK_UPDATE],
 [AT_SETUP([the autoupdating of $1])
 
 _AT_CHECK_AC_MACRO([$1],
-[AT_CHECK([autoupdate --autoconf-dir ..], 0,
+[AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
           [], [autoupdate: `configure.in' is updated
 ])])
 

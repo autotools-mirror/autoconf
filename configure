@@ -735,7 +735,7 @@ ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_gnu_compiler=$ac_cv_prog_gcc
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
@@ -1027,7 +1027,7 @@ AT_TESTPATH=..
 # autoheader scripts.
 for ac_prog in gm4 gnum4 m4
 do
-# Extract the first word of "$ac_prog", so it can be a program name with args.
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo "configure:1032: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -1054,19 +1054,20 @@ done
 esac
 fi
 M4=$ac_cv_path_M4
+
 if test -n "$M4"; then
-  echo "configure:1058: result: $M4" >&5
+  echo "configure:1059: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6
 else
-  echo "configure:1061: result: no" >&5
+  echo "configure:1062: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-test -n "$M4" && break
+  test -n "$M4" && break
 done
 test -n "$M4" || M4="m4"
 
-echo "configure:1069: checking whether m4 supports frozen files" >&5
+echo "configure:1070: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1078,7 +1079,7 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-echo "configure:1081: result: $ac_cv_prog_gnu_m4" >&5
+echo "configure:1082: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   { echo "configure: error: GNU m4 1.4 is required" >&2; exit 1; }
@@ -1089,9 +1090,9 @@ fi
 # `autoconf' and `ifnames' use AWK.
 for ac_prog in mawk gawk nawk awk
 do
-# Extract the first word of "$ac_prog", so it can be a program name with args.
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "configure:1094: checking for $ac_word" >&5
+echo "configure:1095: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1113,36 +1114,36 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "configure:1116: result: $AWK" >&5
+  echo "configure:1117: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "configure:1119: result: no" >&5
+  echo "configure:1120: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-test -n "$AWK" && break
+  test -n "$AWK" && break
 done
 
 # Generating man pages.
-echo "configure:1127: checking for working help2man" >&5
+echo "configure:1128: checking for working help2man" >&5
 echo $ECHO_N "checking for working help2man... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
-   echo "configure:1134: result: found" >&5
+   echo "configure:1135: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    HELP2MAN="$SHELL $missing_dir/missing help2man"
-   echo "configure:1138: result: missing" >&5
+   echo "configure:1139: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "configure:1145: checking for $ac_word" >&5
+echo "configure:1146: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1168,11 +1169,12 @@ done
 esac
 fi
 PERL=$ac_cv_path_PERL
+
 if test -n "$PERL"; then
-  echo "configure:1172: result: $PERL" >&5
+  echo "configure:1174: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "configure:1175: result: no" >&5
+  echo "configure:1177: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1194,7 +1196,7 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "configure:1197: checking for a BSD compatible install" >&5
+echo "configure:1199: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -1243,7 +1245,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "configure:1246: result: $INSTALL" >&5
+echo "configure:1248: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1259,7 +1261,7 @@ if test -f $srcdir/standards.texi; then
   standards_texi=standards.texi
 fi
 
-ac_config_files="$ac_config_files acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile
+ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile
           tests/Makefile tests/atconfig"
 trap '' 1 2 15
 cat >confcache <<\EOF
@@ -1525,7 +1527,6 @@ Try \`$me --help' for more information."; exit 1 ;;
     ac_need_defaults=false;;
 
   # Handling of arguments.
-  'acversion.m4' ) CONFIG_FILES="$CONFIG_FILES acversion.m4" ;;
   'Makefile' ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   'm4/Makefile' ) CONFIG_FILES="$CONFIG_FILES m4/Makefile" ;;
   'man/Makefile' ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;

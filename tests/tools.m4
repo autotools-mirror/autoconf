@@ -160,7 +160,7 @@ AT_CLEANUP
 ## autoupdate.  ##
 ## ------------ ##
 
-# Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
+# Check that AC_CANONICAL_SYSTEM and AC_OUTPUT are properly updated.
 AT_SETUP(autoupdate)
 
 AT_DATA(configure.in,
@@ -185,6 +185,31 @@ AC_OUTPUT
 AT_CLEANUP
 
 
+AT_SETUP([autoupdating AC_LINK FILES])
+
+AT_DATA(configure.in,
+[[AC_INIT
+AC_LINK_FILES(dst1 dst2, src1 src2)
+AC_OUTPUT
+]])
+
+AT_DATA(dst1, dst1
+)
+AT_DATA(dst2, dst2
+)
+
+# Checking `autoupdate'.
+AT_CHECK([../autoupdate --autoconf-dir $top_srcdir], 0, [],
+         [autoupdate: `configure.in' is updated
+])
+AT_CHECK([../autoconf --autoconf-dir $top_srcdir], 0)
+AT_CHECK([./configure], 0, ignore)
+AT_CHECK([cat src1], 0, [dst1
+])
+AT_CHECK([cat src2], 0, [dst2
+])
+
+AT_CLEANUP
 
 
 ## ------------------ ##

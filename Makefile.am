@@ -54,9 +54,25 @@ $(distpkgdataDATA)
 CLEANFILES = autoconf.m4f \
              $(bin_SCRIPTS)
 
-## --------- ##
+
+## ------------------ ##
+## Maintainer rules.  ##
+## ------------------ ##
+
+## acversion.m4.  ##
+
+# - acversion.m4 needs to be updated only once, since it depends on
+#   configure.in, not on the results of a 'configure' run.
+# - It is guaranteed (with GNU Make) that when the version in configure.in
+#   is changed, acversion.m4 is built only after the new version number is
+#   propagated to the Makefile.  (Libtool uses the same guarantee.)
+
+acversion.m4: $(srcdir)/acversion.m4.in $(srcdir)/configure.in
+	sed -e 's,@''VERSION@,$(VERSION),' $(srcdir)/acversion.m4.in > acversion.tm4
+	cp acversion.tm4 $(srcdir)/acversion.m4
+	rm -f acversion.tm4
+
 ## INSTALL.  ##
-## --------- ##
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
@@ -64,6 +80,14 @@ CLEANFILES = autoconf.m4f \
 
 INSTALL.txt: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
+	if test '$(srcdir)' != '.'; then cp $@ $(srcdir); rm -f $@; fi
+
+MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
+
+
+## ----------------------------------- ##
+## Special installation instructions.  ##
+## ----------------------------------- ##
 
 install-data-hook: INSTALL.txt
 	@$(NORMAL_INSTALL)
@@ -74,7 +98,6 @@ install-data-hook: INSTALL.txt
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
 
-MAINTAINERCLEANFILES = INSTALL.txt
 
 ## ------------- ##
 ## The scripts.  ##
