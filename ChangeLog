@@ -1,3 +1,8 @@
+2003-12-24  Andreas Schwab  <schwab@suse.de>
+
+	* doc/autoconf.texi (Default Includes): Fix misspelling of
+	AC_INCLUDES_DEFAULT.
+
 2003-12-03  Paolo Bonzini  <bonzini@gnu.org>
 
 	* configure.ac: Test if sh -n works.

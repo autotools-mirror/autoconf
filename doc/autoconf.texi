@@ -3123,8 +3123,8 @@ include beforehand (@pxref{Header Files}).
 Most generic macros use the following macro to provide the default set
 of includes:
 
-@defmac AC_DEFAULT_INCLUDES (@ovar{include-directives})
-@acindex{DEFAULT_INCLUDES}
+@defmac AC_INCLUDES_DEFAULT (@ovar{include-directives})
+@acindex{INCLUDES_DEFAULT}
 Expand to @var{include-directives} if defined, otherwise to:
 
 @example
