@@ -1,4 +1,4 @@
-# Copyright (C) 2002 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -175,6 +175,9 @@ category of warning, for instance.
 The part of the message subject to duplicate filtering.  See the
 documentation for the C<UP_NONE>, C<UP_TEXT>, and C<UP_LOC_TEXT>
 constants above.
+
+C<uniq_part> can also be set to an arbitrary string that will be used
+instead of the message when considering duplicates.
 
 =item C<uniq_scope =E<gt> US_LOCAL>
 
@@ -425,21 +428,21 @@ sub _print_message ($$%)
     }
 
   # Check for duplicate message if requested.
-  if ($opts{'uniq_part'} != UP_NONE)
+  if ($opts{'uniq_part'} ne UP_NONE)
     {
       # Which part of the error should we match?
       my $to_filter;
-      if ($opts{'uniq_part'} == UP_TEXT)
+      if ($opts{'uniq_part'} eq UP_TEXT)
 	{
 	  $to_filter = $message;
 	}
-      elsif ($opts{'uniq_part'} == UP_LOC_TEXT)
+      elsif ($opts{'uniq_part'} eq UP_LOC_TEXT)
 	{
 	  $to_filter = $msg;
 	}
       else
 	{
-	  confess "unknown value for uniq_part: " . $opts{'uniq_part'};
+	  $to_filter = $opts{'uniq_part'};
 	}
 
       # Do we want local or global uniqueness?

@@ -8,7 +8,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # autoheader -- create `config.h.in' from `configure.ac'
 
 # Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001, 2002,
-# 2003, 2004 Free Software Foundation, Inc.
+# 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -280,7 +280,7 @@ $out->close;
     if keys %symbol;
 }
 
-update_file ("$tmp/config.hin", "$config_h_in");
+update_file ("$tmp/config.hin", "$config_h_in", $force);
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

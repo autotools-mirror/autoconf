@@ -1,4 +1,4 @@
-# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -228,10 +228,12 @@ sub lock
   # Admittedly this is a bit of a hack.
   if (!flock ($fh, $mode)
       && (!$!{ENOLCK}
-	  || " -$ENV{'MAKEFLAGS'}" =~ / (-[BdeikrRsSw]*j|---?jobs)/))
+	  || (exists $ENV{'MAKEFLAGS'}
+	      && " -$ENV{'MAKEFLAGS'}" =~ / (-[BdeikrRsSw]*j|---?jobs)/)))
     {
       my $file = $fh->name;
-      fatal "cannot lock $file with mode $mode (perhaps you are running make -j on a lame NFS client?): $!";
+      fatal ("cannot lock $file with mode $mode "
+	     . "(perhaps you are running make -j on a lame NFS client?): $!");
     }
 }
 

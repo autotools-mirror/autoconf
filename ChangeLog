@@ -1,3 +1,15 @@
+2005-01-27  Akim Demaille  <akim@epita.fr>
+
+	Have autoheader honor --force.
+
+	* doc/make-stds.texi, doc/standards.texi: Update from masters.
+	* lib/Autom4te/Channels.pm, lib/Autom4te/Configure_ac.pm
+	* lib/Autom4te/FileUtils.pm, lib/Autom4te/XFile.pm: Update
+	from masters, so that FileUtils.pm's update_file provide --force
+	support.
+	* bin/autoheader.in: Pass $force to update_file so that
+	config.h.in is always recreated when --force.
+
 2005-01-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Introduction): Update Peter Simons' address.
