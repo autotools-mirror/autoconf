@@ -1,5 +1,10 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_EVAL): New.
+	(AC_TRY_EVAL, AC_TRY_COMMAND): Use it.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_PREPROC_IFELSE, AC_PREPROC_IFELSE): New.
 	(AC_TRY_CPP): Use AC_PREPROC_IFELSE.
 	(AC_CHECK_MEMBER, AC_CHECK_DECL, _AC_CHECK_TYPE_NEW): Quote
