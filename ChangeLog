@@ -1,5 +1,13 @@
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (_AC_FUNC_VFORK): Include stdlib.h and
+	sys/wait.h.
+	sparc_address_test returns void.
+	Use it with an argument, as prototyped.
+	From Bruno Haible.
+
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Subdirectories): Cygnus dirs have
 	configure.in, not configure.ac.
 	Reported by Bruno Haible.

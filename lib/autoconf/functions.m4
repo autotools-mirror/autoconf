@@ -1750,8 +1750,10 @@ AC_DEFUN([_AC_FUNC_VFORK],
 [AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -1764,7 +1766,7 @@ AC_DEFUN([_AC_FUNC_VFORK],
    (e.g. gcc -O) don't grok <vfork.h>.  Test for this by using a
    static variable whose address is put into a register that is
    clobbered by the vfork.  */
-static
+static void
 #ifdef __cplusplus
 sparc_address_test (int arg)
 # else
@@ -1792,7 +1794,7 @@ main ()
   pid_t parent = getpid ();
   pid_t child;
 
-  sparc_address_test ();
+  sparc_address_test (0);
 
   child = vfork ();
 
