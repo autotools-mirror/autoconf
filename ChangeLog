@@ -1,5 +1,10 @@
 2002-04-25  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): sed and `!'.
+	Thanks to Paul Eggert.
+
+2002-04-25  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Let ac_subst_files
 	and ac_subst_vars be sh variables containing the list of
 	AC_SUBST_FILES'ed and AC_SUBST'ed identifiers.  Output them in the

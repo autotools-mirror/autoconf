@@ -9885,6 +9885,18 @@ matched''.  All descendants of Bell Lab's V7 @command{sed} (at least; we
 don't have first hand experience with older @command{sed}s) have
 supported it.
 
+@sc{posix} requires that you must not have any white space between
+@samp{!}  and the following command.  It is OK to have blanks between
+the address and the @samp{!}.  For instance, on Solaris 8:
+
+@example
+$ @kbd{echo "foo" | sed -n '/bar/ ! p'}
+@error{}Unrecognized command: /bar/ ! p
+$ @kbd{echo "foo" | sed -n '/bar/! p'}
+@error{}Unrecognized command: /bar/! p
+$ @kbd{echo "foo" | sed -n '/bar/ !p'}
+foo
+@end example
 
 @item @command{sed} (@samp{t})
 @c ---------------------------
