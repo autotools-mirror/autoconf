@@ -342,8 +342,7 @@ define(AC_INIT,
 [#!/bin/sh
 AC_NOTICE
 AC_PARSEARGS
-AC_PREPARE($1)
-AC_LANG_C])dnl
+AC_PREPARE($1)])dnl
 dnl
 define(AC_PREPARE,
 [trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
@@ -399,6 +398,7 @@ if test ! -r $srcdir/$ac_unique_file; then
     AC_ERROR(can not find sources in ${srcdir})
   fi
 fi
+AC_LANG_C
 ])dnl
 dnl
 define(AC_ENABLE,
