@@ -1,5 +1,9 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	Version 2.52d.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Fix the
 	previous patch.
 	* tests/atspecific.m4 (AT_CHECK_AUTOHEADER): Can create `config.hin~'.
@@ -46,7 +50,7 @@
 	debug scripts, in particular passing explicitly listed tests to
 	run is stupid.
 
-	
+
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (&parse_args): Strip `.' from `@include'.
@@ -115,7 +119,7 @@
 	* tests/atspecific.m4 (AT_CHECK_AUTOCONF): Adjust.
 	* tests/autoconf: Dittowise.
 
-	
+
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoconf.in: Don't bother with `acsite.m4' and `aclocal.m4'.
@@ -125,7 +129,7 @@
 	(&parse_args): Adjust.
 	* lib/autom4te.in (Autoconf): Add `acsite.m4?' and `aclocal.m4?'.
 
-	
+
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Also find tested executables in bin.
