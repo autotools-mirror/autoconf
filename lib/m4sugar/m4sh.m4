@@ -555,13 +555,17 @@ m4_define([_AS_ECHO],
 # display the checking message.  In addition, caching something used once
 # has little interest.
 # Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
-# failed there is also a new-line to match.
+# failed there is also a newline to match.
 m4_defun([_AS_ECHO_N_PREPARE],
-[case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
-  *c*,-n*) ECHO_N= ECHO_C='
-' ECHO_T='	' ;;
-  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
-  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+[ECHO_C= ECHO_N= ECHO_T=
+case `echo -n x` in
+-n*)
+  case `echo 'x\c'` in
+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *)   ECHO_C='\c';;
+  esac;;
+*)
+  ECHO_N='-n';;
 esac
 ])# _AS_ECHO_N_PREPARE
 
