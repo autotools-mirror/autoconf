@@ -1,3 +1,8 @@
+2000-02-28  Akim Demaille  <akim@epita.fr>
+
+	* tests/Makefile.am (testsuite): Use $(M4), not m4.
+	From Patrick Tullmann.
+
 2000-02-25  Akim Demaille  <akim@epita.fr>
 
 	* src/acgeneral.texi (AC_INIT_NOTICE): Include inttypes.h in the

@@ -34,7 +34,7 @@ check-local: atconfig testsuite
 	$(SHELL) testsuite
 
 testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
-	m4 -I $(srcdir) atspecific.m4 suite.m4 | \
+	$(M4) -I $(srcdir) atspecific.m4 suite.m4 | \
           sed -e 's/[ 	]*$$//' | \
 	  sed -e '/^$$/N;/\n$$/D' > $@-tmp
 	chmod +x $@-tmp

@@ -15,9 +15,10 @@ Bill Sommerfeld		sommerfeld@apollo.hp.com
 Bob Friesenhahn		bfriesen@simple.dallas.tx.us
 Bruno Haible		haible@ilog.fr
 Carl Edman		cedman@princeton.edu
-Chris Provenzano	proven@cygnus.com
 Chris P. Ross		cross@uu.net
+Chris Provenzano	proven@cygnus.com
 Christian Krone		krischan@sql.de
+Chris Torek		torek@bsdi.com
 Cort Dougan		cort@cs.nmt.edu
 Dave Adams		adams@hpesdwa.fc.hp.com
 Didier Desseaux		didess@infonie.fr
@@ -38,11 +39,10 @@ Gordon Matzigkeit	gord@trick.fig.org
 Graham Jenkins          c714553@vus415.telstra.com.au
 Guido Flohr		gufl0000@stud.uni-sb.de
 Guillermo Gomez		gomez@mi.uni-erlangen.de
-H.J. Lu			hjl@gnu.org
 Hans Olsson		Hans.Olsson@dna.lth.se
 Harlan Stenn		stenn@whimsy.udel.edu
+H.J. Lu			hjl@gnu.org
 Ian Lance Taylor	ian@cygnus.com
-J"orn Rennecke		amylaar@cygnus.co.uk
 James A. Lupo		lupoja@feynman.ml.wpafb.af.mil
 Jason Molenda		jsm@cygnus.com
 Jeff Garzik		jgarzik@pobox.com
@@ -52,6 +52,7 @@ Jim Meyering		meyering@ascend.com
 Jiro Takabatake		jiro@din.or.jp
 John Interrante		interran@uluru.stanford.edu
 John W. Eaton		jwe@bevo.che.wisc.edu
+J"orn Rennecke		amylaar@cygnus.co.uk
 Julian Onions		j.onions@nexor.co.uk
 Karl Berry		karl@cs.umb.edu
 Karl Heuer		kwzh@gnu.org
@@ -59,7 +60,6 @@ Kaveh R. Ghazi		ghazi@caip.rutgers.edu
 Ken Pizzini		ken@halcyon.com
 Ken Raeburn		raeburn@cygnus.com
 Koji Arai		JCA02266@nifty.ne.jp
-Chris Torek		torek@bsdi.com
 Kurt D. Zeilenga	kurt@openldap.org
 Larry Schwimmer		rosebud@cyclone.stanford.edu
 Lars Hecking		lhecking@nmrc.ucc.ie
@@ -74,10 +74,11 @@ Mike Hopkirk		hops@sco.com
 Mike Stump		mrs@wrs.com
 Miles Bader		miles@gnu.ai.mit.edu
 Nicolas Joly		njoly@pasteur.fr
-Noah Friedman		friedman@gnu.ai.mit.edu
 Noah Elliott		elliott@hera.llnl.gov
-Paul Gampe		paulg@apnic.net
+Noah Friedman		friedman@gnu.ai.mit.edu
+Patrick Tullmann	tullmann@cs.utah.edu
 Paul Eggert		eggert@twinsun.com
+Paul Gampe		paulg@apnic.net
 Pavel Roskin		pavel_roskin@geocities.com
 Philipp Thomas		kthomas@gwdg.de
 Rainer Orth		ro@TechFak.Uni-Bielefeld.DE
@@ -88,10 +89,10 @@ Roland McGrath		roland@gnu.org
 Ryuji Abe		raeva@t3.rim.or.jp
 Scott Bambrough		scottb@corelcomputer.com
 Scott Stanton		stanton@scriptics.com
-Steve Chamberlain	sac@cygnus.com
-Steve Robbins		steve@nyongwa.montreal.qc.ca
-Steven G. Johnson	stevenj@alum.mit.edu
 Stephen Gildea		gildea@alum.mit.edu
+Steve Chamberlain	sac@cygnus.com
+Steven G. Johnson	stevenj@alum.mit.edu
+Steve Robbins		steve@nyongwa.montreal.qc.ca
 Stu Grossman		grossman@cygnus.com
 Syd Polk		spolk@cygnus.com
 T.E. Dickey		dickey@clark.net
