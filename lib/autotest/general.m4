@@ -66,19 +66,37 @@
 # Defined below:
 #  - DEFAULTS
 #    Overall initialization, value of $at_groups_all.
-#  - OPTIONS
-#    Option processing
-#    Be ready to run the tests.
+#  - PARSE_ARGS
+#    Option processing.  After AT_INIT, user options can be entered here as
+#    cases of a case statement.
+#  - PARSE_ARGS_END
+#    Finish up the option processing.
+#  - HELP
+#    Start printing the help message.  User help can be appended to this as
+#    self-contained cat'd here-docs.
+#  - HELP_END
+#    Finish up the help texts.
+#  - PREPARE_TESTS
+#    Like DEFAULTS but run after argument processing for purposes of
+#    optimization.  Do anything else that needs to be done to prepare for
+#    tests.  Sets up verbose and log file descriptors.  Sets and logs PATH.
 #  - TESTS
 #    The core of the test suite, the ``normal'' diversion.
-#  - TAIL
+#  - TESTS_END
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
 
-m4_define([_m4_divert(DEFAULTS)],       5)
-m4_define([_m4_divert(OPTIONS)],      10)
-m4_define([_m4_divert(TESTS)],        50)
-m4_define([_m4_divert(TAIL)],         60)
+m4_define([_m4_divert(DEFAULTS)],           100)
+m4_define([_m4_divert(PARSE_ARGS)],         200)
+m4_define([_m4_divert(PARSE_ARGS_END)],     201)
+m4_define([_m4_divert(HELP)],               300)
+m4_define([_m4_divert(HELP_MODES)],         301)
+m4_define([_m4_divert(HELP_TUNING)],        302)
+m4_define([_m4_divert(HELP_OTHER)],         303)
+m4_define([_m4_divert(HELP_END)],           304)
+m4_define([_m4_divert(PREPARE_TESTS)],      400)
+m4_define([_m4_divert(TESTS)],              401)
+m4_define([_m4_divert(TESTS_END)],          402)
 
 
 # AT_LINE
@@ -174,9 +192,10 @@ at_stder1=$at_suite_dir/at-stder1
 at_stderr=$at_suite_dir/at-stderr
 # The file containing dates.
 at_times_file=$at_suite_dir/at-times
-
+m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
-[# List of the tested programs.
+[
+# List of the tested programs.
 at_tested='m4_ifdef([AT_tested], [AT_tested])'
 # List of the all the test groups.
 at_groups_all='AT_groups_all'
@@ -187,10 +206,24 @@ at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [.])'
 # Description of all the test groups.
 at_help_all=
 AT_help])])dnl
-m4_divert([OPTIONS])
+m4_divert_push([PARSE_ARGS])dnl
 
-while test $[@%:@] -gt 0; do
-  case $[1] in
+at_keywords=
+at_prev=
+for at_option
+do
+  # If the previous option needs an argument, assign it.
+  if test -n "$at_prev"; then
+    eval "$at_prev=\$at_option"
+    at_prev=
+    continue
+  fi
+
+  at_optarg=`expr "x$at_option" : 'x[[^=]]*=\(.*\)'`
+
+  # Accept the important Cygnus configure options, so we can diagnose typos.
+
+  case $at_option in
     --help | -h )
         at_help_p=:
         ;;
@@ -227,19 +260,19 @@ while test $[@%:@] -gt 0; do
         ;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
-        at_groups="$at_groups$[1] "
+        at_groups="$at_groups$at_option "
         ;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
-        at_range_start=`echo $[1] |tr -d '-'`
+        at_range_start=`echo $at_option |tr -d '-'`
         at_range=`echo " $at_groups_all " | \
           sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,'`
         at_groups="$at_groups$at_range "
         ;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
-        at_range_end=`echo $[1] |tr -d '-'`
+        at_range_end=`echo $at_option |tr -d '-'`
         at_range=`echo " $at_groups_all " | \
           sed -e 's, '$at_range_end' .*$, '$at_range_end','`
         at_groups="$at_groups$at_range "
@@ -251,8 +284,8 @@ while test $[@%:@] -gt 0; do
     [[0-9][0-9][0-9]-[0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] )
-        at_range_start=`echo $[1] |sed 's,-.*,,'`
-        at_range_end=`echo $[1] |sed 's,.*-,,'`
+        at_range_start=`echo $at_option |sed 's,-.*,,'`
+        at_range_end=`echo $at_option |sed 's,.*-,,'`
         # FIXME: Maybe test to make sure start <= end?
         at_range=`echo " $at_groups_all " | \
           sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \
@@ -262,43 +295,53 @@ while test $[@%:@] -gt 0; do
 
     # Keywords.
     --keywords | -k )
-        shift
-        at_groups_selected=$at_help_all
-        for at_keyword in `IFS=,; set X $[1]; shift; echo ${1+$[@]}`
-        do
-          # It is on purpose that we match the test group titles too.
-          at_groups_selected=`echo "$at_groups_selected" |
-			      grep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
-        done
-        at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
-	# Smash the end of lines.
-	at_groups_selected=`echo $at_groups_selected`
-        at_groups="$at_groups$at_groups_selected "
-        ;;
+	at_prev=at_keywords
+	;;
+    --keywords=* )
+	at_keywords=$at_optarg
+	;;
+m4_divert_pop([PARSE_ARGS])dnl
+dnl Process *=* last to allow for user specified --option=* type arguments.
+m4_divert_push([PARSE_ARGS_END])dnl
 
     *=*)
-  	at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
+  	at_envvar=`expr "x$at_option" : 'x\([[^=]]*\)='`
   	# Reject names that are not valid shell variable names.
   	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
   	  AS_ERROR([invalid variable name: $at_envvar])
-  	at_value=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
-  	at_value=`echo "$at_value" | sed "s/'/'\\\\\\\\''/g"`
+  	at_value=`echo "$at_optarg" | sed "s/'/'\\\\\\\\''/g"`
   	eval "$at_envvar='$at_value'"
   	export $at_envvar
 	# Propagate to debug scripts.
-  	at_debug_args="$at_debug_args $[1]"
+  	at_debug_args="$at_debug_args $at_option"
   	;;
 
-     *) echo "$as_me: invalid option: $[1]" >&2
+     *) echo "$as_me: invalid option: $at_option" >&2
         echo "Try \`$[0] --help' for more information." >&2
         exit 1
         ;;
   esac
-  shift
 done
+
+# Process the --keywords
+if test -n "$at_keywords"; then
+  at_groups_selected=$at_help_all
+  for at_keyword in `IFS=,; set X $at_keywords; shift; echo ${1+$[@]}`
+  do
+    # It is on purpose that we match the test group titles too.
+    at_groups_selected=`echo "$at_groups_selected" |
+			grep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
+  done
+  at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
+  # Smash the end of lines.
+  at_groups_selected=`echo $at_groups_selected`
+  at_groups="$at_groups$at_groups_selected "
+fi
 
 # Selected test groups.
 test -z "$at_groups" && at_groups=$at_groups_all
+m4_divert_pop([PARSE_ARGS_END])dnl
+m4_divert_push([HELP])dnl
 
 # Help message.
 if $at_help_p; then
@@ -318,12 +361,20 @@ directories relatively to the top level of this distribution.  E.g.,
 possibly amounts into
 
   PATH=/tmp/foo-1.0/bin:/src/foo-1.0/bin:\$PATH
+_ATEOF
+m4_divert_pop([HELP])dnl
+m4_divert_push([HELP_MODES])dnl
+cat <<_ATEOF
 
 Operation modes:
   -h, --help     print the help message, then exit
   -V, --version  print version number, then exit
   -c, --clean    remove all the files this test suite might create and exit
   -l, --list     describes all the tests, or the selected TESTS
+_ATEOF
+m4_divert_pop([HELP_MODES])dnl
+m4_divert_push([HELP_TUNING])dnl
+cat <<_ATEOF
 
 Execution tuning:
   -k, --keywords=KEYWORDS
@@ -335,6 +386,10 @@ Execution tuning:
   -d, --debug    inhibit clean up and debug script creation
                  default for debugging scripts
   -x, --trace    enable tests shell tracing
+_ATEOF
+m4_divert_pop([HELP_TUNING])dnl
+m4_divert_push([HELP_END])dnl
+cat <<_ATEOF
 
 Report bugs to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
@@ -359,6 +414,8 @@ _ATEOF
            if ($[4]) printf "      %s\n", $[4] } '
   exit 0
 fi
+m4_divert_pop([HELP_END])dnl
+m4_divert_push([PREPARE_TESTS])dnl
 
 # Don't take risks: use only absolute directories in PATH.
 #
@@ -489,7 +546,8 @@ at_pass_list=
 at_fail_list=
 at_skip_list=
 at_group_count=0
-m4_divert([TESTS])dnl
+m4_divert_pop([PREPARE_TESTS])dnl
+m4_divert_push([TESTS])dnl
 
 # Create the master directory if it doesn't already exist.
 test -d $at_suite_dir ||
@@ -543,7 +601,8 @@ do
   test $at_group_count != 0 && $at_verbose
   case $at_group in
 dnl Test groups inserted here (TESTS).
-m4_divert([TAIL])[]dnl
+m4_divert_pop([TESTS])[]dnl
+m4_divert_push([TESTS_END])[]dnl
 
   * )
     echo "$as_me: no such test group: $at_group" >&2
@@ -699,7 +758,7 @@ elif test $at_debug_p = false; then
 fi
 
 exit 0
-m4_divert_pop([TAIL])dnl
+m4_divert_pop([TESTS_END])dnl
 dnl End of AT_INIT: divert to KILL, only test groups are to be
 dnl output, the rest is ignored.  Current diversion is BODY, inherited
 dnl from M4sh.

@@ -1,3 +1,8 @@
+2003-03-27  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotest/general.m4: Define and use new diversions in preparation
+	for accepting new arguments and allowing scripting around tests.
+
 2003-03-26  Derek Price  <derek@ximbiot.com>
 
 	* lib/autoconf/general.m4 (AC_ARG_VAR): Use AS_HELP_STRING instead of
