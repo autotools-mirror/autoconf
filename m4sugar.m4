@@ -110,6 +110,7 @@ define([m4_warning],
 # Fatal the user.                                                      :)
 define([m4_fatal],
 [m4_errprint(m4_location[: error: $1])dnl
+m4_expansion_stack_dump()dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
 

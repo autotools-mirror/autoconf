@@ -2208,9 +2208,7 @@ define([AC_WARNING],
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
 # --------------------------------
 define([AC_FATAL],
-[m4_errprint(m4_location[: $1])
-_m4_expansion_stack_dump()
-m4exit(m4_default([$2], [1]))])
+[m4_fatal($@)])
 
 
 
