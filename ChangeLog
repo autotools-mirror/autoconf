@@ -1,5 +1,9 @@
 2002-02-07  Akim Demaille  <akim@epita.fr>
 
+	Version 2.52h.
+
+2002-02-07  Akim Demaille  <akim@epita.fr>
+
 	Fix Autoconf PR/209.
 	Also reported by Frank Denis.
 

@@ -78,3 +78,4 @@ alpha_url_dir = gnu/autoconf
 wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
 	     $(srcdir)/config/texinfo.tex \
 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
+cvs_files = $(srcdir)/config/missing
