@@ -126,6 +126,7 @@ sub parse_args ()
 ## -------------- ##
 
 mktmpdir ('ah');
+switch_warning 'obsolete';
 parse_args;
 
 # Preach.
@@ -146,14 +147,14 @@ if ($config_h_top || $config_h_bot || $acconfig_h)
     \`AC_DEFINE_UNQUOTED\' allows to define a template without
     \`acconfig.h\':
 
-      AC_DEFINE([NEED_MAIN], 1,
+      AC_DEFINE([NEED_FUNC_MAIN], 1,
 		[Define if a function \`main\' is needed.])
 
     More sophisticated templates can also be produced, see the
     documentation.
 END
     $msg =~ s/^    /WARNING: /gm;
-    print STDERR $msg;
+    msg 'obsolete', $msg;
   }
 
 # Set up autoconf.
@@ -265,10 +266,10 @@ $out->close;
     }
   foreach (sort keys %symbol)
     {
-      print STDERR "$me: missing template: $_\n";
+      msg 'syntax', "warning: missing template: $_";
       if ($suggest_ac_define)
 	{
-	  print STDERR "Use AC_DEFINE([$_], [], [Description])\n";
+	  msg 'syntax',  "Use AC_DEFINE([$_], [], [Description])";
 	  $suggest_ac_define = 0;
 	}
 

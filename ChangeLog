@@ -1,5 +1,12 @@
 2003-08-27  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoheader.in: Issue the "Using auxiliary..." message only
+	when -Wobsolete is set.
+	Set it on by default.
+	Suggested by Klee Dienes.
+
+2003-08-27  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (AC_FUNC_FSEEKO, AC_SYS_LARGEFILE): More
 	documentation.
 	From Guido Draheim.

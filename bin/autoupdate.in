@@ -172,9 +172,9 @@ my (%ac_macros, %au_macros);
 sub handle_autoconf_macros ()
 {
   my $macros = new Autom4te::XFile ("$autoconf"
-			     . " --trace AU_DEFUN:'AU:\$f:\$1'"
-			     . " --trace define:'AC:\$f:\$1'"
-			     . " --melt /dev/null |");
+				    . " --trace AU_DEFUN:'AU:\$f:\$1'"
+				    . " --trace define:'AC:\$f:\$1'"
+				    . " --melt /dev/null |");
   while ($_ = $macros->getline)
     {
       chomp;

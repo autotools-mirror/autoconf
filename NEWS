@@ -12,6 +12,11 @@
   This became a significant problem since aclocal and automake can
   run autoconf behind the scene.
 
+** autoheader warnings
+  The warnings of autoheader can be turned off, using --warning.
+  For instance, -Wno-obsolete disables the complaints about acconfig.h
+  and other deprecated constructs.
+
 * Major changes in Autoconf 2.57a
 
   Released 2003-06-20 by Akim Demaille.
