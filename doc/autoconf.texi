@@ -384,16 +384,15 @@ History of Autoconf
 @chapter Introduction
 
 @flushright
-A physicist, an engineer, and a computer scientist were
-discussing the nature of God.  Surely a Physicist, said the
-physicist, because early in the Creation, God made Light; and you
-know, Maxwell's equations, the dual nature of electro-magnetic
-waves, the relativist consequences@dots{} An Engineer!, said the
-engineer, because before making Light, God split the Chaos into
-Land and Water; it takes a hell of an engineer to handle that big
-amount of mud, and orderly separation of solids from
-liquids@dots{} The computer scientist shouted: And the Chaos,
-where do you think it was coming from, hmm?
+A physicist, an engineer, and a computer scientist were discussing the
+nature of God.  ``Surely a Physicist,'' said the physicist, ``because
+early in the Creation, God made Light; and you know, Maxwell's
+equations, the dual nature of electromagnetic waves, the relativistic
+consequences@dots{}'' ``An Engineer!,'' said the engineer, ``because
+before making Light, God split the Chaos into Land and Water; it takes a
+hell of an engineer to handle that big amount of mud, and orderly
+separation of solids from liquids@dots{}'' The computer scientist
+shouted: ``And the Chaos, where do you think it was coming from, hmm?''
 
 ---Anonymous
 @end flushright
@@ -747,9 +746,9 @@ AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
 @end example
 
 You are now able to understand one of the constructs of Autoconf that
-has been continually misunderstood...  The rule of thumb is that
+has been continually misunderstood@dots{}  The rule of thumb is that
 @emph{whenever you expect macro expansion, expect quote expansion};
-i.e., expect one level of quotes to be lost.  For instance
+i.e., expect one level of quotes to be lost.  For instance:
 
 @example
 AC_COMPILE_IFELSE([char b[10];],, [AC_MSG_ERROR([you lose])])
@@ -771,7 +770,7 @@ AC_COMPILE_IFELSE([[char b[10];]],, [AC_MSG_ERROR([you lose])])
 Voil@`a, you actually produce @samp{char b[10];} this time!
 
 The careful reader will notice that, according to these guidelines, the
-"properly" quoted @code{AC_CHECK_HEADER} example above is actually
+``properly'' quoted @code{AC_CHECK_HEADER} example above is actually
 lacking three pairs of quotes!  Nevertheless, for the sake of readability,
 double quotation of literals is used only where needed in this manual.
 
@@ -1426,7 +1425,7 @@ Invocation}, for more information.
 @c to split the macros in several files.  In this case, Autoconf must be
 @c told which files to load, and in which order.
 @c
-@c @defmac AC_INCLUDE (@var{file}...)
+@c @defmac AC_INCLUDE (@var{file}@dots{})
 @c @maindex INCLUDE
 @c @c FIXME: There is no longer shell globbing.
 @c Read the macro definitions that appear in the listed files.  A list of
@@ -1537,7 +1536,7 @@ have this prototype:
 @c Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
-AC_CONFIG_FOOS(@var{tag}..., [@var{commands}], [@var{init-cmds}])
+AC_CONFIG_FOOS(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
 @end example
 
 @noindent
@@ -1571,8 +1570,8 @@ You are encouraged to use literals as @var{tags}.  In particular, you
 should avoid
 
 @example
-... && my_foos="$my_foos fooo"
-... && my_foos="$my_foos foooo"
+@dots{} && my_foos="$my_foos fooo"
+@dots{} && my_foos="$my_foos foooo"
 AC_CONFIG_FOOS($my_foos)
 @end example
 
@@ -1580,8 +1579,8 @@ AC_CONFIG_FOOS($my_foos)
 and use this instead:
 
 @example
-... && AC_CONFIG_FOOS(fooo)
-... && AC_CONFIG_FOOS(foooo)
+@dots{} && AC_CONFIG_FOOS(fooo)
+@dots{} && AC_CONFIG_FOOS(foooo)
 @end example
 
 The macro @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
@@ -1762,8 +1761,8 @@ how to check the results of previous tests.
 @ovindex ECHO_C
 @ovindex ECHO_N
 @ovindex ECHO_T
-How to suppress the trailing newline from @code{echo} for
-question... answer reports:
+How does one suppress the trailing newline from @code{echo} for
+question-answer message pairs?  These variables provide a way:
 
 @example
 echo $ECHO_N "And the winner is... $ECHO_C"
@@ -1772,8 +1771,9 @@ echo "$@{ECHO_T@}dead."
 @end example
 
 @noindent
-Some old and uncommon @code{echo} offer no means to achieve this, in
-which case @code{ECHO_T} is set to tab.  You might not want to use it.
+Some old and uncommon @code{echo} implementations offer no means to
+achieve this, in which case @code{ECHO_T} is set to tab.  You might not
+want to use it.
 @end defvar
 
 @defvar FFLAGS
@@ -2203,24 +2203,19 @@ define yourself.
 You might wonder why @command{autoheader} is needed: after all, why
 would @command{configure} need to ``patch'' a @file{config.h.in} to
 produce a @file{config.h} instead of just creating @file{config.h} from
-scratch?
-
-Well, when everything rocks the answer is just that we are wasting our
-time maintaining @command{autoheader}: generating @file{config.h}
-directly is all that is needed.
-
-But when things go wrong, you'll thank the Autoconf team for
-@command{autoheader}...
+scratch?  Well, when everything rocks, the answer is just that we are
+wasting our time maintaining @command{autoheader}: generating
+@file{config.h} directly is all that is needed.  When things go wrong,
+however, you'll be thankful for the existence of @command{autoheader}.
 
 The fact that the symbols are documented is important in order to
-@emph{check} that @file{config.h} makes sense.
+@emph{check} that @file{config.h} makes sense.  The fact that there is a
+well defined list of symbols that should be @code{#define}'d (or not) is
+also important for people who are porting packages to environments where
+@command{configure} cannot be run: they just have to @emph{fill in the
+blanks}.
 
-The fact that there is a well defined list of symbols that should be
-@code{#define}'d (or not) is also important for people who are porting
-packages to environments where @command{configure} cannot be run: they
-just have to @emph{fill in the blanks}.
-
-But let's come back to the point: @command{autoheader}'s invocation...
+But let's come back to the point: @command{autoheader}'s invocation@dots{}
 
 If you give @command{autoheader} an argument, it uses that file instead
 of @file{configure.ac} and writes the header file to the standard output
@@ -5142,7 +5137,7 @@ The @sc{gnu} assumption that @command{/bin/sh} is the one and only shell
 leads to a permanent deadlock.  Vendors don't want to break user's
 existant shell scripts, and there are some corner cases in the Bourne
 shell that are not completely compatible with a @sc{posix} shell.  Thus,
-vendors who have taken this route will @emph{never} (OK... ``never say
+vendors who have taken this route will @emph{never} (OK@dots{}``never say
 never'') replace the Bourne shell (as @command{/bin/sh}) with a
 @sc{posix} shell.
 @end quotation
@@ -5199,9 +5194,9 @@ escape, while @samp{echo `cd /zorglub 2>/dev/null`} works properly.
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
-Most shells if not all (including Bash, Zsh, Ash) output traces on stderr
-including for sub shells.  This might result in undesired content if you
-meant to capture the standard error of the inner command:
+Most shells, if not all (including Bash, Zsh, Ash), output traces on
+stderr, even for sub-shells.  This might result in undesired content
+if you meant to capture the standard-error output of the inner command:
 
 @example
 $ ash -x -c '(eval "echo foo >&2") 2>stderr'
@@ -5223,10 +5218,10 @@ foo
 @end example
 
 @noindent
-You'll appreciate the various levels of details...
+You'll appreciate the various levels of detail@dots{}
 
-One way out consists in grepping out uninteresting lines, hoping not to
-remove good ones...
+One workaround is to grep out uninteresting lines, hoping not to remove
+good ones@dots{}
 
 @node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
 @subsection File System Conventions
@@ -5372,10 +5367,10 @@ esac
 @noindent
 and in fact it is even @emph{more} portable: in the first case of the
 first attempt, the computation of @code{top_srcdir} is not portable,
-since not all shells properly understand @samp{"`... "foo"... `"}.
-Worse yet, not all shells understand @samp{"`... \"foo\"... `"} the same
-way.  There is just no portable way to use double-quoted strings inside
-double-quoted backquoted expressions (pfew!).
+since not all shells properly understand @code{"`@dots{}"@dots{}"@dots{}`"}.
+Worse yet, not all shells understand @code{"`@dots{}\"@dots{}\"@dots{}`"}
+the same way.  There is just no portable way to use double-quoted
+strings inside double-quoted backquoted expressions (pfew!).
 
 @table @code
 @item $@@
@@ -5484,7 +5479,7 @@ list=$@{list="$default"@}
 @end example
 
 @noindent
-...but beware of the @samp{@}} bug from Solaris (see above).  For safety,
+@dots{}but beware of the @samp{@}} bug from Solaris (see above).  For safety,
 use:
 
 @example
@@ -6045,11 +6040,11 @@ esac
 @end example
 
 Alas, negated character classes are probably not portable, although no
-shell is known to not support the @sc{posix.2} syntax @samp{[!...]}
+shell is known to not support the @sc{posix.2} syntax @samp{[!@dots{}]}
 (when in interactive mode, @command{zsh} is confused by the
-@samp{[!...]} syntax and looks for an event in its history because of
+@samp{[!@dots{}]} syntax and looks for an event in its history because of
 @samp{!}).  Many shells do not support the alternative syntax
-@samp{[^...]} (Solaris, Digital Unix, etc.).
+@samp{[^@dots{}]} (Solaris, Digital Unix, etc.).
 
 One solution can be:
 
@@ -6263,7 +6258,7 @@ give @samp{/}?  Paul Eggert answers:
 
 @quotation
 No, under some older flavors of Unix, leading @samp{//} is a special
-path name: it refers to a "super-root" and is used to access other
+path name: it refers to a ``super-root'' and is used to access other
 machines' files.  Leading @samp{///}, @samp{////}, etc. are equivalent
 to @samp{/}; but leading @samp{//} is special.  I think this tradition
 started with Apollo Domain/OS, an OS that is still in use on some older
@@ -6414,7 +6409,7 @@ status of @code{grep} to determine whether it found a match.
 
 Don't use multiple regexps with @option{-e}, as some @code{grep} will only
 honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
-Stardent Vistra SVR4 @code{grep} lacks @option{-e}...  Instead, use
+Stardent Vistra SVR4 @code{grep} lacks @option{-e}@dots{}  Instead, use
 alternation and @code{egrep}.
 
 
@@ -6583,7 +6578,7 @@ on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
 
 Make itself suffers a great number of limitations, only a few of which
 being listed here.  First of all, remember that since commands are
-executed by the shell, all its weaknesses are inherited...
+executed by the shell, all its weaknesses are inherited@dots{}
 
 @table @asis
 @item @code{VPATH}
@@ -6674,7 +6669,7 @@ Select the language that is saved on the top of the stack, as set by
 
 If given, @var{language} specifies the language we just @emph{quit}.  It
 is a good idea to specify it when it's known (which should be the
-case...), since Autoconf will detect inconsistencies.
+case@dots{}), since Autoconf will detect inconsistencies.
 
 @example
 AC_LANG_PUSH(Fortran 77)
@@ -7055,12 +7050,12 @@ Flushes all cached values to the cache file.  Called automatically from
 For instance:
 
 @example
-@r{ ... AC_INIT, etc. ...}
+@r{ @dots{} AC_INIT, etc. @dots{}}
 @group
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_GCC_TRADITIONAL
-@r{ ... more program checks ...}
+@r{ @dots{} more program checks @dots{}}
 AC_CACHE_SAVE
 @end group
 
@@ -7068,7 +7063,7 @@ AC_CACHE_SAVE
 # Checks for libraries.
 AC_CHECK_LIB(nsl, gethostbyname)
 AC_CHECK_LIB(socket, connect)
-@r{ ... more lib checks ...}
+@r{ @dots{} more lib checks @dots{}}
 AC_CACHE_SAVE
 @end group
 
@@ -7077,7 +7072,7 @@ AC_CACHE_SAVE
 AM_PATH_GTK(1.0.2,, (exit 1); exit)
 AM_PATH_GTKMM(0.9.5,, (exit 1); exit)
 @end group
-@r{ ... AC_OUTPUT, etc. ...}
+@r{ @dots{} AC_OUTPUT, etc. @dots{}}
 @end example
 
 @node Printing Messages,  , Caching Results, Results
@@ -7305,7 +7300,7 @@ macro does.  For example, @code{AC_PATH_X} has internal macros
 
 @c FIXME: Grmph, yet another quoting myth: quotation has *never*
 @c prevented `expansion' of $1.  Unless it refers to the expansion
-@c of the value of $1?  Anyway, we need a rewrite here...
+@c of the value of $1?  Anyway, we need a rewrite here@dots{}
 
 The most common brokenness of existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
@@ -7444,7 +7439,7 @@ car([[]], [[]])
 @end example
 
 With this in mind, we can explore the cases where macros invoke
-macros...
+macros@dots{}
 
 
 @node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, Quoting
@@ -7809,10 +7804,10 @@ required macros from interrupting the messages in the requiring macros;
 
 @example
 @group
-if ...; then
+if @dots{}; then
   AC_REQUIRE([SOME_CHECK])
 fi
-...
+@dots{}
 SOME_CHECK
 @end group
 @end example
@@ -7914,7 +7909,7 @@ by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
 But since there is a macro named @code{AC_SUBST_FILE}, it was just
 impossible to @samp{AC_SUBST(FILE)}!  In this case,
 @code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
-have been used (yes, with the parentheses)...or better yet, high-level
+have been used (yes, with the parentheses)@dots{}or better yet, high-level
 macros such as @code{AC_EXPAND_ONCE}.
 
 No Autoconf macro should ever enter the user-variable name space; i.e.,
@@ -8037,7 +8032,7 @@ macro output.  For example, instead of:
 AC_DEFUN([AC_PATH_X],
 [AC_MSG_CHECKING([for X])
 AC_REQUIRE_CPP()
-@r{# ...omitted...}
+@r{# @dots{}omitted@dots{}}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi])
 @end example
@@ -8049,7 +8044,7 @@ you would write:
 AC_DEFUN([AC_PATH_X],
 [AC_REQUIRE_CPP()[]dnl
 AC_MSG_CHECKING([for X])
-@r{# ...omitted...}
+@r{# @dots{}omitted@dots{}}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi[]dnl
 ])# AC_PATH_X
@@ -8783,7 +8778,7 @@ package was last configured in case reconfiguring is needed.
 
 Synopsis:
 @example
-./config.status @var{option}... [@var{file}@dots{}]
+./config.status @var{option}@dots{} [@var{file}@dots{}]
 @end example
 
 It configures the @var{files}, if none are specified, all the templates
@@ -9184,7 +9179,7 @@ typedef loff_t off_t;
 
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
-Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}...]}.
+Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
