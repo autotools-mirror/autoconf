@@ -566,15 +566,14 @@ AC_DIVERT_POP()dnl
 # -------------------- #
 
 
-# _AC_PROG_CPP_WORKS
-# ------------------
+# _AC_PROG_PREPROC_WORKS
+# ----------------------
 # Check if $ac_cpp is a working preprocessor that can flag absent
 # includes either by the exit status or by warnings
 # Set ac_cpp_err to a non-empty value if the preprocessor failed
 # This macro is for all languages, not only C
-AC_DEFUN([_AC_PROG_CPP_WORKS],
-[AC_REQUIRE_CPP()dnl
-# Use a header file that comes with gcc, so configuring glibc
+AC_DEFUN([_AC_PROG_PREPROC_WORKS],
+[# Use a header file that comes with gcc, so configuring glibc
 # with a fresh cross-compiler works.
 # On the NeXT, cc -E runs the code through the compiler's parser,
 # not just through cpp. "Syntax error" is here to catch this case.
@@ -600,7 +599,7 @@ if test -z "$ac_cpp_err"; then
   fi
 fi
 rm -f conftest*
-])# _AC_PROG_CPP_WORKS
+])# _AC_PROG_PREPROC_WORKS
 
 
 # AC_PROG_CPP
@@ -621,7 +620,7 @@ if test -z "$CPP"; then
     do
       # CPP needs to be expanded
       eval "CPP=\"$ac_tmp_cpp\""
-      _AC_PROG_CPP_WORKS()
+      _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
         break
       fi
@@ -630,7 +629,7 @@ if test -z "$CPP"; then
   ])dnl
   CPP=$ac_cv_prog_CPP
 else
-  _AC_PROG_CPP_WORKS()
+  _AC_PROG_PREPROC_WORKS()
   ac_cv_prog_CPP=$CPP
 fi
 AC_MSG_RESULT($CPP)
@@ -839,7 +838,7 @@ if test -z "$CXXCPP"; then
     do
       # CXXCPP needs to be expanded
       eval "CXXCPP=\"$ac_tmp_cxxcpp\""
-      _AC_PROG_CPP_WORKS()
+      _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
         break
       fi
@@ -848,7 +847,7 @@ if test -z "$CXXCPP"; then
   ])dnl
   CXXCPP=$ac_cv_prog_CXXCPP
 else
-  _AC_PROG_CPP_WORKS()
+  _AC_PROG_PREPROC_WORKS()
   ac_cv_prog_CXXCPP=$CXXCPP
 fi
 AC_MSG_RESULT($CXXCPP)
