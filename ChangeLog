@@ -1,3 +1,10 @@
+2000-10-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/mktests.sh: New file, which replaces the code inlined in
+	Makefile.am.
+	* src/Makefile.am (macros.m4): Use `mktests.sh'.
+	* tests/suite.m4: Reorder from low level to high level.
+
 2000-10-02  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (_AC_LANG_ABBREV, _AC_LANG_ABBREV(C))

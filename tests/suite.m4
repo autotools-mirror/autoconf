@@ -14,10 +14,20 @@ Some tests might be ignored if you don't have the software which the
 macros are supposed to test (e.g., a Fortran compiler).
 EOF
 
-dnl Run the tests from the most selective to the easiest.
+# Run the tests from the lowest level to the highest level, and from
+# the most selective to the easiest.
 
-AT_INCLUDE(torture.m4)
-AT_INCLUDE(semantics.m4)
-AT_INCLUDE(syntax.m4)
-AT_INCLUDE(tools.m4)
+# libm4.
 AT_INCLUDE(base.m4)
+
+# The executables.
+AT_INCLUDE(tools.m4)
+
+# Checking that AC_CHECK_FOO macros work properly.
+AT_INCLUDE(semantics.m4)
+
+# Stressing config.status.
+AT_INCLUDE(torture.m4)
+
+# Checking all the AC_DEFUN'd macros.
+AT_INCLUDE(syntax.m4)

@@ -5,10 +5,10 @@ cat <<\EOF
 Torturing config.status.
 
 ## ---------------------------------------------------------------- ##
-## This section of tests is trying to make Autoconf produce failing ##
-## `configure' scripts, which must not happen.  If these tests ever ##
-## fail, it is extremely important that you report the failure to   ##
-## bug-autoconf@gnu.org.                                            ##
+## This section of torture tests is trying to make Autoconf produce ##
+## failing `configure' scripts, which must never happen.  If one of ##
+## these tests ever fails, it is extremely important that you       ##
+## report the failure to bug-autoconf@gnu.org.                      ##
 ## ---------------------------------------------------------------- ##
 
 EOF
