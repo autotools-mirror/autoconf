@@ -4281,6 +4281,22 @@ define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
 Amdahl UTS and Motorola System V/88.
 @end defmac
 
+@defmac AC_HEADER_STDBOOL
+@acindex HEADER_STDBOOL
+@cvindex HAVE_STDBOOL_H
+If @file{stdbool.h} exists and is conformant to C99, define
+@code{HAVE_STDBOOL_H} to 1.  Your @file{system.h} should contain the
+following code:
+
+@verbatim
+#if HAVE_STDBOOL_H
+# include <stdbool.h>
+#else
+typedef enum {false = 0, true = 1} bool;
+#endif
+@end verbatim
+@end defmac
+
 
 @defmac AC_HEADER_STDC
 @acindex HEADER_STDC

@@ -247,7 +247,9 @@ identifier: S_ISFIFO		AC_HEADER_STAT
 identifier: S_ISLNK		AC_HEADER_STAT
 identifier: S_ISREG		AC_HEADER_STAT
 identifier: S_ISSOCK		AC_HEADER_STAT
+identifier: bool		AC_HEADER_STDBOOL
 identifier: const		AC_C_CONST
+identifier: false		AC_HEADER_STDBOOL
 identifier: gid_t		AC_TYPE_UID_T
 identifier: inline		AC_C_INLINE
 identifier: mode_t		AC_TYPE_MODE_T
@@ -263,6 +265,7 @@ identifier: sys_siglist		AC_CHECK_DECLS([sys_siglist])
 identifier: timeval		AC_HEADER_TIME
 identifier: tm		AC_STRUCT_TM
 identifier: tm_zone		AC_STRUCT_TIMEZONE
+identifier: true		AC_HEADER_STDBOOL
 identifier: uid_t		AC_TYPE_UID_T
 identifier: volatile		AC_C_VOLATILE
 makevar: AWK		AC_PROG_AWK

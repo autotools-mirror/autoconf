@@ -1,3 +1,9 @@
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/headers.m4 (AC_HEADER_STDBOOL): New, based on CVS
+	Bison, by Paul Eggert.
+	* doc/autoconf.texi (Particular Headers): Document it.
+
 2002-10-22  Aaron M. Ucko  <amu@alum.mit.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Avoid duplicates in
