@@ -1,5 +1,11 @@
 2001-05-19  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Particular Programs): Explain the
+	`AC_PROG_LEX invoked multiple times' message.
+	Reported by Rainer Orth as PR Autoconf/177.
+
+2001-05-19  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.sh: Fix file names used in error messages.
 	Reported by Rainer Orth as PR Autoconf/178.
 

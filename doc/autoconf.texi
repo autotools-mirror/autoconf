@@ -157,9 +157,9 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 The GNU build system
 
-* Automake::                    
-* Libtool::                     
-* Pointers::                    
+* Automake::
+* Libtool::
+* Pointers::
 
 Making @code{configure} Scripts
 
@@ -543,7 +543,7 @@ the standard targets, the substitutions provided by Autoconf, automatic
 dependency tracking, @code{VPATH} building, and so on.  @code{make} will
 build the @code{hello} program, and @code{make install} will install it
 in @file{/usr/local/bin} (or whatever prefix was given to
-@code{configure}, if not @file{/usr/local}).  
+@code{configure}, if not @file{/usr/local}).
 
 Automake may require that additional tools be present on the
 @emph{developer's} machine.  For example, the @code{Makefile.in} that
@@ -2913,6 +2913,11 @@ fi
 
 The shell script @command{missing} can be found in the Automake
 distribution.
+
+To ensure backward compatibility, Automake's @code{AM_PROG_LEX} invokes
+(indirectly) this macro twice, which will cause an annoying but benign
+``@code{AC_PROG_LEX} invoked multiple times'' warning.  Future versions
+of Automake will fix this issue, meanwhile, just ignore this message.
 @end defmac
 
 @defmac AC_PROG_LN_S
