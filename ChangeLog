@@ -1,3 +1,8 @@
+2004-12-12  Kelley Cook  <kcook@gcc.gnu.org>
+
+	* bin/autoheader.in: Exit if no AC_CONFIG_HEADERS was found.
+	(trivial change)
+
 2004-12-12  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (Limitations of Usual Tools) <expr (:)>: Typo.
