@@ -1,3 +1,9 @@
+2003-09-30  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/Autom4te/XFile.pm: Use Errno.
+	(lock): Ignore ENOLCK errors.  Problem reported Andreas Schwab in
+	<http://mail.gnu.org/archive/html/bug-autoconf/2003-09/msg00141.html>.
+
 2003-09-30  Akim Demaille  <akim@epita.fr>
 
 	* config/announce-gen (&print_news_deltas): Extracted from...

@@ -87,6 +87,7 @@ require 5.000;
 use strict;
 use vars qw($VERSION @EXPORT @EXPORT_OK $AUTOLOAD @ISA);
 use Carp;
+use Errno;
 use IO::File;
 use File::Basename;
 use Autom4te::ChannelDefs;
@@ -216,7 +217,15 @@ sub lock
 {
   my ($fh, $mode) = @_;
   # Cannot use @_ here.
-  if (!flock ($fh, $mode))
+
+  # On some systems (e.g. GNU/Linux with NFSv2), flock(2) does not work over
+  # NFS, but Perl prefers that over fcntl(2) if it exists and if
+  # perl was not built with -Ud_flock.  Normally, this problem is harmless,
+  # so ignore the ENOLCK errors that are reported in that situation,
+  # However, if the invoker is using "make -j", the problem is not harmless,
+  # so report it in that case.  Admittedly this is a bit of a hack.
+  if (!flock ($fh, $mode)
+      && (!$!{ENOLCK} || " $ENV{'MAKEFLAGS'} " =~ / -j /))
     {
       my $file = $fh->name;
       fatal "cannot lock $file with mode $mode: $!";
