@@ -1,3 +1,10 @@
+2000-07-05  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_SHELL_TMPDIR): When using `mktemp -d', be sure
+	that the directory was created: under Ultrix 4.3 it just returns
+	a name, but does not create the directory.
+	Reported by Christian Krackowizer.
+
 2000-07-03  Lars J. Aas  <larsa@sim.no>
 
 	* acgeneral.m4 (AC_SHELL_MKDIR_P): New macro.
