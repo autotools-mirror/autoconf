@@ -42,6 +42,12 @@
 
 	* standards.texi: Update from FSF.
 
+1999-02-02  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* autoconf.texi: Corrected definitions for AC_CONFIG_AUX_DIR and
+	AC_PROG_F77. Duplicated descriptions for AC_SEARCH_LIBS and
+	AC_TRY_LINK_FUNC removed.
+
 1999-01-29  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_EXEEXT): Ignore C++ source files.

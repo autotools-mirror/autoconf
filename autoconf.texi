@@ -781,7 +781,7 @@ might need to tell @code{configure} where to find some other shell
 scripts by calling @code{AC_CONFIG_AUX_DIR}, though the default places
 it looks are correct for most cases.
 
-@defmac AC_CONFIG_AUX_DIR(@var{dir})
+@defmac AC_CONFIG_AUX_DIR (@var{dir})
 @maindex CONFIG_AUX_DIR
 Use the @file{install-sh}, @file{config.sub}, @file{config.guess}, and
 Cygnus @code{configure} scripts that are in directory @var{dir}.  These
@@ -1625,7 +1625,7 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
-@defmac  AC_PROG_F77
+@defmac AC_PROG_F77
 @maindex PROG_FORTRAN
 @ovindex F77
 @ovindex FFLAGS
@@ -1880,8 +1880,9 @@ Search for a library defining @var{function}, if it's not already
 available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
 with no libraries, then for each library listed in @var{search-libs}.
 
-If the function is found, run @var{action-if-found}, otherwise run
-@var{action-if-not-found}.
+Add @samp{-l@var{library}} to @code{LIBS} for the first library found
+to contain @var{function}, and run @var{action-if-found}.  If the
+function is not found, run @var{action-if-not-found}.
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
@@ -1889,15 +1890,6 @@ as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
 -lX11}.  Otherwise this macro will fail to detect that @var{function} is
 present, because linking the test program will always fail with
 unresolved symbols.
-@end defmac
-
-@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}@r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
-@maindex SEARCH_LIBS
-This macro is equivalent to calling @code{AC_TRY_LINK_FUNC} once for each
-library listed in @var{search-libs}.  Add @samp{-l@var{library}} to
-@code{LIBS} for the first library found to contain @var{function}, and
-execute @var{action-if-found}.  Otherwise execute
-@var{action-if-not-found}.
 @end defmac
 
 @node Library Functions, Header Files, Libraries, Existing Tests
@@ -3151,14 +3143,6 @@ a prototype of and a call to @var{function} can be compiled and linked.
 
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
-@end defmac
-
-@defmac AC_TRY_LINK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
-@maindex TRY_LINK_FUNC
-Attempt to compile and link a small program that links with
-@var{function}.  If the file compiles and links successfully,
-run shell commands @var{action-if-found}, otherwise run
-@var{action-if-not-found}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
