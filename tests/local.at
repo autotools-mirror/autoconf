@@ -34,12 +34,10 @@ AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
 # AT_CMP(FILE-1, FILE-2)
 # ----------------------
-# Check FILE-1 and FILE-2 for equality, like `cmp FILE-1 FILE-2'.  This macro
-# clobbers `expout'.
+# Check FILE-1 and FILE-2 for equality, like `cmp FILE-1 FILE-2'.
 m4_define([AT_CMP],
 [m4_ifval([$2],, [m4_fatal([AT_CMP takes two arguments.])])[]dnl
-cp -f "$1" expout
-AT_CHECK([cat "$2"], 0, [expout])
+AT_CHECK([$at_diff "$1" "$2"])
 ])# AT_CMP
 
 
@@ -330,7 +328,7 @@ do
     { $GREP -v \
 '^\(ac\|as\)_
 ^\(PPID\|RANDOM\|SECONDS\|'\'\\\$\''\)=
-^[[^=]]*=$'        $act_file 
+^[[^=]]*=$'        $act_file
       $GREP ^ac_cv $act_file ; } |
       # Lines that do not look like `foo=bar' are probably latter lines of
       # multiline values; trim them.
