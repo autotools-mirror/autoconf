@@ -2826,6 +2826,115 @@ add these Fortran 77 libraries.  Hence, the macro
 libraries.
 @end defmac
 
+@defmac AC_F77_NAME_MANGLING
+@maindex F77_NAME_MANGLING
+Test for the name mangling scheme used by the Fortran 77 compiler.  This
+macro is used by @code{AC_F77_FUNC_WRAPPER} (@pxref{Fortran 77 Compiler
+Characteristics}, for more information).
+
+Two variables are set by this macro:
+
+@table @code
+
+@item f77_case
+Set to either @samp{upper} or @samp{lower}, depending on whether the
+Fortran 77 compiler translates the case of identifiers to either
+uppercase or lowercase.
+
+@item f77_underscore
+Set to either @samp{no}, @samp{single} or @samp{double}, depending on
+how the Fortran 77 compiler appends underscores (i.e. @code{_}) to
+identifiers, if at all.
+
+If no underscores are appended, then the value is @samp{no}.
+
+If a single underscore is appended, even with identifiers which already
+contain an underscore somewhere in their name, then the value is
+@samp{single}.
+
+If a single underscore is appended @emph{and} two underscores are
+appended to identifiers which already contain an underscore somewhere in
+their name, then the value is @samp{double}.
+
+@end table
+@end defmac
+
+@defmac AC_F77_FUNC_WRAPPER
+@maindex F77_FUNC_WRAPPER
+@cvindex F77_FUNC
+@cvindex F77_FUNC_
+Defines C macros @code{F77_FUNC(name,NAME)} and
+@code{F77_FUNC_(name,NAME)} to properly mangle the names of C
+identifiers, and C identifiers with underscores, respectively, so that
+they match the name mangling scheme used by the Fortran 77 compiler.
+
+Fortran 77 is case-insensitive, and in order to achieve this the Fortran
+77 compiler converts all identifiers into a canonical case and format.
+To call a Fortran 77 subroutine from C or to write a C function that is
+callable from Fortran 77, the C program must explicitly use identifiers
+in the format expected by the Fortran 77 compiler.  In order to do this,
+one simply wraps all C identifiers in one of the macros provided by
+@code{AC_F77_FUNC_WRAPPER}.  For example, suppose you have the following
+Fortran 77 subroutine:
+
+@example
+      subroutine foobar(x,y)
+      double precision x, y
+      y = 3.14159 * x
+      return
+      end
+@end example
+
+You would then declare its prototype in C as:
+
+@example
+#ifdef F77_FUNC
+#  define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
+#endif
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void FOOBAR_F77(double *x, double *y);
+@end example
+
+Note that we pass both the lowercase and uppercase versions of the
+function name to @code{F77_FUNC} so that it can select the right one.
+Note also that all parameters to Fortran 77 routines are passed as
+pointers (@pxref{Mixing Fortran 77 With C and C++, , , automake, GNU
+Automake}).
+
+Although Autoconf tries to be intelligent about detecting the
+name-mangling scheme of the Fortran 77 compiler, there may be Fortran 77
+compilers that it doesn't support yet.  It is therefore recommended that
+you test whether the @code{F77_FUNC} and @code{F77_FUNC_} macros are
+defined, as we have done in the example above.
+
+Now, to call that routine from a C program, we would do something like:
+
+@example
+@{
+    double x = 2.7183, y;
+    FOOBAR_F77(&x, &y);
+@}
+@end example
+
+If the Fortran 77 identifier contains an underscore
+(e.g. @code{foo_bar}), you should use @code{F77_FUNC_} instead of
+@code{F77_FUNC} (with the same arguments).  This is because some Fortran
+77 compilers mangle names differently if they contain an underscore.
+The @code{AC_F77_FUNC_WRAPPER} macro uses the
+@code{AC_F77_NAME_MANGLING} macro to determine this automatically
+(@pxref{Fortran 77 Compiler Characteristics}, for more information).
+
+If you use @code{autoheader} to automatically generate your
+@code{config.h.in} (@pxref{Invoking autoheader}), then these macros will
+be included automatically.  However, if you are not using
+@code{autoheader} (i.e. you manually create @code{config.h.in}), then to
+make @code{autoconf} substitute these macros in your @code{config.h}
+file, you should include lines like @code{#undef F77_FUNC} and
+@code{#undef F77_FUNC_} in @code{config.h.in} (@pxref{Configuration
+Headers}).
+@end defmac
 
 @node System Services, UNIX Variants, Fortran 77 Compiler Characteristics, Existing Tests
 @section System Services
