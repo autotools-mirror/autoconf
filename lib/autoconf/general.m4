@@ -1286,7 +1286,7 @@ if test "$ac_init_help" = "recursive"; then
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
-    [[/\\]]* | ?:[[/\\]]* ) # Absolute path.
+    [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
@@ -2352,7 +2352,7 @@ set dummy $2; ac_word=[$]2
 AC_MSG_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_path_$1,
 [case "[$]$1" in
-  [[/\\]]* | ?:[[/\\]]*)
+  [[\\/]]* | ?:[[\\/]]*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
   ;;
   *)
@@ -3919,7 +3919,7 @@ dnl to be created too).
   .)  srcdir=.
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
-  [[/\\]]* | ?:[[/\\]]* )
+  [[\\/]]* | ?:[[\\/]]* )
       srcdir="$ac_given_srcdir$ac_dir_suffix";
       top_srcdir=$ac_given_srcdir ;;
   *) # Relative path.
@@ -3929,7 +3929,7 @@ dnl to be created too).
 
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
 [  case "$ac_given_INSTALL" in
-  [[/\\$]]* | ?:[[/\\]]* ) INSTALL="$ac_given_INSTALL" ;;
+  [[\\/$]]* | ?:[[\\/]]* ) INSTALL="$ac_given_INSTALL" ;;
   *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
 ])dnl
@@ -4257,7 +4257,7 @@ dnl to be created too).
   fi
 
   case "$srcdir" in
-  [[/\\$]]* | ?:[[/\\]]* ) ac_rel_source="$srcdir/$ac_source" ;;
+  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source="$srcdir/$ac_source" ;;
       *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
   esac
 
@@ -4377,7 +4377,7 @@ dnl to be created too).
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
-    [[/\\]]* | ?:[[/\\]]* ) # Absolute path.
+    [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
@@ -4398,13 +4398,13 @@ dnl to be created too).
 
       # Make the cache file name correct relative to the subdirectory.
       case "$cache_file" in
-      [[/\\]]* | ?:[[/\\]]* ) ac_sub_cache_file=$cache_file ;;
+      [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
         ac_sub_cache_file="$ac_dots$cache_file" ;;
       esac
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
 [      case "$ac_given_INSTALL" in
-        [[/\\$]]* | ?:[[/\\]]*) INSTALL="$ac_given_INSTALL" ;;
+        [[\\/$]]* | ?:[[\\/]]*) INSTALL="$ac_given_INSTALL" ;;
         *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
       esac
 ])dnl

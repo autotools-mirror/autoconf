@@ -1,3 +1,13 @@
+2000-03-28  Akim Demaille  <akim@epita.fr>
+
+	Probably all the versions of bash up to 2.04 fail on
+	  fnmatch ("/tmp", "[/\\\\]")
+	The backslash must not be last.
+
+	* acgeneral.m4 (_AC_INIT_HELP, AC_PATH_PROG, _AC_OUTPUT_FILES,
+	_AC_OUTPUT_LINKS, _AC_OUTPUT_SUBDIRS): Always make `\\' be the
+	first character in all the `[]' of `case' patterns.
+
 2000-03-27  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_CHECK_TOOL_PREFIX): Rename back as
