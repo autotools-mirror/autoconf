@@ -1,5 +1,10 @@
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
+	* config.guess: Updated for master repository.
+	* config.sub: Likewise.
+
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
 	Test suite: instead of using a full list of the AC macros and an
 	AT macro with selects which are the AC macros to test, just
 	produce the list of the AC macros we want to test.
