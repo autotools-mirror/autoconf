@@ -1,3 +1,9 @@
+2001-09-18  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <find>: More about
+	`{}'.
+	* lib/autotest/general.m4 (AT_INIT): Adjust.
+
 2001-09-18  Paul Wagland   <paul@wagland.net>
 
 	* tests/m4sh.at: Ensure that AS_DIRNAME handles '/', '//' and '///'

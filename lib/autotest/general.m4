@@ -378,20 +378,24 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
   if test -n "$top_srcdir"; then
     AS_BOX([ChangeLogs.])
     echo
-    find "$top_srcdir" -name ChangeLog \
-      -exec echo "$as_me: {}:" ';' \
-      -exec sed 's/^/| /;10q' {} ';' \
-      -exec echo ';'
+    for at_file in `find "$top_srcdir" -name ChangeLog -print`
+    do
+      echo "$as_me: $at_file:"
+      sed 's/^/| /;10q' $at_file
+      echo
+    done
 
     AS_UNAME
     echo
 
     AS_BOX([Configuration logs.])
     echo
-    find "$top_srcdir" -name config.log \
-      -exec echo "$as_me: {}:" ';' \
-      -exec sed 's/^/| /' {} ';' \
-      -exec echo ';'
+    for at_file in `find "$top_srcdir" -name config.log -print`
+    do
+      echo "$as_me: $at_file:"
+      sed 's/^/| /;10q' $at_file
+      echo
+    done
   fi
 
   # Inform about the contents of the config files.

@@ -8886,6 +8886,19 @@ set to @command{expr} or to @command{false} according to the result.
 The option @option{-maxdepth} seems to be GNU specific. Tru64 v5.1,
 NetBSD 1.5 and Solaris 2.5 @command{find} commands do not understand it.
 
+The replacement of @samp{@{@}} is guaranteed only if the argument is
+exactly @emph{@{@}}, not if it's only a part of an argument.  For
+instance on DU, and HP-UX 10.20 and HP-UX 11:
+
+@example
+$ touch foo
+$ find . -name foo -exec echo "@{@}-@{@}" \;
+@{@}-@{@}
+@end example
+
+@noindent
+while @sc{gnu} @command{find} reports @samp{./foo-./foo}.
+
 
 @item @command{grep}
 @c -----------------
