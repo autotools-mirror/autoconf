@@ -151,7 +151,9 @@ sub wanted
 # that might create nonportabilities.
 sub scan_files
 {
-  $initfile = $cfiles[0];		# Pick one at random.
+  if (defined $cfiles[0]) {
+    $initfile = $cfiles[0];		# Pick one at random.
+  }
 
   if ($verbose) {
     print "cfiles:", join(" ", @cfiles), "\n";
@@ -318,7 +320,10 @@ sub output
   local (%unique_makefiles);
 
   print CONF "# Process this file with autoconf to produce a configure script.\n";
-  print CONF "AC_INIT($initfile)\n";
+  print CONF "AC_INIT\n";
+  if (defined $initfile) {
+    print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
+  }
 
   &output_programs;
   &output_headers;
@@ -330,7 +335,9 @@ sub output
     s/\.in$//;
     $unique_makefiles{$_}++;
   }
-  print CONF "\nAC_OUTPUT([", join("\n           ", keys(%unique_makefiles)), "])\n";
+  print CONF "\nAC_CONFIG_FILES([",
+    join("\n           ", keys(%unique_makefiles)), "])\n";
+  print CONF "AC_OUTPUT\n";
 
   close CONF;
 }
