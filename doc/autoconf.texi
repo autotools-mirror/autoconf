@@ -9013,7 +9013,7 @@ Autoconf-generated scripts normally set all these variables to
 @sc{posix} requires that @env{LC_ALL} be set to @samp{C} if the C
 locale is desired.  However, some older, nonstandard systems (notably
 @sc{sco}) break if @env{LC_ALL} is set to @samp{C}, so when running on
-these systems Autoconf-generated scripts first try to unset the
+these systems Autoconf-generated scripts unset the
 variables instead.
 
 @item LANGUAGE
@@ -9120,7 +9120,34 @@ When executing the command @samp{>foo}, @command{zsh} executes
 sets @code{NULLCMD} to @samp{cat}.  If you forgot to set @code{NULLCMD},
 your script might be suspended waiting for data on its standard input.
 
+@item ENV
+@itemx MAIL
+@itemx MAILPATH
+@itemx PS1
+@itemx PS2
+@itemx PS4
+@evindex ENV
+@evindex MAIL
+@evindex MAILPATH
+@evindex PS1
+@evindex PS2
+@evindex PS4
+These variables should not matter for shell scripts, since they are
+supposed affect only interactive shells.  However, at least one shell
+(the pre-3.0 UWIN @command{ksh}) gets confused about whether it is
+interactive, which means that (for example) a @env{PS1} with a side
+effect can unexpectedly modify @samp{$?}.  To work around this bug,
+Autoconf-generated scripts do something like this:
+
+@example
+(unset ENV) >/dev/null 2>&1 && unset ENV MAIL MAILPATH
+PS1='$ '
+PS2='> '
+PS4='+ '
+@end example
+
 @item PWD
+@evindex PWD
 @acronym{POSIX} 1003.1-2001 requires that @command{cd} and
 @command{pwd} must update the @env{PWD} environment variable to point
 to the logical path to the current directory, but traditional shells
