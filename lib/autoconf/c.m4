@@ -460,13 +460,19 @@ m4_ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
 [AC_CHECK_TOOL(CC, gcc)
 if test -z "$CC"; then
-  AC_CHECK_TOOL(CC, cc)
+  dnl Here we want:
+  dnl	AC_CHECK_TOOL(CC, cc)
+  dnl but without the check for a tool without the prefix.
+  dnl Until the check is removed from there, copy the code:
+  if test -n "$ac_tool_prefix"; then
+    AC_CHECK_PROG(CC, [${ac_tool_prefix}cc], [${ac_tool_prefix}cc])
+  fi
 fi
 if test -z "$CC"; then
   AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
 fi
 if test -z "$CC"; then
-  AC_CHECK_TOOLS(CC, cl)
+  AC_CHECK_TOOLS(CC, cl.exe)
 fi
 ])
 
@@ -696,11 +702,17 @@ AC_ARG_VAR([CXX],      [C++ compiler command])dnl
 AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
-AC_CHECK_TOOLS(CXX,
-	       [$CCC m4_default([$1],
-			  [g++ c++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC])],
-	       g++)
-
+_AC_ARG_VAR_PRECIOUS([CCC])dnl
+if test -z "$CXX"; then
+  if test -n "$CCC"; then
+    CXX=$CCC
+  else
+    AC_CHECK_TOOLS(CXX,
+		   [m4_default([$1],
+			       [g++ c++ gpp aCC CC cxx cc++ cl.exe FCC KCC RCC xlC_r xlC])],
+		   g++)
+  fi
+fi
 # Provide some information about the compiler.
 echo "$as_me:$LINENO:" \
      "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD

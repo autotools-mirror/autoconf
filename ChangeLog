@@ -1,3 +1,12 @@
+2005-02-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/c.m4 (AC_PROG_CC): Be more careful to skip
+	  `/usr/ucb/cc'; use `cl.exe' to distinguish the MS compiler
+	  from a Common Lisp's `cl'.
+	(AC_PROG_CXX): Behave according to the documentation: don't
+	  search for $ac_tool_prefix$CCC and $CCC, just set CXX=$CCC;
+	  make the variable CCC precious; use `cl.exe', not `cl'.
+
 2005-02-23  Paul Eggert  <eggert@cs.ucla.edu>
 	    Alexandre Duret-Lutz  <adl@gnu.org>
 
