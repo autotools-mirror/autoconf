@@ -21,31 +21,35 @@ dnl
 include(acgeneral.m4)dnl
 builtin(include, acspecific.m4)dnl
 builtin(include, acoldnames.m4)dnl
-dnl
-dnl These are the alternate definitions of the acgeneral.m4 macros we want to
-dnl redefine.  They produce strings in the output marked with "@@@" so we can
-dnl easily extract the information we want.  The `#' at the end of the first
-dnl line of each definition seems to be necessary to prevent m4 from eating
-dnl the newline, which makes the @@@ not always be at the beginning of a line.
-dnl
+
+dnl These are alternate definitions of some macros, which produce
+dnl strings in the output marked with "@@@" so we can easily extract
+dnl the information we want.  The `#' at the end of the first line of
+dnl each definition seems to be necessary to prevent m4 from eating
+dnl the newline, which makes the @@@ not always be at the beginning of
+dnl a line.
+
 define([AC_DEFINE],[#
 @@@syms="$syms $1"@@@
-])dnl
+])
 define([AC_DEFINE_UNQUOTED],[#
 @@@syms="$syms $1"@@@
-])dnl
+])
 define([AC_SIZEOF_TYPE],[#
 @@@types="$types,$1"@@@
-])dnl
+])
 define([AC_CHECK_FUNCS],[#
 @@@funcs="$funcs $1"@@@
-])dnl
+])
 define([AC_CHECK_HEADERS],[#
 @@@headers="$headers $1"@@@
-])dnl
+])
+define([AC_CHECK_HEADERS_DIRENT],[#
+@@@headers="$headers $1"@@@
+])
 define([AC_CONFIG_HEADER],[#
 @@@config_h=$1@@@
-])dnl
+])
 define([AC_CHECK_LIB], [#
 changequote(/,/)dnl
 define(/libname/, dnl
@@ -59,5 +63,4 @@ $3
 # If it was not found, we do:
 $4
 ])
-])dnl
-dnl
+])

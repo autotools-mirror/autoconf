@@ -4,10 +4,8 @@ Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
-* Replace the current ad-hoc macros for Dynix, SCO, ISC, etc.
-Perhaps there should be macros for certain functions (statfs, wait) or
-classes of functions (POSIX, NIS) that do everything necessary, instead.
-Select the right C compiler and POSIX/ANSI C options automatically.
+* Add AC_PROG_CC_POSIX to replace the current ad-hoc macros for AIX,
+Minix, ISC, etc.
 
 ------------------------------------------------------------------------------
 
@@ -36,8 +34,7 @@ Select the right C compiler and POSIX/ANSI C options automatically.
 
 ------------------------------------------------------------------------------
 
-* Look at Jim Avera's code to allow [ and ] in egrep patterns and
-AC_DEFINE args.
+* Allow [ and ] in egrep patterns and AC_DEFINE args.
 
 ------------------------------------------------------------------------------
 

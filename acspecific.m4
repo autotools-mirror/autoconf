@@ -150,6 +150,33 @@ Autoconf TCGETA],
 fi
 ])
 
+define(AC_PROG_CC_ANSI,
+[AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
+AC_CACHE_VAL(ac_cv_prog_cc_ansi,
+[ac_cv_prog_cc_ansi=no
+ac_save_CFLAGS="$CFLAGS"
+# Don't try gcc -ansi; that turns off useful extensions and
+# breaks some systems' header files.
+# AIX			-qlanglvl=ansi
+# Ultrix and OSF/1	-std1
+# HP-UX			-Aa
+# SVR4			-Xc
+for ac_arg in "" -qlanglvl=ansi -std1 -Aa -Xc
+do
+  CFLAGS="$ac_save_CFLAGS $ac_arg"
+dnl Don't use CPP directly in case it doesn't take these options.
+  AC_TRY_LINK(,
+[#if !defined(__STDC__) || __STDC__ != 1
+notansi(); /* Produce a link error if not ANSI C.  */
+#endif	
+], [ac_cv_prog_cc_ansi=$ac_arg; break])
+done
+CFLAGS="$ac_save_CFLAGS"
+])
+AC_MSG_RESULT($ac_cv_prog_cc_ansi)
+test "$ac_cv_prog_cc_ansi" != no && CC="$CC $ac_cv_prog_cc_ansi"
+])
+
 AC_DEFUN(AC_PROG_CC_C_O,
 [if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
@@ -447,7 +474,7 @@ AC_DEFUN(AC_USG,
 [AC_OBSOLETE([$0],
   [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
-AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);], ,
+AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);],
   [AC_MSG_RESULT(yes); AC_DEFINE(USG)], [AC_MSG_RESULT(no)])])
 
 
@@ -484,6 +511,12 @@ AC_DEFUN(AC_HEADER_DIRENT,
 [ac_header_dirent=no
 AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
+# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix,
+# and -lx contains other useful things as well.  (FIXME what are they?)
+if test $ac_header_dirent = dirent.h; then
+AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+fi
+AC_CHECK_LIB(x, main, LIBS="$LIBS -lx")
 ])
 
 dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
@@ -517,20 +550,6 @@ AC_CHECK_HEADER_DIRENT(${ac_hdr},
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
 done])
-
-AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
-[AC_REQUIRE([AC_HEADER_DIRENT])dnl
-AC_MSG_CHECKING(whether closedir returns void)
-AC_CACHE_VAL(ac_cv_func_closedir_void,
-[AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_header_dirent>
-int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
-AC_MSG_RESULT($ac_cv_func_closedir_void)
-if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(CLOSEDIR_VOID)
-fi
-])
 
 dnl Obsolete.
 AC_DEFUN(AC_DIR_HEADER,
@@ -688,6 +707,20 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
 
 dnl ### Checks for functions
 
+
+AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
+[AC_REQUIRE([AC_HEADER_DIRENT])dnl
+AC_MSG_CHECKING(whether closedir returns void)
+AC_CACHE_VAL(ac_cv_func_closedir_void,
+[AC_TRY_RUN([#include <sys/types.h>
+#include <$ac_header_dirent>
+int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
+  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
+AC_MSG_RESULT($ac_cv_func_closedir_void)
+if test $ac_cv_func_closedir_void = yes; then
+  AC_DEFINE(CLOSEDIR_VOID)
+fi
+])
 
 AC_DEFUN(AC_FUNC_MMAP,
 [AC_MSG_CHECKING(for working mmap)
@@ -1174,6 +1207,17 @@ if test $ac_cv_func_setvbuf_reversed = yes; then
 fi
 ])
 
+AC_DEFUN(AC_FUNC_GETMNTENT,
+[# getmntent is in -lsun on Irix 4, -lseq on PTX.
+AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
+AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
+AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
+
+AC_DEFUN(AC_FUNC_STRFTIME,
+[# strftime is in -lintl on SCO UNIX.
+AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
+AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)])])
+
 
 dnl ### Checks for structure members
 
@@ -1323,7 +1367,7 @@ fi
 ])
 
 AC_DEFUN(AC_INT_16_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])
+[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])dnl
 AC_MSG_CHECKING(whether int is 16 bits)
 AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
  [AC_MSG_RESULT(yes)
@@ -1331,7 +1375,7 @@ AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
 ])
 
 AC_DEFUN(AC_LONG_64_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])
+[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])dnl
 AC_MSG_CHECKING(whether long int is 64 bits)
 AC_TRY_RUN([main() { exit(sizeof(long int) != 8); }],
  [AC_MSG_RESULT(yes)
@@ -1740,7 +1784,7 @@ else
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.
-    # Not sure which flavor of 386 Unix this is, but it seems harmless to
+    # Not sure which flavor of 386 UNIX this is, but it seems harmless to
     # check for it.
     AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
 
@@ -1777,7 +1821,6 @@ AC_DEFUN(AC_OS_MINIX,
 [AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
-# The Minix shell can not assign to the same variable on the same line!
 if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE)
   AC_DEFINE(_POSIX_1_SOURCE, 2)
@@ -1806,8 +1849,9 @@ else
 fi
 ])
 
-AC_DEFUN(AC_OS_XENIX,
-[AC_REQUIRE([AC_DIR_HEADER])dnl
+AC_DEFUN(AC_XENIX_DIR,
+[AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
+AC_REQUIRE([AC_DIR_HEADER])dnl
 AC_MSG_CHECKING(for Xenix)
 AC_EGREP_CPP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
@@ -1815,21 +1859,23 @@ AC_EGREP_CPP(yes,
 #endif
 ], [AC_MSG_RESULT(yes); XENIX=yes], [AC_MSG_RESULT(no); XENIX=])
 if test "$XENIX" = yes; then
+  # Make sure -ldir precedes -lx.
+  test $ac_header_dirent = dirent.h && LIBS="$LIBS -ldir"
   LIBS="$LIBS -lx"
-  if test $ac_header_dirent != sys/ndir.h; then
-    LIBS="-ldir $LIBS" # Make sure -ldir precedes -lx.
-  fi
 fi
 ])
 
-AC_DEFUN(AC_OS_SCO,
-[AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
+AC_DEFUN(AC_DYNIX_SEQ,
+[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl
+AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
 ])
 
-AC_DEFUN(AC_OS_IRIX,
-[AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
+AC_DEFUN(AC_IRIX_SUN,
+[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl
+AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
 ])
 
-AC_DEFUN(AC_OS_DYNIX,
-[AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
+AC_DEFUN(AC_SCO_INTL,
+[AC_OBSOLETE([$0], [; instead use AC_FUNC_STRFTIME])dnl
+AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
 ])

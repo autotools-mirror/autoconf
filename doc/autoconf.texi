@@ -185,7 +185,7 @@ Writing Tests
 * Testing Values and Files::    Checking strings and files.
 * Multiple Cases::		Tests for several possible values.
 * Defining Symbols::            Defining C preprocessor symbols.
-* Setting Variables::		Setting shell and output variables.
+* Setting Variables::		Setting variables in output files.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 
@@ -266,7 +266,7 @@ Engineer!, said the engineer, because before making Light, God
 split the Chaos into Land and Water; it takes a hell of an
 engineer to handle that big amount of mud, and orderly separation
 of solids from liquids@dots{} The computer scientist shouted: And
-the Chaos, where do you think it was it coming from, hmm?
+the Chaos, where do you think it was coming from, hmm?
 
 ---Anonymous
 @end display
@@ -832,7 +832,7 @@ script found by @code{AC_CONFIG_AUXDIR} is used.  The subdirectory
 @code{configure} scripts are given the same command line options that
 were given to this @code{configure} script, with minor changes if needed
 (e.g., to adjust a relative path for the cache file or source
-directory).  This macro also sets the shell and output variable
+directory).  This macro also sets the output variable
 @code{subdirs} to the list of directories @samp{@var{dir} @dots{}}.
 @file{Makefile} rules can use this variable to determine which
 subdirectories to recurse into.
@@ -958,8 +958,22 @@ support providing a help string.
 @node Transforming Names, Versions, Package Options, Operation
 @section Transforming Program Names When Installing
 
-Autoconf supports giving @code{configure} the following command line
-options to change the names of programs being installed:
+Autoconf supports giving @code{configure} command line options to change
+the names of programs being installed.  These transformations are useful
+with programs that can be part of a cross-compilation development
+environment.  For example, a cross-assembler running on a Sun 4
+configured with @samp{--target=i960-vxworks} is normally installed as
+@file{i960-vxworks-as}, rather than @file{as}, which could be confused
+with a native Sun 4 assembler.
+
+You can also force a program name to begin with @file{g}, if you don't
+want GNU programs installed on your system to shadow system programs by
+the same name.  For example, if GNU @code{make} used this mechanism, you
+could configure it with @samp{--program-prefix=g} and when you ran
+@samp{make install}, it would be installed as
+@file{/usr/local/bin/gmake}.
+
+The @code{configure} options are:
 
 @table @code
 @item --program-prefix=@var{prefix}
@@ -969,23 +983,27 @@ prepend @var{prefix} to the names;
 append @var{suffix} to the names;
 
 @item --program-transform-name=@var{expression}
-perform @code{sed} substitution @var{expression} on the names.  The main
-use for this option is to prevent the automatic addition of a target
-name prefix to program names (see below) by giving an empty
-@var{expression}.  As another possibility,
-@samp{--program-transform-name='s,^\(........\).*,\1.exe,'} could be used to
-truncate installed program names to 8 characters and append @file{.exe}.
+perform @code{sed} substitution @var{expression} on the names.  For
+example, you could use
+@example
+--program-transform-name='s/^/g/; s/^gg/g/; s/^gless/less/'
+@end example
+@noindent
+to prepend a @samp{g} to most of the program names in a source tree,
+excepting those like @code{gdb} that already have one and those like
+@code{less} and @code{lesskey} that aren't GNU programs.  (That is
+assuming that you have a source tree containing those programs that is
+set up to use this option.)
 @end table
 
-In order to use the values given to those options, @file{configure.in}
+In order to use the values given to these options, @file{configure.in}
 must call the macro @code{AC_ARG_PROGRAM}.
 
 @defmac AC_ARG_PROGRAM
 @maindex ARG_PROGRAM
 @ovindex program_transform_name
-Place in output variable @code{program_transform_name} a
-sequence of @code{sed} commands for changing the names of installed
-programs.
+Place in output variable @code{program_transform_name} a sequence of
+@code{sed} commands for changing the names of installed programs.
 
 If any of the above options are given to @code{configure}, program names
 are transformed accordingly.  Otherwise, if @code{AC_CANONICAL_SYSTEM}
@@ -993,36 +1011,27 @@ has been called and a @samp{--target} value is given that differs from
 the host type (specified with @samp{--host} or defaulted by
 @code{config.sub}), the target type followed by a dash is used as a
 prefix.  Otherwise, no program name transformation is done.
-
-These transformations are useful with programs that can be part of a
-cross-compilation development environment.  For example, a
-cross-assembler running on a Sun 4 configured with
-@samp{--target=i960-vxworks} is normally installed as
-@file{i960-vxworks-as}, rather than @file{as}, which could be confused
-with a native Sun 4 assembler.
-
-They can also force a program name to begin with @file{g}, if you don't
-want GNU programs installed on your system to shadow system programs by
-the same name.  For example, if GNU @code{make} used this macro, you
-could configure it with @samp{--program-prefix=g} and when you ran
-@samp{make install}, it would be installed as
-@file{/usr/local/bin/gmake}.
-
-Use the variable @code{program_transform_name} as in this example for
-an assembler, compiled as @file{as.new}.  The shell variable @code{t}
-is needed in case @code{program_transform_name} contains any shell
-special characters.  With quoting and variable substitutions, whitespace
-still properly separates @code{sed} arguments, but other special
-characters have no effect.
-
-@example
-program_transform_name=@@program_transform_name@@
-install: all
-        name=`t='$(program_transform_name)'; echo as | sed $$t` ; \
-        $(INSTALL_PROGRAM) as.new $(bindir)/$$name
-@end example
 @end defmac
 
+Here is how to use the variable @code{program_transform_name} in a
+@file{Makefile.in}:
+
+@example
+tn=@@program_transform_name@@
+install: all
+        $(INSTALL_PROGRAM) myprog $(bindir)/`echo myprog|sed '$(tn)'`
+@end example
+
+@noindent
+If you have more than one program to install, you can do it in a loop:
+
+@example
+PROGRAMS=cat ls rm
+install:
+        for p in $(PROGRAMS); do \
+          $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(tn)'`; \
+        done
+@end example
 
 @node Versions, , Transforming Names, Operation
 @section Controlling Autoconf Versions
@@ -1094,11 +1103,6 @@ mean either add @samp{-D@var{name}=1} to the output variable
 @code{DEFS}, or put @samp{#define @var{name} 1} in the configuration
 header file, depending on whether @code{AC_CONFIG_HEADER} has been
 called.  @xref{Output}, for more information on @code{AC_CONFIG_HEADER}.
-
-Within each section below, the macros are listed in alphabetical order.
-The macros are generally named for the output variables or C
-preprocessor macros that they define; those names are based largely on
-what existing GNU programs use.
 
 @menu
 * Alternative Programs::	Selecting between alternative programs.
@@ -1178,10 +1182,19 @@ If the C compiler does not accept the @samp{-c} and @samp{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 @end defmac
 
+@defmac AC_PROG_CC_ANSI
+@maindex PROG_CC_ANSI
+@ovindex CC
+If the C compiler in not in ANSI C mode by default (it does not define
+@code{__STDC__} to be 1), try to add an option to output variable
+@code{CC} to make it so.  This macro tries various options that select
+ANSI C on some system or another.
+@end defmac
+
 @defmac AC_PROG_CPP
 @maindex PROG_CPP
 @ovindex CPP
-Set shell and output variable @code{CPP} to a command that runs the
+Set output variable @code{CPP} to a command that runs the
 C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
 It is only portable to run @code{CPP} on files with a @file{.c}
 extension.
@@ -1215,7 +1228,7 @@ for other compilers.
 @defmac AC_PROG_CXXCPP
 @maindex PROG_CXXCPP
 @ovindex CXXCPP
-Set shell and output variable @code{CXXCPP} to a command that runs the
+Set output variable @code{CXXCPP} to a command that runs the
 C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
 It is only portable to run @code{CXXCPP} on files with a @file{.c},
 @file{.C}, or @file{.cc} extension.
@@ -1277,7 +1290,7 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 @maindex PROG_LN_S
 @ovindex LN_S
 If @samp{ln -s} works on the current filesystem (the operating system
-and filesystem support symbolic links), set shell and output
+and filesystem support symbolic links), set output
 variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
 @end defmac
 
@@ -1445,16 +1458,14 @@ but defines a different set of C preprocessor macros to indicate which
 header file is found.  This macro and the names it defines are
 considered obsolete.  The names it defines are:
 
+@c The printed table looks too spaced out with blank lines between the entries.
 @table @file
 @item dirent.h
 @code{DIRENT}
-
 @item sys/ndir.h
 @code{SYSNDIR}
-
 @item sys/dir.h
 @code{SYSDIR}
-
 @item ndir.h
 @code{NDIR}
 @end table
@@ -1472,44 +1483,36 @@ define @code{VOID_CLOSEDIR}.
 Check for the following header files, and for the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
+@c The printed table looks too spaced out with blank lines between the entries.
 @table @file
 @item dirent.h
 @code{HAVE_DIRENT_H}
-
 @item sys/ndir.h
 @code{HAVE_SYS_NDIR_H}
-
 @item sys/dir.h
 @code{HAVE_SYS_DIR_H}
-
 @item ndir.h
 @code{HAVE_NDIR_H}
 @end table
 
 The directory library declarations in the source code should look
-something like the following, which assumes that you have also called
-@samp{AC_CHECK_HEADERS(unistd.h)}:
+something like the following:
 
 @example
 @group
-#ifdef HAVE_UNISTD_H
-# include <sys/types.h>
-# include <unistd.h>
-#endif
-
-#ifdef HAVE_DIRENT_H
+#if HAVE_DIRENT_H
 # include <dirent.h>
 # define NAMLEN(dirent) (strlen((dirent)->d_name))
 #else
 # define dirent direct
 # define NAMLEN(dirent) ((dirent)->d_namlen)
-# ifdef HAVE_SYS_NDIR_H
+# if HAVE_SYS_NDIR_H
 #  include <sys/ndir.h>
 # endif
-# ifdef HAVE_SYS_DIR_H
+# if HAVE_SYS_DIR_H
 #  include <sys/dir.h>
 # endif
-# ifdef HAVE_NDIR_H
+# if HAVE_NDIR_H
 #  include <ndir.h>
 # endif
 #endif
@@ -1520,6 +1523,8 @@ Using the above declarations, the program would declare variables to be
 type @code{struct dirent}, not @code{struct direct}, and would access
 the length of a directory entry name by passing a pointer to a
 @code{struct dirent} to the @code{NAMLEN} macro.
+
+This macro also checks for the SCO Xenix @file{dir} and @file{x} libraries.
 @end defmac
 
 @defmac AC_HEADER_MAJOR
@@ -1908,11 +1913,19 @@ programs need to be installed specially on this system for
 @code{GETLOADAVG_PRIVILEGED}.
 
 @item
-This macro always defines @code{NEED_SETGID}, for @code{make}.  The
-value is @samp{true} if special installation is required, @samp{false}
-if not.  If @code{NEED_SETGID} is @samp{true}, it sets @code{KMEM_GROUP}
+This macro sets the output variable @code{NEED_SETGID}.  The value is
+@samp{true} if special installation is required, @samp{false} if not.
+If @code{NEED_SETGID} is @samp{true}, this macro sets @code{KMEM_GROUP}
 to the name of the group that should own the installed program.
 @end enumerate
+@end defmac
+
+@defmac AC_FUNC_GETMNTENT
+@maindex FUNC_GETMNTENT
+@cvindex HAVE_GETMNTENT
+Check for the @code{getmntent} in the @file{sun} and @file{seq}
+libraries, for Irix 4 and PTX, respectively.  Then, if @code{getmntent} is
+available, define @code{HAVE_GETMNTENT}.
 @end defmac
 
 @defmac AC_FUNC_MMAP
@@ -1937,6 +1950,13 @@ If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
 @samp{AC_CHECK_FUNCS(strcoll)}, because some systems have incorrect
 definitions of @code{strcoll}, which should not be used.
+@end defmac
+
+@defmac AC_FUNC_STRFTIME
+@maindex FUNC_STRFTIME
+@cvindex HAVE_STRFTIME
+Check for @code{strftime} in the @file{intl} library, for SCO UNIX.
+Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 @end defmac
 
 @defmac AC_FUNC_UTIME_NULL
@@ -2046,11 +2066,11 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 @code{HAVE_SYS_TIME_H}.
 
 @example
-#ifdef TIME_WITH_SYS_TIME
+#if TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
 #else
-# ifdef HAVE_SYS_TIME_H
+# if HAVE_SYS_TIME_H
 #  include <sys/time.h>
 # else
 #  include <time.h>
@@ -2134,17 +2154,6 @@ that don't, the @file{Makefile} or configuration header file will define
 it as empty.  (If using a configuration header file, the program should
 include it before any other header files, to prevent inconsistencies in
 declarations.)
-@end defmac
-
-@defmac AC_C_CROSS
-@maindex C_CROSS
-If the C compiler being used does not produce executables that can run
-on the system where @code{configure} is being run, set the shell
-variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
-This information can be used by @code{AC_TRY_RUN} to determine whether
-to take a default action instead of trying to run a test program
-For more information on dealing with test programs and
-cross-compiling, @xref{Test Programs}.
 @end defmac
 
 @defmac AC_C_INLINE
@@ -2254,28 +2263,32 @@ their header files or libraries.  These macros are warts; they should
 be replaced by a more systematic approach, based either on the
 functions they make available or the environments they provide.
 
+@defmac AC_DYNIX_SEQ
+@maindex OS_DYNIX_SEQ
+If on PTX (Sequent UNIX), add @samp{-lseq} to output
+variable @code{LIBS}.  This macro is obsolete; instead, use
+@code{AC_FUNC_GETMNTENT}.
+@end defmac
+
+@defmac AC_IRIX_SUN
+@maindex IRIX_SUN
+If on IRIX (Silicon Graphics UNIX), add @samp{-lsun} to output variable
+@code{LIBS}.  This macro is obsolete; instead, use
+@code{AC_FUNC_GETMNTENT}.
+@end defmac
+
+@defmac AC_SCO_INTL
+@maindex SCO_INTL
+@ovindex LIBS
+If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.
+This macro is obsolete; instead, use @code{AC_FUNC_STRFTIME}.
+@end defmac
+
 @defmac AC_OS_AIX
 @maindex OS_AIX
 @cvindex _ALL_SOURCE
 If on AIX, define @code{_ALL_SOURCE}.  Allows the use of some BSD
 functions.  Should be called before any macros that run the C compiler.
-@end defmac
-
-@defmac AC_OS_DYNIX
-@maindex OS_DYNIX
-If on DYNIX/ptx (Sequent UNIX), add @samp{-lseq} to output
-variable @code{LIBS}.  Allows use of some BSD system calls and
-@code{getmntent}.
-@end defmac
-
-@defmac AC_OS_IRIX
-@maindex OS_IRIX
-If on IRIX (Silicon Graphics UNIX), add @samp{-lsun} to output
-variable @code{LIBS}.  Needed to get @code{getmntent}.  At sites using
-Yellow Pages/NIS, it is also needed to get properly working
-@code{gethostby*}, @code{getpw*}, @code{getgr*}, @code{getnetby*}, and
-so on.
-@c (According to Garrett.Wollman@uvm.edu.)
 @end defmac
 
 @defmac AC_OS_ISC
@@ -2299,21 +2312,13 @@ If on Minix, define @code{_MINIX} and @code{_POSIX_SOURCE} and define
 facilities.  Should be called before any macros that run the C compiler.
 @end defmac
 
-@defmac AC_OS_SCO
-@maindex OS_SCO
+@defmac AC_XENIX_DIR
+@maindex XENIX_DIR
 @ovindex LIBS
-If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.
-Used to get @code{strftime}.  It must be called before checking for
-@code{strftime}.
-@end defmac
-
-@defmac AC_OS_XENIX
-@maindex OS_XENIX
-@ovindex LIBS
-If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also,
-if @file{sys/ndir.h} is not being used, add @samp{-ldir} to @code{LIBS}.
-Needed when using the directory reading functions.  This macro calls
-@code{AC_DIR_HEADER} if it has not been called already.
+If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
+@file{dirent.h} is being used, add @samp{-ldir} to @code{LIBS}.  This
+macro calls @code{AC_DIR_HEADER} if it hasn't been called already.  It
+is obsolete; use @code{AC_HEADER_DIRENT} instead.
 @end defmac
 
 @node Makefiles, Writing Tests, Existing Tests, Top
@@ -2543,7 +2548,7 @@ solve the problem.
 * Testing Values and Files::    Checking strings and files.
 * Multiple Cases::		Tests for several possible values.
 * Defining Symbols::            Defining C preprocessor symbols.
-* Setting Variables::		Setting shell and output variables.
+* Setting Variables::		Setting variables in output files.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 @end menu
@@ -2678,6 +2683,13 @@ each time it encounters a call to @code{AC_TRY_RUN} with no
 warning, though users will not be able to configure your package for
 cross-compiling.  A few of the macros distributed with Autoconf produce
 this warning message.
+@end defmac
+
+@defmac AC_C_CROSS
+@maindex C_CROSS
+If the C compiler being used does not produce executables that can run
+on the system where @code{configure} is being run, set the shell
+variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
 @end defmac
 
 @menu
@@ -2966,35 +2978,26 @@ AC_DEFINE_UNQUOTED(config_machfile, "$@{machfile@}")
 @section Setting Variables
 
 These macros help other macros to define variables that are used in the
-@code{configure} shell script and substituted into output files.
+@code{configure} shell script and substituted into output files.  These
+variables are called @dfn{output variables}.
 
 @defmac AC_SUBST (@var{variable})
 @maindex SUBST
-Substitute the variable @var{variable} when creating the output files
-(typically one or more @file{Makefile}s).  This means replace instances
-of @samp{@@@var{variable}@@}, e.g. in @file{Makefile.in}, with the
-current value of the shell variable @var{variable}.  The value of
-@var{variable} should not contain literal newlines.  If this macro were
-not called, the value of @var{variable} would not be set in the output
-files, even though @code{configure} had figured out a value for it.
-
-You can set or add to the value of @var{variable} in the usual shell
-way.  For example, to add @samp{-ltermcap} to the value of the variable
-@code{LIBS}:
-
-@example
-LIBS="$LIBS -ltermcap"
-@end example
+Substitute the variable @var{variable} into output files (typically one
+or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
+replace instances of @samp{@@@var{variable}@@}, e.g. in
+@file{Makefile.in}, with the value that the shell variable
+@var{variable} has when @code{AC_OUTPUT} is called.  The value of
+@var{variable} should not contain literal newlines.
 @end defmac
 
 @defmac AC_SUBST_FILE (@var{variable})
 @maindex SUBST_FILE
 Substitute the contents of the file named by shell variable
-@var{variable} into output variable @var{variable} when
-creating the output files (typically one or more @file{Makefile}s).
-This macro is useful for inserting @file{Makefile} fragments containing
-special dependencies or other @code{make} directives for particular host
-or target types into @file{Makefile}s.
+@var{variable} into output files (typically one or more
+@file{Makefile}s).  This macro is useful for inserting @file{Makefile}
+fragments containing special dependencies or other @code{make}
+directives for particular host or target types into @file{Makefile}s.
 
 For example, @file{configure.in} could contain:
 
@@ -3430,7 +3433,7 @@ a suggestion for what to use instead of @var{this-macro-name}.
 A sample call is:
 
 @example
-AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])
+AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])dnl
 @end example
 @end defmac
 
@@ -3621,8 +3624,17 @@ example, @samp{decstation} can be given on the command line instead of
 @node Canonicalizing, System Name Variables, Specifying Names, Manual Configuration
 @section Getting the Canonical System Type 
 
-The following macros make the name of the system type available in
-@code{configure} scripts.
+The following macros make the system type available to @code{configure}
+scripts.  They run the shell script @code{config.guess} to determine any
+values for the host, target, and build types that they need and the user
+did not specify on the command line.  They run @code{config.sub} to
+canonicalize any aliases the user gave.  If you use these macros, you
+must distribute those two shell scripts along with your source code.
+@xref{Output}, for information about the @code{AC_CONFIG_AUX_DIR} macro
+which you can use to control which directory @code{configure} looks for
+those scripts in.  If you do not use either of these macros,
+@code{configure} ignores any @samp{--host}, @samp{--target}, and
+@samp{--build} options given to it.
 
 @defmac AC_CANONICAL_HOST
 @maindex CANONICAL_HOST
@@ -3633,24 +3645,15 @@ a compiler toolchain.
 
 @defmac AC_CANONICAL_SYSTEM
 @maindex CANONICAL_SYSTEM
-Set shell and output variables to the names of the canonical system
-types.  If the user did not specify one or more of those values on the
-command line, run @code{config.guess} to determine them.  Run
-@code{config.sub} to canonicalize any aliases the user gave.  If you use
-this macro, you must distribute those two shell scripts along with your
-source code (@pxref{Output}, for information about the
-@code{AC_CONFIG_AUX_DIR} macro which you can use to control which
-directory @code{configure} looks for those scripts in).  If you do not
-run this macro, @code{configure} ignores any @samp{--host}, etc. options
-given to it.
+Set output variables to the names of the canonical system
+types.
 @end defmac
 
 @node System Name Variables, Using System Type, Canonicalizing, Manual Configuration
 @section System Name Variables
 
 After calling @code{AC_CANONICAL_SYSTEM} or @code{AC_CANONICAL_HOST},
-the shell and output variables that contain the system type
-information are:
+the output variables that contain the system type information are:
 
 @table @code
 @ovindex build
@@ -3853,15 +3856,20 @@ It is possible to set some cache values in the site file.
 If you are cross-compiling, it is impossible to check features that
 require running a test program.  You could ``prime the cache'' by
 setting those values correctly for that system in
-@file{@var{exec_prefix}/lib/config.site}.  The cache file is careful to
-not override any variables set in the site files.  Similarly, you should
-not override command-line options in the site files.  Your code should
-check that variables such as @code{prefix} and @code{cache_file} have
-their default values (as set near the top of @code{configure}) before
-changing them.
+@file{@var{exec_prefix}/lib/config.site}.  To find out the names of the
+cache variables you need to set, look for shell variables with
+@samp{_cv_} in their names in the affected configure scripts, or in the
+Autoconf @code{m4} source code for those macros.
+
+The cache file is careful to not override any variables set in the site
+files.  Similarly, you should not override command-line options in the
+site files.  Your code should check that variables such as @code{prefix}
+and @code{cache_file} have their default values (as set near the top of
+@code{configure}) before changing them.
 
 Here is a sample file @file{/usr/share/local/gnu/lib/config.site}.
-@samp{configure --prefix=/usr/share/local/gnu} would read this file.
+@samp{configure --prefix=/usr/share/local/gnu} would read this file
+(if @code{CONFIG_SITE} is not set).
 
 @example
 # config.site for configure
@@ -4021,6 +4029,9 @@ your @file{Makefile.in} files, so they can take advantage of the values
 of those variables in the environment when @code{configure} is run.
 Doing this isn't necessary, but it's a convenience for users.
 
+Add @file{config.log} and @file{config.cache} to the list of files you
+remove in @code{distclean} targets.
+
 If you have the following in @file{Makefile.in}:
 
 @example
@@ -4113,6 +4124,12 @@ If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
 backslashes before quotes, you need to remove them.  It now works
 predictably, and does not treat quotes (except backquotes) specially.
 @xref{Setting Variables}.
+
+All of the boolean shell variables set by Autoconf macros now use
+@samp{yes} for the true value.  Most of them use @samp{no} for false,
+though for backward compatibility some use the empty string instead.  If
+you were relying on a shell variable being set to something like 1 or
+@samp{t} for true, you need to change your tests.
 
 @node Changed Macro Writing, , Changed Results, Upgrading
 @section Changed Macro Writing
@@ -4391,9 +4408,6 @@ removed because of limited usefulness
 @item AC_CROSS_CHECK
 @maindex CROSS_CHECK
 @code{AC_C_CROSS}
-@item AC_DYNIX_SEQ
-@maindex DYNIX_SEQ
-@code{AC_OS_DYNIX}
 @item AC_ERROR
 @maindex ERROR
 @code{AC_MSG_ERROR}
@@ -4433,9 +4447,6 @@ removed because of limited usefulness
 @item AC_INLINE
 @maindex INLINE
 @code{AC_C_INLINE}
-@item AC_IRIX_SUN
-@maindex IRIX_SUN
-@code{AC_OS_IRIX}
 @item AC_ISC_POSIX
 @maindex ISC_POSIX
 @code{AC_OS_ISC}
@@ -4499,9 +4510,6 @@ removed because of limited usefulness
 @item AC_RSH
 @maindex RSH
 removed because of limited usefulness
-@item AC_SCO_INTL
-@maindex SCO_INTL
-@code{AC_OS_SCO}
 @item AC_SETVBUF_REVERSED
 @maindex SETVBUF_REVERSED
 @code{AC_FUNC_SETVBUF_REVERSED}
@@ -4568,9 +4576,6 @@ removed because of limited usefulness
 @item AC_WORDS_BIGENDIAN
 @maindex WORDS_BIGENDIAN
 @code{AC_C_BIGENDIAN}
-@item AC_XENIX_DIR
-@maindex XENIX_DIR
-@code{AC_OS_XENIX}
 @item AC_YYTEXT_POINTER
 @maindex YYTEXT_POINTER
 @code{AC_DECL_YYTEXT}

@@ -587,17 +587,17 @@ AC_DEFUN(AC_ARG_PROGRAM,
 if test -n "${program_transform_name}"; then
   # Double any \ or $.
   echo 's,\\,\\\\,g; s,\$,$$,g' > conftestsed
-  program_transform_name="-e `echo ${program_transform_name} | sed -f conftestsed`"
+  program_transform_name="`echo ${program_transform_name}|sed -f conftestsed`"
   rm -f conftestsed
 fi
 test "${program_prefix}" != NONE &&
-  program_transform_name="-e s,^,${program_prefix}, ${program_transform_name}"
+  program_transform_name="s,^,${program_prefix},; ${program_transform_name}"
 # Use a double $ so make ignores it.
 test "${program_suffix}" != NONE &&
-  program_transform_name="-e s,\$\$,${program_suffix}, ${program_transform_name}"
+  program_transform_name="s,\$\$,${program_suffix},; ${program_transform_name}"
 
 # sed with no file args requires a program.
-test "${program_transform_name}" = "" && program_transform_name="-e s,x,x,"
+test "${program_transform_name}" = "" && program_transform_name="s,x,x,"
 AC_SUBST(program_transform_name)dnl
 ])
 
@@ -701,11 +701,6 @@ NONE---*---* | *---NONE---* | *---*---NONE) ;;
 *) AC_MSG_ERROR(can only configure for one host and one target at a time) ;;
 esac
 
-# Make sure we can run config.sub.
-if ${ac_config_sub} sun4 >/dev/null 2>&1; then :
-else AC_MSG_ERROR(can not run ${ac_config_sub})
-fi
-
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 AC_CANONICAL_BUILD
@@ -718,6 +713,12 @@ dnl Subroutines of AC_CANONICAL_SYSTEM.
 
 AC_DEFUN(AC_CANONICAL_HOST,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+
+# Make sure we can run config.sub.
+if ${ac_config_sub} sun4 >/dev/null 2>&1; then :
+else AC_MSG_ERROR(can not run ${ac_config_sub})
+fi
+
 AC_MSG_CHECKING(host system type)
 
 host_alias=$host
