@@ -471,12 +471,12 @@ AC_DEFUN([AC_REQUIRE_CPP],
 define([_AC_LANG_COMPILER_WORKS],
 [AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-[# If not cross compiling, check that we can run a simple program.
+[# FIXME: these cross compiler hacks should be removed for autoconf 3.0
+# If not cross compiling, check that we can run a simple program.
 if test "$cross_compiling" != yes; then
   if AC_TRY_COMMAND(./conftest); then
     cross_compiling=no
   else
-    AC_MSG_RESULT(no)
     if test "$cross_compiling" = maybe; then
       cross_compiling=yes
     else
@@ -488,6 +488,8 @@ fi
 AC_MSG_RESULT(yes)],
 [AC_MSG_RESULT(no)
 AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])[]dnl
+AC_MSG_CHECKING([whether we are cross compiling])
+AC_MSG_RESULT($cross_compiling)
 ])# AC_LANG_COMPILER_WORKS
 
 
@@ -834,7 +836,7 @@ AC_DEFUN([AC_PROG_F77],
 dnl Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
 dnl `f95' is worth trying.
 dnl pgf77 is the Portland Group f77 compiler
-dnl lf95 is the Lahey-Fujitsu compiler 
+dnl lf95 is the Lahey-Fujitsu compiler
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_TOOLS(F77,
                m4_default([$1],

@@ -1592,8 +1592,8 @@ target=$target_alias
 if test "x$host_alias" != x; then
   if test "x$build_alias" = x; then
     cross_compiling=maybe
-    AC_MSG_WARN([Did you mean --build instead of --host?  Assuming you did.])
-    AC_MSG_WARN([If not, please specify both --build and --host.])
+    AC_MSG_WARN([If you wanted to set the --build type, don't use --host.
+    If a cross compiler is detected then cross compile mode will be used.])
   elif test "x$build_alias" != "x$host_alias"; then
     cross_compiling=yes
   fi
@@ -2951,11 +2951,11 @@ fi
 AC_DEFUN([AC_CHECK_TOOLS],
 [for ac_prog in $2
 do
-  AC_CHECK_PROG([$1], $ac_tool_prefix$ac_prog, $ac_tool_prefix$ac_prog, [$3])
-  test "$$1" != "$3" && break
+  AC_CHECK_PROG([$1], $ac_tool_prefix$ac_prog, $ac_tool_prefix$ac_prog,, [$4])
+  test "$$1" != "" && break
 done
-if test "$$1" = "$3"; then
-  AC_CHECK_PROGS([$1], [$2], [$3])
+if test "$$1" = ""; then
+  AC_CHECK_PROGS([$1], [$2], [$3], [$4])
 fi
 ])# AC_CHECK_TOOLS
 
