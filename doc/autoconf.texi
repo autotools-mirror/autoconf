@@ -4261,9 +4261,9 @@ Specify that @samp{@var{function}.c} must be included in the executables
 to replace a missing or broken implementation of @var{function}.
 
 Technically, it adds @samp{@var{function}.$ac_objext} to the output
-variable @code{LIBOBJS} and calls @code{AC_LIBSOURCE} for
-@samp{@var{function}.c}.  You should not directly change @code{LIBOBJS},
-since this is not traceable.
+variable @code{LIBOBJS} if it is not already in, and calls
+@code{AC_LIBSOURCE} for @samp{@var{function}.c}.  You should not
+directly change @code{LIBOBJS}, since this is not traceable.
 @end defmac
 
 @defmac AC_LIBSOURCE (@var{file})

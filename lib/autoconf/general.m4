@@ -2409,7 +2409,14 @@ m4_define([_AC_LIBOBJ],
 	       [AC_LIBSOURCE([$1.c])],
 	       [$2])dnl
 AC_SUBST([LIB@&t@OBJS])dnl
-LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext"])
+case $LIB@&t@OBJS in
+    "$1.$ac_objext"   | \
+  *" $1.$ac_objext"   | \
+    "$1.$ac_objext "* | \
+  *" $1.$ac_objext "* ) ;;
+  *) LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext" ;;
+esac
+])
 
 
 

@@ -1,3 +1,10 @@
+2003-10-23  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_LIBOBJ): Don't insert twice the
+	same object file in $LIBOBJS.
+	Reported by Alexandre Duret-Lutz & Derek Robert Price.
+	* doc/autoconf.texi (Generic Functions): Adjust.
+
 2003-10-20  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_TR_SH_PREPARE, _AS_TR_CPP_PREPARE):
@@ -27,7 +34,7 @@
 	Mention /usr/dt/bin/dtksh on Solaris.
 	(Shell Substitutions): Warn about $((...)).
 	(Parentheses): New section.
-	
+
 2003-10-15  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Add @prindex for exit.

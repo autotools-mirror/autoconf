@@ -10,6 +10,10 @@
 ** New macros
   AC_LANG_WERROR
 
+** AC_LIBOBJS
+  No longer includes twice the same file in LIBOBJS if invoked
+  multiple times.
+
 * Major changes in Autoconf 2.57f
 
   Released 2003-10-01, by Akim Demaille.
