@@ -1,3 +1,8 @@
+2003-10-15  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Function Portability): Add @prindex for exit.
+	Add putenv and unsetenv.  Add sysconf _SC_PAGE_SIZE.
+
 2003-10-13  Nathanael Nerode  <neroden@gcc.gnu.org>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_FORK): Trivial fix for vfork
