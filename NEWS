@@ -49,8 +49,10 @@ Major changes in release 2.0:
   execute on success.
 * AC_REMOTE_TAPE and AC_RSH removed; too specific to tar and cpio, and
   better maintained with them.
+* AC_ARG_ARRAY removed because no one was likely using it.
 * AC_HAVE_POUNDBANG replaced with AC_SYS_INTERPRETER, which doesn't
   take arguments.
+* Checking for C functions in C++ works.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by

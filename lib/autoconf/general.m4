@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.103)dnl
+define(AC_ACVERSION, 1.104)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -84,9 +84,7 @@ ac_help=])dnl
 dnl
 dnl AC_INIT_PARSE_ARGS()
 AC_DEFUN(AC_INIT_PARSE_ARGS,
-[AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
-AC_BEFORE([$0], [AC_ARG_WITH])dnl
-# Save the original args to write them into config.status later.
+[# Save the original args to write them into config.status later.
 configure_args="[$]@"
 
 # Omit some internal, obsolete, or unimplemented options to make the
@@ -381,13 +379,7 @@ divert(AC_DIVERSION_NORMAL)dnl
 dnl
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT_PREPARE,
-[AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
-AC_BEFORE([$0], [AC_ARG_WITH])dnl
-AC_BEFORE([$0], [AC_CONFIG_HEADER])dnl
-AC_BEFORE([$0], [AC_REVISION])dnl
-AC_BEFORE([$0], [AC_PREREQ])dnl
-dnl AC_BEFORE([$0], [AC_CONFIG_SUBDIRS])dnl
-trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
+[trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -fr confdefs* $ac_clean_files' 0
 
 # File descriptor usage:
@@ -1139,12 +1131,15 @@ dnl
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_TRY_LINK,
-[dnl We use return because because C++ requires a prototype for exit.
-cat > conftest.${ac_ext} <<EOF
+[cat > conftest.${ac_ext} <<EOF
 dnl This sometimes fails to find confdefs.h, for some reason.
 dnl [#]line __LINE__ "[$]0"
 #line __LINE__ "configure"
 #include "confdefs.h"
+ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C" void exit(int);
+#endif
+])dnl
 [$1]
 int main() { return 0; }
 int t() {
@@ -1175,6 +1170,10 @@ else
 cat > conftest.${ac_ext} <<EOF
 #line __LINE__ "configure"
 #include "confdefs.h"
+ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C" void exit(int);
+#endif
+])dnl
 [$1]
 EOF
 eval $ac_compile
@@ -1243,7 +1242,11 @@ AC_CACHE_VAL(ac_cv_func_$1,
 choke me
 #else
 /* Override any gcc2 internal prototype to avoid an error.  */
-extern char $1(); $1();
+]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C"
+#endif
+])dnl
+[char $1(); $1();
 #endif
 ], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
 if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then

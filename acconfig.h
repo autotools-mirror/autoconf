@@ -170,10 +170,6 @@
 /* Define if you have <nlist.h>.  */
 #undef NLIST_STRUCT
 
-/* Define if you can't use the address of an argument to a function
-   as the start of an array.  */
-#undef NO_ARG_ARRAY
-
 /* Define if your C compiler doesn't accept -c and -o together.  */
 #undef NO_MINUS_C_MINUS_O
 

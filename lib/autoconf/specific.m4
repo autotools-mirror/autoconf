@@ -702,7 +702,12 @@ AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
    Test for this by using a static variable whose address
    is put into a register that is clobbered by the vfork.  */
 static
-sparc_address_test (arg) int arg; {
+#ifdef __cplusplus
+sparc_address_test (int arg)
+#else
+sparc_address_test (arg) int arg;
+#endif
+{
   static pid_t child;
   if (!child) {
     child = vfork ();
@@ -1248,27 +1253,6 @@ if test $ac_cv_c_bigendian = yes; then
 fi
 ])dnl
 dnl
-AC_DEFUN(AC_C_ARG_ARRAY,
-[AC_MSG_CHECKING(whether the address of an argument can be used as an array)
-AC_CACHE_VAL(ac_cv_c_arg_array,
-[AC_TRY_RUN([main() {
-/* Return 0 iff arg arrays are ok.  */
-exit(!x(1, 2, 3, 4));
-}
-x(a, b, c, d) {
-  return y(a, &b);
-}
-/* Return 1 iff arg arrays are ok.  */
-y(a, b) int *b; {
-  return a == 1 && b[0] == 2 && b[1] == 3 && b[2] == 4;
-}], ac_cv_c_arg_array=no, ac_cv_c_arg_array=yes)
-rm -f core])dnl
-AC_MSG_RESULT($ac_cv_c_arg_array)
-if test $ac_cv_c_arg_array = no; then
-  AC_DEFINE(NO_ARG_ARRAY)
-fi
-])dnl
-dnl
 AC_DEFUN(AC_C_INLINE,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_MSG_CHECKING([for inline])
@@ -1610,7 +1594,15 @@ else
     fi
   fi
 
-  # Check for additional X libraries.
+  # Check for libraries that R6 introduced.  Xt/Xaw programs need these.
+
+  ac_save_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$LDFLAGS -L$x_libraries"
+  AC_HAVE_LIBRARY(ICE, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lICE"])
+  AC_HAVE_LIBRARY(SM, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lSM"])
+  LDFLAGS="$ac_save_LDFLAGS"
+
+  # Check for system-dependent libraries X programs must link with.
 
   if test "$ISC" = yes; then
     X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
@@ -1624,6 +1616,12 @@ else
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
         [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
     fi
+
+    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT.
+    # Not sure which flavor of 386 Unix this is, but it seems harmless to
+    # check for it.
+    AC_HAVE_LIBRARY(nsl, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
+
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
     # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.103
-@set VERSION 1.103
+@set EDITION 1.104
+@set VERSION 1.104
 @set UPDATED August 1994
 
 @iftex
@@ -954,26 +954,26 @@ something like the following, which assumes that you have also called
 @example
 @group
 #ifdef HAVE_UNISTD_H
-#include <sys/types.h>
-#include <unistd.h>
+# include <sys/types.h>
+# include <unistd.h>
 #endif
 
 #ifdef HAVE_DIRENT_H
 # include <dirent.h>
 # define NAMLEN(dirent) (strlen((dirent)->d_name))
-#else /* !HAVE_DIRENT_H */
+#else
 # define dirent direct
 # define NAMLEN(dirent) ((dirent)->d_namlen)
 # ifdef HAVE_SYS_NDIR_H
 #  include <sys/ndir.h>
-# endif /* HAVE_SYS_NDIR_H */
+# endif
 # ifdef HAVE_SYS_DIR_H
 #  include <sys/dir.h>
-# endif /* HAVE_SYS_DIR_H */
+# endif
 # ifdef HAVE_NDIR_H
 #  include <ndir.h>
-# endif /* HAVE_NDIR_H */
-#endif /* !HAVE_DIRENT_H */
+# endif
+#endif
 @end group
 @end example
 
@@ -1024,15 +1024,14 @@ Then, in the code, use a test like this:
 
 @example
 @group
+/* memory.h might conflict with an ANSI string.h, or strings.h.  */
 #if STDC_HEADERS || HAVE_STRING_H
 # include <string.h>
-/* An ANSI string.h and pre-ANSI memory.h might conflict.  */
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
-# endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
+# endif
+#else
 # include <strings.h>
-/* memory.h and strings.h conflict on some systems.  */
 # ifndef strchr
 #  define strchr index
 # endif
@@ -1045,7 +1044,7 @@ Then, in the code, use a test like this:
 # ifndef memcmp
 #  define memcmp(s1, s2, n) bcmp ((s1), (s2), (n))
 # endif
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
+#endif
 @end group
 @end example
 
@@ -1423,15 +1422,6 @@ macro calls @code{AC_STRUCT_TM} if it hasn't been called already.
 
 The following macros check for C compiler or machine architecture
 features:
-
-@defmac AC_C_ARG_ARRAY
-@maindex C_ARG_ARRAY
-@cvindex NO_ARG_ARRAY
-If the address of an argument to a C function can not be used like
-the start of an array, define @code{NO_ARG_ARRAY}.  This ability allows
-a sequence of arguments with the same type to be accessed as if they
-were an array of values.
-@end defmac
 
 @defmac AC_C_BIGENDIAN
 @maindex C_BIGENDIAN
@@ -1991,7 +1981,8 @@ macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
 backquote substitutions are performed.  If it compiles and links
 successfully and returns an exit status of 0 when executed, run shell
 commands @var{action-if-true}.  Otherwise run shell commands
-@var{action-if-false}.  This macro uses @code{CFLAGS} or
+@var{action-if-false}; the exit status of the program is available in
+the shell variable @samp{$?}.  This macro uses @code{CFLAGS} or
 @code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS} when
 compiling.
 
@@ -2015,12 +2006,15 @@ future use (@pxref{Caching Values}, for more information).
 
 @defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex CHECK_FUNC
-If @var{function} is available, run shell commands
+If C function @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If the
 functions might be in libraries other than the default C library, first
 call @code{AC_CHECK_LIB} for those libraries.  If you just want to
 define a symbol if the function is available, consider using
-@code{AC_CHECK_FUNCS} instead.
+@code{AC_CHECK_FUNCS} instead.  This macro checks for functions with C
+linkage even when @code{AC_LANG_CPLUSPLUS} has been called, since C++ is
+more standardized than C is.  (@pxref{Language Choice}, for more
+information about selecting the language for checks.)
 @end defmac
 
 @defmac AC_CHECK_FUNCS (@var{function}@dots{} @r{[}, @var{action}@r{]})
@@ -2983,13 +2977,23 @@ tests impossible.  You do this by passing the optional last argument to
 @node Guidelines, Tricks, , Test Programs
 @subsection Guidelines for Test Programs
 
-Test programs should return 0 if the test succeeds, nonzero otherwise,
-so that success can be distinguished easily from a core dump or other
-failure; segmentation violations and other failures produce a nonzero
-exit status.  Test programs should @code{exit}, not @code{return}, from
-@code{main}, because on some systems the argument to @code{return} in
-@code{main} is ignored.  They should not write anything to the standard
-output.
+Test programs should not write anything to the standard output.  They
+should return 0 if the test succeeds, nonzero otherwise, so that success
+can be distinguished easily from a core dump or other failure;
+segmentation violations and other failures produce a nonzero exit
+status.  Test programs should @code{exit}, not @code{return}, from
+@code{main}, because on some systems (old Suns, at least) the argument
+to @code{return} in @code{main} is ignored.  Functions that take
+arguments should have a prototype conditionalized for C++.  In practice,
+test programs rarely need functions that take arguments.
+
+@example
+#ifdef __cplusplus
+foo(int i)
+#else
+foo(i) int i;
+#endif
+@end example
 
 Test programs can use @code{#if} or @code{#ifdef} to check the values of
 preprocessor macros defined by tests that have already run.  For
@@ -3108,11 +3112,13 @@ By default, configure uses @file{./config.cache} as the cache file,
 creating it if it does not exist already.  @code{configure} accepts the
 @samp{--cache-file=@var{file}} option to use a different cache file;
 that is what @code{configure} does when it calls @code{configure}
-scripts in subdirectories, so they share the cache.  @xref{Setup}, for
-information on configuring subdirectories with the
-@code{AC_CONFIG_SUBDIRS} macro.  @file{config.status} only pays
-attention to the cache file if it is given the @samp{--recheck} option,
-which makes it rerun @code{configure}.
+scripts in subdirectories, so they share the cache.  Giving
+@samp{--cache-file=/dev/null} disables caching, for debugging
+@code{configure}.  @xref{Setup}, for information on configuring
+subdirectories with the @code{AC_CONFIG_SUBDIRS} macro.
+@file{config.status} only pays attention to the cache file if it is
+given the @samp{--recheck} option, which makes it rerun
+@code{configure}.
 
 It is wrong to try to distribute cache files for particular system types.
 There is too much room for error in doing that, and too much
@@ -3349,6 +3355,7 @@ stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top config.h.bot
 
 # config.status might not change config.h
 # Don't rerun config.status if we just configured.
+# Use || so the command line always returns success.
 config.h: stamp-h
 stamp-h: config.h.in config.status
         test ! -f stamp-h || ./config.status
@@ -3543,7 +3550,7 @@ for backward compatibility, the old names are considered obsolete.
 @code{AC_FUNC_ALLOCA}
 @item AC_ARG_ARRAY
 @maindex ARG_ARRAY
-@code{AC_C_ARG_ARRAY}
+removed because of limited usefulness
 @item AC_CHAR_UNSIGNED
 @maindex CHAR_UNSIGNED
 @code{AC_C_CHAR_UNSIGNED}

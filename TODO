@@ -96,11 +96,8 @@ in a dnl comment.  (Seems to be hard.)
 
 ------------------------------------------------------------------------------
 
-* Prototypes and IEEE math contributed macros.
-
-------------------------------------------------------------------------------
-
-* Functions to check for C++ functions, or C functions under C++.
+* Look at user contributed macros: prototypes, IEEE double precision math, 
+shared libraries, various other things.
 
 ------------------------------------------------------------------------------
 
