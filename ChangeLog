@@ -1,5 +1,19 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Avoid calling `rm' without arguments.
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): It is smarter to use a
+	quoted here doc to output the section providing defaults for
+	CONFIG_*.
+	Don't rm the CONFIG_FILES here but in..
+	(AC_OUTPUT_FILES) [test -n "$CONFIG_FILES"]: here.
+	Hm, actually, no, just don't remove them at all, let the newly
+	created files replace the old ones, exactly as in
+	AC_OUTPUT_HEADERS.
+	From Graham Jenkins.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_LIST_MEMBER_OF): s/ac_$exists/$ac_exists/!
 
 2000-02-10  Akim Demaille  <akim@epita.fr>

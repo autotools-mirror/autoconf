@@ -3541,25 +3541,23 @@ dnl Issue this section only if there were actually config files.
 dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
-[cat >>$CONFIG_STATUS <<EOF
+[cat >>$CONFIG_STATUS <<\EOF
 # If the user did not use the arguments to specify the items to instantiate,
 # then the envvar interface is used.  Set only those that are not.
-if [\$]ac_need_defaults; then
-ifset([AC_LIST_FILES], [  : \${CONFIG_FILES=\$config_files}
+if $ac_need_defaults; then
+ifset([AC_LIST_FILES], [  : ${CONFIG_FILES=$config_files}
 ])dnl
-ifset([AC_LIST_HEADERS], [  : \${CONFIG_HEADERS=\$config_headers}
+ifset([AC_LIST_HEADERS], [  : ${CONFIG_HEADERS=$config_headers}
 ])dnl
-ifset([AC_LIST_LINKS], [  : \${CONFIG_LINKS=\$config_links}
+ifset([AC_LIST_LINKS], [  : ${CONFIG_LINKS=$config_links}
 ])dnl
-ifset([AC_LIST_COMMANDS], [  : \${CONFIG_COMMANDS=\$config_commands}
+ifset([AC_LIST_COMMANDS], [  : ${CONFIG_COMMANDS=$config_commands}
 ])dnl
 fi
 
-# Remove all the CONFIG_FILES, and trap to remove the temp files.
-dnl There is no need to trap for the config files since they are built
-dnl from `mv tmp-file config-file', hence their update is atomic.
-rm -fr \`echo "\$CONFIG_FILES" | sed "s/:@BKL@^ @BKR@*//g"\`
-trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
+# Trap to remove the temp files.
+dnl FIXME: Should we check that there are files to remove?
+trap 'rm -fr $ac_cs_root*; exit 1' 1 2 15
 
 EOF
 ])[]dnl ifval
