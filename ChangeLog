@@ -1,3 +1,11 @@
+2002-06-06  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_LINKS): Fall back on cp
+	if ln doesn't work.
+	* NEWS: Likewise.
+	* doc/autoconf.texi (Configuration Links): Likewise.
+	(Limitations of Usual Tools): Prefer $(LN_S) to ln -s || ln.
+
 2002-06-05  Paul Eggert  <eggert@twinsun.com>
 
 	* config/config.guess, config/config.sub, config/texinfo.tex:
