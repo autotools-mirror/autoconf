@@ -4,7 +4,8 @@
 #
 # Report bugs to <bug-autoconf@gnu.org>.
 #
-# Copyright (C) 2004 Free Software Foundation, Inc.
+# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
+# 2003, 2004 Free Software Foundation, Inc.
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 ## --------------------- ##
@@ -77,181 +78,6 @@ if test ! -f "$as_myself"; then
    { (exit 1); exit 1; }; }
 fi
 
-if { $SHELL 2>/dev/null <<\_ASEOF
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-  # is contrary to our usage.  Disable this feature.
-  alias -g '${1+"$@"}'='"$@"'
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-DUALCASE=1; export DUALCASE # for MKS sh
-
-func_return () {
-  (exit $1)
-}
-
-func_success () {
-  func_return 0
-}
-
-func_failure () {
-  func_return 1
-}
-
-func_ret_success () {
-  return 0
-}
-
-func_ret_failure () {
-  return 1
-}
-
-exitcode=0
-if func_success; then
-  :
-else
-
-  exitcode=1
-  echo func_failure succeeded.
-
-fi
-
-if func_failure; then
-
-  exitcode=1
-  echo func_success failed.
-
-fi
-
-if func_ret_success; then
-  :
-else
-
-  exitcode=1
-  echo func_ret_success failed.
-
-fi
-
-if func_ret_failure; then
-
-  exitcode=1
-  echo func_ret_failure succeeded.
-
-fi
-
-{ (exit $exitcode); exit $exitcode; }
-_ASEOF
-}; then
-  :
-else
-
-  case $CONFIG_SHELL in
-  '')
-    as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   if { $as_dir/$as_base 2>/dev/null <<\_ASEOF
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-  # is contrary to our usage.  Disable this feature.
-  alias -g '${1+"$@"}'='"$@"'
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-DUALCASE=1; export DUALCASE # for MKS sh
-
-func_return () {
-  (exit $1)
-}
-
-func_success () {
-  func_return 0
-}
-
-func_failure () {
-  func_return 1
-}
-
-func_ret_success () {
-  return 0
-}
-
-func_ret_failure () {
-  return 1
-}
-
-exitcode=0
-if func_success; then
-  :
-else
-
-  exitcode=1
-  echo func_failure succeeded.
-
-fi
-
-if func_failure; then
-
-  exitcode=1
-  echo func_success failed.
-
-fi
-
-if func_ret_success; then
-  :
-else
-
-  exitcode=1
-  echo func_ret_success failed.
-
-fi
-
-if func_ret_failure; then
-
-  exitcode=1
-  echo func_ret_failure succeeded.
-
-fi
-
-{ (exit $exitcode); exit $exitcode; }
-_ASEOF
-}; then
-
-	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
-	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
-
-fi
-;;
-	 esac
-       done
-done
-;;
-  *)
-
-echo Found no shell that has working shell functions.
-echo
-echo Please tell autoconf@gnu.org about your system.
-;;
-  esac
-
-fi
-
-
 # Work around bugs in pre-3.0 UWIN ksh.
 $as_unset ENV MAIL MAILPATH
 PS1='$ '
@@ -296,6 +122,246 @@ echo X/"$0" |
   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
   	  /^X\/\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
+
+
+
+if test "x$CONFIG_SHELL" = x; then
+  if (eval ":") 2>/dev/null; then
+  as_have_required=yes
+else
+  as_have_required=no
+fi
+
+  if test $as_have_required = yes && 	 (eval ":
+(func_return () {
+  (exit \$1)
+}
+func_success () {
+  func_return 0
+}
+func_failure () {
+  func_return 1
+}
+func_ret_success () {
+  return 0
+}
+func_ret_failure () {
+  return 1
+}
+
+exitcode=0
+if func_success; then
+  :
+else
+  exitcode=1
+  echo func_failure succeeded.
+fi
+
+if func_failure; then
+  exitcode=1
+  echo func_success failed.
+fi
+
+if func_ret_success; then
+  :
+else
+  exitcode=1
+  echo func_ret_success failed.
+fi
+
+if func_ret_failure; then
+  exitcode=1
+  echo func_ret_failure succeeded.
+fi
+
+test \$exitcode = 0) || { (exit 1); exit 1; }
+
+(
+  as_lineno_1=\$LINENO
+  as_lineno_2=\$LINENO
+  as_lineno_3=\`(expr \$as_lineno_1 + 1) 2>/dev/null\`
+  test \"x\$as_lineno_1\" != \"x\$as_lineno_2\" &&
+  test \"x\$as_lineno_3\"  = \"x\$as_lineno_2\") || { (exit 1); exit 1; }
+") 2> /dev/null; then
+  :
+else
+  as_candidate_shells="$SHELL"
+    as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  case $as_dir in
+	 /*)
+	   for as_base in sh bash ksh sh5; do
+	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
+	   done
+       esac
+done
+
+
+      for as_shell in $as_candidate_shells; do
+	 if { $as_shell 2> /dev/null <<\_ASEOF
+# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
+  alias -g '${1+"$@"}'='"$@"'
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+  set -o posix
+fi
+DUALCASE=1; export DUALCASE # for MKS sh
+
+:
+_ASEOF
+}; then
+  CONFIG_SHELL=$as_shell
+	       as_have_required=yes
+	       if { $as_shell 2> /dev/null <<\_ASEOF
+# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
+  alias -g '${1+"$@"}'='"$@"'
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+  set -o posix
+fi
+DUALCASE=1; export DUALCASE # for MKS sh
+
+:
+(func_return () {
+  (exit $1)
+}
+func_success () {
+  func_return 0
+}
+func_failure () {
+  func_return 1
+}
+func_ret_success () {
+  return 0
+}
+func_ret_failure () {
+  return 1
+}
+
+exitcode=0
+if func_success; then
+  :
+else
+  exitcode=1
+  echo func_failure succeeded.
+fi
+
+if func_failure; then
+  exitcode=1
+  echo func_success failed.
+fi
+
+if func_ret_success; then
+  :
+else
+  exitcode=1
+  echo func_ret_success failed.
+fi
+
+if func_ret_failure; then
+  exitcode=1
+  echo func_ret_failure succeeded.
+fi
+
+test $exitcode = 0) || { (exit 1); exit 1; }
+
+(
+  as_lineno_1=$LINENO
+  as_lineno_2=$LINENO
+  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+  test "x$as_lineno_1" != "x$as_lineno_2" &&
+  test "x$as_lineno_3"  = "x$as_lineno_2") || { (exit 1); exit 1; }
+
+_ASEOF
+}; then
+  break
+fi
+
+fi
+
+      done
+
+      if test "x$CONFIG_SHELL" != x; then
+  $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
+        $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
+        export CONFIG_SHELL
+        exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
+fi
+
+
+    if test $as_have_required = no; then
+  echo This script requires a shell more modern than all the
+      echo shells that I found on your system.  Please install a
+      echo modern shell, or manually run the script under such a
+      echo shell if you do have one.
+      { (exit 1); exit 1; }
+fi
+
+
+fi
+
+fi
+
+
+
+(eval "func_return () {
+  (exit \$1)
+}
+func_success () {
+  func_return 0
+}
+func_failure () {
+  func_return 1
+}
+func_ret_success () {
+  return 0
+}
+func_ret_failure () {
+  return 1
+}
+
+exitcode=0
+if func_success; then
+  :
+else
+  exitcode=1
+  echo func_failure succeeded.
+fi
+
+if func_failure; then
+  exitcode=1
+  echo func_success failed.
+fi
+
+if func_ret_success; then
+  :
+else
+  exitcode=1
+  echo func_ret_success failed.
+fi
+
+if func_ret_failure; then
+  exitcode=1
+  echo func_ret_failure succeeded.
+fi
+
+test \$exitcode = 0") || {
+  echo No shell found that supports shell functions.
+  echo Please tell autoconf@gnu.org about your system,
+  echo including any error possibly output before this
+  echo message
+}
 
 
 
@@ -1066,7 +1132,8 @@ if $ac_init_version; then
 GNU Autoconf configure 2.59a
 generated by GNU Autoconf 2.59a
 
-Copyright (C) 2004 Free Software Foundation, Inc.
+Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
+2003, 2004 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 _ACEOF
@@ -2503,177 +2570,6 @@ echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-if { $SHELL 2>/dev/null <<\_ASEOF
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-  # is contrary to our usage.  Disable this feature.
-  alias -g '${1+"$@"}'='"$@"'
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-DUALCASE=1; export DUALCASE # for MKS sh
-
-func_return () {
-  (exit $1)
-}
-
-func_success () {
-  func_return 0
-}
-
-func_failure () {
-  func_return 1
-}
-
-func_ret_success () {
-  return 0
-}
-
-func_ret_failure () {
-  return 1
-}
-
-exitcode=0
-if func_success; then
-  :
-else
-
-  exitcode=1
-  echo func_failure succeeded.
-
-fi
-
-if func_failure; then
-
-  exitcode=1
-  echo func_success failed.
-
-fi
-
-if func_ret_success; then
-  :
-else
-
-  exitcode=1
-  echo func_ret_success failed.
-
-fi
-
-if func_ret_failure; then
-
-  exitcode=1
-  echo func_ret_failure succeeded.
-
-fi
-
-{ (exit $exitcode); exit $exitcode; }
-_ASEOF
-}; then
-  :
-else
-
-  case $CONFIG_SHELL in
-  '')
-    as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   if { $as_dir/$as_base 2>/dev/null <<\_ASEOF
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-  # is contrary to our usage.  Disable this feature.
-  alias -g '${1+"$@"}'='"$@"'
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-DUALCASE=1; export DUALCASE # for MKS sh
-
-func_return () {
-  (exit $1)
-}
-
-func_success () {
-  func_return 0
-}
-
-func_failure () {
-  func_return 1
-}
-
-func_ret_success () {
-  return 0
-}
-
-func_ret_failure () {
-  return 1
-}
-
-exitcode=0
-if func_success; then
-  :
-else
-
-  exitcode=1
-  echo func_failure succeeded.
-
-fi
-
-if func_failure; then
-
-  exitcode=1
-  echo func_success failed.
-
-fi
-
-if func_ret_success; then
-  :
-else
-
-  exitcode=1
-  echo func_ret_success failed.
-
-fi
-
-if func_ret_failure; then
-
-  exitcode=1
-  echo func_ret_failure succeeded.
-
-fi
-
-{ (exit $exitcode); exit $exitcode; }
-_ASEOF
-}; then
-
-	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
-	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
-
-fi
-;;
-	 esac
-       done
-done
-;;
-  *)
-    ;;
-  esac
-
-fi
-
-
 # Work around bugs in pre-3.0 UWIN ksh.
 $as_unset ENV MAIL MAILPATH
 PS1='$ '
@@ -2718,6 +2614,7 @@ echo X/"$0" |
   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
   	  /^X\/\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
+
 
 
 
@@ -2898,7 +2795,7 @@ GNU Autoconf config.status 2.59a
 configured by $0, generated by GNU Autoconf 2.59a,
   with options \\"`echo "$ac_configure_args" | sed 's/[\\""\`\$]/\\\\&/g'`\\"
 
-Copyright (C) 2003 Free Software Foundation, Inc.
+Copyright (C) 2004 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 srcdir=$srcdir
@@ -3499,7 +3396,7 @@ echo "$as_me: executing $ac_dest commands" >&6;}
     tests/atconfig ) cat >tests/atconfig <<ATEOF
 # Configurable variable values for building test suites.
 # Generated by $0.
-# Copyright (C) 2000, 2001, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2004 Free Software Foundation, Inc.
 
 # The test suite will define top_srcdir=$at_top_srcdir/../.. etc.
 at_testdir='tests'
