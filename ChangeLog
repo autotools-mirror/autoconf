@@ -1,5 +1,18 @@
 1999-03-11  Ben Elliston  <bje@cygnus.com>
 
+	* config.sub: Recognise hppa2.0w. Contributed by Erez Zadok
+	<ezk@cs.columbia.edu>.
+
+1999-03-11  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* config.guess: Prefer $HOST_CC over $CC when deciding on a C
+	compiler to compile stub programs. Allow this to be overridden
+	with the value of $BUILD_CC in cross-compilation environments
+	where the native compiler must be used for running tests on the
+	host.
+		
+1999-03-11  Ben Elliston  <bje@cygnus.com>
+
 	* config.guess: Recognise MiNT and TOS on Atari machines.
 	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
 
