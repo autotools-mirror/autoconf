@@ -935,7 +935,7 @@ define(AC_HAVE_LIBRARY, [dnl
 changequote(/,/)dnl
 define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
-define(/AC_CV_NAME/, ac_cv_lib//AC_LIB_NAME)dnl
+define(/AC_CV_NAME/, ac_cv_lib_//AC_LIB_NAME)dnl
 changequote([,])dnl
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="${LIBS}"
