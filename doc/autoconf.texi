@@ -521,7 +521,7 @@ called @code{configure}.  When run, @code{configure} creates several
 files, replacing configuration parameters in them with appropriate
 values.  The files that @code{configure} creates are:
 
-@itemize @bullet
+@itemize @minus
 @item
 one or more @file{Makefile} files, one in each subdirectory of the
 package (@pxref{Makefile Substitutions});
@@ -5087,7 +5087,7 @@ distributions.
 
 To be compatible with Ash 0.2:
 
-@itemize @bullet
+@itemize @minus
 @item
 don't use @samp{$?} after expanding empty or unset variables:
 
@@ -5235,15 +5235,16 @@ remove good ones...
 @node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
 @subsection File System Conventions
 
-While @command{autoconf} and friends will usually be run on some Unix variety,
-it can and will be used on other systems, most notably @sc{dos} variants.
-This impacts several assumptions regarding file- and pathnames.
+While @command{autoconf} and friends will usually be run on some Unix
+variety, it can and will be used on other systems, most notably @sc{dos}
+variants.  This impacts several assumptions regarding file- and
+pathnames.
 
 @noindent
 For example, the following code:
 
 @example
-case "$foo_dir" in
+case $foo_dir in
   /*) # Absolute
      ;;
   *)
@@ -5257,8 +5258,8 @@ they can use a drivespec, and will usually use a backslash as directory
 separator.  The canonical way to check for absolute paths is:
 
 @example
-case "$foo_dir" in
-  [\\/]* | ?:[\\/]) # Absolute
+case $foo_dir in
+  [\\/]* | ?:[\\/]* ) # Absolute
      ;;
   *)
      foo_dir=$dots$foo_dir ;;
@@ -5275,16 +5276,17 @@ use it as path separator.  When creating or accessing paths, use
 variable).  @command{autoconf} sets this to the appropriate value (@samp{:}
 or @samp{;}) when it starts up.
 
-File names need extra care as well.  While @sc{dos}-based environments that are
-Unixy enough to run @command{autoconf} (such as @sc{djgpp}) will usually be able
-to handle long file names properly, there are still limitations that can
-seriously break packages:
+File names need extra care as well.  While @sc{dos}-based environments
+that are Unixy enough to run @command{autoconf} (such as DJGPP) will
+usually be able to handle long file names properly, there are still
+limitations that can seriously break packages:
 
-@itemize @minus
+@table @asis
 @item No multiple dots
-@sc{dos} cannot handle multiple dots in filenames.  This is an especially important
-thing to remember when building a portable configure script, as
-@command{autoconf} uses a .in suffix for template files.
+@sc{dos} cannot handle multiple dots in filenames.  This is an
+especially important thing to remember when building a portable
+configure script, as @command{autoconf} uses a .in suffix for template
+files.
 
 This is perfectly OK on Unices:
 
@@ -5306,19 +5308,20 @@ AC_OUTPUT
 @end example
 
 @item Case insensitivity
-@sc{dos} is case insensitive, so you cannot, for example, have both a file called
-@samp{INSTALL} and a directory called @samp{install}.  This also affects
-@command{make}; if there's a file called @samp{INSTALL} in the directory,
-@command{make install} will do nothing (unless the @samp{install} target is
-marked as PHONY).
+@sc{dos} is case insensitive, so you cannot, for example, have both a
+file called @samp{INSTALL} and a directory called @samp{install}.  This
+also affects @command{make}; if there's a file called @samp{INSTALL} in
+the directory, @command{make install} will do nothing (unless the
+@samp{install} target is marked as PHONY).
 
 @item The 8+3 limit
-Because the @sc{dos} file system only stores the first 8 characters of the filename
-and the first 3 of the extension, those must be unique.  That means that
-@samp{foobar-part1.c}, @samp{foobar-part2.c} and @samp{foobar-prettybird.c}
-all resolve to the same filename (@samp{FOOBAR-P.C}).  The same goes for
-@samp{foo.bar} and @samp{foo.bartender}.
-@end itemize
+Because the @sc{dos} file system only stores the first 8 characters of
+the filename and the first 3 of the extension, those must be unique.
+That means that @samp{foobar-part1.c}, @samp{foobar-part2.c} and
+@samp{foobar-prettybird.c} all resolve to the same filename
+(@samp{FOOBAR-P.C}).  The same goes for @samp{foo.bar} and
+@samp{foo.bartender}.
+@end table
 
 @node Shell Substitutions, Assignments, File System Conventions, Portable Shell
 @subsection Shell Substitutions
@@ -5693,13 +5696,13 @@ hence read-only.  Do not use it.
 
 @item PATH_SEPARATOR
 @evindex PATH_SEPARATOR
-On @sc{djgpp} systems, the @code{PATH_SEPARATOR} variable can be set to either
-@samp{:} or @samp{;} to control the path separator @command{bash} uses
-to set up certain environment variables (such as @code{PATH}). Since this
-only works inside bash, you want autoconf to detect the regular @sc{dos} path
-separator @samp{;}, so it can be safely substituted in files that may
-not support @samp{;} as path separator. So either unset this variable
-or set it to @samp{;}.
+On DJGPP systems, the @code{PATH_SEPARATOR} variable can be set to
+either @samp{:} or @samp{;} to control the path separator @command{bash}
+uses to set up certain environment variables (such as
+@code{PATH}). Since this only works inside bash, you want autoconf to
+detect the regular @sc{dos} path separator @samp{;}, so it can be safely
+substituted in files that may not support @samp{;} as path separator. So
+either unset this variable or set it to @samp{;}.
 
 @item RANDOM
 @evindex RANDOM
@@ -5785,7 +5788,7 @@ as the string composed of a backslash and an n.
 @c -----------------
 @cindex @command{exit}
 The default value of @command{exit} is supposed to be @code{$?},
-unfortunately some shells, such as the @sc{djgpp} port of Bash 2.04, just
+unfortunately some shells, such as the DJGPP port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
@@ -6401,13 +6404,13 @@ alternation and @code{egrep}.
 Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
 are not available on old systems, use @samp{ln} as a fall back.
 
-For versions of the @sc{djgpp} before 2.04, @command{ln} emulates soft
-links for executables by generating a stub that in turn calls the real
+For versions of the DJGPP before 2.04, @command{ln} emulates soft links
+for executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
 Unix spec. So @samp{ln -s file link} will generate @file{link.exe},
 which will attempt to call @file{file.exe} if run. But this feature only
 works for executables, so @samp{cp -p} is used instead for these
-systems. @sc{djgpp} version 2.04 and later have full symlink support.
+systems.  DJGPP version 2.04 and later have full symlink support.
 
 
 @item @command{mv}
