@@ -191,9 +191,17 @@ $debug ||
 
 # Temporary files.
 : ${TMPDIR=/tmp}
-{ tmp=`(mktemp -d -q "$TMPDIR/acXXXXXX") 2>/dev/null` && test -n "$tmp"; }  ||
-  { tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp); } ||
-  { echo "$me: cannot create a temporary directory in $TMPDIR" >&2; exit 1; }
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/acXXXXXX") 2>/dev/null` &&
+  test -n "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   exit 1;
+}
 
 # Running m4.
 test -n "$localdir" && use_localdir="-I$localdir"
