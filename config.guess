@@ -490,6 +490,9 @@ EOF
     CRAY*TS:*:*:*)
 	echo t90-cray-unicos${UNAME_RELEASE}
 	exit 0 ;;
+    CRAY*T3E:*:*:*)
+	echo t3e-cray-unicosmk${UNAME_RELEASE}
+	exit 0 ;;
     CRAY-2:*:*:*)
 	echo cray2-cray-unicos
         exit 0 ;;
@@ -812,6 +815,12 @@ EOF
 	exit 0 ;;
     BePC:BeOS:*:*)	# BeOS running on Intel PC compatible.
 	echo i586-pc-beos
+	exit 0 ;;
+    SX-4:SUPER-UX:*:*)
+	echo sx4-nec-superux${UNAME_RELEASE}
+	exit 0 ;;
+    SX-5:SUPER-UX:*:*)
+	echo sx5-nec-superux${UNAME_RELEASE}
 	exit 0 ;;
 esac
 

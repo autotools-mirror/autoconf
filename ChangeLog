@@ -1,3 +1,8 @@
+1999-01-08  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect Cray T3E and NEC SX-4, SX-5 machines.
+	Contributed by Andreas Schott <schott@rzg.mpg.de>.
+
 1999-01-06  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (AC_OBJEXT): Correct documentation.
