@@ -114,9 +114,6 @@ test -f atlocal && . ./atlocal
 
 # -e sets to true
 at_stop_on_error=false
-# Shall we save and check stdout and stderr?
-# -n sets to false
-at_check_stds=:
 # Shall we be verbose?
 at_verbose=:
 # Shall we keep the debug scripts?  Must be `:' when testsuite is
@@ -131,14 +128,13 @@ m4_divert([OPTIONS])
 
 while test $[#] -gt 0; do
   case $[1] in
-    --help | -h) at_help=:; break ;;
+    --help | -h) at_help=: ;;
     --version) echo "$[0] ($at_package) $at_version"; exit 0 ;;
 
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
-    -n) at_check_stds=false;;
     -v) at_verbose=echo;;
-    -x) at_traceon='set -vx'; at_traceoff='set +vx'; at_check_stds=false;;
+    -x) at_traceon='set -vx'; at_traceoff='set +vx';;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
         at_tests="$at_tests$[1] ";;
@@ -159,11 +155,10 @@ Usage: $[0] [[OPTION]]... [[TESTS]]
 Run all the tests, or the selected TESTS.
 
 Options:
-  -h  Display this help message and the list of tests
+  -h  Display this help message and the description of TESTS
   -e  Abort the full suite and inhibit normal clean up if a test fails
-  -n  Do not redirect stdout and stderr and do not test their contents
   -v  Force more detailed output, default for debugging scripts
-  -x  Have the shell to trace command execution; also implies option -n
+  -x  Have the shell to trace command execution
 
 Tests:
 EOF

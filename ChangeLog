@@ -1,5 +1,10 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT): Forget about `-n'.
+	Adjust so that `./testsuite -h 1 2' explains only tests 1 & 2.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_EVAL): New.
 	(AC_TRY_EVAL, AC_TRY_COMMAND): Use it.
 
