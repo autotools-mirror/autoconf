@@ -26,8 +26,8 @@ INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 M4 = @M4@
-# Programs that we can not install if perl is missing.
-PROGS = @PROGS@
+
+PROGS = autoconf autoheader autoreconf @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
@@ -76,7 +76,7 @@ TEXIDIR = $(srcdir)/../texinfo
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
 editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
-all: autoconf autoheader ${PROGS}
+all: ${PROGS}
 
 autoconf: autoconf.sh
 	rm -f $@ $@.tmp
