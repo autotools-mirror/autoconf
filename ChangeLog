@@ -1,3 +1,11 @@
+2004-12-22  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Builtins) <case>: Mention
+	problems with SunOS ksh and backslash escaping, Bourne shells and
+	closing brackets (both within character classes).  Bug reported
+	against Libtool by Alexander Kurz <alexander.kurz@qsc.de>.
+	<read>: New entry.  Mention non-availability of -r.
+
 2004-12-21  Akim Demaille  <akim@epita.fr>
 
 	* lib/autotest/general.m4 (AT_LINE): Don't add srcdir here, to
