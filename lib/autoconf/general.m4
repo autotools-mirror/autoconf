@@ -33,7 +33,7 @@ dnl
 dnl ### Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.9.2)dnl
+define(AC_ACVERSION, 1.9.3)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -484,6 +484,8 @@ define(AC_CONFIG_SUBDIRS,
 if test -z "${norecursion}"; then
   for ac_config_dir in $1; do
 
+    # Don't complain, so a configure script can configure a large
+    # source tree, or only the parts of it that are there.
     if test ! -d ${srcdir}/${ac_config_dir}; then
       continue
     fi
@@ -540,8 +542,8 @@ dnl
 dnl ### Canonicalizing the system type.
 dnl
 dnl
-dnl Find Cygnus configure, config.sub, and config.guess in directory $1.
-dnl These are auxiliary files used in configuration.
+dnl Find install.sh, config.sub, config.guess, and Cygnus configure
+dnl in directory $1.  These are auxiliary files used in configuration.
 dnl $1 can be either absolute or relative to ${srcdir}.
 define(AC_CONFIG_AUX,
 [AC_CONFIG_AUX_DIRS($1 ${srcdir}/$1)])dnl
@@ -553,6 +555,8 @@ define(AC_CONFIG_AUX_DEFAULT,
 dnl
 dnl Internal subroutine.
 dnl Search for the configuration auxiliary files in directory list $1.
+dnl We look for install.sh only so that users of AC_PROG_INSTALL
+dnl do not automatically need to distribute the other auxiliary files.
 define(AC_CONFIG_AUX_DIRS,
 [ac_aux_dir=
 for ac_dir in $1; do
