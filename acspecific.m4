@@ -1327,7 +1327,9 @@ dnl ### Checks for operating system services
 dnl
 dnl
 AC_DEFUN(AC_SYS_INTERPRETER,
-[AC_MSG_CHECKING(whether [#]! works in shell scripts)
+[# Pull the hash mark out of the macro call to avoid m4 problems.
+ac_msg="whether #! works in shell scripts"
+AC_MSG_CHECKING($ac_msg)
 AC_CACHE_VAL(ac_cv_sys_interpreter,
 [echo '#!/bin/cat
 exit 69
