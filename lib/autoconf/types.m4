@@ -434,7 +434,14 @@ dnl ac_aggr.MEMBER;
 if (ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
 return 0;])],
                 [AS_VAR_SET(ac_Member, yes)],
-                [AS_VAR_SET(ac_Member, no)])])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
+[dnl AGGREGATE ac_aggr;
+static m4_bpatsubst([$1], [\..*]) ac_aggr;
+dnl sizeof ac_aggr.MEMBER;
+if (sizeof ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
+return 0;])],
+                [AS_VAR_SET(ac_Member, yes)],
+                [AS_VAR_SET(ac_Member, no)])])])
 AS_IF([test AS_VAR_GET(ac_Member) = yes], [$2], [$3])dnl
 AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
