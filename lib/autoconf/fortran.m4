@@ -131,9 +131,9 @@ fi[]dnl
 ## ----------------------- ##
 
 
-# ----------------------------- #
+# -------------------------- #
 # 1d. The Fortran language.  #
-# ----------------------------- #
+# -------------------------- #
 
 
 # AC_LANG(Fortran 77)
@@ -147,7 +147,7 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
 
 # AC_LANG(Fortran)
-# -------------------
+# ----------------
 m4_define([AC_LANG(Fortran)],
 [ac_ext=${FC_SRCEXT-f}
 ac_compile='$FC -c $FCFLAGS $FCFLAGS_SRCEXT conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -161,7 +161,7 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 
 # _AC_FORTRAN_ASSERT
-# --------------------
+# ------------------
 # Current language must be Fortran or Fortran 77.
 m4_defun([_AC_FORTRAN_ASSERT],
 [m4_if(_AC_LANG, [Fortran], [],
@@ -174,7 +174,7 @@ m4_defun([_AC_FORTRAN_ASSERT],
 m4_define([_AC_LANG_ABBREV(Fortran 77)], [f77])
 
 # _AC_LANG_ABBREV(Fortran)
-# ---------------------------
+# ------------------------
 m4_define([_AC_LANG_ABBREV(Fortran)], [fc])
 
 
@@ -183,16 +183,17 @@ m4_define([_AC_LANG_ABBREV(Fortran)], [fc])
 m4_define([_AC_LANG_PREFIX(Fortran 77)], [F])
 
 # _AC_LANG_PREFIX(Fortran)
-# ---------------------------
+# ------------------------
 m4_define([_AC_LANG_PREFIX(Fortran)], [FC])
 
 
 # _AC_FC
-# -------------------
+# ------
 # Return F77 or FC, depending upon the language.
 AC_DEFUN([_AC_FC],
 [_AC_FORTRAN_ASSERT()dnl
-AC_LANG_CASE([Fortran 77], [F77], [Fortran], [FC])])
+AC_LANG_CASE([Fortran 77], [F77],
+             [Fortran],    [FC])])
 
 
 ## ---------------------- ##
@@ -200,9 +201,9 @@ AC_LANG_CASE([Fortran 77], [F77], [Fortran], [FC])])
 ## ---------------------- ##
 
 
-# ------------------------ #
+# --------------------- #
 # 2d. Fortran sources.  #
-# ------------------------ #
+# --------------------- #
 
 # AC_LANG_SOURCE(Fortran 77)(BODY)
 # AC_LANG_SOURCE(Fortran)(BODY)
@@ -260,9 +261,9 @@ m4_define([AC_LANG_CALL(Fortran)],
 ## -------------------------------------------- ##
 
 
-# ----------------------------- #
+# -------------------------- #
 # 3d. The Fortran compiler.  #
-# ----------------------------- #
+# -------------------------- #
 
 
 # AC_LANG_PREPROC(Fortran 77)
@@ -301,7 +302,9 @@ AC_DEFUN([AC_LANG_COMPILER(Fortran)],
 AU_DEFUN([ac_cv_prog_g77],
 [ac_cv_f77_compiler_gnu])
 
+
 # _AC_FC_DIALECT_YEAR([DIALECT])
+# ------------------------------
 # Given a Fortran DIALECT, which is Fortran [YY]YY or simply [YY]YY,
 # convert to a 4-digit year.  The dialect must be one of Fortran 77,
 # 90, 95, or 2000, currently.  If DIALECT is simply Fortran or the
@@ -315,8 +318,9 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
          [],[],
          [m4_fatal([unknown Fortran dialect])])])
 
+
 # _AC_PROG_FC([DIALECT], [COMPILERS...])
-# ---------------------------
+# --------------------------------------
 # DIALECT is a Fortran dialect, given by Fortran [YY]YY or simply [YY]YY,
 # and must be one of those supported by _AC_FC_DIALECT_YEAR
 #
@@ -371,8 +375,9 @@ ac_save_ext=$ac_ext
 ac_ext=F
 _AC_LANG_COMPILER_GNU
 ac_ext=$ac_save_ext
-_AC_PROG_FC_G]
-)
+_AC_PROG_FC_G
+])# _AC_PROG_FC
+
 
 # AC_PROG_F77([COMPILERS...])
 # ---------------------------
@@ -388,8 +393,9 @@ G77=`test $ac_compiler_gnu = yes && echo yes`
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77
 
+
 # AC_PROG_FC([COMPILERS...], [DIALECT])
-# ---------------------------
+# -------------------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for, and [DIALECT] is an optional dialect.  See also _AC_PROG_FC.
 AC_DEFUN([AC_PROG_FC],
@@ -403,7 +409,7 @@ AC_LANG_POP(Fortran)dnl
 
 
 # _AC_PROG_FC_G
-# --------------
+# -------------
 # Check whether -g works, even if F[C]FLAGS is set, in case the package
 # plays around with F[C]FLAGS (such as to build both debugging and normal
 # versions of a library), tasteless as that idea is.
@@ -469,6 +475,7 @@ if test $ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o = no; then
 fi
 ])# _AC_PROG_FC_C_O
 
+
 # AC_PROG_F77_C_O
 # ---------------
 AC_DEFUN([AC_PROG_F77_C_O],
@@ -477,6 +484,7 @@ AC_LANG_PUSH(Fortran 77)dnl
 _AC_PROG_FC_C_O
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77_C_O
+
 
 # AC_PROG_FC_C_O
 # ---------------
@@ -1167,22 +1175,25 @@ AC_DEFUN_ONCE([AC_FC_FREEFORM],
 [AC_LANG_PUSH(Fortran)dnl
 ac_cv_fc_freeform=unknown
 ac_fc_freeform_FCFLAGS_save=$FCFLAGS
-for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform -freeform "-f free"; do
+for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform \
+               -freeform "-f free"
+do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_freeform_FCFLAGS_save $ac_flag"
   AC_COMPILE_IFELSE([
   program freeform
        ! FIXME: how to best confuse non-freeform compilers?
        print *, 'Hello ', &
            'world.'
-       end
-], [ac_cv_fc_freeform=$ac_flag; break])
+       end],
+                    [ac_cv_fc_freeform=$ac_flag; break])
 done
-rm -f conftest.$ac_objext conftest.$ac_ext
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 FCFLAGS=$ac_fc_freeform_FCFLAGS_save
 AC_LANG_POP(Fortran)dnl
 ])
 if test "x$ac_cv_fc_freeform" = xunknown; then
-  m4_default([$2],[AC_MSG_ERROR([Fortran does not accept free-form source],77)])
+  m4_default([$2],
+             [AC_MSG_ERROR([Fortran does not accept free-form source], 77)])
 else
   if test "x$ac_cv_fc_freeform" != xnone; then
     FCFLAGS="$FCFLAGS $ac_cv_fc_freeform"
