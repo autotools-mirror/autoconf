@@ -1,5 +1,11 @@
 2000-10-17  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (The GNU build system): Sketch of new a
+	chapter.
+
+	
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
 	Somehow, the adjustment of `mktests.sh' claimed on 2000-10-17 by
 	myself (`Fix autoupdate...') was not applied.
 

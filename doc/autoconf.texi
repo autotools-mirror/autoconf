@@ -132,6 +132,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 @menu
 * Introduction::                Autoconf's purpose, strengths, and weaknesses
+* The GNU build system::
 * Making configure Scripts::    How to organize and produce Autoconf scripts
 * Setup::                       Initialization and output
 * Existing Tests::              Macros that check for particular features
@@ -372,7 +373,7 @@ History of Autoconf
 
 @c ============================================================= Introduction.
 
-@node Introduction, Making configure Scripts, Top, Top
+@node Introduction, The GNU build system, Top, Top
 @chapter Introduction
 
 @flushright
@@ -475,9 +476,36 @@ Repository}, which is kindly run by @email{simons@@research.cys.de,
 Peter Simons}.
 
 
+@c ================================================= The GNU build system
+
+@node The GNU build system, Making configure Scripts, Introduction, Top
+@chapter The GNU build system
+
+@emph{This chapter is still under work.  It will be ready for the
+release, but most probably not for the next betas.}
+
+I'm unsure about the title.
+
+Move the dissertation `A shell script compiler' here.  The text above,
+probably starting at `There are several jobs...', should be moved here.
+Hm?
+
+Talk about Automake, Libtool.
+
+Explain the concept of system.h.
+
+Promote Bison, Flex and other GNU tools.
+
+Provide pointers to the various documentations and tutorials (books, web
+etc.).
+
+Explain that learning is painful, agreed, but getting inspiration is the
+way out.  Fetish, libit, liberty.
+
+
 @c ================================================= Making configure Scripts.
 
-@node Making configure Scripts, Setup, Introduction, Top
+@node Making configure Scripts, Setup, The GNU build system, Top
 @chapter Making @code{configure} Scripts
 @cindex @file{aclocal.m4}
 @cindex @code{configure}
@@ -1242,7 +1270,8 @@ and do not create @code{configure}.  For example:
 AC_PREREQ(@value{VERSION})
 @end example
 
-This macro is the only macro that may be used before @code{AC_INIT}.
+This macro is the only macro that may be used before @code{AC_INIT}, but
+for consistency, you are invited not to do so.
 @end defmac
 
 @defmac AC_COPYRIGHT (@var{copyright-notice})
