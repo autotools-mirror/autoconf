@@ -887,10 +887,10 @@ short ebcdic_ii[] = { 0x89D3, 0xE3E3, 0x8593, 0x95C5, 0x89C4, 0x9581, 0 };
 short ebcdic_mm[] = { 0xC2C9, 0xC785, 0x95C4, 0x8981, 0x95E2, 0xA8E2, 0 };
 void _ebcdic () { char *s = (char *) ebcdic_mm; s = (char *) ebcdic_ii; }]],
 [[ _ascii (); _ebcdic (); ]])],
-[if fgrep BIGenDianSyS conftest.$ac_objext >/dev/null ; then
+[if grep BIGenDianSyS conftest.$ac_objext >/dev/null ; then
   ac_cv_c_bigendian=yes
 fi
-if fgrep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
+if grep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
   if test "$ac_cv_c_bigendian" = unknown; then
     ac_cv_c_bigendian=no
   else
