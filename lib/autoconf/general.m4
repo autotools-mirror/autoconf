@@ -2320,13 +2320,13 @@ rm -f confcache[]dnl
 
 # AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 # ------------------------------------------
-#
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
-# Should be dnl'ed.
+# Should be dnl'ed.  Try to catch common mistakes.
 define([AC_CACHE_VAL],
-[dnl We used to use the below line, but it fails if the 1st arg is a
-dnl shell variable, so we need the eval.
-dnl if test "${$1+set}" = set; then
+[ifelse(regexp([AC_DEFINE], [$2]), [-1],
+               [AC_DIAGNOSE(syntax,
+[$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
+[where no actions should be taken])])dnl
 AC_VAR_IF_SET([$1],
               [echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG],
               [$2])])
