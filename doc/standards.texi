@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 12 April 1995
+@set lastupdate 16 May 1995
 @c %**end of header
 
 @ifinfo
@@ -1278,6 +1278,7 @@ standard output and exits successfully.  These options should inhibit
 the normal function of the command; they should do nothing except print
 the requested information.
 
+@c longopts begin here (keyword for isearch)
 @c Please leave newlines between items in this table; it's much easier
 @c to update when it isn't completely squashed together and unreadable.
 @c When there is more than one short option for a long option name, put
@@ -1314,6 +1315,9 @@ and @code{unexpand}.
 
 @item ascii
 @samp{-a} in @code{diff}.
+
+@item assign
+@samp{-v} in Gawk.
 
 @item assume-new
 @samp{-W} in Make.
@@ -1394,6 +1398,9 @@ Used in various programs to specify the directory to use.
 @item compare
 @samp{-d} in @code{tar}.
 
+@item compat
+Used in gawk (no corresponding single-letter option).
+
 @item compress
 @samp{-Z} in @code{tar} and @code{shar}.
 
@@ -1406,8 +1413,12 @@ Used in various programs to specify the directory to use.
 @item context
 Used in @code{diff}.
 
+@item copyleft
+Used in gawk (no corresponding single-letter option).
+
 @item copyright
 @samp{-C} in @code{ptx}, @code{recode}, and @code{wdiff}.
+Also used in gawk (no corresponding single-letter option).
 
 @item core
 Used in GDB.
@@ -1544,8 +1555,11 @@ Used in GDB.
 @item fatal-warnings
 @samp{-E} in @code{m4}.
 
+@item field-separator
+p@samp{-F} in Gawk.
+
 @item file
-@samp{-f} in @code{info}, Make, @code{mt}, and @code{tar};
+@samp{-f} in Gawk, @code{info}, Make, @code{mt}, and @code{tar};
 @samp{-n} in @code{sed};
 @samp{-r} in @code{touch}.
 
@@ -1734,6 +1748,9 @@ Used in @code{split}, @code{head}, and @code{tail}.
 
 @item link
 @samp{-l} in @code{cpio}.
+
+@item lint
+Used in gawk (no corresponding single-letter option).
 
 @item list
 @samp{-t} in @code{cpio};
@@ -1966,6 +1983,9 @@ Used in Makeinfo.
 @item portability
 @samp{-c} in @code{cpio} and @code{tar}.
 
+@item posix
+Used in gawk (no corresponding single-letter option).
+
 @item prefix-builtins
 @samp{-P} in @code{m4}.
 
@@ -2139,6 +2159,9 @@ Used in many programs to inhibit the usual output.
 @item sort
 Used in @code{ls}.
 
+@item source
+Used in gawk (no corresponding single-letter option).
+
 @item sparse
 @samp{-S} in @code{tar}.
 
@@ -2274,6 +2297,9 @@ Used in GDB.
 @item update
 @samp{-u} in @code{cp}, @code{ctags}, @code{mv}, @code{tar}.
 
+@item usage
+Used in gawk (no corresponding single-letter option).
+
 @item uuencode
 @samp{-B} in @code{shar}.
 
@@ -2317,6 +2343,7 @@ Print the version number.
 @samp{-z} in @code{gprof}.
 
 @end table
+@c longopts end here (keyword for isearch)
 
 @node Documentation
 @chapter Documenting Programs
