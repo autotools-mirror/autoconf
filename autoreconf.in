@@ -128,7 +128,8 @@ done
 
 # Parse command line.
 while test $# -gt 0; do
-  optarg=`expr "$1" : '-[^=]*=\(.*\)'`
+  optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
+               "x$1" : 'x-.\(.*\)'`
   case "$1" in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
@@ -150,22 +151,22 @@ while test $# -gt 0; do
        localdir=$1
        shift ;;
 
-    --macrodir=* )
-       autoconf_dir=$optarg
-       shift ;;
     --macrodir | -m )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
-
-    --m4dir=* )
-       m4dir=$optarg
+    --macrodir=* | -m* )
+       autoconf_dir=$optarg
        shift ;;
+
     --m4dir | -M )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        m4dir=$1
+       shift ;;
+    --m4dir=* | -M* )
+       m4dir=$optarg
        shift ;;
 
      --force | -f )

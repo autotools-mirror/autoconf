@@ -96,8 +96,8 @@ warning_obsolete=false
 
 # Parse command line.
 while test $# -gt 0 ; do
-  optarg=`expr "$1" : '--[^=]*=\(.*\)' \| \
-               "$1" : '-.\(.*\)'`
+  optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
+               "x$1" : 'x-.\(.*\)'`
   case $1 in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;

@@ -1,3 +1,11 @@
+2000-09-19  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (optarg): More robust expr invocation.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* autoheader.sh: Likewise.
+	Reported by Bernard Dautrevaux.
+
 2000-09-19  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (AU_ALIAS): Do not use `defn' since then autoupdate
