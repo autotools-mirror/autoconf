@@ -9,6 +9,13 @@
   with older Gettexts.
   Many thanks to Bruno Haible for autopoint!
 
+- The -I DIR or --include=DIR option now appends DIR to the include path
+  instead of prepending; this is for consistency with other GNU tools.
+  The new -B DIR or --prepend-include=DIR option has the old behavior.
+
+- When configured with the new --enable-site-macro-dir=DIR configure-time
+  option, Autoconf now appends DIR to the default include path.
+
 ** Macros
 
 - AC_CONFIG_LINKS now makes copies if it can't make links.
