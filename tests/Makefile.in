@@ -200,7 +200,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = atlocal autoconf autoheader autom4te autoreconf \
 	autoscan autoupdate ifnames
 DIST_SOURCES =
-DIST_COMMON = Makefile.am Makefile.in atlocal.in
+DIST_COMMON = Makefile.am Makefile.in atlocal.in wrapper.in
 all: all-am
 
 .SUFFIXES:

@@ -225,9 +225,9 @@ sub find_configure_ac (;$)
 # $FILENAME
 # find_file ($FILENAME, @INCLUDE)
 # -------------------------------
-# We match exactly the behavior of GNU m4: first look in the current
+# We match exactly the behavior of GNU M4: first look in the current
 # directory (which includes the case of absolute file names), and, if
-# the file is not absolute, just fail.  Otherwise, look in the path.
+# the file is not absolute, just fail.  Otherwise, look in @INCLUDE.
 #
 # If the file is flagged as optional (ends with `?'), then return undef
 # if absent.
@@ -249,7 +249,7 @@ sub find_file ($@)
       return undef;
     }
 
-  foreach my $path (reverse @include)
+  foreach my $path (@include)
     {
       return canonpath (catfile ($path, $filename))
 	if -e catfile ($path, $filename);

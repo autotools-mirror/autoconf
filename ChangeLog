@@ -1,5 +1,10 @@
 2002-07-17  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (find_file): Browse the directories in
+	the order they are given.
+
+2002-07-17  Akim Demaille  <akim@epita.fr>
+
 	* tests/wrapsh.as, tests/wrappl.as: Merge into...
 	* tests/wrapper.as: this.
 	* tests/Makefile.am, configure.ac: Adjust.
