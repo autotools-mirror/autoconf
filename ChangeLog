@@ -1,5 +1,14 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Simplify all the
+	case "$switch" in
+	into
+	case $switch in
+	* acspecific.m4: Likewise.
+	* aclang.m4: Likewise.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX): Remove.
 	Adjust dependencies.
 	(_AC_INIT_PARSE_ARGS): Set ac_tool_prefix.

@@ -985,7 +985,7 @@ do
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
 
-  case "$ac_option" in
+  case $ac_option in
 
   -bindir | --bindir | --bindi | --bind | --bin | --bi)
     ac_prev=bindir ;;
@@ -1027,7 +1027,7 @@ do
     expr "x$ac_feature" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
-    case "$ac_option" in
+    case $ac_option in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
@@ -1210,7 +1210,7 @@ do
     expr "x$ac_package" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package| sed 's/-/_/g'`
-    case "$ac_option" in
+    case $ac_option in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
@@ -1390,7 +1390,7 @@ fi
 
 if test -n "$ac_init_help"; then
 ifset([AC_PACKAGE_STRING],
-[  case "$ac_init_help" in
+[  case $ac_init_help in
      short | recursive ) echo "Configuration of AC_PACKAGE_STRING:";;
    esac])
   cat <<\EOF
@@ -1408,7 +1408,7 @@ if test "$ac_init_help" = "recursive"; then
     ac_dots=`echo $ac_subdir |
              sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
 
-    case "$srcdir" in
+    case $srcdir in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
     [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
@@ -1510,7 +1510,7 @@ ac_configure_args=
 ac_sep=
 for ac_arg
 do
-  case "$ac_arg" in
+  case $ac_arg in
   -no-create | --no-create | --no-creat | --no-crea | --no-cre \
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
@@ -2543,7 +2543,7 @@ AC_DEFUN([AC_PATH_PROG],
 set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_path_$1,
-[case "$$1" in
+[case $$1 in
   [[\\/]]* | ?:[[\\/]]*)
   ac_cv_path_$1="$$1" # Let the user override the test with a path.
   ;;
@@ -3951,7 +3951,7 @@ cat >>$CONFIG_STATUS <<\EOF
 ac_need_defaults=:
 while test $[#] != 0
 do
-  case "$[1]" in
+  case $[1] in
   --*=*)
     ac_option=`echo "$[1]" | sed -e 's/=.*//'`
     ac_optarg=`echo "$[1]" | sed -e ['s/[^=]*=//']`
@@ -3965,7 +3965,7 @@ do
      ac_need_defaults=false;;
   esac
 
-  case "$[1]" in
+  case $[1] in
   # Handling of the options.
 EOF
 cat >>$CONFIG_STATUS <<EOF
@@ -4182,7 +4182,7 @@ EOF
 cat >>$CONFIG_STATUS <<\EOF
 for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
-  case "$ac_file" in
+  case $ac_file in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
        ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
   *) ac_file_in=$ac_file.in ;;
@@ -4204,7 +4204,7 @@ dnl to be created too).
     ac_dir_suffix= ac_dots=
   fi
 
-  case "$ac_given_srcdir" in
+  case $ac_given_srcdir in
   .)  srcdir=.
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
@@ -4217,7 +4217,7 @@ dnl to be created too).
   esac
 
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[  case "$ac_given_INSTALL" in
+[  case $ac_given_INSTALL in
   [[\\/$]]* | ?:[[\\/]]* ) INSTALL=$ac_given_INSTALL ;;
   *) INSTALL=$ac_dots$ac_given_INSTALL ;;
   esac
@@ -4266,7 +4266,7 @@ dnl  fi
 
 ifset([AC_LIST_FILES_COMMANDS],
 [  # Run the commands associated with the file.
-  case "$ac_file" in
+  case $ac_file in
 AC_LIST_FILES_COMMANDS()dnl
   esac
 ])dnl
@@ -4343,7 +4343,7 @@ ac_uD='%;t']
 
 for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
-  case "$ac_file" in
+  case $ac_file in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
        ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
   *) ac_file_in=$ac_file.in ;;
@@ -4482,7 +4482,7 @@ dnl to be created too).
   fi
 ifset([AC_LIST_HEADERS_COMMANDS],
 [  # Run the commands associated with the file.
-  case "$ac_file" in
+  case $ac_file in
 AC_LIST_HEADERS_COMMANDS()dnl
   esac
 ])dnl
@@ -4534,7 +4534,7 @@ dnl to be created too).
     ac_dest_dir_suffix= ac_dots=
   fi
 
-  case "$srcdir" in
+  case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
       *) ac_rel_source=$ac_dots$srcdir/$ac_source ;;
   esac
@@ -4547,7 +4547,7 @@ dnl to be created too).
   fi
 ifset([AC_LIST_LINKS_COMMANDS],
 [  # Run the commands associated with the file.
-  case "$ac_file" in
+  case $ac_file in
 AC_LIST_LINKS_COMMANDS()dnl
   esac
 ])dnl
@@ -4577,7 +4577,7 @@ dnl FIXME: Until Automake uses the new features of config.status, we
 dnl should keep this silent.  Otherwise, because Automake runs this in
 dnl each directory, it quickly becomes annoying.
 dnl  echo "executing commands of $ac_dest"
-  case "$ac_dest" in
+  case $ac_dest in
 AC_LIST_COMMANDS_COMMANDS()dnl
   esac
 done
@@ -4604,7 +4604,7 @@ if test "$no_recursion" != yes; then
       ac_prev=
       continue
     fi
-    case "$ac_arg" in
+    case $ac_arg in
     -cache-file | --cache-file | --cache-fil | --cache-fi \
     | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
       ac_prev=cache_file ;;
@@ -4633,7 +4633,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     test -d $srcdir/$ac_subdir || continue
 
     echo configuring in $ac_subdir
-    case "$srcdir" in
+    case $srcdir in
     .) ;;
     *)
 dnl FIXME: should actually be mkinstalldirs (parents may have
@@ -4652,7 +4652,7 @@ dnl to be created too).
     ac_dots=`echo $ac_subdir |
              sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
 
-    case "$srcdir" in
+    case $srcdir in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
     [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
@@ -4674,13 +4674,13 @@ dnl to be created too).
     # The recursion is here.
     if test -n "$ac_sub_configure"; then
       # Make the cache file name correct relative to the subdirectory.
-      case "$cache_file" in
+      case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
         ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[      case "$ac_given_INSTALL" in
+[      case $ac_given_INSTALL in
         [[\\/$]]* | ?:[[\\/]]*) INSTALL=$ac_given_INSTALL ;;
         *) INSTALL=$ac_dots$ac_given_INSTALL ;;
       esac
