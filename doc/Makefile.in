@@ -52,7 +52,7 @@ infodir = @infodir@
 
 #### End of system configuration section. ####
 
-SHELL = /bin/sh
+SHELL = @SHELL@
 
 SUBDIRS = testsuite
 
@@ -74,7 +74,8 @@ DISTFILES = AUTHORS COPYING ChangeLog ChangeLog.1 INSTALL \
 	standards.texi make-stds.texi standards.info*
 
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e \
-	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g'
+	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' \
+	-e 's,@''SHELL''@,$(SHELL),g'
 editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
 all: ${SCRIPTS} info
@@ -172,9 +173,9 @@ ${srcdir}/configure: configure.in $(M4FILES)
 	$(M4) autoconf.m4 configure.in > configure.tmp && \
 	chmod +x configure.tmp && mv configure.tmp configure
 Makefile: Makefile.in config.status
-	./config.status
+	$(SHELL) ./config.status
 config.status: configure
-	./config.status --recheck
+	$(SHELL) ./config.status --recheck
 
 maintainer-clean::
 	@echo "This command is intended for maintainers to use;"
