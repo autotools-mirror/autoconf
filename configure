@@ -456,7 +456,19 @@ else
   as_mkdir_p=false
 fi
 
-as_executable_p="test -f"
+# Find out how to test for executable files. Don't use a zero-byte file,
+# as systems may use methods other than mode bits to determine executability.
+cat >conf$$.file <<_ASEOF
+#! /bin/sh
+exit 0
+_ASEOF
+chmod +x conf$$.file
+if test -x conf$$.file >/dev/null 2>&1; then
+  as_executable_p="test -x"
+else
+  as_executable_p=:
+fi
+rm -f conf$$.file
 
 # Sed expression to map a string onto a valid CPP name.
 as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
@@ -1561,7 +1573,7 @@ case $as_dir/ in
     # by default.
     for ac_prog in ginstall scoinst install; do
       for ac_exec_ext in '' $ac_executable_extensions; do
-	if $as_executable_p "$as_dir/$ac_prog$ac_exec_ext"; then
+	if { test -f "$as_dir/$ac_prog$ac_exec_ext" && $as_executable_p "$as_dir/$ac_prog$ac_exec_ext"; }; then
 	  if test $ac_prog = install &&
 	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
@@ -1726,7 +1738,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_AWK="$ac_prog"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -1859,7 +1871,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_STRIP="${ac_tool_prefix}strip"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -1897,7 +1909,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_ac_ct_STRIP="strip"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2024,7 +2036,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_EXPR="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2075,7 +2087,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_M4="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2154,7 +2166,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2214,7 +2226,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_TEST_EMACS="$ac_prog"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2298,7 +2310,7 @@ do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_EMACS="$ac_prog"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
@@ -2386,28 +2398,7 @@ set dummy grep ggrep; ac_prog_name=$2
 if test "${ac_cv_path_GREP+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  # Create a temporary directory, and hook for its removal unless debugging.
-$debug ||
-{
-  trap 'exit_status=$?; rm -f -r $tmp && exit $exit_status' 0
-  trap '{ (exit 1); exit 1; }' 1 2 13 15
-}
-
-# Create a (secure) tmp directory for tmp files.
-: ${TMPDIR=/tmp}
-{
-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/GREPXXXXXX") 2>/dev/null` &&
-  test -n "$tmp" && test -d "$tmp"
-}  ||
-{
-  tmp=$TMPDIR/GREP$$-$RANDOM
-  (umask 077 && mkdir $tmp)
-} ||
-{
-   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   { (exit 1); exit 1; }
-}
-ac_path_GREP_found=false
+  ac_path_GREP_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 as_dummy="$PATH:/usr/xpg4/bin"
@@ -2418,22 +2409,22 @@ do
   for ac_prog in grep ggrep; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
-    $as_executable_p "$ac_path_GREP" || continue
+    { test -f "$ac_path_GREP" && $as_executable_p "$ac_path_GREP"; } || continue
     # Check for GNU ac_path_GREP and select it if it is found.
   # Check for GNU $ac_path_GREP
 if "$ac_path_GREP" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
   ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:
 else
   ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"$tmp/conftest.in"
+  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
   while :
   do
-    cat "$tmp/conftest.in" "$tmp/conftest.in" >"$tmp/conftest.tmp"
-    mv "$tmp/conftest.tmp" "$tmp/conftest.in"
-    cp "$tmp/conftest.in" "$tmp/conftest.nl"
-    echo 'GREP' >> "$tmp/conftest.nl"
-    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "$tmp/conftest.nl" >"$tmp/conftest.out" 2>/dev/null || break
-    diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    echo 'GREP' >> "conftest.nl"
+    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
     if test $ac_count -gt ${ac_path_GREP_max-0}; then
       # Best one so far, save it but keep looking for a better one
@@ -2452,7 +2443,6 @@ done
 
 done
 
-rm -rf "$tmp"
 
 fi
 
@@ -2829,7 +2819,19 @@ else
   as_mkdir_p=false
 fi
 
-as_executable_p="test -f"
+# Find out how to test for executable files. Don't use a zero-byte file,
+# as systems may use methods other than mode bits to determine executability.
+cat >conf$$.file <<_ASEOF
+#! /bin/sh
+exit 0
+_ASEOF
+chmod +x conf$$.file
+if test -x conf$$.file >/dev/null 2>&1; then
+  as_executable_p="test -x"
+else
+  as_executable_p=:
+fi
+rm -f conf$$.file
 
 # Sed expression to map a string onto a valid CPP name.
 as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
@@ -3053,23 +3055,22 @@ if $ac_need_defaults; then
 fi
 
 # Have a temporary directory for convenience.  Make it in the build tree
-# simply because there is no reason to put it here, and in addition,
+# simply because there is no reason against having it here, and in addition,
 # creating and moving files from /tmp can sometimes cause problems.
-# Create a temporary directory, and hook for its removal unless debugging.
+# Hook for its removal unless debugging.
 $debug ||
 {
-  trap 'exit_status=$?; rm -f -r $tmp && exit $exit_status' 0
+  trap 'exit_status=$?; rm -fr "$tmp" && exit $exit_status' 0
   trap '{ (exit 1); exit 1; }' 1 2 13 15
 }
-
 # Create a (secure) tmp directory for tmp files.
 
 {
-  tmp=`(umask 077 && mktemp -d -q "./confstatXXXXXX") 2>/dev/null` &&
+  tmp=`(umask 077 && mktemp -d -q "./confXXXXXX") 2>/dev/null` &&
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {
-  tmp=./confstat$$-$RANDOM
+  tmp=./conf$$-$RANDOM
   (umask 077 && mkdir $tmp)
 } ||
 {
