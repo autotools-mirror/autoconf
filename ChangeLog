@@ -1,3 +1,7 @@
+2001-12-17  Jim Meyering  <meyering@lucent.com>
+
+	* doc/autoconf.texi (New Macros): Tweak wording.
+
 2001-12-14  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): We cleaning up the
