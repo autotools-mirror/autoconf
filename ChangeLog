@@ -1,5 +1,12 @@
 2000-11-01  Akim Demaille  <akim@epita.fr>
 
+	Autoupdate should not depend upon foreign macros.
+
+	* autoupdate.sh (ac.m4): Use `_au_define', not `define'.
+	(input.m4): Use `_au_BUILTIN' not `BUILTIN'.
+
+2000-11-01  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_fatal): Dump the expansion stack.
 	* acgeneral.m4 (AC_FATAL): Use m4_fatal.
 
