@@ -33,7 +33,9 @@ EXTRA_DIST = README \
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
-testsuite: atgeneral.m4 atspecific.m4 $(SUITE)
+testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
+           atgeneral.m4 atspecific.m4 \
+           $(SUITE)
 	$(M4) -I $(srcdir) -I $(top_srcdir) atspecific.m4 suite.at | \
           sed -e 's/[ 	]*$$//' | \
 	  sed -e '/^$$/N;/\n$$/D' > $@-tmp

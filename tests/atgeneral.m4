@@ -71,7 +71,7 @@ AT_DEFINE([AT_LINE],
 # Begin testing suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 AT_DEFINE([AT_INIT],
-[AT_DEFINE(AT_ordinal, 0)
+[AT_DEFINE([AT_ordinal], 0)
 . ./atconfig
 # Snippet (3
 # -e sets to true
@@ -153,7 +153,7 @@ rm -f debug-*.sh
 
 at_failed_list=
 at_ignore_count=0
-divert(2)[]dnl
+m4_divert(2)[]dnl
 
 # Wrap up the testing suite with summary statistics.
 
@@ -227,7 +227,7 @@ if test -n "$at_failed_list"; then
 fi
 
 exit 0
-divert[]dnl
+m4_divert[]dnl
 ])# AT_INIT
 
 
@@ -242,7 +242,7 @@ m4_pushdef([AT_data_files], )
 m4_pushdef([AT_data_expout], )
 m4_pushdef([AT_data_experr], )
 if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-divert(1)[]dnl
+m4_divert(1)[]dnl
   echo AT_LINE > at-check-line
   echo AT_LINE > at-setup-line
   if $at_verbose; then
@@ -293,12 +293,12 @@ $at_traceoff
   fi
   at_test_count=AT_ordinal
   if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-divert(0)[]dnl
+m4_divert(0)[]dnl
 [#] Snippet (c[]AT_ordinal[](
 
 rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
 [#] Snippet )c[]AT_ordinal[])
-undivert(1)[]dnl
+m4_undivert(1)[]dnl
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
   fi
 fi
@@ -380,4 +380,4 @@ $at_traceon
 ])# AT_CHECK
 
 
-divert(0)dnl
+m4_divert(0)dnl

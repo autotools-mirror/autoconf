@@ -114,6 +114,7 @@ m4_rename_m4([changequote])
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
+m4_rename_m4([divert])
 m4_rename_m4([dumpdef])
 m4_rename_m4([eval])
 m4_rename_m4([format])
@@ -136,6 +137,7 @@ m4_rename_m4([sysval])
 m4_rename_m4([traceoff])
 m4_rename_m4([traceon])
 m4_rename_m4([translit])
+m4_rename_m4([undivert])
 
 
 ## ------------------- ##
@@ -641,7 +643,7 @@ m4_define([_m4_divert],
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
 [m4_pushdef([_m4_divert_diversion], _m4_divert([$1]))dnl
-divert(_m4_divert_diversion)dnl
+m4_divert(_m4_divert_diversion)dnl
 ])
 
 
@@ -652,15 +654,15 @@ m4_define([m4_divert_pop],
 [m4_popdef([_m4_divert_diversion])dnl
 ifndef([_m4_divert_diversion],
        [m4_fatal([too many m4_divert_pop])])dnl
-divert(_m4_divert_diversion)dnl
+m4_divert(_m4_divert_diversion)dnl
 ])
 
 
-# m4_divert(DIVERSION-NAME, CONTENT)
-# ----------------------------------
+# m4_divert_text(DIVERSION-NAME, CONTENT)
+# ---------------------------------------
 # Output CONTENT into DIVERSION-NAME (which may be a number actually).
 # An end of line is appended for free to CONTENT.
-m4_define([m4_divert],
+m4_define([m4_divert_text],
 [m4_divert_push([$1])dnl
 $2
 m4_divert_pop()dnl
@@ -1050,7 +1052,7 @@ m4_divert_push([GROW])])dnl
 m4_define([_m4_defun_epi],
 [m4_divert_pop()dnl
 ifelse(_m4_divert_dump, _m4_divert_diversion,
-       [undivert(_m4_divert([GROW]))dnl
+       [m4_undivert(_m4_divert([GROW]))dnl
 m4_undefine([_m4_divert_dump])])dnl
 m4_popdef([_m4_expansion_stack])dnl
 m4_popdef([_m4_expanding($1)])dnl
@@ -1149,7 +1151,7 @@ m4_provide_ifelse([$1],
                   [],
                   [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
 m4_default([$2], [$1])
-divert(_m4_divert_dump)undivert(_m4_divert_diversion)dnl
+m4_divert(_m4_divert_dump)m4_undivert(_m4_divert_diversion)dnl
 m4_divert_pop()])dnl
 m4_provide_ifelse([$1],
                   [],

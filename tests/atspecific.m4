@@ -16,7 +16,7 @@ divert(-1)						-*- Autoconf -*-
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-include(atgeneral.m4)divert(-1)
+include(atgeneral.m4)m4_divert(-1)
 
 
 
@@ -106,4 +106,4 @@ AT_CLEANUP(configure config.status config.log config.cache config.hin config.h e
 AT_DEFINE(AT_CHECK_DEFINES,
 [AT_CHECK([[fgrep '#' config.h | grep -v 'STDC_HEADERS']],, [$1])])
 
-divert(0)dnl
+m4_divert(0)dnl

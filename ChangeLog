@@ -1,5 +1,13 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	Move divert and undivert into m4_.
+
+	* m4sugar.m4 (m4_divert, divert, undivert): Rename as...
+	(m4_divert_text, m4_divert, m4_undivert): this.
+	* autoconf.m4 (divert, undivert): Restore them for user macros only.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Move Autotest on top of M4sh.
 
 	* tests/atgeneral.m4: Import M4sh.
