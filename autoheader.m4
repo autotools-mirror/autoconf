@@ -73,8 +73,10 @@ ac_verbatim_$1="\
 @@@
 ])])
 
+dnl FIXME: To be rigorous, this should not be systematic: depending
+dnl upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
 define([AH_CHECK_LIB],
-[AH_TEMPLATE(AC_TR_CPP(HAVE_$1),
+[AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
              [Define if you have the `]$1[' library (-l]$1[).])
 # Success
 $3
@@ -103,10 +105,10 @@ define([AH_CHECK_FUNCS],
 [AC_FOREACH([AC_Func], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
                [Define if you have the `]AC_Func[' function.])
-                # Success
-                $2
-                # Failure
-                $3])
+   # Success
+   $2
+   # Failure
+   $3])
 ])
 
 define([AH_CHECK_SIZEOF],
@@ -126,10 +128,10 @@ define([AH_CHECK_MEMBERS],
                [`]AC_Member_Aggregate['.])
    popdef([AC_Member_Member])
    popdef([AC_Member_Aggregate])
-                # Success
-                $2
-                # Failure
-                $3])
+   # Success
+   $2
+   # Failure
+   $3])
 ])
 
 
