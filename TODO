@@ -19,15 +19,18 @@ reader catches that properly, we should not care.  If no info reader
 can handle this, we should change the affected node names.  Bug
 triggered by looking for `CONFIG_FILES' in the index.
 
-** autoconf.texi: Document AC_CONFIG_FILES and AC_CONFIG_COMMANDS.
+** AC_CONFIG_FILES, AC_CONFIG_COMMANDS.
+Will we need both ICMD and CMD as is the case for AC_OUTPUT_COMMANDS?
+If so, they have to be adapted.
+
+** autoconf.texi: Document AC_CONFIG_FILES, AC_CONFIG_COMMANDS.
 I didn't do it, because I don't know where to do that.  I would like
 to have all the AC_CONFIG_ together, but it is not currently the
 case.  An architecture for the docs needs to be decided.
 
-** autoconf.texi, near fubar=27.
-This example is *wrong*.  fubar is set in configure, not
-config.status, therefore the extra commands will not know $fubar, as
-the example let us believe.
+** AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS.
+We still have to discuss a few issues: should the pre-commands be run
+before the cache is created?  Are the names OK?  Document, see above.
 
 ** AC_C_STRUCT_MEMBER needs a full rewrite.
 And once done, the former specialized macros should be adapted.

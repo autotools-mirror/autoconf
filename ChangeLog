@@ -1,5 +1,28 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Provide a means to specify commands to run before config.status is
+	created (and, for symmetry, after it is created).
+
+	This is typically needed by Automake so that AC_REPLACEd functions
+	go through deansification via
+
+	LIBOBJS=`echo $LIBOBJS | sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
+
+	and/or by Libtool which needs to define LTLIBOBJS and others:
+
+	LTLIBOBJS=`echo $LIBOBJS | sed 's/\.o/\.lo/g'`
+	AC_SUBST(LTLIBOBJS)
+
+	* acgeneral.m4 (AC_OUTPUT_PRE_COMMANDS): New growing string.
+	Initialize.
+	(AC_OUTPUT_POST_COMMANDS): Likewise.
+	(AC_CONFIG_PRE_COMMANDS): New macro, grows AC_OUTPUT_PRE_COMMANDS.
+	(AC_CONFIG_PRE_COMMANDS): Likewise.
+	(AC_OUTPUT): Run AC_OUTPUT_PRE_COMMANDS before
+	AC_OUTPUT_CONFIG_STATUS, and AC_OUTPUT_POST_COMMANDS after.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Remove spurious empty lines appearing in configures.
 
 	* acgeneral.m4 (AC_CONFIG_UNIQUE): Produce no output.  Instead of

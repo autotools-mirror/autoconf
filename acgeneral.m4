@@ -3082,6 +3082,7 @@ dnl -----------------------------------------
 dnl Add additional commands for AC_OUTPUT to put into config.status.
 dnl Use diversions instead of macros so we can be robust in the
 dnl presence of commas in $1 and/or $2.
+dnl FIXME: Obsolete it?
 AC_DEFUN(AC_OUTPUT_COMMANDS,
 [AC_DIVERT_PUSH(AC_DIVERSION_CMDS)dnl
 [$1]
@@ -3089,6 +3090,28 @@ AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
 [$2]
 AC_DIVERT_POP()])
+
+
+dnl AC_CONFIG_PRE_COMMANDS(CMDS)
+dnl ----------------------------
+dnl Commands to run right before config.status is created. Accumulates.
+AC_DEFUN([AC_CONFIG_PRE_COMMANDS],
+[m4_append([AC_OUTPUT_PRE_COMMANDS], [$1
+])])
+
+dnl Initialize.
+define([AC_OUTPUT_PRE_COMMANDS])
+
+
+dnl AC_CONFIG_POST_COMMANDS(CMDS)
+dnl -----------------------------
+dnl Commands to run after config.status was created.  Accumulates.
+AC_DEFUN([AC_CONFIG_POST_COMMANDS],
+[m4_append([AC_OUTPUT_POST_COMMANDS], [$1
+])])
+
+dnl Initialize.
+define([AC_OUTPUT_POST_COMMANDS])
 
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
@@ -3138,13 +3161,18 @@ trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 
 ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
+dnl Commands to run before creating config.status.
+AC_OUTPUT_PRE_COMMANDS()dnl
+
 # Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
-
 AC_OUTPUT_CONFIG_STATUS()dnl
-
 rm -fr confdefs* $ac_clean_files
 trap 'exit 1' 1 2 15
+
+dnl Commands to run after config.status was created
+AC_OUTPUT_POST_COMMANDS()dnl
+
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
