@@ -163,7 +163,7 @@ Software Foundation raise funds for GNU development.''
 * config.status Invocation::    Recreating a configuration
 * Obsolete Constructs::         Kept for backward compatibility
 * Using Autotest::              Creating portable test suites
-* FAQ::                         Frequent Questions about Autoconf, with answers
+* FAQ::                         Frequent Autoconf Questions, with answers
 * History::                     History of Autoconf
 * Copying This Manual::         How to make copies of this manual
 * Indices::                     Indices of symbols, concepts, etc.
@@ -426,7 +426,7 @@ Using an Autotest Test Suite
 * testsuite Scripts::           The concepts of Autotest
 * Autotest Logs::               Their contents
 
-Frequently Asked Questions About Autoconf
+Frequent Autoconf Questions, with answers
 
 * Distributing::                Distributing @command{configure} scripts
 * Why GNU m4::                  Why not use the standard M4?
@@ -9619,7 +9619,7 @@ test: argument expected
 If there are risks, use @samp{test "x@var{string}" = x} or @samp{test
 "x@var{string}" != x} instead.
 
-It is frequent to find variations of the following idiom:
+It is common to find variations of the following idiom:
 
 @example
 test -n "`echo $ac_feature | sed 's/[-a-zA-Z0-9_]//g'`" &&
@@ -13756,10 +13756,10 @@ distributed.
 
 
 
-@c =============================== Frequently Asked Questions About Autoconf
+@c =============================== Frequent Autoconf Questions, with answers
 
 @node FAQ
-@chapter Frequently Asked Questions About Autoconf
+@chapter Frequent Autoconf Questions, with answers
 
 Several questions about Autoconf come up occasionally.  Here some of them
 are addressed.
