@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.8)dnl
+define(AC_ACVERSION, 1.9)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -908,7 +908,7 @@ main()
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
 }], ac_size=`cat conftestval`)
-AC_DEFINE_UNQUOTED(changequote(<<,>>) translit(sizeof_$1, [a-z *], [A-Z_P])<<>>changequote([,]), $ac_size))])dnl
+AC_DEFINE_UNQUOTED(changequote(<<,>>) translit(sizeof_$1, [a-z *], [A-Z_P])<<>>changequote([,]), $ac_size)])dnl
 dnl
 dnl
 dnl The big finish
