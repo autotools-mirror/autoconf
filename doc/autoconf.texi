@@ -132,7 +132,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 @menu
 * Introduction::                Autoconf's purpose, strengths, and weaknesses
-* The GNU build system::
+* The GNU build system::        
 * Making configure Scripts::    How to organize and produce Autoconf scripts
 * Setup::                       Initialization and output
 * Existing Tests::              Macros that check for particular features
@@ -287,6 +287,7 @@ Caching Results
 
 * Cache Variable Names::        Shell variables used in caches
 * Cache Files::                 Files @code{configure} uses for caching
+* Cache Checkpointing::         Loading and saving the cache file
 
 Writing Macros
 
@@ -536,7 +537,7 @@ the files listed above (@pxref{config.status Invocation});
 
 @item
 an optional shell script normally called @file{config.cache}
-(created when using @samp{configure --cache-file=config.cache}) that
+(created when using @samp{configure --config-cache}) that
 saves the results of running many of the tests (@pxref{Cache Files});
 
 @item
@@ -6862,12 +6863,13 @@ and then a @file{Makefile.in} could contain:
 @cindex Cache
 
 To avoid checking for the same features repeatedly in various
-@code{configure} scripts (or repeated runs of one script),
-@code{configure} saves the results of many of its checks in a @dfn{cache
-file}.  If, when a @code{configure} script runs, it finds a cache file,
-it reads from it the results from previous runs and avoids rerunning
-those checks.  As a result, @code{configure} can run much faster than if
-it had to perform all of the checks every time.
+@code{configure} scripts (or in repeated runs of one script),
+@code{configure} can optionally save the results of many checks in a
+@dfn{cache file} (@pxref{Cache Files}).  If a @code{configure} script
+runs with caching enabled and finds a cache file, it reads the results
+of previous runs from the cache and avoids rerunning those checks.  As a
+result, @code{configure} can then run much faster than if it had to
+perform all of the checks every time.
 
 @defmac AC_CACHE_VAL (@var{cache-id}, @var{commands-to-set-it})
 @maindex CACHE_VAL
@@ -6898,27 +6900,28 @@ setting the variable @var{cache-id}, see below.
 @end defmac
 
 It is very common to find buggy macros using @code{AC_CACHE_VAL} or
-@code{AC_CACHE_CHECK} because people are tempted to call
-@code{AC_DEFINE} in the @var{commands-to-set-it}. It is the code that
-follows the call to @code{AC_CACHE_VAL} should do that, based on the
-cached value.  For instance the following macro:
+@code{AC_CACHE_CHECK}, because people are tempted to call
+@code{AC_DEFINE} in the @var{commands-to-set-it}. Instead, the code that
+@emph{follows} the call to @code{AC_CACHE_VAL} should call
+@code{AC_DEFINE}, by examining the value of the cache variable.  For
+instance, the following macro is broken:
 
 @example
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-[ac_cv_shell_true_works=no
-true && ac_cv_shell_true_works=yes
-if test $ac_cv_shell_true_works = yes; then
-  AC_DEFINE([TRUE_WORKS], 1
-	    [Define if `true(1)' works properly.])
-fi[]dnl
-])])
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes
+                 if test $ac_cv_shell_true_works = yes; then
+                   AC_DEFINE([TRUE_WORKS], 1
+                             [Define if `true(1)' works properly.])
+                 fi])
+])
 @end group
 @end example
 
 @noindent
-is broken: if the cache is enabled, the second time this macro is run,
+This fails if the cache is enabled: the second time this macro is run,
 @code{TRUE_WORKS} @emph{will not be defined}.  The proper implementation
 is:
 
@@ -6926,12 +6929,12 @@ is:
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-[ac_cv_shell_true_works=no
-true && ac_cv_shell_true_works=yes])
-if test $ac_cv_shell_true_works = yes; then
-  AC_DEFINE([TRUE_WORKS], 1
-	    [Define if `true(1)' works properly.])
-fi[]dnl
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes])
+ if test $ac_cv_shell_true_works = yes; then
+   AC_DEFINE([TRUE_WORKS], 1
+             [Define if `true(1)' works properly.])
+ fi
 ])
 @end group
 @end example
@@ -6945,6 +6948,7 @@ running the shell commands.
 @menu
 * Cache Variable Names::        Shell variables used in caches
 * Cache Files::                 Files @code{configure} uses for caching
+* Cache Checkpointing::         Loading and saving the cache file
 @end menu
 
 @node Cache Variable Names, Cache Files, Caching Results, Caching Results
@@ -6992,7 +6996,7 @@ The values assigned to cache variables may not contain newlines.
 Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
 names of files or functions; so this is not an important restriction.
 
-@node Cache Files,  , Cache Variable Names, Caching Results
+@node Cache Files, Cache Checkpointing, Cache Variable Names, Caching Results
 @subsection Cache Files
 
 A cache file is a shell script that caches the results of configure
@@ -7000,18 +7004,18 @@ tests run on one system so they can be shared between configure scripts
 and configure runs.  It is not useful on other systems.  If its contents
 are invalid for some reason, the user may delete or edit it.
 
-By default, configure uses no cache file (technically, it uses
-@option{--cache-file=/dev/null}), so as to forestall problems caused by
-accidental use of stale cache files.
+By default, @code{configure} uses no cache file (technically, it uses
+@option{--cache-file=/dev/null}), to avoid problems caused by accidental
+use of stale cache files.
 
-To enable caching, @code{configure} accepts
-@option{--cache-file=@var{file}} where @var{file} is the name of the
-cache file to use, traditionally @file{config.cache}.  The cache file is
-created if it does not exist already.  When @code{configure} calls
-@code{configure} scripts in subdirectories, it uses the
-@option{--cache-file} argument so that they share the same cache.
-@xref{Subdirectories}, for information on configuring subdirectories
-with the @code{AC_CONFIG_SUBDIRS} macro.
+To enable caching, @code{configure} accepts @option{--config-cache} (or
+@option{-C}) to cache results in the file @file{config.cache}.
+Alternatively, @option{--cache-file=@var{file}} specifies that
+@var{file} be the cache file.  The cache file is created if it does not
+exist already.  When @code{configure} calls @code{configure} scripts in
+subdirectories, it uses the @option{--cache-file} argument so that they
+share the same cache.  @xref{Subdirectories}, for information on
+configuring subdirectories with the @code{AC_CONFIG_SUBDIRS} macro.
 
 @file{config.status} only pays attention to the cache file if it is
 given the @option{--recheck} option, which makes it rerun
@@ -7023,13 +7027,16 @@ administrative overhead in maintaining them.  For any features that
 can't be guessed automatically, use the standard method of the canonical
 system type and linking files (@pxref{Manual Configuration}).
 
-The cache file on a particular system will gradually accumulate whenever
-someone runs a @code{configure} script; it will be initially
-nonexistent.  Running @code{configure} merges the new cache results with
-the existing cache file.  The site initialization script can specify a
-site-wide cache file to use instead of the default, to make it work
-transparently, as long as the same C compiler is used every time
-(@pxref{Site Defaults}).
+The site initialization script can specify a site-wide cache file to
+use, instead of the usual per-program cache.  In this case, the cache
+file will gradually accumulate information whenever someone runs a new
+@code{configure} script.  (Running @code{configure} merges the new cache
+results with the existing cache file.)  This may cause problems,
+however, if the system configuration (e.g. the installed libraries or
+compilers) changes and the stale cache file is not deleted.
+
+@node Cache Checkpointing,  , Cache Files, Caching Results
+@subsection Cache Checkpointing
 
 If your configure script, or a macro called from configure.ac, happens
 to abort the configure process, it may be useful to checkpoint the cache
@@ -8680,10 +8687,11 @@ Site files can be arbitrary shell scripts, but only certain kinds of
 code are really appropriate to be in them.  Because @code{configure}
 reads any cache file after it has read any site files, a site file can
 define a default cache file to be shared between all Autoconf-generated
-@code{configure} scripts run on that system.  If you set a default cache
-file in a site file, it is a good idea to also set the output variable
-@code{CC} in that site file, because the cache file is only valid for a
-particular compiler, but many systems have several available.
+@code{configure} scripts run on that system (@pxref{Cache Files}).  If
+you set a default cache file in a site file, it is a good idea to also
+set the output variable @code{CC} in that site file, because the cache
+file is only valid for a particular compiler, but many systems have
+several available.
 
 You can examine or override the value set by a command line option to
 @code{configure} in a site file; options set shell variables that have
