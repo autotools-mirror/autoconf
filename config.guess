@@ -636,7 +636,7 @@ EOF
 				    s/ .*//
 				    p'`
         case "$ld_supported_emulations" in
-	    *ia64)
+	  *ia64)
 		echo "${UNAME_MACHINE}-unknown-linux"
 		exit 0
 		;;
