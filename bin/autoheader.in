@@ -33,6 +33,11 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
 test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
 test -z "${M4}" && M4=@M4@
+case "${M4}" in
+/*) # Handle the case that m4 has moved since we were configured.
+    # It may have been found originally in a build directory.
+    test -f "${M4}" || M4=m4 ;;
+esac
 
 print_version=""
 while test $# -gt 0 ; do
@@ -174,7 +179,8 @@ fi
 
 echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
-  sym="`echo "${ctype}" | tr '[a-z *]' '[A-Z_P]'`"
+  # Solaris 2.3 tr rejects noncontiguous characters in character classes.
+  sym="`echo "${ctype}" | tr '[a-z] *' '[A-Z]_P'`"
   echo "
 /* The number of bytes in a ${ctype}.  */
 #undef SIZEOF_${sym}"
@@ -200,6 +206,8 @@ for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
 /* Define if you have the ${lib} library (-l${lib}).  */
 #undef HAVE_LIB${sym}"
 done
+
+test -f ${config_h}.bot && cat ${config_h}.bot
 
 status=0
 
