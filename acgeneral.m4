@@ -3232,7 +3232,7 @@ AC_DEFUN([AC_COMPILE_IFELSE],
 [cat >conftest.$ac_ext <<EOF
 $1
 EOF
-if AC_TRY_EVAL(ac_compile); then
+if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG
@@ -3265,7 +3265,7 @@ AC_DEFUN([AC_LINK_IFELSE],
 [cat >conftest.$ac_ext <<EOF
 $1
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
+if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG
@@ -3518,7 +3518,7 @@ define([_AC_LIBOBJ],
                  [$2],
                  [AC_LIBOBJ_DECL([$1])])dnl
 AC_SUBST([LIBOBJS])dnl
-LIBOBJS="$LIBOBJS $1.${ac_objext}"])
+LIBOBJS="$LIBOBJS $1.$ac_objext"])
 
 
 # AC_LIBOBJ(FILENAME-NOEXT)
