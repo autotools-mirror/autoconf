@@ -4339,6 +4339,11 @@ See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
 @hdrindex stdlib.h
 On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 
+@item @file{sys/mount.h}
+@hdrindex sys/mount.h
+On FreeBSD 4.8 on ia32 and using gcc version 2.95.4,
+@file{sys/params.h} is a prerequisite.
+
 @item @file{sys/socket.h}
 @hdrindex sys/socket.h
 On Darwin, @file{stdlib.h} is a prerequisite.

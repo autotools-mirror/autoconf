@@ -1,3 +1,8 @@
+2003-06-25  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Header Portability): sys/mount.h.
+	From Gareth McCaughan.
+
 2003-06-23  Akim Demaille  <akim@epita.fr>
 
 	* lib/autotest/general.m4 (AT_INIT): Report a single config.log,
