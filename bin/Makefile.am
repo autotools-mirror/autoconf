@@ -54,11 +54,9 @@ $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 
 ## All the files below depend on Makefile so that they are rebuilt
 ## when the prefix etc. changes.
-SUFFIXES = .in
 autoconf autoheader autoreconf autoupdate ifnames autoscan autom4te: Makefile
-.in:
 	rm -f $@ $@.tmp
-	$(edit) $< >$@.tmp
+	$(edit) $@.in >$@.tmp
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
