@@ -5,7 +5,7 @@
 # Report bugs to <bug-autoconf@gnu.org>.
 #
 # Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-# 2003, 2004 Free Software Foundation, Inc.
+# 2003, 2004, 2005 Free Software Foundation, Inc.
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 ## --------------------- ##
@@ -137,45 +137,52 @@ else
 fi
 
   if test $as_have_required = yes && 	 (eval ":
-(func_return () {
+(as_func_return () {
   (exit \$1)
 }
-func_success () {
-  func_return 0
+as_func_success () {
+  as_func_return 0
 }
-func_failure () {
-  func_return 1
+as_func_failure () {
+  as_func_return 1
 }
-func_ret_success () {
+as_func_ret_success () {
   return 0
 }
-func_ret_failure () {
+as_func_ret_failure () {
   return 1
 }
 
 exitcode=0
-if func_success; then
+if as_func_success; then
   :
 else
   exitcode=1
-  echo func_failure succeeded.
+  echo as_func_failure succeeded.
 fi
 
-if func_failure; then
+if as_func_failure; then
   exitcode=1
-  echo func_success failed.
+  echo as_func_success failed.
 fi
 
-if func_ret_success; then
+if as_func_ret_success; then
   :
 else
   exitcode=1
-  echo func_ret_success failed.
+  echo as_func_ret_success failed.
 fi
 
-if func_ret_failure; then
+if as_func_ret_failure; then
   exitcode=1
-  echo func_ret_failure succeeded.
+  echo as_func_ret_failure succeeded.
+fi
+
+if ( set x; as_func_ret_success y && test x = \"\$1\" ); then
+  :
+else
+  exitcode=1
+  echo positional parameters were not saved.
 fi
 
 test \$exitcode = 0) || { (exit 1); exit 1; }
@@ -240,45 +247,52 @@ BIN_SH=xpg4; export BIN_SH # for Tru64
 DUALCASE=1; export DUALCASE # for MKS sh
 
 :
-(func_return () {
+(as_func_return () {
   (exit $1)
 }
-func_success () {
-  func_return 0
+as_func_success () {
+  as_func_return 0
 }
-func_failure () {
-  func_return 1
+as_func_failure () {
+  as_func_return 1
 }
-func_ret_success () {
+as_func_ret_success () {
   return 0
 }
-func_ret_failure () {
+as_func_ret_failure () {
   return 1
 }
 
 exitcode=0
-if func_success; then
+if as_func_success; then
   :
 else
   exitcode=1
-  echo func_failure succeeded.
+  echo as_func_failure succeeded.
 fi
 
-if func_failure; then
+if as_func_failure; then
   exitcode=1
-  echo func_success failed.
+  echo as_func_success failed.
 fi
 
-if func_ret_success; then
+if as_func_ret_success; then
   :
 else
   exitcode=1
-  echo func_ret_success failed.
+  echo as_func_ret_success failed.
 fi
 
-if func_ret_failure; then
+if as_func_ret_failure; then
   exitcode=1
-  echo func_ret_failure succeeded.
+  echo as_func_ret_failure succeeded.
+fi
+
+if ( set x; as_func_ret_success y && test x = "$1" ); then
+  :
+else
+  exitcode=1
+  echo positional parameters were not saved.
 fi
 
 test $exitcode = 0) || { (exit 1); exit 1; }
@@ -322,45 +336,52 @@ fi
 
 
 
-(eval "func_return () {
+(eval "as_func_return () {
   (exit \$1)
 }
-func_success () {
-  func_return 0
+as_func_success () {
+  as_func_return 0
 }
-func_failure () {
-  func_return 1
+as_func_failure () {
+  as_func_return 1
 }
-func_ret_success () {
+as_func_ret_success () {
   return 0
 }
-func_ret_failure () {
+as_func_ret_failure () {
   return 1
 }
 
 exitcode=0
-if func_success; then
+if as_func_success; then
   :
 else
   exitcode=1
-  echo func_failure succeeded.
+  echo as_func_failure succeeded.
 fi
 
-if func_failure; then
+if as_func_failure; then
   exitcode=1
-  echo func_success failed.
+  echo as_func_success failed.
 fi
 
-if func_ret_success; then
+if as_func_ret_success; then
   :
 else
   exitcode=1
-  echo func_ret_success failed.
+  echo as_func_ret_success failed.
 fi
 
-if func_ret_failure; then
+if as_func_ret_failure; then
   exitcode=1
-  echo func_ret_failure succeeded.
+  echo as_func_ret_failure succeeded.
+fi
+
+if ( set x; as_func_ret_success y && test x = \"\$1\" ); then
+  :
+else
+  exitcode=1
+  echo positional parameters were not saved.
 fi
 
 test \$exitcode = 0") || {
@@ -515,7 +536,77 @@ PACKAGE_STRING='GNU Autoconf 2.59c'
 PACKAGE_BUGREPORT='bug-autoconf@gnu.org'
 
 ac_unique_file="ChangeLog"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datarootdir datadir sysconfdir sharedstatedir localstatedir includedir oldincludedir docdir infodir htmldir dvidir pdfdir psdir libdir localedir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar ac_cv_sh_n_works EXPR M4 HELP2MAN PERL TEST_EMACS EMACS EMACSLOADPATH lispdir GREP LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL
+PATH_SEPARATOR
+PACKAGE_NAME
+PACKAGE_TARNAME
+PACKAGE_VERSION
+PACKAGE_STRING
+PACKAGE_BUGREPORT
+exec_prefix
+prefix
+program_transform_name
+bindir
+sbindir
+libexecdir
+datarootdir
+datadir
+sysconfdir
+sharedstatedir
+localstatedir
+includedir
+oldincludedir
+docdir
+infodir
+htmldir
+dvidir
+pdfdir
+psdir
+libdir
+localedir
+mandir
+build_alias
+host_alias
+target_alias
+DEFS
+ECHO_C
+ECHO_N
+ECHO_T
+LIBS
+INSTALL_PROGRAM
+INSTALL_SCRIPT
+INSTALL_DATA
+CYGPATH_W
+PACKAGE
+VERSION
+ACLOCAL
+AUTOCONF
+AUTOMAKE
+AUTOHEADER
+MAKEINFO
+install_sh
+STRIP
+ac_ct_STRIP
+INSTALL_STRIP_PROGRAM
+mkdir_p
+AWK
+SET_MAKE
+am__leading_dot
+AMTAR
+am__tar
+am__untar
+ac_cv_sh_n_works
+EXPR
+M4
+HELP2MAN
+PERL
+TEST_EMACS
+EMACS
+EMACSLOADPATH
+lispdir
+GREP
+LIBOBJS
+LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1103,6 +1194,7 @@ it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <bug-autoconf@gnu.org>.
 _ACEOF
+ac_status=$?
 fi
 
 if test "$ac_init_help" = "recursive"; then
@@ -1175,37 +1267,37 @@ case $ac_abs_builddir in
   esac;;
 esac
 
-    cd $ac_dir
+    cd $ac_dir || { ac_status=$?; continue; }
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_srcdir/configure.gnu; then
-      echo
+      echo &&
       $SHELL $ac_srcdir/configure.gnu  --help=recursive
     elif test -f $ac_srcdir/configure; then
-      echo
+      echo &&
       $SHELL $ac_srcdir/configure  --help=recursive
     elif test -f $ac_srcdir/configure.ac ||
 	   test -f $ac_srcdir/configure.in; then
-      echo
+      echo &&
       $ac_configure --help
     else
       echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
-    fi
-    cd "$ac_popdir"
+    fi || ac_status=$?
+    cd "$ac_popdir" || { ac_status=$?; break; }
   done
 fi
 
-test -n "$ac_init_help" && exit 0
+test -n "$ac_init_help" && exit $ac_status
 if $ac_init_version; then
   cat <<\_ACEOF
 GNU Autoconf configure 2.59c
 generated by GNU Autoconf 2.59c
 
 Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-2003, 2004 Free Software Foundation, Inc.
+2003, 2004, 2005 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 _ACEOF
-  exit 0
+  exit
 fi
 exec 5>config.log
 cat >&5 <<_ACEOF
@@ -2971,7 +3063,7 @@ GNU Autoconf config.status 2.59c
 configured by $0, generated by GNU Autoconf 2.59c,
   with options \\"`echo "$ac_configure_args" | sed 's/[\\""\`\$]/\\\\&/g'`\\"
 
-Copyright (C) 2004 Free Software Foundation, Inc.
+Copyright (C) 2005 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 srcdir=$srcdir
@@ -3008,7 +3100,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     ac_cs_recheck=: ;;
   --version | --vers* | -V )
-    echo "$ac_cs_version"; exit 0 ;;
+    echo "$ac_cs_version"; exit ;;
   --he | --h)
     # Conflict between --help and --header
     { { echo "$as_me:$LINENO: error: ambiguous option: $1
@@ -3017,7 +3109,7 @@ echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; };;
   --help | --hel | -h )
-    echo "$ac_cs_usage"; exit 0 ;;
+    echo "$ac_cs_usage"; exit ;;
   --debug | --d* | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
