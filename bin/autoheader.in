@@ -285,7 +285,7 @@ syms=`for sym in $syms; do echo $sym; done |
 
 
 # We template only the first CONFIG_HEADER.
-config_h=`echo "$config_h" | sed -e 's/ .*//'`
+config_h=`set X $config_h; echo $2`
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
 "") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2

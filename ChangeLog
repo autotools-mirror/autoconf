@@ -1,3 +1,9 @@
+2001-03-27  Akim Demaille  <akim@epita.fr>
+
+	* autoheader.sh (config_h): Be robust to new lines when extracting
+	the first argument of AC_CONFIG_HEADERS.
+	Reported by Lars J. Aas.
+
 2001-03-27  Tim Van Holder <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi: Minor tweaks.
