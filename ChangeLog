@@ -1,3 +1,13 @@
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
+	* lib/Autom4te/General.pm (&debug): New.
+	* bin/autom4te.in ($language): Move to...
+	(parse_args): here.
+	Handle --language in languages.
+	* lib/autom4te.in (Automake-selections, Autoheader-selections)
+	(Autoscan-selections): New.
+	(Autoconf): Adjust.
+
 2001-09-23  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* m4/auxdir.m4, m4/cond.m4, m4/depend.m4, m4/init.m4,

@@ -234,9 +234,8 @@ use strict;
 my $datadir = $ENV{'AC_MACRODIR'} || '@datadir@';
 my $autom4te_cfg = $ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg";
 
-# $LANGUAGE{$LANGUAGE} is the list of automatic options for $LANGUAGE.
+# $LANGUAGE{LANGUAGE} -- Automatic options for LANGUAGE.
 my %language;
-my $language;
 
 my $output = '-';
 
@@ -460,25 +459,29 @@ sub load_configuration ()
 # Process any command line arguments.
 sub parse_args ()
 {
-  my @trace;
-
   # We want to look for the early options, which should not be found
   # in the configuration file.  Prepend to the user arguments.
-  Getopt::Long::Configure ("pass_through");
-  getopt ("l|language=s" => \$language);
-  Getopt::Long::Configure ("defaults");
+  # Perform this repeatedly so that we can use --language in language
+  # definitions.
+  my $language;
+  do {
+    $language = undef;
+    Getopt::Long::Configure ("pass_through");
+    getopt ("l|language=s" => \$language);
 
-  if ($language)
-    {
-      die "$me: unknown language: $language\n"
-	unless exists $language{$language};
-      unshift @ARGV, @{$language{$language}};
-    }
+    if ($language)
+      {
+	die "$me: unknown language: $language\n"
+	  unless exists $language{lc $language};
+	unshift @ARGV, @{$language{lc $language}};
+      }
+  } while $language;
 
-  verbose "arguments: @ARGV\n"
-    if $debug;
+  debug "arguments: @ARGV\n";
 
   # Process the arguments for real this time.
+  my @trace;
+  Getopt::Long::Configure ("defaults");
   getopt
     (
      # Operation modes:

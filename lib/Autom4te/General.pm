@@ -29,7 +29,7 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &find_file &getopt &mktmpdir &mtime
+@EXPORT = qw (&debug &find_configure_ac &find_file &getopt &mktmpdir &mtime
               &uniq &update_file &verbose &xsystem
 	      $debug $help $me $tmp $verbose $version);
 
@@ -86,6 +86,16 @@ sub END
     or (carp "$me: closing standard output: $!\n"), _exit (1);
 
   _exit ($exit_status);
+}
+
+
+# debug(@MESSAGE)
+# ---------------
+# Messages displayed only if $DEBUG and $VERBOSE.
+sub debug (@)
+{
+  print STDERR "$me: ", @_, "\n"
+    if $verbose && $debug;
 }
 
 
@@ -296,8 +306,8 @@ sub update_file ($$)
 }
 
 
-# verbose
-# -------
+# verbose(@MESSAGE)
+# -----------------
 sub verbose (@)
 {
   print STDERR "$me: ", @_, "\n"

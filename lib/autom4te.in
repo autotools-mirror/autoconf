@@ -19,31 +19,35 @@
 # the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-## ---------- ##
-## Autoconf.  ##
-## ---------- ##
+## -------------------------- ##
+## Autoheader preselections.  ##
+## -------------------------- ##
 
-begin-language: "Autoconf"
-# patterns: "*.ac"
-# patterns: "configure.in"
-args: --include @datadir@
-args: autoconf/autoconf.m4f
-args: acsite.m4?
-args: aclocal.m4?
-args: --mode 777
-args: --warning syntax
-args: --normalize
-# Wanted by autoheader
+begin-language: "Autoheader-preselections"
 args: --preselect AC_CONFIG_HEADERS
 args: --preselect AH_OUTPUT
 args: --preselect AC_DEFINE_TRACE_LITERAL
-# Wanted by Automake
+end-language: "Autoheader-preselections"
+
+
+## ------------------------ ##
+## Automake-preselections.  ##
+## ------------------------ ##
+
+begin-language: "Automake-preselections"
 args: --preselect AC_LIBSOURCE
 args: --preselect AC_SUBST
 args: --preselect AM_CONDITIONAL
 args: --preselect AC_LIBSOURCE
 args: --preselect AC_CONFIG_FILES
-# Wanted by autoscan
+end-language: "Automake-preselections"
+
+
+## ------------------------ ##
+## Autoscan-preselections.  ##
+## ------------------------ ##
+
+begin-language: "Autoscan-preselections"
 args: --preselect AC_CHECK_FUNCS
 args: --preselect AC_CHECK_HEADERS
 args: --preselect AC_CHECK_LIB
@@ -103,7 +107,28 @@ args: --preselect AC_TYPE_PID_T
 args: --preselect AC_TYPE_SIGNAL
 args: --preselect AC_TYPE_SIZE_T
 args: --preselect AC_TYPE_UID_T
+end-language: "Autoscan-preselections"
+
+
+## ---------- ##
+## Autoconf.  ##
+## ---------- ##
+
+begin-language: "Autoconf"
+# patterns: "*.ac"
+# patterns: "configure.in"
+args: --include @datadir@
+args: autoconf/autoconf.m4f
+args: acsite.m4?
+args: aclocal.m4?
+args: --mode 777
+args: --warning syntax
+args: --normalize
+args: --language Autoheader-preselections
+args: --language Autoscan-preselections
+args: --language Automake-preselections
 end-language: "Autoconf"
+
 
 ## -------- ##
 ## Autotest ##
@@ -118,6 +143,7 @@ args: --mode 777
 args: --warning syntax
 end-language: "Autotest"
 
+
 ## ---- ##
 ## M4sh ##
 ## ---- ##
@@ -129,6 +155,7 @@ args: m4sugar/m4sh.m4
 args: --mode 777
 args: --warning syntax
 end-language: "M4sh"
+
 
 ## ------- ##
 ## M4sugar ##
