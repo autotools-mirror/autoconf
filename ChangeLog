@@ -1,3 +1,15 @@
+2005-03-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Fix some systematic formatting problems.
+	".)"  needs a following @: if not at the end of a sentence, and
+	similarly for "!)".  "etc." should be preceded by a comma.
+	"n-th" -> "@var{n}th".  pdksh is still buggy, so update its date.
+
+2005-03-22  Bruno Haible  <bruno@clisp.org>
+
+	* doc/autoconf.texi (Input): Mention that AC_CONFIG_AUX_DIR's
+	argument is often called 'build-aux'.
+
 2005-03-07  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Quotation Rule Of Thumb): Mention that the

@@ -1756,7 +1756,7 @@ it looks are correct for most cases.
 @acindex{CONFIG_AUX_DIR}
 Use the auxiliary build tools (e.g., @file{install-sh},
 @file{config.sub}, @file{config.guess}, Cygnus @command{configure},
-Automake and Libtool scripts etc.) that are in directory @var{dir}.
+Automake and Libtool scripts, etc.)@: that are in directory @var{dir}.
 These are auxiliary files used in configuration.  @var{dir} can be
 either absolute or relative to @file{@var{srcdir}}.  The default is
 @file{@var{srcdir}} or @file{@var{srcdir}/..} or
@@ -1767,6 +1767,7 @@ other auxiliary files.  It checks for @file{install.sh} also, but that
 name is obsolete because some @code{make} have a rule that creates
 @file{install} from it if there is no @file{Makefile}.
 
+The auxiliary directory is commonly named @file{build-aux}.
 If you need portability to @acronym{DOS} variants, do not name the
 auxiliary directory @file{aux}.  @xref{File System Conventions}.
 @end defmac
@@ -2475,7 +2476,7 @@ some.
 
 @item Dependency on @file{Makefile}
 Since @code{edit} uses values that depend on the configuration specific
-values (@code{prefix} etc.) and not only on @code{VERSION} and so forth,
+values (@code{prefix}, etc.)@: and not only on @code{VERSION} and so forth,
 the output depends on @file{Makefile}, not @file{configure.ac}.
 
 @item Separated dependencies and Single Suffix Rules
@@ -2569,7 +2570,7 @@ package's distribution, so @command{make} will consider
 @file{config.h.in} up to date.  Don't use @command{touch}
 (@pxref{Limitations of Usual Tools}), rather use @command{echo} (using
 @command{date} would cause needless differences, hence @acronym{CVS}
-conflicts etc.).
+conflicts, etc.).
 
 @example
 @group
@@ -3517,7 +3518,7 @@ As noted in @ref{Specifying Names, , Specifying the system type}, the
 target is rarely specified, because most of the time it is the same
 as the host: it is the type of system for which any compiler tools in
 the package will produce code.  What this macro will look for is,
-for example, @emph{a tool @r{(assembler, linker, etc.)} that the
+for example, @emph{a tool @r{(assembler, linker, etc.)}@: that the
 compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
 will use to produce objects, archives or executables}.
 @end defmac
@@ -5563,7 +5564,7 @@ errors instead for the current language.  This macro is useful when the
 results of configuration will be used where warnings are unacceptable; for
 instance, if parts of a program are built with the GCC @samp{-Werror}
 option.  If the whole program will be built using @samp{-Werror} it is
-often simpler to put @samp{-Werror} in the compiler flags (@code{CFLAGS}
+often simpler to put @samp{-Werror} in the compiler flags (@code{CFLAGS},
 etc.).
 @end defmac
 
@@ -8073,8 +8074,8 @@ There are other magic primitives, such as @code{changecom} to specify
 what syntactic forms are comments (it is common to see
 @samp{changecom(<!--, -->)} when M4 is used to produce HTML pages),
 @code{changeword} and @code{changesyntax} to change other syntactic
-details (such as the character to denote the n-th argument, @samp{$} by
-default, the parenthesis around arguments etc.).
+details (such as the character to denote the @var{n}th argument, @samp{$} by
+default, the parenthesis around arguments, etc.).
 
 These primitives are really meant to make M4 more useful for specific
 domains: they should be considered like command line options:
@@ -8903,7 +8904,7 @@ succeed in that case.
 @asindex{SET_CATFILE}
 Set the shell variable @var{var} to @var{dir}/@var{file}, but
 optimizing the common cases (@var{dir} or @var{file} is @samp{.},
-@var{file} is absolute etc.).
+@var{file} is absolute, etc.).
 @end defmac
 
 
@@ -9734,7 +9735,7 @@ its own.  Similarly to Bash, you can detect whether you are
 running @command{pdksh} by testing whether @code{KSH_VERSION} is set,
 and you can require Posix compatibility by running @samp{set
 -o posix}.  Unfortunately, with @command{pdksh} 5.2.14 (the latest
-stable version as of July 2004) Posix mode is buggy and causes
+stable version as of March 2005) Posix mode is buggy and causes
 @command{pdksh} to depart from Posix in at least one respect:
 
 @example
@@ -10560,7 +10561,7 @@ settings for @env{IFS}.
 
 Don't set the first character of @code{IFS} to backslash.  Indeed,
 Bourne shells use the first character (backslash) when joining the
-components in @samp{"$@@"} and some shells then re-interpret (!) the
+components in @samp{"$@@"} and some shells then re-interpret (!)@: the
 backslash escapes, so you can end up with backspace and other strange
 characters.
 
@@ -11209,7 +11210,7 @@ option (e.g., @samp{@var{string} = "-n"}).
 Contrary to a common belief, @samp{test -n @var{string}} and
 @samp{test -z @var{string}} @strong{are} portable.  Nevertheless many
 shells (such as Solaris 2.5, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
-Digital Unix 4 etc.) have bizarre precedence and may be confused if
+Digital Unix 4, etc.)@: have bizarre precedence and may be confused if
 @var{string} looks like an operator:
 
 @example
@@ -13884,7 +13885,7 @@ Makefile: Makefile.in config.status
 @noindent
 (If @file{configure.ac} does not call @code{AC_CONFIG_HEADERS}, there is
 no need to set @code{CONFIG_HEADERS} in the @code{make} rules.  Equally
-for @code{CONFIG_COMMANDS} etc.)
+for @code{CONFIG_COMMANDS}, etc.)
 
 
 @node acconfig.h
@@ -13995,7 +13996,7 @@ Directories are browsed from last to first.
 
 Several macros are obsoleted in Autoconf, for various reasons (typically
 they failed to quote properly, couldn't be extended for more recent
-issues etc.).  They are still supported, but deprecated: their use
+issues, etc.).  They are still supported, but deprecated: their use
 should be avoided.
 
 During the jump from Autoconf version 1 to version 2, most of the
@@ -15861,7 +15862,7 @@ of the comma separated list @var{keywords}.
 
 Running @samp{./testsuite -k autoupdate,FUNC} will select all the tests
 tagged with @samp{autoupdate} @emph{and} @samp{FUNC} (as in
-@samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH} etc.) while
+@samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH}, etc.)@: while
 @samp{./testsuite -k autoupdate -k FUNC} runs all the tests tagged with
 @samp{autoupdate} @emph{or} @samp{FUNC}.
 
