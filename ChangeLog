@@ -1,3 +1,7 @@
+2001-05-21  Akim Demaille  <akim@epita.fr>
+
+	Version 2.50.
+
 2001-05-19  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.at: s/undefined macro/possibly undefined macro/.
