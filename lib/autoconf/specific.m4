@@ -1768,11 +1768,11 @@ fi
 
 # AC_STRUCT_ST_BLKSIZE
 # --------------------
-AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
-[AC_OBSOLETE([$0], [; replace it with
-  AC_CHECK_MEMBERS((struct stat.st_blksize))
-Please note that it will define `HAVE_STRUCT_STAT_ST_BLKSIZE',
-and not `HAVE_ST_BLKSIZE'.])dnl
+AU_DEFUN(AC_STRUCT_ST_BLKSIZE,
+[AC_WARNING([$0:
+        your code should no longer depend upon `HAVE_ST_BLKSIZE', but
+        `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this AC_WARNING and
+        the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS((struct stat.st_blksize),
                   [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
                              [Define if your `struct stat' has
@@ -1813,11 +1813,11 @@ AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 
 # AC_STRUCT_ST_RDEV
 # -----------------
-AC_DEFUN(AC_STRUCT_ST_RDEV,
-[AC_OBSOLETE([$0], [; replace it with
-  AC_CHECK_MEMBERS((struct stat.st_rdev))
-Please note that it will define `HAVE_STRUCT_STAT_ST_RDEV',
-and not `HAVE_ST_RDEV'.])dnl
+AU_DEFUN(AC_STRUCT_ST_RDEV,
+[AC_WARNING([$0:
+        your code should no longer depend upon `HAVE_ST_RDEV', but
+        `HAVE_STRUCT_STAT_ST_RDEV'.  Remove this AC_WARNING and
+        the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS((struct stat.st_rdev),
                   [AC_DEFINE(HAVE_ST_RDEV, 1,
                              [Define if your `struct stat' has `st_rdev'.

@@ -1,5 +1,13 @@
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Obsolete Macros): Document `AU_DEFUN'.
+	Move the documentation of `AC_OBSOLETE' from here, to...
+	(Old Macros): here.
+	* acspecific.m4 (AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_RDEV):
+	AU_DEFUN'd.
+
+2000-05-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_LIBOBJ_DECL, AC_LIBOBJ): New macros.
 	(AC_REPLACE_FUNCS): Use AC_LIBOBJ.
 	* acspecific.m4 (AC_FUNC_MKTIME, AC_FUNC_MEMCMP,

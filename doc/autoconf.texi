@@ -5722,22 +5722,22 @@ Often better ways of solving a particular problem are developed, or
 ad-hoc approaches are systematized.  This process has occurred in many
 parts of Autoconf.  One result is that some of the macros are now
 considered @dfn{obsolete}; they still work, but are no longer considered
-the best thing to do.  Autoconf provides the @code{AC_OBSOLETE} macro to
-warn users producing @code{configure} scripts when they use obsolete
-macros, to encourage them to modernize.  A sample call is:
+the best thing to do, hence they should be replaced with more modern
+macros.  Ideally, @code{autoupdate} should substitute the old macro calls
+with their modern implementation.
 
-@example
-AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])dnl
-@end example
+Autoconf provides a simple means to obsolete a macro.
 
-@defmac AC_OBSOLETE (@var{this-macro-name}, @ovar{suggestion})
-@maindex OBSOLETE
-Make @code{m4} print a message on the standard error output warning that
-@var{this-macro-name} is obsolete, and giving the file and line number
-where it was called.  @var{this-macro-name} should be the name of the
-macro that is calling @code{AC_OBSOLETE}.  If @var{suggestion} is given,
-it is printed at the end of the warning message; for example, it can be
-a suggestion for what to use instead of @var{this-macro-name}.
+@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
+@maindex DEFUN
+@maindex AU_DEFUN
+Define @var{old-macro} as @var{implementation}.  The only difference
+with @code{AC_DEFUN} is that the user will be warned that
+@var{old-macro} is now obsolete.
+
+If she then uses @code{autoupdate}, the call to @var{old-macro} will be
+replaced by the modern @var{implementation}.  The additional
+@var{message} is then printed.
 @end defmac
 
 Supporting old macros can quickly become a maintenance nightmare, so the
@@ -7542,6 +7542,25 @@ AC_CONFIG_LINKS(host.h:config/$@{machine@}.h
 @defmac AC_MODE_T
 @maindex MODE_T
 @code{AC_TYPE_MODE_T}
+@end defmac
+
+@defmac AC_OBSOLETE (@var{this-macro-name}, @ovar{suggestion})
+@maindex OBSOLETE
+Make @code{m4} print a message on the standard error output warning that
+@var{this-macro-name} is obsolete, and giving the file and line number
+where it was called.  @var{this-macro-name} should be the name of the
+macro that is calling @code{AC_OBSOLETE}.  If @var{suggestion} is given,
+it is printed at the end of the warning message; for example, it can be
+a suggestion for what to use instead of @var{this-macro-name}.
+
+For instance
+
+@example
+AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])dnl
+@end example
+
+You are encouraged to use @code{AU_DEFUN} instead, since it gives better
+services to the user.
 @end defmac
 
 @defmac AC_OFF_T
