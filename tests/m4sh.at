@@ -100,27 +100,28 @@ AT_DATA_M4SH([script.as],
 # weak for us, in which case `as_expr=false'.
 m4_define([DIRNAME_TEST],
 [dir=`AS_DIRNAME([$1])`
-test "$dir" = "$2" ||
+test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
   echo "dirname($1) = $dir instead of $2" >&2
 
 if test "$as_expr" != false; then
   dir=`AS_DIRNAME_EXPR([$1])`
-  test "$dir" = "$2" ||
+  test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
     echo "dirname_expr($1) = $dir instead of $2" >&2
 fi
 
 dir=`AS_DIRNAME_SED([$1])`
 test "$dir" = "$2" ||
+test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
   echo "dirname_sed($1) = $dir instead of $2" >&2])
 
 DIRNAME_TEST([/],		[/])
-DIRNAME_TEST([//],		[//])
+DIRNAME_TEST([//],		[//],	[/])
 DIRNAME_TEST([///],		[/])
-DIRNAME_TEST([//1],		[//])
+DIRNAME_TEST([//1],		[//],	[/])
 DIRNAME_TEST([/1],		[/])
 DIRNAME_TEST([./1],		[.])
 DIRNAME_TEST([../../2],		[../..])
-DIRNAME_TEST([//1/],		[//])
+DIRNAME_TEST([//1/],		[//],	[/])
 DIRNAME_TEST([/1/],		[/])
 DIRNAME_TEST([./1/],		[.])
 DIRNAME_TEST([../../2],		[../..])
