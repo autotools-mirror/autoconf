@@ -836,7 +836,7 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # Maximum number of lines to put in a shell here document.
 dnl This variable seems obsolete.  It should probably be removed, and
 dnl only ac_max_sed_lines should be used.
-: ${ac_max_here_lines=12}
+: ${ac_max_here_lines=48}
 # Sed expression to map a string onto a valid sh and CPP variable names.
 changequote(, )dnl
 ac_tr_sh='sed -e y%*+%pp%;s%[^a-zA-Z0-9_]%_%g'
@@ -1702,7 +1702,7 @@ dnl if the cache file is inconsistent with the current host,
 dnl target and build system types, execute CMD or print a default
 dnl error message.
 AC_DEFUN(AC_VALIDATE_CACHED_SYSTEM_TUPLE, [
-  AC_REQUIRE([AC_CANONICAL_SYSTEM])
+  AC_REQUIRE([AC_CANONICAL_SYSTEM])dnl
   AC_MSG_CHECKING([cached system tuple])
   if { test x"${ac_cv_host_system_type+set}" = x"set" &&
        test x"$ac_cv_host_system_type" != x"$host"; } ||
@@ -3531,17 +3531,12 @@ changequote(<<, >>)dnl
 ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
 ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
 ac_dC='\3'
-ac_dD='%g'
-# ac_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
+ac_dD='%;t t'
+# ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
 ac_uA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_uB='\([ 	]\)%\1#\2define\3'
+ac_uB='<<$>>%\1#\2define\3'
 ac_uC=' '
-ac_uD='\4%g'
-# ac_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_eA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_eB='<<$>>%\1#\2define\3'
-ac_eC=' '
-ac_eD='%g'
+ac_uD='%;t t'
 changequote([, ])dnl
 
 for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
@@ -3558,23 +3553,21 @@ changequote([, ])dnl
 
   rm -f $ac_cs_root.frag $ac_cs_root.in $ac_cs_root.out
   ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
-  cat $ac_file_inputs > $ac_cs_root.in
+  # Remove the trailing spaces.
+  sed -e 's/@BKL@ 	@BKR@*$//' $ac_file_inputs >$ac_cs_root.in
 
 EOF
 
-# Transform confdefs.h into a sed script conftest.vals that substitutes
-# the proper values into config.h.in to produce config.h.  And first:
-# Protect against being on the right side of a sed subst in config.status.
-# Protect against being in an unquoted here document in config.status.
-rm -f conftest.vals
+# Transform confdefs.h into two sed scripts, `conftest.defines' and
+# `conftest.undefs', that substitutes the proper values into
+# config.h.in to produce config.h.  The first handles `#define'
+# templates, and the second `#undef' templates.
+# And first: Protect against being on the right side of a sed subst in
+# config.status.  Protect against being in an unquoted here document
+# in config.status.
+rm -f conftest.defines conftest.undefs
 dnl Using a here document instead of a string reduces the quoting nightmare.
 dnl Putting comments in sed scripts is not portable.
-dnl
-dnl One may be tempted to use the same trick to speed up the sed script
-dnl as for CONFIG_FILES (combination of :t and t t).  Here we cannot,
-dnl because of the `#define' templates: we may enter in infinite loops
-dnl replacing `#define foo bar' by itself.
-dnl We ought to get rid of the #define templates.
 dnl
 dnl There are two labels in the following scripts, `cleanup' and `clear'.
 dnl
@@ -3599,54 +3592,84 @@ s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_d
 t cleanup
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
 : cleanup
-s%ac_d%ac_u%gp
-s%ac_u%ac_e%gp
 changequote([, ])dnl
 EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
 # sort them, since we want the *last* AC_DEFINE to be honored.
-uniq confdefs.h | sed -n -f $ac_cs_root.hdr > conftest.vals
+uniq confdefs.h | sed -n -f $ac_cs_root.hdr >conftest.defines
+sed -e 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
 rm -f $ac_cs_root.hdr
 
 # This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
-cat >> conftest.vals <<\EOF
+cat >>conftest.undefs <<\EOF
 changequote(, )dnl
 s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
 changequote([, ])dnl
 EOF
 
-# Break up conftest.vals because some shells have a limit on the size
+# Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
+echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
+echo '  if egrep "^[ 	]*#[ 	]*define" $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
 rm -f conftest.tail
 while :
 do
-  ac_lines=`grep -c . conftest.vals`
+  ac_lines=`grep -c . conftest.defines`
   # grep -c gives empty output for an empty file on some AIX systems.
   if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   # Write a limited-size here document to $ac_cs_root.frag.
-  echo '  cat > $ac_cs_root.frag <<CEOF' >> $CONFIG_STATUS
-dnl A small speed up: don't consider the non `#undef' or `#define' lines.
-  echo '/^#[ 	]*u*n*d*e*f*/!b' >> $CONFIG_STATUS
-  sed ${ac_max_here_lines}q conftest.vals >> $CONFIG_STATUS
+  echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
+dnl Speed up: don't consider the non `#define' lines.
+  echo ': t' >>$CONFIG_STATUS
+  echo '/^[ 	]*#[ 	]*define/!b' >>$CONFIG_STATUS
+  sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f $ac_cs_root.frag $ac_cs_root.in > $ac_cs_root.out
+  sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
   rm -f $ac_cs_root.in
   mv $ac_cs_root.out $ac_cs_root.in
-' >> $CONFIG_STATUS
-  sed 1,${ac_max_here_lines}d conftest.vals > conftest.tail
-  rm -f conftest.vals
-  mv conftest.tail conftest.vals
+' >>$CONFIG_STATUS
+  sed 1,${ac_max_here_lines}d conftest.defines >conftest.tail
+  rm -f conftest.defines
+  mv conftest.tail conftest.defines
 done
-rm -f conftest.vals
+rm -f conftest.defines
+echo '  fi # egrep' >>$CONFIG_STATUS
+echo >>$CONFIG_STATUS
+
+# Break up conftest.undefs because some shells have a limit on the size
+# of here documents, and old seds have small limits too (100 cmds).
+echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
+rm -f conftest.tail
+while :
+do
+  ac_lines=`grep -c . conftest.undefs`
+  # grep -c gives empty output for an empty file on some AIX systems.
+  if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
+  # Write a limited-size here document to $ac_cs_root.frag.
+  echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
+dnl Speed up: don't consider the non `#undef'
+  echo ': t' >>$CONFIG_STATUS
+  echo '/^[ 	]*#[ 	]*undef/!b' >>$CONFIG_STATUS
+  sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
+  echo 'CEOF
+  sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
+  rm -f $ac_cs_root.in
+  mv $ac_cs_root.out $ac_cs_root.in
+' >>$CONFIG_STATUS
+  sed 1,${ac_max_here_lines}d conftest.undefs >conftest.tail
+  rm -f conftest.undefs
+  mv conftest.tail conftest.undefs
+done
+rm -f conftest.undefs
 
 dnl Now back to your regularly scheduled config.status.
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
   rm -f $ac_cs_root.frag $ac_cs_root.h
-  echo "/* $ac_file.  Generated automatically by configure.  */" > $ac_cs_root.h
-  cat $ac_cs_root.in >> $ac_cs_root.h
+  echo "/* $ac_file.  Generated automatically by configure.  */" >$ac_cs_root.h
+  cat $ac_cs_root.in >>$ac_cs_root.h
   rm -f $ac_cs_root.in
   if cmp -s $ac_file $ac_cs_root.h 2>/dev/null; then
     echo "$ac_file is unchanged"

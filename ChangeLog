@@ -5,6 +5,53 @@
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	config.status: Speed up the creation of config headers (about four
+ 	times faster on Linux).
+
+	The previous scheme had three sed commands for each AC_DEFINE: one
+	for #define templates, and two for #undef templates (with or
+	without trailing spaces).  Divide this in three sed scripts
+	instead: a one liner that removes the trailing spaces, one for
+	#defines, and then the last for #undef.
+
+	The real speed up comes from the fact that the #define script
+	starts by checkin if the current input line has a #define, and if
+	not the script immediately goes to the next line, without running
+	the rest of the script as was the case before.  Equally for the
+	#undef script.
+
+	Note that this way, users that don't use #define templates don't
+ 	pay too much the overhead, since the sed script `realizes' quickly
+ 	there are no #define lines.  My test case runs in 0.32s with
+ 	#define templates, and 0.24s without.  To improve this common
+ 	case, the whole code for #define templates is conditionalized by a
+ 	proper egrep call.  The result runs is 0.24s, i.e., almost no cost
+ 	at all.
+
+	I made one dangerous change that I carefully evaluated before
+ 	commiting: the sed scripts are cut at 48 lines instead of 12 as
+ 	before.  This produces here docs of about 4Kb.  I checked many
+ 	`configure's and they all have big here documents, much bigger
+ 	than the 12 lines (for instance AC_FUNC_MMAP produces a 150 lines
+ 	long, 3800+ character here document).  So I moved to the well
+ 	known HP UX sed limitations: no more than 100 commands, and there
+ 	are two commands per line now, plus a two command preamble.  The
+ 	speed up is noticeable.
+
+	* acgeneral.m4 (AC_OUTPUT_HEADERS): Remove the ac_e
+	family.
+	Changed ac_uD and ac_dD to `...;t t', instead of `...g'.
+	Instead of creating `conftest.vals' with both ac_e, ac_d,
+	and ac_u family, preprocess to strip the trailing spaces, and
+	create `conftest.defines' with the ac_d family, and then
+	`conftest.undefs' for the ac_e family.
+	Break up both `conftest.defines' and `conftest.undefs'.  Insert a
+ 	top label and a global test for `#defines' and `#undef' before.
+	Call `conftest.defines' if there are #define in the input.
+	Call `conftest.undefs'.
+
+1999-10-10  Akim Demaille  <akim@epita.fr>
+
 	Rename the family AC_NEED_DECL as AC_CHECK: it is more uniform,
 	but keep defining NEED_FOO_DECL when `foo' is not declared.  Files
 	not using Autoconf behave better when declarations lacks than when
