@@ -159,9 +159,9 @@ if test "z${INSTALL}" = "z" ; then
   echo checking for install
   IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
   for dir in $PATH; do
-    test -z "$dir" && dir=.
-    case $dir in
-    /etc|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
+    #test -z "$dir" && dir=.
+    case "$dir" in
+    ''|.|/etc|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
     *)
       if test -f $dir/installbsd; then
 	INSTALL="$dir/installbsd -c" # OSF1
@@ -977,7 +977,7 @@ EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-    eval `make acfindx | grep -v make`
+    eval `make acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
     if test ! -f $im_usrlibdir/libX11.a && test -f $im_libdir/libX11.a; then
       im_usrlibdir=$im_libdir
