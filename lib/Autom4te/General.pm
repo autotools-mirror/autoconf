@@ -28,8 +28,8 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &mktmpdir &mtime
-              &uniq &verbose &xsystem
+@EXPORT = qw (&find_configure_ac &find_file &mktmpdir &mtime
+              &uniq &update_file &verbose &xsystem
 	      $me $verbose $debug $tmp);
 
 # Variable we share with the main package.  Be sure to have a single
@@ -104,6 +104,48 @@ sub find_configure_ac ()
 }
 
 
+# $FILENAME
+# find_file ($FILENAME, @INCLUDE)
+# -------------------------------
+# We match exactly the behavior of GNU m4: first look in the current
+# directory (which includes the case of absolute file names), and, if
+# the file is not absolute, just fail.  Otherwise, look in the path.
+#
+# If the file is flagged as optional (ends with `?'), then return undef
+# if absent.
+sub find_file ($@)
+{
+  use File::Spec;
+
+  my ($filename, @include) = @_;
+  my $optional = 0;
+
+  $optional = 1
+    if $filename =~ s/\?$//;
+
+  return File::Spec->canonpath ($filename)
+    if -e $filename;
+
+  if (File::Spec->file_name_is_absolute ($filename))
+    {
+      die "$me: no such file or directory: $filename\n"
+	unless $optional;
+      return undef;
+    }
+
+  foreach my $path (@include)
+    {
+      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
+	if -e File::Spec->catfile ($path, $filename)
+    }
+
+  die "$me: no such file or directory: $filename\n"
+    unless $optional;
+
+  return undef;
+}
+
+
 # mktmpdir ($SIGNATURE)
 # ---------------------
 # Create a temporary directory which name is based on $SIGNATURE.
@@ -165,6 +207,56 @@ sub uniq (@)
 	 }
      }
    return wantarray ? @res : "@res";
+}
+
+
+# &update_file ($FROM, $TO)
+# -------------------------
+# Rename $FROM as $TO, preserving $TO timestamp if it has not changed.
+# Recognize `$TO = -' standing for stdin.
+sub update_file ($$)
+{
+  my ($from, $to) = @_;
+  my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
+  use File::Compare;
+  use File::Copy;
+
+  if ($to eq '-')
+    {
+      my $in = new IO::File ("$from");
+      my $out = new IO::File (">-");
+      while ($_ = $in->getline)
+	{
+	  print $out $_;
+	}
+      $in->close;
+      remove ($from)
+	or die "$me: cannot not remove $from: $!\n";
+      return;
+    }
+
+  if (-f "$to" && compare ("$from", "$to") == 0)
+    {
+      # File didn't change, so don't update its mod time.
+      print STDERR "$me: `$to' is unchanged\n";
+      return
+    }
+
+  if (-f "$to")
+    {
+      # Back up and install the new one.
+      move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
+	or die "$me: cannot not backup $to: $!\n";
+      move ("$from", "$to")
+	or die "$me: cannot not rename $from as $to: $!\n";
+      print STDERR "$me: `$to' is updated\n";
+    }
+  else
+    {
+      move ("$from", "$to")
+	or die "$me: cannot not rename $from as $to: $!\n";
+      print STDERR "$me: `$to' is created\n";
+    }
 }
 
 

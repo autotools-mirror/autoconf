@@ -44,7 +44,6 @@ use Autom4te::Struct;
 use Carp;
 use Getopt::Long;
 use IO::File;
-use File::Spec;
 use strict;
 
 # List of requests.
@@ -361,46 +360,6 @@ my %m4_builtin_alternate_name;
 ## ---------- ##
 
 
-# $FILENAME
-# find_file ($FILENAME)
-# ---------------------
-# We match exactly the behavior of GNU m4: first look in the current
-# directory (which includes the case of absolute file names), and, if
-# the file is not absolute, just fail.  Otherwise, look in the path.
-#
-# If the file is flagged as optional (ends with `?'), then return undef
-# if absent.
-sub find_file ($)
-{
-  my ($filename) = @_;
-  my $optional = 0;
-
-  $optional = 1
-    if $filename =~ s/\?$//;
-
-  return File::Spec->canonpath ($filename)
-    if -e $filename;
-
-  if (File::Spec->file_name_is_absolute ($filename))
-    {
-      die "$me: no such file or directory: $filename\n"
-	unless $optional;
-      return undef;
-    }
-
-  foreach my $path (@include)
-    {
-      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
-	if -e File::Spec->catfile ($path, $filename)
-    }
-
-  die "$me: no such file or directory: $filename\n"
-    unless $optional;
-
-  return undef;
-}
-
-
 # print_usage ()
 # --------------
 # Display usage (--help).
@@ -605,7 +564,7 @@ Try `$me --help' for more information.\n"
   # We don't want to depend upon m4's --include to find the top level
   # files.  Try to get a canonical name, as it's part of the key for
   # caching.  And some files are optional.
-  @ARGV = grep { defined $_ } map { find_file ($_) } @ARGV;
+  @ARGV = grep { defined $_ } map { find_file ($_, @include) } @ARGV;
 }
 
 
@@ -1064,7 +1023,7 @@ sub up_to_date_p ($)
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
   my $deps = new IO::File ("$tmp/dependencies");
-  push @dep, map { chomp; find_file ($_) } $deps->getlines;
+  push @dep, map { chomp; find_file ($_, @include) } $deps->getlines;
 
   # If $FILE is younger than one of its dependencies, it is outdated.
   verbose "$file is the youngest cache file";

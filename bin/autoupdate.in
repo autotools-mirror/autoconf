@@ -23,15 +23,12 @@
 
 BEGIN
 {
-  my $prefix = "@prefix@";
   my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
   unshift @INC, "$perllibdir";
 }
 
 use Getopt::Long;
 use File::Basename;
-use File::Compare;
-use File::Copy;
 use Autom4te::General;
 use strict;
 
@@ -41,7 +38,6 @@ my $autoconf = $ENV{'AUTOCONF'} || '@autoconf-name@';
 my $localdir = '.';
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";
-my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 
 
 ## ---------- ##
@@ -372,30 +368,10 @@ EOF
        or die "$me: cannot close $tmp/input.m4: $!\n";
 
     # Now ask m4 to perform the update.
-    if ("$file" eq "$tmp/stdin")
-       {
-	 xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4");
-       }
-    else
-       {
-	 xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4 >$tmp/updated");
-	 if (compare ("$tmp/updated", "$file") == 0)
-	   {
-	     # File didn't change, so don't update its mod time.
-	     print STDERR "$me: `$file' is unchanged\n"
-	   }
-	 else
-	   {
-	     # Back up and install the new one.
-	     move ("$file",  "$file$SIMPLE_BACKUP_SUFFIX")
-	       or die "$me: cannot not backup $file: $!\n";
-	     move ("$tmp/updated", "$file")
-	       or die "$me: cannot not update $file: $!\n";
-	     print STDERR "$me: `$file' is updated\n";
-	   }
-       }
-     }
-
+    xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4 >$tmp/updated");
+    update_file ("$tmp/updated",
+		 "$file" eq "$tmp/stdin" ? '-' : "$file");
+  }
 exit 0;
 
 

@@ -98,6 +98,7 @@ AT_SETUP([Syntax of the Perl scripts])
 # | ./autom4te syntax OK
 # Ignore it, it might change between releases.
 AT_CHECK([$PERL -c ../bin/autom4te],   0, [], [ignore])
+AT_CHECK([$PERL -c ../bin/autoheader], 0, [], [ignore])
 AT_CHECK([$PERL -c ../bin/autoscan],   0, [], [ignore])
 AT_CHECK([$PERL -c ../bin/autoupdate], 0, [], [ignore])
 

@@ -29,17 +29,12 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
 
 BEGIN
 {
-  my $datadir = ($ENV{'autom4te_perllibdir'}
-		 || $ENV{'AC_MACRODIR'}
-		 || '@datadir@');
-  unshift @INC, "$datadir";
+  my $perllibdir = $ENV{'autom4te_perllibdir'} || '@datadir@';
+  unshift @INC, "$perllibdir";
 }
 
 use Getopt::Long;
 use File::Basename;
-use File::Compare;
-use File::Copy;
-use File::Spec;
 use IO::File;
 use Autom4te::General;
 use strict;
@@ -64,46 +59,6 @@ my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 ## ---------- ##
 ## Routines.  ##
 ## ---------- ##
-
-
-# $FILENAME
-# find_file ($FILENAME)
-# ---------------------
-# We match exactly the behavior of GNU m4: first look in the current
-# directory (which includes the case of absolute file names), and, if
-# the file is not absolute, just fail.  Otherwise, look in the path.
-#
-# If the file is flagged as optional (ends with `?'), then return undef
-# if absent.
-sub find_file ($)
-{
-  my ($filename) = @_;
-  my $optional = 0;
-
-  $optional = 1
-    if $filename =~ s/\?$//;
-
-  return File::Spec->canonpath ($filename)
-    if -e $filename;
-
-  if (File::Spec->file_name_is_absolute ($filename))
-    {
-      die "$me: no such file or directory: $filename\n"
-	unless $optional;
-      return undef;
-    }
-
-  foreach my $path (@include)
-    {
-      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
-	if -e File::Spec->catfile ($path, $filename)
-    }
-
-  die "$me: no such file or directory: $filename\n"
-    unless $optional;
-
-  return undef;
-}
 
 
 # print_usage ()
@@ -202,9 +157,9 @@ mktmpdir ('ah');
 parse_args;
 
 # Preach.
-my $config_h_top = find_file ("config.h.top?");
-my $config_h_bot = find_file ("config.h.bot?");
-my $acconfig_h = find_file ("acconfig.h?");
+my $config_h_top = find_file ("config.h.top?", @include);
+my $config_h_bot = find_file ("config.h.bot?", @include);
+my $acconfig_h = find_file ("acconfig.h?", @include);
 if ($config_h_top || $config_h_bot || $acconfig_h)
   {
     my $msg = << "END";
@@ -297,31 +252,6 @@ $out->close;
 #   done
 # fi
 
-if (compare ("$tmp/config.hin", "$config_h_in") == 0)
-  {
-    # File didn't change, so don't update its mod time.
-    print STDERR "$me: `$config_h_in' is unchanged\n"
-  }
-else
-  {
-    # Back up and install the new one.
-    if (-f $config_h_in)
-      {
-	move ("$config_h_in",  "$config_h_in$SIMPLE_BACKUP_SUFFIX")
-	  or die "$me: cannot not backup $config_h_in: $!\n";
-      }
-    move ("$tmp/config.hin", "$config_h_in")
-      or die "$me: cannot not update $config_h_in: $!\n";
-    # print STDERR "$me: `$config_h_in' is updated\n";
-  }
-
+update_file ("$tmp/config.hin", "$config_h_in");
 
 __END__
-
-
-
-
-
-
-
-(exit $status); exit $status

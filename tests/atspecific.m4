@@ -61,19 +61,23 @@ AC_STATE_SAVE(after)
 ]])])
 
 
-# AT_CHECK_AUTOCONF(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
-# -----------------------------------------------------------
+# AT_CHECK_AUTOCONF(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# ----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
 AT_CHECK([autoconf --include=$srcdir $1],
-         m4_default([$2], [0]), [$3], [$4])])
+         [$2], [$3], [$4])])
 
 
-# AT_CHECK_AUTOHEADER
-# -------------------
+# AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0],
+#                     STDOUT, [STDERR = `autoheader: `config.hin' is created'])
+# -----------------------------------------------------------------------------
 m4_define([AT_CHECK_AUTOHEADER],
 [AT_CLEANUP_FILES(config.hin)dnl
-AT_CHECK([autoheader --localdir=$srcdir], 0, [], [])])
+AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
+         [$3],
+         m4_default([$4], [[autoheader: `config.hin' is created
+]]))])
 
 
 # AT_CHECK_CONFIGURE(END-COMMAND,
