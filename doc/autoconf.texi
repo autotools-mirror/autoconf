@@ -2764,7 +2764,7 @@ displaying the options of the package @code{foo}.  Rather, you should
 write:
 
 @example
-if test "$package_foo_enabled" = yes then;
+if test "$package_foo_enabled" = yes; then
   AC_CONFIG_SUBDIRS(foo)
 fi
 @end example
