@@ -33,7 +33,8 @@ use strict;
 
 # Lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
-my @include;
+# We need to find m4sugar.
+my @include = ('@datadir@');
 my $force = 0;
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";

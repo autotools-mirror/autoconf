@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoupdate.in (@include): `installcheck' revealed the path
+	to m4sugar was lacking!
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* man/Makefile.am (.x.1): We really have pass
 	autom4te_perllibdir.
 
