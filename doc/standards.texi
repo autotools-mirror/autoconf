@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 16 May 1995
+@set lastupdate 24 July 1995
 @c %**end of header
 
 @ifinfo
@@ -1071,6 +1071,10 @@ Do not use a count of errors as the exit status for a program.
 bits (0 through 255).  A single run of the program might have 256
 errors; if you try to return 256 as the exit status, the parent process
 will see 0 as the status, and it will appear that the program succeeded.
+
+If you make temporary files, check the @code{TMPDIR} environment
+variable; if that variable is defined, use the specified directory
+instead of @file{/tmp}.
 
 @node Errors
 @chapter Formatting Error Messages
