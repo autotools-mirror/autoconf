@@ -59,20 +59,27 @@ autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 ## when the prefix etc. changes.  It took quite a while to have these
 ## rules correct, don't break them!
 ## Use chmod -w to prevent people from editing the wrong file by accident.
-$(bin_SCRIPTS): Makefile
+autoheader autom4te autoreconf autoscan autoupdate ifnames: Makefile
 	rm -f $@ $@.tmp
 	$(edit) $(srcdir)/$@.in >$@.tmp
 	chmod +x $@.tmp
 	chmod a-w $@.tmp
 	mv $@.tmp $@
 
-autoconf: $(srcdir)/autoconf.in
 autoheader: $(srcdir)/autoheader.in
 autom4te: $(srcdir)/autom4te.in
 autoreconf: $(srcdir)/autoreconf.in
 autoscan: $(srcdir)/autoscan.in
 autoupdate: $(srcdir)/autoupdate.in
 ifnames: $(srcdir)/ifnames.in
+
+# autoconf.in is in ., not in $(srcdir).
+autoconf: autoconf.in Makefile
+	rm -f $@ $@.tmp
+	$(edit) $@.in >$@.tmp
+	chmod +x $@.tmp
+	chmod a-w $@.tmp
+	mv $@.tmp $@
 
 
 ## --------------- ##
