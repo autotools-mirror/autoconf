@@ -51,7 +51,7 @@ SUFFIXES = .x .1
 
 .x.1:
 	@case $* in \
-	  */config.*) ;; \
+	  config.* | */config.*) ;; \
 	  *) $(MAKE) $*-bin-prereq $*-tests-prereq;; \
 	esac
 	echo "Updating man page $@"
