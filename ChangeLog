@@ -1,5 +1,9 @@
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4: Formatting changes.
+
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
 	More than one argument to `configure' builds a broken
 	`config.status'.  Fix and test.
 

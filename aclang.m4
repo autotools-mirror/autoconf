@@ -51,20 +51,32 @@
 
 
 # Table of Contents:
+#
 # 1. Language selection
 #    and routines to produce programs in a given language.
 #  a. generic routines
 #  b. C
 #  c. C++
 #  d. Fortran 77
-# 2. Looking for a compiler
+#
+# 2. Producing programs in a given language.
+#  a. generic routines
+#  b. C
+#  c. C++
+#  d. Fortran 77
+#
+# 3. Looking for a compiler
 #    And possibly the associated preprocessor.
-#  a. C
-#  b. C++
-#  c. Fortran 77
-# 3. Some specificities of the compilers.
-#  a. C
-#  b. Fortran 77
+#  a. Generic routines.
+#  b. C
+#  c. C++
+#  d. Fortran 77
+#
+# 4. Compilers' characteristics.
+#  a. Generic routines.
+#  b. C
+#  c. C++
+#  d. Fortran 77
 
 
 
@@ -74,9 +86,9 @@
 
 
 
-# ---------------------------- #
-# Generic language selection.  #
-# ---------------------------- #
+# -------------------------------- #
+# 1a. Generic language selection.  #
+# -------------------------------- #
 
 # AC_LANG_CASE(LANG1, IF-LANG1, LANG2, IF-LANG2, ..., DEFAULT)
 # ------------------------------------------------------------
@@ -143,6 +155,82 @@ pushdef([_AC_LANG], _AC_LANG)])
 AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 
 
+
+# -------------------- #
+# 1b. The C language.  #
+# -------------------- #
+
+
+# AC_LANG(C)
+# ----------
+define([AC_LANG(C)],
+[ac_ext=c
+# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+])
+
+
+# AC_LANG_C
+# ---------
+AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
+
+
+
+# ---------------------- #
+# 1c. The C++ language.  #
+# ---------------------- #
+
+
+# AC_LANG(C++)
+# ------------
+define([AC_LANG(C++)],
+[ac_ext=C
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+])
+
+
+# AC_LANG_CPLUSPLUS
+# -----------------
+AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
+
+
+
+# ----------------------------- #
+# 1d. The Fortran 77 language.  #
+# ----------------------------- #
+
+
+# AC_LANG(Fortran 77)
+# -------------------
+define([AC_LANG(Fortran 77)],
+[ac_ext=f
+ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+])
+
+
+# AC_LANG_FORTRAN77
+# -----------------
+AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
+
+
+
+
+
+
+## ---------------------- ##
+## 2.Producing programs.  ##
+## ---------------------- ##
+
+# ---------------------- #
+# 2a. Generic routines.  #
+# ---------------------- #
+
 # AC_LANG_SOURCE(BODY)
 # --------------------
 # Produce a valid source for the current language, which includes the
@@ -169,26 +257,9 @@ AC_DEFUN([AC_LANG_CALL],
 
 
 
-# ---------------- #
-# The C language.  #
-# ---------------- #
-
-
-# AC_LANG(C)
-# ----------
-define([AC_LANG(C)],
-[ac_ext=c
-# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-])
-
-
-# AC_LANG_C
-# ---------
-AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
-
+# --------------- #
+# 2b. C sources.  #
+# --------------- #
 
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
@@ -231,26 +302,9 @@ char $2 ();])], [$2 ();])])
 
 
 
-# ------------------ #
-# The C++ language.  #
-# ------------------ #
-
-
-# AC_LANG(C++)
-# ------------
-define([AC_LANG(C++)],
-[ac_ext=C
-# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-])
-
-
-# AC_LANG_CPLUSPLUS
-# -----------------
-AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
-
+# ----------------- #
+# 2c. C++ sources.  #
+# ----------------- #
 
 # AC_LANG_SOURCE(C++)(BODY)
 # -------------------------
@@ -276,24 +330,9 @@ define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
 
 
 
-# ------------------------- #
-# The Fortran 77 language.  #
-# ------------------------- #
-
-
-# AC_LANG(Fortran 77)
-# -------------------
-define([AC_LANG(Fortran 77)],
-[ac_ext=f
-ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-])
-
-
-# AC_LANG_FORTRAN77
-# -----------------
-AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
-
+# ------------------------ #
+# 1d. Fortran 77 sources.  #
+# ------------------------ #
 
 # AC_LANG_SOURCE(Fortran 77)(BODY)
 # --------------------------------
@@ -322,21 +361,28 @@ define([AC_LANG_CALL(Fortran 77)],
 
 
 
-## ----------------------------- ##
-## Compilers and preprocessors.  ##
-## ----------------------------- ##
 
+## -------------------------------------------- ##
+## 3. Looking for Compilers and Preprocessors.  ##
+## -------------------------------------------- ##
 
+# ----------------------------------------------------- #
+# 3a. Generic routines in compilers and preprocessors.  #
+# ----------------------------------------------------- #
+
+# AC_REQUIRE_CPP
+# --------------
 # Require finding the C or C++ preprocessor, whichever is the
 # current language.
-AC_DEFUN(AC_REQUIRE_CPP,
+AC_DEFUN([AC_REQUIRE_CPP],
 [AC_LANG_CASE(C, [AC_REQUIRE([AC_PROG_CPP])],
                  [AC_REQUIRE([AC_PROG_CXXCPP])])])
 
 
-# ---------------- #
-# The C compiler.  #
-# ---------------- #
+
+# -------------------- #
+# 3b. The C compiler.  #
+# -------------------- #
 
 
 # AC_PROG_CPP
@@ -560,9 +606,9 @@ fi
 
 
 
-# ------------------ #
-# The C++ compiler.  #
-# ------------------ #
+# ---------------------- #
+# 3c. The C++ compiler.  #
+# ---------------------- #
 
 
 # AC_PROG_CXXCPP
@@ -685,9 +731,9 @@ rm -f conftest*
 
 
 
-# ------------------------- #
-# The Fortran 77 compiler.  #
-# ------------------------- #
+# ----------------------------- #
+# 3d. The Fortran 77 compiler.  #
+# ----------------------------- #
 
 
 # AC_PROG_F77([COMPILERS...])
@@ -842,10 +888,14 @@ fi
 
 
 
-## -------------------------------- ##
-## Specificities of the compilers.  ##
-## -------------------------------- ##
+## ------------------------------- ##
+## 4. Compilers' characteristics.  ##
+## ------------------------------- ##
 
+
+# -------------------------------- #
+# 4b. C compiler characteristics.  #
+# -------------------------------- #
 
 # AC_PROG_CC_STDC
 # ---------------
@@ -925,14 +975,6 @@ esac
 
 
 
-
-
-
-
-
-## --------------------------------------- ##
-## Checks for C compiler characteristics.  ##
-## --------------------------------------- ##
 
 
 AC_DEFUN(AC_C_CROSS,
@@ -1200,9 +1242,9 @@ fi
 
 
 
-## ----------------------------------------- ##
-## Checks for F77 compiler characteristics.  ##
-## ----------------------------------------- ##
+# ---------------------------------------- #
+# 4d. Fortan 77 compiler characteristics.  #
+# ---------------------------------------- #
 
 
 # AC_F77_LIBRARY_LDFLAGS
