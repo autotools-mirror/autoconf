@@ -1776,7 +1776,7 @@ AC_CACHE_VAL(ac_cv_type_$1,
 [AC_EGREP_CPP(dnl
 changequote(,)
 $1[^a-zA-Z_0-9] dnl
-changequote([,])), [#include <sys/types.h>
+changequote([,]), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
 #endif], ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
