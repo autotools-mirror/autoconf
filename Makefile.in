@@ -24,6 +24,7 @@ VPATH = @srcdir@
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 TEXI2HTML = texi2html
@@ -150,7 +151,7 @@ installdirs:
 
 install: all $(M4FILES) acconfig.h installdirs install-info
 	for p in $(ASCRIPTS); do \
-	  $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  $(INSTALL_SCRIPT) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 	for i in $(M4FROZEN); do \
 	  $(INSTALL_DATA) $$i $(acdatadir)/$$i; \
@@ -159,7 +160,7 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	  $(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
 	done
 	-if test -f autoscan; then \
-	$(INSTALL_PROGRAM) autoscan $(bindir)/`echo autoscan|sed '$(transform)'`; \
+	$(INSTALL_SCRIPT) autoscan $(bindir)/`echo autoscan|sed '$(transform)'`; \
 	for i in acfunctions acheaders acidentifiers acprograms \
 	  acmakevars; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \

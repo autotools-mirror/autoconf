@@ -1,3 +1,8 @@
+1999-08-04  Ben Elliston  <bje@cygnus.com>
+
+	* Makefile.in (INSTALL_SCRIPT): Substitute.
+	(install): Install scripts with $(INSTALL_SCRIPT).
+
 1999-07-11  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Cray T3E has an Alpha CPU.
