@@ -1,7 +1,7 @@
 #! @PERL@ -w
 # -*- perl -*-
 # autoscan - Create configure.scan (a preliminary configure.ac) for a package.
-# Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
-eval 'exec @PERL@ -S $0 ${1+"$@"}'
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 BEGIN
