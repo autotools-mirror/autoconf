@@ -69,7 +69,9 @@ site.exp: ../config.status Makefile
 	-@rm -f ./tmp?
 
 install:
+
 install-info:
+
 uninstall:
 
 Makefile: Makefile.in ../config.status
@@ -77,9 +79,12 @@ Makefile: Makefile.in ../config.status
 
 clean:
 	rm -f autoconf.log autoconf.sum site.exp site.bak AC* confdummy* 
+
 mostlyclean: clean
+
 distclean: clean
 	rm -f Makefile config.status config.cache config.log
+
 realclean: distclean
+
 TAGS:
-dist:

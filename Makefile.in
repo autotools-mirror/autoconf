@@ -180,6 +180,7 @@ Makefile: Makefile.in config.status
 config.status: configure
 	./config.status --recheck
 
+# FIXME this doesn't work.
 clean mostlyclean distclean realclean::
 	for dir in $(SUBDIRS); do \
 	  echo making $@ in $$dir ; \
