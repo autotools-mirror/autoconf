@@ -1,3 +1,8 @@
+2003-08-18  Derek Price <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Writing testsuite.at): Document RUN-IF-FAIL &
+	RUN-IF-PASS optional arguments.
+
 2003-08-18  Derek Price  <derek@ximbiot.com>
 
 	* doc/autoconf.texi (Programming in M4sh): Add doc for AS_IF.

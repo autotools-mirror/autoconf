@@ -14408,12 +14408,14 @@ brackets to protect against included commas or spurious M4
 expansion.  The contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @dvar{stdout, @samp{}}, @dvar{stderr, @samp{}})
+@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @dvar{stdout, @samp{}}, @dvar{stderr, @samp{}}, @ovar{run-if-fail}, @ovar{run-if-pass})
 @atindex CHECK
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
 @var{stdout} and @var{stderr} contents.  If @var{commands} exit with
-status 77, then the whole test group is skipped.
+status 77, then the whole test group is skipped.  Otherwise, if this test
+fails, run shell commands @var{run-if-fail} or, if this test passes, run shell
+commands @var{run-if-pass}.
 
 The @var{commands} @emph{must not} redirect the standard output, nor the
 standard error.
