@@ -4763,10 +4763,9 @@ unless the C compiler predefines it.
 @defmac AC_C_LONG_DOUBLE
 @acindex C_LONG_DOUBLE
 @cvindex HAVE_LONG_DOUBLE
-If the C compiler supports the @code{long double} type, define
-@code{HAVE_LONG_DOUBLE}.  Some C compilers that do not define
-@code{__STDC__} do support the @code{long double} type; some compilers
-that define @code{__STDC__} do not support @code{long double}.
+If the C compiler supports a working @code{long double} type with more
+range or precision than the @code{double} type, define
+@code{HAVE_LONG_DOUBLE}.
 @end defmac
 
 @defmac AC_C_STRINGIZE
