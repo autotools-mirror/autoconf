@@ -2911,6 +2911,8 @@ define(AC_CONFIG_UNIQUE,
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_LINKS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_SUBDIRS],
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_SUBDIRS.])])
+  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_COMMANDS],
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_COMMANDS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_FILES],
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])])dnl
 ])
@@ -2978,11 +2980,34 @@ AC_DEFUN([AC_CONFIG_FILES],
 [AC_CONFIG_UNIQUE([$1])dnl
 m4_append([AC_LIST_FILES], [ $1])dnl
 dnl
-pushdef([AC_Prefix], [   ])dnl
-dnl
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_FILES_COMMANDS],
-[  ]patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])dnl
+])dnl
+
+
+dnl AC_CONFIG_COMMANDS(NAME..., COMMANDS)
+dnl -------------------------------------
+dnl Specify additional commands to be run by config.status.  This
+dnl commands must be associated with a NAME, which should be thought
+dnl as the name of a file the COMMANDS create.
+dnl
+dnl This name must be a unique config key.
+dnl
+dnl The commands are stored in a growing string AC_LIST_COMMANDS_COMMANDS
+dnl which should be used like this:
+dnl
+dnl      case $ac_file in
+dnl        AC_LIST_COMMANDS_COMMANDS
+dnl      esac
+AC_DEFUN([AC_CONFIG_COMMANDS],
+[AC_CONFIG_UNIQUE([$1])dnl
+m4_append([AC_LIST_COMMANDS], [ $1])dnl
+dnl
+ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
+[m4_append([AC_LIST_COMMANDS_COMMANDS],
+[    ]patsubst(AC_Name, [:.*])[ ) $2 ;;
 ])])])dnl
 ])dnl
 
@@ -3001,8 +3026,10 @@ AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
 [$2]
 AC_DIVERT_POP()])
 
+
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 dnl --------------------------
+dnl FIXME: `subdirs=' should not be here.
 AC_DEFUN(AC_CONFIG_SUBDIRS,
 [AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
@@ -3010,6 +3037,7 @@ m4_append([AC_LIST_SUBDIRS], [$1])dnl
 subdirs="AC_LIST_SUBDIRS"
 AC_SUBST(subdirs)dnl
 ])
+
 
 dnl AC_OUTPUT([CONFIG_FILES...] [, EXTRA-CMDS] [, INIT-CMDS])
 dnl ---------------------------------------------------------
@@ -3071,6 +3099,9 @@ AC_WRAP(AC_LIST_HEADERS, [    ])"
 ifdef([AC_LIST_LINKS], [config_links="\\
 AC_WRAP(AC_LIST_LINKS, [    ])"
 ])dnl
+ifdef([AC_LIST_COMMANDS], [config_commands="\\
+AC_WRAP(AC_LIST_COMMANDS, [    ])"
+])dnl
 
 ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
@@ -3095,6 +3126,9 @@ ifdef([AC_LIST_HEADERS], [  Configuration headers:
 ])dnl
 ifdef([AC_LIST_LINKS], [  Links to install:
 \$config_links
+])dnl
+ifdef([AC_LIST_COMMANDS], [  Individual commands to run:
+\$config_commands
 ])dnl
 
 ])dnl
@@ -3156,6 +3190,16 @@ do
       esac
     done
     test -z "[\$]ac_option" && continue
+    for ac_file in [\$]config_commands
+    do
+      case [\$]ac_file in
+        [\$]ac_option | [\$]ac_option:* )
+          CONFIG_COMMANDS="[\$]CONFIG_COMMANDS [\$]ac_file"
+          ac_option=
+          break ;;
+      esac
+    done
+    test -z "[\$]ac_option" && continue
     echo "$CONFIG_STATUS: invalid argument: [\$]ac_option"; exit 1
    ;;
   esac
@@ -3166,7 +3210,7 @@ EOF
 dnl Issue this section only if there were actually config files.
 dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
 dnl which are given via $[1], or AC_LIST_LINKS is set.
-ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1),
+ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1)ifdef([AC_LIST_COMMANDS], 1),
 [cat >> $CONFIG_STATUS <<EOF
 # If there were arguments, don't assign a default value.
 if test \$[#] = 0; then
@@ -3175,6 +3219,8 @@ ifdef([AC_LIST_FILES], [  CONFIG_FILES="\$config_files"
 ifdef([AC_LIST_HEADERS], [  CONFIG_HEADERS="\$config_headers"
 ])dnl
 ifdef([AC_LIST_LINKS], [  CONFIG_LINKS="\$config_links"
+])dnl
+ifdef([AC_LIST_COMMANDS], [  CONFIG_COMMANDS="\$config_commands"
 ])dnl
 fi
 
@@ -3196,10 +3242,14 @@ dnl than not calling it at all
 ifdef([AC_LIST_FILES],
       [AC_OUTPUT_FILES(AC_LIST_FILES)],
       [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
-AC_OUTPUT_FILES(AC_LIST_FILES)dnl
-AC_DIVERT_POP()])dnl
-ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
-ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
+       AC_OUTPUT_FILES(AC_LIST_FILES)dnl
+       AC_DIVERT_POP()])dnl
+ifdef([AC_LIST_HEADERS],
+      [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
+ifdef([AC_LIST_LINKS],
+      [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
+ifdef([AC_LIST_COMMANDS],
+      [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
 cat >> $CONFIG_STATUS <<EOF
 undivert(AC_DIVERSION_ICMDS)dnl
@@ -3657,6 +3707,33 @@ changequote([, ])dnl
 fi; done
 EOF
 ])dnl AC_OUTPUT_LINKS
+
+
+dnl AC_OUTPUT_COMMANDS_COMMANDS
+dnl ---------------------------
+dnl This is a subroutine of AC_OUTPUT, in charge of issuing the code
+dnl related to AC_CONFIG_COMMANDS.  The weird name is due to the fact
+dnl that AC_OUTPUT_COMMANDS is already used.  This should be fixed.
+dnl
+dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
+dnl Upon exit, no here document shall be opened.
+define(AC_OUTPUT_COMMANDS_COMMANDS,
+[cat >> $CONFIG_STATUS <<\EOF
+
+#
+# CONFIG_COMMANDS section.
+#
+for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
+  ac_dest=`echo "$ac_file"|sed 's%:.*%%'`
+  ac_source=`echo "$ac_file"|sed 's%@BKL@^:@BKR@*:%%'`
+
+  echo "executing commands of $ac_dest"
+  case "$ac_dest" in
+AC_LIST_COMMANDS_COMMANDS[]dnl
+  esac
+EOF
+])dnl AC_OUTPUT_COMMANDS_COMMANDS
+
 
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called after running config.status.

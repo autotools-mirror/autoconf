@@ -1,5 +1,26 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Add a means to specify commands to be run by config.status.  At
+	the difference of AC_OUTPUT_COMMANDS, require that the set of
+	commands be named, so that both
+		CONFIG_COMMANDS=foo ./config.status
+	and
+		./config.status foo
+	perform the Right Thing.
+
+	* acgeneral.m4 (AC_CONFIG_UNIQUE): Also check in
+	AC_LIST_COMMANDS.
+	(AC_CONFIG_FILES): Remove a dead pushdef.
+	(AC_CONFIG_COMMANDS): New macro.
+	(AC_LIST_COMMANDS): New config list.
+	(AC_LIST_COMMANDS_COMMANDS): New growing string.
+	(AC_OUTPUT_COMMANDS_COMMANDS): New macro, output config commands
+	in config.status.
+	(AC_OUTPUT): Take AC_LIST_COMMANDS into account.
+	(AC_OUTPUT): Call AC_OUTPUT_COMMANDS_COMMANDS.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
       New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
       that one associates commands to run when a config file is
       created.  For instance for a shell script `foo', one uses
