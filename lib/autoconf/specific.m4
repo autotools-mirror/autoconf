@@ -530,7 +530,7 @@ char *alloca ();
 #endif
 "
 AC_COMPILE_CHECK([alloca], $decl,
-[char *p = (char *) alloca(1);], , [dnl
+[char *p = (char *) alloca(1);], [AC_DEFINE([HAVE_ALLOCA])], [dnl
 alloca_missing=1
 AC_PROGRAM_EGREP(winnitude, [
 #if defined(CRAY) && ! defined(CRAY2)
