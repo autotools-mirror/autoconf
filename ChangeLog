@@ -1,5 +1,11 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INCLUDES_DEFAULT): Make it more robust to
+	the fact it is used non quoted.
+	Reported by Jim Meyering.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_OUTPUT_FILES): Simplify some excess in
 	changequote.
 	(AC_OUTPUT_SUBDIRS): Likewise.

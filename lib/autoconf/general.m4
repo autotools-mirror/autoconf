@@ -1910,12 +1910,49 @@ AC_DEFUN(AC_TRY_COMMAND,
 
 # See AC_INIT_NOTICE to see the value of the default includes.
 
+
 # AC_INCLUDES_DEFAULT([INCLUDES])
 # -------------------------------
 # If INCLUDES is empty, expand in default includes, otherwise in
 # INCLUDES.
+#
+# The end-of-line after `$[1]' below is meant, and it is actually
+# because this new line is meant that we don't use m4_default.  The
+# problem is that this macro is used *unquoted* in AC_TRY_COMPILE
+# etc.  It is used unquoted because unfortunately (this is a real
+# pain), AC_TRY_COMPILE is over quoting some of its arguments.  This
+# is a sad decision.
+#
+# Still, there are calls such as this
+#
+#      AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([#include <pwd.h>]),
+#                     AC_BLAH_BLAH..)
+#
+# Because AC_INCLUDES_DEFAULT *has* to be unquoted, after evaluation,
+# if there were no end of line, you'd get
+#
+#      AC_TRY_COMPILE(#include <pwd.h>,
+#                     AC_BLAH_BLAH,
+#                     AC_MORE_BLAH_BLAH)
+#
+# i.e. the first argument given to AC_TRY_COMPILE is
+#
+#      #include <pwd.h>,
+#                     AC_BLAH_BLAH
+#
+# (note how the comma was swallowed because of the comment mark) and
+# the second is
+#
+#      AC_MORE_BLAH_BLAH
+#
+# so all the arguments are shifted.
+#
+# Because I don't see any backward compatible means to fix the
+# brokenness of AC_TRY_COMPILE, we are doomed to leave a extra new
+# line here.
 define(AC_INCLUDES_DEFAULT,
-[m4_default([$1], [$ac_includes_default])])
+[ifelse([$1], [], [$ac_includes_default], [$1
+])])
 
 
 ## -------------------------- ##
