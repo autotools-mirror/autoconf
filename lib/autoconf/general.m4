@@ -4411,7 +4411,7 @@ ac_cs_usage="\
 \`$me' instantiates files from templates according to the
 current configuration.
 
-Usage: $[0] [[OPTIONS]] FILE...
+Usage: $[0] [[OPTIONS]] [[FILE]]...
 
   -h, --help       print this help, then exit
   -V, --version    print version number, then exit
