@@ -522,6 +522,7 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   AC_PATH_PROG(AC_Prog, [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
     prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
+    prefix=`AS_DIRNAME(["$prefix"])`
   fi
 fi
 m4_popdef([AC_Prog])dnl

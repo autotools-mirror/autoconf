@@ -1,3 +1,16 @@
+2001-09-18  Paul Wagland   <paul@wagland.net>
+
+	* tests/m4sh.at: Ensure that AS_DIRNAME handles '/', '//' and '///'
+	correctly.
+	Add test for AS_BASENAME.
+	* lib/m4sugar/m4sh.m4: Fix AS_BASENAME so that it passes the previous
+	added test. It now correctly handles /1/2/3/, returning '3' not ''.
+	Added AS_BASENAME_SED to make the interface the same as AS_DIRNAME.
+	* tests/base.at: Fixed the expected responses. The old ones were
+	one line out...
+	* lib/autoconf/general.m4: Fixed AC_PREFIX_PROGRAM, it now behaves as
+	the documentation claims it should (and how it behaved in 2.13).
+
 2001-09-18  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): No INIT-CMDS in

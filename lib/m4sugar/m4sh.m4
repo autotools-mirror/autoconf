@@ -372,8 +372,11 @@ AS_DIRNAME_SED([$1])])
 # --------------------
 # Simulate running `basename(1)' on PATHNAME, not all systems have it.
 # This macro must be usable from inside ` `.
+m4_defun([AS_BASENAME_SED],
+[echo "$1" |sed 's,\(.*[[\\/]]\+\)\?\([[^\\/]]\+\)[[\\/]]*,\2,'])
+
 m4_defun([AS_BASENAME],
-[echo "$1" |sed 's,.*[[\\/]],,'])
+[AS_BASENAME_SED([$1])])
 
 # AS_EXECUTABLE_P
 # ---------------

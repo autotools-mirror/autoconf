@@ -98,8 +98,8 @@ esac
 ]])
 
 AT_CHECK_AUTOCONF([], 0, [],
-[configure.ac:18: warning: SINGLE_TEST invoked multiple times
-configure.ac:19: warning: SINGLE_TEST invoked multiple times
+[configure.ac:17: warning: SINGLE_TEST invoked multiple times
+configure.ac:18: warning: SINGLE_TEST invoked multiple times
 ])
 
 AT_CHECK_CONFIGURE
@@ -143,7 +143,7 @@ esac
 ]])
 
 AT_CHECK_AUTOCONF([], 0, [],
-[configure.ac:17: warning: SINGLE_TEST invoked multiple times
+[configure.ac:16: warning: SINGLE_TEST invoked multiple times
 ])
 AT_CHECK_CONFIGURE
 
