@@ -1299,7 +1299,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
-# Check whether --enable-$1 or --disable-$1 was given.
+[#] Check whether --enable-$1 or --disable-$1 was given.
 if test "[${enable_]m4_bpatsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]m4_bpatsubst([$1], -, _)"
   $3
@@ -1327,7 +1327,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 m4_divert_once([HELP_WITH], [$2])dnl
-# Check whether --with-$1 or --without-$1 was given.
+[#] Check whether --with-$1 or --without-$1 was given.
 if test "[${with_]m4_bpatsubst([$1], -, _)+set}" = set; then
   withval="[$with_]m4_bpatsubst([$1], -, _)"
   $3
