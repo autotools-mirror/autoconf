@@ -1,5 +1,12 @@
 2001-04-04  Lars J. Aas  <larsa@sim.no>
 
+	* acgeneral (_AC_INIT_CONFIG_LOG): New macro for setting up the
+	config.log file.
+	(_AC_INIT_DEFAULTS_FDS): Log to /dev/null instead of config.log.
+	(AC_INIT): Invoke _AC_INIT_CONFIG_LOG after _AC_INIT_VERSION.
+
+2001-04-04  Lars J. Aas  <larsa@sim.no>
+
 	* acgeneral.m4 (_AC_INIT_DEFAULTS): Produce better version
 	information for config.log header.
 	(_AC_INIT_VERSION): Produce better version information for
