@@ -239,7 +239,9 @@ else
   } >&6
 fi
 
-
+at_start_date=`date`
+at_start_time=`date +%s` 2>/dev/null
+echo "$as_me: starting at: $at_start_date" >&6
 at_fail_list=
 at_skip_list=
 at_test_count=0
@@ -292,6 +294,19 @@ _ATEOF
       ;;
   esac
 done
+
+at_stop_date=`date`
+at_stop_time=`date +%s` 2>/dev/null
+echo "$as_me: ending at: $at_stop_date" >&6
+at_duration_s=`expr $at_stop_time - $at_start_time` 2>/dev/null
+at_duration_m=`expr $at_duration_s / 60` 2>/dev/null
+at_duration_h=`expr $at_duration_m / 60` 2>/dev/null
+at_duration_s=`expr $at_duration_s % 60` 2>/dev/null
+at_duration_m=`expr $at_duration_m % 60` 2>/dev/null
+at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
+if test "$at_duration" != "h m s"; then
+  echo "$as_me: test suite duration: $at_duration" >&6
+fi
 
 # Cleanup everything unless the user wants the files.
 $at_debug || rm -rf $at_data_files
