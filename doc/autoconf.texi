@@ -4713,15 +4713,14 @@ With many compilers, the Fortran libraries detected by
 function that initializes things like Fortran I/O, and which then calls
 a user-provided entry function named e.g. @code{MAIN__} to run the
 user's program.  The @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN}
-macros figure out how to deal with this interaction.
+macro figures out how to deal with this interaction.
 
-When using Fortran only for purely numerical functions (no I/O,
-etcetera), users often prefer to provide their own @code{main} and skip
-the Fortran library initializations.  In this case, however, one may
-still need to provide a dummy @code{MAIN__} routine in order to prevent
-linking errors on some systems.  @code{AC_F77_DUMMY_MAIN} detects
-whether any such routine is @emph{required} for linking, and what its
-name is.
+When using Fortran for purely numerical functions (no I/O, etcetera),
+users often prefer to provide their own @code{main} and skip the Fortran
+library initializations.  In this case, however, one may still need to
+provide a dummy @code{MAIN__} routine in order to prevent linking errors
+on some systems.  @code{AC_F77_DUMMY_MAIN} detects whether any such
+routine is @emph{required} for linking, and what its name is.
 
 If it cannot figure out how to link successfully, @code{ACTION-IF-FAIL}
 is executed, with the default action being to exit with an error
