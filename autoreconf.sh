@@ -271,7 +271,11 @@ while read dir; do
   # ------------------ #
 
   # Assumes that there is a Makefile.am in the topmost directory.
-  if $force || $update Makefile.in Makefile.am; then
+  uses_automake=false
+  test -f "Makefile.am" &&
+    uses_automake=:
+  if $uses_automake &&
+     { $force || $update Makefile.in Makefile.am; } then
     $verbose running $automake in $dir
     $automake
   fi
@@ -311,18 +315,16 @@ while read dir; do
     acconfig_h=`echo $localdir_opt | sed -e 's/--localdir=//' \
                                          -e '/./ s%$%/%'`acconfig.h
     uses_autoheader=false;
-    if grep autoheader "$template" >/dev/null 2>&1; then
+    grep autoheader "$template" >/dev/null 2>&1 &&
        uses_autoheader=:
-    fi
     if $uses_autoheader &&
        { $force ||
-         $update $template $stamp configure.in $aclocal_m4 $acconfig_h ||
-         $update $stamp $template configure.in $aclocal_m4 $acconfig_h; } then
-        $verbose running $autoheader $localdir_opt in $dir
-        $autoheader $localdir_opt &&
-        $verbose "touching $stamp" &&
-        touch $stamp
-      fi
+         $update $template configure.in $aclocal_m4 $acconfig_h ||
+         $update $stamp    configure.in $aclocal_m4 $acconfig_h; } then
+      $verbose running $autoheader $localdir_opt in $dir
+      $autoheader $localdir_opt &&
+      $verbose "touching $stamp" &&
+      touch $stamp
     fi
   fi
   )

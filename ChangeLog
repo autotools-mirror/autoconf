@@ -1,5 +1,15 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	Fix the bugs recently introduced in autoreconf.
+
+	* autoreconf.sh: Don't run automake when the package is not using
+	it.
+	When checking whether autoheader should be rerun, don't ask
+	config.h to be newer than stamp-h and vice-versa.
+	Remove an unbalanced `fi'.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (run_aclocal): Rename as `uses_aclocal' to avoid
 	the convention clash with autoconf.sh where `run_foo' is the
 	command to run `foo'.
