@@ -1,3 +1,9 @@
+2000-10-18  Pavel Roskin  <proski@gnu.org>
+
+	* mdate-sh: Removed, its copy remains in the doc/ directory.
+	* Makefile.in: Regenerate.
+	* tests/Makefile.in: Likewise.
+
 2000-10-18  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_CHECK_TOOLS): Use `$' when reading a variable.
