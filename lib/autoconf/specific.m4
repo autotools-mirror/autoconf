@@ -1115,11 +1115,11 @@ EOF
     fi
     case "$ac_imake_incroot" in
 	/usr/include) ;;
-	*) x_includes="$ac_imake_incroot" ;;
+	*) x_includes="${x_includes-$ac_imake_incroot}" ;;
     esac
     case "$ac_imake_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) x_libraries="$ac_imake_usrlibdir" ;;
+	*) x_libraries="${x_libraries-$ac_imake_usrlibdir}" ;;
     esac
   fi
   cd ..
@@ -1159,9 +1159,6 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
     /usr/local/X11/include    \
     /usr/local/include/X11    \
                               \
-    /usr/openwin/include      \
-    /usr/openwin/share/include \
-                              \
     /usr/X386/include         \
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
@@ -1172,10 +1169,13 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
     /usr/athena/include       \
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
+                              \
+    /usr/openwin/include      \
+    /usr/openwin/share/include \
     ; \
   do
     if test -r "$ac_dir/$x_direct_test_include"; then
-      x_includes=$ac_dir; no_x=
+      x_includes=${x_includes-$ac_dir}; no_x=
       break
     fi
   done)
@@ -1205,9 +1205,6 @@ for ac_dir in `echo "$x_includes" | sed s/include/lib/` \
     /usr/local/X11/lib    \
     /usr/local/lib/X11    \
                           \
-    /usr/openwin/lib      \
-    /usr/openwin/share/lib \
-                          \
     /usr/X386/lib         \
     /usr/x386/lib         \
     /usr/XFree86/lib/X11  \
@@ -1218,11 +1215,14 @@ for ac_dir in `echo "$x_includes" | sed s/include/lib/` \
     /usr/athena/lib       \
     /usr/local/x11r5/lib  \
     /usr/lpp/Xamples/lib  \
+                          \
+    /usr/openwin/lib      \
+    /usr/openwin/share/lib \
     ; \
 do
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
-      x_libraries=$ac_dir; no_x=
+      x_libraries=${x_libraries-$ac_dir}; no_x=
       break 2
     fi
   done
@@ -1268,9 +1268,11 @@ else
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
   # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
-  AC_HAVE_LIBRARY(socket,
-    [X_LIBS="$X_LIBS -lsocket"
-     AC_VERBOSE(adding -lsocket to X_LIBS)])
+  if test "`uname 2>/dev/null`" != IRIX; then
+    AC_HAVE_LIBRARY(socket,
+      [x_extra_libs="$x_extra_libs -lsocket"
+       test -n "$verbose" && echo "	adding -lsocket to x_extra_libs"])
+  fi
 fi
 #
 AC_SUBST(X_CFLAGS)dnl
