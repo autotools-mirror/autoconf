@@ -1,3 +1,8 @@
+2000-06-05  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX): AU define it.
+	Suggested by Mo DeJong.
+
 2000-06-05  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_C_CHAR_UNSIGNED): Use the new compiler-test

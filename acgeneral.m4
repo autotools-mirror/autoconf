@@ -2590,6 +2590,11 @@ ifval([$3], [test -n "$$1" || $1="$3"
 ## -------------------- ##
 
 
+# AC_CHECK_TOOL_PREFIX
+# --------------------
+AU_DEFUN([AC_CHECK_TOOL_PREFIX])
+
+
 # AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # -----------------------------------------------------------------------
 AC_DEFUN([AC_PATH_TOOL],
@@ -2645,6 +2650,7 @@ if test -z "$$1" ; then
 fi
 ifval([$3], [test -n "$$1" || $1="$3"
 ])])
+
 
 # AC_PREFIX_PROGRAM(PROGRAM)
 # --------------------------
