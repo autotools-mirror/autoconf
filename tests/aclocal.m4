@@ -44,7 +44,7 @@ m4_defun([AC_STATE_SAVE],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.
-  fgrep = >state-env.$1
+  grep '^m4_defn([m4_re_word])=' >state-env.$1
 test $? = 0 || rm -f state-env.$1
 
 ls -1 | grep -v '^state' | sort >state-ls.$1
