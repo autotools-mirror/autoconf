@@ -1,5 +1,9 @@
 2000-11-10  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sh.at (Negated classes in globbing): New test.
+
+2000-11-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Builtins): `for i; do'.
 
 2000-11-10  Akim Demaille  <akim@epita.fr>

@@ -13,7 +13,7 @@ EOF
 
 # Build nested dirs.
 
-AT_SETUP(AS_DIRNAME & AS_DIRNAME_SED)
+AT_SETUP([AS_DIRNAME & AS_DIRNAME_SED])
 
 AT_DATA(configure.in,
 [[
@@ -85,7 +85,7 @@ AT_CLEANUP(configure)
 
 # Build nested dirs.
 
-AT_SETUP(AC_SHELL_MKDIR_P)
+AT_SETUP([AC_SHELL_MKDIR_P])
 
 AT_DATA(configure.in,
 [[AC_PLAIN_SCRIPT
@@ -106,3 +106,32 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure 1 a)
+
+
+
+
+## ----------------------------- ##
+## Negated classes in globbing.  ##
+## ----------------------------- ##
+
+# It is known that `[^...]' is not universally supported, but it is
+# unknown for `[!...]'.
+
+AT_SETUP([Negated classes in globbing])
+
+AT_DATA(configure.in,
+[[AC_PLAIN_SCRIPT
+case 'with!two!bangs' in
+  *[[!a-z]]*) ;;
+           *) AC_MSG_ERROR([[`*[!a-z]*' didn't match `with!two!bangs']]);;
+esac
+
+case without in
+  *[[!a-z]]*) AC_MSG_ERROR([[`*[!a-z]*' matched `without']]);;
+esac
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure)
