@@ -74,7 +74,6 @@ AT_CHECK([/bin/sh ./syntax.sh])
 # running `sh PROG'.
 
 AT_CHECK([/bin/sh -n ../bin/autoconf],   0)
-AT_CHECK([/bin/sh -n ../bin/autoreconf], 0)
 
 # These are not built, they are in the src tree.
 AT_CHECK([/bin/sh -n $top_srcdir/config/install-sh], 0)
@@ -102,6 +101,7 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 
 AT_CHECK_PERL_SYNTAX([autoheader])
 AT_CHECK_PERL_SYNTAX([autom4te])
+AT_CHECK_PERL_SYNTAX([autoreconf])
 AT_CHECK_PERL_SYNTAX([autoscan])
 AT_CHECK_PERL_SYNTAX([autoupdate])
 AT_CHECK_PERL_SYNTAX([ifnames])

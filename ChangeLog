@@ -1,5 +1,14 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at (AT_CHECK_PERL_SYNTAX): Check autoreconf.
+	(Syntax of the shell scripts): Don't.
+	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in: Don't
+	bother with $force since...
+	* lib/Autom4te/General.pm: does.
+
+	
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.in: Rewrite in Perl.
 	* configure.ac: Adjust.
 	* lib/Autom4te/General.pm (&up_to_date_p): New.

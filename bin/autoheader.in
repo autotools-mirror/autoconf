@@ -45,7 +45,6 @@ my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
 local $config_h;
 my $config_h_in;
 my $localdir = '.';
-my $force = 0;
 my @include;
 my @warning;
 # m4.
@@ -107,7 +106,6 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
-	  'f|force'   => \$force,
 	  'W|warning' => \@warning);
 
   if (! @ARGV)

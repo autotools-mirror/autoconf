@@ -128,8 +128,8 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = autoconf autoheader autom4te autoreconf autoscan \
 	autoupdate ifnames
 DIST_SOURCES =
-DIST_COMMON = README Makefile.am Makefile.in autom4te.in autoreconf.in \
-	autoupdate.in wrappl.in wrapsh.in
+DIST_COMMON = Makefile.am Makefile.in autom4te.in autoupdate.in \
+	wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:
@@ -146,8 +146,8 @@ autoheader: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 autom4te: $(top_builddir)/config.status autom4te.in
 	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
-autoreconf: $(top_builddir)/config.status autoreconf.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autoreconf: $(top_builddir)/config.status wrappl.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 autoscan: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 autoupdate: $(top_builddir)/config.status autoupdate.in

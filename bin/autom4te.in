@@ -275,9 +275,6 @@ my @include;
 # 0 for EXIT_SUCCESS.
 my $exit_status = 0;
 
-# If true, don't rely on the cache (but still update it).
-my $force = 0;
-
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
@@ -487,7 +484,6 @@ sub parse_args ()
      # Operation modes:
      "o|output=s"   => \$output,
      "normalize"    => \$normalize,
-     "f|force"      => \$force,
      "W|warnings=s" => \@warning,
      "m|mode=s"     => \$mode,
      "M|melt"       => \$melt,

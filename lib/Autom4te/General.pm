@@ -31,13 +31,17 @@ use vars qw (@ISA @EXPORT);
 @ISA = qw (Exporter);
 @EXPORT = qw (&debug &find_configure_ac &find_file &getopt &mktmpdir &mtime
               &uniq &update_file &up_to_date_p &verbose &xsystem
-	      $debug $help $me $tmp $verbose $version);
+	      $debug $force $help $me $tmp $verbose $version);
 
 # Variable we share with the main package.  Be sure to have a single
 # copy of them: using `my' together with multiple inclusion of this
 # package would introduce several copies.
 use vars qw ($debug);
 $debug = 0;
+
+# Recreate all the files, or consider all the output files are obsolete.
+use vars qw ($force);
+$force = undef;
 
 use vars qw ($help);
 $help = undef;
@@ -188,6 +192,7 @@ sub getopt (%)
 
              "v|verbose"    => \$verbose,
              "d|debug"      => \$debug,
+	     'f|force'      => \$force,
 	    );
   Getopt::Long::Configure ("bundling");
   GetOptions (%option)

@@ -105,8 +105,6 @@ my $m4dir;
 my $status = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
-# $force -- update up to date files.
-my $force = 0;
 
 
 ## ---------- ##
@@ -124,7 +122,6 @@ sub parse_args ()
   getopt ('l|localdir=s'                => \$localdir,
 	  'A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
 	  'M|m4dir=s'                   => \$m4dir,
-	  'f|force'                     => \$force,
 	  'i|install'                   => \$install,
 	  's|symlink'                   => \$symlink);
 
@@ -215,8 +212,7 @@ sub autoreconf ()
   # ----------------- #
 
   if (-f "$localdir/aclocal.m4" &&
-      ($force ||
-       !up_to_date_p ("$localdir/aclocal.m4", "$localdir/acinclude.m4")))
+      !up_to_date_p ("$localdir/aclocal.m4", "$localdir/acinclude.m4"))
     {
       # If there are flags for aclocal in Makefile.am, use them.
       my $aclocal_flags;
