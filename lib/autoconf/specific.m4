@@ -925,7 +925,7 @@ dnl
 dnl
 define(AC_STRUCT_TM,
 [AC_PROVIDE([$0])dnl
-AC_CHECKING([for struct tm in time.h])
+AC_CHECKING([for struct tm in sys/time.h instead of time.h])
 AC_TEST_LINK([#include <sys/types.h>
 #include <time.h>],
 [struct tm *tp; tp->tm_sec;], , AC_DEFINE(TM_IN_SYS_TIME))])dnl
