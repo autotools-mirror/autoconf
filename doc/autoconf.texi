@@ -3842,6 +3842,15 @@ boundary (such as the one on NeXT x86 OpenStep), require an
 @code{AC_LIBOBJ} replacement for @samp{memcmp}.
 @end defmac
 
+@defmac AC_FUNC_MBRTOWC
+@acindex FUNC_MBRTOWC
+@cvindex HAVE_MBRTOWC
+@c @fuindex mbrtowc
+@prindex @code{mbrtowc}
+Define @code{HAVE_MBRTOWC} to 1 if the function @code{mbrtowc} and the
+type @code{mbstate_t} are properly declared.
+@end defmac
+
 @defmac AC_FUNC_MKTIME
 @acindex FUNC_MKTIME
 @ovindex LIBOBJS

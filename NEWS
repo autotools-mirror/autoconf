@@ -1,6 +1,11 @@
 * Major changes in Autoconf 2.54a                       -*- outline -*-
 
 
+** Macros
+
+- New macros
+  AC_FUNC_MBRTOWC
+
 ** Bug Fixes
 
 - Portability of the Autoconf package to Solaris.

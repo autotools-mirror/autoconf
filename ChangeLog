@@ -1,5 +1,12 @@
 2002-09-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_MBRTOWC): New, stolen from
+	jm_FUNC_MBRTOWC, by Paul Eggert, from the Coreutils 4.5.1.
+	* lib/autoscan/functions: Adjust.
+	* doc/autoconf.texi (Particular Functions): Adjust.
+
+2002-09-27  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Some about mv
 	from /tmp.
 	Thanks to Bill Moseley and Paul Eggert.

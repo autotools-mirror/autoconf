@@ -18,58 +18,59 @@
 # 02111-1307, USA.
 
 # Ones that have their own macros.
-alloca		AC_FUNC_ALLOCA
-bcmp		AC_HEADER_STDC
-bcopy		AC_HEADER_STDC
-bzero		AC_CHECK_FUNCS
-bzero		AC_HEADER_STDC
-chown		AC_FUNC_CHOWN
+alloca          AC_FUNC_ALLOCA
+bcmp            AC_HEADER_STDC
+bcopy           AC_HEADER_STDC
+bzero           AC_CHECK_FUNCS
+bzero           AC_HEADER_STDC
+chown           AC_FUNC_CHOWN
 dcgettext       AM_GNU_GETTEXT
-error		AC_FUNC_ERROR_AT_LINE
-error_at_line	AC_FUNC_ERROR_AT_LINE
-fnmatch		AC_FUNC_FNMATCH
-fork		AC_FUNC_FORK
-fseeko		AC_FUNC_FSEEKO
-ftello		AC_FUNC_FSEEKO
-getgroups	AC_FUNC_GETGROUPS
-getloadavg	AC_FUNC_GETLOADAVG
-getpgrp		AC_FUNC_GETPGRP
-index		AC_HEADER_STDC
-ioctl		AC_PROG_GCC_TRADITIONAL
-lstat		AC_FUNC_LSTAT
-major		AC_HEADER_MAJOR
-makedev		AC_HEADER_MAJOR
-malloc		AC_FUNC_MALLOC
-memchr		AC_CHECK_FUNCS
-memchr		AC_HEADER_STDC
-memcmp		AC_FUNC_MEMCMP
-memcpy		AC_HEADER_STDC
-memmove		AC_CHECK_FUNCS
-memmove		AC_HEADER_STDC
-memset		AC_CHECK_FUNCS
-memset		AC_HEADER_STDC
-minor		AC_HEADER_MAJOR
-mktime		AC_FUNC_MKTIME
-mmap		AC_FUNC_MMAP
-obstack_init	AC_FUNC_OBSTACK
-realloc		AC_FUNC_REALLOC
-rindex		AC_HEADER_STDC
-setpgrp		AC_FUNC_SETPGRP
-setvbuf		AC_FUNC_SETVBUF_REVERSED
-signal		AC_TYPE_SIGNAL
-stat		AC_FUNC_STAT
-strcoll		AC_FUNC_STRCOLL
-strerror_r	AC_FUNC_STRERROR_R
-strftime	AC_FUNC_STRFTIME
-strnlen		AC_FUNC_STRNLEN
-strtod		AC_FUNC_STRTOD
-utime		AC_CHECK_FUNCS
-utime		AC_FUNC_UTIME_NULL
-vfork		AC_FUNC_FORK
-vfprintf	AC_FUNC_VPRINTF
-vprintf		AC_FUNC_VPRINTF
-vsprintf	AC_FUNC_VPRINTF
-wait3		AC_FUNC_WAIT3
+error           AC_FUNC_ERROR_AT_LINE
+error_at_line   AC_FUNC_ERROR_AT_LINE
+fnmatch         AC_FUNC_FNMATCH
+fork            AC_FUNC_FORK
+fseeko          AC_FUNC_FSEEKO
+ftello          AC_FUNC_FSEEKO
+getgroups       AC_FUNC_GETGROUPS
+getloadavg      AC_FUNC_GETLOADAVG
+getpgrp         AC_FUNC_GETPGRP
+index           AC_HEADER_STDC
+ioctl           AC_PROG_GCC_TRADITIONAL
+lstat           AC_FUNC_LSTAT
+major           AC_HEADER_MAJOR
+makedev         AC_HEADER_MAJOR
+malloc          AC_FUNC_MALLOC
+mbrtowc         AC_FUNC_MBRTOWC
+memchr          AC_CHECK_FUNCS
+memchr          AC_HEADER_STDC
+memcmp          AC_FUNC_MEMCMP
+memcpy          AC_HEADER_STDC
+memmove         AC_CHECK_FUNCS
+memmove         AC_HEADER_STDC
+memset          AC_CHECK_FUNCS
+memset          AC_HEADER_STDC
+minor           AC_HEADER_MAJOR
+mktime          AC_FUNC_MKTIME
+mmap            AC_FUNC_MMAP
+obstack_init    AC_FUNC_OBSTACK
+realloc         AC_FUNC_REALLOC
+rindex          AC_HEADER_STDC
+setpgrp         AC_FUNC_SETPGRP
+setvbuf         AC_FUNC_SETVBUF_REVERSED
+signal          AC_TYPE_SIGNAL
+stat            AC_FUNC_STAT
+strcoll         AC_FUNC_STRCOLL
+strerror_r      AC_FUNC_STRERROR_R
+strftime        AC_FUNC_STRFTIME
+strnlen         AC_FUNC_STRNLEN
+strtod          AC_FUNC_STRTOD
+utime           AC_CHECK_FUNCS
+utime           AC_FUNC_UTIME_NULL
+vfork           AC_FUNC_FORK
+vfprintf        AC_FUNC_VPRINTF
+vprintf         AC_FUNC_VPRINTF
+vsprintf        AC_FUNC_VPRINTF
+wait3           AC_FUNC_WAIT3
 
 # Functions we should no longer use.
 getwd          warn: getwd is deprecated, use getcwd instead
@@ -119,7 +120,6 @@ localeconv
 localtime_r
 mblen
 mbrlen
-mbrtowc
 mempcpy
 mkdir
 mkfifo
