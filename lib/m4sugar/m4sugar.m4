@@ -1477,10 +1477,12 @@ m4_defun([m4_join],
 
 
 
-# m4_append(MACRO-NAME, STRING)
-# -----------------------------
-# Redefine MACRO-NAME to hold its former content plus STRING at the
-# end.  It is valid to use this macro with MACRO-NAME undefined.
+# m4_append(MACRO-NAME, STRING, [SEPARATOR])
+# ------------------------------------------
+# Redefine MACRO-NAME to hold its former content plus `SEPARATOR`'STRING'
+# at the end.  It is valid to use this macro with MACRO-NAME undefined,
+# in which case no SEPARATOR is added.  Be aware that the criterion is
+# `not being defined', and not `not being empty'.
 #
 # This macro is robust to active symbols.  It can be used to grow
 # strings.
@@ -1509,15 +1511,7 @@ m4_defun([m4_join],
 #    => active
 m4_define([m4_append],
 [m4_define([$1],
-           m4_ifdef([$1], [m4_defn([$1])])[$2])])
-
-
-# m4_list_append(MACRO-NAME, STRING)
-# ----------------------------------
-# Same as `m4_append', but each element is separated by `, '.
-m4_define([m4_list_append],
-[m4_define([$1],
-           m4_ifdef([$1], [m4_defn([$1]), ])[$2])])
+           m4_ifdef([$1], [m4_defn([$1])$3])[$2])])
 
 
 # m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)

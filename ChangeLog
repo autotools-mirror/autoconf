@@ -1,5 +1,24 @@
 2001-09-10  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Remove the diversion HELP and
+	SETUP: no longer used.
+	Support -k, --keywords.
+	<at_help>: Be `no', `short', or `long'.
+	<at_help_all>: New variable.
+	(AT_KEYWORDS): New.
+	(AT_CLEANUP_FILE_IFELSE, AT_CLEANUP_FILE): Rename as...
+	(_AT_CLEANUP_FILE_IF, _AT_CLEANUP_FILE): these.
+	(_AT_CLEANUP_FILE_IF): Simplify the regexp.
+	(AT_SETUP): Reset AT_line, AT_keywords, AT_description.
+	No longer fill the HELP diversion.
+	(AT_CLEANUP): Use them.
+	* lib/m4sugar/m4sugar.m4 (m4_append): Support a separator.
+	(m4_list_append): Remove.
+
+	Spread a few keywords in the Autoconf test suite.
+
+2001-09-10  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Don't pass
 	PATH_SEPARATOR, let M4sh compute it.
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): New.

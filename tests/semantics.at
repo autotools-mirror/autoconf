@@ -201,6 +201,7 @@ AT_CHECK_MACRO([AC_CHECK_TYPES],
 # Check that we properly dispatch properly to the old implementation
 # or to the new one.
 AT_SETUP([AC_CHECK_TYPES: backward compatibility])
+AT_KEYWORDS([AC_CHECK_TYPES])
 
 AT_DATA([configure.ac],
 [[AC_INIT
@@ -329,6 +330,7 @@ AT_CLEANUP(path)
 ## ---------------- ##
 
 AT_SETUP([[AC_C_BIGENDIAN]])
+AT_KEYWORDS([AC_C_BIGENDIAN,cross])
 
 # Make sure that AC_C_BIGENDIAN behave the same whether we are
 # cross-compiling or not.

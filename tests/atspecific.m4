@@ -87,9 +87,7 @@ AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
 # `top_srcdir' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
-[AT_CLEANUP_FILE_IFELSE([config.hin], [AT_CLEANUP_FILE(config.h)])dnl
-AT_CLEANUP_FILE_IFELSE([defs.in], [AT_CLEANUP_FILE(defs)])dnl
-AT_CLEANUP_FILES(config.log config.status config.cache)dnl
+[AT_CLEANUP_FILES(config.h defs config.log config.status config.cache)dnl
 AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
          [$2],
          m4_default([$3], [ignore]), [$4],
@@ -163,6 +161,8 @@ AT_CHECK_ENV
 # New macros are not expected to depend upon obsolete macros.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
+AT_KEYWORDS([$1])
+
 AT_CONFIGURE_AC([m4_default([$2], [$1])])
 
 AT_CHECK_AUTOCONF([m4_default([$4], [-W obsolete])])
@@ -189,6 +189,8 @@ AT_CLEANUP()dnl
 # Remove config.hin to avoid `autoheader: config.hin is unchanged'.
 m4_define([AT_CHECK_AU_MACRO],
 [AT_SETUP([$1])
+AT_KEYWORDS([$1])
+
 AT_CONFIGURE_AC([$1])
 
 AT_CHECK_AUTOCONF

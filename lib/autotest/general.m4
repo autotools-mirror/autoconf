@@ -50,10 +50,6 @@
 #    Overall initialization, value of $at_tests_all.
 #  - OPTIONS
 #    Option processing
-#  - HELP
-#    Help message.  Of course it is useless, you could just push into
-#    OPTIONS, but that's much clearer this way.
-#  - SETUP
 #    Be ready to run the tests.
 #  - TESTS
 #    The core of the test suite, the ``normal'' diversion.
@@ -63,8 +59,6 @@
 
 m4_define([_m4_divert(DEFAULT)],       5)
 m4_define([_m4_divert(OPTIONS)],      10)
-m4_define([_m4_divert(HELP)],         20)
-m4_define([_m4_divert(SETUP)],        30)
 m4_define([_m4_divert(TESTS)],        50)
 m4_define([_m4_divert(TAIL)],         60)
 
@@ -139,7 +133,7 @@ at_quiet=echo
 # run by a debug script, so that the script doesn't remove itself.
 at_debug=false
 # Display help message?
-at_help=false
+at_help=no
 # Tests to run
 at_tests=
 dnl Other vars inserted here (DEFAULT).
@@ -147,7 +141,8 @@ m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
   case $[1] in
-    --help | -h) at_help=: ;;
+    --help | -h) at_help=short ;;
+    --full-help | -H ) at_help=long;;
     --version)
         if test -n "$at_package_string"; then
           echo "$as_me ($at_package_string)"
@@ -156,32 +151,45 @@ while test $[@%:@] -gt 0; do
           echo "$as_me ($at_testsuite_name)"
           echo "Stand-alone test suite."
         fi
-        exit 0 ;;
+        exit 0
+        ;;
+
     --clean | -c )
         rm -rf $at_data_files debug-*.sh $as_me.log devnull
-	exit 0;;
+	exit 0
+        ;;
 
-    -d) at_debug=:;;
+    -d) at_debug=:
+        ;;
+
     -e) at_debug=:
-        at_stop_on_error=:;;
-    -v) at_verbose=echo; at_quiet=:;;
-    -x) at_traceon='set -vx'; at_traceoff='set +vx';;
+        at_stop_on_error=:
+        ;;
+
+    -v) at_verbose=echo; at_quiet=:
+        ;;
+
+    -x) at_traceon='set -vx'; at_traceoff='set +vx'
+        ;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
-        at_tests="$at_tests$[1] ";;
+        at_tests="$at_tests$[1] "
+        ;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
         at_range_start=`echo $[1] |tr -d '-'`
         at_range=`echo " $at_tests_all " | \
           sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,'`
-        at_tests="$at_tests$at_range ";;
+        at_tests="$at_tests$at_range "
+        ;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
         at_range_end=`echo $[1] |tr -d '-'`
         at_range=`echo " $at_tests_all " | \
           sed -e 's, '$at_range_end' .*$, '$at_range_end','`
-        at_tests="$at_tests$at_range ";;
+        at_tests="$at_tests$at_range "
+        ;;
 
     [[0-9]-[0-9] | [0-9]-[0-9][0-9] | [0-9]-[0-9][0-9][0-9]] | \
     [[0-9]-[0-9][0-9][0-9][0-9] | [0-9][0-9]-[0-9][0-9]] | \
@@ -195,28 +203,44 @@ while test $[@%:@] -gt 0; do
         at_range=`echo " $at_tests_all " | \
           sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \
               -e 's, '$at_range_end' .*$, '$at_range_end','`
-        at_tests="$at_tests$at_range ";;
+        at_tests="$at_tests$at_range "
+        ;;
+
+    # Keywords.
+    --keywords | -k )
+        shift
+        at_tests_selected=$at_help_all
+        for at_keyword in `IFS=,; set X $[1]; shift; echo ${1+$[@]}`
+        do
+          at_tests_selected=`echo "$at_tests_selected" |
+                             egrep -i "^[[^;]]*;[[^;]]*;[[^;]]*;.*$at_keyword"`
+        done
+        at_tests_selected=`echo "$at_tests_selected" | sed 's/;.*//'`
+        at_tests="$at_tests$at_tests_selected "
+        ;;
 
     *=*)
-      at_debug_args="$1"
-      at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
-      # Reject names that are not valid shell variable names.
-      expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
-  	AS_ERROR([invalid variable name: $at_envvar])
-      at_value=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
-      at_value=`echo "$at_value" | sed "s/'/'\\\\\\\\''/g"`
-      eval "$at_envvar='$at_value'"
-      export $at_envvar ;;
+  	at_debug_args="$1"
+  	at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
+  	# Reject names that are not valid shell variable names.
+  	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
+  	  AS_ERROR([invalid variable name: $at_envvar])
+  	at_value=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
+  	at_value=`echo "$at_value" | sed "s/'/'\\\\\\\\''/g"`
+  	eval "$at_envvar='$at_value'"
+  	export $at_envvar
+  	;;
 
      *) echo "$as_me: invalid option: $[1]" >&2
         echo "Try \`$[0] --help' for more information." >&2
-        exit 1 ;;
+        exit 1
+        ;;
   esac
   shift
 done
 
 # Help message.
-if $at_help; then
+if test "$at_help" != no; then
   # If tests were specified, display only their title.
   if test -z "$at_tests"; then
     cat <<_ATEOF
@@ -239,11 +263,21 @@ _ATEOF
     at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
     at_tests_pattern=" (${at_tests_pattern}): "
   fi
-  egrep -e "$at_tests_pattern" <<_ATEOF
-m4_divert([HELP])dnl Help message inserted here.
-m4_divert([SETUP])dnl
-Report bugs to <$at_bugreport>.
-_ATEOF
+  case $at_help in
+  short)
+    echo "$at_help_all" |
+      egrep -e "$at_tests_pattern" |
+      awk 'BEGIN { FS = ";" }
+           { if ($[1]) printf " %3d: %s\n", $[1], $[3] } ';;
+  long)
+    echo "$at_help_all" |
+      egrep -e "$at_tests_pattern" |
+      awk 'BEGIN { FS = ";" }
+           { if ($[1]) printf " %3d: %-18s %s\n", $[1], $[2], $[3]
+             if ($[4]) printf "      %s\n", $[4] } ';;
+  esac
+  echo
+  echo "Report bugs to <$at_bugreport>."
   exit 0
 fi
 
@@ -549,6 +583,8 @@ m4_divert_pop([TAIL])dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
 at_tests_all="AT_TESTS_ALL "
+# Description of all the tests.
+at_help_all="AT_help"
 # List of the output files.
 at_data_files="AT_data_files "])])dnl
 ])# AT_INIT
@@ -573,50 +609,45 @@ at_victims="$1"
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
 m4_define([AT_SETUP],
-[m4_define([AT_ordinal], m4_incr(AT_ordinal))
+[m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
+m4_define([AT_line], AT_LINE)
+m4_define([AT_description], [$1])
+m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
-m4_divert_text([HELP],
-               [m4_format([[ %3d: %-15s %s]], AT_ordinal, AT_LINE, [$1])])
 m4_divert_push([TESTS])dnl
-  AT_ordinal ) @%:@ AT_ordinal. AT_LINE: $1
-    at_setup_line='AT_LINE'
-    $at_verbose "AT_ordinal. AT_LINE: testing $1..."
-    $at_quiet $at_n "m4_format([[%3d: %-18s]], AT_ordinal, AT_LINE)[]$at_c"
+  AT_ordinal ) @%:@ AT_ordinal. AT_line: $1
+    at_setup_line='AT_line'
+    $at_verbose "AT_ordinal. AT_line: testing $1..."
+    $at_quiet $at_n "m4_format([[%3d: %-18s]], AT_ordinal, AT_line)[]$at_c"
     (
       $at_traceon
 ])
 
 
-# AT_CLEANUP_FILE_IFELSE(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
-# --------------------------------------------------------------
+# AT_KEYWORDS(KEYOWRDS)
+# ---------------------
+# Declare a list of keywords associated to the current test group.
+m4_define([AT_KEYWORDS],
+[m4_append([AT_keywords], [$1], [,])])
+
+
+
+# _AT_CLEANUP_FILE_IF(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
+# -----------------------------------------------------------
 # We try to build a regular expression matching `[', `]', `*', and
 # `.', i.e., the regexp active characters.
-#
-# Novices would write, `[[]*.]', which sure fails since the character
-# class ends with the first closing braquet.
-# M4 gurus will sure write `[\[\]*.]', but it will fail too because
-# regexp does not support this and understands `\' per se.
-# Regexp gurus will write `[][*.]' which is indeed what Regexp expects,
-# but it will fail for M4 reasons: it's the same as `[*.]'.
-#
-# So the question is:
-#
-#       Can you write a regexp that matches those four characters,
-#       and respects the M4 quotation contraints?
-#
-# The answer is: (rot13) tvira va gur ertrkc orybj, lbh vqvbg!
-m4_define([AT_CLEANUP_FILE_IFELSE],
-[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [[[]\|[]]\|[*.]], [\\\&])),
+m4_define([_AT_CLEANUP_FILE_IF],
+[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [[][*.]], [\\\&])),
        -1,
        [$3], [$2])])
 
 
-# AT_CLEANUP_FILE(FILE)
-# ---------------------
+# _AT_CLEANUP_FILE(FILE)
+# ----------------------
 # Register FILE for AT_CLEANUP.
-m4_define([AT_CLEANUP_FILE],
-[AT_CLEANUP_FILE_IFELSE([$1], [],
-                        [m4_append([AT_data_files], [$1 ])])])
+m4_define([_AT_CLEANUP_FILE],
+[_AT_CLEANUP_FILE_IF([$1], [],
+                     [m4_append([AT_data_files], [$1 ])])])
 
 
 # AT_CLEANUP_FILES(FILES)
@@ -624,7 +655,7 @@ m4_define([AT_CLEANUP_FILE],
 # Declare a list of FILES to clean.
 m4_define([AT_CLEANUP_FILES],
 [m4_foreach([AT_File], m4_quote(m4_patsubst([$1], [  *], [,])),
-            [AT_CLEANUP_FILE(AT_File)])])
+            [_AT_CLEANUP_FILE(AT_File)])])
 
 
 # AT_CLEANUP(FILES)
@@ -634,13 +665,15 @@ m4_define([AT_CLEANUP_FILES],
 # AT_DATA.
 m4_define([AT_CLEANUP],
 [AT_CLEANUP_FILES([$1])dnl
+m4_append([AT_help],
+m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
+)dnl
     $at_times >at-times
     )
     at_status=$?
     ;;
 
-m4_divert([TESTS])[]dnl
-m4_divert_pop()dnl
+m4_divert_pop([TESTS])dnl Back to KILL.
 ])# AT_CLEANUP
 
 
@@ -650,16 +683,16 @@ m4_divert_pop()dnl
 m4_define([AT_BANNER],
 [m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
 m4_append([AT_TESTS_ALL], [ banner-]m4_defn([AT_banner_ordinal]))
-m4_divert_push([TESTS])dnl
-  banner-AT_banner_ordinal ) [#] Banner AT_banner_ordinal. AT_LINE
+m4_divert_text([TESTS],
+[
+  banner-AT_banner_ordinal ) @%:@ Banner AT_banner_ordinal. AT_LINE
     cat <<\_ATEOF
 
 $1
 
 _ATEOF
     ;;
-
-m4_divert_pop()dnl
+])dnl
 ])# AT_BANNER
 
 
