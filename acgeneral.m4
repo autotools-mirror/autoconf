@@ -1290,6 +1290,9 @@ host=$host_alias
 target=$target_alias
 
 AC_DIVERT_POP()dnl
+
+ac_tool_prefix=
+test -n "$host_alias" && ac_tool_prefix=$host_alias-
 ])# _AC_INIT_PARSE_ARGS
 
 
@@ -2587,22 +2590,10 @@ ifval([$3], [test -n "$$1" || $1="$3"
 ## -------------------- ##
 
 
-# AC_CHECK_TOOL_PREFIX
-# ---------------------
-AC_DEFUN([AC_CHECK_TOOL_PREFIX],
-[if test -n "$host_alias"; then
-  ac_tool_prefix=$host_alias-
-else
-  ac_tool_prefix=
-fi
-])# AC_CHECK_TOOL_PREFIX
-
-
 # AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # -----------------------------------------------------------------------
 AC_DEFUN([AC_PATH_TOOL],
-[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
-AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
+[AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
              ifelse([$3], , [$2]), $4)
 ifval([$3], [
 if test -z "$ac_cv_prog_$1"; then
@@ -2618,8 +2609,7 @@ fi])
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_TOOL],
-[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
-AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
+[AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
 ifval([$3], [
 if test -z "$ac_cv_prog_$1"; then
