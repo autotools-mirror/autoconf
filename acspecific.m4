@@ -729,12 +729,14 @@ AC_MSG_RESULT($CXXCPP)
 AC_SUBST(CXXCPP)dnl
 ])
 
+
 dnl Require finding the C or C++ preprocessor, whichever is the
 dnl current language.
 AC_DEFUN(AC_REQUIRE_CPP,
 [ifelse(AC_LANG,
         C, [AC_REQUIRE([AC_PROG_CPP])],
         [AC_REQUIRE([AC_PROG_CXXCPP])])])
+
 
 dnl AC_PROG_LEX
 dnl -----------
@@ -749,6 +751,7 @@ then
   AC_CHECK_LIB($ac_lib, yywrap, LEXLIB="-l$ac_lib")
 fi
 AC_SUBST(LEXLIB)])
+
 
 dnl AC_DECL_YYTEXT
 dnl --------------
@@ -792,6 +795,7 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
              not a `char[]'.])
 fi
 ])dnl AC_DECL_YYTEXT
+
 
 dnl AC_PROG_INSTALL
 dnl ---------------
@@ -868,6 +872,8 @@ AC_SUBST(INSTALL_DATA)dnl
 ])dnl AC_PROG_INSTALL
 
 
+dnl AC_PROG_LN_S
+dnl ------------
 AC_DEFUN(AC_PROG_LN_S,
 [AC_MSG_CHECKING(whether ln -s works)
 AC_CACHE_VAL(ac_cv_prog_LN_S,
@@ -886,13 +892,15 @@ else
   AC_MSG_RESULT(no)
 fi
 AC_SUBST(LN_S)dnl
-])
+])dnl AC_PROG_LN_S
+
 
 define(AC_RSH,
 [AC_FATAL([$0 has been removed; replace it with equivalent code], 4)])
 
 
 dnl ### Checks for header files
+
 
 dnl AC_HEADER_STDC
 dnl --------------
@@ -994,6 +1002,7 @@ else
 fi
 ])
 
+
 dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
 dnl --------------------------------------------------
 dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
@@ -1060,6 +1069,7 @@ if test $ac_cv_header_stat_broken = yes; then
              work properly.])
 fi
 ])dnl AC_HEADER_STAT
+
 
 dnl AC_DECL_SYS_SIGLIST
 dnl -------------------
@@ -1249,6 +1259,7 @@ if test $ac_cv_func_closedir_void = yes; then
 fi
 ])
 
+
 dnl AC_FUNC_FNMATCH
 dnl ---------------
 dnl We look for fnmatch.h to avoid that the test fails in C++.
@@ -1357,67 +1368,61 @@ char *malloc();
 #endif
 
 int
-main()
+main ()
 {
-	char *data, *data2, *data3;
-	int i, pagesize;
-	int fd;
+  char *data, *data2, *data3;
+  int i, pagesize;
+  int fd;
 
-	pagesize = getpagesize();
+  pagesize = getpagesize ();
 
-	/*
-	 * First, make a file with some known garbage in it.
-	 */
-	data = malloc(pagesize);
-	if (!data)
-		exit(1);
-	for (i = 0; i < pagesize; ++i)
-		*(data + i) = rand();
-	umask(0);
-	fd = creat("conftestmmap", 0600);
-	if (fd < 0)
-		exit(1);
-	if (write(fd, data, pagesize) != pagesize)
-		exit(1);
-	close(fd);
+  /* First, make a file with some known garbage in it. */
+  data = malloc (pagesize);
+  if (!data)
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    *(data + i) = rand ();
+  umask (0);
+  fd = creat ("conftestmmap", 0600);
+  if (fd < 0)
+    exit (1);
+  if (write (fd, data, pagesize) != pagesize)
+    exit (1);
+  close (fd);
 
-	/*
-	 * Next, try to mmap the file at a fixed address which
-	 * already has something else allocated at it.  If we can,
-	 * also make sure that we see the same garbage.
-	 */
-	fd = open("conftestmmap", O_RDWR);
-	if (fd < 0)
-		exit(1);
-	data2 = malloc(2 * pagesize);
-	if (!data2)
-		exit(1);
-	data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
-	if (data2 != mmap(data2, pagesize, PROT_READ | PROT_WRITE,
-	    MAP_PRIVATE | MAP_FIXED, fd, 0L))
-		exit(1);
-	for (i = 0; i < pagesize; ++i)
-		if (*(data + i) != *(data2 + i))
-			exit(1);
+  /* Next, try to mmap the file at a fixed address which already has
+     something else allocated at it.  If we can, also make sure that
+     we see the same garbage.  */
+  fd = open ("conftestmmap", O_RDWR);
+  if (fd < 0)
+    exit (1);
+  data2 = malloc (2 * pagesize);
+  if (!data2)
+    exit (1);
+  data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
+  if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
+                     MAP_PRIVATE | MAP_FIXED, fd, 0L))
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    if (*(data + i) != *(data2 + i))
+      exit (1);
 
-	/*
-	 * Finally, make sure that changes to the mapped area
-	 * do not percolate back to the file as seen by read().
-	 * (This is a bug on some variants of i386 svr4.0.)
-	 */
-	for (i = 0; i < pagesize; ++i)
-		*(data2 + i) = *(data2 + i) + 1;
-	data3 = malloc(pagesize);
-	if (!data3)
-		exit(1);
-	if (read(fd, data3, pagesize) != pagesize)
-		exit(1);
-	for (i = 0; i < pagesize; ++i)
-		if (*(data + i) != *(data3 + i))
-			exit(1);
-	close(fd);
-	unlink("conftestmmap");
-	exit(0);
+  /* Finally, make sure that changes to the mapped area do not
+     percolate back to the file as seen by read().  (This is a bug on
+     some variants of i386 svr4.0.)  */
+  for (i = 0; i < pagesize; ++i)
+    *(data2 + i) = *(data2 + i) + 1;
+  data3 = malloc (pagesize);
+  if (!data3)
+    exit (1);
+  if (read (fd, data3, pagesize) != pagesize)
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    if (*(data + i) != *(data3 + i))
+      exit (1);
+  close (fd);
+  unlink ("conftestmmap");
+  exit (0);
 }], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
 ac_cv_func_mmap_fixed_mapped=no)])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
@@ -1431,8 +1436,8 @@ dnl AC_FUNC_GETPGRP
 dnl ---------------
 AC_DEFUN(AC_FUNC_GETPGRP,
 [AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
-[AC_TRY_RUN([
-/*
+[AC_TRY_RUN(
+[/*
  * If this system has a BSD-style getpgrp(),
  * which takes a pid argument, exit unsuccessfully.
  *
@@ -1710,8 +1715,8 @@ if test $ac_cv_working_alloca_h = yes; then
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
-[AC_TRY_LINK([
-#ifdef __GNUC__
+[AC_TRY_LINK(
+[#ifdef __GNUC__
 # define alloca __builtin_alloca
 #else
 # ifdef _MSC_VER
