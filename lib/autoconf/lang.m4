@@ -522,7 +522,7 @@ To enable cross compilation, use `--host'.])
 fi
 AC_MSG_RESULT(yes)],
 [AC_MSG_RESULT(no)
-AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])[]dnl
+AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])
 AC_MSG_CHECKING([whether we are cross compiling])
 AC_MSG_RESULT($cross_compiling)
 ])# _AC_LANG_COMPILER_WORKS

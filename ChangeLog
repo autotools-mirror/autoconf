@@ -1,3 +1,8 @@
+2000-09-27  Pavel Roskin  <proski@gnu.org>
+
+	* aclang.m4 (_AC_LANG_COMPILER_WORKS): Remove []dnl because it
+	resulted in invalid shell code.
+
 2000-09-27  Lars J. Aas  <larsa@sim.no>
 
 	* autoconf.sh: Report full macro name for missing macros.
