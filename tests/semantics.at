@@ -179,14 +179,14 @@ AT_CLEANUP
 # FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
 # open AH_TEMPLATE to `configure.ac', which is not yet the case.
 AT_CHECK_MACRO([AC_CHECK_FILES],
-[touch ac-exists1 ac-exists2
-ac_exists2=ac-exists2
-ac_missing2=ac-missing2
-AC_CHECK_FILES(ac-exists1 ac-missing1 $ac_exists2 $ac_missing2)
-rm ac-exists1 ac-exists2],
+[touch at-exists1 at-exists2
+ac_exists2=at-exists2
+ac_missing2=at-missing2
+AC_CHECK_FILES(at-exists1 at-missing1 $ac_exists2 $ac_missing2)
+rm at-exists1 at-exists2],
 [AT_CHECK_DEFINES(
-[#define HAVE_AC_EXISTS1 1
-/* #undef HAVE_AC_MISSING1 */
+[#define HAVE_AT_EXISTS1 1
+/* #undef HAVE_AT_MISSING1 */
 ])])
 
 
@@ -252,7 +252,7 @@ test -z "$TOOL5" || fail=:
 AC_CHECK_PROGS(TOOL6, missing tool better,, $path)
 test "$TOOL6" = tool || fail=:
 
-# no AC_OUTPUT, we don't need config.status.
+# No AC-OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[CHECK_PROG failed]])
 AS_EXIT(0)
@@ -292,7 +292,7 @@ test -z "$TOOL3" || fail=:
 AC_PATH_PROGS(TOOL4, missing tool better,, $path)
 test "$TOOL4" = $pwd/path/1/tool || fail=:
 
-# no AC_OUTPUT, we don't need config.status.
+# No AC-OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[PATH_PROG failed]])
 AS_EXIT(0)

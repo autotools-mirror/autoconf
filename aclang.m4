@@ -621,7 +621,7 @@ m4_define([AC_LINK_IFELSE],
 [AC_FATAL([All the tests involving linking were disabled by $0])])
 
 m4_divert_pop()dnl
-])# # AC_NO_EXECUTABLES
+])# AC_NO_EXECUTABLES
 
 
 
@@ -1253,9 +1253,8 @@ AC_DEFUN([AC_PROG_F77_C_O],
 AC_CACHE_CHECK([whether $F77 understand -c and -o together],
                [ac_cv_prog_f77_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-# We do the `AC_TRY_EVAL' test twice because some compilers refuse to
-# overwrite an existing `.o' file with `-o', although they will create
-# one.
+# We test twice because some compilers refuse to overwrite an existing
+# `.o' file with `-o', although they will create one.
 ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
 if AC_TRY_EVAL(ac_try) &&
      test -f conftest.$ac_objext &&
@@ -1362,12 +1361,10 @@ esac
 ])# AC_PROG_CC_STDC
 
 
-
-
-
-
-AC_DEFUN([AC_C_CROSS],
-[AC_OBSOLETE([$0], [; it has been merged into AC_PROG_CC])])
+# AC_C_CROSS
+# ----------
+# Has been merged into AC_PROG_CC.
+AU_DEFUN([AC_C_CROSS], [])
 
 
 # AC_C_CHAR_UNSIGNED

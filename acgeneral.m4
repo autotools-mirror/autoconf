@@ -804,10 +804,8 @@ ac_tr_sh="sed y%*+%pp%;s%[[^_$ac_cr_alnum]]%_%g"
 ac_tr_cpp="sed y%*$ac_cr_az%P$ac_cr_AZ%;s%[[^_$ac_cr_alnum]]%_%g"
 
 # By default always use an empty string as the executable extension.
-# Only change it if the script calls AC_EXEEXT.
 ac_exeext=
-# By default assume that objects files use an extension of .o.  Only
-# change it if the script calls AC_OBJEXT.
+# By default assume that objects files use an extension of .o.
 ac_objext=o
 
 m4_divert_pop([DEFAULTS])dnl
@@ -4187,9 +4185,6 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   configure_input="Generated automatically from `echo $ac_file_in |
                                                  sed 's,.*/,,'` by configure."
 
-  # Don't redirect the output to AC_FILE directly: use `mv' so that
-  # updating is atomic, and doesn't need trapping.
-
   # First look for the input files in the build tree, otherwise in the
   # src tree.
   ac_file_inputs=`IFS=:
@@ -4392,7 +4387,7 @@ s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$,${ac_dA}\1${ac_dB}\1${a
 EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
-# sort them, since we want the *last* AC_DEFINE to be honored.
+# sort them, since we want the *last* AC-DEFINE to be honored.
 uniq confdefs.h | sed -n -f confdef2sed.sed >conftest.defines
 sed 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
 rm -f confdef2sed.sed

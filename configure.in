@@ -17,7 +17,7 @@ if test x"$ac_cv_prog_gnu_m4" != xyes; then
   AC_MSG_ERROR([GNU m4 1.4 is required])
 fi
 # This is needed because Automake does not seem to realize there is
-# an AC_SUBST inside AC_PROG_GNU_M4.  Grmph!
+# a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 AC_SUBST(M4)
 
 # `autoconf' and `ifnames' use AWK.

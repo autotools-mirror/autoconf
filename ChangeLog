@@ -1,5 +1,13 @@
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Don't leave macro names in comments.
+	* aclang.m4: Likewise.
+	* configure.in: Likewise.
+	* tests/semantics.at: Likewise.
+	* tests/tools.at: Likewise.
+
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
 	Medium term goal: AC_ macros can be tested with -W obsolete.
 
 	* acgeneral.m4 (AC_RUN_IFELSE): Accept IF-CROSS-COMPILING.
