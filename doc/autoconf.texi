@@ -11742,13 +11742,9 @@ other words, don't fear registering several times the same keyword in a
 test group.
 @end defmac
 
-@defmac AT_CLEANUP (@ovar{generated-files})
+@defmac AT_CLEANUP
 @atindex CLEANUP
-This macro completes a group of related tests.  It accepts a single
-argument, which is a white separated list of files which have been
-created within the test group.  It has the effect of recursively
-removing those listed files.  There is no need to list @file{stdout},
-@file{stderr}, nor files created with @code{AT_DATA}.
+End the current test group.
 @end defmac
 
 @sp 1

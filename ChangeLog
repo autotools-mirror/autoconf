@@ -1,5 +1,10 @@
 2002-01-28  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Writing testsuite.at): AT_CLEANUP no longer
+	needs an argument.
+
+2002-01-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Don't be ridiculous: adjust
 	AUTOTEST_PATH *after* it was set.
 	Don't put `.' in the PATH: the user should be precise and `./' if
