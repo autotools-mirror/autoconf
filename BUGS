@@ -38,3 +38,12 @@ address them.
                     /*--------------------------.
                     | Sane for full scale use.  |
                     `--------------------------*/
+
+* Interoperability bugs
+
+** libtool 1.4.2, configure.ac, and AC_CONFIG_AUX_DIR
+
+configure.ac files that use AC_CONFIG_AUX_DIR do not work with libtool
+1.4.2.  To work around the problem, you can rename configure.ac to
+configure.in.  Or you can apply Roger Leigh's patch to libtool; see
+<http://mail.gnu.org/pipermail/libtool-patches/2002-January/001659.html>.
