@@ -104,7 +104,7 @@ programs written in C, but many of the rules and principles are useful
 even if you write in another programming language.  The rules often
 state reasons for writing in a certain way.
 
-Corrections or suggestions regarding this document should be sent to
+Corrections or suggestions for this document should be sent to
 @code{gnu@@prep.ai.mit.edu}.  If you make a suggestion, please include a
 suggested new wording for it; our time is limited.  We prefer a context
 diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
@@ -611,10 +611,10 @@ you can do so by printing an additional line of version info for each
 library you want to mention.  Use the same format for these lines as for
 the first line.
 
-Please don't mention all the libraries that the program uses ``just for
-completeness''---that would produce a lot of unhelpful clutter.  Please
-mention library version numbers only if you find in practice that they
-are very important to you in debugging.
+Please do not mention all of the libraries that the program uses ``just
+for completeness''---that would produce a lot of unhelpful clutter.
+Please mention library version numbers only if you find in practice that
+they are very important to you in debugging.
 
 The following line, after the version number line or lines, should be a
 copyright notice.  If more than one copyright notice is called for, put
@@ -633,10 +633,12 @@ Here's an example of output that follows these rules:
 @smallexample
 GNU Emacs 19.34.5
 Copyright (C) 1996 Free Software Foundation, Inc.
-GNU Emacs comes with NO WARRANTY, to the extent permitted by law.
+GNU Emacs comes with NO WARRANTY,
+to the extent permitted by law.
 You may redistribute copies of GNU Emacs
 under the terms of the GNU General Public License.
-For more information about these matters, see the files named COPYING.
+For more information about these matters,
+see the files named COPYING.
 @end smallexample
 
 You should adapt this to your program, of course, filling in the proper
@@ -2929,9 +2931,12 @@ to work with @var{package}.
 @c  Giving an optional @var{parameter} of
 @c @samp{no} should omit @var{package}, if it is used by default.
 
-Possible values of @var{package} include @samp{x}, @samp{x-toolkit},
-@samp{gnu-as} (or @samp{gas}), @samp{gnu-ld}, @samp{gnu-libc}, and
-@samp{gdb}.
+Possible values of @var{package} include 
+@samp{gnu-as} (or @samp{gas}), @samp{gnu-ld}, @samp{gnu-libc},
+@samp{gdb},
+@samp{x}, 
+and
+@samp{x-toolkit}.
 
 Do not use a @samp{--with} option to specify the file name to use to
 find certain files.  That is outside the scope of what @samp{--with}
@@ -2998,7 +3003,7 @@ ignore most of its arguments.
 @node Releases
 @section Making Releases
 
-Package the distribution of Foo version 69.96 in a gzipped tar file
+Package the distribution of Foo version 69.96 up in a gzipped tar file
 named @file{foo-69.96.tar.gz}.  It should unpack into a subdirectory
 named @file{foo-69.96}.
 
