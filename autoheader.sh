@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992, 1993, 1994, 1996, 1998 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ status=0
 
 if test -n "$syms"; then
   for sym in $syms; do
-    if fgrep $sym $TEMPLATES >/dev/null; then
+    if grep "^#[a-z]*[ 	]$sym\\>" $TEMPLATES >/dev/null; then
       : # All is well.
     else
       echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2

@@ -1,3 +1,8 @@
+1999-07-16  Tom Tromey  <tromey@cygnus.com>
+
+	* autoheader.sh: Be more stringent when looking to see if symbol
+	is in a template file.
+
 1999-07-15  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): New implementation, to
