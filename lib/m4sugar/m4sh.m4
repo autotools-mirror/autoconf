@@ -220,8 +220,8 @@ m4_define([_AS_QUOTE],
 $1])])
 
 
-# _AS_ECHO(STRING, [FD = AS_FD_MSG])
-# ----------------------------------
+# _AS_ECHO(STRING, [FD = AS_MESSAGE_FD])
+# --------------------------------------
 # Protect STRING from backquote expansion, echo the result to FD.
 m4_define([_AS_ECHO],
 [_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], [$2])])

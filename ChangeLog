@@ -1,3 +1,11 @@
+2001-06-21  Akim Demaille  <akim@epita.fr>
+
+	./configure --program-suffix=foo produces `transform=s,$$,foo,;',
+	but some sed choke on multiple `;', and other tools (e.g.,
+	Automake), include the separator themselves.
+
+	* acgeneral.m4 (AC_ARG_VAR): Be sure not to leave extra `;'.
+
 2001-06-19  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi (Functions Portability): Rename as...

@@ -1570,9 +1570,9 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
     esac
   fi
 done
-if $ac_suggest_removing_cache; then
-  AC_MSG_WARN([changes in the environment can compromise the build])
-  AC_MSG_WARN([consider removing $cache_file and starting over])
+if $ac_cache_corrupted; then
+  AS_MESSAGE([error: changes in the environment can compromise the build])
+  AS_ERROR([run `make distclean' and/or `rm $config_cache' and start over])
 fi
 ])# _AC_ARG_VAR_VALIDATE
 
@@ -1615,24 +1615,18 @@ Program names:
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
 m4_divert_pop([HELP_BEGIN])dnl
-if test "$program_transform_name" = s,x,x,; then
-  program_transform_name=
-else
-  # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF >conftest.sed
-s,\\,\\\\,g; s,\$,$$,g
-EOF
-  program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
-  rm -f conftest.sed
-fi
 test "$program_prefix" != NONE &&
-  program_transform_name="s,^,${program_prefix},;$program_transform_name"
+  program_transform_name="s,^,$program_prefix,;$program_transform_name"
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
-  program_transform_name="s,\$\$,${program_suffix},;$program_transform_name"
-
-# sed with no file args requires a program.
-test -z "$program_transform_name" && program_transform_name="s,x,x,"
+  program_transform_name="s,\$,$program_suffix,;$program_transform_name"
+# Double any \ or $.  echo might interpret backslashes.
+# By default was `s,x,x', remove it if useless.
+cat <<\_ACEOF >conftest.sed
+[s/[\\$]/&&/g;s/;s,x,x,$//]
+_ACEOF
+program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
+rm conftest.sed
 ])# AC_ARG_PROGRAM
 
 

@@ -8431,6 +8431,14 @@ of a character class.  In conformance with @sc{posix}, the Cray
 Sed scripts should not use branch labels longer than 8 characters and
 should not contain comments.
 
+Don't include extra @samp{;}, as some @command{sed}, such as NetBSD
+1.4.2's, try to interpret the second as a command:
+
+@example
+$ echo a | sed 's/x/x/;;s/x/x/'
+sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
+@end example
+
 Input should have reasonably long lines, since some @command{sed} have
 an input buffer limited to 4000 bytes.
 
@@ -9078,10 +9086,12 @@ the same name.  For example, if you configure @sc{gnu} @code{diff} with
 installed as @file{/usr/local/bin/gdiff}.
 
 As a more sophisticated example, you could use
+
 @example
 --program-transform-name='s/^/g/; s/^gg/g/; s/^gless/less/'
 @end example
 @noindent
+
 to prepend @samp{g} to most of the program names in a source tree,
 excepting those like @code{gdb} that already have one and those like
 @code{less} and @code{lesskey} that aren't @sc{gnu} programs.  (That is
@@ -9128,6 +9138,15 @@ uninstall:
         for p in $(PROGRAMS); do \
           rm -f $(bindir)/`echo $$p | sed '$(transform)'`; \
         done
+@end example
+
+It is guaranteed that @code{program_transform_name} is never empty, and
+that there are no useless separators.  Therefore you may safely embed
+@code{program_transform_name} within a sed program using @samp{;}:
+
+@example
+transform = @@program_transform_name@@
+transform_exe = s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/
 @end example
 
 Whether to do the transformations on documentation files (Texinfo or
