@@ -38,9 +38,9 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 	chmod +x $@-tmp
 	mv $@-tmp $@
 
-macros.m4: $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
+macros.m4: $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
-	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\).*/\1/p' | \
+	  sed -ne 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
 	  sort >defuns
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
