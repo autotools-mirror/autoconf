@@ -19,29 +19,17 @@ instance, there is still AM_PROG_LIBTOOL.  Anyawy, since autoupdate
 takes care of them, it is no longer the role of Automake to handle
 this.  Most should be removed.
 
-** tests/
-Write the sketch of a new series of tests, written in Autotest,
-cf. recode 3.5 by François Pinard.  It has to be shell scripts so that
-everybody can run it, and most people can read it.  Not like DejaGNU.
-
-It is important to start before the release, even if the test suite is
-ridiculously small, so that people see a framework in which they may
-provide their additional tests.
-
 ** AC_INCLUDE
 I think shell globbing is a bad thing.  In particular, this is bad for
 automake.  I think we should make it static, i.e., very much like
 AC_CONFIG_ things.  So there would no problems of localization, some
 macros may AC_INCLUDE files etc.
 
-** testsuite/config/unix.exp
-Fix the regex snippet so that it properly parses the current version
-of Autoconf.
-
 ** AC_ARG_VAR
 If should check that none of the envvar it is in charge of, has
 changed.  The configure.in writer may supply what to do (FATAL, WARN
-etc.).  See VALIDATE CACHE TUPLE.
+etc.).  See VALIDATE CACHE TUPLE.  Write the documentation of
+AC_ARG_VAR.  Where should it go?
 
 ** autoconf.texi: config.status in node names.
 The info mode of Emacs seems to have problems with this.  The info
@@ -63,13 +51,6 @@ The fact we can run commands.
 ** AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS.
 We still have to discuss a few issues: should the pre-commands be run
 before the cache is created?  Are the names OK?  Document, see above.
-
-** AC_C_STRUCT_MEMBER needs a full rewrite.
-And once done, the former specialized macros should be adapted.
-AC_CHECK_MEMBER/AC_CHECK_MEMBERS is a proposal, see the code.
-
-** AC_CHECK_HEADER should not template config.h entries.
-Its entry in autoheader.m4 should be removed.
 
 ** Generalize the association of commands to an output file.
 See AC_CONFIG_FILES: it is possible to associate a command which is
@@ -98,9 +79,6 @@ proves to be useful.
 The fact that there are `#define' templates forbids many useful
 optimizations.  In fact, who really uses #define template in
 config.h.in?
-
-** Write the documentation of AC_ARG_VAR
-where should it go?
 
 ** Mention automake, libtool, etc. in the Autoconf manual.
 
@@ -183,7 +161,8 @@ This requires to obsolete the feature `break' in ACTION-IF, since all
 the loops are to be handled by m4, not sh.
 
 ** Merge the two lex macros, AC_PROG_LEX and AC_DECL_YYTEXT?
-Add give a mean to *require* Flex instead of Lex.
+Add give a mean to *require* Flex instead of Lex.  Or at least explain
+how to do that.
 
 ** Faces of a test
 Each macro can potentially come with several faces: of course the
@@ -208,18 +187,6 @@ require a specific AC_ tests, but a specialized AS_ macro.
 
 ** Change all of Autoconf's macros that print a help string via
    "configure --help" to use new AC_HELP_STRING macro.
-
-** Ensure that "make check" uses only the files from the build tree.  It
-   currently uses some of the installed files from previously installed
-   versions of Autoconf, like autoheader.m4f.
-
-** Give autoheader.sh the capability to use a local version of
-   autoheader.m4.  It currently always uses the installed frozen version
-   autoheader.m4f.
-
-------------------------------------------------------------------------------
-
-* Write an automake Makefile.am to replace the existing Makefile.in.
 
 ------------------------------------------------------------------------------
 
@@ -483,40 +450,6 @@ Make easy macros for checking for X functions and libraries, such as Motif.
 
 ------------------------------------------------------------------------------
 
-* Test suite: more things to test:
-** That the shell scripts produce correct output on some simple data.
-** Configuration header files.  That autoheader does the right thing,
-   and so does AC_CONFIG_HEADER when Autoconf is run.
-
-------------------------------------------------------------------------------
-
-Autoheader in autoconf-2.4 doesn't produce entries for:
-
-        AC_CHECK_TYPE(ssize_t, int)
-
-and it seems like it could easily do so.
-
-In general, it seems to me like Autoconf isn't set up to
-let me periodically run autoheader, and then include my
-"local" tests -- autoheader gets most stuff right, I'd like
-to rerun it periodically without losing my local changes
-to config.h.in.
-
-One of the things that I need is to know is the type to use
-for a fixed size on disk, e.g., what is the system's name
-for an unsigned-32-bit integer?
-
-I can use:
-
-        AC_CHECK_SIZEOF(unsigned int)
-
-and, in fact, that's what I do.  But I still have to build
-sets of #if tests to get from there to the name of the type.
-
-From:    bostic@bsdi.com (Keith Bostic)
-
-------------------------------------------------------------------------------
-
 There are basically three ways to lock files
         lockf, fnctl, flock
 I'd be interested in adding a macro to pick the "right one" if you're
@@ -564,15 +497,6 @@ check the flag variable and always compute the value if it's set.
 
 ------------------------------------------------------------------------------
 
-A number of people have tried to fix configuration problems by editing
-acconfig.h. (Despite comments at the top of the file.) I think they're
-confused because anything.h looks like a regular source file name.
-Maybe acconfig.h could be called acconfig.extra or something?
-
-From: kb@cs.umb.edu (K. Berry)
-
-------------------------------------------------------------------------------
-
 Every user running
 X11 usually has a directory like *X11* in his PATH variable. By replacing
 bin by include, you can find good places to look for the include files
@@ -582,15 +506,15 @@ From: rcb5@win.tue.nl (Richard Verhoeven)
 
 ------------------------------------------------------------------------------
 
-In most cases, when autoscan suggests something, using the search
-or index command into the Info reader for autoconf manual quickly
-explains me what the test is about.  However, for header files
-and functions, the search might fail, because the test is not of
-the specific kind.  The Autoconf manual should reflect somewhere
-all header files or functions (non-specific features, generally)
-triggering autoscan to generate tests, and tell in a few words
-what is the problem, and the suggested approach for a solution;
-that is, how one should use the result of testing the feature.
+In most cases, when autoscan suggests something, using the search or
+index command into the Info reader for autoconf manual quickly
+explains me what the test is about.  However, for header files and
+functions, the search might fail, because the test is not of the
+specific kind.  The Autoconf manual should reflect somewhere all
+header files or functions (non-specific features, generally)
+triggering autoscan to generate tests, and tell in a few words what is
+the problem, and the suggested approach for a solution; that is, how
+one should use the result of testing the feature.
 
 From: pinard@iro.umontreal.ca
 
@@ -638,15 +562,6 @@ From: Roland McGrath <roland@gnu.ai.mit.edu>
 
 ------------------------------------------------------------------------------
 
-about the idea of using small configure.in/aclocal.m4 snippets:
-this is the one idea in metaconfig (the autoconf-like program used by
-Perl) that I like.  metaconfig looks for a "U" directory, and includes
-each ".U" file into the generated Configure script (according to
-various complicated rules).
-From: Tom Tromey <tromey@creche.cygnus.com>
-
-------------------------------------------------------------------------------
-
 I'd much prefer to see the absolute paths substituted for all the
 standard "dir" variables.  It would be nice to have variables in
 configure that held the absolute paths.  And it is nice to be able to
@@ -665,10 +580,9 @@ From: "Joel N. Weber II" <nemo@koa.iolani.honolulu.hi.us>
 
 ------------------------------------------------------------------------------
 
-in order to use the AC_CANONICAL_SYSTEM macro, I have to
-have install-sh somewhere nearby --- why is this?  I have no real
-reason to distribute install-sh, other than that its absence breaks
-this code.
+in order to use the AC_CANONICAL_SYSTEM macro, I have to have
+install-sh somewhere nearby --- why is this?  I have no real reason to
+distribute install-sh, other than that its absence breaks this code.
 
 Shouldn't the above loop be looking for config.sub and config.guess?
 From: jimb@totoro.bio.indiana.edu (Jim Blandy)
@@ -689,10 +603,11 @@ with autoconf scripts.
 ------------------------------------------------------------------------------
 
 autoreconf doesn't support having (in the same tree) both directories
-that are parts of a larger package (sharing aclocal.m4 and acconfig.h),
-and directories that are independent packages (each with their own ac*).
-It assumes that they are all part of the same package, if you use --localdir,
-or that each directory is a separate package, if you don't use it.
+that are parts of a larger package (sharing aclocal.m4 and
+acconfig.h), and directories that are independent packages (each with
+their own ac*).  It assumes that they are all part of the same
+package, if you use --localdir, or that each directory is a separate
+package, if you don't use it.
 
 autoreconf should automatically figure out which ac* files to use--the
 closest ones up the tree from each directory, probably, unless
