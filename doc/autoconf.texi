@@ -3761,9 +3761,7 @@ read the documentation of the former @code{AC_CHECK_TYPE}, see
 @ovindex EXEEXT
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 @code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
-the output of the compiler, after @samp{.$ac_ext} (i.e. source files of
-the current language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files
-have been excluded.  Typically set to empty string if Unix and
+the output of the compiler.  Typically set to empty string if Unix and
 @samp{.exe} if Win32 or OS/2.
 
 @ovindex CYGWIN
@@ -4524,7 +4522,8 @@ However, some of them can be given options that make the exit status
 correct.  This is a problem that Autoconf does not currently handle
 automatically.  If users encounter this problem, they might be able to
 solve it by setting @code{LDFLAGS} in the environment to pass whatever
-options the linker needs (for example, @option{-Wl,-dn} on MIPS RISC/OS).
+options the linker needs (for example, @option{-Wl,-dn} on @sc{mips
+risc/os}).
 
 @code{AC_TRY_LINK} is used to compile test programs to test for
 functions and global variables.  It is also used by @code{AC_CHECK_LIB}
@@ -4883,12 +4882,19 @@ If the value is a literal string, it should be quoted:
 
 @noindent
 otherwise some shells, such as on Digital Unix V 5.0, will die because
-of a @emph{bad substitution}.
+of a ``bad substitution''.
 
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
-gives @samp{1} with sh on Solaris, but @samp{2} with bash.  You must use
+gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
+
+@cindex @samp{"$@@"}
+One of the most famous shell portability issues is related to
+@samp{"$@@"}: when there are no positional argument, it is supposed to
+be equivalent to nothing.  But some shell, for instance under Digital
+Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
+portable, use @samp{$@{1+"$@@"@}}.
 
 Contrary to a persistent urban legend, the Bourne shell does not
 systematically split variables and backquoted expressions, in
@@ -4937,6 +4943,10 @@ the @samp{x} into account later in the pipe.
 @cindex @command{break}
 The use of @samp{break 2} etc. is safe.
 
+@item @command{!}
+@cindex @command{!}
+You can't use @command{!}, you'll have to rewrite your code.
+
 @item @command{case}
 @cindex @command{case}
 You don't need to quote the argument, no splitting is performed.
@@ -4974,9 +4984,11 @@ etc. for a means to simulate @option{-c}.
 Do not use backslashes in the arguments, as there is no consensus on
 their handling:
 
-On @samp{foo='\n'; echo "$foo" | wc -l}, the @command{sh} of Digital
-Unix 4.0, RISC/os 4.52, answer 2, but the Solaris' @command{sh}, Bash
-and Zsh (in @command{sh} emulation mode) report 1.
+On @samp{echo '\n' | wc -l}, the @command{sh} of Digital Unix 4.0,
+@sc{mips risc/os} 4.52, answer 2, but the Solaris' @command{sh}, Bash
+and Zsh (in @command{sh} emulation mode) report 1.  Please note that the
+problem is truly @command{echo}: all the shells understand @samp{'\n'}
+as the string composed of a backslash and an n.
 
 @item @command{exit}
 @cindex @command{exit}
@@ -5040,11 +5052,25 @@ if cmp -s file file.new; then :; else
 fi
 @end example
 
+@item @command{set}
+@cindex @command{set}
+This builtin faces the usual problem with arguments starting with a
+dash.  Modern shells, such as Bash or Zsh understand @samp{--} to
+specify the end of the options (any argument behind @samp{--} is an
+parameters, even @samp{-x} for instance), but most shell simply stop the
+option processing as soon as a non option argument is found.  Therefore
+use @samp{dummy} or simply @samp{x} to neutralize the option processing,
+and use @command{shift} to pop it out:
+
+@example
+set x $my_list; shift
+@end example
+
 @item @command{shift}
 @cindex @command{shift}
 Not only is @command{shift}ing a bad idea when there is nothing left to
-shift, but in addition it is not portable: the shell of @sc{RISC/os}
-4.52 refuses it.
+shift, but in addition it is not portable: the shell of @sc{mips
+risc/os} 4.52 refuses it.
 
 @item @command{test}
 @cindex @command{test}
@@ -5411,7 +5437,7 @@ compiler is used in tests that follow in @file{configure.in}.
 Do compilation tests using the compiler, preprocessor and file
 extensions for the @var{language}.
 
-Support languages are:
+Supported languages are:
 
 @table @samp
 @item C
@@ -6697,6 +6723,8 @@ AC_CACHE_CHECK([for EMX OS/2 environment],
                                   [ac_cv_emxos2=no])])
 @end example
 
+When using @code{AC_TRY_RUN} or any macro which cannot work when
+cross-compiling, provide a pessimistic value (typically @samp{no}).
 
 Feel free to use various tricks to avoid that auxiliary tools, such as
 syntax-highlighting editors, behave improperly.  For instance, instead
@@ -6730,7 +6758,13 @@ test $[@@%:@@] != 0
 
 @noindent
 otherwise, the closing bracket would be hidden inside a @samp{#}-comment
-breaking the bracket matching highlighting from Emacsen.
+breaking the bracket matching highlighting from Emacsen.  Note the
+preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]} etc.  Do
+not escape when it is unneeded.  Common examples of useless quotation
+are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
+etc.  If you add portability issues to the picture, you'll prefer
+@samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
+better than hacking Autoconf @code{:-)}.
 
 When using @command{sed}, don't use @option{-e} but for indenting
 purpose.  With the @code{s} command, the preferred separator is @samp{/}
@@ -7976,9 +8010,7 @@ now it is just @code{AC_FUNC_GETMNTENT}.
 @ovindex EMXOS2
 @ovindex MINGW32
 Defined the output variable @code{EXEEXT} based on the output of the
-compiler, after @samp{.$ac_ext} (i.e. source files of the current
-language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files have been
-excluded.  Typically set to empty string if Unix and @samp{.exe} if
+compiler.  Typically set to empty string if Unix and @samp{.exe} if
 Win32 or OS/2.
 
 This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in

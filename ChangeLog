@@ -1,5 +1,14 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Compilers and Preprocessors, Obsolete
+	Macros): Don't give boring internal details.
+	(Language Choice): Typo.
+	(Limitations of Builtins): Some about `!', `set', `$@'.
+	(Coding Style): Some about $[@] quotation.
+	Some about cross-compilation.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (dir): When verbose, say what are the tools you
 	will use.
 

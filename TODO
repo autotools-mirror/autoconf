@@ -17,9 +17,6 @@ shvar.  Also, think of the capitalization!  For instance this package
 is named `Autoconf', but the tarball is `autoconf-'.  What of the
 space?  Do we need another user input for the name of the tarball?
 
-** Portability
-${1+"$@"}, set dummy.
-
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
