@@ -217,8 +217,6 @@ Existing Tests
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
-* C Compiler::                  Checking its characteristics
-* Fortran 77 Compiler::         Checking its characteristics
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
 
@@ -257,6 +255,13 @@ Types
 
 * Particular Types::            Special handling to find certain types
 * Generic Types::               How to find other types
+
+Compilers and Preprocessors
+
+* Generic Compiler Characteristics::  Language independent tests
+* C Compiler::                  Checking its characteristics
+* C++ Compiler::                Likewise
+* Fortran 77 Compiler::         Likewise
 
 Writing Tests
 
@@ -1767,7 +1772,7 @@ Be sure to read the previous section, @ref{Configuration Actions}.
 Make @code{AC_OUTPUT} create each @file{@var{file}} by copying an input
 file (by default @file{@var{file}.in}), substituting the output variable
 values.
-@c FIXME: Before we used to have this feature, which was later rejected
+@c Before we used to have this feature, which was later rejected
 @c because it complicates the write of Makefiles:
 @c If the file would be unchanged, it is left untouched, to preserve
 @c timestamp.
@@ -2734,8 +2739,6 @@ Symbols}, for how to get those symbol definitions into your program.
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
-* C Compiler::                  Checking its characteristics
-* Fortran 77 Compiler::         Checking its characteristics
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
 @end menu
@@ -4325,7 +4328,7 @@ implemented.  In case of doubt, read the documentation of the former
 @code{AC_CHECK_TYPE}, see @ref{Obsolete Macros}.
 
 
-@node Compilers and Preprocessors, C Compiler, Types, Existing Tests
+@node Compilers and Preprocessors, System Services, Types, Existing Tests
 @section Compilers and Preprocessors
 
 @ovindex EXEEXT
@@ -4343,6 +4346,41 @@ If the compiler being used does not produce executables, they fail.  If
 the executables can't be run, and cross-compilation is not enabled, they
 fail too.  @xref{Manual Configuration}, for more on support for cross
 compiling.
+
+@menu
+* Generic Compiler Characteristics::  Language independent tests
+* C Compiler::                  Checking its characteristics
+* C++ Compiler::                Likewise
+* Fortran 77 Compiler::         Likewise
+@end menu
+
+@node Generic Compiler Characteristics, C Compiler, Compilers and Preprocessors, Compilers and Preprocessors
+@subsection Generic Compiler Characteristics
+
+@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @ovar{includes})
+@maindex CHECK_SIZEOF
+Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
+size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
+of 0.  If no @var{includes} are specified, the default includes are used
+(@pxref{Default Includes}).  If you provide @var{include}, make sure to
+include @file{stdio.h} which is required for this macro to run.
+
+This macro now works even when cross-compiling.  The @var{unused}
+argument was used when cross-compiling.
+
+For example, the call
+
+@example
+AC_CHECK_SIZEOF(int *)
+@end example
+
+@noindent
+defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
+@end defmac
+
+
+@node C Compiler, C++ Compiler, Generic Compiler Characteristics, Compilers and Preprocessors
+@subsection C Compiler Characteristics
 
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
 @maindex PROG_CC
@@ -4417,107 +4455,6 @@ other macros to check the standard error from the preprocessor and
 consider the test failed if any warnings have been reported.
 @end defmac
 
-@defmac AC_PROG_CXX (@ovar{compiler-search-list})
-@maindex PROG_CXX
-@ovindex CXX
-@ovindex CXXFLAGS
-Determine a C++ compiler to use.  Check if the environment variable
-@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
-variable @code{CXX} to its value.
-
-Otherwise, if the macro is invoked without an argument, then search for
-a C++ compiler under the likely names (first @code{g++} and @code{c++}
-then other names).  If none of those checks succeed, then as a last
-resort set @code{CXX} to @code{gcc}.
-
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of C++ compilers to
-search for.  This just gives the user an opportunity to specify an
-alternative search list for the C++ compiler.  For example, if you
-didn't like the default order, then you could invoke @code{AC_PROG_CXX}
-like this:
-
-@example
-AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
-@end example
-
-If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
-@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @option{-g -O2} for the @sc{gnu} C++ compiler (@option{-O2} on
-systems where G++ does not accept @option{-g}), or @option{-g} for other
-compilers.
-@end defmac
-
-@defmac AC_PROG_CXXCPP
-@maindex PROG_CXXCPP
-@ovindex CXXCPP
-Set output variable @code{CXXCPP} to a command that runs the C++
-preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
-It is only portable to run @code{CXXCPP} on files with a @file{.c},
-@file{.C}, or @file{.cc} extension.
-
-If the current language is C++ (@pxref{Language Choice}), many of the
-specific test macros use the value of @code{CXXCPP} indirectly by
-calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
-@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
-
-Some preprocessors don't indicate missing include files by the error
-status.  For such preprocessors an internal variable is set that causes
-other macros to check the standard error from the preprocessor and
-consider the test failed if any warnings have been reported.  However,
-it is not known whether such broken preprocessors exist for C++.
-@end defmac
-
-@defmac AC_PROG_F77 (@ovar{compiler-search-list})
-@maindex PROG_FORTRAN
-@ovindex F77
-@ovindex FFLAGS
-Determine a Fortran 77 compiler to use.  If @code{F77} is not already
-set in the environment, then check for @code{g77} and @code{f77}, and
-then some other names.  Set the output variable @code{F77} to the name
-of the compiler found.
-
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of Fortran 77
-compilers to search for.  This just gives the user an opportunity to
-specify an alternative search list for the Fortran 77 compiler.  For
-example, if you didn't like the default order, then you could invoke
-@code{AC_PROG_F77} like this:
-
-@example
-AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90)
-@end example
-
-If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
-@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
-If the output variable @code{FFLAGS} was not already set in the
-environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
-where @code{g77} does not accept @option{-g}).  Otherwise, set
-@code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
-@end defmac
-
-@defmac AC_PROG_F77_C_O
-@maindex PROG_F77_C_O
-@cvindex F77_NO_MINUS_C_MINUS_O
-Test if the Fortran 77 compiler accepts the options @option{-c} and
-@option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
-does not.
-@end defmac
-
-@defmac AC_PROG_GCC_TRADITIONAL
-@maindex PROG_GCC_TRADITIONAL
-@ovindex CC
-Add @option{-traditional} to output variable @code{CC} if using the
-@sc{gnu} C compiler and @code{ioctl} does not work properly without
-@option{-traditional}.  That usually happens when the fixed header files
-have not been installed on an old system.  Since recent versions of the
-@sc{gnu} C compiler fix the header files automatically when installed,
-this is becoming a less prevalent problem.
-@end defmac
-
-
-@node C Compiler, Fortran 77 Compiler, Compilers and Preprocessors, Existing Tests
-@section C Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
@@ -4648,33 +4585,114 @@ size_t my_strlen PARAMS ((const char *));
 @end example
 @end defmac
 
-@c FIXME: What the heck is this macro doing here?  Move it out of
-@c the way, in its proper section!!!
-@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @ovar{includes})
-@maindex CHECK_SIZEOF
-Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
-size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
-of 0.  If no @var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).  If you provide @var{include}, make sure to
-include @file{stdio.h} which is required for this macro to run.
+@defmac AC_PROG_GCC_TRADITIONAL
+@maindex PROG_GCC_TRADITIONAL
+@ovindex CC
+Add @option{-traditional} to output variable @code{CC} if using the
+@sc{gnu} C compiler and @code{ioctl} does not work properly without
+@option{-traditional}.  That usually happens when the fixed header files
+have not been installed on an old system.  Since recent versions of the
+@sc{gnu} C compiler fix the header files automatically when installed,
+this is becoming a less prevalent problem.
+@end defmac
 
-This macro now works even when cross-compiling.  The @var{unused}
-argument was used when cross-compiling.
 
-For example, the call
+@node C++ Compiler, Fortran 77 Compiler, C Compiler, Compilers and Preprocessors
+@subsection C++ Compiler Characteristics
+
+
+@defmac AC_PROG_CXX (@ovar{compiler-search-list})
+@maindex PROG_CXX
+@ovindex CXX
+@ovindex CXXFLAGS
+Determine a C++ compiler to use.  Check if the environment variable
+@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
+variable @code{CXX} to its value.
+
+Otherwise, if the macro is invoked without an argument, then search for
+a C++ compiler under the likely names (first @code{g++} and @code{c++}
+then other names).  If none of those checks succeed, then as a last
+resort set @code{CXX} to @code{gcc}.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of C++ compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the C++ compiler.  For example, if you
+didn't like the default order, then you could invoke @code{AC_PROG_CXX}
+like this:
 
 @example
-AC_CHECK_SIZEOF(int *)
+AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
 @end example
 
-@noindent
-defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
+If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
+@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
+it to @option{-g -O2} for the @sc{gnu} C++ compiler (@option{-O2} on
+systems where G++ does not accept @option{-g}), or @option{-g} for other
+compilers.
+@end defmac
+
+@defmac AC_PROG_CXXCPP
+@maindex PROG_CXXCPP
+@ovindex CXXCPP
+Set output variable @code{CXXCPP} to a command that runs the C++
+preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
+It is only portable to run @code{CXXCPP} on files with a @file{.c},
+@file{.C}, or @file{.cc} extension.
+
+If the current language is C++ (@pxref{Language Choice}), many of the
+specific test macros use the value of @code{CXXCPP} indirectly by
+calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
+@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
+
+Some preprocessors don't indicate missing include files by the error
+status.  For such preprocessors an internal variable is set that causes
+other macros to check the standard error from the preprocessor and
+consider the test failed if any warnings have been reported.  However,
+it is not known whether such broken preprocessors exist for C++.
 @end defmac
 
 
 
-@node Fortran 77 Compiler, System Services, C Compiler, Existing Tests
-@section Fortran 77 Compiler Characteristics
+@node Fortran 77 Compiler,  , C++ Compiler, Compilers and Preprocessors
+@subsection Fortran 77 Compiler Characteristics
+
+@defmac AC_PROG_F77 (@ovar{compiler-search-list})
+@maindex PROG_FORTRAN
+@ovindex F77
+@ovindex FFLAGS
+Determine a Fortran 77 compiler to use.  If @code{F77} is not already
+set in the environment, then check for @code{g77} and @code{f77}, and
+then some other names.  Set the output variable @code{F77} to the name
+of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of Fortran 77
+compilers to search for.  This just gives the user an opportunity to
+specify an alternative search list for the Fortran 77 compiler.  For
+example, if you didn't like the default order, then you could invoke
+@code{AC_PROG_F77} like this:
+
+@example
+AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90)
+@end example
+
+If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
+@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
+If the output variable @code{FFLAGS} was not already set in the
+environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
+where @code{g77} does not accept @option{-g}).  Otherwise, set
+@code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
+@end defmac
+
+@defmac AC_PROG_F77_C_O
+@maindex PROG_F77_C_O
+@cvindex F77_NO_MINUS_C_MINUS_O
+Test if the Fortran 77 compiler accepts the options @option{-c} and
+@option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
+does not.
+@end defmac
+
 
 The following macros check for Fortran 77 compiler characteristics.  To
 check for characteristics not listed here, use @code{AC_TRY_COMPILE}
@@ -4848,7 +4866,7 @@ preprocessor as above; for example, to call Fortran routines from some
 language other than C/C++.
 @end defmac
 
-@node System Services, UNIX Variants, Fortran 77 Compiler, Existing Tests
+@node System Services, UNIX Variants, Compilers and Preprocessors, Existing Tests
 @section System Services
 
 The following macros check for operating system services or capabilities.

@@ -1,5 +1,12 @@
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (C Compiler, Fortran 77 Compiler): Be subsections
+	of...
+	(Generic Compiler Characteristics): this.
+	(C++ Compiler): New subsection.
+
+2001-07-14  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in: Use IO::File.
 	Adjust all the routines to use it.
 	($log): New file (autoscan.log).
