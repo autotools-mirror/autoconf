@@ -1,5 +1,9 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_CHECK): Fix the m4_ifval invocation.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_LANG): Be `smart': don't issue the sh code if the
 	current language did not change.
 	(AC_LANG_ASSERT): New.

@@ -427,8 +427,8 @@ echo AT_LINE >at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
 $1
-m4_ifval([$2],
-         [at_status=$?
+m4_ifvaln([$2],
+          [at_status=$?
 $at_traceoff
 if test $at_status != $2; then
   $at_verbose "Exit code was $at_status, expected $2" >&6
@@ -437,9 +437,8 @@ dnl Maybe there was an important message to read before it died.
 dnl Preserve exit code 77.
   test $at_status = 77 && exit 77
   exit 1
-fi
-],
-         [$at_traceoff])dnl
+fi],
+          [$at_traceoff])[]dnl
 if $at_check_stds; then
 dnl Restore stdout to fd1 and stderr to fd2.
   exec 1>&5 2>&6
