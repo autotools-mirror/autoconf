@@ -3633,8 +3633,8 @@ Configured on host $ac_hostname by
 srcdir=$srcdir
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [dnl Leave those double quotes here: this $INSTALL is evaluated in a
-dnl here document, wbich might result in `srcdir=/bin/install -c'.
-ac_given_INSTALL="$INSTALL"
+dnl here document, which might result in `INSTALL=/bin/install -c'.
+INSTALL="$INSTALL"
 ])dnl
 EOF
 
@@ -3893,8 +3893,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   * )   ac_file_in=$ac_file.in ;;
   esac
 
-  # Adjust a relative ac_srcdir, ac_top_srcdir, and INSTALL for
-  # subdirectories.
+  # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
   ac_dir=`AS_DIRNAME(["$ac_file"])`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     AS_MKDIR_P(["$ac_dir"])
@@ -3921,9 +3920,9 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[  case $ac_given_INSTALL in
-  [[\\/$]]* | ?:[[\\/]]* ) INSTALL=$ac_given_INSTALL ;;
-  *) INSTALL=$ac_dots$ac_given_INSTALL ;;
+[  case $INSTALL in
+  [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
+  *) ac_INSTALL=$ac_dots$INSTALL ;;
   esac
 ])dnl
 
@@ -3974,7 +3973,7 @@ cat >>$CONFIG_STATUS <<\EOF
 s,@configure_input@,$configure_input,;t t
 s,@srcdir@,$ac_srcdir,;t t
 s,@top_srcdir@,$ac_top_srcdir,;t t
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$INSTALL,;t t
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$ac_INSTALL,;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
@@ -4369,10 +4368,6 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[  ac_given_INSTALL=$INSTALL
-])dnl
-
   for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
 
     # Do not complain, so a configure script can configure whichever
@@ -4427,12 +4422,6 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       *) # Relative path.
         ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[      case $ac_given_INSTALL in
-        [[\\/$]]* | ?:[[\\/]]*) INSTALL=$ac_given_INSTALL ;;
-        *) INSTALL=$ac_dots$ac_given_INSTALL ;;
-      esac
-])dnl
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
       # The eval makes quoting arguments work.
