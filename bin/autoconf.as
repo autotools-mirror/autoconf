@@ -1,6 +1,6 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003, 2004
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -78,6 +78,7 @@ exit 1"
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
+autom4te_options=
 dir=`AS_DIRNAME([$0])`
 outfile=
 verbose=:
@@ -96,7 +97,7 @@ while test $# -gt 0 ; do
 
     --verbose | -v )
        verbose=echo
-       AUTOM4TE="$AUTOM4TE $1"; shift ;;
+       autom4te_options="$autom4te_options $1"; shift ;;
 
     # Arguments passed as is to autom4te.
     --debug      | -d   | \
@@ -104,14 +105,14 @@ while test $# -gt 0 ; do
     --include=*  | -I?* | \
     --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
-       AUTOM4TE="$AUTOM4TE $1"; shift ;;
+       autom4te_options="$autom4te_options '$1'"; shift ;;
 
     # Options with separated arg passed as is to autom4te.
     --include | -I | \
     --prepend-include | -B | \
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
-       AUTOM4TE="$AUTOM4TE $option $2"
+       autom4te_options="$autom4te_options $option '$2'"
        shift 2 ;;
 
     --trace=* | -t?* )
@@ -123,7 +124,7 @@ while test $# -gt 0 ; do
        traces="$traces --trace='"`echo "$1" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --initialization | -i )
-       AUTOM4TE="$AUTOM4TE --melt"
+       autom4te_options="$autom4te_options --melt"
        shift;;
 
     --output=* | -o?* )
@@ -177,6 +178,8 @@ esac
 test -z "$outfile" && outfile=-
 
 # Run autom4te with expansion.
-eval set \$AUTOM4TE --language=autoconf --output=\$outfile "$traces" \$infile
+eval set x $autom4te_options \
+  --language=autoconf --output=\$outfile "$traces" \$infile
+shift
 $verbose "$me: running $*" >&2
-exec "$@"
+exec "$AUTOM4TE" "$@"
