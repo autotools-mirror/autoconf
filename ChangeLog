@@ -1,3 +1,9 @@
+2003-10-20  Daniel Jacobowitz  <drow@mvista.com>
+
+	* lib/autoconf/lang.m4 (AC_NO_EXECUTABLES): Override
+	_AC_COMPILER_EXEEXT to attempt a link.  If linking fails,
+	override AC_LINK_IFELSE.
+
 2003-10-15  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Work around a bug in

@@ -351,8 +351,8 @@ AC_DEFUN([AC_REQUIRE_CPP],
 # -----------------
 # FIXME: The GCC team has specific needs which the current Autoconf
 # framework cannot solve elegantly.  This macro implements a dirty
-# hack until Autoconf is abble to provide the services its users
-# needs.
+# hack until Autoconf is able to provide the services its users
+# need.
 #
 # Several of the support libraries that are often built with GCC can't
 # assume the tool-chain is already capable of linking a program: the
@@ -363,22 +363,38 @@ AC_DEFUN([AC_REQUIRE_CPP],
 # avoid the AC_PROG_CC_WORKS test, that would just abort their
 # configuration.  The introduction of AC_EXEEXT, enabled either by
 # libtool or by CVS autoconf, have just made matters worse.
+#
+# Unlike an earlier version of this macro, using AC_NO_EXECUTABLES does
+# not disable link tests at autoconf time, but at configure time.
+# This allows AC_NO_EXECUTABLES to be invoked conditionally.
 AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
 [m4_divert_push([KILL])
+m4_divert_text([DEFAULTS], [ac_no_link=no])
 
-AC_BEFORE([$0], [_AC_COMPILER_EXEEXT_WORKS])
 AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
-
-m4_define([_AC_COMPILER_EXEEXT_WORKS],
-[cross_compiling=maybe
-])
+AC_BEFORE([$0], [AC_LINK_IFELSE])
 
 m4_define([_AC_COMPILER_EXEEXT],
-[EXEEXT=
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+if AC_TRY_EVAL(ac_link); then
+  ac_no_link=no
+  ]m4_defn([_AC_COMPILER_EXEEXT])[
+else
+  ac_no_link=yes
+  # Setting cross_compile will disable run tests; it will
+  # also disable AC_CHECK_FILE but that's generally
+  # correct if we can't link.
+  cross_compiling=yes
+  EXEEXT=
+  _AC_COMPILER_EXEEXT_CROSS
+fi
 ])
 
 m4_define([AC_LINK_IFELSE],
-[AC_FATAL([All the tests involving linking were disabled by $0])])
+[if test x$ac_no_link = xyes; then
+  AC_MSG_ERROR([Link tests are not allowed after AC@&t@_NO_EXECUTABLES.])
+fi
+]m4_defn([AC_LINK_IFELSE]))
 
 m4_divert_pop()dnl
 ])# AC_NO_EXECUTABLES
