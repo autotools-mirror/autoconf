@@ -756,6 +756,22 @@ define([AC_SHELL_UNSET],
 [$ac_unset $1 || test "${$1+set}" != set || $1=$2 && export $1])
 
 
+# AC_SHELL_MKDIR_P(PATH)
+# ------------------------
+# Emulate `mkdir -p' with plain `mkdir'.
+define([AC_SHELL_MKDIR_P],
+[{ case $1 in
+  [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
+  *)                      ac_incr_dir=.;;
+esac
+ac_dummy="$1"
+for ac_dir in `IFS=/; set X $ac_dummy; shift; echo "$[@]"`; do
+  ac_incr_dir=$ac_incr_dir/$ac_dir
+  test -d $ac_incr_dir || mkdir $ac_incr_dir
+done; }
+])# AC_SHELL_MKDIR_P
+
+
 ## --------------------------------------------------- ##
 ## Common m4/sh handling of variables (indirections).  ##
 ## --------------------------------------------------- ##
@@ -4502,10 +4518,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Remove last slash and all that follows it.  Not all systems have dirname.
   ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-    # The file is in a subdirectory.
-dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too).
-    test -d "$ac_dir" || mkdir "$ac_dir"
+    AC_SHELL_MKDIR_P("$ac_dir")
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
     ac_dots=`echo "$ac_dir_suffix" | sed 's%/[[^/]]*%../%g'`
@@ -4772,10 +4785,7 @@ cat >>$CONFIG_STATUS <<\EOF
     # Remove last slash and all that follows it.  Not all systems have dirname.
     ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
     if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-      # The file is in a subdirectory.
-dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too).
-      test -d "$ac_dir" || mkdir "$ac_dir"
+      AC_SHELL_MKDIR_P("$ac_dir")
     fi
     rm -f $ac_file
     mv $tmp/config.h $ac_file
@@ -4823,10 +4833,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   # Remove last slash and all that follows it.  Not all systems have dirname.
   ac_dest_dir=`echo $ac_dest | sed 's%/[[^/][^/]]*$%%'`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
-    # The dest file is in a subdirectory.
-dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too).
-    test -d "$ac_dest_dir" || mkdir "$ac_dest_dir"
+    AC_SHELL_MKDIR_P("$ac_dest_dir")
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
     ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[[^/]]*%../%g'`
@@ -4935,14 +4942,12 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     echo configuring in $ac_subdir
     case $srcdir in
     .) ;;
-    *)
-dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too).
-      if test -d ./$ac_subdir || mkdir ./$ac_subdir; then :;
-      else
-        AC_MSG_ERROR(cannot create `pwd`/$ac_subdir)
-      fi
-      ;;
+    *) AC_SHELL_MKDIR_P(./$ac_subdir)
+       if test -d ./$ac_subdir; then :;
+       else
+         AC_MSG_ERROR(cannot create `pwd`/$ac_subdir)
+       fi
+       ;;
     esac
 
     ac_popdir=`pwd`
