@@ -1229,6 +1229,19 @@ done
 if test -n "$ac_prev"; then
   AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
 fi
+
+# Be sure to have absolute paths.
+for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
+              localstatedir libdir includedir oldincludedir infodir mandir \
+              exec_prefix prefix
+do
+  eval ac_val=$`echo $ac_var`
+  case $ac_val in
+    [[\\/$]]* | ?:[[\\/]]* ) ;;
+    NONE ) ;;
+    *)  AC_MSG_ERROR([expected an absolute path for --$ac_var: $ac_val]);;
+  esac
+done
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_PARSE_ARGS
 
