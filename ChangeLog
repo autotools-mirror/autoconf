@@ -1,3 +1,8 @@
+2002-03-11  Andreas Schwab  <schwab@suse.de>
+
+	* configure.ac: Explicitly check for EMACS since AM_PATH_LISPDIR
+	does not do it if --with-lispdir is given.
+
 2002-03-08  Akim Demaille  <akim@epita.fr>
 
 	Version 2.53.

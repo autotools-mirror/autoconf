@@ -76,6 +76,8 @@ $PERL -e 'require 5.005_03;' || {
 
 # Emacs modes.
 AC_CONFIG_FILES([lib/emacs/Makefile])
+test x"$EMACS" = xt && EMACS=
+AC_CHECK_PROGS(EMACS, emacs xemacs, no)
 AM_PATH_LISPDIR
 
 AC_CONFIG_FILES([Makefile doc/Makefile
