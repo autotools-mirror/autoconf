@@ -543,6 +543,7 @@ AC_SUBST([infodir],        ['${prefix}/info'])dnl
 AC_SUBST([mandir],         ['${prefix}/man'])dnl
 
 ac_prev=
+ac_dashdash=
 for ac_option
 do
   # If the previous option needs an argument, assign it.
@@ -556,7 +557,9 @@ do
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
 
-  case $ac_option in
+  case $ac_dashdash$ac_option in
+  --)
+    ac_dashdash=yes ;;
 
   -bindir | --bindir | --bindi | --bind | --bin | --bi)
     ac_prev=bindir ;;
