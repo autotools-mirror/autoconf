@@ -2488,17 +2488,6 @@ rm -f conftest*])
 ## --------------------- ##
 
 
-# AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
-#                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-# ---------------------------------------------------------
-AC_DEFUN(AC_COMPILE_CHECK,
-[AC_OBSOLETE([$0], [; instead use AC_TRY_COMPILE or AC_TRY_LINK, and AC_MSG_CHECKING and AC_MSG_RESULT])dnl
-ifelse([$1], , , [AC_CHECKING([for $1])
-])dnl
-AC_TRY_LINK([$2], [$3], [$4], [$5])
-])
-
-
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------
@@ -2538,6 +2527,17 @@ ifelse([$4], , , [  rm -rf conftest*
 fi
 rm -f conftest*
 ])# AC_TRY_LINK
+
+
+# AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
+#                  ACTION-IF-FOUND, [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------
+AU_DEFUN(AC_COMPILE_CHECK,
+[ifelse([$1], , , [AC_CHECKING([for $1])
+])dnl
+AC_TRY_LINK([$2], [$3], [$4], [$5])
+])
+
 
 
 
