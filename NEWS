@@ -2,19 +2,17 @@
 
 ** Executables
 
-- autoreconf is adjusted to GNU Gettext 0.11.3.
-  Warning: It now relies on autopoint, available since 0.11.3.
+- autoreconf no longer changes the version of the gettext/po/intl
+  support files. It now adds the files the correspond to the
+  AM_GNU_GETTEXT_VERSION declared in configure.ac.
 
-  This is much safer and much more satisfying than the previous
-  scheme based on gettextize.
+  Warning: It now relies on the 'autopoint' program, which is part
+  of GNU gettext 0.11.4 and newer.
 
-  Please, note that Gettext 0.11.3 supports all the previous
-  versions of Gettext: if you don't want to upgrade your package
-  to using a more recent gettext, Gettext 0.11.3 will keep (and
-  install if needed) older versions of Gettext.
-  *But*, autoreconf *requires* Gettext 0.11.3.
-
-  Many thanks to Bruno Haible for autopoint!
+  Please note that you need to have a GNU gettext version that
+  corresponds at least to the AM_GNU_GETTEXT_VERSION declared
+  in configure.ac. You can upgrade to newer GNU gettext versions,
+  though, without needing to change configure.ac.
 
 - The -I DIR or --include=DIR option now appends DIR to the include path
   instead of prepending; this is for consistency with other GNU tools.
