@@ -4382,6 +4382,7 @@ cat >$CONFIG_STATUS <<\EOF
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.
 
+_AC_INIT_PREPARE_ENVIRONMENT
 debug=false
 me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
