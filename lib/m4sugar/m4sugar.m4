@@ -695,11 +695,12 @@ m4_define([m4_foreach],
 [m4_pushdef([$1])_m4_foreach($@)m4_popdef([$1])])
 
 # Low level macros used to define m4_foreach.
-m4_define([m4_car], [$1])
+m4_define([m4_car], [[$1]])
+m4_define([m4_car2], [[$@]])
 m4_define([_m4_foreach],
 [m4_if(m4_quote($2), [], [],
        [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
-                                                     [m4_shift($2)],
+                                                     m4_car2(m4_shift($2)),
                                                      [$3])])])
 
 

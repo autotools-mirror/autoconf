@@ -1,3 +1,9 @@
+2001-11-11  Michael Matz  <matz@kde.org>
+
+	* m4sugar.m4 (_m4_foreach): Make it linear instead quadratic.
+	(m4_car2): New.
+	(m4_car): Properly quote arguments.
+
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/aclocal.m4 (AC_STATE_SAVE): s/LIBOBJS/LIB@&t@OBJS/ to cope

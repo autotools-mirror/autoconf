@@ -76,6 +76,9 @@
   ac_top_builddir, ac_srcpath, ac_top_srcpath, ac_buildpath,
   ac_top_buildpath.
 
+- AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS and AC_OUTPUT.
+  Are much less expensive when using long lists of files.
+
 ** Library macros
 
 - AC_FUNC_STRERROR_R now sets STRERROR_R_CHAR_P, not HAVE_WORKING_STRERROR_R,
