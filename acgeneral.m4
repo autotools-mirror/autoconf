@@ -2614,16 +2614,14 @@ fi])
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_TOOL],
-[AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
-	      ifelse([$3], , [$2], ), $4)
-ifval([$3], [
+[AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, , $4)
 if test -z "$ac_cv_prog_$1"; then
   if test -n "$ac_tool_prefix"; then
-    AC_CHECK_PROG($1, $2, $2, $3)
+    AC_CHECK_PROG($1, $2, $2, $3, $4)
   else
     $1="$3"
   fi
-fi])
+fi
 ])
 
 
