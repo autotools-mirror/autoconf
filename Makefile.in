@@ -109,6 +109,7 @@ edit = sed 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@PERL\@,$(PERL),g' 	-e 's,@datadir
 
 
 prev_version_file = $(srcdir)/config/prev-version.txt
+release-archive-dir = releases
 
 # Uploading betas.
 hosts = alpha

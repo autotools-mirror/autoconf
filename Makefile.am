@@ -220,6 +220,7 @@ autoconf.m4f: $(m4sources)
 ## ---------------------------- ##
 
 prev_version_file = $(srcdir)/config/prev-version.txt
+release-archive-dir = releases
 
 # Uploading betas.
 hosts = alpha

@@ -9,3 +9,4 @@ INSTALL.txt
 configure.scan
 autoconf-[0-9].*
 *.log log
+releases

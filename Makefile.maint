@@ -17,7 +17,7 @@ my_distdir = $(PACKAGE)-$(VERSION)
 
 # Old releases are stored here.
 # Used for diffs and xdeltas.
-release-archive-dir = ../release
+release-archive-dir ?= ../release
 
 
 
