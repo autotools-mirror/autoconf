@@ -5803,6 +5803,9 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
+The @href{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
+contains a lot of interesting crossed information on various Unices.
+
 @table @asis
 @item @sc{qnx 4.25}
 @cindex @sc{qnx 4.25}
@@ -5815,6 +5818,12 @@ processor super-computer.  It claims to be @sc{posix} certified. More
 information is available on the @href{www.qnx.com, @sc{qnx} home page},
 including the @href{http://support.qnx.com/support/docs/qnx4/, @sc{qnx}
 man pages}.
+
+@item Tru64
+@cindex Tru64
+The @href{http://www.tru64unix.compaq.com/docs/base_doc/DOCUMENTATION/,
+documentation of several versions of Tru64} is available in different
+formats.
 
 @item Unix version 7
 @cindex Unix version 7
