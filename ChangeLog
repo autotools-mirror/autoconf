@@ -68,7 +68,8 @@
 2000-03-14  John David Anglin  <dave@hiauly1.hia.nrc.ca>
 
 	* tests/actest.m4 (AC_ENV_SAVE): Don't consider RANDOM and LINENO
-	which some shells update.
+	which some shells update.  At least ksh on HP-UX 10.20 and sh on
+	IRIX 6.5 do change their `RANDOM' even if `read' via `set'.
 
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
