@@ -607,8 +607,9 @@ EOF
 	esac
 
 	# The BFD linker knows what the default object file format is, so
-	# first see if it will tell us.
-	ld_help_string=`ld --help 2>&1`
+	# first see if it will tell us. cd to the root directory to prevent
+	# problems with other programs or directories called `ld' in the path.
+	ld_help_string=`cd /; ld --help 2>&1`
 	ld_supported_emulations=`echo $ld_help_string \
 			 | sed -ne '/supported emulations:/!d
 				    s/[ 	][ 	]*/ /g
