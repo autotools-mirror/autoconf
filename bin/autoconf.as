@@ -31,7 +31,8 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
-  -I, --include=DIR        look for input files in DIR (cumulative)
+  -B, --prepend-include=DIR   prepend directory DIR to search path
+  -I, --include=DIR           append directory DIR to search path
   -f, --force              consider all files obsolete
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
@@ -99,11 +100,13 @@ while test $# -gt 0 ; do
     --debug      | -d   | \
     --force      | -f   | \
     --include=*  | -I?* | \
+    --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
        AUTOM4TE="$AUTOM4TE $1"; shift ;;
 
     # Options with separated arg passed as is to autom4te.
     --include | -I | \
+    --prepend-include | -B | \
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        AUTOM4TE="$AUTOM4TE $option $2"
@@ -159,17 +162,18 @@ done
 # Find the input file.
 case $# in
   0)
-    case `ls configure.ac configure.in 2>/dev/null` in
-      *ac*in )
+    if test -f configure.ac; then
+      if test -f configure.in; then
         echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
         echo "$me: warning: proceeding with \`configure.ac'." >&2
-        infile=configure.ac;;
-      *ac ) infile=configure.ac;;
-      *in ) infile=configure.in;;
-      * )
-        echo "$me: no input file" >&2
-        exit 1;;
-    esac
+      fi
+      infile=configure.ac
+    elif test -f configure.in; then
+      infile=configure.in
+    else
+      echo "$me: no input file" >&2
+      exit 1
+    fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
   1) # autom4te doesn't like `-'.
      test "x$1" != "x-" && infile=$1 ;;
