@@ -30,6 +30,19 @@ AT_CHECK_MACRO([AC_CONFIG_COMMANDS with empty commands],
 ]])
 
 
+## -------------------------- ##
+## Multiple AC_CONFIG_FILES.  ##
+## -------------------------- ##
+
+AT_SETUP([Multiple AC_CONFIG_FILES])
+
+AT_CONFIGURE_AC([[AC_CONFIG_FILES([foo foo])]])
+AT_CHECK_AUTOCONF([], 1, [], [ignore])
+
+AT_CLEANUP
+
+
+
 ## ------------ ##
 ## AC_ARG_VAR.  ##
 ## ------------ ##

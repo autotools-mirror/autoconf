@@ -1,3 +1,22 @@
+2002-04-03  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/status.m4 (_AC_CONFIG_FILE, _AC_CONFIG_HEADER)
+	(_AC_CONFIG_COMMAND, _AC_CONFIG_LINK): New.
+	Use dnl, not the KILL diversion.
+	Extracted from...
+	(AC_CONFIG_FILES, AC_CONFIG_HEADERS, AC_CONFIG_COMMANDS)
+	(AC_CONFIG_LINKS): here.
+	Adjust.
+	Don't use the KILL diversion, as it kills spurious output, which
+	results in failures being hidden.
+	Use m4_defn where appropriate.
+	(AC_CONFIG_IF_MEMBER): Kill the real bug: a spurious parenthesis
+	after the second argument.
+	Use m4_defn.
+	* lib/autom4te.in (Autoconf, Autotest, M4sh): Don't pass --warning
+	syntax, as it is provided by M4sugar.
+	* tests/torture.at (Multiple AC_CONFIG_FILES): New.
+
 2002-04-03  Andreas Schwab  <schwab@suse.de>
 
 	* lib/m4sugar/m4sugar.m4 (m4_bmatch): Make sure m4_bregexp is not

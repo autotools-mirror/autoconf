@@ -1,6 +1,6 @@
 # Definition of Autom4te option sets.                     -*- Makefile -*-
 #
-# Copyright 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 #
 # This file is part of GNU Autoconf.
 #
@@ -131,7 +131,6 @@ args: autoconf/autoconf.m4f
 args: acsite.m4?
 args: aclocal.m4?
 args: --mode 777
-args: --warning syntax
 args: --language Autoheader-preselections
 args: --language Automake-preselections
 args: --language Autoreconf-preselections
@@ -149,7 +148,6 @@ args: --include @datadir@
 args: autotest/autotest.m4f
 args: package.m4?
 args: --mode 777
-args: --warning syntax
 args: --language M4sh
 end-language: "Autotest"
 
@@ -162,7 +160,6 @@ begin-language: "M4sh"
 args: --include @datadir@
 args: m4sugar/m4sh.m4f
 args: --mode 777
-args: --warning syntax
 args: --language M4sugar
 end-language: "M4sh"
 
