@@ -1,5 +1,21 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	It seems quite delicate to have AC_INCLUDES_DEFAULT insert the
+	default headers in the INIT section of configure: the reason is
+	that AC_INCLUDES_DEFAULT is called unquoted, and this results in
+	an un expected behavior.  Thanks to Roman V. Shaposhnick for the
+	details.
+
+	The current implementation is not satisfying: the default headers
+	are defined in the INIT section even if they are not used.
+
+	* acgeneral.m4 (Prologue of AC_INCLUDES_DEFAULTS): Dump the
+	definition of ac_includes_default in the INIT section of
+	configure.
+	(AC_INCLUDES_DEFAULTS): Use it.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* TODO: Updated.
 	* THANKS: Updated.
 

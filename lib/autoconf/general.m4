@@ -1818,7 +1818,62 @@ AC_DEFUN(AC_TRY_COMMAND,
 
 
 
-# ### Generic structure checks
+## ----------------- ##
+## Default headers.  ##
+## ----------------- ##
+
+# Always use the same set of default headers for all the generic
+# macros.  It is easier to document, to extend, and to understand than
+# having specific defaults for each macro.
+
+# Of course, one would like to issue these default headers only if
+# they were used, i.e.., AC_INCLUDES_DEFAULT was called, and the
+# default `branch' was run.  Unfortunately AC_INCLUDES_DEFAULT is
+# called unquoted, so it is unsafe to try to divert from there.
+# Therefore, the following *is* buggy, but this is the kind of
+# tradeoff we accept in order to improve configure.
+
+AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
+# Factorizing default headers for most tests.
+# Mandatory included if its is not used.
+ac_includes_default='\
+#include <stdio.h>
+#include <sys/types.h>
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif'
+AC_DIVERT_POP()
+
+
+# AC_INCLUDES_DEFAULT([INCLUDES])
+# -------------------------------
+# If INCLUDES is empty, expand in default includes, otherwise in
+# INCLUDES.
+define(AC_INCLUDES_DEFAULT,
+[m4_default([$1], [$ac_includes_default])])
+
+
+## ------------------------ ##
+## Generic structure checks ##
+## ------------------------ ##
 
 # AC_CHECK_MEMBER(AGGREGATE.MEMBER,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
@@ -1865,42 +1920,6 @@ $2],
 
 
 
-dnl ### Default headers.
-
-# Always use the same set of default headers for all the generic macros.
-# It is easier to document, to extend, and to understand than having
-# specific defaults for each macro.
-
-# AC_INCLUDES_DEFAULT([INCLUDES])
-# -------------------------------
-# If INCLUDES is empty, expand in default includes, otherwise in
-# INCLUDES.
-AC_DEFUN(AC_INCLUDES_DEFAULT,
-[m4_default([$1],
-[#include <stdio.h>
-#include <sys/types.h>
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# if HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-])])
 
 
 ## --------------------- ##
