@@ -24,7 +24,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.116)
+define(AC_ACVERSION, 1.117)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -457,7 +457,7 @@ running configure, to aid debugging if configure makes a mistake.
 " 1>&AC_FD_CC
 
 # Strip out --no-create and --no-recursion so they do not pile up.
-# Also quote any args containing spaces.
+# Also quote any args containing shell metacharacters.
 ac_configure_args=
 for ac_arg
 do
@@ -467,7 +467,7 @@ do
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
 changequote(, )dnl
-  *[" 	"]*) ac_configure_args="$ac_configure_args '$ac_arg'" ;;
+  *[^-a-zA-Z0-9@%_=+:,./]*) ac_configure_args="$ac_configure_args '$ac_arg'" ;;
 changequote([, ])dnl
   *) ac_configure_args="$ac_configure_args $ac_arg" ;;
   esac
@@ -1798,6 +1798,7 @@ while test -n "${ac_sources}"; do
 done
 ])
 
+This is a subroutine of AC_OUTPUT.  It is called after running config.status.
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 define(AC_OUTPUT_SUBDIRS,
 [
@@ -1822,9 +1823,6 @@ if test "${no_recursion}" != yes; then
       ac_prev=srcdir ;;
     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
       ;;
-changequote(, )dnl
-    *[" 	"]*) ac_sub_configure_args="$ac_sub_configure_args '$ac_arg'" ;;
-changequote([, ])dnl
     *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
     esac
   done
