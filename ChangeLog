@@ -1,5 +1,9 @@
 2000-12-19  Akim Demaille  <akim@epita.fr>
 
+	* tests/foreign.at: New file.
+
+2000-12-19  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_BANNER, AT_CLEANUP): Formatting changes.
 
 2000-12-18  Pavel Roskin  <proski@gnu.org>
