@@ -8457,13 +8457,16 @@ strings inside double-quoted backquoted expressions (pfew!).
 @item $@@
 @cindex @samp{"$@@"}
 One of the most famous shell-portability issues is related to
-@samp{"$@@"}: when there are no positional arguments, it is supposed to
-be equivalent to nothing.  But some shells, for instance under Digital
-Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
-portable, use @samp{$@{1+"$@@"@}}.
+@samp{"$@@"}.  When there are no positional arguments, @sc{posix} says
+that @samp{"$@@"} is supposed to be equivalent to nothing, but the
+original Unix Version 7 Bourne shell treated it as equivalent to
+@samp{""} instead, and this behavior survives in later implementations
+like Digital Unix 5.0.
 
-But that's not the end of the story.  Zsh (3.x and 4.x), when emulating
-the Bourne shell, does perform word splitting on @samp{$@{1+"$@@"@}}...
+The traditional way to work around this portability problem is to use
+@samp{$@{1+"$@@"@}}.  Unfortunately this method does not work with
+Zsh (3.x and 4.x), which is used on Mac OS X.  When emulating
+the Bourne shell, Zsh performs word splitting on @samp{$@{1+"$@@"@}}:
 
 @example
 zsh $ @kbd{emulate sh}
@@ -8477,19 +8480,31 @@ World
 @end example
 
 @noindent
-It is not clear whether this is a violation of the Bourne shell
-standard, nevertheless, in this regard Zsh is different from all the
-other shells.  Of course Zsh handles @samp{"$@@"} properly, but we can't
-use it portably...
-
-Fortunately, there is a workaround which relies on Zsh's ``global
-aliases'': let it convert @samp{$@{1+"$@@"@}} into @samp{"$@@"} by
-itself:
+Zsh handles plain @samp{"$@@"} properly, but we can't use plain
+@samp{"$@@"} because of the portability problems mentioned above.
+One workaround relies on Zsh's ``global aliases'' to convert
+@samp{$@{1+"$@@"@}} into @samp{"$@@"} by itself:
 
 @example
-test "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
+$@{ZSH_VERSION-:@} alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
+A more conservative workaround is to avoid @samp{"$@@"} if it is
+possible that there may be no positional arguments.  For example,
+instead of:
+
+@example
+cat conftest.c "$@@"
+@end example
+
+you can use this instead:
+
+@example
+case $# in
+0) cat conftest.c;;
+*) cat conftest.c "$@@";;
+esac
+@end example
 
 @item $@{@var{var}:-@var{value}@}
 @c Info cannot handle `:' in index entries.
