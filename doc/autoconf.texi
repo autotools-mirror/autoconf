@@ -242,12 +242,14 @@ Running @code{configure} Scripts
 * Compilers and Options::       Selecting compilers and optimization.
 * Build Directory::             Configuring in a different directory.
 * Installation Names::          Installing in different directories.
-* System Type::                 Specifying the system type.
 * Optional Features::           Selecting optional features.
+* System Type::                 Specifying the system type.
+* Sharing Defaults::            Setting site-wide defaults for @code{configure}.
+* Operation Controls::          Changing how @code{configure} runs.
 
 Questions About Autoconf
 
-* Copyright::                   Legal restrictions on Autoconf output.
+* Copyright::                   Copyright on Autoconf output.
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
@@ -1023,14 +1025,22 @@ configuration-related dependencies.
 When a package tests more than a few C preprocessor symbols, the command
 lines to pass @samp{-D} options to the compiler can get quite long.
 This causes two problems.  One is that the @code{make} output is hard to
-read.  More seriously, the command lines can exceed the length limits of
-some operating systems.  As an alternative to passing @samp{-D} options
-to the compiler, @code{configure} scripts can create a C header file
-containing @samp{#define} directives.  The @code{AC_CONFIG_HEADER} macro
-selects this kind of output.  It should be called right after @code{AC_INIT}.
+visually scan for errors.  More seriously, the command lines can exceed
+the length limits of some operating systems.  As an alternative to
+passing @samp{-D} options to the compiler, @code{configure} scripts can
+create a C header file containing @samp{#define} directives.  The
+@code{AC_CONFIG_HEADER} macro selects this kind of output.  It should be
+called right after @code{AC_INIT}.
 
 The package should @samp{#include} the configuration header file before
-any other header files, to prevent inconsistencies in declarations.
+any other header files, to prevent inconsistencies in declarations (for
+example, if it redefines @code{const}).  Use @samp{#include <config.h>}
+instead of @samp{#include "config.h"}, and pass the C compiler a
+@samp{-I.} option (or @samp{-I..}; whichever directory contains
+@file{config.h}).  That way, even if the source directory is configured
+itself (perhaps to make a distribution), other build directories can
+also be configured without finding the @file{config.h} from the source
+directory.
 
 @defmac AC_CONFIG_HEADER (@var{header-to-create} @dots{})
 @maindex CONFIG_HEADER
@@ -2763,12 +2773,13 @@ packages.
 
 Some of these external utilities have a portable subset of features, as
 well; for example, don't rely on @code{ln} having a @samp{-f} option or
-@code{cat} having any options.  Don't use @samp{grep -s} to suppress
-output, because @samp{grep -s} on System V does not suppress output,
-only error messages.  Instead, redirect the standard output and standard
-error (in case the file doesn't exist) of @code{grep} to
-@file{/dev/null}.  Check the exit status of @code{grep} to determine
-whether it found a match.
+@code{cat} having any options.  @code{sed} scripts should not contain
+comments or use branch labels longer than 8 characters.  Don't use
+@samp{grep -s} to suppress output, because @samp{grep -s} on System V
+does not suppress output, only error messages.  Instead, redirect the
+standard output and standard error (in case the file doesn't exist) of
+@code{grep} to @file{/dev/null}.  Check the exit status of @code{grep}
+to determine whether it found a match.
 
 @node Testing Values and Files, Multiple Cases, Portable Shell, Writing Tests
 @section Testing Values and Files
@@ -3667,13 +3678,13 @@ should be relative to the top level source or build directory.
 For example, this call:
 
 @example
-AC_LINK_FILES(config/sun3.h config/aout.h, host.h object.h)
+AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h, host.h object.h)
 @end example
 
 @noindent
 creates in the current directory @file{host.h}, which is a link to
-@file{@var{srcdir}/config/sun3.h}, and @file{object.h}, which is a link
-to @file{@var{srcdir}/config/aout.h}.
+@file{@var{srcdir}/config/$@{machine@}.h}, and @file{object.h}, which is a link
+to @file{@var{srcdir}/config/$@{obj_format@}.h}.
 @end defmac
 
 @node Site Configuration, Invoking configure, Manual Configuration, Top
@@ -3722,7 +3733,7 @@ with.  If no argument is given, it defaults to @samp{yes}.
 For each external software package that may be used, @file{configure.in}
 should call @code{AC_ARG_WITH} to detect whether the @code{configure}
 user asked to use it.  Whether each package is used or not by
-default, and what arguments are valid, is up to you.
+default, and which arguments are valid, is up to you.
 
 @defmac AC_ARG_WITH (@var{package}, @var{help-string}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex ARG_WITH
@@ -3782,7 +3793,7 @@ equivalent to @samp{--enable-@var{feature}=no}.
 For each optional feature, @file{configure.in} should call
 @code{AC_ARG_ENABLE} to detect whether the @code{configure} user asked
 to include it.  Whether each feature is included or not by default, and
-what arguments are valid, is up to you.
+which arguments are valid, is up to you.
 
 @defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex ARG_ENABLE
@@ -3895,7 +3906,7 @@ install: all
 If you have more than one program to install, you can do it in a loop:
 
 @example
-PROGRAMS=cat ls rm
+PROGRAMS=cp ls rm
 install:
         for p in $(PROGRAMS); do \
           $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
@@ -3980,8 +3991,10 @@ file in the package.
 * Compilers and Options::       Selecting compilers and optimization.
 * Build Directory::             Configuring in a different directory.
 * Installation Names::          Installing in different directories.
-* System Type::                 Specifying the system type.
 * Optional Features::           Selecting optional features.
+* System Type::                 Specifying the system type.
+* Sharing Defaults::            Setting site-wide defaults for @code{configure}.
+* Operation Controls::          Changing how @code{configure} runs.
 @end menu
 
 @include install.texi
@@ -4077,7 +4090,7 @@ Several questions about Autoconf come up occasionally.  Here some of them
 are addressed.
 
 @menu
-* Copyright::                   Legal restrictions on Autoconf output.
+* Copyright::                   Copyright on Autoconf output.
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
@@ -4092,23 +4105,11 @@ scripts that Autoconf generates?  How does that affect my
 programs that use them?
 @end display
 
-The configuration scripts that Autoconf produces are covered by the GNU
-General Public License.  This is because they consist almost entirely of
-parts of Autoconf itself, rearranged somewhat, and Autoconf is
-distributed under the terms of the GPL.  As applied to Autoconf, the GPL
-just means that you need to distribute @file{configure.in}, and
-@file{acsite.m4}, @file{aclocal.m4}, @file{acconfig.h}, and
-@file{@var{config}.h.top} and @file{@var{config}.h.bot} if you use them,
-along with @code{configure}.
-
-Programs that use Autoconf scripts to configure themselves do not
-automatically come under the GPL.  Distributing an Autoconf
-configuration script as part of a program is considered to be @emph{mere
-aggregation} of that work with the Autoconf script.  Such programs are
-not derivative works based on Autoconf; only their configuration scripts
-are.  We still encourage software authors to distribute their work under
-terms like those of the GPL, but doing so is not required to use
-Autoconf.
+There are no restrictions on how the configuration scripts that Autoconf
+produces may be distributed or used.  In Autoconf version 1, they were
+covered by the GNU General Public License.  We still encourage software
+authors to distribute their work under terms like those of the GPL, but
+doing so is not required to use Autoconf.
 
 @node Why GNU m4, Bootstrapping, Copyright, Questions
 @section Why Require GNU @code{m4}?

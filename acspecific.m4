@@ -2,7 +2,7 @@ dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
-dnl This program is free software; you can redistribute it and/or modify
+dnl This file is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2, or (at your option)
 dnl any later version.
@@ -15,6 +15,10 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+dnl
+dnl As a special exception, if you use parts of this file in a
+dnl configure script, doing so does not cause the resulting script to
+dnl be covered by the GNU General Public License.
 dnl
 dnl Written by David MacKenzie, with help from
 dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
@@ -258,7 +262,7 @@ if test -z "$CXXCPP"; then
 AC_CACHE_VAL(ac_cv_prog_CXXCPP,
 [AC_LANG_SAVE[]dnl
 AC_LANG_CPLUSPLUS[]dnl
-  CXXCPP="${CXX-c++} -E"
+  CXXCPP="${CXX-gcc} -E"
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
   ac_cv_prog_CXXCPP="$CXXCPP"
 AC_LANG_RESTORE[]dnl
@@ -393,7 +397,7 @@ fi
 AC_SUBST(LN_S)dnl
 ])
 
-AC_DEFUN(AC_RSH,
+define(AC_RSH,
 [errprint(__file__:__line__: [$0] has been removed; replace it with equivalent code
 )m4exit(4)])
 
@@ -482,12 +486,12 @@ AC_DEFUN(AC_HEADER_DIRENT,
 [ac_header_dirent=no
 AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
-# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix,
-# and -lx contains other useful things as well.  (FIXME what are they?)
+# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
 AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+else
+AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
 fi
-AC_CHECK_LIB(x, main, LIBS="$LIBS -lx")
 ])
 
 dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
@@ -1067,7 +1071,8 @@ AC_CHECK_LIB(elf, elf_read,
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(inq_stats/cpustats.h,
-  [ac_have_func=yes AC_DEFINE(UMAX4_3) AC_DEFINE(UMAX)])
+  [ac_have_func=yes AC_DEFINE(UMAX4_3)
+   AC_DEFINE(UMAX)])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(sys/cpustats.h,
@@ -1472,7 +1477,7 @@ if test $ac_cv_c_const = no; then
 fi
 ])
 
-AC_DEFUN(AC_ARG_ARRAY,
+define(AC_ARG_ARRAY,
 [errprint(__file__:__line__: [$0] has been removed; don't do unportable things with arguments
 )m4exit(4)])
 
@@ -1499,7 +1504,7 @@ rm -f conftest])dnl
 AC_MSG_RESULT($ac_cv_sys_interpreter)
 ])
 
-AC_DEFUN(AC_HAVE_POUNDBANG,
+define(AC_HAVE_POUNDBANG,
 [errprint(__file__:__line__: [$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments
 ])m4exit(4)])
 

@@ -16,6 +16,29 @@ inefficiently in GNU m4 releases before 1.3.
 
 Major changes in release 2.0:
 
+** New copyright terms:
+* There are no restrictions on distribution or use of configure scripts.
+
+** Documentation:
+* Autoconf manual is reorganized to make information easier to find
+  and has several new indexes.
+* INSTALL is reorganized and clearer and is now made from Texinfo source.
+
+** New utilities:
+* autoscan to generate a preliminary configure.in for a package by
+  scanning its source code for commonly used nonportable functions,
+  programs, and header files.
+* autoupdate to update a configure.in to use the new macro names.
+* ifnames to list the symbols used in #if and #ifdef directives in a
+  source tree.
+* autoreconf to recursively remake configure and configuration header
+  files in a source tree.
+
+** Changed utilities:
+* autoheader can take pieces of acconfig.h to replace config.h.{top,bot}.
+* autoconf and autoheader can look for package-local definition files
+  in an alternate directory.
+
 ** New macros:
 * AC_CACHE_VAL to share results of tests between configure runs.
 * AC_DEFUN to define macros, automatically AC_PROVIDE them, and ensure
@@ -81,26 +104,6 @@ Major changes in release 2.0:
 * New files autoconf.m4 and autoheader.m4 load the other Autoconf macros.
 * acsite.m4 is the new name for the system-wide aclocal.m4.
 * Has the beginnings of a DejaGnu test suite.
-
-** New utilities:
-* autoscan to generate a preliminary configure.in for a package by
-  scanning its source code for commonly used nonportable functions,
-  programs, and header files.
-* autoupdate to update a configure.in to use the new macro names.
-* ifnames to list the symbols used in #if and #ifdef directives in a
-  source tree.
-* autoreconf to recursively remake configure and configuration header
-  files in a source tree.
-
-** Changed utilities:
-* autoheader can take pieces of acconfig.h to replace config.h.{top,bot}.
-* autoconf and autoheader can look for package-local definition files
-  in an alternate directory.
-
-** Documentation:
-* Autoconf manual is reorganized to make information easier to find
-  and has several new indexes.
-* INSTALL is reorganized and clearer and is now made from Texinfo source.
 
 Major changes in release 1.11:
 

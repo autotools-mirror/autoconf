@@ -127,6 +127,21 @@ an extra prefix or suffix on their names by giving @code{configure} the
 option @samp{--program-prefix=@var{PREFIX}} or
 @samp{--program-suffix=@var{SUFFIX}}.
 
+@node Optional Features
+@section Optional Features
+
+Some packages pay attention to @samp{--enable-@var{feature}} options to
+@code{configure}, where @var{feature} indicates an optional part of the
+package.  They may also pay attention to @samp{--with-@var{package}}
+options, where @var{package} is something like @samp{gnu-as} or @samp{x}
+(for the X Window System).  The @file{README} should mention any
+@samp{--enable-} and @samp{--with-} options that the package recognizes.
+
+For packages that use the X Window System, @code{configure} can usually
+find the X include and library files automatically, but if it doesn't,
+you can use the @code{configure} options @samp{--x-includes=@var{dir}}
+and @samp{--x-libraries=@var{dir}} to specify their locations.
+
 @node System Type
 @section Specifying the System Type
 
@@ -150,18 +165,23 @@ the @samp{--target=@var{type}} option to select the type of system
 they will produce code for and the @samp{--build=@var{type}} option
 to select the type of system on which you are compiling the package.
 
-@node Optional Features
-@section Optional Features
+@node Sharing Defaults
+@section Sharing Defaults
 
-Some packages pay attention to @samp{--with-@var{package}} options to
-@code{configure}, where @var{package} is something like @samp{gnu-as} or
-@samp{x} (for the X Window System).  They may also pay attention to
-@samp{--enable-@var{feature}} options, where @var{feature} indicates an
-optional part of the package.  The @file{README} should mention any
-@samp{--with-} and @samp{--enable-} options that the package recognizes.
+If you want to set default values for @code{configure} scripts to share,
+you can create a site shell script called @file{config.site} that gives
+default values for variables like @code{CC}, @code{cache_file}, and
+@code{prefix}.  @code{configure} looks for
+@file{@var{prefix}/lib/config.site} if it exists, then
+@file{@var{exec_prefix}/lib/config.site} if it exists.  Or, you can set
+the @code{CONFIG_SITE} environment variable to the location of the site
+script.  A warning: not all @code{configure} scripts look for a site script.
 
-@noindent
-@code{configure} also recognizes the following options:
+@node Operation Controls
+@section Operation Controls
+
+@code{configure} recognizes the following options to control how it
+operates.
 
 @table @code
 @item --cache-file=@var{file}
@@ -184,12 +204,6 @@ Look for the package's source code in directory @var{dir}.  Usually
 @item --version
 Print the version of Autoconf used to generate the @code{configure}
 script, and exit.
-
-@item --x-includes=@var{dir}
-X include files are in directory @var{dir}.
-
-@item --x-libraries=@var{dir}
-X library files are in directory @var{dir}.
 @end table
 
 @noindent

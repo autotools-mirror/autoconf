@@ -53,11 +53,11 @@
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
 
+/* Define if you have alloca, as a function or macro.  */
+#undef HAVE_ALLOCA
+
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
 #undef HAVE_ALLOCA_H
-
-/* Define if you have <dirent.h>.  */
-#undef HAVE_DIRENT_H
 
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
@@ -77,12 +77,6 @@
 /* Define if you have a working `mmap' system call.  */
 #undef HAVE_MMAP
 
-/* Define if you don't have <dirent.h>, but have <ndir.h>.  */
-#undef HAVE_NDIR_H
-
-/* Define if you have <netdb.h> (and thus the rexec function).  */
-#undef HAVE_NETDB_H
-
 /* Define if system calls automatically restart after interruption
    by a signal.  */
 #undef HAVE_RESTARTABLE_SYSCALLS
@@ -101,18 +95,6 @@
 
 /* Define if you have the strftime function.  */
 #undef HAVE_STRFTIME
-
-/* Define if you don't have <dirent.h>, but have <sys/dir.h>.  */
-#undef HAVE_SYS_DIR_H
-
-/* Define if you have <sys/mtio.h>.  */
-#undef HAVE_SYS_MTIO_H
-
-/* Define if you don't have <dirent.h>, but have <sys/ndir.h>.  */
-#undef HAVE_SYS_NDIR_H
-
-/* Define if you have a <sys/wait.h> with `union wait'.  */
-#undef HAVE_SYS_WAIT
 
 /* Define if your struct tm has tm_zone.  */
 #undef HAVE_TM_ZONE
@@ -135,9 +117,6 @@
 
 /* Define if you have the wait3 system call.  */
 #undef HAVE_WAIT3
-
-/* Define if you have the POSIX.1 `waitpid' function.  */
-#undef HAVE_WAITPID
 
 /* Define as __inline if that's what the C compiler calls it.  */
 #undef inline
@@ -175,9 +154,6 @@
 
 /* Define if your C compiler doesn't accept -c and -o together.  */
 #undef NO_MINUS_C_MINUS_O
-
-/* Define if you have neither a remote shell nor the rexec function.  */
-#undef NO_REMOTE
 
 /* Define to `long' if <sys/types.h> doesn't define.  */
 #undef off_t

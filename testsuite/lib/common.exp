@@ -78,8 +78,6 @@ proc autoconf_load_plus {args} {
     if {$status==0} {
 	return 0
     }
-    # Eventually we might want to run configure with --verbose.
-    # In that case, we'll need to examine $exec_output more creatively.
     if [string match "*:*" "$exec_output"] then {
 	fail "$args, problem with executing"
 	return 0

@@ -111,9 +111,9 @@ s%[^#]*AC_CONFIG_HEADER(\([^)]*\).*%\1%
 t here
 : here
 s%.*:%%
-t hascolon
+t colon
 s%$%.in%
-: hascolon
+: colon
 p
 q
 }' configure.in`

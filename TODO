@@ -31,6 +31,15 @@ Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
+* Doc: Discuss what Autoconf doesn't do: Makefile rules and
+  boilerplate, providing replacement C headers and library functions
+  (a consistent ANSI C/POSIX.1 environment).  Lessons learned.
+  Advantages to not requiring special external libraries or config
+  files or programs.
+  Mention site files in install.texi.
+
+------------------------------------------------------------------------------
+
 * Make autoconf diagnose giving too few or too many arguments to macros.
 
 ------------------------------------------------------------------------------

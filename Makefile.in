@@ -74,29 +74,16 @@ editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
 all: ${PROGS}
 
-autoconf: autoconf.sh
-	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/autoconf.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
+.SUFFIXES:
+.SUFFIXES: .sh .pl
 
-autoheader: autoheader.sh
+.sh:
 	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/autoheader.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
+	$(editsh) $< > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
-autoreconf: autoreconf.sh
+.pl:
 	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/autoreconf.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
-
-autoupdate: autoupdate.sh
-	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/autoupdate.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
-
-ifnames: ifnames.sh
-	rm -f $@ $@.tmp
-	$(editsh) $(srcdir)/ifnames.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
-
-autoscan: autoscan.pl
-	rm -f $@ $@.tmp
-	$(editpl) $(srcdir)/autoscan.pl > $@.tmp && mv $@.tmp $@ && chmod +x $@
+	$(editpl) $< > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
 info: autoconf.info @standards_info@ INSTALL
 
