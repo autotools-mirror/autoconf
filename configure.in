@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_PREREQ(2.49a)
+AC_PREREQ(2.49b)
 AC_INIT(Autoconf, 2.49b, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(acgeneral.m4)
 AM_INIT_AUTOMAKE(autoconf, 2.49b)

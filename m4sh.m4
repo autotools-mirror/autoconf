@@ -267,7 +267,7 @@ m4_define([AS_ERROR],
 # FIXME: Please note the following m4_require is quite wrong: if the first
 # occurrence of AS_DIRNAME_EXPR is in a backquoted expression, the
 # shell will be lost.  We might have to introduce diversions for
-# setting up an M4sh script: required macros will them be expanded there.
+# setting up an M4sh script: required macros will then be expanded there.
 m4_defun([AS_DIRNAME_EXPR],
 [m4_require([_AS_EXPR_PREPARE])dnl
 $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
