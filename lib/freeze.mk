@@ -41,8 +41,6 @@ $(AUTOM4TE_CFG):
 	$(MY_AUTOM4TE)				\
 		--language=$*			\
 		--freeze			\
-		--include=$(srcdir)/..		\
-		--include=..			\
 		--output=$@
 
 # Factor the dependencies between all the frozen files.
@@ -73,6 +71,7 @@ autotest_m4f_dependencies = 			\
 
 autoconf_m4f_dependencies =			\
 	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autoconf/autoscan.m4	\
 	$(src_libdir)/autoconf/general.m4	\
 	$(src_libdir)/autoconf/autoheader.m4	\
 	$(src_libdir)/autoconf/autoupdate.m4	\

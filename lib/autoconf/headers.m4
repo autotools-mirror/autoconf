@@ -54,7 +54,8 @@
 #
 # 1. Generic tests for headers
 # 2. Default includes
-# 3. Tests for specific headers
+# 3. Headers to tests with AC_CHECK_HEADERS
+# 4. Tests for specific headers
 
 
 ## ------------------------------ ##
@@ -195,7 +196,6 @@ done
 
 
 
-
 ## --------------------- ##
 ## 2. Default includes.  ##
 ## --------------------- ##
@@ -274,8 +274,71 @@ $ac_includes_default])])
 
 
 
+## ------------------------------------------- ##
+## 3. Headers to check with AC_CHECK_HEADERS.  ##
+## ------------------------------------------- ##
+
+# errno.h is portable.
+
+AN_HEADER([OS.h],               [AC_CHECK_HEADERS])
+AN_HEADER([argz.h],             [AC_CHECK_HEADERS])
+AN_HEADER([arpa/inet.h],        [AC_CHECK_HEADERS])
+AN_HEADER([fcntl.h],            [AC_CHECK_HEADERS])
+AN_HEADER([fenv.h],             [AC_CHECK_HEADERS])
+AN_HEADER([fs_info.h],          [AC_CHECK_HEADERS])
+AN_HEADER([inttypes.h],         [AC_CHECK_HEADERS])
+AN_HEADER([langinfo.h],         [AC_CHECK_HEADERS])
+AN_HEADER([libintl.h],          [AC_CHECK_HEADERS])
+AN_HEADER([limits.h],           [AC_CHECK_HEADERS])
+AN_HEADER([locale.h],           [AC_CHECK_HEADERS])
+AN_HEADER([mach/mach.h],        [AC_CHECK_HEADERS])
+AN_HEADER([malloc.h],           [AC_CHECK_HEADERS])
+AN_HEADER([memory.h],           [AC_CHECK_HEADERS])
+AN_HEADER([mntent.h],           [AC_CHECK_HEADERS])
+AN_HEADER([mnttab.h],           [AC_CHECK_HEADERS])
+AN_HEADER([netdb.h],            [AC_CHECK_HEADERS])
+AN_HEADER([netinet/in.h],       [AC_CHECK_HEADERS])
+AN_HEADER([nl_types.h],         [AC_CHECK_HEADERS])
+AN_HEADER([nlist.h],            [AC_CHECK_HEADERS])
+AN_HEADER([paths.h],            [AC_CHECK_HEADERS])
+AN_HEADER([sgtty.h],            [AC_CHECK_HEADERS])
+AN_HEADER([shadow.h],           [AC_CHECK_HEADERS])
+AN_HEADER([stdint.h],           [AC_CHECK_HEADERS])
+AN_HEADER([stdio_ext.h],        [AC_CHECK_HEADERS])
+AN_HEADER([strings.h],          [AC_CHECK_HEADERS])
+AN_HEADER([sys/acl.h],          [AC_CHECK_HEADERS])
+AN_HEADER([sys/file.h],         [AC_CHECK_HEADERS])
+AN_HEADER([sys/filsys.h],       [AC_CHECK_HEADERS])
+AN_HEADER([sys/fs/s5param.h],   [AC_CHECK_HEADERS])
+AN_HEADER([sys/fs_types.h],     [AC_CHECK_HEADERS])
+AN_HEADER([sys/fstyp.h],        [AC_CHECK_HEADERS])
+AN_HEADER([sys/ioctl.h],        [AC_CHECK_HEADERS])
+AN_HEADER([sys/mntent.h],       [AC_CHECK_HEADERS])
+AN_HEADER([sys/mount.h],        [AC_CHECK_HEADERS])
+AN_HEADER([sys/param.h],        [AC_CHECK_HEADERS])
+AN_HEADER([sys/socket.h],       [AC_CHECK_HEADERS])
+AN_HEADER([sys/statfs.h],       [AC_CHECK_HEADERS])
+AN_HEADER([sys/statvfs.h],      [AC_CHECK_HEADERS])
+AN_HEADER([sys/systeminfo.h],   [AC_CHECK_HEADERS])
+AN_HEADER([sys/time.h],         [AC_CHECK_HEADERS])
+AN_HEADER([sys/timeb.h],        [AC_CHECK_HEADERS])
+AN_HEADER([sys/vfs.h],          [AC_CHECK_HEADERS])
+AN_HEADER([sys/window.h],       [AC_CHECK_HEADERS])
+AN_HEADER([syslog.h],           [AC_CHECK_HEADERS])
+AN_HEADER([termio.h],           [AC_CHECK_HEADERS])
+AN_HEADER([termios.h],          [AC_CHECK_HEADERS])
+AN_HEADER([unistd.h],           [AC_CHECK_HEADERS])
+AN_HEADER([utime.h],            [AC_CHECK_HEADERS])
+AN_HEADER([utmp.h],             [AC_CHECK_HEADERS])
+AN_HEADER([utmpx.h],            [AC_CHECK_HEADERS])
+AN_HEADER([values.h],           [AC_CHECK_HEADERS])
+AN_HEADER([wchar.h],            [AC_CHECK_HEADERS])
+AN_HEADER([wctype.h],           [AC_CHECK_HEADERS])
+
+
+
 ## ------------------------------- ##
-## 3. Tests for specific headers.  ##
+## 4. Tests for specific headers.  ##
 ## ------------------------------- ##
 
 
@@ -357,6 +420,13 @@ fi
 # AC_HEADER_STAT
 # --------------
 # FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
+AN_IDENTIFIER([S_ISBLK], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISCHR], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISDIR], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISFIFO], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISLNK], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISREG], [AC_HEADER_STAT])
+AN_IDENTIFIER([S_ISSOCK], [AC_HEADER_STAT])
 AC_DEFUN([AC_HEADER_STAT],
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,

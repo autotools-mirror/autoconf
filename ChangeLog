@@ -1,5 +1,19 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autoscan.m4: New file.
+	* lib/autoconf/autoconf.m4: Include it.
+	* lib/autoconf/functions.m4: Use AN_FUNCTION for all the functions
+	that were listed in the original autoscan.list.
+	* lib/autoconf/headers.m4: Similarly with headers.
+	* lib/freeze.mk (autoconf_m4f_dependencies): Add autoscan.m4.
+	(.m4.m4f): Don't pass --prepend-include, since that's done by
+	tests/autom4te itself.
+	* lib/autoscan/Makefile.am: Include freeze.mk.
+	(autoscan.list): New target --this file is no longer a source.
+	(autoscan.pre): New file.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (@kinds): Make them singular.
 	Adjust all uses.
 	(&init_tables): When --debug, report the list of rules to ease

@@ -58,19 +58,6 @@ extensions.
 Deprecate these, as they will be superseded by the AC_PROG_CC changes.
 
 
-** Automake 1.6
-*** AC_LIBOBJ_DECL
-Decide with the Automake team whether this macro should list only `.c'
-files, or it should include the `.h' too.  For instance the
-AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
-the macro which allows to choose a regex engine.
-
-*** Auxiliary files
-It is AC_PROG_LIBTOOL that should tell Automake what are the files to
-ship.  We need something similar to AC_LIBOBJ_DECL for all these
-situations.
-
-
 * Later
 
 ** config.site
@@ -186,22 +173,12 @@ autoupdate do its job on old configure.ac.
 
 * Even later
 
-** Autoscan macros
-Can be introduced even before specializing macros.  It just means that
-specializing macros will call them.  OTOH, this doubles our work,
-since specializing macros will save us from additional typing.  But
-the more powerful autoscan is, the better...
-
 ** Pentateuch
 Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
 _must_ update the `history' section.  Can't go to `New testament', we
 might hurt feelings?  In addition, it means that the Messiah has come,
 which might be slightly presumptuous :).  Still, someone fluent in
 English should write it.
-
-** AC_FUNC_GETLOADAVG
-We must find a solution for this macro which needs to find
-`getloadavg.c'.
 
 ** AC_PATH_X
 Hi Robert,

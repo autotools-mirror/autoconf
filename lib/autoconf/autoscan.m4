@@ -1,7 +1,8 @@
-# This file is part of Autoconf.                -*- Autoconf -*-
-# Driver that loads the Autoconf macro files.
-# Copyright (C) 1994, 1999, 2000, 2001, 2002  Free Software Foundation, Inc.
-#
+# This file is part of Autoconf.                       -*- Autoconf -*-
+# Interface with autoscan.
+
+# Copyright (C) 2002 Free Software Foundation, Inc.
+
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2, or (at your option)
@@ -16,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
-#
+
 # As a special exception, the Free Software Foundation gives unlimited
 # permission to copy, distribute and modify the configure scripts that
 # are the output of Autoconf.  You need not follow the terms of the GNU
@@ -43,71 +44,29 @@
 # the non-data portions to the data portions.)  If your modification has
 # such potential, you must delete any notice of this special exception
 # to the GPL from your modified version.
-#
-# Written by David MacKenzie and many others.
-#
-# Do not sinclude acsite.m4 here, because it may not be installed
-# yet when Autoconf is frozen.
-# Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 
-# general includes some AU_DEFUN.
-m4_include([autoconf/autoupdate.m4])
-m4_include([autoconf/autoscan.m4])
-m4_include([autoconf/general.m4])
-m4_include([autoconf/status.m4])
-m4_include([autoconf/autoheader.m4])
-m4_include([autoconf/autotest.m4])
-m4_include([autoconf/programs.m4])
-m4_include([autoconf/lang.m4])
-m4_include([autoconf/c.m4])
-m4_include([autoconf/fortran.m4])
-m4_include([autoconf/functions.m4])
-m4_include([autoconf/headers.m4])
-m4_include([autoconf/types.m4])
-m4_include([autoconf/libs.m4])
-m4_include([autoconf/specific.m4])
-m4_include([autoconf/oldnames.m4])
+# Written by Akim Demaille.
 
-# We discourage the use of the non prefixed macro names: M4sugar maps
-# all the builtins into `m4_'.  Autoconf has been converted to these
-# names too.  But users may still depend upon these, so reestablish
-# them.
+# The prefix `AN' is chosen after `AutoscaN'.
 
-m4_copy_unm4([m4_builtin])
-m4_copy_unm4([m4_changequote])
-m4_copy_unm4([m4_decr])
-m4_copy_unm4([m4_define])
-m4_copy_unm4([m4_defn])
-m4_copy_unm4([m4_divert])
-m4_copy_unm4([m4_divnum])
-m4_copy_unm4([m4_errprint])
-m4_copy_unm4([m4_esyscmd])
-m4_copy_unm4([m4_ifdef])
-m4_copy([m4_if], [ifelse])
-m4_copy_unm4([m4_incr])
-m4_copy_unm4([m4_index])
-m4_copy_unm4([m4_indir])
-m4_copy_unm4([m4_len])
-m4_copy([m4_bpatsubst], [patsubst])
-m4_copy_unm4([m4_popdef])
-m4_copy_unm4([m4_pushdef])
-m4_copy([m4_bregexp], [regexp])
-m4_copy_unm4([m4_sinclude])
-m4_copy_unm4([m4_syscmd])
-m4_copy_unm4([m4_sysval])
-m4_copy_unm4([m4_traceoff])
-m4_copy_unm4([m4_traceon])
-m4_copy_unm4([m4_translit])
-m4_copy_unm4([m4_undefine])
-m4_copy_unm4([m4_undivert])
+# AN_OUTPUT(KIND, WORD, MACROS)
+# -----------------------------
+# Declare that the WORD, used as a KIND, requires triggering the MACROS.
+m4_define([AN_OUTPUT], [])
 
-# Yet some people have started to use m4_patsubst and m4_regexp.
-m4_define([m4_patsubst],
-[m4_expand_once([m4_warn([syntax],
-                 [do not use m4_patsubst: use patsubst or m4_bpatsubst])])dnl
-patsubst($@)])
 
-m4_define([m4_regexp],
-[m4_expand_once([m4_warn([syntax],
-                 [do not use m4_regexp: use regexp or m4_bregexp])])dnl
-regexp($@)])
+# AN_FUNCTION(NAME, MACROS)
+# AN_HEADER(NAME, MACROS)
+# AN_IDENTIFIER(NAME, MACROS)
+# AN_LIBRARY(NAME, MACROS)
+# AN_MAKEVAR(NAME, MACROS)
+# AN_PROGRAM(NAME, MACROS)
+# ---------------------------
+# If the FUNCTION/HEADER etc. is used in the package, then the MACROS
+# should be invoked from configure.ac.
+m4_define([AN_FUNCTION],   [AN_OUTPUT([function], $@)])
+m4_define([AN_HEADER],     [AN_OUTPUT([header], $@)])
+m4_define([AN_IDENTIFIER], [AN_OUTPUT([identifier], $@)])
+m4_define([AN_LIBRARY],    [AN_OUTPUT([library], $@)])
+m4_define([AN_MAKEVAR],    [AN_OUTPUT([makevar], $@)])
+m4_define([AN_PROGRAM],    [AN_OUTPUT([program], $@)])
