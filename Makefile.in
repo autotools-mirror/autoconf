@@ -103,13 +103,18 @@ CLEANFILES = autoconf.m4f              $(bin_SCRIPTS)
 
 move_if_change = $(top_srcdir)/config/move-if-change
 
+# INSTALL is a special case.  Automake seems to have a single name space
+# for both targets and variables.  If we just use INSTALL, then the var
+# $(INSTALL) is not defined, and the install target fails.
+MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
+
 MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
 edit = sed 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@PERL\@,$(PERL),g' 	-e 's,@datadir\@,$(pkgdatadir),g' 	-e 's,@bindir\@,$(bindir),g' 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' 	-e 's,@M4\@,$(M4),g' 	-e 's,@AWK\@,$(AWK),g' 	-e 's,@VERSION\@,$(VERSION),g' 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
 
 prev_version_file = $(srcdir)/config/prev-version.txt
-release-archive-dir = releases
+release_archive_dir = releases
 
 # Uploading betas.
 hosts = alpha
@@ -432,14 +437,9 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 $(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
 	mv acversion.tm4 $(srcdir)/acversion.m4
-
-# INSTALL is a special case.  Automake seems to have a single name space
-# for both targets and variables.  If we just use INSTALL, then the var
-# $(INSTALL) is not defined, and the install target fails.
-
 INSTALL.txt: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
-	if test '$(srcdir)' != '.'; then cp $@ $(srcdir); rm -f $@; fi
+	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL.txt
+	cp $(srcdir)/INSTALL.txt $(srcdir)/INSTALL
 
 maintainer-check: maintainer-check-tests
 maintainer-check-tests:

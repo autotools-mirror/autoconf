@@ -17,7 +17,7 @@ my_distdir = $(PACKAGE)-$(VERSION)
 
 # Old releases are stored here.
 # Used for diffs and xdeltas.
-release-archive-dir ?= ../release
+release_archive_dir ?= ../release
 
 
 
@@ -44,12 +44,12 @@ po-check:
 
 # Check that `make alpha' will not fail at the end of the process.
 writable-files:
-	if test -d $(release-archive-dir); then :; else			\
-	  mkdir $(release-archive-dir);					\
+	if test -d $(release_archive_dir); then :; else			\
+	  mkdir $(release_archive_dir);					\
 	fi
 	for file in $(distdir).tar.gz $(xd-delta)			\
-	            $(release-archive-dir)/$(distdir).tar.gz		\
-	            $(release-archive-dir)/$(xd-delta); do		\
+	            $(release_archive_dir)/$(distdir).tar.gz		\
+	            $(release_archive_dir)/$(xd-delta); do		\
 	  test -e $$file || continue;					\
 	  test -w $$file						\
 	    || { echo ERROR: $$file is not writable; fail=1; };		\
@@ -250,12 +250,12 @@ check-copyright:
 alpha: local-check
 	$(MAKE) cvs-dist
 	$(MAKE) -s announcement > /tmp/announce-$(my_distdir)
-	ln $(distdir).tar.gz $(release-archive-dir)
+	ln $(distdir).tar.gz $(release_archive_dir)
 	chmod a-w $(distdir).tar.gz
-	cd $(release-archive-dir) \
+	cd $(release_archive_dir) \
 	  && xdelta delta -9 $(prev-tgz) $(distdir).tar.gz $(xd-delta) || :
-	ln $(release-archive-dir)/$(xd-delta) .
-	chmod a-w $(release-archive-dir)/$(xd-delta)
+	ln $(release_archive_dir)/$(xd-delta) .
+	chmod a-w $(release_archive_dir)/$(xd-delta)
 	echo $(VERSION) > $(prev_version_file)
 	cvs ci -m. $(prev_version_file)
 	@$(emit-rsync-commands)

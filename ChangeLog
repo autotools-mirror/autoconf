@@ -1,3 +1,12 @@
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (INSTALL.txt): Don't use $@ and $< in non suffix
+	rules.
+	From Marc Espie.
+	* Makefile.maint (release-archive-dir): Rename as...
+	(release_archive_dir): this, so that it can be specialized in
+	Makefile.
+
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump to 2.50d.

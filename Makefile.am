@@ -85,10 +85,10 @@ $(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
 # $(INSTALL) is not defined, and the install target fails.
-
+MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
 INSTALL.txt: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
-	if test '$(srcdir)' != '.'; then cp $@ $(srcdir); rm -f $@; fi
+	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL.txt
+	cp $(srcdir)/INSTALL.txt $(srcdir)/INSTALL
 
 MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
@@ -220,7 +220,7 @@ autoconf.m4f: $(m4sources)
 ## ---------------------------- ##
 
 prev_version_file = $(srcdir)/config/prev-version.txt
-release-archive-dir = releases
+release_archive_dir = releases
 
 # Uploading betas.
 hosts = alpha
