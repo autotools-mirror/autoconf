@@ -3237,7 +3237,7 @@ AC_SHELL_IFELSE([test "$ac_cv_search_$1" != no],
 # And ``ac_save_LIBS' is too tempting a name, so let's leave them some
 # freedom.
 AC_DEFUN([AC_CHECK_LIB],
-[AH_CHECK_LIB([$1])dnl
+[ifval([$3], , [AH_CHECK_LIB([$1])])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
 AC_ARG_VAR([LDFLAGS], [linker flags, e.g. -L<lib dir> if you have libraries in a nonstandard directory <lib dir>])
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
@@ -3259,8 +3259,6 @@ AC_VAR_POPDEF([ac_Lib])dnl
 
 # AH_CHECK_LIB(LIBNAME)
 # ---------------------
-# FIXME: To be rigorous, this should not be systematic: depending
-# upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
 define([AH_CHECK_LIB],
 [AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
              [Define if you have the `]$1[' library (-l]$1[).])])

@@ -1,5 +1,11 @@
 2000-09-27  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (AC_CHECK_LIB): only call AH_CHECK_LIB if
+	ACTION-IF-TRUE is not given.
+	(AH_CHECK_LIB): related comment changes.
+
+2000-09-27  Pavel Roskin  <proski@gnu.org>
+
 	* aclang.m4 (_AC_LANG_COMPILER_WORKS): Remove []dnl because it
 	resulted in invalid shell code.
 
