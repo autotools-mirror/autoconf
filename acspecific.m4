@@ -242,8 +242,6 @@ fi
 if test -z "$INSTALL"; then
   if test -f ${srcdir}/install.sh; then
     # As a last resort, use the slow shell script.
-    # We want the top-level source directory, not the subdir's srcdir,
-    # so expand srcdir now rather than in the Makefile.
     INSTALL=AC_PROG_INSTALL_INSTALL_SH
   else
     AC_WARN(${srcdir}/install.sh not found; using cp)
@@ -252,15 +250,18 @@ if test -z "$INSTALL"; then
 fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
-INSTALL_PROGRAM=${INSTALL_PROGRAM-'${INSTALL}'}
+# Use test -z because SunOS4 sh mishandles ${INSTALL_PROGRAM-'${INSTALL}'}.
+# It thinks the first close brace ends the variable substitution.
+test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
 AC_SUBST(INSTALL_PROGRAM)dnl
 AC_VERBOSE(setting INSTALL_PROGRAM to $INSTALL_PROGRAM)
-INSTALL_DATA=${INSTALL_DATA-'${INSTALL}'}
+test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL}'
 AC_SUBST(INSTALL_DATA)dnl
 AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
 dnl Defined separately so a configure.in can redefine if necessary.
-define(AC_PROG_INSTALL_INSTALL_SH, ["${srcdir}/install.sh -c"])dnl
+dnl We want the top-level source directory, not the subdir's srcdir.
+define(AC_PROG_INSTALL_INSTALL_SH, ['@top_srcdir@/install.sh -c'])dnl
 dnl
 define(AC_LN_S,
 [AC_CHECKING(for ln -s)
