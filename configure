@@ -106,7 +106,7 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
 
-ac_unique_file="autoconf.in"
+ac_unique_file="ChangeLog"
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1125,7 +1125,7 @@ AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}
 MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 
 # Initialize the test suite.
-AUTOTEST_PATH=..
+AUTOTEST_PATH=../bin
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
@@ -1233,7 +1233,7 @@ fi
 # This is needed because Automake does not seem to realize there is
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 
-# `autoconf' and `ifnames' use AWK.  And we need decent RE support.
+# `ifnames' uses AWK.
 for ac_prog in mawk gawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
@@ -1271,15 +1271,6 @@ fi
   test -n "$AWK" && break
 done
 
-# Some AWK fail
-if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
-  { { echo "$as_me:1276: error: the regex engine of $AWK is too broken to be used
-                you might want to install GNU AWK" >&5
-echo "$as_me: error: the regex engine of $AWK is too broken to be used
-                you might want to install GNU AWK" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
 # Generating man pages.
 
 HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
@@ -1287,7 +1278,7 @@ HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "$as_me:1290: checking for $ac_word" >&5
+echo "$as_me:1281: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1304,7 +1295,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_PERL="$ac_dir/$ac_word"
-   echo "$as_me:1307: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1298: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1316,18 +1307,23 @@ fi
 PERL=$ac_cv_path_PERL
 
 if test -n "$PERL"; then
-  echo "$as_me:1319: result: $PERL" >&5
+  echo "$as_me:1310: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "$as_me:1322: result: no" >&5
+  echo "$as_me:1313: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" = no; then
-  { { echo "$as_me:1327: error: perl is not found" >&5
+  { { echo "$as_me:1318: error: perl is not found" >&5
 echo "$as_me: error: perl is not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
+$PERL -e 'require 5.005;' || {
+   { { echo "$as_me:1323: error: perl 5.005 or better is required" >&5
+echo "$as_me: error: perl 5.005 or better is required" >&2;}
+   { (exit 1); exit 1; }; }
+}
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -1341,7 +1337,7 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "$as_me:1344: checking for a BSD compatible install" >&5
+echo "$as_me:1340: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -1390,7 +1386,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "$as_me:1393: result: $INSTALL" >&5
+echo "$as_me:1389: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1404,7 +1400,7 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
 
-ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile lib/Makefile lib/Autoconf/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile tests/Makefile tests/atconfig"
+ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile bin/Makefile tests/Makefile tests/atconfig"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -1515,7 +1511,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:1518: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:1514: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -1683,7 +1679,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:1686: error: ambiguous option: $1
+    { { echo "$as_me:1682: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1702,7 +1698,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:1705: error: unrecognized option: $1
+  -*) { { echo "$as_me:1701: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1743,14 +1739,15 @@ do
   "doc/Makefile" ) CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
   "config/Makefile" ) CONFIG_FILES="$CONFIG_FILES config/Makefile" ;;
   "lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-  "lib/Autoconf/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Autoconf/Makefile" ;;
+  "lib/Autom4te/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Autom4te/Makefile" ;;
   "lib/autoscan/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autoscan/Makefile" ;;
   "lib/m4sugar/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/m4sugar/Makefile" ;;
   "lib/autoconf/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autoconf/Makefile" ;;
   "lib/autotest/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autotest/Makefile" ;;
+  "bin/Makefile" ) CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
   "tests/atconfig" ) CONFIG_FILES="$CONFIG_FILES tests/atconfig" ;;
-  *) { { echo "$as_me:1753: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:1750: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -1961,7 +1958,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1964: creating $ac_file" >&5
+    { echo "$as_me:1961: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -1979,7 +1976,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:1982: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:1979: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -1992,7 +1989,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:1995: error: cannot find input file: $f" >&5
+           { { echo "$as_me:1992: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -2048,8 +2045,6 @@ if test "$no_create" != yes; then
 fi
 
 # Report the state of this version of Autoconf if this is a beta.
-case 2.52a in
-  *[a-z]*)
     cat <<EOF
 
 You are about to use an experimental version of Autoconf.  Be sure to
@@ -2058,5 +2053,5 @@ read the relevant mailing lists, most importantly <autoconf@gnu.org>.
 Below you will find information on the status of this version of Autoconf.
 
 EOF
-    sed -n '/^\* Status/,$p' $srcdir/BUGS;;
-esac
+    sed -n '/^\* Status/,$p' $srcdir/BUGS
+

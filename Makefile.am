@@ -20,36 +20,20 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
-SUBDIRS = . lib config m4 man doc tests
+SUBDIRS = . lib bin config m4 man doc tests
 
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 WGET = wget
-
-bin_SCRIPTS = autom4te \
-              autoconf autoheader autoreconf ifnames autoscan autoupdate
 
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
 # and adapt dependencies once we use a more recent Automake
 
-m4sources =  lib/m4sugar/m4sugar.m4 lib/m4sugar/m4sh.m4  \
-             $(srcdir)/lib/autoconf/version.m4 \
-             lib/autoconf/autoconf.m4 \
-             lib/autoconf/general.m4 lib/autoconf/oldnames.m4 \
-	     lib/autoconf/specific.m4 lib/autoconf/lang.m4 \
-             lib/autoconf/functions.m4 lib/autoconf/headers.m4 \
-	     lib/autoconf/types.m4
-
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
-             autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-             autoscan.in autom4te.in \
              GNUmakefile Makefile.maint
-
-# Files that should be removed, but which Automake does not know.
-CLEANFILES = $(bin_SCRIPTS)
 
 
 ## ------------------ ##
@@ -87,72 +71,6 @@ install-data-hook: INSTALL.txt
 	  echo " $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f"; \
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
-
-
-## ------------- ##
-## The scripts.  ##
-## ------------- ##
-
-edit = sed \
-	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@bindir\@,$(bindir),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@prefix\@,$(prefix),g' \
-	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
-	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
-
-## All the scripts below depend on configure.ac so that they are rebuilt
-## when the Autoconf version changes. Unfortunately, suffix rules cannot
-## have additional dependencies, so we have to use explicit rules for
-## every script.
-
-autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.ac
-	rm -f autoconf autoconf.tmp
-	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
-	chmod +x autoconf.tmp
-	mv autoconf.tmp autoconf
-
-autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.ac
-	rm -f autoheader autoheader.tmp
-	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
-	chmod +x autoheader.tmp
-	mv autoheader.tmp autoheader
-
-autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.ac
-	rm -f autoreconf autoreconf.tmp
-	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
-	chmod +x autoreconf.tmp
-	mv autoreconf.tmp autoreconf
-
-autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.ac
-	rm -f autoupdate autoupdate.tmp
-	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
-	chmod +x autoupdate.tmp
-	mv autoupdate.tmp autoupdate
-
-ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.ac
-	rm -f ifnames ifnames.tmp
-	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
-	chmod +x ifnames.tmp
-	mv ifnames.tmp ifnames
-
-autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.ac
-	rm -f autoscan autoscan.tmp
-	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
-	chmod +x autoscan.tmp
-	mv autoscan.tmp autoscan
-
-autom4te: $(srcdir)/autom4te.in $(srcdir)/configure.ac
-	rm -f autom4te autom4te.tmp
-	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
-	chmod +x autom4te.tmp
-	mv autom4te.tmp autom4te
 
 
 ## ---------------------------- ##

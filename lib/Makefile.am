@@ -1,3 +1,3 @@
 ## Process this file with automake to create Makefile.in
 
-SUBDIRS = Autoconf m4sugar autoconf autotest autoscan
+SUBDIRS = Autom4te m4sugar autoconf autotest autoscan

@@ -29,13 +29,14 @@ MAINTAINERCLEANFILES = $(man_MANS)
 
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
-autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(top_srcdir)/autoconf.in
-autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(top_srcdir)/autoheader.in
-autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(top_srcdir)/autom4te.in
-autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(top_srcdir)/autoreconf.in
-autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.in
-autoupdate.1: $(common_dep) $(srcdir)/autoupdate.x $(top_srcdir)/autoupdate.in
-ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(top_srcdir)/ifnames.in
+binsrcdir = $(top_srcdir)/bin
+autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.in
+autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(binsrcdir)/autoheader.in
+autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(binsrcdir)/autom4te.in
+autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(binsrcdir)/autoreconf.in
+autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(binsrcdir)/autoscan.in
+autoupdate.1: $(common_dep) $(srcdir)/autoupdate.x $(binsrcdir)/autoupdate.in
+ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(binsrcdir)/ifnames.in
 
 # Independent from this package.
 config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config/config.guess
@@ -44,11 +45,11 @@ config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config/config.sub
 SUFFIXES = .x .1
 
 .x.1:
-	test -f $(top_builddir)/$* && prog=$(top_builddir)/$*; \
-	test -f $(top_srcdir)/$* && prog=$(top_srcdir)/$*; \
+	test -f $(top_builddir)/bin/$* && prog=$(top_builddir)/bin/$*; \
 	test -f $(top_srcdir)/config/$* && prog=$(top_srcdir)/config/$*; \
 	if test -n "$$prog"; then \
 	  echo "Updating man page $@"; \
+	  autom4te_perllibdir="$(top_srcdir)/lib" \
 	  $(HELP2MAN) \
 	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/common.x \

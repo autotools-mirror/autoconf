@@ -1,5 +1,13 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.in, autom4te.in, autoscan.in, ifnames.in,
+	* autoheader.in, autoreconf.in, autoupdate.in: Move to...
+	* bin: here, new directory.
+	* lib/Autoconf: Rename as...
+	* lib/Autom4te: this, to please case insensitive junkie OSes.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* autom4te.in ($m4): Handle the --nesting-limit.
 	* autoconf.in (M4): Remove.
 

@@ -38,7 +38,7 @@ EXTRA_DIST = README \
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
-AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../autom4te
+AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
 testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \

@@ -43,7 +43,7 @@ BEGIN
 }
 
 use Data::Dumper;
-use Autoconf::Struct;
+use Autom4te::Struct;
 use Carp;
 use Getopt::Long;
 use IO::File;

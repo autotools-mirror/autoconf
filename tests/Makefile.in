@@ -76,7 +76,7 @@ SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at 
 EXTRA_DIST = README              atspecific.m4 aclocal.m4              $(SUITE) mktests.sh
 
 
-AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../autom4te
+AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
 
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
@@ -89,8 +89,8 @@ CLEANFILES = debug-*.sh macro configure configure.in configure.ac              c
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in configure \
-configure.ac
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in config.guess \
+config.sub configure.in install-sh ltmain.sh
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

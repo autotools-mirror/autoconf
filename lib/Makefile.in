@@ -66,7 +66,7 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-SUBDIRS = Autoconf m4sugar autoconf autotest autoscan
+SUBDIRS = Autom4te m4sugar autoconf autotest autoscan
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = 
 DIST_COMMON =  Makefile.am Makefile.in
