@@ -1,7 +1,7 @@
 2000-10-24  Pavel Roskin  <proski@gnu.org>
 
-	* tests/mktests.sh: set locale to C to make sure that syntax.m4
-	and update.m4 are locale-independent
+	* tests/mktests.sh: Set locale to C to make sure that syntax.m4
+	and update.m4 are locale-independent.
 
 2000-10-24  Pavel Roskin  <proski@gnu.org>
 
@@ -285,12 +285,12 @@
 
 2000-10-16  Pavel Roskin  <proski@gnu.org>
 
-	* tests/aclocal.m4: Don't considers variables @, '*', '?' and
+	* tests/aclocal.m4: Don't consider variables @, '*', '?' and
 	'#' in the output of `set' - they are modified by zsh.
 
 2000-10-14  Pavel Roskin  <proski@gnu.org>
 
-	* m4/missing.m4 (AM_MISSING_PROG): Use $SHELL to run "missing"
+	* m4/missing.m4 (AM_MISSING_PROG): Use $SHELL to run "missing".
 	* configure.in: Don't add $SHELL to the path of help2man -
 	it is already added by AM_MISSING_PROG.
 
@@ -483,7 +483,7 @@
 
 2000-09-25  Pavel Roskin  <proski@gnu.org>
 
-	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): use
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use
 	_AC_INIT_PREPARE_ENVIRONMENT to make the shell running
 	config.status sane and POSIX-compatible.
 
@@ -709,7 +709,7 @@
 2000-09-11  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Properly report names of unexpanded macros that
-	begin with an underscore
+	begin with an underscore.
 
 2000-09-11  Pavel Roskin  <proski@gnu.org>
 
@@ -726,7 +726,7 @@
 2000-09-08  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi: Always use one space before the opening
-	parenthesis in @defmac
+	parenthesis in @defmac.
 
 2000-09-06  Morten Eriksen  <mortene@sim.no>
 
@@ -747,7 +747,7 @@
 2000-09-05  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Consider undefined macros as errors.
-	* tests/base.m4 (unexpanded macros): Expect error, not warning
+	* tests/base.m4 (unexpanded macros): Expect error, not warning.
 
 2000-09-05  Dave Love  <fx@gnu.org>
 
@@ -807,8 +807,8 @@
 
 2000-08-08  Pavel Roskin  <proski@gnu.org>
 
-	* Makefile.am: substitute @bindir@ in shell scripts, needed by
-	autoheader
+	* Makefile.am: Substitute @bindir@ in shell scripts, needed by
+	autoheader.
 
 2000-08-07  Akim Demaille  <akim@epita.fr>
 
