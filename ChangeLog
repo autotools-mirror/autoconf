@@ -1,3 +1,9 @@
+2003-08-19  Akim Demaille  <akim@epita.fr>
+
+	* config/announce-gen, Makefile.cfg: New.
+	* Makefile.am: Adjust.
+	* GNUmakefile, Makefile.maint: Update from CVS Coreutils.
+
 2003-08-19  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autom4te.in (Automake-preselections): Preselect

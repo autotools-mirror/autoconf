@@ -54,27 +54,3 @@ INSTALL: $(top_srcdir)/doc/install.texi
 maintainer-check: maintainer-check-tests
 maintainer-check-tests:
 	cd tests && make maintainer-check
-
-
-
-## ---------------------------- ##
-## Customizing Makefile.maint.  ##
-## ---------------------------- ##
-
-prev_version_file = $(srcdir)/config/prev-version.txt
-move_if_change = $(srcdir)/config/move-if-change
-release_archive_dir = releases
-
-url_dir_list = \
-  ftp://alpha.gnu.org/gnu/autoconf
-
-# Files to update automatically.
-wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
-	     $(srcdir)/config/texinfo.tex \
-	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
-cvs_files = $(srcdir)/config/elisp-comp \
-	    $(srcdir)/config/mdate-sh \
-	    $(srcdir)/config/missing \
-	    $(srcdir)/config/install-sh \
-	    $(srcdir)/config/mkinstalldirs
-local_updates = wget-update cvs-update
