@@ -232,29 +232,25 @@ while read dir; do
   # Running aclocal.  #
   # ----------------- #
 
-  run_aclocal=no
+  # run_aclocal -- is this package using aclocal?
+  run_aclocal=false
   aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
-  if test -f "$aclocal_m4" &&
-     grep 'generated automatically by aclocal' $aclocal_m4 >/dev/null; then
-     run_aclocal=yes
-  else
-     if test -f "$aclocal_dir/acinclude.m4"; then
-	run_aclocal=yes
-     fi
+  if grep 'generated automatically by aclocal' $aclocal_m4 >/dev/null 2>&1 ||
+     test -f "$aclocal_dir/acinclude.m4"; then
+     run_aclocal=:
   fi
-  if test $run_aclocal = yes; then
+  if $run_aclocal &&
+     $force &&
+     ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null |
+       sed 1q |
+       grep 'aclocal\.m4$' >/dev/null; then :; else
      # If there are flags for aclocal in Makefile.am, use them.
      aclocal_flags=`sed -f $tmp/alflags.sed Makefile.am 2>/dev/null`
-     if $force &&
-        ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null |
-	sed 1q |
-        grep 'aclocal\.m4$' >/dev/null; then :; else
-	if test x"$aclocal_dir" != x.; then
-	   aclocal_flags="$aclocal_flags -I $aclocal_dir"
-	fi
-	$verbose running $aclocal $aclocal_flags --output=$aclocal_m4 in $dir
-	$aclocal $aclocal_flags --output=$aclocal_m4
+     if test x"$aclocal_dir" != x.; then
+       aclocal_flags="$aclocal_flags -I $aclocal_dir"
      fi
+     $verbose running $aclocal $aclocal_flags --output=$aclocal_m4 in $dir
+     $aclocal $aclocal_flags --output=$aclocal_m4
   fi
 
 
@@ -264,8 +260,8 @@ while read dir; do
 
   # Assumes that there is a Makefile.am in the topmost directory.
   if test -f Makefile.am; then
-     $verbose running $automake in $dir
-     $automake
+    $verbose running $automake in $dir
+    $automake
   fi
 
 
