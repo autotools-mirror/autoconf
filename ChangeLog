@@ -1,5 +1,10 @@
 2000-11-10  Pavel Roskin  <proski@gnu.org>
 
+	* doc/autoconf.texi (Particular Structures): Fix examples for
+	AC_STRUCT_ST_BLKSIZE and AC_STRUCT_ST_RDEV.
+
+2000-11-10  Pavel Roskin  <proski@gnu.org>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Don't use
 	uncommon abbreviations.
 

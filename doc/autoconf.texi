@@ -3803,7 +3803,11 @@ If @code{struct stat} contains an @code{st_blksize} member, define
 the future.  This macro is obsoleted, and should be replaced by
 
 @example
-AC_CHECK_MEMBERS((struct stat.st_blksize))
+@group
+AC_CHECK_MEMBERS([struct stat.st_blksize],,,
+[#include <sys/types.h>
+#include <sys/stat.h>])
+@end group
 @end example
 @end defmac
 
@@ -3829,7 +3833,11 @@ is to be avoided, as its support will cease in the future.
 
 This macro is obsoleted, and should be replaced by
 @example
-AC_CHECK_MEMBERS((struct stat.st_rdev))
+@group
+AC_CHECK_MEMBERS([struct stat.st_rdev],,,
+[#include <sys/types.h>
+#include <sys/stat.h>])
+@end group
 @end example
 
 @end defmac
