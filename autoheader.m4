@@ -1,7 +1,7 @@
 include(libm4.m4)#                                          -*- Autoconf -*-
 # This file is part of Autoconf.
 # Driver and redefinitions of some Autoconf macros for autoheader.
-# Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 95, 99, 2000 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -156,7 +156,7 @@ AH_DEFUN([AH_CHECK_HEADERS],
    $3])])
 
 AH_DEFUN([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
-AH_DEFUN([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
+AH_DEFUN([_AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
 
 
 AH_DEFUN([AC_CHECK_FILES],
