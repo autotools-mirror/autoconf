@@ -167,7 +167,8 @@ at_groups_all='AT_groups_all'
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [.])'
 # Description of all the test groups.
-at_help_all='AT_help'])])dnl
+at_help_all=
+AT_help])])dnl
 m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
@@ -732,7 +733,8 @@ m4_define([AT_KEYWORDS],
 # Complete a group of related tests.
 m4_define([AT_CLEANUP],
 [m4_append([AT_help],
-m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
+at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
+'
 )dnl
     $at_times_skip || times >$at_times_file
     )
