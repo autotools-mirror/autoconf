@@ -1,3 +1,7 @@
+2000-09-06  Peter Eisentraut  <peter_e@gmx.net>
+
+	* autoconf.texi: English and typo fixes.
+
 2000-09-05  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Consider undefined macros as errors.
