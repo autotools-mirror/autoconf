@@ -14,13 +14,38 @@ AT_BANNER([[Testing config.status.
 ## AC_ARG_VAR.  ##
 ## ------------ ##
 
-# AT_CHECK_AC_ARG_VAR(TITLE, FIRST-VALUE, SECOND-VALUE)
-# -----------------------------------------------------
+# AT_CHECK_AC_ARG_VAR(FIRST-VALUE, SECOND-VALUE)
+# ----------------------------------------------
 # Check that AC_ARG_VAR caches the latest values, diagnoses
 # inconsistances, and arms config.status.
 m4_define([AT_CHECK_AC_ARG_VAR],
-[
-AT_SETUP([AC_ARG_VAR: $1])
+[rm -f config.cache
+
+# Initial value.
+m4_ifval([$1],
+         [precious='$1'; export precious],
+         [unset precious])
+AT_CHECK_CONFIGURE([--config-cache])
+AT_CHECK([cat file], [], [`$1'
+])
+
+# Testing --recheck.
+unset precious
+AT_CHECK([./config.status --recheck], [], [ignore])
+AT_CHECK([./config.status], [], [ignore])
+AT_CHECK([cat file], [], [`$1'
+])
+
+# Second value.
+m4_ifval([$2],
+         [precious='$2'; export precious],
+         [unset precious])
+AT_CHECK_CONFIGURE([--config-cache], [1], [], [ignore])
+
+])# AT_CHECK_AC_ARG_VAR
+
+
+AT_SETUP([AC_ARG_VAR])
 
 # We don't want to run this test if this shell doesn't support
 # `unset'.
@@ -44,36 +69,16 @@ AT_DATA([file.in],
 
 AT_CHECK_AUTOCONF
 
-# Initial value.
-m4_ifval([$2],
-         [precious='$2'; export precious],
-         [unset precious])
-AT_CHECK_CONFIGURE([--config-cache])
-AT_CHECK([cat file], [], [`$2'
-])
+# Set a precious variable
+AT_CHECK_AC_ARG_VAR([], [apple of my eye])
 
-# Testing --recheck.
-unset precious
-AT_CHECK([./config.status --recheck], [], [ignore])
-AT_CHECK([./config.status], [], [ignore])
-AT_CHECK([cat file], [], [`$2'
-])
+# Unset a precious variable
+AT_CHECK_AC_ARG_VAR([apple of my eye], [])
 
-# Second value.
-m4_ifval([$3],
-         [precious='$3'; export precious],
-         [unset precious])
-AT_CHECK_CONFIGURE([--config-cache], [1], [], [ignore])
+# Change a precious variable
+AT_CHECK_AC_ARG_VAR([apple of my eye], [orange of my eye])
 
 AT_CLEANUP
-])# AT_CHECK_AC_ARG_VAR
-
-AT_CHECK_AC_ARG_VAR([set a precious variable],
-                    [], [apple of my eye])
-AT_CHECK_AC_ARG_VAR([unset a precious variable],
-                    [apple of my eye], [])
-AT_CHECK_AC_ARG_VAR([change a precious variable],
-                    [apple of my eye], [orange of my eye])
 
 
 

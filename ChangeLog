@@ -1,5 +1,10 @@
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (AC_ARG_VAR): Make it a single test instead of
+	three as failures are unlikely, and speed matters.
+
+2001-06-23  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Redefined M4 Macros): New.
 
 2001-06-23  Akim Demaille  <akim@epita.fr>
