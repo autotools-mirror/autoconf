@@ -1,3 +1,13 @@
+2003-04-29  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotest/general.m4 (AT_KEYWORDS): Don't use a comma as the
+	seperator with m4_append_uniq().  It doesn't work.
+	(AT_CLEANUP): Add `;' to end of at_help_all.
+	(AT_INIT): Allow --keywords to be specified more than once.  When
+	grepping $at_help_all for keywords, use the field and keyword
+	seperators to ensure a complete keyword match.  Alter at_prev handling
+	to support the new --keywords behavior.
+
 2003-04-27  Karl Berry  <karl@freefriends.org>
 
 	* doc/autoconf.texi: Make the dir entries in the autoconf manual

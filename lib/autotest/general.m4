@@ -214,9 +214,8 @@ for at_option
 do
   # If the previous option needs an argument, assign it.
   if test -n "$at_prev"; then
-    eval "$at_prev=\$at_option"
+    at_option=$at_prev=$at_option
     at_prev=
-    continue
   fi
 
   at_optarg=`expr "x$at_option" : 'x[[^=]]*=\(.*\)'`
@@ -295,10 +294,10 @@ do
 
     # Keywords.
     --keywords | -k )
-	at_prev=at_keywords
+	at_prev=--keywords
 	;;
     --keywords=* )
-	at_keywords=$at_optarg
+	at_keywords="$at_keywords,$at_optarg"
 	;;
 m4_divert_pop([PARSE_ARGS])dnl
 dnl Process *=* last to allow for user specified --option=* type arguments.
@@ -330,7 +329,7 @@ if test -n "$at_keywords"; then
   do
     # It is on purpose that we match the test group titles too.
     at_groups_selected=`echo "$at_groups_selected" |
-			grep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
+			grep -i "^[[^;]]*;[[^;]]*.*[[; ]]$at_keyword[[ ;]]"`
   done
   at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
   # Smash the end of lines.
@@ -802,7 +801,7 @@ m4_divert_push([TESTS])dnl
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 m4_define([AT_KEYWORDS],
-[m4_append_uniq([AT_keywords], [$1], [,])])
+[m4_append_uniq([AT_keywords], [$1], [ ])])
 
 
 # AT_CLEANUP
@@ -810,7 +809,7 @@ m4_define([AT_KEYWORDS],
 # Complete a group of related tests.
 m4_define([AT_CLEANUP],
 [m4_append([AT_help],
-at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
+at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 '
 )dnl
     $at_times_skip || times >$at_times_file
