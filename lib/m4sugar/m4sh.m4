@@ -474,15 +474,11 @@ m4_define([_AS_LINENO_WORKS],
 # _AS_LINENO_PREPARE
 # ------------------
 # If LINENO is not supported by the shell, produce a version of this
-# script where LINENO is hard coded.  Rewrite if not up to date only.
+# script where LINENO is hard coded.
 # Comparing LINENO against _oline_ is not a good solution, since in
 # the case of embedded executables (such as config.status within
 # configure) you'd compare LINENO wrt config.status vs. _oline_ vs
-# configure.  Hence a useless rewrite (not to mention the risk of
-# ``infinite'' rewrites.  Merely check that LINENO is incremented
-# between two lines, which is a property guaranteed for _oline_, hence
-# it protects us from repetitive rewrites.  Be sure to have a test
-# that does detect non LINENO support...
+# configure.
 m4_define([_AS_LINENO_PREPARE],
 [_AS_LINENO_WORKS || {
   # Find who we are.  Look in the path if we contain no path at all
@@ -515,19 +511,27 @@ m4_define([_AS_LINENO_PREPARE],
 	 esac
        done]);;
   esac
-  if test ! -f "$as_me.lineno" ||
-     test x`ls -1dt "$as_me.lineno" "$as_myself" 2>/dev/null | sed 1q` \
-                != x"$as_me.lineno"; then
-     # Be sure to write the pattern so that it doesn't replace itself:
-     # it must not match itself.
-     awk <$as_myself '
-           /[[$]]LINENO/ { printf "%d:", NR }
-                         { print }
-         ' |
-       sed ['/[$]LINENO/s/^\([0-9][0-9]*\):\(.*\)[$]LINENO/\2\1/'] \
-         >$as_me.lineno
-    chmod +x $as_me.lineno
-  fi
+
+  # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
+  # uniformly replaced by the line number.  The first 'sed' inserts a
+  # line-number line before each line; the second 'sed' does the real
+  # work.  The second script uses 'N' to pair each line-number line
+  # with the numbered line, and appends trailing '-' during
+  # substitution so that $LINENO is not a special case at line end.
+  # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
+  # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
+  sed '=' <$as_myself |
+    sed '
+      N
+      s,$,-,
+      : loop
+      s,^\([[0-9]]*\)\(.*\)[[$]]LINENO\([[^a-zA-Z0-9_]]\),\1\2\1\3,
+      t loop
+      s,-$,,
+      s,^[[0-9]]*\n,,
+    ' >$as_me.lineno &&
+  chmod +x $as_me.lineno ||
+    AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])
 
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
