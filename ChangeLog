@@ -1,3 +1,7 @@
+2000-07-06  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4: Formatting and quotations changes.
+
 2000-07-06  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* aclang.m4 (AC_LANG_INT_SAVE(C++)): Be a copy of

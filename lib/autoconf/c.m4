@@ -513,8 +513,8 @@ AC_CACHE_VAL(ac_cv_prog_CPP,
   CPP="${CC-cc} -E"
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp.
-dnl Use a header file that comes with gcc, so configuring glibc
-dnl with a fresh cross-compiler works.
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
   AC_TRY_CPP([#include <assert.h>
 Syntax Error], ,
   CPP="${CC-cc} -E -traditional-cpp"
@@ -559,9 +559,9 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CC_GNU
 
-dnl Check whether -g works, even if CFLAGS is set, in case the package
-dnl plays around with CFLAGS (such as to build both debugging and
-dnl normal versions of a library), tasteless as that idea is.
+# Check whether -g works, even if CFLAGS is set, in case the package
+# plays around with CFLAGS (such as to build both debugging and normal
+# versions of a library), tasteless as that idea is.
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
 CFLAGS=
@@ -591,7 +591,7 @@ AC_LANG_POP
 # ---------------
 define([_AC_PROG_CC_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
-[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
+[# The semicolon is to pacify NeXT's syntax-checking cpp.
 cat >conftest.c <<EOF
 #ifdef __GNUC__
   yes;
@@ -740,16 +740,16 @@ AC_DEFUN([AC_PROG_CXX],
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_LANG_PUSH(C++)
 AC_CHECK_TOOLS(CXX,
-               $CCC m4_default([$1],
-                          [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC]),
+               [$CCC m4_default([$1],
+                          [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
                g++)
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
 
-dnl Check whether -g works, even if CXXFLAGS is set, in case the package
-dnl plays around with CXXFLAGS (such as to build both debugging and
-dnl normal versions of a library), tasteless as that idea is.
+# Check whether -g works, even if CXXFLAGS is set, in case the package
+# plays around with CXXFLAGS (such as to build both debugging and
+# normal versions of a library), tasteless as that idea is.
 ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS=
@@ -779,7 +779,7 @@ AC_LANG_POP
 # ----------------
 define([_AC_PROG_CXX_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
-[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
+[# The semicolon is to pacify NeXT's syntax-checking cpp.
 cat >conftest.cc <<EOF
 #ifdef __GNUC__
   yes;
@@ -823,6 +823,8 @@ rm -f conftest*
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for.
+# Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
+# `f95' is worth trying.
 #
 # Compilers are ordered by
 #  1. F77, F90, F95
@@ -831,23 +833,21 @@ rm -f conftest*
 # `fort77' and `fc' are wrappers around `f2c', `fort77' being better.
 # It is believed that under HP-UX `fort77' is the name of the native
 # compiler.  NAG f95 is preferred over `fc', so put `fc' last.
+# pgf77 is the Portland Group f77 compiler.
+# lf95 is the Lahey-Fujitsu compiler.
 AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-dnl Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
-dnl `f95' is worth trying.
-dnl pgf77 is the Portland Group f77 compiler
-dnl lf95 is the Lahey-Fujitsu compiler
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_TOOLS(F77,
-               m4_default([$1],
-                          [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc]))
+      [m4_default([$1],
+                  [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc])])
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
 
-dnl Check whether -g works, even if FFLAGS is set, in case the package
-dnl plays around with FFLAGS (such as to build both debugging and
-dnl normal versions of a library), tasteless as that idea is.
+# Check whether -g works, even if FFLAGS is set, in case the package
+# plays around with FFLAGS (such as to build both debugging and normal
+# versions of a library), tasteless as that idea is.
 ac_test_FFLAGS=${FFLAGS+set}
 ac_save_FFLAGS=$FFLAGS
 FFLAGS=
