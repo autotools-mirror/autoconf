@@ -1,5 +1,14 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	sizeof (struct {char a,b; }) is not required to be 2.
+	Reported by Johan Danielsson.
+
+	* tests/semantics.at (AC_CHECK_SIZEOF): Define charchar as an
+	array of 2 chars.
+	Suggested by Alexandre.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	Provide a means to display banners in the test suite.
 
 	* tests/atgeneral.m4 (AT_INIT): Initialize AT_banner_ordinal.
@@ -109,14 +118,14 @@
 	(AT_INIT): After having checked whether the test failed, break out
 	of the loop if requested (-e).
 
-	
+
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_SETUP): Don't build at-check-line, that's
 	AT_CHECK's job.
 	Remove the code depending upon `at_skip_mode': it's unused.
 
-	
+
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/atconfig.in: Remove the `snippet' marks, there are no
