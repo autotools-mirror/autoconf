@@ -22,7 +22,7 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ(2.52g)
 
-AC_INIT(GNU Autoconf, 2.52f, bug-autoconf@gnu.org)
+AC_INIT(GNU Autoconf, 2.52h, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 
 AC_CONFIG_AUX_DIR(config)
