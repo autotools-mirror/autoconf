@@ -1,3 +1,7 @@
+2001-06-19  Paul Eggert  <eggert@twinsun.com>
+
+	* NEWS, doc/autoconf.texi: Document quadrigraphs.
+
 2001-06-18  Akim Demaille  <akim@epita.fr>
 
 	* acfunctions.m4 (AC_FUNC_FORK): Fix typos.

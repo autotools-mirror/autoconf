@@ -1,6 +1,11 @@
 * Major changes in Autoconf 2.50a                       -*- outline -*-
 ** Documentation
 - AC_ARG_VAR
+- Quadrigraphs
+  This feature was present in autoconf 2.50 but was not documented.
+  For example, `@<:@' is translated to `[' just before output.  This
+  is useful when writing strings that contain unbalanced quotes, or
+  other hard-to-quote constructs.
 
 ** Default includes
 - Now include stdint.h.

@@ -298,6 +298,7 @@ M4 Quotation
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
+* Quadrigraphs::                Another way to escape special characters
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 
 Programming in M4sugar
@@ -5897,6 +5898,7 @@ former helps one to follow the latter.
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
+* Quadrigraphs::                Another way to escape special characters
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 @end menu
 
@@ -6027,7 +6029,7 @@ With this in mind, we can explore the cases where macros invoke
 macros@dots{}
 
 
-@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, M4 Quotation
+@node Quotation and Nested Macros, Quadrigraphs, One Macro Call, M4 Quotation
 @subsection Quotation and Nested Macros
 
 The examples below use the following macros:
@@ -6156,7 +6158,43 @@ they are given to the macro, often not in the way the users expect.
 Also, because @code{qar} behaves differently from the other macros,
 it's an exception that should be avoided in Autoconf.
 
-@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, M4 Quotation
+
+@node Quadrigraphs, Quotation Rule Of Thumb, Quotation and Nested Macros, M4 Quotation
+@subsection Quadrigraphs
+@cindex quadrigraphs
+@cindex @samp{@@<:@@}
+@cindex @samp{@@:>@@}
+@cindex @samp{@@S|@@}
+@cindex @samp{@@%:@@}
+
+When writing an autoconf macro you may occasionally need to generate
+special characters that are difficult to express with the standard
+autoconf quoting rules.  For example, you may need to output the regular
+expression @samp{[^[]}, which matches any character other than @samp{[}.
+This expression contains unbalanced brackets so it cannot be put easily
+into an M4 macro.
+
+You can work around this problem by using one of the following
+@dfn{quadrigraphs}:
+
+@table @samp
+@item @@<:@@
+@samp{[}
+@item @@:>@@
+@samp{]}
+@item @@S|@@
+@samp{$}
+@item @@%:@@
+@samp{#}
+@end table
+
+Quadrigraphs are replaced at a late stage of the translation process,
+after @command{m4} is run, so they do not get in the way of M4 quoting.
+For example, the string @samp{[^@@<:@@]}, if properly quoted, will
+appear as @samp{[^[]} in the @code{configure} script.
+
+
+@node Quotation Rule Of Thumb,  , Quadrigraphs, M4 Quotation
 @subsection Quotation Rule Of Thumb
 
 To conclude, the quotation rule of thumb is:
@@ -6232,7 +6270,8 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
                [ac_cv_var_tzname=no])
 @end example
 
-@c FIXME: Quadrigraphs and hopeless cases.
+See @xref{Quadrigraphs}, for what to do if you run into a hopeless case
+where quoting does not suffice.
 
 When you create a @code{configure} script using newly written macros,
 examine it carefully to check whether you need to add more quotes in
