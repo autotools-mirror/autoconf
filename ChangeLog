@@ -1,3 +1,8 @@
+2001-01-17  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_sub_srcdir in case
+	it has IFS characters.
+
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
 	Work around the Ultrix limitations on ``multiple redirections''.

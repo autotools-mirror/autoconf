@@ -4670,9 +4670,9 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_sub_srcdir/configure.gnu; then
-      ac_sub_configure="$SHELL $ac_sub_srcdir/configure.gnu"
+      ac_sub_configure="$SHELL '$ac_sub_srcdir/configure.gnu'"
     elif test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure="$SHELL $ac_sub_srcdir/configure"
+      ac_sub_configure="$SHELL '$ac_sub_srcdir/configure'"
     elif test -f $ac_sub_srcdir/configure.ac ||
            test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
@@ -4698,11 +4698,9 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
       # The eval makes quoting arguments work.
-      if eval $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
-      then :
-      else
+      eval $ac_sub_configure $ac_sub_configure_args \
+           --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir ||
         AC_MSG_ERROR([$ac_sub_configure failed for $ac_subdir])
-      fi
     fi
 
     cd $ac_popdir
