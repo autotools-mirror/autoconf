@@ -1917,8 +1917,7 @@ are found, set @var{variable} to the entire path of the program
 found.
 @end defmac
 
-@defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for} @r{[},
-@var{value-if-not-found} @r{[}, @var{path}@r{]]})
+@defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
 @maindex PATH_TOOL
 Like @code{AC_PATH_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by
