@@ -1,3 +1,8 @@
+1999-07-04  Mark Elbrecht  <snowball3@bigfoot.com>
+
+	* acspecific.m4 (AC_PROG_CXX): Look for gpp after g++. gpp is the
+	DJGPP C++ compiler, since `g++' is not a valid DOS filename.
+
 1999-06-12  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect Linux on ia64.

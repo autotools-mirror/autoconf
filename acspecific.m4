@@ -119,7 +119,7 @@ fi
 
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++ cl, gcc)
+AC_CHECK_PROGS(CXX, $CCC c++ g++ gpp gcc CC cxx cc++ cl, gcc)
 
 AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
