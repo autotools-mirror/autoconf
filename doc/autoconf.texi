@@ -10811,8 +10811,8 @@ line with @code{#}, not only the first.
 A command-line variable definition such as @code{foo=bar} overrides any
 definition of @code{foo} in the @file{Makefile}.  Some @command{make}
 implementations (such as @acronym{GNU} @command{make}) will propagate this
-override to sub-invocations of @command{make}.  This is allowed but not
-required by @acronym{POSIX}.
+override to sub-invocations of @command{make}.  Some other implementation
+will not pass the substitution along to sub-@command{make}s.
 
 @example
 % @kbd{cat Makefile}
@@ -10849,9 +10849,16 @@ and since the environment is inherited between @command{make}
 invocations, the @code{foo} macro will be overridden in
 sub-@code{make}s as expected.
 
-Using @code{-e} could have unexpected side-effects if your environment
-contains some other macros usually defined by the Makefile.  (See
-also the note about @code{make -e} and @code{SHELL} below.)
+This syntax (@code{foo=bar make -e}) is portable only when used
+outside a @file{Makefile}, for instance from a script or from the
+command line.  When run inside a @command{make} rule, GNU
+@command{make} 3.80 and prior versions forget to propagate the
+@code{-e} option to sub-@command{make}s.
+
+Moreover, using @code{-e} could have unexpected side-effects if your
+environment contains some other macros usually defined by the
+Makefile.  (See also the note about @code{make -e} and @code{SHELL}
+below.)
 
 Another way to propagate overrides to sub-@command{make}s is to do it
 manually, from your @file{Makefile}:
