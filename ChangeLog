@@ -1,3 +1,7 @@
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
+	* autoupdate.in: Less Bournisms, more Wallisms.
+
 2001-02-23  Jim Meyering  <meyering@lucent.com>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE_FS_SEPARATORS): Fix typo: s/;/:/

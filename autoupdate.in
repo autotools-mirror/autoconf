@@ -20,6 +20,7 @@
 # Originally written by David MacKenzie <djm@gnu.ai.mit.edu>.
 # Rewritten by Akim Demaille <akim@freefriends.org>.
 
+require 5.005;
 use Getopt::Long;
 use strict;
 
@@ -188,58 +189,97 @@ parse_args;
 $autoconf .= " -l $localdir";
 $ENV{'autoconf_dir'} = $autoconf_dir;
 
-# m4.txt -- the builtins of m4.
-system ("echo dumpdef | "
-	. "$m4 2>&1 >/dev/null | "
-	. "sed -n 's/:.*//p' "
-	. ">$tmp/m4.txt");
+# @M4_BUILTINS -- M4 builtins and a useful comment.
+open M4_BUILTINS, "echo dumpdef | $m4 2>&1 >/dev/null |"
+  or die "$me: cannot open: $!\n";
+my @m4_builtins = <M4_BUILTINS>;
+close M4_BUILTINS
+  or die "$me: cannot close: $!\n";
+map { s/:.*//;s/\W// } @m4_builtins;
+
 
 # m4.m4 -- enable the m4 builtins.
-system ("sed 's/^.*\$/_au_define([&], _au_defn([_au_&]))/' $tmp/m4.txt "
-	. ">$tmp/m4.m4");
-
 # unm4.m4 -- disable the m4 builtins.
-system ("sed 's/^.*\$/_au_undefine([&])/' $tmp/m4.txt >$tmp/unm4.m4");
-
 # savem4.m4 -- save the m4 builtins.
-system ("sed 's/^.*\$/define([_au_&], defn([&]))/' $tmp/m4.txt "
-	. ">$tmp/m4save.m4");
+open M4_M4, ">$tmp/m4.m4"
+  or die "$me: cannot open: $!\n";
+open UNM4_M4, ">$tmp/unm4.m4"
+  or die "$me: cannot open: $!\n";
+open M4SAVE_M4, ">$tmp/m4save.m4"
+  or die "$me: cannot open: $!\n";
+foreach (@m4_builtins)
+  {
+    print M4_M4     "_au_define([$_], _au_defn([_au_$_]))\n";
+    print UNM4_M4   "_au_undefine([$_])\n";
+    print M4SAVE_M4 "define([_au_$_], defn([$_]))\n";
+  }
+close M4SAVE_M4
+  or die "$me: cannot close: $!\n";
+close UNM4_M4
+  or die "$me: cannot close: $!\n";
+close M4_M4
+  or die "$me: cannot close: $!\n";
 
-# au.txt -- list of all the AU macros.
-system ("$autoconf --trace AU_DEFUN:'\$1' -i /dev/null | "
-	. "sort -u "
-	. ">$tmp/au.txt");
 
-# au-del.sed -- delete the AU macro names.
-system ("sed \"s,^.*\$,/&/d,\" $tmp/au.txt "
-	. " >$tmp/au-del.sed");
+# @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
+open MACROS, ("$autoconf "
+	      . "--trace AU_DEFUN:'AU:\$f:\$1' --trace define:'AC:\$f:\$1' "
+	      . "-i /dev/null |")
+  or die "$me: cannot open: $!\n";
+my (%ac_macros, %au_macros);
+while (<MACROS>)
+  {
+    chomp;
+    /^(AC|AU):(.*):([^:]*)$/ or next;
+    if ($1 eq "AC")
+      {
+	$ac_macros{$3} = $2;
+      }
+    else
+      {
+	$au_macros{$3} = $2;
+      }
+  }
+close MACROS
+  or die "$me: cannot close: $!\n";
+# Don't keep AU macros in @AC_MACROS.
+delete $ac_macros{$_}
+  foreach (keys %au_macros);
+print STDERR "AC: " . join (' ', sort keys %ac_macros) . "\n\n\n";
+print STDERR "AU: " . join (' ', sort keys %au_macros) . "\n";
+
+# $au_changequote -- enable the quote `[', `]' right before any AU macro.
+my $au_changequote =
+  's/\b(' . join ('|', keys %au_macros) . ')\b/_au_changequote([,])$1/g';
+print STDERR "$au_changequote\n";
 
 # au.m4 -- definitions the AU macros.
 system ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
 \@<:\@\$2\@:>\@)' -i /dev/null "
 	. ">$tmp/au.m4");
 
-# quote.sed -- enable the quote `[', `]' right before any AU macro.
-# Unfortunately, I can't see a solution which does not use `\b', which
-# is a GNU extension :(.  Am I understanding we should use Perl?
-system ('sed \'s/^.*$/s!\\\\b&\\\\b!_au_changequote([,])\\&!/\'' . " $tmp/au.txt "
-	. ">$tmp/quote.sed");
-
-# ac.txt -- list of all the AC and m4sugar macros prefixed by the name
-# of the file which defines it.
-# Be carefull to remove the AU macros.
-system ("$autoconf --trace define:'\$f:\$1' -i /dev/null | "
-	. "sed -f $tmp/au-del.sed "
-	. ">$tmp/ac.txt");
-
-# ac.m4 -- autoquoting definitions of the AC macros.
-system ('sed -n \'/m4sugar.m4/!s/^[^:]*:\(.*\)$/_au_define([\1], [[$0($@)]])/p\''
-	. " $tmp/ac.txt"
-	. ">$tmp/ac.m4");
-
+# ac.m4 -- autoquoting definitions of the AC macros (M4sugar excluded).
 # disable.m4 -- undefine the macros of AC and m4sugar.
-system ('sed \'s/^[^:]*:\\(.*\\)$/_au_undefine([\1])/\'' . " $tmp/ac.txt "
-	. ">$tmp/disable.m4");
+open AC_M4, ">$tmp/ac.m4"
+  or die "$me: cannot open: $!\n";
+open DISABLE_M4, ">$tmp/disable.m4"
+  or die "$me: cannot open: $!\n";
+foreach (sort keys %ac_macros)
+  {
+    print AC_M4      "_au_define([$_], [[\$0(\$\@)]])\n"
+      unless $ac_macros{$_} eq "m4sugar.m4";
+    print DISABLE_M4 "_au_undefine([$_])\n";
+  }
+close DISABLE_M4
+  or die "$me: cannot close: $!\n";
+close AC_M4
+  or die "$me: cannot close: $!\n";
+
+
+
+## ------------------- ##
+## Process the files.  ##
+## ------------------- ##
 
 foreach my $file (@ARGV)
   {
@@ -353,9 +393,18 @@ EOF
 
     # prepared input -- input, but reenables the quote before each AU macro.
     open INPUT_M4, ">$tmp/input.m4";
-    print INPUT_M4 "$input_m4\n";
-    close INPUT_M4;
-    system ("sed -f $tmp/quote.sed $file >>$tmp/input.m4");
+    print INPUT_M4 "$input_m4";
+    open FILE, "<$file"
+       or die "$me: cannot open: $!\n";
+    while (<FILE>)
+       {
+	 eval $au_changequote;
+	 print INPUT_M4;
+       }
+    close FILE
+       or die "$me: cannot close: $!\n";
+    close INPUT_M4
+       or die "$me: cannot close: $!\n";
 
     # Now ask m4 to perform the update.
     print STDERR "$me: running $m4 $tmp/input.m4"
