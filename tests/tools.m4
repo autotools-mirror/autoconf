@@ -48,7 +48,7 @@ AT_DATA(syntax.sh,
 [[set -e
 (/bin/sh -n endless.sh) &
 cpid=$!
-sleep 2 && kill $cpid >/dev/null 2>&1
+sleep 2 && kill $cpid >/dev/null 2>&1 || exit 1
 ]])
 
 if /bin/sh ./syntax.sh; then
