@@ -2503,10 +2503,10 @@ m4_define([AC_LIBOBJ],
 ## ----------------------------------- ##
 
 
-# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, [INCLUDES])
+# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, [INCLUDES], [IF-FAILS])
 # ---------------------------------------------------------
 # Compute the integer EXPRESSION and store the result in the VARIABLE.
-# Works OK if cross compiling.
+# Works OK if cross compiling, but assumes twos-complement arithmetic.
 m4_define([_AC_COMPUTE_INT_COMPILE],
 [# Depending upon the size, compute the lo and hi bounds.
 AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
@@ -2514,21 +2514,36 @@ AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
   while :; do
     AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
                    [ac_hi=$ac_mid; break],
-                   [ac_lo=`expr $ac_mid + 1`; ac_mid=`expr 2 '*' $ac_mid + 1`])
+                   [ac_lo=`expr $ac_mid + 1`
+                    if test $ac_lo -le $ac_mid; then
+                      ac_lo= ac_hi=
+                      break
+                    fi
+                    ac_mid=`expr 2 '*' $ac_mid + 1`])
   done],
+[AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) < 0])],
  [ac_hi=-1 ac_mid=-1
   while :; do
     AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_mid])],
                       [ac_lo=$ac_mid; break],
-                      [ac_hi=`expr '(' $ac_mid ')' - 1`; ac_mid=`expr 2 '*' $ac_mid`])
-  done])
+                      [ac_hi=`expr '(' $ac_mid ')' - 1`
+                       if test $ac_mid -le $ac_hi; then
+                         ac_lo= ac_hi=
+                         break
+                       fi
+                       ac_mid=`expr 2 '*' $ac_mid`])
+  done],
+ [ac_lo= ac_hi=])])
 # Binary search between lo and hi bounds.
 while test "x$ac_lo" != "x$ac_hi"; do
   ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
   AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
                      [ac_hi=$ac_mid], [ac_lo=`expr '(' $ac_mid ')' + 1`])
 done
-$2=$ac_lo[]dnl
+case $ac_lo in
+?*) $2=$ac_lo;;
+'') $4 ;;
+esac[]dnl
 ])# _AC_COMPUTE_INT_COMPILE
 
 
@@ -2544,7 +2559,7 @@ m4_define([_AC_COMPUTE_INT_RUN],
 # ---------------------------------------------------------
 m4_define([_AC_COMPUTE_INT],
 [if test "$cross_compiling" = yes; then
-  _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3])
+  _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3], [$4])
 else
   _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
 fi
