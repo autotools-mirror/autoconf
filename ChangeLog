@@ -1,5 +1,8 @@
 1999-10-13  Ben Elliston  <bje@cygnus.com>
 
+	* acconfig.h: Reintroduce missing definitions due to testsuite
+	regressions.
+
 	* autoconf.texi (Configuration Headers): Document the potential
 	trouble caused by autoheader and boilerplate files. Fix for
 	PR autoconf/45.

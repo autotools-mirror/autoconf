@@ -153,6 +153,9 @@
 /* Define if on MINIX.  */
 #undef _MINIX
 
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef mode_t
+
 /* Define if you don't have <dirent.h>, but have <ndir.h>.  */
 #undef NDIR
 
@@ -171,6 +174,12 @@
 
 /* Define if your Fortran 77 compiler doesn't accept -c and -o together. */
 #undef F77_NO_MINUS_C_MINUS_O
+
+/* Define to `long' if <sys/types.h> doesn't define.  */
+#undef off_t
+
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef pid_t
 
 /* Define if the system does not provide POSIX.1 features except
    with this defined.  */
@@ -198,6 +207,9 @@
    argument and the buffer pointer as the third, as on System V
    before release 3.  */
 #undef SETVBUF_REVERSED
+
+/* Define to `unsigned' if <sys/types.h> doesn't define.  */
+#undef size_t
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
