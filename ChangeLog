@@ -1,5 +1,9 @@
 2000-02-11  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.m4: Nuke the trailing space in defs.
+
+2000-02-11  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4: Really added to the CVS repository.
 
 2000-02-11  Akim Demaille  <akim@epita.fr>

@@ -189,6 +189,8 @@ AT_DATA(expout,
 [[ -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA]
 ])
 
-AT_CHECK([cat defs], 0, expout)
+# Because we strip trailing spaces in `testsuite' we can't leave one in
+# expout, hence nuke the one left by AC_OUTPUT_MAKE_DEFS.
+AT_CHECK([sed -e 's/ $//' defs], 0, expout)
 
 AT_CLEANUP(configure config.status config.log config.cache config.h defs)
