@@ -1,3 +1,8 @@
+2001-08-17  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Function Portability): Mention snprintf,
+	following up on a suggestion by Kevin Ryde.
+
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
 	* doc/install.texi, doc/autoconf.texi: Use `autoconf', not
