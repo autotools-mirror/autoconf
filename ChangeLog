@@ -1,5 +1,17 @@
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
+	Load the additions *before* running AC_INIT.
+	This is important if you want to redefine AC_INIT or some of its
+	sub macros (eeerk!), or if you want to use user defined macros
+	before AC_INIT.
+	Suggested by Didier Verna.
+
+	* acgeneral.m4 (_AC_INIT): Don't include `acsite.m4' and
+	`aclocal.m4'.
+	* autoconf.sh (run_m4, run_m4f): Do it.
+
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
 	Reading the ChangeLog revealed that the recent update of
 	AC_FUNC_GETLOADAVG introduced a bug which already happened (see
 	Mon Nov 11 18:02:58 1996  David J MacKenzie).

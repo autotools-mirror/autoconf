@@ -105,7 +105,7 @@ esac
 debug=false
 # Trace Autoconf's initialization?
 initialization=false
-localdir=
+localdir=.
 outfile=
 # Exit status.
 status=0
@@ -231,9 +231,11 @@ $debug ||
 }
 
 # Running m4.
-test -n "$localdir" && use_localdir="-I$localdir"
-run_m4="$M4 $use_localdir -I $AC_MACRODIR autoconf.m4"
-run_m4f="$M4 $use_localdir --reload $AC_MACRODIR/autoconf.m4f"
+test -f "$AC_MACRODIR/acsite.m4" && acsite_m4="$AC_MACRODIR/acsite.m4"
+test -f "$localdir/aclocal.m4"   && aclocal_m4="$localdir/aclocal.m4"
+m4_common="$acsite_m4 $aclocal_m4 -I $AC_MACRODIR -I $localdir"
+run_m4="$M4           $AC_MACRODIR/autoconf.m4  $m4_common"
+run_m4f="$M4 --reload $AC_MACRODIR/autoconf.m4f $m4_common"
 
 # Find the input file.
 case $# in

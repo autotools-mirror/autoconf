@@ -1577,9 +1577,7 @@ AC_DIVERT_POP()dnl
 # Include the user macro files, prepare the diversions, and output the
 # preamble of the `configure' script.
 define([_AC_INIT],
-[m4_sinclude(acsite.m4)dnl
-m4_sinclude(./aclocal.m4)dnl
-AC_DIVERT([BINSH], [@%:@! /bin/sh])
+[AC_DIVERT([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS()dnl
 AC_DIVERT_POP()dnl to NORMAL
 _AC_INIT_PARSE_ARGS
