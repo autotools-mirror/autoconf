@@ -1,5 +1,18 @@
 2000-08-04  Akim Demaille  <akim@epita.fr>
 
+	Solaris' /usr/ucb/expr, and SunOS' /usr/bin/expr fail with the `:'
+	operator when \(\) is used, and matches a string longer than 120
+	characters.
+	Reported by Geoff Keating.
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Some words about
+	this.
+	* acgeneral.m4 (_AC_SHELL_DIRNAME): Fall back to echo|sed if expr
+	fails.
+	From Paul Eggert.
+
+2000-08-04  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: (AC_RUN_IFELSE, AC_LINK_IFELSE, AC_COMPILE_IFELSE):
 	Don't create the source file if none is given, and in this case,
 	don't remove it either.
