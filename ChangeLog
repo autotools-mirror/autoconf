@@ -1,3 +1,10 @@
+2001-03-13  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.pl, autoupdate.in: Use `use' instead of `require' to
+	require some version of Perl, so that the test is performed at
+	compile time, not run time.
+	Suggested by Nicolas Joly.
+
 2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
 
 	* tests/aclocal.m4: Fix some typos.  Also ignore $PATH_SEPARATOR.

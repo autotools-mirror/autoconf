@@ -19,6 +19,7 @@
 
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
+use 5.005;
 require "find.pl";
 use Getopt::Long;
 use strict;

@@ -20,7 +20,7 @@
 # Originally written by David MacKenzie <djm@gnu.ai.mit.edu>.
 # Rewritten by Akim Demaille <akim@freefriends.org>.
 
-require 5.005;
+use 5.005;
 use Getopt::Long;
 use File::Basename;
 use strict;
