@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-me=`echo "$0" | sed -e 's,.*/,,'`
+me=`echo "$0" | sed -e 's,.*[\\/],,'`
 
 usage="\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
@@ -95,8 +95,8 @@ ac_LF_and_DOT=`echo; echo .`
 # Handle the case that m4 has moved since we were configured.
 # It may have been found originally in a build directory.
 : ${M4=@M4@}
-case $M4 in
-/*|[a-zA-Z]:*) test -f "$M4" || M4=m4 ;;
+case "$M4" in
+  [\\/]* | ?:[\\/]*) test -f "$M4" || M4=m4 ;;
 esac
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help </dev/null 2>&1` in
@@ -322,7 +322,7 @@ case $task in
   # Put the real line numbers into configure to make config.log more
   # helpful.  Because quoting can sometimes get really painful in m4,
   # there are special @tokens@ to substitute.
-  sed 's/^    //' >$tmp/finalize.awk <<EOF
+  sed 's/^    //' >"$tmp/finalize.awk" <<EOF
     # Load the list of tokens which escape the forbidden patterns.
     BEGIN {
       # Be sure the read GAWK documentation to understand the parens
@@ -344,7 +344,10 @@ case $task in
 
     function errprint (message)
     {
-      print message | "cat >&2"
+      # BAD! the pipe to 'cat >&2' doesn't work for DJGPP.
+      #  print message | "cat >&2"
+      # Use normal redirection instead:
+      print message > "$tmp/finalize.err"
     }
 
     function undefined (file, line, macro)
@@ -421,8 +424,10 @@ case $task in
 EOF
     $AWK -v tmp="$tmp" \
          `$verbose "-v verbose=1"` \
-         -f $tmp/finalize.awk <$tmp/configure >&4 ||
-      { (exit 1); exit; }
+         -f "$tmp/finalize.awk" <$tmp/configure >&4 ||
+      { test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
+        (exit 1); exit; }
+    test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
   ;; # End of the task script.
 
 

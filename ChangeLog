@@ -1,3 +1,17 @@
+2001-03-30  Tim Van Holder <tim.van.holder@pandora.be>
+
+	* m4sh.m4 (AS_BASENAME): New.
+	(AS_SHELL_SANITIZE): Set `$as_me'.
+	* acgeneral.m4: Don't set as_me; AS_SHELL_SANITIZE now does this.
+	* tests/atgeneral.m4: Likewise.
+	(AT_INIT): Use $PATH_SEPARATOR for walking the path.
+	* autoconf.sh: Be DOS-friendly when setting as_me and M4.
+	Add quotes to support spaces in $tmp.
+	Work around problem in DJGPP port of awk by using a temporary file.
+	* autoheader.sh: Be DOS-friendly when setting as_me.
+	* autoreconf.sh: Be DOS-friendly when setting as_me, dir and
+	template_dir.
+
 2001-03-27  Lars J. Aas  <larsa@sim.no>
 
 	* acgeneral.m4 (AC_INIT_VERSION): Improved version information string

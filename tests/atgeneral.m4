@@ -95,9 +95,6 @@ m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
 AS_SHELL_SANITIZE
-
-# Name of the executable.
-as_me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 . ./atconfig
@@ -108,12 +105,12 @@ at_top_srcdir=`cd "$top_srcdir" && pwd`
 # Don't take risks: use absolute path names.
 at_path=`pwd`
 at_IFS_save=$IFS
-IFS=:
+IFS=$PATH_SEPARATOR
 for at_dir in $AUTOTEST_PATH $PATH; do
   # There might be directories that don't exist, but don't redirect
   # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
   at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  test -n "$at_dir" && at_path=$at_path:$at_dir
+  test -n "$at_dir" && at_path="$at_path$PATH_SEPARATOR$at_dir"
 done
 IFS=$at_IFS_save
 PATH=$at_path

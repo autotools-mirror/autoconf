@@ -723,9 +723,6 @@ AS_SHELL_SANITIZE
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 
-# Name of the executable.
-as_me=`echo "$[0]" | sed 's,.*/,,'`
-
 cat >config.log <<EOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -3596,7 +3593,6 @@ cat >$CONFIG_STATUS <<_ACEOF
 # configure, is in config.log if it exists.
 
 debug=false
-as_me=\`echo "\$[0]" | sed 's,.*/,,'\`
 SHELL=\${CONFIG_SHELL-$SHELL}
 
 _ACEOF
@@ -4000,8 +3996,8 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     for f in $ac_file_in; do
       case $f in
       -) echo $tmp/stdin ;;
-      [[\\/$]]* | ?:[[\\/]]*)
-         # Absolute
+      [[\\/$]]*)
+         # Absolute (can't be DOS-style, as IFS=:)
          test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
          echo $f;;
       *) # Relative
@@ -4147,8 +4143,8 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
     for f in $ac_file_in; do
       case $f in
       -) echo $tmp/stdin ;;
-      [[\\/$]]* | ?:[[\\/]]*)
-         # Absolute
+      [[\\/$]]*)
+         # Absolute (can't be DOS-style, as IFS=:)
          test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
          echo $f;;
       *) # Relative

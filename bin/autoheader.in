@@ -20,7 +20,7 @@
 
 # Written by Roland McGrath.
 
-me=`echo "$0" | sed -e 's,.*/,,'`
+me=`echo "$0" | sed -e 's,.*[/\\],,'`
 
 usage="\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]

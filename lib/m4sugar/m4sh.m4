@@ -66,6 +66,10 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
+# Name of the executable.
+dnl Moved here because the tests below can use AC_MSG_ERROR, which uses $as_me
+as_me=`AS_BASENAME($[0])`
+
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_TEST_PREPARE
@@ -291,6 +295,13 @@ m4_defun([AS_DIRNAME],
 AS_DIRNAME_SED([$1])])
 
 
+# AS_BASENAME(PATHNAME)
+# --------------------
+# Simulate running `basename(1)' on PATHNAME, not all systems have it.
+# This macro must be usable from inside ` `.
+m4_defun([AS_BASENAME],
+[echo "$1" |sed 's,.*[[\\/]],,'])
+
 # AS_EXECUTABLE_P
 # ---------------
 # Check whether a file is executable.
@@ -317,7 +328,7 @@ fi
 # _AS_LN_S_PREPARE
 # ----------------
 # Don't use conftest.sym to avoid filename issues on DJGPP, where this
-# would yield conftest.sym.exe for DJGPP < 2.04.  And do use `conftest'
+# would yield conftest.sym.exe for DJGPP < 2.04.  And don't use `conftest'
 # as base name to avoid prohibiting concurrency (e.g., concurrent
 # config.statuses).
 m4_defun([_AS_LN_S_PREPARE],

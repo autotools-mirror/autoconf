@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-me=`echo "$0" | sed -e 's,.*/,,'`
+me=`echo "$0" | sed -e 's,.*[\\/],,'`
 
 usage="\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
@@ -91,7 +91,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 debug=false
-dir=`echo "$0" | sed -e 's,[^/]*$,,'`
+dir=`echo "$0" | sed -e 's,[^\\/]*$,,'`
 force=false
 # --install -- as --add-missing in other tools.
 install=false
@@ -382,7 +382,7 @@ while read dir; do
         : colon
         s/:.*//
       '`
-    template_dir=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`
+    template_dir=`echo $template | sed -e 's,[\\/]*[^\\/]*$,,;s,^$,.,'`
     stamp_num=`test "$tcount" -gt 1 && echo "$tcount"`
     stamp=$template_dir/stamp-h$stamp_num.in
     # If config.hin exists, don't override it unless it was really
