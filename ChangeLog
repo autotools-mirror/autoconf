@@ -1,3 +1,7 @@
+1998-10-03  Ben Elliston  <bje@cygnus.com>
+
+	* README: Update bug reporting address. Include maintainer info.
+
 1998-10-02  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_VALIDATE_CACHED_SYSTEM_TUPLE): New macro. This
