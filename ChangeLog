@@ -1,3 +1,11 @@
+2001-02-07  Pavel Roskin  <proski@gnu.org>
+
+	* tests/atspecific.m4 (AT_CONFIGURE_AC): Double quote constant
+	part of the second argument to AT_DATA.
+	* tests/compile.at (AC_PROG_CPP with warnings): Fix underquoting
+	in a call to _AT_CHECK_AC_MACRO.
+	(AC_PROG_CPP without warnings): Likewise.
+
 2001-02-11  Jim Meyering  <meyering@lucent.com>
 
 	Ensure that even `autoscan --version' fails when e.g.,

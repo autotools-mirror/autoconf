@@ -29,14 +29,14 @@ include(atgeneral.m4)					-*- Autoconf -*-
 m4_define([AT_CONFIGURE_AC],
 [AT_CLEANUP_FILES(env-after state*)dnl
 AT_DATA([configure.ac],
-[AC_INIT
+[[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
-AC_STATE_SAVE(before)
+AC_STATE_SAVE(before)]
 $1
-AC_OUTPUT
+[AC_OUTPUT
 AC_STATE_SAVE(after)
-])])
+]])])
 
 
 # AT_CHECK_AUTOCONF(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)

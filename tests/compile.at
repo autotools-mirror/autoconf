@@ -146,12 +146,12 @@ exec ${1+"$@"}
 chmod +x mycpp
 
 _AT_CHECK_AC_MACRO(
-[AC_PROG_CPP
+[[AC_PROG_CPP
 # If the preprocessor is not strict, just ignore
 test "x$ac_c_preproc_warn_flag" = xyes &&
   AC_MSG_ERROR([preprocessor has no warning option], 77)
 CPP="./mycpp $CPP"
-AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
@@ -176,7 +176,7 @@ exit 0
 chmod +x mycpp
 
 _AT_CHECK_AC_MACRO(
-[# Ignore if /lib/cpp doesn't work
+[[# Ignore if /lib/cpp doesn't work
 if AC_TRY_COMMAND([/lib/cpp </dev/null >&2]); then :; else
   AC_MSG_ERROR([preprocessor doesn't work], 77)
 fi
@@ -184,7 +184,7 @@ CPP=./mycpp
 AC_PROG_CPP
 test "x$ac_c_preproc_warn_flag" != xyes &&
   AC_MSG_ERROR([failed to detect preprocessor warning option])
-AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
