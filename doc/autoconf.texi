@@ -4393,7 +4393,7 @@ removed because of limited usefulness
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
-uses in some way.  Some it sets, others it only checks.
+checks.
 
 @printindex ev
 
