@@ -1,5 +1,17 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	Provide a language independent means to generate language specific
+	programs.
+
+	* acgeneral.m4 (_AC_LANG_DISPATCH): New macro.
+	(AC_LANG): Use it.
+	(AC_LANG_SOURCE, AC_LANG_SOURCE(C), AC_LANG_SOURCE(C++),
+	AC_LANG_SOURCE(FORTRAN77)): New macros.
+	(AC_TRY_COMPILER, AC_EGREP_CPP, AC_TRY_RUN_NATIVE): Use
+	AC_LANG_SOURCE.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	Fix a bug: some macros (e.g., AC_REVISION, AC_COPYRIGHT etc.) can
 	be used before AC_INIT, but they do require it.  But then, the
 	argument of the explicit AC_INIT call is lost.

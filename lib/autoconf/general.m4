@@ -2096,6 +2096,16 @@ AC_LANG(AC_LANG_STACK)dnl
 popdef([AC_LANG_STACK])])
 
 
+# _AC_LANG_DISPATCH(MACRO, LANG, ARGS)
+# ------------------------------------
+# Call the specialization of MACRO for LANG with ARGS.  Complain if
+# unavailable.
+define([_AC_LANG_DISPATCH],
+[ifdef([$1($2)],
+       [indir([$1($2)], m4_shiftn(2, $@))],
+       [AC_FATAL([$1: unknown language: $2])])])
+
+
 # AC_LANG(LANG)
 # -------------
 # Set the current language to LANG.
@@ -2105,10 +2115,22 @@ popdef([AC_LANG_STACK])])
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[ifdef([AC_LANG($1)],
-       [define([_AC_LANG_CURRENT], [$1])dnl
-indir([AC_LANG($1)])],
-       [AC_FATAL([$0: unknown language: $1])])])
+[m4_define([_AC_LANG_CURRENT], [$1])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+
+
+# AC_LANG_SOURCE(BODY)
+# --------------------
+# Produce a valid source for the current language, which includes the BODY.
+# Include the `#line' sync lines.
+AC_DEFUN([AC_LANG_SOURCE],
+[_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+
+
+
+# ---------------- #
+# The C language.  #
+# ---------------- #
 
 
 # AC_LANG(C)
@@ -2128,6 +2150,20 @@ cross_compiling=$ac_cv_prog_cc_cross
 AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
 
+# AC_LANG_SOURCE(C)(BODY)
+# -----------------------
+define([AC_LANG_SOURCE(C)],
+[#line __oline__ "configure"
+#include "confdefs.h"
+$1])
+
+
+
+# ------------------ #
+# The C++ language.  #
+# ------------------ #
+
+
 # AC_LANG(C++)
 # ------------
 define([AC_LANG(C++)],
@@ -2145,6 +2181,24 @@ cross_compiling=$ac_cv_prog_cxx_cross
 AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 
 
+# AC_LANG_SOURCE(C++)(BODY)
+# -------------------------
+define([AC_LANG_SOURCE(C++)],
+[#line __oline__ "configure"
+#include "confdefs.h"
+#ifdef __cplusplus
+extern "C" void exit (int);
+#endif
+$1])
+
+
+
+
+# ------------------------- #
+# The Fortran 77 language.  #
+# ------------------------- #
+
+
 # AC_LANG(FORTRAN77)
 # ------------------
 define([AC_LANG(FORTRAN77)],
@@ -2158,6 +2212,15 @@ cross_compiling=$ac_cv_prog_f77_cross
 # AC_LANG_FORTRAN77
 # -----------------
 AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(FORTRAN77)])
+
+
+# AC_LANG_SOURCE(FORTRAN77)(BODY)
+# -------------------------------
+# FIXME: Apparently, according to former AC_TRY_COMPILER, the CPP
+# directives must not be included.  But AC_TRY_RUN_NATIVE was not
+# avoiding them, so?
+define([AC_LANG_SOURCE(FORTRAN77)],
+[$1])
 
 
 
@@ -2541,12 +2604,7 @@ popdef([AC_Prog])dnl
 # language.
 AC_DEFUN(AC_TRY_COMPILER,
 [cat >conftest.$ac_ext <<EOF
-AC_LANG_CASE([FORTRAN77], ,
-[
-#line __oline__ "configure"
-#include "confdefs.h"
-])
-[$1]
+AC_LANG_SOURCE([[$1]])
 EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   [$2]=yes
@@ -2694,8 +2752,7 @@ popdef([AC_Lib_Name])dnl
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-#line __oline__ "configure"
-#include "confdefs.h"
+AC_LANG_SOURCE([[$1]])
 [$1]
 EOF
 dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
@@ -2733,9 +2790,7 @@ AC_DEFUN(AC_EGREP_HEADER,
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-#line __oline__ "configure"
-#include "confdefs.h"
-[$2]
+AC_LANG_SOURCE([[$2]])
 EOF
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
@@ -2875,13 +2930,7 @@ fi
 # Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
-#line __oline__ "configure"
-#include "confdefs.h"
-AC_LANG_CASE(C++, [#ifdef __cplusplus
-extern "C" void exit(int);
-#endif
-])dnl
-[$1]
+AC_LANG_SOURCE([[$1]])
 EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} &&
    (./conftest; exit) 2>/dev/null; then
