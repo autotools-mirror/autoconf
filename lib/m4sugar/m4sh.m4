@@ -270,7 +270,7 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # ---------------------------------
 # Escape the CHARS in STRING.
 m4_define([AS_ESCAPE],
-[m4_patsubst([$1],
+[m4_bpatsubst([$1],
              m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
              [\\\1])])
 
@@ -284,7 +284,7 @@ m4_define([AS_ESCAPE],
 # Otherwise it's modern.
 # We use two quotes in the pattern to keep highlighting tools at peace.
 m4_define([_AS_QUOTE_IFELSE],
-[m4_match([$1],
+[m4_bmatch([$1],
           [\\[\\$]], [$2],
           [\\[`""]], [$3],
           [$2])])
@@ -704,7 +704,7 @@ _ASBOX])
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
 m4_define([AS_LITERAL_IF],
-[m4_match([$1], [[`$]],
+[m4_bmatch([$1], [[`$]],
           [$3], [$2])])
 
 
@@ -811,7 +811,7 @@ as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
 m4_defun([AS_TR_SH],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-              [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
+              [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
                            [[^a-zA-Z0-9_]], [_])],
               [`echo "$1" | $as_tr_sh`])])
 
@@ -833,7 +833,7 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
 m4_defun([AS_TR_CPP],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-              [m4_patsubst(m4_translit([[$1]],
+              [m4_bpatsubst(m4_translit([[$1]],
                                        [*abcdefghijklmnopqrstuvwxyz],
                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
                            [[^A-Z0-9_]], [_])],
@@ -883,7 +883,7 @@ m4_define([AS_VAR_SET],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
                [$$1],
-               [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`])])
+               [`eval echo '${'m4_bpatsubst($1, [[\\`]], [\\\&])'}'`])])
 
 
 # AS_VAR_TEST_SET(VARIABLE)

@@ -6789,10 +6789,24 @@ m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
 to recover the behavior of the builtin.
 @end defmac
 
+@defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
+@msindex bpatsubst
+This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
+is kept for future versions of M4sh, on top of @sc{gnu} M4 which will
+provide extended regular expression syntax via @code{epatsubst}.
+@end defmac
+
 @defmac m4_popdef (@var{macro})
 @msindex defn
 Contrary to the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
+@end defmac
+
+@defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
+@msindex bregexp
+This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
+is kept for future versions of M4sh, on top of @sc{gnu} M4 which will
+provide extended regular expression syntax via @code{eregexp}.
 @end defmac
 
 @defmac m4_wrap (@var{text})
@@ -7302,14 +7316,14 @@ syntax-highlighting editors, from behaving improperly.  For instance,
 instead of:
 
 @example
-m4_patsubst([$1], [$"])
+m4_bpatsubst([$1], [$"])
 @end example
 
 @noindent
 use
 
 @example
-m4_patsubst([$1], [$""])
+m4_bpatsubst([$1], [$""])
 @end example
 
 @noindent
@@ -11764,7 +11778,7 @@ sophisticated application like Autoconf, including:
 @example
 m4_builtin
 m4_indir
-m4_patsubst
+m4_bpatsubst
 __file__
 __line__
 @end example

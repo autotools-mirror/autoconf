@@ -373,9 +373,9 @@ m4_define([AT_DESCRIPTION],
 # turned into ac_uummy during the construction of config.status.  Yes,
 # this is admittedly a bug, but it would be too hard to fix this.
 # There is really no point in AC_DEFINE a var named ac_d.*.
-m4_pattern_allow([^m4_patsubst$])
+m4_pattern_allow([^m4_bpatsubst$])
 m4_define([AT_DUMMY_VAR],
-[ac_Dummy_[]m4_patsubst([000$1], [.*\(...\)$], [\1])])
+[ac_Dummy_[]m4_bpatsubst([000$1], [.*\(...\)$], [\1])])
 
 
 

@@ -73,7 +73,7 @@ m4_define([_m4_divert(TAIL)],         60)
 #
 # Gee, we can't use simply
 #
-#  m4_patsubst(__file__, [^.*/\(.*\)], [[\1]])
+#  m4_bpatsubst(__file__, [^.*/\(.*\)], [[\1]])
 #
 # since then, since `dnl' doesn't match the pattern, it is returned
 # with once quotation level less, so you lose, dammit!  And since GNU M4
@@ -81,7 +81,7 @@ m4_define([_m4_divert(TAIL)],         60)
 # even think about using `?' or `\?'.  Bah, `*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!
 m4_define([AT_LINE],
-[m4_patsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
+[m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
 # AT_INIT([TESTSUITE-NAME])
@@ -681,7 +681,7 @@ m4_define([_AT_CLEANUP_FILE],
 # -----------------------
 # Declare a list of FILES to clean.
 m4_define([AT_CLEANUP_FILES],
-[m4_foreach([AT_File], m4_quote(m4_patsubst([$1], [  *], [,])),
+[m4_foreach([AT_File], m4_quote(m4_bpatsubst([$1], [  *], [,])),
             [_AT_CLEANUP_FILE(AT_File)])])
 
 

@@ -152,7 +152,7 @@ m4_define([AH_CHECK_LIB],
 # it must be a literal name.
 AU_DEFUN([AC_HAVE_LIBRARY],
 [m4_pushdef([AC_Lib_Name],
-            m4_patsubst(m4_patsubst([[$1]],
+            m4_bpatsubst(m4_bpatsubst([[$1]],
                                     [lib\([^\.]*\)\.a], [\1]),
                         [-l], []))dnl
 AC_CHECK_LIB(AC_Lib_Name, main, [$2], [$3], [$4])dnl

@@ -186,7 +186,7 @@ ac_top_srcpath=`cd $1 && cd $ac_top_srcdir && pwd`
 # matching.  The big problem is then that the active characters should
 # be quoted.  Currently `+*.' are quoted.
 m4_define([AC_CONFIG_IF_MEMBER],
-[m4_match($2, [\(^\| \)]m4_re_escape([$1])[\(:\| \|$\)]),
+[m4_bmatch($2, [\(^\| \)]m4_re_escape([$1])[\(:\| \|$\)]),
           [$3], [$4])])
 
 
@@ -213,7 +213,7 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 m4_define([_AC_CONFIG_DEPENDENCIES],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
-  [_AC_CONFIG_DEPENDENCY(m4_patsubst(AC_File, [:], [,]))])
+  [_AC_CONFIG_DEPENDENCY(m4_bpatsubst(AC_File, [:], [,]))])
 m4_divert_pop([KILL])dnl
 ])
 
@@ -230,7 +230,7 @@ m4_divert_pop([KILL])dnl
 m4_define([_AC_CONFIG_UNIQUE],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
-[m4_pushdef([AC_Dest], m4_patsubst(AC_File, [:.*]))
+[m4_pushdef([AC_Dest], m4_bpatsubst(AC_File, [:.*]))
 AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
@@ -282,7 +282,7 @@ m4_append([AC_LIST_COMMANDS], [ $1])
 
 m4_if([$2],,, [AC_FOREACH([AC_Name], [$1],
 [m4_append([AC_LIST_COMMANDS_COMMANDS],
-[    ]m4_patsubst(AC_Name, [:.*])[ ) $2 ;;
+[    ]m4_bpatsubst(AC_Name, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop([KILL])dnl
@@ -396,7 +396,7 @@ m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
 m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_HEADERS_COMMANDS],
-[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_bpatsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop([KILL])dnl
@@ -671,12 +671,12 @@ AC_DEFUN([AC_CONFIG_LINKS],
 [m4_divert_push([KILL])
 _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
-m4_match([$1], [^\.:\| \.:], [m4_fatal([$0: invalid destination: `.'])])
+m4_bmatch([$1], [^\.:\| \.:], [m4_fatal([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
 dnl Register the commands
 m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_LINKS_COMMANDS],
-[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_bpatsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop([KILL])dnl
@@ -803,7 +803,7 @@ m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
 m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_FILES_COMMANDS],
-[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_bpatsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop([KILL])dnl
@@ -1425,19 +1425,19 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
 AC_FOREACH([AC_File], AC_LIST_FILES,
-[  "m4_patsubst(AC_File, [:.*])" )dnl
+[  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_FILES="$CONFIG_FILES AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_LINKS,
-[  "m4_patsubst(AC_File, [:.*])" )dnl
+[  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_COMMANDS,
-[  "m4_patsubst(AC_File, [:.*])" )dnl
+[  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_HEADERS,
-[  "m4_patsubst(AC_File, [:.*])" )dnl
+[  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
 ])dnl
   *) AC_MSG_ERROR([invalid argument: $ac_config_target]);;

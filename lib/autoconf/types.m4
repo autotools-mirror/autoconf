@@ -193,7 +193,7 @@ m4_define([_AC_CHECK_TYPE_OLD],
 # Because many people have used `off_t' and `size_t' too, they are added
 # for better common-useward backward compatibility.
 m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
-[m4_match([$1],
+[m4_bmatch([$1],
           [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|[_a-zA-Z][_a-zA-Z0-9]*_t\)[][_a-zA-Z0-9() *]*$],
           1, 0)dnl
 ])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
@@ -203,7 +203,7 @@ m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # -----------------------------------
 # Return `1' if STRING looks like a C/C++ type.
 m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
-[m4_match([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$],
+[m4_bmatch([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$],
           1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
@@ -418,16 +418,16 @@ test $ac_cv_sizeof_long_int = 8 &&
 AC_DEFUN([AC_CHECK_MEMBER],
 [AS_LITERAL_IF([$1], [],
                [AC_FATAL([$0: requires literal arguments])])dnl
-m4_match([$1], [\.], ,
+m4_bmatch([$1], [\.], ,
          [m4_fatal([$0: Did not see any dot in `$1'])])dnl
 AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE ac_aggr;
-static m4_patsubst([$1], [\..*]) ac_aggr;
+static m4_bpatsubst([$1], [\..*]) ac_aggr;
 dnl ac_aggr.MEMBER;
-if (ac_aggr.m4_patsubst([$1], [^[^.]*\.]))
+if (ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
 return 0;])],
                 [AS_VAR_SET(ac_Member, yes)],
                 [AS_VAR_SET(ac_Member, no)])])
@@ -445,9 +445,9 @@ AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
   [AC_CHECK_MEMBER(AC_Member,
          [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Member), 1,
-                            [Define if `]m4_patsubst(AC_Member,
+                            [Define if `]m4_bpatsubst(AC_Member,
                                                      [^[^.]*\.])[' is
-                             member of `]m4_patsubst(AC_Member, [\..*])['.])
+                             member of `]m4_bpatsubst(AC_Member, [\..*])['.])
 $2],
                  [$3],
                  [$4])])])

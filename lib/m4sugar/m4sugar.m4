@@ -111,7 +111,7 @@ m4_define([m4_rename_m4],
 # ---------------------------
 # Copy m4_MACRO-NAME as MACRO-NAME.
 m4_define([m4_copy_unm4],
-[m4_copy([$1], m4_patsubst([$1], [^m4_\(.*\)], [[\1]]))])
+[m4_copy([$1], m4_bpatsubst([$1], [^m4_\(.*\)], [[\1]]))])
 
 
 # Some m4 internals have names colliding with tokens we might use.
@@ -139,10 +139,10 @@ m4_rename_m4([len])
 m4_rename([m4exit], [m4_exit])
 m4_rename([m4wrap], [m4_wrap])
 m4_rename_m4([maketemp])
-m4_rename_m4([patsubst])
+m4_rename([patsubst], [m4_bpatsubst])
 m4_undefine([popdef])
 m4_rename_m4([pushdef])
-m4_rename_m4([regexp])
+m4_rename([regexp], [m4_bregexp])
 m4_rename_m4([shift])
 m4_rename_m4([sinclude])
 m4_rename_m4([substr])
@@ -403,8 +403,8 @@ m4_define([m4_case],
        [m4_case([$1], m4_shiftn(3, $@))])])
 
 
-# m4_match(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
-# ----------------------------------------------------
+# m4_bmatch(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
+# -----------------------------------------------------
 # m4 equivalent of
 #
 # if (SWITCH =~ RE1)
@@ -418,11 +418,11 @@ m4_define([m4_case],
 #
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
-m4_define([m4_match],
+m4_define([m4_bmatch],
 [m4_if([$#], 0, [],
        [$#], 1, [],
        [$#], 2, [$2],
-       m4_regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
+       m4_bregexp([$1], [$2]), -1, [m4_bmatch([$1], m4_shiftn(3, $@))],
        [$3])])
 
 
@@ -1342,8 +1342,8 @@ m4_defn([m4_cr_digits])dnl
 # --------------------
 # Escape BRE active characters in STRING.
 m4_define([m4_re_escape],
-[m4_patsubst([$1],
-             [[][+*.]], [\\\&])])
+[m4_bpatsubst([$1],
+              [[][+*.]], [\\\&])])
 
 
 # m4_re_string
@@ -1403,9 +1403,9 @@ m4_define(<<m4_split>>,
 <<m4_changequote(``, '')dnl
 [dnl Can't use m4_default here instead of m4_if, because m4_default uses
 dnl [ and ] as quotes.
-m4_patsubst(````$1'''',
-	    m4_if(``$2'',, ``[ 	]+'', ``$2''),
-	    ``], ['')]dnl
+m4_bpatsubst(````$1'''',
+	     m4_if(``$2'',, ``[ 	]+'', ``$2''),
+	     ``], ['')]dnl
 m4_changequote([, ])>>)
 m4_changequote([, ])
 
@@ -1422,7 +1422,7 @@ m4_changequote([, ])
 #    ive])end
 #    => active activeend
 m4_define([m4_flatten],
-[m4_translit(m4_patsubst([[[$1]]], [\\
+[m4_translit(m4_bpatsubst([[[$1]]], [\\
 ]), [
 ], [ ])])
 
@@ -1449,10 +1449,10 @@ m4_define([m4_flatten],
 # the *third* character, since there are two leading `['; Equally for
 # the outer patsubst.
 m4_define([m4_strip],
-[m4_patsubst(m4_patsubst(m4_patsubst([[[[$1]]]],
-                            [[ 	]+], [ ]),
-                   [^\(..\) ], [\1]),
-          [ \(.\)$], [\1])])
+[m4_bpatsubst(m4_bpatsubst(m4_bpatsubst([[[[$1]]]],
+                                        [[ 	]+], [ ]),
+                           [^\(..\) ], [\1]),
+              [ \(.\)$], [\1])])
 
 
 # m4_normalize(STRING)
@@ -1525,8 +1525,8 @@ m4_define([m4_append],
 # As `m4_append', but append only if not yet present.
 m4_define([m4_append_uniq],
 [m4_ifdef([$1],
-          [m4_match([$3]m4_defn([$1])[$3], m4_re_escape([$3$2$3]), [],
-                    [m4_append($@)])],
+          [m4_bmatch([$3]m4_defn([$1])[$3], m4_re_escape([$3$2$3]), [],
+                     [m4_append($@)])],
           [m4_append($@)])])
 
 
@@ -1615,9 +1615,9 @@ m4_popdef([m4_Prefix])dnl
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])
 # ---------------------------------------------
 m4_define([m4_text_box],
-[@%:@@%:@ m4_patsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@
+[@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@
-@%:@@%:@ m4_patsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@[]dnl
+@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@[]dnl
 ])
 
 
@@ -1631,10 +1631,10 @@ m4_define([m4_text_box],
 #
 # The sign of the integer A.
 m4_define([m4_sign],
-[m4_match([$1],
-          [^-], -1,
-          [^0+], 0,
-                 1)])
+[m4_bmatch([$1],
+           [^-], -1,
+           [^0+], 0,
+                  1)])
 
 # m4_cmp(A, B)
 # ------------
@@ -1684,13 +1684,13 @@ m4_define([m4_list_cmp],
 # This macro is absolutely not robust to active macro, it expects
 # reasonable version numbers and is valid up to `z', no double letters.
 m4_define([m4_version_unletter],
-[m4_translit(m4_patsubst(m4_patsubst(m4_patsubst([$1],
-                                                 [\([0-9]+\)\([abcdefghi]\)],
-                                                 [m4_eval(\1 + 1).-1.\2]),
-                                     [\([0-9]+\)\([jklmnopqrs]\)],
-                                     [m4_eval(\1 + 1).-1.1\2]),
-                         [\([0-9]+\)\([tuvwxyz]\)],
-                         [m4_eval(\1 + 1).-1.2\2]),
+[m4_translit(m4_bpatsubst(m4_bpatsubst(m4_bpatsubst([$1],
+                                                   [\([0-9]+\)\([abcdefghi]\)],
+                                                    [m4_eval(\1 + 1).-1.\2]),
+                                       [\([0-9]+\)\([jklmnopqrs]\)],
+                                       [m4_eval(\1 + 1).-1.1\2]),
+                           [\([0-9]+\)\([tuvwxyz]\)],
+                           [m4_eval(\1 + 1).-1.2\2]),
              [abcdefghijklmnopqrstuvwxyz],
              [12345678901234567890123456])])
 

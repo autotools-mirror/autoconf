@@ -1,5 +1,16 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autoconf.m4, lib/autoconf/general.m4,
+	* lib/autoconf/libs.m4, lib/autoconf/status.m4,
+	* lib/autoconf/types.m4, lib/autotest/general.m4,
+	* lib/m4sugar/m4sh.m4, lib/m4sugar/m4sugar.m4, tests/atspecific.m4,
+	* tests/torture.at: Rename m4_regexp, m4_patsubst, and m4_match to
+	m4_bregexp, m4_bpatsubst, and m4_bmatch.
+	* doc/autoconf.texi (Redefined M4 Macros): Adjust.
+
+	
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4: Use AS_REQUIRE.
 
 2001-10-08  Akim Demaille  <akim@epita.fr>

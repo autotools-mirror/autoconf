@@ -291,7 +291,7 @@ AS_LITERAL_IF([$2], [],  [m4_warn([syntax], [AC_INIT: not a literal: $2])])
 AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
 m4_define([AC_PACKAGE_NAME],     [$1])
 m4_define([AC_PACKAGE_TARNAME],
-          m4_tolower(m4_patsubst([[[$1]]], [GNU ])))
+          m4_tolower(m4_bpatsubst([[[$1]]], [GNU ])))
 m4_define([AC_PACKAGE_VERSION],   [$2])
 m4_define([AC_PACKAGE_STRING],    [$1 $2])
 m4_define([AC_PACKAGE_BUGREPORT], [$3])
@@ -307,10 +307,10 @@ m4_define([AC_PACKAGE_BUGREPORT], [$3])
 # would have not been evaluated.  Another solution, a bit fragile,
 # would have be to use m4_quote to force an evaluation:
 #
-#     m4_patsubst(m4_quote($1), [^], [# ])
+#     m4_bpatsubst(m4_quote($1), [^], [# ])
 m4_define([AC_COPYRIGHT],
 [m4_divert_text([HEADER-COPYRIGHT],
-[m4_patsubst([
+[m4_bpatsubst([
 $1], [^], [@%:@ ])])dnl
 m4_divert_text(m4_default([$2], [VERSION_USER]),
 [
@@ -1159,7 +1159,7 @@ trap 'exit_status=$?
     echo
     AS_BOX([Cache variables.])
     echo
-    m4_patsubst(m4_patsubst(m4_dquote(m4_defn([_AC_CACHE_DUMP])),
+    m4_bpatsubst(m4_bpatsubst(m4_dquote(m4_defn([_AC_CACHE_DUMP])),
                             [^ *\(#.*\)?
 ]),
                 ['], ['"'"'])
@@ -1260,8 +1260,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
 # Check whether --enable-$1 or --disable-$1 was given.
-if test "[${enable_]m4_patsubst([$1], -, _)+set}" = set; then
-  enableval="[$enable_]m4_patsubst([$1], -, _)"
+if test "[${enable_]m4_bpatsubst([$1], -, _)+set}" = set; then
+  enableval="[$enable_]m4_bpatsubst([$1], -, _)"
   $3
 m4_ifvaln([$4], [else
   $4])dnl
@@ -1288,8 +1288,8 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 m4_divert_once([HELP_WITH], [$2])dnl
 # Check whether --with-$1 or --without-$1 was given.
-if test "[${with_]m4_patsubst([$1], -, _)+set}" = set; then
-  withval="[$with_]m4_patsubst([$1], -, _)"
+if test "[${with_]m4_bpatsubst([$1], -, _)+set}" = set; then
+  withval="[$with_]m4_bpatsubst([$1], -, _)"
   $3
 m4_ifvaln([$4], [else
   $4])dnl
@@ -1733,7 +1733,7 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_define([AC_CACHE_VAL],
-[m4_match([$2], [AC_DEFINE],
+[m4_bmatch([$2], [AC_DEFINE],
           [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
