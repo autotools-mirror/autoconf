@@ -62,7 +62,7 @@ dnl when AC_CONFIG_HEADER is used.
 define(AC_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 dnl [#] Generated automatically using autoconf.
-# Generated automatically using autoconf version AC_ACVERSION
+# Generated automatically using autoconf version] AC_ACVERSION [
 dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Copyright (C) 1991, 1992, 1993 Free Software Foundation, Inc.
 
@@ -713,11 +713,15 @@ changequote(,)dnl
 changequote([,])dnl
   if test "$dir" != "$file"; then
     test "$top_srcdir" != . && srcdir=$top_srcdir/$dir
-    test ! -d $dir && mkdir $dir
+    test ! -d "$dir" && mkdir "$dir"
   fi
-  echo creating $file
-  rm -f $file
-  echo "# Generated automatically from `echo $file|sed 's|.*/||'`.in by configure." > $file
+  echo creating "$file"
+  rm -f "$file"
+  comment_str="Generated automatically from `echo $file|sed 's|.*/||'`.in by configure."
+  case "$file" in
+    *.c | *.h )  echo "/* $comment_str */" > "$file" ;;
+    * )          echo "# $comment_str"     > "$file" ;;
+  esac
   sed -e "
 $prsub
 dnl Shell code in configure.in might set extrasub.
