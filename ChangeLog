@@ -1,3 +1,8 @@
+2002-07-22  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Make): Mention the special
+	handling of the obj/ directory by BSD make.
+
 2002-07-20  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Limitations of Make): Add HP-UX IA-64 trailing

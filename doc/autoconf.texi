@@ -10395,6 +10395,31 @@ all:
         # foo
 @end example
 
+@item The @file{obj/} subdirectory.
+@cindex @file{obj/}, subdirectory
+@cindex BSD make and @file{obj/}
+
+Never name one of your subdirectories @file{obj/} if you don't like
+surprises.
+
+If an @file{obj/} directory exists, BSD make will enter it
+before reading @file{Makefile}.  Hence the @file{Makefile} in the
+current directory will not be read.
+
+@example
+% @kbd{cat Makefile}
+all:
+        echo Hello
+% @kbd{cat obj/Makefile}
+all:
+        echo World
+% @kbd{make}      # GNU make
+echo Hello
+Hello
+% @kbd{pmake}     # BSD make
+echo World
+World
+@end example
 
 @item @code{VPATH}
 @cindex @code{VPATH}
