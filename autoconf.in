@@ -101,7 +101,7 @@ elif test ! -r "$infile"; then
 fi
 
 if test -n "$localdir"; then
-  use_localdir="-I$localdir"
+  use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
 else
   use_localdir=
 fi

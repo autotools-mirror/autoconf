@@ -64,6 +64,10 @@ if test $show_version = yes; then
   exit 0
 fi
 
+if test $# -ne 0; then
+  echo "$usage" 1>&2; exit 1
+fi
+
 top_autoconf=`echo $0|sed s%autoreconf%autoconf%`
 top_autoheader=`echo $0|sed s%autoreconf%autoheader%`
 
