@@ -401,9 +401,11 @@ changequote([,])dnl
   if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
   fi
+else
+  ac_srcdir_defaulted=no
 fi
 if test ! -r $srcdir/$ac_unique_file; then
-  if test x$ac_srcdir_defaulted = xyes; then
+  if test "$ac_srcdir_defaulted" = yes; then
     AC_ERROR(can not find sources in ${ac_confdir} or ..)
   else
     AC_ERROR(can not find sources in ${srcdir})
@@ -683,6 +685,7 @@ dnl AC_CACHE_VAL(cache-id, commands-to-set-it)
 dnl The name cache-id must contain the string `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
 [if test "x${$1-unset}" != xunset; then 
+dnl This verbose message is just for testing the caching code.
   AC_VERBOSE(using cached value for $1)
 else
   $2
@@ -740,7 +743,7 @@ define(AC_DEFINE,[
 {
 dnl Uniformly use AC_DEFINE_[SED]QUOTE, so callers of AC_DEFINE_UNQUOTED
 dnl can use AC_QUOTE_* manually if they want to.
-test -n "$verbose" && \
+test "$verbose" = yes && \
 ifelse($#, 2,
 [define([AC_VAL], $2)dnl
 echo "	defining" $1 to be ifelse(AC_VAL,, empty, "AC_QUOTE_SQUOTE(AC_VAL)")],
@@ -796,10 +799,10 @@ dnl ### Printing messages
 dnl
 dnl
 define(AC_CHECKING,
-[test -n "$silent" || echo "checking $1"])dnl
+[test "$silent" = yes || echo "checking $1"])dnl
 dnl
 define(AC_VERBOSE,
-[test -n "$verbose" && echo "	$1"])dnl
+[test "$verbose" = yes && echo "	$1"])dnl
 dnl
 define(AC_WARN,
 [echo "configure: warning: $1" >&2])dnl
@@ -857,8 +860,9 @@ dnl
 dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
-  AC_CACHE_VAL(ac_cv_program_$1,
-[# Extract the first word of `$2', so it can be a program name with args.
+AC_CACHE_VAL(ac_cv_program_$1,
+[  ac_cv_program_$1=
+  # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
@@ -879,22 +883,23 @@ AC_SUBST($1)dnl
 dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
-  AC_CACHE_VAL(ac_cv_program_$1,
-[# Extract the first word of `$2', so it can be a program name with args.
+AC_CACHE_VAL(ac_cv_path_$1,
+[  ac_cv_path_$1=
+  # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      ac_cv_program_$1="$ac_dir/$ac_word"
+      ac_cv_path_$1="$ac_dir/$ac_word"
       break
     fi
   done
   IFS="$ac_save_ifs"
 fi
-ifelse([$3],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$3"])])dnl
-$1="$ac_cv_program_$1"
+ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])])dnl
+$1="$ac_cv_path_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -930,10 +935,10 @@ AC_CACHE_VAL(ac_cv_lib_[]AC_LIB_NAME,
 [ac_save_LIBS="${LIBS}"
 LIBS="${LIBS} -l[]AC_LIB_NAME[]"
 AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();],
-ac_cv_lib_[]AC_LIB_NAME=true, ac_cv_lib_[]AC_LIB_NAME=false)dnl
+ac_cv_lib_[]AC_LIB_NAME=yes, ac_cv_lib_[]AC_LIB_NAME=no)dnl
 LIBS="${ac_save_LIBS}"
 ])dnl
-if test "${ac_cv_lib_[]AC_LIB_NAME}" = true; then
+if test "${ac_cv_lib_[]AC_LIB_NAME}" = yes; then
 ifelse($#, 1, [dnl
    AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
    LIBS="${LIBS} -l[]AC_LIB_NAME[]"
@@ -1123,7 +1128,7 @@ done
 dnl
 define(AC_SIZEOF_TYPE,
 [AC_CHECKING(size of $1)
-ac_size=0
+ac_size=configure_failure
 AC_TEST_PROGRAM([#include <stdio.h>
 main()
 {
@@ -1292,7 +1297,7 @@ $2
 exit 0
 EOF
 chmod +x config.status
-test -n "$no_create" || ${CONFIG_SHELL-/bin/sh} config.status
+test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} config.status
 dnl config.status should never do recursion.
 ifdef([AC_SUBDIR_LIST],[AC_OUTPUT_CONFIG_SUBDIRS(AC_SUBDIR_LIST)])dnl
 ])dnl
