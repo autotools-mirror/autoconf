@@ -1494,6 +1494,7 @@ AC_DEFUN(AC_FUNC_GETLOADAVG,
 # to get the right answer into the cache.
 AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
 AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
+AC_CHECK_LIB(kstat, kstat_open)
 # Check for the 4.4BSD definition of getloadavg.
 AC_CHECK_LIB(util, getloadavg,
   [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])

@@ -1,3 +1,10 @@
+1999-09-29  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for the kstat_open()
+	function in libkstat (on systems such as Solaris). This family of
+	functions is preferred since they don't require setgid permissions
+	to use them. Fix for autoconf/65.
+
 1999-09-27  Ben Elliston  <bje@cygnus.com>
 
 	* autoscan.pl (scan_files): Emit an AC_PROG_CC invocation to
