@@ -133,7 +133,7 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(
 	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  man/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  man/Makefile
-Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
 	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
@@ -265,7 +265,6 @@ clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
-
 distclean-am: clean-am distclean-generic
 
 dvi: dvi-am
@@ -290,7 +289,6 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f Makefile
-
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am

@@ -152,7 +152,7 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(
 	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Makefile
-Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
 	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \

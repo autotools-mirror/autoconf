@@ -1,3 +1,9 @@
+2003-09-25  Akim Demaille  <akim@epita.fr>
+
+	Version 2.57d.
+
+	* config/install-sh: Upgrade from CVS Automake.
+
 2003-09-23  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Limitations of Builtins): Document test -h
@@ -12,7 +18,7 @@
 	about inconsistency if the preprocessor is set to give errors for
 	any warning.
 	* doc/autoconf.texi (C Compiler Characteristics): Document this.
-	
+
 2003-09-13  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* Makefile.am (autom4te-update, autom4te_files): Fetch Struct.pm

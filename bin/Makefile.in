@@ -227,7 +227,7 @@ $(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../lib/freeze.mk $(top_srcdir)/con
 	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  bin/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  bin/Makefile
-Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile:  $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
 	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
@@ -376,7 +376,6 @@ clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
-
 distclean-am: clean-am distclean-generic distclean-tags
 
 dvi: dvi-am
@@ -401,7 +400,6 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f Makefile
-
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
