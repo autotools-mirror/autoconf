@@ -1,3 +1,16 @@
+2000-05-04  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Obsolete Macros): Rename as...
+	(Obsoleting Macros): this.
+	(Old Macros): Rename as...
+	(Obsolete Macros): this.
+	Be a section of...
+	(Obsolete Constructs): New chapter.
+	(Invoking autoheader): Move the `acconfig.h' documentation to...
+	(acconfig.h): here, new section of `Obsolete Constructs'.
+	(Autoheader Macros): Document AH_VERBATIM, AH_TEMPLATE, AH_TOP and
+	AH_BOTTOM.
+
 2000-05-03  Nicolas Joly  <njoly@pasteur.fr>
 
 	* autoheader.sh (config_h): Added templates sort. Under NetBSD 1.4.1

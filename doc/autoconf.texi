@@ -135,7 +135,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Questions::                   Questions about Autoconf, with answers
 * Upgrading::                   Tips for upgrading from version 1
 * History::                     History of Autoconf
-* Old Macros::                  Backward compatibility macros
+* Obsolete Constructs::         Kept for backward compatibility
 * Environment Variable Index::  Index of environment variables used
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
@@ -182,6 +182,7 @@ Configuration Header Files
 
 * Header Templates::            Input for the configuration headers
 * Invoking autoheader::         How to create configuration templates
+* Autoheader Macros::           How to specify CPP templates
 
 Existing Tests
 
@@ -286,7 +287,7 @@ Dependencies Between Macros
 
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
-* Obsolete Macros::             Warning about old ways of doing things
+* Obsoleting Macros::           Warning about old ways of doing things
 
 Manual Configuration
 
@@ -345,6 +346,11 @@ History of Autoconf
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
+
+Obsolete Constructs
+
+* acconfig.h::                  Additional entries in @file{config.h.in}
+* Obsolete Macros::             Backward compatibility macros
 
 @end detailmenu
 @end menu
@@ -1289,7 +1295,7 @@ to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
 @end defmac
 
-@xref{Old Macros}, for a description of the arguments @code{AC_OUTPUT}
+@xref{Obsolete Macros}, for a description of the arguments @code{AC_OUTPUT}
 used to support.
 
 
@@ -1783,6 +1789,7 @@ to prepend and/or append boilerplate to the file.
 @menu
 * Header Templates::            Input for the configuration headers
 * Invoking autoheader::         How to create configuration templates
+* Autoheader Macros::           How to specify CPP templates
 @end menu
 
 @node Header Templates, Invoking autoheader, Configuration Headers, Configuration Headers
@@ -1835,7 +1842,7 @@ Since it is a tedious task to keep a template header up to date, you may
 use @code{autoheader} to generate it, see @ref{Invoking autoheader}.
 
 
-@node Invoking autoheader,  , Header Templates, Configuration Headers
+@node Invoking autoheader, Autoheader Macros, Header Templates, Configuration Headers
 @subsection Using @code{autoheader} to Create @file{config.h.in}
 @cindex @code{autoheader}
 
@@ -1851,38 +1858,6 @@ If you give @code{autoheader} an argument, it uses that file instead of
 instead of to @file{config.h.in}.  If you give @code{autoheader} an
 argument of @samp{-}, it reads the standard input instead of
 @file{configure.in} and writes the header file to the standard output.
-
-@code{autoheader} scans @file{configure.in} and figures out which C
-preprocessor symbols it might define.  It copies comments and
-@code{#define} and @code{#undef} statements from a file called
-@file{acconfig.h}, which comes with and is installed with Autoconf.  It
-also uses a file called @file{acconfig.h} in the current directory, if
-present.  If you @code{AC_DEFINE} any additional symbols, you must
-create that file with entries for them.  For symbols defined by
-@code{AC_CHECK_HEADERS}, @code{AC_CHECK_FUNCS}, @code{AC_CHECK_SIZEOF},
-or @code{AC_CHECK_LIB}, @code{autoheader} generates comments and
-@code{#undef} statements itself rather than copying them from a file,
-since the possible symbols are effectively limitless.
-
-The file that @code{autoheader} creates contains mainly @code{#define}
-and @code{#undef} statements and their accompanying comments.  If
-@file{./acconfig.h} contains the string @samp{@@TOP@@},
-@code{autoheader} copies the lines before the line containing
-@samp{@@TOP@@} into the top of the file that it generates.  Similarly,
-if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
-@code{autoheader} copies the lines after that line to the end of the
-file it generates.  Either or both of those strings may be omitted.
-
-An alternate way to produce the same effect is to create the files
-@file{@var{file}.top} (typically @file{config.h.top}) and/or
-@file{@var{file}.bot} in the current directory.  If they exist,
-@code{autoheader} copies them to the beginning and end, respectively, of
-its output.  Their use is discouraged because they have file names that
-contain two periods, and so cannot be stored on MS-DOS; also, they are
-two more files to clutter up the directory.  But if you use the
-@samp{--localdir=@var{dir}} option to use an @file{acconfig.h} in
-another directory, they give you a way to put custom boilerplate in each
-individual @file{config.h.in}.
 
 @code{autoheader} accepts the following options:
 
@@ -1932,8 +1907,86 @@ treats warnings as errors
 The soon-do-be-standard environment variable @code{WARNINGS} is
 supported: it consists in a comma separated list of categories.  It is
 honored iff @samp{--warnings} was not used.
-
 @end table
+
+@node Autoheader Macros,  , Invoking autoheader, Configuration Headers
+@subsection Autoheader Macros
+
+@code{autoheader} scans @file{configure.in} and figures out which C
+preprocessor symbols it might define.  It knows how to generate
+templates for symbols defined by @code{AC_CHECK_HEADERS},
+@code{AC_CHECK_FUNCS} etc., but if you @code{AC_DEFINE} any additional
+symbol, you must define a template for it.  @code{autoheader} diagnoses
+missing templates, and fails.
+
+The simplest means to create a template for a @var{symbol} is simply to
+document one of the @samp{AC_DEFINE(@var{symbol})}, see @ref{Defining
+Symbols}.  You may also use one of the following macros.
+
+@defmac AH_VERBATIM (@var{key}, @var{template})
+@maindex AH_VERBATIM
+@maindex VERBATIM
+Inform @code{autoheader} that it must include the @var{template} as is
+in the header template file.  This @var{template} is associated to the
+@var{key}, which is used to sort all the different templates, and
+guarantee their uniqueness.  It should be the symbol which can be
+@code{AC_DEFINE}'d.
+
+For instance:
+
+@example
+AH_VERBATIM([_GNU_SOURCE],
+[/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif])
+@end example
+@end defmac
+
+
+@defmac AH_TEMPLATE (@var{key}, @var{description})
+@maindex AH_TEMPLATE
+@maindex TEMPLATE
+Inform @code{autoheader} that it must generate a template for @var{key}.
+This macro generates standard templates, as @code{AC_DEFINE} does when a
+@var{description} is given.
+
+For instance:
+
+@example
+AH_TEMPLATE([CRAY_STACKSEG_END],
+            [Define to one of _getb67, GETB67, getb67
+             for Cray-2 and Cray-YMP systems.  This
+             function is required for alloca.c support
+             on those systems.])
+@end example
+
+@noindent
+will generate the following template, with the description properly
+justified.
+
+@example
+/* Define to one of _getb67, GETB67, getb67 for Cray-2 and
+   Cray-YMP systems. This function is required for alloca.c
+   support on those systems. */
+#undef CRAY_STACKSEG_END
+@end example
+@end defmac
+
+
+@defmac AH_TOP (@var{text})
+@maindex AH_TOP
+@maindex TOP
+Include @var{text} at the top of the header template file.
+@end defmac
+
+
+@defmac AH_BOTTOM (@var{text})
+@maindex AH_BOTTOM
+@maindex BOTTOM
+Include @var{text} at the bottom of the header template file.
+@end defmac
+
 
 @node Configuration Commands, Configuration Links, Configuration Headers, Setup
 @section Running Arbitrary Configuration Commands
@@ -1942,7 +1995,7 @@ You execute arbitrary commands either before, during and after
 @file{config.status} is run.  The three following macros accumulate the
 commands to run when they are called multiple times.
 @code{AC_CONFIG_COMMANDS} replaces the obsolete macro
-@code{AC_OUTPUT_COMMANDS}, see @ref{Old Macros}, for details.
+@code{AC_OUTPUT_COMMANDS}, see @ref{Obsolete Macros}, for details.
 
 @defmac AC_CONFIG_COMMANDS (@var{tag}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_COMMANDS
@@ -3586,7 +3639,7 @@ Autoconf, up to 2.13, used to provide to another version of
 @code{AC_CHECK_TYPE}, broken by design.  In order to keep backward
 compatibility, a simple heuristics, quite safe but not totally, is
 implemented.  In case of doubt, the reader is strongly encourage to read
-the documentation of the former @code{AC_CHECK_TYPE}, see @ref{Old
+the documentation of the former @code{AC_CHECK_TYPE}, see @ref{Obsolete
 Macros}.
 
 
@@ -5537,7 +5590,7 @@ called in an order that might cause incorrect operation.
 @menu
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
-* Obsolete Macros::             Warning about old ways of doing things
+* Obsoleting Macros::           Warning about old ways of doing things
 @end menu
 
 @node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
@@ -5579,7 +5632,7 @@ AC_PROVIDE([$0])
 @end example
 @end defmac
 
-@node Suggested Ordering, Obsolete Macros, Prerequisite Macros, Dependencies Between Macros
+@node Suggested Ordering, Obsoleting Macros, Prerequisite Macros, Dependencies Between Macros
 @subsection Suggested Ordering
 
 Some macros should be run before another macro if both are called, but
@@ -5616,8 +5669,8 @@ macro @var{called-macro-name} must have been defined using
 that it has been called.
 @end defmac
 
-@node Obsolete Macros,  , Suggested Ordering, Dependencies Between Macros
-@subsection Obsolete Macros
+@node Obsoleting Macros,  , Suggested Ordering, Dependencies Between Macros
+@subsection Obsoleting Macros
 
 Configuration and portability technology has evolved over the years.
 Often better ways of solving a particular problem are developed, or
@@ -6729,7 +6782,7 @@ characters around them has been removed.
 
 Many of the macros were renamed in Autoconf version 2.  You can still
 use the old names, but the new ones are clearer, and it's easier to find
-the documentation for them.  @xref{Old Macros}, for a table showing the
+the documentation for them.  @xref{Obsolete Macros}, for a table showing the
 new names for the old macros.  Use the @code{autoupdate} program to
 convert your @file{configure.in} to using the new macro names.
 @xref{Invoking autoupdate}.
@@ -6755,7 +6808,7 @@ calls Autoconf macros by their old names to use the current macro names.
 In version 2 of Autoconf, most of the macros were renamed to use a more
 uniform and descriptive naming scheme.  @xref{Macro Names}, for a
 description of the new scheme.  Although the old names still work
-(@pxref{Old Macros}, for a list of the old macros and the corresponding
+(@pxref{Obsolete Macros}, for a list of the old macros and the corresponding
 new names), you can make your @file{configure.in} files more readable
 and make it easier to use the current Autoconf documentation if you
 update them to use the new macro names.
@@ -6877,7 +6930,7 @@ encapsulate into macros that you can share.
 
 @c ===================================================== History of Autoconf.
 
-@node History, Old Macros, Upgrading, Top
+@node History, Obsolete Constructs, Upgrading, Top
 @chapter History of Autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
@@ -7105,10 +7158,62 @@ Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
 have free time again.  I think.  Yeah, right.)
 
 
-@c ========================================================= Old Macros.
+@c =================================================== Obsolete Constructs
 
-@node Old Macros, Environment Variable Index, History, Top
-@chapter Old Macros
+@node Obsolete Constructs, Environment Variable Index, History, Top
+@chapter Obsolete Constructs
+
+Autoconf changes, and along the years, some constructs are obsoleted.
+Most of the changes involve the macros, but the tools themselves, or
+even some concepts, are now considered obsolete.
+
+You may completely skip this chapter if you are new to Autoconf, it's
+intention is mainly to help maintainers updating their packages by
+understanding how to move to more modern constructs.
+
+@menu
+* acconfig.h::                  Additional entries in @file{config.h.in}
+* Obsolete Macros::             Backward compatibility macros
+@end menu
+
+@node acconfig.h, Obsolete Macros, Obsolete Constructs, Obsolete Constructs
+@section @file{acconfig.h}
+
+@cindex @file{acconfig.h}
+@cindex @file{config.h.top}
+@cindex @file{config.h.bot}
+
+@code{autoheader} scans @file{configure.in} and figures out which C
+preprocessor symbols it might define.  It copies comments and
+@code{#define} and @code{#undef} statements from a file called
+@file{acconfig.h} in the current directory, if present.  This file used
+to be mandatory if you @code{AC_DEFINE} any additional symbols.  Now,
+you are encouraged to use the @code{AH} series of macros
+(@pxref{Autoheader Macros}).
+
+The file that @code{autoheader} creates contains mainly @code{#define}
+and @code{#undef} statements and their accompanying comments.  If
+@file{./acconfig.h} contains the string @samp{@@TOP@@},
+@code{autoheader} copies the lines before the line containing
+@samp{@@TOP@@} into the top of the file that it generates.  Similarly,
+if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
+@code{autoheader} copies the lines after that line to the end of the
+file it generates.  Either or both of those strings may be omitted.
+
+An alternate way to produce the same effect is to create the files
+@file{@var{file}.top} (typically @file{config.h.top}) and/or
+@file{@var{file}.bot} in the current directory.  If they exist,
+@code{autoheader} copies them to the beginning and end, respectively, of
+its output.  Their use is discouraged because they have file names that
+contain two periods, and so cannot be stored on MS-DOS; also, they are
+two more files to clutter up the directory.  But if you use the
+@samp{--localdir=@var{dir}} option to use an @file{acconfig.h} in
+another directory, they give you a way to put custom boilerplate in each
+individual @file{config.h.in}.
+
+
+@node Obsolete Macros,  , acconfig.h, Obsolete Constructs
+@section Obsolete Macros
 
 Several macros are obsoleted in Autoconf, for various reasons (typically
 they failed to quote properly, couldn't be extended for more recent
@@ -7646,7 +7751,7 @@ If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
 @end defmac
 
 
-@node Environment Variable Index, Output Variable Index, Old Macros, Top
+@node Environment Variable Index, Output Variable Index, Obsolete Constructs, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
