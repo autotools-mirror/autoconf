@@ -1,3 +1,11 @@
+Tue Jan 16 16:39:21 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_PROG): Take optional 6th arg, full name
+	of program to reject if found in search path.
+	* acspecific.m4 (AC_PROG_CC): If gcc not found use AC_CHECK_PROG
+	for cc, rejecting /usr/ucb/cc.
+	Fatal configure error if no $CC found at all.
+
 Mon Jan 15 15:57:36 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Match `#define foo' without
