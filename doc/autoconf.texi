@@ -14659,20 +14659,20 @@ not fully exploited}, and eight times slower than without
 @node Present But Cannot Be Compiled
 @section Header Present But Cannot Be Compiled
 
-The most important guideline to bare in mind when checking for
-features is to mock as much as possible the intended use.
+The most important guideline to bear in mind when checking for
+features is to mimic as much as possible the intended use.
 Unfortunately, old versions of @code{AC_CHECK_HEADER} and
-@code{AC_CHECK_HEADERS} failed to follow this idea, and used to call
+@code{AC_CHECK_HEADERS} failed to follow this idea, and called
 the preprocessor, instead of the compiler, to check for headers.  As a
 result, incompatibilities between headers went unnoticed during
 configuration, and maintainers finally had to deal with this issue
 elsewhere.
 
-Since Autoconf 2.56 both checks are performed, and @code{configure}
+As of Autoconf 2.56 both checks are performed, and @code{configure}
 complains loudly if the compiler and the preprocessor do not agree.
-For the time being the result is that of the preprocessor, so that
-maintainers can adjust their @file{configure.ac}, but in the near
-future, the compiler only will be considered.
+For the time being the result used is that of the preprocessor, to give
+maintainers time to adjust their @file{configure.ac}, but in the near
+future, only the compiler will be considered.
 
 Consider the following example:
 
