@@ -633,3 +633,11 @@ ac_objext=$OBJEXT
 ## ------------------------------- ##
 ## 4. Compilers' characteristics.  ##
 ## ------------------------------- ##
+
+# AC_LANG_WERROR
+# ------------------
+# Treat warnings from the current language's preprocessor, compiler, and
+# linker as fatal errors.
+AC_DEFUN([AC_LANG_WERROR],
+[m4_divert_text([DEFAULTS], [ac_[]_AC_LANG_ABBREV[]_werror_flag=no])
+ac_[]_AC_LANG_ABBREV[]_werror_flag=yes])# AC_LANG_WERROR

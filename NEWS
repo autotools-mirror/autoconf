@@ -7,6 +7,9 @@
 ** AC_CONFIG_MACRO_DIR
   Use this macro to declare the directory for local m4 macros for aclocal.
 
+** New macros
+  AC_LANG_WERROR
+
 * Major changes in Autoconf 2.57f
 
   Released 2003-10-01, by Akim Demaille.

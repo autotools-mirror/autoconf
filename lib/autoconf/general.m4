@@ -2069,6 +2069,7 @@ AC_DEFUN([_AC_PREPROC_IFELSE],
 if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
   if test -s conftest.err; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_[]_AC_LANG_ABBREV[]_werror_flag
   else
     ac_cpp_err=
   fi
@@ -2150,7 +2151,9 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IF([AC_TRY_EVAL(ac_compile) &&
+AS_IF([_AC_EVAL_STDERR($ac_compile) &&
+	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
+			 || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest.$ac_objext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
@@ -2189,7 +2192,9 @@ AU_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IF([AC_TRY_EVAL(ac_link) &&
+AS_IF([_AC_EVAL_STDERR($ac_link) &&
+	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
+			 || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST

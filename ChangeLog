@@ -1,5 +1,14 @@
 2003-10-20  Daniel Jacobowitz  <drow@mvista.com>
 
+	* lib/autoconf/lang.m4 (AC_LANG_WERROR): New macro.
+	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE, _AC_PREPROC_IFELSE)
+	(_AC_LINK_IFELSE): Check the werror flag.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Document
+	AC_LANG_WERROR.
+	* NEWS: Mention it.
+
+2003-10-20  Daniel Jacobowitz  <drow@mvista.com>
+
 	* lib/autoconf/lang.m4 (AC_NO_EXECUTABLES): Override
 	_AC_COMPILER_EXEEXT to attempt a link.  If linking fails,
 	override AC_LINK_IFELSE.
