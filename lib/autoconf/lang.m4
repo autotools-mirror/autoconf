@@ -180,6 +180,14 @@ m4_defun([_AC_LANG_ABBREV],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
+# _AC_LANG_PREFIX
+# ---------------
+# Return a short (upper case) signature of _AC_LANG that is used to
+# prefix environment variables like FLAGS.
+m4_defun([_AC_LANG_PREFIX],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
 # AC_LANG_ASSERT(LANG)
 # --------------------
 # Current language must be LANG.

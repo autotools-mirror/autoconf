@@ -76,6 +76,11 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 m4_define([_AC_LANG_ABBREV(C)], [c])
 
 
+# _AC_LANG_PREFIX(C)
+# ------------------
+m4_define([_AC_LANG_PREFIX(C)], [C])
+
+
 # ---------------------- #
 # 1c. The C++ language.  #
 # ---------------------- #
@@ -103,6 +108,9 @@ AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 
 
+# _AC_LANG_PREFIX(C++)
+# --------------------
+m4_define([_AC_LANG_PREFIX(C++)], [CXX])
 
 
 
@@ -136,6 +144,7 @@ $1])
 m4_define([AC_LANG_PROGRAM(C)],
 [$1
 m4_ifdef([_AC_LANG_PROGRAM_C_F77_HOOKS], [_AC_LANG_PROGRAM_C_F77_HOOKS])[]dnl
+m4_ifdef([_AC_LANG_PROGRAM_C_FC_HOOKS], [_AC_LANG_PROGRAM_C_FC_HOOKS])[]dnl
 int
 main ()
 {

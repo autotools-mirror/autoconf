@@ -1,3 +1,38 @@
+2003-09-02  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Add support for newer Fortran dialects.  The F77 interface is
+	unchanged, and continues to support Fortran 77.  New FC macros
+	correspond to all the old F77 macros, with output variables FC,
+	FCFLAGS, and FCLIBS.  AC_PROG_FC defaults to picking the newest
+	available dialect, but older dialects can be specified.  There are
+	new macros AC_FC_SRCEXT to set the source extension, and
+	AC_FC_FREEFORM to accept free-form source files.
+
+	* lib/autoconf/c.m4 (_AC_LANG_PREFIX(C), _AC_LANG_PREFIX(C++)):
+	New macros.
+	(AC_LANG_PROGRAM(C)): Invoke _AC_LANG_PROGRAM_C_FC_HOOKS if defined.
+	* lib/autoconf/fortran.m4 (AC_LANG(Fortran), _AC_FORTRAN_ASSERT,
+	_AC_LANG_ABBREV(Fortran), _AC_LANG_PREFIX(Fortran 77),
+	_AC_LANG_PREFIX(Fortran), _AC_FC, AC_LANG_SOURCE(Fortran),
+	AC_LANG_PROGRAM(Fortran), AC_LANG_CALL(Fortran),
+	AC_LANG_PREPROC(Fortran), AC_LANG_COMPILER(Fortran),
+	_AC_FC_DIALECT_YEAR, _AC_F95_FC, _AC_F90_FC, _AC_F77_FC,
+	_AC_PROG_FC, AC_PROG_FC, _AC_PROG_FC_G, _AC_PROG_FC_C_O,
+	AC_PROG_FC_C_O, _AC_PROG_FC_V_OUTPUT, _AC_PROG_FC_V,
+	_AC_FC_LIBRARY_LDFLAGS, AC_FC_LIBRARY_LDFLAGS, _AC_FC_DUMMY_MAIN,
+	AC_FC_DUMMY_MAIN, _AC_FC_MAIN, AC_FC_MAIN, __AC_FC_NAME_MANGLING,
+	_AC_FC_WRAPPERS, AC_FC_WRAPPERS, _AC_FC_FUNC, AC_FC_FUNC,
+	AC_FC_SRCEXT, AC_FC_FREEFORM):
+	New macros.
+	(AC_PROG_F77, AC_PROG_F77_C_O, AC_F77_LIBRARY_LDFLAGS,
+	AC_F77_DUMMY_MAIN, AC_F77_MAIN, _AC_F77_NAME_MANGLING,
+	AC_F77_NAME_MANGLING, AC_F77_WRAPPERS, AC_F77_FUNC):
+	Rewrite in terms of the above.
+	(_AC_PROG_F77_G, _AC_PROG_F77_V_OUTPUT, _AC_PROG_F77_V): Remove.
+	* lib/autoconf/lang.m4 (_AC_LANG_PREFIX): New macro.
+	* tests/acfortran.at: Test AC_FC_FREEFORM, AC_FC_FUNC,
+	AC_FC_MAIN, AC_FC_SRCEXT, AC_FC_WRAPPERS, AC_PROG_FC_C_O.
+
 2003-09-02  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Limitations of Usual Tools, Limitations of Make):
