@@ -1,3 +1,13 @@
+2004-04-20  Gary V. Vaughan  <gary@gnu.org>
+
+	* lib/autoconf/programs.m4 (_AC_PROG_GREP): Take an additional
+	match expression argument, as different greps have different
+	regular expression flavours.
+	(AC_PROG_FGREP): Pass 'FGREP'. fgrep treats all match chars as
+	literals.
+	(AC_PROG_EGREP): Pass 'EGREP$'.
+	(AC_PROG_GREP): Pass 'GREP$'.
+
 2004-04-20  Albert Chin-A-Young  <china@thewrittenword.com>
 
 	* lib/autoconf/programs.m4 (AC_PROG_GREP): Cache variable
