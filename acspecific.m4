@@ -716,12 +716,12 @@ AC_DEFUN(AC_PROG_CXXCPP,
 [AC_MSG_CHECKING(how to run the C++ preprocessor)
 if test -z "$CXXCPP"; then
 AC_CACHE_VAL(ac_cv_prog_CXXCPP,
-[AC_LANG_SAVE[]dnl
-AC_LANG_CPLUSPLUS[]dnl
+[AC_LANG_SAVE()dnl
+AC_LANG_CPLUSPLUS()dnl
   CXXCPP="${CXX-g++} -E"
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
   ac_cv_prog_CXXCPP="$CXXCPP"
-AC_LANG_RESTORE[]dnl
+AC_LANG_RESTORE()dnl
 ])dnl
 CXXCPP="$ac_cv_prog_CXXCPP"
 fi
@@ -894,8 +894,7 @@ AC_SUBST(LN_S)dnl
 ])dnl AC_PROG_LN_S
 
 
-define(AC_RSH,
-[AC_FATAL([$0 has been removed; replace it with equivalent code], 4)])
+AC_DEFUNCT(AC_RSH, [; replace it with equivalent code])
 
 
 dnl ### Checks for header files
@@ -1079,7 +1078,7 @@ AC_DEFUN(AC_DECL_SYS_SIGLIST,
 #include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+# include <unistd.h>
 #endif
 ], [char *msg = *(sys_siglist + 1);],
   ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
@@ -2637,8 +2636,7 @@ fi
 ])dnl AC_C_PROTOTYPES
 
 
-define(AC_ARG_ARRAY,
-[AC_FATAL([$0 has been removed; don't do non-portable things with arguments], 4)])
+AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
 
 dnl Check the object extension used by the compiler: typically .o or
 dnl .obj.  If this is called, some other behaviour will change,
@@ -3029,8 +3027,7 @@ rm -f conftest])
 interpval="$ac_cv_sys_interpreter"
 ])
 
-define(AC_HAVE_POUNDBANG,
-[AC_FATAL([$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments], 4)])
+AC_DEFUNCT(AC_HAVE_POUNDBANG, [;use AC_SYS_INTERPRETER, taking no arguments])
 
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,

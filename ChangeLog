@@ -1,3 +1,8 @@
+2000-02-04  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_RSH, AC_ARG_ARRAY, AC_HAVE_POUNDBANG): No use
+	to hide, you are DEFUNCT.
+
 1999-11-14  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.texi (Invoking ifnames): ifnames no longer supports
