@@ -1,3 +1,11 @@
+1999-09-15  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
+
+	Fix for autoconf/28.
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Don't assume LF is \012, use
+	`echo` followed by a non-blank, within quotes.
+	* autoheader.sh (syms): Likewise.
+	* configure: Rebuilt.
+
 1999-09-07  Ben Elliston  <bje@cygnus.com>
 
 	* autoreconf.sh: Recognise -v as a synonym for --verbose.
