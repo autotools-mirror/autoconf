@@ -73,7 +73,8 @@ SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at 
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = README              atspecific.m4 aclocal.m4              $(SUITE) mktests.sh
+# atlocal.in is to be listed, since Automake doesn't see it...
+EXTRA_DIST = README              atspecific.m4 aclocal.m4              atlocal.in $(SUITE) mktests.sh
 
 
 AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
@@ -87,10 +88,10 @@ MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/
 CLEANFILES =  	debug-*.sh state-* at-* stderr stdout 	script.s4g script.as script				configure configure.in configure.ac config.status config.cache 	config.log config.h.in config.hin config.h 	config.guess config.sub install-sh		expr						libtool ltconfig ltmain.sh
 
 
-DISTCLEANFILES = atconfig testsuite testsuite.log
+DISTCLEANFILES = atconfig atlocal testsuite testsuite.log
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
+CONFIG_CLEAN_FILES = 
+DIST_COMMON =  README Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -106,8 +107,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-atconfig: $(top_builddir)/config.status atconfig.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 tags: TAGS
 TAGS:
 
@@ -196,7 +195,7 @@ distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
 
-check-local: atconfig testsuite
+check-local: atconfig atlocal testsuite
 	$(SHELL) testsuite
 testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \

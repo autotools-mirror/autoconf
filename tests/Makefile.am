@@ -31,11 +31,12 @@ SUITE = suite.at \
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
+# atlocal.in is to be listed, since Automake doesn't see it...
 EXTRA_DIST = README \
              atspecific.m4 aclocal.m4 \
-             $(SUITE) mktests.sh
+             atlocal.in $(SUITE) mktests.sh
 
-check-local: atconfig testsuite
+check-local: atconfig atlocal testsuite
 	$(SHELL) testsuite
 
 AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
@@ -96,7 +97,7 @@ CLEANFILES = 				\
 	expr					\
 	libtool ltconfig ltmain.sh
 
-DISTCLEANFILES = atconfig testsuite testsuite.log
+DISTCLEANFILES = atconfig atlocal testsuite testsuite.log
 
 
 ## ------------------ ##

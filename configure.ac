@@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52c)
 
 # Initialize the test suite.
-AT_CONFIG(../bin)
+AT_CONFIG(tests, ../bin)
 AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in
@@ -68,7 +68,7 @@ AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
                 lib/m4sugar/Makefile
                 lib/autoconf/Makefile lib/autotest/Makefile
                 bin/Makefile
-                tests/Makefile tests/atconfig)
+                tests/Makefile)
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.

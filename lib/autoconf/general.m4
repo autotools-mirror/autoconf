@@ -4343,10 +4343,7 @@ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
 
-dnl FIXME: Until Automake uses the new features of config.status, we
-dnl should keep this silent.  Otherwise, because Automake runs this in
-dnl each directory, it quickly becomes annoying.
-dnl  echo "executing commands of $ac_dest"
+  AC_MSG_NOTICE([executing $ac_dest commands])
   case $ac_dest in
 AC_LIST_COMMANDS_COMMANDS()dnl
   esac
