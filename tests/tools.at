@@ -137,7 +137,6 @@ AT_CLEANUP
 # autoconf --trace: user macros
 # -----------------------------
 AT_SETUP([autoconf --trace: user macros])
-AT_KEYWORDS([autoconf,traces])
 
 
 m4_pattern_allow([^m4_(define|shift)$])
@@ -227,7 +226,6 @@ AT_CLEANUP
 # autoconf --trace: builtins
 # --------------------------
 AT_SETUP([autoconf --trace: builtins])
-AT_KEYWORDS([autoconf,traces])
 
 AT_DATA([configure.ac],
 [[define([active], [ACTIVE])

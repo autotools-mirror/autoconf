@@ -212,8 +212,9 @@ while test $[@%:@] -gt 0; do
         at_tests_selected=$at_help_all
         for at_keyword in `IFS=,; set X $[1]; shift; echo ${1+$[@]}`
         do
+          # It is on purpose that we match the test group titles too.
           at_tests_selected=`echo "$at_tests_selected" |
-                             egrep -i "^[[^;]]*;[[^;]]*;[[^;]]*;.*$at_keyword"`
+                             egrep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
         done
         at_tests_selected=`echo "$at_tests_selected" | sed 's/;.*//'`
         at_tests="$at_tests$at_tests_selected "

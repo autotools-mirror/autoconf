@@ -161,7 +161,6 @@ AT_CHECK_ENV
 # New macros are not expected to depend upon obsolete macros.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
-AT_KEYWORDS([$1])
 
 AT_CONFIGURE_AC([m4_default([$2], [$1])])
 
@@ -189,7 +188,7 @@ AT_CLEANUP()dnl
 # Remove config.hin to avoid `autoheader: config.hin is unchanged'.
 m4_define([AT_CHECK_AU_MACRO],
 [AT_SETUP([$1])
-AT_KEYWORDS([$1])
+AT_KEYWORDS([autoupdate])
 
 AT_CONFIGURE_AC([$1])
 
