@@ -3,8 +3,11 @@ Major changes in release 2.0:
 ** New files:
 * Comes with config.sub and config.guess.
 * Uses config.h.bot if present, analogous to config.h.top.
+* Uses config.cache to cache test results.  An alternate cache file
+  can be selected with the --cache-file=FILE option.
 
 ** New macros:
+* AC_CACHE_USE to share results of tests between configure runs.
 * AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
