@@ -2870,33 +2870,37 @@ SunOS 5.4), define @code{HAVE_FNMATCH}.
 @cvindex NLIST_NAME_UNION
 @cvindex GETLODAVG_PRIVILEGED
 @cvindex NEED_SETGID
+@cvindex C_GETLOADAVG
 @ovindex LIBOBJS
 @ovindex NEED_SETGID
 @ovindex KMEM_GROUP
+@ovindex GETLOADAVG_LIBS
 Check how to get the system load averages.  If the system has the
-@code{getloadavg} function, this macro defines @code{HAVE_GETLOADAVG},
-and adds to @code{LIBS} any libraries needed to get that function.
+@code{getloadavg} function, define @code{HAVE_GETLOADAVG}, and set
+@code{GETLOADAVG_LIBS} to any libraries needed to get that function.
+Also add @code{GETLOADAVG_LIBS} to @code{LIBS}.
 
-Otherwise, it requires an @code{AC_LIBOBJ} replacement of
-@samp{getloadavg}, and possibly defines several other C preprocessor
-macros and output variables:
+Otherwise, require an @code{AC_LIBOBJ} replacement of @samp{getloadavg},
+and possibly define several other C preprocessor macros and output
+variables:
 
 @enumerate
 @item
-It defines @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if
-on those systems.
+Define @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if on
+those systems.
 
 @item
-If it finds @file{nlist.h}, it defines @code{NLIST_STRUCT}.
+If @file{nlist.h} is found, define @code{NLIST_STRUCT}.
 
 @item
-If @samp{struct nlist} has an @samp{n_un} member, it defines
+If @samp{struct nlist} has an @samp{n_un} member, define
 @code{NLIST_NAME_UNION}.
 
 @item
-If compiling @file{getloadavg.c} defines @code{LDAV_PRIVILEGED},
-programs need to be installed specially on this system for
-@code{getloadavg} to work, and this macro defines
+@c FIXME: I don't understand anything to this sentence :(
+If compiling @file{getloadavg.c} define @code{C_GETLOADAVG} and
+@code{LDAV_PRIVILEGED}, programs need to be installed specially on this
+system for @code{getloadavg} to work, and this macro defines
 @code{GETLOADAVG_PRIVILEGED}.
 
 @item

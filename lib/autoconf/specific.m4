@@ -859,25 +859,37 @@ fi
 
 # AC_FUNC_GETLOADAVG
 # ------------------
-AC_DEFUN(AC_FUNC_GETLOADAVG,
+AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
+
+ac_save_LIBS=$LIBS
+
+# On HPUX9, an unprivileged user can get load averages through this function.
+AC_CHECK_FUNCS(pstat_getdynamic)
+
+# Solaris has libkstat which does not require root.
+AC_CHECK_LIB(kstat, kstat_open)
+test $ac_cv_lib_kstat_kstat_open = yes && ac_have_func=yes
 
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
 # On Solaris, -lkvm requires nlist from -lelf, so check that first
 # to get the right answer into the cache.
+# For kstat on solaris, we need libelf to force the definition of SVR4 below.
 AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
-AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
-AC_CHECK_LIB(kstat, kstat_open)
-# Check for the 4.4BSD definition of getloadavg.
-AC_CHECK_LIB(util, getloadavg,
-  [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])
+if test $ac_have_func = no; then
+  AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
+  # Check for the 4.4BSD definition of getloadavg.
+  AC_CHECK_LIB(util, getloadavg,
+    [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])
+fi
 
 if test $ac_have_func = no; then
   # There is a commonly available library for RS/6000 AIX.
   # Since it is not a standard part of AIX, it might be installed locally.
-  ac_getloadavg_LIBS=$LIBS; LIBS="-L/usr/local/lib $LIBS"
+  ac_getloadavg_LIBS=$LIBS
+  LIBS="-L/usr/local/lib $LIBS"
   AC_CHECK_LIB(getloadavg, getloadavg,
-    LIBS="-lgetloadavg $LIBS", LIBS=$ac_getloadavg_LIBS)
+               [LIBS="-lgetloadavg $LIBS"], [LIBS=$ac_getloadavg_LIBS])
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -888,27 +900,29 @@ if test $ac_cv_func_getloadavg = yes; then
             [Define if your system has its own `getloadavg' function.])
   ac_have_func=yes
 else
+  AC_DEFINE(C_GETLOADAVG, 1, [Define if using getloadavg.c.])
   # Figure out what our getloadavg.c needs.
   ac_have_func=no
   AC_CHECK_HEADER(sys/dg_sys_info.h,
-  [ac_have_func=yes;
+  [ac_have_func=yes
    AC_DEFINE(DGUX, 1, [Define for DGUX with <sys/dg_sys_info.h>.])
    AC_CHECK_LIB(dgc, dg_sys_info)])
+
+  AC_CHECK_HEADER(locale.h)
+  AC_CHECK_FUNCS(setlocale)
 
   # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
   # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
   # Irix 4.0.5F has the header but not the library.
   if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
-    ac_have_func=yes;
-    AC_DEFINE(SVR4, 1,
-              [Define on System V Release 4.])
+    ac_have_func=yes
+    AC_DEFINE(SVR4, 1, [Define on System V Release 4.])
   fi
 
   if test $ac_have_func = no; then
     AC_CHECK_HEADER(inq_stats/cpustats.h,
-    [ac_have_func=yes;
-     AC_DEFINE(UMAX, 1,
-               [Define for Encore UMAX.])
+    [ac_have_func=yes
+     AC_DEFINE(UMAX, 1, [Define for Encore UMAX.])
      AC_DEFINE(UMAX4_3, 1,
                [Define for Encore UMAX 4.3 that has <inq_status/cpustats.h>
                 instead of <sys/cpustats.h>.])])
@@ -946,10 +960,10 @@ AC_CACHE_CHECK(whether getloadavg requires setgid,
 [#include "$srcdir/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
-#endif],
+@%:@endif],
   ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])
 if test $ac_cv_func_getloadavg_setgid = yes; then
-  NEED_SETGID=true;
+  NEED_SETGID=true
   AC_DEFINE(GETLOADAVG_PRIVILEGED, 1,
             [Define if the `getloadavg' function needs to be run setuid
              or setgid.])
@@ -972,6 +986,12 @@ if test $ac_cv_func_getloadavg_setgid = yes; then
   KMEM_GROUP=$ac_cv_group_kmem
 fi
 AC_SUBST(KMEM_GROUP)dnl
+if test "x$ac_save_LIBS" = x; then
+  GETLOADAVG_LIBS=$LIBS
+else
+  GETLOADAVG_LIBS=`echo "$LIBS" | sed "s!$ac_save_LIBS!!"`
+fi
+AC_SUBST(GETLOADAVG_LIBS)dnl
 ])# AC_FUNC_GETLOADAVG
 
 
@@ -1208,7 +1228,6 @@ ac_cv_func_working_mktime=no)])
 if test $ac_cv_func_working_mktime = no; then
   AC_LIBOBJ([mktime])
 fi
-AC_SUBST(LIBOBJS)dnl
 ])# AC_FUNC_MKTIME
 
 

@@ -40,7 +40,7 @@ AC_DEFUN(AC_ENV_SAVE,
       [^(cross_compiling)=],
       [^(interpval)=],
       [^(f77_(case|underscore))=],
-      [^(ALLOCA|NEED_SETGID|KMEM_GROUP)=],
+      [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
       [^(_|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
