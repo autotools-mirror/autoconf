@@ -1,3 +1,11 @@
+1998-12-27  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_CYGWIN): Rename from `AC_CYGWIN32'.
+	
+	* config.sub: Drop `32' from `Cygwin32'.
+
+	* config.guess: Likewise.
+
 1998-12-26  Ben Elliston  <bje@cygnus.com>
 
 	* autoreconf.sh (stamp): Add missing quote.

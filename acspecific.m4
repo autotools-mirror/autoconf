@@ -2137,7 +2137,7 @@ dnl
             case "$arg" in
               -lkernel32)
                 case "$canonical_host_type" in
-                  *-*-cygwin32)
+                  *-*-cygwin*)
                     arg=
                   ;;
                   *)
@@ -2611,15 +2611,19 @@ AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
 ])
 
-dnl Check for cygwin32.  This is a way to set the right value for
+dnl Check for Cygwin.  This is a way to set the right value for
 dnl EXEEXT.
-AC_DEFUN(AC_CYGWIN32,
-[AC_CACHE_CHECK(for cygwin32 environment, ac_cv_cygwin32,
-[AC_TRY_COMPILE(,[return __CYGWIN32__;],
-ac_cv_cygwin32=yes, ac_cv_cygwin32=no)
+AC_DEFUN(AC_CYGWIN,
+[AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
+[AC_TRY_COMPILE(,[
+#ifndef __CYGWIN__
+#define __CYGWIN__ __CYGWIN32__
+#endif
+return __CYGWIN__;],
+ac_cv_cygwin=yes, ac_cv_cygwin=no)
 rm -f conftest*])
-CYGWIN32=
-test "$ac_cv_cygwin32" = yes && CYGWIN32=yes])
+CYGWIN=
+test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 
 dnl Check for mingw32.  This is another way to set the right value for
 dnl EXEEXT.
@@ -2632,15 +2636,15 @@ MINGW32=
 test "$ac_cv_mingw32" = yes && MINGW32=yes])
 
 dnl Check for the extension used for executables.  This knows that we
-dnl add .exe for cygwin32 or mingw32.  Otherwise, it compiles a test
+dnl add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 dnl executable.  If this is called, the executable extensions will be
 dnl automatically used by link commands run by the configure script.
 AC_DEFUN(AC_EXEEXT,
-[AC_REQUIRE([AC_CYGWIN32])
+[AC_REQUIRE([AC_CYGWIN])
 AC_REQUIRE([AC_MINGW32])
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
-[if test "$CYGWIN32" = yes || test "$MINGW32" = yes; then
+[if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
   ac_cv_exeext=.exe
 else
   rm -f conftest*
