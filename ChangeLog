@@ -1,3 +1,7 @@
+2003-11-05  Akim Demaille  <akim@epita.fr>
+
+	* configure.ac: Bump to 2.58a.
+
 2003-11-05  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Using Autotest): Avoid @strong{Note: ...}, since
