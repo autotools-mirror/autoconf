@@ -1,3 +1,9 @@
+2000-05-26  Ossama Othman <ossama@ece.uci.edu>
+
+	* aclang.m4 (AC_PROG_CXX): Look for aCC KCC RCC xlC_r xlC.
+	s/c++ g++/g++ c++/.
+	* doc/autoconf.texi (Compilers and Preprocessors): Adjust.
+
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
 	No library nor special privilege is needed to run `getloadavg'

@@ -3618,8 +3618,9 @@ compiling.
 @ovindex CC
 @ovindex CFLAGS
 Determine a C compiler to use.  If @code{CC} is not already set in the
-environment, check for @code{gcc}, and use @code{cc} if that's not found.
-Set output variable @code{CC} to the name of the compiler found.
+environment, check for @code{gcc} and @code{cc}, then for other C
+compilers.  Set output variable @code{CC} to the name of the compiler
+found.
 
 This macro may, however, be invoked with an optional first argument
 which, if specified, must be a space separated list of C compilers to
@@ -3689,10 +3690,9 @@ Determine a C++ compiler to use.  Check if the environment variable
 variable @code{CXX} to its value.
 
 Otherwise, if the macro is invoked without an argument, then search for
-a C++ compiler under the likely names @code{c++}, @code{g++},
-@code{gcc}, @code{CC}, @code{cxx}, @code{cc++} and @code{cl} (in that
-order).  If none of those checks succeed, then as a last resort set
-@code{CXX} to @code{gcc}.
+a C++ compiler under the likely names (first @code{g++} and @code{c++}
+then other names).  If none of those checks succeed, then as a last
+resort set @code{CXX} to @code{gcc}.
 
 This macro may, however, be invoked with an optional first argument
 which, if specified, must be a space separated list of C++ compilers to
@@ -3730,9 +3730,8 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @ovindex F77
 @ovindex FFLAGS
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
-set in the environment, then check for @code{g77}, @code{f77},
-@code{xlf}, @code{cf77}, @code{fl32}, @code{fort77}, @code{f90},
-@code{xlf90} and @code{f2c}, in that order.  Set the output variable
+set in the environment, then check for @code{g77} and @code{f77}, and
+then some other names, and finally @code{f2c}.  Set the output variable
 @code{F77} to the name of the compiler found.
 
 This macro may, however, be invoked with an optional first argument

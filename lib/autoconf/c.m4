@@ -678,10 +678,18 @@ AC_SUBST(CXXCPP)dnl
 # for (if not specified, a default list is used).  This just gives the
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
+# aCC	HP-UX C++ compiler
+# KCC	KAI C++ compiler
+# RCC	Rational C++
+# xlC_r	AIX C Set++ (with support for reentrant code)
+# xlC	AIX C Set++
 AC_DEFUN([AC_PROG_CXX],
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_LANG_PUSH(C++)
-AC_CHECK_TOOLS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
+AC_CHECK_TOOLS(CXX,
+               $CCC m4_default([$1],
+                          [g++ c++ gpp CC cxx cc++ cl aCC KCC RCC xlC_r xlC]),
+               g++)
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
