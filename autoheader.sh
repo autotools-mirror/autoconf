@@ -1,6 +1,6 @@
 #!/bin/sh
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992, 1993 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -142,6 +142,8 @@ fi
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 echo "/* ${config_h}.in.  Generated automatically from $infile by autoheader.  */"
+
+test -f ${config_h}.top && cat ${config_h}.top
 
 # This puts each paragraph on its own line, separated by @s.
 if test -n "$syms"; then
