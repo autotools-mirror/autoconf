@@ -124,7 +124,7 @@ AC_OUTPUT
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,,
 [configure.in:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
 ])
-AT_CHECK([[sed -e '/^#(cut-from-here/, /^#to-here)/!d' -e '/^#/d' configure]],
+AT_CHECK([[sed -e '/^#(cut-from-here/,/^#to-here)/!d' -e '/^#/d' configure]],
          0,
          [NEW
 OLD
