@@ -37,12 +37,7 @@ use strict;
 
 use vars qw(@cfiles @makefiles @shfiles %printed);
 
-# The list of C keywords.
-my %c_keywords = map { $_ => 1}
-  qw (int char float double struct union long short unsigned
-      auto extern register typedef static goto return sizeof break
-      continue if else for do while switch case default);
-
+# The kind of the words we are looking for.
 my @kinds = qw (functions headers identifiers programs
                 makevars libraries);
 
@@ -202,15 +197,26 @@ sub init_tables ()
 }
 
 
-# used($KIND, $WORD, [$WHERE])
-# ----------------------------
+# used ($KIND, $WORD, [$WHERE])
+# -----------------------------
 # $WORD is used as a $KIND.
 sub used ($$;$)
 {
   my ($kind, $word, $where) = @_;
   $where ||= "$File::Find::name:$.";
-  push (@{$used{$kind}{$word}}, $where);
+  if (
+      # Check for all the libraries.  But `-links' is certainly a
+      # `find' argument, and `-le', a `test' argument.
+      ($kind eq 'libraries' && $word !~ /^e|inks$/)
+      # Other than libraries are to be checked only if listed in
+      # the Autoscan library files.
+      || defined $macro{$kind}{$word}
+     )
+    {
+      push (@{$used{$kind}{$word}}, $where);
+    }
 }
+
 
 
 ## ----------------------- ##
@@ -218,8 +224,8 @@ sub used ($$;$)
 ## ----------------------- ##
 
 
-# scan_c_file($FILENAME)
-# ----------------------
+# scan_c_file ($FILENAME)
+# -----------------------
 sub scan_c_file ($)
 {
   my ($filename) = @_;
@@ -275,13 +281,11 @@ sub scan_c_file ($)
       # Maybe we should ignore function definitions (in column 0)?
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
-	  used ('functions', $1)
-	    if !$c_keywords{$1};
+	  used ('functions', $1);
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  used ('identifiers', $1)
-	    if !$c_keywords{$1};
+	  used ('identifiers', $1);
 	}
     }
 
@@ -440,11 +444,6 @@ sub output_kind ($$)
     if exists $kind_comment{$kind};
   foreach my $word (sort keys %{$used{$kind}})
     {
-      # Words that were caught, but not to be checked according to the
-      # autoscan library files.
-      next
-	if ! exists $macro{$kind}{$word};
-
       # Output the needed macro invocations in $configure_scan if not
       # already printed, and remember these macros are needed.
       foreach my $macro (@{$macro{$kind}{$word}})
@@ -626,3 +625,20 @@ if ($configure_ac)
 # at END.  It results in a truncated file.
 $log->close;
 exit 0;
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## cperl-indent-level: 2
+## cperl-brace-offset: 0
+## cperl-continued-brace-offset: 0
+## cperl-label-offset: -2
+## cperl-extra-newline-before-brace: t
+## cperl-merge-trailing-else: nil
+## cperl-continued-statement-offset: 2
+## End:
