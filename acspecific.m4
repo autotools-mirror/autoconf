@@ -1206,6 +1206,7 @@ test $ac_cv_func_memcmp = no && LIBOBJS="$LIBOBJS memcmp.o"
 AC_SUBST(LIBOBJS)dnl
 ])
 
+
 dnl ### Checks for structure members
 
 
