@@ -1,3 +1,21 @@
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
+	* m4sugar.m4 (m4_dquote, m4_pattern_forbid, m4_pattern_allow)
+	(m4_cr_letters, m4_cr_LETTERS, m4_cr_Letters, m4_cr_digits)
+	(m4_cr_symbols1, m4_cr_symbols2, m4_re_string, m4_re_word)
+	(m4_init): New macros.
+	(m4_token_allow): Remove.
+	* acgeneral.m4: Don't push BODY into the diversion stack.
+	(AC_PLAIN_SCRIPT): Do it.
+	Call m4_init, define the Autoconf patterns.
+	(AC_INIT): Use AC_PLAIN_SCRIPT.
+	Remove the useless `dnl' (those where the current diversion is
+	KILL).
+	* autoconf.sh (m4_common): Fix quotation.
+	(finalize.awk): Load forbidden.rx and allowed.rx.
+	Split the line into tokens, and check their validity.
+	* tests/tools.at (Forbidden tokens): Adjust.
+
 2000-12-05  Bob Wilson  <bwilson@tensilica.com>
 
 	* acspecific.m4 (_AC_OBJEXT, _AC_EXEEXT): Ignore .d files produced

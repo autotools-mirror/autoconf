@@ -261,7 +261,7 @@ $debug ||
 test -f "$autoconf_dir/acsite.m4" && acsite_m4="$autoconf_dir/acsite.m4"
 test -f "$localdir/aclocal.m4"   && aclocal_m4="$localdir/aclocal.m4"
 m4_common="$acsite_m4 $aclocal_m4 -I $autoconf_dir -I $localdir \
-           -Dm4_tmpdir=\"$tmp\""
+           -Dm4_tmpdir=$tmp"
 run_m4="$M4           $autoconf_dir/autoconf.m4  $m4_common"
 run_m4f="$M4 --reload $autoconf_dir/autoconf.m4f $m4_common"
 
@@ -314,43 +314,37 @@ case $task in
   # Put the real line numbers into configure to make config.log more
   # helpful.  Because quoting can sometimes get really painful in m4,
   # there are special @tokens@ to substitute.
-  cat >$tmp/finalize.awk <<EOF
+  sed 's/^    //' >$tmp/finalize.awk <<EOF
     # Load the list of tokens which escape the forbidden patterns.
     BEGIN {
       # Be sure the read GAWK documentation to understand the parens
-      # around \`tmp "/tokens_allowed"'.
-      while ((getline token < (tmp "/tokens_allowed")) > 0)
-      	{
-          if (verbose)
-            print "$0: token \`" token "' is allowed" | "cat >&2"
-          tokens_allowed[token] = 1
-      	}
-      close (tmp "/tokens_allowed")
+      # around \`tmp "/forbidden.rx"'.
+      while ((getline pattern < (tmp "/forbidden.rx")) > 0)
+        forbidden = (forbidden ? forbidden "|" : "") pattern
+      close (tmp "/forbidden.rx")
+      if (verbose)
+        errprint("$me: forbidden: " forbidden)
+
+      while ((getline pattern < (tmp "/allowed.rx")) > 0)
+        allowed = (allowed ? allowed "|" : "") pattern
+      close (tmp "/allowed.rx")
+      if (verbose)
+        errprint("$me: allowed: " allowed)
+    }
+
+    function errprint (message)
+    {
+      print message | "cat >&2"
     }
 
     function undefined (file, line, macro)
     {
-      print file ":" line ": error: undefined macro: " macro | "cat >&2"
-    }
-
-    # If the token in CODE_PART from BEGIN to END is forbidden,
-    # register it for further complains.
-    function check_pattern (pattern, offset)
-    {
-      if (match (code_part, pattern))
-        {
-    	  token = substr (code_part, RSTART + offset, RLENGTH - offset)
-    	  if (! tokens_allowed[token])
-    	    {
-    	      macros [token] = oline
-    	      some_macros_were_not_expanded = 1
-    	    }
-    	}
+      errprint(file ":" line ": error: undefined macro: " macro)
     }
 
     # Body.
     {
-      sub(/[         ]*$/, "")
+      sub (/[ \t]*$/, "")
       if (\$0 == "")
         {
           if (!duplicate)
@@ -364,7 +358,7 @@ case $task in
       duplicate = 0
       oline++
       if (\$0 ~ /__oline__/)
-        while (sub(/__oline__/, oline))
+        while (sub (/__oline__/, oline))
           continue
       while (sub (/@<:@/, "["))
         continue
@@ -374,17 +368,22 @@ case $task in
         continue
       while (sub (/@%:@/, "#"))
         continue
-      # Dubious feature: we tolerate macro names when commented.
-      code_part = \$0
-      sub (/#.*/, "", code_part)
 
-      # We don't \`if ... else if ...' because a single line may contain
-      # several unexpanded names.  That's also why the last two \`match'
-      # are not grouped together.
-      check_pattern("[^$WORDCHAR](A[$ALPHABET]|m4)_[$WORDCHAR]*", 1)
-      check_pattern("^(A[$ALPHABET]|m4)_[$WORDCHAR]*", 0)
-      check_pattern("[$WORDCHAR]*_A[$ALPHABET]_[$WORDCHAR]*", 0)
       print
+
+      # Dubious feature: we tolerate macro names when commented.
+      sub (/#.*/, "")
+
+      # Get the tokens.
+      split (\$0, tokens, /[^$WORDCHAR]*/)
+
+      for (token in tokens)
+        if (match (tokens[token], forbidden) &&
+            !match (tokens[token], allowed))
+          {
+            macros [tokens [token]] = oline
+            some_macros_were_not_expanded = 1
+          }
     }
 
     # If there are some macros which are left unexpanded in the output,

@@ -492,6 +492,7 @@ _m4_dumpdefs_down([$1])])
 # expansion of EXP, while in the latter you just obtain the string
 # `exp'.
 m4_define([m4_quote], [[$*]])
+m4_define([m4_dquote], [[[$*]]])
 
 
 # m4_noquote(STRING)
@@ -1123,12 +1124,19 @@ m4_define([$1],
                              [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
 
 
-# m4_token_allow(TOKEN)
+# m4_pattern_forbid(ERE)
+# ----------------------
+# Declare that no token matching the extended regular expression ERE
+# should be seen in the output but if...
+m4_define([m4_pattern_forbid],
+[m4_file_append(m4_defn([m4_tmpdir])/forbidden.rx, [$1])])
+
+
+# m4_pattern_allow(ERE)
 # ---------------------
-# Declare TOKEN is allowed in the output, even if it matches the forbidden
-# patterns such as `m4_*'.
-m4_define([m4_token_allow],
-[m4_file_append(m4_defn([m4_tmpdir])/tokens_allowed, [$1])])
+# ... but if that token matches the extended regular expression ERE.
+m4_define([m4_pattern_allow],
+[m4_file_append(m4_defn([m4_tmpdir])/allowed.rx, [$1])])
 
 
 ## ----------------------------- ##
@@ -1225,6 +1233,51 @@ m4_define([m4_provide_ifelse],
 ## -------------------- ##
 ## 9. Text processing.  ##
 ## -------------------- ##
+
+# m4_cr_letters
+# m4_cr_LETTERS
+# m4_cr_Letters
+# -------------
+m4_define([m4_cr_letters], [abcdefghijklmnopqrstuvwxyz])
+m4_define([m4_cr_LETTERS], [ABCDEFGHIJKLMNOPQRSTUVWXYZ])
+m4_define([m4_cr_Letters],
+m4_defn([m4_cr_letters])dnl
+m4_defn([m4_cr_LETTERS])dnl
+)
+
+# m4_cr_digits
+# ------------
+m4_define([m4_cr_digits], [0123456789])
+
+
+# m4_cr_symbols1 & m4_cr_symbols2
+# -------------------------------
+m4_define([m4_cr_symbols1],
+m4_defn([m4_cr_Letters])dnl
+_)
+
+m4_define([m4_cr_symbols2],
+m4_defn([m4_cr_symbols1])dnl
+m4_defn([m4_cr_digits])dnl
+)
+
+
+# m4_re_string
+# ------------
+# Regexp for `[a-zA-Z_0-9]*'
+m4_define([m4_re_string],
+m4_dquote(m4_defn([m4_cr_symbols2]))dnl
+[*]dnl
+)
+
+
+# m4_re_word
+# ----------
+# Regexp for `[a-zA-Z_][a-zA-Z_0-9]*'
+m4_define([m4_re_word],
+m4_dquote(m4_defn([m4_cr_symbols1]))dnl
+m4_defn([m4_re_string])dnl
+)
 
 # m4_tolower(STRING)
 # m4_toupper(STRING)
@@ -1549,4 +1602,26 @@ m4_define([m4_version_compare],
 m4_define([m4_file_append],
 [m4_syscmd([cat >>$1 <<_m4eof
 $2
-_m4eof])])
+_m4eof])
+ifelse(m4_sysval, [0], [],
+       [m4_fatal([$0: cannot write: $1])])])
+
+
+
+## ------------------------ ##
+## 13. Setting M4sugar up.  ##
+## ------------------------ ##
+
+
+# m4_init
+# -------
+m4_defun([m4_init],
+[# We need a tmp directory.
+m4_ifndef([m4_tmpdir],
+          [m4_define([m4_tmpdir], [/tmp])])
+
+
+# M4sugar reserves `m4_[A-Za-z0-9_]*'.  We'd need \b and +,
+# but they are not portable.
+m4_pattern_forbid([^m4_])
+])

@@ -154,9 +154,8 @@ m4_define([AC_DIVERT_POP],
 [m4_divert_pop($@)])
 
 
-# Initialize the diversion setup.
-m4_define([_m4_divert_diversion], _m4_divert([BODY]))
 # Throw away output until AC_INIT is called.
+# FIXME: Should not be here.
 m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 
 
@@ -189,6 +188,7 @@ m4_define([AC_DEFUN_ONCE],
 # ------------------------------------------
 m4_define([AC_OBSOLETE],
 [AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
+
 
 
 
@@ -593,10 +593,10 @@ m4_popdef([AC_Prefix])dnl
 # _AC_INIT_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
 # ------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
-[m4_define([AC_PACKAGE_NAME],     [$1])dnl
-m4_define([AC_PACKAGE_VERSION],   [$2])dnl
-m4_define([AC_PACKAGE_STRING],    [$1 $2])dnl
-m4_define([AC_PACKAGE_BUGREPORT], [$3])dnl
+[m4_define([AC_PACKAGE_NAME],     [$1])
+m4_define([AC_PACKAGE_VERSION],   [$2])
+m4_define([AC_PACKAGE_STRING],    [$1 $2])
+m4_define([AC_PACKAGE_BUGREPORT], [$3])
 ])
 
 
@@ -1518,6 +1518,18 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 ])
 
 
+# AC_PLAIN_SCRIPT
+# ---------------
+# Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
+# generation.  This is used by some tests, and let `autoconf' be used to
+# generate other scripts than `configure'.
+m4_define([AC_PLAIN_SCRIPT],
+[m4_init
+m4_pattern_forbid([^A]m4_dquote(m4_defn([m4_cr_LETTERS]))[_])
+m4_pattern_forbid([_AC_])
+m4_divert_push([BODY])])
+
+
 # AC_INIT([PACKAGE, VERSION, [BUG-REPORT])
 # ----------------------------------------
 # Include the user macro files, prepare the diversions, and output the
@@ -1525,10 +1537,9 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 m4_define([AC_INIT],
-[m4_ifval([$2], [_AC_INIT_PACKAGE($@)])dnl
+[m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 m4_divert_text([BINSH], [@%:@! /bin/sh])
-_AC_INIT_DEFAULTS()dnl
-m4_divert_pop()dnl to BODY
+_AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
 _AC_INIT_SRCDIR
 _AC_INIT_HELP
@@ -1539,16 +1550,11 @@ dnl it dumps into a diversion prepared by _AC_INIT_VERSION.
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
+# Initialize the diversion setup.
+AC_PLAIN_SCRIPT
 ])
 
 
-# AC_PLAIN_SCRIPT
-# ---------------
-# Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
-# generation.  This is used by some tests, and let `autoconf' be used to
-# generate other scripts than `configure'.
-m4_define([AC_PLAIN_SCRIPT],
-[m4_divert_pop()])
 
 
 ## ----------------------------- ##

@@ -347,27 +347,32 @@ AT_SETUP([Forbidden tokens])
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
-AB_THIS_IS_PROBABLY_NOT_DEFINED
-AND_AZ_THAT_EITHER
-and_AZ_that_too
-# This is legal, also there is `AC_DEFINE' in there.
+
+# This is allowed in spite of the name.
+m4_pattern_allow([^AC_ALLOWED$])
+NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
+
+# Test forbidding.
+m4_pattern_forbid([^FORBIDDEN$])
+NOT_FORBIDDEN FORBIDDEN FORBIDDEN_NOT
+
+# Test Autoconf's patterns.
+AC_THIS_IS_INVALID and AZ_THIS_IS_INVALID_TOO
+BUT_AZ_THIS_IS_NOT ALTHOUGH_AC_THIS_IS
+# This is legal, although there is `AC_DEFINE' in there.
 BAC_DEFINE
 # AC_THIS_IS_A_COMMENT so just shut up.
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
-
-# This is allowed in spite of the name.
-m4_token_allow([AC_UNDEFINED])
-AC_UNDEFINED
-# But it does not allow this,
-MY_AC_UNDEFINED
 ]])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
-[[configure.in:2: error: undefined macro: AB_THIS_IS_PROBABLY_NOT_DEFINED
-configure.in:3: error: undefined macro: AND_AZ_THAT_EITHER
-configure.in:4: error: undefined macro: and_AZ_that_too
-configure.in:14: error: undefined macro: MY_AC_UNDEFINED
-configure:7: error: undefined macro: AC_OUTPUT
+[[configure.in:5: error: undefined macro: NOT_AC_ALLOWED
+configure.in:5: error: undefined macro: AC_ALLOWED_NOT
+configure.in:8: error: undefined macro: FORBIDDEN
+configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
+configure.in:12: error: undefined macro: AZ_THIS_IS_INVALID_TOO
+configure.in:13: error: undefined macro: ALTHOUGH_AC_THIS_IS
+configure:16: error: undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure)
