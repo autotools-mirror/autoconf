@@ -1,6 +1,6 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
-	Fix Autoconf/FIXME:.
+	Fix Autoconf/123.
 
 	* libm4.m4: Rename `symbols' as `m4_symbols'.
 
