@@ -1,5 +1,9 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Catch up -I, --include changes.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&parse_args): Die on unknown languages.
 	* bin/autoheader.in: Run directly autom4te --mode=autoconf, no
 	need for autoconf.

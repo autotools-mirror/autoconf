@@ -1151,20 +1151,9 @@ Don't remove the temporary files.
 @itemx -f
 Remake @file{configure} even if newer than its input files.
 
-@item --autoconf-dir=@var{dir}
-@itemx -A @var{dir}
-@evindex AC_MACRODIR
-Override the location where the installed Autoconf data files are looked
-for.  You can also set the @code{AC_MACRODIR} environment variable to a
-directory; this option overrides the environment variable.
-
-This option is rarely needed and dangerous; it is only used when one
-plays with different versions of Autoconf simultaneously.
-
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package file @file{aclocal.m4} in directory @var{dir}
-instead of in the current directory.
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations accumulate.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -2518,21 +2507,9 @@ Don't remove the temporary files.
 @itemx -f
 Remake the template file even if newer than its input files.
 
-@item --autoconf-dir=@var{dir}
-@itemx -A @var{dir}
-@evindex AC_MACRODIR
-Override the location where the installed Autoconf data files are looked
-for.  You can also set the @code{AC_MACRODIR} environment variable to a
-directory; this option overrides the environment variable.
-
-This option is rarely needed and dangerous; it is only used when one
-plays with different versions of Autoconf simultaneously.
-
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
-not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
-@var{dir} instead of in the current directory.
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations accumulate.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -10089,20 +10066,9 @@ Report processing steps.
 @itemx -d
 Don't remove the temporary files.
 
-@item --autoconf-dir=@var{dir}
-@itemx -A @var{dir}
-@evindex AC_MACRODIR
-Override the location where the installed Autoconf data files are looked
-for.  You can also set the @code{AC_MACRODIR} environment variable to a
-directory; this option overrides the environment variable.
-
-This option is rarely needed and dangerous; it is only used when one
-plays with different versions of Autoconf simultaneously.
-
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package file @file{aclocal.m4} in directory @var{dir}
-instead of in the current directory.
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations accumulate.
 @end table
 
 @node Obsolete Macros

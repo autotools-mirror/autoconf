@@ -13,10 +13,11 @@
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
   some processing.
-** autoconf
+** Standardization of the executables options
 - --force, -f
-** autoheader
-- --force, -f
+  Supported by autom4te, autoconf and autoheader.
+- --include, -I
+  Replaces --autoconf-dir and --localdir in autoconf and autoheader.
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
 ** C Macros
