@@ -4,10 +4,10 @@
 @settitle Autoconf
 @setchapternewpage odd
 @c %**end of header
-@c Use on instead of odd in the setchapternewpage for single-sided printing.
+@c For single-sided printing, use on instead of odd in the setchapternewpage.
 
-@set EDITION 1.7.7
-@set VERSION 1.7.7
+@set EDITION 1.7.8
+@set VERSION 1.7.8
 @set UPDATED March 1994
 
 @iftex
@@ -627,6 +627,26 @@ exists (implying the @code{rexec} function), and in addition define
 available, define @code{NO_REMOTE}.
 @end defmac
 
+@defmac AC_SET_MAKE
+@maindex SET_MAKE
+If @code{make} predefines the variable @code{MAKE}, define @code{make}
+variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
+to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
+
+In recent versions of @code{make}, the variable @code{MAKE} contains the
+name of the @code{make} program plus options it was given.  It is used
+when running @code{make} recursively in subdirectories.  But some old
+versions of @code{make} don't set the @code{MAKE} variable.
+This macro allows use of @code{MAKE} on all systems.
+
+If you use this macro, simply place a line like this in your
+@file{Makefile.in} file(s):
+
+@example
+@@SET_MAKE@@
+@end example
+@end defmac
+
 @node Header Files, Typedefs, Alternative Programs, Specific Tests
 @section Header Files
 
@@ -1022,7 +1042,9 @@ detects any of them.
 @vindex HAVE_VPRINTF
 @vindex HAVE_DOPRNT
 If @code{vprintf} is found, define @code{HAVE_VPRINTF}.  Otherwise, if
-@code{_doprnt} is found, define @code{HAVE_DOPRNT}.
+@code{_doprnt} is found, define @code{HAVE_DOPRNT}.  (If @code{vprintf}
+is available, you may assume that @code{vfprintf} and @code{vsprintf}
+are also available.)
 @end defmac
 
 @defmac AC_WAIT3
@@ -2653,6 +2675,13 @@ command line like this:
 
 @example
 CC='gcc -traditional' LIBS=-lposix ./configure
+@end example
+
+@noindent
+On systems that have the @code{env} program, you can do it like this:
+
+@example
+env CC='gcc -traditional' LIBS=-lposix ./configure
 @end example
 
 Here are the @code{make} variables that you might want to override with
