@@ -1763,7 +1763,7 @@ name is obsolete because some @code{make} have a rule that creates
 @section Outputting Files
 
 Every Autoconf script, e.g., @file{configure.ac}, should finish by
-calling @code{AC_OUTPUT}.  That is the macro that generates
+calling @code{AC_OUTPUT}.  That is the macro that generates and runs
 @file{config.status}, which will create the @file{Makefile}s and any
 other files resulting from configuration.  This is the only required
 macro besides @code{AC_INIT} (@pxref{Input}).
@@ -1782,6 +1782,14 @@ Commands}, macro @code{AC_CONFIG_COMMANDS}), links (see
 @ref{Configuration Links}, macro @code{AC_CONFIG_LINKS}), subdirectories
 to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
+
+The location of your @code{AC_OUTPUT} invocation is the exact point
+where configuration actions are taken: any code afterwards will be
+executed by @code{configure} once @command{config.status} was run.  If
+you want to bind actions to @command{config.status} itself
+(independently of whether @command{configure} is being run), see
+@ref{Configuration Commands, , Running Arbitrary Configuration
+Commands}.
 @end defmac
 
 Historically, the usage of @code{AC_OUTPUT} was somewhat different.
