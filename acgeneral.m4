@@ -3588,17 +3588,20 @@ AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 # shells die.  Unfortunately the limit is not known precisely...
 m4_define([_AC_OUTPUT_CONFIG_STATUS],
 [AC_MSG_NOTICE([creating $CONFIG_STATUS])
-cat >$CONFIG_STATUS <<\_ACEOF
-#! /bin/sh
+cat >$CONFIG_STATUS <<_ACEOF
+#! $SHELL
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # Compiler output produced by configure, useful for debugging
 # configure, is in config.log if it exists.
 
 debug=false
-as_me=`echo "$[0]" | sed 's,.*/,,'`
-SHELL=${CONFIG_SHELL-/bin/sh}
+as_me=\`echo "\$[0]" | sed 's,.*/,,'\`
+SHELL=\${CONFIG_SHELL-$SHELL}
 
+_ACEOF
+
+cat >>$CONFIG_STATUS <<\_ACEOF
 AS_SHELL_SANITIZE
 _AC_INIT_DEFAULTS_FDS
 cat >&AS_MESSAGE_LOG_FD << EOF

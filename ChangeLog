@@ -1,5 +1,11 @@
 2001-03-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Don't hard code
+	`/bin/sh', use $SHELL.
+	From Paul Eggert.
+
+2001-03-19  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4 (AC_FUNC_STRERROR_R): Update to
 	fileutils-4.0.42's.
 

@@ -1571,17 +1571,20 @@ ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
 { echo "$as_me:1572: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
-cat >$CONFIG_STATUS <<\_ACEOF
-#! /bin/sh
+cat >$CONFIG_STATUS <<_ACEOF
+#! $SHELL
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # Compiler output produced by configure, useful for debugging
 # configure, is in config.log if it exists.
 
 debug=false
-as_me=`echo "$0" | sed 's,.*/,,'`
-SHELL=${CONFIG_SHELL-/bin/sh}
+as_me=\`echo "\$0" | sed 's,.*/,,'\`
+SHELL=\${CONFIG_SHELL-$SHELL}
 
+_ACEOF
+
+cat >>$CONFIG_STATUS <<\_ACEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -1745,7 +1748,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:1748: error: ambiguous option: $1
+    { { echo "$as_me:1751: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1772,12 +1775,12 @@ Try \`$0 --help' for more information." >&2;}
   'tests/atconfig' ) CONFIG_FILES="$CONFIG_FILES tests/atconfig" ;;
 
   # This is an error.
-  -*) { { echo "$as_me:1775: error: unrecognized option: $1
+  -*) { { echo "$as_me:1778: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; } ;;
-  *) { { echo "$as_me:1780: error: invalid argument: $1" >&5
+  *) { { echo "$as_me:1783: error: invalid argument: $1" >&5
 echo "$as_me: error: invalid argument: $1" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -1991,7 +1994,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1994: creating $ac_file" >&5
+    { echo "$as_me:1997: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -2009,7 +2012,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]* | ?:[\\/]*)
          # Absolute
-         test -f "$f" || { { echo "$as_me:2012: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:2015: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -2022,7 +2025,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:2025: error: cannot find input file: $f" >&5
+           { { echo "$as_me:2028: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
