@@ -917,10 +917,12 @@ NONE)
 esac
 
 dnl Set the other host vars.
+changequote(<<, >>)dnl
 host=`$ac_config_sub $host_alias`
-host_cpu=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
-host_vendor=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
-host_os=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+changequote([, ])dnl
 AC_MSG_RESULT($host)
 AC_SUBST(host)dnl
 AC_SUBST(host_alias)dnl
@@ -945,10 +947,12 @@ NONE)
 esac
 
 dnl Set the other target vars.
+changequote(<<, >>)dnl
 target=`$ac_config_sub $target_alias`
-target_cpu=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
-target_vendor=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
-target_os=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+target_cpu=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+target_vendor=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+changequote([, ])dnl
 AC_MSG_RESULT($target)
 AC_SUBST(target)dnl
 AC_SUBST(target_alias)dnl
@@ -973,10 +977,12 @@ NONE)
 esac
 
 dnl Set the other build vars.
+changequote(<<, >>)dnl
 build=`$ac_config_sub $build_alias`
-build_cpu=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
-build_vendor=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
-build_os=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+build_cpu=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+build_vendor=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+build_os=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+changequote([, ])dnl
 AC_MSG_RESULT($build)
 AC_SUBST(build)dnl
 AC_SUBST(build_alias)dnl

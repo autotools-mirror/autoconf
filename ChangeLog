@@ -1,3 +1,9 @@
+Thu Oct 10 22:29:37 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_CANONICAL_HOST, AC_CANONICAL_TARGET,
+	AC_CANONICAL_BUILD): Allow the os part of the string returned by
+	config.sub to contain dashes, as in "linux-gnu".
+
 Fri Jul 19 16:59:00 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_TYPE): Add dnl so regexp doesn't have a
