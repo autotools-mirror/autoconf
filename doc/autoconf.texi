@@ -320,6 +320,7 @@ Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
+* Common Shell Constructs::     Working around shell portability problems
 
 Writing Autoconf Macros
 
@@ -6688,6 +6689,8 @@ M4sugar''.
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
+* Common Shell Constructs::     Working around shell portability problems
+
 @end menu
 
 @node Redefined M4 Macros
@@ -6791,7 +6794,19 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
 @end defmac
 
+@node Common Shell Constructs
+@subsection Common Shell Constructs
 
+M4sugar provides portable alternatives for some common shell constructs
+that unfortunately are not portable in practice.
+
+@defmac AS_DIRNAME (@var{pathname})
+@msindex DIRNAME
+Return the directory portion of @var{pathname}, using the algorithm
+required by @sc{posix}.  @xref{Limitations of Usual Tools}, for more
+details about what this returns and why it is more portable than the
+@command{dirname} command.
+@end defmac
 
 @c=================================================== Writing Autoconf Macros.
 
@@ -8746,17 +8761,18 @@ Some implementations, such as Tru64's, fail when comparing to
 @item @command{dirname}
 @c --------------------
 @prindex @command{dirname}
-Not all hosts have @command{dirname}, but it is reasonably easy to
-emulate, e.g.:
+Not all hosts have a working @command{dirname}, and you should instead
+use @code{AS_DIRNAME} (@pxref{Common Shell Constructs}).  For example.
 
 @example
-dir=`expr "x$file" : 'x\(.*\)/[^/]*' \|
-          '.'      : '.'
+dir=`dirname "$file"` # This is not portable.
+dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @end example
 
 @noindent
-But there are a few subtilities, e.g., under UN*X, should @samp{//1}
-give @samp{/}?  Paul Eggert answers:
+This handles a few subtleties in the standard way required by
+@sc{posix}.  For example, under UN*X, should @samp{dirname //1} give
+@samp{/}?  Paul Eggert answers:
 
 @quotation
 No, under some older flavors of Unix, leading @samp{//} is a special
@@ -8766,15 +8782,11 @@ to @samp{/}; but leading @samp{//} is special.  I think this tradition
 started with Apollo Domain/OS, an OS that is still in use on some older
 hosts.
 
-POSIX.2 allows but does not require the special treatment for @samp{//}.
+@sc{posix} allows but does not require the special treatment for @samp{//}.
 It says that the behavior of dirname on path names of the form
 @samp{//([^/]+/*)?}  is implementation defined.  In these cases, GNU
 @command{dirname} returns @samp{/}, but it's more portable to return
 @samp{//} as this works even on those older flavors of Unix.
-
-I have heard rumors that this special treatment of @samp{//} may be
-dropped in future versions of POSIX, but for now it's still the
-standard.
 @end quotation
 
 
