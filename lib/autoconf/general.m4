@@ -608,7 +608,7 @@ ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev
 dnl
 define(AC_LANG_CPLUSPLUS,
 [define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
-# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP}'
 ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
