@@ -103,7 +103,7 @@ installdirs: mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 
 # References to install-info have been removed until it's released.
-install: acgeneral.m4 acspecific.m4 acconfig.h installdirs
+install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
 	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
@@ -119,7 +119,7 @@ install: acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_DATA) $(srcdir)/acmakevars $(acdatadir)/acmakevars; \
 	else :; fi
 
-install-info: installdirs
+install-info: info installdirs
 	-test -f autoconf.info || cd $(srcdir); \
 	for i in autoconf.info*; do \
 	$(INSTALL_DATA) $$i $(infodir)/$$i; \
