@@ -1,3 +1,10 @@
+2001-07-10  Jens Petersen  <petersen@redhat.com>
+
+	* autoscan.in (&scan_makefile): Improve programs regexp to parse
+	things like "g++", "file.c" and "some-conf" as tokens.
+	(&scan_file): Match C++ files extensions.
+	If the filename extension is C++ then ask for c++.
+
 2001-07-05  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_F77_DUMMY_MAIN): Use AC_TRY_LINK, not

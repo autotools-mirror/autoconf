@@ -26,6 +26,7 @@ cc		AC_PROG_CC
 gcc		AC_PROG_CC
 cpp		AC_PROG_CPP
 CC		AC_PROG_CXX
+c++		AC_PROG_CXX
 g++		AC_PROG_CXX
 install		AC_PROG_INSTALL
 lex		AC_PROG_LEX

@@ -265,7 +265,6 @@ sub scan_c_file ($)
   my ($file) = @_;
 
   push (@cfiles, $File::Find::name);
-  push (@{$used{'programs'}{"cc"}}, $File::Find::name);
 
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
@@ -346,7 +345,7 @@ sub scan_makefile ($)
 	  push (@{$used{'libraries'}{$1}}, "$File::Find::name:$.");
 	}
       # Tokens in the code.
-      while (s/\b([a-zA-Z_]\w*)\b/ /)
+      while (s/\b([a-zA-Z_][\w\+\.-]+)/ /)
 	{
 	  push (@{$used{'programs'}{$1}}, "$File::Find::name:$.");
 	}
@@ -396,8 +395,14 @@ sub scan_file ()
   # Strip a useless leading `./'.
   $File::Find::name =~ s,^\./,,;
 
-  if (/\.[chlymC](\.in)?$/ || /\.cc(\.in)?$/)
+  if (/\.[chlym](\.in)?$/)
     {
+      push (@{$used{'programs'}{"cc"}}, $File::Find::name);
+      scan_c_file ($_);
+    }
+  elsif (/\.(cc|cpp|cxx|CC|C|hh|hpp|hxx|HH|H|yy|ypp|ll|lpp)(\.in)?$/)
+    {
+      push (@{$used{'programs'}{"c++"}}, $File::Find::name);
       scan_c_file ($_);
     }
   elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)
