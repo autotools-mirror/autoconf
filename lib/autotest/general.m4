@@ -251,7 +251,7 @@ while test $[@%:@] -gt 0; do
         do
           # It is on purpose that we match the test group titles too.
           at_groups_selected=`echo "$at_groups_selected" |
-                             egrep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
+			      grep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
         done
         at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
 	# Smash the end of lines.
@@ -335,10 +335,9 @@ AT_TESTSUITE_NAME test groups:
 _ATEOF
   # "  1 42  45 " => "^(1|42|45);".
   at_groups_pattern=`echo "$at_groups" | sed 's/^  *//;s/  *$//;s/  */|/g'`
-  at_groups_pattern="^(${at_groups_pattern});"
   echo "$at_help_all" |
-    egrep -e "$at_groups_pattern" |
     awk 'BEGIN { FS = ";" }
+         { if ($[1] !~ /^('"$at_groups_pattern"')$/) next }
          { if ($[1]) printf " %3d: %-18s %s\n", $[1], $[2], $[3]
            if ($[4]) printf "      %s\n", $[4] } '
   exit 0
@@ -849,8 +848,8 @@ $at_verbose "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >$at_check_line_file
 ( $at_traceon; $1 ) >$at_stdout 2>$at_stder1
 at_status=$?
-egrep '^ *\+' $at_stder1 >&2
-egrep -v '^ *\+' $at_stder1 >$at_stderr
+grep '^ *+' $at_stder1 >&2
+grep -v '^ *+' $at_stder1 >$at_stderr
 at_failed=false
 dnl Check stderr.
 m4_case([$4],
