@@ -1,3 +1,8 @@
+2003-10-02  Akim Demaille  <akim@epita.fr>
+
+	* bin/ifnames.in (&scan_file): Skip C++ comments.
+        From Jeremy Yallop.
+
 2003-10-01  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (Particular Structure Checks):

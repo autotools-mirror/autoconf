@@ -107,6 +107,7 @@ sub scan_file ($)
 	  # Remove comments.  Not perfect, but close enough.
 	  s(/\*.*?\*/)();
 	  s(/\*.*)();
+	  s(//.*)();
 	  foreach my $word (split (/\W+/))
 	    {
 	      next
