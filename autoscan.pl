@@ -1,4 +1,4 @@
-#! @PERL@
+#! @PERL@ -w
 # autoscan - Create configure.scan (a preliminary configure.in) for a package.
 # Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 
@@ -20,6 +20,7 @@
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
 require "find.pl";
+use Getopt::Long;
 
 $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 ($me = $0) =~ s,.*/,,;
@@ -38,17 +39,14 @@ undef %programs_macros;
 
 exit 0;
 
-# Process any command line arguments.
-sub parse_args
+# Display usage (--help).
+sub print_usage
 {
-  # There are a couple of useless `\' below.  They are used to have
-  # Emacs fontify properly.
-  local ($usage) = <<EOD;
-Usage: $0 [OPTION] ... [SRCDIR]
+  print "Usage: $0 [OPTION] ... [SRCDIR]
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
-common portability problems and create a file \`configure.scan' which
+common portability problems and create a file \`configure.scan\' which
 is a preliminary \`configure.in' for that package.
 
   -h, --help            print this help, then exit
@@ -59,61 +57,43 @@ Library directories:
   -A, --autoconf-dir=ACDIR  Autoconf's files location (rarely needed)
   -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
 
-Report bugs to <bug-autoconf\@gnu.org>.
-EOD
+Report bugs to <bug-autoconf\@gnu.org>.\n";
+  exit 0;
+}
 
-  local ($version) = <<'EOD';
-autoscan (GNU @PACKAGE@) @VERSION@
+# Display version (--version).
+sub print_version
+{
+  print "autoscan (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie.
 
 Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-EOD
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
+  exit 0;
+}
 
-  local ($help) = "Try \`$me --help' for more information.";
+# Process any command line arguments.
+sub parse_args
+{
+  Getopt::Long::Configure ("bundling");
+  Getopt::Long::GetOptions ("A|autoconf-dir|m|macrodir=s" => \$datadir,
+			    "h|help" => \&print_usage,
+			    "V|version" => \&print_version,
+			    "v|verbose+" => \$verbose)
+    or exit 1;
 
-  local $need_datadir = 0;
-
-  foreach $_ (@ARGV) {
-    if (/^--autoconf-dir=(.*)/) {
-      $datadir = $1;
-    } elsif (/^--autoconf-dir/ || /^-A$/) {
-      $need_datadir = 1;
-    } elsif (/^--m[a-z]*=(.*)/) {
-      $datadir = $1;
-    } elsif (/^-m$/) {
-      $need_datadir = 1;
-    } elsif (/^--h/ || /^-h$/) {
-      print "$usage";
-      exit 0;
-    } elsif (/^--verb/ || /^-v$/) {
-      $verbose = 1;
-    } elsif (/^--vers/ || /^-V$/) {
-      print "$version";
-      exit 0;
-    } elsif (/^[^-]/) {
-      if ($need_datadir) {
-	$datadir = $_;
-	$need_datadir = 0;
-      } else {
-	die "$me: too many arguments\n$help" if defined($srcdir);
-	# Top level directory of the package being autoscanned.
-	$srcdir = $_;
-      }
-    } else {
-      die "$me: invalid option $_\n$help";
-    }
-  }
-
-  die "$me: missing argument to -m\n$help" if $need_datadir;
-
-  $srcdir="." if !defined($srcdir);
+  die "$me: too many arguments
+Try \`$me --help' for more information.\n"
+    if (@ARGV > 1);
+  ($srcdir) = @ARGV;
+  $srcdir = "."
+    if !defined($srcdir);
 
   print "srcdir=$srcdir\n" if $verbose;
   chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
 
-  open(CONF, ">configure.scan") ||
+  open (CONF, ">configure.scan") ||
     die "$me: cannot create configure.scan: $!\n";
 }
 
