@@ -1,3 +1,12 @@
+2004-09-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix problems reported by Andreas Buening in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2004-04/msg00004.html
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Set SHELL=/bin/sh
+	in test makefile.
+	* lib/autotest/general.m4 (AT_INIT): Don't assume /dev/null is
+	readable; it's not true in OS/2-emx.
+
 2004-09-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): If xmkmf returns
