@@ -1,5 +1,9 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	Version 2.51.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_F77_DUMMY_MAIN): Let the interface be more
 	Autoconfy: $1 = action-if-found, $2 = action-if-not-found.
 
