@@ -3,18 +3,18 @@ dnl Requires GNU m4.
 dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
-dnl This file is free software; you can redistribute it and/or modify
+dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2, or (at your option)
 dnl any later version.
 dnl
-dnl This file is distributed in the hope that it will be useful,
+dnl This program is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this file; if not, write to the Free Software
+dnl along with this program; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
 dnl As a special exception, the Free Software Foundation gives unlimited
@@ -36,7 +36,7 @@ dnl
 dnl This special exception to the GPL applies to versions of Autoconf
 dnl released by the Free Software Foundation.  When you make and
 dnl distribute a modified version of Autoconf, you may extend this special
-dnl exception to the GPL to apply to your modified version well, *unless*
+dnl exception to the GPL to apply to your modified version as well, *unless*
 dnl your modified version has the potential to copy into its output some
 dnl of text that was the non-data portion of the version that you started
 dnl with.  (In other words, unless your change moves or copies text from
@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.122)
+define(AC_ACVERSION, 1.123)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -148,7 +148,16 @@ AC_DEFUN(AC_INIT_NOTICE,
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 
-ac_help=])
+# Defaults:
+ac_help=
+ac_default_prefix=/usr/local
+[#] Any additions from configure.in:])
+
+dnl AC_PREFIX_DEFAULT(PREFIX)
+AC_DEFUN(AC_PREFIX_DEFAULT,
+[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+ac_default_prefix=$1
+AC_DIVERT_POP()])
 
 dnl AC_INIT_PARSE_ARGS()
 AC_DEFUN(AC_INIT_PARSE_ARGS,
@@ -164,8 +173,10 @@ Configuration:
   --quiet, --silent       do not print \`checking...' messages
   --version               print the version of autoconf that created configure
 Directory and file names:
-  --exec-prefix=PREFIX    install host dependent files in PREFIX [/usr/local]
-  --prefix=PREFIX         install host independent files in PREFIX [/usr/local]
+  --prefix=PREFIX         install architecture-independent files in PREFIX
+                          [$ac_default_prefix]
+  --exec-prefix=PREFIX    install architecture-dependent files in PREFIX
+                          [same as prefix]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
@@ -839,13 +850,9 @@ define(AC_SITE_LOAD,
 [# Prefer explicitly selected file to automatically selected ones.
 if test -z "$CONFIG_SITE"; then
   if test "x$prefix" != xNONE; then
-    CONFIG_SITE=$prefix/lib/config.site
+    CONFIG_SITE="$prefix/share/config.site $prefix/etc/config.site"
   else
-    CONFIG_SITE=/usr/local/lib/config.site
-  fi
-  # System dependent files override system independent ones.
-  if test "x$exec_prefix" != xNONE && test "x$exec_prefix" != "x$prefix"; then
-    CONFIG_SITE="$CONFIG_SITE $exec_prefix/lib/config.site"
+    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
   fi
 fi
 for ac_site_file in $CONFIG_SITE; do
@@ -1519,7 +1526,7 @@ define(AC_OUTPUT,
 AC_CACHE_SAVE
 trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 
-test "x$prefix" = xNONE && prefix=/usr/local
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
 test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
