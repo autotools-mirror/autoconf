@@ -59,6 +59,107 @@ ifdef([__gnu__], ,
 set the M4 environment variable to its path name.)
 m4exit(2)])
 
+
+
+## ---------------------------------------------- ##
+## Defining macros and disabling/enabling libm4.  ##
+## ---------------------------------------------- ##
+
+# Private copies of the macros we used in disabling/enabling libm4.
+# It is much more convenient than fighting with the renamed version
+# of define etc.
+
+define([m4_dnl],      defn([dnl]))
+define([m4_define],   defn([define]))
+define([m4_undefine], defn([undefine]))
+define([m4_defn],     defn([defn]))
+
+# Name spaces.
+
+# Sometimes we want to disable some *set* of macros, and restore them
+# later.  We provide support for this via name spaces.
+
+# There are basically three characters playing this scene: defining a
+# macro in a namespace, disabling a namespace, and restoring a namespace
+# (i.e., all the definitions it holds).
+
+# Technically, to define a MACRO in NAMESPACE means to define the
+# macro named `m4_defn(NAMESPACE, MACRO)' to the VALUE.  At the same
+# time, we append `undefine(NAME)' in the macro named
+# `m4_disable(NAMESPACE)', and similarly a binding of NAME to the
+# value of `m4_defn(NAMESPACE, MACRO)' in `m4_enable(NAMESPACE)'.
+# These mechanisms allow to bind the macro of NAMESPACE and to unbind
+# them at will.
+
+# Of course this implementation is not really efficient: m4 has to
+# grow strings which can become quickly huge, which slows it
+# significantly.  A better implementation should be a list of the
+# symbols associated to the name space, and m4_enable?m4_disable
+# would just loop over this list.  Unfortunately loops of active
+# symbols are extremely delicate in m4, and I'm still unsure of the
+# implementation I want.  So, until we reach a perfect agreement on
+# foreach loops implementation, I prefer to use the brute force.
+
+# It should be noted that one should avoid as much as possible to use
+# `define' for temporaries.  Now that `define' as quite a complex
+# meaning, it is an expensive operations that should be limited to
+# macros.  Use `m4_define' for temporaries.
+
+m4_define([m4_namespace_push], [pushdef([m4_namespace], [$1])])
+m4_define([m4_namespace_pop],  [popdef([m4_namespace])])
+
+m4_namespace_push([libm4])
+
+
+# m4_namespace_define(NAMESPACE, NAME, VALUE)
+# -------------------------------------------
+#
+# Assign VALUE to NAME in NAMESPACE, and append the binding/unbinding
+# in `m4_disable(NAMESPACE)'/`m4_enable(NAMESPACE)'.
+m4_define([m4_namespace_define],
+[m4_define([m4_defn([$1], [$2])], [$3])dnl
+m4_define([m4_disable($1)],
+defn([m4_disable($1)])dnl
+[m4_undefine([$2])])dnl
+m4_define([m4_enable($1)],
+defn([m4_enable(]m4_namespace[)])dnl
+[m4_define([$2], defn([m4_defn([$1], [$2])]))])dnl
+])
+
+
+# define(NAME, VALUE)
+# -------------------
+#
+# Assign VALUE to NAME in the current name space, and bind it at top level.
+m4_define([define],
+[m4_namespace_define(m4_namespace, [$1], [$2])dnl
+m4_define([$1], [$2])dnl
+])
+
+
+# m4_disable(NAMESPACE)
+# ---------------------
+#
+# Undefine all the macros of NAMESPACE.
+m4_define([m4_disable], [indir([m4_disable($1)])])
+
+
+# m4_enable(NAMESPACE)
+# --------------------
+#
+# Restore all the macros of NAMESPACE.
+m4_define([m4_enable], [indir([m4_enable($1)])])
+
+
+# m4_rename(SRC, DST)
+# -------------------
+#
+# Rename the macro SRC as DST.
+define([m4_rename],
+[m4_define([$2], m4_defn([$1]))m4_undefine([$1])])
+
+
+
 ## --------------------------------------------- ##
 ## Move some m4 builtins to a safer name space.  ##
 ## --------------------------------------------- ##
@@ -84,16 +185,6 @@ define(m4_fatal,
 m4exit(ifelse([$2],, 1, [$2]))])
 
 
-# Some m4 internals have names colliding with tokens we might use.
-# Rename them a` la `m4 --prefix-builtins'.
-define([m4_prefix],
-[define([m4_$1], defn([$1]))
-undefine([$1])])
-
-m4_prefix([eval])
-m4_prefix([shift])
-m4_prefix([format])
-
 
 # We also want to neutralize include (and sinclude for symmetry),
 # but we want to extend them slightly: warn when a file is included
@@ -105,7 +196,6 @@ m4_prefix([format])
 # then a second reading will turn into
 #   define(bar, [bar])
 # which is certainly not what was meant.
-
 
 # m4_include_unique(FILE)
 # -----------------------
@@ -240,9 +330,11 @@ define(m4_match,
 define([m4_for],
 [pushdef([$1], [$2])_m4_for([$1], [$2], [$3], [$4])popdef([$1])])
 
+# Low level macros used to define m4_for.
+# Use m4_define for temporaries.
 define([_m4_for],
 [$4[]ifelse($1, [$3], [],
-            [define([$1], incr($1))_m4_for([$1], [$2], [$3], [$4])])])
+            [m4_define([$1], incr($1))_m4_for([$1], [$2], [$3], [$4])])])
 
 
 
@@ -309,13 +401,14 @@ define([_m4_for],
 define(m4_foreach,
 [pushdef([$1], [])_m4_foreach($@)popdef([$1])])
 
-# Low level macros used to define m4_foreach
+# Low level macros used to define m4_foreach.
+# Use m4_define for temporaries.
 define(m4_car, [[$1]])
 define(_m4_foreach,
 [ifelse($2, [()], ,
-        [define([$1], [m4_car$2])$3[]_m4_foreach([$1],
-                                                 [(m4_shift$2)],
-                                                 [$3])])])
+        [m4_define([$1], [m4_car$2])$3[]_m4_foreach([$1],
+                                                    [(m4_shift$2)],
+                                                    [$3])])])
 
 
 ## ----------------------- ##
@@ -340,7 +433,6 @@ define([m4_quote], [[$@]])
 # Use m4_strip to remove them.
 #
 # REGEXP specifies where to split.  Default is [\t ]+.
-#
 # Pay attention to the changequotes.  Inner changequotes exist for
 # obvious reasons (we want to insert square brackets).  Outer
 # changequotes are needed because otherwise the m4 parser, when it
@@ -355,16 +447,22 @@ define([m4_quote], [[$@]])
 #   define(active, ACTIVE)
 #   m4_split([active active ])end
 #   => [active], [active], []end
-changequote(<<, >>)
-define(<<m4_split>>,
-<<changequote(``, '')dnl
-[dnl Can't use m4_default here instead of ifelse, because m4_default uses
-dnl [ and ] as quotes.
-patsubst(````$1'''',
-         ifelse(``$2'',, ``[ 	]+'', ``$2''),
-         ``], ['')]dnl
-changequote([, ])>>)
-changequote([, ])
+#changequote(<<, >>)
+#define(m4_split,
+#<<changequote(``, '')dnl
+#[dnl Can't use m4_default here instead of ifelse, because m4_default uses
+#dnl [ and ] as quotes.
+#patsubst(````$1'''',
+#	  ifelse(``$2'',, ``[   ]+'', ``$2''),
+#	  ``], ['')]dnl
+#changequote([, ])>>)
+#changequote([, ])
+#changequote(<<, >>)
+
+define(m4_split,
+[patsubst([[$1]],
+         ifelse([$2],, [[[   ]+]], [[$2]]),
+         [,])])
 
 
 # m4_join(STRING)
@@ -457,9 +555,9 @@ ifdef([$1], [defn([$1]), ])[$2])])
 
 
 
-## --------------------------------- ##
-## Helping macros to display strings ##
-## --------------------------------- ##
+## ----------------------------------- ##
+## Helping macros to display strings.  ##
+## ----------------------------------- ##
 
 
 # m4_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -510,7 +608,7 @@ ifelse(m4_eval(m4_Cursor > len(m4_Prefix)),
        1, [define([m4_Cursor], len(m4_Prefix))
 m4_Prefix])[]dnl
 m4_foreach([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
-[define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
+[m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 ifelse(m4_eval(m4_Cursor > m4_Width),
@@ -518,10 +616,16 @@ ifelse(m4_eval(m4_Cursor > m4_Width),
 m4_Prefix,
        [m4_Separator])[]dnl
 m4_Word[]dnl
-define([m4_Separator], [ ])])dnl
+m4_define([m4_Separator], [ ])])dnl
 popdef([m4_Separator])dnl
 popdef([m4_Cursor])dnl
 popdef([m4_Width])dnl
 popdef([m4_Prefix1])dnl
 popdef([m4_Prefix])dnl
 ])
+
+# Some m4 internals have names colliding with tokens we might use.
+# Rename them a` la `m4 --prefix-builtins'.
+m4_rename([eval],   [m4_eval])
+m4_rename([shift],  [m4_shift])
+m4_rename([format], [m4_format])

@@ -3378,9 +3378,9 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # look for a macro that doesn't take arguments.
 cat >$ac_cs_root.defs <<\EOF
 changequote(<<, >>)dnl
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
+s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
+s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
 : cleanup
 s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
@@ -3605,7 +3605,7 @@ changequote(<<, >>)dnl
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
-ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dA='s%^\([ 	]*\)#\([ 	]*<<define>>[ 	][ 	]*\)'
 ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
 ac_dC='\3'
 ac_dD='%;t t'
@@ -3671,9 +3671,9 @@ s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
 t clear
 : clear
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
 t cleanup
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
 : cleanup
 changequote([, ])dnl
 EOF

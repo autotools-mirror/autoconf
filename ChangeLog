@@ -1,5 +1,18 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Introduce name spaces in libm4.
+
+	* libm4.m4 (m4_namespace_push, m4_namespace_pop,
+	m4_namespace_define, define, m4_disable, m4_enable, m4_rename):
+	New macros.
+	(_m4_foreach, _m4_for, m4_wrap): Use m4_define for temporaries.
+	(m4_split): Don't mess with the quotes.
+
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS, AC_OUTPUT_HEADERS): Quote
+	`define'.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Introduction): m4 1.4 is now required.
 	(Invoking autoconf): A better help on --trace.
 	(Defining Symbols): Advocate a proper use of the quotes in m4
