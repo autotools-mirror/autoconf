@@ -244,10 +244,13 @@ AC_DEFUN([AC_CHECK_TYPE],
 # -----------------
 AC_DEFUN([AC_TYPE_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
+AC_CHECK_HEADERS(sys/types.h)
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [[/* Thanks to Mike Rendell for this test.  */
-#include <sys/types.h>
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #define NGID 256
 #undef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
@@ -313,9 +316,12 @@ AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
 # --------------
 # Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN([AC_TYPE_SIGNAL],
-[AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
 [AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM([#include <sys/types.h>
+[AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <signal.h>
 #ifdef signal
 # undef signal
@@ -516,9 +522,12 @@ AC_CHECK_MEMBERS([struct stat.st_rdev],
 # FIXME: This macro is badly named, it should be AC_CHECK_TYPE_STRUCT_TM.
 # Or something else, but what? AC_CHECK_TYPE_STRUCT_TM_IN_SYS_TIME?
 AC_DEFUN([AC_STRUCT_TM],
-[AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
-  ac_cv_struct_tm,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
+               ac_cv_struct_tm,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <time.h>
 ],
                                     [struct tm *tp; tp->tm_sec;])],
@@ -538,7 +547,9 @@ fi
 # external array `tzname' is found, define `HAVE_TZNAME'.
 AC_DEFUN([AC_STRUCT_TIMEZONE],
 [AC_REQUIRE([AC_STRUCT_TM])dnl
-AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#include <sys/types.h>
+AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <$ac_cv_struct_tm>
 ])
 if test "$ac_cv_member_struct_tm_tm_zone" = yes; then

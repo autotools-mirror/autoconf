@@ -60,12 +60,15 @@
 ## 1. Generic tests for headers.  ##
 ## ------------------------------ ##
 
-# AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ----------------------------------------------------------------------
+# AC_CHECK_HEADER(HEADER-FILE,
+#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                 [INCLUDES])
+# ---------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADER],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
-               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([m4_n([$4])dnl
+@%:@include <$1>])],
                                   [AS_VAR_SET(ac_Header, yes)],
                                   [AS_VAR_SET(ac_Header, no)])])
 AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
@@ -83,6 +86,7 @@ m4_define([AH_CHECK_HEADERS],
 
 # AC_CHECK_HEADERS(HEADER-FILE...
 #                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+#                 [INCLUDES])
 # ----------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADERS],
 [AH_CHECK_HEADERS([$1])dnl
@@ -90,7 +94,8 @@ for ac_header in $1
 do
 AC_CHECK_HEADER($ac_header,
                 [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$ac_header)) $2],
-                [$3])dnl
+                [$3],
+                [$4])dnl
 done
 ])
 
@@ -111,7 +116,9 @@ done
 m4_define([_AC_CHECK_HEADER_DIRENT],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
 AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <$1>
 ],
                                     [DIR *dirp = 0;])],
@@ -135,6 +142,7 @@ m4_define([AH_CHECK_HEADERS_DIRENT],
 # ----------------
 AC_DEFUN([AC_HEADER_DIRENT],
 [AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
+AC_CHECK_HEADERS(sys/types.h)
 ac_header_dirent=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
   _AC_CHECK_HEADER_DIRENT($ac_hdr,
@@ -154,7 +162,7 @@ fi
 # ---------------
 AC_DEFUN([AC_HEADER_MAJOR],
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
-  ac_cv_header_sys_types_h_makedev,
+                ac_cv_header_sys_types_h_makedev,
 [AC_TRY_LINK([#include <sys/types.h>
 ], [return makedev(0, 0);],
   ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
@@ -180,9 +188,12 @@ fi
 # --------------
 # FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
 AC_DEFUN([AC_HEADER_STAT],
-[AC_CACHE_CHECK(whether stat file-mode macros are broken,
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,
-[AC_EGREP_CPP([You lose], [#include <sys/types.h>
+[AC_EGREP_CPP([You lose], [#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/stat.h>
 
 #if defined(S_ISBLK) && defined(S_IFDIR)
@@ -272,10 +283,13 @@ fi
 # AC_HEADER_SYS_WAIT
 # ------------------
 AC_DEFUN([AC_HEADER_SYS_WAIT],
-[AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
-  ac_cv_header_sys_wait_h,
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
+                ac_cv_header_sys_wait_h,
 [AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM([#include <sys/types.h>
+[AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/wait.h>
 #ifndef WEXITSTATUS
 # define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
@@ -299,9 +313,12 @@ fi
 # AC_HEADER_TIME
 # --------------
 AC_DEFUN([AC_HEADER_TIME],
-[AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
-  ac_cv_header_time,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
+               ac_cv_header_time,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/time.h>
 #include <time.h>
 ],
@@ -318,10 +335,13 @@ fi
 # _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
 # ----------------------------------
 m4_define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
-[AC_CACHE_CHECK([whether termios.h defines TIOCGWINSZ],
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([whether termios.h defines TIOCGWINSZ],
                 ac_cv_sys_tiocgwinsz_in_termios_h,
 [AC_EGREP_CPP([yes],
-              [#include <sys/types.h>
+              [#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <termios.h>
 #ifdef TIOCGWINSZ
   yes
@@ -335,10 +355,13 @@ m4_define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
 # _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
 # ----------------------------------
 m4_define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
-[AC_CACHE_CHECK([whether sys/ioctl.h defines TIOCGWINSZ],
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK([whether sys/ioctl.h defines TIOCGWINSZ],
                 ac_cv_sys_tiocgwinsz_in_sys_ioctl_h,
 [AC_EGREP_CPP([yes],
-              [#include <sys/types.h>
+              [#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/ioctl.h>
 #ifdef TIOCGWINSZ
   yes

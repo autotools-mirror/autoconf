@@ -2180,8 +2180,12 @@ AC_DEFUN([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
 dnl If ever you change this variable, please keep autoconf.texi in sync.
 ac_includes_default="\
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#if HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
@@ -2212,7 +2216,7 @@ ac_includes_default="\
 #endif"
 ])dnl
 AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_CHECK_HEADERS(stdlib.h string.h memory.h strings.h inttypes.h stdint.h unistd.h)
+AC_CHECK_HEADERS(sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h inttypes.h stdint.h unistd.h, [], [], $ac_includes_default)
 ])
 
 

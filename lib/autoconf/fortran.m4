@@ -1376,6 +1376,7 @@ AC_DEFUN([AC_PROG_CC_STDC],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_BEFORE([$0], [AC_C_INLINE])dnl
 AC_BEFORE([$0], [AC_C_CONST])dnl
+AC_CHECK_HEADERS(sys/types.h sys/stat.h)
 dnl Force this before AC_PROG_CPP.  Some cpp's, eg on HPUX, require
 dnl a magic option to avoid problems with ANSI preprocessor commands
 dnl like #elif.
@@ -1389,9 +1390,15 @@ ac_save_CC=$CC
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <stdarg.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#if HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+
 /* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
+
 struct buf { int x; };
 FILE * (*rcsopen) (struct buf *, struct stat *, int);
 static char *e (p, i)
@@ -1496,10 +1503,13 @@ fi
 # AC_C_BIGENDIAN
 # --------------
 AC_DEFUN([AC_C_BIGENDIAN],
-[AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
+[AC_CHECK_HEADERS(sys/types.h)
+AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/param.h>
 ],
 [#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
@@ -1507,7 +1517,9 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #endif
 ])],
 [# It does; now see whether it defined to BIG_ENDIAN or not.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <sys/param.h>
 ], [#if BYTE_ORDER != BIG_ENDIAN
  not big endian
