@@ -1,3 +1,15 @@
+2001-08-29  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4: Use
+		foo=`(command) 2>/dev/null`
+	not
+		foo=`command` 2>/dev/null
+	(at-devnull): Rename as...
+	(AT-devnull): this.
+	(--clean): Remove AT-* files too.
+	* doc/autoconf.texi (Limitations of Usual Tools): Document `date'.
+	Reported by Nicolas Joly.
+
 2001-08-28  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Don't use single

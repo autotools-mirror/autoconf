@@ -126,7 +126,7 @@ while test $[@%:@] -gt 0; do
     --help | -h) at_help=: ;;
     --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
     --clean | -c )
-        rm -rf $at_data_files debug-*.sh $as_me.log
+        rm -rf $at_data_files debug-*.sh $as_me.log AT-*
 	exit 0;;
 
     -d) at_debug=:;;
@@ -220,7 +220,7 @@ test -z "$at_tests" && at_tests=$at_tests_all
 if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
 else
-  at_devnull=at-devnull
+  at_devnull=AT-devnull
   cp /dev/null $at_devnull
 fi
 
@@ -347,7 +347,7 @@ else
 fi
 
 at_start_date=`date`
-at_start_time=`date +%s` 2>/dev/null
+at_start_time=`(date +%s) 2>/dev/null`
 echo "$as_me: starting at: $at_start_date" >&6
 at_fail_list=
 at_skip_list=
@@ -403,13 +403,13 @@ _ATEOF
 done
 
 at_stop_date=`date`
-at_stop_time=`date +%s` 2>/dev/null
+at_stop_time=`(date +%s) 2>/dev/null`
 echo "$as_me: ending at: $at_stop_date" >&6
-at_duration_s=`expr $at_stop_time - $at_start_time` 2>/dev/null
-at_duration_m=`expr $at_duration_s / 60` 2>/dev/null
-at_duration_h=`expr $at_duration_m / 60` 2>/dev/null
-at_duration_s=`expr $at_duration_s % 60` 2>/dev/null
-at_duration_m=`expr $at_duration_m % 60` 2>/dev/null
+at_duration_s=`(expr $at_stop_time - $at_start_time) 2>/dev/null`
+at_duration_m=`(expr $at_duration_s / 60) 2>/dev/null`
+at_duration_h=`(expr $at_duration_m / 60) 2>/dev/null`
+at_duration_s=`(expr $at_duration_s % 60) 2>/dev/null`
+at_duration_m=`(expr $at_duration_m % 60) 2>/dev/null`
 at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
 if test "$at_duration" != "h m s"; then
   echo "$as_me: test suite duration: $at_duration" >&6

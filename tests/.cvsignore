@@ -1,5 +1,5 @@
 Makefile
-at-* atlocal atconfig experr expout stderr stdout
+AT-* at-* atlocal atconfig experr expout stderr stdout
 config.h config.hin
 config.log
 config.status

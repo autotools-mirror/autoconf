@@ -8689,6 +8689,21 @@ newer systems, @code{rename}).
 @c without -r???
 
 
+@item @command{date}
+@c -----------------
+@prindex @command{date}
+Some versions of @command{date} do not recognize special % directives,
+and unfortunately, instead of complaining, they just pass them through,
+and exit with success:
+
+@example
+$ uname -a
+OSF1 medusa.sis.pasteur.fr V5.1 732 alpha
+$ date "+%s"
+%s
+@end example
+
+
 @item @command{diff}
 @c -----------------
 @prindex @command{diff}
@@ -8696,6 +8711,7 @@ Option @option{-u} is nonportable.
 
 Some implementations, such as Tru64's, fail when comparing to
 @file{/dev/null}.  Use an empty file instead.
+
 
 @item @command{dirname}
 @c --------------------
