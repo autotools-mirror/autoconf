@@ -84,7 +84,7 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! $SHELL" >conftest.sh
+  echo "#! /bin/sh" >conftest.sh
   echo  "exit 0"   >>conftest.sh
   chmod +x conftest.sh
   if (PATH=".;."; conftest.sh) >/dev/null 2>&1; then
@@ -127,7 +127,7 @@ done
   case $CONFIG_SHELL in
   '')
     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in /bin:/usr/bin:$PATH
+for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
@@ -432,7 +432,7 @@ do
     with_fp=no ;;
 
   -no-create | --no-create | --no-creat | --no-crea | --no-cre \
-  | --no-cr | --no-c)
+  | --no-cr | --no-c | -n)
     no_create=yes ;;
 
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
@@ -913,7 +913,7 @@ for ac_arg
 do
   case $ac_arg in
   -no-create | --no-create | --no-creat | --no-crea | --no-cre \
-  | --no-cr | --no-c) continue ;;
+  | --no-cr | --no-c | -n ) continue ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r)
     continue ;;
@@ -2003,7 +2003,7 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! $SHELL" >conftest.sh
+  echo "#! /bin/sh" >conftest.sh
   echo  "exit 0"   >>conftest.sh
   chmod +x conftest.sh
   if (PATH=".;."; conftest.sh) >/dev/null 2>&1; then
@@ -2047,7 +2047,7 @@ echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2;}
   case $CONFIG_SHELL in
   '')
     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in /bin:/usr/bin:$PATH
+for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.

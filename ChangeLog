@@ -1,5 +1,12 @@
 2002-01-24  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Use PATH_SEPARATOR.
+	(_AS_PATH_SEPARATOR_PREPARE): Don't expect $SHELL to be
+	Bourne. Use /bin/sh.
+	From Andreas Buening.
+
+2002-01-24  Akim Demaille  <akim@epita.fr>
+
 	* config/config.guess, config/config.sub, config/texinfo.tex:
 	Update from masters.
 

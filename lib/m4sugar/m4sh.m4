@@ -502,7 +502,7 @@ m4_define([_AS_LINENO_PREPARE],
   fi
   case $CONFIG_SHELL in
   '')
-    _AS_PATH_WALK([/bin:/usr/bin:$PATH],
+    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
       [for as_base in sh bash ksh sh5; do
 	 case $as_dir in
 	 /*)
@@ -579,7 +579,7 @@ rm -f conf$$ conf$$.exe conf$$.file
 m4_defun([_AS_PATH_SEPARATOR_PREPARE],
 [# The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! $SHELL" >conftest.sh
+  echo "#! /bin/sh" >conftest.sh
   echo  "exit 0"   >>conftest.sh
   chmod +x conftest.sh
   if (PATH=".;."; conftest.sh) >/dev/null 2>&1; then
