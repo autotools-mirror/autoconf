@@ -1,9 +1,4 @@
 #!@PERL@
-eval "exec @PERL@ -S $0 $*"
-    if $running_under_some_shell;
-                        # this emulates #! processing on NIH machines.
-                        # (remove #! line above if indigestible)
-
 # autoscan - Create configure.scan (a preliminary configure.in) for a package.
 # Copyright (C) 1994 Free Software Foundation, Inc.
 
@@ -27,6 +22,10 @@ require "find.pl";
 
 $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 $verbose = 0;
+# Reference these variables to pacify perl -w.
+undef %identifiers_macros;
+undef %makevars_macros;
+undef %programs_macros;
 
 &parse_args;
 &init_tables;
@@ -87,7 +86,7 @@ sub version
 # Put values in the tables of what to do with each token.
 sub init_tables
 {
-    local($kind, $word, $macro, %files);
+    local($kind, $word, $macro);
 
     # Initialize a table of C keywords (to ignore).
     # Taken from K&R 1st edition p. 180.
@@ -316,7 +315,7 @@ sub output
 	s/\.in$//;
 	$unique_makefiles{$_}++;
     }
-    print CONF "AC_OUTPUT(", join(" ", keys(%unique_makefiles)), ")\n";
+    print CONF "\nAC_OUTPUT(", join(" ", keys(%unique_makefiles)), ")\n";
 
     close CONF;
 }
@@ -336,14 +335,14 @@ sub output_programs
 {
     local ($word);
 
-    print CONF "dnl Checks for programs.\n";
+    print CONF "\ndnl Checks for programs.\n";
     foreach $word (sort keys %programs) {
 	&print_unique($programs_macros{$word});
     }
     foreach $word (sort keys %makevars) {
 	&print_unique($makevars_macros{$word});
     }
-    print CONF "dnl Checks for libraries.\n";
+    print CONF "\ndnl Checks for libraries.\n";
     foreach $word (sort keys %libraries) {
 	print CONF "AC_HAVE_LIBRARY($word)\n";
     }
@@ -353,9 +352,10 @@ sub output_headers
 {
     local ($word);
 
-    print CONF "dnl Checks for header files.\n";
+    print CONF "\ndnl Checks for header files.\n";
     foreach $word (sort keys %headers) {
-	if ($headers_macros{$word} eq 'AC_CHECK_HEADERS') {
+	if (defined($headers_macros{$word}) &&
+	    $headers_macros{$word} eq 'AC_CHECK_HEADERS') {
 	    push(@have_headers, $word);
 	} else {	
 	    &print_unique($headers_macros{$word});
@@ -369,7 +369,7 @@ sub output_identifiers
 {
     local ($word);
 
-    print CONF "dnl Checks for typedefs, structures, and compiler characteristics.\n";
+    print CONF "\ndnl Checks for typedefs, structures, and compiler characteristics.\n";
     foreach $word (sort keys %identifiers) {
 	&print_unique($identifiers_macros{$word});
     }
@@ -379,9 +379,10 @@ sub output_functions
 {
     local ($word);
 
-    print CONF "dnl Checks for library functions.\n";
+    print CONF "\ndnl Checks for library functions.\n";
     foreach $word (sort keys %functions) {
-	if ($functions_macros{$word} eq 'AC_CHECK_FUNCS') {
+	if (defined($functions_macros{$word}) &&
+	    $functions_macros{$word} eq 'AC_CHECK_FUNCS') {
 	    push(@have_funcs, $word);
 	} else {	
 	    &print_unique($functions_macros{$word});
