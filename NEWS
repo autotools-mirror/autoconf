@@ -1,4 +1,7 @@
-Major changes in release 2.15:
+* Major changes in release 2.14.1			-*- outline -*-
+
+** Use of Automake
+All the standard GNU Makefile targets are supported.
 
 * config.status
   - much faster on most architectures

@@ -1,5 +1,30 @@
 1999-10-31  Ben Elliston  <bje@cygnus.com>
 
+	* configure: Regenerate.
+	* aclocal.m4: Generate.
+	* Makefile.in: Regenerate with Automake.
+	* testsuite/Makefile.in: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
+	Use Automake.  Based on files from Ben Elliston.
+
+	* acgeneral.m4: No longer define AC_ACVERSION, include
+ 	acversion.m4.
+	* acversion.m4.in: New AC_CONFIG_FILE.
+	* acspecific.m4: Few formating changes.
+	* autoconf.texi: No longer define EDITION, VERSION and UPDATED:
+	include version.texi.
+	AC_OUTPUT the Makefiles mentioned below and acversion.m4.
+	* configure.in: Use AM_INIT_AUTOMAKE.
+ 	Do not AC_ARG_PROGRAM: AM_INIT_AUTOMAKE does it.
+	* Makefile.am: New file.
+	* mdate-sh: Likewise.
+	* missing: Likewise.
+	* testsuite/Makefile.am: Likewise.
+
+1999-10-31  Ben Elliston  <bje@cygnus.com>
+
 	* acspecific.m4 (AC_PROG_CC_STDC, AC_C_PROTOTYPES): Inherit from
 	Automake. From Franc,ois Pinard.
 	* autoconf.texi (Particular Programs): Document AC_PROG_CC_STDC.

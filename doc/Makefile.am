@@ -1,0 +1,100 @@
+## Process this file with automake to create Makefile.in.
+
+## Makefile for Autoconf.
+## Copyright (C) 1999 Free Software Foundation, Inc.
+
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 2, or (at your option)
+## any later version.
+
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+## 02111-1307, USA.
+
+AUTOMAKE_OPTIONS = check-news
+
+SUBDIRS = testsuite
+
+MAKEINFO = makeinfo --no-split
+TEXI2HTML = texi2html
+SUFFIXES = .m4 .m4f .pl .sh
+
+bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
+EXTRA_SCRIPTS = autoscan
+
+pkgdata_DATA = acfunctions acheaders acidentifiers acmakevars \
+               acprograms acconfig.h autoconf.m4f autoheader.m4f \
+               acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 \
+               autoheader.m4 acversion.m4
+
+info_TEXINFOS = autoconf.texi standards.texi
+autoconf_TEXINFOS = install.texi
+standards_TEXINFOS = make-stds.texi
+
+OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
+EXTRA_DIST = $(OLDCHANGELOGS) \
+	     acfunctions acheaders acidentifiers acmakevars \
+             acprograms acconfig.h acgeneral.m4 acoldnames.m4 \
+             acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in \
+	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
+	     ifnames.sh autoscan.pl INSTALL.txt
+
+# INSTALL is a special case.  Automake seems to have a single name space
+# for both targets and variables.  If we just use INSTALL, then the var
+# $(INSTALL) is not defined, and the install target fails.
+
+INSTALL.txt: install.texi
+	$(MAKEINFO) -I$(srcdir) $< --no-headers --no-validate --output=$@
+
+install-data-hook: INSTALL.txt
+	@$(NORMAL_INSTALL)
+	@list='INSTALL'; for p in $$list; do \
+	  if test -f "$$p.txt"; then d= ; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
+	done
+
+# The scripts.
+
+editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e \
+	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' \
+	-e 's,@''SHELL''@,$(SHELL),g'
+editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
+
+.sh:
+	rm -f $@ $@.tmp
+	$(editsh) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+
+.pl:
+	rm -f $@ $@.tmp
+	$(editpl) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+
+.m4.m4f:
+	@case `$(M4) --help </dev/null 2>&1` in \
+	*reload-state*) echo freezing $*.m4; \
+	  $(M4) -F $*.m4f -I${srcdir} ${srcdir}/$*.m4 ;; \
+	*traditional*) ;; \
+	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
+	esac
+
+autoconf.m4f: autoconf.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
+autoheader.m4f: autoheader.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
+
+
+# The documentation
+
+html: autoconf_1.html standards_1.html
+
+autoconf_1.html: autoconf.texi install.texi
+	$(TEXI2HTML) -split_chapter $(srcdir)/autoconf.texi
+
+standards_1.html: standards.texi make-stds.texi
+	$(TEXI2HTML) -split_chapter $(srcdir)/standards.texi

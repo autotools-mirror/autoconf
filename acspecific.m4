@@ -782,6 +782,8 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
 fi
 ])dnl AC_DECL_YYTEXT
 
+dnl AC_PROG_INSTALL
+dnl ---------------
 AC_DEFUN(AC_PROG_INSTALL,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Find a good install program.  We prefer a C program (faster),
@@ -852,7 +854,8 @@ AC_SUBST(INSTALL_SCRIPT)dnl
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 AC_SUBST(INSTALL_DATA)dnl
-])
+])dnl AC_PROG_INSTALL
+
 
 AC_DEFUN(AC_PROG_LN_S,
 [AC_MSG_CHECKING(whether ln -s works)
@@ -2235,6 +2238,9 @@ if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
 fi
 ])dnl AC_C_CHAR_UNSIGNED
 
+
+dnl AC_C_LONG_DOUBLE
+dnl ----------------
 AC_DEFUN(AC_C_LONG_DOUBLE,
 [AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
 [if test "$GCC" = yes; then
@@ -2251,7 +2257,8 @@ if test $ac_cv_c_long_double = yes; then
   AC_DEFINE(HAVE_LONG_DOUBLE, 1,
             [Define if the `long double' type works.])
 fi
-])
+])dnl AC_C_LONG_DOUBLE
+
 
 AC_DEFUN(AC_INT_16_BITS,
 [AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(int)])])
@@ -2259,6 +2266,9 @@ AC_DEFUN(AC_INT_16_BITS,
 AC_DEFUN(AC_LONG_64_BITS,
 [AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(long)])])
 
+
+dnl AC_C_BIGENDIAN
+dnl --------------
 AC_DEFUN(AC_C_BIGENDIAN,
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
@@ -2290,7 +2300,9 @@ if test $ac_cv_c_bigendian = yes; then
             [Define if your processor stores words with the most significant
              byte first (like Motorola and SPARC, unlike Intel and VAX).])
 fi
-])
+])dnl AC_C_BIGENDIAN
+
+
 
 dnl AC_C_INLINE
 dnl -----------
