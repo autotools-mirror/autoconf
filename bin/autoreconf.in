@@ -297,7 +297,7 @@ sub autoreconf_current_directory ()
       my $aclocal_m4 = new Autom4te::XFile 'aclocal.m4';
       $_ = $aclocal_m4->getline;
       $uses_aclocal = 0
-	unless /generated.*by aclocal/;
+	unless defined ($_) && /generated.*by aclocal/;
     }
 
   # If there are flags for aclocal in Makefile.am, use them.

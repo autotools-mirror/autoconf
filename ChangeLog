@@ -1,3 +1,8 @@
+2003-02-20  Klee Dienes  <kdienes@apple.com>
+
+	* bin/autoreconf.in (autoreconf_current_directory): Properly
+	handle an empty aclocal.m4.
+
 2003-02-20  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (AC_PREFIX_PROGRAM): Quote
