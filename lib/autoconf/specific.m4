@@ -673,14 +673,14 @@ if test "$enable_largefile" != no; then
        while :; do
      	 # IRIX 6.2 and later do not support large files by default,
      	 # so use the C compiler's -n32 option if that helps.
-     	 AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE()],
-     			   [break])
+         AC_LANG_CONFTEST([AC_LANG_PROGRAM([_AC_SYS_LARGEFILE_TEST_INCLUDES])])
+     	 AC_COMPILE_IFELSE([], [break])
      	 CC="$CC -n32"
-     	 AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE()],
-     			   [ac_cv_sys_largefile_CC=' -n32'; break])
+     	 AC_COMPILE_IFELSE([], [ac_cv_sys_largefile_CC=' -n32'; break])
          break
        done
        CC=$ac_save_CC
+       rm -f conftest.$ac_ext
     fi])
   if test "$ac_cv_sys_largefile_CC" != no; then
     CC=$CC$ac_cv_sys_largefile_CC

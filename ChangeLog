@@ -1,5 +1,10 @@
 2000-11-16  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_SYS_LARGEFILE): _AC_SYS_LARGEFILE_SOURCE no
+	longer exist.
+
+2000-11-16  Akim Demaille  <akim@epita.fr>
+
 	POSIX doesn't require s/[^/]// to work.
 	From Paul Eggert and Johan Danielsson.
 
