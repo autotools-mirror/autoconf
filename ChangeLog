@@ -1,5 +1,11 @@
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Making testsuite Scripts): Document
+	package.m4.
+
+	
+2002-02-05  Akim Demaille  <akim@epita.fr>
+
 	* lib/freeze.mk: New.
 
 2002-02-05  Akim Demaille  <akim@epita.fr>

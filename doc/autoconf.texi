@@ -11600,8 +11600,8 @@ test group, or a sequence of test groups all addressing some common
 functionality in the package.  In such cases, file @file{testsuite.at}
 only initializes the whole validation suite, and sometimes do elementary
 health checking, before listing include statements for all other test
-files.  The special file @file{package.m4} is automatically included if
-found.
+files.  The special file @file{package.m4}, containing the
+identification of the package, is automatically included if found.
 
 The validation scripts that Autotest produces are by convention called
 @command{testsuite}.  When run, @command{testsuite} executes each test
@@ -11930,11 +11930,31 @@ check list of things to do.
 @itemize @minus
 
 @item
-Ensure that configuration defines @code{PACKAGE} and @code{VERSION}.
-This is already guaranteed if you are using Automake through the
-@code{AM_INIT_AUTOMAKE} call, but with straight Autoconf, it means that
-you should at least use @code{AC_SUBST} for these two variables, after
-having initialized them to proper values.
+@cindex @file{package.m4}
+Make sure to create the file @file{package.m4}, which defines the
+identity of the package.  It must define @code{AT_PACKAGE_STRING}, the
+full signature of the package, and @code{AT_PACKAGE_BUGREPORT}, the
+address to which bug reports should be sent.  For sake of completeness,
+we suggest that you also define @code{AT_PACKAGE_NAME},
+@code{AT_PACKAGE_TARNAME}, and @code{AT_PACKAGE_VERSION}.
+@xref{Initializing configure}, for a description of these variables.  We
+suggest the following Makefile excerpt:
+
+@smallexample
+$(srcdir)/package.m4: $(top_srcdir)/configure.ac
+        @{                                      \
+          echo '# Signature of the current package.'; \
+          echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])'; \
+          echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])'; \
+          echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])'; \
+          echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])'; \
+          echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
+        @} >$(srcdir)/package.m4
+@end smallexample
+
+@noindent
+Be sure to distribute @file{package.m4} and to put it into the source
+hierarchy: the test suite ought to be shipped!
 
 @item
 @c FIXME: This macro should become part of Autoconf.  AC_AUTOTEST_PATH?
