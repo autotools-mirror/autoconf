@@ -1,5 +1,10 @@
 2001-09-18  Paul Eggert  <eggert@twinsun.com>
 
+	* doc/autoconf.texi (Common Shell Constructs): New node,
+	documenting AS_DIRNAME.
+	(Limitations of Usual Tools): Refer to it when discussing dirname.
+	Also, update discussion of POSIX standard to reflect latest draft.
+
 	* lib/autoconf/c.m4:
 	(AC_LANG_INT_SAVE(C)): Also support negative values, down to LONG_MIN.
 
