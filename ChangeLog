@@ -1,5 +1,11 @@
 2001-06-12  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.in (%kind_comment): New.
+	(output_kind): New.
+	(output_functions, output_identifiers, output_headers): Use it.
+
+2001-06-12  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in (&print_unique): Take `$kind' and `$word' as
 	arguments, to factor indirections into `%macro' and `%used'.
 	(%generic_macro): Fix a typo.
