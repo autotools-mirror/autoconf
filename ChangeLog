@@ -1,5 +1,11 @@
 2000-05-24  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_FUNC_VFORK): Quote properly.
+	(AC_FUNC_STRFTIME, AC_FUNC_VFORK, AC_FUNC_VPRINTF): Don't use
+	AC_DEFINE, just use the AC_CHECK_*S macro.
+
+2000-05-24  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_WHICH_A): Replace it with...
 	(AC_SHELL_PATH_WALK): this.
 	(AC_CHECK_PROG, AC_PATH_PROG): Use it.

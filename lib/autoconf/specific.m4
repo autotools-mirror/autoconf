@@ -1596,13 +1596,10 @@ fi
 # AC_FUNC_STRFTIME
 # ----------------
 AC_DEFUN([AC_FUNC_STRFTIME],
-[AC_CHECK_FUNC(strftime,
-               [AC_DEFINE(HAVE_STRFTIME, 1,
-                          [Define if you have the `strftime' function.])],
+[AC_CHECK_FUNCS(strftime, [],
 [# strftime is in -lintl on SCO UNIX.
 AC_CHECK_LIB(intl, strftime,
-[AC_DEFINE(HAVE_STRFTIME, 1,
-           [Define if you have the `strftime' function.])
+             [AC_DEFINE(HAVE_STRFTIME)
 LIBS="-lintl $LIBS"])])dnl
 ])# AC_FUNC_STRFTIME
 
@@ -1611,9 +1608,7 @@ LIBS="-lintl $LIBS"])])dnl
 # -------------
 AC_DEFUN([AC_FUNC_VFORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADER(vfork.h,
-                AC_DEFINE(HAVE_VFORK_H, 1,
-                          [Define if you have <vfork.h>.]))
+AC_CHECK_HEADERS(vfork.h)
 AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
@@ -1708,8 +1703,10 @@ main ()
 	 );
   }
 }],
-ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
-ac_cv_func_vfork_works=$ac_cv_func_vfork)])
+            [ac_cv_func_vfork_works=yes],
+            [ac_cv_func_vfork_works=no],
+            [AC_CHECK_FUNC(vfork)
+ac_cv_func_vfork_works=$ac_cv_func_vfork])])
 if test "x$ac_cv_func_vfork_works" = xno; then
   AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
 fi
@@ -1719,19 +1716,13 @@ fi
 # AC_FUNC_VPRINTF
 # ---------------
 # Why the heck is that _doprnt does not define HAVE__DOPRNT???
-# That the logical name!  In addition, why doesn't it use
-# AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
-# FIXME: To be changed in Autoconf 3?
+# That the logical name!
 AC_DEFUN([AC_FUNC_VPRINTF],
-[AC_CHECK_FUNC(vprintf,
-               AC_DEFINE(HAVE_VPRINTF, 1,
-               [Define if you have the `vprintf' function.]))
-if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt,
-              AC_DEFINE(HAVE_DOPRNT, 1,
-                        [Define if you don't have `vprintf' but do have
-                         `_doprnt.']))
-fi
+[AC_CHECK_FUNCS(vprintf, []
+[AC_CHECK_FUNC(_doprnt,
+               [AC_DEFINE(HAVE_DOPRNT, 1,
+                          [Define if you don't have `vprintf' but do have
+                          `_doprnt.'])])])
 ])
 
 
