@@ -48,6 +48,8 @@ AT_DATA([configure.in],
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])
+# Some libtoolize complain if you don't have an aclocal.m4.
+AT_CHECK([echo '# generated automatically by aclocal' > aclocal.m4])
 AT_CHECK([libtoolize], 0, [stdout], ignore)
 
 # Some broken libtoolize fail to install a functional config.guess.

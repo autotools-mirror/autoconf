@@ -197,8 +197,17 @@ AC_DEFUN([AC_PATH_TOOL],
 fi
 if test -z "$ac_cv_path_$1"; then
   ac_pt_$1=$$1
-  AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
-  $1=$ac_pt_$1
+  AC_PATH_PROG([ac_pt_$1], [$2], [], [$4])
+  if test "x$ac_pt_$1" = x; then
+    $1="$3"
+  else
+    if test "$build" != "$host"; then
+      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org.])
+    fi
+    $1=$ac_pt_$1
+  fi
 else
   $1="$ac_cv_path_$1"
 fi
@@ -214,8 +223,17 @@ AC_DEFUN([AC_CHECK_TOOL],
 fi
 if test -z "$ac_cv_prog_$1"; then
   ac_ct_$1=$$1
-  AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
-  $1=$ac_ct_$1
+  AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [], [$4])
+  if test "x$ac_ct_$1" = x; then
+    $1="$3"
+  else
+    if test "$build" != "$host"; then
+      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org.])
+    fi
+    $1=$ac_ct_$1
+  fi
 else
   $1="$ac_cv_prog_$1"
 fi
@@ -240,10 +258,86 @@ AC_DEFUN([AC_CHECK_TOOLS],
 fi
 if test -z "$$1"; then
   ac_ct_$1=$$1
-  AC_CHECK_PROGS([ac_ct_$1], [$2], [$3], [$4])
-  $1=$ac_ct_$1
+  AC_CHECK_PROGS([ac_ct_$1], [$2], [], [$4])
+  if test "x$ac_ct_$1" = x; then
+    $1="$3"
+  else
+    if test "$build" != "$host"; then
+      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org.])
+    fi
+    $1=$ac_ct_$1
+  fi
 fi
 ])# AC_CHECK_TOOLS
+
+
+# AC_PATH_TARGET_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# -----------------------------------------------------------------------
+# (Use different variables $1 and ac_pt_$1 so that cache vars don't conflict.)
+AC_DEFUN([AC_PATH_TARGET_TOOL],
+[AC_BEFORE([$0], [AC_CANONICAL_TARGET])dnl
+AC_PATH_PROG([$1], [$target_alias-$2], , [$4])
+if test -z "$ac_cv_path_$1"; then
+  if test "$build" = "$target"; then
+    ac_pt_$1=$$1
+    AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
+    $1=$ac_pt_$1
+  else
+    $1="$3"
+  fi
+else
+  $1="$ac_cv_path_$1"
+fi
+])# AC_PATH_TARGET_TOOL
+
+
+# AC_CHECK_TARGET_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# ------------------------------------------------------------------------
+# (Use different variables $1 and ac_ct_$1 so that cache vars don't conflict.)
+AC_DEFUN([AC_CHECK_TARGET_TOOL],
+[AC_BEFORE([$0], [AC_CANONICAL_TARGET])dnl
+AC_CHECK_PROG([$1], [$target_alias-$2], [$target_alias-$2], , [$4])
+if test -z "$ac_cv_prog_$1"; then
+  if test "$build" = "$target"; then
+    ac_ct_$1=$$1
+    AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
+    $1=ac_ct_$1
+  else
+    $1="$3"
+  fi
+else
+  $1="$ac_cv_prog_$1"
+fi
+])# AC_CHECK_TARGET_TOOL
+
+
+# AC_CHECK_TARGET_TOOLS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
+#	                [PATH])
+# ------------------------------------------------------------------
+# Check for each tool in PROGS-TO-CHECK-FOR with the cross prefix. If
+# none can be found with a cross prefix, then use the first one that
+# was found without the cross prefix.
+AC_DEFUN([AC_CHECK_TARGET_TOOLS],
+[AC_BEFORE([$0], [AC_CANONICAL_TARGET])dnl
+for ac_prog in $2
+do
+  AC_CHECK_PROG([$1],
+		[$target_alias-$ac_prog], [$target_alias-$ac_prog],,
+		[$4])
+  test -n "$$1" && break
+done
+if test -z "$$1"; then
+  if test "$build" = "$target"; then
+    ac_ct_$1=$$1
+    AC_CHECK_PROGS([ac_ct_$1], [$2], [$3], [$4])
+    $1=$ac_ct_$1
+  else
+    $1="$3"
+  fi
+fi
+])# AC_CHECK_TARGET_TOOLS
 
 
 

@@ -43,7 +43,7 @@
 @c
 @c Because we want to drop out the AC_ part of the macro names in the
 @c printed manual, but not in the other outputs, we need a layer above
-@c the usual @acindex etc.  That's why we first define indexes such as
+@c the usual @acindex{} etc.  That's why we first define indexes such as
 @c acx meant to become the macro @acindex.  First of all, using ``ac_''
 @c does not work with makeinfo, and using ``ac1'' doesn't work with TeX.
 @c So use something more regular ``acx''.  Then you finish with a printed
@@ -136,7 +136,7 @@
 @end ifclear
 
 @c @hdrindex{MACRO}
-@c ---------------
+@c ----------------
 @c Indexing a header.
 @macro hdrindex{macro}
 @prindex @file{\macro\}
@@ -3380,7 +3380,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @end defmac
 
 @defmac AC_PROG_SED
-@acindex {PROG_SED}
+@acindex{PROG_SED}
 @ovindex SED
 Set output variable @code{SED} to a @code{sed} on @samp{PATH} that
 truncates as few characters as possible.  If @sc{gnu} Sed is found,
@@ -3438,6 +3438,23 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
+@defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@acindex{CHECK_TARGET_TOOL}
+Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
+with a prefix of the target type as determined by
+@code{AC_CANONICAL_TARGET}, followed by a dash (@pxref{Canonicalizing}).
+If the tool cannot be found with a prefix, and if the build and target
+types are equal, then it is also searched for without a prefix.
+
+As noted in @ref{Specifying Names, , Specifying the system type}, the
+target is rarely specified, because most of the time it is the same
+as the host: it is the type of system for which any compiler tools in
+the package will produce code.  What this macro will look for is,
+for example, @emph{a tool @r{(assembler, linker, etc.)} that the
+compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
+will use to produce objects, archives or executables}.
+@end defmac
+
 @defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
@@ -3452,6 +3469,25 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 @code{PATH}, or otherwise to @samp{ranlib} if that program exists in
 @code{PATH}, or to @samp{:} if neither program exists.
+
+In the future, when cross-compiling this macro will @emph{only}
+accept program names that are prefixed with the host type.
+For more information, see @ref{Specifying Names, , Specifying the
+system type}.
+@end defmac
+
+@defmac AC_CHECK_TARGET_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@acindex{CHECK_TARGET_TOOLS}
+Like @code{AC_CHECK_TARGET_TOOL}, each of the tools in the list
+@var{progs-to-check-for} are checked with a prefix of the target type as
+determined by @code{AC_CANONICAL_TARGET}, followed by a dash
+(@pxref{Canonicalizing}).  If none of the tools can be found with a
+prefix, and if the build and target types are equal, then the first one
+without a prefix is used.  If a tool is found, set @var{variable} to
+the name of that program.  If none of the tools in the list are found,
+set @var{variable} to @var{value-if-not-found}; if @var{value-if-not-found}
+is not specified, the value of @var{variable} is not changed.  Calls
+@code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
@@ -3465,6 +3501,9 @@ set @var{variable} to the name of that program.  If none of the tools in
 the list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
+
+In the future, when cross-compiling this macro will @emph{not}
+accept program names that are not prefixed with the host type.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
@@ -3480,10 +3519,19 @@ are found, set @var{variable} to the entire path of the program
 found.
 @end defmac
 
+@defmac AC_PATH_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@acindex{PATH_TARGET_TOOL}
+Like @code{AC_CHECK_TARGET_TOOL}, but set @var{variable} to the entire
+path of the program if it is found.
+@end defmac
+
 @defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_TOOL}
 Like @code{AC_CHECK_TOOL}, but set @var{variable} to the entire
 path of the program if it is found.
+
+In the future, when cross-compiling this macro will @emph{not}
+accept program names that are not prefixed with the host type.
 @end defmac
 
 
@@ -3755,7 +3803,7 @@ in some cases how they respond when given certain arguments.
 @ovindex ALLOCA
 @c @fuindex alloca
 @prindex @code{alloca}
-@hdrindex alloca.h
+@hdrindex{alloca.h}
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
@@ -3865,7 +3913,7 @@ Library 2.1.
 @prindex @code{fork}
 @c @fuindex vfork
 @prindex @code{vfork}
-@hdrindex vfork.h
+@hdrindex{vfork.h}
 This macro checks for the @code{fork} and @code{vfork} functions.  If a
 working @code{fork} is found, define @code{HAVE_WORKING_FORK}.  This macro
 checks whether @code{fork} is just a stub by trying to run it.
@@ -3955,7 +4003,7 @@ Define @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if on
 those systems.
 
 @item
-@hdrindex nlist.h
+@hdrindex{nlist.h}
 If @file{nlist.h} is found, define @code{HAVE_NLIST_H}.
 
 @item
@@ -4270,7 +4318,7 @@ are also available.)
 @acindex{REPLACE_FNMATCH}
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
-@hdrindex fnmatch.h
+@hdrindex{fnmatch.h}
 If the @code{fnmatch} function does not conform to @acronym{POSIX} (see
 @code{AC_FUNC_FNMATCH}), ask for its @code{AC_LIBOBJ} replacement.
 
@@ -4434,8 +4482,8 @@ additions.  Please help us keeping it as complete as possible.
 
 @table @asis
 @item @file{inttypes.h} vs.@: @file{stdint.h}
-@hdrindex inttypes.h
-@hdrindex stdint.h
+@hdrindex{inttypes.h}
+@hdrindex{stdint.h}
 Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
 separately in a standard environment.  Many implementations have
@@ -4445,15 +4493,15 @@ know of any implementation that has @file{stdint.h} but not
 @file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
 
 @item @file{linux/irda.h}
-@hdrindex linux/irda.h
+@hdrindex{linux/irda.h}
 It requires @file{linux/types.h} and @file{sys/socket.h}.
 
 @item @file{linux/random.h}
-@hdrindex linux/random.h
+@hdrindex{linux/random.h}
 It requires @file{linux/types.h}.
 
 @item @file{net/if.h}
-@hdrindex net/if.h
+@hdrindex{net/if.h}
 On Darwin, this file requires that @file{sys/socket.h} be included
 beforehand.  One should run:
 
@@ -4476,7 +4524,7 @@ AC_CHECK_HEADERS([net/if.h], [], [],
 @end example
 
 @item @file{netinet/if_ether.h}
-@hdrindex netinet/if_ether.h
+@hdrindex{netinet/if_ether.h}
 On Darwin, this file requires that @file{stdio.h} and
 @file{sys/socket.h} be included beforehand.  One should run:
 
@@ -4502,24 +4550,24 @@ AC_CHECK_HEADERS([netinet/if_ether.h], [], [],
 See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
 
 @item @file{stdlib.h}
-@hdrindex stdlib.h
+@hdrindex{stdlib.h}
 On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 
 @item @file{sys/mount.h}
-@hdrindex sys/mount.h
+@hdrindex{sys/mount.h}
 On FreeBSD 4.8 on ia32 and using gcc version 2.95.4,
 @file{sys/params.h} is a prerequisite.
 
 @item @file{sys/socket.h}
-@hdrindex sys/socket.h
+@hdrindex{sys/socket.h}
 On Darwin, @file{stdlib.h} is a prerequisite.
 
 @item @file{sys/ucred.h}
-@hdrindex sys/ucred.h
+@hdrindex{sys/ucred.h}
 On HP Tru64 5.1, @file{sys/types.h} is a prerequisite.
 
 @item @file{X11/extensions/scrnsaver.h}
-@hdrindex X11/extensions/scrnsaver.h
+@hdrindex{X11/extensions/scrnsaver.h}
 Using XFree86, this header requires @file{X11/Xlib.h}, which is probably
 so required that you might not even consider looking for it.
 
@@ -4543,10 +4591,10 @@ exist, and in some cases whether they declare certain symbols.
 @cvindex HAVE_NDIR_H
 @cvindex HAVE_SYS_DIR_H
 @cvindex HAVE_SYS_NDIR_H
-@hdrindex dirent.h
-@hdrindex sys/ndir.h
-@hdrindex sys/dir.h
-@hdrindex ndir.h
+@hdrindex{dirent.h}
+@hdrindex{sys/ndir.h}
+@hdrindex{sys/dir.h}
+@hdrindex{ndir.h}
 Check for the following header files.  For the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
@@ -4593,8 +4641,8 @@ This macro also checks for the SCO Xenix @file{dir} and @file{x} libraries.
 @acindex{HEADER_MAJOR}
 @cvindex MAJOR_IN_MKDEV
 @cvindex MAJOR_IN_SYSMACROS
-@hdrindex sys/mkdev.h
-@hdrindex sys/sysmacros.h
+@hdrindex{sys/mkdev.h}
+@hdrindex{sys/sysmacros.h}
 If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{makedev}, but @file{sys/mkdev.h} does, define
 @code{MAJOR_IN_MKDEV}; otherwise, if @file{sys/sysmacros.h} does, define
@@ -4605,7 +4653,7 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @defmac AC_HEADER_STAT
 @acindex{HEADER_STAT}
 @acindex{STAT_MACROS_BROKEN}
-@hdrindex sys/stat.h
+@hdrindex{sys/stat.h}
 If the macros @code{S_ISDIR}, @code{S_ISREG}, etc.@: defined in
 @file{sys/stat.h} do not work properly (returning false positives),
 define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
@@ -4616,8 +4664,8 @@ Amdahl UTS and Motorola System V/88.
 @acindex{HEADER_STDBOOL}
 @cvindex HAVE_STDBOOL_H
 @cvindex HAVE__BOOL
-@hdrindex stdbool.h
-@hdrindex system.h
+@hdrindex{stdbool.h}
+@hdrindex{system.h}
 If @file{stdbool.h} exists and is conformant to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
@@ -4646,11 +4694,11 @@ typedef unsigned char _Bool;
 @defmac AC_HEADER_STDC
 @acindex{HEADER_STDC}
 @cvindex STDC_HEADERS
-@hdrindex stdlib.h
-@hdrindex stdarg.h
-@hdrindex string.h
-@hdrindex float.h
-@hdrindex ctype.h
+@hdrindex{stdlib.h}
+@hdrindex{stdarg.h}
+@hdrindex{string.h}
+@hdrindex{float.h}
+@hdrindex{ctype.h}
 Define @code{STDC_HEADERS} if the system has @acronym{ANSI} C header files.
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
 @file{string.h}, and @file{float.h}; if the system has those, it
@@ -4666,8 +4714,8 @@ the system has @acronym{ANSI}-compliant header files (and probably C library
 functions) because many systems that have GCC do not have @acronym{ANSI} C
 header files.
 
-@hdrindex string.h
-@hdrindex strings.h
+@hdrindex{string.h}
+@hdrindex{strings.h}
 On systems without @acronym{ANSI} C headers, there is so much variation
 that it is probably easier to declare the functions you use than to
 figure out exactly what the system header files declare.  Some systems
@@ -4720,7 +4768,7 @@ for example, put it in @file{memchr.c} and use
 @defmac AC_HEADER_SYS_WAIT
 @acindex{HEADER_SYS_WAIT}
 @cvindex HAVE_SYS_WAIT_H
-@hdrindex sys/wait.h
+@hdrindex{sys/wait.h}
 If @file{sys/wait.h} exists and is compatible with @acronym{POSIX}, define
 @code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
 does not exist, or if it uses the old @acronym{BSD} @code{union wait} instead
@@ -4746,7 +4794,7 @@ example:
 @end defmac
 
 @cvindex _POSIX_VERSION
-@hdrindex unistd.h
+@hdrindex{unistd.h}
 @code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
 @acronym{POSIX} systems.  If there is no @file{unistd.h}, it is definitely
 not a @acronym{POSIX} system.  However, some non-@acronym{POSIX} systems do
@@ -4770,8 +4818,8 @@ The way to check if the system supports @acronym{POSIX} is:
 @defmac AC_HEADER_TIME
 @acindex{HEADER_TIME}
 @cvindex TIME_WITH_SYS_TIME
-@hdrindex time.h
-@hdrindex sys/time.h
+@hdrindex{time.h}
+@hdrindex{sys/time.h}
 If a program may include both @file{time.h} and @file{sys/time.h},
 define @code{TIME_WITH_SYS_TIME}.  On some older systems,
 @file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
@@ -4802,8 +4850,8 @@ example, @code{struct timeval} as well as
 @defmac AC_HEADER_TIOCGWINSZ
 @acindex{HEADER_TIOCGWINSZ}
 @cvindex GWINSZ_IN_SYS_IOCTL
-@hdrindex sys/ioctl.h
-@hdrindex termios.h
+@hdrindex{sys/ioctl.h}
+@hdrindex{termios.h}
 @c FIXME: I need clarifications from Jim.
 If the use of @code{TIOCGWINSZ} requires @file{<sys/ioctl.h>}, then
 define @code{GWINSZ_IN_SYS_IOCTL}.  Otherwise @code{TIOCGWINSZ} can be
@@ -5032,8 +5080,8 @@ AC_CHECK_MEMBERS([struct stat.st_rdev])
 @defmac AC_STRUCT_TM
 @acindex{STRUCT_TM}
 @cvindex TM_IN_SYS_TIME
-@hdrindex time.h
-@hdrindex sys/time.h
+@hdrindex{time.h}
+@hdrindex{sys/time.h}
 If @file{time.h} does not define @code{struct tm}, define
 @code{TM_IN_SYS_TIME}, which means that including @file{sys/time.h}
 had better define @code{struct tm}.
@@ -5109,8 +5157,8 @@ use a general type-check macro.
 @node Particular Types
 @subsection Particular Type Checks
 
-@hdrindex sys/types.h
-@hdrindex stdlib.h
+@hdrindex{sys/types.h}
+@hdrindex{stdlib.h}
 These macros check for particular C types in @file{sys/types.h},
 @file{stdlib.h} and others, if they exist.
 
@@ -5124,7 +5172,7 @@ is the base type of the array argument to @code{getgroups}.
 @defmac AC_TYPE_MBSTATE_T
 @acindex{TYPE_MBSTATE_T}
 @cvindex mbstate_t
-@hdrindex wchar.h
+@hdrindex{wchar.h}
 Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @code{mbstate_t} type.  Also, define @code{mbstate_t} to be a type if
 @code{<wchar.h>} does not declare it.
@@ -5151,7 +5199,7 @@ Equivalent to @samp{AC_CHECK_TYPE(pid_t, int)}.
 @defmac AC_TYPE_SIGNAL
 @acindex{TYPE_SIGNAL}
 @cvindex RETSIGTYPE
-@hdrindex signal.h
+@hdrindex{signal.h}
 If @file{signal.h} declares @code{signal} as returning a pointer to a
 function returning @code{void}, define @code{RETSIGTYPE} to be
 @code{void}; otherwise, define it to be @code{int}.
@@ -5534,7 +5582,7 @@ like GCC to compile their C code.
 @end defmac
 
 @defmac AC_C_RESTRICT
-@acindex C_RESTRICT
+@acindex{C_RESTRICT}
 @cvindex restrict
 If the C compiler recognizes the @code{restrict} keyword, don't do anything.
 If it recognizes only a variant spelling (@code{__restrict},
@@ -12336,21 +12384,33 @@ If you mean to override the result of @command{config.guess}, use
 @option{--build}, not @option{--host}, since the latter enables
 cross-compilation.  For historical reasons, passing @option{--host} also
 changes the build type.  Therefore, whenever you specify @code{--host},
-be sure to specify @code{--build} too.  This will be fixed in the
-future.
+be sure to specify @code{--build} too; this will be fixed in the
+future.  So, to enter cross-compilation mode, use a command like this
 
 @example
 ./configure --build=i686-pc-linux-gnu --host=m68k-coff
 @end example
 
 @noindent
-will enter cross-compilation mode, but @command{configure} will fail if it
-can't run the code generated by the specified compiler if you configure
-as follows:
+Note that if you do not specify @option{--host}, @command{configure} will
+fail if it can't run the code generated by the specified compiler.  For
+example, configuring as follows will fail:
 
 @example
 ./configure CC=m68k-coff-gcc
 @end example
+
+In the future, when cross-compiling Autoconf will @emph{not}
+accept tools (compilers, linkers, assemblers) whose name is not
+prefixed with the host type.  The only case when this may be
+useful is when you really are not cross-compiling, but only
+building for a least-common-denominator architecture: an example
+is building for @code{i386-pc-linux-gnu} while running on an
+@code{i686-pc-linux-gnu} architecture.  In this case, some particular
+pairs might be similar enough to let you get away with the system
+compilers, but in general the compiler might make bogus assumptions
+on the host: if you know what you are doing, please create symbolic
+links from the host compiler to the build compiler.
 
 @cindex @command{config.sub}
 @command{configure} recognizes short aliases for many system types; for
@@ -15016,7 +15076,7 @@ it contains an arbitrary number of shell commands or calls to
 @code{AT_CHECK}, and it completes with one call to @code{AT_CLEANUP}.
 
 @defmac AT_INIT (@ovar{name})
-@atindex INIT
+@atindex{INIT}
 @c FIXME: Not clear, plus duplication of the information.
 Initialize Autotest.  Giving a @var{name} to the test suite is
 encouraged if your package includes several test suites.  In any case,
@@ -15025,7 +15085,7 @@ inherits the package bug report address.
 @end defmac
 
 @defmac AT_TESTED (@var{executables})
-@atindex TESTED
+@atindex{TESTED}
 Log the path and answer to @option{--version} of each program in
 space-separated list @var{executables}.  Several invocations register
 new executables, in other words, don't fear registering one program
@@ -15043,7 +15103,7 @@ diagnostics.
 @sp 1
 
 @defmac AT_SETUP (@var{test-group-name})
-@atindex SETUP
+@atindex{SETUP}
 This macro starts a group of related tests, all to be executed in the
 same subshell.  It accepts a single argument, which holds a few words
 (no more than about 30 or 40 characters) quickly describing the purpose
@@ -15051,7 +15111,7 @@ of the test group being started.
 @end defmac
 
 @defmac AT_KEYWORDS (@var{keywords})
-@atindex KEYWORDS
+@atindex{KEYWORDS}
 Associate the space-separated list of @var{keywords} to the enclosing
 test group.  This makes it possible to run ``slices'' of the test suite.
 For instance if some of your test groups exercise some @samp{foo}
@@ -15066,7 +15126,7 @@ test group.
 @end defmac
 
 @defmac AT_XFAIL_IF (@var{shell-condition})
-@atindex XFAIL_IF
+@atindex{XFAIL_IF}
 Determine whether the test is expected to fail because it is a known
 bug (for unsupported features, you should skip the test).
 @var{shell-condition} is a shell expression such as a @code{test}
@@ -15076,14 +15136,14 @@ the test into an expected failure.
 @end defmac
 
 @defmac AT_CLEANUP
-@atindex CLEANUP
+@atindex{CLEANUP}
 End the current test group.
 @end defmac
 
 @sp 1
 
 @defmac AT_DATA (@var{file}, @var{contents})
-@atindex DATA
+@atindex{DATA}
 Initialize an input data @var{file} with given @var{contents}.  Of
 course, the @var{contents} have to be properly quoted between square
 brackets to protect against included commas or spurious M4
@@ -15091,7 +15151,7 @@ expansion.  The contents ought to end with an end of line.
 @end defmac
 
 @defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @dvar{stdout, @samp{}}, @dvar{stderr, @samp{}}, @ovar{run-if-fail}, @ovar{run-if-pass})
-@atindex CHECK
+@atindex{CHECK}
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
 @var{stdout} and @var{stderr} contents.  If @var{commands} exit with

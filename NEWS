@@ -3,6 +3,16 @@
 ** AC_CHECK_ALIGNOF
   New macro that computes the default alignment of a type.
 
+** AC_CHECK_TOOL, AC_PATH_TOOL, AC_CHECK_TOOLS
+  When cross-compiling, these macros will give a warning if the tool
+  is not prefixed.  In the future, unprefixed cross tools will not
+  be detected; please consult the info documentation for information
+  about the reason of this change.
+
+** AC_CHECK_TARGET_TOOL, AC_PATH_TARGET_TOOL, AC_CHECK_TARGET_TOOLS
+  New macros that detect programs whose name is prefixed with the
+  target type, if the build type and target type are different.
+
 * Major changes in Autoconf 2.59a
 
 ** AC_PROG_GREP

@@ -82,7 +82,8 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_CANONICALIZE, AC_PREFIX_PROGRAM, AC_PREREQ
 #   Need an argument.
 #
-# - AC_CHECK alignof, decl, file, func, header, lib, member, prog, sizeof, type
+# - AC_CHECK alignof, decl, file, func, header, lib, member, prog, sizeof,
+#   host/target tool, type
 #   Performed in the semantics tests.
 #
 # - AC_CONFIG
@@ -98,7 +99,8 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_LANG*
 #   Heavily used by other macros.
 #
-# - AC_PATH_PROGS?, AC_F77_FUNC, AC_FC_FUNC, AC_FC_SRCEXT
+# - AC_PATH_PROGS?, AC_PATH_TOOL, AC_PATH_TARGET_TOOL, AC_F77_FUNC, AC_FC_FUNC,
+#   AC_FC_SRCEXT
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
 #
@@ -131,7 +133,7 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #
 ac_exclude_list='^AC_ARG_VAR$
 ^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
-^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
+^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_(F77|FC)_FUNC$
 ^AC_FC_(FUNC|FREEFORM|SRCEXT)$
@@ -143,7 +145,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_LINK_FILES$
 ^AC_LIST_MEMBER_OF$
 ^AC_OUTPUT$
-^AC_PATH_(TOOL|PROG)S?$
+^AC_PATH_((TARGET_)?TOOL|PROG)S?$
 ^AC_REPLACE_(FNMATCH|FUNCS)$
 ^AC_SEARCH_LIBS$
 ^(AC_TRY.*|AC_RUN_LOG)$

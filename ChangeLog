@@ -1,13 +1,35 @@
-2004-03-15  Paul Eggert  <eggert@gnu.org>
+2004-03-16  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/autoconf/programs.m4 (AC_PATH_TOOL, AC_CHECK_TOOL,
+	AC_CHECK_TOOLS): Warn if a cross-tool is found without
+	a prefix.
+	(AC_PATH_TARGET_TOOL, AC_CHECK_TARGET_TOOL,
+	AC_CHECK_TARGET_TOOLS): New macros.
+	* doc/autoconf.texi (Generic Programs): Document
+	(AC_PATH_TARGET_TOOL, AC_CHECK_TARGET_TOOL,
+	AC_CHECK_TARGET_TOOLS, and warn for future changes
+	in the behavior of AC_PATH_TOOL, AC_CHECK_TOOL and
+	AC_CHECK_TOOLS.
+	(Specifying Names): Document the reason for these future
+	behavioral changes.
+	* tests/mktests.sh: Do not generate tests for the
+	new macros.
+	* NEWS: Document these changes.
+
+	* doc/autoconf.texi: Avoid macros with unbraced arguments,
+	they make TeX hang up.
+
+2004-03-15  Paul Eggert  <eggert@bogus.example.com>
 
 	* NEWS: New macro AC_CHECK_ALIGNOF.
 	* doc/autoconf.texi (Generic Compiler Characteristics): Document it.
-	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Use long int rather than int;
-	avoid "a `$1'" since this isn't grammatical if $1 begins with a vowel.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Use long int rather than
+	int; avoid "a `$1'" since this isn't grammatical if $1 begins with a
+	vowel.
 	(AC_CHECK_ALIGNOF): New macro.
 	* tests/mktests.sh (ac_exclude_list): Exclude AC_CHECK_ALIGNOF.
 	* tests/semantics.at (AC_CHECK_ALIGNOF): Add tests similar to
-	those for sizeof.
+        those for sizeof.
 
 2004-03-03  Paul Eggert  <eggert@twinsun.com>
 
