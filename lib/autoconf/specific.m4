@@ -181,7 +181,16 @@ if test "z${INSTALL}" = "z" ; then
   done
   IFS="$saveifs"
 fi
-INSTALL=${INSTALL-cp}
+if test -z "$INSTALL"; then
+  if test -f ${srcdir}/install.sh; then
+    # We want the top-level source directory, not the subdir's srcdir,
+    # so expand srcdir now rather than in the Makefile.
+    INSTALL="${srcdir}/install.sh -c"
+  else
+    echo "warning: ${srcdir}/install.sh not found; using cp"
+    INSTALL=cp
+  fi
+fi
 AC_SUBST(INSTALL)dnl
 test -n "$verbose" && echo "	setting INSTALL to $INSTALL"
 INSTALL_PROGRAM=${INSTALL_PROGRAM-'$(INSTALL)'}
