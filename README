@@ -8,7 +8,9 @@ configuration script for a package from a template file that lists the
 operating system features that the package can use, in the form of m4
 macro calls.
 
-Autoconf requires GNU m4.
+Autoconf requires GNU m4.  The configuration scripts produced by
+Autoconf are independent of Autoconf when they are run, so their users
+do not need to have Autoconf (or GNU m4).
 
 The file INSTALL can be distributed with packages that use
 Autoconf-generated configure scripts and Makefiles that conform to the
@@ -22,11 +24,6 @@ variables that Autoconf can define, suitable for copying into other
 packages' configuration headers or Makefile.in files.  You can use the
 program `autoheader' to automatically creates a configuration header
 from a `configure.in', based on the information in `acconfig.h'.
-
-Some GNU programs have been released with `configure.in' and
-`Makefile.in' files written for pre-1.0 versions of Autoconf.
-Most of those files do not work with the current version of Autoconf,
-because of changes in the Autoconf macros.
 
 Mail suggestions and bug reports for Autoconf to
 bug-gnu-utils@prep.ai.mit.edu.  Please include the Autoconf version
