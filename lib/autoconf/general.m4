@@ -1770,7 +1770,10 @@ AC_DEFUN(AC_CHECK_TYPE,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_MSG_CHECKING(for $1)
 AC_CACHE_VAL(ac_cv_type_$1,
-[AC_EGREP_CPP($1, [#include <sys/types.h>
+[AC_EGREP_CPP(dnl
+changequote(,)
+$1[^a-zA-Z_0-9] dnl
+changequote([,])), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
 #endif], ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
