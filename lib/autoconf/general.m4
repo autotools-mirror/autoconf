@@ -691,36 +691,6 @@ exec AS_MESSAGE_FD>&1
 ])# _AC_INIT_DEFAULTS_FDS
 
 
-# _AC_INIT_LOG_COMPLETE
-# ---------------------
-# At the end of configure, dump some useful information in the
-# log, even if AC_OUTPUT was not called.
-m4_define([_AC_INIT_LOG_COMPLETE],
-[# Save into config.log some information that might help in debugging.
-cat <<_ACEOF >&AS_MESSAGE_LOG_FD
-
-## ----------------- ##
-## Cache variables.  ##
-## ----------------- ##
-
-_ACEOF
-_AC_CACHE_DUMP >&AS_MESSAGE_LOG_FD
-
-sed '/^$/d' confdefs.h >conftest.log
-if test -s conftest.log; then
-  cat <<_ACEOF >&AS_MESSAGE_LOG_FD
-
-## ------------ ##
-## confdefs.h.  ##
-## ------------ ##
-
-_ACEOF
-  cat conftest.log >&AS_MESSAGE_LOG_FD
-fi
-(echo; echo) >&AS_MESSAGE_LOG_FD
-])# _AC_INIT_LOG_COMPLETE
-
-
 # _AC_INIT_DEFAULTS
 # -----------------
 # Values which defaults can be set from `configure.ac'.
