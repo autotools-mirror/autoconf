@@ -13,10 +13,6 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
-** Doc
-Each use of target, build and host should be checked: it is not
-consistent :(.
-
 ** m4
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
@@ -37,11 +33,28 @@ this?
 The test for a recent missing doesn't hide the error messages from the
 old missing.
 
-** automake
+** Automake
 The section for old macros is not completely up to date.  For
-instance, there is still AM_PROG_LIBTOOL.  Anyawy, since autoupdate
+instance, there is still AM_PROG_LIBTOOL.  Anyway, since autoupdate
 takes care of them, it is no longer the role of Automake to handle
 this.  Most should be removed.
+
+** Automake
+Decide with the team whether they prefer that AC_PACKAGE_NAME etc. be
+a macro, or a shell variable ac_package_name.  Had we used AC_PACKAGE
+anywhere in configure.in, we would have had to use an shvar.  Also,
+think of the capitalization!  For instance this package is named
+`Autoconf', but the tarball is `autoconf-'.  What of the space?
+Do we need another user input for the name of the tarball?
+
+** config.status
+Lars seemed to need to be able to apply both the AC_SUBST and
+AC_DEFINE transformation on a single file, which implies that we must
+be able to have `.in' files either in srcdir or in builddir.  In fact,
+have a look at the configuration of Zsh: they patch config.status on
+the fly to have it look for the files in builddir instead of srcdir!!!
+There is a real problem, Autoconf must help.  BTW, why do they need
+that?
 
 ** Doc: autoconf
 Document --install.  Should --install `fix' configure.in for the user?
@@ -51,18 +64,86 @@ If should check that none of the envvar it is in charge of, has
 changed.  The configure.in writer may supply what to do (FATAL, WARN
 etc.).  See VALIDATE CACHE TUPLE.  Document.  Where?
 
+Document more variables: CC, CXX etc.
+
+** Doc:
+Should we already document AC_LANG_* and AC_*_IFELSE?  I hope the
+interface is right...
+
+** AC_CONFIG_LINKS
+_Must_ support shell variables.  Yet another patch to config.status...
+
+** autoconf --install
+We must finalize the interface we want.
+
+** DJGPP
+2.15 cannot be released without having `make check' succeed under
+DJGPP.  EMX will be a requirement for the next release, not this one.
+
+** AC_REQUIRE
+Axel Thimm (Sp?) once sent a very nice bug report about some problems
+when requirements are crossed.  Fix it, and test it.
+
+** autoupdate
+We should probably install the files which do not depend upon the
+user, just the Autoconf library files.  But conversely autoupdate must
+be opened to user macros, i.e., for instance libtool itself must be
+able to say that AM_PROG_LIBTOOL is now AC_PROG_LIBTOOL, and have
+autoupdate do its job on old configure.in.
+
+** Portability
+${1+"$@"}, set dummy.
+
+** --target & AC_ARG_PROGRAM
+Shouldn't *any* `program' be installed as `$target_alias-program' even
+if AC_ARG_PROGRAM is not called?  That would be much more predictable.
+Ian?
+
+** AC_SYS_LARGEFILE
+We *need* it.
+
+** More macros from Jim
+Those related to *_SLASH_*.
+
+** AC_C_CHAR_UNSIGNED
+Use the new technology to read compiler's characteristics.
+
+** AC_FUNC_GETLOADAVG
+We must find a solution for this macro which needs to find
+`getloadavg.c'.
+
+** AC_LIBOBJ_DECL
+Decide with the Automake team whether this macro should list only `.c'
+files, or it should include the `.h' too.  For instance the
+AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
+the macro which allows to choose a regex engine.
+
+** Document the coding style
+Browse the Autoconf Macro Archive, spot what we don't like, and
+document it.  Explain AC_DEFUN vs. define.  Explain people should
+really quote the names of the macros when they define it.  Stress that
+AC_FUNC_* which AC_REPLACE should not inline the setup of the
+replacement function, it's unreadable.
+
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
 
-** Move AM_PROG_CC_STDC into Autoconf.
-Autoconf should provide the means to determine the ANSIsm of the
-compiler, not Automake.
-I've done it, but this is the last opportunity to change this macro
-name: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
+** AC_PROG_CC_STDC
+Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
+Should include more tests (e.g., AC_C_CONST etc.)?
 
-** Document GNATS?
+** Document
+GNATS, bug-autoconf, Autoconf Macro Archive, Automake, Libtool.
 
-** Mention automake, libtool, etc. in the Autoconf manual.
+** Pentateuch
+Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
+_must_ update the `history' section.  Can't go to `New testament', we
+might hurt feelings?  In addition, it means that the Messiah has come,
+which might be slightly presumptuous :).  Still, someone fluent in
+English should write it.
+
+** AUTHORS
+Now what?
 
 ** More C compilers (How come this has never been handled?  --akim)
 Question: at least one common UNIX variant has a "cc" that is old K&R
