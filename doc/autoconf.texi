@@ -11541,8 +11541,8 @@ foo
 @item @command{expr}
 @c -----------------
 @prindex @command{expr}
-No @command{expr} keyword starts with @samp{x}, so use @samp{expr
-x"@var{word}" : 'x@var{regex}'} to keep @command{expr} from
+No @command{expr} keyword starts with @samp{X}, so use @samp{expr
+X"@var{word}" : 'X@var{regex}'} to keep @command{expr} from
 misinterpreting @var{word}.
 
 Don't use @code{length}, @code{substr}, @code{match} and @code{index}.
