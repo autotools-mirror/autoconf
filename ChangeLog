@@ -1,3 +1,23 @@
+2002-05-29  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/autom4te.in ($m4): Do not assume that egrep and fgrep exist.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Likewise.
+	* lib/autoconf/general.m4 (_AC_RUN_LOG_STDERR, AC_EGREP_CPP):
+	Likewise.
+	* lib/autoconf/Makefile.am (check-local): Likewise.
+	* lib/autoconf/status.m4 (AC_CONFIG_HEADER): Likewise.
+	* lib/autoconf/types.m4 (commentary only): Likewise.
+	* lib/autotest/general.m4 (AT_INIT, AT_CHECK): Likewise.
+	* lib/autotest/Makefile.am (check-local): Likewise.
+	* lib/m4sugar/Makefile.am (check-local): Likewise.
+	* tests/atspecific.m4 (AT_CONFIGURE_AC, AT_CHECK_DEFINES): Likewise.
+	* tests/mktests.sh (egrep): New var; use it instead of plain egrep.
+
+	* lib/autoconf/programs.m4 (AC_PROG_EGREP, AC_PROG_FGREP): New macros.
+	* doc/autoconf.texi (Particular Programs): Document them.
+	(Limitations of Usual Tools): Warn that egrep and fgrep may not exist.
+	* NEWS: Likewise.
+	
 2002-05-27  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/types.m4 (AC_TYPE_MBSTATE_T): New macro.
