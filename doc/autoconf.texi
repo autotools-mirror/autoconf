@@ -6990,7 +6990,8 @@ or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
 replace instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
 is called.  This value of @var{variable} should not contain literal
-newlines.
+newlines.  (There is currently no portable way to escape literal
+newlines.)
 
 If @var{value} is given, in addition assign it to @var{variable}.
 @end defmac

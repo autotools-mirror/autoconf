@@ -1,3 +1,16 @@
+2004-02-09  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Setting Output Variables): Emphasize that
+	AC_SUBST provides no portable way to escape literal newlines.
+
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore all
+	flags of the form -lcrt*.o, not just -lcrt[01].o and -lcrtbegin.o.
+	Darwin uses -lcrt2.o and there's little point to cataloging all
+	the system variants.  Partial fix reported by Andreas Waechter in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00006.html
+	for bug reported by Nelson H. F. Beebe in:
+	http://mail.gnu.org/archive/html/bug-autoconf/2003-12/msg00090.html
+	
 2004-02-04   Paolo Bonzini  <bonzini@gnu.org>
 
 	* doc/autoconf.texi (AU_DEFUN): Fix English,
