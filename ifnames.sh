@@ -1,6 +1,6 @@
 #! @SHELL@
 # ifnames - print the identifiers used in C preprocessor conditionals
-# Copyright (C) 1994, 1995 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,12 +39,18 @@ space-separated list of the files in which that identifier occurs.
 
 Report bugs to <bug-autoconf@gnu.org>."
 
-show_version=no
+version="\
+ifnames (GNU @PACKAGE@) @VERSION@
+Written by David J. MacKenzie and Paul Eggert.
+
+Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
 : ${AC_MACRODIR=@datadir@}
 
 while test $# -gt 0; do
-  case "$1" in 
+  case "$1" in
   -h | --help | --h* )
     echo "$usage"; exit 0 ;;
   --macrodir=* | --m*=* )
@@ -56,20 +62,13 @@ while test $# -gt 0; do
     AC_MACRODIR="$1"
     shift ;;
   --version | --versio | --versi | --vers)
-    show_version=yes; shift ;;
+    echo "$version"; exit 0 ;;
   --)     # Stop option processing.
     shift; break ;;
   -*) echo "$usage" 1>&2; exit 1 ;;
   *) break ;;
   esac
 done
-
-if test $show_version = yes; then
-  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
-    $AC_MACRODIR/acgeneral.m4`
-  echo "Autoconf version $version"
-  exit 0
-fi
 
 @AWK@ '
   # Record that sym was found in FILENAME.

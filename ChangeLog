@@ -1,5 +1,20 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Fix the --version of all the executables.
+
+	* Makefile.am (editsh, editpl): Substitute also PACKAGE and
+	VERSION.
+	* autoconf.sh (version): New string.
+	(--version): Use it.
+	(--help) Output on stdout, not stderr.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoscan.pl: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Perform a better checking for missing templates in autoheader.
 
 	* autoheader.m4 (AH_HOOK): When hook AC_FOO on AH_FOO, define the

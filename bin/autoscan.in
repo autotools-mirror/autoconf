@@ -55,6 +55,15 @@ is a preliminary `configure.in' for that package.
 Report bugs to <bug-autoconf@gnu.org>.
 EOD
 
+    local ($version) = <<'EOD';
+autoscan (GNU @PACKAGE@) @VERSION@
+Written by David J. MacKenzie.
+
+Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+EOD
+
     foreach $_ (@ARGV) {
 	if (/^--m[a-z]*=(.*)/) {
 	    $datadir = $1;
@@ -64,7 +73,8 @@ EOD
 	} elsif (/^--verb/) {
 	    $verbose = 1;
 	} elsif (/^--vers/) {
-	    &version;
+	    print "$version";
+	    exit 0;
 	} elsif (/^[^-]/) {
 	    die "$usage" if defined($srcdir);
 	    # Top level directory of the package being autoscanned.
@@ -81,20 +91,6 @@ EOD
 
     open(CONF, ">configure.scan") ||
 	die "$0: cannot create configure.scan: $!\n";
-}
-
-# Print the version number and exit.
-sub version
-{
-    open(ACG, "<$datadir/acgeneral.m4") ||
-	die "$0: cannot open $datadir/acgeneral.m4: $!\n";
-    while (<ACG>) {
-	if (/define.AC_ACVERSION.\s*([0-9.]+)/) {
-	    print "Autoconf version $1\n";
-	    exit 0;
-	}
-    }
-    die "Autoconf version unknown\n";
 }
 
 # Put values in the tables of what to do with each token.
@@ -373,7 +369,7 @@ sub output_headers
 	if (defined($headers_macros{$word}) &&
 	    $headers_macros{$word} eq 'AC_CHECK_HEADERS') {
 	    push(@have_headers, $word);
-	} else {	
+	} else {
 	    &print_unique($headers_macros{$word});
 	}
     }
@@ -400,7 +396,7 @@ sub output_functions
 	if (defined($functions_macros{$word}) &&
 	    $functions_macros{$word} eq 'AC_CHECK_FUNCS') {
 	    push(@have_funcs, $word);
-	} else {	
+	} else {
 	    &print_unique($functions_macros{$word});
 	}
     }

@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1992-1994, 1996, 1998-1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,14 @@ given.
 
 Report bugs to <bug-autoconf@gnu.org>."
 
+version="\
+autoheader (GNU @PACKAGE@) @VERSION@
+Written by Roland McGrath.
+
+Copyright (C) 1992-1994, 1996, 1998-1999 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally
 # because not all systems understand e.g. LANG=C (notably SCO).
@@ -67,7 +75,6 @@ esac
 ac_LF_and_DOT="`echo; echo .`"
 
 localdir=.
-show_version=no
 debug=0
 # Basename for temporary files.
 ah_base=autoh$$
@@ -75,7 +82,7 @@ ah_base=autoh$$
 while test $# -gt 0 ; do
    case "${1}" in
       -h | --help | --h* )
-         echo "${usage}"; exit 0 ;;
+         echo "$usage"; exit 0 ;;
       -d | --debug | --d* )
          debug=1; shift ;;
       --localdir=* | --l*=* )
@@ -95,7 +102,7 @@ while test $# -gt 0 ; do
          AC_MACRODIR="${1}"
          shift ;;
       --version | --v* )
-         show_version=yes; shift ;;
+         echo "$version"; exit 0 ;;
       -- )     # Stop option processing
         shift; break ;;
       - )	# Use stdin as input.
@@ -106,13 +113,6 @@ while test $# -gt 0 ; do
         break ;;
    esac
 done
-
-if test $show_version = yes; then
-  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
-    $AC_MACRODIR/acgeneral.m4`
-  echo "Autoconf version $version"
-  exit 0
-fi
 
 acconfigs="${AC_MACRODIR}/acconfig.h"
 test -r $localdir/acconfig.h && acconfigs="${acconfigs} $localdir/acconfig.h"
@@ -177,7 +177,7 @@ undefined) echo "error: AC_CONFIG_HEADER not found in $infile" >&2; exit 1 ;;
 esac
 
 tmpout=$ah_base.out
-if test $debug -eq 0; then trap "rm -f $ah_base*; exit 1" 1 2 15; fi 
+if test $debug -eq 0; then trap "rm -f $ah_base*; exit 1" 1 2 15; fi
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmpout

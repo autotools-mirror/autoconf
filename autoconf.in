@@ -35,6 +35,14 @@ TEMPLATE-FILE is given, else into \`configure'.
 
 Report bugs to <bug-autoconf@gnu.org>."
 
+version="\
+autoconf (GNU @PACKAGE@) @VERSION@
+Written by David J. MacKenzie.
+
+Copyright (C) 1992, 1993, 1994, 1996, 1999 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally
 # because not all systems understand e.g. LANG=C (notably SCO).
@@ -57,12 +65,11 @@ esac
 : ${TMPDIR=/tmp}
 tmpout=${TMPDIR}/acout.$$
 localdir=
-show_version=no
 
 while test $# -gt 0 ; do
    case "${1}" in
       -h | --help | --h* )
-         echo "${usage}" 1>&2; exit 0 ;;
+         echo "${usage}"; exit 0 ;;
       --localdir=* | --l*=* )
          localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
@@ -80,7 +87,7 @@ while test $# -gt 0 ; do
          AC_MACRODIR="${1}"
          shift ;;
       --version | --v* )
-         show_version=yes; shift ;;
+         echo "$version" ; exit 0 ;;
       -- )     # Stop option processing
         shift; break ;;
       - )	# Use stdin as input.
@@ -91,13 +98,6 @@ while test $# -gt 0 ; do
         break ;;
    esac
 done
-
-if test $show_version = yes; then
-  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
-    $AC_MACRODIR/acgeneral.m4`
-  echo "Autoconf version $version"
-  exit 0
-fi
 
 case $# in
   0) infile=configure.in ;;
