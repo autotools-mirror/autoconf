@@ -1,3 +1,10 @@
+2001-08-15  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.maint (CVS): New.
+	(local-check): Run changelog-check. last.
+	(alpha): Don't depend upon local-check, since...
+	(cvs-dist): depends upon it.
+
 2001-08-15  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* tests/Makefile.am: Use a clean-local rule to remove
