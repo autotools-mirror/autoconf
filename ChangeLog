@@ -1,3 +1,8 @@
+2004-05-22  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Automake-preselections): Preselect
+	LT_SUPPORTED_TAG in lieu of AC_LIBTOOL_TAGS.
+
 2004-05-19  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Add strerror_r, cross
@@ -101,7 +106,7 @@
 
 	* lib/autoconf/c.m4 (_AC_PROG_CC_G, _AC_PROG_CXX_G): Don't
 	consider -g to work if it generates warnings when plain compiles
-v	don't.  Problem reported by Braden McDaniel in:
+	don't.  Problem reported by Braden McDaniel in:
 	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00014.html
 
 	* doc/autoconf.texi (Slashes): New section, to document a problem

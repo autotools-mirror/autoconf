@@ -44,7 +44,6 @@ args: --preselect AC_CONFIG_LIBOBJ_DIR
 args: --preselect AC_CONFIG_LINKS
 args: --preselect AC_INIT
 args: --preselect AC_LIBSOURCE
-args: --preselect AC_LIBTOOL_TAGS
 args: --preselect AC_SUBST
 args: --preselect AM_AUTOMAKE_VERSION
 args: --preselect AM_CONDITIONAL
@@ -52,9 +51,10 @@ args: --preselect AM_GNU_GETTEXT
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
 args: --preselect AM_PROG_CC_C_O
+args: --preselect LT_SUPPORTED_TAG
+args: --preselect _LT_AC_TAGCONFIG
 args: --preselect m4_include
 args: --preselect m4_sinclude
-args: --preselect _LT_AC_TAGCONFIG
 end-language: "Automake-preselections"
 
 
