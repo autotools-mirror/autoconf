@@ -1,5 +1,18 @@
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
+	Don't AC_SUBST too much, as it makes Automake include those
+	variables in Makefiles, and drives autoscan to require unneeded
+	programs.
+
+	* acgeneral.m4 (_AC_INIT_PREPARE): Don't AC_SUBST CFLAGS,
+	CPPFLAGS, CXXFLAGS and LDFLAGS.
+	(AC_ARG_VAR): AC_SUBST the var.
+	Document it only once, even if there are several different docs.
+	* aclang.m4 (AC_PROG_CPP): Declare CPP and CPPFLAGS to AC_ARG_VAR.
+	(AC_PROG_CXXCPP): Declare CXXCPP and CPPFLAGS.
+
+2001-01-24  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_expand_once): Accept a witness.
 
 2001-01-23  Akim Demaille  <akim@epita.fr>

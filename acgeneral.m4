@@ -1479,12 +1479,7 @@ AC_LANG_PUSH(C)
 
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
-AC_SUBST(CFLAGS)dnl
-AC_SUBST(CPPFLAGS)dnl
-AC_SUBST(CXXFLAGS)dnl
-AC_SUBST(FFLAGS)dnl
 AC_SUBST(DEFS)dnl
-AC_SUBST(LDFLAGS)dnl
 AC_SUBST(LIBS)dnl
 m4_divert_pop([INIT_PREPARE])dnl
 ])# _AC_INIT_PREPARE
@@ -1673,11 +1668,14 @@ fi
 AC_DEFUN([AC_ARG_VAR],
 [m4_divert_once([HELP_VAR], [[
 Some influential environment variables:]])dnl
-m4_divert_once([HELP_VAR_END], [
+m4_divert_once([HELP_VAR_END], [[
 Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.])dnl
-m4_divert_once([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
+it to find libraries and programs with nonstandard names/locations.]])dnl
+m4_expand_once([m4_divert_once([HELP_VAR],
+                               [AC_HELP_STRING([$1], [$2], [              ])])],
+               [$0($1)])dnl
 _AC_ARG_VAR_PRECIOUS([$1])dnl
+AC_SUBST([$1])dnl
 ])# AC_ARG_VAR
 
 
@@ -2618,7 +2616,9 @@ AS_IF([test "$ac_cv_search_$1" != no],
 AC_DEFUN([AC_CHECK_LIB],
 [m4_ifval([$3], , [AH_CHECK_LIB([$1])])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
-AC_ARG_VAR([LDFLAGS], [linker flags, e.g. -L<lib dir> if you have libraries in a nonstandard directory <lib dir>])
+AC_ARG_VAR([LDFLAGS],
+           [linker flags, e.g. -L<lib dir> if you have libraries in a
+            nonstandard directory <lib dir>])
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
