@@ -1222,7 +1222,7 @@ AC_CACHE_VAL(ac_cv_prog_$1,
   ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in ifelse([$4], , $PATH, [$4]); do
+  for ac_dir in ifelse([$5], , $PATH, [$5]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
       ac_cv_prog_$1="$3"
