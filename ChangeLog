@@ -5,6 +5,21 @@
 	Bug reported by David Relson in
 	<http://mail.gnu.org/archive/html/autoconf/2004-01/msg00011.html>.
 
+	* Makefile.am (autom4te-update):
+	Replace "rm -rf" and "rm -fr" with "rm -f -r", as POSIX requires.
+	* Makefile.maint (my-distcheck, do-po-update): Likewise.
+	* doc/autoconf.texi (Guidelines): Likewise.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Likewise.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Likewise.
+	* lib/autoconf/specific.m4 (AC_SYS_LONG_FILE_NAMES): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Likewise.
+	* tests/Makefile.am (clean-local): Likewise.
+	* tests/tortue.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS,
+	srcdir): Likewise.
+	* doc/autoconf.texi (Limitations of Usual Tools):
+	Warn against "rm -fr".
+	
 2004-01-03  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Mention that cc

@@ -1192,7 +1192,7 @@ trap 'exit_status=$?
     echo "$as_me: exit $exit_status"
   } >&AS_MESSAGE_LOG_FD
   rm -f core *.core &&
-  rm -rf conftest* confdefs* conf$[$]* $ac_clean_files &&
+  rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
      ' 0
 for ac_signal in 1 2 13 15; do
@@ -1201,7 +1201,7 @@ done
 ac_signal=0
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
-rm -rf conftest* confdefs.h
+rm -f -r conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 # NextStep 3.3 (patch 3) loses unless the first echo outputs at least 14 bytes.
 ac_space=' '

@@ -1,7 +1,9 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+
+## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software
+## Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -73,7 +75,7 @@ autom4te_files = \
   Autom4te/XFile.pm
 
 autom4te-update:
-	rm -rf Fetchdir > /dev/null 2>&1
+	rm -f -r Fetchdir > /dev/null 2>&1
 	mkdir Fetchdir; mkdir Fetchdir/Autom4te
 ## If a get fails then that is a problem.
 	(cd Fetchdir && \

@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf testsuite.
-## Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ atconfig: $(top_builddir)/config.status
 clean-local:
 	test ! -f $(TESTSUITE) || $(SHELL) $(TESTSUITE) --clean
 	rm -f *.tmp
-	rm -rf autom4te.cache
+	rm -f -r autom4te.cache
 
 check-local: atconfig atlocal $(TESTSUITE)
 	$(SHELL) $(TESTSUITE)

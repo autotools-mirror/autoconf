@@ -6363,7 +6363,7 @@ example, if you call @code{AC_HEADER_STDC}, then later on in
 
 If a test program needs to use or create a data file, give it a name
 that starts with @file{conftest}, such as @file{conftest.data}.  The
-@command{configure} script cleans up by running @samp{rm -rf conftest*}
+@command{configure} script cleans up by running @samp{rm -f -r conftest*}
 after running test programs and if the script is interrupted.
 
 @node Test Functions
@@ -11276,6 +11276,13 @@ nor can
 exec > foo
 rm -f foo
 @end example
+
+@item @command{rm}
+@c ---------------
+@prindex @command{rm}
+Avoid @samp{rm -fr}; instead, use @samp{rm -f -r}.  @acronym{POSIX} says
+that scripts must not combine options into a single argument when
+invoking a standard utility like @command{rm}.
 
 @item @command{sed}
 @c ----------------

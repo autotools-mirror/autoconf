@@ -2,7 +2,7 @@
 # This Makefile fragment is shared between the coreutils,
 # CPPI, Bison, and Autoconf.
 
-## Copyright (C) 2001-2003 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -329,7 +329,7 @@ null_AM_MAKEFLAGS = \
 TMPDIR ?= /tmp
 t=$(TMPDIR)/$(PACKAGE)/test
 my-distcheck: $(local-check)
-	-rm -rf $(t)
+	-rm -f -r $(t)
 	mkdir -p $(t)
 	GZIP=$(GZIP_ENV) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz
 	cd $(t)/$(distdir) \
@@ -342,7 +342,7 @@ my-distcheck: $(local-check)
 	(cd $(t) && mv $(distdir) $(distdir).old \
 	  && $(AMTAR) -zxf - ) < $(distdir).tar.gz
 	diff -ur $(t)/$(distdir).old $(t)/$(distdir)
-	-rm -rf $(t)
+	-rm -f -r $(t)
 	@echo "========================"; \
 	echo "$(distdir).tar.gz is ready for distribution"; \
 	echo "========================"
@@ -418,7 +418,7 @@ po_repo = http://www.iro.umontreal.ca/contrib/po/maint/$(PACKAGE)
 .PHONY: do-po-update po-update
 do-po-update:
 	tmppo=/tmp/$(PACKAGE)-$(VERSION)-po &&\
-	rm -rf $$tmppo && \
+	rm -f -r $$tmppo && \
 	mkdir $$tmppo && \
 	(cd $$tmppo && \
 	  $(WGET) $(WGETFLAGS) -r -l1 -nd --no-parent -A '*.po' $(po_repo)) &&\

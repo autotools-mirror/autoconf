@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for libraries.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002 Free Software Foundation, Inc.
+# 2002, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -180,7 +180,7 @@ m4_popdef([AC_Lib_Name])dnl
 # Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_XMKMF],
-[rm -fr conftest.dir
+[rm -f -r conftest.dir
 if mkdir conftest.dir; then
   cd conftest.dir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
@@ -211,7 +211,7 @@ _ACEOF
     esac
   fi
   cd ..
-  rm -fr conftest.dir
+  rm -f -r conftest.dir
 fi
 ])# _AC_PATH_X_XMKMF
 

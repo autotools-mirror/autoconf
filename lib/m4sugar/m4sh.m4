@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -896,7 +896,7 @@ m4_define([AS_TMPDIR],
 [# Create a temporary directory, and hook for its removal unless debugging.
 $debug ||
 {
-  trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
+  trap 'exit_status=$?; rm -f -r $tmp && exit $exit_status' 0
   trap 'AS_EXIT([1])' 1 2 13 15
 }
 
