@@ -1636,6 +1636,9 @@ if test $ac_cv_func_wait3_rusage = yes; then
 fi
 ])dnl AC_FUNC_WAIT3
 
+
+dnl AC_FUNC_ALLOCA
+dnl --------------
 AC_DEFUN(AC_FUNC_ALLOCA,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
@@ -1729,6 +1732,9 @@ fi
 AC_SUBST(ALLOCA)dnl
 ])dnl AC_FUNC_ALLOCA
 
+
+dnl AC_FUNC_GETLOADAVG
+dnl ------------------
 AC_DEFUN(AC_FUNC_GETLOADAVG,
 [ac_have_func=no # yes means we've found a way to get the load average.
 
@@ -1842,8 +1848,11 @@ changequote([, ])dnl
   KMEM_GROUP=$ac_cv_group_kmem
 fi
 AC_SUBST(KMEM_GROUP)dnl
-])
+])dnl AC_FUNC_GETLOADAVG
 
+
+dnl AC_FUNC_UTIME_NULL
+dnl ------------------
 AC_DEFUN(AC_FUNC_UTIME_NULL,
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftestdata; >conftestdata
@@ -1863,8 +1872,11 @@ if test $ac_cv_func_utime_null = yes; then
             [Define if `utime(file, NULL)' sets file's timestamp to the
              present.])
 fi
-])
+])dnl AC_FUNC_UTIME_NULL
 
+
+dnl AC_FUNC_STRCOLL
+dnl ---------------
 AC_DEFUN(AC_FUNC_STRCOLL,
 [AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_TRY_RUN([#include <string.h>
@@ -1880,8 +1892,11 @@ if test $ac_cv_func_strcoll_works = yes; then
             [Define if you have the `strcoll' function and it is properly
              defined.])
 fi
-])
+])dnl AC_FUNC_STRCOLL
 
+
+dnl AC_FUNC_SETVBUF_REVERSED
+dnl ------------------------
 AC_DEFUN(AC_FUNC_SETVBUF_REVERSED,
 [AC_CACHE_CHECK(whether setvbuf arguments are reversed,
   ac_cv_func_setvbuf_reversed,
@@ -1903,7 +1918,8 @@ if test $ac_cv_func_setvbuf_reversed = yes; then
              its second argument and the buffer pointer as the third, as on
              System V before release 3.])
 fi
-])
+])dnl AC_FUNC_SETVBUF_REVERSED
+
 
 AC_DEFUN(AC_FUNC_GETMNTENT,
 [# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX, -lgen on Unixware.
@@ -1913,6 +1929,7 @@ AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
 AC_CHECK_FUNC(getmntent,
               [AC_DEFINE(HAVE_GETMNTENT, 1,
                          [Define if you have the `getmntent' function.])])])
+
 
 AC_DEFUN(AC_FUNC_MKTIME,
 [AC_REQUIRE([AC_HEADER_TIME])dnl

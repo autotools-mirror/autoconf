@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Formating changes.
+	* acspecific.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (pkgdata_DATA): Split into dist_pkgdata_DATA and
 	nodist_pkgdata_DATA.
 
