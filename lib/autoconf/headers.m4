@@ -536,10 +536,7 @@ m4_define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
 # FIXME: Is this the proper name?  Is this the proper implementation?
 # I need more help.
 AC_DEFUN([AC_HEADER_TIOCGWINSZ],
-[AC_REQUIRE([AC_SYS_POSIX_TERMIOS])dnl
-if test $ac_cv_sys_posix_termios = yes; then
-  _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
-fi
+[_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
 if test $ac_cv_sys_tiocgwinsz_in_termios_h != yes; then
   _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
   if test $ac_cv_sys_tiocgwinsz_in_sys_ioctl_h = yes; then
