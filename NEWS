@@ -28,6 +28,9 @@
   ac_cv_prog_cc_c99 or ac_cv_prog_cc_c89 (whichever is valid, in
   that order).
 
+** AT_COPYRIGHT
+  New macro for copyright notices in testsuite files.
+
 * Major changes in Autoconf 2.59b
 
   Released 2004-08-20, by Paul Eggert.

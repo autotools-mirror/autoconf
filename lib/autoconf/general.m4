@@ -227,7 +227,7 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 # It is suggested that the macros in this section appear before
 # AC_INIT in `configure.ac'.  Nevertheless, this is just stylistic,
-# and from the implementation point of, AC_INIT *must* be expanded
+# and from the implementation point of view, AC_INIT *must* be expanded
 # beforehand: it puts data in diversions which must appear before the
 # data provided by the macros of this section.
 
@@ -262,18 +262,10 @@ m4_ifndef([AC_PACKAGE_BUGREPORT],
 
 # AC_COPYRIGHT(TEXT, [VERSION-DIVERSION = VERSION_USER])
 # ------------------------------------------------------
-# Append Copyright information in the top of `configure'.  TEXT is
-# evaluated once, hence TEXT can use macros.  Note that we do not
-# prepend `# ' but `@%:@ ', since m4 does not evaluate the comments.
-# Had we used `# ', the Copyright sent in the beginning of `configure'
-# would have not been evaluated.  Another solution, a bit fragile,
-# would have be to use m4_quote to force an evaluation:
-#
-#     m4_bpatsubst(m4_quote($1), [^], [# ])
+# Emit TEXT, a copyright notice, in the top of `configure' and in
+# --version output.  Macros in TEXT are evaluated once.
 m4_define([AC_COPYRIGHT],
-[m4_divert_text([HEADER-COPYRIGHT],
-[m4_bpatsubst([
-$1], [^], [@%:@ ])])dnl
+[AS_COPYRIGHT([$1])[]dnl
 m4_divert_text(m4_default([$2], [VERSION_USER]),
 [
 $1])dnl
@@ -354,8 +346,8 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 # user copyrights, and after the setup of the --version handling.
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
-[Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-2003, 2004, 2005 Free Software Foundation, Inc.
+[Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.],
 	      [VERSION_FSF])dnl

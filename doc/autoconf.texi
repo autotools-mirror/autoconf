@@ -15618,6 +15618,17 @@ the test suite always displays the package name and version.  It also
 inherits the package bug report address.
 @end defmac
 
+@defmac AT_COPYRIGHT (@var{copyright-notice})
+@atindex{COPYRIGHT}
+@cindex Copyright Notice
+State that, in addition to the Free Software Foundation's copyright on
+the Autotest macros, parts of your test suite are covered by
+@var{copyright-notice}.
+
+The @var{copyright-notice} will show up in both the head of
+@command{testsuite} and in @samp{testsuite --version}.
+@end defmac
+
 @defmac AT_TESTED (@var{executables})
 @atindex{TESTED}
 Log the file name and answer to @option{--version} of each program in

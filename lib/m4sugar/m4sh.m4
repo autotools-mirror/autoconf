@@ -301,6 +301,17 @@ AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
 test $exitcode = 0])
 
 
+# AS_COPYRIGHT(TEXT)
+# ------------------
+# Emit TEXT, a copyright notice, as a shell comment near the top of the
+# script.  TEXT is evaluated once; to accomplish that, we do not prepend
+# `# ' but `@%:@ '.
+m4_define([AS_COPYRIGHT],
+[m4_divert_text([HEADER-COPYRIGHT],
+[m4_bpatsubst([
+$1], [^], [@%:@ ])])])
+
+
 # AS_SHELL_SANITIZE
 # -----------------
 m4_defun([AS_SHELL_SANITIZE],

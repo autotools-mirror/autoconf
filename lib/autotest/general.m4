@@ -76,6 +76,7 @@
 #    cases of a case statement.
 #  - PARSE_ARGS_END
 #    Finish up the option processing.
+#
 #  - HELP
 #    Start printing the help message.
 #  - HELP_MODES
@@ -88,6 +89,14 @@
 #    User help can be appended to this as self-contained cat'd here-docs.
 #  - HELP_END
 #    Finish up the help texts.
+#
+#  - VERSION
+#    Head of the handling of --version.
+#  - VERSION_NOTICES
+#    Copyright notices for --version.
+#  - VERSION_END
+#    Tail of the handling of --version.
+#
 #  - PREPARE_TESTS
 #    Like DEFAULTS but run after argument processing for purposes of
 #    optimization.  Do anything else that needs to be done to prepare for
@@ -109,6 +118,9 @@ m4_define([_m4_divert(HELP_MODES)],         301)
 m4_define([_m4_divert(HELP_TUNING)],        302)
 m4_define([_m4_divert(HELP_OTHER)],         303)
 m4_define([_m4_divert(HELP_END)],           304)
+m4_define([_m4_divert(VERSION)],            350)
+m4_define([_m4_divert(VERSION_NOTICES)],    351)
+m4_define([_m4_divert(VERSION_END)],        352)
 m4_define([_m4_divert(PREPARE_TESTS)],      400)
 m4_define([_m4_divert(TESTS)],              401)
 m4_define([_m4_divert(TESTS_END)],          402)
@@ -146,6 +158,11 @@ m4_define([AT_TESTSUITE_NAME],
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 AS_INIT
+AT_COPYRIGHT(
+[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+Foundation, Inc.
+This test suite is free software; the Free Software Foundation gives
+unlimited permission to copy, distribute and modify it.])
 AS_PREPARE
 m4_divert_push([DEFAULTS])dnl
 
@@ -190,6 +207,8 @@ at_quiet=echo
 at_debug_p=false
 # Display help message?
 at_help_p=false
+# Display the version message?
+at_version_p=false
 # List test groups?
 at_list_p=false
 # Test groups to run
@@ -251,8 +270,7 @@ do
 	;;
 
     --version | -V )
-	echo "$as_me (AT_PACKAGE_STRING)"
-	exit 0
+	at_version_p=:
 	;;
 
     --clean | -c )
@@ -433,6 +451,16 @@ _ATEOF
   exit 0
 fi
 m4_divert_pop([HELP_END])dnl
+m4_divert_push([VERSION])dnl
+if $at_version_p; then
+  echo "$as_me (AT_PACKAGE_STRING)"
+  cat <<\_ACEOF
+m4_divert_pop([VERSION])dnl
+m4_divert_push([VERSION_END])dnl
+_ACEOF
+  exit 0
+fi
+m4_divert_pop([VERSION_END])dnl
 m4_divert_push([PREPARE_TESTS])dnl
 
 # Don't take risks: use only absolute directories in PATH.
@@ -1035,6 +1063,17 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 m4_define([AT_TESTED],
 [m4_append_uniq([AT_tested], [$1], [
 ])])
+
+
+# AT_COPYRIGHT(TEXT)
+# ------------------
+# Emit TEXT, a copyright notice, in the top of the test suite and in
+# --version output.  Macros in TEXT are evaluated once.
+m4_define([AT_COPYRIGHT],
+[AS_COPYRIGHT([$1])[]dnl
+m4_divert_text([VERSION_NOTICES],
+[
+$1])])# AT_COPYRIGHT
 
 
 # AT_SETUP(DESCRIPTION)
