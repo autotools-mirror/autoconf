@@ -75,9 +75,10 @@ define([m4_rename],
 
 # Some m4 internals have names colliding with tokens we might use.
 # Rename them a` la `m4 --prefix-builtins'.
-m4_rename([eval],   [m4_eval])
-m4_rename([shift],  [m4_shift])
-m4_rename([format], [m4_format])
+m4_rename([eval],    [m4_eval])
+m4_rename([format],  [m4_format])
+m4_rename([shift],   [m4_shift])
+m4_rename([symbols], [m4_symbols])
 
 
 ## --------------------------------------------- ##
