@@ -505,12 +505,12 @@ IFS=" 	$as_nl"
 $as_unset CDPATH
 
 
-exec </dev/null 6>&1
-
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
+
+exec 6>&1
 
 #
 # Initializations.
@@ -2548,7 +2548,7 @@ do
     { test -f "$ac_path_GREP" && $as_executable_p "$ac_path_GREP"; } || continue
     # Check for GNU ac_path_GREP and select it if it is found.
   # Check for GNU $ac_path_GREP
-case `"$ac_path_GREP" --version 2>&1` in
+case `"$ac_path_GREP" --version </dev/null 2>&1` in
 *GNU*)
   ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
 *)
