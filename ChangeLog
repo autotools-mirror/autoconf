@@ -1,10 +1,15 @@
 2001-10-10  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Recognize
+	`a_out.exe' for OpenVMS 7.1, DEC C 5.5 compiler, via GNV.
+	From Eric Sharkey.
+
+2001-10-10  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_N_PREPARE): m4_defun, not
 	m4_define, since...
 	(_AS_ECHO_N): AS_REQUIREs it.
 
-	
 2001-10-10  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS)
