@@ -1,3 +1,7 @@
+2000-10-13  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4: Typos in comments spotted by Pavel.
+
 2000-10-12  Pavel Roskin  <proski@gnu.org>
 
 	* acspecific.m4 (AC_PROG_LEX): Don't assume that lex exists.

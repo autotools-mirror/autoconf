@@ -212,7 +212,7 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 #
 # Two things deserve attention and are detailed below:
 #  1. Implementation of AC_REQUIRE
-#  2. Keeping tracking of the expansion stack
+#  2. Keeping track of the expansion stack
 #
 # 1. Implementation of AC_REQUIRE
 # ===============================
@@ -499,14 +499,14 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 #   diversions: BODY |-
 #
 #
-# 2. Keeping tracking of the expansion stack
-# ==========================================
+# 2. Keeping track of the expansion stack
+# =======================================
 #
 # When M4 expansion goes wrong it is often extremely hard to find the
-# path amongst macros that drove to the failure.  What is needed case
-# is the stack of macro `calls'. One could imagine that GNU M4 would
-# maintain a stack of macro expansion, unfortunately it doesn't, so we
-# do it by hand.  This is of course extremely costly, but the help
+# path amongst macros that drove to the failure.  What is needed is
+# the stack of macro `calls'. One could imagine that GNU M4 would
+# maintain a stack of macro expansions, unfortunately it doesn't, so
+# we do it by hand.  This is of course extremely costly, but the help
 # this stack provides is worth it.  Nevertheless to limit the
 # performance penalty this is implemented only for AC_DEFUN'd macros,
 # not for define'd macros.
