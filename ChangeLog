@@ -1,5 +1,18 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	Stop playing with FDs in Autotest.
+
+	* tests/atgeneral.m4 (AT_INIT): Set up FD 5.
+	(AT_CHECK): Instead of using exec to globally change the FDs of
+	`testsuite', enclose the body of the test into a
+	`(..) >stdout 2>stderr'.
+	In every case, when verbose, display the differences between
+	expected and oberved (stdout, stderr, exit status).
+	Let `0' be the default for EXIT-STATUS.
+	Support EXIT-STATUS == `ignore'.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (autoconf: forbidden tokens): Adjust expected
 	result.
 

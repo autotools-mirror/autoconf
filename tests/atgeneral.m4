@@ -113,10 +113,10 @@ fi
 test -f atlocal && . ./atlocal
 
 # -e sets to true
-at_stop_on_error=false;
+at_stop_on_error=false
 # Shall we save and check stdout and stderr?
 # -n sets to false
-at_check_stds=:;
+at_check_stds=:
 # Shall we be verbose?
 at_verbose=:
 # Shall we keep the debug scripts?  Must be `:' when testsuite is
@@ -214,6 +214,14 @@ else
   exit 1
 fi
 
+# Setting up the FDs.
+# 5 is stdout conditioned by verbosity.
+if test $at_verbose = echo; then
+  exec 5>&1
+else
+  exec 5>/dev/null
+fi
+
 at_failed_list=
 at_ignore_count=0
 at_test_count=0
@@ -221,7 +229,7 @@ m4_divert([TESTS])dnl
 
 for at_test in $at_tests
 do
-  at_status=0;
+  at_status=0
   case $at_test in
 dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
@@ -424,44 +432,35 @@ m4_define([AT_CHECK],
 [$at_traceoff
 $at_verbose "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
 echo AT_LINE >at-check-line
-$at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
-$1
-m4_ifvaln([$2],
-          [at_status=$?
+( $1 ) >stdout 2>stderr
+at_status=$?
 $at_traceoff
-if test $at_status != $2; then
-  $at_verbose "Exit code was $at_status, expected $2" >&6
-dnl Maybe there was an important message to read before it died.
-  $at_verbose = echo && $at_check_stds && cat stderr >&6
-dnl Preserve exit code 77.
-  test $at_status = 77 && exit 77
-  exit 1
-fi],
-          [$at_traceoff])[]dnl
-if $at_check_stds; then
-dnl Restore stdout to fd1 and stderr to fd2.
-  exec 1>&5 2>&6
-dnl If not verbose, neutralize the output of diff.
-  test $at_verbose = : && exec 1>/dev/null 2>/dev/null
-  at_failed=false;
-  m4_case([$4],
-          ignore, [$at_verbose = echo && cat stderr;:],
-          experr, [AT_CLEANUP_FILE([experr])dnl
-$at_diff experr stderr || at_failed=:],
-          [], [$at_diff empty stderr || at_failed=:],
-          [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
-  m4_case([$3],
-          ignore, [test $at_verbose = echo && cat stdout;:],
-          expout, [AT_CLEANUP_FILES([expout])dnl
-$at_diff expout stdout || at_failed=:],
-          [], [$at_diff empty stdout || at_failed=:],
-          [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || at_failed=:])
-  if $at_failed; then
-    exit 1
-  else
-    :
-  fi
-fi
+at_continue=:
+dnl Check stderr.
+m4_case([$4],
+        ignore, [cat stderr >&5],
+        experr, [AT_CLEANUP_FILE([experr])dnl
+$at_diff experr stderr >&5 || at_continue='exit 1'],
+        [], [$at_diff empty stderr >&5 || at_continue='exit 1'],
+        [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr >&5 || at_continue='exit 1'])
+dnl Check stdout.
+m4_case([$3],
+        ignore, [cat stdout >&5],
+        expout, [AT_CLEANUP_FILES([expout])dnl
+$at_diff expout stdout >&5 || at_continue='exit 1'],
+        [], [$at_diff empty stdout >&5 || at_continue='exit 1'],
+        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_continue=:])
+dnl Check exit val.
+case $at_status in
+  77) exit 77;;
+m4_case([$2],
+  [ignore],
+    [   *);;],
+    [   m4_default([$2], [0])) ;;
+   *) $at_verbose "Exit code was $at_status, expected $2" >&2
+      at_continue='exit 1';;])
+esac
+$at_continue
 $at_traceon
 ])# AT_CHECK

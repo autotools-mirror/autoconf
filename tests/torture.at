@@ -33,22 +33,22 @@ AT_CHECK_AUTOCONF
 
 # Create a header
 AT_CHECK([./configure what_to_test=header], 0, ignore)
-AT_CHECK([ls header file command link 2>/dev/null], [], [header
+AT_CHECK([ls header file command link 2>/dev/null], [ignore], [header
 ])
 
 # Create a file
 AT_CHECK([./configure what_to_test=file], 0, ignore)
-AT_CHECK([ls header file command link 2>/dev/null], [], [file
+AT_CHECK([ls header file command link 2>/dev/null], [ignore], [file
 ])
 
 # Execute a command
 AT_CHECK([./configure what_to_test=command], 0, ignore)
-AT_CHECK([ls header file command link 2>/dev/null], [], [command
+AT_CHECK([ls header file command link 2>/dev/null], [ignore], [command
 ])
 
 # Create a link
 AT_CHECK([./configure what_to_test=link], 0, ignore)
-AT_CHECK([ls header file command link 2>/dev/null], [], [link
+AT_CHECK([ls header file command link 2>/dev/null], [ignore], [link
 ])
 
 AT_CLEANUP(header file link command header.in file.in link.in command.in configure config.status)
