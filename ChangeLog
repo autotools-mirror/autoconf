@@ -1,5 +1,21 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	Replace AC_LANG_SAVE/AC_LANG_RESTORE with AC_LANG_PUSH/AC_LANG_POP.
+
+	* aclang.m4 (_AC_LANG_CURRENT, AC_LANG_STACK): You two are the same
+	thing, which now we shall name `_AC_LANG'.
+	All users adjusted.
+	(AC_LANG_PUSH, AC_LANG_POP): New macros.
+	(AC_LANG_SAVE, AC_LANG_RESTORE): AU defined.
+	(AC_PROG_CC_WORKS, AC_PROG_CXXCPP, AC_PROG_CXX_WORKS,
+	AC_PROG_F77_WORKS, AC_F77_LIBRARY_LDFLAGS, AC_F77_NAME_MANGLING):
+	Use them.
+	(AC_F77_LIBRARY_LDFLAGS): Move the requirements at its top.
+	* doc/autoconf.texi (Language Choice): Document them.
+	(Old Macros): Welcome AC_LANG_SAVE and AC_LANG_RESTORE.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Less adventurous use of
 	`test'.
 	Fixes Autoconf/108.

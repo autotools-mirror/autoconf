@@ -4671,24 +4671,17 @@ otherwise.
 @end table
 @end defmac
 
-@defmac AC_LANG_SAVE
-@maindex LANG_SAVE
-Remember the current language (as set by @code{AC_LANG_C},
-@code{AC_LANG_CPLUSPLUS} or @code{AC_LANG_FORTRAN77}) on a stack.  Does
-not change which language is current.  Use this macro and
-@code{AC_LANG_RESTORE} in macros that need to temporarily switch to a
-particular language.
+@defmac AC_LANG_PUSH (@var{language})
+@maindex LANG_PUSH
+Remember the current language (as set by @code{AC_LANG}) on a stack, and
+then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
+in macros that need to temporarily switch to a particular language.
 @end defmac
 
-@defmac AC_LANG_RESTORE
-@maindex LANG_RESTORE
+@defmac AC_LANG_POP
+@maindex LANG_POP
 Select the language that is saved on the top of the stack, as set by
-@code{AC_LANG_SAVE}, and remove it from the stack.  This macro is
-equivalent to either @code{AC_LANG_C}, @code{AC_LANG_CPLUSPLUS} or
-@code{AC_LANG_FORTRAN77}, whichever had been run most recently when
-@code{AC_LANG_SAVE} was last called.
-
-Do not call this macro more times than @code{AC_LANG_SAVE}.
+@code{AC_LANG_PUSH}, and remove it from the stack.
 @end defmac
 
 @defmac AC_REQUIRE_CPP
@@ -7515,6 +7508,20 @@ Same as @samp{AC_LANG(C++)}.
 @defmac AC_LANG_FORTRAN77
 @maindex LANG_FORTRAN77
 Same as @samp{AC_LANG(Fortran 77)}.
+@end defmac
+
+@defmac AC_LANG_RESTORE
+@maindex LANG_RESTORE
+Select the @var{language} that is saved on the top of the stack, as set
+by @code{AC_LANG_SAVE}, remove it from the stack, and call
+@code{AC_LANG(@var{language})}.
+@end defmac
+
+@defmac AC_LANG_SAVE
+@maindex LANG_SAVE
+Remember the current language (as set by @code{AC_LANG}) on a stack.
+Doe not change which language is current.  @code{AC_LANG_PUSH} is
+preferred.
 @end defmac
 
 @defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})

@@ -73,9 +73,6 @@
 ## ----------------------- ##
 
 
-# The current scheme is really not beautiful.  It'd be better to have
-# AC_LANG_PUSH(C), AC_LANG_POP.  In addition, that's easy to do.
-# FIXME: do it yet for 2.16?
 
 # ---------------------------- #
 # Generic language selection.  #
@@ -86,24 +83,7 @@
 # Expand into IF-LANG1 if the current language is LANG1 etc. else
 # into default.
 define(AC_LANG_CASE,
-[m4_case(_AC_LANG_CURRENT, $@)])
-
-
-# AC_LANG_SAVE
-# ------------
-# Push the current language on a stack.
-define(AC_LANG_SAVE,
-[pushdef([AC_LANG_STACK], _AC_LANG_CURRENT)])
-
-
-# AC_LANG_RESTORE
-# ---------------
-# Restore the current language from the stack.
-pushdef([AC_LANG_RESTORE],
-[ifelse(AC_LANG_STACK, [AC_LANG_STACK],
-        [AC_FATAL([too many AC_LANG_RESTORE])])dnl
-AC_LANG(AC_LANG_STACK)dnl
-popdef([AC_LANG_STACK])])
+[m4_case(_AC_LANG, $@)])
 
 
 # _AC_LANG_DISPATCH(MACRO, LANG, ARGS)
@@ -125,8 +105,42 @@ define([_AC_LANG_DISPATCH],
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[m4_define([_AC_LANG_CURRENT], [$1])dnl
-_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+[m4_define([_AC_LANG], [$1])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_PUSH(LANG)
+# ------------------
+# Save the current language, and use LANG.
+define([AC_LANG_PUSH],
+[pushdef([_AC_LANG])dnl
+AC_LANG([$1])])
+
+
+# AC_LANG_POP
+# -----------
+# Restore the previous language.
+define([AC_LANG_POP],
+[popdef([_AC_LANG])dnl
+ifelse(_AC_LANG, [_AC_LANG],
+        [AC_FATAL([too many $0])])dnl
+AC_LANG(_AC_LANG)])
+
+
+# AC_LANG_SAVE
+# ------------
+# Save the current language, but don't change language.
+AU_DEFUN([AC_LANG_SAVE],
+[AC_DIAGNOSE([obsolete],
+             [instead of using `AC_LANG', `AC_LANG_SAVE',
+and `AC_LANG_RESTORE', you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
+pushdef([_AC_LANG], _AC_LANG)])
+
+
+# AC_LANG_RESTORE
+# ---------------
+# Restore the current language from the stack.
+AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 
 
 # AC_LANG_SOURCE(BODY)
@@ -134,7 +148,7 @@ _AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
 # Produce a valid source for the current language, which includes the
 # BODY.  Include the `#line' sync lines.
 AC_DEFUN([AC_LANG_SOURCE],
-[_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_PROGRAM(PROLOGUE, BODY)
@@ -144,14 +158,14 @@ AC_DEFUN([AC_LANG_SOURCE],
 # execution the BODY (typically glued inside the `main' function, or
 # equivalent).
 AC_DEFUN([AC_LANG_PROGRAM],
-[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])])
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 
 # AC_LANG_CALL(PROLOGUE, FUNCTION)
 # --------------------------------
 # Call the FUNCTION.
 AC_DEFUN([AC_LANG_CALL],
-[_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 
@@ -423,11 +437,10 @@ fi
 # ----------------
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) works])
-AC_LANG_SAVE()dnl
-AC_LANG(C)
+AC_LANG_PUSH(C)
 AC_TRY_COMPILER([int main(){return(0);}],
                 ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 AC_MSG_RESULT($ac_cv_prog_cc_works)
 if test $ac_cv_prog_cc_works = no; then
   AC_MSG_ERROR([installation or configuration problem: C compiler cannot create executables.], 77)
@@ -557,12 +570,11 @@ AC_DEFUN(AC_PROG_CXXCPP,
 [AC_MSG_CHECKING(how to run the C++ preprocessor)
 if test -z "$CXXCPP"; then
 AC_CACHE_VAL(ac_cv_prog_CXXCPP,
-[AC_LANG_SAVE()dnl
-AC_LANG(C++)dnl
+[AC_LANG_PUSH(C++)
   CXXCPP="${CXX-g++} -E"
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
   ac_cv_prog_CXXCPP=$CXXCPP
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 ])dnl
 CXXCPP=$ac_cv_prog_CXXCPP
 fi
@@ -620,11 +632,10 @@ fi
 # -----------------
 AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) works])
-AC_LANG_SAVE()dnl
-AC_LANG(C++)
+AC_LANG_PUSH(C++)
 AC_TRY_COMPILER([int main(){return(0);}],
                 ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then
   AC_MSG_ERROR([installation or configuration problem: C++ compiler cannot create executables.], 77)
@@ -716,13 +727,12 @@ fi
 # compiler is `g77').
 AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
-AC_LANG_SAVE()dnl
-AC_LANG(Fortran 77)
+AC_LANG_PUSH(Fortran 77)
 AC_TRY_COMPILER(
 [      program conftest
       end
 ], ac_cv_prog_f77_works, ac_cv_prog_f77_cross)
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 AC_MSG_RESULT($ac_cv_prog_f77_works)
 if test $ac_cv_prog_f77_works = no; then
   AC_MSG_ERROR([installation or configuration problem: Fortran 77 compiler cannot create executables.], 77)
@@ -1200,14 +1210,12 @@ fi
 # However, nearly all of this macro came from the "OCTAVE_FLIBS" macro
 # in "octave-2.0.13/aclocal.m4", and full credit should go to John
 # W. Eaton for writing this extremely useful macro.  Thank you John.
-AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
-[AC_CACHE_CHECK([for Fortran 77 libraries],
-                 ac_cv_flibs,
+AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
 [AC_REQUIRE([AC_PROG_F77])dnl
 AC_REQUIRE([AC_CYGWIN])dnl
-
-AC_LANG_SAVE()dnl
-AC_LANG(Fortran 77)
+AC_CACHE_CHECK([for Fortran 77 libraries],
+                ac_cv_flibs,
+[AC_LANG_PUSH(Fortran 77)
 
 # This is the simplest of all Fortran 77 programs.
 cat >conftest.$ac_ext <<EOF
@@ -1235,7 +1243,7 @@ exec AC_FD_LOG>&8
 
 rm -f conftest.*
 
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 
 # This will ultimately be our output variable.
 FLIBS=
@@ -1333,7 +1341,6 @@ done
 ac_ld_run_path=`echo $ac_link_output |
                 sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
 test "x$ac_ld_run_path" != x && FLIBS="$ac_ld_run_path $FLIBS"
-
 ac_cv_flibs=$FLIBS
 ])
 AC_SUBST(FLIBS)
@@ -1370,8 +1377,7 @@ AC_REQUIRE([AC_PROG_F77])dnl
 AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
                ac_cv_f77_mangling,
-[AC_LANG_SAVE()dnl
-AC_LANG(Fortran 77)
+[AC_LANG_PUSH(Fortran 77)
 AC_COMPILE_IFELSE(
 [      subroutine foobar()
       return
@@ -1381,8 +1387,7 @@ AC_COMPILE_IFELSE(
       end],
 [mv conftest.${ac_objext} cf77_test.${ac_objext}
 
-  AC_LANG_SAVE()dnl
-  AC_LANG(C)
+  AC_LANG_PUSH(C)
 
   ac_save_LIBS=$LIBS
   LIBS="cf77_test.${ac_objext} $FLIBS $LIBS"
@@ -1416,9 +1421,9 @@ AC_COMPILE_IFELSE(
   fi
 
   LIBS=$ac_save_LIBS
-  AC_LANG_RESTORE()dnl
+  AC_LANG_POP()dnl
   rm -f cf77_test*])
-AC_LANG_RESTORE()dnl
+AC_LANG_POP()dnl
 ])
 dnl Get case/underscore from cache variable, in case above tests were skipped:
 f77_case=`echo "$ac_cv_f77_mangling" | sed 's/ case.*$//'`
