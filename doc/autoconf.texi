@@ -2241,7 +2241,10 @@ compiling.
 @maindex PROG_CC_C_O
 @cvindex NO_MINUS_C_MINUS_O
 If the C compiler does not accept the @samp{-c} and @samp{-o} options
-simultaneously, define @code{NO_MINUS_C_MINUS_O}.
+simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
+tests both the compiler found by @code{AC_PROG_CC}, and, if different,
+the first @code{cc} in the path.  The test fails if one fails.  This
+macro was created for GNU Make to choose the default C compilation rule.
 @end defmac
 
 @defmac AC_PROG_CC_STDC
