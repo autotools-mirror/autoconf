@@ -109,6 +109,7 @@ M4_INCLUDES =  --include $(srcdir) \
 # the dependencies...
 srclibdir = $(top_srcdir)/lib
 autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
+              $(srclibdir)/m4sugar/version.m4	\
               $(srclibdir)/m4sugar/m4sh.m4	\
               $(srclibdir)/autoconf/autoconf.m4	\
               $(srclibdir)/autoconf/general.m4	\

@@ -1,3 +1,9 @@
+2001-09-07  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/Makefile.am (autoconf.m4f): Depends upon
+	m4sugar/version.m4.
+
+	
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Use `_array_'
