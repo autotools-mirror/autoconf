@@ -18,10 +18,9 @@ Major changes in release 1.8:
 * AC_COMPILE_CHECK protects its ECHO-TEXT argument with double quotes.
 
 ** New or changed command line options:
-* configure accepts --enable-FEATURE[=VAL] and --disable-FEATURE options.
-* configure accepts --without-PACKAGE; giving --with-PACKAGE an
-  argument is deprecated, and gives $withval a value of `yes' instead
-  of `1' by default for --with-, and `no' for --without-.
+* configure accepts --enable-FEATURE[=ARG] and --disable-FEATURE options.
+* configure accepts --without-PACKAGE, which sets withval=no.
+* Giving --with-PACKAGE no argument sets withval=yes instead of 1.
 * configure accepts --help, --version, --silent/--quiet options.
 * configure accepts and ignores most other Cygnus configure options, and
   warns about unknown options.
