@@ -9892,7 +9892,7 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @cindex `@var{commands}`
 @cindex Command Substitution
 While in general it makes no sense, do not substitute a single builtin
-with side effects, becauase Ash 0.2, trying to optimize, does not fork a
+with side effects, because Ash 0.2, trying to optimize, does not fork a
 subshell to perform the command.
 
 For instance, if you wanted to check that @command{cd} is silent, do not
