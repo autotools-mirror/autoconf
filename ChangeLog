@@ -1,3 +1,22 @@
+1999-09-04  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Output comment to not only
+	`Makefile', but also `makefile'.
+
+1999-09-04  Jim Blandy  <jimb@zwingli.cygnus.com>
+
+	* Makefile.in (install): Don't freak if the M4FROZEN files were
+	never generated.  m4 1.1 is supported, but doesn't freeze files.
+
+1999-09-04  Scott Bambrough  <scottb@netwinder.org>
+
+	* config.guess: Autodetect ArmLinux using 2.9.1.xx linker
+	emulation names and using the emulation names from the linker from
+	the binutils CVS tree.
+
+	* config.sub: Change manufacturer name for the NetWinder alias
+	from Corel to Rebel.
+
 1999-09-04  Jeremy Elson  <jelson@circlemud.org>
 
 	* autoheader.m4 (AC_CHECK_HEADER): Define.
