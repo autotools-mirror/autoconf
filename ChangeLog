@@ -1,3 +1,12 @@
+2003-11-05  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Using Autotest): Avoid @strong{Note: ...}, since
+	it provokes a warning from makeinfo about looking like a cross
+	reference in info output.
+
+	* doc/autoconf.texi (Function Portability): Add notes on signal
+	handler return type, as per AC_TYPE_SIGNAL.
+
 2003-11-04  Akim Demaille  <akim@epita.fr>
 
 	Version 2.58.
