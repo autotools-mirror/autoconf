@@ -3,6 +3,12 @@
 	* config.guess: Handle strange processor ID assignments on AIX
 	machines.  Contributed by Didier Desseaux <didess@infonie.fr>.
 
+Sat Sep 12 16:25:00 1998  Aaron Crane  <aaronc@pobox.com>
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Changed the egrep regex to avoid
+	incorrectly assuming that if foobar_t is defined, then so is
+	bar_t.
+	
 Thu Jun 18 12:13:27 1998  Ian Lance Taylor  <ian@cygnus.com>
 
 	* acspecific.m4 (AC_EXEEXT): Correct setting of ac_exeext when
