@@ -794,11 +794,14 @@ contains.
 @defvar configure_input
 @ovindex configure_input
 A comment saying that the file was generated automatically by configure
-and giving the name of the input file.  You should reference this
-variable in a comment at the top of each input file.  For example, a
-@file{Makefile.in} should begin like this:
+and giving the name of the input file.  @code{AC_OUTPUT} adds a comment
+line containing this variable to the top of every @file{Makefile} it
+creates.  For other files, you should reference this variable in a
+comment at the top of each input file.  For example, an input
+shell script should begin like this:
 
 @example
+#!/bin/sh
 # @@configure_input@@
 @end example
 

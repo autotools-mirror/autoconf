@@ -1,4 +1,3 @@
-# @configure_input@
 # Makefile for Autoconf.
 # Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 
@@ -131,8 +130,8 @@ installdirs:
 install: all $(M4FILES) acconfig.h installdirs install-info
 	@case `$(M4) --help < /dev/null 2>&1` in \
 	*reload-state*) echo installing frozen m4 files; \
-	  $(M4) -F $(acdatadir)/autoconf.m4f autoconf.m4 ; \
-	  $(M4) -F $(acdatadir)/autoheader.m4f autoheader.m4 ;; \
+	  $(M4) -F $(acdatadir)/autoconf.m4f -I${srcdir} ${srcdir}/autoconf.m4 ; \
+	  $(M4) -F $(acdatadir)/autoheader.m4f -I${srcdir} ${srcdir}/autoheader.m4 ;; \
 	*traditional*) ;; \
 	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
 	esac

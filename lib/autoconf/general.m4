@@ -1455,7 +1455,9 @@ dnl The big finish.
 dnl Produce config.status, config.h, and links, and configure subdirs.
 dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS] [, INIT-CMDS])
 define(AC_OUTPUT,
-[AC_CACHE_SAVE
+[trap '' 1 2 15
+AC_CACHE_SAVE
+trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 
 test "x$prefix" = xNONE && prefix=/usr/local
 # Let make expand exec_prefix.
@@ -1631,7 +1633,12 @@ changequote([, ])dnl
   echo creating "$ac_file"
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
-  sed -e "
+  case "$ac_file" in
+  *Makefile*) ac_comsub="1i\\
+# $configure_input" ;;
+  *) ac_comsub= ;;
+  esac
+  sed -e "$ac_comsub
 s%@configure_input@%$configure_input%g
 s%@srcdir@%$srcdir%g
 s%@top_srcdir@%$top_srcdir%g
