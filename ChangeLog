@@ -1,5 +1,10 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* lib/autoconf/programs.m4: Use extensions listed in
+	$ac_executable_extensions when looking for programs.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* lib/autoconf/general.m4: Fix a small Englisho.
 	* lib/autoconf/status.m4: Fix a small typo.  Handle DOS paths when
 	setting up ac_dir_suffix and ac_top_builddir.

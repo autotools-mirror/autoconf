@@ -69,16 +69,19 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 else
 m4_ifvaln([$6],
 [  ac_prog_rejected=no])dnl
-  _AS_PATH_WALK([$5],
-[AS_EXECUTABLE_P("$as_dir/$ac_word") || continue
+_AS_PATH_WALK([$5],
+[for ac_exec_ext in '' $ac_executable_extensions; do
+  if AS_EXECUTABLE_P(["$as_dir/$ac_word$ac_exec_ext"]); then
 m4_ifvaln([$6],
-[if test "$as_dir/$ac_word" = "$6"; then
-  ac_prog_rejected=yes
-  continue
-fi])dnl
-ac_cv_prog_$1="$3"
-echo "$as_me:__oline__: found $as_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-break])
+[    if test "$as_dir/$ac_word$ac_exec_ext" = "$6"; then
+       ac_prog_rejected=yes
+       continue
+     fi])dnl
+    ac_cv_prog_$1="$3"
+    echo "$as_me:__oline__: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
+    break 2
+  fi
+done])
 m4_ifvaln([$6],
 [if test $ac_prog_rejected = yes; then
   # We found a bogon in the path, so make sure we never use it.
@@ -140,11 +143,13 @@ AC_CACHE_VAL([ac_cv_path_$1],
   ;;
   *)
   _AS_PATH_WALK([$4],
-[if AS_EXECUTABLE_P("$as_dir/$ac_word"); then
-   ac_cv_path_$1="$as_dir/$ac_word"
-   echo "$as_me:__oline__: found $as_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-   break
-fi])
+[for ac_exec_ext in '' $ac_executable_extensions; do
+  if AS_EXECUTABLE_P(["$as_dir/$ac_word$ac_exec_ext"]); then
+    ac_cv_path_$1="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:__oline__: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
+    break 2
+  fi
+done])
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
 m4_ifvaln([$3],
@@ -286,20 +291,22 @@ case $as_dir/ in
     # Don't use installbsd from OSF since it installs stuff as root
     # by default.
     for ac_prog in ginstall scoinst install; do
-      if AS_EXECUTABLE_P(["$as_dir/$ac_prog"]); then
-  	if test $ac_prog = install &&
-  	  grep dspmsg "$as_dir/$ac_prog" >/dev/null 2>&1; then
-  	  # AIX install.  It has an incompatible calling convention.
-  	  :
-  	elif test $ac_prog = install &&
-  	  grep pwplus "$as_dir/$ac_prog" >/dev/null 2>&1; then
-  	  # program-specific install script used by HP pwplus--don't use.
-  	  :
-  	else
-  	  ac_cv_path_install="$as_dir/$ac_prog -c"
-  	  break 2
-  	fi
-      fi
+      for ac_exec_ext in '' $ac_executable_extensions; do
+        if AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]); then
+          if test $ac_prog = install &&
+            grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+            # AIX install.  It has an incompatible calling convention.
+            :
+          elif test $ac_prog = install &&
+            grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+            # program-specific install script used by HP pwplus--don't use.
+            :
+          else
+            ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
+            break 3
+          fi
+        fi
+      done
     done
     ;;
 esac])
