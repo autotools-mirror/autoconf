@@ -139,18 +139,18 @@ SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
 nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in freeze.mk
 edit = sed \
-	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@bindir\@,$(bindir),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@prefix\@,$(prefix),g' \
-	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
-	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
+	-e 's|@SHELL[@]|$(SHELL)|g' \
+	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@datadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
+	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
+	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
+	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@VERSION[@]|$(VERSION)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g'
 
 
 # All the files below depend on Makefile so that they are rebuilt

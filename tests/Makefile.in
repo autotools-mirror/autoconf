@@ -199,10 +199,10 @@ wrappers = autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames
 # The hairy heredoc is more robust than using echo.
 CLEANFILES = wrapper.in $(wrappers) expr
 edit = sed \
-	-e 's,@wrap_program\@,$@,g' \
-	-e 's,@abs_top_srcdir\@,@abs_top_srcdir@,g' \
-	-e 's,@abs_top_builddir\@,@abs_top_builddir@,g' \
-	-e 's,@configure_input\@,Generated from $<.,g'
+	-e 's|@wrap_program[@]|$@|g' \
+	-e 's|@abs_top_srcdir[@]|@abs_top_srcdir@|g' \
+	-e 's|@abs_top_builddir[@]|@abs_top_builddir@|g' \
+	-e 's|@configure_input[@]|Generated from $<.|g'
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \

@@ -199,19 +199,19 @@ EXTRA_DIST = autoconf.as autoheader.in autoreconf.in autoupdate.in ifnames.in \
 # Files that should be removed, but which Automake does not know.
 MOSTLYCLEANFILES = $(bin_SCRIPTS) autoconf.in *.tmp
 edit = sed \
-	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@bindir\@,$(bindir),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@prefix\@,$(prefix),g' \
-	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
-	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g' \
-	-e 's,@configure_input\@,Generated from $@.in; do not edit by hand.,g'
+	-e 's|@SHELL[@]|$(SHELL)|g' \
+	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@datadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
+	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
+	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
+	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@VERSION[@]|$(VERSION)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
+	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
 
 TAGS_DEPENDENCIES = $(EXTRA_DIST)
 letters = abcdefghijklmnopqrstuvwxyz
