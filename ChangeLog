@@ -1,5 +1,9 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_PROG_BINSH): Removed.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	Start revamping `autoconf --trace'.
 
 	* autoconf.sh (debug): New var, new option.
