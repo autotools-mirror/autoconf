@@ -13,6 +13,7 @@
 
 - AC_FUNC_GETLOADAVG now has an optional argument specifying the directory
   that contains getloadavg.c, and it tests whether getloadavg.c exists.
+- AC_FUNC_SETVBUF_REVERSED no longer fails when cross-compiling.
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
 
 ** Bug fixes
