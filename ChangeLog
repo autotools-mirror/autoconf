@@ -1,5 +1,11 @@
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
+	* sh.m4 (_AS_EXPR_PREPARE): Don't rely on the exit status of a
+	back quote evaluation since the very system for which the test was
+	written does not propagate it.  Groumph!
+
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (_AC_EXEEXT): Also remove conftest$ac_exeext.
 	Reported by Pavel.
 

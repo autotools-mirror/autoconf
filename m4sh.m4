@@ -295,11 +295,11 @@ AS_DIRNAME_SED([$1])])
 # but exit with failure.  When a fall back to expr (as in AS_DIRNAME)
 # is provided, you get twice the result.  Prevent this.
 m4_defun([_AS_EXPR_PREPARE],
-[as_expr=`expr a : '\(a\)'`
-case $as_expr,$? in
-  a,0) as_expr=expr;;
-    *) as_expr=false;;
-esac[]dnl
+[if expr a : '\(a\)' >/dev/null 2>&1; then
+  as_expr=expr
+else
+  as_expr=false
+fi[]dnl
 ])# _AS_EXPR_PREPARE
 
 

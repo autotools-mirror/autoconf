@@ -17,11 +17,11 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
-as_expr=`expr a : '\(a\)'`
-case $as_expr,$? in
-  a,0) as_expr=expr;;
-    *) as_expr=false;;
-esac
+if expr a : '\(a\)' >/dev/null 2>&1; then
+  as_expr=expr
+else
+  as_expr=false
+fi
 # Support unset when possible.
 if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
   as_unset=unset
@@ -1496,11 +1496,11 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
-as_expr=`expr a : '\(a\)'`
-case $as_expr,$? in
-  a,0) as_expr=expr;;
-    *) as_expr=false;;
-esac
+if expr a : '\(a\)' >/dev/null 2>&1; then
+  as_expr=expr
+else
+  as_expr=false
+fi
 # Support unset when possible.
 if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
   as_unset=unset
