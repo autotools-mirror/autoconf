@@ -1,3 +1,11 @@
+2000-03-23  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Support --help={long, short,
+	recursive}.
+	(_AC_INIT_HELP): Propagate --help=recursive to CONFIG_SUBDIRS.
+	Code stolen from...
+	(AC_OUTPUT_SUBDIRS): s/ac_config_dir/ac_subdir/g.
+
 2000-03-23  Lars J. Aas  <larsa@sim.no>
 
 	* libm4.m4 (m4_do): New macro.

@@ -846,11 +846,11 @@ AC_DIVERT_POP()dnl
 
 # _AC_INIT_PARSE_ARGS
 # -------------------
-AC_DEFUN(_AC_INIT_PARSE_ARGS,
+AC_DEFUN([_AC_INIT_PARSE_ARGS],
 [AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
 
 # Initialize some variables set by options.
-ac_init_help=false
+ac_init_help=
 ac_init_version=false
 # The variables have the same names as the options, with
 # dashes changed to underlines.
@@ -965,7 +965,12 @@ do
     with_gas=yes ;;
 
   -help | --help | --hel | --he | -h)
-    ac_init_help=: ;;
+    ac_init_help=long ;;
+  -help=r* | --help=r* | --hel=r* | --he=r* | -hr*)
+    ac_init_help=recursive ;;
+  -help=s* | --help=s* | --hel=s* | --he=s* | -hs*)
+    ac_init_help=short ;;
+
   -host | --host | --hos | --ho)
     ac_prev=host ;;
   -host=* | --host=* | --hos=* | --ho=*)
@@ -1198,7 +1203,7 @@ define([_AC_INIT_HELP],
 #
 # Report the --help message.
 #
-if $ac_init_help; then
+if test "$ac_init_help" = "long"; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
   cat <<\EOF
@@ -1255,13 +1260,55 @@ Host type:
   --host=HOST        configure for HOST [guessed]
   --target=TARGET    configure for TARGET [TARGET=HOST]
 EOF
-
   cat <<\EOF]
+AC_DIVERT_POP()dnl
+AC_DIVERT_PUSH([HELP_ENABLE])dnl
+EOF
+fi
+
+if test -n "$ac_init_help"; then
+ifset([AC_Package_Name],
+[  $ac_init_help ||
+     echo "Configuration of AC_Package_Name AC_Package_Version:"])
+  cat <<\EOF
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH([HELP_END])dnl
 EOF
-  exit 0
 fi
+
+if test "$ac_init_help" = "recursive"; then
+  # If there are subdirs, report their specific --help.
+  ac_popdir=`pwd`
+  for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
+    cd $ac_subdir
+    # A "../" for each directory in /$ac_subdir.
+    ac_dots=`echo $ac_subdir |
+             sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
+
+    case "$srcdir" in
+    .) # No --srcdir option.  We are building in place.
+      ac_sub_srcdir=$srcdir ;;
+    [[/\\]]* | ?:[[/\\]] ) # Absolute path.
+      ac_sub_srcdir=$srcdir/$ac_subdir ;;
+    *) # Relative path.
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_sub_srcdir/configure; then
+      echo
+      $SHELL $ac_sub_srcdir/configure  --help=recursive
+    elif test -f $ac_sub_srcdir/configure.in; then
+      echo
+      $ac_configure --help
+    else
+      AC_MSG_WARN([no configuration information is in $ac_subdir])
+    fi
+    cd $ac_popdir
+  done
+fi
+
+test -n "$ac_init_help" && exit 0
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_HELP
 
@@ -4473,7 +4520,7 @@ EOF
 # ------------------
 # This is a subroutine of AC_OUTPUT, but it does not go into
 # config.status, rather, it is called after running config.status.
-define(_AC_OUTPUT_SUBDIRS,
+define([_AC_OUTPUT_SUBDIRS],
 [
 #
 # CONFIG_SUBDIRS section.
@@ -4507,42 +4554,42 @@ if test "$no_recursion" != yes; then
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [  ac_given_INSTALL="$INSTALL"
 ])dnl
 
-  for ac_config_dir in AC_LIST_SUBDIRS; do
+  for ac_subdir in AC_LIST_SUBDIRS; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
-    if test ! -d $srcdir/$ac_config_dir; then
+    if test ! -d $srcdir/$ac_subdir; then
       continue
     fi
 
-    echo configuring in $ac_config_dir
+    echo configuring in $ac_subdir
 
     case "$srcdir" in
     .) ;;
     *)
 dnl FIXME: should actually be mkinstalldirs (parents may have
 dnl to be created too).
-      if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
+      if test -d ./$ac_subdir || mkdir ./$ac_subdir; then :;
       else
-        AC_MSG_ERROR(cannot create `pwd`/$ac_config_dir)
+        AC_MSG_ERROR(cannot create `pwd`/$ac_subdir)
       fi
       ;;
     esac
 
     ac_popdir=`pwd`
-    cd $ac_config_dir
+    cd $ac_subdir
 
-    # A "../" for each directory in /$ac_config_dir.
-    ac_dots=`echo $ac_config_dir |
+    # A "../" for each directory in /$ac_subdir.
+    ac_dots=`echo $ac_subdir |
              sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
 
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
     [[/\\]]* | ?:[[/\\]] ) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
+      ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
     esac
 
     # Check for guested configure; otherwise get Cygnus style configure.
@@ -4551,7 +4598,7 @@ dnl to be created too).
     elif test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
-      AC_MSG_WARN(no configuration information is in $ac_config_dir)
+      AC_MSG_WARN(no configuration information is in $ac_subdir)
       ac_sub_configure=
     fi
 
@@ -4576,7 +4623,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],
       if eval $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
       then :
       else
-        AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
+        AC_MSG_ERROR($ac_sub_configure failed for $ac_subdir)
       fi
     fi
 
