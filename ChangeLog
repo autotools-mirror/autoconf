@@ -170,7 +170,7 @@
 2000-12-07  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (_AC_EXEEXT): Skip *.pdb.
-	From Paul Berrevoets <paul@swi.com>.
+	From Paul Berrevoets.
 
 2000-12-07  Akim Demaille  <akim@epita.fr>
 
@@ -540,13 +540,11 @@
 	(AT_INIT): After having checked whether the test failed, break out
 	of the loop if requested (-e).
 
-
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_SETUP): Don't build at-check-line, that's
 	AT_CHECK's job.
 	Remove the code depending upon `at_skip_mode': it's unused.
-
 
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
@@ -8174,7 +8172,7 @@
 	use `echo` followed by a non-blank, within quotes.
 	* autoheader.sh (syms): Likewise.
 	* configure: Rebuilt.
-	Reported by Christian Krone <krischan@sql.de>
+	Reported by Christian Krone.
 
 	* acgeneral.m4 (AC_INCLUDE): New macro.
 	* autoconf.texi: Document it.
@@ -8420,7 +8418,7 @@
 	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): New implementation, to
 	make maintenance easier.
 	Grep the initial output so that we don't start parsing "-l" and
-	"-L" too early.  From Christopher Lee <chrislee@ri.cmu.edu>
+	"-L" too early.  From Christopher Lee.
 
 	* acgeneral.m4 (AC_LIST_MEMBER_OF): New "private implementation
 	macro" use by AC_F77_LIBRARY_LDFLAGS.
@@ -9546,7 +9544,7 @@ Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* acspecific.m4 (AC_PROG_CXX): Check for cc++ for NexT.
 	From Carl Edman.
 	(AC_PROG_CC, AC_PROG_CXX): Check whether -g works even if
-	C[XX]FLAGS is set.  From T.E.Dickey <dickey@clark.net>
+	C[XX]FLAGS is set.  From T.E.Dickey.
 	(AC_FUNC_FNMATCH): New macro.
 	* acconfig.h (HAVE_FNMATCH): New entry.
 
