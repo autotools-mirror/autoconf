@@ -1,3 +1,7 @@
+2000-05-24  Didier Verna  <didier@lrde.epita.fr>
+
+	* acgeneral.m4 (AC_INIT): Call _AC_PACKAGE before _AC_INIT.
+
 2000-05-24  Ossama Othman  <ossama@debian.org>
 
 	* aclang.m4 (AC_LANG(C++)): Change `ac_ext' from from `C' to `cc'
