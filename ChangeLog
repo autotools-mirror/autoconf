@@ -1,3 +1,12 @@
+1999-09-20  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_OUTPUT): Don't remove the CONFIG_HEADERS
+ 	unconditionaly: it breaks the `config.h has not changed' trick.
+
+1999-09-20  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* autoheader.sh: Fix the tr invocation.
+
 1999-09-17  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Improve configure's --help.

@@ -2673,10 +2673,9 @@ confstat=cft\$\$
 EOF
 
 cat >> $CONFIG_STATUS <<EOF
-dnl Remove all of CONFIG_FILES and CONFIG_HEADERS, and trap to remove
-dnl the temp files.  There is no need to trap for the config files
-dnl since they are built from `mv tmp-file config-file', hence their
-dnl update is atomic.
+dnl Remove all the CONFIG_FILES, and trap to remove the temp files.  There
+dnl is no need to trap for the config files since they are built from `mv
+dnl tmp-file config-file', hence their update is atomic.
 : \${CONFIG_FILES="$1"}
 ifdef([AC_LIST_HEADER], [: \${CONFIG_HEADERS=AC_LIST_HEADER}
 ])dnl

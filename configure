@@ -983,7 +983,6 @@ s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%;t t
 s%@INSTALL_DATA@%$INSTALL_DATA%;t t
 s%@standards_info@%$standards_info%;t t
 s%@standards_dvi@%$standards_dvi%;t t
-
 CEOF
 EOF
 
