@@ -259,6 +259,31 @@ AC_DEFUN([AC_PROG_AWK],
 [AC_CHECK_PROGS(AWK, gawk mawk nawk awk, )])
 
 
+# AC_PROG_EGREP
+# -------------
+AC_DEFUN([AC_PROG_EGREP],
+[AC_CACHE_CHECK([for egrep], [ac_cv_prog_egrep],
+   [if echo a | (grep -E '(a|b)') >/dev/null 2>&1
+    then ac_cv_prog_egrep='grep -E'
+    else ac_cv_prog_egrep='egrep'
+    fi])
+ EGREP=$ac_cv_prog_egrep
+ AC_SUBST([EGREP])
+])# AC_PROG_EGREP
+
+# AC_PROG_FGREP
+# -------------
+AC_DEFUN([AC_PROG_FGREP],
+[AC_CACHE_CHECK([for fgrep], [ac_cv_prog_fgrep],
+   [if echo 'ab*c' | (grep -F 'ab*c') >/dev/null 2>&1
+    then ac_cv_prog_fgrep='grep -F'
+    else ac_cv_prog_fgrep='fgrep'
+    fi])
+ FGREP=$ac_cv_prog_fgrep
+ AC_SUBST([FGREP])
+])# AC_PROG_FGREP
+
+
 # AC_PROG_INSTALL
 # ---------------
 AC_DEFUN([AC_PROG_INSTALL],
