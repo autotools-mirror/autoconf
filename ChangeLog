@@ -1,3 +1,14 @@
+2001-10-07  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (config.status Invocation):
+	CONFIG_SHELL defaults to a shell that supports LINENO if available.
+
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): If the current
+	shell does not support LINENO, and if CONFIG_SHELL is unset or
+	empty, and if we can find a shell that does support LINENO,
+	then set CONFIG_SHELL to that shell and then re-execute
+	ourselves with CONFIG_SHELL.
+
 2001-10-05  Paul Eggert  <eggert@twinsun.com>
 
 	* tests/Makefile.am (clean-local): Don't invoke $(TESTSUITE) if it
