@@ -1,3 +1,15 @@
+2000-02-17  Akim Demaille  <akim@epita.fr>
+
+	Fix the `missing dummy.in' reported by the test suite.
+	Reported by Erez Zadok.
+
+	* tests/torture.m4 (config.status under extreme conditions):
+	Reorganized.  Because files required by this test were created
+	outside the pair AT_SETUP/AT_CLEANUP, when the test fails and
+	autotest extracts this test, the `debug' script does not contain
+	the files it needs.  Now AT_SETUP/AT_CLEANUP encloses the full
+	auto contained section.
+
 2000-02-16  Akim Demaille  <akim@epita.fr>
 
 	* tests/actest.m4 (AC_ENV_SAVE): X_EXTRA_LIBS can be changed by
