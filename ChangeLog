@@ -1,3 +1,14 @@
+2000-11-16  Akim Demaille  <akim@epita.fr>
+
+	POSIX doesn't require s/[^/]// to work.
+	From Paul Eggert and Johan Danielsson.
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>:
+	Reorganize.  Document this issue.
+	* autoupdate.sh (dir): Use `,' as separator instead of `/'
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Ditto.
+
 2000-11-16  Paul Eggert  <eggert@twinsun.com>
 
 	* m4/largefile.m4 (_AC_SYS_LARGEFILE_SOURCE): Remove, replaced by...

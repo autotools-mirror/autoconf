@@ -81,7 +81,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
-dir=`echo "$0" | sed -e 's/[^/]*$//'`
+dir=`echo "$0" | sed -e 's,[^/]*$,,'`
 # We test "$dir/autoconf" in case we are in the build tree, in which case
 # the names are not transformed yet.
 for autoconf in "$AUTOCONF" \
@@ -293,7 +293,7 @@ test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
 
 # Dump `acconfig.h' but its bottom.
 test -r $localdir/acconfig.h &&
-  sed -e '/@BOTTOM@/,$d' -e 's/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
+  sed '/@BOTTOM@/,$d;s/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
 
 # Dump the templates from `configure.in'.
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p' | sort`; do

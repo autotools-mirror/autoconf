@@ -91,7 +91,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 debug=false
-dir=`echo "$0" | sed -e 's/[^/]*$//'`
+dir=`echo "$0" | sed -e 's,[^/]*$,,'`
 force=false
 # --install -- as --add-missing in other tools.
 install=false

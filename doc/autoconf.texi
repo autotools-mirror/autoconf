@@ -5885,8 +5885,26 @@ don't rely on symbolic links on @sc{djgpp}.
 
 @item @command{sed}
 @cindex @command{sed}
+Patterns should not include the separator (unless escaped), even as part
+of a character class.  In conformance with @sc{posix}, the Cray
+@command{sed} will reject @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
+
+Sed scripts should not use branch labels longer than 8 characters and
+should not contain comments.
+
+Input should have reasonably long lines, since some @command{sed} have
+an input buffer limited to 4000 bytes.
+
+Alternation, @samp{\|}, is common but not portable.
+@c FIXME: I know Solaris is guilty, but I don't remember how.
+Anchors (@samp{^} and @samp{$}) inside groups are not portable.
+
+Nested groups are extremely portable, but there is at least one
+@command{sed} (System V/68 Base Operating System R3V7.1) that does not
+support it.
+
 Of course the option @option{-e} is portable, but it is not needed.  No
-valid @command{sed} program can start with a dash, so it does not help
+valid Sed program can start with a dash, so it does not help
 disambiguating.  Its sole usefulness is helping enforcing indenting as
 in:
 
@@ -5905,21 +5923,6 @@ sed @var{instruction-1};@var{instruction-2}
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
 matched''.
-
-@command{sed} scripts should not use branch labels longer than 8
-characters and should not contain comments.
-
-@command{sed} input should have reasonably long lines, since some
-@command{sed} have an input buffer limited to 4000 bytes.
-
-Alternation, @samp{\|}, is common but not portable.
-
-Nested groups are extremely portable, but there is at least one
-@command{sed} (System V/68 Base Operating System R3V7.1) that does not
-support it.
-
-Anchors (@samp{^} and @samp{$}) inside groups are not portable.
-@c FIXME: I know Solaris is guilty, but I don't remember how.
 
 
 @item @command{sed} (@samp{t})
