@@ -45,6 +45,11 @@ m4_define([AT_DATA_LINENO],
 [AT_DATA([$1],
 [[AS@&t@_INIT
 if $2; then
+  # We cannot unset LINENO with Zsh, yet this test case relies on
+  # unsetting LINENO to compare its result when (i) LINENO is supported
+  # and when (ii) it is not.
+  # So just skip is the shell is ZSH.
+  test -n "${ZSH_VERSION+set}" && AS@&t@_ERROR([cannot unset LINENO], 77)
   AS@&t@_UNSET([LINENO])
 fi
 _AS@&t@_PREPARE
@@ -84,8 +89,8 @@ AT_CHECK([(PATH=test$PATH_SEPARATOR$PATH; export PATH; exec test-2)],
 						   0, [expout])
 AT_CHECK([sh ./test/test-2],                       0, [expout])
 
-# Beware that *.lineno scripts can be *here* while the masters are in test/.
-AT_CLEANUP(reference test test-1.lineno test-2.lineno)
+AT_CLEANUP
+
 
 
 ## ------------ ##
@@ -232,7 +237,7 @@ AS_EXIT(0)
 AT_CHECK_M4SH
 AT_CHECK([./script])
 
-AT_CLEANUP(1 a)
+AT_CLEANUP
 
 
 

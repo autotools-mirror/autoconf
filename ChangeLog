@@ -1,3 +1,8 @@
+2002-04-22  Akim Demaille  <akim@epita.fr>
+
+	* tests/m4sh.at (LINENO): Skip the test if LINENO cannot be unset.
+	Fixes false failures on Darwin.
+
 2002-04-21  Paul Eggert  <eggert@twinsun.com>
 
 	* TODO, bin/autoupdate.in, doc/autoconf.texi,
@@ -11,7 +16,7 @@
 	ZSH_VERSION fixes.  Bug reported by Raja R Harinath.
 	* lib/autotest/general.m4 (AT_INIT): Likewise.
 	* tests/atgeneral.m4 (AT_INIT): Likewise.
-	
+
 2002-04-19  Paul Eggert  <eggert@twinsun.com>
 
 	* NEWS, TODO, bin/autom4te.in, bin/autoreconf.in, bin/autoupdate.in,
