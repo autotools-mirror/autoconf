@@ -419,6 +419,30 @@ EOF
 ## ---------- ##
 
 
+# $OPTION
+# files_to_options (@FILE)
+# ------------------------
+# Transform Autom4te conventions (e.g., using foo.m4f to designate a frozen
+# file) into a suitable command line for M4 (e.g., using --reload-state).
+sub files_to_options (@)
+{
+  my (@file) = @_;
+  my @res;
+  foreach my $file (@file)
+    {
+      if ($file =~ /\.m4f$/)
+	{
+	  push @res, "--reload-state=$file";
+	}
+      else
+	{
+	  push @res, $file;
+	}
+    }
+  return join ' ', @res;
+}
+
+
 # load_configuration ()
 # ---------------------
 # Load the configuration file.
@@ -562,7 +586,7 @@ Try `$me --help' for more information."
 	  my $file = find_file ("$_?", @include);
 	  if (!$melt && $file)
 	    {
-	      @argv = ("--reload-state=$file");
+	      @argv = ($file);
 	    }
 	  else
 	    {
@@ -610,7 +634,7 @@ sub handle_m4 ($@)
 	   . ' --debug=aflq'
 	   . " --error-output=$tcache" . $req->id . "t"
 	   . join (' --trace=',   '', sort @macro)
-	   . " @ARGV"
+	   . " " . files_to_options (@ARGV)
 	   . ' </dev/null'
 	   . " >$ocache" . $req->id . "t");
 
@@ -1028,7 +1052,18 @@ sub up_to_date ($)
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
   my $deps = new Autom4te::XFile ("$tmp/dependencies");
-  push @dep, map { chomp; find_file ($_, @include) } $deps->getlines;
+  while ($_ = $deps->getline)
+    {
+      chomp;
+      my $file = find_file ("$_?", @include);
+      # If a file which used to be included is no longer there, then
+      # don't say it's missing (it might no longer be included).  But
+      # of course, that cause the output to be outdated (as if the
+      # time stamp of that missing file was newer).
+      return 0
+	if ! $file;
+      push @dep, $file;
+    }
 
   # If $FILE is younger than one of its dependencies, it is outdated.
   return up_to_date_p ($file, @dep);
@@ -1051,15 +1086,13 @@ sub freeze ($)
 		    . ' --fatal-warning'
 		    . join (' --include=', '', @include)
 		    . ' --define=divert'
-		    . " @ARGV"
+		    . " " . files_to_options (@ARGV)
 		    . ' </dev/null');
   $result =~ s/#.*\n//g;
   $result =~ s/^\n//mg;
-  if ($result)
-    {
-      print STDERR "$me: freezing produced output:\n$result";
-      exit 1;
-    }
+
+  error "freezing produced output:\n$result"
+    if $result;
 
   # If freezing produces output, something went wrong: a bad `divert',
   # or an improper paren etc.
@@ -1067,7 +1100,7 @@ sub freeze ($)
 	   . ' --fatal-warning'
 	   . join (' --include=', '', @include)
 	   . " --freeze-state=$output"
-	   . " @ARGV"
+	   . " " . files_to_options (@ARGV)
 	   . ' </dev/null');
 }
 
@@ -1104,16 +1137,13 @@ my $req = Request->request ('input' => \@ARGV,
 			    'path'  => \@include,
 			    'macro' => [keys %trace, @preselect]);
 
-# If $REQ's cache files are not up to date, declare it invalid.
+# If $REQ's cache files are not up to date, or simply if the user
+# discarded them (-f), declare it invalid.
 $req->valid (0)
-  if ! up_to_date ($req);
+  if $force || ! up_to_date ($req);
 
 # We now know whether we can trust the Request object.  Say it.
-if ($verbose)
-  {
-    print STDERR "$me: the trace request object is:\n";
-    print STDERR $req->marshall;
-  }
+verbose "$me: the trace request object is:\n" . $req->marshall;
 
 # We need to run M4 if (i) the users wants it (--force), (ii) $REQ is
 # invalid.

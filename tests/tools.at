@@ -111,6 +111,39 @@ AT_CLEANUP
 
 
 
+## ------------------ ##
+## autom4te's cache.  ##
+## ------------------ ##
+
+AT_SETUP([autom4te cache])
+
+AT_DATA_M4SUGAR([[script.4s]],
+[[m4_include([foo])
+]])
+
+# Everything is OK.
+touch foo
+AT_CHECK_M4SUGAR
+
+# We moved a file: it should fail
+mkdir sub
+mv foo sub
+AT_CHECK_M4SUGAR([], [], [], [stderr])
+AT_CHECK([[sed 's/^[^:]*m4:/m4:/' stderr]], [],
+[m4: script.4s: 1: Cannot open foo: No such file or directory
+])
+
+# But if we change the main file, then we should no longer complain of
+# missing files.
+AT_DATA_M4SUGAR([[script.4s]],
+[[m4_include([sub/foo])
+]])
+AT_CHECK_M4SUGAR
+
+AT_CLEANUP
+
+
+
 
 ## ------------------ ##
 ## autoconf --trace.  ##

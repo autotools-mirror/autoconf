@@ -1,5 +1,22 @@
 2002-10-16  Akim Demaille  <akim@epita.fr>
 
+	Because of caching, some files that no longer exist and are no
+	longer required can still cause errors.
+	Reported by Alexandre Duret-Lutz.
+
+	* bin/autom4te.in (&parse_args): Do not prepend `--reload-state'
+	to frozen files in @ARGV, as @ARGV must remain being a list of
+	files.  Rather, at M4 call sites, use this...
+	(&files_to_options): New function.
+	(&freeze): Use &error.
+	(&up_to_date): If a file that was included according to the cache
+	is no longer there, then the output is out dated.
+	(&main): Don't even check whether a file is up to date is anyway
+	--force is given.
+	* tests/tools.at (autom4te cache): New.
+
+2002-10-16  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoconf.as: Kill dead options.
 	* bin/autoupdate.in (&parse_args): Kill old options.
 	* bin/autoreconf.in (&parse_args): Remove dead options.
