@@ -3,10 +3,6 @@
 	* config.guess: Handle strange processor ID assignments on AIX
 	machines.  Contributed by Didier Desseaux <didess@infonie.fr>.
 
-Sun Sep 13 13:15:34 1998  Ben Elliston  <bje@cygnus.com>
-
-	* install-sh: Imported from another GNU package.
-
 Thu Jun 18 12:13:27 1998  Ian Lance Taylor  <ian@cygnus.com>
 
 	* acspecific.m4 (AC_EXEEXT): Correct setting of ac_exeext when
