@@ -1,10 +1,10 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
-AC_INIT(GNU Autoconf, 2.52b, bug-autoconf@gnu.org)
+AC_INIT(GNU Autoconf, 2.52c, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(autoconf, 2.52b)
+AM_INIT_AUTOMAKE(autoconf, 2.52c)
 
 # Initialize the test suite.
 AT_CONFIG(../bin)
@@ -16,7 +16,7 @@ AC_PATH_PROG(EXPR, expr)
 # autoheader scripts.
 AC_PROG_GNU_M4
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  AC_MSG_ERROR([GNU m4 1.4 is required])
+  AC_MSG_ERROR([GNU M4 1.4 is required])
 fi
 # This is needed because Automake does not seem to realize there is
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
@@ -35,10 +35,8 @@ if test "$PERL" = no; then
   AC_MSG_ERROR([perl is not found])
 fi
 $PERL -e 'require 5.005;' || {
-   AC_MSG_ERROR([perl 5.005 or better is required])
+   AC_MSG_ERROR([Perl 5.005 or better is required])
 }
-
-AC_PROG_INSTALL
 
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
