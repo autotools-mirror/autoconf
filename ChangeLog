@@ -19,7 +19,7 @@
 	section.
 	* tests/tools.m4 (AWK portability): New test.
 
-2000-08-0  Pavel Roskin  <proski@gnu.org>
+2000-08-08  Pavel Roskin  <proski@gnu.org>
 
 	* Makefile.am: substitute @bindir@ in shell scripts, needed by
 	autoheader
