@@ -1069,7 +1069,7 @@ if test "$no_recursion" != yes; then
     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
       ;;
     -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-      ;;
+      ac_prev=prefix ;;
     -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
       ;;
     *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;

@@ -1,3 +1,8 @@
+2001-11-05  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): When removing
+	the --prefix option, also remove it's argument.
+
 2001-11-05  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (testsuite Invocation): Update.
