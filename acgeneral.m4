@@ -876,11 +876,11 @@ AC_CACHE_VAL(ac_cv_program_$1,
     fi
   done
   IFS="$ac_save_ifs"
-fi
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_CHECK will keep looking.
-ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])
-$1="$ac_cv_program_$1"])dnl
+ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])])dnl
+  $1="$ac_cv_program_$1"
+fi
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -900,11 +900,11 @@ AC_CACHE_VAL(ac_cv_path_$1,
     fi
   done
   IFS="$ac_save_ifs"
-fi
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_PATH will keep looking.
-ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])
-$1="$ac_cv_path_$1"])dnl
+ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])])dnl
+  $1="$ac_cv_path_$1"
+fi
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
