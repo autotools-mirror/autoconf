@@ -228,7 +228,7 @@ define(AC_PROG_INSTALL,
 # Avoid using ./install, which might have been erroneously created
 # by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
-  AC_CACHE_USE(ac_cv_program_INSTALL,
+  AC_CACHE_VAL(ac_cv_program_INSTALL,
 [  AC_CHECKING(for a BSD compatible install)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do

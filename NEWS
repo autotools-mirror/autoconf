@@ -7,7 +7,7 @@ Major changes in release 2.0:
   can be selected with the --cache-file=FILE option.
 
 ** New macros:
-* AC_CACHE_USE to share results of tests between configure runs.
+* AC_CACHE_VAL to share results of tests between configure runs.
 * AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
