@@ -407,19 +407,34 @@ m4_defun([AS_DIRNAME_SED],
   	  s/.*/./; q']])
 
 m4_defun([AS_DIRNAME],
-[AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
+[(dirname $1) 2>/dev/null ||
+AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 AS_DIRNAME_SED([$1])])
 
 
 # AS_BASENAME(PATHNAME)
 # --------------------
 # Simulate running `basename(1)' on PATHNAME, not all systems have it.
-# This macro must be usable from inside ` `.
+# Also see the comments for AS_DIRNAME.
+
+m4_defun([AS_BASENAME_EXPR],
+[m4_require([_AS_EXPR_PREPARE])dnl
+$as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
+	 X[]$1 : 'X\(//\)$' \| \
+	 X[]$1 : 'X\(/\)$' \| \
+	 .     : '\(.\)'])
+
 m4_defun([AS_BASENAME_SED],
-[echo "$1" |sed 's,\(.*[[\\/]]\+\)\?\([[^\\/]]\+\)[[\\/]]*,\2,'])
+[echo X/[]$1 |
+    sed ['/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
+  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\/\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q']])
 
 m4_defun([AS_BASENAME],
-[AS_BASENAME_SED([$1])])
+[(basename $1) 2>/dev/null ||
+AS_BASENAME_EXPR([$1]) 2>/dev/null ||
+AS_BASENAME_SED([$1])])
 
 
 # AS_EXECUTABLE_P
