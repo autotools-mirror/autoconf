@@ -200,17 +200,14 @@ while read dir; do
   run_aclocal=no
   aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
   if test -f "$aclocal_m4" &&
-     grep 'generated automatically by aclocal' $aclocal_m4 > /dev/null
-  then
+     grep 'generated automatically by aclocal' $aclocal_m4 >/dev/null; then
      run_aclocal=yes
   else
-     if test -f "$aclocal_dir/acinclude.m4"
-     then
+     if test -f "$aclocal_dir/acinclude.m4"; then
 	run_aclocal=yes
      fi
   fi
-  if test $run_aclocal = yes
-  then
+  if test $run_aclocal = yes; then
       # If there are flags for aclocal, use them.  Makefile.am and Makefile
       # may not exists.
       aclocal_flags=`sed -ne '\
@@ -220,17 +217,13 @@ while read dir; do
   q
 }' Makefile.in 2>/dev/null`
      if $force &&
-        ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null|
+        ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null |
 	sed 1q |
-        grep 'aclocal\.m4$' > /dev/null
-     then
-	:
-     else
-	if test x"$aclocal_dir" != x.
-	then
+        grep 'aclocal\.m4$' >/dev/null; then :; else
+	if test x"$aclocal_dir" != x.; then
 	   aclocal_flags="$aclocal_flags -I $aclocal_dir"
 	fi
-	$verbose "running $aclocal $aclocal_flags in $dir, creating $aclocal_m4"
+	$verbose running $aclocal $aclocal_flags --output=$aclocal_m4 in $dir
 	$aclocal $aclocal_flags --output=$aclocal_m4
      fi
   fi
@@ -244,13 +237,12 @@ while read dir; do
 
   test ! -f $aclocal_m4 && aclocal_m4=
 
-  if $force && test -f configure &&
-    ls -lt configure configure.in $aclocal_m4 | sed 1q |
-      grep 'configure$' > /dev/null
-  then
-    :
-  else
-    $verbose "running autoconf in $dir"
+  if $force &&
+     test -f configure &&
+     ls -lt configure configure.in $aclocal_m4 |
+       sed 1q |
+       grep 'configure$' >/dev/null; then :; else
+    $verbose running $autoconf $localdir_opt in $dir
     $autoconf $localdir_opt
   fi
 
@@ -268,17 +260,16 @@ while read dir; do
 	: colon
 	s/:.*//
       '`
-    stamp=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`/stamp-h`test "$tcount" -gt 1 && echo "$tcount"`.in
+    template_dir=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`
+    stamp_num=`test "$tcount" -gt 1 && echo "$tcount"`
+    stamp=$template_dir/stamp-h$stamp_num.in
     if test ! -f "$template" || grep autoheader "$template" >/dev/null; then
       if $force && test -f $template &&
 	 ls -lt $template configure.in $aclocal_m4 $stamp 2>/dev/null \
 	        `echo $localdir_opt | sed -e 's/--localdir=//' \
 		                          -e '/./ s%$%/%'`acconfig.h |
-	   sed 1q | egrep "$template$|$stamp$" > /dev/null
-      then
-        :
-      else
-        $verbose "running autoheader in $dir"
+	   sed 1q | egrep "$template$|$stamp$" >/dev/null; then :; else
+        $verbose running $autoheader $localdir_opt in $dir
         $autoheader $localdir_opt &&
         $verbose "touching $stamp" &&
         touch $stamp

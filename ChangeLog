@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh: Formatting changes.
+	When verbose, display exactly what you do, not just a synopsis.
+	When using `$verbose' don't use quotes to avoid spurious spaces
+	for empty arguments.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (force): Instead of yes/no, use :/false.
 	Adjust the code.
 	(automake_deps, automake_force): No longer used.
