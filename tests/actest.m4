@@ -26,7 +26,7 @@ AC_DEFUN(AC_ENV_SAVE,
   -e '^(LIBS|LIBOBJS|LDFLAGS)=' \
   -e '^INSTALL(_(DATA|PROGRAM|SCRIPT))?=' \
   -e '^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=' \
-  -e '^(X_(CFLAGS|(|EXTRA_|PRE_)LIBS)|x_(includes|libraries)|have_x)=' \
+  -e '^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|have_x)=' \
   -e '^(host|build|target)(_(alias|cpu|vendor|os))?=' \
   -e '^(cross_compiling)=' \
   -e '^(interpval)=' \

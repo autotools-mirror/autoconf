@@ -1,5 +1,19 @@
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
+	The empty regexp cannot be portably used in egrep's alternation.
+	For instance with Digital Unix v5.0:
+	   > echo "foo"  | egrep -e "^(|foo|bar)$"
+	   > echo "|foo" | egrep -e "^(|foo|bar)$"
+	   |foo
+	   > echo "|bar" | egrep -e "^(|foo|bar)$"
+	   > echo "bar"  | egrep -e "^(|foo|bar)$"
+	   bar
+	Reported by Nicolas Joly.
+
+	* src/actest.m4 (AC_ENV_SAVE): s/(|EXTRA_|PRE_)/(EXTRA_|PRE_)?/.
+
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4: Removed a few addresses, the map is...
 	* THANKS: here.
 
