@@ -1,5 +1,8 @@
 2004-06-03  Kevin Ryde  <user42@zip.com.au>
 
+	* doc/autoconf.texi (Function Portability): Add notes on free(NULL),
+	malloc(0) and realloc(NULL,size).
+
 	* doc/autoconf.texi (Shell Substitutions): Spelling error reported by
 	Bob Proulx.
 
