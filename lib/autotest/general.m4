@@ -187,12 +187,19 @@ fi
 # Tests to run.
 test -z "$at_tests" && at_tests=$at_tests_all
 
+# Can we diff with `/dev/null'?  DU 5.0 refuses.
+if diff /dev/null /dev/null >/dev/null 2>&1; then
+  at_devnull=/dev/null
+else
+  at_devnull=at-devnull
+  cp /dev/null $at_devnull
+fi
+
 # Use `diff -u' when possible.
-: >empty
-if diff -u empty empty >/dev/null 2>&1; then
+if diff $at_devnull $at_devnull >/dev/null 2>&1; then
   at_diff='diff -u'
 else
-  at_diff='diff'
+  at_diff=diff
 fi
 
 # Tester and tested.
@@ -531,14 +538,14 @@ m4_case([$4],
         stderr, [(echo stderr:; tee stderr <at-stderr) >&5],
         ignore, [(echo stderr:; cat at-stderr) >&5],
         experr, [$at_diff experr at-stderr >&5 || at_failed=:],
-        [],     [$at_diff empty  at-stderr >&5 || at_failed=:],
+        [],     [$at_diff $at_devnull  at-stderr >&5 || at_failed=:],
         [echo $at_n "AS_ESCAPE([$4])$at_c" | $at_diff - at-stderr >&5 || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
         stdout, [(echo stdout:; tee stdout <at-stdout) >&5],
         ignore, [(echo stdout:; cat at-stdout) >&5],
         expout, [$at_diff expout at-stdout >&5 || at_failed=:],
-        [],     [$at_diff empty  at-stdout >&5 || at_failed=:],
+        [],     [$at_diff $at_devnull  at-stdout >&5 || at_failed=:],
         [echo $at_n "AS_ESCAPE([$3])$at_c" | $at_diff - at-stdout >&5 || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
