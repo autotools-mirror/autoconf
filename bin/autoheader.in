@@ -96,7 +96,8 @@ warning_obsolete=false
 
 # Parse command line.
 while test $# -gt 0 ; do
-  optarg=`expr "$1" : '-[^=]*=\(.*\)'`
+  optarg=`expr "$1" : '--[^=]*=\(.*\)' \| \
+               "$1" : '-.\(.*\)'`
   case $1 in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
@@ -140,10 +141,10 @@ while test $# -gt 0 ; do
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
+       warnings=$warnings,$1
        shift ;;
     --warnings=* | -W*)
-       warnings="$warnings "`echo "$optarg" | sed -e 's/,/ /g'`
+       warnings=$warnings,$optarg
        shift ;;
 
     -- )     # Stop option processing
@@ -160,11 +161,16 @@ while test $# -gt 0 ; do
   esac
 done
 
-# Decode `$warnings'.
-for i in :$warnings
+# The warnings are the concatenation of 1. application's defaults
+# (here, none), 2. $WARNINGS, $3 command line options, in that order.
+_ac_warnings=
+for warning in `IFS=,; echo $WARNINGS,$warnings | tr 'A-Z' 'a-z'`
 do
-  test "$i" = : && continue
-  eval "warning_$i=:"
+  case $warning in
+  '')   continue;;
+  no-*) eval warning_`expr x$warning : 'xno-\(.*\)'`=false;;
+  *)    eval warning_$warning=:;;
+  esac
 done
 
 # Trap on 0 to stop playing with `rm'.

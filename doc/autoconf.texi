@@ -971,7 +971,7 @@ report none
 @item error
 treats warnings as errors
 
-@item no@var{category}
+@item no-@var{category}
 disable warnings falling into @var{category}
 @end table
 
@@ -2150,7 +2150,7 @@ report none
 @item error
 treats warnings as errors
 
-@item no@var{category}
+@item no-@var{category}
 disable warnings falling into @var{category}
 @end table
 

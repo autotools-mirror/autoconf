@@ -1,5 +1,11 @@
 2000-07-28  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (--warnings): Catch `no-category', not `nocategory'.
+	* autoheader.sh: Likewise.
+	* acgeneral.m4 (_AC_WARNING_IFELSE): Adjust.
+
+2000-07-28  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Installation Directory Variables): New
 	section, Eved off from `Preset Output Variables', i.e., was a
 	small part of it, grew independent, and is its equal (at least).

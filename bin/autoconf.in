@@ -41,13 +41,13 @@ Operation modes:
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
-  \`cross'        cross compilation issues
-  \`obsolete'     obsolete constructs
-  \`syntax'       dubious syntactic constructs
-  \`all'          all the warnings
-  \`noCATEGORY'   turn off the warnings on CATEGORY
-  \`none'         turn off all the warnings
-  \`error'        warnings are error
+  \`cross'         cross compilation issues
+  \`obsolete'      obsolete constructs
+  \`syntax'        dubious syntactic constructs
+  \`all'           all the warnings
+  \`no-CATEGORY'   turn off the warnings on CATEGORY
+  \`none'          turn off all the warnings
+  \`error'         warnings are error
 
 The environment variable \`WARNINGS' is honored.
 
@@ -202,10 +202,7 @@ while test $# -gt 0 ; do
        shift
        warnings=$warnings,$1
        shift ;;
-    --warnings=* )
-       warnings=$warnings,$optarg
-       shift ;;
-    -W* ) # People are used to -Wall, -Werror etc.
+    --warnings=* | -W* )
        warnings=$warnings,$optarg
        shift ;;
 
