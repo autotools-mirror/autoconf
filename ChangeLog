@@ -1,3 +1,10 @@
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Usual Tools, Limitations of
+	Builtins): Integrate comments from Paul Eggert and Jim Meyering.
+	Add the sed limitation discovered by Philippe De Muyter.
+	Typo from Pavel Roskin.
+
 2000-05-25  Akim Demaille  <akim@epita.fr>
 
 	The test suite needs GNU m4.
