@@ -1,4 +1,11 @@
+1999-01-13  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.sh: Remove -v and --verbose from the command line usage
+	help. They do not exist.
+	
 1999-01-11  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect HP-UX on MPE/iX machines.
 
 	* acgeneral.m4 (AC_ACVERSION): Increment to 2.14.
 

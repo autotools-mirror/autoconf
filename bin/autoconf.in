@@ -30,7 +30,6 @@ TEMPLATE-FILE is given, else into \`configure'.
 
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing the \`aclocal.m4' file
-  -v, --verbose         verbosely report processing
   -h, --help            print this help, then exit
   --version             print version number, then exit
 
