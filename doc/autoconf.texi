@@ -5791,6 +5791,9 @@ as opposed to
 sed @var{instruction-1};@var{instruction-2}
 @end example
 
+Contrary to yet another urban legend, you may portably use @samp{&} in
+the rhs to mean ``what was matched''.
+
 @command{sed} scripts should not use branch labels longer than 8
 characters and should not contain comments.
 
