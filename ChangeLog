@@ -1,5 +1,9 @@
 2003-06-21  Kevin Ryde  <user42@zip.com.au>
 
+	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Extend test program to get an
+	error from OSF 4.0 Compaq cc in its default almost-ANSI mode, thereby
+	ensuring we add -std1 for full-ANSI.
+
 	* doc/autoconf.texi (hdrindex): New macro.
 	Add index entries for portability of various standard header files.
 
