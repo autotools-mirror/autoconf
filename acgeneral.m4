@@ -1408,17 +1408,21 @@ dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
 dnl may have different results.
-ac_lib_var=`echo $1['_']$2 | tr '.-/+' '___p'`
+ac_lib_var=`echo $1['_']$2 | tr '.\055/+' '___p'`
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
-AC_TRY_LINK([/* Override any gcc2 internal prototype to avoid an error.  */
+AC_TRY_LINK(dnl
+ifelse([$2], [main], , dnl Avoid conflicting decl of main.
+[/* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
-[char $2();
-],
+[/* We use `char' because `int' might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char $2();
+]),
 	    [$2()],
 	    eval "ac_cv_lib_$ac_lib_var=yes",
 	    eval "ac_cv_lib_$ac_lib_var=no")dnl
@@ -1685,7 +1689,9 @@ dnl select.  Similarly for bzero.
 extern "C"
 #endif
 ])dnl
-[char $1();
+[/* We use `char' because `int' might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char $1();
 ], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
