@@ -2320,7 +2320,7 @@ m4_define([AC_MSG_ERROR],
 
 # AU::AC_CHECKING(FEATURE)
 # ------------------------
-AU_ALIAS([AC_CHECKING],
+AU_DEFUN([AC_CHECKING],
 [AC_MSG_NOTICE([checking $1...])])
 
 
