@@ -22,5 +22,6 @@ dnl
 include(acgeneral.m4)dnl
 builtin(include, acspecific.m4)dnl
 builtin(include, acoldnames.m4)dnl
-sinclude(acsite.m4)dnl
+dnl Do not sinclude acsite.m4 here, because it may not be installed
+dnl yet when Autoconf is frozen.
 dnl Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.

@@ -79,46 +79,6 @@ case $# in
   *) echo "$usage" >&2; exit 1 ;;
 esac
 
-# These are the alternate definitions of the acgeneral.m4 macros we want to
-# redefine.  They produce strings in the output marked with "@@@" so we can
-# easily extract the information we want.  The `#' at the end of the first
-# line of each definition seems to be necessary to prevent m4 from eating
-# the newline, which makes the @@@ not always be at the beginning of a line.
-frob='define([AC_DEFINE],[#
-@@@syms="$syms $1"@@@
-])dnl
-define([AC_DEFINE_UNQUOTED],[#
-@@@syms="$syms $1"@@@
-])dnl
-define([AC_SIZEOF_TYPE],[#
-@@@types="$types,$1"@@@
-])dnl
-define([AC_CHECK_FUNCS],[#
-@@@funcs="$funcs $1"@@@
-])dnl
-define([AC_CHECK_HEADERS],[#
-@@@headers="$headers $1"@@@
-])dnl
-define([AC_CONFIG_HEADER],[#
-@@@config_h=$1@@@
-])dnl
-define([AC_CHECK_LIB], [#
-changequote(/,/)dnl
-define(/libname/, dnl
-patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
-changequote([,])dnl
-  ifelse([$3], , [
-@@@libs="$libs libname"@@@
-], [
-# If it was found, we do:
-$3
-# If it was not found, we do:
-$4
-])
-])dnl
-dnl
-'
-
 config_h=config.h
 syms=
 types=
@@ -126,11 +86,19 @@ funcs=
 headers=
 libs=
 
-# We extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
+# Use the frozen version of Autoconf if available.
+r= f=
+# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
+case `$M4 --help < /dev/null 2>&1` in
+*reload-state*) test -r $AC_MACRODIR/autoheader.m4f && { r=--reload f=f; } ;;
+*traditional*) ;;
+*) echo Autoconf requires GNU m4 1.1 or later >&2; rm -f $tmpin; exit 1 ;;
+esac
+
+# Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-eval "`echo \"$frob\" |
-       $M4 -I$AC_MACRODIR $print_version autoconf.m4 - $infile |
+eval "`$M4 -I$AC_MACRODIR $print_version $r autoheader.m4$f $infile |
        sed -n -e '
 		: again
 		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p

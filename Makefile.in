@@ -52,7 +52,7 @@ SHELL = /bin/sh
 
 SUBDIRS = testsuite
 
-M4FILES = autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4
+M4FILES = autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoheader.m4
 
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = info Makefile
@@ -129,7 +129,9 @@ installdirs:
 
 install: all $(M4FILES) acconfig.h installdirs install-info
 	@case `$(M4) --help < /dev/null 2>&1` in \
-	*reload-state*) $(M4) -F $(acdatadir)/autoconf.m4f autoconf.m4 ;; \
+	*reload-state*) echo installing frozen m4 files; \
+	  $(M4) -F $(acdatadir)/autoconf.m4f autoconf.m4 ; \
+	  $(M4) -F $(acdatadir)/autoheader.m4f autoheader.m4 ;; \
 	*traditional*) ;; \
 	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
 	esac

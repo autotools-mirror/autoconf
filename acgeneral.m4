@@ -416,7 +416,8 @@ AC_DEFUN(AC_INIT_BINSH,
 dnl
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT,
-[sinclude(./aclocal.m4)dnl
+[sinclude(acsite.m4)dnl
+sinclude(./aclocal.m4)dnl
 AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_INIT_NOTICE
 AC_DIVERT_POP()dnl	to NORMAL
