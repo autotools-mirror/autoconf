@@ -1034,7 +1034,6 @@ cat > conftest.${ac_ext} <<EOF
 int main() { return 0; }
 int t() { [$2]; return 0; }
 EOF
-dnl Don't try to run the program, which would prevent cross-configuring.
 if eval $ac_compile; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
