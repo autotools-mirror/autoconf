@@ -2110,6 +2110,28 @@ if test $ac_cv_c_const = no; then
 fi
 ])
 
+dnl   Note that, unlike const, #defining volatile to be the empty
+dnl   string can actually turn a correct program into an incorrect
+dnl   one, since removing uses of volatile actually grants the
+dnl   compiler permission to perform optimizations that could break
+dnl   the user's code.  So, do not #define volatile away unless it is
+dnl   really necessary to allow the user's code to compile cleanly.
+dnl   Benign compiler failures should be tolerated.
+AC_DEFUN(AC_C_VOLATILE,
+[AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
+[AC_TRY_COMPILE(,
+changequote(<<, >>)dnl
+<<
+volatile int x;
+int * volatile y;
+>>,
+changequote([, ])dnl
+ac_cv_c_volatile=yes, ac_cv_c_volatile=no)])
+if test $ac_cv_c_volatile = no; then
+  AC_DEFINE(volatile, )
+fi
+])
+
 AC_DEFUN(AC_C_STRINGIZE, [
 AC_REQUIRE([AC_PROG_CPP])
 AC_MSG_CHECKING([for preprocessor stringizing operator])

@@ -2721,6 +2721,28 @@ that don't, the @file{Makefile} or configuration header file will define
 it as empty.
 @end defmac
 
+@defmac AC_C_VOLATILE
+@maindex C_VOLATILE
+@cvindex volatile
+If the C compiler does not understand the keyword @code{volatile},
+define @code{volatile} to be empty.  Programs can simply use
+@code{volatile} as if every C compiler supported it; for those that do
+not, the @file{Makefile} or configuration header will define it as
+empty.
+
+If the correctness of your program depends on the semantics of
+@code{volatile}, simply defining it to be empty does, in a sense, break
+your code.  However, given that the compiler does not support
+@code{volatile}, you are at its mercy anyway.  At least your
+program will compile, when it wouldn't before.
+
+In general, the @code{volatile} keyword is a feature of ANSI C, so you
+might expect that @code{volatile} is available only when @code{__STDC__}
+is defined.  However, Ultrix 4.3's native compiler does support
+volatile, but does not defined @code{__STDC__}.
+@end defmac
+
+
 @defmac AC_C_INLINE
 @maindex C_INLINE
 @cvindex inline
