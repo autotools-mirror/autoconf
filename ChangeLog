@@ -1,3 +1,15 @@
+2001-10-20  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoheader.in ($localdir, $m4, $SIMPLE_BACKUP_SUFFIX):
+	Remove, dead.
+	* bin/autoreconf.in (&autoreconf): Do not run gettextize when
+	`intl' is already present, as it refuses unless --force.
+	(&parse_args): Use -I, --include instead of the old Autoconf
+	options.
+	($localdir, $autoconf_dir): Remove.
+	(@include): New.
+	(&maybe_autoreconf): New, to preserve $_ for File::Find.
+
 2001-10-19  Jens Petersen  <petersen@redhat.com>
 
 	* lib/autoconf/programs.m4 (AC_PROG_AWK): Prefer gawk to mawk.

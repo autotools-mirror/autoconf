@@ -22,9 +22,6 @@ verbosely report processing
 \fB\-d\fR, \fB\-\-debug\fR
 don't remove temporary files
 .TP
-\fB\-I\fR, \fB\-\-include\fR=\fIDIR\fR
-look for input files in DIR (cumulative)
-.TP
 \fB\-f\fR, \fB\-\-force\fR
 consider all files obsolete
 .TP
@@ -46,8 +43,12 @@ turn off all the warnings
 .TP
 `error'
 warnings are error
+.SS "Library directories:"
+.TP
+\fB\-I\fR, \fB\-\-include\fR=\fIDIR\fR
+look for files in DIR (cumulative)
 .SH AUTHOR
-Written by Roland McGrath.
+Written by Roland McGrath and Akim Demaille.
 .PP
 Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.

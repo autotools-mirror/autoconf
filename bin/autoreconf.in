@@ -66,9 +66,8 @@ The option `--install' is similar to the option `--add-missing' in
 other tools.
 
 Library directories:
-  -A, --autoconf-dir=ACDIR  location of Autoconf's macro files (rarely needed)
-  -l, --localdir=DIR        location of `aclocal.m4' and `acconfig.h'
-  -M, --m4dir=M4DIR         this package's Autoconf extensions
+  -I, --include=DIR  look for FILES in DIR (cumulative)
+  -M, --m4dir=M4DIR  this package's Autoconf extensions
 
 Unless specified, heuristics try to compute `M4DIR' from the `Makefile.am',
 or defaults to `m4' if it exists.
@@ -100,8 +99,7 @@ my $gettextize = $ENV{'GETTEXTIZE'} || 'gettextize';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
-my $localdir = '.';
-my $autoconf_dir = '.';
+my @include;
 # m4dir -- local Autoconf extensions.  Typically `m4'.
 my $m4dir;
 my $status = 0;
@@ -121,11 +119,10 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('l|localdir=s'                => \$localdir,
-	  'A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
-	  'M|m4dir=s'                   => \$m4dir,
-	  'i|install'                   => \$install,
-	  's|symlink'                   => \$symlink);
+  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+	  'M|m4dir=s'                                        => \$m4dir,
+	  'i|install'                                        => \$install,
+	  's|symlink'                                        => \$symlink);
 
   die "$me: too many arguments\n"
     if @ARGV;
@@ -147,19 +144,17 @@ sub parse_args ()
     }
 
   # Dispatch autoreconf's option to the tools.
-  # --localdir
-  $autoconf   .= " --include=$autoconf_dir --include=$localdir";
-  $autoheader .= " --include=$autoconf_dir --include=$localdir";
+  # --include;
+  $autoconf   .= join (' ', map { "--include=$_" } @include);
+  $autoheader .= join (' ', map { "--include=$_" } @include);
+
   # --install and --symlink;
   if ($install)
     {
-      $automake .= ' --add-missing';
-      $automake .= ' --copy'
-	unless $symlink;
-      $gettextize .= ' --copy'
-	unless $symlink;
-      $libtoolize .= ' --copy'
-	unless $symlink;
+      $automake   .= ' --add-missing';
+      $automake   .= ' --copy' unless $symlink;
+      $gettextize .= ' --copy' unless $symlink;
+      $libtoolize .= ' --copy' unless $symlink;
     }
   # --force;
   if ($force)
@@ -230,6 +225,10 @@ sub autoreconf ()
     {
       verbose "$configure_ac: not using Gettext";
     }
+  elsif (-d 'intl')
+    {
+      verbose "$configure_ac: not running gettextize: `intl' is already present";
+    }
   else
     {
       xsystem ($gettextize);
@@ -261,14 +260,14 @@ sub autoreconf ()
   # Running aclocal.  #
   # ----------------- #
 
-  if (-f "$localdir/aclocal.m4" &&
-      !up_to_date_p ("$localdir/aclocal.m4", "$localdir/acinclude.m4"))
+  if (-f 'aclocal.m4' &&
+      !up_to_date_p ('aclocal.m4', 'acinclude.m4'))
     {
       # If there are flags for aclocal in Makefile.am, use them.
       my $aclocal_flags;
-      if (-f "Makefile.am")
+      if (-f 'Makefile.am')
 	{
-	  my $aclocal_m4 = new Autom4te::XFile "Makefile.am";
+	  my $aclocal_m4 = new Autom4te::XFile 'Makefile.am';
 	  while ($_ = $aclocal_m4->getline)
 	    {
 	      if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
@@ -351,4 +350,4 @@ sub autoreconf ()
 mktmpdir ('ah');
 $ENV{'TMPDIR'} = $tmp;
 parse_args;
-find (\&autoreconf, '.');
+find (\&maybe_autoreconf, '.');

@@ -44,12 +44,8 @@ use vars qw ($config_h %verbatim %symbol);
 my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
 local $config_h;
 my $config_h_in;
-my $localdir = '.';
 my @include;
 my @warning;
-# m4.
-my $m4 = $ENV{"M4"} || "@M4@";
-my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 
 
 # $HELP
@@ -57,7 +53,7 @@ my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 $help = <<"END";
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
-Create a template file of C \`#define\' statements for \`configure\' to
+Create a template file of C \`\#define\' statements for \`configure\' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.ac\' if present,
 or else \`configure.in\'.
 
@@ -65,7 +61,6 @@ or else \`configure.in\'.
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don\'t remove temporary files
-  -I, --include=DIR        look for input files in DIR (cumulative)
   -f, --force              consider all files obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
@@ -76,6 +71,9 @@ Warning categories include:
   \`none\'          turn off all the warnings
   \`error\'         warnings are error
 
+Library directories:
+  -I, --include=DIR  look for files in DIR (cumulative)
+
 Report bugs to <bug-autoconf\@gnu.org>.
 END
 
@@ -84,7 +82,7 @@ END
 # --------
 $version = <<"END";
 autoheader (@PACKAGE_NAME@) @VERSION@
-Written by Roland McGrath.
+Written by Roland McGrath and Akim Demaille.
 
 Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.
@@ -152,7 +150,7 @@ END
 
 # Set up autoconf.
 my $autoconf = "$autom4te --language=autoconf ";
-$autoconf .= join (' ' , map { "--include=$_" } @include);
+$autoconf .= join (' ', map { "--include=$_" } @include);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;
