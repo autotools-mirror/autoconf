@@ -2517,13 +2517,13 @@ AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
   while :; do
     AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_mid])],
                       [ac_lo=$ac_mid; break],
-                      [ac_hi=`expr $ac_mid - 1`; ac_mid=`expr 2 '*' $ac_mid`])
+                      [ac_hi=`expr '(' $ac_mid ')' - 1`; ac_mid=`expr 2 '*' $ac_mid`])
   done])
 # Binary search between lo and hi bounds.
 while test "x$ac_lo" != "x$ac_hi"; do
   ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
   AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
-                     [ac_hi=$ac_mid], [ac_lo=`expr $ac_mid + 1`])
+                     [ac_hi=$ac_mid], [ac_lo=`expr '(' $ac_mid ')' + 1`])
 done
 $2=$ac_lo[]dnl
 ])# _AC_COMPUTE_INT_COMPILE
