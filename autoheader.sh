@@ -154,8 +154,6 @@ esac
 cat <<EOF
 /* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
 
-#ifndef _CONFIG_H
-#define _CONFIG_H
 EOF
 
 test -r ${config_h}.top && cat ${config_h}.top
@@ -246,11 +244,6 @@ test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
-
-cat <<EOF
-
-#endif /* _CONFIG_H */
-EOF
 
 status=0
 

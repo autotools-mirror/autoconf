@@ -9,7 +9,6 @@ Major changes in release 2.11:
   fail are saved in config.log. 
 * Another workaround has been added for seds with small command length limits.
 * config.sub and config.guess recognize more system types.
-* autoheader.sh adds multiple-inclusion protection for config.h.
 * Bug fixes.
 
 Major changes in release 2.10:

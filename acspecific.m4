@@ -174,9 +174,11 @@ AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_C
-AC_TRY_RUN_NATIVE([main() { exit(0); }],
-           ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no,
-           AC_TRY_LINK(, , ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no))
+dnl We can't try running a program here because we don't know yet if
+dnl we're cross-compiling.  And we can't check for that first, because the
+dnl cross-compiling test being fooled by non-working compiler installations
+dnl is the reason we're doing this in the first place.
+AC_TRY_LINK(, , ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cc_works)
 if test $ac_cv_prog_cc_works = no; then
@@ -188,9 +190,11 @@ AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_TRY_RUN_NATIVE([main() { exit(0); }],
-           ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no,
-           AC_TRY_LINK(, , ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no))
+dnl We can't try running a program here because we don't know yet if
+dnl we're cross-compiling.  And we can't check for that first, because the
+dnl cross-compiling test being fooled by non-working compiler installations
+dnl is the reason we're doing this in the first place.
+AC_TRY_LINK(, , ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then
@@ -1419,9 +1423,11 @@ AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
 AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
 
 AC_DEFUN(AC_FUNC_STRFTIME,
+[AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)],
 [# strftime is in -lintl on SCO UNIX.
-AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
-AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)])])
+AC_CHECK_LIB(intl, strftime, 
+[AC_DEFINE(HAVE_STRFTIME)
+LIBS="-lintl $LIBS"])])])
 
 AC_DEFUN(AC_FUNC_MEMCMP,
 [AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,

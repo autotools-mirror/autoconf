@@ -1,3 +1,16 @@
+Thu Nov 14 11:15:27 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* autoheader.sh: Take the multiple-include protection back out.
+	It's not needed for a file that just #defines stuff, and, as Ken
+	Raeburn pointed out in Apr 1994:
+	Since you don't make it optional, and you don't give the writer of
+	configure.in much control over the name of the symbol, it also would
+	prevent one "config.h" file in a subdirectory from including
+	"../config.h" as a way to avoid duplicating some common tests.
+
+	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): Don't try
+	running a program, just try linking.
+
 Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX): Check whether the
@@ -7,6 +20,8 @@ Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	of CC doesn't get eval'd correctly to actually work.
 	Directly test whether a space is needed after -R.
 	Don't add "-L" to LDFLAGS if $x_libraries is empty.
+	(AC_FUNC_STRFTIME): Check for it in -lintl only if it's not in the
+	normal libraries.
 
 	* Test release 2.10.3.
 
