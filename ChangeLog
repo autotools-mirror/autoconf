@@ -1,5 +1,10 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	* tests/base.m4: Really added to the CVS repository.
+	* tests/tools.m4: Likewise.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.m4: s/m4 -I ../m4 -I $at_top_srcdir/.
 
 2000-02-08  Akim Demaille  <akim@epita.fr>
