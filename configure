@@ -764,7 +764,7 @@ trap 'exit_status=$?
     exit $exit_status
      ' 0
 for ac_signal in 1 2 13 15; do
-  trap 'ac_status=$?; ac_signal='$ac_signal'; { (exit $ac_status); exit $ac_status; }' $ac_signal
+  trap 'ac_signal='$ac_signal'; { (exit 1); exit 1; }' $ac_signal
 done
 ac_signal=0
 
@@ -1791,7 +1791,7 @@ fi
 $debug ||
 {
   trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
-  trap '{ (exit $?); exit $?; }' 1 2 13 15
+  trap '{ (exit 1); exit 1; }' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
