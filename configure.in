@@ -1,5 +1,13 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(acgeneral.m4)
 AC_PROGRAMS_PATH(M4, gnum4 gm4 m4, m4)
+AC_PROGRAM_PATH(PERL, perl, no-perl)
+AC_SUBST(PERL)dnl
+AC_SUBST(PROGS)dnl
+if test "$PERL" != no-perl; then
+  PROGS=autoscan
+else
+  AC_VERBOSE(autoscan will not be built since perl is not found)
+fi
 AC_PROG_INSTALL
 AC_OUTPUT(Makefile)
