@@ -1,3 +1,23 @@
+1999-09-07  Ben Elliston  <bje@cygnus.com>
+
+	* autoreconf.sh: Recognise -v as a synonym for --verbose.
+
+1999-09-07  Gary V. Vaughan  <gvaughan@oranda.demon.co.uk>
+
+	* Makefile.in (INSTALL, standards.info, autoconf.info):  MiKTeX
+	for Windows treats all options after the first filename as
+	additional filenames, so real options must appear before the first
+	filename.
+
+1999-09-07  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* autoconf.texi (LDFLAGS, LIBS): Document that -L linker flags
+	should be kept in LDFLAGS and not LIBS.
+
+1999-09-07  Jim Meyering  <meyering@ascend.com>
+
+	* acgeneral.m4 (AC_SEARCH_LIBS): Use $ac_lib as the index, not $i.
+
 1999-09-06  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_FUNC_ALLOCA): Rename cache variable to avoid
