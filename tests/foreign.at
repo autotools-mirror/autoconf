@@ -15,8 +15,9 @@ AT_CHECK([libtoolize --version || exit 77],
 AT_CHECK([[libtoolize --version | grep '1.3.[012345]' && exit 77]],
          ignore, ignore, ignore)
 
-# Using a configure.ac, have libtoolize confess where libtool.m4 is.
-AT_DATA([configure.ac],
+# FIXME: Once Libtool `configure.ac' aware, change this.
+# Using a configure.in, have libtoolize confess where libtool.m4 is.
+AT_DATA([configure.in],
 [[AC_INIT
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
@@ -24,9 +25,15 @@ AC_PROG_LIBTOOL
 AT_CHECK([libtoolize | sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"] >at-path],
          0, [], ignore)
 
+# Make sure at-path contains something valid, and let the test suite
+# display it when verbose.  And fail, skipping would too easily hide
+# problems.
+AT_CHECK([grep . at-path], 0, [ignore])
+AT_CHECK([test -f "`cat at-path`"])
+
 # Build the concatenation of libtool.m4 and configure.ac.
-cp `cat at-path` configure.ac
-cat >>configure.ac <<_EOF
+cp `cat at-path` configure.in
+cat >>configure.in <<_EOF
 AC_INIT
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
