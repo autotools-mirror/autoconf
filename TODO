@@ -303,11 +303,6 @@ config.site.
 
 ------------------------------------------------------------------------------
 
-* autoscan: Tell the files that caused inclusion of each macro,
-in a dnl comment.  (Seems to be hard.)
-
-------------------------------------------------------------------------------
-
 * Look at user contributed macros:
 	IEEE double precision math
 	more

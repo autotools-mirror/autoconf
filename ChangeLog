@@ -1,5 +1,12 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl ($headers, $functions, $identifiers, $libraries):
+	Also register locations of their requirement instead of a simple
+	counter.
+	(&check_configure_ac): Close TRACES.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Formatting changes.
 	Check `configure.ac' or `configure.in' if present.
 

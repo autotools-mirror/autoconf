@@ -203,7 +203,7 @@ sub scan_files
 
   foreach $file (@cfiles)
     {
-      $programs{"cc"}++;
+      push (@{$programs{"cc"}}, $file);
       &scan_c_file($file);
     }
 
@@ -248,7 +248,7 @@ sub scan_c_file
       # Preprocessor directives.
       if (/^\s*\#\s*include\s*<([^>]*)>/)
 	{
-	  $headers{$1}++;
+	  push (@{$headers{$1}}, "$file:$.");
 	}
       # Ignore other preprocessor directives.
       next if /^\s*\#/;
@@ -261,12 +261,12 @@ sub scan_c_file
       # Maybe we should ignore function definitions (in column 0)?
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
-	  $functions{$1}++
+	  push (@{$functions{$1}}, "$file:$.")
 	    if !defined($c_keywords{$1});
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  $identifiers{$1}++
+	  push (@{$identifiers{$1}}, "$file:$.")
 	    if !defined($c_keywords{$1});
 	}
     }
@@ -279,19 +279,19 @@ sub scan_c_file
       print "\n$file functions:\n";
       foreach $word (sort keys %functions)
 	{
-	  print "$word $functions{$word}\n";
+	  print "$word: @{$functions{$word}}\n";
 	}
 
       print "\n$file identifiers:\n";
       foreach $word (sort keys %identifiers)
 	{
-	  print "$word $identifiers{$word}\n";
+	  print "$word: @{$identifiers{$word}}\n";
 	}
 
       print "\n$file headers:\n";
       foreach $word (sort keys %headers)
 	{
-	  print "$word $headers{$word}\n";
+	  print "$word: @{$headers{$word}}\n";
 	}
     }
 }
@@ -317,7 +317,7 @@ sub scan_makefile
       # Libraries.
       while (s/\B-l([a-zA-Z_]\w*)\b/ /)
 	{
-	  $libraries{$1}++;
+	  push (@{$libraries{$1}}, "$file:$.");
 	}
       # Tokens in the code.
       while (s/\b([a-zA-Z_]\w*)\b/ /)
@@ -334,19 +334,19 @@ sub scan_makefile
       print "\n$file makevars:\n";
       foreach $word (sort keys %makevars)
 	{
-	  print "$word @{$makevars{$word}}\n";
+	  print "$word: @{$makevars{$word}}\n";
 	}
 
       print "\n$file libraries:\n";
       foreach $word (sort keys %libraries)
 	{
-	  print "$word $libraries{$word}\n";
+	  print "$word: @{$libraries{$word}}\n";
 	}
 
       print "\n$file programs:\n";
       foreach $word (sort keys %programs)
 	{
-	  print "$word @{$programs{$word}}\n";
+	  print "$word: @{$programs{$word}}\n";
 	}
     }
 }
@@ -371,15 +371,16 @@ sub scan_sh_file
     }
   close(MFILE);
 
-  if ($verbose) {
-    local($word);
+  if ($verbose)
+    {
+      local($word);
 
-    print "\n$file programs:\n";
-    foreach $word (sort keys %programs)
-      {
-	print "$word @{$programs{$word}}\n";
-      }
-  }
+      print "\n$file programs:\n";
+      foreach $word (sort keys %programs)
+	{
+	  print "$word: @{$programs{$word}}\n";
+	}
+    }
 }
 
 # Print a proto configure.ac.
@@ -453,10 +454,11 @@ sub output_libraries
   local ($word);
 
   print CONF "\n# Checks for libraries.\n";
-  foreach $word (sort keys %libraries) {
-    print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
-    print CONF "AC_CHECK_LIB([$word], [main])\n";
-  }
+  foreach $word (sort keys %libraries)
+    {
+      print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
+      print CONF "AC_CHECK_LIB([$word], [main])\n";
+    }
 }
 
 sub output_headers
@@ -473,7 +475,7 @@ sub output_headers
 	}
       else
 	{
-	  &print_unique($headers_macros{$word});
+	  &print_unique($headers_macros{$word}, @{$headers{$word}});
 	}
     }
   print CONF "AC_CHECK_HEADERS([" . join(' ', sort(@have_headers)) . "])\n"
@@ -494,7 +496,7 @@ sub output_identifiers
 	}
       else
 	{
-	  &print_unique ($identifiers_macros{$word});
+	  &print_unique ($identifiers_macros{$word}, @{$identifiers{$word}});
 	}
     }
   print CONF "AC_CHECK_TYPES([" . join(', ', sort(@have_types)) . "])\n"
@@ -515,7 +517,7 @@ sub output_functions
 	}
       else
 	{
-	  &print_unique($functions_macros{$word});
+	  &print_unique($functions_macros{$word}, @{$functions{$word}});
 	}
     }
   print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
@@ -544,6 +546,9 @@ sub check_configure_ac
       local ($file, $line, $macro, $args) = split (/:/, $_, 4);
       delete ($needed_macros{$macro});
     }
+
+  close (TRACES) ||
+    die "$me: cannot close traces: $!\n";
 
   foreach $macro (sort keys %needed_macros)
     {
