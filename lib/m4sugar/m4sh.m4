@@ -167,7 +167,7 @@ for as_var in \
   LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
   LC_TELEPHONE LC_TIME
 do
-  if (set +x; test -n "`(eval $as_var=C; export $as_var) 2>&1`"); then
+  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
     $as_unset $as_var
