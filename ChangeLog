@@ -1,5 +1,11 @@
 1998-09-27  Ben Elliston  <bje@cygnus.com>
 
+	* Makefile.in (all): Generate frozen .m4 files at build time.
+	(install): Do not freeze .m4 files. Install pre-frozen .m4f files
+	using $(INSTALL_DATA).
+	(.m4.m4f): Freeze files if m4 supports stored internal state.
+	Contributed by Karl Heuer <kwzh@gnu.org>.
+	
 	* install-sh: Import latest version from the FSF.
 
 	* mkinstalldirs: Likewise.
