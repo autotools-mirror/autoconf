@@ -2026,6 +2026,10 @@ dnl link name in DEST...
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 AC_DEFUN(AC_LINK_FILES,
 [dnl
+ifelse($#, 2, , dnl
+  [errprint(__file__:__line__: incorrect number of arguments to [AC_LINK_FILES]
+)]
+  AC_MSG_ERROR([aborting due to error at __file__:__line__]))dnl
 define([AC_LIST_FILES], ifdef([AC_LIST_FILES], [AC_LIST_FILES ],)[$1])dnl
 define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2])])
 
