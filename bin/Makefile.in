@@ -451,7 +451,7 @@ check-forbidden-patterns:
 	else \
 	  rm -f forbidden.log; \
 	fi
-$(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
+$(srcdir)/autoconf.in: $(srcdir)/autoconf.as # $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
 autoconf: $(srcdir)/autoconf.in Makefile
