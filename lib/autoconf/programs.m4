@@ -307,6 +307,7 @@ AC_DEFUN([AC_PROG_INSTALL],
 # AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# OS/2's system install, which has a completely different semantic
 # ./install, which can be erroneously created by make from ./install.sh.
 AC_MSG_CHECKING([for a BSD-compatible install])
 if test -z "$INSTALL"; then
@@ -316,6 +317,7 @@ AC_CACHE_VAL(ac_cv_path_install,
 case $as_dir/ in
   ./ | .// | /[cC]/* | \
   /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+  |?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
   /usr/ucb/* ) ;;
   *)
     # OSF1 and SCO ODT 3.0 have their own names for install.
