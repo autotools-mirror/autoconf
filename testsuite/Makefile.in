@@ -26,7 +26,7 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 # Directory in which to install library files.
-datadir = $(prefix)/lib
+datadir = $(prefix)/share
 acdatadir = $(datadir)/autoconf
 
 AUTOCONF = autoconf
