@@ -121,6 +121,9 @@
 /* Define if you have the POSIX.1 `waitpid' function.  */
 #undef HAVE_WAITPID
 
+/* Define as __inline if that's what the C compiler calls it.  */
+#undef inline
+
 /* Define if int is 16 bits instead of 32.  */
 #undef INT_16_BITS
 
