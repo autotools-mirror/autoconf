@@ -6,14 +6,15 @@ Base layer.
 
 EOF
 
-dnl AU_DEFUN
-dnl --------
-dnl
+# AU_DEFUN
+# --------
+
 AT_SETUP(m4_wrap)
 
-dnl m4_wrap is used to display the help strings.
-dnl Also, check that commas are not swallowed.  This can easily happen
-dnl because of m4-listification.
+# m4_wrap is used to display the help strings.  Also, check that
+# commas are not swallowed.  This can easily happen because of
+# m4-listification.
+
 AT_DATA(libm4.in,
 [[include(libm4.m4)divert(0)dnl
 m4_wrap([Short string */], [   ], [/* ], 20)
@@ -47,7 +48,7 @@ AT_DATA(expout,
 First, second , third, [,quoted]
 ]])
 
-AT_CHECK([m4 -I $at_top_srcdir libm4.in], 0, expout)
+AT_CHECK([$M4 -I $at_top_srcdir libm4.in], 0, expout)
 
 
 AT_CLEANUP()

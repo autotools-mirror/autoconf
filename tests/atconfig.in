@@ -76,4 +76,7 @@ if test -n "@AT_TESTPATH@"; then
 else
   export PATH; PATH=`pwd`:$PATH
 fi
+
+# We need GNU m4.
+M4=@M4@
 # Snippet )2

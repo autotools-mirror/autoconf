@@ -1,5 +1,13 @@
 2000-05-25  Akim Demaille  <akim@epita.fr>
 
+	The test suite needs GNU m4.
+	Reported by Bob Friesenhahn.
+
+	* tests/atconfig.in (M4): Set it.
+	* tests/base.m4: Use it.
+
+2000-05-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Don't use negated character
 	classes with `case'.  Use `expr' instead.
 	Suggested by Paul Eggert.
