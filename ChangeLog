@@ -1,4 +1,4 @@
-2001-12-18  Kevin Ryde  <kevin@user42@zip.com.au>
+2001-12-18  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Add notes on sscanf
 	sometimes needing writable input.
