@@ -114,6 +114,10 @@ substitutions done on them.
 ------------------------------------------------------------------------------
 
 Have AC_CANONICAL_* cache the host/build/target types.
+They have to be overridden by the command line arguments,
+just as for X includes and libraries.  Should they be cached
+all in one variable, or three?  In that case, what if only one
+or two of the cache variables are set?
 
 ------------------------------------------------------------------------------
 
