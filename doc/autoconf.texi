@@ -11901,7 +11901,7 @@ AC_CONFIG_COMMANDS([default], [[echo "Square brackets: []"]])
 
 @defmac AC_PROG_CC_STDC
 @acindex PROG_CC_STDC
-This macro has been integrated into @code{AC_PROG_CC_STDC}.
+This macro has been integrated into @code{AC_PROG_CC}.
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK
