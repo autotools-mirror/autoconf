@@ -1157,7 +1157,7 @@ else
   # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
   # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
   # Irix 4.0.5F has the header but not the library.
-  if test $ac_have_func = no && test $ac_cv_lib_elf = yes; then
+  if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
     ac_have_func=yes; AC_DEFINE(SVR4)
   fi
 
@@ -1891,7 +1891,7 @@ else
     # libraries were built with DECnet support.  And karl@cs.umb.edu says
     # the Alpha needs dnet_stub (dnet does not exist).
     AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
-    if test $ac_cv_lib_dnet = no; then
+    if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
         [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
     fi
