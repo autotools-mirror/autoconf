@@ -112,6 +112,8 @@ do
   . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
+AUTOTEST_PATH=`echo $AUTOTEST_PATH |tr ':' $PATH_SEPARATOR`
+
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`

@@ -7700,10 +7700,9 @@ Make sure you quote the brackets if appropriate and keep the backslash as
 first character (@pxref{Limitations of Builtins}).
 
 Also, because the colon is used as part of a drivespec, these systems don't
-use it as path separator.  When creating or accessing paths, use
-@code{$ac_path_separator} instead (or the @code{PATH_SEPARATOR} output
-variable).  @command{autoconf} sets this to the appropriate value (@samp{:}
-or @samp{;}) when it starts up.
+use it as path separator.  When creating or accessing paths, use the
+@code{PATH_SEPARATOR} output variable instead.  @command{configure} sets this
+to the appropriate value (@samp{:} or @samp{;}) when it starts up.
 
 File names need extra care as well.  While @sc{dos}-based environments
 that are Unixy enough to run @command{autoconf} (such as DJGPP) will
@@ -8060,8 +8059,8 @@ twice.
 
 @c FIXME: Which shells?  How do they behave?
 Setting @code{CDPATH} to the empty value is not enough for most shells.
-A simple colon is enough except for @code{zsh}, which prefers a leading
-dot:
+A simple path separator is enough except for @code{zsh}, which prefers a
+leading dot:
 
 @example
 zsh-3.1.6 % mkdir foo && (CDPATH=: cd foo)
@@ -8073,27 +8072,30 @@ zsh-3.1.6 %
 @end example
 
 @noindent
-(of course we could just @code{unset} @code{CDPATH}, since it also
+(of course we could just @command{unset} @code{CDPATH}, since it also
 behaves properly if set to the empty string).
 
 Life wouldn't be so much fun if @command{bash} and @command{zsh} had the
 same behavior:
 
 @example
+bash-2.02 % mkdir foo && (CDPATH=: cd foo)
 bash-2.02 % (CDPATH=:. cd foo)
 bash-2.02 % (CDPATH=.: cd foo)
 /tmp/foo
 @end example
 
-Therefore, a portable solution to neutralize @samp{CDPATH} is
+Of course, even better style would be to use @code{PATH_SEPARATOR} instead
+of a @samp{:}.
+Therefore, a portable solution to neutralize @code{CDPATH} is
 
 @example
-CDPATH=$@{ZSH_VERSION+.@}:
+CDPATH=$@{ZSH_VERSION+.@}$PATH_SEPARATOR
 @end example
 
 @noindent
 Note that since @command{zsh} supports @command{unset}, you may unset
-@samp{CDPATH} using @samp{:} as a fallback, see
+@code{CDPATH} using @code{PATH_SEPARATOR} as a fallback, see
 @ref{Limitations of Builtins}.
 
 @item IFS
@@ -8152,13 +8154,18 @@ hence read-only.  Do not use it.
 
 @item PATH_SEPARATOR
 @evindex PATH_SEPARATOR
-On DJGPP systems, the @code{PATH_SEPARATOR} variable can be set to
-either @samp{:} or @samp{;} to control the path separator @command{bash}
-uses to set up certain environment variables (such as
-@code{PATH}). Since this only works inside bash, you want autoconf to
-detect the regular @sc{dos} path separator @samp{;}, so it can be safely
-substituted in files that may not support @samp{;} as path separator. So
-either unset this variable or set it to @samp{;}.
+If it is not set, @command{configure} will detect the appropriate path
+separator for the build system and set the @code{PATH_SEPARATOR} output
+variable accordingly.
+
+On DJGPP systems, the @code{PATH_SEPARATOR} environment variable can be
+set to either @samp{:} or @samp{;} to control the path separator
+@command{bash} uses to set up certain environment variables (such as
+@code{PATH}).  Since this only works inside @command{bash}, you want
+@command{configure} to detect the regular @sc{dos} path separator
+(@samp{;}), so it can be safely substituted in files that may not support
+@samp{;} as path separator.  So it is recommended to either unset this
+variable or set it to @samp{;}.
 
 @item RANDOM
 @evindex RANDOM

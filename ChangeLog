@@ -1,5 +1,15 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* doc/autoconf.texi (File System Conventions): Clarify the use of
+	PATH_SEPARATOR.
+	(Special Shell Variables[PATH_SEPARATOR]): Ditto.
+	(Special Shell Variables[CDPATH]): Mention that $PATH_SEPRATOR should
+	be used instead of ':'.
+	* lib/autotest/general.m4: Replace occurrences of ':' in
+	AUTOTEST_PATH with $PATH_SEPARATOR at test suite startup.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* tests/atgeneral.m4: Add basic support for test ranges (e.g. 7-34) as
 	arguments.  Fixed a typo.
 
