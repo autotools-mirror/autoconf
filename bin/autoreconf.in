@@ -6,7 +6,8 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autoreconf - install the GNU Build System in a directory tree
-# Copyright (C) 1994, 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003
+# Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -101,7 +102,7 @@ Report bugs to <bug-autoconf\@gnu.org>.
 $version = "autoreconf (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
-Copyright 2002 Free Software Foundation, Inc.
+Copyright (C) 2003 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ";
@@ -118,6 +119,8 @@ my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
 my $install = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
+# Does aclocal support --force?
+my $aclocal_supports_force = 0;
 
 my @prepend_include;
 my @include;
@@ -170,6 +173,8 @@ sub parse_args ()
 	}
     }
 
+  $aclocal_supports_force = `$aclocal --help` =~ /--force/;
+
   # Dispatch autoreconf's option to the tools.
   # --include;
   $autoconf   .= join (' --include=', '', @include);
@@ -187,6 +192,8 @@ sub parse_args ()
   # --force;
   if ($force)
     {
+      $aclocal    .= ' --force'
+	if $aclocal_supports_force;
       $autoconf   .= ' --force';
       $autoheader .= ' --force';
       $automake   .= ' --force-missing';
@@ -216,6 +223,67 @@ sub parse_args ()
     }
 }
 
+
+# &run_aclocal ($ACLOCAL, $FLAGS)
+# -------------------------------
+# Update aclocal.m4 as lazily as possible, as aclocal pre-1.8 always
+# overwrites aclocal.m4, hence triggers autoconf, autoheader, automake
+# etc. uselessly.  aclocal 1.8+ does not need this.
+sub run_aclocal ($$)
+{
+  my ($aclocal, $flags) = @_;
+
+  # aclocal 1.8+ does all this for free.  It can be recognized by its
+  # --force support.
+  if ($aclocal_supports_force)
+    {
+      xsystem ("$aclocal $flags");
+    }
+  else
+    {
+      xsystem ("$aclocal $flags --output=aclocal.m4t");
+      # aclocal may produce no output.
+      if (-f 'aclocal.m4t')
+	{
+	  update_file ('aclocal.m4t', 'aclocal.m4');
+	  # Make sure that the local m4 files are older than
+	  # aclocal.m4.
+	  #
+	  # Why is not always the case?  Because we already run
+	  # aclocal at first (before tracing), which, for instance,
+	  # can find Gettext's macros in .../share/aclocal, so we may
+	  # have had the right aclocal.m4 already.  Then autopoint is
+	  # run, and installs locally these M4 files.  Then
+	  # autoreconf, via update_file, sees it is the _same_
+	  # aclocal.m4, and doesn't change its timestamp.  But later,
+	  # Automake's Makefile expresses that aclocal.m4 depends on
+	  # these local files, which are newer, so it triggers aclocal
+	  # again.
+	  #
+	  # To make sure aclocal.m4 is no older, we change the
+	  # modification times of the local M4 files to be not newer
+	  # than it.
+	  #
+	  # First, where are the local files?
+	  my $aclocal_local_dir = '.';
+	  if ($flags =~ /-I\s+(\S+)/)
+	    {
+	      $aclocal_local_dir = $1;
+	    }
+	  # All the local files newer than aclocal.m4 are to be
+	  # made not newer than it.
+	  my $aclocal_m4_mtime = mtime ('aclocal.m4');
+	  for my $file (glob ("$aclocal_local_dir/*.m4"), 'acinclude.m4')
+	    {
+	      if ($aclocal_m4_mtime < mtime ($file))
+		{
+		  debug "aging $file to be not newer than aclocal.m4";
+		  utime $aclocal_m4_mtime, $aclocal_m4_mtime, $file;
+		}
+	    }
+	}
+    }
+}
 
 # &autoreconf_current_directory
 # -----------------------------
@@ -337,10 +405,7 @@ sub autoreconf_current_directory ()
       # fall.
       sleep 1;
 
-      xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-      # aclocal may produce no output.
-      update_file ('aclocal.m4t', 'aclocal.m4')
-	if -f 'aclocal.m4t';
+      run_aclocal ($aclocal, $aclocal_flags);
     }
 
   # We might have to rerun aclocal if Libtool (or others) imports new
@@ -437,47 +502,7 @@ sub autoreconf_current_directory ()
 	}
       else
 	{
-	  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-	  # aclocal may produce no output.
-	  if (-f 'aclocal.m4t')
-	    {
-	      update_file ('aclocal.m4t', 'aclocal.m4');
-	      # Make sure that the local m4 files are older than
-	      # aclocal.m4.
-	      #
-	      # Why is not always the case?  Because we already run
-	      # aclocal at first (before tracing), which, for instance,
-	      # can find Gettext's macros in .../share/aclocal, so we
-	      # may have had the right aclocal.m4 already.  Then
-	      # autopoint is run, and installs locally these M4
-	      # files.  Then autoreconf, via update_file, sees it is
-	      # the _same_ aclocal.m4, and doesn't change its
-	      # timestamp.  But later, Automake's Makefile expresses
-	      # that aclocal.m4 depends on these local files, which
-	      # are newer, so it triggers aclocal again.
-	      #
-	      # To make sure aclocal.m4 is no older, we change the
-	      # modification times of the local M4 files to be
-	      # not newer than it.
-	      #
-	      # First, where are the local files?
-	      my $aclocal_local_dir = '.';
-	      if ($aclocal_flags =~ /-I\s+(\S+)/)
-		{
-		  $aclocal_local_dir = $1;
-		}
-	      # All the local files newer than aclocal.m4 are to be
-	      # made not newer than it.
-	      my $aclocal_m4_mtime = mtime ('aclocal.m4');
-	      for my $file (glob ("$aclocal_local_dir/*.m4"), 'acinclude.m4')
-		{
-		  if ($aclocal_m4_mtime < mtime ($file))
-		    {
-		      debug "aging $file to be not newer than aclocal.m4";
-		      utime $aclocal_m4_mtime, $aclocal_m4_mtime, $file;
-		    }
-		}
-	    }
+	  run_aclocal ($aclocal, $aclocal_flags);
 	}
     }
 

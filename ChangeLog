@@ -1,5 +1,16 @@
 2003-05-06  Akim Demaille  <akim@epita.fr>
 
+	Don't try to be smart with aclocal 1.8+ because (i) aclocal no
+	longer updates aclocal.m4 if useless, (ii) if a file m4_included
+	by aclocal.m4 is changed it might require the importing of another
+	m4 extension file, i.e., aclocal must be run.
+
+	* bin/autoreconf.in (&run_aclocal, $aclocal_supports_force): New.
+	(&parse_args): Use --force with aclocal if required and supported.
+	(&autoreconf_current_directory): Use &run_aclocal.
+
+2003-05-06  Akim Demaille  <akim@epita.fr>
+
 	Lock autom4te's cache.
 
 	* lib/Autom4te/XFile.pm ($me, &name, &lock, &truncate, &seek): New.
