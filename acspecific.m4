@@ -261,6 +261,7 @@ AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
 dnl Defined separately so a configure.in can redefine if necessary.
 dnl We want the top-level source directory, not the subdir's srcdir.
+dnl This relies on top_srcdir being substituted after INSTALL.
 define(AC_PROG_INSTALL_INSTALL_SH, ['@top_srcdir@/install.sh -c'])dnl
 dnl
 define(AC_LN_S,
