@@ -113,16 +113,18 @@ define([AH_CHECK_SIZEOF],
 [AH_TEMPLATE(AC_TR_CPP(SIZEOF_$1),
              [The number of bytes in a `]$1['.])])
 
+
 define([AH_PROG_LEX],
 [AH_CHECK_LIB(fl)
 AH_CHECK_LIB(l)])
+
 
 define([AH_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
   [pushdef(AC_Member_Aggregate, [patsubst(AC_Member, [\.[^.]*])])
    pushdef(AC_Member_Member,    [patsubst(AC_Member, [.*\.])])
    AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Member),
-              [Define if `]AC_Member_Member[' is member of]
+               [Define if `]AC_Member_Member[' is member of]
                [`]AC_Member_Aggregate['.])
    popdef([AC_Member_Member])
    popdef([AC_Member_Aggregate])
@@ -158,7 +160,7 @@ define([AH_FUNC_ALLOCA],
         STACK_DIRECTION > 0 => grows toward higher addresses
         STACK_DIRECTION < 0 => grows toward lower addresses
         STACK_DIRECTION = 0 => direction of growth unknown */
-#undef STACK_DIRECTION[]dnl
+#undef STACK_DIRECTION
 ])])dnl AH_FUNC_ALLOCA
 
 
@@ -167,7 +169,7 @@ define([AH_C_CHAR_UNSIGNED],
 [/* Define if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
-#endif[]dnl
+#endif
 ])])
 
 
@@ -178,7 +180,7 @@ define([AH_AIX],
    We just want to avoid a redefinition error message.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
-#endif[]dnl
+#endif
 ])])
 
 
