@@ -40,7 +40,7 @@ exec_prefix = @exec_prefix@
 bindir = $(exec_prefix)/bin
 
 # Directory in which to install library files.
-datadir = $(prefix)/lib
+datadir = $(prefix)/share
 acdatadir = $(datadir)/autoconf
 
 # Directory in which to install documentation info files.
