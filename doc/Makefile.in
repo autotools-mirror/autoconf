@@ -25,7 +25,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
-M4 = m4
+M4 = @M4@
 
 prefix = /usr/local
 exec_prefix = $(prefix)
