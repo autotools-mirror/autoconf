@@ -70,8 +70,14 @@ Software Foundation raise funds for GNU development.''
                                 How to create configuration scripts
 * autoreconf: (autoconf)autoreconf Invocation.
                                 Remaking multiple @command{configure} scripts
+* autoheader: (autoconf)autoheader Invocation.
+                                How to create configuration templates
+* autom4te: (autoconf)Invoking autom4te.
+                                The Autoconf executables backbone
 * configure: (autoconf)configure Invocation.
                                 Configuring a package
+* autoupdate: (autoconf)autoupdate Invocation.
+                                Automatic update of @file{configure.ac}
 * config.status: (autoconf)config.status Invocation.
                                 Recreating a configuration
 * testsuite: (autoconf)testsuite Invocation.

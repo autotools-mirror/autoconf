@@ -1,3 +1,7 @@
+2002-06-11  Andreas Schwab  <schwab@suse.de>
+
+	* doc/autoconf.texi: Add more dir entries.
+
 2002-06-10  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* bin/autom4te.in ($cache): Don't define using `$me', the name
