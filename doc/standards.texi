@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 24 January 1995
+@set lastupdate 12 April 1995
 @c %**end of header
 
 @ifinfo
