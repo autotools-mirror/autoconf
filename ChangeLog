@@ -1,5 +1,22 @@
 2001-01-30  Akim Demaille  <akim@epita.fr>
 
+	The recent addition of `exit's prototype in confdefs.h causes
+	AC_OUTPUT_MAKE_DEFS to include junky -D switches.
+	Reported by Wolfgang Mueller.
+
+	* tests/torture.at (#define header templates): Include trash in
+	confdefs.h.
+	* tests/atgeneral.at (AT_INIT): Don't expect `find' to support
+	-maxdepth, hence don't use -follow either.
+	Reported by Nicolas Joly.
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS) <confdef2opt.sed>: In the
+	`quote' section, `p'rint the result.
+	If neither `#define' pattern match, just call `d' to start a new
+	cycle.
+	Call this sed program with -n.
+
+2001-01-30  Akim Demaille  <akim@epita.fr>
+
 	* tests/compile.at: New test.
 	* tests/atspecific.at (AT_CHECK): When given 77 as expected exit
 	status, don't include the `skip' mechanism.

@@ -3787,11 +3787,14 @@ t clear
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
 t quote
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
+t quote
+d
 : quote
 s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
 s,\$,$$,g
+p
 EOF
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
@@ -3800,7 +3803,7 @@ EOF
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
 ac_LF_and_DOT=`echo; echo .`
-DEFS=`sed -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
+DEFS=`sed -n -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f confdef2opt.sed
 ]])# AC_OUTPUT_MAKE_DEFS
 

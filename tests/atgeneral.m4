@@ -290,7 +290,7 @@ elif test $at_debug = false; then
 
     # Try to find a few ChangeLogs in case it might help determining the
     # exact version.
-    find "$at_top_srcdir" -follow -maxdepth 3 -name ChangeLog \
+    find "$at_top_srcdir" -name ChangeLog \
       -exec echo {} : ';' \
       -exec sed 's/^/| /;10q' {} ';' \
       -exec echo ';'

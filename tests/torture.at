@@ -133,16 +133,28 @@ AT_SETUP([#define header templates])
 AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
+
 # I18n of dummy variables: their French translations.
 AC_DEFINE(foo, toto)
 AC_DEFINE(bar, tata)
 AC_DEFINE(baz, titi)
 AC_DEFINE(fubar, tutu)
+
 # Symbols which are prefixes of another.
 AC_DEFINE(a, A)
 AC_DEFINE(aaa, AAA)
 AC_DEFINE(aa, AA)
 AC_CONFIG_FILES(defs)
+
+# Things included in confdefs.h, but which make no sense in
+# config.h, nor in $DEFS.
+cat <<\EOF >>confdefs.h
+/* Hi Mum! Look, I'm doing C++! */
+#ifdef __cplusplus
+void exit (int status);
+#endif
+EOF
+
 # In addition of config.h output a full DEFS
 AC_OUTPUT_MAKE_DEFS
 DEFS_SAVED=$DEFS
@@ -187,7 +199,7 @@ AT_CHECK([cat config.h], 0, expout)
 
 # Check the value of DEFS.  Note the leading space.
 AT_DATA([expout],
-[[ -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA]
+[[-Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA]
 ])
 
 # Because we strip trailing spaces in `testsuite' we can't leave one in

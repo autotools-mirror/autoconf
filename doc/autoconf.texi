@@ -6274,6 +6274,12 @@ simple work around consists in testing @command{expr} and use a variable
 set to @command{expr} or to @command{false} according to the result.
 
 
+@item @command{find}
+@c -----------------
+The option @option{-maxdepth} seems to be GNU specific. Tru64 v5.1,
+NetBSD 1.5 and Solaris 2.5 @command{find} commands do not understand it.
+
+
 @item @command{grep}
 @c -----------------
 @cindex @command{grep}
