@@ -1,3 +1,18 @@
+2005-02-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Redirect stdin
+	from /dev/null, as "configure" shouldn't read stdin, and this
+	insulates us from problems (e.g., when testing for "cl").
+	Suggested by Alexandre Duret-Lutz.  Also, do this redirection
+	before invoking "hostname" or "uname".
+	(_AC_PREPROC_IFELSE, _AC_COMPILE_IFELSE,
+	_AC_LINK_IFELSE): Undo previous change, as it's no longer needed.
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX): Don't bother with
+	"</dev/null" since it's now done at the top of 'configure'.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+	* lib/autoconf/programs.m4 (_AC_PATH_PROG_FLAVOR_GNU): Likewise.
+	Also, replace grep with shell pattern-matching, to save a process.
+
 2005-02-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE, _AC_COMPILE_IFELSE,
