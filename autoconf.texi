@@ -2897,10 +2897,10 @@ called in an order that might cause incorrect operation.
 @subsection Prerequisite Macros
 
 A macro that you write might need to use values that have previously
-been computed by other macros.  For example, if you write a new macro
-that uses the C preprocessor, it depends on @code{AC_PROG_CPP} having
-been called first to set the shell variable @code{CPP}
-(@pxref{Alternative Programs}).
+been computed by other macros.  For example, @code{AC_PROG_YYTEXT}
+examines the output of @code{flex} or @code{lex}, so it depends on
+@code{AC_PROG_LEX} having been called first to set the shell variable
+@code{LEX}.
 
 Rather than forcing the user of the macros to keep track of the
 dependencies between them, you can use the @code{AC_REQUIRE} macro to do
@@ -2911,31 +2911,18 @@ called if it is needed, and only called once.
 @maindex REQUIRE
 If the @code{m4} macro @var{macro-name} has not already been called,
 call it (without any arguments).  Make sure to quote @var{macro-name}
-with square brackets.  The body of @var{macro-name} must have been
-defined using @code{AC_DEFUN} or else contain a call to
-@code{AC_PROVIDE} to indicate that it has been called.
+with square brackets.  @var{macro-name} must have been defined using
+@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
+that it has been called.
 @end defmac
 
-For example, a new macro that runs the C preprocessor should contain,
-somewhere before @code{CPP} is used, the statement
-
-@example
-AC_REQUIRE([AC_PROG_CPP])
-@end example
-
-The macro @code{AC_PROG_CPP} should be defined using @code{AC_DEFUN},
-which as well as defining the macro, causes it to set a flag when it is
-called.  Then, when the new macro is run, it will invoke
-@code{AC_PROG_CPP} if and only if @code{AC_PROG_CPP} has not already
-been run.  An obsolete alternative is to define @code{AC_PROG_CPP} using
-@code{define} and have it call @code{AC_PROVIDE}:
+An obsolete alternative to using @code{AC_DEFUN} is to use @code{define}
+and call @code{AC_PROVIDE}:
 
 @defmac AC_PROVIDE (@var{macro-name})
 @maindex PROVIDE
-Set a flag recording that @var{macro-name} has been called.  This macro
-is called automatically when using @code{AC_DEFUN} to define a macro.
-
-The argument should be the name of the macro that is calling
+Set a flag recording that @var{macro-name} has been called.
+@var{macro-name} should be the name of the macro that is calling
 @code{AC_PROVIDE}.  An easy way to get it is from the @code{m4} builtin
 variable @code{$0}, like this:
 
