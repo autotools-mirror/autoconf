@@ -2041,8 +2041,10 @@ $1="$ac_cv_c_struct_member_$1"])
 dnl ### Checking for programs
 
 
-dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
-dnl               [, [VALUE-IF-NOT-FOUND] [, [PATH] [, [REJECT]]]])
+dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR
+dnl               [, VALUE-IF-FOUND [, VALUE-IF-NOT-FOUND]
+dnl               [, PATH [, REJECT]]])
+dnl ------------------------------------------------------
 AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -2105,7 +2107,21 @@ else
   AC_MSG_RESULT(no)
 fi
 AC_SUBST($1)dnl
-])
+])dnl AC_CHECK_PROG
+
+
+dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
+dnl                [, PATH]])
+dnl -----------------------------------------------------------------
+AC_DEFUN(AC_CHECK_PROGS,
+[for ac_prog in $2
+do
+AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, , $4)
+test -n "[$]$1" && break
+done
+ifelse([$3], , , [test -n "[$]$1" || $1="$3"
+])])
+
 
 dnl AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND [, PATH]])
 dnl -------------------------------------------------------------------------
@@ -2148,19 +2164,10 @@ fi
 AC_SUBST($1)dnl
 ])
 
-dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
-dnl                [, PATH]])
-AC_DEFUN(AC_CHECK_PROGS,
-[for ac_prog in $2
-do
-AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, , $4)
-test -n "[$]$1" && break
-done
-ifelse([$3], , , [test -n "[$]$1" || $1="$3"
-])])
 
 dnl AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
 dnl               [, PATH]])
+dnl ----------------------------------------------------------------
 AC_DEFUN(AC_PATH_PROGS,
 [for ac_prog in $2
 do
@@ -2169,6 +2176,11 @@ test -n "[$]$1" && break
 done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])
+
+
+
+
+dnl ### Checking for tools
 
 dnl Internal subroutine.
 AC_DEFUN(AC_CHECK_TOOL_PREFIX,
@@ -2180,18 +2192,35 @@ else
 fi
 ])
 
+dnl AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
+dnl ------------------------------------------------------------------------
+AC_DEFUN(AC_PATH_TOOL,
+[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
+AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
+             ifelse([$3], , [$2], ), $4)
+ifelse([$3], , , [
+if test -z "$ac_cv_prog_$1"; then
+  if test -n "$ac_tool_prefix"; then
+    AC_PATH_PROG($1, $2, $2, $3)
+  else
+    $1="$3"
+  fi
+fi])
+])
+
 dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
+dnl -------------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_TOOL,
 [AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
 AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
 ifelse([$3], , , [
 if test -z "$ac_cv_prog_$1"; then
-if test -n "$ac_tool_prefix"; then
-  AC_CHECK_PROG($1, $2, $2, $3)
-else
-  $1="$3"
-fi
+  if test -n "$ac_tool_prefix"; then
+    AC_CHECK_PROG($1, $2, $2, $3)
+  else
+    $1="$3"
+  fi
 fi])
 ])
 

@@ -1916,6 +1916,26 @@ are found, set @var{variable} to the entire path of the program
 found.
 @end defmac
 
+@defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for} @r{[},
+@var{value-if-not-found} @r{[}, @var{path}@r{]]})
+@maindex PATH_TOOL
+Like @code{AC_PATH_PROG}, but first looks for @var{prog-to-check-for}
+with a prefix of the host type as determined by
+@code{AC_CANONICAL_HOST},
+followed by a dash (@pxref{Canonicalizing}).  For example, if the user
+runs @samp{configure --host=i386-gnu}, then this call:
+@example
+AC_PATH_TOOL(FILE, file, :, /usr/bin:$PATH)
+@end example
+@noindent
+sets @code{FILE} to @file{/usr/bin/i386-gnu-file}, for example, if
+that program is found at @file{/usr/bin} in @code{PATH}, or to
+@samp{/usr/bin/file}, for example, if @emph{that} program is found at
+@file{/usr/bin} in @code{PATH}, or to @samp{:} if neither program can
+be found.
+@end defmac
+
+
 @node Libraries, Library Functions, Alternative Programs, Existing Tests
 @section Library Files
 

@@ -1,5 +1,13 @@
 1999-10-05  Akim Demaille  <akim@epita.fr>
 
+	Implement AC_PATH_TOOL.
+	Submited by Gary V. Vaughan.
+
+	* acgeneral.m4 (AC_PATH_TOOL): New macro.
+	* autoconf.texi (Generic Programs): Document.
+
+1999-10-05  Akim Demaille  <akim@epita.fr>
+
 	Handle arbitrary version numbers.
 	Reported by H.J. Lu.
 
