@@ -2,7 +2,7 @@
 
 cat <<EOF
 
-Autoshell.
+M4sh.
 
 EOF
 
@@ -16,14 +16,12 @@ EOF
 AT_SETUP([AS_DIRNAME & AS_DIRNAME_SED])
 
 AT_DATA(configure.in,
-[[
-
-define([AS_DIRNAME_TEST],
+[[define([AS_DIRNAME_TEST],
 [dir=`AS_DIRNAME([$1])`
 test "$dir" = "$2" ||
-  echo "dirname($1) = $dir instead of $2" >&2])
-define([AS_DIRNAME_SED_TEST],
-[dir=`AS_DIRNAME_SED([$1])`
+  echo "dirname($1) = $dir instead of $2" >&2
+
+dir=`AS_DIRNAME_SED([$1])`
 test "$dir" = "$2" ||
   echo "dirname_sed($1) = $dir instead of $2" >&2])
 
@@ -48,27 +46,6 @@ AS_DIRNAME_TEST([//1//3/],	[//1])
 AS_DIRNAME_TEST([/1//3/],	[/1])
 AS_DIRNAME_TEST([./1//3/],	[./1])
 AS_DIRNAME_TEST([../../2//3/],	[../../2])
-
-AS_DIRNAME_SED_TEST([//1],		[//])
-AS_DIRNAME_SED_TEST([/1],		[/])
-AS_DIRNAME_SED_TEST([./1],		[.])
-AS_DIRNAME_SED_TEST([../../2],		[../..])
-AS_DIRNAME_SED_TEST([//1/],		[//])
-AS_DIRNAME_SED_TEST([/1/],		[/])
-AS_DIRNAME_SED_TEST([./1/],		[.])
-AS_DIRNAME_SED_TEST([../../2],		[../..])
-AS_DIRNAME_SED_TEST([//1/3],		[//1])
-AS_DIRNAME_SED_TEST([/1/3],		[/1])
-AS_DIRNAME_SED_TEST([./1/3],		[./1])
-AS_DIRNAME_SED_TEST([../../2/3],	[../../2])
-AS_DIRNAME_SED_TEST([//1/3///],		[//1])
-AS_DIRNAME_SED_TEST([/1/3///],		[/1])
-AS_DIRNAME_SED_TEST([./1/3///],		[./1])
-AS_DIRNAME_SED_TEST([../../2/3///],	[../../2])
-AS_DIRNAME_SED_TEST([//1//3/],		[//1])
-AS_DIRNAME_SED_TEST([/1//3/],		[/1])
-AS_DIRNAME_SED_TEST([./1//3/],		[./1])
-AS_DIRNAME_SED_TEST([../../2//3/],	[../../2])
 AS_EXIT(0)
 ]])
 
@@ -85,7 +62,7 @@ AT_CLEANUP(configure)
 
 # Build nested dirs.
 
-AT_SETUP([AC_SHELL_MKDIR_P])
+AT_SETUP([AS_MKDIR_P])
 
 AT_DATA(configure.in,
 [[AC_PLAIN_SCRIPT

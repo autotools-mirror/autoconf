@@ -1,5 +1,10 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sh.at (AS_DIRNAME & AS_DIRNAME_SED): Simplify.
+
+	
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4 (AC_FUNC_ALLOCA): Don't require AC_PROG_CPP,
 	since (i) you actually need a compiler, (ii) AC_TRY_LINK handles
 	it.
