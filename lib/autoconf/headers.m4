@@ -130,6 +130,7 @@ case $ac_header_compiler:$ac_header_preproc in
   no:yes )
     AC_MSG_WARN([$1: present but cannot be compiled])
     AC_MSG_WARN([$1: check for missing prerequisite headers?])
+    AC_MSG_WARN([$1: see the documentation, section "Present But Cannot Be Compiled"])
     AC_MSG_WARN([$1: proceeding with the preprocessor's result])
     AC_MSG_WARN([$1: in the future, the compiler will take precedence])
     (

@@ -1,5 +1,10 @@
 2003-03-28  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/headers.m4: Suggest reading the section "Present
+	But Cannot Be Compiled" when the header causes problems.
+
+2003-03-28  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (Configuring subdirectories): Require aclocal
 	1.4, otherwise the test fails, as it does support configure.ac.
 	This fixes the "test 40 failed" bug reports.

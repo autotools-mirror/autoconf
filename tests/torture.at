@@ -561,7 +561,7 @@ AT_KEYWORDS(autoreconf)
 # We use aclocal (via autoreconf).
 AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
 # It should understand configure.ac.
-AT_CHECK([grep 1.4 stdout && exit 77], [1], [ignore])
+AT_CHECK([[grep '1.[01234] stdout && exit 77]], [1], [ignore])
 
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
