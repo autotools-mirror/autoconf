@@ -953,7 +953,7 @@ AC_CHECK_FUNCS(setlocale)
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
-if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
+if test $ac_have_func = no && test "$ac_cv_lib_elf_elf_begin" = yes; then
   ac_have_func=yes
   AC_DEFINE(SVR4, 1, [Define on System V Release 4.])
 fi
