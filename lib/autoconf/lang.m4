@@ -1399,7 +1399,7 @@ for ac_arg in $ac_link_output; do
                             ac_arg=, [AC_LINKER_OPTION([$ac_arg], ac_seen)])
           ;;
           # Ignore these flags.
-        -lang* | -lcrt0.o | -l[[cm]] | -lgcc | -LANG:=*)
+        -lang* | -lcrt0.o | -lc | -lgcc | -LANG:=*)
           ac_arg=
           ;;
         -lkernel32)
@@ -1416,14 +1416,14 @@ for ac_arg in $ac_link_output; do
           ac_arg=
           ;;
         -YP,*)
-          temp_arg=
-          for ac_i in `echo $ac_arg | sed -e 's%^P,%-L%' -e 's%:% -L%g'`; do
+          ac_temp_arg=
+          for ac_j in `echo $ac_arg | sed 's/-YP,/-L/;s/:/ -L/g'`; do
             # Append to AC_SEEN if it's not already there.
-            AC_LIST_MEMBER_OF($ac_i, $ac_seen,
-                              temp_arg="$temp_arg $ac_i",
-                              ac_seen="$ac_seen $ac_i")
+            AC_LIST_MEMBER_OF($ac_j, $ac_seen, ,
+                              [ac_temp_arg="$ac_temp_arg $ac_j"
+                               ac_seen="$ac_seen $ac_j"])
           done
-          ac_arg=$temp_arg
+          ac_arg=$ac_temp_arg
           ;;
         -[[lLR]]*)
           # Append to AC_SEEN if it's not already there.
@@ -1445,11 +1445,17 @@ for ac_arg in $ac_link_output; do
   test "x$ac_arg" != x && FLIBS="$FLIBS $ac_arg"
 done
 
-# Assumption: We only see "LD_RUN_PATH" on Solaris systems.  If this
-# is seen, then we insist that the "run path" must be an absolute
-# path (i.e. it must begin with a "/").
-ac_ld_run_path=`echo $ac_link_output |
-                sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
+# We only consider "LD_RUN_PATH" on Solaris systems.  If this is seen,
+# then we insist that the "run path" must be an absolute path (i.e. it
+# must begin with a "/").
+case `(uname -sr) 2>/dev/null` in
+   "SunOS 5"*)
+      ac_ld_run_path=`echo $ac_link_output |
+                        sed -n 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%-R\1%p'`
+      test "x$ac_ld_run_path" != x &&
+        AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
+      ;;
+esac
 test "x$ac_ld_run_path" != x && FLIBS="$ac_ld_run_path $FLIBS"
 ac_cv_flibs=$FLIBS
 fi # test "x$FLIBS" = "x"

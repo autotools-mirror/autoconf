@@ -1,3 +1,13 @@
+2000-07-07  Martin Wilck <martin@tropos.de>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Keep -lm, if a Fortran
+	compiler needs it, it is likely to be required when linking C/C++
+	with Fortran.
+	<-YP,*>: Fix the list of arguments to loop on.
+	Don't mess with the user variable name space.
+	<ac_ld_run_path>: Prepend LD_RUN_PATH directories with -R only
+	when running Solaris (without this, link errors occur).
+
 2000-07-06  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_SHELL_DIRNAME): Fix quotation.
