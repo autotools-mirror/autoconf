@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.106)dnl
+define(AC_ACVERSION, 1.107)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -113,7 +113,7 @@ Features and packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --x-includes=DIR        X include files are in DIR
   --x-libraries=DIR       X library files are in DIR
---enable/--with options recognized:$ac_help"
+--enable and --with options recognized:$ac_help"
 changequote([, ])dnl
 
 # Initialize some variables set by options.
@@ -470,10 +470,10 @@ AC_SUBST(LIBS)dnl
 AC_SUBST(prefix)dnl
 AC_SUBST(exec_prefix)dnl
 AC_SUBST(DEFS)dnl
-AC_SUBST_DEFAULT(CFLAGS, -g)dnl
-AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
-AC_SUBST_DEFAULT(CPPFLAGS, )dnl
-AC_SUBST_DEFAULT(LDFLAGS, )dnl
+AC_SUBST(CFLAGS)dnl
+AC_SUBST(CXXFLAGS)dnl
+AC_SUBST(CPPFLAGS)dnl
+AC_SUBST(LDFLAGS)dnl
 ])dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
@@ -866,12 +866,6 @@ divert(AC_DIVERSION_SED)dnl
 s%@$1@%%g
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
-dnl
-dnl AC_SUBST_DEFAULT(VARIABLE [, DEFAULT-VALUE])
-AC_DEFUN(AC_SUBST_DEFAULT,
-[$1=${$1-"$2"}
-AC_SUBST($1)dnl
-])dnl
 dnl
 dnl
 dnl ### Printing messages
@@ -1636,9 +1630,11 @@ do
   sed ${ac_max_here_lines}q conftest.vals >> ${CONFIG_STATUS}
   echo 'CEOF
   sed -f conftest.frag conftest.in > conftest.out
+  rm -f conftest.in
   mv conftest.out conftest.in
 ' >> ${CONFIG_STATUS}
   sed 1,${ac_max_here_lines}d conftest.vals > conftest.tail
+  rm -f conftest.vals
   mv conftest.tail conftest.vals
 done
 rm -f conftest.vals

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.106
-@set VERSION 1.106
+@set EDITION 1.107
+@set VERSION 1.107
 @set UPDATED August 1994
 
 @iftex
@@ -731,9 +731,13 @@ finds.
 
 @defmac AC_PROG_CC
 @maindex PROG_CC
-If @code{gcc} is found, set @code{make} variable @code{CC} to
-@samp{gcc}, and set shell variable @code{GCC} to @samp{yes}.  Otherwise
-set @code{GCC} to be empty.
+Determine a C compiler to use.  If @code{CC} is not already set in the
+environment, check for @code{gcc}, and use @code{cc} if it's not found.
+Set @code{make} variable @code{CC} to the name of the compiler found.
+Set shell variable @code{GCC} to @samp{yes} if it found the GNU C
+compiler, empty otherwise, and if @code{make} variable @code{CFLAGS} was
+not already set, set it to @samp{-g -O} for the GNU C compiler or
+@samp{-g} for other compilers.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
@@ -763,10 +767,12 @@ been called already.
 Determine a C++ compiler to use.  Check if the environment variable
 @var{CXX} or @var{CCC} (in that order) is set; if so, set @code{make}
 variable @code{CXX} to its value.  Otherwise search for a C++ compiler
-under likely names (@code{c++}, @code{g++}, @code{gcc}, and @code{CC}).
-If none of those checks succeed, as a last resort set @code{CXX} to
-@code{gcc}.  Also set shell variable @code{GXX} to @samp{yes} if it
-found the GNU C++ compiler, empty otherwise.
+under likely names (@code{c++}, @code{g++}, @code{gcc}, @code{CC}, and
+@code{cxx}).  If none of those checks succeed, as a last resort set
+@code{CXX} to @code{gcc}.  Also set shell variable @code{GXX} to
+@samp{yes} if it found the GNU C++ compiler, empty otherwise, and if
+@code{make} variable @code{CXXFLAGS} was not already set, set it to
+@samp{-g -O} for the GNU C++ compiler or @samp{-g} for other compilers.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
@@ -1063,8 +1069,8 @@ The way to check if the system supports POSIX.1 is:
 @example
 @group
 #if HAVE_UNISTD_H
-#include <sys/types.h>
-#include <unistd.h>
+# include <sys/types.h>
+# include <unistd.h>
 #endif
 
 #ifdef _POSIX_VERSION
@@ -1200,19 +1206,19 @@ rather than choke on it.
 /* AIX requires this to be the first thing in the file.  */
 #ifdef __GNUC__
 # define alloca __builtin_alloca
-#else /* not __GNUC__ */
+#else
 # if HAVE_ALLOCA_H
 #  include <alloca.h>
-# else /* not HAVE_ALLOCA_H */
+# else
 #  ifdef _AIX
  #pragma alloca
-#  else /* not _AIX */
+#  else
 #   ifndef alloca /* predefined by HP cc +Olibcalls */
 char *alloca ();
-#   endif /* not defined(alloca) */
-#  endif /* not _AIX */
-# endif /* not HAVE_ALLOCA_H */
-#endif /* not __GNUC__ */
+#   endif
+#  endif
+# endif
+#endif
 @end group
 @end example
 @end defmac
@@ -1349,14 +1355,14 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 
 @example
 #ifdef TIME_WITH_SYS_TIME
-#include <sys/time.h>
-#include <time.h>
+# include <sys/time.h>
+# include <time.h>
 #else
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else
-#include <time.h>
-#endif
+# ifdef HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
 #endif
 @end example
 @end defmac
@@ -1950,7 +1956,8 @@ shell commands @var{action-if-false}.
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.  It uses @code{CPPFLAGS}, but not @code{CFLAGS},
-because -g, -O, etc. are not valid options to many C preprocessors.
+because @samp{-g}, @samp{-O}, etc. are not valid options to many C
+preprocessors.
 @end defmac
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -2284,22 +2291,6 @@ way.  For example, to add @samp{-ltermcap} to the value of the variable
 
 @example
 LIBS="$LIBS -ltermcap"
-@end example
-@end defmac
-
-@defmac AC_SUBST_DEFAULT (@var{variable}, @var{default-value})
-@maindex SUBST_DEFAULT
-Like @code{AC_SUBST}, but if @var{variable} is not set in the
-environment when @code{configure} is run, give it the value
-@var{default-value}.  @var{default-value} is evaluated in shell double
-quotes, so it may refer to other variables or even the output of a
-command.  As an example, Autoconf automatically calls this macro like this:
-
-@example
-AC_SUBST_DEFAULT(CFLAGS, -g)dnl
-AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
-AC_SUBST_DEFAULT(CPPFLAGS, )dnl
-AC_SUBST_DEFAULT(LDFLAGS, )dnl
 @end example
 @end defmac
 
@@ -3047,7 +3038,7 @@ header file conditionally:
 @example
 @group
 #if STDC_HEADERS
-#include <stdlib.h>
+# include <stdlib.h>
 #endif
 @end group
 @end example
@@ -3280,25 +3271,25 @@ directory, this is the same as @code{srcdir}.
 @end defvar
 
 @defvar CFLAGS
-Debugging and optimization options for the C compiler.  The default
-value is @samp{-g} if it is not set in the environment when
-@code{configure} runs.  @code{configure} uses this variable when
-compiling programs to test for C features.
+Debugging and optimization options for the C compiler.  If it is not set
+in the environment when @code{configure} runs, the default value is set
+by @code{AC_PROG_CC} (empty if you don't).  @code{configure} uses this
+variable when compiling programs to test for C features.
 @end defvar
 
 @defvar CPPFLAGS
 Header file search directory (@samp{-I@var{dir}}) and any other
-miscellaneous options for the C preprocessor and compiler.  The default
-value is empty if it is not set in the environment when @code{configure}
-runs.  @code{configure} uses this variable when compiling or
+miscellaneous options for the C preprocessor and compiler.  If it is not
+set in the environment when @code{configure} runs, the default value is
+empty.  @code{configure} uses this variable when compiling or
 preprocessing programs to test for C features.
 @end defvar
 
 @defvar CXXFLAGS
-Debugging and optimization options for the C++ compiler.  The default
-value is @samp{-g} if it is not set in the environment when
-@code{configure} runs.  @code{configure} uses this variable when
-compiling programs to test for C++ features.
+Debugging and optimization options for the C++ compiler.  If it is not
+set in the environment when @code{configure} runs, the default value is
+set by @code{AC_PROG_CXX} (empty if you don't).  @code{configure} uses
+this variable when compiling programs to test for C++ features.
 @end defvar
 
 @defvar DEFS
@@ -3309,8 +3300,8 @@ is called, @code{configure} replaces @samp{@@DEFS@@} with
 
 @defvar LDFLAGS
 Stripping (@samp{-s}) and any other miscellaneous options for the
-linker.  The default value is empty if it is not set in the environment
-when @code{configure} runs.  @code{configure} uses this variable when
+linker.  If it is not set in the environment when @code{configure} runs,
+the default value is empty.  @code{configure} uses this variable when
 linking programs to test for C features.
 @end defvar
 

@@ -26,8 +26,6 @@ Major changes in release 2.0:
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
 * AC_SUBST_FILE, to insert one file into another.
-* AC_SUBST_DEFAULT, to copy a variable from the configure environment into
-  Makefiles with a default fallback value.
 
 ** Changed macros:
 * Many macros renamed, but old names are accepted for backward compatibility.

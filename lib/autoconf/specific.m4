@@ -59,7 +59,13 @@ else
   ac_cv_prog_gcc=no
 fi])dnl
 AC_MSG_RESULT($ac_cv_prog_gcc)
-if test $ac_cv_prog_gcc = yes; then GCC=yes; else GCC= ; fi
+if test $ac_cv_prog_gcc = yes; then
+  GCC=yes
+  test "${CFLAGS+set}" = set || CFLAGS='-g -O'
+else
+  GCC=
+  test "${CFLAGS+set}" = set || CFLAGS='-g'
+fi
 ])dnl
 dnl
 AC_DEFUN(AC_PROG_CXX,
@@ -78,7 +84,13 @@ if ${CXX-gcc} -E conftest.C 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gxx=no
 fi])dnl
-if test $ac_cv_prog_gxx = yes; then GXX=yes; else GXX= ; fi
+if test $ac_cv_prog_gxx = yes; then
+  GXX=yes
+  test "${CXXFLAGS+set}" = set || CXXFLAGS='-g -O'
+else
+  GXX=
+  test "${CXXFLAGS+set}" = set || CXXFLAGS='-g'
+fi
 ])dnl
 dnl
 AC_DEFUN(AC_PROG_GCC_TRADITIONAL,
@@ -1611,8 +1623,8 @@ else
 
   ac_save_LDFLAGS="$LDFLAGS"
   LDFLAGS="$LDFLAGS -L$x_libraries"
-  AC_HAVE_LIBRARY(ICE, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lICE"])
-  AC_HAVE_LIBRARY(SM, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lSM"])
+  AC_CHECK_LIB(ICE, IceConnectionNumbers, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lICE"])
+  AC_CHECK_LIB(SM, SmcOpenConnection, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lSM"])
   LDFLAGS="$ac_save_LDFLAGS"
 
   # Check for system-dependent libraries X programs must link with.
@@ -1633,7 +1645,7 @@ else
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT.
     # Not sure which flavor of 386 Unix this is, but it seems harmless to
     # check for it.
-    AC_HAVE_LIBRARY(nsl, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
+    AC_CHECK_LIB(nsl, main, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
