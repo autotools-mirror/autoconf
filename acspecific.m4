@@ -1091,8 +1091,8 @@ AC_FIND_X_XMKMF
 if test -z "$ac_imake_usrlibdir"; then
 AC_FIND_X_DIRECT
 fi
-test -n "$x_includes" && AC_VERBOSE(found X11 headers in $x_includes)
-test -n "$x_libraries" && AC_VERBOSE(found X11 libraries in $x_libraries)
+test -n "$x_includes" && AC_VERBOSE(X11 headers are in $x_includes)
+test -n "$x_libraries" && AC_VERBOSE(X11 libraries are in $x_libraries)
 ])dnl
 dnl
 dnl Internal subroutine of AC_FIND_X.
