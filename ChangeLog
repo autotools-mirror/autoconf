@@ -1,3 +1,8 @@
+1999-04-11  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* autoheader.m4: Do not complain about using AC_TRY_RUN without a
+	cross-compilation action--only autoconf should do this.
+
 1999-04-11  Paul Eggert  <eggert@twinsun.com>
 
 	* acgeneral.m4 (AC_CHECK_TYPE): Allow first argument to be a
