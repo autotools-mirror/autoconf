@@ -9,6 +9,10 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Soon
 
+** AC_CHECK_HEADERS
+and the like, don't have a consistent way to handle multi-line
+arguments.  Fix, test, and document.
+
 ** AC_PROG_INSTALL
 This test should be extended to check that install supports the GNU
 Install syntax: install FILES... DIR.  This will relieve everybody
