@@ -1,3 +1,10 @@
+2001-01-22  Pavel Roskin  <proski@gnu.org>
+
+	* autoscan.pl: Use "use strict". Declare all global variables
+	or make them private. Make all local variables private.
+	(find_autoconf): New, moved some code from the top level.
+	Use %ENV outside quotes to eliminate a warning.
+
 2001-01-22  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* acspecific.m4 (AC_PROG_LN_S): Detect DJGPP < 2.04, which only

@@ -21,24 +21,17 @@
 
 require "find.pl";
 use Getopt::Long;
+use strict;
+
+use vars qw($autoconf $datadir $initfile $me $name $verbose
+            @cfiles @makefiles @shfiles
+            %functions_macros %headers_macros %identifiers_macros
+            %programs_macros %makevars_macros %needed_macros
+            %c_keywords %programs %headers %identifiers %makevars
+            %libraries %functions %printed);
 
 # Find the lib files and autoconf.
-$datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
-($dir = $0) =~ s,[^/]*$,,;
-$autoconf = '';
-# We test "$dir/autoconf" in case we are in the build tree, in which case
-# the names are not transformed yet.
-foreach $file ("$ENV{AUTOCONF}" || '',
-	       "$dir/@autoconf-name@",
-	       "$dir/autoconf",
-	       "@bindir@/@autoconf-name@")
-  {
-    if (-f $file)
-      {
-	$autoconf = $file;
-	last;
-      }
-  }
+&find_autoconf;
 
 ($me = $0) =~ s,.*/,,;
 $verbose = 0;
@@ -70,6 +63,31 @@ elsif (-f 'configure.in')
   }
 
 exit 0;
+
+# find_autoconf
+# -------------
+# Find the lib files and autoconf.
+sub find_autoconf
+{
+  my $dir;
+  my $file;
+  $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
+  ($dir = $0) =~ s,[^/]*$,,;
+  $autoconf = '';
+  # We test "$dir/autoconf" in case we are in the build tree, in which case
+  # the names are not transformed yet.
+  foreach $file ($ENV{"AUTOCONF"} || '',
+	         "$dir/@autoconf-name@",
+	         "$dir/autoconf",
+	         "@bindir@/@autoconf-name@")
+    {
+      if (-f $file)
+	{
+	  $autoconf = $file;
+	  last;
+	}
+    }
+}
 
 # Display usage (--help).
 sub print_usage
@@ -108,6 +126,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 # Process any command line arguments.
 sub parse_args
 {
+  my $srcdir;
   Getopt::Long::config ("bundling");
   Getopt::Long::GetOptions ("A|autoconf-dir|m|macrodir=s" => \$datadir,
 			    "h|help" => \&print_usage,
@@ -132,7 +151,7 @@ Try `$me --help' for more information.\n"
 # Put values in the tables of what to do with each token.
 sub init_tables
 {
-  local($kind, $word, $macro);
+  my ($kind, $word, $macro);
 
   # Initialize a table of C keywords (to ignore).
   # Taken from K&R 1st edition p. 180.
@@ -206,6 +225,7 @@ sub wanted
 # that might create nonportabilities.
 sub scan_files
 {
+  my $file;
   if (defined $cfiles[0])
     {
       $initfile = $cfiles[0];		# Pick one at random.
@@ -239,8 +259,8 @@ sub scan_files
 # -----------------
 sub scan_c_file
 {
-  local($file) = @_;
-  local($in_comment) = 0;	# Nonzero if in a multiline comment.
+  my ($file) = @_;
+  my ($in_comment) = 0;	# Nonzero if in a multiline comment.
 
   open(CFILE, "<$file") || die "$me: cannot open $file: $!\n";
   while (<CFILE>)
@@ -291,7 +311,7 @@ sub scan_c_file
 
   if ($verbose)
     {
-      local($word);
+      my ($word);
 
       print "\n$file functions:\n";
       foreach $word (sort keys %functions)
@@ -315,7 +335,7 @@ sub scan_c_file
 
 sub scan_makefile
 {
-  local($file) = @_;
+  my ($file) = @_;
 
   open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
   while (<MFILE>)
@@ -346,7 +366,7 @@ sub scan_makefile
 
   if ($verbose)
     {
-      local($word);
+      my ($word);
 
       print "\n$file makevars:\n";
       foreach $word (sort keys %makevars)
@@ -370,7 +390,7 @@ sub scan_makefile
 
 sub scan_sh_file
 {
-  local($file) = @_;
+  my ($file) = @_;
 
   open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
   while (<MFILE>)
@@ -390,7 +410,7 @@ sub scan_sh_file
 
   if ($verbose)
     {
-      local($word);
+      my ($word);
 
       print "\n$file programs:\n";
       foreach $word (sort keys %programs)
@@ -403,7 +423,7 @@ sub scan_sh_file
 # Print a proto configure.ac.
 sub output
 {
-  local (%unique_makefiles);
+  my %unique_makefiles;
 
   print CONF "# Process this file with autoconf to produce a configure script.\n";
   print CONF "AC_INIT\n";
@@ -438,7 +458,7 @@ sub output
 # Print Autoconf macro $1 if it's not undef and hasn't been printed already.
 sub print_unique
 {
-  local($macro, @where) = @_;
+  my ($macro, @where) = @_;
 
   if (defined($macro) && !defined($printed{$macro}))
     {
@@ -453,7 +473,7 @@ sub print_unique
 
 sub output_programs
 {
-  local ($word);
+  my $word;
 
   print CONF "\n# Checks for programs.\n";
   foreach $word (sort keys %programs)
@@ -468,7 +488,7 @@ sub output_programs
 
 sub output_libraries
 {
-  local ($word);
+  my ($word);
 
   print CONF "\n# Checks for libraries.\n";
   foreach $word (sort keys %libraries)
@@ -480,7 +500,8 @@ sub output_libraries
 
 sub output_headers
 {
-  local ($word);
+  my $word;
+  my @have_headers;
 
   print CONF "\n# Checks for header files.\n";
   foreach $word (sort keys %headers)
@@ -501,7 +522,8 @@ sub output_headers
 
 sub output_identifiers
 {
-  local ($word);
+  my $word;
+  my @have_types;
 
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
   foreach $word (sort keys %identifiers)
@@ -522,7 +544,8 @@ sub output_identifiers
 
 sub output_functions
 {
-  local ($word);
+  my $word;
+  my @have_funcs;
 
   print CONF "\n# Checks for library functions.\n";
   foreach $word (sort keys %functions)
@@ -546,9 +569,10 @@ sub output_functions
 # in `configure.ac'
 sub check_configure_ac
 {
-  local ($configure_ac) = $@;
-  local ($trace_option) = '';
-  local ($word);
+  my ($configure_ac) = $@;
+  my ($trace_option) = '';
+  my ($word);
+  my ($macro);
 
   foreach $macro (sort keys %needed_macros)
     {
@@ -560,7 +584,7 @@ sub check_configure_ac
 
   while (<TRACES>)
     {
-      local ($file, $line, $macro, $args) = split (/:/, $_, 4);
+      my ($file, $line, $macro, $args) = split (/:/, $_, 4);
       delete ($needed_macros{$macro});
     }
 
