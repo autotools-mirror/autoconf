@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -54,3 +54,32 @@ INSTALL: $(top_srcdir)/doc/install.texi
 maintainer-check: maintainer-check-tests
 maintainer-check-tests:
 	cd tests && make maintainer-check
+
+
+## ----------------------------------- ##
+## Updating Perl files from Automake.  ##
+## ----------------------------------- ##
+
+## Fetch the latest versions of files we care about.
+automake_cvsweb = \
+   http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/automake
+automake_cvsargs = \
+   'content-type=text/plain&cvsroot=automake'
+autom4te_files = \
+  Autom4te/Configure_ac.pm \
+  Autom4te/Channels.pm \
+  Autom4te/FileUtils.pm
+
+autom4te-update:
+	rm -rf Fetchdir > /dev/null 2>&1
+	mkdir Fetchdir; mkdir Fetchdir/Autom4te
+## If a get fails then that is a problem.
+	(cd Fetchdir && \
+	$(WGET) $(automake_cvsweb)/lib/Automake/Configure_ac.pm?$(automake_cvsargs) -O Autom4te/Configure_ac.pm; \
+	$(WGET) $(automake_cvsweb)/lib/Automake/Channels.pm?$(automake_cvsargs) -O Autom4te/Channels.pm; \
+	$(WGET) $(automake_cvsweb)/lib/Automake/FileUtils.pm?$(automake_cvsargs) -O Autom4te/FileUtils.pm; \
+	:)
+	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
+	for file in $(autom4te_files); do \
+	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file; \
+	done
