@@ -1,4 +1,8 @@
-2002-07-18  Akim Demaille  <akim@epita.fr>,
+2002-07-18  Akim Demaille  <akim@epita.fr>
+
+	* config/config.guess, config/config.sub: Update.
+
+2002-07-18  Akim Demaille  <akim@epita.fr>
 
 	Handle LIBOBJS and LTLIBOBJS once for all, including Libtool's and
 	Automake's parts.
