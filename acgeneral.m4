@@ -3342,15 +3342,32 @@ EOF
 rm -f conftest.vals
 dnl Using a here document instead of a string reduces the quoting nightmare.
 dnl Putting comments in sed scripts is not portable.
+dnl
 dnl One may be tempted to use the same trick to speed up the sed script
 dnl as for CONFIG_FILES (combination of :t and t t).  Here we cannot,
 dnl because of the `#define' templates: we may enter in infinite loops
 dnl replacing `#define foo bar' by itself.
 dnl We ought to get rid of the #define templates.
+dnl
+dnl There are two labels in the following scripts, `cleanup' and `clear'.
+dnl
+dnl `cleanup' is used to avoid that the second main sed command (meant for
+dnl 0-ary CPP macros) applies to n-ary macro definitions.  So we use
+dnl `t cleanup' to jump over the second main sed command when it succeeded.
+dnl
+dnl But because in sed the `t' flag is set when there is a substitution
+dnl that succeeded before, and not *right* before (i.e., included the
+dnl first two small commands), we need to clear the `t' flag.  This is the
+dnl purpose of `t clear; : clear'.
+dnl
+dnl Additionally, this works around a bug of IRIX' sed which does not
+dnl clear the `t' flag between to cycles.
 cat > $ac_cs_root.hdr <<\EOF
 changequote(<<, >>)dnl
 s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
+t clear
+: clear
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
 t cleanup
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp

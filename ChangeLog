@@ -1,5 +1,15 @@
 1999-10-05  Akim Demaille  <akim@epita.fr>
 
+	When you rely on the `t' flag of sed for the immediately
+	preceding substitution, use a combination of `: foo; t foo'.
+	Additionally, work around a bug in IRIX sed.
+	Suggested by Ken Pizzini.
+
+	* acgeneral.m4 (AC_OUTPUT_HEADER): Added a label and a test in the
+	sed code of `$ac_cs_root.hdr'.
+
+1999-10-05  Akim Demaille  <akim@epita.fr>
+
 	Implement AC_PATH_TOOL.
 	Submited by Gary V. Vaughan.
 
