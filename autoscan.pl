@@ -53,6 +53,17 @@ my %generic_macro =
 
 my $configure_scan = 'configure.scan';
 
+
+# Exit nonzero whenever closing STDOUT fails.
+sub END
+{
+  use POSIX qw (_exit);
+  # This is required if the code might send any output to stdout
+  # E.g., even --version or --help.  So it's best to do it unconditionally.
+  close STDOUT
+    or (warn "$me: closing standard output: $!\n"), _exit (1);
+}
+
 # find_autoconf
 # -------------
 # Find the lib files and autoconf.
