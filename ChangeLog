@@ -1,3 +1,8 @@
+2000-10-24  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (_AC_CACHE_DUMP): Add a missing separator for sed
+	commands.
+
 2000-10-24  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AT_FILE_DEPENDENCY): Rename as...

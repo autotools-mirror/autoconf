@@ -2547,7 +2547,7 @@ define([_AC_CACHE_DUMP],
       # `set' does not quote correctly, so add quotes (double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
-        ["s/'/'\\\\''/g \
+        ["s/'/'\\\\''/g;
     	  s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"]
       ;;
     *)
