@@ -53,7 +53,7 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&debug &error
+  qw (&debug
       &file_name_is_absolute
       &getopt &mktmpdir
       &uniq &verbose);

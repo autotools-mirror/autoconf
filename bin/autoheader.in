@@ -56,12 +56,11 @@ local $config_h;
 my $config_h_in;
 my @prepend_include;
 my @include;
-my @warning;
 
 
 # $HELP
 # -----
-$help = <<"END";
+$help = "\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Create a template file of C \`\#define\' statements for \`configure\' to
@@ -75,31 +74,26 @@ or else \`configure.in\'.
   -f, --force              consider all files obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
-Warning categories include:
-  \`obsolete\'      obsolete constructs
-  \`all\'           all the warnings
-  \`no-CATEGORY\'   turn off the warnings on CATEGORY
-  \`none\'          turn off all the warnings
-  \`error\'         warnings are error
+" . Autom4te::ChannelDefs::usage () . "
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
 Report bugs to <bug-autoconf\@gnu.org>.
-END
+";
 
 
 # $VERSION
 # --------
-$version = <<"END";
+$version = "\
 autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath and Akim Demaille.
 
 Copyright (C) 2003 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-END
+";
 
 
 ## ---------- ##
@@ -114,9 +108,10 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('I|include=s' => \@include,
+  parse_WARNINGS;
+  getopt ('I|include=s'         => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
-	  'W|warnings=s' => \@warning);
+	  'W|warnings=s'        => \&parse_warnings);
 
   setup_channel 'note', silent => !$verbose;
 

@@ -1,5 +1,13 @@
 2003-08-21  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoheader.in (&parse_args): Use &parse_warnings and
+	&parse_WARNINGS.
+	($help): Use Autom4te::ChannelDefs::usage.
+	* bin/autoscan.in: Use Autom4te::ChannelDefs.
+	* lib/Autom4te/General.pm: Don't export error: you don't own it.
+
+2003-08-21  Akim Demaille  <akim@epita.fr>
+
 	First stab at preserving warnings between calls to autom4te,
 	including when the cache is used.
 
