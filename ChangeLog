@@ -1,5 +1,17 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	Test suites can be run independently of configure.
+
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO, _AS_ECHO_N_PREPARE): New.
+	* lib/autoconf/programs.m4 (_AC_PROG_ECHO): Remove.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Adjust: AC_SUBST
+	ECHO_N etc.
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Don't ask for at_n
+	and at_c.
+	* lib/autotest/general.m4: Use ECHO_*.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* bin/ifnames.in: Rewrite in Perl.
 	* configure.ac: Don't look for AWK.
 	* tests/tools.at (AWK portability): Remove.

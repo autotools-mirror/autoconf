@@ -72,9 +72,6 @@ at_package_version='$at_package_version'
 at_package_string='$at_package_string'
 at_bugreport='$at_bugreport'
 
-at_n='$at_n'
-at_c='$at_c'
-
 at_testdir='$1'
 srcdir='$ac_srcdir'
 top_srcdir='$ac_top_srcdir'
@@ -89,9 +86,6 @@ ATEOF
 at_package_version='$PACKAGE_VERSION'
 at_package_string='$PACKAGE_STRING'
 at_bugreport='$PACKAGE_BUGREPORT'
-
-at_n='$ECHO_N'
-at_c='$ECHO_C'
 
 at_shell='$SHELL'
 ])

@@ -518,8 +518,8 @@ AC_DEFUN([AC_PREFIX_PROGRAM],
 m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-  echo $ECHO_N "checking for prefix by $ECHO_C" >&AS_MESSAGE_FD
-  AC_PATH_PROG(m4_quote(AC_Prog), [$1])
+  _AS_ECHO_N([checking for prefix by])
+  AC_PATH_PROG(AC_Prog, [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
     prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
   fi
@@ -1240,11 +1240,12 @@ _AC_ARG_VAR_PRECIOUS([host_alias])dnl
 _AC_ARG_VAR_PRECIOUS([target_alias])dnl
 AC_LANG_PUSH(C)
 
-_AC_PROG_ECHO()dnl
-
 dnl Substitute for predefined variables.
-AC_SUBST(DEFS)dnl
-AC_SUBST(LIBS)dnl
+AC_SUBST([DEFS])dnl
+AC_SUBST([ECHO_C])dnl
+AC_SUBST([ECHO_N])dnl
+AC_SUBST([ECHO_T])dnl
+AC_SUBST([LIBS])dnl
 m4_divert_pop([INIT_PREPARE])dnl
 ])# _AC_INIT_PREPARE
 
@@ -1797,7 +1798,7 @@ m4_define([AC_CACHE_VAL],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
-              [echo $ECHO_N "(cached) $ECHO_C" >&AS_MESSAGE_FD],
+              [_AS_ECHO_N([(cached)])],
               [$2])])
 
 
@@ -1931,19 +1932,11 @@ m4_define([AC_WARNING],
 ## ---------------------------------------- ##
 
 
-# _AC_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
-# ------------------------------------
-# Same as _AS_ECHO, but echo doesn't return to a new line.
-m4_define([_AC_ECHO_N],
-[echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
-                                                    [AS_MESSAGE_FD])])
-
-
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
 [_AS_ECHO([$as_me:__oline__: checking $1], AS_MESSAGE_LOG_FD)
-_AC_ECHO_N([checking $1... ])[]dnl
+_AS_ECHO_N([checking $1... ])[]dnl
 ])
 
 

@@ -113,6 +113,7 @@ fi
 dnl Moved here because the tests below can use AC_MSG_ERROR, which uses $as_me
 as_me=`AS_BASENAME($[0])`
 
+_AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
@@ -271,6 +272,33 @@ $1])])
 # Protect STRING from backquote expansion, echo the result to FD.
 m4_define([_AS_ECHO],
 [_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], [$2])])
+
+
+# _AS_ECHO_N_PREPARE
+# ------------------
+# Check whether to use -n, \c, or newline-tab to separate
+# checking messages from result messages.
+# Don't try to cache, since the results of this macro are needed to
+# display the checking message.  In addition, caching something used once
+# has little interest.
+# Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
+# failed there is also a new-line to match.
+m4_define([_AS_ECHO_N_PREPARE],
+[case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
+  *c*,-n*) ECHO_N= ECHO_C='
+' ECHO_T='	' ;;
+  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
+  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+esac
+])# _AS_ECHO_N_PREPARE
+
+
+# _AS_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
+# ----------------------------------------
+# Same as _AS_ECHO, but echo doesn't return to a new line.
+m4_define([_AS_ECHO_N],
+[echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
+                                                    [AS_MESSAGE_FD])])
 
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])

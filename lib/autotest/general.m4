@@ -474,7 +474,7 @@ _ATEOF
     	echo "$at_setup_line" >at-check-line
       fi
       at_test_count=`expr 1 + $at_test_count`
-      $at_verbose $at_n "$at_test. $at_setup_line: $at_c"
+      $at_verbose $ECHO_N "$at_test. $at_setup_line: $ECHO_C"
       case $at_status in
         0) at_msg="ok"
            ;;
@@ -530,9 +530,9 @@ elif test $at_debug = false; then
   # Remove any debugging script resulting from a previous run.
   rm -f debug-*.sh
   echo
-  echo $at_n "Writing \`debug-NN.sh' scripts, with NN =$at_c"
+  echo $ECHO_N "Writing \`debug-NN.sh' scripts, with NN =$ECHO_C"
   for at_group in $at_fail_list; do
-    echo $at_n " $at_group$at_c"
+    echo $ECHO_N " $at_group$ECHO_C"
     ( echo "#! /bin/sh"
       echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
            '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
@@ -619,7 +619,7 @@ m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. AT_line: $1
     at_setup_line='AT_line'
     $at_verbose "AT_ordinal. AT_line: testing $1..."
-    $at_quiet $at_n "m4_format([[%3d: %-18s]], AT_ordinal, AT_line)[]$at_c"
+    $at_quiet $ECHO_N "m4_format([[%3d: %-18s]], AT_ordinal, AT_line)[]$ECHO_C"
     (
       $at_traceon
 ])
