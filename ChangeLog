@@ -1,3 +1,8 @@
+2000-10-16  Pavel Roskin  <proski@gnu.org>
+
+	* tests/aclocal.m4: Don't considers variables @, '*', '?' and
+	'#' in the output of `set' - they are modified by zsh.
+
 2000-10-14  Pavel Roskin  <proski@gnu.org>
 
 	* m4/missing.m4 (AM_MISSING_PROG): Use $SHELL to run "missing"
