@@ -49,7 +49,7 @@ Library directories:
 Report bugs to <bug-autoconf@gnu.org>."
 
 version="\
-autoheader (GNU @PACKAGE@) @VERSION@
+autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath.
 
 Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000

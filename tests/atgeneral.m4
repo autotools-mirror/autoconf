@@ -94,16 +94,24 @@ m4_divert_push([DEFAULT])dnl
 
 AS_SHELL_SANITIZE
 
+# Name of the executable.
+as_me=`echo "$[0]" | sed 's,.*/,,'`
+
 . ./atconfig
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`
 
-if test -n "$AUTOTEST_PATH"; then
-  export PATH; PATH=`pwd`:`cd "$AUTOTEST_PATH" && pwd`:$PATH
-else
-  export PATH; PATH=`pwd`:$PATH
-fi
+# Don't take risks: use absolute path names.
+at_path=`pwd`
+at_IFS_save=$IFS
+IFS=:
+for at_dir in $AUTOTEST_PATH:$PATH; do
+  at_path=$at_path:`cd "$at_dir" && pwd`
+done
+IFS=$at_IFS_save
+PATH=$at_path
+export PATH
 
 test -f atlocal && . ./atlocal
 
@@ -193,7 +201,7 @@ fi
 # over files, the full test suite cleans up both before and after test groups.
 
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
-  AS_BOX([Testing suite for $at_package, version $at_version])
+  AS_BOX([Testing suite for $at_package $at_version])
 else
   AS_BOX([ERROR: Not using the proper version, no tests performed])
   exit 1
@@ -278,11 +286,15 @@ elif test $at_debug = false; then
   echo 'case the testsuite provide a good starting point.'
   echo
   echo 'Now, failed tests will be executed again, verbosely, and logged'
-  echo 'in the file '$[0]'.log.  When sending this file to the maintainers,'
-  echo 'be careful to give at least all the information you have: version'
-  echo 'numbers, decription of your environment etc.'
-  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_failed_list 2>&1 | tee $[0].log
+  echo 'in the file '$[0]'.log.'
+
+  AS_UNAME >$[0].log
+  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_failed_list 2>&1 | tee -a $[0].log
   AS_BOX([$[0].log is created])
+
+  echo
+  echo "Please send \`$[0].log' to <$at_bugreport> together with as"
+  echo 'information as you think might help.'
   exit 1
 fi
 

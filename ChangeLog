@@ -1,5 +1,17 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (editpl, editsh): Merge into...
+	(edit).
+	* m4sh.m4 (AS_UNAME): Eved out from...
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): here.
+	(_AC_INIT_PACKAGE): Define AC_PACKAGE_NAME.
+	(_AC_INIT_PARSE_ARGS): AC_SUBST the PACKAGE_ variables.
+	Propagate their use in the executables and the test suite.
+	* tests/atgeneral.m4 (PATH): Include only absolute paths.
+	(AT_INIT): Use AS_UNAME.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	When default headers are used, check for their presence.
 	Suggested by Jim.
 

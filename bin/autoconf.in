@@ -60,7 +60,7 @@ In tracing mode, no configuration script is created.
 Report bugs to <bug-autoconf@gnu.org>."
 
 version="\
-autoconf (GNU @PACKAGE@) @VERSION@
+autoconf (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie.
 
 Copyright 1992, 1993, 1994, 1996, 1999, 2000

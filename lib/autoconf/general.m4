@@ -582,10 +582,14 @@ m4_popdef([AC_Prefix])dnl
 
 
 
-# _AC_INIT_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
-# ------------------------------------------------
+# _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION,
+#                  [BUG-REPORT],
+#                  [TAR-NAME = unGNU'd lower case PACKAGE-NAME])
+# --------------------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
 [m4_define([AC_PACKAGE_NAME],     [$1])
+m4_define([AC_PACKAGE_TARNAME],
+          m4_tolower(m4_patsubst([[[$1]]], [GNU ])))
 m4_define([AC_PACKAGE_VERSION],   [$2])
 m4_define([AC_PACKAGE_STRING],    [$1 $2])
 m4_define([AC_PACKAGE_BUGREPORT], [$3])
@@ -739,7 +743,7 @@ ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 # Name of the executable.
 as_me=`echo "$[0]" | sed 's,.*/,,'`
 
-cat >config.log << EOF
+cat >config.log <<EOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
 
@@ -747,30 +751,10 @@ It was created by $as_me m4_ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
  > $[0] $[@]
 
+EOF
+AS_UNAME >>config.log
 
-## ---------- ##
-## Platform.  ##
-## ---------- ##
-
-hostname = $ac_hostname
-uname -m = `(uname -m) 2>/dev/null || echo unknown`
-uname -r = `(uname -r) 2>/dev/null || echo unknown`
-uname -s = `(uname -s) 2>/dev/null || echo unknown`
-uname -v = `(uname -v) 2>/dev/null || echo unknown`
-
-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
-
-/bin/arch              = `(/bin/arch) 2>/dev/null`
-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
-hostinfo               = `(hostinfo) 2>/dev/null`
-/bin/machine           = `(/bin/machine) 2>/dev/null`
-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
-/bin/universe          = `(/bin/universe) 2>/dev/null`
-
-PATH = $PATH
-
+cat >>config.log <<EOF
 ## ------------ ##
 ## Core tests.  ##
 ## ------------ ##
@@ -886,23 +870,36 @@ srcdir=
 verbose=
 x_includes=NONE
 x_libraries=NONE
-dnl Installation directory options.
-dnl These are left unexpanded so users can "make install exec_prefix=/foo"
-dnl and all the variables that are supposed to be based on exec_prefix
-dnl by default will actually change.
-dnl Use braces instead of parens because sh, perl, etc. also accept them.
-AC_SUBST(bindir,         '${exec_prefix}/bin')dnl
-AC_SUBST(sbindir,        '${exec_prefix}/sbin')dnl
-AC_SUBST(libexecdir,     '${exec_prefix}/libexec')dnl
-AC_SUBST(datadir,        '${prefix}/share')dnl
-AC_SUBST(sysconfdir,     '${prefix}/etc')dnl
-AC_SUBST(sharedstatedir, '${prefix}/com')dnl
-AC_SUBST(localstatedir,  '${prefix}/var')dnl
-AC_SUBST(libdir,         '${exec_prefix}/lib')dnl
-AC_SUBST(includedir,     '${prefix}/include')dnl
-AC_SUBST(oldincludedir,  '/usr/include')dnl
-AC_SUBST(infodir,        '${prefix}/info')dnl
-AC_SUBST(mandir,         '${prefix}/man')dnl
+
+# Installation directory options.
+# These are left unexpanded so users can "make install exec_prefix=/foo"
+# and all the variables that are supposed to be based on exec_prefix
+# by default will actually change.
+# Use braces instead of parens because sh, perl, etc. also accept them.
+AC_SUBST([bindir],         ['${exec_prefix}/bin'])dnl
+AC_SUBST([sbindir],        ['${exec_prefix}/sbin'])dnl
+AC_SUBST([libexecdir],     ['${exec_prefix}/libexec'])dnl
+AC_SUBST([datadir],        ['${prefix}/share'])dnl
+AC_SUBST([sysconfdir],     ['${prefix}/etc'])dnl
+AC_SUBST([sharedstatedir], ['${prefix}/com'])dnl
+AC_SUBST([localstatedir],  ['${prefix}/var'])dnl
+AC_SUBST([libdir],         ['${exec_prefix}/lib'])dnl
+AC_SUBST([includedir],     ['${prefix}/include'])dnl
+AC_SUBST([oldincludedir],  ['/usr/include'])dnl
+AC_SUBST([infodir],        ['${prefix}/info'])dnl
+AC_SUBST([mandir],         ['${prefix}/man'])dnl
+
+# Identity of this package.
+AC_SUBST([PACKAGE_NAME],
+         [m4_ifdef([AC_PACKAGE_NAME],      ['AC_PACKAGE_NAME'])])dnl
+AC_SUBST([PACKAGE_TARNAME],
+         [m4_ifdef([AC_PACKAGE_TARNAME],   ['AC_PACKAGE_TARNAME'])])dnl
+AC_SUBST([PACKAGE_VERSION],
+         [m4_ifdef([AC_PACKAGE_VERSION],   ['AC_PACKAGE_VERSION'])])dnl
+AC_SUBST([PACKAGE_STRING],
+         [m4_ifdef([AC_PACKAGE_STRING],    ['AC_PACKAGE_STRING'])])dnl
+AC_SUBST([PACKAGE_BUGREPORT],
+         [m4_ifdef([AC_PACKAGE_BUGREPORT], ['AC_PACKAGE_BUGREPORT'])])dnl
 
 ac_prev=
 for ac_option

@@ -64,7 +64,7 @@ Report bugs to <bug-autoconf\@gnu.org>.\n";
 # Display version (--version).
 sub print_version
 {
-  print "autoscan (GNU @PACKAGE@) @VERSION@
+  print "autoscan (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie.
 
 Copyright 1994, 1999, 2000 Free Software Foundation, Inc.

@@ -40,7 +40,7 @@ space-separated list of the files in which that identifier occurs.
 Report bugs to <bug-autoconf@gnu.org>."
 
 version="\
-ifnames (GNU @PACKAGE@) @VERSION@
+ifnames (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Paul Eggert.
 
 Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.

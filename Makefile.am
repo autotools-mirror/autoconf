@@ -30,6 +30,10 @@ WGET = wget
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
+# FIXME: Current Automakes are blind and cannot see inner AC_SUBST,
+# so help it.
+PACKAGE_NAME = @PACKAGE_NAME@
+
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
@@ -112,22 +116,17 @@ install-data-hook: INSTALL.txt
 ## The scripts.  ##
 ## ------------- ##
 
-editsh = sed \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
+edit = sed \
 	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE\@,$(PACKAGE),g' \
+	-e 's,@PERL\@,$(PERL),g' \
+	-e 's,@datadir\@,$(pkgdatadir),g' \
 	-e 's,@bindir\@,$(bindir),g' \
 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g'
-
-editpl = sed \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@PERL\@,$(PERL),g' \
+	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
+	-e 's,@M4\@,$(M4),g' \
+	-e 's,@AWK\@,$(AWK),g' \
 	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE\@,$(PACKAGE),g'
+	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
 ## All the scripts below depend on configure.in so that they are rebuilt
 ## when the Autoconf version changes. Unfortunately, suffix rules cannot
@@ -136,37 +135,37 @@ editpl = sed \
 
 autoconf: $(srcdir)/autoconf.sh $(srcdir)/configure.in
 	rm -f autoconf autoconf.tmp
-	$(editsh) $(srcdir)/autoconf.sh >autoconf.tmp
+	$(edit) $(srcdir)/autoconf.sh >autoconf.tmp
 	chmod +x autoconf.tmp
 	mv autoconf.tmp autoconf
 
 autoheader: $(srcdir)/autoheader.sh $(srcdir)/configure.in
 	rm -f autoheader autoheader.tmp
-	$(editsh) $(srcdir)/autoheader.sh >autoheader.tmp
+	$(edit) $(srcdir)/autoheader.sh >autoheader.tmp
 	chmod +x autoheader.tmp
 	mv autoheader.tmp autoheader
 
 autoreconf: $(srcdir)/autoreconf.sh $(srcdir)/configure.in
 	rm -f autoreconf autoreconf.tmp
-	$(editsh) $(srcdir)/autoreconf.sh >autoreconf.tmp
+	$(edit) $(srcdir)/autoreconf.sh >autoreconf.tmp
 	chmod +x autoreconf.tmp
 	mv autoreconf.tmp autoreconf
 
 autoupdate: $(srcdir)/autoupdate.sh $(srcdir)/configure.in
 	rm -f autoupdate autoupdate.tmp
-	$(editsh) $(srcdir)/autoupdate.sh >autoupdate.tmp
+	$(edit) $(srcdir)/autoupdate.sh >autoupdate.tmp
 	chmod +x autoupdate.tmp
 	mv autoupdate.tmp autoupdate
 
 ifnames: $(srcdir)/ifnames.sh $(srcdir)/configure.in
 	rm -f ifnames ifnames.tmp
-	$(editsh) $(srcdir)/ifnames.sh >ifnames.tmp
+	$(edit) $(srcdir)/ifnames.sh >ifnames.tmp
 	chmod +x ifnames.tmp
 	mv ifnames.tmp ifnames
 
 autoscan: $(srcdir)/autoscan.pl $(srcdir)/configure.in
 	rm -f autoscan autoscan.tmp
-	$(editpl) $(srcdir)/autoscan.pl >autoscan.tmp
+	$(edit) $(srcdir)/autoscan.pl >autoscan.tmp
 	chmod +x autoscan.tmp
 	mv autoscan.tmp autoscan
 
