@@ -8879,6 +8879,10 @@ case $host_os in
          * ) CYGWIN=no;;
 esac
 @end example
+
+Beware that the variable @code{CYGWIN} has a very special meaning when
+running CygWin32, and should not be changed.  That's yet another reason
+not to use this macro.
 @end defmac
 
 @defmac AC_DECL_YYTEXT
