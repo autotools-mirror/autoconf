@@ -4761,8 +4761,16 @@ often possible to avoid this problem using @samp{echo "x$word"}, taking
 the @samp{x} into account later in the pipe.
 
 @table @asis
+@item @command{break}
+@cindex @command{break}
+The use of @samp{break 2} etc. is safe.
+
 @item @command{case}
 @cindex @command{case}
+You don't need to quote the argument, no splitting is performed.
+
+You don't need the last @samp{;;}, but you should use it.
+
 Because of a bug in its @code{fnmatch}, @command{bash} fails to handle
 properly backslashes in character classes:
 
@@ -4841,6 +4849,24 @@ alternately @samp{foo} and @samp{bar}, although it should only print
 Therefore you should @command{export} again each environment variable
 you update.
 
+@item @command{if}
+@cindex @command{if}
+Using @samp{!} is not portable.  Instead of
+
+@example
+if ! cmp -s file file.new; then
+  mv file.new file
+fi
+@end example
+
+@noindent
+use
+
+@example
+if cmp -s file file.new; then :; else
+  mv file.new file
+fi
+@end example
 
 @item @command{test}
 @cindex @command{test}
@@ -4857,13 +4883,17 @@ operators; consequently, @sc{posix} does not specify them, so using them
 is nonportable.  If you combine @samp{&&} and @samp{||} in the same
 statement, keep in mind that they have equal precedence.
 
+You may use @samp{!} with @command{test}, but not with @command{if}:
+@samp{test ! -r foo || exit 1}.
+
 @item @command{test} (files)
 To enable @code{configure} scripts to support cross-compilation, they
 shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because @sc{4.3bsd} does not
-have it.
+have it.  Do not use @samp{test -e} either.
+@c FIXME: Jim, what was the system?
 
 @item @command{test} (strings)
 Avoid @samp{test "@var{string}"}, in particular if @var{string} might

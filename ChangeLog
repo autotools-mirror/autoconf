@@ -1,3 +1,9 @@
+2000-06-07  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Builtins): More on `test' and
+	`case'.
+	Some on `if' and `break'.
+
 2000-06-07  Morten Eriksen  <mortene@sim.no>
 
 	* acspecific.m4 (_AC_PATH_X_DIRECT): Include `X11/Intrinsic.h'
