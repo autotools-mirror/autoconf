@@ -1351,6 +1351,13 @@ if echo $ac_link_output | grep xlfentry >/dev/null 2>&1; then
   ac_link_output=`echo $ac_link_output | sed 's/,/ /g'`
 fi
 
+# If we are using Cray Fortran then delete quotes.
+# Use "\"" instead of '"' for font-lock-mode.
+# FIXME: a more general fix for quoted arguments with spaces?
+if echo $ac_link_output | grep cft90 >/dev/null 2>&1; then
+  ac_link_output=`echo $ac_link_output | sed "s/\"//g"`
+fi
+
 # AC_SAVE_ARG will be set to the current option (i.e. something
 # beginning with a "-") when we come across an option that we think
 # will take an argument (e.g. -L /usr/local/lib/foo).  When

@@ -1,3 +1,10 @@
+2000-06-07  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Fix problem on Cray due to
+	confusion from the link command getting echoed in quotes.  In the
+	future, a more general fix for quoted arguments with spaces might
+	be better.
+
 2000-06-07  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Builtins): More on `test' and
