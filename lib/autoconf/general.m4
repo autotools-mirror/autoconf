@@ -358,6 +358,24 @@ define(AC_PREPARE,
 [trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -fr confdefs* $ac_clean_files' 0
 
+# File descriptor usage:
+# 0 unused; standard input
+# 1 file creation
+# 2 errors and warnings
+# 3 unused; some systems may open it to /dev/tty
+# 4 "checking for..."
+# 5 test results
+if test "$silent" = yes; then
+  exec 4>/dev/null
+else
+  exec 4>&1
+fi
+if test "$verbose" = yes; then
+  exec 5>&1
+else
+  exec 5>/dev/null
+fi
+
 # Save the original args if we used an alternate arg parser.
 ac_configure_temp="${configure_args-[$]*}"
 # Strip out --no-create and --norecursion so they don't pile up.
@@ -435,30 +453,6 @@ if test -n "$withval"; then
 ifelse([$3], , , [else
   $3
 ])dnl
-fi
-])dnl
-dnl
-dnl Guess the value for the `prefix' variable by looking for
-dnl the argument program along PATH and taking its parent.
-dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
-dnl set `prefix' to /usr/local/gnu.
-define(AC_PREFIX,
-[if test -z "$prefix"
-then
-  AC_CHECKING([for $1 to derive installation directory prefix])
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="$IFS:"
-  for ac_dir in $PATH; do
-    test -z "$ac_dir" && ac_dir=.
-    if test $ac_dir != . && test -f $ac_dir/$1; then
-changequote(,)dnl
-      # Not all systems have dirname.
-      prefix=`echo $ac_dir|sed 's%/[^/][^/]*$%%'`
-changequote([,])dnl
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-  AC_VERBOSE(chose installation directory prefix ${prefix})
 fi
 ])dnl
 dnl
@@ -664,7 +658,7 @@ define(AC_CACHE_SAVE,
 [if test -w $cache_file; then
 AC_VERBOSE(saving test results in cache file $cache_file)
 cat <<\CEOF > $cache_file
-# This file is a shell script that stores the results of configure
+# This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
 # If its contents are invalid for some reason, you may edit or delete it.
@@ -674,7 +668,7 @@ cat <<\CEOF > $cache_file
 # the --cache-file=FILE option to use a different cache file; that is
 # what configure does when it calls configure scripts in
 # subdirectories, so they share the cache.
-# config.status only pays attention to this file if you give it the
+# config.status only pays attention to the cache file if you give it the
 # --recheck option to rerun configure.
 CEOF
 changequote(,)dnl
@@ -803,10 +797,10 @@ dnl ### Printing messages
 dnl
 dnl
 define(AC_CHECKING,
-[test "$silent" = yes || echo "checking $1"])dnl
+[echo "checking $1" >&4])dnl
 dnl
 define(AC_VERBOSE,
-[test "$verbose" = yes && echo "	$1"])dnl
+[echo "	$1" >&5])dnl
 dnl
 define(AC_WARN,
 [echo "configure: warning: $1" >&2])dnl
@@ -868,11 +862,13 @@ dnl
 dnl
 define(AC_PROGRAM_CHECK,
 [# Extract the first word of `$2', so it can be a program name with args.
-set ac_dummy $2; ac_word=[$]2
+set dummy $2; ac_word=[$]2
 AC_CHECKING([for $ac_word])
-if test -z "[$]$1"; then
 AC_CACHE_VAL(ac_cv_program_$1,
-[  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+[if test -n "[$]$1"; then
+  ac_cv_program_$1="[$]$1" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
@@ -883,20 +879,25 @@ AC_CACHE_VAL(ac_cv_program_$1,
   IFS="$ac_save_ifs"
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_CHECK will keep looking.
-ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])])dnl
-  $1="$ac_cv_program_$1"
-fi
+ifelse([$4],,, [  test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"
+])dnl
+fi])dnl
+$1="$ac_cv_program_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
 dnl
 define(AC_PROGRAM_PATH,
 [# Extract the first word of `$2', so it can be a program name with args.
-set ac_dummy $2; ac_word=[$]2
+set dummy $2; ac_word=[$]2
 AC_CHECKING([for $ac_word])
-if test -z "[$]$1"; then
 AC_CACHE_VAL(ac_cv_path_$1,
-[  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+[case "[$]$1" in
+  /*)
+  ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
@@ -907,9 +908,11 @@ AC_CACHE_VAL(ac_cv_path_$1,
   IFS="$ac_save_ifs"
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_PATH will keep looking.
-ifelse([$3],,, [test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"])])dnl
-  $1="$ac_cv_path_$1"
-fi
+ifelse([$3],,, [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
+])dnl
+  ;;
+esac])dnl
+$1="$ac_cv_path_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -935,6 +938,27 @@ test -n "[$]$1" && break
 done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
+dnl
+dnl Guess the value for the `prefix' variable by looking for
+dnl the argument program along PATH and taking its parent.
+dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
+dnl set `prefix' to /usr/local/gnu.
+define(AC_PREFIX,
+[if test -z "$prefix"; then
+changequote(<<,>>)dnl
+define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
+changequote([,])dnl
+AC_PROGRAM_PATH(AC_VAR_NAME, $1)
+changequote(<<,>>)dnl
+  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
+    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
+changequote([,])dnl
+    test -z "$prefix" && prefix=/
+    AC_VERBOSE(setting installation directory prefix to ${prefix})
+  fi
+fi
+undefine(AC_VAR_NAME)dnl
+])dnl
 dnl
 define(AC_HAVE_LIBRARY, [dnl
 changequote(/,/)dnl
