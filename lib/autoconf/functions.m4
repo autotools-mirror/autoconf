@@ -553,8 +553,8 @@ AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
 # Make sure getloadavg.c is where it belongs, at configure-time.
-test -f "$ac_config_libobj_dir/getloadavg.c" ||
-  AC_MSG_ERROR([$ac_config_libobj_dir/getloadavg.c is missing])
+test -f "$srcdir/$ac_config_libobj_dir/getloadavg.c" ||
+  AC_MSG_ERROR([$srcdir/$ac_config_libobj_dir/getloadavg.c is missing])
 
 ac_save_LIBS=$LIBS
 
@@ -600,7 +600,7 @@ AC_CHECK_FUNCS(getloadavg, [],
 AC_CACHE_CHECK(whether getloadavg requires setgid,
                ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
-[#include "$ac_config_libobj_dir/getloadavg.c"
+[#include "$srcdir/$ac_config_libobj_dir/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
 @%:@endif],

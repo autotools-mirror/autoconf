@@ -4109,11 +4109,15 @@ AC_LIBOBJ($foo_or_bar)
 @defmac AC_CONFIG_LIBOBJ_DIR (@var{directory})
 @acindex CONFIG_LIBOBJ_DIR
 Specify that @code{AC_LIBOBJ} replacement files are to be found in
-@var{directory} (which defaults to @samp{.}, the top source directory).
-@command{configure} might need to know where these files are for the
+@var{directory}, a relative path starting from the top level of the
+source tree.  The replacement directory defaults to @file{.}, the top
+level directory, and the most typical value is @file{lib}, corresponding
+to @samp{AC_CONFIG_LIBOBJ_DIR(lib)}.
+
+@command{configure} might need to know the replacement directory for the
 following reasons: (i) some checks use the replacement files, (ii) some
 macros bypass broken system headers by installing links to the
-replacement headers etc.
+replacement headers, etc.
 @end defmac
 
 @sp 1

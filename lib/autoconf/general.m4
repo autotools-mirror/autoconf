@@ -2363,9 +2363,11 @@ $3],
 
 # AC_CONFIG_LIBOBJ_DIR(DIRNAME)
 # -----------------------------
-# Announce LIBOBJ replacement files are in DIRNAME.
+# Announce LIBOBJ replacement files are in $top_srcdir/DIRNAME.
 AC_DEFUN_ONCE([AC_CONFIG_LIBOBJ_DIR],
-[m4_divert_text([DEFAULTS], [ac_config_libobj_dir=$1])[]dnl
+[m4_bmatch([$1], [^]m4_defn([m4_cr_symbols2]),
+           [AC_WARNING([invalid replacement directory: $1])])dnl
+m4_divert_text([DEFAULTS], [ac_config_libobj_dir=$1])[]dnl
 ])
 
 
