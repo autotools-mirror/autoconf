@@ -1,3 +1,14 @@
+2002-11-15  Akim Demaille  <akim@epita.fr>
+
+	Version 2.56.
+
+	* config/install-sh: chmod +x.
+	From Paul Eggert.
+	* config/move-if-change: Indenting changes.
+	* Makefile.am (AUTOMAKE_OPTIONS): Move to...
+	* configure.ac (AM_INIT_AUTOMAKE): here.
+	Require 1.7.1.
+
 2002-11-14  Akim Demaille  <akim@epita.fr>
 
 	Version 2.55.

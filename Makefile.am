@@ -18,8 +18,6 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = check-news 1.6c dist-bzip2 readme-alpha
-
 # bin/ and tests/ must be run first, as they build the tests executables
 # (tests/autom4te etc.), that we happen to use here.
 SUBDIRS = bin tests . lib config man doc

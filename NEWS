@@ -1,5 +1,12 @@
-* Major changes in Autoconf 2.55                       -*- outline -*-
+* Major changes in Autoconf 2.56                       -*- outline -*-
+
+  Released November 15th, 2002.
+
+One packaging problem fixed (config/install-sh was not executable).
+
 
+* Major changes in Autoconf 2.55
+
   Released November 14th, 2002.
 
 Release tips:
@@ -102,7 +109,7 @@ Release tips:
   assignments.
 
 
-** Plans for 2.56
+** Plans for 2.57
 
 - ./configure <host>
 
