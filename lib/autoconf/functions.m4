@@ -843,7 +843,7 @@ fi
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_CHECK_HEADERS(stdlib.h)
-AC_CACHE_CHECK([for working malloc], ac_cv_func_malloc_works,
+AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
 [[#if STDC_HEADERS || HAVE_STDLIB_H
@@ -853,10 +853,10 @@ char *malloc ();
 #endif
 ]],
                  [exit (malloc (0) ? 0 : 1);])],
-               [ac_cv_func_malloc_works=yes],
-               [ac_cv_func_malloc_works=no],
-               [ac_cv_func_malloc_works=no])])
-AS_IF([test $ac_cv_func_malloc_works = yes], [$1], [$2])
+               [ac_cv_func_malloc_0_nonnull=yes],
+               [ac_cv_func_malloc_0_nonnull=no],
+               [ac_cv_func_malloc_0_nonnull=no])])
+AS_IF([test $ac_cv_func_malloc_0_nonnull = yes], [$1], [$2])
 ])# AC_FUNC_MALLOC
 
 
@@ -868,8 +868,8 @@ AN_FUNCTION([malloc], [AC_FUNC_MALLOC])
 AC_DEFUN([AC_FUNC_MALLOC],
 [_AC_FUNC_MALLOC_IF(
   [AC_DEFINE([HAVE_MALLOC], 1,
-             [Define to 1 if your system has a working `malloc' function,
-              and to 0 otherwise.])],
+             [Define to 1 if your system has a GNU libc compatible `malloc'
+              function, and to 0 otherwise.])],
   [AC_DEFINE([HAVE_MALLOC], 0)
    AC_LIBOBJ(malloc)
    AC_DEFINE([malloc], [rpl_malloc],
@@ -1284,7 +1284,7 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_CHECK_HEADERS(stdlib.h)
-AC_CACHE_CHECK([for working realloc], ac_cv_func_realloc_works,
+AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
 [[#if STDC_HEADERS || HAVE_STDLIB_H
@@ -1294,10 +1294,10 @@ char *realloc ();
 #endif
 ]],
                  [exit (realloc (0, 0) ? 0 : 1);])],
-               [ac_cv_func_realloc_works=yes],
-               [ac_cv_func_realloc_works=no],
-               [ac_cv_func_realloc_works=no])])
-AS_IF([test $ac_cv_func_realloc_works = yes], [$1], [$2])
+               [ac_cv_func_realloc_0_nonnull=yes],
+               [ac_cv_func_realloc_0_nonnull=no],
+               [ac_cv_func_realloc_0_nonnull=no])])
+AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
 ])# AC_FUNC_REALLOC
 
 
@@ -1309,8 +1309,8 @@ AN_FUNCTION([realloc], [AC_FUNC_REALLOC])
 AC_DEFUN([AC_FUNC_REALLOC],
 [_AC_FUNC_REALLOC_IF(
   [AC_DEFINE([HAVE_REALLOC], 1,
-             [Define to 1 if your system has a working `realloc' function,
-              and to 0 otherwise.])],
+             [Define to 1 if your system has a GNU libc compatible `realloc'
+              function, and to 0 otherwise.])],
   [AC_DEFINE([HAVE_REALLOC], 0)
    AC_LIBOBJ([realloc])
    AC_DEFINE([realloc], [rpl_realloc],
