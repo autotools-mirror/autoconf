@@ -1,4 +1,4 @@
-1994-04-06  Ben Elliston  <bje@cygnus.com>
+1999-04-06  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Avoid the possibility of `ld' on GNU/Linux systems
 	being something other than the GNU linker (such as a directory, in
