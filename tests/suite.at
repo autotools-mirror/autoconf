@@ -39,7 +39,6 @@ m4_include([torture.at])
 m4_include([compile.at])
 
 # Checking that AC_CHECK_FOO macros work properly.
-AT_BANNER([FIXME: AC_CHECK_TYPE is a known failure.])
 m4_include([semantics.at])
 
 # Blind testing the macros.

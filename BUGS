@@ -18,9 +18,3 @@ address them.
 	/*--------------------------.
 	| Good for production use.  |
 	`--------------------------*/
-
-* Important bugs
-
-** AC_CHECK_LIB
-Does not work properly when given variables instead of literals, e.g.,
-AC_CHECK_LIB($foo, $bar).

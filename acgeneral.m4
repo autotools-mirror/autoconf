@@ -2523,6 +2523,11 @@ AS_IF([test "$ac_cv_search_$1" != no],
 # just for library $1.  Separate tests with the same $1 and different $2s
 # may have different results.
 #
+# Note that using directly AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])
+# is asking for troubles, since AC_CHECK_LIB($lib, fun) would give
+# ac_cv_lib_$lib_fun, which is definitely not what was meant.  Hence
+# the AS_LITERAL_IF indirection.
+#
 # FIXME: This macro is extremely suspicious.  It DEFINEs unconditionnally,
 # whatever the FUNCTION, in addition to not being a *S macro.  Note
 # that the cache does depend upon the function we are looking for.
@@ -2534,7 +2539,9 @@ AS_IF([test "$ac_cv_search_$1" != no],
 # freedom.
 AC_DEFUN([AC_CHECK_LIB],
 [m4_ifval([$3], , [AH_CHECK_LIB([$1])])dnl
-AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
+AS_LITERAL_IF([$1],
+              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])],
+              [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1''_$2])])dnl
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"

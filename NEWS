@@ -6,6 +6,8 @@ Now include stdint.h.
 - Mostly in the test suite.
 - Invocation of GNU M4 now robust to POSIXLY_CORRECT.
 - configure accepts --prefix='' again.
+- AC_CHECK_LIB works properly when its first argument is not a
+  literal.
 
 * Major changes in Autoconf 2.50
 

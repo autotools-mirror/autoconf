@@ -1,5 +1,11 @@
 2001-06-06  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_LIB): Fix the cache var name to work
+	properly when $1 is not a literal.
+	Fixes PR Autoconf/187, reported by Bram Moolenaar.
+
+2001-06-06  Akim Demaille  <akim@epita.fr>
+
 	Invoking AC_COPYRIGHT before AC_INIT fails.
 
 	* Makefile.am (.m4.m4f): Pass --fatal-warnings to m4.
