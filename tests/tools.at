@@ -431,9 +431,7 @@ AC_OUTPUT
 ]])
 
 # Checking `autoupdate'.
-AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
-         [autoupdate: `configure.ac' is updated
-])
+AT_CHECK_AUTOUPDATE
 AT_CHECK([cat configure.ac], 0, [expout])
 # Checking that `autoupdate' is idempotent
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
@@ -460,9 +458,7 @@ AT_DATA(dst2, dst2
 )
 
 # Checking `autoupdate'.
-AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
-         [autoupdate: `configure.ac' is updated
-])
+AT_CHECK_AUTOUPDATE
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([cat src1], 0, [dst1
@@ -481,6 +477,7 @@ cat >expout <<EOF
 AC_PREREQ($at_version)
 EOF
 
+AT_CHECK([autoupdate --version || exit 77], ignore, ignore, ignore)
 AT_CHECK([echo "AC_PREREQ(1.0)" |
             autoupdate --autoconf-dir $top_srcdir -],
          0, [expout], [])

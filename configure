@@ -496,7 +496,7 @@ if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
   ac_prog=$0
-  ac_confdir=`echo "$ac_prog" | sed 's%/[^/][^/]*$%%'`
+  ac_confdir=`echo "$ac_prog" | sed 's%[\\/][^\\/][^\\/]*$%%'`
   test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
@@ -514,7 +514,7 @@ if test ! -r $srcdir/$ac_unique_file; then
    { (exit 1); exit 1; }; }
   fi
 fi
-srcdir=`echo "$srcdir" | sed 's%\([^/]\)/*$%\1%'`
+srcdir=`echo "$srcdir" | sed 's%\([^\\/]\)[\\/]*$%\1%'`
 ac_env_build_alias_set=${build_alias+set}
 ac_env_build_alias_value=$build_alias
 ac_cv_env_build_alias_set=${build_alias+set}

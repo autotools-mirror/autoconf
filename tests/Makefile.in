@@ -84,12 +84,12 @@ EXTRA_DIST = README              atgeneral.m4 atspecific.m4 aclocal.m4          
 MACRO_FILES = ../acgeneral.m4               ../acspecific.m4               ../acfunctions.m4               ../aclang.m4               ../acheaders.m4               ../actypes.m4
 
 
-CLEANFILES = debug-*.sh macro configure configure.in configure.ac              config.status config.cache config.log config.h.in config.h              stderr stdout empty
+CLEANFILES = debug-*.sh macro configure configure.in configure.ac              config.status config.cache config.log config.h.in config.h              stderr stdout empty 	     config.guess config.sub expr libtool ltconfig ltmain.sh install-sh
 
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in configure
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
