@@ -1,3 +1,10 @@
+2004-12-21  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4: Quote ``$tmp'' in many places.
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Fix the comment, as traps are
+	  no longer part of the macro, quote the occurrence of ``$tmp''.
+	* doc/autoconf.texi (Forbidden Patterns): Typo.
+
 2004-12-21  Akim Demaille  <akim@epita.fr>
 
 	* lib/autotest/general.m4 (AT_INIT): Make sure the "ok" etc. are

@@ -940,8 +940,7 @@ m4_define([AS_LITERAL_IF],
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
 # -------------------------------------------------
 # Create as safely as possible a temporary directory in DIRECTORY
-# which name is inspired by PREFIX (should be 2-4 chars max), and set
-# trap mechanisms to remove it.
+# which name is inspired by PREFIX (should be 2-4 chars max).
 m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
@@ -951,7 +950,7 @@ m4_if([$2], [], [: ${TMPDIR=/tmp}])
 }  ||
 {
   tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
-  (umask 077 && mkdir $tmp)
+  (umask 077 && mkdir "$tmp")
 } ||
 {
    echo "$me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])" >&2

@@ -8727,7 +8727,7 @@ Declare that no token matching @var{pattern} must be found in the output.
 Comments are not checked; this can be a problem if, for instance, you
 have some macro left unexpanded after an @samp{#include}.  No consensus
 is currently found in the Autoconf community, as some people consider it
-should be valid to name macros in comments (which doesn't makes sense to
+should be valid to name macros in comments (which doesn't make sense to
 the author of this documentation, as @samp{#}-comments should document
 the output, not the input, documented by @samp{dnl} comments).
 @end defmac
