@@ -1,6 +1,5 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
-# Requires GNU m4.
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
 # Free Software Foundation, Inc.
 #
@@ -49,7 +48,6 @@
 # Written by David MacKenzie, with help from
 # Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
-#
 
 m4_namespace_push(autoconf)
 
@@ -216,9 +214,20 @@ undivert(AC_DIVERT([NORMAL_1]))dnl
 # future.
 define([AC_DEFUN],
 [ifelse([$3],,
-[define([$1], [AC_PRO([$1])$2[]AC_EPI()])],
-[define([$2-$3], [$1])
+        [define([$1], [AC_PRO([$1])$2[]AC_EPI()])],
+        [define([$2-$3], [$1])
 define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
+
+
+# AC_DEFUN_ONCE(NAME, EXPANSION)
+# ------------------------------
+# As AC_DEFUN, but issues the EXPANSION only once, and warns if used
+# several times.
+define([AC_DEFUN_ONCE],
+[define([$1],
+[AC_PROVIDE_IF([$1],
+               [AC_WARNING([$1 invoked multiple times])],
+               [AC_PRO([$1])$2[]AC_EPI()])])])
 
 
 # AC_DEFUNCT(NAME, COMMENT)
@@ -1385,25 +1394,25 @@ esac[]dnl
 
 # AC_ARG_PROGRAM
 # --------------
-# FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
-AC_DEFUN(AC_ARG_PROGRAM,
+# This macro is expanded only once, to avoid that `foo' ends up being
+# installed as `ggfoo'.
+AC_DEFUN_ONCE(AC_ARG_PROGRAM,
 [dnl Document the options.
-AC_EXPAND_ONCE([AC_DIVERT_PUSH([HELP_BEGIN])dnl
+AC_DIVERT_PUSH([HELP_BEGIN])dnl
 
 Program names:
-  --program-prefix=PREFIX prepend PREFIX to installed program names
-  --program-suffix=SUFFIX append SUFFIX to installed program names
-  --program-transform-name=PROGRAM
-                          run sed PROGRAM on installed program names
-AC_DIVERT_POP])[]dnl
+  --program-prefix=PREFIX            prepend PREFIX to installed program names
+  --program-suffix=SUFFIX            append SUFFIX to installed program names
+  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+AC_DIVERT_POP()dnl
 if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF_SED >conftestsed
+  cat <<\EOF >conftestsed
 s,\\,\\\\,g; s,\$,$$,g
-EOF_SED
-  program_transform_name=`echo $program_transform_name|sed -f conftestsed`
+EOF
+  program_transform_name=`echo $program_transform_name | sed -f conftestsed`
   rm -f conftestsed
 fi
 test "$program_prefix" != NONE &&
@@ -1414,7 +1423,8 @@ test "$program_suffix" != NONE &&
 
 # sed with no file args requires a program.
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
-])
+])# AC_ARG_PROGRAM
+
 
 
 ## ----------------- ##

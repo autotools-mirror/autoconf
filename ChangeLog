@@ -1,5 +1,17 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	AC_ARG_PROGRAM must not be expanded twice, which is likely since
+	Automake calls it, and usually users do too.  If it happens,
+	`--program-prefix=g' actually prepend two (or more) `g'.
+
+	* acgeneral.m4 (AC_DEFUN_ONCE): New macro.
+	(AC_ARG_PROGRAM): AC_DEFUNed_ONCE.  Or is it AC_DEFUN_ONCE'd? :).
+	No longer AC_EXPAND_ONCE the help string, the macro itself is
+	expanded at most once.
+	Rename the here-doc tag EOF_SED as EOF.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	Get rid of the ICMDS diversion.
 
 	* acgeneral.m4 (AC_DIVERT): Remove ICMDS.
