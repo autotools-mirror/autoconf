@@ -84,16 +84,16 @@ Last updated @value{lastupdate}.
 @end ifinfo
 
 @menu
-* Preface::			About the GNU Coding Standards
+* Preface::                     About the GNU Coding Standards
 * Intellectual Property::       Keeping Free Software Free
 * Design Advice::               General Program Design
 * Program Behavior::            Program Behavior for All Programs
 * Writing C::                   Making The Best Use of C
-* Documentation::		Documenting Programs
+* Documentation::               Documenting Programs
 * Managing Releases::           The Release Process
 @end menu
 
-@node Preface
+@node Preface, Intellectual Property, Top, Top
 @chapter About the GNU Coding Standards
 
 The GNU Coding Standards were written by Richard Stallman and other GNU
@@ -113,18 +113,18 @@ you don't have those files, please mail your suggestion anyway.
 This release of the GNU Coding Standards was last updated
 @value{lastupdate}.
 
-@node Intellectual Property
+@node Intellectual Property, Design Advice, Preface, Top
 @chapter Keeping Free Software Free
 
 This @value{CHAPTER} discusses how you can make sure that GNU software
 remains unencumbered.
 
 @menu
-* Reading Non-Free Code::	Referring to Proprietary Programs
-* Contributions::		Accepting Contributions
+* Reading Non-Free Code::       Referring to Proprietary Programs
+* Contributions::               Accepting Contributions
 @end menu
 
-@node Reading Non-Free Code
+@node Reading Non-Free Code, Contributions, Intellectual Property, Intellectual Property
 @section Referring to Proprietary Programs
 
 Don't in any circumstances refer to Unix source code for or during
@@ -158,7 +158,7 @@ Or use a simple garbage collector instead of tracking precisely when
 to free memory, or use a new GNU facility such as obstacks.
 
 
-@node Contributions
+@node Contributions,  , Reading Non-Free Code, Intellectual Property
 @section Accepting Contributions
 
 If someone else sends you a piece of code to add to the program you are
@@ -192,20 +192,20 @@ The very worst thing is if you forget to tell us about the other
 contributor.  We could be very embarrassed in court some day as a
 result.
 
-@node Design Advice
+@node Design Advice, Program Behavior, Intellectual Property, Top
 @chapter General Program Design
 
 This @value{CHAPTER} discusses some of the issues you should take into
 account when designing your program.
 
 @menu
-* Compatibility::		Compatibility with other implementations
-* Using Extensions::		Using non-standard features
+* Compatibility::               Compatibility with other implementations
+* Using Extensions::            Using non-standard features
 * ANSI C::                      Using ANSI C features
-* Source Language::		Using languages other than C
+* Source Language::             Using languages other than C
 @end menu
 
-@node Compatibility
+@node Compatibility, Using Extensions, Design Advice, Design Advice
 @section Compatibility with Other Implementations
 
 With occasional exceptions, utility programs and libraries for GNU
@@ -240,7 +240,7 @@ Additional programs with no counterpart in Unix may be useful,
 but our first priority is usually to duplicate what Unix already
 has.
 
-@node Using Extensions
+@node Using Extensions, ANSI C, Compatibility, Design Advice
 @section Using Non-standard Features
 
 Many GNU facilities that already exist support a number of convenient
@@ -271,7 +271,7 @@ order to bootstrap the GNU compilation facilities.  If these require
 the GNU compiler, then no one can compile them without having them
 installed already.  That would be no good.
 
-@node ANSI C
+@node ANSI C, Source Language, Using Extensions, Design Advice
 @section @sc{ansi} C and pre-@sc{ansi} C
 
 Do not ever use the ``trigraph'' feature of @sc{ansi} C.
@@ -317,7 +317,7 @@ definition in the pre-@sc{ansi} style.
 If you don't know non-@sc{ansi} C, there's no need to learn it; just
 write in @sc{ansi} C.
 
-@node Source Language
+@node Source Language,  , ANSI C, Design Advice
 @section Using Languages Other Than C
 
 Using a language other than C is like using a non-standard feature: it
@@ -347,7 +347,7 @@ If an application is not of extremely widespread interest, then perhaps
 it's not important if the application is inconvenient to install.
 @end itemize
 
-@node Program Behavior
+@node Program Behavior, Writing C, Design Advice, Top
 @chapter Program Behavior for All Programs
 
 This @value{CHAPTER} describes how to write robust software. It also
@@ -355,15 +355,15 @@ describes general standards for error messages, the command line interface,
 and how libraries should behave.
 
 @menu
-* Semantics::			Writing robust programs
-* Libraries::			Library behavior
-* Errors::			Formatting error messages
-* User Interfaces::		Standards for command line interfaces
+* Semantics::                   Writing robust programs
+* Libraries::                   Library behavior
+* Errors::                      Formatting error messages
+* User Interfaces::             Standards for command line interfaces
 * Option Table::                Table of long options.
 * Memory Usage::                When and how to care about memory needs
 @end menu
 
-@node Semantics
+@node Semantics, Libraries, Program Behavior, Program Behavior
 @section Writing Robust Programs
 
 Avoid arbitrary limits on the length or number of @emph{any} data
@@ -440,7 +440,7 @@ If you make temporary files, check the @code{TMPDIR} environment
 variable; if that variable is defined, use the specified directory
 instead of @file{/tmp}.
 
-@node Libraries
+@node Libraries, Errors, Semantics, Program Behavior
 @section Library Behavior
 
 Try to make library functions reentrant.  If they need to do dynamic
@@ -469,7 +469,7 @@ points if you like.
 Static functions and variables can be used as you like and need not
 fit any naming convention.
 
-@node Errors
+@node Errors, User Interfaces, Libraries, Program Behavior
 @section Formatting Error Messages
 
 Error messages from compilers should look like this:
@@ -509,7 +509,7 @@ Error messages from interactive programs, and other messages such as
 usage messages, should start with a capital letter.  But they should not
 end with a period.
 
-@node User Interfaces
+@node User Interfaces, Option Table, Errors, Program Behavior
 @section Standards for Command Line Interfaces
 
 Please don't make the behavior of a utility depend on the name used
@@ -658,7 +658,7 @@ Report bugs to @var{mailing-address}.
 @end example
 @end table
 
-@node Option Table
+@node Option Table, Memory Usage, User Interfaces, Program Behavior
 @section Table of Long Options
 
 Here is a table of long options used by GNU programs.  It is surely
@@ -1738,7 +1738,7 @@ Print the version number.
 @samp{-z} in @code{gprof}.
 @end table
 
-@node Memory Usage
+@node Memory Usage,  , Option Table, Program Behavior
 @section Memory Usage
 
 If it typically uses just a few meg of memory, don't bother making any
@@ -1757,25 +1757,25 @@ files that are bigger than will fit in core all at once.
 If your program creates complicated data structures, just make them in
 core and give a fatal error if @code{malloc} returns zero.
 
-@node Writing C
+@node Writing C, Documentation, Program Behavior, Top
 @chapter Making The Best Use of C
 
 This @value{CHAPTER} provides advice on how best to use the C language
 when writing GNU software.
 
 @menu
-* Formatting::			Formatting Your Source Code
-* Comments::			Commenting Your Work
-* Syntactic Conventions::	Clean Use of C Constructs
-* Names::			Naming Variables and Functions
-* System Portability::		Portability between different operating systems
+* Formatting::                  Formatting Your Source Code
+* Comments::                    Commenting Your Work
+* Syntactic Conventions::       Clean Use of C Constructs
+* Names::                       Naming Variables and Functions
+* System Portability::          Portability between different operating systems
 * CPU Portability::             Supporting the range of CPU types
 * System Functions::            Portability and ``standard'' library functions
 * Internationalization::        Techniques for internationalization
 * Mmap::                        How you can safely use @code{mmap}.
 @end menu
 
-@node Formatting
+@node Formatting, Comments, Writing C, Writing C
 @section Formatting Your Source Code
 
 It is important to put the open-brace that starts the body of a C
@@ -1895,7 +1895,7 @@ just how long the pages are, since they do not have to fit on a printed
 page.  The formfeeds should appear alone on lines by themselves.
 
 
-@node Comments
+@node Comments, Syntactic Conventions, Formatting, Writing C
 @section Commenting Your Work
 
 Every program should start with a comment saying briefly what it is for.
@@ -1978,7 +1978,7 @@ but, by contrast, write the comments this way for a @samp{#ifndef}:
 @end example
 
 
-@node Syntactic Conventions
+@node Syntactic Conventions, Names, Comments, Writing C
 @section Clean Use of C Constructs
 
 Please explicitly declare all arguments to functions.
@@ -2105,7 +2105,7 @@ Don't make the program ugly to placate @code{lint}.  Please don't insert any
 casts to @code{void}.  Zero without a cast is perfectly fine as a null
 pointer constant, except when calling a varargs function.
 
-@node  Names
+@node  Names, System Portability, Syntactic Conventions, Writing C
 @section Naming Variables and Functions
 
 The names of global variables and functions in a program serve as
@@ -2147,7 +2147,7 @@ problems on older System V systems.  You can use the program
 name conflicts if the files were loaded onto an MS-DOS file
 system---something you may or may not care about.
 
-@node System Portability
+@node System Portability, CPU Portability, Names, Writing C
 @section Portability between System Types
 
 In the Unix world, ``portability'' refers to porting to different Unix
@@ -2184,7 +2184,7 @@ GNU kernel is based on Mach, so the features of Mach will also be
 available.  However, if you use Mach features, you'll probably have
 trouble debugging your program today.
 
-@node CPU Portability
+@node CPU Portability, System Functions, System Portability, Writing C
 @section Portability between @sc{cpu}s
 
 Even GNU systems will differ because of differences among @sc{cpu}
@@ -2239,7 +2239,7 @@ essential---such as, a Lisp interpreter which stores type information as
 well as an address in one word---it is ok to do so, but you'll have to
 make explicit provisions to handle different word sizes.
 
-@node System Functions
+@node System Functions, Internationalization, CPU Portability, Writing C
 @section Calling System Functions
 
 C implementations differ substantially.  @sc{ansi} C reduces but does not
@@ -2252,20 +2252,6 @@ functions to avoid unnecessary loss of portability.
 @item
 Don't use the value of @code{sprintf}.  It returns the number of
 characters written on some systems, but not on all systems.
-
-@item
-Don't assume that @code{mmap} either works on all files or fails
-for all files.  It may work on some files and fail on others.
-
-The proper way to use @code{mmap} is to try it on the specific file for
-which you want to use it---and if @code{mmap} doesn't work, fall back on
-doing the job in another way using @code{read} and @code{write}.
-
-The reason this precaution is needed is that the GNU kernel (the HURD)
-provides a user-extensible file system, in which there can be many
-different kinds of ``ordinary files.''  Many of them support
-@code{mmap}, but some do not.  It is important to make programs handle
-all these kinds of files.
 
 @item
 @code{main} should be declared to return type @code{int}.  It should
@@ -2374,7 +2360,7 @@ Here we assume that @code{HAVE_STRCHR} and @code{HAVE_STRRCHR} are
 macros defined in systems where the corresponding functions exist.
 One way to get them properly defined is to use Autoconf.
 
-@node Internationalization
+@node Internationalization, Mmap, System Functions, Writing C
 @section Internationalization
 
 GNU has a library called GNU gettext that makes it easy to translate the
@@ -2472,20 +2458,36 @@ printf (f->tried_implicit
         : "#  Implicit rule search has not been done.\n");
 @end example
 
-@node Documentation
+@node Mmap,  , Internationalization, Writing C
+@section Mmap
+
+Don't assume that @code{mmap} either works on all files or fails
+for all files.  It may work on some files and fail on others.
+
+The proper way to use @code{mmap} is to try it on the specific file for
+which you want to use it---and if @code{mmap} doesn't work, fall back on
+doing the job in another way using @code{read} and @code{write}.
+
+The reason this precaution is needed is that the GNU kernel (the HURD)
+provides a user-extensible file system, in which there can be many
+different kinds of ``ordinary files.''  Many of them support
+@code{mmap}, but some do not.  It is important to make programs handle
+all these kinds of files.
+
+@node Documentation, Managing Releases, Writing C, Top
 @chapter Documenting Programs
 
 @menu
 * GNU Manuals::                 Writing proper manuals.
 * Manual Structure Details::    Specific structure conventions.
 * NEWS File::                   NEWS files supplement manuals.
-* Change Logs::			Recording Changes
+* Change Logs::                 Recording Changes
 * Man Pages::                   Man pages are secondary.
 * Reading other Manuals::       How far you can go in learning
                                 from other manuals.
 @end menu
 
-@node GNU Manuals
+@node GNU Manuals, Manual Structure Details, Documentation, Documentation
 @section GNU Manuals
 
 The preferred way to document part of the GNU system is to write a
@@ -2528,7 +2530,7 @@ Please do not use the term ``illegal'' to refer to erroneous input to a
 computer program.  Use ``invalid'' instead, and reserve the term
 ``illegal'' for violations of law.
 
-@node Manual Structure Details
+@node Manual Structure Details, NEWS File, GNU Manuals, Documentation
 @section Manual Structure Details
 
 The title page of the manual should state the version of the program
@@ -2556,7 +2558,7 @@ quickly reading just this part of its manual.
 If one manual describes several programs, it should have such a node for
 each program described.
 
-@node NEWS File
+@node NEWS File, Change Logs, Manual Structure Details, Documentation
 @section The NEWS File
 
 In addition to its manual, the package should have a file named
@@ -2570,7 +2572,7 @@ If the @file{NEWS} file gets very long, move some of the older items
 into a file named @file{ONEWS} and put a note at the end referring the
 user to that file.
 
-@node Change Logs
+@node Change Logs, Man Pages, NEWS File, Documentation
 @section Change Logs
 
 Keep a change log to describe all the changes made to program source
@@ -2582,13 +2584,13 @@ inconsistencies between different parts of a program, by giving you a
 history of how the conflicting concepts arose and who they came from.
 
 @menu
-* Change Log Concepts::
-* Style of Change Logs::
-* Simple Changes::
-* Conditional Changes::
+* Change Log Concepts::         
+* Style of Change Logs::        
+* Simple Changes::              
+* Conditional Changes::         
 @end menu
 
-@node Change Log Concepts
+@node Change Log Concepts, Style of Change Logs, Change Logs, Change Logs
 @subsection Change Log Concepts
 
 You can think of the change log as a conceptual ``undo list'' which
@@ -2623,7 +2625,7 @@ asterisk, the name of the changed file, and then in parentheses the name
 of the changed functions, variables or whatever, followed by a colon.
 Then describe the changes you made to that function or variable.
 
-@node Style of Change Logs
+@node Style of Change Logs, Simple Changes, Change Log Concepts, Change Logs
 @subsection Style of Change Logs
 
 Here are some examples of change log entries:
@@ -2659,7 +2661,7 @@ entries represent parts of the same change, so that they work together,
 then don't put blank lines between them.  Then you can omit the file
 name and the asterisk when successive entries are in the same file.
 
-@node Simple Changes
+@node Simple Changes, Conditional Changes, Style of Change Logs, Change Logs
 @subsection Simple Changes
 
 Certain simple kinds of changes don't need much detail in the change
@@ -2686,7 +2688,7 @@ precisely engineered fashion.  To correct an error, you need not know
 the history of the erroneous passage; it is enough to compare what the
 documentation says with the way the program actually works.
 
-@node Conditional Changes
+@node Conditional Changes,  , Simple Changes, Change Logs
 @subsection Conditional Changes
 
 C programs often contain compile-time @code{#if} conditionals.  Many
@@ -2727,7 +2729,7 @@ a certain macro is @emph{not} defined:
 (gethostname) [!HAVE_SOCKETS]: Replace with winsock version.
 @end example
 
-@node Man Pages
+@node Man Pages, Reading other Manuals, Change Logs, Documentation
 @section Man Pages
 
 In the GNU project, man pages are secondary.  It is not necessary or
@@ -2758,7 +2760,7 @@ page explaining that you don't maintain it and that the Texinfo manual
 is more authoritative.  The note should say how to access the Texinfo
 documentation.
 
-@node Reading other Manuals
+@node Reading other Manuals,  , Man Pages, Documentation
 @section Reading other Manuals
 
 There may be non-free books or documentation files that describe the
@@ -2773,7 +2775,7 @@ outline structure, wording, tables or examples from preexisting non-free
 documentation.  Copying from free documentation may be ok; please check
 with the FSF about the individual case.
 
-@node Managing Releases
+@node Managing Releases,  , Documentation, Top
 @chapter The Release Process
 
 Making a release is more than just bundling up your source files in a
@@ -2785,12 +2787,11 @@ makes it easy to include your package into the larger framework of
 all GNU software.
 
 @menu
-* Configuration::		How Configuration Should Work
-* Makefile Conventions::	Makefile Conventions
-* Releases::			Making Releases
+* Configuration::               How Configuration Should Work
+* Releases::                    Making Releases
 @end menu
 
-@node Configuration
+@node Configuration, Releases, Managing Releases, Managing Releases
 @section How Configuration Should Work
 
 Each GNU distribution should come with a shell script named
@@ -2958,7 +2959,7 @@ ignore most of its arguments.
 @include make-stds.texi
 @raisesections
 
-@node Releases
+@node Releases,  , Configuration, Managing Releases
 @section Making Releases
 
 Package the distribution of Foo version 69.96 in a gzipped tar file
