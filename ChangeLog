@@ -1,3 +1,19 @@
+2005-02-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/programs.m4 (AC_PROG_SED): Don't look in
+	/usr/xpg4/bin since that sed dumps core (at least on Solaris 8).
+
+2005-02-04  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/m4sugar/m4sh.m4 (AS_UNAME): Try only /usr/bin/hostinfo, not
+	any `hostinfo' in $PATH, since hostinfo.exe is a popular file name
+	on some platforms.
+
+2005-02-04  Bruno Haible <bruno@clisp.org>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): New mkstemp entry.
+
 2005-02-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sugar.m4 (m4_re_escape): Escape ?, ^, \, $ too;
