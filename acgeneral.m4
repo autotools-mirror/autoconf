@@ -2444,23 +2444,22 @@ $2],
 ## ----------------------- ##
 
 
-# _AC_WHICH_A(NAME, PATH)
-# -----------------------
-# Work like `which -a NAME' in PATH, even if NAME is not executable.
-# Can be used inside backquotes.
-define([_AC_WHICH_A],
+# AC_SHELL_PATH_WALK([PATH = $PATH], BODY)
+# ----------------------------------------
+# Walk through PATH running BODY for each `ac_dir'.
+#
+# `$ac_dummy' forces splitting on constant user-supplied paths.
+# POSIX.2 word splitting is done only on the output of word
+# expansions, not every word.  This closes a longstanding sh security
+# hole.
+define([AC_SHELL_PATH_WALK],
 [ac_save_IFS=$IFS; IFS=':'
-dnl $ac_dummy forces splitting on constant user-supplied paths.
-dnl POSIX.2 word splitting is done only on the output of word expansions,
-dnl not every word.  This closes a longstanding sh security hole.
-ac_dummy="$2"
+ac_dummy="m4_default([$1], [$PATH])"
 for ac_dir in $ac_dummy; do
+  IFS=$ac_save_IFS
   test -z "$ac_dir" && ac_dir=.
-  if test -f $ac_dir/$1; then
-    echo "$ac_dir/$1"
-  fi
+  $2
 done
-IFS=$ac_save_IFS
 ])
 
 
@@ -2476,28 +2475,30 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 [if test -n "$$1"; then
   ac_cv_prog_$1="$$1" # Let the user override the test.
 else
-ifval([$6], [  ac_prog_rejected=no
-])dnl
-  for ac_path in `_AC_WHICH_A([$ac_word], [m4_default([$5], [$PATH])])`; do
 ifval([$6],
-[    if test "$ac_path" = "$6"; then
-      ac_prog_rejected=yes
-      continue
-    fi
+[  ac_prog_rejected=no
 ])dnl
-    ac_cv_prog_$1="$3"
-    break
-  done
-ifval([$6], [if test $ac_prog_rejected = yes; then
+  AC_SHELL_PATH_WALK([$5],
+[test -f $ac_dir/$ac_word || continue
+ifval([$6],
+[if test "$ac_dir/$ac_word" = "$6"; then
+  ac_prog_rejected=yes
+  continue
+fi
+])dnl
+ac_cv_prog_$1="$3"
+break])
+ifval([$6],
+[if test $ac_prog_rejected = yes; then
   # We found a bogon in the path, so make sure we never use it.
   set dummy $ac_cv_prog_$1
   shift
-  if test $[#] -gt 0; then
+  if test $[@%:@] != 0; then
     # We chose a different compiler from the bogus one.
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    set dummy "$ac_path" ${1+"$[@]"}
+    set dummy "$ac_dir/$ac_word" ${1+"$[@]"}
     shift
     ac_cv_prog_$1="$[@]"
 ifelse([$2], [$4],
@@ -2511,7 +2512,8 @@ fi
 ])dnl
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_CHECK_PROGS will keep looking.
-ifval([$4], [  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"
+ifval([$4],
+[  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
 $1=$ac_cv_prog_$1
@@ -2549,22 +2551,15 @@ AC_CACHE_VAL(ac_cv_path_$1,
   ac_cv_path_$1="$$1" # Let the user override the test with a path.
   ;;
   *)
-  ac_save_IFS=$IFS; IFS=':'
-dnl $ac_dummy forces splitting on constant user-supplied paths.
-dnl POSIX.2 word splitting is done only on the output of word expansions,
-dnl not every word.  This closes a longstanding sh security hole.
-  ac_dummy="m4_default([$4], [$PATH])"
-  for ac_dir in $ac_dummy; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f "$ac_dir/$ac_word"; then
-      ac_cv_path_$1=$ac_dir/$ac_word
-      break
-    fi
-  done
-  IFS=$ac_save_IFS
+  AC_SHELL_PATH_WALK([$4],
+[if test -f "$ac_dir/$ac_word"; then
+   ac_cv_path_$1=$ac_dir/$ac_word
+   break
+fi])
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
-ifval([$3], [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"
+ifval([$3],
+[  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"
 ])dnl
   ;;
 esac])dnl

@@ -1,5 +1,11 @@
 2000-05-24  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_WHICH_A): Replace it with...
+	(AC_SHELL_PATH_WALK): this.
+	(AC_CHECK_PROG, AC_PATH_PROG): Use it.
+
+2000-05-24  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Builtins): Document `unset'.
 	(Special Shell Variables): Adjust.
 	(Shellology): New section.  Introduce bash and zsh.
