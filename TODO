@@ -24,16 +24,9 @@ Document --install.  Should --install `fix' configure.in for the user?
 2.15 cannot be released without having `make check' succeed under
 DJGPP.  EMX will be a requirement for the next release, not this one.
 
-** AC_REQUIRE
-Axel Thimm (Sp?) once sent a very nice bug report about some problems
-when requirements are crossed.  Fix it, and test it.
-
 ** Doc:
 Should we document AC_LANG_* and AC_*_IFELSE?  I hope the interface is
 right...
-
-** AC_CONFIG_LINKS
-_Must_ support shell variables.  Yet another patch to config.status...
 
 ** autoconf --install
 We must finalize the interface we want.
@@ -45,9 +38,6 @@ ${1+"$@"}, set dummy.
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
-
-** AC_SYS_LARGEFILE
-We *need* it.
 
 ** More macros from Jim
 Those related to *_SLASH_*.

@@ -3713,7 +3713,16 @@ AC_DEFUN([AC_CHECK_TYPE],
 #
 # Finally, the `INIT-CMDS' are dumped into a special diversion, via
 # `_AC_CONFIG_COMMANDS_INIT'.  While `COMMANDS' are output once per TAG,
-# `INIT-CMDS' are dumpdef only once per call to AC_CONFIG_FOOS.
+# `INIT-CMDS' are dumped only once per call to AC_CONFIG_FOOS.
+#
+# It also leave the TAG in the shell variable ac_config_foo which contains
+# those which will actually be executed.  In other words:
+#
+#	if false; then
+#	  AC_CONFIG_FOOS(bar, [touch bar])
+#	fi
+#
+# will not create bar.
 #
 # AC_CONFIG_FOOS can be called several times (with different TAGs of
 # course).
@@ -3838,6 +3847,7 @@ ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 AC_DIVERT_POP()dnl
+ac_config_commands="$ac_config_commands $1"
 ])dnl
 
 # Initialize the lists.
@@ -3915,6 +3925,7 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 AC_DIVERT_POP()dnl
+ac_config_headers="$ac_config_headers $1"
 ])dnl
 
 # Initialize to empty.  It is much easier and uniform to have a config
@@ -3951,6 +3962,7 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 AC_DIVERT_POP()dnl
+ac_config_links="$ac_config_links $1"
 ])dnl
 
 
@@ -4021,6 +4033,7 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 AC_DIVERT_POP()dnl
+ac_config_files="$ac_config_files $1"
 ])dnl
 
 # Initialize the lists.
@@ -4146,25 +4159,26 @@ debug=false
 me=`echo "$[0]" | sed -e 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
+EOF
+
 # Files that config.status was made for.
-ifset([AC_LIST_FILES], [config_files="\
-m4_wrap(AC_LIST_FILES, [  ])"
-])dnl
-ifset([AC_LIST_HEADERS], [config_headers="\
-m4_wrap(AC_LIST_HEADERS, [  ])"
-])dnl
-EOF
-# Be careful that the expansion of AC_LIST_LINKS (which may contain
-# uses of shell variables) is itself expanded in an unquoted `here'-document.
-cat >>$CONFIG_STATUS <<EOF
-ifset([AC_LIST_LINKS], [config_links="\
-m4_wrap(AC_LIST_LINKS, [  ])"
-])dnl
-EOF
+if test -n "$ac_config_files"; then
+  echo "config_files=\"$ac_config_files\"" >>$CONFIG_STATUS
+fi
+
+if test -n "$ac_config_headers"; then
+  echo "config_headers=\"$ac_config_headers\"" >>$CONFIG_STATUS
+fi
+
+if test -n "$ac_config_links"; then
+  echo "config_links=\"$ac_config_links\"" >>$CONFIG_STATUS
+fi
+
+if test -n "$ac_config_commands"; then
+  echo "config_commands=\"$ac_config_commands\"" >>$CONFIG_STATUS
+fi
+
 cat >>$CONFIG_STATUS <<\EOF
-ifset([AC_LIST_COMMANDS], [config_commands="\
-m4_wrap(AC_LIST_COMMANDS, [  ])"
-])dnl
 
 ac_cs_usage="\
 \`$me' instantiates files from templates according to the

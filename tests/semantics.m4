@@ -307,3 +307,50 @@ AC_C_VOLATILE
 case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
  yes,*no*) exit 1;;
 esac]])
+
+
+
+
+## ------------- ##
+## Base macros.  ##
+## ------------- ##
+
+
+AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
+
+AT_DATA(configure.in,
+[[AC_INIT
+rm -rf header file link command
+touch header.in file.in link.in command.in
+case $what_to_test in
+ header)   AC_CONFIG_HEADERS(header:header.in);;
+ file)     AC_CONFIG_FILES(file:file.in);;
+ command)  AC_CONFIG_COMMANDS(command:command.in, [cp command.in command]);;
+ link)     AC_CONFIG_LINKS(link:link.in);;
+esac
+AC_OUTPUT
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
+
+# Create a header
+AT_CHECK([./configure what_to_test=header], 0, ignore)
+AT_CHECK([ls header file command link 2>/dev/null], [], [header
+])
+
+# Create a file
+AT_CHECK([./configure what_to_test=file], 0, ignore)
+AT_CHECK([ls header file command link 2>/dev/null], [], [file
+])
+
+# Execute a command
+AT_CHECK([./configure what_to_test=command], 0, ignore)
+AT_CHECK([ls header file command link 2>/dev/null], [], [command
+])
+
+# Create a link
+AT_CHECK([./configure what_to_test=link], 0, ignore)
+AT_CHECK([ls header file command link 2>/dev/null], [], [link
+])
+
+AT_CLEANUP(header file link command header.in file.in link.in command.in configure config.status)

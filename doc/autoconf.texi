@@ -1355,8 +1355,10 @@ instantiating macros: @code{AC_CONFIG_FILES}, @code{AC_CONFIG_HEADERS},
 macro @code{AC_CONFIG_COMMANDS}, and @code{AC_CONFIG_LINKS}.  They all
 have this prototype:
 
+@c Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
+@c awful.
 @example
-AC_CONFIG_FOOS(@var{tag}..., @ovar{commands}, @ovar{init-cmds})
+AC_CONFIG_FOOS(@var{tag}..., [@var{commands}], [@var{init-cmds}])
 @end example
 
 @noindent
@@ -1385,6 +1387,22 @@ needs to run the @var{cmds}.  At the difference of @var{cmds}, the
 All these macros can be called multiple times, with different
 @var{tag}s, of course!
 
+You are encouraged to use literals as @var{tags}.  In particular, you
+should avoid
+
+@example
+... && my_foos="$my_foos fooo"
+... && my_foos="$my_foos foooo"
+AC_CONFIG_FOOS($my_foos)
+@end example
+
+@noindent
+and use this instead:
+
+@example
+... && AC_CONFIG_FOOS(fooo)
+... && AC_CONFIG_FOOS(foooo)
+@end example
 
 @node Configuration Files, Makefile Substitutions, Configuration Actions, Setup
 @section Creating Configuration Files

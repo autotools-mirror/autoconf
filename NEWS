@@ -110,9 +110,10 @@ test cases in this new frame work.
 - AC_CONFIG_LINKS
   Replaces AC_LINK_FILES.
 
-- AC_CONFIG_SUBDIRS
-  It now has a dynamic behavior: you should no longer use shell
-  variables as argument.  Instead of
+- AC_CONFIG_HEADERS, AC_CONFIG_COMMANDS, AC_CONFIG_SUBDIRS,
+  AC_CONFIG_LINKS, and AC_CONFIG_FILES
+  They now obey sh: you should no longer use shell variables as
+  argument.  Instead of
 
         test "$package_foo_enabled" = yes && $my_subdirs="$my_subdirs foo"
         AC_CONFIG_SUBDIRS($my_subdirs)
@@ -137,8 +138,8 @@ test cases in this new frame work.
 - AC_CHECK_DECL, AC_CHECK_DECLS
   To check whether a symbol is declared.
 
-- AC_CHECK_SIZEOF
-  No longer needs a cross-compilation size.
+- AC_CHECK_SIZEOF, AC_C_CHAR_UNSIGNED.
+  No longer need a cross-compilation default.
 
 - AC_CHECK_TYPE
   The test it performs is much more robust than previously, and makes
