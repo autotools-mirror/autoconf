@@ -44,6 +44,18 @@ export LANG; LANG=C
 export LC_ALL; LC_ALL=C
 
 
+# exclude_list
+# ------------
+# Macros which must not be checked at all (not by syntax.at, not udpate.at).
+# The trailing new line is meant.
+#
+# - ac_cv_prog_gcc, gxx, g77
+#   Not macros, just mapping from old variable name to a new one.
+exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
+'
+
+
+
 ## ----------- ##
 ## syntax.at.  ##
 ## ----------- ##
@@ -106,7 +118,7 @@ _AC_'
 # Build a single egrep pattern out of filter_macros_list.
 # Sed is used to get rid of the trailing `|' coming from the trailing
 # `\n' from `echo'.
-syntax_exclude_egrep=`echo "$syntax_exclude_list" | tr '
+syntax_exclude_egrep=`echo "$exclude_list$syntax_exclude_list" | tr '
 ' '|' | sed 's/.$//'`
 
 sed 's/^ *//' >syntax.tat <<MK_EOF
@@ -167,7 +179,7 @@ update_exclude_list='^AC_LANG_RESTORE$
 # Build a single egrep pattern out of filter_macros_list.
 # Sed is used to get rid of the trailing `|' coming from the trailing
 # `\n' from `echo'.
-update_exclude_egrep=`echo "$update_exclude_list" | tr '
+update_exclude_egrep=`echo "$exclude_list$update_exclude_list" | tr '
 ' '|' | sed 's/.$//'`
 
 

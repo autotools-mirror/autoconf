@@ -1,5 +1,12 @@
 2000-11-07  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (ac_cv_prog_gcc, ac_cv_prog_gxx, ac_cv_prog_g77):
+	Be AU_DEFUN'd, not AU_ALIAS'd.
+	Reported by Ralf Corsepius.
+	* tests/mktests.sh (exclude_list): Skip these variables.
+
+2000-11-07  Akim Demaille  <akim@epita.fr>
+
 	m4_syscmd was reestablished as `syscd' intead of `syscmd' because
 	instead of `s/^m4_//', m4_copy_unm4 was running `s/[m4_]//'.
 

@@ -681,7 +681,8 @@ AC_DEFUN([AC_LANG_COMPILER(C)],
 # ac_cv_prog_gcc
 # --------------
 # We used to name the cache variable this way.
-AU_ALIAS([ac_cv_prog_gcc], [ac_cv_c_compiler_gnu])
+AU_DEFUN([ac_cv_prog_gcc],
+[ac_cv_c_compiler_gnu])
 
 
 # AC_PROG_CC([COMPILER ...])
@@ -875,7 +876,8 @@ AC_DEFUN([AC_LANG_COMPILER(C++)],
 # ac_cv_prog_gxx
 # --------------
 # We used to name the cache variable this way.
-AU_ALIAS([ac_cv_prog_gxx], [ac_cv_cxx_compiler_gnu])
+AU_DEFUN([ac_cv_prog_gxx],
+[ac_cv_cxx_compiler_gnu])
 
 
 # AC_PROG_CXX([LIST-OF-COMPILERS])
@@ -957,7 +959,8 @@ AC_DEFUN([AC_LANG_COMPILER(Fortran 77)],
 # ac_cv_prog_g77
 # --------------
 # We used to name the cache variable this way.
-AU_ALIAS([ac_cv_prog_g77], [ac_cv_f77_compiler_gnu])
+AU_DEFUN([ac_cv_prog_g77],
+[ac_cv_f77_compiler_gnu])
 
 
 # AC_PROG_F77([COMPILERS...])
