@@ -28,7 +28,7 @@
 
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
-	More uniform style is scripts.
+	More uniform style in scripts.
 
 	* autoheader.sh: s/-eq/=/.
 	Uniform ordering of variable initializations, option handling.
