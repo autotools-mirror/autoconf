@@ -11290,13 +11290,6 @@ exec > foo
 rm -f foo
 @end example
 
-@item @command{rm}
-@c ---------------
-@prindex @command{rm}
-Avoid @samp{rm -fr}; instead, use @samp{rm -f -r}.  @acronym{POSIX} says
-that scripts must not combine options into a single argument when
-invoking a standard utility like @command{rm}.
-
 @item @command{sed}
 @c ----------------
 @prindex @command{sed}

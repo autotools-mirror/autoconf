@@ -1,5 +1,9 @@
 2004-01-05  Paul Eggert  <eggert@twinsun.com>
 
+	* doc/autoconf.texi (Limitations of Usual Tools):
+	Remove warning against "rm -fr" introduced yesterday; it
+	seems to have been a false alarm.
+
 	* bin/Makefile.am (autoconf, autoheader, autom4te, autoreconf,
 	autoscan, autoupdate, ifnames): Don't use chmod -w.
 	* lib/Makefile.am (autom4te.cfg): Likewise.
