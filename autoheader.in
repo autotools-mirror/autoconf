@@ -200,11 +200,14 @@ done
 
 if test $# -eq 0; then
   if test $status -eq 0; then
-    if cmp -s $tmpout ${config_h}.in; then
-      rm -f $tmpout
-    else
-      mv -f $tmpout ${config_h}.in
-    fi
+    # Update the file even if it is unchanged, to avoid foiling a
+    # Makefile rule that makes it from configure.in.
+    # If you let the rule for making config.status from configure
+    # create config.h from config.h.in, then an unnecessary update here
+    # will not cause unneeded recompilation.  Recompilation should only
+    # happen if config.h is updated, which won't occur if config.h.in
+    # had the same contents, even if its timestamp changed.  (Ick.)
+    mv -f $tmpout ${config_h}.in
   else
     rm -f $tmpout
   fi
