@@ -3255,7 +3255,7 @@ input before matching.  On Solaris 9 @code{/usr/bin/grep} does not
 understand the @option{-e} option.  On NeXT, @code{grep} understands only a
 single @option{-e} option.  This macro looks for @sc{gnu} Grep or
 else the best available @code{grep} or @code{ggrep} in the user's
-@code{$PATH} which accepts the longest input lines possible, and which
+@env{PATH} which accepts the longest input lines possible, and which
 accepts and respects multiple @option{-e} options.  Set the
 output variable @code{GREP} to whatever is chosen.
 @end defmac
@@ -3264,8 +3264,8 @@ output variable @code{GREP} to whatever is chosen.
 @acindex{PROG_EGREP}
 @ovindex EGREP
 Check whether @code{$GREP -E} works, or else search the user's
-@code{$PATH} for @code{egrep}, and @code{gegrep}, in that order, and set
-output variable @code{EGREP} to the one which accepts the longest input
+@env{PATH} for @code{egrep}, and @code{gegrep}, in that order, and set
+output variable @code{EGREP} to the one that accepts the longest input
 lines.
 @end defmac
 
@@ -3273,8 +3273,8 @@ lines.
 @acindex{PROG_FGREP}
 @ovindex FGREP
 Check whether @code{$GREP -F} works, or else search the user's
-@code{$PATH} for @code{fgrep}, and @code{gfgrep}, in that order, and set
-output variable @code{FGREP} to the one which accepts the longest input
+@env{PATH} for @code{fgrep}, and @code{gfgrep}, in that order, and set
+output variable @code{FGREP} to the one that accepts the longest input
 lines.
 @end defmac
 
@@ -15136,10 +15136,10 @@ the very platforms that are most likely to torture Autoconf and
 exhibit deficiencies.
 
 To circumvent this problem many package maintainers have developed their
-own testing framework, based on simple shell scripts whose sole output
-are their exit status: the test succeeded, or failed.  In addition, most
-of these tests share some common patterns, what results in lots of
-duplicated code, tedious maintenance etc.
+own testing framework, based on simple shell scripts whose sole outputs
+are exit status values describing whether the test succeeded.  Most of
+these tests share common patterns, and this can result in lots of
+duplicated code and tedious maintenance.
 
 Following exactly the same reasoning that yielded to the inception of
 Autoconf, Autotest provides a test suite generation frame work, based on
@@ -15151,7 +15151,7 @@ Autoconf itself has been using Autotest for years, and we do attest that
 it has considerably improved the strength of the test suite, and the
 quality of bug reports.  Other projects are known to use some generation
 of Autotest, such as Bison, Free Recode, Free Wdiff, @acronym{GNU} Tar, each of
-them having different needs, what slowly polishes Autotest as a general
+them with different needs, and this usage has validated Autotest as a general
 testing framework.
 
 Nonetheless, compared to Deja@acronym{GNU}, Autotest is inadequate for
@@ -15189,16 +15189,16 @@ Each test of the validation suite should be part of some test group.  A
 @dfn{test group} is a sequence of interwoven tests that ought to be
 executed together, usually because one test in the group creates data
 files than a later test in the same group needs to read.  Complex test
-groups make later debugging more tedious.  It is much better keeping
-keep only a few tests per test group, and if you can put only one test
-per test group, this is just ideal.
+groups make later debugging more tedious.  It is much better to
+keep only a few tests per test group.  Ideally there is only one test
+per test group.
 
 For all but the simplest packages, some file such as @file{testsuite.at}
 does not fully hold all test sources, as these are often easier to
 maintain in separate files.  Each of these separate files holds a single
 test group, or a sequence of test groups all addressing some common
-functionality in the package.  In such cases, file @file{testsuite.at}
-only initializes the whole validation suite, and sometimes do elementary
+functionality in the package.  In such cases, @file{testsuite.at}
+merely initializes the validation suite, and sometimes does elementary
 health checking, before listing include statements for all other test
 files.  The special file @file{package.m4}, containing the
 identification of the package, is automatically included if found.
@@ -15231,7 +15231,7 @@ of debugging scripts has the purpose of easing the chase for bugs.
 @end itemize
 
 In the ideal situation, none of the tests fail, and consequently, no
-debugging directory is left out of validation.
+debugging directory is left behind for validation.
 
 It often happens in practice that individual tests in the validation
 suite need to get information coming out of the configuration process.
@@ -15363,12 +15363,12 @@ new executables, in other words, don't fear registering one program
 several times.
 @end defmac
 
-Autotest test suites rely on the @env{PATH} to find the tested program.
-This saves from generating the absolute names of the various tools, and
-makes it possible to test installed programs.  Therefore, knowing what
-programs are being exercised is crucial to understand some problems in
+Autotest test suites rely on @env{PATH} to find the tested program.
+This avoids the need to generate absolute names of the various tools, and
+makes it possible to test installed programs.  Therefore, knowing which
+programs are being exercised is crucial to understanding problems in
 the test suite itself, or its occasional misuses.  It is a good idea to
-also subscribe foreign programs you depend upon, to ease incompatibility
+also subscribe foreign programs you depend upon, to avoid incompatible
 diagnostics.
 
 @sp 1
