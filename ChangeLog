@@ -1,5 +1,10 @@
 2001-06-09  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Portable Shell Programming): Promoted as a
+	chapter.
+
+2001-06-09  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Builtins): Complete the
 	description of the here-docs penalties with Alexandre Oliva's
 	explanations.

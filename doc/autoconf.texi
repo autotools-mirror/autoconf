@@ -137,6 +137,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Setup::                       Initialization and output
 * Existing Tests::              Macros that check for particular features
 * Writing Tests::               How to write new feature checks
+* Portable Shell::              Shell script portability pitfalls
 * Results::                     What to do with results from feature checks
 * Writing Macros::              Adding new macros to Autoconf
 * Manual Configuration::        Selecting features that can't be guessed
@@ -260,7 +261,6 @@ Writing Tests
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
-* Portable Shell::              Shell script portability pitfalls
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
 
@@ -4809,7 +4809,7 @@ facilities.  Should be called before any macros that run the C compiler.
 
 @c ========================================================= Writing Tests
 
-@node Writing Tests, Results, Existing Tests, Top
+@node Writing Tests, Portable Shell, Existing Tests, Top
 @chapter Writing Tests
 
 If the existing feature tests don't do something you need, you have to
@@ -4842,7 +4842,6 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
-* Portable Shell::              Shell script portability pitfalls
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
 @end menu
@@ -5136,7 +5135,7 @@ inlines; for example, @code{memcpy}.  To avoid errors when checking for
 them, either pass them the correct number of arguments or redeclare them
 with a different return type (such as @code{char}).
 
-@node Systemology, Portable Shell, Run Time, Writing Tests
+@node Systemology, Multiple Cases, Run Time, Writing Tests
 @section Systemology
 
 This section aims at presenting some systems and pointers to
@@ -5158,8 +5157,111 @@ man pages}.
 @end table
 
 
-@node Portable Shell, Multiple Cases, Systemology, Writing Tests
-@section Portable Shell Programming
+@node Multiple Cases, Language Choice, Systemology, Writing Tests
+@section Multiple Cases
+
+Some operations are accomplished in several possible ways, depending on
+the @sc{unix} variant.  Checking for them essentially requires a ``case
+statement''.  Autoconf does not directly provide one; however, it is
+easy to simulate by using a shell variable to keep track of whether a
+way to perform the operation has been found yet.
+
+Here is an example that uses the shell variable @code{fstype} to keep
+track of whether the remaining cases need to be checked.
+
+@example
+@group
+AC_MSG_CHECKING([how to get file system type])
+fstype=no
+# The order of these tests is important.
+AC_TRY_CPP([#include <sys/statvfs.h>
+#include <sys/fstyp.h>],
+           [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
+if test $fstype = no; then
+  AC_TRY_CPP([#include <sys/statfs.h>
+#include <sys/fstyp.h>],
+             [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
+fi
+if test $fstype = no; then
+  AC_TRY_CPP([#include <sys/statfs.h>
+#include <sys/vmount.h>],
+             [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
+fi
+# (more cases omitted here)
+AC_MSG_RESULT([$fstype])
+@end group
+@end example
+
+@node Language Choice,  , Multiple Cases, Writing Tests
+@section Language Choice
+@cindex Language
+
+Autoconf-generated @code{configure} scripts check for the C compiler and
+its features by default.  Packages that use other programming languages
+(maybe more than one, e.g. C and C++) need to test features of the
+compilers for the respective languages.  The following macros determine
+which programming language is used in the subsequent tests in
+@file{configure.ac}.
+
+@defmac AC_LANG (@var{language})
+Do compilation tests using the compiler, preprocessor and file
+extensions for the specified @var{language}.
+
+Supported languages are:
+
+@table @samp
+@item C
+Do compilation tests using @code{CC} and @code{CPP} and use extension
+@file{.c} for test programs.
+
+@item C++
+Do compilation tests using @code{CXX} and @code{CXXCPP} and use
+extension @file{.C} for test programs.
+
+@item Fortran 77
+Do compilation tests using @code{F77} and use extension @file{.f} for
+test programs.
+@end table
+@end defmac
+
+@defmac AC_LANG_PUSH (@var{language})
+@maindex LANG_PUSH
+Remember the current language (as set by @code{AC_LANG}) on a stack, and
+then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
+in macros that need to temporarily switch to a particular language.
+@end defmac
+
+@defmac AC_LANG_POP (@ovar{language})
+@maindex LANG_POP
+Select the language that is saved on the top of the stack, as set by
+@code{AC_LANG_PUSH}, and remove it from the stack.
+
+If given, @var{language} specifies the language we just @emph{quit}.  It
+is a good idea to specify it when it's known (which should be the
+case@dots{}), since Autoconf will detect inconsistencies.
+
+@example
+AC_LANG_PUSH(Fortran 77)
+# Perform some tests on Fortran 77.
+# ...
+AC_LANG_POP(Fortran 77)
+@end example
+@end defmac
+
+@defmac AC_REQUIRE_CPP
+@maindex REQUIRE_CPP
+Ensure that whichever preprocessor would currently be used for tests has
+been found.  Calls @code{AC_REQUIRE} (@pxref{Prerequisite Macros}) with an
+argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
+depending on which language is current.
+@end defmac
+
+
+
+@c ============================================= Portable Shell Programming
+
+@node Portable Shell, Results, Writing Tests, Top
+@chapter Portable Shell Programming
 
 When writing your own checks, there are some shell-script programming
 techniques you should avoid in order to make your code portable.  The
@@ -5204,7 +5306,7 @@ Some of these external utilities have a portable subset of features; see
 @end menu
 
 @node Shellology, File Descriptors, Portable Shell, Portable Shell
-@subsection Shellology
+@section Shellology
 
 There are several families of shells, most prominently the Bourne
 family and the C shell family which are deeply incompatible.  If you
@@ -5310,7 +5412,7 @@ So while most modern systems do have a shell _somewhere_ that meets the
 @end quotation
 
 @node File Descriptors, File System Conventions, Shellology, Portable Shell
-@subsection File Descriptors
+@section File Descriptors
 
 Some file descriptors shall not be used, since some systems, admittedly
 arcane, use them for special purpose:
@@ -5379,7 +5481,7 @@ One workaround is to grep out uninteresting lines, hoping not to remove
 good ones@dots{}
 
 @node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
-@subsection File System Conventions
+@section File System Conventions
 
 While @command{autoconf} and friends will usually be run on some Unix
 variety, it can and will be used on other systems, most notably @sc{dos}
@@ -5495,7 +5597,7 @@ include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 @end table
 
 @node Shell Substitutions, Assignments, File System Conventions, Portable Shell
-@subsection Shell Substitutions
+@section Shell Substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
 systematically split variables and backquoted expressions, in particular
@@ -5689,7 +5791,7 @@ $(echo blah)
 
 
 @node Assignments, Special Shell Variables, Shell Substitutions, Portable Shell
-@subsection Assignments
+@section Assignments
 
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
@@ -5759,7 +5861,7 @@ for the rationale.
 
 
 @node Special Shell Variables, Limitations of Builtins, Assignments, Portable Shell
-@subsection Special Shell Variables
+@section Special Shell Variables
 
 Some shell variables should not be used, since they can have a deep
 influence on the behavior of the shell.  In order to recover a sane
@@ -5887,7 +5989,7 @@ can be observed by using @command{set}.
 
 
 @node Limitations of Builtins, Limitations of Usual Tools, Special Shell Variables, Portable Shell
-@subsection Limitations of Shell Builtins
+@section Limitations of Shell Builtins
 
 No, no, we are serious: some shells do have limitations! :)
 
@@ -6362,7 +6464,7 @@ the case of environment variables.
 @end table
 
 @node Limitations of Usual Tools, Limitations of Make, Limitations of Builtins, Portable Shell
-@subsection Limitations of Usual Tools
+@section Limitations of Usual Tools
 
 The small set of tools you can expect to find on any machine can still
 include some limitations you should be aware of.
@@ -6781,7 +6883,7 @@ on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
 
 
 @node Limitations of Make,  , Limitations of Usual Tools, Portable Shell
-@subsection Limitations of Make
+@section Limitations of Make
 
 Make itself suffers a great number of limitations, only a few of which
 being listed here.  First of all, remember that since commands are
@@ -6795,109 +6897,11 @@ Don't use it!  For instance any assignment to @code{VPATH} causes Sun
 @end table
 
 
-@node Multiple Cases, Language Choice, Portable Shell, Writing Tests
-@section Multiple Cases
-
-Some operations are accomplished in several possible ways, depending on
-the @sc{unix} variant.  Checking for them essentially requires a ``case
-statement''.  Autoconf does not directly provide one; however, it is
-easy to simulate by using a shell variable to keep track of whether a
-way to perform the operation has been found yet.
-
-Here is an example that uses the shell variable @code{fstype} to keep
-track of whether the remaining cases need to be checked.
-
-@example
-@group
-AC_MSG_CHECKING([how to get file system type])
-fstype=no
-# The order of these tests is important.
-AC_TRY_CPP([#include <sys/statvfs.h>
-#include <sys/fstyp.h>],
-           [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
-if test $fstype = no; then
-  AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/fstyp.h>],
-             [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
-fi
-if test $fstype = no; then
-  AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/vmount.h>],
-             [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
-fi
-# (more cases omitted here)
-AC_MSG_RESULT([$fstype])
-@end group
-@end example
-
-@node Language Choice,  , Multiple Cases, Writing Tests
-@section Language Choice
-@cindex Language
-
-Autoconf-generated @code{configure} scripts check for the C compiler and
-its features by default.  Packages that use other programming languages
-(maybe more than one, e.g. C and C++) need to test features of the
-compilers for the respective languages.  The following macros determine
-which programming language is used in the subsequent tests in
-@file{configure.ac}.
-
-@defmac AC_LANG (@var{language})
-Do compilation tests using the compiler, preprocessor and file
-extensions for the specified @var{language}.
-
-Supported languages are:
-
-@table @samp
-@item C
-Do compilation tests using @code{CC} and @code{CPP} and use extension
-@file{.c} for test programs.
-
-@item C++
-Do compilation tests using @code{CXX} and @code{CXXCPP} and use
-extension @file{.C} for test programs.
-
-@item Fortran 77
-Do compilation tests using @code{F77} and use extension @file{.f} for
-test programs.
-@end table
-@end defmac
-
-@defmac AC_LANG_PUSH (@var{language})
-@maindex LANG_PUSH
-Remember the current language (as set by @code{AC_LANG}) on a stack, and
-then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
-in macros that need to temporarily switch to a particular language.
-@end defmac
-
-@defmac AC_LANG_POP (@ovar{language})
-@maindex LANG_POP
-Select the language that is saved on the top of the stack, as set by
-@code{AC_LANG_PUSH}, and remove it from the stack.
-
-If given, @var{language} specifies the language we just @emph{quit}.  It
-is a good idea to specify it when it's known (which should be the
-case@dots{}), since Autoconf will detect inconsistencies.
-
-@example
-AC_LANG_PUSH(Fortran 77)
-# Perform some tests on Fortran 77.
-# ...
-AC_LANG_POP(Fortran 77)
-@end example
-@end defmac
-
-@defmac AC_REQUIRE_CPP
-@maindex REQUIRE_CPP
-Ensure that whichever preprocessor would currently be used for tests has
-been found.  Calls @code{AC_REQUIRE} (@pxref{Prerequisite Macros}) with an
-argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
-depending on which language is current.
-@end defmac
 
 
 @c ====================================================== Results of Tests.
 
-@node Results, Writing Macros, Writing Tests, Top
+@node Results, Writing Macros, Portable Shell, Top
 @chapter Results of Tests
 
 Once @code{configure} has determined whether a feature exists, what can
