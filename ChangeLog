@@ -1,3 +1,8 @@
+2000-06-06  Akim Demaille  <akim@epita.fr>
+
+	* tests/aclocal.m4 (AC_ENV_SAVE): Skip `no_x'.
+	From Mark Elbrecht.
+
 2000-06-05  Mo DeJong  <mdejong@cygnus.com>
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Move the setting
