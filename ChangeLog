@@ -1,5 +1,11 @@
 2000-07-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_SHELL_MKDIR_P): s/ac_dir/ac_mkdir_dir/ to avoid
+	clashes with the numerous ac_dir loops.
+	Reported by Lars J. Aas.
+
+2000-07-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_SHELL_DIRNAME): Return `.', not `' when there
 	is no directory part.
 
