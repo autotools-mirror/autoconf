@@ -1,5 +1,11 @@
 2000-02-25  Akim Demaille  <akim@epita.fr>
 
+	* src/acgeneral.texi (AC_INIT_NOTICE): Include inttypes.h in the
+	ac_includes_default.
+	* doc/autoconf.texi (Default Includes): Adjust.
+
+2000-02-25  Akim Demaille  <akim@epita.fr>
+
 	Export the knowledge on disabling echo's trailing new line.
 
 	* acspecific.m4 (AC_PROG_ECHO_N): Renamed as...

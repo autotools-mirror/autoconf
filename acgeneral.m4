@@ -513,7 +513,8 @@ popdef([AC_Prefix])dnl
 AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using Autoconf version ]AC_ACVERSION[
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+# Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
@@ -545,6 +546,9 @@ ac_includes_default="\
 # if HAVE_STRINGS_H
 #  include <strings.h>
 # endif
+#endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
 #endif
 #if HAVE_UNISTD_H
 # include <unistd.h>

@@ -1919,6 +1919,9 @@ Most generic macros provide the following default set of includes:
 #  include <strings.h>
 # endif
 #endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
