@@ -1942,7 +1942,8 @@ _ACEOF
 m4_define([AC_SUBST],
 [m4_pattern_allow([^$1$])dnl
 m4_ifvaln([$2], [$1=$2])[]dnl
-m4_append_uniq([_AC_SUBST_VARS], [$1], [ ])dnl
+m4_append_uniq([_AC_SUBST_VARS], [$1], [
+])dnl
 ])# AC_SUBST
 
 
@@ -1951,7 +1952,8 @@ m4_append_uniq([_AC_SUBST_VARS], [$1], [ ])dnl
 # Read the comments of the preceding macro.
 m4_define([AC_SUBST_FILE],
 [m4_pattern_allow([^$1$])dnl
-m4_append_uniq([_AC_SUBST_FILES], [$1], [ ])])
+m4_append_uniq([_AC_SUBST_FILES], [$1], [
+])])
 
 
 
