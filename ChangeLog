@@ -1,3 +1,8 @@
+Mon Dec 11 22:12:54 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acspecific.m4 (AC_PROG_CC_C_O): Rearrange logic to get the right
+	answer for cc.
+
 Fri Nov 24 17:26:38 1995  Miles Bader  <miles@gnu.ai.mit.edu>
 
 	* autoconf.sh: Define $AWK from the subst @AWK@, and use it.
