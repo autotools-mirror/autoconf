@@ -1,5 +1,16 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	AC_LIBOBJ when used by AC_REPLACE_FUNCS should not complain for
+	variables as argument.
+
+	* acgeneral.m4 (_AC_LIBOBJ): Same as the former AC_LIBOBJ, but
+	takes an additional argument: action to perform when non-literal
+	argument.
+	(AC_LIBOBJ): Use it.
+	(AC_REPLACE_FUNCS): Use _AC_LIBOBJ, not AC_LIBOBJ.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	LANGUAGE should be neutralized too.
 
 	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT): Do it.
