@@ -289,7 +289,7 @@ changequote([,])dnl
       AC_WARN($ac_option: invalid host type)
     fi
     if test "x$nonopt" -ne xNONE; then
-      AC_WARN(can only configure for one host and one target at a time)
+      AC_ERROR(can only configure for one host and one target at a time)
     fi
     nonopt="$ac_option"
     ;;
