@@ -254,7 +254,7 @@ do
 	;;
 
     --clean | -c )
-	rm -f -r $at_suite_dir $at_suite_log
+	rm -f -r "$at_suite_dir" "$at_suite_log"
 	exit 0
 	;;
 
@@ -482,7 +482,7 @@ export PATH
 # 5 is the log file.  Not to be overwritten if `-d'.
 m4_define([AS_MESSAGE_LOG_FD], [5])
 $at_debug_p && at_suite_log=/dev/null
-exec AS_MESSAGE_LOG_FD>$at_suite_log
+exec AS_MESSAGE_LOG_FD>"$at_suite_log"
 
 # Banners and logs.
 AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
@@ -558,20 +558,20 @@ m4_divert_pop([PREPARE_TESTS])dnl
 m4_divert_push([TESTS])dnl
 
 # Create the master directory if it doesn't already exist.
-test -d $at_suite_dir ||
-  mkdir $at_suite_dir ||
-  AS_ERROR([cannot create $at_suite_dir])
+test -d "$at_suite_dir" ||
+  mkdir "$at_suite_dir" ||
+  AS_ERROR([cannot create '$at_suite_dir'])
 
 # Can we diff with `/dev/null'?  DU 5.0 refuses.
 if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
 else
   at_devnull=$at_suite_dir/devnull
-  cp /dev/null $at_devnull
+  cp /dev/null "$at_devnull"
 fi
 
 # Use `diff -u' when possible.
-if diff -u $at_devnull $at_devnull >/dev/null 2>&1; then
+if diff -u "$at_devnull" "$at_devnull" >/dev/null 2>&1; then
   at_diff='diff -u'
 else
   at_diff=diff
@@ -581,7 +581,7 @@ fi
 for at_group in $at_groups
 do
   # Be sure to come back to the top test directory.
-  cd $at_suite_dir
+  cd "$at_suite_dir"
 
   case $at_group in
     banner-*)
@@ -608,7 +608,7 @@ do
       ;;
   esac
 
-  echo 0 > $at_status_file
+  echo 0 > "$at_status_file"
 
   # Clearly separate the test groups when verbose.
   test $at_group_count != 0 && $at_verbose
@@ -616,9 +616,9 @@ do
   # In verbose mode, append to the log file *and* show on
   # the standard output; in quiet mode only write to the log
   if test $at_verbose = echo; then
-    at_tee_pipe="tee -a $at_group_log"
+    at_tee_pipe='tee -a "$at_group_log"'
   else
-    at_tee_pipe="cat >> $at_group_log"
+    at_tee_pipe='cat >> "$at_group_log"'
   fi
 
   case $at_group in
@@ -634,22 +634,22 @@ m4_divert_push([TESTS_END])[]dnl
 
   # Be sure to come back to the suite directory, in particular
   # since below we might `rm' the group directory we are in currently.
-  cd $at_suite_dir
+  cd "$at_suite_dir"
 
   case $at_group in
     banner-*) ;;
     *)
-      if test ! -f $at_check_line_file; then
+      if test ! -f "$at_check_line_file"; then
 	sed "s/^ */$as_me: warning: /" <<_ATEOF
 	A failure happened in a test group before any test could be
 	run. This means that test suite is improperly designed.  Please
 	report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
-    	echo "$at_setup_line" >$at_check_line_file
+    	echo "$at_setup_line" >"$at_check_line_file"
       fi
       at_group_count=`expr 1 + $at_group_count`
       $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"
-      echo $ECHO_N "$at_group. $at_setup_line: $ECHO_C" >> $at_group_log
+      echo $ECHO_N "$at_group. $at_setup_line: $ECHO_C" >> "$at_group_log"
       case $at_xfail:$at_status in
 	yes:0)
 	    at_msg="UNEXPECTED PASS"
@@ -662,17 +662,17 @@ _ATEOF
 	    at_errexit=false
 	    ;;
 	*:77)
-	    at_msg="skipped (`cat $at_check_line_file`)"
+	    at_msg='skipped ('`cat "$at_check_line_file"`')'
 	    at_skip_list="$at_skip_list $at_group"
 	    at_errexit=false
 	    ;;
 	yes:*)
-	    at_msg="expected failure (`cat $at_check_line_file`)"
+	    at_msg='expected failure ('`cat $at_check_line_file`')'
 	    at_xfail_list="$at_xfail_list $at_group"
 	    at_errexit=false
 	    ;;
 	no:*)
-	    at_msg="FAILED (`cat $at_check_line_file`)"
+	    at_msg='FAILED ('`cat $at_check_line_file`')'
 	    at_fail_list="$at_fail_list $at_group"
 	    at_errexit=$at_errexit_p
 	    ;;
@@ -685,11 +685,11 @@ _ATEOF
 	  # We're not including the group log, so the success message
 	  # is written in the global log separately.  But we also
 	  # write to the group log in case they're using -d.
-	  if test -f $at_times_file; then
-	    at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
-	    rm -f $at_times_file
+	  if test -f "$at_times_file"; then
+	    at_log_msg="$at_log_msg	("`sed 1d "$at_times_file"`')'
+	    rm -f "$at_times_file"
           fi
-	  echo "$at_log_msg" >> $at_group_log
+	  echo "$at_log_msg" >> "$at_group_log"
 	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
 
 	  # Cleanup the group directory, unless the user wants the files.
@@ -699,14 +699,14 @@ _ATEOF
 	  # Upon failure, include the log into the testsuite's global
 	  # log.  The failure message is written in the group log.  It
 	  # is later included in the global log.
-	  echo "$at_log_msg" >> $at_group_log
+	  echo "$at_log_msg" >> "$at_group_log"
 
 	  # Upon failure, keep the group directory for autopsy, and
 	  # create the debugging script.
 	  {
 	    echo "#! /bin/sh"
 	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-	    echo "cd $at_dir"
+	    echo "cd '$at_dir'"
 	    echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
 	         '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
 	    echo 'exit 1'
@@ -720,7 +720,7 @@ _ATEOF
 done
 
 # Back to the top directory.
-cd $at_dir
+cd "$at_dir"
 
 # Compute the duration of the suite.
 at_stop_date=`date`
@@ -859,7 +859,7 @@ else
         # Create a fresh directory for the next test group, and enter.
         at_group_dir=$at_suite_dir/$at_group_normalized
         at_group_log=$at_group_dir/$as_me.log
-        cat $at_group_log
+        cat "$at_group_log"
         echo
       done
       echo
@@ -1090,9 +1090,9 @@ m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
       $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
       $at_traceoff
-      $at_times_p && times >$at_times_file
+      $at_times_p && times >"$at_times_file"
     ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
-    at_status=`cat $at_status_file`
+    at_status=`cat "$at_status_file"`
     ;;
 
 m4_divert_pop([TESTS])dnl Back to KILL.
@@ -1123,7 +1123,7 @@ _ATEOF
 # Initialize an input data FILE with given CONTENTS, which should end with
 # an end of line.
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
-# If you don't want CONTENT to be evaluated, quote it twice.
+# If you don't want CONTENTS to be evaluated, quote it twice.
 m4_define([AT_DATA],
 [cat >$1 <<'_ATEOF'
 $2[]_ATEOF
@@ -1220,32 +1220,32 @@ m4_define([AT_CHECK_NOESCAPE],
 m4_define([_AT_CHECK],
 [$at_traceoff
 echo "AT_LINE: AS_ESCAPE([$1])"
-echo AT_LINE >$at_check_line_file
-( $at_traceon; $1 ) >$at_stdout 2>$at_stder1
+echo AT_LINE >"$at_check_line_file"
+( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
 at_status=$?
-grep '^ *+' $at_stder1 >&2
-grep -v '^ *+' $at_stder1 >$at_stderr
+grep '^ *+' "$at_stder1" >&2
+grep -v '^ *+' "$at_stder1" >"$at_stderr"
 at_failed=false
 dnl Check stderr.
 m4_case([$4],
-	stderr, [echo stderr:; tee stderr <$at_stderr],
-	ignore, [echo stderr:; cat $at_stderr],
-	experr, [$at_diff experr $at_stderr || at_failed=:],
-	[],     [$at_diff $at_devnull $at_stderr || at_failed=:],
-	[echo >>$at_stderr; echo "m4_ifval([$7],[AS_ESCAPE([$4])],[$4])" | $at_diff - $at_stderr || at_failed=:])
+	stderr, [echo stderr:; tee stderr <"$at_stderr"],
+	ignore, [echo stderr:; cat "$at_stderr"],
+	experr, [$at_diff experr "$at_stderr" || at_failed=:],
+	[],     [$at_diff "$at_devnull" "$at_stderr" || at_failed=:],
+	[echo >>"$at_stderr"; echo "m4_ifval([$7],[AS_ESCAPE([$4])],[$4])" | $at_diff - "$at_stderr" || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
-	stdout, [echo stdout:; tee stdout <$at_stdout],
-	ignore, [echo stdout:; cat $at_stdout],
-	expout, [$at_diff expout $at_stdout || at_failed=:],
-	[],     [$at_diff $at_devnull $at_stdout || at_failed=:],
-	[echo >>$at_stdout; echo "m4_ifval([$7],[AS_ESCAPE([$3])],[$3])" | $at_diff - $at_stdout || at_failed=:])
+	stdout, [echo stdout:; tee stdout <"$at_stdout"],
+	ignore, [echo stdout:; cat "$at_stdout"],
+	expout, [$at_diff expout "$at_stdout" || at_failed=:],
+	[],     [$at_diff "$at_devnull" "$at_stdout" || at_failed=:],
+	[echo >>"$at_stdout"; echo "m4_ifval([$7],[AS_ESCAPE([$3])],[$3])" | $at_diff - "$at_stdout" || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],
   [77],
     [],
-    [   77) echo 77 > $at_status_file
+    [   77) echo 77 > "$at_status_file"
             exit 77;;
 ])dnl
 m4_case([$2],
@@ -1256,7 +1256,7 @@ m4_case([$2],
       at_failed=:;;])
 esac
 AS_IF($at_failed, [$5
-  echo 1 > $at_status_file
+  echo 1 > "$at_status_file"
   exit 1], [$6])
 $at_traceon
 ])# AT_CHECK_NOESCAPE
