@@ -724,6 +724,36 @@ exec AS_MESSAGE_LOG_FD>>config.log
 ])# _AC_INIT_DEFAULTS_FDS
 
 
+# _AC_INIT_LOG_COMPLETE
+# ---------------------
+# At the end of configure, dump some useful information in the
+# log, even if AC_OUTPUT was not called.
+AC_DEFUN([_AC_INIT_LOG_COMPLETE],
+[# Save into config.log some information that might help in debugging.
+cat <<_ACEOF >&AS_MESSAGE_LOG_FD
+
+## ----------------- ##
+## Cache variables.  ##
+## ----------------- ##
+
+_ACEOF
+_AC_CACHE_DUMP >&AS_MESSAGE_LOG_FD
+
+sed '/^$/d' confdefs.h >conftest.log
+if test -s conftest.log; then
+  cat <<_ACEOF >&AS_MESSAGE_LOG_FD
+
+## ------------ ##
+## confdefs.h.  ##
+## ------------ ##
+
+_ACEOF
+  cat conftest.log >&AS_MESSAGE_LOG_FD
+fi
+(echo; echo) >&AS_MESSAGE_LOG_FD
+])# _AC_INIT_LOG_COMPLETE
+
+
 # _AC_INIT_DEFAULTS
 # -----------------
 # Values which defaults can be set from `configure.ac'.
@@ -758,6 +788,7 @@ cat >>config.log <<EOF
 ## ------------ ##
 
 EOF
+m4_wrap([AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])])dnl
 
 _AC_INIT_DEFAULTS_FDS
 #
@@ -1496,6 +1527,7 @@ m4_define([AC_PLAIN_SCRIPT],
 m4_pattern_forbid([^A]m4_dquote(m4_defn([m4_cr_LETTERS]))[_])
 m4_pattern_forbid([_AC_])
 m4_divert_push([BODY])])
+
 
 
 # AC_INIT([PACKAGE, VERSION, [BUG-REPORT])
@@ -3728,23 +3760,7 @@ m4_ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
-# Save into config.log some information that might help in debugging.
-cat <<_ACEOF >&AS_MESSAGE_LOG_FD
-
-## ----------------- ##
-## Cache variables.  ##
-## ----------------- ##
-
-_ACEOF
-_AC_CACHE_DUMP >&AS_MESSAGE_LOG_FD
-cat <<_ACEOF >&AS_MESSAGE_LOG_FD
-
-## ------------ ##
-## confdefs.h.  ##
-## ------------ ##
-
-_ACEOF
-sed '/^$/d' confdefs.h >&AS_MESSAGE_LOG_FD
+AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files

@@ -1,5 +1,10 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_LOG_COMPLETE): Eve out from AC_OUTPUT.
+	(_AC_INIT_DEFAULTS, AC_OUTPUT): Use it.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Lots of additions and changes.
 	(File Descriptors): New.
 	(Limitations of Make): New.
