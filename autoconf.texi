@@ -1252,16 +1252,17 @@ The command line options @samp{--x-includes=@var{dir}} and
 
 @defmac AC_FIND_XTRA
 @maindex FIND_XTRA
-Put the C compiler flags determined by @code{AC_FIND_X} into @code{make}
-variable @code{X_CFLAGS}, and the linker flags it determined into
-@code{X_LIBS}.  If X is not available, put @samp{-DX_DISPLAY_MISSING}
-into @code{X_CFLAGS}.
+An enhanced version of @code{AC_FIND_X}.  Put the C compiler flags that
+X needs into @code{make} variable @code{X_CFLAGS}, and the X linker
+flags into @code{X_LIBS}.  If X is not available, put
+@samp{-DX_DISPLAY_MISSING} into @code{X_CFLAGS}.
 
 Also check for special libraries that some systems need in order to
 compile X programs.  Add any that the system needs to @code{make}
 variable @code{X_EXTRA_LIBS}.  This macro calls @code{AC_FIND_X} and
 @code{AC_ISC_POSIX} (@pxref{UNIX Variants}) if they have not already
-been called.
+been called.  Because of the macro dependencies, if you call this macro,
+you should let it call @code{AC_FIND_X} rather than doing that yourself.
 @end defmac
 
 @defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-unsupported}@r{]})
