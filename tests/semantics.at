@@ -73,6 +73,28 @@ AC_CHECK_LIB($ac_m, $ac_asinner,
 ])
 
 
+# AC_SEARCH_LIBS
+# --------------
+AT_CHECK_MACRO([AC_SEARCH_LIBS],
+[
+AC_SEARCH_LIBS(cos, oser m ust,,
+             [AC_MSG_ERROR([cannot find `cos'])])
+
+case "$ac_cv_search_cos" in
+  -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_cos must be a cool library!]) ;;
+esac
+
+AC_SEARCH_LIBS(printf, oser c ust,,
+             [AC_MSG_ERROR([cannot find `printf'])])
+
+case "$ac_cv_search_printf" in
+  -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_printf must be a cool library!]) ;;
+  -lc) AC_MSG_ERROR([huh, you need to give -lc?])
+esac
+
+])
+
+
 # AC_CHECK_DECLS
 # --------------
 # Check that it performs the correct actions:
@@ -139,6 +161,69 @@ AT_CHECK_MACRO([AC_CHECK_HEADERS],
 [/* #undef HAVE_AUTOCONF_IO_H */
 #define HAVE_STDIO_H 1
 ])])
+
+
+# AC_CHECK_HEADERS_OLD
+# --------------------
+# Check that it performs the correct actions:
+# Must not check prerequisites, hence define header2.h
+AT_SETUP([AC_CHECK_HEADERS_OLD])
+
+AT_DATA([header1.h],
+[typedef int foo;
+])
+
+AT_DATA([header2.h],
+[typedef foo bar;
+])
+
+AT_CONFIGURE_AC(
+[CPPFLAGS="$CPPFLAGS -I."
+AC_CHECK_HEADERS(header2.h, [], [], -)])
+
+AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+AT_CHECK_DEFINES(
+[#define HAVE_HEADER2_H 1
+])
+
+AT_CLEANUP([header1.h header2.h])
+
+
+# AC_CHECK_HEADERS_NEW
+# --------------------
+# Check that it performs the correct actions:
+# Must check prerequisites, hence define header2.h but not header3.h
+AT_SETUP([AC_CHECK_HEADERS_NEW])
+
+AT_DATA([header1.h],
+[typedef int foo;
+])
+
+AT_DATA([header2.h],
+[typedef foo bar;
+])
+
+AT_DATA([header3.h],
+[typedef bar wow;
+])
+
+AT_CONFIGURE_AC(
+[CPPFLAGS="$CPPFLAGS -I."
+AC_CHECK_HEADERS(header2.h header3.h, [], [], [[@%:@include "header1.h"]])])
+
+AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+AT_CHECK_DEFINES(
+[#define HAVE_HEADER2_H 1
+/* #undef HAVE_HEADER3_H */
+])
+
+AT_CLEANUP([header1.h header2.h header3.h])
 
 
 # AC_CHECK_MEMBERS
