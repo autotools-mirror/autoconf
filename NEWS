@@ -108,6 +108,7 @@ test cases in this new frame work.
   You can instantiate unknown files and headers:
     ./config.status --header foo.h:foo.h.in --file bar:baz
 - has a useful --help
+- accepts special file name "-" for stdin/stdout
 
 
 ** Identity Macros
