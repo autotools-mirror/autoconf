@@ -9159,7 +9159,7 @@ use @samp{test -z "`cd /`"} because the following can happen:
 @example
 $ @kbd{pwd}
 /tmp
-$ @kbd{test -n "`cd /`" && pwd}
+$ @kbd{test -z "`cd /`" && pwd}
 /
 @end example
 
