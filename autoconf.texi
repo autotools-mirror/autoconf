@@ -1624,6 +1624,23 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 If @samp{ln -s} works on the current filesystem (the operating system
 and filesystem support symbolic links), set output
 variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
+
+If the link is put in a directory other than the current directory, its
+meaning depends on whether @samp{ln} or @samp{ln -s} is used.  To safely
+create links using @samp{$(LN_S)}, either find out which form is used
+and adjust the arguments, or always invoke @code{ln} in the directory
+where the link is to be created.
+
+In other words, it does not work to do
+@example
+$(LN_S) foo /x/bar
+@end example
+
+Instead, do
+
+@example
+(cd /x && $(LN_S) foo bar)
+@end example
 @end defmac
 
 @defmac AC_PROG_RANLIB
@@ -2957,6 +2974,9 @@ method to get the results instead of calling the macros.
 If the C compiler being used does not produce executables that can run
 on the system where @code{configure} is being run, set the shell
 variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
+In other words, this tests whether the build system type is different
+from the host system type (the target system type is irrelevant to this
+test).  @xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @node Guidelines, Test Functions, Test Programs, Run Time

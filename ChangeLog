@@ -1,5 +1,11 @@
 Thu Nov 14 11:15:27 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* acheaders: Add entry for malloc.h.  Make the strings.h entry
+ 	suggest AC_CHECK_HEADERS instead of AC_HEADER_STDC.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Move initialization of
+	ac_max_here_lines here from AC_OUTPUT_HEADER.
+
 	* autoheader.sh: Take the multiple-include protection back out.
 	It's not needed for a file that just #defines stuff, and, as Ken
 	Raeburn pointed out in Apr 1994:
@@ -10,6 +16,7 @@ Thu Nov 14 11:15:27 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): Don't try
 	running a program, just try linking.
+	(AC_C_CROSS): Make the wording clearer.
 
 Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 

@@ -205,6 +205,8 @@ mandir='${prefix}/man'
 # Initialize some other variables.
 subdirs=
 MFLAGS= MAKEFLAGS=
+# Maximum number of lines to put in a shell here document.
+ac_max_here_lines=12
 
 ac_prev=
 for ac_option
@@ -1982,10 +1984,10 @@ cat >> $CONFIG_STATUS <<\EOF
 
 # Split the substitutions into bite-sized pieces for seds with
 # small command number limits, like on Digital OSF/1 and HP-UX.
+ac_max_sed_cmds=90 # Maximum number of lines to put in a sed script.
 ac_file=1 # Number of current file.
-ac_inc=90 # Lines per file.
 ac_beg=1 # First line for current file.
-ac_end=$ac_inc # Line after last line for current file.
+ac_end=$ac_max_sed_cmds # Line after last line for current file.
 ac_more_lines=:
 ac_sed_cmds=""
 while $ac_more_lines; do
@@ -2005,7 +2007,7 @@ while $ac_more_lines; do
     fi
     ac_file=`expr $ac_file + 1`
     ac_beg=$ac_end
-    ac_end=`expr $ac_end + $ac_inc`
+    ac_end=`expr $ac_end + $ac_max_sed_cmds`
   fi
 done
 if test -z "$ac_sed_cmds"; then
@@ -2171,8 +2173,6 @@ EOF
 
 # Break up conftest.vals because some shells have a limit on
 # the size of here documents, and old seds have small limits too.
-# Maximum number of lines to put in a single here document.
-ac_max_here_lines=12
 
 rm -f conftest.tail
 while :

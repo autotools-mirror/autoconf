@@ -153,7 +153,6 @@ esac
 # config.h, which it's ok to edit.
 cat <<EOF
 /* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
-
 EOF
 
 test -r ${config_h}.top && cat ${config_h}.top

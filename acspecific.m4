@@ -1533,8 +1533,8 @@ dnl ### Checks for compiler characteristics
 
 
 AC_DEFUN(AC_C_CROSS,
-[# If we cannot run a trivial program, we must be cross compiling.
-AC_CACHE_CHECK(whether cross-compiling, ac_cv_c_cross,
+[# If we cannot run a trivial program, we are probably using a cross compiler.
+AC_CACHE_CHECK(whether using a cross-compiler, ac_cv_c_cross,
 [AC_TRY_RUN([main(){return(0);}],
   ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_c_cross=yes)])
 cross_compiling=$ac_cv_c_cross
