@@ -1160,7 +1160,7 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 
 dnl Internal subroutine.
 AC_DEFUN(AC_CHECK_TOOL_PREFIX,
-[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+[AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 if test $host != $build; then
   ac_tool_prefix=${host_alias}-
 else
