@@ -2243,9 +2243,10 @@ AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 # Eval COMMAND, save the exit status in ac_status, and log it.
 AC_DEFUN([_AC_EVAL],
 [{ (eval echo "$as_me:__oline__: \"$1\"") >&AS_MESSAGE_LOG_FD
-   (eval $1) 2>&AS_MESSAGE_LOG_FD
-   ac_status=$?
-   echo "$as_me:__oline__: \$? = $ac_status" >&AS_MESSAGE_LOG_FD; }])
+  (eval $1) 2>&AS_MESSAGE_LOG_FD
+  ac_status=$?
+  echo "$as_me:__oline__: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  (exit $ac_status); }])
 
 
 # AC_TRY_EVAL(VARIABLE)
@@ -2253,13 +2254,13 @@ AC_DEFUN([_AC_EVAL],
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
 AC_DEFUN([AC_TRY_EVAL],
-[_AC_EVAL([$]$1) && (exit $ac_status) ])
+[_AC_EVAL([$]$1)])
 
 
 # AC_TRY_COMMAND(COMMAND)
 # -----------------------
 AC_DEFUN([AC_TRY_COMMAND],
-[_AC_EVAL([$1]) && (exit $ac_status) ])
+[_AC_EVAL([$1])])
 
 
 ## ------------------ ##
