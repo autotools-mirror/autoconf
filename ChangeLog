@@ -1,3 +1,14 @@
+2001-09-30  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF):
+	Report an error if the size cannot be determined even though
+	the type exists.
+	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE):
+	Check for `expr' arithmetic overflow, and for compilation failure,
+	and invoke a new argument $4 if either is discovered.
+	This makes _AC_COMPUTE_INT_COMPILE more like _AC_COMPUTE_INT_RUN.
+	(_AC_COMPUTE_INT): Pass IF-FAILS arg to _AC_COMPUTE_INT_COMPILE.
+
 2001-09-28  Akim Demaille  <akim@epita.fr>
 
 	* lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el: New.
