@@ -52,52 +52,16 @@ AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh
 $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
-## All the files below depend on configure.ac so that they are rebuilt
-## when the Autoconf version changes. Unfortunately, suffix rules cannot
-## have additional dependencies, so we have to use explicit rules.
+## All the files below depend on Makefile so that they are rebuilt
+## when the prefix etc. changes.
+SUFFIXES = .in
+autoconf autoheader autoreconf autoupdate ifnames autoscan autom4te: Makefile
+.in:
+	rm -f $@ $@.tmp
+	$(edit) $< >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
-
-autoconf: $(srcdir)/autoconf.in $(top_srcdir)/configure.ac
-	rm -f autoconf autoconf.tmp
-	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
-	chmod +x autoconf.tmp
-	mv autoconf.tmp autoconf
-
-autoheader: $(srcdir)/autoheader.in $(top_srcdir)/configure.ac
-	rm -f autoheader autoheader.tmp
-	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
-	chmod +x autoheader.tmp
-	mv autoheader.tmp autoheader
-
-autoreconf: $(srcdir)/autoreconf.in $(top_srcdir)/configure.ac
-	rm -f autoreconf autoreconf.tmp
-	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
-	chmod +x autoreconf.tmp
-	mv autoreconf.tmp autoreconf
-
-autoupdate: $(srcdir)/autoupdate.in $(top_srcdir)/configure.ac
-	rm -f autoupdate autoupdate.tmp
-	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
-	chmod +x autoupdate.tmp
-	mv autoupdate.tmp autoupdate
-
-ifnames: $(srcdir)/ifnames.in $(top_srcdir)/configure.ac
-	rm -f ifnames ifnames.tmp
-	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
-	chmod +x ifnames.tmp
-	mv ifnames.tmp ifnames
-
-autoscan: $(srcdir)/autoscan.in $(top_srcdir)/configure.ac
-	rm -f autoscan autoscan.tmp
-	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
-	chmod +x autoscan.tmp
-	mv autoscan.tmp autoscan
-
-autom4te: $(srcdir)/autom4te.in $(top_srcdir)/configure.ac
-	rm -f autom4te autom4te.tmp
-	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
-	chmod +x autom4te.tmp
-	mv autom4te.tmp autom4te
 
 
 ## --------------- ##

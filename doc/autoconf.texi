@@ -2232,18 +2232,27 @@ e.g. @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
 @code{datadir} and friends in your shell scripts and other files, rather
 let @command{make} manage their replacement.  For instance Autoconf
-ships templates of its shell scripts ending with @samp{.sh}, and uses
-this Makefile snippet:
+ships templates of its shell scripts ending with @samp{.in}, and uses a
+Makefile snippet similar to:
 
 @example
-.sh:
+@group
+edit = sed \
+	-e 's,@@datadir\@@,$(pkgdatadir),g' \
+	-e 's,@@prefix\@@,$(prefix),g'
+@end group
+
+autoconf autoheader: Makefile
+@group
+.in:
         rm -f $@@ $@@.tmp
-        sed 's,@@datadir\@@,$(pkgdatadir),g' $< >$@@.tmp
+        $(edit) $< >$@@.tmp
         chmod +x $@@.tmp
         mv $@@.tmp $@@
+@end group
 @end example
 
-Three things are noteworthy:
+Five details are noteworthy:
 
 @table @samp
 @item @@datadir\@@
@@ -2258,6 +2267,22 @@ instead.
 Don't use @samp{/} in the sed expression(s) since most probably the
 variables you use, such as @samp{$(pkgdatadir)}, will contain
 some.
+
+@item Dependency on @file{Makefile}
+Since @code{edit} uses values that depend on the configuration specific
+values (@code{prefix} etc.) and not only on @code{VERSION} and so forth,
+the output depends on @file{Makefile}, not @file{configure.ac}.
+
+@item Separated dependency
+Don't write
+
+@example
+.in: Makefile
+        @dots{}
+@end example
+
+@noindent
+unless you really mean to create the file @file{.in} from @file{Makefile}.
 @end table
 
 

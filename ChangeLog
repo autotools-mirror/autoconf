@@ -1,8 +1,16 @@
+2002-09-05  Akim Demaille  <akim@epita.fr>
+
+	* bin/Makefile.am (autoconf, autoheader, autoreconf, autoupdate)
+	(ifnames, autoscan, autom4te): Since we don't only depend on
+	configure.ac variables (such as VERSION etc.), but also on prefix
+	and so forth, depend on Makefile, not configure.ac.
+	Reported by Alexandre Duret-Lutz.
+	* doc/autoconf.texi (Installation Directory Variables): Adjust.
+
 2002-09-05  Kevin Ryde  <user42@zip.com.au>
 
-	* hpmake/autoconf.texi (Limitations of Make): HP-UX trailing
-	backslashes doesn't seem to be confined to ia64, just say "some
-	versions".
+	* autoconf.texi (Limitations of Make): HP-UX trailing backslashes
+	doesn't seem to be confined to ia64, just say "some versions".
 
 2002-09-04  Akim Demaille  <akim@epita.fr>
 
