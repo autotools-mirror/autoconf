@@ -293,15 +293,16 @@ divert(-1)
          [ifelse([$#], [1], [],
                  [$#], [2], [smash([$2])],
                  [smash([$2])[$1]_star([$1], shift(shift($@)))])])
+
+  # Smash quotes its result.
   define([smash],
-         [patsubst(patsubst(patsubst(patsubst([[[[$1]]]],
+         [patsubst(patsubst(patsubst([[[$1]]],
                                      [\\
 ]),
-                            [[
- 	]+],
-                            [ ]),
-       		   [^\(..\) ], [\1]),
-       	 [ \(.\)$], [\1])])
+                           [[
+     ]+],
+                           [ ]),
+    		   [^ *\(.*\) *$], [[\1]])])
   define([args],
          [shift(shift(shift(shift(shift($@)))))])
   define([at],

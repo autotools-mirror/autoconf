@@ -1,5 +1,10 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (trace_m4::smash): Double quote, we don't want the
+	result to be evaluated.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: s/@%:@line __oline__/#line __oline__/g. __oline__
 	is not a macro, so there is just no use in avoiding `#'.
 
