@@ -43,6 +43,12 @@ if test -f $srcdir/standards.texi; then
   AC_SUBST(standards_texi, standards.texi)dnl
 fi
 
+# Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
+# AC_SUBSTS here too.
+AC_SUBST(PACKAGE_NAME)
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+
 AC_OUTPUT(Makefile m4/Makefile man/Makefile doc/Makefile
           tests/Makefile tests/atconfig)
 

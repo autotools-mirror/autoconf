@@ -30,12 +30,6 @@ WGET = wget
 bin_SCRIPTS = autoconf autoheader autoreconf ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan autoupdate
 
-# FIXME: Current Automakes are blind and cannot see inner AC_SUBST,
-# so help it.  This is because, in this case, 'aclocal' is bypassed.
-PACKAGE_NAME = @PACKAGE_NAME@
-VERSION = @VERSION@
-PACKAGE = @PACKAGE@
-
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
