@@ -1,3 +1,14 @@
+1999-05-17  Ben Elliston  <bje@cygnus.com>
+
+	Merge with the EGCS source tree.
+
+	* config.guess: Add detection for Interix and UWIN on Windows NT,
+	OpenBSD on PA-RISC and UnixWare version 7.x.
+	Improve usage of `tr' where sets are concerned.
+	Detect all HP 9000 machines.
+	Determine machine types more completely on older UnixWare systems.
+	Determine C library version on GNU/Linux for the PowerPC.
+
 1999-04-29  Ben Elliston  <bje@cygnus.com>
 
 	* config.sub: Handle `t3e' alias for Cray T3E. Contributed by
