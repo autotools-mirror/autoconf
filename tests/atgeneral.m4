@@ -79,20 +79,17 @@ at_stop_on_error=false;
 # Shall we save and check stdout and stderr?
 # -n sets to false
 at_check_stds=:;
-# Shall we be verbose
-# -s sets to false, and -v to true
-at_verbose=false
+# Shall we be verbose?
+at_verbose=:
 # Shall we keep the debug scripts?  Must be `:' when testsuite is
 # run by a debug script, so that the script doesn't remove itself.
-# -s sets to false, and -v to true
 at_debug=false
 
 at_usage="Usage: $[0] [OPTION]...
 
   -e  Abort the full suite and inhibit normal clean up if a test fails
   -n  Do not redirect stdout and stderr and do not test their contents
-  -s  Inhibit verbosity while generating or executing debugging scripts
-  -v  Force more detailed output, default for debugging scripts unless -s
+  -v  Force more detailed output, default for debugging scripts
   -x  Have the shell to trace command execution; also implies option -n"
 
 while test $[#] -gt 0; do
@@ -102,8 +99,7 @@ while test $[#] -gt 0; do
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
     -n) at_check_stds=false;;
-    -s) at_verbose=false; at_silent=1;;
-    -v) at_verbose=:; at_silent=;;
+    -v) at_verbose=echo;;
     -x) at_traceon='set -vx'; at_traceoff='set +vx'; at_check_stds=false;;
     *) echo 1>&2 "Try \`$[0] --help' for more information."; exit 1 ;;
   esac
@@ -162,8 +158,7 @@ do
 m4_divert_pop[]dnl
 m4_divert_push(3)[]dnl
   esac
-  $at_verbose &&
-    echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
+  $at_verbose $at_n "     $test. $srcdir/`cat at-setup-line`: $at_c"
   case $at_status in
     0) echo ok
        ;;
@@ -224,19 +219,16 @@ echo "$at_banner"
 echo "$at_dashes"
 
 if test $at_debug = false && test -n "$at_failed_list"; then
-  if test -z "$at_silent"; then
-    echo
-    echo 'When reporting failed tests to maintainers, do not merely list test'
-    echo 'numbers, as the numbering changes between releases and pretests.'
-    echo 'Be careful to give at least all the information you got about them.'
-    echo 'You may investigate any problem if you feel able to do so, in which'
-    echo 'case the generated debugging scripts provide good starting points.'
-    echo "Go on and modify them at will.  \`./debug-NN --help' gives usage"
-    echo 'information.  Now, failed tests will be executed again, verbosely.'
-    for at_group in $at_failed_list; do
-      ./debug-$at_group.sh
-    done
-  fi
+  echo
+  echo 'When reporting failed tests to maintainers, do not merely list test'
+  echo 'numbers, as the numbering changes between releases and pretests.'
+  echo 'Be careful to give at least all the information you got about them.'
+  echo 'You may investigate any problem if you feel able to do so, in which'
+  echo 'case the testsuite provide a good starting point.'
+  echo 'information.  Now, failed tests will be executed again, verbosely.'
+  for at_group in $at_failed_list; do
+    ./debug-$at_group.sh
+  done
   exit 1
 fi
 
@@ -264,11 +256,9 @@ m4_divert_pop()dnl
 dnl Here will be inserted the `rm' corresponding to AT_CLEANUP.
 m4_divert(2)[]dnl
     echo AT_LINE > at-setup-line
-    if $at_verbose; then
-      echo 'testing $1'
-      echo $at_n "     $at_c"
-    fi
-    if $at_verbose; then
+    $at_verbose 'testing $1'
+    $at_verbose $at_n "     $at_c"
+    if test $at_verbose = echo; then
       echo "AT_ordinal. $srcdir/AT_LINE..."
     else
       echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
@@ -289,14 +279,12 @@ AT_DEFINE([AT_CLEANUP],
     at_status=$?
     at_test_count=`expr 1 + $at_test_count`
     if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-m4_divert(1)[]dnl
-
-    rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
-m4_undivert(2)[]dnl
       rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
     fi
     ;;
-
+m4_divert(1)[]dnl
+    rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
+m4_undivert(2)[]dnl
 m4_popdef([AT_data_experr])dnl
 m4_popdef([AT_data_expout])dnl
 m4_popdef([AT_data_files])dnl
@@ -330,7 +318,7 @@ $2[]_ATEOF
 # their content is not checked.
 AT_DEFINE([AT_CHECK],
 [$at_traceoff
-$at_verbose && echo "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
+$at_verbose "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
 echo AT_LINE > at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
@@ -338,9 +326,9 @@ $1
 ifelse([$2], [], [],
 [at_status=$?
 if test $at_status != $2; then
-  $at_verbose && echo "Exit code was $at_status, expected $2" >&6
+  $at_verbose "Exit code was $at_status, expected $2" >&6
 dnl Maybe there was an important message to read before it died.
-  $at_verbose && $at_check_stds && cat stderr >&6
+  $at_verbose = echo && $at_check_stds && cat stderr >&6
 dnl Preserve exit code 77.
   test $at_status = 77 && exit 77
   exit 1
@@ -351,16 +339,16 @@ if $at_check_stds; then
 dnl Restore stdout to fd1 and stderr to fd2.
   exec 1>&5 2>&6
 dnl If not verbose, neutralize the output of diff.
-  $at_verbose || exec 1>/dev/null 2>/dev/null
+  test $at_verbose = echo && exec 1>/dev/null 2>/dev/null
   at_failed=false;
   m4_case([$4],
-          ignore, [$at_verbose && cat stderr;:],
+          ignore, [$at_verbose = echo && cat stderr;:],
           experr, [AT_DEFINE([AT_data_experr], [ experr])dnl
 $at_diff experr stderr || at_failed=:],
           [], [$at_diff empty stderr || at_failed=:],
           [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
   m4_case([$3],
-          ignore, [$at_verbose && cat stdout;:],
+          ignore, [test $at_verbose = echo && cat stdout;:],
           expout, [AT_DEFINE([AT_data_expout], [ expout])dnl
 $at_diff expout stdout || at_failed=:],
           [], [$at_diff empty stdout || at_failed=:],

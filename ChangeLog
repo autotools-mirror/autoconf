@@ -1,5 +1,11 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT) <at_verbose>: Be a :/echo variable.
+	<at_silent>: Remove.
+	(AT_CLEANUP): Clean up the diversion use.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Factor part of the prologue of the tests.
 
 	* tests/atgeneral.m4 (AT_SETUP, AT_CLEANUP): No longer handle

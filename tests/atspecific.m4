@@ -48,7 +48,7 @@ rm -f state*
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
-test -n "$at_verbose" && echo "--- config.log" && cat config.log
+test $at_verbose = echo && echo "--- config.log" && cat config.log
 
 dnl Some tests might exit prematurely when they find a problem, in
 dnl which case `env-after' is probably missing.  Don't check it then.
