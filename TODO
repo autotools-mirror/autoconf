@@ -1,19 +1,6 @@
 -*- outline -*-
 
-Required for 2.0:
-
-------------------------------------------------------------------------------
-
-* Doc: chapter addressing misconceptions and migration from v1.
-
-------------------------------------------------------------------------------
-
-* Try it on Emacs configure.in, and adapt that to use the new features.
-
-------------------------------------------------------------------------------
-
-
-Other things:
+Things it would be nice to maybe do someday:
 
 ------------------------------------------------------------------------------
 

@@ -22,6 +22,7 @@ Major changes in release 2.0:
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
 * AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
+* AC_CHECK_LIB, which checks for a particular function in a library.
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
 * AC_SUBST_FILE, to insert one file into another.

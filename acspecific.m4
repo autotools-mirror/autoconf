@@ -31,7 +31,7 @@ dnl Internal use only.
 AC_DEFUN(AC_PROG_ECHO_N,
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
-  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn > /dev/null; then
+  if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
     ac_n= ac_c='
 ' ac_t='	'
   else
@@ -1333,7 +1333,7 @@ AC_CACHE_VAL(ac_cv_sys_interpreter,
 exit 69
 ' > conftest
 chmod u+x conftest
-(SHELL=/bin/sh; export SHELL; ./conftest > /dev/null)
+(SHELL=/bin/sh; export SHELL; ./conftest >/dev/null)
 if test $? -ne 69; then
    ac_cv_sys_interpreter=yes
 else
@@ -1363,10 +1363,10 @@ for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` 
   val=`cat $ac_dir/conftest9012345 2>/dev/null`
   if test ! -f $ac_dir/conftest9012345 || test "$val" != 1; then
     ac_cv_sys_long_file_names=no
-    rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2> /dev/null
+    rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
     break
   fi
-  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2> /dev/null
+  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
 done])dnl
 AC_MSG_RESULT($ac_cv_sys_long_file_names)
 if test $ac_cv_sys_long_file_names = yes; then

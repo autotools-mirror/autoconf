@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.104)dnl
+define(AC_ACVERSION, 1.105)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -93,26 +93,26 @@ changequote(, )dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
 Configuration:
---cache-file=FILE	cache test results in FILE
---help			print this message
---no-create		do not create output files
---quiet, --silent	do not print \`checking...' messages
---version		print the version of autoconf that created configure
+  --cache-file=FILE       cache test results in FILE
+  --help                  print this message
+  --no-create             do not create output files
+  --quiet, --silent       do not print \`checking...' messages
+  --version               print the version of autoconf that created configure
 Directories:
---exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
---prefix=PREFIX		install host independent files in PREFIX [/usr/local]
---srcdir=DIR		find the sources in DIR [configure dir or ..]
+  --exec-prefix=PREFIX    install host dependent files in PREFIX [/usr/local]
+  --prefix=PREFIX         install host independent files in PREFIX [/usr/local]
+  --srcdir=DIR            find the sources in DIR [configure dir or ..]
 Host type:
---build=BUILD		configure for building on BUILD [BUILD=HOST]
---host=HOST		configure for HOST [guessed]
---target=TARGET		configure for TARGET [TARGET=HOST]
+  --build=BUILD           configure for building on BUILD [BUILD=HOST]
+  --host=HOST             configure for HOST [guessed]
+  --target=TARGET         configure for TARGET [TARGET=HOST]
 Features and packages:
---disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
---enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
---with-PACKAGE[=ARG]	use PACKAGE [ARG=yes]
---without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)
---x-includes=DIR	X include files are in DIR
---x-libraries=DIR	X library files are in DIR
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --x-includes=DIR        X include files are in DIR
+  --x-libraries=DIR       X library files are in DIR
 --enable/--with options recognized:$ac_help"
 changequote([, ])dnl
 
@@ -1053,7 +1053,34 @@ dnl
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
-[changequote(<<, >>)dnl
+[AC_MSG_CHECKING([for -l$1])
+AC_CACHE_VAL(ac_cv_lib_$1,
+[ac_save_LIBS="${LIBS}"
+LIBS="${LIBS} -l$1 $5"
+AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$1=yes", eval "ac_cv_lib_$1=no")dnl
+LIBS="${ac_save_LIBS}"
+])dnl
+if eval "test \"`echo '$ac_cv_lib_'$1`\" = yes"; then
+  AC_MSG_RESULT(yes)
+  ifelse([$3], , 
+[changequote(, )dnl
+  ac_tr_lib=HAVE_LIB`echo $1 | tr '[a-z]' '[A-Z]'`
+changequote([, ])dnl
+  AC_DEFINE(${ac_tr_lib})
+  LIBS="${LIBS} -l$1"
+], [$3])
+else
+  AC_MSG_RESULT(no)
+ifelse([$4], , , [$4
+])dnl
+fi
+])dnl
+dnl
+dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                 [, OTHER-LIBRARIES]]])
+AC_DEFUN(AC_HAVE_LIBRARY,
+[AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
+changequote(<<, >>)dnl
 define(<<AC_LIB_NAME>>, dnl
 patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
 define(<<AC_CV_NAME>>, ac_cv_lib_<<>>AC_LIB_NAME)dnl
@@ -1061,29 +1088,22 @@ changequote([, ])dnl
 AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l[]AC_LIB_NAME[] $5"
-AC_TRY_LINK( , [$2()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
+LIBS="${LIBS} -l[]AC_LIB_NAME[] $4"
+AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="${ac_save_LIBS}"
 ])dnl
 AC_MSG_RESULT($AC_CV_NAME)
 if test "${AC_CV_NAME}" = yes; then
-  ifelse([$3], , 
+  ifelse([$2], , 
 [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-], [$3])
-ifelse([$4], , , [else
-  $4
+], [$2])
+ifelse([$3], , , [else
+  $3
 ])dnl
 fi
 undefine([AC_LIB_NAME])dnl
 undefine([AC_CV_NAME])dnl
-])dnl
-dnl
-dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                 [, OTHER-LIBRARIES]]])
-AC_DEFUN(AC_HAVE_LIBRARY,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
-AC_CHECK_LIB([$1], main, [$2], [$3], [$4])dnl
 ])dnl
 dnl
 dnl
