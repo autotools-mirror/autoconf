@@ -186,7 +186,7 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 # AC_LANG(C++)
 # ------------
 define([AC_LANG(C++)],
-[ac_ext=C
+[ac_ext=cc
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
@@ -719,12 +719,12 @@ AC_LANG_POP
 define([_AC_PROG_CXX_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.C <<EOF
+cat >conftest.cc <<EOF
 #ifdef __GNUC__
   yes;
 #endif
 EOF
-if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CXX-g++} -E conftest.cc) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no

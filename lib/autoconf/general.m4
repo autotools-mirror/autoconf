@@ -1624,9 +1624,9 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 AC_DEFUN([AC_INIT],
-[AC_EXPAND_ONCE([_AC_INIT()])dnl
-ifval([$2], [_AC_INIT_PACKAGE($@)],
-            [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
+[ifval([$2], [_AC_INIT_PACKAGE($@)])dnl
+AC_EXPAND_ONCE([_AC_INIT()])dnl
+ifval([$2], , [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 ])
 
 

@@ -1,3 +1,8 @@
+2000-05-24  Ossama Othman  <ossama@debian.org>
+
+	* aclang.m4 (AC_LANG(C++)): Change `ac_ext' from from `C' to `cc'
+	to avoid potential ambiguities on case-insensitive shells.
+
 2000-05-24  Mo DeJong  <mdejong@cygnus.com>
 
 	Have --host=sun4 automatically look for CC=sun4-cc etc.
