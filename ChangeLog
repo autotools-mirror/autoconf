@@ -1,5 +1,14 @@
 2002-04-19  Paul Eggert  <eggert@twinsun.com>
 
+	* NEWS, TODO, bin/autom4te.in, bin/autoreconf.in, bin/autoupdate.in,
+	doc/autoconf.texi, lib/freeze.mk, lib/Autom4te/Struct.pm,
+	lib/autoconf/autoheader.m4, lib/autoconf/c.m4,
+	lib/autoconf/functions.m4, lib/autoconf/general.m4,
+	lib/autoconf/lang.m4, lib/autoconf/libs.m4, lib/autoscan/identifiers,
+	lib/autotest/general.m4, lib/m4sugar/m4sh.m4, tests/atgeneral.m4,
+	tests/atspecific.m4, tests/semantics.at, tests/torture.at:
+	Minor spelling and grammar fixes.
+
 	* doc/autoconf.texi: Follow the outline suggested in the GNU
 	Sample Texts sections of the Texinfo 4.2 manual.  Most
 	importantly, this makes sure that the copyright notices appear in

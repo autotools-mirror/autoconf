@@ -289,10 +289,10 @@ foreach my $file (@ARGV)
 
       # They work by pair: each time an AU macro is activated, it runs
       # _au_enable, and at its end its runs _au_disable (see _au_defun
-      # above).  But since AU macros might use AU macros, which should
-      # enable/disable only for the outter AU macros.
+      # above).  AU macros might use AU macros, which should
+      # enable/disable only for the outer AU macros.
       #
-      # `_au_enabled' is used to this end, condionning whether we really
+      # `_au_enabled' is used to this end, determining whether we really
       # enable/disable.
 
 

@@ -1,7 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for functions.
-# Copyright 2000, 2001
-# Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -402,7 +401,7 @@ fi
 # AC_FUNC_GETGROUPS
 # -----------------
 # Try to find `getgroups', and check that it works.
-# When crosscompiling, assume getgroups is broken.
+# When cross-compiling, assume getgroups is broken.
 AC_DEFUN([AC_FUNC_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
 AC_REQUIRE([AC_TYPE_SIZE_T])dnl
@@ -614,8 +613,8 @@ fi
 
 # AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 # -------------------------------------
-# When crosscompiling, be pessimistic so we will end up using the
-# replacement version of lstat that checkes for trailing slashes and
+# When cross-compiling, be pessimistic so we will end up using the
+# replacement version of lstat that checks for trailing slashes and
 # calls lstat a second time when necessary.
 AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
 [AC_CACHE_CHECK(

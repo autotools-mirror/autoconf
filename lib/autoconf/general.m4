@@ -1354,15 +1354,15 @@ ac_cv_env_$1_value=$$1])dnl
 # _AC_ARG_VAR_VALIDATE
 # --------------------
 # The precious variables are saved twice at the beginning of
-# configure.  E.g., PRECIOUS, is saved as `ac_env_PRECIOUS_SET' and
+# configure.  E.g., PRECIOUS is saved as `ac_env_PRECIOUS_SET' and
 # `ac_env_PRECIOUS_VALUE' on the one hand and `ac_cv_env_PRECIOUS_SET'
 # and `ac_cv_env_PRECIOUS_VALUE' on the other hand.
 #
-# Now the cache has just been load, so `ac_cv_env_' represents the
+# Now the cache has just been loaded, so `ac_cv_env_' represents the
 # content of the cached values, while `ac_env_' represents that of the
 # current values.
 #
-# So we check that `ac_env_' and `ac_cv_env_' are consistant.  If
+# So we check that `ac_env_' and `ac_cv_env_' are consistent.  If
 # they aren't, die.
 m4_define([_AC_ARG_VAR_VALIDATE],
 [# Check that the precious variables saved in the cache have kept the same

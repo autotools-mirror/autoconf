@@ -349,7 +349,7 @@ sub autoreconf ($)
 
 
   # -------------------- #
-  # Running gettexitze.  #
+  # Running gettextize.  #
   # -------------------- #
 
   if (!$uses_gettext)
@@ -471,7 +471,7 @@ sub autoreconf ($)
   # ------------------ #
 
   # Don't try to be smarter than `autoconf', which does its own
-  # up to date checkings.
+  # up to date checks.
   xsystem ($autoconf);
 
 

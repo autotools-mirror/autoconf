@@ -1,6 +1,6 @@
 # M4 macros used in building Autoconf test suites.        -*- Autotest -*-
 
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -278,7 +278,7 @@ AT_CLEANUP()dnl
 #
 # Updated configure.ac shall not depend upon obsolete macros, which votes
 # in favor of `-W obsolete', but since many of these macros leave a message
-# to be removed by the user once her code ajusted, let's not check.
+# to be removed by the user once her code is adjusted, let's not check.
 #
 # Remove config.hin to avoid `autoheader: config.hin is unchanged'.
 m4_define([AT_CHECK_AU_MACRO],

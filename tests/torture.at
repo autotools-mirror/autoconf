@@ -1,6 +1,6 @@
 #							-*- Autotest -*-
 
-# Copyright 2000, 2001, 2002 (C) Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ AT_CLEANUP
 # AT_CHECK_AC_ARG_VAR(FIRST-VALUE, SECOND-VALUE)
 # ----------------------------------------------
 # Check that AC_ARG_VAR caches the latest values, diagnoses
-# inconsistances, and arms config.status.
+# inconsistencies, and arms config.status.
 m4_define([AT_CHECK_AC_ARG_VAR],
 [rm -f config.cache
 

@@ -403,9 +403,9 @@ m4_divert_push([TESTS])dnl
 # We try to build a regular expression matching `[', `]', `*', and
 # `.', i.e., the regexp active characters.
 #
-# Novices would write, `[[]*.]', which sure fails since the character
-# class ends with the first closing braquet.
-# M4 gurus will sure write `[\[\]*.]', but it will fail too because
+# Novices would write `[[]*.]', which fails since the character
+# class ends with the first closing bracket.
+# M4 gurus would write `[\[\]*.]', but it will fail too because
 # regexp does not support this and understands `\' per se.
 # Regexp gurus will write `[][*.]' which is indeed what Regexp expects,
 # but it will fail for M4 reasons: it's the same as `[*.]'.

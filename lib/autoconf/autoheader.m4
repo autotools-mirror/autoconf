@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with autoheader.
-# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
-# Free Software Foundation, Inc.
+
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+# 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,7 +63,7 @@ m4_define([AH_OUTPUT], [])
 # If KEY is direct (i.e., no indirection such as in KEY=$my_func which
 # may occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader
 # TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
-# output as is, with no formating.
+# output as is, with no formatting.
 m4_define([AH_VERBATIM],
 [AS_LITERAL_IF([$1],
                [AH_OUTPUT([$1], AS_ESCAPE([[$2]]))])

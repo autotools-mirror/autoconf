@@ -360,7 +360,7 @@ Site Configuration
 
 * External Software::           Working with other optional software
 * Package Options::             Selecting optional features
-* Pretty Help Strings::         Formating help string
+* Pretty Help Strings::         Formatting help string
 * Site Details::                Configuring site details
 * Transforming Names::          Changing program names when installing
 * Site Defaults::               Giving @command{configure} local defaults
@@ -3399,7 +3399,7 @@ strnlen ("foobar", 9) = 6
 @prindex @code{unlink}
 The @sc{posix} spec says that @code{unlink} causes the given file to be
 removed only after there are no more open file handles for it.  Not all
-OS's support this behaviour though.  So even on systems that provide
+OS's support this behavior though.  So even on systems that provide
 @code{unlink}, you cannot portably assume it is OK to call it on files
 that are open.  For example, on Windows 9x and ME, such a call would fail;
 on DOS it could even lead to file system corruption, as the file might end
@@ -3429,7 +3429,7 @@ value back in the caller (eg. @code{vsnprintf} in the GNU C Library
 @item Signed @code{>>}
 Normally the C @code{>>} right shift of a signed type replicates the
 high bit, giving a so-called ``arithmetic'' shift.  But care should be
-taken since the ISO C standard doesn't require that behaviour.  On those
+taken since the ISO C standard doesn't require that behavior.  On those
 few processors without a native arithmetic shift (for instance Cray
 vector systems) zero bits may be shifted in, the same as a shift of an
 unsigned type.
@@ -6403,7 +6403,7 @@ and their interface might change in the future.  As a matter of fact,
 @c prevented `expansion' of $1.  Unless it refers to the expansion
 @c of the value of $1?  Anyway, we need a rewrite here@dots{}
 
-The most common brokenness of existing macros is an improper quotation.
+The most common problem with existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
 @emph{must} read, first justifies the quotation scheme that was chosen
 for Autoconf and then ends with a rule of thumb.  Understanding the
@@ -7345,7 +7345,7 @@ Return the arguments as a single entity, i.e., wrap them into a pair of
 quotes.
 @end defmac
 
-The following example aims at emphasing the difference between (i), not
+The following example aims at emphasizing the difference between (i), not
 using these macros, (ii), using @code{m4_quote}, and (iii), using
 @code{m4_dquote}.
 
@@ -8131,8 +8131,8 @@ Russ Allbery:
 
 @quotation
 The @sc{gnu} assumption that @command{/bin/sh} is the one and only shell
-leads to a permanent deadlock.  Vendors don't want to break user's
-existant shell scripts, and there are some corner cases in the Bourne
+leads to a permanent deadlock.  Vendors don't want to break users'
+existing shell scripts, and there are some corner cases in the Bourne
 shell that are not completely compatible with a @sc{posix} shell.  Thus,
 vendors who have taken this route will @emph{never} (OK@dots{}``never say
 never'') replace the Bourne shell (as @command{/bin/sh}) with a
@@ -8147,7 +8147,7 @@ This is exactly the problem.  While most (at least most System V's) do
 have a Bourne shell that accepts shell functions most vendor
 @command{/bin/sh} programs are not the @sc{posix} shell.
 
-So while most modern systems do have a shell _somewhere_ that meets the
+So while most modern systems do have a shell @emph{somewhere} that meets the
 @sc{posix} standard, the challenge is to find it.
 @end quotation
 
@@ -8398,7 +8398,7 @@ That means that @file{foobar-part1.c}, @file{foobar-part2.c} and
 
 Note: This is not usually a problem under Windows, as it uses numeric
 tails in the short version of filenames to make them unique.  However, a
-registry setting can turn this behaviour off.  While this makes it
+registry setting can turn this behavior off.  While this makes it
 possible to share file trees containing long file names between @sc{sfn}
 and @sc{lfn} environments, it also means the above problem applies there
 as well.
@@ -9881,7 +9881,7 @@ sed @var{instruction-1};@var{instruction-2}
 
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
-matched''.  All descendents of Bell Lab's V7 @command{sed} (at least; we
+matched''.  All descendants of Bell Lab's V7 @command{sed} (at least; we
 don't have first hand experience with older @command{sed}s) have
 supported it.
 
@@ -10596,7 +10596,7 @@ options.
 @menu
 * External Software::           Working with other optional software
 * Package Options::             Selecting optional features
-* Pretty Help Strings::         Formating help string
+* Pretty Help Strings::         Formatting help string
 * Site Details::                Configuring site details
 * Transforming Names::          Changing program names when installing
 * Site Defaults::               Giving @command{configure} local defaults

@@ -1,7 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright 2001
-# Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -878,7 +877,7 @@ main ()
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
 }], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes],
-[# try to guess the endianess by grep'ing values into an object file
+[# try to guess the endianness by grepping values into an object file
   ac_cv_c_bigendian=unknown
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 [[short ascii_mm[] = { 0x4249, 0x4765, 0x6E44, 0x6961, 0x6E53, 0x7953, 0 };
@@ -909,7 +908,7 @@ case $ac_cv_c_bigendian in
     $2 ;;
   *)
     m4_default([$3],
-      [AC_MSG_ERROR([unknown endianess
+      [AC_MSG_ERROR([unknown endianness
 presetting ac_cv_c_bigendian=no (or yes) will help])]) ;;
 esac
 ])# AC_C_BIGENDIAN

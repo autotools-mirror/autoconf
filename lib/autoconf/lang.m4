@@ -1,7 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright 2000, 2001
-# Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -351,7 +350,7 @@ AC_DEFUN([AC_REQUIRE_CPP],
 # compiler often expects to be able to link with some of such
 # libraries.
 #
-# In several of these libraries, work-arounds have been introduced to
+# In several of these libraries, workarounds have been introduced to
 # avoid the AC_PROG_CC_WORKS test, that would just abort their
 # configuration.  The introduction of AC_EXEEXT, enabled either by
 # libtool or by CVS autoconf, have just made matters worse.
@@ -562,7 +561,7 @@ ac_exeext=$EXEEXT
 # _AC_COMPILER_OBJEXT
 # -------------------
 # Check the object extension used by the compiler: typically `.o' or
-# `.obj'.  If this is called, some other behaviour will change,
+# `.obj'.  If this is called, some other behavior will change,
 # determined by ac_objext.
 #
 # This macro is called by AC_LANG_COMPILER, the latter being required

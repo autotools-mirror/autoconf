@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -564,8 +564,8 @@ Modified by Damian Conway, 1999-03-05, v0.58.
     Added classname prefixes to keys in hash-based classes
     (refer to "Perl Cookbook", Recipe 13.12 for rationale).
 
-    Corrected behaviour of accessors for '*@' and '*%' struct
-    elements.  Package now implements documented behaviour when
+    Corrected behavior of accessors for '*@' and '*%' struct
+    elements.  Package now implements documented behavior when
     returning a reference to an entire hash or array element.
     Previously these were returned as a reference to a reference
     to the element.

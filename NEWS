@@ -459,7 +459,7 @@ Major changes in Autoconf 2.13:
 * Fixed an important bug in AC_CHECK_TYPE that would cause a configure
   script to report that `sometype_t' was present when only `type_t'
   was defined.
-* Merge of the FSF version of config.guess and config.sub to modernise
+* Merge of the FSF version of config.guess and config.sub to modernize
   these scripts. Add support for a few new hosts in config.guess.
   Incorporate latest versions of install-sh, mkinstalldirs and
   texinfo.tex from the FSF.
@@ -808,8 +808,8 @@ Various bug fixes.
 
 -----
 
-Copyright 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001 Free
-Software Foundation, Inc.
+Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
+Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 

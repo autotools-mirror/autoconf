@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for libraries.
-# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
-# Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+# 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,11 +52,11 @@
 # Table of contents
 #
 # 1. Generic tests for libraries
-# 2. Tests for specific libraires
+# 2. Tests for specific libraries
 
 
 ## --------------------------------- ##
-## 1. Generic tests for libraires.## ##
+## 1. Generic tests for libraries.## ##
 ## --------------------------------- ##
 
 

@@ -76,7 +76,7 @@ m4_define([_m4_divert(TAIL)],         60)
 #  m4_bpatsubst(__file__, [^.*/\(.*\)], [[\1]])
 #
 # since then, since `dnl' doesn't match the pattern, it is returned
-# with once quotation level less, so you lose, dammit!  And since GNU M4
+# with once quotation level less, so you lose!  And since GNU M4
 # is one of the biggest junk in the whole universe wrt regexp, don't
 # even think about using `?' or `\?'.  Bah, `*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!

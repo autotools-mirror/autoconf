@@ -236,7 +236,7 @@ So that --recheck does not pass --no-recursive to configure.
 
 * autoconf.texi
 Move the specific macro documentation blocks into the source files,
-and use a doc-block extraction/merge technique to get docuemntation
+and use a doc-block extraction/merge technique to get documentation
 into texi-file.  This should help avoid bit-rot in the doc, and make
 the doc easier to update when people add/change macros.  The name
 "autodoc" is probably already taken so we probably need another one.
@@ -693,7 +693,7 @@ with autoconf scripts.
 
 ------------------------------------------------------------------------------
 
-Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software
+Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002 Free Software
 Foundation, Inc.
 
 This file is part of GNU Autoconf.

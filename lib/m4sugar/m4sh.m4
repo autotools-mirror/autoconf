@@ -176,7 +176,7 @@ as_me=`AS_BASENAME("$[0]")`
 # _AS_PREPARE
 # -----------
 # This macro has a very special status.  Normal use of M4sh relies
-# heavily on AS_REQUIRE, so that needed initiatizations (such as
+# heavily on AS_REQUIRE, so that needed initializations (such as
 # _AS_TEST_PREPARE) are performed on need, not on demand.  But
 # Autoconf is the first client of M4sh, and for two reasons: configure
 # and config.status.  Relying on AS_REQUIRE is of course fine for

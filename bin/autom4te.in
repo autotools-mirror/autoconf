@@ -135,7 +135,7 @@ sub request ($%)
     }
 
   # It would be great to have $REQ check that it up to date wrt its
-  # dependencies, but that requires gettting traces (to fetch the
+  # dependencies, but that requires getting traces (to fetch the
   # included files), which is out of the scope of Request
   # (currently?).
 
@@ -1138,7 +1138,7 @@ if (%trace)
     # Always produce traces, since even if the output is young enough,
     # there is no guarantee that the traces use the same *format*
     # (e.g., `-t FOO:foo' and `-t FOO:bar' are both using the same M4
-    # traces, hence the M4 traces cache is usable, but its formating
+    # traces, hence the M4 traces cache is usable, but its formatting
     # will yield different results).
     handle_traces ($req, $output, %trace);
   }

@@ -1,6 +1,6 @@
 ## Freeze M4 files.
 
-## Copyright 2002 Free Software Foundation, Inc.
+## Copyright (C) 2002 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 SUFFIXES = .m4 .m4f
 
 # Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
-# checks if we are independant of Autoconf by defining AUTOM4TE (and
+# checks if we are independent of Autoconf by defining AUTOM4TE (and
 # others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
 # apply to us.
 MY_AUTOM4TE = $(top_builddir)/tests/autom4te

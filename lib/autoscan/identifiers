@@ -1,6 +1,7 @@
-# acindentifiers -- autoscan's mapping from identifiers which are not
+# identifiers -- autoscan's mapping from identifiers which are not
 # involved in function calls to Autoconf macros.
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
+
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
