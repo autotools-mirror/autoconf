@@ -154,6 +154,7 @@ Making @code{configure} Scripts
 
 Initialization and Output Files
 
+* Notices::                     Copyright, version numbers in @code{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
 * Configuration Actions::       Preparing the output based on results
@@ -164,7 +165,6 @@ Initialization and Output Files
 * Configuration Links::         Links depending from the configuration
 * Subdirectories::              Configuring independent packages together
 * Default Prefix::              Changing the default installation prefix
-* Versions::                    Version numbers in @code{configure}
 
 Substitutions in Makefiles
 
@@ -526,6 +526,8 @@ functions could be affected by types and libraries.
 
 @display
 @group
+Autoconf requirements
+information on the package
 @code{AC_INIT(@var{file})}
 checks for programs
 checks for libraries
@@ -903,6 +905,7 @@ about the output files to produce.  The following sections describe
 initialization and creating output files.
 
 @menu
+* Notices::                     Copyright, version numbers in @code{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
 * Configuration Actions::       Preparing the output based on results
@@ -913,10 +916,68 @@ initialization and creating output files.
 * Configuration Links::         Links depending from the configuration
 * Subdirectories::              Configuring independent packages together
 * Default Prefix::              Changing the default installation prefix
-* Versions::                    Version numbers in @code{configure}
 @end menu
 
-@node Input, Output, Setup, Setup
+@node Notices, Input, Setup, Setup
+@section Notices in @code{configure}
+
+The following macros manage version numbers for @code{configure}
+scripts.  Using them is optional.
+
+@c FIXME: AC_PREREQ should not be here, but where should it go?
+@defmac AC_PREREQ (@var{version})
+@maindex PREREQ
+@cindex Version
+Ensure that a recent enough version of Autoconf is being used.  If the
+version of Autoconf being used to create @code{configure} is earlier
+than @var{version}, print an error message on the standard error output
+and do not create @code{configure}.  For example:
+
+@example
+AC_PREREQ(@value{VERSION})
+@end example
+@end defmac
+
+@defmac AC_COPYRIGHT(@var{copyright-notice})
+@maindex COPYRIGHT
+@cindex Copyright Notice
+State that in addition to the Free Software Foundation's copyright over
+the Autoconf macros, parts of your @code{configure} are covered by the
+@var{copyright-notice}.
+
+The @var{copyright-notice} will show up in both the head of
+@code{configure}, and in @samp{configure --version}.
+@end defmac
+
+
+@defmac AC_REVISION (@var{revision-info})
+@maindex REVISION
+@cindex Revision
+Copy revision stamp @var{revision-info} into the @code{configure}
+script, with any dollar signs or double-quotes removed.  This macro lets
+you put a revision stamp from @file{configure.in} into @code{configure}
+without RCS or CVS changing it when you check in @code{configure}.  That
+way, you can determine easily which revision of @file{configure.in} a
+particular @code{configure} corresponds to.
+
+For example, this line in @file{configure.in}:
+
+@c The asis prevents RCS from changing the example in the manual.
+@example
+AC_REVISION($@asis{Revision: 1.30 }$)dnl
+@end example
+
+@noindent
+produces this in @code{configure}:
+
+@example
+#! /bin/sh
+# From configure.in Revision: 1.30
+@end example
+@end defmac
+
+
+@node Input, Output, Notices, Setup
 @section Finding @code{configure} Input
 
 Every @code{configure} script must call @code{AC_INIT} before doing
@@ -1822,7 +1883,7 @@ which subdirectories to recurse into.  This macro may be called multiple
 times.
 @end defmac
 
-@node Default Prefix, Versions, Subdirectories, Setup
+@node Default Prefix,  , Subdirectories, Setup
 @section Default Prefix
 
 By default, @code{configure} sets the prefix for files it installs to
@@ -1857,62 +1918,9 @@ is found, set the prefix to the parent of the directory containing
 set the prefix to @file{/usr/local/gnu}.
 @end defmac
 
-@node Versions,  , Default Prefix, Setup
-@section Version Numbers in @code{configure}
 
-The following macros manage version numbers for @code{configure}
-scripts.  Using them is optional.
 
-@defmac AC_PREREQ (@var{version})
-@maindex PREREQ
-@cindex Version
-Ensure that a recent enough version of Autoconf is being used.  If the
-version of Autoconf being used to create @code{configure} is earlier
-than @var{version}, print an error message on the standard error output
-and do not create @code{configure}.  For example:
-
-@example
-AC_PREREQ(@value{VERSION})
-@end example
-
-This macro is useful if your @file{configure.in} relies on non-obvious
-behavior that changed between Autoconf releases.  If it merely needs
-recently added macros, then @code{AC_PREREQ} is less useful, because the
-@code{autoconf} program already tells the user which macros are not
-found.  The same thing happens if @file{configure.in} is processed by a
-version of Autoconf older than when @code{AC_PREREQ} was added.
-@end defmac
-
-@defmac AC_REVISION (@var{revision-info})
-@maindex REVISION
-Copy revision stamp @var{revision-info} into the @code{configure}
-script, with any dollar signs or double-quotes removed.  This macro lets
-you put a revision stamp from @file{configure.in} into @code{configure}
-without RCS or CVS changing it when you check in @code{configure}.  That
-way, you can determine easily which revision of @file{configure.in} a
-particular @code{configure} corresponds to.
-
-It is a good idea to call this macro before @code{AC_INIT} so that the
-revision number is near the top of both @file{configure.in} and
-@code{configure}.  To support doing that, the @code{AC_REVISION} output
-begins with @samp{#! /bin/sh}, like the normal start of a
-@code{configure} script does.
-
-For example, this line in @file{configure.in}:
-
-@c The asis prevents RCS from changing the example in the manual.
-@example
-AC_REVISION($@asis{Revision: 1.30 }$)dnl
-@end example
-
-@noindent
-produces this in @code{configure}:
-
-@example
-#! /bin/sh
-# From configure.in Revision: 1.30
-@end example
-@end defmac
+@c ======================================================== Existing tests
 
 @node Existing Tests, Writing Tests, Setup, Top
 @chapter Existing Tests

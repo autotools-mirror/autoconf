@@ -1,5 +1,23 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_BINSH): Remove, useless now that...
+	(AC_REVISION): Require AC_INIT, not _AC_INIT_BINSH.
+	(AC_INIT): Do what _AC_INIT_BINSH used to.
+	Don't require _AC_INIT_VERSION, just call it.
+	Rename as _AC_INIT.
+	(AC_INIT): New macro, single expansion wrapper around _AC_INIT.
+	(_AC_COPYRIGHT_SEPARATOR): New.
+	(AC_COPYRIGHT): Use it.
+	Require AC_INIT, not _AC_INIT_VERSION.
+	* doc/autoconf.texi (Versions): Promote as first section of
+	`Setup'.
+	Rename as `Notices'.
+	Document AC_COPYRIGHT.
+	Don't give false reasons for placing AC_REVISION before AC_INIT,
+	the place no longer matters.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (trace_m4::smash): Double quote, we don't want the
 	result to be evaluated.
 

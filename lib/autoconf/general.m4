@@ -613,20 +613,15 @@ popdef([AC_Prefix])dnl
 ## ---------------- ##
 
 
-# _AC_INIT_BINSH
-# --------------
-# Try to have only one #! line, so the script doesn't look funny
-# for users of AC_REVISION.
-AC_DEFUN(_AC_INIT_BINSH,
-[AC_DIVERT_PUSH([BINSH])dnl
-#! /bin/sh
-AC_DIVERT_POP()dnl to KILL
-])
+
+# _AC_COPYRIGHT_SEPARATOR
+# -----------------------
+# Empty at the first call to AC_COPYRIGHT, then set to two new lines.
+define(_AC_COPYRIGHT_SEPARATOR)
 
 
 # AC_COPYRIGHT(TEXT)
 # ------------------
-
 # Append Copyright information in the top of `configure'.  TEXT is
 # evaluated once, hence TEXT can use macros.  Note that we do not
 # prepend `# ' but `@%:@ ', since m4 does not evaluate the comments.
@@ -634,18 +629,23 @@ AC_DIVERT_POP()dnl to KILL
 # would have not been evaluated.  Another solution, a bit fragile,
 # would have be to use m4_quote to force an evaluation:
 #
-#     patsubst(m4_quote($1), [^], [@%:@ ])
+#     patsubst(m4_quote($1), [^], [# ])
 #
-# _AC_INIT_VERSION must be run before, exactly like _AC_INIT_BINSH
-# must be run before AC_REVISION.
+# AC_INIT must be run before, exactly like for AC_REVISION.
 AC_DEFUN(AC_COPYRIGHT,
-[AC_REQUIRE([_AC_INIT_VERSION])dnl
+[AC_REQUIRE([AC_INIT])dnl
 AC_DIVERT_PUSH([NOTICE])dnl
-patsubst([$1], [^], [@%:@ ])
+patsubst([]_AC_COPYRIGHT_SEPARATOR()dnl
+[$1], [^], [@%:@ ])
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH([VERSION_BEGIN])dnl
+_AC_COPYRIGHT_SEPARATOR()dnl
 $1
 AC_DIVERT_POP()dnl
+define([_AC_COPYRIGHT_SEPARATOR],
+[
+
+])dnl
 ])# _AC_INIT_COPYRIGHT
 
 
@@ -654,6 +654,7 @@ AC_DIVERT_POP()dnl
 # Values which defaults can be set from `configure.in'.
 AC_DEFUN(_AC_INIT_DEFAULTS,
 [AC_DIVERT_PUSH([DEFAULTS])dnl
+
 # Defaults:
 ac_default_prefix=/usr/local
 @%:@ Any additions from configure.in:
@@ -1278,13 +1279,24 @@ AC_DIVERT_POP()dnl
 ])# _AC_INIT_PREPARE
 
 
-# AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
-# ------------------------------------
-# Output the preamble of the `configure' script.
-AC_DEFUN(AC_INIT,
+# _AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
+# -------------------------------------
+# Include the user macro files, prepare the diversions, and output the
+# preamble of the `configure' script.
+define([_AC_INIT],
 [m4_sinclude(acsite.m4)dnl
 m4_sinclude(./aclocal.m4)dnl
-AC_REQUIRE([_AC_INIT_BINSH])dnl
+AC_DIVERT_PUSH([BINSH])dnl
+#! /bin/sh
+AC_DIVERT_POP()dnl to KILL
+_AC_INIT_DEFAULTS()dnl
+AC_DIVERT_POP()dnl to NORMAL
+_AC_INIT_PARSE_ARGS
+_AC_INIT_HELP
+_AC_INIT_VERSION
+_AC_INIT_PREPARE([$1])dnl
+dnl AC_COPYRIGHT must be called after _AC_INIT_VERSION, since it dumps
+dnl into a diversion prepared by _AC_INIT_VERSION.
 AC_DIVERT_PUSH([NOTICE])dnl
 # Guess values for system-dependent variables and create Makefiles.
 AC_DIVERT_POP()dnl
@@ -1295,15 +1307,14 @@ Free Software Foundation, Inc.
 
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.])dnl
-_AC_INIT_DEFAULTS()dnl
-AC_DIVERT_POP()dnl to NORMAL
-_AC_INIT_PARSE_ARGS
-_AC_INIT_HELP
-AC_REQUIRE([_AC_INIT_VERSION])dnl
-_AC_INIT_PREPARE([$1])dnl
 ])
 
 
+# AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
+# ------------------------------------
+# Wrapper around _AC_INIT which guarantees _AC_INIT is expanded only
+# once.
+AC_DEFUN([AC_INIT], [AC_EXPAND_ONCE([_AC_INIT])])
 
 
 ## ----------------------------- ##
@@ -1445,9 +1456,9 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 # AC_REVISION(REVISION-INFO)
 # --------------------------
 AC_DEFUN(AC_REVISION,
-[AC_REQUIRE([_AC_INIT_BINSH])dnl
+[AC_REQUIRE([AC_INIT])dnl
 AC_DIVERT_PUSH([BINSH])dnl
-[# From configure.in] translit([$1], $")
+@%:@ From configure.in translit([$1], $")
 AC_DIVERT_POP()dnl to KILL
 ])
 
