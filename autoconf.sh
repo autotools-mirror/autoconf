@@ -324,12 +324,6 @@ divert(-1)
 EOF
   # A program to translate user tracing requests into m4 macros.
   cat >$translate_awk <<\EOF
-BEGIN {
-  # We want AWK to consider the whole file is a single record.
-  # This allows to use `\n' as a separator.
-  RS = "\0" ;
-}
-
 function trans (arg, sep)
 {
   # File name.
@@ -363,9 +357,14 @@ function error (message)
 }
 
 {
+  # Accumulate the whole input.
+  request = request $0 "\n"
+}
+
+END {
   res = ""
 
-  for (cp = $0; cp; cp = substr (cp, 2))
+  for (cp = request; cp; cp = substr (cp, 2))
     {
       char = substr (cp, 1, 1)
       if (char == "$")

@@ -1,5 +1,15 @@
 2000-03-20  Akim Demaille  <akim@epita.fr>
 
+	Don't rely on RS = "\0" to swallow the whole input as a single
+	record, this is not portable: mawk and nawk understand it as RS =
+	"".  gawk understands it as expected.
+
+	* autoconf.sh (translate_awk::BEGIN): No longer change RS.
+	(translate_awk::body): Move to the END.
+	Instead, accumulate the input in `request'.
+
+2000-03-20  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Testing Values and Files): Be a subsection of
 	`Portable Shell Programming'.
 	(Shell Substitutions, Limitations of Usual Tools): New subsections.
