@@ -1,0 +1,86 @@
+# -*- TCL -*-
+# Auxiliary procedures for autoconf tests.
+
+# Create a configure.in from a string.
+# Return 1 if successful, 0 if an error occurs.
+proc autoconf_create {configin contents} {
+    if [catch {set hand [open $configin "w"]}] {
+	error "$configin, cannot create"
+	return 0
+    }
+    puts $hand "AC_INIT(Makefile.in)
+$contents
+AC_OUTPUT(Makefile)"
+    close $hand
+    return 1
+}
+
+# Compile a configure.in into a configure
+#  and call error if there's any output (undefined macros, can't
+#  find library files, etc.).
+proc autoconf_start_plus {configin} {
+    global comp_output
+
+    set status [autoconf_start $configin]
+    if {$status==0} {
+	return 0
+    }
+    # Examine $comp_output.
+    if ![string match "" "$comp_output"] then {
+	fail "$configin, running autoconf failed"
+	return 0
+    }
+    return 1
+}
+
+# Execute a configure script and check the output
+#  against what it's supposed to be.
+# Return 1 if successful so far, 0 if failure already.
+proc autoconf_load_plus {args} {
+    global exec_output
+
+    set status [autoconf_load $args]
+    if {$status==0} {
+	return 0
+    }
+    if [string match "*:*" "$exec_output"] then {
+	fail "$args, did not execute correctly"
+	return 0
+    }
+    return 1
+}
+
+# Remove generated configuration files for test CONFIG.
+# Return 1 if successful, 0 if not.
+proc autoconf_remove {config} {
+    if [catch "exec rm -f $config $config.in conftest* config.status config.cache config.log"] {
+	warning "$config output files, cannot remove"
+	return 0
+    }
+    return 1
+}
+
+# The standard autoconf test: compile, run, and remove
+# a simple configure script.
+proc autoconf_test {testname contents} {
+    if ![autoconf_remove $testname] {
+	return 0
+    }
+    if ![autoconf_create $testname.in "$contents"] {
+	return 0
+    }
+    if ![autoconf_start_plus $testname.in] {
+	autoconf_remove $testname
+	return 0
+    }
+    if ![autoconf_load_plus $testname] {
+	autoconf_remove $testname
+	return 0
+    }
+    if ![autoconf_remove $testname] {
+	return 0
+    }
+
+    pass "$testname"
+    return 1
+}
