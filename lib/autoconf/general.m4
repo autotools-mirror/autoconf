@@ -4775,7 +4775,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
            AC_MSG_ERROR([cannot find input file \\`$f'])
          fi;;
       esac
-    done` || exit 1
+    done` || { (exit 1); exit; }
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
@@ -4922,7 +4922,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
            AC_MSG_ERROR([cannot find input file \\`$f'])
          fi;;
       esac
-    done`
+    done` || { (exit 1); exit; }
   # Remove the trailing spaces.
   sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 

@@ -1,5 +1,10 @@
 2000-09-28  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (_AC_OUTPUT_FILES): Fixed exit status.
+	(_AC_OUTPUT_HEADERS): Exit if the header template is missing.
+
+2000-09-28  Pavel Roskin  <proski@gnu.org>
+
 	* acfunctions.m4: Formatting fixes.
 	* acgeneral.m4: Likewise.
 	* aclang.m4: Likewise.
