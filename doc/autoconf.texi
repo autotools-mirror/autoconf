@@ -3382,6 +3382,12 @@ portability issues.  By definition, this list will always require
 additions.  Please help us keeping it as complete as possible.
 
 @table @asis
+@item @code{exit}
+@c @fuindex exit
+Did you know that, on some older hosts, @code{exit} returns @code{int}?
+This is because @code{exit} predates @code{void}, and there was a long
+tradition of it returning @code{int}.
+
 @item @code{snprintf}
 @c @fuindex snprintf
 @prindex @code{snprintf}
