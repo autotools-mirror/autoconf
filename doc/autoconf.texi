@@ -10873,6 +10873,19 @@ practice.  Typically the C compiler is invoked from makefiles that use
 compiler name.
 
 
+@item @command{chmod}
+@c ------------------
+@prindex @command{chmod}
+Avoid usages like @samp{chmod -w file}; use @samp{chmod a-w file}
+instead, for two reasons.  First, plain @samp{-w} does not necessarily
+make the file unwriteable, since it does not affect mode bits that
+correspond to bits in the file mode creation mask.  Second,
+@acronym{POSIX} says that the @samp{-w} might be interpreted as an
+implementation-specific option, not as a mode; @acronym{POSIX} suggests
+using @samp{chmod -- -w file} to avoid this confusion, but unfortunately
+@samp{--} does not work on some older hosts.
+
+
 @item @command{cmp}
 @c ----------------
 @prindex @command{cmp}

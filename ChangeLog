@@ -1,3 +1,11 @@
+2004-01-05  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/Makefile.am (autoconf, autoheader, autom4te, autoreconf,
+	autoscan, autoupdate, ifnames): Don't use chmod -w.
+	* lib/Makefile.am (autom4te.cfg): Likewise.
+	* doc/autoconf.texi (Limitations of Usual Tools): Warn against
+	"chmod -w".
+
 2004-01-04  Paul Eggert  <eggert@twinsun.com>
 	    Paolo Bonzini  <bonzini@gnu.org>
 

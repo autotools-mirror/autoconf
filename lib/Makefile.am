@@ -1,6 +1,6 @@
 ## Process this file with automake to create Makefile.in
 
-## Copyright 2002 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -42,5 +42,5 @@ CLEANFILES = autom4te.cfg
 autom4te.cfg: $(srcdir)/autom4te.in Makefile
 	rm -f autom4te.cfg autom4te.tmp
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
-	chmod -w autom4te.tmp
+	chmod a-w autom4te.tmp
 	mv autom4te.tmp autom4te.cfg

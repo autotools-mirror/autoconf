@@ -1,7 +1,9 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+
+## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software
+## Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -64,49 +66,49 @@ autoconf: $(srcdir)/autoconf.in Makefile
 	rm -f autoconf autoconf.tmp
 	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
-	chmod -w autoconf.tmp
+	chmod a-w autoconf.tmp
 	mv -f autoconf.tmp autoconf
 
 autoheader: $(srcdir)/autoheader.in Makefile
 	rm -f autoheader autoheader.tmp
 	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
 	chmod +x autoheader.tmp
-	chmod -w autoheader.tmp
+	chmod a-w autoheader.tmp
 	mv -f autoheader.tmp autoheader
 
 autom4te: $(srcdir)/autom4te.in Makefile
 	rm -f autom4te autom4te.tmp
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod +x autom4te.tmp
-	chmod -w autom4te.tmp
+	chmod a-w autom4te.tmp
 	mv -f autom4te.tmp autom4te
 
 autoreconf: $(srcdir)/autoreconf.in Makefile
 	rm -f autoreconf autoreconf.tmp
 	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
 	chmod +x autoreconf.tmp
-	chmod -w autoreconf.tmp
+	chmod a-w autoreconf.tmp
 	mv -f autoreconf.tmp autoreconf
 
 autoscan: $(srcdir)/autoscan.in Makefile
 	rm -f autoscan autoscan.tmp
 	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
 	chmod +x autoscan.tmp
-	chmod -w autoscan.tmp
+	chmod a-w autoscan.tmp
 	mv -f autoscan.tmp autoscan
 
 autoupdate: $(srcdir)/autoupdate.in Makefile
 	rm -f autoupdate autoupdate.tmp
 	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
-	chmod -w autoupdate.tmp
+	chmod a-w autoupdate.tmp
 	mv -f autoupdate.tmp autoupdate
 
 ifnames: $(srcdir)/ifnames.in Makefile
 	rm -f ifnames ifnames.tmp
 	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
 	chmod +x ifnames.tmp
-	chmod -w ifnames.tmp
+	chmod a-w ifnames.tmp
 	mv -f ifnames.tmp ifnames
 
 
