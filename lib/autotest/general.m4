@@ -652,23 +652,23 @@ _ATEOF
 	    at_errexit=false
 	    ;;
 	*:77)
-	    at_msg="ok (skipped near \``cat $at_check_line_file`')"
+	    at_msg="skipped (`cat $at_check_line_file`)"
 	    at_skip_list="$at_skip_list $at_group"
 	    at_errexit=false
 	    ;;
 	yes:*)
-	    at_msg="expected failure (failed near \``cat $at_check_line_file`')"
+	    at_msg="expected failure (`cat $at_check_line_file`)"
 	    at_xfail_list="$at_xfail_list $at_group"
 	    at_errexit=false
 	    ;;
 	no:*)
-	    at_msg="FAILED near \``cat $at_check_line_file`'"
+	    at_msg="FAILED (`cat $at_check_line_file`)"
 	    at_fail_list="$at_fail_list $at_group"
 	    at_errexit=$at_errexit_p
 	    ;;
       esac
       echo $at_msg
-      at_log_msg="$at_group. $at_setup_line: $at_msg"
+      at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
       case $at_status in
 	0|77)
 	  # $at_times_file is only available if the group succeeded or
@@ -913,8 +913,9 @@ m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
     at_setup_line='m4_defn([AT_line])'
-    $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
-	               AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
+    at_desc='$1'
+    $at_quiet $ECHO_N "m4_format([[%3d: %-45s]],
+	               AT_ordinal, [$1])[]$ECHO_C"
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 

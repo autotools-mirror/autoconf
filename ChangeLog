@@ -1,3 +1,9 @@
+2003-08-14  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotestgeneral.m4 (AT_INIT): Reformat test summary line to print
+	DESCRIPTION rather than FILE and LINE.  Shorten result to fit in new,
+	shorter column three.  Add DESCRIPTION to log file content.
+
 2003-08-13  Derek Price  <derek@ximbiot.com>
 
 	* lib/autotest/general.m4 (AT_INIT): Correct typo in final status
