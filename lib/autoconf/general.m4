@@ -1209,6 +1209,8 @@ done
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
+# WARNING: Be sure not to use single quotes in there, as some shells,
+# such as our DU 5.0 friend, will then `close' the trap.
 trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
@@ -1223,7 +1225,7 @@ trap 'exit_status=$?
     if test -s confdefs.h; then
       AS_BOX([confdefs.h.])
       echo
-      sed '/^$/d' confdefs.h
+      sed "/^$/d" confdefs.h
       echo
     fi
     test "$ac_signal" != 0 &&

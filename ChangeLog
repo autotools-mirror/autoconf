@@ -1,3 +1,9 @@
+2001-08-28  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Don't use single
+	quotes inside single quotes.
+	Reported by Nicolas Joly.
+
 2001-08-28  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Mention C right shifts.
