@@ -5355,7 +5355,7 @@ var=$@{var="$default"@}
 If the default value contains a closing brace, then use
 
 @example
-test $@{var+set@} = set || var='$@{indirection@}'
+test "$@{var+set@}" = set || var='$@{indirection@}'
 @end example
 @end enumerate
 
