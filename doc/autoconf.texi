@@ -1451,6 +1451,15 @@ method handles the timestamps of configuration header templates
 properly, but does not pass @option{--autoconf-dir=@var{dir}} or
 @option{--localdir=@var{dir}}.
 
+@cindex Gettext
+@cindex @command{autopoint}
+Gettext supplies the @command{autopoint} command to add translation
+infrastructure to a source package.  If you use @command{autopoint},
+your @file{configure.ac} should invoke both @code{AM_GNU_GETTEXT} and
+@code{AM_GNU_GETTEXT_VERSION(@var{gettext-version})}.  @xref{autopoint
+Invocation,, Invoking the @code{autopoint} Program, gettext, GNU
+@code{gettext} utilities}, for further details.
+
 @noindent
 @command{autoreconf} accepts the following options:
 
