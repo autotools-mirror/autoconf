@@ -1606,18 +1606,19 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for})
+@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex CHECK_TOOL
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
 followed by a dash (@pxref{Canonicalizing}).  For example, if the user
 runs @samp{configure --host=i386-gnu}, then this call:
 @example
-AC_CHECK_TOOL(AR, ar)
+AC_CHECK_TOOL(RANLIB, ranlib, :)
 @end example
 @noindent
-sets @code{AR} to @file{i386-gnu-ar} if that program exists in
-@code{PATH}, or to @samp{ar} if not.
+sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
+@code{PATH}, or to @samp{ranlib} if that program exists in @code{PATH},
+or to @samp{:} if neither program exists.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
