@@ -1,3 +1,22 @@
+# acheaders -- autoscan's mapping from headers to Autoconf macros
+# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
+# Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
 # Ones that have their own macros.
 X11/Xlib.h	AC_PATH_X
 dirent.h	AC_HEADER_DIRENT
@@ -12,7 +31,7 @@ sys/mkdev.h	AC_HEADER_MAJOR
 sys/ndir.h	AC_HEADER_DIRENT
 sys/wait.h	AC_HEADER_SYS_WAIT
 
-# Others, to checked with AC_CHECK_HEADERS.
+# Others, checked with AC_CHECK_HEADERS.
 OS.h
 alloca.h
 argz.h
@@ -40,6 +59,7 @@ paths.h
 sgtty.h
 shadow.h
 stddef.h
+stdint.h
 stdio_ext.h
 stdlib.h
 string.h
@@ -73,3 +93,7 @@ utmpx.h
 values.h
 wchar.h
 wctype.h
+
+# Local Variables:
+# mode: shell-script
+# End:

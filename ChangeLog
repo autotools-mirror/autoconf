@@ -1,5 +1,12 @@
 2001-05-31  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions, acheaders, acidentifiers, acmakevars, acprograms:
+	Add copyright and comments.
+	* acheaders: Add stdint.h.
+	Suggested by Paul Eggert.
+
+2001-05-31  Akim Demaille  <akim@epita.fr>
+
 	* atgeneral.m4 (AT_INIT): Use $SHELL.
 	* atspecific.m4 (AT_CHECK_DEFINES): Skip HAVE_STDINT_H.
 
