@@ -1,5 +1,10 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_TOOLS): Don't require
+	AC_CHECK_TOOL_PREFIX, it's dead.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Simplify all the
 	case "$switch" in
 	into
