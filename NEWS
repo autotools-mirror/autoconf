@@ -25,6 +25,8 @@
 - AC_ARG_VAR properly propagates precious variables inherited from the
   environment to ./config.status.
 - Using --program-suffix/--program-prefix is portable.
+- Failures to detect the default compiler's output extension are less
+  likely.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to

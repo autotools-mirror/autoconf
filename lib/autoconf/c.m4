@@ -652,18 +652,24 @@ AC_DEFUN([AC_OBJEXT],   [])
 # it compiles properly.
 m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try to create an executable without -o first, disregard a.out.
-# It will help us diagnose broken compiler, and finding out an intuition
+# It will help us diagnose broken compilers, and finding out an intuition
 # of exeext.
 AC_MSG_CHECKING([for _AC_LANG compiler default output])
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
 AS_IF([AC_TRY_EVAL(ac_link_default)],
-[for ac_file in `ls a.exe conftest.exe a.* conftest conftest.* 2>/dev/null`; do
+[# Find the output, starting from the most likely.  This scheme is
+# not robust to junk in `.', hence go to wildcards (a.*) only as a last
+# resort.
+for ac_file in `ls a.exe conftest.exe 2>/dev/null;
+                ls a.out conftest 2>/dev/null;
+                ls a.* conftest.* 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
     a.out ) # We found the default executable, but exeext='' is most
             # certainly right.
             break;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+          # FIXME: I believe we export ac_cv_exeext for Libtool --akim.
           export ac_cv_exeext
           break;;
     * ) break;;

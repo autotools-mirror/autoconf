@@ -1,5 +1,10 @@
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Try to be robust to
+	preexisting files matching a.*.
+
+2001-06-23  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_ARG_VAR_VALIDATE): Output error messages on
 	stderr.
 	* doc/autoconf.texi (AC_ARG_VAR): Update.
