@@ -1,5 +1,13 @@
 2001-02-28  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT): Warn when at-check-line is
+	missing.
+	* tests/tools.at (Syntax of the scripts): Use AT_CHECK to test
+	/bin/sh -n.  Exit 77 on failure.
+	Reported by Harlan Stenn.
+
+2001-02-28  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE_FS_SEPARATORS): Use `.;.' instead
 	of `.;`pwd`': if pwd is c:/foo, we might walk through `.:c'
 	(fails), and then `/foo' which might succeed, resulting in

@@ -45,22 +45,24 @@ sleep 2
 if kill $! >/dev/null 2>&1; then
   # We managed to kill the child, which means that we probably
   # can't trust `/bin/sh -n', hence the test failed.
-  exit 1
+  exit 77
 fi
 ]])
 
-if /bin/sh ./syntax.sh; then
-  # Specify the path to the tool, some shells don't honor PATH
-  # when running `sh PROG'.
-  AT_CHECK([/bin/sh -n ../autoconf],   0)
-  AT_CHECK([/bin/sh -n ../autoreconf], 0)
-  AT_CHECK([/bin/sh -n ../ifnames],    0)
+# If we can't trust sh, just skip.
+AT_CHECK([/bin/sh ./syntax.sh])
 
-  # These are not built, they are in the src tree.
-  AT_CHECK([/bin/sh -n $top_srcdir/install-sh], 0)
-  AT_CHECK([/bin/sh -n $top_srcdir/mkinstalldirs], 0)
-  AT_CHECK([/bin/sh -n $top_srcdir/missing], 0)
-fi
+# Specify the path to the tool, some shells don't honor PATH when
+# running `sh PROG'.
+
+AT_CHECK([/bin/sh -n ../autoconf],   0)
+AT_CHECK([/bin/sh -n ../autoreconf], 0)
+AT_CHECK([/bin/sh -n ../ifnames],    0)
+
+# These are not built, they are in the src tree.
+AT_CHECK([/bin/sh -n $top_srcdir/install-sh], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/mkinstalldirs], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/missing], 0)
 
 AT_CLEANUP
 

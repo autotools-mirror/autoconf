@@ -225,6 +225,14 @@ m4_divert([TAIL])[]dnl
     continue
     ;;
   esac
+  if test ! -f at-check-line; then
+    echo "$am_me: warning: no at-check-line which means a failure happened"
+    echo "$am_me: warning: in a [AT_SETUP/AT_CLEANUP] pair before any"
+    echo "$am_me: warning: AT_CHECK could be run.  This test suite is"
+    echo "$am_me: warning: improperly designed, please report to"
+    echo "$am_me: warning: <$at_bugreport>."
+    cp at-setup-line at-check-line
+  fi
   case $at_test in
     banner-*) ;;
     *)
