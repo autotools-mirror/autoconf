@@ -320,7 +320,7 @@ AC_SUBST(LEXLIB)])
 AC_DEFUN(AC_DECL_YYTEXT,
 [AC_REQUIRE_CPP()dnl
 AC_REQUIRE([AC_PROG_LEX])dnl
-AC_MSG_CHECKING(for yytext declaration)
+AC_MSG_CHECKING(whether yytext is a pointer)
 AC_CACHE_VAL(ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent. Figure out which it is, since
@@ -336,12 +336,12 @@ if test -f lex.yy.c; then
 elif test -f lexyy.c; then
   LEX_OUTPUT_ROOT=lexyy
 else
-  AC_MSG_ERROR(cannot find output from $LEX, giving up)
+  AC_MSG_ERROR([cannot find output from $LEX, giving up])
 fi
-echo 'extern char *yytext; main () { exit (0); }' >>$LEX_OUTPUT_ROOT.c
+echo 'extern char *yytext;' >>$LEX_OUTPUT_ROOT.c
 ac_save_LIBS="$LIBS"
 LIBS="$LIBS $LEXLIB"
-AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, ac_cv_prog_lex_yytext_pointer=yes)
+AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, , ac_cv_prog_lex_yytext_pointer=yes)
 LIBS="$ac_save_LIBS"
 rm -f "${LEX_OUTPUT_ROOT}.c"])dnl
 AC_MSG_RESULT($ac_cv_prog_lex_yytext_pointer)
@@ -973,10 +973,11 @@ main() {
   /* Use a field that we can force nonzero --
      voluntary context switches.
      For systems like NeXT and OSF/1 that don't set it,
-     also use the system CPU time.  */
+     also use the system CPU time.  And page faults (I/O) for Linux.  */
   r.ru_nvcsw = 0;
   r.ru_stime.tv_sec = 0;
   r.ru_stime.tv_usec = 0;
+  r.ru_majflt = r.ru_minflt = 0;
   switch (fork()) {
   case 0: /* Child.  */
     sleep(1); /* Give up the CPU.  */
@@ -985,7 +986,7 @@ main() {
   default: /* Parent.  */
     wait3(&i, 0, &r);
     sleep(1); /* Avoid "text file busy" from rm on fast HP-UX machines.  */
-    exit(r.ru_nvcsw == 0
+    exit(r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
 }], ac_cv_func_wait3=yes, ac_cv_func_wait3=no, ac_cv_func_wait3=no)])dnl
@@ -1196,7 +1197,7 @@ exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
 && t.st_mtime - s.st_mtime < 120));
 }], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
   ac_cv_func_utime_null=no)
-rm -f core])dnl
+rm -f core core.* *.core])dnl
 AC_MSG_RESULT($ac_cv_func_utime_null)
 if test $ac_cv_func_utime_null = yes; then
   AC_DEFINE(HAVE_UTIME_NULL)
@@ -1233,7 +1234,7 @@ main () {
   putc('\r', stdout);
   exit(0);			/* Non-reversed systems segv here.  */
 }], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
-rm -f core])dnl
+rm -f core core.* *.core])dnl
 AC_MSG_RESULT($ac_cv_func_setvbuf_reversed)
 if test $ac_cv_func_setvbuf_reversed = yes; then
   AC_DEFINE(SETVBUF_REVERSED)
@@ -1372,7 +1373,7 @@ AC_DEFUN(AC_C_CROSS,
 AC_MSG_CHECKING(whether cross-compiling)
 AC_CACHE_VAL(ac_cv_c_cross,
 [AC_TRY_RUN([main(){return(0);}],
-  ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_cross=yes)])dnl
+  ac_cv_c_cross=no, ac_cv_c_cross=yes, ac_cv_c_cross=yes)])dnl
 cross_compiling=$ac_cv_c_cross
 AC_MSG_RESULT($ac_cv_c_cross)
 ])
@@ -1542,7 +1543,7 @@ AC_DEFUN(AC_SYS_INTERPRETER,
 ac_msg="whether #! works in shell scripts"
 AC_MSG_CHECKING($ac_msg)
 AC_CACHE_VAL(ac_cv_sys_interpreter,
-[echo '#!/bin/cat
+[echo '#! /bin/cat
 exit 69
 ' > conftest
 chmod u+x conftest
@@ -1829,7 +1830,7 @@ else
   # These have to be linked with before -lX11, unlike the other
   # libraries we check for below, so use a different variable.
   #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
-  AC_CHECK_LIB(ICE, IceConnectionNumbers,
+  AC_CHECK_LIB(ICE, IceConnectionNumber,
     [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
   LDFLAGS="$ac_save_LDFLAGS"
 

@@ -25,7 +25,9 @@
 #undef C_ALLOCA
 
 /* Define if type char is unsigned and you are not using gcc.  */
+#ifndef __CHAR_UNSIGNED__
 #undef __CHAR_UNSIGNED__
+#endif
 
 /* Define if the closedir function returns void instead of int.  */
 #undef CLOSEDIR_VOID

@@ -73,7 +73,7 @@ dnl ### Defining macros
 dnl m4 output diversions.  We let m4 output them all in order at the end,
 dnl except that we explicitly undivert AC_DIVERSION_SED.
 
-dnl AC_DIVERSION_NOTICE - 1 (= 0)	AC_REQUIRE'd #!/bin/sh line
+dnl AC_DIVERSION_NOTICE - 1 (= 0)	AC_REQUIRE'd #! /bin/sh line
 define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
 define(AC_DIVERSION_INIT, 2)dnl		initialization code
 define(AC_DIVERSION_SED, 3)dnl		variable substitutions in config.status
@@ -448,7 +448,7 @@ dnl Try to have only one #! line, so the script doesn't look funny
 dnl for users of AC_REVISION.
 dnl AC_INIT_BINSH()
 AC_DEFUN(AC_INIT_BINSH,
-[#!/bin/sh
+[#! /bin/sh
 ])
 
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
@@ -466,14 +466,15 @@ AC_DIVERT_POP()dnl to NORMAL
 
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT_PREPARE,
-[trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
+[trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 # File descriptor usage:
-# 0 unused; standard input
+# 0 standard input
 # 1 file creation
 # 2 errors and warnings
-# 3 unused; some systems may open it to /dev/tty
-define(AC_FD_MSG, 4)dnl
+# 3 some systems may open it to /dev/tty
+# 4 used on the Kubota Titan
+define(AC_FD_MSG, 6)dnl
 [#] AC_FD_MSG checking for... messages and results
 define(AC_FD_CC, 5)dnl
 [#] AC_FD_CC compiler messages saved in config.log
@@ -581,8 +582,8 @@ AC_DEFUN(AC_ARG_ENABLE,
 ac_help="$ac_help
 [$2]"
 AC_DIVERT_POP()dnl
-[#] Check whether --enable-$1 or --disable-$1 was given.
-enableval="[$enable_]patsubst($1, -, _)"
+[#] Check whether --enable-[$1] or --disable-[$1] was given.
+enableval="[$enable_]patsubst([$1], -, _)"
 if test -n "$enableval"; then
   ifelse([$3], , :, [$3])
 ifelse([$4], , , [else
@@ -606,8 +607,8 @@ AC_DEFUN(AC_ARG_WITH,
 ac_help="$ac_help
 [$2]"
 AC_DIVERT_POP()dnl
-[#] Check whether --with-$1 or --without-$1 was given.
-withval="[$with_]patsubst($1, -, _)"
+[#] Check whether --with-[$1] or --without-[$1] was given.
+withval="[$with_]patsubst([$1], -, _)"
 if test -n "$withval"; then
   ifelse([$3], , :, [$3])
 ifelse([$4], , , [else
@@ -901,9 +902,10 @@ cat > $cache_file <<\EOF
 EOF
 changequote(, )dnl
 dnl Allow a site initialization script to override cache values.
-# Ultrix sh set writes to stderr and can't be redirected directly.
+# Ultrix sh set writes to stderr and can't be redirected directly,
+# and sets the high bit in the cache file unless we assign to the vars.
 (set) 2>&1 |
-  sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/: \${\1='\2'}/p" \
+  sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1='\2'}/p" \
   >> $cache_file
 changequote([, ])dnl
 else
@@ -1504,7 +1506,7 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], AC_CV_NAME=`cat conftestval`)])dnl
+}], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0)])dnl
 AC_MSG_RESULT($AC_CV_NAME)
 AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine([AC_TYPE_NAME])dnl
@@ -1558,7 +1560,7 @@ dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS] [, INIT-CMDS])
 define(AC_OUTPUT,
 [trap '' 1 2 15
 AC_CACHE_SAVE
-trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
+trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
@@ -1583,7 +1585,7 @@ ifdef([AC_LIST_HEADER], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 echo creating $CONFIG_STATUS
 rm -f $CONFIG_STATUS
 cat > $CONFIG_STATUS <<EOF
-#!/bin/sh
+#! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # This directory was configured as follows,
@@ -1636,7 +1638,7 @@ exit 0
 EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS
+test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])dnl
@@ -1704,7 +1706,7 @@ changequote([, ])dnl
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
     test ! -d "$ac_dir" && mkdir "$ac_dir"
-    ac_dir_suffix="/$ac_dir"
+    ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
 changequote(, )dnl
     ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
@@ -1893,7 +1895,7 @@ changequote([, ])dnl
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     # The dest file is in a subdirectory.
     test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
-    ac_dest_dir_suffix="/$ac_dest_dir"
+    ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
 changequote(, )dnl
     ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[^/]*%../%g'`
@@ -1918,7 +1920,8 @@ changequote([, ])dnl
 done
 ])
 
-This is a subroutine of AC_OUTPUT.  It is called after running config.status.
+dnl This is a subroutine of AC_OUTPUT.
+dnl It is called after running config.status.
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 define(AC_OUTPUT_SUBDIRS,
 [
@@ -1995,13 +1998,21 @@ if test "$no_recursion" != yes; then
       # Make the cache file name correct relative to the subdirectory.
 changequote(, )dnl
       # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo /$ac_config_dir|sed 's%/[^/]*%../%g'`
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%/[^/]*%../%g' -e 's%^%/%`
 changequote([, ])dnl
       case "$cache_file" in
       /*) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
         ac_sub_cache_file="$ac_dots$cache_file" ;;
       esac
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+      [  case "$ac_given_INSTALL" in
+changequote(, )dnl
+        [/$]*) INSTALL="$ac_given_INSTALL" ;;
+changequote([, ])dnl
+        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+        esac
+])dnl
 
       echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
       # The eval makes quoting arguments work.
