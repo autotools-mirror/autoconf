@@ -469,8 +469,8 @@ Because of its mission, Autoconf includes only a set of highly used
 macros which have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
 @href{http://research.cys.de/autoconf-archive/, Autoconf Macro
-Repository}, which is kindly run by @email{simons@@cys.de, Peter
-Simons}.
+Repository}, which is kindly run by @email{simons@@research.cys.de,
+Peter Simons}.
 
 
 @c ================================================= Making configure Scripts.
