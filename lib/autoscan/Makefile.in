@@ -96,6 +96,7 @@ autoscanlibdir = $(pkgdatadir)/autoscan
 
 EXTRA_DIST = autoscan.pre
 nodist_autoscanlib_DATA = autoscan.list
+CLEANFILES = autoscan.list
 
 SUFFIXES = .m4 .m4f
 
@@ -266,6 +267,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)

@@ -21,7 +21,7 @@ autoscanlibdir = $(pkgdatadir)/autoscan
 
 EXTRA_DIST = autoscan.pre
 nodist_autoscanlib_DATA = autoscan.list
-
+CLEANFILES = autoscan.list
 
 ## ------------------------ ##
 ## Building autoscan.list.  ##

@@ -13,6 +13,7 @@
 	* lib/autoscan/Makefile.am (EXTRA_DIST, nodist_autoscanlib_DATA):
 	autoscan.pre is not to be installed, and autoscan.list is not to
 	be shipped.
+	(CLEANFILES): Add autoscan.list.
 
 2002-10-25  Akim Demaille  <akim@epita.fr>
 
