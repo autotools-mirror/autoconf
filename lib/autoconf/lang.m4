@@ -463,7 +463,8 @@ for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.*; do
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])
+AC_MSG_ERROR([_AC_LANG compiler cannot create executables
+check `config.log' for details.], 77)])
 ac_exeext=$ac_cv_exeext
 AC_MSG_RESULT([$ac_file])
 ])# _AC_COMPILER_EXEEXT_DEFAULT
