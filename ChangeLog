@@ -1,5 +1,15 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Because of commas and brackets, m4_split must mess with the
+	quotes.
+
+	* libm4.m4 (m4_split): Quote the elements of the list you produce.
+	* tests/base.m4: New file, testing libm4.
+	All callers adapted.
+	Test m4_wrap.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CONFIG_UNIQUE): Strip the `:foo.in' part
 	yourself, in order to give better error messages.
 	(AC_CONFIG_IF_MEMBER): Adapted to the above change.

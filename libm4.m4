@@ -475,41 +475,47 @@ define([m4_quote], [[$@]])
 
 # m4_split(STRING, [REGEXP])
 # --------------------------
+#
 # Split STRING into an m4 list of quoted elements.  The elements are
 # quoted with [ and ].  Beginning spaces and end spaces *are kept*.
 # Use m4_strip to remove them.
 #
 # REGEXP specifies where to split.  Default is [\t ]+.
+#
 # Pay attention to the changequotes.  Inner changequotes exist for
 # obvious reasons (we want to insert square brackets).  Outer
 # changequotes are needed because otherwise the m4 parser, when it
 # sees the closing bracket we add to the result, believes it is the
-# end of the body of the macro we define.
+# end of the body of the macro we define.  And since the active quote
+# when `define' is called are not the ones which were used in its
+# definition, we cannot use `define' as defined above.  Therefore,
+# using m4's builtin `m4_define', which is indepedent from the
+# current quotes, to define `m4_split', and then register `m4_split'
+# in libm4.
 #
-# Also, notice that $1 is quoted twice, since we want the result to be
-# quoted.  Then you should understand that the argument of patsubst is
-# ``STRING'' (i.e., with additional `` and '').
+# Also, notice that $1 is quoted twice, since we want the result to
+# be quoted.  Then you should understand that the argument of
+# patsubst is ``STRING'' (i.e., with additional `` and '').
 #
 # This macro is safe on active symbols, i.e.:
 #   define(active, ACTIVE)
 #   m4_split([active active ])end
 #   => [active], [active], []end
-#changequote(<<, >>)
-#define(m4_split,
-#<<changequote(``, '')dnl
-#[dnl Can't use m4_default here instead of ifelse, because m4_default uses
-#dnl [ and ] as quotes.
-#patsubst(````$1'''',
-#	  ifelse(``$2'',, ``[   ]+'', ``$2''),
-#	  ``], ['')]dnl
-#changequote([, ])>>)
-#changequote([, ])
-#changequote(<<, >>)
 
-define(m4_split,
-[patsubst([[$1]],
-         ifelse([$2],, [[[   ]+]], [[$2]]),
-         [,])])
+changequote(<<, >>)
+m4_define(m4_split,
+<<changequote(``, '')dnl
+[dnl Can't use m4_default here instead of ifelse, because m4_default uses
+dnl [ and ] as quotes.
+patsubst(````$1'''',
+	  ifelse(``$2'',, ``[   ]+'', ``$2''),
+	  ``], ['')]dnl
+changequote([, ])>>)
+changequote([, ])
+changequote(<<, >>)
+
+m4_namespace_register(m4_split, [libm4])
+
 
 
 # m4_join(STRING)
