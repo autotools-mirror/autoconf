@@ -43,16 +43,6 @@ my %c_keywords = map { $_ => 1}
       auto extern register typedef static goto return sizeof break
       continue if else for do while switch case default);
 
-# $USED{KIND}{ITEM} is set if ITEM is used in the program.
-# It is set to its list of locations.
-my %used = ();
-
-# $MACRO{KIND}{ITEM} is the list of macros to use to test ITEM.
-my %macro = ();
-
-# $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
-my %needed_macros = ();
-
 my @kinds = qw (functions headers identifiers programs
                 makevars libraries);
 
@@ -68,11 +58,27 @@ my %generic_macro =
 
 my %kind_comment =
   (
-   'functions' => 'Checks for library functions.',
-   'headers' => 'Checks for header files.',
+   'functions'   => 'Checks for library functions.',
+   'headers'     => 'Checks for header files.',
    'identifiers' => 'Checks for typedefs, structures, and compiler characteristics.',
-   'programs' => 'Checks for programs.',
+   'programs'    => 'Checks for programs.',
   );
+
+# $USED{KIND}{ITEM} is the list of locations where the ITEM (of KIND) was used
+# in the user package.
+# For instance $USED{function}{alloca} is the list of `file:line' where
+# `alloca (...)' appears.
+my %used = ();
+
+# $MACRO{KIND}{ITEM} is the list of macros to use to test ITEM.
+# Initialized from lib/autoscan/*.  E.g., $MACRO{function}{alloca} contains
+# the singleton AC_FUNC_ALLOCA.  Some require several checks.
+my %macro = ();
+
+# $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
+# E.g., $NEEDED_MACROS{AC_FUNC_ALLOC} the list of `file:line' containing
+# `alloca (...)'.
+my %needed_macros = ();
 
 my $configure_scan = 'configure.scan';
 my $log = new Autom4te::XFile ">$me.log";
@@ -123,7 +129,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 # Process any command line arguments.
 sub parse_args ()
 {
-  getopt ('I|include|A|autoconf-dir|m|macrodir=s' => \@include,
+  getopt ('I|include=s' => \@include,
 	  'B|prepend-include=s' => \@prepend_include);
 
   die "$me: too many arguments
@@ -162,25 +168,31 @@ sub init_tables ()
 	  # Ignore blank lines and comments.
 	  next
 	    if /^\s*$/ || /^\s*\#/;
-	  unless (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
+
+	  # '<word>        <macro invocation>' or...
+	  # '<word>        warn: <message>'    or...
+	  # '<word>'.
+	  if (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
 	    {
-	      error "cannot parse definition in $file:\n$_";
+	      my $word = $1;
+	      my $macro = $2 || $generic_macro{$kind};
+	      # The default macro must be explicitly listed for words
+	      # which have a specific macros.  This allows to enforce
+	      # consistency checks.
+	      if (!defined $2 && exists $macro{$kind}{$word})
+		{
+		  warn ("$file:$.: "
+			. "ignoring implicit call to the generic macro for $word\n");
+		  $tables_are_consistent = 0;
+		}
+	      else
+		{
+		  push @{$macro{$kind}{$word}}, $macro;
+		}
+	      next;
 	    }
-	  my $word = $1;
-	  my $macro = $2 || $generic_macro{$kind};
-	  # The default macro must be explicitly listed for words
-	  # which have a specific macros.  This allows to enforce
-	  # consistency checks.
-	  if (!defined $2 && exists $macro{$kind}{$word})
-	    {
-	      warn ("$file:$.: "
-		    . "ignoring implicit call to the generic macro for $word\n");
-	      $tables_are_consistent = 0;
-	    }
-	  else
-	    {
-	      push @{$macro{$kind}{$word}}, $macro;
-	    }
+
+	  error "cannot parse definition in $file:\n$_";
 	}
       $table->close;
     }
@@ -199,6 +211,7 @@ sub used ($$;$)
   $where ||= "$File::Find::name:$.";
   push (@{$used{$kind}{$word}}, $where);
 }
+
 
 ## ----------------------- ##
 ## Scanning source files.  ##
@@ -436,7 +449,15 @@ sub output_kind ($$)
       # already printed, and remember these macros are needed.
       foreach my $macro (@{$macro{$kind}{$word}})
 	{
-	  if (exists $generic_macro{$kind}
+	  if ($macro =~ /^warn:\s+(.*)/)
+	    {
+	      my $message = $1;
+	      foreach my $location (@{$used{$kind}{$word}})
+		{
+		  warn "$location: warning: $message\n";
+		}
+	    }
+	  elsif (exists $generic_macro{$kind}
 	      && $macro eq $generic_macro{$kind})
 	    {
 	      push (@have, $word);

@@ -1,3 +1,11 @@
+2002-09-27  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoscan.in: Improve the comments.
+	(&parse_args): Drop obsolete undocumented options.
+	(&output_kind): Output warnings.
+	* lib/autoscan/functions: (dcgettext): Now trigger AM_GNU_GETTEXT.
+	(getwd): Trigger a warning.
+
 2002-09-26  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in: Clarify that -s is meaningless without -i.
