@@ -1,5 +1,15 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Use the style we promote.
+
+	* doc/autoconf.texi (Header Templates): Promote #if over #ifdef;
+	and #undef over #define in templates.
+	* acspecific.m4 (AC_DECL_SYS_SIGLIST, AC_FUNC_MMAP,
+	AC_FUNC_SETPGRP, AC_FUNC_VFORK, AC_FUNC_SELECT_ARGTYPES): Use #if,
+	not #ifdef and #ifndef, indent CPP directives.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Quote properly AC_SHELL_IFELSE and callers.
 
 	* acgeneral.m4 (AC_SHELL_IFELSE): Don't overquote $1.

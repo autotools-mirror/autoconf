@@ -690,7 +690,7 @@ Print the version number of Autoconf and exit.
 @item --trace=@var{macro}
 @itemx -t @var{macro}
 List the calls to @var{macro}.  Multiple calls to @samp{--trace} list
-several macros.  It is adviced to use this feature instead of parsing
+several macros.  It is advised to use this feature instead of parsing
 @file{configure.in}.
 
 The output is composed of separated lines for each macro call.  Each
@@ -1309,8 +1309,8 @@ input file and may overwrite one of your boilerplates.
 @subsection Configuration Header Templates
 
 Your distribution should contain a template file that looks as you want
-the final header file to look, including comments, with default values
-in the @code{#define} statements.  For example, suppose your
+the final header file to look, including comments, with @code{#undef}
+statements which are used as hooks.  For example, suppose your
 @file{configure.in} makes these calls:
 
 @example
@@ -1319,34 +1319,43 @@ AC_CHECK_HEADERS(unistd.h)
 @end example
 
 @noindent
-Then you could have code like the following in @file{conf.h.in}.
-On systems that have @file{unistd.h}, @code{configure} will change the 0
-to a 1.  On other systems, it will leave the line unchanged.
+Then you could have code like the following in @file{conf.h.in}.  On
+systems that have @file{unistd.h}, @code{configure} will @samp{#define}
+@samp{HAVE_UNISTD_H} to 1.  On other systems, the whole line will be
+commented out (in case the system predefines that symbol).
 
 @example
 @group
 /* Define as 1 if you have unistd.h.  */
-#define HAVE_UNISTD_H 0
-@end group
-@end example
-
-Alternately, if your code tests for configuration options using
-@code{#ifdef} instead of @code{#if}, a default value can be to
-@code{#undef} the variable instead of to define it to a value.  On
-systems that have @file{unistd.h}, @code{configure} will change the
-second line to read @samp{#define HAVE_UNISTD_H 1}.  On other systems,
-it will comment that line out (in case the system predefines that
-symbol).
-
-@example
-@group
-/* Define if you have unistd.h.  */
 #undef HAVE_UNISTD_H
 @end group
 @end example
 
-@node Invoking autoheader,  , Header Templates, Configuration Headers
+You can then decode the configuration header using the preprocessor
+directives:
+
+@example
+@group
+#include "conf.h"
+
+#if HAVE_UNISTD_D
+# include <unistd.h>
+#else
+/* We are in trouble. */
+#endif
+@end group
+@end example
+
+The use of old form templates, with @samp{#define} instead of
+@samp{#undef} is strongly discouraged.
+
+Since it is a tedious task to keep a template header up to date, you may
+use @code{autoheader} to generate it, see @ref{Invoking autoheader}.
+
+
+@node Invoking autoheader,, Header Templates, Configuration Headers
 @subsection Using @code{autoheader} to Create @file{config.h.in}
+
 
 The @code{autoheader} program can create a template file of C
 @samp{#define} statements for @code{configure} to use.  If
@@ -6226,3 +6235,7 @@ easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @contents
 @bye
+
+@c Local Variables:
+@c ispell-local-dictionary: "american"
+@c End:

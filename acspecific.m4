@@ -1084,7 +1084,7 @@ AC_DEFUN(AC_DECL_SYS_SIGLIST,
 [AC_TRY_COMPILE([#include <sys/types.h>
 #include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
-#ifdef HAVE_UNISTD_H
+#if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 ], [char *msg = *(sys_siglist + 1);],
@@ -1126,12 +1126,12 @@ fi
 AC_DEFUNCT(AC_UNISTD_H, [; instead use AC_CHECK_HEADERS(unistd.h)])
 
 AC_DEFUNCT(AC_USG,
-            [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])
+           [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])
 
 # If memchr and the like aren't declared in <string.h>, include <memory.h>.
 # To avoid problems, don't check for gcc2 built-ins.
 AC_DEFUNCT(AC_MEMORY_H,
-            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
+           [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
 
 AC_DEFUNCT(AC_DIR_HEADER, [; instead use AC_HEADER_DIRENT])
 
@@ -1222,7 +1222,7 @@ AC_DEFUN(AC_TYPE_SIGNAL,
 [AC_TRY_COMPILE([#include <sys/types.h>
 #include <signal.h>
 #ifdef signal
-#undef signal
+# undef signal
 #endif
 #ifdef __cplusplus
 extern "C" void (*signal (int, void (*)(int)))(int);
@@ -1286,7 +1286,7 @@ AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
 #endif
 
 int
-main()
+main ()
 {
   exit (fnmatch ("a*", "abc", 0) != 0);
 }],
@@ -1305,8 +1305,8 @@ AC_DEFUN(AC_FUNC_MMAP,
 [AC_CHECK_HEADERS(unistd.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
-[AC_TRY_RUN([
-/* Thanks to Mike Haertel and Jim Avera for this test.
+[AC_TRY_RUN(
+[/* Thanks to Mike Haertel and Jim Avera for this test.
    Here is a matrix of mmap possibilities:
 	mmap private not fixed
 	mmap private fixed at somewhere currently unmapped
@@ -1332,20 +1332,20 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 #include <sys/mman.h>
 
 /* This mess was copied from the GNU getpagesize.h.  */
-#ifndef HAVE_GETPAGESIZE
-# ifdef HAVE_UNISTD_H
+#if !HAVE_GETPAGESIZE
+# if HAVE_UNISTD_H
 #  include <unistd.h>
 # endif
 
 /* Assume that all systems that can run configure have sys/param.h.  */
-# ifndef HAVE_SYS_PARAM_H
+# if !HAVE_SYS_PARAM_H
 #  define HAVE_SYS_PARAM_H 1
 # endif
 
 # ifdef _SC_PAGESIZE
 #  define getpagesize() sysconf(_SC_PAGESIZE)
 # else /* no _SC_PAGESIZE */
-#  ifdef HAVE_SYS_PARAM_H
+#  if HAVE_SYS_PARAM_H
 #   include <sys/param.h>
 #   ifdef EXEC_PAGESIZE
 #    define getpagesize() EXEC_PAGESIZE
@@ -1513,7 +1513,7 @@ fi
 AC_DEFUN(AC_FUNC_SETPGRP,
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
 AC_TRY_RUN(
-[#ifdef HAVE_UNISTD_H
+[#if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 
@@ -1568,10 +1568,10 @@ AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef HAVE_UNISTD_H
+#if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#ifdef HAVE_VFORK_H
+#if HAVE_VFORK_H
 # include <vfork.h>
 #endif
 /* On some sparc systems, changes by the child to local and incoming
@@ -2223,17 +2223,17 @@ AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
      for ac_cv_func_select_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
       for ac_cv_func_select_arg5 in 'struct timeval *' 'const struct timeval *'; do
        AC_TRY_COMPILE(dnl
-[#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+[#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
 #endif
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
+#if HAVE_SYS_TIME_H
+# include <sys/time.h>
 #endif
-#ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#if HAVE_SYS_SELECT_H
+# include <sys/select.h>
 #endif
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
+#if HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
 #endif
 extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5);],,dnl
         [ac_not_found=no ; break 3],ac_not_found=yes)
