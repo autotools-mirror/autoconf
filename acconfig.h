@@ -21,6 +21,9 @@
 #undef _ALL_SOURCE
 #endif
 
+/* Define if using alloca.c.  */
+#undef C_ALLOCA
+
 /* Define if type char is unsigned and you are not using gcc.  */
 #undef __CHAR_UNSIGNED__
 
