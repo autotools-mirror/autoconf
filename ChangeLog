@@ -1,7 +1,7 @@
 2005-01-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Clarify that
-	"if test -d foo; ..." is portable.  Suggested by Stepan Kasal.
+	"if test ! -d foo; ..." is portable.  Suggested by Stepan Kasal.
 
 2005-01-20  Paul Eggert  <eggert@cs.ucla.edu>
 
