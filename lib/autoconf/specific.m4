@@ -1234,11 +1234,11 @@ AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 [#include <sys/types.h>
 #include <$ac_header_dirent>
 
-int closedir();
+int closedir ();
 int
-main()
+main ()
 {
-  exit(closedir(opendir(".")) != 0);
+  exit (closedir (opendir (".")) != 0);
 }],
   ac_cv_func_closedir_void=no,
   ac_cv_func_closedir_void=yes,
