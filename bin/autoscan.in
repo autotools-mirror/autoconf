@@ -188,7 +188,7 @@ sub init_tables ()
 
 # used($KIND, $WORD, [$WHERE])
 # ----------------------------
-# $WORD is used in $KIND.
+# $WORD is used as a $KIND.
 sub used ($$;$)
 {
   my ($kind, $word, $where) = @_;
@@ -359,12 +359,12 @@ sub scan_file ()
 
   if (/\.[chlym](\.in)?$/)
     {
-      push (@{$used{'programs'}{"cc"}}, $File::Find::name);
+      used 'programs', 'cc';
       scan_c_file ($_);
     }
   elsif (/\.(cc|cpp|cxx|CC|C|hh|hpp|hxx|HH|H|yy|ypp|ll|lpp)(\.in)?$/)
     {
-      push (@{$used{'programs'}{"c++"}}, $File::Find::name);
+      used 'programs', 'c++';
       scan_c_file ($_);
     }
   elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)
