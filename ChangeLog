@@ -1,3 +1,12 @@
+2004-01-28  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Add 2004 to
+	copyright years.
+	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Add 1992 thorugh
+	2003 (except 1997) to the list of copyright years.  This undoes
+	the 2003-05-22 change, which removed the older years from the list.
+	* lib/autoconf/status.m4 (AC_OUTPUT): Update copyright date to 2004.
+
 2004-01-27  Gary V. Vaugan  <gary@gnu.org>
 	    Albert Chin-A-Young <china@thewrittenword.com>
 
@@ -22,7 +31,7 @@
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
 	bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in: Likewise.
 	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Likewise.
-	
+
 	* Makefile.in, aclocal.m4, configure, bin/Makefile.in,
 	bin/autoconf.in, config/Makefile.in, config/config.guess,
 	config/config.sub, config/install-sh, config/mdate-sh,
