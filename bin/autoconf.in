@@ -32,6 +32,8 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
 test -z "${M4}" && M4=@M4@
 
+tmpout=/tmp/acout.$$
+
 print_version=
 while test $# -gt 0 ; do
    case "z${1}" in 
@@ -47,6 +49,7 @@ while test $# -gt 0 ; do
          shift ;;
       z-v | z--version | z--v* )
          print_version="-DAC_PRINT_VERSION"
+         infile=/dev/null tmpout=/dev/null
          shift ;;
       z-- )     # Stop option processing
         shift; break ;;
@@ -59,32 +62,24 @@ while test $# -gt 0 ; do
    esac
 done
 
-case $# in
-  0) infile=configure.in ;;
-  1) infile="$1" ;;
-  *) echo "$usage" >&2; exit 1 ;;
-esac
+if test -z "$print_version"; then
+  case $# in
+    0) infile=configure.in ;;
+    1) infile="$1" ;;
+    *) echo "$usage" >&2; exit 1 ;;
+  esac
 
-version_only=
-if test z$infile = z-; then
-  infile=/tmp/acin.$$
-  trap 'rm -f $infile' 1 3 15
-  cat > $infile
-else
-  if test ! -s "${infile}"; then
-    if test $# -eq 0 -a z"$print_version" != z; then
-      # No error for `autoconf --version'.
-      infile=/dev/null
-      version_only=yes
-    else
-      echo "autoconf: ${infile}: No such file or directory" >&2
-      exit 1
-    fi
+  if test z$infile = z-; then
+    infile=/tmp/acin.$$
+    trap 'rm -f $infile' 1 3 15
+    cat > $infile
+  elif test ! -s "${infile}"; then
+    echo "autoconf: ${infile}: No such file or directory" >&2
+    exit 1
   fi
-fi
 
-tmpout=/tmp/acout.$$
-trap 'rm -f $tmpout; exit 1' 1 3 15
+  trap 'rm -f $tmpout; exit 1' 1 3 15
+fi
 
 MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4"
 test -r ${AC_MACRODIR}/aclocal.m4 \
@@ -93,6 +88,8 @@ test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
 MACROFILES="${print_version} ${MACROFILES}"
 
 $M4 $MACROFILES $infile > $tmpout
+
+test -n "$print_version" && exit 0
 
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do
@@ -109,7 +106,7 @@ if grep "${pattern}" $tmpout > /dev/null 2>&1; then
   status=1
 fi
 
-test z"$version_only" = z && case $# in
+case $# in
   0) cat $tmpout > configure; chmod +x configure ;;
   1) cat $tmpout ;;
 esac
