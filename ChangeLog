@@ -1,5 +1,11 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Prerequisite Macros): Dedocument AC_PROVIDE.
+	(Coding Style): Move some into...
+	(Macro Definitions): here.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	The --help message should have paragraphs starting with a title,
 	the options, and then optionally a small paragraph.
 

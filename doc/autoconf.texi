@@ -5891,23 +5891,42 @@ the order in which macros are called (@pxref{Prerequisite Macros}).
 An Autoconf macro definition looks like this:
 
 @example
-AC_DEFUN(@var{macro-name}, [@var{macro-body}])
+AC_DEFUN(@var{macro-name}, @var{macro-body})
 @end example
 
-@noindent
-The square brackets here do not indicate optional text: they should
-literally be present in the macro definition to avoid macro expansion
-problems (@pxref{Quoting}).  You can refer to any arguments passed to
-the macro as @samp{$1}, @samp{$2}, etc.
+You can refer to any arguments passed to the macro as @samp{$1},
+@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
+GNU m4}, for more complete information on writing M4 macros.
 
-To introduce comments in M4, use the builtin @code{dnl}; it causes
-@code{m4} to discard the text through the next newline.  It is not
-needed between macro definitions in @file{acsite.m4} and
-@file{aclocal.m4}, because all output is discarded until @code{AC_INIT}
-is called.
+Be sure to quote properly both the @var{macro-body} @emph{and} the
+@var{macro-name}, to avoid any problems if the macro happens to be
+already defined.
 
-@xref{Definitions,, How to define new macros, m4.info, GNU m4}, for more
-complete information on writing M4 macros.
+Any macro should have a header comment which gives its prototype, and a
+short documentation.  When arguments have default values, display them
+in the prototype.  For instance:
+
+@example
+# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
+# --------------------------------------
+define([AC_MSG_ERROR],
+[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
+@end example
+
+Comments about the macro should be left in the header comment.  Most
+other comments should make their way into @file{configure}, hence just
+keep using @samp{#} to introduce comments.
+
+@cindex @code{dnl}
+If you have some very special comments about pure M4 code, comments
+which make no sense in @file{configure} and in the header comment, then
+use the builtin @code{dnl}: it causes @code{m4} to discard the text
+through the next newline.
+
+Keep in mind that @code{dnl} is rarely needed to introduce comments,
+rather it is useful to get rid of the newlines behind macros which
+produce no output, such as @code{AC_REQUIRE}.
+
 
 @node Macro Names, Quoting, Macro Definitions, Writing Macros
 @section Macro Names
@@ -6496,22 +6515,6 @@ SOME_CHECK
 You are encouraged to put all the @code{AC_REQUIRE}s at the beginning of
 the macros.  You can use @code{dnl} to avoid the empty line they leave.
 
-An alternative to using @code{AC_DEFUN} is to use @code{define} and call
-@code{AC_PROVIDE}.  Because this technique does not prevent nested
-messages, it is considered obsolete.
-
-@defmac AC_PROVIDE (@var{this-macro-name})
-@maindex PROVIDE
-Record the fact that @var{this-macro-name} has been called.
-@var{this-macro-name} should be the name of the macro that is calling
-@code{AC_PROVIDE}.  An easy way to get it is from the M4 builtin
-variable @code{$0}, like this:
-
-@example
-AC_PROVIDE([$0])
-@end example
-@end defmac
-
 @node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
 @subsection Suggested Ordering
 
@@ -6694,20 +6697,10 @@ purpose.  With the @code{s} command, the preferred separator is @samp{/}
 unless @samp{/} itself is used in the command, in which case you should
 use @samp{,}.
 
-When defining a macro, quote the name being defined.  If the macro is
-never @code{AC_REQUIRE}'d nor @code{AC_REQUIRE}'s, use @code{define}.
-In case of doubt, use @code{AC_DEFUN}.  Include the prototype of the
-macro in its header comments.  When arguments have default values,
-display them in the prototype.  For instance:
-
-@example
-# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
-# --------------------------------------
-define([AC_MSG_ERROR],
-[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
-@end example
-
-All the @code{AC_REQUIRE} should be at the beginning of the macro,
+@xref{Macro Definitions}, for details on how to define a macro.  If the
+macro is never @code{AC_REQUIRE}'d nor @code{AC_REQUIRE}'s, use
+@code{define}.  In case of doubt, use @code{AC_DEFUN}.  All the
+@code{AC_REQUIRE} should be at the beginning of the macro,
 @code{dnl}'ed.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
