@@ -137,20 +137,8 @@ m4_define([AS_REQUIRE],
 # AS_SHELL_SANITIZE
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.
-#
-# This macro has a very special status.  Normal use of M4sh relies
-# heavily on AS_REQUIRE, so that needed initiatizations (such as
-# _AS_TEST_PREPARE) are performed on need, not on demand.  But
-# Autoconf is the first client of M4sh, and for two reasons: configure
-# and config.status.  Relying on AS_REQUIRE is of course fine for
-# configure, but fails for config.status (which is created by
-# configure).  So we need a means to force the inclusion of the
-# various _AS_PREPARE_* on top of config.status.  That's basically why
-# there are so many _AS_PREPARE_* below, and that's also why it is
-# important not to forget some: config.status needs them.
 m4_defun([AS_SHELL_SANITIZE],
-[
-## --------------------- ##
+[## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
 
@@ -158,6 +146,9 @@ m4_defun([AS_SHELL_SANITIZE],
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
+  [#] Zsh performs word splitting on ${1+"$[@]"}, which is contrary to
+  # our usage.  Disable this feature.
+  alias -g '${1+"$[@]"}'='"$[@]"'
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
@@ -172,11 +163,30 @@ m4_foreach([_AS_var],
       { _AS_var=C; export _AS_var; }
 ])
 
-# Name of the executable.
+# Required to use basename.
+_AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
+
+# Name of the executable.
 as_me=`AS_BASENAME("$[0]")`
 
-# PATH needs CR, and LINENO needs CR and PATH.
+])
+
+
+# _AS_PREPARE
+# -----------
+# This macro has a very special status.  Normal use of M4sh relies
+# heavily on AS_REQUIRE, so that needed initiatizations (such as
+# _AS_TEST_PREPARE) are performed on need, not on demand.  But
+# Autoconf is the first client of M4sh, and for two reasons: configure
+# and config.status.  Relying on AS_REQUIRE is of course fine for
+# configure, but fails for config.status (which is created by
+# configure).  So we need a means to force the inclusion of the
+# various _AS_PREPARE_* on top of config.status.  That's basically why
+# there are so many _AS_PREPARE_* below, and that's also why it is
+# important not to forget some: config.status needs them.
+m4_defun([_AS_PREPARE],
+[# PATH needs CR, and LINENO needs CR and PATH.
 _AS_CR_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 _AS_LINENO_PREPARE
@@ -198,6 +208,14 @@ IFS=" 	$as_nl"
 # CDPATH.
 AS_UNSET([CDPATH], [$PATH_SEPARATOR])
 ])
+
+
+# AS_PREPARE
+# ----------
+# Output all the M4sh possible initialization into the initialization
+# diversion.
+m4_defun([AS_PREPARE],
+[m4_divert_text([M4SH-INIT], [_AS_PREPARE])])
 
 
 ## ----------------------------- ##
@@ -508,7 +526,8 @@ m4_define([_AS_LINENO_WORKS],
 # configure) you'd compare LINENO wrt config.status vs. _oline_ vs
 # configure.
 m4_define([_AS_LINENO_PREPARE],
-[_AS_LINENO_WORKS || {
+[AS_REQUIRE([_AS_CR_PREPARE])dnl
+_AS_LINENO_WORKS || {
   # Find who we are.  Look in the path if we contain no path at all
   # relative or not.
   case $[0] in
@@ -1017,8 +1036,9 @@ m4_define([AS_INIT],
 # Forbidden tokens and exceptions.
 m4_pattern_forbid([^_?AS_])
 
-# Bangshe.
+# Bangshe and minimal initialization.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
+m4_divert_text([M4SH-INIT], [AS_SHELL_SANITIZE])
 
 # Let's go!
 m4_wrap([m4_divert_pop([BODY])[]])

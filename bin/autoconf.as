@@ -1,27 +1,4 @@
-#! /bin/sh
-if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
-  as_basename=basename
-else
-  as_basename=false
-fi
-
-if expr a : '\(a\)' >/dev/null 2>&1; then
-  as_expr=expr
-else
-  as_expr=false
-fi
-
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-  # Zsh performs word splitting on ${1+""}, which is contrary to
-  # our usage.  Disable this feature.
-  alias -g '${1+""}'='""'
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-
+AS_INIT[]dnl                                            -*- shell-script -*-
 # autoconf -- create `configure' using m4 macros
 # Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
@@ -41,7 +18,7 @@ fi
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-usage="\
+usage=["\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
@@ -76,26 +53,17 @@ Tracing:
 
 In tracing mode, no configuration script is created.
 
-Report bugs to <bug-autoconf@gnu.org>."
+Report bugs to <bug-autoconf@gnu.org>."]
 
-version="\
+version=["\
 autoconf (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
 Copyright 2002 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."]
 
-me=`$as_basename $0 ||
-$as_expr X/$0 : '.*/\([^/][^/]*\)/*$' \| \
-	 X$0 : 'X\(//\)$' \| \
-	 X$0 : 'X\(/\)$' \| \
-	 .     : '\(.\)' 2>/dev/null ||
-echo X/$0 |
-    sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
-  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\/\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+me=`AS_BASENAME([$0])`
 
 help="\
 Try \`$me --help' for more information."
@@ -107,27 +75,16 @@ exit 1"
 
 # Variables.
 : ${AUTOM4TE=@autom4te-name@}
-dir=`(dirname $0) 2>/dev/null ||
-$as_expr X$0 : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-         X$0 : 'X\(//\)[^/]' \| \
-         X$0 : 'X\(//\)$' \| \
-         X$0 : 'X\(/\)' \| \
-         .     : '\(.\)' 2>/dev/null ||
-echo X$0 |
-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q'`
+dir=`AS_DIRNAME([$0])`
 outfile=
 verbose=:
 
 # Parse command line.
 while test $# -gt 0 ; do
-  option=`expr "x$1" : 'x\(--[^=]*\)' \| \
-               "x$1" : 'x\(-.\)'`
-  optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
-               "x$1" : 'x-.\(.*\)'`
+  option=[`expr "x$1" : 'x\(--[^=]*\)' \| \
+               "x$1" : 'x\(-.\)'`]
+  optarg=[`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
+               "x$1" : 'x-.\(.*\)'`]
   case $1 in
     --version | -V )
        echo "$version" ; exit 0 ;;

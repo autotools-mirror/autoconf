@@ -1,0 +1,5 @@
+AS_INIT
+# Running `$0' as if it were installed.
+me=`echo "$0" | sed -e 's,.*[\\/],,'`
+
+exec @abs_top_builddir@/bin/$me --include @abs_top_builddir@/lib ${1+"$@"}

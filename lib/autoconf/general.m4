@@ -432,8 +432,6 @@ AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
-AS_SHELL_SANITIZE
-
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 # so uname gets run too.
@@ -1252,6 +1250,7 @@ m4_pattern_forbid([^LIBOBJS$],
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
 AS_INIT
+AS_PREPARE
 m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
@@ -1754,9 +1753,9 @@ rm -f confcache[]dnl
 # ------------------------------------------
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
-m4_define([AC_CACHE_VAL],
+m4_defun([AC_CACHE_VAL],
 [m4_bmatch([$2], [AC_DEFINE],
-          [AC_DIAGNOSE(syntax,
+           [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
@@ -1767,7 +1766,7 @@ AS_VAR_SET_IF([$1],
 # AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
 # -------------------------------------------
 # Do not call this macro with a dnl right behind.
-m4_define([AC_CACHE_CHECK],
+m4_defun([AC_CACHE_CHECK],
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])dnl
 AC_MSG_RESULT_UNQUOTED([AS_VAR_GET([$2])])])

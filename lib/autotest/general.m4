@@ -94,9 +94,10 @@ m4_define([AT_TESTSUITE_NAME],
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 AS_INIT
+AS_PREPARE
 m4_divert_push([DEFAULT])dnl
 
-AS_SHELL_SANITIZE
+AS_PREPARE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?

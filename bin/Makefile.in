@@ -85,7 +85,8 @@ bin_SCRIPTS = autom4te \
 
 
 EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-             autoscan.in autom4te.in
+             autoscan.in autom4te.in \
+	     autoconf.as
 
 
 # Files that should be removed, but which Automake does not know.
@@ -105,6 +106,9 @@ edit = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
+
+# autoconf is written in M4sh.
+AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh
 
 TAGS_DEPENDENCIES = $(EXTRA_DIST)
 
@@ -294,6 +298,8 @@ uninstall-am: uninstall-binSCRIPTS uninstall-info-am
 	maintainer-clean-generic mostlyclean mostlyclean-generic tags \
 	uninstall uninstall-am uninstall-binSCRIPTS uninstall-info-am
 
+$(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
+	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
 autoconf: $(srcdir)/autoconf.in $(top_srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp

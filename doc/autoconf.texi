@@ -7412,6 +7412,9 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @c FIXME: Eventually will become a chapter, as it is not related to
 @c programming in M4 per se.
 
+M4sh is aiming at producing portable Bourne shell scripts.  For the time
+being, it is not mature enough to be widely used.
+
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
@@ -8460,6 +8463,35 @@ be equivalent to nothing.  But some shells, for instance under Digital
 Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
 portable, use @samp{$@{1+"$@@"@}}.
 
+But that's not the end of the story.  Zsh (3.x and 4.x), when emulating
+the Bourne shell, does perform word splitting on @samp{$@{1+"$@@"@}}...
+
+@example
+zsh $ @kbd{emulate sh}
+zsh $ @kbd{for i in "$@"; do echo $i; done}
+Hello World
+!
+zsh $ @kbd{for i in $@{1+"$@@"@}; do echo $i; done}
+Hello
+World
+!
+@end example
+
+@noindent
+It is not clear whether this is a violation of the Bourne shell
+standard, nevertheless, in this regard Zsh is different from all the
+other shells.  Of course Zsh handles @samp{"$@@"} properly, but we can't
+use it portably...
+
+Fortunately, there is a workaround which relies on Zsh's ``global
+aliases'': let it convert @samp{$@{1+"$@@"@}} into @samp{"$@@"} by
+itself:
+
+@example
+test -n "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
+@end example
+
+
 @item $@{@var{var}:-@var{value}@}
 @c Info cannot handle `:' in index entries.
 @c @cindex $@{@var{var}:-@var{value}@}
@@ -8477,6 +8509,8 @@ Be sure to quote:
 @noindent
 otherwise some shells, such as on Digital Unix V 5.0, will die because
 of a ``bad substitution''.
+
+@sp 1
 
 Solaris' @command{/bin/sh} has a frightening bug in its interpretation
 of this.  Imagine you need set a variable to a string containing
@@ -9132,6 +9166,12 @@ for arg in $@{1+"$@@"@}; do
   echo "$arg"
 done
 @end example
+
+@noindent
+But keep in mind that Zsh, even in Bourne shell emulation mode, performs
+word splitting on @samp{$@{1+"$@@"@}}, see @ref{Shell Substitutions},
+item @samp{$@@}, for more.
+
 
 @item @command{if}
 @c ---------------

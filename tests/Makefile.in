@@ -83,14 +83,68 @@ lispdir = @lispdir@
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
 EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
-             atlocal.in package.m4
+             atlocal.in package.m4 wrapsh.as
 
 
 # Running the uninstalled scripts.
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-# FIXME: Why doesn't Automake clean these?
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+
+SUFFIXES = .m4 .m4f
+
+# Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
+# checks if we are independant of Autoconf by defining AUTOM4TE (and
+# others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
+# apply to us.
+MY_AUTOM4TE = $(top_builddir)/tests/autom4te
+
+AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
+
+# Factor the dependencies between all the frozen files.
+# Some day we should explain to Automake how to use autom4te to compute
+# the dependencies...
+src_libdir = $(top_srcdir)/lib
+build_libdir = $(top_builddir)/lib
+
+m4f_dependencies = $(MY_AUTOM4TE) $(AUTOM4TE_CFG)
+
+m4sugar_m4f_dependencies = \
+	$(m4f_dependencies)			\
+	$(src_libdir)/m4sugar/m4sugar.m4	\
+	$(build_libdir)/m4sugar/version.m4
+
+
+m4sh_m4f_dependencies = \
+	$(m4sugar_m4f_dependencies)		\
+	$(src_libdir)/m4sugar/m4sh.m4
+
+
+autotest_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autotest/autotest.m4	\
+	$(src_libdir)/autotest/general.m4
+
+
+autoconf_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autoconf/general.m4	\
+	$(src_libdir)/autoconf/autoheader.m4	\
+	$(src_libdir)/autoconf/autoupdate.m4	\
+	$(src_libdir)/autoconf/autotest.m4	\
+	$(src_libdir)/autoconf/status.m4	\
+	$(src_libdir)/autoconf/oldnames.m4	\
+	$(src_libdir)/autoconf/specific.m4	\
+	$(src_libdir)/autoconf/lang.m4		\
+	$(src_libdir)/autoconf/c.m4		\
+	$(src_libdir)/autoconf/fortran.m4	\
+	$(src_libdir)/autoconf/functions.m4	\
+	$(src_libdir)/autoconf/headers.m4	\
+	$(src_libdir)/autoconf/types.m4		\
+	$(src_libdir)/autoconf/libs.m4		\
+	$(src_libdir)/autoconf/programs.m4	\
+	$(src_libdir)/autoconf/autoconf.m4
+
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -149,7 +203,8 @@ DIST_COMMON = Makefile.am Makefile.in atlocal.in wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+.SUFFIXES: .m4 .m4f
+$(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../lib/freeze.mk $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  tests/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -278,6 +333,30 @@ uninstall-am: uninstall-info-am
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	uninstall uninstall-am uninstall-info-am
 
+$(MY_AUTOM4TE):
+	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
+$(AUTOM4TE_CFG):
+	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+
+# When processing the file with diversion disabled, there must be no
+# output but comments and empty lines.
+# If freezing produces output, something went wrong: a bad `divert',
+# or an improper paren etc.
+# It may happen that the output does not end with a end of line, hence
+# force an end of line when reporting errors.
+.m4.m4f:
+	$(MY_AUTOM4TE)				\
+		--language=$*			\
+		--freeze			\
+		--include=$(srcdir)/..		\
+		--include=..			\
+		--output=$@
+
+# For parallel builds.
+$(build_libdir)/m4sugar/version.m4:
+	cd $(build_libdir)/m4sugar && $(MAKE) $(AM_MAKEFLAGS) version.m4
+
+# Import the dependencies on Autotest and M4sh.
 
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 	{					\
@@ -288,13 +367,13 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 	  echo 'm4_define([AT_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
 	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
 	} >$(srcdir)/package.m4
-$(TESTSUITE): $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
-	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
-           $(top_srcdir)/lib/autotest/autotest.m4 \
-           $(top_srcdir)/lib/autotest/general.m4 \
-	   $(srcdir)/package.m4 \
-	   atspecific.m4 \
-           $(TESTSUITE_AT)
+
+$(srcdir)/wrapsh.in: $(srcdir)/wrapsh.as
+	./autom4te --language=M4sh $(srcdir)/wrapsh.as -o $@
+$(TESTSUITE): $(srcdir)/package.m4 \
+	      atspecific.m4 \
+              $(TESTSUITE_AT) \
+	      $(autotest_m4f_dependencies)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 

@@ -1,3 +1,38 @@
+2002-04-10  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Install the Zsh
+	workaround for ${1+"$@"}.
+	* doc/autoconf.texi (Shell Substitutions): Explain it.
+	From Oliver Kiddle and Peter Stephenson.
+
+	Have M4sh perform minimal shell sanitizing.
+
+	* lib/m4sugar/m4sh.at (AS_SHELL_SANITIZE): Split the `_AS_PREPARE_*'
+	part into...
+	(_AS_PREPARE): this new macro.
+	(AS_PREPARE): New.
+	(AS_INIT): Invoke AS_SHELL_SANITIZE.
+	* tests/m4sh.at (AT_DATA_LINENO): Use _AS_PREPARE.
+
+	Adjust Autoconf and Autotest.
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Don't invoke
+	AS_SHELL_SANITIZE, AS_INIT did it, but invoke AS_PREPARE.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS):
+	Invoke _AS_PREPARE (not AS_PREPARE) in addition to
+	AS_SHELL_SANITIZE.
+
+	Use this M4sh to generate Autoconf's shell scripts.
+
+	* tests/wrapsh.as: New, precursor of wrapsh.in.
+	* tests/Makefile.am: Include lib/freeze.mk to get the dependencies
+	on Autotest and M4sh.
+	($(TESTSUITE)): Use $(autotest_m4f_dependencies).
+	(wrapsh.in): New target.
+	* bin/autoconf.as: New, precursor of autoconf.in.
+	(autoconf.in): New target.
+
 2002-04-09  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Make): Mention the issue

@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf testsuite.
-## Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -21,13 +21,16 @@
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
 EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
-             atlocal.in package.m4
+             atlocal.in package.m4 wrapsh.as
 
 # Running the uninstalled scripts.
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-# FIXME: Why doesn't Automake clean these?
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+
+# Import the dependencies on Autotest and M4sh.
+include ../lib/freeze.mk
+
 
 ## ------------ ##
 ## package.m4.  ##
@@ -43,6 +46,14 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
 	} >$(srcdir)/package.m4
 
+
+
+## ---------- ##
+## Wrappers.  ##
+## ---------- ##
+
+$(srcdir)/wrapsh.in: $(srcdir)/wrapsh.as
+	./autom4te --language=M4sh $(srcdir)/wrapsh.as -o $@
 
 
 ## ------------ ##
@@ -71,13 +82,10 @@ TESTSUITE = ./testsuite
 # Don't use AUTOM4TE since `make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
 AUTOTEST = ./autom4te --language=autotest
-$(TESTSUITE): $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
-	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
-           $(top_srcdir)/lib/autotest/autotest.m4 \
-           $(top_srcdir)/lib/autotest/general.m4 \
-	   $(srcdir)/package.m4 \
-	   atspecific.m4 \
-           $(TESTSUITE_AT)
+$(TESTSUITE): $(srcdir)/package.m4 \
+	      atspecific.m4 \
+              $(TESTSUITE_AT) \
+	      $(autotest_m4f_dependencies)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 

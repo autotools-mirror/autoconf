@@ -8,6 +8,16 @@
 
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
 
+** Bug fixes
+
+- Spurious complaints from `m4_bmatch' about invalid regular
+  expressions are suppressed.
+
+** Improved Zsh portability
+  Both Autoconf the package, and the scripts it produces, should run
+  more reliably with Zsh.  Bear in mind it is the default Bourne shell
+  on Darwin.
+
 ** Documentation
 
 - Limitations of Make

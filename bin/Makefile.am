@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright 1999, 2000, 2001 Free Software Foundation, Inc.
+## Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -22,7 +22,8 @@ bin_SCRIPTS = autom4te \
               autoconf autoheader autoreconf ifnames autoscan autoupdate
 
 EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-             autoscan.in autom4te.in
+             autoscan.in autom4te.in \
+	     autoconf.as
 
 # Files that should be removed, but which Automake does not know.
 CLEANFILES = $(bin_SCRIPTS)
@@ -46,9 +47,15 @@ edit = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
+# autoconf is written in M4sh.
+AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh
+$(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
+	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
+
 ## All the files below depend on configure.ac so that they are rebuilt
 ## when the Autoconf version changes. Unfortunately, suffix rules cannot
 ## have additional dependencies, so we have to use explicit rules.
+
 
 autoconf: $(srcdir)/autoconf.in $(top_srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp
