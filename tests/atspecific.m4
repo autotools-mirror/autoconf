@@ -1,6 +1,6 @@
 # M4 macros used in building Autoconf test suites.        -*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -55,6 +55,8 @@ m4_ifval([$4],
 [AT_CHECK([[sed -e 's,^\([^:]*\): *\([0-9][0-9]*\): *[^:]*m4: ,m4: \1: \2: ,' \
                 -e 's,^[^:]*m4: *\([^:]*\): *\([0-9][0-9]*\): ,m4: \1: \2: ,' \
                 -e 's/^autom4te: [^ ]*m4 /autom4te: m4 /' \
+                -e 's/^autom4te: [^ ]*m4.exe /autom4te: m4 /' \
+                -e 's/ (E[A-Z]*)$//' \
            stderr]], [0],[$4])])
 ])
 
