@@ -1,58 +1,57 @@
-dnl This file is part of Autoconf.                       -*- Autoconf -*-
-dnl Driver and redefinitions of some Autoconf macros for autoheader.
-dnl Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
-dnl
-dnl This program is free software; you can redistribute it and/or modify
-dnl it under the terms of the GNU General Public License as published by
-dnl the Free Software Foundation; either version 2, or (at your option)
-dnl any later version.
-dnl
-dnl This program is distributed in the hope that it will be useful,
-dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-dnl GNU General Public License for more details.
-dnl
-dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-dnl 02111-1307, USA.
-dnl
-dnl Written by Roland McGrath.
-dnl
-include(libm4.m4)dnl
-m4_include(acversion.m4)dnl
-m4_include(acgeneral.m4)dnl
-m4_include(acspecific.m4)dnl
-m4_include(acoldnames.m4)dnl
+include(libm4.m4)dnl                                          -*- Autoconf -*-
+# This file is part of Autoconf.
+# Driver and redefinitions of some Autoconf macros for autoheader.
+# Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by Roland McGrath.
+#
+m4_include(acversion.m4)
+m4_include(acgeneral.m4)
+m4_include(acspecific.m4)
+m4_include(acoldnames.m4)
 
-
-dnl AH_HOOK(AUTOCONF-NAME, AUTOHEADER-NAME)
-dnl ---------------------------------------
-dnl Install a new hook for AH_ macros.  Specify that the macro
-dnl AUTOCONF-NAME will later be defined as the concatenation of
-dnl both its former definition, and that of AUTOHEADER-NAME.
-dnl
-dnl There are several motivations for not just defining to be equivalent to
-dnl AUTOHEADER-NAME.
-dnl
-dnl Let AC_FOO be
-dnl   | AC_DEFINE(FOO, 1)
-dnl   | AC_DEFINE(BAR, 1)
-dnl   | AC_DEFINE(BAZ, 1, The value of BAZ.)
-dnl Let AH_FOO be
-dnl   | AH_TEMPLATE(FOO, The value of FOO.)
-dnl
-dnl If we hook AC_FOO to be AH_FOO only, then only FOO will be templated.
-dnl If we hook AC_FOO to expand in both the former AC_FOO and AH_FOO, then
-dnl both FOO and BAZ are templated.
-dnl
-dnl Additionaly, if AC_FOO is hooked to AH_FOO only, then we loose track
-dnl of the other AC_DEFINE, and the autoheader machinery (see the use of
-dnl the shell variable SYMS in AC_TEMPLATE) won't be able to see that BAR
-dnl is not templated at all.  Hooking AC_FOO on both its AC_ and AH_ faces
-dnl makes sure we keep track of non templated DEFINEs.
-dnl
-dnl The two last end of lines make AH_HOOKS more readable.
+# AH_HOOK(AUTOCONF-NAME, AUTOHEADER-NAME)
+# ---------------------------------------
+# Install a new hook for AH_ macros.  Specify that the macro
+# AUTOCONF-NAME will later be defined as the concatenation of
+# both its former definition, and that of AUTOHEADER-NAME.
+#
+# There are several motivations for not just defining to be equivalent to
+# AUTOHEADER-NAME.
+#
+# Let AC_FOO be
+#   | AC_DEFINE(FOO, 1)
+#   | AC_DEFINE(BAR, 1)
+#   | AC_DEFINE(BAZ, 1, The value of BAZ.)
+# Let AH_FOO be
+#   | AH_TEMPLATE(FOO, The value of FOO.)
+#
+# If we hook AC_FOO to be AH_FOO only, then only FOO will be templated.
+# If we hook AC_FOO to expand in both the former AC_FOO and AH_FOO, then
+# both FOO and BAZ are templated.
+#
+# Additionaly, if AC_FOO is hooked to AH_FOO only, then we loose track
+# of the other AC_DEFINE, and the autoheader machinery (see the use of
+# the shell variable SYMS in AC_TEMPLATE) won't be able to see that BAR
+# is not templated at all.  Hooking AC_FOO on both its AC_ and AH_ faces
+# makes sure we keep track of non templated DEFINEs.
+#
+# The two last end of lines make AH_HOOKS more readable.
 define(AH_HOOK,
 [m4_append([AH_HOOKS],
 [define([$1],
@@ -63,38 +62,38 @@ defn([$2])
 
 
 
-dnl AH_DEFUN(MACRO, CONTENT)
-dnl ------------------------
-dnl Define the macro AH_MACRO (i.e., with AH_ prepended) as CONTENT.  Also
-dnl install an AH_HOOK from MACRO to AH_MACRO.  This hook is run by
-dnl autoheader to substitutes the selected AC_FOO macros by AH_AC_FOO.
+# AH_DEFUN(MACRO, CONTENT)
+# ------------------------
+# Define the macro AH_MACRO (i.e., with AH_ prepended) as CONTENT.  Also
+# install an AH_HOOK from MACRO to AH_MACRO.  This hook is run by
+# autoheader to substitutes the selected AC_FOO macros by AH_AC_FOO.
 define(AH_DEFUN,
 [define([AH_$1], [$2])
 AH_HOOK([$1], [AH_$1])])
 
 
 
-dnl These are alternate definitions of some macros, which produce
-dnl strings in the output marked with "@@@" so we can easily extract
-dnl the information we want.  The `#' at the end of the first line of
-dnl each definition seems to be necessary to prevent m4 from eating
-dnl the newline, which makes the @@@ not always be at the beginning of
-dnl a line.
+# These are alternate definitions of some macros, which produce
+# strings in the output marked with "@@@" so we can easily extract
+# the information we want.  The `#' at the end of the first line of
+# each definition seems to be necessary to prevent m4 from eating
+# the newline, which makes the @@@ not always be at the beginning of
+# a line.
 
-dnl Autoheader is not the right program to complain about cross-compiling.
+# Autoheader is not the right program to complain about cross-compiling.
 AH_DEFUN([AC_TRY_RUN],
 [$2
 $3
 $4])
 
-dnl AH_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
-dnl -------------------------------------------
-dnl When running autoheader, this macro replaces AC_DEFINE and
-dnl AC_DEFINE_UNQUOTED.
-dnl
-dnl If DESCRIPTION is not given, then there is a risk that VARIABLE will
-dnl not be properly templated.  To control later that it has been
-dnl templated elsewhere, store VARIABLE in a shell growing string, SYMS.
+# AH_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
+# -------------------------------------------
+# When running autoheader, this macro replaces AC_DEFINE and
+# AC_DEFINE_UNQUOTED.
+#
+# If DESCRIPTION is not given, then there is a risk that VARIABLE will
+# not be properly templated.  To control later that it has been
+# templated elsewhere, store VARIABLE in a shell growing string, SYMS.
 define([AH_DEFINE],
 [ifval([$3],
        [AH_TEMPLATE([$1], [$3])],
@@ -107,22 +106,22 @@ AH_DEFUN([AC_DEFINE],          [AH_DEFINE($@)])
 AH_DEFUN([AC_DEFINE_UNQUOTED], [AH_DEFINE($@)])
 
 
-dnl AH_TEMPLATE(KEY, DESCRIPTION)
-dnl -----------------------------
-dnl Issue an autoheader template for KEY, i.e., a comment composed
-dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
+# AH_TEMPLATE(KEY, DESCRIPTION)
+# -----------------------------
+# Issue an autoheader template for KEY, i.e., a comment composed
+# of DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
              m4_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
 
 
-dnl AH_VERBATIM(KEY, TEMPLATE)
-dnl --------------------------
-dnl If KEY is direct (i.e., no indirection such as in KEY=$my_func which may
-dnl occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader TEMPLATE
-dnl associated to the KEY.  Otherwise, do nothing.
-dnl TEMPLATE is output as is, with no formating.
+# AH_VERBATIM(KEY, TEMPLATE)
+# --------------------------
+# If KEY is direct (i.e., no indirection such as in KEY=$my_func which may
+# occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader TEMPLATE
+# associated to the KEY.  Otherwise, do nothing.
+# TEMPLATE is output as is, with no formating.
 define([AH_VERBATIM],
 [AC_VAR_IF_INDIR([$1],,
 [#
@@ -132,8 +131,8 @@ _AC_SH_QUOTE([$2])"
 @@@
 ])])
 
-dnl FIXME: To be rigorous, this should not be systematic: depending
-dnl upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
+# FIXME: To be rigorous, this should not be systematic: depending
+# upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
 AH_DEFUN([AC_CHECK_LIB],
 [AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
              [Define if you have the `]$1[' library (-l]$1[).])
@@ -200,8 +199,8 @@ AH_DEFUN([AC_CHECK_MEMBERS],
 ])
 
 
-dnl AC_CHECK_TYPE(TYPE, SUBTITUTE)
-dnl ------------------------------
+# AC_CHECK_TYPE(TYPE, SUBTITUTE)
+# ------------------------------
 AH_DEFUN([AC_CHECK_TYPE],
 [AH_TEMPLATE([$1], [Define to `$2' if <sys/types.h> does not define.])])
 
@@ -217,8 +216,8 @@ AH_DEFUN([AC_FUNC_ALLOCA],
 ])])dnl AH_FUNC_ALLOCA
 
 
-dnl AH_CHECK_TYPES((TYPES, ...))
-dnl ----------------------------
+# AH_CHECK_TYPES((TYPES, ...))
+# ----------------------------
 AH_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Type),
@@ -267,5 +266,5 @@ AH_DEFUN([AC_CONFIG_HEADERS],
 [@@@config_h=patsubst($1, [ .*$], [])@@@
 ])
 
-dnl Install the AH_HOOKS
+# Install the AH_HOOKS
 AH_HOOKS
