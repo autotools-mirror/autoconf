@@ -15,9 +15,17 @@
 # - AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC
 #   AC_PROGs from acspecific
 # - _|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
-#   Some variables some shells use and change
+#   Some variables some shells use and change.
+#   `.[*#?].' catches `$#' etc. which are displayed like this:
+#      | '!'=18186
+#      | '#'=0
+#      | '$'=6908
 # - POW_LIB
 #   From acfunctions.m4.
+#
+# Some `egrep' choke on such a big regex (e.g., SunOS 4.1.3).  In this
+# case just don't pay attention to the env.  It would be great
+# to keep the error message but we can't: that would break AT_CHECK.
 m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
   egrep -v -e 'm4_join([|],
@@ -33,12 +41,10 @@ m4_defun([AC_STATE_SAVE],
       [^(f77_(case|underscore))=],
       [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
-      [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
+      [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.
   fgrep = >state-env.$1
-# Some `egrep' choke on such a big regex (e.g., SunOS 4.1.3).  In this
-# case just don't pay attention to the env.
 test $? = 0 || rm -f state-env.$1
 
 ls -1 | grep -v '^state' | sort >state-ls.$1
