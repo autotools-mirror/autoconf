@@ -1642,11 +1642,11 @@ name is obsolete because some @command{make} have a rule that creates
 @node Output
 @section Outputting Files
 
-Every Autoconf-generated @command{configure} script must finish by calling
-@code{AC_OUTPUT}.  It is the macro that generates @file{config.status},
-which will create the @file{Makefile}s and any other files resulting
-from configuration.  The only other required macro is @code{AC_INIT}
-(@pxref{Input}).
+Every Autoconf script, e.g., @file{configure.ac}, should finish by
+calling @code{AC_OUTPUT}.  It is the macro that generates
+@file{config.status}, which will create the @file{Makefile}s and any
+other files resulting from configuration.  The only required macro is
+@code{AC_INIT} (@pxref{Input}).
 
 @defmac AC_OUTPUT
 @acindex OUTPUT
