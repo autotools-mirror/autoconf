@@ -1,5 +1,11 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX): Remove.
+	Adjust dependencies.
+	(_AC_INIT_PARSE_ARGS): Set ac_tool_prefix.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	In `info', it is easier to type `autoconf <TAB>' to reach the list
 	of options, that `Invoking autoc<TAB>'.
 
