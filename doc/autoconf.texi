@@ -12640,7 +12640,7 @@ consequence, any action must be traceable, which obsoletes critical
 variable assignments.  Fortunately, @code{LIBOBJS} was the only problem.
 
 At the time this documentation is written, Automake does not rely on
-traces yet, but this is planed for a near future.  Nevertheless, to
+traces yet, but this is planned for a near future.  Nevertheless, to
 ease the transition, and to guarantee this future Automake release will
 be able to use Autoconf 2.53, using @code{LIBOBJS} directly will make
 @command{autoconf} fail.  But note that the output, @command{configure},
