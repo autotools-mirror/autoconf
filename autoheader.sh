@@ -69,6 +69,8 @@ ac_LF_and_DOT="`echo; echo .`"
 localdir=.
 show_version=no
 debug=false
+# Basename for temporary files.
+ah_base=autoh$$
 
 while test $# -gt 0 ; do
    case "${1}" in
@@ -112,8 +114,8 @@ if test $show_version = yes; then
   exit 0
 fi
 
-TEMPLATES="${AC_MACRODIR}/acconfig.h"
-test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
+acconfigs="${AC_MACRODIR}/acconfig.h"
+test -r $localdir/acconfig.h && acconfigs="${acconfigs} $localdir/acconfig.h"
 
 case $# in
   0) infile=configure.in ;;
@@ -144,9 +146,9 @@ case `$M4 --help < /dev/null 2>&1` in
 *) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
 esac
 
-# Extract assignments of SYMS, TYPES, FUNCS, HEADERS, LIBS and DECLS
-# from the modified autoconf processing of the input file.  The sed
-# hair is necessary to win for multi-line macro invocations.
+# Extract assignments of `ah_verbatim_SYMBOL' and `syms' from the
+# modified autoconf processing of the input file.  The sed hair is
+# necessary to win for multi-line macro invocations.
 $M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
  sed -n -e '
 	: again
@@ -156,9 +158,9 @@ $M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
 		n
 		s/^/@@@/
 		b again
-	}' >autoheader.decls
-. ./autoheader.decls
-$debug || rm ./autoheader.decls
+	}' >$ah_base.decls
+. ./$ah_base.decls
+$debug || rm ./$ah_base.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -174,22 +176,19 @@ undefined) echo "error: AC_CONFIG_HEADER not found in $infile" >&2; exit 1 ;;
 *) config_h_in="${config_h}.in" ;;
 esac
 
-if test $# -eq 0; then
-  tmpout=autoh$$
-  trap "rm -f $tmpout; exit 1" 1 2 15
-  exec > $tmpout
-fi
+tmpout=$ah_base.out
+$debug || trap "rm -f $ah_base*; exit 1" 1 2 15
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-cat <<EOF
-/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
+cat <<EOF >$tmpout
+/* ${config_h_in}.  Generated automatically from $infile by aheader.  */
 EOF
 
-test -r ${config_h}.top && cat ${config_h}.top
+test -r ${config_h}.top && cat ${config_h}.top  >>$tmpout
 test -r $localdir/acconfig.h &&
   grep @TOP@ $localdir/acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' $localdir/acconfig.h
+  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmpout
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
@@ -198,7 +197,7 @@ if test -n "$syms"; then
   # be removed.
   # Undocumented useless feature: stuff outside of @TOP@ and @BOTTOM@
   # is ignored in the systemwide acconfig.h too.
-  for t in $TEMPLATES; do
+  for t in $acconfigs; do
     sedscript=""
     grep @TOP@ $t >/dev/null && sedscript="1,/@TOP@/d;"
     grep @BOTTOM@ $t >/dev/null && sedscript="$sedscript /@BOTTOM@/,\$d;"
@@ -222,97 +221,55 @@ if test -n "$syms"; then
   # Some fgrep's have limits on the number of lines that can be in the
   # pattern on the command line, so use a temporary file containing the
   # pattern.
-  (fgrep_tmp=${TMPDIR-/tmp}/autoh$$
+  (fgrep_tmp=$ah_base.fgrep
    trap "rm -f $fgrep_tmp; exit 1" 1 2 15
    cat > $fgrep_tmp <<EOF
 $syms
 EOF
    fgrep -f $fgrep_tmp
    rm -f $fgrep_tmp) |
-  tr @. "$ac_LF_and_DOT"
+  tr @. "$ac_LF_and_DOT" >>$tmpout
 fi
 
-echo "$types" | tr ,. "$ac_LF_and_DOT" | sort | uniq | while read ctype; do
-  test -z "$ctype" && continue
-  sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
-  echo "
-/* The number of bytes in a \`${ctype}'.  */
-#undef SIZEOF_${sym}"
+for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
+  echo >>$tmpout
+  eval echo >>$tmpout '"${'$verb'}"'
 done
-
-# /bin/sh on the Alpha gives `for' a random value if $funcs is empty.
-if test -n "$funcs"; then
-  for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
-    sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the \`${func}' function.  */
-#undef HAVE_${sym}"
-  done
-fi
-
-if test -n "$headers"; then
-  for header in `for x in $headers; do echo $x; done | sort | uniq`; do
-
-    sym="`echo ${header} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the <${header}> header file.  */
-#undef HAVE_${sym}"
-  done
-fi
-
-if test -n "$libs"; then
-  for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
-   sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the \`${lib}' library (-l${lib}).  */
-#undef HAVE_LIB${sym}"
-  done
-fi
-
-if test -n "$decls"; then
-  for decl in `for x in $decls; do echo $x; done | sort | uniq`; do
-   sym="`echo ${decl} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you need the declaration of \`${decl}'.  */
-#undef NEED_DECL_${sym}"
-  done
-fi
-
-if test -n "$verbatim"; then
-  echo "$verbatim"
-fi
 
 # Handle the case where @BOTTOM@ is the first line of acconfig.h.
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
-test -f ${config_h}.bot && cat ${config_h}.bot
+  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmpout
+test -f ${config_h}.bot && cat ${config_h}.bot >>$tmpout
 
+# Check that all the symbols have a template
 status=0
 
 if test -n "$syms"; then
   for sym in $syms; do
-    if grep "^#[a-z]*[ 	][ 	]*$sym[ 	]*$" $TEMPLATES >/dev/null; then
+    if grep "^#[a-z]*[ 	][ 	]*$sym[ 	]*$" $tmpout >/dev/null; then
       : # All is well.
     else
-      echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2
+      echo "$0: No template for symbol \`${sym}'" >&2
       status=1
     fi
   done
 fi
 
-if test $# -eq 0; then
-  # Force $tmpout to close to avoid Windows file sharing conflicts.
-  exec 1>&2
-  if test $status -eq 0; then
+# If the run was successful, output the result.
+if test $status -eq 0; then
+  if test $# -eq 0; then
+    # Output is a file
     if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
-      rm -f $tmpout # File didn't change, so don't update its mod time.
+      : # File didn't change, so don't update its mod time.
     else
       mv -f $tmpout ${config_h_in}
     fi
   else
-    rm -f $tmpout
+    # Output is stdout
+    cat $tmpout
   fi
 fi
 
+rm -f $tmpout
 exit $status

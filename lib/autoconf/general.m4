@@ -73,16 +73,21 @@ m4_prefix([include])
 m4_prefix([shift])
 m4_prefix([format])
 
-dnl ifset(COND, IF-TRUE[, IF-FALSE])
-dnl --------------------------------
-dnl If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
-dnl Comparable to ifdef.
-define([ifset], [ifelse([$1],,[$3],[$2])])
 
-dnl m4_default(EXP1, EXP2)
-dnl ----------------------
-dnl Returns EXP1 if non empty, otherwise EXP2.
-define([m4_default], [ifset([$1], [$1], [$2])])
+dnl ------------------------------------------------------------
+dnl Text processing in m4.
+dnl ------------------------------------------------------------
+
+dnl m4_quote(STRING)
+dnl ----------------
+dnl Return STRING quoted.
+dnl
+dnl It is important to realize the difference between `quote(exp)' and
+dnl `[exp]': in the first case you obtain the quoted *result* of the
+dnl expansion of EXP, while in the latter you just obtain the string
+dnl `exp'.
+define([m4_quote], [[$@]])
+
 
 dnl m4_split(STRING)
 dnl ----------------
@@ -156,8 +161,25 @@ define([m4_strip],
           [ \(.\)$], [\1])])
 
 
-dnl ### Implementing m4 loops
+dnl ------------------------------------------------------------
+dnl Some additional m4 structural control.
+dnl ------------------------------------------------------------
 
+
+dnl ifset(COND, IF-TRUE[, IF-FALSE])
+dnl --------------------------------
+dnl If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
+dnl Comparable to ifdef.
+define([ifset], [ifelse([$1],,[$3],[$2])])
+
+
+dnl m4_default(EXP1, EXP2)
+dnl ----------------------
+dnl Returns EXP1 if non empty, otherwise EXP2.
+define([m4_default], [ifset([$1], [$1], [$2])])
+
+
+dnl ### Implementing m4 loops
 
 dnl Implementing loops (`foreach' loops) in m4 is much more tricky than it
 dnl may seem.  Actually, the example of a `foreach' loop in the m4
@@ -207,6 +229,7 @@ dnl  => echo c)
 dnl
 dnl Bingo!
 
+
 dnl M4_FOREACH(VARIABLE, LIST, EXPRESSION)
 dnl --------------------------------------
 dnl Expand EXPRESSION assigning to VARIABLE each value of the LIST
@@ -226,8 +249,45 @@ define(_m4_car, [[$1]])
 define(_m4_foreach,
 [ifelse($2, [()], ,
         [define([$1], [_m4_car$2])$3[]_m4_foreach([$1],
-                                                [(m4_shift$2)],
-                                                [$3])])])
+                                                  [(m4_shift$2)],
+                                                  [$3])])])
+
+
+dnl m4_list_append(LIST, ELEMENT)
+dnl -----------------------------
+dnl Insert ELEMENT at the end of LIST.
+dnl
+dnl This macro is picky on its input, especially for the empty list: it
+dnl must be either the empty string, or exactly `()' (no spaces allowed).
+dnl This macro is actually purely textual: it basically replaces the
+dnl closing paren of LIST with `, ELEMENT)'.  The hair is to preserve
+dnl quotation: this macro is robust to active symbols.
+dnl
+dnl   | define(active, ACTIVE)
+dnl   | m4_list_append(m4_list_append(m4_list_append((), [1 active]),
+dnl   |                               [2 active]),
+dnl   |                [3 active])end
+dnl   =>(1 active, 2 active, 3 active)end
+dnl
+dnl The combination of this macro and m4_quote is extremely useful to
+dnl build and store lists:
+dnl
+dnl   | define(active, ACTIVE)
+dnl   | define(list, ())
+dnl   | define([list], m4_quote(m4_list_append(list, [1 active])))
+dnl   | define([list], m4_quote(m4_list_append(list, [2 active])))
+dnl   | define([list], m4_quote(m4_list_append(list, [3 active])))
+dnl   | list
+dnl   =>(1 active, 2 active, 3 active)
+dnl
+define([m4_list_append],
+[ifelse([$1], [],   [([$2])],
+        [$1], [()], [([$2])],
+        [patsubst([[$1]], [^..\(.*\)..$], [[(\1, $2)]])])])
+
+
+define([m4_list_add],
+[define([$1], m4_quote(m4_list_append($1, [$2])))])
 
 
 dnl ### Defining macros
@@ -491,10 +551,10 @@ dnl of `$ac_tr_cpp' if you change this.
 define(AC_TR_CPP,
 [AC_VAR_IF_INDIR([$1],
   [`echo "$1" | $ac_tr_cpp`],
-  [patsubst(translit([$1],
+  [patsubst(translit([[$1]],
                      [*abcdefghijklmnopqrstuvwxyz],
                      [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-            [A-Z0-9_], [_])])])
+            [[^A-Z0-9_]], [_])])])
 
 
 dnl AC_TR_SH(EXPRESSION)
@@ -507,7 +567,7 @@ dnl Make sure to update the definition of `$ac_tr_cpp' if you change this.
 define(AC_TR_SH,
 [AC_VAR_IF_INDIR([$1],
   [`echo "$1" | $ac_tr_sh`],
-  [patsubst(translit([$1], [*+], [pp]),
+  [patsubst(translit([[$1]], [*+], [pp]),
             [[^a-zA-Z0-9_]], [_])])])
 
 
@@ -1740,6 +1800,8 @@ define(AC_DEFINE,
 EOF
 ])
 
+
+
 dnl AC_DEFINE_UNQUOTED(VARIABLE [, VALUE[, DESCRIPTION]])
 dnl -----------------------------------------------------
 dnl Similar, but perform shell substitutions $ ` \ once on VALUE.
@@ -1748,6 +1810,7 @@ define(AC_DEFINE_UNQUOTED,
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
+
 
 
 dnl ### Setting output variables
@@ -2236,6 +2299,10 @@ dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
 dnl may have different results.
+dnl
+dnl FIXME: This macro is extremely suspicious.  It DEFINE unconditionnally,
+dnl whatever the FUNCTION, in addition to not being a *S macro.  Note
+dnl that the cache does depend upon the function with look for.
 AC_DEFUN(AC_CHECK_LIB,
 [AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
@@ -2265,36 +2332,12 @@ AC_SHELL_IFELSE(test AC_VAR_GET(ac_Lib) = yes,
 AC_VAR_POPDEF([ac_Lib])dnl
 ])dnl AC_CHECK_LIB
 
+
+
 dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                 [, OTHER-LIBRARIES]]])
-dnl FIXME: Remove
 AC_DEFUN(AC_HAVE_LIBRARY,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
-changequote(<<, >>)dnl
-define(<<AC_LIB_NAME>>, dnl
-patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
-define(<<AC_CV_NAME>>, ac_cv_lib_<<>>AC_LIB_NAME)dnl
-changequote([, ])dnl
-AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
-AC_CACHE_VAL(AC_CV_NAME,
-[ac_save_LIBS="$LIBS"
-LIBS="-l[]AC_LIB_NAME[] $4 $LIBS"
-AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)
-LIBS="$ac_save_LIBS"
-])dnl
-AC_MSG_RESULT($AC_CV_NAME)
-if test "$AC_CV_NAME" = yes; then
-  ifelse([$2], ,
-[AC_DEFINE([HAVE_LIB]AC_TR_CPP(AC_LIB_NAME))
-  LIBS="-l[]AC_LIB_NAME[] $LIBS"
-], [$2])
-ifelse([$3], , , [else
-  $3
-])dnl
-fi
-undefine([AC_LIB_NAME])dnl
-undefine([AC_CV_NAME])dnl
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_LIB])])
 
 
 dnl ### Examining declarations
@@ -2612,14 +2655,7 @@ $2],
                  [$4])])
 ])dnl AC_NEED_DECLS
 
-dnl This is the pure sh version of the macro above.
-dnl [for ac_sym in [$1]
-dnl do
-dnl AC_NEED_DECL($ac_sym,
-dnl 		 [$2],
-dnl 		 [AC_DEFINE_UNQUOTED(AC_TR_CPP(${ac_sym}_DECLARED)) $3],
-dnl 		 [$4])dnl
-dnl done
+
 
 dnl ### Checking for library functions
 
@@ -2669,6 +2705,7 @@ AC_CHECK_FUNC($ac_func,
               [$3])dnl
 done
 ])
+
 
 dnl AC_REPLACE_FUNCS(FUNCTION...)
 AC_DEFUN(AC_REPLACE_FUNCS,

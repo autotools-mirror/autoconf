@@ -651,7 +651,7 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
             [Define if `lex' declares `yytext' as a `char *' by default,
              not a `char[]'.])
 fi
-])
+])dnl AC_DECL_YYTEXT
 
 AC_DEFUN(AC_PROG_INSTALL,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
@@ -1582,7 +1582,7 @@ main ()
 AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 fi
 AC_SUBST(ALLOCA)dnl
-])
+])dnl AC_FUNC_ALLOCA
 
 AC_DEFUN(AC_FUNC_GETLOADAVG,
 [ac_have_func=no # yes means we've found a way to get the load average.
@@ -2112,7 +2112,7 @@ fi])
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
-])
+])dnl AC_C_CHAR_UNSIGNED
 
 AC_DEFUN(AC_C_LONG_DOUBLE,
 [AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
@@ -2271,8 +2271,12 @@ if test $ac_cv_c_volatile = no; then
 fi
 ])
 
-AC_DEFUN(AC_C_STRINGIZE, [
-AC_REQUIRE([AC_PROG_CPP])
+dnl AC_C_STRINGIZE
+dnl --------------
+dnl Checks if `#' can be used to glue strings together at the CPP level.
+dnl Defines HAVE_STRINGIZE if positive.
+AC_DEFUN(AC_C_STRINGIZE,
+[AC_REQUIRE([AC_PROG_CPP])
 AC_MSG_CHECKING([for preprocessor stringizing operator])
 AC_CACHE_VAL(ac_cv_c_stringize,
 AC_EGREP_CPP([#teststring],[
@@ -2281,7 +2285,8 @@ AC_EGREP_CPP([#teststring],[
 char *s = x(teststring);
 ], ac_cv_c_stringize=no, ac_cv_c_stringize=yes))
 if test "${ac_cv_c_stringize}" = yes; then
-  AC_DEFINE(HAVE_STRINGIZE)
+  AC_DEFINE(HAVE_STRINGIZE, 1,
+            [Define if you have the ANSI # stringizing operator in cpp.])
 fi
 AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])dnl
@@ -3157,7 +3162,7 @@ AC_EGREP_CPP(yes,
 [AC_MSG_RESULT(yes)
 AC_DEFINE(_ALL_SOURCE)],
 AC_MSG_RESULT(no))
-])
+])dnl AC_AIX
 
 AC_DEFUN(AC_MINIX,
 [AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
@@ -3173,7 +3178,7 @@ if test "$MINIX" = yes; then
   AC_DEFINE(_MINIX, 1,
             [Define if on MINIX.])
 fi
-])
+])dnl AC_MINIX
 
 AC_DEFUN(AC_ISC_POSIX,
 [AC_REQUIRE([AC_PROG_CC])dnl
@@ -3197,7 +3202,7 @@ else
   AC_MSG_RESULT(no)
   ISC=
 fi
-])
+])dnl AC_ISC_POSIX
 
 AC_DEFUN(AC_XENIX_DIR,
 [AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
@@ -3213,7 +3218,7 @@ if test "$XENIX" = yes; then
   test $ac_header_dirent = dirent.h && LIBS="-ldir $LIBS"
   LIBS="$LIBS -lx"
 fi
-])
+])dnl AC_XENIX_DIR
 
 AC_DEFUN(AC_DYNIX_SEQ,
 [AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl

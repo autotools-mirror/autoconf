@@ -23,6 +23,12 @@ include(acgeneral.m4)dnl
 m4_include(acspecific.m4)dnl
 m4_include(acoldnames.m4)dnl
 
+dnl Autoheader is not the right program to complain about cross-compiling.
+define([AC_TRY_RUN], [
+$2
+$3
+$4])
+
 dnl These are alternate definitions of some macros, which produce
 dnl strings in the output marked with "@@@" so we can easily extract
 dnl the information we want.  The `#' at the end of the first line of
@@ -30,94 +36,152 @@ dnl each definition seems to be necessary to prevent m4 from eating
 dnl the newline, which makes the @@@ not always be at the beginning of
 dnl a line.
 
-define([AC_CHECK_FUNCS], [#
-@@@funcs="$funcs $1"@@@
-ifelse([$2], , , [
-# If it was found, we do:
+dnl AH_DEFINE(VARIABLE [, VALUE[, DESCRIPTION]])
+dnl --------------------------------------------
+dnl When running autoheader, this macro replaces AC_DEFINE and
+dnl AC_DEFINE_UNQUOTED.
+dnl
+dnl We remember the symbols we already defined to avoid to define
+dnl them twice.  In the future we may want to use another program
+dnl than sh to issue the templates.  For instance with AWK, we
+dnl may fill an associative array (key is $1, value is the template).
+dnl This garantees that there is a unique prototype issued, and also
+dnl that it will be sorted!
+define([AH_DEFINE],
+[ifset([$3],
+       [AH_TEMPLATE([$1], [$3])],
+       [#
+dnl Ignore CPP macro arguments.
+@@@syms="$syms patsubst($1, [(.*$])"@@@
+])])
+
+dnl AC_VERBATIM
+define([AC_VERBATIM], [])
+
+dnl AH_TEMPLATE(KEY, DESCRIPTION)
+dnl Issue an autoheader template for KEY, i.e., a comment composed
+dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
+define([AH_TEMPLATE],
+[AH_VERBATIM([$1],
+             AC_WRAP(_AC_SH_QUOTE([[$2 */]]), [   ], [/* ])[
+#undef $1])])
+
+dnl AH_VERBATIM(KEY, TEMPLATE)
+dnl --------------------------
+dnl If KEY is direct (i.e., no indirection such as in KEY=$my_func which may
+dnl occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader TEMPLATE
+dnl associated to the KEY.  Otherwise, do nothing.
+dnl TEMPLATE is output as is, with no formating.
+define([AH_VERBATIM],
+[AC_VAR_IF_INDIR([$1],,
+[#
+@@@
+ac_verbatim_$1="\
+[$2]"
+@@@
+])])
+
+define([AH_CHECK_LIB],
+[AH_TEMPLATE(AC_TR_CPP(HAVE_$1),
+             [Define if you have the `]$1[' library (-l]$1[).])
+# Success
+$3
+# Failure
+$4])
+
+define([AH_CHECK_HEADERS],
+[AC_FOREACH([AC_Header], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
+               [Define if you have the <]AC_Header[> header file.])
+# Success
 $2
-# If it was not found, we do:
-$3
-])
-])
+# Failure
+$3])])
 
-define([AC_CHECK_HEADERS], [#
-@@@headers="$headers $1"@@@
-ifelse([$2], , , [
-# If it was found, we do:
+define([AH_NEED_DECLS],
+[AC_FOREACH([AC_Symbol], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(NEED_DECL_[]AC_Symbol),
+               [Define if you need the declaration of `]AC_Symbol['.])
+# Success
 $2
-# If it was not found, we do:
-$3
-])
-])
+# Failure
+$3])])
 
-define([AC_CHECK_HEADER], [AC_CHECK_HEADERS($1,$2,$3)])
-
-define([AC_CHECK_HEADERS_DIRENT], [#
-@@@headers="$headers $1"@@@
-])
-
-define([AC_CHECK_LIB], [#
-  ifelse([$3], , [
-@@@libs="$libs $1"@@@
-], [
-# If it was found, we do:
-$3
-# If it was not found, we do:
-$4
-])
-])
-
-define([AC_NEED_DECLS], [#
-  ifelse([$2], , [
-@@@decls="$decls $1"@@@
-], [
-# If it was found, we do:
+define([AH_CHECK_FUNCS],
+[AC_FOREACH([AC_Func], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
+               [Define if you have the `]AC_Func[' function.])
+# Success
 $2
-# If it was not found, we do:
-$3
-])
-])
+# Failure
+$3])])
 
-define([AC_HAVE_LIBRARY], [#
-changequote(<<, >>)dnl
-define(<<AC_LIB_NAME>>, dnl
-patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
-changequote([, ])dnl
-  ifelse([$2], , [
-@@@libs="$libs AC_LIB_NAME"@@@
-], [
-# If it was found, we do:
-$2
-# If it was not found, we do:
-$3
-])
-])
 
-define([AC_CHECK_SIZEOF], [#
-@@@types="$types,$1"@@@
-])
+define([AH_CHECK_SIZEOF],
+[AH_TEMPLATE(AC_TR_CPP(SIZEOF_$1),
+             [The number of bytes in a `]$1['.])])
+
+define([AH_PROG_LEX],
+[AH_CHECK_LIB(fl)
+AH_CHECK_LIB(l)])
+
+define([AC_FUNC_ALLOCA],
+[AH_VERBATIM([STACK_DIRECTION],
+[/* If using the C implementation of alloca, define if you know the
+   direction of stack growth for your system; otherwise it will be
+   automatically deduced at run-time.
+	STACK_DIRECTION > 0 => grows toward higher addresses
+	STACK_DIRECTION < 0 => grows toward lower addresses
+	STACK_DIRECTION = 0 => direction of growth unknown */
+#undef STACK_DIRECTION
+])])
+
+define([AC_C_CHAR_UNSIGNED],
+[AH_VERBATIM([__CHAR_UNSIGNED__],
+[/* Define if type `char' is unsigned and you are not using gcc.  */
+#ifndef __CHAR_UNSIGNED__
+# undef __CHAR_UNSIGNED__
+#endif])])
+
+define([AH_AIX],
+[AH_VERBATIM([_ALL_SOURCE],
+[/* Define if on AIX 3.
+   System headers sometimes define this.
+   We just want to avoid a redefinition error message.  */
+#ifndef _ALL_SOURCE
+# undef _ALL_SOURCE
+#endif])])
+
+
+define([AH_F77_WRAPPERS],
+[AH_TEMPLATE([F77_FUNC],
+             [Define to a macro that performs the appropriate name
+              mangling on its argument to make the C identifier, which
+              *does not* contain underscores, match the name mangling
+              scheme of the Fortran 77 compiler.])
+AH_TEMPLATE([F77_FUNC],
+             [Define to a macro that performs the appropriate name
+              mangling on its argument to make the C identifier, which
+              *does* contain underscores, match the name mangling
+              scheme of the Fortran 77 compiler.])])
+
 
 define([AC_CONFIG_HEADER], [#
 define([AC_CONFIG_H], patsubst($1, [ .*$], []))dnl
 @@@config_h=AC_CONFIG_H@@@
 ])
 
-define([AC_DEFINE], [#
-ifelse([$3],,[#
-dnl Ignore CPP macro arguments.
-@@@syms="$syms patsubst($1, [(.*$])"@@@
-], [#
-@@@verbatim="$verbatim
-dnl Quoted twice because there are two applications.
-AC_WRAP(_AC_SH_QUOTE([[$3 */]]), [   ], [/* ])
-#undef $1
-"@@@
-])])
-
-define([AC_DEFINE_UNQUOTED], [AC_DEFINE($@)])
-
-dnl Autoheader is not the right program to complain about cross-compiling
-define([AC_TRY_RUN], [
-$2
-$3
-$4])
+define([AC_VERBATIM], [AH_VERBATIM($@)])
+define([AC_DEFINE], [AH_DEFINE($@)])
+define([AC_DEFINE_UNQUOTED], [AH_DEFINE($@)])
+define([AC_NEED_DECLS], [AH_NEED_DECLS($@)])
+define([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF($@)])
+define([AC_CHECK_FUNCS], [AH_CHECK_FUNCS($@)])
+define([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
+define([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
+define([AC_CHECK_LIB], [AH_CHECK_LIB($@)])
+define([AC_PROG_LEX], [AH_PROG_LEX($@)])
+define([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA($@)])
+define([AC_C_CHAR_UNSIGNED], [AH_C_CHAR_UNSIGNED($@)])
+define([AC_AIX], [AH_AIX($@)])
+define([AC_F77_WRAPPERS], [AH_F77_WRAPPERS($@)])

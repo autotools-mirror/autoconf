@@ -1,3 +1,53 @@
+1999-10-01  Akim Demaille  <akim@epita.fr>
+
+	Moving most of the task of creating config.h.in from sh to m4.
+	Getting rid of acconfig.h by supply a major new family of macros:
+	AH_* which make it possible to insert arbitrary text into
+	config.h.in.
+
+	* autoheader.m4: Major rewrite: introduction of a set of macros
+ 	AH_ that produce code into config.h.in.  There are two sets of
+ 	macros: generic macros, or specialized, documented below.  The
+ 	basic idea is that an AC_FOO macro which needs an entry in
+ 	config.h.in should have a sibling AH_FOO which expands into that
+ 	entry.  In a near future, these macros will be moved next to their
+	siblings.
+
+	* autoheader.m4 (AH_VERBATIM, AH_DEFINE, AH_DEFINE, AH_NEED_DECLS,
+ 	AH_CHECK_SIZEOF, AH_CHECK_FUNCS, AH_CHECK_HEADERS,
+ 	AH_CHECK_HEADERS, AH_CHECK_LIB, AH_PROG_LEX, AH_FUNC_ALLOCA,
+ 	AH_C_CHAR_UNSIGNED, AH_AIX, AH_F77_WRAPPERS): New macros.
+
+	* autoheader.m4 (End section): Bind AC_ macros to their
+	AH_siblings.
+
+	* autoheader.sh: Remove the sections in charge of SYMS, TYPES,
+	FUNCS, HEADERS, LIBS and DECLS: autoheader.m4 is now in charge of
+	these.
+
+	* autoheader.sh (options): Added -d, --debug, which does not
+	remove the temporary files.
+
+	* autoheader.sh: Instead of redirecting stdout to the output
+	stream, always output to a temporary file.  This allows to change
+	slightly the consistency check: before autoheader would check that
+	each non documented AC_DEFINE is templated in an acconfig.  Now it
+	just checks whether the template is in the output file.
+
+	* acconfig.h: Completely emptied, the remaining templates
+	(_ALL_SOURCE, __CHAR_UNSIGNED__, F77_FUNC, F77_FUNC_,
+ 	HAVE_STRINGIZE, and STACK_DIRECTION) are now either associated to
+ 	their AC_DEFINE, or to one of the new AH_ macros.
+
+	* acgeneral.m4: Reordering of the m4 macros which are not specific
+ 	to Autoconf.
+
+	* acgeneral.m4 (AC_HAVE_LIB): Promoted from obsolete to hasbeen.
+
+	* acgeneral.m4 (AC_TR_CPP): Fixed quoting problem, and missing ^
+	in patsubst.
+	(AC_TR_SH): Fixed quoting problem.
+
 1999-09-29  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_WRAP): Don't output an extra space after the
