@@ -1194,3 +1194,13 @@ You lose.
 #endif /* S_ISSOCK */
 ], AC_DEFINE(STAT_MACROS_BROKEN))])dnl
 dnl
+dnl
+define(AC_SYS_SIGLIST_DECLARED,[dnl
+AC_COMPILE_CHECK(sys_siglist declaration in signal.h or unistd.h,
+		 [#include <signal.h>
+/* NetBSD declares sys_siglist in <unistd.h>.  */
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif], [char *msg = *(sys_siglist + 1);],
+		 AC_DEFINE(SYS_SIGLIST_DECLARED))])dnl
+dnl
