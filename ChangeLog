@@ -1,5 +1,14 @@
 2001-06-12  Akim Demaille  <akim@epita.fr>
 
+	* aclibraries: New.
+	* autoscan.in (@kinds): Add `libraries'.
+	Use `@kinds' instead of hard coded lists.
+	(%programs, %headers, %identifiers, %makevars, %libraries, %functions):
+	Remove, replaced by...
+	(%used): this.
+
+2001-06-12  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in (%functions_macros %headers_macros)
 	(%identifiers_macros %programs_macros %makevars_macros): Remove,
 	replaced by...

@@ -41,7 +41,7 @@ m4sources =  m4sugar.m4 m4sh.m4  \
              acfunctions.m4 acheaders.m4 actypes.m4
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
-                  $(m4sources)
+                  aclibraries $(m4sources)
 
 nodistpkgdataDATA = autoconf.m4f
 

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4-p2 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p3 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -86,7 +86,7 @@ EXTRA_SCRIPTS = autoscan autoupdate
 m4sources = m4sugar.m4 m4sh.m4               autoconf.m4              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4              acfunctions.m4 acheaders.m4 actypes.m4
 
 
-distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms                   $(m4sources)
+distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms                   aclibraries $(m4sources)
 
 
 nodistpkgdataDATA = autoconf.m4f
