@@ -1,3 +1,8 @@
+2001-06-02  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (.m4.m4f): Pass the options first.
+	Fixes PR autoconf/182.
+
 2001-06-02  Nathan Sidwell  <nathan@codesourcery.com>
 
 	GNU getopt, when POSIXLY_CORRECT does not permute options and
