@@ -350,13 +350,13 @@ dnl can use AC_QUOTE_* manually if they want to.
 test -n "$verbose" && \
 ifelse($#, 2,
 [define([AC_VAL], $2)dnl
-echo "	defining $1 to be ifelse(AC_VAL,, empty, AC_DEFINE_QUOTE(AC_VAL))"],
+echo "	defining" $1 to be ifelse(AC_VAL,, empty, "AC_QUOTE_SQUOTE(AC_VAL)")],
 [define([AC_VAL], 1)dnl
 echo "	defining $1"])
 dnl
-echo "[#][define] $1 AC_DEFINE_QUOTE(AC_VAL)" >> confdefs.h
+echo "[#][define]" $1 "AC_QUOTE_SQUOTE(AC_VAL)" >> confdefs.h
 dnl Define DEFS even if AC_CONFIG_NAMES for use in user case statements.
-DEFS="$DEFS -D$1=AC_DEFINE_QUOTE(AC_VAL)"
+DEFS="$DEFS -D$1=AC_QUOTE_SQUOTE(AC_VAL)"
 ifdef([AC_CONFIG_NAMES],
 SEDDEFS="dnl
 ${SEDDEFS}\${SEDdA}$1\${SEDdB}$1\${SEDdC}AC_DEFINE_SEDQUOTE(AC_VAL)\${SEDdD}
@@ -376,11 +376,11 @@ dnl function, which should be expanded, and the arguments to the inner
 dnl function, which shouldn't yet.
 define(AC_IDENTITY,$1)dnl
 define(AC_DEFINE_UNQUOTED,[dnl
-pushdef([AC_DEFINE_QUOTE],defn([AC_IDENTITY]))dnl
+pushdef([AC_QUOTE_SQUOTE],defn([AC_IDENTITY]))dnl
 pushdef([AC_DEFINE_SEDQUOTE],defn([AC_IDENTITY]))dnl
 AC_DEFINE($1,$2)dnl
 popdef([AC_DEFINE_SEDQUOTE])dnl
-popdef([AC_DEFINE_QUOTE])dnl
+popdef([AC_QUOTE_SQUOTE])dnl
 ])dnl
 dnl
 define(AC_BEFORE,
