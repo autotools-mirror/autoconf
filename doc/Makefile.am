@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-MAKEINFO = @MAKEINFO@ --no-split
+AM_MAKEINFOFLAGS = --no-split
 TEXI2HTML = texi2html
 TEXI2HTML_FLAGS = -split_chapter
 
