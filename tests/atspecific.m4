@@ -128,7 +128,7 @@ AT_CLEANUP(configure config.status config.log config.cache config.hin config.h e
 # TOP_SRCDIR is needed to set the auxdir (some macros need
 # `install-sh', `config.guess' etc.).
 AT_DEFINE([AT_CHECK_UPDATE],
-[AT_SETUP([$1])
+[AT_SETUP([the autoupdating of $1])
 
 _AT_CHECK_AC_MACRO([$1],
 [AT_CHECK([autoupdate --autoconf-dir ..], 0,
