@@ -1,3 +1,11 @@
+2003-06-11  Paolo Bonzini  <bonzini@gnu.org>
+
+	* doc/autoconf.texi (Writing testsuite.at): Document AT_XFAIL_IF
+	* lib/autotest/general.m4 (AT_XFAIL_IF): New macro.
+	(TEST_SCRIPT): New diversion.
+	(AT_SETUP): Divert output to TEST_SCRIPT and move some code...
+	(AT_CLEANUP): ...to here.  Undivert TEST_SCRIPT.
+	(AT_INIT): Support for expected failures.
 
 2003-06-02  Alexandre Duret-Lutz  <adl@gnu.org>
 2003-06-02  Akim Demaille  <akim@epita.fr>
@@ -8,12 +16,6 @@
 	Autoconf nor Automake.
 	(&contents): New, from Automake.
 	PODify.
-
--            and Paul Eggert <eggert@twinsun.com>
-+	    and Paul Eggert <eggert@twinsun.com>
- 
-	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
-	Remove `#include <stdlib.h>' from the list; we should never
 
 2003-05-28  Paul Eggert  <eggert@twinsun.com>
 

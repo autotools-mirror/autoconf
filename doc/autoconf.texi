@@ -14314,6 +14314,16 @@ other words, don't fear registering several times the same keyword in a
 test group.
 @end defmac
 
+@defmac AT_XFAIL_IF (@var{shell-condition})
+@atindex XFAIL_IF
+Determine whether the test is expected to fail because it is a known
+bug (for unsupported features, you should skip the test).
+@var{shell-condition} is a shell expression such as a @code{test}
+command; you can instantiate this macro many times from within the
+same test group, and one of the conditions will be enough to turn
+the test into an expected failure.
+@end defmac
+
 @defmac AT_CLEANUP
 @atindex CLEANUP
 End the current test group.

@@ -81,10 +81,12 @@
 #    optimization.  Do anything else that needs to be done to prepare for
 #    tests.  Sets up verbose and log file descriptors.  Sets and logs PATH.
 #  - TESTS
-#    The core of the test suite, the ``normal'' diversion.
+#    The core of the test suite.
 #  - TESTS_END
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
+#  - TEST_SCRIPT
+#    The code for each test, the ``normal'' diversion
 
 m4_define([_m4_divert(DEFAULTS)],           100)
 m4_define([_m4_divert(PARSE_ARGS)],         200)
@@ -97,6 +99,7 @@ m4_define([_m4_divert(HELP_END)],           304)
 m4_define([_m4_divert(PREPARE_TESTS)],      400)
 m4_define([_m4_divert(TESTS)],              401)
 m4_define([_m4_divert(TESTS_END)],          402)
+m4_define([_m4_divert(TEST_SCRIPT)],        403)
 
 
 # AT_LINE
@@ -535,6 +538,8 @@ done
 at_start_date=`date`
 at_start_time=`(date +%s) 2>/dev/null`
 echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
+at_xpass_list=
+at_xfail_list=
 at_pass_list=
 at_fail_list=
 at_skip_list=
@@ -635,15 +640,31 @@ _ATEOF
       at_group_count=`expr 1 + $at_group_count`
       $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"
       echo $ECHO_N "$at_group. $at_setup_line: $ECHO_C" >> $at_group_log
-      case $at_status in
-	0)  at_msg="ok"
+      case $at_xfail:$at_status in
+	yes:0)
+	    at_msg="UNEXPECTED PASS"
+	    at_xpass_list="$at_xpass_list $at_group"
+	    at_errexit=$at_errexit_p
+	    ;;
+	no:0)
+	    at_msg="ok"
 	    at_pass_list="$at_pass_list $at_group"
+	    at_errexit=false
 	    ;;
-	77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
+	*:77)
+	    at_msg="ok (skipped near \``cat $at_check_line_file`')"
 	    at_skip_list="$at_skip_list $at_group"
+	    at_errexit=false
 	    ;;
-	*)  at_msg="FAILED near \``cat $at_check_line_file`'"
+	yes:*)
+	    at_msg="expected failure (failed near \``cat $at_check_line_file`')"
+	    at_xfail_list="$at_xfail_list $at_group"
+	    at_errexit=false
+	    ;;
+	no:*)
+	    at_msg="FAILED near \``cat $at_check_line_file`'"
 	    at_fail_list="$at_fail_list $at_group"
+	    at_errexit=$at_errexit_p
 	    ;;
       esac
       echo $at_msg
@@ -679,7 +700,7 @@ _ATEOF
 	    echo 'exit 1'
 	  } >$at_group_dir/run
 	  chmod +x $at_group_dir/run
-	  $at_errexit_p && break
+	  $at_errexit && break
 	  ;;
       esac
       ;;
@@ -706,62 +727,148 @@ fi
 # Wrap up the test suite with summary statistics.
 at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
 at_fail_count=`set dummy $at_fail_list; shift; echo $[@%:@]`
-if test $at_fail_count = 0; then
-  if test $at_skip_count = 0; then
-    AS_BOX([All $at_group_count tests were successful.])
+at_xpass_count=`set dummy $at_xpass_list; shift; echo $[@%:@]`
+at_xfail_count=`set dummy $at_xfail_list; shift; echo $[@%:@]`
+
+at_run_count=`expr $at_group_count - $at_skip_count`
+at_unexpected_count=`expr $at_xpass_count + $at_fail_count`
+at_total_fail_count=`expr $at_xfail_count + $at_fail_count`
+
+echo
+AS_BOX([Test results.])
+echo
+{
+  echo
+  AS_BOX([Test results.])
+  echo
+} >&AS_MESSAGE_LOG_FD
+
+dnl
+dnl FIXME: this code is as far from i18n-cleanness as man
+dnl could imagine...
+dnl
+if test $at_run_count = 1; then
+  at_result="1 test"
+  at_were=was
+else
+  at_result="$at_run_count tests"
+  at_were=were
+fi
+if $at_errexit_p && test $at_unexpected_count != 0; then
+  if test $at_xpass_count = 1; then
+    at_result="$at_result $at_were run, one passed"
   else
-    AS_BOX([All $at_group_count tests were successful ($at_skip_count skipped).])
+    at_result="$at_result $at_were run, one failed"
   fi
-elif test $at_debug_p = false; then
-  if $at_errexit_p; then
-    AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests.])
-  else
-    AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_group_count tests failed.])
+  at_result="$at_result unexpectedly and inhibited subsequent tests."
+else
+  # Don't you just love exponential explosion of the number of cases?
+  case $at_xpass_count:$at_fail_count:$at_xfail_count in
+    # So far, so good.
+    0:0:0) at_result="$at_result $at_were successful." ;;
+    0:0:*) at_result="$at_result behaved as expected." ;;
+
+    # Some unexpected failures
+    0:*:0) at_result="$at_result $at_were run,
+$at_xfail_count failed unexpectedly." ;;
+
+    # Some failures, both expected and unexpected
+    0:*:1) at_result="$at_result $at_were run,
+$at_total_fail_count failed ($at_xfail_count expected failure)." ;;
+    0:*:*) at_result="$at_result $at_were run,
+$at_total_fail_count failed ($at_xfail_count expected failures)." ;;
+
+    # No unexpected failures, but some xpasses
+    *:0:*) at_result="$at_result $at_were run,
+$at_xpass_count passed unexpectedly." ;;
+
+    # No expected failures, but failures and xpasses
+    *:1:0) at_result="$at_result $at_were run,
+$at_unexpected_count did not behave as expected ($at_fail_count unexpected failure)." ;;
+    *:*:0) at_result="$at_result $at_were run,
+$at_unexpected_count did not behave as expected ($at_fail_count unexpected failures)." ;;
+
+    # All of them.
+    *:*:1) at_result="$at_result $at_were run,
+$at_xpass_count passed unexpectedly,
+$at_total_fail_count failed ($at_xfail_count expected failure)." ;;
+    *:*:*) at_result="$at_result $at_were run,
+$at_xpass_count passed unexpectedly,
+$at_total_fail_count failed ($at_xfail_count expected failures)." ;;
+  esac
+
+  if test $at_skip_count = 0 && test $at_run_count -gt 1; then
+    at_result="All $at_result"
   fi
+fi
 
-  echo 'You may investigate any problem if you feel able to do so, in which'
-  echo 'case the test suite provides a good starting point.'
-  echo
-  echo 'Failed tests have been logged in the file '$as_me'.log.'
-
-  {
+# Now put skips in the mix.
+case $at_skip_count in
+  0) ;;
+  1) at_result="$at_result
+1 test was skipped." ;;
+  *) at_result="$at_result
+$at_skip_count tests were skipped." ;;
+esac
+ 
+if test $at_unexpected_count = 0; then
+  echo "$at_result"
+  echo "$at_result" >&AS_MESSAGE_LOG_FD
+else
+  echo "ERROR: $at_result" >&2
+  echo "ERROR: $at_result" >&AS_MESSAGE_LOG_FD
+  if test $at_debug_p = false; then
     echo
+    echo 'You may investigate any problem if you feel able to do so, in which'
+    echo 'case the test suite provides a good starting point.'
     echo
-    AS_BOX([Summary of the failures.])
+    echo 'Failed tests have been logged in the file '$as_me'.log.'
 
-    # Summary of failed and skipped tests.
-    if test $at_fail_count != 0; then
-      echo "Failed tests:"
-      $SHELL $[0] $at_fail_list --list
+    {
       echo
-    fi
-    if test $at_skip_count != 0; then
-      echo "Skipped tests:"
-      $SHELL $[0] $at_skip_list --list
       echo
-    fi
-    if test -n "$at_top_srcdir"; then
-      AS_BOX([Configuration logs.])
-      echo
-      for at_file in `find "$at_top_srcdir" -name config.log -print`
-      do
-  	echo "$as_me: $at_file:"
-  	sed 's/^/| /' $at_file
-  	echo
-      done
-    fi
-  } >&AS_MESSAGE_LOG_FD
+      AS_BOX([Summary of the failures.])
 
+      # Summary of failed and skipped tests.
+      if test $at_fail_count != 0; then
+        echo "Failed tests:"
+        $SHELL $[0] $at_fail_list --list
+        echo
+      fi
+      if test $at_skip_count != 0; then
+        echo "Skipped tests:"
+        $SHELL $[0] $at_skip_list --list
+        echo
+      fi
+      if test $at_xpass_count != 0; then
+        echo "Unexpected passes:"
+        $SHELL $[0] $at_xpass_list --list
+        echo
+      fi
+      if test -n "$at_top_srcdir"; then
+        AS_BOX([Configuration logs.])
+        echo
+        for at_file in `find "$at_top_srcdir" -name config.log -print`
+        do
+  	  echo "$as_me: $at_file:"
+  	  sed 's/^/| /' $at_file
+  	  echo
+        done
+      fi
+    } >&AS_MESSAGE_LOG_FD
 
-  AS_BOX([$as_me.log is created.])
+    AS_BOX([$as_me.log was created.])
 
-  echo
-  echo "Please send \`$as_me.log' and all information you think might help:"
-  echo
-  echo "   To: <AT_PACKAGE_BUGREPORT>"
-  echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:$at_fail_list failed"
-  echo
-  exit 1
+    echo
+    echo "Please send \`$as_me.log' and all information you think might help:"
+    echo
+    echo "   To: <AT_PACKAGE_BUGREPORT>"
+    echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
+$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}dnl
+$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
+    echo
+    exit 1
+  fi
 fi
 
 exit 0
@@ -791,6 +898,7 @@ m4_define([AT_TESTED],
 m4_define([AT_SETUP],
 [m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
 m4_define([AT_line], AT_LINE)
+m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], [$1])
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
@@ -799,10 +907,24 @@ m4_divert_push([TESTS])dnl
     at_setup_line='m4_defn([AT_line])'
     $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
 	               AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
-    (
-      echo "AT_ordinal. m4_defn([AT_line]): testing $1..."
-      $at_traceon
+m4_divert_push([TEST_SCRIPT])dnl
 ])
+
+
+# AT_XFAIL_IF(SHELL-EXPRESSION)
+# -----------------------------------
+# Set up the test to be expected to fail if SHELL-EXPRESSION evaluates to
+# true (exitcode = 0).
+m4_define([AT_XFAIL_IF],
+[dnl
+dnl Try to limit the amount of conditionals that we emit.
+m4_case([$1], 
+      [], [],
+      [false], [],
+      [:], [m4_define([AT_xfail], [at_xfail=yes])],
+      [true], [m4_define([AT_xfail], [at_xfail=yes])],
+      [m4_append([AT_xfail], [
+      $1 && at_xfail=yes])])])
 
 
 # AT_KEYWORDS(KEYOWRDS)
@@ -820,6 +942,12 @@ m4_define([AT_CLEANUP],
 at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 '
 )dnl
+m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
+    AT_xfail
+    (
+      echo "AT_ordinal. m4_defn([AT_line]): testing $1..."
+      $at_traceon
+m4_undivert([TEST_SCRIPT])dnl Insert the code here
       $at_traceoff
       $at_times_skip || times >$at_times_file
     ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
