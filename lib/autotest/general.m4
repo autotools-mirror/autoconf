@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -671,11 +671,13 @@ _ATEOF
       at_log_msg="$at_group. $at_setup_line: $at_msg"
       case $at_status in
 	0|77)
-	  # $at_times_file is only available if the group succeeded or was skipped.
-	  # We're not including the group log, so the success message is written
-	  # in the global log separately.  But we also write to the group log in
-	  # case they're using -d.
-	  at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
+	  # $at_times_file is only available if the group succeeded or
+	  # was skipped.  We're not including the group log, so the
+	  # success message is written in the global log separately.
+	  # But we also write to the group log in case they're using
+	  # -d.
+	  $at_times_skip ||
+	    at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
 	  echo "$at_log_msg" >> $at_group_log
 	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
 
@@ -683,9 +685,9 @@ _ATEOF
 	  $at_debug_p || rm -rf $at_group_dir
 	  ;;
 	*)
-	  # Upon failure, include the log into the testsuite's global log.
-	  # The failure message is written in the group log and then included
-	  # in the global log.
+	  # Upon failure, include the log into the testsuite's global
+	  # log.  The failure message is written in the group log and
+	  # then included in the global log.
 	  echo "$at_log_msg" >> $at_group_log
 	  cat $at_group_log >&AS_MESSAGE_LOG_FD
 

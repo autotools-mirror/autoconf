@@ -1,5 +1,10 @@
 2003-06-20  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4: Use at_times_file only if used.
+	From Nicolas Joly.
+
+2003-06-20  Akim Demaille  <akim@epita.fr>
+
 	* config/config.guess, config/config.sub, config/elisp-comp,
 	* config/install-sh, config/mkinstalldirs, doc/standards.texi:
 	Update from masters.
