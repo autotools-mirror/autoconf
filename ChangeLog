@@ -1,3 +1,8 @@
+1999-03-22  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* autoheader.sh: Report an error if AC_CONFIG_HEADER is not
+	present in the configure input file.
+
 1999-03-21  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Correct typo for detecting ELF on FreeBSD.

@@ -108,7 +108,7 @@ case $# in
   *) echo "$usage" >&2; exit 1 ;;
 esac
 
-config_h=config.h
+config_h=undefined
 syms=
 types=
 funcs=
@@ -150,18 +150,19 @@ eval "`$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
 # is a substring of it.
 syms="`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`"
 
+# Support "outfile[:infile]", defaulting infile="outfile.in".
+case "$config_h" in
+undefined) echo "error: AC_CONFIG_HEADER not found in $infile" >&2; exit 1 ;;
+*:*) config_h_in=`echo "$config_h"|sed 's%.*:%%'`
+     config_h=`echo "$config_h"|sed 's%:.*%%'` ;;
+*) config_h_in="${config_h}.in" ;;
+esac
+
 if test $# -eq 0; then
   tmpout=autoh$$
   trap "rm -f $tmpout; exit 1" 1 2 15
   exec > $tmpout
 fi
-
-# Support "outfile[:infile]", defaulting infile="outfile.in".
-case "$config_h" in
-*:*) config_h_in=`echo "$config_h"|sed 's%.*:%%'`
-     config_h=`echo "$config_h"|sed 's%:.*%%'` ;;
-*) config_h_in="${config_h}.in" ;;
-esac
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
