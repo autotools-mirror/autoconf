@@ -8331,7 +8331,7 @@ sets of combined command line arguments:
 
 @table @option
 @item --language=@var{language}
-@itemx -l =@var{language}
+@itemx -l @var{language}
 Use the @var{language} Autom4te library.  Current languages include:
 
 @table @code
@@ -8344,12 +8344,14 @@ create M4sh executable shell scripts.
 @item Autotest
 create Autotest executable test suites.
 
-@item Autoconf
-create Autoconf executable configure scripts.
-
 @item Autoconf-without-aclocal-m4
 create Autoconf executable configure scripts without
 reading @file{aclocal.m4}.
+
+@item Autoconf
+create Autoconf executable configure scripts.  This language inherits
+all the characteristics of @code{Autoconf-without-aclocal-m4} and will
+additionally read @file{aclocal.m4}.
 @end table
 
 @item --prepend-include=@var{dir}
@@ -8398,9 +8400,9 @@ globally, include the following lines in @file{~/.autom4te.cfg}:
 ## User Preferences.  ##
 ## ------------------ ##
 
-begin-language: "Autoconf"
+begin-language: "Autoconf-without-aclocal-m4"
 args: --no-cache
-end-language: "Autoconf"
+end-language: "Autoconf-without-aclocal-m4"
 @end verbatim
 
 

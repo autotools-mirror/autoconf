@@ -1,3 +1,10 @@
+2004-03-19  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (autom4te Invocation): Language Autoconf
+	inherits from language Autoconf-without-aclocal-m4.
+	(Customizing autom4te): Adjust example; the cache must now be
+	disabled for language Autoconf-without-aclocal-m4.
+
 2004-03-16  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/autoconf/programs.m4 (AC_PATH_TOOL, AC_CHECK_TOOL,
