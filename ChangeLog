@@ -1,5 +1,13 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): Instead of defining an
+	unused pointer to the type $1, use
+	if (($1 *) 0) return 0;
+	to avoid warnings from the compiler.
+	From Paul Eggert.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INCLUDES_DEFAULT): Include sys/types.h
 	Reported by Jim Meyering.
 

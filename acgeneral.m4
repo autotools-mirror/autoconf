@@ -3126,7 +3126,9 @@ dnl ### Checking for types
 # 	  if (sizeof (TYPE))
 #
 # to `read' sizeof (to avoid warnings), while not depending on its type
-# (not necessarily size_t etc.).
+# (not necessarily size_t etc.).  Equally, instead of defining an unused
+# variable, we just use a cast to avoid warnings from the compiler.
+# Suggested by Paul Eggert.
 #
 # FIXME: This is *the* macro which ought to be named AC_CHECK_TYPE.
 AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
@@ -3134,7 +3136,8 @@ AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
 [AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
-[$1 *foo;
+[if (($1 *) 0)
+  return 0;
 if (sizeof ($1))
   return 0;],
                 AC_VAR_SET(ac_Type, yes),
