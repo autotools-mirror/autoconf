@@ -253,6 +253,7 @@ Writing Tests
 * Examining Syntax::            Detecting language syntax features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
+* Systemology::                 A zoology of operating systems
 * Portable Shell::              Shell script portability pitfalls
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
@@ -4692,6 +4693,7 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Examining Syntax::            Detecting language syntax features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
+* Systemology::                 A zoology of operating systems
 * Portable Shell::              Shell script portability pitfalls
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
@@ -4848,7 +4850,7 @@ If the file compiles and links successfully, run shell commands
 
 
 
-@node Run Time, Portable Shell, Examining Libraries, Writing Tests
+@node Run Time, Systemology, Examining Libraries, Writing Tests
 @section Checking Run Time Behavior
 
 Sometimes you need to find out how a system performs at run time, such
@@ -4986,7 +4988,29 @@ inlines; for example, @code{memcpy}.  To avoid errors when checking for
 them, either pass them the correct number of arguments or redeclare them
 with a different return type (such as @code{char}).
 
-@node Portable Shell, Multiple Cases, Run Time, Writing Tests
+@node Systemology, Portable Shell, Run Time, Writing Tests
+@section Systemology
+
+This section aims at presenting some systems and pointers to
+documentation.  It may help you addressing particular problems reported
+by users.
+
+@table @asis
+@item @sc{qnx 4.25}
+@cindex @sc{qnx 4.25}
+@c FIXME: Please, if you feel like writing something more precise,
+@c it'd be great.  In particular, I can't understand the difference with
+@c QNX Neutrino.
+@sc{qnx} is a realtime operating system running on Intel architecture
+meant to be scalable from the small embedded systems to hundred
+processor super-computer.  It claims to be @sc{posix} certified. More
+information is available on the @href{www.qnx.com, @sc{qnx} home page},
+including the @href{http://support.qnx.com/support/docs/qnx4/, @sc{qnx}
+man pages}.
+@end table
+
+
+@node Portable Shell, Multiple Cases, Systemology, Writing Tests
 @section Portable Shell Programming
 
 When writing your own checks, there are some shell script programming
@@ -5269,7 +5293,7 @@ spaces in @samp{$list}: there are @samp{M- }, i.e., spaces with the 8th
 bit set, hence no IFS splitting is performed!!!
 
 A good news is that Ultrix works fine with @samp{: $@{list=$default@}},
-i.e., if you @emph{don't} quote.  A bad news is then that @sc{qnx} 4.2.5
+i.e., if you @emph{don't} quote.  A bad news is then that @sc{qnx} 4.25
 then sets @var{list} to the @emph{last} item of @var{default}!
 
 The portable way out consists in using a double assignment, to switch
@@ -5985,7 +6009,7 @@ not supported on Solaris.
 The @sc{posix.2-1992} standard is ambiguous as to whether @samp{expr a :
 b} (and @samp{expr 'a' : '\(b\)'}) output @samp{0} or the empty string.
 In practice, it outputs the empty string on most platforms, but portable
-scripts should not assume this.  For instance, the @sc{qnx} 4.2.5 native
+scripts should not assume this.  For instance, the @sc{qnx} 4.25 native
 @command{expr} returns @samp{0}.
 
 You may believe that one means to get a uniform behavior would be to use
@@ -6007,7 +6031,7 @@ bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 
 Don't leave, there is some more!
 
-The @sc{qnx} 4.2.5 @command{expr}, in addition of preferring @samp{0} to
+The @sc{qnx} 4.25 @command{expr}, in addition of preferring @samp{0} to
 the empty string, has a funny behavior wrt exit status: it's always 1
 when the parenthesis are used!
 
@@ -6033,7 +6057,7 @@ $ expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'
 @end example
 
 @noindent
-will output @samp{a} on most hosts, but @samp{aa} on @sc{qnx} 4.2.5.  A
+will output @samp{a} on most hosts, but @samp{aa} on @sc{qnx} 4.25.  A
 simple work around consists in testing @command{expr} and use a variable
 set to @command{expr} or to @command{false} according to the result.
 
