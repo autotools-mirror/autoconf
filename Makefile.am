@@ -20,11 +20,13 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4
 
-SUBDIRS = . man testsuite
+SUBDIRS = . m4 man testsuite
 
 MAKEINFO = makeinfo --no-split
 TEXI2HTML = texi2html
 SUFFIXES = .m4 .m4f .pl .sh
+## There is currently no means with Automake not to run aclocal.
+ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan

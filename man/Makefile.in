@@ -59,22 +59,11 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 
 @SET_MAKE@
-AMDEP = @AMDEP@
-AMTAR = @AMTAR@
 AWK = @AWK@
-CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
-DEPDIR = @DEPDIR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
-MAKEINFO = @MAKEINFO@
-PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
-VERSION = @VERSION@
-install_sh = @install_sh@
 standards_texi = @standards_texi@
 
 
@@ -104,6 +93,9 @@ MANS = $(man_MANS)
 NROFF = nroff
 DIST_COMMON =  Makefile.am Makefile.in
 
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 

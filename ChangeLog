@@ -1,5 +1,16 @@
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
+	Let Autoconf use autoconf's `--install'.
+
+	* m4/Makefile.am: New file.
+	* m4/init.am: New file, required by Automake.
+	* m4/missing.am: Likewise.
+	* m4/sanity.am: Likewise.
+	* aclocal.m4: Include them.
+	* configure.in (AC_OUTPUT): Added m4/Makefile.
+
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
 	Make autoconf support --install.
 
 	* autoconf.sh (task install): New task.  Extract the set of

@@ -59,21 +59,11 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 
 @SET_MAKE@
-AMDEP = @AMDEP@
-AMTAR = @AMTAR@
 AWK = @AWK@
-CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
-DEPDIR = @DEPDIR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
-PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
-VERSION = @VERSION@
-install_sh = @install_sh@
 standards_texi = @standards_texi@
 
 
@@ -153,6 +143,9 @@ config.sub configure configure.in depcomp install-sh mdate-sh missing \
 mkinstalldirs stamp-vti texinfo.tex version.texi
 
 
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 GZIP_ENV = --best
@@ -166,8 +159,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
-	cd $(srcdir) && $(ACLOCAL)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
