@@ -92,50 +92,14 @@ m4_divert_push([DEFAULT])dnl
 AS_SHELL_SANITIZE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
+# How were we run?
+at_cmd_line="$[0] $[@]"
+
 . ./atconfig
 
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`
-
-
-# Don't take risks: use only absolute directories in PATH.
-# AUTOTEST_PATH is expanded into build/src parts, since users
-# may create executables in both places.
-#
-# There might be directories that don't exist, but don't redirect
-# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
-at_IFS_save=$IFS
-IFS=$PATH_SEPARATOR
-at_sep=
-at_path=
-# Build first.
-for at_dir in $AUTOTEST_PATH; do
-  at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
-done
-# Then source.
-for at_dir in $AUTOTEST_PATH; do
-  at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
-done
-# And finally PATH.
-for at_dir in $PATH; do
-  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
-done
-IFS=$at_IFS_save
-PATH=$at_path
-export PATH
 
 # -e sets to true
 at_stop_on_error=false
@@ -168,6 +132,16 @@ while test $[@%:@] -gt 0; do
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
         at_tests="$at_tests$[1] ";;
 
+    *=*)
+      at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
+      # Reject names that are not valid shell variable names.
+      expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
+  	AS_ERROR([invalid variable name: $at_envvar])
+      at_value=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
+      at_value=`echo "$at_value" | sed "s/'/'\\\\\\\\''/g"`
+      eval "$at_envvar='$at_value'"
+      export $at_envvar ;;
+
      *) echo "$as_me: invalid option: $[1]" >&2
         echo "Try \`$[0] --help' for more information." >&2
         exit 1 ;;
@@ -180,7 +154,7 @@ if $at_help; then
   # If tests were specified, display only their title.
   if test -z "$at_tests"; then
     cat <<_ATEOF
-Usage: $[0] [[OPTION]]... [[TESTS]]
+Usage: $[0] [[OPTION]]... [[TESTS]] [[VAR=VALUE]]
 
 Run all the tests, or the selected TESTS.
 
@@ -242,11 +216,53 @@ fi
 # Load the user config file before checking the PATH.
 test -r ./atlocal && . ./atlocal
 
+# Don't take risks: use only absolute directories in PATH.
+# AUTOTEST_PATH is expanded into build/src parts, since users
+# may create executables in both places.
+#
+# There might be directories that don't exist, but don't redirect
+# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
+at_IFS_save=$IFS
+IFS=$PATH_SEPARATOR
+at_sep=
+at_path=
+# Build first.
+for at_dir in $AUTOTEST_PATH; do
+  at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
+done
+# Then source.
+for at_dir in $AUTOTEST_PATH; do
+  at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
+done
+# And finally PATH.
+for at_dir in $PATH; do
+  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
+  if test -n "$at_dir"; then
+    at_path="$at_path$at_sep$at_dir"
+    at_sep=$PATH_SEPARATOR
+  fi
+done
+IFS=$at_IFS_save
+PATH=$at_path
+export PATH
+
 # Tester and tested.
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
   AS_BOX([Test suite for $at_package $at_version])
   {
-    AS_BOX([     Test suite log for $at_package $at_version.     ])
+    AS_BOX([     Test suite log for $at_package $at_version.      ])
+    echo
+
+    echo "$as_me: command line was:"
+    echo "  $ $at_cmd_line"
     echo
 
     # Try to find a few ChangeLogs in case it might help determining the
@@ -280,10 +296,10 @@ if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
     fi
     echo
 
-    AS_BOX([Running silently the tests])
+    AS_BOX([Running silently the tests.])
   } >&6
 else
-  AS_BOX([ERROR: Not using the proper version, no tests performed])
+  AS_BOX([ERROR: Not using the proper version, no tests performed.])
   exit 1
 fi
 
@@ -364,15 +380,15 @@ at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
 at_fail_count=`set dummy $at_fail_list; shift; echo $[@%:@]`
 if test $at_fail_count = 0; then
   if test $at_skip_count = 0; then
-    AS_BOX([All $at_test_count tests were successful])
+    AS_BOX([All $at_test_count tests were successful.])
   else
-    AS_BOX([All $at_test_count tests were successful ($at_skip_count skipped)])
+    AS_BOX([All $at_test_count tests were successful ($at_skip_count skipped).])
   fi
 elif test $at_debug = false; then
   if $at_stop_on_error; then
-    AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests])
+    AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests.])
   else
-    AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed])
+    AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed.])
   fi
 
   # Remove any debugging script resulting from a previous run.
@@ -398,7 +414,7 @@ elif test $at_debug = false; then
   {
     echo
     echo
-    AS_BOX([Summary of the failures])
+    AS_BOX([Summary of the failures.])
 
     # Summary of failed and skipped tests.
     if test $at_fail_count != 0; then
@@ -413,12 +429,12 @@ elif test $at_debug = false; then
     fi
     echo
 
-    AS_BOX([Running verbosely the failing tests])
+    AS_BOX([Running verbosely the failing tests.])
     echo
   } >&6
 
   $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $as_me.log
-  AS_BOX([$as_me.log is created])
+  AS_BOX([$as_me.log is created.])
 
   echo
   echo "Please send \`$as_me.log' to <$at_bugreport> together with all"

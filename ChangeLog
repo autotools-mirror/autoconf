@@ -1,5 +1,12 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Log the command line.
+	Support `VAR=VAL' as arguments.
+	Compute PATH _after_ the options processing, so that AUTOTEST_PATH
+	may be set via the command line.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): $2 defaults to $1.
 	* lib/autotest/autotest.m4 (AT_INIT): Expand AUTOTEST_PATH into
 	first the build dirs, then the src dirs.
