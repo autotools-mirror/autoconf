@@ -1,4 +1,4 @@
-divert(-1)						-*- shell-script -*-
+divert(-1)						    -*- Autoconf -*-
 # `m4' macros used in building test suites.
 # Copyright (C) 2000 Free Software Foundation, Inc.
 
@@ -283,12 +283,12 @@ $at_traceon
 
 
 # AT_CLEANUP(FILES)
-
+# -----------------
 # Complete a group of related tests, recursively remove those FILES
 # created within the test.  There is no need to list stdout, stderr,
 # nor files created with AT_DATA.
 
-AT_DEFINE(AT_CLEANUP,
+AT_DEFINE([AT_CLEANUP],
 $at_traceoff
 [[#] Snippet )s[]AT_ordinal[])
     )
@@ -324,21 +324,21 @@ popdef([AT_group_description])])
 
 
 # AT_DATA(FILE, CONTENTS)
-
+# -----------------------
 # Initialize an input data FILE with given CONTENTS, which should end with
 # an end of line.
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
 # If you don't want CONTENT to be evaluated, quote it twice.
 
-AT_DEFINE(AT_DATA,
+AT_DEFINE([AT_DATA],
 [AT_DEFINE([AT_data_files], AT_data_files[ ]$1)
-cat > $1 <<'EOF'
-$2[]EOF
+cat >$1 <<'_ATEOF'
+$2[]_ATEOF
 ])
 
 
 # AT_CHECK(COMMANDS, [STATUS], STDOUT, STDERR)
-
+# --------------------------------------------
 # Execute a test by performing given shell COMMANDS.  These commands
 # should normally exit with STATUS, while producing expected STDOUT and
 # STDERR contents.  The special word `expout' for STDOUT means that file

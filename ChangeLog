@@ -1,5 +1,9 @@
 2000-09-19  Pavel Roskin  <proski@gnu.org>
 
+	* tests/atgeneral.m4 (AT_DATA): Use _ATEOF instead of EOF.
+
+2000-09-19  Pavel Roskin  <proski@gnu.org>
+
 	* tests/semantics.m4 (AC_PROG_CPP with warnings): Minor
 	simplification.
 
