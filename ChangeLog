@@ -1,3 +1,8 @@
+Mon Jul 24 17:27:11 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Don't enclose tr args in [], for
+	  SysV and POSIX.  From Karl Heuer.
+
 Wed Jul 19 17:43:44 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Translate + to p in lib name.

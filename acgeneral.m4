@@ -1357,7 +1357,7 @@ dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
 changequote(, )dnl
-ac_lib_var=`echo $1 | tr '[+./]' '[p__]'`
+ac_lib_var=`echo $1 | tr '+./' 'p__'`
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
