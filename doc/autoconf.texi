@@ -7343,6 +7343,9 @@ You'll appreciate the various levels of detail@dots{}
 One workaround is to grep out uninteresting lines, hoping not to remove
 good ones@dots{}
 
+Don't try to move/delete open files, such as in @samp{exec >foo; mv foo
+bar}, see @xref{Limitations of Builtins}, @command{mv} for more details.
+
 @node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
 @section File System Conventions
 
@@ -7864,6 +7867,31 @@ often possible to avoid this problem using @samp{echo "x$word"}, taking
 the @samp{x} into account later in the pipe.
 
 @table @asis
+@item @command{.}
+@cindex @command{.}
+Use @command{.} only with regular files (use @samp{test -f}).  Bash
+2.03, for instance, chokes on @samp{. /dev/null}.  Also, remember that
+@command{.} is not expected to look in the current directory, hence you
+might need some wrapper code for relative paths:
+
+@example
+# Some versions of Bash will fail to source /dev/null (special
+# files actually), so we avoid doing that.
+if test -r "$file" && test -f "$file"; then
+  case $file in
+    [\\/]* | ?:[\\/]* ) . $file;;
+    *)                  . ./$file;;
+  esac
+fi
+@end example
+
+Almost all the shells have a special handling for filenames containing
+no slash, but they are not portable.  For instance, Zsh sticks to
+@code{$PATH} for @command{.}, while it first looks in the current
+directory with @command{source}.  Bash makes no difference between
+@command{.} and @command{source} and looks in the current directory if
+the file was not found in the @code{$PATH}.
+
 @item @command{!}
 @cindex @command{!}
 You can't use @command{!}, you'll have to rewrite your code.
@@ -8590,6 +8618,7 @@ systems.  DJGPP versions 2.04 and later have full symlink support.
 @item @command{mv}
 @c ---------------
 @cindex @command{mv}
+@cindex Moving open files
 The only portable options are @option{-f} and @option{-i}.
 
 Moving individual files between file systems is portable (it was in V6),
@@ -8600,6 +8629,21 @@ a critical section where neither the old nor the new version of
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
 
+Moving/Deleting open files isn't portable. The following can't be done
+on DOS/WIN32:
+
+@example
+exec > foo
+mv foo bar
+@end example
+
+@noindent
+nor can
+
+@example
+exec > foo
+rm -f foo
+@end example
 
 @item @command{sed}
 @c ----------------
@@ -8622,8 +8666,11 @@ sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
 Input should have reasonably long lines, since some @command{sed} have
 an input buffer limited to 4000 bytes.
 
-Alternation, @samp{\|}, is common but not portable.
-@c FIXME: I know Solaris is guilty, but I don't remember how.
+Alternation, @samp{\|}, is common but @sc{posix}.2 does not require its
+support, so it should be avoided in portable scripts.  Solaris 8
+@command{sed} does not support alternation; e.g. @samp{sed '/a\|b/d'}
+deletes only lines that contain the literal string @samp{a|b}.
+
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
 Nested groups are extremely portable, but there is at least one
@@ -8649,7 +8696,9 @@ sed @var{instruction-1};@var{instruction-2}
 
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
-matched''.
+matched''.  All descendents of Bell Lab's V7 @command{sed} (at least; we
+don't have first hand experience with older @command{sed}s) have
+supported it.
 
 
 @item @command{sed} (@samp{t})

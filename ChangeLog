@@ -1,3 +1,8 @@
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi: Moving/deleting open files is not portable.
+	Portability issues for `.' (source), and more information about sed.
+
 2001-07-25  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Ignore -libmil (on Solaris),
