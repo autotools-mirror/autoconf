@@ -255,6 +255,9 @@ my @include;
 # 0 for EXIT_SUCCESS.
 my $exit_status = 0;
 
+# If true, don't rely on the cache (but still update it).
+my $force = 0;
+
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
@@ -361,35 +364,36 @@ sub find_file ($)
 # Display usage (--help).
 sub print_usage ()
 {
+  # Quotes are backslahed to help Emacs' font-lock-mode.
   print <<EOF;
-Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+Usage: $0 [OPTION] ... [FILES]
 
-Generate a configuration script from a TEMPLATE-FILE if given, or
-`configure.ac' if present, or else `configure.in'.  Output is sent
-to the standard output if TEMPLATE-FILE is given, else into
-`configure'.
+Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
+consists of the traces only, otherwise output the expansion of the FILES.
+The first of the FILES may be an M4 frozen file, but then must end in \`.m4f\'.
 
 Operation modes:
   -h, --help               print this help, then exit
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
-  -d, --debug              don't remove temporary files
-  -o, --output=FILE        save output in FILE (stdout is the default)
+  -d, --debug              don\'t remove temporary files
+  -o, --output=FILE        save output in FILE (defaults to \`-\', stdout)
+  -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
-  `cross'         cross compilation issues
-  `obsolete'      obsolete constructs
-  `syntax'        dubious syntactic constructs
-  `all'           all the warnings
-  `no-CATEGORY'   turn off the warnings on CATEGORY
-  `none'          turn off all the warnings
-  `error'         warnings are error
+  \`cross\'         cross compilation issues
+  \`obsolete\'      obsolete constructs
+  \`syntax\'        dubious syntactic constructs
+  \`all\'           all the warnings
+  \`no-CATEGORY\'   turn off the warnings on CATEGORY
+  \`none\'          turn off all the warnings
+  \`error\'         warnings are error
 
-The environment variable `WARNINGS' is honored.
+The environment variable \`WARNINGS\' is honored.
 
 Library directories:
-  -I, --include=DIR  look in DIR.  Several invocations accumulate
+  -I, --include=DIR  look for FILES in DIR.  Several invocations accumulate
 
 Tracing:
   -t, --trace=MACRO      report the MACRO invocations
@@ -397,7 +401,6 @@ Tracing:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
-  # Help font-lock-mode find a closing back quote: `
   exit 0;
 }
 
@@ -436,6 +439,7 @@ sub parse_args ()
      "v|verbose"    => \$verbose,
      "d|debug"      => \$debug,
      "o|output=s"   => \$output,
+     "f|force"      => \$force,
      "W|warnings=s" => \@warning,
 
      # Library directories:
@@ -471,6 +475,11 @@ Try `$me --help' for more information.\n"
 	map { $m4_builtin_alternate_name{$_} }
 	grep { exists $m4_builtin_alternate_name{$_} } @preselect);
 
+  # Only the first file can be frozen, but M4 doesn't complain if this
+  # constraint is not honored.
+  die "$me: the first file only can be frozen\n"
+    if grep { /\.m4f/ } @ARGV[1 .. $#ARGV];
+
   # We don't want to depend upon m4's --include to find the top level
   # files.  Try to get a canonical name, as it's part of the key for caching.
   for (my $i = 0; $i < $#ARGV; ++$i)
@@ -487,8 +496,6 @@ sub handle_m4 ($@)
 {
   my ($req, @macro) = @_;
 
-  # Find the files.  We don't want to depend upon m4's --include.
-  # *.m4f files have to be reloaded.
   my $files;
   foreach (@ARGV)
     {
@@ -588,7 +595,7 @@ sub handle_output ($)
       # Don't complain in comments.  Well, until we have something
       # better, don't consider `#include' etc. are comments.
       s/\#.*//
-	unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
+	unless /^\#\s*(if|include|endif|ifdef|ifndef|define)\b/;
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $oline
@@ -937,14 +944,15 @@ if ($verbose)
     print STDERR $req->marshall;
   }
 
-# We need to run M4 if (i) $REQ is invalid, or (ii) we are expanding
-# (i.e., not tracing) and the output is older than the cache file
-# (since the later is valid if it's older than the dependencies).
-# STDOUT is pretty old.
+# We need to run M4 if (i) the users wants it (--force), (ii) $REQ is
+# invalid, or (iii) we are expanding (i.e., not tracing) and the
+# output is older than the cache file (since the later is valid if
+# it's older than the dependencies).  STDOUT is pretty old.
 my $output_mtime = mtime ($output);
 
 handle_m4 ($req, keys %{$req->macro})
-  if (! $req->valid
+  if ($force
+      || ! $req->valid
       || (! %trace && $output_mtime < mtime ("$me.cache/" . $req->cache)));
 
 

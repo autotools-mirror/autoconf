@@ -1,5 +1,12 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in ($force): New.
+	(&parse_args, &print_usage): -f, --force is a new option.
+	(&handle_output): CPP directives might have spaces after `#'.
+	(&parse_args): The first file only can be frozen.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	Don't let autom4te compute the `include' traces several times:
 	first check that the trace cache file is up to date, and then
 	compare its timestamp with that of the output.

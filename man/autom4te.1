@@ -4,12 +4,11 @@
 autom4te \- Generate files and scripts thanks to M4
 .SH SYNOPSIS
 .B autom4te
-[\fIOPTION\fR] ... [\fITEMPLATE-FILE\fR]
+[\fIOPTION\fR] ... [\fIFILES\fR]
 .SH DESCRIPTION
-Generate a configuration script from a TEMPLATE-FILE if given, or
-`configure.ac' if present, or else `configure.in'.  Output is sent
-to the standard output if TEMPLATE-FILE is given, else into
-`configure'.
+Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
+consists of the traces only, otherwise output the expansion of the FILES.
+The first of the FILES may be an M4 frozen file, but then must end in `.m4f'.
 .SS "Operation modes:"
 .TP
 \fB\-h\fR, \fB\-\-help\fR
@@ -25,7 +24,10 @@ verbosely report processing
 don't remove temporary files
 .TP
 \fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
-save output in FILE (stdout is the default)
+save output in FILE (defaults to `-', stdout)
+.TP
+\fB\-f\fR, \fB\-\-force\fR
+don't rely on cached values
 .TP
 \fB\-W\fR, \fB\-\-warnings\fR=\fICATEGORY\fR
 report the warnings falling in CATEGORY
@@ -56,7 +58,7 @@ The environment variable `WARNINGS' is honored.
 .SS "Library directories:"
 .TP
 \fB\-I\fR, \fB\-\-include\fR=\fIDIR\fR
-look in DIR.  Several invocations accumulate
+look for FILES in DIR.  Several invocations accumulate
 .SS "Tracing:"
 .TP
 \fB\-t\fR, \fB\-\-trace\fR=\fIMACRO\fR
