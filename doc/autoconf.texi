@@ -8,7 +8,7 @@
 
 @set EDITION 1.7.10
 @set VERSION 1.7.10
-@set UPDATED March 1994
+@set UPDATED April 1994
 
 @iftex
 @finalout
@@ -251,9 +251,10 @@ number, which you can get by running @samp{autoconf --version}.
 The configuration scripts that Autoconf produces are covered by the GNU
 General Public License.  This is because they consist almost entirely of
 parts of Autoconf itself, rearranged somewhat, and Autoconf is
-distributed under the terms of the GPL.  As applied to Autoconf,
-the GPL just means that you need to distribute @file{configure.in} along
-with @file{configure}.
+distributed under the terms of the GPL.  As applied to Autoconf, the GPL
+just means that you need to distribute @file{configure.in}, and
+@file{aclocal.m4}, @file{acconfig.h}, and @file{@var{config}.h.top} if
+you use them, along with @file{configure}.
 
 Programs that use Autoconf scripts to configure themselves do not
 automatically come under the GPL.  Distributing an Autoconf
@@ -295,6 +296,7 @@ Here is a diagram showing how the files that can be used in
 configuration are produced:
 
 @example
+aclocal.m4  \
 acgeneral.m4 \                          Makefile.in \
 acspecific.m4 \                                      \
 autoconf*     -> m4* -> configure* -> config.status* -> Makefile \
@@ -2569,30 +2571,44 @@ time.info: time.texinfo
 
 You can put rules like the following in the top-level @file{Makefile.in}
 for a package to automatically update the configuration information when
-you change the configuration files.
+you change the configuration files.  This example includes all of the
+optional files, such as @file{aclocal.m4} and those related to
+configuration header files.  Omit from the @file{Makefile.in} rules any
+of these files that your package does not use.
+
+The @file{stamp-} files are necessary because the timestamps of
+@file{config.h.in} and @file{config.h} will not be changed if remaking
+them does not change their contents.  This feature avoids unnecessary
+recompilation.  You should include the file @file{stamp-h.in} your
+package's distribution, so @code{make} will consider @file{config.h.in}
+up to date.
 
 @example
 @group
-# Do not also depend on config.status, since if config.status changes,
-# the rule after this one remakes Makefile anyway.
-Makefile: Makefile.in
-        $(SHELL) config.status
+configure: configure.in aclocal.m4
+        cd $@{srcdir@}; autoconf
 
-# This rule also makes config.h from config.h.in.
-# If that does not change it, its timestamp is untouched,
-# so do not add an explicit rule to make config.h from config.h.in.
+# autoheader might not change config.h.in
+config.h.in: stamp-h.in
+stamp-h.in: configure.in acconfig.h config.h.top
+        cd $@{srcdir@}; autoheader
+        touch $@{srcdir@}/stamp-h.in
+
+# config.status might not change config.h
+config.h: stamp-h
+stamp-h: config.h.in config.status
+        ./config.status
+        touch stamp-h
+
+Makefile: Makefile.in config.status
+        ./config.status
+
 config.status: configure
-        $(SHELL) config.status --recheck
-
-configure: configure.in
-        cd $(srcdir); autoconf
-
-config.h.in: configure.in
-        cd $(srcdir); autoheader
+        ./config.status --recheck
 @end group
 @end example
 
-@xref{Invoking config.status}, for an alternate approach to
+@xref{Invoking config.status}, for more information on handling
 configuration-related dependencies.
 
 @node Invoking configure, Example, Makefiles, Top
@@ -2738,10 +2754,15 @@ which describes which configuration options were specified when the
 package was last configured.  This file is a shell script which,
 if run, will recreate the same configuration.
 
-You can give @file{config.status} the @samp{--recheck} option, which
-makes it re-run @code{configure} with the same arguments you used
-before.  This option is useful if you change @code{configure}, so that
-the results of some tests might be different from the previous run.
+You can give @file{config.status} the @samp{--recheck} option to update
+itself.  This option is useful if you change @code{configure}, so that
+the results of some tests might be different from the previous run.  The
+@samp{--recheck} option re-runs @code{configure} with the same arguments
+you used before, plus the @samp{--no-create} option, which prevents
+@code{configure} from running @file{config.status} and creating
+@file{Makefile} and other files.  (This is so other @file{Makefile}
+rules can run @file{config.status} when it changes; @pxref{Automatic
+Remaking}, for an example).
 
 @file{config.status} also accepts the options @samp{--help}, which
 prints a summary of the options to @file{config.status}, and
@@ -2775,20 +2796,20 @@ macro was not called, @file{config.status} ignores this variable.
 @end defvar
 
 These variables also allow you to write @file{Makefile} rules that
-regenerate only some of the files.  For example:
+regenerate only some of the files.  For example, in the dependencies
+given above (@pxref{Automatic Remaking}), @file{config.status} is run
+twice when @file{configure.in} has changed.  If that bothers you, you
+can make each run only regenerate the files for that rule:
 
 @example
 @group
-config.status: configure
-        CONFIG_FILES= CONFIG_HEADERS= ./configure
-
-# The touch is in case config.h was unchanged, to avoid config.h
-# staying out of date and this rule being re-invoked on every make.
-config.h: config.status config.h.in
+# config.status might not change config.h
+config.h: stamp-h
+stamp-h: config.h.in config.status
         CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
-        touch config.h
+        touch stamp-h
 
-Makefile: config.status Makefile.in
+Makefile: Makefile.in config.status
         CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
 @end group
 @end example
