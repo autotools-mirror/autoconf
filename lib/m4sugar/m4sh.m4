@@ -604,7 +604,7 @@ fi
 m4_define([_AS_PATH_WALK],
 [AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])dnl
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-AS_LITERAL_IF([m4_default([$1], [$PATH])],
+AS_LITERAL_IF(m4_default([$1], [$PATH]),
 [as_dummy="$1"
 for as_dir in $as_dummy],
 [for as_dir in m4_default([$1], [$PATH])])

@@ -3152,8 +3152,8 @@ be in the user's @code{PATH}, you can pass a modified path to use
 instead, like this:
 
 @example
-AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
-  $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
+AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
+             [$PATH:/usr/libexec:/usr/sbin:/usr/etc:etc])
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to

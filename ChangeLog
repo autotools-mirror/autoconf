@@ -1,5 +1,12 @@
 2002-02-07  Akim Demaille  <akim@epita.fr>
 
+	Fix Autoconf PR/209.
+	Also reported by Frank Denis.
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Don't over quote.
+
+2002-02-07  Akim Demaille  <akim@epita.fr>
+
 	Fix Autoconf PR/207:
 	AC_PREFIX_PROGRAM fails with dashed program names
 

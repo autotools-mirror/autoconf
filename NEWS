@@ -64,6 +64,8 @@
 - Precious variables accumulation
   config.status could stack several copies of the precious variables
   assignments.
+- AC_PATH_PROG and family.
+  Works properly when given a literal path.
 
 ** C Macros
 
