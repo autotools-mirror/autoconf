@@ -1,9 +1,20 @@
+1999-02-26  Ben Elliston  <bje@cygnus.com>
+
+	* install-sh: Avoid trailing whitespace.
+
+	* autoscan.pl (parse_args): Make compatible with Perl version 4.
+
+1999-02-24  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect LynxOS 3.x. Contributed by Giuseppe
+	Guerrini <guisguerrini@racine.ra.it>.
+
 1999-02-23  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect ReliantUNIX on MIPS. Contributed by Andrej
 	Borsenkow <borsenkow.msk@sni.de>.
 	Also remove random trailing whitespace.
-	
+
 1999-02-22  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (System Services): Explain the semantics of the
@@ -26,7 +37,7 @@
 1999-02-19  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Make C code clean for C++ compilers. Contributed
-	by Markus Oberhumer <k3040e4@c210.edvz.uni-linz.ac.at>.
+	by Markus Oberhumer <markus.oberhumer@jk.uni-linz.ac.at>.
 
 1999-02-19  Ben Elliston <bje@cygnus.com>
 	
@@ -47,6 +58,11 @@
 1999-02-11  Ben Elliston  <bje@cygnus.com>
 
 	* standards.texi: Update from FSF.
+
+1999-02-10  Tom Tromey  <tromey@cygnus.com>
+
+	* acgeneral.m4 (AC_CACHE_LOAD): Avoid sourcing special files.
+	Works around bug in some versions of bash.
 
 1999-02-02  Pavel Roskin  <pavel_roskin@geocities.com>
 
