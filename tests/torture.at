@@ -635,9 +635,12 @@ prefix=/usr/local
 ])
 
 # Make sure precious variables and command line options are properly
-# passed, even when there are duplicates.
-AT_CHECK([cd builddir && ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
-AT_CHECK([cat builddir/inner/innermost/config], 0,
+# passed, even when there are duplicates.  Run another directory so
+# that if the user has set config.site to have a config.cache, then
+# the two runs don't have colliding caches.
+AS_MKDIR_P([builddir2])
+AT_CHECK([cd builddir2 && ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
+AT_CHECK([cat builddir2/inner/innermost/config], 0,
 [INNER=good
 srcdir=../../../inner/innermost
 top_srcdir=../../../inner

@@ -1,5 +1,12 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (Configuring subdirectories): Be robust to
+	users who use config.site to require for a cache: in this case,
+	the two last configure runs, using two different sets of
+	arguments, trigger a legitimate error.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (Functions Support, Functions and return Support):
 	New.
 
