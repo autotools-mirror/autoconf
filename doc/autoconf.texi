@@ -5186,13 +5186,13 @@ functions.  Should be called before any macros that run the C compiler.
 
 @defmac AC_ISC_POSIX
 @acindex ISC_POSIX
-@cvindex _POSIX_SOURCE
-@ovindex CC
-If on a POSIXized ISC @sc{unix}, define @code{_POSIX_SOURCE} and add
-@option{-posix} (for the @sc{gnu} C compiler) or @option{-Xp} (for other C
-compilers) to output variable @code{CC}.  This allows the use of
-@sc{posix} facilities.  Must be called after @code{AC_PROG_CC} and
-before any other macros that run the C compiler.
+@ovindex LIBS
+For @sc{interactive unix} (@sc{isc}), add @option{-lcposix} to output
+variable @code{LIBS} if necessary for @sc{posix} facilities.  Call this
+after @code{AC_PROG_CC} and before any other macros that use @sc{posix}
+interfaces.  @sc{interactive unix} is no longer sold, and Sun says that
+they will drop support for it on 2006-07-23, so this macro is becoming
+obsolescent.
 @end defmac
 
 @defmac AC_MINIX
