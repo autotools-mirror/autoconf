@@ -1,3 +1,8 @@
+2003-11-03  Pavel Roskin  <proski@gnu.org>
+
+	* doc/autoconf.texi (Generic Structure Checks): Describe
+	action-if-found and action-if-not-found in AC_CHECK_MEMBERS.
+
 2003-10-31  Akim Demaille  <akim@epita.fr>
 
 	* tests/fortran.at (GNU Fortran 77): Don't run FC macros.

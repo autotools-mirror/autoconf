@@ -5006,7 +5006,10 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 Check for the existence of each @samp{@var{aggregate}.@var{member}} of
 @var{members} using the previous macro.  When @var{member} belongs to
 @var{aggregate}, define @code{HAVE_@var{aggregate}_@var{member}} (in all
-capitals, with spaces and dots replaced by underscores).
+capitals, with spaces and dots replaced by underscores).  If
+@var{action-if-found} is given, it is executed for each of the found
+members.  If @var{action-if-not-found} is given, it is executed for each
+of the members that could not be found.
 
 This macro uses m4 lists:
 @example
