@@ -23,7 +23,7 @@ set top_srcdir "$srcdir/.."
 set uscript {s/^#undef[	 ]*\([^	 ]*\).*/\1/p}
 set undefs [exec sed -n $uscript $top_srcdir/acconfig.h]
 
-set dscript {s/.*AC_DEFINE[A-Z_]*(\([^$,)]*\).*/\1/p; s/.*AC_CHECK_TYPEDEF(\([^$,)]*\).*/\1/p}
+set dscript {s/.*AC_DEFINE[A-Z_]*(\([^$,)]*\).*/\1/p; s/.*AC_CHECK_TYPE(\([^$,)]*\).*/\1/p}
 set defines [exec sed -n $dscript $top_srcdir/acspecific.m4]
 
 send_user "Checking acspecific.m4 for definitions of symbols in acconfig.h...\n"
