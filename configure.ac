@@ -19,14 +19,16 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-AC_PREREQ(2.50)
+# We need AC_CONFIG_TESTDIR.
+AC_PREREQ(2.52c)
+
 AC_INIT(GNU Autoconf, 2.52c, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52c)
 
 # Initialize the test suite.
-AT_CONFIG(tests, ../bin)
+AC_CONFIG_TESTDIR(tests, ../bin)
 AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in

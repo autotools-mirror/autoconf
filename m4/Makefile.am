@@ -18,9 +18,13 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-EXTRA_DIST = \
-atconfig.m4 \
-init.m4 \
-m4.m4 \
-missing.m4 \
-sanity.m4
+EXTRA_DIST =					\
+auxdir.m4					\
+cond.m4						\
+depend.m4					\
+init.m4						\
+install-sh.m4					\
+m4.m4						\
+missing.m4					\
+sanity.m4					\
+strip.m4

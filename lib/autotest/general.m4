@@ -94,14 +94,6 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 
 . ./atconfig
 
-# Path to the top builddir: reverse at_testdir
-top_builddir=`echo '$at_testdir' |
-                sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g;s,/$,,'`
-# Path to the top srcdir: to go to top build, then to top src
-top_srcdir=$top_builddir/$at_topbuild_2_topsrc
-# Path to srcdir: from top srcdir to this dir.
-srcdir=$top_srcdir/$at_testdir
-
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
 at_top_srcdir=`cd "$top_srcdir" && pwd`

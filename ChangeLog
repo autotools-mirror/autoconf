@@ -1,5 +1,12 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* m4/atconfig.m4 (AT_CONFIG): Remove, replaced by...
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): this.
+	New file.
+	* m4/Makefile.am (EXTRA_DIST): Oops, adjust...
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (AU_DEFINE, AU_DEFUN, AU_ALIAS): Move
 	to...
 	* lib/autoconf/autoheader.m4: this new file.

@@ -129,7 +129,7 @@
 # Ouputs:
 # - `ac_dots' is `build -> top_build'.  If not empty, has a trailing slash.
 # - `ac_srcdir' is `build -> src'.
-# - `ac_top_srcdir' is `build -> top-srcdir'
+# - `ac_top_srcdir' is `build -> top-src'
 m4_define([_AC_SRCPATHS],
 [if test $1 != .; then
   ac_dir_suffix=/`echo $1 | sed 's,^\./,,'`
@@ -346,6 +346,8 @@ m4_define([_AC_OUTPUT_COMMANDS],
 for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+  ac_dir=`AS_DIRNAME(["$ac_dest"])`
+  _AC_SRCPATHS(["$ac_dir"])
 
   AC_MSG_NOTICE([executing $ac_dest commands])
   case $ac_dest in

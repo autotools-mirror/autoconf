@@ -1,4 +1,3 @@
-m4_include([m4/atconfig.m4])
 m4_include([m4/auxdir.m4])
 m4_include([m4/cond.m4])
 m4_include([m4/depend.m4])
