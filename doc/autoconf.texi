@@ -274,6 +274,7 @@ Writing Macros
 * Quoting::                     Protecting macros from unwanted expansion
 * Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
+* Obsoleting Macros::           Warning about old ways of doing things
 * Coding Style::                Writing Autoconf macros @`a la Autoconf
 
 Quoting
@@ -287,7 +288,6 @@ Dependencies Between Macros
 
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
-* Obsoleting Macros::           Warning about old ways of doing things
 
 Manual Configuration
 
@@ -5745,6 +5745,7 @@ Here are some instructions and guidelines for writing Autoconf macros.
 * Quoting::                     Protecting macros from unwanted expansion
 * Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
+* Obsoleting Macros::           Warning about old ways of doing things
 * Coding Style::                Writing Autoconf macros @`a la Autoconf
 @end menu
 
@@ -6251,7 +6252,7 @@ When the user runs @samp{autoconf -W error}, warnings from
 @code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
 @ref{autoconf Invocation}.
 
-@node Dependencies Between Macros, Coding Style, Reporting Messages, Writing Macros
+@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Macros
 @section Dependencies Between Macros
 
 Some Autoconf macros depend on other macros having been called first in
@@ -6262,7 +6263,6 @@ called in an order that might cause incorrect operation.
 @menu
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
-* Obsoleting Macros::           Warning about old ways of doing things
 @end menu
 
 @node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
@@ -6379,7 +6379,7 @@ AC_PROVIDE([$0])
 @end example
 @end defmac
 
-@node Suggested Ordering, Obsoleting Macros, Prerequisite Macros, Dependencies Between Macros
+@node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
 @subsection Suggested Ordering
 
 Some macros should be run before another macro if both are called, but
@@ -6417,8 +6417,8 @@ macro @var{called-macro-name} must have been defined using
 that it has been called.
 @end defmac
 
-@node Obsoleting Macros,  , Suggested Ordering, Dependencies Between Macros
-@subsection Obsoleting Macros
+@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Macros
+@section Obsoleting Macros
 
 Configuration and portability technology has evolved over the years.
 Often better ways of solving a particular problem are developed, or
@@ -6443,7 +6443,7 @@ replaced by the modern @var{implementation}.  The additional
 @var{message} is then printed.
 @end defmac
 
-@node Coding Style,  , Dependencies Between Macros, Writing Macros
+@node Coding Style,  , Obsoleting Macros, Writing Macros
 @section Coding Style
 
 The Autoconf macros follow a strict coding style.  You are encouraged to

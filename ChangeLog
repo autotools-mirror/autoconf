@@ -1,5 +1,11 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Obsoleting Macros): Is not a subsection of
+	`Dependencies Between Macros', but rather a section of `Writing
+	Macros'.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Coding Style): New node.
 
 2000-07-07  Akim Demaille  <akim@epita.fr>
