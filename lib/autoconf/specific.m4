@@ -186,7 +186,10 @@ AC_DEFUN(AC_PROG_CC_C_O,
 else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
-set dummy $CC; ac_cc=[$]2
+set dummy $CC; ac_cc="`echo [$]2 | 
+changequote(, )dnl
+		       sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
+changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [eval ac_cv_prog_cc_${ac_cc}_c_o=no
 echo 'foo(){}' > conftest.c
@@ -220,7 +223,7 @@ fi
 
 dnl Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN(AC_PROG_MAKE_SET,
-[AC_MSG_CHECKING(whether ${MAKE-make} sets \$\{MAKE\})
+[AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
 set dummy ${MAKE-make}; ac_make=[$]2
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat > conftestmake <<\EOF
