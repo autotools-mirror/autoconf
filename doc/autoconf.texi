@@ -4323,7 +4323,7 @@ It requires @file{linux/types.h} and @file{sys/socket.h}.
 
 @item @file{linux/random.h}
 @hdrindex linux/random.h
-It requires @file{asm/types.h}.
+It requires @file{linux/types.h}.
 
 @item @file{net/if.h}
 @hdrindex net/if.h
