@@ -6,6 +6,10 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
+* Write an automake Makefile.am to replace the existing Makefile.in.
+
+------------------------------------------------------------------------------
+
 * Make AC_CHECK_LIB check whether the function is already available
   before checking for the library.  This might involve adding another
   kind of cache variable to indicate whether a given function needs a
@@ -18,10 +22,6 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Add AC_PROG_CC_POSIX to replace the current ad-hoc macros for AIX,
   Minix, ISC, etc.
-
-------------------------------------------------------------------------------
-
-* Use AC_EGREP_CPP instead of AC_TRY_LINK to detect structures and members.
 
 ------------------------------------------------------------------------------
 
