@@ -1,5 +1,13 @@
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl (@kinds, %generic_macro): New.
+	(&init_tables): Use them.
+	* acheaders: Run `autoconf -t AC_CHECK_HEADERS:'$1'' on the fileutils,
+	and include all these headers in here.
+	Don't specify `AC_CHECK_HEADERS' as it's the default.
+
+2001-01-24  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Just like the previous patch, but for
 	AC_CHECK_FUNCS, AC_CHECK_TYPES, and AC_CHECK_MEMBERS.
 

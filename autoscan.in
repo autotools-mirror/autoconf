@@ -42,6 +42,20 @@ $verbose = 0;
 %programs_macros = ();
 %needed_macros = ();
 
+my @kinds =
+  ('functions', 'headers', 'identifiers', 'programs', 'makevars');
+
+# For each kind, the default macro.
+my %generic_macro =
+  (
+   "functions"   => "AC_CHECK_FUNCTIONS",
+   "headers"     => "AC_CHECK_HEADERS",
+   "identifiers" => "AC_CHECK_TYPES",
+   "programs"    => "AC_CHECK_PROGS"
+  );
+
+
+
 &parse_args;
 &init_tables;
 &find('.');
@@ -171,8 +185,7 @@ sub init_tables
   # a new Autoconf macro should probably be written for that case,
   # instead of duplicating the code in lots of configure.ac files.
 
-  foreach $kind ('functions', 'headers', 'identifiers', 'programs',
-		 'makevars')
+  foreach $kind (@kinds)
     {
       open(TABLE, "<$datadir/ac$kind") ||
 	die "$me: cannot open $datadir/ac$kind: $!\n";
@@ -181,11 +194,12 @@ sub init_tables
 	  # Ignore blank lines and comments.
 	  next
 	    if /^\s*$/ || /^\s*\#/;
-	  unless (/^(\S+)\s+(\S.*)$/)
+	  unless (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
 	    {
 	      die "$me: cannot parse definition in $datadir/ac$kind:\n$_\n";
 	    }
-	  ($word, $macro) = ($1, $2);
+	  $word = $1;
+	  $macro = $2 || $generic_macro{$kind};
 	  eval "\$$kind" . "_macros{\$word} = \$macro";
 	}
       close(TABLE);
@@ -605,12 +619,12 @@ sub check_configure_ac
 	  # separated macros.  But there is no point.
 	  foreach $word (split (/\s|,/, $args[0]))
 	    {
+	      # AC_CHECK_MEMBERS wants `struct' or `union'.
 	      if ($macro eq "AC_CHECK_MEMBERS"
 		  && $word =~ /^stat.st_/)
 		{
 		  $word = "struct " . $word;
 		}
-	      print STDERR "DELETE: $macro($word)\n";
 	      delete ($needed_macros{"$macro([$word])"});
 	    }
 	}
