@@ -1,3 +1,25 @@
+2000-05-09  Akim Demaille  <akim@epita.fr>
+
+	Let `config.status' use a private temp dir.
+	Suggested by Jim Meyering.
+
+	* acgeneral.m4 (_AC_SHELL_TMPDIR): New macro.
+	(_AC_OUTPUT_CONFIG_STATUS): Use it.
+	Use more quoted here docs to improve readability.
+	Compute `$me' and use it in the error messages.
+	Define `$configure' and `$configure_args' to avoid continuously
+	mixing the uses of `configure' and `config.status' evaluation in a
+	single line.
+	Define `$SHELL' and use it.
+	Simplify all the unjustified `[\$]foo' into `\$foo', the quotes
+	are needed only for `\$[1]', `\$[@]' etc.
+	Replace all the uses of `ac_cs_root' with files in the tmp dir of
+	`config.status'.
+	Remove a few `rm' covered by the removal of the `$tmp' dir.
+	Let `config.status' support `--debug'.
+	(_AC_INIT_PREPARE): Avoid the leading space in `ac_configure_args'.
+	* doc/autoconf.texi (Invoking config.status): Adjust.
+
 2000-05-05  Jim Meyering  <meyering@lucent.com>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Set up traps to remove

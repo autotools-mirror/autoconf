@@ -450,8 +450,37 @@ ifval([$3],
   $3
 ])dnl
 fi
-])])
+])dnl
+])# AC_SHELL_IFELSE
 
+
+# _AC_SHELL_TMPDIR(PREFIX)
+# ----------------------
+# Create as safely as possible a temporary directory which name is
+# inspired by PREFIX (should be 2-4 chars max), and set trap
+# mechanisms to remove it.
+define([_AC_SHELL_TMPDIR],
+[# Create a temporary directory, and hook for its removal unless debugging.
+$debug ||
+{
+  trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
+  trap 'exit $?' 1 2 13 15
+}
+
+# Create a (secure) tmp directory for tmp files.
+: ${TMPDIR=/tmp}
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/$1XXXXXX") 2>/dev/null` &&
+  test -n "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/$1$$-$RANDOM && (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   exit 1;
+}dnl
+])# _AC_SHELL_TMPDIR
 
 
 ## --------------------------------------------------- ##
@@ -1470,6 +1499,7 @@ trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2
 # Strip out --no-create and --no-recursion so they do not pile up.
 # Also quote any args containing shell meta-characters.
 ac_configure_args=
+ac_sep=
 for ac_arg
 do
   case "$ac_arg" in
@@ -1480,10 +1510,13 @@ do
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 [  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
-  ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
-  ac_configure_args="$ac_configure_args '$ac_arg'" ;;
-  *) ac_configure_args="$ac_configure_args $ac_arg" ;;
+    ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
+    ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
+    ac_sep=" " ;;
+  *) ac_configure_args="$ac_configure_args$ac_sep$ac_arg"
+     ac_sep=" " ;;
   esac
+  # Get rid of the leading space.
 done
 
 # File descriptor usage:
@@ -3758,105 +3791,108 @@ ifval([$2$3],
 # Produce config.status.  Called by AC_OUTPUT.
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
-define(_AC_OUTPUT_CONFIG_STATUS,
+define([_AC_OUTPUT_CONFIG_STATUS],
 [echo creating $CONFIG_STATUS
 cat >$CONFIG_STATUS <<EOF
 #! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
-# This directory was configured as follows,
-dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
-dnl so uname gets run too.
-# on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
-#
-@%:@ [$]0 $ac_configure_args
-#
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.
 
+configure=$[0]
+configure_args=$ac_configure_args
+debug=false
+EOF
+
+cat >>$CONFIG_STATUS <<\EOF
+me=`echo "$[0]" | sed -e 's,.*/,,'`
+SHELL=${CONFIG_SHELL-/bin/sh}
+
 # Files that config.status was made for.
-ifset([AC_LIST_FILES], [config_files="\\
+ifset([AC_LIST_FILES], [config_files="\
 m4_wrap(AC_LIST_FILES, [  ])"
 ])dnl
-ifset([AC_LIST_HEADERS], [config_headers="\\
+ifset([AC_LIST_HEADERS], [config_headers="\
 m4_wrap(AC_LIST_HEADERS, [  ])"
 ])dnl
-ifset([AC_LIST_LINKS], [config_links="\\
+ifset([AC_LIST_LINKS], [config_links="\
 m4_wrap(AC_LIST_LINKS, [  ])"
 ])dnl
-ifset([AC_LIST_COMMANDS], [config_commands="\\
+ifset([AC_LIST_COMMANDS], [config_commands="\
 m4_wrap(AC_LIST_COMMANDS, [  ])"
 ])dnl
 
-ac_cs_usage="\\
-\\\`$CONFIG_STATUS' instantiates files from templates according to the
+ac_cs_usage="\
+\`$me' instantiates files from templates according to the
 current configuration.
 
-Usage: $CONFIG_STATUS [[OPTIONS]] FILE...
+Usage: $[0] [[OPTIONS]] FILE...
 
-  --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
-  --version    Print the version of Autoconf and exit
-  --help       Display this help and exit
+  -h, --help       print this help, then exit
+  -V, --version    print version number, then exit
+  -d, --debug      don't remove temporary files
+      --recheck    update $me by reconfiguring in the same conditions
 ifset([AC_LIST_FILES],
 [[  --file=FILE[:TEMPLATE]
-               Instantiate the configuration file FILE
+                   instantiate the configuration file FILE
 ]])dnl
 ifset([AC_LIST_HEADERS],
 [[  --header=FILE[:TEMPLATE]
-               Instantiate the configuration header FILE
+                   instantiate the configuration header FILE
 ]])dnl
 
 ifset([AC_LIST_FILES],
 [Configuration files:
-\$config_files
+$config_files
 
 ])dnl
 ifset([AC_LIST_HEADERS],
 [Configuration headers:
-\$config_headers
+$config_headers
 
 ])dnl
 ifset([AC_LIST_LINKS],
 [Configuration links:
-\$config_links
+$config_links
 
 ])dnl
 ifset([AC_LIST_COMMANDS],
 [Configuration commands:
-\$config_commands
+$config_commands
 
 ])dnl
 Report bugs to <bug-autoconf@gnu.org>."
+EOF
 
+dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+dnl so uname gets run too.
+cat >>$CONFIG_STATUS <<EOF
 ac_cs_version="\\
 $CONFIG_STATUS generated by autoconf version AC_ACVERSION.
 Configured on host `(hostname || uname -n) 2>/dev/null | sed 1q` by
-  `echo "[$]0 $ac_configure_args" | sed 's/[[\\"\`\$]]/\\\\&/g'`"
+  $configure $configure_arg"
 
-dnl We use a different name than CONFTEST just to help the maintainers
-dnl to make the difference between `conftest' which is the root of the
-dnl files used by configure, and `ac_cs_root' which is the root of the
-dnl files of config.status.
-# Root of the tmp file names.  Use pid to allow concurrent executions.
-ac_cs_root=cs\$\$
 ac_given_srcdir=$srcdir
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [dnl Leave those double quotes here: this $INSTALL is evaluated in a
 dnl here document, wbich might result in `ac_given_srcdir=/bin/install -c'.
 ac_given_INSTALL="$INSTALL"
 ])dnl
+EOF
 
+cat >>$CONFIG_STATUS <<\EOF
 # If no file are specified by the user, then we need to provide default
 # value.  By we need to know if files were specified by the user.
 ac_need_defaults=:
-while test [\$]@%:@ != 0
+while test $[#] != 0
 do
-  case "[\$]1" in
+  case "$[1]" in
   --*=*)
-    ac_option=\`echo "[\$]1" | sed -e 's/=.*//'\`
-    ac_optarg=\`echo "[\$]1" | sed -e ['s/[^=]*=//']\`
+    ac_option=`echo "$[1]" | sed -e 's/=.*//'`
+    ac_optarg=`echo "$[1]" | sed -e ['s/[^=]*=//']`
     shift
-    set dummy "[\$]ac_option" "[\$]ac_optarg" [\$]{1+"[\$]@"}
+    set dummy "[\$]ac_option" "$ac_optarg" ${1+"$[@]"}
     shift
     ;;
   -*);;
@@ -3865,7 +3901,7 @@ do
      ac_need_defaults=false;;
   esac
 
-  case "[\$]1" in
+  case "$[1]" in
 
   # Handling of the options.
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
@@ -3873,47 +3909,49 @@ dnl The following line is extremely suspicious: there are double quotes
 dnl inside a "`...`" (which is not portable).  But it is actually safe,
 dnl since we are in an unquoted here doc, which will skip the outer pair
 dnl of double quotes, and only eval the back quotes.
-    echo "running [\$]{CONFIG_SHELL-/bin/sh} [$]0 `echo "$ac_configure_args" | sed 's/[[\\"\`\$]]/\\\\&/g'` --no-create --no-recursion"
-    exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 $ac_configure_args --no-create --no-recursion ;;
-  -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
-    echo "[\$]ac_cs_version"; exit 0 ;;
+    echo "running $SHELL $configure $configure_args --no-create --no-recursion"
+    exec $SHELL $configure $configure_args --no-create --no-recursion ;;
+  --version | --vers* | -V )
+    echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    echo "$CONFIG_STATUS: ambiguous option: [\$]ac_option
-Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
-  -help | --help | --hel )
-    echo "[\$]ac_cs_usage"; exit 0 ;;
+    echo "$me: ambiguous option: $ac_option
+Try \`$me --help' for more information."; exit 1 ;;
+  --help | --hel | -h )
+    echo "$ac_cs_usage"; exit 0 ;;
+  --debug | --d* | -d )
+    debug=:; shift ;;
   --file | --fil | --fi | --f )
     shift
-    CONFIG_FILES="[\$]CONFIG_FILES [\$]1"
+    CONFIG_FILES="$CONFIG_FILES $[1]"
     ac_need_defaults=false;;
   --header | --heade | --head | --hea )
     shift
-    CONFIG_HEADERS="[\$]CONFIG_HEADERS [\$]1"
+    CONFIG_HEADERS="$CONFIG_HEADERS $[1]"
     ac_need_defaults=false;;
 
   # Handling of arguments.
 AC_FOREACH([AC_File], AC_LIST_FILES,
 [  'patsubst(AC_File, [:.*])' )dnl
- CONFIG_FILES="[\$]CONFIG_FILES AC_File" ;;
+ CONFIG_FILES="$CONFIG_FILES AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_LINKS,
 [  'patsubst(AC_File, [:.*])' )dnl
- CONFIG_LINKS="[\$]CONFIG_LINKS AC_File" ;;
+ CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_COMMANDS,
 [  'patsubst(AC_File, [:.*])' )dnl
- CONFIG_COMMANDS="[\$]CONFIG_COMMANDS AC_File" ;;
+ CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_HEADERS,
 [  'patsubst(AC_File, [:.*])' )dnl
- CONFIG_HEADERS="[\$]CONFIG_HEADERS AC_File" ;;
+ CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
 ])dnl
 
   # This is an error.
-  -*) echo "$CONFIG_STATUS: unrecognized option: [\$]1
-Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
-  *) echo "$CONFIG_STATUS: invalid argument: [\$]1"; exit 1 ;;
+  -*) echo "$me: unrecognized option: $[1]
+Try \`$me --help' for more information."; exit 1 ;;
+  *) echo "$me: invalid argument: $[1]"; exit 1 ;;
   esac
   shift
 done
@@ -3938,10 +3976,7 @@ ifset([AC_LIST_COMMANDS], [  : ${CONFIG_COMMANDS=$config_commands}
 ])dnl
 fi
 
-# Trap to remove the temp files.
-dnl FIXME: Should we check that there are files to remove?
-trap 'status=$?; rm -rf $ac_cs_root* && exit $status' 0
-trap 'exit $?' 1 2 13 15
+_AC_SHELL_TMPDIR(cs)
 
 EOF
 ])[]dnl ifval
@@ -3986,7 +4021,7 @@ define(AC_OUTPUT_MAKE_DEFS,
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat >conftest.defs <<\EOF
+cat >confdef2opt.sed <<\EOF
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
@@ -4003,8 +4038,8 @@ EOF
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
 ac_LF_and_DOT=`echo; echo .`
-DEFS=`sed -f conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
-rm -f conftest.defs
+DEFS=`sed -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
+rm -f confdef2opt.sed
 ]])# AC_OUTPUT_MAKE_DEFS
 
 
@@ -4030,7 +4065,7 @@ dnl Please, pay attention that this sed code depends a lot on the shape
 dnl of the sed commands issued by AC_SUBST.  So if you change one, change
 dnl the other too.
 [  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
-   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF]
+   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$tmp/subs.sed <<\\CEOF]
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
@@ -4052,24 +4087,23 @@ dnl Here, there are 2 cmd per line, and two cmd are added later.
   ac_sed_cmds=
   while $ac_more_lines; do
     if test $ac_beg -gt 1; then
-      sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
+      sed "1,${ac_beg}d; ${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
     else
-      sed "${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
+      sed "${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
     fi
-    if test ! -s $ac_cs_root.sfrag; then
+    if test ! -s $tmp/subs.frag; then
       ac_more_lines=false
-      rm -f $ac_cs_root.sfrag
     else
       # The purpose of the label and of the branching condition is to
       # speed up the sed processing (if there are no `@' at all, there
       # is no need to browse any of the substitutions).
       # These are the two extra sed commands mentioned above.
       (echo [':t
-  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b'] && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
+  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b'] && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
       if test -z "$ac_sed_cmds"; then
-  	ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
+  	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
       else
-  	ac_sed_cmds="$ac_sed_cmds | sed -f $ac_cs_root.s$ac_sed_frag"
+  	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
       fi
       ac_sed_frag=`expr $ac_sed_frag + 1`
       ac_beg=$ac_end
@@ -4163,16 +4197,15 @@ s%@top_srcdir@%$top_srcdir%;t t
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
-" $ac_file_inputs | (eval "$ac_sed_cmds") >$ac_cs_root.out
+" $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
 dnl This would break Makefile dependencies.
-dnl  if cmp -s $ac_file $ac_cs_root.out 2>/dev/null; then
+dnl  if cmp -s $ac_file $tmp/out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
-dnl    rm -f $ac_cs_root.out
 dnl   else
 dnl     rm -f $ac_file
-dnl    mv $ac_cs_root.out $ac_file
+dnl    mv $tmp/out $ac_file
 dnl  fi
-  mv $ac_cs_root.out $ac_file
+  mv $tmp/out $ac_file
 
 ifset([AC_LIST_FILES_COMMANDS],
 [  # Run the commands associated with the file.
@@ -4181,7 +4214,6 @@ AC_LIST_FILES_COMMANDS()dnl
   esac
 ])dnl
 done
-rm -f $ac_cs_root.s*
 EOF
 ])# _AC_OUTPUT_FILES
 
@@ -4262,16 +4294,15 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
 
   echo creating $ac_file
 
-  rm -f $ac_cs_root.frag $ac_cs_root.in $ac_cs_root.out
   ac_file_inputs=`echo "$ac_file_in" |
                   sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
-    for ac_file_input in $ac_file_inputs;
+  for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
         AC_MSG_ERROR(cannot find input file `$ac_file_input')
   done
   # Remove the trailing spaces.
-  sed -e 's/[[ 	]]*$//' $ac_file_inputs >$ac_cs_root.in
+  sed -e 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 
 EOF
 
@@ -4299,7 +4330,7 @@ dnl purpose of `t clear; : clear'.
 dnl
 dnl Additionally, this works around a bug of IRIX' sed which does not
 dnl clear the `t' flag between two cycles.
-cat >$ac_cs_root.hdr <<\EOF
+cat >confdef2sed.sed <<\EOF
 dnl Double quote for `[ ]' and `define'.
 [s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
@@ -4313,9 +4344,9 @@ EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
 # sort them, since we want the *last* AC_DEFINE to be honored.
-uniq confdefs.h | sed -n -f $ac_cs_root.hdr >conftest.defines
+uniq confdefs.h | sed -n -f confdef2sed.sed >conftest.defines
 sed -e 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
-rm -f $ac_cs_root.hdr
+rm -f confdef2sed.sed
 
 # This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
@@ -4327,21 +4358,21 @@ EOF
 # Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if egrep ["^[ 	]*#[ 	]*define"] $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
+echo '  if egrep ["^[ 	]*#[ 	]*define"] $tmp/in >/dev/null; then' >>$CONFIG_STATUS
 echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
 echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
 while grep . conftest.defines >/dev/null
 do
-  # Write a limited-size here document to $ac_cs_root.frag.
-  echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
+  # Write a limited-size here document to $tmp/frag.
+  echo '  cat >$tmp/frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#define' lines.
   echo ['/^[ 	]*#[ 	]*define/!b'] >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
-  rm -f $ac_cs_root.in
-  mv $ac_cs_root.out $ac_cs_root.in
+  sed -f $tmp/frag $tmp/in >$tmp/out
+  rm -f $tmp/in
+  mv $tmp/out $tmp/in
 ' >>$CONFIG_STATUS
   sed 1,${ac_max_here_lines}d conftest.defines >conftest.tail
   rm -f conftest.defines
@@ -4357,15 +4388,15 @@ echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
 rm -f conftest.tail
 while grep . conftest.undefs >/dev/null
 do
-  # Write a limited-size here document to $ac_cs_root.frag.
-  echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
+  # Write a limited-size here document to $tmp/frag.
+  echo '  cat >$tmp/frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#undef'
   echo ['/^[ 	]*#[ 	]*undef/!b'] >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
-  rm -f $ac_cs_root.in
-  mv $ac_cs_root.out $ac_cs_root.in
+  sed -f $tmp/frag $tmp/in >$tmp/out
+  rm -f $tmp/in
+  mv $tmp/out $tmp/in
 ' >>$CONFIG_STATUS
   sed 1,${ac_max_here_lines}d conftest.undefs >conftest.tail
   rm -f conftest.undefs
@@ -4375,13 +4406,11 @@ rm -f conftest.undefs
 
 dnl Now back to your regularly scheduled config.status.
 cat >>$CONFIG_STATUS <<\EOF
-  rm -f $ac_cs_root.frag $ac_cs_root.h
-  echo "/* $ac_file.  Generated automatically by configure.  */" >$ac_cs_root.h
-  cat $ac_cs_root.in >>$ac_cs_root.h
-  rm -f $ac_cs_root.in
-  if cmp -s $ac_file $ac_cs_root.h 2>/dev/null; then
+  echo "/* $ac_file.  Generated automatically by configure.  */" >$tmp/config.h
+  cat $tmp/in >>$tmp/config.h
+  rm -f $tmp/in
+  if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
     echo "$ac_file is unchanged"
-    rm -f $ac_cs_root.h
   else
     # Remove last slash and all that follows it.  Not all systems have dirname.
     ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
@@ -4392,7 +4421,7 @@ dnl to be created too).
       test ! -d "$ac_dir" && mkdir "$ac_dir"
     fi
     rm -f $ac_file
-    mv $ac_cs_root.h $ac_file
+    mv $tmp/config.h $ac_file
   fi
 ifset([AC_LIST_HEADERS_COMMANDS],
 [  # Run the commands associated with the file.

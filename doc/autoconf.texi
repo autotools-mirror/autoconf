@@ -6388,6 +6388,19 @@ not
 
 The supported @var{option}s are:
 @table @code
+@item --help
+@itemx -h
+Print a summary of the command line options, the list of the template
+files and exit.
+
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files.
+
 @item --file=@var{file}[:@var{template}]
 Require that @var{file} be instantiated as if
 @samp{AC_CONFIG_FILES(@var{file}:@var{template})} was used.
@@ -6408,16 +6421,6 @@ which prevents @code{configure} from running other @code{configure}
 scripts in subdirectories.  (This is so other @file{Makefile} rules can
 run @file{config.status} when it changes; @pxref{Automatic Remaking},
 for an example).
-
-@item --help
-@itemx -h
-Print a summary of the command line options, a list of the template
-files and exit.
-
-@item --version
-@itemx -V
-Print the version number of Autoconf used to create the @code{configure}
-script that generated @file{config.status} and exit.
 @end table
 
 @file{config.status} checks several optional environment variables that
