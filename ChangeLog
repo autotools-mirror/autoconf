@@ -1,5 +1,11 @@
 2003-05-22  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_GETLOADAVG): Restore smashed
+	' \t' as '\t ' so that Emacs' whitespace.el keep it.
+	Reported by Jim Meyering.
+
+2003-05-22  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Replace AC_HELP_STRING AS_HELP_STRING.
 	Add AC_HELP_STRING  to the obsolete macros section.
 	Typos.
