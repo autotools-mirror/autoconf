@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.108
-@set VERSION 1.108
+@set EDITION 1.109
+@set VERSION 1.109
 @set UPDATED August 1994
 
 @iftex
@@ -306,7 +306,8 @@ Autoconf imposes some restrictions on the names of macros used with
 Autoconf requires GNU @code{m4} in order to generate the scripts.  It
 uses features that some UNIX versions of @code{m4} do not have.  It also
 overflows internal limits of some versions of @code{m4}, including GNU
-@code{m4} 1.0; you must use version 1.1 or later of GNU @code{m4}.
+@code{m4} 1.0.  You must use version 1.1 or later of GNU @code{m4}.
+Using version 1.3 or later will be much faster than 1.1 or 1.2.
 
 @xref{Concerns}, for answers to some common questions about Autoconf.
 @xref{Upgrading}, for information about upgrading from version 1.
@@ -2591,9 +2592,9 @@ number, which you can get by running @samp{autoconf --version}.
 @maindex DEFUN
 Autoconf macros are defined as arguments to the @code{AC_DEFUN} macro,
 which is similar to the @code{m4} builtin @code{define} macro.  In
-addition to defining the macro, @code{AC_DEFUN} causes the macro, when
-it is called, to set a flag which is used to constrain the order in
-which macros are called (@pxref{Prerequisite Macros}).
+addition to defining the macro, @code{AC_DEFUN} adds some code to the
+macro which is used to constrain the order in which macros are called
+(@pxref{Prerequisite Macros}).
 
 An Autoconf macro definition looks like this:
 
@@ -3762,14 +3763,23 @@ Why does Autoconf require GNU @code{m4}?
 @end display
 
 Many @code{m4} implementations have hard-coded limitations on the size
-and number of macros.  They also lack regular expression capabilities
-and other builtins that it would be difficult to get along without in a
-sophisticated application like Autoconf.  Since only software
-maintainers need to use Autoconf, and since GNU @code{m4} is simple to
-configure and install, it does not seem like an unreasonable burden to
-require GNU @code{m4} to be installed also.  Most maintainers of GNU and
-other free software already have most of the GNU utilities installed,
-since they prefer them.
+and number of macros, which Autoconf exceeds.  They also lack several
+builtin macros that it would be difficult to get along without in a
+sophisticated application like Autoconf, including:
+
+@example
+builtin
+indir
+patsubst
+__file__
+__line__
+@end example
+
+Since only software maintainers need to use Autoconf, and since GNU
+@code{m4} is simple to configure and install, it does not seem like an
+unreasonable burden to require GNU @code{m4} to be installed also.  Most
+maintainers of GNU and other free software already have most of the GNU
+utilities installed, since they prefer them.
 
 @node Bootstrapping, Policy Decisions, Why GNU m4, Concerns
 @section How Can I Bootstrap?
@@ -3817,9 +3827,12 @@ out some problems to watch for when upgrading.  Also, perhaps your
 @code{configure} scripts could benefit from some of the new features in
 version 2.
 
-First, make sure you have GNU @code{m4} version 1.1 or higher installed.
-Earlier versions have bugs that prevent them from working with Autoconf
-version 2.
+First, make sure you have GNU @code{m4} version 1.1 or higher installed,
+preferably 1.3 or higher.  Versions before 1.1 have bugs that prevent
+them from working with Autoconf version 2.  Versions 1.3 and later are
+much faster than earlier versions, because as of version 1.3, GNU
+@code{m4} has a more efficient implementation of diversions and can
+freeze its internal state in a file that it can read back quickly.
 
 @menu
 * Changed File Names::          Files you might rename.
@@ -3944,10 +3957,13 @@ predictably, and does not treat quotes (except backquotes) specially.
 @node Changed Macro Writing, , Changed Results, Upgrading
 @section Changed Macro Writing
 
-When defining your own macros, you may now use @code{AC_DEFUN} instead of
-@code{define}, because @code{AC_DEFUN} automatically calls
-@code{AC_PROVIDE}.  There's no harm in continuing to use the older way;
-it's just less convenient.  @xref{Macro Format}.
+When defining your own macros, you should now use @code{AC_DEFUN}
+instead of @code{define}.  @code{AC_DEFUN} automatically calls
+@code{AC_PROVIDE} and ensures that macros called via @code{AC_REQUIRE}
+do not interrupt other macros, to prevent nested @samp{checking@dots{}}
+messages on the screen.  There's no actual harm in continuing to use the
+older way, but it's less convenient and attractive.  @xref{Macro
+Format}.
 
 You probably looked at the macros that came with Autoconf as a guide for
 how to do things.  It would be a good idea to take a look at the new

@@ -23,4 +23,4 @@ include(acgeneral.m4)dnl
 builtin(include, acspecific.m4)dnl
 builtin(include, acoldnames.m4)dnl
 sinclude(acsite.m4)dnl
-sinclude(./aclocal.m4)dnl
+dnl Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.

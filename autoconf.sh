@@ -88,7 +88,16 @@ if test -z "$print_version"; then
   fi
 fi
 
-$M4 -I$AC_MACRODIR $print_version autoconf.m4 $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
+# Use the frozen version of Autoconf if available.
+r= f=
+# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
+case `$M4 --help < /dev/null 2>&1` in
+*reload-state*) test -r $AC_MACRODIR/autoconf.m4f && { r=--reload f=f; } ;;
+*traditional*) ;;
+*) echo Autoconf requires GNU m4 1.1 or later >&2; rm -f $tmpin; exit 1 ;;
+esac
+
+$M4 -I$AC_MACRODIR $print_version $r autoconf.m4$f $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
 
 if test -n "$print_version"; then
   cat $tmpout

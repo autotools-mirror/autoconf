@@ -27,7 +27,9 @@ MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 M4 = @M4@
 
-PROGS = autoconf autoheader autoreconf autoupdate ifnames @PROGS@
+# Programs that are always installed.
+APROGS = autoconf autoheader autoreconf autoupdate ifnames 
+PROGS = $(APROGS) @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
@@ -49,14 +51,17 @@ infodir = $(prefix)/info
 SHELL = /bin/sh
 
 SUBDIRS = testsuite
+
+M4FILES = autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4
+
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = info Makefile
 # Files to distribute.
 DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL \
-	Makefile.in NEWS README TODO \
-	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
-	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
-	autoconf.m4 autoconf.sh autoconf.texi install.texi \
+	Makefile.in NEWS README TODO $(M4FILES) \
+	acconfig.h acfunctions acheaders acidentifiers \
+	acmakevars acprograms autoconf.info* \
+	autoconf.sh autoconf.texi install.texi \
 	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
 	install.sh mkinstalldirs texinfo.tex \
@@ -122,14 +127,16 @@ installcheck: all install
 installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 
-# References to install-info have been removed until it's released.
-install: all autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
-	installdirs install-info
+install: all $(M4FILES) acconfig.h installdirs install-info
+	@case `$(M4) --help < /dev/null 2>&1` in \
+	*reload-state*) $(M4) -F $(acdatadir)/autoconf.m4f autoconf.m4 ;; \
+	*traditional*) ;; \
+	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
+	esac
 	for i in autoconf autoheader autoreconf autoupdate ifnames; do \
 	  $(INSTALL_PROGRAM) $$i $(bindir)/$$i; \
 	done
-	for i in autoconf.m4 acgeneral.m4 acoldnames.m4 \
-	  acspecific.m4 acconfig.h; do \
+	for i in $(M4FILES) acconfig.h; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
 	done
 	-if test -f autoscan; then \
@@ -158,7 +165,7 @@ uninstall:
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
 	then cd $(infodir); rm -f standards.info*; fi
 
-configure: configure.in autoconf.m4 acgeneral.m4 acspecific.m4 acoldnames.m4
+configure: configure.in $(M4FILES)
 	cd $(srcdir); \
 	rm -f $@ $@.tmp; \
 	$(M4) autoconf.m4 configure.in > $@.tmp && \

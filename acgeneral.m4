@@ -1,4 +1,4 @@
-dnl Parameterized macros that do not check for something specific.
+dnl Parameterized macros.
 dnl Requires GNU m4.
 dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.108)dnl
+define(AC_ACVERSION, 1.109)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -45,20 +45,66 @@ dnl ### Controlling Autoconf operation
 dnl
 dnl
 dnl m4 output diversions.  We let m4 output them all in order at the end,
-dnl except that we insert AC_DIVERSION_SED into AC_DIVERSION_NORMAL.
-dnl We don't use the default diversion (0) at all.
+dnl except that we explicitly undivert AC_DIVERSION_SED.
+dnl 
+dnl AC_DIVERSION_NOTICE - 1 (= 0)	AC_REQUIRE'd #!/bin/sh line
 define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
 define(AC_DIVERSION_INIT, 2)dnl		initialization code
-define(AC_DIVERSION_NORMAL, 3)dnl	the tests and output code
-define(AC_DIVERSION_SED, 6)dnl		variable substitutions in config.status
-divert(AC_DIVERSION_NOTICE)dnl
+define(AC_DIVERSION_SED, 3)dnl		variable substitutions in config.status
+define(AC_DIVERSION_NORMAL_4, 4)dnl	AC_REQUIRE'd code, 4 level deep
+define(AC_DIVERSION_NORMAL_3, 5)dnl	AC_REQUIRE'd code, 3 level deep
+define(AC_DIVERSION_NORMAL_2, 6)dnl	AC_REQUIRE'd code, 2 level deep
+define(AC_DIVERSION_NORMAL_1, 7)dnl	AC_REQUIRE'd code, 1 level deep
+define(AC_DIVERSION_NORMAL, 8)dnl	the tests and output code
 dnl
-dnl Define a macro which automatically provides itself.
-dnl Use instead of define for macros to be used as functions.
+dnl Change the diversion stream to STREAM, while stacking old values.
+dnl AC_DIVERT_PUSH(STREAM)
+define(AC_DIVERT_PUSH,
+[pushdef([AC_DIVERSION_CURRENT], $1)dnl
+divert(AC_DIVERSION_CURRENT)dnl
+])dnl
+dnl
+dnl Change the diversion stream to its previous value, unstacking it.
+dnl AC_DIVERT_POP()
+define(AC_DIVERT_POP,
+[popdef([AC_DIVERSION_CURRENT])dnl
+divert(AC_DIVERSION_CURRENT)dnl
+])dnl
+dnl
+dnl Initialize the diversion setup.
+define(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl	will be later POPed by AC_INIT
+dnl
+dnl The prologue for Autoconf macros.
+dnl AC_PRO(MACRO-NAME)
+define(AC_PRO,
+[define([AC_PROVIDE_$1], )dnl
+ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
+[AC_DIVERT_PUSH(builtin(eval, AC_DIVERSION_CURRENT - 1))],
+[pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_CURRENT)])dnl
+])dnl
+dnl
+dnl The Epilogue for Autoconf macros.
+dnl AC_EPI()
+define(AC_EPI,
+[AC_DIVERT_POP()dnl
+ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
+[undivert(AC_DIVERSION_NORMAL_4)dnl
+undivert(AC_DIVERSION_NORMAL_3)dnl
+undivert(AC_DIVERSION_NORMAL_2)dnl
+undivert(AC_DIVERSION_NORMAL_1)dnl
+])dnl
+])dnl
+dnl
+dnl Define a macro which automatically provides itself.  Add machinery
+dnl so the macro automatically switches expansion to the diversion
+dnl stack if it is not already using it.  In this case, once finished,
+dnl it will bring back all the code accumulated in the diversion stack.
+dnl This, combined with AC_REQUIRE, achieves the topological ordering of
+dnl macros.
 dnl AC_DEFUN(NAME, EXPANSION)
 define([AC_DEFUN],
-[define($1,
-[define([AC_PROVIDE_$1], )][$2])])dnl
+[define($1, [AC_PRO([$1])$2[]AC_EPI()])])dnl
 dnl
 dnl AC_INIT_NOTICE()
 AC_DEFUN(AC_INIT_NOTICE,
@@ -361,7 +407,8 @@ if test -n "$ac_prev"; then
 fi
 ])dnl
 dnl
-dnl Try to have only one #! line, so the script doesn't look funny.
+dnl Try to have only one #! line, so the script doesn't look funny
+dnl for users of AC_REVISION.
 dnl AC_INIT_BINSH()
 AC_DEFUN(AC_INIT_BINSH,
 [#!/bin/sh
@@ -369,12 +416,14 @@ AC_DEFUN(AC_INIT_BINSH,
 dnl
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT,
-[AC_REQUIRE([AC_INIT_BINSH])dnl
+[sinclude(./aclocal.m4)dnl
+AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_INIT_NOTICE
-divert(AC_DIVERSION_INIT)dnl
+AC_DIVERT_POP()dnl	to NORMAL
+AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
 AC_INIT_PARSE_ARGS
 AC_INIT_PREPARE($1)dnl
-divert(AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_POP()dnl	to NORMAL
 ])dnl
 dnl
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
@@ -478,10 +527,10 @@ AC_SUBST(LDFLAGS)dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_ENABLE,
-[divert(AC_DIVERSION_NOTICE)dnl
+[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 ac_help="${ac_help}
 [$2]"
-divert(AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_POP()dnl
 [#] Check whether --enable-$1 or --disable-$1 was given.
 enableval="[$enable_]patsubst($1, -, _)"
 if test -n "$enableval"; then
@@ -499,10 +548,10 @@ AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])dnl
 dnl
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_WITH,
-[divert(AC_DIVERSION_NOTICE)dnl
+[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 ac_help="${ac_help}
 [$2]"
-divert(AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_POP()dnl
 [#] Check whether --with-$1 or --without-$1 was given.
 withval="[$with_]patsubst($1, -, _)"
 if test -n "$withval"; then
@@ -852,19 +901,19 @@ dnl AC_SUBST(VARIABLE)
 AC_DEFUN(AC_SUBST,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
-divert(AC_DIVERSION_SED)dnl
+AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
 s%@$1@%[$]$1%g
-divert(AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_POP()dnl
 ])])dnl
 dnl
 dnl AC_SUBST_FILE(VARIABLE)
 AC_DEFUN(AC_SUBST_FILE,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
-divert(AC_DIVERSION_SED)dnl
+AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
 /@$1@/r [$]$1
 s%@$1@%%g
-divert(AC_DIVERSION_NORMAL)dnl
+AC_DIVERT_POP()dnl
 ])])dnl
 dnl
 dnl
@@ -942,7 +991,11 @@ AC_DEFUN(AC_BEFORE,
 dnl
 dnl AC_REQUIRE(MACRO-NAME)
 AC_DEFUN(AC_REQUIRE,
-[ifdef([AC_PROVIDE_$1], , [indir([$1])])])dnl
+[ifdef([AC_PROVIDE_$1], ,
+[AC_DIVERT_PUSH(builtin(eval, AC_DIVERSION_CURRENT - 1))dnl
+indir([$1])
+AC_DIVERT_POP()dnl
+])])dnl
 dnl
 dnl AC_PROVIDE(MACRO-NAME)
 define(AC_PROVIDE,
@@ -954,7 +1007,7 @@ AC_DEFUN(AC_OBSOLETE,
 )])dnl
 dnl
 dnl
-dnl ### Checking for files - fundamental (caching)
+dnl ### Checking for files (caching)
 dnl
 dnl
 dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
@@ -1025,10 +1078,6 @@ fi
 AC_SUBST($1)dnl
 ])dnl
 dnl
-dnl
-dnl ### Checking for files - derived (caching)
-dnl
-dnl
 dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
@@ -1065,7 +1114,7 @@ if eval "test \"`echo '$ac_cv_lib_'$1`\" = yes"; then
 [changequote(, )dnl
   ac_tr_lib=HAVE_LIB`echo $1 | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
-  AC_DEFINE(${ac_tr_lib})
+  AC_DEFINE_UNQUOTED(${ac_tr_lib})
   LIBS="${LIBS} -l$1"
 ], [$3])
 else
@@ -1106,7 +1155,7 @@ undefine([AC_CV_NAME])dnl
 ])dnl
 dnl
 dnl
-dnl ### Checking for C features - fundamental (no caching)
+dnl ### Checking for C features - primitive (no caching)
 dnl
 dnl
 dnl AC_EGREP_HEADER(PATTERN, HEADER-FILE, ACTION-IF-FOUND [,
