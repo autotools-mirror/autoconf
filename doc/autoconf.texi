@@ -2159,7 +2159,7 @@ The directory for installing read-only single-machine data.
 
 
 Most of these variables have values that rely on @code{prefix} or
-@code{exec_prefix}.  It is on purpose that the directory output
+@code{exec_prefix}.  It is deliberate that the directory output
 variables keep them unexpanded: typically @samp{@@datadir@@} will be
 replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}.
 
@@ -2170,7 +2170,7 @@ the user runs:
 @item make
 she can still specify a different prefix from the one specified to
 @command{configure}, in which case, if needed, the package shall hard
-code dependencies to her late desires.
+code dependencies corresponding to the make-specified prefix.
 
 @item make install
 she can specify a different installation location, in which case the
@@ -2185,9 +2185,9 @@ In order to support these features, it is essential that @code{datadir}
 remains being defined as @samp{$@{prefix@}/share} to depend upon the
 current value of @code{prefix}.
 
-A corollary is that you should not use these variables but in Makefiles.
-For instance, instead of trying to evaluate @code{datadir} in
-@file{configure} and hardcoding it in Makefiles using
+A corollary is that you should not use these variables except in
+Makefiles.  For instance, instead of trying to evaluate @code{datadir}
+in @file{configure} and hardcoding it in Makefiles using
 e.g. @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
