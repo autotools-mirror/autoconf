@@ -1,5 +1,10 @@
 2000-11-08  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (_m4_expansion_stack_dump): Really rename as...
+	(m4_expansion_stack_dump): this.
+
+2000-11-08  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_LANG_PROGRAM(Fortran 77): Complain about $1 having
 	a value.
 	Reported by Paul Martinolich.

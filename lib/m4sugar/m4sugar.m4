@@ -1017,14 +1017,14 @@ m4_divert_pop()dnl
 
 m4_define([_m4_divert(GROW)],       10000)
 
-# _m4_expansion_stack_DUMP
-# ------------------------
+# m4_expansion_stack_dump
+# -----------------------
 # Dump the expansion stack.
-m4_define([_m4_expansion_stack_dump],
+m4_define([m4_expansion_stack_dump],
 [ifdef([_m4_expansion_stack],
        [m4_errprint(m4_defn([_m4_expansion_stack]))dnl
 m4_popdef([_m4_expansion_stack])dnl
-_m4_expansion_stack_dump()],
+m4_expansion_stack_dump()],
        [m4_errprint(m4_location[: the top level])])])
 
 
