@@ -19,10 +19,10 @@
 ## 02111-1307, USA.
 
 man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 \
-autoscan.1 config.guess.1 config.sub.1
+autoscan.1 autom4te.1 config.guess.1 config.sub.1
 
 man_aux = autoconf.x autoreconf.x autoheader.x autoupdate.x ifnames.x \
-autoscan.x config.guess.x config.sub.x
+autoscan.x autom4te.x config.guess.x config.sub.x
 
 EXTRA_DIST = $(man_MANS) $(man_aux) common.x
 MAINTAINERCLEANFILES = $(man_MANS)
@@ -30,11 +30,12 @@ MAINTAINERCLEANFILES = $(man_MANS)
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(top_srcdir)/autoconf.in
-autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(top_srcdir)/autoreconf.in
 autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(top_srcdir)/autoheader.in
+autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(top_srcdir)/autom4te.in
+autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(top_srcdir)/autoreconf.in
+autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.in
 autoupdate.1: $(common_dep) $(srcdir)/autoupdate.x $(top_srcdir)/autoupdate.in
 ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(top_srcdir)/ifnames.in
-autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.in
 
 # Independent from this package.
 config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config/config.guess

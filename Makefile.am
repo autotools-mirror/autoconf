@@ -20,15 +20,15 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
-SUBDIRS = . config m4 man doc tests
+SUBDIRS = . lib config m4 man doc tests
 
 SUFFIXES = .m4 .m4f
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 WGET = wget
 
-bin_SCRIPTS = autoconf autoheader autoreconf ifnames @PERLSCRIPTS@
-EXTRA_SCRIPTS = autoscan autoupdate
+bin_SCRIPTS = autom4te \
+              autoconf autoheader autoreconf ifnames autoscan autoupdate
 
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
@@ -52,7 +52,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
              acversion.in \
              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-             autoscan.in \
+             autoscan.in autom4te.in \
              $(distpkgdataDATA) \
              GNUmakefile Makefile.maint
 
@@ -117,8 +117,9 @@ install-data-hook: INSTALL.txt
 edit = sed \
 	-e 's,@SHELL\@,$(SHELL),g' \
 	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
 	-e 's,@bindir\@,$(bindir),g' \
+	-e 's,@datadir\@,$(pkgdatadir),g' \
+	-e 's,@prefix\@,$(prefix),g' \
 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
 	-e 's,@M4\@,$(M4),g' \
@@ -167,6 +168,11 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.ac
 	chmod +x autoscan.tmp
 	mv autoscan.tmp autoscan
 
+autom4te: $(srcdir)/autom4te.in $(srcdir)/configure.ac
+	rm -f autom4te autom4te.tmp
+	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
+	chmod +x autom4te.tmp
+	mv autom4te.tmp autom4te
 
 ## ------------------ ##
 ## The frozen files.  ##

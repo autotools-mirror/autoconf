@@ -36,11 +36,8 @@ AM_MISSING_PROG(HELP2MAN, help2man)
 # We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)
 AC_SUBST(PERL)dnl
-AC_SUBST(PERLSCRIPTS)dnl
-if test "$PERL" != no; then
-  PERLSCRIPTS="autoscan autoupdate"
-else
-  AC_MSG_WARN([autoscan and autoupdate will not be built since perl is not found])
+if test "$PERL" = no; then
+  AC_MSG_ERROR([perl is not found])
 fi
 
 AC_PROG_INSTALL
@@ -52,6 +49,7 @@ AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
 AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
+                lib/Makefile lib/Autoconf/Makefile
                 tests/Makefile tests/atconfig)
 
 AC_OUTPUT

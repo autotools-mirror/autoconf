@@ -38,12 +38,12 @@ BEGIN
 {
   my $prefix = "@prefix@";
   # FIXME: Import Struct into Autoconf.
-  my $perllibdir = $ENV{'perllibdir'} || "@datadir@/automake";
+  my $perllibdir = $ENV{'perllibdir'} || "@datadir@";
   unshift @INC, "$perllibdir";
 }
 
 use Data::Dumper;
-use Automake::Struct;
+use Autoconf::Struct;
 use Carp;
 use Getopt::Long;
 use IO::File;

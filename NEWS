@@ -1,4 +1,11 @@
-* Major changes in Autoconf 2.52                       -*- outline -*-
+* Major changes in Autoconf 2.52a                       -*- outline -*-
+** Requirements
+  Perl 5.005 is now required to run Autoconf.
+** autom4te
+  New executable, used by the Autoconf suite to cache and speed up
+  some processing.
+
+* Major changes in Autoconf 2.52
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs
