@@ -1497,7 +1497,7 @@ the email to which users should send bug reports.  The package
 package name (e.g., @samp{GNU Autoconf}), while the former is meant for
 distribution tar ball names (e.g., @samp{autoconf}).  It defaults to
 @var{package} once @samp{GNU } strip, lower cased, and all non
-alphanumeric character mapped onto @samp{-}.
+alphanumeric and underscore characters mapped onto @samp{-}.
 
 It is preferable that these arguments be static, i.e., there should not
 be any shell computation, but they can be computed by M4.  The following

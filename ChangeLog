@@ -1,5 +1,11 @@
 2002-07-17  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): `_' is allowed in
+	tarnames.
+	* doc/autoconf.texi (Initializing configure): Adjust.
+
+2002-07-17  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/functions.m4 (AC_FUNC_REALLOC, _AC_FUNC_REALLOC)
 	(_AC_FUNC_MALLOC): New.
 	(AC_FUNC_MALLOC): Use the latter.
