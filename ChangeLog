@@ -1,3 +1,7 @@
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
+	* autoupdate.sh: Typo: s/infile/file/.
+
 2000-07-19  Martin Wilck  <martin@tropos.de>
 
 	* aclang.m4 (AC_F77_NAME_MANGLING): Obsolete, becomes
