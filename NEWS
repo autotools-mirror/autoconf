@@ -1,12 +1,12 @@
 * Major changes in Autoconf 2.57a                       -*- outline -*-
 
-* New macros
+** New macros
   AC_C_RESTRICT
 
-* Improve DJGPP portability
+** Improve DJGPP portability
   The Autoconf tools and configure behave better under DJGPP.
 
-* Present But Cannot Be Compiled
+** Present But Cannot Be Compiled
   New FAQ section dedicated to the mystic
 
     configure: WARNING: pi.h: present but cannot be compiled
@@ -14,11 +14,16 @@
     configure: WARNING: pi.h: proceeding with the preprocessor's result
       messages.
 
-* Concurrent executions of autom4te
+** Concurrent executions of autom4te
   autom4te now locks its internal files, which enables concurrent
   executions of autom4te, likely to happen if automake, autoconf,
   autoheader etc. are run simultaneously.
 
+** Libtool
+  Use of Libtool 1.5 and higher is encouraged.  Compatibility with
+  Libtool pre-1.4 is not checked.
+
+
 * Major changes in Autoconf 2.57
 
   Released 2002-12-03 by Paul Eggert.
