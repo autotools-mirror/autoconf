@@ -1,3 +1,8 @@
+2000-06-09  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE): Always initialize
+	$3 to no
+
 2000-06-08  Paul Eggert  <eggert@twinsun.com>
 
 	Import AC_SYS_LARGEFILE from largefile.m4 serial 12.

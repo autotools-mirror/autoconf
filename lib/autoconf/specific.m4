@@ -2113,12 +2113,12 @@ int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];],
 define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
+  $3=no
   AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([$5], [$6])],
   		    [break])
   AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([@%:@define $1 $2
 $5], [$6])],
   		    [$3=$2; break])
-  $3=no
   break
 done])
 if test "$$3" != no; then
