@@ -1,5 +1,27 @@
 2004-08-20  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Version 2.59b.
+
+	* README: Add advice about m4 1.4.2.
+
+	* Makefile.cfg (wget_files): Remove config.guess, config.sub,
+	texinfo.tex for now (done by hand now).
+	* Makefile.maint (wget_files, cvs_files):
+	Remove ansi2knr.c; nobody uses it.
+	(ansi2knr.c-url_prefix): Remove.
+	(cvs-update): Fix test for failure.  I don't know why it ever
+	worked...
+	
+	* doc/autoconf.texi: Update URLs, some of which went stale.
+	Use @uref rather than @href.
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Have configure
+	handle "--" as per POSIX.  Suggested by Paul Pogonyshev.
+
+	* config/config.guess, config/config.sub, config/elisp-comp,
+	config/install-sh, config/mkinstalldirs, config/texinfo.tex,
+	doc/fdl.texi, doc/standards.texi: Sync with master copy.
+
 	* NEWS, TODO, configure.ac, bin/autoscan.in,
 	bin/autoupdate.in, bin/ifnames.in, doc/autoconf.texi,
 	doc/install.texi, lib/Autom4te/Configure_ac.pm,

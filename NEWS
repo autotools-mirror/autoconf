@@ -1,5 +1,7 @@
 * Major changes in Autoconf 2.59b
 
+  Released 2004-08-20, by Paul Eggert.
+
 ** AC_CHECK_ALIGNOF
   New macro that computes the default alignment of a type.
 
@@ -15,8 +17,6 @@
 
 ** AC_REQUIRE_AUX_FILE
   New trace macro that declares expected auxiliary files.
-
-* Major changes in Autoconf 2.59a
 
 ** AC_PROG_GREP
   New macro that tests for a grep program that accepts as a long a line
