@@ -95,6 +95,9 @@ test cases in this new frame work.
   Most macros, if not all, now strictly follow the `one quotation
   level' rule.  This results in a more predictable expansion.
 
+- AC_REQUIRE
+  A sly bug in the AC_REQUIRE machinery, which could produce incorrect
+  configure scripts, was fixed by Axel Thimm.
 
 ** Setup Macros
 - AC_ARG_VAR

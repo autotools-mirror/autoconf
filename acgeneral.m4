@@ -187,15 +187,301 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 ## Defining macros in autoconf::.  ##
 ## ------------------------------- ##
 
+# `AC_DEFUN' is basically `define' but it equips the macro with the
+# needed machinery for `AC_REQUIRE'.  A macro must be AC_DEFUN'd if
+# either it is AC_REQUIRE'd, or it AC_REQUIRE's.
+#
+# Of course AC_DEFUN AC_PROVIDE's the macro, so that a macro which has
+# been expanded is not expanded again when AC_REQUIRE'd, but the
+# difficult part is the proper expansion of macros when they are
+# AC_REQUIRE'd.
+#
+# The implementation is based on two ideas, (i) using diversions to
+# prepare the expansion of the macro and its dependencies (by François
+# Pinard), and (ii) expand the most recently AC_REQUIRE'd macros _after_
+# the previous macros (by Axel Thimm).
+#
+#
+# The first idea: why using diversions?
+# -------------------------------------
+#
+# When a macro requires another, the other macro is expanded in new
+# diversion, NORMAL_1.  When the outer macro is fully expanded, we first
+# undivert the most nested diversions (NORMAL_2...), and finally
+# undivert NORMAL_1.  To understand why we need several diversions,
+# consider the following example:
+#
+# | AC_DEFUN([TEST1], [Test...REQUIRE([TEST2])1])
+# | AC_DEFUN([TEST2], [Test...REQUIRE([TEST3])2])
+# | AC_DEFUN([TEST3], [Test...3])
+#
+# Because AC_REQUIRE is not required to be first in the outer macros, we
+# must keep the expansions of the various level of AC_REQUIRE separated.
+# Right before executing the epilogue of TEST1, we have:
+#
+# 	   NORMAL_3: Test...3
+# 	   NORMAL_1: Test...2
+# 	   NORMAL_1: Test...1
+# 	   NORMAL:
+#
+# Finally the epilogue of TEST1 undiverts NORMAL_3, 2, and 1 into the
+# regular flow, NORMAL.
+#
+# 	   NORMAL_3:
+# 	   NORMAL_1:
+# 	   NORMAL_1:
+# 	   NORMAL: Test...3; Test...2; Test...1
+#
+# (The semicolons are here for clarification, but of course are not
+# emitted.)  This is what Autoconf 2.0 (I think) to 2.13 (I'm sure)
+# implement.
+#
+#
+# The second idea: first required first out
+# -----------------------------------------
+#
+# The natural implementation of the idea above is buggy and produces
+# very surprising results in some situations.  Let's consider the
+# following example to explain the bug:
+#
+# | AC_DEFUN([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
+# | AC_DEFUN([TEST2a], [])
+# | AC_DEFUN([TEST2b], [REQUIRE([TEST3])])
+# | AC_DEFUN([TEST3],  [REQUIRE([TEST2a])])
+# |
+# | AC_INIT
+# | TEST1
+#
+# The dependencies between the macros are:
+#
+# 		 3 --- 2b
+# 		/        \              is AC_REQUIRE'd by
+# 	       /          \       left -------------------- right
+# 	    2a ------------ 1
+#
+# If you strictly apply the rules given in the previous section you get:
+#
+# 	   NORMAL_3: TEST3
+# 	   NORMAL_2: TEST2a; TEST2b
+# 	   NORMAL_1: TEST1
+# 	   NORMAL:
+#
+# (TEST2a, although required by TEST3 is not expanded in NORMAL_4
+# because is has already been expanded before in NORMAL_2, so it has
+# been AC_PROVIDE'd, so it is not expanded again) so when you undivert
+# the stack of diversions, you get:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2:
+# 	   NORMAL_1:
+# 	   NORMAL: TEST3; TEST2a; TEST2b; TEST1
+#
+# i.e., TEST2a is expanded after TEST3 although the latter required the
+# former.
+#
+# Starting from 2.50, uses an implementation provided by Axel Thimm.
+# The idea is simple: the order in which macros are emitted must be the
+# same as the one in which macro are expanded.  (The bug above can
+# indeed be described as: a macro has been AC_PROVIDE'd, but it is
+# emitted after: the lack of correlation between emission and expansion
+# order is guilty).
+#
+# How to do that?  You keeping the stack of diversions to elaborate the
+# macros, but each time a macro is fully expanded, emit it immediately.
+#
+# In the example above, when TEST2a is expanded, but it's epilogue is
+# not run yet, you have:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2: TEST2a
+# 	   NORMAL_1: Elaboration of TEST1
+# 	   NORMAL:
+#
+# The epilogue of TEST2a emits it immediately:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2:
+# 	   NORMAL_1: Elaboration of TEST1
+# 	   NORMAL:   TEST2a
+#
+# TEST2b then requires TEST3, so right before the epilogue of TEST3, you
+# have:
+#
+# 	   NORMAL_3: TEST3
+# 	   NORMAL_2: Elaboration of TEST2b
+# 	   NORMAL_1: Elaboration of TEST1
+# 	   NORMAL:   TEST2a
+#
+# The epilogue of TEST3 emits it:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2: Elaboration of TEST2b
+# 	   NORMAL_1: Elaboration of TEST1
+# 	   NORMAL:   TEST2a; TEST3
+#
+# TEST2b is now completely expanded, and emitted:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2:
+# 	   NORMAL_1: Elaboration of TEST1
+# 	   NORMAL:   TEST2a; TEST3; TEST2b
+#
+# and finally, TEST1 is finished and emitted:
+#
+# 	   NORMAL_3:
+# 	   NORMAL_2:
+# 	   NORMAL_1:
+# 	   NORMAL:   TEST2a; TEST3; TEST2b: TEST1
+#
+# The idea, is simple, but the implementation is a bit evolved.  If you
+# are like me, you will want to see the actual functioning of this
+# implementation to be convinced.  The next section gives the full
+# details.
+#
+#
+# The Axel Thimm implementation at work
+# -------------------------------------
+#
+# We consider the macros above, and this configure.in:
+#
+# 	    AC_INIT
+# 	    TEST1
+#
+# You should keep the definitions of _AC_DEFUN_PRO, _AC_DEFUN_EPI, and
+# AC_REQUIRE at hand to follow the steps.
+#
+# This implements tries not to assume that of the current diversion is
+# NORMAL, so as soon as a macro (AC_DEFUN'd) is expanded, we first
+# record the current diversion under the name _AC_DIVERT_DUMP (denoted
+# DUMP below for short).  This introduces an important difference with
+# the previous versions of Autoconf: you cannot use AC_REQUIRE if you
+# were not inside an AC_DEFUN'd macro, and especially, you cannot
+# AC_REQUIRE directly from the top level.
+#
+# We have not tried to simulate the old behavior (better yet, we
+# diagnose it), because it is too dangerous: a macro AC_REQUIRE'd from
+# the top level is expanded before the body of `configure', i.e., before
+# any other test was run.  I let you imagine the result of requiring
+# AC_STDC_HEADERS for instance, before AC_PROG_CC was actually run....
+#
+# After AC_INIT was run, the current diversion is NORMAL.
+# * AC_INIT was run
+#   DUMP:                undefined
+#   diversion stack:     NORMAL |-
+#
+# * TEST1 is expanded
+# The prologue of TEST1 sets AC_DIVERSION_DUMP, which is the diversion
+# where the current elaboration will be dumped, to the current
+# diversion.  It also AC_DIVERT_PUSH to NORMAL_1, where the full
+# expansion of TEST1 and its dependencies will be elaborated.
+#   DUMP:       NORMAL
+#   NORMAL:     empty
+#   diversions: NORMAL_1, NORMAL |-
+#
+# * TEST1 requires TEST2a: prologue
+# AC_REQUIRE AC_DIVERT_PUSHes another temporary diversion NORMAL_2 (in
+# fact, the diversion whose number is one less than the current
+# diversion), and expands TEST2a in there.
+#   DUMP:       NORMAL
+#   NORMAL:     empty
+#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST2a is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       NORMAL
+#   NORMAL:     empty
+#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# It is expanded in NORMAL_2, and NORMAL_2 is popped by the epilogue
+# of TEST2a.
+#   DUMP:       NORMAL
+#   NORMAL:     nothing
+#   NORMAL_2:   TEST2a
+#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST1 requires TEST2a: epilogue
+# The content of the current diversion is appended to DUMP (and removed
+# from the current diversion).  A diversion is popped.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   diversions: NORMAL_1, NORMAL |-
+#
+# * TEST1 requires TEST2b: prologue
+# AC_REQUIRE pushes NORMAL_2 and expands TEST2b.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST2b is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# The body is expanded here.
+#
+# * TEST2b requires TEST3: prologue
+# AC_REQUIRE pushes NORMAL_3 and expands TEST3.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   diversions: NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST3 is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   diversions: NORMAL_3, NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# TEST3 requires TEST2a, but TEST2a has already been AC_PROVIDE'd, so
+# nothing happens.  It's body is expanded here, and its epilogue pops a
+# diversion.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a
+#   NORMAL_3:   TEST3
+#   diversions: NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST2b requires TEST3: epilogue
+# The current diversion is appended to DUMP, and a diversion is popped.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a; TEST3
+#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# The content of TEST2b is expanded here.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a; TEST3
+#   NORMAL_2:   TEST2b,
+#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# The epilogue of TEST2b pops a diversion.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a; TEST3
+#   NORMAL_2:   TEST2b,
+#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#
+# * TEST1 requires TEST2b: epilogue
+# The current diversion is appended to DUMP, and a diversion is popped.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a; TEST3; TEST2b
+#   diversions: NORMAL_1, NORMAL |-
+#
+# * TEST1 is expanded: epilogue
+# TEST1's own content is in NORMAL_1, and it's epilogue pops a diversion.
+#   DUMP:       NORMAL
+#   NORMAL:     TEST2a; TEST3; TEST2b
+#   NORMAL_1:   TEST1
+#   diversions: NORMAL |-
+# Here, the epilogue of TEST1 notices the elaboration is done because
+# DUMP and the current diversion are the same, it then undiverts
+# NORMAL_1 by hand, and undefines DUMP.
+#   DUMP:       undefined
+#   NORMAL:     TEST2a; TEST3; TEST2b; TEST1
+#   diversions: NORMAL |-
+
 
 # _AC_DEFUN_PRO(MACRO-NAME)
 # -------------------------
 # The prologue for Autoconf macros.
 define([_AC_DEFUN_PRO],
 [AC_PROVIDE([$1])dnl
-ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
-       [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))],
-       [pushdef([AC_DIVERT_DIVERSION], AC_DIVERT_DIVERSION)])dnl
+ifdef([_AC_DIVERT_DUMP],
+      [AC_DIVERT_PUSH(defn([AC_DIVERT_DIVERSION]))],
+      [define([_AC_DIVERT_DUMP], defn([AC_DIVERT_DIVERSION]))dnl
+AC_DIVERT_PUSH([NORMAL_1])])dnl
 ])
 
 
@@ -205,12 +491,9 @@ ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
 # the PRO/EPI pairs.
 define([_AC_DEFUN_EPI],
 [AC_DIVERT_POP()dnl
-ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
-[undivert(_AC_DIVERT([NORMAL_4]))dnl
-undivert(_AC_DIVERT([NORMAL_3]))dnl
-undivert(_AC_DIVERT([NORMAL_2]))dnl
-undivert(_AC_DIVERT([NORMAL_1]))dnl
-])dnl
+ifelse(_AC_DIVERT_DUMP, AC_DIVERT_DIVERSION,
+       [undivert(_AC_DIVERT([NORMAL_1]))dnl
+undefine([_AC_DIVERT_DUMP])])dnl
 ])
 
 
@@ -270,11 +553,16 @@ define([AC_BEFORE],
 # AC_REQUIRE(MACRO-NAME)
 # ----------------------
 # If MACRO-NAME has never been expanded, expand it *before* the current
-# macro expansion.
+# macro expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.
 define([AC_REQUIRE],
-[AC_PROVIDE_IFELSE([$1],
-                   [],
-                   [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])dnl
+[ifndef([_AC_DIVERT_DUMP],
+        [AC_FATAL([$0: cannot be used out of an AC_DEFUN'd macro])])dnl
+AC_PROVIDE_IFELSE([$1],
+                  [],
+                  [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))dnl
+$1
+divert(_AC_DIVERT_DUMP)undivert(AC_DIVERT_DIVERSION)dnl
+AC_DIVERT_POP()])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
                   [AC_DIAGNOSE([syntax],

@@ -6,8 +6,8 @@ Base layer.
 
 EOF
 
-# AU_DEFUN
-# --------
+# m4_wrap
+# -------
 
 AT_SETUP(m4_wrap)
 
@@ -50,5 +50,45 @@ First, second , third, [,quoted]
 
 AT_CHECK([$M4 -I $at_top_srcdir libm4.in], 0, expout)
 
-
 AT_CLEANUP()
+
+
+
+# AC_REQUIRE
+# ----------
+
+# Check that dependencies are always properly honored.
+
+AT_SETUP(AC_REQUIRE)
+
+AT_DATA(configure.in,
+[[define([REQUIRE_AND_CHECK],
+[AC_REQUIRE([$1])dnl
+test -z "$translit([$1], [A-Z], [a-z])" && exit 1])
+
+AC_DEFUN([TEST1],
+[REQUIRE_AND_CHECK([TEST2a])
+REQUIRE_AND_CHECK([TEST2b])
+test1=set])
+
+AC_DEFUN([TEST2a],
+[test2a=set])
+
+AC_DEFUN([TEST2b],
+[REQUIRE_AND_CHECK([TEST3])
+test2b=set])
+
+AC_DEFUN([TEST3],
+[REQUIRE_AND_CHECK([TEST2a])
+test3=set])
+
+AC_DIVERT_POP()
+TEST1
+test -z "$test1" && exit 1
+exit 0
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0, [], [])
+AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure)

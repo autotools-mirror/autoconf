@@ -1,5 +1,28 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	The current implementation of AC_REQUIRE fails on
+
+	| AC_DEFUN([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
+	| AC_DEFUN([TEST2a], [])
+	| AC_DEFUN([TEST2b], [REQUIRE([TEST3])])
+	| AC_DEFUN([TEST3],  [REQUIRE([TEST2a])])
+	|
+	| AC_INIT
+	| TEST1
+
+	because it produces TEST3; TEST2a; TEST2b; TEST1.
+	Fix this bug, implement the solution provided by Axel Thimm,
+	and test AC_REQUIRE.
+
+	* acgeneral.m4: Document this implementation.
+	(_AC_DEFUN_PRO, _AC_DEFUN_EPI, AC_REQUIRE): Be sure that macros
+	are emitted in the same order as they are expanded.
+	(AC_REQUIRE): Forbid being calling out of an AC_DEFUN'd	macro (in
+	particular the top level).
+	* tests/base.m4 (AC_REQUIRE): New test.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	A macro which is not defined with AC_DEFUN should not be
 	AC_REQUIRE'd, since it doesn't AC_PROVIDE itself.
 
