@@ -26,7 +26,9 @@ undefine([include])dnl
 undefine([shift])dnl
 undefine([format])dnl
 dnl
-ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
+ifdef([__gnu__], , [errprint(Autoconf requires GNU m4.
+Install it before installing Autoconf or set the
+M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
 define(AC_ACVERSION, 1.97)dnl
