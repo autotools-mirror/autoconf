@@ -4305,5 +4305,5 @@ ifelse([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
     fi
   done
 
-  AC_SHELL_IFELSE([test x"ac_$exists" = xtrue], [$3], [$4])
+  AC_SHELL_IFELSE([test x"$ac_exists" = xtrue], [$3], [$4])
 ])

@@ -1,5 +1,9 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_LIST_MEMBER_OF): s/ac_$exists/$ac_exists/!
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 	* acspecific.m4: Likewise.
 
