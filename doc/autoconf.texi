@@ -4179,6 +4179,17 @@ file in a site file, it is a good idea to also set the output variable
 @code{CC} in that site file, because the cache file is only valid for a
 particular compiler, but many systems have several available.
 
+You can examine or override the value set by a command line option to
+@code{configure} in a site file; options set shell variables that have
+the same names as the options, with any dashes turned into underscores.
+The exceptions are that @samp{--without-} and @samp{--disable-} options
+are like giving the corresponding @samp{--with-} or @samp{--enable-}
+option and the value @samp{no}.  Thus, @samp{--cache-file=localcache}
+sets the variable @code{cache_file} to the value @samp{localcache};
+@samp{--enable-warnings=no} or @samp{--disable-warnings} sets the variable
+@code{enable_warnings} to the value @samp{no}; @samp{--prefix=/usr} sets the
+variable @code{prefix} to the value @samp{/usr}; etc.
+
 Site files are also good places to set default values for other output
 variables, such as @code{CFLAGS}, if you need to give them non-default
 values: anything you would normally do, repetitively, on the command
