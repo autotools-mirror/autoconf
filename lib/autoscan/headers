@@ -1,5 +1,5 @@
 # acheaders -- autoscan's mapping from headers to Autoconf macros
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -21,80 +21,80 @@
 # unclear to me --akim.
 
 # Ones that have their own macros.
-X11/Xlib.h	AC_PATH_X
+X11/Xlib.h      AC_PATH_X
 alloca.h        AC_FUNC_ALLOCA
-dirent.h	AC_HEADER_DIRENT
-float.h		AC_HEADER_STDC
-float.h		AC_CHECK_HEADERS
-ndir.h		AC_HEADER_DIRENT
-stdarg.h	AC_HEADER_STDC
-stddef.h	AC_HEADER_STDC
-stddef.h	AC_CHECK_HEADERS
-stdlib.h	AC_HEADER_STDC
-stdlib.h	AC_CHECK_HEADERS
-string.h	AC_HEADER_STDC
-string.h	AC_CHECK_HEADERS
-sys/dir.h	AC_HEADER_DIRENT
-sys/mkdev.h	AC_HEADER_MAJOR
-sys/ndir.h	AC_HEADER_DIRENT
-sys/wait.h	AC_HEADER_SYS_WAIT
+dirent.h        AC_HEADER_DIRENT
+float.h         AC_HEADER_STDC
+float.h         AC_CHECK_HEADERS
+ndir.h          AC_HEADER_DIRENT
+stdarg.h        AC_HEADER_STDC
+stddef.h        AC_HEADER_STDC
+stddef.h        AC_CHECK_HEADERS
+stdlib.h        AC_HEADER_STDC
+stdlib.h        AC_CHECK_HEADERS
+string.h        AC_HEADER_STDC
+string.h        AC_CHECK_HEADERS
+sys/dir.h       AC_HEADER_DIRENT
+sys/mkdev.h     AC_HEADER_MAJOR
+sys/ndir.h      AC_HEADER_DIRENT
+sys/wait.h      AC_HEADER_SYS_WAIT
 
 # Others, checked with AC_CHECK_HEADERS.
-OS.h
-argz.h
-arpa/inet.h
+OS.h                    AC_CHECK_HEADERS
+argz.h                  AC_CHECK_HEADERS
+arpa/inet.h             AC_CHECK_HEADERS
 # errno.h is portable.
-fcntl.h
-fenv.h
-fs_info.h
-inttypes.h
-langinfo.h
-libintl.h
-limits.h
-locale.h
-mach/mach.h
-malloc.h
-memory.h
-mntent.h
-mnttab.h
-netdb.h
-netinet/in.h
-nl_types.h
-nlist.h
-paths.h
-sgtty.h
-shadow.h
-stdint.h
-stdio_ext.h
-strings.h
-sys/acl.h
-sys/file.h
-sys/filsys.h
-sys/fs/s5param.h
-sys/fs_types.h
-sys/fstyp.h
-sys/ioctl.h
-sys/mntent.h
-sys/mount.h
-sys/param.h
-sys/socket.h
-sys/statfs.h
-sys/statvfs.h
-sys/systeminfo.h
-sys/time.h
-sys/timeb.h
-sys/vfs.h
-sys/window.h
-syslog.h
-termio.h
-termios.h
-unistd.h
-utime.h
-utmp.h
-utmpx.h
-values.h
-wchar.h
-wctype.h
+fcntl.h                 AC_CHECK_HEADERS
+fenv.h                  AC_CHECK_HEADERS
+fs_info.h               AC_CHECK_HEADERS
+inttypes.h              AC_CHECK_HEADERS
+langinfo.h              AC_CHECK_HEADERS
+libintl.h               AC_CHECK_HEADERS
+limits.h                AC_CHECK_HEADERS
+locale.h                AC_CHECK_HEADERS
+mach/mach.h             AC_CHECK_HEADERS
+malloc.h                AC_CHECK_HEADERS
+memory.h                AC_CHECK_HEADERS
+mntent.h                AC_CHECK_HEADERS
+mnttab.h                AC_CHECK_HEADERS
+netdb.h                 AC_CHECK_HEADERS
+netinet/in.h            AC_CHECK_HEADERS
+nl_types.h              AC_CHECK_HEADERS
+nlist.h                 AC_CHECK_HEADERS
+paths.h                 AC_CHECK_HEADERS
+sgtty.h                 AC_CHECK_HEADERS
+shadow.h                AC_CHECK_HEADERS
+stdint.h                AC_CHECK_HEADERS
+stdio_ext.h             AC_CHECK_HEADERS
+strings.h               AC_CHECK_HEADERS
+sys/acl.h               AC_CHECK_HEADERS
+sys/file.h              AC_CHECK_HEADERS
+sys/filsys.h            AC_CHECK_HEADERS
+sys/fs/s5param.h        AC_CHECK_HEADERS
+sys/fs_types.h          AC_CHECK_HEADERS
+sys/fstyp.h             AC_CHECK_HEADERS
+sys/ioctl.h             AC_CHECK_HEADERS
+sys/mntent.h            AC_CHECK_HEADERS
+sys/mount.h             AC_CHECK_HEADERS
+sys/param.h             AC_CHECK_HEADERS
+sys/socket.h            AC_CHECK_HEADERS
+sys/statfs.h            AC_CHECK_HEADERS
+sys/statvfs.h           AC_CHECK_HEADERS
+sys/systeminfo.h        AC_CHECK_HEADERS
+sys/time.h              AC_CHECK_HEADERS
+sys/timeb.h             AC_CHECK_HEADERS
+sys/vfs.h               AC_CHECK_HEADERS
+sys/window.h            AC_CHECK_HEADERS
+syslog.h                AC_CHECK_HEADERS
+termio.h                AC_CHECK_HEADERS
+termios.h               AC_CHECK_HEADERS
+unistd.h                AC_CHECK_HEADERS
+utime.h                 AC_CHECK_HEADERS
+utmp.h                  AC_CHECK_HEADERS
+utmpx.h                 AC_CHECK_HEADERS
+values.h                AC_CHECK_HEADERS
+wchar.h                 AC_CHECK_HEADERS
+wctype.h                AC_CHECK_HEADERS
 
 # Local Variables:
 # mode: shell-script

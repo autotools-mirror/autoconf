@@ -165,12 +165,11 @@ sub init_tables ()
 	    if /^\s*$/ || /^\s*\#/;
 
 	  # '<word>        <macro invocation>' or...
-	  # '<word>        warn: <message>'    or...
-	  # '<word>'.
-	  if (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
+	  # '<word>        warn: <message>'.
+	  if (/^(\S+)\s+(\S.*)$/)
 	    {
 	      my $word = $1;
-	      my $macro = $2 || $generic_macro{$kind};
+	      my $macro = $2;
 	      # The default macro must be explicitly listed for words
 	      # which have a specific macros.  This allows to enforce
 	      # consistency checks.
