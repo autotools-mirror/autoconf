@@ -1,5 +1,22 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Improve support of name spaces in libm4.  Put the m4 builtins
+	in the `libm4' name space.
+
+	* libm4 (m4_changequote, m4_define, m4_defn, m4_dnl, m4_indir,
+	m4_undefine): Private copies in the global name space.  Used by
+	the name space mechanisms.
+	(m4_namespace_register): New macro.
+	(m4_namespace_define): Use it.
+	(builtin, changequote, defn, dnl, esyscmd, ifdef, ifelse, indir,
+	patsubst, popdef, pushdef, regexp, undefine, syscmd, sysval): Put
+	in the `libm4' name space.
+	(m4_disable, m4_enable): Use the private m4_indir, otherwise once
+	`libm4' closed, there is no `indir' available, and therefore no
+	means to reopen a name space.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Output really nothing if AC_INIT was not given.  Unconditional
 	output can be problematic with autoupdate.
 

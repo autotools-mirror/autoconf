@@ -61,18 +61,9 @@ m4exit(2)])
 
 
 
-## ---------------------------------------------- ##
-## Defining macros and disabling/enabling libm4.  ##
-## ---------------------------------------------- ##
-
-# Private copies of the macros we used in disabling/enabling libm4.
-# It is much more convenient than fighting with the renamed version
-# of define etc.
-
-define([m4_dnl],      defn([dnl]))
-define([m4_define],   defn([define]))
-define([m4_undefine], defn([undefine]))
-define([m4_defn],     defn([defn]))
+## --------------------------------- ##
+## Defining macros and name spaces.  ##
+## --------------------------------- ##
 
 # Name spaces.
 
@@ -110,19 +101,38 @@ m4_define([m4_namespace_pop],  [popdef([m4_namespace])])
 m4_namespace_push([libm4])
 
 
+# Private copies of the macros we used in entering / exiting the
+# libm4 name space.  It is much more convenient than fighting with
+# the renamed version of define etc.
+
+define([m4_changequote], defn([changequote]))
+define([m4_define],      defn([define]))
+define([m4_defn],        defn([defn]))
+define([m4_dnl],         defn([dnl]))
+define([m4_indir],       defn([indir]))
+define([m4_undefine],    defn([undefine]))
+
+
+# m4_namespace_register(NAMESPACE, NAME)
+# --------------------------------------
+#
+# Register NAME in NAMESPACE, i.e., append the binding/unbinding in
+# `m4_disable(NAMESPACE)'/`m4_enable(NAMESPACE)'.
+m4_define([m4_namespace_register],
+[m4_define([m4_disable($1)],
+           m4_defn([m4_disable($1)])[m4_undefine([$2])])dnl
+m4_define([m4_enable($1)],
+           m4_defn([m4_enable($1)])[m4_define([$2], m4_defn([$1::$2]))])dnl
+])
+
+
 # m4_namespace_define(NAMESPACE, NAME, VALUE)
 # -------------------------------------------
 #
-# Assign VALUE to NAME in NAMESPACE, and append the binding/unbinding
-# in `m4_disable(NAMESPACE)'/`m4_enable(NAMESPACE)'.
+# Assign VALUE to NAME in NAMESPACE, and register it.
 m4_define([m4_namespace_define],
 [m4_define([$1::$2], [$3])dnl
-m4_define([m4_disable($1)],
-defn([m4_disable($1)])dnl
-[m4_undefine([$2])])dnl
-m4_define([m4_enable($1)],
-defn([m4_enable($1)])dnl
-[m4_define([$2], defn([$1::$2]))])dnl
+m4_namespace_register([$1], [$2])dnl
 ])
 
 
@@ -135,19 +145,48 @@ m4_define([define],
 m4_define([$1], [$2])dnl
 ])
 
+# Register define too.
+m4_namespace_register(libm4, [define])
+
+
+# Put the m4 builtins into the `libm4' name space.  We cannot use `define'
+# here because of the very special handling of `defn' for builtins.
+# The following macro is useless but here, so undefine once done.
+m4_define(m4_namespace_builtin,
+[m4_define([libm4::$1], defn([$1]))
+m4_namespace_register(libm4, [$1])])
+
+m4_namespace_builtin([builtin])
+m4_namespace_builtin([changequote])
+m4_namespace_builtin([defn])
+m4_namespace_builtin([dnl])
+m4_namespace_builtin([esyscmd])
+m4_namespace_builtin([ifdef])
+m4_namespace_builtin([ifelse])
+m4_namespace_builtin([indir])
+m4_namespace_builtin([patsubst])
+m4_namespace_builtin([popdef])
+m4_namespace_builtin([pushdef])
+m4_namespace_builtin([regexp])
+m4_namespace_builtin([undefine])
+m4_namespace_builtin([syscmd])
+m4_namespace_builtin([sysval])
+
+m4_undefine([m4_namespace_builtin])
+
 
 # m4_disable(NAMESPACE)
 # ---------------------
 #
 # Undefine all the macros of NAMESPACE.
-m4_define([m4_disable], [indir([m4_disable($1)])])
+m4_define([m4_disable], [m4_indir([m4_disable($1)])])
 
 
 # m4_enable(NAMESPACE)
 # --------------------
 #
 # Restore all the macros of NAMESPACE.
-m4_define([m4_enable], [indir([m4_enable($1)])])
+m4_define([m4_enable], [m4_indir([m4_enable($1)])])
 
 
 # m4_rename(SRC, DST)
