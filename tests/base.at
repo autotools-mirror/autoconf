@@ -226,15 +226,15 @@ AT_SETUP([AC_TRY_*])
 AT_DATA([configure.ac],
 [[AC_INIT
 
-if AC_TRY_COMMAND([(echo "The Cat in the Hat"
+if AC_TRY_COMMAND([(echo "The Cat in the Hat";
                     echo "The Hat in the Cat" >&2)
                   | grep ^The\ Cat\ in\ the\ Hat\$ >/dev/null]); then
-  # Cool!
+  :
 else
   AC_MSG_ERROR([Didn't see the Cat in the Hat!])
 fi
 
-if AC_TRY_COMMAND([(echo "The Cat in the Hat"
+if AC_TRY_COMMAND([(echo "The Cat in the Hat";
                     echo "The Hat in the Cat" >&2)
                   | grep ^The\ Hat\ in\ the\ Cat\$ >/dev/null]); then
   AC_MSG_ERROR([Saw the Hat in the Cat!])

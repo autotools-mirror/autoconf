@@ -1,3 +1,9 @@
+2001-02-03  Pavel Roskin  <proski@gnu.org>
+
+	* tests/base.at (AC_TRY_COMMAND): Add a colon between "then" and
+	"else". Separate commands inside AC_TRY_COMMAND with semicolons.
+	From Nicolas Joly.
+
 2001-02-03  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_LOG_COMPLETE): Removed, dead code.
