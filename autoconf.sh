@@ -137,7 +137,7 @@ $M4 -I$AC_MACRODIR $use_localdir $r autoconf.m4$f $infile > $tmpout ||
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do
 # alternation.
-pattern="AC_"
+pattern="A[CHM]_"
 
 status=0
 if grep "^[^#]*${pattern}" $tmpout > /dev/null 2>&1; then

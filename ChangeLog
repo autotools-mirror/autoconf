@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (Looking for bugs): In addition to AC_, match AH_
+	and AM_.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Provide the m4 infrastructure for defining AH_ hooks.
 
 	* autoheader.m4 (AH_HOOK): New macro.
