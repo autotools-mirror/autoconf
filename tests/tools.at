@@ -73,12 +73,12 @@ AT_CHECK([/bin/sh ./syntax.sh])
 # Specify the path to the tool, some shells don't honor PATH when
 # running `sh PROG'.
 
-AT_CHECK([/bin/sh -n ../bin/autoconf],   0)
+AT_CHECK([/bin/sh -n $top_buildpath/bin/autoconf],   0)
 
 # These are not built, they are in the src tree.
-AT_CHECK([/bin/sh -n $top_srcdir/config/install-sh], 0)
-AT_CHECK([/bin/sh -n $top_srcdir/config/mkinstalldirs], 0)
-AT_CHECK([/bin/sh -n $top_srcdir/config/missing], 0)
+AT_CHECK([/bin/sh -n $top_srcpath/config/install-sh], 0)
+AT_CHECK([/bin/sh -n $top_srcpath/config/mkinstalldirs], 0)
+AT_CHECK([/bin/sh -n $top_srcpath/config/missing], 0)
 
 AT_CLEANUP
 
@@ -96,7 +96,7 @@ AT_SETUP([Syntax of the Perl scripts])
 # | ./autom4te syntax OK
 # Ignore it, it might change between releases.
 m4_define([AT_CHECK_PERL_SYNTAX],
-[AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/$1],
+[AT_CHECK([autom4te_perllibdir=$top_srcpath/lib $PERL -c $top_buildpath/bin/$1],
           0, [], [ignore])])
 
 AT_CHECK_PERL_SYNTAX([autoheader])

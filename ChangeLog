@@ -1,5 +1,10 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at: Use absolute paths, since we are no longer run
+	in place.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	Now that tests are running in their own private dir, there is no
 	need to list the files to remove at the end of tests groups.
 
