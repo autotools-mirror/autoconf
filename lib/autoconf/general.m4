@@ -2786,8 +2786,8 @@ _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 # AC_MSG_WARN(PROBLEM)
 # --------------------
 define([AC_MSG_WARN],
-[_AC_ECHO([configure:__oline__: WARNING: $1], AC_FD_LOG)
-_AC_ECHO([configure: WARNING: $1], 2)])
+[{ _AC_ECHO([configure:__oline__: WARNING: $1], AC_FD_LOG)
+_AC_ECHO([configure: WARNING: $1], 2); }])
 
 
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
