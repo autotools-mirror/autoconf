@@ -117,4 +117,4 @@ exit 0
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
-AT_CLEANUP(configure 1)
+AT_CLEANUP(configure 1 a)
