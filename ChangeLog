@@ -1,3 +1,8 @@
+2001-07-19  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Cache Checkpointing): Use AC_MSG_ERROR in
+	example, rather than (exit 1); exit (which isn't portable).
+
 2001-07-18  Akim Demaille  <akim@epita.fr>
 
 	Version 2.52.
@@ -317,7 +322,6 @@
 
 	* autoconf.in (Task traces): Separate the error messages from the
 	traces to improve robustness.
-
 
 2001-06-23  Akim Demaille  <akim@epita.fr>
 

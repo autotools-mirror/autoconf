@@ -5900,8 +5900,8 @@ AC_CACHE_SAVE
 
 @group
 # Might abort...
-AM_PATH_GTK(1.0.2,, (exit 1); exit)
-AM_PATH_GTKMM(0.9.5,, (exit 1); exit)
+AM_PATH_GTK(1.0.2,, [AC_MSG_ERROR([GTK not in path])])
+AM_PATH_GTKMM(0.9.5,, [AC_MSG_ERROR([GTK not in path])])
 @end group
 @r{ @dots{} AC_OUTPUT, etc. @dots{}}
 @end example
