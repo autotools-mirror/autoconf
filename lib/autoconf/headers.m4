@@ -530,8 +530,14 @@ AC_DEFUN([AC_HEADER_STDBOOL],
 	char g[true];
 	char h[sizeof (_Bool)];
 	char i[sizeof s.t];
+	enum { j = false, k = true, l = false * true, m = true * 256 };
+	_Bool n[m];
+	char o[sizeof n == m * sizeof n[0] ? 1 : -1];
       ]],
-      [[ return !a + !b + !c + !d + !e + !f + !g + !h + !i; ]])],
+      [[
+	 return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !j + !k + !l
+		 + !m + !n + !o);
+      ]])],
       [ac_cv_header_stdbool_h=yes],
       [ac_cv_header_stdbool_h=no])])
 AC_CHECK_TYPES([_Bool])
