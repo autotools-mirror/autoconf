@@ -29,10 +29,22 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&backname &debug &find_configure_ac &find_file
-              &getopt &mktmpdir &mtime
-              &uniq &update_file &up_to_date_p &verbose &xsystem
-	      $debug $force $help $me $tmp $verbose $version);
+
+# Variables we define and export.
+my @export_vars =
+  qw ($debug $force $help $me $tmp $verbose $version);
+
+# Functions we define and export.
+my @export_subs =
+  qw (&backname &debug &find_configure_ac &find_file
+      &getopt &mktmpdir &mtime
+      &uniq &update_file &up_to_date_p &verbose &xsystem);
+
+# Functions we forward (coming from modules we use).
+my @export_forward_subs =
+  qw (&basename &dirname &fileparse);
+
+@EXPORT = (@export_vars, @export_subs, @export_forward_subs);
 
 # Variable we share with the main package.  Be sure to have a single
 # copy of them: using `my' together with multiple inclusion of this

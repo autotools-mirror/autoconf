@@ -181,8 +181,7 @@ sub parse_args ()
 sub autoreconf ($)
 {
   my ($configure_ac_path) = @_;
-  my ($subdir, $configure_ac) = fileparse ($configure_ac_path);
-
+  my ($configure_ac, $subdir) = fileparse ($configure_ac_path);
   verbose "working in $subdir, on $configure_ac";
   chdir $subdir
     or die "$me: cannot chdir to $subdir: $!\n";
@@ -196,8 +195,11 @@ sub autoreconf ($)
   my $configure_ac_file = new Autom4te::XFile $configure_ac;
   while ($_ = $configure_ac_file->getline)
      {
-       $uses_autoconf = 1
-	 if /AC_INIT/;
+       if (/AC_INIT/)
+	 {
+	   $uses_autoconf = 1;
+	   last;
+	 }
      }
   if (!$uses_autoconf)
     {
@@ -294,7 +296,7 @@ sub autoreconf ($)
 
   # If there are flags for aclocal in Makefile.am, use them.
   my $aclocal_flags = '';
-  if (-f 'Makefile.am')
+  if ($uses_aclocal && -f 'Makefile.am')
     {
       my $makefile = new Autom4te::XFile 'Makefile.am';
       while ($_ = $makefile->getline)
@@ -302,7 +304,6 @@ sub autoreconf ($)
 	  if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
 	    {
 	      $aclocal_flags = $1;
-	      $uses_aclocal = 1;
 	      last;
 	    }
 	}
@@ -315,7 +316,9 @@ sub autoreconf ($)
   else
     {
       xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-      update_file ('aclocal.m4t', 'aclocal.m4');
+      # aclocal may produce no output.
+      update_file ('aclocal.m4t', 'aclocal.m4')
+	if -f 'aclocal.m4t';
     }
 
   # ------------------ #

@@ -1,5 +1,18 @@
 2001-11-03  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (@export_vars, @export_subs)
+	(@export_forward_subs): New.
+	Add basename, dirname, and fileparse.
+	(@EXPORT): Adjust.
+	* bin/autoreconf.in (&autoreconf): Fix call to fileparse.
+	Don't look for aclocal flags if we already know aclocal is not
+	used.
+	Move aclocal.m4t only if it exists.
+	Reported by Ezra Peisach.
+
+	
+2001-11-03  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.in (&parse_args): Work only on the configure.ac
 	passed on command line, defaulting to ./configure.ac if present.
 	(&maybe_autoreconf, File::Find): Remove, unused.
