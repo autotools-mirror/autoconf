@@ -184,6 +184,9 @@ while test $# -gt 0 ; do
     --output=* )
        outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
+    -o* )
+       outfile=`expr "$1" : '-o\(.*\)'`
+       shift ;;
 
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
@@ -245,13 +248,16 @@ run_m4f="$M4 --reload $AC_MACRODIR/autoconf.m4f $m4_common"
 # Find the input file.
 case $# in
   0) infile=configure.in
-     test $task = script && test "x$outfile" = x && outfile=configure;;
+     test $task = script && test -z "$outfile" && outfile=configure;;
   1) infile=$1 ;;
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
      exit 1 ;;
 esac
+
+# Unless specified, the output is stdout.
+test -z "$outfile" && outfile=-
 
 # We need an actual file.
 if test z$infile = z-; then
@@ -264,7 +270,7 @@ fi
 
 # Output is produced into FD 4.  Prepare it.
 case "x$outfile" in
- x- | x )  # Output to stdout
+ x-)  # Output to stdout
   exec 4>&1 ;;
  * )
   exec 4>$outfile;;
@@ -297,7 +303,7 @@ case $task in
     status=1
   fi
 
-  if test -n "$outfile"; then
+  if test "x$outfile" != x-; then
     chmod +x $outfile
   fi
 

@@ -1965,6 +1965,15 @@ ifval([$2], , [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 ])
 
 
+# AC_PLAIN_SCRIPT
+# ------------
+# Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
+# generation.  This is used by some tests, and let `autoconf' be used to
+# generate other scripts than `configure'.
+define([AC_PLAIN_SCRIPT],
+[AC_DIVERT_POP()])
+
+
 ## ----------------------------- ##
 ## Selecting optional features.  ##
 ## ----------------------------- ##

@@ -15,8 +15,8 @@ AT_SETUP(m4_wrap)
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA(libm4.in,
-[[include(libm4.m4)divert(0)dnl
+AT_DATA(configure.in,
+[[AC_PLAIN_SCRIPT()dnl
 m4_wrap([Short string */], [   ], [/* ], 20)
 
 m4_wrap([Much longer string */], [   ], [/* ], 20)
@@ -48,7 +48,7 @@ AT_DATA(expout,
 First, second , third, [,quoted]
 ]])
 
-AT_CHECK([$M4 -I $at_top_srcdir libm4.in], 0, expout)
+AT_CHECK([../autoconf -m .. -l $at_srcdir -o-], 0, expout)
 
 AT_CLEANUP()
 
@@ -82,7 +82,7 @@ AC_DEFUN([TEST3],
 [REQUIRE_AND_CHECK([TEST2a])
 test3=set])
 
-AC_DIVERT_POP()
+AC_PLAIN_SCRIPT
 TEST1
 test -z "$test1" && exit 1
 exit 0
@@ -102,7 +102,7 @@ AT_CLEANUP(configure)
 AT_SETUP(AC_SHELL_MKDIR_P)
 
 AT_DATA(configure.in,
-[[AC_DIVERT_POP()
+[[AC_PLAIN_SCRIPT
 pwd=`pwd`
 set -e
 # Absolute

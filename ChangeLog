@@ -1,5 +1,13 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_PLAIN_SCRIPT): New macro.
+	* tests/base.m4 (m4_wrap, AC_REQUIRE, AC_SHELL_MKDIR_P): Use it.
+	* autoconf.sh: Properly handle the case where `$output' is `-'
+	(i.e., stdout).
+	Handle `-ofile', not only `-o file'.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh: Formatting changes.
 	When verbose, display exactly what you do, not just a synopsis.
 	When using `$verbose' don't use quotes to avoid spurious spaces
