@@ -1,3 +1,9 @@
+2002-01-24  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS)
+	(_AC_INIT_PREPARE): Support -n as --no-create, as documented.
+	Reported by Geir Ove Myhr.
+
 2002-01-21  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MMAP): #Undef malloc.
