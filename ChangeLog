@@ -1,5 +1,10 @@
 2001-09-22  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autotest.m4: Create `package.m4'.
+	* tests/Makefile.am (package.m4): Remove.
+
+2001-09-22  Akim Demaille  <akim@epita.fr>
+
 	Rely on `$LINENO' when possible instead of `__oline__'.
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Provide some form of
