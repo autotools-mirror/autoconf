@@ -4583,9 +4583,13 @@ cat >>$CONFIG_STATUS <<\EOF
 for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
-  *:*) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-       ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  *) ac_file_in=$ac_file.in ;;
+  - | *:- | *:-:* ) # input from stdin
+        cat >$tmp/stdin
+        ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+  * )   ac_file_in=$ac_file.in ;;
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
@@ -4618,15 +4622,22 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   esac
 ])dnl
 
-  echo creating "$ac_file"
-  rm -f "$ac_file"
+  if test x"$ac_file" != x-; then
+    echo creating $ac_file
+    rm -f "$ac_file"
+  fi
   configure_input="Generated automatically from `echo $ac_file_in |
                                                  sed 's,.*/,,'` by configure."
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that
   # updating is atomic, and doesn't need trapping.
   ac_file_inputs=`IFS=:
-                  for f in $ac_file_in; do echo $ac_given_srcdir/$f; done`
+                  for f in $ac_file_in; do
+                    case $f in
+                    -) echo $tmp/stdin ;;
+                    *) echo $ac_given_srcdir/$f ;;
+                    esac
+                  done`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
@@ -4650,6 +4661,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$INSTALL,;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
+  rm -f $tmp/stdin
 dnl This would break Makefile dependencies.
 dnl  if cmp -s $ac_file $tmp/out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
@@ -4657,7 +4669,12 @@ dnl   else
 dnl     rm -f $ac_file
 dnl    mv $tmp/out $ac_file
 dnl  fi
-  mv $tmp/out $ac_file
+  if test x"$ac_file" != x-; then
+    mv $tmp/out $ac_file
+  else
+    cat $tmp/out
+    rm -f $tmp/out
+  fi
 
 ifset([AC_LIST_FILES_COMMANDS],
 [  # Run the commands associated with the file.
@@ -4739,15 +4756,24 @@ ac_uD=',;t']
 for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
-  *:*) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-       ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  *) ac_file_in=$ac_file.in ;;
+  - | *:- | *:-:* ) # input from stdin
+        cat >$tmp/stdin
+        ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+  * )   ac_file_in=$ac_file.in ;;
   esac
 
-  echo creating $ac_file
+  test x"$ac_file" != x- && echo creating $ac_file
 
-  ac_file_inputs=`echo "$ac_file_in" |
-                  sed "s,^,$ac_given_srcdir/,;s,:, $ac_given_srcdir/,g"`
+  ac_file_inputs=`IFS=:
+                  for f in $ac_file_in; do
+                    case $f in
+                    -) echo $tmp/stdin ;;
+                    *) echo $ac_given_srcdir/$f ;;
+                    esac
+                  done`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
@@ -4849,18 +4875,27 @@ rm -f conftest.undefs
 
 dnl Now back to your regularly scheduled config.status.
 cat >>$CONFIG_STATUS <<\EOF
-  echo "/* $ac_file.  Generated automatically by configure.  */" >$tmp/config.h
+  if test x"$ac_file" = x-; then
+    echo "/* Generated automatically by configure.  */" >$tmp/config.h
+  else
+    echo "/* $ac_file.  Generated automatically by configure.  */" >$tmp/config.h
+  fi
   cat $tmp/in >>$tmp/config.h
   rm -f $tmp/in
-  if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
-    echo "$ac_file is unchanged"
-  else
-    ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
-    if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-      AC_SHELL_MKDIR_P("$ac_dir")
+  if test x"$ac_file" != x-; then
+    if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
+      echo "$ac_file is unchanged"
+    else
+      ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
+      if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
+        AC_SHELL_MKDIR_P("$ac_dir")
+      fi
+      rm -f $ac_file
+      mv $tmp/config.h $ac_file
     fi
-    rm -f $ac_file
-    mv $tmp/config.h $ac_file
+  else
+    cat $tmp/config.h
+    rm -f $tmp/config.h
   fi
 ifset([AC_LIST_HEADERS_COMMANDS],
 [  # Run the commands associated with the file.
