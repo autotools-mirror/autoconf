@@ -422,7 +422,7 @@ for ac_file in `ls a.exe conftest.exe 2>/dev/null;
                 ls a.out conftest 2>/dev/null;
                 ls a.* conftest.* 2>/dev/null`; do
   case $ac_file in
-    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb | *.xSYM ) ;;
     a.out ) # We found the default executable, but exeext='' is most
             # certainly right.
             break;;
