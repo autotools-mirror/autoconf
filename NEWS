@@ -13,6 +13,7 @@ Major changes in release 1.8:
 * configure accepts --help, --version, --silent/--quiet options.
 * config.status accepts --help, --version options.
 * Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
+* autoheader optionally copies config.h.top to the beginning of config.h.in.
 * Namespace cleanup: all shell variables used internally by Autoconf
   have names beginning with `ac_'.
 
