@@ -663,7 +663,7 @@ if test -n "$ac_alloca_missing"; then
   ALLOCA=alloca.o
   AC_DEFINE(C_ALLOCA)
 
-  echo 'checking stack direction for C alloca'
+  AC_CHECKING(stack direction for C alloca)
   AC_TEST_PROGRAM([find_stack_direction ()
 {
   static char *addr = 0;
@@ -907,13 +907,15 @@ fi
 ])dnl
 dnl
 define(AC_INT_16_BITS,
-[AC_CHECKING(integer size)
+[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(int, sizevar)])
+AC_CHECKING(integer size)
 AC_TEST_PROGRAM([main() { exit(sizeof(int) != 2); }],
  AC_DEFINE(INT_16_BITS))
 ])dnl
 dnl
 define(AC_LONG_64_BITS,
-[AC_CHECKING(for 64-bit long ints)
+[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(long, sizevar)])
+AC_CHECKING(for 64-bit long ints)
 AC_TEST_PROGRAM([main() { exit(sizeof(long int) != 8); }],
  AC_DEFINE(LONG_64_BITS))
 ])dnl
@@ -1003,7 +1005,7 @@ dnl checks for operating system services
 dnl
 dnl
 define(AC_HAVE_POUNDBANG, [dnl
-echo "checking if \`#!' works in shell scripts"
+AC_CHECKING(whether \`#!' works in shell scripts)
 echo '#!/bin/cat
 exit 69
 ' > conftest
