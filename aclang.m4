@@ -183,8 +183,8 @@ m4_define([AC_LANG_ASSERT],
 m4_define([AC_LANG(C)],
 [ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -210,8 +210,8 @@ m4_define([_AC_LANG_ABBREV(C)], [c])
 m4_define([AC_LANG(C++)],
 [ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -235,8 +235,8 @@ m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 # -------------------
 m4_define([AC_LANG(Fortran 77)],
 [ac_ext=f
-ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -761,7 +761,7 @@ if test -z "$CPP"; then
   AC_CACHE_VAL(ac_cv_prog_CPP,
   [dnl
     # Double quotes because CPP needs to be expanded
-    for CPP in "${CC-cc} -E" "${CC-cc} -E -traditional-cpp" "/lib/cpp"
+    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
     do
       _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
@@ -841,7 +841,7 @@ m4_define([_AC_PROG_CC_G],
 [ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
 CFLAGS="-g"
-AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
+AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
                [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_prog_cc_g=yes],
                                                         [ac_cv_prog_cc_g=no])])
 if test "$ac_test_CFLAGS" = set; then
@@ -866,7 +866,7 @@ fi[]dnl
 # -----------------------
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
 [if test $ac_cv_c_compiler_gnu = yes; then
-    AC_CACHE_CHECK(whether ${CC-cc} needs -traditional,
+    AC_CACHE_CHECK(whether $CC needs -traditional,
       ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
   AC_EGREP_CPP($ac_pattern, [#include <sgtty.h>
@@ -901,7 +901,7 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
+ac_try='$CC -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
 if AC_TRY_EVAL(ac_try) &&
    test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
 then
@@ -959,7 +959,7 @@ if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
   [dnl
     # Double quotes because CXXCPP needs to be expanded
-    for CXXCPP in "${CXX-g++} -E" "/lib/cpp"
+    for CXXCPP in "$CXX -E" "/lib/cpp"
     do
       _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
@@ -1034,7 +1034,7 @@ m4_define([_AC_PROG_CXX_G],
 [ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="-g"
-AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
+AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
                [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
                                    [ac_cv_prog_cxx_g=yes],
                                    [ac_cv_prog_cxx_g=no])])
@@ -1216,7 +1216,7 @@ dnl like #elif.
 dnl FIXME: can't do this because then AC_AIX won't work due to a
 dnl circular dependency.
 dnl AC_BEFORE([$0], [AC_PROG_CPP])
-AC_MSG_CHECKING([for ${CC-cc} option to accept ANSI C])
+AC_MSG_CHECKING([for $CC option to accept ANSI C])
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
 ac_save_CC=$CC
@@ -1501,7 +1501,7 @@ AC_DEFUN([AC_C_STRINGIZE],
 char *s = x(teststring);],
               [ac_cv_c_stringize=no],
               [ac_cv_c_stringize=yes])])
-if test "${ac_cv_c_stringize}" = yes; then
+if test $ac_cv_c_stringize = yes; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
             [Define if cpp supports the ANSI @%:@ stringizing operator.])
 fi
@@ -1744,12 +1744,12 @@ AC_COMPILE_IFELSE(
       subroutine foo_bar()
       return
       end],
-[mv conftest.${ac_objext} cf77_test.${ac_objext}
+[mv conftest.$ac_objext cf77_test.$ac_objext
 
   AC_LANG_PUSH(C)
 
   ac_save_LIBS=$LIBS
-  LIBS="cf77_test.${ac_objext} $FLIBS $LIBS"
+  LIBS="cf77_test.$ac_objext $FLIBS $LIBS"
 
   ac_success=no
   for ac_foobar in foobar FOOBAR; do

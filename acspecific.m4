@@ -660,7 +660,7 @@ if test "$enable_largefile" != no; then
     ac_cv_sys_largefile_CC,
     [ac_cv_sys_largefile_CC=no
      if test "$GCC" != yes; then
-       ac_save_CC=${CC-cc}
+       ac_save_CC=$CC
        while :; do
      	 # IRIX 6.2 and later do not support large files by default,
      	 # so use the C compiler's -n32 option if that helps.
