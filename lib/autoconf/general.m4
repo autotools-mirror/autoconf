@@ -1994,7 +1994,7 @@ while $ac_more_lines; do
   else
     sed "${ac_end}q" conftest.subs > conftest.s$ac_file
   fi
-  if ! test -s conftest.s$ac_file; then
+  if test ! -s conftest.s$ac_file; then
     ac_more_lines=false
     rm -f conftest.s$ac_file
   else
