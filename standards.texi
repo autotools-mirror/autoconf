@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 17 November 1994
+@set lastupdate 03 December 1994
 @c %**end of header
 
 @ifinfo
@@ -1996,6 +1996,9 @@ Used in @code{tar} and @code{cp}.
 @item printer
 @samp{-p} in @code{wdiff}.
 
+@item prompt
+@samp{-p} in @code{ed}.
+
 @item query-user
 @samp{-X} in @code{shar}.
 
@@ -2230,7 +2233,7 @@ Used in @code{ls} and @code{touch}.
 
 @item traditional
 @samp{-t} in @code{hello};
-@samp{-G} in @code{m4} and @code{ptx}.
+@samp{-G} in @code{ed}, @code{m4}, and @code{ptx}.
 
 @item tty
 Used in GDB.
