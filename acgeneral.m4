@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.9)dnl
+define(AC_ACVERSION, 1.8.1)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -192,7 +192,7 @@ changequote([,])dnl
     exec_prefix="$ac_optarg" ;;
 
   -gas | --gas | --ga | --g)
-    with_gas=1 ;; # Obsolete; use --with-gas.
+    with_gas=yes ;; # Obsolete; use --with-gas.
 
   -help | --help | --hel | --he)
     cat << EOF
@@ -299,7 +299,7 @@ changequote([,])dnl
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
 
-  --x) with_x=1 ;; # Obsolete; use --with-x.
+  --x) with_x=yes ;; # Obsolete; use --with-x.
 
   -x-includes | --x-includes | --x-include | --x-includ | --x-inclu \
   | --x-incl | --x-inc | --x-in | --x-i)
