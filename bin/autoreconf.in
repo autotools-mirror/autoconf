@@ -1,4 +1,4 @@
-#! /bin/sh
+#! @SHELL@
 # autoreconf - remake all Autoconf configure scripts in a directory tree
 # Copyright (C) 1994 Free Software Foundation, Inc.
 
@@ -126,6 +126,7 @@ while read dir; do
   if grep AC_CONFIG_HEADER configure.in >/dev/null; then
     template=`sed -n '/AC_CONFIG_HEADER/{
 s%[^#]*AC_CONFIG_HEADER(\([^)]*\).*%\1%
+s%^ *\([^ ][^ ]*\) .*$%\1%
 t here
 : here
 s%.*:%%
