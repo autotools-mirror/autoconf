@@ -1,5 +1,27 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Create AC_CONFIG_HEADERS which has the same interface as the other
+	AC_CONFIG_*S.
+
+	* acgeneral.m4 (AC_CONFIG_HEADERS): New macro, with the same
+	interface as AC_CONFIG_LINKS and AC_CONFIG_FILES.
+	(AC_LIST_HEADERS_COMMANDS): New growing string, initialize it.
+	(AC_CONFIG_HEADER): Rename as...
+	(AC_CONFIG_HEADERS): this, for consistency.
+	(AC_CONFIG_HEADER): New macro, which calls AC_OUTPUT_HEADERS.
+	(AC_OUTPUT_HEADERS): The square brackets for sed and grep were
+	not properly quoted: use @BKL@ and @BKR@.
+	(AC_OUTPUT_HEADERS): Run the AC_LIST_HEADERS_COMMANDS.
+
+	* acgeneral.m4 (AC_OUTPUT): Once config.status created, before
+	running it, trap to `exit 1' so that config.status is not removed
+	if configure is interrupted when config.status is complete.
+
+	* acgeneral.m4 (AC_OUTPUT_CONFIG_STATUS): When recognizing
+	arguments, accept only foo, and no longer foo:foo.in etc.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formating changes.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>

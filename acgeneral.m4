@@ -2931,7 +2931,7 @@ dnl CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
 define(AC_CONFIG_UNIQUE,
 [AC_FOREACH([AC_File], [$1],
  [AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_HEADERS],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_HEADER.])])
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_LINKS],
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_LINKS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_SUBDIRS],
@@ -2943,18 +2943,41 @@ define(AC_CONFIG_UNIQUE,
 ])
 
 
-dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
-dnl --------------------------------------
-dnl FIXME: For sake of uniformity, it should be AC_CONFIG_HEADERS, and
-dnl it should be possible to accumulate several calls.
-AC_DEFUN(AC_CONFIG_HEADER,
+dnl AC_CONFIG_HEADERS(HEADERS..., [COMMANDS])
+dnl -----------------------------------------
+dnl Specify that the HEADERS are to be created by instantiation of the
+dnl AC_DEFINEs.  Associate the COMMANDS to the HEADERS.  This macro
+dnl accumulates if called several times.
+dnl
+dnl The commands are stored in a growing string AC_LIST_HEADERS_COMMANDS
+dnl which should be used like this:
+dnl
+dnl      case $ac_file in
+dnl        AC_LIST_HEADERS_COMMANDS
+dnl      esac
+AC_DEFUN([AC_CONFIG_HEADERS],
 [AC_CONFIG_UNIQUE([$1])dnl
-define([AC_LIST_HEADERS], $1)])
+m4_append([AC_LIST_HEADERS], [$1])dnl
+dnl Register the commands
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_HEADERS_COMMANDS],
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])dnl
+])dnl
 
 dnl Initialize to empty.  It is much easier and uniform to have a config
 dnl list expand to empty when undefined, instead of special casing when
 dnl not defined (since in this case, AC_CONFIG_FOO expands to AC_CONFIG_FOO).
 define([AC_LIST_HEADERS])
+define([AC_LIST_HEADERS_COMMANDS])
+
+
+dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
+dnl --------------------------------------
+dnl FIXME: Make it obsolete?
+AC_DEFUN(AC_CONFIG_HEADER,
+[AC_CONFIG_HEADERS([$1])])
+
 
 dnl AC_CONFIG_LINKS(DEST:SOURCE...)
 dnl -------------------------------
@@ -3118,6 +3141,7 @@ ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 AC_OUTPUT_CONFIG_STATUS()dnl
 
 rm -fr confdefs* $ac_clean_files
+trap 'exit 1' 1 2 15
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
@@ -3172,7 +3196,7 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
 dnl Issue this section only if there were actually config files.
 dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
 dnl or AC_LIST_LINKS is set.
-ifval(AC_LIST_HEADERS AC_LIST_LINKS AC_LIST_FILES AC_LIST_COMMANDS,
+ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [Files to instantiate:
 ifset([AC_LIST_FILES], [  Configuration files:
 \$config_files
@@ -3218,19 +3242,19 @@ do
     echo "[\$]ac_cs_usage"; exit 0 ;;
   # Handling of arguments.
 AC_FOREACH([AC_File], AC_LIST_FILES,
-[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+[  'patsubst(AC_File, [:.*])' )dnl
  CONFIG_FILES="[\$]CONFIG_FILES AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_LINKS,
-[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+[  'patsubst(AC_File, [:.*])' )dnl
  CONFIG_LINKS="[\$]CONFIG_LINKS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_COMMANDS,
-[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+[  'patsubst(AC_File, [:.*])' )dnl
  CONFIG_COMMANDS="[\$]CONFIG_COMMANDS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_HEADERS,
-[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+[  'patsubst(AC_File, [:.*])' )dnl
  CONFIG_HEADERS="[\$]CONFIG_HEADERS AC_File" ;;
 ])dnl
   # This is an error.
@@ -3243,7 +3267,7 @@ EOF
 dnl Issue this section only if there were actually config files.
 dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
 dnl or AC_LIST_LINKS is set.
-ifval(AC_LIST_HEADERS AC_LIST_LINKS AC_LIST_FILES AC_LIST_COMMANDS,
+ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [cat >>$CONFIG_STATUS <<EOF
 # If there were arguments and we reach this point, then the user
 # has specified the files to intantiate.  If there were no arguments,
@@ -3281,7 +3305,7 @@ ifset([AC_LIST_FILES],
        AC_OUTPUT_FILES(AC_LIST_FILES)dnl
        AC_DIVERT_POP()])dnl
 ifset([AC_LIST_HEADERS],
-      [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
+      [AC_OUTPUT_HEADERS(AC_LIST_HEADERS)])dnl
 ifset([AC_LIST_LINKS],
       [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
 ifset([AC_LIST_COMMANDS],
@@ -3303,7 +3327,7 @@ dnl -------------------
 dnl Set the DEFS variable to the -D options determined earlier.
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called inside configure, outside of config.status.
-dnl FIXME: This has to be fixed the same way as in AC_OUTPUT_HEADER.
+dnl FIXME: This has to be fixed the same way as in AC_OUTPUT_HEADERS.
 define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
@@ -3513,14 +3537,14 @@ EOF
 ])dnl AC_OUTPUT_FILES
 
 
-dnl AC_OUTPUT_HEADER(HEADER-FILE...)
-dnl --------------------------------
+dnl AC_OUTPUT_HEADERS(HEADER-FILE...)
+dnl ---------------------------------
 dnl Create the config.h files from the config.h.in files.
 dnl This is a subroutine of AC_OUTPUT.
 dnl
 dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
 dnl Upon exit, no here document shall be opened.
-define(AC_OUTPUT_HEADER,
+define(AC_OUTPUT_HEADERS,
 [cat >>$CONFIG_STATUS <<\EOF
 changequote(<<, >>)dnl
 
@@ -3617,7 +3641,7 @@ EOF
 # Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if egrep "^[ 	]*#[ 	]*define" $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
+echo '  if egrep "^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define" $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
 rm -f conftest.tail
 while :
 do
@@ -3628,7 +3652,7 @@ do
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#define' lines.
   echo ': t' >>$CONFIG_STATUS
-  echo '/^[ 	]*#[ 	]*define/!b' >>$CONFIG_STATUS
+  echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define/!b' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
   sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
@@ -3656,7 +3680,7 @@ do
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#undef'
   echo ': t' >>$CONFIG_STATUS
-  echo '/^[ 	]*#[ 	]*undef/!b' >>$CONFIG_STATUS
+  echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*undef/!b' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
   echo 'CEOF
   sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
@@ -3692,9 +3716,15 @@ dnl to be created too.
     rm -f $ac_file
     mv $ac_cs_root.h $ac_file
   fi
+ifset([AC_LIST_HEADERS_COMMANDS],
+[  # Run the commands associated with the file.
+  case "$ac_file" in
+AC_LIST_HEADERS_COMMANDS()dnl
+  esac
+])dnl
 fi; done
 EOF
-])dnl AC_OUTPUT_HEADER
+])dnl AC_OUTPUT_HEADERS
 
 
 dnl AC_OUTPUT_LINKS(DEST:SOURCE...)
@@ -3791,8 +3821,8 @@ EOF
 
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 dnl -------------------------------
-dnl This is a subroutine of AC_OUTPUT.
-dnl It is called after running config.status.
+dnl This is a subroutine of AC_OUTPUT, but it does not go into
+dnl config.status, rather, it is called after running config.status.
 define(AC_OUTPUT_SUBDIRS,
 [
 #
