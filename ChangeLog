@@ -1,5 +1,20 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	The AU-glue code for AC_LINK_FILES was not fully compatible: in
+	  AC_LINK_FILES($from, $to)
+	`$from' and `$to' can be lists, hence `AC_CONFIG_LINKS($to:$from)'
+	is wrong.
+	Reported by H.J. Lu.
+
+	* acgeneral.m4 (AC_LINK_FILES): Replace the m4-glue code from
+	AC_LINK_FILES to AC_CONFIG_LINKS, with sh-glue code.
+	Give a detailed update message.
+	(_AC_LINK_FILES_CNT): New variable.  Initialize.
+	* tests/tools.m4 (autoupdate): No longer exercise `autoupdate'
+	with AC_LINK_FILES.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_PROG_SED): Removed.
 
 2000-02-10  Akim Demaille  <akim@epita.fr>

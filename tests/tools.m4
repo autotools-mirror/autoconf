@@ -51,7 +51,6 @@ AT_SETUP(autoupdate)
 
 AT_DATA(configure.in,
 [[AC_INIT
-AC_LINK_FILES(from1 from2, to1 to2)
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
@@ -60,7 +59,6 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 # Checking `autoupdate'.
 AT_CHECK([../autoupdate -m .. -l $at_srcdir -<configure.in], 0,
 [[AC_INIT
-AC_CONFIG_LINKS(to1:from1)AC_CONFIG_LINKS(to2:from2)
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES(Makefile)

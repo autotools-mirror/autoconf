@@ -3174,20 +3174,39 @@ define([AC_LIST_LINKS_COMMANDS])
 # ---------------------------------
 # Link each of the existing files SOURCE... to the corresponding
 # link name in DEST...
+#
+# Unfortunately we can't provide a very good autoupdate service here,
+# since in `AC_LINK_FILES($from, $to)' it is possible that `$from'
+# and `$to' are actually lists.  It would then be completely wrong to
+# replace it with `AC_CONFIG_LINKS($to:$from).  It is possible in the
+# case of literal values though, but because I don't think there is any
+# interest in creating config links with literal values, no special
+# mechanism is implemented to handle them.
+#
+# _AC_LINK_CNT is used to be robust to multiple calls.
 AU_DEFUN([AC_LINK_FILES],
 [ifelse($#, 2, ,
         [m4_fatal([$0: incorrect number of arguments])])dnl
-pushdef([AC_Srcs], m4_split(m4_strip(m4_join([$1]))))dnl
-pushdef([AC_Dsts], m4_split(m4_strip(m4_join([$2]))))dnl
-dnl
-m4_foreach([AC_Dummy], (AC_Srcs),
-[AC_CONFIG_LINKS(m4_car(AC_Dsts):m4_car(AC_Srcs))dnl
-define([AC_Srcs], m4_shift(AC_Srcs))dnl
-define([AC_Dsts], m4_shift(AC_Dsts))])dnl
-dnl
-popdef([AC_Srcs])dnl
-popdef([AC_Dsts])dnl
-])# AC_LINK_FILES
+define([_AC_LINK_FILES_CNT], incr(_AC_LINK_FILES_CNT))dnl
+ac_sources="$1"
+ac_dests="$2"
+while test -n "$ac_sources"; do
+  set $ac_dests; ac_dest=[$]1; shift; ac_dests=[$]*
+  set $ac_sources; ac_source=[$]1; shift; ac_sources=[$]*
+  [ac_config_links_]_AC_LINK_FILES_CNT="$[ac_config_links_]_AC_LINK_FILES_CNT $ac_dest:$ac_source"
+done
+AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
+],
+[
+  It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
+  to AC_CONFIG_FILES.  `autoupdate' provides a functional but inelegant
+  update, you should probably tune the result yourself.])# AC_LINK_FILES
+
+
+# Initialize both in `autoconf::' and `autoupdate::'.
+define(_AC_LINK_FILES_CNT, 0)
+m4_namespace_define(autoupdate,
+                    [_AC_LINK_FILES_CNT], 0)
 
 
 
