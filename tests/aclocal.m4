@@ -3,15 +3,15 @@
 
 # AC_STATE_SAVE(FILE)
 # ------------------
-# Save the environment, but the variables we are allowed to touch.
+# Save the environment, except for those variables we are allowed to touch.
 # This is to check no test touches the user name space.
 # FIXME: There are surely better ways.  Explore for instance if
 # we can ask help from AC_SUBST.  We have the right to touch what
-# is AC_SUBST.
+# is AC_SUBST'ed.
 # - ^ac_
 #   Autoconf's shell name space.
 # - prefix and exec_prefix
-#   are kept undefined (NONE) until AC_OUTPUT with then sets them to
+#   are kept undefined (NONE) until AC_OUTPUT which then sets them to
 #   `/usr/local' and `${prefix}' for make.
 # - CONFIG_STATUS and DEFS
 #   Set by AC_OUTPUT.
@@ -44,6 +44,7 @@ m4_defun([AC_STATE_SAVE],
       [^(host|build|target)(_(alias|cpu|vendor|os))?=],
       [^(cross_compiling)=],
       [^(interpval)=],
+      [^(PATH_SEPARATOR)=],
       [^(f77_(case|underscore))=],
       [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],

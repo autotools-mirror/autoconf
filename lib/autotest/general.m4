@@ -154,12 +154,11 @@ while test $[#] -gt 0; do
   shift
 done
 
-test -z "$at_tests" && at_tests=$at_tests_all
-
 # Help message.
 if $at_help; then
   # If tests were specified, display only their title.
-  test -z "$at_tests" && cat <<EOF
+  if test -z "$at_tests"; then
+    cat <<EOF
 Usage: $[0] [[OPTION]]... [[TESTS]]
 
 Run all the tests, or the selected TESTS.
@@ -173,14 +172,20 @@ Options:
 
 Tests:
 EOF
-  # "  1 42  45 " => " (1|42|45): "
-  at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
-  egrep -e " (${at_tests_pattern}): " <<EOF
+  else
+    # "  1 42  45 " => " (1|42|45): "
+    at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
+    at_tests_pattern=" (${at_tests_pattern}): "
+  fi
+  egrep -e "$at_tests_pattern" <<EOF
 m4_divert([HELP])dnl Help message inserted here.
 m4_divert([SETUP])dnl
 EOF
   exit 0
 fi
+
+# Tests to run.
+test -z "$at_tests" && at_tests=$at_tests_all
 
 # Use `diff -u' when possible.
 : >empty

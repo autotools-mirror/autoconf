@@ -1,5 +1,15 @@
 2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
 
+	* tests/aclocal.m4: Fix some typos.  Also ignore $PATH_SEPARATOR.
+	* tests/atconfig.in: Set PATH_SEPARATOR to the proper
+	path separator.  Set SHELL here...
+	* tests/atgeneral.m4: ... instead of here.  Use	$PATH_SEPARATOR
+	when setting AUTOTEST_PATH.  Don't default tests to "all" before
+	deciding whether the help text is needed.
+	* tests/semantics.at: Use the correct path separator.
+
+2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
+
 	* doc/autoconf.texi: Expand section on DOS issues.
 	Add link to the `doschk' package.  Fix minor typo.
 	Clean up white spaces.

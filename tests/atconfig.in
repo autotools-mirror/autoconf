@@ -1,4 +1,5 @@
-# @configure_input@					-*- shell-script -*-
+# -*- shell-script -*-
+# @configure_input@
 # Configurable variable values for building test suites.
 # Copyright 2000 Free Software Foundation, Inc.
 
@@ -58,6 +59,9 @@ at_c='@ECHO_C@'
 srcdir='@srcdir@'
 top_srcdir='@top_srcdir@'
 AUTOTEST_PATH='@AUTOTEST_PATH@'
+
+SHELL=${CONFIG_SHELL-'@SHELL@'}
+PATH_SEPARATOR='@PATH_SEPARATOR@'
 
 # We need GNU m4.
 M4='@M4@'
