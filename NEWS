@@ -93,6 +93,9 @@
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS and AC_OUTPUT.
   Are much less expensive when using long lists of files.
 
+- AC_PREFIX_PROGRAM
+  Works with shell variables, and non alphanumeric names.
+
 ** Library macros
 
 - AC_FUNC_STRERROR_R now sets STRERROR_R_CHAR_P, not HAVE_WORKING_STRERROR_R,

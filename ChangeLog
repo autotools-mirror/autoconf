@@ -1,5 +1,14 @@
 2002-02-07  Akim Demaille  <akim@epita.fr>
 
+	Fix Autoconf PR/207:
+	AC_PREFIX_PROGRAM fails with dashed program names
+
+	* lib/autoconf/general.m4 (AC_PREFIX_PROGRAM): Just use a fresh
+	variable when looking for the prefix program.
+	Now it also works for shell variables.
+
+2002-02-07  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Builtins): More about
 	case/esac.
 

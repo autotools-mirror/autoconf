@@ -489,18 +489,15 @@ AC_DEFUN([AC_PREFIX_DEFAULT],
 # and it might use a cached value for the path.
 # No big loss, I think, since most configures don't use this macro anyway.
 AC_DEFUN([AC_PREFIX_PROGRAM],
-[dnl Get an upper case version of $[1].
-m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
-if test "x$prefix" = xNONE; then
+[if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-  _AS_ECHO_N([checking for prefix by])
-  AC_PATH_PROG(AC_Prog, [$1])
-  if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
+  _AS_ECHO_N([checking for prefix by ])
+  AC_PATH_PROG(ac_prefix_program, [$1])
+  if test -n $ac_prefix_program; then
+    prefix=`AS_DIRNAME(["$ac_prefix_program"])`
     prefix=`AS_DIRNAME(["$prefix"])`
   fi
 fi
-m4_popdef([AC_Prog])dnl
 ])# AC_PREFIX_PROGRAM
 
 
