@@ -1,5 +1,11 @@
 2000-12-07  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT): More robust computation of
+	ac_tests_pattern.
+	Reported by  Andrej Borsenkow.
+
+2000-12-07  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (_AC_EXEEXT): Skip *.pdb.
 	From Paul Berrevoets <paul@swi.com>.
 
