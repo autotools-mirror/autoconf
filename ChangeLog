@@ -1,3 +1,9 @@
+1999-01-09  H.J. Lu  <hjl@lucon.org>
+
+	* config.guess: Permit multiple concurrent instances by including
+	the process ID of the shell running this script in temporary
+	filenames.
+		
 1999-01-08  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: More useful and up-to-date help from the --help
