@@ -3076,23 +3076,53 @@ fi
 
 # AC_SYS_RESTARTABLE_SYSCALLS
 # ---------------------------
+# If the system automatically restarts a system call that is
+# interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN(AC_SYS_RESTARTABLE_SYSCALLS,
-[AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
+[AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
+AC_CHECK_HEADERS(unistd.h)
+AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 [AC_TRY_RUN(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
    after getting the signal.  */
+
 #include <sys/types.h>
 #include <signal.h>
-ucatch (isig) { }
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+#if HAVE_SYS_WAIT_H
+# include <sys/wait.h>
+#endif
+
+/* Some platforms explicitly require an extern "C" signal handler
+   when using C++. */
+#ifdef __cplusplus
+extern "C" void ucatch (int dummy) { }
+#else
+void ucatch (dummy) int dummy; { }
+#endif
+
 int
 main ()
 {
   int i = fork (), status;
-  if (i == 0) { sleep (3); kill (getppid (), SIGINT); sleep (3); exit (0); }
+
+  if (i == 0)
+    {
+      sleep (3);
+      kill (getppid (), SIGINT);
+      sleep (3);
+      exit (0);
+    }
+
   signal (SIGINT, ucatch);
-  status = wait(&i);
-  if (status == -1) wait(&i);
+
+  status = wait (&i);
+  if (status == -1)
+    wait (&i);
+
   exit (status == -1);
 }], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
 if test $ac_cv_sys_restartable_syscalls = yes; then

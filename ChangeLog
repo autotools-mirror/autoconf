@@ -1,10 +1,19 @@
+2000-03-09  Ossama Othman  <ossama@debian.org>
+
+	* acspecific.m4 (AC_SYS_RESTARTABLE_SYSCALLS): Added some missing
+	headers if they exist (needed for some missing prototypes) and
+	corrects the signal handler prototype/definition.  The signal
+	handler prototype is now prepended with an `extern "C"' for C++
+	compilers since some platforms explicitly require an `extern "C"'
+	signal handler.
+
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
 	* autoheader.m4 (autoheader::AC_CHECK_HEADERS_DIRENT): Renamed as
 	(autoheader::_AC_CHECK_HEADERS_DIRENT): to cope with the new name
 	of the autoconf:: macro.
 	Fixes autoconf/119, reported by Raja R Harinath.
-	
+
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_PATH_PROG, AC_OUTPUT_FILES, AC_OUTPUT_SUBDIRS):
