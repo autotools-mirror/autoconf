@@ -22,7 +22,7 @@ AUTOMAKE_OPTIONS = gnits
 
 SUITE = suite.at \
         m4sugar.at m4sh.at \
-        base.at tools.at semantics.at torture.at syntax.at update.at
+        base.at tools.at torture.at compile.at semantics.at syntax.at update.at
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.

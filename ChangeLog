@@ -1,5 +1,20 @@
 2000-11-16  Akim Demaille  <akim@epita.fr>
 
+	Reorder the test suite so that low level features are tested
+	before high level ones.
+
+	* tests/semantics.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	(missing templates): Move to...
+	* tests/torture.at: here.
+	Reorder the file so that the torture test is last.
+	* tests/semantics.at (AC_TRY_LINK_FUNC, AC_PROG_CPP with warnings)
+	(AC_PROG_CPP without warnings): Move to...
+	* tests/compile.at: here, new file.
+	* tests/suite.at: Run `torture' and then `compile' before
+	`semantics'.
+
+2000-11-16  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_SYS_LARGEFILE): _AC_SYS_LARGEFILE_SOURCE no
 	longer exist.
 

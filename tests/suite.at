@@ -8,7 +8,7 @@
 # like contributing new tests?  If you do, you may tell your intent to
 # `autoconf@gnu.org', so no two people work at the same thing.
 
-AT_INIT(autoconf)
+AT_INIT([autoconf])
 
 cat <<EOF
 Some tests might be ignored if you don't have the software which the
@@ -19,25 +19,32 @@ EOF
 # the most selective to the easiest.
 
 # M4sugar.
-AT_INCLUDE(m4sugar.at)
+AT_INCLUDE([m4sugar.at])
 
 # M4sh.m4.
-AT_INCLUDE(m4sh.at)
+AT_INCLUDE([m4sh.at])
 
 # Autoconf base macros.
-AT_INCLUDE(base.at)
+AT_INCLUDE([base.at])
 
 # The executables.
-AT_INCLUDE(tools.at)
+AT_INCLUDE([tools.at])
+
+# Testing config.status
+# ---------------------
+# Actually should be named config.status.at but I fear problems with
+# the name.  Does no `checking...' at all, but exercises only code
+# which following section use too.  Hence, run it first.
+AT_INCLUDE([torture.at])
+
+# Checking AC_PROG_CC, AC_COMPILE_IFELSE etc.
+AT_INCLUDE([compile.at])
 
 # Checking that AC_CHECK_FOO macros work properly.
-AT_INCLUDE(semantics.at)
-
-# Stressing config.status.
-AT_INCLUDE(torture.at)
+AT_INCLUDE([semantics.at])
 
 # Checking all the AC_DEFUN'd macros.
-AT_INCLUDE(syntax.at)
+AT_INCLUDE([syntax.at])
 
-# Checking that updatiing an obsolete macro produces a valid configure.in
-AT_INCLUDE(update.at)
+# Checking that updating an obsolete macro produces a valid configure.in
+AT_INCLUDE([update.at])

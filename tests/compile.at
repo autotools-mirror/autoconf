@@ -1,0 +1,105 @@
+#							-*- autoconf -*-
+
+cat <<EOF
+
+Low level compiling/preprocessing macros.
+
+EOF
+
+# Since the macros which compile are required by most tests, check
+# them first.  But remember that looking for a compiler is even more
+# primitive, so check those first.
+
+
+## ------------ ##
+## C keywords.  ##
+## ------------ ##
+
+# GCC supports `const', `volatile', and `inline'.
+AT_CHECK_MACRO([C keywords],
+[[AC_PROG_CC
+AC_C_CONST
+AC_C_INLINE
+AC_C_VOLATILE
+case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
+ yes,*no*)
+   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
+esac]])
+
+
+
+## --------------------------- ##
+## AC_PROG_CPP with warnings.  ##
+## --------------------------- ##
+
+
+# It's Ok for strict preprocessors to produce warnings.
+
+AT_SETUP([AC_PROG_CPP with warnings])
+
+AT_DATA([mycpp],
+[[#! /bin/sh
+echo noise >&2
+exec ${1+"$@"}
+]])
+
+chmod +x mycpp
+
+_AT_CHECK_AC_MACRO(
+[AC_PROG_CPP
+# If the preprocessor is not strict, just ignore
+test "x$ac_c_preproc_warn_flag" = xyes &&
+  AC_MSG_ERROR([preprocessor has no warning option], 77)
+CPP="./mycpp $CPP"
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+
+AT_CHECK_DEFINES(
+[/* #undef HAVE_AUTOCONF_IO_H */
+#define HAVE_STDIO_H 1
+])
+
+AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+
+
+## ------------------------------ ##
+## AC_PROG_CPP without warnings.  ##
+## ------------------------------ ##
+
+AT_SETUP([AC_PROG_CPP without warnings])
+
+AT_DATA([mycpp],
+[[#! /bin/sh
+/lib/cpp ${1+"$@"}
+exit 0
+]])
+
+chmod +x mycpp
+
+_AT_CHECK_AC_MACRO(
+[# Ignore if /lib/cpp doesn't work
+/lib/cpp </dev/null >/dev/null 2>&1 ||
+  AC_MSG_ERROR([preprocessor doesn't work], 77)
+CPP=./mycpp
+AC_PROG_CPP
+test "x$ac_c_preproc_warn_flag" != xyes &&
+  AC_MSG_ERROR([failed to detect preprocessor warning option])
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+
+AT_CHECK_DEFINES(
+[/* #undef HAVE_AUTOCONF_IO_H */
+#define HAVE_STDIO_H 1
+])
+
+AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+
+
+
+## ------------------ ##
+## AC_TRY_LINK_FUNC.  ##
+## ------------------ ##
+
+AT_CHECK_MACRO([AC_TRY_LINK_FUNC],
+[AC_TRY_LINK_FUNC(exit,,
+                  [AC_MSG_ERROR([cannot find `exit'])])
+AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
+                 [AC_MSG_ERROR([found a nonexistent function])])])
