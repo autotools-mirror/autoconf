@@ -1,5 +1,10 @@
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
+	* autoupdate.in (&parse_args): Support `-'.
+
+	
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
 	* autoupdate.in: Less Bournisms, more Wallisms.
 
 2001-02-23  Jim Meyering  <meyering@lucent.com>

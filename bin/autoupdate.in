@@ -137,12 +137,18 @@ sub find_configure_ac ()
 sub parse_args ()
 {
   my $srcdir;
+  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
+  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
+  my $update_stdin = grep /^-$/, @ARGV;
+  @ARGV = grep !/^-$/, @ARGV;
   Getopt::Long::config ("bundling");
-  Getopt::Long::GetOptions ("A|autoconf-dir|m|macrodir=s" => \$autoconf_dir,
-			    "h|help" => \&print_usage,
-			    "V|version" => \&print_version,
-			    "v|verbose" => \$verbose)
+  Getopt::Long::GetOptions ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
+			    'h|help'    => \&print_usage,
+			    'V|version' => \&print_version,
+			    'v|verbose' => \$verbose)
     or exit 1;
+  push @ARGV, '-'
+    if $update_stdin;
   if (! @ARGV)
     {
       my $configure_ac = find_configure_ac;
@@ -245,13 +251,17 @@ close MACROS
 # Don't keep AU macros in @AC_MACROS.
 delete $ac_macros{$_}
   foreach (keys %au_macros);
-print STDERR "AC: " . join (' ', sort keys %ac_macros) . "\n\n\n";
-print STDERR "AU: " . join (' ', sort keys %au_macros) . "\n";
+if ($verbose)
+  {
+    print STDERR "Current Autoconf macros:\n";
+    print STDERR join (' ', sort keys %ac_macros) . "\n\n";
+    print STDERR "Obsolete Autoconf macros:\n";
+    print STDERR join (' ', sort keys %au_macros) . "\n\n";
+  }
 
 # $au_changequote -- enable the quote `[', `]' right before any AU macro.
 my $au_changequote =
   's/\b(' . join ('|', keys %au_macros) . ')\b/_au_changequote([,])$1/g';
-print STDERR "$au_changequote\n";
 
 # au.m4 -- definitions the AU macros.
 system ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
@@ -409,8 +419,12 @@ EOF
     # Now ask m4 to perform the update.
     print STDERR "$me: running $m4 $tmp/input.m4"
        if $verbose;
-    system ("$m4 $tmp/input.m4 >$tmp/updated") == 0
-       or die "$me: cannot update \`$filename'";
+    if (system ("$m4 $tmp/input.m4 >$tmp/updated"))
+       {
+	 # Don't let `die' with random errno.
+	 $! = 1;
+	 die "$me: cannot update \`$filename'\n";
+       };
 
     if ("$file" eq "$tmp/stdin")
        {
