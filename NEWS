@@ -1,3 +1,8 @@
+* Major changes in Autoconf 2.59b
+
+** AC_CHECK_ALIGNOF
+  New macro that computes the default alignment of a type.
+
 * Major changes in Autoconf 2.59a
 
 ** AC_PROG_GREP
@@ -1176,8 +1181,8 @@ Various bug fixes.
 
 -----
 
-Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003
-Free Software Foundation, Inc.
+Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
+2003, 2004 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 

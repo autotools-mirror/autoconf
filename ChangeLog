@@ -1,3 +1,14 @@
+2004-03-15  Paul Eggert  <eggert@gnu.org>
+
+	* NEWS: New macro AC_CHECK_ALIGNOF.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Document it.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Use long int rather than int;
+	avoid "a `$1'" since this isn't grammatical if $1 begins with a vowel.
+	(AC_CHECK_ALIGNOF): New macro.
+	* tests/mktests.sh (ac_exclude_list): Exclude AC_CHECK_ALIGNOF.
+	* tests/semantics.at (AC_CHECK_ALIGNOF): Add tests similar to
+	those for sizeof.
+
 2004-03-03  Paul Eggert  <eggert@twinsun.com>
 
 	* bin/Makefile.am (edit): Don't use $< in a context where

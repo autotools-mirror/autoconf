@@ -2,7 +2,7 @@
 
 AT_BANNER([Semantics.])
 
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -236,6 +236,43 @@ AT_CHECK_MACRO([AC_CHECK_MEMBERS],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_STRUCT_YES_S_NO */
 #define HAVE_STRUCT_YES_S_YES 1
+])])
+
+
+# AC_CHECK_ALIGNOF
+# ----------------
+# Not cross-compiling.
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF],
+[[AC_CHECK_ALIGNOF(char)
+AC_CHECK_ALIGNOF(charchar,
+[[#include <stddef.h>
+#include <stdio.h>
+typedef char charchar[2];]])
+AC_CHECK_ALIGNOF(charcharchar)
+]],
+[AT_CHECK_DEFINES(
+[#define ALIGNOF_CHAR 1
+#define ALIGNOF_CHARCHAR 1
+#define ALIGNOF_CHARCHARCHAR 0
+])])
+
+
+# AC_CHECK_ALIGNOF
+# ----------------
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF],
+[[# Exercise the code used when cross-compiling
+cross_compiling=yes
+AC_CHECK_ALIGNOF(char)
+AC_CHECK_ALIGNOF(charchar,
+[[#include <stddef.h>
+#include <stdio.h>
+typedef char charchar[2];]])
+AC_CHECK_ALIGNOF(charcharchar)
+]],
+[AT_CHECK_DEFINES(
+[#define ALIGNOF_CHAR 1
+#define ALIGNOF_CHARCHAR 1
+#define ALIGNOF_CHARCHARCHAR 0
 ])])
 
 

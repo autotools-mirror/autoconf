@@ -82,7 +82,7 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_CANONICALIZE, AC_PREFIX_PROGRAM, AC_PREREQ
 #   Need an argument.
 #
-# - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
+# - AC_CHECK alignof, decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
 #
 # - AC_CONFIG
@@ -131,7 +131,7 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #
 ac_exclude_list='^AC_ARG_VAR$
 ^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
-^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
+^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_(F77|FC)_FUNC$
 ^AC_FC_(FUNC|FREEFORM|SRCEXT)$
