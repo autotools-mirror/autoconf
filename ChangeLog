@@ -1,3 +1,9 @@
+2001-06-23  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Consider
+	inttypes.h is missing if it conflicts with sys/types.h, as on IRIX
+	5.3.
+
 2001-06-23  Paolo Bonzini <bonzini@gnu.org>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Defer parsing of

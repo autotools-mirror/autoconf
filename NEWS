@@ -29,6 +29,8 @@
   likely.
 - `config.status foo' works properly when `foo' depends on variables
   set in an AC_CONFIG_THING INIT-CMD.
+- if inttypes.h and sys/types.h are conflicting, consider inttypes.h
+  doesn't exist.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
