@@ -5193,7 +5193,7 @@ detect failures.  Invoking @samp{cc -c a.c -o a.o; cc -c b.c -o b.o; cc
 a.o b.o -o c} solves the issue.
 
 @item Don't rely on correct @code{#line} support
-On Solaris 2.8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
+On Solaris 8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
 111679-08 2002/05/09)) rejects @code{#line} directives whose line
 numbers are greater than 32767.  In addition, nothing in @sc{posix}
 makes this invalid.  That is the reason why Autoconf stopped issuing
