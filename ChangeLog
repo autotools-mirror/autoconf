@@ -1,5 +1,13 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Rename as...
+	(_AC_INIT_PARSE_ARGS): this.
+	Move the display of help and version strings to...
+	(_AC_INIT_HELP, _AC_INIT_VERSION): here.
+	(AC_INIT): Adjust.  Also, fix quotation.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	Some tests are failing with srcdir != builddir, because they can't
 	find config.guess, install-sh etc.
 	Reported by Erez Zadok.
