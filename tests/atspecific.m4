@@ -44,8 +44,8 @@ m4_define([AT_CHECK_CONFIGURE],
 [AT_CLEANUP_FILE_IFELSE([config.hin],
                         [AT_CLEANUP_FILE(config.h)])dnl
 AT_CLEANUP_FILES(config.log config.status config.cache)dnl
-AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
-test $at_verbose = echo && echo "--- config.log" && cat config.log])
+AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [],
+        [test $at_verbose = echo && echo "--- config.log" && cat config.log])])
 
 
 # _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)

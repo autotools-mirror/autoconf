@@ -433,21 +433,21 @@ $at_traceon
 ( $1 ) >stdout 2>stderr
 at_status=$?
 $at_traceoff
-at_continue=:
+at_failed=false
 dnl Check stderr.
 m4_case([$4],
         ignore, [cat stderr >&5],
         experr, [AT_CLEANUP_FILE([experr])dnl
-$at_diff experr stderr >&5 || at_continue='exit 1'],
-        [], [$at_diff empty stderr >&5 || at_continue='exit 1'],
-        [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr >&5 || at_continue='exit 1'])
+$at_diff experr stderr >&5 || at_failed=:],
+        [], [$at_diff empty stderr >&5 || at_failed=:],
+        [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr >&5 || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
         ignore, [cat stdout >&5],
         expout, [AT_CLEANUP_FILES([expout])dnl
-$at_diff expout stdout >&5 || at_continue='exit 1'],
-        [], [$at_diff empty stdout >&5 || at_continue='exit 1'],
-        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_continue='exit 1'])
+$at_diff expout stdout >&5 || at_failed=:],
+        [], [$at_diff empty stdout >&5 || at_failed=:],
+        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_failed=:])
 dnl Check exit val.
 case $at_status in
   77) exit 77;;
@@ -456,8 +456,9 @@ m4_case([$2],
     [   *);;],
     [   m4_default([$2], [0])) ;;
    *) $at_verbose "Exit code was $at_status, expected $2" >&2
-      at_continue='exit 1';;])
+      at_failed=:;;])
 esac
-$at_continue
+AS_IFELSE($at_failed, [$5], [$6])
+$at_failed && exit 1
 $at_traceon
 ])# AT_CHECK

@@ -84,7 +84,7 @@ DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
 DIST_COMMON =  README Makefile.am Makefile.in atconfig.in config.guess \
-config.sub ltconfig ltmain.sh
+config.sub configure configure.in ltconfig ltmain.sh
 
 
 PACKAGE = @PACKAGE@
