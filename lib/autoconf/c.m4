@@ -677,7 +677,7 @@ AC_LANG_POP()dnl
 # -------------------
 # Find the C compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(C)],
-[AC_PROG_CC])
+[AC_REQUIRE([AC_PROG_CC])])
 
 
 # ac_cv_prog_gcc
@@ -872,7 +872,7 @@ AC_LANG_POP()dnl
 # ---------------------
 # Find the C++ compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(C++)],
-[AC_PROG_CXX])
+[AC_REQUIRE([AC_PROG_CXX])])
 
 
 # ac_cv_prog_gxx
@@ -955,7 +955,7 @@ fi[]dnl
 # Find the Fortran 77 compiler.  Must be AC_DEFUN'd to be
 # AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(Fortran 77)],
-[AC_PROG_F77])
+[AC_REQUIRE([AC_PROG_F77])])
 
 
 # ac_cv_prog_g77
