@@ -117,6 +117,13 @@ Well, back onto this one :( See Peter for very useful comments on the
 technology.  Should we make this a new language?  AC_LANG(ISO C).  It
 would be great to introduce AC_LANG_COMPILER in this release too.
 
+* autoconf.texi
+Move the specific macro documentation blocks into the source files, and use
+a doc-block extraction/merge technique to get docuemntation into texi-file.
+This should help avoid bit-rot in the doc, and make the doc easier to update
+when people add/change macros.  The name "autodoc" is probably already taken 
+so we probably need another one.
+
 ------------------------------------------------------------------------------
 
 * Automake
