@@ -9438,6 +9438,27 @@ newer systems, @code{rename}).
 @c Ian said: ``I don't think -p or -r are portable''!!! How can you live
 @c without -r???
 
+Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
+ownerships.  But whether it actually does copy ownerships or not is a
+system dependent policy decision implemented by the kernel.  If the
+kernel allows it then it happens.  If the kernel does not allow it then
+it does not happen.  It is not something @command{cp} itself has control
+over.
+
+In SysV any user can chown files to any other user, and also had a
+non-sticky @file{/tmp}.  That undoubtedly derives from the heritage of
+SysV in a business environment without hostile users.  BSD changed this
+to be a more secure model where only root can @command{chown} files, and
+used a sticky @file{/tmp}.  That undoubtedly derives from the heritage
+of BSD in a campus environment.
+
+Linux by default follows BSD, but it can be configured to allow
+@command{chown}.  HP-UX as an alternate example follows SysV, but it can
+be configured to use the modern security model and disallow
+@command{chown}.  Since it is an administrator configurable parameter
+you can't use the name of the kernel as an indicator of the behavior.
+
+
 
 @item @command{date}
 @c -----------------
