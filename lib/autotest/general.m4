@@ -62,10 +62,6 @@ include(m4sh.m4)					    -*- Autoconf -*-
 #  - TAIL
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
-#
-#  - TEST
-#    for each test group: proper code, to reinsert between cleanups;
-#    undiverted into TESTS once at_data_files diverted.
 
 m4_define([_m4_divert(DEFAULT)],       0)
 m4_define([_m4_divert(OPTIONS)],      10)
@@ -73,8 +69,6 @@ m4_define([_m4_divert(HELP)],         20)
 m4_define([_m4_divert(SETUP)],        30)
 m4_define([_m4_divert(TESTS)],        50)
 m4_define([_m4_divert(TAIL)],         60)
-
-m4_define([_m4_divert(TEST)],        100)
 
 m4_divert_push([TESTS])
 m4_divert_push([KILL])
@@ -94,6 +88,7 @@ m4_define([AT_LINE],
 m4_define([AT_INIT],
 [m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
+m4_define([AT_data_files], [stdout stderr ])
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -225,6 +220,7 @@ m4_divert([TESTS])dnl
 for at_test in $at_tests
 do
   at_status=0
+  rm -rf $at_data_files
   case $at_test in
 dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
@@ -306,6 +302,9 @@ m4_divert_pop()dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
 at_tests_all="AT_TESTS_ALL "])])dnl
+m4_wrap([m4_divert_text([SETUP],
+                        [# List of the output files.
+at_data_files="AT_data_files "])])dnl
 ])# AT_INIT
 
 
@@ -319,12 +318,8 @@ m4_define([AT_SETUP],
 m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
 m4_divert_text([HELP],
                [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
-m4_pushdef([AT_data_files], [stdout stderr ])
 m4_divert_push([TESTS])dnl
   AT_ordinal ) [#] AT_ordinal. AT_LINE: $1
-dnl Here will be inserted the definition of at_data_files.
-m4_divert([TEST])[]dnl
-    rm -rf $at_data_files
     echo AT_LINE >at-setup-line
     $at_verbose 'testing $1'
     $at_verbose $at_n "     $at_c"
@@ -340,8 +335,24 @@ m4_divert([TEST])[]dnl
 
 # AT_CLEANUP_FILE_IFELSE(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
 # --------------------------------------------------------------
+# We try to build a regular expression matching `[', `]', `*', and
+# `.', i.e., the regexp active characters.
+#
+# Novices would write, `[[]*.]', which sure fails since the character
+# class ends with the first closing braquet.
+# M4 gurus will sure write `[\[\]*.]', but it will fail too because
+# regexp does not support this and understands `\' per se.
+# Regexp gurus will write `[][*.]' which is indeed what Regexp expects,
+# but it will fail for M4 reasons: it's the same as `[*.]'.
+#
+# So the question is:
+#
+#       Can you write a regexp that matches those four characters,
+#       and respects the M4 quotation contraints?
+#
+# The answer is: (rot13) tvira va gur ertrkc orybj, lbh vqvbg!
 m4_define([AT_CLEANUP_FILE_IFELSE],
-[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [\([\[\]*.]\)], [\\\1])),
+[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [[[]\|[]]\|[*.]], [\\\&])),
        -1,
        [$3], [$2])])
 
@@ -375,9 +386,6 @@ m4_define([AT_CLEANUP],
     ;;
 
 m4_divert([TESTS])[]dnl
-    at_data_files="AT_data_files"
-m4_undivert([TEST])[]dnl
-m4_popdef([AT_data_files])dnl
 m4_divert_pop()dnl
 ])# AT_CLEANUP
 

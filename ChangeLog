@@ -1,5 +1,15 @@
 2000-12-20  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_CLEANUP_FILE_IFELSE): Fix the regexp: the
+	pattern ` state* ' was added many times for `*' was improperly
+	escaped.
+	(AT_INIT): Remove the data files before running the tests.
+	Define AT_data_files and output it.
+	(AT_SETUP): Don't.
+	(_m4_divert(TEST)): Remove, now useless.
+
+2000-12-20  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4: `dnl' the AC_LANG_PUSH and AC_LANG_POP.
 	(AC_PROG_CXXCPP, AC_PROG_CPP): Set the current language instead of
 	just asserting it, since these macros can be called directly.
