@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 08 November 1994
+@set lastupdate 10 November 1994
 @c %**end of header
 
 @ifinfo
@@ -369,12 +369,11 @@ For example, a Sun 3 might be @samp{m68k-sun-sunos4.1}.
 
 The @code{configure} script needs to be able to decode all plausible
 alternatives for how to describe a machine.  Thus, @samp{sun3-sunos4.1}
-would be a valid alias.  So would @samp{sun3-bsd4.2}, since SunOS is
-basically @sc{BSD} and no other @sc{BSD} system is used on a Sun.  For many
-programs, @samp{vax-dec-ultrix} would be an alias for
-@samp{vax-dec-bsd}, simply because the differences between Ultrix and
-@sc{BSD} are rarely noticeable, but a few programs might need to distinguish
-them.
+would be a valid alias.  For many programs, @samp{vax-dec-ultrix} would
+be an alias for @samp{vax-dec-bsd}, simply because the differences
+between Ultrix and @sc{BSD} are rarely noticeable, but a few programs
+might need to distinguish them.
+@c Real 4.4BSD now runs on some Suns.
 
 There is a shell script called @file{config.sub} that you can use
 as a subroutine to validate system types and canonicalize aliases.
@@ -462,7 +461,6 @@ cross-operation is not a meaningful thing.
 Some programs have ways of configuring themselves automatically.  If
 your program is set up to do this, your @code{configure} script can simply
 ignore most of its arguments.
-
 
 @node Source Language
 @chapter Using Languages Other Than C
