@@ -2,7 +2,7 @@
 # Checking for programs.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2004 Free Software Foundation, Inc.
+# 2002, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -672,7 +672,10 @@ fi
 
 # AC_PROG_MAKE_SET
 # ----------------
-# Define SET_MAKE to set ${MAKE} if make doesn't.
+# Define SET_MAKE to set ${MAKE} if Make does not do so automatically.  If Make
+# does not run the test Makefile, we assume that the Make program the user will
+# invoke does set $(MAKE).  This is typical, and emitting `MAKE=foomake' is
+# always wrong if `foomake' is not available or does not work.
 AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
@@ -682,11 +685,11 @@ AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
 all:
-	@echo 'ac_maketemp="$(MAKE)"'
+	@echo 'ac_maketemp=X"$(MAKE)"'
 _ACEOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
 eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
-if test -n "$ac_maketemp"; then
+if test "$ac_maketemp" != X ; then
   eval ac_cv_prog_make_${ac_make}_set=yes
 else
   eval ac_cv_prog_make_${ac_make}_set=no

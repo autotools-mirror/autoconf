@@ -1835,9 +1835,10 @@ following macro allows you to use it even with those versions.
 @defmac AC_PROG_MAKE_SET
 @acindex{PROG_MAKE_SET}
 @ovindex SET_MAKE
-If @command{make} predefines the Make variable @code{MAKE}, define
-output variable @code{SET_MAKE} to be empty.  Otherwise, define
-@code{SET_MAKE} to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for
+If the Make command, @code{$MAKE} if set or else @samp{make}, predefines
+@code{$(MAKE)}, define output variable @code{SET_MAKE} to be empty.
+Otherwise, define @code{SET_MAKE} to a macro definition that sets
+@code{$(MAKE)}, such as @samp{MAKE=make}.  Calls @code{AC_SUBST} for
 @code{SET_MAKE}.
 @end defmac
 

@@ -1,3 +1,9 @@
+2005-01-04  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): If the Make program does
+	not seem to work, assume it does set $(MAKE).
+	* doc/autoconf.texi (AC_PROG_MAKE_SET): Update.
+
 2005-01-03  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Add a comment about nesting.
