@@ -1,3 +1,14 @@
+2005-02-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Use @acronym for DJGPP.
+	Fix some @code's that should have been @env's, and vice versa.
+	Sort environment variable names.
+	Mention that shells no longer inherit IFS.
+	Don't recommend PATH_SEPARATOR=';' so strongly.
+	Mention that $RANDOM might expand to the empty string.
+	"symlink" and "soft link" -> "symbolic link".
+	Improve mktemp description (reported by Bruno Haible).
+
 2005-02-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/foreign.at (Libtool): Don't overquote AT_SETUP arg.
