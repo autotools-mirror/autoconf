@@ -1221,9 +1221,10 @@ if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # IFS
-# We need space, tab and new line.
-IFS="
- 	"dnl
+# We need space, tab and new line, in precisely that order.
+ac_nl='
+'
+IFS=" 	$ac_nl"dnl
 ])
 
 # _AC_INIT_PREPARE([UNIQUE-FILE-IN-SOURCE-DIR])
