@@ -536,7 +536,7 @@ main()
 changequote([,])dnl
 AC_TEST_RUN([$ac_prog],
   ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)])dnl
-AC_DEFINE(GETGROUPS_T, $ac_cv_type_getgroups)
+AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
 ])dnl
 dnl
 define(AC_UID_T,
@@ -573,7 +573,7 @@ AC_CACHE_VAL(ac_cv_type_signal,
 #endif
 extern void (*signal ()) ();],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])dnl
-AC_DEFINE(RETSIGTYPE, $ac_cv_type_signal)
+AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
 ])dnl
 dnl
 dnl
@@ -881,7 +881,7 @@ main ()
   exit (find_stack_direction() < 0);
 }], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
   ac_cv_c_stack_direction=0)])dnl
-AC_DEFINE(STACK_DIRECTION, $ac_cv_c_stack_direction)
+AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 fi
 AC_SUBST(ALLOCA)dnl
 ])dnl
