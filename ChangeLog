@@ -1,3 +1,9 @@
+1999-02-23  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect ReliantUNIX on MIPS. Contributed by Andrej
+	Borsenkow <borsenkow.msk@sni.de>.
+	Also remove random trailing whitespace.
+	
 1999-02-22  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (System Services): Explain the semantics of the

@@ -378,21 +378,21 @@ EOF
               sed 's/^              //' << EOF >$dummy.c
               #include <stdlib.h>
               #include <unistd.h>
-              
+
               int main ()
               {
               #if defined(_SC_KERNEL_BITS)
                   long bits = sysconf(_SC_KERNEL_BITS);
-              #endif 
+              #endif
                   long cpu  = sysconf (_SC_CPU_VERSION);
-              
-                  switch (cpu) 
+
+                  switch (cpu)
               	{
               	case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
               	case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
-              	case CPU_PA_RISC2_0: 
+              	case CPU_PA_RISC2_0:
               #if defined(_SC_KERNEL_BITS)
-              	    switch (bits) 
+              	    switch (bits)
               		{
               		case 64: puts ("hppa2.0w"); break;
               		case 32: puts ("hppa2.0n"); break;
@@ -400,7 +400,7 @@ EOF
               		} break;
               #else  /* !defined(_SC_KERNEL_BITS) */
               	    puts ("hppa2.0"); break;
-              #endif 
+              #endif
               	default: puts ("hppa1.0"); break;
               	}
                   exit (0);
@@ -622,14 +622,14 @@ EOF
 			16)
 				UNAME_MACHINE="alphaev6"
 				;;
-			esac	
+			esac
 
 			objdump --private-headers $dummy | \
 			  grep ld.so.1 > /dev/null
 			if test "$?" = 0 ; then
 				LIBC="libc1"
 			fi
-		fi	
+		fi
 		rm -f $dummy.s $dummy
 		echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC} ; exit 0
 	elif test "${UNAME_MACHINE}" = "mips" ; then
@@ -787,6 +787,9 @@ EOF
 	exit 0 ;;
     SM[BE]S:UNIX_SV:*:*)
 	echo mips-dde-sysv${UNAME_RELEASE}
+	exit 0 ;;
+    RM*:ReliantUNIX-*:*:*)
+	echo mips-sni-sysv4
 	exit 0 ;;
     RM*:SINIX-*:*:*)
 	echo mips-sni-sysv4
