@@ -1,3 +1,9 @@
+2003-09-29  Akim Demaille  <akim@epita.fr>
+
+	Version 2.59e.
+
+	* config/mkinstalldirs: Upgrade.
+
 2003-09-28  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Set DUALCASE=1, for MKS sh.
@@ -6,7 +12,7 @@
 	(_AS_MKDIR_P_PREPARE): Change "rm -fr ./-p" to the more-conservative
 	"test -d ./-p && rmdir ./-p".  Suggested by Andreas Schwab in:
 	http://mail.gnu.org/archive/html/autoconf-patches/2003-09/msg00039.html
-	
+
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_COMMANDS): Make sure the
