@@ -614,7 +614,7 @@ at_data_files="AT_data_files "])])dnl
 # must correspond to the version of the package..  The PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_VICTIMS],
-[m4_append([AT_victims], [$1], [ ])])
+[m4_append_uniq([AT_victims], [$1], [ ])])
 
 
 # AT_SETUP(DESCRIPTION)
@@ -642,25 +642,14 @@ m4_divert_push([TESTS])dnl
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 m4_define([AT_KEYWORDS],
-[m4_append([AT_keywords], [$1], [,])])
-
-
-
-# _AT_CLEANUP_FILE_IF(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
-# -----------------------------------------------------------
-# We try to build a regular expression matching `[', `]', `*', and
-# `.', i.e., the regexp active characters.
-m4_define([_AT_CLEANUP_FILE_IF],
-[m4_match(AT_data_files, m4_re_escape([ $1 ]),
-          [$2], [$3])])
+[m4_append_uniq([AT_keywords], [$1], [,])])
 
 
 # _AT_CLEANUP_FILE(FILE)
 # ----------------------
 # Register FILE for AT_CLEANUP.
 m4_define([_AT_CLEANUP_FILE],
-[_AT_CLEANUP_FILE_IF([$1], [],
-                     [m4_append([AT_data_files], [$1 ])])])
+[m4_append_uniq([AT_data_files], [$1], [ ])])
 
 
 # AT_CLEANUP_FILES(FILES)

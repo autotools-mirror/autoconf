@@ -1,5 +1,11 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sugar.m4 (m4_append_uniq): New.
+	* lib/autotest/general.m4 (AT_VICTIMS, AT_KEYWORDS, _AT_CLEANUP_FILE):
+	Use it.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (_AS_QUOTE_IFELSE, _AS_BOX_INDIR): Use
 	m4_match.
 	(m4_re_escape): New.

@@ -1520,6 +1520,16 @@ m4_define([m4_append],
            m4_ifdef([$1], [m4_defn([$1])$3])[$2])])
 
 
+# m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR])
+# -----------------------------------------------
+# As `m4_append', but append only if not yet present.
+m4_define([m4_append_uniq],
+[m4_ifdef([$1],
+          [m4_match([$3]m4_defn([$1])[$3], m4_re_escape([$3$2$3]), [],
+                    [m4_append($@)])],
+          [m4_append($@)])])
+
+
 # m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)
 # ---------------------------------------------
 # FIXME: This macro should not exists.  Currently it's used only in
