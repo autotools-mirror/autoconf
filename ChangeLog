@@ -1,5 +1,9 @@
 2002-03-08  Akim Demaille  <akim@epita.fr>
 
+	Version 2.53.
+
+2002-03-08  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Subdirectories): Clarify that the
 	subdirectory should exist.
 

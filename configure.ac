@@ -20,19 +20,20 @@
 # 02111-1307, USA.
 
 # We need AC_CONFIG_TESTDIR.
-AC_PREREQ(2.52g)
+AC_PREREQ([2.53])
 
-AC_INIT(GNU Autoconf, 2.52j, bug-autoconf@gnu.org)
-AC_CONFIG_SRCDIR(ChangeLog)
+AC_INIT([GNU Autoconf], [2.53], [bug-autoconf@gnu.org])
+AC_SUBST([PACKAGE_NAME])dnl
+AC_CONFIG_SRCDIR([ChangeLog])
 
-AC_CONFIG_AUX_DIR(config)
-AC_CONFIG_FILES(config/Makefile)
+AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_FILES([config/Makefile])
 
 AM_INIT_AUTOMAKE
 
 # Initialize the test suite and build position independent wrappers.
-AC_CONFIG_TESTDIR(tests)
-AC_CONFIG_FILES(tests/Makefile tests/atlocal)
+AC_CONFIG_TESTDIR([tests])
+AC_CONFIG_FILES([tests/Makefile tests/atlocal])
 AC_CONFIG_FILES([tests/autoconf:tests/wrapsh.in],
                 [chmod +x tests/autoconf])
 AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],
@@ -58,17 +59,14 @@ AC_PROG_GNU_M4
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   AC_MSG_ERROR([GNU M4 1.4 is required])
 fi
-# This is needed because Automake does not seem to realize there is
-# a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
-AC_SUBST(M4)
 
 # Man pages.
 AC_CONFIG_FILES(man/Makefile)
 AM_MISSING_PROG(HELP2MAN, help2man)
 
 # We use a path for perl so the #! line in autoscan will work.
-AC_PATH_PROG(PERL, perl, no)
-AC_SUBST(PERL)dnl
+AC_PATH_PROG([PERL], perl, no)
+AC_SUBST([PERL])dnl
 if test "$PERL" = no; then
   AC_MSG_ERROR([perl is not found])
 fi
@@ -77,20 +75,14 @@ $PERL -e 'require 5.005_03;' || {
 }
 
 # Emacs modes.
-AC_CONFIG_FILES(lib/emacs/Makefile)
+AC_CONFIG_FILES([lib/emacs/Makefile])
 AM_PATH_LISPDIR
 
-# Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
-# AC_SUBSTS here too.
-AC_SUBST(PACKAGE_NAME)
-AC_SUBST(PACKAGE)
-AC_SUBST(VERSION)
-
-AC_CONFIG_FILES(Makefile doc/Makefile
-                lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
-                lib/m4sugar/Makefile
-                lib/autoconf/Makefile lib/autotest/Makefile
-                bin/Makefile)
+AC_CONFIG_FILES([Makefile doc/Makefile
+                 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
+                 lib/m4sugar/Makefile
+                 lib/autoconf/Makefile lib/autotest/Makefile
+                 bin/Makefile])
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.
