@@ -45,12 +45,12 @@ use strict;
 # -----
 $help = "Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
-Run `autoconf' (and `autoheader', `aclocal' and `automake', where
-appropriate) repeatedly to remake the Autoconf `configure' scripts
-and configuration header templates in the directory tree rooted at the
-current directory.  By default, it only remakes those files that are
-older than their predecessors.  If you install a new version of
-Autoconf, running `autoreconf' remakes all of the files by giving it
+Run `autoconf' (and `autoheader', `aclocal', `automake' and
+`gettextize', where appropriate) repeatedly to remake the GNU Build
+System files in the directory tree rooted at the current directory.
+By default, it only remakes those files that are older than their
+predecessors.  If you install a new version of GNU Build System
+components, running `autoreconf' remakes all of the files by giving it
 the `--force' option.
 
 Operation modes:
@@ -94,6 +94,7 @@ my $autoconf   = $ENV{'AUTOCONF'}   || '@autoconf-name@';
 my $autoheader = $ENV{'AUTOHEADER'} || '@autoheader-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
+my $gettextize = $ENV{'GETTEXTIZE'} || 'gettexize';
 
 
 # --install -- as --add-missing in other tools.
@@ -149,6 +150,7 @@ sub parse_args ()
     {
       $autoconf   .= ' --force';
       $autoheader .= ' --force';
+      $gettextize .= ' --force';
     }
   else
     {
@@ -167,12 +169,15 @@ sub parse_args ()
     {
       $autoconf   .= ' --debug';
       $autoheader .= ' --debug';
+      $automake   .= ' --verbose';
     }
   # --install and --symlink;
   if ($install)
     {
       $automake .= ' --add-missing';
       $automake .= ' --copy'
+	unless $symlink;
+      $gettextize .= ' --copy'
 	unless $symlink;
     }
 }
@@ -195,17 +200,38 @@ sub autoreconf ()
   # If there is no AC_INIT, then we are not interested: it looks like
   # a Cygnus thingy.
   my $configure_ac_file = new Autom4te::XFile $configure_ac;
-  my $autoconf_driven;
+  my $uses_autoconf;
   while ($_ = $configure_ac_file->getline)
      {
-       $autoconf_driven = 1
+       $uses_autoconf = 1
 	 if /AC_INIT/;
      }
-  if (!$autoconf_driven)
+  if (!$uses_autoconf)
     {
       verbose "$configure_ac: not Autoconf";
       return;
     }
+
+  # -------------------- #
+  # Running gettexitze.  #
+  # -------------------- #
+
+  my $uses_gettext = 0;
+  my $traces = new Autom4te::XFile "$autoconf --trace=AM_GNU_GETTEXT |";
+  while ($_ = $traces->getline)
+    {
+      $uses_gettext = 1
+	if /AM_GNU_GETTEXT/;
+    }
+  if (!$uses_gettext)
+    {
+      verbose "$configure_ac: not Gettext";
+    }
+  else
+    {
+      xsystem ($gettextize);
+    }
+
 
   # ----------------- #
   # Running aclocal.  #
@@ -270,14 +296,14 @@ sub autoreconf ()
   # We now consider that if AC_CONFIG_HEADERS is used, then autoheader
   # is used too.
   # Just as for autoconf, up to date ness is performed by the tool itself.
-  my $autoheader_driven = 0;
+  my $uses_autoheader = 0;
   my $traces = new Autom4te::XFile "$autoconf --trace=AC_CONFIG_HEADERS |";
   while ($_ = $traces->getline)
     {
-      $autoheader_driven = 1
+      $uses_autoheader = 1
 	if /AC_CONFIG_HEADERS/;
     }
-  if (!$autoheader_driven)
+  if (!$uses_autoheader)
     {
       verbose "$configure_ac: not Autoheader";
     }

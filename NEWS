@@ -26,16 +26,19 @@
 ** Emacs
   Autoconf and Autotest modes are provided.
 
-** autom4te
-  New executable, used by the Autoconf suite to cache and speed up
-  most processing.
-
-** Standardization of the executables interface
+** Executables
+- autom4te
+  New, used by the Autoconf suite to cache and speed up most processing.
 - --force, -f
   Supported by autom4te, autoconf and autoheader.
 - --include, -I
   Replaces --autoconf-dir and --localdir in autoconf, autoheader and
   autoupdate.
+- autoreconf
+  No longer passes --cygnus, --foreign, --gnits, --gnu, --include-deps:
+  automake options are to be given via AUTOMAKE_OPTIONS.
+- autoreconf
+  Runs gettextize when appropriate.
 
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.

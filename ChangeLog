@@ -1,5 +1,11 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (autoreconf Invocation): Adjust.
+	* bin/autoreconf.in (autoreconf): Run gettextize when appropriate.
+
+	
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (AT_CHECK_PERL_SYNTAX): Check autoreconf.
 	(Syntax of the shell scripts): Don't.
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in: Don't

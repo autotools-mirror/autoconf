@@ -1463,26 +1463,6 @@ plays with different versions of Autoconf simultaneously.
 Specify location of additional macro files (@file{m4} by default).
 @end table
 
-Additionally, the following options are recognized and passed to
-@code{automake}:
-
-@table @option
-@item --cygnus
-Assume program is part of Cygnus-style tree.
-
-@item --foreign
-Set strictness to foreign.
-
-@item --gnits
-Set strictness to gnits.
-
-@item --gnu
-Set strictness to gnu.
-
-@item --include-deps
-Include generated dependencies in @file{Makefile.in}.
-@end table
-
 
 @c ========================================= Initialization and Output Files.
 

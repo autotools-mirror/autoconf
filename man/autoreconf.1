@@ -6,12 +6,12 @@ autoreconf \- Update generated configuration files
 .B autoreconf
 [\fIOPTION\fR] ... [\fITEMPLATE-FILE\fR]
 .SH DESCRIPTION
-Run `autoconf' (and `autoheader', `aclocal' and `automake', where
-appropriate) repeatedly to remake the Autoconf `configure' scripts
-and configuration header templates in the directory tree rooted at the
-current directory.  By default, it only remakes those files that are
-older than their predecessors.  If you install a new version of
-Autoconf, running `autoreconf' remakes all of the files by giving it
+Run `autoconf' (and `autoheader', `aclocal', `automake' and
+`gettextize', where appropriate) repeatedly to remake the GNU Build
+System files in the directory tree rooted at the current directory.
+By default, it only remakes those files that are older than their
+predecessors.  If you install a new version of GNU Build System
+components, running `autoreconf' remakes all of the files by giving it
 the `--force' option.
 .SS "Operation modes:"
 .TP
