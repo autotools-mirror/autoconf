@@ -881,8 +881,7 @@ if test -z "$CPP"; then
     # Double quotes because CPP needs to be expanded
     for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
     do
-      # break 2 since there is a loop in there.
-      _AC_PROG_PREPROC_WORKS_IFELSE([break 2])
+      _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
     ac_cv_prog_CPP=$CPP
   ])dnl
@@ -1089,8 +1088,7 @@ if test -z "$CXXCPP"; then
     # Double quotes because CXXCPP needs to be expanded
     for CXXCPP in "$CXX -E" "/lib/cpp"
     do
-      # break 2 since there is a loop in there.
-      _AC_PROG_PREPROC_WORKS_IFELSE([break 2])
+      _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
     ac_cv_prog_CXXCPP=$CXXCPP
   ])dnl
