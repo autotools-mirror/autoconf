@@ -1,3 +1,7 @@
+1999-04-08  Ben Elliston  <bje@cygnus.com>
+
+	* config.sub: Handle MPE/iX.
+
 1999-04-07  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Add more CLIX machines. From Thomas Dickey.

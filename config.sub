@@ -352,6 +352,10 @@ case $basic_machine in
 		basic_machine=hppa1.0-hp
 		os=-mpeix
 		;;
+	hp3k9[0-9][0-9] | hp9[0-9][0-9])
+		basic_machine=hppa1.0-hp
+		os=-mpeix
+		;;
 	i370-ibm* | ibm*)
 		basic_machine=i370-ibm
 		os=-mvs
@@ -943,6 +947,9 @@ case $basic_machine in
 				vendor=ibm
 				;;
 			-hpux*)
+				vendor=hp
+				;;
+			-mpeix*)
 				vendor=hp
 				;;
 			-mpeix*)
