@@ -10272,6 +10272,7 @@ test:
 	: BAR is "$(BAR)"
 @end example
 
+@noindent
 shows @code{FOO} equal to @code{one BAR = two}.  Other Makes sensibly
 let a backslash continue only to the immediately following line.
 
