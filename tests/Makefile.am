@@ -45,18 +45,18 @@ EXTRA_DIST = README \
 check-local: atconfig atlocal testsuite
 	$(SHELL) testsuite
 
-AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
+AUTOM4TE = AUTOM4TE_CFG='$(top_builddir)/lib/autom4te.cfg' \
+           AC_MACRODIR='$(top_srcdir)/lib' \
+           ../bin/autom4te
 testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
 	   atspecific.m4 \
            $(SUITE)
-	$(AUTOM4TE) -I $(srcdir) -I $(top_srcdir)/lib \
-	  autotest/autotest.m4 suite.at -o $@.tmp
-	chmod +x $@.tmp
+	$(AUTOM4TE) --set=autotest -I $(srcdir) -I $(top_srcdir)/lib \
+	  suite.at -o $@.tmp
 	mv $@.tmp $@
-
 
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,

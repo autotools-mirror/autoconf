@@ -1,0 +1,136 @@
+# Definition of macro sets.                              -*- Makefile -*-
+#
+# Copyright 2001 Free Software Foundation, Inc.
+#
+# This file is part of GNU Autoconf.
+#
+# GNU Autoconf is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# GNU Autoconf is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with autoconf; see the file COPYING.  If not, write to
+# the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
+## ---------- ##
+## Autoconf.  ##
+## ---------- ##
+
+begin-set: "Autoconf"
+# patterns: "*.ac"
+# patterns: "configure.in"
+args: --include @datadir@
+args: autoconf/autoconf.m4f
+args: --mode 777
+args: --warning syntax
+args: --normalize
+# Wanted by autoheader
+args: --preselect AC_CONFIG_HEADERS
+args: --preselect AH_OUTPUT
+args: --preselect AC_DEFINE_TRACE_LITERAL
+# Wanted by Automake
+args: --preselect AC_LIBSOURCE
+args: --preselect AC_SUBST
+# Wanted by autoscan
+args: --preselect AC_CHECK_FUNCS
+args: --preselect AC_CHECK_HEADERS
+args: --preselect AC_CHECK_LIB
+args: --preselect AC_CHECK_TYPES
+args: --preselect AC_C_CONST
+args: --preselect AC_C_INLINE
+args: --preselect AC_DECL_SYS_SIGLIST
+args: --preselect AC_FUNC_ALLOCA
+args: --preselect AC_FUNC_CHOWN
+args: --preselect AC_FUNC_ERROR_AT_LINE
+args: --preselect AC_FUNC_FNMATCH
+args: --preselect AC_FUNC_FORK
+args: --preselect AC_FUNC_FSEEKO
+args: --preselect AC_FUNC_GETGROUPS
+args: --preselect AC_FUNC_GETLOADAVG
+args: --preselect AC_FUNC_GETPGRP
+args: --preselect AC_FUNC_LSTAT
+args: --preselect AC_FUNC_MALLOC
+args: --preselect AC_FUNC_MEMCMP
+args: --preselect AC_FUNC_MKTIME
+args: --preselect AC_FUNC_MMAP
+args: --preselect AC_FUNC_OBSTACK
+args: --preselect AC_FUNC_SETPGRP
+args: --preselect AC_FUNC_SETVBUF_REVERSED
+args: --preselect AC_FUNC_STAT
+args: --preselect AC_FUNC_STRCOLL
+args: --preselect AC_FUNC_STRERROR_R
+args: --preselect AC_FUNC_STRFTIME
+args: --preselect AC_FUNC_STRTOD
+args: --preselect AC_FUNC_UTIME_NULL
+args: --preselect AC_FUNC_VPRINTF
+args: --preselect AC_FUNC_WAIT3
+args: --preselect AC_HEADER_DIRENT
+args: --preselect AC_HEADER_MAJOR
+args: --preselect AC_HEADER_STAT
+args: --preselect AC_HEADER_STDC
+args: --preselect AC_HEADER_SYS_WAIT
+args: --preselect AC_HEADER_TIME
+args: --preselect AC_PATH_X
+args: --preselect AC_PROG_AWK
+args: --preselect AC_PROG_CC
+args: --preselect AC_PROG_CPP
+args: --preselect AC_PROG_CXX
+args: --preselect AC_PROG_GCC_TRADITIONAL
+args: --preselect AC_PROG_INSTALL
+args: --preselect AC_PROG_LEX
+args: --preselect AC_PROG_LN_S
+args: --preselect AC_PROG_MAKE_SET
+args: --preselect AC_PROG_RANLIB
+args: --preselect AC_PROG_YACC
+args: --preselect AC_STRUCT_ST_BLOCKS
+args: --preselect AC_STRUCT_TIMEZONE
+args: --preselect AC_STRUCT_TM
+args: --preselect AC_TYPE_MODE_T
+args: --preselect AC_TYPE_OFF_T
+args: --preselect AC_TYPE_PID_T
+args: --preselect AC_TYPE_SIGNAL
+args: --preselect AC_TYPE_SIZE_T
+args: --preselect AC_TYPE_UID_T
+end-set: "Autoconf"
+
+## -------- ##
+## Autotest ##
+## -------- ##
+
+begin-set: "Autotest"
+# patterns: *.at
+args: --include @datadir@
+args: autotest/autotest.m4
+args: --mode 777
+args: --warning syntax
+end-set: "Autotest"
+
+## ---- ##
+## M4sh ##
+## ---- ##
+
+begin-set: "M4sh"
+# patterns: *.as
+args: --include @datadir@
+args: m4sugar/m4sh.m4
+args: --mode 777
+args: --warning syntax
+end-set: "M4sh"
+
+## ------- ##
+## M4sugar ##
+## ------- ##
+
+begin-set: "M4sugar"
+# patterns: *.msh
+args: --include @datadir@
+args: m4sugar/m4sugar.m4
+args: --warning syntax
+end-set: "M4sugar"

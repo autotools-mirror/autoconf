@@ -26,9 +26,10 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
 
 BEGIN
 {
-  my $prefix = "@prefix@";
-  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
-  unshift @INC, "$perllibdir";
+  my $datadir = ($ENV{'autom4te_perllibdir'}
+		 || $ENV{'AC_MACRODIR'}
+		 || '@datadir@');
+  unshift @INC, "$datadir";
 }
 
 ## --------- ##
@@ -235,6 +236,25 @@ use File::Basename;
 use IO::File;
 use strict;
 
+# Configuration file.
+my $datadir = $ENV{'AC_MACRODIR'} || '@datadir@';
+my $autom4te_cfg = $ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg";
+
+# $SET{$SET} is the list of automatic options for $SET.
+my %set;
+my $set;
+
+my $output = '-';
+
+# Should we normalize the output?
+my $normalize = 0;
+
+# Mode of the output file except for traces.
+my $mode = "0666";
+
+# If melt, don't use frozen files.
+my $melt = 0;
+
 # Names of the cache directory, cache directory index, trace cache
 # prefix, and output cache prefix.
 my $cache = "$me.cache";
@@ -252,11 +272,6 @@ my %trace;
 #
 # FIXME: What about `sinclude'?
 my @preselect = ('include', 'm4_pattern_allow', 'm4_pattern_forbid');
-
-my $output = '-';
-
-# Should we normalize the output?
-my $normalize = 0;
 
 # Autom4te's default warnings, and the actual list of warnings.
 my @my_warning = ('syntax');
@@ -394,6 +409,15 @@ Operation modes:
       --normalize          smash successive empty lines
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+  -s, --set=SET            specify the set of M4 macros to use
+  -m, --mode=OCTAL         change the non trace output file mode (0666)
+  -M, --melt               don\'t use M4 frozen files
+
+Sets include:
+  \`Autoconf\'   create Autoconf configure scripts
+  \`Autotest\'   create Autotest test suites
+  \`M4sh\'       create M4sh shell scripts
+  \`M4sugar\'    create M4sugar output
 
 Warning categories include:
   \`cross\'         cross compilation issues
@@ -437,6 +461,46 @@ EOF
 }
 
 
+# load_configuration ()
+# ---------------------
+# Load the configuration file.
+sub load_configuration ()
+{
+  use Text::ParseWords;
+
+  my $cfg = new IO::File ($autom4te_cfg)
+    or die "$me: cannot read $autom4te_cfg: $!\n";
+  my $set;
+  while ($_ = $cfg->getline)
+    {
+      chomp;
+      # Comments.
+      next
+	if /^\s*(\#.*)?$/;
+
+      my @words = shellwords ($_);
+      my $type = shift @words;
+      if ($type eq 'begin-set:')
+	{
+	  $set = lc $words[0];
+	}
+      elsif ($type eq 'end-set:')
+	{
+	  die "$me: $autom4te_cfg:$.: end-set mismatch: $set\n"
+	    if $set ne lc $words[0];
+	}
+      elsif ($type eq 'args:')
+	{
+	  push @{$set{$set}}, @words;
+	}
+      else
+	{
+	  die "$me: $autom4te_cfg:$.: unknown directive: $type\n";
+	}
+    }
+}
+
+
 # parse_args ()
 # -------------
 # Process any command line arguments.
@@ -444,18 +508,36 @@ sub parse_args ()
 {
   my @trace;
 
-  Getopt::Long::config ("bundling");
+  # We want to look for the early options, which should not be found
+  # in the configuration file.  Prepend to the user arguments.
+  Getopt::Long::Configure ("bundling", "pass_through");
+  GetOptions (
+	      "h|help"     => \&print_usage,
+	      "V|version"  => \&print_version,
+
+	      "s|set=s"    => \$set,
+	      "v|verbose"  => \$verbose,
+	      "d|debug"    => \$debug,
+	     )
+    or exit 1;
+  Getopt::Long::Configure ("defaults");
+  unshift @ARGV, @{$set{$set}}
+    if $set;
+
+  verbose "arguments: @ARGV\n"
+    if $debug;
+
+  # Process the arguments for real this time.
+  Getopt::Long::Configure ("bundling");
   GetOptions
     (
      # Operation modes:
-     "h|help"       => \&print_usage,
-     "V|version"    => \&print_version,
-     "v|verbose"    => \$verbose,
-     "d|debug"      => \$debug,
      "o|output=s"   => \$output,
      "normalize"    => \$normalize,
      "f|force"      => \$force,
      "W|warnings=s" => \@warning,
+     "m|mode=s"     => \$mode,
+     "M|melt"       => \$melt,
 
      # Library directories:
      "I|include=s" => \@include,
@@ -494,6 +576,9 @@ Try `$me --help' for more information.\n"
   # constraint is not honored.
   die "$me: the first file only can be frozen\n"
     if grep { /\.m4f/ } @ARGV[1 .. $#ARGV];
+
+  $ARGV[0] =~ s/\.m4f$/.m4/
+    if $melt;
 
   # We don't want to depend upon m4's --include to find the top level
   # files.  Try to get a canonical name, as it's part of the key for caching.
@@ -572,9 +657,21 @@ sub handle_output ($$)
   verbose "forbidden tokens: $forbidden";
   verbose "allowed   tokens: $allowed";
 
-  # Read the (cached) raw M4 output, produce the actual result.
-  my $out = new IO::File (">$output")
-    or die "$me: cannot create $output: $!\n";
+  # Read the (cached) raw M4 output, produce the actual result.  We
+  # have to use the 2nd arg to have IO::File honor the third, but then
+  # stdout is to be handled by hand :(.  Don't use fdopen as it means
+  # we will close STDOUT, which we already do in END.
+  my $out = new IO::File;
+  if ($output eq '-')
+    {
+      $out->open (">$output");
+    }
+  else
+    {
+      $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode))
+    }
+  die "$me: cannot create $output: $!\n"
+    unless $out;
   my $in = new IO::File ($ocache . $req->id)
     or die "$me: cannot read $ocache" . $req->id . ": $!\n";
 
@@ -956,6 +1053,7 @@ sub up_to_date_p ($)
 ## -------------- ##
 
 mktmpdir ('t4');
+load_configuration;
 parse_args;
 
 # We need our cache directory.

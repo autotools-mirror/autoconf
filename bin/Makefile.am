@@ -46,10 +46,9 @@ edit = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
-## All the scripts below depend on configure.ac so that they are rebuilt
+## All the files below depend on configure.ac so that they are rebuilt
 ## when the Autoconf version changes. Unfortunately, suffix rules cannot
-## have additional dependencies, so we have to use explicit rules for
-## every script.
+## have additional dependencies, so we have to use explicit rules.
 
 autoconf: $(srcdir)/autoconf.in $(top_srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp

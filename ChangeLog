@@ -1,5 +1,18 @@
 2001-08-29  Akim Demaille  <akim@epita.fr>
 
+	* lib/autom4te.in: New.
+	* lib/Makefile.am (edit, autom4te.cfg): New.
+	* bin/autom4te.in (BEGIN): Simplify.
+	Rely on `AC_MACRODIR' in addition of `autom4te_perllibdir'.
+	(&load_configuration): New.  Use it.
+	(&parse_args): Support --mode, --set, and --melt.
+	* bin/autoconf.in: Simplify and adjust.
+	* tests/Makefile.am (AUTOMAKE): Use --set.
+	* tests/atlocal.in: Adjust.
+	* BUGS: distcheck and check are weak.
+
+2001-08-29  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4: Use
 		foo=`(command) 2>/dev/null`
 	not

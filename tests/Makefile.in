@@ -91,7 +91,10 @@ EXTRA_DIST = README \
              atlocal.in $(SUITE) mktests.sh
 
 
-AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
+AUTOM4TE = AUTOM4TE_CFG='$(top_builddir)/lib/autom4te.cfg' \
+           AC_MACRODIR='$(top_srcdir)/lib' \
+           ../bin/autom4te
+
 
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
@@ -119,7 +122,7 @@ subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-DIST_COMMON = README Makefile.am Makefile.in
+DIST_COMMON = README Makefile.am Makefile.in configure configure.ac
 all: all-am
 
 .SUFFIXES:
@@ -242,9 +245,8 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
 	   atspecific.m4 \
            $(SUITE)
-	$(AUTOM4TE) -I $(srcdir) -I $(top_srcdir)/lib \
-	  autotest/autotest.m4 suite.at -o $@.tmp
-	chmod +x $@.tmp
+	$(AUTOM4TE) --set=autotest -I $(srcdir) -I $(top_srcdir)/lib \
+	  suite.at -o $@.tmp
 	mv $@.tmp $@
 
 $(SUITE_GENERATED): mktests.sh $(MACRO_FILES)

@@ -50,6 +50,7 @@ SUFFIXES = .x .1
 	if test -n "$$prog"; then \
 	  echo "Updating man page $@"; \
 	  autom4te_perllibdir="$(top_srcdir)/lib" \
+	  AUTOM4TE_CFG="$(top_builddir)/lib/autom4te.cfg" \
 	  $(HELP2MAN) \
 	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/common.x \
