@@ -68,7 +68,9 @@ automake_cvsargs = \
 autom4te_files = \
   Autom4te/Configure_ac.pm \
   Autom4te/Channels.pm \
-  Autom4te/FileUtils.pm
+  Autom4te/FileUtils.pm \
+  Autom4te/Struct.pm \
+  Autom4te/XFile.pm
 
 autom4te-update:
 	rm -rf Fetchdir > /dev/null 2>&1
@@ -78,6 +80,8 @@ autom4te-update:
 	$(WGET) $(automake_cvsweb)/lib/Automake/Configure_ac.pm?$(automake_cvsargs) -O Autom4te/Configure_ac.pm; \
 	$(WGET) $(automake_cvsweb)/lib/Automake/Channels.pm?$(automake_cvsargs) -O Autom4te/Channels.pm; \
 	$(WGET) $(automake_cvsweb)/lib/Automake/FileUtils.pm?$(automake_cvsargs) -O Autom4te/FileUtils.pm; \
+	$(WGET) $(automake_cvsweb)/lib/Automake/Struct.pm?$(automake_cvsargs) -O Autom4te/Struct.pm; \
+	$(WGET) $(automake_cvsweb)/lib/Automake/XFile.pm?$(automake_cvsargs) -O Autom4te/XFile.pm; \
 	:)
 	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
 	for file in $(autom4te_files); do \

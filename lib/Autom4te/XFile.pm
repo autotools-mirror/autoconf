@@ -18,8 +18,8 @@
 # Written by Akim Demaille <akim@freefriends.org>.
 
 ###############################################################
-# The main copy of this file is in Autoconf's CVS repository. #
-# Updates should be sent to autoconf-patches@gnu.org.         #
+# The main copy of this file is in Automake's CVS repository. #
+# Updates should be sent to automake-patches@gnu.org.         #
 ###############################################################
 
 package Autom4te::XFile;
@@ -33,7 +33,7 @@ Autom4te::XFile - supply object methods for filehandles with error handling
     use Autom4te::XFile;
 
     $fh = new Autom4te::XFile;
-    $fh->open("< file"))
+    $fh->open ("< file");
     # No need to check $FH: we died if open failed.
     print <$fh>;
     $fh->close;
@@ -50,12 +50,12 @@ Autom4te::XFile - supply object methods for filehandles with error handling
     print <$fh>;
     undef $fh;   # automatically closes the file and checks for errors.
 
-    $fh = new Autom4te::XFile "file", O_WRONLY|O_APPEND;
+    $fh = new Autom4te::XFile "file", O_WRONLY | O_APPEND;
     # No need to check $FH: we died if new failed.
     print $fh "corge\n";
 
     $pos = $fh->getpos;
-    $fh->setpos($pos);
+    $fh->setpos ($pos);
 
     undef $fh;   # automatically closes the file and checks for errors.
 
@@ -89,6 +89,8 @@ use vars qw($VERSION @EXPORT @EXPORT_OK $AUTOLOAD @ISA);
 use Carp;
 use IO::File;
 use File::Basename;
+use Autom4te::ChannelDefs;
+use Autom4te::FileUtils;
 
 require Exporter;
 require DynaLoader;
@@ -117,7 +119,7 @@ my $me = basename ($0);
 sub new
 {
   my $type = shift;
-  my $class = ref($type) || $type || "Autom4te::XFile";
+  my $class = ref $type || $type || "Autom4te::XFile";
   my $fh = $class->SUPER::new ();
   if (@_)
     {
@@ -132,7 +134,7 @@ sub new
 
 sub open
 {
-  my ($fh) = shift;
+  my $fh = shift;
   my ($file) = @_;
 
   # WARNING: Gross hack: $FH is a typeglob: use its hash slot to store
@@ -143,7 +145,7 @@ sub open
 
   if (!$fh->SUPER::open (@_))
     {
-      croak "$me: cannot open $file: $!\n";
+      fatal "cannot open $file: $!";
     }
 
   # In case we're running under MSWindows, don't write with CRLF.
@@ -159,11 +161,13 @@ sub open
 
 sub close
 {
-  my ($fh) = shift;
+  my $fh = shift;
   if (!$fh->SUPER::close (@_))
     {
       my $file = $fh->name;
-      croak "$me: cannot close $file: $!\n";
+      Autom4te::FileUtils::handle_exec_errors $file
+	unless $!;
+      fatal "cannot close $file: $!";
     }
 }
 
@@ -200,7 +204,7 @@ sub getlines
 
 sub name
 {
-  my ($fh) = shift;
+  my $fh = shift;
   return ${*$fh}{'autom4te_xfile_file'};
 }
 
@@ -215,7 +219,7 @@ sub lock
   if (!flock ($fh, $mode))
     {
       my $file = $fh->name;
-      croak "$me: cannot lock $file with mode $mode: $!\n";
+      fatal "cannot lock $file with mode $mode: $!";
     }
 }
 
@@ -225,12 +229,12 @@ sub lock
 
 sub seek
 {
-  my ($fh) = shift;
+  my $fh = shift;
   # Cannot use @_ here.
   if (!seek ($fh, $_[0], $_[1]))
     {
       my $file = $fh->name;
-      croak "$me: cannot rewind $file with @_: $!\n";
+      fatal "$me: cannot rewind $file with @_: $!";
     }
 }
 
@@ -244,7 +248,7 @@ sub truncate
   if (!truncate ($fh, $len))
     {
       my $file = $fh->name;
-      croak "$me: cannot truncate $file at $len: $!\n";
+      fatal "cannot truncate $file at $len: $!";
     }
 }
 
