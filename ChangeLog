@@ -1,5 +1,10 @@
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
+	* config/config.guess, config/config.sub, config/texinfo.tex
+	* doc/standards.texi, doc/make-stds.texi: Update.
+
+2001-07-14  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.maint (cvs-check, cvs-tag-check, cvs-diff-check): New.
 
 2001-07-14  Akim Demaille  <akim@epita.fr>
