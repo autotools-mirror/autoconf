@@ -1369,18 +1369,10 @@ revision number is near the top of both @file{configure.in} and
 begins with @samp{#!/bin/sh}, like the normal start of a
 @file{configure} script does.
 
-For example, this line in @file{configure.in}:
+Here is a sample call of this macro:
 
 @example
 AC_REVISION($Revision$)dnl
-@end example
-
-@noindent
-produces this in @file{configure}:
-
-@example
-#!/bin/sh
-# From configure.in Revision: 1.30 
 @end example
 @end defmac
 
