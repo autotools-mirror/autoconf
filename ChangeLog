@@ -1,5 +1,10 @@
 2002-01-24  Akim Demaille  <akim@epita.fr>
 
+	* config/config.guess, config/config.sub, config/texinfo.tex:
+	Update from masters.
+
+2002-01-24  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (AUTOMAKE_OPTIONS): 1.5b.
 	* config/auxdir.m4, config/cond.m4, config/depend.m4,
 	* config/init.m4, config/install-sh.m4, config/lispdir.m4,
