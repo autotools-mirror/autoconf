@@ -275,17 +275,25 @@ sub getopt (%)
   # If fixed some day, use this: '' => sub { push @ARGV, "-" }
   my $stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
-  %option = (%option,
-	     "h|help"     => sub { print $help; exit 0 },
+  %option = ("h|help"     => sub { print $help; exit 0 },
              "V|version"  => sub { print $version; exit 0 },
 
              "v|verbose"    => \$verbose,
              "d|debug"      => \$debug,
 	     'f|force'      => \$force,
-	    );
-  Getopt::Long::Configure ("bundling");
+
+	     # User options last, so that they have precedence.
+	     %option);
+  Getopt::Long::Configure ("bundling", "pass_through");
   GetOptions (%option)
     or exit 1;
+
+  foreach (grep { /^-./ } @ARGV)
+    {
+      print STDERR "$0: unrecognized option `$_'\n";
+      print STDERR "Try `$0 --help' for more information.\n";
+      exit (1);
+    }
 
   push @ARGV, '-'
     if $stdin;

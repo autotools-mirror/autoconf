@@ -459,8 +459,9 @@ sub parse_args ()
   my @language;
   do {
     @language = ();
+    use Getopt::Long;
     Getopt::Long::Configure ("pass_through");
-    getopt ("l|language=s" => \@language);
+    GetOptions ("l|language=s" => \@language);
 
     foreach (@language)
       {
@@ -474,7 +475,6 @@ sub parse_args ()
 
   # Process the arguments for real this time.
   my @trace;
-  Getopt::Long::Configure ("defaults");
   getopt
     (
      # Operation modes:
