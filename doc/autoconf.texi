@@ -1479,16 +1479,24 @@ Every @command{configure} script must call @code{AC_INIT} before doing
 anything else.  The only other required macro is @code{AC_OUTPUT}
 (@pxref{Output}).
 
-@defmac AC_INIT (@var{package})
+@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @ovar{tarname})
 @acindex INIT
 Process any command-line arguments and perform various initializations
-and verifications.  Set the name of the @var{package} and its
-@var{version}.  The optional argument @var{bug-report-address} should be
-the email to which users should send bug reports.
+and verifications.
 
-These three arguments should be @emph{static}, i.e., there should not be
-any shell computation, but they can be computed by M4.  The following M4
-macros (e.g., @code{AC_PACKAGE_NAME}), output variables (e.g.,
+Set the name of the @var{package} and its @var{version}.  These are
+typically used in @option{--version} support, including that of
+@command{configure}.  The optional argument @var{bug-report} should be
+the email to which users should send bug reports.  The package
+@var{tarname} differs from @var{package}: the latter designates the full
+package name (e.g., @samp{GNU Autoconf}), while the latter is meant for
+distribution tar ball names (e.g., @samp{autoconf}).  It defaults to
+@var{package} once @samp{GNU } strip, lower cased, and all non
+alphanumeric character mapped onto @samp{-}.
+
+It is preferable that these arguments be static, i.e., there should not
+be any shell computation, but they can be computed by M4.  The following
+M4 macros (e.g., @code{AC_PACKAGE_NAME}), output variables (e.g.,
 @code{PACKAGE_NAME}), and preprocessor symbols (e.g.,
 @code{PACKAGE_NAME}) are then defined:
 
@@ -1503,8 +1511,7 @@ Exactly @var{package}.
 @acindex PACKAGE_TARNAME
 @ovindex PACKAGE_TARNAME
 @cvindex PACKAGE_TARNAME
-@var{package} once @samp{GNU } strip, lower cased, and all non
-alphanumeric character mapped onto @samp{-}.
+Exactly @var{tarname}.
 
 @item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
 @acindex PACKAGE_VERSION
@@ -1522,26 +1529,8 @@ Exactly @samp{@var{package} @var{version}}.
 @acindex PACKAGE_BUGREPORT
 @ovindex PACKAGE_BUGREPORT
 @cvindex PACKAGE_BUGREPORT
-Exactly @var{bug-report-address}.
+Exactly @var{bug-report}.
 @end table
-
-All these values may be changed.  For instance if the default value for
-@code{AC_PACKAGE_NAME} does not suit your application, you can either
-use:
-
-@example
-m4_define([AC_PACKAGE_TARNAME], [GNU-Foo-Bar-1.0])
-AC_INIT([GNU Foo Bar], [1.0])
-@end example
-
-@noindent
-or
-
-@example
-AC_INIT([GNU Foo Bar], [1.0])
-m4_define([AC_PACKAGE_TARNAME], [GNU-Foo-Bar-1.0])
-AC_SUBST([PACKAGE_TARNAME], ['AC_PACKAGE_TARNAME'])
-@end example
 @end defmac
 
 
