@@ -256,7 +256,7 @@ Running @code{configure} Scripts
 
 Questions About Autoconf
 
-* Copyright::                   Copyright on Autoconf output.
+* Distributing::                Distributing @code{configure} scripts.
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
@@ -4184,14 +4184,14 @@ Several questions about Autoconf come up occasionally.  Here some of them
 are addressed.
 
 @menu
-* Copyright::                   Copyright on Autoconf output.
+* Distributing::                Distributing @code{configure} scripts.
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
 @end menu
 
-@node Copyright, Why GNU m4, , Questions
-@section Copyright on @code{configure} Scripts
+@node Distributing, Why GNU m4, , Questions
+@section Distributing @code{configure} Scripts
 
 @display
 What are the restrictions on distributing @code{configure}
@@ -4206,15 +4206,15 @@ authors to distribute their work under terms like those of the GPL, but
 doing so is not required to use Autoconf.
 
 Of the other files that might be used with @code{configure},
-@file{config.sub} and @file{config.guess} have an exception to the GPL
-when they are used with an Autoconf-generated @code{configure} script,
-which permits you to distribute them under the same terms as the rest of
-your package.  @file{install.sh} is not copyrighted.  @file{config.h.in}
-is under whatever copyright you use for your @file{configure.in}, since
-it is derived from that file and from the public domain file
-@file{acconfig.h}.
+@file{config.h.in} is under whatever copyright you use for your
+@file{configure.in}, since it is derived from that file and from the
+public domain file @file{acconfig.h}.  @file{config.sub} and
+@file{config.guess} have an exception to the GPL when they are used with
+an Autoconf-generated @code{configure} script, which permits you to
+distribute them under the same terms as the rest of your package.
+@file{install.sh} is not copyrighted.
 
-@node Why GNU m4, Bootstrapping, Copyright, Questions
+@node Why GNU m4, Bootstrapping, Distributing, Questions
 @section Why Require GNU @code{m4}?
 
 @display
