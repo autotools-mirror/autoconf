@@ -84,15 +84,15 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! /bin/sh" >conftest.sh
-  echo  "exit 0"   >>conftest.sh
-  chmod +x conftest.sh
-  if (PATH="/nonexistent;."; conftest.sh) >/dev/null 2>&1; then
+  echo "#! /bin/sh" >conf$$.sh
+  echo  "exit 0"   >>conf$$.sh
+  chmod +x conf$$.sh
+  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
   fi
-  rm -f conftest.sh
+  rm -f conf$$.sh
 fi
 
 
@@ -922,23 +922,49 @@ _ACEOF
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
 # Also quote any args containing shell meta-characters.
+# Make two passes to allow for proper duplicate-argument suppression.
 ac_configure_args=
+ac_configure_args0=
+ac_configure_args1=
 ac_sep=
-for ac_arg
+ac_must_keep_next=false
+for ac_pass in 1 2
 do
-  case $ac_arg in
-  -no-create | --no-create | --no-creat | --no-crea | --no-cre \
-  | --no-cr | --no-c | -n ) continue ;;
-  -no-recursion | --no-recursion | --no-recursio | --no-recursi \
-  | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r)
-    continue ;;
-  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
-    ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-  esac
-  ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-  # Get rid of the leading space.
-  ac_sep=" "
+  for ac_arg
+  do
+    case $ac_arg in
+    -no-create | --no-c* | -n | -no-recursion | --no-r*) continue ;;
+    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+      ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+    esac
+    case $ac_pass in
+    1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
+    2)
+      ac_configure_args1="$ac_configure_args1 '$ac_arg'"
+      if test $ac_must_keep_next = true; then
+        ac_must_keep_next=false # Got value, back to normal.
+      else
+        case $ac_arg in
+          *=* | --config-cache | -C | -disable-* | --disable-* \
+          | -enable-* | --enable-* | -gas | --g* | -nfp | --nf* \
+          | -q | -quiet | --q* | -silent | --sil* | -v | -verb* \
+          | -with-* | --with-* | -without-* | --without-* | --x)
+            case "$ac_configure_args0 " in
+              "$ac_configure_args1"*" '$ac_arg' "* ) continue ;;
+            esac
+            ;;
+          -* ) ac_must_keep_next=true ;;
+        esac
+      fi
+      ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
+      # Get rid of the leading space.
+      ac_sep=" "
+      ;;
+    esac
+  done
 done
+$as_unset ac_configure_args0 || test "${ac_configure_args0+set}" != set || { ac_configure_args0=; export ac_configure_args0; }
+$as_unset ac_configure_args1 || test "${ac_configure_args1+set}" != set || { ac_configure_args1=; export ac_configure_args1; }
 
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
@@ -1945,7 +1971,7 @@ _ACEOF
      t end
      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
      : end' >>confcache
-if cmp -s $cache_file confcache; then :; else
+if diff $cache_file confcache >/dev/null 2>&1; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
     cat confcache >$cache_file
@@ -2116,15 +2142,15 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! /bin/sh" >conftest.sh
-  echo  "exit 0"   >>conftest.sh
-  chmod +x conftest.sh
-  if (PATH="/nonexistent;."; conftest.sh) >/dev/null 2>&1; then
+  echo "#! /bin/sh" >conf$$.sh
+  echo  "exit 0"   >>conf$$.sh
+  chmod +x conf$$.sh
+  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
   fi
-  rm -f conftest.sh
+  rm -f conf$$.sh
 fi
 
 
