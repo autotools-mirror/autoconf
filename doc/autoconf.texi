@@ -6508,6 +6508,7 @@ it's an exception that should be avoided in Autoconf.
 @cindex @samp{@@:>@@}
 @cindex @samp{@@S|@@}
 @cindex @samp{@@%:@@}
+@cindex @samp{@@&t@@}
 
 When writing an autoconf macro you may occasionally need to generate
 special characters that are difficult to express with the standard
@@ -6528,13 +6529,53 @@ You can work around this problem by using one of the following
 @samp{$}
 @item @@%:@@
 @samp{#}
+@item @@&t@@
+Expands to nothing.
 @end table
 
 Quadrigraphs are replaced at a late stage of the translation process,
 after @command{m4} is run, so they do not get in the way of M4 quoting.
-For example, the string @samp{[^@@<:@@]}, if properly quoted, will
-appear as @samp{[^[]} in the @code{configure} script.
+For example, the string @samp{^@@<:@@}, independently of its quotation,
+will appear as @samp{^[} in the output.
 
+The empty quadrigraph can be used:
+
+@itemize @minus
+@item to mark explicitly trailing spaces
+
+Trailing spaces are smashed by @command{autom4te}.  This is a feature.
+
+@item to produce other quadrigraphs
+
+For instance @samp{@@<@@&t@@:@@} produces @samp{@@<:@@}.
+
+@item to escape @emph{occurrences} of forbidden patterns
+
+For instance you might want to mention @code{AC_FOO} is a comment, while
+still being sure that @command{autom4te} will still catch unexpanded
+@samp{AC_*}.  Then write @samp{AC@@&t@@_FOO}.
+@end itemize
+
+The name @samp{@@&t@@} was suggested by Paul Eggert:
+
+@quotation
+I should give some credit to the @samp{@@&t@@} pun.  The @samp{&} is my
+own invention, but the @samp{t} came from the source code of the
+@sc{algol68c} compiler, written by Steve Bourne (of Bourne shell fame),
+and which used @samp{mt} to denote the empty string.  In C, it would
+have looked like something like:
+
+@example
+char const mt[] = "";
+@end example
+
+@noindent
+but of course the source code was written in Algol 68.
+
+I don't know where he got @samp{mt} from: it could have been his own
+invention, and I suppose it could have been a common pun around the
+Cambridge University computer lab at the time.
+@end quotation
 
 @node Quotation Rule Of Thumb
 @subsection Quotation Rule Of Thumb
@@ -7444,7 +7485,7 @@ Robert Lipe:
 
 @quotation
 This is exactly the problem.  While most (at least most System V's) do
-have a bourne shell that accepts shell functions most vendor
+have a Bourne shell that accepts shell functions most vendor
 @command{/bin/sh} programs are not the @sc{posix} shell.
 
 So while most modern systems do have a shell _somewhere_ that meets the
@@ -11282,16 +11323,16 @@ out of validation.
 The automatic generation of debugging scripts for failed test has the
 purpose of easing the chase for bugs.
 
-@c FIXME: This is not accurate today: we have a single atconfig.in.
 It often happens in practice that individual tests in the validation
 suite need to get information coming out of the configuration process.
 Some of this information, common for all validation suites, is provided
-through the file @file{atconfig.in}, which your package should distribute
-verbatim, unchanged.  For configuration informations which your testing
-environment specifically needs, you might prepare an optionnal file named
-@file{atlocal.in}.  The configuration process produces @file{atconfig}
-and @file{atlocal} out of these two input files, and these two produced
-files are automatically read by the @file{testsuite} script.
+through the file @file{atconfig}, automatically created by
+@code{AC_CONFIG_TESTDIR}.  For configuration informations which your
+testing environment specifically needs, you might prepare an optionnal
+file named @file{atlocal.in}.  The configuration process produces
+@file{atconfig} and @file{atlocal} out of these two input files, and
+these two produced files are automatically read by the @file{testsuite}
+script.
 
 Here is a diagram showing the relationship between files.
 
@@ -11306,13 +11347,22 @@ testsuite.at --> autom4te* --> testsuite
 Files used in configuring a software package:
 
 @example
-atconfig.in                                        testsuite.log
-    |                                                   ^
-    v                    .-> atconfig --.               |
-    +--> config.status* -+              +-> testsuite* -+
-    ^                    `-> [atlocal] -'               |
-    |                                                   v
-[atlocal.in]                                       debug-@var{nn}.sh*
+                                     .-> atconfig
+                                    /
+[atlocal.in] -->  config.status* --<
+                                    \
+                                     `-> [atlocal]
+@end example
+
+@noindent
+Files created during the test suite execution:
+
+@example
+atconfig -->.                    .--> testsuite.log
+             \                  /
+              >-- testsuite* --<
+             /                  \
+[atlocal] ->'                    `--> [debug-@var{nn}.sh*]
 @end example
 
 @node Writing testsuite.at

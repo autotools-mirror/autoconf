@@ -673,26 +673,7 @@ sub handle_output ($$)
 	    if /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
 	}
 
-      # Performed *last*: the empty quadrigraph.  Handling it last
-      # makes it possible to generate quadrigraphs, e.g. `@<@&t@:@'
-      # produces `@<:@'.  In addition, it provides a means to
-      # explicitly allow some *occurrences* of forbidden patterns.
-      #
-      # The use of `@&t@' was suggested by Paul Eggert:
-      #
-      # ``I should give some credit to the @&t@ pun.  The "&" is my
-      # own invention, but the "t" came from the source code of the
-      # ALGOL68C compiler, written by Steve Bourne (of Bourne shell
-      # fame), and which used "mt" to denote the empty string.  In C,
-      # it would have looked like something like this:
-      #
-      # char const mt[] = "";
-      #
-      # but of course the source code was written in Algol 68.
-      #
-      # I don't know where he got "mt" from: it could have been his
-      # own invention, and I suppose it could have been a common pun
-      # around the Cambridge University computer lab at the time.''
+      # Performed *last*: the empty quadrigraph.
       $res =~ s/\@&t\@//g;
 
       print $out "$res\n";

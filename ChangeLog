@@ -1,5 +1,11 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Quadrigraphs): Document `@&t@'.
+	(testsuite Scripts): There is no such thing as `atconfig.in'.
+	And actually one diagram is missing: test suite runtime.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm (&find_file): Browse the includes in the
 	inverse order.
 
