@@ -1,5 +1,16 @@
 2001-08-07  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): All the `at-*' are to be
+	removed.
+	(at-setup-line): Huh?  Be a variable `at_setup_line', not a file.
+	No need to remove the files before and after the each test, before
+	each test and at the end of the suite is enough.
+	Display only the children `times', not the shell's.
+	If the test failed or was skipped, at-times is not available.
+
+	
+2001-08-07  Akim Demaille  <akim@epita.fr>
+
 	Always produce testsuite.log, including when there are no
 	failures.  This helps getting information on skipped tests, and
 	duration of the tests.  Err, implement the latter btw.

@@ -89,9 +89,7 @@ m4_define([AT_INIT],
 [m4_pattern_forbid([^_?AT_])
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-m4_define([AT_data_files],
-          [stdout expout at-setup-line at-check-line at-stdout stderr experr
-           at-stder1 at-stderr ])
+m4_define([AT_data_files], [stdout expout at-* stderr experr ])
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -266,15 +264,15 @@ m4_divert([TAIL])[]dnl
     banner-*) ;;
     *)
       if test ! -f at-check-line; then
-    	echo "$as_me: warning: no at-check-line which means a failure happened"
-    	echo "$as_me: warning: in a [AT""_SETUP/AT""_CLEANUP] pair before any"
-    	echo "$as_me: warning: [AT""_CHECK] could be run.  This test suite is"
-    	echo "$as_me: warning: improperly designed, please report to"
-    	echo "$as_me: warning: <$at_bugreport>."
-    	cp at-setup-line at-check-line
+        sed "s/^ */$as_me: warning: /" <<_ATEOF
+        A failure happened in a test group before any test could be
+        run. This test suite is improperly designed, please report
+    	to <$at_bugreport>.
+_ATEOF
+    	echo "$at_setup_line" >at-check-line
       fi
       at_test_count=`expr 1 + $at_test_count`
-      $at_verbose $at_n "$at_test. $srcdir/`cat at-setup-line`: $at_c"
+      $at_verbose $at_n "$at_test. $srcdir/$at_setup_line: $at_c"
       case $at_status in
         0) at_msg="ok"
            ;;
@@ -286,18 +284,19 @@ m4_divert([TAIL])[]dnl
            ;;
       esac
       echo $at_msg
-      at_log_msg="$at_test. $srcdir/`cat at-setup-line`: $at_msg"
-      at_log_msg="$at_log_msg	(`cat at-times`)"
+      at_log_msg="$at_test. $srcdir/$at_setup_line: $at_msg"
+      # If the test failed, at-times is not available.
+      test -f at-times && at_log_msg="$at_log_msg	(`sed 1d at-times`)"
       echo "$at_log_msg" >&6
       $at_stop_on_error && test -n "$at_fail_list" && break
-      $at_debug || rm -rf $at_data_files
       ;;
   esac
 done
 
-# Wrap up the test suite with summary statistics.
+# Cleanup everything unless the user wants the files.
+$at_debug || rm -rf $at_data_files
 
-rm -f at-check-line at-setup-line
+# Wrap up the test suite with summary statistics.
 at_skip_count=`set dummy $at_skip_list; shift; echo $[#]`
 at_fail_count=`set dummy $at_fail_list; shift; echo $[#]`
 if test $at_fail_count = 0; then
@@ -349,6 +348,7 @@ elif test $at_debug = false; then
       $SHELL $[0] $at_skip_list --help
       echo
     fi
+    echo
 
     AS_BOX([Running verbosely the failing tests])
     echo
@@ -386,7 +386,7 @@ m4_divert_text([HELP],
                [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
 m4_divert_push([TESTS])dnl
   AT_ordinal ) [#] AT_ordinal. AT_LINE: $1
-    echo AT_LINE >at-setup-line
+    at_setup_line='AT_LINE'
     $at_verbose "AT_ordinal. $srcdir/AT_LINE: testing $1..."
     $at_quiet $at_n "m4_format([%3d: %-18s], AT_ordinal, AT_LINE)[]$at_c"
     (
