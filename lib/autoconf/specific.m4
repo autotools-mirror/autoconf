@@ -1349,7 +1349,7 @@ main() {
 }],
 ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
 ac_cv_func_vfork_works=$ac_cv_func_vfork)])
-if test $ac_cv_func_vfork_works = no; then
+if test "x$ac_cv_func_vfork_works" = xno; then
   AC_DEFINE(vfork, fork)
 fi
 ])

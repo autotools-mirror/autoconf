@@ -1,5 +1,9 @@
 1999-02-28  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_FUNC_VFORK): Allow test to behave correctly
+	when $ac_cv_func_vfork_works is the empty string. Contributed by
+	<red@nym.alias.net>.
+
 	* config.sub: Add `oskit' as a basic system type. From Godmar Back
 	<gback@cs.utah.edu>.
 
