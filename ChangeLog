@@ -1,5 +1,10 @@
 2002-03-08  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Subdirectories): Clarify that the
+	subdirectory should exist.
+
+2002-03-08  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (AUTOMAKE_OPTIONS): 1.6.
 
 2002-03-08  Akim Demaille  <akim@epita.fr>

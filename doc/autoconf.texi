@@ -2771,15 +2771,22 @@ if test "$package_foo_enabled" = yes; then
 fi
 @end example
 
-If a given @var{dir} is not found, no error is reported, so a
-@command{configure} script can configure whichever parts of a large source
-tree are present.  If a given @var{dir} contains @command{configure.gnu},
-it is run instead of @command{configure}. This is for packages that might
-use a non-autoconf script @command{Configure}, which can't be called
-through a wrapper @command{configure} since it would be the same file on
+If a given @var{dir} is not found, an error is reported: if the
+subdirectory is optional, write:
+
+@example
+if test -d $srcdir/foo; then
+  AC_CONFIG_SUBDIRS(foo)
+fi
+@end example
+
+If a given @var{dir} contains @command{configure.gnu}, it is run instead
+of @command{configure}. This is for packages that might use a
+non-autoconf script @command{Configure}, which can't be called through a
+wrapper @command{configure} since it would be the same file on
 case-insensitive filesystems. Likewise, if a @var{dir} contains
-@file{configure.ac} but no @command{configure}, the Cygnus @command{configure}
-script found by @code{AC_CONFIG_AUX_DIR} is used.
+@file{configure.ac} but no @command{configure}, the Cygnus
+@command{configure} script found by @code{AC_CONFIG_AUX_DIR} is used.
 
 The subdirectory @command{configure} scripts are given the same command
 line options that were given to this @command{configure} script, with minor
