@@ -509,7 +509,7 @@ AC_DEFUN([AC_HEADER_STDBOOL],
 # error false is not 0
 #endif
 #ifndef true
-# error false is not defined
+# error true is not defined
 #endif
 #if true != 1
 # error true is not 1
@@ -533,6 +533,7 @@ AC_DEFUN([AC_HEADER_STDBOOL],
       [[ return !a + !b + !c + !d + !e + !f + !g + !h + !i; ]])],
       [ac_cv_header_stdbool_h=yes],
       [ac_cv_header_stdbool_h=no])])
+AC_CHECK_TYPES([_Bool])
 if test $ac_cv_header_stdbool_h = yes; then
   AC_DEFINE(HAVE_STDBOOL_H, 1, [Define to 1 if stdbool.h conforms to C99.])
 fi
