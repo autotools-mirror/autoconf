@@ -4646,7 +4646,7 @@ bytes long:
 int
 main (void)
 @{
-  static int test_array [(unsigned long) (sizeof (int)) == 4 ? 1 : -1];
+  static int test_array [sizeof (int) == 4 ? 1 : -1];
   test_array [0] = 0
   return 0;
 @}
@@ -4662,6 +4662,9 @@ $ @kbd{cc -c -Ae +O2 +Onolimit conftest.c}
 cc: "conftest.c": error 1879: Variable-length arrays cannot \
     have static storage.
 @end example
+
+Autoconf works around this problem by casting @code{sizeof (int)} to
+@code{long} before comparing it.
 @end table
 
 @node Generic Compiler Characteristics

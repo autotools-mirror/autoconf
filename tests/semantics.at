@@ -173,20 +173,8 @@ AC_CHECK_SIZEOF(charcharchar)
 
 # AC_CHECK_SIZEOF
 # ---------------
-# Cross-compiling: only with GCC, as some compilers, such as HP's
-# cannot grok our trick:
-#
-# static int test_array [1 - 2 * !(((unsigned long) (sizeof (unsigned char))) >= 0)];
-#
-# configure:3637: cc -c -Ae +O2 +Onolimit  conftest.c >&5
-# cc: "configure", line 3660: error 1879: Variable-length arrays cannot have static storage.
-#
 AT_CHECK_MACRO([AC_CHECK_SIZEOF],
 [[# Exercize the code used when cross-compiling
-AC_PROG_CC
-if test "$GCC" != yes; then
-  exit 77
-fi
 cross_compiling=yes
 AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
