@@ -1450,7 +1450,6 @@ done
 # would cause problems or look ugly.
 trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
-  echo cat <<_ACEOF >&AS_MESSAGE_LOG_FD
   echo >&AS_MESSAGE_LOG_FD
   echo "## ----------------- ##" >&AS_MESSAGE_LOG_FD
   echo "## Cache variables.  ##" >&AS_MESSAGE_LOG_FD
