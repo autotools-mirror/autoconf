@@ -24,21 +24,6 @@
 @r{[}@var{\varname\} = @samp{\default\}@r{]}
 @end macro
 
-@c @href(URL, TITLE)
-@c -----------------
-@c A replacement for @uref that puts the URL in the footnotes when
-@c not in HTML.
-@ifhtml
-@macro href{url, title}
-@uref{\url\, \title\}
-@end macro
-@end ifhtml
-@ifnothtml
-@macro href{url, title}
-\title\@footnote{\title\, @url{\url\}.}
-@end macro
-@end ifnothtml
-
 @c Handling the indexes with Texinfo yields several different problems.
 @c
 @c Because we want to drop out the AC_ part of the macro names in the
@@ -653,34 +638,30 @@ do not have.  You must use version 1.4 or later of @acronym{GNU} M4.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
 for answers to some common questions about Autoconf.
 
-
-See the @href{http://www.gnu.org/software/autoconf/autoconf.html,
+See the @uref{http://www.gnu.org/software/autoconf/,
 Autoconf web page} for up-to-date information, details on the mailing
 lists, pointers to a list of known bugs, etc.
 
 Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
 list}.
 
-Bug reports should be preferably submitted to the
-@href{http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf,
-Autoconf Gnats database}, or sent to @email{bug-autoconf@@gnu.org, the
+Bug reports should be emailed to @email{bug-autoconf@@gnu.org, the
 Autoconf Bugs mailing list}.  If possible, first check that your bug is
 not already solved in current development versions, and that it has not
 been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
-Autoconf's development tree is accessible via @acronym{CVS}; see the Autoconf
-web page for details.  There is also a
-@href{http://subversions.gnu.org/cgi-bin/cvsweb/autoconf/, @acronym{CVS}web
-interface to the Autoconf development tree}.  Patches relative to the
+Autoconf's development tree is accessible via @acronym{CVS}; see the
+@uref{http://savannah.gnu.org/projects/autoconf/, Autoconf
+Summary} for details.  Patches relative to the
 current @acronym{CVS} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
 
 Because of its mission, Autoconf includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@href{http://www.gnu.org/software/ac-archive/, Autoconf Macro
-Archive}, which is kindly run by @email{simons@@computer.org,
+@uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
+Archive}, which is kindly run by @email{simons@@gnu.org,
 Peter Simons}.
 
 
@@ -794,9 +775,9 @@ the @acronym{GNU} build tools.
 @item Web
 
 The home pages for
-@href{http://www.gnu.org/software/autoconf/,Autoconf},
-@href{http://www.gnu.org/software/automake/,Automake}, and
-@href{http://www.gnu.org/software/libtool/,Libtool}.
+@uref{http://www.gnu.org/software/autoconf/, Autoconf},
+@uref{http://www.gnu.org/software/automake/, Automake}, and
+@uref{http://www.gnu.org/software/libtool/, Libtool}.
 
 @item Automake Manual
 
@@ -807,18 +788,10 @@ information on Automake.
 
 The book @cite{@acronym{GNU} Autoconf, Automake and
 Libtool}@footnote{@cite{@acronym{GNU} Autoconf, Automake and Libtool},
-by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  New
-Riders, 2000, ISBN 1578701902.}  describes the complete @acronym{GNU}
-build environment.  You can also find the entire book on-line at
-@href{http://sources.redhat.com/autobook/,``The Goat Book'' home
-page}.
-
-@item Tutorials and Examples
-
-The @href{http://sources.redhat.com/autoconf/,Autoconf Developer Page}
-maintains links to a number of Autoconf/Automake tutorials online, and
-also links to the @href{http://www.gnu.org/software/ac-archive/,
-Autoconf Macro Archive}.
+by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
+New Riders), 2000, ISBN 1578701902.}  describes the complete @acronym{GNU}
+build environment.  You can also find
+@uref{http://sources.redhat.com/autobook/, the entire book on-line}.
 
 @end itemize
 
@@ -6267,7 +6240,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cindex Large file support
 @cindex LFS
 Arrange for
-@href{http://www.unix-systems.org/version2/whatsnew/lfs20mar.html,
+@uref{http://www.unix-systems.org/version2/whatsnew/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
@@ -6939,7 +6912,7 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
-The @href{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
+The @uref{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
 contains a lot of interesting crossed information on various Unix variants.
 
 @table @asis
@@ -6966,13 +6939,12 @@ tree on the UFS).
 @acronym{QNX} is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to the hundred
 processor super-computer.  It claims to be @acronym{POSIX} certified.  More
-information is available on the @href{www.qnx.com, @acronym{QNX} home page},
-including the @href{http://support.qnx.com/support/docs/qnx4/, @acronym{QNX}
-man pages}.
+information is available on the
+@uref{http://www.qnx.com/, @acronym{QNX} home page}.
 
 @item Tru64
 @cindex Tru64
-The @href{http://www.tru64unix.compaq.com/docs/base_doc/DOCUMENTATION/,
+The @uref{http://h30097.www3.hp.com/docs/,
 documentation of several versions of Tru64} is available in different
 formats.
 
@@ -6982,7 +6954,7 @@ formats.
 Officially this was called the ``Seventh Edition'' of ``the @sc{unix}
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
-@href{http://plan9.bell-labs.com/7thEdMan/index.html, V7 Manual}.
+@uref{http://plan9.bell-labs.com/7thEdMan/, V7 Manual}.
 Previous versions of Unix are called ``Unix version 6'', etc., but
 they were not as widely used.
 @end table
@@ -9365,7 +9337,7 @@ Some of these external utilities have a portable subset of features; see
 @ref{Limitations of Usual Tools}.
 
 There are other sources of documentation about shells.  See for instance
-@href{http://www.faqs.org/faqs/unix-faq/shell/, the Shell FAQs}.
+@uref{http://www.faqs.org/faqs/unix-faq/shell/, the Shell FAQs}.
 
 @menu
 * Shellology::                  A zoology of shells
@@ -9389,7 +9361,7 @@ There are other sources of documentation about shells.  See for instance
 There are several families of shells, most prominently the Bourne family
 and the C shell family which are deeply incompatible.  If you want to
 write portable shell scripts, avoid members of the C shell family.  The
-@href{http://www.faqs.org/faqs/unix-faq/shell/shell-differences/, the
+@uref{http://www.faqs.org/faqs/unix-faq/shell/shell-differences/, the
 Shell difference FAQ} includes a small history of Unix shells, and a
 comparison between several of them.
 
@@ -9745,7 +9717,7 @@ that are Unixy enough to run @command{autoconf} (such as DJGPP) will
 usually be able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
-@href{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, doschk}
+@uref{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, doschk}
 package.
 
 A short overview follows; problems are marked with @sc{sfn}/@sc{lfn} to
@@ -15847,7 +15819,7 @@ datadir.h: Makefile
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
 automate this task.  For instance, the macro @code{AC_DEFINE_DIR} from
-the @href{http://www.gnu.org/software/ac-archive/, Autoconf Macro
+the @uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
 Archive}.
 
 This solution does not conform to the @acronym{GNU} Coding Standards.
@@ -15860,7 +15832,8 @@ find @code{prefix} at runtime, this way your package is relocatable.
 Some macros are already available to address this issue: see
 @code{adl_COMPUTE_RELATIVE_PATHS} and
 @code{adl_COMPUTE_STANDARD_RELATIVE_PATHS} on the
-@href{http://www.gnu.org/software/ac-archive/, Autoconf Macro Archive}.
+@uref{http://www.gnu.org/software/ac-archive/,
+@acronym{GNU} Autoconf Macro Archive}.
 @end itemize
 
 
