@@ -3128,9 +3128,10 @@ particular test macros.
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
 If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
+
 @example
 AC_CHECK_MEMBER(struct passwd.pw_gecos,,
-                [AC_FATAL([We need `struct passwd.pw_gecos'!])],
+                [AC_MSG_ERROR([We need `struct passwd.pw_gecos'!])],
                 [#include <pwd.h>])
 @end example
 @end defmac

@@ -1,5 +1,10 @@
 2000-02-15  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Generic Structures):
+	s/AC_FATAL/AC_MSG_ERROR.
+
+2000-02-15  Akim Demaille  <akim@epita.fr>
+
 	autoreconf had a silly syntax error, test it and fix it.
 	Reported by Franc,ois Pinard and Rainer Orth.
 
