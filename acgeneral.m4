@@ -1534,14 +1534,14 @@ dnl AC_OUTPUT_MAKE_DEFS()
 define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
+# Protect against shell expansion while executing Makefile rules.
+# Protect against Makefile macro expansion.
 cat > conftest.defs <<\EOF
 changequote(<<, >>)dnl
 s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) \(.*\)%-D\1=\2%g
-# Protect against shell expansion while executing Makefile rules.
 s%[ `~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
-# Protect against Makefile macro expansion.
 s%\$%$$%g
 changequote([, ])dnl
 EOF
