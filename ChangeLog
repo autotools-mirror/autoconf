@@ -1,5 +1,12 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (scan_c_file): Fix the handling of C comments.
+	Before, having a line containing the opening of a multi line
+	comment made the whole line be ignored.
+
+	
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Using an Autotest Test Suite): New.
 	(testsuite Scripts): Be one of its subsection.
 	(Autotest Logs): New.

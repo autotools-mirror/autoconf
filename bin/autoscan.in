@@ -207,22 +207,21 @@ sub scan_c_file ($)
 
   while ($_ = $file->getline)
     {
-      # Strip out comments, approximately.
-      # Ending on this line.
-      if ($in_comment && m,\*/,)
+      # Strip out comments.
+      if ($in_comment && s,^.*?\*/,,)
 	{
-	  s,.*\*/,,;
 	  $in_comment = 0;
 	}
+      # The whole line is inside a commment.
+      next if $in_comment;
       # All on one line.
-      s,/\*.*\*/,,g;
+      s,/\*.*?\*/,,g;
+
       # Starting on this line.
-      if (m,/\*,)
+      if (s,/\*.*$,,)
 	{
 	  $in_comment = 1;
 	}
-      # Continuing on this line.
-      next if $in_comment;
 
       # Preprocessor directives.
       if (/^\s*\#\s*include\s*<([^>]*)>/)
