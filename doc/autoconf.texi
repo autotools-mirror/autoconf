@@ -3478,7 +3478,7 @@ instead, like this:
 
 @example
 AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
-             [$PATH:/usr/libexec:/usr/sbin:/usr/etc:etc])
+             [$PATH:/usr/libexec:/usr/sbin:/usr/etc:/etc])
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to

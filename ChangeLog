@@ -1,3 +1,7 @@
+2005-04-01  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Generic Programs): Fix a typo.
+
 2005-04-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autotest/general.m4 (AT_INIT): Don't assume that "date +%s"
