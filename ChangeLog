@@ -1,3 +1,7 @@
+2004-12-09  Noah Misch  <noah@cs.caltech.edu>
+
+	* man/Makefile.am (autoconf.1): Regenerate when `autoconf.as' changes.
+
 2004-12-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Libraries): Clarify problems with AC_CHECK_LIB
