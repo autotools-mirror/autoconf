@@ -176,15 +176,23 @@ char $2 ();])], [$2 ();])])
 #
 m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 [AC_LANG_PROGRAM(
-[/* System header to define __stub macros and hopefully few prototypes,
+[/* Define $1 to an innocuous variant, in case <limits.h> declares $1.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $1 innocuous_$1
+
+/* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $1 (); below.
     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
     <limits.h> exists even on freestanding compilers.  */
+
 #ifdef __STDC__
 # include <limits.h>
 #else
 # include <assert.h>
 #endif
+
+#undef $1
+
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
