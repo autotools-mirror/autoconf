@@ -6,8 +6,8 @@
 @c %**end of header
 @c For single-sided printing, use on instead of odd in the setchapternewpage.
 
-@set EDITION 1.7.8
-@set VERSION 1.7.8
+@set EDITION 1.7.9
+@set VERSION 1.7.9
 @set UPDATED March 1994
 
 @iftex
@@ -125,7 +125,7 @@ Specific Tests
 General Purpose Macros
 
 * Setup::			Controlling Autoconf operation.
-* General Tests::		Checking for kinds of features.
+* General Feature Tests::	Checking for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
@@ -225,7 +225,7 @@ those functions are available.  This problem does not exist with
 releases 1.06 and later of the GNU C library, which define C
 preprocessor macros that the Autoconf macros @code{AC_FUNC_CHECK} and
 @code{AC_REPLACE_FUNCS} test, indicating that certain functions are
-stubs (@pxref{General Tests}, for more information on checking for
+stubs (@pxref{General Feature Tests}, for more information on checking for
 functions).
 
 @ifinfo
@@ -326,7 +326,7 @@ Autoconf macros that test the system features your package needs or can
 use.  Autoconf macros already exist to check for many features; see
 @ref{Specific Tests}, for their descriptions.  For most other
 features, you can use Autoconf template macros to produce custom checks;
-see @ref{General Tests}, for information about them.  For especially
+see @ref{General Feature Tests}, for information about them.  For especially
 tricky or specialized features, @file{configure.in} might need to
 contain some hand-crafted shell commands.  @xref{Writing Macros}, for
 guidelines on writing tests from scratch.
@@ -459,7 +459,7 @@ These macros test for particular operating system features that packages
 might need or want to use.  If you need to test for a feature that none
 of these macros check for, you can probably do it by calling one of the
 general purpose test macros with appropriate arguments (@pxref{General
-Tests}).
+Feature Tests}).
 
 All of these macros that set @code{make} variables call @code{AC_SUBST}
 on those variables (@pxref{Setting Variables}, for details about
@@ -1156,7 +1156,7 @@ If the C compiler being used does not produce executables that can run
 on the system where @code{configure} is being run, set the shell
 variable @code{cross_compiling} to 1.  This information can be used by
 @code{AC_TEST_PROGRAM} to determine whether to take a default action
-instead of trying to run a test program (@pxref{General Tests}).
+instead of trying to run a test program (@pxref{General Feature Tests}).
 @end defmac
 
 @defmac AC_CHAR_UNSIGNED
@@ -1195,7 +1195,7 @@ define @code{inline} to be @code{__inline}.  This macro calls
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
 This macro is obsolete; it is more general to use
 @samp{AC_SIZEOF_TYPE(int, @var{sizevar})} instead (@pxref{General
-Tests}), and define a symbol based on the size returned in
+Feature Tests}), and define a symbol based on the size returned in
 @var{sizevar}.
 @end defmac
 
@@ -1205,7 +1205,7 @@ Tests}), and define a symbol based on the size returned in
 If the C type @code{long int} is 64 bits wide, define
 @code{LONG_64_BITS}.  This macro is obsolete; it is more general to use
 @samp{AC_SIZEOF_TYPE(long, @var{sizevar})} instead (@pxref{General
-Tests}), and define a symbol based on the size returned in
+Feature Tests}), and define a symbol based on the size returned in
 @var{sizevar}.
 @end defmac
 
@@ -1367,14 +1367,15 @@ These macros are defined in the file @file{acgeneral.m4}.
 
 @menu
 * Setup::			Controlling Autoconf operation.
-* General Tests::		Checking for kinds of features.
+* General Feature Tests::	Checking for kinds of features.
+* Command Line::                Checking command line arguments.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 @end menu
 
-@node Setup, General Tests, , General Purpose Macros
+@node Setup, General Feature Tests, , General Purpose Macros
 @section Controlling Autoconf Setup
 
 The following macros control the kind of output that Autoconf produces.
@@ -1490,7 +1491,7 @@ produces this in @file{configure}:
 @end example
 @end defmac
 
-@node General Tests, Setting Variables, Setup, General Purpose Macros
+@node General Feature Tests, Command Line, Setup, General Purpose Macros
 @section Checking for Kinds of Features
 
 These macros are templates that, when called with actual parameters,
@@ -1514,37 +1515,14 @@ macros.
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex COMPILE_CHECK
-Print @samp{checking for @var{echo-text}} to the standard output.  Then
-create a test C program to see whether a function whose body consists of
+
+Print @samp{checking for @var{echo-text}} to the standard output
+(using @code{AC_CHECKING}, @pxref{Printing Messages}).
+Create a test C program to see whether a function whose body consists of
 @var{function-body} can be compiled and linked; @var{includes} is any
 @code{#include} statements needed by the code in @var{function-body}.
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
-@end defmac
-
-@defmac AC_ENABLE (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
-@maindex ENABLE
-If the user gave @code{configure} the option
-@samp{--enable-@var{feature}}, run shell commands @var{action-if-true}.
-Otherwise run shell commands @var{action-if-false}.  The name
-@var{feature} should consist only of alphanumeric characters and dashes.
-
-The @var{feature} indicates an optional user-level facility.  This
-allows users to choose which optional features to build and install.
-
-The user can give a value by following the feature name with @samp{=}
-and the value.  Giving a value of @samp{no} specifies that the feature
-is @emph{not} available.  A feature with a value looks like
-@samp{--enable-debug=stabs}.
-
-The value given is available to the shell commands @var{action-if-true}
-in the shell variable @code{enableval}.  If no value was given,
-@code{enableval} is @samp{yes}.  For example,
-
-@example
-AC_ENABLE(fubar, echo "got --enable-fubar=$enableval",
-        echo no --enable-fubar)
-@end example
 @end defmac
 
 @defmac AC_FUNC_CHECK (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -1578,8 +1556,7 @@ it is used here.
 
 @defmac AC_HAVE_LIBRARY (@var{library} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex HAVE_LIBRARY
-Print @samp{checking for @var{library}} to the standard output.  Then
-create a test C program to see whether that program can be linked with
+Create a test C program to see whether that program can be linked with
 the specified library.  @var{action-if-found} is a list of shell
 commands to run if the link succeeds (which means that the library is
 present); @var{action-if-not-found} is a list of shell commands to run
@@ -1614,17 +1591,6 @@ You can not check whether preprocessor symbols are defined this way,
 because they get expanded before @code{egrep} sees them.  But you can
 almost always detect them by simply using @code{#ifdef} directives in
 your programs.
-@end defmac
-
-@defmac AC_PREFIX (@var{program})
-@maindex PREFIX
-If the user did not specify an installation prefix on the command line,
-guess a value for it by looking for @var{program} in @code{PATH}, the
-way the shell does.  If @var{program} is found, set the prefix to the
-parent of the directory containing @var{program}; otherwise leave the
-prefix specified in @file{Makefile.in} unchanged.  For example, if
-@var{program} is @code{gcc} and the @code{PATH} contains
-@file{/usr/local/gnu/bin/gcc}, set the prefix to @file{/usr/local/gnu}.
 @end defmac
 
 @defmac AC_PROGRAM_CHECK (@var{variable}, @var{prog-to-check-for}, @var{value-if-found}, @var{value-if-not-found})
@@ -1731,37 +1697,75 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
+@node Command Line, Setting Variables, General Feature Tests, General Purpose Macros
+@section Checking Command Line Arguments
+
+These macros check whether the user gave @code{configure} various
+command line arguments.  Like the general feature tests (@pxref{General
+Feature Tests}),  they may take an argument to use if the argument was
+given and one for if it was not given.
+
+@defmac AC_ENABLE (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
+@maindex ENABLE
+If the user gave @code{configure} the option
+@samp{--enable-@var{feature}}, run shell commands @var{action-if-true}.
+Otherwise run shell commands @var{action-if-false}.  The name
+@var{feature} should consist only of alphanumeric characters and dashes.
+
+The @var{feature} indicates an optional user-level facility.  This
+option allows users to choose which optional features to build and
+install.  @samp{--enable-@var{feature}} options should never make a
+feature behave differently or cause one feature to replace another.
+They should only cause parts of the program to be built rather than left
+out.
+
+The user can give a value by following the feature name with @samp{=}
+and the value.  Giving a value of @samp{no} specifies that the feature
+is @emph{not} available.  A feature with a value looks like
+@samp{--enable-debug=stabs}.
+
+The value given is available to the shell commands @var{action-if-true}
+in the shell variable @code{enableval}.  If no value was given,
+@code{enableval} is @samp{yes}.  For example,
+
+@example
+AC_ENABLE(fubar, echo "got --enable-fubar=$enableval",
+        echo no --enable-fubar)
+@end example
+@end defmac
+
+@defmac AC_PREFIX (@var{program})
+@maindex PREFIX
+If the user did not specify an installation prefix (using the
+@samp{--prefix} option), guess a value for it by looking for
+@var{program} in @code{PATH}, the way the shell does.  If @var{program}
+is found, set the prefix to the parent of the directory containing
+@var{program}; otherwise leave the prefix specified in
+@file{Makefile.in} unchanged.  For example, if @var{program} is
+@code{gcc} and the @code{PATH} contains @file{/usr/local/gnu/bin/gcc},
+set the prefix to @file{/usr/local/gnu}.
+@end defmac
+
 @defmac AC_WITH (@var{package}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex WITH
-If the user gave @code{configure} the option
-@samp{--with-@var{package}}, run shell commands @var{action-if-true}.
-Otherwise run shell commands @var{action-if-false}.  The name
-@var{package} should consist only of alphanumeric characters and dashes.
+If the user gave @code{configure} the option @samp{--with-@var{package}}
+or @samp{--without-@var{package}}, run shell commands
+@var{action-if-true}.  Otherwise run shell commands
+@var{action-if-false}.  The name @var{package} should consist only of
+alphanumeric characters and dashes.
 
 The @var{package} indicates another software package that this program
 should work with.  For example, @samp{--with-gnu-ld} means work with the
 GNU linker instead of some other linker.  @samp{--with-x11} means work
 with X11.
 
-The user can give a value by following the package name with @samp{=}
-and the value.  Giving a value of @samp{no} specifies that the package
-is @emph{not} available.  For example,
-
-@example
-./configure --with-gnu-libc=no
-@end example
-
-The value given is available to the shell commands @var{action-if-true}
-in the shell variable @code{withval}.  If no value was given,
-@code{withval} is @samp{yes}.  For example,
-
-@example
-AC_WITH(fubar, echo "got --with-fubar=$withval",
-        echo no --with-fubar)
-@end example
+@samp{--without} is for packages that are used by default.  Which option
+was given is available to the shell commands @var{action-if-true} in the
+shell variable @code{withval}.  For @samp{--with}, @code{withval} is
+@samp{yes}; for @samp{--without}, @code{withval} is @samp{no}.
 @end defmac
 
-@node Setting Variables, Printing Messages, General Tests, General Purpose Macros
+@node Setting Variables, Printing Messages, Command Line, General Purpose Macros
 @section Setting Variables
 
 These macros help other macros to define shell and @code{make}
@@ -2252,7 +2256,7 @@ Do not use @samp{test -x}, because 4.3BSD does not have it.  Use
 
 If you need to check whether a symbol is defined in a C header file, you
 can use @code{AC_HEADER_EGREP} if the symbol is not a C preprocessor
-macro (@pxref{General Tests}), or compile a small test program that includes
+macro (@pxref{General Feature Tests}), or compile a small test program that includes
 the file and references the symbol (@pxref{Test Programs}).  Don't
 directly @code{grep} for the symbol in the file, because on some systems
 it might be defined in another header file that the file you are
@@ -2299,9 +2303,9 @@ than scanning the libraries.
 
 If you need to check for a condition other than whether some symbol
 exists on the system or has a certain value, then you can't use
-@code{AC_COMPILE_CHECK} (@pxref{General Tests}).  You have to write a
+@code{AC_COMPILE_CHECK} (@pxref{General Feature Tests}).  You have to write a
 test program by hand.  You can compile and run it using
-@code{AC_TEST_PROGRAM} (@pxref{General Tests}).
+@code{AC_TEST_PROGRAM} (@pxref{General Feature Tests}).
 
 Try to avoid writing test programs if possible, because using them
 prevents people from configuring your package for cross-compiling.  If
@@ -2468,7 +2472,7 @@ redundant.
 
 @defvar LIBOBJS
 Names of object files (ending in @file{.o}).  Set by
-@code{AC_REPLACE_FUNCS} (@pxref{General Tests}).
+@code{AC_REPLACE_FUNCS} (@pxref{General Feature Tests}).
 @end defvar
 
 @node Installation Prefixes, VPATH Substitutions, Predefined Variables, Makefiles
@@ -2480,7 +2484,7 @@ Cygnus @code{configure}.  This method is not recommended.
 
 If @code{configure} has figured out a value for the installation prefix,
 either by the user supplying one on the command line (@pxref{Invoking
-configure}) or with @code{AC_PREFIX} (@pxref{General Tests}), then it
+configure}) or with @code{AC_PREFIX} (@pxref{General Feature Tests}), then it
 substitutes that value in @file{Makefile}s that it creates.  Wherever a
 @file{Makefile.in} contains lines like
 
