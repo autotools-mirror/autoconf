@@ -14,7 +14,8 @@ configuration, doc/ contains the documentation, and tests/ the test
 suite.
 
 ** Man pages are provided
-For autoconf, autoreconf, autoupdate, autoheader, autoscan and ifnames.
+For autoconf, autoreconf, autoupdate, autoheader, autoscan, ifnames,
+config.guess, config.sub.
 
 ** autoconf
 - --trace
@@ -199,6 +200,8 @@ test cases in this new frame work.
   Takes a language as argument and replaces AC_LANG_C,
   AC_LANG_CPLUSPLUS and AC_LANG_FORTRAN77.
 
+- AC_LANG_PUSH, AC_LANG_POP
+  Are preferred to AC_LANG_SAVE, AC_LANG_RESTORE.
 
 ** Specific Macros
 - AC_FUNC_CHOWN, AC_FUNC_MALLOC, AC_FUNC_STRERROR_R,
@@ -217,6 +220,10 @@ test cases in this new frame work.
 
 - AC_SYS_LARGEFILE
   Arrange for large-file support.
+
+- AC_EXEEXT, AC_OBJEXT
+  You are no longer expected to use them: their computation is
+  performed by default.
 
 ** C++ compatibility
   Every macro has been revisited in order to support at best CC=c++.

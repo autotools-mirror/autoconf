@@ -9,10 +9,6 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Autoconf 2.50
 
-** AC_EXEEXT, AC_OBJEXT
-We need a good implementation.  As much as possible, they should not
-depend upon AC_EMXOS2 etc.
-
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
@@ -21,24 +17,10 @@ Ian?
 ** Document
 Automake, Libtool.
 
-** Pentateuch
-Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
-_must_ update the `history' section.  Can't go to `New testament', we
-might hurt feelings?  In addition, it means that the Messiah has come,
-which might be slightly presumptuous :).  Still, someone fluent in
-English should write it.
-
-** Character intervals
-For safety, we should check that configure scripts do not depend upon
-char intervals.  Introducing ac_A_Z etc. might make it more
-convenient.
-
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
 
-** Forbidden patterns
-Chose a means to declare patterns to catch, means to escape the
-control, and document it.
+* Autoconf 2.51
 
 ** AC_CHECK_FUNCS and AC_TRY_LINK_FUNC
 I have still not understood what's the difference  between the two
@@ -46,7 +28,29 @@ which requires to have two different sources: AC_LANG_CALL and
 AC_LANG_FUNC_LINK_TRY (which names seem to be inappropriate).
 Wouldn't one be enough?
 
-* Autoconf 2.51 or so
+** autom4te
+Eve it out of autoconf.  Install support for Autotest, M4sugar, and
+M4sh.  Give a means to trace at the same time as we produce the
+output.  autoconf shall use this feature to make autoheader obsolete,
+and to produce some kind of input file for automake which should no
+longer *ever* try to parse Autoconf files.
+
+** Autotest
+Document it.
+
+* Autoconf 2.51 or later
+
+** Libtool
+Define once for all the hooks they need, any redefinition of
+AC_PROG_CC etc. is way too dangerous and too limiting.  The GCC team
+certainly has requirements too.
+
+** Pentateuch
+Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
+_must_ update the `history' section.  Can't go to `New testament', we
+might hurt feelings?  In addition, it means that the Messiah has come,
+which might be slightly presumptuous :).  Still, someone fluent in
+English should write it.
 
 ** AC_FUNC_GETLOADAVG
 We must find a solution for this macro which needs to find
@@ -79,22 +83,9 @@ objext and exeext.
 Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 Should include more tests (e.g., AC_C_CONST etc.)?
 
-** AC_INIT(PACKAGE)
-Decide with the Automake team whether they prefer that AC_PACKAGE_NAME
-etc. be a macro, or a shell variable ac_package_name.  Had we used
-AC_PACKAGE anywhere in configure.in, we would have had to use an
-shvar.  Also, think of the capitalization!  For instance this package
-is named `Autoconf', but the tarball is `autoconf-'.  What of the
-space?  Do we need another user input for the name of the tarball?
-
 ** AC_SYS_INTERPRETER
 Defines $interpval.  This is not a standard name.  Do we want to keep
 this?  Clarify our policy on those names.
-
-** AC_PROVIDE
-I think it is the epilogue that should provide, not the prologue.  Not
-clear: there are risks of circular dependencies :(.  In fact the
-relationship AC_BEFORE should be given outside the macro themselves.
 
 ** autoupdate
 We should probably install the files which do not depend upon the

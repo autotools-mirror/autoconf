@@ -1043,10 +1043,10 @@ OUTTER
 you get:
 
 @example
-/tmp % ace -Wcross
+$ autoconf -Wcross
 configure.ac:8: warning: AC_TRY_RUN called without default \
 to allow cross compiling
-/tmp % ace -Wcross,error
+$ autoconf -Wcross,error
 configure.ac:8: error: AC_TRY_RUN called without default \
 to allow cross compiling
 acgeneral.m4:3044: AC_TRY_RUN is expanded from...
@@ -1128,7 +1128,7 @@ For instance, to know the list of variables that are substituted:
 
 @example
 @group
-% autoconf -t AC_SUBST
+$ autoconf -t AC_SUBST
 configure.ac:2:AC_SUBST:ECHO_C
 configure.ac:2:AC_SUBST:ECHO_N
 configure.ac:2:AC_SUBST:ECHO_T
@@ -1142,17 +1142,17 @@ The example below highlights the difference between @samp{$@@},
 
 @example
 @group
-% cat configure.ac
+$ cat configure.ac
 AC_DEFINE(This, is, [an
 [example]])
-% autoconf -t 'AC_DEFINE:@@: $@@
+$ autoconf -t 'AC_DEFINE:@@: $@@
 *: $*
-%: $%'
+$: $%'
 @@: [This],[is],[an
 [example]]
 *: This,is,an
 [example]
-%: This:is:an [example]
+$: This:is:an [example]
 @end group
 @end example
 
@@ -1161,7 +1161,7 @@ Much freedom is given over the @var{format}:
 
 @example
 @group
-% autoconf -t 'AC_SUBST:ac_subst@{"$1"@} = "$f:$l";'
+$ autoconf -t 'AC_SUBST:ac_subst@{"$1"@} = "$f:$l";'
 ac_subst@{"ECHO_C"@} = "configure.ac:2";
 ac_subst@{"ECHO_N"@} = "configure.ac:2";
 ac_subst@{"ECHO_T"@} = "configure.ac:2";
@@ -1175,7 +1175,7 @@ structures:
 
 @example
 @group
-% autoconf -t 'AM_MISSING_PROG:$@{|:::::|@}*'
+$ autoconf -t 'AM_MISSING_PROG:$@{|:::::|@}*'
 ACLOCAL|:::::|aclocal|:::::|$missing_dir
 AUTOCONF|:::::|autoconf|:::::|$missing_dir
 AUTOMAKE|:::::|automake|:::::|$missing_dir
@@ -5226,7 +5226,6 @@ the affected variable was already set.  This bug can be exercised by
 running:
 
 @example
-% /bin/sh
 $ unset foo
 $ foo=$@{foo='@}'@}
 $ echo $foo
@@ -5830,12 +5829,12 @@ Solaris 8 @command{sh} consider that when the trap is run it is
 that the trap receives:
 
 @example
-% cat trap.sh
+$ cat trap.sh
 trap 'echo $?' 0
 (exit 42); exit 0
-% zsh trap.sh
+$ zsh trap.sh
 42
-% bash trap.sh
+$ bash trap.sh
 0
 @end example
 
