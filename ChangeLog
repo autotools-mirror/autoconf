@@ -1,5 +1,13 @@
 2002-06-07  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (AC_REPLACE_FUNC_FNMATCH): Typo,
+	rename as...
+	(AC_REPLACE_FNMATCH): this.
+	* tests/mktests.sh (exclude_list): Exclude AC_REPLACE_FNMATCH,
+	AC_FUNC_FNMATCH_GNU.
+
+2002-06-07  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Systemology): Point to Tru64 docs, and the
 	Rosetta Stone for Unix.
 

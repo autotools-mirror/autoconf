@@ -81,34 +81,48 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #
 # - AC_CANONICALIZE, AC_PREFIX_PROGRAM, AC_PREREQ
 #   Need an argument.
+#
 # - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
+#
 # - AC_CONFIG
 #   They fail when the source does not exist.
-# - AC_FUNC_GETLOADAVG
-#   Requires a file that is not shipped with Autoconf.  But it should.
+#
+# - AC_FUNC_GETLOADAVG, AC_REPLACE_FNMATCH, AC_FUNC_FNMATCH_GNU
+#   Require a file that is not shipped with Autoconf.  But it should.
+#
 # - AC_INIT
 #   AC_INIT includes all the AC_INIT macros.  Note that there is an
 #   infinite m4 recursion if AC_INIT it used twice.
+#
 # - AC_LANG*
 #   Heavily used by other macros.
+#
 # - AC_PATH_PROGS?, AC_F77_FUNC
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
+#
 # - AC_TRY, AC_.*_IFELSE, AC_RUN_LOG.
 #   Used in many places.
+#
 # - _AC_
 #   Internal macros are used elsewhere.
+#
 # - AC_OUTPUT
 #   Already tested by `AT_CHECK_MACRO'.
+#
 # - AC_FD_CC
 #   Is a number.
+#
 # - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE), AC_PATH_XTRA
 #   Checked in semantics.
+#
 # - AC_CYGWIN, AC_CYGWIN32, AC_EMXOS2, AC_MING32, AC_EXEEXT, AC_OBJEXT
 #   AU defined to nothing.
+#
 # - AC_PATH_XTRA
 #   Checked in semantics.
+#
 # - AC_SYS_RESTARTABLE_SYSCALLS, AC_FUNC_WAIT3
 #   Obsolete, checked in semantics.
 #
@@ -117,7 +131,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_F77_FUNC$
-^AC_FUNC_GETLOADAVG$
+^AC_(FUNC_GETLOADAVG|REPLACE_FNMATCH|FUNC_FNMATCH_GNU)$
 ^AC_INIT
 ^AC_LANG
 ^AC_LINKER_OPTION$
