@@ -81,7 +81,7 @@
 
 2003-08-20  Akim Demaille  <akim@epita.fr>
 
-	* bin/autoupdate.in, bin/auheader.in, bin/autoreconf.in,
+	* bin/autoupdate.in, bin/autoheader.in, bin/autoreconf.in,
 	* bin/autom4te: Adjust.
 	In particular, be Autoconf tools are really silent when properly
 	working, bind the verbosity of the 'note' channel to $verbose.
