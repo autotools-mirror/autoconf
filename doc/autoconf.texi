@@ -267,8 +267,10 @@ Autoconf.
 @chapter Making @code{configure} Scripts
 
 The configuration scripts that Autoconf produces are by convention
-called @code{configure} when they are distributed.  When run, they
-create several files:
+called @code{configure}.  When run, @code{configure} creates several
+files, replacing configuration parameters in them with values
+appropriate for the system being configured.  The files that
+@code{configure} creates are:
 
 @itemize @bullet
 @item
@@ -281,8 +283,7 @@ containing @code{#define} statements (@pxref{Setup});
 
 @item
 a shell script called @file{config.status} that, when run, will recreate
-the current configuration parameter settings
-(@pxref{Invoking config.status}).
+the files listed above (@pxref{Invoking config.status}).
 @end itemize
 
 To create a @code{configure} script with Autoconf, you need to write an
@@ -300,13 +301,14 @@ configure.in  /                          |    |                   \
   |    |                                 |    |             make* -> your
   |    |                                 |    |                   /package
   |    |                              config.status* -> config.h /
-configure.in \                                       /
-autoheader*  ->  - - - - - - - - - - -> config.h.in /
-acconfig.h   /
+configure.in  \                                      /
+autoheader*   -> - - - - - - - - - - -> config.h.in /
+acconfig.h    /
+config.h.top /
 @end example
 
 @noindent
-Executables are suffixed by @samp{*}, while files appearing twice are
+Executables are suffixed by @samp{*}.  Files appearing twice are
 linked with lines of @samp{|}.
 
 @menu
@@ -410,7 +412,7 @@ summary of the command-line options and exits.
 @node Invoking autoheader, , Invoking autoconf, Making configure Scripts
 @section Invoking @code{autoheader}
 
-You can use the program @code{autoheader} to create a template file of C
+You can use the @code{autoheader} program to create a template file of C
 @samp{#define} statements for @code{configure} to use.  By default, the
 file that @code{autoheader} creates is called @file{config.h.in}; if
 @file{configure.in} invokes @code{AC_CONFIG_HEADER(@var{file})},
@@ -421,16 +423,18 @@ preprocessor symbols it might define.  It copies comments and
 @code{#define} and @code{#undef} statements from a file called
 @file{acconfig.h}, which comes with and is installed with Autoconf.  It
 also uses a file called @file{acconfig.h} in the current directory, if
-present; you must create that file to contain entries for symbols that
-you @code{AC_DEFINE}.  For symbols that @code{AC_HAVE_HEADERS} or
-@code{AC_HAVE_FUNCS} define, @code{autoheader} generates comments and
-@code{#undef} statements itself rather than copying them from a file,
-since the possible symbols are effectively limitless.
+present; you must create that file to contain entries for any additional
+symbols that you @code{AC_DEFINE}.  For symbols defined by
+@code{AC_HAVE_HEADERS}, @code{AC_HAVE_FUNCS}, or @code{AC_HAVE_LIBRARY},
+@code{autoheader} generates comments and @code{#undef} statements itself
+rather than copying them from a file, since the possible symbols are
+effectively limitless.
 
-The file that @code{autoheader} creates contains only @code{#define} and
-@code{#undef} statements and their accompanying comments; there is no
-provision in @code{autoheader} for adding other code or comments to the
-file.
+The file that @code{autoheader} creates usually contains only
+@code{#define} and @code{#undef} statements and their accompanying
+comments.  However, if a file called @file{@var{file}.top} (typically
+@file{config.h.top}) exists in the current directory, @code{autoheader}
+copies that file to the beginning of its output.
 
 If you give @code{autoheader} an argument, it uses that file instead of
 @file{configure.in} and writes the header file to the standard output
@@ -488,6 +492,7 @@ what existing GNU programs use.  These macros are defined in the file
 The following macros check for the presence or behavior of particular
 programs:
 
+@ignore
 @defmac AC_DECLARE_YYTEXT
 @maindex DECLARE_YYTEXT
 @vindex DECLARE_YYTEXT
@@ -498,6 +503,15 @@ current language, @pxref{Language Choice}) and @code{AC_PROG_LEX} if
 they haven't been called already.
 
 This macro currently does not work, due to problems with shell quoting.
+@end defmac
+@end ignore
+
+@defmac AC_GCC_TRADITIONAL
+@maindex GCC_TRADITIONAL
+Add @samp{-traditional} to @code{make} variable @code{CC} if using the
+GNU C compiler and @code{ioctl} does not work properly without
+@samp{-traditional}.  This macro calls @code{AC_PROG_CC} and
+@code{AC_PROG_CPP} if they haven't been called already.
 @end defmac
 
 @defmac AC_LN_S
@@ -514,11 +528,18 @@ If the C compiler does not accept the @samp{-c} and @samp{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 @end defmac
 
-@defmac AC_PROG_YACC
-@maindex PROG_YACC
-If @code{bison} is found, set @code{make} variable @code{YACC} to
-@samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
-to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
+@defmac AC_PROG_AWK
+@maindex PROG_AWK
+Check for @code{mawk}, @code{gawk}, @code{nawk}, and @code{awk}, in that
+order, and set @code{make} variable @code{AWK} to the first one that it
+finds.
+@end defmac
+
+@defmac AC_PROG_CC
+@maindex PROG_CC
+If @code{gcc} is found, set @code{make} variable @code{CC} to @samp{gcc},
+and set shell variable @code{GCC} to 1 for use by macros such as
+@code{AC_GCC_TRADITIONAL}.
 @end defmac
 
 @defmac AC_PROG_CPP
@@ -534,6 +555,16 @@ hasn't been called already.  It calls @code{AC_PROG_CC} if it hasn't
 been called already.
 @end defmac
 
+@defmac AC_PROG_CXX
+@maindex PROG_CXX
+Determine a C++ compiler to use.  Check if the environment variable
+@var{CXX} or @var{CCC} (in that order) is set; if so, set @code{make}
+variable @code{CXX} to its value.  Otherwise search for a C++ compiler
+under likely names (@code{c++}, @code{g++}, @code{gcc}, and @code{CC}).
+If none of those checks succeed, as a last resort set @code{CXX} to
+@code{gcc}.
+@end defmac
+
 @defmac AC_PROG_CXXCPP
 @maindex PROG_CXXCPP
 Set shell and @code{make} variable @code{CXXCPP} to a command that runs the
@@ -545,46 +576,6 @@ calling @code{AC_TEST_CPP}, @code{AC_HEADER_CHECK},
 @code{AC_HEADER_EGREP}, or @code{AC_PROGRAM_EGREP}.  Those macros call
 this macro first if it hasn't been called already.  It macro calls
 @code{AC_PROG_CXX} if it hasn't been called already.
-@end defmac
-
-@defmac AC_PROG_LEX
-@maindex PROG_LEX
-If @code{flex} is found, set @code{make} variable @code{LEX} to
-@samp{flex} and @code{LEXLIB} to @samp{-lfl}, if that library is in a
-standard place.  Otherwise set @code{LEX} to @samp{lex} and
-@code{LEXLIB} to @samp{-ll}.
-@end defmac
-
-@defmac AC_PROG_AWK
-@maindex PROG_AWK
-Check for @code{mawk}, @code{gawk}, @code{nawk}, and @code{awk}, in that
-order, and set @code{make} variable @code{AWK} to the first one that it
-finds.
-@end defmac
-
-@defmac AC_PROG_CC
-@maindex PROG_CC
-If @code{gcc} is found, set @code{make} variable @code{CC} to @samp{gcc},
-and set shell variable @code{GCC} to 1 for use by macros such as
-@code{AC_GCC_TRADITIONAL}.
-@end defmac
-
-@defmac AC_PROG_CXX
-@maindex PROG_CXX
-Determine a C++ compiler to use.  Check if the environment variable
-@var{CXX} or @var{CCC} (in that order) is set; if so, set @code{make}
-variable @code{CXX} to its value.  Otherwise search for a C++ compiler
-under likely names (@code{c++}, @code{g++}, @code{gcc}, and @code{CC}).
-If none of those checks succeed, as a last resort set @code{CXX} to
-@code{gcc}.
-@end defmac
-
-@defmac AC_GCC_TRADITIONAL
-@maindex GCC_TRADITIONAL
-Add @samp{-traditional} to @code{make} variable @code{CC} if using the
-GNU C compiler and @code{ioctl} does not work properly without
-@samp{-traditional}.  This macro calls @code{AC_PROG_CC} and
-@code{AC_PROG_CPP} if they haven't been called already.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -604,10 +595,25 @@ not found in standard @code{install} programs, there is no reason to use
 @file{Makefile.in} files.
 @end defmac
 
+@defmac AC_PROG_LEX
+@maindex PROG_LEX
+If @code{flex} is found, set @code{make} variable @code{LEX} to
+@samp{flex} and @code{LEXLIB} to @samp{-lfl}, if that library is in a
+standard place.  Otherwise set @code{LEX} to @samp{lex} and
+@code{LEXLIB} to @samp{-ll}.
+@end defmac
+
 @defmac AC_PROG_RANLIB
 @maindex PROG_RANLIB
 Set @code{make} variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
 is found, otherwise to @samp{:} (do nothing).
+@end defmac
+
+@defmac AC_PROG_YACC
+@maindex PROG_YACC
+If @code{bison} is found, set @code{make} variable @code{YACC} to
+@samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
+to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @defmac AC_RSH
@@ -1226,12 +1232,10 @@ if they have not already been called.
 
 @defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-unsupported}@r{]})
 @maindex HAVE_POUNDBANG
-Print @samp{checking if `#!' works in shell scripts} to the standard
-output.  Then check whether the system supports starting shell scripts
-with a line of the form @samp{#!/bin/csh} to select the shell to run
-them with.  @var{action-if-supported} is a list of shell commands to run
-if @samp{#!} works; @var{action-if-not-supported} is a list of shell
-commands to run otherwise.
+Check whether the system supports starting shell scripts with a line of
+the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
+works, execute shell commands @var{action-if-supported}; if not, execute
+@var{action-if-not-supported}.
 @end defmac
 
 @defmac AC_LONG_FILE_NAMES
@@ -1389,18 +1393,6 @@ make sure that the directory that it is told contains the source code in
 fact does (@pxref{Invoking configure}, for more information).
 @end defmac
 
-@defmac AC_PREPARE (@var{unique-file-in-source-dir})
-@maindex PREPARE
-Find the source code directory and set up shell variables necessary for
-other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
-file that is in the package's source directory; @code{configure} checks
-for this file's existence to make sure that the directory that it is
-told contains the source code in fact does (@pxref{Invoking configure},
-for more information).  @code{AC_PREPARE} is the last thing done by
-@code{AC_INIT}.  Use @code{AC_PREPARE} instead of @code{AC_INIT} if you
-want to do argument parsing yourself; never use both.
-@end defmac
-
 @defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
 @maindex OUTPUT
 Create output files (typically one or more @file{Makefile}s) and
@@ -1417,6 +1409,18 @@ X/Imakefile}.
 
 If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.
+@end defmac
+
+@defmac AC_PREPARE (@var{unique-file-in-source-dir})
+@maindex PREPARE
+Find the source code directory and set up shell variables necessary for
+other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
+file that is in the package's source directory; @code{configure} checks
+for this file's existence to make sure that the directory that it is
+told contains the source code in fact does (@pxref{Invoking configure},
+for more information).  @code{AC_PREPARE} is the last thing done by
+@code{AC_INIT}.  Use @code{AC_PREPARE} instead of @code{AC_INIT} if you
+want to do argument parsing yourself; never use both.
 @end defmac
 
 @defmac AC_PREREQ (@var{version})
@@ -1601,8 +1605,8 @@ been called already.
 @defmac AC_PROGRAM_PATH (@var{variable}, @var{prog-to-check-for}, @var{value-if-not-found})
 @maindex PROGRAM_PATH
 Similar to @code{AC_PROGRAM_CHECK}, but set @var{variable} to the entire path of 
-@var{prog-to-check-for} if found.  Otherwise, just set @var{variable} to
-the value of @var{value-if-not-found}; no path checking is performed.
+@var{prog-to-check-for} if found.  Otherwise, set @var{variable} to
+the value @var{value-if-not-found} and perform no path checking.
 Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
@@ -1620,8 +1624,8 @@ will not be changed.  Calls @code{AC_SUBST} for @var{variable}.
 @defmac AC_PROGRAMS_PATH (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex PROGRAMS_PATH
 Like @code{AC_PROGRAMS_CHECK}, but if any of @var{progs-to-check-for}
-are found, @var{variable} is set to the entire pathname of the found
-program.
+are found, set @var{variable} to the entire pathname of the program
+found.
 @end defmac
 
 @defmac AC_REPLACE_FUNCS (@var{function-name}@dots{})
@@ -1636,10 +1640,11 @@ might be in libraries other than the default C library, first call
 @defmac AC_SIZEOF_TYPE (@var{type}, @var{size-var})
 @maindex SIZEOF_TYPE
 Assign to shell variable @var{size-var} the size (in bytes) of the C (or
-C++) type @var{type}, e.g. @samp{int} or @samp{char *}.  If @samp{type}
-is unknown to the compiler, assign 0 to @var{size-var}.  The caller will
-likely use @code{AC_DEFINE} to define a symbol in the package being
-configured, based on the value of @var{size-var}.  For example,
+C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
+@samp{type} is unknown to the compiler, assign 0 to @var{size-var}.  The
+caller will likely use @code{AC_DEFINE} to define a symbol in the
+package being configured, based on the value of @var{size-var}.  For
+example,
 
 @example
 AC_SIZEOF_TYPE(char *, psize)
@@ -1749,7 +1754,7 @@ could have code like this:
 
 On systems that have @file{unistd.h}, @code{configure} will change the
 second line to read @samp{#define HAVE_UNISTD_H 1}.  On other systems,
-it will leave the line unchanged.
+it will comment that line out (in case the system predefines that symbol).
 
 Due to the syntactical bizarreness of the Bourne shell, do not use
 semicolons to separate @code{AC_DEFINE} calls from other macro calls or
@@ -1823,12 +1828,12 @@ These macros are all wrappers around the @code{echo} shell command.
 Other macros should rarely need to run @code{echo} directly to print
 messages for the @code{configure} user.  Using these macros makes it
 easy to change how and when each kind of message is printed; such
-changes need only be made to the macro definitions, and all the callers
-change automatically.
+changes need only be made to the macro definitions, and all of the
+callers change automatically.
 
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
-Tell the user that @code{configure} is checking for a particular
+Notify the user that @code{configure} is checking for a particular
 feature.  This macro prints a message that starts with @samp{checking }.
 It prints nothing if @code{configure} is run with the @samp{--silent} or
 @samp{--quiet} option.  The @var{feature-description} should be
@@ -1847,7 +1852,7 @@ stream and exits @code{configure} with a nonzero status.
 
 @defmac AC_VERBOSE (@var{result-description})
 @maindex VERBOSE
-Notify the user of the results of a check.  This extra information is
+Notify the user of the results of a check.  This information is
 only printed if @code{configure} is run with the @samp{--verbose}
 option.  @var{result-description} should be something like @samp{setting
 ADA to $ADA}.
@@ -1866,9 +1871,10 @@ make hard links}.
 @node Language Choice, Macro Ordering, Printing Messages, General Purpose Macros
 @section Language Choice
 
-Programs that use both C and C++ need to test features of both
-compilers.  The following macros determine which language's compiler is
-used in tests that follow in @file{configure.in}.
+Packages that use both C and C++ need to test features of both
+compilers.  Autoconf-generated @code{configure} scripts check for C
+features by default.  The following macros determine which language's
+compiler is used in tests that follow in @file{configure.in}.
 
 @defmac AC_LANG_C
 @maindex LANG_C
@@ -1899,7 +1905,8 @@ Do not call this macro more times than @code{AC_LANG_SAVE}.
 @maindex LANG_SAVE
 Remember the current language (as set by @code{AC_LANG_C} or
 @code{AC_LANG_CPLUSPLUS}) on a stack.  Does not change which language is
-current.
+current.  Use this macro and @code{AC_LANG_RESTORE} in macros that need
+to temporarily switch to a particular language.
 @end defmac
 
 @defmac AC_REQUIRE_CPP
@@ -2528,7 +2535,7 @@ itself.
 
 Running @code{configure} takes a minute or two.  While it is running, it
 prints some messages that tell what it is doing.  If you don't want to
-see the messages, run @code{configure} with its standard output
+see any messages, run @code{configure} with its standard output
 redirected to @file{/dev/null}; for example, @samp{./configure >/dev/null}.
 
 To compile the package in a different directory from the one containing
