@@ -9,6 +9,7 @@ autoupdate \- Update a configure.in to a newer Autoconf
 Update the TEMPLATE-FILE... if given, or `configure.in' by default, to
 the syntax of the current version of `autoconf'.  The original files
 are backed up.
+.SS "Operation modes:"
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 print this help, then exit
@@ -16,8 +17,17 @@ print this help, then exit
 \fB\-V\fR, \fB\-\-version\fR
 print version number, then exit
 .TP
+\fB\-v\fR, \fB\-\-verbose\fR
+verbosely report processing
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+don't remove temporary files
+.TP
 \fB\-m\fR, \fB\-\-macrodir\fR=\fIDIR\fR
-directory storing Autoconf's files
+directory storing Autoconf's macro files
+.TP
+\fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
+directory storing the `aclocal.m4' file
 .SH AUTHOR
 Written by David J. MacKenzie.
 .SH "REPORTING BUGS"

@@ -1,5 +1,38 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	The Associated Rewriters are even prouder to present...
+		  .
+		  |
+		  |
+		 /-\
+		/   \
+		)===(   U  T  O  U  P  D  A  T  E    I V
+	       //   \\
+	      =========
+	    _//_     _\\_      The ``Eiffel Tower'' Release
+
+	* autoupdate.sh: Complete rewrite.  See that file for a detailed
+	explanation.  Basically, simulate the name spaces thanks to
+	`autoconf --trace' and auxiliary files.
+	No longer use `autoupdate.m4', remove the dependencies.
+	Synchronize the options and `--help'.
+	* doc/autoconf.texi (Invoking autoupdate): Humanoupdate.
+	* autoupdate.m4: Delete.
+	* tests/Makefile.am (FILTER_MACROS): Add `AC_OUTPUT'.
+	Since `AC_OUTPUT' is now AU_DEFUN'd, it is extracted for testing,
+	while it was not before.
+	* tests/tools.m4 (autoupdate): Re-enable.  Adjust the expected
+	output with the right quotation (yeah!).
+	Pass `-m $top_srcdir': autoupdate want the `.m4' files, not the
+	frozen files.
+	* Makefile.am (nodistpkgdataDATA): Move `acversion.m4' to
+	(distpkgdataDATA): here, so that all the `.m4' files are in the
+	source hierarchy, not split across src and build.
+	* acversion.m4.in: Update to today's standards.
+	* Makefile.am: Adjust.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4: Be robust to multiple inclusion.
 	Have the first `changequote' robust to the current quotation
 	system.

@@ -1,5 +1,5 @@
-dnl This file is part of Autoconf.                       -*- Autoconf -*-
-dnl Version of Autoconf.
-dnl Copyright (C) 1999 Free Software Foundation, Inc.
+# This file is part of Autoconf.                             -*- Autoconf -*-
+# Version of Autoconf.
+# Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 
-define(AC_ACVERSION, @VERSION@)
+define([AC_ACVERSION], [@VERSION@])

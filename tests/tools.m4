@@ -160,27 +160,26 @@ AT_CLEANUP
 
 # Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
 # actest.m4 AU_ defines OSBOLETE to UPDATED.
-###FIXME: Disabled until there's a new autoupdate.
-###AT_SETUP(autoupdate)
-###
-###AT_DATA(configure.in,
-###[[AC_INIT
-###dnl The doc says 27 is a valid fubar.
-###fubar=27
-###AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
-###]])
-###
-#### Checking `autoupdate'.
-###AT_CHECK([../autoupdate -m .. -l $at_srcdir -<configure.in], 0,
-###[[AC_INIT
-###dnl The doc says 27 is a valid fubar.
-###fubar=27
-###AC_CONFIG_FILES(Makefile)
-###AC_CONFIG_COMMANDS(default, [echo $fubar], [fubar=$fubar])
-###AC_OUTPUT
-###]], ignore)
-###
-###AT_CLEANUP
+AT_SETUP(autoupdate)
+
+AT_DATA(configure.in,
+[[AC_INIT
+dnl The doc says 27 is a valid fubar.
+fubar=27
+AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
+]])
+
+# Checking `autoupdate'.
+AT_CHECK([../autoupdate -m $top_srcdir -<configure.in], 0,
+[[AC_INIT
+dnl The doc says 27 is a valid fubar.
+fubar=27
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_COMMANDS([default],[[echo $fubar]],[[fubar=$fubar]])
+AC_OUTPUT
+]], ignore)
+
+AT_CLEANUP
 
 
 

@@ -6877,18 +6877,29 @@ standard output.
 @itemx -h
 Print a summary of the command line options and exit.
 
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+@itemx -v
+Report processing steps.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files.
+
 @item --macrodir=@var{dir}
 @itemx -m @var{dir}
 @evindex AC_MACRODIR
-Look for the Autoconf macro files in directory @var{dir} instead of the
-default installation directory.
-You can also set the @code{AC_MACRODIR}
-environment variable to a directory; this option overrides the
-environment variable.
+Look for the installed macro files in directory @var{dir}.  You can also
+set the @code{AC_MACRODIR} environment variable to a directory; this
+option overrides the environment variable.
 
-@item --version
-@itemx -V
-Print the version number of @code{autoupdate} and exit.
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package file @file{aclocal.m4} in directory @var{dir}
+instead of in the current directory.
 @end table
 
 @node Changed Results, Changed Macro Writing, Invoking autoupdate, Upgrading

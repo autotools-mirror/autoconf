@@ -67,6 +67,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 #   Used in many places.
 # - _AC_
 #   Internal macros are used elsewhere.
+# - AC_OUTPUT
+#   Already tested by `AT_TEST_MACRO'.
 #
 # Multiple `-e' to egrep are not portable, so join all the patterns together.
 # We use the fact that automake will replace all the `\\\n' with ` '.
@@ -80,6 +82,7 @@ FILTER_MACROS = egrep -v -e \
 ^AC_LINKER_OPTION$$\
 ^AC_LINK_FILES$$\
 ^AC_LIST_MEMBER_OF$$\
+^AC_OUTPUT$$\
 ^AC_PATH_(TOOL|PROG)S?$$\
 ^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$\
 ^AC_REPLACE_FUNCS$$\
