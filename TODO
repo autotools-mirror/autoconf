@@ -18,7 +18,8 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Fix AC_ARG_{ENABLE,WITH} and AC_PATH_X*.
+* Fix AC_ARG_{ENABLE,WITH}, and AC_PATH_X*, and AC_REQUIRE
+  interrupting messages.
 
 ------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ functions (POSIX, NIS) that do everything necessary, instead.
 ** Support all of the GNU standard targets.
 
 ** Parameterize with make variables to require as little modification
-as necessary.  Maybe via m4?  (Eww, visions of imake.)
+as necessary.  Maybe via m4?  (Eww, sounds like imake.)
 
 ** Make it usable both with and without a header file.
 
@@ -62,6 +63,9 @@ as necessary.  Maybe via m4?  (Eww, visions of imake.)
 config.site.
 
 *** Distribute a config.site corresponding to a hypothetical bare POSIX system with c89.
+
+*** Cache consistency checking: ignore cache if environment
+(CC or PATH) differs.
 
 ** Site defaults:
 
@@ -90,7 +94,9 @@ in a dnl comment.  (Seems to be hard.)
 
 ------------------------------------------------------------------------------
 
-* Cache consistency checking: ignore cache if environment
-(CC or PATH) differs.
+* Test suite: more things to test:
+** That the shell scripts produce correct output on some simple data.
+** Configuration header files.  That autoheader does the right thing,
+   and so does AC_CONFIG_HEADER when autoconf is run.
 
 ------------------------------------------------------------------------------
