@@ -1,3 +1,12 @@
+2004-12-13  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Move the trap commands ...
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): ... here;
+	  give only 4-letter prefix to AS_TMPDIR, comment fixed.
+	* lib/autoconf/programs.m4 (_AC_PATH_PROG_FEATURE_CHECK): Don't
+	  create the temporary directory.
+	(_AC_FEATURE_CHECK_LENGTH): Work in current directory.
+
 2004-12-12  Kelley Cook  <kcook@gcc.gnu.org>
 
 	* bin/autoheader.in: Exit if no AC_CONFIG_HEADERS was found.

@@ -963,14 +963,7 @@ m4_define([AS_LITERAL_IF],
 # which name is inspired by PREFIX (should be 2-4 chars max), and set
 # trap mechanisms to remove it.
 m4_define([AS_TMPDIR],
-[# Create a temporary directory, and hook for its removal unless debugging.
-$debug ||
-{
-  trap 'exit_status=$?; rm -f -r $tmp && exit $exit_status' 0
-  trap 'AS_EXIT([1])' 1 2 13 15
-}
-
-# Create a (secure) tmp directory for tmp files.
+[# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
   tmp=`(umask 077 && mktemp -d -q "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&

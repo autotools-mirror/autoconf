@@ -428,8 +428,7 @@ m4_define([_AC_PATH_PROG_FEATURE_CHECK],
 if test -z "$$1"; then
 set dummy $2; ac_prog_name=$[2]
 AC_CACHE_VAL([ac_cv_path_$1],
-[AS_TMPDIR([$1])
-ac_path_$1_found=false
+[ac_path_$1_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
 _AS_PATH_WALK([$4],
 [for ac_prog in $2; do
@@ -441,7 +440,6 @@ _AS_PATH_WALK([$4],
   done
 done
 ])
-rm -rf "$tmp"
 ])
 $1="$ac_cv_path_$1"
 if test -z "$$1"; then
@@ -468,15 +466,15 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
   _AC_PATH_PROG_FLAVOR_GNU([$$1],
     [$2="$$1" $1_found=:],
   [ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"$tmp/conftest.in"
+  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
   while :
   do
-    cat "$tmp/conftest.in" "$tmp/conftest.in" >"$tmp/conftest.tmp"
-    mv "$tmp/conftest.tmp" "$tmp/conftest.in"
-    cp "$tmp/conftest.in" "$tmp/conftest.nl"
-    echo '$4' >> "$tmp/conftest.nl"
-    $3 < "$tmp/conftest.nl" >"$tmp/conftest.out" 2>/dev/null || break
-    diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    echo '$4' >> "conftest.nl"
+    $3 < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
     if test $ac_count -gt ${$1_max-0}; then
       # Best one so far, save it but keep looking for a better one

@@ -1539,9 +1539,16 @@ m4_ifset([AC_LIST_COMMANDS],
 fi
 
 # Have a temporary directory for convenience.  Make it in the build tree
-# simply because there is no reason to put it here, and in addition,
+# simply because there is no reason against having it here, and in addition,
 # creating and moving files from /tmp can sometimes cause problems.
-AS_TMPDIR([confstat], [.])
+# Hook for its removal unless debugging.
+$debug ||
+{
+  trap 'exit_status=$?; rm -fr "$tmp" && exit $exit_status' 0
+  trap 'AS_EXIT([1])' 1 2 13 15
+}
+dnl The comment above AS_TMPDIR says at most 4 chars are allowed.
+AS_TMPDIR([conf], [.])
 
 _ACEOF
 ])[]dnl m4_ifval
