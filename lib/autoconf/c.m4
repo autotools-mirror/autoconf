@@ -112,7 +112,7 @@ define([_AC_LANG_DISPATCH],
 # -------------
 # Set the current language to LANG.
 #
-# Do *not* write AC_LANG([$1]), because this pair of parens do not
+# Do *not* write AC_LANG([$1]), because this pair of parens does not
 # correspond to an evaluation, rather, they are just part of the name.
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
@@ -169,6 +169,7 @@ define([AC_LANG(C)],
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_gnu_compiler=$ac_cv_prog_gcc
 ])
 
 
@@ -191,6 +192,7 @@ define([AC_LANG(C++)],
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_gnu_compiler=$ac_cv_prog_gxx
 ])
 
 
@@ -211,6 +213,7 @@ define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_gnu_compiler=$ac_cv_prog_g77
 ])
 
 
@@ -580,7 +583,8 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gcc=no
 fi])
-if test $ac_cv_prog_gcc = yes; then
+ac_gnu_compiler=$ac_cv_prog_gcc
+if test $ac_gnu_compiler = yes; then
   GCC=yes
 else
   GCC=
@@ -768,8 +772,8 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.cc) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gxx=no
 fi])
-
-if test $ac_cv_prog_gxx = yes; then
+ac_gnu_compiler=$ac_cv_prog_gxx
+if test $ac_gnu_compiler = yes; then
   GXX=yes
 else
   GXX=
@@ -869,7 +873,8 @@ if AC_TRY_COMMAND($F77 -E conftest.f) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_g77=no
 fi])
-if test $ac_cv_prog_g77 = yes; then
+ac_gnu_compiler=$ac_cv_prog_g77
+if test $ac_gnu_compiler = yes; then
   G77=yes
 else
   G77=

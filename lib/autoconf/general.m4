@@ -5047,20 +5047,13 @@ fi
 # doesn't currently support.
 # FIXME: Get rid of this macro.
 AC_DEFUN([AC_LINKER_OPTION],
-[AC_LANG_CASE([C],         [test x"$GCC" = xyes && using_gnu_compiler=yes],
-              [C++],       [test x"$GXX" = xyes && using_gnu_compiler=yes],
-              [FORTRAN77], [test x"$G77" = xyes && using_gnu_compiler=yes],
-                           [using_gnu_compiler=])
-
-dnl I don't understand the point of having the test inside of the
-dnl loop.
-for ac_link_opt in $1; do
-  if test x"$using_gnu_compiler" = xyes; then
+[if test "ac_gnu_compiler" = yes; then
+  for ac_link_opt in $1; do
     $2="[$]$2 -Xlinker $ac_link_opt"
-  else
-    $2="[$]$2 $ac_link_opt"
-  fi
-done])
+  done
+else
+  $2="[$]$2 $1"
+fi])
 
 
 # AC_LIST_MEMBER_OF(ELEMENT, LIST, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
