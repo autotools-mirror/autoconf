@@ -1,5 +1,10 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (wget-update): New target.
+	(WGET): New variable.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Coding Style): Some more constraints :).
 
 2000-07-10  Akim Demaille  <akim@epita.fr>

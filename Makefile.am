@@ -25,6 +25,7 @@ SUBDIRS = . m4 man doc tests
 SUFFIXES = .m4 .m4f .pl .sh
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
+WGET = wget
 
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
@@ -107,3 +108,11 @@ common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
          aclang.m4
 
 autoconf.m4f: autoconf.m4 $(common)
+
+
+wget-update:
+	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
+	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/make-stds.texi -O $(srcdir)/doc/make-stds.texi
+	$(WGET) ftp://ftp.gnu.org/gnu/texinfo/texinfo.tex    -O $(srcdir)/doc/texinfo.tex
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config.guess
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config.sub
