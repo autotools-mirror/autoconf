@@ -223,8 +223,7 @@ fi
 # AC_HEADER_STDC
 # --------------
 AC_DEFUN([AC_HEADER_STDC],
-[AC_REQUIRE_CPP()dnl
-AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
+[AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 [AC_TRY_CPP([#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>

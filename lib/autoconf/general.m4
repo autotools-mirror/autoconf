@@ -2771,10 +2771,12 @@ m4_popdef([AC_Lib_Name])dnl
 # _AC_TRY_CPP
 # -----------
 # Run cpp and set ac_cpp_err to "yes" for an error, to
-# "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if neither
-# warnings nor errors have been detected.
-# eval is necessary to expand ac_cpp.  It may put trace lines to conftest.err
-# when run under sh -x (e.g. when zsh is used), so we filter them out.
+# "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if
+# neither warnings nor errors have been detected.  eval is necessary
+# to expand ac_cpp.  It may put trace lines to conftest.err when run
+# under sh -x (e.g. when zsh is used), so we filter them out.
+#
+# Do not require AC_PROG_CPP since this macro is also used by AC_PROG_CPP.
 AC_DEFUN([_AC_TRY_CPP],
 [ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
 if AC_TRY_EVAL(ac_try); then
@@ -2812,15 +2814,6 @@ rm -f conftest*
 ])# AC_TRY_CPP
 
 
-# AC_EGREP_HEADER(PATTERN, HEADER-FILE,
-#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ---------------------------------------------------------
-AC_DEFUN([AC_EGREP_HEADER],
-[AC_EGREP_CPP([$1],
-[#include <$2>
-], [$3], [$4])])
-
-
 # AC_EGREP_CPP(PATTERN, PROGRAM,
 #              [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ------------------------------------------------------
@@ -2840,6 +2833,16 @@ m4_ifvanl([$4], [else
 fi
 rm -f conftest*
 ])# AC_EGREP_CPP
+
+
+# AC_EGREP_HEADER(PATTERN, HEADER-FILE,
+#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ---------------------------------------------------------
+AC_DEFUN([AC_EGREP_HEADER],
+[AC_EGREP_CPP([$1],
+[#include <$2>
+], [$3], [$4])])
+
 
 
 

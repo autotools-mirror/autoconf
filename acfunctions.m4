@@ -197,8 +197,7 @@ AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 # AC_FUNC_ALLOCA
 # --------------
 AC_DEFUN([AC_FUNC_ALLOCA],
-[AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
-# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
+[# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 [AC_TRY_LINK([@%:@include <alloca.h>],

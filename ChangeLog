@@ -1,5 +1,13 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_ALLOCA): Don't require AC_PROG_CPP,
+	since (i) you actually need a compiler, (ii) AC_TRY_LINK handles
+	it.
+	* acheaders.m4 (AC_HEADER_STDC): Don't require AC_PROG_CPP,
+	AC_TRY_CPP does it.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	Create acheaders.m4.
 
 	* acgeneral.m4 (AC_CHECK_HEADER, AC_CHECK_HEADERS)
