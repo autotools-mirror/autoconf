@@ -35,7 +35,7 @@ EXTRA_SCRIPTS = autoscan
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
 # and adapt dependencies once we use a more recent Automake
 
-m4sources =  m4sugar.m4 shell.m4  \
+m4sources =  m4sugar.m4 m4sh.m4  \
              autoconf.m4 \
              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4 \
              acfunctions.m4

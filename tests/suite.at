@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/sh						-*- Autoconf -*-
 # Validation suite for Autoconf
 # Copyright 2000 Free Software Foundation, Inc.
 
@@ -18,25 +18,25 @@ EOF
 # the most selective to the easiest.
 
 # M4sugar.
-AT_INCLUDE(m4sugar.m4)
+AT_INCLUDE(m4sugar.at)
 
-# shell.m4.
-AT_INCLUDE(shell.m4)
+# M4sh.m4.
+AT_INCLUDE(m4sh.at)
 
 # Autoconf base macros.
-AT_INCLUDE(base.m4)
+AT_INCLUDE(base.at)
 
 # The executables.
-AT_INCLUDE(tools.m4)
+AT_INCLUDE(tools.at)
 
 # Checking that AC_CHECK_FOO macros work properly.
-AT_INCLUDE(semantics.m4)
+AT_INCLUDE(semantics.at)
 
 # Stressing config.status.
-AT_INCLUDE(torture.m4)
+AT_INCLUDE(torture.at)
 
 # Checking all the AC_DEFUN'd macros.
-AT_INCLUDE(syntax.m4)
+AT_INCLUDE(syntax.at)
 
 # Checking that updatiing an obsolete macro produces a valid configure.in
-AT_INCLUDE(update.m4)
+AT_INCLUDE(update.at)

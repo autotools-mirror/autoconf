@@ -24,7 +24,7 @@ include(m4sugar.m4)#                                        -*- Autoconf -*-
 # yet when Autoconf is frozen.
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 
-m4_include(shell.m4)
+m4_include(m4sh.m4)
 
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)

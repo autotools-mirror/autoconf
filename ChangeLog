@@ -1,3 +1,15 @@
+2000-10-26  Akim Demaille  <akim@epita.fr>
+
+	* shell.m4: Rename as...
+	* m4sh.m4: this.
+	* tests/m4sugar.m4, tests/shell.m4, tests/torture.m4: Rename as...
+	* tests/m4sugar.at, tests/m4sh.at, tests/torture.at: these.
+	* tests/semantics.m4, tests/base.m4, tests/suite.m4: Rename as...
+	* tests/semantics.at, tests/base.at, tests/suite.at: these.
+	* tests/tools.m4, tests/update.m4, tests/syntax.m4: Rename as...
+	* tests/tools.at, tests/update.at, tests/syntax.at: these.
+	* tests/mktests.sh: Adjust the output file names.
+
 2000-10-25  Pavel Roskin  <proski@gnu.org>
 
 	* autoupdate.sh: Redirect stdin for sed to /dev/null to avoid
