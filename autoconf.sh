@@ -144,7 +144,7 @@ while test $# -gt 0 ; do
        verbose=echo
        shift;;
 
-    --localdir=* | --l*=* )
+    --localdir=* | --l*=* | -l?* )
        localdir=$optarg
        shift ;;
     --localdir | --l* | -l )
@@ -153,7 +153,7 @@ while test $# -gt 0 ; do
        localdir=$1
        shift ;;
 
-    --autoconf-dir=* | --a*=* )
+    --autoconf-dir=* | --a*=* | -A?* )
       autoconf_dir=$optarg
        shift ;;
     --autoconf-dir | --a* | -A )
@@ -161,7 +161,7 @@ while test $# -gt 0 ; do
        shift
        autoconf_dir=$1
        shift ;;
-    --macrodir=* | --m*=* )
+    --macrodir=* | --m*=* | -m?* )
        echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
        shift ;;
@@ -172,7 +172,7 @@ while test $# -gt 0 ; do
        autoconf_dir=$1
        shift ;;
 
-    --trace=* | --t*=* )
+    --trace=* | --t*=* | -t?* )
        task=trace
        traces="$traces '"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
@@ -186,7 +186,7 @@ while test $# -gt 0 ; do
        initialization=:
        shift;;
 
-    --output=* | --o*=* )
+    --output=* | --o*=* | -o?* )
        outfile=$optarg
        shift ;;
     --output | --o* | -o )
@@ -195,7 +195,7 @@ while test $# -gt 0 ; do
        outfile=$1
        shift ;;
 
-    --warnings=* | --w*=* )
+    --warnings=* | --w*=* | -W?* )
        warnings=$warnings,$optarg
        shift ;;
     --warnings | --w* | -W )

@@ -141,7 +141,7 @@ while test $# -gt 0; do
     --debug | --d* | -d )
        debug=:; shift ;;
 
-    --localdir=* | --l*=* )
+    --localdir=* | --l*=* | -l?* )
        localdir=$optarg
        shift ;;
     --localdir | --l* | -l )
@@ -150,15 +150,15 @@ while test $# -gt 0; do
        localdir=$1
        shift ;;
 
-    --autoconf-dir=*)
+    --autoconf-dir=* | --a*=* | -A?* )
       autoconf_dir=$optarg
        shift ;;
-    --autoconf-dir | -A* )
+    --autoconf-dir | --a* | -A )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
-    --macrodir=* | --m*=* )
+    --macrodir=* | --m*=* | -m?* )
        echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
        shift ;;
@@ -169,13 +169,13 @@ while test $# -gt 0; do
        autoconf_dir=$1
        shift ;;
 
-    --m4dir | -M )
+    --m4dir=* | --m4*=* | -M?* )
+       m4dir=$optarg
+       shift ;;
+    --m4dir | --m4* | -M )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        m4dir=$1
-       shift ;;
-    --m4dir=* | -M* )
-       m4dir=$optarg
        shift ;;
 
      --force | --forc* | -f )

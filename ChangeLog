@@ -1,3 +1,13 @@
+2000-10-27  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Recognize short options followed by arguments
+	without separators.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise. Recognize abbreviations for
+	"--autoconf-dir" and "--m4dir"
+	* autoupdate.sh: Likewise. Recognize abbreviations for
+	"--autoconf-dir"
+
 2000-10-26  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Don't show obsolete options on "--help". Report
