@@ -28,58 +28,60 @@ define(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_PROVIDE([$0])dnl
 AC_PROGRAM_CHECK(CC, gcc, gcc, cc)
+
 # Find out if we are using GNU C, under whatever name.
-cat > conftest.c <<EOF
+AC_CACHE_VAL(ac_cv_prog_gcc,
+[cat > conftest.c <<EOF
 #ifdef __GNUC__
   yes
 #endif
 EOF
-${CC-cc} -E conftest.c > conftest.out 2>&1
-if egrep yes conftest.out >/dev/null 2>&1; then
-  GCC=yes
+if ${CC-cc} -E conftest.c 2>&6 | egrep yes >/dev/null 2>&1; then
+  ac_cv_prog_gcc=yes
 else
-  GCC=
-fi
-rm -f conftest*
+  ac_cv_prog_gcc=no
+fi])dnl
+if test "$ac_cv_prog_gcc" = yes; then GCC=yes; else GCC= ; fi
 ])dnl
 dnl
 define(AC_PROG_CXX,
 [AC_BEFORE([$0],[AC_PROG_CXXCPP])dnl
 AC_PROVIDE([$0])dnl
 AC_PROGRAMS_CHECK(CXX, $CCC c++ g++ gcc CC cxx, gcc)
+
 # Find out if we are using GNU C++, under whatever name.
-cat > conftest.C <<EOF
+AC_CACHE_VAL(ac_cv_prog_gxx,
+[cat > conftest.C <<EOF
 #ifdef __GNUC__
   yes
 #endif
 EOF
-${CXX-gcc} -E conftest.C > conftest.out 2>&1
-if egrep yes conftest.out >/dev/null 2>&1; then
-  GXX=yes
+if ${CXX-gcc} -E conftest.C 2>&6 | egrep yes >/dev/null 2>&1; then
+  ac_cv_prog_gxx=yes
 else
-  GXX=
-fi
-rm -f conftest*
+  ac_cv_prog_gxx=no
+fi])dnl
+if test "$ac_cv_prog_gxx" = yes; then GXX=yes; else GXX= ; fi
 ])dnl
 dnl
 define(AC_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
-if test "$GCC" = yes; then
+if test "$ac_cv_prog_gcc" = yes; then
   AC_CHECKING(whether -traditional is needed)
-changequote(,)dnl
-  ac_pattern="Autoconf.*'x'"
-changequote([,])dnl
+AC_CACHE_VAL(ac_cv_prog_gcc_traditional,
+[  ac_pattern="Autoconf.*'x'"
   ac_prog='#include <sgtty.h>
 Autoconf TIOCGETP'
-  AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=yes, ac_need_trad=no)
+  AC_PROGRAM_EGREP($ac_pattern, $ac_prog,
+  ac_cv_prog_gcc_traditional=yes, ac_cv_prog_gcc_traditional=no)
 
-  if test "$ac_need_trad" = no; then
+  if test "$ac_cv_prog_gcc_traditional" = no; then
     ac_prog='#include <termio.h>
 Autoconf TCGETA'
-    AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=yes)
-  fi
-  if test "$ac_need_trad" = yes; then
+    AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_cv_prog_gcc_traditional=yes)
+  fi])dnl
+  if test "$ac_cv_prog_gcc_traditional" = yes; then
     CC="$CC -traditional"
     AC_VERBOSE(setting CC to $CC)
   fi
@@ -96,15 +98,15 @@ echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-if ${CC-cc} -c conftest.c -o conftest.o >/dev/null 2>&1 \
- && test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o >/dev/null 2>&1
+if ${CC-cc} -c conftest.c -o conftest.o 1>&6 2>&6 &&
+  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&6 2>&6
 then
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if cc -c conftest.c >/dev/null 2>&1
+    if cc -c conftest.c 1>&6 2>&6
     then
-      if cc -c conftest.c -o conftest2.o >/dev/null 2>&1 && \
-         test -f conftest2.o && cc -c conftest.c -o conftest2.o >/dev/null 2>&1
+      if cc -c conftest.c -o conftest2.o 1>&6 2>&6 &&
+        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&6 2>&6
       then
         :
       else
@@ -230,7 +232,7 @@ AC_SUBST(LEX_OUTPUT_ROOT)dnl
 ])dnl
 dnl
 define(AC_PROG_INSTALL,
-[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Make sure to not get the incompatible SysV /etc/install and
 # /usr/sbin/install, which might be in PATH before a BSD-like install,
 # or the SunOS /usr/etc/install directory, or the AIX /bin/install,
@@ -249,7 +251,7 @@ define(AC_PROG_INSTALL,
 # by make from ./install.sh.
 AC_CHECKING(for a BSD compatible install)
 if test -z "${INSTALL}"; then
-AC_CACHE_VAL(ac_cv_path_INSTALL,
+AC_CACHE_VAL(ac_cv_path_install,
 [  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
@@ -264,7 +266,7 @@ AC_CACHE_VAL(ac_cv_path_INSTALL,
 	    # OSF/1 installbsd also uses dspmsg, but is usable.
 	    :
 	  else
-	    ac_cv_path_INSTALL="$ac_dir/$ac_prog -c"
+	    ac_cv_path_install="$ac_dir/$ac_prog -c"
 	    break 2
 	  fi
 	fi
@@ -274,8 +276,8 @@ AC_CACHE_VAL(ac_cv_path_INSTALL,
   done
   IFS="$ac_save_ifs"
   # As a last resort, use the slow shell script.
-  test -z "$ac_cv_path_INSTALL" && ac_cv_path_INSTALL="$ac_install_sh"])dnl
-  INSTALL="$ac_cv_path_INSTALL"
+  test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
+  INSTALL="$ac_cv_path_install"
 fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
@@ -348,7 +350,7 @@ fi
 
 if test "$ac_stdc_hdrs" = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-AC_TEST_PROGRAM([#include <ctype.h>
+AC_TEST_RUN([#include <ctype.h>
 #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
 #define XOR(e,f) (((e) && !(f)) || (!(e) && (f)))
@@ -402,14 +404,12 @@ AC_DIR_HEADER_CHECK(sys/dir.h, SYSDIR)
 AC_DIR_HEADER_CHECK(ndir.h, NDIR)
 
 AC_CHECKING(for closedir return value)
-AC_TEST_PROGRAM([#include <sys/types.h>
+AC_TEST_RUN([#include <sys/types.h>
 #include <$ac_dir_header>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }], ,
 AC_DEFINE(VOID_CLOSEDIR))
 ])dnl
 dnl Subroutine of AC_DIR_HEADER.
-dnl ??? I tried to put this define inside AC_DIR_HEADER, but when I did
-dnl that, $1 and $2 did not get expanded. --roland
 dnl Check if $1 is the winning directory library header file.
 dnl It must not only exist, but also correctly define the `DIR' type.
 dnl If it is really winning, define $2 and set shell var `ac_dir_header' to $1.
@@ -486,7 +486,7 @@ main()
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
 }'
 changequote([,])dnl
-AC_TEST_PROGRAM([$ac_prog],
+AC_TEST_RUN([$ac_prog],
 		AC_DEFINE(GETGROUPS_T, gid_t), AC_DEFINE(GETGROUPS_T, int))
 ])dnl
 dnl
@@ -535,7 +535,7 @@ dnl
 dnl
 define(AC_MMAP, [
 AC_CHECKING(for working mmap)
-AC_TEST_PROGRAM([/* Thanks to Mike Haertel and Jim Avera for this test. */
+AC_TEST_RUN([/* Thanks to Mike Haertel and Jim Avera for this test. */
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -605,12 +605,9 @@ main()
 ])dnl
 dnl
 define(AC_VPRINTF,
-[AC_CHECKING([for vprintf])
-AC_TEST_LINK( , [vprintf();],
-  [ac_have_vprintf=yes AC_DEFINE(HAVE_VPRINTF)], ac_have_vprintf=no)
-if test "$ac_have_vprintf" = no; then
-AC_CHECKING([for _doprnt])
-AC_TEST_LINK( , [_doprnt();], AC_DEFINE(HAVE_DOPRNT))
+[AC_FUNC_CHECK(vprintf, AC_DEFINE(HAVE_VPRINTF))
+if test "$ac_cv_func_vprintf" != yes; then
+AC_FUNC_CHECK(_doprnt, AC_DEFINE(HAVE_DOPRNT))
 fi
 ])dnl
 dnl
@@ -619,7 +616,7 @@ define(AC_VFORK,
 AC_HEADER_CHECK(vfork.h, AC_DEFINE(HAVE_VFORK_H))
 AC_CHECKING(for working vfork)
 AC_REQUIRE([AC_RETSIGTYPE])
-AC_TEST_PROGRAM([/* Thanks to Paul Eggert for this test.  */
+AC_TEST_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -704,7 +701,7 @@ main() {
 dnl
 define(AC_WAIT3,
 [AC_CHECKING(for wait3 that fills in rusage)
-AC_TEST_PROGRAM([#include <sys/types.h>
+AC_TEST_RUN([#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <stdio.h>
@@ -749,7 +746,9 @@ ac_decl="#ifdef __GNUC__
 #ifdef _AIX
  #pragma alloca
 #else
+#ifndef alloca /* predefined by HP cc +Olibcalls */
 char *alloca ();
+#endif
 #endif
 #endif
 #endif
@@ -780,7 +779,7 @@ AC_FUNC_CHECK([GETB67],AC_DEFINE([CRAY_STACKSEG_END],[GETB67]),
 AC_FUNC_CHECK([getb67],AC_DEFINE([CRAY_STACKSEG_END],[getb67])))))
 
 AC_CHECKING(stack direction for C alloca)
-AC_TEST_PROGRAM([find_stack_direction ()
+AC_TEST_RUN([find_stack_direction ()
 {
   static char *addr = 0;
   auto char dummy;
@@ -889,7 +888,7 @@ define(AC_UTIME_NULL,
 [AC_CHECKING(utime with null argument)
 rm -f conftestdata; > conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
-AC_TEST_PROGRAM([#include <sys/types.h>
+AC_TEST_RUN([#include <sys/types.h>
 #include <sys/stat.h>
 main() {
 struct stat s, t;
@@ -901,7 +900,7 @@ rm -f core
 ])dnl
 dnl
 define(AC_STRCOLL, [AC_CHECKING(for strcoll)
-AC_TEST_PROGRAM([#include <string.h>
+AC_TEST_RUN([#include <string.h>
 main ()
 {
   exit (strcoll ("abc", "def") >= 0 ||
@@ -911,7 +910,7 @@ main ()
 dnl
 define(AC_SETVBUF_REVERSED,
 [AC_CHECKING(whether setvbuf arguments are reversed)
-AC_TEST_PROGRAM([#include <stdio.h>
+AC_TEST_RUN([#include <stdio.h>
 /* If setvbuf has the reversed format, exit 0. */
 main () {
   /* This call has the arguments reversed.
@@ -999,14 +998,14 @@ define(AC_CROSS_CHECK,
 [AC_PROVIDE([$0])dnl
 AC_CHECKING(whether cross-compiling)
 # If we cannot run a trivial program, we must be cross compiling.
-AC_TEST_PROGRAM([main(){exit(0);}], cross_compiling=, cross_compiling=yes)
+AC_TEST_RUN([main(){exit(0);}], cross_compiling=, cross_compiling=yes)
 if test "$cross_compiling" = yes; then
   AC_VERBOSE(we are cross-compiling)
 fi])dnl
 dnl
 define(AC_CHAR_UNSIGNED,
 [AC_CHECKING(for unsigned characters)
-AC_TEST_PROGRAM(
+AC_TEST_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
 #if !__STDC__
 #define volatile
@@ -1023,10 +1022,10 @@ dnl
 define(AC_LONG_DOUBLE,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_CHECKING(for long double)
-if test -n "$GCC"; then
+if test "$GCC" = yes; then
 AC_DEFINE(HAVE_LONG_DOUBLE)
 else
-AC_TEST_PROGRAM([int main() {
+AC_TEST_RUN([int main() {
 /* The Stardent Vistra knows sizeof(long double), but does not support it.  */
 long double foo = 0.0;
 /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
@@ -1038,20 +1037,20 @@ dnl
 define(AC_INT_16_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(int)])
 AC_CHECKING(integer size)
-AC_TEST_PROGRAM([main() { exit(sizeof(int) != 2); }],
+AC_TEST_RUN([main() { exit(sizeof(int) != 2); }],
  AC_DEFINE(INT_16_BITS))
 ])dnl
 dnl
 define(AC_LONG_64_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(long)])
 AC_CHECKING(for 64-bit long ints)
-AC_TEST_PROGRAM([main() { exit(sizeof(long int) != 8); }],
+AC_TEST_RUN([main() { exit(sizeof(long int) != 8); }],
  AC_DEFINE(LONG_64_BITS))
 ])dnl
 dnl
 define(AC_WORDS_BIGENDIAN,
 [AC_CHECKING(byte ordering)
-AC_TEST_PROGRAM([main () {
+AC_TEST_RUN([main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
@@ -1065,7 +1064,7 @@ AC_TEST_PROGRAM([main () {
 dnl
 define(AC_ARG_ARRAY,
 [AC_CHECKING(whether the address of an argument can be used as an array)
-AC_TEST_PROGRAM([main() {
+AC_TEST_RUN([main() {
 /* Return 0 iff arg arrays are ok.  */
 exit(!x(1, 2, 3, 4));
 }
@@ -1186,7 +1185,7 @@ test "$ac_some_dir_failed" = yes || AC_DEFINE(HAVE_LONG_FILE_NAMES)
 dnl
 define(AC_RESTARTABLE_SYSCALLS,
 [AC_CHECKING(for restartable system calls)
-AC_TEST_PROGRAM(
+AC_TEST_RUN(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
    after getting the signal.  */
@@ -1373,8 +1372,8 @@ fi
 # It would also be nice to do this for all -L options, not just this one.
 if test -n "$x_libraries"; then
   X_LIBS="$X_LIBS -L$x_libraries"
-  if test "`(uname) 2>/dev/null`" = SunOS \
-     && uname -r | grep '^5' >/dev/null; then
+  if test "`(uname) 2>/dev/null`" = SunOS &&
+    uname -r | grep '^5' >/dev/null; then
     X_LIBS="$X_LIBS -R$x_libraries"
   fi
 fi
@@ -1410,13 +1409,13 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 dnl
 dnl
 dnl ### Checks for UNIX variants
-dnl These are kludges; we need a better approach.
+dnl These are kludges; we need a more systematic approach.
 dnl
 dnl
 define(AC_AIX,
 [AC_CHECKING(for AIX)
 AC_BEFORE([$0], [AC_TEST_LINK])dnl
-AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_TEST_RUN])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
 AC_PROGRAM_EGREP(yes,
 [#ifdef _AIX
@@ -1427,7 +1426,7 @@ AC_PROGRAM_EGREP(yes,
 dnl
 define(AC_MINIX,
 [AC_BEFORE([$0], [AC_TEST_LINK])dnl
-AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_TEST_RUN])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
 AC_HEADER_CHECK(minix/config.h, MINIX=yes, MINIX=)
 # The Minix shell ca not assign to the same variable on the same line!
@@ -1441,7 +1440,7 @@ dnl
 define(AC_ISC_POSIX,
 [AC_PROVIDE([$0])dnl
 AC_BEFORE([$0], [AC_TEST_LINK])dnl
-AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_TEST_RUN])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
 AC_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&
@@ -1449,7 +1448,7 @@ if test -d /etc/conf/kconfig.d &&
 then
   ISC=yes # If later tests want to check for ISC.
   AC_DEFINE(_POSIX_SOURCE)
-  if test -n "$GCC"; then
+  if test "$GCC" = yes; then
     CC="$CC -posix"
   else
     CC="$CC -Xp"

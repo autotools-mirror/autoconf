@@ -29,35 +29,16 @@ dnl
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
 )m4exit(2)])dnl
 dnl
-dnl
-dnl ### Utility functions for stamping the configure script.
-dnl
-dnl
-define(AC_ACVERSION, 1.91)dnl
+define(AC_ACVERSION, 1.93)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
-)])dnl
-dnl
-dnl These are currently not used, for the sake of people who diff
-dnl configure scripts and don't want spurious differences.
-dnl But they are too clever to just delete.
-dnl
-define(AC_USER, [esyscmd(
-changequote({,})dnl
-# Extract the user name from the first pair of parentheses.
-({ac_sedcmd='s/[^(]*(\([^)]*\)).*/\1/';}
-changequote([,])dnl
-whoami || id|sed "$ac_sedcmd") 2>/dev/null|tr -d '\012')])dnl
-dnl
-define(AC_HOST, [esyscmd((hostname || uname -n) 2>/dev/null|tr -d '\012')])dnl
-dnl
-define(AC_DATE, [esyscmd(date|tr -d '\012')])dnl
+)m4exit(0)])dnl
 dnl
 dnl
 dnl ### Controlling Autoconf operation
 dnl
 dnl
-dnl Diversions:
+dnl m4 diversions:
 define(AC_DIVERSION_NORMAL, 0)dnl	normal output
 define(AC_DIVERSION_SED, 1)dnl		sed substitutions for config.status
 define(AC_DIVERSION_VAR, 2)dnl		variable assignments for config.status
@@ -66,13 +47,9 @@ define(AC_DIVERSION_ARG_ENABLE, 4)dnl	--enable/--disable actions
 define(AC_DIVERSION_HELP_WITH, 5)dnl	--with/--without help strings
 define(AC_DIVERSION_ARG_WITH, 6)dnl	--with/--without actions
 dnl
-dnl This is separate from AC_INIT to prevent GNU m4 1.0 from coredumping
-dnl when AC_CONFIG_HEADER is used.
 define(AC_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
-dnl [#] Generated automatically using autoconf.
 # Generated automatically using autoconf version] AC_ACVERSION [
-dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Copyright (C) 1991, 1992, 1993, 1994 Free Software Foundation, Inc.
 #
 # This configure script is free software; you can redistribute it and/or
@@ -91,12 +68,13 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 ])dnl
 dnl
 define(AC_PARSEARGS,
-[AC_BEFORE([$0], AC_ARG_ENABLE)dnl
-AC_BEFORE([$0], AC_ARG_WITH)dnl
+[AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
+AC_BEFORE([$0], [AC_ARG_WITH])dnl
 # Save the original args to write them into config.status later.
 configure_args="[$]*"
 
-# Omit internal or obsolete options to make the list less imposing.
+# Omit some internal, obsolete, or unimplemented options to make the
+# list less imposing.
 changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
@@ -130,12 +108,12 @@ changequote([,])dnl
 # dashes changed to underlines.
 build=NONE
 cache_file=./config.cache
-exec_prefix=
+exec_prefix=NONE
 host=NONE
 no_create=
 nonopt=NONE
 norecursion=
-prefix=
+prefix=NONE
 program_prefix=
 program_suffix=
 program_transform_name=
@@ -382,8 +360,12 @@ AC_PREPARE($1)])dnl
 dnl
 dnl AC_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 define(AC_PREPARE,
-[AC_BEFORE([$0], AC_ARG_ENABLE)dnl
-AC_BEFORE([$0], AC_ARG_WITH)dnl
+[AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
+AC_BEFORE([$0], [AC_ARG_WITH])dnl
+AC_BEFORE([$0], [AC_CONFIG_HEADER])dnl
+AC_BEFORE([$0], [AC_REVISION])dnl
+AC_BEFORE([$0], [AC_PREREQ])dnl
+AC_BEFORE([$0], [AC_CONFIG_SUBDIRS])dnl
 trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -fr confdefs* $ac_clean_files' 0
 
@@ -392,8 +374,9 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 # 1 file creation
 # 2 errors and warnings
 # 3 unused; some systems may open it to /dev/tty
-# 4 checking for...
+# 4 checking for... messages
 # 5 test results
+# 6 compiler messages
 if test "$silent" = yes; then
   exec 4>/dev/null
 else
@@ -404,6 +387,12 @@ if test "$verbose" = yes; then
 else
   exec 5>/dev/null
 fi
+exec 6>./config.log
+
+echo "\
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+" 1>&6
 
 # Save the original args if we used an alternate arg parser.
 ac_configure_temp="${configure_args-[$]*}"
@@ -458,7 +447,12 @@ if test ! -r $srcdir/$ac_unique_file; then
     AC_ERROR(can not find sources in ${srcdir})
   fi
 fi
+
+ifdef([AC_LIST_PREFIX_PROGRAM], [AC_PREFIX(AC_LIST_PREFIX_PROGRAM)])dnl
+dnl Let the site file select an alternate cache file if it wants to.
+AC_SITE_LOAD
 AC_CACHE_LOAD
+
 AC_LANG_C
 undivert(AC_DIVERSION_ARG_ENABLE)dnl
 undivert(AC_DIVERSION_ARG_WITH)dnl
@@ -466,7 +460,8 @@ undivert(AC_DIVERSION_ARG_WITH)dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 define(AC_ARG_ENABLE,
-[divert(AC_DIVERSION_HELP_ENABLE)dnl
+[AC_PROVIDE([$0])dnl
+divert(AC_DIVERSION_HELP_ENABLE)dnl
 $2
 divert(AC_DIVERSION_ARG_ENABLE)dnl
 AC_ENABLE_INTERNAL([$1], [$3], [$4])dnl
@@ -492,7 +487,8 @@ fi
 dnl
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 define(AC_ARG_WITH,
-[divert(AC_DIVERSION_HELP_WITH)dnl
+[AC_PROVIDE([$0])dnl
+divert(AC_DIVERSION_HELP_WITH)dnl
 $2
 divert(AC_DIVERSION_ARG_WITH)dnl
 AC_WITH_INTERNAL([$1], [$3], [$4])dnl
@@ -517,10 +513,10 @@ fi
 ])dnl
 dnl
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
-define(AC_CONFIG_HEADER, [define(AC_LIST_HEADERS, $1)])dnl
+define(AC_CONFIG_HEADER, [AC_PROVIDE([$0])define(AC_LIST_HEADERS, $1)])dnl
 dnl
 dnl AC_REVISION(REVISION-INFO)
-define(AC_REVISION, [AC_REQUIRE([AC_BINSH])dnl
+define(AC_REVISION, [AC_PROVIDE([$0])AC_REQUIRE([AC_BINSH])dnl
 [# From configure.in] translit([$1],$")])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
@@ -543,15 +539,43 @@ dnl
 dnl Complain and exit if the Autoconf version is less than $1.
 dnl AC_PREREQ(VERSION)
 define(AC_PREREQ,
-[AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
+[AC_PROVIDE([$0])dnl
+AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
 dnl
 dnl Run configure in subdirectories $1.
 dnl Not actually done until AC_OUTPUT_SUBDIRS.
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 define(AC_CONFIG_SUBDIRS,
-[AC_REQUIRE([AC_CONFIG_AUXDIR_DEFAULT])dnl
+[AC_PROVIDE([$0])dnl
+AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 define([AC_LIST_SUBDIRS],[$1])])dnl
+dnl
+dnl Guess the value for the `prefix' variable by looking for
+dnl the argument program along PATH and taking its parent.
+dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
+dnl set `prefix' to /usr/local/gnu.
+dnl AC_PREFIX_PROGRAM(PROGRAM)
+define(AC_PREFIX_PROGRAM, [define([AC_LIST_PREFIX_PROGRAM],[$1])])dnl
+define(AC_PREFIX_INTERNAL,
+[if test "x$prefix" = xNONE; then
+changequote(<<,>>)dnl
+define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
+changequote([,])dnl
+AC_PROGRAM_PATH(AC_VAR_NAME, $1)
+changequote(<<,>>)dnl
+  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
+    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
+changequote([,])dnl
+dnl    test -z "$prefix" && prefix=/
+    AC_VERBOSE(setting installation directory prefix to ${prefix})
+  fi
+fi
+undefine(AC_VAR_NAME)dnl
+])dnl
+define(AC_PREFIX,
+[AC_OBSOLETE([$0], [; instead use AC_PREFIX_PROGRAM before AC_INIT])dnl
+AC_PREFIX_INTERNAL([$1])])dnl
 dnl
 dnl
 dnl ### Canonicalizing the system type
@@ -560,21 +584,21 @@ dnl
 dnl Find install.sh, config.sub, config.guess, and Cygnus configure
 dnl in directory $1.  These are auxiliary files used in configuration.
 dnl $1 can be either absolute or relative to ${srcdir}.
-dnl AC_CONFIG_AUXDIR(DIR)
-define(AC_CONFIG_AUXDIR,
-[AC_CONFIG_AUXDIR_DIRS($1 ${srcdir}/$1)])dnl
+dnl AC_CONFIG_AUX_DIR(DIR)
+define(AC_CONFIG_AUX_DIR,
+[AC_CONFIG_AUX_DIRS($1 ${srcdir}/$1)])dnl
 dnl
 dnl The default is `${srcdir}' or `${srcdir}/..' or `${srcdir}/../..'.
 dnl There's no need to call this macro explicitly; just AC_REQUIRE it.
-define(AC_CONFIG_AUXDIR_DEFAULT,
-[AC_CONFIG_AUXDIR_DIRS(${srcdir} ${srcdir}/.. ${srcdir}/../..)])dnl
+define(AC_CONFIG_AUX_DIR_DEFAULT,
+[AC_CONFIG_AUX_DIRS(${srcdir} ${srcdir}/.. ${srcdir}/../..)])dnl
 dnl
 dnl Internal subroutine.
 dnl Search for the configuration auxiliary files in directory list $1.
 dnl We look only for install.sh, so users of AC_PROG_INSTALL
 dnl do not automatically need to distribute the other auxiliary files.
-dnl AC_CONFIG_AUXDIR_DIRS(DIR ...)
-define(AC_CONFIG_AUXDIR_DIRS,
+dnl AC_CONFIG_AUX_DIRS(DIR ...)
+define(AC_CONFIG_AUX_DIRS,
 [ac_aux_dir=
 for ac_dir in $1; do
   if test -f $ac_dir/install.sh; then
@@ -588,12 +612,12 @@ ac_config_guess=${ac_aux_dir}/config.guess
 ac_config_sub=${ac_aux_dir}/config.sub
 ac_configure=${ac_aux_dir}/configure # This should be Cygnus configure.
 ac_install_sh="${ac_aux_dir}/install.sh -c"
-AC_PROVIDE([AC_CONFIG_AUXDIR_DEFAULT])dnl
+AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])dnl
 dnl
 dnl Canonicalize the host, target, and build system types.
-define(AC_CANON_SYSTEM,
-[AC_REQUIRE([AC_CONFIG_AUXDIR_DEFAULT])dnl
+define(AC_CANONICAL_SYSTEM,
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
 #    configure --host=HOST --target=TARGET --build=BUILD NONOPT
@@ -623,14 +647,14 @@ if ${ac_config_sub} sun4 >/dev/null 2>&1; then :
 else AC_ERROR(can not run ${ac_config_sub})
 fi
 
-AC_CANON_HOST
-AC_CANON_TARGET
-AC_CANON_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+AC_CANONICAL_BUILD
 ])dnl
 dnl
-dnl Subroutines of AC_CANON_SYSTEM.
+dnl Subroutines of AC_CANONICAL_SYSTEM.
 dnl
-define(AC_CANON_HOST,
+define(AC_CANONICAL_HOST,
 [AC_CHECKING(host type)
 
 case "${host_alias}" in
@@ -653,7 +677,7 @@ AC_SUBST(host)dnl
 AC_SUBST(host_alias)dnl
 ])dnl
 dnl
-define(AC_CANON_TARGET,
+define(AC_CANONICAL_TARGET,
 [AC_CHECKING(target type)
 
 case "${target_alias}" in
@@ -673,7 +697,7 @@ AC_SUBST(target)dnl
 AC_SUBST(target_alias)dnl
 ])dnl
 dnl
-define(AC_CANON_BUILD,
+define(AC_CANONICAL_BUILD,
 [AC_CHECKING(build type)
 
 case "${build_alias}" in
@@ -690,30 +714,38 @@ AC_SUBST(build)dnl
 AC_SUBST(build_alias)dnl
 ])dnl
 dnl
-dnl Put the contents of file $2 into Makefile variable $1.
-dnl Useful for inserting Makefile fragments into Makefiles.
-dnl AC_SUBST_FILE(VARIABLE, FILE)
-define(AC_SUBST_FILE,
-[AC_SUBST($1)dnl
-if test -f ${srcdir}/$2; then
-  AC_VERBOSE(using $2 for $1)
-  $1=`cat ${srcdir}/$2`
-fi
-])dnl
-dnl
 dnl Link each of the existing files in $2 to the corresponding
 dnl link name in $1.
 dnl Not actually done until AC_OUTPUT_LINKS.
-dnl AC_MAKE_LINKS(LINK ..., FILE ...)
-define(AC_MAKE_LINKS,
+dnl AC_LINK_FILES(LINK ..., FILE ...)
+define(AC_LINK_FILES,
 [define([AC_LIST_LINKS],[$1])define([AC_LIST_FILES],[$2])])dnl
 dnl
 dnl
 dnl ### Caching test results
 dnl
 dnl
+dnl Look for site or system specific initialization scripts.
+define(AC_SITE_LOAD,
+[ac_site_dirs=/usr/local
+if test "x$prefix" != xNONE; then
+  ac_site_dirs=$prefix
+fi
+# System dependent files override system independent ones in case of conflict.
+if test "x$exec_prefix" != xNONE && test "x$exec_prefix" != "x$prefix"; then
+  ac_site_dirs="$ac_site_dirs $exec_prefix"
+fi
+for ac_site_dir in $ac_site_dirs; do
+  ac_site_file=$ac_site_dir/lib/config.site
+  if test -r "$ac_site_file"; then
+    AC_VERBOSE(loading site initialization script $ac_site_file)
+    . $ac_site_file
+  fi
+done
+])dnl
+dnl
 define(AC_CACHE_LOAD,
-[if test -r $cache_file; then
+[if test -r "$cache_file"; then
   AC_VERBOSE(loading test results from cache file $cache_file)
   . $cache_file
 else
@@ -728,7 +760,7 @@ cat > $cache_file <<\CEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
-# If its contents are invalid for some reason, you may edit or delete it.
+# If its contents are invalid for some reason, you may delete or edit it.
 #
 # By default, configure uses ./config.cache as the cache file,
 # creating it if it does not exist already.  You can give configure
@@ -739,7 +771,8 @@ cat > $cache_file <<\CEOF
 # --recheck option to rerun configure.
 CEOF
 changequote(,)dnl
-set | sed -n "/^[a-zA-Z0-9_]*_cv_/s/=\(.*\)/='\1'/p" >> $cache_file
+dnl Allow a site initialization script to override cache values.
+set | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
 changequote([,])dnl
 fi])dnl
 dnl
@@ -888,7 +921,7 @@ AC_PROVIDE([$0])dnl
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CPP}'
-ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&6 2>&6'
 ])dnl
 dnl
 define(AC_LANG_CPLUSPLUS,
@@ -897,7 +930,7 @@ AC_PROVIDE([$0])dnl
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP}'
-ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&6 2>&6'
 ])dnl
 dnl
 dnl Push the current language on a stack.
@@ -940,25 +973,25 @@ define(AC_PROGRAM_CHECK,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
 AC_CHECKING([for $ac_word])
-AC_CACHE_VAL(ac_cv_program_$1,
+AC_CACHE_VAL(ac_cv_prog_$1,
 [if test -n "[$]$1"; then
-  ac_cv_program_$1="[$]$1" # Let the user override the test.
+  ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      ac_cv_program_$1="$3"
+      ac_cv_prog_$1="$3"
       break
     fi
   done
   IFS="$ac_save_ifs"
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_PROGRAMS_CHECK will keep looking.
-ifelse([$4],,, [  test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"
+ifelse([$4],,, [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
-$1="$ac_cv_program_$1"
+$1="$ac_cv_prog_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -1017,28 +1050,6 @@ test -n "[$]$1" && break
 done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
-dnl
-dnl Guess the value for the `prefix' variable by looking for
-dnl the argument program along PATH and taking its parent.
-dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
-dnl set `prefix' to /usr/local/gnu.
-dnl AC_PREFIX(PROGRAM)
-define(AC_PREFIX,
-[if test -z "$prefix"; then
-changequote(<<,>>)dnl
-define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
-changequote([,])dnl
-AC_PROGRAM_PATH(AC_VAR_NAME, $1)
-changequote(<<,>>)dnl
-  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
-    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
-changequote([,])dnl
-    test -z "$prefix" && prefix=/
-    AC_VERBOSE(setting installation directory prefix to ${prefix})
-  fi
-fi
-undefine(AC_VAR_NAME)dnl
-])dnl
 dnl
 dnl AC_HAVE_LIBRARY(LIBRARY [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 define(AC_HAVE_LIBRARY, [dnl
@@ -1106,7 +1117,8 @@ dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 define(AC_COMPILE_CHECK,
 [AC_PROVIDE([$0])dnl
-AC_OBSOLETE([$0], [; instead use AC_TEST_LINK])dnl
+dnl It's actually ok to use this, if you don't care about caching.
+dnl AC_OBSOLETE([$0], [; instead use AC_TEST_LINK])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
 AC_TEST_LINK([$2], [$3], [$4], [$5])dnl
@@ -1134,14 +1146,15 @@ fi
 rm -f conftest*]
 )dnl
 dnl
-dnl AC_TEST_PROGRAM(PROGRAM, ACTION-IF-TRUE [, ACTION-IF-FALSE
-dnl                 [, ACTION-IF-CROSS-COMPILING]])
-define(AC_TEST_PROGRAM,
+dnl AC_TEST_RUN(PROGRAM, ACTION-IF-TRUE [, ACTION-IF-FALSE
+dnl             [, ACTION-IF-CROSS-COMPILING]])
+define(AC_TEST_RUN,
 [AC_PROVIDE([$0])dnl
 AC_REQUIRE([AC_CROSS_CHECK])dnl
 if test -n "$cross_compiling"; then
   ifelse([$4], , AC_ERROR(can not run test program while cross compiling),
-  [$4
+  [AC_VERBOSE(using default for cross-compiling)
+$4
 ])
 else
 cat > conftest.${ac_ext} <<EOF
@@ -1157,6 +1170,9 @@ ifelse([$3], , , [else
 fi
 fi
 rm -fr conftest*])dnl
+dnl Obsolete name, which is less clear about what the macro does,
+dnl but is otherwise ok to use.
+define(AC_TEST_PROGRAM, [AC_TEST_RUN([$1], [$2], [$3], [$4])])dnl
 dnl
 dnl AC_TEST_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 define(AC_TEST_CPP,
@@ -1202,7 +1218,8 @@ dnl AC_FUNC_CHECK(FUNCTION, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 define(AC_FUNC_CHECK,
 [AC_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_func_$1,
-[AC_TEST_LINK([#include <ctype.h>], [
+[AC_TEST_LINK(
+[#include <ctype.h> /* Arbitrary system header to define __stub macros. */], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
@@ -1266,15 +1283,14 @@ define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
 changequote([,])dnl
 AC_CHECKING(size of $1)
 AC_CACHE_VAL(AC_CV_NAME,
-[dnl If cross-compiling, the caller has to decide what to do; we can't.
-AC_TEST_PROGRAM([#include <stdio.h>
+[AC_TEST_RUN([#include <stdio.h>
 main()
 {
   FILE *f=fopen("conftestval", "w");
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], AC_CV_NAME=`cat conftestval`, AC_ERROR(can not determine size of $1))])dnl
+}], AC_CV_NAME=`cat conftestval`)])dnl
 AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine(AC_TYPE_NAME)dnl
 undefine(AC_CV_NAME)dnl
@@ -1288,9 +1304,9 @@ dnl AC_OUTPUT([FILE...] [,EXTRA-CMDS])
 define(AC_OUTPUT,
 [AC_CACHE_SAVE
 
-test -z "$prefix" && prefix=/usr/local
+test "x$prefix" = xNONE && prefix=/usr/local
 # Let make expand exec_prefix.
-test -z "$exec_prefix" && exec_prefix='${prefix}'
+test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
 # Any assignment to VPATH causes Sun make to only execute
 # the first set of double-colon rules, so remove it if not needed.
