@@ -171,8 +171,9 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(
 	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
 	    *$$dep*) \
 	      echo ' cd $(srcdir) && $(AUTOMAKE) --gnu '; \
-	      cd $(srcdir) && $(AUTOMAKE) --gnu ; \
-	      exit 0;; \
+	      cd $(srcdir) && $(AUTOMAKE) --gnu  \
+		&& exit 0; \
+	      exit 1;; \
 	  esac; \
 	done; \
         echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Makefile'; \

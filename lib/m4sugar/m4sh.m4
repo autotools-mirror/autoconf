@@ -131,7 +131,7 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 #
 m4_define([AS_REQUIRE],
 [m4_provide_if([$1], [],
-               [m4_divert_text([M4SH-INIT], [$1])])])
+	       [m4_divert_text([M4SH-INIT], [$1])])])
 
 
 # AS_SHELL_SANITIZE
@@ -312,8 +312,8 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # Escape the CHARS in STRING.
 m4_define([AS_ESCAPE],
 [m4_bpatsubst([$1],
-             m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
-             [\\\1])])
+	     m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
+	     [\\\1])])
 
 
 # _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
@@ -326,9 +326,9 @@ m4_define([AS_ESCAPE],
 # We use two quotes in the pattern to keep highlighting tools at peace.
 m4_define([_AS_QUOTE_IFELSE],
 [m4_bmatch([$1],
-          [\\[\\$]], [$2],
-          [\\[`""]], [$3],
-          [$2])])
+	  [\\[\\$]], [$2],
+	  [\\[`""]], [$3],
+	  [$2])])
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
@@ -344,9 +344,9 @@ m4_define([_AS_ECHO_UNQUOTED],
 # backslash all the quotes.
 m4_define([_AS_QUOTE],
 [_AS_QUOTE_IFELSE([$1],
-                  [AS_ESCAPE([$1], m4_default([$2], [`""]))],
-                  [m4_warn([obsolete],
-           [back quotes and double quotes must not be escaped in: $1])dnl
+		  [AS_ESCAPE([$1], m4_default([$2], [`""]))],
+		  [m4_warn([obsolete],
+	   [back quotes and double quotes must not be escaped in: $1])dnl
 $1])])
 
 
@@ -382,16 +382,16 @@ esac
 m4_define([_AS_ECHO_N],
 [AS_REQUIRE([_AS_ECHO_N_PREPARE])dnl
 echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
-                                                    [AS_MESSAGE_FD])])
+						    [AS_MESSAGE_FD])])
 
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
 m4_define([AS_MESSAGE],
 [m4_ifset([AS_MESSAGE_LOG_FD],
-          [{ _AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])
+	  [{ _AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])
 _AS_ECHO([$as_me: $1], [$2]);}],
-          [_AS_ECHO([$as_me: $1], [$2])])[]dnl
+	  [_AS_ECHO([$as_me: $1], [$2])])[]dnl
 ])
 
 
@@ -431,10 +431,10 @@ m4_define([AS_ERROR],
 m4_defun([AS_DIRNAME_EXPR],
 [AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
-         X[]$1 : 'X\(//\)[[^/]]' \| \
-         X[]$1 : 'X\(//\)$' \| \
-         X[]$1 : 'X\(/\)' \| \
-         .     : '\(.\)'])
+	 X[]$1 : 'X\(//\)[[^/]]' \| \
+	 X[]$1 : 'X\(//\)$' \| \
+	 X[]$1 : 'X\(/\)' \| \
+	 .     : '\(.\)'])
 
 m4_defun([AS_DIRNAME_SED],
 [echo X[]$1 |
@@ -541,7 +541,7 @@ _AS_LINENO_WORKS || {
   case $[0] in
     *[[\\/]]* ) as_myself=$[0] ;;
     *) _AS_PATH_WALK([],
-                   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
+		   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
        ;;
   esac
   # We did not find ourselves, most probably we were run as `sh COMMAND'
@@ -760,8 +760,8 @@ m4_defun([_AS_TEST_PREPARE],
 # must not be `/').
 m4_define([AS_BOX],
 [AS_LITERAL_IF([$1],
-               [_AS_BOX_LITERAL($@)],
-               [_AS_BOX_INDIR($@)])])
+	       [_AS_BOX_LITERAL($@)],
+	       [_AS_BOX_INDIR($@)])])
 
 # _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
 # -------------------------------------------------
@@ -786,7 +786,7 @@ _ASBOX])
 # definitely a literal, but will not be recognized as such.
 m4_define([AS_LITERAL_IF],
 [m4_bmatch([$1], [[`$]],
-           [$3], [$2])])
+	   [$3], [$2])])
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
@@ -896,7 +896,7 @@ _AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 m4_define([AS_HELP_STRING],
 [m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
 m4_pushdef([AS_Prefix_Format],
-           [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
+	   [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
 m4_text_wrap([$2], AS_Prefix, m4_format(AS_Prefix_Format, [$1]))dnl
 m4_popdef([AS_Prefix_Format])dnl
 m4_popdef([AS_Prefix])dnl
@@ -945,9 +945,9 @@ as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
 m4_defun([AS_TR_SH],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-              [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
-                            [[^a-zA-Z0-9_]], [_])],
-              [`echo "$1" | $as_tr_sh`])])
+	      [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
+			    [[^a-zA-Z0-9_]], [_])],
+	      [`echo "$1" | $as_tr_sh`])])
 
 
 # _AS_TR_CPP_PREPARE
@@ -967,11 +967,11 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
 m4_defun([AS_TR_CPP],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-              [m4_bpatsubst(m4_translit([[$1]],
-                                        [*abcdefghijklmnopqrstuvwxyz],
-                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-                           [[^A-Z0-9_]], [_])],
-              [`echo "$1" | $as_tr_cpp`])])
+	      [m4_bpatsubst(m4_translit([[$1]],
+					[*abcdefghijklmnopqrstuvwxyz],
+					[PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+			   [[^A-Z0-9_]], [_])],
+	      [`echo "$1" | $as_tr_cpp`])])
 
 
 # _AS_TR_PREPARE
@@ -1005,8 +1005,8 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 # perform whenever possible at m4 level, otherwise sh level.
 m4_define([AS_VAR_SET],
 [AS_LITERAL_IF([$1],
-               [$1=$2],
-               [eval "$1=AS_ESCAPE([$2])"])])
+	       [$1=$2],
+	       [eval "$1=AS_ESCAPE([$2])"])])
 
 
 # AS_VAR_GET(VARIABLE)
@@ -1016,8 +1016,8 @@ m4_define([AS_VAR_SET],
 # else into the appropriate `eval' sequence.
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
-               [$$1],
-               [`eval echo '${'m4_bpatsubst($1, [[\\`]], [\\\&])'}'`])])
+	       [$$1],
+	       [`eval echo '${'m4_bpatsubst($1, [[\\`]], [\\\&])'}'`])])
 
 
 # AS_VAR_TEST_SET(VARIABLE)
@@ -1026,8 +1026,8 @@ m4_define([AS_VAR_GET],
 # is set.  Polymorphic.  Should be dnl'ed.
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_IF([$1],
-               [test "${$1+set}" = set],
-               [eval "test \"\${$1+set}\" = set"])])
+	       [test "${$1+set}" = set],
+	       [eval "test \"\${$1+set}\" = set"])])
 
 
 # AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
@@ -1071,8 +1071,8 @@ m4_define([AS_VAR_SET_IF],
 # the transliteration is handled here.  To be dnl'ed.
 m4_define([AS_VAR_PUSHDEF],
 [AS_LITERAL_IF([$2],
-               [m4_pushdef([$1], [AS_TR_SH($2)])],
-               [as_$1=AS_TR_SH($2)
+	       [m4_pushdef([$1], [AS_TR_SH($2)])],
+	       [as_$1=AS_TR_SH($2)
 m4_pushdef([$1], [$as_[$1]])])])
 
 

@@ -309,8 +309,8 @@ m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(C++)])
 # AC_PROG_{CC, CPP, CXX, CXXCPP}.
 AC_DEFUN([_AC_ARG_VAR_CPPFLAGS],
 [AC_ARG_VAR([CPPFLAGS],
-            [C/C++ preprocessor flags, e.g. -I<include dir> if you have
-             headers in a nonstandard directory <include dir>])])
+	    [C/C++ preprocessor flags, e.g. -I<include dir> if you have
+	     headers in a nonstandard directory <include dir>])])
 
 
 # _AC_ARG_VAR_LDFLAGS
@@ -319,8 +319,8 @@ AC_DEFUN([_AC_ARG_VAR_CPPFLAGS],
 # AC_PROG_{CC, CXX, F77}.
 AC_DEFUN([_AC_ARG_VAR_LDFLAGS],
 [AC_ARG_VAR([LDFLAGS],
-            [linker flags, e.g. -L<lib dir> if you have libraries in a
-             nonstandard directory <lib dir>])])
+	    [linker flags, e.g. -L<lib dir> if you have libraries in a
+	     nonstandard directory <lib dir>])])
 
 
 
@@ -352,17 +352,17 @@ do
 @%:@else
 @%:@ include <assert.h>
 @%:@endif
-                     Syntax error]])],
-                     [],
-                     [# Broken: fails on valid input.
+		     Syntax error]])],
+		     [],
+		     [# Broken: fails on valid input.
 continue])
 
   # OK, works on sane cases.  Now check whether non-existent headers
   # can be detected and how.
   _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
-                     [# Broken: success on invalid input.
+		     [# Broken: success on invalid input.
 continue],
-                     [# Passes both tests.
+		     [# Passes both tests.
 ac_preproc_ok=:
 break])
 
@@ -405,7 +405,7 @@ else
 fi
 AC_MSG_RESULT([$CPP])
 _AC_PROG_PREPROC_WORKS_IFELSE([],
-                [AC_MSG_FAILURE([C preprocessor "$CPP" fails sanity check])])
+		[AC_MSG_FAILURE([C preprocessor "$CPP" fails sanity check])])
 AC_SUBST(CPP)dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CPP
@@ -476,7 +476,7 @@ _AC_PROG_CC_STDC
 _AC_COMPILE_IFELSE([@%:@ifndef __cplusplus
   choke me
 @%:@endif],
-                   [_AC_PROG_CXX_EXIT_DECLARATION])
+		   [_AC_PROG_CXX_EXIT_DECLARATION])
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
@@ -491,8 +491,8 @@ m4_define([_AC_PROG_CC_G],
 ac_save_CFLAGS=$CFLAGS
 CFLAGS="-g"
 AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
-               [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_prog_cc_g=yes],
-                                                        [ac_cv_prog_cc_g=no])])
+	       [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_prog_cc_g=yes],
+							[ac_cv_prog_cc_g=no])])
 if test "$ac_test_CFLAGS" = set; then
   CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
@@ -563,11 +563,11 @@ then
       if AC_TRY_EVAL(ac_try) &&
 	 test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
       then
-        # cc works too.
-        :
+	# cc works too.
+	:
       else
-        # cc exists but doesn't like -o.
-        eval ac_cv_prog_cc_${ac_cc}_c_o=no
+	# cc exists but doesn't like -o.
+	eval ac_cv_prog_cc_${ac_cc}_c_o=no
       fi
     fi
   fi
@@ -581,7 +581,7 @@ if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
 else
   AC_MSG_RESULT([no])
   AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
-           [Define to 1 if your C compiler doesn't accept -c and -o together.])
+	   [Define to 1 if your C compiler doesn't accept -c and -o together.])
 fi
 ])# AC_PROG_CC_C_O
 
@@ -625,7 +625,7 @@ else
 fi
 AC_MSG_RESULT([$CXXCPP])
 _AC_PROG_PREPROC_WORKS_IFELSE([],
-          [AC_MSG_FAILURE([C++ preprocessor "$CXXCPP" fails sanity check])])
+	  [AC_MSG_FAILURE([C++ preprocessor "$CXXCPP" fails sanity check])])
 AC_SUBST(CXXCPP)dnl
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXXCPP
@@ -668,9 +668,9 @@ AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 AC_CHECK_TOOLS(CXX,
-               [$CCC m4_default([$1],
-                          [g++ c++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC])],
-               g++)
+	       [$CCC m4_default([$1],
+			  [g++ c++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC])],
+	       g++)
 
 # Provide some information about the compiler.
 echo "$as_me:$LINENO:" \
@@ -700,9 +700,9 @@ m4_define([_AC_PROG_CXX_G],
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="-g"
 AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
-               [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-                                   [ac_cv_prog_cxx_g=yes],
-                                   [ac_cv_prog_cxx_g=no])])
+	       [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+				   [ac_cv_prog_cxx_g=yes],
+				   [ac_cv_prog_cxx_g=no])])
 if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
@@ -736,12 +736,12 @@ m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
 do
   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@include <stdlib.h>
 $ac_declaration],
-                                      [exit (42);])],
-                     [],
-                     [continue])
+				      [exit (42);])],
+		     [],
+		     [continue])
   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration],
-                                      [exit (42);])],
-                     [break])
+				      [exit (42);])],
+		     [break])
 done
 rm -f conftest*
 if test -n "$ac_declaration"; then
@@ -818,7 +818,7 @@ for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIO
 do
   CC="$ac_save_CC $ac_arg"
   _AC_COMPILE_IFELSE([],
-                     [ac_cv_prog_cc_stdc=$ac_arg
+		     [ac_cv_prog_cc_stdc=$ac_arg
 break])
 done
 rm -f conftest.$ac_ext conftest.$ac_objext
@@ -879,8 +879,8 @@ AC_DEFUN([AC_C_CHAR_UNSIGNED],
 #endif])dnl
 AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
 [AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([AC_INCLUDES_DEFAULT([])],
-                                             [((char) -1) < 0])],
-                   ac_cv_c_char_unsigned=no, ac_cv_c_char_unsigned=yes)])
+					     [((char) -1) < 0])],
+		   ac_cv_c_char_unsigned=no, ac_cv_c_char_unsigned=yes)])
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
@@ -898,13 +898,13 @@ AC_DEFUN([AC_C_LONG_DOUBLE],
 	 [#include <float.h>
 	  long double foo = 0.0;],
 	 [/* Using '|' rather than '||' catches a GCC 2.95.2 x86 bug.  */
-          (DBL_MAX < LDBL_MAX) | (LDBL_EPSILON < DBL_EPSILON)
+	  (DBL_MAX < LDBL_MAX) | (LDBL_EPSILON < DBL_EPSILON)
 	  | (DBL_MAX_EXP < LDBL_MAX_EXP) | (DBL_MANT_DIG < LDBL_MANT_DIG)])],
       ac_cv_c_long_double=yes,
       ac_cv_c_long_double=no)])
 if test $ac_cv_c_long_double = yes; then
   AC_DEFINE(HAVE_LONG_DOUBLE, 1,
-            [Define to 1 if long double works and has more range or precision than double.])
+	    [Define to 1 if long double works and has more range or precision than double.])
 fi
 ])# AC_C_LONG_DOUBLE
 
@@ -942,8 +942,8 @@ main ()
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
 }]])],
-              [ac_cv_c_bigendian=no],
-              [ac_cv_c_bigendian=yes],
+	      [ac_cv_c_bigendian=no],
+	      [ac_cv_c_bigendian=yes],
 [# try to guess the endianness by grepping values into an object file
   ac_cv_c_bigendian=unknown
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
@@ -969,7 +969,7 @@ case $ac_cv_c_bigendian in
   yes)
     m4_default([$1],
       [AC_DEFINE([WORDS_BIGENDIAN], 1,
-        [Define to 1 if your processor stores words with the most significant
+	[Define to 1 if your processor stores words with the most significant
 	 byte first (like Motorola and SPARC, unlike Intel and VAX).])]) ;;
   no)
     $2 ;;
@@ -1002,14 +1002,14 @@ static $ac_kw foo_t static_foo () {return 0; }
 $ac_kw foo_t foo () {return 0; }
 #endif
 ])],
-                    [ac_cv_c_inline=$ac_kw; break])
+		    [ac_cv_c_inline=$ac_kw; break])
 done
 ])
 case $ac_cv_c_inline in
   inline | yes) ;;
   no) AC_DEFINE(inline,,
-                [Define as `__inline' if that's what the C compiler calls it,
-                 or to nothing if it is not supported.]) ;;
+		[Define as `__inline' if that's what the C compiler calls it,
+		 or to nothing if it is not supported.]) ;;
   *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
 esac
 ])# AC_C_INLINE
@@ -1068,11 +1068,11 @@ AC_DEFUN([AC_C_CONST],
   }
 #endif
 ]])],
-                   [ac_cv_c_const=yes],
-                   [ac_cv_c_const=no])])
+		   [ac_cv_c_const=yes],
+		   [ac_cv_c_const=no])])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
-            [Define to empty if `const' does not conform to ANSI C.])
+	    [Define to empty if `const' does not conform to ANSI C.])
 fi
 ])# AC_C_CONST
 
@@ -1105,8 +1105,8 @@ AC_DEFUN([AC_C_RESTRICT],
  case $ac_cv_c_restrict in
    restrict) ;;
    no) AC_DEFINE(restrict,,
-        [Define to equivalent of C99 restrict keyword, or to nothing if this
-        is not supported.  Do not define if restrict is supported directly.]) ;;
+	[Define to equivalent of C99 restrict keyword, or to nothing if this
+	is not supported.  Do not define if restrict is supported directly.]) ;;
    *)  AC_DEFINE_UNQUOTED(restrict, $ac_cv_c_restrict) ;;
  esac
 ])# AC_C_RESTRICT
@@ -1126,13 +1126,13 @@ AC_DEFUN([AC_C_VOLATILE],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 volatile int x;
 int * volatile y;])],
-                   [ac_cv_c_volatile=yes],
-                   [ac_cv_c_volatile=no])])
+		   [ac_cv_c_volatile=yes],
+		   [ac_cv_c_volatile=no])])
 if test $ac_cv_c_volatile = no; then
   AC_DEFINE(volatile,,
-            [Define to empty if the keyword `volatile' does not work.
-             Warning: valid code using `volatile' can become incorrect
-             without.  Disable with care.])
+	    [Define to empty if the keyword `volatile' does not work.
+	     Warning: valid code using `volatile' can become incorrect
+	     without.  Disable with care.])
 fi
 ])# AC_C_VOLATILE
 
@@ -1143,16 +1143,16 @@ fi
 # Defines HAVE_STRINGIZE if positive.
 AC_DEFUN([AC_C_STRINGIZE],
 [AC_CACHE_CHECK([for preprocessor stringizing operator],
-                [ac_cv_c_stringize],
+		[ac_cv_c_stringize],
 [AC_EGREP_CPP([@%:@teststring],
-              [@%:@define x(y) #y
+	      [@%:@define x(y) #y
 
 char *s = x(teststring);],
-              [ac_cv_c_stringize=no],
-              [ac_cv_c_stringize=yes])])
+	      [ac_cv_c_stringize=no],
+	      [ac_cv_c_stringize=yes])])
 if test $ac_cv_c_stringize = yes; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
-            [Define to 1 if cpp supports the ANSI @%:@ stringizing operator.])
+	    [Define to 1 if cpp supports the ANSI @%:@ stringizing operator.])
 fi
 ])# AC_C_STRINGIZE
 
@@ -1167,9 +1167,9 @@ AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT([yes])
   AC_DEFINE(PROTOTYPES, 1,
-            [Define to 1 if the C compiler supports function prototypes.])
+	    [Define to 1 if the C compiler supports function prototypes.])
   AC_DEFINE(__PROTOTYPES, 1,
-            [Define like PROTOTYPES; this can be used by system headers.])
+	    [Define like PROTOTYPES; this can be used by system headers.])
 else
   AC_MSG_RESULT([no])
 fi

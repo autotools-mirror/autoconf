@@ -28,7 +28,7 @@ AT_SETUP([[Libtool]])
 
 # Skip this test if there is no libtoolize.
 AT_CHECK([libtoolize --version || exit 77],
-         ignore, ignore, ignore)
+	 ignore, ignore, ignore)
 # CVS Autoconf probably does not work with too old Libtools.
 AT_CHECK([[
 case `libtoolize --version |
@@ -36,7 +36,7 @@ case `libtoolize --version |
   0.*          ) exit 77;;
   1.[0123]*    ) exit 77;;
 esac]],
-         ignore, ignore, ignore)
+	 ignore, ignore, ignore)
 
 # FIXME: Once Libtool `configure.ac' aware, change this.
 # Using a configure.in, have libtoolize confess where libtool.m4 is.

@@ -188,7 +188,7 @@ ac_abs_top_srcdir=`cd $1 && cd $ac_top_srcdir && pwd`
 # be quoted.  Currently `+*.' are quoted.
 m4_define([AC_CONFIG_IF_MEMBER],
 [m4_bmatch(m4_defn([$2]), [\(^\| \)]m4_re_escape([$1])[\([: ]\|$\)],
-           [$3], [$4])])
+	   [$3], [$4])])
 
 
 # AC_FILE_DEPENDENCY_TRACE(DEST, SOURCE1, [SOURCE2...])
@@ -204,8 +204,8 @@ m4_define([AC_FILE_DEPENDENCY_TRACE], [])
 # `DEST.in'.
 m4_define([_AC_CONFIG_DEPENDENCY],
 [m4_ifval([$2],
-          [AC_FILE_DEPENDENCY_TRACE($@)],
-          [AC_FILE_DEPENDENCY_TRACE([$1], [$1.in])])])
+	  [AC_FILE_DEPENDENCY_TRACE($@)],
+	  [AC_FILE_DEPENDENCY_TRACE([$1], [$1.in])])])
 
 
 # _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]]...)
@@ -258,8 +258,8 @@ m4_popdef([AC_Dest])])dnl
 # was the case in AC_OUTPUT_COMMANDS.
 m4_define([_AC_CONFIG_COMMANDS_INIT],
 [m4_ifval([$1],
-          [m4_append([_AC_OUTPUT_COMMANDS_INIT],
-                     [$1
+	  [m4_append([_AC_OUTPUT_COMMANDS_INIT],
+		     [$1
 ])])])
 
 # Initialize.
@@ -504,11 +504,11 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-        cat >$tmp/stdin
-        ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+	cat >$tmp/stdin
+	ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   * )   ac_file_in=$ac_file.in ;;
   esac
 
@@ -521,21 +521,21 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
       case $f in
       -) echo $tmp/stdin ;;
       [[\\/$]]*)
-         # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-         # Do quote $f, to prevent DOS paths from being IFS'd.
-         echo "$f";;
+	 # Absolute (can't be DOS-style, as IFS=:)
+	 test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
+	 # Do quote $f, to prevent DOS paths from being IFS'd.
+	 echo "$f";;
       *) # Relative
-         if test -f "$f"; then
-           # Build tree
-           echo "$f"
-         elif test -f "$srcdir/$f"; then
-           # Source tree
-           echo "$srcdir/$f"
-         else
-           # /dev/null tree
-           AC_MSG_ERROR([cannot find input file: $f])
-         fi;;
+	 if test -f "$f"; then
+	   # Build tree
+	   echo "$f"
+	 elif test -f "$srcdir/$f"; then
+	   # Source tree
+	   echo "$srcdir/$f"
+	 else
+	   # /dev/null tree
+	   AC_MSG_ERROR([cannot find input file: $f])
+	 fi;;
       esac
     done` || AS_EXIT([1])
   # Remove the trailing spaces.
@@ -665,7 +665,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 dnl If running for Automake, be ready to perform additional
 dnl commands to set up the timestamp files.
 m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
-         [_AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+	 [_AC_AM_CONFIG_HEADER_HOOK([$ac_file])
 ])dnl
 m4_ifset([AC_LIST_HEADERS_COMMANDS],
 [  # Run the commands associated with the file.
@@ -877,11 +877,11 @@ dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
 m4_ifdef([_AC_SUBST_VARS],
-         [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_VARS]),
+	 [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_VARS]),
 [s,@AC_Var@,$AC_Var,;t t
 ])])dnl
 m4_ifdef([_AC_SUBST_FILES],
-         [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_FILES]),
+	 [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_FILES]),
 [/@AC_Var@/r $AC_Var
 s,@AC_Var@,,;t t
 ])])dnl
@@ -936,11 +936,11 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-        cat >$tmp/stdin
-        ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+	cat >$tmp/stdin
+	ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-        ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
+	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   * )   ac_file_in=$ac_file.in ;;
   esac
 
@@ -969,7 +969,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     configure_input="$ac_file.  "
   fi
   configure_input=$configure_input"Generated from `echo $ac_file_in |
-                                     sed 's,.*/,,'` by configure."
+				     sed 's,.*/,,'` by configure."
 
   # First look for the input files in the build tree, otherwise in the
   # src tree.
@@ -978,20 +978,20 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       case $f in
       -) echo $tmp/stdin ;;
       [[\\/$]]*)
-         # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-         echo "$f";;
+	 # Absolute (can't be DOS-style, as IFS=:)
+	 test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
+	 echo "$f";;
       *) # Relative
-         if test -f "$f"; then
-           # Build tree
-           echo "$f"
-         elif test -f "$srcdir/$f"; then
-           # Source tree
-           echo "$srcdir/$f"
-         else
-           # /dev/null tree
-           AC_MSG_ERROR([cannot find input file: $f])
-         fi;;
+	 if test -f "$f"; then
+	   # Build tree
+	   echo "$f"
+	 elif test -f "$srcdir/$f"; then
+	   # Source tree
+	   echo "$srcdir/$f"
+	 else
+	   # /dev/null tree
+	   AC_MSG_ERROR([cannot find input file: $f])
+	 fi;;
       esac
     done` || AS_EXIT([1])
 _ACEOF
@@ -1067,9 +1067,9 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
 AS_LITERAL_IF([$1], [],
-              [AC_DIAGNOSE(syntax, [$0: you should use literals])])
+	      [AC_DIAGNOSE(syntax, [$0: you should use literals])])
 m4_divert_text([DEFAULTS],
-               [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
+	       [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
 
@@ -1153,14 +1153,14 @@ if test "$no_recursion" != yes; then
       case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
-        ac_sub_cache_file=$ac_top_builddir$cache_file ;;
+	ac_sub_cache_file=$ac_top_builddir$cache_file ;;
       esac
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
       # The eval makes quoting arguments work.
       eval $ac_sub_configure $ac_sub_configure_args \
-           --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
-        AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
+	   --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
+	AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
     fi
 
     cd $ac_popdir
@@ -1183,9 +1183,9 @@ fi
 # proper modern macros.
 AU_DEFUN([AC_OUTPUT],
 [m4_ifvaln([$1],
-           [AC_CONFIG_FILES([$1])])dnl
+	   [AC_CONFIG_FILES([$1])])dnl
 m4_ifvaln([$2$3],
-          [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])])dnl
+	  [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])])dnl
 [AC_OUTPUT]])
 
 
@@ -1199,12 +1199,12 @@ m4_ifvaln([$2$3],
 m4_define([AC_OUTPUT],
 [dnl Dispatch the extra arguments to their native macros.
 m4_ifval([$1],
-         [AC_CONFIG_FILES([$1])])dnl
+	 [AC_CONFIG_FILES([$1])])dnl
 m4_ifval([$2$3],
-         [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
+	 [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
 m4_ifval([$1$2$3],
-         [AC_DIAGNOSE([obsolete],
-                      [$0 should be used without arguments.
+	 [AC_DIAGNOSE([obsolete],
+		      [$0 should be used without arguments.
 You should run autoupdate.])])dnl
 AC_CACHE_SAVE
 
@@ -1351,11 +1351,11 @@ Usage: $[0] [[OPTIONS]] [[FILE]]...
       --recheck    update $as_me by reconfiguring in the same conditions
 m4_ifset([AC_LIST_FILES],
 [[  --file=FILE[:TEMPLATE]
-                   instantiate the configuration file FILE
+		   instantiate the configuration file FILE
 ]])dnl
 m4_ifset([AC_LIST_HEADERS],
 [[  --header=FILE[:TEMPLATE]
-                   instantiate the configuration header FILE
+		   instantiate the configuration header FILE
 ]])dnl
 
 m4_ifset([AC_LIST_FILES],

@@ -78,10 +78,10 @@ m4_define([AU_DEFINE],
 # See `acobsolete.m4' for a longer description.
 m4_define([AU_DEFUN],
 [AU_DEFINE([$1],
-           [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
+	   [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
 $2],
-           [$3])dnl
+	   [$3])dnl
 ])
 
 

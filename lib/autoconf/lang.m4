@@ -128,7 +128,7 @@ m4_defun([_AC_LANG_SET],
 # Set the current language to LANG.
 m4_defun([AC_LANG],
 [_AC_LANG_SET(m4_ifdef([_AC_LANG], [m4_defn([_AC_LANG])]),
-              [$1])dnl
+	      [$1])dnl
 m4_define([_AC_LANG], [$1])])
 
 
@@ -137,7 +137,7 @@ m4_define([_AC_LANG], [$1])])
 # Save the current language, and use LANG.
 m4_defun([AC_LANG_PUSH],
 [_AC_LANG_SET(m4_ifdef([_AC_LANG], [m4_defn([_AC_LANG])]),
-              [$1])dnl
+	      [$1])dnl
 m4_pushdef([_AC_LANG], [$1])])
 
 
@@ -161,7 +161,7 @@ m4_popdef([$0 OLD])dnl
 # Save the current language, but don't change language.
 AU_DEFUN([AC_LANG_SAVE],
 [AC_DIAGNOSE([obsolete],
-             [instead of using `AC_LANG', `AC_LANG_SAVE',
+	     [instead of using `AC_LANG', `AC_LANG_SAVE',
 and `AC_LANG_RESTORE', you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
 m4_pushdef([_AC_LANG], _AC_LANG)])
 
@@ -275,7 +275,7 @@ AC_DEFUN([AC_LANG_INT_SAVE],
 # instance, the latter must be AC_DEFUN'd, not just define'd.
 m4_define([AC_LANG_COMPILER],
 [AC_BEFORE([AC_LANG_COMPILER(]_AC_LANG[)],
-           [AC_LANG_PREPROC(]_AC_LANG[)])dnl
+	   [AC_LANG_PREPROC(]_AC_LANG[)])dnl
 _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
@@ -284,7 +284,7 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 # Ensure we have a compiler for the current LANG.
 AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 [m4_require([AC_LANG_COMPILER(]_AC_LANG[)],
-            [AC_LANG_COMPILER])])
+	    [AC_LANG_COMPILER])])
 
 
 
@@ -300,13 +300,13 @@ AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 # continuation line, and warn instead of reporting an error.
 m4_define([_AC_LANG_COMPILER_GNU],
 [AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
-                [ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
+		[ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
 [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[#ifndef __GNUC__
        choke me
 #endif
 ]])],
-                   [ac_compiler_gnu=yes],
-                   [ac_compiler_gnu=no])
+		   [ac_compiler_gnu=yes],
+		   [ac_compiler_gnu=no])
 ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
 ])])# _AC_LANG_COMPILER_GNU
 
@@ -327,7 +327,7 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 # Ensure we have a preprocessor for the current language.
 AC_DEFUN([AC_LANG_PREPROC_REQUIRE],
 [m4_require([AC_LANG_PREPROC(]_AC_LANG[)],
-            [AC_LANG_PREPROC])])
+	    [AC_LANG_PREPROC])])
 
 
 # AC_REQUIRE_CPP
@@ -458,23 +458,23 @@ do
   test -f "$ac_file" || continue
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT )
-        ;;
+	;;
     conftest.$ac_ext )
-        # This is the source file.
-        ;;
+	# This is the source file.
+	;;
     [[ab]].out )
-        # We found the default executable, but exeext='' is most
-        # certainly right.
-        break;;
+	# We found the default executable, but exeext='' is most
+	# certainly right.
+	break;;
     *.* )
-        ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-        # FIXME: I believe we export ac_cv_exeext for Libtool,
-        # but it would be cool to find out if it's true.  Does anybody
-        # maintain Libtool? --akim.
-        export ac_cv_exeext
-        break;;
+	ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+	# FIXME: I believe we export ac_cv_exeext for Libtool,
+	# but it would be cool to find out if it's true.  Does anybody
+	# maintain Libtool? --akim.
+	export ac_cv_exeext
+	break;;
     * )
-        break;;
+	break;;
   esac
 done],
       [_AC_MSG_LOG_CONFTEST
@@ -534,12 +534,12 @@ for ac_file in conftest.exe conftest conftest.*; do
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-          export ac_cv_exeext
-          break;;
+	  export ac_cv_exeext
+	  break;;
     * ) break;;
   esac
 done],
-              [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])])
+	      [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])])
 rm -f conftest$ac_cv_exeext
 AC_MSG_RESULT([$ac_cv_exeext])
 ])# _AC_COMPILER_EXEEXT_O

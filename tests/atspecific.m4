@@ -53,11 +53,11 @@ m4_define([AT_CHECK_AUTOM4TE],
 [AT_CHECK([autom4te $1], [$2], [$3], m4_ifval([$4], [stderr]))
 m4_ifval([$4],
 [AT_CHECK([[sed -e 's,^\([^:]*\): *\([0-9][0-9]*\): *[^:]*m4: ,m4: \1: \2: ,' \
-                -e 's,^[^:]*m4: *\([^:]*\): *\([0-9][0-9]*\): ,m4: \1: \2: ,' \
-                -e 's/^autom4te: [^ ]*m4 /autom4te: m4 /' \
-                -e 's/^autom4te: [^ ]*m4.exe /autom4te: m4 /' \
-                -e 's/ (E[A-Z]*)$//' \
-           stderr]], [0],[$4])])
+		-e 's,^[^:]*m4: *\([^:]*\): *\([0-9][0-9]*\): ,m4: \1: \2: ,' \
+		-e 's/^autom4te: [^ ]*m4 /autom4te: m4 /' \
+		-e 's/^autom4te: [^ ]*m4.exe /autom4te: m4 /' \
+		-e 's/ (E[A-Z]*)$//' \
+	   stderr]], [0],[$4])])
 ])
 
 
@@ -73,16 +73,16 @@ m4_ifval([$4],
 m4_define([AT_DATA_M4SUGAR],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
-               [@&t@],    [@&@&t@t@],
-               [\(m4\)_], [\1@&t@_],
-               [dnl],     [d@&t@nl])])])
+	       [@&t@],    [@&@&t@t@],
+	       [\(m4\)_], [\1@&t@_],
+	       [dnl],     [d@&t@nl])])])
 
 
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
 [AT_CHECK_AUTOM4TE([--language=m4sugar script.4s -o script $1],
-          m4_default([$2], [0]), [$3], [$4])])
+	  m4_default([$2], [0]), [$3], [$4])])
 
 
 
@@ -97,16 +97,16 @@ m4_define([AT_CHECK_M4SUGAR],
 m4_define([AT_DATA_M4SH],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
-               [@&t@],        [@&@&t@t@],
-               [\(m4\|AS\)_], [\1@&t@_],
-               [dnl],         [d@&t@nl])])])
+	       [@&t@],        [@&@&t@t@],
+	       [\(m4\|AS\)_], [\1@&t@_],
+	       [dnl],         [d@&t@nl])])])
 
 
 # AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -------------------------------------------------------
 m4_define([AT_CHECK_M4SH],
 [AT_CHECK([autom4te --language=m4sh script.as -o script $1],
-          m4_default([$2], [0]), [$3], [$4])])
+	  m4_default([$2], [0]), [$3], [$4])])
 
 
 
@@ -121,9 +121,9 @@ m4_define([AT_CHECK_M4SH],
 m4_define([AT_DATA_AUTOCONF],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
-               [@&t@],            [@&@&t@t@],
-               [\(m4\|AS\|AC\)_], [\1@&t@_],
-               [dnl],             [d@&t@nl])])])
+	       [@&t@],            [@&@&t@t@],
+	       [\(m4\|AS\|AC\)_], [\1@&t@_],
+	       [dnl],             [d@&t@nl])])])
 
 
 
@@ -211,7 +211,7 @@ AC_STATE_SAVE(after)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CHECK([autoconf $1],
-          [$2], [$3], [$4])])
+	  [$2], [$3], [$4])])
 
 
 # AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
@@ -229,9 +229,9 @@ m4_define([AT_CHECK_AUTOHEADER],
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
 [AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
-          [$2],
-          m4_default([$3], [ignore]), [$4],
-          [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
+	  [$2],
+	  m4_default([$3], [ignore]), [$4],
+	  [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
 
 
 # AT_CHECK_ENV
@@ -273,7 +273,7 @@ m4_define([AT_CHECK_DEFINES],
 /SYS_STAT/d
 /SYS_TYPES/d
 /UNISTD/d' config.h]],,
-          [$1])])
+	  [$1])])
 
 
 # AT_CHECK_AUTOUPDATE

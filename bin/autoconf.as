@@ -85,9 +85,9 @@ verbose=:
 # Parse command line.
 while test $# -gt 0 ; do
   option=[`expr "x$1" : 'x\(--[^=]*\)' \| \
-               "x$1" : 'x\(-.\)'`]
+	       "x$1" : 'x\(-.\)'`]
   optarg=[`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
-               "x$1" : 'x-.\(.*\)'`]
+	       "x$1" : 'x-.\(.*\)'`]
   case $1 in
     --version | -V )
        echo "$version" ; exit 0 ;;
@@ -154,8 +154,8 @@ case $# in
   0)
     if test -f configure.ac; then
       if test -f configure.in; then
-        echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
-        echo "$me: warning: proceeding with \`configure.ac'." >&2
+	echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
+	echo "$me: warning: proceeding with \`configure.ac'." >&2
       fi
       infile=configure.ac
     elif test -f configure.in; then

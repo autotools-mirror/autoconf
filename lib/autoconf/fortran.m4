@@ -200,7 +200,7 @@ m4_define([AC_LANG_CALL(Fortran 77)],
 # Find the Fortran 77 preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_PREPROC(Fortran 77)],
 [m4_warn([syntax],
-         [$0: No preprocessor defined for ]_AC_LANG)])
+	 [$0: No preprocessor defined for ]_AC_LANG)])
 
 
 # AC_LANG_COMPILER(Fortran 77)
@@ -247,7 +247,7 @@ AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf frt pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95])])
+		  [g77 f77 xlf frt pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95])])
 
 # Provide some information about the compiler.
 echo "$as_me:__oline__:" \
@@ -315,7 +315,7 @@ fi[]dnl
 AC_DEFUN([AC_PROG_F77_C_O],
 [AC_REQUIRE([AC_PROG_F77])dnl
 AC_CACHE_CHECK([whether $F77 understand -c and -o together],
-               [ac_cv_prog_f77_c_o],
+	       [ac_cv_prog_f77_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # We test twice because some compilers refuse to overwrite an existing
 # `.o' file with `-o', although they will create one.
@@ -330,8 +330,8 @@ fi
 rm -f conftest*])
 if test $ac_cv_prog_f77_c_o = no; then
   AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
-            [Define to 1 if your Fortran 77 compiler doesn't accept
-             -c and -o together.])
+	    [Define to 1 if your Fortran 77 compiler doesn't accept
+	     -c and -o together.])
 fi
 ])# AC_PROG_F77_C_O
 
@@ -407,7 +407,7 @@ fi[]dnl
 # Some compilers don't accept -v (Lahey: -verbose, xlf: -V, Fujitsu: -###)
 AC_DEFUN([_AC_PROG_F77_V],
 [AC_CACHE_CHECK([how to get verbose linking output from $F77],
-                [ac_cv_prog_f77_v],
+		[ac_cv_prog_f77_v],
 [AC_LANG_ASSERT(Fortran 77)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_v=
@@ -417,16 +417,16 @@ for ac_verb in -v -verbose --verbose -V -\#\#\#; do
   # look for -l* and *.a constructs in the output
   for ac_arg in $ac_f77_v_output; do
      case $ac_arg in
-        [[\\/]]*.a | ?:[[\\/]]*.a | -[[lLRu]]*)
-          ac_cv_prog_f77_v=$ac_verb
-          break 2 ;;
+	[[\\/]]*.a | ?:[[\\/]]*.a | -[[lLRu]]*)
+	  ac_cv_prog_f77_v=$ac_verb
+	  break 2 ;;
      esac
   done
 done
 if test -z "$ac_cv_prog_f77_v"; then
    AC_MSG_WARN([cannot determine how to obtain linking information from $F77])
 fi],
-                  [AC_MSG_WARN([compilation failed])])
+		  [AC_MSG_WARN([compilation failed])])
 ])])# _AC_PROG_F77_V
 
 
@@ -478,45 +478,45 @@ while test $[@%:@] != 1; do
   shift
   ac_arg=$[1]
   case $ac_arg in
-        [[\\/]]*.a | ?:[[\\/]]*.a)
-          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
-              ac_cv_flibs="$ac_cv_flibs $ac_arg")
-          ;;
-        -bI:*)
-          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
-             [_AC_LINKER_OPTION([$ac_arg], ac_cv_flibs)])
-          ;;
-          # Ignore these flags.
-        -lang* | -lcrt0.o | -lc | -lgcc | -libmil | -LANG:=*)
-          ;;
-        -lkernel32)
-          test x"$CYGWIN" != xyes && ac_cv_flibs="$ac_cv_flibs $ac_arg"
-          ;;
-        -[[LRuY]])
-          # These flags, when seen by themselves, take an argument.
-          # We remove the space between option and argument and re-iterate
-          # unless we find an empty arg or a new option (starting with -)
+	[[\\/]]*.a | ?:[[\\/]]*.a)
+	  _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
+	      ac_cv_flibs="$ac_cv_flibs $ac_arg")
+	  ;;
+	-bI:*)
+	  _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
+	     [_AC_LINKER_OPTION([$ac_arg], ac_cv_flibs)])
+	  ;;
+	  # Ignore these flags.
+	-lang* | -lcrt0.o | -lc | -lgcc | -libmil | -LANG:=*)
+	  ;;
+	-lkernel32)
+	  test x"$CYGWIN" != xyes && ac_cv_flibs="$ac_cv_flibs $ac_arg"
+	  ;;
+	-[[LRuY]])
+	  # These flags, when seen by themselves, take an argument.
+	  # We remove the space between option and argument and re-iterate
+	  # unless we find an empty arg or a new option (starting with -)
 	  case $[2] in
-             "" | -*);;
-             *)
+	     "" | -*);;
+	     *)
 		ac_arg="$ac_arg$[2]"
 		shift; shift
 		set X $ac_arg "$[@]"
 		;;
 	  esac
-          ;;
-        -YP,*)
-          for ac_j in `echo $ac_arg | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
-            _AC_LIST_MEMBER_IF($ac_j, $ac_cv_flibs, ,
-                               [ac_arg="$ac_arg $ac_j"
-                               ac_cv_flibs="$ac_cv_flibs $ac_j"])
-          done
-          ;;
-        -[[lLR]]*)
-          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
-                             ac_cv_flibs="$ac_cv_flibs $ac_arg")
-          ;;
-          # Ignore everything else.
+	  ;;
+	-YP,*)
+	  for ac_j in `echo $ac_arg | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
+	    _AC_LIST_MEMBER_IF($ac_j, $ac_cv_flibs, ,
+			       [ac_arg="$ac_arg $ac_j"
+			       ac_cv_flibs="$ac_cv_flibs $ac_j"])
+	  done
+	  ;;
+	-[[lLR]]*)
+	  _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
+			     ac_cv_flibs="$ac_cv_flibs $ac_arg")
+	  ;;
+	  # Ignore everything else.
   esac
 done
 # restore positional arguments
@@ -528,9 +528,9 @@ set X $ac_save_positional; shift
 case `(uname -sr) 2>/dev/null` in
    "SunOS 5"*)
       ac_ld_run_path=`echo $ac_f77_v_output |
-                        sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
+			sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
       test "x$ac_ld_run_path" != x &&
-        _AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
+	_AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
       ;;
 esac
 fi # test "x$FLIBS" = "x"
@@ -586,20 +586,20 @@ m4_define([_AC_LANG_PROGRAM_C_F77_HOOKS],
 #endif
 ])
 AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
-               ac_cv_f77_dummy_main,
+	       ac_cv_f77_dummy_main,
 [AC_LANG_PUSH(C)dnl
  ac_f77_dm_save_LIBS=$LIBS
  LIBS="$LIBS $FLIBS"
 
  # First, try linking without a dummy main:
  AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
-                [ac_cv_f77_dummy_main=none],
-                [ac_cv_f77_dummy_main=unknown])
+		[ac_cv_f77_dummy_main=none],
+		[ac_cv_f77_dummy_main=unknown])
 
  if test $ac_cv_f77_dummy_main = unknown; then
    for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
      AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@define F77_DUMMY_MAIN $ac_func]])],
-                    [ac_cv_f77_dummy_main=$ac_func; break])
+		    [ac_cv_f77_dummy_main=$ac_func; break])
    done
  fi
  rm -f conftest*
@@ -611,11 +611,11 @@ AS_IF([test "$F77_DUMMY_MAIN" != unknown],
       [m4_default([$1],
 [if test $F77_DUMMY_MAIN != none; then
   AC_DEFINE_UNQUOTED([F77_DUMMY_MAIN], $F77_DUMMY_MAIN,
-                     [Define to dummy `main' function (if any) required to
-                      link to the Fortran 77 libraries.])
+		     [Define to dummy `main' function (if any) required to
+		      link to the Fortran 77 libraries.])
 fi])],
       [m4_default([$2],
-            [AC_MSG_FAILURE([linking to Fortran libraries from C fails])])])
+	    [AC_MSG_FAILURE([linking to Fortran libraries from C fails])])])
 ])# AC_F77_DUMMY_MAIN
 
 
@@ -630,7 +630,7 @@ fi])],
 AC_DEFUN([AC_F77_MAIN],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_CACHE_CHECK([for alternate main to link with Fortran 77 libraries],
-               ac_cv_f77_main,
+	       ac_cv_f77_main,
 [AC_LANG_PUSH(C)dnl
  ac_f77_m_save_LIBS=$LIBS
  LIBS="$LIBS $FLIBS"
@@ -639,15 +639,15 @@ AC_CACHE_CHECK([for alternate main to link with Fortran 77 libraries],
  for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
    AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@undef F77_DUMMY_MAIN
 @%:@define main $ac_func])],
-                  [ac_cv_f77_main=$ac_func; break])
+		  [ac_cv_f77_main=$ac_func; break])
  done
  rm -f conftest*
  LIBS=$ac_f77_m_save_LIBS
  AC_LANG_POP(C)dnl
 ])
 AC_DEFINE_UNQUOTED([F77_MAIN], $ac_cv_f77_main,
-                   [Define to alternate name for `main' routine that is
-                    called from a `main' in the Fortran libraries.])
+		   [Define to alternate name for `main' routine that is
+		    called from a `main' in the Fortran libraries.])
 ])# AC_F77_MAIN
 
 
@@ -670,7 +670,7 @@ AC_DEFUN([_AC_F77_NAME_MANGLING],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_REQUIRE([AC_F77_DUMMY_MAIN])dnl
 AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
-               ac_cv_f77_mangling,
+	       ac_cv_f77_mangling,
 [AC_LANG_PUSH(Fortran 77)dnl
 AC_COMPILE_IFELSE(
 [      subroutine foobar()
@@ -691,41 +691,41 @@ AC_COMPILE_IFELSE(
     for ac_underscore in "" "_"; do
       ac_func="$ac_foobar$ac_underscore"
       AC_LINK_IFELSE([AC_LANG_CALL([], [$ac_func])],
-                     [ac_success=yes; break 2])
+		     [ac_success=yes; break 2])
     done
   done
 
   if test "$ac_success" = "yes"; then
      case $ac_foobar in
-        foobar)
-           ac_case=lower
-           ac_foo_bar=foo_bar
-           ;;
-        FOOBAR)
-           ac_case=upper
-           ac_foo_bar=FOO_BAR
-           ;;
+	foobar)
+	   ac_case=lower
+	   ac_foo_bar=foo_bar
+	   ;;
+	FOOBAR)
+	   ac_case=upper
+	   ac_foo_bar=FOO_BAR
+	   ;;
      esac
 
      ac_success_extra=no
      for ac_extra in "" "_"; do
-        ac_func="$ac_foo_bar$ac_underscore$ac_extra"
-        AC_LINK_IFELSE([AC_LANG_CALL([], [$ac_func])],
-                       [ac_success_extra=yes; break])
+	ac_func="$ac_foo_bar$ac_underscore$ac_extra"
+	AC_LINK_IFELSE([AC_LANG_CALL([], [$ac_func])],
+		       [ac_success_extra=yes; break])
      done
 
      if test "$ac_success_extra" = "yes"; then
 	ac_cv_f77_mangling="$ac_case case"
-        if test -z "$ac_underscore"; then
-           ac_cv_f77_mangling="$ac_cv_f77_mangling, no underscore"
+	if test -z "$ac_underscore"; then
+	   ac_cv_f77_mangling="$ac_cv_f77_mangling, no underscore"
 	else
-           ac_cv_f77_mangling="$ac_cv_f77_mangling, underscore"
-        fi
-        if test -z "$ac_extra"; then
-           ac_cv_f77_mangling="$ac_cv_f77_mangling, no extra underscore"
+	   ac_cv_f77_mangling="$ac_cv_f77_mangling, underscore"
+	fi
+	if test -z "$ac_extra"; then
+	   ac_cv_f77_mangling="$ac_cv_f77_mangling, no extra underscore"
 	else
-           ac_cv_f77_mangling="$ac_cv_f77_mangling, extra underscore"
-        fi
+	   ac_cv_f77_mangling="$ac_cv_f77_mangling, extra underscore"
+	fi
       else
 	ac_cv_f77_mangling="unknown"
       fi
@@ -760,32 +760,32 @@ AH_TEMPLATE([F77_FUNC_],
     [As F77_FUNC, but for C identifiers containing underscores.])dnl
 case $ac_cv_f77_mangling in
   "lower case, no underscore, no extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [name])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [name])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [name]) ;;
   "lower case, no underscore, extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [name])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [name])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
   "lower case, underscore, no extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
   "lower case, underscore, extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __]) ;;
   "upper case, no underscore, no extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [NAME]) ;;
   "upper case, no underscore, extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
   "upper case, underscore, no extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
   "upper case, underscore, extra underscore")
-          AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __]) ;;
+	  AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+	  AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __]) ;;
   *)
-          AC_MSG_WARN([unknown Fortran 77 name-mangling scheme])
-          ;;
+	  AC_MSG_WARN([unknown Fortran 77 name-mangling scheme])
+	  ;;
 esac
 ])# AC_F77_WRAPPERS
 

@@ -233,8 +233,8 @@ AC_DEFUN([AC_CHECK_TOOLS],
   for ac_prog in $2
   do
     AC_CHECK_PROG([$1],
-                  [$ac_tool_prefix$ac_prog], [$ac_tool_prefix$ac_prog],,
-                  [$4])
+		  [$ac_tool_prefix$ac_prog], [$ac_tool_prefix$ac_prog],,
+		  [$4])
     test -n "$$1" && break
   done
 fi
@@ -325,20 +325,20 @@ case $as_dir/ in
     # by default.
     for ac_prog in ginstall scoinst install; do
       for ac_exec_ext in '' $ac_executable_extensions; do
-        if AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]); then
-          if test $ac_prog = install &&
-            grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
-            # AIX install.  It has an incompatible calling convention.
-            :
-          elif test $ac_prog = install &&
-            grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
-            # program-specific install script used by HP pwplus--don't use.
-            :
-          else
-            ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
-            break 3
-          fi
-        fi
+	if AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]); then
+	  if test $ac_prog = install &&
+	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # AIX install.  It has an incompatible calling convention.
+	    :
+	  elif test $ac_prog = install &&
+	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # program-specific install script used by HP pwplus--don't use.
+	    :
+	  else
+	    ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
+	    break 3
+	  fi
+	fi
       done
     done
     ;;
@@ -428,8 +428,8 @@ rm -f "${LEX_OUTPUT_ROOT}.c"
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER, 1,
-            [Define to 1 if `lex' declares `yytext' as a `char *' by default,
-             not a `char[]'.])
+	    [Define to 1 if `lex' declares `yytext' as a `char *' by default,
+	     not a `char[]'.])
 fi
 ])# _AC_PROG_LEX_YYTEXT_DECL
 

@@ -1938,14 +1938,14 @@ else
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }
-        am_cv_lispdir=`sed -n \
+	am_cv_lispdir=`sed -n \
        -e 's,/$,,' \
        -e '/.*\/lib\/\(x\?emacs\/site-lisp\)$/{s,,${libdir}/\1,;p;q;}' \
        -e '/.*\/share\/\(x\?emacs\/site-lisp\)$/{s,,${datadir}/\1,;p;q;}' \
        conftest.out`
        rm conftest.out
        if test -z "$am_cv_lispdir"; then
-         am_cv_lispdir='${datadir}/emacs/site-lisp'
+	 am_cv_lispdir='${datadir}/emacs/site-lisp'
        fi
 
 fi

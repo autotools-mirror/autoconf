@@ -119,8 +119,9 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(
 	@for dep in $?; do \
 	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
 	    *$$dep*) \
-	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh; \
-	      exit 0;; \
+	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh \
+		&& exit 0; \
+	      exit 1;; \
 	  esac; \
 	done; \
         echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Autom4te/Makefile'; \

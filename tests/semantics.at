@@ -33,10 +33,10 @@ AT_BANNER([Semantics.])
 # this test fail, so exit successfully if `cos' is in libc.
 AT_CHECK_MACRO([AC_CHECK_LIB],
 [AC_TRY_LINK_FUNC(cos,
-                  [AC_MSG_ERROR([`cos' is in `libc'], 77)])
+		  [AC_MSG_ERROR([`cos' is in `libc'], 77)])
 
 AC_CHECK_LIB(m, cos,,
-             [AC_MSG_ERROR([cannot find `cos' in `libm'])])
+	     [AC_MSG_ERROR([cannot find `cos' in `libm'])])
 
 # No kidding, using variables was broken in 2.50 :(
 ac_sin=sin
@@ -55,7 +55,7 @@ AC_CHECK_LIB($ac_m, $ac_asin,,
 # correctly detect failures.
 
 AC_CHECK_LIB(m, cossack,
-             [AC_MSG_ERROR([found `cossack' in `libm'])])
+	     [AC_MSG_ERROR([found `cossack' in `libm'])])
 
 # No kidding, using variables was broken in 2.50 :(
 ac_sinner=sinner
@@ -78,14 +78,14 @@ AC_CHECK_LIB($ac_m, $ac_asinner,
 AT_CHECK_MACRO([AC_SEARCH_LIBS],
 [
 AC_SEARCH_LIBS(cos, oser m ust,,
-             [AC_MSG_ERROR([cannot find `cos'])])
+	     [AC_MSG_ERROR([cannot find `cos'])])
 
 case "$ac_cv_search_cos" in
   -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_cos must be a cool library!]) ;;
 esac
 
 AC_SEARCH_LIBS(printf, oser c ust,,
-             [AC_MSG_ERROR([cannot find `printf'])])
+	     [AC_MSG_ERROR([cannot find `printf'])])
 
 case "$ac_cv_search_printf" in
   -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_printf must be a cool library!]) ;;
@@ -101,7 +101,7 @@ esac
 # Must define NEED_NO_DECL, but not NEED_YES_DECL.
 AT_CHECK_MACRO([AC_CHECK_DECLS],
 [[AC_CHECK_DECLS([yes, no],,,
-                 [int yes = 1;])]],
+		 [int yes = 1;])]],
 [AT_CHECK_DEFINES(
 [#define HAVE_DECL_NO 0
 #define HAVE_DECL_YES 1
@@ -145,7 +145,7 @@ AT_CHECK_DEFINES(
 ])
 
 AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs], [],
-         [autoconf_ftnirp$U.o
+	 [autoconf_ftnirp$U.o
 ])
 
 AT_CLEANUP([config.libobjs])
@@ -232,7 +232,7 @@ AT_CLEANUP([header1.h header2.h header3.h])
 # Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
 AT_CHECK_MACRO([AC_CHECK_MEMBERS],
 [[AC_CHECK_MEMBERS([struct yes_s.yes, struct yes_s.no],,,
-                   [struct yes_s { int yes ;} ;])]],
+		   [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_STRUCT_YES_S_NO */
 #define HAVE_STRUCT_YES_S_YES 1
@@ -282,7 +282,7 @@ AC_CHECK_SIZEOF(charcharchar)
 # builtin types, and defined types.
 AT_CHECK_MACRO([AC_CHECK_TYPES],
 [[AC_CHECK_TYPES([int, struct yes_s, struct no_s],,,
-                 [struct yes_s { int yes ;} ;])]],
+		 [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
 [#define HAVE_INT 1
 /* #undef HAVE_STRUCT_NO_S */
@@ -314,8 +314,8 @@ AC_OUTPUT
 
 AT_CHECK_AUTOCONF
 AT_CHECK([[sed -e '/^#(cut-from-here/,/^#to-here)/!d' -e '/^#/d' configure]],
-         0,
-         [NEW
+	 0,
+	 [NEW
 OLD
 OLD
 OLD
