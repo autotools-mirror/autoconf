@@ -1472,7 +1472,7 @@ AC_DEFUN(AC_CHECK_FUNC,
 AC_CACHE_VAL(ac_cv_func_$1,
 [AC_TRY_LINK(
 [/* This header should be one that does not declare any functions.
-    Such declarations can conflict with `char $1();' below.  */
+    Such declarations can conflict with char $1(); below.  */
 #include <errno.h> /* Arbitrary system header to define __stub macros. */
 /* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
