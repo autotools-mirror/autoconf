@@ -20,7 +20,8 @@ should be removed.
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
 
-* Autoconf 2.52 or later
+
+* Later
 
 ** Languages
 Integrate other Fortrans etc.
@@ -31,29 +32,86 @@ which requires to have two different sources: AC_LANG_CALL and
 AC_LANG_FUNC_LINK_TRY (which names seem to be inappropriate).
 Wouldn't one be enough?
 
-** autom4te
-Eve it out of autoconf.  Install support for Autotest, M4sugar, and
-M4sh.  Give a means to trace at the same time as we produce the
-output.  autoconf shall use this feature to make autoheader obsolete,
-and to produce some kind of input file for automake which should no
-longer *ever* try to parse Autoconf files.
-
 ** Autotest
 Document it.
 
 ** Document AC_COMPILE_IFELSE, AC_LANG_PROGRAM etc.
 And make AC_TRY_COMPILE etc. obsolete.
 
+** Libtool
+Define once for all the hooks they need, any redefinition of
+AC_PROG_CC etc. is way too dangerous and too limiting.  The GCC team
+certainly has requirements too.
+
+** AC_SEARCH_LIBS
+From: Tom Tromey <tromey@cygnus.com>
+Subject: AC_SEARCH_LIBS
+
+I think AC_SEARCH_LIBS has an unfortunate interface.
+
+ACTION-IF-FOUND is run in addition to the default action.  Most
+autoconf macros don't work this way.  This is confusing.
+
+In my case I can't use this macro because it always appends to LIBS.
+I don't want that.  Instead I want to use ACTION-IF-FOUND to set my
+own macro.
+
+Also there is no documentation on the format of library names expected
+by the macro.  Even a reference to some other function (e.g., "the
+library name can have the same forms as with AC_HAVE_LIBRARY" (if that
+is true, which I haven't looked up) would be fine.
+
+** Revamp the language support
+We should probably have a language for C89, and C99.  We must give the
+means to the users to specify some needs over the compilers, and
+actually look for a good compiler, instead of stopping at the first
+compiler we find.
+
+In fact, the AC_CHECK_PROG macro and variations have proved their
+limitation: we really need something more powerful and simpler too.
+
+We must take into account the specific problems of the GCC team.  We
+must extend AC_CHECK_FUNCS in order to use the headers instead of fake
+declarations as we currently do.  Default headers could be triggered
+on when C99, but not with the other languages?
+
+At the end, we should have a simple macro, such as AC_LANG_COMPILER
+for instance, which is built over simpler macros.  Each language
+support should come with these simpler macros, but each language
+should follow the same process.
+
+We also need to check the srcext which are supported by the compiler.
+In fact, this macro is also probably the right place to check for
+objext and exeext.
+
+** AC_PROG_CC_STDC
+Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
+Should include more tests (e.g., AC_C_CONST etc.)?  See Peter for very
+useful comments on the technology.  Should we make this a new
+language?  AC_LANG(ISO C).  It would be great to introduce
+AC_LANG_COMPILER in this release too.
+
+** autoupdate
+We should probably install the files which do not depend upon the
+user, just the Autoconf library files.  But conversely autoupdate must
+be opened to user macros, i.e., for instance libtool itself must be
+able to say that AM_PROG_LIBTOOL is now AC_PROG_LIBTOOL, and have
+autoupdate do its job on old configure.ac.
+
+** AC_LIBOBJ_DECL
+Decide with the Automake team whether this macro should list only `.c'
+files, or it should include the `.h' too.  For instance the
+AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
+the macro which allows to choose a regex engine.
+
+
+* Even later
+
 ** Autoscan macros
 Can be introduced even before specializing macros.  It just means that
 specializing macros will call them.  OTOH, this doubles our work,
 since specializing macros will save us from additional typing.  But
 the more powerful autoscan is, the better...
-
-** Libtool
-Define once for all the hooks they need, any redefinition of
-AC_PROG_CC etc. is way too dangerous and too limiting.  The GCC team
-certainly has requirements too.
 
 ** Pentateuch
 Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
@@ -102,76 +160,12 @@ in the environment prior to running configure--and these don't need to be
 limited to just -I flags.  Nevertheless, I can see a few clean ways to
 improve this.
 
-
-** AC_SEARCH_LIBS
-From: Tom Tromey <tromey@cygnus.com>
-Subject: AC_SEARCH_LIBS
-
-I think AC_SEARCH_LIBS has an unfortunate interface.
-
-ACTION-IF-FOUND is run in addition to the default action.  Most
-autoconf macros don't work this way.  This is confusing.
-
-In my case I can't use this macro because it always appends to LIBS.
-I don't want that.  Instead I want to use ACTION-IF-FOUND to set my
-own macro.
-
-Also there is no documentation on the format of library names expected
-by the macro.  Even a reference to some other function (e.g., "the
-library name can have the same forms as with AC_HAVE_LIBRARY" (if that
-is true, which I haven't looked up) would be fine.
-
-** Revamp the language support
-We should probably have a language for C89, and C99.  We must give the
-means to the users to specify some needs over the compilers, and
-actually look for a good compiler, instead of stopping at the first
-compiler we find.
-
-In fact, the AC_CHECK_PROG macro and variations have proved their
-limitation: we really need something more powerful and simpler too.
-
-We must take into account the specific problems of the GCC team.  We
-must extend AC_CHECK_FUNCS in order to use the headers instead of fake
-declarations as we currently do.  Default headers could be triggered
-on when C99, but not with the other languages?
-
-At the end, we should have a simple macro, such as AC_LANG_COMPILER
-for instance, which is built over simpler macros.  Each language
-support should come with these simpler macros, but each language
-should follow the same process.
-
-We also need to check the srcext which are supported by the compiler.
-In fact, this macro is also probably the right place to check for
-objext and exeext.
-
-** AC_PROG_CC_STDC
-Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
-Should include more tests (e.g., AC_C_CONST etc.)?
-
 ** AC_SYS_INTERPRETER
 Defines $interpval.  This is not a standard name.  Do we want to keep
 this?  Clarify our policy on those names.
 
-** autoupdate
-We should probably install the files which do not depend upon the
-user, just the Autoconf library files.  But conversely autoupdate must
-be opened to user macros, i.e., for instance libtool itself must be
-able to say that AM_PROG_LIBTOOL is now AC_PROG_LIBTOOL, and have
-autoupdate do its job on old configure.in.
-
-** AC_LIBOBJ_DECL
-Decide with the Automake team whether this macro should list only `.c'
-files, or it should include the `.h' too.  For instance the
-AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
-the macro which allows to choose a regex engine.
-
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
-
-** AC_PROG_CC_STDC
-Well, back onto this one :( See Peter for very useful comments on the
-technology.  Should we make this a new language?  AC_LANG(ISO C).  It
-would be great to introduce AC_LANG_COMPILER in this release too.
 
 * autoconf.texi
 Move the specific macro documentation blocks into the source files,
@@ -193,9 +187,6 @@ The section for old macros is not completely up to date.  For
 instance, there is still AM_PROG_LIBTOOL.  Anyway, since autoupdate
 takes care of them, it is no longer the role of Automake to handle
 this.  Most should be removed.
-
-** AC_EXEXT, AC_OBJEXT
-Support should be enabled by default.
 
 ** Macros now swallowed by Autoconf.
 error.m4, obstack.m4, ptrdiff.m4, strtod.m4, termios.m4, winsz.m4.
