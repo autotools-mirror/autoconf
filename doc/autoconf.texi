@@ -1721,15 +1721,16 @@ feature behave differently or cause one feature to replace another.
 They should only cause parts of the program to be built rather than left
 out.
 
-The user can give a value by following the feature name with @samp{=}
-and the value.  Giving a value of @samp{no} specifies that the feature
-is @emph{not} available.  A feature with a value looks like
-@samp{--enable-debug=stabs}.
+The user can give an argument by following the feature name with
+@samp{=} and the argument.  Giving an argument of @samp{no} indicates
+that the feature is @emph{not} available.  A feature with an argument
+looks like @samp{--enable-debug=stabs}.
 
-The value given is available to the shell commands @var{action-if-true}
-in the shell variable @code{enableval}.  If no value was given,
-@code{enableval} is @samp{yes}.  @samp{--disable-@var{feature}} is
-equivalent to @samp{--enable-@var{feature}=no}.
+The argument is available to the shell commands @var{action-if-true} in
+the shell variable @code{enableval}.  If no argument was given to
+@samp{--enable-@var{feature}}, @code{enableval} is @samp{yes}.
+@samp{--disable-@var{feature}} is equivalent to
+@samp{--enable-@var{feature}=no}.
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -1757,10 +1758,19 @@ should work with.  For example, @samp{--with-gnu-ld} means work with the
 GNU linker instead of some other linker.  @samp{--with-x11} means work
 with X11.
 
-@samp{--without} is for packages that are used by default.  Which option
-was given is available to the shell commands @var{action-if-true} in the
-shell variable @code{withval}.  For @samp{--with}, @code{withval} is
-@samp{yes}; for @samp{--without}, @code{withval} is @samp{no}.
+The user can give an argument by following the package name with
+@samp{=} and the argument.  Giving an argument of @samp{no} is for
+packages that would be used by default; it says to @emph{not} use the
+package.  An argument that is neither @samp{yes} nor @samp{no} could
+include a name or number of a version of the other package, to specify
+more precisely which other package this program is supposed to work
+with.
+
+The argument is available to the shell commands @var{action-if-true} in
+the shell variable @code{withval}.  If no argument was given to
+@samp{--with-@var{package}}, @code{withval} is @samp{yes}.
+@samp{--without-@var{package}} is equivalent to
+@samp{--with-@var{package}=no}.
 @end defmac
 
 @node Setting Variables, Printing Messages, Command Line, General Purpose Macros
