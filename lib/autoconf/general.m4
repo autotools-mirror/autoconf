@@ -1213,9 +1213,10 @@ cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
-# Some shells (Coherent) do redirections in the wrong order, so need
-# the parens.
-ac_err=`eval "($ac_cpp conftest.${ac_ext} >/dev/null) 2>&1"`
+dnl Capture the stderr of cpp.
+dnl Coherent sh does redirections in the wrong order, so separate them
+dnl with quotes.
+ac_err=`eval "$ac_cpp conftest.${ac_ext} >/dev/null" 2>&1`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
   $2])
