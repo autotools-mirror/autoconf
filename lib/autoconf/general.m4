@@ -1368,7 +1368,7 @@ AC_DEFUN(AC_TRY_RUN,
 [AC_REQUIRE([AC_C_CROSS])dnl
 if test "$cross_compiling" = yes; then
   ifelse([$4], ,
-    [errprint(__file__:__line__: warning: test program without default to allow cross compiling
+    [errprint(__file__:__line__: warning: [AC_TRY_RUN] called without default to allow cross compiling
 )dnl
   AC_MSG_ERROR(can not run test program while cross compiling)],
   [$4])
