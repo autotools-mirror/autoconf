@@ -1,3 +1,9 @@
+2001-04-10  Lars J. Aas  <larsa@sim.no>
+
+	* autoupdate.in (print_usage): print "\ at end of line does not
+	work as expected, so change block to here-doc instead.
+	(print_version): Same.
+
 2001-04-09  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: Replace all tab characters with (8) spaces,

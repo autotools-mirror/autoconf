@@ -101,7 +101,7 @@ sub END
 # Display usage (--help).
 sub print_usage ()
 {
-  print "\
+  print <<"END";
 Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
 
 Update the TEMPLATE-FILE... if given, or \`configure.ac' if present,
@@ -123,7 +123,7 @@ Environment variables:
   AUTOCONF   autoconf @VERSION@
 
 Report bugs to <bug-autoconf\@gnu.org>.
-";
+END
   exit 0;
 }
 
@@ -133,14 +133,14 @@ Report bugs to <bug-autoconf\@gnu.org>.
 # Display version (--version).
 sub print_version
 {
-  print "\
+  print <<END;
 autoupdate (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
 Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-";
+END
   exit 0;
 }
 
