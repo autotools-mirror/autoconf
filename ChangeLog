@@ -1,3 +1,7 @@
+2001-08-28  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Function Portability): Mention C right shifts.
+
 2001-08-27  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* lib/autotest/general.m4: Reword some messages.

@@ -3373,6 +3373,13 @@ that are open.  For example, on Windows 9x and ME, such a call would fail;
 on DOS it could even lead to file system corruption, as the file might end
 up being written to after the OS has removed it.
 
+@item Signed @code{>>}
+Normally the C @code{>>} right shift of a signed type replicates the
+high bit, giving a so-called ``arithmetic'' shift.  But care should be
+taken since the ISO C standard doesn't require that behaviour.  On those
+few processors without a native arithmetic shift (for instance Cray
+vector systems) zero bits may be shifted in, the same as a shift of an
+unsigned type.
 @end table
 
 
