@@ -7,8 +7,8 @@
 	  > echo "foo\nbar" | egrep -e 'bar' -e 'foo'
 	  foo
 	Reported by Nicolas Joly.
-	An alternative would have to use `sed', unfortunately alternation
-	is not portable.
+	An alternative would have been to use `sed', unfortunately
+	alternation is not portable.
 
 	* tests/actest.m4 (join): New macro.
 	(AC_ENV_SAVE): Join the egrep patterns into a single big one.
@@ -32,7 +32,7 @@
 
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
-	* autoheader.m4 (autoheader::AC_CHECK_HEADERS_DIRENT): Renamed as
+	* autoheader.m4 (autoheader::AC_CHECK_HEADERS_DIRENT): Rename as
 	(autoheader::_AC_CHECK_HEADERS_DIRENT): to cope with the new name
 	of the autoconf:: macro.
 	Fixes autoconf/119, reported by Raja R Harinath.
@@ -84,7 +84,7 @@
 
 	* acgeneral.m4 (AC_DIVERSION_DEFAULTS, AC_DIVERSION_INIT_PREPARE):
 	New diversion numbers.
-	(AC_DIVERSION_INIT): Renamed as...
+	(AC_DIVERSION_INIT): Rename as...
 	(AC_DIVERSION_INIT_PARSE_ARGS): this.
 	(AC_DIVERT_POP): Instead of going into wild endless loops when
 	there are more pops than pushes, die with dignity.
@@ -296,6 +296,16 @@
 	   > echo "|bar" | egrep -e "^(|foo|bar)$"
 	   > echo "bar"  | egrep -e "^(|foo|bar)$"
 	   bar
+	   > echo "bar" | egrep '^(foo|bar|)$'
+	   > echo "bar|" | egrep '^(foo|bar|)$'
+	   bar|
+	   > echo "bar" | egrep '^(foo||bar)$'
+	   > echo "|bar" | egrep '^(foo||bar)$'
+	   |bar
+	   > echo "foo" | egrep '^(foo||bar)$'
+	   foo
+	   > echo "foo|" | egrep '^(foo||bar)$'
+	   >
 	Reported by Nicolas Joly.
 
 	* src/actest.m4 (AC_ENV_SAVE): s/(|EXTRA_|PRE_)/(EXTRA_|PRE_)?/.
@@ -376,7 +386,7 @@
 
 	Export the knowledge on disabling echo's trailing new line.
 
-	* acspecific.m4 (AC_PROG_ECHO_N): Renamed as...
+	* acspecific.m4 (AC_PROG_ECHO_N): Rename as...
 	(_AC_PROG_ECHO): this.
 	Set ECHO_N, ECHO_C, ECHO_T instead of ac_n, ac_c and ac_t.
 	All dependencies changed.
@@ -600,7 +610,7 @@
 	Honor properly the `#define' config.h.in templates.
 	Test it.
 
-	* acgeneral.m4 (AC_OUTPUT_HEADERS): Renamed as...
+	* acgeneral.m4 (AC_OUTPUT_HEADERS): Rename as...
 	(_AC_OUTPUT_HEADERS): this.  All callers changed.
 	Don't mess with changequote, just quote properly.
 	Bug 1.  Because of the `#' in `ac_dA', the quotes <<>> were not
@@ -663,15 +673,15 @@
 	`AC_CHECK_TYPE',
 	Based on ideas from Paul Eggert and Alexandre Oliva.
 
-	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): Renamed as
+	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): Rename as...
 	(_AC_CHECK_TYPE_NEW): this.
 	(AC_CHECK_TYPES): Adjusted.
-	(AC_CHECK_TYPE): Renamed as
+	(AC_CHECK_TYPE): Rename as...
 	(_AC_CHECK_TYPE_OLD): This.  Adjusted to _AC_CHECK_TYPE_NEW.
 	No longer support extra includes, stick to 2.13's interface.
 	(_AC_CHECK_TYPE_BUILTIN_P): New macro.
 	(AC_CHECK_TYPE): New macro.
-	* autoheader.m4 (autoheader::AC_CHECK_TYPE): Renamed as...
+	* autoheader.m4 (autoheader::AC_CHECK_TYPE): Rename as...
 	(autoheader::_AC_CHECK_TYPE_OLD): this.
 	* tests/atspecific.m4 (TEST_MACRO): Skip /^_AC_/ macros.
 	* tests/semantics.m4: Test the choices of AC_CHECK_TYPE (wrt _NEW
@@ -731,7 +741,7 @@
 	Standardize the error messages in the options handling of
 	`configure' and `config.status'.
 
-	* acgeneral.m4 (AC_OUTPUT_CONFIG_STATUS): Renamed as...
+	* acgeneral.m4 (AC_OUTPUT_CONFIG_STATUS): Rename as...
 	(_AC_OUTPUT_CONFIG_STATUS): this.
 	Change the error messages from
 	  value: invalid feature name
@@ -742,7 +752,7 @@
 
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
-	* acgeneral.m4 (AC_OUTPUT_COMMANDS_COMMANDS): Renamed as...
+	* acgeneral.m4 (AC_OUTPUT_COMMANDS_COMMANDS): Rename as...
 	(_AC_OUTPUT_COMMANDS): This.  All callers changed.
 	Disable the verbose message until Automake uses the new features
 	of `config.status'.
@@ -880,7 +890,7 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
 	* libm4.m4 (m4_sign, m4_cmp, m4_list_cmp): New macros.
-	* acgeneral.m4 (AC_UNGNITS): Renamed as...
+	* acgeneral.m4 (AC_UNGNITS): Rename as...
 	(_AC_VERSION_UNLETTER): this.  All callers changed.
 	Implement the scheme proposed by Alexandre Oliva:
 		Nl -> (N+1).-1.(l#)
@@ -1011,7 +1021,7 @@
 
 	* doc/autoconf.texi (Concept Index): New section.
 	Various entries added.
-	(Typedefs): Renamed as...
+	(Typedefs): Rename as...
 	(Types): this.  Pay attention to not limiting the documentation to
 	the typedefs.
 	(Particular Types): Mention the equivalent generic test.
@@ -1244,7 +1254,7 @@
 
 	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): Prefixed with 'ac_':
 	arg, save_arg, i, seen, previous_arg, ld_run_path.
-	Renamed f77_link_output as ac_link_output.
+	Rename f77_link_output as ac_link_output.
 	* tests/actest.m4 (AC_ENV_SAVE): Don't note F77, FFLAGS, FLIBS,
 	G77, f77_case, f77_underscore.
 
@@ -1418,7 +1428,7 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4(AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS):
-	Renamed AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.  All
+	Rename as AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.  All
 	dependencies changed.
 	From Jim Meyering.
 
@@ -2075,13 +2085,13 @@
 	they are wrong.  So the unset position should off, hence #if NEEDS
 	instead of #if !HAVE (which is triggered when HAVE is not set).
 
-	* acgeneral.m4 (AC_NEED_DECL): Renamed as...
+	* acgeneral.m4 (AC_NEED_DECL): Rename as...
 	(AC_CHECK_DECL): This.  Make sure the arguments are the usual
 	IF-FOUND, IF-NOT-FOUND.
 	(AC_NEED_DECLS, AC_CHECK_DECLS): Likewise.
 	* autoconf.texi (Generic Declarations): Document the changes
 	aforementioned.
-	* autoheader.m4 (AH_NEED_DECLS): Renamed as
+	* autoheader.m4 (AH_NEED_DECLS): Rename as
 	(AH_CHECK_DECLS): This.
 	(AH_HOOKS): Hook AH_CHECK_DECLS on AC_CHECK_DECLS instead of
 	_NEED_.
@@ -2093,7 +2103,7 @@
 	the case which handles the options.
 	Suggested by Alexandre Oliva.
 
-	* acgeneral.m4 (ifset): Renamed as...
+	* acgeneral.m4 (ifset): Rename as...
 	(ifval): This.  All callers changed.
 	(ifset): New macro, which tests if a macro is set to a non empty
 	value.
@@ -2542,7 +2552,7 @@
 	Make AC_FOREACH be robust to active symbols.
 
 	* acgeneral.m4 (m4_split, m4_join, m4_strip): New macros.
-	(AC_FOREACH_COMMA): Renamed as...
+	(AC_FOREACH_COMMA): Rename as...
 	(m4_foreach): this.
 	(_AC_CAR): Renamed as...
 	(_m4_car): this.
