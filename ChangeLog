@@ -53,10 +53,19 @@
 
 	* acgeneral.m4 (AC_ACVERSION): Bump to 2.14.1 for prereleases.
 
+1999-01-14  Scott Bambrough  <scottb@corelcomputer.com>
+
+	* config.guess: Recognise armv[234][lb] types (ie. `armv*').
+		
 1999-01-13  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: Remove -v and --verbose from the command line usage
 	help. They do not exist.
+
+1999-01-12  Scott Bambrough  <scottb@corelcomputer.com>
+
+	* config.sub: Recognize armv[234][lb] types (ie. `armv*'). Add
+	alias for the NetWinder; set company to `corel'.
 	
 1999-01-11  Ben Elliston  <bje@cygnus.com>
 
