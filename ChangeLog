@@ -1,5 +1,12 @@
 2003-05-22  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autotest.m4, lib/autoconf/autoupdate.m4
+	* lib/autoconf/fortran.m4 lib/autoconf/general.m4
+	* lib/autoconf/headers.m4 lib/autoconf/oldnames.m4
+	* lib/autoconf/status.m4: Fix and adjust copyright notices.	
+
+2003-05-22  Akim Demaille  <akim@epita.fr>
+
 	* aclocal.m4, bin/autoconf.as, lib/autoconf/autoconf.m4,
 	* lib/autoconf/autoheader.m4, lib/autoconf/autoupdate.m4,
 	* lib/autoconf/c.m4, lib/autoconf/fortran.m4,
@@ -10,7 +17,7 @@
 	* lib/autotest/general.m4, lib/m4sugar/m4sugar.m4,
 	* tests/atspecific.m4, tests/base.at, tests/compile.at,
 	* tests/foreign.at, tests/m4sh.at, tests/semantics.at,
-	* tests/tools.at, tests/torture.at: 
+	* tests/tools.at, tests/torture.at:
 	Whitespace clean up.
 	Suggested by Jim Meyering.
 

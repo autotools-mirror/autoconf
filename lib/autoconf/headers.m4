@@ -755,7 +755,7 @@ AC_CHECK_HEADERS(string.h)
 #   | AC_EGREP_HEADER(memchr, string.h, ac_found=yes, ac_found=no)
 #   | AC_MSG_RESULT($ac_found)
 #   | if test $ac_found = no; then
-#   | 	AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
+#   |	AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
 #   | fi
 #
 # But it is better to check for both headers, and alias NEED_MEMORY_H to
