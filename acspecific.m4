@@ -965,11 +965,11 @@ fi
 ])# AC_HEADER_MAJOR
 
 
-# AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+# _AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 # ----------------------------------------------------
 # Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 # defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-AC_DEFUN(AC_CHECK_HEADER_DIRENT,
+AC_DEFUN(_AC_CHECK_HEADER_DIRENT,
 [ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
@@ -984,26 +984,29 @@ if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
 else
   AC_MSG_RESULT(no)
 fi
-])
+])# _AC_CHECK_HEADER_DIRENT
 
 
-# AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+# _AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
 # --------------------------------------------------
 # Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
 # defines `DIR'.
-define(AC_CHECK_HEADERS_DIRENT,
+define(_AC_CHECK_HEADERS_DIRENT,
 [for ac_hdr in $1
 do
-AC_CHECK_HEADER_DIRENT($ac_hdr,
+_AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
   ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
-done])
+done])# _AC_CHECK_HEADERS_DIRENT
 
+
+# AC_HEADER_DIRENT
+# ----------------
 AC_DEFUN(AC_HEADER_DIRENT,
 [ac_header_dirent=no
-AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
+_AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
@@ -1011,7 +1014,7 @@ if test $ac_header_dirent = dirent.h; then
 else
   AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
 fi
-])
+])# AC_HEADER_DIRENT
 
 
 # AC_HEADER_STAT
@@ -1112,7 +1115,13 @@ AC_DEFUNCT(AC_USG,
 AC_DEFUNCT(AC_MEMORY_H,
            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
 
-AC_DEFUNCT(AC_DIR_HEADER, [; instead use AC_HEADER_DIRENT])
+
+# Like calling `AC_HEADER_DIRENT' and `AC_FUNC_CLOSEDIR_VOID', but
+# defines a different set of C preprocessor macros to indicate which
+# header file is found.  This macro and the names it defines are
+# considered obsolete.
+AC_DEFUNCT(AC_DIR_HEADER,
+[; instead use AC_HEADER_DIRENT])
 
 
 
@@ -3111,7 +3120,7 @@ fi
 # AC_PATH_X
 # ---------
 AC_DEFUN(AC_PATH_X,
-[AC_REQUIRE_CPP()dnl Set CPP; we run AC_PATH_X_DIRECT conditionally.
+[AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
 # If we find X, set shell vars x_includes and x_libraries to the
 # paths, otherwise set no_x=yes.
 # Uses ac_ vars as temps to allow command line to override cache and checks.
@@ -3131,8 +3140,8 @@ else
 AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
 ac_x_includes=NO ac_x_libraries=NO
-AC_PATH_X_XMKMF
-AC_PATH_X_DIRECT
+_AC_PATH_X_XMKMF
+_AC_PATH_X_DIRECT
 if test "$ac_x_includes" = NO || test "$ac_x_libraries" = NO; then
   # Didn't find X anywhere.  Cache the known absence of X.
   ac_cv_have_x="have_x=no"
@@ -3160,11 +3169,11 @@ fi
 ])# AC_PATH_X
 
 
-# AC_PATH_X_XMKMF
+# _AC_PATH_X_XMKMF
 # ---------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN(AC_PATH_X_XMKMF,
+AC_DEFUN(_AC_PATH_X_XMKMF,
 [rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -3198,14 +3207,14 @@ EOF
   cd ..
   rm -fr conftestdir
 fi
-])# AC_PATH_X_XMKMF
+])# _AC_PATH_X_XMKMF
 
 
-# AC_PATH_X_DIRECT
+# _AC_PATH_X_DIRECT
 # ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN(AC_PATH_X_DIRECT,
+AC_DEFUN(_AC_PATH_X_DIRECT,
 [if test "$ac_x_includes" = NO; then
   # Guess where to find include files, by looking for this one X11 .h file.
   test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
@@ -3322,7 +3331,7 @@ dnl Don't even attempt the hair of trying to link an X program!
   done
 done])
 fi # $ac_x_libraries = NO
-])# AC_PATH_X_DIRECT
+])# _AC_PATH_X_DIRECT
 
 
 # AC_PATH_XTRA

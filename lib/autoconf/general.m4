@@ -1400,8 +1400,8 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_DEFUN(AC_CANONICAL_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
-AC_REQUIRE([AC_CANONICAL_TARGET])dnl
-AC_REQUIRE([AC_CANONICAL_BUILD])dnl
+AC_REQUIRE([_AC_CANONICAL_TARGET])dnl
+AC_REQUIRE([_AC_CANONICAL_BUILD])dnl
 AC_BEFORE([$0], [AC_ARG_PROGRAM])
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
@@ -1427,21 +1427,17 @@ test "$host_alias" != "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
-])
+])# AC_CANONICAL_SYSTEM
 
 
-
-# Subroutines of AC_CANONICAL_SYSTEM.
-
-
-# AC_CANONICAL_THING(THING)
-# -------------------------
+# _AC_CANONICAL_THING(THING)
+# --------------------------
 # Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
 # `host', `target', or `build'.  Canonicalize the appropriate thing,
 # generating the variables THING, THING_{alias cpu vendor os}, and the
 # associated cache entries.  We also redo the cache entries if the user
 # specifies something different from ac_cv_$THING_alias on the command line.
-define(AC_CANONICAL_THING,
+define(_AC_CANONICAL_THING,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ifelse([$1], [host], , [AC_REQUIRE([AC_CANONICAL_HOST])])dnl
 AC_MSG_CHECKING([$1 system type])
@@ -1489,13 +1485,13 @@ AC_SUBST($1_alias)dnl
 AC_SUBST($1_cpu)dnl
 AC_SUBST($1_vendor)dnl
 AC_SUBST($1_os)dnl
-])# AC_CANONICAL_THING
+])# _AC_CANONICAL_THING
 
-AC_DEFUN(AC_CANONICAL_HOST, [AC_CANONICAL_THING([host])])
+AC_DEFUN(AC_CANONICAL_HOST, [_AC_CANONICAL_THING([host])])
 
 # Internal use only.
-AC_DEFUN(AC_CANONICAL_TARGET, [AC_CANONICAL_THING([target])])
-AC_DEFUN(AC_CANONICAL_BUILD, [AC_CANONICAL_THING([build])])
+AC_DEFUN(_AC_CANONICAL_TARGET, [_AC_CANONICAL_THING([target])])
+AC_DEFUN(_AC_CANONICAL_BUILD, [_AC_CANONICAL_THING([build])])
 
 
 # AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])
@@ -2186,20 +2182,24 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ## Checking for tools.  ##
 ## -------------------- ##
 
-# Internal subroutine.
+
+# _AC_CHECK_TOOL_PREFIX
+# ---------------------
 AC_DEFUN(AC_CHECK_TOOL_PREFIX,
-[AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_CANONICAL_BUILD])dnl
+[AC_REQUIRE([_AC_CANONICAL_HOST])dnl
+AC_REQUIRE([_AC_CANONICAL_BUILD])dnl
 if test $host != $build; then
   ac_tool_prefix=${host_alias}-
 else
   ac_tool_prefix=
 fi
-])
+])# _AC_CHECK_TOOL_PREFIX
 
-# AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
-# ------------------------------------------------------------------------
+
+# AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# -----------------------------------------------------------------------
 AC_DEFUN(AC_PATH_TOOL,
-[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
+[AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
 AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
              ifelse([$3], , [$2], ), $4)
 ifelse([$3], , , [
@@ -2213,10 +2213,10 @@ fi])
 ])
 
 
-# AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
-# -------------------------------------------------------------------------
+# AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# ------------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_TOOL,
-[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
+[AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
 AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
 ifelse([$3], , , [
@@ -3081,8 +3081,8 @@ define(AC_CONFIG_IF_MEMBER,
         -1, [$4], [$3])])
 
 
-# AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
-# ----------------------------------
+# _AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
+# -----------------------------------
 #
 # Verify that there is no double definition of an output file
 # (precisely, guarantees there is no common elements between
@@ -3090,7 +3090,7 @@ define(AC_CONFIG_IF_MEMBER,
 #
 # Note that this macro does not check if the list $[1] itself
 # contains doubles.
-define(AC_CONFIG_UNIQUE,
+define(_AC_CONFIG_UNIQUE,
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
 AC_FOREACH([AC_File], [$1],
 [pushdef([AC_Dest], patsubst(AC_File, [:.*]))
@@ -3131,7 +3131,7 @@ AC_DIVERT_POP()])])
 # as the name of a file the COMMANDS create.
 AC_DEFUN([AC_CONFIG_COMMANDS],
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
-AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_COMMANDS], [ $1])
 
 ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
@@ -3209,7 +3209,7 @@ define([AC_OUTPUT_COMMANDS_POST])
 #      esac
 AC_DEFUN([AC_CONFIG_HEADERS],
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
-AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
@@ -3242,7 +3242,7 @@ AC_DEFUN(AC_CONFIG_HEADER,
 # to guess the links to establish (`./config.status .').
 AC_DEFUN(AC_CONFIG_LINKS,
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
-AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_UNIQUE([$1])
 ifelse(regexp([$1], [^\.:\| \.:]), -1,,
        [AC_FATAL([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
@@ -3315,7 +3315,7 @@ m4_namespace_define(autoupdate,
 #      esac
 AC_DEFUN([AC_CONFIG_FILES],
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
-AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
@@ -3335,7 +3335,7 @@ define([AC_LIST_FILES_COMMANDS])
 # --------------------------
 # FIXME: `subdirs=' should not be here.
 AC_DEFUN(AC_CONFIG_SUBDIRS,
-[AC_CONFIG_UNIQUE([$1])dnl
+[_AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([AC_LIST_SUBDIRS], [ $1])dnl
 subdirs="AC_LIST_SUBDIRS"

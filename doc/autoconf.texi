@@ -4880,11 +4880,13 @@ of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
 behavior of the @code{utime} function when called with a @code{NULL}
 pointer.
 
-A macro that is an internal subroutine of another macro should have a
-name that starts with the name of that other macro, followed by one or
-more words saying what the internal macro does.  For example,
-@code{AC_PATH_X} has internal macros @code{AC_PATH_X_XMKMF} and
-@code{AC_PATH_X_DIRECT}.
+An internal macro should have a name which starts with an underscore;
+Autoconf internals should therefore start with @samp{_AC_}.
+Additionally, a macro that is an internal subroutine of another macro
+should have a name that starts with an underscore and the name of that
+other macro, followed by one or more words saying what the internal
+macro does.  For example, @code{AC_PATH_X} has internal macros
+@code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
 
 @node Quoting, Dependencies Between Macros, Macro Names, Writing Macros
 @section Quoting

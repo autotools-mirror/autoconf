@@ -1,5 +1,16 @@
 2000-03-02  Akim Demaille  <akim@epita.fr>
 
+	Internal macros are named `_AC_'.
+
+	* acgeneral.m4 (AC_CANONICAL_TARGET, AC_CANONICAL_BUILD,
+	AC_CANONICAL_THING, AC_CHECK_TOOL_PREFIX, AC_CONFIG_UNIQUE):
+	Prepend `_' to their names.
+	* acspecific.m4 (AC_CHECK_HEADER_DIRENT, AC_CHECK_HEADERS_DIRENT,
+	AC_PATH_X_XMKMF, AC_PATH_X_DIRECT): Prepend `_' to their names.
+	* doc/autoconf.texi (Macro Names): Adjusted.
+
+2000-03-02  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 	* acspecific.m4: Likewise.
 
