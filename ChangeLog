@@ -1,5 +1,11 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Move the code
+	processing the result of AC_PROG_CC_G, AC_PROG_CXX_G, and
+	AC_PROG_F77_G into them.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Multiple Cases, Quotation Rule Of Thumb):
 	Follow the coding style.
 

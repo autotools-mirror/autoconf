@@ -558,29 +558,7 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CC_GNU
-
-# Check whether -g works, even if CFLAGS is set, in case the package
-# plays around with CFLAGS (such as to build both debugging and normal
-# versions of a library), tasteless as that idea is.
-ac_test_CFLAGS=${CFLAGS+set}
-ac_save_CFLAGS=$CFLAGS
-CFLAGS=
 _AC_PROG_CC_G
-if test "$ac_test_CFLAGS" = set; then
-  CFLAGS=$ac_save_CFLAGS
-elif test $ac_cv_prog_cc_g = yes; then
-  if test "$GCC" = yes; then
-    CFLAGS="-g -O2"
-  else
-    CFLAGS="-g"
-  fi
-else
-  if test "$GCC" = yes; then
-    CFLAGS="-O2"
-  else
-    CFLAGS=
-  fi
-fi
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
@@ -611,9 +589,15 @@ fi[]dnl
 
 
 # _AC_PROG_CC_G
-# ------------
+# -------------
+# Check whether -g works, even if CFLAGS is set, in case the package
+# plays around with CFLAGS (such as to build both debugging and normal
+# versions of a library), tasteless as that idea is.
 define([_AC_PROG_CC_G],
-[AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
+[ac_test_CFLAGS=${CFLAGS+set}
+ac_save_CFLAGS=$CFLAGS
+CFLAGS=
+AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [echo 'void f(){}' >conftest.c
 if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
   ac_cv_prog_cc_g=yes
@@ -621,7 +605,23 @@ else
   ac_cv_prog_cc_g=no
 fi
 rm -f conftest*
-])])# _AC_PROG_CC_G
+])
+if test "$ac_test_CFLAGS" = set; then
+  CFLAGS=$ac_save_CFLAGS
+elif test $ac_cv_prog_cc_g = yes; then
+  if test "$GCC" = yes; then
+    CFLAGS="-g -O2"
+  else
+    CFLAGS="-g"
+  fi
+else
+  if test "$GCC" = yes; then
+    CFLAGS="-O2"
+  else
+    CFLAGS=
+  fi
+fi[]dnl
+])# _AC_PROG_CC_G
 
 
 # AC_PROG_GCC_TRADITIONAL
@@ -746,29 +746,7 @@ AC_CHECK_TOOLS(CXX,
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
-
-# Check whether -g works, even if CXXFLAGS is set, in case the package
-# plays around with CXXFLAGS (such as to build both debugging and
-# normal versions of a library), tasteless as that idea is.
-ac_test_CXXFLAGS=${CXXFLAGS+set}
-ac_save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS=
 _AC_PROG_CXX_G
-if test "$ac_test_CXXFLAGS" = set; then
-  CXXFLAGS=$ac_save_CXXFLAGS
-elif test $ac_cv_prog_cxx_g = yes; then
-  if test "$GXX" = yes; then
-    CXXFLAGS="-g -O2"
-  else
-    CXXFLAGS="-g"
-  fi
-else
-  if test "$GXX" = yes; then
-    CXXFLAGS="-O2"
-  else
-    CXXFLAGS=
-  fi
-fi
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
@@ -800,9 +778,15 @@ fi[]dnl
 
 
 # _AC_PROG_CXX_G
-# -------------
+# --------------
+# Check whether -g works, even if CXXFLAGS is set, in case the package
+# plays around with CXXFLAGS (such as to build both debugging and
+# normal versions of a library), tasteless as that idea is.
 define([_AC_PROG_CXX_G],
-[AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
+[ac_test_CXXFLAGS=${CXXFLAGS+set}
+ac_save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS=
+AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
 [echo 'void f(){}' >conftest.cc
 if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
   ac_cv_prog_cxx_g=yes
@@ -810,7 +794,23 @@ else
   ac_cv_prog_cxx_g=no
 fi
 rm -f conftest*
-])])# _AC_PROG_CXX_G
+])
+if test "$ac_test_CXXFLAGS" = set; then
+  CXXFLAGS=$ac_save_CXXFLAGS
+elif test $ac_cv_prog_cxx_g = yes; then
+  if test "$GXX" = yes; then
+    CXXFLAGS="-g -O2"
+  else
+    CXXFLAGS="-g"
+  fi
+else
+  if test "$GXX" = yes; then
+    CXXFLAGS="-O2"
+  else
+    CXXFLAGS=
+  fi
+fi[]dnl
+])# _AC_PROG_CXX_G
 
 
 
@@ -844,29 +844,8 @@ AC_CHECK_TOOLS(F77,
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
-
-# Check whether -g works, even if FFLAGS is set, in case the package
-# plays around with FFLAGS (such as to build both debugging and normal
-# versions of a library), tasteless as that idea is.
-ac_test_FFLAGS=${FFLAGS+set}
-ac_save_FFLAGS=$FFLAGS
-FFLAGS=
 _AC_PROG_F77_G
-if test "$ac_test_FFLAGS" = set; then
-  FFLAGS=$ac_save_FFLAGS
-elif test $ac_cv_prog_f77_g = yes; then
-  if test "$G77" = yes; then
-    FFLAGS="-g -O2"
-  else
-    FFLAGS="-g"
-  fi
-else
-  if test "$G77" = yes; then
-    FFLAGS="-O2"
-  else
-    FFLAGS=
-  fi
-fi
+
 AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
@@ -899,16 +878,36 @@ fi[]dnl
 
 
 # _AC_PROG_F77_G
-# -------------
-# Test whether the Fortran 77 compiler can accept the `-g' option to
-# enable debugging.
+# --------------
+# Check whether -g works, even if FFLAGS is set, in case the package
+# plays around with FFLAGS (such as to build both debugging and normal
+# versions of a library), tasteless as that idea is.
 define([_AC_PROG_F77_G],
-[AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
+[ac_test_FFLAGS=${FFLAGS+set}
+ac_save_FFLAGS=$FFLAGS
+FFLAGS=
+AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [FFLAGS=-g
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_g=yes],
 [ac_cv_prog_f77_g=no])
-])])# _AC_PROG_F77_G
+])
+if test "$ac_test_FFLAGS" = set; then
+  FFLAGS=$ac_save_FFLAGS
+elif test $ac_cv_prog_f77_g = yes; then
+  if test "$G77" = yes; then
+    FFLAGS="-g -O2"
+  else
+    FFLAGS="-g"
+  fi
+else
+  if test "$G77" = yes; then
+    FFLAGS="-O2"
+  else
+    FFLAGS=
+  fi
+fi[]dnl
+])# _AC_PROG_F77_G
 
 
 # AC_PROG_F77_C_O
