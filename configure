@@ -9,6 +9,12 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 
+if expr a : '\(a\)' >/dev/null 2>&1; then
+  as_expr=expr
+else
+  as_expr=false
+fi
+
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -22,7 +28,16 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Name of the executable.
-as_me=`echo "$0" |sed 's,\(.*[\\/]\+\)\?\([^\\/]\+\)[\\/]*,\2,'`
+as_me=`(basename "$0") 2>/dev/null ||
+$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)$' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X/"$0" |
+    sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
+  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\/\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
 
 # Rewrite early, but we need PATH_SEPARATOR.
 # The user is always right.
@@ -608,9 +623,18 @@ test "$silent" = yes && exec 6>/dev/null
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
-  ac_prog=$0
-  ac_confdir=`echo "$ac_prog" | sed 's%[\\/][^\\/][^\\/]*$%%'`
-  test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
+  ac_confdir=`(dirname "$0") 2>/dev/null ||
+$as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+         X"$0" : 'X\(//\)[^/]' \| \
+         X"$0" : 'X\(//\)$' \| \
+         X"$0" : 'X\(/\)' \| \
+         .     : '\(.\)' 2>/dev/null ||
+echo X"$0" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
@@ -1753,7 +1777,16 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Name of the executable.
-as_me=`echo "$0" |sed 's,\(.*[\\/]\+\)\?\([^\\/]\+\)[\\/]*,\2,'`
+as_me=`(basename "$0") 2>/dev/null ||
+$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)$' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X/"$0" |
+    sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
+  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\/\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
 
 # Rewrite early, but we need PATH_SEPARATOR.
 # The user is always right.
@@ -2272,7 +2305,8 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
-  ac_dir=`$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+  ac_dir=`(dirname "$ac_file") 2>/dev/null ||
+$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
          X"$ac_file" : 'X\(//\)[^/]' \| \
          X"$ac_file" : 'X\(//\)$' \| \
          X"$ac_file" : 'X\(/\)' \| \
@@ -2425,7 +2459,8 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
-  ac_dir=`$as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+  ac_dir=`(dirname "$ac_dest") 2>/dev/null ||
+$as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
          X"$ac_dest" : 'X\(//\)[^/]' \| \
          X"$ac_dest" : 'X\(//\)$' \| \
          X"$ac_dest" : 'X\(/\)' \| \
