@@ -1,5 +1,9 @@
 2001-04-20  Akim Demaille  <akim@epita.fr>
 
+	Version 2.49e.
+
+2001-04-20  Akim Demaille  <akim@epita.fr>
+
 	* tests/foreign.at (Libtool): Ignore configure's stderr.
 
 2001-04-20  Tim Van Holder  <tim.van.holder@pandora.be>
