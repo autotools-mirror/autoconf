@@ -1,5 +1,9 @@
 2002-09-01  Paul Eggert  <eggert@twinsun.com>
 
+	* tests/mktests.sh (ac_exclude_egrep, au_exclude_egrep): Use
+	ordinary shell concatenation rather than echo+tr+sed command that
+	runs afoul of a long-line-related sed bug in Solaris 8.
+
 	* bin/autoheader.in (parse_args): --warning -> --warnings.
 
 	* bin/autoconf.as: Work even if "ls" outputs "FOO not found" to
