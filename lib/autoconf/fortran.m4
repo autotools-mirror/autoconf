@@ -222,7 +222,7 @@ AU_DEFUN([ac_cv_prog_g77],
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for.
-# Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
+# Fortran 95 isn't strictly backwards-compatible with Fortran 77, but
 # `f95' is worth trying.
 #
 # Compilers are ordered by
