@@ -866,7 +866,7 @@ ccp = (char const *const *) p;
 }'
 changequote([,])dnl
 AC_COMPILE_CHECK([dnl Do not "break" this again.
-lack of working const], , [$prog], , AC_DEFINE(const,))])ppdnl
+lack of working const], , [$prog], , AC_DEFINE(const,))])dnl
 dnl
 dnl
 dnl checks for operating system services
@@ -908,9 +908,7 @@ some_dir_failed=false
 # eval it to expand exec_prefix.
 for dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` ; do
   test -d $dir || continue
-  test -w $dir || { echo \
-"warning: cannot write in $dir; assuming it supports long file names"
-		    continue; }
+  test -w $dir || continue # It's less confusing to not echo anything here.
   (echo 1 > $dir/conftest9012345) 2>/dev/null
   (echo 2 > $dir/conftest9012346) 2>/dev/null
   val=`cat $dir/conftest9012345 2>/dev/null`
