@@ -575,8 +575,9 @@ _ATEOF
   esac
 done
 
-# Back to the suite directory.
-cd $at_suite_dir
+# Back to the top directory, in particular because we might
+# rerun the suite verbosely.
+cd $at_dir
 
 # Compute the duration of the suite.
 at_stop_date=`date`
@@ -724,8 +725,8 @@ m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_
     at_status=$?
     ;;
 
-m4_divert_pop([TESTS])dnl Back to KILL.
-])# AT_CLEANUP
+m4_divert_pop([TESTS])dnl Back to KILL.]
+)# AT_CLEANUP
 
 
 # AT_BANNER(TEXT)

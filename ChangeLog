@@ -1,5 +1,10 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): After having run the test
+	group, go back to the initial directory, not to at_suite_dir.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH)
 	(AT_DATA_AUTOCONF):  Also protect @&t@ from autom4te.
 	(AT_CHECK_AUTOCONF, AT_CHECK_AUTOHEADER): Pass no --include
