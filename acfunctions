@@ -22,11 +22,12 @@ alloca		AC_FUNC_ALLOCA
 bcmp		AC_HEADER_STDC
 bcopy		AC_HEADER_STDC
 bzero		AC_HEADER_STDC
+bzero		AC_CHECK_FUNCS
 chown		AC_FUNC_CHOWN
 error		AC_FUNC_ERROR_AT_LINE
 error_at_line	AC_FUNC_ERROR_AT_LINE
 fnmatch		AC_FUNC_FNMATCH
-fork		AC_FUNC_FORK     
+fork		AC_FUNC_FORK
 fseeko		AC_FUNC_FSEEKO
 ftello		AC_FUNC_FSEEKO
 getgroups	AC_FUNC_GETGROUPS
@@ -39,10 +40,13 @@ major		AC_HEADER_MAJOR
 malloc		AC_FUNC_MALLOC
 makedev		AC_HEADER_MAJOR
 memchr		AC_HEADER_STDC
+memchr		AC_CHECK_FUNCS
 memcmp		AC_FUNC_MEMCMP
 memcpy		AC_HEADER_STDC
 memmove		AC_HEADER_STDC
+memmove		AC_CHECK_FUNCS
 memset		AC_HEADER_STDC
+memset		AC_CHECK_FUNCS
 minor		AC_HEADER_MAJOR
 mktime		AC_FUNC_MKTIME
 mmap		AC_FUNC_MMAP
@@ -57,6 +61,7 @@ strerror_r	AC_FUNC_STRERROR_R
 strftime	AC_FUNC_STRFTIME
 strtod		AC_FUNC_STRTOD
 utime		AC_FUNC_UTIME_NULL
+utime		AC_CHECK_FUNCS
 vfork		AC_FUNC_FORK
 vfprintf	AC_FUNC_VPRINTF
 vprintf		AC_FUNC_VPRINTF
@@ -72,7 +77,6 @@ acl
 alarm
 atexit
 btowc
-bzero
 clock_gettime
 dcgettext
 doprnt
@@ -85,17 +89,14 @@ fdatasync
 fesetround
 floor
 fs_stat_dev
-fseeko
 ftime
 ftruncate
 getcwd
 getdelim
-getgroups
 gethostbyaddr
 gethostbyname
 gethostname
 gethrtime
-getloadavg
 getmntent
 getmntinfo
 getpagesize
@@ -115,10 +116,7 @@ localtime_r
 mblen
 mbrlen
 mbrtowc
-memchr
-memmove
 mempcpy
-memset
 mkdir
 mkfifo
 modf
@@ -150,7 +148,6 @@ strchr
 strcspn
 strdup
 strerror
-strftime
 strncasecmp
 strndup
 strnlen
@@ -158,7 +155,6 @@ strpbrk
 strrchr
 strspn
 strstr
-strtod
 strtol
 strtoul
 strtoull
@@ -167,10 +163,8 @@ strverscmp
 sysinfo
 tzset
 uname
-utime
 utmpname
 utmpxname
-vprintf
 wcwidth
 
 # Local Variables:

@@ -22,20 +22,21 @@
 
 use 5.005;
 require "find.pl";
+use File::Basename;
 use Getopt::Long;
 use strict;
 
-use vars qw($autoconf $datadir $initfile $me $name $verbose
+use vars qw($autoconf $datadir $initfile $name
             @cfiles @makefiles @shfiles %c_keywords %printed);
 
-($me = $0) =~ s,.*/,,;
-$verbose = 0;
+my $me = basename ($0);
+my $verbose = 0;
 
 # $USED{KIND}{ITEM} is set if ITEM is used in the program.
 # It is set to its list of locations.
 my %used = ();
 
-# $MACRO{KIND}{ITEM} is the macro to use to test ITEM.
+# $MACRO{KIND}{ITEM} is the list of macros to use to test ITEM.
 my %macro = ();
 
 # $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
@@ -80,7 +81,7 @@ sub END
 sub find_autoconf
 {
   $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
-  (my $dir = $0) =~ s,[^/]*$,,;
+  my $dir = dirname ($0);
   $autoconf = '';
   # We test "$dir/autoconf" in case we are in the build tree, in which case
   # the names are not transformed yet.
@@ -206,7 +207,7 @@ sub init_tables ()
   # If more than that is required for a common portability problem,
   # a new Autoconf macro should probably be written for that case,
   # instead of duplicating the code in lots of configure.ac files.
-
+  my $tables_are_consistent = 1;
   foreach my $kind (@kinds)
     {
       my $file = "$datadir/ac$kind";
@@ -223,10 +224,25 @@ sub init_tables ()
 	    }
 	  my $word = $1;
 	  my $macro = $2 || $generic_macro{$kind};
-	  $macro{$kind}{$word} = $macro;
+	  # The default macro must be explicitly listed for words
+	  # which have a specific macros.  This allows to enforce
+	  # consistency checks.
+	  if (!defined $2 && exists $macro{$kind}{$word})
+	    {
+	      warn ("$datadir/ac$kind:$.: "
+		    . "ignoring implicit call to the generic macro for $word\n");
+	      $tables_are_consistent = 0;
+	    }
+	  else
+	    {
+	      push @{$macro{$kind}{$word}}, $macro;
+	    }
 	}
       close(TABLE);
     }
+
+  die "$me: some tables are inconsistent\n"
+    if !$tables_are_consistent;
 }
 
 
@@ -423,43 +439,29 @@ sub scan_sh_file ($)
 }
 
 
-# print_unique ($KIND, $WORD)
-# ---------------------------
-# $WORD, of some $KIND, is used, and needs to be checked.  (i) output
-# the needed macro invocation in $configure_scan if it exists and
-# hasn't been printed already, (ii), remember this macro needed.
-sub print_unique ($@)
-{
-  my ($kind, $word) = @_;
-
-  my $macro = $macro{$kind}{$word};
-  my @where = @{$used{$kind}{$word}};
-
-  if (defined $macro && !defined $printed{$macro})
-    {
-      print CONF "$macro\n";
-      $printed{$macro} = 1;
-
-      push (@{$needed_macros{$macro}}, @where);
-    }
-}
-
-
 # output_kind ($KIND)
 # -------------------
 sub output_kind ($)
 {
   my ($kind) = @_;
+  # Lists of words to be checked with the generic macro.
   my @have;
 
   print CONF "\n# $kind_comment{$kind}\n"
     if exists $kind_comment{$kind};
   foreach my $word (sort keys %{$used{$kind}})
     {
-      if (defined $macro{$kind}{$word})
+      # Words that were caught, but not to be checked according to
+      # the autoscan library files.
+      next
+	if ! exists $macro{$kind}{$word};
+
+      # Output the needed macro invocations in $configure_scan if not
+      # already printed, and remember these macros are needed.
+      foreach my $macro (@{$macro{$kind}{$word}})
 	{
 	  if (exists $generic_macro{$kind}
-	      && $macro{$kind}{$word} eq $generic_macro{$kind})
+	      && $macro eq $generic_macro{$kind})
 	    {
 	      push (@have, $word);
 	      push (@{$needed_macros{"$generic_macro{$kind}([$word])"}},
@@ -467,7 +469,13 @@ sub output_kind ($)
 	    }
 	  else
 	    {
-	      print_unique ($kind, $word);
+	      if (! $printed{$macro})
+		{
+		  print CONF "$macro\n";
+		  $printed{$macro} = 1;
+		}
+	      push (@{$needed_macros{$macro}},
+		    @{$used{$kind}{$word}});
 	    }
 	}
     }
@@ -525,7 +533,7 @@ sub output ($)
       $unique_makefiles{$m}++;
     }
   print CONF "\nAC_CONFIG_FILES([",
-       join ("\n                 ", keys(%unique_makefiles)), "])\n";
+       join ("\n                 ", sort keys %unique_makefiles), "])\n";
   print CONF "AC_OUTPUT\n";
 
   close CONF ||

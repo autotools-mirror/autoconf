@@ -1,5 +1,18 @@
 2001-06-25  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.in (%macro): Now maps from word to list of macros.
+	(&init_tables): Die when a word which is already handled by
+	explicit macros is mapped to the default macro.
+	(&print_unique): Remove, inlined in...
+	(&output_kind): here.
+	(File::Basename): Use it.
+	(&output): Sort the CONFIG_FILES.
+	* acheaders: Normalize.
+	* acfunctions: Likewise.
+
+	
+2001-06-25  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_LANG_COMPILER_GNU): If GNU, dump the compiler
 	characteristics in the logs.
 	Suggested by Mo DeJong.

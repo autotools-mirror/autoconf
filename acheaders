@@ -17,15 +17,22 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+# FIXME: The case of AC_HEADER_STDC + AC_CHECK_HEADERS headers is
+# unclear to me --akim.
+
 # Ones that have their own macros.
 X11/Xlib.h	AC_PATH_X
 dirent.h	AC_HEADER_DIRENT
 float.h		AC_HEADER_STDC
+float.h		AC_CHECK_HEADERS
 ndir.h		AC_HEADER_DIRENT
 stdarg.h	AC_HEADER_STDC
 stddef.h	AC_HEADER_STDC
+stddef.h	AC_CHECK_HEADERS
 stdlib.h	AC_HEADER_STDC
+stdlib.h	AC_CHECK_HEADERS
 string.h	AC_HEADER_STDC
+string.h	AC_CHECK_HEADERS
 sys/dir.h	AC_HEADER_DIRENT
 sys/mkdev.h	AC_HEADER_MAJOR
 sys/ndir.h	AC_HEADER_DIRENT
@@ -39,7 +46,6 @@ arpa/inet.h
 errno.h
 fcntl.h
 fenv.h
-float.h
 fs_info.h
 inttypes.h
 langinfo.h
@@ -58,11 +64,8 @@ nlist.h
 paths.h
 sgtty.h
 shadow.h
-stddef.h
 stdint.h
 stdio_ext.h
-stdlib.h
-string.h
 strings.h
 sys/acl.h
 sys/file.h
@@ -81,7 +84,6 @@ sys/systeminfo.h
 sys/time.h
 sys/timeb.h
 sys/vfs.h
-sys/wait.h
 sys/window.h
 syslog.h
 termio.h
