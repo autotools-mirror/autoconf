@@ -1,3 +1,7 @@
+1999-01-09  J"orn Rennecke  <amylaar@cygnus.co.uk>
+
+	* acgeneral.m4 (AC_CHECK_FUNC): Don't actually call the function.
+	
 1999-01-09  H.J. Lu  <hjl@lucon.org>
 
 	* config.guess: Permit multiple concurrent instances by including

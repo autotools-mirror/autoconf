@@ -1935,6 +1935,7 @@ extern "C"
 [/* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
 char $1();
+char (*f)();
 ], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
@@ -1942,7 +1943,7 @@ char $1();
 #if defined (__stub_$1) || defined (__stub___$1)
 choke me
 #else
-$1();
+f = $1;
 #endif
 ], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])
 if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
