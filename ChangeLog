@@ -1,3 +1,10 @@
+2005-02-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE, _AC_COMPILE_IFELSE,
+	_AC_LINK_IFELSE): Redirect stdin to /dev/null, in an attempt to
+	avoid thinking that Allegro Common Lisp's "cl" command is a C++
+	compiler.
+
 2005-02-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Document that
