@@ -1,5 +1,10 @@
 2002-10-11  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (AC_ARG_VAR): Have configure report the value
+	of `precious'.
+
+2002-10-11  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Use $$ in the
 	file name to enable parallel executions.
 	From Sam Varshavchik.

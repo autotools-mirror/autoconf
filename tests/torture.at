@@ -58,18 +58,21 @@ m4_define([AT_CHECK_AC_ARG_VAR],
 m4_ifval([$1],
          [precious='$1'; export precious],
          [unset precious])
-AT_CHECK_CONFIGURE([--config-cache])
+AT_CHECK_CONFIGURE([--config-cache -q])
 AT_CHECK([cat file], [], [`$1'
 ])
 
-# Testing --recheck.
+# Testing --recheck: 1. have the environment `forget' about PRECIOUS.
 unset precious
+# 2. Rerun config.status to recreate `file'.
 AT_CHECK([./config.status --recheck], [], [ignore])
 AT_CHECK([./config.status], [], [ignore])
+# 3. Check that file contains the old value of PRECIOUS.
 AT_CHECK([cat file], [], [`$1'
 ])
 
-# Second value.
+# Second value: we should issue an error here: the value
+# has changed!
 m4_ifval([$2],
          [precious='$2'; export precious],
          [unset precious])
@@ -93,6 +96,7 @@ fi
 AT_DATA([configure.ac],
 [[AC_INIT
 AC_ARG_VAR([precious], [this variable costs a lot])
+echo "precious:$precious"
 AC_OUTPUT(file)
 ]])
 
