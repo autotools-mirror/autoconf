@@ -1,3 +1,8 @@
+2000-11-09  Pavel Roskin  <proski@gnu.org>
+
+	* tests/m4sugar.at (m4_warn): Adjusted to accept stack dump when
+	-Werror is used.
+
 2000-11-08  Akim Demaille  <akim@epita.fr>
 
 	* m4sugar.m4 (_m4_expansion_stack_dump): Really rename as...

@@ -91,6 +91,7 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar],
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar,error],
          1, [],
 [configure.in:2: error: bar
+configure.in:2: the top level
 ])
 
 AT_CLEANUP()
