@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -485,7 +485,7 @@ m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
-_AC_PROG_CC_STDC
+_AC_PROG_CC_C89
 # Some people use a C++ compiler to compile C.  Since we use `exit',
 # in C++ we need to declare it.  In case someone uses the same compiler
 # for both compiling C and C++ we need to have the C++ compiler decide
@@ -810,17 +810,17 @@ fi
 # 4b. C compiler characteristics.  #
 # -------------------------------- #
 
-# _AC_PROG_CC_STDC
-# ----------------
-# If the C compiler in not in ANSI C mode by default, try to add an
-# option to output variable @code{CC} to make it so.  This macro tries
-# various options that select ANSI C on some system or another.  It
-# considers the compiler to be in ANSI C mode if it handles function
-# prototypes correctly.
-AC_DEFUN([_AC_PROG_CC_STDC],
-[AC_MSG_CHECKING([for $CC option to accept ANSI C])
-AC_CACHE_VAL(ac_cv_prog_cc_stdc,
-[ac_cv_prog_cc_stdc=no
+# _AC_PROG_CC_C89 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
+# ----------------------------------------------------------------
+# If the C compiler is not in ANSI C89 (ISO C90) mode by default, try
+# to add an option to output variable CC to make it so.  This macro
+# tries various options that select ANSI C89 on some system or
+# another.  It considers the compiler to be in ANSI C89 mode if it
+# handles function prototypes correctly.
+AC_DEFUN([_AC_PROG_CC_C89],
+[AC_MSG_CHECKING([for $CC option to accept ANSI C89])
+AC_CACHE_VAL(ac_cv_prog_cc_c89,
+[ac_cv_prog_cc_c89=no
 ac_save_CC=$CC
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <stdarg.h>
@@ -875,26 +875,219 @@ for ac_arg in "" -qlanglvl=extc89 -qlanglvl=ansi -std \
 do
   CC="$ac_save_CC $ac_arg"
   _AC_COMPILE_IFELSE([],
-		     [ac_cv_prog_cc_stdc=$ac_arg
+		     [ac_cv_prog_cc_c89=$ac_arg
 break])
 done
-rm -f conftest.$ac_ext conftest.$ac_objext
-CC=$ac_save_CC
-])
-case "x$ac_cv_prog_cc_stdc" in
+# Because of `break', _AC_COMPILE_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+case "x$ac_cv_prog_cc_c89" in
   x|xno)
-    AC_MSG_RESULT([none needed]) ;;
+    CC="$ac_save_CC" ;;
   *)
-    AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
-    CC="$CC $ac_cv_prog_cc_stdc" ;;
+    CC="$ac_save_CC $ac_cv_prog_cc_c89" ;;
 esac
-])# _AC_PROG_CC_STDC
+])
+case "x$ac_cv_prog_cc_c89" in
+  xno)
+    AC_MSG_RESULT([unsupported])
+    $2 ;;
+  *)
+    if test "x$ac_cv_prog_cc_c89" = x; then
+      AC_MSG_RESULT([none needed])
+    else
+      AC_MSG_RESULT([$ac_cv_prog_cc_c89])
+    fi
+    $1 ;;
+esac
+])# _AC_PROG_CC_C89
+
+
+# _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
+# ----------------------------------------------------------------
+# If the C compiler is not in ISO C99 mode by default, try to add an
+# option to output variable CC to make it so.  This macro tries
+# various options that select ISO C99 on some system or another.  It
+# considers the compiler to be in ISO C99 mode if it handles mixed
+# code and declarations, _Bool, inline and restrict.
+AC_DEFUN([_AC_PROG_CC_C99],
+[AC_MSG_CHECKING([for $CC option to accept ISO C99])
+AC_CACHE_VAL(ac_cv_prog_cc_c99,
+[ac_cv_prog_cc_c99=no
+ac_save_CC=$CC
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <stdarg.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <wchar.h>
+#include <stdio.h>
+
+struct incomplete_array
+{
+  int datasize;
+  double data[];
+};
+
+struct named_init {
+  int number;
+  const wchar_t *name;
+  double average;
+};
+
+static inline int
+test_restrict(const char *restrict text)
+{
+  // See if C++-style comments work.
+  // Iterate through items via the restricted pointer.
+  // Also check for declarations in for loops.
+  for (unsigned int i = 0; *(text+i) != '\0'; ++i)
+    continue;
+  return 0;
+}
+
+// Check varargs and va_copy work.
+static void
+test_varargs(const char *format, ...)
+{
+  va_list args;
+  va_start(args, format);
+  va_list args_copy;
+  va_copy(args_copy, args);
+
+  const char *str;
+  int number;
+  float fnumber;
+
+  while (*format)
+    {
+      switch (*format++)
+	{
+	case 's': // string
+	  str = va_arg(args_copy, const char *);
+	  break;
+	case 'd': // int
+	  number = va_arg(args_copy, int);
+	  break;
+	case 'f': // float
+	  fnumber = (float) va_arg(args_copy, double);
+	  break;
+	default:
+	  break;
+	}
+    }
+  va_end(args_copy);
+  va_end(args);
+}
+]],
+[[
+  // Check bool and long long datatypes.
+  _Bool success = false;
+  long long int bignum = -1234567890LL;
+  unsigned long long int ubignum = 1234567890uLL;
+
+  // Check restrict.
+  if (test_restrict("String literal") != 0)
+    success = true;
+  char *restrict newvar = "Another string";
+
+  // Check varargs.
+  test_varargs("s, d' f .", "string", 65, 34.234);
+
+  // Check incomplete arrays work.
+  struct incomplete_array *ia =
+    malloc(sizeof(struct incomplete_array) + (sizeof(double) * 10));
+  ia->datasize = 10;
+  for (int i = 0; i < ia->datasize; ++i)
+    ia->data[i] = (double) i * 1.234;
+
+  // Check named initialisers.
+  struct named_init ni = {
+    .number = 34,
+    .name = L"Test wide string",
+    .average = 543.34343,
+  };
+
+  ni.number = 58;
+
+  int dynamic_array[ni.number];
+  dynamic_array[43] = 543;
+]])])
+# Try
+# GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
+# AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
+# Intel ICC	-c99
+# IRIX		-c99
+# Solaris	(unused because it causes the compiler to assume C99 semantics for
+#		library functions, and this is invalid before Solaris 10: -xc99)
+# Tru64		-c99
+# with extended modes being tried first.
+for ac_arg in "" -std=gnu99  -c99 -qlanglvl=extc99
+do
+  CC="$ac_save_CC $ac_arg"
+  _AC_COMPILE_IFELSE([],
+		     [ac_cv_prog_cc_c99=$ac_arg
+break])
+done
+# Because of `break', _AC_COMPILE_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+case "x$ac_cv_prog_cc_c99" in
+  x|xno)
+    CC="$ac_save_CC" ;;
+  *)
+    CC="$ac_save_CC $ac_cv_prog_cc_c99" ;;
+esac
+])
+case "x$ac_cv_prog_cc_c99" in
+  xno)
+    AC_MSG_RESULT([unsupported])
+    $2 ;;
+  *)
+    if test "x$ac_cv_prog_cc_c99" = x; then
+      AC_MSG_RESULT([none needed])
+    else
+      AC_MSG_RESULT([$ac_cv_prog_cc_c99])
+    fi
+    $1 ;;
+esac
+])# _AC_PROG_CC_C99
+
+
+# AC_PROG_CC_C89
+# --------------
+AC_DEFUN([AC_PROG_CC_C89],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  _AC_PROG_CC_C89
+])
+
+
+# AC_PROG_CC_C99
+# --------------
+AC_DEFUN([AC_PROG_CC_C99],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  _AC_PROG_CC_C99
+])
 
 
 # AC_PROG_CC_STDC
 # ---------------
-# Has been merged into AC_PROG_CC.
-AU_DEFUN([AC_PROG_CC_STDC], [])
+AC_DEFUN([AC_PROG_CC_STDC],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  _AC_PROG_CC_C99([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
+                  [_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89], [no])])dnl
+  AC_MSG_CHECKING([for $CC option to accept ISO Standard C])
+  AC_CACHE_VAL([ac_cv_prog_cc_stdc], [])
+  case "x$ac_cv_prog_cc_stdc" in
+    xno)
+      AC_MSG_RESULT([unsupported])
+      ;;
+    *)
+      if test "x$ac_cv_prog_cc_stdc" = x; then
+        AC_MSG_RESULT([none needed])
+      else
+        AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
+      fi
+      ;;
+  esac
+])
 
 
 # AC_C_BACKSLASH_A
@@ -1246,7 +1439,7 @@ fi
 AC_DEFUN([AC_C_PROTOTYPES],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_MSG_CHECKING([for function prototypes])
-if test "$ac_cv_prog_cc_stdc" != no; then
+if test "$ac_cv_prog_cc_c89" != no; then
   AC_MSG_RESULT([yes])
   AC_DEFINE(PROTOTYPES, 1,
 	    [Define to 1 if the C compiler supports function prototypes.])

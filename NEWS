@@ -1,5 +1,16 @@
 * Major changes in Autoconf 2.59c
 
+** AC_PROG_CC_C89, AC_PROG_CC_C99
+  New macros for ISO C99 support.  AC_PROG_CC_C89 and AC_PROG_CC_C99
+  check for ANSI C89 and ISO C99 support respectively.
+
+** AC_PROG_CC_STDC
+  Has been unobsoleted, and will check if the compiler supports ISO
+  C99, falling back to ANSI C89 if not.  ac_cv_prog_cc_stdc is
+  retained for backwards compatibility, assuming the value of
+  ac_cv_prog_cc_c99 or ac_cv_prog_cc_c89 (whichever is valid, in
+  that order).
+
 * Major changes in Autoconf 2.59b
 
   Released 2004-08-20, by Paul Eggert.
@@ -1197,7 +1208,7 @@ Various bug fixes.
 -----
 
 Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-2003, 2004 Free Software Foundation, Inc.
+2003, 2004, 2005 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 

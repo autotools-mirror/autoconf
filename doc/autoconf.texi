@@ -181,7 +181,7 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -5597,15 +5597,15 @@ this:
 AC_PROG_CC(cl egcs gcc cc)
 @end example
 
-If the C compiler is not in @acronym{ANSI} C mode by default, try to add an
+If the C compiler is not in @acronym{ANSI} mode by default, try to add an
 option to output variable @code{CC} to make it so.  This macro tries
 various options that select @acronym{ANSI} C on some system or another.  It
-considers the compiler to be in @acronym{ANSI} C mode if it handles function
+considers the compiler to be in @acronym{ANSI} mode if it handles function
 prototypes correctly.
 
 After calling this macro you can check whether the C compiler has been
 set to accept @acronym{ANSI} C; if not, the shell variable
-@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
+@code{ac_cv_prog_cc_c89} is set to @samp{no}.  If you wrote your source
 code in @acronym{ANSI} C, you can make an un-@acronym{ANSI}fied copy of it by
 using the program @code{ansi2knr}, which comes with Automake.  See also
 under @code{AC_C_PROTOTYPES} below.
@@ -5658,6 +5658,49 @@ The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
 @code{AC_RUN_IFELSE} (@pxref{Run Time}).
+
+@defmac AC_PROG_CC_STDC
+@acindex{PROG_CC_STDC}
+If the C compiler is not able to compile ISO Standard C (currently ISO
+C99), try to add an option to output variable @code{CC} to make it so.
+If the compiler does not support ISO C99, fall back to supporting
+@acronym{ANSI} C89 (ISO C90).
+
+After calling this macro you can check whether the C compiler has been
+set to accept ISO Standard C; if not, the shell variable
+@code{ac_cv_prog_cc_stdc} is set to @samp{no}.
+@end defmac
+
+@defmac AC_PROG_CC_C89
+@acindex{PROG_CC_C89}
+If the C compiler is not in @acronym{ANSI} C89 (ISO C90) mode by
+default, try to add an option to output variable @code{CC} to make it
+so.  This macro tries various options that select @acronym{ANSI} C89 on
+some system or another.  It considers the compiler to be in
+@acronym{ANSI} C89 mode if it handles function prototypes correctly.
+
+After calling this macro you can check whether the C compiler has been
+set to accept @acronym{ANSI} C89; if not, the shell variable
+@code{ac_cv_prog_cc_c89} is set to @samp{no}.
+
+This macro is called automatically by @code{AC_PROG_CC}.
+@end defmac
+
+@defmac AC_PROG_CC_C99
+@acindex{PROG_CC_C99}
+If the C compiler is not in ISO C99 mode by default, try to add an
+option to output variable @code{CC} to make it so.  This macro tries
+various options that select ISO C99 on some system or another.  It
+considers the compiler to be in ISO C99 mode if it handles @code{_Bool},
+flexible arrays, @code{inline}, @code{long long}, mixed code and
+declarations, named initialization of structs, @code{restrict}, varargs
+macros, variable declarations in @code{for} loops and variable length
+arrays.
+
+After calling this macro you can check whether the C compiler has been
+set to accept ISO C99; if not, the shell variable
+@code{ac_cv_prog_cc_c99} is set to @samp{no}.
+@end defmac
 
 @defmac AC_C_BACKSLASH_A
 @acindex{HAVE_C_BACKSLASH_A}
@@ -14266,11 +14309,6 @@ AC_CONFIG_COMMANDS([default], [[echo "Square brackets: []"]])
 @defmac AC_PREFIX
 @acindex{PREFIX}
 @code{AC_PREFIX_PROGRAM}
-@end defmac
-
-@defmac AC_PROG_CC_STDC
-@acindex{PROG_CC_STDC}
-This macro has been integrated into @code{AC_PROG_CC}.
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK
