@@ -2479,10 +2479,21 @@ is executed when one of the header files is not found.
 @node Structures, Typedefs, Header Files, Existing Tests
 @section Structures
 
+The following macros check for the presence of certain members in C
+structures.  If there is no macro specifically defined to check for a
+member you need, then you can use the general structure member macro
+(@pxref{Generic Structures}) or, for more complex tests, you may use
+@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
+
+@menu
+* Particular Structures::       Macros to check for certain stucture members.
+* Generic Structures::          How to find other structure members.
+@end menu
+
+@node Particular Structures, Generic Structures, Structures, Structures
+@subsection Particular Structure Checks
+
 The following macros check for certain structures or structure members.
-To check structures not listed here, use @code{AC_EGREP_CPP}
-(@pxref{Examining Declarations}) or @code{AC_TRY_COMPILE}
-(@pxref{Examining Syntax}).
 
 @defmac AC_HEADER_STAT
 @maindex HEADER_STAT
@@ -2560,6 +2571,26 @@ had better define @code{struct tm}.
 Figure out how to get the current timezone.  If @code{struct tm} has a
 @code{tm_zone} member, define @code{HAVE_TM_ZONE}.  Otherwise, if the
 external array @code{tzname} is found, define @code{HAVE_TZNAME}.
+@end defmac
+
+@node Generic Structures, , Particular Structures, Structures
+@subsection Generic Structure Checks
+
+These macros are used to find structure members not covered by the
+particular test macros.
+
+@defmac AC_C_STRUCT_MEMBER (@var{variable}, @var{includes}, @var{type}, @var{member})
+@maindex C_STRUCT_MEMBER
+Check whether @var{member} is a member of the C aggregate @var{type}.
+The value of @var{type} may be the name of any legitimate C data type
+including the keywords @code{struct} and @code{union}. @var{includes} is
+any @code{#include} statements needed to obtain the definition of the
+aggregate type. If @var{member} is present, set @var{variable} to @samp{yes},
+otherwise @samp{no}.  An example:
+@example
+AC_C_STRUCT_MEMBER(gecos,
+  [#include <pwd.h>], [struct passwd], gecos)
+@end example
 @end defmac
 
 @node Typedefs, C Compiler Characteristics, Structures, Existing Tests

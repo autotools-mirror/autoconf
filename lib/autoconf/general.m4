@@ -1277,6 +1277,17 @@ define(AC_OBSOLETE,
 )])
 
 
+dnl ### Generic structure checks
+
+dnl Check if a particular structure member exists.
+dnl AC_C_STRUCT_MEMBER(VARIABLE, INCLUDES, TYPE, MEMBER)
+AC_DEFUN(AC_C_STRUCT_MEMBER,
+[AC_CACHE_CHECK([for member $4 in aggregate type $3],ac_cv_c_struct_member_$1,
+  [AC_TRY_COMPILE([$2], [$3 foo; foo.$4;],
+   ac_cv_c_struct_member_$1=yes,ac_cv_c_struct_member_$1=no)])
+$1="$ac_cv_c_struct_member_$1"])
+
+
 dnl ### Checking for programs
 
 

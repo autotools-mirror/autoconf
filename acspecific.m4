@@ -1733,11 +1733,9 @@ fi
 
 AC_DEFUN(AC_STRUCT_TIMEZONE,
 [AC_REQUIRE([AC_STRUCT_TM])dnl
-AC_CACHE_CHECK([for tm_zone in struct tm], ac_cv_struct_tm_zone,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <$ac_cv_struct_tm>], [struct tm tm; tm.tm_zone;],
-  ac_cv_struct_tm_zone=yes, ac_cv_struct_tm_zone=no)])
-if test "$ac_cv_struct_tm_zone" = yes; then
+AC_C_STRUCT_MEMBER(tm_zone, [#include <sys/types.h>
+#include <$ac_cv_struct_tm>], [struct tm], tm_zone)
+if test "$ac_cv_c_struct_member_tm_zone" = yes; then
   AC_DEFINE(HAVE_TM_ZONE)
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
@@ -1756,11 +1754,9 @@ fi
 ])
 
 AC_DEFUN(AC_STRUCT_ST_BLOCKS,
-[AC_CACHE_CHECK([for st_blocks in struct stat], ac_cv_struct_st_blocks,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/stat.h>], [struct stat s; s.st_blocks;],
-ac_cv_struct_st_blocks=yes, ac_cv_struct_st_blocks=no)])
-if test $ac_cv_struct_st_blocks = yes; then
+[AC_C_STRUCT_MEMBER(st_blocks, [#include <sys/types.h>
+#include <sys/stat.h>], [struct stat], st_blocks)
+if test $ac_cv_c_struct_member_st_blocks = yes; then
   AC_DEFINE(HAVE_ST_BLOCKS)
 else
   LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
@@ -1769,21 +1765,17 @@ AC_SUBST(LIBOBJS)dnl
 ])
 
 AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
-[AC_CACHE_CHECK([for st_blksize in struct stat], ac_cv_struct_st_blksize,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/stat.h>], [struct stat s; s.st_blksize;],
-ac_cv_struct_st_blksize=yes, ac_cv_struct_st_blksize=no)])
-if test $ac_cv_struct_st_blksize = yes; then
+[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
+#include <sys/stat.h>], [struct stat], st_blksize)
+if test $ac_cv_c_struct_member_st_blksize = yes; then
   AC_DEFINE(HAVE_ST_BLKSIZE)
 fi
 ])
 
 AC_DEFUN(AC_STRUCT_ST_RDEV,
-[AC_CACHE_CHECK([for st_rdev in struct stat], ac_cv_struct_st_rdev,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/stat.h>], [struct stat s; s.st_rdev;],
-ac_cv_struct_st_rdev=yes, ac_cv_struct_st_rdev=no)])
-if test $ac_cv_struct_st_rdev = yes; then
+[AC_C_STRUCT_MEMBER(st_rdev, [#include <sys/types.h>
+#include <sys/stat.h>], [struct stat], st_rdev)
+if test $ac_cv_c_struct_member_st_rdev = yes; then
   AC_DEFINE(HAVE_ST_RDEV)
 fi
 ])

@@ -1,3 +1,16 @@
+1999-04-11  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_C_STRUCT_MEMBER): New macro.
+	* acspecific.m4 (AC_STRUCT_TIMEZONE): Rewrite in terms of
+	AC_C_STRUCT_MEMBER.
+	(AC_STRUCT_ST_BLOCKS): Likewise.
+	(AC_STRUCT_ST_BLKSIZE): Likewise.
+	(AC_STRUCT_ST_RDEV): Likewise.
+	* autoconf.texi (Structures): Update. Add menu for subnodes.
+	(Particular Structures): New node.
+	(Generic Structures): New node.
+	(AC_C_STRUCT_MEMBER): Document.
+
 1999-04-10  Ben Elliston  <bje@cygnus.com>
 
 	* mkinstalldirs: Add `-m' flag to specify the mode of a newly
