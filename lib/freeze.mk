@@ -53,6 +53,10 @@ build_libdir = $(top_builddir)/lib
 
 m4f_dependencies = $(MY_AUTOM4TE) $(AUTOM4TE_CFG)
 
+# For parallel builds.
+$(build_libdir)/m4sugar/version.m4:
+	cd $(build_libdir)/m4sugar && $(MAKE) $(AM_MAKEFLAGS) version.m4
+
 m4sugar_m4f_dependencies =			\
 	$(m4f_dependencies)			\
 	$(src_libdir)/m4sugar/m4sugar.m4	\

@@ -1,5 +1,10 @@
 2002-03-04  Akim Demaille  <akim@epita.fr>
 
+	* lib/freeze.mk ($(build_libdir)/m4sugar/version.m4): New, for
+	parallel builds.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Transforming Names): Equality between target
 	and host is irrelevant.
 	(Specifying Names, Canonicalizing): Remove all references to the
