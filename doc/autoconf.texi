@@ -235,7 +235,7 @@ Alternative Programs
 
 Library Functions
 
-* Functions Portability::       Pitfalls with usual functions
+* Function Portability::        Pitfalls with usual functions
 * Particular Functions::        Special handling to find certain functions
 * Generic Functions::           How to find other functions
 
@@ -3170,12 +3170,12 @@ and you don't need to check for any special properties of
 it, then you can use one of the general function-check macros.
 
 @menu
-* Functions Portability::       Pitfalls with usual functions
+* Function Portability::        Pitfalls with usual functions
 * Particular Functions::        Special handling to find certain functions
 * Generic Functions::           How to find other functions
 @end menu
 
-@node Functions Portability, Particular Functions, Library Functions, Library Functions
+@node Function Portability, Particular Functions, Library Functions, Library Functions
 @subsection Portability of Classical Functions
 
 Most usual functions can either be missing, or be buggy, or be limited
@@ -3185,10 +3185,19 @@ additions, please help us keeping it as complete as possible
 
 @table @code
 
+@item unlink
+The @sc{posix} spec says that @code{unlink} causes the given files to be
+removed only after there are no more open file handles for it.  Not all
+OS's support this behaviour though.  So even on systems that provide
+@code{unlink}, you cannot portably assume it is OK to call it on files
+that are open.  For example, on Windows 9x and ME, such a call would fail;
+on DOS it could even lead to file system corruption, as the file might end
+up being written to after the OS has removed it.
+
 @end table
 
 
-@node Particular Functions, Generic Functions, Functions Portability, Library Functions
+@node Particular Functions, Generic Functions, Function Portability, Library Functions
 @subsection Particular Function Checks
 @cindex Function, checking
 
