@@ -33,8 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am $(autoconf_TEXINFOS) version.texi \
-	stamp-vti $(standards_TEXINFOS)
+DIST_COMMON = Makefile.in Makefile.am $(autoconf_TEXINFOS) \
+	version.texi stamp-vti $(standards_TEXINFOS)
 subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
@@ -219,9 +219,6 @@ standards.info: standards.texi $(standards_TEXINFOS)
 standards.dvi: standards.texi $(standards_TEXINFOS)
 standards.pdf: standards.texi $(standards_TEXINFOS)
 standards.html: standards.texi $(standards_TEXINFOS)
-
-TEXI2PDF = $(TEXI2DVI) --pdf --batch
-DVIPS = dvips
 .dvi.ps:
 	$(DVIPS) -o $@ $<
 
@@ -261,16 +258,17 @@ dist-info: $(INFO_DEPS)
 mostlyclean-aminfo:
 	-rm -rf autoconf.AC autoconf.ACs autoconf.AT autoconf.ATs autoconf.MS \
 	  autoconf.MSs autoconf.aux autoconf.cp autoconf.cps \
-	  autoconf.cv autoconf.cvs autoconf.ev autoconf.evs autoconf.fn \
-	  autoconf.fns autoconf.ky autoconf.kys autoconf.log \
-	  autoconf.ov autoconf.ovs autoconf.pg autoconf.pgs autoconf.pr \
-	  autoconf.prs autoconf.tmp autoconf.toc autoconf.tp \
-	  autoconf.tps autoconf.vr autoconf.vrs autoconf.dvi \
-	  autoconf.pdf autoconf.ps autoconf.html standards.aux \
-	  standards.cp standards.cps standards.fn standards.ky \
-	  standards.log standards.pg standards.tmp standards.toc \
-	  standards.tp standards.tps standards.vr standards.dvi \
-	  standards.pdf standards.ps standards.html
+	  autoconf.cv autoconf.cvs autoconf.ev autoconf.evs \
+	  autoconf.fn autoconf.fns autoconf.ky autoconf.kys \
+	  autoconf.log autoconf.ov autoconf.ovs autoconf.pg \
+	  autoconf.pgs autoconf.pr autoconf.prs autoconf.tmp \
+	  autoconf.toc autoconf.tp autoconf.tps autoconf.vr \
+	  autoconf.vrs autoconf.dvi autoconf.pdf autoconf.ps \
+	  autoconf.html standards.aux standards.cp standards.cps \
+	  standards.fn standards.ky standards.log standards.pg \
+	  standards.tmp standards.toc standards.tp standards.tps \
+	  standards.vr standards.dvi standards.pdf standards.ps \
+	  standards.html
 
 maintainer-clean-aminfo:
 	@list='$(INFO_DEPS)'; for i in $$list; do \
@@ -284,7 +282,6 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
@@ -322,7 +319,6 @@ all-am: Makefile $(INFO_DEPS)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(infodir)
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am

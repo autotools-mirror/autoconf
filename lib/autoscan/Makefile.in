@@ -203,7 +203,6 @@ $(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_D
 $(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
-nodist_autoscanlibDATA_INSTALL = $(INSTALL_DATA)
 install-nodist_autoscanlibDATA: $(nodist_autoscanlib_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(autoscanlibdir)
@@ -227,7 +226,6 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	$(mkinstalldirs) $(distdir)/..
@@ -263,7 +261,6 @@ all-am: Makefile $(DATA)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(autoscanlibdir)
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am

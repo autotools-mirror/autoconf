@@ -141,14 +141,13 @@ $(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_D
 $(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
-dist_lispLISP_INSTALL = $(INSTALL_DATA)
 
 elc-stamp: $(am__ELFILES)
 	@echo 'WARNING: Warnings can be ignored. :-)'
 	if test $(EMACS) != no; then \
 	  set x; \
 	  list='$(am__ELFILES)'; for p in $$list; do \
-            if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	    if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	    set x "$$@" "$$d$$p"; shift; \
 	  done; \
 	  shift; \
@@ -195,7 +194,6 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
@@ -230,7 +228,6 @@ all-am: Makefile $(LISP) elc-stamp $(ELCFILES)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(lispdir)
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -304,9 +301,9 @@ uninstall-am: uninstall-dist_lispLISP uninstall-info-am
 .PHONY: all all-am check check-am clean clean-generic clean-lisp \
 	distclean distclean-generic distdir dvi dvi-am html html-am \
 	info info-am install install-am install-data install-data-am \
-	install-dist_lispLISP install-exec install-exec-am install-info \
-	install-info-am install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	install-dist_lispLISP install-exec install-exec-am \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
 	pdf-am ps ps-am uninstall uninstall-am uninstall-dist_lispLISP \
 	uninstall-info-am

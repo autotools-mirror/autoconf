@@ -105,13 +105,13 @@ AC_REQUIRE([AM_SET_LEADING_DOT])dnl
 
 _AM_IF_OPTION([no-dependencies],,
 [AC_PROVIDE_IFELSE([AC_PROG_CC],
-		  [_AM_DEPENDENCIES(CC)],
-		  [define([AC_PROG_CC],
-			  defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
+                  [_AM_DEPENDENCIES(CC)],
+                  [define([AC_PROG_CC],
+                          defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
 AC_PROVIDE_IFELSE([AC_PROG_CXX],
-		  [_AM_DEPENDENCIES(CXX)],
-		  [define([AC_PROG_CXX],
-			  defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+                  [_AM_DEPENDENCIES(CXX)],
+                  [define([AC_PROG_CXX],
+                          defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
 ])
 ])
 
@@ -167,7 +167,7 @@ AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
 
 # Helper functions for option handling.                    -*- Autoconf -*-
 
-# Copyright 2001, 2002  Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -213,7 +213,7 @@ AC_DEFUN([_AM_IF_OPTION],
 # Check to make sure that the build environment is sane.
 #
 
-# Copyright 1996, 1997, 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1996, 1997, 2000, 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -276,7 +276,7 @@ AC_MSG_RESULT(yes)])
 #  -*- Autoconf -*-
 
 
-# Copyright 1997, 1999, 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1997, 1999, 2000, 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -321,7 +321,7 @@ fi
 
 # AM_AUX_DIR_EXPAND
 
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -388,7 +388,7 @@ am_aux_dir=`cd $ac_aux_dir && pwd`
 # ------------------
 # Define $install_sh.
 
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -412,7 +412,7 @@ AC_SUBST(install_sh)])
 
 # AM_PROG_INSTALL_STRIP
 
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -530,10 +530,10 @@ ifelse([$1], CC,   [depcc="$CC"   am_compiler_list=],
        [$1], CXX,  [depcc="$CXX"  am_compiler_list=],
        [$1], OBJC, [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
        [$1], GCJ,  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
-		   [depcc="$$1"   am_compiler_list=])
+                   [depcc="$$1"   am_compiler_list=])
 
 AC_CACHE_CHECK([dependency style of $depcc],
-	       [am_cv_$1_dependencies_compiler_type],
+               [am_cv_$1_dependencies_compiler_type],
 [if test -z "$AMDEP_TRUE" && test -f "$am_depcomp"; then
   # We make a subdir and do the tests there.  Otherwise we can end up
   # making bogus files that we don't know about and never remove.  For
@@ -577,15 +577,15 @@ AC_CACHE_CHECK([dependency style of $depcc],
        source=conftest.c object=conftest.o \
        depfile=conftest.Po tmpdepfile=conftest.TPo \
        $SHELL ./depcomp $depcc -c -o conftest.o conftest.c \
-	 >/dev/null 2>conftest.err &&
+         >/dev/null 2>conftest.err &&
        grep conftest.h conftest.Po > /dev/null 2>&1 &&
        ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
       # icc doesn't choke on unknown options, it will just issue warnings
       # (even with -Werror).  So we grep stderr for any message
       # that says an option was ignored.
       if grep 'ignoring option' conftest.err >/dev/null 2>&1; then :; else
-	am_cv_$1_dependencies_compiler_type=$depmode
-	break
+        am_cv_$1_dependencies_compiler_type=$depmode
+        break
       fi
     fi
   done
@@ -629,7 +629,7 @@ AC_SUBST([AMDEPBACKSLASH])
 
 # Generate code to set up dependency tracking.   -*- Autoconf -*-
 
-# Copyright 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -713,7 +713,7 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS],
 
 # Check to see how 'make' treats includes.	-*- Autoconf -*-
 
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -738,8 +738,9 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS],
 AC_DEFUN([AM_MAKE_INCLUDE],
 [am_make=${MAKE-make}
 cat > confinc << 'END'
-doit:
+am__doit:
 	@echo done
+.PHONY: am__doit
 END
 # If we don't find an include directive, just comment out the code.
 AC_MSG_CHECKING([for style of include used by $am_make])
@@ -767,15 +768,15 @@ if test "$am__include" = "#"; then
       _am_result=BSD
    fi
 fi
-AC_SUBST(am__include)
-AC_SUBST(am__quote)
-AC_MSG_RESULT($_am_result)
+AC_SUBST([am__include])
+AC_SUBST([am__quote])
+AC_MSG_RESULT([$_am_result])
 rm -f confinc confmf
 ])
 
 # AM_CONDITIONAL                                              -*- Autoconf -*-
 
-# Copyright 1997, 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1997, 2000, 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -819,8 +820,8 @@ fi])])
 
 m4_include([config/m4.m4])
 
-# Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
-#   Free Software Foundation, Inc.
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+# Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -837,7 +838,7 @@ m4_include([config/m4.m4])
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-# serial 6
+# serial 7
 
 # AM_PATH_LISPDIR
 # ---------------
@@ -865,8 +866,8 @@ AC_DEFUN([AM_PATH_LISPDIR],
   AC_RUN_LOG([$EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) "\n")) (setq load-path (cdr load-path)))' </dev/null >conftest.out])
 	am_cv_lispdir=`sed -n \
        -e 's,/$,,' \
-       -e '/.*\/lib\/\(x\?emacs\/site-lisp\)$/{s,,${libdir}/\1,;p;q;}' \
-       -e '/.*\/share\/\(x\?emacs\/site-lisp\)$/{s,,${datadir}/\1,;p;q;}' \
+       -e '/.*\/lib\/x\?emacs\/site-lisp$/{s,.*/lib/\(x\?emacs/site-lisp\)$,${libdir}/\1,;p;q;}' \
+       -e '/.*\/share\/x\?emacs\/site-lisp$/{s,.*/share/\(x\?emacs/site-lisp\),${datadir}/\1,;p;q;}' \
        conftest.out`
        rm conftest.out
        if test -z "$am_cv_lispdir"; then

@@ -34,10 +34,11 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am COPYING INSTALL NEWS README \
-	AUTHORS ChangeLog THANKS aclocal.m4 configure configure.ac \
-	$(am__configure_deps) README-alpha AUTHORS COPYING ChangeLog \
-	INSTALL NEWS README THANKS TODO configure configure.ac
+DIST_COMMON = Makefile.in Makefile.am COPYING COPYING INSTALL INSTALL \
+	NEWS NEWS README README AUTHORS AUTHORS ChangeLog ChangeLog \
+	THANKS aclocal.m4 configure configure.ac $(am__configure_deps) \
+	README-alpha AUTHORS COPYING ChangeLog INSTALL NEWS README \
+	THANKS TODO configure configure.ac
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
@@ -67,6 +68,7 @@ am__remove_distdir = \
   { test ! -d $(distdir) \
     || { find $(distdir) -type d ! -perm -200 -exec chmod u+w {} ';' \
          && rm -fr $(distdir); }; }
+DIST_ARCHIVES = $(distdir).tar.gz $(distdir).tar.bz2
 GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
@@ -162,9 +164,6 @@ local_updates = wget-update cvs-update
 all: all-recursive
 
 .SUFFIXES:
-
-am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
- configure.lineno
 am--refresh:
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)
 	@for dep in $?; do \
@@ -197,7 +196,6 @@ $(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_D
 $(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 uninstall-info-am:
-pkgdataDATA_INSTALL = $(INSTALL_DATA)
 install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
@@ -275,12 +273,6 @@ ctags-recursive:
 	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
 	done
 
-ETAGS = etags
-ETAGSFLAGS =
-
-CTAGS = ctags
-CTAGSFLAGS =
-
 tags: TAGS
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -339,19 +331,6 @@ GTAGS:
 
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-
-distdir = $(PACKAGE)-$(VERSION)
-top_distdir = $(distdir)
-
-am__remove_distdir = \
-  { test ! -d $(distdir) \
-    || { find $(distdir) -type d ! -perm -200 -exec chmod u+w {} ';' \
-         && rm -fr $(distdir); }; }
-
-GZIP_ENV = --best
-distuninstallcheck_listfiles = find . -type f -print
-distcleancheck_listfiles = find . -type f -print
 
 distdir: $(DISTFILES)
 	@case `sed 15q $(srcdir)/NEWS` in \
@@ -410,9 +389,21 @@ distdir: $(DISTFILES)
 dist-gzip: distdir
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
 	$(am__remove_distdir)
-
 dist-bzip2: distdir
 	$(AMTAR) chof - $(distdir) | bzip2 -9 -c >$(distdir).tar.bz2
+	$(am__remove_distdir)
+
+dist-tarZ: distdir
+	$(AMTAR) chof - $(distdir) | compress -c >$(distdir).tar.Z
+	$(am__remove_distdir)
+
+dist-shar: distdir
+	shar $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).shar.gz
+	$(am__remove_distdir)
+
+dist-zip: distdir
+	-rm -f $(distdir).zip
+	zip -rq $(distdir).zip $(distdir)
 	$(am__remove_distdir)
 
 dist dist-all: distdir
@@ -424,8 +415,18 @@ dist dist-all: distdir
 # it guarantees that the distribution is self-contained by making another
 # tarfile.
 distcheck: dist
-	$(am__remove_distdir)
-	GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(AMTAR) xf -
+	case '$(DIST_ARCHIVES)' in \
+	*.tar.gz*) \
+	  GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(AMTAR) xf - ;;\
+	*.tar.bz2*) \
+	  bunzip2 -c $(distdir).tar.bz2 | $(AMTAR) xf - ;;\
+	*.tar.Z*) \
+	  uncompress -c $(distdir).tar.Z | $(AMTAR) xf - ;;\
+	*.shar.gz*) \
+	  GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | unshar ;;\
+	*.zip*) \
+	  unzip $(distdir).zip ;;\
+	esac
 	chmod -R a-w $(distdir); chmod a+w $(distdir)
 	mkdir $(distdir)/_build
 	mkdir $(distdir)/_inst
@@ -452,12 +453,12 @@ distcheck: dist
 	            distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \
 	      } || { rm -rf "$$dc_destdir"; exit 1; }) \
 	  && rm -rf "$$dc_destdir" \
-	  && $(MAKE) $(AM_MAKEFLAGS) dist-gzip \
-	  && rm -f $(distdir).tar.gz \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist \
+	  && rm -rf $(DIST_ARCHIVES) \
 	  && $(MAKE) $(AM_MAKEFLAGS) distcleancheck
-	$(am__remove_distdir)
-	@echo "$(distdir).tar.gz is ready for distribution" | \
-	  sed 'h;s/./=/g;p;x;p;x'
+	@(echo "$(distdir) archives ready for distribution: "; \
+	  for i in $(DIST_ARCHIVES); do echo $$i; done) | \
+	  sed -e '1{h;s/./=/g;p;x}' -e '$${p;x}'
 distuninstallcheck:
 	@cd $(distuninstallcheck_dir) \
 	&& test `$(distuninstallcheck_listfiles) | wc -l` -le 1 \
@@ -557,22 +558,23 @@ uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
 	check-am clean clean-generic clean-recursive ctags \
-	ctags-recursive dist dist-all dist-bzip2 dist-gzip distcheck \
-	distclean distclean-generic distclean-recursive distclean-tags \
-	distcleancheck distdir distuninstallcheck dvi dvi-am \
-	dvi-recursive html html-am html-recursive info info-am \
-	info-recursive install install-am install-data install-data-am \
-	install-data-recursive install-exec install-exec-am \
-	install-exec-recursive install-info install-info-am \
-	install-info-recursive install-man install-pkgdataDATA \
-	install-recursive install-strip installcheck installcheck-am \
-	installdirs installdirs-am installdirs-recursive \
-	maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-recursive pdf pdf-am pdf-recursive ps ps-am \
-	ps-recursive tags tags-recursive uninstall uninstall-am \
-	uninstall-info-am uninstall-info-recursive \
-	uninstall-pkgdataDATA uninstall-recursive
+	ctags-recursive dist dist-all dist-bzip2 dist-gzip dist-shar \
+	dist-tarZ dist-zip distcheck distclean distclean-generic \
+	distclean-recursive distclean-tags distcleancheck distdir \
+	distuninstallcheck dvi dvi-am dvi-recursive html html-am \
+	html-recursive info info-am info-recursive install install-am \
+	install-data install-data-am install-data-recursive \
+	install-exec install-exec-am install-exec-recursive \
+	install-info install-info-am install-info-recursive \
+	install-man install-pkgdataDATA install-recursive \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am installdirs-recursive maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-recursive pdf \
+	pdf-am pdf-recursive ps ps-am ps-recursive tags tags-recursive \
+	uninstall uninstall-am uninstall-info-am \
+	uninstall-info-recursive uninstall-pkgdataDATA \
+	uninstall-recursive
 
 
 html:

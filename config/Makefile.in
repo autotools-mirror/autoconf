@@ -33,9 +33,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am config.guess config.sub elisp-comp \
-	install-sh mdate-sh missing mkinstalldirs texinfo.tex \
-	config.guess config.sub
+DIST_COMMON = Makefile.in Makefile.am config.guess config.sub \
+	elisp-comp install-sh mdate-sh missing mkinstalldirs \
+	texinfo.tex config.guess config.sub
 subdir = config
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
@@ -158,7 +158,6 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
@@ -192,7 +191,6 @@ check: check-am
 all-am: Makefile
 
 installdirs:
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am

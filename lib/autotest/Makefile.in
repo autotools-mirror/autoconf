@@ -213,7 +213,6 @@ $(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_D
 $(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
-dist_autotestlibDATA_INSTALL = $(INSTALL_DATA)
 install-dist_autotestlibDATA: $(dist_autotestlib_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir)
@@ -231,7 +230,6 @@ uninstall-dist_autotestlibDATA:
 	  echo " rm -f $(DESTDIR)$(autotestlibdir)/$$f"; \
 	  rm -f $(DESTDIR)$(autotestlibdir)/$$f; \
 	done
-nodist_autotestlibDATA_INSTALL = $(INSTALL_DATA)
 install-nodist_autotestlibDATA: $(nodist_autotestlib_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir)
@@ -249,12 +247,6 @@ uninstall-nodist_autotestlibDATA:
 	  echo " rm -f $(DESTDIR)$(autotestlibdir)/$$f"; \
 	  rm -f $(DESTDIR)$(autotestlibdir)/$$f; \
 	done
-
-ETAGS = etags
-ETAGSFLAGS =
-
-CTAGS = ctags
-CTAGSFLAGS =
 
 tags: TAGS
 
@@ -303,7 +295,6 @@ GTAGS:
 
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	$(mkinstalldirs) $(distdir)/..
@@ -340,7 +331,6 @@ all-am: Makefile $(DATA)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir) $(DESTDIR)$(autotestlibdir)
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -416,11 +406,12 @@ uninstall-am: uninstall-dist_autotestlibDATA uninstall-info-am \
 
 .PHONY: CTAGS GTAGS all all-am check check-am check-local clean \
 	clean-generic ctags distclean distclean-generic distclean-tags \
-	distdir dvi dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dist_autotestlibDATA \
-	install-exec install-exec-am install-info install-info-am \
-	install-man install-nodist_autotestlibDATA install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	distdir dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am \
+	install-dist_autotestlibDATA install-exec install-exec-am \
+	install-info install-info-am install-man \
+	install-nodist_autotestlibDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
 	pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-dist_autotestlibDATA uninstall-info-am \

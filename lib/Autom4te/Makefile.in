@@ -144,7 +144,6 @@ $(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_D
 $(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
-dist_perllibDATA_INSTALL = $(INSTALL_DATA)
 install-dist_perllibDATA: $(dist_perllib_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(perllibdir)
@@ -162,12 +161,6 @@ uninstall-dist_perllibDATA:
 	  echo " rm -f $(DESTDIR)$(perllibdir)/$$f"; \
 	  rm -f $(DESTDIR)$(perllibdir)/$$f; \
 	done
-
-ETAGS = etags
-ETAGSFLAGS =
-
-CTAGS = ctags
-CTAGSFLAGS =
 
 tags: TAGS
 
@@ -216,7 +209,6 @@ GTAGS:
 
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
@@ -251,7 +243,6 @@ all-am: Makefile $(DATA)
 
 installdirs:
 	$(mkinstalldirs) $(DESTDIR)$(perllibdir)
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -322,15 +313,16 @@ ps-am:
 
 uninstall-am: uninstall-dist_perllibDATA uninstall-info-am
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic ctags \
-	distclean distclean-generic distclean-tags distdir dvi dvi-am \
-	html html-am info info-am install install-am install-data \
-	install-data-am install-dist_perllibDATA install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-dist_perllibDATA uninstall-info-am
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+	ctags distclean distclean-generic distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-dist_perllibDATA \
+	install-exec install-exec-am install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
+	uninstall uninstall-am uninstall-dist_perllibDATA \
+	uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

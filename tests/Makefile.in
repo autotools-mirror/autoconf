@@ -34,8 +34,10 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 DIST_COMMON = $(srcdir)/../lib/freeze.mk Makefile.in Makefile.am \
-	atlocal.in wrapper.in wrapper.in wrapper.in wrapper.in \
-	wrapper.in wrapper.in wrapper.in
+	atlocal.in atlocal.in wrapper.in wrapper.in wrapper.in \
+	wrapper.in wrapper.in wrapper.in wrapper.in wrapper.in \
+	wrapper.in wrapper.in wrapper.in wrapper.in wrapper.in \
+	wrapper.in
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
@@ -275,7 +277,6 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 distdir: $(DISTFILES)
 	$(mkinstalldirs) $(distdir)/../lib
@@ -312,7 +313,6 @@ check: check-am
 all-am: Makefile
 
 installdirs:
-
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -387,13 +387,14 @@ ps-am:
 uninstall-am: uninstall-info-am
 
 .PHONY: all all-am check check-am check-local clean clean-generic \
-	clean-local distclean distclean-generic distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
+	clean-local distclean distclean-generic distdir dvi dvi-am \
+	html html-am info info-am install install-am install-data \
 	install-data-am install-exec install-exec-am install-info \
 	install-info-am install-man install-strip installcheck \
-	installcheck-am installcheck-local installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am uninstall uninstall-am uninstall-info-am
+	installcheck-am installcheck-local installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am uninstall uninstall-am \
+	uninstall-info-am
 
 $(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
