@@ -1,3 +1,11 @@
+2000-05-22 Mark Elbrecht <snowball3@bigfoot.com>,  Eli Zaretskii <eliz@gnu.org>
+
+	More MS-DOS support.
+
+	* acgeneral.m4 (_AC_OUTPUT_FILES): Fix the computation of
+	`ac_file_inputs' for `$ac_given_srcdir' containing a colon.
+	(AC_CHECK_MEMBERS, AC_PATH_PROG): s/ac_save_ifs/ac_save_IFS/.
+
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (AC_FUNC_CHOWN): New macro, based on Jim

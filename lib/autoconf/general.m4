@@ -2450,7 +2450,7 @@ $2],
 # Work like `which -a NAME' in PATH, even if NAME is not executable.
 # Can be used inside backquotes.
 define([_AC_WHICH_A],
-[ac_save_ifs=$IFS; IFS=':'
+[ac_save_IFS=$IFS; IFS=':'
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
@@ -2461,7 +2461,7 @@ for ac_dir in $ac_dummy; do
     echo "$ac_dir/$1"
   fi
 done
-IFS=$ac_save_ifs
+IFS=$ac_save_IFS
 ])
 
 
@@ -2550,7 +2550,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   ac_cv_path_$1="$$1" # Let the user override the test with a path.
   ;;
   *)
-  ac_save_ifs=$IFS; IFS=':'
+  ac_save_IFS=$IFS; IFS=':'
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
@@ -2562,7 +2562,7 @@ dnl not every word.  This closes a longstanding sh security hole.
       break
     fi
   done
-  IFS=$ac_save_ifs
+  IFS=$ac_save_IFS
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
 ifval([$3], [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"
@@ -4205,8 +4205,8 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that
   # updating is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo "$ac_file_in" |
-                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
+  ac_file_inputs=`IFS=:
+                  for f in $ac_file_in; do echo $ac_given_srcdir/$f; done`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
