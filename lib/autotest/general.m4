@@ -372,10 +372,12 @@ $1
 ifelse([$2], [], [],
 [at_status=$?
 if test $at_status != $2; then
+  $at_verbose && echo "Exit code was $at_status, expected $2" >&6
 dnl Maybe there was an important message to read before it died.
   $at_verbose && $at_check_stds && cat stderr >&6
-dnl Exit with the same code, at least to preserve 77.
-  exit $at_status
+dnl Preserve exit code 77.
+  test $at_status = 77 && exit 77
+  exit 1
 fi
 ])dnl
 $at_traceoff

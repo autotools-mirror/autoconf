@@ -1,5 +1,11 @@
 2000-10-29  Pavel Roskin  <proski@gnu.org>
 
+	* tests/atgeneral.m4 (AT_CHECK): Warn if the expected exit status
+	is different from what we got. Don't preserve exit status other
+	than 77.
+
+2000-10-29  Pavel Roskin  <proski@gnu.org>
+
 	* autoconf.sh: When scanning for unexpanded macros match only
 	words beginning with "A?_" and "m4_" or containing "_A?_".
 	Strip the comments before the matching. Don't use character
