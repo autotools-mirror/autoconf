@@ -97,30 +97,13 @@ directory that @code{configure} is in and in @file{..}.
 By default, @samp{make install} will install the package's files in
 @file{/usr/local/bin}, @file{/usr/local/man}, etc.  You can specify an
 installation prefix other than @file{/usr/local} by giving
-@code{configure} the option @samp{--prefix=@var{path}}.  Alternately,
-you can do so by consistently giving a value for the @samp{prefix}
-variable when you run @code{make}, e.g.,
-@example
-make prefix=/usr/gnu
-make prefix=/usr/gnu install
-@end example
+@code{configure} the option @samp{--prefix=@var{path}}.
 
 You can specify separate installation prefixes for architecture-specific
 files and architecture-independent files.  If you give @code{configure}
-the option @samp{--exec-prefix=@var{path}} or set the @code{make}
-variable @samp{exec_prefix} to @var{path}, the package will use
+the option @samp{--exec-prefix=@var{path}}, the package will use
 @var{path} as the prefix for installing programs and libraries.
 Documentation and other data files will still use the regular prefix.
-
-If you use an unusual directory layout in which some of the installation
-directory names are not based on a single prefix, you can set the
-individual variables @code{bindir}, @code{libdir}, etc. on the
-@code{make} command line:
-@example
-make bindir=/bin libdir=/usr/lib
-@end example
-@noindent
-Check the @file{Makefile.in} files to see which variables each package uses.
 
 If the package supports it, you can cause programs to be installed with
 an extra prefix or suffix on their names by giving @code{configure} the
