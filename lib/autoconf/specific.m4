@@ -1390,13 +1390,13 @@ dnl FIXME: banish uname from this macro!
     "SunOS 5"*)
       AC_MSG_CHECKING(whether -R must be followed by a space)
       ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
-      AC_LINK_IFELSE([], ac_R_nospace=yes, ac_R_nospace=no)
+      AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_nospace=yes, ac_R_nospace=no)
       if test $ac_R_nospace = yes; then
 	AC_MSG_RESULT(no)
 	X_LIBS="$X_LIBS -R$x_libraries"
       else
 	LIBS="$ac_xsave_LIBS -R $x_libraries"
-	AC_LINK_IFELSE([], ac_R_space=yes, ac_R_space=no)
+	AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_space=yes, ac_R_space=no)
 	if test $ac_R_space = yes; then
 	  AC_MSG_RESULT(yes)
 	  X_LIBS="$X_LIBS -R $x_libraries"

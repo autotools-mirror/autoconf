@@ -1,5 +1,10 @@
 2000-10-30  Pavel Roskin  <proski@gnu.org>
 
+	* acspecific.m4 (AC_PATH_XTRA): Use AC_LANG_PROGRAM() as the
+	argument to AC_LINK_IFELSE.
+
+2000-10-30  Pavel Roskin  <proski@gnu.org>
+
 	* m4sh.m4 (AS_EXIT): Use "false" for exit code 1, ":" for 0.
 	* acgeneral.m4 (AC_MSG_ERROR): Don't use m4_default for the
 	second argument - AS_EXIT takes care of it.
