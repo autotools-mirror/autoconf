@@ -68,6 +68,8 @@
   ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
   for ACTION-IF-TRUE is to define WORDS_BIGENDIAN like AC_C_BIGENDIAN
   always did.
+- AC_C_LONG_DOUBLE now succeeds only if `long double' has more range or
+  precision than `double'.
 
 ** Generic macros
 
