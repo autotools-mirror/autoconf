@@ -34,7 +34,10 @@ po-check:
 	fi
 
 # Do not save the original name or timestamp in the .tar.gz file.
-GZIP_ENV = --no-name
+GZIP_ENV = '--no-name --best'
+
+# Automake 1.4 does not define AMTAR.
+AMTAR ?= $(TAR)
 
 # Tag before making distribution.  Also, don't make a distribution if
 # checks fail.  Also, make sure the NEWS file is up-to-date.
@@ -66,7 +69,7 @@ t=./=test
 my-distcheck: writable-files po-check
 	-rm -rf $(t)
 	mkdir $(t)
-	GZIP=$(GZIP) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz
+	GZIP=$(GZIP_ENV) $(AMTAR) -C $(t) -zxf $(distdir).tar.gz
 	cd $(t)/$(distdir) \
 	  && ./configure --disable-nls \
 	  && $(MAKE) CFLAGS='-Wformat -Werror' \

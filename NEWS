@@ -45,6 +45,7 @@
   AM_FUNC_OBSTACK, and AM_FUNC_STRTOD are now activated.
   Be sure to read `Upgrading from Version 2.13' to understand why
   running `autoupdate' is needed.
+[2.50]
 
 * Major changes in Autoconf 2.50
 
