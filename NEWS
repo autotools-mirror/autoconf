@@ -1,8 +1,8 @@
 Major changes in release 2.0:
 
 ** New files:
-* Fits into an integrated GNU source tree containing the compiler tools.
-* Comes with config.sub, config.guess, and Cygnus configure.
+* Comes with config.sub and config.guess.
+* Uses config.h.bot if present, analogous to config.h.top.
 
 ** New macros:
 * AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
