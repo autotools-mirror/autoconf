@@ -1372,12 +1372,7 @@ ac_config_commands="$ac_config_commands tests/package.m4"
 
 ac_config_commands="$ac_config_commands tests/atconfig"
 
-if test -f $srcdir/tests/atlocal.in; then
-  ac_config_files="$ac_config_files tests/atlocal"
-
-fi
-
-ac_config_files="$ac_config_files tests/Makefile"
+ac_config_files="$ac_config_files tests/Makefile tests/atlocal"
 
 ac_config_files="$ac_config_files tests/autoconf:tests/wrapsh.in"
 
@@ -2124,8 +2119,8 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "config/Makefile" ) CONFIG_FILES="$CONFIG_FILES config/Makefile" ;;
-  "tests/atlocal" ) CONFIG_FILES="$CONFIG_FILES tests/atlocal" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+  "tests/atlocal" ) CONFIG_FILES="$CONFIG_FILES tests/atlocal" ;;
   "tests/autoconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoconf:tests/wrapsh.in" ;;
   "tests/autoheader" ) CONFIG_FILES="$CONFIG_FILES tests/autoheader:tests/wrappl.in" ;;
   "tests/autom4te" ) CONFIG_FILES="$CONFIG_FILES tests/autom4te" ;;

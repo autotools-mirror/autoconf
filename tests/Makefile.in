@@ -131,11 +131,11 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 CLEANFILES = expr
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES = autoconf autoheader autom4te autoreconf autoscan \
-	autoupdate ifnames
+CONFIG_CLEAN_FILES = atlocal autoconf autoheader autom4te autoreconf \
+	autoscan autoupdate ifnames
 DIST_SOURCES =
-DIST_COMMON = Makefile.am Makefile.in autom4te.in autoupdate.in \
-	wrappl.in wrapsh.in
+DIST_COMMON = Makefile.am Makefile.in atlocal.in autom4te.in \
+	autoupdate.in wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:
@@ -143,23 +143,23 @@ $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  tests/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && \
-	  CONFIG_HEADERS= CONFIG_LINKS= \
-	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+atlocal: $(top_builddir)/config.status atlocal.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoconf: $(top_builddir)/config.status wrapsh.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrapsh.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoheader: $(top_builddir)/config.status wrappl.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autom4te: $(top_builddir)/config.status autom4te.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoreconf: $(top_builddir)/config.status wrappl.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoscan: $(top_builddir)/config.status wrappl.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoupdate: $(top_builddir)/config.status autoupdate.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 ifnames: $(top_builddir)/config.status wrappl.in
-	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 uninstall-info-am:
 tags: TAGS
 TAGS:
@@ -275,9 +275,6 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	mv $@.tmp $@
 
 atconfig: $(top_builddir)/config.status
-	cd $(top_builddir) && ./config.status tests/$@
-
-atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 	cd $(top_builddir) && ./config.status tests/$@
 
 clean-local:
