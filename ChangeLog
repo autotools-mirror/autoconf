@@ -1,3 +1,9 @@
+2001-04-18  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Replace documentation for obsolete
+	AC_LIBOBJ_DECL with clearer documentation for AC_LIBSOURCE
+	and AC_LIBSOURCES, improving the AC_LIBOBJ docs as well.
+
 2001-04-17  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: Fixes for punctuation and grammar..  Replace
