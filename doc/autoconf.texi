@@ -2789,10 +2789,13 @@ first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @defmac AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 @maindex FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 @cvindex LSTAT_FOLLOWS_SLASHED_SYMLINK
-According to @sc{posix}, if @file{link} is a symlink to an
-@file{entity}, then @code{lstat} must return information on the
-@file{entity} (not on @file{link}) when called on @file{"link/"}, i.e.,
-when the trailing slash is given.
+If @file{link} is a symbolic link, then @code{lstat} should treat
+@file{link/} the same as @file{link/.}.  However, many older
+@code{lstat} implementations incorrectly ignore trailing slashes.
+
+It is safe to assume that if @code{lstat} incorrectly ignores
+trailing slashes, then other symbolic-link-aware functions like
+@code{unlink} and @code{unlink} also incorrectly ignore trailing slashes.
 
 If @code{lstat} behaves properly, define
 @code{LSTAT_FOLLOWS_SLASHED_SYMLINK}, otherwise require an
