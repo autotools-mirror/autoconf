@@ -601,13 +601,15 @@ dnl
 dnl
 define(AC_LANG_C,
 [define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
-ac_cpp='${CPP} $CFLAGS'
+# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='${CPP}'
 ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
 dnl
 define(AC_LANG_CPLUSPLUS,
 [define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
-ac_cpp='${CXXCPP} $CXXFLAGS'
+# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+ac_cpp='${CXXCPP}'
 ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
 dnl
