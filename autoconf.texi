@@ -1646,7 +1646,7 @@ These macros are used to find programs not covered by the particular
 test macros.  If you need to check the behavior of a program as well as
 find out whether it is present, you have to write your own test for it
 (@pxref{Writing Tests}).  By default, these macros use the environment
-variable @code{PATH].  If you need to check for a program that might not
+variable @code{PATH}.  If you need to check for a program that might not
 be in the user's @code{PATH}, you can pass a modified path to use
 instead, like this:
 
