@@ -268,6 +268,7 @@ Portable Shell Programming
 
 * Shellology::                  A zoology of shells
 * File Descriptors::            FDs and redirections
+* File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
@@ -5056,6 +5057,7 @@ Some of these external utilities have a portable subset of features, see
 @menu
 * Shellology::                  A zoology of shells
 * File Descriptors::            FDs and redirections
+* File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
@@ -5161,7 +5163,7 @@ So while most modern systems do have a shell _somewhere_ that meets the
 @sc{posix} standard, the challenge is to find it.
 @end quotation
 
-@node File Descriptors, Shell Substitutions, Shellology, Portable Shell
+@node File Descriptors, File System Conventions, Shellology, Portable Shell
 @subsection File Descriptors
 
 Some file descriptors shall not be used, since some systems, admittedly
@@ -5230,8 +5232,95 @@ You'll appreciate the various levels of details...
 One way out consists in grepping out uninteresting lines, hoping not to
 remove good ones...
 
+@node File System Conventions, Shell Substitutions, File Descriptors, Portable Shell
+@subsection File System Conventions
 
-@node Shell Substitutions, Assignments, File Descriptors, Portable Shell
+While @command{autoconf} and friends will usually be run on some Unix variety,
+it can and will be used on other systems, most notably @sc{dos} variants.
+This impacts several assumptions regarding file- and pathnames.
+
+@noindent
+For example, the following code:
+
+@example
+case "$foo_dir" in
+  /*) # Absolute
+     ;;
+  *)
+     foo_dir=$dots$foo_dir ;;
+esac
+@end example
+
+@noindent
+will fail to properly detect absolute paths on those systems, because
+they can use a drivespec, and will usually use a backslash as directory
+separator.  The canonical way to check for absolute paths is:
+
+@example
+case "$foo_dir" in
+  [\\/]* | ?:[\\/]) # Absolute
+     ;;
+  *)
+     foo_dir=$dots$foo_dir ;;
+esac
+@end example
+
+@noindent
+Make sure you quote the brackets if appropriate and keep the backslash as
+first char (@pxref{Limitations of Builtins}).
+
+Also, because the colon is used as part of a drivespec, these systems don't
+use it as path separator.  When creating or accessing paths, use
+@code{$ac_path_separator} instead (or the @code{PATH_SEPARATOR} output
+variable).  @command{autoconf} sets this to the appropriate value (@samp{:}
+or @samp{;}) when it starts up.
+
+File names need extra care as well.  While @sc{dos}-based environments that are
+Unixy enough to run @command{autoconf} (such as @sc{djgpp}) will usually be able
+to handle long file names properly, there are still limitations that can
+seriously break packages:
+
+@itemize @minus
+@item No multiple dots
+@sc{dos} cannot handle multiple dots in filenames.  This is an especially important
+thing to remember when building a portable configure script, as
+@command{autoconf} uses a .in suffix for template files.
+
+This is perfectly OK on Unices:
+
+@example
+AC_CONFIG_HEADER(config.h)
+AC_CONFIG_FILES([source.c foo.bar])
+AC_OUTPUT
+@end example
+
+@noindent
+but it causes problems on @sc{dos}, as it requires @samp{config.h.in},
+@samp{source.c.in} and @samp{foo.bar.in}.  To make your package more portable
+to @sc{dos}-based environments, you should use this instead:
+
+@example
+AC_CONFIG_HEADER(config.h:config.hin)
+AC_CONFIG_FILES([source.c:source.cin foo.bar:foobar.in])
+AC_OUTPUT
+@end example
+
+@item Case insensitivity
+@sc{dos} is case insensitive, so you cannot, for example, have both a file called
+@samp{INSTALL} and a directory called @samp{install}.  This also affects
+@command{make}; if there's a file called @samp{INSTALL} in the directory,
+@command{make install} will do nothing (unless the @samp{install} target is
+marked as PHONY).
+
+@item The 8+3 limit
+Because the @sc{dos} file system only stores the first 8 characters of the filename
+and the first 3 of the extension, those must be unique.  That means that
+@samp{foobar-part1.c}, @samp{foobar-part2.c} and @samp{foobar-prettybird.c}
+all resolve to the same filename (@samp{FOOBAR-P.C}).  The same goes for
+@samp{foo.bar} and @samp{foo.bartender}.
+@end itemize
+
+@node Shell Substitutions, Assignments, File System Conventions, Portable Shell
 @subsection Shell Substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
@@ -5601,6 +5690,16 @@ your script might be suspended waiting for data on its standard input.
 @evindex status
 This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
 hence read-only.  Do not use it.
+
+@item PATH_SEPARATOR
+@evindex PATH_SEPARATOR
+On @sc{djgpp} systems, the @code{PATH_SEPARATOR} variable can be set to either
+@samp{:} or @samp{;} to control the path separator @command{bash} uses
+to set up certain environment variables (such as @code{PATH}). Since this
+only works inside bash, you want autoconf to detect the regular @sc{dos} path
+separator @samp{;}, so it can be safely substituted in files that may
+not support @samp{;} as path separator. So either unset this variable
+or set it to @samp{;}.
 
 @item RANDOM
 @evindex RANDOM
