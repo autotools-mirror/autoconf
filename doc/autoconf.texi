@@ -6,8 +6,8 @@
 @c %**end of header
 @c For single-sided printing, use on instead of odd in the setchapternewpage.
 
-@set EDITION 1.7.9
-@set VERSION 1.7.9
+@set EDITION 1.7.10
+@set VERSION 1.7.10
 @set UPDATED March 1994
 
 @iftex
@@ -126,6 +126,7 @@ General Purpose Macros
 
 * Setup::			Controlling Autoconf operation.
 * General Feature Tests::	Checking for kinds of features.
+* Command Line::                Checking command line arguments.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
@@ -586,8 +587,8 @@ Otherwise, set @code{INSTALL} to @samp{@var{srcdir}/install.sh -c} if that
 script exists, or to @samp{cp} as a last resort.  Screens out the
 false matches @file{/etc/install}, @file{/usr/sbin/install}, and other
 instances of @code{install} known not to work.  Also sets the variable
-@code{INSTALL_PROGRAM} to @samp{$(INSTALL)} and
-@code{INSTALL_DATA} to @samp{$(INSTALL) -m 644}.
+@code{INSTALL_PROGRAM} to @samp{$@{INSTALL@}} and
+@code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
 
 If you need to use your own @file{install.sh} because it has features
 not found in standard @code{install} programs, there is no reason to use
@@ -1708,9 +1709,10 @@ given and one for if it was not given.
 @defmac AC_ENABLE (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex ENABLE
 If the user gave @code{configure} the option
-@samp{--enable-@var{feature}}, run shell commands @var{action-if-true}.
-Otherwise run shell commands @var{action-if-false}.  The name
-@var{feature} should consist only of alphanumeric characters and dashes.
+@samp{--enable-@var{feature}} or @samp{--disable-@var{feature}}, run
+shell commands @var{action-if-true}.  Otherwise run shell commands
+@var{action-if-false}.  The name @var{feature} should consist only of
+alphanumeric characters and dashes.
 
 The @var{feature} indicates an optional user-level facility.  This
 option allows users to choose which optional features to build and
@@ -1726,12 +1728,8 @@ is @emph{not} available.  A feature with a value looks like
 
 The value given is available to the shell commands @var{action-if-true}
 in the shell variable @code{enableval}.  If no value was given,
-@code{enableval} is @samp{yes}.  For example,
-
-@example
-AC_ENABLE(fubar, echo "got --enable-fubar=$enableval",
-        echo no --enable-fubar)
-@end example
+@code{enableval} is @samp{yes}.  @samp{--disable-@var{feature}} is
+equivalent to @samp{--enable-@var{feature}=no}.
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -2640,8 +2638,10 @@ all files are installed using the same prefix.
 
 Some packages pay attention to @samp{--with-@var{package}} options to
 @code{configure}, where @var{package} is something like @samp{gnu-as} or
-@samp{x} (for the X Window System).  The README should mention any
-@samp{--with-} options that the package recognizes.
+@samp{x} (for the X Window System).  They may also pay attention to
+@samp{--enable-@var{feature}} options, where @var{feature} indicates an
+optional part of the package.  The README should mention any
+@samp{--with-} and @samp{--enable-} options that the package recognizes.
 
 @code{configure} also recognizes the following options:
 
@@ -2661,7 +2661,7 @@ Print the version of Autoconf used to generate the @code{configure}
 script, and exit.
 @end table
 
-@code{configure} ignores any other arguments that you give it.
+@code{configure} also accepts and ignores some other options.
 
 @menu
 * Overriding variables::        Workarounds for unusual systems.
