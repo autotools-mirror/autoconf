@@ -67,10 +67,6 @@ other tools.
 
 Library directories:
   -I, --include=DIR  look for FILES in DIR (cumulative)
-  -M, --m4dir=M4DIR  this package's Autoconf extensions
-
-Unless specified, heuristics try to compute `M4DIR' from the `Makefile.am',
-or defaults to `m4' if it exists.
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
 GETTEXTIZE, LIBTOOLIZE are honored.
@@ -100,8 +96,6 @@ my $gettextize = $ENV{'GETTEXTIZE'} || 'gettextize';
 # --install -- as --add-missing in other tools.
 my $install = 0;
 my @include;
-# m4dir -- local Autoconf extensions.  Typically `m4'.
-my $m4dir;
 my $status = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
@@ -120,7 +114,6 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
-	  'M|m4dir=s'                                        => \$m4dir,
 	  'i|install'                                        => \$install,
 	  's|symlink'                                        => \$symlink);
 
@@ -145,8 +138,8 @@ sub parse_args ()
 
   # Dispatch autoreconf's option to the tools.
   # --include;
-  $autoconf   .= join (' ', map { "--include=$_" } @include);
-  $autoheader .= join (' ', map { "--include=$_" } @include);
+  $autoconf   .= join (' --include=', '', @include);
+  $autoheader .= join (' --include=', '', @include);
 
   # --install and --symlink;
   if ($install)
@@ -181,51 +174,83 @@ sub parse_args ()
 }
 
 
-# &autoreconf ()
-# --------------
-# Reconf the current directory.
-sub autoreconf ()
+# &maybe_autoreconf ()
+# --------------------
+# If the current file ($_) is configure.ac, then there is work to perform
+# there.  Otherwise return.  The main point is preserving $_.
+sub maybe_autoreconf ()
 {
   # If there it's not `configure.ac' or `configure.in', we are not
   # interested in the directory.
   return
     if !/^configure\.(ac|in)$/;
 
-  my $configure_ac = $_;
-  verbose "working on $File::Find::dir/$configure_ac";
+  # Save $_ as Find::File requires it to be preserved.
+  my $underscore = $_;
+  autoreconf ($_);
+  $_ = $underscore;
+}
 
-  # If there is no AC_INIT, then we are not interested: it looks like
-  # a Cygnus thingy.
+
+# &autoreconf ($CONFIGURE_AC)
+# ---------------------------
+# Reconf the current directory.
+sub autoreconf ($)
+{
+  my ($configure_ac) = @_;
+  verbose "working on $File::Find::name";
+
+  # ------------------------------- #
+  # See what tools will be needed.  #
+  # ------------------------------- #
+
+  # Perform a single trace reading to avoid --force forcing a rerun
+  # between two --trace, that's useless.  If there is no AC_INIT, then
+  # we are not interested: it looks like a Cygnus thingy.
   my $configure_ac_file = new Autom4te::XFile $configure_ac;
   my $uses_autoconf;
+  my $uses_gettext;
+  my $uses_libtool;
+  my $uses_autoheader;
   while ($_ = $configure_ac_file->getline)
      {
        $uses_autoconf = 1
 	 if /AC_INIT/;
      }
+
+  my $traces = new Autom4te::XFile
+    ("$autoconf"
+     . join (' --trace=', '',
+	     'AC_INIT', 'AM_GNU_GETTEXT', 'AM_PROG_LIBTOOL',
+	     'AC_CONFIG_HEADERS')
+     . " |");
+  while ($_ = $traces->getline)
+    {
+      $uses_autoconf = 1   if /AC_INIT/;
+      $uses_gettext = 1    if /AM_GNU_GETTEXT/;
+      $uses_libtool = 1    if /AM_PROG_LIBTOOL/;
+      $uses_autoheader = 1 if /AC_CONFIG_HEADERS/;
+    }
+
+  # ------------------ #
+  # Running autoconf.  #
+  # ------------------ #
+
   if (!$uses_autoconf)
     {
       verbose "$configure_ac: not using Autoconf";
       return;
     }
 
-
   # -------------------- #
   # Running gettexitze.  #
   # -------------------- #
 
-  my $uses_gettext = 0;
-  my $traces = new Autom4te::XFile "$autoconf --trace=AM_GNU_GETTEXT |";
-  while ($_ = $traces->getline)
-    {
-      $uses_gettext = 1
-	if /AM_GNU_GETTEXT/;
-    }
   if (!$uses_gettext)
     {
       verbose "$configure_ac: not using Gettext";
     }
-  elsif (-d 'intl')
+  elsif (-d 'intl' && !$force)
     {
       verbose "$configure_ac: not running gettextize: `intl' is already present";
     }
@@ -239,13 +264,6 @@ sub autoreconf ()
   # Running libtoolize.  #
   # -------------------- #
 
-  my $uses_libtool = 0;
-  $traces = new Autom4te::XFile "$autoconf --trace=AM_PROG_LIBTOOL |";
-  while ($_ = $traces->getline)
-    {
-      $uses_libtool = 1
-	if /AM_PROG_LIBTOOL/;
-    }
   if (!$uses_libtool)
     {
       verbose "$configure_ac: not using Libtool";
@@ -260,34 +278,27 @@ sub autoreconf ()
   # Running aclocal.  #
   # ----------------- #
 
-  if (-f 'aclocal.m4' &&
-      !up_to_date_p ('aclocal.m4', 'acinclude.m4'))
+  # Always run aclocal.  Tracking its sources for up-to-dateness
+  # is too complex and too error prone.  The best we can do is
+  # avoiding nuking the time stamp.
+
+  # If there are flags for aclocal in Makefile.am, use them.
+  my $aclocal_flags;
+  if (-f 'Makefile.am')
     {
-      # If there are flags for aclocal in Makefile.am, use them.
-      my $aclocal_flags;
-      if (-f 'Makefile.am')
+      my $aclocal_m4 = new Autom4te::XFile 'Makefile.am';
+      while ($_ = $aclocal_m4->getline)
 	{
-	  my $aclocal_m4 = new Autom4te::XFile 'Makefile.am';
-	  while ($_ = $aclocal_m4->getline)
+	  if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
 	    {
-	      if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
-		{
-		  $aclocal_flags = $1;
-		  last;
-		}
+	      $aclocal_flags = $1;
+	      last;
 	    }
 	}
-
-      # If m4dir is not specified and these flags do not specify the
-      # location of the local Autoconf extensions, default to `m4'.
-      if (!$aclocal_flags)
-	{
-	  $aclocal_flags = '-I ' . ($m4dir || 'm4');
-	}
-      xsystem ("$aclocal $aclocal_flags")
     }
 
-
+  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
+  update_file ('aclocal.m4t', 'aclocal.m4');
 
   # ------------------ #
   # Running automake.  #
@@ -323,13 +334,6 @@ sub autoreconf ()
   # We now consider that if AC_CONFIG_HEADERS is used, then autoheader
   # is used too.
   # Just as for autoconf, up to date ness is performed by the tool itself.
-  my $uses_autoheader = 0;
-  $traces = new Autom4te::XFile "$autoconf --trace=AC_CONFIG_HEADERS |";
-  while ($_ = $traces->getline)
-    {
-      $uses_autoheader = 1
-	if /AC_CONFIG_HEADERS/;
-    }
   if (!$uses_autoheader)
     {
       verbose "$configure_ac: not using Autoheader";

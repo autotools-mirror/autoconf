@@ -1,7 +1,9 @@
 * Major changes in Autoconf 2.52e                       -*- outline -*-
 
 ** Requirements
-  Perl 5.005 is required.
+  Perl 5.005 is required: autom4te is written in Perl and is needed by
+  autoconf.  autoheader, autoreconf, ifnames, and autoscan are
+  rewritten in Perl.
 
 ** Documentation
 - AC_INIT
@@ -32,13 +34,15 @@
 - --force, -f
   Supported by autom4te, autoconf and autoheader.
 - --include, -I
-  Replaces --autoconf-dir and --localdir in autoconf, autoheader and
-  autoupdate.
+  Replaces --autoconf-dir and --localdir in autoconf, autoheader,
+  autoupdate, and autoreconf.
 - autoreconf
   No longer passes --cygnus, --foreign, --gnits, --gnu, --include-deps:
   automake options are to be given via AUTOMAKE_OPTIONS.
 - autoreconf
   Runs gettextize and libtoolize when appropriate.
+- autoreconf
+  --m4dir is no longer supported.
 
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.

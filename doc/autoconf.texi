@@ -1077,7 +1077,7 @@ symbols it finds in them.  This output can be voluminous.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Latest directories are looking in first.
+accumulate.  Directories are browsed from last to first.
 @end table
 
 @node ifnames Invocation
@@ -1162,7 +1162,7 @@ Remake @file{configure} even if newer than its input files.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Latest directories are looking in first.
+accumulate.  Directories are browsed from last to first.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -1443,26 +1443,10 @@ Copy missing auxiliary files.  This option is similar to the option
 @itemx -s
 Instead of copying missing auxiliary files, install symbolic links.
 
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Have @code{autoconf} and @code{autoheader} look for the package files
-@file{aclocal.m4} and (@code{autoheader} only) @file{acconfig.h} (but
-not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
-@var{dir} instead of in the directory containing each @file{configure.ac}.
-
-@item --autoconf-dir=@var{dir}
-@itemx -A @var{dir}
-@evindex AC_MACRODIR
-Override the location where the installed Autoconf data files are looked
-for.  You can also set the @code{AC_MACRODIR} environment variable to a
-directory; this option overrides the environment variable.
-
-This option is rarely needed and dangerous; it is only used when one
-plays with different versions of Autoconf simultaneously.
-
-@item --m4dir=@var{dir}
-@itemx -M @var{dir}
-Specify location of additional macro files (@file{m4} by default).
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations
+accumulate.  Directories are browsed from last to first.
 @end table
 
 
@@ -2533,7 +2517,7 @@ Remake the template file even if newer than its input files.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.
-Latest directories are looking in first.
+Directories are browsed from last to first.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -10258,7 +10242,7 @@ Force the update even if the file has not changed.  Disregard the cache.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.
-Latest directories are looking in first.
+Directories are browsed from last to first.
 @end table
 
 @node Obsolete Macros

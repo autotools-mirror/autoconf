@@ -280,12 +280,12 @@ sub up_to_date_p ($@)
     {
       if ($mtime < mtime ($dep))
 	{
-	  verbose "up_to_date ($file): outdated: $dep";
+	  debug "up_to_date ($file): outdated: $dep";
 	  return 0;
 	}
     }
 
-  verbose "up_to_date ($file): up to date";
+  debug "up_to_date ($file): up to date";
   return 1;
 }
 
@@ -293,7 +293,7 @@ sub up_to_date_p ($@)
 # &update_file ($FROM, $TO)
 # -------------------------
 # Rename $FROM as $TO, preserving $TO timestamp if it has not changed.
-# Recognize `$TO = -' standing for stdin.
+# Recognize `$TO = -' standing for stdin.  $FROM is always removed/renamed.
 sub update_file ($$)
 {
   my ($from, $to) = @_;
@@ -319,6 +319,8 @@ sub update_file ($$)
     {
       # File didn't change, so don't update its mod time.
       print STDERR "$me: `$to' is unchanged\n";
+      unlink ($from)
+	or die "$me: cannot not remove $from: $!\n";
       return
     }
 

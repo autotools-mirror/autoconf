@@ -1,5 +1,18 @@
 2001-10-20  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (&update_file): If destination is
+	unchanged, remove the source.
+	(&up_to_date_p): Don't be verbose, be debug.
+	* bin/autoreconf.in: No longer support --m4dir.
+	(&autoreconf): Display the full path of the configure.ac we are
+	studying.
+	Trace it only once.
+	Be sure to honor --force with gettextize.
+	Always run aclocal.
+	* doc/autoconf.texi: Adjust.
+
+2001-10-20  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoheader.in ($localdir, $m4, $SIMPLE_BACKUP_SUFFIX):
 	Remove, dead.
 	* bin/autoreconf.in (&autoreconf): Do not run gettextize when

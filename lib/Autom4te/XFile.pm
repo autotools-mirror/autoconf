@@ -135,6 +135,11 @@ sub open
       my $me = basename ($0);
       croak "$me: cannot open $file: $!\n";
     }
+
+  # In case we're running under MSWindows, don't write with CRLF.
+  # (This circumvents a bug in at least Cygwin bash where the shell
+  # parsing fails on lines ending with the continuation character '\'
+  # and CRLF).
   binmode $fh if $file =~ /^\s*>/;
 }
 
