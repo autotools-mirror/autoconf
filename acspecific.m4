@@ -358,6 +358,10 @@ fi
 AC_SUBST(LN_S)dnl
 ])dnl
 dnl
+AC_DEFUN(AC_RSH,
+[errprint([$0] has been removed; replace it with equivalent code
+)m4exit(4)])dnl
+dnl
 dnl
 dnl ### Checks for header files
 dnl
@@ -1346,6 +1350,10 @@ if test $ac_cv_c_const = no; then
 fi
 ])dnl
 dnl
+AC_DEFUN(AC_ARG_ARRAY,
+[errprint([$0] has been removed; don't do unportable things with arguments
+)m4exit(4)])dnl
+dnl
 dnl
 dnl ### Checks for operating system services
 dnl
@@ -1368,6 +1376,10 @@ fi
 rm -f conftest])dnl
 AC_MSG_RESULT($ac_cv_sys_interpreter)
 ])dnl
+dnl
+AC_DEFUN(AC_HAVE_POUNDBANG,
+[errprint([$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments
+])m4exit(4)])dnl
 dnl
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_MSG_CHECKING(for long file names)

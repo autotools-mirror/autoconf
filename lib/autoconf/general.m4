@@ -1658,10 +1658,18 @@ fi; done
 
 ])dnl
 dnl
+dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
+dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_LINKS(DEST..., SOURCE...)
 AC_DEFUN(AC_OUTPUT_LINKS,
-[ac_links="$1"
+[EOF
+
+cat >> ${CONFIG_STATUS} <<EOF
+ac_links="$1"
 ac_files="$2"
+EOF
+
+cat >> ${CONFIG_STATUS} <<\EOF
 while test -n "${ac_files}"; do
   set ${ac_links}; ac_link=[$]1; shift; ac_links=[$]*
   set ${ac_files}; ac_file=[$]1; shift; ac_files=[$]*
