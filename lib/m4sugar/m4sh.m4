@@ -279,9 +279,10 @@ fi
 # AS_UNSET depends upon $as_unset: compute it.
 # Use MAIL to trigger a bug in Bash 2.01;
 # the "|| exit" suppresses the resulting "Segmentation fault" message.
+# Avoid 'if ((', as that triggers a bug in pdksh 5.2.14.
 m4_defun([_AS_UNSET_PREPARE],
 [# Support unset when possible.
-if ((MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
+if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   as_unset=unset
 else
   as_unset=false

@@ -1,3 +1,12 @@
+2003-10-15  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Work around a bug in
+	pdksh 5.2.14.  Bug reported by Ralf Corsepius.
+	* doc/autoconf.texi (Shellology): Mention the Korn shell and pdksh.
+	Mention /usr/dt/bin/dtksh on Solaris.
+	(Shell Substitutions): Warn about $((...)).
+	(Parentheses): New section.
+	
 2003-10-15  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Add @prindex for exit.

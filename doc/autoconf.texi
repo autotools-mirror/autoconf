@@ -468,6 +468,7 @@ Portable Shell Programming
 * File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
+* Parentheses::                 Parentheses in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
@@ -9055,6 +9056,7 @@ There are other sources of documentation about shells.  See for instance
 * File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
+* Parentheses::                 Parentheses in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
@@ -9125,12 +9127,31 @@ versions of @command{bash} (or with many other shells, probably).  So if
 you use @command{bash} 2.05 or higher to execute @command{configure},
 you'll need to use @command{bash} 2.05 for all other build tasks as well.
 
-@item @command{/usr/xpg4/bin/sh} on Solaris
+@item Ksh
+@prindex Ksh
+@prindex Korn shell
+@prindex @samp{ksh88}
+@prindex @samp{ksh93}
+The Korn shell is compatible with the Bourne family and it mostly
+conforms to @acronym{POSIX}.  It has two major variants commonly
+called @samp{ksh88} and @samp{ksh93}, named after the years of initial
+release.  It is usually called @command{ksh}, but Solaris systems have
+three variants:
+@prindex @command{/usr/bin/ksh} on Solaris
+@command{/usr/bin/ksh} is @samp{ksh88},
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
-The @acronym{POSIX}-compliant Bourne shell on a Solaris system is
-@command{/usr/xpg4/bin/sh} and is part of an extra optional package.
-There is no extra charge for this package, but it is also not part of a
-minimal OS install and therefore some folks may not have it.
+@command{/usr/xpg4/bin/sh} is a @acronym{POSIX}-compliant variant of
+@samp{ksh88}, and
+@prindex @command{/usr/dt/bin/dtksh} on Solaris
+@command{/usr/dt/bin/dtksh} is @samp{ksh93}.  @command{/usr/bin/ksh}
+is standard on Solaris; the other variants are parts of optional
+packages.  There is no extra charge for these packages, but they are
+not part of a minimal OS install and therefore some installations may
+not have it.
+@prindex @samp{pdksh}
+A public-domain clone of the Korn shell called @samp{pdksh} is also
+widely available: it has most of the @samp{ksh88} features along with
+a few of its own.
 
 @item Zsh
 @cindex Zsh
@@ -9669,6 +9690,13 @@ IRIX firebird-image 6.5 07151432 IP22
 $ @kbd{echo $(echo blah)}
 $(echo blah)
 @end example
+
+If you do use @samp{$(@var{commands})}, make sure that the commands
+do not start with a parenthesis, as that would cause confusion with
+a different notation @samp{$((@var{expression}))} that in modern
+shells is an arithmetic expression not a command.  To avoid the
+confusion, insert a space between the two opening parentheses.
+
 @end table
 
 
@@ -9755,6 +9783,36 @@ doubt, just use the latter.  @xref{Shell Substitutions}, items
 @samp{$@{@var{var}:-@var{value}@}} and @samp{$@{@var{var}=@var{value}@}}
 for the rationale.
 
+@node Parentheses
+@section Parentheses in Shell Scripts
+
+Beware of two opening parentheses in a row, as some shell
+implementations mishandle them.  For example, @samp{pdksh} 5.2.14
+misparses the following code:
+
+@example
+if ((true) || false); then
+  echo ok
+fi
+@end example
+
+@noindent
+To work around this problem, insert a space between the two opening
+parentheses.  There is a similar problem and workaround with
+@samp{$((}; see @ref{Shell Substitutions}.
+
+@acronym{POSIX} requires support for @code{case} patterns with opening
+parentheses like this:
+
+@example
+case $filename in
+(*.c) echo "C source code";;
+esac
+@end example
+
+@noindent
+but the @code{(} in this example is not portable to many older Bourne
+shell implementations.  It can be omitted safely.
 
 @node Special Shell Variables
 @section Special Shell Variables
