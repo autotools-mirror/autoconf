@@ -11819,6 +11819,35 @@ recent enough (the copies shipped with Automake 1.8.3 are OK, those from
 older versions are not thread-safe either).
 
 
+@item @command{mktemp}
+@c -------------------
+@prindex @command{mktemp}
+@cindex Creating temporary files
+The command @command{mktemp} lets shell scripts use temporary files
+safely, but it does not exist on all systems.  A portable way to create
+a safe temporary file name is to create a temporary directory with mode
+700 and use a file inside this directory.
+
+Here is sample code to create a new temporary directory safely
+under @code{$TMPDIR}, with the default location being @file{/tmp}:
+
+@example
+: $@{TMPDIR=/tmp@}
+@{
+  # Prefer mktemp if it exists, as it is more reliable.
+  tmp=`
+    (umask 077 && mktemp -d "$TMPDIR/fooXXXXXX") 2>/dev/null
+  ` &&
+  test -n "$tmp" && test -d "$tmp"
+@} ||
+@{
+  # Fall back on mkdir; $RANDOM makes collisions less likely.
+  tmp=$TMPDIR/foo$$-$RANDOM
+  (umask 077 && mkdir "$tmp")
+@} || exit $?
+@end example
+
+
 @item @command{mv}
 @c ---------------
 @prindex @command{mv}
