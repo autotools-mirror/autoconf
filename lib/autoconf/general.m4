@@ -1857,7 +1857,7 @@ AC_DEFUN(AC_TRY_COMMAND,
 AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
 # Factorizing default headers for most tests.
 # Mandatory included if its is not used.
-ac_includes_default='\
+ac_includes_default="\
 #include <stdio.h>
 #include <sys/types.h>
 #if HAVE_STRING_H
@@ -1880,7 +1880,7 @@ ac_includes_default='\
 #endif
 #if HAVE_UNISTD_H
 # include <unistd.h>
-#endif'
+#endif"
 AC_DIVERT_POP()
 
 
