@@ -1,3 +1,8 @@
+2000-05-12  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Exiting from Shell Scripts): New node.
+	(Autoconf Language): Follow the advice in the new node.
+
 2000-05-12  Peter Eisentraut  <peter_e@gmx.net>
 
 	* doc/autoconf.texi: Fix typos.
