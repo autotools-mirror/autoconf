@@ -1,3 +1,15 @@
+2004-12-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* man/Makefile.am (autoconf.1, autoheader.1, autom4te.1, autoreconf.1,
+	autoscan.1, autoupdate.1, ifnames.1, config.guess.1, config.sub.1):
+	Don't depend on .x file explicitly, since "make" does that for us.
+	Suggested by Stepan Kasal.
+
+	* bin/Makefile.am (MOSTLYCLEANFILES): Renamed from CLEANFILES.
+	Add *.tmp.
+	(autoconf, autoheader, autom4te, autoreconf, autoscan, autoupdate,
+	ifnames): Factor common code.  And they said it couldn't be done!
+
 2004-12-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* bin/.cvsignore: Add autoconf.in.
