@@ -1,5 +1,16 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Provide the m4 infrastructure for defining AH_ hooks.
+
+	* autoheader.m4 (AH_HOOK): New macro.
+	Hook all the AC_ macros to their AH_siblings in AH_HOOKS.
+	Run AH_HOOKS.
+
+	* acgeneral.m4 (m4_append): New macro.
+	(m4_list_append, m4_list_add): Removed.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4: Formating changes.
 	* acgeneral.m4: Likewise.
 

@@ -167,6 +167,43 @@ define([m4_strip],
           [ \(.\)$], [\1])])
 
 
+
+dnl m4_append(MACRO-NAME, STRING)
+dnl -----------------------------
+dnl Redefine MACRO-NAME to hold its former content plus STRING at the
+dnl end.  It is valid to use this macro with MACRO-NAME undefined.
+dnl
+dnl This macro is robust to active symbols.  It can be used to grow
+dnl strings or lists.
+dnl
+dnl    | define(active, ACTIVE)
+dnl    | m4_append([sentence], [This is an])
+dnl    | m4_append([sentence], [ active ])
+dnl    | m4_append([sentence], [symbol.])
+dnl    | sentence
+dnl    | undefine([active])dnl
+dnl    | sentence
+dnl    => This is an ACTIVE symbol.
+dnl    => This is an active symbol.
+dnl
+dnl It can be used to define hooks.
+dnl
+dnl    | define(active, ACTIVE)
+dnl    | m4_append([hooks], [define([act1], [act2])])
+dnl    | m4_append([hooks], [define([act2], [active])])
+dnl    | undefine([active])
+dnl    | act1
+dnl    | hooks
+dnl    | act1
+dnl    => act1
+dnl    =>
+dnl    => active
+define(m4_append,
+[define([$1],
+ifdef([$1], [defn([$1])])
+[$2])])
+
+
 dnl ------------------------------------------------------------
 dnl Some additional m4 structural control.
 dnl ------------------------------------------------------------
@@ -259,41 +296,6 @@ define(_m4_foreach,
                                                  [$3])])])
 
 
-dnl m4_list_append(LIST, ELEMENT)
-dnl -----------------------------
-dnl Insert ELEMENT at the end of LIST.
-dnl
-dnl This macro is picky on its input, especially for the empty list: it
-dnl must be either the empty string, or exactly `()' (no spaces allowed).
-dnl This macro is actually purely textual: it basically replaces the
-dnl closing paren of LIST with `, ELEMENT)'.  The hair is to preserve
-dnl quotation: this macro is robust to active symbols.
-dnl
-dnl   | define(active, ACTIVE)
-dnl   | m4_list_append(m4_list_append(m4_list_append((), [1 active]),
-dnl   |                               [2 active]),
-dnl   |                [3 active])end
-dnl   =>(1 active, 2 active, 3 active)end
-dnl
-dnl The combination of this macro and m4_quote is extremely useful to
-dnl build and store lists:
-dnl
-dnl   | define(active, ACTIVE)
-dnl   | define(list, ())
-dnl   | define([list], m4_quote(m4_list_append(list, [1 active])))
-dnl   | define([list], m4_quote(m4_list_append(list, [2 active])))
-dnl   | define([list], m4_quote(m4_list_append(list, [3 active])))
-dnl   | list
-dnl   =>(1 active, 2 active, 3 active)
-dnl
-define([m4_list_append],
-[ifelse([$1], [],   [([$2])],
-        [$1], [()], [([$2])],
-        [patsubst([[$1]], [^..\(.*\)..$], [[(\1, $2)]])])])
-
-
-define([m4_list_add],
-[define([$1], m4_quote(m4_list_append($1, [$2])))])
 
 
 dnl ### Defining macros

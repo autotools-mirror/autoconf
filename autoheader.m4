@@ -192,23 +192,31 @@ define([AC_CONFIG_H], patsubst($1, [ .*$], []))dnl
 @@@config_h=AC_CONFIG_H@@@
 ])
 
+dnl Install a new hook for AH_ macros.
+define(AH_HOOK,
+[m4_append([AH_HOOKS], [define([$1], defn([$2]))])])
+
+
 dnl Autoheader is not the right program to complain about cross-compiling.
 define([AC_TRY_RUN], [
 $2
 $3
 $4])
 
-define([AC_DEFINE], [AH_DEFINE($@)])
-define([AC_DEFINE_UNQUOTED], [AH_DEFINE($@)])
-define([AC_NEED_DECLS], [AH_NEED_DECLS($@)])
-define([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF($@)])
-define([AC_CHECK_FUNCS], [AH_CHECK_FUNCS($@)])
-define([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
-define([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
-define([AC_CHECK_MEMBERS], [AH_CHECK_MEMBERS($@)])
-define([AC_CHECK_LIB], [AH_CHECK_LIB($@)])
-define([AC_PROG_LEX], [AH_PROG_LEX($@)])
-define([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA($@)])
-define([AC_C_CHAR_UNSIGNED], [AH_C_CHAR_UNSIGNED($@)])
-define([AC_AIX], [AH_AIX($@)])
-define([AC_F77_WRAPPERS], [AH_F77_WRAPPERS($@)])
+AH_HOOK([AC_DEFINE], [AH_DEFINE])
+AH_HOOK([AC_DEFINE_UNQUOTED], [AH_DEFINE])
+AH_HOOK([AC_NEED_DECLS], [AH_NEED_DECLS])
+AH_HOOK([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF])
+AH_HOOK([AC_CHECK_FUNCS], [AH_CHECK_FUNCS])
+AH_HOOK([AC_CHECK_HEADERS], [AH_CHECK_HEADERS])
+AH_HOOK([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS])
+AH_HOOK([AC_CHECK_MEMBERS], [AH_CHECK_MEMBERS])
+AH_HOOK([AC_CHECK_LIB], [AH_CHECK_LIB])
+AH_HOOK([AC_PROG_LEX], [AH_PROG_LEX])
+AH_HOOK([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA])
+AH_HOOK([AC_C_CHAR_UNSIGNED], [AH_C_CHAR_UNSIGNED])
+AH_HOOK([AC_AIX], [AH_AIX])
+AH_HOOK([AC_F77_WRAPPERS], [AH_F77_WRAPPERS])
+
+dnl Install the AH_HOOKS
+AH_HOOKS
