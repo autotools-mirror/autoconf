@@ -1,3 +1,8 @@
+Fri Jul 19 16:59:00 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Add dnl so regexp doesn't have a
+	leading newline.
+
 Wed Jun 12 13:56:57 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_TYPE): Remove extra ')'.
