@@ -2811,7 +2811,7 @@ set to empty string if Unix, @samp{.exe} or @samp{.EXE} if Win32.
 @ovindex OBJEXT
 Defines substitute variable @code{OBJEXT} based on the output of the
 compiler, after .c files have been excluded.  Typically
-set to @samp{.o} if Unix, @samp{.obj} if Win32.
+set to @samp{o} if Unix, @samp{obj} if Win32.
 @end defmac
 
 @defmac AC_MINGW32

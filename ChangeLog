@@ -1,3 +1,7 @@
+1999-01-06  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (AC_OBJEXT): Correct documentation.
+
 1999-01-05  Ben Elliston  <bje@cygnus.com>
 
 	* Version 2.13.
