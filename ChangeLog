@@ -1,3 +1,14 @@
+2001-04-17  Akim Demaille  <akim@epita.fr>
+
+	Don't mess with FDs.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS_FDS): Remove, replace with
+	inline setting up of AS_MESSAGE_FD.
+	(AS_MESSAGE_LOG_FD): Do not define, so that AS_MESSAGE does not
+	output in it before...
+	(_AC_INIT_CONFIG_LOG): here, which is run after the handling of
+	options.
+
 2001-04-18  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: Replace documentation for obsolete
