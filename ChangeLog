@@ -1,5 +1,9 @@
 2001-11-03  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: s/@code/@command/ where appropriate.
+
+2001-11-03  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm: (&catfile, &canonfile)
 	(&file_name_is_absolute): New, wrappers around routines from
 	File::Spec.
