@@ -17,6 +17,13 @@ script can find them.  The configuration scripts produced by Autoconf
 are self-contained, so their users do not need to have Autoconf (or
 GNU M4, Perl etc.).
 
+Vanilla GNU m4 1.4 has some serious bugs, so we recommend using m4 1.4
+as patched by the standard GNU/Linux distributions.  If you're
+building GNU m4 1.4 from scratch we suggest using 1.4.2 or later.
+You can get 1.4.2 here:
+
+ftp://alpha.gnu.org/gnu/bison/m4-1.4.2.tar.gz
+
 The file INSTALL should be distributed with packages that use
 Autoconf-generated configure scripts and Makefiles that conform to the
 GNU coding standards.  The package's README can just give an overview
@@ -35,7 +42,7 @@ running `autoconf --version'.
 
 -----
 
-Copyright (C) 1992, 1993, 1994, 1998, 2000, 2001, 2002, 2003
+Copyright (C) 1992, 1993, 1994, 1998, 2000, 2001, 2002, 2003, 2004
 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
