@@ -1,3 +1,7 @@
+1998-03-14  Alexandre Oliva  <oliva@dcc.unicamp.br>
+	
+	* config.guess: Recognise HP 9000/8x0 machines.
+
 1999-03-11  Ben Elliston  <bje@cygnus.com>
 
 	* config.sub: Recognise hppa2.0w. Contributed by Erez Zadok
