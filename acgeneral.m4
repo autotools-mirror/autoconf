@@ -2455,6 +2455,10 @@ EOF
 
 cat >> $CONFIG_STATUS <<\EOF
 srcdir=$ac_given_srcdir
+# Remove spaces from $ac_sources if it is otherwise empty.
+set -- $ac_sources
+ac_sources=[$]*
+
 while test -n "$ac_sources"; do
   set $ac_dests; ac_dest=[$]1; shift; ac_dests=[$]*
   set $ac_sources; ac_source=[$]1; shift; ac_sources=[$]*

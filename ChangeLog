@@ -1,3 +1,9 @@
+1999-09-26  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_OUTPUT_LINKS): Eliminate gratuitous spaces from
+	$ac_sources if this variable is otherwise empty. Fix for
+	autoconf/30.
+
 1999-09-25  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (AC_FUNC_SETVBUF): Do not mention which systems
