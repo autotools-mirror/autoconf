@@ -1,3 +1,15 @@
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
+	Test groups are now run two directories deeper.
+
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Replace srcdir,
+	top_srcdir and top_builddir with at_srcdir, at_top_srcdir and
+	at_top_builddir.
+	* lib/autotest/general.m4 (AT_INIT): Compute srcdir,
+	top_srcdir, builddir and top_builddir.
+	Use `at_*dir' relatively to the directory containing the
+	suite, use `*dir' when relatively to the current group dir.
+
 2001-11-25  Joseph S. Myers  <jsm28@cam.ac.uk>
 
 	* doc/autoconf.texi, TODO, lib/autoconf/fortran.m4,

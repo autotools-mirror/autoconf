@@ -110,6 +110,17 @@ do
   . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
+# atconfig delivers paths relative to the directory the test suite is
+# in, but the groups themselves are run in testsuite-dir/group-dir.
+if test -n "$at_top_srcdir"; then
+  builddir=../..
+  for at_dir in srcdir top_srcdir top_builddir
+  do
+    at_val=AS_VAR_GET(at_$at_dir)
+    AS_VAR_SET($at_dir, $at_val/../..)
+  done
+fi
+
 AUTOTEST_PATH=`echo $AUTOTEST_PATH | tr ':' $PATH_SEPARATOR`
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
@@ -349,13 +360,13 @@ _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
     at_path=$at_path$PATH_SEPARATOR$as_dir
     ;;
   * )
-    if test -z "$top_builddir"; then
+    if test -z "$at_top_builddir"; then
       # Stand-alone test suite.
       at_path=$at_path$PATH_SEPARATOR$as_dir
     else
       # Embedded test suite.
-      at_path=$at_path$PATH_SEPARATOR$top_builddir/$as_dir
-      at_path=$at_path$PATH_SEPARATOR$top_srcdir/$as_dir
+      at_path=$at_path$PATH_SEPARATOR$at_top_builddir/$as_dir
+      at_path=$at_path$PATH_SEPARATOR$at_top_srcdir/$as_dir
     fi
     ;;
 esac])
@@ -406,10 +417,10 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   # exact version.  Use the relative dir: if the top dir is a symlink,
   # find will not follow it (and options to follow the links are not
   # portable), which would result in no output here.
-  if test -n "$top_srcdir"; then
+  if test -n "$at_top_srcdir"; then
     AS_BOX([ChangeLogs.])
     echo
-    for at_file in `find "$top_srcdir" -name ChangeLog -print`
+    for at_file in `find "$at_top_srcdir" -name ChangeLog -print`
     do
       echo "$as_me: $at_file:"
       sed 's/^/| /;10q' $at_file
@@ -644,10 +655,10 @@ elif test $at_debug_p = false; then
 
   {
     echo
-    if test -n "$top_srcdir"; then
+    if test -n "$at_top_srcdir"; then
       AS_BOX([Configuration logs.])
       echo
-      for at_file in `find "$top_srcdir" -name config.log -print`
+      for at_file in `find "$at_top_srcdir" -name config.log -print`
       do
   	echo "$as_me: $at_file:"
   	sed 's/^/| /' $at_file
