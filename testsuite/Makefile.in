@@ -17,6 +17,7 @@
 
 #### Start of system configuration section. ####
 
+top_srcdir = @top_srcdir@
 srcdir = @srcdir@
 VPATH = @srcdir@
 
@@ -25,12 +26,8 @@ M4 = @M4@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
-# Directory in which to install library files.
-datadir = $(prefix)/share
-acdatadir = $(datadir)/autoconf
-
-AUTOCONF = autoconf
-AUTOCONFFLAGS =
+AUTOCONF = ../autoconf
+AUTOCONFFLAGS = -m $(top_srcdir)
 
 RUNTEST= runtest
 RUNTESTFLAGS=
@@ -50,7 +47,7 @@ check: site.exp all
 
 installcheck:
 
-site.exp: ../config.status Makefile
+site.exp: Makefile
 	@echo "Making a new site.exp file..."
 	-@rm -f site.bak
 	-@mv site.exp site.bak
