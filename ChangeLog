@@ -1,3 +1,34 @@
+1999-09-14  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_HELP_STRING): Rewrite in m4.  Have m4 work, and
+ 	give a break to sh.
+	(_AC_FOREACH): Be careful not to evaluate the arguments.  A loop
+	over *quoted* macro names should loop over the macro names, not
+	upon their expansion.
+	(_AC_COMMATIZE): Also swallow end of lines.
+
+	* autoconf.texi (Pretty Help Strings): Updated to reflect the
+ 	changes.
+
+1999-09-13  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (ifset): New helpy tiny macro.
+	(AC_OUTPUT): Improved --help of config.status.
+	(AC_OUTPUT): Remove inconditionaly all the files to be updated.
+	(AC_OUTPUT): Use pid to define the temporary file names in order
+	to allow parallel builds.
+
+	* autoconf.sh: Substitute also /@BKL@/[/ /@BKR@/]/ /@DLR@/$/ so
+ 	that these characters are more easily accessible from m4 without
+ 	turning changequote juggling into a nightmare.
+
+	* acgeneral.m4 (AC_WRAP): New macro, for word wrapping.
+
+	* autoconf.texi: Update the direntry for more modern Texinfos.
+	Add pointer to configure and config.status.
+	Remove the dots from the menus: horizontal space is precious.
+	(Invoking config.status): More traditional presentation of the options.
+
 1999-09-02  Tom Tromey  <tromey@cygnus.com>
 
 	* autoheader.sh: Allow multiple spaces between #undef and symbol

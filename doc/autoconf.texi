@@ -14,13 +14,28 @@
 @finalout
 @end iftex
 
-@ifinfo
-@format
-START-INFO-DIR-ENTRY
-* Autoconf: (autoconf).         Create source code configuration scripts.
-END-INFO-DIR-ENTRY
-@end format
+@dircategory GNU admin
+@direntry
+* Autoconf: (autoconf).         Create source code configuration scripts
+@end direntry
 
+@dircategory Individual utilities
+@direntry
+* autoscan: (autoconf)Invoking autoscan.
+                                Semi-automatic @file{configure.in} writing
+* ifnames: (autoconf)Invoking ifnames.
+                                Listing the conditionals in source code
+* autoconf: (autoconf)Invoking autoconf.
+                                How to create configuration scripts
+* autoreconf: (autoconf)Invoking autoreconf.
+                                Remaking multiple @code{configure} scripts
+* configure: (autoconf)Invoking aclocal.
+                                How to use the Autoconf output
+* config.status: (autoconf)Invoking config.status.
+                                Recreating a configuration
+@end direntry
+
+@ifinfo
 Autoconf: Creating Automatic Configuration Scripts, by David MacKenzie.
 
 This file documents the GNU Autoconf package for creating scripts to
@@ -95,201 +110,202 @@ by the Foundation.
 @ifinfo
 This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
-package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
+package.  This is edition @value{EDITION}, for Autoconf version
+@value{VERSION}.
 
 @end ifinfo
 
 @c The master menu, created with texinfo-master-menu, goes here.
 
 @menu
-* Introduction::                Autoconf's purpose, strengths, and weaknesses.
-* Making configure Scripts::    How to organize and produce Autoconf scripts.
-* Setup::                       Initialization and output.
-* Existing Tests::              Macros that check for particular features.
-* Writing Tests::               How to write new feature checks.
-* Results::                     What to do with results from feature checks.
-* Writing Macros::              Adding new macros to Autoconf.
-* Manual Configuration::        Selecting features that can't be guessed.
-* Site Configuration::          Local defaults for @code{configure}.
-* Invoking configure::          How to use the Autoconf output.
-* Invoking config.status::      Recreating a configuration.
-* Questions::                   Questions about Autoconf, with answers.
-* Upgrading::                   Tips for upgrading from version 1.
-* History::                     History of Autoconf.
-* Old Macro Names::             Backward compatibility macros.
-* Environment Variable Index::  Index of environment variables used.
-* Output Variable Index::       Index of variables set in output files.
-* Preprocessor Symbol Index::   Index of C preprocessor symbols defined.
-* Macro Index::                 Index of Autoconf macros.
+* Introduction::                Autoconf's purpose, strengths, and weaknesses
+* Making configure Scripts::    How to organize and produce Autoconf scripts
+* Setup::                       Initialization and output
+* Existing Tests::              Macros that check for particular features
+* Writing Tests::               How to write new feature checks
+* Results::                     What to do with results from feature checks
+* Writing Macros::              Adding new macros to Autoconf
+* Manual Configuration::        Selecting features that can't be guessed
+* Site Configuration::          Local defaults for @code{configure}
+* Invoking configure::          How to use the Autoconf output
+* Invoking config.status::      Recreating a configuration
+* Questions::                   Questions about Autoconf, with answers
+* Upgrading::                   Tips for upgrading from version 1
+* History::                     History of Autoconf
+* Old Macro Names::             Backward compatibility macros
+* Environment Variable Index::  Index of environment variables used
+* Output Variable Index::       Index of variables set in output files
+* Preprocessor Symbol Index::   Index of C preprocessor symbols defined
+* Macro Index::                 Index of Autoconf macros
 
 @detailmenu
  --- The Detailed Node Listing ---
 
 Making @code{configure} Scripts
 
-* Writing configure.in::        What to put in an Autoconf input file.
-* Invoking autoscan::           Semi-automatic @file{configure.in} writing.
-* Invoking ifnames::            Listing the conditionals in source code.
-* Invoking autoconf::           How to create configuration scripts.
-* Invoking autoreconf::         Remaking multiple @code{configure} scripts.
+* Writing configure.in::        What to put in an Autoconf input file
+* Invoking autoscan::           Semi-automatic @file{configure.in} writing
+* Invoking ifnames::            Listing the conditionals in source code
+* Invoking autoconf::           How to create configuration scripts
+* Invoking autoreconf::         Remaking multiple @code{configure} scripts
 
 Initialization and Output Files
 
-* Input::                       Where Autoconf should find files.
-* Output::                      Creating output files.
-* Makefile Substitutions::      Using output variables in @file{Makefile}s.
-* Configuration Headers::       Creating a configuration header file.
-* Subdirectories::              Configuring independent packages together.
-* Default Prefix::              Changing the default installation prefix.
-* Versions::                    Version numbers in @code{configure}.
+* Input::                       Where Autoconf should find files
+* Output::                      Creating output files
+* Makefile Substitutions::      Using output variables in @file{Makefile}s
+* Configuration Headers::       Creating a configuration header file
+* Subdirectories::              Configuring independent packages together
+* Default Prefix::              Changing the default installation prefix
+* Versions::                    Version numbers in @code{configure}
 
 Substitutions in Makefiles
 
-* Preset Output Variables::     Output variables that are always set.
-* Build Directories::           Supporting multiple concurrent compiles.
-* Automatic Remaking::          Makefile rules for configuring.
+* Preset Output Variables::     Output variables that are always set
+* Build Directories::           Supporting multiple concurrent compiles
+* Automatic Remaking::          Makefile rules for configuring
 
 Configuration Header Files
 
-* Header Templates::            Input for the configuration headers.
-* Invoking autoheader::         How to create configuration templates.
+* Header Templates::            Input for the configuration headers
+* Invoking autoheader::         How to create configuration templates
 
 Existing Tests
 
-* Alternative Programs::        Selecting between alternative programs.
-* Libraries::                   Library archives that might be missing.
-* Library Functions::           C library functions that might be missing.
-* Header Files::                Header files that might be missing.
-* Structures::                  Structures or members that might be missing.
-* Typedefs::                    @code{typedef}s that might be missing.
-* C Compiler Characteristics::  
-* Fortran 77 Compiler Characteristics::  
-* System Services::             Operating system services.
-* UNIX Variants::               Special kludges for specific UNIX variants.
+* Alternative Programs::        Selecting between alternative programs
+* Libraries::                   Library archives that might be missing
+* Library Functions::           C library functions that might be missing
+* Header Files::                Header files that might be missing
+* Structures::                  Structures or members that might be missing
+* Typedefs::                    @code{typedef}s that might be missing
+* C Compiler Characteristics::
+* Fortran 77 Compiler Characteristics::
+* System Services::             Operating system services
+* UNIX Variants::               Special kludges for specific UNIX variants
 
 Alternative Programs
 
-* Particular Programs::         Special handling to find certain programs.
-* Generic Programs::            How to find other programs.
+* Particular Programs::         Special handling to find certain programs
+* Generic Programs::            How to find other programs
 
 Library Functions
 
-* Particular Functions::        Special handling to find certain functions.
-* Generic Functions::           How to find other functions.
+* Particular Functions::        Special handling to find certain functions
+* Generic Functions::           How to find other functions
 
 Header Files
 
-* Particular Headers::          Special handling to find certain headers.
-* Generic Headers::             How to find other headers.
+* Particular Headers::          Special handling to find certain headers
+* Generic Headers::             How to find other headers
 
 Structures
 
-* Particular Structures::       Macros to check for certain stucture members.
-* Generic Structures::          How to find other structure members.
+* Particular Structures::       Macros to check for certain stucture members
+* Generic Structures::          How to find other structure members
 
 Typedefs
 
-* Particular Typedefs::         Special handling to find certain types.
-* Generic Typedefs::            How to find other types.
+* Particular Typedefs::         Special handling to find certain types
+* Generic Typedefs::            How to find other types
 
 Writing Tests
 
-* Examining Declarations::      Detecting header files and declarations.
-* Examining Syntax::            Detecting language syntax features.
-* Examining Libraries::         Detecting functions and global variables.
-* Run Time::                    Testing for run-time features.
-* Portable Shell::              Shell script portability pitfalls.
-* Testing Values and Files::    Checking strings and files.
-* Multiple Cases::              Tests for several possible values.
-* Language Choice::             Selecting which language to use for testing.
+* Examining Declarations::      Detecting header files and declarations
+* Examining Syntax::            Detecting language syntax features
+* Examining Libraries::         Detecting functions and global variables
+* Run Time::                    Testing for run-time features
+* Portable Shell::              Shell script portability pitfalls
+* Testing Values and Files::    Checking strings and files
+* Multiple Cases::              Tests for several possible values
+* Language Choice::             Selecting which language to use for testing
 
 Checking Run Time Behavior
 
-* Test Programs::               Running test programs.
-* Guidelines::                  General rules for writing test programs.
-* Test Functions::              Avoiding pitfalls in test programs.
+* Test Programs::               Running test programs
+* Guidelines::                  General rules for writing test programs
+* Test Functions::              Avoiding pitfalls in test programs
 
 Results of Tests
 
-* Defining Symbols::            Defining C preprocessor symbols.
-* Setting Output Variables::    Replacing variables in output files.
-* Caching Results::             Speeding up subsequent @code{configure} runs.
-* Printing Messages::           Notifying users of progress or problems.
+* Defining Symbols::            Defining C preprocessor symbols
+* Setting Output Variables::    Replacing variables in output files
+* Caching Results::             Speeding up subsequent @code{configure} runs
+* Printing Messages::           Notifying users of progress or problems
 
 Caching Results
 
-* Cache Variable Names::        Shell variables used in caches.
-* Cache Files::                 Files @code{configure} uses for caching.
+* Cache Variable Names::        Shell variables used in caches
+* Cache Files::                 Files @code{configure} uses for caching
 
 Writing Macros
 
-* Macro Definitions::           Basic format of an Autoconf macro.
-* Macro Names::                 What to call your new macros.
-* Quoting::                     Protecting macros from unwanted expansion.
-* Dependencies Between Macros::  What to do when macros depend on other macros.
+* Macro Definitions::           Basic format of an Autoconf macro
+* Macro Names::                 What to call your new macros
+* Quoting::                     Protecting macros from unwanted expansion
+* Dependencies Between Macros::  What to do when macros depend on other macros
 
 Dependencies Between Macros
 
-* Prerequisite Macros::         Ensuring required information.
-* Suggested Ordering::          Warning about possible ordering problems.
-* Obsolete Macros::             Warning about old ways of doing things.
+* Prerequisite Macros::         Ensuring required information
+* Suggested Ordering::          Warning about possible ordering problems
+* Obsolete Macros::             Warning about old ways of doing things
 
 Manual Configuration
 
-* Specifying Names::            Specifying the system type.
-* Canonicalizing::              Getting the canonical system type.
-* System Type Variables::       Variables containing the system type.
-* Using System Type::           What to do with the system type.
+* Specifying Names::            Specifying the system type
+* Canonicalizing::              Getting the canonical system type
+* System Type Variables::       Variables containing the system type
+* Using System Type::           What to do with the system type
 
 Site Configuration
 
-* External Software::           Working with other optional software.
-* Package Options::             Selecting optional features.
-* Pretty Help Strings::         
-* Site Details::                Configuring site details.
-* Transforming Names::          Changing program names when installing.
-* Site Defaults::               Giving @code{configure} local defaults.
+* External Software::           Working with other optional software
+* Package Options::             Selecting optional features
+* Pretty Help Strings::
+* Site Details::                Configuring site details
+* Transforming Names::          Changing program names when installing
+* Site Defaults::               Giving @code{configure} local defaults
 
 Transforming Program Names When Installing
 
-* Transformation Options::      @code{configure} options to transform names.
-* Transformation Examples::     Sample uses of transforming names.
-* Transformation Rules::        @file{Makefile} uses of transforming names.
+* Transformation Options::      @code{configure} options to transform names
+* Transformation Examples::     Sample uses of transforming names
+* Transformation Rules::        @file{Makefile} uses of transforming names
 
 Running @code{configure} Scripts
 
-* Basic Installation::          Instructions for typical cases.
-* Compilers and Options::       Selecting compilers and optimization.
-* Multiple Architectures::      Compiling for multiple architectures at once.
-* Installation Names::          Installing in different directories.
-* Optional Features::           Selecting optional features.
-* System Type::                 Specifying the system type.
-* Sharing Defaults::            Setting site-wide defaults for @code{configure}.
-* Operation Controls::          Changing how @code{configure} runs.
+* Basic Installation::          Instructions for typical cases
+* Compilers and Options::       Selecting compilers and optimization
+* Multiple Architectures::      Compiling for multiple architectures at once
+* Installation Names::          Installing in different directories
+* Optional Features::           Selecting optional features
+* System Type::                 Specifying the system type
+* Sharing Defaults::            Setting site-wide defaults for @code{configure}
+* Operation Controls::          Changing how @code{configure} runs
 
 Questions About Autoconf
 
-* Distributing::                Distributing @code{configure} scripts.
+* Distributing::                Distributing @code{configure} scripts
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
-* Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
+* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 
 Upgrading From Version 1
 
-* Changed File Names::          Files you might rename.
-* Changed Makefiles::           New things to put in @file{Makefile.in}.
-* Changed Macros::              Macro calls you might replace.
-* Invoking autoupdate::         Replacing old macro names in @code{configure.in}.
-* Changed Results::             Changes in how to check test results.
-* Changed Macro Writing::       Better ways to write your own macros.
+* Changed File Names::          Files you might rename
+* Changed Makefiles::           New things to put in @file{Makefile.in}
+* Changed Macros::              Macro calls you might replace
+* Invoking autoupdate::         Replacing old macro names in @code{configure.in}
+* Changed Results::             Changes in how to check test results
+* Changed Macro Writing::       Better ways to write your own macros
 
 History of Autoconf
 
-* Genesis::                     Prehistory and naming of @code{configure}.
-* Exodus::                      The plagues of @code{m4} and Perl.
-* Leviticus::                   The priestly code of portability arrives.
-* Numbers::                     Growth and contributors.
-* Deuteronomy::                 Approaching the promises of easy configuration.
+* Genesis::                     Prehistory and naming of @code{configure}
+* Exodus::                      The plagues of @code{m4} and Perl
+* Leviticus::                   The priestly code of portability arrives
+* Numbers::                     Growth and contributors
+* Deuteronomy::                 Approaching the promises of easy configuration
 
 @end detailmenu
 @end menu
@@ -297,7 +313,7 @@ History of Autoconf
 @node Introduction, Making configure Scripts, Top, Top
 @chapter Introduction
 
-@display
+@flushright
 A physicist, an engineer, and a computer scientist were
 discussing the nature of God.  Surely a Physicist, said the
 physicist, because early in the Creation, God made Light; and you
@@ -310,7 +326,7 @@ liquids@dots{} The computer scientist shouted: And the Chaos,
 where do you think it was coming from, hmm?
 
 ---Anonymous
-@end display
+@end flushright
 @c (via Franc,ois Pinard)
 
 Autoconf is a tool for producing shell scripts that automatically
@@ -449,11 +465,11 @@ Makefile.in ---'                    `-> Makefile ---'
 @end example
 
 @menu
-* Writing configure.in::        What to put in an Autoconf input file.
-* Invoking autoscan::           Semi-automatic @file{configure.in} writing.
-* Invoking ifnames::            Listing the conditionals in source code.
-* Invoking autoconf::           How to create configuration scripts.
-* Invoking autoreconf::         Remaking multiple @code{configure} scripts.
+* Writing configure.in::        What to put in an Autoconf input file
+* Invoking autoscan::           Semi-automatic @file{configure.in} writing
+* Invoking ifnames::            Listing the conditionals in source code
+* Invoking autoconf::           How to create configuration scripts
+* Invoking autoreconf::         Remaking multiple @code{configure} scripts
 @end menu
 
 @node Writing configure.in, Invoking autoscan, Making configure Scripts, Making configure Scripts
@@ -755,13 +771,13 @@ about the output files to produce.  The following sections describe
 initialization and creating output files.
 
 @menu
-* Input::                       Where Autoconf should find files.
-* Output::                      Creating output files.
-* Makefile Substitutions::      Using output variables in @file{Makefile}s.
-* Configuration Headers::       Creating a configuration header file.
-* Subdirectories::              Configuring independent packages together.
-* Default Prefix::              Changing the default installation prefix.
-* Versions::                    Version numbers in @code{configure}.
+* Input::                       Where Autoconf should find files
+* Output::                      Creating output files
+* Makefile Substitutions::      Using output variables in @file{Makefile}s
+* Configuration Headers::       Creating a configuration header file
+* Subdirectories::              Configuring independent packages together
+* Default Prefix::              Changing the default installation prefix
+* Versions::                    Version numbers in @code{configure}
 @end menu
 
 @node Input, Output, Setup, Setup
@@ -918,9 +934,9 @@ GNU Coding Standards}, for more information on what to put in
 @file{Makefile}s.
 
 @menu
-* Preset Output Variables::     Output variables that are always set.
-* Build Directories::           Supporting multiple concurrent compiles.
-* Automatic Remaking::          Makefile rules for configuring.
+* Preset Output Variables::     Output variables that are always set
+* Build Directories::           Supporting multiple concurrent compiles
+* Automatic Remaking::          Makefile rules for configuring
 @end menu
 
 @node Preset Output Variables, Build Directories, Makefile Substitutions, Makefile Substitutions
@@ -1242,8 +1258,8 @@ to prepend and/or append boilerplate to the file.
 @end defmac
 
 @menu
-* Header Templates::            Input for the configuration headers.
-* Invoking autoheader::         How to create configuration templates.
+* Header Templates::            Input for the configuration headers
+* Invoking autoheader::         How to create configuration templates
 @end menu
 
 @node Header Templates, Invoking autoheader, Configuration Headers, Configuration Headers
@@ -1497,16 +1513,16 @@ preprocessor symbol @var{name} to the value 1''.  @xref{Defining
 Symbols}, for how to get those symbol definitions into your program.
 
 @menu
-* Alternative Programs::        Selecting between alternative programs.
-* Libraries::                   Library archives that might be missing.
-* Library Functions::           C library functions that might be missing.
-* Header Files::                Header files that might be missing.
-* Structures::                  Structures or members that might be missing.
-* Typedefs::                    @code{typedef}s that might be missing.
-* C Compiler Characteristics::  
-* Fortran 77 Compiler Characteristics::  
-* System Services::             Operating system services.
-* UNIX Variants::               Special kludges for specific UNIX variants.
+* Alternative Programs::        Selecting between alternative programs
+* Libraries::                   Library archives that might be missing
+* Library Functions::           C library functions that might be missing
+* Header Files::                Header files that might be missing
+* Structures::                  Structures or members that might be missing
+* Typedefs::                    @code{typedef}s that might be missing
+* C Compiler Characteristics::
+* Fortran 77 Compiler Characteristics::
+* System Services::             Operating system services
+* UNIX Variants::               Special kludges for specific UNIX variants
 @end menu
 
 @node Alternative Programs, Libraries, Existing Tests, Existing Tests
@@ -1520,8 +1536,8 @@ and you don't need to check for any special properties of
 it, then you can use one of the general program check macros.
 
 @menu
-* Particular Programs::         Special handling to find certain programs.
-* Generic Programs::            How to find other programs.
+* Particular Programs::         Special handling to find certain programs
+* Generic Programs::            How to find other programs
 @end menu
 
 @node Particular Programs, Generic Programs, Alternative Programs, Alternative Programs
@@ -1945,8 +1961,8 @@ and you don't need to check for any special properties of
 it, then you can use one of the general function check macros.
 
 @menu
-* Particular Functions::        Special handling to find certain functions.
-* Generic Functions::           How to find other functions.
+* Particular Functions::        Special handling to find certain functions
+* Generic Functions::           How to find other functions
 @end menu
 
 @node Particular Functions, Generic Functions, Library Functions, Library Functions
@@ -2250,8 +2266,8 @@ and you don't need to check for any special properties of
 it, then you can use one of the general header file check macros.
 
 @menu
-* Particular Headers::          Special handling to find certain headers.
-* Generic Headers::             How to find other headers.
+* Particular Headers::          Special handling to find certain headers
+* Generic Headers::             How to find other headers
 @end menu
 
 @node Particular Headers, Generic Headers, Header Files, Header Files
@@ -2536,8 +2552,8 @@ member you need, then you can use the general structure member macro
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
 
 @menu
-* Particular Structures::       Macros to check for certain stucture members.
-* Generic Structures::          How to find other structure members.
+* Particular Structures::       Macros to check for certain stucture members
+* Generic Structures::          How to find other structure members
 @end menu
 
 @node Particular Structures, Generic Structures, Structures, Structures
@@ -2652,8 +2668,8 @@ to check for any special properties of it, then you can use a general
 typedef check macro.
 
 @menu
-* Particular Typedefs::         Special handling to find certain types.
-* Generic Typedefs::            How to find other types.
+* Particular Typedefs::         Special handling to find certain types
+* Generic Typedefs::            How to find other types
 @end menu
 
 @node Particular Typedefs, Generic Typedefs, Typedefs, Typedefs
@@ -3185,14 +3201,14 @@ software package, the best thing to do is encapsulate it in a new macro.
 @xref{Writing Macros}, for how to do that.
 
 @menu
-* Examining Declarations::      Detecting header files and declarations.
-* Examining Syntax::            Detecting language syntax features.
-* Examining Libraries::         Detecting functions and global variables.
-* Run Time::                    Testing for run-time features.
-* Portable Shell::              Shell script portability pitfalls.
-* Testing Values and Files::    Checking strings and files.
-* Multiple Cases::              Tests for several possible values.
-* Language Choice::             Selecting which language to use for testing.
+* Examining Declarations::      Detecting header files and declarations
+* Examining Syntax::            Detecting language syntax features
+* Examining Libraries::         Detecting functions and global variables
+* Run Time::                    Testing for run-time features
+* Portable Shell::              Shell script portability pitfalls
+* Testing Values and Files::    Checking strings and files
+* Multiple Cases::              Tests for several possible values
+* Language Choice::             Selecting which language to use for testing
 @end menu
 
 @node Examining Declarations, Examining Syntax, Writing Tests, Writing Tests
@@ -3368,9 +3384,9 @@ possible, because using them prevents people from configuring your
 package for cross-compiling.
 
 @menu
-* Test Programs::               Running test programs.
-* Guidelines::                  General rules for writing test programs.
-* Test Functions::              Avoiding pitfalls in test programs.
+* Test Programs::               Running test programs
+* Guidelines::                  General rules for writing test programs
+* Test Functions::              Avoiding pitfalls in test programs
 @end menu
 
 @node Test Programs, Guidelines, Run Time, Run Time
@@ -3673,10 +3689,10 @@ save the result in a cache file for future @code{configure} runs, and
 print a message letting the user know the result of the test.
 
 @menu
-* Defining Symbols::            Defining C preprocessor symbols.
-* Setting Output Variables::    Replacing variables in output files.
-* Caching Results::             Speeding up subsequent @code{configure} runs.
-* Printing Messages::           Notifying users of progress or problems.
+* Defining Symbols::            Defining C preprocessor symbols
+* Setting Output Variables::    Replacing variables in output files
+* Caching Results::             Speeding up subsequent @code{configure} runs
+* Printing Messages::           Notifying users of progress or problems
 @end menu
 
 @node Defining Symbols, Setting Output Variables, Results, Results
@@ -3874,8 +3890,8 @@ checkpoints the cache in case of an early configure script abort.
 @end defmac
 
 @menu
-* Cache Variable Names::        Shell variables used in caches.
-* Cache Files::                 Files @code{configure} uses for caching.
+* Cache Variable Names::        Shell variables used in caches
+* Cache Files::                 Files @code{configure} uses for caching
 @end menu
 
 @node Cache Variable Names, Cache Files, Caching Results, Caching Results
@@ -4087,10 +4103,10 @@ software package, the best thing to do is encapsulate it in a new macro.
 Here are some instructions and guidelines for writing Autoconf macros.
 
 @menu
-* Macro Definitions::           Basic format of an Autoconf macro.
-* Macro Names::                 What to call your new macros.
-* Quoting::                     Protecting macros from unwanted expansion.
-* Dependencies Between Macros::  What to do when macros depend on other macros.
+* Macro Definitions::           Basic format of an Autoconf macro
+* Macro Names::                 What to call your new macros
+* Quoting::                     Protecting macros from unwanted expansion
+* Dependencies Between Macros::  What to do when macros depend on other macros
 @end menu
 
 @node Macro Definitions, Macro Names, Writing Macros, Writing Macros
@@ -4238,9 +4254,9 @@ macros are called if needed and a way to warn the user if macros are
 called in an order that might cause incorrect operation.
 
 @menu
-* Prerequisite Macros::         Ensuring required information.
-* Suggested Ordering::          Warning about possible ordering problems.
-* Obsolete Macros::             Warning about old ways of doing things.
+* Prerequisite Macros::         Ensuring required information
+* Suggested Ordering::          Warning about possible ordering problems
+* Obsolete Macros::             Warning about old ways of doing things
 @end menu
 
 @node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
@@ -4357,10 +4373,10 @@ looking for libraries that are unique to particular systems.  However,
 Autoconf provides a uniform method for handling unguessable features.
 
 @menu
-* Specifying Names::            Specifying the system type.
-* Canonicalizing::              Getting the canonical system type.
-* System Type Variables::       Variables containing the system type.
-* Using System Type::           What to do with the system type.
+* Specifying Names::            Specifying the system type
+* Canonicalizing::              Getting the canonical system type
+* System Type Variables::       Variables containing the system type
+* Using System Type::           What to do with the system type
 @end menu
 
 @node Specifying Names, Canonicalizing, Manual Configuration, Manual Configuration
@@ -4538,12 +4554,12 @@ under modified names, and set default values for @code{configure}
 options.
 
 @menu
-* External Software::           Working with other optional software.
-* Package Options::             Selecting optional features.
-* Pretty Help Strings::         
-* Site Details::                Configuring site details.
-* Transforming Names::          Changing program names when installing.
-* Site Defaults::               Giving @code{configure} local defaults.
+* External Software::           Working with other optional software
+* Package Options::             Selecting optional features
+* Pretty Help Strings::         Formating help string
+* Site Details::                Configuring site details
+* Transforming Names::          Changing program names when installing
+* Site Defaults::               Giving @code{configure} local defaults
 @end menu
 
 @node External Software, Package Options, Site Configuration, Site Configuration
@@ -4613,10 +4629,8 @@ needed.  Just make sure the columns line up in @samp{configure --help}.
 Avoid tabs in the help string.  You'll need to enclose it in @samp{[}
 and @samp{]} in order to produce the leading spaces.
 
-If you find yourself using @code{AC_ARG_WITH} more than once (or you
-just like to have your @var{help-string}s look pretty), then you should
-first format your @var{help-string} with the macro @code{AC_HELP_STRING}
-(@pxref{Pretty Help Strings}).
+You should format your @var{help-string} with the macro
+@code{AC_HELP_STRING} (@pxref{Pretty Help Strings}).
 @end defmac
 
 @defmac AC_WITH (@var{package}, @var{action-if-given} @r{[}, @var{action-if-not-given}@r{]})
@@ -4681,10 +4695,8 @@ actually just the value of the shell variable
 @var{help-string} argument is like that of @code{AC_ARG_WITH}
 (@pxref{External Software}).
 
-If you find yourself using @code{AC_ARG_ENABLE} more than once (or you
-just like to have your @var{help-string}s look pretty), then you should
-first format your @var{help-string} with the macro @code{AC_HELP_STRING}
-(@pxref{Pretty Help Strings}).
+You should format your @var{help-string} with the macro
+@code{AC_HELP_STRING} (@pxref{Pretty Help Strings}).
 @end defmac
 
 @defmac AC_ENABLE (@var{feature}, @var{action-if-given} @r{[}, @var{action-if-not-given}@r{]})
@@ -4704,28 +4716,27 @@ your own @samp{help strings} to line up in the appropriate columns of
 @samp{configure --help} just like the standard Autoconf @samp{help
 strings} do.  This is the purpose of the @code{AC_HELP_STRING} macro.
 
-@defmac AC_HELP_STRING (@var{left-hand-side}, @var{right-hand-side}, @var{formatted-help-string})
+@defmac AC_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
 @maindex HELP_STRING
 
-Format an Autoconf macro's help string so that it looks pretty when the
-user executes @samp{configure --help}.  The formatted help string is
-assigned to the third argument, @var{formatted-help-string}, which can
-then be used in @code{AC_ARG_WITH} (@pxref{External Software}) or
-@code{AC_ARG_ENABLE} (@pxref{Package Options}).  The following example
-will make this clearer.
+Expands into an help string that looks pretty when the user executes
+@samp{configure --help}.  It is typically used in @code{AC_ARG_WITH}
+(@pxref{External Software}) or @code{AC_ARG_ENABLE} (@pxref{Package
+Options}).  The following example will make this clearer.
 
 @example
 AC_DEFUN(TEST_MACRO,
 [
-  AC_HELP_STRING([--with-foo], [use foo (default is NO)], foo_help_string)
-  AC_ARG_WITH(foo, $foo_help_string, ac_cv_use_foo=$withval, ac_cv_use_foo=no)
-
+  AC_ARG_WITH(foo,
+              AC_HELP_STRING([--with-foo], [use foo (default is NO)],
+              ac_cv_use_foo=$withval, ac_cv_use_foo=no)
   AC_CACHE_CHECK(whether to use foo, ac_cv_use_foo, ac_cv_use_foo=no)
 ])
 @end example
 
-This will cause the last few lines of @samp{configure --help} to appear
-like this:
+Please note that the call to @code{AC_HELP_STRING} is @strong{unquoted}.
+Then the last few lines of @samp{configure --help} will appear like
+this:
 
 @example
 Features and packages:
@@ -4739,10 +4750,6 @@ Features and packages:
   --with-foo              use foo (default is NO)
 @end example
 
-Notice how @samp{--with-foo} is properly prefixed with two spaces, and
-@samp{use foo (default is NO)} begins in column 26 with the rest of the
-Autoconf help strings.
-
 The @code{AC_HELP_STRING} macro is particularly helpful when the
 @var{left-hand-side} and/or @var{right-hand-side} are composed of macro
 arguments, as shown in the following example.
@@ -4750,8 +4757,9 @@ arguments, as shown in the following example.
 @example
 AC_DEFUN(MY_ARG_WITH,
 [
-  AC_HELP_STRING([--with-$1], [use $1 (default is $2)], $1_help_string)
-  AC_ARG_WITH($1, [$]$1_help_string, ac_cv_use_$1=$withval, ac_cv_use_$1=no)
+  AC_ARG_WITH($1,
+              AC_HELP_STRING([--with-$1], [use $1 (default is $2)]),
+              ac_cv_use_$1=$withval, ac_cv_use_$1=no)
 
   AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)
 ])
@@ -4802,9 +4810,9 @@ is used as a prefix.  Otherwise, no program name transformation is done.
 @end defmac
 
 @menu
-* Transformation Options::      @code{configure} options to transform names.
-* Transformation Examples::     Sample uses of transforming names.
-* Transformation Rules::        @file{Makefile} uses of transforming names.
+* Transformation Options::      @code{configure} options to transform names
+* Transformation Examples::     Sample uses of transforming names
+* Transformation Rules::        @file{Makefile} uses of transforming names
 @end menu
 
 @node Transformation Options, Transformation Examples, Transforming Names, Transforming Names
@@ -4988,14 +4996,14 @@ file in the package.  A plain-text version of @file{INSTALL} which you
 may use comes with Autoconf.
 
 @menu
-* Basic Installation::          Instructions for typical cases.
-* Compilers and Options::       Selecting compilers and optimization.
-* Multiple Architectures::      Compiling for multiple architectures at once.
-* Installation Names::          Installing in different directories.
-* Optional Features::           Selecting optional features.
-* System Type::                 Specifying the system type.
-* Sharing Defaults::            Setting site-wide defaults for @code{configure}.
-* Operation Controls::          Changing how @code{configure} runs.
+* Basic Installation::          Instructions for typical cases
+* Compilers and Options::       Selecting compilers and optimization
+* Multiple Architectures::      Compiling for multiple architectures at once
+* Installation Names::          Installing in different directories
+* Optional Features::           Selecting optional features
+* System Type::                 Specifying the system type
+* Sharing Defaults::            Setting site-wide defaults for @code{configure}
+* Operation Controls::          Changing how @code{configure} runs
 @end menu
 
 @include install.texi
@@ -5008,22 +5016,28 @@ which describes which configuration options were specified when the
 package was last configured.  This file is a shell script which,
 if run, will recreate the same configuration.
 
-You can give @file{config.status} the @samp{--recheck} option to update
-itself.  This option is useful if you change @code{configure}, so that
-the results of some tests might be different from the previous run.  The
-@samp{--recheck} option re-runs @code{configure} with the same arguments
-you used before, plus the @samp{--no-create} option, which prevent
-@code{configure} from running @file{config.status} and creating
-@file{Makefile} and other files, and the @samp{--no-recursion} option,
-which prevents @code{configure} from running other @code{configure}
-scripts in subdirectories.  (This is so other @file{Makefile} rules can
-run @file{config.status} when it changes; @pxref{Automatic Remaking},
-for an example).
+It supports the following options:
+@table @code
+@item --recheck
+Ask @file{config.status} to update itself.  This option is useful if you
+change @code{configure}, so that the results of some tests might be
+different from the previous run.  The @samp{--recheck} option re-runs
+@code{configure} with the same arguments you used before, plus the
+@samp{--no-create} option, which prevent @code{configure} from running
+@file{config.status} and creating @file{Makefile} and other files, and
+the @samp{--no-recursion} option, which prevents @code{configure} from
+running other @code{configure} scripts in subdirectories.  (This is so
+other @file{Makefile} rules can run @file{config.status} when it
+changes; @pxref{Automatic Remaking}, for an example).
 
-@file{config.status} also accepts the options @samp{--help}, which
-prints a summary of the options to @file{config.status}, and
-@samp{--version}, which prints the version of Autoconf used to create
-the @code{configure} script that generated @file{config.status}.
+@item --help
+@itemx -h
+Print a summary of the command line options and exit.
+
+@item --version
+Print the version number of Autoconf used to create the @code{configure}
+script that generated @file{config.status} and exit.
+@end table
 
 @file{config.status} checks several optional environment variables that
 can alter its behavior:
@@ -5091,10 +5105,10 @@ Several questions about Autoconf come up occasionally.  Here some of them
 are addressed.
 
 @menu
-* Distributing::                Distributing @code{configure} scripts.
+* Distributing::                Distributing @code{configure} scripts
 * Why GNU m4::                  Why not use the standard @code{m4}?
 * Bootstrapping::               Autoconf and GNU @code{m4} require each other?
-* Why Not Imake::               Why GNU uses @code{configure} instead of Imake.
+* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 @end menu
 
 @node Distributing, Why GNU m4, Questions, Questions
@@ -5277,12 +5291,12 @@ much faster than earlier versions, because as of version 1.3, GNU
 freeze its internal state in a file that it can read back quickly.
 
 @menu
-* Changed File Names::          Files you might rename.
-* Changed Makefiles::           New things to put in @file{Makefile.in}.
-* Changed Macros::              Macro calls you might replace.
-* Invoking autoupdate::         Replacing old macro names in @code{configure.in}.
-* Changed Results::             Changes in how to check test results.
-* Changed Macro Writing::       Better ways to write your own macros.
+* Changed File Names::          Files you might rename
+* Changed Makefiles::           New things to put in @file{Makefile.in}
+* Changed Macros::              Macro calls you might replace
+* Invoking autoupdate::         Replacing old macro names in @code{configure.in}
+* Changed Results::             Changes in how to check test results
+* Changed Macro Writing::       Better ways to write your own macros
 @end menu
 
 @node Changed File Names, Changed Makefiles, Upgrading, Upgrading
@@ -5496,11 +5510,11 @@ to you, and you might as well skip it.  If you @emph{are} wondering,
 then let there be light@dots{}
 
 @menu
-* Genesis::                     Prehistory and naming of @code{configure}.
-* Exodus::                      The plagues of @code{m4} and Perl.
-* Leviticus::                   The priestly code of portability arrives.
-* Numbers::                     Growth and contributors.
-* Deuteronomy::                 Approaching the promises of easy configuration.
+* Genesis::                     Prehistory and naming of @code{configure}
+* Exodus::                      The plagues of @code{m4} and Perl
+* Leviticus::                   The priestly code of portability arrives
+* Numbers::                     Growth and contributors
+* Deuteronomy::                 Approaching the promises of easy configuration
 @end menu
 
 @node Genesis, Exodus, History, History
