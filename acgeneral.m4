@@ -837,6 +837,7 @@ AC_DEFUN(_AC_INIT_DEFAULTS,
 # Initializations.
 #
 ac_default_prefix=/usr/local
+cross_compiling=no
 subdirs=
 MFLAGS= MAKEFLAGS=
 AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
@@ -2323,7 +2324,6 @@ AC_DEFUN(AC_TRY_COMMAND,
 [{ ac_try='$1'; AC_TRY_EVAL(ac_try); }])
 
 
-
 ## ------------------ ##
 ## Default includes.  ##
 ## ------------------ ##
@@ -2670,26 +2670,6 @@ popdef([AC_Prog])dnl
 ])# AC_PREFIX_PROGRAM
 
 
-# AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
-# -----------------------------------------------------
-# Try to compile, link and execute TEST-PROGRAM.  Set WORKING-VAR to
-# `yes' if the current compiler works, otherwise set it ti `no'.  Set
-# CROSS-VAR to `yes' if the compiler and linker produce non-native
-# executables, otherwise set it to `no'.  Before calling
-# `AC_TRY_COMPILER()', call `AC_LANG_*' to set-up for the right
-# language.
-AC_DEFUN(AC_TRY_COMPILER,
-[AC_LINK_IFELSE([AC_LANG_SOURCE([[$1]])],
-[$2=yes
-  # If we can't run a trivial program, we are probably using a cross compiler.
-  if (./conftest; exit) 2>/dev/null; then
-    $3=no
-  else
-    $3=yes
-  fi],
-[$2=no])[]dnl
-])# AC_TRY_COMPILER
-
 
 
 ## ------------------------ ##
@@ -2974,7 +2954,7 @@ rm -f conftest*[]dnl
 #            [ACTION-IF-CROSS-COMPILING])
 # --------------------------------------------------------
 AC_DEFUN([AC_TRY_RUN],
-[if test "$cross_compiling" = yes; then
+[if test $cross_compiling = yes; then
   m4_default([$4],
    [AC_DIAGNOSE([cross],
             [AC_TRY_RUN called without default to allow cross compiling])dnl
@@ -3038,7 +3018,7 @@ AC_DEFUN(AC_CHECK_FILE,
 AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
 dnl FIXME: why was there this line? AC_REQUIRE([AC_PROG_CC])dnl
 AC_CACHE_CHECK([for $1], ac_File,
-[test "$cross_compiling" = yes &&
+[test $cross_compiling = yes &&
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
 if test -r "[$1]"; then
   AC_VAR_SET(ac_File, yes)

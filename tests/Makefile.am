@@ -63,12 +63,16 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # - AC_PATH_PROGS?
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
-# - AC_TRY
+# - AC_TRY, AC_.*_IFELSE
 #   Used in many places.
 # - _AC_
 #   Internal macros are used elsewhere.
 # - AC_OUTPUT
 #   Already tested by `AT_TEST_MACRO'.
+# - AC_FD_CC
+#   Is a number.
+# - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE)
+#   Checked in semantics.
 #
 # Multiple `-e' to egrep are not portable, so join all the patterns together.
 # We use the fact that automake will replace all the `\\\n' with ` '.
@@ -88,6 +92,9 @@ FILTER_MACROS = egrep -v -e \
 ^AC_REPLACE_FUNCS$$\
 ^AC_SEARCH_LIBS$$\
 ^AC_TRY\
+^AC_.*_IFELSE$$\
+^AC_FD_CC$$\
+^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$$\
 _AC_' | tr ' ' '|'`
 
 # The files which contains macro we check for syntax.

@@ -239,8 +239,8 @@ AC_DEFUN([AC_LANG_SOURCE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
-# AC_LANG_PROGRAM(PROLOGUE, BODY)
-# -------------------------------
+# AC_LANG_PROGRAM([PROLOGUE], [BODY])
+# -----------------------------------
 # Produce a valid source for the current language.  Prepend the
 # PROLOGUE (typically CPP directives and/or declarations) to an
 # execution the BODY (typically glued inside the `main' function, or
@@ -271,8 +271,8 @@ define([AC_LANG_SOURCE(C)],
 $1])
 
 
-# AC_LANG_PROGRAM(C)(PROLOGUE, BODY)
-# ----------------------------------
+# AC_LANG_PROGRAM(C)([PROLOGUE], [BODY])
+# --------------------------------------
 define([AC_LANG_PROGRAM(C)],
 [$1
 int
@@ -317,8 +317,8 @@ extern "C" void exit (int);
 $1])
 
 
-# AC_LANG_PROGRAM(C++)(PROLOGUE, BODY)
-# ------------------------------------
+# AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
+# ----------------------------------------
 # Same as C.
 define([AC_LANG_PROGRAM(C++)], defn([AC_LANG_PROGRAM(C)]))
 
@@ -343,8 +343,8 @@ define([AC_LANG_SOURCE(Fortran 77)],
 [$1])
 
 
-# AC_LANG_PROGRAM(Fortran 77)(PROLOGUE, BODY)
-# -------------------------------------------
+# AC_LANG_PROGRAM(Fortran 77)([PROLOGUE], [BODY])
+# -----------------------------------------------
 # Yes, we discard the PROLOGUE.
 define([AC_LANG_PROGRAM(Fortran 77)],
 [      program main
@@ -378,6 +378,24 @@ AC_DEFUN([AC_REQUIRE_CPP],
 [AC_LANG_CASE(C, [AC_REQUIRE([AC_PROG_CPP])],
                  [AC_REQUIRE([AC_PROG_CXXCPP])])])
 
+
+# AC_LANG_COMPILER_WORKS
+# ----------------------
+define([_AC_LANG_COMPILER_WORKS],
+[AC_MSG_CHECKING([whether the _AC_LANG compiler works])
+AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+[# If not cross compiling, check that we can run a simple program.
+if test $cross_compiling != yes; then
+  if AC_TRY_COMMAND(./conftest); then :; else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
+To enable cross compilation, use `--host'.])
+  fi
+fi
+AC_MSG_RESULT(yes)],
+[AC_MSG_RESULT(no)
+AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])[]dnl
+])# AC_LANG_COMPILER_WORKS
 
 
 # -------------------- #
@@ -427,6 +445,7 @@ AC_SUBST(CPP)dnl
 # search list for the C compiler.
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
+AC_LANG_PUSH(C)
 AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
 ifval([$1],
       [AC_CHECK_PROGS(CC, [$1])],
@@ -442,9 +461,7 @@ ifval([$1],
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
-if test "$cross_compiling" != yes; then
-  AC_PROG_CC_WORKS
-fi
+_AC_LANG_COMPILER_WORKS
 _AC_PROG_CC_GNU
 
 dnl Check whether -g works, even if CFLAGS is set, in case the package
@@ -469,28 +486,8 @@ else
     CFLAGS=
   fi
 fi
+AC_LANG_POP
 ])# AC_PROG_CC
-
-
-# AC_PROG_CC_WORKS
-# ----------------
-AC_DEFUN(AC_PROG_CC_WORKS,
-[AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) works])
-AC_LANG_PUSH(C)
-AC_TRY_COMPILER([int main(){return(0);}],
-                ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
-AC_LANG_POP()dnl
-AC_MSG_RESULT($ac_cv_prog_cc_works)
-if test $ac_cv_prog_cc_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: C compiler cannot create executables.], 77)
-fi
-AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($ac_cv_prog_cc_cross)
-if test $cross_compiling,$ac_cv_prog_cc_cross = no,yes; then
-  AC_MSG_ERROR([installation or configuration problem: cannot run C compiled programs.
-To enable cross compilation, use `--host'.])
-fi
-])# AC_PROG_CC_WORKS
 
 
 # _AC_PROG_CC_GNU
@@ -639,11 +636,10 @@ AC_SUBST(CXXCPP)dnl
 # compiler.
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
+AC_LANG_PUSH(C++)
 AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
 
-if test "$cross_compiling" != yes; then
-  AC_PROG_CXX_WORKS
-fi
+_AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
 
 dnl Check whether -g works, even if CXXFLAGS is set, in case the package
@@ -668,28 +664,8 @@ else
     CXXFLAGS=
   fi
 fi
+AC_LANG_POP
 ])# AC_PROG_CXX
-
-
-# AC_PROG_CXX_WORKS
-# -----------------
-AC_DEFUN(AC_PROG_CXX_WORKS,
-[AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) works])
-AC_LANG_PUSH(C++)
-AC_TRY_COMPILER([int main(){return(0);}],
-                ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
-AC_LANG_POP()dnl
-AC_MSG_RESULT($ac_cv_prog_cxx_works)
-if test $ac_cv_prog_cxx_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: C++ compiler cannot create executables.], 77)
-fi
-AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($ac_cv_prog_cxx_cross)
-if test $cross_compiling,$ac_cv_prog_cxx_cross = no,yes; then
-  AC_MSG_ERROR([installation or configuration problem: cannot run C++ compiled programs.
-To enable cross compilation, use `--host'.])
-fi
-])# AC_PROG_CXX_WORKS
 
 
 # _AC_PROG_CXX_GNU
@@ -742,12 +718,11 @@ rm -f conftest*
 # for.
 AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
+AC_LANG_PUSH(Fortran 77)
 AC_CHECK_PROGS(F77,
                m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c]))
 
-if test "$cross_compiling" != yes; then
-  AC_PROG_F77_WORKS
-fi
+_AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
 
 dnl Check whether -g works, even if FFLAGS is set, in case the package
@@ -772,34 +747,8 @@ else
     FFLAGS=
   fi
 fi
+AC_LANG_POP
 ])# AC_PROG_F77
-
-
-# AC_PROG_F77_WORKS
-# -----------------
-# Test whether the Fortran 77 compiler can compile and link a trivial
-# Fortran program.  Also, test whether the Fortran 77 compiler is a
-# cross-compiler (which may realistically be the case if the Fortran
-# compiler is `g77').
-AC_DEFUN(AC_PROG_F77_WORKS,
-[AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
-AC_LANG_PUSH(Fortran 77)
-AC_TRY_COMPILER(
-[      program conftest
-      end
-], ac_cv_prog_f77_works, ac_cv_prog_f77_cross)
-AC_LANG_POP()dnl
-AC_MSG_RESULT($ac_cv_prog_f77_works)
-if test $ac_cv_prog_f77_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: Fortran 77 compiler cannot create executables.], 77)
-fi
-AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($ac_cv_prog_f77_cross)
-if test $cross_compiling,$ac_cv_prog_f77_cross = no,yes; then
-  AC_MSG_ERROR([installation or configuration problem: cannot run Fortran 77 compiled programs.
-To enable cross compilation, use `--host'.])
-fi
-])# AC_PROG_F77_WORKS
 
 
 # _AC_PROG_F77_GNU
@@ -1233,7 +1182,7 @@ AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(PROTOTYPES, 1,
-            [Define if the compiler supports function prototypes.])
+            [Define if the C compiler supports function prototypes.])
 else
   AC_MSG_RESULT(no)
 fi

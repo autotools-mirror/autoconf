@@ -1,5 +1,16 @@
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
+	Factor the AC_PROG_<compiler>_WORKS macros.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Set `cross_compiling'.
+	(AC_TRY_COMPILER): Remove.
+	* aclang.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS,
+	AC_PROG_F77_WORKS): Removed.
+	(_AC_LANG_COMPILER_WORKS): New macro.
+	(AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Adjust.
+
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4: Formatting changes.
 
 2000-05-22  Akim Demaille  <akim@epita.fr>

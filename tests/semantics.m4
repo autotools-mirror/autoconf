@@ -281,7 +281,7 @@ AT_CLEANUP(path config.log config.cache configure)
 ## ----------------- ##
 
 
-# AC_C_CONST
+# C compiler
 # ----------
 # GCC supports `const', `volatile', and `inline'.
 AT_TEST_MACRO(C keywords,
