@@ -1,3 +1,12 @@
+2000-11-03  Jim Meyering  <meyering@lucent.com>
+
+	* acfunctions.m4 (AC_FUNC_FNMATCH): Add a test to detect
+	the d*/*1 vs d/s/1 bug.
+	Add a couple more test cases to catch bugs in glibc 2.1.95.
+	Include fnmatch.h unconditionally
+	Mention the GNU C library.
+	From Paul Eggert.
+
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
 	AC_CONFIG_AUX_DIR_DEFAULTS overrides AC_CONFIG_AUX_DIR.  Ouch.
