@@ -85,6 +85,8 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #   Performed in the semantics tests.
 # - AC_CONFIG
 #   They fail when the source does not exist.
+# - AC_FUNC_GETLOADAVG
+#   Requires a file that is not shipped with Autoconf.  But it should.
 # - AC_INIT
 #   AC_INIT includes all the AC_INIT macros.  Note that there is an
 #   infinite m4 recursion if AC_INIT it used twice.
@@ -115,6 +117,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_F77_FUNC$
+^AC_FUNC_GETLOADAVG$
 ^AC_INIT
 ^AC_LANG
 ^AC_LINKER_OPTION$

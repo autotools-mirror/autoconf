@@ -443,6 +443,7 @@ exec AS_MESSAGE_FD>&1
 # Initializations.
 #
 ac_default_prefix=/usr/local
+ac_config_libobj_dir=.
 cross_compiling=no
 subdirs=
 MFLAGS=
@@ -2352,9 +2353,18 @@ $3],
 ])# AC_CHECK_DECLS
 
 
-## -------------------------------- ##
-## Checking for library functions.  ##
-## -------------------------------- ##
+
+## ---------------------------------- ##
+## Replacement of library functions.  ##
+## ---------------------------------- ##
+
+
+# AC_CONFIG_LIBOBJ_DIR(DIRNAME)
+# -----------------------------
+# Announce LIBOBJ replacement files are in DIRNAME.
+AC_DEFUN_ONCE([AC_CONFIG_LIBOBJ_DIR],
+[m4_divert_text([DEFAULTS], [ac_config_libobj_dir=$1])[]dnl
+])
 
 
 # AC_LIBSOURCE(FILENAME)

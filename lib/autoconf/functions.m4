@@ -342,25 +342,24 @@ fi
 AU_ALIAS([AM_FUNC_ERROR_AT_LINE], [AC_FUNC_ERROR_AT_LINE])
 
 
-# _AC_FUNC_FNMATCH([DIR], STANDARD, SHELL_VAR, VARIABLE)
-# ---------------------------------------------
-AC_DEFUN([_AC_FUNC_FNMATCH],
-[m4_ifval([$1],
-   [AC_REQUIRE([AC_C_CONST])
-    AC_REQUIRE([AC_FUNC_ALLOCA])
-    AC_REQUIRE([AC_TYPE_MBSTATE_T])])
- AC_CACHE_CHECK(
-   [for working $2 fnmatch],
-   [$3],
-   # Some versions of Solaris, SCO, and the GNU C Library
+# _AC_FUNC_FNMATCH_IF(STANDARD = GNU | POSIX, CACHE_VAR, IF-TRUE, IF-FALSE)
+# -------------------------------------------------------------------------
+# If a STANDARD compliant fnmatch is found, run IF-TRUE, otherwise
+# IF-FALSE.  Use CACHE_VAR.
+AC_DEFUN([_AC_FUNC_FNMATCH_IF],
+[AC_CACHE_CHECK(
+   [for working $1 fnmatch],
+   [$2],
+  [# Some versions of Solaris, SCO, and the GNU C Library
    # have a broken or incompatible fnmatch.
    # So we run a test program.  If we are cross-compiling, take no chance.
    # Thanks to John Oleynick, Franc,ois Pinard, and Paul Eggert for this test.
-   [AC_RUN_IFELSE(
+   AC_RUN_IFELSE(
       [AC_LANG_PROGRAM(
 	 [#include <fnmatch.h>
 #	   define y(a, b, c) (fnmatch (a, b, c) == 0)
-#	   define n(a, b, c) (fnmatch (a, b, c) == FNM_NOMATCH)],
+#	   define n(a, b, c) (fnmatch (a, b, c) == FNM_NOMATCH)
+         ],
 	 [exit
 	   (!(y ("a*", "abc", 0)
 	      && n ("d*/*1", "d/s/1", FNM_PATHNAME)
@@ -368,7 +367,7 @@ AC_DEFUN([_AC_FUNC_FNMATCH],
 	      && n ("a\\\\bc", "abc", FNM_NOESCAPE)
 	      && y ("*x", ".x", 0)
 	      && n ("*x", ".x", FNM_PERIOD)
-	      && m4_if([$2], [GNU],
+	      && m4_if([$1], [GNU],
 		   [y ("xxXX", "xXxX", FNM_CASEFOLD)
 		    && y ("a++(x|yy)b", "a+xyyyyxb", FNM_EXTMATCH)
 		    && n ("d*/*1", "d/s/1", FNM_FILE_NAME)
@@ -376,37 +375,69 @@ AC_DEFUN([_AC_FUNC_FNMATCH],
 		    && y ("x*", "x/y/z", FNM_FILE_NAME | FNM_LEADING_DIR)
 		    && y ("*c*", "c/x", FNM_FILE_NAME | FNM_LEADING_DIR)],
 		   1)));])],
-      [$3=yes],
-      [$3=no],
-      [$3=cross])])
- if test $$3 = yes; then
-   m4_ifval([$1], [rm -f $1/fnmatch.h])
-   AC_DEFINE([$4], 1,
-     [Define to 1 if your system has a working $2 `fnmatch' function.])
- else
-   m4_ifval([$1],
-     [AC_CHECK_DECLS([getenv])
-      AC_CHECK_FUNCS(mbsrtowcs mempcpy wmempcpy)
-      AC_CHECK_HEADERS(wchar.h wctype.h)
-      AC_LIBOBJ(fnmatch)
-      AC_CONFIG_LINKS([$1/fnmatch.h:$1/fnmatch_.h])
-      AC_DEFINE(fnmatch, rpl_fnmatch,
-	[Define to rpl_fnmatch if the replacement function should be used.])
-     ],
-     [:])
- fi
-])# _AC_FUNC_FNMATCH
+      [$2=yes],
+      [$2=no],
+      [$2=cross])])
+AS_IF([test $$2 = yes], [$3], [$4])
+])# _AC_FUNC_FNMATCH_IF
 
-# AC_FUNC_FNMATCH([DIR])
-# ----------------------
+
+# AC_FUNC_FNMATCH
+# ---------------
 AC_DEFUN([AC_FUNC_FNMATCH],
-[_AC_FUNC_FNMATCH([$1], [POSIX], [ac_cv_func_fnmatch_works], [HAVE_FNMATCH])])
+[_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
+                     [AC_DEFINE([HAVE_FNMATCH], 1,
+                     [Define to 1 if your system has a working POSIX `fnmatch'
+                      function.])])
+])# AC_FUNC_FNMATCH
 
-# AC_FUNC_FNMATCH_GNU([DIR])
-# --------------------------
+
+# AC_FUNC_FNMATCH_GNU
+# -------------------
 AC_DEFUN([AC_FUNC_FNMATCH_GNU],
 [AC_REQUIRE([AC_GNU_SOURCE])
- _AC_FUNC_FNMATCH([$1], [GNU], [ac_cv_func_fnmatch_gnu], [HAVE_FNMATCH_GNU])])
+_AC_FUNC_FNMATCH_IF([GNU], [ac_cv_func_fnmatch_gnu],
+                    [AC_DEFINE([HAVE_FNMATCH], 1,
+                    [Define to 1 if your system has a working GNU `fnmatch'
+                    function.])])
+])# AC_FUNC_FNMATCH_GNU
+
+
+# _AC_LIBOBJ_FNMATCH
+# ------------------
+# Prepare the replacement of fnmatch.
+AC_DEFUN([_AC_LIBOBJ_FNMATCH],
+[AC_REQUIRE([AC_C_CONST])dnl
+AC_REQUIRE([AC_FUNC_ALLOCA])dnl
+AC_REQUIRE([AC_TYPE_MBSTATE_T])dnl
+AC_CHECK_DECLS([getenv])
+AC_CHECK_FUNCS([mbsrtowcs mempcpy wmempcpy])
+AC_CHECK_HEADERS([wchar.h wctype.h])
+AC_LIBOBJ([fnmatch])
+AC_CONFIG_LINKS([$ac_config_libobj_dir/fnmatch.h:$ac_config_libobj_dir/fnmatch_.h])
+AC_DEFINE(fnmatch, rpl_fnmatch,
+          [Define to rpl_fnmatch if the replacement function should be used.])
+])# _AC_LIBOBJ_FNMATCH
+
+
+# AC_REPLACE_FUNC_FNMATCH
+# -----------------------
+AC_DEFUN([AC_REPLACE_FUNC_FNMATCH],
+[_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
+                     [rm -f $ac_config_libobj_dir/fnmatch.h],
+                     [_AC_LIBOBJ_FNMATCH])
+])# AC_REPLACE_FUNC_FNMATCH
+
+
+# AC_REPLACE_FUNC_FNMATCH_GNU
+# ---------------------------
+AC_DEFUN([AC_REPLACE_FNMATCH_GNU],
+[AC_REQUIRE([AC_GNU_SOURCE])
+_AC_FUNC_FNMATCH_IF([GNU], [ac_cv_func_fnmatch_gnu],
+                    [rm -f $ac_config_libobj_dir/fnmatch.h],
+                    [_AC_LIBOBJ_FNMATCH])
+])# AC_REPLACE_FUNC_FNMATCH_GNU
+
 
 # AU::AM_FUNC_FNMATCH
 # AU::fp_FUNC_FNMATCH
@@ -532,13 +563,9 @@ AC_CHECK_HEADERS(nlist.h,
 AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
-# The directory to find getloadavg.c in.
-ac_lib_dir_getloadavg=$srcdir[]m4_ifval([$1], [/$1])
-
 # Make sure getloadavg.c is where it belongs, at configure-time.
-test -f "$ac_lib_dir_getloadavg/getloadavg.c" ||
-  AC_MSG_ERROR([$ac_lib_dir_getloadavg/getloadavg.c is missing])
-# FIXME: Add an autoconf-time test, too?
+test -f "$ac_config_libobj_dir/getloadavg.c" ||
+  AC_MSG_ERROR([$ac_config_libobj_dir/getloadavg.c is missing])
 
 ac_save_LIBS=$LIBS
 
@@ -584,7 +611,7 @@ AC_CHECK_FUNCS(getloadavg, [],
 AC_CACHE_CHECK(whether getloadavg requires setgid,
                ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
-[#include "$ac_lib_dir_getloadavg/getloadavg.c"
+[#include "$ac_config_libobj_dir/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
 @%:@endif],

@@ -3540,29 +3540,26 @@ If the @code{error_at_line} function is not found, require an
 @code{AC_LIBOBJ} replacement of @samp{error}.
 @end defmac
 
-@defmac AC_FUNC_FNMATCH (@ovar{dir})
+@defmac AC_FUNC_FNMATCH
 @acindex FUNC_FNMATCH
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
 If the @code{fnmatch} function conforms to @acronym{POSIX}, define
 @code{HAVE_FNMATCH}.  Detect common implementation bugs, for example,
-the bugs in Solaris 2.4.  If @var{dir} is nonempty, the files
-@file{fnmatch.c}, @file{fnmatch_loop.c}, and @file{fnmatch_.h} in the
-directory @var{dor} are assumed to contain a copy of the source code
-of @acronym{GNU} @code{fnmatch}.  If necessary, this source code is
-compiled as an @code{AC_LIBOBJ} replacement, and the @file{fnmatch_.h}
-file is linked to @file{fnmatch.h} so that it can be included in place
-of the system @code{<fnmatch.h>}.
+the bugs in Solaris 2.4.
+
+Note that for historical reasons, contrary to the other specific
+@code{AC_FUNC} macros, @code{AC_FUNC_FNMATCH} does not replace
+broken/missing @code{fnmatch}.  See @code{AC_REPLACE_FNMATCH} below.
 @end defmac
 
-@defmac AC_FUNC_FNMATCH_GNU (@ovar{dir})
+@defmac AC_FUNC_FNMATCH_GNU
 @acindex FUNC_FNMATCH_GNU
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
-Behave like @code{AC_FUNC_FNMATCH(@var{dir})}, but also test whether
-@code{fnmatch} supports @acronym{GNU} extensions.  Detect common
-implementation bugs, for example, the bugs in the @acronym{GNU} C
-Library 2.1.
+Behave like @code{AC_FUNC_FNMATCH}, but also test whether @code{fnmatch}
+supports @acronym{GNU} extensions.  Detect common implementation bugs,
+for example, the bugs in the @acronym{GNU} C Library 2.1.
 @end defmac
 
 @defmac AC_FUNC_FORK
@@ -3621,7 +3618,7 @@ Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @end defmac
 
-@defmac AC_FUNC_GETLOADAVG (@dvar{dir, .})
+@defmac AC_FUNC_GETLOADAVG
 @acindex FUNC_GETLOADAVG
 @cvindex SVR4
 @cvindex DGUX
@@ -3638,15 +3635,18 @@ needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @ovindex GETLOADAVG_LIBS
 @c @fuindex getloadavg
 @prindex @code{getloadavg}
-Check how to get the system load averages.  If the system has the
-@code{getloadavg} function, define @code{HAVE_GETLOADAVG}, and set
-@code{GETLOADAVG_LIBS} to any libraries needed to get that function.
-Also add @code{GETLOADAVG_LIBS} to @code{LIBS}.
+Check how to get the system load averages.  To perform it tests
+properly, this macro needs the file @file{getloadavg.c}; therefore, be
+sure to set the @code{AC_LIBOBJ} replacement directory properly (see
+@ref{Generic Functions}, @code{AC_CONFIG_LIBOBJ_DIR}).
 
-Otherwise, require an @code{AC_LIBOBJ} replacement for
-@samp{getloadavg} with source code in @file{@var{dir}/getloadavg.c},
-and possibly define several other C preprocessor
-macros and output variables:
+If the system has the @code{getloadavg} function, define
+@code{HAVE_GETLOADAVG}, and set @code{GETLOADAVG_LIBS} to any libraries
+needed to get that function.  Also add @code{GETLOADAVG_LIBS} to
+@code{LIBS}.  Otherwise, require an @code{AC_LIBOBJ} replacement for
+@samp{getloadavg} with source code in @file{@var{dir}/getloadavg.c}, and
+possibly define several other C preprocessor macros and output
+variables:
 
 @enumerate
 @item
@@ -3909,6 +3909,31 @@ is available, you may assume that @code{vfprintf} and @code{vsprintf}
 are also available.)
 @end defmac
 
+@defmac AC_REPLACE_FNMATCH
+@acindex REPLACE_FNMATCH
+@c @fuindex fnmatch
+@prindex @code{fnmatch}
+If the @code{fnmatch} function does not conform to @acronym{POSIX} (see
+@code{AC_FUNC_FNMATCH}), ask for its @code{AC_LIBOBJ} replacement.
+
+The files @file{fnmatch.c}, @file{fnmatch_loop.c}, and @file{fnmatch_.h}
+in the @code{AC_LIBOBJ} replacement directory are assumed to contain a
+copy of the source code of @acronym{GNU} @code{fnmatch}.  If necessary,
+this source code is compiled as an @code{AC_LIBOBJ} replacement, and the
+@file{fnmatch_.h} file is linked to @file{fnmatch.h} so that it can be
+included in place of the system @code{<fnmatch.h>}.
+@end defmac
+
+@defmac AC_REPLACE_FNMATCH_GNU
+@acindex REPLACE_FNMATCH_GNU
+@c @fuindex fnmatch
+@prindex @code{fnmatch}
+Samr as @code{AC_REPLACE_FNMATCH}, but requiring the @acronym{GNU}
+extensions to @code{fnmatch} (see @code{AC_FUNC_FNMATCH_GNU}).
+@end defmac
+
+
+
 @node Generic Functions
 @subsection Generic Function Checks
 
@@ -3942,15 +3967,13 @@ execute when one of the functions is found.  You can give it a value of
 functions is not found.
 @end defmac
 
+@sp 1
+
 Autoconf follows a philosophy that was formed over the years by those
 who have struggled for portability: isolate the portability issues in
 specific files, and then program as if you were in a @sc{posix}
 environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
-
-Use the first three of the following macros to specify a function to be
-replaced, and the last one (@code{AC_REPLACE_FUNCS}) to check for and
-replace the function if needed.
 
 @defmac AC_LIBOBJ (@var{function})
 @acindex LIBOBJ
@@ -4003,6 +4026,22 @@ AC_LIBSOURCES([foo.c, bar.c])
 AC_LIBOBJ($foo_or_bar)
 @end example
 @end defmac
+
+@defmac AC_CONFIG_LIBOBJ_DIR (@var{directory})
+@acindex CONFIG_LIBOBJ_DIR
+Specify that @code{AC_LIBOBJ} replacement files are to be found in
+@var{directory} (which defaults to @samp{.}, the top source directory).
+@command{configure} might need to know where these files are for the
+following reasons: (i) some checks use the replacement files, (ii) some
+macros bypass broken system headers by installing links to the
+replacement headers etc.
+@end defmac
+
+@sp 1
+
+It is common to merely check for the existence of a function, and ask
+for its @code{AC_LIBOBJ} replacement if missing.  The following macro is
+a convenient shorthand.
 
 @defmac AC_REPLACE_FUNCS (@var{function}@dots{})
 @acindex REPLACE_FUNCS

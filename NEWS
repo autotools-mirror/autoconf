@@ -14,14 +14,20 @@
 - AC_CONFIG_LINKS now makes copies if it can't make links.
 - AC_FUNC_FNMATCH now tests only for POSIX compatibility, reverting to
   Autoconf 2.13 behavior.  The new macro AC_FUNC_FNMATCH_GNU also tests for
-  GNU extensions to fnmatch.  Both macros now accept an optional argument
-  specifying the directory that contains the replacement fnmatch source code.
-- AC_FUNC_GETLOADAVG now has an optional argument specifying the directory
-  that contains getloadavg.c, and it tests whether getloadavg.c exists.
+  GNU extensions to fnmatch.
+
 - AC_FUNC_SETVBUF_REVERSED no longer fails when cross-compiling.
+
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
+
 - AC_PROG_F77 default search no longer includes cf77 and cfg77.
-- New macros: AC_GNU_SOURCE, AC_PROG_EGREP, AC_PROG_FGREP, AC_TYPE_MBSTATE_T.
+
+- New macros
+  AC_CONFIG_LIBOBJ_DIR, AC_GNU_SOURCE, AC_PROG_EGREP, AC_PROG_FGREP,
+  AC_REPLACE_FNMATCH, AC_REPLACE_FNMATCH_GNU, AC_TYPE_MBSTATE_T.
+
+- AC_FUNC_GETLOADAVG
+  looks for getloadavg.c in the CONFIG_LIBOBJ_DIR.
 
 ** Bug fixes
 
