@@ -1,3 +1,11 @@
+1999-11-13  Akim Demaille  <akim@epita.fr>
+
+	Clean up a bit the handling of the LANG stack.  More is needed.
+
+	* acgeneral.m4 (AC_LANG_CASE): New macro.
+	(AC_LANG_RESTORE): Use m4_case.
+	(AC_LINKER_OPTION): Use AC_LANG_CASE.
+
 1999-11-11  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.texi (Generic Declarations): Fixed a typo which

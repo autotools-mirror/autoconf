@@ -733,9 +733,8 @@ AC_SUBST(CXXCPP)dnl
 dnl Require finding the C or C++ preprocessor, whichever is the
 dnl current language.
 AC_DEFUN(AC_REQUIRE_CPP,
-[ifelse(AC_LANG,
-        C, [AC_REQUIRE([AC_PROG_CPP])],
-        [AC_REQUIRE([AC_PROG_CXXCPP])])])
+[AC_LANG_CASE(C, [AC_REQUIRE([AC_PROG_CPP])],
+                 [AC_REQUIRE([AC_PROG_CXXCPP])])])
 
 
 dnl AC_PROG_LEX
@@ -2941,10 +2940,10 @@ EOF
       echo "configure: failed program was:" >&AC_FD_CC
       cat conftest.$ac_ext >&AC_FD_CC
     fi
-
 dnl We need to pop the language stack twice.
-    AC_LANG_RESTORE
-    AC_LANG_RESTORE
+dnl FIXME: Why?  You've done it above, AFAICT.
+AC_LANG_RESTORE()dnl
+AC_LANG_RESTORE()dnl
 ])])
 
 

@@ -314,6 +314,30 @@ dnl Returns EXP1 if non empty, otherwise EXP2.
 define([m4_default], [ifval([$1], [$1], [$2])])
 
 
+dnl m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
+dnl -----------------------------------------------------------
+dnl m4 equivalent of
+dnl switch (SWITCH)
+dnl {
+dnl   case VAL1:
+dnl     IF-VAL1;
+dnl     break;
+dnl   case VAL2:
+dnl     IF-VAL2;
+dnl     break;
+dnl   ...
+dnl   default:
+dnl     DEFAULT;
+dnl     break;
+dnl }.
+dnl All the values are optional, and the macro is robust to active
+dnl symbols properly quoted.
+define(m4_case,
+[ifelse([$1], 1,,
+	[$#], 2, [$2],
+        [$1], [$2], [$3],
+        [m4_case([$1], m4_shift(m4_shift($@)))])])
+
 
 dnl ### Implementing m4 loops
 
@@ -2064,6 +2088,17 @@ define(AC_MSG_ERROR_UNQUOTED,
 dnl ### Selecting which language to use for testing
 
 
+dnl The current scheme is really not beautiful.  It'd be better to have
+dnl AC_LANG_PUSH(C), AC_LANG_POP.  In addition, that's easy to do.  FIXME:
+dnl do it yet for 2.16?
+
+dnl AC_LANG_CASE(LANG1, IF-LANG1, LANG2, IF-LANG2, ..., DEFAULT)
+dnl ------------------------------------------------------------
+dnl Expand into IF-LANG1 if the current language is LANG1 etc. else
+dnl into default.
+define(AC_LANG_CASE,
+[m4_case(AC_LANG, $@)])
+
 dnl AC_LANG_C
 dnl ---------
 AC_DEFUN(AC_LANG_C,
@@ -2108,9 +2143,11 @@ dnl AC_LANG_RESTORE
 dnl ---------------
 dnl Restore the current language from the stack.
 pushdef([AC_LANG_RESTORE],
-[ifelse(AC_LANG_STACK, [C], [AC_LANG_C],dnl
-AC_LANG_STACK, [CPLUSPLUS], [AC_LANG_CPLUSPLUS],dnl
-AC_LANG_STACK, [FORTRAN77], [AC_LANG_FORTRAN77])[]popdef([AC_LANG_STACK])])
+[m4_case(AC_LANG_STACK,
+         [C],         [AC_LANG_C()],
+         [CPLUSPLUS], [AC_LANG_CPLUSPLUS()],
+         [FORTRAN77], [AC_LANG_FORTRAN77()])dnl
+popdef([AC_LANG_STACK])])
 
 
 dnl ### Compiler-running mechanics
@@ -4214,21 +4251,20 @@ dnl doesn't currently support.
 dnl
 dnl pushdef([AC_LINKER_OPTION],
 AC_DEFUN(AC_LINKER_OPTION,
-[
-  using_gnu_compiler=
+[AC_LANG_CASE([C],         [test x"$GCC" = xyes && using_gnu_compiler=yes],
+              [CPLUSPLUS], [test x"$GXX" = xyes && using_gnu_compiler=yes],
+              [FORTRAN77], [test x"$G77" = xyes && using_gnu_compiler=yes],
+                           [using_gnu_compiler=])
 
-  ifelse(AC_LANG, [C],         test x"$GCC" = xyes && using_gnu_compiler=yes,
- [ifelse(AC_LANG, [CPLUSPLUS], test x"$GXX" = xyes && using_gnu_compiler=yes,
- [ifelse(AC_LANG, [FORTRAN77], test x"$G77" = xyes && using_gnu_compiler=yes)])])
-
-  for i in $1; do
-    if test x"$using_gnu_compiler" = xyes; then
-      $2="[$]$2 -Xlinker $i"
-    else
-      $2="[$]$2 $i"
-    fi
-  done
-])
+dnl I don't understand the point of having the test inside of the
+dnl loop.
+for ac_link_opt in $1; do
+  if test x"$using_gnu_compiler" = xyes; then
+    $2="[$]$2 -Xlinker $ac_link_opt"
+  else
+    $2="[$]$2 $ac_link_opt"
+  fi
+done])
 
 
 dnl AC_LIST_MEMBER_OF
