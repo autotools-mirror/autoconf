@@ -1159,7 +1159,7 @@ changequote(<<, >>)dnl
 #undef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 int
-main()
+main ()
 {
   gid_t gidset[NGID];
   int i, n;
@@ -1190,7 +1190,9 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
 ])# AC_TYPE_GETGROUPS
 
 
-
+# AC_TYPE_UID_T
+# -------------
+# FIXME: Rewrite using AC_CHECK_TYPE.
 AC_DEFUN(AC_TYPE_UID_T,
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
@@ -1201,6 +1203,7 @@ if test $ac_cv_type_uid_t = no; then
 fi
 ])
 
+# FIXME: AU_DEFUN these guys?
 AC_DEFUN(AC_TYPE_SIZE_T,
 [AC_CHECK_TYPE(size_t, unsigned)])
 

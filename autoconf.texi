@@ -140,6 +140,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
 * Macro Index::                 Index of Autoconf macros
+* Concept Index::               General index
 
 @detailmenu --- The Detailed Node Listing ---
 
@@ -180,7 +181,7 @@ Existing Tests
 * Header Files::                Header files that might be missing
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
-* Typedefs::                    @code{typedef}s that might be missing
+* Types::                       Types that might be missing
 * C Compiler Characteristics::
 * Fortran 77 Compiler Characteristics::
 * System Services::             Operating system services
@@ -211,10 +212,10 @@ Structures
 * Particular Structures::       Macros to check for certain structure members
 * Generic Structures::          How to find other structure members
 
-Typedefs
+Types
 
-* Particular Typedefs::         Special handling to find certain types
-* Generic Typedefs::            How to find other types
+* Particular Types::            Special handling to find certain types
+* Generic Types::               How to find other types
 
 Writing Tests
 
@@ -289,7 +290,7 @@ Running @code{configure} Scripts
 * Optional Features::           Selecting optional features
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
-* Environment Variables::       Defining environment variables.
+* Environment Variables::       Defining environment variables
 * Operation Controls::          Changing how @code{configure} runs
 
 Questions About Autoconf
@@ -397,6 +398,8 @@ Please include the Autoconf version number, which you can get by running
 
 @node Making configure Scripts, Setup, Introduction, Top
 @chapter Making @code{configure} Scripts
+@cindex @file{aclocal.m4}
+@cindex @code{configure}
 
 The configuration scripts that Autoconf produces are by convention
 called @code{configure}.  When run, @code{configure} creates several
@@ -563,6 +566,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 @node Invoking autoscan, Invoking ifnames, Writing configure.in, Making configure Scripts
 @section Using @code{autoscan} to Create @file{configure.in}
+@cindex @code{autoscan}
 
 The @code{autoscan} program can help you create a @file{configure.in}
 file for a software package.  @code{autoscan} examines source files in
@@ -614,6 +618,7 @@ Print the version number of Autoconf and exit.
 
 @node Invoking ifnames, Invoking autoconf, Invoking autoscan, Making configure Scripts
 @section Using @code{ifnames} to List Conditionals
+@cindex @code{ifnames}
 
 @code{ifnames} can help when writing a @file{configure.in} for a
 software package.  It prints the identifiers that the package already
@@ -644,6 +649,7 @@ Print the version number of Autoconf and exit.
 
 @node Invoking autoconf, Invoking autoreconf, Invoking ifnames, Making configure Scripts
 @section Using @code{autoconf} to Create @code{configure}
+@cindex @code{autoconf}
 
 To create @code{configure} from @file{configure.in}, run the
 @code{autoconf} program with no arguments.  @code{autoconf} processes
@@ -711,6 +717,7 @@ for the standard output.
 
 @node Invoking autoreconf,  , Invoking autoconf, Making configure Scripts
 @section Using @code{autoreconf} to Update @code{configure} Scripts
+@cindex @code{autoreconf}
 
 If you have a lot of Autoconf-generated @code{configure} scripts, the
 @code{autoreconf} program can save you some work.  It runs
@@ -1252,6 +1259,8 @@ configuration-related dependencies.
 
 @node Configuration Headers, Subdirectories, Makefile Substitutions, Setup
 @section Configuration Header Files
+@cindex Configuration Header
+@cindex @file{config.h}
 
 When a package tests more than a few C preprocessor symbols, the command
 lines to pass @samp{-D} options to the compiler can get quite long.
@@ -1309,6 +1318,8 @@ input file and may overwrite one of your boilerplates.
 
 @node Header Templates, Invoking autoheader, Configuration Headers, Configuration Headers
 @subsection Configuration Header Templates
+@cindex Configuration Header Template
+@cindex @file{config.h.in}
 
 Your distribution should contain a template file that looks as you want
 the final header file to look, including comments, with @code{#undef}
@@ -1355,8 +1366,9 @@ Since it is a tedious task to keep a template header up to date, you may
 use @code{autoheader} to generate it, see @ref{Invoking autoheader}.
 
 
-@node Invoking autoheader,, Header Templates, Configuration Headers
+@node Invoking autoheader,  , Header Templates, Configuration Headers
 @subsection Using @code{autoheader} to Create @file{config.h.in}
+@cindex @code{autoheader}
 
 
 The @code{autoheader} program can create a template file of C
@@ -1573,7 +1585,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Header Files::                Header files that might be missing
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
-* Typedefs::                    @code{typedef}s that might be missing
+* Types::                       Types that might be missing
 * C Compiler Characteristics::
 * Fortran 77 Compiler Characteristics::
 * System Services::             Operating system services
@@ -1582,6 +1594,7 @@ Symbols}, for how to get those symbol definitions into your program.
 
 @node Alternative Programs, Libraries, Existing Tests, Existing Tests
 @section Alternative Programs
+@cindex Programs, checking
 
 These macros check for the presence or behavior of particular programs.
 They are used to choose between several alternative programs and to
@@ -1987,6 +2000,7 @@ be found.
 
 @node Libraries, Library Functions, Alternative Programs, Existing Tests
 @section Library Files
+@cindex Library, checking
 
 The following macros check for the presence of certain C, C++ or Fortran
 77 library archive files.
@@ -2055,6 +2069,7 @@ it, then you can use one of the general function check macros.
 
 @node Particular Functions, Generic Functions, Library Functions, Library Functions
 @subsection Particular Function Checks
+@cindex Function, checking
 
 These macros check for particular C functions---whether they exist, and
 in some cases how they respond when given certain arguments.
@@ -2347,6 +2362,7 @@ redeclare it, lest your declaration conflict.
 
 @node Header Files, Declarations, Library Functions, Existing Tests
 @section Header Files
+@cindex Header, checking
 
 The following macros check for the presence of certain C header files.
 If there is no macro specifically defined to check for a header file you need,
@@ -2610,6 +2626,7 @@ is executed when one of the header files is not found.
 
 @node Declarations, Structures, Header Files, Existing Tests
 @section Declarations
+@cindex Declaration, checking
 
 The following macros check for the declaration of variables and
 functions.  If there is no macro specifically defined to check for a
@@ -2688,8 +2705,9 @@ declarations.  It is safer not to declare in case of doubts.
 @end defmac
 
 
-@node Structures, Typedefs, Declarations, Existing Tests
+@node Structures, Types, Declarations, Existing Tests
 @section Structures
+@cindex Structure, checking
 
 The following macros check for the presence of certain members in C
 structures.  If there is no macro specifically defined to check for a
@@ -2797,24 +2815,24 @@ AC_CHECK_MEMBERS((struct stat.st_rdev, struct stat.st_blksize))
 @end defmac
 
 
-@node Typedefs, C Compiler Characteristics, Structures, Existing Tests
-@section Typedefs
+@node Types, C Compiler Characteristics, Structures, Existing Tests
+@section Types
 
-The following macros check for C typedefs.  If there is no macro
-specifically defined to check for a typedef you need, and you don't need
-to check for any special properties of it, then you can use a general
-typedef check macro.
+The following macros check for C types, either builtin or typedefs.  If
+there is no macro specifically defined to check for a type you need, and
+you don't need to check for any special properties of it, then you can
+use a general type check macro.
 
 @menu
-* Particular Typedefs::         Special handling to find certain types
-* Generic Typedefs::            How to find other types
+* Particular Types::            Special handling to find certain types
+* Generic Types::               How to find other types
 @end menu
 
-@node Particular Typedefs, Generic Typedefs, Typedefs, Typedefs
-@subsection Particular Typedef Checks
+@node Particular Types, Generic Types, Types, Types
+@subsection Particular Type Checks
 
-These macros check for particular C typedefs in @file{sys/types.h} and
-@file{stdlib.h} (if it exists).
+These macros check for particular C types in @file{sys/types.h},
+@file{stdlib.h} and others, if they exist.
 
 @defmac AC_TYPE_GETGROUPS
 @maindex TYPE_GETGROUPS
@@ -2826,19 +2844,19 @@ is the base type of the array argument to @code{getgroups}.
 @defmac AC_TYPE_MODE_T
 @maindex TYPE_MODE_T
 @cvindex mode_t
-If @code{mode_t} is not defined, define @code{mode_t} to be @code{int}.
+Equivalent to @samp{AC_CHECK_TYPE(mode_t, int)}.
 @end defmac
 
 @defmac AC_TYPE_OFF_T
 @maindex TYPE_OFF_T
 @cvindex off_t
-If @code{off_t} is not defined, define @code{off_t} to be @code{long}.
+Equivalent to @samp{AC_CHECK_TYPE(off_t, long)}.
 @end defmac
 
 @defmac AC_TYPE_PID_T
 @maindex TYPE_PID_T
 @cvindex pid_t
-If @code{pid_t} is not defined, define @code{pid_t} to be @code{int}.
+Equivalent to @samp{AC_CHECK_TYPE(pid_t, int)}.
 @end defmac
 
 @defmac AC_TYPE_SIGNAL
@@ -2864,8 +2882,7 @@ hup_handler ()
 @defmac AC_TYPE_SIZE_T
 @maindex TYPE_SIZE_T
 @cvindex size_t
-If @code{size_t} is not defined, define @code{size_t} to be
-@code{unsigned}.
+Equivalent to @samp{AC_CHECK_TYPE(size_t, unsigned)}.
 @end defmac
 
 @defmac AC_TYPE_UID_T
@@ -2876,11 +2893,11 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @code{gid_t} to be @code{int}.
 @end defmac
 
-@node Generic Typedefs,  , Particular Typedefs, Typedefs
-@subsection Generic Typedef Checks
+@node Generic Types,  , Particular Types, Types
+@subsection Generic Type Checks
 
-These macros are used to check for typedefs not covered by the
-particular test macros.
+These macros are used to check for types not covered by the particular
+test macros.
 
 @defmac AC_CHECK_TYPES ((@var{type}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_TYPES
@@ -2922,7 +2939,7 @@ to prefer @code{AC_CHECK_TYPES}.
 
 
 
-@node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Typedefs, Existing Tests
+@node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Types, Existing Tests
 @section C Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
@@ -2933,6 +2950,7 @@ features.  To check for characteristics not listed here, use
 @defmac AC_C_BIGENDIAN
 @maindex C_BIGENDIAN
 @cvindex WORDS_BIGENDIAN
+@cindex Endianness
 If words are stored with the most significant byte first (like Motorola
 and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 @end defmac
@@ -3032,11 +3050,11 @@ Ghostscript distribution, to unprotoize function definitions.  For
 function prototypes, you should first define @code{PARAMS}:
 @example
 #ifndef PARAMS
-#  if PROTOTYPES
-#    define PARAMS(protos) protos
-#  else /* no PROTOTYPES */
-#    define PARAMS(protos) ()
-#  endif /* no PROTOTYPES */
+# if PROTOTYPES
+#  define PARAMS(protos) protos
+# else /* no PROTOTYPES */
+#  define PARAMS(protos) ()
+# endif /* no PROTOTYPES */
 #endif
 @end example
 then use it this way:
@@ -3689,9 +3707,9 @@ functions that take arguments.
 
 @example
 #ifdef __cplusplus
-foo(int i)
+foo (int i)
 #else
-foo(i) int i;
+foo (i) int i;
 #endif
 @end example
 
@@ -3701,9 +3719,9 @@ include any header files containing clashing prototypes.
 
 @example
 #ifdef __cplusplus
-extern "C" void *malloc(size_t);
+extern "C" void *malloc (size_t);
 #else
-char *malloc();
+char *malloc ();
 #endif
 @end example
 
@@ -3811,6 +3829,9 @@ way to perform the operation has been found yet.
 Here is an example that uses the shell variable @code{fstype} to keep
 track of whether the remaining cases need to be checked.
 
+@c FIXME: I hate this example, because it does not use the quotes
+@c properly, but it would be terrible to use quotes here.  So?  Should
+@c I just shut up, or advocate the right uses of (useless) quotes?
 @example
 @group
 AC_MSG_CHECKING(how to get file system type)
@@ -3833,6 +3854,7 @@ AC_MSG_RESULT($fstype)
 
 @node Language Choice,  , Multiple Cases, Writing Tests
 @section Language Choice
+@cindex Language
 
 Packages that use both C and C++ need to test features of both
 compilers.  Autoconf-generated @code{configure} scripts check for C
@@ -4049,6 +4071,7 @@ and then a @file{Makefile.in} could contain:
 
 @node Caching Results, Printing Messages, Setting Output Variables, Results
 @section Caching Results
+@cindex Cache
 
 To avoid checking for the same features repeatedly in various
 @code{configure} scripts (or repeated runs of one script),
@@ -4108,6 +4131,7 @@ checkpoints the cache in case of an early configure script abort.
 
 @node Cache Variable Names, Cache Files, Caching Results, Caching Results
 @subsection Cache Variable Names
+@cindex Cache variable
 
 The names of cache variables should have the following format:
 
@@ -5225,6 +5249,7 @@ fi
 
 @node Invoking configure, Invoking config.status, Site Configuration, Top
 @chapter Running @code{configure} Scripts
+@cindex @code{configure}
 
 Below are instructions on how to configure a package that uses a
 @code{configure} script, suitable for inclusion as an @file{INSTALL}
@@ -5247,6 +5272,7 @@ may use comes with Autoconf.
 
 @node Invoking config.status, Questions, Invoking configure, Top
 @chapter Recreating a Configuration
+@cindex @code{config.status}
 
 The @code{configure} script creates a file named @file{config.status},
 which actually configures, or @dfn{instantiates}, the template files.
@@ -5657,6 +5683,7 @@ in conjunction with cache variables.  @xref{Caching Results}.
 
 @node Invoking autoupdate, Changed Results, Changed Macros, Upgrading
 @section Using @code{autoupdate} to Modernize @code{configure}
+@cindex @code{autoupdate}
 
 The @code{autoupdate} program updates a @file{configure.in} file that
 calls Autoconf macros by their old names to use the current macro names.
@@ -6227,13 +6254,20 @@ use these names in @code{#if} directives.
 
 @printindex cv
 
-@node Macro Index,  , Preprocessor Symbol Index, Top
+@node Macro Index, Concept Index, Preprocessor Symbol Index, Top
 @unnumbered Macro Index
 
 This is an alphabetical list of the Autoconf macros.  To make the list
 easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ma
+
+@node Concept Index,  , Macro Index, Top
+@unnumbered Concept Index
+
+@c FIXME: Find some nice wording to introduce this section.
+
+@printindex cp
 
 @contents
 @bye

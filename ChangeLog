@@ -1,5 +1,17 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Introduce a concept index, and update a bit the documentation.
+
+	* doc/autoconf.texi (Concept Index): New section.
+	Various entries added.
+	(Typedefs): Renamed as...
+	(Types): this.  Pay attention to not limiting the documentation to
+	the typedefs.
+	(Particular Types): Mention the equivalent generic test.
+	Promote the GNU coding style at various places.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Revamp the autoupdate/AC_OBSOLETE chain.  All the details are
 	given in the prologue of acobsolete.m4.
 
