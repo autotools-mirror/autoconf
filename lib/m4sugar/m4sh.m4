@@ -626,13 +626,14 @@ fi
 # Still very private as its interface looks quite bad.
 #
 # `$as_dummy' forces splitting on constant user-supplied paths.
-# POSIX.2 word splitting is done only on the output of word
-# expansions, not every word.  This closes a longstanding sh security
-# hole.  Optimize it away when not needed.
+# POSIX.2 field splitting is done only on the result of word
+# expansions, not on literal text.  This closes a longstanding sh security
+# hole.  Optimize it away when not needed, i.e., if there are no literal
+# path separators.
 m4_define([_AS_PATH_WALK],
 [AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])dnl
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-AS_LITERAL_IF(m4_default([$1], [$PATH]),
+m4_bmatch([$1], [[:;]],
 [as_dummy="$1"
 for as_dir in $as_dummy],
 [for as_dir in m4_default([$1], [$PATH])])
