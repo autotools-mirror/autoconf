@@ -3112,8 +3112,8 @@ AC_SUBST($1)dnl
 AC_DEFUN([AC_CHECK_PROGS],
 [for ac_prog in $2
 do
-AC_CHECK_PROG([$1], $ac_prog, $ac_prog, , [$4])
-test -n "$$1" && break
+  AC_CHECK_PROG([$1], [$ac_prog], [$ac_prog], , [$4])
+  test -n "$$1" && break
 done
 m4_ifvanl([$3], [test -n "$$1" || $1="$3"])])
 
@@ -3141,13 +3141,12 @@ m4_ifvanl([$3],
 [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"])dnl
   ;;
 esac])dnl
-$1=$ac_cv_path_$1
+AC_SUBST([$1], [$ac_cv_path_$1])
 if test -n "$$1"; then
-  AC_MSG_RESULT($$1)
+  AC_MSG_RESULT([$$1])
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi
-AC_SUBST($1)dnl
 ])# AC_PATH_PROG
 
 
@@ -3157,8 +3156,8 @@ AC_SUBST($1)dnl
 AC_DEFUN([AC_PATH_PROGS],
 [for ac_prog in $2
 do
-AC_PATH_PROG($1, $ac_prog, , $4)
-test -n "$$1" && break
+  AC_PATH_PROG([$1], [$ac_prog], , [$4])
+  test -n "$$1" && break
 done
 m4_ifvanl([$3], [test -n "$$1" || $1="$3"])dnl
 ])
@@ -3180,14 +3179,12 @@ AU_DEFUN([AC_CHECK_TOOL_PREFIX])
 # -----------------------------------------------------------------------
 # (Use different variables $1 and ac_pt_$1 so that cache vars don't conflict.)
 AC_DEFUN([AC_PATH_TOOL],
-[AC_PATH_PROG($1, ${ac_tool_prefix}$2, , $4)
+[if test -n "$ac_tool_prefix"; then
+  AC_PATH_PROG([$1], [${ac_tool_prefix}$2], , [$4])
+fi
 if test -z "$ac_cv_path_$1"; then
-  if test -n "$ac_tool_prefix"; then
-    AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
-    $1="$ac_pt_$1"
-  else
-    $1="$3"
-  fi
+  AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
+  $1="$ac_pt_$1"
 fi
 ])
 
@@ -3196,14 +3193,12 @@ fi
 # ------------------------------------------------------------------------
 # (Use different variables $1 and ac_ct_$1 so that cache vars don't conflict.)
 AC_DEFUN([AC_CHECK_TOOL],
-[AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, , $4)
+[if test -n "$ac_tool_prefix"; then
+  AC_CHECK_PROG([$1], [${ac_tool_prefix}$2], [${ac_tool_prefix}$2], , [$4])
+fi
 if test -z "$ac_cv_prog_$1"; then
-  if test -n "$ac_tool_prefix"; then
-    AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
-    $1="$ac_ct_$1"
-  else
-    $1="$3"
-  fi
+  AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
+  $1="$ac_ct_$1"
 fi
 ])
 
@@ -3215,12 +3210,16 @@ fi
 # none can be found with a cross prefix, then use the first one that
 # was found without the cross prefix.
 AC_DEFUN([AC_CHECK_TOOLS],
-[for ac_prog in $2
-do
-  AC_CHECK_PROG([$1], $ac_tool_prefix$ac_prog, $ac_tool_prefix$ac_prog,, [$4])
-  test "$$1" != "" && break
-done
-if test "$$1" = ""; then
+[if test -n "$ac_tool_prefix"; then
+  for ac_prog in $2
+  do
+    AC_CHECK_PROG([$1],
+                  [$ac_tool_prefix$ac_prog], [$ac_tool_prefix$ac_prog],,
+                  [$4])
+    test "$$1" != "" && break
+  done
+fi
+if test -z "$$1"; then
   AC_CHECK_PROGS([$1], [$2], [$3], [$4])
 fi
 ])# AC_CHECK_TOOLS

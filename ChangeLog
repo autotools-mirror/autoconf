@@ -1,5 +1,13 @@
 2000-10-17  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_PROG, AC_CHECK_PROGS, AC_PATH_PROG)
+	(AC_PATH_PROGS, AC_PATH_TOOL, AC_CHECK_TOOL, AC_CHECK_TOOLS): Fix
+	the quotation.
+	(AC_PATH_TOOL, AC_CHECK_TOOL, AC_CHECK_TOOLS): Check with the
+	$ac_tool_prefix iff it is not empty.
+
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Particular Programs): Some notes on the
 	portability of Flex.
 
