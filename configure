@@ -273,7 +273,7 @@ PACKAGE_STRING='GNU Autoconf 2.57a'
 PACKAGE_BUGREPORT='bug-autoconf@gnu.org'
 
 ac_unique_file="ChangeLog"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE EXPR M4 HELP2MAN PERL EMACS lispdir LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot EXPR M4 HELP2MAN PERL EMACS EMACSLOADPATH lispdir LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -714,6 +714,14 @@ ac_env_target_alias_set=${target_alias+set}
 ac_env_target_alias_value=$target_alias
 ac_cv_env_target_alias_set=${target_alias+set}
 ac_cv_env_target_alias_value=$target_alias
+ac_env_EMACS_set=${EMACS+set}
+ac_env_EMACS_value=$EMACS
+ac_cv_env_EMACS_set=${EMACS+set}
+ac_cv_env_EMACS_value=$EMACS
+ac_env_EMACSLOADPATH_set=${EMACSLOADPATH+set}
+ac_env_EMACSLOADPATH_value=$EMACSLOADPATH
+ac_cv_env_EMACSLOADPATH_set=${EMACSLOADPATH+set}
+ac_cv_env_EMACSLOADPATH_value=$EMACSLOADPATH
 
 #
 # Report the --help message.
@@ -792,6 +800,14 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-lispdir          Override the default lisp directory
+
+Some influential environment variables:
+  EMACS       the Emacs editor command
+  EMACSLOADPATH
+              the Emacs library search path
+
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <bug-autoconf@gnu.org>.
 _ACEOF
@@ -1237,7 +1253,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
           ac_config_files="$ac_config_files config/Makefile"
 
 
-am__api_version="1.7"
+am__api_version="1.7a"
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -1456,6 +1472,15 @@ echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 
+rm -rf .tst 2>/dev/null
+mkdir .tst 2>/dev/null
+if test -d .tst; then
+  am__leading_dot=.
+else
+  am__leading_dot=_
+fi
+rmdir .tst 2>/dev/null
+
  # test to see if srcdir already configured
 if test "`cd $srcdir && pwd`" != "`pwd`" &&
    test -f $srcdir/config.status; then
@@ -1475,8 +1500,8 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=autoconf
- VERSION=2.57a
+ PACKAGE='autoconf'
+ VERSION='2.57a'
 
 
 cat >>confdefs.h <<_ACEOF
@@ -1891,6 +1916,8 @@ fi
   test -n "$EMACS" && break
 done
 test -n "$EMACS" || EMACS="no"
+
+
 
  if test $EMACS != "no"; then
    if test x${lispdir+set} != xset; then
@@ -2610,11 +2637,13 @@ s,@ac_ct_STRIP@,$ac_ct_STRIP,;t t
 s,@INSTALL_STRIP_PROGRAM@,$INSTALL_STRIP_PROGRAM,;t t
 s,@AWK@,$AWK,;t t
 s,@SET_MAKE@,$SET_MAKE,;t t
+s,@am__leading_dot@,$am__leading_dot,;t t
 s,@EXPR@,$EXPR,;t t
 s,@M4@,$M4,;t t
 s,@HELP2MAN@,$HELP2MAN,;t t
 s,@PERL@,$PERL,;t t
 s,@EMACS@,$EMACS,;t t
+s,@EMACSLOADPATH@,$EMACSLOADPATH,;t t
 s,@lispdir@,$lispdir,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
