@@ -1823,7 +1823,11 @@ The directory for installing read-only architecture-independent data.
 
 @defvar exec_prefix
 @ovindex exec_prefix
-The installation prefix for architecture-dependent files.
+The installation prefix for architecture-dependent files.  By default
+it's the same as @var{prefix}.  You should avoid installing anything
+directly to @var{exec_prefix}.  However, the default value for
+directories containing architecture-dependent files should be relative
+to @var{exec_prefix}.
 @end defvar
 
 @defvar includedir
@@ -1863,7 +1867,9 @@ The directory for installing C header files for non-gcc compilers.
 
 @defvar prefix
 @ovindex prefix
-The installation prefix for architecture-independent files.
+The common installation prefix for all files. If @var{exec_prefix}
+is defined to a different value, @var{prefix} is used only for
+architecture-independent files.
 @end defvar
 
 @defvar sbindir

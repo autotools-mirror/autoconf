@@ -1,3 +1,8 @@
+2000-12-19  Pavel Roskin  <proski@gnu.org>
+
+	* doc/autoconf.texi (Installation Directory Variables): More info
+	on prefix and exec_prefix.
+
 2000-12-19  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (_AC_COMPILER_OBJEXT): Don't rely on
