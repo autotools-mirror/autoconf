@@ -1,3 +1,8 @@
+2000-12-19  Akim Demaille  <akim@epita.fr>
+
+	* tests/compile.at (AC_PROG_CPP without warnings, GNU Fortran 77):
+	Use AC_TRY_COMMAND when running commands, to enrich the logs.
+
 2000-12-19  Akim Demaille  <akim@epita.fr>, Mo DeJong  <mdejong@cygnus.com>
 
 	* aclang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): New.

@@ -86,8 +86,9 @@ chmod +x mycpp
 
 _AT_CHECK_AC_MACRO(
 [# Ignore if /lib/cpp doesn't work
-/lib/cpp </dev/null >/dev/null 2>&1 ||
+if AC_TRY_COMMAND([/lib/cpp </dev/null >&2]); then :; else
   AC_MSG_ERROR([preprocessor doesn't work], 77)
+fi
 CPP=./mycpp
 AC_PROG_CPP
 test "x$ac_c_preproc_warn_flag" != xyes &&
@@ -124,7 +125,7 @@ AT_CHECK_MACRO([GNU Fortran 77],
 [[AC_LANG(Fortran 77)
 AC_LANG_COMPILER
 
-if $F77 --version 2>/dev/null | grep GNU >/dev/null; then
+if AC_TRY_COMMAND([$F77 --version | grep GNU >&2]); then
   # Has GNU in --version.
   test "$G77" != yes &&
     AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler])
