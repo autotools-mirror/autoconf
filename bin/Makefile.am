@@ -92,3 +92,17 @@ autom4te: $(srcdir)/autom4te.in $(top_srcdir)/configure.ac
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod +x autom4te.tmp
 	mv autom4te.tmp autom4te
+
+
+## --------------- ##
+## Building TAGS.  ##
+## --------------- ##
+
+TAGS_DEPENDENCIES = $(EXTRA_DIST)
+
+ETAGS_PERL = --lang=perl \
+  autoreconf.in autoupdate.in autoscan.in autom4te.in
+ETAGS_SH = --lang=none --regex='/\([a-zA-Z_][a-zA-Z_0-9]*\)=/\1/' \
+  autoconf.in autoheader.in ifnames.in
+
+ETAGS_ARGS = $(ETAGS_PERL) $(ETAGS_SH)

@@ -40,6 +40,20 @@ $(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/version.in >version.tm4
 	mv version.tm4 $(srcdir)/version.m4
 
+
+## --------------- ##
+## Building TAGS.  ##
+## --------------- ##
+
+TAGS_FILES = $(distautoconflib_DATA)
+
+ETAGS_ARGS = --lang=none \
+  --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
+
+
+
+
+
 ## ------------------ ##
 ## The frozen files.  ##
 ## ------------------ ##

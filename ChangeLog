@@ -1,3 +1,8 @@
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
+	* bin/Makefile.am, lib/Autom4te/Makefile.am, lib/autoconf/Makefile.am
+	* lib/autotest/Makefile.am, lib/m4sugar/Makefile.am: Add TAGS support.
+
 2001-08-16  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi, doc/install.texi: Put copyright notice at
