@@ -299,20 +299,9 @@ case $task in
   # M4 expansion.
   $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure || exit 2
 
-  # You could add your own prefixes to pattern if you wanted to check for
-  # them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do
-  # alternation.
-  pattern="A[CHM]_"
-
-  if grep "^[^#]*$pattern" $tmp/configure >/dev/null 2>&1; then
-    echo "$me: undefined macros:" >&2
-    sed -n "s/^[^#]*\\($pattern[_A-Za-z0-9]*\\).*/\\1/p" $tmp/configure |
-      while read macro; do
-  	grep -n "^[^#]*$macro" $infile /dev/null
-  	test $? = 1 && echo "***BUG in Autoconf--please report*** $macro"
-      done | sort -u >&2
-    status=1
-  fi
+  # You can add your own prefixes to pattern if you want to check for
+  # them too.
+  pattern="A[CHM]_|m4_"
 
   if test "x$outfile" != x-; then
     chmod +x $outfile
@@ -321,31 +310,71 @@ case $task in
   # Put the real line numbers into configure to make config.log more
   # helpful.  Because quoting can sometimes get really painful in m4,
   # there are special @tokens@ to substitute.
-  $AWK '
+  cat >$tmp/finalize.awk <<EOF
+    function undefined (file, line, macro)
+    {
+      print file ":" line ": warning: undefined macro: " macro | "cat >&2"
+    }
+
     {
       sub(/[         ]*$/, "")
-      if ($0 == "")
+      if (\$0 == "")
         {
           if (!duplicate)
-            print
+            {
+               oline++
+               print
+            }
           duplicate = 1
           next
         }
       duplicate = 0
       oline++
-      if ($0 ~ /__oline__/)
+      if (\$0 ~ /__oline__/)
         while (sub(/__oline__/, oline))
           continue
-      while (sub(/@<:@/, "["))
+      while (sub (/@<:@/, "["))
         continue
-      while (sub(/@:>@/, "]"))
+      while (sub (/@:>@/, "]"))
         continue
-      while (sub(/@S\|@/, "$"))
+      while (sub (/@S\|@/, "$"))
         continue
-      while (sub(/@%:@/, "#"))
+      while (sub (/@%:@/, "#"))
         continue
+      # Dubious feature: we tolerate macro names when commented.
+      if (/^[^#]*($pattern)/)
+        {
+           match (\$0, /($pattern)[_A-Za-z0-9]*/)
+           macros [substr (\$0, RSTART, RLENGTH)] = oline
+           some_macros_were_not_expanded = 1
+        }
       print
-    }' <$tmp/configure >&4
+    }
+
+    # If there are some macros which are left unexpanded in the output,
+    # try to find the input which is responsible.  Otherwise, try to help.
+    END {
+      if (some_macros_were_not_expanded)
+        {
+          line = 0
+          while (getline < "$infile")
+            {
+              line++
+              for (macro in macros)
+              if (index (\$0, macro))
+                {
+                  delete macros [macro]
+                  undefined ("$infile", line, macro)
+                }
+            }
+          close ("$infile")
+          for (macro in macros)
+            undefined ("$outfile", macros [macro], macro)
+          exit 1
+        }
+    }
+EOF
+    $AWK -f $tmp/finalize.awk <$tmp/configure >&4
   ;; # End of the task script.
 
 
