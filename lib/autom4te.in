@@ -206,5 +206,5 @@ end-language: "M4sh"
 begin-language: "M4sugar"
 args: --prepend-include @datadir@
 args: m4sugar/m4sugar.m4f
-args: --warning syntax
+args: --warnings syntax
 end-language: "M4sugar"
