@@ -184,7 +184,7 @@ do
 done
 
 
-      for as_shell in $as_candidate_shells ${SHELL-/bin/sh}; do
+      for as_shell in $as_candidate_shells $SHELL; do
 	 if { $as_shell 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then

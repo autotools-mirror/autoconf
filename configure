@@ -185,7 +185,7 @@ test \$exitcode = 0) || { (exit 1); exit 1; }
 ") 2> /dev/null; then
   :
 else
-  as_candidate_shells="$SHELL"
+  as_candidate_shells=
     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
 do
@@ -200,7 +200,7 @@ do
 done
 
 
-      for as_shell in $as_candidate_shells; do
+      for as_shell in $as_candidate_shells $SHELL; do
 	 if { $as_shell 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -497,7 +497,7 @@ PACKAGE_STRING='GNU Autoconf 2.59a'
 PACKAGE_BUGREPORT='bug-autoconf@gnu.org'
 
 ac_unique_file="ChangeLog"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot ac_cv_sh_n_works EXPR M4 HELP2MAN PERL TEST_EMACS EMACS EMACSLOADPATH lispdir LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot ac_cv_sh_n_works EXPR M4 HELP2MAN PERL TEST_EMACS EMACS EMACSLOADPATH lispdir GREP LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1663,7 +1663,7 @@ else
 echo "$as_me: WARNING: \`missing' script is too old or missing" >&2;}
 fi
 
-if mkdir -p -- . 2>/dev/null; then
+if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
   # Keeping the `.' argument allows $(mkdir_p) to be used without
   # argument.  Indeed, we sometimes output rules like
   #   $(mkdir_p) $(somedir)
@@ -1676,7 +1676,7 @@ else
   # recognize any option.  It will interpret all options as
   # directories to create, and then abort because `.' already
   # exists.
-  for d in ./-p ./--;
+  for d in ./-p ./--version;
   do
     test -d $d && rmdir $d
   done
@@ -1887,7 +1887,6 @@ do
 done
 done
 
-  test -z "$ac_cv_prog_ac_ct_STRIP" && ac_cv_prog_ac_ct_STRIP=":"
 fi
 fi
 ac_ct_STRIP=$ac_cv_prog_ac_ct_STRIP
@@ -1899,7 +1898,19 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-  STRIP=$ac_ct_STRIP
+  if test "x$ac_ct_STRIP" = x; then
+    STRIP=":"
+  else
+    if test "$build" != "$host"; then
+      { echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&5
+echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org." >&2;}
+    fi
+    STRIP=$ac_ct_STRIP
+  fi
 else
   STRIP="$ac_cv_prog_STRIP"
 fi
@@ -2346,6 +2357,110 @@ echo "${ECHO_T}$am_cv_lispdir" >&6
   lispdir="$am_cv_lispdir"
 
 fi;
+
+
+
+
+## ------ ##
+## Grep.  ##
+## ------ ##
+echo "$as_me:$LINENO: checking for grep that handles long lines and -e" >&5
+echo $ECHO_N "checking for grep that handles long lines and -e... $ECHO_C" >&6
+if test "${ac_cv_path_GREP+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  # Extract the first word of "grep ggrep" to use in msg output
+if test -z "$GREP"; then
+set dummy grep ggrep; ac_prog_name=$2
+if test "${ac_cv_path_GREP+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  # Create a temporary directory, and hook for its removal unless debugging.
+$debug ||
+{
+  trap 'exit_status=$?; rm -f -r $tmp && exit $exit_status' 0
+  trap '{ (exit 1); exit 1; }' 1 2 13 15
+}
+
+# Create a (secure) tmp directory for tmp files.
+: ${TMPDIR=/tmp}
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/GREPXXXXXX") 2>/dev/null` &&
+  test -n "$tmp" && test -d "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/GREP$$-$RANDOM
+  (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   { (exit 1); exit 1; }
+}
+ac_path_GREP_found=false
+# Loop through the user's path and test for each of PROGNAME-LIST
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+as_dummy="		$PATH:/usr/xpg4/bin"
+for as_dir in $as_dummy
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_prog in grep ggrep; do
+  for ac_exec_ext in '' $ac_executable_extensions; do
+    ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
+    test -f "$ac_path_GREP" || continue
+    $ac_path_GREP_found || if $as_executable_p "$ac_path_GREP"; then
+  # Check for GNU ac_path_GREP and select it if it is found.
+  # Check for GNU $ac_path_GREP
+if "$ac_path_GREP" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
+  ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:
+else
+  ac_count=0
+  echo $ECHO_N "0123456789$ECHO_C" >"$tmp/conftest.in"
+  while :
+  do
+    cat "$tmp/conftest.in" "$tmp/conftest.in" >"$tmp/conftest.tmp"
+    mv "$tmp/conftest.tmp" "$tmp/conftest.in"
+    cp "$tmp/conftest.in" "$tmp/conftest.nl"
+    echo 'GREP' >> "$tmp/conftest.nl"
+    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "$tmp/conftest.nl" >"$tmp/conftest.out" || break
+    diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
+    ac_count=`expr $ac_count + 1`
+    if test $ac_count -gt ${ac_path_GREP_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      ac_cv_path_GREP="$ac_path_GREP"
+      ac_path_GREP_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+fi
+
+fi
+
+    $ac_path_GREP_found && break 3
+  done
+done
+
+done
+
+rm -rf "$tmp"
+
+fi
+
+GREP="$ac_cv_path_GREP"
+if test -z "$GREP"; then
+  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in 		$PATH:/usr/xpg4/bin" >&5
+echo "$as_me: error: no acceptable $ac_prog_name could be found in 		$PATH:/usr/xpg4/bin" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+fi
+
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_path_GREP" >&5
+echo "${ECHO_T}$ac_cv_path_GREP" >&6
+ GREP="$ac_cv_path_GREP"
 
 
 
@@ -3029,6 +3144,7 @@ s,@TEST_EMACS@,$TEST_EMACS,;t t
 s,@EMACS@,$EMACS,;t t
 s,@EMACSLOADPATH@,$EMACSLOADPATH,;t t
 s,@lispdir@,$lispdir,;t t
+s,@GREP@,$GREP,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
