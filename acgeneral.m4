@@ -3585,7 +3585,7 @@ ifset([AC_LIST_FILES],
        AC_OUTPUT_FILES()dnl
        AC_DIVERT_POP()])dnl
 ifset([AC_LIST_HEADERS],
-      [AC_OUTPUT_HEADERS()])dnl
+      [_AC_OUTPUT_HEADERS()])dnl
 ifset([AC_LIST_LINKS],
       [AC_OUTPUT_LINKS()])dnl
 ifset([AC_LIST_COMMANDS],
@@ -3609,7 +3609,7 @@ chmod +x $CONFIG_STATUS
 # Set the DEFS variable to the -D options determined earlier.
 # This is a subroutine of AC_OUTPUT.
 # It is called inside configure, outside of config.status.
-# FIXME: This has to be fixed the same way as in AC_OUTPUT_HEADERS.
+# FIXME: This has to be fixed the same way as in _AC_OUTPUT_HEADERS.
 define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
@@ -3827,16 +3827,52 @@ EOF
 ])# AC_OUTPUT_FILES
 
 
-# AC_OUTPUT_HEADERS
-# -----------------
-# Create the config.h files from the config.h.in files.
-# This is a subroutine of AC_OUTPUT.
+# _AC_OUTPUT_HEADERS
+# ------------------
 #
-# It has to send itself into $CONFIG_STATUS (eg, via here documents).
-# Upon exit, no here document shall be opened.
-define(AC_OUTPUT_HEADERS,
+# Output the code which instantiates the `config.h' files from their
+# `config.h.in'.
+#
+# This is a subroutine of _AC_OUTPUT_CONFIG_STATUS.  It has to send
+# itself into $CONFIG_STATUS (eg, via here documents).  Upon exit, no
+# here document shall be opened.
+#
+#
+# The code produced used to be extremely costly: there are was a
+# single sed script (n lines) handling both `#define' templates,
+# `#undef' templates with trailing space, and `#undef' templates
+# without trailing spaces.  The full script was run on each of the m
+# lines of `config.h.in', i.e., about n x m.
+#
+# Now there are two scripts: `conftest.defines' for the `#define'
+# templates, and `conftest.undef' for the `#undef' templates.
+#
+# Optimization 1.  It is incredibly costly to run two `#undef'
+# scripts, so just remove trailing spaces first.  Removes about a
+# third of the cost.
+#
+# Optimization 2.  Since `#define' are rare and obsoleted,
+# `conftest.defines' is built and run only if grep says there are
+# `#define'.  Improves by at least a factor 2, since in addition we
+# avoid the cost of *producing* the sed script.
+#
+# Optimization 3.  In each script, first check that the current input
+# line is a template.  This avoids running the full sed script on
+# empty lines and comments (divides the cost by about 3 since each
+# template chunk is typically a comment, a template, an empty line).
+#
+# Optimization 4.  Once a substitution performed, since there can be
+# only one per line, immediately restart the script on the next input
+# line (using the `t' sed instruction).  Divides by about 2.
+# *Note:* In the case of the AC_SUBST sed script (AC_OUTPUT_FILES)
+# this optimization cannot be applied as is, because there can be
+# several substitutions per line.
+#
+#
+# The result is about, hm, ... times blah... plus....  Ahem.  The
+# result is about much faster.
+define(_AC_OUTPUT_HEADERS,
 [cat >>$CONFIG_STATUS <<\EOF
-changequote(<<, >>)dnl
 
 #
 # CONFIG_HEADER section.
@@ -3846,16 +3882,16 @@ changequote(<<, >>)dnl
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
-ac_dA='s%^\([ 	]*\)#\([ 	]*<<define>>[ 	][ 	]*\)'
-ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
-ac_dC='\3'
-ac_dD='%;t t'
+dnl Double quote for the `[ ]' and `define'.
+[ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dB='[ 	].*$%\1#\2'
+ac_dC=' '
+ac_dD='%;t'
 # ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
 ac_uA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_uB='<<$>>%\1#\2define\3'
+ac_uB='$%\1#\2define\3'
 ac_uC=' '
-ac_uD='%;t t'
-changequote([, ])dnl
+ac_uD='%;t']
 
 for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
 changequote(, )dnl
@@ -3946,7 +3982,6 @@ do
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#define' lines.
-  echo ': t' >>$CONFIG_STATUS
   echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define/!b' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
@@ -3971,7 +4006,6 @@ do
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#undef'
-  echo ': t' >>$CONFIG_STATUS
   echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*undef/!b' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
   echo 'CEOF
@@ -4016,7 +4050,7 @@ AC_LIST_HEADERS_COMMANDS()dnl
 ])dnl
 fi; done
 EOF
-])# AC_OUTPUT_HEADERS
+])# _AC_OUTPUT_HEADERS
 
 
 # AC_OUTPUT_LINKS

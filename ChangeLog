@@ -1,5 +1,35 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Honor properly the `#define' config.h.in templates.
+	Test it.
+
+	* acgeneral.m4 (AC_OUTPUT_HEADERS): Renamed as...
+	(_AC_OUTPUT_HEADERS): this.  All callers changed.
+	Don't mess with changequote, just quote properly.
+	Bug 1.  Because of the `#' in `ac_dA', the quotes <<>> were not
+	removed, and therefore the sed script contained `<<define>>'
+	instead of `define'.  Now that the block is properly quoted, there
+	is no need to quote `define'.
+	Bug 2.  Once a `#define' substitution performed, we were branching
+	to the top of the sed script (`t top').  This resulted in an
+	endless substitution of `#define foo 1' to `#define foo 1'.
+	Branching is not enough: you also have to fetch the next input
+	line, i.e., use `t' instead of `t t' in ac_dD, and don't output
+	`: top' in `config.defines'.
+	Though it was correct for `#undef' templates, just apply the same
+	transformation to `ac_uD' and `config.undefs'.
+	Bug 3.  Don't try to preserve what was behind the value in the
+	template, since on
+		#define NAME "bar baz"
+	it leads to
+		#define NAME 1 baz"
+	Now `ac_dB' catches everything behind the NAME (making sure there
+	is at least a space) and `ac_dC' only outputs a space.
+	* tests/torture.m4: Check that various forms of `#define' header
+	templates are properly handled.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Avoid calling `rm' without arguments.
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): It is smarter to use a

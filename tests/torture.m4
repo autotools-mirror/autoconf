@@ -117,3 +117,62 @@ AT_CHECK([./config.status --recheck | sed -n -e 's/^result=//p'], 0,
 ], ignore)
 
 AT_CLEANUP(configure config.status config.log config.cache)
+
+
+
+## -------------------------------------------- ##
+## Check that `#define' templates are honored.  ##
+## -------------------------------------------- ##
+
+# Use various forms of `#define' templates, and make sure there are no
+# problems when a symbol is prefix of another.
+
+AT_SETUP([#define header templates])
+
+AT_DATA(configure.in,
+[[AC_INIT
+AC_CONFIG_HEADERS(config.h:config.hin)
+# I18n of dummy variables: their French translations.
+AC_DEFINE(foo, toto)
+AC_DEFINE(bar, tata)
+AC_DEFINE(baz, titi)
+AC_DEFINE(fubar, tutu)
+# Symbols which are prefixes of another.
+AC_DEFINE(a, A)
+AC_DEFINE(aaa, AAA)
+AC_DEFINE(aa, AA)
+AC_OUTPUT
+]])
+
+AT_DATA(config.hin,
+[[#define foo   0
+#  define bar bar
+#  define baz   "Archimedes was sinking in his baz"
+#  define fubar	 	 	 	tutu
+#define a B
+#define aa BB
+#define aaa BBB
+#undef a
+#undef aa
+#undef aaa
+]])
+
+AT_DATA(expout,
+[[/* config.h.  Generated automatically by configure.  */
+#define foo toto
+#  define bar tata
+#  define baz titi
+#  define fubar tutu
+#define a A
+#define aa AA
+#define aaa AAA
+#define a A
+#define aa AA
+#define aaa AAA
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0)
+AT_CHECK([./configure], 0, ignore)
+AT_CHECK([cat config.h], 0, expout)
+
+AT_CLEANUP(configure config.status config.log config.cache config.h)
