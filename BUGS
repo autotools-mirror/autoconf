@@ -12,21 +12,20 @@ address them.
 
 * Status
 
-	/*----------------------------------------.
-	| DO NOT USE THIS VERSION IN PRODUCTION.  |
-	`----------------------------------------*/
+	/*---------------------------------.
+	| Use with caution in production.  |
+	`---------------------------------*/
+
 
 * Serious bugs
 
-Autoconf must not be used in production if there are `grave' bugs.
+Autoconf must not be used in production if there are serious bugs.
 
-** Portability of expr
-AS_DIRNAME is not portable on QNX.
 
-** : ${foo=$val}
-There are problems on Ultrix and I don't recall which architecture.
+* Important bugs
 
-** : foo=${foo='${MAGIC}'}
-Solaris behaves very improperly here and adds braces.  This affects
-the cache mechanism.  Fortunately it is uncommon to have such cache
-entries, but Libtool is affected.
+** GNUness of Fortran Compiler
+The test is broken.
+
+** Portability to Cygwin and others
+EXEEXT and OBJEXT might not be properly computed.
