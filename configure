@@ -683,8 +683,10 @@ if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   ac_popdir=`pwd`
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
-    cd $ac_dir
-    if test "$ac_dir" != .; then
+    test -d $ac_dir || continue
+    ac_builddir=.
+
+if test "$ac_dir" != .; then
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
   # A "../" for each directory in $ac_dir_suffix.
   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
@@ -707,7 +709,14 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
+# Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
+# absolute.
+ac_buildpath=`cd "$ac_dir" && cd $ac_builddir && pwd`
+ac_top_buildpath=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_srcpath=`cd "$ac_dir" && cd $ac_srcdir && pwd`
+ac_top_srcpath=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
+    cd $ac_dir
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_srcdir/configure.gnu; then
       echo
@@ -1738,7 +1747,7 @@ exec 5>>config.log
 {
   echo
   sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
-## Running \$as_me. ##
+## Running $as_me. ##
 _ASBOX
 } >&5
 cat >&5 <<_CSEOF
@@ -2112,7 +2121,9 @@ echo "$as_me: error: cannot create \"$ac_dir\"" >&2;}
   esac
 done; }
 
-  if test "$ac_dir" != .; then
+  ac_builddir=.
+
+if test "$ac_dir" != .; then
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
   # A "../" for each directory in $ac_dir_suffix.
   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
@@ -2135,6 +2146,12 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
+# Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
+# absolute.
+ac_buildpath=`cd "$ac_dir" && cd $ac_builddir && pwd`
+ac_top_buildpath=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_srcpath=`cd "$ac_dir" && cd $ac_srcdir && pwd`
+ac_top_srcpath=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
   case $INSTALL in
   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
@@ -2189,7 +2206,13 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 /@[a-zA-Z_][a-zA-Z_0-9]*@/!b
 s,@configure_input@,$configure_input,;t t
 s,@srcdir@,$ac_srcdir,;t t
+s,@srcpath@,$ac_srcpath,;t t
 s,@top_srcdir@,$ac_top_srcdir,;t t
+s,@top_srcpath@,$ac_top_srcpath,;t t
+s,@builddir@,$ac_builddir,;t t
+s,@buildpath@,$ac_buildpath,;t t
+s,@top_builddir@,$ac_top_builddir,;t t
+s,@top_buildpath@,$ac_top_buildpath,;t t
 s,@INSTALL@,$ac_INSTALL,;t t
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
   rm -f $tmp/stdin
@@ -2231,7 +2254,9 @@ echo X"$ac_dest" |
   	  /^X\(\/\/\)$/{ s//\1/; q; }
   	  /^X\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
-  if test "$ac_dir" != .; then
+  ac_builddir=.
+
+if test "$ac_dir" != .; then
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
   # A "../" for each directory in $ac_dir_suffix.
   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
@@ -2254,6 +2279,12 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
+# Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
+# absolute.
+ac_buildpath=`cd "$ac_dir" && cd $ac_builddir && pwd`
+ac_top_buildpath=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_srcpath=`cd "$ac_dir" && cd $ac_srcdir && pwd`
+ac_top_srcpath=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
   { echo "$as_me:$LINENO: executing $ac_dest commands" >&5
 echo "$as_me: executing $ac_dest commands" >&6;}
@@ -2273,9 +2304,13 @@ ATEOF
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 
 at_testdir='tests'
+buildpath='$ac_buildpath'
 srcdir='$ac_srcdir'
+srcpath='$ac_srcpath'
 top_srcdir='$ac_top_srcdir'
+top_srcpath='$ac_top_srcpath'
 top_builddir='$ac_top_builddir'
+top_buildpath='$ac_top_buildpath'
 
 AUTOTEST_PATH='tests'
 

@@ -43,7 +43,6 @@
 	(Programming in M4sh): this.
 	Promote to @section.
 
-	
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
 	* lib/autotest/general.m4 (AT_INIT): Dump config.log last.
