@@ -156,22 +156,33 @@ args: --preselect AM_GNU_GETTEXT
 end-language: "Autoscan-preselections"
 
 
-## ---------- ##
-## Autoconf.  ##
-## ---------- ##
+## ----------------------------- ##
+## Autoconf without aclocal.m4.  ##
+## ----------------------------- ##
 
-begin-language: "Autoconf"
+# This intermediate language is used by aclocal to build aclocal.m4.
+
+begin-language: "Autoconf-without-aclocal-m4"
 args: --prepend-include @datadir@
 args: --cache=autom4te.cache
 args: autoconf/autoconf.m4f
 args: acsite.m4?
-args: aclocal.m4?
 args: --mode 777
 args: --language Autoheader-preselections
 args: --language Automake-preselections
 args: --language Autoreconf-preselections
 args: --language Autoscan-preselections
 args: --language M4sh
+end-language: "Autoconf-without-aclocal-m4"
+
+
+## ---------- ##
+## Autoconf.  ##
+## ---------- ##
+
+begin-language: "Autoconf"
+args: --language Autoconf-without-aclocal-m4
+args: aclocal.m4?
 end-language: "Autoconf"
 
 

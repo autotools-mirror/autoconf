@@ -1,3 +1,10 @@
+2003-08-19  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Autoconf): Move all args except aclocal.m4? into ...
+	(Autoconf-without-aclocal-m4): ... this new language.
+	* doc/autoconf.texi (autom4te Invocation): Mention
+	Autoconf-without-aclocal-m4.
+
 2003-08-18  Derek Price <derek@ximbiot.com>
 
 	* doc/autoconf.texi (Writing testsuite.at): Document RUN-IF-FAIL &
@@ -59,7 +66,7 @@
 	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00007.html
 	(This really should be 'intptr_t', not 'long', but that would
 	take more work.)
-	
+
 2003-06-25  Akim Demaille  <akim@epita.fr>
 
 	* lib/Makefile.am (autom4te.cfg): Make it read only.

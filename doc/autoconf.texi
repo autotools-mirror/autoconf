@@ -7914,6 +7914,10 @@ create Autotest executable test suites.
 
 @item Autoconf
 create Autoconf executable configure scripts.
+
+@item Autoconf-without-aclocal-m4
+create Autoconf executable configure scripts without
+reading @file{aclocal.m4}.
 @end table
 
 @item --prepend-include=@var{dir}
