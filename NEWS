@@ -3,6 +3,9 @@
 ** New macros
   AC_C_RESTRICT
 
+** AC_DECL_SYS_SIGLIST
+  Works again.
+
 ** Improve DJGPP portability
   The Autoconf tools and configure behave better under DJGPP.
 

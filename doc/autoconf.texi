@@ -12723,7 +12723,17 @@ not to use this macro.
 @defmac AC_DECL_SYS_SIGLIST
 @acindex{DECL_SYS_SIGLIST}
 @cvindex SYS_SIGLIST_DECLARED
-Same as @samp{AC_CHECK_DECLS([sys_siglist])}.
+Same as:
+
+@example
+AC_CHECK_DECLS([sys_siglist],,,
+[#include <signal.h>
+/* NetBSD declares sys_siglist in unistd.h.  */
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+])
+@end example
 @end defmac
 
 @defmac AC_DECL_YYTEXT

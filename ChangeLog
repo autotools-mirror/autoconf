@@ -1,3 +1,9 @@
+2003-05-17  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/specific.m4: Include signal.h and unistd.h.
+	* doc/autoconf.texi (Obsolete Macros): Adjust.
+	Reported by Werner LEMBERG and Debian Bug 190886.
+
 2003-05-16  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): s/FOO/as_foo/ to avoid

@@ -60,7 +60,13 @@
 # -------------------
 AN_IDENTIFIER([sys_siglist],     [AC_CHECK_DECLS([sys_siglist])])
 AU_DEFUN([AC_DECL_SYS_SIGLIST],
-[AC_CHECK_DECLS([sys_siglist])
+[AC_CHECK_DECLS([sys_siglist],,,
+[#include <signal.h>
+/* NetBSD declares sys_siglist in unistd.h.  */
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+])
 ])# AC_DECL_SYS_SIGLIST
 
 
