@@ -1,5 +1,11 @@
 2000-09-21  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (_AC_OUTPUT_FILES): Ensure that config.status
+	exits if any input file is missing.
+	* tests/semantics.m4 (missing templates): Test it.
+
+2000-09-21  Pavel Roskin  <proski@gnu.org>
+
 	* acgeneral.m4 (_AC_SHELL_TMPDIR): Don't check status of variable
 	assignment - it's undefined in ash 0.2.
 

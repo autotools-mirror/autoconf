@@ -416,3 +416,26 @@ AT_CHECK([ls header file command link 2>/dev/null], [], [link
 ])
 
 AT_CLEANUP(header file link command header.in file.in link.in command.in configure config.status)
+
+
+
+## ------------------------------------------------------ ##
+## Check that config.status detects missing input files.  ##
+## ------------------------------------------------------ ##
+
+AT_SETUP(missing templates)
+
+AT_DATA(configure.in,
+[[AC_INIT
+AC_CONFIG_FILES([nonexistent])
+AC_OUTPUT
+]])
+
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([./configure], 1, ignore,
+[[configure: error: cannot find input file `nonexistent.in'
+]])
+# Make sure that the output file doesn't exist
+AT_CHECK([test -f nonexistent], 1)
+
+AT_CLEANUP(configure config.status config.log config.cache config.h defs)

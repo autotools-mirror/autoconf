@@ -4776,7 +4776,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
            AC_MSG_ERROR([cannot find input file \\`$f'])
          fi;;
       esac
-    done`
+    done` || exit 1
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
