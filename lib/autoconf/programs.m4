@@ -536,7 +536,7 @@ for ac_prog in sed gsed; do
         cp conftest.in conftest.nl
         echo '' >> conftest.nl
         "$ac_sed" -e 's/a$//' < conftest.nl >conftest.out || break
-        cmp conftest.out conftest.nl >/dev/null 2>&1 || break
+        diff conftest.out conftest.nl >/dev/null 2>&1 || break
         ac_count=`expr $ac_count + 1`
         if test $ac_count -gt $ac_max; then
           ac_max=$ac_count
