@@ -1,3 +1,7 @@
+1999-09-24  Ben Elliston  <bje@cygnus.com>
+
+	* install.texi: Replace `can not' with `cannot'.
+
 1999-09-22  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Clear the CCOPTS environment variable before

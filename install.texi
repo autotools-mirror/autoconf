@@ -142,10 +142,10 @@ and @samp{--x-libraries=@var{dir}} to specify their locations.
 @node System Type
 @section Specifying the System Type
 
-There may be some features @code{configure} can not figure out
+There may be some features @code{configure} cannot figure out
 automatically, but needs to determine by the type of host the package
 will run on.  Usually @code{configure} can figure that out, but if it
-prints a message saying it can not guess the host type, give it the
+prints a message saying it cannot guess the host type, give it the
 @samp{--host=@var{type}} option.  @var{type} can either be a short name
 for the system type, such as @samp{sun4}, or a canonical name with three
 fields:
