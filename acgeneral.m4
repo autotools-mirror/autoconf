@@ -807,7 +807,8 @@ dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
 if eval "test \"`echo '${'$1'+set}'`\" = set"; then
 dnl This verbose message is just for testing the caching code.
-  AC_MSG_RESULT(using cached value for $1)
+dnl  AC_MSG_RESULT(using cached value for $1)
+  AC_MSG_RESULT(using cached value)
 else
   $2
 fi

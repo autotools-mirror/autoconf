@@ -432,6 +432,7 @@ dnl
 define(AC_HEADER_DIRENT,
 [AC_PROVIDE([$0])dnl
 AC_MSG_CHECKING(for directory library header)
+dnl We don't use AC_CHECK_HEADERS so we can stop when we get a match.
 AC_CACHE_VAL(ac_cv_header_dir,
 [ac_cv_header_dir=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
@@ -1696,7 +1697,7 @@ fi
 ])dnl
 dnl
 define(AC_OS_XENIX,
-[AC_REQUIRE([AC_HEADER_DIRENT])dnl
+[AC_REQUIRE([AC_DIR_HEADER])dnl
 AC_MSG_CHECKING(for Xenix)
 AC_EGREP_CPP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)

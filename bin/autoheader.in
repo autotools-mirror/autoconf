@@ -147,7 +147,10 @@ eval "`echo \"$frob\" \
 test -n "$print_version" && exit 0
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
-syms="`for sym in $syms; do echo $sym; done | sort | uniq`"
+# Start each symbol with a blank (to match the blank after "#undef")
+# to reduce the possibility of mistakenly matching another symbol that
+# is a substring of it.
+syms="`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`"
 
 if test $# -eq 0; then
   tmpout=autoh$$
@@ -161,7 +164,7 @@ echo "/* ${config_h}.in.  Generated automatically from $infile by autoheader.  *
 
 test -f ${config_h}.top && cat ${config_h}.top
 
-# This puts each paragraph on its own line, separated by @s.
+# This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
    # Make sure the boundary of template files is also the boundary
    # of the paragraph.  Extra newlines don't hurt since they will

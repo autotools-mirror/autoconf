@@ -1608,8 +1608,8 @@ by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}.
 
 The following macros check for certain operating systems that need
 special treatment for some programs, due to exceptional oddities in
-their header files or libraries.  These macros are kludges; they should
-be replaced someday with a more systematic approach, based either on the
+their header files or libraries.  These macros are warts; they should
+be replaced by a more systematic approach, based either on the
 functions they make available or the environments they provide.
 
 @defmac AC_OS_AIX
@@ -1667,8 +1667,8 @@ Used to get @code{strftime}.  It must be called before checking for
 @maindex OS_XENIX
 If on Xenix, add @samp{-lx} to @code{make} variable @code{LIBS}.  Also,
 if @file{sys/ndir.h} is not being used, add @samp{-ldir} to @code{LIBS}.
-Needed when using the directory reading functions.  This macro must be
-called after @code{AC_HEADER_DIRENT}.
+Needed when using the directory reading functions.  This macro calls
+@code{AC_DIR_HEADER} if it has not been called already.
 @end defmac
 
 @node General Purpose Macros, Manual Configuration, Specific Tests, Top
