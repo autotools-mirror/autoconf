@@ -43,7 +43,7 @@ dnl may fill an associative array (key is $1, value is the template).
 dnl This garantees that there is a unique prototype issued, and also
 dnl that it will be sorted!
 define([AH_DEFINE],
-[ifset([$3],
+[ifval([$3],
        [AH_TEMPLATE([$1], [$3])],
        [#
 dnl Ignore CPP macro arguments.

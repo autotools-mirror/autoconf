@@ -1,5 +1,30 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Revamp the handling of the arguments of config.status: instead of
+	looping over config_files etc. to recognize the file names, use
+	the case which handles the options.
+	Suggested by Alexandre Oliva.
+
+	* acgeneral.m4 (ifset): Renamed as...
+	(ifval): This.  All callers changed.
+	(ifset): New macro, which tests if a macro is set to a non empty
+	value.
+
+	* acgeneral.m4: Initialize growing lists and strings to empty, to
+	ease the tests.
+	(AC_CONFIG_HEADER): Quote AC_LIST_HEADERS in the define, to handle
+	the case AC_LIST_HEADERS is initialized.
+
+	* acgeneral.m4: (AC_OUTPUT_CONFIG_STATUS): New macro, pulled out
+	from...
+	(AC_OUTPUT): Instead of using $1, $2 and $3, pass them to the
+	official macros (AC_CONFIG_FILES, AC_OUTPUT_COMMANTS).
+	Call AC_OUTPUT_CONFIG_STATUS.
+	(option handling): Use the case-esac to recognize arguments.
+	(AC_OUTPUT_COMMANDS): Fix the missing fi;done.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Add a means to specify commands to be run by config.status.  At
 	the difference of AC_OUTPUT_COMMANDS, require that the set of
 	commands be named, so that both
@@ -21,33 +46,33 @@
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
-      New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
-      that one associates commands to run when a config file is
-      created.  For instance for a shell script `foo', one uses
-      AC_CONFIG_FILES(foo, chmod +x foo).
+      	New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
+	that one associates commands to run when a config file is created.
+	For instance for a shell script `foo', one uses
+	AC_CONFIG_FILES(foo, chmod +x foo).
 
-      In addition, check that the same name is never used twice in
-      config files, headers, subdirs and links.
+	In addition, check that the same name is never used twice in
+	config files, headers, subdirs and links.
 
-      * acgeneral.m4 (m4_append): Don't insert new line between
-      elements.
-      (m4_list_append): New macro.
-      (AC_CONFIG_IF_MEMBER): New macro which tests if a file is member
-      of a config list.
-      (AC_CONFIG_UNIQUE): New macro which ensures that a config file
-      name is not yet used.
-      (AC_CONFIG_HEADER, AC_CONFIG_LINKS, AC_CONFIG_SUBDIRS): Use
-      AC_CONFIG_UNIQUE.
+	* acgeneral.m4 (m4_append): Don't insert new line between
+	elements.
+	(m4_list_append): New macro.
+	(AC_CONFIG_IF_MEMBER): New macro which tests if a file is member
+	of a config list.
+	(AC_CONFIG_UNIQUE): New macro which ensures that a config file
+	name is not yet used.
+	(AC_CONFIG_HEADER, AC_CONFIG_LINKS, AC_CONFIG_SUBDIRS): Use
+	AC_CONFIG_UNIQUE.
 
-      * acgeneral.m4 (AC_CONFIG_FILES): New macro.
-      (AC_LIST_FILES): New list, which stores arguments of
-      AC_CONFIG_LISTS the same as AC_LIST_LINKS stores AC_CONFIG_LINKS
-      etc.
-      (AC_OUTPUT): No longer rely on $1 to designate the config files:
-      register them via AC_CONFIG_FILES.  All uses of $1 replaced by
-      uses of AC_LIST_FILES.
-      (AC_OUTPUT_FILES): Run the commands associated to the
-      CONFIG_FILES.
+	* acgeneral.m4 (AC_CONFIG_FILES): New macro.
+	(AC_LIST_FILES): New list, which stores arguments of
+	AC_CONFIG_LISTS the same as AC_LIST_LINKS stores AC_CONFIG_LINKS
+	etc.
+	(AC_OUTPUT): No longer rely on $1 to designate the config files:
+	register them via AC_CONFIG_FILES.  All uses of $1 replaced by
+	uses of AC_LIST_FILES.
+	(AC_OUTPUT_FILES): Run the commands associated to the
+	CONFIG_FILES.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 

@@ -215,18 +215,42 @@ dnl ------------------------------------------------------------
 dnl Some additional m4 structural control.
 dnl ------------------------------------------------------------
 
+dnl Both `ifval' and `ifset' tests against the empty string.  The
+dnl difference is that `ifset' is specialized on macros.
+dnl
+dnl In case of arguments of macros, eg $[1], it makes little difference.
+dnl In the case of a macro `FOO', you don't want to check `ifval(FOO,
+dnl TRUE)', because if `FOO' expands with commas, there is a shifting of
+dnl the arguments.  So you want to run `ifval([FOO])', but then you just
+dnl compare the *string* `FOO' against `', which, of course fails.
+dnl
+dnl So you want a variation of `ifset' that expects a macro name as $[1].
+dnl If this macro is both defined and defined to a non empty value, then
+dnl it runs TRUE etc.
 
-dnl ifset(COND, IF-TRUE[, IF-FALSE])
+
+dnl ifval(COND, IF-TRUE[, IF-FALSE])
 dnl --------------------------------
 dnl If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 dnl Comparable to ifdef.
-define([ifset], [ifelse([$1],,[$3],[$2])])
+define([ifval], [ifelse([$1],[],[$3],[$2])])
+
+
+dnl ifset(MACRO, IF-TRUE[, IF-FALSE])
+dnl --------------------------------
+dnl If MACRO has no definition, or of its definition is the empty string,
+dnl expand IF-FALSE, otherwise IF-TRUE.
+define([ifset],
+[ifdef([$1],
+       [ifelse(defn([$1]), [], [$3], [$2])],
+       [$3])])
 
 
 dnl m4_default(EXP1, EXP2)
 dnl ----------------------
 dnl Returns EXP1 if non empty, otherwise EXP2.
-define([m4_default], [ifset([$1], [$1], [$2])])
+define([m4_default], [ifval([$1], [$1], [$2])])
+
 
 
 dnl ### Implementing m4 loops
@@ -400,10 +424,10 @@ dnl | 	IF-FALSE
 dnl | fi
 dnl with simplifications is IF-TRUE and/or IF-FALSE is empty.
 define([AC_SHELL_IFELSE],
-[ifset([$2$3],
+[ifval([$2$3],
 [if [$1]; then
-  ifset([$2], [$2], :)
-ifset([$3],
+  ifval([$2], [$2], :)
+ifval([$3],
 [else
   $3
 ])dnl
@@ -2678,11 +2702,11 @@ else
 fi])dnl
 if test AC_VAR_GET(ac_var) = yes; then
   AC_MSG_RESULT(yes)
-ifset([$2], [  $2
+ifval([$2], [  $2
 ])dnl
 else
   AC_MSG_RESULT(no)
-ifset([$3], [  $3
+ifval([$3], [  $3
 ])dnl
 fi
 AC_VAR_POPDEF([ac_var])])
@@ -2840,7 +2864,7 @@ main()
 }],
   AC_VAR_SET(ac_Sizeof, `cat conftestval`),
   AC_VAR_SET(ac_Sizeof, 0),
-  ifset([$2], AC_VAR_SET(ac_Sizeof, $2)))])
+  ifval([$2], AC_VAR_SET(ac_Sizeof, $2)))])
 AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), AC_VAR_GET(ac_Sizeof))
 AC_VAR_POPDEF([ac_Sizeof])dnl
 ])
@@ -2924,8 +2948,12 @@ dnl FIXME: For sake of uniformity, it should be AC_CONFIG_HEADERS, and
 dnl it should be possible to accumulate several calls.
 AC_DEFUN(AC_CONFIG_HEADER,
 [AC_CONFIG_UNIQUE([$1])dnl
-define(AC_LIST_HEADERS, $1)])
+define([AC_LIST_HEADERS], $1)])
 
+dnl Initialize to empty.  It is much easier and uniform to have a config
+dnl list expand to empty when undefined, instead of special casing when
+dnl not defined (since in this case, AC_CONFIG_FOO expands to AC_CONFIG_FOO).
+define([AC_LIST_HEADERS])
 
 dnl AC_CONFIG_LINKS(DEST:SOURCE...)
 dnl -------------------------------
@@ -2941,6 +2969,8 @@ ifelse(regexp([$1], [^\.:\| \.:]), -1,,
 m4_append([AC_LIST_LINKS], [$1])dnl
 ])
 
+dnl Initialize the list.
+define([AC_LIST_LINKS])
 
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 dnl ---------------------------------
@@ -2986,6 +3016,9 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 ])])])dnl
 ])dnl
 
+dnl Initialize the lists.
+define([AC_LIST_FILES])
+define([AC_LIST_FILES_COMMANDS])
 
 dnl AC_CONFIG_COMMANDS(NAME..., COMMANDS)
 dnl -------------------------------------
@@ -3011,6 +3044,9 @@ ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
 ])])])dnl
 ])dnl
 
+dnl Initialize the lists.
+define([AC_LIST_COMMANDS])
+define([AC_LIST_COMMANDS_COMMANDS])
 
 
 dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
@@ -3038,6 +3074,9 @@ subdirs="AC_LIST_SUBDIRS"
 AC_SUBST(subdirs)dnl
 ])
 
+dnl Initialize the list
+define([AC_LIST_SUBDIRS])
+
 
 dnl AC_OUTPUT([CONFIG_FILES...] [, EXTRA-CMDS] [, INIT-CMDS])
 dnl ---------------------------------------------------------
@@ -3047,8 +3086,9 @@ dnl The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADERS.
 dnl Pay special attention not to have too long here docs: some old
 dnl shells die.  Unfortunately the limit is not known precisely...
 define(AC_OUTPUT,
-[dnl Store the CONFIG_FILES
+[dnl Dispatch the extra arguments to their native macros.
 AC_CONFIG_FILES([$1])dnl
+AC_OUTPUT_COMMANDS([$2], [$3])dnl
 trap '' 1 2 15
 AC_CACHE_SAVE
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
@@ -3068,13 +3108,27 @@ fi
 
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 
-ifdef([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
+ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
 # Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
 
-echo creating $CONFIG_STATUS
-rm -f $CONFIG_STATUS
+AC_OUTPUT_CONFIG_STATUS()dnl
+
+rm -fr confdefs* $ac_clean_files
+test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
+dnl config.status should not do recursion.
+ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
+])dnl AC_OUTPUT
+
+
+dnl AC_OUTPUT_CONFIG_STATUS
+dnl -----------------------
+dnl Produce config.status.  Called by AC_OUTPUT.
+dnl Pay special attention not to have too long here docs: some old
+dnl shells die.  Unfortunately the limit is not known precisely...
+define(AC_OUTPUT_CONFIG_STATUS,
+[echo creating $CONFIG_STATUS
 cat > $CONFIG_STATUS <<EOF
 #! /bin/sh
 # Generated automatically by configure.
@@ -3090,16 +3144,16 @@ dnl so uname gets run too.
 # configure, is in ./config.log if it exists.
 
 # Files that config.status was made for.
-ifdef([AC_LIST_FILES], [config_files="\\
+ifset([AC_LIST_FILES], [config_files="\\
 AC_WRAP(AC_LIST_FILES, [    ])"
 ])dnl
-ifdef([AC_LIST_HEADERS], [config_headers="\\
+ifset([AC_LIST_HEADERS], [config_headers="\\
 AC_WRAP(AC_LIST_HEADERS, [    ])"
 ])dnl
-ifdef([AC_LIST_LINKS], [config_links="\\
+ifset([AC_LIST_LINKS], [config_links="\\
 AC_WRAP(AC_LIST_LINKS, [    ])"
 ])dnl
-ifdef([AC_LIST_COMMANDS], [config_commands="\\
+ifset([AC_LIST_COMMANDS], [config_commands="\\
 AC_WRAP(AC_LIST_COMMANDS, [    ])"
 ])dnl
 
@@ -3114,20 +3168,20 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --help       Display this help and exit
 
 dnl Issue this section only if there were actually config files.
-dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
-dnl which are given via $[1], or AC_LIST_LINKS is set.
-ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1),
+dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
+dnl or AC_LIST_LINKS is set.
+ifval(AC_LIST_HEADERS AC_LIST_LINKS AC_LIST_FILES AC_LIST_COMMANDS,
 [Files to instantiate:
-ifdef([AC_LIST_FILES], [  Configuration files:
+ifset([AC_LIST_FILES], [  Configuration files:
 \$config_files
 ])dnl
-ifdef([AC_LIST_HEADERS], [  Configuration headers:
+ifset([AC_LIST_HEADERS], [  Configuration headers:
 \$config_headers
 ])dnl
-ifdef([AC_LIST_LINKS], [  Links to install:
+ifset([AC_LIST_LINKS], [  Links to install:
 \$config_links
 ])dnl
-ifdef([AC_LIST_COMMANDS], [  Individual commands to run:
+ifset([AC_LIST_COMMANDS], [  Individual commands to run:
 \$config_commands
 ])dnl
 
@@ -3152,6 +3206,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 for ac_option
 do
   case "[\$]ac_option" in
+  # Handling of the options.
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     echo "running [\$]{CONFIG_SHELL-/bin/sh} [$]0 `echo "[$]ac_configure_args" | sed 's/[[\\"\`\$]]/\\\\&/g'` --no-create --no-recursion"
     exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args --no-create --no-recursion ;;
@@ -3159,68 +3214,47 @@ do
     echo "[\$]ac_cs_version"; exit 0 ;;
   -help | --help | --hel | --he | --h)
     echo "[\$]ac_cs_usage"; exit 0 ;;
-  *) # Find out the files to process.
-    for ac_file in [\$]config_files
-    do
-      case [\$]ac_file in
-        [\$]ac_option | [\$]ac_option:* )
-          CONFIG_FILES="[\$]CONFIG_FILES [\$]ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "[\$]ac_option" && continue
-    for ac_file in [\$]config_headers
-    do
-      case [\$]ac_file in
-        [\$]ac_option | [\$]ac_option:* )
-          CONFIG_HEADERS="[\$]CONFIG_HEADERS [\$]ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "[\$]ac_option" && continue
-    for ac_file in [\$]config_links
-    do
-      case [\$]ac_file in
-        [\$]ac_option | [\$]ac_option:* )
-          CONFIG_LINKS="[\$]CONFIG_LINKS [\$]ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "[\$]ac_option" && continue
-    for ac_file in [\$]config_commands
-    do
-      case [\$]ac_file in
-        [\$]ac_option | [\$]ac_option:* )
-          CONFIG_COMMANDS="[\$]CONFIG_COMMANDS [\$]ac_file"
-          ac_option=
-          break ;;
-      esac
-    done
-    test -z "[\$]ac_option" && continue
-    echo "$CONFIG_STATUS: invalid argument: [\$]ac_option"; exit 1
-   ;;
+  # Handling of arguments.
+AC_FOREACH([AC_File], AC_LIST_FILES,
+[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+ CONFIG_FILES="[\$]CONFIG_FILES AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_LINKS,
+[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+ CONFIG_LINKS="[\$]CONFIG_LINKS AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_COMMANDS,
+[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+ CONFIG_COMMANDS="[\$]CONFIG_COMMANDS AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_HEADERS,
+[  'patsubst(AC_File, [:.*])' | 'patsubst(AC_File, [:.*]):*' )dnl
+ CONFIG_HEADERS="[\$]CONFIG_HEADERS AC_File" ;;
+])dnl
+  # This is an error.
+  *) echo "$CONFIG_STATUS: invalid argument: [\$]ac_option"; exit 1 ;;
   esac
 done
 
 EOF
 
 dnl Issue this section only if there were actually config files.
-dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
-dnl which are given via $[1], or AC_LIST_LINKS is set.
-ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1)ifdef([AC_LIST_COMMANDS], 1),
+dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
+dnl or AC_LIST_LINKS is set.
+ifval(AC_LIST_HEADERS AC_LIST_LINKS AC_LIST_FILES AC_LIST_COMMANDS,
 [cat >> $CONFIG_STATUS <<EOF
-# If there were arguments, don't assign a default value.
+# If there were arguments and we reach this point, then the user
+# has specified the files to intantiate.  If there were no arguments,
+# then the files were specified by envvars.  Set only the envvar that
+# are not set.
 if test \$[#] = 0; then
-ifdef([AC_LIST_FILES], [  CONFIG_FILES="\$config_files"
+ifset([AC_LIST_FILES], [  : \${CONFIG_FILES="\$config_files"}
 ])dnl
-ifdef([AC_LIST_HEADERS], [  CONFIG_HEADERS="\$config_headers"
+ifset([AC_LIST_HEADERS], [  : \${CONFIG_HEADERS="\$config_headers"}
 ])dnl
-ifdef([AC_LIST_LINKS], [  CONFIG_LINKS="\$config_links"
+ifset([AC_LIST_LINKS], [  : \${CONFIG_LINKS="\$config_links"}
 ])dnl
-ifdef([AC_LIST_COMMANDS], [  CONFIG_COMMANDS="\$config_commands"
+ifset([AC_LIST_COMMANDS], [  : \${CONFIG_COMMANDS="\$config_commands"}
 ])dnl
 fi
 
@@ -3231,7 +3265,7 @@ rm -fr \`echo "\$CONFIG_FILES" | sed "s/:@BKL@^ @BKR@*//g"\`
 trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
 
 EOF
-])[]dnl
+])[]dnl ifval
 
 dnl The following three sections are in charge of their own here
 dnl documenting into $CONFIG_STATUS.
@@ -3239,33 +3273,27 @@ dnl documenting into $CONFIG_STATUS.
 dnl Because AC_OUTPUT_FILES is in charge of undiverting the AC_SUBST
 dnl section, it is better to divert it to void and *call it*, rather
 dnl than not calling it at all
-ifdef([AC_LIST_FILES],
+ifset([AC_LIST_FILES],
       [AC_OUTPUT_FILES(AC_LIST_FILES)],
       [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
        AC_OUTPUT_FILES(AC_LIST_FILES)dnl
        AC_DIVERT_POP()])dnl
-ifdef([AC_LIST_HEADERS],
+ifset([AC_LIST_HEADERS],
       [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
-ifdef([AC_LIST_LINKS],
+ifset([AC_LIST_LINKS],
       [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
-ifdef([AC_LIST_COMMANDS],
+ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
 cat >> $CONFIG_STATUS <<EOF
 undivert(AC_DIVERSION_ICMDS)dnl
-$3
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 undivert(AC_DIVERSION_CMDS)dnl
-$2
 exit 0
 EOF
 chmod +x $CONFIG_STATUS
-rm -fr confdefs* $ac_clean_files
-test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
-dnl config.status should not do recursion.
-ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
-])dnl AC_OUTPUT
+])dnl AC_OUTPUT_CONFIG_STATUS
 
 
 dnl AC_OUTPUT_MAKE_DEFS
@@ -3471,10 +3499,10 @@ dnl    mv $ac_cs_root.out $ac_file
 dnl  fi
   mv $ac_cs_root.out $ac_file
 
-ifdef([AC_LIST_FILES_COMMANDS],
-[  # Run the commands associated to the file.
+ifset([AC_LIST_FILES_COMMANDS],
+[  # Run the commands associated with the file.
   case "$ac_file" in
-AC_LIST_FILES_COMMANDS[]dnl
+AC_LIST_FILES_COMMANDS()dnl
   esac
 ])dnl
 fi; done
@@ -3731,15 +3759,20 @@ for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
   case "$ac_dest" in
 AC_LIST_COMMANDS_COMMANDS[]dnl
   esac
+fi;done
 EOF
 ])dnl AC_OUTPUT_COMMANDS_COMMANDS
 
 
+dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
+dnl -------------------------------
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called after running config.status.
-dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
 define(AC_OUTPUT_SUBDIRS,
 [
+#
+# CONFIG_SUBDIRS section.
+#
 if test "$no_recursion" != yes; then
 
   # Remove --cache-file and --srcdir arguments so they do not pile up.
@@ -3847,7 +3880,7 @@ changequote([, ])dnl
     cd $ac_popdir
   done
 fi
-])
+])dnl AC_OUTPUT_SUBDIRS
 
 
 dnl AC_LINKER_OPTION
