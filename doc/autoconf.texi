@@ -164,14 +164,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Questions::                   Questions about Autoconf, with answers
 * History::                     History of Autoconf
 * Copying This Manual::         How to make copies of this manual
-* Environment Variable Index::  Index of environment variables used
-* Output Variable Index::       Index of variables set in output files
-* Preprocessor Symbol Index::   Index of C preprocessor symbols defined
-* Autoconf Macro Index::        Index of Autoconf macros
-* M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
-* Autotest Macro Index::        Index of Autotest macros
-* Program & Function Index::    Index of those with portability problems
-* Concept Index::               General index
+* Indices::                     Indices of symbols, concepts, etc.
 
 @detailmenu --- The Detailed Node Listing ---
 
@@ -11865,7 +11858,7 @@ have free time again.  I think.  Yeah, right.)
 
 @c ========================================================== Appendices
 
-@node Copying This Manual, Environment Variable Index, History, Top
+@node Copying This Manual, Indices, History, Top
 @appendix Copying This Manual
 
 @menu
@@ -11874,16 +11867,30 @@ have free time again.  I think.  Yeah, right.)
 
 @include fdl.texi
 
-@node Environment Variable Index, Output Variable Index, Copying This Manual, Top
-@unnumbered Environment Variable Index
+@node Indices, , Copying This Manual, Top
+@appendix Indices
+
+@menu
+* Environment Variable Index::  Index of environment variables used
+* Output Variable Index::       Index of variables set in output files
+* Preprocessor Symbol Index::   Index of C preprocessor symbols defined
+* Autoconf Macro Index::        Index of Autoconf macros
+* M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
+* Autotest Macro Index::        Index of Autotest macros
+* Program & Function Index::    Index of those with portability problems
+* Concept Index::               General index
+@end menu
+
+@node Environment Variable Index, Output Variable Index, Indices, Indices
+@appendixsec Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
 checks.
 
 @printindex ev
 
-@node Output Variable Index, Preprocessor Symbol Index, Environment Variable Index, Top
-@unnumbered Output Variable Index
+@node Output Variable Index, Preprocessor Symbol Index, Environment Variable Index, Indices
+@appendixsec Output Variable Index
 
 This is an alphabetical list of the variables that Autoconf can
 substitute into files that it creates, typically one or more
@@ -11892,8 +11899,8 @@ on how this is done.
 
 @printindex ov
 
-@node Preprocessor Symbol Index, Autoconf Macro Index, Output Variable Index, Top
-@unnumbered Preprocessor Symbol Index
+@node Preprocessor Symbol Index, Autoconf Macro Index, Output Variable Index, Indices
+@appendixsec Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
 Autoconf macros define.  To work with Autoconf, C source code needs to
@@ -11901,16 +11908,16 @@ use these names in @code{#if} directives.
 
 @printindex cv
 
-@node Autoconf Macro Index, M4 Macro Index, Preprocessor Symbol Index, Top
-@unnumbered Autoconf Macro Index
+@node Autoconf Macro Index, M4 Macro Index, Preprocessor Symbol Index, Indices
+@appendixsec Autoconf Macro Index
 
 This is an alphabetical list of the Autoconf macros.  To make the list
 easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ac
 
-@node M4 Macro Index, Autotest Macro Index, Autoconf Macro Index, Top
-@unnumbered M4 Macro Index
+@node M4 Macro Index, Autotest Macro Index, Autoconf Macro Index, Indices
+@appendixsec M4 Macro Index
 
 This is an alphabetical list of the M4, M4sugar, and M4sh macros.  To
 make the list easier to use, the macros are listed without their
@@ -11918,24 +11925,24 @@ preceding @samp{m4_} or @samp{AS_}.
 
 @printindex ms
 
-@node Autotest Macro Index, Program & Function Index, M4 Macro Index, Top
-@unnumbered Autotest Macro Index
+@node Autotest Macro Index, Program & Function Index, M4 Macro Index, Indices
+@appendixsec Autotest Macro Index
 
 This is an alphabetical list of the Autotest macros.  To make the list
 easier to use, the macros are listed without their preceding @samp{AT_}.
 
 @printindex at
 
-@node Program & Function Index, Concept Index, Autotest Macro Index, Top
-@unnumbered Program and Function Index
+@node Program & Function Index, Concept Index, Autotest Macro Index, Indices
+@appendixsec Program and Function Index
 
 This is an alphabetical list of the programs and functions which
 portability is discussed in this document.
 
 @printindex pr
 
-@node Concept Index,  , Program & Function Index, Top
-@unnumbered Concept Index
+@node Concept Index,  , Program & Function Index, Indices
+@appendixsec Concept Index
 
 This is an alphabetical list of the files, tools, and concepts
 introduced in this document.
