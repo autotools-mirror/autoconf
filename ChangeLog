@@ -1,3 +1,8 @@
+1999-02-18  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect NEC EWS4800. Contributed by Koji Arai
+	<JCA02266@nifty.ne.jp>.
+
 1999-02-11  Ben Elliston  <bje@cygnus.com>
 
 	* standards.texi: Update from FSF.
