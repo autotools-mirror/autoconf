@@ -1,3 +1,11 @@
+1998-09-27  Ben Elliston  <bje@cygnus.com>
+
+	* testsuite/Makefile.in (check): If DejaGNU is not installed,
+	print a warning and skip the `dejacheck' target (which will fail).
+	(site.exp): Use tests to guard commands from generating error
+	messages if `site.exp' or `site.bak' do not exist. Contributed by
+	Karl Heuer <kwzh@gnu.org>.
+	
 1998-09-26  Ben Elliston  <bje@cygnus.com>
 
 	* texinfo.tex: Import latest version from the FSF.
