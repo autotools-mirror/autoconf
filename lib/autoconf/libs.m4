@@ -202,7 +202,7 @@ _ACEOF
     # bogus both because they are the default anyway, and because
     # using them would break gcc on systems where it needs fixed includes.
     case $ac_im_incroot in
-	/usr/include) ;;
+	/usr/include) ac_x_includes= ;;
 	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
     esac
     case $ac_im_usrlibdir in
