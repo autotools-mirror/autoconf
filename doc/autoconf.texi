@@ -758,7 +758,7 @@ AC_COMPILE_IFELSE([char b[10];],, [AC_MSG_ERROR([you lose])])
 @noindent
 is incorrect: here, the first argument of @code{AC_COMPILE_IFELSE} is
 @samp{char b[10];} and will be expanded once, which results in
-@samp{char b10;}.  (There was a idiom common in Autoconf's past to
+@samp{char b10;}.  (There was an idiom common in Autoconf's past to
 address this issue via the M4 @code{changequote} primitive, but do not
 use it!)  Let's take a closer look: the author meant the first argument
 to be understood as a literal, and therefore it must be quoted twice:
@@ -802,8 +802,6 @@ with the @samp{#}.  For example, it is helpful to begin
 @example
 # Process this file with autoconf to produce a configure script.
 @end example
-
-Such comments will be included in the generated @file{configure} script.
 
 @node configure.ac Layout,  , Autoconf Language, Writing configure.ac
 @subsection Standard @file{configure.ac} Layout
@@ -1027,7 +1025,7 @@ autoconf --warnings=syntax,$WARNINGS,@var{category}
 @end example
 
 @noindent
-If you want to disable @command{autoconf}'s defaults and @code{WARNING},
+If you want to disable @command{autoconf}'s defaults and @code{WARNINGS},
 but (for example) enable the warnings about obsolete constructs, you
 would use @option{-W none,obsolete}.
 
@@ -2058,6 +2056,7 @@ config.status: configure
 @end group
 @end example
 
+@noindent
 (Be careful if you copy these lines directly into your Makefile, as you
 will need to convert the indented lines to start with the tab character.)
 
@@ -2459,6 +2458,7 @@ One can then run:
 @example
 ./config.status host.h object.h
 @end example
+@noindent
 to create the links.
 @end defmac
 
@@ -8041,30 +8041,31 @@ room for further arguments.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
 beginning of a line, followed by a comment that repeats the name of the
-macro being defined.  If you want to avoid the new-line which is then
-introduced, use @code{dnl}.  Better yet, use @samp{[]dnl} @emph{even}
-inside of parentheses: because of the M4 evaluation rules, the
-@samp{dnl} might otherwise be appended to the result of the macro
-evaluation (e.g., leading to @samp{yesdnl} instead of @samp{yes}).  For
-instance, instead of:
+macro being defined.  This introduces an additional newline in
+@code{configure}; normally, that is not a problem, but if you want to
+remove it you can use @samp{[]dnl} on the last line.  You can similarly
+use @samp{[]dnl} after a macro call to remove its newline.  @samp{[]dnl}
+is recommended instead of @samp{dnl} to ensure that M4 does not
+interpret the @samp{dnl} as being attached to the preceding text or
+macro output.  For example, instead of:
 
 @example
 AC_DEFUN([AC_PATH_X],
 [AC_MSG_CHECKING([for X])
 AC_REQUIRE_CPP()
-@r{# cut...}
+@r{# ...omitted...}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi])
 @end example
 
 @noindent
-write:
+you would write:
 
 @example
 AC_DEFUN([AC_PATH_X],
-[AC_REQUIRE_CPP()dnl
+[AC_REQUIRE_CPP()[]dnl
 AC_MSG_CHECKING([for X])
-@r{# cut...}
+@r{# ...omitted...}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi[]dnl
 ])# AC_PATH_X
@@ -8073,12 +8074,11 @@ fi[]dnl
 If the macro is long, try to split it into logical chunks.  Typically,
 macros that check for a bug in a function and prepare its
 @code{AC_LIBOBJ} replacement should have an auxiliary macro to perform
-this setup.
+this setup.  Do not hesitate to introduce auxiliary macros to factor
+your code.
 
-Do not hesitate to introduce auxiliary macros to factor your code.
-
-In order to highlight this coding style, here is a macro written the old
-way:
+In order to highlight the recommended coding style, here is a macro
+written the old way:
 
 @example
 dnl Check for EMX on OS/2.
