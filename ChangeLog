@@ -1,3 +1,9 @@
+2003-09-30  Nicolas Joly  <njoly@pasteur.fr>
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Remove files which might
+	have been created when invoking the compiler.
+	* tests/fortran.at (GNU Fortran 77): Quote $G77.
+
 2003-09-29  Akim Demaille  <akim@epita.fr>
 
 	Version 2.57e.

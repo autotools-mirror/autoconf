@@ -361,6 +361,7 @@ ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v </dev/null >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -V </dev/null >&AS_MESSAGE_LOG_FD])
+rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
