@@ -435,7 +435,7 @@ _AS_PATH_WALK([$4],
 [for ac_prog in $2; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
-    test -f "$ac_path_$1" || continue
+    AS_EXECUTABLE_P(["$ac_path_$1"]) || continue
     $3
     $ac_path_$1_found && break 3
   done
@@ -464,8 +464,7 @@ fi
 # iteration by appending (optionally, MATCH-STRING and) a newline
 # to the file, and using the result as input to CHECK-CMD.
 m4_define([_AC_FEATURE_CHECK_LENGTH],
-[$$1_found || if AS_EXECUTABLE_P(["$$1"]); then
-  # Check for GNU $1 and select it if it is found.
+[# Check for GNU $1 and select it if it is found.
   _AC_PATH_PROG_FLAVOR_GNU([$$1],
     [$2="$$1" $1_found=:],
   [ac_count=0
@@ -490,7 +489,6 @@ dnl   # for best performing tool in a list breaks down.
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
   done])
-fi
 ])
 
 
