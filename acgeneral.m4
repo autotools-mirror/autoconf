@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.8)dnl
+define(AC_ACVERSION, 1.7.9)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -97,62 +97,64 @@ Options: [defaults in brackets]
 --srcdir=DIR		find the sources in DIR [configure dir or ..]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
---with-PACKAGE[=VAL]	external PACKAGE is available [VAL=yes]"
+--with-PACKAGE		use external PACKAGE
+--without-PACKAGE	do not use external PACKAGE"
 changequote([,])dnl
 
 # Initialize some variables set by options.
+build=NONE
 exec_prefix=
-floating_point=yes
+host=NONE
 norecursion=
 prefix=
 program_prefix=
 program_suffix=
+program_transform_name=
 ac_silent=
+site=
 srcdir=
+target=NONE
 ac_verbose=
 
-# Get the option argument from the current or next ARGV element.
-ac_get_optarg='
-case "$ac_option" in
-changequote(,)dnl
-  *=*) ac_optarg=`echo $ac_option | sed 's/[-a-z_]*=//'` ;;
-changequote([,])dnl
-  *) 
-  if test $[#] -eq 0; then
-    AC_ERROR(missing argument to $ac_option)
-  else
-    ac_optarg="$[1]"; shift
-  fi
-  ;;
-esac
-'
-
-while test $[#] -gt 0
+ac_prev=
+for ac_option
 do
-  ac_option="$[1]"; shift
+
+  # If the previous option needs an argument, assign it.
+  if test -n "$ac_prev"; then
+    eval "$ac_prev=\$ac_option"
+    ac_prev=
+    continue
+  fi
 
   # Accept but ignore most of the Cygnus configure options,
   # so we can diagnose typos and other invalid options.
 
   case "$ac_option" in
+changequote(,)dnl
+  *=*) ac_optarg=`echo "$ac_option" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+changequote([,])dnl
+  *) ac_optarg= ;;
+  esac
 
-  -build | --build | --buil | --bui | --bu | --b \
-  | -build=* | --build=* | --buil=* | --bui=* | --bu=* | --b=*)
-    eval "$ac_get_optarg" ;;
+  case "$ac_option" in
+
+  -build | --build | --buil | --bui | --bu | --b)
+    ac_prev=build ;;
+  -build=* | --build=* | --buil=* | --bui=* | --bu=* | --b=*)
+    build="$ac_optarg" ;;
 
   -enable-* | --enable-*)
     ac_feature=`echo $ac_option|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that aren't valid shell variable names.
 changequote(,)dnl
-    if test -n "`echo $ac_feature| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if test -n "`echo $ac_feature| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([,])dnl
       AC_ERROR($ac_feature: invalid feature name)
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     case "$ac_option" in
-changequote(,)dnl
-      *=*) ac_optarg="`echo $ac_option|sed 's/[^=]*=//'`" ;;
-changequote([,])dnl
+      *=*) ;;
       *) ac_optarg=yes ;;
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
@@ -160,13 +162,14 @@ changequote([,])dnl
   # For backward compatibility, recognize -exec-prefix and --exec_prefix.
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
-  | --exec | --exe | --ex \
-  | -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
+  | --exec | --exe | --ex)
+    ac_prev=exec_prefix ;;
+  -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
   | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* \
   | --exec=* | --exe=* | --ex=*)
-    eval "$ac_get_optarg"; exec_prefix="$ac_optarg" ;;
+    exec_prefix="$ac_optarg" ;;
 
-  -gas | --gas | --ga | --g) with_gnu_as=1 ;; # Obsolete; use --with-gas.
+  -gas | --gas | --ga | --g) with_gas=1 ;; # Obsolete; use --with-gas.
 
   -help | --help | --hel | --he)
     cat << EOF
@@ -174,33 +177,36 @@ $ac_usage
 EOF
     exit 0 ;;
 
-  -host | --host | --hos | --ho \
-  | -host=* | --host=* | --hos=* | --ho=*)
-    eval "$ac_get_optarg" ;;
+  -host | --host | --hos | --ho)
+    ac_prev=host ;;
+  -host=* | --host=* | --hos=* | --ho=*)
+    host="$ac_optarg" ;;
 
-  -nfp | --nfp | --nf) floating_point=no ;; # Obsolete; use --with-fp=no.
+  -nfp | --nfp | --nf) with_fp=no ;; # Obsolete; use --without-fp.
 
   -norecursion | --norecursion | --norecursio | --norecursi \
   | --norecurs | --norecur | --norecu | --norec | --nore | --nor | --no)
   norecursion=yes ;;
 
-  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p \
-  | -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
-    eval "$ac_get_optarg"; prefix="$ac_optarg" ;;
+  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+    ac_prev=prefix ;;
+  -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+    prefix="$ac_optarg" ;;
 
   -program-prefix | --program-prefix | --program-prefi | --program-pref \
-  | --program-pre | --program-pr | --program-p \
-  | -program-prefix=* | --program-prefix=* | --program-prefi=* \
+  | --program-pre | --program-pr | --program-p)
+    ac_prev=program_prefix ;;
+  -program-prefix=* | --program-prefix=* | --program-prefi=* \
   | --program-pref=* | --program-pre=* | --program-pr=* | --program-p=*)
-    eval "$ac_get_optarg"; program_prefix="$ac_optarg" ;;
+    program_prefix="$ac_optarg" ;;
 
   -program-suffix | --program-suffix | --program-suffi | --program-suff \
-  | --program-suf | --program-su | --program-s \
-  | -program-suffix=* | --program-suffix=* | --program-suffi=* \
+  | --program-suf | --program-su | --program-s)
+    ac_prev=program_suffix ;;
+  -program-suffix=* | --program-suffix=* | --program-suffi=* \
   | --program-suff=* | --program-suf=* | --program-su=* | --program-s=*)
-    eval "$ac_get_optarg"; program_suffix="$ac_optarg" ;;
+    program_suffix="$ac_optarg" ;;
 
-  # For paranoia about old sh size limits, split this case up.
   -program-transform-name | --program-transform-name \
   | --program-transform-nam | --program-transform-na \
   | --program-transform-n | --program-transform- \
@@ -208,8 +214,7 @@ EOF
   | --program-transfo | --program-transf \
   | --program-trans | --program-tran \
   | --progr-tra | --program-tr | --program-t)
-    eval "$ac_get_optarg" ;;
-
+    ac_prev=program_transform_name ;;
   -program-transform-name=* | --program-transform-name=* \
   | --program-transform-nam=* | --program-transform-na=* \
   | --program-transform-n=* | --program-transform-=* \
@@ -217,23 +222,26 @@ EOF
   | --program-transfo=* | --program-transf=* \
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
-    eval "$ac_get_optarg" ;;
+    program_transform_name="$ac_optarg" ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
     ac_silent=yes ;;
 
-  -site | --site | --sit \
-  | --site=* | --sit=*)
-    eval "$ac_get_optarg" ;;
+  -site | --site | --sit)
+    ac_prev=site ;;
+  -site= | --site=* | --sit=*)
+    site="$ac_optarg" ;;
 
-  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr \
-  | -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-    eval "$ac_get_optarg"; srcdir="$ac_optarg" ;;
+  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+    ac_prev=srcdir ;;
+  -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+    srcdir="$ac_optarg" ;;
 
-  -target | --target | --targe | --targ | --tar | --ta | --t \
-  | -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
-    eval "$ac_get_optarg" ;;
+  -target | --target | --targe | --targ | --tar | --ta | --t)
+    ac_prev=target ;;
+  -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
+    target="$ac_optarg" ;;
 
   -v | -verbose | --verbose | --verbos | --verbo | --verb)
       ac_verbose=yes ;;
@@ -246,15 +254,13 @@ EOF
     ac_package=`echo $ac_option|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that aren't valid shell variable names.
 changequote(,)dnl
-    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if test -n "`echo $ac_package| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([,])dnl
       AC_ERROR($ac_package: invalid package name)
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case "$ac_option" in
-changequote(,)dnl
-      *=*) ac_optarg="`echo $ac_option|sed 's/[^=]*=//'`" ;;
-changequote([,])dnl
+      *=*) ;;
       *) ac_optarg=yes ;;
     esac
     eval "with_${ac_package}='$ac_optarg'" ;;
@@ -285,6 +291,10 @@ changequote([,])dnl
 
   esac
 done
+
+if test -n "$ac_prev"; then
+  AC_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
+fi
 ])dnl
 dnl
 define(AC_INIT,
@@ -350,8 +360,9 @@ ifelse([$3], , , [else
 fi
 ])dnl
 dnl
+dnl Giving --with an argument is deprecated.
 define(AC_WITH,
-[[#] check whether --with-$1 was given
+[[#] check whether --with-$1 or --without-$1 was given.
 withval="[$with_]patsubst($1,-,_)"
 if test -n "$withval"; then
   ifelse([$2], , :, [$2])
@@ -685,7 +696,7 @@ cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
 int main() { return 0; }
-int t() { [$3] }
+int t() { [$3]; return 0; }
 EOF
 dnl Don't try to run the program, which would prevent cross-configuring.
 if eval $ac_compile; then
@@ -891,8 +902,6 @@ s%@DEFS@%$DEFS%]
 DEFS='$DEFS'
 ])dnl
 divert(2)dnl
-prefix='$prefix'
-exec_prefix='$exec_prefix'
 ac_prsub='$ac_prsub'
 ac_vpsub='$ac_vpsub'
 extrasub='$extrasub'
