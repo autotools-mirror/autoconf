@@ -137,7 +137,7 @@ as_nl='
 IFS=" 	$as_nl"
 
 # CDPATH.
-AS_UNSET([CDPATH], [:])
+AS_UNSET([CDPATH], [$PATH_SEPARATOR])
 ])
 
 
