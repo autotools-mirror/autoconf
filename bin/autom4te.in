@@ -6,7 +6,7 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
     if 0;
 
 # autom4te - Wrapper around M4 libraries.
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -346,7 +346,12 @@ Usage: $0 [OPTION] ... [FILES]
 
 Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
 consists of the traces only, otherwise output the expansion of the FILES.
-The first of the FILES may be an M4 frozen file, but then must end in \`.m4f\'.
+
+If some of the FILES are named \`FILE.m4f\' they are considered to be M4
+frozen files of all the previous files (which are therefore not loaded).
+If \`FILE.m4f\' is not found, then \`FILE.m4\' will be used, together with
+all the previous files.
+
 Some files may be optional, i.e., will only be processed if found in the
 include path, but then must end in \`.m4?\';  the question mark is not part of
 the actual file name.
@@ -396,7 +401,7 @@ $version =  <<"EOF";
 autom4te (@PACKAGE_NAME@) @VERSION@
 Written by Akim Demaille.
 
-Copyright 2001 Free Software Foundation, Inc.
+Copyright 2001, 2002 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 EOF
@@ -471,8 +476,6 @@ sub parse_args ()
       }
   } while @language;
 
-  debug "arguments: @ARGV\n";
-
   # Process the arguments for real this time.
   my @trace;
   getopt
@@ -521,18 +524,38 @@ Try `$me --help' for more information.\n"
 	map { $m4_builtin_alternate_name{$_} }
 	grep { exists $m4_builtin_alternate_name{$_} } @preselect);
 
-  # Only the first file can be frozen, but M4 doesn't complain if this
-  # constraint is not honored.
-  die "$me: the first file only can be frozen\n"
-    if grep { /\.m4f/ } @ARGV[1 .. $#ARGV];
-
-  $ARGV[0] =~ s/\.m4f$/.m4/
-    if $melt;
-
+  # If we find frozen files, then all the files before it are
+  # discarded: the frozen file is supposed to include them all.
+  #
   # We don't want to depend upon m4's --include to find the top level
-  # files.  Try to get a canonical name, as it's part of the key for
-  # caching.  And some files are optional.
-  @ARGV = grep { defined $_ } map { find_file ($_, @include) } @ARGV;
+  # files, so we use `find_file' here.  Try to get a canonical name,
+  # as it's part of the key for caching.  And some files are optional
+  # (also handled by `find_file').
+  my @argv;
+  foreach (@ARGV)
+    {
+      if (/\.m4f$/)
+	{
+	  # Frozen files are optional => pass a `?' to `find_file'.
+	  my $file = find_file ("$_?", @include);
+	  if (!$melt && $file)
+	    {
+	      @argv = ("--reload-state=$file");
+	    }
+	  else
+	    {
+	      s/\.m4f$/.m4/;
+	      push @argv, find_file ($_, @include);
+	    }
+	}
+      else
+	{
+	  my $file = find_file ($_, @include);
+	  push @argv, $file
+	    if $file;
+	}
+    }
+  @ARGV = @argv;
 }
 
 
@@ -542,15 +565,6 @@ Try `$me --help' for more information.\n"
 sub handle_m4 ($@)
 {
   my ($req, @macro) = @_;
-
-  my $files;
-  foreach (@ARGV)
-    {
-      $files .= ' ';
-      $files .= '--reload-state='
-	if /\.m4f$/;
-      $files .= "$_";
-    }
 
   # The warnings are the concatenation of 1. application's defaults,
   # 2. $WARNINGS, $3 command line options, in that order.
@@ -574,7 +588,7 @@ sub handle_m4 ($@)
 		 . ' --debug=aflq'
 		 . " --error-output=$tcache" . $req->id
 		 . join (' --trace=',   '', sort @macro)
-		 . $files
+		 . " @ARGV"
 		 . ' </dev/null'
 		 . " >$ocache" . $req->id);
   verbose "running: $command";

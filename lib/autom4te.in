@@ -1,6 +1,6 @@
 # Definition of macro sets.                              -*- Makefile -*-
 #
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright 2001, 2002 Free Software Foundation, Inc.
 #
 # This file is part of GNU Autoconf.
 #
@@ -138,6 +138,7 @@ args: --language Autoheader-preselections
 args: --language Automake-preselections
 args: --language Autoreconf-preselections
 args: --language Autoscan-preselections
+args: --language M4sh
 end-language: "Autoconf"
 
 
@@ -148,10 +149,11 @@ end-language: "Autoconf"
 begin-language: "Autotest"
 # patterns: *.at
 args: --include @datadir@
-args: autotest/autotest.m4
+args: autotest/autotest.m4f
 args: package.m4?
 args: --mode 777
 args: --warning syntax
+args: --language M4sh
 end-language: "Autotest"
 
 
@@ -162,9 +164,10 @@ end-language: "Autotest"
 begin-language: "M4sh"
 # patterns: *.as
 args: --include @datadir@
-args: m4sugar/m4sh.m4
+args: m4sugar/m4sh.m4f
 args: --mode 777
 args: --warning syntax
+args: --language M4sugar
 end-language: "M4sh"
 
 
@@ -175,6 +178,6 @@ end-language: "M4sh"
 begin-language: "M4sugar"
 # patterns: *.msh
 args: --include @datadir@
-args: m4sugar/m4sugar.m4
+args: m4sugar/m4sugar.m4f
 args: --warning syntax
 end-language: "M4sugar"
