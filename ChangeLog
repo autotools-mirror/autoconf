@@ -1,5 +1,13 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	A macro which is not defined with AC_DEFUN should not be
+	AC_REQUIRE'd, since it doesn't AC_PROVIDE itself.
+
+	* acgeneral.m4 (AC_REQUIRE): Issue a warning when after expansion,
+	the macro is not AC_PROVIDE'd.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	Various cleanups.
 
 	* acgeneral.m4 (AC_PRO, AC_EPI): Rename as _AC_DEFUN_PRO and

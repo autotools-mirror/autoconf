@@ -275,6 +275,10 @@ define([AC_REQUIRE],
 [AC_PROVIDE_IFELSE([$1],
                    [],
                    [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])dnl
+AC_PROVIDE_IFELSE([$1],
+                  [],
+                  [AC_DIAGNOSE([syntax],
+                               [$1 is AC_REQUIRE'd but is not AC_DEFUN'd])])dnl
 ])
 
 
