@@ -1,5 +1,11 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_RUN_IFELSE): New macro.
+	(AC_TRY_RUN_NATIVE): Remove.
+	(AC_TRY_RUN): Use AC_RUN_IFELSE, not AC_TRY_RUN_NATIVE.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CHECK_LIB): Ah ah!  I recognized you, even
 	masked: you are AC_TRY_LINK_FUNC.
 	Fix quotation.

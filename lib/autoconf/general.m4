@@ -2988,38 +2988,40 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 ## -------------------------------- ##
 
 
-# AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE],
-#            [ACTION-IF-CROSS-COMPILING])
-# --------------------------------------------------------
-AC_DEFUN(AC_TRY_RUN,
-[if test "$cross_compiling" = yes; then
-  ifelse([$4], ,
-    [AC_WARNING([AC_TRY_RUN called without default to allow cross compiling])dnl
-  AC_MSG_ERROR(cannot run test program while cross compiling)],
-  [$4])
-else
-  AC_TRY_RUN_NATIVE([$1], [$2], [$3])
-fi
-])
-
-
-# AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-# ---------------------------------------------------------------
-# Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
-AC_DEFUN(AC_TRY_RUN_NATIVE,
+# AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# -----------------------------------------------------------
+# Compile, link, and run.
+AC_DEFUN([AC_RUN_IFELSE],
 [cat >conftest.$ac_ext <<EOF
-AC_LANG_SOURCE([[$1]])
+$1
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} &&
-   (./conftest; exit) 2>/dev/null; then
-  m4_default([$2], [:])
+if AC_TRY_EVAL(ac_link) &&
+   test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null; then
+  m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-  $3
+ifval([$3],
+[  $3
+])dnl
 fi
-rm -fr conftest*
-])# AC_TRY_RUN_NATIVE
+rm -f conftest*[]dnl
+])# AC_RUN_IFELSE
+
+
+# AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE],
+#            [ACTION-IF-CROSS-COMPILING])
+# --------------------------------------------------------
+AC_DEFUN([AC_TRY_RUN],
+[if test "$cross_compiling" = yes; then
+  ifelse([$4], ,
+   [AC_WARNING([AC_TRY_RUN called without default to allow cross compiling])dnl
+  AC_MSG_ERROR(cannot run test program while cross compiling)],
+   [$4])
+else
+  AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])
+fi
+])# AC_TRY_RUN
 
 
 
