@@ -178,7 +178,8 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 # It may happen that the output does not end with a end of line, hence
 # force an end of line when reporting errors.
 .m4.m4f:
-	$(M4) -I $(srcdir) -D divert $(srcdir)/$*.m4 | \
+	$(M4) --include $(srcdir) --fatal-warning --define divert \
+	      $(srcdir)/$*.m4 | \
 	  sed 's/#.*//;/^$$/d' >process.log
 	if grep . process.log >/dev/null 2>&1; then \
 	  echo "Processing $(srcdir)/$*.m4 produced output:" >&2; \
@@ -188,7 +189,8 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 	else \
 	  rm -f process.log; \
 	fi
-	$(M4) -I $(srcdir) --freeze-state=$*.m4f $(srcdir)/$*.m4 >freeze.log
+	$(M4) --include $(srcdir) --fatal-warning --freeze-state=$*.m4f \
+	      $(srcdir)/$*.m4 >freeze.log
 	if grep . freeze.log >/dev/null 2>&1; then \
 	  echo "Freezing $(srcdir)/$*.m4 produced output:" >&2; \
 	  sed "s,^,$(srcdir)/$*.m4: ," < freeze.log >&2; \

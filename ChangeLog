@@ -1,5 +1,16 @@
 2001-06-06  Akim Demaille  <akim@epita.fr>
 
+	Invoking AC_COPYRIGHT before AC_INIT fails.
+
+	* Makefile.am (.m4.m4f): Pass --fatal-warnings to m4.
+	* acgeneral.m4 (_m4_divert(VERSION_FSF))
+	(_m4_divert(VERSION_USER)): New.
+	(AC_COPYRIGHT): $2 is the diversion to use.
+	(_AC_INIT_COPYRIGHT): Use the FSF diversion.
+	(AC_INIT): Remove dead comments as now it's commutative.
+
+2001-06-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/semantics.at (AC_CHECK_LIB): Strengthen to reflect
 	PR autoconf/187.
 

@@ -91,7 +91,11 @@
 #   Tail of the handling of --help.
 #
 # - VERSION_BEGIN
-#   Copyright notice for --version.
+#   Head of the handling of --version.
+# - VERSION_FSF
+#   FSF copyright notice for --version.
+# - VERSION_USER
+#   User copyright notice for --version.
 # - VERSION_END
 #   Tail of the handling of --version.
 #
@@ -124,7 +128,9 @@ m4_define([_m4_divert(HELP_VAR_END)],   15)
 m4_define([_m4_divert(HELP_END)],       16)
 
 m4_define([_m4_divert(VERSION_BEGIN)],  20)
-m4_define([_m4_divert(VERSION_END)],    21)
+m4_define([_m4_divert(VERSION_FSF)],    21)
+m4_define([_m4_divert(VERSION_USER)],   22)
+m4_define([_m4_divert(VERSION_END)],    23)
 
 m4_define([_m4_divert(INIT_PREPARE)],   30)
 
@@ -449,8 +455,8 @@ m4_define([AC_PACKAGE_BUGREPORT], [$3])
 ])
 
 
-# AC_COPYRIGHT(TEXT)
-# ------------------
+# AC_COPYRIGHT(TEXT, [VERSION-DIVERSION = VERSION_USER])
+# ------------------------------------------------------
 # Append Copyright information in the top of `configure'.  TEXT is
 # evaluated once, hence TEXT can use macros.  Note that we do not
 # prepend `# ' but `@%:@ ', since m4 does not evaluate the comments.
@@ -463,7 +469,7 @@ m4_define([AC_COPYRIGHT],
 [m4_divert_text([NOTICE],
 [m4_patsubst([
 $1], [^], [@%:@ ])])dnl
-m4_divert_text([VERSION_BEGIN],
+m4_divert_text(m4_default([$2], [VERSION_USER]),
 [
 $1])dnl
 ])# AC_COPYRIGHT
@@ -542,12 +548,15 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 
 # _AC_INIT_COPYRIGHT
 # ------------------
+# We dump to VERSION_FSF to make sure we are inserted before the
+# user copyrights, and after the setup of the --version handling.
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
 [Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
-gives unlimited permission to copy, distribute and modify it.])dnl
+gives unlimited permission to copy, distribute and modify it.],
+              [VERSION_FSF])dnl
 ])
 
 
@@ -1410,8 +1419,6 @@ _AC_INIT_HELP
 _AC_INIT_VERSION
 _AC_INIT_CONFIG_LOG
 _AC_INIT_PREPARE
-dnl _AC_INIT_COPYRIGHT must be called after _AC_INIT_VERSION, since
-dnl it dumps into a diversion prepared by _AC_INIT_VERSION.
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
