@@ -200,7 +200,11 @@ done
 
 if test $# -eq 0; then
   if test $status -eq 0; then
-    mv -f $tmpout ${config_h}.in
+    if cmp -s $tmpout ${config_h}.in; then
+      mv -f $tmpout ${config_h}.in
+    else
+      rm -f $tmpout
+    fi
   else
     rm -f $tmpout
   fi
