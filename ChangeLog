@@ -1,7 +1,16 @@
 1999-10-05  Akim Demaille  <akim@epita.fr>
 
+	The sed quoting script depends on the shape of the commands used
+	by AC_SUBST.  The latter was changed, but not the former.
+	Bug triggered with FOO='%\c' AC_SUBST(FOO).
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Fix the sed quoting script.
+
+1999-10-05  Akim Demaille  <akim@epita.fr>
+
 	When you rely on the `t' flag of sed for the immediately
 	preceding substitution, use a combination of `: foo; t foo'.
+	Bug triggered if you AC_DEFINE(FOO, "%").
 	Additionally, work around a bug in IRIX sed.
 	Suggested by Ken Pizzini.
 

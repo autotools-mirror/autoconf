@@ -1826,9 +1826,12 @@ EOF
 dnl ### Setting output variables
 
 
+dnl AC_SUBST(VARIABLE)
+dnl ------------------
 dnl This macro protects VARIABLE from being diverted twice
 dnl if this macro is called twice for it.
-dnl AC_SUBST(VARIABLE)
+dnl Beware that if you change this macro, you also have to change the
+dnl sed script at the top of AC_OUTPUT_FILES.
 define(AC_SUBST,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
@@ -1838,6 +1841,8 @@ AC_DIVERT_POP()dnl
 ])])
 
 dnl AC_SUBST_FILE(VARIABLE)
+dnl -----------------------
+dnl Read the comments of the preceding macro.
 define(AC_SUBST_FILE,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
@@ -3137,9 +3142,12 @@ dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_FILES,
 [cat >>$CONFIG_STATUS <<EOF
 # Protect against being on the right side of a sed subst in config.status.
+dnl Please, pay attention that this sed code depends a lot on the shape
+dnl of the sed commands issued by AC_SUBST.  So if you change one, change
+dnl the other too.
 changequote(, )dnl
-sed 's/%@/@@/; s/@%/@@/; s/%g\$/@g/; /@g\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > \$ac_cs_root.subs <<\\CEOF
+sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
+ s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' > \$ac_cs_root.subs <<\\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
