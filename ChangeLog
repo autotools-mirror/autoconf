@@ -1,3 +1,10 @@
+2002-07-02  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
+	bin/autoupdate.in, bin/ifnames.in, lib/Autom4te/General.pm,
+	lib/Autom4te/Struct.pm, lib/Autom4te/XFile.pm: Add local variables
+	so that Emacs setups GNU style for perl-mode and cperl-mode.
+
 2002-06-27  Paul Eggert  <eggert@twinsun.com>
 
 	* config/install-sh: Quote $src.  Prefer || to test's -o option,
