@@ -2687,15 +2687,7 @@ AC_CONFIG_COMMANDS([time-stamp], [date >time-stamp])
 
 @defmac AC_CONFIG_COMMANDS_PRE (@var{cmds})
 @acindex OUTPUT_COMMANDS_PRE
-Execute the @var{cmds} right before creating @file{config.status}.  A
-typical use is computing values derived from variables built during the
-execution of @command{configure}:
-
-@example
-AC_CONFIG_COMMANDS_PRE(
-[LTLIBOBJS=`echo $LIBOBJS | sed 's/\.o/\.lo/g'`
-AC_SUBST(LTLIBOBJS)])
-@end example
+Execute the @var{cmds} right before creating @file{config.status}.
 @end defmac
 
 @defmac AC_CONFIG_COMMANDS_POST (@var{cmds})
