@@ -1,3 +1,11 @@
+2001-03-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/atgeneral.m4 (AT_INIT): Register at-setup-line and
+	at-check-line for removal.
+	Check for the presence of at-check-line only when $at_test was
+	really a test.
+	Reported by Pavel.
+
 2001-03-04  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atgeneral.m4 (AT_INIT): s/am_me/as_me/. Quote AT_CHECK

@@ -89,7 +89,8 @@ m4_define([AT_INIT],
 [m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files],
-          [stdout expout at-stdout stderr experr at-stder1 at-stderr ])
+          [stdout expout at-setup-line at-check-line at-stdout stderr experr
+           at-stder1 at-stderr ])
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -225,17 +226,17 @@ m4_divert([TAIL])[]dnl
     continue
     ;;
   esac
-  if test ! -f at-check-line; then
-    echo "$as_me: warning: no at-check-line which means a failure happened"
-    echo "$as_me: warning: in a [AT_SETUP/AT_CLEANUP] pair before any"
-    echo "$as_me: warning: [AT_CHECK] could be run.  This test suite is"
-    echo "$as_me: warning: improperly designed, please report to"
-    echo "$as_me: warning: <$at_bugreport>."
-    cp at-setup-line at-check-line
-  fi
   case $at_test in
     banner-*) ;;
     *)
+      if test ! -f at-check-line; then
+    	echo "$as_me: warning: no at-check-line which means a failure happened"
+    	echo "$as_me: warning: in a [AT_SETUP/AT_CLEANUP] pair before any"
+    	echo "$as_me: warning: [AT_CHECK] could be run.  This test suite is"
+    	echo "$as_me: warning: improperly designed, please report to"
+    	echo "$as_me: warning: <$at_bugreport>."
+    	cp at-setup-line at-check-line
+      fi
       at_test_count=`expr 1 + $at_test_count`
       $at_verbose $at_n "$at_test. $srcdir/`cat at-setup-line`: $at_c"
       case $at_status in
