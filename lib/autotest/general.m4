@@ -135,7 +135,7 @@ m4_divert([OPTIONS])
 while test $[#] -gt 0; do
   case $[1] in
     --help | -h) at_help=: ;;
-    --version) echo "$[0] ($at_package) $at_version"; exit 0 ;;
+    --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
 
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
@@ -220,7 +220,7 @@ fi
 if $at_debug; then
   exec 6>/dev/null
 else
-  exec 6>$[0].log
+  exec 6>$as_me.log
   {
     AS_BOX([Test suite log for $at_package $at_version])
     echo
@@ -347,7 +347,7 @@ elif test $at_debug = false; then
   echo 'case the test suite provides a good starting point.'
   echo
   echo 'Now, failed tests will be executed again, verbosely, and logged'
-  echo 'in the file '$[0]'.log.'
+  echo 'in the file '$as_me'.log.'
 
   {
     echo
@@ -371,11 +371,11 @@ elif test $at_debug = false; then
     echo
   } >&6
 
-  $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $[0].log
-  AS_BOX([$[0].log is created])
+  $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $as_me.log
+  AS_BOX([$as_me.log is created])
 
   echo
-  echo "Please send \`$[0].log' to <$at_bugreport> together with all"
+  echo "Please send \`$as_me.log' to <$at_bugreport> together with all"
   echo "the information you think might help."
   exit 1
 fi

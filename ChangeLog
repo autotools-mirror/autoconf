@@ -1,5 +1,11 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Refer to `$as_me.log', not
+	`$0.log' as for projects where testsuite is in src, we'd have
+	testsuite.log created in src.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&parse_args): Recognize --normalize.
 
 2001-08-17  Akim Demaille  <akim@epita.fr>
