@@ -300,9 +300,8 @@ The problem occurs with the following libc functions in SunOS 5.4:
 It also occurs with a bunch more libposix4 functions that most people
 probably aren't worried about yet, e.g. shm_open.
 
-All of these functions fail with errno set to 59.  errno 59 is not
-documented and is not in /usr/include/sys/errno.h, but perror claims
-that it means ``Operation not applicable''.
+All these functions fail with errno set to ENOSYS (89)
+``Operation not applicable''.
 
 Perhaps autoconf should have a
 specific macro for fnmatch, another for glob+globfree, another for
@@ -312,6 +311,10 @@ Solaris 2.4.  Or autoconf could limit itself to fnmatch and regcomp,
 the only two functions that I know have been a problem so far.
 
 From Paul Eggert.
+
+------------------------------------------------------------------------------
+
+Make easy macros for checking for X functions and libraries.
 
 ------------------------------------------------------------------------------
 

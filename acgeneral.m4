@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.1.2)
+define(AC_ACVERSION, 2.1.3)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -889,9 +889,7 @@ fi
 
 dnl AC_CACHE_SAVE()
 define(AC_CACHE_SAVE,
-[if test -w $cache_file; then
-echo "updating cache $cache_file"
-cat > $cache_file <<\EOF
+[cat > $cache_file.$$ <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
@@ -913,11 +911,19 @@ dnl Allow a site initialization script to override cache values.
 # and sets the high bit in the cache file unless we assign to the vars.
 (set) 2>&1 |
   sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1='\2'}/p" \
-  >> $cache_file
+  >> $cache_file.$$
 changequote([, ])dnl
+if cmp -s $cache_file $cache_file.$$; then
+  :
 else
-echo "not updating unwritable cache $cache_file"
+  if test -w $cache_file; then
+    echo "updating cache $cache_file"
+    cat $cache_file.$$ > $cache_file
+  else
+    echo "not updating unwritable cache $cache_file"
+  fi
 fi
+rm -f $cache_file.$$
 ])
 
 dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
@@ -1471,9 +1477,12 @@ AC_DEFUN(AC_CHECK_FUNC,
 [AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_func_$1,
 [AC_TRY_LINK(
-[/* This header should be one that does not declare any functions.
-    Such declarations can conflict with char $1(); below.  */
-#include <errno.h> /* Arbitrary system header to define __stub macros. */
+dnl Don't include <ctype.h> because on OSF/1 3.0 it includes <sys/types.h>
+dnl which includes <sys/select.h> which contains a prototype for
+dnl select.  Similarly for bzero.
+[/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $1(); below.  */
+#include <assert.h>
 /* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C"

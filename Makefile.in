@@ -90,15 +90,16 @@ all: ${SCRIPTS}
 
 info: autoconf.info @standards_info@ INSTALL
 
+# Use --no-split to avoid creating filenames > 14 chars.
 autoconf.info: autoconf.texi install.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --output=$@
+	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --no-split --output=$@
 
 INSTALL: install.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/install.texi --output=$@ \
 	--no-headers --no-validate
 
 standards.info: standards.texi make-stds.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --output=$@
+	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --no-split --output=$@
 
 dvi: autoconf.dvi @standards_dvi@
 
@@ -142,15 +143,17 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	done; \
 	else :; fi
 
+# Don't cd, to avoid breaking install-sh references.
 install-info: info installdirs
-	-test -f autoconf.info || cd $(srcdir); \
-	for i in autoconf.info*; do \
-	$(INSTALL_DATA) $$i $(infodir)/$$i; \
-	done
-	-test -f standards.info || cd $(srcdir); \
-	for i in standards.info*; do \
-	$(INSTALL_DATA) $$i $(infodir)/$$i; \
-	done
+	if test -f autoconf.info; then \
+	  for i in *.info*; do \
+	    $(INSTALL_DATA) $$i $(infodir)/$$i; \
+	  done; \
+	else \
+	  for i in $(srcdir)/*.info*; do \
+	    $(INSTALL_DATA) $$i $(infodir)/`echo $$i | sed 's|^$(srcdir)/||'`; \
+	  done; \
+	fi
 
 uninstall:
 	for p in $(SCRIPTS); do \

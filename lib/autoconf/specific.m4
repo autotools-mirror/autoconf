@@ -400,6 +400,9 @@ AC_CACHE_VAL(ac_cv_path_install,
   done
   IFS="$ac_save_ifs"
   # As a last resort, use the slow shell script.
+dnl FIXME We probably shouldn't cache a path within a source directory,
+dnl because that will break other packages using the cache if
+dnl that directory is removed.
   test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
   INSTALL="$ac_cv_path_install"
 fi
@@ -925,19 +928,17 @@ AC_DEFUN(AC_FUNC_VFORK,
 AC_CHECK_HEADER(vfork.h, AC_DEFINE(HAVE_VFORK_H))
 AC_MSG_CHECKING(for working vfork)
 AC_CACHE_VAL(ac_cv_func_vfork,
-[AC_REQUIRE([AC_TYPE_SIGNAL])
-AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
+[AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <signal.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #ifdef HAVE_VFORK_H
 #include <vfork.h>
 #endif
-/* On sparc systems, changes by the child to local and incoming
+/* On some sparc systems, changes by the child to local and incoming
    argument registers are propagated back to the parent.
    The compiler is told about this with #include <vfork.h>,
    but some compilers (e.g. gcc -O) don't grok <vfork.h>.
@@ -962,15 +963,11 @@ sparc_address_test (arg) int arg;
     }
   }
 }
-static int signalled;
-static RETSIGTYPE catch (s) int s; { signalled = 1; }
 main() {
   pid_t parent = getpid ();
   pid_t child;
 
   sparc_address_test ();
-
-  signal (SIGINT, catch);
 
   child = vfork ();
 
@@ -979,7 +976,7 @@ main() {
        This test uses lots of local variables, at least
        as many local variables as main has allocated so far
        including compiler temporaries.  4 locals are enough for
-       gcc 1.40.3 on a sparc, but we use 8 to be safe.
+       gcc 1.40.3 on a Solaris 4.1.3 sparc, but we use 8 to be safe.
        A buggy compiler should reuse the register of parent
        for one of the local variables, since it will think that
        parent can't possibly be used any more in this routine.
@@ -993,12 +990,6 @@ main() {
     if (p != p1 || p != p2 || p != p3 || p != p4
 	|| p != p5 || p != p6 || p != p7)
       _exit(1);
-
-    /* On some systems (e.g. SunOS 5.2), if the parent is catching
-       a signal, the child ignores the signal before execing,
-       and the parent later receives that signal, the parent dumps core.
-       Test for this by ignoring SIGINT in the child.  */
-    signal (SIGINT, SIG_IGN);
 
     /* On some systems (e.g. IRIX 3.3),
        vfork doesn't separate parent from child file descriptors.
@@ -1021,10 +1012,6 @@ main() {
 
 	 /* Did the vfork/compiler bug occur?  */
 	 || parent != getpid()
-
-	 /* Did the signal handling bug occur?  */
-	 || kill(parent, SIGINT) != 0
-	 || signalled != 1
 
 	 /* Did the file descriptor bug occur?  */
 	 || fstat(fileno(stdout), &st) != 0

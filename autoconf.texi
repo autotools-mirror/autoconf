@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.1.2
-@set VERSION 2.1.2
-@set UPDATED February 1995
+@set EDITION 2.1.3
+@set VERSION 2.1.3
+@set UPDATED March 1995
 
 @iftex
 @finalout
@@ -240,7 +240,7 @@ Site Configuration
 
 Transforming Program Names When Installing
 
-* Transformation Options::      @code{configure} options to transforme names.
+* Transformation Options::      @code{configure} options to transform names.
 * Transformation Examples::     Sample uses of transforming names.
 * Transformation Rules::        @file{Makefile} uses of transforming names.
 
@@ -1040,7 +1040,8 @@ recompilation.  You should include the file @file{stamp-h.in} your
 package's distribution, so @code{make} will consider @file{config.h.in}
 up to date.  On some old BSD systems, @code{touch} or any command that
 results in an empty file does not update the timestamps, so use a
-command like @code{date} as a workaround.
+command like @code{echo} as a workaround.
+@c Using @code{date} would cause needless CVS conflicts.
 
 @example
 @group
@@ -1052,7 +1053,7 @@ $@{srcdir@}/config.h.in: stamp-h.in
 $@{srcdir@}/stamp-h.in: configure.in aclocal.m4 acconfig.h \
     config.h.top config.h.bot
         cd $@{srcdir@} && autoheader
-        date > $@{srcdir@}/stamp-h.in
+        echo timestamp > $@{srcdir@}/stamp-h.in
 
 config.h: stamp-h
 stamp-h: config.h.in config.status
@@ -1066,10 +1067,10 @@ config.status: configure
 @end group
 @end example
 
-In addition, you should pass @samp{date > stamp-h} in the @var{extra-cmds}
-argument to @code{AC_OUTPUT}, so @file{config.status} will ensure that
-@file{config.h} is considered up to date.  @xref{Output}, for more
-information about @code{AC_OUTPUT}.
+In addition, you should pass @samp{echo timestamp > stamp-h} in the
+@var{extra-cmds} argument to @code{AC_OUTPUT}, so @file{config.status}
+will ensure that @file{config.h} is considered up to date.
+@xref{Output}, for more information about @code{AC_OUTPUT}.
 
 @xref{Invoking config.status}, for more examples of handling
 configuration-related dependencies.
@@ -1873,7 +1874,9 @@ If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
 @code{vfork} is not found, define @code{vfork} to be @code{fork}.  This
 macro checks for several known errors in implementations of @code{vfork}
 and considers the system to not have a working @code{vfork} if it
-detects any of them.
+detects any of them.  It is not considered to be an implementation error
+if a child's invocation of @code{signal} modifies the parent's signal
+handler, since child processes rarely change their signal handlers.
 @end defmac
 
 @defmac AC_FUNC_VPRINTF
@@ -2517,16 +2520,21 @@ otherwise set it to the empty string.
 @ovindex X_LIBS
 @ovindex X_EXTRA_LIBS
 @ovindex X_PRE_LIBS
-An enhanced version of @code{AC_PATH_X}.  Add the C compiler flags that
+An enhanced version of @code{AC_PATH_X}.  It adds the C compiler flags that
 X needs to output variable @code{X_CFLAGS}, and the X linker flags to
-@code{X_LIBS}.  If X is not available, add @samp{-DX_DISPLAY_MISSING} to
+@code{X_LIBS}.  If X is not available, adds @samp{-DX_DISPLAY_MISSING} to
 @code{X_CFLAGS}.
 
-Also check for special libraries that some systems need in order to
-compile X programs.  Add any that the system needs to output variable
-@code{X_EXTRA_LIBS}.  And check for special X11R6 libraries that need to
-be linked with before @samp{-lX11}, and add any found to the output
-variable @code{X_PRE_LIBS}.
+This macro also checks for special libraries that some systems need in
+order to compile X programs.  It adds any that the system needs to
+output variable @code{X_EXTRA_LIBS}.  And it checks for special X11R6
+libraries that need to be linked with before @samp{-lX11}, and adds any
+found to the output variable @code{X_PRE_LIBS}.
+
+@c This is an incomplete kludge.  Make a real way to do it.
+@c If you need to check for other X functions or libraries yourself, then
+@c after calling this macro, add the contents of @code{X_EXTRA_LIBS} to
+@c @code{LIBS} temporarily, like this:
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -4044,7 +4052,7 @@ is used as a prefix.  Otherwise, no program name transformation is done.
 @end defmac
 
 @menu
-* Transformation Options::      @code{configure} options to transforme names.
+* Transformation Options::      @code{configure} options to transform names.
 * Transformation Examples::     Sample uses of transforming names.
 * Transformation Rules::        @file{Makefile} uses of transforming names.
 @end menu
@@ -4456,7 +4464,7 @@ might wrongly assume that all source files are in one big directory
 tree, or the Imake configuration might assume one compiler whereas the
 package or the installer needs to use another, or there might be a
 version mismatch between the Imake expected by the package and the Imake
-suported by the host.  These problems are much rarer with Autoconf,
+supported by the host.  These problems are much rarer with Autoconf,
 where each package comes with its own independent configuration
 processor.
 
@@ -4524,7 +4532,7 @@ in a particular package's source directory), you must rename it to
 @file{acsite.m4}.  @xref{Invoking autoconf}.
 
 If you distribute @file{install.sh} with your package, rename it to
-@file{install-sh} so @code{make} builtin rules won't inadvertantly
+@file{install-sh} so @code{make} builtin rules won't inadvertently
 create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
 looks for the script under both names, but it is best to use the new name.
 
