@@ -8,7 +8,6 @@
 	Display only the children `times', not the shell's.
 	If the test failed or was skipped, at-times is not available.
 
-	
 2001-08-07  Akim Demaille  <akim@epita.fr>
 
 	Always produce testsuite.log, including when there are no
