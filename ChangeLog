@@ -1,5 +1,8 @@
 2000-05-28  Jim Meyering  <meyering@lucent.com>
 
+	* acspecific.m4 (AC_FUNC_STRERROR_R): Call strerror_r with 2nd arg
+	of type char*, not int.  Suggestion from Paul Eggert.
+
 	* doc/autoconf.texi (Particular Functions): Give better description of
 	AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK.  From Paul Eggert.
 
