@@ -256,9 +256,9 @@ fi
 # Please, keep this section sorted.
 # (But of course when keeping related things together).
 
-# Check for mawk first since it's generally faster.
+# Check for gawk first since it's generally better.
 AC_DEFUN([AC_PROG_AWK],
-[AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
+[AC_CHECK_PROGS(AWK, gawk mawk nawk awk, )])
 
 
 # AC_PROG_INSTALL
