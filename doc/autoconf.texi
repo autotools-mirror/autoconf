@@ -4332,6 +4332,29 @@ AC_CHECK_HEADERS([net/if.h], [], [],
 ])
 @end example
 
+@item @file{netinet/if_ether.h}
+@hdrindex netinet/if_ether.h
+On Darwin, this file requires that @file{stdio.h} and
+@file{sys/socket.h} be included beforehand.  One should run:
+
+@example
+AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([netinet/if_ether.h], [], [],
+[#include <stdio.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
+])
+@end example
+
 @item @file{stdint.h}
 See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
 
