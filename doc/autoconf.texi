@@ -8153,36 +8153,33 @@ characters.
 
 @item LANG
 @itemx LC_ALL
-@itemx LC_TIME
-@itemx LC_CTYPE
-@itemx LANGUAGE
 @itemx LC_COLLATE
-@itemx LC_NUMERIC
+@itemx LC_CTYPE
 @itemx LC_MESSAGES
+@itemx LC_NUMERIC
+@itemx LC_TIME
 @evindex LANG
 @evindex LC_ALL
-@evindex LC_TIME
-@evindex LC_CTYPE
-@evindex LANGUAGE
 @evindex LC_COLLATE
-@evindex LC_NUMERIC
+@evindex LC_CTYPE
 @evindex LC_MESSAGES
+@evindex LC_NUMERIC
+@evindex LC_TIME
 
-These must not be set unconditionally because not all systems understand
-e.g. @samp{LANG=C} (notably SCO).  Fixing @env{LC_MESSAGES} prevents
-Solaris @command{sh} from translating var values in @code{set}!  Non-C
-@env{LC_CTYPE} values break the ctype check.  Fixing @env{LC_COLLATE}
-makes scripts more portable in some cases.  For example, it causes the
-regular expression @samp{[a-z]} to match only lower-case letters on
-@sc{ascii} platforms.  However, @samp{[a-z]} does not work in general
-even when @env{LC_COLLATE} is fixed; for example, it does not work for
-@sc{ebcdic} platforms.  For maximum portability, you should use regular
-expressions like @samp{[abcdefghijklmnopqrstuvwxyz]} that list
-characters explicitly instead of relying on ranges.
+Autoconf-generated scripts normally set all these variables to
+@samp{C} because so much configuration code assumes the C locale and
+@sc{posix} requires that @env{LC_ALL} be set to @samp{C} if the C
+locale is desired.  However, some older, nonstandard systems (notably
+@sc{sco}) break if @env{LC_ALL} is set to @samp{C}, so when running on
+these systems Autoconf-generated scripts first try to unset the
+variables instead.
 
-@emph{If} one of these variables is set, you should try to unset it,
-using @samp{C} as a fall back value. see @ref{Limitations of Builtins},
-builtin @command{unset}, for more details.
+@item LANGUAGE
+@evindex LANGUAGE
+
+@env{LANGUAGE} is not specified by @sc{posix}, but it is a @sc{gnu}
+extension that overrides @env{LC_ALL} in some cases, so
+Autoconf-generated scripts set it too.
 
 @item LINENO
 @evindex LINENO
@@ -8748,7 +8745,7 @@ for @command{true}.
 @prindex @command{unset}
 You cannot assume the support of @command{unset}, nevertheless, because
 it is extremely useful to disable embarrassing variables such as
-@code{CDPATH} or @code{LANG}, you can test for its existence and use
+@code{CDPATH}, you can test for its existence and use
 it @emph{provided} you give a neutralizing value when @command{unset} is
 not supported:
 
