@@ -200,7 +200,12 @@ sub parse_args ()
     }
   else
     {
-      $automake .= ' --no-force';
+      # The implementation of --no-force is bogus in all implementations
+      # of Automake up to 1.8, so we avoid it in these cases.  (Automake
+      # 1.8 is the first version where aclocal supports force, hence
+      # the condition.)
+      $automake .= ' --no-force'
+	if $aclocal_supports_force;
     }
   # --debug;
   if ($debug)
