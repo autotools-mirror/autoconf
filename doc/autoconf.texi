@@ -5701,6 +5701,22 @@ $ exit
 @noindent
 Fortunately this bug affects only trap.
 
+@item @command{true}
+@cindex @command{true}
+@cindex @command{:}
+Don't worry: as far as we know @command{true} is portable.
+Nevertheless, it's not always a builtin (e.g., Bash 1.x), and the
+portable shell community tends to prefer using @command{:}.  This has an
+funny side effect: when asked whether @command{false} is more portable
+than @command{true} Alexandre Oliva answered
+
+@quotation
+In a sense, yes, because if it doesn't exist, the shell will produce an
+exit status of failure, which is correct for @command{false}, but not
+for @command{true}.
+@end quotation
+
+
 @item @command{unset}
 @cindex @command{unset}
 You cannot assume the support of @command{unset}, nevertheless, because
