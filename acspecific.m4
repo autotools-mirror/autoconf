@@ -107,10 +107,10 @@ all:
 EOF
 changequote(,)dnl
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-eval `make -f conftestmake 2>/dev/null | grep temp=`
+eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
 changequote([,])dnl
 if test -n "$ac_maketemp"; then SET_MAKE=
-else SET_MAKE='MAKE=make'; fi
+else SET_MAKE="MAKE=${MAKE-make}"; fi
 AC_SUBST([SET_MAKE])dnl
 ])dnl
 dnl
