@@ -1533,6 +1533,7 @@ AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 for ac_kw in inline __inline__ __inline; do
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 [#ifndef __cplusplus
+static $ac_kw int static_foo () {return 0; }
 $ac_kw int foo () {return 0; }
 #endif
 ])],
