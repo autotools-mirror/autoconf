@@ -1,3 +1,10 @@
+2000-06-09  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Don't require AC_CYGWIN.
+	(AC_F77_NAME_MANGLING): Removed useless comment.
+	(_AC_PROG_F77_GNU): Use `.f' not `.fpp' which is not properly
+	processed by Abysoft's Fortran compiler.
+
 2000-06-09  Steven G. Johnson  <stevenj@superjdj.mit.edu>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Fixed bug where

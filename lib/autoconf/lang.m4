@@ -870,12 +870,12 @@ AC_LANG_POP
 # do CPP pre-processing.
 define([_AC_PROG_F77_GNU],
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
-[cat >conftest.fpp <<EOF
+[cat >conftest.f <<EOF
 #ifdef __GNUC__
   yes
 #endif
 EOF
-if AC_TRY_COMMAND($F77 -E conftest.fpp) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND($F77 -E conftest.f) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no
@@ -1321,9 +1321,7 @@ fi
 # W. Eaton for writing this extremely useful macro.  Thank you John.
 AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
 [AC_REQUIRE([AC_PROG_F77])dnl
-AC_REQUIRE([AC_CYGWIN])dnl
-AC_CACHE_CHECK([for Fortran 77 libraries],
-                ac_cv_flibs,
+AC_CACHE_CHECK([for Fortran 77 libraries], ac_cv_flibs,
 [if test "x$FLIBS" != "x"; then
   ac_cv_flibs="$FLIBS" # Let the user override the test.
 else
@@ -1344,7 +1342,6 @@ ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
 FFLAGS=$ac_save_FFLAGS
 
 rm -f conftest.*
-
 AC_LANG_POP()dnl
 
 # This will ultimately be our output variable.
@@ -1536,7 +1533,6 @@ AC_COMPILE_IFELSE(
   rm -f cf77_test*])
 AC_LANG_POP()dnl
 ])
-dnl Get case/underscore from cache variable, in case above tests were skipped:
 f77_case=`echo "$ac_cv_f77_mangling" | sed 's/ case.*$//'`
 f77_underscore=`echo "$ac_cv_f77_mangling" | sed 's/^.*, \(.*\) .*$/\1/'`
 ])# AC_F77_NAME_MANGLING
