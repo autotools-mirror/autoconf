@@ -33,7 +33,7 @@
   `(("\\bdnl \\(.*\\)"  1 font-lock-comment-face t)
     ("\\$[0-9*#@]" . font-lock-variable-name-face)
     ("\\b\\(m4_\\)?\\(builtin\\|change\\(com\\|quote\\|word\\)\\|d\\(e\\(bug\\(file\\|mode\\)\\|cr\\|f\\(ine\\|n\\)\\)\\|iv\\(ert\\|num\\)\\|nl\\|umpdef\\)\\|e\\(rrprint\\|syscmd\\|val\\)\\|f\\(ile\\|ormat\\)\\|gnu\\|i\\(f\\(def\\|else\\)\\|n\\(c\\(lude\\|r\\)\\|d\\(ex\\|ir\\)\\)\\)\\|l\\(en\\|ine\\)\\|m\\(4\\(exit\\|wrap\\)\\|aketemp\\)\\|p\\(atsubst\\|opdef\\|ushdef\\)\\|regexp\\|s\\(hift\\|include\\|ubstr\\|ys\\(cmd\\|val\\)\\)\\|tra\\(ceo\\(ff\\|n\\)\\|nslit\\)\\|un\\(d\\(efine\\|ivert\\)\\|ix\\)\\)\\b" . font-lock-keyword-face)
-    ("^\\(\\(m4_\\)?define\\|A._DEFUN\\)(\\[?\\([A-Za-z0-9_]+\\)" 3 font-lock-function-name-face)
+    ("^\\(\\(m4_\\)?define\\|A._DEFUN\\|m4_defun\\)(\\[?\\([A-Za-z0-9_]+\\)" 3 font-lock-function-name-face)
     "default font-lock-keywords")
 )
 
@@ -53,20 +53,32 @@
 
 (defvar autoconf-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-c\C-c" 'comment-region)
+    (define-key map '[(control c) (\;)] 'comment-region)
     map))
+
+(defun autoconf-current-defun ()
+  "Autoconf value for `add-log-current-defun-function'.
+This tells add-log.el how to find the current macro."
+  (save-excursion
+    (if (re-search-backward "^\\(m4_define\\|m4_defun\\|A._DEFUN\\)(\\[*\\([A-Za-z0-9_]+\\)" nil t)
+	(buffer-substring (match-beginning 2)
+			  (match-end 2))
+      nil)))
 
 ;;;###autoload
 (defun autoconf-mode ()
-  "A major-mode to edit autoconf input files like configure.in
+  "A major-mode to edit Autoconf files like configure.ac.
 \\{autoconf-mode-map}
 "
   (interactive)
   (kill-all-local-variables)
   (use-local-map autoconf-mode-map)
 
+  (make-local-variable 'add-log-current-defun-function)
+  (setq add-log-current-defun-function 'autoconf-current-defun)
+
   (make-local-variable 'comment-start)
-  (setq comment-start "dnl")
+  (setq comment-start "# ")
   (make-local-variable 'parse-sexp-ignore-comments)
   (setq parse-sexp-ignore-comments t)
 

@@ -58,14 +58,26 @@
     (define-key map '[(control c) (\;)] 'comment-region)
     map))
 
+(defun autotest-current-defun ()
+  "Autotest value for `add-log-current-defun-function'.
+This tells add-log.el how to find the current test group/macro."
+  (save-excursion
+    (if (re-search-backward "^\\(m4_define\\|m4_defun\\|AT_SETUP\\)(\\[+\\([^]]+\\)" nil t)
+	(buffer-substring (match-beginning 2)
+			  (match-end 2))
+      nil)))
+
 ;;;###autoload
 (defun autotest-mode ()
-  "A major-mode to edit Autotest input files like testsuite.at
+  "A major-mode to edit Autotest files like testsuite.at.
 \\{autotest-mode-map}
 "
   (interactive)
   (kill-all-local-variables)
   (use-local-map autotest-mode-map)
+
+  (make-local-variable 'add-log-current-defun-function)
+  (setq add-log-current-defun-function 'autotest-current-defun)
 
   (make-local-variable 'comment-start)
   (setq comment-start "# ")

@@ -1,5 +1,18 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	Use `add-log-current-defun-function' for ChangeLog creation.
+	Suggested by Tom Tromey.
+
+	* lib/emacs/autotest-mode.el (autotest-mode-map): New.
+	(autotest-mode): Adjust.
+	* lib/emacs/autoconf-mode.el (autoconf-mode-map): Modernize, map
+	'comment-region onto `C-c ;'.
+	Comments are `#', not `dnl'.
+	(autoconf-current-defun): New.
+	(autoconf-font-lock-keywords): Recognize `m4_defun'.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_m4_divert(BODY)): Move to...
 	* lib/m4sugar/m4sh.m4: here.
 	(AS_INIT): Push the BODY diversion, set the #! /bin/sh line.
