@@ -45,9 +45,6 @@ fi
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 AC_SUBST(M4)
 
-# `ifnames' uses AWK.
-AC_PROG_AWK
-
 # Generating man pages.
 AM_MISSING_PROG(HELP2MAN, help2man)
 

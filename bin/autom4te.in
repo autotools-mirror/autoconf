@@ -26,9 +26,7 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
 
 BEGIN
 {
-  my $datadir = ($ENV{'autom4te_perllibdir'}
-		 || $ENV{'AC_MACRODIR'}
-		 || '@datadir@');
+  my $datadir = ($ENV{'autom4te_perllibdir'} || '@datadir@');
   unshift @INC, "$datadir";
 }
 

@@ -75,7 +75,6 @@ AT_CHECK([/bin/sh ./syntax.sh])
 
 AT_CHECK([/bin/sh -n ../bin/autoconf],   0)
 AT_CHECK([/bin/sh -n ../bin/autoreconf], 0)
-AT_CHECK([/bin/sh -n ../bin/ifnames],    0)
 
 # These are not built, they are in the src tree.
 AT_CHECK([/bin/sh -n $at_top_srcdir/config/install-sh], 0)
@@ -97,33 +96,17 @@ AT_SETUP([Syntax of the Perl scripts])
 # | % perl -c ./autom4te
 # | ./autom4te syntax OK
 # Ignore it, it might change between releases.
-AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/autom4te],
-         0, [], [ignore])
-AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/autoheader],
-         0, [], [ignore])
-AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/autoscan],
-         0, [], [ignore])
-AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/autoupdate],
-         0, [], [ignore])
+m4_define([AT_CHECK_PERL_SYNTAX],
+[AT_CHECK([autom4te_perllibdir=$top_srcdir/lib $PERL -c ../bin/$1],
+          0, [], [ignore])])
+
+AT_CHECK_PERL_SYNTAX([autoheader])
+AT_CHECK_PERL_SYNTAX([autom4te])
+AT_CHECK_PERL_SYNTAX([autoscan])
+AT_CHECK_PERL_SYNTAX([autoupdate])
+AT_CHECK_PERL_SYNTAX([ifnames])
 
 AT_CLEANUP
-
-
-
-## ----------------- ##
-## AWK portability.  ##
-## ----------------- ##
-
-AT_SETUP([AWK portability])
-
-# Skip if we don't have GNU Awk.
-AT_CHECK([gawk --version || exit 77], 0, ignore, ignore)
-
-# Syntax correctness of ifnames.
-AT_CHECK([AWK='gawk --posix' ifnames /dev/null])
-
-AT_CLEANUP
-
 
 
 

@@ -1,7 +1,12 @@
-#! @SHELL@
-# -*- shell-script -*-
+#! @PERL@ -w
+# -*- perl -*-
+# @configure_input@
+
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
 # ifnames - print the identifiers used in C preprocessor conditionals
-# Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1999, 2000, 2001 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,111 +29,95 @@
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>
 # and Paul Eggert <eggert@twinsun.com>.
 
-me=`echo "$0" | sed -e 's,.*/,,'`
+BEGIN
+{
+  my $datadir = ($ENV{'autom4te_perllibdir'} || '@datadir@');
+  unshift @INC, "$datadir";
+}
 
-usage="\
-Usage: $0 [OPTION] ...  [FILE] ...
+use Autom4te::General;
+use Autom4te::XFile;
+
+# $HELP
+# -----
+$help = "Usage: $0 [OPTION] ...  [FILE] ...
 
 Scan all of the C source FILES (or the standard input, if none are
 given) and write to the standard output a sorted list of all the
-identifiers that appear in those files in \`#if', \`#elif', \`#ifdef', or
-\`#ifndef' directives.  Print each identifier on a line, followed by a
+identifiers that appear in those files in `#if', `#elif', `#ifdef', or
+`#ifndef' directives.  Print each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
   -h, --help      print this help, then exit
   -V, --version   print version number, then exit
 
-Report bugs to <bug-autoconf@gnu.org>."
+Report bugs to <bug-autoconf\@gnu.org>.";
 
-version="\
+
+# $VERSION
+# --------
+$version = "\
 ifnames (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Paul Eggert.
 
-Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.
+Copyright 1994, 1995, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.";
 
-help="\
-Try \`$me --help' for more information."
 
-while test $# -gt 0; do
-  case "$1" in
-  --help | -h )
-    echo "$usage"; exit 0 ;;
-  --version | -V )
-    echo "$version"; exit 0 ;;
-  --)     # Stop option processing.
-    shift; break ;;
-  -*)
-    exec >&2
-    echo "$me: invalid option $1"
-    echo "$help"
-    exit 1 ;;
-  *) break ;;
-  esac
-done
+# &parse_args ()
+# --------------
+# Process any command line arguments.
+sub parse_args ()
+{
+  getopt ();
+}
 
-# Variables.
-: ${AWK=@AWK@}
 
-$AWK '
-  # Record that sym was found in FILENAME.
-  function file_sym(sym,  i, fs)
-  {
-    if (sym ~ /^[A-Za-z_]/)
+# %OCCURRENCE
+# -----------
+my %occurrence;
+
+
+# &scan_file ($FILENAME)
+# ----------------------
+sub scan_file ($)
+{
+  my ($filename) = @_;
+  my $file = new Autom4te::XFile ($filename);
+  while ($_ = $file->getline)
     {
-      if (!found[sym,FILENAME])
-      {
-	found[sym,FILENAME] = 1
+      # Continuation lines.
+      $_ .= $file->getline
+	while (s/\\$//);
 
-	# Insert FILENAME into files[sym], keeping the list sorted.
-	i = 1
-	fs = files[sym]
- 	while (match(substr(fs, i), /^ [^ ]*/) \
- 	       && substr(fs, i + 1, RLENGTH - 1) < FILENAME)
-        {
- 	  i += RLENGTH
+      # Preprocessor directives.
+      if (s/^\s*\#\s*(if|ifdef|ifndef|elif)\s+//)
+	{
+	  # Remove comments.  Not perfect, but close enough.
+	  s(/\*.*?\*/)();
+	  s(/\*.*)();
+	  foreach my $word (split (/\W+/))
+	    {
+	      next
+		if $word eq 'defined' || $word !~ /^[a-zA-Z_]/;
+	      $occurrence{$word}{$filename} = 1;
+	    }
 	}
-	files[sym] = substr(fs, 1, i - 1) " " FILENAME substr(fs, i)
-      }
     }
-  }
+}
 
+
+## ------ ##
+## Main.  ##
+## ------ ##
+
+parse_args();
+foreach (@ARGV)
   {
-    while (sub(/\\$/, "", $0) > 0)
-    {
-      if ((getline tmp) > 0)
-	$0 = $0 tmp
-      else
-	break
-    }
+    scan_file ($_);
   }
-
-  /^[\t ]*#/ {
-    if (sub(/^[\t ]*#[\t ]*ifn?def[\t ]+/, "", $0))
-    {
-      sub(/[^A-Za-z_0-9].*/, "", $0)
-      file_sym($0)
-    }
-    if (sub(/^[\t ]*#[\t ]*(el)?if[\t ]+/, "", $0))
-    {
-      # Remove comments.  Not perfect, but close enough.
-      gsub(/\/\*[^\/]*(\*\/)?/, "", $0)
-
-      for (i = split($0, field, /[^A-Za-z_0-9]+/);  1 <= i;  i--)
-      {
-	if (field[i] != "defined")
-        {
-	  file_sym(field[i])
-	}
-      }
-    }
+foreach (sort keys %occurrence)
+  {
+    print "$_ ", join (' ', sort keys %{$occurrence{$_}}), "\n";
   }
-
-  END {
-    for (sym in files)
-    {
-      print sym files[sym]
-    }
-  }
-' ${1+"$@"} | sort

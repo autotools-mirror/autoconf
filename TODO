@@ -20,10 +20,6 @@ should be removed.
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
 
-** ifnames
-Rewrite in Perl.  Drop the AWK dependency.  Remove the AWK portability
-tests.  Add ifnames to the Perl sanity checks.
-
 ** autom4te and warnings.
 Decide what must be done.
 

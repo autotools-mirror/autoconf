@@ -24,7 +24,7 @@ EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
              atlocal.in
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate
+WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate ifnames
 
 DISTCLEANFILES       = atconfig atlocal $(TESTSUITE)
 

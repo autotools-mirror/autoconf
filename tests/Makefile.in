@@ -58,7 +58,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
@@ -72,7 +71,7 @@ EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
 
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate
+WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate ifnames
 
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
 
@@ -127,7 +126,7 @@ subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-DIST_COMMON = README Makefile.am Makefile.in
+DIST_COMMON = README Makefile.am Makefile.in configure.ac
 all: all-am
 
 .SUFFIXES:
