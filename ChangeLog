@@ -1,5 +1,11 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.maint: Formatting changes.
+	(do-po-update, po-update, cvs-update, update): New targets.
+	(AMTAR): Remove.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT) <at_cmd_line>: Remove.
 	<at_cmd_line>: New.
 	Pass it to debug-*.sh scripts.
@@ -26,7 +32,7 @@
 	(--clean, -c): New option.
 	* tests/Makefile.am: Use this option.
 
-	
+
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Rename `ac_dots' as
@@ -126,7 +132,7 @@
 	* tests/Makefile.am (testsuite): Remove -I top_srcdir, unneeded.
 	* tests/suite.at: Require 2.52c.
 
-	
+
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
 	testsuite.log should include config.log.

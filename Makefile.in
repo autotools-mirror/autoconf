@@ -82,6 +82,7 @@ pkgdata_DATA = INSTALL
 MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
 
 prev_version_file = $(srcdir)/config/prev-version.txt
+move_if_change = $(srcdir)/config/move-if-change
 release_archive_dir = releases
 
 # Uploading betas.

@@ -67,6 +67,7 @@ maintainer-check-tests:
 ## ---------------------------- ##
 
 prev_version_file = $(srcdir)/config/prev-version.txt
+move_if_change = $(srcdir)/config/move-if-change
 release_archive_dir = releases
 
 # Uploading betas.
