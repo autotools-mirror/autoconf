@@ -391,7 +391,29 @@ m4_divert_pop()dnl
 #
 # When the w32 free Borland C++ command line compiler links a program
 # (conftest.exe), it also produces a file named `conftest.tds' in
-# addition to `conftest.obj'
+# addition to `conftest.obj'.
+#
+# - *.bb, *.bbg
+#   Created per object by GCC when given -ftest-coverage.
+#
+# - *.xSYM
+#   Created on BeOS.  Seems to be per executable.
+
+
+# _AC_COMPILER_OBJEXT_REJECT
+# --------------------------
+# Case/esac pattern matching the files to be ignored when looking for
+# compiled object files.
+m4_define([_AC_COMPILER_OBJEXT_REJECT],
+[*.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg])
+
+
+# _AC_COMPILER_EXEEXT_REJECT
+# --------------------------
+# Case/esac pattern matching the files to be ignored when looking for
+# compiled executables.
+m4_define([_AC_COMPILER_EXEEXT_REJECT],
+[_AC_COMPILER_OBJEXT_REJECT | *.o | *.obj])
 
 
 # We must not AU define them, because autoupdate would then remove
@@ -430,7 +452,7 @@ for ac_file in `ls a_out.exe a.exe conftest.exe 2>/dev/null;
                 ls a.out conftest 2>/dev/null;
                 ls a.* conftest.* 2>/dev/null`; do
   case $ac_file in
-    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb | *.xSYM ) ;;
+    _AC_COMPILER_EXEEXT_REJECT ) ;;
     a.out ) # We found the default executable, but exeext='' is most
             # certainly right.
             break;;
@@ -496,7 +518,7 @@ AS_IF([AC_TRY_EVAL(ac_link)],
 # `rm'.
 for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
-    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    _AC_COMPILER_EXEEXT_REJECT ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
           export ac_cv_exeext
           break;;
@@ -554,7 +576,7 @@ rm -f conftest.o conftest.obj
 AS_IF([AC_TRY_EVAL(ac_compile)],
 [for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    _AC_COMPILER_OBJEXT_REJECT ) ;;
     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
        break;;
   esac

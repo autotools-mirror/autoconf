@@ -1,3 +1,12 @@
+2002-04-03  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_OBJEXT_REJECT)
+	(_AC_COMPILER_EXEEXT_REJECT): New.
+	Also recognize *.bb and *.bbg as compilation byproducts.
+	(_AC_COMPILER_EXEEXT_DEFAULT, _AC_COMPILER_EXEEXT_O)
+	(_AC_COMPILER_OBJEXT): Use them.
+	Fixes Debian #138666.
+
 2002-04-02  Peter Eisentraut  <peter_e@gmx.net>
 
 	Integrate AC_PROG_CC_STDC into AC_PROG_CC.
