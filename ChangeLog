@@ -1,3 +1,11 @@
+2004-05-19  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Function Portability): Add strerror_r, cross
+	referencing AC_FUNC_STRERROR_R.
+
+	* doc/autoconf.texi (Particular Functions): In AC_FUNC_CLOSEDIR_VOID,
+	note pessimistic assumption when cross compiling.
+
 2004-05-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Make): Note that BSD make
