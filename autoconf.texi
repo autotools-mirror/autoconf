@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.125
-@set VERSION 1.125
+@set EDITION 2.0
+@set VERSION 2.0
 @set UPDATED October 1994
 
 @iftex
@@ -1003,6 +1003,9 @@ optional files, such as @file{aclocal.m4} and those related to
 configuration header files.  Omit from the @file{Makefile.in} rules any
 of these files that your package does not use.
 
+The @samp{$@{srcdir@}/} prefix is included because of limitations in the
+@code{VPATH} mechanism.
+
 The @file{stamp-} files are necessary because the timestamps of
 @file{config.h.in} and @file{config.h} will not be changed if remaking
 them does not change their contents.  This feature avoids unnecessary
@@ -1014,12 +1017,13 @@ command like @code{date} as a workaround.
 
 @example
 @group
-configure: configure.in aclocal.m4
+$@{srcdir@}/configure: configure.in aclocal.m4
         cd $@{srcdir@} && autoconf
 
 # autoheader might not change config.h.in, so touch a stamp file.
-config.h.in: stamp-h.in
-stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top config.h.bot
+$@{srcdir@}/config.h.in: stamp-h.in
+$@{srcdir@}/stamp-h.in: configure.in aclocal.m4 acconfig.h \
+    config.h.top config.h.bot
         cd $@{srcdir@} && autoheader
         date > $@{srcdir@}/stamp-h.in
 
@@ -3121,13 +3125,13 @@ newlines.
 @defmac AC_SUBST_FILE (@var{variable})
 @maindex SUBST_FILE
 Another way to create an output variable from a shell variable.  Make
-@code{AC_OUTPUT} substitute the contents of the file named by shell
-variable @var{variable} into output files (typically one or more
-@file{Makefile}s).  This means that @code{AC_OUTPUT} will replace
-instances of @samp{@@@var{variable}@@} in the @file{Makefile.in} files
+@code{AC_OUTPUT} insert (without substitutions) the contents of the file
+named by shell variable @var{variable} into output files.  This means
+that @code{AC_OUTPUT} will replace instances of
+@samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
 with the contents of the file that the shell variable @var{variable}
 names when @code{AC_OUTPUT} is called.  Set the variable to
-@file{/dev/null} for cases which do not have a file to insert.
+@file{/dev/null} for cases that do not have a file to insert.
 
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host
@@ -4005,10 +4009,11 @@ assuming that you have a source tree containing those programs that is
 set up to use this feature.)
 
 One way to install multiple versions of some programs simultaneously is
-to append a version number to the name of one or both.  For example, you
-can configure Autoconf using @samp{--program-suffix=2} to install the
-programs as @file{/usr/local/bin/autoconf2}, @file{/usr/local/bin/autoheader2},
-etc.
+to append a version number to the name of one or both.  For example, if
+you want to keep Autoconf version 1 around for awhile, you can configure
+Autoconf version 2 using @samp{--program-suffix=2} to install the
+programs as @file{/usr/local/bin/autoconf2},
+@file{/usr/local/bin/autoheader2}, etc.
 
 @node Transformation Rules, , Transformation Examples, Transforming Names
 @subsection Transformation Rules
@@ -4020,6 +4025,9 @@ Here is how to use the variable @code{program_transform_name} in a
 transform=@@program_transform_name@@
 install: all
         $(INSTALL_PROGRAM) myprog $(bindir)/`echo myprog|sed '$(transform)'`
+
+uninstall:
+        rm -f $(bindir)/`echo myprog|sed '$(transform)'`
 @end example
 
 @noindent
@@ -4031,7 +4039,22 @@ install:
         for p in $(PROGRAMS); do \
           $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
         done
+
+uninstall:
+        for p in $(PROGRAMS); do \
+          rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+        done
 @end example
+
+Whether to do the transformations on documentation files (Texinfo or
+@code{man}) is a tricky question; there seems to be no perfect answer,
+due to the several reasons for name transforming.  Documentation is not
+usually particular to a specific architecture, and Texinfo files do not
+conflict with system documentation.  But they might conflict with
+earlier versions of the same files, and @code{man} pages sometimes do
+conflict with system documentation.  As a compromise, it is probably
+best to do name transformations on @code{man} pages but not on Texinfo
+manuals.
 
 @node Site Defaults, , Transforming Names, Site Configuration
 @section Setting Site Defaults
@@ -4069,10 +4092,10 @@ You can set some cache values in the site file itself.  Doing this is
 useful if you are cross-compiling, so it is impossible to check features
 that require running a test program.  You could ``prime the cache'' by
 setting those values correctly for that system in
-@file{@var{prefix}/etc/config.site}.  To find out the names of the
-cache variables you need to set, look for shell variables with
-@samp{_cv_} in their names in the affected configure scripts, or in the
-Autoconf @code{m4} source code for those macros.
+@file{@var{prefix}/etc/config.site}.  To find out the names of the cache
+variables you need to set, look for shell variables with @samp{_cv_} in
+their names in the affected @code{configure} scripts, or in the Autoconf
+@code{m4} source code for those macros.
 
 The cache file is careful to not override any variables set in the site
 files.  Similarly, you should not override command-line options in the
@@ -4082,7 +4105,7 @@ and @code{cache_file} have their default values (as set near the top of
 
 Here is a sample file @file{/usr/share/local/gnu/share/config.site}.  The
 command @samp{configure --prefix=/usr/share/local/gnu} would read this
-file (if @code{CONFIG_SITE} is not set).
+file (if @code{CONFIG_SITE} is not set to a different file).
 
 @example
 # config.site for configure
@@ -4829,10 +4852,10 @@ Franc,ois
 @tex
 Fran\c cois
 @end tex
-Pinard, Jim Meyering, Karl Berry, Rob Savoye, and Ken Raeburn.
+Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn, and Mark Eichin.
 
 Finally, version 2.0 was ready.  And there was much rejoicing.
-(And I have free time again.  I think.)
+(And I have free time again.  I think.  Yeah, right.)
 
 @node Old Macro Names, Environment Variable Index, History, Top
 @chapter Old Macro Names
