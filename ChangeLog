@@ -1,3 +1,9 @@
+2004-11-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Pretty Help Strings): Fix typo
+	in my editing of the previous patch.  Problem reported
+	by Alexandre Duret-Lutz.
+
 2004-11-22  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Autoconf Language): Explain that
