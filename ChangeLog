@@ -1,3 +1,9 @@
+2003-10-28  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.cfg (local_updates, executable-update): Tweak to be
+	robust to parallel makes.
+	Suggested by Alexandre Duret-Lutz.
+
 2003-10-27  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.cfg (executable-update): New.
