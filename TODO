@@ -54,6 +54,7 @@ Things it might be nice to do someday:
 ------------------------------------------------------------------------------
 
 * Add a Makefile generator that supports the standard GNU targets.
+  (Being worked on.)
 
 ------------------------------------------------------------------------------
 
