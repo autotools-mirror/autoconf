@@ -44,9 +44,27 @@
 # such potential, you must delete any notice of this special exception
 # to the GPL from your modified version.
 
-# Use of diversions:
+# _m4_divert(DIVERSION-NAME)
+# --------------------------
+# Convert a diversion name into its number.  Otherwise, return
+# DIVERSION-NAME which is supposed to be an actual diversion number.
+# Of course it would be nicer to use m4_case here, instead of zillions
+# of little macros, but it then takes twice longer to run `autoconf'!
 #
-#  - DEFAULT
+# From M4sugar:
+#    -1. KILL
+# 10000. GROW
+#
+# From M4sh:
+#    0. BINSH
+#    1. HEADER-REVISION
+#    2. HEADER-COMMENT
+#    3. HEADER-COPYRIGHT
+#    4. M4SH-INIT
+# 1000. BODY
+#
+# Defined below:
+#  - DEFAULTS
 #    Overall initialization, value of $at_groups_all.
 #  - OPTIONS
 #    Option processing
@@ -57,7 +75,7 @@
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
 
-m4_define([_m4_divert(DEFAULT)],       5)
+m4_define([_m4_divert(DEFAULTS)],       5)
 m4_define([_m4_divert(OPTIONS)],      10)
 m4_define([_m4_divert(TESTS)],        50)
 m4_define([_m4_divert(TAIL)],         60)
@@ -95,7 +113,7 @@ m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 AS_INIT
 AS_PREPARE
-m4_divert_push([DEFAULT])dnl
+m4_divert_push([DEFAULTS])dnl
 
 SHELL=${CONFIG_SHELL-/bin/sh}
 
@@ -157,7 +175,7 @@ at_stderr=$at_suite_dir/at-stderr
 # The file containing dates.
 at_times_file=$at_suite_dir/at-times
 
-m4_wrap([m4_divert_text([DEFAULT],
+m4_wrap([m4_divert_text([DEFAULTS],
 [# List of the tested programs.
 at_tested='m4_ifdef([AT_tested], [AT_tested])'
 # List of the all the test groups.

@@ -1,5 +1,10 @@
 2003-03-26  Derek Price  <derek@ximbiot.com>
 
+	* lib/autotest/general.m4: s/DEFAULT/DEFAULTS/ since it makes more
+	sense.  Verbosify the diversion definitions comment.
+
+2003-03-26  Derek Price  <derek@ximbiot.com>
+
 	* lib/autotest/general.m4 (AT_INIT): Remove redundant call to
 	AS_PREPARE.
 
