@@ -79,6 +79,8 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 
 @end ifinfo
 
+@c The master menu, created with texinfo-master-menu, goes here.
+
 @menu
 * Introduction::		Autoconf's purpose, strengths, and weaknesses.
 * Distributing::		Legal restrictions on Autoconf output.
@@ -91,6 +93,64 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * Example::			Sample Autoconf input files.
 * Preprocessor Symbol Index::	Index of C preprocessor symbols defined.
 * Macro Index::			Index of Autoconf macros.
+
+ --- The Detailed Node Listing ---
+
+Making @code{configure} Scripts
+
+* Writing configure.in::	What to put in an Autoconf input file.
+* Invoking autoconf::		How to create configuration scripts.
+* Invoking autoheader::		How to create configuration header files.
+
+Specific Tests
+
+* Alternative Programs::	Selecting between alternative programs.
+* Header Files::		Header files that might be missing.
+* Typedefs::			@code{typedef}s that might be missing.
+* Library Functions::		C library functions that might be missing.
+* Structures::			Structures or members that might be missing.
+* Compiler Characteristics::	C compiler or machine architecture features.
+* System Services::		Operating system services.
+* UNIX Variants::		Special cases for specific UNIX variants.
+
+General Purpose Macros
+
+* Setup::			Controlling Autoconf operation.
+* General Tests::		Check for kinds of features.
+* Setting Variables::		Setting shell and @code{make} variables.
+* Macro Ordering::		Enforcing ordering constraints.
+
+Writing Macros
+
+* Macro Format::		Basic format of an Autoconf macro.
+* Quoting::			Protecting macros from unwanted expansion.
+* Dependencies Between Macros::	What to do when macros depend on other macros.
+* Checking for Files::		Finding whether a file exists.
+* Checking for Symbols::	Finding whether a symbol is defined.
+* Test Programs::		Writing programs to test for features.
+* Multiple Cases::		Tests for several possible values.
+
+Dependencies Between Macros
+
+* Prerequisite Macros::		Ensuring required information.
+* Suggested Ordering::		Warning about possible ordering problems.
+
+Test Programs
+
+* Guidelines::			General rules for writing test programs.
+* Tricks::			Special ways to work around problems.
+
+Makefiles
+
+* Predefined Variables::	Heavily used @code{make} variables.
+* Installation Prefixes::	A special variable substitution.
+* VPATH Substitutions::		Compiling in a different directory.
+* Automatic Remaking::		Makefile rules for configuring.
+
+An Example
+
+* Sample configure.in::		An example of a @file{configure} template.
+* Sample Makefile.in::		An example of a @file{Makefile} template.
 @end menu
 
 @node Introduction, Distributing, Top, Top
