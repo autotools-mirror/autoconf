@@ -164,7 +164,7 @@
 	Don't run _AC_DECL_YYTEXT if it doesn't. Always check libl and
 	libfl regardless of the $LEX value.
 
-2000-10-12  Morten Eriksen <mortene@sim.no>
+2000-10-12  Morten Eriksen  <mortene@sim.no>
 
 	* acgeneral.m4 (AC_CONFIG_SUBDIRS): Fixed nasty typo.
 
@@ -233,7 +233,7 @@
 	AC_COMPILE_IFELSE etc. without AC_LANG_COMPILER_REQUIRE.
 	(AC_COMPILE_IFELSE, AC_LINK_IFELSE, AC_RUN_IFELSE): Use them.
 
-2000-10-11  Morten Eriksen <mortene@sim.no>
+2000-10-11  Morten Eriksen  <mortene@sim.no>
 
 	* acgeneral.m4 (AC_RUN_IFELSE): Add missing executable suffix.
 	* aclang.m4 (_AC_LANG_COMPILER_WORKS): Likewise.
@@ -455,7 +455,7 @@
 	* tests/semantics.m4 (AC_PROG_CPP with warnings, AC_PROG_CPP
 	without warnings): New tests.
 
-2000-09-18  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
+2000-09-18  Rüdiger Kuhlmann  <autoconf-list@ruediger-kuhlmann.de>
 
 	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Check for configure.gnu
 	as well.
@@ -492,7 +492,7 @@
 	it's useless here. Rename to ...
 	(_AC_PROG_PREPROC_WORKS): ... this.
 
-2000-09-12  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
+2000-09-12  Rüdiger Kuhlmann  <autoconf-list@ruediger-kuhlmann.de>
 
 	* acspecific.m4 (AC_PROG_INSTALL): Exclude c:install on AmigaOS.
 
@@ -545,7 +545,7 @@
 	* acgeneral.m4 (AC_EGREP_CPP): Use additional quotes instead of
 	changequote.
 
-2000-09-12  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
+2000-09-12  Rüdiger Kuhlmann  <autoconf-list@ruediger-kuhlmann.de>
 
 	* acgeneral.m4 (AC_ARG_ENABLE,AC_ARG_WIDTH): Add trailing
 	semicolon to final fi.
@@ -579,7 +579,7 @@
 	* doc/autoconf.texi: Always use one space before the opening
 	parenthesis in @defmac
 
-2000-09-06   Morten Eriksen  <mortene@sim.no>
+2000-09-06  Morten Eriksen  <mortene@sim.no>
 
 	* acspecific.m4 (_AC_OBJEXT): No longer use AC_COMPILE_IFELSE,
 	which uses $ac_objext hence depends upon _AC_OBJEXT.
@@ -600,7 +600,7 @@
 	* autoconf.sh: Consider undefined macros as errors.
 	* tests/base.m4 (unexpanded macros): Expect error, not warning
 
-2000-09-05   Dave Love  <fx@gnu.org>
+2000-09-05  Dave Love  <fx@gnu.org>
 
 	* aclang.m4 (_AC_PROG_F77_GNU): Run command from standard input so
 	that we can get some standard output.
@@ -1110,7 +1110,7 @@
 	handle absolute input file names.
 	From Alexandre Oliva.
 
-2000-07-12 Martin Wilck <martin@tropos.de>
+2000-07-12  Martin Wilck  <martin@tropos.de>
 
 	* aclang.m4 (AC_PROG_F77): Delete AC_BEFORE(AC_PROG_CPP) that
 	leads to unnecessary warnings if both C and Fortran are checked.
@@ -1122,7 +1122,7 @@
 	* autoconf.sh (_ac_warnings): Fix call to tr.
 	Reported by Johan Danielsson.
 
-2000-07-11  Martin Wilck <martin@tropos.de>
+2000-07-11  Martin Wilck  <martin@tropos.de>
 
 	* aclang.m4 (_AC_PROG_F77_V): New macro to determine the flag that
 	causes the compiler to output verbose linking information.
@@ -1458,7 +1458,7 @@
 	(AC_INIT): be more uniform.
 	(AC_INIT, AC_REVISION, AC_COPYRIGHT): `define', don't AC_DEFUN.
 
-2000-07-07  Martin Wilck <martin@tropos.de>
+2000-07-07  Martin Wilck  <martin@tropos.de>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Keep -lm, if a Fortran
 	compiler needs it, it is likely to be required when linking C/C++
@@ -1506,7 +1506,7 @@
 	(_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS, _AC_OUTPUT_LINKS):
 	Use _AC_SHELL_DIRNAME.
 
-2000-07-06 Martin Wilck <martin@tropos.de>
+2000-07-06  Martin Wilck  <martin@tropos.de>
 
 	* aclang.m4 (AC_PROG_F77): Add two compilers,
 	lf95 (Lahey/Fujitsu Fortran) and pgf77 (Portland Group Fortran)
@@ -1897,7 +1897,7 @@
 	Simplify the handling of localdir and AC_MACRODIR.
 	* ifnames.sh: Formatting changes.
 
-2000-05-25  Steven G. Johnson <stevenj@alum.mit.edu>
+2000-05-25  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Don't use f2c as a possible Fortran compiler, since by itself it
 	cannot produce object code.
@@ -1905,7 +1905,7 @@
 	* aclang.m4 (AC_PROG_F77): Remove f2c from the search list.
 	* doc/autoconf.texi: Excise mentions of f2c in AC_PROG_F77 docs.
 
-2000-05-26 Mark Elbrecht <snowball3@bigfoot.com>
+2000-05-26  Mark Elbrecht  <snowball3@bigfoot.com>
 
 	Currently, AC_PROG_LN_S incorrectly reports yes with DJGPP. This
 	is because the DJGPP `ln' emulates soft links for executables by
@@ -1918,7 +1918,7 @@
 	* acspecific.m4 (AC_PROG_LN_S): Create a sample file and use it to
 	test `ln -s'.
 
-2000-05-26  Ossama Othman <ossama@ece.uci.edu>
+2000-05-26  Ossama Othman  <ossama@ece.uci.edu>
 
 	* aclang.m4 (AC_PROG_CXX): Look for aCC before CC.
 
@@ -1986,7 +1986,7 @@
 	Check whether the type exists beforehand.
 	* tests/semantics.m4 (AC_CHECK_SIZEOF): Strengthen.
 
-2000-05-26  Ossama Othman <ossama@ece.uci.edu>
+2000-05-26  Ossama Othman  <ossama@ece.uci.edu>
 
 	* aclang.m4 (AC_PROG_CXX): Look for aCC KCC RCC xlC_r xlC.
 	s/c++ g++/g++ c++/.
@@ -2230,7 +2230,7 @@
 	here?  Point to `Invoking configure'.
 	(Cache Files): No need to document the disabling of the cache.
 
-2000-05-22 Mark Elbrecht <snowball3@bigfoot.com>,  Eli Zaretskii <eliz@gnu.org>
+2000-05-22  Mark Elbrecht  <snowball3@bigfoot.com>,  Eli Zaretskii  <eliz@gnu.org>
 
 	More MS-DOS support.
 
@@ -3182,7 +3182,7 @@
 	_AC_CHECK_TYPE_NEW): Adjust.
 	* acspecific.m4 (AC_DECL_YYTEXT, AC_PATH_XTRA): Adjust.
 
-2000-03-23  Steven G. Johnson <stevenj@alum.mit.edu>
+2000-03-23  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* acspecific.m4 (AC_F77_NAME_MANGLING): Need to use
 	AC_F77_LIBRARY_LDFLAGS when linking C and Fortran code.
@@ -3669,7 +3669,7 @@
 	* acgeneral.m4 (AC_PATH_PROG, AC_OUTPUT_FILES, AC_OUTPUT_SUBDIRS):
 	Fix quotation problems in DOS path handling.
 
-2000-03-08   Franz Sirl  <Franz.Sirl-kernel@lauterbach.com>
+2000-03-08  Franz Sirl  <Franz.Sirl-kernel@lauterbach.com>
 
 	* acspecific.m4 (AC_FUNC_MMAP, AC_FUNC_ALLOCA): Make them C++
 	safe: include the right headers, cast the allocations etc.
@@ -3822,7 +3822,7 @@
 	AC_EGREP_CPP, AC_TRY_LINK, AC_COMPILE_CHECK, AC_TRY_RUN_NATIVE):
 	Use ifval instead of ifelse.
 
-2000-03-07 Mark Elbrecht <snowball3@bigfoot.com>
+2000-03-07  Mark Elbrecht  <snowball3@bigfoot.com>
 
 	Support absolute DOS-style paths.
 
@@ -3847,7 +3847,7 @@
 	Preserve exit status in trap handler.
 	Based on suggestions from Paul Eggert.
 
-2000-03-03  Paul Eggert <eggert@twinsun.com>
+2000-03-03  Paul Eggert  <eggert@twinsun.com>
 
 	Move the quadrigraphs out of the user name space.
 
@@ -6873,7 +6873,7 @@
 	* autoconf.texi (Fortran 77 Compiler Characteristics): Document
 	new AC_F77_NAME_MANGLING macro.
 
-1999-05-30  Steven G. Johnson <stevenj@alum.mit.edu>
+1999-05-30  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* autoconf.texi (Fortran 77 Compiler Characteristics): Document
 	new AC_F77_FUNC_WRAPPER macro.
@@ -7109,7 +7109,7 @@
 	* config.guess: Make C code clean for C++ compilers. Contributed
 	by Markus Oberhumer.
 
-1999-02-19  Ben Elliston <bje@cygnus.com>
+1999-02-19  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Automatically recognise ELF on FreeBSD. From Niall
 	Smart and improved by Andrew Cagney.
