@@ -170,6 +170,37 @@ automake="$automake `$verbose --verbose`"
 aclocal="$aclocal `$verbose --verbose`"
 export AC_MACRODIR
 
+# Trap on 0 to stop playing with `rm'.
+$debug ||
+{
+  trap 'status=$?; rm -rf $tmp && exit $status' 0
+  trap 'exit $?' 1 2 13 15
+}
+
+# Create a (secure) tmp directory for tmp files.
+: ${TMPDIR=/tmp}
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/arXXXXXX") 2>/dev/null` &&
+  test -n "$tmp" && test -d "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   exit 1;
+}
+
+# alflags.sed -- Fetch the aclocal flags.
+
+cat >$tmp/alflags.sed <<EOF
+#n
+/^ACLOCAL_[A-Z_]*FLAGS/{
+  s/.*=//
+  p
+  q
+}
+EOF
 # ----------------------- #
 # Real work starts here.  #
 # ----------------------- #
@@ -196,7 +227,11 @@ while read dir; do
        aclocal_m4=$dots$localdir/aclocal.m4 ;;
   esac
 
-  # Regenerate aclocal.m4 if necessary.
+
+  # ----------------- #
+  # Running aclocal.  #
+  # ----------------- #
+
   run_aclocal=no
   aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
   if test -f "$aclocal_m4" &&
@@ -208,14 +243,8 @@ while read dir; do
      fi
   fi
   if test $run_aclocal = yes; then
-      # If there are flags for aclocal, use them.  Makefile.am and Makefile
-      # may not exists.
-      aclocal_flags=`sed -ne '\
-/^ACLOCAL_[A-Z_]*FLAGS/{
-  s/.*=//
-  p
-  q
-}' Makefile.in 2>/dev/null`
+     # If there are flags for aclocal in Makefile.am, use them.
+     aclocal_flags=`sed -f $tmp/alflags.sed Makefile.am 2>/dev/null`
      if $force &&
         ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null |
 	sed 1q |
@@ -228,12 +257,21 @@ while read dir; do
      fi
   fi
 
-  # Re-run automake if required.  Assumes that there is a Makefile.am
-  # in the topmost directory.
+
+  # ------------------ #
+  # Running automake.  #
+  # ------------------ #
+
+  # Assumes that there is a Makefile.am in the topmost directory.
   if test -f Makefile.am; then
      $verbose running $automake in $dir
      $automake
   fi
+
+
+  # ------------------ #
+  # Running autoconf.  #
+  # ------------------ #
 
   test ! -f $aclocal_m4 && aclocal_m4=
 
@@ -246,12 +284,14 @@ while read dir; do
     $autoconf $localdir_opt
   fi
 
-  if grep '^[ 	]*A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
-    templates=`sed -n '/A[CM]_CONFIG_HEADER/ {
-	s%[^#]*A[CM]_CONFIG_HEADER[ 	]*(\([^)]*\).*%\1%
-	p
-	q
-      }' configure.in`
+
+  # -------------------- #
+  # Running autoheader.  #
+  # -------------------- #
+
+  # templates -- arguments of AC_CONFIG_HEADERS.
+  templates=`$autoconf $localdir_opt -t 'AC_CONFIG_HEADERS:$1'`
+  if test -n "$templates"; then
     tcount=`set -- $templates; echo $#`
     template=`set -- $templates; echo $1 | sed '
 	s/.*://

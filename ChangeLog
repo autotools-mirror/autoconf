@@ -1,5 +1,15 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh: You too can have a $tmp dir if you wish.
+	(alflags.sed): New sub sed program.
+	Compute the flags of aclocal from Makefile.am instead of
+	Makefile.in, it is unlikely that aclocal be used but not automake,
+	while it is convenient to be able to run autoreconf even if
+	automake was not run yet.
+	Use `autoconf --trace' to get the list of configuration headers.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_PLAIN_SCRIPT): New macro.
 	* tests/base.m4 (m4_wrap, AC_REQUIRE, AC_SHELL_MKDIR_P): Use it.
 	* autoconf.sh: Properly handle the case where `$output' is `-'
