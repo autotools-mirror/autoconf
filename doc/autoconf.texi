@@ -1572,17 +1572,18 @@ it looks are correct for most cases.
 
 @defmac AC_CONFIG_AUX_DIR (@var{dir})
 @maindex CONFIG_AUX_DIR
-Use the @file{install-sh}, @file{config.sub}, @file{config.guess}, and
-Cygnus @code{configure} scripts that are in directory @var{dir}.  These
-are auxiliary files used in configuration.  @var{dir} can be either
-absolute or relative to @file{@var{srcdir}}.  The default is
+Use the auxiliary build tools (e.g., @file{install-sh},
+@file{config.sub}, @file{config.guess}, Cygnus @code{configure},
+Automake and Libtool scripts etc.) that are in directory @var{dir}.
+These are auxiliary files used in configuration.  @var{dir} can be
+either absolute or relative to @file{@var{srcdir}}.  The default is
 @file{@var{srcdir}} or @file{@var{srcdir}/..} or
 @file{@var{srcdir}/../..}, whichever is the first that contains
 @file{install-sh}.  The other files are not checked for, so that using
 @code{AC_PROG_INSTALL} does not automatically require distributing the
 other auxiliary files.  It checks for @file{install.sh} also, but that
-name is obsolete because some @code{make} programs have a rule that
-creates @file{install} from it if there is no @file{Makefile}.
+name is obsolete because some @command{make} have a rule that creates
+@file{install} from it if there is no @file{Makefile}.
 @end defmac
 
 
@@ -1681,7 +1682,7 @@ request is given to @file{config.status}; typically, each time the file
 Shell commands output @emph{unquoted} near the beginning of
 @file{config.status}, and executed each time @file{config.status} runs
 (regardless of the tag).  Because they are unquoted, for example,
-@samp{$var} will be output as the value of @var{var}.  @var{init-cmds}
+@samp{$var} will be output as the value of @code{var}.  @var{init-cmds}
 is typically used by @file{configure} to give @file{config.status} some
 variables it needs to run the @var{commands}.
 @end table
@@ -1815,7 +1816,9 @@ Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
 complete list of output variables.  @xref{Installation Directory
 Variables}, for the list of the preset ones related to installation
-directories.  Below are listed the other preset ones.
+directories.  Below are listed the other preset ones.  They all are
+precious variables (@pxref{Setting Output Variables},
+@code{AC_ARG_VAR}).
 
 @c Just say no to ASCII sorting!  We're humans, not computers.
 @c These variables are listed as they would be in a dictionary:
@@ -2988,19 +2991,9 @@ AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
   $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
 @end example
 
-@defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @ovar{action-if-not-found})
-@maindex CHECK_FILE
-Check whether file @var{file} exists on the native system.  If it is
-found, execute @var{action-if-found}, otherwise do
-@var{action-if-not-found}, if given.
-@end defmac
-
-@defmac AC_CHECK_FILES (@var{files}, @ovar{action-if-found}, @ovar{action-if-not-found})
-@maindex CHECK_FILES
-Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
-Additionally, defines @samp{HAVE_@var{file}} (@pxref{Standard Symbols})
-for each file found.
-@end defmac
+You are strongly encouraged to declare the @var{variable} passed to
+@code{AC_CHECK_PROG} etc. as precious, @xref{Setting Output Variables},
+@code{AC_ARG_VAR}, for more details.
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
 @maindex CHECK_PROG
@@ -3070,6 +3063,28 @@ found.
 @maindex PATH_TOOL
 Like @code{AC_CHECK_TOOL}, but set @var{variable} to the entire
 path of the program if it is found.
+@end defmac
+
+
+@c FIXME: Not the proper place for these guys.
+
+You might also need to check for the existence of files.  Before using
+these macros, ask yourself whether a run time test might not be a better
+solution.  Be aware that, like most Autoconf macros, they test a feature
+of the host machine, and therefore, they die when cross-compiling.
+
+@defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@maindex CHECK_FILE
+Check whether file @var{file} exists on the native system.  If it is
+found, execute @var{action-if-found}, otherwise do
+@var{action-if-not-found}, if given.
+@end defmac
+
+@defmac AC_CHECK_FILES (@var{files}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@maindex CHECK_FILES
+Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
+Additionally, defines @samp{HAVE_@var{file}} (@pxref{Standard Symbols})
+for each file found.
 @end defmac
 
 
@@ -5414,6 +5429,78 @@ and then a @file{Makefile.in} could contain:
 @@host_frag@@
 @end example
 @end defmac
+
+@cindex Previous Variable
+@cindex Variable, Precious
+Running @command{configure} in different environments can be extremely
+dangerous.  If for instance the user runs @samp{CC=bizarre-cc
+./configure}, then the cache, @file{config.h} and many other output
+files will depend upon @command{bizarre-cc} being the C compiler.  If
+for some reason the user runs @command{/configure} again, or if it is
+run via @samp{./config.status --recheck}, (@xref{Automatic Remaking},
+and @pxref{config.status Invocation}), then the configuration can be
+inconsistent, composed of results depending upon two different
+compilers.
+
+Such variables are named @dfn{precious variables}, and can be declared
+as such by @code{AC_ARG_VAR}.
+
+@defmac AC_ARG_VAR (@var{variable}, @var{description})
+@maindex ARG_VAR
+Declare @var{variable} is a precious variable, and include its
+@var{description} in the variable section of @samp{./configure --help}.
+
+Being precious means that
+@itemize @minus
+@item
+@var{variable} is @code{AC_SUBST}'d.
+
+@item
+@var{variable} is kept in the cache including if it was not specified on
+the @samp{./configure} command line.  Indeed, while @command{configure}
+can notice the definition of @code{CC} in @samp{./configure
+CC=bizarre-cc}, it is impossible to notice it in @samp{CC=bizarre-cc
+./configure}, which, unfortunately, is what most users do.
+
+@item
+@var{variable} is checked for consistency between two
+@command{configure} runs.  For instance:
+
+@example
+$ ./configure --silent --config-cache
+$ CC=cc ./configure --silent --config-cache
+configure: WARNING: `CC' was not set in the previous run
+configure: WARNING: changes in the environment can compromise
+configure: WARNING: the build. consider removing config.cache
+configure: WARNING: and starting over
+$ CC=gcc ./configure --config-cache --silent
+configure: WARNING: `CC' has changed since the previous run:
+configure: WARNING:   former value:  cc
+configure: WARNING:   current value: gcc
+configure: WARNING: changes in the environment can compromise
+configure: WARNING: the build. consider removing config.cache
+configure: WARNING: and starting over
+$ ./configure --silent --config-cache
+configure: WARNING: `CC' was set to `gcc' in the previous run
+configure: WARNING: changes in the environment can compromise
+configure: WARNING: the build. consider removing config.cache
+configure: WARNING: and starting over
+@end example
+
+@item
+@var{variable} is kept during automatic reconfiguration
+(@pxref{config.status Invocation}) as if it had been passed as a command
+line argument, including when no cache is used:
+
+@example
+$ CC=/usr/bin/cc ./configure undeclared_var=raboof --silent
+$ ./config.status --recheck
+running /bin/sh ./configure undeclared_var=raboof --silent \
+  CC=/usr/bin/cc  --no-create --no-recursion
+@end example
+@end itemize
+@end defmac
+
 
 @node Caching Results, Printing Messages, Setting Output Variables, Results
 @section Caching Results

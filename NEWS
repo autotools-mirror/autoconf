@@ -1,4 +1,7 @@
 * Major changes in Autoconf 2.50a                       -*- outline -*-
+** Documentation
+- AC_ARG_VAR
+
 ** Default includes
 - Now include stdint.h.
 - sys/types.h and sys/stat.h are guarded.
@@ -12,6 +15,10 @@
 - HAVE_INTTYPES_H is defined only if not conflicting with previous
   headers.
 - build_, host_, and target_alias are AC_SUBST as in 2.13.
+- AC_ARG_VAR: The latest value of precious variables is saved, instead
+  of the first one.
+- AC_ARG_VAR properly propagates precious variables inherited from the
+  environment to ./config.status.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to

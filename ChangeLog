@@ -1,3 +1,12 @@
+2001-06-17  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_ARG_VAR_VALIDATE): Be sure to cache the
+	current values of the precious variables, not the previously
+	cached values.
+	Pass precious variables which are set to config.status.
+	* doc/autoconf.texi (Setting Output Variables): Document AC_ARG_VAR.
+	* tests/torture.at (AC_ARG_VAR): New.
+
 2001-06-15  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi: Move AC_FUNC_WAIT3 and

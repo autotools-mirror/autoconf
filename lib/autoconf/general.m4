@@ -1513,6 +1513,19 @@ ac_cv_env_$1_value=$$1])dnl
 
 # _AC_ARG_VAR_VALIDATE
 # --------------------
+# The precious variables are saved twice at the beginning of
+# configure.  E.g., PRECIOUS, is saved as `ac_env_PRECIOUS_SET' and
+# `ac_env_PRECIOUS_VALUE' on the one hand and `ac_cv_env_PRECIOUS_SET'
+# and `ac_cv_env_PRECIOUS_VALUE' on the other hand.
+#
+# Now the cache has just been load, so `ac_cv_env_' represents the
+# content of the cached values, while `ac_env_' represents that of the
+# current values.
+#
+# So we check that `ac_env_' and `ac_cv_env_' are consistant.  But if
+# they aren't, be sure to update the `ac_cv_env_' values with the
+# `ac_env_' ones, otherwise, we would save again the old values in the
+# cache.
 m4_define([_AC_ARG_VAR_VALIDATE],
 [# Check that the precious variables saved in the cache have kept the same
 # value.
@@ -1539,6 +1552,23 @@ for ac_var in `(set) 2>&1 |
         ac_suggest_removing_cache=:
       fi;;
   esac
+  # Synchronize cached values with current values.
+  eval ac_cv_env_${ac_var}_set=\${$ac_var+set}
+  eval ac_cv_env_${ac_var}_value=\$${ac_var}
+  # Pass precious variables to config.status.  It doesn't matter if
+  # we pass it a second time (in addition to the command line arguments).
+  if test "$ac_new_set" = set; then
+    case $ac_new_val in
+dnl If you change this globbing pattern, test it on an old shell --
+dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
+[    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
+      ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"`
+      ac_configure_args="$ac_configure_args '$ac_arg'"
+      ;;
+    *) ac_configure_args="$ac_configure_args $ac_var=$ac_new_val"
+       ;;
+    esac
+  fi
 done
 if $ac_suggest_removing_cache; then
   AC_MSG_WARN([changes in the environment can compromise the build])
