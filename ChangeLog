@@ -1,3 +1,9 @@
+2003-09-02  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Limitations of Usual Tools, Limitations of Make):
+	Document problems with timestamp resolution that 'make', 'cp -p', and
+	'touch -r' have.
+
 2003-08-27  Akim Demaille  <akim@epita.fr>
 
 	* tests/m4sugar.at (cross_warning): Make sure to enable the

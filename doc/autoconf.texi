@@ -10469,6 +10469,21 @@ newline encoding.
 @item @command{cp}
 @c ---------------
 @prindex @command{cp}
+@cindex timestamp resolution
+Traditionally, file timestamps had 1-second resolution, and @samp{cp
+-p} copied the timestamps exactly.  However, many modern filesystems
+have timestamps with 1-nanosecond resolution.  Unfortunately, @samp{cp
+-p} implementations truncate timestamps when copying files, so this
+can result in the destination file appearing to be older than the
+source.  The exact amount of truncation depends on the resolution of
+the system calls that @command{cp} uses; traditionally this was
+@code{utime}, which has 1-second resolution, but some newer
+@command{cp} implementations use @code{utimes}, which has
+1-microsecond resolution.  These newer implementations include GNU
+coreutils 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
+later.  Unfortunately as of September 2003 there is still no system
+call to set time stamps to the full nanosecond resolution.
+
 @c This is thanks to Ian.
 SunOS @command{cp} does not support @option{-f}, although its
 @command{mv} does.  It's possible to deduce why @command{mv} and
@@ -10989,6 +11004,12 @@ s/.*/deleted/g
 @item @command{touch}
 @c ------------------
 @prindex @command{touch}
+@cindex timestamp resolution
+If you specify the desired timestamp (e.g., with the @option{-r}
+option), @command{touch} typically uses the @code{utime} or
+@code{utimes} system call, which can result in the same kind of
+timestamp truncation problems that @samp{cp -p} has.
+
 On some old @acronym{BSD} systems, @command{touch} or any command that
 results in an empty file does not update the timestamps, so use a
 command like @code{echo} as a workaround.
@@ -11683,6 +11704,38 @@ cp foo.in foo.out
 @end example
 
 As a result, in such a case, you have to write target rules.
+
+@item Timestamp Resolution
+@cindex timestamp resolution
+Traditionally, file timestamps had 1-second resolution, and
+@command{make} used those timestamps to determine whether one file was
+newer than the other.  However, many modern filesystems have
+timestamps with 1-nanosecond resolution.  Some @command{make}
+implementations look at the entire timestamp; others ignore the
+fractional part, which can lead to incorrect results.  Normally this
+is not a problem, but in some extreme cases you may need to use tricks
+like @samp{sleep 1} to work around timestamp truncation bugs.
+
+Commands like @samp{cp -p} and @samp{touch -r} typically do not copy
+file timestamps to their full resolutions (@pxref{Limitations of Usual
+Tools}).  Hence you should be wary of rules like this:
+
+@example
+dest: src
+	cp -p src dest
+@end example
+
+as @file{dest} will often appear to be older than @file{src} after the
+timestamp is truncated, and this can cause @command{make} to do
+needless rework the next time it is invoked.  To work around this
+problem, you can use a timestamp file, e.g.:
+
+@example
+dest-stamp: src
+	cp -p src dest
+	date >dest-stamp
+@end example
+
 @end table
 
 
