@@ -1382,17 +1382,20 @@ do
   --*=*)
     ac_option=`expr "x$[1]" : 'x\([[^=]]*\)='`
     ac_optarg=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
-    shift
-    set dummy "$ac_option" "$ac_optarg" ${1+"$[@]"}
-    shift
+    ac_shift=:
     ;;
-  -*);;
+  -*)
+    ac_option=$[1]
+    ac_optarg=$[2]
+    ac_shift=shift
+    ;;
   *) # This is not an option, so the user has probably given explicit
      # arguments.
+     ac_option=$[1]
      ac_need_defaults=false;;
   esac
 
-  case $[1] in
+  case $ac_option in
   # Handling of the options.
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
@@ -1412,12 +1415,12 @@ Try `$[0] --help' for more information.]);;
   --debug | --d* | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
-    shift
-    CONFIG_FILES="$CONFIG_FILES $[1]"
+    $ac_shift
+    CONFIG_FILES="$CONFIG_FILES $ac_optarg"
     ac_need_defaults=false;;
   --header | --heade | --head | --hea )
-    shift
-    CONFIG_HEADERS="$CONFIG_HEADERS $[1]"
+    $ac_shift
+    CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
     ac_need_defaults=false;;
 
   # This is an error.
