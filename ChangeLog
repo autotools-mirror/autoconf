@@ -1,5 +1,17 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sh.m4 (AS_DIRNAME_EXPR): Use AS_REQUIRE.
+	* tests/tools.at (AT_DATA_FORBIDDEN): Rename/move/duplicate to...
+	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH): here.
+	* tests/tools.at, tests/m4sh.at: Use it.
+	* tests/m4sh.at: Don't rely on Autoconf macros.
+	(DIRNAME_TEST): Also exercise the expr variant.
+	* tests/m4sugar.at, tests/atspecific.m4 (AT_CHECK_M4SUGAR): The
+	preferred M4sugar extension is now `.4s'.
+	* tests/README: Remove.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_provide_ifelse): Rename as...
 	(m4_provide_if): this.
 	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): New.

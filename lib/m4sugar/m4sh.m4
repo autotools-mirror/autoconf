@@ -388,13 +388,8 @@ m4_define([AS_ERROR],
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-#
-# FIXME: Please note the following m4_require is quite wrong: if the first
-# occurrence of AS_DIRNAME_EXPR is in a backquoted expression, the
-# shell will be lost.  We might have to introduce diversions for
-# setting up an M4sh script: required macros will then be expanded there.
 m4_defun([AS_DIRNAME_EXPR],
-[m4_require([_AS_EXPR_PREPARE])dnl
+[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
          X[]$1 : 'X\(//\)[[^/]]' \| \
          X[]$1 : 'X\(//\)$' \| \

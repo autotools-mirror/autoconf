@@ -1,5 +1,4 @@
 # M4 macros used in building Autoconf test suites.        -*- Autotest -*-
-# Copyright 2000, 2001 Free Software Foundation, Inc.
 
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 
@@ -19,16 +18,41 @@
 # 02111-1307, USA.
 
 
-## ------------------------------------ ##
-## Macros specialized in testing M4sh.  ##
-## ------------------------------------ ##
+## ----------------- ##
+## Testing M4sugar.  ##
+## ----------------- ##
+
+
+# AT_DATA_M4SUGAR(FILENAME, CONTENTS)
+# --------------------------------
+# Escape the invalid tokens with @&t@.
+m4_define([AT_DATA_M4SUGAR],
+[AT_DATA([$1],
+[m4_patsubst(m4_patsubst([[$2]], [\(m4\)_], [\1@&t@_]),
+                         [dnl], [d@&t@nl])])])
+
 
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
 [AT_CLEANUP_FILES([script.4s script autom4te.cache])dnl
-AT_CHECK([autom4te --language=m4sugar script.s4g -o script $1],
+AT_CHECK([autom4te --language=m4sugar script.4s -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
+
+
+
+## -------------- ##
+## Testing M4sh.  ##
+## -------------- ##
+
+
+# AT_DATA_M4SH(FILENAME, CONTENTS)
+# --------------------------------
+# Escape the invalid tokens with @&t@.
+m4_define([AT_DATA_M4SH],
+[AT_DATA([$1],
+[m4_patsubst(m4_patsubst([[$2]], [\(m4\|AS\)_], [\1@&t@_]),
+                         [dnl], [d@&t@nl])])])
 
 
 # AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
@@ -39,9 +63,10 @@ AT_CHECK([autom4te --language=m4sh script.as -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
-## ---------------------------------------- ##
-## Macros specialized in testing Autoconf.  ##
-## ---------------------------------------- ##
+
+## ------------------ ##
+## Testing Autoconf.  ##
+## ------------------ ##
 
 
 # AT_CONFIGURE_AC(BODY)

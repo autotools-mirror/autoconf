@@ -236,17 +236,12 @@ AT_CLEANUP
 ## autoconf: forbidden tokens.  ##
 ## ---------------------------- ##
 
-# AT_DATA_FORBIDDEN(FILENAME, CONTENTS)
-# -------------------------------------
-# Escape the invalid tokens with @&t@.
-m4_define([AT_DATA_FORBIDDEN],
-[AT_DATA([$1], [m4_patsubst([$2], [\(m4\|AS\)_], [\1@&t@_])])])
 
 # autoconf: forbidden tokens, basic
 # ---------------------------------
 AT_SETUP([autoconf: forbidden tokens, basic])
 
-AT_DATA_FORBIDDEN([configure.ac],
+AT_DATA_M4SH([configure.ac],
 [[AS_INIT
 m4_foo
 _m4_bar
@@ -255,7 +250,7 @@ _AS_BAR
 [d@&t@nl]
 ]])
 
-AT_DATA_FORBIDDEN([experr],
+AT_DATA_M4SH([experr],
 [[configure.ac:2: error: possibly undefined macro: m4_foo
 configure.ac:3: error: possibly undefined macro: _m4_bar
 configure.ac:4: error: possibly undefined macro: AS_FOO
@@ -272,7 +267,7 @@ AT_CLEANUP
 # --------------------------------------
 AT_SETUP([autoconf: forbidden tokens, exceptions])
 
-AT_DATA_FORBIDDEN([configure.ac],
+AT_DATA_M4SH([configure.ac],
 [[AS_INIT
 
 # This is allowed in spite of the name.
@@ -294,7 +289,7 @@ BAS_DEFINE
 It would be very bad if Autoconf forgot to expand [AS_]INIT!
 ]])
 
-AT_DATA_FORBIDDEN([experr],
+AT_DATA_M4SH([experr],
 [[configure.ac:1: error: possibly undefined macro: AS_INIT
 configure.ac:7: error: possibly undefined macro: AS_ALLOWED_NOT
 configure.ac:10: error: possibly undefined macro: FORBIDDEN
