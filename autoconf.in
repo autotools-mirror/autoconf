@@ -96,6 +96,8 @@ debug=false
 initialization=false
 localdir=
 outfile=
+# Exit status.
+status=0
 # Tasks:
 # - trace
 #   Trace the first arguments of some macros
@@ -200,11 +202,13 @@ case $# in
 esac
 
 # Trap on 0 to stop playing with `rm'.
-if $debug; then
+$debug ||
+{
   trap 'status=$?
-        rm -f $tmpin $tmpout $silent_m4 $trace_m4 && exit $status' 0
-  trap exit 1 2 13 15
-fi
+        rm -f $tmpin $tmpout $silent_m4 $trace_m4 $translate_awk &&
+          exit $status' 0
+  trap 'exit $?' 1 2 13 15
+}
 
 if test z$infile = z-; then
   infile=$tmpin
@@ -236,7 +240,6 @@ case $task in
   # alternation.
   pattern="A[CHM]_"
 
-  status=0
   if grep "^[^#]*$pattern" $tmpout >/dev/null 2>&1; then
     echo "$me: undefined macros:" >&2
     sed -n "s/^[^#]*\\($pattern[_A-Za-z0-9]*\\).*/\\1/p" $tmpout |

@@ -1,5 +1,15 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	Trap on 0 is not executed when `exit' is called without argument.
+
+	* autoheader.sh (trap 1 2 13 15): s/exit/exit $?/.
+	* autoconf.sh: Likewise.
+	Remove translate_awk too.
+	* autoupdate.sh: Likewise.
+	Handle `--debug'.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	More uniform style is scripts.
 
 	* autoheader.sh: s/-eq/=/.

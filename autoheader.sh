@@ -158,8 +158,11 @@ case $# in
 esac
 
 # Trap on 0 to stop playing with `rm'.
-$debug || trap 'status=$?; rm -f $tmpbase* && exit $status' 0
-$debug || trap exit 1 2 13 15
+$debug ||
+{
+  trap 'status=$?; rm -f $tmpbase* && exit $status' 0
+  trap 'exit $?' 1 2 13 15
+}
 
 # Well, work now!
 config_h=
