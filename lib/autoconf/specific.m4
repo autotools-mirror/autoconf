@@ -341,50 +341,44 @@ fi
 ## ------------------------- ##
 
 
-# _AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
-# ----------------------------------------------------
+# _AC_CHECK_HEADER_DIRENT(HEADER-FILE,
+#                         [ACTION-IF-FOUND], [ACTION-IF-NOT_FOUND])
+# -----------------------------------------------------------------
 # Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 # defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-AC_DEFUN(_AC_CHECK_HEADER_DIRENT,
-[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
-AC_MSG_CHECKING([for $1 that defines DIR])
-AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
+define([_AC_CHECK_HEADER_DIRENT],
+[AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
+AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
 [AC_TRY_COMPILE([#include <sys/types.h>
 #include <$1>
-], [DIR *dirp = 0;],
-  eval "ac_cv_header_dirent_$ac_safe=yes",
-  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
-if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  $2
-else
-  AC_MSG_RESULT(no)
-fi
+],
+                [DIR *dirp = 0;],
+AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Header) = yes],
+                [$2], [$3])dnl
+AC_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_DIRENT
 
 
-# _AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
-# --------------------------------------------------
-# Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
-# defines `DIR'.
-define(_AC_CHECK_HEADERS_DIRENT,
-[AH_CHECK_HEADERS([$1])dnl
-for ac_hdr in $1
-do
-_AC_CHECK_HEADER_DIRENT($ac_hdr,
-[changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
-done])# _AC_CHECK_HEADERS_DIRENT
+# AH_CHECK_HEADERS_DIRENT(HEADERS...)
+# -----------------------------------
+define([AH_CHECK_HEADERS_DIRENT],
+[AC_FOREACH([AC_Header], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
+               [Define if you have the <]AC_Header[> header file, and
+                it defines `DIR'.])])])
 
 
 # AC_HEADER_DIRENT
 # ----------------
 AC_DEFUN(AC_HEADER_DIRENT,
-[ac_header_dirent=no
-_AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
-  [ac_header_dirent=$ac_hdr; break])
+[AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
+ac_header_dirent=no
+for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
+  _AC_CHECK_HEADER_DIRENT($ac_hdr,
+                          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_hdr), 1)
+ac_header_dirent=$ac_hdr; break])
+done
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
   AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
