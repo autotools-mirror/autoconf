@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Clean up autoconf.
+
+	* autoconf.sh: Minor reorganizations to clearly separate the
+	prologue, which is almost common to all the shell scripts of
+	Autoconf, and the body.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Improve support of name spaces in libm4.  Put the m4 builtins
 	in the `libm4' name space.
 

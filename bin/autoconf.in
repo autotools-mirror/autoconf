@@ -71,16 +71,23 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # would break.
 ac_LF_and_DOT=`echo; echo .`
 
-: ${AC_MACRODIR=@datadir@}
-: ${AC_ACLOCALDIR=`aclocal --print-ac-dir 2>/dev/null`}
+# Find GNU m4.
+# Handle the case that m4 has moved since we were configured.
+# It may have been found originally in a build directory.
 : ${M4=@M4@}
-: ${AWK=@AWK@}
 case "$M4" in
-/*) # Handle the case that m4 has moved since we were configured.
-    # It may have been found originally in a build directory.
-    test -f "$M4" || M4=m4 ;;
+/*) test -f "$M4" || M4=m4 ;;
+esac
+# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
+case `$M4 --help < /dev/null 2>&1` in
+*reload-state*);;
+*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
 esac
 
+# Variables.
+: ${AC_MACRODIR=@datadir@}
+: ${AC_ACLOCALDIR=`aclocal --print-ac-dir 2>/dev/null`}
+: ${AWK=@AWK@}
 localdir=
 outfile=
 # Tasks:
@@ -94,8 +101,11 @@ tmpin=$TMPDIR/acin.$$
 tmpout=$TMPDIR/acout.$$
 verbose=:
 
+# Parse command line
 while test $# -gt 0 ; do
   case "$1" in
+    --version | --v* )
+       echo "$version" ; exit 0 ;;
     --help | --h* | -h )
        echo "$usage"; exit 0 ;;
     --localdir=* | --l*=* )
@@ -129,10 +139,6 @@ while test $# -gt 0 ; do
        task=trace
        traces="$traces -t `echo \"$1\" | sed -e 's/^[^=]*=//'`"
        shift ;;
-    -t* )
-       task=trace
-       traces="$traces -t `echo \"$1\" | sed -e 's/^-t//'`"
-       shift ;;
     --output | -o )
        shift
        outfile="$1"
@@ -140,11 +146,6 @@ while test $# -gt 0 ; do
     --output=* )
        outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
-    -o* )
-       outfile=`echo "$1" | sed -e 's/^-o//'`
-       shift ;;
-    --version | --v* )
-       echo "$version" ; exit 0 ;;
     -- )     # Stop option processing
        shift; break ;;
     - )	# Use stdin as input.
@@ -158,6 +159,13 @@ while test $# -gt 0 ; do
        break ;;
   esac
 done
+
+# Running m4.
+if test -n "$localdir"; then
+  use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
+fi
+run_m4="$M4 --reload $AC_MACRODIR/autoconf.m4f $use_localdir"
+
 
 case $# in
   0) infile=configure.in
@@ -174,22 +182,9 @@ if test z$infile = z-; then
   infile=$tmpin
   cat >$infile
 elif test ! -r "$infile"; then
-  echo "autoconf: $infile: No such file or directory" >&2
+  echo "$me: $infile: No such file or directory" >&2
   exit 1
 fi
-
-if test -n "$localdir"; then
-  use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
-else
-  use_localdir=
-fi
-
-# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-case `$M4 --help < /dev/null 2>&1` in
-*reload-state*);;
-*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
-esac
-run_m4="$M4 --reload $AC_MACRODIR/autoconf.m4f $use_localdir"
 
 # Output is produced into FD 4.  Prepare it.
 case "x$outfile" in
@@ -199,13 +194,12 @@ case "x$outfile" in
   exec 4>$outfile;;
 esac
 
-# Initializations are performed.  Perform the task.
+# Initializations are performed.  Proceed to the main task.
 case $task in
 
-
-  ## ------------------- ##
-  ## Generate the script ##
-  ## ------------------- ##
+  ## --------------------- ##
+  ## Generate the script.  ##
+  ## --------------------- ##
   script)
   $run_m4 $infile > $tmpout || exit 2
 
