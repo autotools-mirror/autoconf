@@ -7204,9 +7204,8 @@ output.
 Define the C preprocessor variable @var{variable} to @var{value} (verbatim).
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
-characters, as @command{make} tends to eat them.  To use a shell variable
-(which you need to do in order to define a value containing the M4 quote
-characters @samp{[} or @samp{]}), use @code{AC_DEFINE_UNQUOTED} instead.
+characters, as @command{make} tends to eat them.  To use a shell variable,
+use @code{AC_DEFINE_UNQUOTED} instead.
 @var{description} is only useful if you are using
 @code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
 the generated @file{config.h.in} as the comment before the macro define.
