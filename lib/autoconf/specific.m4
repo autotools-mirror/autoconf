@@ -168,33 +168,35 @@ then
 fi
 AC_SUBST(LEXLIB)])dnl
 dnl
-define(AC_DECLARE_YYTEXT,
-[AC_REQUIRE_CPP()AC_REQUIRE([AC_PROG_LEX])dnl
-errprint(warning: [$0] is currently broken due to a quoting quagmire
-)dnl
-AC_CHECKING(how to declare yytext)
-# Figure out what yytext is by creating a minimal parser and
-# examining the (preprocessed, in case macros are used) output.
-if test "z${DECLARE_YYTEXT}" = "z"; then
-changequote(,)dnl
+define(AC_YYTEXT_POINTER,[dnl
+AC_REQUIRE_CPP()AC_REQUIRE([AC_PROG_LEX])dnl
+AC_CHECKING(for yytext declaration)
+# POSIX says lex can declare yytext either as a pointer or an array; the
+# default is implementation-dependent. Figure out which it is, since
+# not all implementations provide the %pointer and %array declarations.
+#
+# The minimal lex program is just a single line: %%.  But some broken lexes
+# (Solaris, I think it was) want two %% lines, so accommodate them.
   echo '%%
 %%' | ${LEX}
-  if test -f lex.yy.c; then
-    LEX_OUTPUT_ROOT=lex.yy
-  elif test -f lexyy.c; then
-    LEX_OUTPUT_ROOT=lexyy
-  else
-    # Don't know what to do here.
-    AC_WARN(can not find output from $LEX; assuming lex.yy.c)
-    LEX_OUTPUT_ROOT=lex.yy
-  fi
-  DECLARE_YYTEXT=`eval ${CPP} "${LEX_OUTPUT_ROOT}.c" |
-    sed -n '/extern.*yytext[^a-zA-Z0-9_]/s/^.*extern/extern/p'`
+if test -f lex.yy.c; then
+  LEX_OUTPUT_ROOT=lex.yy
+elif test -f lexyy.c; then
+  LEX_OUTPUT_ROOT=lexyy
+else
+  # Don't know what to do here.
+  AC_ERROR(cannot find output from $LEX, giving up on yytext declaration)
+  LEX_OUTPUT_ROOT=
+fi
+if test -n "$LEX_OUTPUT_ROOT"; then
+  echo 'extern char *yytext; main () { exit (0); }' >>$LEX_OUTPUT_ROOT.c
+  ac_save_LIBS="$LIBS"
+  LIBS="$LIBS $LEXLIB"
+  AC_TEST_PROGRAM(`cat $LEX_OUTPUT_ROOT.c`, AC_DEFINE(YYTEXT_POINTER))
+  LIBS="$ac_save_LIBS"
   rm -f "${LEX_OUTPUT_ROOT}.c"
-changequote([,])dnl
 fi
 AC_SUBST(LEX_OUTPUT_ROOT)dnl
-AC_DEFINE_UNQUOTED(DECLARE_YYTEXT, $DECLARE_YYTEXT)dnl
 ])dnl
 dnl
 define(AC_PROG_INSTALL,
@@ -1090,12 +1092,14 @@ dnl
 define(AC_FIND_X,
 [AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
 no_x=true
+if test "x$with_x" != xno; then
 AC_FIND_X_XMKMF
 if test -z "$ac_im_usrlibdir"; then
 AC_FIND_X_DIRECT
 fi
 test -n "$x_includes" && AC_VERBOSE(X11 headers are in $x_includes)
 test -n "$x_libraries" && AC_VERBOSE(X11 libraries are in $x_libraries)
+fi
 ])dnl
 dnl
 dnl Internal subroutine of AC_FIND_X.
@@ -1236,7 +1240,8 @@ do
 done)])dnl
 dnl
 dnl Find additional X libraries, magic flags, etc.
-define(AC_FIND_XTRA, [AC_REQUIRE(AC_FIND_X)AC_REQUIRE(AC_ISC_POSIX)
+define(AC_FIND_XTRA, [AC_REQUIRE([AC_FIND_X])AC_REQUIRE([AC_ISC_POSIX])
+AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
 elif test -n "$no_x"; then 
@@ -1249,7 +1254,7 @@ fi
 # It would also be nice to do this for all -L options, not just this one.
 if test -n "$x_libraries"; then
   X_LIBS="$X_LIBS -L$x_libraries"
-  if test "`uname 2>/dev/null`" = SunOS \
+  if test "`(uname) 2>/dev/null`" = SunOS \
      && uname -r | grep '^5' >/dev/null; then
     X_LIBS="$X_LIBS -R$x_libraries"
   fi
@@ -1258,33 +1263,31 @@ fi
 # Check for additional X libraries.
 
 if test -n "$ISC"; then
-  X_LIBS="$X_LIBS -lnsl_s -linet"
-  AC_VERBOSE(adding -lnsl_s -linet to X_LIBS)
+  X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
 else
   # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
   # libraries were built with DECnet support.  And karl@cs.umb.edu's Alpha
-  # needs dnet_stub.
+  # needs dnet_stub (dnet doesn't exist).
   AC_HAVE_LIBRARY(dnet,
-    [X_LIBS="$X_LIBS -ldnet"
-     ac_have_dnet=t
-     AC_VERBOSE(adding -ldnet to X_LIBS)])
+    [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"
+     ac_have_dnet=t])
   if test -z "$ac_have_dnet"; then
-    AC_HAVE_LIBRARY(dnet_stub,
-      [X_LIBS="$X_LIBS -ldnet_stub"
-       AC_VERBOSE(adding -ldnet_stub to X_LIBS)])
+    AC_HAVE_LIBRARY(dnet_stub, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
   # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
-  # But -lsocket is broken on IRIX, according to kb@cs.umb.edu.
-  if test "`uname 2>/dev/null`" != IRIX; then
-    AC_HAVE_LIBRARY(socket,
-      [x_extra_libs="$x_extra_libs -lsocket"
-       test -n "$verbose" && echo "	adding -lsocket to x_extra_libs"])
+  # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
+  if test "`(uname) 2>/dev/null`" != IRIX; then
+    AC_HAVE_LIBRARY(socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
   fi
 fi
 #
+AC_VERBOSE(X compiler flags: $X_CFLAGS)
+AC_VERBOSE(X library flags: $X_LIBS)
+AC_VERBOSE(extra X libraries: $X_EXTRA_LIBS)
 AC_SUBST(X_CFLAGS)dnl
 AC_SUBST(X_LIBS)dnl
+AC_SUBST(X_EXTRA_LIBS)dnl
 ])dnl
 dnl
 dnl
