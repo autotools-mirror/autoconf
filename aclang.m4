@@ -466,7 +466,9 @@ m4_define([AC_LANG_SOURCE(Fortran 77)],
 # -----------------------------------------------
 # Yes, we discard the PROLOGUE.
 m4_define([AC_LANG_PROGRAM(Fortran 77)],
-[      program main
+[ifval([$1],
+       [m4_warn([syntax], [$0: ignoring PROLOGUE: $1])])dnl
+      program main
 $2
       end])
 
@@ -549,7 +551,7 @@ AC_MSG_RESULT($cross_compiling)
 m4_define([_AC_LANG_COMPILER_GNU],
 [AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
                 [ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
-[_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#ifndef __GNUC__
+[_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[#ifndef __GNUC__
   choke me
 #endif
 ]])],
