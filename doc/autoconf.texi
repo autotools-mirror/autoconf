@@ -4459,42 +4459,19 @@ test for it (@pxref{Writing Tests}).
 
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex CHECK_HEADER
-If the system header file @var{header-file} is usable, execute shell
+If the system header file @var{header-file} is compilable, execute shell
 commands @var{action-if-found}, otherwise execute
 @var{action-if-not-found}.  If you just want to define a symbol if the
 header file is available, consider using @code{AC_CHECK_HEADERS}
 instead.
 
-The meaning of ``usable'' depends upon the content of @var{includes}:
-
-@table @asis
-@item if @var{includes} is empty
-check whether
-
-@example
-@var{header-file}
-@end example
-
-@noindent
-can be @emph{preprocessed} without error.
-
-@item if @var{include} is set
-Check whether
-
-@example
-@var{includes}
-#include <@var{header-file}>
-@end example
-
-@noindent
-can be @emph{compiled} without error.  You may use
-@code{AC_CHECK_HEADER} (and @code{AC_CHECK_HEADERS}) to check whether
-two headers are compatible.
-@end table
-
-You may pass any kind of dummy content for @var{includes}, such as a
-single space or a comment, to check whether @var{header-file} compiles
-with success.
+Previous versions of Autoconf merely checked whether the header was
+accepted by the preprocessor.  This was changed because the old test
+was inappropriate for typical uses.  Headers are typically used to
+compile, not merely to preprocess, and the old behavior sometimes
+accepted headers that clashed at compile-time.  If you need to check
+whether a header is preprocessable, you can use @code{AC_TRY_CPP} or
+one of its variants (@pxref{Examining Declarations}).
 @end defmac
 
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
@@ -4507,9 +4484,6 @@ is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
-
-Be sure to read the documentation of @code{AC_CHECK_HEADER} to
-understand the influence of @var{includes}.
 @end defmac
 
 @node Declarations

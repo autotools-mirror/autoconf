@@ -1,5 +1,13 @@
 2002-10-11  Akim Demaille  <akim@epita.fr>
 
+	No longer use CPP to check for the existing of headers: use CC to
+	check for compilability.
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL)
+	(AC_CHECK_HEADER, _AC_CHECK_HEADER_OLD): Remove.
+	(_AC_CHECK_HEADER_NEW): Rename as...
+	(AC_CHECK_HEADER): this.
+
 	* lib/autotest/general.m4 (AT_INIT): Include the failed test
 	numbers in the Subject suggestion.
 
