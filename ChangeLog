@@ -1,5 +1,12 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_NOTICE, AC_INIT_PREPARE, AC_ARG_ENABLE,
+	AC_ARG_WITH, AC, TRY_COMPILER, AC_TRY_RUN, AC_TRY_CPP,
+	AC_EGREP_CPP): Use @PND@ instead of [#]: it looses the editors
+	that try to match the pairs of (), [] etc.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Fix the compatibility of the compiling macros with C++.
 
 	* acgeneral.m4 (AC_TRY_COMPILE, AC_TRY_LINK, AC_CHECK_SIZEOF): Use
