@@ -43,7 +43,7 @@ for as_var in \
   LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
   LC_TELEPHONE LC_TIME
 do
-  if (set +x; test -n "`(eval $as_var=C; export $as_var) 2>&1`"); then
+  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
     $as_unset $as_var
@@ -1265,6 +1265,7 @@ am__api_version="1.7a"
 # AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# OS/2's system install, which has a completely different semantic
 # ./install, which can be erroneously created by make from ./install.sh.
 echo "$as_me:$LINENO: checking for a BSD-compatible install" >&5
 echo $ECHO_N "checking for a BSD-compatible install... $ECHO_C" >&6
@@ -1281,6 +1282,7 @@ do
 case $as_dir/ in
   ./ | .// | /cC/* | \
   /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+  ?:\\/os2\\/install\\/* | ?:\\/OS2\\/INSTALL\\/* | \
   /usr/ucb/* ) ;;
   *)
     # OSF1 and SCO ODT 3.0 have their own names for install.
@@ -1445,7 +1447,7 @@ done
 
 echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \$(MAKE)... $ECHO_C" >&6
-set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
+set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,:./+-,___p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -2137,7 +2139,7 @@ for as_var in \
   LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
   LC_TELEPHONE LC_TIME
 do
-  if (set +x; test -n "`(eval $as_var=C; export $as_var) 2>&1`"); then
+  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
     $as_unset $as_var
@@ -2807,14 +2809,14 @@ echo "$as_me: creating $ac_file" >&6;}
          test -f "$f" || { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
-         echo $f;;
+         echo "$f";;
       *) # Relative
          if test -f "$f"; then
            # Build tree
-           echo $f
+           echo "$f"
          elif test -f "$srcdir/$f"; then
            # Source tree
-           echo $srcdir/$f
+           echo "$srcdir/$f"
          else
            # /dev/null tree
            { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5

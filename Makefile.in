@@ -21,7 +21,6 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = .
-
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -35,6 +34,42 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+DIST_COMMON = Makefile.in Makefile.am COPYING INSTALL NEWS README \
+	AUTHORS ChangeLog THANKS aclocal.m4 configure configure.ac \
+	$(am__configure_deps) README-alpha AUTHORS COPYING ChangeLog \
+	INSTALL NEWS README THANKS TODO configure configure.ac
+subdir = .
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__configure_deps = $(top_srcdir)/config/m4.m4
+am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
+ configure.lineno
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+CONFIG_CLEAN_FILES =
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
+	ps-recursive html-recursive install-info-recursive \
+	uninstall-info-recursive all-recursive install-data-recursive \
+	install-exec-recursive installdirs-recursive install-recursive \
+	uninstall-recursive check-recursive installcheck-recursive
+am__installdirs = $(DESTDIR)$(pkgdatadir)
+pkgdataDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(pkgdata_DATA)
+ETAGS = etags
+ETAGSFLAGS = 
+CTAGS = ctags
+CTAGSFLAGS = 
+DIST_SUBDIRS = $(SUBDIRS)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+am__remove_distdir = \
+  { test ! -d $(distdir) \
+    || { find $(distdir) -type d ! -perm -200 -exec chmod u+w {} ';' \
+         && rm -fr $(distdir); }; }
+GZIP_ENV = --best
+distuninstallcheck_listfiles = find . -type f -print
+distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AUTOCONF = @AUTOCONF@
@@ -97,23 +132,17 @@ target_alias = @target_alias@
 # bin/ and tests/ must be run first, as they build the tests executables
 # (tests/autom4te etc.), that we happen to use here.
 SUBDIRS = bin tests . lib config man doc
-
 ACLOCAL_AMFLAGS = -I config
-
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS \
              GNUmakefile Makefile.maint
 
-
 MAINTAINERCLEANFILES = INSTALL
-
 pkgdata_DATA = INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
-
 prev_version_file = $(srcdir)/config/prev-version.txt
 move_if_change = $(srcdir)/config/move-if-change
 release_archive_dir = releases
-
 url_dir_list = \
   ftp://alpha.gnu.org/gnu/autoconf
 
@@ -130,41 +159,41 @@ cvs_files = $(srcdir)/config/elisp-comp \
             $(srcdir)/config/mkinstalldirs
 
 local_updates = wget-update cvs-update
-subdir = .
-ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES =
-DIST_SOURCES =
-DATA = $(pkgdata_DATA)
-
-
-RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
-	ps-recursive install-info-recursive uninstall-info-recursive \
-	all-recursive install-data-recursive install-exec-recursive \
-	installdirs-recursive install-recursive uninstall-recursive \
-	check-recursive installcheck-recursive
-DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-	Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 configure \
-	configure.ac
-DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
 .SUFFIXES:
 
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+am--refresh:
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)
+	@for dep in $?; do \
+	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
+	    *$$dep*) \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --gnu '; \
+	      cd $(srcdir) && $(AUTOMAKE) --gnu ; \
+	      exit 0;; \
+	  esac; \
+	done; \
+        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)
+	@case '$?' in \
+	  *config.status*) \
+	    echo ' $(SHELL) ./config.status'; \
+	    $(SHELL) ./config.status;; \
+	  *) \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
+	esac;
 
-$(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+$(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) 
-	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4):  configure.ac config/m4.m4
+$(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) $(am__configure_deps)
+	cd $(srcdir) && $(AUTOCONF)
+$(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 uninstall-info-am:
 pkgdataDATA_INSTALL = $(INSTALL_DATA)
@@ -332,7 +361,7 @@ distdir: $(DISTFILES)
 	esac
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/tests
+	$(mkinstalldirs) $(distdir)/config $(distdir)/tests
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -429,7 +458,7 @@ distcheck: dist
 	@echo "$(distdir).tar.gz is ready for distribution" | \
 	  sed 'h;s/./=/g;p;x;p;x'
 distuninstallcheck:
-	cd $(distuninstallcheck_dir) \
+	@cd $(distuninstallcheck_dir) \
 	&& test `$(distuninstallcheck_listfiles) | wc -l` -le 1 \
 	   || { echo "ERROR: files left after uninstall:" ; \
 	        if test -n "$(DESTDIR)"; then \
@@ -438,11 +467,11 @@ distuninstallcheck:
 	        $(distuninstallcheck_listfiles) ; \
 	        exit 1; } >&2
 distcleancheck: distclean
-	if test '$(srcdir)' = . ; then \
+	@if test '$(srcdir)' = . ; then \
 	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
 	  exit 1 ; \
 	fi
-	test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
+	@test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
 	  || { echo "ERROR: files left in build directory after distclean:" ; \
 	       $(distcleancheck_listfiles) ; \
 	       exit 1; } >&2
@@ -525,18 +554,19 @@ uninstall-am: uninstall-info-am uninstall-pkgdataDATA
 
 uninstall-info: uninstall-info-recursive
 
-.PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am clean \
-	clean-generic clean-recursive ctags ctags-recursive dist \
-	dist-all dist-bzip2 dist-gzip distcheck distclean \
-	distclean-generic distclean-recursive distclean-tags \
+.PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
+	check-am clean clean-generic clean-recursive ctags \
+	ctags-recursive dist dist-all dist-bzip2 dist-gzip distcheck \
+	distclean distclean-generic distclean-recursive distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am \
-	dvi-recursive info info-am info-recursive install install-am \
-	install-data install-data-am install-data-recursive \
-	install-exec install-exec-am install-exec-recursive \
-	install-info install-info-am install-info-recursive install-man \
-	install-pkgdataDATA install-recursive install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	installdirs-recursive maintainer-clean maintainer-clean-generic \
+	dvi-recursive html html-am html-recursive info info-am \
+	info-recursive install install-am install-data install-data-am \
+	install-data-recursive install-exec install-exec-am \
+	install-exec-recursive install-info install-info-am \
+	install-info-recursive install-man install-pkgdataDATA \
+	install-recursive install-strip installcheck installcheck-am \
+	installdirs installdirs-am installdirs-recursive \
+	maintainer-clean maintainer-clean-generic \
 	maintainer-clean-recursive mostlyclean mostlyclean-generic \
 	mostlyclean-recursive pdf pdf-am pdf-recursive ps ps-am \
 	ps-recursive tags tags-recursive uninstall uninstall-am \

@@ -14,6 +14,8 @@
 
 @SET_MAKE@
 
+NROFF = nroff
+MANS = $(dist_man_MANS)
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -21,7 +23,6 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = ..
-
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -35,6 +36,19 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+DIST_COMMON = Makefile.in Makefile.am $(dist_man_MANS)
+subdir = man
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__configure_deps = $(top_srcdir)/config/m4.m4
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+CONFIG_CLEAN_FILES =
+SOURCES =
+DIST_SOURCES =
+man1dir = $(mandir)/man1
+am__installdirs = $(DESTDIR)$(man1dir)
+NROFF = nroff
+MANS = $(dist_man_MANS)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AUTOCONF = @AUTOCONF@
@@ -93,14 +107,11 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-
 dist_man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 \
 autoscan.1 autom4te.1 config.guess.1 config.sub.1
 
-
 man_aux = autoconf.x autoreconf.x autoheader.x autoupdate.x ifnames.x \
 autoscan.x autom4te.x config.guess.x config.sub.x
-
 
 EXTRA_DIST = $(man_aux) common.x
 MAINTAINERCLEANFILES = $(dist_man_MANS)
@@ -108,25 +119,38 @@ MAINTAINERCLEANFILES = $(dist_man_MANS)
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 binsrcdir = $(top_srcdir)/bin
-
 SUFFIXES = .x .1
-subdir = man
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES =
-DIST_SOURCES =
-
-NROFF = nroff
-MANS = $(dist_man_MANS)
-DIST_COMMON = $(dist_man_MANS) Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .x .1
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)
+	@for dep in $?; do \
+	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
+	    *$$dep*) \
+	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh; \
+	      exit 0;; \
+	  esac; \
+	done; \
+        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  man/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  man/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+	@case '$?' in \
+	  *config.status*) \
+	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
+	  *) \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
+	esac;
+
+$(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+
+$(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) $(am__configure_deps)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+$(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
 
 man1dir = $(mandir)/man1
@@ -254,6 +278,8 @@ dvi: dvi-am
 
 dvi-am:
 
+html: html-am
+
 info: info-am
 
 info-am:
@@ -289,8 +315,8 @@ uninstall-am: uninstall-info-am uninstall-man
 uninstall-man: uninstall-man1
 
 .PHONY: all all-am check check-am clean clean-generic distclean \
-	distclean-generic distdir dvi dvi-am info info-am install \
-	install-am install-data install-data-am install-exec \
+	distclean-generic distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-exec \
 	install-exec-am install-info install-info-am install-man \
 	install-man1 install-strip installcheck installcheck-am \
 	installdirs maintainer-clean maintainer-clean-generic \

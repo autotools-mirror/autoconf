@@ -21,7 +21,6 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = ..
-
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -35,6 +34,28 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+DIST_COMMON = Makefile.in Makefile.am
+subdir = lib
+ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+am__configure_deps = $(top_srcdir)/config/m4.m4
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+CONFIG_CLEAN_FILES =
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
+	ps-recursive html-recursive install-info-recursive \
+	uninstall-info-recursive all-recursive install-data-recursive \
+	install-exec-recursive installdirs-recursive install-recursive \
+	uninstall-recursive check-recursive installcheck-recursive
+am__installdirs = $(DESTDIR)$(pkgdatadir)
+nodist_pkgdataDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(nodist_pkgdata_DATA)
+ETAGS = etags
+ETAGSFLAGS = 
+CTAGS = ctags
+CTAGSFLAGS = 
+DIST_SUBDIRS = $(SUBDIRS)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AUTOCONF = @AUTOCONF@
@@ -93,11 +114,9 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-
 SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
 nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in freeze.mk
-
 edit = sed \
 	-e 's,@SHELL\@,$(SHELL),g' \
 	-e 's,@PERL\@,$(PERL),g' \
@@ -117,28 +136,36 @@ edit = sed \
 # when the Autoconf version changes. Unfortunately, suffix rules
 # cannot have additional dependencies, so we have to use explicit rules.
 CLEANFILES = autom4te.cfg
-subdir = lib
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES =
-DIST_SOURCES =
-DATA = $(nodist_pkgdata_DATA)
-
-
-RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
-	ps-recursive install-info-recursive uninstall-info-recursive \
-	all-recursive install-data-recursive install-exec-recursive \
-	installdirs-recursive install-recursive uninstall-recursive \
-	check-recursive installcheck-recursive
-DIST_COMMON = Makefile.am Makefile.in
-DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)
+	@for dep in $?; do \
+	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
+	    *$$dep*) \
+	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh; \
+	      exit 0;; \
+	  esac; \
+	done; \
+        echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Makefile'; \
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+	@case '$?' in \
+	  *config.status*) \
+	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
+	  *) \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
+	esac;
+
+$(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+
+$(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) $(am__configure_deps)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+$(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 uninstall-info-am:
 nodist_pkgdataDATA_INSTALL = $(INSTALL_DATA)
 install-nodist_pkgdataDATA: $(nodist_pkgdata_DATA)
@@ -368,6 +395,8 @@ dvi: dvi-recursive
 
 dvi-am:
 
+html: html-recursive
+
 info: info-recursive
 
 info-am:
@@ -405,10 +434,11 @@ uninstall-info: uninstall-info-recursive
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am clean \
 	clean-generic clean-recursive ctags ctags-recursive distclean \
 	distclean-generic distclean-recursive distclean-tags distdir \
-	dvi dvi-am dvi-recursive info info-am info-recursive install \
-	install-am install-data install-data-am install-data-recursive \
-	install-exec install-exec-am install-exec-recursive \
-	install-info install-info-am install-info-recursive install-man \
+	dvi dvi-am dvi-recursive html html-am html-recursive info \
+	info-am info-recursive install install-am install-data \
+	install-data-am install-data-recursive install-exec \
+	install-exec-am install-exec-recursive install-info \
+	install-info-am install-info-recursive install-man \
 	install-nodist_pkgdataDATA install-recursive install-strip \
 	installcheck installcheck-am installdirs installdirs-am \
 	installdirs-recursive maintainer-clean maintainer-clean-generic \

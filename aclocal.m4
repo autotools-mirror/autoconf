@@ -1,6 +1,6 @@
 # generated automatically by aclocal 1.7a -*- Autoconf -*-
 
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -16,7 +16,7 @@
 # This macro actually does too much some checks are only needed if
 # your package does certain things.  But this isn't really a big deal.
 
-# Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -34,16 +34,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-# serial 9
+# serial 10
 
-# There are a few dirty hacks below to avoid letting `AC_PROG_CC' be
-# written in clear, in which case automake, when reading aclocal.m4,
-# will think it sees a *use*, and therefore will trigger all it's
-# C support machinery.  Also note that it means that autoscan, seeing
-# CC etc. in the Makefile, will ask for an AC_PROG_CC use...
-
-
-AC_PREREQ([2.54])
+AC_PREREQ([2.55])
 
 # Autoconf 2.50 wants to disallow AM_ names.  We explicitly allow
 # the ones we care about.
@@ -824,36 +817,7 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.])
 fi])])
 
-# Copyright 2000 Free Software Foundation, Inc.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-# 02111-1307, USA.
-
-# AC_PROG_GNU_M4
-# --------------
-# Check for GNU m4, at least 1.3 (supports frozen files).
-AC_DEFUN([AC_PROG_GNU_M4],
-[AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
-AC_CACHE_CHECK(whether m4 supports frozen files, ac_cv_prog_gnu_m4,
-[ac_cv_prog_gnu_m4=no
-if test x"$M4" != x; then
-  case `$M4 --help < /dev/null 2>&1` in
-    *reload-state*) ac_cv_prog_gnu_m4=yes ;;
-  esac
-fi])])
-
+m4_include([config/m4.m4])
 
 # Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003
 #   Free Software Foundation, Inc.
