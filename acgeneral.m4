@@ -4087,6 +4087,8 @@ define([AC_OUTPUT_MAKE_DEFS],
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
 cat >confdef2opt.sed <<\EOF
+t clear
+: clear
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
@@ -4373,22 +4375,13 @@ EOF
 # config.status.  Protect against being in an unquoted here document
 # in config.status.
 rm -f conftest.defines conftest.undefs
-dnl Using a here document instead of a string reduces the quoting nightmare.
-dnl Putting comments in sed scripts is not portable.
-dnl
-dnl There are two labels in the following scripts, `cleanup' and `clear'.
-dnl
-dnl `cleanup' is used to avoid that the second main sed command (meant for
-dnl 0-ary CPP macros) applies to n-ary macro definitions.  So we use
-dnl `t cleanup' to jump over the second main sed command when it succeeded.
-dnl
-dnl But because in sed the `t' flag is set when there is a substitution
-dnl that succeeded before, and not *right* before (i.e., included the
-dnl first two small commands), we need to clear the `t' flag.  This is the
-dnl purpose of `t clear; : clear'.
-dnl
-dnl Additionally, this works around a bug of IRIX' sed which does not
-dnl clear the `t' flag between two cycles.
+# Using a here document instead of a string reduces the quoting nightmare.
+# Putting comments in sed scripts is not portable.
+#
+# `cleanup' is used to avoid that the second main sed command (meant for
+# 0-ary CPP macros) applies to n-ary macro definitions.  So we use
+# `t cleanup' to jump over the second main sed command when it succeeded.
+# See the Autoconf documentation for `clear'.
 cat >confdef2sed.sed <<\EOF
 dnl Double quote for `[ ]' and `define'.
 [s/[\\&%]/\\&/g

@@ -5090,16 +5090,90 @@ don't rely on symbolic links on @sc{djgpp}.
 
 @item @command{sed}
 @cindex @command{sed}
-@code{sed} scripts should not use branch labels longer than 8 characters
-and should not contain comments.
+@command{sed} scripts should not use branch labels longer than 8
+characters and should not contain comments.
 
-@code{sed} input should have reasonably long lines, since some
-@code{sed} have an input buffer limited to 4000 bytes.
+@command{sed} input should have reasonably long lines, since some
+@command{sed} have an input buffer limited to 4000 bytes.
 
 Alternation, @samp{\|}, is common but not portable.
 
-Nested groups are extremely portable, but there is at least one sed
-(System V/68 Base Operating System R3V7.1) which does not support it.
+Nested groups are extremely portable, but there is at least one
+@command{sed} (System V/68 Base Operating System R3V7.1) which does not
+support it.
+
+@item @command{sed} (@samp{t})
+@cindex @command{sed} (@samp{t})
+Some old systems have @command{sed} which ``forget'' to reset their
+@samp{t} flag when starting a new cycle.  For instance on @sc{mips
+risc/os}, and on @sc{irix} 5.3, if you run the following @command{sed}
+script (the line numbers are not actual part of the texts):
+
+@example
+s/keep me/kept/g  # a
+t end             # b
+s/.*/deleted/g    # c
+: end             # d
+@end example
+
+@noindent
+on
+
+@example
+delete me         # 1
+delete me         # 2
+keep me           # 3
+delete me         # 4
+@end example
+
+@noindent
+you get
+
+@example
+deleted
+delete me
+kept
+deleted
+@end example
+
+@noindent
+instead of
+
+@example
+deleted
+deleted
+kept
+deleted
+@end example
+
+Why? When processing 1, a matches, therefore sets the t flag, b jumps to
+d, and the output is produced.  When processing line 2, the t flag is
+still set (this is the bug).  Line a fails to match, but @command{sed}
+is not supposed to clear the t flag when a substitution fails.  Line b
+sees that the flag is set, therefore it clears it, and jumps to d, hence
+you get @samp{delete me} instead of @samp{deleted}.  When processing 3 t
+is clear, a matches, so the flag is set, hence b clears the flags and
+jumps.  Finally, since the flag is clear, 4 is processed properly.
+
+There are two things one should remind about @samp{t} in @command{sed}.
+Firstly, always remember that @samp{t} jumps if @emph{some} substitution
+succeeded, not only the immediately preceding substitution, therefore,
+always use a fake @samp{t clear; : clear} to reset the t flag where
+indeed.
+
+Secondly, you cannot rely on @command{sed} to clear the flag at each new
+cycle.
+
+One portable implementation of the script above is:
+
+@example
+t clear
+: clear
+s/keep me/kept/g
+t end
+s/.*/deleted/g
+: end
+@end example
 @end table
 
 
