@@ -1,5 +1,7 @@
 Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* Test release 2.10.2.
+	
 	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX) [GCC]: Use -O2 instead
 	of -O.  Suggested by fnf@ninemoons.com (Fred Fish).
 	

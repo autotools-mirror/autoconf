@@ -1,7 +1,7 @@
 Issues to resolve before release:
 
 1.  sed command limitation.
-2.  autoreconf problem with finding nested acconfig.h.
+2.  autoreconf problem with finding subdirectory acconfig.h.
 3.  test the new features.
 
 Major changes in release 2.11:
@@ -11,7 +11,8 @@ Major changes in release 2.11:
 * AC_REPLACE_FUNCS defines HAVE_@var{function} if the system has the function.
 * The argument to AC_CONFIG_HEADER can contain shell variables.
 * New macros: AC_FUNC_FNMATCH, AC_FUNC_SETPGRP.
-* The source code for test programs that fail is saved in config.log.
+* The "checking..." messages and the source code for test programs that
+  fail are saved in config.log. 
 * config.sub and config.guess recognize more system types.
 * autoheader.sh adds multiple-inclusion protection for config.h.
 * Bug fixes.

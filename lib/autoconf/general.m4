@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.10.1)
+define(AC_ACVERSION, 2.10.2)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1521,7 +1521,7 @@ if test -z "$ac_err"; then
   $2])
 else
   echo "$ac_err" >&AC_FD_CC
-  echo "configure: input program was:" >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
 ifelse([$3], , , [  rm -rf conftest*
   $3
@@ -1583,7 +1583,7 @@ if AC_TRY_EVAL(ac_compile); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 else
-  echo "configure: input program was:" >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
 ifelse([$4], , , [  rm -rf conftest*
   $4
@@ -1622,7 +1622,7 @@ if AC_TRY_EVAL(ac_link) && test -s conftest; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 else
-  echo "configure: input program was:" >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
 ifelse([$4], , , [  rm -rf conftest*
   $4
@@ -1666,7 +1666,7 @@ AC_TRY_EVAL(ac_link)
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2])
 else
-  echo "configure: input program was:" >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
 ifelse([$3], , , [  rm -fr conftest*
   $3

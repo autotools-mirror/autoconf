@@ -41,7 +41,7 @@ info:
 dvi:
 
 check: site.exp all
-	@echo This only works if you have the DejaGNU runtest program installed...
+	@echo NOTE: This only works if you have the DejaGNU runtest program installed...
 	$(RUNTEST) $(RUNTESTFLAGS) --tool autoconf AUTOCONF=${AUTOCONF} \
 	AUTOCONFFLAGS="${AUTOCONFFLAGS}" --srcdir $(srcdir)
 
