@@ -1,3 +1,18 @@
+2003-05-22  Jim Meyering  <jim@meyering.net>
+            and Paul Eggert <eggert@twinsun.com>
+
+	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
+	Remove `#include <stdlib.h>' from the list; we should never
+	make confdefs.h include <stdlib.h> or <cstdlib>, because the
+	resulting namespace pollution would cause other tests to fail.
+	Configure scripts run with some older versions of g++ and HP's
+	aCC would fail due to such an #include.  Problems reported by
+	Matthew Mueller in <http://bugs.debian.org/120704> and by
+	Keith Bostic in
+	<http://mail.gnu.org/archive/html/autoconf/2003-05/msg00063.html>.
+	In the test, use the test declaration before including <stdlib.h>,
+	as that's closer to how it'll be used.
+
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Header Portability): ucred.h.
