@@ -1,5 +1,10 @@
 2002-03-05  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Specifying Names): Clarification suggested by
+	Kevin Ryde.
+
+2002-03-05  Akim Demaille  <akim@epita.fr>
+
 	Version 2.52i.
 
 2002-03-04  Akim Demaille  <akim@epita.fr>

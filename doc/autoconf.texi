@@ -9588,10 +9588,11 @@ produce code (rarely needed).  By default, it is the same as host.
 @end table
 
 If you mean to override the result of @command{config.guess}, use
-@option{--build}, not @option{--host}, which enables cross-compilation.
-For historical reasons, passing @option{--host} also changes the build
-type.  Therefore, whenever you specify @code{--host}, be sure to specify
-@code{--build} too.  This will be fixed in the future.
+@option{--build}, not @option{--host}, since the latter enables
+cross-compilation.  For historical reasons, passing @option{--host} also
+changes the build type.  Therefore, whenever you specify @code{--host},
+be sure to specify @code{--build} too.  This will be fixed in the
+future.
 
 @example
 ./configure --build=i686-pc-linux-gnu --host=m68k-coff
