@@ -76,14 +76,10 @@ echo \"\$help\" >&2
 exit 1"
 
 # NLS nuisances.
-# Only set these to C if already set.  These must not be set unconditionally
-# because not all systems understand e.g. LANG=C (notably SCO).
-# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
-# Non-C LC_CTYPE values break the ctype check.
 if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
 if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
-if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 
 # ac_LF_and_DOT
 # We use echo to avoid assuming a particular line-breaking character.
@@ -223,8 +219,11 @@ done
 # The warnings are the concatenation of 1. application's defaults,
 # 2. $WARNINGS, $3 command line options, in that order.
 # Set them in the order expected by the M4 macros: the converse.
+alphabet='abcdefghijklmnopqrstuvwxyz'
+ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 _ac_warnings=
-for warning in `IFS=,; echo syntax,$WARNINGS,$warnings | tr 'A-Z' 'a-z'`
+for warning in `IFS=,; echo syntax,$WARNINGS,$warnings |
+                         tr $ALPHABET $alphabet`
 do
   test -n $warning || continue
   _ac_warnings="$warning"`test -n "$_ac_warnings" && echo ",$_ac_warnings"`

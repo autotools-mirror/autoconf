@@ -4930,20 +4930,28 @@ fall back, see @ref{Limitations of Builtins}.
 
 @item LANG
 @itemx LC_ALL
+@itemx LC_TIME
 @itemx LC_CTYPE
 @itemx LANGUAGE
+@itemx LC_COLLATE
+@itemx LC_NUMERIC
 @itemx LC_MESSAGES
 @evindex LANG
 @evindex LC_ALL
+@evindex LC_TIME
 @evindex LC_CTYPE
 @evindex LANGUAGE
+@evindex LC_COLLATE
+@evindex LC_NUMERIC
 @evindex LC_MESSAGES
 
 These must not be set unconditionally because not all systems understand
 e.g. @samp{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
 Solaris @command{sh} from translating var values in @code{set}!  Non-C
-@code{LC_CTYPE} values break the ctype check.  @code{LANGUAGE} is a
-@sc{gnu} extension.
+@code{LC_CTYPE} values break the ctype check.  Fixing @code{LC_COLLATE}
+prevents accented characters from being match by @samp{[a-z]} etc.  You
+are nevertheless encouraged to list explicitly the characters instead of
+relying on ranges.  @code{LANGUAGE} is a @sc{gnu} extension.
 
 @emph{If} one of these variables is set, you should try to unset it,
 using @samp{C} as a fall back value. see @ref{Limitations of Builtins},
