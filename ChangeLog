@@ -1,3 +1,10 @@
+2001-07-02  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.in: Formatting changes, matching the invocation order.
+	(File::Find): Use it instead of Perl 4's `find.pl'.
+	(&wanted): Rename as...
+	(&find_file): this.
+
 2001-06-29  Pavel Roskin  <proski@gnu.org>
 
 	* aclang.m4 (AC_F77_DUMMY_MAIN): Remove conftest* after using

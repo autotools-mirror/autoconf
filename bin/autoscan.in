@@ -21,12 +21,12 @@
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
 use 5.005;
-require "find.pl";
 use File::Basename;
+use File::Find;
 use Getopt::Long;
 use strict;
 
-use vars qw($autoconf $datadir $initfile $name
+use vars qw($initfile
             @cfiles @makefiles @shfiles %c_keywords %printed);
 
 my $me = basename ($0);
@@ -64,6 +64,9 @@ my %kind_comment =
 
 my $configure_scan = 'configure.scan';
 
+# Autoconf and lib files.
+my $autoconf;
+my $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 
 # Exit nonzero whenever closing STDOUT fails.
 sub END
@@ -73,51 +76,6 @@ sub END
   # E.g., even --version or --help.  So it's best to do it unconditionally.
   close STDOUT
     or (warn "$me: closing standard output: $!\n"), _exit (1);
-}
-
-# find_autoconf
-# -------------
-# Find the lib files and autoconf.
-sub find_autoconf
-{
-  $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
-  my $dir = dirname ($0);
-  $autoconf = '';
-  # We test "$dir/autoconf" in case we are in the build tree, in which case
-  # the names are not transformed yet.
-  foreach my $file ($ENV{"AUTOCONF"} || '',
-		    "$dir/@autoconf-name@",
-		    "$dir/autoconf",
-		    "@bindir@/@autoconf-name@")
-    {
-      if (-x $file)
-	{
-	  $autoconf = $file;
-	  last;
-	}
-    }
-}
-
-
-# $CONFIGURE_AC
-# &find_configure_ac ()
-# ---------------------
-sub find_configure_ac ()
-{
-  if (-f 'configure.ac')
-    {
-      if (-f 'configure.in')
-	{
-	  warn "warning: `configure.ac' and `configure.in' both present.\n";
-	  warn "warning: proceeding with `configure.ac'.\n";
-	}
-      return 'configure.ac';
-    }
-  elsif (-f 'configure.in')
-    {
-      return 'configure.in';
-    }
-  return;
 }
 
 
@@ -186,6 +144,50 @@ Try `$me --help' for more information.\n"
 }
 
 
+# find_autoconf
+# -------------
+# Find the lib files and autoconf.
+sub find_autoconf
+{
+  my $dir = dirname ($0);
+  # We test "$dir/autoconf" in case we are in the build tree, in which case
+  # the names are not transformed yet.
+  foreach my $file ($ENV{"AUTOCONF"} || '',
+		    "$dir/@autoconf-name@",
+		    "$dir/autoconf",
+		    "@bindir@/@autoconf-name@")
+    {
+      if (-x $file)
+	{
+	  $autoconf = $file;
+	  last;
+	}
+    }
+}
+
+
+# $CONFIGURE_AC
+# &find_configure_ac ()
+# ---------------------
+sub find_configure_ac ()
+{
+  if (-f 'configure.ac')
+    {
+      if (-f 'configure.in')
+	{
+	  warn "warning: `configure.ac' and `configure.in' both present.\n";
+	  warn "warning: proceeding with `configure.ac'.\n";
+	}
+      return 'configure.ac';
+    }
+  elsif (-f 'configure.in')
+    {
+      return 'configure.in';
+    }
+  return;
+}
+
+
 # init_tables ()
 # --------------
 # Put values in the tables of what to do with each token.
@@ -246,34 +248,34 @@ sub init_tables ()
 }
 
 
-# wanted ()
-# ---------
+# find_files ()
+# -------------
 # Collect names of various kinds of files in the package.
 # Called by &find on each file.
-sub wanted ()
+sub find_files ()
 {
   # Strip a useless leading `./'.
-  $name =~ s,^\./,,;
+  $File::Find::name =~ s,^\./,,;
 
   if (/^.*\.[chlymC]$/ || /^.*\.cc$/)
     {
-      push (@cfiles, $name);
+      push (@cfiles, $File::Find::name);
     }
   elsif (/^[Mm]akefile$/ || /^GNUmakefile$/)
     {
       # Wanted only if there is no corresponding Makefile.in.
       # Using Find, $_ contains the current filename with the current
       # directory of the walk through.
-      push (@makefiles, $name)
+      push (@makefiles, $File::Find::name)
 	if ! -f "$_.in";
     }
   elsif (/^[Mm]akefile\.in$/)
     {
-      push (@makefiles, $name);
+      push (@makefiles, $File::Find::name);
     }
   elsif (/^.*\.sh$/)
     {
-      push (@shfiles, $name);
+      push (@shfiles, $File::Find::name);
     }
 }
 
@@ -602,12 +604,12 @@ sub check_configure_ac ($)
 ## Main program.  ##
 ## -------------- ##
 
+parse_args;
 # Find the lib files and autoconf.
 find_autoconf;
 my $configure_ac = find_configure_ac;
-parse_args;
 init_tables;
-find ('.');
+find (\&find_files, '.');
 scan_files;
 output ('configure.scan');
 if ($configure_ac)
