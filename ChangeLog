@@ -1,5 +1,10 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Fix stupid bugs.
+
+	
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Create and remove
 	`$as_me.[0-9]+' instead of `debug-[0-9]+.sh', so that multiple
 	test suites can cohabit.

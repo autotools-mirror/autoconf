@@ -160,7 +160,7 @@ while test $[@%:@] -gt 0; do
 
     --clean | -c )
         rm -rf $at_data_files \
-               $as_me.[0-9] $as_me.[0-9][0-9] $as_me.[0-9][0-9][0-9] \
+               $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]] \
                $as_me.log devnull
         exit 0
         ;;
@@ -227,7 +227,6 @@ while test $[@%:@] -gt 0; do
         ;;
 
     *=*)
-  	at_debug_args="$1"
   	at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
   	# Reject names that are not valid shell variable names.
   	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
@@ -236,6 +235,8 @@ while test $[@%:@] -gt 0; do
   	at_value=`echo "$at_value" | sed "s/'/'\\\\\\\\''/g"`
   	eval "$at_envvar='$at_value'"
   	export $at_envvar
+	# Propagate to debug scripts.
+  	at_debug_args="$at_debug_args $[1]"
   	;;
 
      *) echo "$as_me: invalid option: $[1]" >&2
@@ -534,7 +535,7 @@ elif test $at_debug = false; then
   fi
 
   # Remove any debugging script resulting from a previous run.
-  rm -f $as_me.[0-9] $as_me.[0-9][0-9] $as_me.[0-9][0-9][0-9]
+  rm -f $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]]
 
   echo
   echo $ECHO_N "Writing \`$as_me.NN' scripts, with NN =$ECHO_C"
@@ -629,10 +630,11 @@ m4_define([AT_description], [$1])
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_TESTS_ALL], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TESTS])dnl
-  AT_ordinal ) @%:@ AT_ordinal. AT_line: $1
-    at_setup_line='AT_line'
-    $at_verbose "AT_ordinal. AT_line: testing $1..."
-    $at_quiet $ECHO_N "m4_format([[%3d: %-18s]], AT_ordinal, AT_line)[]$ECHO_C"
+  AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
+    at_setup_line='m4_defn([AT_line])'
+    $at_verbose "AT_ordinal. m4_defn([AT_line]): testing $1..."
+    $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
+                       AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
     (
       $at_traceon
 ])
