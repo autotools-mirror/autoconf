@@ -1,5 +1,11 @@
 2001-10-05  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Look in the path
+	iff we are a bareword.
+	Reported by Raja R Harinath.
+
+2001-10-05  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (LINENO): New.
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Be sure to set
 	PATH_SEPARATOR before using it.

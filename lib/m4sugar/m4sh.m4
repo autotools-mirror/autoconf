@@ -426,9 +426,10 @@ as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
 if test "x$as_lineno_1"  = "x$as_lineno_2" ||
    test "x$as_lineno_3" != "x$as_lineno_2";
   then
-  # Find who we are.
+  # Find who we are.  Look in the path if we contain no path at all
+  # relative or not.
   case $[0] in
-    [[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
+    *[[\\/]]* ) as_myself=$[0] ;;
     *) _AS_PATH_WALK([],
                    [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
        ;;
