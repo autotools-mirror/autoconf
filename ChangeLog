@@ -1,3 +1,14 @@
+2002-10-08  Paul Eggert  <eggert@twinsun.com>
+
+	Work around problems found when POSIXLY_CORRECT=1 is set.
+	None of this seems to have anything to do with POSIX, really,
+	but it's how Perl getopt works.
+	* bin/autom4te.in (parse_args): Configure GetOpt with
+	"permute", too.
+	* doc/autoconf.texi (Invoking autom4te):
+	--warning -> --warnings.
+	* lib/autom4te.in: --warning -> --warnings.
+
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (autom4te.cache): New section.
