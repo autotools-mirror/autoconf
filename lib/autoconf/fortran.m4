@@ -388,7 +388,7 @@ G77=`test $ac_compiler_gnu = yes && echo yes`
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77
 
-# AC_PROG_FC([DIALECT], [COMPILERS...])
+# AC_PROG_FC([COMPILERS...], [DIALECT])
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for, and [DIALECT] is an optional dialect.  See also _AC_PROG_FC.
@@ -397,7 +397,7 @@ AC_DEFUN([AC_PROG_FC],
 AC_ARG_VAR([FC],    [Fortran compiler command])dnl
 AC_ARG_VAR([FCFLAGS], [Fortran compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
-_AC_PROG_FC([$1], [$2])
+_AC_PROG_FC([$2], [$1])
 AC_LANG_POP(Fortran)dnl
 ])# AC_PROG_FC
 
@@ -1144,6 +1144,14 @@ fi
 # compile code using new extension) and ACTION-IF-FAILURE (defaults to
 # failing with an error message) if not.  (Defined via DEFUN_ONCE to
 # prevent flag from being added to FCFLAGS multiple times.)
+#
+# The known flags are:
+#              -free: Compaq compiler (fort)
+#          -freeform: SGI compiler
+#        -ffree-form: GNU g77
+#             -qfree: IBM compiler (xlf)
+# -Mfree, -Mfreeform: Portland Group compiler
+#                -FR: Intel compiler (icc, ecc)
 AC_DEFUN_ONCE([AC_FC_FREEFORM],
 [AC_CACHE_CHECK([for Fortran flag needed to allow free-form source],
                 ac_cv_fc_freeform,
@@ -1165,7 +1173,7 @@ FCFLAGS=$ac_fc_freeform_FCFLAGS_save
 AC_LANG_POP(Fortran)dnl
 ])
 if test "x$ac_cv_fc_freeform" = xunknown; then
-  m4_default([$2],[AC_MSG_ERROR([Fortran does not accept free-form source])])
+  m4_default([$2],[AC_MSG_ERROR([Fortran does not accept free-form source],77)])
 else
   if test "x$ac_cv_fc_freeform" != xnone; then
     FCFLAGS="$FCFLAGS $ac_cv_fc_freeform"
