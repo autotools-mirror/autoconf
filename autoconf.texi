@@ -202,7 +202,7 @@ Dependencies Between Macros
 Test Programs
 
 * Guidelines::			General rules for writing test programs.
-* Tricks::			Special ways to work around problems.
+* Test Functions::		Special ways to work around problems.
 
 Caching Values
 
