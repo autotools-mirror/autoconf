@@ -1,16 +1,60 @@
+1999-09-01  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_ACVERSION): Bump to 2.14.1 to differenciate the
+	experimental branch from the main trunk.
+
+	* acgeneral.m4 (AC_FOREACH_COMMA): New macro, to perform m4 loops
+ 	on m4 lists (i.e., list='(item_1, item_2, ..., item_n)').
+	(AC_FOREACH): New macro, to perform m4 loops on shell lists (i.e.,
+ 	list='item_1 item_2 ... item_n').
+
+	* acgeneral.m4 (AC_DEFUN): Now accept two other optionnal
+ 	parameters: the name of the macro which is specialized here, and
+ 	the name of the first argument.  For instance `AC_CHECK_FNMATCH'
+ 	should be declared as specializing `AC_CHECK_FUNC' for `fnmatch'
+ 	as first argument.
+
+	* acgeneral.m4 (AC_CHECK_FILES): Use AC_FOREACH for looping,
+ 	instead of the shell's loop.
+
+	* acgeneral.m4 (AC_TR): In addition to transliteration, provide a
+ 	mean to specify the valid destination alphabet and a default
+ 	character for aliens characters.  This is in order to remove
+	characters such as `+:-' etc. that may appear in file names,
+	but are not valid for shell variables or #defines.
+	(AC_TR_DEFINE): New macro, maps anything to a valid uppercase
+ 	#define rhs.
+	(AC_TR_UPCASE_NAME): Replaced by AC_TR_DEFINE.  All callers
+ 	changed.
+	(AC_TR_UPCASE_FILE): Likewise.
+
+	* acgeneral.m4 (AC_TR_SH): Don't use the generic AC_TR: there is a
+ 	difficult problem of quoting between m4 and sh.  Use the variable
+ 	$ac_tr_sh to work around this difficulty.
+	(AC_VAR_TEST_SET): New macro, which tests if a variable is set.
+	(AC_VAR_IF_SET): New `ifelse' macro.
+	(AC_CACHE_VAL): Use AC_VAR_IF_SET.
+	(AC_INIT_NOTICE): Define $ac_tr_sh.
+
+	* acgeneral.m4 (AC_CHECK_FILE): Converted to use AC_TR and AC_VAR
+ 	families.
+
+	* acgeneral.m4: Fixed the regular expressions: `$' shall not be
+	portably in a sed \(\) group.
+
 1999-08-22  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acspecific.m4 (AC_PROG_CC): Remove uname test for win32/Cygwin,
 	and just test for `cl' as a last resort.
- 
+
 	* autoconf.texi (Particular Programs): Document new optional
 	argument to AC_PROG_CC, AC_PROG_CXX and AC_PROG_F77.  Document
 	additions to the Fortran 77 compiler search list.
- 
+
  	* acspecific.m4 (AC_PROG_F77): Add more Fortran 77 compilers to
 	the search list.  Contributed by Steven G. Johnson
 	<stevenj@alum.mit.edu>.
- 
+
 	(AC_PROG_CC): Likewise.
 	(AC_PROG_CXX): Likewise.
 	* acspecific.m4 (AC_PROG_F77): Add an optional first argument
@@ -37,7 +81,7 @@
 	* acgeneral.m4 (AC_LIST_MEMBER_OF): New "private implementation
 	macro" use by AC_F77_LIBRARY_LDFLAGS.
 	(AC_LINKER_OPTION): Likewise.
-	
+
 1999-06-09  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* autoconf.texi (Pretty Help Strings): Synchronize documentation
@@ -107,7 +151,7 @@
 
 	* autoheader.m4 (AC_DEFINE): Ignore CPP macro arguments.
 	(AC_DEFINE_UNQUOTED): Likewise.
-	
+
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Change sed regexps to
 	recognize CPP macros that take arguments.  Reported, and based on
 	a patch, by Steven G. Johnson <stevenj@alum.mit.edu>.
@@ -201,12 +245,12 @@
 	* mkinstalldirs: Add `-m' flag to specify the mode of a newly
 	created directory. Add command line usage and `-h', `--help'
 	options. Contributed by Jeff Garzik <jgarzik@pobox.com>.
-	
+
 1999-04-08  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_PROG_CC): Try using the `cl' C compiler under
 	Cygwin. Contributed by Scott Stanton <stanton@scriptics.com>.
-	
+
 	* config.sub: Handle MPE/iX.
 
 1999-04-07  Ben Elliston  <bje@cygnus.com>
@@ -275,7 +319,7 @@
 	* config.guess: Correct typo for detecting ELF on FreeBSD.
 
 1998-03-14  Alexandre Oliva  <oliva@dcc.unicamp.br>
-	
+
 	* config.guess: Recognise HP 9000/8x0 machines.
 
 1999-03-11  Ben Elliston  <bje@cygnus.com>
@@ -290,14 +334,14 @@
 	with the value of $BUILD_CC in cross-compilation environments
 	where the native compiler must be used for running tests on the
 	host.
-		
+
 1999-03-11  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Recognise MiNT and TOS on Atari machines.
 	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
 
 	* config.sub: Add aliases for MiNT.
-	
+
 1999-03-10  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Recognise HP 9000/800. Merged from the master
@@ -359,7 +403,7 @@
 	by Markus Oberhumer <markus.oberhumer@jk.uni-linz.ac.at>.
 
 1999-02-19  Ben Elliston <bje@cygnus.com>
-	
+
 	* config.guess: Automatically recognise ELF on FreeBSD. From Niall
 	Smart and improved by Andrew Cagney.
 
@@ -398,10 +442,10 @@
 	* acspecific.m4 (AC_PROG_INSTALL): set INSTALL_SCRIPT to
 	${INSTALL} so that automake doesn't propogate install time flags
 	for INSTALL_PROGRAM into INSTALL_SCRIPT.
-	
+
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
-	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by 
+	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by
 	Jeff Garzik <jgarzik@pobox.com>.
 
 	* Makefile.in (clean mostlyclean distclean maintainer-clean):
@@ -444,7 +488,7 @@
 1999-01-14  Scott Bambrough  <scottb@corelcomputer.com>
 
 	* config.guess: Recognise armv[234][lb] types (ie. `armv*').
-		
+
 1999-01-13  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: Remove -v and --verbose from the command line usage
@@ -476,7 +520,7 @@
 
 	* config.guess: Detect Rhapsody on PowerPC and other machines.
 	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
-	
+
 	* config.sub: Add rhapsody and openstep aliases.
 
 1999-01-09  Ben Elliston  <bje@cygnus.com>
@@ -484,7 +528,7 @@
 	* Makefile.in (html): New target. Generate HTML documentation.
 	(install-strip): Add.
 	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
-	
+
 	* autoconf.texi (AC_CHECK_LIB): Explain more. Contributed by Bob
 	Friesenhahn <bfriesen@simple.dallas.tx.us>.
 	(UPDATED): Bump to 1999.
@@ -495,13 +539,13 @@
 1999-01-09  J"orn Rennecke  <amylaar@cygnus.co.uk>
 
 	* acgeneral.m4 (AC_CHECK_FUNC): Don't actually call the function.
-	
+
 1999-01-09  H.J. Lu  <hjl@lucon.org>
 
 	* config.guess: Permit multiple concurrent instances by including
 	the process ID of the shell running this script in temporary
 	filenames.
-		
+
 1999-01-08  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: More useful and up-to-date help from the --help
@@ -541,7 +585,7 @@
 	(AC_MINGW32): Likewise.
 	(AC_TRY_LINK_FUNC): Likewise.
 	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
-	
+
 1999-01-01  Ben Elliston  <bje@cygnus.com>
 
 	* NEWS: Update.
@@ -575,7 +619,7 @@
 	(AC_FUNC_SELECT_ARGTYPES): Document.
 	(AC_C_STRINGIZE): Likewise.
 	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
-	
+
 	* acspecific.m4 (AC_CYGWIN): Rename from `AC_CYGWIN32'.
 	(AC_CYGWIN32): Warn about deprecated usage. Forward to AC_CYGWIN.
 
@@ -588,7 +632,7 @@
 	* NEWS: Update.
 
 	* configure: Rebuild.
-	
+
 1998-12-26  Ben Elliston  <bje@cygnus.com>
 
 	* autoreconf.sh (stamp): Add missing quote.
@@ -598,7 +642,7 @@
 	<steve@nyongwa.montreal.qc.ca>.
 
 1998-12-11  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
-	
+
 	* acconfig.h, acgeneral.m4, acspecific.m4, autoconf.texi: Change
 	all of the Fortran 77 code to use the new `F77' prefix instead of
 	the older `FC' prefix.
@@ -622,7 +666,7 @@
 	and run aclocal and automake when needed. Also, create stamp files
 	just like automake's Makefiles would do for config headers.
 	Additional contributions from Tom Tromey <tromey@cygnus.com>.
-	
+
 1998-10-24  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_LANG_FORTRAN77): Remove [] (i.e. the m4 quotes)
@@ -649,7 +693,7 @@
 	* config.guess: Hide warnings emitted by the HP linker when
 	generating a PA 2.0 object file. Contributed by Marcus Thiessel
 	<marcus@xemacs.org>.
-	
+
 1998-10-20  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_LANG_RESTORE): Fix a typo spotted by Noah
@@ -714,7 +758,7 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 	using $(INSTALL_DATA).
 	(.m4.m4f): Freeze files if m4 supports stored internal state.
 	Contributed by Karl Heuer <kwzh@gnu.org>.
-	
+
 	* install-sh: Import latest version from the FSF.
 
 	* mkinstalldirs: Likewise.
@@ -731,14 +775,14 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 	Robbins <arnold@gnu.org> on behalf of the GNU AWK project.
 
 	* acconfig.h (HAVE_STRINGIZE): Add for the AC_C_STRINGIZE macro.
-		
+
 	* testsuite/Makefile.in (check): If DejaGNU is not installed,
 	print a warning and skip the `dejacheck' target (which will fail).
 	(site.exp): Use tests to guard commands from generating error
 	messages if `site.exp' or `site.bak' do not exist. Contributed by
 	Karl Heuer <kwzh@gnu.org>.
 	(dejacheck): Remove unused target.
-	
+
 1998-09-26  Ben Elliston  <bje@cygnus.com>
 
 	* texinfo.tex: Import latest version from the FSF.
@@ -754,7 +798,7 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 
 1998-09-15  Didier Verna  <verna@inf.enst.fr>
 
-	* acspecific.m4 (AC_PATH_XTRA): use X_EXTRA_LIBS add-on libraries 
+	* acspecific.m4 (AC_PATH_XTRA): use X_EXTRA_LIBS add-on libraries
 	in the test for libICE. It is needed at least under Solaris.
 
 1998-09-15  Ben Elliston  <bje@cygnus.com>
@@ -864,7 +908,7 @@ Tue Nov 18 14:21:38 1997  Eric Mumpower  <nocturne@cygnus.com>
 	autoreconf would end up executing incorrect shell code (e.g.
 	"test ! -f 1.h 2.h.in") in such cases.
 	Patch submitted in parallel to bug-gnu-utils@prep.ai.mit.edu.
-	
+
 Fri Oct  3 18:10:39 1997  Ian Lance Taylor  <ian@cygnus.com>
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Add a grep when checking whether
@@ -911,7 +955,7 @@ Mon Dec  9 23:39:17 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Add a semicolon between
 	shell variable assignments; the evaluation order varies between
-	implementations. 
+	implementations.
 
 Tue Nov 26 13:00:28 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
@@ -1044,10 +1088,10 @@ Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	These macros don't change the linkage options.
 
 	* Test release 2.10.2.
-	
+
 	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX) [GCC]: Use -O2 instead
 	of -O.  Suggested by fnf@ninemoons.com (Fred Fish).
-	
+
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Support passing
  	AC_CONFIG_HEADER a value containing shell variables.  Suggested by
  	Markku Savela <msa@msa.tte.vtt.fi> and Julian Onions
@@ -1055,10 +1099,10 @@ Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE, AC_TRY_LINK, AC_TRY_COMPILE,
         AC_TRY_CPP): Show the test program in config.log if the test fails.
 	From Karl Berry <karl@cs.umb.edu>.
-	
+
 	* testsuite/config/unix.exp: Run the configure script as "./script"
 	in case the user doesn't have "." in their PATH.
-	
+
 Mon Nov 11 18:02:58 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_TRY_COMPILE, AC_TRY_LINK): Deal with smart
@@ -1077,7 +1121,7 @@ Mon Nov 11 18:02:58 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* autoheader.sh: Don't cmp with config.h.in if it doesn't exist yet.
 	Don't frob lines 1-@TOP@ or @BOTTOM@-end of acconfig.h's.
 	Accept TAB as well as SPC after #undef in acconfig.h's.
-	
+
 Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Test release 2.10.1.
@@ -1091,7 +1135,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	isn't eaten.
 
 	* autoheader.sh: Add multiple-inclusion protection for config.h.
-	
+
 	* acgeneral.m4 (AC_PREFIX_PROGRAM): Pretty up the output.
 	(AC_CHECK_LIB): Include the function being tested in the message.
 	(AC_CHECK_PROG, AC_PATH_PROG): Add a dummy variable to force word
@@ -1103,7 +1147,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Accept the HP-UX sh 'set' output
 	format.  From Marcus Daniels <marcus@sysc.pdx.edu>.
-	
+
 	* acgeneral.m4 (AC_MSG_CHECKING, AC_CHECKING): Write a message to
 	config.log also.  From "T.E.Dickey" <dickey@clark.net>.
 	(AC_CHECK_LIB, AC_CHECK_HEADER, AC_CHECK_HEADERS): Replace use of
@@ -1112,7 +1156,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	tr interprets \055 as a range specifier, like an unquoted -.
 	* acspecific.m4 (AC_PROG_MAKE_SET, AC_CHECK_HEADER_DIRENT,
 	AC_CHECK_HEADERS_DIRENT): Ditto.
-	
+
 	* acspecific.m4 (AC_FUNC_SETPGRP): New macro.
         * acconfig.h (SETPGRP_VOID): New entry.
 	From "T.E.Dickey" <dickey@clark.net>.
@@ -1134,7 +1178,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	Don't blather about being called before AC_TRY_LINK,
 	which is now called in AC_PROG_CC.  Don't encourage using this macro.
         * acconfig.h (X_DISPLAY_MISSING): Add entry.
-	
+
 Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Search for /usr/X11 before
@@ -1152,9 +1196,9 @@ Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	C[XX]FLAGS is set.  From T.E.Dickey <dickey@clark.net>
 	(AC_FUNC_FNMATCH): New macro.
 	* acconfig.h (HAVE_FNMATCH): New entry.
-	
+
 	* acgeneral.m4 (AC_REPLACE_FUNCS): Call AC_CHECK_FUNCS to do the work.
-	
+
 Tue Oct 29 13:03:44 1996  Doug Evans  <dje@canuck.cygnus.com>
 
 	* acgeneral.m4 (AC_OUTPUT_SUBDIRS): Fix thinko in computation of

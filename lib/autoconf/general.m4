@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.13.1)
+define(AC_ACVERSION, 2.14.1)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -62,10 +62,16 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])
 
-undefine([eval])
-undefine([include])
-undefine([shift])
-undefine([format])
+dnl Some m4 internals have names colliding with tokens we might use.
+dnl Rename them a` la `m4 --prefix-builtins'.
+define([m4_prefix],
+[define([m4_$1], defn([$1]))
+undefine([$1])])
+
+m4_prefix([eval])
+m4_prefix([include])
+m4_prefix([shift])
+m4_prefix([format])
 
 
 dnl ### Defining macros
@@ -127,6 +133,8 @@ undivert(AC_DIVERSION_NORMAL_1)dnl
 ])dnl
 ])
 
+dnl AC_DEFUN(NAME, [REPLACED-FUNCTION, ARGUMENT, ]EXPANSION)
+dnl --------------------------------------------------------
 dnl Define a macro which automatically provides itself.  Add machinery
 dnl so the macro automatically switches expansion to the diversion
 dnl stack if it is not already using it.  In this case, once finished,
@@ -135,9 +143,18 @@ dnl This, combined with AC_REQUIRE, achieves the topological ordering of
 dnl macros.  We don't use this macro to define some frequently called
 dnl macros that are not involved in ordering constraints, to save m4
 dnl processing.
-dnl AC_DEFUN(NAME, EXPANSION)
+dnl
+dnl If the REPLACED-FUNCTTION and ARGUMENT are defined, then declare that
+dnl NAME is a specialized version of REPLACED-FUNCTION when its first
+dnl argument is ARGUMENT.  For instance AC_TYPE_SIZE_T is a specialization
+dnl of AC_CHECK_TYPE applied to `size_t'.
 define([AC_DEFUN],
-[define($1, [AC_PRO([$1])$2[]AC_EPI()])])
+[ifelse([$3],,
+[define([$1], [AC_PRO([$1])$2[]AC_EPI()])],
+[define([$2-$3], [$1])
+define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
+
+
 
 
 dnl ### Common m4/sh handling of variables (indirections)
@@ -160,18 +177,93 @@ define(AC_VAR_IF_INDIR,
         [$2])])
 
 dnl AC_VAR_SET(VARIABLE, VALUE)
+dnl ---------------------------
 dnl Set the VALUE of the shell VARIABLE.
 dnl If the variable contains indirections (e.g. `ac_cv_func_$ac_func`)
 dnl perform whenever possible at m4 level, otherwise sh level.
 define(AC_VAR_SET,
-[AC_VAR_IF_INDIR([$1], eval "[$1]=[$2]", [$1]=[$2])])
+[AC_VAR_IF_INDIR([$1],
+                 [eval "$1=$2"],
+                 [$1=$2])])
+
 
 dnl AC_VAR_GET(VARIABLE)
+dnl --------------------
 dnl Get the value of the shell VARIABLE.
 dnl Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 dnl else into the appropriate `eval' sequence.
 define(AC_VAR_GET,
-[AC_VAR_IF_INDIR([$1], [`eval "echo \`echo $\"$1\"\`"`], $[$1])])
+[AC_VAR_IF_INDIR([$1],
+                 [`eval echo '${'patsubst($1, [[\\`]], [\\\&])'}'`],
+                 [$[]$1])])
+
+
+dnl AC_VAR_TEST_SET(VARIABLE)
+dnl -------------------------
+dnl Expands into the `test' expression which is true if VARIABLE
+dnl is set.  Polymorphic.
+define(AC_VAR_TEST_SET,
+[AC_VAR_IF_INDIR([$1],
+           [eval "test \"\${$1+set}\" = set"],
+           [test "${$1+set}" = set])])
+
+
+
+dnl AC_VAR_IF_SET(VARIABLE, IF-TRUE, IF-FALSE)
+dnl ------------------------------------------
+dnl Implement a shell `if-then-else' depending whether VARIABLE is set
+dnl or not.  Polymorphic.
+define(AC_VAR_IF_SET,
+[if AC_VAR_TEST_SET([$1]); then
+  ifelse([$2], , :, [$2])
+ifelse([$3], , ,
+[else
+  $3
+])dnl
+fi
+])
+
+dnl AC_VAR_PUSHDEF and AC_VAR_POPDEF
+dnl --------------------------------
+dnl
+
+dnl The idea behind these macros is that we may sometimes have to handle
+dnl manifest values (e.g. `stdlib.h'), while at other moments, the same
+dnl code may have to get the value from a variable (e.g., `ac_header').
+dnl To have a uniform handling of both case, when a new value is about to
+dnl be processed, declare a local variable, e.g.:
+dnl
+dnl   AC_VAR_PUSHDEF([header], [ac_cv_header_$1])
+dnl
+dnl and then in the body of the macro, use `header' as is.  It is of first
+dnl importance to use `AC_VAR_*' to access this variable.  Don't quote its
+dnl name: it must be used right away by m4.
+dnl
+dnl If the value `$1' was manifest (e.g. `stdlib.h'), then `header' is in
+dnl fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect, then
+dnl `header's value in m4 is in fact `$ac_header', the shell variable that
+dnl holds all of the magic to get the expansion right.
+dnl
+dnl At the end of the block, free the variable with
+dnl
+dnl   AC_VAR_POPDEF([header])
+
+dnl AC_VAR_PUSHDEF(VARNAME, VALUE)
+dnl ------------------------------
+dnl Define the m4 macro VARNAME to an accessor to the shell variable
+dnl named VALUE.  VALUE does not need to be a valid shell variable name:
+dnl the transliteration is handled here.
+define(AC_VAR_PUSHDEF,
+[AC_VAR_IF_INDIR([$2],
+[ac_$1=AC_TR_SH($2)
+pushdef([$1], [$ac_[$1]])],
+[pushdef([$1], [AC_TR_SH($2)])])])
+
+dnl AC_VAR_POPDEF(VARNAME)
+dnl ----------------------
+dnl Free the shell variable accessor VARNAME.
+define(AC_VAR_POPDEF,
+[popdef([$1])])
 
 
 dnl ### Common m4/sh character translation
@@ -188,18 +280,24 @@ dnl - m4/sh polymorphism
 dnl   Transliteration of manifest strings should be handled by m4, while
 dnl   shell variables' content will be translated at run time (tr or sed).
 
-dnl AC_TR(STRING, FROM, TO)
+dnl AC_TR(STRING, FROM, TO, ALPHABET, DEFAULT)
+dnl ------------------------------------------
+dnl
 dnl Perform tr 'FROM' 'TO' on STRING by m4 when possible, otherwise
-dnl by the shell at configure time.
+dnl by the shell at configure time.  After transliteration, any character
+dnl which is not part of ALPHABET is then mapped to DEFAULT.
+dnl
 dnl We use `sed' and not `tr' when there is a `-', because:
 dnl - if `-' is in the middle, it is taken as a range.
 dnl - if `-' is at the beginning, some `tr' think it is an option.
 dnl - if `-' is at the end, Solaris, `/usr/bin/tr' hangs.  I suspect
 dnl   that it takes `a-' as the C string "a-\0", and when expanding
 dnl   from `a' to `\0' never ends...
+dnl
 dnl Include a protection against `%' (used as a sed separator) in FROM and TO.
-dnl Forbid appearence of `-' elsewhere than in the last position,
+dnl Forbid appearence of `-' in FROM elsewhere than in the last position,
 dnl since we might otherwise trigger a GNU m4 bug (version 1.4 included).
+dnl ALPHABET may contain characters interval.
 define(AC_TR,
 [ifelse(regexp([$2$3], [%]), -1,,
 	[AC_FATAL([$0: `%' cannot be used.  Change the definition of $0])])dnl
@@ -208,34 +306,90 @@ ifelse(regexp([$2], [-]), -1,, len([$2]),,
 ifelse(len([$2]), len([$3]),,
        [AC_FATAL([$0: argument 2 and 3 should have the same length])])dnl
 AC_VAR_IF_INDIR([$1],
-                `echo "[$1]" | ifelse(regexp([$2], [-]), -1,
-                                      tr '[$2]' '[$3]',
-                                      sed 'y%[$2]%[$3]%')`,
-                [translit([$1], [$2], [$3])])])
+  [`echo "$1" | sed 'y%$2%$3%;s%[^$4]%$5%g'`],
+  [patsubst(translit([$1], [$2], [$3]),
+                             [[^$4]], [$5])])])
 
-dnl AC_TR_UPCASE_NAME(EXPRESSION)
-dnl If EXPRESSION has to be shell expanded (contains ` or $), late
-dnl upper casing is performed (at configure time), else at autoconf time.
-dnl Space and star are included because they may appear as part of a type.
-define(AC_TR_UPCASE_NAME,
+dnl AC_TR_DEFINE(EXPRESSION)
+dnl ------------------------
+dnl
+dnl Map EXPRESSION to an upper case string which is valid as rhs for a
+dnl `#define'.  sh/m4 polymorphic.
+define(AC_TR_DEFINE,
 [AC_TR([$1],
-       [* abcdefghijklmnopqrstuvwxyz],
-       [P_ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
+       [*abcdefghijklmnopqrstuvwxyz],
+       [PABCDEFGHIJKLMNOPQRSTUVWXYZ],
+       [A-Z0-9_],
+       [_])])
 
-dnl AC_TR_UPCASE_FILE(EXPRESSION)
-dnl Same as AC_UPCASE_NAME, but also maps `.-/' to `___'.
-dnl Used for CPP macros.
-define(AC_TR_UPCASE_FILE,
-[AC_TR([$1],
-       [abcdefghijklmnopqrstuvwxyz./-],
-       [ABCDEFGHIJKLMNOPQRSTUVWXYZ___])])
 
 dnl AC_TR_SH(EXPRESSION)
+dnl --------------------
+dnl
 dnl Transform EXPRESSION into a valid shell variable name.
+dnl sh/m4 polymorphic.  Because of a delicate problem of quoting,
+dnl we cannot use the definition we had before:
+dnl    AC_TR([$1],[*+], [pp], [a-zA-Z0-9_], [_])
 define(AC_TR_SH,
-[AC_TR([$1],
-       [ *+./-],
-       [_pp___])])
+[AC_VAR_IF_INDIR([$1],
+  [`echo "$1" | $ac_tr_sh`],
+  [patsubst(translit([$1], [*+], [pp]),
+                     [[^a-zA-Z0-9_]], [_])])])
+
+
+
+dnl ### Implementing m4 loops
+
+
+dnl AC_FOREACH_COMMA(VARIABLE, LIST, EXPRESSION)
+dnl --------------------------------------------
+dnl Compute EXPRESSION assigning to VARIABLE each value of the LIST
+dnl (LIST has the form `(item_1, item_2, ..., item_n)').
+define(AC_FOREACH_COMMA,
+[pushdef([$1], [])_AC_FOREACH([$1], [$2], [$3])popdef([$1])])
+
+dnl Low level macros used to define AC_FOREACH_COMMA.
+define(_AC_CAR, [$1])
+define(_AC_CDR, [builtin(shift, $@)])
+define(_AC_FOREACH,
+[ifelse([$2], [()], ,
+        [define([$1], _AC_CAR$2)$3[]_AC_FOREACH([$1],
+                                                (_AC_CDR$2),
+                                                [$3])])])
+
+dnl _AC_COMMATIZE(LIST)
+dnl -------------------
+dnl Use patsubst to go from an AC_FOREACH_COMMA list to a AC_FOREACH
+dnl list.  Do not use `patsubst([$2], [\>\W+\<], [,])', since it swallows
+dnl the `$' from the variable names, so, 1. swallow `\[CR]' (I don't
+dnl understand why I need two backslashes), 2. remove trailing spaces, 3.
+dnl replace remaining sequences of spaces with commas.
+define([_AC_COMMATIZE],
+[patsubst(patsubst(patsubst([$1], [\\
+]), [[  ]+$]), [[       ]+], [,])])
+
+
+dnl AC_FOREACH(VARIABLE, LIST, EXPRESSION)
+dnl --------------------------------------
+dnl
+dnl Compute EXPRESSION assigning to VARIABLE each value of the LIST.
+dnl (LIST has the form `item_1 item_2 ... item_n': there are no commas.)
+dnl
+define(AC_FOREACH,
+[AC_FOREACH_COMMA([$1], (_AC_COMMATIZE([$2])), [$3])])
+
+
+dnl AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
+dnl --------------------------------------
+dnl
+dnl Basically calls the macro MACRO with arguments ARG1, ARGS... But if
+dnl there exist a specialized version of MACRO for ARG1, use this macro
+dnl instead with arguments ARGS (i.e., ARG1 is *not* given).  See the
+dnl definition of `AC_DEFUN'.
+AC_DEFUN(AC_SPECIALIZE,
+[ifdef([$1-$2],
+       [indir([$1-$2], m4_shift(m4_shift($@)))],
+       [indir([$1], m4_shift($@))])])
 
 
 dnl ### Initialization
@@ -245,7 +399,7 @@ dnl AC_INIT_NOTICE()
 AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version] AC_ACVERSION [
-# Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
+# Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
@@ -309,6 +463,10 @@ MFLAGS= MAKEFLAGS=
 SHELL=${CONFIG_SHELL-/bin/sh}
 # Maximum number of lines to put in a shell here document.
 ac_max_here_lines=12
+# Sed expression to map a string onto a valid sh variable name
+changequote(, )dnl
+ac_tr_sh='sed -e y%*+%pp%;s%[^a-zA-Z0-9_]%_%g'
+changequote([, ])dnl
 
 ac_prev=
 for ac_option
@@ -1301,18 +1459,17 @@ fi
 rm -f confcache
 ])
 
-dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 dnl AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
+dnl ------------------------------------------
+dnl
+dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
 [dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
-if eval "test \"\${$1+set}\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
-else
-  $2
-fi
-])
+AC_VAR_IF_SET([$1],
+              [echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG],
+              [$2])])
 
 dnl AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
 define(AC_CACHE_CHECK,
@@ -1382,8 +1539,6 @@ m4exit(ifdef([$2], [$2], 1))])
 
 
 dnl ### Printing messages at configure run time
-
-define(echo1, [$1])
 
 dnl _AC_SH_QUOTE(STRING)
 dnl Quote the back quotes but if they are already quoted.
@@ -1865,7 +2020,7 @@ LIBS="$ac_save_LIBS"
 AC_MSG_RESULT($AC_CV_NAME)
 if test "$AC_CV_NAME" = yes; then
   ifelse([$2], ,
-[AC_DEFINE([HAVE_LIB]AC_TR_UPCASE_NAME(AC_LIB_NAME))
+[AC_DEFINE([HAVE_LIB]AC_TR_DEFINE(AC_LIB_NAME))
   LIBS="-l[]AC_LIB_NAME[] $LIBS"
 ], [$2])
 ifelse([$3], , , [else
@@ -2098,40 +2253,49 @@ done
 dnl ### Checking for the existence of files
 
 dnl AC_CHECK_FILE(FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl --------------------------------------------------------------
+dnl
+dnl Check for the existence of FILE.
 AC_DEFUN(AC_CHECK_FILE,
-[AC_REQUIRE([AC_PROG_CC])
-dnl Do the transliteration at runtime so arg 1 can be a shell variable.
-ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
+[#AC_REQUIRE([AC_PROG_CC])dnl
 AC_MSG_CHECKING([for $1])
-AC_CACHE_VAL(ac_cv_file_$ac_safe,
+AC_VAR_PUSHDEF([var_name], [ac_cv_file_$1])dnl
+AC_CACHE_VAL(var_name,
 [if test "$cross_compiling" = yes; then
   AC_WARNING([Cannot check for file existence when cross compiling])dnl
-  AC_MSG_ERROR(Cannot check for file existence when cross compiling)
-else
-  if test -r $1; then
-    eval "ac_cv_file_$ac_safe=yes"
-  else
-    eval "ac_cv_file_$ac_safe=no"
+  AC_MSG_ERROR([Cannot check for file existence when cross compiling])
   fi
+if test -r "[$1]"; then
+  AC_VAR_SET(var_name, yes)
+else
+  AC_VAR_SET(var_name, no)
 fi])dnl
-if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
+if test AC_VAR_GET(var_name) = yes; then
   AC_MSG_RESULT(yes)
-  ifelse([$2], , :, [$2])
+ifelse([$2], , , [  $2
+])dnl
 else
   AC_MSG_RESULT(no)
-ifelse([$3], , , [$3])
+ifelse([$3], , , [  $3
+])dnl
 fi
-])
+AC_VAR_POPDEF([var_name])])
 
 dnl AC_CHECK_FILES(FILE... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_FILES,
-[for ac_file in $1
-do
-AC_CHECK_FILE($ac_file,
-              [AC_DEFINE_UNQUOTED(AC_TR_UPCASE_FILE(HAVE_$ac_file)) $2],
-              [$3])dnl
-done
-])
+[AC_FOREACH([AC_FILE_NAME], [$1],
+  [AC_SPECIALIZE([AC_CHECK_FILE], AC_FILE_NAME,
+                 [AC_DEFINE_UNQUOTED(AC_TR_DEFINE(HAVE_[]AC_FILE_NAME))
+$2],
+                 [$3])])])
+
+dnl [for ac_file in $1
+dnl do
+dnl AC_CHECK_FILE($ac_file,
+dnl 		  [AC_DEFINE_UNQUOTED(AC_TR_DEFINE(HAVE_$ac_file)) $2],
+dnl 		  [$3])dnl
+dnl done
+dnl ])
 
 
 dnl ### Checking for library functions
@@ -2182,7 +2346,7 @@ AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
-              [AC_DEFINE_UNQUOTED(AC_TR_UPCASE_NAME(HAVE_$ac_func)) $2],
+              [AC_DEFINE_UNQUOTED(AC_TR_DEFINE(HAVE_$ac_func)) $2],
               [$3])dnl
 done
 ])
@@ -2200,7 +2364,7 @@ dnl ### Checking compiler characteristics
 dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE])
 AC_DEFUN(AC_CHECK_SIZEOF,
 [dnl The name to #define.
-define([AC_TYPE_NAME], AC_TR_UPCASE_NAME(sizeof_$1))dnl
+define([AC_TYPE_NAME], AC_TR_DEFINE(sizeof_$1))dnl
 dnl The cache variable name.
 define([AC_CV_NAME], AC_TR_SH(ac_cv_sizeof_$1))dnl
 AC_MSG_CHECKING(size of $1)
