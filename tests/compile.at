@@ -1,4 +1,4 @@
-#							-*- autoconf -*-
+#							-*- Autotest -*-
 
 AT_BANNER([Low level compiling/preprocessing macros.])
 

@@ -1,4 +1,4 @@
-#							-*- Autoconf -*-
+#							-*- Autotest -*-
 
 AT_BANNER([M4sugar.])
 

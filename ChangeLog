@@ -1,5 +1,12 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* tests/base.at, tests/compile.at, tests/foreign.at,
+	* tests/m4sh.at, tests/m4sugar.at, tests/mktests.sh,
+	* tests/semantics.at, tests/suite.at, tests/tools.at,
+	* tests/torture.at: Ask Autotest mode, not Autoconf mode.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (handle_output): Handle @__@.
 
 2001-08-20  Akim Demaille  <akim@epita.fr>
