@@ -354,7 +354,8 @@ AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
 [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
   _AC_COMPUTE_INT([sizeof ($1)],
                   [AS_TR_SH([ac_cv_sizeof_$1])],
-                  [AC_INCLUDES_DEFAULT([$3])])
+                  [AC_INCLUDES_DEFAULT([$3])],
+                  [AC_MSG_ERROR([cannot compute sizeof ($1), 77])])
 else
   AS_TR_SH([ac_cv_sizeof_$1])=0
 fi])dnl
