@@ -1528,7 +1528,7 @@ AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="$LIBS"
 LIBS="-l[]AC_LIB_NAME[] $4 $LIBS"
-AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
+AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)
 LIBS="$ac_save_LIBS"
 ])dnl
 AC_MSG_RESULT($AC_CV_NAME)
@@ -1649,7 +1649,7 @@ AC_DEFUN(AC_COMPILE_CHECK,
 [AC_OBSOLETE([$0], [; instead use AC_TRY_COMPILE or AC_TRY_LINK, and AC_MSG_CHECKING and AC_MSG_RESULT])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
-AC_TRY_LINK([$2], [$3], [$4], [$5])dnl
+AC_TRY_LINK([$2], [$3], [$4], [$5])
 ])
 
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
@@ -1786,7 +1786,7 @@ choke me
 #else
 $1();
 #endif
-], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
+], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])
 if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
   AC_MSG_RESULT(yes)
   ifelse([$2], , :, [$2])

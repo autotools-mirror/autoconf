@@ -3487,11 +3487,9 @@ For example, @samp{broken} or @samp{set}.  This part of the name may
 be omitted if it does not apply.
 @end table
 
-Like their names, the values that may be assigned to cache variables
-have a few restrictions.  The values may not contain single quotes or
-curly braces.  Usually, their values will be boolean (@samp{yes} or
-@samp{no}) or the names of files or functions; so this is not an
-important restriction.
+The values assigned to cache variables may not contain newlines.
+Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
+names of files or functions; so this is not an important restriction.
 
 @node Cache Files, ,  Cache Variable Names, Caching Results
 @subsection Cache Files
