@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 93, 94, 95, 96, 1998 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -2364,6 +2364,166 @@ FLIBS="$ac_cv_flibs"
 AC_SUBST(FLIBS)dnl
 AC_MSG_RESULT($FLIBS)
 ])
+
+
+dnl Test for the name mangling scheme used by the Fortran 77 compiler.
+dnl Two variables are set by this macro:
+dnl
+dnl        f77_case: Set to either "upper" or "lower", depending on the
+dnl                  case of the name mangling.
+dnl
+dnl  f77_underscore: Set to either "no", "single" or "double", depending
+dnl                  on how underscores (i.e. "_") are appended to
+dnl                  identifiers, if at all.
+dnl
+dnl                  If no underscores are appended, then the value is
+dnl                  "no".
+dnl
+dnl                  If a single underscore is appended, even with
+dnl                  identifiers which already contain an underscore
+dnl                  somewhere in their name, then the value is
+dnl                  "single".
+dnl
+dnl                  If a single underscore is appended *and* two
+dnl                  underscores are appended to identifiers which
+dnl                  already contain an underscore somewhere in their
+dnl                  name, then the value is "double".
+dnl
+dnl AC_F77_NAME_MANGLING()
+AC_DEFUN(AC_F77_NAME_MANGLING,
+[
+  AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
+                 ac_cv_f77_mangling,
+  [
+    AC_REQUIRE([AC_PROG_CC])
+    AC_REQUIRE([AC_PROG_F77])
+
+    AC_LANG_SAVE
+    AC_LANG_FORTRAN77
+
+cat > conftest.$ac_ext <<EOF
+      subroutine foobar()
+      return
+      end
+      subroutine foo_bar()
+      return
+      end
+EOF
+
+    if AC_TRY_EVAL(ac_compile); then
+
+      mv conftest.${ac_objext} cf77_test.${ac_objext}
+
+      AC_LANG_SAVE
+      AC_LANG_C
+
+      ac_save_LIBS="$LIBS"
+      LIBS="cf77_test.${ac_objext} $LIBS"
+
+      f77_case=
+      f77_underscore=
+
+      AC_TRY_LINK_FUNC(foobar,
+        f77_case=lower
+        f77_underscore=no
+        foo_bar=foo_bar_,
+        AC_TRY_LINK_FUNC(foobar_,
+          f77_case=lower
+          f77_underscore=single
+          foo_bar=foo_bar__,
+          AC_TRY_LINK_FUNC(FOOBAR,
+            f77_case=upper
+            f77_underscore=no
+            foo_bar=FOO_BAR_,
+            AC_TRY_LINK_FUNC(FOOBAR_,
+              f77_case=upper
+              f77_underscore=single
+              foo_bar=FOO_BAR__))))
+
+      AC_TRY_LINK_FUNC(${foo_bar}, f77_underscore=double)
+
+      if test x"$f77_case" = x -o x"$f77_underscore" = x; then
+        ac_cv_f77_mangling="unknown"
+      else
+        ac_cv_f77_mangling="$f77_case case, $f77_underscore underscores"
+      fi
+
+      LIBS="$ac_save_LIBS"
+      AC_LANG_RESTORE
+
+      rm -f conftest*
+      rm -f cf77_test*
+
+    else
+      echo "configure: failed program was:" >&AC_FD_CC
+      cat conftest.$ac_ext >&AC_FD_CC
+    fi
+
+dnl We need to pop the language stack twice.
+    AC_LANG_RESTORE
+    AC_LANG_RESTORE
+])])
+
+
+dnl Defines C macros F77_FUNC(name,NAME) and F77_FUNC_(name,NAME) to
+dnl properly mangle the names of C identifiers, and C identifiers with
+dnl underscores, respectively, so that they match the name mangling
+dnl scheme used by the Fortran 77 compiler.
+dnl
+dnl AC_F77_WRAPPERS()
+AC_DEFUN(AC_F77_WRAPPERS,
+[
+  AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
+                 ac_cv_f77_wrappers,
+  [
+dnl Be optimistic at first.
+    ac_cv_f77_wrappers="yes"
+
+    AC_REQUIRE([AC_F77_NAME_MANGLING])
+    case "$f77_case" in
+        lower)
+            case "$f77_underscore" in
+                no)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name])
+                    ;;
+                single)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _])
+                    ;;
+                double)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __])
+                    ;;
+                *)
+                    AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+                    ;;
+            esac
+            ;;
+        upper)
+            case "$f77_underscore" in
+                no)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME])
+                    ;;
+                single)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _])
+                    ;;
+                double)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __])
+                    ;;
+                *)
+                    AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+                    ;;
+            esac
+            ;;
+        *)
+            AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+            ;;
+    esac
+])])
 
 
 dnl ### Checks for operating system services
