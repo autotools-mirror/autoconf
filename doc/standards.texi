@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate March  6, 2001
+@set lastupdate March 23, 2001
 @c %**end of header
 
 @ifinfo
@@ -112,25 +112,27 @@ programs written in C, but many of the rules and principles are useful
 even if you write in another programming language.  The rules often
 state reasons for writing in a certain way.
 
-Corrections or suggestions for this document should be sent to
-@email{bug-standards@@gnu.org}.  If you make a suggestion, please include a
-suggested new wording for it; our time is limited.  We prefer a context
-diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
-you don't have those files, please mail your suggestion anyway.
-
 This release of the GNU Coding Standards was last updated
 @value{lastupdate}.
 
 @cindex where to obtain @code{standards.texi}
 @cindex downloading this manual
 If you did not obtain this file directly from the GNU project and
-recently, please check for a newer version.  You can ftp the GNU Coding
-Standards from any GNU FTP host in the directory
+recently, please check for a newer version.  You can ftp the GNU
+Coding Standards from any GNU FTP host in the directory
 @file{/pub/gnu/standards/}.  The GNU Coding Standards are available
 there in several different formats: @file{standards.text},
-@file{standards.texi}, @file{standards.info}, and @file{standards.dvi}.
-The GNU Coding Standards are also available on the GNU World Wide Web
-server: @uref{http://www.gnu.org/prep/standards_toc.html}.
+@file{standards.info}, and @file{standards.dvi}, as well as the
+Texinfo ``source'' which is divided in two files:
+@file{standards.texi} and @file{make-stds.texi}.  The GNU Coding
+Standards are also available on the GNU World Wide Web server:
+@uref{http://www.gnu.org/prep/standards_toc.html}.
+
+Corrections or suggestions for this document should be sent to
+@email{bug-standards@@gnu.org}.  If you make a suggestion, please include a
+suggested new wording for it; our time is limited.  We prefer a context
+diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
+you don't have those files, please mail your suggestion anyway.
 
 @node Legal Issues
 @chapter Keeping Free Software Free
