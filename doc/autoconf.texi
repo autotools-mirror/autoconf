@@ -3654,6 +3654,20 @@ Did you know that, on some older hosts, @code{exit} returns @code{int}?
 This is because @code{exit} predates @code{void}, and there was a long
 tradition of it returning @code{int}.
 
+@item @code{free}
+@c @fuindex free
+@prindex @code{free}
+The ISO C99 standard says a call @code{free(NULL)} does nothing, but
+some old systems don't support this (eg.@: NextStep).
+
+@item @code{malloc}
+@c @fuindex malloc
+@prindex @code{malloc}
+The ISO C99 standard says a call @code{malloc(0)} is implementation
+dependent, it may either return @code{NULL} (eg.@: OSF 4) or
+non-@code{NULL} (eg.@: @acronym{GNU} C Library).  @code{AC_FUNC_MALLOC}
+can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
+
 @item @code{putenv}
 @c @fuindex putenv
 @prindex @code{putenv}
@@ -3668,6 +3682,13 @@ case and instead @code{unsetenv} must be used.
 
 On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
 environment, rather than inserting it with an empty value.
+
+@item @code{realloc}
+@c @fuindex realloc
+@prindex @code{realloc}
+The ISO C99 standard says a call @code{realloc(NULL,size)} is equivalent
+to a @code{malloc(size)}, but some old systems don't support this (eg.@:
+NextStep).
 
 @item @code{signal} handler
 @c @fuindex signal
