@@ -121,14 +121,14 @@ sub END
 	{
 	  if (! unlink <$tmp/*>)
 	    {
-	      print "$me: cannot empty $tmp: $!\n";
+	      print STDERR "$me: cannot empty $tmp: $!\n";
 	      $? = 1;
 	      return;
 	    }
 	}
       if (! rmdir $tmp)
 	{
-	  print "$me: cannot remove $tmp: $!\n";
+	  print STDERR "$me: cannot remove $tmp: $!\n";
 	  $? = 1;
 	  return;
 	}
@@ -138,7 +138,7 @@ sub END
   # E.g., even --version or --help.  So it's best to do it unconditionally.
   if (! close STDOUT)
     {
-      print "$me: closing standard output: $!\n";
+      print STDERR "$me: closing standard output: $!\n";
       $? = 1;
       return;
     }
@@ -488,23 +488,57 @@ sub verbose (@)
     if $verbose;
 }
 
+# handle_exec_errors ($COMMAND)
+# -----------------------------
+# Display an error message for $COMMAND, based on the content of $? and $!.
+sub handle_exec_errors ($)
+{
+  my ($command) = @_;
+
+  $command = (split (' ', $command))[0];
+  if ($!)
+    {
+      error "failed to run $command: $!";
+    }
+  else
+    {
+      use POSIX qw (WIFEXITED WEXITSTATUS WIFSIGNALED WTERMSIG);
+
+      if (WIFEXITED ($?))
+	{
+	  my $status = WEXITSTATUS ($?);
+	  # WIFEXITED and WEXITSTATUS can alter $!, reset it so that
+	  # error() actually propagates the command's exit status, not $!.
+	  $! = 0;
+	  error "$command failed with exit status: $status";
+	}
+      elsif (WIFSIGNALED ($?))
+	{
+	  my $signal = WTERMSIG ($?);
+	  # In this case we prefer to exit with status 1.
+	  $! = 1;
+	  error "$command terminated by signal: $signal";
+	}
+      else
+	{
+	  error "$command exited abnormally";
+	}
+    }
+}
 
 # xqx ($COMMAND)
 # --------------
 # Same as `qx' (but in scalar context), but fails on errors.
 sub xqx ($)
 {
-  use POSIX qw (WIFEXITED WEXITSTATUS);
-
   my ($command) = @_;
 
   verbose "running: $command";
-  my $res = `$command`;
 
-  error ((split (' ', $command))[0]
-	 . " failed with exit status: "
-	 . WEXITSTATUS ($?))
-    if WIFEXITED ($?) && WEXITSTATUS ($?) != 0;
+  $! = 0;
+  my $res = `$command`;
+  handle_exec_errors $command
+    if $?;
 
   return $res;
 }
@@ -514,26 +548,13 @@ sub xqx ($)
 # ------------------
 sub xsystem ($)
 {
-  use POSIX qw (WEXITSTATUS);
-
   my ($command) = @_;
 
   verbose "running: $command";
 
   $! = 0;
-
-  if (system $command)
-  {
-    $command = (split (' ', $command))[0];
-    if ($!)
-      {
-	error "failed to run $command: $!";
-      }
-    else
-      {
-	error "$command failed with exit status: " . WEXITSTATUS ($?);
-      }
-  }
+  handle_exec_errors $command
+    if system $command;
 }
 
 

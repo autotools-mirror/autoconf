@@ -1,3 +1,10 @@
+2003-05-25  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/Autom4te/General.pm (END): Print diagnostics to STDERR.
+	(handle_exec_errors): New function.  Work around $! being
+	altered by WEXITSTATUS.
+	(xqx, xsystem): Use handle_exec_errors.
+
 2003-05-23  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/Autom4te/General.pm (END): Rewrite exit code processing.
