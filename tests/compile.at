@@ -266,12 +266,17 @@ AT_CHECK_MACRO([GNU Fortran 77],
 AC_LANG_COMPILER
 
 if AC_TRY_COMMAND([$F77 --version | grep GNU >&2]); then
+  # Be sure to remove files which might be created by compilers that
+  # don't support --version.
+  rm -f a.exe a.out
   # Has GNU in --version.
   test "$G77" != yes &&
     AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler])
 else
+  # Be sure to remove files which might be created by compilers that
+  # don't support --version.
+  rm -f a.exe a.out
   # Has not.
   test "$G77" = yes &&
     AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler])
-fi
-AS_EXIT(0)]])
+fi]])
