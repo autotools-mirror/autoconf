@@ -1,3 +1,8 @@
+2000-04-28  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (options handling::-W*): Strip two leading chars, not
+	just one.
+
 2000-04-20  Dave Love  <fx@gnu.org>
 
 	* acspecific.m4 (AC_FUNC_MKTIME): Use AC_SUBST.

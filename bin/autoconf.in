@@ -188,7 +188,7 @@ while test $# -gt 0 ; do
        warnings="$warnings "`echo "$1" | sed -e 's/^[^=]*=//;s/,/ /g'`
        shift ;;
     -W* ) # People are used to -Wall, -Werror etc.
-       warnings="$warnings "`echo "$1" | sed -e 's/^.//;s/,/ /g'`
+       warnings="$warnings "`echo "$1" | sed -e 's/^-W//;s/,/ /g'`
        shift ;;
 
     -- )     # Stop option processing
