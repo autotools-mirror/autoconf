@@ -7405,6 +7405,8 @@ create Autoconf executable configure scripts.
 Prepend directory @var{dir} to the search path.  This is used to include
 the language-specific files before any third-party macros.
 
+@end table
+
 @cindex @file{autom4te.cfg}
 As an example, if Autoconf is installed in its default location,
 @file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is
@@ -10219,20 +10221,20 @@ on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
 @node Limitations of Make
 @section Limitations of Make
 
-Make itself suffers a great number of limitations, only a few of which
-being listed here.  First of all, remember that since commands are
-executed by the shell, all its weaknesses are inherited@enddots{}
+@command{make} itself suffers a great number of limitations, only a few
+of which being listed here.  First of all, remember that since commands
+are executed by the shell, all its weaknesses are inherited@enddots{}
 
 @table @asis
 @item @code{$<}
 @sc{posix} says that the @samp{$<} construct in makefiles can be used
 only in inference rules and in the @samp{.DEFAULT} rule; its meaning in
-ordinary rules is unspecified.  Solaris 8's Make for instance
+ordinary rules is unspecified.  Solaris 8's @command{make} for instance
 will replace it with the argument.
 
 @item Leading underscore in macro names
-Some Makes don't support leading underscores in macro names, such as on
-NEWS-OS 4.2R.
+Some @command{make}s don't support leading underscores in macro names,
+such as on NEWS-OS 4.2R.
 
 @example
 $ @kbd{cat Makefile}
@@ -10264,13 +10266,14 @@ test:
 @end example
 
 @noindent
-shows @code{FOO} equal to @code{one BAR = two}.  Other Makes sensibly
-let a backslash continue only to the immediately following line.
+shows @code{FOO} equal to @code{one BAR = two}.  Other @command{make}s
+sensibly let a backslash continue only to the immediately following
+line.
 
 @item Escaped newline in comments
 
-According to @sc{posix}, Makefile comments start with @code{#} and
-continue until an unescaped newline is reached.
+According to @sc{posix}, @file{Makefile} comments start with @code{#}
+and continue until an unescaped newline is reached.
 
 @example
 % @kbd{cat Makefile}
@@ -10308,10 +10311,10 @@ line with @code{#}, not only the first.
 @item @code{make macro=value} and sub-@command{make}s.
 
 A command-line variable definition such as @code{foo=bar} overrides any
-definition of @code{foo} in the @file{Makefile}.  Some Make
-implementations (such as @sc{gnu} Make) will propagate this override to
-sub-invocations of @command{make}, this is allowed but not required by
-@sc{posix}.
+definition of @code{foo} in the @file{Makefile}.  Some @command{make}
+implementations (such as @sc{gnu} @command{make}) will propagate this
+override to sub-invocations of @command{make}, this is allowed but not
+required by @sc{posix}.
 
 @example
 % @kbd{cat Makefile}
@@ -10368,29 +10371,30 @@ You need to foresee all macros that a user might want to override if
 you do that.
 
 @item The @code{SHELL} macro
-@cindex @code{SHELL} and Make
-@cindex Make and @code{SHELL}
+@cindex @code{SHELL} and @command{make}
+@cindex @command{make} and @code{SHELL}
 
-POSIX Makes internally use the @code{$(SHELL)} macro to spawn shell
-processes and execute @file{Makefile} rules.  This is a built-in
-macro supplied by Make, but it can be modified from the Makefile or a
-command-line argument.
+@sc{posix}-compliant @command{make}s internally use the @code{$(SHELL)}
+macro to spawn shell processes and execute @file{Makefile} rules.  This
+is a built-in macro supplied by @command{make}, but it can be modified
+from the @file{Makefile} or a command-line argument.
 
-Not all Makes will define this @code{SHELL} macro.  OSF/Tru64 Make is
-an example; this implementation will always use @code{/bin/sh}.  So it's
-a good idea to always define @code{SHELL} in your @file{Makefile}s.  If
-you use Autoconf, do
+Not all @command{make}s will define this @code{SHELL} macro.  OSF/Tru64
+@command{make} is an example; this implementation will always use
+@code{/bin/sh}.  So it's a good idea to always define @code{SHELL} in
+your @file{Makefile}s.  If you use Autoconf, do
 
 @example
 SHELL = @@SHELL@@
 @end example
 
-@sc{posix}-compliant makes should never acquire the value of $(SHELL)
-from the environment, even when @code{make -e} is used (otherwise, think
-about what would happen to your rules if @code{SHELL=/bin/tcsh}).
+@sc{posix}-compliant @command{make}s should never acquire the value of
+$(SHELL) from the environment, even when @code{make -e} is used
+(otherwise, think about what would happen to your rules if
+@code{SHELL=/bin/tcsh}).
 
-However not all Make implementations will make this exception.
-For instance it's not surprising that OSF/Tru64 Make doesn't
+However not all @command{make} implementations will make this exception.
+For instance it's not surprising that OSF/Tru64 @command{make} doesn't
 protect @code{SHELL}, since it doesn't use it.
 
 @example
@@ -10414,9 +10418,9 @@ bar
 
 Never put comments in a rule.
 
-Some Makes treat anything starting with a tab as a command for the
-current rule, even if the tab is immediately followed by a @code{#}.
-The Make from Tru64 Unix V5.1 is one of them.  The following
+Some @command{make} treat anything starting with a tab as a command for
+the current rule, even if the tab is immediately followed by a @code{#}.
+The @command{make} from Tru64 Unix V5.1 is one of them.  The following
 @file{Makefile} will run @code{# foo} through the shell.
 
 @example
@@ -10426,12 +10430,12 @@ all:
 
 @item The @file{obj/} subdirectory.
 @cindex @file{obj/}, subdirectory
-@cindex BSD make and @file{obj/}
+@cindex BSD @command{make} and @file{obj/}
 
 Never name one of your subdirectories @file{obj/} if you don't like
 surprises.
 
-If an @file{obj/} directory exists, BSD make will enter it
+If an @file{obj/} directory exists, BSD @command{make} will enter it
 before reading @file{Makefile}.  Hence the @file{Makefile} in the
 current directory will not be read.
 
@@ -10474,14 +10478,14 @@ exit status: 0
 @item @code{VPATH}
 @cindex @code{VPATH}
 
-There is no @code{VPATH} support specified in @sc{posix}.  Many Makes
-have a form of @code{VPATH} support, but its implementation is not
-consistent amongst Makes.
+There is no @code{VPATH} support specified in @sc{posix}.  Many
+@command{make}s have a form of @code{VPATH} support, but its
+implementation is not consistent amongst @command{make}s.
 
 Maybe the best suggestion to give to people who need the @code{VPATH}
-feature is to choose a Make implementation and stick to it.  Since the
-resulting @file{Makefile}s are not portable anyway, better choose a
-portable Make (hint, hint).
+feature is to choose a @command{make} implementation and stick to it.
+Since the resulting @file{Makefile}s are not portable anyway, better
+choose a portable @command{make} (hint, hint).
 
 Here are a couple of known issues with some @code{VPATH}
 implementations.
@@ -10491,16 +10495,17 @@ implementations.
 @item @code{VPATH} and double-colon rules
 @cindex @code{VPATH} and double-colon rules
 @cindex double-colon rules and @code{VPATH}
-Any assignment to @code{VPATH} causes Sun Make to only execute the first
-set of double-colon rules.  (This comment has been here since 1994 and
-the context has been lost.  It's probably about SunOS 4.  If you can
-reproduce this, please send us a test case for illustration.)
+
+Any assignment to @code{VPATH} causes Sun @command{make} to only execute
+the first set of double-colon rules.  (This comment has been here since
+1994 and the context has been lost.  It's probably about SunOS 4.  If
+you can reproduce this, please send us a test case for illustration.)
 
 @item @code{$<} in inference rules:
 @cindex suffix rules, @code{$<}, and @code{VPATH}
 @cindex @code{$<}, inference rules, and @code{VPATH}
 @cindex @code{VPATH}, inference rules, and @code{$<}
-An implementation of make would not prefix @code{$<} if this
+An implementation of @command{make} would not prefix @code{$<} if this
 prerequisite has been found in a @code{VPATH} dir.  This means that
 
 @example
@@ -10522,8 +10527,8 @@ VPATH = ../src
 @end example
 
 This kludge was introduced in Automake in 2000, but the exact context
-have been lost.  If you know which make implementation is involved here,
-please drop us a note.
+have been lost.  If you know which @command{make} implementation is
+involved here, please drop us a note.
 
 
 @item @code{$<} not supported in explicit rules
@@ -10546,9 +10551,9 @@ foo.o: foo.c
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
-Some Make implementations, such as SunOS Make, will
-search prerequisites in @code{VPATH} and rewrite all their occurrences in
-the rule appropriately.
+Some @command{make} implementations, such as SunOS @command{make}, will
+search prerequisites in @code{VPATH} and rewrite all their occurrences
+in the rule appropriately.
 
 For instance
 
@@ -10562,7 +10567,7 @@ foo.o: foo.c
 would execute @code{cc -c ../src/foo.c -o foo.o} if @file{foo.c} was
 found in @file{../src}.  That sounds great.
 
-However, for the sake of other Make implementations, we can't
+However, for the sake of other @command{make} implementations, we can't
 rely on this, and we have to search @code{VPATH} manually:
 
 @example
@@ -10573,7 +10578,7 @@ foo.o: foo.c
 
 @noindent
 However the "prerequisite rewriting" still applies here.  So if
-@file{foo.c} is in @file{../src}, SunOS Make will execute
+@file{foo.c} is in @file{../src}, SunOS @command{make} will execute
 
 @example
 @code{cc -c `test -f ../src/foo.c || echo ../src/`foo.c -o foo.o}
@@ -10675,12 +10680,12 @@ install-HEADERS: $(HEADERS)
 @end example
 
 
-@item OSF/Tru64 make creates prerequisite directories magically
+@item OSF/Tru64 @command{make} creates prerequisite directories magically
 @cindex @code{VPATH} and prerequisite directories
 @cindex prerequisite directories and @code{VPATH}
 
 When a prerequisite is a sub-directory of @code{VPATH}, Tru64
-Make will create it in the current directory.
+@command{make} will create it in the current directory.
 
 @example
 % @kbd{mkdir -p foo/bar build}
@@ -10705,6 +10710,101 @@ all : foo/bar
 
 The above @command{command} will be run on the empty @file{foo/bar}
 directory that was created in the current directory.
+
+@item target lookup
+@cindex @code{VPATH}, resolving target pathnames
+
+GNU @command{make} uses a rather complex algorithm to decide when it
+should use files found via a @code{VPATH} search.  @xref{Search
+Algorithm,, How Directory Searches are Performed, make, The GNU Make
+Manual}.
+
+If a target needs to be rebuilt, GNU @command{make} discards the
+filename found during the @code{VPATH} search for this target, and
+builds the file locally using the filename given in the @file{Makefile}.
+If a target does not need to be rebuilt, GNU @command{make} uses the
+filename found during the @code{VPATH} search.
+
+Other @command{make} implementations, like BSD @command{make}, are
+easier to describe: the filename found during the @code{VPATH} search
+will be used whether the target needs to be rebuilt or not.  Therefore
+new files are created locally, but existing files are updated at their
+@code{VPATH} location.
+
+When attempting a @code{VPATH} build for an autoconfiscated package
+(e.g, @code{mkdir build; ../configure}), this means the GNU
+@command{make} will build everything locally in the @file{build}
+directory, while BSD @command{make} will build new files locally and
+update existing files in the source directory.
+
+@example
+% @kbd{cat Makefile}
+VPATH = ..
+all: foo.x bar.x
+foo.x bar.x: newer.x
+        @@echo Building $@@
+% @kbd{touch ../bar.x}
+% @kbd{touch ../newer.x}
+% @kbd{make}        # GNU make
+Building foo.x
+Building bar.x
+% @kbd{pmake}       # BSD make
+Building foo.x
+Building ../bar.x
+@end example
+
+Another point worth mentioning is that once GNU @command{make} has
+decided to ignore a @code{VPATH} filename (e.g. it ignored
+@file{../bar.x} in the above example) it will continue to ignore it when
+the target occurs as a prerequisite of another rule.
+
+The following example shows that GNU @command{make} does not look up
+@file{bar.x} in @code{VPATH} before performing the @code{.x.y} rule,
+because it ignored the @code{VPATH} result of @file{bar.x} while running
+the @code{bar.x: newer.x} rule.
+
+@example
+% @kbd{cat Makefile}
+VPATH = ..
+all: bar.y
+bar.x: newer.x
+        @@echo Building $@@
+.SUFFIXES: .x .y
+.x.y:
+        cp $< $@@
+% @kbd{touch ../bar.x}
+% @kbd{touch ../newer.x}
+% @kbd{make}        # GNU make
+Building bar.x
+cp bar.x bar.y
+cp: cannot stat `bar.x': No such file or directory
+make: *** [bar.y] Error 1
+% @kbd{pmake}       # BSD make
+Building ../bar.x
+cp ../bar.x bar.y
+@end example
+
+Note that if you drop away the command from the @code{bar.x: newer.x}
+rule, things will magically start to work: GNU @command{make} knows that
+@code{bar.x} hasn't been updated, therefore it doesn't discard the
+result from @code{VPATH} (@file{../bar.x}) in succeeding uses.
+
+@example
+% @kbd{cat Makefile}
+VPATH = ..
+all: bar.y
+bar.x: newer.x
+.SUFFIXES: .x .y
+.x.y:
+        cp $< $@@
+% @kbd{touch ../bar.x}
+% @kbd{touch ../newer.x}
+% @kbd{make}        # GNU make
+cp ../bar.x bar.y
+% @kbd{rm bar.y}
+% @kbd{pmake}       # BSD make
+cp ../bar.x bar.y
+@end example
 
 @end table
 @end table

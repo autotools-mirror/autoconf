@@ -1,3 +1,10 @@
+2002-07-31  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Invoking autom4te): End the option table,
+	fixing a bug introduced by the previous patch.
+	(Limitations of Make): Add a 'target lookup' subentry in the
+	'VPATH' entry.  Rewrite all `make' occurences as `@command{make}'.
+
 2002-07-29  Mark D. Roth  <roth@feep.net>
 
 	* bin/autom4te.in: Remove --include-envvar and --site-macro-subdir
@@ -29,7 +36,7 @@
 
 	* autoconf.texi (Limitations of Make, Making testsuite Scripts):
 	Untabify, since tabs are not enjoyed by texi2dvi and makeinfo.
-	
+
 2002-07-23  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE):
