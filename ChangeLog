@@ -1,3 +1,8 @@
+1999-01-09  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Distinguish between OpenStep and NeXTStep
+	platforms. Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+
 1999-01-09  J"orn Rennecke  <amylaar@cygnus.co.uk>
 
 	* acgeneral.m4 (AC_CHECK_FUNC): Don't actually call the function.
