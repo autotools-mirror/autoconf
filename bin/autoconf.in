@@ -733,9 +733,22 @@ EOF
   fi
 
   # Run m4 on the input file to get traces.
-  $verbose "$me: running $run_m4_trace $trace_prefiles $infile | $M4 $tmp/trace.m4" >&2
-  $run_m4_trace $trace_prefiles $infile 2>&1 >/dev/null |
-    sed -f $tmp/trace2m4.sed |
+  #
+  # We used to have a simple pipe, which was very convenient as it
+  # allows to use traces on never ending expansions (i.e., when
+  # debugging :) but it is requires to keep error messages *and*
+  # traces in stderr.  This is too fragile, as it results in
+  # unexpected data in the output.  autoheader has been fragile to
+  # this.
+  $verbose "$me: running $run_m4_trace $trace_prefiles $infile -o $tmp/traces" >&2
+  $run_m4_trace $trace_prefiles $infile -o $tmp/traces >/dev/null ||
+    {
+      echo "$me: tracing failed" >&2
+      (exit 1); exit 1
+    }
+
+  $verbose "$me: running $M4 $tmp/trace.m4" >&2
+  sed -f $tmp/trace2m4.sed $tmp/traces |
     # Now we are ready to run m4 to process the trace file.
     if $debug; then
       cat >>$tmp/trace.m4
@@ -745,14 +758,14 @@ EOF
     fi |
       # It makes no sense to try to transform __oline__.
       sed '
-	s/@<:@/[/g
-	s/@:>@/]/g
-	s/@S|@/$/g
-	s/@%:@/#/g
-	' >&4 ||
+    	s/@<:@/[/g
+    	s/@:>@/]/g
+    	s/@S|@/$/g
+    	s/@%:@/#/g
+    	' >&4 ||
       {
-        echo "$me: tracing failed" >&2
-	(exit 1); exit 1
+    	echo "$me: traces formatting failed" >&2
+    	(exit 1); exit 1
       }
   ;;
 

@@ -6,22 +6,20 @@
   For example, `@<:@' is translated to `[' just before output.  This
   is useful when writing strings that contain unbalanced quotes, or
   other hard-to-quote constructs.
+- m4_pattern_forbid, m4_pattern_allow
 
 ** Default includes
 - Now include stdint.h.
 - sys/types.h and sys/stat.h are guarded.
 
 ** Bug fixes
-- Mostly in the test suite.
+- The test suite is more robust and presents less false failures.
 - Invocation of GNU M4 now robust to POSIXLY_CORRECT.
 - configure accepts --prefix='' again.
 - AC_CHECK_LIB works properly when its first argument is not a
   literal.
-- HAVE_INTTYPES_H is defined only if not conflicting with previous
-  headers.
+- HAVE_INTTYPES_H is defined only if not conflicting with sys/types.h.
 - build_, host_, and target_alias are AC_SUBST as in 2.13.
-- AC_ARG_VAR: The latest value of precious variables is saved, instead
-  of the first one.
 - AC_ARG_VAR properly propagates precious variables inherited from the
   environment to ./config.status.
 - Using --program-suffix/--program-prefix is portable.
@@ -29,12 +27,13 @@
   likely.
 - `config.status foo' works properly when `foo' depends on variables
   set in an AC_CONFIG_THING INIT-CMD.
-- if inttypes.h and sys/types.h are conflicting, consider inttypes.h
-  doesn't exist.
+- autoheader is more robust to broken input.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
   specify pre-includes.
+- AC_ARG_VAR refuses to run configure when precious variable have
+  changed.
 
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.

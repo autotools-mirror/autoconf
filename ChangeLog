@@ -1,3 +1,9 @@
+2001-06-24  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.in (Task traces): Separate the error messages from the
+	traces to improve robustness.
+
+	
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/torture.at (AC_ARG_VAR): Make it a single test instead of
