@@ -27,6 +27,22 @@ m4_pattern_allow([^m4_(define|shift)$])
 
 AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
+
+## ---------------- ##
+## Utility macros.  ##
+## ---------------- ##
+
+# AT_CMP(FILE-1, FILE-2)
+# ----------------------
+# Check FILE-1 and FILE-2 for equality, like `cmp FILE-1 FILE-2'.  This macro
+# clobbers `expout'.
+m4_define([AT_CMP],
+[m4_ifval([$2],, [m4_fatal([AT_CMP takes two arguments.])])[]dnl
+cp -f "$1" expout
+AT_CHECK([cat "$2"], 0, [expout])
+])# AT_CMP
+
+
 ## ---------------- ##
 ## Testing syntax.  ##
 ## ---------------- ##
@@ -159,68 +175,17 @@ m4_define([AT_DATA_AUTOCONF],
 # ---------------------
 # Create a full configure.ac running BODY, with a config header set up,
 # AC_OUTPUT, and environment checking hooks.
-#
-# Here are the exceptions to AC_STATE_SAVE:
-#
-# - ^ac_
-#   Autoconf's shell name space.
-# - prefix and exec_prefix
-#   are kept undefined (NONE) until AC_OUTPUT which then sets them to
-#   `/usr/local' and `${prefix}' for make.
-# - CONFIG_STATUS and DEFS
-#   Set by AC_OUTPUT.
-# - F77_DUMMY_MAIN
-#   Set by AC_F77_DUMMY_MAIN.
-# - ALLOCA|NEED_SETGID|KMEM_GROUP
-#   AC_FUNCs from acspecific.
-# - AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC
-#   AC_PROGs from acspecific
-# - _|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
-#   Some variables some shells use and change.
-#   `.[*#?].' catches `$#' etc. which are displayed like this:
-#      | '!'=18186
-#      | '#'=0
-#      | '$'=6908
-# - POW_LIB
-#   From acfunctions.m4.
-#
 m4_define([AT_CONFIGURE_AC],
 [AT_DATA_AUTOCONF([aclocal.m4],
 [[
 # AC_STATE_SAVE(FILE)
-# ------------------
-# Save the environment, except for those variables we are allowed to touch.
-# This is to check no test touches the user name space.
-# FIXME: There are surely better ways.  Explore for instance if
-# we can ask help from AC_SUBST.  We have the right to touch what
-# is AC_SUBST'ed.
-#
-# Perhaps grep -E is not supported, or perhaps it chokes on such a big regex.
-# In this case just don't pay attention to the env.  It would be great
-# to keep the error message but we can't: that would break AT_CHECK.
+# -------------------
+# Save the shell variables and directory listing.  AT_CHECK_ENV uses these to
+# confirm that no test modifies variables outside the Autoconf namespace or
+# leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm that
+# tests have the same side effects regardless of caching.
 m4_defun([AC_STATE_SAVE],
-[(set) 2>&1 |
-  $GREP -E -v -e 'm4_join([|],
-      [^a[cs]_],
-      [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
-      [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
-      [^(LIBS|LIB@&t@OBJS|LTLIBOBJS|LDFLAGS)=],
-      [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
-      [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|XENIX|EXEEXT|OBJEXT)=],
-      [^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|(have|no)_x)=],
-      [^(host|build|target)(_(alias|cpu|vendor|os))?=],
-      [^(cross_compiling)=],
-      [^(interpval|PATH_SEPARATOR)=],
-      [^(F77_DUMMY_MAIN|f77_(case|underscore))=],
-      [^(FC_DUMMY_MAIN|FC|FCFLAGS|FCLIBS|FCFLAGS_f)=],
-      [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
-      [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
-      [^(EGREP|FGREP|SED)=],
-      [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
-  # There maybe variables spread on several lines, eg IFS, remove the dead
-  # lines.
-  $GREP '^m4_defn([m4_re_word])=' >state-env.$][1
-test $? = 0 || rm -f state-env.$][1
+[(set) >state-env.$][1 2>&1
 ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 ])# AC_STATE_SAVE
 ]])
@@ -229,7 +194,6 @@ AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/config)
 AC_CONFIG_HEADER(config.h:config.hin)
-AC_PROG_GREP
 AC_STATE_SAVE(before)]
 $1
 [AC_OUTPUT
@@ -272,20 +236,108 @@ m4_define([AT_CHECK_CONFIGURE],
 # ------------
 # Check that the full configure run remained in its variable name space,
 # and cleaned up tmp files.
+#
+# Perhaps grep -E is not supported, or perhaps it chokes on such a big regex.
+# In this case just don't pay attention to the env.  It would be great
+# to keep the error message but we can't: that would break AT_CHECK.
+#
 # Some tests might exit prematurely when they find a problem, in
 # which case `env-after' is probably missing.  Don't check it then.
+#
+# Here are the variables `configure' may modify during execution:
+# - ^as_
+#   M4sh's shell name space.
+# - ^ac_
+#   Autoconf's shell name space.
+# - prefix and exec_prefix
+#   are kept undefined (NONE) until AC_OUTPUT which then sets them to
+#   `/usr/local' and `${prefix}' for make.
+# - (host|build|target)(_(alias|cpu|vendor|os))?
+#   Set by AC_CANONICAL_(HOST|BUILD|TARGET).
+# - cross_compiling
+#   Set by AC_INIT.
+# - interpval
+#   Set by AC_SYS_INTERPRETER.
+# - CONFIG_STATUS and DEFS
+#   Set by AC_OUTPUT.
+# - AC_SUBST'ed variables
+#   (FIXME: Generate a list of these automatically.)
+# - _|@|.[*#?$].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
+#   Some variables some shells use and change.
+#   `.[*#?$].' catches `$#' etc. which are displayed like this:
+#      | '!'=18186
+#      | '#'=0
+#      | '$'=6908
+#
 m4_define([AT_CHECK_ENV],
-[test -f state-ls.before ||
+[# Compare directory listings.
+test -f state-ls.before ||
   AS_ERROR([state-ls.before not present])
+test -f state-ls.after && { AT_CMP([state-ls.before], [state-ls.after]) }
+# Compare variable space dumps.
 if test -f state-env.before && test -f state-env.after; then
-  mv -f state-env.before expout
-  AT_CHECK([cat state-env.after], 0, expout)
-fi
-if test -f state-ls.after; then
-  mv -f state-ls.before expout
-  AT_CHECK([cat state-ls.after], 0, expout)
+  for act_file in state-env.before state-env.after
+  do
+    $GREP -E -v -e 'm4_join([|],
+      [^a[cs]_],
+      [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
+      [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
+      [^(LIBS|LIB@&t@OBJS|LTLIBOBJS|LDFLAGS)=],
+      [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
+      [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|XENIX|EXEEXT|OBJEXT)=],
+      [^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|(have|no)_x)=],
+      [^(host|build|target)(_(alias|cpu|vendor|os))?=],
+      [^(cross_compiling)=],
+      [^(interpval|PATH_SEPARATOR)=],
+      [^(F77_DUMMY_MAIN|f77_(case|underscore))=],
+      [^(FC_DUMMY_MAIN|FC|FCFLAGS|FCLIBS|FCFLAGS_f)=],
+      [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
+      [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
+      [^(GREP|EGREP|FGREP|SED)=],
+      [^(_|@|.[*#?$].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' \
+     $act_file 2>/dev/null |
+      # There may be variables spread on several lines; remove latter lines.
+      $GREP '^m4_defn([m4_re_word])=' >clean-$act_file
+  done
+  AT_CMP([clean-state-env.before], [clean-state-env.after])
 fi
 ])
+
+
+# AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B)
+# -------------------------------------
+# Check the outcomes of two configure runs for equality by comparing dumps of
+# their shell variables.  VAR-FILE-A and VAR-FILE-B are two `set'-style shell
+# variable space dumps.
+#
+# We permit variance between runs in the following shell variables:
+# - ^as_
+#   M4sh's shell name space.
+# - ^ac_, excluding ^ac_cv_
+#   Autoconf's private shell name space.
+# - PPID [bash, zsh]
+# - RANDOM [zsh]
+# - SECONDS [zsh]
+# - '$' [zsh]
+#
+# Furthermore, it is okay for a variable initialized to empty in one run to be
+# unset in another run.  This happens when, for example, cache update code tries
+# a number of values in LIBS and eventually restores LIBS to its original value.
+# If LIBS was previously unset, it will have become set and empty.
+m4_define([AT_CONFIG_CMP],
+[for act_file in $1 $2
+do
+    { $GREP -v \
+'^\(ac\|as\)_
+^\(PPID\|RANDOM\|SECONDS\|'\'\\\$\''\)=
+^[[^=]]*=$'        $act_file 
+      $GREP ^ac_cv $act_file ; } |
+      # Lines that do not look like `foo=bar' are probably latter lines of
+      # multiline values; trim them.
+      $GREP '^m4_defn([m4_re_word])=' >at_config_vars-$act_file
+done
+AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl
+])# AT_CONFIG_CMP
 
 
 # AT_CHECK_DEFINES(CONTENT)
@@ -339,6 +391,9 @@ AT_CHECK_ENV
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
 #
+# We run `configure' twice, both times with a cache, and compare
+# the environment after each run to detect inconsistencies.
+#
 # New macros are not expected to depend upon obsolete macros.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
@@ -347,9 +402,20 @@ AT_CONFIGURE_AC([m4_default([$2], [$1])])
 
 AT_CHECK_AUTOCONF([m4_default([$4], [-W obsolete])])
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
-AT_CHECK_ENV
+
+for at_run in r1 r2
+do
+    AT_CHECK_CONFIGURE([-C])
+    cp -f state-env.after state-env.$at_run
+    cp -f config.h config-h.$at_run
+    AT_CHECK_ENV
+done
+
+AT_CMP([config-h.r1], [config-h.r2])
+AT_CONFIG_CMP([state-env.r1], [state-env.r2])
+
 $3
+
 AT_CLEANUP()dnl
 ])# AT_CHECK_MACRO
 
