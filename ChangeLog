@@ -1,3 +1,33 @@
+2001-08-03  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sugar.m4 (m4_init): Also forbid `_m4_*' tokens.
+	(m4_divert_pop): Dump the whole diversion stack when a diversion
+	mismatch happens.
+	* bin/autom4te.in (&handle_output): Remember of the first
+	occurrence of a possibly undefined macro, not the last.
+	Complain about the possibly undefined macros in the same order as
+	the appear in the output.
+	* lib/autoconf/Makefile.am (autoconf.m4f): List its dependencies.
+	* tests/tools.at (autoconf: forbidden tokens, basic)
+	(autoconf: forbidden tokens, exceptions): No longer sort
+	autoconf's stderr, as it is now deterministic.
+	Check that `dnl' is caught.
+
+2001-08-03  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sugar.m4 (m4_init): Also forbid `_m4_*' tokens.
+	(m4_divert_pop): Dump the whole diversion stack when a diversion
+	mismatch happens.
+	* bin/autom4te.in (&handle_output): Remember of the first
+	occurrence of a possibly undefined macro, not the last.
+	Complain about the possibly undefined macros in the same order as
+	the appear in the output.
+	* lib/autoconf/Makefile.am (autoconf.m4f): List its dependencies.
+	* tests/tools.at (autoconf: forbidden tokens, basic)
+	(autoconf: forbidden tokens, exceptions): No longer sort
+	autoconf's stderr, as it is now deterministic.
+	Check that `dnl' is caught.
+
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Bump to 2.52c.

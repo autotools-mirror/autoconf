@@ -208,7 +208,7 @@ AT_CLEANUP
 AT_SETUP([autoconf: forbidden tokens, basic])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()dnl
+[[AC_PLAIN_SCRIPT()
 AC_FOO
 _AC_BAR
 m4_foo
@@ -217,21 +217,21 @@ BAC_FOO
 B_AC_FOO
 AS_FOO
 _AS_BAR
+[dnl]
 ]])
 
-AT_CHECK_AUTOCONF([], 1, [], [stderr])
-# The output of autoconf is not deterministic here because it
-# uses `for (ind in array)'.  So be sure to have a unique representation.
-AT_CHECK([sort stderr], 0,
+AT_CHECK_AUTOCONF([], 1, [],
 [[configure.ac:2: error: possibly undefined macro: AC_FOO
 configure.ac:3: error: possibly undefined macro: _AC_BAR
 configure.ac:4: error: possibly undefined macro: m4_foo
+configure.ac:5: error: possibly undefined macro: _m4_bar
 configure.ac:7: error: possibly undefined macro: B_AC_FOO
 configure.ac:8: error: possibly undefined macro: AS_FOO
 configure.ac:9: error: possibly undefined macro: _AS_BAR
+configure.ac:10: error: possibly undefined macro: dnl
 ]])
 
-AT_CLEANUP(configure)
+AT_CLEANUP
 
 
 # autoconf: forbidden tokens, exceptions
@@ -260,20 +260,17 @@ BAC_DEFINE
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
-AT_CHECK_AUTOCONF([], 1, [], [stderr])
-# The output of autoconf is not deterministic here because it
-# uses `for (ind in array)'.  So be sure to have a unique representation.
-AT_CHECK([sort stderr], 0,
-[[configure.ac:10: error: possibly undefined macro: FORBIDDEN
+AT_CHECK_AUTOCONF([], 1, [],
+[[configure.ac:7: error: possibly undefined macro: NOT_AC_ALLOWED
+configure.ac:7: error: possibly undefined macro: AC_ALLOWED_NOT
+configure.ac:10: error: possibly undefined macro: FORBIDDEN
 configure.ac:14: error: possibly undefined macro: AC_THIS_IS_INVALID
 configure.ac:14: error: possibly undefined macro: _AC_THIS_IS_INVALID_TOO
 configure.ac:15: error: possibly undefined macro: ALTHOUGH_AC_THIS_IS
-configure.ac:7: error: possibly undefined macro: AC_ALLOWED_NOT
-configure.ac:7: error: possibly undefined macro: NOT_AC_ALLOWED
 configure:18: error: possibly undefined macro: AC_OUTPUT
 ]])
 
-AT_CLEANUP(configure err)
+AT_CLEANUP
 
 
 

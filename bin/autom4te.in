@@ -532,7 +532,7 @@ sub handle_output ($)
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $oline
-	    if /$forbidden/ && !/$allowed/;
+	    if /$forbidden/ && !/$allowed/ && ! exists $prohibited{$_};
 	}
     }
 
@@ -566,7 +566,7 @@ sub handle_output ($)
 	}
     }
   warn "$output:$prohibited{$_}: error: possibly undefined macro: $_\n"
-    foreach (keys %prohibited);
+    foreach (sort { $prohibited{$a} <=> $prohibited{$b} } keys %prohibited);
 }
 
 

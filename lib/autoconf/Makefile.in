@@ -79,6 +79,10 @@ SUFFIXES = .m4 .m4f
 M4_INCLUDES = --include $(srcdir)                --include $(top_builddir)/lib                --include $(top_srcdir)/lib
 
 
+# Some day we should explain to Automake how to use autom4te to compute
+# the dependencies...
+srclibdir = $(top_srcdir)/lib
+
 # Files that should be removed, but which Automake does not know.
 CLEANFILES = autoconf.m4f
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -277,8 +281,18 @@ $(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
 	else \
 	  rm -f freeze.log; \
 	fi
-
-autoconf.m4f: $(m4sources)
+autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
+              $(srclibdir)/m4sugar/m4sh.m4	\
+              $(srclibdir)/autoconf/autoconf.m4	\
+              $(srclibdir)/autoconf/general.m4	\
+              $(srclibdir)/autoconf/oldnames.m4	\
+              $(srclibdir)/autoconf/specific.m4	\
+              $(srclibdir)/autoconf/lang.m4 \
+              $(srclibdir)/autoconf/c.m4 \
+              $(srclibdir)/autoconf/fortran.m4	\
+              $(srclibdir)/autoconf/functions.m4 \
+              $(srclibdir)/autoconf/headers.m4	\
+              $(srclibdir)/autoconf/types.m4
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

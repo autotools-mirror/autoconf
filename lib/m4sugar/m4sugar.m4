@@ -728,7 +728,8 @@ m4_builtin([divert], _m4_divert(_m4_divert_diversion))dnl
 m4_define([m4_divert_pop],
 [m4_ifval([$1],
      [m4_if(_m4_divert([$1]), m4_divnum, [],
-            [m4_fatal([$0($1): unexpected current diversion: ]m4_divnum)])])dnl
+            [m4_fatal([$0($1): diversion mismatch: ]
+m4_defn([m4_divert_stack]))])])dnl
 m4_popdef([_m4_divert_diversion])dnl
 dnl m4_ifndef([_m4_divert_diversion],
 dnl           [m4_fatal([too many m4_divert_pop])])dnl
@@ -1724,14 +1725,14 @@ m4_define([m4_init],
 m4_ifndef([m4_tmpdir],
           [m4_define([m4_tmpdir], [/tmp])])
 
-# M4sugar reserves `m4_[A-Za-z0-9_]*'.  We'd need \b and +,
-# but they are not portable.
-m4_pattern_forbid([^m4_])
+# All the M4sugar macros start with `m4_', except `dnl' kept as is
+# for sake of simplicity.
+m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])
 
 # Check the divert push/pop perfect balance.
 m4_wrap([m4_ifdef([_m4_divert_diversion],
-         [m4_fatal([$0: unbalanced m4_divert_push:]
+                  [m4_fatal([$0: unbalanced m4_divert_push:]
 m4_defn([m4_divert_stack]))])[]])
 
 m4_divert_push([KILL])

@@ -69,7 +69,21 @@ M4_INCLUDES =  --include $(srcdir) \
 	  rm -f freeze.log; \
 	fi
 
-autoconf.m4f: $(m4sources)
+# Some day we should explain to Automake how to use autom4te to compute
+# the dependencies...
+srclibdir = $(top_srcdir)/lib
+autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
+              $(srclibdir)/m4sugar/m4sh.m4	\
+              $(srclibdir)/autoconf/autoconf.m4	\
+              $(srclibdir)/autoconf/general.m4	\
+              $(srclibdir)/autoconf/oldnames.m4	\
+              $(srclibdir)/autoconf/specific.m4	\
+              $(srclibdir)/autoconf/lang.m4 \
+              $(srclibdir)/autoconf/c.m4 \
+              $(srclibdir)/autoconf/fortran.m4	\
+              $(srclibdir)/autoconf/functions.m4 \
+              $(srclibdir)/autoconf/headers.m4	\
+              $(srclibdir)/autoconf/types.m4
 
 # Files that should be removed, but which Automake does not know.
 CLEANFILES = autoconf.m4f
