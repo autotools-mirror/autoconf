@@ -268,6 +268,11 @@ my $m4 = $ENV{"M4"} || '@M4@';
 die "$me: need GNU m4 1.4 or later: $m4\n"
   if system "$m4 --help </dev/null 2>&1 | fgrep reload-state >/dev/null";
 
+# Set some high recursion limit as the default limit, 250, has already
+# been hit with AC_OUTPUT.  Don't override the user's choice.
+$m4 .= ' --nesting-limit=1024'
+  if " $m4 " !~ / (--nesting-limit|-L) /;
+
 # @M4_BUILTINS -- M4 builtins and a useful comment.
 my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
 map { s/:.*//;s/\W// } @m4_builtins;

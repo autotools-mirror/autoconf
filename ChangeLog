@@ -1,5 +1,10 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* autom4te.in ($m4): Handle the --nesting-limit.
+	* autoconf.in (M4): Remove.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in ($AWK): Remove, no longer used.
 	* test/tools.at: Use AT_CHECK_AUTOCONF.
 	(AWK portability): Remove, for autoconf no longer uses AWK.
