@@ -1,5 +1,11 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (pkgdata_DATA, EXTRA_DIST): Removed acconfig.h.
+	* testsuite/autoconf.s/defines.exp: Commented out, there is no
+	longer an acconfig.h.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.m4: Insert -*- Autoconf -*-.
 	* acgeneral.m4: Likewise.
 	* acspecific.m4: Likewise.

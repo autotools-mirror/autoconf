@@ -30,7 +30,7 @@ bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
 pkgdata_DATA = acfunctions acheaders acidentifiers acmakevars \
-               acprograms acconfig.h autoconf.m4f autoheader.m4f \
+               acprograms autoconf.m4f autoheader.m4f \
                acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 \
                autoheader.m4 acversion.m4
 
@@ -41,7 +41,7 @@ standards_TEXINFOS = make-stds.texi
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
             acfunctions acheaders acidentifiers acmakevars \
-             acprograms acconfig.h acgeneral.m4 acoldnames.m4 \
+             acprograms acgeneral.m4 acoldnames.m4 \
              acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in \
 	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
 	     ifnames.sh autoscan.pl INSTALL.txt
