@@ -1,3 +1,8 @@
+Wed Mar 13 12:49:51 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_OUTPUT_HEADER): Undo last change to $ac_dB,
+	and instead change the code written into conftest.hdr.
+
 Tue Mar 12 02:51:24 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Apply Jan 15 fix to
