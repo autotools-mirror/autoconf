@@ -1,3 +1,22 @@
+1999-08-22  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acspecific.m4 (AC_PROG_CC): Remove uname test for win32/Cygwin,
+	and just test for `cl' as a last resort.
+ 
+	* autoconf.texi (Particular Programs): Document new optional
+	argument to AC_PROG_CC, AC_PROG_CXX and AC_PROG_F77.  Document
+	additions to the Fortran 77 compiler search list.
+ 
+ 	* acspecific.m4 (AC_PROG_F77): Add more Fortran 77 compilers to
+	the search list.  Contributed by Steven G. Johnson
+	<stevenj@alum.mit.edu>.
+ 
+	(AC_PROG_CC): Likewise.
+	(AC_PROG_CXX): Likewise.
+	* acspecific.m4 (AC_PROG_F77): Add an optional first argument
+	which gives the user an opportunity to specify an alternative
+	search list for the compiler.
+
 1999-07-20  Tom Tromey  <tromey@cygnus.com>
 
 	* autoheader.sh: Fixed regexp when searching for missing symbol.
