@@ -1,3 +1,7 @@
+2004-11-29  Stepan Kasal  <kasal@ucw.cz>
+
+	* NEWS: Add ^L above each release.
+
 2004-11-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix documentation problems reported by Russ Boylan in
@@ -11,7 +15,7 @@
 	* NEWS: Mention that bugs.gnu.org is kaput.
 	* README: Likewise.  Mention where mailing list archives can be found.
 
-2004-11-28  Stepan Kasal  <address@hidden>
+2004-11-28  Stepan Kasal  <address@ucw.cz>
 
 	* HACKING: Refer to "coreutils", not "File, Shell or Text utils".
 	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): A typo in the comment.
