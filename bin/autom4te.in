@@ -587,6 +587,29 @@ sub handle_m4 ($@)
 }
 
 
+# warn_forbidden ($WHERE, $WORD, %FORBIDDEN)
+# ------------------------------------------
+# $WORD is forbidden.  Warn with a dedicated error message if in
+# %FORBIDDEN, otherwise, a simple `error: possibly undefined macro'
+# will do.
+sub warn_forbidden ($$%)
+{
+  my ($where, $word, %forbidden) = @_;
+  my $message;
+
+  for my $re (sort keys %forbidden)
+    {
+      if ($word =~ $re)
+	{
+	  $message = $forbidden{$re};
+	  last;
+	}
+    }
+  $message ||= "possibly undefined macro: $word";
+  warn "$where: error: $message\n";
+}
+
+
 # handle_output ($REQ, $OUTPUT)
 # -----------------------------
 # Run m4 on the input files, perform quadrigraphs substitution, check for
@@ -599,14 +622,18 @@ sub handle_output ($$)
 
   # Load the forbidden/allowed patterns.
   handle_traces ($req, "$tmp/patterns",
-		 ('m4_pattern_forbid' => 'forbid:$1',
+		 ('m4_pattern_forbid' => 'forbid:$1:$2',
 		  'm4_pattern_allow'  => 'allow:$1'));
   my @patterns = new Autom4te::XFile ("$tmp/patterns")->getlines;
   chomp @patterns;
-  my $forbidden = join ('|', map { /^forbid:(.*)/ } @patterns) || "^\$";
-  my $allowed   = join ('|', map { /^allow:(.*)/  } @patterns) || "^\$";
+  my %forbidden =
+    map { /^forbid:([^:]+):.+$/ => /^forbid:[^:]+:(.+)$/ } @patterns;
+  my $forbidden = join ('|', map { /^forbid:([^:]+)/ } @patterns) || "^\$";
+  my $allowed   = join ('|', map { /^allow:([^:]+)/  } @patterns) || "^\$";
 
   verbose "forbidden tokens: $forbidden";
+  verbose "forbidden token : $_ => $forbidden{$_}"
+    foreach (sort keys %forbidden);
   verbose "allowed   tokens: $allowed";
 
   # Read the (cached) raw M4 output, produce the actual result.  We
@@ -675,15 +702,16 @@ sub handle_output ($$)
       # Complain once per word, but possibly several times per line.
       while (/$prohibited/)
 	{
-	  warn "$ARGV[$#ARGV]:$.: error: possibly undefined macro: $1\n";
-	  delete $prohibited{$1};
+	  my $word = $1;
+	  warn_forbidden ("$ARGV[$#ARGV]:$.", $word, %forbidden);
+	  delete $prohibited{$word};
 	  # If we're done, exit.
 	  return
 	    if ! %prohibited;
 	  $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
 	}
     }
-  warn "$output:$prohibited{$_}: error: possibly undefined macro: $_\n"
+  warn_forbidden ("$output:$prohibited{$_}", $_, %forbidden)
     foreach (sort { $prohibited{$a} <=> $prohibited{$b} } keys %prohibited);
 }
 

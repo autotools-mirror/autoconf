@@ -1222,8 +1222,8 @@ m4_define([$1],
                          [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
 
 
-# m4_pattern_forbid(ERE)
-# ----------------------
+# m4_pattern_forbid(ERE, [WHY])
+# -----------------------------
 # Declare that no token matching the extended regular expression ERE
 # should be seen in the output but if...
 m4_define([m4_pattern_forbid], [])

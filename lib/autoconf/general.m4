@@ -1224,6 +1224,8 @@ m4_define([AC_INIT],
 [# Forbidden tokens and exceptions.
 m4_pattern_forbid([^_?A[CHUM]_])
 m4_pattern_forbid([_AC_])
+m4_pattern_forbid([^LIBOBJS$],
+                  [do not use LIBOBJ directly, use AC_LIBOBJS])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
 AS_INIT
@@ -2342,8 +2344,8 @@ m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
                [AC_LIBSOURCE([$1.c])],
                [$2])dnl
-AC_SUBST([LIBOBJS])dnl
-LIBOBJS="$LIBOBJS $1.$ac_objext"])
+AC_SUBST([LIB@&t@OBJS])dnl
+LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext"])
 
 
 # AC_LIBOBJ(FILENAME-NOEXT)

@@ -15,6 +15,7 @@ else
   as_expr=false
 fi
 
+
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -60,6 +61,7 @@ fi
     { $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set; } ||
       { LC_MESSAGES=C; export LC_MESSAGES; }
 
+
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
@@ -92,6 +94,7 @@ if test "${PATH_SEPARATOR+set}" != set; then
   fi
   rm -f conftest.sh
 fi
+
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
@@ -177,6 +180,7 @@ done
   exit
 }
 
+
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -216,6 +220,7 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
 
+
 # IFS
 # We need space, tab and new line, in precisely that order.
 as_nl='
@@ -224,6 +229,7 @@ IFS=" 	$as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=$PATH_SEPARATOR; export CDPATH; }
+
 
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
@@ -644,6 +650,7 @@ test -n "$host_alias" && ac_tool_prefix=$host_alias-
 
 test "$silent" = yes && exec 6>/dev/null
 
+
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
@@ -895,11 +902,13 @@ done
 
 cat >&5 <<_ACEOF
 
+
 ## ----------- ##
 ## Core tests. ##
 ## ----------- ##
 
 _ACEOF
+
 
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
@@ -1073,6 +1082,33 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ac_aux_dir=
 for ac_dir in config $srcdir/config; do
   if test -f $ac_dir/install-sh; then
@@ -1099,6 +1135,7 @@ ac_config_sub="$SHELL $ac_aux_dir/config.sub"
 ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 
 ac_config_files="$ac_config_files config/Makefile"
+
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -1153,6 +1190,7 @@ case $as_dir/ in
     ;;
 esac
 done
+
 
 fi
   if test "${ac_cv_path_install+set}" = set; then
@@ -1233,6 +1271,7 @@ s/[\\$]/&&/g;s/;s,x,x,$//
 _ACEOF
 program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
 rm conftest.sed
+
 
 # expand $ac_aux_dir to an absolute path
 am_aux_dir=`cd $ac_aux_dir && pwd`
@@ -1327,6 +1366,7 @@ if test "x$enable_dependency_tracking" != xno; then
   AMDEPBACKSLASH='\'
 fi
 
+
 if test "x$enable_dependency_tracking" != xno; then
   AMDEP_TRUE=
   AMDEP_FALSE='#'
@@ -1334,6 +1374,9 @@ else
   AMDEP_TRUE='#'
   AMDEP_FALSE=
 fi
+
+
+
 
 rm -f .deps 2>/dev/null
 mkdir .deps 2>/dev/null
@@ -1344,6 +1387,7 @@ else
   DEPDIR=_deps
 fi
 rmdir .deps 2>/dev/null
+
 
 # test to see if srcdir already configured
 if test "`cd $srcdir && pwd`" != "`pwd`" &&
@@ -1361,9 +1405,11 @@ cat >>confdefs.h <<_ACEOF
 #define PACKAGE "$PACKAGE"
 _ACEOF
 
+
 cat >>confdefs.h <<_ACEOF
 #define VERSION "$VERSION"
 _ACEOF
+
 
 # Autoconf 2.50 wants to disallow AM_ names.  We explicitly allow
 # the ones we care about.
@@ -1372,13 +1418,18 @@ _ACEOF
 
 ACLOCAL=${ACLOCAL-"${am_missing_run}aclocal"}
 
+
 AUTOCONF=${AUTOCONF-"${am_missing_run}autoconf"}
+
 
 AUTOMAKE=${AUTOMAKE-"${am_missing_run}automake"}
 
+
 AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}
 
+
 MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
+
 
 AMTAR=${AMTAR-"${am_missing_run}tar"}
 
@@ -1389,10 +1440,13 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 
+
 # Initialize the test suite and build position independent wrappers.
 ac_config_commands="$ac_config_commands tests/package.m4"
 
+
 ac_config_commands="$ac_config_commands tests/atconfig"
+
 
 ac_config_files="$ac_config_files tests/Makefile tests/atlocal"
 
@@ -1448,6 +1502,8 @@ else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
+
+
 
 # We use a path for GNU m4 so even if users have another m4 first in
 # their path, the installer can configure with a path that has GNU m4
@@ -1520,10 +1576,13 @@ fi
 # This is needed because Automake does not seem to realize there is
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 
+
 # Man pages.
 ac_config_files="$ac_config_files man/Makefile"
 
+
 HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
+
 
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
@@ -1579,6 +1638,7 @@ echo "$as_me: error: Perl 5.005_03 or better is required" >&2;}
 
 # Emacs modes.
 ac_config_files="$ac_config_files lib/emacs/Makefile"
+
 
 # Check whether --with-lispdir or --without-lispdir was given.
 if test "${with_lispdir+set}" = set; then
@@ -1665,10 +1725,16 @@ echo "${ECHO_T}$am_cv_lispdir" >&6
 
 fi;
 
+
+
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
 
+
+
+
 ac_config_files="$ac_config_files Makefile doc/Makefile lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile bin/Makefile"
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -1776,6 +1842,8 @@ ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -n -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f confdef2opt.sed
 
+
+
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
@@ -1839,6 +1907,7 @@ fi
     { $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set; } ||
       { LC_MESSAGES=C; export LC_MESSAGES; }
 
+
 # Name of the executable.
 as_me=`(basename "$0") 2>/dev/null ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
@@ -1871,6 +1940,7 @@ if test "${PATH_SEPARATOR+set}" != set; then
   fi
   rm -f conftest.sh
 fi
+
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
@@ -1958,6 +2028,7 @@ echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;
   exit
 }
 
+
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -1996,6 +2067,7 @@ as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
 
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
+
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -2166,7 +2238,10 @@ PACKAGE_VERSION='$PACKAGE_VERSION'
 PACKAGE_STRING='$PACKAGE_STRING'
 PACKAGE_BUGREPORT='$PACKAGE_BUGREPORT'
 
+
 _ACEOF
+
+
 
 cat >>$CONFIG_STATUS <<\_ACEOF
 for ac_config_target in $ac_config_targets
@@ -2424,6 +2499,7 @@ ac_top_buildpath=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
 ac_srcpath=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_top_srcpath=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
+
   case $INSTALL in
   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
   *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
@@ -2563,6 +2639,7 @@ ac_top_buildpath=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
 ac_srcpath=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_top_srcpath=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
+
   { echo "$as_me:$LINENO: executing $ac_dest commands" >&5
 echo "$as_me: executing $ac_dest commands" >&6;}
   case $ac_dest in
@@ -2605,6 +2682,7 @@ _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
 
+
 # configure is writing to config.log, and then calls config.status.
 # config.status does its own redirection, appending to config.log.
 # Unfortunately, on DOS this fails, as config.log is still kept open
@@ -2631,5 +2709,7 @@ read the relevant mailing lists, most importantly <autoconf@gnu.org>.
 
 Below you will find information on the status of this version of Autoconf.
 
+
 EOF
     sed -n '/^\* Status/,$p' $srcdir/BUGS
+
