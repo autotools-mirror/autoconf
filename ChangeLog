@@ -1,3 +1,8 @@
+2001-01-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* acfunctions.m4 (AC_FUNC_MEMCMP): Missing comma in AC_TRY_RUN
+	invocation.
+
 2001-01-11  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): New.

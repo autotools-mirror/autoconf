@@ -769,7 +769,7 @@ main ()
       }
     exit (0);
   }
-}]
+}],
    ac_cv_func_memcmp_working=yes,
    ac_cv_func_memcmp_working=no,
    ac_cv_func_memcmp_working=no)])
