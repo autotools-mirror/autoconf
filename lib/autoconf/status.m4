@@ -577,7 +577,7 @@ _ACEOF
 # Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if egrep ["^[ 	]*#[ 	]*define"] $tmp/in >/dev/null; then' >>$CONFIG_STATUS
+echo '  if grep ["^[ 	]*#[ 	]*define"] $tmp/in >/dev/null; then' >>$CONFIG_STATUS
 echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
 echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
@@ -601,7 +601,7 @@ do
   mv conftest.tail conftest.defines
 done
 rm -f conftest.defines
-echo '  fi # egrep' >>$CONFIG_STATUS
+echo '  fi # grep' >>$CONFIG_STATUS
 echo >>$CONFIG_STATUS
 
 # Break up conftest.undefs because some shells have a limit on the size
