@@ -32,8 +32,8 @@
                                 How to create configuration scripts
 * autoreconf: (autoconf)Invoking autoreconf.
                                 Remaking multiple @code{configure} scripts
-* configure: (autoconf)Invoking aclocal.
-                                How to use the Autoconf output
+* configure: (autoconf)Invoking configure.
+                                Configuring a package
 * config.status: (autoconf)Invoking config.status.
                                 Recreating a configuration
 @end direntry
@@ -130,7 +130,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Writing Macros::              Adding new macros to Autoconf
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @code{configure}
-* Invoking configure::          How to use the Autoconf output
+* Running configure scripts::   How to use the Autoconf output
 * Invoking config.status::      Recreating a configuration
 * Questions::                   Questions about Autoconf, with answers
 * Upgrading::                   Tips for upgrading from version 1
@@ -322,7 +322,7 @@ Running @code{configure} Scripts
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* Operation Controls::          Changing how @code{configure} runs
+* Invoking configure::          Changing how @code{configure} runs
 
 Questions About Autoconf
 
@@ -5193,7 +5193,7 @@ By default, configure uses no cache file (technically, it uses
 @samp{--cache-file=/dev/null}), so as to forestall problems caused by
 accidental use of stale cache files.
 
-To enable caching, @code{configure} accepts the optional argument
+To enable caching, @code{configure} accepts
 @samp{--cache-file=@var{file}} where @var{file} is the name of the cache
 file to use, traditionally @file{./config.cache}.  The cache file is
 created if it does not exist already.  When @code{configure} calls
@@ -5204,16 +5204,7 @@ with the @code{AC_CONFIG_SUBDIRS} macro.
 
 @file{config.status} only pays attention to the cache file if it is
 given the @samp{--recheck} option, which makes it rerun
-@code{configure}.  If you are anticipating a long debugging period, you
-can also disable cache loading and saving for a @code{configure} script
-by redefining the cache macros at the start of @file{configure.in}:
-
-@example
-define([AC_CACHE_LOAD])
-define([AC_CACHE_SAVE])
-AC_INIT(@r{whatever})
-@r{ ... rest of configure.in ...}
-@end example
+@code{configure}.
 
 It is wrong to try to distribute cache files for particular system types.
 There is too much room for error in doing that, and too much
@@ -6175,7 +6166,7 @@ macro which does that.
 
 @c ===================================================== Site Configuration.
 
-@node Site Configuration, Invoking configure, Manual Configuration, Top
+@node Site Configuration, Running configure scripts, Manual Configuration, Top
 @chapter Site Configuration
 
 @code{configure} scripts support several kinds of local configuration
@@ -6614,7 +6605,7 @@ fi
 
 @c ============================================== Running configure Scripts.
 
-@node Invoking configure, Invoking config.status, Site Configuration, Top
+@node Running configure scripts, Invoking config.status, Site Configuration, Top
 @chapter Running @code{configure} Scripts
 @cindex @code{configure}
 
@@ -6632,7 +6623,7 @@ may use comes with Autoconf.
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* Operation Controls::          Changing how @code{configure} runs
+* Invoking configure::          Changing how @code{configure} runs
 @end menu
 
 @include install.texi
@@ -6640,7 +6631,7 @@ may use comes with Autoconf.
 
 @c ============================================== Recreating a Configuration
 
-@node Invoking config.status, Questions, Invoking configure, Top
+@node Invoking config.status, Questions, Running configure scripts, Top
 @chapter Recreating a Configuration
 @cindex @code{config.status}
 

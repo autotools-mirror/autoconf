@@ -16,9 +16,10 @@ current configuration, and a file @file{config.log} containing compiler
 output (useful mainly for debugging @code{configure}).
 
 It can also use an optional file (typically called @file{config.cache}
-and enabled with @samp{--cache-file=./config.cache}) that saves the
-results of its tests to speed up reconfiguring.  (Caching is disabled by
-default to prevent problems with accidental use of stale cache files.)
+and enabled with @samp{--cache-file=./config.cache} or simply @samp{-C})
+that saves the results of its tests to speed up reconfiguring.  (Caching
+is disabled by default to prevent problems with accidental use of stale
+cache files.)
 
 If you need to do unusual things to compile the package, please try to
 figure out how @code{configure} could check whether to do them, and mail
@@ -203,8 +204,8 @@ will cause the specified gcc to be used as the C compiler (unless it is
 overridden in the site shell script).
 
 
-@node Operation Controls
-@section Operation Controls
+@node Invoking configure
+@section Invoking @code{configure}
 
 @code{configure} recognizes the following options to control how it
 operates.
@@ -224,6 +225,10 @@ script, and exit.
 Enable the cache: use and save the results of the tests in @var{file},
 traditionally @file{./config.cache}.  @var{file} defaults to
 @file{/dev/null} to disable caching.
+
+@item --config-cache
+@itemx -C
+Alias for @samp{--cache-file=config.cache}.
 
 @item --quiet
 @itemx --silent

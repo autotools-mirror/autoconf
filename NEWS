@@ -60,6 +60,9 @@ test cases in this new frame work.
   Cross compilation is enabled iff the user specified `--host'.
   `configure' now fails if it can't run the executables it compiles,
   unless cross-compilation is enabled.
+- Cache file
+  The cache file is disabled by default.  The new options
+  `--config-cache', `-C' set the cache to `config.cache'.
 
 ** config.status
 - faster

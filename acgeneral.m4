@@ -1012,6 +1012,9 @@ do
   | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
     cache_file=$ac_optarg ;;
 
+  --config-cache | -C)
+    cache_file=config.cache ;;
+
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
   -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
@@ -1277,7 +1280,8 @@ Try `configure --help' for more information.])
 done
 
 if test -n "$ac_prev"; then
-  AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
+  ac_option=--`echo $ac_prev | sed 's/_/-/g'`
+  AC_MSG_ERROR(missing argument to $ac_option)
 fi
 
 # Be sure to have absolute paths.
@@ -1327,6 +1331,7 @@ Configuration:
   -V, --version           display version information and exit
   -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for \`--cache-file=config.cache'
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
@@ -4586,6 +4591,8 @@ if test "$no_recursion" != yes; then
     -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
     | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
     | --c=*)
+      ;;
+    --config-cache | -C)
       ;;
     -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
       ac_prev=srcdir ;;

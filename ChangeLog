@@ -1,3 +1,22 @@
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
+	Add `configure --config-cache', `-C' as a shortcut for
+	`--cache-file=config.cache'.
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Let `configure' support
+	`--config-cache' and `-C'.
+	Report them in `--help'.
+	Fix the display of missing argument.
+	(_AC_OUTPUT_SUBDIRS): Adjust.
+	* doc/install.texi (Invoking configure): Rename the node as
+	(Running configure scripts): this, the name of the chapter.
+	(Operation Controls): Rename as...
+	(Invoking configure): this.
+	Document the new options.
+	* doc/autoconf.texi (direntry): Huh?  What is this `aclocal' doing
+	here?  Point to `Invoking configure'.
+	(Cache Files): No need to document the disabling of the cache.
+
 2000-05-22 Mark Elbrecht <snowball3@bigfoot.com>,  Eli Zaretskii <eliz@gnu.org>
 
 	More MS-DOS support.
