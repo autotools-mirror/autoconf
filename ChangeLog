@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (debug): New variable.
+	(tmp): s/ac/ar/.
+	<options handling>: Support --debug.
+	* doc/autoconf.texi: Adjust.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	Fix the bugs recently introduced in autoreconf.
 
 	* autoreconf.sh: Don't run automake when the package is not using

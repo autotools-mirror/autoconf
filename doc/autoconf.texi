@@ -1098,6 +1098,10 @@ Print the version number of Autoconf and exit.
 Print the name of each directory where @code{autoreconf} runs
 @code{autoconf} (and @code{autoheader}, if appropriate).
 
+@item --debug
+@itemx -d
+Don't remove the temporary files.
+
 @item --force
 @itemx -f
 Remake even @file{configure} scripts and configuration headers that are

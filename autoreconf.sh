@@ -33,6 +33,7 @@ the \`--force' option.
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
   -v, --verbose         verbosely report processing
+  -d, --debug           don't remove temporary files
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -f, --force           consider every files are obsolete
@@ -78,6 +79,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${AC_MACRODIR=@datadir@}
+debug=false
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
 force=false
 localdir=.
@@ -116,6 +118,8 @@ while test $# -gt 0; do
     --verbose | --verb* | -v )
        verbose=echo
        shift;;
+    --debug | --d* | -d )
+       debug=:; shift ;;
 
     --localdir=* | --l*=* )
        localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
@@ -184,7 +188,7 @@ $debug ||
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {
-  tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp)
+  tmp=$TMPDIR/ar$$ && (umask 077 && mkdir $tmp)
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
@@ -231,7 +235,7 @@ while read dir; do
   case "$dir" in
   .) dots= ;;
   *) # A "../" for each directory in /$dir.
-     dots=`echo /$dir|sed 's%/[^/]*%../%g'` ;;
+     dots=`echo /$dir | sed 's%/[^/]*%../%g'` ;;
   esac
 
   case "$localdir" in
