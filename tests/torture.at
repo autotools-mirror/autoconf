@@ -533,6 +533,9 @@ AT_CHECK_CONFIGURE([], 1, ignore, ignore)
 AT_CLEANUP
 
 
+
+AT_BANNER([autoreconf.])
+
 ## ---------------------------- ##
 ## Configuring subdirectories.  ##
 ## ---------------------------- ##
@@ -706,5 +709,98 @@ AT_CHECK([cd builddir && ../configure INNERMOST=build/tsomrenni], 0, [ignore])
 AT_CHECK([grep INNERMOST builddir/inner/innermost/config.h], 0,
 [[#define INNERMOST build/tsomrenni
 ]])
+
+AT_CLEANUP
+
+
+
+## -------------------------------- ##
+## Non-Autoconf AC_CONFIG_SUBDIRS.  ##
+## -------------------------------- ##
+
+AT_SETUP([Non-Autoconf AC_CONFIG_SUBDIRS])
+AT_KEYWORDS([autoreconf])
+
+# We use aclocal (via autoreconf).
+AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+
+AT_DATA([install-sh], [])
+AT_DATA([configure.in],
+[[AC_INIT(GNU Outer, 1.0)
+AC_CONFIG_SUBDIRS([inner])
+AC_OUTPUT
+]])
+
+AS_MKDIR_P([inner])
+
+AT_DATA([inner/configure],
+[[#! /bin/sh
+case "$*" in
+    *--help*) echo 'No Autoconf here, folks!' ;;
+    *)        echo got_it >myfile ;;
+esac
+exit 0
+]])
+chmod +x inner/configure
+
+AT_CHECK([autoreconf -Wall -v], 0, [ignore], [ignore])
+
+# Running the outer configure recursively should provide the innermost
+# help strings.
+AT_CHECK([./configure --help=recursive | grep "folks"], 0, [ignore])
+
+# Running the outer configure should trigger the inner.
+AT_CHECK([./configure], 0, [ignore])
+AT_CHECK([test -f inner/myfile], 0)
+
+AT_CLEANUP
+
+
+
+## ----------------- ##
+## Empty directory.  ##
+## ----------------- ##
+
+AT_SETUP([Empty directory])
+AT_KEYWORDS([autoreconf])
+
+# We use aclocal (via autoreconf).
+AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+
+# The test group directory is not necessarily _empty_, but it does not contain
+# files meaningful to `autoreconf'.
+
+AT_CHECK([autoreconf -Wall -v], 1, [ignore], [ignore])
+
+AT_CLEANUP
+
+
+
+## ------------------------------ ##
+## Unusual Automake input files.  ##
+## ------------------------------ ##
+
+# This parallels gnumake.test in Automake.
+
+AT_SETUP([Unusual Automake input files])
+AT_KEYWORDS([autoreconf])
+
+# We use aclocal and automake via autoreconf.
+AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+
+AT_DATA([configure.in],
+[[AC_INIT(GNU foo, 1.0)
+AM_INIT_AUTOMAKE
+AC_CONFIG_FILES([HeeHee])
+AC_OUTPUT
+]])
+
+AT_DATA([HeeHee.am],
+[[# Humans do no worse than `GNUmakefile.am'.
+AUTOMAKE_OPTIONS = foreign
+]])
+
+AT_CHECK([autoreconf -Wall -v -i], 0, [ignore], [ignore])
+AT_CHECK([test -f HeeHee.in])
 
 AT_CLEANUP

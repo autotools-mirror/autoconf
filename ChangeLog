@@ -1,5 +1,16 @@
 2004-12-30  Noah Misch  <noah@cs.caltech.edu>
 
+	* bin/autoreconf.in (autoreconf_current_directory):  AM_INIT_AUTOMAKE
+	signals that the package uses Automake; a `Makefile.am' is typical but
+	not essential.  Reported by Magnus Therning.
+	* tests/torture.at (autoreconf.): New banner.
+	(autoreconf and non-AC configure): Rename to `Non-Autoconf
+	AC_CONFIG_SUBDIRS'.
+	(autoreconf an empty directory): Rename to `Empty directory'.
+	(Unusual Automake input files): New test.
+
+2004-12-30  Noah Misch  <noah@cs.caltech.edu>
+
 	* lib/autotest/general.m4 (AT_CAPTURE_FILE): New macro.
 	(AT_SETUP): Clear AT_capture_files.
 	(_AT_CHECK): On failure, log each of AT_capture_files.  Fix comment.
