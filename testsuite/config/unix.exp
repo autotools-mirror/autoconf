@@ -29,7 +29,10 @@ proc autoconf_version {} {
 
     if {[which $AUTOCONF] != 0} then {
 	set tmp [ eval exec $AUTOCONF $AUTOCONFFLAGS --version /dev/null ]
-	regexp "version.*$" $tmp version
+	# Use the first line of output only.
+	set tmp [lindex [split $tmp \n] 0]
+	regexp {^(autoconf) (\(.*\)) (.*)} $tmp junk autoconf ignore vers
+	set version "$autoconf $vers"
 	if [info exists version] then {
 	    clone_output "[which $AUTOCONF] $version\n"
 	} else {

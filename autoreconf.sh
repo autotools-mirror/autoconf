@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoreconf - remake all Autoconf configure scripts in a directory tree
-# Copyright (C) 1994 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,9 +44,16 @@ The following options are passed to \`automake':
 
 Report bugs to <bug-autoconf@gnu.org>."
 
+version="\
+autoreconf (GNU @PACKAGE@) @VERSION@
+Written by David J. MacKenzie.
+
+Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+
 localdir=
 verbose=:
-show_version=no
 force=no
 automake_mode=--gnu
 automake_deps=
@@ -78,7 +85,7 @@ while test $# -gt 0; do
   -f | --force)
     force=yes; shift ;;
   --version | --vers*)
-    show_version=yes; shift ;;
+    echo "$version"; exit 0 ;;
   --cygnus | --foreign | --gnits | --gnu)
     automake_mode=$1; shift ;;
   --include-deps | -i)
@@ -89,13 +96,6 @@ while test $# -gt 0; do
   *) break ;;
   esac
 done
-
-if test $show_version = yes; then
-  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
-    $AC_MACRODIR/acgeneral.m4`
-  echo "Autoconf version $version"
-  exit 0
-fi
 
 if test $# -ne 0; then
   echo "$usage" 1>&2; exit 1

@@ -94,9 +94,10 @@ CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas auto
 
 # The scripts.
 
-editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g'
+editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g' 	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
 
-editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g'
+editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' 	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
+
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  acversion.m4

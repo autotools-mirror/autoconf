@@ -1,6 +1,24 @@
 1999-11-09  Ben Elliston  <bje@cygnus.com>
 
+	* testsuite/config/unix.exp (autoconf_version): Detect version
+	numbers from the new style of output.
+
+	* Makefile.in: Regenerate.
+
 	* TODO: Update.
+
+1999-11-09  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (editsh, editpl): Substitute also PACKAGE and
+	VERSION.
+	* autoconf.sh (version): New string.
+	(--version): Use it.
+	(--help) Output on stdout, not stderr.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoscan.pl: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Likewise.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 

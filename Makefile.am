@@ -71,8 +71,10 @@ install-data-hook: INSTALL.txt
 
 editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e \
 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' \
-	-e 's,@''SHELL''@,$(SHELL),g'
-editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g'
+	-e 's,@''SHELL''@,$(SHELL),g' \
+	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
+editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' \
+	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
 
 .sh:
 	rm -f $@ $@.tmp
