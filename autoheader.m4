@@ -90,9 +90,9 @@ $2
 # Failure
 $3])])
 
-define([AH_NEED_DECLS],
+define([AH_CHECK_DECLS],
 [AC_FOREACH([AC_Symbol], [$1],
-  [AH_TEMPLATE(AC_TR_CPP(NEED_DECL_[]AC_Symbol),
+  [AH_TEMPLATE(AC_TR_CPP([NEED_]AC_Symbol[_DECL]),
                [Define if you need the declaration of `]AC_Symbol['.])
 # Success
 $2
@@ -205,7 +205,7 @@ $4])
 
 AH_HOOK([AC_DEFINE], [AH_DEFINE])
 AH_HOOK([AC_DEFINE_UNQUOTED], [AH_DEFINE])
-AH_HOOK([AC_NEED_DECLS], [AH_NEED_DECLS])
+AH_HOOK([AC_CHECK_DECLS], [AH_CHECK_DECLS])
 AH_HOOK([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF])
 AH_HOOK([AC_CHECK_FUNCS], [AH_CHECK_FUNCS])
 AH_HOOK([AC_CHECK_HEADERS], [AH_CHECK_HEADERS])

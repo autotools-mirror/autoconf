@@ -2438,7 +2438,7 @@ char *s = x(teststring);
 ], ac_cv_c_stringize=no, ac_cv_c_stringize=yes))
 if test "${ac_cv_c_stringize}" = yes; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
-            [Define if you have the ANSI # stringizing operator in cpp.])
+            [Define if cpp supports the ANSI # stringizing operator.])
 fi
 AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])dnl AC_C_STRINGIZE

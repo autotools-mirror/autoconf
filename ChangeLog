@@ -1,5 +1,24 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Rename the family AC_NEED_DECL as AC_CHECK: it is more uniform,
+	but keep defining NEED_FOO_DECL when `foo' is not declared.  Files
+	not using Autoconf behave better when declarations lacks than when
+	they are wrong.  So the unset position should off, hence #if NEEDS
+	instead of #if !HAVE (which is triggered when HAVE is not set).
+
+	* acgeneral.m4 (AC_NEED_DECL): Renamed as...
+	(AC_CHECK_DECL): This.  Make sure the arguments are the usual
+	IF-FOUND, IF-NOT-FOUND.
+	(AC_NEED_DECLS, AC_CHECK_DECLS): Likewise.
+	* autoconf.texi (Generic Declarations): Document the changes
+ 	aforementioned.
+	* autoheader.m4 (AH_NEED_DECLS): Renamed as
+	(AH_CHECK_DECLS): This.
+	(AH_HOOKS): Hook AH_CHECK_DECLS on AC_CHECK_DECLS instead of
+	_NEED_.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Revamp the handling of the arguments of config.status: instead of
 	looping over config_files etc. to recognize the file names, use
 	the case which handles the options.

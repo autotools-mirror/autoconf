@@ -288,7 +288,6 @@ in a dnl comment.  (Seems to be hard.)
 ------------------------------------------------------------------------------
 
 * Look at user contributed macros:
-	prototypes
 	IEEE double precision math
 	more
 

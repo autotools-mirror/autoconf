@@ -2607,11 +2607,11 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the particular
 test macros.
 
-@defmac AC_NEED_DECL (@var{symbol} @r{[}, @var{action-if-needed}@r{[}, @var{action-if-not-needed} @r{[},@var{includes} @r{]]]})
-@maindex NEED_DECL
+@defmac AC_CHECK_DECL (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@maindex CHECK_DECL
 If the declaration of @var{symbol} (a function or a variable) is needed
 because it is not declared in @var{includes}, run the shell commands
-@var{action-if-needed}, otherwise @var{action-if-not-needed}.  If no
+@var{action-if-not-found}, otherwise @var{action-if-found}.  If no
 @var{includes} are given at all, by default @file{stdio.h},
 @file{stdlib.h}, @file{stddef.h}, @file{memory.h}, @file{string.h},
 @file{strings.h}, and @file{unistd.h} will be included.
@@ -2621,15 +2621,31 @@ r-value, not if it is really declared, because it is much safer to avoid
 introducing extra declarations when not needed.
 @end defmac
 
-@defmac AC_NEED_DECLS (@var{symbol} @r{[}, @var{action-if-needed}@r{[}, @var{action-if-not-needed} @r{[},@var{includes} @r{]]]})
-@maindex NEED_DECLS
-@cvindex NEED_DECL_@var{symbol}
+@defmac AC_CHECK_DECLS (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@maindex CHECK_DECLS
+@cvindex NEED_@var{symbol}_DECL
 For each given @var{symbol} (whitespace-separated), define
-@code{NEED_DECL_@var{symbol}} (in all capitals) if @var{symbol} has to
-be declared to be used as an r-value.  If @var{action-if-needed} is
+@code{NEED_@var{symbol}_DECL} (in all capitals) if @var{symbol} has to
+be declared to be used as an r-value.  If @var{action-if-not-found} is
 given, it is additional shell code to execute when one of the function
-declarations is needed, otherwise @var{action-if-not-needed} is
-executed.
+declarations is needed, otherwise @var{action-if-found} is executed.
+
+This macro does not define @code{HAVE_@var{symbol}_DECL} on purpose.
+The following code
+@example
+#if NEED_FOO_DECL
+/* Declare foo. */
+#endif
+@end example
+is safer than
+@example
+#if !HAVE_FOO_DECL
+/* Declare foo. */
+#endif
+@end example
+since in this last case, if @code{configure} was not run, then the test
+succeeds, thus @code{foo} is declared, with risks to clash with previous
+declarations.  It is safer not to declare in case of doubts.
 @end defmac
 
 
