@@ -1369,10 +1369,23 @@ revision number is near the top of both @file{configure.in} and
 begins with @samp{#!/bin/sh}, like the normal start of a
 @file{configure} script does.
 
-Here is a sample call of this macro:
+For example, this line in @file{configure.in}:
 
 @example
-AC_REVISION($Revision$)dnl
+@iftex
+AC_REVISION($@code{Revision: 1.30 }$)dnl
+@end iftex
+@ifinfo
+AC_REVISION($@asis{Revision: 1.30 }$)dnl
+@end ifinfo
+@end example
+
+@noindent
+produces this in @file{configure}:
+
+@example
+#!/bin/sh
+# From configure.in Revision: 1.30 
 @end example
 @end defmac
 
@@ -1813,11 +1826,13 @@ The square brackets here do not indicate optional text: they should
 literally be present in the macro definition.
 
 All of the Autoconf macros have names starting with @samp{AC_} to
-prevent them from accidentally conflicting with other text.  You should
-prefix your own macro names with some other sequence, such as your
-initials or an abbreviation for the name of your organization or
-software package, to ensure that their names don't conflict with the
-names of present or future Autoconf macros.
+prevent them from accidentally conflicting with other text.  All shell
+variables that they use for internal purposes have names starting with
+@samp{ac_}.  To ensure that your macros don't conflict with present or
+future Autoconf macros, you should prefix your own macro names and any
+shell variables they use with some other sequence.  Possibilities
+include your initials, or an abbreviation for the name of your
+organization or software package.
 
 The @code{m4} builtin @code{dnl} prevents a newline from being inserted
 in the output where the macro is defined; without it, the generated
