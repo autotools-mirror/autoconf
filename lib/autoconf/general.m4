@@ -1771,7 +1771,7 @@ _AC_CACHE_DUMP() |
      t end
      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
      : end'] >>confcache
-if cmp -s $cache_file confcache; then :; else
+if diff $cache_file confcache >/dev/null 2>&1; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
     cat confcache >$cache_file

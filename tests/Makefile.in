@@ -267,11 +267,13 @@ top_distdir = ..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	$(mkinstalldirs) $(distdir)/$(srcdir)/../lib
+	$(mkinstalldirs) $(distdir)/./../lib
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
 	  case $$file in \
 	    $(srcdir)/*) file=`echo "$$file" | sed "s|^$$srcdirstrip/||"`;; \
+	    $(top_srcdir)/*) file=`echo "$$file" | sed "s|^$$topsrcdirstrip/|$(top_builddir)/|"`;; \
 	  esac; \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -400,6 +402,18 @@ $(AUTOM4TE_CFG):
 # For parallel builds.
 $(build_libdir)/m4sugar/version.m4:
 	cd $(build_libdir)/m4sugar && $(MAKE) $(AM_MAKEFLAGS) version.m4
+
+check-forbidden-patterns:
+	if (cd $(srcdir) && \
+	    grep $(forbidden_patterns) $(forbidden_patterns_files)) \
+	    >forbidden.log; then \
+	  echo "ERROR: forbidden patterns were found:" >&2; \
+	  sed "s,^,$*.m4: ," <forbidden.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f forbidden.log; \
+	fi
 
 # Import the dependencies on Autotest and M4sh.
 

@@ -99,6 +99,8 @@ CLEANFILES = $(nodist_autotestlib_DATA)
 TAGS_FILES = $(dist_autotestlib_DATA)
 
 ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
+forbidden_patterns = -e '^_*EOF' -e ' cmp '
+forbidden_patterns_files = $(dist_autotestlib_DATA)
 
 SUFFIXES = .m4 .m4f
 
@@ -285,11 +287,13 @@ top_distdir = ../..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	$(mkinstalldirs) $(distdir)/$(srcdir)/..
+	$(mkinstalldirs) $(distdir)/./..
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
 	  case $$file in \
 	    $(srcdir)/*) file=`echo "$$file" | sed "s|^$$srcdirstrip/||"`;; \
+	    $(top_srcdir)/*) file=`echo "$$file" | sed "s|^$$topsrcdirstrip/|$(top_builddir)/|"`;; \
 	  esac; \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -402,16 +406,7 @@ uninstall-am: uninstall-dist_autotestlibDATA uninstall-info-am \
 	uninstall-nodist_autotestlibDATA
 
 
-check-local:
-	if (cd $(srcdir) && \
-	    grep '^_*EOF' $(dist_autotestlib_DATA)) >eof.log; then \
-	  echo "ERROR: user EOF tags were used:" >&2; \
-	  sed "s,^,$*.m4: ," <eof.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f eof.log; \
-	fi
+check-local: check-forbidden-patterns
 
 autotest.m4f: $(autotest_m4f_dependencies)
 $(MY_AUTOM4TE):
@@ -434,6 +429,18 @@ $(AUTOM4TE_CFG):
 # For parallel builds.
 $(build_libdir)/m4sugar/version.m4:
 	cd $(build_libdir)/m4sugar && $(MAKE) $(AM_MAKEFLAGS) version.m4
+
+check-forbidden-patterns:
+	if (cd $(srcdir) && \
+	    grep $(forbidden_patterns) $(forbidden_patterns_files)) \
+	    >forbidden.log; then \
+	  echo "ERROR: forbidden patterns were found:" >&2; \
+	  sed "s,^,$*.m4: ," <forbidden.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f forbidden.log; \
+	fi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

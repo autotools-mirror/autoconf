@@ -649,7 +649,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
   cat $tmp/in >>$tmp/config.h
   rm -f $tmp/in
   if test x"$ac_file" != x-; then
-    if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
+    if diff $ac_file $tmp/config.h >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
       ac_dir=`AS_DIRNAME(["$ac_file"])`
@@ -1019,7 +1019,7 @@ dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
   rm -f $tmp/stdin
 dnl This would break Makefile dependencies.
-dnl  if cmp -s $ac_file $tmp/out 2>/dev/null; then
+dnl  if diff $ac_file $tmp/out >/dev/null 2>&1; then
 dnl    echo "$ac_file is unchanged"
 dnl   else
 dnl     rm -f $ac_file

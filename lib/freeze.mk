@@ -111,3 +111,20 @@ ETAGS_FOR_AUTOCONF = \
   $(ETAGS_FOR_M4SUGAR) \
   --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)\]/\2/' \
   --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
+
+
+## -------------------------------- ##
+## Looking for forbidden patterns.  ##
+## -------------------------------- ##
+
+check-forbidden-patterns:
+	if (cd $(srcdir) && \
+	    grep $(forbidden_patterns) $(forbidden_patterns_files)) \
+	    >forbidden.log; then \
+	  echo "ERROR: forbidden patterns were found:" >&2; \
+	  sed "s,^,$*.m4: ," <forbidden.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f forbidden.log; \
+	fi

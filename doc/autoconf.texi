@@ -9860,6 +9860,17 @@ DOS files, even if only checking whether two files are different, use
 @command{diff} to avoid spurious differences due to differences of
 newline encoding.
 
+Under HP-UX 11, @command{cmp} is unable to process @file{/dev/null}, and
+even exits with success:
+
+@example
+$ @kbd{cmp /dev/null configure}
+@error{}Premature end of file /dev/null at -1
+$ @kbd{echo $?}
+0
+@end example
+
+For all these reasons, it seems safer to always use @command{diff}.
 
 @item @command{cp}
 @c ---------------
