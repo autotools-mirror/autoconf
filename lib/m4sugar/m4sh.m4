@@ -459,6 +459,17 @@ else
 fi
 ])# _AS_EXPR_PREPARE
 
+# _AS_LINENO_WORKS
+# ---------------
+# Succeed if the currently executing shell supports LINENO.
+m4_define([_AS_LINENO_WORKS],
+[{
+  as_lineno_1=$LINENO
+  as_lineno_2=$LINENO
+  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+  test "x$as_lineno_1" != "x$as_lineno_2" &&
+  test "x$as_lineno_3"  = "x$as_lineno_2"
+}])
 
 # _AS_LINENO_PREPARE
 # ------------------
@@ -473,16 +484,7 @@ fi
 # it protects us from repetitive rewrites.  Be sure to have a test
 # that does detect non LINENO support...
 m4_define([_AS_LINENO_PREPARE],
-[as_command='
-  as_lineno_1=$LINENO
-  as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-  test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2"
-'
-if eval "$as_command"; then
-  :
-else
+[_AS_LINENO_WORKS || {
   # Find who we are.  Look in the path if we contain no path at all
   # relative or not.
   case $[0] in
@@ -505,7 +507,7 @@ else
       [for as_base in sh bash ksh sh5; do
 	 case $as_dir in
 	 /*)
-	   if ("$as_dir/$as_base" -c "$as_command") 2>/dev/null; then
+	   if ("$as_dir/$as_base" -c '_AS_LINENO_WORKS') 2>/dev/null; then
 	     CONFIG_SHELL=$as_dir/$as_base
 	     export CONFIG_SHELL
 	     exec "$CONFIG_SHELL" "$[0]" ${1+"$[@]"}
@@ -533,7 +535,7 @@ else
   . ./$as_me.lineno
   # Exit status is that of the last command.
   exit
-fi
+}
 ])# _AS_LINENO_PREPARE
 
 
