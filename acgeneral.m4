@@ -951,10 +951,13 @@ Defaults for the options are specified in brackets.
 Configuration:
   -h, --help              print this message
   -V, --version           print the version of autoconf that created configure
-  -q, --quiet, --silent   do not print \`checking...' messages
+  -q, --quiet, --silent   do not print `checking...' messages
       --cache-file=FILE   cache test results in FILE
   -n, --no-create         do not create output files
 
+EOF
+
+  cat <<EOF
 Directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
@@ -976,6 +979,9 @@ Directories:
   --mandir=DIR            man documentation in DIR [PREFIX/man]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
 
+EOF
+
+  cat <<\EOF
 Program names:
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
