@@ -3023,6 +3023,19 @@ It tries @code{gawk} first because that is reported to be the
 best implementation.
 @end defmac
 
+@defmac AC_PROG_EGREP
+@acindex PROG_EGREP
+@ovindex EGREP
+Check for @code{grep -E} and @code{egrep}, in that order, and set
+output variable @code{EGREP} to the first one that is found.
+@end defmac
+
+@defmac AC_PROG_FGREP
+@acindex PROG_FGREP
+@ovindex FGREP
+Check for @code{grep -F} and @code{fgrep}, in that order, and set
+output variable @code{FGREP} to the first one that is found.
+@end defmac
 
 @defmac AC_PROG_INSTALL
 @acindex PROG_INSTALL
@@ -5474,7 +5487,7 @@ in another header file that the file you are checking @samp{#include}s.
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found}, @ovar{action-if-not-found})
 @acindex EGREP_HEADER
 If the output of running the preprocessor on the system header file
-@var{header-file} matches the @code{egrep} regular expression
+@var{header-file} matches the extended regular expression
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
 execute @var{action-if-not-found}.
 @end defmac
@@ -5496,7 +5509,7 @@ AC_EGREP_CPP(yes,
 @var{program} is the text of a C or C++ program, on which shell
 variable, back quote, and backslash substitutions are performed.  If the
 output of running the preprocessor on @var{program} matches the
-@code{egrep} regular expression @var{pattern}, execute shell commands
+extended regular expression @var{pattern}, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
@@ -9671,21 +9684,25 @@ It says that the behavior of dirname on path names of the form
 @item @command{egrep}
 @c ------------------
 @prindex @command{egrep}
+@acronym{POSIX} 1003.1-2001 no longer requires @command{egrep},
+but many older hosts do not yet support the @acronym{POSIX}
+replacement @code{grep -E}.  To work around this problem, invoke
+@code{AC_PROG_EGREP} and then use @code{$EGREP}.
+
 The empty alternative is not portable, use @samp{?} instead. For
 instance with Digital Unix v5.0:
 
 @example
-> printf "foo\n|foo\n" | egrep '^(|foo|bar)$'
+> printf "foo\n|foo\n" | $EGREP '^(|foo|bar)$'
 |foo
-> printf "bar\nbar|\n" | egrep '^(foo|bar|)$'
+> printf "bar\nbar|\n" | $EGREP '^(foo|bar|)$'
 bar|
-> printf "foo\nfoo|\n|bar\nbar\n" | egrep '^(foo||bar)$'
+> printf "foo\nfoo|\n|bar\nbar\n" | $EGREP '^(foo||bar)$'
 foo
 |bar
 @end example
 
-@command{egrep} also suffers the limitations of @command{grep}.
-
+@command{$EGREP} also suffers the limitations of @command{grep}.
 
 @item @command{expr}
 @c -----------------
@@ -9784,6 +9801,15 @@ simple work around consists in testing @command{expr} and use a variable
 set to @command{expr} or to @command{false} according to the result.
 
 
+@item @command{fgrep}
+@c ------------------
+@prindex @command{fgrep}
+@acronym{POSIX} 1003.1-2001 no longer requires @command{fgrep},
+but many older hosts do not yet support the @acronym{POSIX}
+replacement @code{grep -F}.  To work around this problem, invoke
+@code{AC_PROG_FGREP} and then use @code{$FGREP}.
+
+
 @item @command{find}
 @c -----------------
 The option @option{-maxdepth} seems to be GNU specific. Tru64 v5.1,
@@ -9815,7 +9841,7 @@ status of @code{grep} to determine whether it found a match.
 Don't use multiple regexps with @option{-e}, as some @code{grep} will only
 honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
 Stardent Vistra SVR4 @code{grep} lacks @option{-e}@dots{}  Instead, use
-alternation and @code{egrep}.
+extended regular expressions and alternation.
 
 
 @item @command{ln}
