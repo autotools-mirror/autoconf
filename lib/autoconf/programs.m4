@@ -497,7 +497,7 @@ dnl   # for best performing tool in a list breaks down.
 # ----------------------------------------------------------------
 m4_define([_AC_PATH_PROG_FLAVOR_GNU],
 [# Check for GNU $1
-case `"$1" --version </dev/null 2>&1` in
+case `"$1" --version 2>&1` in
 *GNU*)
   $2;;
 m4_ifval([$3],

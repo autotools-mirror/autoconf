@@ -1,5 +1,11 @@
 * Major changes in Autoconf 2.59c
 
+** The configure command now redirects standard input from /dev/null,
+  to help avoid problems with subsidiary commands that might mistakenly
+  read standard input.  AS_ORIGINAL_STDIN_FD points to the original
+  standard input before this redirection, if you really want configure to
+  read from standard input.
+
 ** Directory variables adjusted to recent changes in the GNU Coding Standards.
   The following directory variables are new:
 

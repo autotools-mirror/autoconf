@@ -364,9 +364,9 @@ AC_CHECK_TOOLS([]_AC_FC[],
 echo "$as_me:__oline__:" \
      "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
 ac_compiler=`set X $ac_compile; echo $[2]`
-_AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -v </dev/null >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -V </dev/null >&AS_MESSAGE_LOG_FD])
+_AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
+_AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
+_AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl

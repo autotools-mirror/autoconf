@@ -1,4 +1,23 @@
 2005-02-23  Paul Eggert  <eggert@cs.ucla.edu>
+	    Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Redirect stdin from
+	/dev/null, as "configure" shouldn't read stdin, and this insulates
+	us from problems (e.g., when testing for "cl").  Also, do this
+	redirection before invoking "hostname" or "uname", and keep the
+	original input stream available via...
+	(AS_ORIGINAL_STDIN_FD): ... this new macro.
+	(_AC_PREPROC_IFELSE, _AC_COMPILE_IFELSE, _AC_LINK_IFELSE): Don't
+	bother with "</dev/null" since it's now done at the top of
+	'configure'.
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+	* lib/autoconf/programs.m4 (_AC_PATH_PROG_FLAVOR_GNU): Likewise.
+	* doc/autoconf.texi (File Descriptor Macros): New section.
+	(Printing Messages): Mention it.
+	* tests/base.at (Input/Output): New test.
+
+2005-02-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_N_PREPARE): Don't set ECHO_C to
 	newline if neither \c nor -n work, as that would output two

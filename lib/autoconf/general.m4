@@ -358,13 +358,18 @@ gives unlimited permission to copy, distribute and modify it.],
 # ----------------
 # Set up the file descriptors used by `configure'.
 # File descriptor usage:
-# 0 standard input
+# 0 standard input (/dev/null)
 # 1 file creation
 # 2 errors and warnings
 # AS_MESSAGE_LOG_FD compiler messages saved in config.log
 # AS_MESSAGE_FD checking for... messages and results
-
+# AS_ORIGINAL_STDIN_FD original standard input (still open)
+#
+# stdin is /dev/null because checks that run programs may
+# inadvertently run interactive ones, which would stop configuration
+# until someone typed an EOF.
 m4_define([AS_MESSAGE_FD], 6)
+m4_define([AS_ORIGINAL_STDIN_FD], 7)
 # That's how they used to be named.
 AU_ALIAS([AC_FD_CC],  [AS_MESSAGE_LOG_FD])
 AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
@@ -377,12 +382,12 @@ AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
+exec AS_ORIGINAL_STDIN_FD<&0 </dev/null AS_MESSAGE_FD>&1
+
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
-
-exec AS_MESSAGE_FD>&1
 
 #
 # Initializations.
@@ -2133,7 +2138,7 @@ AC_DEFUN([AC_RUN_LOG],
 # to expand ac_cpp.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) </dev/null >/dev/null; then
+if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
   if test -s conftest.err; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
     ac_cpp_err=$ac_cpp_err$ac_[]_AC_LANG_ABBREV[]_werror_flag
@@ -2218,7 +2223,7 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IF([_AC_EVAL_STDERR($ac_compile) </dev/null &&
+AS_IF([_AC_EVAL_STDERR($ac_compile) &&
 	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
 			 || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest.$ac_objext])],
@@ -2259,7 +2264,7 @@ AU_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IF([_AC_EVAL_STDERR($ac_link) </dev/null &&
+AS_IF([_AC_EVAL_STDERR($ac_link) &&
 	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
 			 || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest$ac_exeext])],

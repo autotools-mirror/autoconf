@@ -2,7 +2,7 @@
 
 AT_BANNER([Autoconf base layer.])
 
-# Copyright (C) 2000, 2001, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -228,5 +228,24 @@ fi
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([-q])
+
+AT_CLEANUP
+
+
+## ------------ ##
+## Input/Output ##
+## ------------ ##
+
+AT_SETUP([Input/Output])
+
+m4_pattern_allow([^AS_(MESSAGE|ORIGINAL_STDIN)_FD$])
+AT_DATA([configure.ac],
+[[AC_INIT
+cat <&AS_ORIGINAL_STDIN_FD >&AS_MESSAGE_FD
+]])
+AT_CHECK_AUTOCONF
+AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure],, [Hello
+])
+AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure --silent])
 
 AT_CLEANUP

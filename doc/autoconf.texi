@@ -333,7 +333,7 @@ Existing Tests
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
-* Compilers and Preprocessors:: Checking for compiling programs
+* Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
 * Posix Variants::              Special kludges for specific Posix variants
 
@@ -418,6 +418,7 @@ Programming in M4
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common shell Constructs
+* File Descriptor Macros::      File descriptor macros for input and output
 
 M4 Quotation
 
@@ -2167,7 +2168,7 @@ how to check the results of previous tests.
 @ovindex ECHO_C
 @ovindex ECHO_N
 @ovindex ECHO_T
-How does one suppress the trailing newline from @code{echo} for
+How does one suppress the trailing newline from @command{echo} for
 question-answer message pairs?  These variables provide a way:
 
 @example
@@ -2177,7 +2178,7 @@ echo "$@{ECHO_T@}dead."
 @end example
 
 @noindent
-Some old and uncommon @code{echo} implementations offer no means to
+Some old and uncommon @command{echo} implementations offer no means to
 achieve this, in which case @code{ECHO_T} is set to tab.  You might not
 want to use it.
 @end defvar
@@ -3143,7 +3144,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
-* Posix Variants::               Special kludges for specific Posix variants
+* Posix Variants::              Special kludges for specific Posix variants
 @end menu
 
 @node Common Behavior
@@ -7650,11 +7651,13 @@ for each kind.  The arguments to all of them get enclosed in shell
 double quotes, so the shell performs variable and back-quote
 substitution on them.
 
-These macros are all wrappers around the @code{echo} shell command.
-@command{configure} scripts should rarely need to run @code{echo} directly
+These macros are all wrappers around the @command{echo} shell command,
+and will direct output to the appropriate file descriptor (@pxref{File
+Descriptor Macros}).
+@command{configure} scripts should rarely need to run @command{echo} directly
 to print messages for the user.  Using these macros makes it easy to
 change how and when each kind of message is printed; such changes need
-only be made to the macro definitions and all of the callers will change
+only be made to the macro definitions and all the callers will change
 automatically.
 
 To diagnose static issues, i.e., when @command{autoconf} is run, see
@@ -7752,6 +7755,7 @@ and their interface might change in the future.  As a matter of fact,
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common shell Constructs
+* File Descriptor Macros::      File descriptor macros for input and output
 @end menu
 
 @node M4 Quotation
@@ -8900,6 +8904,68 @@ optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @var{file} is absolute etc.).
 @end defmac
 
+
+@node File Descriptor Macros
+@section File Descriptor Macros
+@cindex input
+@cindex standard input
+@cindex file descriptors
+@cindex descriptors
+@cindex low-level output
+@cindex output, low-level
+
+The following macros define file descriptors used to output messages
+(or input values) from @file{configure} scripts.
+For example:
+
+@example
+echo "$wombats found" >&AS_MESSAGE_LOG_FD
+echo 'Enter desired kangaroo count:' >&AS_MESSAGE_FD
+read kangaroos <&AS_ORIGINAL_STDIN_FD`
+@end example
+
+@noindent
+However doing so is seldom needed, because Autoconf provides higher
+level macros as described below.
+
+@defmac AS_MESSAGE_FD
+@asindex{MESSAGE_FD}
+The file descriptor for @samp{checking for...}  messages and results.
+Normally this directs messages to the standard output, however when
+@command{configure} is run with the @code{-q} option, messages sent to
+@code{AS_MESSAGE_FD} will be discarded.
+
+If you want to display some messages, consider using one of the printing
+macros (@pxref{Printing Messages}) instead.  Copies of messages output
+via these macros will additionally be recorded in @file{config.log}.
+@end defmac
+
+@defmac AS_MESSAGE_LOG_FD
+@asindex{MESSAGE_LOG_FD}
+
+The file descriptor for messages logged to @file{config.log}.  Macros
+that run tools, like @code{AC_COMPILE_IFELSE} (@pxref{Running the
+Compiler}), redirect all output to this descriptor.  You may want to do
+so if you develop such a low-level macro.
+@end defmac
+
+@defmac AS_ORIGINAL_STDIN_FD
+@asindex{ORIGINAL_STDIN_FD}
+The file descriptor for the original standard input.
+
+When @command{configure} runs, it may accidentally execute an
+interactive command that has the same name as the non-interactive meant
+to be used or checked.  If the standard input was the terminal, such
+interactive programs would cause @command{configure} to stop, pending
+some user input.  Therefore @command{configure} redirects its standard
+input from @file{/dev/null} during its initialization.  This is not
+normally a problem, since @command{configure} normally does not need
+user input.
+
+In the extreme case where your @file{configure} script really needs to
+obtain some values from the original standard input, you can read them
+explicitly from @code{AS_ORIGINAL_STDIN_FD}.
+@end defmac
 
 
 @c=================================================== Writing Autoconf Macros.
@@ -10823,7 +10889,7 @@ Also please see the discussion of the @command{pwd} command.
 @item @command{echo}
 @c -----------------
 @prindex @command{echo}
-The simple @code{echo} is probably the most surprising source of
+The simple @command{echo} is probably the most surprising source of
 portability troubles.  It is not possible to use @samp{echo} portably
 unless both options and escape sequences are omitted.  New applications
 which are not aiming at portability should use @samp{printf} instead of
@@ -12081,7 +12147,7 @@ timestamp truncation problems that @samp{cp -p} has.
 
 On some old @acronym{BSD} systems, @command{touch} or any command that
 results in an empty file does not update the timestamps, so use a
-command like @code{echo} as a workaround.
+command like @command{echo} as a workaround.
 
 @acronym{GNU} @command{touch} 3.16r (and presumably all before that)
 fails to work on SunOS 4.1.3 when the empty file is on an
@@ -14866,7 +14932,7 @@ macros while running @command{autoconf}, you may safely ignore them, but
 your @command{configure} script will generally work better if you follow
 the advice that is printed about what to replace the obsolete macros with.  In
 particular, the mechanism for reporting the results of tests has
-changed.  If you were using @code{echo} or @code{AC_VERBOSE} (perhaps
+changed.  If you were using @command{echo} or @code{AC_VERBOSE} (perhaps
 via @code{AC_COMPILE_CHECK}), your @command{configure} script's output will
 look better if you switch to @code{AC_MSG_CHECKING} and
 @code{AC_MSG_RESULT}.  @xref{Printing Messages}.  Those macros work best
