@@ -39,7 +39,7 @@ exit 0;
 # Process any command line arguments.
 sub parse_args
 {
-    local ($usage) = << 'EOD';
+    local ($usage) = <<'EOD';
 Usage: autoscan [OPTION] ... [SRCDIR]
 
 Examine source files in the directory tree rooted at SRCDIR, or the
