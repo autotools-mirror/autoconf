@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.7)dnl
+define(AC_ACVERSION, 1.7.8)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -83,6 +83,17 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Save the original args to write them into config.status later.
 ac_configure_args="[$]*"
 ac_prog=[$]0
+
+# Initialize some variables set by options.
+exec_prefix=
+floating_point=yes
+norecursion=
+prefix=
+program_prefix=
+program_suffix=
+ac_silent=
+srcdir=
+ac_verbose=
 ])dnl
 dnl
 define(AC_PARSEARGS,
@@ -103,10 +114,10 @@ Options: [defaults in brackets]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
 --with-PACKAGE[=VAL]	external PACKAGE is available (optional parameter VAL)
---without-PACKAGE	same as --with-PACKAGE=no
 --x			obsolete form of --with-x"
 changequote([,])dnl
 
+# Get the option argument from the current or next ARGV element.
 ac_get_optarg='
 case "$ac_option" in
 changequote(,)dnl
@@ -213,8 +224,6 @@ EOF
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
     eval "$ac_get_optarg" ;;
-
-  --rm | --r) ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
@@ -716,7 +725,8 @@ ifelse([$4], , , fi
 rm -fr conftest*])dnl
 dnl
 define(AC_TEST_CPP,
-[AC_REQUIRE_CPP()cat > conftest.${ac_ext} <<EOF
+[AC_REQUIRE_CPP()dnl
+cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
@@ -791,7 +801,8 @@ done
 ])dnl
 dnl
 define(AC_HAVE_HEADERS,
-[for ac_hdr in $1
+[AC_REQUIRE_CPP()dnl Make sure the cpp check happens outside the loop.
+for ac_hdr in $1
 do
 changequote(,)dnl
 ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
