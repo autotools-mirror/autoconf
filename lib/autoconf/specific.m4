@@ -202,8 +202,8 @@ fi
 ])
 
 
-dnl AC_PROG_CC_WORKS
-dnl ----------------
+# AC_PROG_CC_WORKS
+# ----------------
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) works])
 AC_LANG_SAVE

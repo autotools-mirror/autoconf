@@ -1,5 +1,10 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Formatting changes.
+	* acspecific.m4: Likewise.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): Don't use FFLAGS_SAVE
 	but ac_save_FFLAGS.
 	(AC_F77_NAME_MANGLING): Don't use foo_bar but ac_foo_bar.

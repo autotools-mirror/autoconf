@@ -435,15 +435,15 @@ define(AC_DIVERSION_SED, 8)dnl		variable substitutions in config.status
 define(AC_DIVERSION_CMDS, 9)dnl		extra shell commands in config.status
 define(AC_DIVERSION_ICMDS, 10)dnl	extra initialization in config.status
 
-dnl Change the diversion stream to STREAM, while stacking old values.
 dnl AC_DIVERT_PUSH(STREAM)
+dnl Change the diversion stream to STREAM, while stacking old values.
 define(AC_DIVERT_PUSH,
 [pushdef([AC_DIVERSION_CURRENT], $1)dnl
 divert(AC_DIVERSION_CURRENT)dnl
 ])
 
-dnl Change the diversion stream to its previous value, unstacking it.
 dnl AC_DIVERT_POP()
+dnl Change the diversion stream to its previous value, unstacking it.
 define(AC_DIVERT_POP,
 [popdef([AC_DIVERSION_CURRENT])dnl
 divert(AC_DIVERSION_CURRENT)dnl
@@ -454,8 +454,8 @@ define([AC_DIVERSION_CURRENT], AC_DIVERSION_NORMAL)
 dnl Throw away output until AC_INIT is called.
 pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
 
-dnl The prologue for Autoconf macros.
 dnl AC_PRO(MACRO-NAME)
+dnl The prologue for Autoconf macros.
 define(AC_PRO,
 [define([AC_PROVIDE_$1], )dnl
 ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
@@ -463,8 +463,8 @@ ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
 [pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_CURRENT)])dnl
 ])
 
-dnl The Epilogue for Autoconf macros.
 dnl AC_EPI()
+dnl The Epilogue for Autoconf macros.
 define(AC_EPI,
 [AC_DIVERT_POP()dnl
 ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
@@ -673,6 +673,7 @@ define(AC_TR_SH,
 
 
 dnl ### Implementing Autoconf loops
+
 
 dnl AC_FOREACH(VARIABLE, LIST, EXPRESSION)
 dnl --------------------------------------
@@ -3018,10 +3019,11 @@ AC_CACHE_CHECK([size of $1], ac_Sizeof,
 int
 main ()
 {
-  FILE *f=fopen("conftestval", "w");
-  if (!f) exit(1);
-  fprintf(f, "%d\n", sizeof([$1]));
-  exit(0);
+  FILE *f = fopen ("conftestval", "w");
+  if (!f)
+     exit (1);
+  fprintf (f, "%d\n", sizeof ([$1]));
+  exit (0);
 }],
   AC_VAR_SET(ac_Sizeof, `cat conftestval`),
   AC_VAR_SET(ac_Sizeof, 0),
@@ -3031,7 +3033,7 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 ])
 
 
-dnl ### Checking for typedefs
+dnl ### Checking for types
 
 
 # AC_CHECK_TYPE_INTERNAL(TYPE,
