@@ -7,7 +7,6 @@
 	(AT_CLEANUP): ...to here.  Undivert TEST_SCRIPT.
 	(AT_INIT): Support for expected failures.
 
-2003-06-02  Alexandre Duret-Lutz  <adl@gnu.org>
 2003-06-02  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in, bin/autoscan.in, bin/autoheader.in: White space
@@ -41,7 +40,7 @@
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4: Prefer "TAB-SP" to "SP-TAB", because of
-	Emacs' danger whitespace.el behavior (smashing "useless" spaces in
+	Emacs' dangerous whitespace.el behavior (smashing "useless" spaces in
 	the middle of a line).
 	* lib/m4sugar/m4sugar.m4: Likewise.
 	Remove useless spaces in comments.
