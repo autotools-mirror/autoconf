@@ -1,3 +1,7 @@
+1999-09-21  Ben Elliston  <bje@cygnus.com>
+
+	* THANKS: Update some mail addresses.
+
 1999-09-20  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): Don't remove the CONFIG_HEADERS
