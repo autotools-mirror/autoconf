@@ -318,6 +318,24 @@ fi
 ])
 
 
+# AC_FUNC_ERROR_AT_LINE
+# ---------------------
+AC_DEFUN([AC_FUNC_ERROR_AT_LINE],
+[AC_CACHE_CHECK([for error_at_line], ac_cv_lib_error_at_line,
+[AC_TRY_LINK([],[error_at_line (0, 0, "", 0, "");],
+              ac_cv_lib_error_at_line=yes,
+              ac_cv_lib_error_at_line=no)])
+if test $ac_cv_lib_error_at_line = no; then
+  AC_LIBOBJ(error)
+fi
+])
+
+
+# AU::AM_FUNC_ERROR_AT_LINE
+# -------------------------
+AU_ALIAS([AM_FUNC_ERROR_AT_LINE], [AC_FUNC_ERROR_AT_LINE])
+
+
 # AC_FUNC_FNMATCH
 # ---------------
 # We look for fnmatch.h to avoid that the test fails in C++.

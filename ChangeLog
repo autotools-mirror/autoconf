@@ -1,5 +1,11 @@
 2000-08-01  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_ERROR_AT_LINE): New macro, from
+	Automake.
+	* doc/autoconf.texi (Particular Functions): Adjust.
+
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
 	Create acfunctions.m4, in charge of the macros related to
 	functions.
 

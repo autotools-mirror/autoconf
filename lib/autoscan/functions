@@ -4,6 +4,8 @@ bcmp		AC_HEADER_STDC
 bcopy		AC_HEADER_STDC
 bzero		AC_HEADER_STDC
 chown		AC_FUNC_CHOWN
+error		AC_FUNC_ERROR_AT_LINE
+error_at_line	AC_FUNC_ERROR_AT_LINE
 fnmatch		AC_FUNC_FNMATCH
 getgroups	AC_FUNC_GETGROUPS
 getloadavg	AC_FUNC_GETLOADAVG

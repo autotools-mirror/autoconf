@@ -2938,6 +2938,12 @@ define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
 return value for an error indicator.
 @end defmac
 
+@defmac AC_FUNC_ERROR_AT_LINE
+@maindex FUNC_ERROR_AT_LINE
+If the @code{error_at_line} function is not found, require an
+@code{AC_LIBOBJ} replacement of @samp{error}.
+@end defmac
+
 @defmac AC_FUNC_FNMATCH
 @maindex FUNC_FNMATCH
 If the @code{fnmatch} function is available and works (unlike the one on
