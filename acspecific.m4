@@ -1790,16 +1790,18 @@ else
     fi
   fi
 
-  # Check for libraries that R6 introduced.  Xt/Xaw programs need these.
+  # Check for libraries that X11R6 Xt/Xaw programs need.
 
   ac_save_LDFLAGS="$LDFLAGS"
   LDFLAGS="$LDFLAGS -L$x_libraries"
-  AC_CHECK_LIB(ICE, IceConnectionNumbers, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lICE"])
-  # On SunOS 4, -lSM requires -lICE in order to link, according to
-  # interran@uluru.Stanford.EDU (John Interrante).
-  ac_save_LIBS="$LIBS"; LIBS="$LIBS $X_EXTRA_LIBS"
-  AC_CHECK_LIB(SM, SmcOpenConnection, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lSM"])
-  LIBS="$ac_save_LIBS"
+  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
+  # check for ICE first), but we must link in the order -lSM -lICE or
+  # we get undefined symbols.  So assume we have SM if we have ICE.
+  # These have to be linked with before -lX11, unlike the other
+  # libraries we check for below, so use a different variable.
+  #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
+  AC_CHECK_LIB(ICE, IceConnectionNumbers,
+    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
   LDFLAGS="$ac_save_LDFLAGS"
 
   # Check for system-dependent libraries X programs must link with.
@@ -1831,6 +1833,7 @@ else
   fi
 fi
 AC_SUBST(X_CFLAGS)dnl
+AC_SUBST(X_PRE_LIBS)dnl
 AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
 ])
