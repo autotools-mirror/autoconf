@@ -1,9 +1,15 @@
+2001-01-24  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* m4sh.m4 (AS_EXECUTABLE_P, _AS_TEST_PREPARE): New macros.
+	(AS_SANITIZE_SHELL): Call _AS_TEST_PREPARE.
+	* acgeneral.m4 (AC_CHECK_PROG, AC_PATH_PROG): Use AS_EXECUTABLE_P
+	instead of test -f.
+
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.pl (generic_macro): s/AC_CHECK_FUNCTIONS/AC_CHECK_FUNCS/.
 	* acfunctions: Just like the previous patch.
 
-	
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.pl (@kinds, %generic_macro): New.
@@ -17,7 +23,6 @@
 	* autoscan.pl: Just like the previous patch, but for
 	AC_CHECK_FUNCS, AC_CHECK_TYPES, and AC_CHECK_MEMBERS.
 
-	
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.pl (print_unique): Push all the macro invocation
@@ -26,7 +31,6 @@
 	the specialized macro, or the generic macro call.
 	(check_configure_ac): Handle AC_CHECK_HEADERS.
 
-	
 2001-01-24  Raja R Harinath  <harinath@cs.umn.edu>
 
 	Some non-srcdir build fixes.

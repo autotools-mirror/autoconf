@@ -6993,6 +6993,9 @@ completing.  This macro prints an error message on the standard error
 output and exits @code{configure} with @var{exit-status} (1 by default).
 @var{error-description} should be something like @samp{invalid value
 $HOME for \$HOME}.
+
+The @var{error-description} should start with a lower case letter, and
+``cannot'' is preferred to ``can't''.
 @end defmac
 
 @defmac AC_MSG_WARN (@var{problem-description})

@@ -2358,7 +2358,7 @@ else
 m4_ifvaln([$6],
 [  ac_prog_rejected=no])dnl
   AC_SHELL_PATH_WALK([$5],
-[test -f "$ac_dir/$ac_word" || continue
+[AS_EXECUTABLE_P("$ac_dir/$ac_word") || continue
 m4_ifvaln([$6],
 [if test "$ac_dir/$ac_word" = "$6"; then
   ac_prog_rejected=yes
@@ -2427,7 +2427,7 @@ AC_CACHE_VAL([ac_cv_path_$1],
   ;;
   *)
   AC_SHELL_PATH_WALK([$4],
-[if test -f "$ac_dir/$ac_word"; then
+[if AS_EXECUTABLE_P("$ac_dir/$ac_word"); then
    ac_cv_path_$1="$ac_dir/$ac_word"
    break
 fi])
@@ -2912,11 +2912,11 @@ AC_DEFUN([AC_TRY_RUN],
 # Check for the existence of FILE.
 AC_DEFUN([AC_CHECK_FILE],
 [AC_DIAGNOSE([cross],
-             [Cannot check for file existence when cross compiling])dnl
+             [cannot check for file existence when cross compiling])dnl
 AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
 AC_CACHE_CHECK([for $1], ac_File,
 [test "$cross_compiling" = yes &&
-  AC_MSG_ERROR([Cannot check for file existence when cross compiling])
+  AC_MSG_ERROR([cannot check for file existence when cross compiling])
 if test -r "$1"; then
   AC_VAR_SET(ac_File, yes)
 else

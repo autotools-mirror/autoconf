@@ -67,6 +67,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 _AS_EXPR_PREPARE
+_AS_TEST_PREPARE
 _AS_UNSET_PREPARE
 
 # NLS nuisances.
@@ -95,6 +96,7 @@ AS_UNSET([CDPATH], [:])
 ## ----------------------------- ##
 
 # This section is lexicographically sorted.
+
 
 # AS_EXIT([EXIT-CODE = 1])
 # ------------------------
@@ -288,6 +290,15 @@ m4_defun([AS_DIRNAME],
 AS_DIRNAME_SED([$1])])
 
 
+# AS_EXECUTABLE_P
+# ---------------
+# Check whether a file is executable.
+m4_defun([AS_EXECUTABLE_P],
+[m4_require([_AS_TEST_PREPARE])dnl
+$as_executable_p $1[]dnl
+])# AS_EXECUTABLE_P
+
+
 # _AS_EXPR_PREPARE
 # ----------------
 # Some expr work properly (i.e. compute and issue the right result),
@@ -298,7 +309,7 @@ m4_defun([_AS_EXPR_PREPARE],
   as_expr=expr
 else
   as_expr=false
-fi[]dnl
+fi
 ])# _AS_EXPR_PREPARE
 
 
@@ -322,6 +333,29 @@ for ac_mkdir_dir in `IFS='\\/'; set X $ac_dummy; shift; echo "$[@]"`; do
   esac
 done; }
 ])# AS_MKDIR_P
+
+
+# _AS_TEST_PREPARE
+# ----------------
+# Find out ahead of time whether we want test -x (preferred) or test -f
+# to check whether a file is executable.
+m4_defun([_AS_TEST_PREPARE],
+[# Find out how to test for executable files. Don't use a zero-byte file,
+# as systems may use methods other than mode bits to determine executability.
+cat >conftest.file <<_ASEOF
+@%:@! /bin/sh
+exit 0
+_ASEOF
+chmod +x conftest.file
+if test -x conftest.file; then
+  as_executable_p="test -x"
+elif test -f conftest.file; then
+  as_executable_p="test -f"
+else
+  AS_ERROR([cannot check whether a file is executable on this system])
+fi
+rm -f conftest.file
+])# _AS_TEST_PREPARE
 
 
 
