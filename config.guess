@@ -510,8 +510,11 @@ EOF
     sparc*:BSD/OS:*:*)
 	echo sparc-unknown-bsdi${UNAME_RELEASE}
 	exit 0 ;;
-    i?86:BSD/386:*:* | *:BSD/OS:*:*)
+    i?86:BSD/386:*:* | i?86:BSD/OS:*:*)
 	echo ${UNAME_MACHINE}-pc-bsdi${UNAME_RELEASE}
+	exit 0 ;;
+    *:BSD/OS:*:*)
+	echo ${UNAME_MACHINE}-unknown-bsdi${UNAME_RELEASE}
 	exit 0 ;;
     *:FreeBSD:*:*)
 	echo ${UNAME_MACHINE}-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`

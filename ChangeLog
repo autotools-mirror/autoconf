@@ -1,3 +1,8 @@
+1998-12-27  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Handle BSD/OS variants for non-x86 machines.
+	Contributed by Chris P. Ross <cross@uu.net>.
+
 1998-10-30  Jeff Garzik <jgarzik@pobox.com>
 
 	* autoconf.texi: Document AC_CACHE_LOAD and AC_CACHE_SAVE. Explain
