@@ -72,9 +72,11 @@ if test $# -ne 0; then
   echo "$usage" 1>&2; exit 1
 fi
 
+# The paths to the autoconf and autoheader scripts, at the top of the tree.
 top_autoconf=`echo $0|sed s%autoreconf%autoconf%`
 top_autoheader=`echo $0|sed s%autoreconf%autoheader%`
 
+# Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
 find . -name configure.in -print |
 xargs grep -l AC_OUTPUT |

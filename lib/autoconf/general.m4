@@ -72,17 +72,20 @@ dnl ### Defining macros
 
 
 dnl m4 output diversions.  We let m4 output them all in order at the end,
-dnl except that we explicitly undivert AC_DIVERSION_SED.
+dnl except that we explicitly undivert AC_DIVERSION_SED, AC_DIVERSION_CMDS,
+dnl and AC_DIVERSION_ICMDS.
 
 dnl AC_DIVERSION_NOTICE - 1 (= 0)	AC_REQUIRE'd #! /bin/sh line
 define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
 define(AC_DIVERSION_INIT, 2)dnl		initialization code
-define(AC_DIVERSION_SED, 3)dnl		variable substitutions in config.status
-define(AC_DIVERSION_NORMAL_4, 4)dnl	AC_REQUIRE'd code, 4 level deep
-define(AC_DIVERSION_NORMAL_3, 5)dnl	AC_REQUIRE'd code, 3 level deep
-define(AC_DIVERSION_NORMAL_2, 6)dnl	AC_REQUIRE'd code, 2 level deep
-define(AC_DIVERSION_NORMAL_1, 7)dnl	AC_REQUIRE'd code, 1 level deep
-define(AC_DIVERSION_NORMAL, 8)dnl	the tests and output code
+define(AC_DIVERSION_NORMAL_4, 3)dnl	AC_REQUIRE'd code, 4 level deep
+define(AC_DIVERSION_NORMAL_3, 4)dnl	AC_REQUIRE'd code, 3 level deep
+define(AC_DIVERSION_NORMAL_2, 5)dnl	AC_REQUIRE'd code, 2 level deep
+define(AC_DIVERSION_NORMAL_1, 6)dnl	AC_REQUIRE'd code, 1 level deep
+define(AC_DIVERSION_NORMAL, 7)dnl	the tests and output code
+define(AC_DIVERSION_SED, 8)dnl		variable substitutions in config.status
+define(AC_DIVERSION_CMDS, 9)dnl		extra shell commands in config.status
+define(AC_DIVERSION_ICMDS, 10)dnl	extra initialization in config.status
 
 dnl Change the diversion stream to STREAM, while stacking old values.
 dnl AC_DIVERT_PUSH(STREAM)
@@ -1070,7 +1073,7 @@ changequote(, )dnl
     ;;
   *)
     # `set' quotes correctly as required by POSIX, so do not add quotes.
-    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1=\2}/p'
+    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
     ;;
   esac >> confcache
 changequote([, ])dnl
@@ -1880,17 +1883,16 @@ define([AC_LIST_FILES], ifdef([AC_LIST_FILES], [AC_LIST_FILES ],)[$1])dnl
 define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2])])
 
 dnl Add additional commands for AC_OUTPUT to put into config.status.
-dnl I have concluded that m4's quoting rules make it impossible to
-dnl make this robust in the presence of commas in $1 or $2 and
-dnl an arbitrary number of calls.  I tried putting the defines
-dnl inside the ifdefs, with no success that way either.  -djm
+dnl Use diversions instead of macros so we can be robust in the
+dnl presence of commas in $1 and/or $2.
 dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
 AC_DEFUN(AC_OUTPUT_COMMANDS,
-[dnl
-define([AC_LIST_EXTRA], ifdef([AC_LIST_EXTRA], [AC_LIST_EXTRA
-],)[$1])dnl
-define([AC_LIST_INIT], ifdef([AC_LIST_INIT], [AC_LIST_INIT
-],)[$2])])
+[AC_DIVERT_PUSH(AC_DIVERSION_CMDS)dnl
+[$1]
+AC_DIVERT_POP()dnl
+AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
+[$2]
+AC_DIVERT_POP()])
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 AC_DEFUN(AC_CONFIG_SUBDIRS,
@@ -1980,13 +1982,11 @@ ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
 ifelse([$3][AC_LIST_INIT], , ,
 [EOF
 cat >> $CONFIG_STATUS <<EOF
-ifdef([AC_LIST_INIT], [AC_LIST_INIT
-],)[]dnl
+undivert(AC_DIVERSION_ICMDS)dnl
 $3
 EOF
 cat >> $CONFIG_STATUS <<\EOF])
-ifdef([AC_LIST_EXTRA], [AC_LIST_EXTRA
-],)[]dnl
+undivert(AC_DIVERSION_CMDS)dnl
 $2
 exit 0
 EOF

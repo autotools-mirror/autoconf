@@ -1,9 +1,14 @@
 Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* Test release 2.11.1.
+
 	* acgeneral.m4 (AC_TRY_LIB): Remove an erroneous dnl.
 	(AC_TRY_COMPILE): Make the final newline consistent with the
 	other AC_TRY_* macros.
-	
+	(AC_DIVERSION_CMDS, AC_DIVERSION_ICMDS): New macros.
+	(AC_OUTPUT_COMMANDS, AC_OUTPUT): Use them instead of appending to
+	list macros.
+
 	* acgeneral.m4 (AC_CACHE_SAVE): Handle cache variable values
 	correctly even if they contain single quote, or are quoted by
 	the shell.  From Paul Eggert <eggert@twinsun.com>.

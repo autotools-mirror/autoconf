@@ -766,7 +766,7 @@ EOF
     ;;
   *)
     # `set' quotes correctly as required by POSIX, so do not add quotes.
-    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1=\2}/p'
+    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
     ;;
   esac >> confcache
 if cmp -s $cache_file confcache; then
