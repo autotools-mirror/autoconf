@@ -1,5 +1,14 @@
 2002-10-22  Akim Demaille  <akim@epita.fr>
 
+	Restore the 2002-10-11  Akim Demaille  <akim@epita.fr> patch:
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL)
+	(AC_CHECK_HEADER, _AC_CHECK_HEADER_NEW,_AC_CHECK_HEADER_OLD): Restore.
+	(_AC_CHECK_HEADER_NEW): Rename as...
+	(AC_CHECK_HEADER): this.
+
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Remove incorrect
 	words about HP-UX cmp: it was actually a user-written cmp.
 

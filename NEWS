@@ -10,10 +10,6 @@
 
 ** Macros
 
-- AC_CHECK_HEADER/AC_CHECK_HEADERS
-  These macros now check whether the headers are compilable, i.e., they
-  compile headers rather than merely preprocess them.
-
 - New macros
   AC_FUNC_MBRTOWC
 
