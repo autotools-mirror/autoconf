@@ -3,7 +3,7 @@
 	* acspecific.m4 (_AC_OBJEXT): No longer use AC_COMPILE_IFELSE,
 	which uses $ac_objext hence depends upon _AC_OBJEXT.
 	* aclang.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Call
-	_AC_EXEEXT before _AC_OBJEXT since the former needs $ac_objext.
+	_AC_OBJEXT before _AC_EXEEXT since the latter needs $ac_objext.
 
 2000-09-06  Bernard Dautrevaux  <dautrevaux@objectlive.com>
 
