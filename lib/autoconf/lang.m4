@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -622,7 +622,8 @@ m4_define([_AC_COMPILER_OBJEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 rm -f conftest.o conftest.obj
 AS_IF([AC_TRY_EVAL(ac_compile)],
-[for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
+[for ac_file in conftest.o conftest.obj conftest.*; do
+  test -f "$ac_file" || continue;
   case $ac_file in
     _AC_COMPILER_OBJEXT_REJECT ) ;;
     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`

@@ -1,3 +1,13 @@
+2005-01-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_OBJEXT): Avoid subshells when
+	this is safe.
+	* lib/autoconf/programs.m4 (AC_PROG_EGREP, AC_PROG_FGREP): Likewise.
+	* lib/autoconf/specific.m4 (AC_SYS_LONG_FILE_NAMES): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_WORKS): Likewise.
+	* tests/mktests.sh: Likewise.
+
 2005-01-27  Akim Demaille  <akim@epita.fr>
 
 	Have autoheader honor --force.

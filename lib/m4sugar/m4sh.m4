@@ -1,7 +1,9 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+#
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -694,9 +696,8 @@ m4_define([_AS_LINENO_WORKS],
 [
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2"])
+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2"])
 
 # _AS_LINENO_PREPARE
 # ------------------

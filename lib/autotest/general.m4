@@ -1,6 +1,8 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -547,7 +549,7 @@ done
 } >&AS_MESSAGE_LOG_FD
 
 at_start_date=`date`
-at_start_time=`(date +%s) 2>/dev/null`
+at_start_time=`date +%s 2>/dev/null || echo 0`
 echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
 at_xpass_list=
 at_xfail_list=
@@ -726,13 +728,13 @@ cd "$at_dir"
 
 # Compute the duration of the suite.
 at_stop_date=`date`
-at_stop_time=`(date +%s) 2>/dev/null`
+at_stop_time=`date +%s 2>/dev/null || echo 0`
 echo "$as_me: ending at: $at_stop_date" >&AS_MESSAGE_LOG_FD
-at_duration_s=`(expr $at_stop_time - $at_start_time) 2>/dev/null`
-at_duration_m=`(expr $at_duration_s / 60) 2>/dev/null`
-at_duration_h=`(expr $at_duration_m / 60) 2>/dev/null`
-at_duration_s=`(expr $at_duration_s % 60) 2>/dev/null`
-at_duration_m=`(expr $at_duration_m % 60) 2>/dev/null`
+at_duration_s=`expr $at_stop_time - $at_start_time`
+at_duration_m=`expr $at_duration_s / 60`
+at_duration_h=`expr $at_duration_m / 60`
+at_duration_s=`expr $at_duration_s % 60`
+at_duration_m=`expr $at_duration_m % 60`
 at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
 if test "$at_duration" != "h m s"; then
   echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD

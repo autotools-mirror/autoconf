@@ -2,7 +2,7 @@
 # Macros that test for specific, unclassified, features.
 #
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -227,15 +227,10 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   (umask 077 && mkdir $ac_xdir 2>/dev/null) || continue
   ac_tf1=$ac_xdir/conftest9012345
   ac_tf2=$ac_xdir/conftest9012346
-  (echo 1 >$ac_tf1) 2>/dev/null
-  (echo 2 >$ac_tf2) 2>/dev/null
-  ac_val=`cat $ac_tf1 2>/dev/null`
-  if test ! -f $ac_tf1 || test "$ac_val" != 1; then
+  touch $ac_tf1 2>/dev/null && test -f $ac_tf1 && test ! -f $ac_tf2 ||
     ac_cv_sys_long_file_names=no
-    rm -f -r $ac_xdir 2>/dev/null
-    break
-  fi
   rm -f -r $ac_xdir 2>/dev/null
+  test $ac_cv_sys_long_file_names = no && break
 done])
 if test $ac_cv_sys_long_file_names = yes; then
   AC_DEFINE(HAVE_LONG_FILE_NAMES, 1,

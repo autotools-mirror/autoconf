@@ -1,7 +1,9 @@
 #! /bin/sh
 
 # Build some of the Autoconf test files.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -190,7 +192,7 @@ au_exclude_egrep=$exclude_list$au_exclude_list
 
 # egrep
 # -----
-if echo a | (grep -E '(a|b)') >/dev/null 2>&1
+if echo a | grep -E '(a|b)' >/dev/null 2>&1
 then egrep='grep -E'
 else egrep='egrep'
 fi

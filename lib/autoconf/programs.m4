@@ -364,7 +364,7 @@ AC_DEFUN([AC_PROG_AWK],
 AC_DEFUN([AC_PROG_EGREP],
 [AC_REQUIRE([AC_PROG_GREP])dnl
 AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
-   [if echo a | ($GREP -E '(a|b)') >/dev/null 2>&1
+   [if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
    then ac_cv_path_EGREP="$GREP -E"
    else
      _AC_PROG_GREP(EGREP, egrep, ['EGREP$'])
@@ -379,7 +379,7 @@ AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
 AC_DEFUN([AC_PROG_FGREP],
 [AC_REQUIRE([AC_PROG_GREP])dnl
 AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
-   [if echo 'ab*c' | ($GREP -F 'ab*c') >/dev/null 2>&1
+   [if echo 'ab*c' | $GREP -F 'ab*c' >/dev/null 2>&1
    then ac_cv_path_FGREP="$GREP -F"
    else
      _AC_PROG_GREP(FGREP, fgrep, [FGREP])
