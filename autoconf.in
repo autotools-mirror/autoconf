@@ -362,6 +362,13 @@ function error (message)
 }
 
 END {
+  # Chomp.
+  request = substr (request, 1, length (request) - 1)
+  # The default request is `$f:$l:$n:$*'.
+  colon   = index (request, ":")
+  macro   = colon ? substr (request, 1, colon - 1) : request
+  request = colon ? substr (request, colon + 1)    : "$f:$l:$n:$*"
+
   res = ""
 
   for (cp = request; cp; cp = substr (cp, 2))
@@ -408,7 +415,9 @@ END {
       else
 	res = res char
     }
-  print res
+
+  # Produce the definition of AT_<MACRO> = the translation of the request.
+  print "define([AT_" macro "], [[" res "]])"
   close("cat >&2")
 }
 EOF
@@ -419,17 +428,7 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     trace_opt="$trace_opt -t "`echo "$trace" | sed -e 's/:.*//;q'`
-    case "$trace" in
-      *:*)
-        # The `]])' are closing the `define' which is started by sed.
-        # This is to cope with multiple line requests.
-        echo "$trace]])" |
-          sed -e '1s/^\([^:]*\):\(.*\)$/define([AT_\1], [[\2/';;
-      *)
-        # Default request.
-        echo "define([AT_$trace], [[\$f:\$l:\$n:\$*]])";;
-    esac |
-      $AWK -f $translate_awk >>$trace_m4 || exit 1
+    echo "$trace" | $AWK -f $translate_awk >>$trace_m4 || exit 1
   done
   echo "divert(0)dnl" >>$trace_m4
 
