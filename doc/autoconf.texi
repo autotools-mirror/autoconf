@@ -4670,6 +4670,69 @@ in as well, but the C++ compiler/linker doesn't know by default how to
 add these Fortran 77 libraries.  Hence, the macro
 @code{AC_F77_LIBRARY_LDFLAGS} was created to determine these Fortran 77
 libraries.
+
+The macro @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN} will probably
+also be necessary to link C/C++ with Fortran; see below.
+@end defmac
+
+@defmac AC_F77_DUMMY_MAIN(@ovar{ACTION-IF-FAIL}, @ovar{ACTION-IF-NONE}, @ovar{ACTION-IF-FOUND})
+@maindex F77_DUMMY_MAIN
+@cvindex F77_DUMMY_MAIN
+With many compilers, the Fortran libraries detected by
+@code{AC_F77_LIBRARY_LDFLAGS} provide their own @code{main} entry
+function that initializes things like Fortran I/O, and which then calls
+a user-provided entry function named e.g. @code{MAIN__} to run the
+user's program.  The @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN}
+macros figure out how to deal with this interaction.
+
+When using Fortran only for purely numerical functions (no I/O,
+etcetera), users often prefer to provide their own @code{main} and skip
+the Fortran library initializations.  In this case, however, one may
+still need to provide a dummy @code{MAIN__} routine in order to prevent
+linking errors on some systems.  @code{AC_F77_DUMMY_MAIN} detects
+whether any such routine is @emph{required} for linking, and what its
+name is.
+
+If it cannot figure out how to link successfully, @code{ACTION-IF-FAIL}
+is executed, with the default action being to exit with an error
+message.  @code{ACTION-IF-NONE} is executed if no dummy main is needed
+(default: no action).  @code{ACTION-IF-FOUND} is executed if a dummy
+main is required; the default action is to define @code{F77_DUMMY_MAIN}
+to the name of this required routine (e.g. @code{MAIN__}).
+
+In order to link with Fortran routines, the user's C/C++ program should
+then include the following code to define the dummy main if it is
+needed:
+
+@example
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() @{ return 1; @}
+#endif
+@end example
+
+Note that @code{AC_F77_DUMMY_MAIN} is called automatically from
+@code{AC_F77_WRAPPERS}; there is generally no need to call it explicitly
+unless one wants to change the default actions.
+@end defmac
+
+@defmac AC_F77_MAIN
+@maindex F77_MAIN
+@cvindex F77_MAIN
+As discussed above for @code{AC_F77_DUMMY_MAIN}, many Fortran libraries
+allow you to provide an entry point called e.g. @code{MAIN__} instead of
+the usual @code{main}, which is then called by a @code{main} function in
+the Fortran libraries that initializes things like Fortran I/O.  The
+@code{AC_F77_MAIN} macro detects whether it is @emph{possible} to
+utilize such an alternate main function, and defines @code{F77_MAIN} to
+the name of the function.  (If no alternate main function name is found,
+@code{F77_MAIN} is simply defined to @code{main}.)
+
+Thus, when calling Fortran routines from C that perform things like I/O,
+one should use this macro and name the "main" function @code{F77_MAIN}
+instead of @code{main}.
 @end defmac
 
 @defmac AC_F77_WRAPPERS

@@ -29,6 +29,8 @@
 - `config.status foo' works properly when `foo' depends on variables
   set in an AC_CONFIG_THING INIT-CMD.
 - autoheader is more robust to broken input.
+- Fixed Fortran name-mangling and link tests on a number of systems,
+  e.g. NetBSD; see AC_F77_DUMMY_MAIN, below.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
@@ -45,7 +47,9 @@
   AM_FUNC_OBSTACK, and AM_FUNC_STRTOD are now activated.
   Be sure to read `Upgrading from Version 2.13' to understand why
   running `autoupdate' is needed.
-[2.50a]
+- AC_F77_DUMMY_MAIN, AC_F77_MAIN: new macros to detect whether
+  a main-like routine is required/possible when linking C/C++ with
+  Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
 
 * Major changes in Autoconf 2.50
 

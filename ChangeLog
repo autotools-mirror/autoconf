@@ -1,3 +1,21 @@
+2001-07-01  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Add alternate 'main' routine detection for linking C/C++ with Fortran,
+	fixing link failures for e.g. AC_F77_WRAPPERS on NetBSD.
+
+	* aclang.m4 (AC_F77_DUMMY_MAIN): New macro to detect whether a
+	dummy alternate main is required even if the user provides her own
+	'main'.
+	(AC_F77_MAIN): New macro to detect whether it is possible to
+	provide an alternate 'main' function name, using the 'main' from
+	the Fortran libraries.
+	(AC_LANG_PROGRAM(C)): Use F77_DUMMY_MAIN, if it is defined, so that
+	cross-language link tests can be performed successfully.
+	(_AC_F77_NAME_MANGLING): Require AC_F77_DUMMY_MAIN.  Also put $FLIBS
+	after $LIBS, for consistency; this should be the general rule since
+	the user may want to link to Fortran libraries that require $FLIBS.
+	* autoconf.texi: Document AC_F77_DUMMY_MAIN and AC_F77_MAIN.
+
 2001-06-29  Pavel Roskin  <proski@gnu.org>
 
 	* atgeneral.m4 (AT_CHECK): Add a newline to the end of
