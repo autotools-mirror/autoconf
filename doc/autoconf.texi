@@ -9218,25 +9218,26 @@ You can't use @command{!}, you'll have to rewrite your code.
 The use of @samp{break 2}, etcetera, is safe.
 
 
-@item @command{cd} and @command{pwd}
+@item @command{cd}
 @c ---------------------------------
 @prindex @command{cd}
-@prindex @command{pwd}
-@acronym{POSIX} 1003.1-2001 requires that @command{cd} and
-@command{pwd} must support the @option{-L} and @option{-P} options,
+@acronym{POSIX} 1003.1-2001 requires that @command{cd} must support
+the @option{-L} (``logical'') and @option{-P} (``physical'') options,
 with @option{-L} being the default.  However, traditional shells do
-not support these options, and their @command{cd} and @command{pwd}
-commands have the @option{-P} behavior.
+not support these options, and their @command{cd} command has the
+@option{-P} behavior.
 
 Portable scripts should assume neither option is supported, and should
 assume neither behavior is the default.  This can be a bit tricky,
 since the @acronym{POSIX} default behavior means that, for example,
-@samp{ls ..} and @samp{cd ..} may refer to different directories.  It
-is safe to use @command{cd @var{dir}} if @var{dir} contains no
-@file{..} components.  Also, Autoconf-generated scripts check for this
-problem when computing variables like @code{ac_top_srcdir}
-(@pxref{Configuration Actions}), so it is safe to @command{cd} to
-these variables.
+@samp{ls ..} and @samp{cd ..} may refer to different directories if
+the current logical directory is a symbolic link.  It is safe to use
+@command{cd @var{dir}} if @var{dir} contains no @file{..} components.
+Also, Autoconf-generated scripts check for this problem when computing
+variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
+so it is safe to @command{cd} to these variables.
+
+Also please see the discussion of the @command{pwd} command.
 
 
 @item @command{case}
@@ -9466,7 +9467,41 @@ fi
 
 @item @command{pwd}
 @c ----------------
-See @command{cd} above.
+@prindex @command{pwd}
+With modern shells, plain @command{pwd} outputs a ``logical''
+directory name, some of whose components may be symbolic links.  These
+directory names are in contrast to ``physical'' directory names, whose
+components are all directories.
+
+@acronym{POSIX} 1003.1-2001 requires that @command{pwd} must support
+the @option{-L} (``logical'') and @option{-P} (``physical'') options,
+with @option{-L} being the default.  However, traditional shells do
+not support these options, and their @command{pwd} command has the
+@option{-P} behavior.
+
+Portable scripts should assume neither option is supported, and should
+assume neither behavior is the default.  Also, on many hosts
+@samp{/bin/pwd} is equivalent to @samp{pwd -P}, but @acronym{POSIX}
+does not require this behavior and portable scripts should not rely on
+it.
+
+Typically it's best to use plain @command{pwd}.  On modern hosts this
+outputs logical directory names, which have the following advantages:
+
+@itemize @bullet
+@item
+Logical names are what the user specified.
+@item
+Physical names may not be portable from one installation
+host to another due to network filesystem gymnastics.
+@item
+On modern hosts @samp{pwd -P} may fail due to lack of permissions to
+some parent directory, but plain @command{pwd} cannot fail for this
+reason.
+@end itemize
+
+Also please see the discussion of the @command{cd} command.
+
 
 @item @command{set}
 @c ----------------
