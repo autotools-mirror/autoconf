@@ -241,9 +241,9 @@ ac_header_dirent=$ac_hdr; break])
 done
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
-  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+  AC_SEARCH_LIBS(opendir, dir)
 else
-  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
+  AC_SEARCH_LIBS(opendir, x)
 fi
 ])# AC_HEADER_DIRENT
 
