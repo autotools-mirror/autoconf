@@ -2023,11 +2023,11 @@ The @file{stamp-} files are necessary because the timestamps of
 @file{config.h.in} and @file{config.h} will not be changed if remaking
 them does not change their contents.  This feature avoids unnecessary
 recompilation.  You should include the file @file{stamp-h.in} your
-package's distribution, so @code{make} will consider @file{config.h.in}
-up to date.  On some old @sc{bsd} systems, @code{touch} or any command
-that results in an empty file does not update the timestamps, so use a
-command like @code{echo} as a workaround.
-@c Using @code{date} would cause needless CVS conflicts.
+package's distribution, so @command{make} will consider
+@file{config.h.in} up to date.  Don't use @command{touch}
+(@pxref{Limitations of Usual Tools}), rather use @command{echo} (using
+@command{date} would cause needless differences, hence @sc{cvs}
+conflicts etc.).
 
 @example
 @group
@@ -6567,7 +6567,19 @@ t end
 s/.*/deleted/g
 : end
 @end example
+
+@item @command{touch}
+@c ------------------
+@cindex @command{touch}
+On some old @sc{bsd} systems, @command{touch} or any command that
+results in an empty file does not update the timestamps, so use a
+command like @code{echo} as a workaround.
+
+GNU @command{touch} 3.16r (and presumably all before that) fails to work
+on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
+
 @end table
+
 
 @node Limitations of Make,  , Limitations of Usual Tools, Portable Shell
 @subsection Limitations of Make

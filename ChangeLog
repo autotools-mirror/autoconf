@@ -1,5 +1,11 @@
 2001-03-20  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): Some about
+	`touch'.
+	From Jim Meyering, Volker Borchert, and Peter Eisentraut.
+
+2001-03-20  Akim Demaille  <akim@epita.fr>
+
 	* tests/foreign.at (Libtool): Don't skip 1.3.5.
 	Invoke AC_CANONICAL_SYSTEM ---for some reason AC_CANONICAL_HOST is
 	not enough for 1.3.5.
