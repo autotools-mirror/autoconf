@@ -106,8 +106,13 @@ define([AS_UNSET],
 # We cannot simply use "exit N" because some shells (zsh and Solaris sh)
 # will not set $? to N while running the code set by "trap 0"
 # So we set $? by executing "exit N" in the subshell and then exit.
+# "false" is used for exit code 1 (default), ":" is used for 0
 define([AS_EXIT],
-[{ (exit m4_default([$1], 1)); exit; }])
+[{ m4_case([$1],
+           [0], [:; exit],
+           [],  [false; exit],
+           [1], [false; exit],
+           [(exit $1); exit]); }])
 
 
 

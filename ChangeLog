@@ -1,3 +1,9 @@
+2000-10-30  Pavel Roskin  <proski@gnu.org>
+
+	* m4sh.m4 (AS_EXIT): Use "false" for exit code 1, ":" for 0.
+	* acgeneral.m4 (AC_MSG_ERROR): Don't use m4_default for the
+	second argument - AS_EXIT takes care of it.
+
 2000-10-30  Akim Demaille  <akim@epita.fr>
 
 	* m4sugar.m4: Formatting changes.
