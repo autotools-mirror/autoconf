@@ -289,8 +289,12 @@ AC_SUBST(LN_S)dnl
 ])# AC_PROG_LN_S
 
 
-AC_DEFUNCT([AC_RSH], [; replace it with equivalent code])
-
+# AC_RSH
+# ------
+# I don't know what it used to do, but it no longer does.
+AU_DEFUN([AC_RSH],
+[AC_WARNING([$0: is no longer supported.
+Remove this AC_WARNING when you adjust the code.])])
 
 
 
@@ -544,25 +548,71 @@ fi
 
 
 
-# A few hasbeen'd macros.
+# A few obsolete macros.
 
-AC_DEFUNCT([AC_UNISTD_H], [; instead use AC_CHECK_HEADERS(unistd.h)])
-
-AC_DEFUNCT([AC_USG],
-           [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])
-
-# If memchr and the like aren't declared in <string.h>, include <memory.h>.
-# To avoid problems, don't check for gcc2 built-ins.
-AC_DEFUNCT([AC_MEMORY_H],
-           [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
+AU_DEFUN([AC_UNISTD_H],
+[AC_CHECK_HEADERS(unistd.h)])
 
 
+# AU::AC_USG
+# ----------
+# Define `USG' if string functions are in strings.h.
+AU_DEFUN([AC_USG],
+[AC_WARNING([$0: Remove `AC_MSG_CHECKING', `AC_TRY_LINK' and this `AC_WARNING'
+when you ajust your code to use HAVE_STRING_H.])dnl
+AC_MSG_CHECKING([for BSD string and memory functions])
+AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
+  [AC_MSG_RESULT(yes)],
+  [AC_MSG_RESULT(no)
+   AC_DEFINE(USG, 1,
+       [Define if you do not have <strings.h>, index, bzero, etc...
+        This symbol is obsolete, you should not depend upon it.])])
+AC_CHECK_HEADERS(string.h)])
+
+
+# AU::AC_MEMORY_H
+# ---------------
+# To be precise this macro used to be:
+#
+#   | AC_MSG_CHECKING(whether string.h declares mem functions)
+#   | AC_EGREP_HEADER(memchr, string.h, ac_found=yes, ac_found=no)
+#   | AC_MSG_RESULT($ac_found)
+#   | if test $ac_found = no; then
+#   | 	AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
+#   | fi
+#
+# But it is better to check for both headers, and alias NEED_MEMORY_H to
+# HAVE_MEMORY_H.
+AU_DEFUN([AC_MEMORY_H],
+[AC_WARNING([$0: Remove this `AC_WARNING' and
+`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you ajust your code to
+use and HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])dnl
+AC_CHECK_HEADER(memory.h,
+                [AC_DEFINE([NEED_MEMORY_H], 1,
+                           [Same as `HAVE_MEMORY_H', don't depend on me.])])
+AC_CHECK_HEADERS(string.h memory.h)
+])
+
+
+# AU::AC_DIR_HEADER
+# -----------------
 # Like calling `AC_HEADER_DIRENT' and `AC_FUNC_CLOSEDIR_VOID', but
 # defines a different set of C preprocessor macros to indicate which
-# header file is found.  This macro and the names it defines are
-# considered obsolete.
-AC_DEFUNCT([AC_DIR_HEADER],
-[; instead use AC_HEADER_DIRENT])
+# header file is found.
+AU_DEFUN([AC_DIR_HEADER],
+[AC_HEADER_DIRENT
+AC_FUNC_CLOSEDIR_VOID
+AC_WARNING([$0: Remove this `AC_WARNING' and the four `AC_DEFINE' when you
+ajust your code to use `AC_HEADER_DIRENT'.])
+test ac_cv_header_dirent_dirent_h &&
+  AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
+test ac_cv_header_dirent_sys_ndir_h &&
+  AC_DEFINE([SYSNDIR], 1, [Same as `HAVE_SYS_NDIR_H', don't depend on me.])
+test ac_cv_header_dirent_sys_dir_h &&
+  AC_DEFINE([SYSDIR], 1, [Same as `HAVE_SYS_DIR_H', don't depend on me.])
+test ac_cv_header_dirent_ndir_h &&
+  AC_DEFINE([NDIR], 1, [Same as `HAVE_NDIR_H', don't depend on me.])
+])
 
 
 
@@ -629,21 +679,41 @@ if test $ac_cv_type_uid_t = no; then
 fi
 ])
 
-# FIXME: AU_DEFUN these guys?
-AC_DEFUN([AC_TYPE_SIZE_T],
-[AC_CHECK_TYPE(size_t, unsigned)])
 
-AC_DEFUN([AC_TYPE_PID_T],
-[AC_CHECK_TYPE(pid_t, int)])
+AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned)])
+AC_DEFUN([AC_TYPE_PID_T],  [AC_CHECK_TYPE(pid_t,  int)])
+AC_DEFUN([AC_TYPE_OFF_T],  [AC_CHECK_TYPE(off_t,  long)])
+AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
 
-AC_DEFUN([AC_TYPE_OFF_T],
-[AC_CHECK_TYPE(off_t, long)])
 
-AC_DEFUN([AC_TYPE_MODE_T],
-[AC_CHECK_TYPE(mode_t, int)])
+# AU::AC_INT_16_BITS
+# ------------------
+# What a great name :)
+AU_DEFUN([AC_INT_16_BITS],
+[AC_CHECK_SIZEOF([int])
+AC_WARNING([$0:
+        your code should no longer depend upon `INT_16_BITS', but upon
+        `SIZEOF_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when you
+        adjust the code.])dnl
+test $ac_check_sizeof_int = 2 &&
+  AC_DEFINE(INT_16_BITS, 1,
+            [Define if `sizeof (int)' = 2.  Obsolete, use `SIZEOF_INT'.])
+])
 
-AC_DEFUNCT([AC_INT_16_BITS], [; instead use AC_CHECK_SIZEOF(int)])
-AC_DEFUNCT([AC_LONG_64_BITS], [; instead use AC_CHECK_SIZEOF(long)])
+
+# AU::AC_LONG_64_BITS
+# -------------------
+AU_DEFUN([AC_LONG_64_BITS],
+[AC_CHECK_SIZEOF([long int])
+AC_WARNING([$0:
+        your code should no longer depend upon `LONG_64_BITS', but upon
+        `SIZEOF_LONG_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when
+        you adjust the code.])dnl
+test $ac_check_sizeof_long_int = 8 &&
+  AC_DEFINE(LONG_64_BITS, 1,
+            [Define if `sizeof (long int)' = 8.  Obsolete, use
+             `SIZEOF_LONG_INT'.])
+])
 
 
 # AC_TYPE_SIGNAL
@@ -2091,8 +2161,15 @@ interpval=$ac_cv_sys_interpreter
 ])
 
 
-AC_DEFUNCT([AC_HAVE_POUNDBANG], [;use AC_SYS_INTERPRETER, taking no arguments])
-AC_DEFUNCT([AC_ARG_ARRAY], [; don't do unportable things with arguments])
+AU_DEFUN([AC_HAVE_POUNDBANG],
+[AC_SYS_INTERPRETER
+AC_WARNING([$0: Remove this warning when you adjust your code to use
+      `AC_SYS_INTERPRETER'.])])
+
+
+AU_DEFUN([AC_ARG_ARRAY],
+[AC_WARNING([$0: no longer implemented: don't do unportable things
+with arguments. Remove this warning when you adjust your code.])])
 
 
 # _AC_SYS_LARGEFILE_SOURCE(PROLOGUE, BODY)

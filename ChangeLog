@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_DEFUNCT): Remove.
+	(AC_RSH, AC_UNISTD_H, AC_USG, AC_MEMORY_H, AC_DIR_HEADER,
+	AC_INT_16_BITS, AC_LONG_64_BITS): They're alive!...
+	* doc/autoconf.texi (Obsolete Macros): but not fresh.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (debug): New variable.
 	(tmp): s/ac/ar/.
 	<options handling>: Support --debug.

@@ -7800,7 +7800,27 @@ task.
 @end defmac
 
 @defmac AC_DECL_YYTEXT
+@maindex DECL_YYTEXT
 Does nothing, now integrated in @code{AC_PROG_LEX}.
+@end defmac
+
+@defmac AC_DIR_HEADER
+@maindex DIR_HEADER
+@cvindex DIRENT
+@cvindex SYSNDIR
+@cvindex SYSDIR
+@cvindex NDIR
+Like calling @code{AC_FUNC_CLOSEDIR_VOID} and@code{AC_HEADER_DIRENT},
+but defines a different set of C preprocessor macros to indicate which
+header file is found:
+
+@multitable {@file{sys/ndir.h}} {Old Symbol} {@code{HAVE_SYS_NDIR_H}}
+@item Header            @tab Old Symbol     @tab New Symbol
+@item @file{dirent.h}   @tab @code{DIRENT}  @tab @code{HAVE_DIRENT_H}
+@item @file{sys/ndir.h} @tab @code{SYSNDIR} @tab @code{HAVE_SYS_NDIR_H}
+@item @file{sys/dir.h}  @tab @code{SYSDIR}  @tab @code{HAVE_SYS_DIR_H}
+@item @file{ndir.h}     @tab @code{NDIR}    @tab @code{HAVE_NDIR_H}
+@end multitable
 @end defmac
 
 @defmac AC_DYNIX_SEQ
@@ -7928,6 +7948,13 @@ AC_CONFIG_SRCDIR(@var{unique-file-in-source-dir})
 @code{AC_C_INLINE}
 @end defmac
 
+@defmac AC_INT_16_BITS
+@maindex INT_16_BITS
+@cvindex INT_16_BITS
+If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
+Use @samp{AC_CHECK_SIZEOF(int)} instead.
+@end defmac
+
 @defmac AC_IRIX_SUN
 @maindex IRIX_SUN
 If on IRIX (Silicon Graphics @sc{unix}), add @option{-lsun} to output
@@ -8002,6 +8029,13 @@ AC_CONFIG_LINKS(host.h:config/$machine.h
 @code{AC_PROG_LN_S}
 @end defmac
 
+@defmac AC_LONG_64_BITS
+@maindex LONG_64_BITS
+@cvindex LONG_64_BITS
+If the C type @code{long int} is 16 bits wide, define
+@code{LONG_64_BITS}.  Use @samp{AC_CHECK_SIZEOF(long int)} instead.
+@end defmac
+
 @defmac AC_LONG_DOUBLE
 @maindex LONG_DOUBLE
 @code{AC_C_LONG_DOUBLE}
@@ -8015,6 +8049,16 @@ AC_CONFIG_LINKS(host.h:config/$machine.h
 @defmac AC_MAJOR_HEADER
 @maindex MAJOR_HEADER
 @code{AC_HEADER_MAJOR}
+@end defmac
+
+@defmac AC_MEMORY_H
+@maindex MEMORY_H
+@cvindex NEED_MEMORY_H
+Used to define @code{NEED_MEMORY_H} if the @code{mem} functions were
+defined in @file{memory.h}.  Today it is equivalent to
+@samp{AC_CHECK_HEADERS(memory.h)}.  Adjust your code to depend upon
+@code{HAVE_MEMORY_H}, not @code{NEED_MEMORY_H}, see @xref{Standard
+Symbols}.
 @end defmac
 
 @defmac AC_MINGW32
@@ -8179,7 +8223,7 @@ removed because of limited usefulness
 
 @defmac AC_RSH
 @maindex RSH
-removed because of limited usefulness
+Removed because of limited usefulness.
 @end defmac
 
 @defmac AC_SCO_INTL
@@ -8274,6 +8318,19 @@ now it just calls @code{AC_FUNC_STRFTIME} instead.
 @defmac AC_UID_T
 @maindex UID_T
 @code{AC_TYPE_UID_T}
+@end defmac
+
+@defmac AC_UNISTD_H
+@maindex UNISTD_H
+Same as @samp{AC_CHECK_HEADERS(unistd.h)}.
+@end defmac
+
+@defmac AC_USG
+@maindex USG
+@cvindex USG
+Define @code{USG} if the @sc{bsd} string functions are defined in
+@file{strings.h}.  You should no longer depend upon @code{USG}, but on
+@code{HAVE_STRING_H}, see @xref{Standard Symbols}.
 @end defmac
 
 @defmac AC_UTIME_NULL

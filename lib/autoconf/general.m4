@@ -531,13 +531,6 @@ define([AC_DEFUN_ONCE],
                    [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])])
 
 
-# AC_DEFUNCT(NAME, COMMENT)
-# -------------------------
-# Declare the macro NAME no longer exists, and must not be used.
-define([AC_DEFUNCT],
-[define([$1], [AC_FATAL([$1] is defunct[$2])])])
-
-
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
 # ------------------------------------------
 define([AC_OBSOLETE],
