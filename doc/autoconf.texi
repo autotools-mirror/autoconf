@@ -4466,9 +4466,9 @@ libraries.
 @cvindex F77_FUNC
 @cvindex F77_FUNC_
 Defines C macros @code{F77_FUNC(name,NAME)} and
-@code{F77_FUNC_(name,NAME)} to properly mangle the names of C
-identifiers, and C identifiers with underscores, respectively, so that
-they match the name mangling scheme used by the Fortran 77 compiler.
+@code{F77_FUNC_(name,NAME)} to properly mangle the names of C/C++
+identifiers, and identifiers with underscores, respectively, so that
+they match the name-mangling scheme used by the Fortran 77 compiler.
 
 Fortran 77 is case-insensitive, and in order to achieve this the Fortran
 77 compiler converts all identifiers into a canonical case and format.
@@ -4487,12 +4487,10 @@ Fortran 77 subroutine:
       end
 @end example
 
-You would then declare its prototype in C as:
+You would then declare its prototype in C or C++ as:
 
 @example
-#ifdef F77_FUNC
-# define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
-#endif
+#define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
 #endif
@@ -4507,9 +4505,10 @@ Automake}).
 
 Although Autoconf tries to be intelligent about detecting the
 name-mangling scheme of the Fortran 77 compiler, there may be Fortran 77
-compilers that it doesn't support yet.  It is therefore recommended that
-you test whether the @code{F77_FUNC} and @code{F77_FUNC_} macros are
-defined, as we have done in the example above.
+compilers that it doesn't support yet.  In this case, the above code
+will generate a compile-time error, but some other behavior
+(e.g. disabling Fortran-related features) can be induced by checking
+whether the @code{F77_FUNC} macro is defined.
 
 Now, to call that routine from a C program, we would do something like:
 
