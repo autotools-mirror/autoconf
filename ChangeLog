@@ -1,3 +1,9 @@
+Fri Jan 12 14:38:37 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_TRY_CPP): Use "" instead of '' when setting
+	ac_try; we need one level of expansion there for $ac_cpp, then
+	AC_TRY_EVAL does one more for its the expansion of $ac_cpp.
+
 Thu Jan 11 10:38:19 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Removed echo cmds
