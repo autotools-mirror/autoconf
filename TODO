@@ -97,6 +97,8 @@ this.  Most should be removed.
 ** AC_EXEXT, AC_OBJEXT
 Support should be enabled by default.
 
+** Macros now swallowed by Autoconf.
+error.m4, obstack.m4, ptrdiff.m4, strtod.m4, termios.m4, winsz.m4.
 
 ------------------------------------------------------------------------------
 

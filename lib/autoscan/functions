@@ -33,6 +33,7 @@ stat		AC_FUNC_STAT
 strcoll		AC_FUNC_STRCOLL
 strerror_r	AC_FUNC_STRERROR_R
 strftime	AC_FUNC_STRFTIME
+strtod		AC_FUNC_STRTOD
 utime		AC_FUNC_UTIME_NULL
 vfork		AC_FUNC_VFORK
 vfprintf	AC_FUNC_VPRINTF

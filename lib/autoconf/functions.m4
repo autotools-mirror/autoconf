@@ -1201,6 +1201,64 @@ AC_DEFUN([AC_FUNC_STAT],  [_AC_FUNC_STAT(stat)])
 AC_DEFUN([AC_FUNC_LSTAT], [_AC_FUNC_STAT(lstat)])
 
 
+# _AC_LIBOBJ_STRTOD
+# -----------------
+define([_AC_LIBOBJ_STRTOD],
+[AC_LIBOBJ(strtod)
+AC_CHECK_FUNC(pow)
+if test $ac_cv_func_pow = no; then
+  AC_CHECK_LIB(m, pow,
+               [POW_LIB=-lm],
+               [AC_MSG_WARN(can't find library containing definition of pow)])
+fi
+])# _AC_LIBOBJ_STRTOD
+
+
+# AC_FUNC_STRTOD
+# --------------
+AC_DEFUN([AC_FUNC_STRTOD],
+[AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
+[AC_TRY_RUN([
+double strtod ();
+int
+main()
+{
+  {
+    /* Some versions of Linux strtod mis-parse strings with leading '+'.  */
+    char *string = " +69";
+    char *term;
+    double value;
+    value = strtod (string, &term);
+    if (value != 69 || term != (string + 4))
+      exit (1);
+  }
+
+  {
+    /* Under Solaris 2.4, strtod returns the wrong value for the
+       terminating character under some conditions.  */
+    char *string = "NaN";
+    char *term;
+    strtod (string, &term);
+    if (term != string && *(term - 1) == 0)
+      exit (1);
+  }
+  exit (0);
+}
+],
+            ac_cv_func_strtod=yes,
+            ac_cv_func_strtod=no,
+            ac_cv_func_strtod=no)])
+if test $ac_cv_func_strtod = no; then
+  _AC_LIBOBJ_STRTOD
+fi
+])
+
+
+# AU::AM_FUNC_STRTOD
+# -------------------
+AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
+
+
 # AC_FUNC_STRERROR_R
 # ------------------
 AC_DEFUN([AC_FUNC_STRERROR_R],

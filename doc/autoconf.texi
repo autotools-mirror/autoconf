@@ -3140,6 +3140,15 @@ If the @code{strcoll} function exists and works correctly, define
 definitions of @code{strcoll}, which should not be used.
 @end defmac
 
+@defmac AC_FUNC_STRTOD
+@maindex FUNC_STRTOD
+@ovindex POW_LIB
+If the @code{strtod} function does not exist or doesn't work correctly,
+ask for an @code{AC_LIBOBJ} replacement of @samp{strtod}.  In this case,
+because @file{strtod.c} is likely to need @samp{pow}, set the output
+variable @code{POW_LIB} to the extra library needed.
+@end defmac
+
 @defmac AC_FUNC_STRERROR_R
 @maindex FUNC_STRERROR_R
 @cvindex HAVE_STRERROR_R
