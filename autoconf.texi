@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.9.3
-@set VERSION 1.9.3
+@set EDITION 1.9.4
+@set VERSION 1.9.4
 @set UPDATED May 1994
 
 @iftex
@@ -1702,6 +1702,20 @@ AC_SIZEOF_TYPE(int *)
 defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
+@defmac AC_TEST_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
+@maindex TEST_CPP
+@var{includes} is C or C++ @code{#include} statements and declarations, on
+which shell variable and backquote substitutions are performed.
+(Actually, it can be any C program, but other statements are probably
+not useful.)  If the preprocessor produces no error messages while
+processing it, run shell commands @var{action-if-true}.  Otherwise run
+shell commands @var{action-if-false}.
+
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
+@end defmac
+
 @defmac AC_TEST_PROGRAM (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
 @maindex TEST_PROGRAM
 @var{program} is the text of a C program, on which shell variable and
@@ -1716,20 +1730,6 @@ system where @code{configure} is being run, then the test program is not
 run.  Instead, the shell commands @var{action-if-cross-compiling} are
 run.  If that argument is given, this macro calls @code{AC_CROSS_CHECK}
 if it has not already been called (@pxref{Compiler Characteristics}).
-@end defmac
-
-@defmac AC_TEST_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
-@maindex TEST_CPP
-@var{includes} is C or C++ @code{#include} statements and declarations, on
-which shell variable and backquote substitutions are performed.
-(Actually, it can be any C program, but other statements are probably
-not useful.)  If the preprocessor produces no error messages while
-processing it, run shell commands @var{action-if-true}.  Otherwise run
-shell commands @var{action-if-false}.
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
 @end defmac
 
 @node Command Line, Setting Variables, General Feature Tests, General Purpose Macros
