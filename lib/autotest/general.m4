@@ -153,7 +153,7 @@ done
 if $at_help; then
   # If tests were specified, display only their title.
   if test -z "$at_tests"; then
-    cat <<EOF
+    cat <<_ATEOF
 Usage: $[0] [[OPTION]]... [[TESTS]]
 
 Run all the tests, or the selected TESTS.
@@ -166,16 +166,16 @@ Options:
   -x  Have the shell to trace command execution
 
 Tests:
-EOF
+_ATEOF
   else
     # "  1 42  45 " => " (1|42|45): "
     at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
     at_tests_pattern=" (${at_tests_pattern}): "
   fi
-  egrep -e "$at_tests_pattern" <<EOF
+  egrep -e "$at_tests_pattern" <<_ATEOF
 m4_divert([HELP])dnl Help message inserted here.
 m4_divert([SETUP])dnl
-EOF
+_ATEOF
   exit 0
 fi
 

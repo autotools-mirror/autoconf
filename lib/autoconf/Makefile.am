@@ -54,6 +54,22 @@ ETAGS_ARGS = --lang=none \
 
 
 
+## -------- ##
+## Checks.  ##
+## -------- ##
+
+check-local:
+	if (cd $(srcdir) && \
+	    egrep '^_?EOF' $(distautoconflib_DATA)) >eof.log; then \
+	  echo "ERROR: user EOF tags were used:" >&2; \
+	  sed "s,^,$*.m4: ," <eof.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f eof.log; \
+	fi
+
+
 ## ------------------ ##
 ## The frozen files.  ##
 ## ------------------ ##
@@ -99,6 +115,7 @@ M4_INCLUDES =  --include $(srcdir) \
 	else \
 	  rm -f freeze.log; \
 	fi
+
 
 # Some day we should explain to Automake how to use autom4te to compute
 # the dependencies...

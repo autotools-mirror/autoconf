@@ -84,10 +84,10 @@ AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \${MAKE}])
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
-[cat >conftest.make <<\EOF
+[cat >conftest.make <<\_ACEOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
-EOF
+_ACEOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
 eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
 if test -n "$ac_maketemp"; then
@@ -583,10 +583,10 @@ m4_define([_AC_PATH_X_XMKMF],
 if mkdir conftest.dir; then
   cd conftest.dir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
-  cat >Imakefile <<'EOF'
+  cat >Imakefile <<'_ACEOF'
 acfindx:
 	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
-EOF
+_ACEOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`

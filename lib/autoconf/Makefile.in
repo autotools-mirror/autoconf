@@ -204,6 +204,7 @@ info: info-am
 dvi-am:
 dvi: dvi-am
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) check-local
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
@@ -261,11 +262,12 @@ maintainer-clean: maintainer-clean-am
 .PHONY: uninstall-distautoconflibDATA install-distautoconflibDATA \
 uninstall-nodistautoconflibDATA install-nodistautoconflibDATA tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
-distdir info-am info dvi-am dvi check check-am installcheck-am \
-installcheck install-exec-am install-exec install-data-am install-data \
-install-am install uninstall-am uninstall all-redirect all-am all \
-installdirs mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+distdir info-am info dvi-am dvi check-local check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 # - version.m4 needs to be updated only once, since it depends on
@@ -277,6 +279,17 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 $(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/version.in >version.tm4
 	mv version.tm4 $(srcdir)/version.m4
+
+check-local:
+	if (cd $(srcdir) && \
+	    egrep '^_?EOF' $(distautoconflib_DATA)) >eof.log; then \
+	  echo "ERROR: user EOF tags were used:" >&2; \
+	  sed "s,^,$*.m4: ," <eof.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f eof.log; \
+	fi
 
 # When processing the file with diversion disabled, there must be no
 # output but comments and empty lines.
