@@ -76,11 +76,11 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 # Process any command line arguments.
 sub parse_args
 {
-  Getopt::Long::Configure ("bundling");
+  Getopt::Long::config ("bundling");
   Getopt::Long::GetOptions ("A|autoconf-dir|m|macrodir=s" => \$datadir,
 			    "h|help" => \&print_usage,
 			    "V|version" => \&print_version,
-			    "v|verbose+" => \$verbose)
+			    "v|verbose" => \$verbose)
     or exit 1;
 
   die "$me: too many arguments

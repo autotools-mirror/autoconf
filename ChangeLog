@@ -1,3 +1,7 @@
+2000-09-04  Peter Eisentraut  <peter_e@gmx.net>
+
+	* autoscan.pl: Repair broken Getopt::Long use.
+
 2000-09-04  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump version to 2.49b.
