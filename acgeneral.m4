@@ -85,7 +85,7 @@ define(AC_PARSEARGS,
 [# Save the original args to write them into config.status later.
 configure_args="[$]*"
 
-# Only options that might do something get documented.
+# Omit internal or obsolete options to make the list less imposing.
 changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
@@ -363,10 +363,11 @@ for ac_arg in $ac_configure_temp; do
 done
 
 # NLS nuisances.
+# Only set `LANG' and `LC_ALL' to "C" if already set.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
-if test "${LC_ALL+set}" = 'set'; then LC_ALL=C; export LC_ALL; fi
-if test "${LANG+set}"   = 'set'; then LANG=C;   export LANG;   fi
+if test "${LC_ALL-unset}" != unset; then LC_ALL=C; export LC_ALL; fi
+if test "${LANG-unset}"   != unset; then LANG=C;   export LANG;   fi
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -402,7 +403,7 @@ AC_LANG_C
 ])dnl
 dnl
 define(AC_ENABLE,
-[[#] check whether --enable-$1 was given
+[[#] Check whether --enable-$1 or --disable-$1 was given.
 enableval="[$enable_]patsubst($1,-,_)"
 if test -n "$enableval"; then
   ifelse([$2], , :, [$2])
@@ -414,7 +415,7 @@ fi
 dnl
 dnl Giving --with an argument is deprecated.
 define(AC_WITH,
-[[#] check whether --with-$1 or --without-$1 was given.
+[[#] Check whether --with-$1 or --without-$1 was given.
 withval="[$with_]patsubst($1,-,_)"
 if test -n "$withval"; then
   ifelse([$2], , :, [$2])
@@ -478,6 +479,8 @@ define(AC_PREREQ,
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
 dnl
 dnl Run configure in subdirectories $1.
+dnl FIXME It would be better to define a macro here, and
+dnl do the subdir configuring in AC_OUTPUT if that macro is defined.
 dnl
 define(AC_CONFIG_SUBDIRS,
 [AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
@@ -761,7 +764,7 @@ ${ac_sed_defs}\${ac_dA}$1\${ac_dB}$1\${ac_dC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_dD}
 dnl
 dnl Unsafe version of AC_DEFINE.
 dnl Users are responsible for the quoting nightmare.
-dnl Well, not all of it.  We need to pull the identify function out to
+dnl Well, not all of it.  We need to pull the identity function out to
 dnl the top level, because m4 doesn't really support nested functions;
 dnl it doesn't distinguish between the arguments to the outer
 dnl function, which should be expanded, and the arguments to the inner
