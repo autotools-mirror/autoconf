@@ -3238,17 +3238,18 @@ popdef([AC_Lib_Name])dnl
 
 # AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------
-# INCLUDES are not defaulted.
-AC_DEFUN([AC_TRY_CPP],
-[AC_REQUIRE_CPP()dnl
-AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
 # Capture the stderr of cpp.  eval is necessary to expand ac_cpp.  We
 # used to copy stderr to stdout and capture it in a variable, but that
 # breaks under sh -x, which writes compile commands starting with ` +'
 # to stderr in eval and subshells.
+#
+# INCLUDES are not defaulted.
+AC_DEFUN([AC_TRY_CPP],
+[AC_REQUIRE_CPP()dnl
+AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 AC_TRY_EVAL(ac_try)
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.$ac_ext\$"`
 if test -z "$ac_err"; then
   m4_default([$2], :)
 else
@@ -3380,7 +3381,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 AC_DEFUN([AC_RUN_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) &&
-   test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null; then
+   test -s conftest$ac_exeext && (./conftest; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG

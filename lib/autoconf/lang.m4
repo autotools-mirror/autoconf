@@ -163,9 +163,9 @@ AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 
 # AC_LANG(C)
 # ----------
+# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 define([AC_LANG(C)],
 [ac_ext=c
-# CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
@@ -186,9 +186,9 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
 # AC_LANG(C++)
 # ------------
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 define([AC_LANG(C++)],
 [ac_ext=cc
-# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'

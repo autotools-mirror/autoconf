@@ -1,5 +1,13 @@
 2000-08-07  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (_AC_LIBOBJ_ALLOCA, AC_REPLACE_FUNCS): Simplify
+	${foo} into $foo.
+	* aclang.m4 (AC_LANG(C), AC_LANG(C++)): Move some internal
+	comments into the header comment.
+	* acgeneral.m4 (AC_TRY_CPP): Likewise.
+
+2000-08-07  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.m4 (undefined macros): New test.
 
 2000-08-07  Akim Demaille  <akim@epita.fr>

@@ -94,7 +94,7 @@ done
 # -----------------------------
 AC_DEFUN([AC_REPLACE_FUNCS],
 [AC_FOREACH([AC_Func], [$1], [AC_LIBOBJ_DECL(AC_Func)])dnl
-AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ(${ac_func})])
+AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
 ])
 
 
@@ -137,7 +137,7 @@ define([_AC_LIBOBJ_ALLOCA],
 # contain a buggy version.  If you still want to use their alloca,
 # use ar to extract alloca.o from them instead of compiling alloca.c.
 AC_LIBOBJ_DECL(alloca)
-AC_SUBST(ALLOCA, alloca.${ac_objext})dnl
+AC_SUBST(ALLOCA, alloca.$ac_objext)dnl
 AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
 
 AC_CACHE_CHECK(whether `alloca.c' needs Cray hooks, ac_cv_os_cray,
