@@ -243,7 +243,7 @@ define(AC_PROG_INSTALL,
 # by make from ./install.sh.
 AC_CHECKING(for a BSD compatible install)
 if test -z "${INSTALL}"; then
-AC_CACHE_VAL(ac_cv_program_INSTALL,
+AC_CACHE_VAL(ac_cv_path_INSTALL,
 [  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
@@ -258,7 +258,7 @@ AC_CACHE_VAL(ac_cv_program_INSTALL,
 	    # OSF/1 installbsd also uses dspmsg, but is usable.
 	    :
 	  else
-	    ac_cv_program_INSTALL="$ac_dir/$ac_prog -c"
+	    ac_cv_path_INSTALL="$ac_dir/$ac_prog -c"
 	    break 2
 	  fi
 	fi
@@ -268,8 +268,8 @@ AC_CACHE_VAL(ac_cv_program_INSTALL,
   done
   IFS="$ac_save_ifs"
   # As a last resort, use the slow shell script.
-  test -z "$ac_cv_program_INSTALL" && ac_cv_program_INSTALL="$ac_install_sh"])dnl
-  INSTALL="$ac_cv_program_INSTALL"
+  test -z "$ac_cv_path_INSTALL" && ac_cv_path_INSTALL="$ac_install_sh"])dnl
+  INSTALL="$ac_cv_path_INSTALL"
 fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
