@@ -1,3 +1,7 @@
+1999-08-05  Jeffrey A Law  <law@cygnus.com>
+
+	* config.sub (-wrs case): Use os=-vxworks, not os=vxworks.
+
 1999-08-05  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Update patch submission address.
