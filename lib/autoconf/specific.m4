@@ -70,7 +70,10 @@ Autoconf TIOCGETP'
 Autoconf TCGETA'
     AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=1)
   fi
-  test -n "$ac_need_trad" && CC="$CC -traditional"
+  if test -n "$ac_need_trad"; then
+    CC="$CC -traditional"
+    AC_VERBOSE(setting CC to $CC)
+  fi
 fi
 ])dnl
 dnl
@@ -110,8 +113,12 @@ changequote(,)dnl
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
 eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
 changequote([,])dnl
-if test -n "$ac_maketemp"; then SET_MAKE=
-else SET_MAKE="MAKE=${MAKE-make}"; fi
+if test -n "$ac_maketemp"; then
+  SET_MAKE=
+else
+  SET_MAKE="MAKE=${MAKE-make}"
+  AC_VERBOSE(setting MAKE to ${MAKE-make} in Makefiles)
+fi
 AC_SUBST([SET_MAKE])dnl
 ])dnl
 dnl
@@ -280,10 +287,16 @@ AC_SUBST(LN_S)
 dnl
 define(AC_RSH,
 [AC_CHECKING(for remote shell)
-if test -f /usr/ucb/rsh || test -f /usr/bin/remsh || test -f /usr/bin/rsh ||
-  test -f /usr/bsd/rsh || test -f /usr/bin/nsh; then
-  RTAPELIB=rtapelib.o
-else
+for ac_file in \
+  /usr/ucb/rsh /usr/bin/remsh /usr/bin/rsh /usr/bsd/rsh /usr/bin/nsh
+do
+  if test -f $ac_file; then
+    AC_VERBOSE(found remote shell $ac_file)
+    RTAPELIB=rtapelib.o
+    break
+  fi
+done
+if test -z "$RTAPELIB"; then
   AC_HEADER_CHECK(netdb.h, AC_DEFINE(HAVE_NETDB_H) RTAPELIB=rtapelib.o,
     AC_DEFINE(NO_REMOTE))
 fi
@@ -400,7 +413,7 @@ dnl
 define(AC_SYS_SIGLIST_DECLARED,[dnl
 AC_COMPILE_CHECK(sys_siglist declaration in signal.h or unistd.h,
 		 [#include <signal.h>
-/* NetBSD declares sys_siglist in <unistd.h>.  */
+/* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif], [char *msg = *(sys_siglist + 1);],
@@ -462,6 +475,7 @@ define(AC_MODE_T,
 [AC_CHECKING(for mode_t in sys/types.h)
 AC_HEADER_EGREP(mode_t, sys/types.h, , AC_DEFINE(mode_t, int))])dnl
 dnl
+dnl Note that identifiers starting with SIG are reserved by ANSI C.
 define(AC_RETSIGTYPE,
 [AC_PROVIDE([$0])AC_COMPILE_CHECK([return type of signal handlers],
 [#include <sys/types.h>
@@ -752,10 +766,10 @@ AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm")
 if $ac_need_func; then
 # There is a commonly available library for RS/6000 AIX.
 # Since it is not a standard part of AIX, it might be installed locally.
-LIBS_old="$LIBS"
+ac_save_LIBS="$LIBS"
 LIBS="-L/usr/local/lib $LIBS"
 AC_HAVE_LIBRARY(getloadavg, LIBS="$LIBS -lgetloadavg" ac_need_func=false,
-	LIBS="$LIBS_old")
+	LIBS="$ac_save_LIBS")
 fi
 
 # Make sure it is really in the library, if we think we found it at all.
@@ -816,6 +830,7 @@ changequote(,)dnl
 	       s/^.[sSrwx-]* *[0-9]* *\([^0-9]*\)  *.*/\1/;
 	       / /s/.* //;p;'`
 changequote([,])dnl
+  AC_VERBOSE(/dev/kmem is owned by $KMEM_GROUP)
 fi
 ])dnl
 dnl
@@ -892,7 +907,7 @@ if test -n "$ac_no_tm_zone"; then
 AC_COMPILE_CHECK(tzname, changequote(<<,>>)dnl
 <<#include <time.h>
 #ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others want it this way.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif>>, changequote([,])dnl
 [atoi(*tzname);], AC_DEFINE(HAVE_TZNAME))
 fi
@@ -926,7 +941,9 @@ define(AC_CROSS_CHECK,
 [AC_PROVIDE([$0])AC_CHECKING(whether cross-compiling)
 # If we cannot run a trivial program, we must be cross compiling.
 AC_TEST_PROGRAM([main(){exit(0);}], , cross_compiling=1)
-])dnl
+if test -n "$cross_compiling"; then
+  AC_VERBOSE(we are cross-compiling)
+fi])dnl
 dnl
 define(AC_CHAR_UNSIGNED,
 [AC_CHECKING(for unsigned characters)
@@ -1327,6 +1344,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 dnl
 dnl
 dnl ### checks for UNIX variants
+dnl These are kludges; we need a better approach.
 dnl
 dnl
 define(AC_AIX,
