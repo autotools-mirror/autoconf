@@ -1244,7 +1244,7 @@ fi
 
 
 # _AC_PATH_X_XMKMF
-# ---------------
+# ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 define([_AC_PATH_X_XMKMF],
@@ -1285,7 +1285,7 @@ fi
 
 
 # _AC_PATH_X_DIRECT
-# ----------------
+# -----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 define([_AC_PATH_X_DIRECT],

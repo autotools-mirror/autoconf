@@ -240,7 +240,7 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 
 # AC_LANG_CONFTEST(BODY)
-# ---------------------
+# ----------------------
 # Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
 define([AC_LANG_CONFTEST],
 [cat >conftest.$ac_ext <<_ACEOF
@@ -1477,7 +1477,7 @@ fi[]dnl
 
 
 # _AC_PROG_F77_V
-# ---------------
+# --------------
 #
 # Determine the flag that causes the Fortran 77 compiler to print
 # information of library and object files (normally -v)
@@ -1621,7 +1621,7 @@ AC_SUBST(FLIBS)
 
 
 # _AC_F77_NAME_MANGLING
-# --------------------
+# ---------------------
 # Test for the name mangling scheme used by the Fortran 77 compiler.
 #
 # Sets ac_cv_f77_mangling. The value contains three fields, separated by commas:

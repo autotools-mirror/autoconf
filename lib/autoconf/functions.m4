@@ -1266,7 +1266,7 @@ fi
 
 
 # AU::AM_FUNC_STRTOD
-# -------------------
+# ------------------
 # FIXME: Because Automake macros are defined with their name unquoted,
 # we can't yet provide the Autoupdate glue.
 # AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])

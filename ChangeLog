@@ -1,3 +1,11 @@
+2000-09-28  Pavel Roskin  <proski@gnu.org>
+
+	* acfunctions.m4: Formatting fixes.
+	* acgeneral.m4: Likewise.
+	* aclang.m4: Likewise.
+	* acspecific.m4: Likewise.
+	* libm4.m4: Likewise.
+
 2000-09-27  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (AC_CHECK_PROG): Added protection against spaces
@@ -41,7 +49,7 @@
 2000-09-25  Pavel Roskin  <proski@gnu.org>
 
 	* autoheader.sh: Don't check status of variable assignments -
-	* it's undefined in ash 0.2.
+	it's undefined in ash 0.2.
 	* autoreconf.sh: Likewise.
 	* autoupdate.sh: Likewise.
 	* autoconf.sh: Likewise. Also eliminated command substitution

@@ -107,7 +107,7 @@ m4exit(ifelse([$2],, 1, [$2]))])
 
 
 # m4_assert( EXPRESSION [, EXIT-STATUS = 1 ])
-# ------------------------------------------
+# -------------------------------------------
 # This macro ensures that EXPRESSION evaluates to true, and exits if
 # EXPRESSION evaluates to false.
 define([m4_assert],
@@ -293,7 +293,7 @@ define([m4_do],
 
 
 # m4_for(VARIABLE, FIRST, LAST, [STEP = +/-1], EXPRESSION)
-# --------------------------------------
+# --------------------------------------------------------
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
 # Both limits are included.
 

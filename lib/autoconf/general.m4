@@ -799,8 +799,8 @@ $debug ||
 ])# _AC_SHELL_TMPDIR
 
 
-# AC_SHELL_UNSETENV(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
-# -----------------------------------------------------------
+# AC_SHELL_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
+# --------------------------------------------------------
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
 define([AC_SHELL_UNSET],
@@ -808,7 +808,7 @@ define([AC_SHELL_UNSET],
 
 
 # AC_SHELL_MKDIR_P(PATH)
-# ------------------------
+# ----------------------
 # Emulate `mkdir -p' with plain `mkdir'.
 define([AC_SHELL_MKDIR_P],
 [{ case $1 in
@@ -2059,7 +2059,7 @@ ifval([$2], , [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 
 
 # AC_PLAIN_SCRIPT
-# ------------
+# ---------------
 # Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
 # generation.  This is used by some tests, and let `autoconf' be used to
 # generate other scripts than `configure'.
@@ -3337,7 +3337,7 @@ rm -f conftest*
 
 # AC_EGREP_HEADER(PATTERN, HEADER-FILE,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------
+# ---------------------------------------------------------
 AC_DEFUN([AC_EGREP_HEADER],
 [AC_EGREP_CPP([$1],
 [#include <$2>
