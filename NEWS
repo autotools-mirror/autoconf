@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.54b                       -*- outline -*-
+* Major changes in Autoconf 2.54c                       -*- outline -*-
 
 
 Release tips:
@@ -42,8 +42,8 @@ Release tips:
 
 - New macros
   AC_COMPILER_IFELSE, AC_FUNC_MBRTOWC, AC_HEADER_STDBOOL,
-  AC_LANG_CONFTEST, AC_LANG_SOURCE, AC_LANG_PROGRAM, AC_MSG_FAILURE,
-  AC_PREPROC_IFELSE.
+  AC_LANG_CONFTEST, AC_LANG_SOURCE, AC_LANG_PROGRAM, AC_LANG_CALL,
+  AC_LANG_FUNC_TRY_LINK, AC_MSG_FAILURE, AC_PREPROC_IFELSE.
 
 - Obsoleted
   Obsoleted macros are kept for Autoconf backward compatibility, but

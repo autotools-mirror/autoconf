@@ -1,5 +1,9 @@
 2002-10-28  Akim Demaille  <akim@epita.fr>
 
+	* configure.ac: Bumpto 2.54c.
+
+2002-10-28  Akim Demaille  <akim@epita.fr>
+
 	Version 2.54b.
 
 	* tests/foreign.at (Libtool): Adjust to broken libtoolize.
@@ -67,7 +71,7 @@
 	* lib/autoconf/c.m4 (AC_PROG_CPP, AC_PROG_CC, AC_PROG_CXXCPP):
 	Likewise.
 
-	Deprecate macros with unsual interface.
+	Deprecate macros with unusual interfaces.
 
 	* lib/autoconf/general.m4 (AC_TRY_CPP, AC_TRY_LINK)
 	(AC_TRY_COMPILE, AC_TRY_RUN): AU_DEFUN'ed.
