@@ -1,3 +1,8 @@
+1999-01-25  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Synchronise with master FSF version. Add detection
+	for HP MPE/iX.
+
 1999-01-23  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Catch more NILE system models. Contributed by
