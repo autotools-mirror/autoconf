@@ -8476,6 +8476,15 @@ except that it is portable to older versions of @command{mkdir} that
 lack support for the @option{-p} option.
 @end defmac
 
+@defmac AS_SET_CATFILE (@var{var}, @var{dir}, @var{file})
+@asindex{SET_CATFILE}
+Set the shell variable @var{var} to @var{dir}/@var{file}, but
+optimizing the common cases (@var{dir} or @var{file} is @samp{.},
+@var{file} is absolute etc.).
+@end defmac
+
+
+
 @c=================================================== Writing Autoconf Macros.
 
 @node Writing Autoconf Macros

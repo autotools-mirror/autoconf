@@ -4,7 +4,7 @@
   core.* files are no longer removed, as they may be valid user files.
 
 ** New macros
-  AC_LANG_ASSERT.
+  AC_LANG_ASSERT, AS_SET_CATFILE.
 
 * Major changes in Autoconf 2.57g
 

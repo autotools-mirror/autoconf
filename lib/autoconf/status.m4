@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
 # 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -160,12 +160,10 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
-# Don't blindly perform a `cd $1/$ac_foo && pwd` since $ac_foo can be
-# absolute.
-ac_abs_builddir=`cd $1 && cd $ac_builddir && pwd`
-ac_abs_top_builddir=`cd $1 && cd ${ac_top_builddir}. && pwd`
-ac_abs_srcdir=`cd $1 && cd $ac_srcdir && pwd`
-ac_abs_top_srcdir=`cd $1 && cd $ac_top_srcdir && pwd`
+AS_SET_CATFILE([ac_abs_builddir],     [$1], [$ac_builddir])
+AS_SET_CATFILE([ac_abs_top_builddir], [$1], [${ac_top_builddir}.])
+AS_SET_CATFILE([ac_abs_srcdir],       [$1], [$ac_srcdir])
+AS_SET_CATFILE([ac_abs_top_srcdir],   [$1], [$ac_top_srcdir])
 ])# _AC_SRCPATHS
 
 
@@ -366,7 +364,7 @@ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
   ac_dir=`AS_DIRNAME(["$ac_dest"])`
-  AS_MKDIR_P(["$ac_dir"])  
+  AS_MKDIR_P(["$ac_dir"])
   _AC_SRCPATHS(["$ac_dir"])
 
   AC_MSG_NOTICE([executing $ac_dest commands])

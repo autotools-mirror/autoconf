@@ -1,3 +1,16 @@
+2003-11-04  Akim Demaille  <akim@epita.fr>
+
+	AC_CONFIG_FILE([d1/foo:d2/foo]) triggers error messages when
+	computing the absolute path to d1 in the source hierarchy: it may
+	not exist at all.  So don't cd into it.
+	From Alexandre Duret-Lutz.
+	http://mail.gnu.org/archive/html/bug-autoconf/2003-10/msg00205.html
+
+	* lib/m4sugar/m4sh.m4 (AS_SET_CATFILE): New.
+	From Paul Eggert, but named after Perl's IO::Spec->catfile.
+	* doc/autoconf.texi (Programming in M4sh): Document.
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): Use it.
+
 2003-11-03  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (Generic Structure Checks): Describe

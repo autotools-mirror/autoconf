@@ -748,6 +748,23 @@ m4_defun([_AS_TEST_PREPARE],
 ])# _AS_BROKEN_TEST_PREPARE
 
 
+# AS_SET_CATFILE(VAR, DIR-NAME, FILE-NAME)
+# ----------------------------------------
+# Set VAR to DIR-NAME/FILE-NAME.
+# Optimize the common case where $2 or $3 is '.'.
+# Don't blindly perform a $1=`cd $2/$3 && pwd`, since $3 can be absolute,
+# and also $3 might not exist yet.
+m4_define([AS_SET_CATFILE],
+[case $2 in
+.) $1=$3;;
+*)
+  case $3 in
+  .) $1=$2;;
+  [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
+  *) $1=$2/$3;;
+  esac;;
+esac[]dnl
+])# AS_SET_CATFILE
 
 
 
