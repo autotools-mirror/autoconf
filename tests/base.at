@@ -38,7 +38,8 @@ test3=set])
 
 AC_PLAIN_SCRIPT
 TEST1
-test -z "$test1" && exit 1
+test -z "$test1" &&
+  AC_MSG_ERROR([\$test1 is empty])
 exit 0
 ]])
 

@@ -26,7 +26,8 @@ SUITE = suite.at \
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 atspecific.m4 aclocal.m4 \
+EXTRA_DIST = README \
+             atgeneral.m4 atspecific.m4 aclocal.m4 \
              $(SUITE) mktests.sh
 
 check-local: atconfig testsuite

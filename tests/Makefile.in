@@ -71,7 +71,7 @@ SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at semantics.a
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 atspecific.m4 aclocal.m4              $(SUITE) mktests.sh
+EXTRA_DIST = README              atgeneral.m4 atspecific.m4 aclocal.m4              $(SUITE) mktests.sh
 
 
 # The files which contains macro we check for syntax.
@@ -83,7 +83,7 @@ CLEANFILES = debug-*.sh macro configure configure.in config.status              
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  Makefile.am Makefile.in atconfig.in
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
 
 
 PACKAGE = @PACKAGE@

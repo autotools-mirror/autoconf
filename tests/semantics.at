@@ -10,9 +10,10 @@ EOF
 # AC_TRY_LINK_FUNC
 # ----------------
 AT_CHECK_MACRO(AC_TRY_LINK_FUNC,
-[AC_TRY_LINK_FUNC(exit,, exit 1)
+[AC_TRY_LINK_FUNC(exit,,
+                  [AC_MSG_ERROR([cannot find `exit'])])
 AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
-                 exit 1)])
+                 [AC_MSG_ERROR([found a nonexistent function])])])
 
 
 
@@ -29,7 +30,8 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
 # this test fail, so exit successfully if `cos' is in libc.
 AT_CHECK_MACRO(AC_CHECK_LIB,
 [AC_TRY_LINK_FUNC(cos, exit 0)
-AC_CHECK_LIB(m, cos,, exit 1)])
+AC_CHECK_LIB(m, cos,,
+             [AC_MSG_ERROR([cannot find `cos'])])])
 
 
 # AC_CHECK_DECLS
@@ -195,12 +197,13 @@ rm ac-exists1 ac-exists2],
 ## AC_CHECK_PROG & AC_PATH_PROG.  ##
 ## ------------------------------ ##
 
-AT_SETUP(AC_CHECK_PROG & AC_PATH_PROG)
 
+# AT_CHECK_PROGS_PREPARE
+# ----------------------
 # Create a sub directory `path' with 6 subdirs which all 7 contain
 # an executable `tool'. `6' contains a `better' tool.
-
-mkdir path
+AT_DEFINE([AT_CHECK_PROGS_PREPARE],
+[mkdir path
 
 cat >path/tool <<\EOF
 #! /bin/sh
@@ -213,74 +216,88 @@ do
   mkdir path/$i
   cp path/tool path/$i
 done
-cp path/tool path/6/better
+cp path/tool path/6/better])
 
 
 # -------------------------------- #
 # AC_CHECK_PROG & AC_CHECK_PROGS.  #
 # -------------------------------- #
 
+AT_SETUP(AC_CHECK_PROG & AC_CHECK_PROGS)
+
+AT_CHECK_PROGS_PREPARE
+
 AT_DATA(configure.in,
 [[AC_INIT
 pwd=`pwd`
 path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
-fail=0
+fail=false
 
 AC_CHECK_PROG(TOOL1, tool, found, not-found, $path)
-test "$TOOL1" = found || fail=1
+test "$TOOL1" = found || fail=:
 
 # Yes, the semantics of this macro is weird.
 AC_CHECK_PROG(TOOL2, tool,, not-found, $path)
-test "$TOOL2" = not-found || fail=1
+test "$TOOL2" = not-found || fail=:
 
 AC_CHECK_PROG(TOOL3, tool, tool, not-found, $path, $pwd/path/1/tool)
-test "$TOOL3" = $pwd/path/2/tool || fail=1
+test "$TOOL3" = $pwd/path/2/tool || fail=:
 
 AC_CHECK_PROG(TOOL4, better, better, not-found, $path, $pwd/path/1/tool)
-test "$TOOL4" = better || fail=1
+test "$TOOL4" = better || fail=:
 
 # When a tool is not found, and no value is given for not-found,
 # the variable is left empty.
 AC_CHECK_PROGS(TOOL5, missing,, $path)
-test -z "$TOOL5" || fail=1
+test -z "$TOOL5" || fail=:
 
 AC_CHECK_PROGS(TOOL6, missing tool better,, $path)
-test "$TOOL6" = tool || fail=1
+test "$TOOL6" = tool || fail=:
 
 # no AC_OUTPUT, we don't need config.status.
-exit $fail
+$fail &&
+  AC_MSG_ERROR([[CHECK_PROG failed]])
+exit 0
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0, ignore)
+
+AT_CLEANUP(path config.log config.cache configure)
 
 
 # ------------------------------ #
 # AC_PATH_PROG & AC_PATH_PROGS.  #
 # ------------------------------ #
 
+AT_SETUP(AC_PATH_PROG & AC_PATH_PROGS)
+
+AT_CHECK_PROGS_PREPARE
+
 AT_DATA(configure.in,
 [[AC_INIT
 pwd=`pwd`
 path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
-fail=0
+fail=false
 
 AC_PATH_PROG(TOOL1, tool, not-found, $path)
-test "$TOOL1" = $pwd/path/1/tool || fail=1
+test "$TOOL1" = $pwd/path/1/tool || fail=:
 
 AC_PATH_PROG(TOOL2, better, not-found, $path)
-test "$TOOL2" = $pwd/path/6/better || fail=1
+test "$TOOL2" = $pwd/path/6/better || fail=:
 
 # When a tool is not found, and no value is given for not-found,
 # the variable is left empty.
 AC_PATH_PROGS(TOOL3, missing,, $path)
-test -z "$TOOL3" || fail=1
+test -z "$TOOL3" || fail=:
 
 AC_PATH_PROGS(TOOL4, missing tool better,, $path)
-test "$TOOL4" = $pwd/path/1/tool || fail=1
+test "$TOOL4" = $pwd/path/1/tool || fail=:
 
 # no AC_OUTPUT, we don't need config.status.
-exit $fail
+$fail &&
+  AC_MSG_ERROR([[PATH_PROG failed]])
+exit 0
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
@@ -305,7 +322,8 @@ AC_C_CONST
 AC_C_INLINE
 AC_C_VOLATILE
 case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
- yes,*no*) exit 1;;
+ yes,*no*)
+   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
 esac]])
 
 
@@ -329,7 +347,8 @@ chmod +x mycpp
 _AT_CHECK_AC_MACRO(
 [AC_PROG_CPP
 # If the preprocessor is not strict, just ignore
-test "x$ac_c_preproc_warn_flag" = xyes && exit 77
+test "x$ac_c_preproc_warn_flag" = xyes &&
+  AC_MSG_ERROR([preprocessor has no warning option], 77)
 CPP="./mycpp $CPP"
 AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
 
@@ -355,10 +374,12 @@ chmod +x mycpp
 
 _AT_CHECK_AC_MACRO(
 [# Ignore if /lib/cpp doesn't work
-/lib/cpp </dev/null >/dev/null 2>&1 || exit 77
+/lib/cpp </dev/null >/dev/null 2>&1 ||
+  AC_MSG_ERROR([preprocessor doesn't work], 77)
 CPP=./mycpp
 AC_PROG_CPP
-test "x$ac_c_preproc_warn_flag" != xyes && exit 1
+test "x$ac_c_preproc_warn_flag" != xyes &&
+  AC_MSG_ERROR([failed to detect preprocessor warning option])
 AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
 
 AT_CHECK_DEFINES(

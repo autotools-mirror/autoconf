@@ -1,3 +1,18 @@
+2000-10-27  Akim Demaille  <akim@epita.fr>
+
+	Use AC_MSG_ERROR in the test suite, not just `exit'.
+
+	* tests/README: New file.
+	* tests/semantics.at: Don't just `exit 1' or `exit 77' from
+	configure.in: call AC_MSG_ERROR.
+	* tests/base.m4: Likewise.
+	* tests/m4sh.at: Likewise.
+	* tests/semantics.at (AT_CHECK_PROGS_PREPARE): New macro, eved
+	out of...
+	(AC_CHECK_PROG & AC_PATH_PROG): here.
+	Split into two individual tests...
+	(AC_CHECK_PROG & AC_CHECK_PROGS, AC_PATH_PROG & AC_PATH_PROGS): these.
+
 2000-10-27  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Recognize short options followed by arguments

@@ -1,0 +1,20 @@
+							-*- outline -*-
+
+This directory holds the M4sugar, M4sh and Autoconf test suites.
+
+Here are a few rules on how to write tests.
+
+* Autoconf
+
+** Use of `exit'
+Don't directly `exit 1' or `exit 77', rather use `AC_MSG_ERROR'.
+First of all because when we have to read the test suite logs we are
+happy to know why `configure' exited thanks to the error
+message. Secondly, because `configure' traps the `exit' and pretty
+many shells fail to set $? to 77 when trapping `exit 77'.  This
+results in the test suite not being able to check the exit status.
+
+** AC_MSG_ERROR
+Of course, since macro names are forbidden in `configure', if you
+really want to mention the macro name, you'll have to do without
+including `A?_' in the output.
