@@ -2712,7 +2712,7 @@ m4_popdef([AC_Lib_Name])dnl
 # This macro can be used during the selection of a preprocessor.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext >/dev/null]); then
+if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
   if test -s conftest.err; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
   else
