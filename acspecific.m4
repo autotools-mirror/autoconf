@@ -336,7 +336,7 @@ fi
 AC_DEFUN([AC_TYPE_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
-[AC_TRY_RUN(
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
 [/* Thanks to Mike Rendell for this test.  */
 #include <sys/types.h>
 #define NGID 256
@@ -357,9 +357,10 @@ main ()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short but getgroups modifies an array of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
-}],
-  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int,
-  ac_cv_type_getgroups=cross)
+}])],
+               [ac_cv_type_getgroups=gid_t],
+               [ac_cv_type_getgroups=int],
+               [ac_cv_type_getgroups=cross])
 if test $ac_cv_type_getgroups = cross; then
   dnl When we can't run the test program (we are cross compiling), presume
   dnl that <unistd.h> has either an accurate prototype for getgroups or none.
@@ -752,7 +753,7 @@ AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
 [AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
-[AC_TRY_RUN(
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
    after getting the signal.  */
@@ -794,7 +795,9 @@ main ()
     wait (&i);
 
   exit (status == -1);
-}], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
+}])],
+               [ac_cv_sys_restartable_syscalls=yes],
+               [ac_cv_sys_restartable_syscalls=no])])
 if test $ac_cv_sys_restartable_syscalls = yes; then
   AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS, 1,
             [Define if system calls automatically restart after interruption
@@ -1200,11 +1203,11 @@ AC_DEFUN([AC_AIX],
 [/* Define if on AIX 3.
    System headers sometimes define this.
    We just want to avoid a redefinition error message.  */
-#ifndef _ALL_SOURCE
-# undef _ALL_SOURCE
-#endif])dnl
-AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_RUN])dnl
+@%:@ifndef _ALL_SOURCE
+@$:@ undef _ALL_SOURCE
+@%:@endif])dnl
+AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
+AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 AC_MSG_CHECKING([for AIX])
 AC_EGREP_CPP(yes,
 [#ifdef _AIX
@@ -1220,8 +1223,8 @@ AC_DEFINE(_ALL_SOURCE)],
 # AC_MINIX
 # --------
 AC_DEFUN([AC_MINIX],
-[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_RUN])dnl
+[AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
+AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE, 1,
@@ -1240,8 +1243,8 @@ fi
 # ------------
 AC_DEFUN([AC_ISC_POSIX],
 [AC_REQUIRE([AC_PROG_CC])dnl
-AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_RUN])dnl
+AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
+AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 AC_MSG_CHECKING([for POSIXized ISC])
 if test -d /etc/conf/kconfig.d &&
    grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1

@@ -1,5 +1,15 @@
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
+	Medium term goal: AC_ macros can be tested with -W obsolete.
+
+	* acgeneral.m4 (AC_RUN_IFELSE): Accept IF-CROSS-COMPILING.
+	(AC_TRY_RUN): Use it.
+	* acfunctions.m4: Start ousting AC_TRY_RUN and AC_TRY_COMPILE.
+	* acspecific.m4 (AC_AIX, AC_MINIX, AC_ISC_POSIX): AC_BEFORE on
+	AC_COMPILE_IFELSE and AC_RUN_IFELSE.
+
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INCLUDES_DEFAULT): Force the newline to avoid
 	bad surprises.
 	Reported by Jim.

@@ -2922,30 +2922,32 @@ rm -f conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
 
-# AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-# -----------------------------------------------------------
+# AC_RUN_IFELSE(PROGRAM,
+#               [ACTION-IF-TRUE], [ACTION-IF-FALSE],
+#               [ACTION-IF-CROSS-COMPILING = RUNTIME-ERROR])
+# ----------------------------------------------------------
 # Compile, link, and run. Requires that the compiler for the current
 # language was checked for, hence do not use this macro in macros looking
 # for a compiler.
 AC_DEFUN([AC_RUN_IFELSE],
 [AC_LANG_COMPILER_REQUIRE()dnl
-_AC_RUN_IFELSE($@)])
-
-
-# AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE],
-#            [ACTION-IF-CROSS-COMPILING])
-# --------------------------------------------------------
-AC_DEFUN([AC_TRY_RUN],
-[m4_ifval([$4], [],
-          [AC_DIAGNOSE([cross],
-                    [$0 called without default to allow cross compiling])])dnl
+m4_ifval([$4], [],
+         [AC_DIAGNOSE([cross],
+                     [$0 called without default to allow cross compiling])])dnl
 if test "$cross_compiling" = yes; then
   m4_default([$4],
              [AC_MSG_ERROR([cannot run test program while cross compiling])])
 else
-  AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])
-fi
-])# AC_TRY_RUN
+  _AC_RUN_IFELSE($@)
+fi])
+
+
+# AC_TRY_RUN(PROGRAM,
+#            [ACTION-IF-TRUE], [ACTION-IF-FALSE],
+#            [ACTION-IF-CROSS-COMPILING = RUNTIME-ERROR])
+# --------------------------------------------------------
+AC_DEFUN([AC_TRY_RUN],
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3], [$4])])
 
 
 
@@ -3113,7 +3115,7 @@ m4_define([_AC_COMPUTE_INT],
 [if test "$cross_compiling" = yes; then
   _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3])
 else
- _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
+  _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
 fi
 rm -f conftestval[]dnl
 ])# _AC_COMPUTE_INT

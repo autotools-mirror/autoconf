@@ -159,8 +159,9 @@ if test $ac_cv_os_cray = yes; then
   done
 fi
 
-AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
-[AC_TRY_RUN(
+AC_CACHE_CHECK([stack direction for C alloca],
+               [ac_cv_c_stack_direction],
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
 [int
 find_stack_direction ()
 {
@@ -179,8 +180,10 @@ int
 main ()
 {
   exit (find_stack_direction () < 0);
-}], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
-  ac_cv_c_stack_direction=0)])
+}])],
+               [ac_cv_c_stack_direction=1],
+               [ac_cv_c_stack_direction=-1],
+               [ac_cv_c_stack_direction=0])])
 AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -254,8 +257,7 @@ AC_DEFUN([AC_FUNC_CHOWN],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
-[AC_TRY_RUN([
-#include <sys/types.h>
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #ifdef HAVE_UNISTD_H
@@ -265,7 +267,7 @@ AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
 int
 main ()
 {
-  char *f = "conftestchown";
+  char *f = "conftest.chown";
   struct stat before, after;
 
   if (creat (f, 0600) < 0)
@@ -278,15 +280,16 @@ main ()
     exit (1);
   exit ((before.st_uid == after.st_uid
          && before.st_gid == after.st_gid) ? 0 : 1);
-}],
-            ac_cv_func_chown_works=yes,
-            ac_cv_func_chown_works=no,
-            ac_cv_func_chown_works=no)])
+}]])],
+               [ac_cv_func_chown_works=yes],
+               [ac_cv_func_chown_works=no],
+               [ac_cv_func_chown_works=no])
+rm -f conftest.chown
+])
 if test $ac_cv_func_chown_works = yes; then
   AC_DEFINE(HAVE_CHOWN, 1,
             [Define if your system has a working `chown' function.])
 fi
-rm -f conftestchown
 ])# AC_FUNC_CHOWN
 
 
@@ -296,8 +299,9 @@ rm -f conftestchown
 # that case.
 AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
-AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
-[AC_TRY_RUN(
+AC_CACHE_CHECK([whether closedir returns void],
+               [ac_cv_func_closedir_void],
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
 [#include <sys/types.h>
 #include <$ac_header_dirent>
 
@@ -306,10 +310,10 @@ int
 main ()
 {
   exit (closedir (opendir (".")) != 0);
-}],
-  ac_cv_func_closedir_void=no,
-  ac_cv_func_closedir_void=yes,
-  ac_cv_func_closedir_void=yes)])
+}])],
+               [ac_cv_func_closedir_void=no],
+               [ac_cv_func_closedir_void=yes],
+               [ac_cv_func_closedir_void=yes])])
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID, 1,
             [Define if the `closedir' function returns void instead of `int'.])
@@ -341,21 +345,21 @@ fi
 # ---------------
 # We look for fnmatch.h to avoid that the test fails in C++.
 AC_DEFUN([AC_FUNC_FNMATCH],
-[AC_CACHE_CHECK(for working GNU-style fnmatch, ac_cv_func_fnmatch_works,
+[AC_CACHE_CHECK([for working GNU-style fnmatch],
+                [ac_cv_func_fnmatch_works],
 # Some versions of Solaris, SCO, and the GNU C Library
 # have a broken or incompatible fnmatch.
 # So we run a test program.  If we are cross-compiling, take no chance.
 # Thanks to John Oleynick, Franc,ois Pinard, and Paul Eggert for this test.
-[AC_TRY_RUN([#include <fnmatch.h>
-main() {
-  exit (fnmatch ("a*", "abc", 0) != 0
-	|| fnmatch("d*/*1", "d/s/1", FNM_FILE_NAME) != FNM_NOMATCH
-	|| fnmatch("*", "x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
-	|| fnmatch("x*", "x/y/z", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
-	|| fnmatch("*c*", "c/x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0);
-}],
-ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
-ac_cv_func_fnmatch_works=no)])
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([@%:@include <fnmatch.h>],
+ [exit (fnmatch ("a*", "abc", 0) != 0
+	|| fnmatch ("d*/*1", "d/s/1", FNM_FILE_NAME) != FNM_NOMATCH
+	|| fnmatch ("*", "x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
+	|| fnmatch ("x*", "x/y/z", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
+	|| fnmatch ("*c*", "c/x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0);])],
+               [ac_cv_func_fnmatch_works=yes],
+               [ac_cv_func_fnmatch_works=no],
+               [ac_cv_func_fnmatch_works=no])])
 if test $ac_cv_func_fnmatch_works = yes; then
   AC_DEFINE(HAVE_FNMATCH, 1,
             [Define if your system has a working `fnmatch' function.])
@@ -364,7 +368,6 @@ fi
 
 
 # AU::AM_FUNC_FNMATCH
-# and
 # AU::fp_FUNC_FNMATCH
 # -------------------
 # FIXME: Because Automake macros are defined with their name unquoted,
@@ -416,16 +419,12 @@ fi
 # getgroups function only if there is such a function.
 if test $ac_cv_func_getgroups = yes; then
   AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
-   [AC_TRY_RUN([
-     int
-     main ()
-     {
-       /* On Ultrix 4.3, getgroups (0, 0) always fails.  */
-       exit (getgroups (0, 0) == -1 ? 1 : 0);
-     }],
-               ac_cv_func_getgroups_works=yes,
-               ac_cv_func_getgroups_works=no,
-               ac_cv_func_getgroups_works=no)
+   [AC_RUN_IFELSE([AC_LANG_PROGRAM([],
+      [/* On Ultrix 4.3, getgroups (0, 0) always fails.  */
+       exit (getgroups (0, 0) == -1 ? 1 : 0);])],
+                  [ac_cv_func_getgroups_works=yes],
+                  [ac_cv_func_getgroups_works=no],
+                  [ac_cv_func_getgroups_works=no])
    ])
   if test $ac_cv_func_getgroups_works = yes; then
     AC_DEFINE(HAVE_GETGROUPS, 1,
@@ -600,8 +599,8 @@ AC_CHECK_FUNC(getmntent,
 # ---------------
 AC_DEFUN([AC_FUNC_GETPGRP],
 [AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
-[AC_TRY_RUN(
-[/*
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[
+/*
  * If this system has a BSD-style getpgrp(),
  * which takes a pid argument, exit unsuccessfully.
  *
@@ -649,8 +648,10 @@ main ()
       wait (&s);
       exit (s>>8);
     }
-}], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
-   [AC_MSG_ERROR([cannot check getpgrp if cross compiling])])
+}]])],
+               [ac_cv_func_getpgrp_void=yes],
+               [ac_cv_func_getpgrp_void=no],
+               [AC_MSG_ERROR([cannot check getpgrp if cross compiling])])
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID, 1,
@@ -671,24 +672,16 @@ AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
 [rm -f conftest.sym conftest.file
 echo >conftest.file
 if ln -s conftest.file conftest.sym; then
-  AC_TRY_RUN([
-#  include <sys/types.h>
-#  include <sys/stat.h>
-
-   int
-   main ()
-   {
-     struct stat sbuf;
+  AC_RUN_IFELSE([AC_LANG_PROGRAM([@%:@include <sys/types.h>
+@%:@include <sys/stat.h>],
+    [struct stat sbuf;
      /* Linux will dereference the symlink and fail.
         That is better in the sense that it means we will not
         have to compile and use the lstat wrapper.  */
-     exit (lstat ("conftest.sym/", &sbuf) ? 0 : 1);
-   }
-   ],
-   ac_cv_func_lstat_dereferences_slashed_symlink=yes,
-   ac_cv_func_lstat_dereferences_slashed_symlink=no,
-   ac_cv_func_lstat_dereferences_slashed_symlink=no
-  )
+     exit (lstat ("conftest.sym/", &sbuf) ? 0 : 1);])],
+                [ac_cv_func_lstat_dereferences_slashed_symlink=yes],
+                [ac_cv_func_lstat_dereferences_slashed_symlink=no],
+                [ac_cv_func_lstat_dereferences_slashed_symlink=no])
 else
   # If the `ln -s' command failed, then we probably don't even
   # have an lstat function.
@@ -715,22 +708,18 @@ AC_DEFUN([AC_FUNC_MALLOC],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for working malloc], ac_cv_func_malloc_works,
-[AC_TRY_RUN(
-[#if STDC_HEADERS || HAVE_STDLIB_H
+[AC_RUN_IFELSE(
+[AC_LANG_PROGRAM(
+[[#if STDC_HEADERS || HAVE_STDLIB_H
 # include <stdlib.h>
 #else
 char *malloc ();
 #endif
-
-int
-main ()
-{
-  exit (malloc (0) ? 0 : 1);
-}],
-              ac_cv_func_malloc_works=yes,
-              ac_cv_func_malloc_works=no,
-              ac_cv_func_malloc_works=no)
-  ])
+]],
+                 [exit (malloc (0) ? 0 : 1);])],
+               [ac_cv_func_malloc_works=yes],
+               [ac_cv_func_malloc_works=no],
+               [ac_cv_func_malloc_works=no])])
 if test $ac_cv_func_malloc_works = yes; then
   AC_DEFINE(HAVE_MALLOC, 1,
             [Define if your system has a working `malloc' function.])
@@ -742,7 +731,7 @@ fi
 # --------------
 AC_DEFUN([AC_FUNC_MEMCMP],
 [AC_CACHE_CHECK([for working memcmp], ac_cv_func_memcmp_working,
-[AC_TRY_RUN([
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([], [[
 int
 main ()
 {
@@ -769,10 +758,10 @@ main ()
       }
     exit (0);
   }
-}],
-   ac_cv_func_memcmp_working=yes,
-   ac_cv_func_memcmp_working=no,
-   ac_cv_func_memcmp_working=no)])
+}]])],
+               [ac_cv_func_memcmp_working=yes],
+               [ac_cv_func_memcmp_working=no],
+               [ac_cv_func_memcmp_working=no])])
 test $ac_cv_func_memcmp_working = no && AC_LIBOBJ([memcmp])
 ])# AC_FUNC_MEMCMP
 
@@ -784,8 +773,8 @@ AC_DEFUN([AC_FUNC_MKTIME],
 AC_CHECK_HEADERS(sys/time.h unistd.h)
 AC_CHECK_FUNCS(alarm)
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
-[AC_TRY_RUN(
-[/* Test program from Paul Eggert and Tony Leneis.  */
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
+[[/* Test program from Paul Eggert and Tony Leneis.  */
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
@@ -822,7 +811,7 @@ static const char *const tz_strings[] = {
 static void
 spring_forward_gap ()
 {
-  /* glibc (up to about 1998-10-07) failed this test) */
+  /* glibc (up to about 1998-10-07) failed this test. */
   struct tm tm;
 
   /* Use the portable POSIX.1 specification "TZ=PST8PDT,M4.1.0,M10.5.0"
@@ -929,9 +918,10 @@ main ()
   irix_6_4_bug ();
   spring_forward_gap ();
   exit (0);
-}],
-ac_cv_func_working_mktime=yes, ac_cv_func_working_mktime=no,
-ac_cv_func_working_mktime=no)])
+}]])],
+               [ac_cv_func_working_mktime=yes],
+               [ac_cv_func_working_mktime=no],
+               [ac_cv_func_working_mktime=no])])
 if test $ac_cv_func_working_mktime = no; then
   AC_LIBOBJ([mktime])
 fi
@@ -951,8 +941,8 @@ AC_DEFUN([AC_FUNC_MMAP],
 [AC_CHECK_HEADERS(stdlib.h unistd.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
-[AC_TRY_RUN(
-[/* Thanks to Mike Haertel and Jim Avera for this test.
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
+[[/* Thanks to Mike Haertel and Jim Avera for this test.
    Here is a matrix of mmap possibilities:
 	mmap private not fixed
 	mmap private fixed at somewhere currently unmapped
@@ -1079,8 +1069,10 @@ main ()
       exit (1);
   close (fd);
   exit (0);
-}], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
-ac_cv_func_mmap_fixed_mapped=no)])
+}]])],
+               [ac_cv_func_mmap_fixed_mapped=yes],
+               [ac_cv_func_mmap_fixed_mapped=no],
+               [ac_cv_func_mmap_fixed_mapped=no])])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE(HAVE_MMAP, 1,
             [Define if you have a working `mmap' system call.])
@@ -1166,25 +1158,18 @@ rm -f conftest*
 # ---------------
 AC_DEFUN([AC_FUNC_SETPGRP],
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
-[AC_TRY_RUN(
+[AC_RUN_IFELSE(
+[AC_LANG_PROGRAM(
 [#if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-
-/* If this system has a BSD-style setpgrp, which takes arguments, exit
+],
+[/* If this system has a BSD-style setpgrp, which takes arguments, exit
    successfully.  */
-
-int
-main ()
-{
-  if (setpgrp (1,1) == -1)
-    exit (0);
-  else
-    exit (1);
-}],
-            [ac_cv_func_setpgrp_void=no],
-            [ac_cv_func_setpgrp_void=yes],
-            [AC_MSG_ERROR([cannot check setpgrp if cross compiling])])])
+  exit (setpgrp (1,1) == -1);])],
+               [ac_cv_func_setpgrp_void=no],
+               [ac_cv_func_setpgrp_void=yes],
+               [AC_MSG_ERROR([cannot check setpgrp if cross compiling])])])
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
             [Define if the `setpgrp' function takes no argument.])
