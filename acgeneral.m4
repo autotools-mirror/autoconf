@@ -1424,11 +1424,11 @@ AC_DEFUN([AC_INIT], [AC_EXPAND_ONCE([_AC_INIT])])
 # ------------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
 [AC_DIVERT_PUSH([HELP_ENABLE])dnl
-AC_EXPAND_ONCE([
+AC_EXPAND_ONCE([[
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-])[]dnl
+]])[]dnl
 $2
 AC_DIVERT_POP()dnl
 # Check whether --enable-$1 or --disable-$1 was given.
@@ -1456,11 +1456,11 @@ AU_DEFUN(AC_ENABLE,
 # --------------------------------------------------------------------
 AC_DEFUN(AC_ARG_WITH,
 [AC_DIVERT_PUSH([HELP_WITH])dnl
-AC_EXPAND_ONCE([
+AC_EXPAND_ONCE([[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-])[]dnl
+]])[]dnl
 $2
 AC_DIVERT_POP()dnl
 # Check whether --with-$1 or --without-$1 was given.
