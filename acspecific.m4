@@ -652,7 +652,7 @@ AC_CACHE_VAL(ac_cv_func_mmap,
 #endif
 
 #ifdef __cplusplus
-extern "C" { char *valloc(int), *malloc(int); }
+extern "C" { void *valloc(unsigned), *malloc(unsigned); }
 #else
 char *valloc(), *malloc();
 #endif
@@ -665,9 +665,9 @@ main()
   int i2 = getpagesize()*2;
   int fd;
 
-  buf1 = valloc(i2);
-  buf2 = valloc(i);
-  buf3 = malloc(i2);
+  buf1 = (char *)valloc(i2);
+  buf2 = (char *)valloc(i);
+  buf3 = (char *)malloc(i2);
   for (j = 0; j < i2; ++j)
     *(buf1 + j) = rand();
   fd = open("conftestmmap", O_CREAT | O_RDWR, 0666);
@@ -1643,10 +1643,11 @@ else
         [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
     fi
 
-    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT.
+    # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
+    # to get the SysV transport functions.
     # Not sure which flavor of 386 Unix this is, but it seems harmless to
     # check for it.
-    AC_CHECK_LIB(nsl, main, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
+    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT 2.0.

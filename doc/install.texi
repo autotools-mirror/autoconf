@@ -148,7 +148,7 @@ Some packages pay attention to @samp{--with-@var{package}} options to
 @code{configure}, where @var{package} is something like @samp{gnu-as} or
 @samp{x} (for the X Window System).  They may also pay attention to
 @samp{--enable-@var{feature}} options, where @var{feature} indicates an
-optional part of the package.  The README should mention any
+optional part of the package.  The @file{README} should mention any
 @samp{--with-} and @samp{--enable-} options that the package recognizes.
 
 @noindent

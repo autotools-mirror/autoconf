@@ -1589,14 +1589,15 @@ for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
 EOF
 
 # Transform confdefs.h into a sed script conftest.vals that substitutes
-# the proper values into config.h.in to produce config.h.
+# the proper values into config.h.in to produce config.h.  And first:
+# Protect against being on the right side of a sed subst in config.status. 
+# Protect against being in an unquoted here document in config.status.
 rm -f conftest.vals
 dnl Using a here document instead of a string reduces the quoting nightmare.
+dnl Putting comments in sed scripts is not portable.
 cat > conftest.hdr <<\EOF
 changequote(<<, >>)dnl
-# Protect against being on the right side of a sed subst in config.status. 
 s/[\\&%]/\\&/g
-# Protect against being in an unquoted here document in config.status.
 s%[\\$`]%\\&%g
 s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) \(.*\)%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
 s%ac_d%ac_u%gp
