@@ -1147,7 +1147,7 @@ AC_DEFUN_ONCE([AC_FC_FREEFORM],
 [AC_LANG_PUSH(Fortran)dnl
 ac_cv_fc_freeform=unknown
 ac_fc_freeform_FCFLAGS_save=$FCFLAGS
-for ac_flag in none -free -freeform -qfree -Mfree -Mfreeform -FR; do
+for ac_flag in none -free -freeform -ffree-form -qfree -Mfree -Mfreeform -FR; do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_freeform_FCFLAGS_save $ac_flag"
   AC_COMPILE_IFELSE([
   program freeform
