@@ -1,5 +1,12 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Work around Texinfo buglets.
+	(Transformation Rules): One example is enough, users are expected
+	to have their brains on. And BTW, use DESTDIR.
+	(dvar): New macro.  Use it.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Writing testsuite.at) <AT_CHECK>: Complete.
 	* lib/autotest/general.m4 (AT_INIT): Use the relative dir when
 	looking for ChangeLogs.

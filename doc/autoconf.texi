@@ -14,6 +14,11 @@
 @r{[}@var{\varname\}@r{]}
 @end macro
 
+@c A simple macro for optional variables with a default value.
+@macro dvar{varname, default}
+@r{[}@var{\varname\} = @samp{\default\}@r{]}
+@end macro
+
 @c I don't like the way URL are displayed in TeX with @uref.
 @ifhtml
 @macro href{url, title}
@@ -1715,7 +1720,7 @@ instantiating macros: @code{AC_CONFIG_FILES}, @code{AC_CONFIG_HEADERS},
 @code{AC_CONFIG_COMMANDS} and @code{AC_CONFIG_LINKS}.  They all
 have this prototype:
 
-@c Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
+@c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
 AC_CONFIG_FOOS(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
@@ -9222,8 +9227,10 @@ that are already installed.  The user can give @code{configure}
 command line options to specify which such external software to use.
 The options have one of these forms:
 
+@c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
+@c awful.
 @example
---with-@var{package}=@ovar{arg}
+--with-@var{package}=[@var{arg}]
 --without-@var{package}
 @end example
 
@@ -9299,8 +9306,10 @@ If a software package has optional compile-time features, the user can
 give @code{configure} command line options to specify whether to
 compile them.  The options have one of these forms:
 
+@c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
+@c awful.
 @example
---enable-@var{feature}=@ovar{arg}
+--enable-@var{feature}=[@var{arg}]
 --disable-@var{feature}
 @end example
 
@@ -9520,29 +9529,17 @@ Here is how to use the variable @code{program_transform_name} in a
 @file{Makefile.in}:
 
 @example
-transform = @@program_transform_name@@
-install: all
-        $(INSTALL_PROGRAM) myprog $(bindir)/`echo myprog | \
-                                               sed '$(transform)'`
-
-uninstall:
-        rm -f $(bindir)/`echo myprog | sed '$(transform)'`
-@end example
-
-@noindent
-If you have more than one program to install, you can do it in a loop:
-
-@example
 PROGRAMS = cp ls rm
+transform = @@program_transform_name@@
 install:
         for p in $(PROGRAMS); do \
-          $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p | \
+          $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p | \
                                               sed '$(transform)'`; \
         done
 
 uninstall:
         for p in $(PROGRAMS); do \
-          rm -f $(bindir)/`echo $$p | sed '$(transform)'`; \
+          rm -f $(DESTDIR)$(bindir)/`echo $$p | sed '$(transform)'`; \
         done
 @end example
 
@@ -11090,11 +11087,11 @@ $
 @cindex Autotest
 
 @display
-@strong{Note: This section describes an experimental features which will
-officially part of Autoconf in a forthcoming release.  Although we
-believe Autotest is stabilizing, the documentation below describes an
-interface which might change in the future: do not depend upon Autotest
-without subscribing to the Autoconf mailings lists.}
+@strong{Note: This section describes an experimental feature which will
+be part of Autoconf in a forthcoming release.  Although we believe
+Autotest is stabilizing, this documentation describes an interface which
+might change in the future: do not depend upon Autotest without
+subscribing to the Autoconf mailing lists.}
 @end display
 
 It is paradoxical that portable projects depend on nonportable tools to
@@ -11271,7 +11268,7 @@ to protect against included commas or spurious @code{m4} expansion.  The
 contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @ovar{status = 0}, @ovar{stdout}, @ovar{stderr})
+@defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @ovar{stdout}, @ovar{stderr})
 @atindex CHECK
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
