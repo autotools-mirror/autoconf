@@ -2183,7 +2183,7 @@ The @command{autoheader} program can create a template file of C
 arguments are given, the first one is used.  Otherwise,
 @command{autoheader} creates @file{config.h.in}.
 
-In order to do its job @command{autoheader} needs that you document all
+In order to do its job @command{autoheader} needs you to document all
 the symbols that you might use, i.e., that there is at least one
 @code{AC_DEFINE} or one @code{AC_DEFINE_UNQUOTED} using its third
 argument, see @ref{Defining Symbols}.  An additional constraint is that
@@ -2194,18 +2194,18 @@ would @command{configure} need to ``patch'' a @file{config.h.in} to
 produce a @file{config.h} instead of just creating @file{config.h} from
 scratch?
 
-Well, when everything rocks the answer is just that we are losing our
-time maintaining @command{autoheader}: generating directly
-@file{config.h} is just what is needed.
+Well, when everything rocks the answer is just that we are wasting our
+time maintaining @command{autoheader}: generating @file{config.h}
+directly is just what is needed.
 
 But when things go wrong, you'll thank the Autoconf team for
 @command{autoheader}...
 
-The fact that the symbols are documented is precious to @emph{check}
-that @file{config.h} makes sense.
+The fact that the symbols are documented is important in order to
+@emph{check} that @file{config.h} makes sense.
 
 The fact that there is a well defined list of symbols that should be
-@code{#define}'d (or not) is also precious for people who are porting
+@code{#define}'d (or not) is also important for people who are porting
 packages to environments where @command{configure} cannot be run: they
 just have to @emph{fill in the blanks}.
 
@@ -7308,7 +7308,7 @@ helps following the latter.
 @node Active Characters, One Macro Call, Quoting, Quoting
 @subsection Active Characters
 
-To fully understand where proper quotation is precious, you first need
+To fully understand where proper quotation is important, you first need
 to know what are the special characters in Autoconf: @samp{#} introduces
 a comment inside which no macro expansion is performed, @samp{,}
 separates arguments, @samp{[} and @samp{]} are the quotes themselves,

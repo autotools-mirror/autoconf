@@ -1,3 +1,7 @@
+2001-03-20  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi: A couple of grammatical tweaks.
+
 2001-03-19  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump to 2.49e.
