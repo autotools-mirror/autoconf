@@ -78,7 +78,6 @@ if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
-: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 : ${AUTOCONF=@autoconf-name@}
 dir=`echo "$0" | sed -e 's,[^/]*$,,'`
 debug=false
@@ -253,7 +252,7 @@ case $# in
 esac
 
 # Set up autoconf.
-autoconf="$AUTOCONF -A $autoconf_dir -l $localdir "\
+autoconf="$AUTOCONF --include=$autoconf_dir --include=$localdir "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`
 

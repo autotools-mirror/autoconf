@@ -1,5 +1,5 @@
 #! /bin/sh
-# Running `autoheader' as if it were installed.
+# Running `$0' as if it were installed.
 
 me=`echo "$0" | sed -e 's,.*[\\/],,'`
 

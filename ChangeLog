@@ -1,5 +1,18 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoconf.in (--include, -I): New option.
+	Map --localdir, --autoconf-dir onto it.
+	Forward autom4te's options instead of interpreting them.
+	* bin/autoconf.in, bin/autoheader.in (AC_MACRODIR, autoconf_dir):
+	There is no such envvar since the inception of autom4te.cfg.
+	* bin/autom4te.in (&parse_args): Uniquify `@include'.
+	* bin/autoupdate.in: Adjust, and perform more control.
+	* tests/atspecific.m4 (AT_CHECK_AUTOCONF): Adjust.
+	* tests/autoconf: Dittowise.
+
+	
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoconf.in: Don't bother with `acsite.m4' and `aclocal.m4'.
 	* bin/autom4te.in (&find_file): Support `FILE?' standing for
 	optionally `FILE'.

@@ -65,7 +65,7 @@ AC_STATE_SAVE(after)
 # -----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
-AT_CHECK([autoconf --localdir=$srcdir $1],
+AT_CHECK([autoconf --include=$srcdir $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 

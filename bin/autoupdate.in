@@ -135,7 +135,7 @@ sub parse_args ()
 ## -------------- ##
 parse_args;
 mktmpdir ('au');
-$autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir ";
+$autoconf .= " --include=$autoconf_dir --include=$localdir ";
 $autoconf .= "--debug " if $debug;
 $autoconf .= "--verbose " if $verbose;
 
@@ -176,17 +176,22 @@ my (%ac_macros, %au_macros);
 while (<MACROS>)
   {
     chomp;
-    /^(AC|AU):(.*):([^:]*)$/ or next;
+    my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
     # ../lib/m4sugar/m4sugar.m4  -> m4sugar
     # ../lib/autoconf/general.m4 -> autoconf
-    my $set = basename (dirname ($2));
-    if ($1 eq "AC")
+    # aclocal.m4 -> ignore
+    next
+      if $file eq 'aclocal.m4';
+    my $set = basename (dirname ($file));
+    die "$me: unknown set: $set: $_\n"
+      unless $set =~ /^(m4sugar|autoconf)$/;
+    if ($domain eq "AC")
       {
-	$ac_macros{$3} = $set;
+	$ac_macros{$macro} = $set;
       }
     else
       {
-	$au_macros{$3} = $set;
+	$au_macros{$macro} = $set;
       }
   }
 close MACROS
@@ -202,6 +207,11 @@ if ($debug)
     print STDERR "Obsolete Autoconf macros:\n";
     print STDERR join (' ', sort keys %au_macros) . "\n\n";
   }
+die "$me: no current Autoconf macros found\n"
+  unless keys %ac_macros;
+die "$me: no obsolete Autoconf macros found\n"
+  unless keys %au_macros;
+
 
 # $au_changequote -- enable the quote `[', `]' right before any AU macro.
 my $au_changequote =
@@ -364,11 +374,11 @@ EOF
     # Now ask m4 to perform the update.
     if ("$file" eq "$tmp/stdin")
        {
-	 xsystem ("$m4 -I $autoconf_dir $tmp/input.m4");
+	 xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4");
        }
     else
        {
-	 xsystem ("$m4 -I $autoconf_dir $tmp/input.m4 >$tmp/updated");
+	 xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4 >$tmp/updated");
 	 if (compare ("$tmp/updated", "$file") == 0)
 	   {
 	     # File didn't change, so don't update its mod time.

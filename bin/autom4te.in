@@ -573,6 +573,11 @@ sub parse_args ()
 Try `$me --help' for more information.\n"
     unless @ARGV;
 
+  # Normalize the includes: the first occurrence is enough, several is
+  # a pain since it introduces a useless difference in the path which
+  # invalidates the cache.
+  @include = uniq (@include);
+
   # Convert @trace to %trace, and work around the M4 builtins tracing
   # problem.
   # The default format is `$f:$l:$n:$%'.

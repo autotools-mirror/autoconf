@@ -34,6 +34,7 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
+  -I, --include=DIR        look for input files in DIR.  Accumulates
   -f, --force              consider all the files are obsolete
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
@@ -48,10 +49,6 @@ Warning categories include:
   \`error'         warnings are error
 
 The environment variable \`WARNINGS' is honored.
-
-Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
-  -l, --localdir=DIR        location of the \`aclocal.m4' file
 
 Tracing:
   -t, --trace=MACRO     report the list of calls to MACRO
@@ -85,21 +82,15 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 
 # Variables.
-: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 : ${AUTOM4TE=@autom4te-name@}
-debug=false
-force=false
 dir=`echo "$0" | sed -e 's,[^\\/]*$,,'`
-# Trace Autoconf's initialization?
-initialization=false
-localdir=.
 outfile=
-# Exit status.
-status=0
 verbose=:
 
 # Parse command line.
 while test $# -gt 0 ; do
+  option=`expr "x$1" : 'x\(--[^=]*\)' \| \
+               "x$1" : 'x\(-.\)'`
   optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
                "x$1" : 'x-.\(.*\)'`
   case $1 in
@@ -108,40 +99,34 @@ while test $# -gt 0 ; do
     --help | -h )
        echo "$usage"; exit 0 ;;
 
-    --debug | -d )
-       debug=:; shift ;;
-    --force | -f )
-       force=:; shift ;;
     --verbose | -v )
        verbose=echo
-       shift;;
+       AUTOM4TE="$AUTOM4TE $1"; shift ;;
 
-    --localdir=* | -l?* )
-       localdir=$optarg
-       shift ;;
-    --localdir | -l )
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       localdir=$1
-       shift ;;
+    # Arguments passed as is to autom4te.
+    --debug      | -d   | \
+    --force      | -f   | \
+    --include=*  | -I?* | \
+    --warnings=* | -W?* )
+       AUTOM4TE="$AUTOM4TE $1"; shift ;;
 
-    --autoconf-dir=* | -A?* )
-      autoconf_dir=$optarg
+    # Options with separated arg passed as is to autom4te.
+    --include | -I | \
+    --warnings | -W )
+       test $# = 1 && eval "$exit_missing_arg"
+       AUTOM4TE="$AUTOM4TE $option $2"
+       shift 2 ;;
+
+    # Obsolete options.
+    --localdir=* | -l?* | --autoconf-dir=* | -A?* | --macrodir=* | -m?* )
+       echo "$me: warning: $option is obsolete, use --include" >&2
+       AUTOM4TE="$AUTOM4TE --include=$optarg"
        shift ;;
-    --autoconf-dir | -A )
+    --localdir | -l | --autoconf-dir | -A | --macrodir | -m )
+       echo "$me: warning: $option is obsolete, use --include" >&2
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       autoconf_dir=$1
-       shift ;;
-    --macrodir=* | -m?* )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
-       autoconf_dir=$optarg
-       shift ;;
-    --macrodir | -m )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       autoconf_dir=$1
+       AUTOM4TE="$AUTOM4TE --include=$1"
        shift ;;
 
     --trace=* | -t?* )
@@ -153,7 +138,7 @@ while test $# -gt 0 ; do
        traces="$traces --trace='"`echo "$1" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --initialization | -i )
-       initialization=:
+       AUTOM4TE="$AUTOM4TE --melt"
        shift;;
 
     --output=* | -o?* )
@@ -163,15 +148,6 @@ while test $# -gt 0 ; do
        test $# = 1 && eval "$exit_missing_arg"
        shift
        outfile=$1
-       shift ;;
-
-    --warnings=* | -W?* )
-       warnings=$warnings,$optarg
-       shift ;;
-    --warnings | -W )
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       warnings=$warnings,$1
        shift ;;
 
     -- )     # Stop option processing
@@ -215,22 +191,9 @@ esac
 test -z "$outfile" && outfile=-
 
 # Running autom4te.
-run_autom4te="$AUTOM4TE "\
-`$verbose "--verbose "`\
-`$debug && echo "--debug "`\
-`$force && echo "--force "`\
-"--language=autoconf "\
-"--include=$autoconf_dir "\
-"--include=$localdir "\
-`test -n "$warnings" && echo "--warning=$warnings "`\
-"--output=$outfile "\
-`$initialization && echo "--melt "`
-
+run_autom4te="$AUTOM4TE --language=autoconf --output=$outfile"
 # Autom4te expansion.
 eval set dummy "$traces"
 shift
 $verbose "$me: running $run_autom4te "${1+"$@"}" $infile" >&2
-$run_autom4te ${1+"$@"} $infile ||
-  { (exit 1); exit 1; }
-
-(exit $status); exit $status
+exec $run_autom4te ${1+"$@"} $infile

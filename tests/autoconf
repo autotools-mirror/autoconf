@@ -1,8 +1,8 @@
 #! /bin/sh
-# Running `autoheader' as if it were installed.
+# Running `$0' as if it were installed.
 
 me=`echo "$0" | sed -e 's,.*[\\/],,'`
 
 . ./atconfig
 
-exec ../bin/$me --autoconf-dir ../lib ${1+"$@"}
+exec ../bin/$me --include ../lib ${1+"$@"}
