@@ -9,6 +9,14 @@ autoconf \- Generate configuration scripts
 Generate a configuration script from a TEMPLATE-FILE if given, or
 `configure.in' by default.  Output is sent to the standard output if
 TEMPLATE-FILE is given, else into `configure'.
+.PP
+If the option `--trace' is used, no configuration script is created.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+print this help, then exit
+.TP
+\fB\-\-version\fR
+print version number, then exit
 .TP
 \fB\-m\fR, \fB\-\-macrodir\fR=\fIDIR\fR
 directory storing macro files
@@ -16,11 +24,11 @@ directory storing macro files
 \fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
 directory storing the `aclocal.m4' file
 .TP
-\fB\-h\fR, \fB\-\-help\fR
-print this help, then exit
+\fB\-t\fR, \fB\-\-trace\fR=\fIMACRO\fR
+report the list of calls to MACRO
 .TP
-\fB\-\-version\fR
-print version number, then exit
+\fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
+save output in FILE (stdout is the default)
 .SH AUTHOR
 Written by David J. MacKenzie.
 .SH "REPORTING BUGS"

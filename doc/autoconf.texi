@@ -695,6 +695,25 @@ option overrides the environment variable.
 
 @item --version
 Print the version number of Autoconf and exit.
+
+@item --trace=@var{macro}
+@itemx -t @var{macro}
+List the calls to @var{macro}.  Multiple calls to @samp{--trace} list
+several macros.  It is adviced to use this feature instead of parsing
+@file{configure.in}.
+
+The output is composed of separated lines for each macro call.  Each
+line follows this model:
+@example
+% ./autoconf -t AC_INIT -t AM_INIT_AUTOMAKE
+configure.in:2:AC_INIT:acgeneral.m4
+configure.in:3:AM_INIT_AUTOMAKE:autoconf, 2.14a
+@end example
+
+@item --output=@var{file}
+@itemx -o @var{file}
+Save output (script or traces) to @var{file}.  The file @samp{-} stands
+for the standard output.
 @end table
 
 @node Invoking autoreconf,  , Invoking autoconf, Making configure Scripts
@@ -813,7 +832,7 @@ to split the macros in several files.  In this case, Autoconf must be
 told which files to load, and in which order.
 
 @defmac AC_INCLUDE (@var{file}...)
-@maindex AC_INCLUDE
+@maindex INCLUDE
 Read the macro definitions that appear in the listed files.  A list of
 space-separated filenames or shell globbing patterns is expected.  The
 files will be read in the order they're listed.

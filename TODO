@@ -28,6 +28,12 @@ It is important to start before the release, even if the test suite is
 ridiculously small, so that people see a framework in which they may
 provide their additional tests.
 
+** AC_INCLUDE
+I think shell globbing is a bad thing.  In particular, this is bad for
+automake.  I think we should make it static, i.e., very much like
+AC_CONFIG_ things.  So there would no problems of localization, some
+macros may AC_INCLUDE files etc.
+
 ** testsuite/config/unix.exp
 Fix the regex snippet so that it properly parses the current version
 of Autoconf.
@@ -75,10 +81,6 @@ See the FIXME note in the code.
 
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
-
-** Allow --header, --command, --file to config.status.
-./config.status --file foo, would work on foo as if it were a config
-file.  It would be great that we could use stdin and stdout also.
 
 ** Move AM_PROG_CC_STDC into Autoconf.
 Autoconf should provide the means to determine the ANSIsm of the

@@ -1,5 +1,16 @@
 1999-11-01  Akim Demaille  <akim@epita.fr>
 
+	Be kind to Automake: list the arguments of selected macros
+	(for instance AC_SUBST will list each variable which may be
+ 	substitued).
+
+	* autoconf.sh (--trace, --output): New options.
+	Implement tracing of macros.
+	trap also on 0, so that there is no need to rm here and there.
+	* autoconf.texi (Output): Document --trace and --output.
+
+1999-11-01  Akim Demaille  <akim@epita.fr>
+
 	Clean up the macros for testing members of aggregates.
 
 	* acgeneral.m4 (AC_CHECK_MEMBER): FATAL if $1 has no dot in it.
