@@ -1,5 +1,10 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* tests/atgeneral.m4: Add basic support for test ranges (e.g. 7-34) as
+	arguments.  Fixed a typo.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* man/Makefile.am (.x.1): Use @PATH_SEPARATOR@, not ':' to set up
 	$PATH.  Also set AUTOM4TE_CFG, so we can process autom4te properly.
 

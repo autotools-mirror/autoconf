@@ -146,6 +146,33 @@ while test $[#] -gt 0; do
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
         at_tests="$at_tests$[1] ";;
 
+    # Ranges
+    [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
+        at_range_start=`echo $[1] |tr -d '-'`
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,'`
+        at_tests="$at_tests$at_range ";;
+
+    [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
+        at_range_end=`echo $[1] |tr -d '-'`
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's, '$at_range_end' .*$, '$at_range_end','`
+        at_tests="$at_tests$at_range ";;
+
+    [[0-9]-[0-9] | [0-9]-[0-9][0-9] | [0-9]-[0-9][0-9][0-9]] | \
+    [[0-9]-[0-9][0-9][0-9][0-9] | [0-9][0-9]-[0-9][0-9]] | \
+    [[0-9][0-9]-[0-9][0-9][0-9] | [0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9]-[0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
+    [[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] )
+        at_range_start=`echo $[1] |sed 's,-.*,,'`
+        at_range_end=`echo $[1] |sed 's,.*-,,'`
+	# Maybe test to make sure start <= end
+        at_range=`echo " $at_tests_all " | \
+          sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \
+              -e 's, '$at_range_end' .*$, '$at_range_end','`
+        at_tests="$at_tests$at_range ";;
+
      *) echo "$as_me: invalid option: $[1]" >&2
         echo "Try \`$[0] --help' for more information." >&2
         exit 1 ;;
@@ -299,7 +326,7 @@ elif test $at_debug = false; then
   echo ', done'
   echo
   echo 'You may investigate any problem if you feel able to do so, in which'
-  echo 'case the testsuite provide a good starting point.'
+  echo 'case the test suite provides a good starting point.'
   echo
   echo 'Now, failed tests will be executed again, verbosely, and logged'
   echo 'in the file '$[0]'.log.'
