@@ -164,11 +164,11 @@ m4_foreach([_AS_var],
 # Name of the executable.
 as_me=`AS_BASENAME("$[0]")`
 
-# Rewrite early, but we need PATH_SEPARATOR.
+# PATH needs CR, and LINENO needs CR and PATH.
+_AS_CR_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 _AS_LINENO_PREPARE
 
-_AS_CR_PREPARE
 _AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
@@ -528,10 +528,10 @@ m4_define([_AS_LINENO_PREPARE],
       N
       s,$,-,
       : loop
-      s,^\([[0-9]]*\)\(.*\)[[$]]LINENO\([[^a-zA-Z0-9_]]\),\1\2\1\3,
+      s,^\([['$as_cr_digits']]*\)\(.*\)[[$]]LINENO\([[^'$as_cr_alnum'_]]\),\1\2\1\3,
       t loop
       s,-$,,
-      s,^[[0-9]]*\n,,
+      s,^[['$as_cr_digits']]*\n,,
     ' >$as_me.lineno &&
   chmod +x $as_me.lineno ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])
