@@ -1,3 +1,8 @@
+2002-09-09  Koji Arai  <JCA02266@nifty.ne.jp>
+
+	* doc/autoconf.texi (Making testsuite Scripts): Use `@@' where a
+	plain `@' is wanted.
+
 2002-09-09  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Keep the

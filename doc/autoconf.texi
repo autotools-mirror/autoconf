@@ -13718,8 +13718,8 @@ check-local: atconfig atlocal $(TESTSUITE)
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
-        $(AUTOTEST) -I $(srcdir) $@.at -o $@.tmp
-        mv $@.tmp $@
+        $(AUTOTEST) -I $(srcdir) $@@.at -o $@@.tmp
+        mv $@@.tmp $@@
 @end example
 
 You might want to list explicitly the dependencies, i.e., the list of
@@ -13733,11 +13733,11 @@ subdir = tests
 
 atconfig: $(top_builddir)/config.status
         cd $(top_builddir) && \
-           $(SHELL) ./config.status $(subdir)/$@
+           $(SHELL) ./config.status $(subdir)/$@@
 
 atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
         cd $(top_builddir) && \
-           $(SHELL) ./config.status $(subdir)/$@
+           $(SHELL) ./config.status $(subdir)/$@@
 @end example
 
 @noindent
