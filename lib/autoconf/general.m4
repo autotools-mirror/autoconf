@@ -1164,10 +1164,10 @@ trap 'exit_status=$?
     echo
     AS_BOX([Cache variables.])
     echo
-    m4_bpatsubst(m4_bpatsubst(m4_dquote(m4_defn([_AC_CACHE_DUMP])),
-                            [^ *\(#.*\)?
-]),
-                ['], ['"'"'])
+    m4_bpatsubsts(m4_defn([_AC_CACHE_DUMP]),
+                  [^ *\(#.*\)?
+],                [],
+                  ['], ['"'"'])
     echo
     if test -s confdefs.h; then
       AS_BOX([confdefs.h.])

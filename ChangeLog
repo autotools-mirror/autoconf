@@ -1,5 +1,24 @@
 2002-03-04  Akim Demaille  <akim@epita.fr>
 
+	Instead of having stacking `shift's evaluated at the end, let
+	`foreach' loops immediately evaluate them.
+
+	* lib/m4sugar/m4sugar.m4 (m4_quote, m4_dquote): Use $@ rather than
+	$*.  This is the n-th time I change my mind, but hopefully this is
+	the last...
+	(m4_lquote): New.
+	(m4_text_wrap): Use m4_foreach, which is finally correct _and_
+	efficient.
+	(m4_foreach_quoted, m4_car_quoted, _m4_foreach_quoted): Remove, as
+	it was only a hack for m4_text_wrap.
+	(m4_car2): Remove, replaced by...
+	(m4_cdr): New.
+	(_m4_foreach): Adjust.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Adjust, and use
+	m4_bpatsubst for clarification.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Changequote is Evil): New.
 
 2002-03-03  Kevin Ryde  <user42@zip.com.au>
