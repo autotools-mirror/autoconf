@@ -1,5 +1,8 @@
 2005-01-28  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): Recommend X
+	rather than x for expr.
+
 	* lib/autoconf/lang.m4 (_AC_COMPILER_OBJEXT): Avoid subshells when
 	this is safe.
 	* lib/autoconf/programs.m4 (AC_PROG_EGREP, AC_PROG_FGREP): Likewise.
