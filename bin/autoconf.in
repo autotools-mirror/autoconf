@@ -20,11 +20,14 @@
 # With one arg, create a configure script on standard output from
 # the given template file.
 
-# NLS nuisances.
-LANG=C; LC_ALL=C; export LANG; export LC_ALL;
-
 usage="Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir] 
                 [-v] [--version] [template-file]" 
+
+# NLS nuisances.
+# These must not be set unconditionally because not all systems understand
+# e.g. LANG=C (notably SCO).
+if test "${LC_ALL+set}" = 'set' ; then LC_ALL=C; export LC_ALL; fi
+if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
 test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
 test -z "${M4}" && M4=@M4@
