@@ -7,7 +7,7 @@
 2003-03-29  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Skip OS/2's install,
-	that starts a GYI.
+	that starts a GUI.
 	From Ilya Zakharevich.
 
 2003-03-29  Akim Demaille  <akim@epita.fr>
