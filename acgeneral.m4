@@ -3588,7 +3588,23 @@ ac_clean_files=$ac_clean_files_save
 dnl Commands to run after config.status was created
 AC_OUTPUT_COMMANDS_POST()dnl
 
-test "$no_create" = yes || $SHELL $CONFIG_STATUS || AS_EXIT([1])
+# configure is writing to config.log, and then calls config.status.
+# config.status does its own redirection, appending to config.log.
+# Unfortunately, on DOS this fails, as config.log is still kept open
+# by configure, so config.status won't be able to write to it; its
+# output is simply discarded.  So we exec the FD to /dev/null,
+# effectively closing config.log, so it can be properly (re)opened and
+# appended to by config.status.  When coming back to configure, we
+# need to make the FD available again.
+if test "$no_create" != yes; then
+  ac_cs_success=:
+  exec AS_MESSAGE_LOG_FD>/dev/null
+  $SHELL $CONFIG_STATUS || ac_cs_success=false
+  exec AS_MESSAGE_LOG_FD>>config.log
+  # Use ||, not &&, to avoid exiting from the if with $? = 1, which
+  # would make configure fail if this is the last instruction.
+  $ac_cs_success || AS_EXIT([1])
+fi
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 ])# AC_OUTPUT
