@@ -241,7 +241,11 @@ EOF
 	exit 0 ;;
     mips:*:*:UMIPS | mips:*:*:RISCos)
 	sed 's/^	//' << EOF >$dummy.c
-	int main (argc, argv) int argc; char **argv; {
+#ifdef __cplusplus
+	int main (int argc, char *argv[]) {
+#else
+	int main (argc, argv) int argc; char *argv[]; {
+#endif
 	#if defined (host_mips) && defined (MIPSEB)
 	#if defined (SYSTYPE_SYSV)
 	  printf ("mips-mips-riscos%ssysv\n", argv[1]); exit (0);
@@ -630,10 +634,11 @@ EOF
 		echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC} ; exit 0
 	elif test "${UNAME_MACHINE}" = "mips" ; then
 	  cat >$dummy.c <<EOF
-main(argc, argv)
-     int argc;
-     char *argv[];
-{
+#ifdef __cplusplus
+	int main (int argc, char *argv[]) {
+#else
+	int main (argc, argv) int argc; char *argv[]; {
+#endif
 #ifdef __MIPSEB__
   printf ("%s-unknown-linux-gnu\n", argv[1]);
 #endif
@@ -665,10 +670,11 @@ EOF
 	  # Determine whether the default compiler is a.out or elf
 	  cat >$dummy.c <<EOF
 #include <features.h>
-main(argc, argv)
-     int argc;
-     char *argv[];
-{
+#ifdef __cplusplus
+	int main (int argc, char *argv[]) {
+#else
+	int main (argc, argv) int argc; char *argv[]; {
+#endif
 #ifdef __ELF__
 # ifdef __GLIBC__
 #  if __GLIBC__ >= 2
