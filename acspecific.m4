@@ -996,19 +996,25 @@ dnl
 dnl Internal subroutine of AC_FIND_X.
 define(AC_FIND_X_DIRECT,
 [echo checking for X include and library files directly
+if test ".$x_direct_test_library" = . ; then
+   x_direct_test_library=Xt
+fi
 AC_TEST_CPP([#include <X11/Intrinsic.h>], no_x=,
   for dir in \
     /usr/local/include \
     /usr/unsupported/include \
     /usr/x386/include \
     /usr/local/x11r5/include \
+    /usr/include/X11R6 \
     /usr/include/X11R5 \
     /usr/include/X11R4 \
+    /usr/X11R6/include \
     /usr/X11R5/include \
     /usr/X11/include \
     /usr/openwin/include \
     /usr/openwin/share/include \
     /usr/lpp/Xamples/include \
+    /usr/athena/include \
     ; \
   do
     if test -r $dir/X11/Intrinsic.h; then
@@ -1019,18 +1025,23 @@ AC_TEST_CPP([#include <X11/Intrinsic.h>], no_x=,
 
 # Check for the libraries.  First see if replacing the `include' by
 # `lib' works.
-AC_HAVE_LIBRARY(Xt, no_x=,
+AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
 for dir in `echo "$x_includes" | sed s/include/lib/` \
   /usr/local/lib \
   /usr/unsupported/lib \
   /usr/x386/lib \
   /usr/local/x11r5/lib \
   /usr/lib/X11 \
+  /usr/lib/X11R6 \
+  /usr/lib/X11R5 \
   /usr/lib/X11R4 \
+  /usr/X11R6/lib \
   /usr/X11R5/lib \
+  /usr/X11R4/lib \
   /usr/X11/lib \
   /usr/openwin/lib \
   /usr/lpp/Xamples/lib \
+  /usr/athena/lib \
   ; \
 do
   for extension in a so sl; do
