@@ -71,12 +71,6 @@ This is what is needed for LTLIBOBJS and others.
 
 ** gettext (This is more for Automake, but I'm afraid to forget --akim)
 There a nsl_cv_ which is actually nls_cv_.
-It seems not valid to me to give twho empty strings to AC_LINK_FILES.
-The user should check herself if she wants not to link, it is not
-the job of Autoconf.
-
-Currently there are hacks to keep it legal, but it should be made
-illegal in the future.
 
 ** fnmatch
 From: Stanislav Brabec <utx@k332.feld.cvut.cz>

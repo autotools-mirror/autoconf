@@ -787,7 +787,8 @@ AC_DEFUN(AC_PREFIX_DEFAULT,
 ac_default_prefix=$1
 AC_DIVERT_POP()])
 
-dnl AC_INIT_PARSE_ARGS()
+dnl AC_INIT_PARSE_ARGS
+dnl ------------------
 AC_DEFUN(AC_INIT_PARSE_ARGS,
 [
 # Initialize some variables set by options.
@@ -846,7 +847,6 @@ changequote([, ])dnl
 ac_prev=
 for ac_option
 do
-
   # If the previous option needs an argument, assign it.
   if test -n "$ac_prev"; then
     eval "$ac_prev=\$ac_option"
@@ -1228,16 +1228,19 @@ done
 if test -n "$ac_prev"; then
   AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
 fi
-])
+])dnl AC_INIT_PARSE_ARGS
 
+
+dnl AC_INIT_BINSH
+dnl -------------
 dnl Try to have only one #! line, so the script doesn't look funny
 dnl for users of AC_REVISION.
-dnl AC_INIT_BINSH()
 AC_DEFUN(AC_INIT_BINSH,
 [AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
 #! /bin/sh
 AC_DIVERT_POP()dnl to KILL
 ])
+
 
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 dnl ----------------------------------
@@ -2970,6 +2973,7 @@ m4_append([AC_LIST_LINKS], [$1])dnl
 dnl Initialize the list.
 define([AC_LIST_LINKS])
 
+
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 dnl ---------------------------------
 dnl Link each of the existing files SOURCE... to the corresponding
@@ -3007,7 +3011,7 @@ dnl      esac
 AC_DEFUN([AC_CONFIG_FILES],
 [AC_CONFIG_UNIQUE([$1])dnl
 m4_append([AC_LIST_FILES], [ $1])dnl
-dnl
+dnl Register the commands.
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_FILES_COMMANDS],
 [    ]patsubst(AC_File, [:.*])[ ) $2 ;;
@@ -3072,7 +3076,7 @@ subdirs="AC_LIST_SUBDIRS"
 AC_SUBST(subdirs)dnl
 ])
 
-dnl Initialize the list
+dnl Initialize the list.
 define([AC_LIST_SUBDIRS])
 
 

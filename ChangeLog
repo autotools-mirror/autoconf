@@ -1,7 +1,6 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
-	* acgeneral.m4: Prefer `>file' over `> file' etc.
-	* acspecific.m4: Likewise.
+	* acgeneral.m4: Formating changes.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
@@ -50,7 +49,12 @@
 	Call `conftest.defines' if there are #define in the input.
 	Call `conftest.undefs'.
 
-1999-10-10  Akim Demaille  <akim@epita.fr>
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4: Prefer `>file' over `> file' etc.
+	* acspecific.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
 
 	Rename the family AC_NEED_DECL as AC_CHECK: it is more uniform,
 	but keep defining NEED_FOO_DECL when `foo' is not declared.  Files
