@@ -802,14 +802,17 @@ The following macros check for particular C library functions:
 
 @defmac AC_ALLOCA
 @maindex ALLOCA
+@vindex C_ALLOCA
 @vindex HAVE_ALLOCA_H
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If that fails, it looks for a function
 in the standard C library.  If that fails, it sets the @code{make}
-variable @code{ALLOCA} to @samp{alloca.o}.  This variable is separate
-from @code{LIBOBJS} so multiple programs can share the value of
-@code{ALLOCA} without needing to create an actual library.
+variable @code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA}
+(so programs can periodically call @samp{alloca(0)} to garbage collect).
+This variable is separate from @code{LIBOBJS} so multiple programs can
+share the value of @code{ALLOCA} without needing to create an actual
+library.
 
 If this macro finds @file{alloca.h}, it defines @code{HAVE_ALLOCA_H}.
 
@@ -949,7 +952,7 @@ The following macros check for certain structures or structure members:
 @defmac AC_STAT_MACROS_BROKEN
 @maindex STAT_MACROS_BROKEN
 @maindex STAT_MACROS_BROKEN
-If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined
+If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
 @file{sys/stat.h} do not work properly (returning false positives),
 define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
 Amdahl UTS and Motorola System V/88.
@@ -1079,6 +1082,12 @@ define @code{inline} to be @code{__inline}.  This macro calls
 @maindex INT_16_BITS
 @vindex INT_16_BITS
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
+@end defmac
+
+@defmac AC_LONG_64_BITS
+@maindex LONG_64_BITS
+@vindex LONG_64_BITS
+If the C type @code{long int} is 64 bits wide, define @code{LONG_64_BITS}.
 @end defmac
 
 @defmac AC_LONG_DOUBLE
@@ -1238,15 +1247,16 @@ These macros are defined in the file @file{acgeneral.m4}.
 
 The following macros control the kind of output that Autoconf produces.
 
-@defmac AC_CONFIG_HEADER (@var{header-to-create})
+@defmac AC_CONFIG_HEADER (@var{header-to-create} @dots{})
 @maindex CONFIG_HEADER
 @vindex HAVE_CONFIG_H
-Make @code{AC_OUTPUT} create a file @var{header-to-create} containing C
-preprocessor @code{#define} statements and replace @samp{@@DEFS@@} in
-generated files with @samp{-DHAVE_CONFIG_H} instead of the value of
-@code{DEFS}.  @xref{Setup}, for more information on @code{AC_OUTPUT}.
-This macro should be called right after @code{AC_INIT}.  The usual name
-for @var{header-to-create} is @file{config.h}.
+Make @code{AC_OUTPUT} create one or more files @var{header-to-create}
+containing C preprocessor @code{#define} statements and replace
+@samp{@@DEFS@@} in generated files with @samp{-DHAVE_CONFIG_H} instead
+of the value of @code{DEFS}.  @xref{Setup}, for more information on
+@code{AC_OUTPUT}.  This macro should be called right after
+@code{AC_INIT}.  The usual name for @var{header-to-create} is
+@file{config.h}.
 
 If @var{header-to-create} already exists and its contents are identical
 to what @code{AC_OUTPUT} would put in it, it is left alone.  Doing this
