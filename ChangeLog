@@ -1,3 +1,8 @@
+2000-03-23  Steven G. Johnson <stevenj@alum.mit.edu>
+
+	* acspecific.m4 (AC_F77_NAME_MANGLING): Need to use
+	AC_F77_LIBRARY_LDFLAGS when linking C and Fortran code.
+
 2000-03-23  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_LANG_PROGRAM, AC_LANG_PROGRAM(C),

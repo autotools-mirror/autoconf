@@ -2846,6 +2846,7 @@ AC_DEFUN(AC_F77_NAME_MANGLING,
   [
     AC_REQUIRE([AC_PROG_CC])dnl
     AC_REQUIRE([AC_PROG_F77])dnl
+    AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 
     AC_LANG_SAVE
     AC_LANG(FORTRAN77)
@@ -2867,7 +2868,7 @@ EOF
       AC_LANG(C)
 
       ac_save_LIBS="$LIBS"
-      LIBS="cf77_test.${ac_objext} $LIBS"
+      LIBS="cf77_test.${ac_objext} $FLIBS $LIBS"
 
       f77_case=
       f77_underscore=
