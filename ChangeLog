@@ -1,5 +1,14 @@
 2004-06-04  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (File System Conventions): Warn about
+	names like "aux".  Problem reported by Eric Blake.
+
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Require
+	_AS_UNSET_PREPARE, so that we can use $as_unset directly.
+	Don't fail if ENV or BASH_ENV is readonly.
+	(AS_SHELL_SANITIZE): Don't fail if ENV, MAIL, MAILPATH, LC_ALL,
+	etc. are read only.
+
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY (C)): Use division
 	by zero instead of array size, so that we can use any arithmetic
 	constant expression (instead of requiring an integer constant

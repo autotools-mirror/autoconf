@@ -9621,7 +9621,9 @@ esac
 @noindent
 will fail to properly detect absolute paths on those systems, because
 they can use a drivespec, and will usually use a backslash as directory
-separator.  The canonical way to check for absolute paths is:
+separator.  If you want to be portable to @acronym{DOS} variants (at the
+price of rejecting valid but oddball Unix file names like @file{a:\b}),
+you can check for absolute file names like this:
 
 @example
 case $foo_dir in
@@ -9637,7 +9639,7 @@ Make sure you quote the brackets if appropriate and keep the backslash as
 first character (@pxref{Limitations of Builtins}).
 
 Also, because the colon is used as part of a drivespec, these systems don't
-use it as path separator.  When creating or accessing paths, use the
+use it as path separator.  When creating or accessing paths, you can use the
 @code{PATH_SEPARATOR} output variable instead.  @command{configure} sets this
 to the appropriate value (@samp{:} or @samp{;}) when it starts up.
 
@@ -9705,12 +9707,21 @@ possible to share file trees containing long file names between @sc{sfn}
 and @sc{lfn} environments, it also means the above problem applies there
 as well.
 
-@item Invalid characters
+@item Invalid characters (@sc{lfn})
 Some characters are invalid in @acronym{DOS} filenames, and should therefore
 be avoided.  In a @sc{lfn} environment, these are @samp{/}, @samp{\},
 @samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
 In a @sc{sfn} environment, other characters are also invalid.  These
 include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
+
+@item Invalid names (@sc{lfn})
+Some @acronym{DOS} file names are reserved, and cause problems if you
+try to use files with those names.  These names include @file{CON},
+@file{AUX}, @file{COM1}, @file{COM2}, @file{COM3}, @file{COM4},
+@file{LPT1}, @file{LPT2}, @file{LPT3}, @file{NUL}, and @file{PRN}.
+Remember that file names are case insensitive, so even names like
+@file{aux/config.guess} are disallowed.
+
 @end table
 
 @node Shell Substitutions
