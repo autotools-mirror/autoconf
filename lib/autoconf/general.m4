@@ -182,6 +182,23 @@ define(AC_SPECIALIZE,
        [indir([$1], m4_shift($@))])])
 
 
+# AU_DEFINE(NAME, GLUE-CODE, [MESSAGE])
+# -------------------------------------
+#
+# Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
+# wrapping actions required by `autoupdate'.
+# We do not define anything in `autoconf::'.
+define(AU_DEFINE,
+[m4_namespace_define(autoupdate, [$1],
+[m4_changequote([, ])m4_dnl
+m4_enable(libm4)m4_dnl
+m4_warn([Updating use of `$1'. $3])m4_dnl
+$2[]m4_dnl
+m4_disable(libm4)m4_dnl
+m4_changequote(, )m4_dnl
+])])
+
+
 # AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
 # -----------------------------------
 # Declare that the macro NAME is now obsoleted, and should be replaced
@@ -198,14 +215,9 @@ define(AU_DEFUN,
 [m4_warn([The macro `$1' is obsolete.
 You should run autoupdate.])dnl
 $2])dnl
-m4_namespace_define(autoupdate, [$1],
-[m4_changequote([, ])m4_dnl
-m4_enable(libm4)m4_dnl
-m4_warn([Updating use of `$1'. $3])m4_dnl
-$2[]m4_dnl
-m4_disable(libm4)m4_dnl
-m4_changequote(, )m4_dnl
-])])
+AU_DEFINE([$1], [$2], [$3])dnl
+])
+
 
 
 ## ----------------------------- ##
@@ -3279,6 +3291,23 @@ test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])# AC_OUTPUT
+
+
+# autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
+# -------------------------------------------------------------------
+#
+# If there are arguments given to AC_OUTPUT, dispatch them to the
+# proper modern macros.
+
+AU_DEFINE([AC_OUTPUT],
+[ifval([$1],
+      [AC_CONFIG_FILES([$1])
+])dnl
+ifval([$2$3],
+      [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])
+])dnl
+[AC_OUTPUT]],
+[`AC_OUTPUT' should be used without arguments.])
 
 
 # AC_OUTPUT_CONFIG_STATUS

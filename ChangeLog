@@ -1,5 +1,24 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	AU_ glue code for AC_OUTPUT with arguments.
+
+	* acgeneral.m4 (AU_DEFINE): New macros, pulled out from AU_DEFUN.
+	Defines a macro in `autoupdate::' with all the required wrapping
+	for `autoupdate'.
+	(AU_DEFUN): Use it.
+	(AC_OUTPUT): When dispatching your arguments, use ifval, not
+	ifset!
+	Dispath actions to AC_CONFIG_COMMANDS not AC_OUTPUT_COMMANDS, to
+	avoid unneeded warnings for obsolete use of AC_OUTPUT_COMMANDS.
+	(autoupdate::AC_OUTPUT): New macro.
+	* doc/autoconf.texi (Writing configure.in, the example): Don't
+	advocate AC_OUTPUT with args.
+	(Output, AC_OUTPUT with args): Simplify the documentation, and
+	provide the translation into the new scheme.
+	Propagate what remained into the proper sections.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	AU_ glue code for AC_OUTPUT_COMMANDS.
 
 	* acgeneral.m4 (AC_OUTPUT_COMMANDS): AU_DEFUNed in terms of
