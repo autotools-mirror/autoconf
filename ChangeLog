@@ -1,5 +1,13 @@
 2000-11-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Shell Substitutions): Split into...
+	(Shell Substitutions, Assignments): these.
+	Move them before `Special Shell Variables'.
+	(Shell Substitutions): Include information on `$()' from Russ
+	Allbery.
+
+2000-11-10  Akim Demaille  <akim@epita.fr>
+
 	When running
 
 	AC_INIT

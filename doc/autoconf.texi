@@ -152,7 +152,8 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Macro Index::                 Index of Autoconf macros
 * Concept Index::               General index
 
-@detailmenu --- The Detailed Node Listing ---
+@detailmenu
+ --- The Detailed Node Listing ---
 
 Making @code{configure} Scripts
 
@@ -265,8 +266,9 @@ Checking Run Time Behavior
 Portable Shell Programming
 
 * Shellology::                  A zoology of shells
+* Shell Substitutions::         Variable expansions...
+* Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
-* Shell Substitutions::         Test and assign
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 
@@ -4982,13 +4984,14 @@ Some of these external utilities have a portable subset of features, see
 
 @menu
 * Shellology::                  A zoology of shells
+* Shell Substitutions::         Variable expansions...
+* Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
-* Shell Substitutions::         Test and assign
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 @end menu
 
-@node Shellology, Special Shell Variables, Portable Shell, Portable Shell
+@node Shellology, Shell Substitutions, Portable Shell, Portable Shell
 @subsection Shellology
 
 There are several families of shells, most prominently the Bourne
@@ -5066,7 +5069,116 @@ from exiting:
 @end table
 
 
-@node Special Shell Variables, Shell Substitutions, Shellology, Portable Shell
+@node Shell Substitutions, Assignments, Shellology, Portable Shell
+@subsection Shell Substitutions
+
+Contrary to a persistent urban legend, the Bourne shell does not
+systematically split variables and backquoted expressions, in
+particular, the following code:
+
+@example
+case "$given_srcdir" in
+.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`"
+*)  top_srcdir="$dots$given_srcdir" ;;
+esac
+@end example
+
+@noindent
+is more readable with the right-hand side of the assignments, and the
+argument of @code{case} left without quotes:
+
+@example
+case $given_srcdir in
+.)  top_srcdir=`echo "$dots" | sed 's,/$,,'`
+*)  top_srcdir=$dots$given_srcdir ;;
+esac
+@end example
+
+@noindent
+and in fact it is even @emph{more} portable: in the first case of the
+first attempt, the computation of @code{top_srcdir} is not portable,
+since not all the shells understand properly @samp{"`... "foo"... `"}.
+Worse yet, not all the shells understand @samp{"`... \"foo\"... `"} the
+same way: there is just no portable way to use double-quoted strings
+inside double-quoted backquoted expressions (Pfew!).
+
+@table @code
+@item $@@
+@cindex @samp{"$@@"}
+One of the most famous shell portability issues is related to
+@samp{"$@@"}: when there are no positional argument, it is supposed to
+be equivalent to nothing.  But some shell, for instance under Digital
+Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
+portable, use @samp{$@{1+"$@@"@}}.
+
+@item $@{@var{var}:-@var{value}@}
+@cindex $@{@var{var}:-@var{value}@}
+0Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
+colon for any shell substitution, and complain and die.
+
+@item $(@var{commands})
+@cindex $(@var{commands})
+This construct is meant to replace @samp{`@var{commands}`}; they can be
+nested while this is impossible to do portably with back quotes.
+Unfortunately it is not yet widely supported.  Most notably even recent
+releases of Solaris don't support it:
+
+@example
+$ uname -a
+SunOS shelby.Stanford.EDU 5.7 Generic_106541-10 sun4u sparc SUNW,Ultra-1
+$ echo $(echo blah)
+syntax error: `(' unexpected
+@end example
+
+@noindent
+nor does @sc{irix} 6.5's Bourne shell:
+@example
+$ uname -a
+IRIX firebird-image 6.5 07151432 IP22
+$ echo $(echo blah)
+$(echo blah)
+@end example
+@end table
+
+
+@node Assignments, Special Shell Variables, Shell Substitutions, Portable Shell
+@subsection Assignments
+
+A nonportable shell programming construct is
+
+@example
+@var{var}=$@{@var{var}:-@var{value}@}
+@end example
+
+@noindent
+The intent is to set @var{var} to @var{value} only if it is not already
+set, but if @var{var} has any value, even the empty string, to leave it
+alone.  Old @sc{bsd} shells, including the Ultrix @code{sh}, don't
+accept the colon for any shell substitution, and complain and die.  A
+portable equivalent is
+
+@example
+: $@{@var{var}=@var{value}@}
+@end example
+
+If the value is a literal string, it should be quoted:
+
+@example
+: $@{var='Some words'@}
+@end example
+
+@noindent
+otherwise some shells, such as on Digital Unix V 5.0, will die because
+of a ``bad substitution''.
+
+When setting several variables in a row, be aware that the order of the
+evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
+gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
+@samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
+
+
+
+@node Special Shell Variables, Limitations of Builtins, Assignments, Portable Shell
 @subsection Special Shell Variables
 
 Some shell variables shall not be used or have a deep influence on the
@@ -5162,79 +5274,7 @@ hence read-only.  Do not use it.
 @end table
 
 
-@node Shell Substitutions, Limitations of Builtins, Special Shell Variables, Portable Shell
-@subsection Shell Substitutions
-
-A nonportable shell programming construct is
-
-@example
-@var{var}=$@{@var{var}:-@var{value}@}
-@end example
-
-@noindent
-The intent is to set @var{var} to @var{value} only if it is not already
-set, but if @var{var} has any value, even the empty string, to leave it
-alone.  Old @sc{bsd} shells, including the Ultrix @code{sh}, don't
-accept the colon for any shell substitution, and complain and die.  A
-portable equivalent is
-
-@example
-: $@{@var{var}=@var{value}@}
-@end example
-
-If the value is a literal string, it should be quoted:
-
-@example
-: $@{var='Some words'@}
-@end example
-
-@noindent
-otherwise some shells, such as on Digital Unix V 5.0, will die because
-of a ``bad substitution''.
-
-When setting several variables in a row, be aware that the order of the
-evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
-gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
-@samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
-
-@cindex @samp{"$@@"}
-One of the most famous shell portability issues is related to
-@samp{"$@@"}: when there are no positional argument, it is supposed to
-be equivalent to nothing.  But some shell, for instance under Digital
-Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
-portable, use @samp{$@{1+"$@@"@}}.
-
-Contrary to a persistent urban legend, the Bourne shell does not
-systematically split variables and backquoted expressions, in
-particular, the following code:
-
-@example
-case "$given_srcdir" in
-.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`"
-*)  top_srcdir="$dots$given_srcdir" ;;
-esac
-@end example
-
-@noindent
-is more readable with the right-hand side of the assignments, and the
-argument of @code{case} left without quotes:
-
-@example
-case $given_srcdir in
-.)  top_srcdir=`echo "$dots" | sed 's,/$,,'`
-*)  top_srcdir=$dots$given_srcdir ;;
-esac
-@end example
-
-@noindent
-and in fact it is even @emph{more} portable: in the first case of the
-first attempt, the computation of @code{top_srcdir} is not portable,
-since not all the shells understand properly @samp{"`... "foo"... `"}.
-Worse yet, not all the shells understand @samp{"`... \"foo\"... `"} the
-same way: there is just no portable way to use double-quoted strings
-inside double-quoted backquoted expressions (Pfew!).
-
-@node Limitations of Builtins, Limitations of Usual Tools, Shell Substitutions, Portable Shell
+@node Limitations of Builtins, Limitations of Usual Tools, Special Shell Variables, Portable Shell
 @subsection Limitations of Shell Builtins
 
 No no, we are serious: some shells do have limitations :)
