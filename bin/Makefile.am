@@ -29,7 +29,7 @@ EXTRA_DIST = autoconf.as autoheader.in autoreconf.in autoupdate.in ifnames.in \
 	     autoscan.in autom4te.in
 
 # Files that should be removed, but which Automake does not know.
-CLEANFILES = $(bin_SCRIPTS) autoconf.in
+MOSTLYCLEANFILES = $(bin_SCRIPTS) autoconf.in *.tmp
 
 
 ## ------------- ##
@@ -57,58 +57,22 @@ autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 
 ## All the files below depend on Makefile so that they are rebuilt
 ## when the prefix etc. changes.  It took quite a while to have these
-## rules correct, don't break them!  In particular, we believe there is
-## no solution to factor the code.
+## rules correct, don't break them!
 ## Use chmod -w to prevent people from editing the wrong file by accident.
-autoconf: autoconf.in Makefile
-	rm -f autoconf autoconf.tmp
-	$(edit) autoconf.in >autoconf.tmp
-	chmod +x autoconf.tmp
-	chmod a-w autoconf.tmp
-	mv -f autoconf.tmp autoconf
+$(bin_SCRIPTS): Makefile
+	rm -f $@ $@.tmp
+	$(edit) $(srcdir)/$@.in >$@.tmp
+	chmod +x $@.tmp
+	chmod a-w $@.tmp
+	mv $@.tmp $@
 
-autoheader: $(srcdir)/autoheader.in Makefile
-	rm -f autoheader autoheader.tmp
-	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
-	chmod +x autoheader.tmp
-	chmod a-w autoheader.tmp
-	mv -f autoheader.tmp autoheader
-
-autom4te: $(srcdir)/autom4te.in Makefile
-	rm -f autom4te autom4te.tmp
-	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
-	chmod +x autom4te.tmp
-	chmod a-w autom4te.tmp
-	mv -f autom4te.tmp autom4te
-
-autoreconf: $(srcdir)/autoreconf.in Makefile
-	rm -f autoreconf autoreconf.tmp
-	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
-	chmod +x autoreconf.tmp
-	chmod a-w autoreconf.tmp
-	mv -f autoreconf.tmp autoreconf
-
-autoscan: $(srcdir)/autoscan.in Makefile
-	rm -f autoscan autoscan.tmp
-	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
-	chmod +x autoscan.tmp
-	chmod a-w autoscan.tmp
-	mv -f autoscan.tmp autoscan
-
-autoupdate: $(srcdir)/autoupdate.in Makefile
-	rm -f autoupdate autoupdate.tmp
-	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
-	chmod +x autoupdate.tmp
-	chmod a-w autoupdate.tmp
-	mv -f autoupdate.tmp autoupdate
-
-ifnames: $(srcdir)/ifnames.in Makefile
-	rm -f ifnames ifnames.tmp
-	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
-	chmod +x ifnames.tmp
-	chmod a-w ifnames.tmp
-	mv -f ifnames.tmp ifnames
-
+autoconf: $(srcdir)/autoconf.in
+autoheader: $(srcdir)/autoheader.in
+autom4te: $(srcdir)/autom4te.in
+autoreconf: $(srcdir)/autoreconf.in
+autoscan: $(srcdir)/autoscan.in
+autoupdate: $(srcdir)/autoupdate.in
+ifnames: $(srcdir)/ifnames.in
 
 
 ## --------------- ##
