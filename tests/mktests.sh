@@ -135,7 +135,8 @@ MK_EOF
 # Get the list of macros which are defined in Autoconf level.
 # Get rid of the macros we are not interested in.
 cat $src |
-  sed -ne 's/^A[CU]_DEFUN\(_ONCE\)\?(\[*\([a-zA-Z0-9_]*\).*$/\2/p' |
+  sed -n -e 's/^A[CU]_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
+         -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' |
   sort |
   uniq |
   egrep -v "$syntax_exclude_egrep" >acdefuns

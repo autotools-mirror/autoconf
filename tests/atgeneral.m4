@@ -168,7 +168,7 @@ Options:
 Tests:
 EOF
   # "  1 42  45 " => " (1|42|45): "
-  at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;y/  */|/'`
+  at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
   egrep -e " (${at_tests_pattern}): " <<EOF
 m4_divert([HELP])dnl Help message inserted here.
 m4_divert([SETUP])dnl

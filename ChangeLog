@@ -1,3 +1,12 @@
+2000-12-13  Pavel Roskin  <proski@gnu.org>
+
+	* m4sugar.m4 (m4_file_append): Add a newline after _m4eof,
+	otherwise _m4eof is appended to the output on FreeBSD 4.0.
+	* tests/atgeneral.m4 (AT_INIT): Avoid using unbalanced "y"
+	in sed, use "s" instead.
+	* tests/mktests.sh: Don't use \? in sed - it's a GNU extension.
+	Use separate patterns for A[CU]_DEFUN and AC_DEFUN_ONCE.
+
 2000-12-13  Akim Demaille  <akim@epita.fr>
 
 	EXEEXT and OBJEXT don't need to know $CYGWIN etc.

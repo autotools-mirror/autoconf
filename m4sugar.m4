@@ -1615,7 +1615,8 @@ m4_define([m4_version_compare],
 m4_define([m4_file_append],
 [m4_syscmd([cat >>$1 <<_m4eof
 $2
-_m4eof])
+_m4eof
+])
 m4_if(m4_sysval, [0], [],
       [m4_fatal([$0: cannot write: $1])])])
 
