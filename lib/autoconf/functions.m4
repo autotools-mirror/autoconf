@@ -1216,19 +1216,20 @@ AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
 AC_DEFUN([AC_FUNC_STRERROR_R],
 [AC_CHECK_DECLS([strerror_r])
 AC_CHECK_FUNCS([strerror_r])
-if test $ac_cv_func_strerror_r = yes; then
-  AC_CACHE_CHECK([for working strerror_r],
-                 ac_cv_func_strerror_r_works,
+AC_CACHE_CHECK([whether strerror_r returns char *],
+               ac_cv_func_strerror_r_char_p,
    [
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-     [[
-       char buf[100];
-       char x = *strerror_r (0, buf, sizeof buf);
-     ]])],
-                      ac_cv_func_strerror_r_works=yes,
-                      ac_cv_func_strerror_r_works=no)
-    if test $ac_cv_func_strerror_r_works = no; then
-      # strerror_r seems not to work, but now we have to choose between
+    ac_cv_func_strerror_r_char_p=no
+    if test $ac_cv_have_decl_strerror_r = yes; then
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+	[[
+	  char buf[100];
+	  char x = *strerror_r (0, buf, sizeof buf);
+	  char *p = strerror_r (0, buf, sizeof buf);
+	]])],
+			ac_cv_func_strerror_r_char_p=yes)
+    else
+      # strerror_r is not declared.  Choose between
       # systems that have relatively inaccessible declarations for the
       # function.  BeOS and DEC UNIX 4.0 fall in this category, but the
       # former has a strerror_r that returns char*, while the latter
@@ -1239,15 +1240,12 @@ if test $ac_cv_func_strerror_r = yes; then
 	[[char buf[100];
 	  char x = *strerror_r (0, buf, sizeof buf);
 	  exit (!isalpha (x));]])],
-                    ac_cv_func_strerror_r_works=yes,
-                    ac_cv_func_strerror_r_works=no,
-                    ac_cv_func_strerror_r_works=no)
+                    ac_cv_func_strerror_r_char_p=yes, , :)
     fi
   ])
-  if test $ac_cv_func_strerror_r_works = yes; then
-    AC_DEFINE_UNQUOTED([HAVE_WORKING_STRERROR_R], 1,
-                       [Define to 1 if `strerror_r' returns a string.])
-  fi
+if test $ac_cv_func_strerror_r_char_p = yes; then
+  AC_DEFINE([STRERROR_R_CHAR_P], 1,
+	    [Define to 1 if strerror_r returns char *.])
 fi
 ])# AC_FUNC_STRERROR_R
 
