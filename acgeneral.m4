@@ -1974,7 +1974,7 @@ m4_define([_AC_CACHE_DUMP],
 # Save the cache.
 # Allow a site initialization script to override cache values.
 m4_define([AC_CACHE_SAVE],
-[cat >confcache <<\EOF
+[cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs, see configure's option --config-cache.
@@ -1988,9 +1988,14 @@ m4_define([AC_CACHE_SAVE],
 # loading this file, other *unset* `ac_cv_foo' will be assigned the
 # following values.
 
-EOF
+_ACEOF
+
 _AC_CACHE_DUMP() |
-  sed '/^ac_cv_env/!s/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
+  sed ['
+     s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
+     t cleanup
+     /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
+     : cleanup'] >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"

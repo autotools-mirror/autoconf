@@ -5187,8 +5187,18 @@ portable, use @samp{$@{1+"$@@"@}}.
 Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 
-@item $@{@var{var}='@var{value}'@}
-@cindex $@{@var{var}='@var{value}'@}
+@item $@{@var{var}=@var{literal}@}
+@cindex $@{@var{var}=@var{literal}@}
+Be sure to quote:
+
+@example
+: $@{var='Some words'@}
+@end example
+
+@noindent
+otherwise some shells, such as on Digital Unix V 5.0, will die because
+of a ``bad substitution''.
+
 Solaris' @command{/bin/sh} has a frightening bug in its understanding
 this.  Imagine you need set a variable to a string containing @samp{@}}.
 This @samp{@}} character got Solaris' @command{/bin/sh} confused when
@@ -5213,6 +5223,70 @@ $ echo $foo
 It seems that @samp{@}} is considered to match @samp{$@{}, even though
 it is enclosed in single quotes.  The problem doesn't happen using
 double quotes.
+
+@item $@{@var{var}=@var{expanded-value}@}
+@cindex $@{@var{var}=@var{expanded-value}@}
+On Ultrix,
+running
+
+@example
+default="yu,yaa"
+: $@{var="$default"@}
+@end example
+
+@noindent
+will set @var{var} to @samp{M-yM-uM-,M-yM-aM-a}, i.e., the 8th bit of
+each char will be set. You won't observe the phenomenon using a simple
+@samp{echo $var} since apparently the shell resets the 8th bit when it
+expands $var.  Here are two means to make this shell confess its sins:
+
+@example
+$ cat -v <<EOF
+$var
+EOF
+@end example
+
+@noindent
+and
+
+@example
+$ set | grep '^var=' | cat -v
+@end example
+
+One classical incarnation of this bug is:
+
+@example
+default="a b c"
+: $@{list="$default"@}
+for c in $list; do
+  echo $c
+done
+@end example
+
+@noindent
+You'll get @samp{a b c} on a single line.  Why?  Because there are no
+spaces in @samp{$list}: there are @samp{M- }, i.e., spaces with the 8th
+bit set, hence no IFS splitting is performed!!!
+
+A good news is that Ultrix works fine with @samp{: $@{list=$default@}},
+i.e., if you @emph{don't} quote.  A bad news is then that @sc{qnx} 4.2.5
+then sets @var{list} to the @emph{last} item of @var{default}!
+
+The portable way out consists in using a double assignment, to switch
+twice the 8th bit on Ultrix:
+
+@example
+list=$@{list="$default"@}
+@end example
+
+@noindent
+but beware of the @samp{@}} bug from Solaris (see above).  For safety,
+use
+
+@example
+test "$@{var+set@}" = set || var=@var{@{value@}}
+@end example
+
 
 @item $(@var{commands})
 @cindex $(@var{commands})
@@ -5242,38 +5316,53 @@ $(echo blah)
 @node Assignments, Special Shell Variables, Shell Substitutions, Portable Shell
 @subsection Assignments
 
-A nonportable shell programming construct is
-
-@example
-@var{var}=$@{@var{var}:-@var{value}@}
-@end example
-
-@noindent
-The intent is to set @var{var} to @var{value} only if it is not already
-set, but if @var{var} has any value, even the empty string, to leave it
-alone.  Old @sc{bsd} shells, including the Ultrix @code{sh}, don't
-accept the colon for any shell substitution, and complain and die.  A
-portable equivalent is
-
-@example
-: $@{@var{var}=@var{value}@}
-@end example
-
-If the value is a literal string, it should be quoted:
-
-@example
-: $@{var='Some words'@}
-@end example
-
-@noindent
-otherwise some shells, such as on Digital Unix V 5.0, will die because
-of a ``bad substitution''.
-
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
 gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
 
+
+To assign default values follow this algorithm:
+
+@enumerate
+@item
+If the default value is a literal and does not contain any closing
+brace, use
+
+@example
+: $@{var='my literal'@}
+@end example
+
+@item
+If the default value contains no closing brace, has to be expanded and
+the variable being initialized will never be IFS split (i.e., it's not a
+list), then use:
+
+@example
+: $@{var="$default"@}
+@end example
+
+@item
+If the default value contains no closing brace, has to be expanded and
+the variable being initialized will be IFS split (i.e., it's not a
+list), then use:
+
+@example
+var=$@{var="$default"@}
+@end example
+
+@item
+If the default value contains a closing brace, then use
+
+@example
+test $@{var+set@} = set || var='$@{indirection@}'
+@end example
+@end enumerate
+
+In most cases @samp{var=$@{var="$default"@}} is fine, but in case of
+doubt, just use the latter.  @xref{Shell Substitutions}, items
+@samp{$@{@var{var}:-@var{value}@}} and @samp{$@{@var{var}=@var{value}@}}
+for the rationale.
 
 
 @node Special Shell Variables, Limitations of Builtins, Assignments, Portable Shell

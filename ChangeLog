@@ -1,5 +1,13 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Shell Substitutions): More on the variations
+	around ${foo=bar}.
+	(Assignments): Rewrite as a summary of the previous section.
+	* acgeneral.m4 (AC_CACHE_SAVE): Be protected against the Solaris'
+	`${foo='${bar}'}' bug.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_OUTPUT_HEADERS, _AC_OUTPUT_FILES): Don't use
 	   `... echo "error: \\\`$f'" ...`
 	as it's not portable to BSDI 1.3.
