@@ -73,7 +73,7 @@ while test $# -gt 0; do
     test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
-  --verbose | --verb*)
+  -v | --verbose | --verb*)
     verbose=echo; shift ;;
   -f | --force)
     force=yes; shift ;;
@@ -170,8 +170,12 @@ while read dir; do
      then
 	:
      else
+	if test x"$aclocal_dir" != x.
+	then
+	   aclocal_flags="$aclocal_flags -I $aclocal_dir"
+	fi
 	$verbose "running aclocal $aclocal_flags in $dir, creating $aclocal_m4"
-	aclocal $aclocal_flags --output=$aclocal_m4 -I $aclocal_dir
+	aclocal $aclocal_flags --output=$aclocal_m4
      fi
   fi
 
@@ -197,7 +201,7 @@ while read dir; do
     $autoconf $macrodir_opt $localdir_opt
   fi
 
-  if grep 'A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
+  if grep '^[ 	]*A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
     templates=`sed -n '/A[CM]_CONFIG_HEADER/ {
 	s%[^#]*A[CM]_CONFIG_HEADER[ 	]*(\([^)]*\).*%\1%
 	p

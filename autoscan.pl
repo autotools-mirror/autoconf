@@ -160,6 +160,7 @@ sub scan_files
     }
 
     foreach $file (@cfiles) {
+	$programs{"cc"}++;
 	&scan_c_file($file);
     }
 

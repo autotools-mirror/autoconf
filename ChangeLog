@@ -1,5 +1,16 @@
 1999-09-29  Akim Demaille  <akim@epita.fr>
 
+	Merged the trunk into the experimental branch.
+
+1999-09-29  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for the kstat_open()
+	function in libkstat (on systems such as Solaris). This family of
+	functions is preferred since they don't require setgid permissions
+	to use them. Fix for autoconf/65.
+
+1999-09-29  Akim Demaille  <akim@epita.fr>
+
 	* acconfig.h: Commit the change announced below.
 
 1999-09-29  Akim Demaille  <akim@epita.fr>
@@ -85,6 +96,12 @@
 
 	* autoconf.texi (Generic Declarations): Update.
 
+1999-09-27  Ben Elliston  <bje@cygnus.com>
+
+	* autoscan.pl (scan_files): Emit an AC_PROG_CC invocation to
+	configure.scan if there are any C files present. Fix for
+	autoconf/19.
+
 1999-09-27  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): Divert AC_OUTPUT_FILE to
@@ -125,6 +142,21 @@
 	Allow a third optional argument: extra includes.
 	* autoconf.texi (Generic Typedefs): Documents.
 
+1999-09-26  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_OUTPUT_LINKS): Eliminate gratuitous spaces from
+	$ac_sources if this variable is otherwise empty. Fix for
+	autoconf/30.
+
+1999-09-25  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (AC_FUNC_SETVBUF): Do not mention which systems
+	might have their setvbuf() arguments reordered. It's difficult to
+	accurately determine and is not essential. Fix for autoconf/7.
+
+	* acgeneral.m4 (AC_LINK_FILES): Emit an error if an incorrect
+	number of arguments are collected. Fix for autoconf/10.
+
 1999-09-25  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT, handling of options): Make it possible
@@ -139,6 +171,26 @@
 
 	* TODO: Updated.
 	Added a section for 2.15 and 3.
+
+1999-09-24  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_HEADER_STDC): Define ISLOWER and ISUPPER
+	macros correctly on EBCDIC systems. Contributed by Kurt D.
+	Zeilenga <kurt@openldap.org>. Fix for autoconf/6.
+
+1999-09-24  Jim Blandy  <jimb@zwingli.cygnus.com>
+
+	* acspecific.m4 (AC_C_VOLATILE): New test.
+	* acconfig.h: Add new entry for `volatile'.
+	* autoconf.texi (C Compiler Characteristics): Document it.
+
+1999-09-24  Ben Elliston  <bje@cygnus.com>
+
+	* autoreconf.sh: Do not run autoheader if AC_CONFIG_HEADER is
+	commented out in configure.in. Reported by Erez Zadok
+	<ezk@cs.columbia.edu> as a fix for autoconf/21.
+
+	* install.texi: Replace `can not' with `cannot'.
 
 1999-09-23  Pavel Roskin  <pavel_roskin@geocities.com>
 
@@ -184,6 +236,18 @@
 	(AC_CHECK_LIB): When ACTION-IF-FOUND is specified, don't perform
 	the default action.
 	Reported by Pavel.
+
+1999-09-22  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Clear the CCOPTS environment variable before
+	invoking the C compiler on HP-UX. This is necessary to guarantee
+	that the test program is compiled correctly. Reported by Dietmar
+	P. Schindler <schd@mra.man.de>.
+
+1999-09-22  Linas Vepstas  <linas@linas.org>
+
+	* config.guess: Add OS/390 match pattern.
+	* config.sub: Add mvs, openedition targets.
 
 1999-09-21  Akim Demaille  <akim@epita.fr>
 
@@ -252,6 +316,17 @@
 
 	* THANKS: Update some mail addresses.
 
+1999-09-21  Nick Clifton  <nickc@cygnus.com>
+
+	* config.sub: Add fr30 target.
+
+1999-09-21  Ben Elliston  <bje@cygnus.com>
+
+	* configure.in: Check if an appropriate version of GNU m4 is
+	installed at configure-time rather than at runtime. From Pavel
+	Roskin <pavel_roskin@geocities.com>. Fix for autoconf/2.
+	* configure: Regenerate.
+
 1999-09-20  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): Don't remove the CONFIG_HEADERS
@@ -260,6 +335,11 @@
 1999-09-20  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* autoheader.sh: Fix the tr invocation.
+
+1999-09-20  Ben Elliston  <bje@cygnus.com>
+
+	* autoheader.sh: Bourne shell compatibility fix. From Pavel Roskin
+	<pavel_roskin@geocities.com>.
 
 1999-09-17  Akim Demaille  <akim@epita.fr>
 
@@ -300,6 +380,16 @@
 
 	* THANKS: New file.
 
+1999-09-17  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect QNX version 4.
+	* config.sub: Handle `qnx' and `i386-qnx' aliases.
+
+1999-09-17  Erez Zadok  <ezk@cs.columbia.edu>
+
+	* config.guess: Eliminate the trailing dot if ${UNAME_RELEASE} is
+	1.4-<SOMETHING>. Fix for autoconf/22.
+
 1999-09-15  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_CHECK_FILE): Use ifset.
@@ -307,6 +397,14 @@
 	(AC_CHECK_SIZEOF): Likewise.
 	(AC_CACHE_CHECK): Use AC_MSG_RESULT_UNQUOTED.
 	(AC_MSG_RESULT_UNQUOTED): New macro.
+
+1999-09-15  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
+
+	Fix for autoconf/28.
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Don't assume LF is \012, use
+	`echo` followed by a non-blank, within quotes.
+	* autoheader.sh (syms): Likewise.
+	* configure: Rebuilt.
 
 1999-09-14  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
@@ -359,6 +457,68 @@
 	Remove the dots from the menus: horizontal space is precious.
 	(Invoking config.status): More traditional presentation of the options.
 
+1999-09-07  Ben Elliston  <bje@cygnus.com>
+
+	* autoreconf.sh: Recognise -v as a synonym for --verbose.
+
+1999-09-07  Gary V. Vaughan  <gvaughan@oranda.demon.co.uk>
+
+	* Makefile.in (INSTALL, standards.info, autoconf.info):  MiKTeX
+	for Windows treats all options after the first filename as
+	additional filenames, so real options must appear before the first
+	filename.
+
+1999-09-07  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* autoconf.texi (LDFLAGS, LIBS): Document that -L linker flags
+	should be kept in LDFLAGS and not LIBS.
+
+1999-09-07  Jim Meyering  <meyering@ascend.com>
+
+	* acgeneral.m4 (AC_SEARCH_LIBS): Use $ac_lib as the index, not $i.
+
+1999-09-06  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_FUNC_ALLOCA): Rename cache variable to avoid
+	name clashes with AC_CHECK_HEADER(alloca.h).
+
+1999-09-05  Steve Chamberlain  <sac@pobox.com>
+
+	* config.sub: Add support for configuring for picoJava (pj).
+
+1999-09-05  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (CONFIG_AUX_DIRS): Try running `shtool install'.
+	Contributed by Ralf S. Engelschall <rse@engelschall.com>.
+
+1999-09-04  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Use POSIX compliant shell code on DG/UX.
+	Suggested by Stephen Gildea <gildea@alum.mit.edu>.
+
+1999-09-04  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Output comment to not only
+	`Makefile', but also `makefile'.
+
+1999-09-04  Jim Blandy  <jimb@zwingli.cygnus.com>
+
+	* Makefile.in (install): Don't freak if the M4FROZEN files were
+	never generated.  m4 1.1 is supported, but doesn't freeze files.
+
+1999-09-04  Scott Bambrough  <scottb@netwinder.org>
+
+	* config.guess: Autodetect ArmLinux using 2.9.1.xx linker
+	emulation names and using the emulation names from the linker from
+	the binutils CVS tree.
+
+	* config.sub: Change manufacturer name for the NetWinder alias
+	from Corel to Rebel.
+
+1999-09-04  Jeremy Elson  <jelson@circlemud.org>
+
+	* autoheader.m4 (AC_CHECK_HEADER): Define.
+
 1999-09-02  Tom Tromey  <tromey@cygnus.com>
 
 	* autoheader.sh: Allow multiple spaces between #undef and symbol
@@ -408,6 +568,30 @@
 	* acgeneral.m4: Fixed the regular expressions: `$' shall not be
 	portably in a sed \(\) group.
 
+1999-08-28  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Once and for all, emit the correct string for
+	Unixware 7! Contributed by Mike Hopkirk <hops@sco.com>.
+
+	* acspecific.m4 (AC_C_INLINE): Qualify the return type of the
+	dummy inlined function to satisfy newer C++ compilers. Fix for
+	autoconf/49.
+
+1999-08-26  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (Changed Results): Correct an error in one of the
+	examples. Fix for autoconf/38.
+
+1999-08-25  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (Cache Variable Names): Be more explicit about the
+	requirements for cache variable names. Fix for autoconf/53.
+
+1999-08-25  Alexandre Oliva  <oliva@dcc.unicamp.br>
+
+	* autoreconf.sh: Run aclocal with the -I option only if
+	aclocal_dir != `.'.  Fix for autoconf/44.
+
 1999-08-22  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acspecific.m4 (AC_PROG_CC): Remove uname test for win32/Cygwin,
@@ -426,6 +610,39 @@
 	* acspecific.m4 (AC_PROG_F77): Add an optional first argument
 	which gives the user an opportunity to specify an alternative
 	search list for the compiler.
+
+1999-08-18  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Remove "/MP" from the release string on
+	multiprocessor x86 machines running SVR4.0. Suggested by Tom
+	Purcell <Tom.Purcell@wang.com>.
+
+1999-08-16  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Add optional third argument
+	INCLUDES, which specifies the headers in which to search for the
+	type in question. Also, pass a "description" argument to
+	AC_DEFINE_UNQUOTED.
+	* acconfig.h (mode_t, off_t, pid_t, size_t): Remove definitions.
+	* autoconf.texi (AC_CHECK_TYPE): Document optional third argument.
+
+1999-08-05  Jeffrey A Law  <law@cygnus.com>
+
+	* config.sub (-wrs case): Use os=-vxworks, not os=vxworks.
+
+1999-08-05  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Update patch submission address.
+
+1999-08-05  Ben Elliston  <bje@cygnus.com>
+
+	* config.sub: Accept version number appended to OS name for MiNT.
+	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
+
+1999-08-04  Ben Elliston  <bje@cygnus.com>
+
+	* Makefile.in (INSTALL_SCRIPT): Substitute.
+	(install): Install scripts with $(INSTALL_SCRIPT).
 
 1999-07-20  Tom Tromey  <tromey@cygnus.com>
 
@@ -448,6 +665,25 @@
 	macro" use by AC_F77_LIBRARY_LDFLAGS.
 	(AC_LINKER_OPTION): Likewise.
 
+1999-07-11  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Cray T3E has an Alpha CPU.
+
+1999-07-04  Mark Elbrecht  <snowball3@bigfoot.com>
+
+	* acspecific.m4 (AC_PROG_CXX): Look for gpp after g++. gpp is the
+	DJGPP C++ compiler, since `g++' is not a valid DOS filename.
+
+1999-06-12  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect Linux on ia64.
+	* config.sub: Handle ia64.
+
+1999-06-12  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Handle `elf32ppclinux' from ld. Contributed by
+	Cort Dougan <cort@cs.nmt.edu>.
+
 1999-06-09  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* autoconf.texi (Pretty Help Strings): Synchronize documentation
@@ -457,6 +693,10 @@
 
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Fix sed regexp for handling
 	CPP macros with args.
+
+1999-06-04  Nick Clifton  <nickc@cygnus.com>
+
+	* config.sub: Add more target.
 
 1999-06-03  Ben Elliston  <bje@cygnus.com>
 
@@ -1933,8 +2173,9 @@ Wed Mar  8 12:44:34 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 Tue Mar  7 11:48:19 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
-	* acspecific.m4 (AC_FUNC_ALLOCA): Keep sh variable namespace clean.
-	Put newline after AC_DEFINE_UNQUOTED call to avoid Irix syntax error.
+	* acspecific.m4 (AC_FUNC_ALLOCA): Keep sh variable namespace
+ 	clean.  Put newline after AC_DEFINE_UNQUOTED call to avoid Irix
+ 	syntax error.
 
 Mon Mar  6 15:07:00 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 

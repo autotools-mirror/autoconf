@@ -1125,15 +1125,15 @@ how to check the results of previous tests.
 
 @defvar LDFLAGS
 @ovindex LDFLAGS
-Stripping (@samp{-s}) and any other miscellaneous options for the
-linker.  If it is not set in the environment when @code{configure} runs,
-the default value is empty.  @code{configure} uses this variable when
-linking programs to test for C features.
+Stripping (@samp{-s}), path (@samp{-L}), and any other miscellaneous
+options for the linker.  If it is not set in the environment when
+@code{configure} runs, the default value is empty.  @code{configure}
+uses this variable when linking programs to test for C features.
 @end defvar
 
 @defvar LIBS
 @ovindex LIBS
-@samp{-l} and @samp{-L} options to pass to the linker.
+@samp{-l} options to pass to the linker.
 @end defvar
 
 @node Build Directories, Automatic Remaking, Preset Output Variables, Makefile Substitutions
@@ -2183,7 +2183,7 @@ first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
 @cvindex SETVBUF_REVERSED
 If @code{setvbuf} takes the buffering type as its second argument and
 the buffer pointer as the third, instead of the other way around, define
-@code{SETVBUF_REVERSED}.  This is the case on System V before release 3.
+@code{SETVBUF_REVERSED}.
 @end defmac
 
 @defmac AC_FUNC_STRCOLL
@@ -2827,12 +2827,13 @@ and its design will probably change in the future.
 One of its main flaws is that missing types are not typedef'd, they are
 defined, which can lead to incompatible code in the case of pointer types.
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default}@r{[}, @var{includes}@r{]})
+@defmac AC_CHECK_TYPE (@var{type}, @var{default} @r{[}, @var{includes}@r{]})
 @maindex CHECK_TYPE
 If the type @var{type} is not defined in @file{sys/types.h}, or
-@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the C
-(or C++) builtin type @var{default}; e.g., @samp{short} or
-@samp{unsigned}.
+@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the
+C (or C++) builtin type @var{default}; e.g., @samp{short} or
+@samp{unsigned}.  The default header files to search can be replaced
+by supplying the optional argument @var{includes}.
 @end defmac
 
 
@@ -2862,6 +2863,28 @@ simply use @code{const} as if every C compiler supported it; for those
 that don't, the @file{Makefile} or configuration header file will define
 it as empty.
 @end defmac
+
+@defmac AC_C_VOLATILE
+@maindex C_VOLATILE
+@cvindex volatile
+If the C compiler does not understand the keyword @code{volatile},
+define @code{volatile} to be empty.  Programs can simply use
+@code{volatile} as if every C compiler supported it; for those that do
+not, the @file{Makefile} or configuration header will define it as
+empty.
+
+If the correctness of your program depends on the semantics of
+@code{volatile}, simply defining it to be empty does, in a sense, break
+your code.  However, given that the compiler does not support
+@code{volatile}, you are at its mercy anyway.  At least your
+program will compile, when it wouldn't before.
+
+In general, the @code{volatile} keyword is a feature of ANSI C, so you
+might expect that @code{volatile} is available only when @code{__STDC__}
+is defined.  However, Ultrix 4.3's native compiler does support
+volatile, but does not defined @code{__STDC__}.
+@end defmac
+
 
 @defmac AC_C_INLINE
 @maindex C_INLINE
@@ -3999,7 +4022,9 @@ For cache values used by the distributed Autoconf macros, this value is
 @samp{ac}.
 
 @item @code{_cv_}
-Indicates that this shell variable is a cache value.
+Indicates that this shell variable is a cache value. This string
+@emph{must} be present in the variable name, including the leading
+underscore.
 
 @item @var{value-type}
 A convention for classifying cache values, to produce a rational naming
@@ -5576,7 +5601,7 @@ if test $ac_cv_func_syslog = no; then
   # syslog is not in the default libraries.  See if it's in some other.
   for lib in bsd socket inet; do
     AC_CHECK_LIB($lib, syslog, [AC_DEFINE(HAVE_SYSLOG)
-      LIBS="$LIBS $lib"; break])
+      LIBS="$LIBS -l$lib"; break])
   done
 fi
 @end example

@@ -13,6 +13,9 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** AC_CHECK_HEADER should not template config.h entries.
+Its entry in autoheader.m4 should be removed.
+
 ** fnmatch
 From: Stanislav Brabec <utx@k332.feld.cvut.cz>
 

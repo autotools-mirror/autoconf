@@ -1466,6 +1466,10 @@ for ac_dir in $1; do
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install.sh -c"
     break
+  elif test -f $ac_dir/shtool; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/shtool install -c"
+    break
   fi
 done
 if test -z "$ac_aux_dir"; then
@@ -2202,10 +2206,10 @@ AC_DEFUN(AC_SEARCH_LIBS,
 [ac_func_search_save_LIBS="$LIBS"
 ac_cv_search_$1="no"
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
-test "$ac_cv_search_$1" = "no" && for i in $2; do
-LIBS="-l$i $5 $ac_func_search_save_LIBS"
+test "$ac_cv_search_$1" = "no" && for ac_lib in $2; do
+LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
 AC_TRY_LINK_FUNC([$1],
-[ac_cv_search_$1="-l$i"
+[ac_cv_search_$1="-l$ac_lib"
 break])
 done
 LIBS="$ac_func_search_save_LIBS"])
@@ -2707,18 +2711,19 @@ AC_CACHE_CHECK([for $1], ac_Type,
 [AC_EGREP_CPP(dnl
 changequote(<<,>>)dnl
 <<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
-changequote([,]), [#include <stdio.h>
+changequote([,]), m4_default([$3], [#include <stdio.h>
 #include <sys/types.h>
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #endif
-$3
-], AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
+]), AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,,
-                [AC_DEFINE_UNQUOTED($1, $2)])dnl
+                [AC_DEFINE_UNQUOTED($1, $2,
+                                    [Define to `$2' if <sys/types.h>
+                                     does not define.])])dnl
 AC_VAR_POPDEF([ac_Type])dnl
-])
+])dnl AC_CHECK_TYPE
 
 
 dnl ### Creating output files
@@ -2733,6 +2738,10 @@ dnl link name in DEST...
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 AC_DEFUN(AC_LINK_FILES,
 [dnl
+ifelse($#, 2, , dnl
+  [errprint(__file__:__line__: incorrect number of arguments to [AC_LINK_FILES]
+)]
+  AC_MSG_ERROR([aborting due to error at __file__:__line__]))dnl
 define([AC_LIST_FILES], ifdef([AC_LIST_FILES], [AC_LIST_FILES ],)[$1])dnl
 define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2])])
 
@@ -2971,7 +2980,7 @@ EOF
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
 ac_LF_and_DOT="`echo; echo .`"
-DEFS=`sed -f $conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
+DEFS=`sed -f $ac_cs_root.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f $ac_cs_root.defs
 ])
 
@@ -3093,7 +3102,9 @@ changequote([, ])dnl
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
   case "$ac_file" in
-  *Makefile*) ac_comsub="1i\\
+changequote(, )dnl
+  *[Mm]akefile*) ac_comsub="1i\\
+changequote([, ])dnl
 # $configure_input" ;;
   *) ac_comsub= ;;
   esac
@@ -3200,10 +3211,10 @@ s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
 t cleanup
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$% ${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
 : cleanup
-s%ac_d%ac_e%gp
-s%ac_e%ac_u%gp
+s%ac_d%ac_u%gp
+s%ac_u%ac_e%gp
 changequote([, ])dnl
 EOF
 # If some macros were called several times there might be several times
@@ -3286,6 +3297,10 @@ EOF
 
 cat >> $CONFIG_STATUS <<\EOF
 srcdir=$ac_given_srcdir
+# Remove spaces from $ac_sources if it is otherwise empty.
+set -- $ac_sources
+ac_sources=[$]*
+
 while test -n "$ac_sources"; do
   set $ac_dests; ac_dest=[$]1; shift; ac_dests=[$]*
   set $ac_sources; ac_source=[$]1; shift; ac_sources=[$]*

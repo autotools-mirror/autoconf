@@ -124,13 +124,15 @@ else
 fi
 ])
 
-dnl AC_PROG_CXX takes an optional first argument which, if specified,
-dnl must be a space separated list of C++ compilers to search for.  This
-dnl just gives the user an opportunity to specify an alternative search
-dnl list for the C++ compiler.
+dnl AC_PROG_CXX([LIST-OF-COMPILERS])
+dnl --------------------------------
+dnl LIST-OF-COMPILERS is a space separated list of C++ compilers to search
+dnl for (if not specified, a default list is used).  This just gives the
+dnl user an opportunity to specify an alternative search list for the C++
+dnl compiler.
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC ifelse([$1], , [c++ g++ gcc CC cxx cc++ cl], [$1]), gcc)
+AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gcc CC cxx cc++ cl]), gcc)
 
 AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
@@ -771,8 +773,15 @@ fi
 if test $ac_cv_header_stdc = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
 AC_TRY_RUN([#include <ctype.h>
+#if ((' ' & 0x0FF) == 0x020)
 #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+#else
+#define ISLOWER(c) (('a' <= (c) && (c) <= 'i') \
+ || ('j' <= (c) && (c) <= 'r') \
+ || ('s' <= (c) && (c) <= 'z'))
+#define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
+#endif
 #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
 int main () { int i; for (i = 0; i < 256; i++)
 if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
@@ -1488,10 +1497,10 @@ AC_DEFUN(AC_FUNC_ALLOCA,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
-AC_CACHE_CHECK([for working alloca.h], ac_cv_header_alloca_h,
+AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 [AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
-  ac_cv_header_alloca_h=yes, ac_cv_header_alloca_h=no)])
-if test $ac_cv_header_alloca_h = yes; then
+  ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
+if test $ac_cv_working_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H, 1,
             [Define if you have <alloca.h> and it should be used
              (not on Ultrix).])
@@ -1583,6 +1592,7 @@ AC_DEFUN(AC_FUNC_GETLOADAVG,
 # to get the right answer into the cache.
 AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
 AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
+AC_CHECK_LIB(kstat, kstat_open)
 # Check for the 4.4BSD definition of getloadavg.
 AC_CHECK_LIB(util, getloadavg,
   [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])
@@ -2168,7 +2178,7 @@ AC_DEFUN(AC_C_INLINE,
 [AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
-  AC_TRY_COMPILE(, [} $ac_kw foo() {], [ac_cv_c_inline=$ac_kw; break])
+  AC_TRY_COMPILE(, [} $ac_kw int foo() {], [ac_cv_c_inline=$ac_kw; break])
 done
 ])
 case "$ac_cv_c_inline" in
@@ -2236,6 +2246,28 @@ ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
             [Define to empty if the keyword `const' does not work.])
+fi
+])
+
+dnl AC_C_VOLATILE
+dnl -------------
+dnl Note that, unlike const, #defining volatile to be the empty string can
+dnl actually turn a correct program into an incorrect one, since removing
+dnl uses of volatile actually grants the compiler permission to perform
+dnl optimizations that could break the user's code.  So, do not #define
+dnl volatile away unless it is really necessary to allow the user's code
+dnl to compile cleanly.  Benign compiler failures should be tolerated.
+AC_DEFUN(AC_C_VOLATILE,
+[AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
+[AC_TRY_COMPILE(,[
+volatile int x;
+int * volatile y;],
+ac_cv_c_volatile=yes, ac_cv_c_volatile=no)])
+if test $ac_cv_c_volatile = no; then
+  AC_DEFINE(volatile,,
+            [Define to empty if the keyword `volatile' does not work.
+             Warning: valid code using `volatile' can become incorrect
+             without.  Disable with care.])
 fi
 ])
 

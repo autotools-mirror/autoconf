@@ -57,6 +57,15 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
+# ac_LF_and_DOT
+# We use echo to avoid assuming a particular line-breaking character.
+# The extra dot is to prevent the shell from consuming trailing
+# line-breaks from the sub-command output.  A line-break within
+# single-quotes doesn't work because, if this script is created in a
+# platform that uses two characters for line-breaks (e.g., DOS), tr
+# would break.
+ac_LF_and_DOT="`echo; echo .`"
+
 localdir=.
 show_version=no
 debug=false
@@ -220,16 +229,10 @@ $syms
 EOF
    fgrep -f $fgrep_tmp
    rm -f $fgrep_tmp) |
-  tr @. "`echo; echo .`"
-# We use echo to avoid assuming a particular line-breaking character.
-# The extra dot is to prevent the shell from consuming trailing
-# line-breaks from the sub-command output.  A line-break within
-# single-quotes doesn't work because, if this script is created in a
-# platform that uses two characters for line-breaks (e.g., DOS), tr
-# would break.
+  tr @. "$ac_LF_and_DOT"
 fi
 
-echo "$types" | tr ,. "`echo`." | sort | uniq | while read ctype; do
+echo "$types" | tr ,. "$ac_LF_and_DOT" | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
   sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
   echo "
