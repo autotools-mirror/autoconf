@@ -1,3 +1,8 @@
+2003-04-01  Derek Price  <derek@ximbiot.com>
+
+	* tests/torture.at (Configuring subdirectories): Add missing
+	close-quote for Akim's change from 3-28.
+
 2003-04-01  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (ac, at, ms): Rename these indexes as...
