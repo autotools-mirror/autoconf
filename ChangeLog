@@ -1,3 +1,20 @@
+2004-01-26  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Default Includes): Include <stdint.h> even if
+	HAVE_INTTYPES_H is defined.  This is needed on Tru64 5.1b with
+	Compac C V6.5-207 (dtk), which defines uintmax_t in <stdint.h> but
+	not <inttypes.h>.  Problem reported by Tim Mooney in
+	<http://mail.gnu.org/archive/html/bug-coreutils/2004-01/msg00147.html>.
+	* lib/autoconf/headers.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS):
+	Likewise.
+	
+	* lib/autoconf/programs.m4 (AC_PROG_SED): Use diff, not sed;
+	otherwise "make check" fails because it forbids cmp (I guess
+	because cmp treats files as binary on DOS-like systems).
+
+	* tests/mktests.sh: Update copyright date to 2004, since some tests
+	have changed in 2004.
+
 2004-01-23  Gary V. Vaugan  <gary@gnu.org>
 
 	* lib/autoconf/programs.m4 (AC_PROG_SED):  New macro to test for a
