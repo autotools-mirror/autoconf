@@ -231,7 +231,14 @@ define(m4_fatal,
 [m4_errprint([error: $1])dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
-
+# m4_assert( EXPRESSION [, EXIT-STATUS = 1 ])
+# ------------------------------------------
+# This macro ensures that EXPRESSION evaluates to true, and exits if
+# EXPRESSION evaluates to false.
+define([m4_assert],
+[ifelse(m4_eval([$1]), 0,
+        [m4_fatal([assert failed: $1], [$2])],
+        [])])
 
 # We also want to neutralize include (and sinclude for symmetry),
 # but we want to extend them slightly: warn when a file is included
@@ -321,6 +328,19 @@ define([ifndef],
 define([m4_default], [ifval([$1], [$1], [$2])])
 
 
+# m4_shiftn( N, ... )
+# -------------------
+# Returns ... shifted N times.  Useful for recursive "varargs" constructs.
+define([m4_shiftn],
+[m4_assert(($1 >= 0) && ($# > $1))dnl
+_m4_shiftn($@)])
+
+define([_m4_shiftn],
+[ifelse([$1], 0,
+        [m4_shift($@)],
+        [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
+
+
 # m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
 # -----------------------------------------------------------
 # m4 equivalent of
@@ -344,7 +364,7 @@ define(m4_case,
 	[$#], 1, [],
 	[$#], 2, [$2],
         [$1], [$2], [$3],
-        [m4_case([$1], m4_shift(m4_shift(m4_shift($@))))])])
+        [m4_case([$1], m4_shiftn(3, $@))])])
 
 
 # m4_match(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
@@ -366,29 +386,33 @@ define(m4_match,
 [ifelse([$#], 0, [],
 	[$#], 1, [],
 	[$#], 2, [$2],
-        regexp([$1], [$2]), -1, [m4_match([$1],
-                                          m4_shift(m4_shift(m4_shift($@))))],
+        regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
         [$3])])
-
 
 ## --------------------- ##
 ## Implementing m4 loops ##
 ## --------------------- ##
 
 
-# m4_for(VARIABLE, FROM, TO, EXPRESSION)
+# m4_for(VARIABLE, FIRST, LAST, [STEP = +/-1], EXPRESSION)
 # --------------------------------------
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
 # Both limits are included.
+
 define([m4_for],
-[pushdef([$1], [$2])_m4_for([$1], [$2], [$3], [$4])popdef([$1])])
+[m4_case(m4_sign(m4_eval($3 - $2)),
+         1, [m4_assert(m4_sign(m4_default($4, 1)) == 1)],
+        -1, [m4_assert(m4_sign(m4_default($4, -1)) == -1)])dnl
+pushdef([$1], [$2])dnl
+ifelse(m4_eval([$3 > $2]), 1,
+       [_m4_for([$1], [$3], m4_default([$4], 1), [$5])],
+       [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
+popdef([$1])])
 
-# Low level macros used to define m4_for.
-# Use m4_define for temporaries.
 define([_m4_for],
-[$4[]ifelse($1, [$3], [],
-            [m4_define([$1], incr($1))_m4_for([$1], [$2], [$3], [$4])])])
-
+[$4[]dnl
+ifelse($1, [$2], [],
+       [m4_define([$1], m4_eval($1+[$3]))_m4_for([$1], [$2], [$3], [$4])])])
 
 
 # Implementing `foreach' loops in m4 is much more tricky than it may
@@ -525,7 +549,7 @@ m4_define(m4_split,
 [dnl Can't use m4_default here instead of ifelse, because m4_default uses
 dnl [ and ] as quotes.
 patsubst(````$1'''',
-	  ifelse(``$2'',, ``[   ]+'', ``$2''),
+	  ifelse(``$2'',, ``[ 	]+'', ``$2''),
 	  ``], ['')]dnl
 changequote([, ])>>)
 changequote([, ])

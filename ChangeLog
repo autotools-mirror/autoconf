@@ -1,3 +1,10 @@
+2000-3-16  Lars J. Aas  <larsa@sim.no>
+
+	* libm4.m4 (m4_assert, m4_shiftn): New macros.
+	(m4_case,m4_match): Rewrite to use m4_shiftn (for readability reasons).
+	(m4_for): Add the STEP argument and some argument-verifying asserts.
+	(m4_split): Correct spaces to tabulator in regexp.
+
 2000-03-15  Akim Demaille  <akim@epita.fr>
 
 	Revamp AC_FUNC_SELECT_ARGTYPES.
