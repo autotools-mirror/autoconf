@@ -2289,7 +2289,7 @@ AU_DEFUN([AC_VERBOSE],
 # AC_MSG_WARN(PROBLEM)
 # --------------------
 define([AC_MSG_WARN],
-[_AC_ECHO([configure: warning: $1], 2)])
+[_AC_ECHO([configure: WARNING: $1], 2)])
 
 
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])

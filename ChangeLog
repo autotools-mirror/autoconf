@@ -1,5 +1,11 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_MSG_WARN): s/warning/WARNING/.
+	* autoheader.sh: Likewise.
+	From François Pinard.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_PACKAGE): Rename as _AC_INIT_PACKAGE.
 	(AC_INIT): Dispatch your arguments either to _AC_INIT_PACKAGE or
 	to AC_CONFIG_SRCDIR.

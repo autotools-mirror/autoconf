@@ -167,7 +167,7 @@ if ($warning_all || $warning_obsolete) &&
     (test -f $config_h.top ||
      test -f $config_h.bot ||
      test -f $localdir/acconfig.h); then
-  sed -e "s/^    //;s/^/$me: warning: /" >&2 <<\EOF
+  sed -e "s/^    //;s/^/$me: WARNING: /" >&2 <<\EOF
     Using auxiliary files such as `acconfig.h', `config.h.bot'
     and `config.h.top', to define templates for `config.h.in'
     is deprecated and discouraged.
