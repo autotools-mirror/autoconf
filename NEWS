@@ -1,3 +1,10 @@
+Major changes in release 2.1:
+
+* Fix C++ problems.
+* More explanations in the manual.
+* Fix a spurious failure in the testsuite.
+* Clarify some warning messages.
+
 Thanks to everybody who's submitted changes and additions to Autoconf!
 I've incorporated many of them, and am still considering others for
 future releases -- but I didn't want to postpone this release indefinitely.
