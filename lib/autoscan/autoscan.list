@@ -196,6 +196,7 @@ header: netinet/in.h		AC_CHECK_HEADERS
 header: nl_types.h		AC_CHECK_HEADERS
 header: nlist.h		AC_CHECK_HEADERS
 header: paths.h		AC_CHECK_HEADERS
+header: resolv.h		AC_HEADER_RESOLV
 header: sgtty.h		AC_CHECK_HEADERS
 header: shadow.h		AC_CHECK_HEADERS
 header: stdarg.h		AC_HEADER_STDC
