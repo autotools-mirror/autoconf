@@ -1048,8 +1048,8 @@ m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
     at_setup_line='m4_defn([AT_line])'
     at_desc='$1'
-    $at_quiet $ECHO_N "m4_format([[%3d: %-45s]],
-	               AT_ordinal, [$1])[]$ECHO_C"
+    $at_quiet $ECHO_N "m4_format([%3d: %-]m4_eval(47 - m4_qdelta([$1]))[s],
+	               AT_ordinal, [[$1]])[]$ECHO_C"
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 

@@ -3,7 +3,7 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Base M4 layer.
 # Requires GNU M4.
 #
-# Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation,
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation,
 # Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1613,6 +1613,21 @@ m4_define([m4_text_box],
 @%:@@%:@ $1 @%:@@%:@
 @%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@[]dnl
 ])
+
+
+# m4_qlen(STRING)
+# ---------------
+# Expands to the length of STRING after autom4te converts all quadrigraphs.
+m4_define([m4_qlen],
+[m4_len(m4_bpatsubsts([[$1]], [@\(<:\|:>\|S|\|%:\)@], [P], [@&t@]))])
+
+
+# m4_qdelta(STRING)
+# -----------------
+# Expands to the net change in the length of STRING from autom4te converting the
+# quadrigraphs in STRING.  This number is always negative or zero.
+m4_define([m4_qdelta],
+[m4_eval(m4_qlen([$1]) - m4_len([$1]))])
 
 
 

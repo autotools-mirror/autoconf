@@ -1,5 +1,10 @@
 2004-12-18  Noah Misch  <noah@cs.caltech.edu>
 
+	* lib/m4sugar/m4sugar.m4 (m4_qlen, m4_qdelta): New macros.
+	* lib/autotest/general.m4 (AT_SETUP): Use m4_qdelta.
+
+2004-12-18  Noah Misch  <noah@cs.caltech.edu>
+
 	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): New macro.
 	(_AT_CHECK): Use it.
 	* lib/m4sugar/m4sh.m4 (AS_ESCAPE_FOR_EXPAND): Remove.
