@@ -228,10 +228,12 @@ if test "x$CONFIG_SHELL" = x; then
        esac])
 
       for as_shell in $as_candidate_shells $SHELL; do
-	 AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY], [$as_shell 2> /dev/null])],
+	 AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY],
+                        [($as_shell) 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
-	       AS_IF([_AS_RUN([_AS_DETECT_SUGGESTED_BODY], [$as_shell 2> /dev/null])],
+	       AS_IF([_AS_RUN([_AS_DETECT_SUGGESTED_BODY],
+			      [($as_shell) 2> /dev/null])],
 		     [break])])
       done
 
