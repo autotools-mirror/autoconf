@@ -1,3 +1,13 @@
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
+	More than one argument to `configure' builds a broken
+	`config.status'.  Fix and test.
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use
+	`$ac_configure_args' directly, no via a tmp variable.
+	* tests/torture.m4 (command line interface): Test with more than
+	one argument.
+
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_MSG_WARN): s/warning/WARNING/.

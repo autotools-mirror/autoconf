@@ -103,33 +103,35 @@ AT_CLEANUP(dummy)
 ## interface.                                             ##
 ## ------------------------------------------------------ ##
 
-# We run `./configure result=val' and verify that (i) `configure'
-# correctly receives `val' and (ii) correctly passes it to
-# `config.status', which we check by running `config.status --recheck'
-# (which *must* preserve the value of `result').
+# We run `./configure one=val1 --enable-two=val2 --with-three=val3'
+# and verify that (i) `configure' correctly receives the arguments and
+# (ii) correctly passes them to `config.status', which we check by
+# running `config.status --recheck'.
 
 AT_SETUP(command line interface)
 
 AT_DATA(configure.in,
 [[AC_INIT
-echo "result=$result"
+echo "result=$one$enable_two$with_three"
 AC_OUTPUT
 ]])
 
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 
-AT_CHECK([./configure result=result | sed -n -e 's/^result=//p'], 0,
-         [result
+AT_CHECK([./configure one=one --enable-two=two --with-three=three |
+          sed -n -e 's/^result=//p'], 0,
+         [onetwothree
 ], ignore)
 AT_CHECK([./config.status --recheck | sed -n -e 's/^result=//p'], 0,
-         [result
+         [onetwothree
 ], ignore)
 
-AT_CHECK([./configure result="\"'$" | sed -n -e 's/^result=//p'], 0,
-         ["'$
+AT_CHECK([./configure one="\"'$ " --enable-two="\" ' $" --with-three=" \"'$"|
+          sed -n -e 's/^result=//p'], 0,
+         ["'$ " ' $ "'$
 ], ignore)
 AT_CHECK([./config.status --recheck | sed -n -e 's/^result=//p'], 0,
-         ["'$
+         ["'$ " ' $ "'$
 ], ignore)
 
 AT_CLEANUP(configure config.status config.log config.cache)
