@@ -1,5 +1,15 @@
 2001-09-07  Akim Demaille  <akim@epita.fr>
 
+	Move toward possibly stand-alone test suites.
+
+	* lib/autotest/general.m4: Stop displaying srcdir everywhere as,
+	in addition, it introduces useless differences in logs.
+	(AT_INIT): Let atconfig and atlocal be both optional.
+	Adjust PATH computation.
+	* lib/m4sugar/m4sh.m4 (AS_UNAME): More readable display of PATH.
+
+2001-09-07  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/Makefile.am (autoconf.m4f): Depends upon
 	m4sugar/version.m4.
 

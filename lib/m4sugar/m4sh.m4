@@ -570,9 +570,15 @@ hostinfo               = `(hostinfo) 2>/dev/null               || echo unknown`
 /usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null       || echo unknown`
 /bin/universe          = `(/bin/universe) 2>/dev/null          || echo unknown`
 
-PATH = $PATH
-
 _ASUNAME
+
+as_save_IFS=$IFS
+IFS=:
+for as_dir in $PATH
+do
+  echo "PATH: $as_dir"
+done
+IFS=$as_save_IFS
 }])
 
 

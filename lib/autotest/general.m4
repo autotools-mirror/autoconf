@@ -110,7 +110,12 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 at_cli_args=${1+"$[@]"}
 at_debug_args=
 
-. ./atconfig
+# Load the config file.
+for at_file in atconfig atlocal
+do
+  test -r $at_file || continue
+  . ./$at_file || AS_ERROR([invalid content: $at_file])
+done
 
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd "$srcdir" && pwd`
@@ -232,6 +237,56 @@ fi
 # Tests to run.
 test -z "$at_tests" && at_tests=$at_tests_all
 
+# Don't take risks: use only absolute directories in PATH.
+#
+# For stand-alone test suites, AUTOTEST_PATH is relative to `.'.
+#
+# For embedded test suites, AUTOTEST_PATH is relative to the top level
+# of the package.  Then expand it into build/src parts, since users
+# may create executables in both places.
+#
+# There might be directories that don't exist, but don't redirect
+# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
+at_IFS_save=$IFS
+IFS=$PATH_SEPARATOR
+at_path=
+for at_dir in $AUTOTEST_PATH $PATH
+do
+  case $at_dir in
+    [[\\/]]* | ?:[[\\/]]* )
+      at_path=$at_path$PATH_SEPARATOR$at_dir
+      ;;
+    * )
+      if test -z "$top_builddir"; then
+        # Stand-alone test suite.
+        at_path=$at_path$PATH_SEPARATOR$at_dir
+      else
+        # Embbeded test suite.
+        at_path=$at_path$PATH_SEPARATOR$top_builddir/$at_dir
+        at_path=$at_path$PATH_SEPARATOR$top_srcdir/$at_dir
+      fi
+      ;;
+  esac
+done
+# Now build and simplify PATH.
+at_sep=
+PATH=
+for at_dir in $at_path
+do
+  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
+  test -d "$at_dir" || continue
+  case $PATH in
+                    $at_dir                 | \
+                    $at_dir$PATH_SEPARATOR* | \
+    *$PATH_SEPARATOR$at_dir                 | \
+    *$PATH_SEPARATOR$at_dir$PATH_SEPARATOR* ) ;;
+    *) PATH=$PATH$at_sep$at_dir
+       at_sep=$PATH_SEPARATOR;;
+  esac
+done
+IFS=$at_IFS_save
+export PATH
+
 # Can we diff with `/dev/null'?  DU 5.0 refuses.
 if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
@@ -261,46 +316,6 @@ if $at_debug; then
 else
   exec 6>$as_me.log
 fi
-
-# Load the user config file before checking the PATH.
-test -r ./atlocal && . ./atlocal
-
-# Don't take risks: use only absolute directories in PATH.
-# AUTOTEST_PATH is expanded into build/src parts, since users
-# may create executables in both places.
-#
-# There might be directories that don't exist, but don't redirect
-# builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
-at_IFS_save=$IFS
-IFS=$PATH_SEPARATOR
-at_sep=
-at_path=
-for at_dir in $AUTOTEST_PATH $PATH
-do
-  case $at_dir in
-    [[\\/]]* | ?:[[\\/]]* )
-      if test -d "$at_dir"; then
-        at_path="$at_path$at_sep$at_dir"
-        at_sep=$PATH_SEPARATOR
-      fi
-      ;;
-    * )
-      at_build_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
-      if test -d "$at_build_dir"; then
-        at_path="$at_path$at_sep$at_build_dir"
-        at_sep=$PATH_SEPARATOR
-      fi
-      at_src_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
-      if test -d "$at_src_dir"; then
-        at_path="$at_path$at_sep$at_src_dir"
-        at_sep=$PATH_SEPARATOR
-      fi
-      ;;
-  esac
-done
-IFS=$at_IFS_save
-PATH=$at_path
-export PATH
 
 # Tester and tested.
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
@@ -336,13 +351,13 @@ if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
       -exec echo ';'
 
     # Inform about the contents of the config files.
-    echo "$as_me: atconfig:" >&6
-    sed 's/^/| /' atconfig >&6
-    if test -r ./atlocal; then
-      echo "$as_me: atlocal:" >&6
-      sed 's/^/| /' atlocal >&6
-    fi
-    echo
+    for at_file in atconfig atlocal
+    do
+      test -r $at_file || continue
+      echo "$as_me: $at_file:" >&6
+      sed 's/^/| /' $at_file >&6
+      echo
+    done
 
     AS_BOX([Silently running the tests])
   } >&6
@@ -386,7 +401,7 @@ _ATEOF
     	echo "$at_setup_line" >at-check-line
       fi
       at_test_count=`expr 1 + $at_test_count`
-      $at_verbose $at_n "$at_test. $srcdir/$at_setup_line: $at_c"
+      $at_verbose $at_n "$at_test. $at_setup_line: $at_c"
       case $at_status in
         0) at_msg="ok"
            ;;
@@ -398,7 +413,7 @@ _ATEOF
            ;;
       esac
       echo $at_msg
-      at_log_msg="$at_test. $srcdir/$at_setup_line: $at_msg"
+      at_log_msg="$at_test. $at_setup_line: $at_msg"
       # If the test failed, at-times is not available.
       test -f at-times && at_log_msg="$at_log_msg	(`sed 1d at-times`)"
       echo "$at_log_msg" >&6
@@ -514,7 +529,7 @@ m4_divert_text([HELP],
 m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. AT_LINE: $1
     at_setup_line='AT_LINE'
-    $at_verbose "AT_ordinal. $srcdir/AT_LINE: testing $1..."
+    $at_verbose "AT_ordinal. AT_LINE: testing $1..."
     $at_quiet $at_n "m4_format([[%3d: %-18s]], AT_ordinal, AT_LINE)[]$at_c"
     (
       $at_traceon
@@ -677,7 +692,7 @@ $2[]_ATEOF
 #
 m4_define([AT_CHECK],
 [$at_traceoff
-$at_verbose "$srcdir/AT_LINE: AS_ESCAPE([$1])"
+$at_verbose "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >at-check-line
 ( $at_traceon; $1 ) >at-stdout 2>at-stder1
 at_status=$?
@@ -709,7 +724,7 @@ m4_case([$2],
   [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
-   *) $at_verbose "$srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])" >&2
+   *) $at_verbose "AT_LINE: exit code was $at_status, expected m4_default([$2], [0])" >&2
       at_failed=:;;])
 esac
 AS_IF($at_failed, [$5], [$6])
