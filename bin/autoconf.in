@@ -189,7 +189,7 @@ $debug ||
   trap 'exit $?' 1 2 13 15
 }
 
-# Temporary files.
+# Create a (secure) tmp directory for tmp files.
 : ${TMPDIR=/tmp}
 {
   tmp=`(umask 077 && mktemp -d -q "$TMPDIR/acXXXXXX") 2>/dev/null` &&

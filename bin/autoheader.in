@@ -75,11 +75,8 @@ ac_LF_and_DOT=`echo; echo .`
 : ${AC_MACRODIR=@datadir@}
 debug=false
 localdir=.
+tmp=
 verbose=:
-# Basename for temporary files.
-: ${TMPDIR=/tmp}
-tmpbase=$TMPDIR/ah$$
-tmpout=$tmpbase.out
 
 while test $# -gt 0 ; do
   case "$1" in
@@ -126,6 +123,27 @@ while test $# -gt 0 ; do
   esac
 done
 
+# Trap on 0 to stop playing with `rm'.
+$debug ||
+{
+  trap 'status=$?; rm -rf $tmp && exit $status' 0
+  trap 'exit $?' 1 2 13 15
+}
+
+# Create a (secure) tmp directory for tmp files.
+: ${TMPDIR=/tmp}
+{
+  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/ahXXXXXX") 2>/dev/null` &&
+  test -n "$tmp"
+}  ||
+{
+  tmp=$TMPDIR/ah$$ && (umask 077 && mkdir $tmp)
+} ||
+{
+   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   exit 1;
+}
+
 acconfigs=
 test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 
@@ -139,13 +157,6 @@ case $# in
      exit 1 ;;
 esac
 
-# Trap on 0 to stop playing with `rm'.
-$debug ||
-{
-  trap 'status=$?; rm -f $tmpbase* && exit $status' 0
-  trap 'exit $?' 1 2 13 15
-}
-
 # Well, work now!
 config_h=
 syms=
@@ -155,9 +166,8 @@ autoconf=`echo "$0" | sed -e 's/autoheader$/autoconf/'`
 test -n "$localdir" && autoconf="$autoconf -l $localdir"
 export AC_MACRODIR
 $autoconf --trace AH_OUTPUT:'$1' --trace AC_CONFIG_HEADERS:'config_h="$1"' \
-  $infile >$tmpbase.decls
-. $tmpbase.decls
-$debug || rm -f $tmpbase.decls
+  $infile >$tmp/traces.sh
+. $tmp/traces.sh
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -179,14 +189,14 @@ esac
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-cat <<EOF >$tmpout
+cat <<EOF >$tmp/config.h
 /* $config_h_in.  Generated automatically from $infile by autoheader.  */
 EOF
 
-test -r ${config_h}.top && cat ${config_h}.top  >>$tmpout
+test -r ${config_h}.top && cat ${config_h}.top  >>$tmp/config.h
 test -r $localdir/acconfig.h &&
   grep @TOP@ $localdir/acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmpout
+  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmp/config.h
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
@@ -218,25 +228,23 @@ if test -n "$syms"; then
   # Some fgrep's have limits on the number of lines that can be in the
   # pattern on the command line, so use a temporary file containing the
   # pattern.
-  (fgrep_tmp=$tmpbase.fgrep
-   cat > $fgrep_tmp <<EOF
+  (cat > $tmp/syms.fgrep <<EOF
 $syms
 EOF
-   fgrep -f $fgrep_tmp
-   rm -f $fgrep_tmp) |
-  tr @. "$ac_LF_and_DOT" >>$tmpout
+   fgrep -f $tmp/syms.fgrep) |
+  tr @. "$ac_LF_and_DOT" >>$tmp/config.h
 fi
 
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
-  echo >>$tmpout
-  eval echo >>$tmpout '"${'$verb'}"'
+  echo >>$tmp/config.h
+  eval echo '"${'$verb'}"' >>$tmp/config.h
 done
 
 # Handle the case where @BOTTOM@ is the first line of acconfig.h.
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmpout
-test -f ${config_h}.bot && cat ${config_h}.bot >>$tmpout
+  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.h
+test -f ${config_h}.bot && cat ${config_h}.bot >>$tmp/config.h
 
 
 # Check that all the symbols have a template.
@@ -245,7 +253,7 @@ status=0
 w='[ 	]'
 if test -n "$syms"; then
   for sym in $syms; do
-    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmpout >/dev/null; then
+    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.h >/dev/null; then
       : # All is well.
     else
       echo "$0: No template for symbol \`$sym'" >&2
@@ -259,15 +267,15 @@ fi
 if test $status = 0; then
   if test $# = 0; then
     # Output is a file
-    if test -f $config_h_in && cmp -s $tmpout $config_h_in; then
+    if test -f $config_h_in && cmp -s $tmp/config.h $config_h_in; then
       # File didn't change, so don't update its mod time.
       echo "$0: $config_h_in is unchanged" >&2
     else
-      mv -f $tmpout $config_h_in
+      mv -f $tmp/config.h $config_h_in
     fi
   else
     # Output is stdout
-    cat $tmpout
+    cat $tmp/config.h
   fi
 fi
 

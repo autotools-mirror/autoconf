@@ -1,3 +1,9 @@
+2000-03-31  Akim Demaille  <akim@epita.fr>
+
+	* autoheader.sh: Catch up with the `mktemp -d' changes in
+	autoconf.sh.
+	* autoupdate.sh: Likewise.
+
 2000-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): bug fix in F77 test program
