@@ -1,5 +1,13 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_LANG_CALL, AC_LANG_CALL(C), AC_LANG_CALL(C++),
+	AC_LANG_CALL(FORTRAN77)): New macros.
+	(AC_TRY_LINK_FUNC): Use it.
+	(AC_TRY_CPP): Argument was output twice.
+	(AC_COMPILE_IFELSE, AC_LINK_IFELSE): Output $3 only if needed.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_TRY_COMPILER): Use AC_LINK_IFELSE.
 	(AC_TRY_LINK_FUNC, AC_CHECK_LIB, AC_CHECK_FUNC): Don't check that
 	the current language is C++ to output `extern "C"': the CPP

@@ -2184,6 +2184,13 @@ AC_DEFUN([AC_LANG_PROGRAM],
 [AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])])
 
 
+# AC_LANG_CALL(PROLOGUE, FUNCTION)
+# --------------------------------
+# Call the FUNCTION.
+AC_DEFUN([AC_LANG_CALL],
+[_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+
+
 
 # ---------------- #
 # The C language.  #
@@ -2232,6 +2239,22 @@ $2
 }])
 
 
+# AC_LANG_CALL(C)(PROLOGUE, FUNCTION)
+# -----------------------------------
+# Avoid conflicting decl of main.
+define([AC_LANG_CALL(C)],
+[AC_LANG_PROGRAM([$1
+ifelse([$2], [main], ,
+[/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $2 ();])], [$2 ();])])
+
+
+
 # ------------------ #
 # The C++ language.  #
 # ------------------ #
@@ -2267,17 +2290,14 @@ $1])
 
 # AC_LANG_PROGRAM(C++)(PROLOGUE, BODY)
 # ------------------------------------
-define([AC_LANG_PROGRAM(C++)],
-[$1
-int
-main ()
-{
-dnl Do *not* indent the following line: there may be CPP directives.
-dnl Don't move the `;' right after for the same reason.
-$2
-  ;
-  return 0;
-}])
+# Same as C.
+define([AC_LANG_PROGRAM(C++)], defn([AC_LANG_PROGRAM(C)]))
+
+
+# AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
+# -------------------------------------
+# Same as C.
+define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
 
 
 
@@ -2317,6 +2337,14 @@ define([AC_LANG_PROGRAM(FORTRAN77)],
 [      program main
 $2
       end])
+
+
+# AC_LANG_CALL(FORTRAN77)(PROLOGUE, FUNCTION)
+# -------------------------------------------
+# FIXME: This is a guess, help!
+define([AC_LANG_CALL(FORTRAN77)],
+[AC_LANG_PROGRAM([$1],
+[      call $2])])
 
 
 
@@ -2722,20 +2750,7 @@ AC_DEFUN(AC_TRY_COMPILER,
 # the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
 # ACTION-IF-NOT-FOUND.
 AC_DEFUN(AC_TRY_LINK_FUNC,
-[AC_TRY_LINK(
-AC_LANG_CASE([FORTRAN77], ,
-[ifelse([$1], [main], , dnl Avoid conflicting decl of main.
-[/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $1();
-])]),
-[$1()],
-[$2],
-[$3])])
+[AC_LINK_IFELSE([AC_LANG_CALL([], [$1])], [$2], [$3])])
 
 
 # AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS,
@@ -2839,7 +2854,6 @@ AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
 AC_LANG_SOURCE([[$1]])
-[$1]
 EOF
 dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
 dnl We used to copy stderr to stdout and capture it in a variable, but
@@ -2912,7 +2926,9 @@ if AC_TRY_EVAL(ac_compile); then
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-  $3
+ifval([$3],
+[  $3
+])dnl
 fi
 rm -f conftest*[]dnl
 ])# AC_COMPILE_IFELSE
@@ -2944,7 +2960,9 @@ if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-  $3
+ifval([$3],
+[  $3
+])dnl
 fi
 rm -f conftest*[]dnl
 ])# AC_LINK_IFELSE
