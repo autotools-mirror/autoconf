@@ -1,5 +1,19 @@
 2000-08-01  Akim Demaille  <akim@epita.fr>
 
+	AC_VALIDATE_CACHED_SYSTEM_TUPLE no longer works properly since the
+	AC_CANONICAL_* revamping.
+	Reported by Peter Eisentraut.
+	In fact, let's just use the precious variables handling.
+
+	* acgeneral.m4 (AC_VALIDATE_CACHED_SYSTEM_TUPLE): Obsoleted.
+	(_AC_ARG_VAR_PRECIOUS): New macro, eved from...
+	(AC_ARG_VAR): this macro.  Adjust.
+	(_AC_INIT_PREPARE): `build_alias', `host_alias', and
+	`target_alias' are precious.
+	* doc/autoconf.texi: Adjust.
+
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT): Neutralize also
 	LC_COLLATE and LC_NUMERIC.
 	* autoconf.m4: Don't rely on character ranges with tr.

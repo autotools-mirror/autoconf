@@ -7147,13 +7147,6 @@ canonicalization of @code{target_alias} by @command{config.sub},
 otherwise it defaults to @code{host}.
 @end defmac
 
-@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@ovar{cmd})
-@maindex VALIDATE_CACHED_SYSTEM_TUPLE
-If the cache file is inconsistent with the current host, target and
-build system types, execute @var{cmd} or print a default error message.
-@end defmac
-
-
 
 @node Using System Type,  , Canonicalizing, Manual Configuration
 @section Using the System Type
@@ -8621,6 +8614,15 @@ Define @code{USG} if the @sc{bsd} string functions are defined in
 @defmac AC_UTIME_NULL
 @maindex UTIME_NULL
 @code{AC_FUNC_UTIME_NULL}
+@end defmac
+
+@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@ovar{cmd})
+@maindex VALIDATE_CACHED_SYSTEM_TUPLE
+If the cache file is inconsistent with the current host, target and
+build system types, it used to execute @var{cmd} or print a default
+error message.
+
+This is now handled by default.
 @end defmac
 
 @defmac AC_VERBOSE (@var{result-description})

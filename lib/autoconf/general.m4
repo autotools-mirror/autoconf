@@ -1929,6 +1929,9 @@ echo >confdefs.h
 AC_SITE_LOAD
 AC_CACHE_LOAD
 _AC_ARG_VAR_VALIDATE
+_AC_ARG_VAR_PRECIOUS(build_alias)dnl
+_AC_ARG_VAR_PRECIOUS(host_alias)dnl
+_AC_ARG_VAR_PRECIOUS(target_alias)dnl
 AC_LANG(C)
 
 _AC_PROG_ECHO()dnl
@@ -2076,13 +2079,11 @@ AU_DEFUN([AC_WITH],
 ## ----------------------------------------- ##
 
 
-
-# AC_ARG_VAR(VARNAME, DOCUMENTATION)
-# ----------------------------------
-# Register VARNAME as a variable configure should remember, and
-# document it in `configure --help' (but only once).
+# _AC_ARG_VAR_PRECIOUS(VARNAME)
+# -----------------------------
+# Declare VARNAME is precious.
 #
-# Try to diagnose when precious variables have changed.  To do this,
+# We try to diagnose when precious variables have changed.  To do this,
 # make two early snapshots (after the option processing to take
 # explicit variables into account) of those variables: one (ac_env_)
 # which represents the current run, and a second (ac_cv_env_) which,
@@ -2092,19 +2093,13 @@ AU_DEFUN([AC_WITH],
 #
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
-AC_DEFUN([AC_ARG_VAR],
-[AC_DIVERT_ONCE([HELP_VAR], [
-Some influential environment variables:])dnl
-AC_DIVERT_ONCE([HELP_VAR_END], [
-Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.])dnl
-AC_DIVERT_ONCE([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
-AC_DIVERT_ONCE([PARSE_ARGS],
+define([_AC_ARG_VAR_PRECIOUS],
+[AC_DIVERT_ONCE([PARSE_ARGS],
 [ac_env_$1_set=${$1+set}
-ac_env_$1_value="$$1"
+ac_env_$1_value=$$1
 ac_cv_env_$1_set=${$1+set}
-ac_cv_env_$1_value="$$1"])
-])# AC_ARG_VAR
+ac_cv_env_$1_value=$$1])dnl
+])
 
 
 # _AC_ARG_VAR_VALIDATE
@@ -2141,6 +2136,24 @@ if $ac_suggest_removing_cache; then
   AC_MSG_WARN([consider removing $cache_file and starting over])
 fi
 ])# _AC_ARG_VAR_VALIDATE
+
+
+# AC_ARG_VAR(VARNAME, DOCUMENTATION)
+# ----------------------------------
+# Register VARNAME as a precious variable, and document it in
+# `configure --help' (but only once).
+AC_DEFUN([AC_ARG_VAR],
+[AC_DIVERT_ONCE([HELP_VAR], [
+Some influential environment variables:])dnl
+AC_DIVERT_ONCE([HELP_VAR_END], [
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.])dnl
+AC_DIVERT_ONCE([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
+_AC_ARG_VAR_PRECIOUS([$1])dnl
+])# AC_ARG_VAR
+
+
+
 
 
 ## ---------------------------- ##
@@ -2338,30 +2351,12 @@ test -n "$target_alias" &&
 AU_ALIAS([AC_CANONICAL_SYSTEM], [AC_CANONICAL_TARGET])
 
 
-# AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])
-# --------------------------------------
+# AU::AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])
+# ------------------------------------------
 # If the cache file is inconsistent with the current host,
 # target and build system types, execute CMD or print a default
-# error message.
-AC_DEFUN([AC_VALIDATE_CACHED_SYSTEM_TUPLE],
-[AC_REQUIRE([AC_CANONICAL_SYSTEM])dnl
-AC_MSG_CHECKING([cached system tuple])
-if { test x"${ac_cv_host_system_type+set}" = x"set" &&
-     test x"$ac_cv_host_system_type" != x"$host"; } ||
-   { test x"${ac_cv_build_system_type+set}" = x"set" &&
-     test x"$ac_cv_build_system_type" != x"$build"; } ||
-   { test x"${ac_cv_target_system_type+set}" = x"set" &&
-     test x"$ac_cv_target_system_type" != x"$target"; }; then
-    AC_MSG_RESULT([different])
-    m4_default([$1],
-               [AC_MSG_ERROR([remove config.cache and re-run configure])])
-else
-  AC_MSG_RESULT(ok)
-fi
-ac_cv_host_system_type=$host
-ac_cv_build_system_type=$build
-ac_cv_target_system_type=$target[]dnl
-])
+# error message.  Now handled via _AC_ARG_VAR_PRECIOUS.
+AU_DEFUN([AC_VALIDATE_CACHED_SYSTEM_TUPLE], [])
 
 
 ## ---------------------- ##
