@@ -1,5 +1,11 @@
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Use `_array_'
+	to avoid GCC warnings.
+	From Uwe Seimet.
+
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in: --language is -l, not -s.
 
 2001-09-05  Akim Demaille  <akim@epita.fr>

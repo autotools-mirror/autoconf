@@ -194,8 +194,12 @@ f = $1;
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
 # -------------------------------------------------
+# Be sure to use this array to avoid `unused' warnings, which are even
+# errors with `-W error'.
 m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
-[AC_LANG_PROGRAM([$1], [int _array_ @<:@1 - 2 * !($2)@:>@])])
+[AC_LANG_PROGRAM([$1], [int _array_ @<:@1 - 2 * !($2)@:>@;
+_array_ @<:@0@:>@ = 0
+])])
 
 
 # AC_LANG_INT_SAVE(C)(PROLOGUE, EXPRESSION)
