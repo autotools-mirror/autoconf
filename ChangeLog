@@ -62,14 +62,14 @@
 
 	Provide a means to display banners in the test suite.
 
-	* tests/atgeneral.m4 (AT_INIT): Initialize AT_banner_ordinal.
+	* tests/atgeneral.m4 (AT_INIT): Initialize `AT_banner_ordinal'.
 	Execute the epilogue of the tests only if a test was run.
-	Don't built the value of `at_tests_all' by a for loop: expand
-	AT_TESTS_ALL.
-	(AT_SETUP): Build AT_TESTS_ALL.
+	Don't build the value of `at_tests_all' with a for loop: expand
+	`AT_TESTS_ALL'.
+	(AT_SETUP): Build `AT_TESTS_ALL'.
 	(AT_BANNER): New.
 	Adjust all the former banners to use it.
-	(AT_CHECK): Don't trace the decoding of $?.
+	(AT_CHECK): Don't trace the decoding of `$?'.
 
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
