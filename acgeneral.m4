@@ -3885,9 +3885,15 @@ m4_wrap(AC_LIST_FILES, [  ])"
 ifset([AC_LIST_HEADERS], [config_headers="\
 m4_wrap(AC_LIST_HEADERS, [  ])"
 ])dnl
+EOF
+# Be careful that the expansion of AC_LIST_LINKS (which may contain
+# uses of shell variables) is itself expanded in an unquoted `here'-document.
+cat >>$CONFIG_STATUS <<EOF
 ifset([AC_LIST_LINKS], [config_links="\
 m4_wrap(AC_LIST_LINKS, [  ])"
 ])dnl
+EOF
+cat >>$CONFIG_STATUS <<\EOF
 ifset([AC_LIST_COMMANDS], [config_commands="\
 m4_wrap(AC_LIST_COMMANDS, [  ])"
 ])dnl

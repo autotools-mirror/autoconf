@@ -1,3 +1,8 @@
+2000-06-07  Jim Meyering  <meyering@lucent.com>
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Put the expansion of
+	AC_LIST_LINKS in an unquoted `here'-document.
+
 2000-06-06  Akim Demaille  <akim@epita.fr>
 
 	* tests/aclocal.m4 (AC_ENV_SAVE): Skip `no_x'.
