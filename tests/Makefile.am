@@ -53,10 +53,24 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 ## Wrappers.  ##
 ## ---------- ##
 
-MAINTAINERCLEANFILES += $(srcdir)/wrapper.in
+wrappers = autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames
+CLEANFILES = wrapper.in $(wrappers)
 
-$(srcdir)/wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
-	./autom4te --language=M4sh $(srcdir)/wrapper.as -o $@
+wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
+	$(MY_AUTOM4TE) --language=M4sh $(srcdir)/wrapper.as -o $@
+
+edit = sed \
+	-e 's,@wrap_program\@,$@,g' \
+	-e 's,@abs_top_srcdir\@,@abs_top_srcdir@,g' \
+	-e 's,@abs_top_builddir\@,@abs_top_builddir@,g' \
+	-e 's,@configure_input\@,Generated from $<.,g'
+
+$(wrappers): wrapper.in
+	rm -f $@ $@.tmp
+	$(edit) wrapper.in >$@.tmp
+	chmod +x $@.tmp
+	chmod a-w $@.tmp
+	mv -f $@.tmp $@
 
 
 
@@ -145,7 +159,7 @@ $(TESTSUITE_GENERATED_AT): mktests.sh $(AUTOCONF_FILES)
 maintainer-check: maintainer-check-posix maintainer-check-c++
 
 # The hairy heredoc is more robust than using echo.
-CLEANFILES = expr
+CLEANFILES += expr
 expr:
 	echo '#! $(SHELL)'            >expr
 	echo 'result=`@EXPR@ "$$@"`' >>expr

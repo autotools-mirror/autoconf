@@ -1,5 +1,25 @@
 2004-12-08  Noah Misch  <noah@cs.caltech.edu>
 
+	* configure.ac (test suite): Cease to generate wrapper scripts.
+	* configure: Regenerate.
+	* lib/freeze.mk (MY_AUTOM4TE): Wrap the uninstalled autom4te directly.
+	(m4f_dependencies): Adjust accordingly.
+	* tests/Makefile.am (Wrappers): Generate wrapper scripts.
+	(wrapper.in): Generate it in the build directory.
+	(MAINTAINERCLEANFILES): Delete wrapper.in.
+	(CLEANFILES): Add wrapper.in.
+	* tests/wrapper.as: Move AS_INIT to very top, preserving copyright in
+	the output.  Replace each $as_me with a @wrap_program@.
+	* tests/wrapper.in: Delete it; we always build it.
+
+	* bin/Makefile.am (autoconf.in): Generate it in the build directory.
+	(EXTRA_DIST): Remove autoconf.in.
+	(CLEANFILES): Add autoconf.in.
+	(autoconf): Find autoconf.in in the build directory.
+	* bin/autoconf.in: Delete it; we always build it.
+
+2004-12-08  Noah Misch  <noah@cs.caltech.edu>
+
 	* lib/autotest/general.m4 (AT_INIT): Replace a `tr' with a `sed'.  Join
 	PATH members so as to not prepend an empty element.  Move a comment.
 	* Makefile.am (SUBDIRS): Build in `tests' last.

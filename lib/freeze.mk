@@ -24,17 +24,18 @@
 
 SUFFIXES = .m4 .m4f
 
-# Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
-# checks if we are independent of Autoconf by defining AUTOM4TE (and
-# others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
-# apply to us.
-MY_AUTOM4TE = $(top_builddir)/tests/autom4te
-$(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
-	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
-
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 $(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+
+# Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
+# checks if we are independent of Autoconf by defining AUTOM4TE (and
+# others) to `false'.  Autoconf provides autom4te, so that doesn't
+# apply to us.
+MY_AUTOM4TE =									\
+	autom4te_perllibdir='$(top_srcdir)'/lib					\
+	AUTOM4TE_CFG='$(AUTOM4TE_CFG)'         $(top_builddir)/bin/autom4te	\
+		-B '$(top_builddir)'/lib -B '$(top_srcdir)'/lib        # keep ` '
 
 # When processing the file with diversion disabled, there must be no
 # output but comments and empty lines.
@@ -54,7 +55,7 @@ $(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 src_libdir   = $(top_srcdir)/lib
 build_libdir = $(top_builddir)/lib
 
-m4f_dependencies = $(MY_AUTOM4TE) $(AUTOM4TE_CFG)
+m4f_dependencies = $(top_builddir)/bin/autom4te $(AUTOM4TE_CFG)
 
 # For parallel builds.
 $(build_libdir)/m4sugar/version.m4:

@@ -25,12 +25,11 @@ include ../lib/freeze.mk
 bin_SCRIPTS = autom4te \
 	      autoconf autoheader autoreconf ifnames autoscan autoupdate
 
-EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-	     autoscan.in autom4te.in \
-	     autoconf.as
+EXTRA_DIST = autoconf.as autoheader.in autoreconf.in autoupdate.in ifnames.in \
+	     autoscan.in autom4te.in
 
 # Files that should be removed, but which Automake does not know.
-CLEANFILES = $(bin_SCRIPTS)
+CLEANFILES = $(bin_SCRIPTS) autoconf.in
 
 
 ## ------------- ##
@@ -53,18 +52,17 @@ edit = sed \
 	-e 's,@configure_input\@,Generated from $@.in; do not edit by hand.,g'
 
 # autoconf is written in M4sh.
-AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh --cache ''
-$(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
-	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
+autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
+	$(MY_AUTOM4TE) --language M4sh --cache '' $(srcdir)/autoconf.as -o $@
 
 ## All the files below depend on Makefile so that they are rebuilt
 ## when the prefix etc. changes.  It took quite a while to have these
 ## rules correct, don't break them!  In particular, we believe there is
 ## no solution to factor the code.
 ## Use chmod -w to prevent people from editing the wrong file by accident.
-autoconf: $(srcdir)/autoconf.in Makefile
+autoconf: autoconf.in Makefile
 	rm -f autoconf autoconf.tmp
-	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
+	$(edit) autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
 	chmod a-w autoconf.tmp
 	mv -f autoconf.tmp autoconf
