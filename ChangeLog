@@ -1,5 +1,12 @@
 2000-11-09  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE): Use ":" instead of
+	"true".
+	* tests/atgeneral.m4 (AT_INIT): Likewise.
+	* tests/tools.at (Syntax of the scripts): Likewise.
+
+2000-11-09  Pavel Roskin  <proski@gnu.org>
+
 	* tests/m4sugar.at (m4_warn): Adjusted to accept stack dump when
 	-Werror is used.
 

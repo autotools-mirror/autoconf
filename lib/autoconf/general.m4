@@ -3214,13 +3214,13 @@ m4_define([_AC_COMPUTE_INT_COMPILE],
 [# Depending upon the size, compute the lo and hi bounds.
 AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
  [ac_lo=0 ac_try=0
-  while true; do
+  while :; do
     AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_try])],
                    [ac_hi=$ac_try; break],
                    [ac_lo=`expr $ac_try + 1`; ac_try=`expr 2 '*' $ac_try + 1`])
   done],
  [ac_hi=-1 ac_try=-1
-  while true; do
+  while :; do
     AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_try])],
                       [ac_lo=$ac_try; break],
                       [ac_hi=`expr $ac_try - 1`; ac_try=`expr 2 '*' $ac_try`])

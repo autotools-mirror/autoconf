@@ -114,7 +114,7 @@ AT_DEFINE([AT_INIT],
 at_stop_on_error=false;
 # Shall we save and check stdout and stderr?
 # -n sets to false
-at_check_stds=true;
+at_check_stds=:;
 # Shall we
 # -s sets to false, and -v to true
 at_verbose=false

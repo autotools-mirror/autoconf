@@ -37,7 +37,7 @@ AT_SETUP(Syntax of the scripts)
 # broken /bin/sh loop equally with `false', but it makes it easier to
 # test the robusteness in a good environment: just remove the `-n'.
 AT_DATA(endless.sh,
-[[while true
+[[while :
 do
   :
 done
