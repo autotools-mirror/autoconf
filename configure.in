@@ -12,9 +12,9 @@ AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
 dnl We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)
 AC_SUBST(PERL)dnl
-AC_SUBST(PROGS)dnl
+AC_SUBST(SCRIPTS)dnl
 if test "$PERL" != no; then
-  PROGS=autoscan
+  SCRIPTS=autoscan
 else
   AC_MSG_WARN(autoscan will not be built since perl is not found)
 fi
