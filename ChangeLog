@@ -1,5 +1,10 @@
 2001-08-29  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&handle_output): s/@__@/@&t@/.
+	Suggested by Paul Eggert.
+
+2001-08-29  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.maint (do-po-update): Wget refuses to overwrite files:
 	download in a tmp dir.
 

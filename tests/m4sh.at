@@ -34,7 +34,7 @@ AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()
 #! /bin/sh
 
-_AS@__@_EXPR_PREPARE
+_AS@&t@_EXPR_PREPARE
 
 m4_define([DIRNAME_TEST],
 [dir=`AS_DIRNAME([$1])`

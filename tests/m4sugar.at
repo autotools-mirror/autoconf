@@ -121,7 +121,7 @@ AT_SETUP([[m4_text_wrap]])
 # m4-listification.
 
 AT_DATA([script.s4g],
-[[m4@__@_divert_push([0])m4@__@_wrap([m4@__@_divert_pop([0])])d@__@nl
+[[m4@&t@_divert_push([0])m4@&t@_wrap([m4@&t@_divert_pop([0])])d@&t@nl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)

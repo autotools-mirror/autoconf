@@ -264,7 +264,7 @@ BAC_FOO
 B_AC_FOO
 AS_FOO
 _AS_BAR
-[d@__@nl]
+[d@&t@nl]
 ]])
 
 AT_CHECK_AUTOCONF([], 1, [],
@@ -275,7 +275,7 @@ configure.ac:5: error: possibly undefined macro: _m4_bar
 configure.ac:7: error: possibly undefined macro: B_AC_FOO
 configure.ac:8: error: possibly undefined macro: AS_FOO
 configure.ac:9: error: possibly undefined macro: _AS_BAR
-configure.ac:10: error: possibly undefined macro: d@__@nl
+configure.ac:10: error: possibly undefined macro: d@&t@nl
 ]])
 
 AT_CLEANUP
@@ -291,11 +291,11 @@ AT_DATA([configure.ac],
 # This is allowed in spite of the name.
 # It is on purpose that we check the case where there are several
 # tokens on the same line.
-m4@__@_pattern_allow([^AC_ALLOWED$])
+m4@&t@_pattern_allow([^AC_ALLOWED$])
 NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
 
 # Test forbidding.
-m4@__@_pattern_forbid([^FORBIDDEN$])
+m4@&t@_pattern_forbid([^FORBIDDEN$])
 NOT_FORBIDDEN FORBIDDEN FORBIDDEN_NOT
 
 # Test Autoconf's patterns.
