@@ -1,7 +1,7 @@
 #! @PERL@ -w
 # -*- perl -*-
 # autoupdate - modernize an Autoconf file.
-# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003 
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ my @prepend_include;
 my @include = ('@datadir@');
 my $force = 0;
 # m4.
-my $m4 = $ENV{"M4"} || "@M4@";
+my $m4 = $ENV{"M4"} || '@M4@';
 
 
 # $HELP
@@ -131,7 +131,7 @@ sub handle_m4_macros ()
   while ($_ = $m4_defs->getline)
     {
       push @m4_builtins, $1
-        if /^(\w+):/;
+	if /^(\w+):/;
     }
   $m4_defs->close;
 
@@ -330,8 +330,8 @@ foreach my $file (@ARGV)
       # builtins, and m4sugar if needed.
       _au_define([_au_enable],
       [_au_ifdef([_au_enabled],
-                 [],
-                 [__au_enable()])_au_dnl
+		 [],
+		 [__au_enable()])_au_dnl
       _au_pushdef([_au_enabled])])
 
 
@@ -357,8 +357,8 @@ foreach my $file (@ARGV)
       _au_define([_au_disable],
       [_au_popdef([_au_enabled])_au_dnl
       _au_ifdef([_au_enabled],
-                [],
-                [__au_disable()])])
+		[],
+		[__au_disable()])])
 
 
       ## ------------------------------- ##
@@ -405,9 +405,9 @@ EOF
 exit 0;
 
 
-# 		  ## ---------------------------- ##
-# 		  ## How `autoupdate' functions.  ##
-# 		  ## ---------------------------- ##
+#		  ## ---------------------------- ##
+#		  ## How `autoupdate' functions.  ##
+#		  ## ---------------------------- ##
 #
 # The task of `autoupdate' is not trivial: the biggest difficulty being
 # that you must limit the changes to the parts that really need to be
@@ -545,13 +545,13 @@ exit 0;
 # You first think to design AU_DEFUN like this:
 #
 # 1. AC_DEFUN(OLD-NAME,
-# 	      [Warn the user OLD-NAME is obsolete.
-# 	       NEW-CODE])
+#	      [Warn the user OLD-NAME is obsolete.
+#	       NEW-CODE])
 #
 # 2. Store for late AU binding([define(OLD_NAME,
-# 				[Reestablish the quotes.
-# 				 NEW-CODE
-# 				 Disable the quotes.])])
+#				[Reestablish the quotes.
+#				 NEW-CODE
+#				 Disable the quotes.])])
 #
 # but this will not work: NEW-CODE has probably $1, $2 etc. and these
 # guys will be replaced with the argument of `Store for late AU binding'
@@ -660,14 +660,14 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # which will result in
 #
 #     dnl The Unbelievable Truth
 #     NEW(1, 2, m4_eval(1 + 2))
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # Grpmh.  Two problems.  A minor problem: it would have been much better
 # to have the `m4_eval' computed, and a major problem: you lost the
@@ -690,7 +690,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     changequote([, ])NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # which results in
 #
@@ -738,7 +738,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # i.e., the new value of `OLD' is precomputed using the auto-quoting
 # definition of `NEW' and the m4 builtins.  We'll see how afterwards,
@@ -760,7 +760,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # i.e., for each call to obsolete macros, we build an array `call =>
 # value', and use a macro to dispatch these values.  This results in:
@@ -768,7 +768,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     NEW([1, 2], [3])
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # In French, we say `Youpi !', which you might roughly translate as
 # `Yippee!'.
@@ -796,7 +796,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 #
 # # Computing the `values' section
@@ -868,7 +868,7 @@ exit 0;
 #     dnl The Unbelievable Truth
 #     changequote([, ])OLD(1, 2)
 #     NEW([0, 0],
-# 	  0)
+#	  0)
 #
 # And we just run m4 on it.  Et voila`, Monsieur !  Mais oui, mais oui.
 #
@@ -885,7 +885,7 @@ exit 0;
 # problem: non expanded code will never be seen/ In particular, the body
 # of a `define' definition is not seen, so on the input
 #
-# 	  define([idem], [OLD(0, [$1])])
+#	  define([idem], [OLD(0, [$1])])
 #
 # autoupdate would never see the `OLD', and wouldn't have updated it.
 # Worse yet, if `idem(0)' was used later, then autoupdate sees that
@@ -894,7 +894,7 @@ exit 0;
 # [$1])', the dispatcher would have replaced with... nothing, leading
 # to
 #
-# 	  define([idem], [])
+#	  define([idem], [])
 #
 # With some more thinking, you see that the two step approach is wrong,
 # the namespace approach was much saner.
