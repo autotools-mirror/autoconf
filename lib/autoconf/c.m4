@@ -228,11 +228,14 @@ char (*f) () = $1;
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
 # -------------------------------------------------
-# Be sure to use this array to avoid `unused' warnings, which are even
-# errors with `-W error'.
+# The C standard does not require a diagnostic when we compute 1 / 0
+# at compile-time, but we don't know of any compiler that fails to
+# diagnose this.  Diagnostics are required for some other expressions
+# (e.g., ((EXPRESSION) ? 0 : (0, 0)), INT_MAX + !!(EXPRESSION)),
+# but they don't work as well in practice.
 m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
-[AC_LANG_PROGRAM([$1], [static int test_array @<:@1 - 2 * !($2)@:>@;
-test_array @<:@0@:>@ = 0
+[AC_LANG_PROGRAM([$1], [static int v = 1 / !!($2);
+v = 0;
 ])])
 
 
@@ -965,6 +968,8 @@ AC_DEFUN([AC_C_LONG_DOUBLE],
 		  + (DBL_MANT_DIG < LDBL_MANT_DIG)
 		  - (LDBL_MAX_EXP < DBL_MAX_EXP)
 		  - (LDBL_MANT_DIG < DBL_MANT_DIG)))
+	   && (0 < ((DBL_MAX < LDBL_MAX) + (LDBL_EPSILON < DBL_EPSILON)
+	            - (LDBL_MAX < DBL_MAX) - (DBL_EPSILON < LDBL_EPSILON)))
 	   && (int) LDBL_EPSILON == 0
          ]])],
       ac_cv_c_long_double=yes,

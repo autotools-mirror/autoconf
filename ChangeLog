@@ -1,3 +1,14 @@
+2004-06-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY (C)): Use division
+	by zero instead of array size, so that we can use any arithmetic
+	constant expression (instead of requiring an integer constant
+	expression).  This allows us to test expressions like DBL_MAX <
+	LDBL_MAX, which didn't conform to the C standard using the old
+	method.
+	(AC_C_LONG_DOUBLE): Put back in the tests for LDBL_MAX and LDBL_EPSILON,
+	now that we can do floating-point tests at compile time.
+
 2004-06-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_C_LONG_DOUBLE): Don't check LDBL_MAX
