@@ -104,7 +104,9 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 1, ignore, ignore)
+AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 1, [],
+[autoheader: No template for symbol `that'
+])
 
 
 # 3. Check TOP and BOTTOM.
@@ -146,7 +148,7 @@ Bottom1 from configure.in.
 
 Bottom2 from configure.in.
 /* Bottom from acconfig.h. */
-]], ignore)
+]], [])
 
 
 AT_CLEANUP
@@ -178,7 +180,7 @@ fubar=27
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_COMMANDS([default],[[echo $fubar]],[[fubar=$fubar]])
 AC_OUTPUT
-]], ignore)
+]], [])
 
 AT_CLEANUP
 

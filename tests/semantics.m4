@@ -251,7 +251,7 @@ test "$TOOL6" = tool || fail=1
 exit $fail
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0, ignore)
 
 
@@ -283,7 +283,7 @@ test "$TOOL4" = $pwd/path/1/tool || fail=1
 exit $fail
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0, ignore)
 
 AT_CLEANUP(path config.log config.cache configure)
@@ -393,7 +393,7 @@ esac
 AC_OUTPUT
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 
 # Create a header
 AT_CHECK([./configure what_to_test=header], 0, ignore)

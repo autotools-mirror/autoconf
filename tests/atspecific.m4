@@ -91,12 +91,8 @@ AC_ENV_SAVE(env-after)
 AC_OUTPUT
 ])
 
-dnl FIXME: Here we just don't consider the stderr from Autoconf.
-dnl Maybe some day we could be more precise and filter out warnings.
-dnl The problem is that currently some warnings are spread on several
-dnl lines, so grepping -v warning is not enough.
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
-AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([autoconf -W none --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
 
