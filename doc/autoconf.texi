@@ -125,8 +125,9 @@ Specific Tests
 General Purpose Macros
 
 * Setup::			Controlling Autoconf operation.
-* General Tests::		Check for kinds of features.
+* General Tests::		Checking for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
+* Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 
@@ -1332,8 +1333,9 @@ These macros are defined in the file @file{acgeneral.m4}.
 
 @menu
 * Setup::			Controlling Autoconf operation.
-* General Tests::		Check for kinds of features.
+* General Tests::		Checking for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
+* Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 @end menu
@@ -1663,7 +1665,7 @@ AC_WITH(fubar, echo "got --with-fubar=$withval",
 @end example
 @end defmac
 
-@node Setting Variables, Language Choice, General Tests, General Purpose Macros
+@node Setting Variables, Printing Messages, General Tests, General Purpose Macros
 @section Setting Variables
 
 These macros help other macros to define shell and @code{make}
@@ -1769,7 +1771,51 @@ LIBS="$LIBS -ltermcap"
 @end example
 @end defmac
 
-@node Language Choice, Macro Ordering, Setting Variables, General Purpose Macros
+@node Printing Messages, Language Choice, Setting Variables, General Purpose Macros
+@section Printing Messages
+
+@code{configure} scripts need to give users running them several kinds
+of information.  The following macros print messages in ways appropriate
+for different kinds of information.  The arguments to all of them get
+enclosed in shell double quotes, so the shell performs variable and
+backquote substitution on them.
+
+@defmac AC_CHECKING (@var{feature-description})
+@maindex CHECKING
+Tell the user that @code{configure} is checking for a particular
+feature.  This macro prints a message that starts with @samp{checking }.
+The @var{feature-description} should be something like @samp{whether the
+Fortran compiler accepts C++ comments} or @samp{for c89}.
+@end defmac
+
+@defmac AC_ERROR (@var{error-description})
+@maindex ERROR
+Notify the user of an error that prevents @code{configure} from
+completing.  This macro prints an error message on the standard error
+stream and exits @code{configure} with a nonzero status.
+@var{error-description} should be something like @samp{invalid value for
+\$HOME}.
+@end defmac
+
+@defmac AC_VERBOSE (@var{result-description})
+@maindex VERBOSE
+Notify the user of the results of a check.  This extra information is
+only printed if @code{configure} is run with the @samp{--verbose}
+option.  @var{result-description} should be something like @samp{setting
+ADA to $ADA}.
+@end defmac
+
+@defmac AC_WARN (@var{problem-description})
+@maindex WARN
+Notify the @code{configure} user of a possible problem.  This macro
+prints the message on the standard error stream; @code{configure}
+continues running afterward, so macros that call @code{AC_WARN} should
+provide a default (back-up) behavior for the situations they warn about.
+@var{problem-description} should be something like @samp{ln -s seems to
+make hard links}.
+@end defmac
+
+@node Language Choice, Macro Ordering, Printing Messages, General Purpose Macros
 @section Language Choice
 
 Programs that use both C and C++ need to test features of both
