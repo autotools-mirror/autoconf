@@ -123,12 +123,12 @@ m4_define([AT_CONFIGURE_AC],
 # we can ask help from AC_SUBST.  We have the right to touch what
 # is AC_SUBST'ed.
 #
-# Some `egrep' choke on such a big regex (e.g., SunOS 4.1.3).  In this
-# case just don't pay attention to the env.  It would be great
+# Perhaps grep -E is not supported, or perhaps it chokes on such a big regex.
+# In this case just don't pay attention to the env.  It would be great
 # to keep the error message but we can't: that would break AT_CHECK.
 m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
-  egrep -v -e 'm4_join([|],
+  grep -E -v -e 'm4_join([|],
       [^a[cs]_],
       [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
@@ -148,7 +148,7 @@ m4_defun([AC_STATE_SAVE],
   grep '^m4_defn([m4_re_word])=' >state-env.$[@]&t@1
 test $? = 0 || rm -f state-env.$[@]&t@1
 
-ls -1 | egrep -v '^(at-|state-|config\.)' | sort >state-ls.$[@]&t@1
+ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$[@]&t@1
 ])# AC_STATE_SAVE
 ]])
 
@@ -220,8 +220,17 @@ fi
 # and symbols (PACKAGE_...).
 # AT_CHECK_HEADER is a better name, but too close from AC_CHECK_HEADER.
 m4_define([AT_CHECK_DEFINES],
-[AT_CHECK([[fgrep '#' config.h |
- egrep -v 'STDC_HEADERS|STD(INT|LIB)|INTTYPES|MEMORY|PACKAGE_|STRING|SYS_(TYPES|STAT)|UNISTD']],,
+[AT_CHECK([[sed '/#/!d
+/INTTYPES/d
+/MEMORY/d
+/PACKAGE_/d
+/STDC_HEADERS/d
+/STDINT/d
+/STDLIB/d
+/STRING/d
+/SYS_STAT/d
+/SYS_TYPES/d
+/UNISTD/d' config.h]],,
           [$1])])
 
 
