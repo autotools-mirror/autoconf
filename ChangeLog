@@ -1,5 +1,10 @@
 2003-09-10  Akim Demaille  <akim@epita.fr>
 
+	* tests/mktests.sh (au_exclude_egrep): Make it harder to be
+	willing to edit the output files.
+
+2003-09-10  Akim Demaille  <akim@epita.fr>
+
 	* tests/fortran.at (GNU Fortran 77): Also exercise AC_FC_SRCEXT
 	and AC_FC_FREEFORM.
 	* tests/mktests.sh: Skip AC_FC_SRCEXT.
