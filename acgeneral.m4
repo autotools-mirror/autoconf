@@ -1412,8 +1412,16 @@ ac_lib_var=`echo $1[_]$2 | tr '.-/+' '___p'`
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
-AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$ac_lib_var=yes",
-  eval "ac_cv_lib_$ac_lib_var=no")dnl
+AC_TRY_LINK([/* Override any gcc2 internal prototype to avoid an error.  */
+]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C"
+#endif
+])dnl
+char $2();
+],
+	    [$2()],
+	    eval "ac_cv_lib_$ac_lib_var=yes",
+	    eval "ac_cv_lib_$ac_lib_var=no")dnl
 LIBS="$ac_save_LIBS"
 ])dnl
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
