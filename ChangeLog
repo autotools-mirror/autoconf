@@ -1,5 +1,10 @@
 2000-11-09  Pavel Roskin  <proski@gnu.org>
 
+	* tests/tools.at (Syntax of the scripts): Check "autoreconf"
+	only once. Check "install-sh", "mkinstalldirs" and "missing".
+
+2000-11-09  Pavel Roskin  <proski@gnu.org>
+
 	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE): Use ":" instead of
 	"true".
 	* tests/atgeneral.m4 (AT_INIT): Likewise.
