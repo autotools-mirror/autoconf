@@ -197,7 +197,7 @@ sub autoreconf ()
     if !/^configure\.(ac|in)$/;
 
   my $configure_ac = $_;
-  verbose "working on $configure_ac";
+  verbose "working on $File::Find::dir/$configure_ac";
 
   # If there is no AC_INIT, then we are not interested: it looks like
   # a Cygnus thingy.

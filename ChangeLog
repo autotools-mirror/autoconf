@@ -1,3 +1,8 @@
+2001-10-19  Ezra Peisach  <epeisach@zif.mit.edu>
+
+	* bin/autoreconf.in (autoreconf): Display the path to the
+	configure.ac being studied.
+
 2001-10-18  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Cast sizeof to unsigned
