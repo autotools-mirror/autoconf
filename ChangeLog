@@ -1,5 +1,27 @@
 1999-11-13  Akim Demaille  <akim@epita.fr>
 
+	Run the `syntax' test on acgeneral macros too.
+	Fix the bugs discovered.
+
+	* acgeneral.m4 (AC_CANONICAL_THING): Quote the
+	AC_REQUIRE([AC_CANONICAL_HOST]).  Bug triggered by the use of
+	AC_CANONICAL_BUILD alone in configure.in.  Also, quote the
+	arguments of macros (eg, ifelse([$1]...), not ifelse($1...)).
+	(m4_case): New macro.
+	(AC_LINKER_OPTION): Don't clash with user's name space
+	(s/i/ac_link_opt).
+	(AC_LIST_MEMBER_OF).  You mean AC_FATAL, not AC_MSG_ERROR.
+	Quote properly the argument.
+	dnl out the empty lines that result from m4 pure code.
+	Don't pollute the user name space.
+	Use AC_SHELL_IFELSE.
+	(AC_F77_NAME_MANGLING): Don't use `test -o'.  There are still
+	name space problems.
+	* tests/Makefile.am (macros.m4): Also fetch the macros from
+	acgeneral.m4.
+
+1999-11-13  Akim Demaille  <akim@epita.fr>
+
 	Really install this patch.
 
 	* acgeneral.m4 (AC_MSG_ERROR, AC_MSG_ERROR_UNQUOTED): Allow an

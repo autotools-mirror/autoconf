@@ -1742,7 +1742,7 @@ dnl -------------------------
 AC_DEFUN(AC_CANONICAL_THING,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 
-ifelse($1, [host], ,AC_REQUIRE([AC_CANONICAL_HOST]))dnl
+ifelse([$1], [host], , [AC_REQUIRE([AC_CANONICAL_HOST])])dnl
 AC_MSG_CHECKING([$1 system type])
 if test "x$ac_cv_$1" = "x" || (test "x$$1" != "xNONE" && test "x$$1" != "x$ac_cv_$1_alias"); then
 
@@ -1757,12 +1757,12 @@ dnl Set $1_alias.
   NONE)
     case $nonopt in
     NONE)
-ifelse($1, [host],[dnl
+ifelse([$1], [host],[dnl
       if ac_cv_$1_alias=`$ac_config_guess`; then :
       else AC_MSG_ERROR(cannot guess $1 type; you must specify one)
       fi ;;],[dnl
       ac_cv_$1_alias=$host_alias ;;
-])
+])dnl
     *) ac_cv_$1_alias=$nonopt ;;
     esac ;;
   esac
@@ -2210,11 +2210,11 @@ AC_DEFUN(AC_CHECK_MEMBER,
 AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_VAR_IF_INDIR([$1],
-[AC_FATAL([$0: requires manifest arguments])],
-[ifelse(regexp([$1], [\.]), -1,
-        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
+[AC_FATAL([$0: requires manifest arguments])])
+ifelse(regexp([$1], [\.]), -1,
+       [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 pushdef(AC_Member_Aggregate, [patsubst([$1], [\.[^.]*])])dnl
-pushdef(AC_Member_Member,     [patsubst([$1], [.*\.])])])dnl
+pushdef(AC_Member_Member,    [patsubst([$1], [.*\.])])dnl
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
 ac_Member_Aggregate foo;
@@ -4287,22 +4287,17 @@ dnl ACTION-IF-NOT-FOUND.
 dnl
 dnl pushdef([AC_LIST_MEMBER_OF],
 AC_DEFUN(AC_LIST_MEMBER_OF,
-[
-  dnl Do some sanity checking of the arguments.
-  ifelse($1, , [AC_MSG_ERROR([$0]: 1st arg must be defined)])
-  ifelse($2, , [AC_MSG_ERROR([$0]: 2nd arg must be defined)])
+[dnl Do some sanity checking of the arguments.
+ifelse([$1], , [AC_FATAL([$0]: missing argument 1)])dnl
+ifelse([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
 
-  exists=false
-  for i in $2; do
-      if test x"$1" = x"$i"; then
-          exists=true
-          break
-      fi
+  ac_exists=false
+  for ac_i in $2; do
+    if test x"$1" = x"$ac_i"; then
+      ac_exists=true
+      break
+    fi
   done
 
-  if test x"$exists" = xtrue; then
-      ifelse($3, , :, $3)
-  else
-      ifelse($4, , :, $4)
-  fi
+  AC_SHELL_IFELSE([test x"ac_$exists" = xtrue], [$3], [$4])
 ])
