@@ -4883,7 +4883,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 @cvindex HAVE_ST_BLOCKS
 @ovindex LIBOBJS
 If @code{struct stat} contains an @code{st_blocks} member, define
-@code{HAVE_STRUCT STAT_ST_BLOCKS}.  Otherwise, require an
+@code{HAVE_STRUCT_STAT_ST_BLOCKS}.  Otherwise, require an
 @code{AC_LIBOBJ} replacement of @samp{fileblocks}.  The former name,
 @code{HAVE_ST_BLOCKS} is to be avoided, as its support will cease in the
 future.
