@@ -1,5 +1,11 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_OBJEXT): Skip *.tds, special case .o and
+	.obj.
+	Suggested by Lars.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Fix the portability of
 	the default assignment of CONFIG_FILES, CONFIG_HEADERS,
 	CONFIG_LINKS and CONFIG_COMMANDS.

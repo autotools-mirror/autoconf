@@ -1224,15 +1224,20 @@ AC_SUBST(EXEEXT)dnl
 # Check the object extension used by the compiler: typically .o or
 # .obj.  If this is called, some other behaviour will change,
 # determined by ac_objext.
+#
+# When the w32 free Borland C++ command line compiler links a program
+# (conftest.exe), it also produces a file named `conftest.tds' in
+# addition to `conftest.obj'
 m4_define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 if AC_TRY_EVAL(ac_compile); then
-  for ac_file in conftest.*; do
-  case $ac_file in
-    *.$ac_ext) ;;
-    *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
-  esac
+  for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
+    case $ac_file in
+      *.o | *.obj )       ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`;;
+      *.$ac_ext | *.tds ) ;;
+      *)                  ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`;;
+    esac
   done
 else
   rm -f conftest.$ac_ext
