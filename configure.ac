@@ -1,7 +1,7 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# Copyright 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ([2.53])
 
-AC_INIT([GNU Autoconf], [2.53a], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], [2.53b], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
