@@ -2614,15 +2614,12 @@ ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 AC_TRY_EVAL(ac_try)
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
-  ifelse([$2], , :, [rm -rf conftest*
-  $2])
+  m4_default([$2], :)
 else
   echo "$ac_err" >&AC_FD_CC
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifval([$3], [  rm -rf conftest*
   $3
-])dnl
 fi
 rm -f conftest*])
 
@@ -2655,10 +2652,8 @@ dnl Prevent m4 from eating character classes:
 changequote(, )dnl
   egrep "$1" >/dev/null 2>&1; then
 changequote([, ])dnl
-  ifelse([$3], , :, [rm -rf conftest*
-  $3])
+  m4_default([$3], :)
 ifval([$4], [else
-  rm -rf conftest*
   $4
 ])dnl
 fi
@@ -2698,14 +2693,11 @@ dnl Don't move the `;' right after for the same reason.
 }
 ])EOF
 if AC_TRY_EVAL(ac_compile); then
-  ifelse([$3], , :, [rm -rf conftest*
-  $3])
+  m4_default([$3], :)
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifval([$4], [  rm -rf conftest*
   $4
-])dnl
 fi
 rm -f conftest*])
 
@@ -2744,14 +2736,11 @@ dnl Don't move the `;' right after for the same reason.
 }
 ])EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
-  ifelse([$3], , :, [rm -rf conftest*
-  $3])
+  m4_default([$3], :)
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifval([$4], [  rm -rf conftest*
   $4
-])dnl
 fi
 rm -f conftest*
 ])# AC_TRY_LINK
@@ -2802,16 +2791,13 @@ extern "C" void exit(int);
 ])dnl
 [$1]
 EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
-then
-dnl Don't remove the temporary files here, so they can be examined.
+if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} &&
+   (./conftest; exit) 2>/dev/null; then
   m4_default([$2], [:])
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifval([$3], [  rm -fr conftest*
   $3
-])dnl
 fi
 rm -fr conftest*
 ])# AC_TRY_RUN_NATIVE

@@ -1,3 +1,10 @@
+2000-03-17  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_TRY_CPP, AC_EGREP_CPP, AC_TRY_COMPILE,
+	AC_TRY_LINK, AC_TRY_RUN_NATIVE): Simplify the removal of the
+	contest files: don't remove them before running the actions, just
+	remove them at the end of the macro.
+
 2000-03-16  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (AC_FUNC_SELECT_ARGTYPES): Use
