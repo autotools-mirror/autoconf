@@ -9,7 +9,7 @@ nodistautoconflibdir = $(pkgdatadir)/autoconf
 # The order matters: we need version.m4 to build autoconf.m4f.
 nodistautoconflib_DATA = version.m4 autoconf.m4f
 
-EXTRA_DIST = $(distautoconflib_DATA) version.in
+EXTRA_DIST = $(distautoconflib_DATA) version.in version.m4
 
 ## version.m4.  ##
 

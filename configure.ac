@@ -22,13 +22,8 @@ fi
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 AC_SUBST(M4)
 
-# `autoconf' and `ifnames' use AWK.  And we need decent RE support.
+# `ifnames' uses AWK.
 AC_PROG_AWK
-# Some AWK fail
-if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
-  AC_MSG_ERROR([the regex engine of $AWK is too broken to be used
-                you might want to install GNU AWK])
-fi
 
 # Generating man pages.
 AM_MISSING_PROG(HELP2MAN, help2man)
@@ -39,6 +34,9 @@ AC_SUBST(PERL)dnl
 if test "$PERL" = no; then
   AC_MSG_ERROR([perl is not found])
 fi
+$PERL -e 'require 5.005;' || {
+   AC_MSG_ERROR([perl 5.005 or better is required])
+}
 
 AC_PROG_INSTALL
 
@@ -55,11 +53,9 @@ AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
                 tests/Makefile tests/atconfig)
 
 AC_OUTPUT
-
 # Report the state of this version of Autoconf if this is a beta.
-case AC_PACKAGE_VERSION in
-  *[[a-z]]*)
-    cat <<EOF
+m4_match(m4_defn([AC_PACKAGE_VERSION]),  [[a-z]],
+[    cat <<EOF
 
 You are about to use an experimental version of Autoconf.  Be sure to
 read the relevant mailing lists, most importantly <autoconf@gnu.org>.
@@ -68,5 +64,5 @@ Below you will find information on the status of this version of Autoconf.
 
 
 EOF
-    sed -n '/^\* Status/,$p' $srcdir/BUGS;;
-esac
+    sed -n '/^\* Status/,$p' $srcdir/BUGS
+])

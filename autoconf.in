@@ -119,15 +119,6 @@ case " $M4 " in
 esac
 
 
-# Find a good AWK.
-: ${AWK=@AWK@}
-if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
-  echo "$me: the regex engine of $AWK is too broken to be used" >&2
-  echo "$me: you might want to install GNU AWK" >&2
-  exit 1
-fi
-
-
 # We test "$dir/autom4te" in case we are in the build tree, in which case
 # the names are not transformed yet.
 for autom4te in "$AUTOM4TE" \

@@ -63,8 +63,9 @@ AUTOTEST_PATH='@AUTOTEST_PATH@'
 SHELL=${CONFIG_SHELL-'@SHELL@'}
 PATH_SEPARATOR='@PATH_SEPARATOR@'
 
-# We need GNU m4.
+# We need GNU m4, and Perl.
 M4='@M4@'
+PERL='@PERL@'
 
 # Be sure to use the non installed Perl modules.
 # We need no special protection for the subtools (e.g., autoheader runs

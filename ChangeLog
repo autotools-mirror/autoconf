@@ -1,5 +1,18 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.in ($AWK): Remove, no longer used.
+	* test/tools.at: Use AT_CHECK_AUTOCONF.
+	(AWK portability): Remove, for autoconf no longer uses AWK.
+	(Syntax of the Perl scripts): New.
+	* configure.ac: autoconf no longer needs an AWK with a good
+	regexp engine.
+	Use a static test on AC_PACKAGE_VERSION.
+	* autom4te.in (&up_to_date_p): Output depends on the arguments.
+	* lib/autoconf/Makefile.am: Ship version.m4, maintainer file.
+	* tests/atconfig.in (PERL): New.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/lang.m4 (AC_LANG(C), AC_LANG_C, _AC_LANG_ABBREV(C))
 	(AC_LANG(C++), AC_LANG_CPLUSPLUS, _AC_LANG_ABBREV(C++))
 	(AC_LANG_SOURCE(C), AC_LANG_PROGRAM(C), AC_LANG_CALL(C))

@@ -10,16 +10,12 @@ configuration script for a package from a template file that lists the
 operating system features that the package can use, in the form of M4
 macro calls.
 
-Producing configuration scripts using Autoconf requires GNU M4.  You
-must install GNU M4 (version 1.4 or later) before configuring
-Autoconf, so that Autoconf's configure script can find it.  The
-configuration scripts produced by Autoconf are self-contained, so
-their users do not need to have Autoconf (or GNU M4).
-
-Some optional utilities that come with Autoconf (autoscan and
-autoupdate) use Perl 5.5.  However, it is not required in order to use
-the main Autoconf programs.  If it is not present, the affected
-Autoconf utilities will not be installed.
+Producing configuration scripts using Autoconf requires GNU M4 and
+Perl.  You must install GNU M4 (version 1.4 or later) and Perl (5.005
+or later) before configuring Autoconf, so that Autoconf's configure
+script can find them.  The configuration scripts produced by Autoconf
+are self-contained, so their users do not need to have Autoconf (or
+GNU M4, Perl etc.).
 
 The file INSTALL should be distributed with packages that use
 Autoconf-generated configure scripts and Makefiles that conform to the
@@ -28,7 +24,7 @@ of the package, where to report bugs, and a pointer to INSTALL for
 instructions on compilation and installation.  This removes the need
 to maintain many similar sets of installation instructions.
 
-Be sure to read BUGS (especially if this Autoconf is not an official
+Be sure to read BUGS (especially if this version is not an official
 release) and INSTALL.
 
 Mail suggestions to autoconf@gnu.org, report bugs on
