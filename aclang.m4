@@ -795,8 +795,8 @@ fi])])# _AC_PROG_PREPROC_WORKS
 # between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CC.
 AC_DEFUN([AC_PROG_CPP],
 [AC_REQUIRE([AC_PROG_CC])dnl
+AC_LANG_PUSH(C)dnl
 AC_MSG_CHECKING([how to run the C preprocessor])
-AC_LANG_ASSERT(C)dnl
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
   CPP=
@@ -824,6 +824,7 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
 fi
 AC_SUBST(CPP)dnl
+AC_LANG_POP()dnl
 ])# AC_PROG_CPP
 
 
@@ -1000,8 +1001,8 @@ AC_DEFUN([AC_LANG_PREPROC(C++)],
 # between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CXX.
 AC_DEFUN([AC_PROG_CXXCPP],
 [AC_REQUIRE([AC_PROG_CXX])dnl
+AC_LANG_PUSH(C++)dnl
 AC_MSG_CHECKING([how to run the C++ preprocessor])
-AC_LANG_ASSERT(C++)dnl
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
   [dnl
@@ -1025,6 +1026,7 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
 fi
 AC_SUBST(CXXCPP)dnl
+AC_LANG_POP()dnl
 ])# AC_PROG_CXXCPP
 
 
@@ -1054,7 +1056,7 @@ AU_DEFUN([ac_cv_prog_gxx],
 # xlC_r	AIX C Set++ (with support for reentrant code)
 # xlC	AIX C Set++
 AC_DEFUN([AC_PROG_CXX],
-[AC_LANG_PUSH(C++)
+[AC_LANG_PUSH(C++)dnl
 AC_ARG_VAR([CXX], [C++ compiler command])
 AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])
 AC_CHECK_TOOLS(CXX,
@@ -1149,7 +1151,7 @@ AU_DEFUN([ac_cv_prog_g77],
 # pgf77 is the Portland Group f77 compiler.
 # lf95 is the Lahey-Fujitsu compiler.
 AC_DEFUN([AC_PROG_F77],
-[AC_LANG_PUSH(Fortran 77)
+[AC_LANG_PUSH(Fortran 77)dnl
 AC_ARG_VAR([F77], [Fortran 77 compiler command])
 AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])
 AC_CHECK_TOOLS(F77,
@@ -1589,7 +1591,7 @@ fi
 # space-separated items.
 AC_DEFUN([_AC_PROG_F77_V_OUTPUT],
 [AC_REQUIRE([AC_PROG_F77])dnl
-AC_LANG_PUSH(Fortran 77)
+AC_LANG_PUSH(Fortran 77)dnl
 
 AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 
@@ -1783,7 +1785,7 @@ AC_DEFUN([_AC_F77_NAME_MANGLING],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
                ac_cv_f77_mangling,
-[AC_LANG_PUSH(Fortran 77)
+[AC_LANG_PUSH(Fortran 77)dnl
 AC_COMPILE_IFELSE(
 [      subroutine foobar()
       return
@@ -1793,7 +1795,7 @@ AC_COMPILE_IFELSE(
       end],
 [mv conftest.$ac_objext cf77_test.$ac_objext
 
-  AC_LANG_PUSH(C)
+  AC_LANG_PUSH(C)dnl
 
   ac_save_LIBS=$LIBS
   LIBS="cf77_test.$ac_objext $FLIBS $LIBS"

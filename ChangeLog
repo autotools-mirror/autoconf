@@ -1,3 +1,10 @@
+2000-12-20  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4: `dnl' the AC_LANG_PUSH and AC_LANG_POP.
+	(AC_PROG_CXXCPP, AC_PROG_CPP): Set the current language instead of
+	just asserting it, since these macros can be called directly.
+	Reported by Raja R. Harinath.
+
 2000-12-19  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (Installation Directory Variables): More info
