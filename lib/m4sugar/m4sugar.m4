@@ -1279,13 +1279,14 @@ m4_expansion_stack_pop()dnl
 ])
 
 
-# m4_expand_once(TEXT)
-# --------------------
-# If TEXT has never been expanded, expand it *here*.
+# m4_expand_once(TEXT, [WITNESS = TEXT])
+# --------------------------------------
+# If TEXT has never been expanded, expand it *here*.  Use WITNESS as
+# as a memory that TEXT has already been expanded.
 m4_define([m4_expand_once],
-[m4_provide_ifelse([$1],
+[m4_provide_ifelse(m4_ifval([$2], [[$2]], [[$1]]),
                    [],
-                   [m4_provide([$1])[]$1])])
+                   [m4_provide(m4_ifval([$2], [[$2]], [[$1]]))[]$1])])
 
 
 # m4_provide(MACRO-NAME)
