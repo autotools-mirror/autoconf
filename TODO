@@ -32,7 +32,7 @@ Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
-* Doc: Add index of concepts.
+* Doc: Add concept index.
 
 ------------------------------------------------------------------------------
 
@@ -61,23 +61,13 @@ Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
-* Supply a template Makefile.in that people can adapt (what GNU hello
-  was going to be).
-
-** Have CC, DEFS, etc. substitutions.
-
-** Support all of the GNU standard targets.
-
-** Parameterize with make variables to require as little modification
-as necessary.  Maybe via m4?  (Eww, sounds like imake.)
-
-** Make it usable both with and without a header file.
+* Add a Makefile generator that supports the standard GNU targets.
 
 ------------------------------------------------------------------------------
 
-* Mike Haertel's suggestions.
+* Mike Haertel's suggestions:
 
-** Provide a file containing decls for alloca, strings, etc.  acdecls.h?
+** Provide files containing decls for alloca, strings, etc.
 
 ** Cross compiling:
 
