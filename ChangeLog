@@ -1,3 +1,9 @@
+2000-04-03  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Writing configure.in): Explain what Autoconf
+	is.  Explain how to use the quotation scheme used in Autoconf.
+	(Quoting): Update.  Do not advocate changequote.
+
 2000-03-30  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Fix F77 name-mangling macros to work with cached values (so
