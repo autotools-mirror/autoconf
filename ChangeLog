@@ -1,3 +1,10 @@
+2003-12-27  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (Limitations of Make) <Automatic rule rewriting>:
+	Documents OSF1/Tru64 make behavior.  Replace `VPATH = ../src' by
+	`VPATH = ../pkg/src' in examples to make the OSF1/Tru64 make
+	explanation clearer.
+
 2003-12-24  Andreas Schwab  <schwab@suse.de>
 
 	* doc/autoconf.texi (Default Includes): Fix misspelling of

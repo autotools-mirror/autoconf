@@ -8854,7 +8854,7 @@ with @code{AC_DEFUN} is that the user will be warned that
 @var{old-macro} is now obsolete.
 
 If she then uses @command{autoupdate}, the call to @var{old-macro} will be
-replaced by the modern @var{implementation}.  In the future, 
+replaced by the modern @var{implementation}.  In the future,
 @command{autoupdate} will then print the additional @var{message}.
 @end defmac
 
@@ -11653,46 +11653,47 @@ to find the prerequisite via a @code{VPATH} search, you have to code the
 whole thing manually.  For instance, using the following pattern:
 
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 foo.o: foo.c
-        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f foo.c || echo ../pkg/src/`foo.c -o foo.o
 @end example
 
 @item Automatic rule rewriting
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
-Some @command{make} implementations, such as SunOS @command{make}, will
-search prerequisites in @code{VPATH} and rewrite all their occurrences
-in the rule appropriately.
+Some @command{make} implementations, such as SunOS @command{make} or
+OSF1/Tru64 @command{make}, will search prerequisites in @code{VPATH} and
+rewrite all their occurrences in the rule appropriately.
 
 For instance
 
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 foo.o: foo.c
         cc -c foo.c -o foo.o
 @end example
 
 @noindent
-would execute @code{cc -c ../src/foo.c -o foo.o} if @file{foo.c} was
-found in @file{../src}.  That sounds great.
+would execute @code{cc -c ../pkg/src/foo.c -o foo.o} if @file{foo.c} was
+found in @file{../pkg/src}.  That sounds great.
 
 However, for the sake of other @command{make} implementations, we can't
 rely on this, and we have to search @code{VPATH} manually:
 
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 foo.o: foo.c
-        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f foo.c || echo ../pkg/src/`foo.c -o foo.o
 @end example
 
 @noindent
 However the "prerequisite rewriting" still applies here.  So if
-@file{foo.c} is in @file{../src}, SunOS @command{make} will execute
+@file{foo.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
+@command{make} will execute
 
 @example
-@code{cc -c `test -f ../src/foo.c || echo ../src/`foo.c -o foo.o}
+@code{cc -c `test -f ../pkg/src/foo.c || echo ../pkg/src/`foo.c -o foo.o}
 @end example
 
 @noindent
@@ -11709,23 +11710,23 @@ One workaround is to make sure that foo.c never appears as a plain word
 in the rule.  For instance these three rules would be safe.
 
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 foo.o: foo.c
-        cc -c `test -f ./foo.c || echo ../src/`foo.c -o foo.o
+        cc -c `test -f ./foo.c || echo ../pkg/src/`foo.c -o foo.o
 foo2.o: foo2.c
-        cc -c `test -f 'foo2.c' || echo ../src/`foo2.c -o foo2.o
+        cc -c `test -f 'foo2.c' || echo ../pkg/src/`foo2.c -o foo2.o
 foo3.o: foo3.c
-        cc -c `test -f "foo3.c" || echo ../src/`foo3.c -o foo3.o
+        cc -c `test -f "foo3.c" || echo ../pkg/src/`foo3.c -o foo3.o
 @end example
 
 Things get worse when your prerequisites are in a macro.
 
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 HEADERS = foo.h foo2.h foo3.h
 install-HEADERS: $(HEADERS)
         for i in $(HEADERS); do \
-          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
@@ -11735,11 +11736,11 @@ i in $(HEADERS);} will be expanded as @code{for i in foo.h foo2.h foo3.h;}
 where @code{foo.h} and @code{foo2.h} are plain words and are hence
 subject to @code{VPATH} adjustments.
 
-If the three files are in @file{../src}, the rule is run as:
+If the three files are in @file{../pkg/src}, the rule is run as:
 
 @example
-for i in ../src/foo.h ../src/foo2.h foo3.h; do \
-  install -m 644 `test -f $i || echo ../src/`$i \
+for i in ../pkg/src/foo.h ../pkg/src/foo2.h foo3.h; do \
+  install -m 644 `test -f $i || echo ../pkg/src/`$i \
      /usr/local/include/$i; \
 done
 @end example
@@ -11748,14 +11749,14 @@ where the two first @command{install} calls will fail.  For instance,
 consider the @code{foo.h} installation:
 
 @example
-install -m 644 `test -f ../src/foo.h || echo ../src/`../src/foo.h \
-  /usr/local/include/../src/foo.h;
+install -m 644 `test -f ../pkg/src/foo.h || echo ../pkg/src/`../pkg/src/foo.h \
+  /usr/local/include/../pkg/src/foo.h;
 @end example
 @noindent
 It reduces to:
 
 @example
-install -m 644 ../src/foo.h /usr/local/include/../src/foo.h;
+install -m 644 ../pkg/src/foo.h /usr/local/include/../pkg/src/foo.h;
 @end example
 
 Note that the manual @code{VPATH} search did not cause any problems here;
@@ -11767,7 +11768,7 @@ Trying to quote @code{$(HEADERS)} in some way, as we did for
 @example
 install-HEADERS: $(HEADERS)
         headers='$(HEADERS)'; for i in $$headers; do \
-          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
@@ -11775,22 +11776,61 @@ install-HEADERS: $(HEADERS)
 Indeed, @code{headers='$(HEADERS)'} expands to @code{headers='foo.h
 foo2.h foo3.h'} where @code{foo2.h} is still a plain word.  (Aside: the
 @code{headers='$(HEADERS)'; for i in $$headers;} idiom is a good
-idea if @code{$(HEADERS)} can be empty, because some shell produce a
+idea if @code{$(HEADERS)} can be empty, because some shells diagnose a
 syntax error on @code{for i in;}.)
 
-One workaround is to strip this unwanted @file{../src/} prefix manually:
+One workaround is to strip this unwanted @file{../pkg/src/} prefix manually:
 @example
-VPATH = ../src
+VPATH = ../pkg/src
 HEADERS = foo.h foo2.h foo3.h
 install-HEADERS: $(HEADERS)
         headers='$(HEADERS)'; for i in $$headers; do \
-          i=`expr "$$i" : '../src/\(.*\)'`;
-          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+          i=`expr "$$i" : '../pkg/src/\(.*\)'`;
+          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
 
-Automake does something similar.
+Automake does something similar.  However the above hack works only if
+the files listed in @code{HEADERS} are in the current directory or a
+subdirectory; they should not be in an enclosing directory.  If we had
+@code{HEADERS = ../foo.h}, the above fragment would fail in a VPATH
+build with OSF1/Tru64 @command{make}.  The reason is that not only does
+OSF1/Tru64 @command{make} rewrite dependencies, but it also simplifies
+them.  Hence @code{../foo.h} will become @code{../pkg/foo.h} instead of
+@code{../pkg/src/../foo.h}.  This obviously defeats any attempt to strip
+a leading @file{../pkg/src/} component.
+
+The following example makes the behavior of OSF1/Tru64 @command{make}
+more apparent.
+@example
+% cat Makefile
+VPATH = sub
+all: ../foo
+        echo ../foo
+% ls
+Makefile foo
+% make
+echo foo
+foo
+@end example
+@noindent
+Dependency @file{../foo} was found in @file{sub/../foo}, but OSF1/Tru64
+@command{make} simplified it as @file{foo}.  (Note that the @file{sub/}
+directory does not even exist, this just means that the simplification
+occurred before the file was checked for.)
+
+For the records here is how SunOS @command{make} behaves on this
+very same example.
+@example
+% make
+make: Fatal error: Don't know how to make target `../foo'
+% mkdir sub
+% make
+echo sub/../foo
+sub/../foo
+@end example
+
 
 @item OSF/Tru64 @command{make} creates prerequisite directories magically
 @cindex @code{VPATH} and prerequisite directories
