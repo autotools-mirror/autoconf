@@ -1,3 +1,12 @@
+2001-02-05  Akim Demaille  <akim@epita.fr>
+
+	acfunctions.m4 was still using the old AC_LIBOBJ_DECL.
+	Reported by Derek R. Price.
+
+	* tests/semantics.at (AC_REPLACE_FUNCS): New test.
+	* acfunctions.m4 (AC_REPLACE_FUNCS, _AC_LIBOBJ_ALLOCA): Use
+	AC_LIBSOURCES.
+
 2001-02-03  Pavel Roskin  <proski@gnu.org>
 
 	* tests/base.at (AC_TRY_COMMAND): Add a colon between "then" and

@@ -92,7 +92,7 @@ done
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
 AC_DEFUN([AC_REPLACE_FUNCS],
-[AC_FOREACH([AC_Func], [$1], [AC_LIBOBJ_DECL(AC_Func)])dnl
+[AC_FOREACH([AC_Func], [$1], [AC_LIBSOURCE(AC_Func.c)])dnl
 AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
 ])
 
@@ -129,13 +129,13 @@ AU_ALIAS([AC_HAVE_FUNCS], [AC_CHECK_FUNCS])
 # -----------------
 # Set up the LIBOBJ replacement of `alloca'.  Well, not exactly
 # AC_LIBOBJ since we actually set the output variable `ALLOCA'.
-# Nevertheless, for Automake, AC_LIBOBJ_DECL it.
+# Nevertheless, for Automake, AC_LIBSOURCES it.
 m4_define([_AC_LIBOBJ_ALLOCA],
 [# The SVR3 libPW and SVR4 libucb both contain incompatible functions
 # that cause trouble.  Some versions do not even contain alloca or
 # contain a buggy version.  If you still want to use their alloca,
 # use ar to extract alloca.o from them instead of compiling alloca.c.
-AC_LIBOBJ_DECL(alloca)
+AC_LIBSOURCES(alloca.c)
 AC_SUBST(ALLOCA, alloca.$ac_objext)dnl
 AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
 

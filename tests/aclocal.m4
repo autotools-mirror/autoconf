@@ -53,5 +53,5 @@ m4_defun([AC_STATE_SAVE],
   grep '^m4_defn([m4_re_word])=' >state-env.$1
 test $? = 0 || rm -f state-env.$1
 
-ls -1 | egrep -v '^(state.*|config\.)' | sort >state-ls.$1
+ls -1 | egrep -v '^(at-|state-|config\.)' | sort >state-ls.$1
 ])# AC_STATE_SAVE
