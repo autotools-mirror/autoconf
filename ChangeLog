@@ -1,3 +1,12 @@
+2004-11-13  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Don't check
+	the $1_found variable, don't test whether the file is executable;
+	Both things are checked ...
+	(_AC_PATH_PROG_FEATURE_CHECK): ... here; AS_EXECUTABLE_P replaces
+	the former ``test -f''.
+	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Fix a typo.
+
 2004-11-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Avoid cp -r;
