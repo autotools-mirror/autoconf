@@ -1,5 +1,16 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm: Use `carp' and `croak', not `warn' and
+	`die'.
+	(&END): New.
+	* bin/autoconf.in, bin/autom4te.in, bin/autoupdate.in: Remove your
+	`END', as `Autom4te::General::END' will be triggered.
+	* bin/autoupdate.in, bin/autoscan.in: Improve error messages accuracy.
+	* bin/autoupdate.in (File::Compare, File::Copy): Use them instead of
+	system to run `mv', `rm', and `cmp'.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm (&unique): New.
 	* bin/autoscan.in (&output): Use it to issue trace requests once.
 

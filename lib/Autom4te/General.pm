@@ -41,6 +41,43 @@ $verbose = 0;
 use vars qw ($debug);
 $debug = 0;
 
+# Our tmp dir.
+use vars qw ($tmp);
+$tmp = undef;
+
+
+# END
+# ---
+# Exit nonzero whenever closing STDOUT fails.
+# Ideally we should `exit ($? >> 8)', unfortunately, for some reason
+# I don't understand, whenever we `exit (1)' somewhere in the code,
+# we arrive here with `$? = 29'.  I suspect some low level END routine
+# might be responsible.  In this case, be sure to exit 1, not 29.
+sub END
+{
+  my $exit_status = $? ? 1 : 0;
+
+  use POSIX qw (_exit);
+
+  if (!$debug && defined $tmp && -d $tmp)
+    {
+      if (<$tmp/*>)
+	{
+	  unlink <$tmp/*>
+	    or carp ("$me: cannot empty $tmp: $!\n"), _exit (1);
+	}
+      rmdir $tmp
+	or carp ("$me: cannot remove $tmp: $!\n"), _exit (1);
+    }
+
+  # This is required if the code might send any output to stdout
+  # E.g., even --version or --help.  So it's best to do it unconditionally.
+  close STDOUT
+    or (carp "$me: closing standard output: $!\n"), _exit (1);
+
+  _exit ($exit_status);
+}
+
 
 # $CONFIGURE_AC
 # &find_configure_ac ()
@@ -51,8 +88,8 @@ sub find_configure_ac ()
     {
       if (-f 'configure.in')
 	{
-	  warn "warning: `configure.ac' and `configure.in' both present.\n";
-	  warn "warning: proceeding with `configure.ac'.\n";
+	  carp "warning: `configure.ac' and `configure.in' both present.\n";
+	  carp "warning: proceeding with `configure.ac'.\n";
 	}
       return 'configure.ac';
     }
@@ -101,10 +138,6 @@ sub find_peer ($$$)
   return $res;
 }
 
-
-# Our tmp dir.
-use vars qw ($tmp);
-$tmp = undef;
 
 # mktmpdir ($SIGNATURE)
 # ---------------------

@@ -280,39 +280,6 @@ map { s/:.*//;s/\W// } @m4_builtins;
 ## ---------- ##
 
 
-# END
-# ---
-# Exit nonzero whenever closing STDOUT fails.
-sub END
-{
-  use POSIX qw (_exit);
-
-  my ($q) = ($?);
-
-  # FIXME: Heelp!  Can't find a means to properly catch system's
-  # exit status (without hair I mean).
-  # my $status = $? >> 8;
-
-  if (!$debug && defined $tmp && -d $tmp)
-    {
-      if (<$tmp/*>)
-	{
-	  unlink <$tmp/*>
-	    or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
-	}
-      rmdir $tmp
-	or warn ("$me: cannot remove $tmp: $!\n"), _exit (1);
-    }
-
-  # This is required if the code might send any output to stdout
-  # E.g., even --version or --help.  So it's best to do it unconditionally.
-  close STDOUT
-    or (warn "$me: closing standard output: $!\n"), _exit (1);
-
-  ($!, $?) = (0, $q);
-}
-
-
 # $FILENAME
 # find_file ($FILENAME)
 # ---------------------

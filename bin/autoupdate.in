@@ -33,6 +33,8 @@ BEGIN
 
 use Getopt::Long;
 use File::Basename;
+use File::Compare;
+use File::Copy;
 use Autom4te::General;
 use strict;
 
@@ -48,36 +50,6 @@ my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 ## ---------- ##
 ## Routines.  ##
 ## ---------- ##
-
-
-# END
-# ---
-# Exit nonzero whenever closing STDOUT fails.
-sub END
-{
-  use POSIX qw (_exit);
-
-  my ($q) = ($?);
-
-  # FIXME: Heelp!  Can't find a means to properly catch system's
-  # exit status (without hair I mean).
-  # my $status = $? >> 8;
-
-  if (!$debug && -d $tmp)
-    {
-      unlink <$tmp/*>
-	or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
-      rmdir $tmp
-	or warn ("$me: cannot remove $tmp: $!\n"), _exit (1);
-    }
-
-  # This is required if the code might send any output to stdout
-  # E.g., even --version or --help.  So it's best to do it unconditionally.
-  close STDOUT
-    or (warn "$me: closing standard output: $!\n"), _exit (1);
-
-  ($!, $?) = (0, $q);
-}
 
 
 # print_usage ()
@@ -191,18 +163,18 @@ foreach (@m4_builtins)
     print M4SAVE_M4 "define([_au_$_], defn([$_]))\n";
   }
 close M4SAVE_M4
-  or die "$me: cannot close: $!\n";
+  or die "$me: cannot close $tmp/m4save.m4: $!\n";
 close UNM4_M4
-  or die "$me: cannot close: $!\n";
+  or die "$me: cannot close $tmp/unm4.m4: $!\n";
 close M4_M4
-  or die "$me: cannot close: $!\n";
+  or die "$me: cannot close $tmp/m4.m4: $!\n";
 
 
 # @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
 open MACROS, ("$autoconf "
 	      . "--trace AU_DEFUN:'AU:\$f:\$1' --trace define:'AC:\$f:\$1' "
 	      . "-i /dev/null |")
-  or die "$me: cannot open: $!\n";
+  or die "$me: cannot open definitions reading pipe: $!\n";
 my (%ac_macros, %au_macros);
 while (<MACROS>)
   {
@@ -219,7 +191,8 @@ while (<MACROS>)
       }
   }
 close MACROS
-  or die "$me: cannot close: $!\n";
+  or die ($! ? "$me: cannot close definitions reading pipe: $!\n"
+	  : "$me: definitions reading pipe failed with exit status: $?\n");
 # Don't keep AU macros in @AC_MACROS.
 delete $ac_macros{$_}
   foreach (keys %au_macros);
@@ -253,9 +226,9 @@ foreach (sort keys %ac_macros)
     print DISABLE_M4 "_au_undefine([$_])\n";
   }
 close DISABLE_M4
-  or die "$me: cannot close: $!\n";
+  or die "$me: cannot close $tmp/disable.m4: $!\n";
 close AC_M4
-  or die "$me: cannot close: $!\n";
+  or die "$me: cannot close $tmp/ac.m4: $!\n";
 
 
 
@@ -284,7 +257,7 @@ foreach my $file (@ARGV)
       divert(-1)                                            -*- Autoconf -*-
       changequote([, ])
 
-      # Move all the builtins into the \`_au_' pseudo namespace
+      # Move all the builtins into the `_au_' pseudo namespace
       include([$tmp/m4save.m4])
 
       # _au_defun(NAME, BODY)
@@ -309,7 +282,7 @@ foreach my $file (@ARGV)
       # above).  But since AU macros might use AU macros, which should
       # enable/disable only for the outter AU macros.
       #
-      # \`_au_enabled' is used to this end, condionning whether we really
+      # `_au_enabled' is used to this end, condionning whether we really
       # enable/disable.
 
 
@@ -385,43 +358,34 @@ EOF
 	 print INPUT_M4;
        }
     close FILE
-       or die "$me: cannot close: $!\n";
+       or die "$me: cannot close $file: $!\n";
     close INPUT_M4
-       or die "$me: cannot close: $!\n";
+       or die "$me: cannot close $tmp/input.m4: $!\n";
 
     # Now ask m4 to perform the update.
-    print STDERR "$me: running $m4 $tmp/input.m4\n"
-       if $verbose;
-    if (system ("$m4 $tmp/input.m4 >$tmp/updated"))
-       {
-	 # Exit status of system() is in the upper byte.
-	 $! >>= 8;
-	 die "$me: cannot update \`$filename'\n";
-       };
-
     if ("$file" eq "$tmp/stdin")
        {
-	 system ("cat $tmp/updated");
-       }
-    elsif (! system ("cmp -s $tmp/updated $file"))
-       {
-	 # File didn't change, so don't update its mod time.
-	 print STDERR "$me: \`$file' is unchanged\n"
+	 xsystem ("$m4 $tmp/input.m4");
        }
     else
        {
-	 # Back up and install the new one.
-	 if (system ("mv $file $file${SIMPLE_BACKUP_SUFFIX} && "
-		     . "mv $tmp/updated $file") == 0)
+	 xsystem ("$m4 $tmp/input.m4 >$tmp/updated");
+	 if (compare ("$tmp/updated", "$file") == 0)
 	   {
-	     print STDERR "$me: \`$file' is updated\n";
+	     # File didn't change, so don't update its mod time.
+	     print STDERR "$me: `$file' is unchanged\n"
 	   }
 	 else
 	   {
-	     die "$me: cannot update \`$file'\n";
+	     # Back up and install the new one.
+	     move ("$file",  "$file$SIMPLE_BACKUP_SUFFIX")
+	       or die "$me: cannot not backup $file: $!\n";
+	     move ("$tmp/updated", "$file")
+	       or die "$me: cannot not update $file: $!\n";
+	     print STDERR "$me: `$file' is updated\n";
 	   }
        }
-  }
+     }
 
 exit 0;
 
