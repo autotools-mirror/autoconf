@@ -1,5 +1,7 @@
 2002-09-01  Paul Eggert  <eggert@twinsun.com>
 
+	* bin/autoheader.in (parse_args): --warning -> --warnings.
+
 	* bin/autoconf.as: Work even if "ls" outputs "FOO not found" to
 	stdout, as traditional "ls" does.
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT,
