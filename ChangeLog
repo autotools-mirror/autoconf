@@ -1,3 +1,8 @@
+2001-03-30  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Use "invalid" instead of "illegal," as
+	suggested by the GNU coding standards.
+
 2001-03-30  Tim Van Holder <tim.van.holder@pandora.be>
 
 	* m4sh.m4 (AS_BASENAME): New.

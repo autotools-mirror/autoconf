@@ -5329,22 +5329,24 @@ the directory, @command{make install} will do nothing (unless the
 @item The 8+3 limit (@sc{sfn})
 Because the @sc{dos} file system only stores the first 8 characters of
 the filename and the first 3 of the extension, those must be unique.
-That means that @samp{foobar-part1.c}, @samp{foobar-part2.c} and
-@samp{foobar-prettybird.c} all resolve to the same filename
-(@samp{FOOBAR-P.C}).  The same goes for @samp{foo.bar} and
-@samp{foo.bartender}.
+That means that @file{foobar-part1.c}, @file{foobar-part2.c} and
+@file{foobar-prettybird.c} all resolve to the same filename
+(@file{FOOBAR-P.C}).  The same goes for @file{foo.bar} and
+@file{foo.bartender}.
+
 Note: This is not usually a problem under Windows, as it uses numeric
-tails in the short version of filenames to make them unique.  However,
-a registry setting can turn this behaviour off.  While this makes it
+tails in the short version of filenames to make them unique.  However, a
+registry setting can turn this behaviour off.  While this makes it
 possible to share file trees containing long file names between @sc{sfn}
 and @sc{lfn} environments, it also means the above problem applies there
 as well.
 
-@item Illegal characters
-Some characters are illegal in @sc{dos} filenames, and should therefore
-be avoided. In a @sc{lfn} environment, these are '/', '\', '?', '*', ':',
-'<', '>', '|' and '"'.  In a @sc{sfn} environment, other characters are
-also illegal.  These include '+', ',', '[' and ']'.
+@item Invalid characters
+Some characters are invalid in @sc{dos} filenames, and should therefore
+be avoided. In a @sc{lfn} environment, these are @samp{/}, @samp{\},
+@samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
+In a @sc{sfn} environment, other characters are also invalid.  These
+include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 @end table
 
 @node Shell Substitutions, Assignments, File System Conventions, Portable Shell
