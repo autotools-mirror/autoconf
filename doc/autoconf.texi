@@ -4726,6 +4726,13 @@ inside double-quoted backquoted expressions (Pfew!).
 
 No no, we are serious: some shells do have limitations :)
 
+You should always keep in mind that any built-in or command may support
+options, and therefore have a very different behavior with arguments
+starting with a dash.  For instance, the innocent @samp{echo "$word"}
+can give unexpected results when @code{word} starts with a dash.  It is
+often possible to avoid this problem using @samp{echo "x$word"}, taking
+the @samp{x} into account later in the pipe.
+
 @table @asis
 @item @command{case}
 @cindex @command{case}
@@ -4861,6 +4868,29 @@ case $ac_feature in
 esac
 @end example
 
+Alas, negated character classes are not portable (some old shells
+support the @samp{[!...]} syntax, some modern shells such as
+@command{zsh} support only the more recent syntax @samp{[^...]}).  One
+solution can be:
+
+@example
+expr "$ac_feature" : ".*[^-a-zA-Z0-9_]" >/dev/null &&
+  @var{action}
+@end example
+
+@noindent
+or better yet
+
+@example
+expr "x$ac_feature" : ".*[^-a-zA-Z0-9_]" >/dev/null &&
+  @var{action}
+@end example
+
+It is somewhat more robust than the @samp{echo | grep} solution which
+suffers the limitations of @command{echo}: its argument should be too
+special (containing backslashes).
+
+
 @item @command{unset}
 @cindex @command{unset}
 You cannot assume the support of @command{unset}, nevertheless, because
@@ -4910,6 +4940,15 @@ foo
 @end example
 
 @command{egrep} also suffers the limitations of @command{grep}.
+
+@item @command{expr}
+@cindex @command{expr}
+Don't use @samp{\?}, @samp{\+} and @samp{\|} which are not supported by
+Solaris.
+
+There is no known command of @command{expr} starting with @samp{x}, so
+using @samp{expr x"@var{word}" : '@var{regex}'} avoids problems if
+@var{word} happens to have a meaning for @command{expr}.
 
 @item @command{grep}
 @cindex @command{grep}
