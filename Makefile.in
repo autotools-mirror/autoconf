@@ -95,12 +95,6 @@ EXTRA_DIST = $(OLDCHANGELOGS) autoconf.sh autoheader.sh autoreconf.sh autoupdate
 CLEANFILES = autoconf.m4f autoheader.m4f autoupdate.m4f              $(bin_SCRIPTS)
 
 
-# INSTALL is a special case.  Automake seems to have a single name space
-# for both targets and variables.  If we just use INSTALL, then the var
-# $(INSTALL) is not defined, and the install target fails.
-
-MAKEINFO = makeinfo --no-split
-
 # The scripts.
 
 editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g' 	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
@@ -417,8 +411,12 @@ installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
+# INSTALL is a special case.  Automake seems to have a single name space
+# for both targets and variables.  If we just use INSTALL, then the var
+# $(INSTALL) is not defined, and the install target fails.
+
 INSTALL.txt: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $< --no-headers --no-validate --output=$@
+	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
 
 install-data-hook: INSTALL.txt
 	@$(NORMAL_INSTALL)

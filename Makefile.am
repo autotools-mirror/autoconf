@@ -58,10 +58,8 @@ CLEANFILES = autoconf.m4f autoheader.m4f autoupdate.m4f \
 # for both targets and variables.  If we just use INSTALL, then the var
 # $(INSTALL) is not defined, and the install target fails.
 
-MAKEINFO = makeinfo --no-split
-
 INSTALL.txt: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $< --no-headers --no-validate --output=$@
+	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
 
 install-data-hook: INSTALL.txt
 	@$(NORMAL_INSTALL)
