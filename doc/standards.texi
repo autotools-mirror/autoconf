@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate November 26, 2000
+@set lastupdate December  1, 2000
 @c %**end of header
 
 @ifinfo
@@ -2098,7 +2098,15 @@ lots_of_args (int an_integer, long a_long, short a_short,
 @end example
 
 The rest of this section gives our recommendations for other aspects of
-C formatting style.  We don't think of them as requirements, because it
+C formatting style, which is also the default style of the @code{indent}
+program in version 1.2 and newer.  It corresponds to the options
+
+@smallexample
+-nbad -bap -nbc -bbo -bl -bli2 -bls -ncdb -nce -cp1 -cs -di2
+-ndj -nfc1 -nfca -hnl -i2 -ip5 -lp -pcs -psl -nsc -nsob
+@end smallexample
+
+We don't think of these recommendations as requirements, because it
 causes no problems for users if two different programs have different
 formatting styles.
 
