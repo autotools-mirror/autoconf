@@ -209,7 +209,7 @@ AT_CHECK([cat src1], 0, [dst1
 AT_CHECK([cat src2], 0, [dst2
 ])
 
-AT_CLEANUP
+AT_CLEANUP(src1 src2)
 
 
 ## ------------------ ##

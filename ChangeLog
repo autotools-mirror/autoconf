@@ -1,3 +1,8 @@
+2000-10-20  Pavel Roskin  <proski@gnu.org>
+
+	* tests/tools.m4 (autoupdating AC_LINK FILES): Clean up "src1"
+	and "src2" at the end of the test.
+
 2000-10-19  Pavel Roskin  <proski@gnu.org>
 
 	* NEWS: Documented changes in AC_PROG_CPP and AC_TRY_CPP.
