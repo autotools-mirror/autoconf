@@ -1,3 +1,9 @@
+1999-02-22  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (System Services): Explain the semantics of the
+	AC_SYS_RESTARTABLE_SYSCALLS macro in greater detail. Suggested by
+	Franc,ois Pinard <pinard@iro.umontreal.ca>.
+
 1999-02-22  Stu Grossman  <grossman@cygnus.com>
 
 	* acgeneral.m4 (AC_CANONICAL_SYSTEM): Explicitly require

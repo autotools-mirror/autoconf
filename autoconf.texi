@@ -2892,7 +2892,11 @@ If the system supports file names longer than 14 characters, define
 @maindex SYS_RESTARTABLE_SYSCALLS
 @cvindex HAVE_RESTARTABLE_SYSCALLS
 If the system automatically restarts a system call that is interrupted
-by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}.
+by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}. This macro does
+not check if system calls are restarted in general--it tests whether a
+signal handler installed with @code{signal} (but not @code{sigaction})
+causes system calls to be restarted. It does not test if system calls
+can be restarted when interrupted by signals that have no handler.
 @end defmac
 
 @node UNIX Variants,  , System Services, Existing Tests
