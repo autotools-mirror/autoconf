@@ -1,3 +1,8 @@
+2001-02-05  Jim Meyering  <meyering@lucent.com>
+
+	* acspecific.m4 (AC_SYS_LARGEFILE): Add ULL suffix to the
+	integer constants.
+
 2001-02-05  Akim Demaille  <akim@epita.fr>
 
 	acfunctions.m4 was still using the old AC_LIBOBJ_DECL.
