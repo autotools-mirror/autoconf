@@ -1,3 +1,10 @@
+2000-05-12  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Invoking config.status): Move the
+	documentation of the envvar CONFIG_(FILES, HEADERS, COMMANDS,
+	LINKS) to
+	(Obsolete config.status Use): here.
+
 2000-05-12  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Exiting from Shell Scripts): New node.
