@@ -2646,6 +2646,16 @@ rm -f conftest*])
 MINGW32=
 test "$ac_cv_mingw32" = yes && MINGW32=yes])
 
+dnl Check for EMX on OS/2.  This is another way to set the right value
+dnl for EXEEXT.
+AC_DEFUN(AC_EMXOS2,
+[AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
+[AC_TRY_COMPILE(,[return __EMX__;],
+ac_cv_emxos2=yes, ac_cv_emxos2=no)
+rm -f conftest*])
+EMXOS2=
+test "$ac_cv_emxos2" = yes && EMXOS2=yes])
+
 dnl Check for the extension used for executables.  This knows that we
 dnl add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 dnl executable.  If this is called, the executable extensions will be
@@ -2653,9 +2663,10 @@ dnl automatically used by link commands run by the configure script.
 AC_DEFUN(AC_EXEEXT,
 [AC_REQUIRE([AC_CYGWIN])
 AC_REQUIRE([AC_MINGW32])
+AC_REQUIRE([AC_EMXOS2])
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
-[if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
+[if test "$CYGWIN" = yes || test "$MINGW32" = yes || test "$EMXOS2" = yes; then
   ac_cv_exeext=.exe
 else
   rm -f conftest*

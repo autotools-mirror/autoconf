@@ -1,3 +1,14 @@
+1999-04-05  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_EMXOS2): New macro. Contributed by Ryuji Abe
+	<raeva@t3.rim.or.jp>.
+	(AC_EXEEXT): Handle case for OS/2.
+	
+	* autoconf.texi (AC_EMXOS2): Document.
+	(AC_EXEEXT): Mention OS/2.
+	(AC_MINGW32): Move.
+	(UPDATED): Update.
+
 1999-04-01  Ben Elliston  <bje@cygnus.com>
 
 	* standards.texi: Update from FSF.

@@ -8,7 +8,7 @@
 
 @set EDITION 2.14
 @set VERSION 2.14
-@set UPDATED January 1999
+@set UPDATED April 1999
 
 @iftex
 @finalout
@@ -2801,12 +2801,25 @@ Checks for the Cygwin environment.  If present, sets shell variable
 to the empty string.
 @end defmac
 
+@defmac AC_MINGW32
+@maindex MINGW32
+Checks for the MingW32 compiler environment.  If present, sets shell
+variable @code{MINGW32} to @samp{yes}.  If not present, sets
+@code{MINGW32} to the empty string.
+@end defmac
+
+@defmac AC_EMXOS2
+@maindex EMXOS2
+Checks for the EMX environment on OS/2.  If present, sets shell variable
+@code{EMXOS2} to @samp{yes}.  If not present. sets @code{EMXOS2} to the
+empty string.
+
 @defmac AC_EXEEXT
 @maindex EXEEXT
 @ovindex EXEEXT
 Defines substitute variable @code{EXEEXT} based on the output of the
 compiler, after .c, .o, and .obj files have been excluded.  Typically
-set to empty string if Unix, @samp{.exe} or @samp{.EXE} if Win32.
+set to empty string if Unix and @samp{.exe} if Win32 or OS/2.
 @end defmac
 
 @defmac AC_OBJEXT
@@ -2815,13 +2828,6 @@ set to empty string if Unix, @samp{.exe} or @samp{.EXE} if Win32.
 Defines substitute variable @code{OBJEXT} based on the output of the
 compiler, after .c files have been excluded.  Typically
 set to @samp{o} if Unix, @samp{obj} if Win32.
-@end defmac
-
-@defmac AC_MINGW32
-@maindex MINGW32
-Checks for the MingW32 compiler environment.  If present, sets shell
-variable @code{MINGW32} to @samp{yes}.  If not present, sets
-@code{MINGW32} to the empty string.
 @end defmac
 
 @defmac AC_PATH_X
