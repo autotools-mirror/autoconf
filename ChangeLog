@@ -1,3 +1,7 @@
+Fri Nov 24 17:26:38 1995  Miles Bader  <miles@gnu.ai.mit.edu>
+
+	* autoconf.sh: Define $AWK from the subst @AWK@, and use it.
+
 Wed Nov 22 11:01:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Version 2.7.
