@@ -27,7 +27,7 @@ test -d $pwd/1/2/3/4/5/6 ||
 AS_MKDIR_P(a/b/c/d/e/f)
 test -d a/b/c/d/e/f ||
   AC_MSG_ERROR([a/b/c/d/e/f has not been properly created])
-exit 0
+AS_EXIT(0)
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
@@ -99,7 +99,7 @@ AS_DIRNAME_SED_TEST([//1//3/],		[//1])
 AS_DIRNAME_SED_TEST([/1//3/],		[/1])
 AS_DIRNAME_SED_TEST([./1//3/],		[./1])
 AS_DIRNAME_SED_TEST([../../2//3/],	[../../2])
-exit 0
+AS_EXIT(0)
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])

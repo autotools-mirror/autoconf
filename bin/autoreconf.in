@@ -286,7 +286,7 @@ EOF
 # update.sh --
 # Exit 0 if the first argument is not the most recent of all or is missing.
 cat >$tmp/update.sh <<\EOF
-test -f "$1" || exit 0
+test -f "$1" || { :; exit; }
 test x`ls -1dt "$@" 2>/dev/null | sed 1q` != x"$1"
 EOF
 update="@SHELL@ $tmp/update.sh"

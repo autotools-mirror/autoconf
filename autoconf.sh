@@ -390,7 +390,7 @@ case $task in
         }
     }
 EOF
-    $AWK -f $tmp/finalize.awk <$tmp/configure >&4 || exit 1
+    $AWK -f $tmp/finalize.awk <$tmp/configure >&4 || { (exit 1); exit; }
   ;; # End of the task script.
 
 

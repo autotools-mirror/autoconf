@@ -29,7 +29,7 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
 # But there are systems without libm, on which we don't want to have
 # this test fail, so exit successfully if `cos' is in libc.
 AT_CHECK_MACRO(AC_CHECK_LIB,
-[AC_TRY_LINK_FUNC(cos, exit 0)
+[AC_TRY_LINK_FUNC(cos, [AS_EXIT(0)])
 AC_CHECK_LIB(m, cos,,
              [AC_MSG_ERROR([cannot find `cos'])])])
 
@@ -257,7 +257,7 @@ test "$TOOL6" = tool || fail=:
 # no AC_OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[CHECK_PROG failed]])
-exit 0
+AS_EXIT(0)
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
@@ -297,7 +297,7 @@ test "$TOOL4" = $pwd/path/1/tool || fail=:
 # no AC_OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[PATH_PROG failed]])
-exit 0
+AS_EXIT(0)
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])

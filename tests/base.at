@@ -18,7 +18,7 @@ AT_SETUP(AC_REQUIRE)
 AT_DATA(configure.in,
 [[define([REQUIRE_AND_CHECK],
 [AC_REQUIRE([$1])dnl
-test -z "$translit([$1], [A-Z], [a-z])" && exit 1])
+test -z "$translit([$1], [A-Z], [a-z])" && AS_EXIT(1)])
 
 AC_DEFUN([TEST1],
 [REQUIRE_AND_CHECK([TEST2a])
@@ -40,7 +40,7 @@ AC_PLAIN_SCRIPT
 TEST1
 test -z "$test1" &&
   AC_MSG_ERROR([\$test1 is empty])
-exit 0
+AS_EXIT(0)
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])

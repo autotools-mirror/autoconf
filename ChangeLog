@@ -1,3 +1,12 @@
+2000-11-01  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Using trap-safe "exit".
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* tests/base.at: Use AS_EXIT instead of exit in configure.in.
+	* tests/m4sh.at: Likewise.
+	* tests/semantics.at: Likewise.
+
 2000-11-01  Akim Demaille  <akim@epita.fr>
 
 	In M4sugar, move `define', `undefine', and `defn' into the `m4_'
