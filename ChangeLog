@@ -1,5 +1,10 @@
 2002-10-11  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/specific.m4 (AC_DECL_SYS_SIGLIST): Obsolete.
+	Suggest using AC_CHECK_DECLS instead.
+
+2002-10-11  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (AC_ARG_VAR): Have configure report the value
 	of `precious'.
 

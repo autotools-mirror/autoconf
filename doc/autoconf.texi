@@ -4530,15 +4530,7 @@ Declarations}) or, for more complex tests, you may use
 @node Particular Declarations
 @subsection Particular Declaration Checks
 
-The following macros check for certain declarations.
-
-@defmac AC_DECL_SYS_SIGLIST
-@acindex DECL_SYS_SIGLIST
-@cvindex SYS_SIGLIST_DECLARED
-Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist}
-is declared in a system header file, either @file{signal.h} or
-@file{unistd.h}.
-@end defmac
+There are no specific macros for declarations.
 
 @node Generic Declarations
 @subsection Generic Declaration Checks
@@ -12222,6 +12214,12 @@ esac
 Beware that the variable @code{CYGWIN} has a very special meaning when
 running CygWin32, and should not be changed.  That's yet another reason
 not to use this macro.
+@end defmac
+
+@defmac AC_DECL_SYS_SIGLIST
+@acindex DECL_SYS_SIGLIST
+@cvindex SYS_SIGLIST_DECLARED
+Same as @samp{AC_CHECK_DECLS([sys_siglist])}.
 @end defmac
 
 @defmac AC_DECL_YYTEXT

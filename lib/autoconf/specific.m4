@@ -58,25 +58,9 @@
 
 # AC_DECL_SYS_SIGLIST
 # -------------------
-AN_IDENTIFIER([sys_siglist],     [AC_DECL_SYS_SIGLIST])
-AC_DEFUN([AC_DECL_SYS_SIGLIST],
-[AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
-  ac_cv_decl_sys_siglist,
-[AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM([#include <sys/types.h>
-#include <signal.h>
-/* NetBSD declares sys_siglist in unistd.h.  */
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-], [char *msg = *(sys_siglist + 1);])],
-                   [ac_cv_decl_sys_siglist=yes],
-                   [ac_cv_decl_sys_siglist=no])])
-if test $ac_cv_decl_sys_siglist = yes; then
-  AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
-            [Define to 1 if `sys_siglist' is declared by <signal.h>
-             or <unistd.h>.])
-fi
+AN_IDENTIFIER([sys_siglist],     [AC_CHECK_DECLS([sys_siglist])])
+AU_DEFUN([AC_DECL_SYS_SIGLIST],
+[AC_CHECK_DECLS([sys_siglist])
 ])# AC_DECL_SYS_SIGLIST
 
 

@@ -6,6 +6,11 @@
 - New macros
   AC_FUNC_MBRTOWC
 
+- Obsoleted
+  Obsoleted macros are kept for Autoconf backward compatibility, but
+  should be avoided in configure.ac.  Running autoupdate is advised.
+  AC_DECL_SYS_SIGLIST.
+
 ** Bug Fixes
 
 - Portability of the Autoconf package to Solaris.

@@ -259,7 +259,7 @@ identifier: size_t		AC_TYPE_SIZE_T
 identifier: st_blksize		AC_CHECK_MEMBERS([struct stat.st_blksize])
 identifier: st_blocks		AC_STRUCT_ST_BLOCKS
 identifier: st_rdev		AC_CHECK_MEMBERS([struct stat.st_rdev])
-identifier: sys_siglist		AC_DECL_SYS_SIGLIST
+identifier: sys_siglist		AC_CHECK_DECLS([sys_siglist])
 identifier: timeval		AC_HEADER_TIME
 identifier: tm		AC_STRUCT_TM
 identifier: tm_zone		AC_STRUCT_TIMEZONE
