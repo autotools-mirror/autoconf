@@ -1,5 +1,8 @@
 2002-04-03  Andreas Schwab  <schwab@suse.de>
 
+	* lib/m4sugar/m4sugar.m4 (m4_bmatch): Make sure m4_bregexp is not
+	expanded if $# <= 2.
+
 	* bin/autoreconf.in (autoreconf): Run automake after rerunning
 	aclocal.
 
