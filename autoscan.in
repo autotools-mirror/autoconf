@@ -386,27 +386,25 @@ sub scan_sh_file ($)
 # the current directory of the walk through.
 sub scan_file ()
 {
+  # Wanted only if there is no corresponding FILE.in.
+  return
+    if -f "$_.in";
+
   # Save $_ as Find::File requires it to be preserved.
   my $underscore = $_;
 
   # Strip a useless leading `./'.
   $File::Find::name =~ s,^\./,,;
 
-  if (/^.*\.[chlymC]$/ || /^.*\.cc$/)
+  if (/\.[chlymC](\.in)?$/ || /\.cc(\.in)?$/)
     {
       scan_c_file ($_);
     }
-  elsif (/^[Mm]akefile$/ || /^GNUmakefile$/)
-    {
-      # Wanted only if there is no corresponding Makefile.in.
-      scan_makefile ($_)
-	if ! -f "$_.in";
-    }
-  elsif (/^[Mm]akefile\.in$/)
+  elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)
     {
       scan_makefile ($_);
     }
-  elsif (/^.*\.sh$/)
+  elsif (/\.sh(\.in)?$/)
     {
       scan_sh_file ($_);
     }

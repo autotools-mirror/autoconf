@@ -1,8 +1,13 @@
+2001-07-04  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.in (&scan_file): Skip FILE if there is FILE.in.
+	From Jens Petersen.
+
 2001-07-03  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Specify CONFIG_FILES
 	etc. in the log.
-	
+
 2001-07-03  Akim Demaille  <akim@epita.fr>
 
 	* acheaders.m4 (AC_CHECK_HEADER): When INCLUDES are set, use the
