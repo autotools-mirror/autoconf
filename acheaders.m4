@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for headers.
-# Copyright 2000
+# Copyright 2000, 2001
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Macros that test for specific features.
-# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
+# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
