@@ -216,12 +216,12 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [], [stderr])
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
 AT_CHECK([sort stderr], 0,
-[[configure.ac:2: error: undefined macro: AC_FOO
-configure.ac:3: error: undefined macro: _AC_BAR
-configure.ac:4: error: undefined macro: m4_foo
-configure.ac:7: error: undefined macro: B_AC_FOO
-configure.ac:8: error: undefined macro: AS_FOO
-configure.ac:9: error: undefined macro: _AS_BAR
+[[configure.ac:2: error: possibly undefined macro: AC_FOO
+configure.ac:3: error: possibly undefined macro: _AC_BAR
+configure.ac:4: error: possibly undefined macro: m4_foo
+configure.ac:7: error: possibly undefined macro: B_AC_FOO
+configure.ac:8: error: possibly undefined macro: AS_FOO
+configure.ac:9: error: possibly undefined macro: _AS_BAR
 ]])
 
 AT_CLEANUP(configure)
@@ -257,13 +257,13 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [], [stderr])
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
 AT_CHECK([sort stderr], 0,
-[[configure.ac:10: error: undefined macro: FORBIDDEN
-configure.ac:14: error: undefined macro: AC_THIS_IS_INVALID
-configure.ac:14: error: undefined macro: _AC_THIS_IS_INVALID_TOO
-configure.ac:15: error: undefined macro: ALTHOUGH_AC_THIS_IS
-configure.ac:7: error: undefined macro: AC_ALLOWED_NOT
-configure.ac:7: error: undefined macro: NOT_AC_ALLOWED
-configure:18: error: undefined macro: AC_OUTPUT
+[[configure.ac:10: error: possibly undefined macro: FORBIDDEN
+configure.ac:14: error: possibly undefined macro: AC_THIS_IS_INVALID
+configure.ac:14: error: possibly undefined macro: _AC_THIS_IS_INVALID_TOO
+configure.ac:15: error: possibly undefined macro: ALTHOUGH_AC_THIS_IS
+configure.ac:7: error: possibly undefined macro: AC_ALLOWED_NOT
+configure.ac:7: error: possibly undefined macro: NOT_AC_ALLOWED
+configure:18: error: possibly undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure err)
