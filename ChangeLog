@@ -1,5 +1,10 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* man/Makefile.am (.x.1): Fix to work properly with
+	builddir != srcdir.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Fortran 77))
 	(AC_PROG_CPP, AC_PROG_CXXCPP, AC_PROG_GCC_TRADITIONAL)
 	(_AC_PROG_CC_G, AC_PROG_CC_C_O, _AC_PROG_CXX_G, AC_PROG_CC_STDC):

@@ -24,13 +24,14 @@ config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config.sub
 SUFFIXES = .x .1
 
 .x.1:
-	@if test -f $(top_builddir)/$*; then \
+	test -f $(top_builddir)/$* && prog=$(top_builddir)/$*; \
+	test -f $(top_srcdir)/$* && prog=$(top_srcdir)/$*; \
+	if test -n "$$prog"; then \
 	  echo "Updating man page $@"; \
 	  $(HELP2MAN) \
 	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ \
-	    $(top_builddir)/$*; \
+	    --output=$@ $$prog; \
 	else \
 	  echo "WARNING: The man page $@ cannot be updated yet."; \
 	  echo "         Retry once the corresponding executable is built."; \
