@@ -89,7 +89,6 @@ actypes.at: mktests.sh $(MACRO_FILES)
 
 CLEANFILES = 				\
 	debug-*.sh state-* at-* stderr stdout \
-	autom4te.cache				\
 	script.s4g script.as script			\
 	configure configure.in configure.ac config.status config.cache \
 	config.log config.h.in config.hin config.h \
@@ -127,3 +126,6 @@ maintainer-check-posix: expr
 # Try using G++ as a C compiler.
 maintainer-check-c++:
 	CC=g++ make check
+
+clean-local:
+	-rm -rf autom4te.cache

@@ -55,6 +55,8 @@ INSTALL.txt: $(top_srcdir)/doc/install.texi
 
 MAINTAINERCLEANFILES = INSTALL.txt
 
+maintainer-clean-local:
+	-rm -rf autom4te.cache
 
 ## maintainer-check ##
 maintainer-check: maintainer-check-tests
