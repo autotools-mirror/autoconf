@@ -1,5 +1,12 @@
 2003-11-24  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Particular Programs): AC_PROG_LEX can
+	override some files.
+	(Input): AC_CONFIG_AUX_DIR(aux) is a bad idea on DOS.
+	From Debian Autoconf 2.58.
+
+2003-11-24  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_popdir
 	uses.
 	From Debian Autoconf 2.58.

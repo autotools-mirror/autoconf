@@ -1757,6 +1757,9 @@ either absolute or relative to @file{@var{srcdir}}.  The default is
 other auxiliary files.  It checks for @file{install.sh} also, but that
 name is obsolete because some @code{make} have a rule that creates
 @file{install} from it if there is no @file{Makefile}.
+
+The auxiliary directory should not be named @file{aux} for portability
+to MS-DOS, because the filename @file{aux} is reserved under MS-DOS.
 @end defmac
 
 Similarly, packages that use @command{aclocal} should declare where
@@ -3296,6 +3299,9 @@ To ensure backward compatibility, Automake's @code{AM_PROG_LEX} invokes
 (indirectly) this macro twice, which will cause an annoying but benign
 ``@code{AC_PROG_LEX} invoked multiple times'' warning.  Future versions
 of Automake will fix this issue; meanwhile, just ignore this message.
+
+As part of running the test, this macro may delete any file in the
+configuration directory named @file{lex.yy.c} or @file{lexyy.c}.
 @end defmac
 
 @defmac AC_PROG_LN_S
