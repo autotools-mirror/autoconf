@@ -1564,7 +1564,7 @@ dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
 dnl may have different results.
-ac_lib_var=`echo $1['_']$2 | sed 'y%./+-%__p_%'`
+ac_lib_var=`echo $1['_']$2 | sed 'y%./+-:%__p__%'`
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"

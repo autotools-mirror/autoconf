@@ -1,3 +1,8 @@
+1999-05-27  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Translate the ":" character to a
+	"_", which allows checking for member functions in C++ libraries.
+
 1995-05-25  H.J. Lu  <hjl@gnu.org>
 
 	* config.guess (dummy): Changed to $dummy.
