@@ -827,22 +827,10 @@ AC_CHECK_HEADER(sys/mkdev.h,
 fi
 ])
 
-AC_DEFUN(AC_HEADER_DIRENT,
-[ac_header_dirent=no
-AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
-  [ac_header_dirent=$ac_hdr; break])
-# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
-if test $ac_header_dirent = dirent.h; then
-  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
-else
-  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
-fi
-])
-
+dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+dnl ----------------------------------------------------
 dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
-AC_DEFUN(AC_CHECK_HEADER_DIRENT,
 [ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
@@ -858,9 +846,10 @@ else
 fi
 ])
 
+dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+dnl --------------------------------------------------
 dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
 dnl defines `DIR'.
-dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
 define(AC_CHECK_HEADERS_DIRENT,
 [for ac_hdr in $1
 do
@@ -871,9 +860,21 @@ changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
 
+AC_DEFUN(AC_HEADER_DIRENT,
+[ac_header_dirent=no
+AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
+  [ac_header_dirent=$ac_hdr; break])
+# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
+if test $ac_header_dirent = dirent.h; then
+  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+else
+  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
+fi
+])
+
+
 AC_DEFUN(AC_DIR_HEADER,
 [AC_HASBEEN([$0], [; instead use AC_HEADER_DIRENT])])
-
 
 AC_DEFUN(AC_HEADER_STAT,
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
@@ -912,6 +913,8 @@ if test $ac_cv_header_stat_broken = yes; then
 fi
 ])
 
+dnl AC_DECL_SYS_SIGLIST
+dnl -------------------
 AC_DEFUN(AC_DECL_SYS_SIGLIST,
 [AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
   ac_cv_decl_sys_siglist,
@@ -920,13 +923,14 @@ AC_DEFUN(AC_DECL_SYS_SIGLIST,
 /* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif], [char *msg = *(sys_siglist + 1);],
+#endif
+], [char *msg = *(sys_siglist + 1);],
   ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
 if test $ac_cv_decl_sys_siglist = yes; then
   AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
-            [Define if `sys_siglist' is declared by <signal.h>.])
+            [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
 fi
-])
+])dnl AC_DECL_SYS_SIGLIST
 
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
@@ -992,7 +996,7 @@ fi])
 AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
                    [Define to the type of elements in the array set by
                     `getgroups'. Usually this is either `int' or `gid_t'.])
-])
+])dnl AC_TYPE_GETGROUPS
 
 AC_DEFUN(AC_TYPE_UID_T,
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
@@ -1040,8 +1044,10 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 dnl ### Checks for functions
 
 
-dnl FIXME: What is going on here?  There are both CLOSEDIR_VOID
-dnl *and* VOID_CLOSEDIR.
+dnl AC_FUNC_CLOSEDIR_VOID
+dnl ---------------------
+dnl Check whether closedir returns void, and #define CLOSEDIR_VOID in
+dnl that case.
 AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
@@ -1462,7 +1468,7 @@ if test $ac_cv_func_wait3_rusage = yes; then
   AC_DEFINE(HAVE_WAIT3, 1,
             [Define if you have the `wait3' system call.])
 fi
-])
+])dnl AC_FUNC_WAIT3
 
 AC_DEFUN(AC_FUNC_ALLOCA,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.

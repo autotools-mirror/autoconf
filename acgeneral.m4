@@ -89,11 +89,13 @@ dnl `exp'.
 define([m4_quote], [[$@]])
 
 
-dnl m4_split(STRING)
-dnl ----------------
+dnl m4_split(STRING, [REGEXP])
+dnl --------------------------
 dnl Split STRING into an m4 list of quoted elements.  The elements are
 dnl quoted with [ and ].  Beginning spaces and end spaces *are kept*.
 dnl Use m4_strip to remove them.
+dnl
+dnl REGEXP specifies where to split.  Default is [\t ]+.
 dnl
 dnl Pay attention to the changequotes.  Inner changequotes exist for
 dnl obvious reasons (we want to insert square brackets).  Outer
@@ -112,7 +114,11 @@ dnl   => [active], [active], []end
 changequote(<<, >>)
 define(<<m4_split>>,
 <<changequote(``, '')dnl
-[patsubst(````$1'''', ``[ 	]+'', ``], ['')]dnl
+[dnl Can't use m4_default here instead of ifelse, because m4_default uses
+dnl [ and ] as quotes.
+patsubst(````$1'''',
+         ifelse(``$2'',, ``[ 	]+'', ``$2''),
+         ``], ['')]dnl
 changequote([, ])>>)
 changequote([, ])
 
@@ -1477,30 +1483,34 @@ AC_DIVERT_POP()dnl to KILL
 
 dnl Subroutines of AC_PREREQ.
 
-dnl Change the dots in NUMBER into commas.
-dnl AC_PREREQ_SPLIT(NUMBER)
-define(AC_PREREQ_SPLIT,
-[translit($1, ., [, ])])
-
-dnl Default the ternary version number to 0 (e.g., 1, 7 -> 1, 7, 0).
-dnl AC_PREREQ_CANON(MAJOR, MINOR [,TERNARY])
-define(AC_PREREQ_CANON,
-[$1, $2, ifelse([$3], , 0, [$3])])
-
-dnl Complain and exit if version number 1 is less than version number 2.
-dnl PRINTABLE2 is the printable version of version number 2.
-dnl AC_PREREQ_COMPARE(MAJOR1, MINOR1, TERNARY1, MAJOR2, MINOR2, TERNARY2,
-dnl                   PRINTABLE2)
-define(AC_PREREQ_COMPARE,
-[ifelse(
-  m4_eval([$3 + $2 * 1000 + $1 * 1000000 < $6 + $5 * 1000 + $4 * 1000000]),
-  1, [AC_FATAL(Autoconf version $7 or higher is required for this script)])])
+dnl m4_compare(VERSION-1, VERSION-2)
+dnl --------------------------------
+dnl Compare the two version numbers and expand into
+dnl  -1 if VERSION-1 < VERSION-2
+dnl   0 if           =
+dnl   1 if           >
+dnl The handling of the special values [[]] is a pain, but seems necessary.
+dnl This macro is a excellent tutorial on the order of evaluation of ifelse.
+define(m4_compare,
+[ifelse([$1],,      [ifelse([$2],,      0,
+                            [$2], [[]], 0,
+                            1)],
+        [$1], [[]], [ifelse([$2],, 0,
+                            [$2], [[]], 0,
+                            1)],
+        [$2],,      -1,
+        [$2], [[]], -1,
+        [ifelse(m4_eval(m4_car($1) < m4_car($2)), 1, 1,
+                [ifelse(m4_eval(m4_car($1) > m4_car($2)), 1, -1,
+                        [m4_compare(m4_quote(m4_shift($1)),
+                                    m4_quote(m4_shift($2)))])])])])
 
 dnl Complain and exit if the Autoconf version is less than VERSION.
 dnl AC_PREREQ(VERSION)
 define(AC_PREREQ,
-[AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
-AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])), [$1])])
+[ifelse(m4_compare(m4_split([$1],         [\.]),
+                   m4_split(AC_ACVERSION, [\.])), -1,
+       [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
 
 
 dnl ### Getting the canonical system type
@@ -2268,8 +2278,10 @@ char $1();
 [$3]))
 
 
-dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
-dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
+dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS
+dnl                [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                [, OTHER-LIBRARIES]]])
+dnl --------------------------------------------------------
 dnl Search for a library defining FUNC, if it's not already available.
 
 AC_DEFUN(AC_SEARCH_LIBS,
@@ -2295,6 +2307,7 @@ fi])
 
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
+dnl ------------------------------------------------------------------------
 dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
@@ -2791,25 +2804,32 @@ AC_DEFUN(AC_CONFIG_LINKS,
 ifelse(regexp([$1], [ .:]), -1,,
         [AC_FATAL([$0: invalid destination: `.'])])
 define([AC_LIST_LINKS],
-       ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$1])])
+       ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$1])
+])
 
 
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 dnl ---------------------------------
 dnl Link each of the existing files SOURCE... to the corresponding
 dnl link name in DEST...
+dnl This macro, as AC_CONFIG_FILES, produces no sh code, so we don't
+dnl dnl.
 AC_DEFUN(AC_LINK_FILES,
-[AC_OBSOLETE([$0], [; instead use AC_CONFIG_FILES(DEST:SOURCE...)])dnl
+[AC_OBSOLETE([$0], [; instead use AC_CONFIG_FILES(DEST:SOURCE...)])
 ifelse($#, 2, ,
   [AC_FATAL([$0: incorrect number of arguments])])
+
 pushdef([AC_Sources], m4_split(m4_strip(m4_join([$1]))))
 pushdef([AC_Dests], m4_split(m4_strip(m4_join([$2]))))
+
 m4_foreach([AC_Dummy], (AC_Sources),
   [AC_CONFIG_LINKS(m4_car(AC_Dests):m4_car(AC_Sources))
    define([AC_Sources], m4_quote(m4_shift(AC_Sources)))
    define([AC_Dests], m4_quote(m4_shift(AC_Dests)))])
+
 popdef([AC_Sources])
-popdef([AC_Dests])])
+popdef([AC_Dests])
+])
 
 define([AC_LIST_LINKS],
        ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2:$1])])

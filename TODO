@@ -13,9 +13,27 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+
 ** AC_CHECK_HEADER should not template config.h entries.
 Its entry in autoheader.m4 should be removed.
 
+** Allow tags for AC_OUTPUT_COMMANDS
+so that we  can run ./config.status name-of-the command.
+
+** Allow --recursive to config.status
+
+** Allow --header, --command, --file to config.status.
+
+** Fix the two sed quoting snippets for config.status.
+That of #defines has in addition a problem of sed portability on Irix.
+That of the AC_SUBST is broken since when went from s%%%g to s%%%;t t.
+
+** Move AM_PROG_CC_STDC into Autoconf.
+Autoconf should provide the means to determine the ANSIsm of the
+compiler, not Automake.
+
+** Provide means to provides commands to run before AC_OUTPUT.
+This is what is needed for LTLIBOBJS and others.
 
 ** Document GNATS?
 
@@ -78,18 +96,6 @@ non-zero. TOUPPER, hence, is not correct either. But, in all variants
 of ASCII in the C locale, it works.
 
 Tanmoy Bhattacharya (tanmoy@qcd.lanl.gov>
-
-** CONFIG_LINKS= (I think we should fix this one --akim)
-When using CONFIG_FILES= and CONFIG_HEADERS= for controlling partial
-configuration, any AC_LINK_FILES is repeated in each case (that is,
-usually, once for config.h and once per subdirectory).  This is not
-elegant.
-
-Maybe Autoconf could use some kind of CONFIG_LINKS=<file-list>, having
-all such AC_LINK(ed)_FILES by default, but usable by each Makefile.in
-in rules for updating the particular links they need.
-
-From: pinard@iro.umontreal.ca
 
 ** More C compilers (How come this has never been handled?  --akim)
 Question: at least one common UNIX variant has a "cc" that is old K&R

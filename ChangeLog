@@ -1,3 +1,16 @@
+1999-10-05  Akim Demaille  <akim@epita.fr>
+
+	Handle arbitrary version numbers.
+	Reported by H.J. Lu.
+
+	* acgeneral.m4 (m4_split): Support a second optional argument: a
+ 	regexp to specify where to split.
+	(m4_compare): New macro, compares arbitrary long m4 lists of
+ 	integers.
+	(AC_PREREQ_SPLIT, AC_PREREQ_CANON, AC_PREREQ_COMPARE): Removed,
+	replaced by more generic macros.
+	(AC_PREREQ): Reimplemented, using m4_compare and m4_split.
+
 1999-10-04  Akim Demaille  <akim@epita.fr>
 
 	Beware of  the expansions of $n in comments.
