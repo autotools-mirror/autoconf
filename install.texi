@@ -91,8 +91,8 @@ files and executables to go and run the @code{configure} script.
 @code{configure} automatically checks for the source code in the
 directory that @code{configure} is in and in @file{..}.
 
-@node Installation Directories
-@section Installation Directories
+@node Installation Names
+@section Installation Names
 
 By default, @samp{make install} will install the package's files in
 @file{/usr/local/bin}, @file{/usr/local/man}, etc.  You can specify an
@@ -121,6 +121,11 @@ make bindir=/bin libdir=/usr/lib
 @end example
 @noindent
 Check the @file{Makefile.in} files to see which variables each package uses.
+
+If the package supports it, you can cause programs to be installed with
+an extra prefix or suffix on their names by giving @code{configure} the
+option @samp{--program-prefix=@var{PREFIX}} or
+@samp{--program-suffix=@var{SUFFIX}}.
 
 @node System Type
 @section Specifying the System Type

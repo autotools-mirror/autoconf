@@ -340,7 +340,7 @@ AC_CACHE_VAL(ac_cv_path_install,
     case "$ac_dir" in
     ''|.|/etc|/usr/sbin|/usr/etc|/sbin|/usr/afsws/bin|/usr/ucb) ;;
     *)
-      # OSF1, X11, and SCO ODT 3.0 have their own names for install.
+      # OSF1 and SCO ODT 3.0 have their own names for install.
       for ac_prog in ginstall installbsd scoinst install; do
         if test -f $ac_dir/$ac_prog; then
 	  if test $ac_prog = install &&
