@@ -1,7 +1,7 @@
 dnl Parameterized macros.
 dnl Requires GNU m4.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -2022,7 +2022,7 @@ if test "$no_recursion" != yes; then
       # Make the cache file name correct relative to the subdirectory.
 changequote(, )dnl
       # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%/[^/]*%../%g' -e 's%^%/%`
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
 changequote([, ])dnl
       case "$cache_file" in
       /*) ac_sub_cache_file=$cache_file ;;
