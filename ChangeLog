@@ -1,5 +1,10 @@
 2001-05-31  Akim Demaille  <akim@epita.fr>
 
+	* atgeneral.m4 (AT_INIT): Use $SHELL.
+	* atspecific.m4 (AT_CHECK_DEFINES): Skip HAVE_STDINT_H.
+
+2001-05-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Include
 	stdlib.h.
 	From Paul Eggert and Lars Hecking.

@@ -2,6 +2,9 @@
 ** Default includes
 Now include stdint.h.
 
+** Bug fixes
+- Mostly in the test suite.
+
 
 * Major changes in Autoconf 2.50
 

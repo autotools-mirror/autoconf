@@ -291,7 +291,7 @@ elif test $at_debug = false; then
   for at_group in $at_fail_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
-      echo 'exec ${CONFIG_SHELL-/bin/sh} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
+      echo 'exec ${CONFIG_SHELL-'"$SHELL"'/bin/sh} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
@@ -330,7 +330,7 @@ elif test $at_debug = false; then
     AS_UNAME
   } >>$[0].log
 
-  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_fail_list 2>&1 | tee -a $[0].log
+  $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $[0].log
   AS_BOX([$[0].log is created])
 
   echo
