@@ -1,8 +1,7 @@
 -*- outline -*-
 
 Things it might be nice to do someday.  I haven't evaluated all of
-these suggestions... their presence here doesn't imply my endorsement,
-just that I haven't looked at them closely enough to reject them yet.
+these suggestions... their presence here doesn't imply my endorsement.
 -djm
 
 ------------------------------------------------------------------------------
@@ -321,6 +320,46 @@ Make easy macros for checking for X functions and libraries.
 We probably shouldn't cache a path for INSTALL within a source
 directory, because that will break other packages using the cache if
 that directory is removed.
+
+------------------------------------------------------------------------------
+
+Document this trick:
+
+>> Half my time these days seems to be spent porting
+>> configure.in files to new OS releases.)  Alas, there doesn't seem to
+>> be any way to turn off caching (with a configure.in directive).
+
+define([AC_CACHE_LOAD], )dnl
+define([AC_CACHE_SAVE], )dnl
+AC_INIT(whatever)
+ ... rest of configure.in ...
+
+------------------------------------------------------------------------------
+
+Testing for ANSI header files (AC_HEADER_STDC) fails under linux when
+using the latest libraries (libc-4.6.30, at least libc-4.6.27 works
+ok) when LC_CTYPE is set to ISO-8859-1. The islower/toupper test
+reports errors.
+Anyway, adding a line like 
+if test "${LC_CTYPE+set}"   = set; then LC_CTYPE=C;   export LC_CTYPE;   fi
+to the configure script can solve the problem.
+From: tom@vlsivie.tuwien.ac.AT (Thomas Winder)
+
+------------------------------------------------------------------------------
+
+A number of people have tried to fix configuration problems by editing
+acconfig.h. (Despite comments at the top of the file.) I think they're
+confused because anything.h looks like a regular source file name.
+Maybe acconfig.h could be called acconfig.extra or something?
+From: kb@cs.umb.edu (K. Berry)
+
+------------------------------------------------------------------------------
+
+Using the macro AC_CHECK_LIB, if the library name contains a dot (which is
+the case of the library complib.sgimath on Irix 5.x) a syntax error occurs
+because the corresponding cache variable name contains a dot.
+Should dots be converted to underlines in variable names by autoconf?
+From: Frederic.DEvernay@sophia.inria.fr (Frederic Devernay)
 
 ------------------------------------------------------------------------------
 

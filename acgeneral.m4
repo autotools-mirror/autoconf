@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.2)
+define(AC_ACVERSION, 2.2.1)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1023,8 +1023,8 @@ AC_DEFUN(AC_LANG_C,
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} conftest.$ac_ext $CFLAGS $CPPFLAGS -c 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='${CC-cc} conftest.$ac_ext $CFLAGS $CPPFLAGS $LDFLAGS -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_compile='${CC-cc} $CFLAGS $CPPFLAGS conftest.$ac_ext -c 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -1666,7 +1666,9 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
 
 ifdef([AC_LIST_HEADER],
-[trap 'rm -fr `echo $1 AC_LIST_HEADER | tr : " "` conftest*; exit 1' 1 2 15],
+[changequote({,})
+trap 'rm -fr `echo $1 AC_LIST_HEADER | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+changequote(,)],
 [trap 'rm -f $1; exit 1' 1 2 15])
 
 AC_OUTPUT_FILES($1)
