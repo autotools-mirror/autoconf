@@ -725,8 +725,8 @@ m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_
     at_status=$?
     ;;
 
-m4_divert_pop([TESTS])dnl Back to KILL.]
-)# AT_CLEANUP
+m4_divert_pop([TESTS])dnl Back to KILL.
+])# AT_CLEANUP
 
 
 # AT_BANNER(TEXT)
