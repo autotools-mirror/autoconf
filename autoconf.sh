@@ -299,7 +299,8 @@ case $task in
   ## --------------------------------- ##
   script)
   # M4 expansion.
-  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure || exit
+  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure ||
+    { (exit 1); exit; }
 
   # You can add your own prefixes to pattern if you want to check for
   # them too.
@@ -554,7 +555,8 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     trace_opt="$trace_opt -t "`echo "$trace" | sed -e 's/:.*//;q'`
-    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 || exit
+    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
+      { (exit 1); exit; }
   done
   echo "divert(0)dnl" >>$tmp/trace.m4
 

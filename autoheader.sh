@@ -88,6 +88,7 @@ for autoconf in "$AUTOCONF" \
 done
 debug=false
 localdir=.
+status=0
 tmp=
 verbose=:
 warning_all=false
@@ -179,7 +180,7 @@ done
 $debug ||
 {
   trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap 'exit $?' 1 2 13 15
+  trap '(exit $?); exit' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -194,7 +195,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   exit 1;
+   (exit 1); exit
 }
 
 # Preach.
@@ -217,7 +218,7 @@ if ($warning_all || $warning_obsolete) &&
     More sophisticated templates can also be produced, see the
     documentation.
 EOF
-  $warning_error && exit 1
+  $warning_error && { (exit 1); exit; }
 fi
 
 acconfigs=
@@ -230,7 +231,7 @@ case $# in
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
-     exit 1 ;;
+     (exit 1); exit ;;
 esac
 
 # Set up autoconf.
@@ -249,7 +250,7 @@ $autoconf  \
 $2"' \
   --trace AC_DEFINE:'syms="$$syms $1"' \
   --trace AC_DEFINE_UNQUOTED:'syms="$$syms $1"' \
-  $infile >$tmp/traces.sh || exit 1
+  $infile >$tmp/traces.sh || { (exit 1); exit; }
 
 $verbose $me: sourcing $tmp/traces.sh >&2
 . $tmp/traces.sh
@@ -271,7 +272,8 @@ syms=`for sym in $syms; do echo $sym; done |
 config_h=`echo "$config_h" | sed -e 's/ .*//'`
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
-"") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2; exit 1 ;;
+"") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2
+    (exit 1); exit ;;
 *:*) config_h_in=`echo "$config_h" | sed 's/.*://'`
      config_h=`echo "$config_h" | sed 's/:.*//'` ;;
 *) config_h_in="$config_h.in" ;;
@@ -305,7 +307,6 @@ test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
 
 # Check that all the symbols have a template.
 $verbose $me: checking completeness of the template >&2
-status=0
 # Regexp for a white space.
 w='[ 	]'
 if test -n "$syms"; then
@@ -336,4 +337,4 @@ if test $status = 0; then
   fi
 fi
 
-exit $status
+(exit $status); exit

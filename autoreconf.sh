@@ -100,6 +100,7 @@ install=false
 localdir=.
 # m4dir -- local Autoconf extensions.  Typically `m4'.
 m4dir=
+status=0
 # symlink -- when --install, use symlinks instead.
 symlink=false
 verbose=:
@@ -241,7 +242,7 @@ fi
 $debug ||
 {
   trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap 'exit $?' 1 2 13 15
+  trap '(exit $?); exit' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -256,7 +257,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   exit 1;
+   (exit 1); exit
 }
 
 # When debugging, it is convenient that all the related temporary
@@ -275,7 +276,7 @@ cat >$tmp/alflags.sed <<EOF
 EOF
 
 # update.sh --
-# Exit 0 iff the first argument is not the most recent of all or is missing.
+# Exit 0 if the first argument is not the most recent of all or is missing.
 cat >$tmp/update.sh <<\EOF
 test -f "$1" || exit 0
 test x`ls -1dt "$@" 2>/dev/null | sed 1q` != x"$1"

@@ -1,3 +1,11 @@
+2000-09-27  J. David Anglin  <dave@hiauly1.hia.nrc.ca>
+
+	* autoheader.sh: Fix trap (EXIT) status.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* autoconf.sh: Change `exit' to `{ (exit 1); exit; }' after m4 and
+	awk commands to ensure exit state is in a defined state.
+
 2000-09-25  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
 	* tests/semantics.m4 (AC_PROG_CPP with warning): Simplified.
