@@ -9,10 +9,10 @@ operating system features that the package can use, in the form of m4
 macro calls.
 
 Producing configuration scripts using Autoconf requires GNU m4.  You
-should install GNU m4 before configuring Autoconf, so that Autoconf's
-configure script can find it.  The configuration scripts produced by
-Autoconf are self-contained, so their users do not need to have
-Autoconf (or GNU m4).
+should install GNU m4 (version 1.1 or later) before configuring
+Autoconf, so that Autoconf's configure script can find it.  The
+configuration scripts produced by Autoconf are self-contained, so
+their users do not need to have Autoconf (or GNU m4).
 
 Also, some optional utilities that come with Autoconf use Perl, Bash,
 TCL, and the TCL packages Expect and DejaGNU.  However, none of those

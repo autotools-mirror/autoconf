@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.98
-@set VERSION 1.98
+@set EDITION 1.99
+@set VERSION 1.99
 @set UPDATED August 1994
 
 @iftex
@@ -136,7 +136,8 @@ General Purpose Macros
 
 * Setup::			Controlling Autoconf operation.
 * File Existence::              Checking whether particular files exist.
-* C Features::                  Checking for features of the C system.
+* C System Output::             Checking output of C compiler system.
+* C Features::                  Checking for particular features of C.
 * Command Line::                Checking command line arguments.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
@@ -237,7 +238,7 @@ Autoconf imposes some restrictions on the names of macros used with
 Autoconf requires GNU @code{m4} in order to generate the scripts.  It
 uses features that some UNIX versions of @code{m4} do not have.  It also
 overflows internal limits of some versions of @code{m4}, including GNU
-@code{m4} 1.0; so use a later version of GNU @code{m4}.
+@code{m4} 1.0; so use version 1.1 or later of GNU @code{m4}.
 
 Autoconf does not work well with GNU C library releases before 1.06.
 The GNU C library contains stubs (which always return an error) for
@@ -247,8 +248,8 @@ those functions are available.  This problem does not exist with
 releases 1.06 and later of the GNU C library, which define C
 preprocessor macros that the Autoconf macros @code{AC_CHECK_FUNC} and
 @code{AC_REPLACE_FUNCS} test, indicating that certain functions are
-stubs (@pxref{C Features}, for more information on checking for
-functions).
+stubs (@pxref{C Features}, for more information on checking
+for functions).
 
 @ifinfo
 Autoconf was written by David MacKenzie, with help from Franc,ois
@@ -753,26 +754,16 @@ what existing GNU programs use.  These macros are defined in the file
 The following macros check for the presence or behavior of particular
 programs:
 
-@defmac AC_PROG_GCC_TRADITIONAL
-@maindex PROG_GCC_TRADITIONAL
-Add @samp{-traditional} to @code{make} variable @code{CC} if using the
-GNU C compiler and @code{ioctl} does not work properly without
-@samp{-traditional}.  This macro calls @code{AC_PROG_CC} and
-@code{AC_PROG_CPP} if they haven't been called already.
-@end defmac
+@defmac AC_DECL_YYTEXT
+@maindex DECL_YYTEXT
+@vindex YYTEXT_POINTER
+Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
+of a @samp{char []}.  This depends on whether @code{lex} or @code{flex}
+is being used.  This macro calls @code{AC_PROG_CPP} (or
+@code{AC_PROG_CXXCPP} if C++ is the current language, @pxref{Language
+Choice}) and @code{AC_PROG_LEX} if they haven't been called already.
 
-@defmac AC_PROG_LN_S
-@maindex PROG_LN_S
-If @samp{ln -s} works on the current filesystem (the operating system
-and filesystem support symbolic links), set shell and @code{make}
-variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
-@end defmac
-
-@defmac AC_PROG_CC_C_O
-@maindex PROG_CC_C_O
-@vindex NO_MINUS_C_MINUS_O
-If the C compiler does not accept the @samp{-c} and @samp{-o} options
-simultaneously, define @code{NO_MINUS_C_MINUS_O}.
+This macro replaces @code{AC_DECLARE_YYTEXT}, which didn't work.
 @end defmac
 
 @defmac AC_PROG_AWK
@@ -787,6 +778,13 @@ finds.
 If @code{gcc} is found, set @code{make} variable @code{CC} to
 @samp{gcc}, and set shell variable @code{GCC} to @samp{yes}.  Otherwise
 set @code{GCC} to be empty.
+@end defmac
+
+@defmac AC_PROG_CC_C_O
+@maindex PROG_CC_C_O
+@vindex NO_MINUS_C_MINUS_O
+If the C compiler does not accept the @samp{-c} and @samp{-o} options
+simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 @end defmac
 
 @defmac AC_PROG_CPP
@@ -830,6 +828,14 @@ this macro first if it hasn't been called already.  This macro calls
 @code{AC_PROG_CXX} if it hasn't been called already.
 @end defmac
 
+@defmac AC_PROG_GCC_TRADITIONAL
+@maindex PROG_GCC_TRADITIONAL
+Add @samp{-traditional} to @code{make} variable @code{CC} if using the
+GNU C compiler and @code{ioctl} does not work properly without
+@samp{-traditional}.  This macro calls @code{AC_PROG_CC} and
+@code{AC_PROG_CPP} if they haven't been called already.
+@end defmac
+
 @defmac AC_PROG_INSTALL
 @maindex PROG_INSTALL
 Set @code{make} variable @code{INSTALL} to @samp{install -c} if
@@ -858,29 +864,11 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 @code{LEXLIB} to @samp{-ll}.
 @end defmac
 
-@defmac AC_PROG_RANLIB
-@maindex PROG_RANLIB
-Set @code{make} variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
-is found, otherwise to @samp{:} (do nothing).
-@end defmac
-
-@defmac AC_PROG_YACC
-@maindex PROG_YACC
-If @code{bison} is found, set @code{make} variable @code{YACC} to
-@samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
-to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
-@end defmac
-
-@defmac AC_PROG_RSH
-@maindex PROG_RSH
-@vindex RSH
-@vindex NO_REMOTE
-@vindex HAVE_NETDB_H
-If a remote shell is available, set @code{make} variable @code{RSH} to
-its pathname.  Otherwise, if @file{netdb.h} exists (implying the
-@code{rexec} function), define @code{HAVE_NETDB_H}.  If either is true,
-also put @samp{rtapelib.o} in @code{make} variable @code{RTAPELIB}.
-Otherwise, define @code{NO_REMOTE}.
+@defmac AC_PROG_LN_S
+@maindex PROG_LN_S
+If @samp{ln -s} works on the current filesystem (the operating system
+and filesystem support symbolic links), set shell and @code{make}
+variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
 @end defmac
 
 @defmac AC_PROG_MAKE_SET
@@ -903,22 +891,43 @@ If you use this macro, simply place a line like this in your
 @end example
 @end defmac
 
-@defmac AC_DECL_YYTEXT
-@maindex DECL_YYTEXT
-@vindex YYTEXT_POINTER
-Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
-of a @samp{char []}.  This depends on whether @code{lex} or @code{flex}
-is being used.  This macro calls @code{AC_PROG_CPP} (or
-@code{AC_PROG_CXXCPP} if C++ is the current language, @pxref{Language
-Choice}) and @code{AC_PROG_LEX} if they haven't been called already.
+@defmac AC_PROG_RANLIB
+@maindex PROG_RANLIB
+Set @code{make} variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
+is found, otherwise to @samp{:} (do nothing).
+@end defmac
 
-This macro replaces @code{AC_DECLARE_YYTEXT}, which didn't work.
+@defmac AC_PROG_RSH
+@maindex PROG_RSH
+@vindex RSH
+@vindex NO_REMOTE
+@vindex HAVE_NETDB_H
+If a remote shell is available, set @code{make} variable @code{RSH} to
+its pathname.  Otherwise, if @file{netdb.h} exists (implying the
+@code{rexec} function), define @code{HAVE_NETDB_H}.  If either is true,
+also put @samp{rtapelib.o} in @code{make} variable @code{RTAPELIB}.
+Otherwise, define @code{NO_REMOTE}.
+@end defmac
+
+@defmac AC_PROG_YACC
+@maindex PROG_YACC
+If @code{bison} is found, set @code{make} variable @code{YACC} to
+@samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
+to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @node Header Files, Typedefs, Alternative Programs, Specific Tests
 @section Header Files
 
 The following macros check for the presence of certain C header files:
+
+@defmac AC_DECL_SYS_SIGLIST
+@maindex DECL_SYS_SIGLIST
+@vindex SYS_SIGLIST_DECLARED
+Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
+declared in a system header file, either @file{signal.h} or
+@file{unistd.h}.
+@end defmac
 
 @defmac AC_DIR_HEADER
 @maindex DIR_HEADER
@@ -1024,15 +1033,6 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{MAJOR_IN_SYSMACROS}.
 @end defmac
 
-@defmac AC_MEMORY_H
-@maindex MEMORY_H
-@vindex NEED_MEMORY_H
-Define @code{NEED_MEMORY_H} if @code{memcpy}, @code{memcmp}, etc. are
-not declared in @file{string.h} and @file{memory.h} exists.  This macro
-is obsolete; instead, use @code{AC_CHECK_HEADERS(memory.h)}.  See the
-example for @code{AC_HEADER_STDC}.
-@end defmac
-
 @defmac AC_HEADER_STDC
 @maindex HEADER_STDC
 @vindex STDC_HEADERS
@@ -1100,6 +1100,15 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
+@defmac AC_MEMORY_H
+@maindex MEMORY_H
+@vindex NEED_MEMORY_H
+Define @code{NEED_MEMORY_H} if @code{memcpy}, @code{memcmp}, etc. are
+not declared in @file{string.h} and @file{memory.h} exists.  This macro
+is obsolete; instead, use @code{AC_CHECK_HEADERS(memory.h)}.  See the
+example for @code{AC_HEADER_STDC}.
+@end defmac
+
 @defmac AC_UNISTD_H
 @maindex UNISTD_H
 @vindex HAVE_UNISTD_H
@@ -1137,14 +1146,6 @@ Define @code{USG} if the system does not have @file{strings.h},
 The symbol @code{USG} is obsolete.  Instead of this macro, use
 @code{AC_CHECK_HEADERS(string.h)} and use @code{HAVE_STRING_H} in your
 code.  See the example for @code{AC_HEADER_STDC}.
-@end defmac
-
-@defmac AC_DECL_SYS_SIGLIST
-@maindex DECL_SYS_SIGLIST
-@vindex SYS_SIGLIST_DECLARED
-Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
-declared in a system header file, either @file{signal.h} or
-@file{unistd.h}.
 @end defmac
 
 @node Typedefs, Library Functions, Header Files, Specific Tests
@@ -1391,28 +1392,6 @@ define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
 Amdahl UTS and Motorola System V/88.
 @end defmac
 
-@defmac AC_STRUCT_ST_BLKSIZE
-@maindex STRUCT_ST_BLKSIZE
-@vindex HAVE_ST_BLKSIZE
-If @code{struct stat} contains an @code{st_blksize} member, define
-@code{HAVE_ST_BLKSIZE}.
-@end defmac
-
-@defmac AC_STRUCT_ST_BLOCKS
-@maindex STRUCT_ST_BLOCKS
-@vindex HAVE_ST_BLOCKS
-If @code{struct stat} contains an @code{st_blocks} member, define
-@code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
-@code{make} variable @code{LIBOBJS}.
-@end defmac
-
-@defmac AC_STRUCT_ST_RDEV
-@maindex STRUCT_ST_RDEV
-@vindex HAVE_ST_RDEV
-If @code{struct stat} contains an @code{st_rdev} member, define
-@code{HAVE_ST_RDEV}.
-@end defmac
-
 @defmac AC_HEADER_TIME
 @maindex HEADER_TIME
 @vindex TIME_WITH_SYS_TIME
@@ -1437,6 +1416,28 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 #endif
 #endif
 @end example
+@end defmac
+
+@defmac AC_STRUCT_ST_BLKSIZE
+@maindex STRUCT_ST_BLKSIZE
+@vindex HAVE_ST_BLKSIZE
+If @code{struct stat} contains an @code{st_blksize} member, define
+@code{HAVE_ST_BLKSIZE}.
+@end defmac
+
+@defmac AC_STRUCT_ST_BLOCKS
+@maindex STRUCT_ST_BLOCKS
+@vindex HAVE_ST_BLOCKS
+If @code{struct stat} contains an @code{st_blocks} member, define
+@code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
+@code{make} variable @code{LIBOBJS}.
+@end defmac
+
+@defmac AC_STRUCT_ST_RDEV
+@maindex STRUCT_ST_RDEV
+@vindex HAVE_ST_RDEV
+If @code{struct stat} contains an @code{st_rdev} member, define
+@code{HAVE_ST_RDEV}.
 @end defmac
 
 @defmac AC_STRUCT_TM
@@ -1472,14 +1473,11 @@ a sequence of arguments with the same type to be accessed as if they
 were an array of values.
 @end defmac
 
-@defmac AC_C_CROSS
-@maindex C_CROSS
-If the C compiler being used does not produce executables that can run
-on the system where @code{configure} is being run, set the shell
-variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
-This information can be used by @code{AC_TRY_RUN} to determine whether
-to take a default action instead of trying to run a test program
-(@pxref{C Features}).
+@defmac AC_C_BIGENDIAN
+@maindex C_BIGENDIAN
+@vindex WORDS_BIGENDIAN
+If words are stored with the most significant byte first (like Motorola
+and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 @end defmac
 
 @defmac AC_C_CHAR_UNSIGNED
@@ -1501,6 +1499,16 @@ that don't, the @file{Makefile} or configuration header file will define
 it as empty.  (If using a configuration header file, the program should
 include it before any other header files, to prevent inconsistencies in
 declarations.)
+@end defmac
+
+@defmac AC_C_CROSS
+@maindex C_CROSS
+If the C compiler being used does not produce executables that can run
+on the system where @code{configure} is being run, set the shell
+variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
+This information can be used by @code{AC_TRY_RUN} to determine whether
+to take a default action instead of trying to run a test program
+(@pxref{C System Output}).
 @end defmac
 
 @defmac AC_C_INLINE
@@ -1537,17 +1545,19 @@ If the C compiler supports the @code{long double} type, define
 that define @code{__STDC__} do not support @code{long double}.
 @end defmac
 
-@defmac AC_C_BIGENDIAN
-@maindex C_BIGENDIAN
-@vindex WORDS_BIGENDIAN
-If words are stored with the most significant byte first (like Motorola
-and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
-@end defmac
-
 @node System Services, UNIX Variants, Compiler Characteristics, Specific Tests
 @section System Services
 
 The following macros check for operating system services:
+
+@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[},
+@var{action-if-not-supported}@r{]})
+@maindex HAVE_POUNDBANG
+Check whether the system supports starting shell scripts with a line of
+the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
+works, execute shell commands @var{action-if-supported}; if not, execute
+@var{action-if-not-supported}.
+@end defmac
 
 @defmac AC_PATH_X
 @maindex PATH_X
@@ -1580,15 +1590,6 @@ variable @code{X_EXTRA_LIBS}.  This macro calls @code{AC_PATH_X} and
 @code{AC_OS_ISC} (@pxref{UNIX Variants}) if they have not already
 been called.  Because of the macro dependencies, if you call this macro,
 you should let it call @code{AC_PATH_X} rather than doing that yourself.
-@end defmac
-
-@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[},
-@var{action-if-not-supported}@r{]})
-@maindex HAVE_POUNDBANG
-Check whether the system supports starting shell scripts with a line of
-the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
-works, execute shell commands @var{action-if-supported}; if not, execute
-@var{action-if-not-supported}.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -1717,7 +1718,8 @@ These macros are defined in the file @file{acgeneral.m4}.
 @menu
 * Setup::			Controlling Autoconf operation.
 * File Existence::              Checking whether particular files exist.
-* C Features::                  Checking for features of the C system.
+* C System Output::             Checking output of C compiler system.
+* C Features::                  Checking for particular features of C.
 * Command Line::                Checking command line arguments.
 * Setting Variables::		Setting shell and @code{make} variables.
 * Printing Messages::           Notifying users of progress or problems.
@@ -1806,6 +1808,18 @@ make sure that the directory that it is told contains the source code in
 fact does (@pxref{Invoking configure}, for more information).
 @end defmac
 
+@defmac AC_INIT_PREPARE (@var{unique-file-in-source-dir})
+@maindex INIT_PREPARE
+Find the source code directory and set up shell variables necessary for
+other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
+file that is in the package's source directory; @code{configure} checks
+for this file's existence to make sure that the directory that it is
+told contains the source code in fact does (@pxref{Invoking configure},
+for more information).  @code{AC_INIT_PREPARE} is the last thing done by
+@code{AC_INIT}.  Use @code{AC_INIT_PREPARE} instead of @code{AC_INIT} if you
+want to do argument parsing yourself; never use both.
+@end defmac
+
 @defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
 @maindex OUTPUT
 Create output files (typically one or more @file{Makefile}s) and
@@ -1830,6 +1844,12 @@ If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.
 @end defmac
 
+@defmac AC_PREFIX (@var{program})
+@maindex PREFIX
+This macro is like @code{AC_PREFIX_PROGRAM}, except that it does not
+find the site-wide defaults file correctly, so it is obsolete.
+@end defmac
+
 @defmac AC_PREFIX_PROGRAM (@var{program})
 @maindex PREFIX_PROGRAM
 If the user did not specify an installation prefix (using the
@@ -1840,18 +1860,6 @@ is found, set the prefix to the parent of the directory containing
 @file{Makefile.in} unchanged.  For example, if @var{program} is
 @code{gcc} and the @code{PATH} contains @file{/usr/local/gnu/bin/gcc},
 set the prefix to @file{/usr/local/gnu}.
-@end defmac
-
-@defmac AC_INIT_PREPARE (@var{unique-file-in-source-dir})
-@maindex INIT_PREPARE
-Find the source code directory and set up shell variables necessary for
-other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
-file that is in the package's source directory; @code{configure} checks
-for this file's existence to make sure that the directory that it is
-told contains the source code in fact does (@pxref{Invoking configure},
-for more information).  @code{AC_INIT_PREPARE} is the last thing done by
-@code{AC_INIT}.  Use @code{AC_INIT_PREPARE} instead of @code{AC_INIT} if you
-want to do argument parsing yourself; never use both.
 @end defmac
 
 @defmac AC_PREREQ (@var{version})
@@ -1899,10 +1907,12 @@ produces this in @file{configure}:
 @end example
 @end defmac
 
-@node File Existence, C Features, Setup, General Purpose Macros
+@node File Existence, C System Output, Setup, General Purpose Macros
 @section Checking Whether Particular Files Exist
 
-These macros check whether particular files exist.
+These macros check whether particular files exist.  They cache the
+results of their tests for future use (@pxref{Caching Values}, for more
+information).
 
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
 @maindex CHECK_LIB
@@ -1928,34 +1938,12 @@ present, because linking the test program will always fail with
 unresolved symbols.
 @end defmac
 
-@defmac AC_HAVE_LIBRARY (@var{library}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
-@maindex HAVE_LIBRARY
-This macro is equivalent to calling @code{AC_CHECK_LIB} with a
-@var{function} argument of @code{main}.  It is considered obsolete,
-because some linkers (e.g., Apollo's) do not fail when asked to link
-with a nonexistent library if there are no unresolved sybols.
-@end defmac
-
-@defmac AC_PREFIX (@var{program})
-@maindex PREFIX
-This macro is like @code{AC_PREFIX_PROGRAM}, except that it prevents
-finding the site-wide defaults file correctly, so it is obsolete.
-@end defmac
-
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found}@r{]})
 @maindex CHECK_PROG
 Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
 @var{value-if-not-found}, if given.  If @var{variable} was already set,
 do nothing.  Calls @code{AC_SUBST} for @var{variable}.
-@end defmac
-
-@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
-@maindex PATH_PROG
-Similar to @code{AC_CHECK_PROG}, but set @var{variable} to the entire
-path of @var{prog-to-check-for} if found.  Otherwise, set @var{variable}
-to @var{value-if-not-found}, if given.  If @var{variable} was already
-set, do nothing.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
@@ -1969,6 +1957,22 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
+@defmac AC_HAVE_LIBRARY (@var{library}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
+@maindex HAVE_LIBRARY
+This macro is equivalent to calling @code{AC_CHECK_LIB} with a
+@var{function} argument of @code{main}.  It is considered obsolete,
+because some linkers (e.g., Apollo's) do not fail when asked to link
+with a nonexistent library if there are no unresolved sybols.
+@end defmac
+
+@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@maindex PATH_PROG
+Similar to @code{AC_CHECK_PROG}, but set @var{variable} to the entire
+path of @var{prog-to-check-for} if found.  Otherwise, set @var{variable}
+to @var{value-if-not-found}, if given.  If @var{variable} was already
+set, do nothing.  Calls @code{AC_SUBST} for @var{variable}.
+@end defmac
+
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex PATH_PROGS
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
@@ -1976,17 +1980,15 @@ are found, set @var{variable} to the entire pathname of the program
 found.
 @end defmac
 
-@node C Features, Command Line, File Existence, General Purpose Macros
-@section Checking For C Features
+@node C System Output, C Features, File Existence, General Purpose Macros
+@section Checking C Compiler System Output
 
-These macros check for features of the C compiler, libraries, and headers.
-
-@defmac AC_CHECK_TYPE (@var{type}, @var{default})
-@maindex CHECK_TYPE
-If the type @var{type} is not defined in @file{sys/types.h}, define it
-to be the C (or C++) builtin type @var{default}, e.g. @samp{short} or
-@samp{unsigned}.
-@end defmac
+These macros check the output of the C compiler system.  They @emph{do
+not} cache the results of their tests for future use (@pxref{Caching
+Values}), because they don't know enough about the information they are
+checking for to generate a cache variable name.  The checks for
+particular kinds of C features call these macros and do cache their
+results (@pxref{C Features}).
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex COMPILE_CHECK
@@ -1994,41 +1996,19 @@ This is an obsolete alias for @code{AC_TRY_LINK}, with the addition that it
 prints @samp{checking for @var{echo-text}} to the standard output first.
 @end defmac
 
-@defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex CHECK_FUNC
-If @var{function} is available, run shell commands
-@var{action-if-found}, otherwise @var{action-if-not-found}.  If the
-functions might be in libraries other than the default C library, first
-call @code{AC_CHECK_LIB} for those libraries.  If you just want to
-define a symbol if the function is available, consider using
-@code{AC_CHECK_FUNCS} instead.
-@end defmac
+@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@maindex EGREP_CPP
+@var{program} is the text of a C or C++ program, on which shell variable and
+backquote substitutions are performed.  If the output of running the
+preprocessor on @var{program} contains the @code{egrep} regular
+expression @var{pattern}, execute shell commands @var{action-if-found},
+otherwise execute @var{action-if-not-found}.  (It is an unfortunate
+oversight that we use the word @code{PROGRAM} in Autoconf macro names to
+sometimes mean C or C++ source code and sometimes mean a UNIX command.)
 
-@defmac AC_CHECK_FUNCS (@var{function}@dots{})
-@maindex CHECK_FUNCS
-@vindex HAVE_@var{function}
-For each given @var{function} in the whitespace-separated argument list
-that is available, define @code{HAVE_@var{function}} (in all caps).
-@xref{Specific Tests}, for a precise definition of ``define'' as it
-is used here.  If the functions might be in libraries other than the
-default C library, first call @code{AC_CHECK_LIB} for those libraries.
-@end defmac
-
-@defmac AC_CHECK_HEADERS (@var{header-file}@dots{})
-@maindex CHECK_HEADERS
-@vindex HAVE_@var{header}
-For each given system header file @var{header-file} in the
-whitespace-separated argument list that exists, define
-@code{HAVE_@var{header-file}} (in all caps).  @xref{Specific Tests}, for
-a precise definition of ``define'' as it is used here.
-@end defmac
-
-@defmac AC_CHECK_HEADER (@var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex CHECK_HEADER
-If the system header file @var{header-file} exists, execute shell commands
-@var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
-you just want to define a symbol if the header file is available,
-consider using @code{AC_CHECK_HEADERS} instead.
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
 @end defmac
 
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -2047,44 +2027,6 @@ You can not check whether preprocessor symbols are defined this way,
 because they get expanded before @code{egrep} sees them.  But you can
 almost always detect them by simply using @code{#ifdef} directives in
 your programs.
-@end defmac
-
-@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex EGREP_CPP
-@var{program} is the text of a C or C++ program, on which shell variable and
-backquote substitutions are performed.  If the output of running the
-preprocessor on @var{program} contains the @code{egrep} regular
-expression @var{pattern}, execute shell commands @var{action-if-found},
-otherwise execute @var{action-if-not-found}.  (It is an unfortunate
-oversight that we use the word @code{PROGRAM} in Autoconf macro names to
-sometimes mean C or C++ source code and sometimes mean a UNIX command.)
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
-@end defmac
-
-@defmac AC_REPLACE_FUNCS (@var{function-name}@dots{})
-@maindex REPLACE_FUNCS
-For each given @var{function-name} in the whitespace-separated argument
-list that is not in the C library, add @samp{@var{function-name}.o} to
-the value of the @code{make} variable @code{LIBOBJS}.  If the functions
-might be in libraries other than the default C library, first call
-@code{AC_CHECK_LIB} for those libraries.
-@end defmac
-
-@defmac AC_CHECK_SIZEOF (@var{type})
-@maindex CHECK_SIZEOF
-Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
-C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
-@samp{type} is unknown to the compiler, gets a size of 0.  @var{uctype}
-is @var{type}, with lowercase converted to uppercase, spaces changed to
-underscores, and asterisks changed to @samp{P}.  For example, the call
-@example
-AC_CHECK_SIZEOF(int *)
-@end example
-@noindent
-defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
 @defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
@@ -2131,6 +2073,80 @@ Otherwise, @code{configure} prints an error message and exits.
 
 It is preferable to use @code{AC_TRY_LINK} instead of @code{AC_TRY_RUN},
 when possible.  @xref{Test Programs}, for more information.
+@end defmac
+
+@node C Features, Command Line, C System Output, General Purpose Macros
+@section Checking For C Features
+
+These macros check for particular kinds of features of the C compiler,
+libraries, and headers.  They cache the results of their tests for
+future use (@pxref{Caching Values}, for more information).
+
+@defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@maindex CHECK_FUNC
+If @var{function} is available, run shell commands
+@var{action-if-found}, otherwise @var{action-if-not-found}.  If the
+functions might be in libraries other than the default C library, first
+call @code{AC_CHECK_LIB} for those libraries.  If you just want to
+define a symbol if the function is available, consider using
+@code{AC_CHECK_FUNCS} instead.
+@end defmac
+
+@defmac AC_CHECK_FUNCS (@var{function}@dots{})
+@maindex CHECK_FUNCS
+@vindex HAVE_@var{function}
+For each given @var{function} in the whitespace-separated argument list
+that is available, define @code{HAVE_@var{function}} (in all caps).
+@xref{Specific Tests}, for a precise definition of ``define'' as it
+is used here.  If the functions might be in libraries other than the
+default C library, first call @code{AC_CHECK_LIB} for those libraries.
+@end defmac
+
+@defmac AC_CHECK_HEADER (@var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@maindex CHECK_HEADER
+If the system header file @var{header-file} exists, execute shell commands
+@var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
+you just want to define a symbol if the header file is available,
+consider using @code{AC_CHECK_HEADERS} instead.
+@end defmac
+
+@defmac AC_CHECK_HEADERS (@var{header-file}@dots{})
+@maindex CHECK_HEADERS
+@vindex HAVE_@var{header}
+For each given system header file @var{header-file} in the
+whitespace-separated argument list that exists, define
+@code{HAVE_@var{header-file}} (in all caps).  @xref{Specific Tests}, for
+a precise definition of ``define'' as it is used here.
+@end defmac
+
+@defmac AC_CHECK_SIZEOF (@var{type})
+@maindex CHECK_SIZEOF
+Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
+C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
+@samp{type} is unknown to the compiler, gets a size of 0.  @var{uctype}
+is @var{type}, with lowercase converted to uppercase, spaces changed to
+underscores, and asterisks changed to @samp{P}.  For example, the call
+@example
+AC_CHECK_SIZEOF(int *)
+@end example
+@noindent
+defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
+@end defmac
+
+@defmac AC_CHECK_TYPE (@var{type}, @var{default})
+@maindex CHECK_TYPE
+If the type @var{type} is not defined in @file{sys/types.h}, define it
+to be the C (or C++) builtin type @var{default}, e.g. @samp{short} or
+@samp{unsigned}.
+@end defmac
+
+@defmac AC_REPLACE_FUNCS (@var{function-name}@dots{})
+@maindex REPLACE_FUNCS
+For each given @var{function-name} in the whitespace-separated argument
+list that is not in the C library, add @samp{@var{function-name}.o} to
+the value of the @code{make} variable @code{LIBOBJS}.  If the functions
+might be in libraries other than the default C library, first call
+@code{AC_CHECK_LIB} for those libraries.
 @end defmac
 
 @node Command Line, Setting Variables, C Features, General Purpose Macros
@@ -2360,7 +2376,13 @@ callers change automatically.
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
 This macro is similar to @code{AC_MSG_CHECKING}, except that it prints a
-newline after the @var{feature-description}.  It is considered obsolete.
+newline after the @var{feature-description}.  It is useful mainly to
+print a general description of the overall purpose of a group of feature
+checks, e.g.
+
+@example
+AC_CHECKING(if stack overflow is detectable)
+@end example
 @end defmac
 
 @defmac AC_MSG_CHECKING (@var{feature-description})
@@ -2476,8 +2498,9 @@ called in the correct order.
 Make @code{m4} print a warning message on the standard error output if
 @var{called-macro-name} has already been called.  @var{this-macro-name}
 should be the name of the macro that is calling @code{AC_BEFORE}.  The
-macro @var{called-macro-name} must contain a call to @code{AC_PROVIDE}
-to indicate that it has been called.
+macro @var{called-macro-name} must have been defined using
+@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
+that it has been called.
 
 This macro should be used when one macro makes changes that might affect
 another macro, so that the other macro should probably not be called
@@ -2513,8 +2536,10 @@ AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])
 
 @defmac AC_PROVIDE (@var{macro-name})
 @maindex PROVIDE
-Set a flag recording that @var{macro-name} has been called.  The
-argument should be the name of the macro that is calling
+Set a flag recording that @var{macro-name} has been called.  This macro
+is called automatically when using @code{AC_DEFUN} to define a macro.
+
+The argument should be the name of the macro that is calling
 @code{AC_PROVIDE}.  An easy way to get it is from the @code{m4} builtin
 variable @code{$0}, like this:
 
@@ -2527,13 +2552,14 @@ AC_PROVIDE([$0])
 @maindex REQUIRE
 If the @code{m4} macro @var{macro-name} has not already been called,
 call it (without any arguments).  Make sure to quote @var{macro-name}
-with square brackets.  The body of @var{macro-name} must contain a call
-to @code{AC_PROVIDE} to indicate that it has been called.
+with square brackets.  The body of @var{macro-name} must have been
+defined using @code{AC_DEFUN} or else contain a call to
+@code{AC_PROVIDE} to indicate that it has been called.
 
 Macros that need some other macro to be called before they are called
 can use @code{AC_REQUIRE} to ensure that it has been, in case the person
 who made @file{configure.in} forgot or didn't know to do it.
-@code{AC_REQUIRE} and @code{AC_PROVIDE} together can ensure that a macro
+@code{AC_REQUIRE} can ensure that a macro
 is only called if it is needed, and only called once.
 @xref{Dependencies Between Macros}, for more information.
 @end defmac
@@ -2690,11 +2716,17 @@ number, which you can get by running @samp{autoconf --version}.
 @node Macro Format, Macro Naming, , Writing Macros
 @section Macro Format
 
-Autoconf macros are defined as arguments to the @code{m4} builtin
-command @code{define}.  Their overall structure looks like this:
+@maindex DEFUN
+Autoconf macros are defined as arguments to the @code{AC_DEFUN} macro,
+which is similar to the @code{m4} builtin @code{define} macro.  In
+addition to defining the macro, @code{AC_DEFUN} causes the macro, when
+it is called, to set a flag which is used to constrain the order in
+which macros are called (@pxref{Prerequisite Macros}).
+
+An Autoconf macro definition looks like this:
 
 @example
-define(@var{macro-name}, [@var{macro-body}])dnl
+AC_DEFUN(@var{macro-name}, [@var{macro-body}])dnl
 @end example
 
 @noindent
@@ -2828,10 +2860,10 @@ that uses the C preprocessor, it depends on @code{AC_PROG_CPP} having
 been called first to set the shell variable @code{CPP}
 (@pxref{Alternative Programs}).
 
-Rather than forcing the user of the macros to keep track of all of the
-dependencies between them, you can use the macros @code{AC_PROVIDE} and
-@code{AC_REQUIRE} to do it automatically.  @xref{Macro Ordering}, for more
-information on their syntax.
+Rather than forcing the user of the macros to keep track of the
+dependencies between them, you can use the @code{AC_REQUIRE} macro to do
+it automatically.  @xref{Macro Ordering}, for more information on its
+syntax.
 
 The new macro that runs the C preprocessor should contain, somewhere
 before @code{CPP} is used, the statement
@@ -2840,17 +2872,11 @@ before @code{CPP} is used, the statement
 AC_REQUIRE([AC_PROG_CPP])
 @end example
 
-@noindent
-and the macro @code{AC_PROG_CPP} should contain the statement (anywhere
-in its body)
-
-@example
-AC_PROVIDE([$0])
-@end example
-
-@noindent
-Then, when the new macro is run, it will invoke @code{AC_PROG_CPP} if
-and only if @code{AC_PROG_CPP} has not already been run.
+The macro @code{AC_PROG_CPP} should be defined using @code{AC_DEFUN},
+which as well as defining the macro, causes it to set a flag when it is
+called.  Then, when the new macro is run, it will invoke
+@code{AC_PROG_CPP} if and only if @code{AC_PROG_CPP} has not already
+been run.
 
 @node Suggested Ordering, , Prerequisite Macros, Dependencies Between Macros
 @subsection Suggested Ordering
@@ -2870,20 +2896,12 @@ not when running @file{configure}.  It is not a fatal error;
 The @code{AC_BEFORE} macro causes @code{m4} to print a warning message
 on the standard error output when a macro is used before another macro
 which might change its behavior.  The macro which should come first
-should contain a call to @code{AC_BEFORE} and the macro which should
-come later should contain a call to @code{AC_PROVIDE}.
+should contain a call to @code{AC_BEFORE}.
 
 For example, @code{AC_OS_AIX} contains
 
 @example
 AC_BEFORE([$0], [AC_TRY_LINK])
-@end example
-
-@noindent
-and @code{AC_TRY_LINK} contains
-
-@example
-AC_PROVIDE([$0])
 @end example
 
 @noindent
@@ -2912,11 +2930,11 @@ Do not use @samp{test -x}, because 4.3BSD does not have it.  Use
 
 If you need to check whether a symbol is defined in a C header file, you
 can use @code{AC_EGREP_HEADER} if the symbol is not a C preprocessor
-macro (@pxref{C Features}), or compile a small test program that includes
-the file and references the symbol (@pxref{Test Programs}).  Don't
-directly @code{grep} for the symbol in the file, because on some systems
-it might be defined in another header file that the file you are
-checking @samp{#include}s.
+macro (@pxref{C System Output}), or compile a small test program
+that includes the file and references the symbol (@pxref{Test
+Programs}).  Don't directly @code{grep} for the symbol in the file,
+because on some systems it might be defined in another header file that
+the file you are checking @samp{#include}s.
 
 However, if you need to check for a particular UNIX variant which is
 distinguished by having certain text in a certain file, then use
@@ -2959,9 +2977,9 @@ than scanning the libraries.
 
 If you need to check for a condition other than whether some symbol
 exists on the system or has a certain value, then you can't use
-@code{AC_TRY_LINK} (@pxref{C Features}).  You have to write a
+@code{AC_TRY_LINK} (@pxref{C System Output}).  You have to write a
 test program by hand.  You can compile and run it using
-@code{AC_TRY_RUN} (@pxref{C Features}).
+@code{AC_TRY_RUN} (@pxref{C System Output}).
 
 Try to avoid running test programs if possible, because using them
 prevents people from configuring your package for cross-compiling.  If

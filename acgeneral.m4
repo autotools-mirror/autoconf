@@ -1,4 +1,5 @@
 dnl Parameterized macros that do not check for something specific.
+dnl Requires GNU m4.
 dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
@@ -34,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.98)dnl
+define(AC_ACVERSION, 1.99)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -47,12 +48,19 @@ dnl m4 diversions:
 define(AC_DIVERSION_NORMAL, 0)dnl	normal output
 define(AC_DIVERSION_SED, 1)dnl		sed substitutions for config.status
 define(AC_DIVERSION_VAR, 2)dnl		variable assignments for config.status
-define(AC_DIVERSION_HELP_ENABLE, 3)dnl	--enable/--disable help strings
-define(AC_DIVERSION_ARG_ENABLE, 4)dnl	--enable/--disable actions
-define(AC_DIVERSION_HELP_WITH, 5)dnl	--with/--without help strings
-define(AC_DIVERSION_ARG_WITH, 6)dnl	--with/--without actions
+define(AC_DIVERSION_HELP, 3)dnl		--enable/--with help strings
+define(AC_DIVERSION_ARG, 4)dnl		--enable/--with actions
+divert(AC_DIVERSION_NORMAL)dnl
 dnl
-define(AC_INIT_NOTICE,
+dnl Define a macro which automatically provides itself.
+dnl Use instead of define for macros to be used as functions.
+dnl
+dnl AC_DEFUN(NAME, EXPANSION)
+define([AC_DEFUN],
+[define($1,
+[define([AC_PROVIDE_$1], )][$2])])dnl
+dnl
+AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version] AC_ACVERSION [
 # Copyright (C) 1991, 1992, 1993, 1994 Free Software Foundation, Inc.
@@ -72,7 +80,7 @@ define(AC_INIT_NOTICE,
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])dnl
 dnl
-define(AC_INIT_PARSEARGS,
+AC_DEFUN(AC_INIT_PARSEARGS,
 [AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
 AC_BEFORE([$0], [AC_ARG_WITH])dnl
 # Save the original args to write them into config.status later.
@@ -105,10 +113,8 @@ Features and packages:
 --x-includes=DIR	X include files are in DIR
 --x-libraries=DIR	X library files are in DIR
 
---enable/--disable options recognized:
-undivert(AC_DIVERSION_HELP_ENABLE)dnl
---with/--without options recognized:
-undivert(AC_DIVERSION_HELP_WITH)"dnl
+--enable/--with options recognized:
+undivert(AC_DIVERSION_HELP)"dnl
 changequote([, ])dnl
 
 # Initialize some variables set by options.
@@ -358,25 +364,24 @@ fi
 dnl
 dnl Try to have only one #! line, just so it doesn't look funny.
 dnl
-define(AC_BINSH,
-[AC_PROVIDE([AC_BINSH])dnl
-dnl AC_REQUIRE inserts a newline after this.
-#!/bin/sh])dnl
+AC_DEFUN(AC_BINSH,
+[#!/bin/sh
+])dnl
 dnl
-define(AC_INIT,
+AC_DEFUN(AC_INIT,
 [AC_REQUIRE([AC_BINSH])dnl
 AC_INIT_NOTICE
 AC_INIT_PARSEARGS
 AC_INIT_PREPARE($1)])dnl
 dnl
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
-define(AC_INIT_PREPARE,
+AC_DEFUN(AC_INIT_PREPARE,
 [AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
 AC_BEFORE([$0], [AC_ARG_WITH])dnl
 AC_BEFORE([$0], [AC_CONFIG_HEADER])dnl
 AC_BEFORE([$0], [AC_REVISION])dnl
 AC_BEFORE([$0], [AC_PREREQ])dnl
-AC_BEFORE([$0], [AC_CONFIG_SUBDIRS])dnl
+dnl AC_BEFORE([$0], [AC_CONFIG_SUBDIRS])dnl
 trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -fr confdefs* $ac_clean_files' 0
 
@@ -465,27 +470,25 @@ AC_SITE_LOAD
 AC_CACHE_LOAD
 
 AC_LANG_C
-undivert(AC_DIVERSION_ARG_ENABLE)dnl
-undivert(AC_DIVERSION_ARG_WITH)dnl
+undivert(AC_DIVERSION_ARG)dnl
 ])dnl
 dnl
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-define(AC_ARG_ENABLE,
-[AC_PROVIDE([$0])dnl
-divert(AC_DIVERSION_HELP_ENABLE)dnl
+AC_DEFUN(AC_ARG_ENABLE,
+[divert(AC_DIVERSION_HELP)dnl
 $2
-divert(AC_DIVERSION_ARG_ENABLE)dnl
+divert(AC_DIVERSION_ARG)dnl
 AC_ENABLE_INTERNAL([$1], [$3], [$4])dnl
 divert(AC_DIVERSION_NORMAL)dnl
 ])dnl
 dnl
-define(AC_ENABLE,
+AC_DEFUN(AC_ENABLE,
 [AC_OBSOLETE([$0], [; instead use AC_ARG_ENABLE before AC_INIT])dnl
 AC_ENABLE_INTERNAL([$1], [$2], [$3])dnl
 ])dnl
 dnl
 dnl AC_ENABLE_INTERNAL(FEATURE, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-define(AC_ENABLE_INTERNAL,
+AC_DEFUN(AC_ENABLE_INTERNAL,
 [[#] Check whether --enable-$1 or --disable-$1 was given.
 enableval="[$enable_]patsubst($1, -, _)"
 if test -n "$enableval"; then
@@ -497,22 +500,21 @@ fi
 ])dnl
 dnl
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-define(AC_ARG_WITH,
-[AC_PROVIDE([$0])dnl
-divert(AC_DIVERSION_HELP_WITH)dnl
+AC_DEFUN(AC_ARG_WITH,
+[divert(AC_DIVERSION_HELP)dnl
 $2
-divert(AC_DIVERSION_ARG_WITH)dnl
+divert(AC_DIVERSION_ARG)dnl
 AC_WITH_INTERNAL([$1], [$3], [$4])dnl
 divert(AC_DIVERSION_NORMAL)dnl
 ])dnl
 dnl
-define(AC_WITH,
+AC_DEFUN(AC_WITH,
 [AC_OBSOLETE([$0], [; instead use AC_ARG_WITH before AC_INIT])dnl
 AC_WITH_INTERNAL([$1], [$2], [$3])dnl
 ])dnl
 dnl
 dnl AC_WITH_INTERNAL(PACKAGE, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-define(AC_WITH_INTERNAL,
+AC_DEFUN(AC_WITH_INTERNAL,
 [[#] Check whether --with-$1 or --without-$1 was given.
 withval="[$with_]patsubst($1, -, _)"
 if test -n "$withval"; then
@@ -524,24 +526,28 @@ fi
 ])dnl
 dnl
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
-define(AC_CONFIG_HEADER, [AC_PROVIDE([$0])define(AC_LIST_HEADERS, $1)])dnl
+AC_DEFUN(AC_CONFIG_HEADER,
+[define(AC_LIST_HEADERS, $1)])dnl
 dnl
 dnl AC_REVISION(REVISION-INFO)
-define(AC_REVISION, [AC_PROVIDE([$0])AC_REQUIRE([AC_BINSH])dnl
+AC_DEFUN(AC_REVISION,
+[AC_REQUIRE([AC_BINSH])dnl
 [# From configure.in] translit([$1], $")])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
 dnl
 dnl Change the dots in version number $1 into commas.
-define(AC_PREREQ_SPLIT, [translit($1, ., [, ])])dnl
+AC_DEFUN(AC_PREREQ_SPLIT,
+[translit($1, ., [, ])])dnl
 dnl
 dnl Default the ternary version number to 0 (e.g., 1, 7 -> 1, 7, 0).
-define(AC_PREREQ_CANON, [$1, $2, ifelse([$3], , 0, [$3])])dnl
+AC_DEFUN(AC_PREREQ_CANON,
+[$1, $2, ifelse([$3], , 0, [$3])])dnl
 dnl
 dnl Complain and exit if the version number in $1 through $3 is less than
 dnl the version number in $4 through $6.
 dnl $7 is the printable version of the second version number.
-define(AC_PREREQ_COMPARE,
+AC_DEFUN(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
 [$3 + $2 * 100 + $1 * 10000 < $6 + $5 * 100 + $4 * 10000]), 1,
 [errprint(Autoconf version $7 or higher is required
@@ -549,17 +555,15 @@ define(AC_PREREQ_COMPARE,
 dnl
 dnl Complain and exit if the Autoconf version is less than $1.
 dnl AC_PREREQ(VERSION)
-define(AC_PREREQ,
-[AC_PROVIDE([$0])dnl
-AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
+AC_DEFUN(AC_PREREQ,
+[AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])), [$1])])dnl
 dnl
 dnl Run configure in subdirectories $1.
 dnl Not actually done until AC_OUTPUT_SUBDIRS.
 dnl AC_CONFIG_SUBDIRS(DIR ...)
-define(AC_CONFIG_SUBDIRS,
-[AC_PROVIDE([$0])dnl
-AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_DEFUN(AC_CONFIG_SUBDIRS,
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 define([AC_LIST_SUBDIRS], [$1])])dnl
 dnl
 dnl Guess the value for the `prefix' variable by looking for
@@ -567,8 +571,9 @@ dnl the argument program along PATH and taking its parent.
 dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
 dnl set `prefix' to /usr/local/gnu.
 dnl AC_PREFIX_PROGRAM(PROGRAM)
-define(AC_PREFIX_PROGRAM, [define([AC_LIST_PREFIX_PROGRAM], [$1])])dnl
-define(AC_PREFIX_INTERNAL,
+AC_DEFUN(AC_PREFIX_PROGRAM,
+[define([AC_LIST_PREFIX_PROGRAM], [$1])])dnl
+AC_DEFUN(AC_PREFIX_INTERNAL,
 [if test "x$prefix" = xNONE; then
 changequote(<<, >>)dnl
 define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
@@ -582,7 +587,7 @@ changequote([, ])dnl
 fi
 undefine(AC_VAR_NAME)dnl
 ])dnl
-define(AC_PREFIX,
+AC_DEFUN(AC_PREFIX,
 [AC_OBSOLETE([$0], [; instead use AC_PREFIX_PROGRAM before AC_INIT])dnl
 AC_PREFIX_INTERNAL([$1])])dnl
 dnl
@@ -594,12 +599,12 @@ dnl Find install.sh, config.sub, config.guess, and Cygnus configure
 dnl in directory $1.  These are auxiliary files used in configuration.
 dnl $1 can be either absolute or relative to ${srcdir}.
 dnl AC_CONFIG_AUX_DIR(DIR)
-define(AC_CONFIG_AUX_DIR,
+AC_DEFUN(AC_CONFIG_AUX_DIR,
 [AC_CONFIG_AUX_DIRS($1 ${srcdir}/$1)])dnl
 dnl
 dnl The default is `${srcdir}' or `${srcdir}/..' or `${srcdir}/../..'.
 dnl There's no need to call this macro explicitly; just AC_REQUIRE it.
-define(AC_CONFIG_AUX_DIR_DEFAULT,
+AC_DEFUN(AC_CONFIG_AUX_DIR_DEFAULT,
 [AC_CONFIG_AUX_DIRS(${srcdir} ${srcdir}/.. ${srcdir}/../..)])dnl
 dnl
 dnl Internal subroutine.
@@ -607,7 +612,7 @@ dnl Search for the configuration auxiliary files in directory list $1.
 dnl We look only for install.sh, so users of AC_PROG_INSTALL
 dnl do not automatically need to distribute the other auxiliary files.
 dnl AC_CONFIG_AUX_DIRS(DIR ...)
-define(AC_CONFIG_AUX_DIRS,
+AC_DEFUN(AC_CONFIG_AUX_DIRS,
 [ac_aux_dir=
 for ac_dir in $1; do
   if test -f $ac_dir/install.sh; then
@@ -625,7 +630,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])dnl
 dnl
 dnl Canonicalize the host, target, and build system types.
-define(AC_CANONICAL_SYSTEM,
+AC_DEFUN(AC_CANONICAL_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
@@ -663,7 +668,7 @@ AC_CANONICAL_BUILD
 dnl
 dnl Subroutines of AC_CANONICAL_SYSTEM.
 dnl
-define(AC_CANONICAL_HOST,
+AC_DEFUN(AC_CANONICAL_HOST,
 [AC_MSG_CHECKING(host system type)
 
 case "${host_alias}" in
@@ -689,7 +694,7 @@ AC_SUBST(host_vendor)dnl
 AC_SUBST(host_os)dnl
 ])dnl
 dnl
-define(AC_CANONICAL_TARGET,
+AC_DEFUN(AC_CANONICAL_TARGET,
 [AC_MSG_CHECKING(target system type)
 
 case "${target_alias}" in
@@ -712,7 +717,7 @@ AC_SUBST(target_vendor)dnl
 AC_SUBST(target_os)dnl
 ])dnl
 dnl
-define(AC_CANONICAL_BUILD,
+AC_DEFUN(AC_CANONICAL_BUILD,
 [AC_MSG_CHECKING(build system type)
 
 case "${build_alias}" in
@@ -736,7 +741,7 @@ dnl Link each of the existing files in $2 to the corresponding
 dnl link name in $1.
 dnl Not actually done until AC_OUTPUT_LINKS.
 dnl AC_LINK_FILES(LINK ..., FILE ...)
-define(AC_LINK_FILES,
+AC_DEFUN(AC_LINK_FILES,
 [define([AC_LIST_LINKS], [$1])define([AC_LIST_FILES], [$2])])dnl
 dnl
 dnl
@@ -744,7 +749,7 @@ dnl ### Caching test results
 dnl
 dnl
 dnl Look for site or system specific initialization scripts.
-define(AC_SITE_LOAD,
+AC_DEFUN(AC_SITE_LOAD,
 [ac_site_dirs=/usr/local
 if test "x$prefix" != xNONE; then
   ac_site_dirs=$prefix
@@ -762,16 +767,17 @@ for ac_site_dir in $ac_site_dirs; do
 done
 ])dnl
 dnl
-define(AC_CACHE_LOAD,
+AC_DEFUN(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
   echo "loading cache $cache_file"
   . $cache_file
 else
   echo "creating cache $cache_file"
   > $cache_file
-fi])dnl
+fi
+])dnl
 dnl
-define(AC_CACHE_SAVE,
+AC_DEFUN(AC_CACHE_SAVE,
 [if test -w $cache_file; then
 echo "updating cache $cache_file"
 cat > $cache_file <<\CEOF
@@ -793,11 +799,12 @@ dnl Allow a site initialization script to override cache values.
 # Ultrix sh set writes to stderr and can't be redirected directly.
 (set) 2>&1 | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
 changequote([, ])dnl
-fi])dnl
+fi
+])dnl
 dnl
 dnl AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
-define(AC_CACHE_VAL,
+AC_DEFUN(AC_CACHE_VAL,
 [AC_REQUIRE([AC_PROG_ECHO_N])dnl
 dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
@@ -816,38 +823,43 @@ dnl
 dnl Several simple subroutines to do various flavors of quoting.
 dnl
 dnl Quote $1 against shell "s.
-define(AC_QUOTE_DQUOTE, [dnl We use \1 instead of \& to avoid an m4 1.0.3 bug.
+AC_DEFUN(AC_QUOTE_DQUOTE,
+[dnl We use \1 instead of \& to avoid an m4 1.0.3 bug.
 patsubst($1, changequote(, )\([$"`\\]\)changequote([, ]), \\\1)])dnl
 dnl
 dnl Quote $1 against shell 's.
-define(AC_QUOTE_SQUOTE, [patsubst($1, ', '\\'')])dnl
+AC_DEFUN(AC_QUOTE_SQUOTE,
+[patsubst($1, ', '\\'')])dnl
 dnl
 dnl Quote $1 against shell here documents (<<EOF).
-define(AC_QUOTE_HERE, [changequote({, })dnl
+AC_DEFUN(AC_QUOTE_HERE,
+[changequote({, })dnl
 dnl We use \1 instead of \& to avoid an m4 1.0.3 bug.
 patsubst(patsubst($1, \(\\[$`\\]\), \\\1), \([$`]\), \\\1){}dnl
 changequote([, ])])dnl
 dnl
 dnl Quote $1 against the right hand side of a sed substitution.
-define(AC_QUOTE_SED, [changequote({, })dnl
+AC_DEFUN(AC_QUOTE_SED,
+[changequote({, })dnl
 dnl We use \1 instead of \& to avoid an m4 1.0.3 bug.
 dnl % and @ and ! are commonly used as the sed s separator character.
 patsubst($1, \([&\\%@!]\), \\\1){}dnl
 changequote([, ])])dnl
 dnl
 dnl Quote $1 against tokenization.
-define(AC_QUOTE_TOKEN, [changequote({, })dnl
+AC_DEFUN(AC_QUOTE_TOKEN,
+[changequote({, })dnl
 patsubst($1, \([	 ]\), \\\1){}dnl
 changequote([, ])])dnl
 dnl
 dnl Subroutines of AC_DEFINE.  Does more quoting magic than any sane person
 dnl should be able to understand.  The point of it all is that what goes into
 dnl Makefile et al should be verbatim what was written in configure.in.
-define(AC_DEFINE_QUOTE, [dnl
-AC_QUOTE_TOKEN(AC_QUOTE_SQUOTE(AC_QUOTE_DQUOTE($1)))])dnl
+AC_DEFUN(AC_DEFINE_QUOTE,
+[AC_QUOTE_TOKEN(AC_QUOTE_SQUOTE(AC_QUOTE_DQUOTE($1)))])dnl
 dnl
-define(AC_DEFINE_SEDQUOTE, [dnl
-AC_QUOTE_DQUOTE(AC_QUOTE_HERE(AC_QUOTE_HERE(AC_QUOTE_SED($1))))])dnl
+AC_DEFUN(AC_DEFINE_SEDQUOTE,
+[AC_QUOTE_DQUOTE(AC_QUOTE_HERE(AC_QUOTE_HERE(AC_QUOTE_SED($1))))])dnl
 dnl
 dnl Don't compare $2 to a blank, so we can support "-Dfoo=".
 dnl If creating a configuration header file, we add
@@ -857,7 +869,8 @@ dnl variable parts of the string: the variable name to define
 dnl and the value to give it.
 dnl The newlines around the curly braces prevent sh syntax errors.
 dnl AC_DEFINE(VARIABLE [, VALUE])
-define(AC_DEFINE, [
+AC_DEFUN(AC_DEFINE,
+[
 {
 dnl Uniformly use AC_DEFINE_[SED]QUOTE, so callers of AC_DEFINE_UNQUOTED
 dnl can use AC_QUOTE_* manually if they want to.
@@ -885,9 +898,10 @@ dnl the top level, because m4 doesn't really support nested functions;
 dnl it doesn't distinguish between the arguments to the outer
 dnl function, which should be expanded, and the arguments to the inner
 dnl function, which shouldn't yet.
-define(AC_QUOTE_IDENTITY, $1)dnl
-define(AC_DEFINE_UNQUOTED, [dnl
-pushdef([AC_QUOTE_SQUOTE], defn([AC_QUOTE_IDENTITY]))dnl
+AC_DEFUN(AC_QUOTE_IDENTITY,
+$1)dnl
+AC_DEFUN(AC_DEFINE_UNQUOTED,
+[pushdef([AC_QUOTE_SQUOTE], defn([AC_QUOTE_IDENTITY]))dnl
 pushdef([AC_DEFINE_SEDQUOTE], defn([AC_QUOTE_IDENTITY]))dnl
 AC_DEFINE($1, $2)dnl
 popdef([AC_DEFINE_SEDQUOTE])dnl
@@ -897,7 +911,7 @@ dnl
 dnl This macro protects the argument from being diverted twice
 dnl if this macro is called twice for it.
 dnl AC_SUBST(VARIABLE)
-define(AC_SUBST,
+AC_DEFUN(AC_SUBST,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 divert(AC_DIVERSION_SED)dnl
@@ -908,7 +922,7 @@ divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
 dnl
 dnl AC_SUBST_FILE(VARIABLE, FILE)
-define(AC_SUBST_FILE,
+AC_DEFUN(AC_SUBST_FILE,
 [if test -f $2; then
   echo using $2 for $1)
   AC_INSERT_FILE($1, $2)
@@ -917,7 +931,7 @@ elif test -f ${srcdir}/$2; then
   AC_INSERT_FILE($1, ${srcdir}/$2)
 fi
 ])dnl
-define(AC_INSERT_FILE,
+AC_DEFUN(AC_INSERT_FILE,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 divert(AC_DIVERSION_SED)dnl
@@ -933,47 +947,44 @@ dnl ### Printing messages
 dnl
 dnl
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
-define(AC_MSG_CHECKING,
+AC_DEFUN(AC_MSG_CHECKING,
 [AC_REQUIRE([AC_PROG_ECHO_N])dnl
 echo $ac_n "checking $1""... $ac_c" 1>&4])dnl
 dnl
-define(AC_CHECKING,
-[AC_OBSOLETE([$0], [; instead use AC_MSG_CHECKING])dnl
-echo "checking $1" 1>&4])dnl
+AC_DEFUN(AC_CHECKING,
+[echo "checking $1" 1>&4])dnl
 dnl
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
-define(AC_MSG_RESULT,
+AC_DEFUN(AC_MSG_RESULT,
 [AC_REQUIRE([AC_PROG_ECHO_N])dnl
 echo "$ac_t""$1" 1>&4])dnl
 dnl
-define(AC_VERBOSE,
+AC_DEFUN(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
 echo "	$1" 1>&4])dnl
 dnl
 dnl AC_MSG_WARN(PROBLEM-DESCRIPTION)
-define(AC_MSG_WARN,
+AC_DEFUN(AC_MSG_WARN,
 [echo "configure: warning: $1" 1>&2])dnl
 dnl
 dnl AC_MSG_ERROR(ERROR-DESCRIPTION)
-define(AC_MSG_ERROR,
+AC_DEFUN(AC_MSG_ERROR,
 [echo "configure: $1" 1>&2; exit 1])dnl
 dnl
 dnl
 dnl ### Selecting which language to use for testing
 dnl
 dnl
-define(AC_LANG_C,
+AC_DEFUN(AC_LANG_C,
 [define([AC_LANG], [C])dnl
-AC_PROVIDE([$0])dnl
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CPP}'
 ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&5 2>&5'
 ])dnl
 dnl
-define(AC_LANG_CPLUSPLUS,
+AC_DEFUN(AC_LANG_CPLUSPLUS,
 [define([AC_LANG], [CPLUSPLUS])dnl
-AC_PROVIDE([$0])dnl
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP}'
@@ -981,10 +992,11 @@ ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1
 ])dnl
 dnl
 dnl Push the current language on a stack.
-define(AC_LANG_SAVE, [pushdef([AC_LANG_STACK], AC_LANG)])dnl
+AC_DEFUN(AC_LANG_SAVE,
+[pushdef([AC_LANG_STACK], AC_LANG)])dnl
 dnl
 dnl Restore the current language from the stack.
-define(AC_LANG_RESTORE,
+AC_DEFUN(AC_LANG_RESTORE,
 [ifelse(AC_LANG_STACK, C, [ifelse(AC_LANG, C, , [AC_LANG_C])], [ifelse(AC_LANG, CPLUSPLUS, , [AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])dnl
 dnl
 dnl
@@ -992,21 +1004,20 @@ dnl ### Enforcing ordering constraints
 dnl
 dnl
 dnl AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
-define(AC_BEFORE,
+AC_DEFUN(AC_BEFORE,
 [ifdef([AC_PROVIDE_$2], [errprint(__file__:__line__: [$2 was called before $1
 ])])])dnl
 dnl
 dnl AC_REQUIRE(MACRO-NAME)
-define(AC_REQUIRE,
-[ifdef([AC_PROVIDE_$1], , [indir([$1])
-])])dnl
+AC_DEFUN(AC_REQUIRE,
+[ifdef([AC_PROVIDE_$1], , [indir([$1])])])dnl
 dnl
 dnl AC_PROVIDE(MACRO-NAME)
 define(AC_PROVIDE,
 [define([AC_PROVIDE_$1], )])dnl
 dnl
 dnl AC_OBSOLETE(THIS-MACRO-NAME [, SUGGESTION])
-define(AC_OBSOLETE,
+AC_DEFUN(AC_OBSOLETE,
 [errprint(__file__:__line__: warning: [$1] is obsolete[$2]
 )])dnl
 dnl
@@ -1016,7 +1027,7 @@ dnl
 dnl
 dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
 dnl                  [, VALUE-IF-NOT-FOUND])
-define(AC_CHECK_PROG,
+AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
 AC_MSG_CHECKING([for $ac_word])
@@ -1039,12 +1050,16 @@ ifelse([$4], , , [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
 $1="$ac_cv_prog_$1"
-test -n "[$]$1" && AC_MSG_RESULT([$]$1)
+if test -n "[$]$1"; then
+  AC_MSG_RESULT([$]$1)
+else
+  AC_MSG_RESULT(no)
+fi
 AC_SUBST($1)dnl
 ])dnl
 dnl
 dnl AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
-define(AC_PATH_PROG,
+AC_DEFUN(AC_PATH_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
 AC_MSG_CHECKING([for $ac_word])
@@ -1070,7 +1085,11 @@ ifelse([$3], , , [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
   ;;
 esac])dnl
 $1="$ac_cv_path_$1"
-test -n "[$]$1" && AC_MSG_RESULT([$]$1)
+if test -n "[$]$1"; then
+  AC_MSG_RESULT([$]$1)
+else
+  AC_MSG_RESULT(no)
+fi
 AC_SUBST($1)dnl
 ])dnl
 dnl
@@ -1079,7 +1098,7 @@ dnl ### Checking for files - derived (caching)
 dnl
 dnl
 dnl AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
-define(AC_CHECK_PROGS,
+AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
 do
 AC_CHECK_PROG($1, [$]ac_prog, [$]ac_prog, )
@@ -1089,7 +1108,7 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])dnl
 dnl
 dnl AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
-define(AC_PATH_PROGS,
+AC_DEFUN(AC_PATH_PROGS,
 [for ac_prog in $2
 do
 AC_PATH_PROG($1, [$]ac_prog)
@@ -1100,7 +1119,7 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 dnl
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                 [, OTHER-LIBRARIES]]])
-define(AC_CHECK_LIB,
+AC_DEFUN(AC_CHECK_LIB,
 [changequote(/, /)dnl
 define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
@@ -1129,7 +1148,7 @@ undefine(AC_CV_NAME)dnl
 dnl
 dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                 [, OTHER-LIBRARIES]]])
-define(AC_HAVE_LIBRARY,
+AC_DEFUN(AC_HAVE_LIBRARY,
 [AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
 AC_CHECK_LIB([$1], main, [$2], [$3], [$4])dnl
 ])dnl
@@ -1140,17 +1159,15 @@ dnl
 dnl
 dnl AC_EGREP_HEADER(PATTERN, HEADER-FILE, ACTION-IF-FOUND [,
 dnl                 ACTION-IF-NOT-FOUND])
-define(AC_EGREP_HEADER,
-[AC_PROVIDE([$0])dnl
-AC_EGREP_CPP([$1], [#include <$2>], [$3], [$4])])dnl
+AC_DEFUN(AC_EGREP_HEADER,
+[AC_EGREP_CPP([$1], [#include <$2>], [$3], [$4])])dnl
 dnl
-dnl Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must come early,
-dnl it is not included in AC_BEFORE checks.
+dnl Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must
+dnl come early, it is not included in AC_BEFORE checks.
 dnl AC_EGREP_CPP(PATTERN, PROGRAM, ACTION-IF-FOUND [,
 dnl                  ACTION-IF-NOT-FOUND])
-define(AC_EGREP_CPP,
+AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
-AC_PROVIDE([$0])dnl
 cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
@@ -1169,9 +1186,8 @@ rm -f conftest*
 dnl
 dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-define(AC_COMPILE_CHECK,
-[AC_PROVIDE([$0])dnl
-dnl It's actually ok to use this, if you don't care about caching.
+AC_DEFUN(AC_COMPILE_CHECK,
+[dnl It's actually ok to use this, if you don't care about caching.
 dnl AC_OBSOLETE([$0], [; instead use AC_TRY_LINK])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
@@ -1180,9 +1196,8 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])dnl
 dnl
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 dnl              ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-define(AC_TRY_LINK,
-[AC_PROVIDE([$0])dnl
-dnl We use return because because C++ requires a prototype for exit.
+AC_DEFUN(AC_TRY_LINK,
+[dnl We use return because because C++ requires a prototype for exit.
 cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
@@ -1204,9 +1219,8 @@ rm -f conftest*]
 dnl
 dnl AC_TRY_RUN(PROGRAM, ACTION-IF-TRUE [, ACTION-IF-FALSE
 dnl             [, ACTION-IF-CROSS-COMPILING]])
-define(AC_TRY_RUN,
-[AC_PROVIDE([$0])dnl
-AC_REQUIRE([AC_C_CROSS])dnl
+AC_DEFUN(AC_TRY_RUN,
+[AC_REQUIRE([AC_C_CROSS])dnl
 if test "$cross_compiling" = yes; then
   ifelse([$4], , AC_MSG_ERROR(can not run test program while cross compiling),
   [AC_MSG_WARN(using default for cross-compiling)
@@ -1228,7 +1242,7 @@ fi
 rm -fr conftest*])dnl
 dnl
 dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-define(AC_TRY_CPP,
+AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
@@ -1252,7 +1266,7 @@ dnl ### Checking for C features - derived (caching)
 dnl
 dnl
 dnl AC_CHECK_HEADER(HEADER-FILE, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-define(AC_CHECK_HEADER,
+AC_DEFUN(AC_CHECK_HEADER,
 [dnl Do the transliteration at runtime so arg 1 can be a shell variable.
 ac_var=`echo "$1" | tr './' '__'`
 AC_MSG_CHECKING([for $1])
@@ -1270,7 +1284,7 @@ fi
 ])dnl
 dnl
 dnl AC_CHECK_FUNC(FUNCTION, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-define(AC_CHECK_FUNC,
+AC_DEFUN(AC_CHECK_FUNC,
 [AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_func_$1,
 [AC_TRY_LINK(
@@ -1296,7 +1310,7 @@ fi
 ])dnl
 dnl
 dnl AC_CHECK_FUNCS(FUNCTION...)
-define(AC_CHECK_FUNCS,
+AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
 changequote(, )dnl
@@ -1307,7 +1321,7 @@ done
 ])dnl
 dnl
 dnl AC_CHECK_HEADERS(HEADER-FILE...)
-define(AC_CHECK_HEADERS,
+AC_DEFUN(AC_CHECK_HEADERS,
 [AC_REQUIRE_CPP()dnl Make sure the cpp check happens outside the loop.
 for ac_hdr in $1
 do
@@ -1319,7 +1333,7 @@ done
 ])dnl
 dnl
 dnl AC_REPLACE_FUNCS(FUNCTION-NAME...)
-define(AC_REPLACE_FUNCS,
+AC_DEFUN(AC_REPLACE_FUNCS,
 [for ac_func in $1
 do
 AC_CHECK_FUNC(${ac_func}, , [LIBOBJS="$LIBOBJS ${ac_func}.o"])
@@ -1328,7 +1342,7 @@ AC_SUBST(LIBOBJS)dnl
 ])dnl
 dnl
 dnl AC_CHECK_SIZEOF(TYPE)
-define(AC_CHECK_SIZEOF,
+AC_DEFUN(AC_CHECK_SIZEOF,
 [changequote(<<, >>)dnl
 dnl The name to #define.
 define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
@@ -1352,7 +1366,7 @@ undefine(AC_CV_NAME)dnl
 ])dnl
 dnl
 dnl AC_CHECK_TYPE(TYPE, DEFAULT)
-define(AC_CHECK_TYPE,
+AC_DEFUN(AC_CHECK_TYPE,
 [AC_MSG_CHECKING(for $1 in sys/types.h)
 AC_CACHE_VAL(ac_cv_type_$1,
 [AC_EGREP_HEADER($1, sys/types.h, ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
@@ -1367,7 +1381,7 @@ dnl ### The big finish
 dnl
 dnl
 dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS])
-define(AC_OUTPUT,
+AC_DEFUN(AC_OUTPUT,
 [AC_CACHE_SAVE
 
 test "x$prefix" = xNONE && prefix=/usr/local
@@ -1401,8 +1415,8 @@ ifdef([AC_LIST_HEADERS],
 [divert(AC_DIVERSION_SED)dnl
 s%@DEFS@%-DHAVE_CONFIG_H%],
 [divert(AC_DIVERSION_SED)dnl
-s%@DEFS@%$DEFS%]
-[divert(AC_DIVERSION_VAR)dnl
+s%@DEFS@%$DEFS%
+divert(AC_DIVERSION_VAR)dnl
 DEFS='$DEFS'
 ])dnl
 divert(AC_DIVERSION_VAR)dnl
@@ -1410,7 +1424,7 @@ ac_vpsub='$ac_vpsub'
 extrasub='$extrasub'
 divert(AC_DIVERSION_NORMAL)dnl
 
-# Some shells look in PATH for config.status without the "./".
+# Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
 
 trap "rm -f ${CONFIG_STATUS}; exit 1" 1 2 15
@@ -1546,7 +1560,7 @@ dnl
 dnl Create the header files listed in $1.
 dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
-define(AC_OUTPUT_HEADER,
+AC_DEFUN(AC_OUTPUT_HEADER,
 [changequote(<<, >>)dnl
 
 # These sed commands are put into ac_sed_defs when defining a macro.
@@ -1661,7 +1675,7 @@ rm -f conftest.sed
 
 ])dnl
 dnl
-define(AC_OUTPUT_LINKS,
+AC_DEFUN(AC_OUTPUT_LINKS,
 [ac_links="$1"
 ac_files="$2"
 while test -n "${ac_files}"; do
@@ -1683,7 +1697,7 @@ while test -n "${ac_files}"; do
 done
 ])dnl
 dnl
-define(AC_OUTPUT_SUBDIRS,
+AC_DEFUN(AC_OUTPUT_SUBDIRS,
 [if test -z "${norecursion}"; then
 
   # Remove --cache-file and --srcdir arguments so they do not pile up.

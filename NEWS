@@ -1,3 +1,7 @@
+Thanks to everybody who's submitted changes and additions to Autoconf!
+I've incorporated some of them, and am still considering others for
+future releases -- but I didn't want to postpone this release indefinitely.
+
 Major changes in release 2.0:
 
 ** New files:
@@ -11,6 +15,7 @@ Major changes in release 2.0:
 
 ** New macros:
 * AC_CACHE_VAL to share results of tests between configure runs.
+* AC_DEFUN to define macros and automatically AC_PROVIDE them.
 * AC_CONFIG_AUX_DIR, AC_CANONICAL_SYSTEM, AC_LINK_FILES to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
