@@ -1349,10 +1349,14 @@ define(AC_PREREQ,
 AC_DEFUN(AC_CONFIG_AUX_DIR,
 [AC_CONFIG_AUX_DIRS($1 $srcdir/$1)])
 
+
+# AC_CONFIG_AUX_DIR_DEFAULT
+# -------------------------
 # The default is `$srcdir' or `$srcdir/..' or `$srcdir/../..'.
 # There's no need to call this macro explicitly; just AC_REQUIRE it.
 AC_DEFUN(AC_CONFIG_AUX_DIR_DEFAULT,
 [AC_CONFIG_AUX_DIRS($srcdir $srcdir/.. $srcdir/../..)])
+
 
 # AC_CONFIG_AUX_DIRS(DIR ...)
 # ---------------------------
@@ -1387,6 +1391,8 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])# AC_CONFIG_AUX_DIRS
 
 
+# AC_CANONICAL_SYSTEM
+# -------------------
 # Canonicalize the host, target, and build system types.
 AC_DEFUN(AC_CANONICAL_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
@@ -1423,6 +1429,7 @@ test "$host_alias" != "$target_alias" &&
 
 
 # Subroutines of AC_CANONICAL_SYSTEM.
+
 
 # AC_CANONICAL_THING(THING)
 # -------------------------

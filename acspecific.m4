@@ -124,7 +124,8 @@ else
     CFLAGS=
   fi
 fi
-])
+])# AC_PROG_CC
+
 
 # AC_PROG_CXX([LIST-OF-COMPILERS])
 # --------------------------------
@@ -167,7 +168,8 @@ else
     CXXFLAGS=
   fi
 fi
-])
+])# AC_PROG_CXX
+
 
 # AC_PROG_F77([COMPILERS...])
 # ---------------------------
@@ -201,7 +203,7 @@ else
   G77=
   test "${FFLAGS+set}" = set || FFLAGS="-g"
 fi
-])
+])# AC_PROG_F77
 
 
 # AC_PROG_CC_WORKS
@@ -220,7 +222,7 @@ fi
 AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cc_cross)
 cross_compiling=$ac_cv_prog_cc_cross
-])
+])# AC_PROG_CC_WORKS
 
 
 # AC_PROG_CXX_WORKS
@@ -282,7 +284,7 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gcc=no
 fi])dnl
-])
+])# AC_PROG_CC_GNU
 
 
 # AC_PROG_CXX_GNU
@@ -300,7 +302,7 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gxx=no
 fi])dnl
-])
+])# AC_PROG_CXX_GNU
 
 
 # AC_PROG_F77_GNU
@@ -1550,11 +1552,11 @@ AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 # include <vfork.h>
 #endif
 /* On some sparc systems, changes by the child to local and incoming
-   argument registers are propagated back to the parent.
-   The compiler is told about this with #include <vfork.h>,
-   but some compilers (e.g. gcc -O) don't grok <vfork.h>.
-   Test for this by using a static variable whose address
-   is put into a register that is clobbered by the vfork.  */
+   argument registers are propagated back to the parent.  The compiler
+   is told about this with #include <vfork.h>, but some compilers
+   (e.g. gcc -O) don't grok <vfork.h>.  Test for this by using a
+   static variable whose address is put into a register that is
+   clobbered by the vfork.  */
 static
 #ifdef __cplusplus
 sparc_address_test (int arg)
@@ -1588,16 +1590,15 @@ main ()
   child = vfork ();
 
   if (child == 0) {
-    /* Here is another test for sparc vfork register problems.
-       This test uses lots of local variables, at least
-       as many local variables as main has allocated so far
-       including compiler temporaries.  4 locals are enough for
-       gcc 1.40.3 on a Solaris 4.1.3 sparc, but we use 8 to be safe.
-       A buggy compiler should reuse the register of parent
-       for one of the local variables, since it will think that
-       parent can't possibly be used any more in this routine.
-       Assigning to the local variable will thus munge parent
-       in the parent process.  */
+    /* Here is another test for sparc vfork register problems.  This
+       test uses lots of local variables, at least as many local
+       variables as main has allocated so far including compiler
+       temporaries.  4 locals are enough for gcc 1.40.3 on a Solaris
+       4.1.3 sparc, but we use 8 to be safe.  A buggy compiler should
+       reuse the register of parent for one of the local variables,
+       since it will think that parent can't possibly be used any more
+       in this routine.  Assigning to the local variable will thus
+       munge parent in the parent process.  */
     pid_t
       p = getpid(), p1 = getpid(), p2 = getpid(), p3 = getpid(),
       p4 = getpid(), p5 = getpid(), p6 = getpid(), p7 = getpid();
@@ -1607,11 +1608,10 @@ main ()
 	|| p != p5 || p != p6 || p != p7)
       _exit(1);
 
-    /* On some systems (e.g. IRIX 3.3),
-       vfork doesn't separate parent from child file descriptors.
-       If the child closes a descriptor before it execs or exits,
-       this munges the parent's descriptor as well.
-       Test for this by closing stdout in the child.  */
+    /* On some systems (e.g. IRIX 3.3), vfork doesn't separate parent
+       from child file descriptors.  If the child closes a descriptor
+       before it execs or exits, this munges the parent's descriptor
+       as well.  Test for this by closing stdout in the child.  */
     _exit(close(fileno(stdout)) != 0);
   } else {
     int status;
@@ -1653,7 +1653,7 @@ AC_DEFUN(AC_FUNC_WAIT3,
 #include <stdio.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
 int
-main()
+main ()
 {
   struct rusage r;
   int i;
@@ -1665,17 +1665,20 @@ main()
   r.ru_stime.tv_sec = 0;
   r.ru_stime.tv_usec = 0;
   r.ru_majflt = r.ru_minflt = 0;
-  switch (fork()) {
-  case 0: /* Child.  */
-    sleep(1); /* Give up the CPU.  */
-    _exit(0);
-  case -1: _exit(0); /* What can we do?  */
-  default: /* Parent.  */
-    wait3(&i, 0, &r);
-    sleep(2); /* Avoid "text file busy" from rm on fast HP-UX machines.  */
-    exit(r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
-	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
-  }
+  switch (fork ())
+    {
+    case 0: /* Child.  */
+      sleep(1); /* Give up the CPU.  */
+      _exit(0);
+    case -1: /* What can we do?  */
+      _exit(0);
+    default: /* Parent.  */
+      wait3(&i, 0, &r);
+      /* Avoid "text file busy" from rm on fast HP-UX machines.  */
+      sleep(2);
+      exit (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
+	    && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
+    }
 }], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
 ac_cv_func_wait3_rusage=no)])
 if test $ac_cv_func_wait3_rusage = yes; then
@@ -1758,7 +1761,8 @@ done
 fi
 
 AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
-[AC_TRY_RUN([find_stack_direction ()
+[AC_TRY_RUN(
+[find_stack_direction ()
 {
   static char *addr = 0;
   auto char dummy;
@@ -1770,6 +1774,7 @@ AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
   else
     return (&dummy > addr) ? 1 : -1;
 }
+
 int
 main ()
 {
@@ -3113,6 +3118,13 @@ fi
 ])# AC_SYS_RESTARTABLE_SYSCALLS
 
 
+
+
+## --------------------- ##
+## Checks for X window.  ##
+## --------------------- ##
+
+
 # AC_PATH_X
 # ---------
 AC_DEFUN(AC_PATH_X,
@@ -3162,8 +3174,11 @@ else
 		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
-])
+])# AC_PATH_X
 
+
+# AC_PATH_X_XMKMF
+# ---------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 AC_DEFUN(AC_PATH_X_XMKMF,
@@ -3200,8 +3215,11 @@ EOF
   cd ..
   rm -fr conftestdir
 fi
-])
+])# AC_PATH_X_XMKMF
 
+
+# AC_PATH_X_DIRECT
+# ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 AC_DEFUN(AC_PATH_X_DIRECT,
@@ -3321,8 +3339,11 @@ dnl Don't even attempt the hair of trying to link an X program!
   done
 done])
 fi # $ac_x_libraries = NO
-])
+])# AC_PATH_X_DIRECT
 
+
+# AC_PATH_XTRA
+# ------------
 # Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
 [AC_REQUIRE([AC_PATH_X])dnl
@@ -3435,7 +3456,13 @@ AC_SUBST(X_CFLAGS)dnl
 AC_SUBST(X_PRE_LIBS)dnl
 AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
-])
+])# AC_PATH_XTRA
+
+
+
+## ------------------------------------ ##
+## Checks for not-quite-Unix variants.  ##
+## ------------------------------------ ##
 
 # The old Cygwin32 macro is deprecated.
 AU_DEFUN(AC_CYGWIN32,
@@ -3457,6 +3484,7 @@ ac_cv_cygwin=yes, ac_cv_cygwin=no)])
 CYGWIN=
 test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 
+
 # AC_MINGW32
 # ----------
 # Check for mingw32.  This is another way to set the right value for
@@ -3467,6 +3495,7 @@ AC_DEFUN(AC_MINGW32,
 ac_cv_mingw32=yes, ac_cv_mingw32=no)])
 MINGW32=
 test "$ac_cv_mingw32" = yes && MINGW32=yes])
+
 
 # AC_EMXOS2
 # ---------
@@ -3564,6 +3593,7 @@ if test "$MINIX" = yes; then
             [Define if on MINIX.])
 fi
 ])# AC_MINIX
+
 
 # AC_ISC_POSIX
 # ------------
