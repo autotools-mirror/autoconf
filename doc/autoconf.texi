@@ -273,6 +273,7 @@ Checking Run Time Behavior
 Portable Shell Programming
 
 * Shellology::                  A zoology of shells
+* Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
@@ -603,28 +604,29 @@ the GNU build tools.
 @item Web
 
 The home pages for
-@uref{http://www.gnu.org/software/autoconf/,Autoconf},
-@uref{http://www.gnu.org/software/automake/,Automake}, and
-@uref{http://www.gnu.org/software/libtool/,Libtool}.
+@href{http://www.gnu.org/software/autoconf/,Autoconf},
+@href{http://www.gnu.org/software/automake/,Automake}, and
+@href{http://www.gnu.org/software/libtool/,Libtool}.
 
-@item Automake Manual (TeXinfo)
+@item Automake Manual
 
 @xref{Top,,Automake,automake,GNU Automake}, for more
 information on Automake.
 
 @item Books
 
-The book @cite{GNU Autoconf, Automake and Libtool}, by G. V. Vaughan,
-B. Elliston, T. Tromey, and I. L. Taylor (New Riders, 2000) (ISBN
-1578701902) describes the complete GNU build environment.  You can also
-find the entire book on-line at
-@uref{http://sources.redhat.com/autobook/,``The Goat Book'' home page}.
+The book @cite{GNU Autoconf, Automake and Libtool}@footnote{@cite{GNU
+Autoconf, Automake and Libtool}, by G. V. Vaughan, B. Elliston,
+T. Tromey, and I. L. Taylor. New Riders, 2000, ISBN 1578701902.}
+describes the complete GNU build environment.  You can also find the
+entire book on-line at @href{http://sources.redhat.com/autobook/,``The
+Goat Book'' home page}.
 
 @item Tutorials and Examples
 
-The @uref{http://sources.redhat.com/autoconf/,Autoconf Developer Page}
+The @href{http://sources.redhat.com/autoconf/,Autoconf Developer Page}
 maintains links to a number of Autoconf/Automake tutorials online, and
-also links to the @uref{http://www.gnu.org/software/ac-archive/,
+also links to the @href{http://www.gnu.org/software/ac-archive/,
 Autoconf Macro Archive}.
 
 @end itemize
@@ -1289,17 +1291,18 @@ The @var{format} gives you a lot of freedom:
 
 @example
 @group
-$ autoconf -t 'AC_SUBST:ac_subst@{"$1"@} = "$f:$l";'
-ac_subst@{"ECHO_C"@} = "configure.ac:2";
-ac_subst@{"ECHO_N"@} = "configure.ac:2";
-ac_subst@{"ECHO_T"@} = "configure.ac:2";
+$ autoconf -t 'AC_SUBST:$$ac_subst@{"$1"@} = "$f:$l";'
+$ac_subst@{"ECHO_C"@} = "configure.ac:2";
+$ac_subst@{"ECHO_N"@} = "configure.ac:2";
+$ac_subst@{"ECHO_T"@} = "configure.ac:2";
 @i{More traces deleted}
 @end group
 @end example
 
 @noindent
 A long @var{separator} can be used to improve the readability of complex
-structures:
+structures, and to ease its parsing (for instance when no single
+character is suitable as a separator)):
 
 @example
 @group
@@ -4724,7 +4727,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cvindex _LARGE_FILES
 @ovindex CC
 Arrange for
-@uref{http://www.sas.com/standards/large.file/x_open.20Mar96.html,
+@href{http://www.sas.com/standards/large.file/x_open.20Mar96.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
@@ -5295,6 +5298,7 @@ Some of these external utilities have a portable subset of features; see
 
 @menu
 * Shellology::                  A zoology of shells
+* Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * File System Conventions::     File- and pathnames
 * Shell Substitutions::         Variable and command expansions
@@ -5305,7 +5309,7 @@ Some of these external utilities have a portable subset of features; see
 * Limitations of Make::         Portable Makefiles
 @end menu
 
-@node Shellology, File Descriptors, Portable Shell, Portable Shell
+@node Shellology, Here-Documents, Portable Shell, Portable Shell
 @section Shellology
 
 There are several families of shells, most prominently the Bourne
@@ -5358,15 +5362,6 @@ To detect whether you are running @command{bash}, test if
 Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
 details.
 
-@item @command{/bin/sh} on OpenBSD
-@cindex @command{/bin/sh} on OpenBSD
-
-@samp{\"} expands to @samp{"} in here-documents with unquoted
-delimiter in the native @command{/bin/sh} on OpenBSD 2.7.  As a general
-rule, if @samp{\\} expands to @samp{\} use @samp{\\} to get @samp{\}.
-Don't rely on @samp{\} being preserved just because it has no special
-meaning together with the next symbol.
-
 @item @command{/usr/xpg4/bin/sh} on Solaris
 @cindex @command{/usr/xpg4/bin/sh} on Solaris
 The @sc{posix}-compliant Bourne shell on a Solaris system is
@@ -5381,6 +5376,8 @@ To detect whether you are running @command{zsh}, test if
 compatible with the Bourne shell: you have to run @samp{emulate sh} and
 set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
+
+Zsh 3.0.8 is the native @command{/bin/sh} on Mac OS X 10.0.3.
 @end table
 
 The following discussion between Russ Allbery and Robert Lipe is worth
@@ -5411,7 +5408,77 @@ So while most modern systems do have a shell _somewhere_ that meets the
 @sc{posix} standard, the challenge is to find it.
 @end quotation
 
-@node File Descriptors, File System Conventions, Shellology, Portable Shell
+@node Here-Documents, File Descriptors, Shellology, Portable Shell
+@section Here-Documents
+
+Don't rely on @samp{\} being preserved just because it has no special
+meaning together with the next symbol.  in the native @command{/bin/sh}
+on OpenBSD 2.7 @samp{\"} expands to @samp{"} in here-documents with
+unquoted delimiter.  As a general rule, if @samp{\\} expands to @samp{\}
+use @samp{\\} to get @samp{\}.
+
+With OpenBSD 2.7's @command{/bin/sh}
+
+@example
+@group
+$ cat <<EOF
+> \" \\
+> EOF
+" \
+@end group
+@end example
+
+@noindent
+and with Bash:
+
+@example
+@group
+bash-2.04$ cat <<EOF
+> \" \\
+> EOF
+\" \
+@end group
+@end example
+
+
+Many older shells (including the Bourne shell) implement here-documents
+inefficiently.  Users can generally speed things up by using a faster
+shell, e.g., by using the command @samp{bash ./configure} rather than
+plain @samp{./configure}.
+
+Some shells can be extremely inefficient when there are a lot of
+here-documents inside a single statement.  For instance if your
+@file{configure.ac} includes something like:
+
+@example
+@group
+if <cross_compiling>; then
+  assume this and that
+else
+  check this
+  check that
+  check something else
+  on and on forever
+fi
+@end group
+@end example
+
+A shell parses the whole @code{if}/@code{fi} construct, creating
+temporary files for each here document in it.  Some shells create links
+for such here-documents on every @code{fork ()}, so that the clean-up
+code they had installed correctly removes them.  It is creating the
+links that the shell can take forever.
+
+Moving the tests out of the @code{if}/@code{fi}, or creating multiple
+@code{if}/@code{fi} constructs, would improve the performance
+significantly.  Anyway, this kind of construct is not exactly the
+typical use of Autoconf.  In fact, it's even not recommended, because M4
+macros can't look into shell conditionals, so we may fail to expand a
+macro when it was expanded before in a conditional path, and the
+condition turned out to be false at run-time, and we end up not
+executing the macro at all.
+
+@node File Descriptors, File System Conventions, Here-Documents, Portable Shell
 @section File Descriptors
 
 Some file descriptors shall not be used, since some systems, admittedly
@@ -5527,10 +5594,10 @@ or @samp{;}) when it starts up.
 File names need extra care as well.  While @sc{dos}-based environments
 that are Unixy enough to run @command{autoconf} (such as DJGPP) will
 usually be able to handle long file names properly, there are still
-limitations that can seriously break packages.  Several of these issues can
-be easily detected by
-@uref{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, the doschk
-package}.
+limitations that can seriously break packages.  Several of these issues
+can be easily detected by the
+@href{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, doschk}
+package.
 
 A short overview follows; problems are marked with @sc{sfn}/@sc{lfn} to
 indicate where they apply: @sc{sfn} means the issues are only relevant to
@@ -6071,43 +6138,6 @@ cat <<EOF
 $foo
 EOF
 @end example
-
-Many older shells (including the Bourne shell) implement here-documents
-inefficiently.  Users can generally speed things up by using a faster
-shell, e.g., by using the command @samp{bash ./configure} rather than
-plain @samp{./configure}.
-
-Some shells can be extremely inefficient when there are a lot of
-here-documents inside a single statement.  For instance if your
-@file{configure.ac} includes something like:
-
-@example
-@group
-if <cross_compiling>; then
-  assume this and that
-else
-  check this
-  check that
-  check something else
-  on and on forever
-fi
-@end group
-@end example
-
-A shell parses the whole @code{if}/@code{fi} construct, creating
-temporary files for each here document in it.  Some shells create links
-for such here-documents on every @code{fork ()}, so that the clean-up
-code they had installed correctly removes them.  It is creating the
-links that the shell can take forever.
-
-Moving the tests out of the @code{if}/@code{fi}, or creating multiple
-@code{if}/@code{fi} constructs, would improve the performance
-significantly.  Anyway, this kind of construct is not exactly the
-typical use of Autoconf.  In fact, it's even not recommended, because M4
-macros can't look into shell conditionals, so we may fail to expand a
-macro when it was expanded before in a conditional path, and the
-condition turned out to be false at run-time, and we end up not
-executing the macro at all.
 
 
 @item @command{exit}

@@ -7,7 +7,7 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
-* Autoconf 2.51
+* Soon
 
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
@@ -15,13 +15,18 @@ if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
 
 ** Document
-Automake, Libtool, AC_ARG_VAR.
+AC_ARG_VAR, m4_pattrern_*
 
 ** RedHat's Autoconf page
 should be removed.
 
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
+
+* Autoconf 2.52 or later
+
+** Languages
+Integrate other Fortrans etc.
 
 ** AC_CHECK_FUNCS and AC_TRY_LINK_FUNC
 I have still not understood what's the difference  between the two
@@ -47,8 +52,6 @@ Can be introduced even before specializing macros.  It just means that
 specializing macros will call them.  OTOH, this doubles our work,
 since specializing macros will save us from additional typing.  But
 the more powerful autoscan is, the better...
-
-* Autoconf 2.51 or later
 
 ** Libtool
 Define once for all the hooks they need, any redefinition of
