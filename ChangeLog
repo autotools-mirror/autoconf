@@ -1,3 +1,11 @@
+1998-12-26  Ben Elliston  <bje@cygnus.com>
+
+	* autoreconf.sh (stamp): Add missing quote.
+
+	* mkinstalldirs: Write output which is not diagnostic to standard
+	output and not standard error. Suggested by Steve Robbins
+	<steve@nyongwa.montreal.qc.ca>.
+
 1998-12-11  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_ACVERSION): Bump to 2.13.
