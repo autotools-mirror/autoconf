@@ -200,17 +200,16 @@ published by the Free Software Foundation raise funds for
 
 
 
-@dircategory GNU programming tools
+@dircategory Software development
 @direntry
-* Autoconf: (autoconf).         Create source code configuration scripts
+* Autoconf: (autoconf).         Create source code configuration scripts.
 @end direntry
 
 @dircategory Individual utilities
 @direntry
 * autoscan: (autoconf)autoscan Invocation.
                                 Semi-automatic @file{configure.ac} writing
-* ifnames: (autoconf)ifnames Invocation.
-                                Listing the conditionals in source code
+* ifnames: (autoconf)ifnames Invocation.        Listing conditionals in source.
 * autoconf: (autoconf)autoconf Invocation.
                                 How to create configuration scripts
 * autoreconf: (autoconf)autoreconf Invocation.
@@ -219,14 +218,11 @@ published by the Free Software Foundation raise funds for
                                 How to create configuration templates
 * autom4te: (autoconf)autom4te Invocation.
                                 The Autoconf executables backbone
-* configure: (autoconf)configure Invocation.
-                                Configuring a package
+* configure: (autoconf)configure Invocation.    Configuring a package.
 * autoupdate: (autoconf)autoupdate Invocation.
                                 Automatic update of @file{configure.ac}
-* config.status: (autoconf)config.status Invocation.
-                                Recreating a configuration
-* testsuite: (autoconf)testsuite Invocation.
-                                Running an Autotest test suite
+* config.status: (autoconf)config.status Invocation. Recreating configurations.
+* testsuite: (autoconf)testsuite Invocation.    Running an Autotest test suite.
 @end direntry
 
 @titlepage
