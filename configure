@@ -881,8 +881,8 @@ esac
 echo "#! $SHELL" >conftest.sh
 echo  "exit 0"   >>conftest.sh
 chmod +x conftest.sh
-if { (echo "$as_me:884: PATH=\".;\`pwd\`\"; conftest.sh") >&5
-  (PATH=".;`pwd`"; conftest.sh) 2>&5
+if { (echo "$as_me:884: PATH=\".;.\"; conftest.sh") >&5
+  (PATH=".;."; conftest.sh) 2>&5
   ac_status=$?
   echo "$as_me:887: \$? = $ac_status" >&5
   (exit $ac_status); }; then
