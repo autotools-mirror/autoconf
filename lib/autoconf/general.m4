@@ -519,6 +519,11 @@ if test ! -r $srcdir/$ac_unique_file; then
     AC_MSG_ERROR(can not find sources in $srcdir)
   fi
 fi
+dnl Double slashes in pathnames in object file debugging info
+dnl mess up M-x gdb in Emacs.
+changequote(, )dnl
+srcdir=`echo "${srcdir}" | sed 's%\([^/]\)/*$%\1%'`
+changequote([, ])dnl
 
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
