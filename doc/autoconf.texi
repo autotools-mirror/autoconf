@@ -8477,7 +8477,7 @@ One workaround relies on Zsh's ``global aliases'' to convert
 @samp{$@{1+"$@@"@}} into @samp{"$@@"} by itself:
 
 @example
-$@{ZSH_VERSION-:@} alias -g '$@{1+"$@@"@}'='"$@@"'
+test "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
 A more conservative workaround is to avoid @samp{"$@@"} if it is
