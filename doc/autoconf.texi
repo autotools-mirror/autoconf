@@ -2471,8 +2471,9 @@ commented out (in case the system predefines that symbol).
 @end group
 @end example
 
-You can then decode the configuration header using the preprocessor
-directives:
+Pay attention that @samp{#undef} is in the first column, and there is
+nothing behind @samp{HAVE_UNISTD_H}, not even white spaces.  You can
+then decode the configuration header using the preprocessor directives:
 
 @example
 @group
@@ -2487,7 +2488,9 @@ directives:
 @end example
 
 The use of old form templates, with @samp{#define} instead of
-@samp{#undef} is strongly discouraged.
+@samp{#undef} is strongly discouraged.  Similarly with old templates
+with comments on the same line as the @samp{#undef}.  Anyway, putting
+comments in preprocessor macros has never been a good idea.
 
 Since it is a tedious task to keep a template header up to date, you may
 use @command{autoheader} to generate it, see @ref{autoheader Invocation}.
@@ -7679,7 +7682,7 @@ globally, include the following lines in @file{~/.autom4te.cfg}:
 ## ------------------ ##
 
 begin-language: "Autoconf"
-args: --cache=''
+args: --cache ''
 end-language: "Autoconf"
 @end verbatim
 

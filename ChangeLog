@@ -1,5 +1,11 @@
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Header Templates): Put also in words what the
+	pictures says to assist free style readers.
+	(Customizing autom4te): s/--cache=/--cache /.
+
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/functions.m4 (_AC_FUNC_VFORK): Include stdlib.h and
 	sys/wait.h.
 	sparc_address_test returns void.
