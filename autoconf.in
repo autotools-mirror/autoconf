@@ -105,6 +105,16 @@ case `$M4 --help </dev/null 2>&1` in
 *) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
 esac
 
+# Set some high recursion limit as the default limit, 250, has already
+# been hit with AC_OUTPUT.
+case " $M4 " in
+  *" --nesting-limit"* | *" -L"* )
+  # Don't override the user's choice
+  ;;
+  *) M4="$M4 --nesting-limit=1024"
+  ;;
+esac
+
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 test -z "$AC_ACLOCALDIR" &&

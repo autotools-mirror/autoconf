@@ -1,5 +1,11 @@
 2001-06-18  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.in (M4): Pass --nesting-limit=1024, unless already set
+	in $M4.
+	Suggested by Andreas Schwab.
+
+2001-06-18  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4 (AC_FUNC_CHOWN, AC_FUNC_CLOSEDIR_VOID)
 	(AC_FUNC_GETPGRP, AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK)
 	(AC_FUNC_MMAP, AC_FUNC_SELECT_ARGTYPES, _AC_FUNC_STAT)
