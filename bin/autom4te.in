@@ -38,7 +38,7 @@ BEGIN
 {
   my $prefix = "@prefix@";
   # FIXME: Import Struct into Autoconf.
-  my $perllibdir = $ENV{'perllibdir'} || "@datadir@";
+  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
   unshift @INC, "$perllibdir";
 }
 

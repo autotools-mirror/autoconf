@@ -1,5 +1,12 @@
 2001-07-25  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.in: Try to define the variables before using them.
+	* autom4te.in ($perllibdir): Use `$autom4te_perllibdir' as envvar
+	instead of `$perllibdir'.
+	* tests/atconfig.in ($autom4te_perllibdir): Export it.
+
+2001-07-25  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in (ac_LF_and_DOT): Remove, unused.
 
 2001-07-24  Akim Demaille  <akim@epita.fr>

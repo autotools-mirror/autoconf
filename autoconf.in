@@ -83,6 +83,18 @@ if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 
+# Variables.
+: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
+debug=false
+dir=`echo "$0" | sed -e 's,[^\\/]*$,,'`
+# Trace Autoconf's initialization?
+initialization=false
+localdir=.
+outfile=
+# Exit status.
+status=0
+verbose=:
+
 # Find GNU m4.
 # Handle the case that m4 has moved since we were configured.
 # It may have been found originally in a build directory.
@@ -125,19 +137,6 @@ for autom4te in "$AUTOM4TE" \
   test -f "$autom4te" && break
 done
 
-
-# Variables.
-: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
-test -z "$AC_ACLOCALDIR" &&
-  AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`
-debug=false
-# Trace Autoconf's initialization?
-initialization=false
-localdir=.
-outfile=
-# Exit status.
-status=0
-verbose=:
 
 # Parse command line.
 while test $# -gt 0 ; do
