@@ -1904,18 +1904,21 @@ produces this in @file{configure}:
 
 These macros check whether particular files exist.
 
-@defmac AC_CHECK_LIB (@var{library} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
+@defmac AC_CHECK_LIB (@var{library}, @var{function}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
 @maindex CHECK_LIB
 Create a test C program to see whether that program can be linked with
-the library @var{library}.  @var{action-if-found} is a list of shell
-commands to run if the link succeeds (which means that the library is
-present); @var{action-if-not-found} is a list of shell commands to run
-if the link fails.  If @var{action-if-found} and
-@var{action-if-not-found} are not specified, the default action is to
-add @samp{-lfoo} to @code{LIBS} and define @samp{HAVE_LIBfoo}
-for library @samp{foo}.  @var{library} can be written as any of
-@samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In all of those cases,
-the compiler is passed @samp{-lfoo}.
+the library @var{library}.  @var{function} should be the name of a
+function that that library contains, to force the linker to try to link
+with the library to resolve the name.
+
+@var{action-if-found} is a list of shell commands to run if the link
+succeeds (which means that the library is present);
+@var{action-if-not-found} is a list of shell commands to run if the link
+fails.  If @var{action-if-found} and @var{action-if-not-found} are not
+specified, the default action is to add @samp{-lfoo} to @code{LIBS} and
+define @samp{HAVE_LIBfoo} for library @samp{foo}.  @var{library} can be
+written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In all
+of those cases, the compiler is passed @samp{-lfoo}.
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
@@ -1923,6 +1926,14 @@ as the @var{other-libraries} argument, separated by spaces: @samp{-lX11
 -lXt}.  Otherwise this macro will fail to detect that @var{library} is
 present, because linking the test program will always fail with
 unresolved symbols.
+@end defmac
+
+@defmac AC_HAVE_LIBRARY (@var{library}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
+@maindex HAVE_LIBRARY
+This macro is equivalent to calling @code{AC_CHECK_LIB} with a
+@var{function} argument of @code{main}.  It is considered obsolete,
+because some linkers (e.g., Apollo's) do not fail when asked to link
+with a nonexistent library if there are no unresolved sybols.
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -2087,7 +2098,8 @@ shell commands @var{action-if-false}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
+been called already.  It does not use @code{CFLAGS}, because -g, -O,
+etc. are not valid options to many C preprocessors. 
 @end defmac
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -2096,7 +2108,9 @@ Create a test C program to see whether a function whose body consists of
 @var{function-body} can be compiled and linked; @var{includes} is any
 @code{#include} statements needed by the code in @var{function-body}.
 If the file compiles and links successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@var{action-if-found}, otherwise run @var{action-if-not-found}.  This
+macro uses @code{CFLAGS} and @code{LDFLAGS} and @code{LIBS} when
+compiling.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
@@ -2105,14 +2119,18 @@ If the file compiles and links successfully, run shell commands
 backquote substitutions are performed.  If it compiles and links
 successfully and returns an exit status of 0 when executed, run shell
 commands @var{action-if-true}.  Otherwise run shell commands
-@var{action-if-false}.
+@var{action-if-false}.  This macro uses @code{CFLAGS} and @code{LDFLAGS}
+and @code{LIBS} when compiling.
 
-If the optional argument @var{action-if-cross-compiling} is given and
-the C compiler being used does not produce executables that run on the
-system where @code{configure} is being run, then the test program is not
-run.  Instead, the shell commands @var{action-if-cross-compiling} are
-run.  If that argument is given, this macro calls @code{AC_C_CROSS}
+If the C compiler being used does not produce executables that run on
+the system where @code{configure} is being run, then the test program is
+not run.  If the optional shell commands @var{action-if-cross-compiling}
+are given, they are run instead and this macro calls @code{AC_C_CROSS}
 if it has not already been called (@pxref{Compiler Characteristics}).
+Otherwise, @code{configure} prints an error message and exits.
+
+It is preferable to use @code{AC_TRY_LINK} instead of @code{AC_TRY_RUN},
+when possible.  @xref{Test Programs}, for more information.
 @end defmac
 
 @node Command Line, Setting Variables, C Features, General Purpose Macros
@@ -2945,7 +2963,7 @@ exists on the system or has a certain value, then you can't use
 test program by hand.  You can compile and run it using
 @code{AC_TRY_RUN} (@pxref{C Features}).
 
-Try to avoid writing test programs if possible, because using them
+Try to avoid running test programs if possible, because using them
 prevents people from configuring your package for cross-compiling.  If
 it's really best that you test for a run-time behavior, try to provide a
 default ``worst case'' value to use when cross-compiling makes run-time
@@ -3477,11 +3495,12 @@ code are really appropriate to be in them.  Besides a cache file, they
 are good places to set default values for other shell variables like
 @code{CC}, if you need to give them unusual values: anything you would
 normally do, repetitively, on the command line.  If you use non-default
-values for @var{prefix} or @var{exec_prefix}, you can't set them in the
-site file, since you have to specify them on the command line in order
-for @code{configure} to find the site file!
+values for @var{prefix} or @var{exec_prefix} (wherever you locate the
+site file), you can't set them in the site file, since you have to
+specify them on the command line in order for @code{configure} to find
+the site file!
 
-In addition, it is possible to set some cache values in the site file.
+It is possible to set some cache values in the site file.
 If you are cross-compiling, it is impossible to check features that
 require running a test program.  You could ``prime the cache'' by
 setting those values correctly for that system in
@@ -3491,6 +3510,20 @@ not override command-line options in the site files.  Your code should
 check that variables such as @code{prefix} and @code{cache_file} have
 their default values (as set near the top of @code{configure}) before
 changing them.
+
+Here is a sample file @file{/usr/share/local/gnu/lib/config.site}.
+@samp{configure --prefix=/usr/share/local/gnu} would read this file.
+
+@example
+# config.site for configure
+#
+# Give Autoconf 2.x generated configure scripts a shared default
+# cache file for feature test results, architecture-specific.
+test $cache_file = ./config.cache &&
+  cache_file=/usr/local/gnu/lib/config.cache
+# Also, if you give --prefix, you get --exec-prefix automatically.
+test $exec_prefix = NONE && exec_prefix=/usr/local/gnu
+@end example
 
 @node Old Macro Names, Example, Site Default Values, Top
 @chapter Old Macro Names
@@ -3539,10 +3572,6 @@ for backward compatibility, the old names are considered obsolete.
 @vindex PROGRAMS_PATH
 @vindex PATH_PROGS
 @code{AC_PATH_PROGS}
-@item AC_HAVE_LIBRARY
-@vindex HAVE_LIBRARY
-@vindex CHECK_LIB
-@code{AC_CHECK_LIB}
 @item AC_HEADER_EGREP
 @vindex HEADER_EGREP
 @vindex EGREP_HEADER

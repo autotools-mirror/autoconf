@@ -24,6 +24,23 @@ dnl
 dnl ### Checks for programs
 dnl
 dnl
+dnl Check whether to use -n, \c, or newline-tab to separate
+dnl checking messages from result messages.
+dnl Idea borrowed from dist 3.0.
+dnl Internal use only.
+define(AC_PROG_ECHO_N,
+[AC_PROVIDE([$0])dnl
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
+  if (echo -n testing; echo 1,2,3) | grep -e -n > /dev/null; then
+    ac_n= ac_c='
+' ac_t='	'
+  else
+    ac_n=-n ac_c= ac_t=
+  fi
+else
+  ac_n= ac_c='\c' ac_t=
+fi])dnl
+dnl
 define(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_PROVIDE([$0])dnl
@@ -213,7 +230,7 @@ AC_MSG_CHECKING(for $LEX library)
 if test -z "$LEXLIB"
 then
   case "$LEX" in
-  flex*) AC_CHECK_LIB(fl, LEXLIB="-lfl") ;;
+  flex*) AC_CHECK_LIB(fl, main, LEXLIB="-lfl") ;;
   *) LEXLIB="-ll" ;;
   esac
 fi
@@ -953,15 +970,15 @@ AC_SUBST(NEED_SETGID)dnl
 ac_have_func=no
 
 # Check for the 4.4BSD definition of getloadavg.
-AC_CHECK_LIB(util, [LIBS="$LIBS -lutil" ac_have_func=yes
+AC_CHECK_LIB(util, getloadavg, [LIBS="$LIBS -lutil" ac_have_func=yes
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
-AC_CHECK_LIB(kvm, LIBS="$LIBS -lkvm")])
+AC_CHECK_LIB(kvm, kvm_open,  LIBS="$LIBS -lkvm")])
 
 if test $ac_have_func = no; then
 # There is a commonly available library for RS/6000 AIX.
 # Since it is not a standard part of AIX, it might be installed locally.
 ac_save_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
-AC_CHECK_LIB(getloadavg, LIBS="$LIBS -lgetloadavg", LIBS="$ac_save_LIBS")
+AC_CHECK_LIB(getloadavg, getloadavg, LIBS="$LIBS -lgetloadavg", LIBS="$ac_save_LIBS")
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -973,15 +990,14 @@ else
 ac_have_func=no
 AC_CHECK_HEADER(sys/dg_sys_info.h,
 [ac_have_func=yes AC_DEFINE(DGUX)
-# Some versions of DGUX need -ldgc for dg_sys_info.
-AC_CHECK_LIB(dgc)])
+AC_CHECK_LIB(dgc, dg_sys_info)])
 if test $ac_have_func = no; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
-AC_CHECK_LIB(elf,
+AC_CHECK_LIB(elf, elf_read,
   [LIBS="$LIBS -lelf" ac_have_func=yes AC_DEFINE(SVR4)
-  AC_CHECK_LIB(kvm, LIBS="$LIBS -lkvm")])
+  AC_CHECK_LIB(kvm, kvm_open, LIBS="$LIBS -lkvm")])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(inq_stats/cpustats.h,
@@ -1547,9 +1563,9 @@ dnl
 dnl Internal subroutine of AC_PATH_X.
 define(AC_PATH_X_DIRECT,
 [AC_CHECKING(for X include and library files directly)
-test -z "$x_direct_TRY_library" && x_direct_TRY_library=Xt
-test -z "$x_direct_TRY_include" && x_direct_TRY_include=X11/Intrinsic.h
-AC_TRY_CPP([#include <$x_direct_TRY_include>], no_x=,
+test -z "$x_direct_test_library" && x_direct_test_library=Xt
+test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
+AC_TRY_CPP([#include <$x_direct_test_include>], no_x=,
   for ac_dir in               \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
@@ -1587,7 +1603,7 @@ AC_TRY_CPP([#include <$x_direct_TRY_include>], no_x=,
     /usr/openwin/share/include \
     ; \
   do
-    if test -r "$ac_dir/$x_direct_TRY_include"; then
+    if test -r "$ac_dir/$x_direct_test_include"; then
       test -z "$ac_cv_x_includes" && ac_cv_x_includes=$ac_dir
       no_x=
       break
@@ -1596,7 +1612,7 @@ AC_TRY_CPP([#include <$x_direct_TRY_include>], no_x=,
 
 # Check for the libraries.  First see if replacing the include by
 # lib works.
-AC_CHECK_LIB("$x_direct_TRY_library", no_x=,
+AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
 for ac_dir in `echo "$ac_cv_x_includes" | sed s/include/lib/` \
     /usr/X11R6/lib        \
     /usr/X11R5/lib        \
@@ -1635,7 +1651,7 @@ for ac_dir in `echo "$ac_cv_x_includes" | sed s/include/lib/` \
     ; \
 do
   for ac_extension in a so sl; do
-    if test -r $ac_dir/lib${x_direct_TRY_library}.$ac_extension; then
+    if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
       test -z "$ac_cv_x_libraries" && ac_cv_x_libraries=$ac_dir
       no_x=
       break 2
@@ -1674,16 +1690,17 @@ else
   # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
   # libraries were built with DECnet support.  And karl@cs.umb.edu says
   # the Alpha needs dnet_stub (dnet does not exist).
-  AC_CHECK_LIB(dnet,
+  AC_CHECK_LIB(dnet, dnet_ntoa,
     [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet" ac_have_dnet=yes], ac_have_dnet=no)
   if test "$ac_have_dnet" = no; then
-    AC_CHECK_LIB(dnet_stub, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
+    AC_CHECK_LIB(dnet_stub, dnet_ntoa,
+      [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
   # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
   # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
   if test "`(uname) 2>/dev/null`" != IRIX; then
-    AC_CHECK_LIB(socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
+    AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
   fi
 fi
 #
@@ -1766,13 +1783,13 @@ fi
 ])dnl
 dnl
 define(AC_OS_SCO,
-[AC_CHECK_LIB(intl, LIBS="$LIBS -lintl")
+[AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
 ])dnl
 dnl
 define(AC_OS_IRIX,
-[AC_CHECK_LIB(sun, LIBS="$LIBS -lsun")
+[AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
 ])dnl
 dnl
 define(AC_OS_DYNIX,
-[AC_CHECK_LIB(seq, LIBS="$LIBS -lseq")
+[AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
 ])dnl

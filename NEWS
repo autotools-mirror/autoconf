@@ -21,6 +21,7 @@ Major changes in release 2.0:
   configure --verbose no longer has any effect.
 * AC_PREFIX_PROGRAM, which obsoletes AC_PREFIX.
 * AC_HEADER_DIRENT, which obsoletes AC_DIR_HEADER.
+* AC_CHECK_LIB, which obsoletes AC_HAVE_LIBRARY.
 * AC_ARG_ENABLE and AC_ARG_WITH, which obsolete AC_ENABLE and AC_WITH.
 * AC_SUBST_FILE, to insert one file into another.
 

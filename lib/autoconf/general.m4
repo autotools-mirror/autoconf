@@ -756,7 +756,7 @@ fi
 for ac_site_dir in $ac_site_dirs; do
   ac_site_file=$ac_site_dir/lib/config.site
   if test -r "$ac_site_file"; then
-    echo "loading site initialization script $ac_site_file"
+    echo "loading site script $ac_site_file"
     . $ac_site_file
   fi
 done
@@ -764,16 +764,16 @@ done
 dnl
 define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
-  echo "loading test results from cache file $cache_file"
+  echo "loading cache $cache_file"
   . $cache_file
 else
-  echo "creating new cache file $cache_file"
+  echo "creating cache $cache_file"
   > $cache_file
 fi])dnl
 dnl
 define(AC_CACHE_SAVE,
 [if test -w $cache_file; then
-echo "saving test results in cache file $cache_file"
+echo "updating cache $cache_file"
 cat > $cache_file <<\CEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -798,7 +798,7 @@ dnl
 dnl AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
-[AC_REQUIRE([AC_MSG_ECHO_N])dnl
+[AC_REQUIRE([AC_PROG_ECHO_N])dnl
 dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
@@ -932,37 +932,20 @@ dnl
 dnl ### Printing messages
 dnl
 dnl
-dnl Check whether to use -n, \c, or newline-tab to separate
-dnl checking messages from result messages.
-define(AC_MSG_ECHO_N,
-[AC_PROVIDE([$0])dnl
-if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  if (echo -n testing; echo 1,2,3) | grep -e -n > /dev/null; then
-    ac_n= ac_c='
-' ac_t='	'
-  else
-    ac_n=-n ac_c= ac_t=
-  fi
-else
-  ac_n= ac_c='\c' ac_t=
-fi])dnl
-dnl
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 define(AC_MSG_CHECKING,
-[AC_REQUIRE([AC_MSG_ECHO_N])dnl
-echo $ac_n "checking $1""...$ac_c" 1>&4])dnl
+[AC_REQUIRE([AC_PROG_ECHO_N])dnl
+echo $ac_n "checking $1""... $ac_c" 1>&4])dnl
 dnl
-dnl Obsolete version.
 define(AC_CHECKING,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_CHECKING])dnl
 echo "checking $1" 1>&4])dnl
 dnl
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
 define(AC_MSG_RESULT,
-[AC_REQUIRE([AC_MSG_ECHO_N])dnl
+[AC_REQUIRE([AC_PROG_ECHO_N])dnl
 echo "$ac_t""$1" 1>&4])dnl
 dnl
-dnl Obsolete version.
 define(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
 echo "	$1" 1>&4])dnl
@@ -1115,10 +1098,10 @@ done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])dnl
 dnl
-dnl AC_CHECK_LIB(LIBRARY [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl                 [, OTHER-LIBRARIES]]])
-define(AC_CHECK_LIB, [dnl
-changequote(/, /)dnl
+define(AC_CHECK_LIB,
+[changequote(/, /)dnl
 define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 define(/AC_CV_NAME/, ac_cv_lib_//AC_LIB_NAME)dnl
@@ -1126,22 +1109,29 @@ changequote([, ])dnl
 AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l[]AC_LIB_NAME[] $4"
-AC_TRY_LINK( , [main();], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
+LIBS="${LIBS} -l[]AC_LIB_NAME[] $5"
+AC_TRY_LINK( , [$2()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="${ac_save_LIBS}"
 ])dnl
 AC_MSG_RESULT($AC_CV_NAME)
 if test "${AC_CV_NAME}" = yes; then
-  ifelse([$2], , 
+  ifelse([$3], , 
 [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-], [$2])
-ifelse([$3], , , [else
-  $3
+], [$3])
+ifelse([$4], , , [else
+  $4
 ])dnl
 fi
 undefine(AC_LIB_NAME)dnl
 undefine(AC_CV_NAME)dnl
+])dnl
+dnl
+dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                 [, OTHER-LIBRARIES]]])
+define(AC_HAVE_LIBRARY,
+[AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
+AC_CHECK_LIB([$1], main, [$2], [$3], [$4])dnl
 ])dnl
 dnl
 dnl
