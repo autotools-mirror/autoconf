@@ -2,6 +2,8 @@
 
 	* doc/autoconf.texi (Quotation Rule Of Thumb): Mention that the
 	  macro AC_TRY_LINK is obsolete.
+	(Installation Directory Variables): Change `AC_OUTPUT_FILES' to
+	  `AC_CONFIG_FILES'.
 
 2005-02-24  Stepan Kasal  <kasal@ucw.cz>
 

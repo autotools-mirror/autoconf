@@ -2427,7 +2427,7 @@ e.g., @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir", [Data directory.])},
 you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
-Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
+Similarly, you should not rely on @code{AC_CONFIG_FILES} to replace
 @code{datadir} and friends in your shell scripts and other files, rather
 let @command{make} manage their replacement.  For instance Autoconf
 ships templates of its shell scripts ending with @samp{.in}, and uses a
@@ -8250,8 +8250,8 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
                [ac_cv_var_tzname=no])
 @end example
 
-Please note that the macro AC_TRY_LINK is obsolete, so you really should
-be using @code{AC_LINK_IFELSE} instead.
+Please note that the macro @code{AC_TRY_LINK} is obsolete, so you really
+should be using @code{AC_LINK_IFELSE} instead.
 
 @xref{Quadrigraphs}, for what to do if you run into a hopeless case
 where quoting does not suffice.
