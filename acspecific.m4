@@ -1242,7 +1242,7 @@ do
 done)])dnl
 dnl
 dnl Find additional X libraries, magic flags, etc.
-define(AC_FIND_XTRA, [AC_REQUIRE([AC_FIND_X])AC_REQUIRE([AC_ISC_POSIX])
+define(AC_FIND_XTRA, [AC_REQUIRE([AC_ISC_POSIX])AC_REQUIRE([AC_FIND_X])
 AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
