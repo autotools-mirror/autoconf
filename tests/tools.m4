@@ -90,7 +90,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(this, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader -m .. -<configure.in], 0,
+AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Define this to whatever you want. */
 #undef this
@@ -104,7 +104,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader -m .. -<configure.in], 1, ignore, ignore)
+AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 1, ignore, ignore)
 
 
 # 3. Check TOP and BOTTOM.
@@ -130,7 +130,7 @@ AH_BOTTOM([Bottom2 from configure.in.])
 # Yes, that's right: the `middle' part of `acconfig.h' is still before
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
-AT_CHECK([../autoheader -m .. -<configure.in], 0,
+AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Top from acconfig.h. */
 
@@ -170,7 +170,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 ]])
 
 # Checking `autoupdate'.
-AT_CHECK([../autoupdate -m $top_srcdir -<configure.in], 0,
+AT_CHECK([../autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
 [[AC_INIT
 dnl The doc says 27 is a valid fubar.
 fubar=27
@@ -201,7 +201,7 @@ TRACE1(foo, [active], TRACE1(active, [active]))
 ]])
 
 # Several --traces.
-AT_CHECK([../autoconf -m .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
 [[configure.in:4:TRACE1:foo:bar:baz
 configure.in:4:TRACE2:bar:baz
 configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
@@ -215,7 +215,7 @@ configure.in:7:TRACE2:active::ACTIVE
 ]])
 
 # Several line requests.
-AT_CHECK([[../autoconf -m .. -l $at_srcdir -t TRACE1:'
+AT_CHECK([[../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
 [$1], [$2], [$3].']], 0,
 [[
 [foo], [bar], [baz].
@@ -230,7 +230,7 @@ AT_CHECK([[../autoconf -m .. -l $at_srcdir -t TRACE1:'
 ]])
 
 # ${sep}@.
-AT_CHECK([../autoconf -m .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
 [[[bar])===([baz]
 [AC_TRACE1(bar, baz)]
 [ACTIVE])===([baz]

@@ -54,7 +54,10 @@ is a preliminary \`configure.in' for that package.
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
   -v, --verbose         verbosely report processing
-  -m, --macrodir=DIR    directory storing data files
+
+Library directories:
+  -A, --autoconf-dir=ACDIR  Autoconf's files location (rarely needed)
+  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOD
@@ -73,7 +76,11 @@ EOD
   local $need_datadir = 0;
 
   foreach $_ (@ARGV) {
-    if (/^--m[a-z]*=(.*)/) {
+    if (/^--autoconf-dir=(.*)/) {
+      $datadir = $1;
+    } elsif (/^--autoconf-dir/ || /^-A$/) {
+      $need_datadir = 1;
+    } elsif (/^--m[a-z]*=(.*)/) {
       $datadir = $1;
     } elsif (/^-m$/) {
       $need_datadir = 1;

@@ -48,7 +48,7 @@ AT_DATA(expout,
 First, second , third, [,quoted]
 ]])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir -o-], 0, expout)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -o-], 0, expout)
 
 AT_CLEANUP()
 
@@ -88,7 +88,7 @@ test -z "$test1" && exit 1
 exit 0
 ]])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0, [], [])
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure)
@@ -114,7 +114,7 @@ test -d a/b/c/d/e/f || exit 1
 exit 0
 ]])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0, [], [])
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure 1)

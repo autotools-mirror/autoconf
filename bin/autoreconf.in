@@ -43,9 +43,10 @@ The option \`--install' is similar to the option \`--add-missing' in
 other tools.
 
 Library directories:
-  -m, --macrodir=ACDIR  Autoconf's macro files location (rarely needed)
-  -l, --localdir=DIR    location of \`aclocal.m4' and \`acconfig.h'
-  -M, --m4dir=M4DIR     this package's Autoconf extensions
+  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
+  -m, --macro-path=PATH     library extensions files
+  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
+  -M, --m4dir=M4DIR         this package's Autoconf extensions
 
 Unless specified, heuristics try to compute \`M4DIR' from the \`Makefile.am',
 or defaults to \`m4' if it exists.
@@ -90,7 +91,7 @@ if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
-: ${AC_MACRODIR=@datadir@}
+: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 debug=false
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
 force=false
@@ -150,12 +151,12 @@ while test $# -gt 0; do
        shift ;;
 
     --macrodir=* )
-       AC_MACRODIR=$optarg
+       autoconf_dir=$optarg
        shift ;;
     --macrodir | -m )
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       AC_MACRODIR=$1
+       autoconf_dir=$1
        shift ;;
 
     --m4dir=* )
@@ -217,7 +218,7 @@ $debug &&
   autoheader="$autoheader --debug"
 }
 # --macrodir
-export AC_MACRODIR
+export autoconf_dir
 # --install and --symlink
 if $install; then
   automake="$automake --add-missing `$symlink || echo --copy`"
@@ -389,7 +390,7 @@ EOF
   # user needs the FILES, check that there is an exact correspondence.
   # Use yourself to get the list of the included files.
   export AC_ACLOCALDIR
-  export AC_MACRODIR
+  export autoconf_dir
   $autoconf -t include:'$1' -t m4_include:'$1' -t m4_sinclude:'$1' configure.in |
     sort |
     uniq >$tmp/included

@@ -75,8 +75,8 @@ m4_for(AT_Count, 1, 100,
 AC_OUTPUT
 ])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
-AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoheader --autoconf-dir .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([./configure], 0, ignore)
 
 # Checking that AC_DEFINE worked properly.
@@ -116,7 +116,7 @@ echo "result=$one$enable_two$with_three"
 AC_OUTPUT
 ]])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
 
 AT_CHECK([./configure one=one --enable-two=two --with-three=three |
           sed -n -e 's/^result=//p'], 0,
@@ -184,7 +184,7 @@ AT_DATA(config.hin,
 #undef aaa
 ]])
 
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0)
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0)
 AT_CHECK([./configure], 0, ignore)
 
 AT_DATA(expout,

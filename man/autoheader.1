@@ -22,12 +22,6 @@ verbosely report processing
 \fB\-d\fR, \fB\-\-debug\fR
 don't remove temporary files
 .TP
-\fB\-m\fR, \fB\-\-macrodir\fR=\fIDIR\fR
-directory storing Autoconf's macro files
-.TP
-\fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
-directory storing `aclocal.m4' and `acconfig.h'
-.TP
 \fB\-W\fR, \fB\-\-warnings\fR=\fICATEGORY\fR
 report the warnings falling in CATEGORY
 .SS "Warning categories include:"
@@ -40,6 +34,13 @@ all the warnings
 .TP
 `error'
 warnings are error
+.SS "Library directories:"
+.TP
+\fB\-A\fR, \fB\-\-autoconf\-dir\fR=\fIACDIR\fR
+Autoconf's macro files location (rarely needed)
+.TP
+\fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
+location of `aclocal.m4' and `acconfig.h'
 .SH AUTHOR
 Written by Roland McGrath.
 .SH "REPORTING BUGS"

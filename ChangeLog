@@ -1,5 +1,22 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	Make it clear that the regular user does not need --macrodir.
+	In fact, rename this option as -A, --autoconf-dir.
+
+	* autoconf.sh: Complain when -m, --macrodir is used.
+	Accept -A, --autoconf-dir.
+	Use $autoconf_dir instead of $AC_MACRODIR.
+	Adjust --help.
+	* autoheader.sh: Likewise.
+	* autoscan.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	Use $optarg.
+	* autoreconf.sh: Likewise.
+	* doc/autoconf.texi: Adjust.
+	* tests: Adjust the test suite.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh: Forward --debug to sub tools.
 	Let them share the same tmp dir.
 

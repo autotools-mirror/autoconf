@@ -794,6 +794,7 @@ encountered.  Lines starting with @samp{#} are comments.
 
 @table @option
 @item --help
+@itemx -h
 Print a summary of the command line options and exit.
 
 @item --version
@@ -801,15 +802,19 @@ Print a summary of the command line options and exit.
 Print the version number of Autoconf and exit.
 
 @item --verbose
+@itemx -v
 Print the names of the files it examines and the potentially interesting
 symbols it finds in them.  This output can be voluminous.
 
-@item --macrodir=@var{dir}
+@item --autoconf-dir=@var{dir}
+@itemx -A
 @evindex AC_MACRODIR
-Look for the data files in directory @var{dir} instead of the default
-installation directory.  You can also set the @code{AC_MACRODIR}
-environment variable to a directory; this option overrides the
-environment variable.
+Overwrite the location where Autoconf files were installed.  You can
+also set the @code{AC_MACRODIR} environment variable to a directory;
+this option overrides the environment variable.
+
+This option is rarely needed and dangerous: only when you play with
+different versions of Autoconf.
 @end table
 
 @node ifnames Invocation, autoconf Invocation, autoscan Invocation, Making configure Scripts
@@ -887,12 +892,15 @@ Report processing steps.
 @itemx -d
 Don't remove the temporary files.
 
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
+@item --autoconf-dir=@var{dir}
+@itemx -A
 @evindex AC_MACRODIR
-Look for the installed macro files in directory @var{dir}.  You can also
-set the @code{AC_MACRODIR} environment variable to a directory; this
-option overrides the environment variable.
+Overwrite the location where Autoconf files were installed.  You can
+also set the @code{AC_MACRODIR} environment variable to a directory;
+this option overrides the environment variable.
+
+This option is rarely needed and dangerous: only when you play with
+different versions of Autoconf.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -1084,7 +1092,7 @@ amount of work.  If you install a new version of Autoconf, you can make
 @code{autoreconf} remake @emph{all} of the files by giving it the
 @option{--force} option.
 
-If you give @code{autoreconf} the @option{--macrodir=@var{dir}} or
+If you give @code{autoreconf} the @option{--autoconf-dir=@var{dir}} or
 @option{--localdir=@var{dir}} options, it passes them down to
 @code{autoconf} and @code{autoheader} (with relative paths adjusted
 properly).
@@ -1101,7 +1109,7 @@ in the future.
 @xref{Automatic Remaking}, for @file{Makefile} rules to automatically
 remake @code{configure} scripts when their source files change.  That
 method handles the timestamps of configuration header templates
-properly, but does not pass @option{--macrodir=@var{dir}} or
+properly, but does not pass @option{--autoconf-dir=@var{dir}} or
 @option{--localdir=@var{dir}}.
 
 @noindent
@@ -1137,13 +1145,15 @@ Have @code{autoconf} and @code{autoheader} look for the package files
 not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
 @var{dir} instead of in the directory containing each @file{configure.in}.
 
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
+@item --autoconf-dir=@var{dir}
+@itemx -A
 @evindex AC_MACRODIR
-Look for the Autoconf macro files in directory @var{dir} instead of the
-default installation directory.  You can also set the @code{AC_MACRODIR}
-environment variable to a directory; this option overrides the
-environment variable.
+Overwrite the location where Autoconf files were installed.  You can
+also set the @code{AC_MACRODIR} environment variable to a directory;
+this option overrides the environment variable.
+
+This option is rarely needed and dangerous: only when you play with
+different versions of Autoconf.
 @end table
 
 
@@ -1957,12 +1967,15 @@ Print the version number of Autoconf and exit.
 @itemx -d
 Don't remove the temporary files.
 
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
+@item --autoconf-dir=@var{dir}
+@itemx -A
 @evindex AC_MACRODIR
-Look for the installed macro files and @file{acconfig.h} in directory
-@var{dir}.  You can also set the @code{AC_MACRODIR} environment variable
-to a directory; this option overrides the environment variable.
+Overwrite the location where Autoconf files were installed.  You can
+also set the @code{AC_MACRODIR} environment variable to a directory;
+this option overrides the environment variable.
+
+This option is rarely needed and dangerous: only when you play with
+different versions of Autoconf.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -7724,12 +7737,15 @@ Report processing steps.
 @itemx -d
 Don't remove the temporary files.
 
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
+@item --autoconf-dir=@var{dir}
+@itemx -A
 @evindex AC_MACRODIR
-Look for the installed macro files in directory @var{dir}.  You can also
-set the @code{AC_MACRODIR} environment variable to a directory; this
-option overrides the environment variable.
+Overwrite the location where Autoconf files were installed.  You can
+also set the @code{AC_MACRODIR} environment variable to a directory;
+this option overrides the environment variable.
+
+This option is rarely needed and dangerous: only when you play with
+different versions of Autoconf.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -9002,7 +9018,7 @@ invalid arguments.  Jim Blandy bravely coerced it into configuring
 Roland McGrath got it to configure the @sc{gnu} C Library, wrote the
 @code{autoheader} script to automate the creation of C header file
 templates, and added a @option{--verbose} option to @code{configure}.
-Noah Friedman added the @option{--macrodir} option and
+Noah Friedman added the @option{--autoconf-dir} option and
 @code{AC_MACRODIR} environment variable.  (He also coined the term
 @dfn{autoconfiscate} to mean ``adapt a software package to use
 Autoconf''.)  Roland and Noah improved the quoting protection in

@@ -108,7 +108,7 @@ case `$M4 --help </dev/null 2>&1` in
 esac
 
 # Variables.
-: ${AC_MACRODIR=@datadir@}
+: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 : ${AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`}
 : ${AWK=@AWK@}
 debug=false
@@ -152,13 +152,23 @@ while test $# -gt 0 ; do
        localdir=$1
        shift ;;
 
-    --macrodir=* | --m*=* )
-       AC_MACRODIR=$optarg
+    --autoconf-dir=*)
+      autoconf_dir=$optarg
        shift ;;
-    --macrodir | --m* | -m )
+    --autoconf-dir | -A* )
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       AC_MACRODIR=$1
+       autoconf_dir=$1
+       shift ;;
+    --macrodir=* | --m*=* )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       autoconf_dir=$optarg
+       shift ;;
+    --macrodir | --m* | -m )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       test $# = 1 && eval "$exit_missing_arg"
+       shift
+       autoconf_dir=$1
        shift ;;
 
     --trace | -t )
@@ -246,11 +256,11 @@ $debug ||
 }
 
 # Running m4.
-test -f "$AC_MACRODIR/acsite.m4" && acsite_m4="$AC_MACRODIR/acsite.m4"
+test -f "$autoconf_dir/acsite.m4" && acsite_m4="$autoconf_dir/acsite.m4"
 test -f "$localdir/aclocal.m4"   && aclocal_m4="$localdir/aclocal.m4"
-m4_common="$acsite_m4 $aclocal_m4 -I $AC_MACRODIR -I $localdir"
-run_m4="$M4           $AC_MACRODIR/autoconf.m4  $m4_common"
-run_m4f="$M4 --reload $AC_MACRODIR/autoconf.m4f $m4_common"
+m4_common="$acsite_m4 $aclocal_m4 -I $autoconf_dir -I $localdir"
+run_m4="$M4           $autoconf_dir/autoconf.m4  $m4_common"
+run_m4f="$M4 --reload $autoconf_dir/autoconf.m4f $m4_common"
 
 # Find the input file.
 case $# in

@@ -36,14 +36,17 @@ given.
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
-  -m, --macrodir=DIR       directory storing Autoconf's macro files
-  -l, --localdir=DIR       directory storing \`aclocal.m4' and \`acconfig.h'
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
   \`obsolete'   obsolete constructs
   \`all'        all the warnings
   \`error'      warnings are error
+
+Library directories:
+  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
+  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
+
 Report bugs to <bug-autoconf@gnu.org>."
 
 version="\
@@ -73,7 +76,7 @@ if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
-: ${AC_MACRODIR=@datadir@}
+: ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
 # We test "$dir/autoconf" in case we are in the build tree, in which case
 # the names are not transformed yet.
@@ -93,7 +96,8 @@ warning_obsolete=false
 
 # Parse command line.
 while test $# -gt 0 ; do
-  case "$1" in
+  optarg=`expr "$1" : '-[^=]*=\(.*\)'`
+  case $1 in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
     --help | --h* | -h )
@@ -106,7 +110,7 @@ while test $# -gt 0 ; do
        shift;;
 
     --localdir=* | --l*=* )
-       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
+       localdir=$optarg
        shift ;;
     --localdir | --l* | -l )
        test $# = 1 && eval "$exit_missing_arg"
@@ -114,13 +118,23 @@ while test $# -gt 0 ; do
        localdir=$1
        shift ;;
 
-    --macrodir=* | --m*=* )
-       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
+    --autoconf-dir=*)
+      autoconf_dir=$optarg
        shift ;;
-    --macrodir | --m* | -m )
+    --autoconf-dir | -A* )
        test $# = 1 && eval "$exit_missing_arg"
        shift
-       AC_MACRODIR=$1
+       autoconf_dir=$1
+       shift ;;
+    --macrodir=* | --m*=* )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       autoconf_dir=$optarg
+       shift ;;
+    --macrodir | --m* | -m )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       test $# = 1 && eval "$exit_missing_arg"
+       shift
+       autoconf_dir=$1
        shift ;;
 
     --warnings | -W )
@@ -128,11 +142,8 @@ while test $# -gt 0 ; do
        shift
        warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
        shift ;;
-    --warnings=* )
-       warnings="$warnings "`echo "$1" | sed -e 's/^[^=]*=//;s/,/ /g'`
-       shift ;;
-    -W* ) # People are used to -Wall, -Werror etc.
-       warnings="$warnings "`echo "$1" | sed -e 's/^-W//;s/,/ /g'`
+    --warnings=* | -W*)
+       warnings="$warnings "`echo "$optarg" | sed -e 's/,/ /g'`
        shift ;;
 
     -- )     # Stop option processing
@@ -182,7 +193,7 @@ if ($warning_all || $warning_obsolete) &&
     (test -f $config_h.top ||
      test -f $config_h.bot ||
      test -f $localdir/acconfig.h); then
-  sed -e "s/^    //;s/^/$me: WARNING: /" >&2 <<\EOF
+  sed -e "s/^    /$me: WARNING: /" >&2 <<\EOF
     Using auxiliary files such as `acconfig.h', `config.h.bot'
     and `config.h.top', to define templates for `config.h.in'
     is deprecated and discouraged.
@@ -215,7 +226,7 @@ esac
 
 # Set up autoconf.
 autoconf="$autoconf -l $localdir"
-export AC_MACRODIR
+export autoconf_dir
 
 # ----------------------- #
 # Real work starts here.  #
