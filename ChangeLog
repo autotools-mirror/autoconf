@@ -5,6 +5,11 @@
 	Contributed by Theodore Y. Ts'o <tytso@mit.edu>.
 	(AC_CHECK_FILES): Likewise.
 
+1998-09-15  Didier Verna  <verna@inf.enst.fr>
+
+	* acspecific.m4 (AC_PATH_XTRA): use X_EXTRA_LIBS add-on libraries 
+	in the test for libICE. It is needed at least under Solaris.
+
 1998-09-15  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Handle strange processor ID assignments on AIX

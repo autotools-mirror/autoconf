@@ -2188,7 +2188,7 @@ dnl FIXME banish uname from this macro!
   # libraries we check for below, so use a different variable.
   #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
   AC_CHECK_LIB(ICE, IceConnectionNumber,
-    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
+    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"], , $X_EXTRA_LIBS)
   LDFLAGS="$ac_save_LDFLAGS"
 
 fi
