@@ -7,7 +7,6 @@ Major changes in release 1.9:
 * AC_FIND_X assumes no X if --without-x was given.
 * AC_FIND_XTRA adds libraries to the variable X_EXTRA_LIBS.
 * AC_PROG_INSTALL finds OSF/1 installbsd.
-* A copy of install.sh is installed in ${acdatadir}, for convenience.
 
 Major changes in release 1.8:
 
