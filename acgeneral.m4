@@ -143,7 +143,7 @@ dnl AC_INIT_NOTICE()
 AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version] AC_ACVERSION [
-# Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
+# Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
@@ -1417,7 +1417,7 @@ AC_TRY_LINK([/* Override any gcc2 internal prototype to avoid an error.  */
 extern "C"
 #endif
 ])dnl
-char $2();
+[char $2();
 ],
 	    [$2()],
 	    eval "ac_cv_lib_$ac_lib_var=yes",
@@ -2016,7 +2016,7 @@ define(AC_OUTPUT_HEADER,
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
 ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-ac_dB='\([ 	][ 	]*\)[^ 	]*%\1#\2'
+ac_dB='\([ 	]*\)[^ 	]*%\1#\2'
 ac_dC='\3'
 ac_dD='%g'
 # ac_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
