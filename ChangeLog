@@ -1,3 +1,9 @@
+1998-10-24  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Hide warnings emitted by the HP linker when
+	generating a PA 2.0 object file. Contributed by Marcus Thiessel
+	<marcus@xemacs.org>.
+	
 1998-10-20  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_LANG_RESTORE): Fix a typo spotted by Noah

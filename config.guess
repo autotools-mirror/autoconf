@@ -400,7 +400,7 @@ EOF
                   exit (0);
               }
 EOF
-	${CC-cc} dummy.c -o dummy && HP_ARCH=`./dummy`
+	(${CC-cc} dummy.c -o dummy 2>/dev/null ) && HP_ARCH=`./dummy`
 	rm -f dummy.c dummy
 	esac
 	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
