@@ -1504,7 +1504,7 @@ Exactly @var{package}.
 @ovindex PACKAGE_TARNAME
 @cvindex PACKAGE_TARNAME
 @var{package} once @samp{GNU } strip, lower cased, and all non
-alphanumeric character mapped onto @samp{_}.
+alphanumeric character mapped onto @samp{-}.
 
 @item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
 @acindex PACKAGE_VERSION
@@ -4620,7 +4620,7 @@ implemented.  In case of doubt, read the documentation of the former
 @ovindex EXEEXT
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 @code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
-the output of the compiler, typically to the empty string if Unix and
+the output of the 1compiler, typically to the empty string if Unix and
 @samp{.exe} if Win32 or OS/2.
 
 @ovindex OBJEXT

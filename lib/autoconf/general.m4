@@ -295,7 +295,7 @@ m4_ifndef([AC_PACKAGE_TARNAME],
           [m4_define([AC_PACKAGE_TARNAME],
                      m4_bpatsubst(m4_tolower(m4_bpatsubst([[[$1]]], [GNU ])),
                                   [[^abcdefghijklmnopqrstuvwxyz0123456789]],
-                                  [_]))])
+                                  [-]))])
 m4_ifndef([AC_PACKAGE_VERSION],
           [m4_define([AC_PACKAGE_VERSION],   [$2])])
 m4_ifndef([AC_PACKAGE_STRING],
