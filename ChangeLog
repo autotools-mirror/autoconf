@@ -1,3 +1,7 @@
+2004-12-12  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <expr (:)>: Typo.
+
 2004-12-11  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autotest/general.m4 (_AT_CHECK) [--trace]: Rework a shell pattern
