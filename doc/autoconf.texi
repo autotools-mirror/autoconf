@@ -387,7 +387,7 @@ Compilers and Preprocessors
 * Generic Compiler Characteristics::  Language independent tests
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
-* Fortran 77 Compiler::         Likewise
+* Fortran Compiler::            Likewise
 
 Writing Tests
 
@@ -2148,6 +2148,15 @@ achieve this, in which case @code{ECHO_T} is set to tab.  You might not
 want to use it.
 @end defvar
 
+@defvar FCFLAGS
+@ovindex FCFLAGS
+Debugging and optimization options for the Fortran compiler.  If it
+is not set in the environment when @command{configure} runs, the default
+value is set when you call @code{AC_PROG_FC} (or empty if you don't).
+@command{configure} uses this variable when compiling programs to test for
+Fortran features.
+@end defvar
+
 @defvar FFLAGS
 @ovindex FFLAGS
 Debugging and optimization options for the Fortran 77 compiler.  If it
@@ -2164,7 +2173,7 @@ options for the linker.  Don't use this variable to pass library names
 (@option{-l}) to the linker, use @code{LIBS} instead.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
 @command{configure} uses this variable when linking programs to test for
-C, C++ and Fortran 77 features.
+C, C++, and Fortran features.
 @end defvar
 
 @defvar LIBS
@@ -2173,7 +2182,7 @@ C, C++ and Fortran 77 features.
 but some Autoconf macros may prepend extra libraries to this variable if
 those libraries are found and provide necessary functions, see
 @ref{Libraries}.  @command{configure} uses this variable when linking
-programs to test for C, C++ and Fortran 77 features.
+programs to test for C, C++, and Fortran features.
 @end defvar
 
 @defvar builddir
@@ -3450,12 +3459,12 @@ for each file found.
 @cindex Library, checking
 
 The following macros check for the presence of certain C, C++, or Fortran
-77 library archive files.
+library archive files.
 
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{CHECK_LIB}
 Depending on the current language(@pxref{Language Choice}), try to
-ensure that the C, C++, or Fortran 77 function @var{function} is
+ensure that the C, C++, or Fortran function @var{function} is
 available by checking whether a test program can be linked with the
 library @var{library} to get the function.  @var{library} is the base
 name of the library; e.g., to check for @option{-lmp}, use @samp{mp} as
@@ -5126,7 +5135,7 @@ compiling.
 * Generic Compiler Characteristics::  Language independent tests
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
-* Fortran 77 Compiler::         Likewise
+* Fortran Compiler::            Likewise
 @end menu
 
 @node Specific Compiler Characteristics
@@ -5562,11 +5571,24 @@ it is not known whether such broken preprocessors exist for C++.
 
 
 
-@node Fortran 77 Compiler
-@subsection Fortran 77 Compiler Characteristics
+@node Fortran Compiler
+@subsection Fortran Compiler Characteristics
+
+The Autoconf Fortran support is divided into two categories: legacy
+Fortran 77 macros (@code{F77}), and modern Fortran macros (@code{FC}).
+The former are intended for traditional Fortran 77 code, and have output
+variables like @code{F77}, @code{FFLAGS}, and @code{FLIBS}.  The latter
+are for newer programs that can (or must) compile under the newer
+Fortran standards, and have output variables like @code{FC},
+@code{FCFLAGS}, and @code{FCLIBS}.
+
+Except for two new macros @code{AC_FC_SRCEXT} and @code{AC_FC_FREEFORM}
+(see below), the @code{FC} and @code{F77} macros behave almost identically, and so
+they are documented together in this section.
+
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})
-@acindex{PROG_FORTRAN}
+@acindex{PROG_F77}
 @ovindex F77
 @ovindex FFLAGS
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
@@ -5593,74 +5615,115 @@ where @code{g77} does not accept @option{-g}).  Otherwise, set
 @code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
 @end defmac
 
-@defmac AC_PROG_F77_C_O
-@acindex{PROG_F77_C_O}
-@cvindex F77_NO_MINUS_C_MINUS_O
-Test if the Fortran 77 compiler accepts the options @option{-c} and
-@option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
-does not.
+@defmac AC_PROG_FC (@ovar{compiler-search-list}, @ovar{dialect})
+@acindex{PROG_FC}
+@ovindex FC
+@ovindex FCFLAGS
+Determine a Fortran compiler to use.  If @code{FC} is not already set in
+the environment, then @code{dialect} is a hint to indicate what Fortran
+dialect to search for; the default is to search for the newest available
+dialect.  Set the output variable @code{FC} to the name of the compiler
+found.
+
+By default, newer dialects are preferred over older dialects, but if
+@code{dialect} is specified then older dialects are preferred starting
+with the specified dialect. @code{dialect} can currently be one of
+Fortran 77, Fortran 90, or Fortran 95.  However, this is only a hint of
+which compiler @emph{name} to prefer (e.g. @code{f90} or @code{f95}),
+and no attempt is made to guarantee that a particular language standard
+is actually supported.  Thus, it is preferable that you avoid the
+@code{dialect} option, and use AC_PROG_FC only for code compatible with
+the latest Fortran standard.
+
+This macro may, alternatively, be invoked with an optional first argument
+which, if specified, must be a space separated list of Fortran
+compilers to search for, just as in @code{AC_PROG_F77}.
+
+If the output variable @code{FCFLAGS} was not already set in the
+environment, then set it to @option{-g -02} for GNU @code{g77} (or
+@option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,
+set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
 @end defmac
 
+@defmac AC_PROG_F77_C_O
+@defmacx AC_PROG_FC_C_O
+@acindex{PROG_F77_C_O}
+@acindex{PROG_FC_C_O}
+@cvindex F77_NO_MINUS_C_MINUS_O
+@cvindex FC_NO_MINUS_C_MINUS_O
+Test if the Fortran compiler accepts the options @option{-c} and
+@option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} or
+@code{FC_NO_MINUS_C_MINUS_O}, respectively, if it does not.
+@end defmac
 
-The following macros check for Fortran 77 compiler characteristics.  To
-check for characteristics not listed here, use @code{AC_COMPILE_IFELSE}
-(@pxref{Running the Compiler}) or @code{AC_RUN_IFELSE} (@pxref{Run
-Time}), making sure to first set the current language to Fortran 77
-@code{AC_LANG(Fortran 77)} (@pxref{Language Choice}).
+The following macros check for Fortran compiler characteristics.
+To check for characteristics not listed here, use
+@code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
+@code{AC_RUN_IFELSE} (@pxref{Run Time}), making sure to first set the
+current language to Fortran 77 or Fortran via @code{AC_LANG(Fortran 77)}
+or @code{AC_LANG(Fortran)} (@pxref{Language Choice}).
 
 
 @defmac AC_F77_LIBRARY_LDFLAGS
+@defmacx AC_FC_LIBRARY_LDFLAGS
 @acindex{F77_LIBRARY_LDFLAGS}
 @ovindex FLIBS
+@acindex{FC_LIBRARY_LDFLAGS}
+@ovindex FCLIBS
 Determine the linker flags (e.g., @option{-L} and @option{-l}) for the
-@dfn{Fortran 77 intrinsic and run-time libraries} that are required to
-successfully link a Fortran 77 program or shared library.  The output
-variable @code{FLIBS} is set to these flags.
+@dfn{Fortran intrinsic and run-time libraries} that are required to
+successfully link a Fortran program or shared library.  The output
+variable @code{FLIBS} or @code{FCLIBS} is set to these flags (which
+should be include after @code{LIBS} when linking).
 
 This macro is intended to be used in those situations when it is
-necessary to mix, e.g., C++ and Fortran 77 source code into a single
+necessary to mix, e.g., C++ and Fortran source code in a single
 program or shared library (@pxref{Mixing Fortran 77 With C and C++,,,
 automake, @acronym{GNU} Automake}).
 
-For example, if object files from a C++ and Fortran 77 compiler must be
+For example, if object files from a C++ and Fortran compiler must be
 linked together, then the C++ compiler/linker must be used for linking
 (since special C++-ish things need to happen at link time like calling
 global constructors, instantiating templates, enabling exception
 support, etc.).
 
-However, the Fortran 77 intrinsic and run-time libraries must be linked
-in as well, but the C++ compiler/linker doesn't know by default how to
-add these Fortran 77 libraries.  Hence, the macro
-@code{AC_F77_LIBRARY_LDFLAGS} was created to determine these Fortran 77
-libraries.
+However, the Fortran intrinsic and run-time libraries must be linked in
+as well, but the C++ compiler/linker doesn't know by default how to add
+these Fortran 77 libraries.  Hence, this macro was created to determine
+these Fortran libraries.
 
-The macro @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN} will probably
-also be necessary to link C/C++ with Fortran; see below.
+The macros @code{AC_F77_DUMMY_MAIN}/@code{AC_FC_DUMMY_MAIN} or
+@code{AC_F77_MAIN}/@code{AC_FC_MAIN} will probably also be necessary to
+link C/C++ with Fortran; see below.
 @end defmac
 
-
 @defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
+@defmacx AC_FC_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{F77_DUMMY_MAIN}
 @cvindex F77_DUMMY_MAIN
 With many compilers, the Fortran libraries detected by
-@code{AC_F77_LIBRARY_LDFLAGS} provide their own @code{main} entry
-function that initializes things like Fortran I/O, and which then calls
-a user-provided entry function named (say) @code{MAIN__} to run the
-user's program.  The @code{AC_F77_DUMMY_MAIN} or @code{AC_F77_MAIN}
-macro figures out how to deal with this interaction.
+@code{AC_F77_LIBRARY_LDFLAGS} or @code{AC_FC_LIBRARY_LDFLAGS} provide
+their own @code{main} entry function that initializes things like
+Fortran I/O, and which then calls a user-provided entry function named
+(say) @code{MAIN__} to run the user's program.  The
+@code{AC_F77_DUMMY_MAIN}/@code{AC_FC_DUMMY_MAIN} or
+@code{AC_F77_MAIN}/@code{AC_FC_MAIN} macro figures out how to deal with
+this interaction.
 
-When using Fortran for purely numerical functions (no I/O, etc.)@: often one
-prefers to provide one's own @code{main} and skip the Fortran library
-initializations.  In this case, however, one may still need to provide a
-dummy @code{MAIN__} routine in order to prevent linking errors on some
-systems.  @code{AC_F77_DUMMY_MAIN} detects whether any such routine is
-@emph{required} for linking, and what its name is; the shell variable
-@code{F77_DUMMY_MAIN} holds this name, @code{unknown} when no solution
+When using Fortran for purely numerical functions (no I/O, etc.)@: often
+one prefers to provide one's own @code{main} and skip the Fortran
+library initializations.  In this case, however, one may still need to
+provide a dummy @code{MAIN__} routine in order to prevent linking errors
+on some systems.  @code{AC_F77_DUMMY_MAIN} or @code{AC_FC_DUMMY_MAIN}
+detects whether any such routine is @emph{required} for linking, and
+what its name is; the shell variable @code{F77_DUMMY_MAIN} or
+@code{FC_DUMMY_MAIN} holds this name, @code{unknown} when no solution
 was found, and @code{none} when no such dummy main is needed.
 
-By default, @var{action-if-found} defines @code{F77_DUMMY_MAIN} to the
-name of this routine (e.g., @code{MAIN__}) @emph{if} it is required.
-@ovar{action-if-not-found} defaults to exiting with an error.
+By default, @var{action-if-found} defines @code{F77_DUMMY_MAIN} or
+@code{FC_DUMMY_MAIN} to the name of this routine (e.g., @code{MAIN__})
+@emph{if} it is required.  @ovar{action-if-not-found} defaults to
+exiting with an error.
 
 In order to link with Fortran routines, the user's C/C++ program should
 then include the following code to define the dummy main if it is
@@ -5675,45 +5738,56 @@ needed:
 #endif
 @end example
 
-Note that @code{AC_F77_DUMMY_MAIN} is called automatically from
-@code{AC_F77_WRAPPERS}; there is generally no need to call it explicitly
-unless one wants to change the default actions.
+(Replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
+
+Note that this macro is called automatically from @code{AC_F77_WRAPPERS}
+or @code{AC_FC_WRAPPERS}; there is generally no need to call it
+explicitly unless one wants to change the default actions.
 @end defmac
 
 @defmac AC_F77_MAIN
+@defmacx AC_FC_MAIN
 @acindex{F77_MAIN}
 @cvindex F77_MAIN
-As discussed above for @code{AC_F77_DUMMY_MAIN}, many Fortran libraries
-allow you to provide an entry point called (say) @code{MAIN__} instead of
-the usual @code{main}, which is then called by a @code{main} function in
-the Fortran libraries that initializes things like Fortran I/O@.  The
-@code{AC_F77_MAIN} macro detects whether it is @emph{possible} to
-utilize such an alternate main function, and defines @code{F77_MAIN} to
-the name of the function.  (If no alternate main function name is found,
-@code{F77_MAIN} is simply defined to @code{main}.)
+@acindex{FC_MAIN}
+@cvindex FC_MAIN
+As discussed above, many Fortran libraries allow you to provide an entry
+point called (say) @code{MAIN__} instead of the usual @code{main}, which
+is then called by a @code{main} function in the Fortran libraries that
+initializes things like Fortran I/O@.  The
+@code{AC_F77_MAIN}/@code{AC_FC_MAIN} macro detects whether it is
+@emph{possible} to utilize such an alternate main function, and defines
+@code{F77_MAIN}/@code{FC_MAIN} to the name of the function.  (If no
+alternate main function name is found, @code{F77_MAIN}/@code{FC_MAIN} is
+simply defined to @code{main}.)
 
 Thus, when calling Fortran routines from C that perform things like I/O,
-one should use this macro and name the "main" function @code{F77_MAIN}
-instead of @code{main}.
+one should use this macro and name the "main" function
+@code{F77_MAIN}/@code{FC_MAIN} instead of @code{main}.
 @end defmac
 
 @defmac AC_F77_WRAPPERS
+@defmacx AC_FC_WRAPPERS
 @acindex{F77_WRAPPERS}
 @cvindex F77_FUNC
 @cvindex F77_FUNC_
-Defines C macros @code{F77_FUNC(name,NAME)} and
-@code{F77_FUNC_(name,NAME)} to properly mangle the names of C/C++
-identifiers, and identifiers with underscores, respectively, so that
-they match the name-mangling scheme used by the Fortran 77 compiler.
+@acindex{FC_WRAPPERS}
+@cvindex FC_FUNC
+@cvindex FC_FUNC_
+Defines C macros @code{F77_FUNC(name,NAME)}/@code{FC_FUNC(name,NAME)}
+and @code{F77_FUNC_(name,NAME)}/@code{FC_FUNC_(name,NAME)} to properly
+mangle the names of C/C++ identifiers, and identifiers with underscores,
+respectively, so that they match the name-mangling scheme used by the
+Fortran compiler.
 
-Fortran 77 is case-insensitive, and in order to achieve this the Fortran
-77 compiler converts all identifiers into a canonical case and format.
-To call a Fortran 77 subroutine from C or to write a C function that is
-callable from Fortran 77, the C program must explicitly use identifiers
-in the format expected by the Fortran 77 compiler.  In order to do this,
-one simply wraps all C identifiers in one of the macros provided by
-@code{AC_F77_WRAPPERS}.  For example, suppose you have the following
-Fortran 77 subroutine:
+Fortran is case-insensitive, and in order to achieve this the Fortran
+compiler converts all identifiers into a canonical case and format.  To
+call a Fortran subroutine from C or to write a C function that is
+callable from Fortran, the C program must explicitly use identifiers in
+the format expected by the Fortran compiler.  In order to do this, one
+simply wraps all C identifiers in one of the macros provided by
+@code{AC_F77_WRAPPERS} or @code{AC_FC_WRAPPERS}.  For example, suppose
+you have the following Fortran 77 subroutine:
 
 @example
       subroutine foobar(x,y)
@@ -5739,12 +5813,14 @@ Note also that all parameters to Fortran 77 routines are passed as
 pointers (@pxref{Mixing Fortran 77 With C and C++,,, automake, @acronym{GNU}
 Automake}).
 
+(Replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
+
 Although Autoconf tries to be intelligent about detecting the
-name-mangling scheme of the Fortran 77 compiler, there may be Fortran 77
+name-mangling scheme of the Fortran compiler, there may be Fortran
 compilers that it doesn't support yet.  In this case, the above code
 will generate a compile-time error, but some other behavior
 (e.g., disabling Fortran-related features) can be induced by checking
-whether the @code{F77_FUNC} macro is defined.
+whether the @code{F77_FUNC}/@code{FC_FUNC} macro is defined.
 
 Now, to call that routine from a C program, we would do something like:
 
@@ -5755,22 +5831,91 @@ Now, to call that routine from a C program, we would do something like:
 @}
 @end example
 
-If the Fortran 77 identifier contains an underscore
-(e.g., @code{foo_bar}), you should use @code{F77_FUNC_} instead of
-@code{F77_FUNC} (with the same arguments).  This is because some Fortran
-77 compilers mangle names differently if they contain an underscore.
+If the Fortran identifier contains an underscore (e.g., @code{foo_bar}),
+you should use @code{F77_FUNC_}/@code{FC_FUNC_} instead of
+@code{F77_FUNC}/@code{FC_FUNC} (with the same arguments).  This is
+because some Fortran compilers mangle names differently if they contain
+an underscore.
 @end defmac
 
 @defmac AC_F77_FUNC (@var{name}, @ovar{shellvar})
+@defmacx AC_FC_FUNC (@var{name}, @ovar{shellvar})
 @acindex{F77_FUNC}
+@acindex{FC_FUNC}
 Given an identifier @var{name}, set the shell variable @var{shellvar} to
 hold the mangled version @var{name} according to the rules of the
-Fortran 77 linker (see also @code{AC_F77_WRAPPERS}).  @var{shellvar} is
-optional; if it is not supplied, the shell variable will be simply
-@var{name}.  The purpose of this macro is to give the caller a way to
-access the name-mangling information other than through the C
-preprocessor as above, for example, to call Fortran routines from some
-language other than C/C++.
+Fortran linker (see also @code{AC_F77_WRAPPERS} or
+@code{AC_FC_WRAPPERS}).  @var{shellvar} is optional; if it is not
+supplied, the shell variable will be simply @var{name}.  The purpose of
+this macro is to give the caller a way to access the name-mangling
+information other than through the C preprocessor as above, for example,
+to call Fortran routines from some language other than C/C++.
+@end defmac
+
+@defmac AC_FC_SRCEXT (@var{ext}, @ovar{action-if-success}, @ovar{action-if-failure})
+@acindex{FC_SRCEXT}
+By default, the @code{FC} macros perform their tests using a @file{.f}
+extension for source-code files.  Some compilers, however, only enable
+newer language features for appropriately named files, e.g. Fortran 90
+features only for @file{.f90} files.  On the other hand, some other
+compilers expect all source files to end in @file{.f} and require
+special flags to support other filename extensions.  The
+@code{AC_FC_SRCEXT} macro deals with both of these issues.
+
+The @code{AC_FC_SRCEXT} tries to get the @code{FC} compiler to accept files
+ending with the extension .@var{ext} (i.e. @var{ext} does @emph{not}
+contain the dot).  If any special compiler flags are needed for this, it
+stores them in the output variable @code{FCFLAGS_}@var{ext}.  This
+extension and these flags are then used for all subsequent @code{FC} tests
+(until @code{AC_FC_SRCEXT} is called again).
+
+For example, you would use @code{AC_FC_SRCEXT(f90)} to employ the
+@file{.f90} extension in future tests, and it would set a
+@code{FCFLAGS_f90} output variable with any extra flags that are needed
+to compile such files.
+
+The @code{FCFLAGS_}@var{ext} can @emph{not} be simply absorbed into
+@code{FCFLAGS}, for two reasons based on the limitations of some
+compilers.  First, only one @code{FCFLAGS_}@var{ext} can be used at a
+time, so files with different extensions must be compiled separately.
+Second, @code{FCFLAGS_}@var{ext} must appear @emph{immediately} before
+the source-code filename when compiling.  So, continuing the example
+above, you might compile a @file{foo.f90} file in your Makefile with the
+command:
+
+@example
+foo.o: foo.f90
+     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) foo.f90
+@end example
+
+If @code{AC_FC_SRCEXT} succeeds in compiling files with the @var{ext}
+extension, it calls @ovar{action-if-success} (defaults to nothing).  If
+it fails, and cannot find a way to make the @code{FC} compiler accept such
+files, it calls @ovar{action-if-failure} (defaults to exiting with an
+error message).
+
+@end defmac
+
+@defmac AC_FC_FREEFORM (@ovar{action-if-success}, @ovar{action-if-failure})
+@acindex{FC_FREEFORM}
+
+The @code{AC_FC_FREEFORM} tries to ensure that the Fortran compiler
+(@code{$FC}) allows free-format source code (as opposed to the older
+fixed-format style from Fortran 77).  If necessary, it may add some
+additional flags to @code{FCFLAGS}.
+
+This macro is most important if you are using the default @file{.f}
+extension, since many compilers interpret this extension as indicating
+fixed-format source unless an additional flag is supplied.  If you
+specify a different extension with @code{AC_FC_SRCEXT}, such as
+@file{.f90} or @file{.f95}, then @code{AC_FC_FREEFORM} will ordinarily
+succeed without modifying @code{FCFLAGS}.
+
+If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
+calls @ovar{action-if-success} (defaults to nothing). If it fails, it
+calls @ovar{action-if-failure} (defaults to exiting with an error
+message).
+
 @end defmac
 
 @node System Services
@@ -5982,15 +6127,25 @@ Supported languages are:
 @table @samp
 @item C
 Do compilation tests using @code{CC} and @code{CPP} and use extension
-@file{.c} for test programs.
+@file{.c} for test programs.  Use compilation flags: @code{CPPFLAGS} with
+@code{CPP}, and both @code{CPPFLAGS} and @code{CFLAGS} with @code{CC}.
 
 @item C++
 Do compilation tests using @code{CXX} and @code{CXXCPP} and use
-extension @file{.C} for test programs.
+extension @file{.C} for test programs.  Use compilation flags:
+@code{CPPFLAGS} with @code{CXXPP}, and both @code{CPPFLAGS} and
+@code{CXXFLAGS} with @code{CXX}.
 
 @item Fortran 77
 Do compilation tests using @code{F77} and use extension @file{.f} for
-test programs.
+test programs.  Use compilation flags: @code{FFLAGS}.
+
+@item Fortran
+Do compilation tests using @code{FC} and use extension @file{.f} (or
+whatever has been set by @code{AC_FC_SRCEXT}) for test programs.  Use
+compilation flags: @code{FCFLAGS}.
+
+
 @end table
 @end defmac
 
@@ -6347,23 +6502,17 @@ extended regular expression @var{pattern}, execute shell commands
 @node Running the Compiler
 @section Running the Compiler
 
-To check for a syntax feature of the (C, C++, or Fortran 77) compiler,
-such as whether it recognizes a certain keyword, or simply to try some
-library feature, use @code{AC_COMPILE_IFELSE} to try to compile a small
-program that uses that feature.
-
+To check for a syntax feature of the current language's (@pxref{Language
+Choice}) compiler, such as whether it recognizes a certain keyword, or
+simply to try some library feature, use @code{AC_COMPILE_IFELSE} to try
+to compile a small program that uses that feature.
 
 @defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{COMPILE_IFELSE}
-Run the compiler of the current language (@pxref{Language Choice}) on
-the @var{input}, run the shell commands @var{action-if-true} on success,
-@var{action-if-false} otherwise.  The @var{input} can be made by
-@code{AC_LANG_PROGRAM} and friends.
-
-This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
-the currently selected language, as well as @code{CPPFLAGS}, when
-compiling.  If Fortran 77 is the currently selected language then
-@code{FFLAGS} will be used when compiling.
+Run the compiler and compilation flags of the current language
+(@pxref{Language Choice}) on the @var{input}, run the shell commands
+@var{action-if-true} on success, @var{action-if-false} otherwise.  The
+@var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to link; use
@@ -6395,15 +6544,14 @@ program.
 
 @defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{LINK_IFELSE}
-Run the compiler and the linker of the current language (@pxref{Language
-Choice}) on the @var{input}, run the shell commands @var{action-if-true}
-on success, @var{action-if-false} otherwise.  The @var{input} can be made
-by @code{AC_LANG_PROGRAM} and friends.
+Run the compiler (and compilation flags) and the linker of the current
+language (@pxref{Language Choice}) on the @var{input}, run the shell
+commands @var{action-if-true} on success, @var{action-if-false}
+otherwise.  The @var{input} can be made by @code{AC_LANG_PROGRAM} and
+friends.
 
-This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
-the currently selected language, as well as @code{CPPFLAGS}, when
-compiling.  If Fortran 77 is the currently selected language then
-@code{FFLAGS} will be used when compiling.
+@code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
+current compilation flags.
 
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to execute the program;
@@ -6433,9 +6581,9 @@ If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
 Otherwise, run shell commands @var{action-if-false}.
 
-The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.  This
-macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
-@code{LDFLAGS}, and @code{LIBS}
+The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+@code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
+compilation flags of the current language (@pxref{Language Choice}).
 
 If the compiler being used does not produce executables that run on the
 system where @command{configure} is being run, then the test program is
@@ -13488,11 +13636,9 @@ This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
 by the code in @var{function-body} (@var{includes} will be ignored if
-the currently selected language is Fortran 77).  This macro also uses
-@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
-selected language, as well as @code{CPPFLAGS}, when compiling.  If
-Fortran 77 is the currently selected language then @code{FFLAGS} will be
-used when compiling.
+the currently selected language is Fortran or Fortran 77).  The compiler
+and compilation flags are determined by the current language
+(@pxref{Language Choice}).
 @end defmac
 
 @defmac AC_TRY_CPP (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
@@ -13522,12 +13668,10 @@ This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
 by the code in @var{function-body} (@var{includes} will be ignored if
-the currently selected language is Fortran 77).  This macro also uses
-@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
-selected language, as well as @code{CPPFLAGS}, when compiling.  If
-Fortran 77 is the currently selected language then @code{FFLAGS} will be
-used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
-be used during linking in all cases.
+the currently selected language is Fortran or Fortran 77).  The compiler
+and compilation flags are determined by the current language
+(@pxref{Language Choice}), and in addition @code{LDFLAGS} and
+@code{LIBS} are used for linking.
 @end defmac
 
 @defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
