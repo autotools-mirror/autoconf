@@ -274,6 +274,7 @@ Types
 
 Compilers and Preprocessors
 
+* Specific Compiler Characteristics::  Some portability issues
 * Generic Compiler Characteristics::  Language independent tests
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
@@ -4633,11 +4634,46 @@ fail too.  @xref{Manual Configuration}, for more on support for cross
 compiling.
 
 @menu
+* Specific Compiler Characteristics::  Some portability issues
 * Generic Compiler Characteristics::  Language independent tests
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
 * Fortran 77 Compiler::         Likewise
 @end menu
+
+@node Specific Compiler Characteristics
+@subsection Specific Compiler Characteristics
+
+Some compilers exhibit different behaviors.
+
+@table @asis
+@item Static/Dynamic Expressions
+Autoconf relies on a trick to extract one bit of information from the C
+compiler: using negative array sizes.  For instance the following
+excerpt of a C source demonstrates how to test whether @samp{int}s are 4
+bytes long:
+
+@example
+int
+main (void)
+@{
+  static int test_array [(unsigned long) (sizeof (int)) == 4 ? 1 : -1];
+  test_array [0] = 0
+  return 0;
+@}
+@end example
+
+@noindent
+To our knowledge, there is a single compiler that does not support this
+trick: the HP C compilers (the real one, not only the ``bundled'') on
+HP-UX 11.00:
+
+@example
+$ @kbd{cc -c -Ae +O2 +Onolimit conftest.c}
+cc: "conftest.c": error 1879: Variable-length arrays cannot \
+    have static storage.
+@end example
+@end table
 
 @node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics

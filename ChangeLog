@@ -1,5 +1,12 @@
 2002-01-30  Akim Demaille  <akim@epita.fr>
 
+	* tests/semantics.at (AC_CHECK_SIZEOF): Split into two tests: one
+	for plain code, the other for cross-compilation code.  The latter
+	is now run with GCC only.
+	* doc/autoconf.texi (Compilers and Preprocessors): New.
+
+2002-01-30  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): Support pre-defined
 	values.
 	* doc/autoconf.texi (Initializing configure): Explain how to
