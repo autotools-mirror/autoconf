@@ -162,9 +162,22 @@ m4_divert_push(1)dnl
 : ${tests="$TESTS"}
 for test in $tests
 do
+  at_status=0;
   case $test in
 m4_divert_pop[]dnl
 m4_divert_push(3)[]dnl
+  esac
+  $at_verbose &&
+    echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
+  case $at_status in
+    0) echo ok
+       ;;
+    77) echo "ignored near \``cat at-check-line`'"
+        at_ignore_count=`expr $at_ignore_count + 1`
+        ;;
+    *) echo "FAILED near \``cat at-check-line`'"
+       at_failed_list="$at_failed_list $test"
+       ;;
   esac
 done
 
@@ -284,21 +297,9 @@ $at_traceoff
 [[#] Snippet )s[]AT_ordinal[])
     	)
     	at_status=$?
-    	$at_verbose &&
-    	  echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
-    	case $at_status in
-    	  0) echo ok
-    	     ;;
-    	  77) echo "ignored near \``cat at-check-line`'"
-    	      at_ignore_count=`expr $at_ignore_count + 1`
-    	      ;;
-    	  *) echo "FAILED near \``cat at-check-line`'"
-    	     at_failed_list="$at_failed_list AT_ordinal"
-    	     ;;
-    	esac
       else
-    	 echo 'ignored (skipped)'
-    	 at_ignore_count=`expr $at_ignore_count + 1`
+        echo 'ignored (skipped)'
+        at_ignore_count=`expr $at_ignore_count + 1`
       fi
       at_test_count=`expr 1 + $at_test_count`
       if $at_stop_on_error && test -n "$at_failed_list"; then :; else
