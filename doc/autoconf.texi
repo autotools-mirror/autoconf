@@ -1858,10 +1858,12 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 This macro is equivalent to calling @code{AC_CHECK_LIB} with a
 @var{function} argument of @code{main}.  In addition, @var{library} can
 be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
-all of those cases, the compiler is passed @samp{-lfoo}.  This macro is
-considered obsolete, because some linkers (e.g., Apollo's) do not fail
-when asked to link with a nonexistent library if there are no unresolved
-sybols.
+all of those cases, the compiler is passed @samp{-lfoo}.  However,
+@var{library} can not be a shell variable; it must be a constant.
+
+This macro is considered obsolete, because some linkers (e.g., Apollo's)
+do not fail when asked to link with a nonexistent library if there are
+no unresolved sybols.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
@@ -2080,7 +2082,8 @@ the option which looks like this:
 @noindent
 @var{help-string} may be more than one line long, if more detail is
 needed.  Just make sure the columns line up in @samp{configure --help}.
-Avoid tabs in the help string.
+Avoid tabs in the help string.  You'll need to enclose it in @samp{[}
+and @samp{]} in order to produce the leading spaces.
 
 The name @var{feature} should consist only of alphanumeric characters
 and dashes.  The @var{feature} indicates an optional user-level
@@ -2117,7 +2120,8 @@ the option which looks like this:
 @noindent
 @var{help-string} may be more than one line long, if more detail is
 needed.  Just make sure the columns line up in @samp{configure --help}.
-Avoid tabs in the help string.
+Avoid tabs in the help string.  You'll need to enclose it in @samp{[}
+and @samp{]} in order to produce the leading spaces.
 
 The name @var{package} should consist only of alphanumeric characters
 and dashes.  The @var{package} indicates another software package that
@@ -2973,6 +2977,18 @@ test programs rarely need functions that take arguments.
 foo(int i)
 #else
 foo(i) int i;
+#endif
+@end example
+
+Functions that test programs declare should also be conditionalized for
+C++, which requires @samp{extern "C"} prototypes.  Make sure to not
+include any header files containing clashing prototypes.
+
+@example
+#ifdef __cplusplus
+extern "C" char *malloc(int);
+#else
+char *malloc();
 #endif
 @end example
 

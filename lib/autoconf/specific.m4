@@ -472,25 +472,27 @@ AC_CACHE_VAL(ac_cv_header_stat_broken,
 [AC_EGREP_CPP([You lose], [#include <sys/types.h>
 #include <sys/stat.h>
 #ifdef S_ISBLK
-#if S_ISBLK (S_IFDIR)
+# if S_ISBLK (S_IFDIR)
 You lose.
-#endif
-#ifdef S_IFCHR
-#if S_ISBLK (S_IFCHR)
+# endif
+# ifdef S_IFCHR
+#  if S_ISBLK (S_IFCHR)
 You lose.
+#  endif
+# endif
 #endif
-#endif /* S_IFCHR */
-#endif /* S_ISBLK */
+
 #ifdef S_ISLNK
-#if S_ISLNK (S_IFREG)
+# if S_ISLNK (S_IFREG)
 You lose.
+# endif
 #endif
-#endif /* S_ISLNK */
+
 #ifdef S_ISSOCK
-#if S_ISSOCK (S_IFREG)
+# if S_ISSOCK (S_IFREG)
 You lose.
+# endif
 #endif
-#endif /* S_ISSOCK */
 ], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])dnl
 AC_MSG_RESULT($ac_cv_header_stat_broken)
 if test $ac_cv_header_stat_broken = yes; then
@@ -604,36 +606,40 @@ AC_CACHE_VAL(ac_cv_func_mmap,
 #include <sys/mman.h>
 
 #ifdef BSD
-#ifndef BSD4_1
-#define HAVE_GETPAGESIZE
+# ifndef BSD4_1
+#  define HAVE_GETPAGESIZE
+# endif
 #endif
-#endif
+
 #ifndef HAVE_GETPAGESIZE
-#include <sys/param.h>
-#ifdef EXEC_PAGESIZE
-#define getpagesize() EXEC_PAGESIZE
-#else
-#ifdef NBPG
-#define getpagesize() NBPG * CLSIZE
-#ifndef CLSIZE
-#define CLSIZE 1
-#endif /* no CLSIZE */
-#else /* no NBPG */
-#ifdef NBPC
-#define getpagesize() NBPC
-#else /* no NBPC */
-#define getpagesize() PAGESIZE /* SVR4 */
-#endif /* no NBPC */
-#endif /* no NBPG */
-#endif /* no EXEC_PAGESIZE */
-#endif /* not HAVE_GETPAGESIZE */
+# include <sys/param.h>
+# ifdef EXEC_PAGESIZE
+#  define getpagesize() EXEC_PAGESIZE
+# else
+#  ifdef NBPG
+#   define getpagesize() NBPG * CLSIZE
+#   ifndef CLSIZE
+#    define CLSIZE 1
+#   endif
+#  else
+#   ifdef NBPC
+#    define getpagesize() NBPC
+#   else
+#    define getpagesize() PAGESIZE /* SVR4 */
+#   endif
+#  endif
+# endif
+#endif
 
 #ifdef __osf__
-#define valloc malloc
+# define valloc malloc
 #endif
 
-extern char *valloc();
-extern char *malloc();
+#ifdef __cplusplus
+extern "C" { char *valloc(int), *malloc(int); }
+#else
+char *valloc(), *malloc();
+#endif
 
 int
 main()
@@ -845,20 +851,21 @@ fi
 
 AC_MSG_CHECKING([for alloca])
 AC_CACHE_VAL(ac_cv_func_alloca,
-[AC_TRY_LINK([#ifdef __GNUC__
-#define alloca __builtin_alloca
+[AC_TRY_LINK([
+#ifdef __GNUC__
+# define alloca __builtin_alloca
 #else
-#if HAVE_ALLOCA_H
-#include <alloca.h>
-#else
-#ifdef _AIX
+# if HAVE_ALLOCA_H
+#  include <alloca.h>
+# else
+#  ifdef _AIX
  #pragma alloca
-#else
-#ifndef alloca /* predefined by HP cc +Olibcalls */
+#  else
+#   ifndef alloca /* predefined by HP cc +Olibcalls */
 char *alloca ();
-#endif
-#endif
-#endif
+#   endif
+#  endif
+# endif
 #endif
 ], [char *p = (char *) alloca(1);],
   ac_cv_func_alloca=yes, ac_cv_func_alloca=no)])dnl
