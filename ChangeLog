@@ -1,3 +1,8 @@
+Tue Nov 21 17:36:41 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Makefile.in (install): Undo last ASCRIPTS panic change.
+	The bug reporter hadn't cleaned up his source dir.
+
 Mon Nov 20 15:26:50 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Version 2.6.

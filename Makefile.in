@@ -29,8 +29,9 @@ M4 = @M4@
 AWK = @AWK@
 PERL = @PERL@
 
-# Programs that are always installed.
+# Programs that are ALWAYS installed (and are created in the build dir).
 ASCRIPTS = autoconf autoheader autoreconf autoupdate ifnames 
+# All programs, including those only installed if you have perl.
 SCRIPTS = $(ASCRIPTS) @SCRIPTS@
 
 transform=@program_transform_name@
@@ -130,7 +131,7 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
 	esac
 	for p in $(ASCRIPTS); do \
-	  $(INSTALL_PROGRAM) $(srcdir)/$$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+	  $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 	for i in $(M4FILES) acconfig.h; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
