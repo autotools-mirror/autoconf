@@ -385,8 +385,12 @@ while read dir; do
     template_dir=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`
     stamp_num=`test "$tcount" -gt 1 && echo "$tcount"`
     stamp=$template_dir/stamp-h$stamp_num.in
-    uses_autoheader=false;
+    # If config.hin exists, don't override it unless it was really
+    # created by autoheader (users are allowed to write them by hand!).
+    uses_autoheader=false
     grep autoheader "$template" >/dev/null 2>&1 &&
+       uses_autoheader=:
+    test -f "$template" ||
        uses_autoheader=:
     if $uses_autoheader &&
        { $force ||

@@ -1,5 +1,11 @@
 2001-01-26  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (autoheader): Run it when there is no template, as
+	there is no risk to override a handwritten template.
+	From Assar Westerlund.
+
+2001-01-26  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4: dnl AC_ARG_VAR's newline.
 	(AC_PROG_CC, AC_PROG_F77, AC_PROG_CXX): AC_ARG_VAR(LDFLAGS).
 	* acgeneral.m4 (AC_CHECK_LIB): Don't do it.
