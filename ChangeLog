@@ -1,3 +1,9 @@
+2002-10-29  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Particular Functions): AC_FUNC_MALLOC and
+	AC_FUNC_REALLOC check for compatibility with glibc, not POSIX.
+	Problem reported by Bruno Haible.
+
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Header Templates): Put also in words what the
