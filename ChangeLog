@@ -1,3 +1,7 @@
+2000-06-07  Dave Love  <fx@gnu.org>
+
+	* aclang.m4 (AC_PROG_F77): Check for f95 and fc too.
+
 2000-06-07  Philippe De Muyter  <phdm@macqel.be>
 
 	`foo=1 foo=2 cmd' has an undefined behavior.

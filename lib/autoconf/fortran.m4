@@ -815,11 +815,22 @@ rm -f conftest*
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for.
+#
+# Compilers are ordered by
+#  1. F77, F90, F95
+#  2. Good native compilers, bad native compilers, wrappers around f2c.
+#
+# `fort77' and `fc' are wrappers around `f2c', `fort77' being better.
+# It is believed that under HP-UX `fort77' is the name of the native
+# compiler.  NAG f95 is preferred over `fc', so put `fc' last.
 AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
+dnl Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
+dnl `f95' is worth trying.
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_TOOLS(F77,
-               m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90]))
+               m4_default([$1],
+                          [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f95 fc]))
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
