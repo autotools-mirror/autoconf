@@ -1,23 +1,21 @@
-*.aux
-*.cp *.cps
-*.cv *.cvs
-*.dvi
-*.ev *.evs
-*.fn *.fns
-*.info
-*.ky
-*.log
 *.ac *.acs
 *.at *.ats
+*.cp *.cps
+*.cv *.cvs
+*.ev *.evs
+*.fn *.fns
 *.ms *.mss
 *.ov *.ovs
+*.pr *.prs
+*.vr *.vrs
+*.ky
+*.aux *.dvi *.info *.log
+Makefile
+*.pdf
 *.pg
 *.ps
-*.pdf
+stamp-vti
 *.tmp
 *.toc
 *.tp
-*.vr *.vrs
-Makefile
-stamp-vti
 version.texi
