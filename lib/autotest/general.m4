@@ -420,27 +420,23 @@ fi
   done
 
   AS_BOX([Victims.])
+  echo
 } >&AS_MESSAGE_LOG_FD
 
-# If we are an embedded test suite, be sure to check we are running
-# the proper version of the programs.  And in either case, report
-# what program is being used.
-for at_program in $at_victims
+# Report what programs are being tested.
+for at_program in : $at_victims
 do
-  _AS_PATH_WALK([$PATH],
-[if test -f $as_dir/$at_program; then
-  (
-    echo "AT_LINE: $as_dir/$at_program --version"
-    $as_dir/$at_program --version
-    echo
-  ) >&AS_MESSAGE_LOG_FD 2>&1
-  if test -n "$at_package_name" && test -n "$at_package_version"; then
-    ($as_dir/$at_program --version |
-      grep "$at_package_name.*$at_package_version") >/dev/null 2>&1 ||
-      AS_ERROR([version mismatch (need $at_package_name $at_package_version): $as_dir/$at_program])
+  test "$at_program" = : && continue
+  _AS_PATH_WALK([$PATH], [test -f $as_dir/$at_program && break])
+  if test -f $as_dir/$at_program; then
+    {
+      echo "AT_LINE: $as_dir/$at_program --version"
+      $as_dir/$at_program --version
+      echo
+    } >&AS_MESSAGE_LOG_FD 2>&1
+  else
+    AS_ERROR([cannot find $at_program])
   fi
-  break;
-fi])
 done
 
 {

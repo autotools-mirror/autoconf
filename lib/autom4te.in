@@ -40,6 +40,9 @@ args: --preselect AC_DEFINE_TRACE_LITERAL
 # Wanted by Automake
 args: --preselect AC_LIBSOURCE
 args: --preselect AC_SUBST
+args: --preselect AM_CONDITIONAL
+args: --preselect AC_LIBSOURCE
+args: --preselect AC_CONFIG_FILES
 # Wanted by autoscan
 args: --preselect AC_CHECK_FUNCS
 args: --preselect AC_CHECK_HEADERS

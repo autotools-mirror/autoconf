@@ -1798,7 +1798,7 @@ m4_define([AC_CACHE_VAL],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
-              [_AS_ECHO_N([(cached)])],
+              [_AS_ECHO_N([(cached) ])],
               [$2])])
 
 
