@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate March 13, 1998
+@set lastupdate April 17, 1998
 @c %**end of header
 
 @ifinfo
@@ -533,8 +533,10 @@ to select among the alternate behaviors.
 
 Likewise, please don't make the behavior of the program depend on the
 type of output device it is used with.  Device independence is an
-important principle of the system's design; do not compromise it
-merely to save someone from typing an option now and then.
+important principle of the system's design; do not compromise it merely
+to save someone from typing an option now and then.  (Variation in error
+message syntax when using a terminal is ok, because that is a side issue
+that people do not depend on.)
 
 If you think one behavior is most useful when the output is to a
 terminal, and another is most useful when the output is a file or a
