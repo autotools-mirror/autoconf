@@ -25,7 +25,8 @@ define([join],
 #   AC_PROGs from acspecific
 # - _|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
 #   Some variables some shells use and change
-
+# - POW_LIB
+#   From acfunctions.m4.
 AC_DEFUN([AC_ENV_SAVE],
 [(set) 2>&1 |
   egrep -v -e \
@@ -40,7 +41,7 @@ AC_DEFUN([AC_ENV_SAVE],
       [^(cross_compiling)=],
       [^(interpval)=],
       [^(f77_(case|underscore))=],
-      [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID)=],
+      [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
       [^(_|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead

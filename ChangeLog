@@ -1,3 +1,9 @@
+2000-09-19  Akim Demaille  <akim@epita.fr>
+
+	* tests/aclocal.m4.new (AC_ENV_SAVE): Skip POW_LIB, used by
+	AC_FUNC_STRTOD.
+	From Bernard Dautrevaux.
+
 2000-09-19  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atgeneral.m4 (AT_DATA): Use _ATEOF instead of EOF.
