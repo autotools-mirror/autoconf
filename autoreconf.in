@@ -69,16 +69,21 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${AC_MACRODIR=@datadir@}
-if test -n "$AUTOCONF"; then
-  autoconf=$AUTOCONF
-else
-  autoconf=`echo "$0" | sed -e 's/[^/]*$//`"@autoconf-name@"
-fi
-if test -n "$AUTOHEADER"; then
-  autoheader=$AUTOHEADER
-else
-  autoheader=`echo "$0" | sed -e 's/[^/]*$//`"@autoheader-name@"
-fi
+dir=`echo "$0" | sed -e 's/[^/]*$//'`
+# We test "$dir/autoconf" in case we are in the build tree, in which case
+# the names are not transformed yet.
+for autoconf in "$AUTOCONF" \
+                "$dir/@autoconf-name@" \
+                "$dir/autoconf" \
+                "@bindir@/@autoconf-name@"; do
+  test -f "$autoconf" && break
+done
+for autoheader in "$AUTOHEADER" \
+                  "$dir/@autoheader-name@" \
+                  "$dir/autoheader" \
+                  "@bindir@/@autoheader-name@"; do
+  test -f "$autoheader" && break
+done
 automake_mode=--gnu
 automake_deps=
 force=no

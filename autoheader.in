@@ -69,11 +69,15 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${AC_MACRODIR=@datadir@}
-if test -n "$AUTOCONF"; then
-  autoconf=$AUTOCONF
-else
-  autoconf=`echo "$0" | sed -e 's/[^/]*$//`"@autoconf-name@"
-fi
+dir=`echo "$0" | sed -e 's/[^/]*$//'`
+# We test "$dir/autoconf" in case we are in the build tree, in which case
+# the names are not transformed yet.
+for autoconf in "$AUTOCONF" \
+                "$dir/@autoconf-name@" \
+                "$dir/autoconf" \
+                "@bindir@/@autoconf-name@"; do
+  test -f "$autoconf" && break
+done
 debug=false
 localdir=.
 tmp=
