@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Build some of the Autoconf test files.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^(AC_TRY.*|AC_RUN_LOG)$
 ^AC_.*_IFELSE$
 ^AC_FD_CC$
-^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$
+^(AC_(PROG_CC|C_CONST|C_INLINE|C_RESTRICT|C_VOLATILE))$
 ^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$
 ^AC_PATH_XTRA$
 ^AC_SYS_RESTARTABLE_SYSCALLS$
