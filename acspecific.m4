@@ -663,6 +663,11 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
 ])# AC_TYPE_GETGROUPS
 
 
+# AU::AM_TYPE_PTRDIFF_T
+AU_DEFUN([AM_TYPE_PTRDIFF_T],
+[AC_CHECK_TYPES(ptrdiff_t)])
+
+
 # AC_TYPE_UID_T
 # -------------
 # FIXME: Rewrite using AC_CHECK_TYPE.

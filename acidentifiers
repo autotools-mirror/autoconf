@@ -13,6 +13,7 @@ mode_t		AC_TYPE_MODE_T
 obstack		AC_FUNC_OBSTACK
 off_t		AC_TYPE_OFF_T
 pid_t		AC_TYPE_PID_T
+ptrdiff_t	AC_CHECK_TYPES
 size_t		AC_TYPE_SIZE_T
 timeval		AC_HEADER_TIME
 tm		AC_STRUCT_TM
