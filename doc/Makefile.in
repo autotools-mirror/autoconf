@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4-p3 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -76,7 +76,7 @@ standards_TEXINFOS = make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
-CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas              autoconf.ov autoconf.ovs autoconf.tmp
+CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas              autoconf.ov autoconf.ovs autoconf.ms autoconf.mss autoconf.tmp
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = 

@@ -114,8 +114,10 @@ approved by the Foundation.
 @defcodeindex ov
 @c Define a CPP variable index.
 @defcodeindex cv
-@c Define a macro index that @@defmac doesn't write to.
+@c Define an Autoconf macro index that @defmac doesn't write to.
 @defcodeindex ma
+@c Define an M4sugar macro index that @defmac doesn't write to.
+@defcodeindex ms
 
 @node Top, Introduction, (dir), (dir)
 @comment  node-name,  next,  previous,  up
@@ -138,7 +140,8 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Existing Tests::              Macros that check for particular features
 * Writing Tests::               How to write new feature checks
 * Results::                     What to do with results from feature checks
-* Writing Macros::              Adding new macros to Autoconf
+* Programming in M4::           Layers on top of which Autoconf is written
+* Writing Autoconf Macros::     Adding new macros to Autoconf
 * Portable Shell::              Shell script portability pitfalls
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @code{configure}
@@ -150,7 +153,8 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Environment Variable Index::  Index of environment variables used
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
-* Macro Index::                 Index of Autoconf macros
+* Autoconf Macro Index::        Index of Autoconf macros
+* M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
 * Concept Index::               General index
 
 @detailmenu
@@ -283,22 +287,30 @@ Caching Results
 * Cache Files::                 Files @code{configure} uses for caching
 * Cache Checkpointing::         Loading and saving the cache file
 
-Writing Macros
+Programming in M4
 
-* Macro Definitions::           Basic format of an Autoconf macro
-* Macro Names::                 What to call your new macros
-* Quoting::                     Protecting macros from unwanted expansion
-* Reporting Messages::          Notifying @code{autoconf} users
-* Dependencies Between Macros::  What to do when macros depend on other macros
-* Obsoleting Macros::           Warning about old ways of doing things
-* Coding Style::                Writing Autoconf macros @`a la Autoconf
+* M4 Quotation::                Protecting macros from unwanted expansion
+* Programming in M4sugar::      Convenient pure M4 macros
 
-Quoting
+M4 Quotation
 
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
 * Quotation Rule Of Thumb::     One parenthesis, one quote
+
+Programming in M4sugar
+
+* Forbidden Patterns::          Catching unexpanded macros
+
+Writing Autoconf Macros
+
+* Macro Definitions::           Basic format of an Autoconf macro
+* Macro Names::                 What to call your new macros
+* Reporting Messages::          Notifying @code{autoconf} users
+* Dependencies Between Macros::  What to do when macros depend on other macros
+* Obsoleting Macros::           Warning about old ways of doing things
+* Coding Style::                Writing Autoconf macros @`a la Autoconf
 
 Dependencies Between Macros
 
@@ -1071,7 +1083,7 @@ looks for the optional file @file{acsite.m4} in the directory that
 contains the distributed Autoconf macro files, and for the optional file
 @file{aclocal.m4} in the current directory.  Those files can contain
 your site's or the package's own Autoconf macro definitions
-(@pxref{Writing Macros}, for more information).  If a macro is defined
+(@pxref{Writing Autoconf Macros}, for more information).  If a macro is defined
 in more than one of the files that @code{autoconf} reads, the last
 definition it reads overrides the earlier ones.
 
@@ -4847,7 +4859,7 @@ about what they're checking for.
 
 When you write a feature test that could be applicable to more than one
 software package, the best thing to do is encapsulate it in a new macro.
-@xref{Writing Macros}, for how to do that.
+@xref{Writing Autoconf Macros}, for how to do that.
 
 @menu
 * Examining Declarations::      Detecting header files and declarations
@@ -5273,7 +5285,7 @@ depending on which language is current.
 
 @c ====================================================== Results of Tests.
 
-@node Results, Writing Macros, Writing Tests, Top
+@node Results, Programming in M4, Writing Tests, Top
 @chapter Results of Tests
 
 Once @code{configure} has determined whether a feature exists, what can
@@ -5815,142 +5827,26 @@ make hard links}.
 
 
 
-@c ========================================================== Writing Macros.
+@c ====================================================== Programming in M4.
 
-@node Writing Macros, Portable Shell, Results, Top
-@chapter Writing Macros
+@node Programming in M4, Writing Autoconf Macros, Results, Top
+@chapter Programming in M4
 
-When you write a feature test that could be applicable to more than one
-software package, the best thing to do is encapsulate it in a new macro.
-Here are some instructions and guidelines for writing Autoconf macros.
+Autoconf is written on top of two layers: @dfn{M4sugar}, which provides
+convenient macros for pure M4 programming, and @dfn{M4sh}, which
+provides macros dedicated to shell script generation.
+
+As of this version of Autoconf, these two layers are still experimental,
+and their interface might change in the future.  As a matter of fact,
+@emph{anything that is not documented must not be used}.
 
 @menu
-* Macro Definitions::           Basic format of an Autoconf macro
-* Macro Names::                 What to call your new macros
-* Quoting::                     Protecting macros from unwanted expansion
-* Reporting Messages::          Notifying @code{autoconf} users
-* Dependencies Between Macros::  What to do when macros depend on other macros
-* Obsoleting Macros::           Warning about old ways of doing things
-* Coding Style::                Writing Autoconf macros @`a la Autoconf
+* M4 Quotation::                Protecting macros from unwanted expansion
+* Programming in M4sugar::      Convenient pure M4 macros
 @end menu
 
-@node Macro Definitions, Macro Names, Writing Macros, Writing Macros
-@section Macro Definitions
-
-@maindex DEFUN
-Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
-similar to the M4 builtin @code{define} macro.  In addition to defining
-a macro, @code{AC_DEFUN} adds to it some code that is used to constrain
-the order in which macros are called (@pxref{Prerequisite Macros}).
-
-An Autoconf macro definition looks like this:
-
-@example
-AC_DEFUN(@var{macro-name}, @var{macro-body})
-@end example
-
-You can refer to any arguments passed to the macro as @samp{$1},
-@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
-GNU m4}, for more complete information on writing M4 macros.
-
-Be sure to properly quote both the @var{macro-body} @emph{and} the
-@var{macro-name} to avoid any problems if the macro happens to have
-been previously defined.
-
-Each macro should have a header comment that gives its prototype, and a
-brief description.  When arguments have default values, display them in
-the prototype.  For example:
-
-@example
-# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
-# --------------------------------------
-define([AC_MSG_ERROR],
-[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
-@end example
-
-Comments about the macro should be left in the header comment.  Most
-other comments will make their way into @file{configure}, so just keep
-using @samp{#} to introduce comments.
-
-@cindex @code{dnl}
-If you have some very special comments about pure M4 code, comments
-that make no sense in @file{configure} and in the header comment, then
-use the builtin @code{dnl}: it causes @code{m4} to discard the text
-through the next newline.
-
-Keep in mind that @code{dnl} is rarely needed to introduce comments;
-@code{dnl} is more useful to get rid of the newlines following macros
-that produce no output, such as @code{AC_REQUIRE}.
-
-
-@node Macro Names, Quoting, Macro Definitions, Writing Macros
-@section Macro Names
-
-All of the Autoconf macros have all-uppercase names starting with
-@samp{AC_} to prevent them from accidentally conflicting with other
-text.  All shell variables that they use for internal purposes have
-mostly-lowercase names starting with @samp{ac_}.  To ensure that your
-macros don't conflict with present or future Autoconf macros, you should
-prefix your own macro names and any shell variables they use with some
-other sequence.  Possibilities include your initials, or an abbreviation
-for the name of your organization or software package.
-
-Most of the Autoconf macros' names follow a structured naming convention
-that indicates the kind of feature check by the name.  The macro names
-consist of several words, separated by underscores, going from most
-general to most specific.  The names of their cache variables use the
-same convention (@pxref{Cache Variable Names}, for more information on
-them).
-
-The first word of the name after @samp{AC_} usually tells the category
-of feature being tested.  Here are the categories used in Autoconf for
-specific test macros, the kind of macro that you are more likely to
-write.  They are also used for cache variables, in all-lowercase.  Use
-them where applicable; where they're not, invent your own categories.
-
-@table @code
-@item C
-C language builtin features.
-@item DECL
-Declarations of C variables in header files.
-@item FUNC
-Functions in libraries.
-@item GROUP
-@sc{unix} group owners of files.
-@item HEADER
-Header files.
-@item LIB
-C libraries.
-@item PATH
-The full path names to files, including programs.
-@item PROG
-The base names of programs.
-@item MEMBER
-Members of aggregates.
-@item SYS
-Operating system features.
-@item TYPE
-C builtin or declared types.
-@item VAR
-C variables in libraries.
-@end table
-
-After the category comes the name of the particular feature being
-tested.  Any further words in the macro name indicate particular aspects
-of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
-behavior of the @code{utime} function when called with a @code{NULL}
-pointer.
-
-An internal macro should have a name that starts with an underscore;
-Autoconf internals should therefore start with @samp{_AC_}.
-Additionally, a macro that is an internal subroutine of another macro
-should have a name that starts with an underscore and the name of that
-other macro, followed by one or more words saying what the internal
-macro does.  For example, @code{AC_PATH_X} has internal macros
-@code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
-
-@node Quoting, Reporting Messages, Macro Names, Writing Macros
-@section Quoting
+@node M4 Quotation, Programming in M4sugar, Programming in M4, Programming in M4
+@section M4 Quotation
 @cindex quotation
 
 @c FIXME: Grmph, yet another quoting myth: quotation has *never*
@@ -5970,7 +5866,7 @@ former helps one to follow the latter.
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 @end menu
 
-@node Active Characters, One Macro Call, Quoting, Quoting
+@node Active Characters, One Macro Call, M4 Quotation, M4 Quotation
 @subsection Active Characters
 
 To fully understand where proper quotation is important, you first need
@@ -6019,7 +5915,7 @@ How can you correctly output the intended results@footnote{Using
 @code{defn}.}?
 
 
-@node One Macro Call, Quotation and Nested Macros, Active Characters, Quoting
+@node One Macro Call, Quotation and Nested Macros, Active Characters, M4 Quotation
 @subsection One Macro Call
 
 Let's proceed on the interaction between active characters and macros
@@ -6097,7 +5993,7 @@ With this in mind, we can explore the cases where macros invoke
 macros@dots{}
 
 
-@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, Quoting
+@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, M4 Quotation
 @subsection Quotation and Nested Macros
 
 The examples below use the following macros:
@@ -6226,7 +6122,7 @@ they are given to the macro, often not in the way the users expect.
 Also, because @code{qar} behaves differently from the other macros,
 it's an exception that should be avoided in Autoconf.
 
-@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, Quoting
+@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, M4 Quotation
 @subsection Quotation Rule Of Thumb
 
 To conclude, the quotation rule of thumb is:
@@ -6315,7 +6211,184 @@ unexpanded macros.  The @code{autoconf} program checks for this problem
 by doing @samp{grep AC_ configure}.
 
 
-@node Reporting Messages, Dependencies Between Macros, Quoting, Writing Macros
+@node Programming in M4sugar,  , M4 Quotation, Programming in M4
+@section Programming in M4sugar
+
+@cindex M4sugar
+M4 by itself provides only a small, but sufficient, set of all-purpose
+macros.  M4sugar introduces additional generic macros.  Its name was
+coined by Lars J. Aas: ``Readability And Greater Understanding Stands 4
+M4sugar''.
+
+@menu
+* Forbidden Patterns::          Catching unexpanded macros
+@end menu
+
+@node Forbidden Patterns,  , Programming in M4sugar, Programming in M4sugar
+@subsection Forbidden Patterns
+
+M4sugar provides a means to define suspicious patterns, patterns
+describing tokens which should not be found in the output.  For
+instance, if an Autoconf @file{configure} script includes tokens such as
+@samp{AC_DEFINE}, or @samp{dnl}, then most probably something went
+wrong (typically a macro was not evaluated because of over quotation).
+
+M4sugar forbids all the tokens matching @samp{^m4_} and @samp{^dnl$}.
+
+@defmac m4_pattern_forbid (@var{pattern})
+@msindex pattern_forbid
+Declare no token matching @var{pattern} must be found in the output.
+Comments are not checked; this can be a problem if, for instance, you
+have some macro left unexpanded after an @samp{#include}.  No consensus
+is currently found in the Autoconf community, as some people consider it
+should be valid to name macros in comments (which doesn't makes sense to
+the author of this documentation, as @samp{#}-comments should document
+the output, not the input, documented vy @samp{dnl}-comments).
+@end defmac
+
+Of course, you might encounter exceptions to these generic rules, for
+instance you might have to refer to @samp{$m4_flags}.
+
+@defmac m4_pattern_allow (@var{pattern})
+@msindex pattern_allow
+Any token matching @var{pattern} is allowed, including if it matches an
+@code{m4_pattern_forbid} pattern.
+@end defmac
+
+@c=================================================== Writing Autoconf Macros.
+
+@node Writing Autoconf Macros, Portable Shell, Programming in M4, Top
+@chapter Writing Autoconf Macros
+
+When you write a feature test that could be applicable to more than one
+software package, the best thing to do is encapsulate it in a new macro.
+Here are some instructions and guidelines for writing Autoconf macros.
+
+@menu
+* Macro Definitions::           Basic format of an Autoconf macro
+* Macro Names::                 What to call your new macros
+* Reporting Messages::          Notifying @code{autoconf} users
+* Dependencies Between Macros::  What to do when macros depend on other macros
+* Obsoleting Macros::           Warning about old ways of doing things
+* Coding Style::                Writing Autoconf macros @`a la Autoconf
+@end menu
+
+@node Macro Definitions, Macro Names, Writing Autoconf Macros, Writing Autoconf Macros
+@section Macro Definitions
+
+@maindex DEFUN
+Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
+similar to the M4 builtin @code{define} macro.  In addition to defining
+a macro, @code{AC_DEFUN} adds to it some code that is used to constrain
+the order in which macros are called (@pxref{Prerequisite Macros}).
+
+An Autoconf macro definition looks like this:
+
+@example
+AC_DEFUN(@var{macro-name}, @var{macro-body})
+@end example
+
+You can refer to any arguments passed to the macro as @samp{$1},
+@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
+GNU m4}, for more complete information on writing M4 macros.
+
+Be sure to properly quote both the @var{macro-body} @emph{and} the
+@var{macro-name} to avoid any problems if the macro happens to have
+been previously defined.
+
+Each macro should have a header comment that gives its prototype, and a
+brief description.  When arguments have default values, display them in
+the prototype.  For example:
+
+@example
+# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
+# --------------------------------------
+define([AC_MSG_ERROR],
+[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
+@end example
+
+Comments about the macro should be left in the header comment.  Most
+other comments will make their way into @file{configure}, so just keep
+using @samp{#} to introduce comments.
+
+@cindex @code{dnl}
+If you have some very special comments about pure M4 code, comments
+that make no sense in @file{configure} and in the header comment, then
+use the builtin @code{dnl}: it causes @code{m4} to discard the text
+through the next newline.
+
+Keep in mind that @code{dnl} is rarely needed to introduce comments;
+@code{dnl} is more useful to get rid of the newlines following macros
+that produce no output, such as @code{AC_REQUIRE}.
+
+
+@node Macro Names, Reporting Messages, Macro Definitions, Writing Autoconf Macros
+@section Macro Names
+
+All of the Autoconf macros have all-uppercase names starting with
+@samp{AC_} to prevent them from accidentally conflicting with other
+text.  All shell variables that they use for internal purposes have
+mostly-lowercase names starting with @samp{ac_}.  To ensure that your
+macros don't conflict with present or future Autoconf macros, you should
+prefix your own macro names and any shell variables they use with some
+other sequence.  Possibilities include your initials, or an abbreviation
+for the name of your organization or software package.
+
+Most of the Autoconf macros' names follow a structured naming convention
+that indicates the kind of feature check by the name.  The macro names
+consist of several words, separated by underscores, going from most
+general to most specific.  The names of their cache variables use the
+same convention (@pxref{Cache Variable Names}, for more information on
+them).
+
+The first word of the name after @samp{AC_} usually tells the category
+of feature being tested.  Here are the categories used in Autoconf for
+specific test macros, the kind of macro that you are more likely to
+write.  They are also used for cache variables, in all-lowercase.  Use
+them where applicable; where they're not, invent your own categories.
+
+@table @code
+@item C
+C language builtin features.
+@item DECL
+Declarations of C variables in header files.
+@item FUNC
+Functions in libraries.
+@item GROUP
+@sc{unix} group owners of files.
+@item HEADER
+Header files.
+@item LIB
+C libraries.
+@item PATH
+The full path names to files, including programs.
+@item PROG
+The base names of programs.
+@item MEMBER
+Members of aggregates.
+@item SYS
+Operating system features.
+@item TYPE
+C builtin or declared types.
+@item VAR
+C variables in libraries.
+@end table
+
+After the category comes the name of the particular feature being
+tested.  Any further words in the macro name indicate particular aspects
+of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
+behavior of the @code{utime} function when called with a @code{NULL}
+pointer.
+
+An internal macro should have a name that starts with an underscore;
+Autoconf internals should therefore start with @samp{_AC_}.
+Additionally, a macro that is an internal subroutine of another macro
+should have a name that starts with an underscore and the name of that
+other macro, followed by one or more words saying what the internal
+macro does.  For example, @code{AC_PATH_X} has internal macros
+@code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
+
+@node Reporting Messages, Dependencies Between Macros, Macro Names, Writing Autoconf Macros
 @section Reporting Messages
 @cindex Messages, from @code{autoconf}
 
@@ -6360,7 +6433,7 @@ When the user runs @samp{autoconf -W error}, warnings from
 @code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
 @ref{autoconf Invocation}.
 
-@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Macros
+@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Autoconf Macros
 @section Dependencies Between Macros
 
 Some Autoconf macros depend on other macros having been called first in
@@ -6509,7 +6582,7 @@ macro @var{called-macro-name} must have been defined using
 that it has been called.
 @end defmac
 
-@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Macros
+@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Autoconf Macros
 @section Obsoleting Macros
 
 Configuration and portability technology has evolved over the years.
@@ -6535,7 +6608,7 @@ replaced by the modern @var{implementation}.  The additional
 @var{message} is then printed.
 @end defmac
 
-@node Coding Style,  , Obsoleting Macros, Writing Macros
+@node Coding Style,  , Obsoleting Macros, Writing Autoconf Macros
 @section Coding Style
 
 The Autoconf macros follow a strict coding style.  You are encouraged to
@@ -6543,7 +6616,7 @@ follow this style, especially if you intend to distribute your macro,
 either by contributing it to Autoconf itself, or via other means.
 
 The first requirement is to pay great attention to the quotation, for
-more details, see @ref{Autoconf Language}, and @ref{Quoting}.
+more details, see @ref{Autoconf Language}, and @ref{M4 Quotation}.
 
 Do not try to invent new interfaces.  It is likely that there is a macro
 in Autoconf that resembles the macro you are defining: try to stick to
@@ -6745,7 +6818,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 
 @c ============================================= Portable Shell Programming
 
-@node Portable Shell, Manual Configuration, Writing Macros, Top
+@node Portable Shell, Manual Configuration, Writing Autoconf Macros, Top
 @chapter Portable Shell Programming
 
 When writing your own checks, there are some shell-script programming
@@ -10765,7 +10838,7 @@ on how this is done.
 
 @printindex ov
 
-@node Preprocessor Symbol Index, Macro Index, Output Variable Index, Top
+@node Preprocessor Symbol Index, Autoconf Macro Index, Output Variable Index, Top
 @unnumbered Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
@@ -10774,15 +10847,24 @@ use these names in @code{#if} directives.
 
 @printindex cv
 
-@node Macro Index, Concept Index, Preprocessor Symbol Index, Top
-@unnumbered Macro Index
+@node Autoconf Macro Index, M4 Macro Index, Preprocessor Symbol Index, Top
+@unnumbered Autoconf Macro Index
 
 This is an alphabetical list of the Autoconf macros.  To make the list
 easier to use, the macros are listed without their preceding @samp{AC_}.
 
 @printindex ma
 
-@node Concept Index,  , Macro Index, Top
+@node M4 Macro Index, Concept Index, Autoconf Macro Index, Top
+@unnumbered M4 Macro Index
+
+This is an alphabetical list of the M4, M4sugar, and M4sh macros.  To
+make the list easier to use, the macros are listed without their
+preceding @samp{m4_} or @samp{AS_}.
+
+@printindex ms
+
+@node Concept Index,  , M4 Macro Index, Top
 @unnumbered Concept Index
 
 This is an alphabetical list of the files, tools, and concepts

@@ -14,9 +14,6 @@ Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
 
-** Document
-AC_ARG_VAR, m4_pattern_*
-
 ** RedHat's Autoconf page
 should be removed.
 

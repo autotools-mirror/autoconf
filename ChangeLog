@@ -1,3 +1,15 @@
+2001-06-18  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (ms): New index.
+	(Macro Index): Rename as...
+	(Autoconf Macro Index): this.
+	(M4 Macro Index): New appendix.
+	(Programming in M4): New chapter.
+	Define M4sugar, M4sh, m4_pattern_forbid, and m4_pattern_allow.
+	(Quoting): Rename as...
+	(M$ Quotation): this.
+	Be part of `Programming in M4).
+
 2001-06-18  Nicolas Joly  <njoly@pasteur.fr>
 
 	* tests/torture.at (AC_ARG_VAR): Set variables and export them
