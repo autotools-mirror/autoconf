@@ -3778,9 +3778,8 @@ AC_CHECK_TYPES([unsigned long long, uintmax_t])
 Autoconf, up to 2.13, used to provide to another version of
 @code{AC_CHECK_TYPE}, broken by design.  In order to keep backward
 compatibility, a simple heuristics, quite safe but not totally, is
-implemented.  In case of doubt, the reader is strongly encouraged to
-read the documentation of the former @code{AC_CHECK_TYPE}, see
-@ref{Obsolete Macros}.
+implemented.  In case of doubt, read the documentation of the former
+@code{AC_CHECK_TYPE}, see @ref{Obsolete Macros}.
 
 
 @node Compilers and Preprocessors, C Compiler Characteristics, Types, Existing Tests
@@ -7863,11 +7862,12 @@ The user is encouraged to explicitly use either
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default})
 @maindex CHECK_TYPE
-Autoconf, up to 2.13, used to provide to this version of
-@code{AC_CHECK_TYPE}, broken by design.  First, although it is a member
-of the @code{CHECK} clan, singular sub-family, it does more than just
-checking.  Second, missing types are not typedef'd, they are defined,
-which can lead to incompatible code in the case of pointer types.
+Autoconf, up to 2.13, used to provide this version of
+@code{AC_CHECK_TYPE} deprecated because of it flaws.  Firstly, although
+it is a member of the @code{CHECK} clan, singular sub-family, it does
+more than just checking.  Second, missing types are not
+@code{typedef}'d, they are @code{#define}'d, which can lead to
+incompatible code in the case of pointer types.
 
 This use of @code{AC_CHECK_TYPE} is obsolete and discouraged, see
 @ref{Generic Types}, for the description of the current macro.
@@ -7875,43 +7875,39 @@ This use of @code{AC_CHECK_TYPE} is obsolete and discouraged, see
 If the type @var{type} is not defined, define it to be the C (or C++)
 builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.
 
-This macro is equivalent to
+This macro is equivalent to:
+
 @example
 AC_CHECK_TYPE([@var{type}],
               [AC_DEFINE([@var{type}], [@var{default}],
                          [Define to `@var{default}' if <sys/types.h>
                           does not define.])])
 @end example
+
 In order to keep backward compatibility, the two versions of
 @code{AC_CHECK_TYPE} are implemented, selected by a simple heuristics:
-@itemize @bullet
+
+@enumerate
 @item
-if there are three or four arguments, the modern version is used;
+If there are three or four arguments, the modern version is used.
 
 @item
-if the second argument is a C or C++ @strong{builtin} type, then the
-obsolete version is used;
+If the second argument is a C or C++ @emph{builtin} type, then the
+obsolete version is used.  Because many people have used @samp{off_t}
+and @samp{size_t} as replacement types, they are recognized too.
 
 @item
-if the second argument is spelled with the alphabet of valid C and C++
-types, the user is warned and the modern version is used;
+If the second argument is spelled with the alphabet of valid C and C++
+types, the user is warned and the modern version is used.
 
 @item
-otherwise, the modern version is used.
-@end itemize
+Otherwise, the modern version is used.
+@end enumerate
 
 @noindent
-In particular, the following code, which was invalid but functional:
-
-@example
-AC_CHECK_TYPE(loff_t, off_t)
-@end example
-
-@noindent
-will be improperly branched to the modern implementation.  You are
-encouraged either to use a valid builtin type, or to use the equivalent
-modern code (see above), or better yet, to use @code{AC_CHECK_TYPES}
-together with
+You are encouraged either to use a valid builtin type, or to use the
+equivalent modern code (see above), or better yet, to use
+@code{AC_CHECK_TYPES} together with
 
 @example
 #if !HAVE_LOFF_T

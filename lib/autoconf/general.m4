@@ -3744,16 +3744,28 @@ define([_AC_CHECK_TYPE_OLD],
 ])# _AC_CHECK_TYPE_OLD
 
 
-# _AC_CHECK_TYPE_BUILTIN_P(STRING)
-# --------------------------------
+# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P(STRING)
+# -----------------------------------------
 # Return `1' if STRING seems to be a builtin C/C++ type, i.e., if it
 # starts with `_Bool', `bool', `char', `double', `float', `int',
 # `long', `short', `signed', or `unsigned' followed by characters
 # that are defining types.
-define([_AC_CHECK_TYPE_BUILTIN_P],
-[ifelse(regexp([$1], [^\(_Bool\|bool|\char\|double\|float\|int\|long\|short\|\(un\)?signed\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+# Because many people have used `off_t' and `size_t' too, they are added
+# for better common-useward backward compatibility.
+define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
+[ifelse(regexp([$1],
+               [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
 	0, 1, 0)dnl
-])# _AC_CHECK_TYPE_BUILTIN_P
+])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
+
+
+# _AC_CHECK_TYPE_MAYBE_TYPE_P(STRING)
+# -----------------------------------
+# Return `1' if STRING looks like a C/C++ type.
+define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
+[ifelse(regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+	0, 1, 0)dnl
+])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
 
 # AC_CHECK_TYPE(TYPE, DEFAULT)
@@ -3764,15 +3776,20 @@ define([_AC_CHECK_TYPE_BUILTIN_P],
 # -------------------------------------------------------
 #
 # Dispatch respectively to _AC_CHECK_TYPE_OLD or _AC_CHECK_TYPE_NEW.
-# 1. More than two arguments     => NEW
-# 2. $2 seems to be builtin type => OLD
-# 3. $2 seems to be a type       => NEW plus a warning
-# 4. default                     => NEW
+# 1. More than two arguments         => NEW
+# 2. $2 seems to be replacement type => OLD
+#    See _AC_CHECK_TYPE_REPLACEMENT_TYPE_P for `replacement type'.
+# 3. $2 seems to be a type           => NEW plus a warning
+# 4. default                         => NEW
 AC_DEFUN([AC_CHECK_TYPE],
-[ifelse($#, 3, [_AC_CHECK_TYPE_NEW($@)],
-        $#, 4, [_AC_CHECK_TYPE_NEW($@)],
-        _AC_CHECK_TYPE_BUILTIN_P([$2]), 1, [_AC_CHECK_TYPE_OLD($@)],
-        regexp([$2], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]), 0, [m4_warn([$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
+[ifelse($#, 3,
+           [_AC_CHECK_TYPE_NEW($@)],
+        $#, 4,
+           [_AC_CHECK_TYPE_NEW($@)],
+        _AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2]), 1,
+           [_AC_CHECK_TYPE_OLD($@)],
+        _AC_CHECK_TYPE_MAYBE_TYPE_P([$2]), 1,
+           [m4_warn([$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
         [_AC_CHECK_TYPE_NEW($@)])[]dnl
 ])# AC_CHECK_TYPE
 

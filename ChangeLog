@@ -1,3 +1,11 @@
+2000-07-24  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_CHECK_TYPE_BUILTIN_P): Add `off_t' and
+	`size_t' which are often used too.
+	Fix a bug which prevents recognition of `bool' and `char'.
+	(_AC_CHECK_TYPE_MAYBE_TYPE_P): New macro.
+	(AC_CHECK_TYPE): Use it.
+
 2000-07-19  Peter Eisentraut  <peter_e@gmx.net>
 
 	* Makefile.am: Remove INSTALL.txt by maintainer-clean target.
