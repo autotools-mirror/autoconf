@@ -1,5 +1,10 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_F77_DUMMY_MAIN): Let the interface be more
+	Autoconfy: $1 = action-if-found, $2 = action-if-not-found.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	The runtime test for AC_FUNC_GETPGRP fails when prototypes are
 	used.  Well, then use the prototypes when you can, and runtime as
 	a last resort.

@@ -4735,7 +4735,7 @@ also be necessary to link C/C++ with Fortran; see below.
 @end defmac
 
 
-@defmac AC_F77_DUMMY_MAIN (@ovar{action-if-fail}, @ovar{action-if-none}, @ovar{action-if-found})
+@defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
 @maindex F77_DUMMY_MAIN
 @cvindex F77_DUMMY_MAIN
 With many compilers, the Fortran libraries detected by
@@ -4750,14 +4750,13 @@ users often prefer to provide their own @code{main} and skip the Fortran
 library initializations.  In this case, however, one may still need to
 provide a dummy @code{MAIN__} routine in order to prevent linking errors
 on some systems.  @code{AC_F77_DUMMY_MAIN} detects whether any such
-routine is @emph{required} for linking, and what its name is.
+routine is @emph{required} for linking, and what its name is; the shell
+variable @code{F77_DUMMY_MAIN} holds this name, @code{unknown} when no
+solution was found, and @code{none} when no such dummy main is needed.
 
-If it cannot figure out how to link successfully, @code{action-if-fail}
-is executed, with the default action being to exit with an error
-message.  @code{action-if-none} is executed if no dummy main is needed
-(default: no action).  @code{action-if-found} is executed if a dummy
-main is required; the default action is to define @code{F77_DUMMY_MAIN}
-to the name of this required routine (e.g. @code{MAIN__}).
+By default, @var{action-if-found} defines @code{F77_DUMMY_MAIN} to the
+name of this routine (e.g. @code{MAIN__}) @emph{if} it is required.
+@ovar{action-if-not-found} defaults to exiting with an error.
 
 In order to link with Fortran routines, the user's C/C++ program should
 then include the following code to define the dummy main if it is
