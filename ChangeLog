@@ -1,3 +1,12 @@
+2000-03-03  Paul Eggert <eggert@twinsun.com>
+
+	Move the quadrigraphs out of the user name space.
+
+	* acgeneral.m4: 's/\@BKL@/@<:@/g', 's/\@BKR@/\@:>@/g',
+	's/\@DLR@/\@S|@/g', 's/\@PND@/@%:@/g'.
+	* acspecific.m4: Likewise.
+	* autoconf.sh: Likewise.
+
 2000-03-03  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_WHICH_A): New macro.

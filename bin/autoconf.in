@@ -240,10 +240,10 @@ case $task in
   	          { print }' |
     sed '
       /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
-      s/@BKL@/[/g
-      s/@BKR@/]/g
-      s/@DLR@/$/g
-      s/@PND@/#/g
+      s/@<:@/[/g
+      s/@:>@/]/g
+      s/@S|@/$/g
+      s/@%:@/#/g
       ' >&4
   ;; # End of the task script.
 

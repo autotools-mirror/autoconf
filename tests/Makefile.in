@@ -90,7 +90,7 @@ PERL = perl
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
-#   They produce `= val' because $1, the variable use to store the result,
+#   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
 # - AC_TRY
 #   Used in many places.

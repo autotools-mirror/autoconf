@@ -3012,7 +3012,7 @@ dnl Be optimistic at first.
 # AC_SYS_INTERPRETER
 # ------------------
 AC_DEFUN(AC_SYS_INTERPRETER,
-[AC_CACHE_CHECK(whether @PND@! works in shell scripts, ac_cv_sys_interpreter,
+[AC_CACHE_CHECK(whether @%:@! works in shell scripts, ac_cv_sys_interpreter,
 [echo '#! /bin/cat
 exit 69
 ' >conftest

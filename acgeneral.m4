@@ -553,7 +553,7 @@ ac_includes_default="\
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
-@PND@ Any additions from configure.in:])
+@%:@ Any additions from configure.in:])
 
 
 # AC_PREFIX_DEFAULT(PREFIX)
@@ -1054,9 +1054,9 @@ AC_DEFUN(AC_INIT_PREPARE,
 # 3 some systems may open it to /dev/tty
 # 4 used on the Kubota Titan
 define(AC_FD_MSG, 6)dnl
-@PND@ AC_FD_MSG checking for... messages and results
+@%:@ AC_FD_MSG checking for... messages and results
 define(AC_FD_CC, 5)dnl
-@PND@ AC_FD_CC compiler messages saved in config.log
+@%:@ AC_FD_CC compiler messages saved in config.log
 if test "$silent" = yes; then
   exec AC_FD_MSG>/dev/null
 else
@@ -1186,7 +1186,7 @@ AC_DEFUN(AC_ARG_ENABLE,
 ac_arg_enable_help="$ac_arg_enable_help
 [$2]"
 AC_DIVERT_POP()dnl
-@PND@ Check whether --enable-[$1] or --disable-[$1] was given.
+@%:@ Check whether --enable-[$1] or --disable-[$1] was given.
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
@@ -1213,7 +1213,7 @@ AC_DEFUN(AC_ARG_WITH,
 ac_arg_with_help="$ac_arg_with_help
 [$2]"
 AC_DIVERT_POP()dnl
-@PND@ Check whether --with-[$1] or --without-[$1] was given.
+@%:@ Check whether --with-[$1] or --without-[$1] was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
@@ -2277,7 +2277,7 @@ AC_DEFUN(AC_TRY_COMPILER,
 [cat >conftest.$ac_ext <<EOF
 AC_LANG_CASE([FORTRAN77], ,
 [
-@PND@line __oline__ "configure"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 ])
 [$1]
@@ -2428,7 +2428,7 @@ popdef([AC_Lib_Name])dnl
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-@PND@line __oline__ "configure"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 EOF
@@ -2470,7 +2470,7 @@ AC_DEFUN(AC_EGREP_HEADER,
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-@PND@line __oline__ "configure"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 [$2]
 EOF
@@ -2509,8 +2509,8 @@ AC_LANG_CASE([FORTRAN77],
 [$2]
       end],
 [dnl This sometimes fails to find confdefs.h, for some reason.
-dnl @PND@line __oline__ "[$]0"
-@PND@line __oline__ "configure"
+dnl @%:@line __oline__ "[$]0"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 int
@@ -2555,8 +2555,8 @@ AC_LANG_CASE([FORTRAN77],
       end
 ],
 [dnl This sometimes fails to find confdefs.h, for some reason.
-dnl @PND@line __oline__ "[$]0"
-@PND@line __oline__ "configure"
+dnl @%:@line __oline__ "[$]0"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 int
@@ -2620,7 +2620,7 @@ fi
 # Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
-@PND@line __oline__ "configure"
+@%:@line __oline__ "configure"
 #include "confdefs.h"
 AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
@@ -3438,7 +3438,7 @@ dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 dnl so uname gets run too.
 # on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
 #
-@PND@ [$]0 [$]ac_configure_args
+@%:@ [$]0 [$]ac_configure_args
 #
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.
@@ -3515,7 +3515,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 # If no file are specified by the user, then we need to provide default
 # value.  By we need to know if files were specified by the user.
 ac_need_defaults=:
-while test [\$]@PND@ != 0
+while test [\$]@%:@ != 0
 do
   case "[\$]1" in
   --*=*)
