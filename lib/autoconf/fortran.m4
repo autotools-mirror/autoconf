@@ -1094,7 +1094,7 @@ AC_LANG_POP(Fortran)dnl
 #
 # For ordinary extensions like f90, etcetera, the modified FCFLAGS
 # are currently needed for IBM's xlf* and Intel's ifc (grrr).  Unfortunately,
-* xlf* will only take flags to recognize one extension at a time, so if the
+# xlf* will only take flags to recognize one extension at a time, so if the
 # user wants to compile multiple extensions (.f90 and .f95, say), she
 # will need to use the FCFLAGS_F90 and FCFLAGS_F95 individually rather
 # than just adding them all to FCFLAGS, for example.

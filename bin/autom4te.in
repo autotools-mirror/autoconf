@@ -89,7 +89,7 @@ my $freeze = 0;
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-error "need GNU m4 1.4 or later: $m4"
+fatal "need GNU m4 1.4 or later: $m4"
   if system "$m4 --help </dev/null 2>&1 | grep reload-state >/dev/null";
 
 # Set some high recursion limit as the default limit, 250, has already
@@ -269,7 +269,7 @@ sub load_configuration ($)
       my $type = shift @words;
       if ($type eq 'begin-language:')
 	{
-	  error "$file:$.: end-language missing for: $lang"
+	  fatal "$file:$.: end-language missing for: $lang"
 	    if defined $lang;
 	  $lang = lc $words[0];
 	}
@@ -281,7 +281,7 @@ sub load_configuration ($)
 	}
       elsif ($type eq 'args:')
 	{
-	  error "$file:$.: no current language"
+	  fatal "$file:$.: no current language"
 	    unless defined $lang;
 	  push @{$language{$lang}}, @words;
 	}
@@ -360,7 +360,7 @@ sub parse_args ()
      "no-cache"  => sub { $cache = undef; },
     );
 
-  error "too few arguments
+  fatal "too few arguments
 Try `$me --help' for more information."
     unless @ARGV;
 
@@ -369,7 +369,7 @@ Try `$me --help' for more information."
   # And it implies melting: there is risk not to update properly using
   # old frozen files, and worse yet: we could load a frozen file and
   # refreeze it!  A sort of caching :)
-  error "cannot freeze and trace"
+  fatal "cannot freeze and trace"
     if $freeze && @trace;
   $melt = 1
     if $freeze;
@@ -472,7 +472,7 @@ sub handle_m4 ($@)
     {
       use File::Copy;
       move ("${file}t", "$file")
-	or error "cannot not rename ${file}t as $file: $!";
+	or fatal "cannot not rename ${file}t as $file: $!";
     }
 }
 
@@ -548,7 +548,7 @@ sub handle_output ($$)
     {
       $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
     }
-  error "cannot create $output: $!"
+  fatal "cannot create $output: $!"
     unless $out;
   my $in = new Autom4te::XFile ($ocache . $req->id);
 
@@ -922,7 +922,7 @@ sub freeze ($)
   $result =~ s/#.*\n//g;
   $result =~ s/^\n//mg;
 
-  error "freezing produced output:\n$result"
+  fatal "freezing produced output:\n$result"
     if $result;
 
   # If freezing produces output, something went wrong: a bad `divert',
@@ -951,14 +951,14 @@ parse_args;
 if ($freeze)
   {
     freeze ($output);
-    exit 0;
+    exit $exit_code;
   }
 
 # We need our cache directory.
 if (! -d "$cache")
   {
     mkdir "$cache", 0755
-      or error "cannot create $cache: $!";
+      or fatal "cannot create $cache: $!";
   }
 
 # Open the index for update, and lock it.  autom4te handles several
