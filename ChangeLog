@@ -1,5 +1,9 @@
 1998-09-27  Ben Elliston  <bje@cygnus.com>
 
+	* install-sh: Import latest version from the FSF.
+
+	* mkinstalldirs: Likewise.
+
 	* config.guess: Apply the sysconf(2) test to HP 9000/600-series,
 	9000/802, 9000/804 and 9000/892 machines.  Contributed by Pavel
 	Roskin <pavel.roskin@ecsoft.co.uk>.
