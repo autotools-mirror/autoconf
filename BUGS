@@ -15,13 +15,6 @@ address them.
 
 * Status
 
-	/*----------------------------------.
-	| Don't use it for production use.  |
-	`----------------------------------*/
-
-* Serious bugs
-
-** `make check' requires `make install'
-Currently autoconf requires autom4te to be installed.  This is very
-bad, but will be fixed.  In order to use this version of Autoconf, you
-will first have to `make install'.
+	/*--------------------------.
+	| Safe for production use.  |
+	`--------------------------*/
