@@ -318,8 +318,8 @@ dnl
 dnl Quote $1 against the right hand side of a sed substitution.
 define(AC_QUOTE_SED, [changequote({,})dnl
 dnl We use \1 instead of \& to avoid an m4 1.0.3 bug.
-dnl % and @ are commonly used as the sed s separator character.
-patsubst($1, \([&\\%@]\), \\\1){}dnl
+dnl % and @ and ! are commonly used as the sed s separator character.
+patsubst($1, \([&\\%@!]\), \\\1){}dnl
 changequote([,])])dnl
 dnl
 dnl Quote $1 against tokenization.
