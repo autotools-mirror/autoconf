@@ -1135,8 +1135,8 @@ fi
 ])# AC_FC_SRCEXT
 
 
-# AC_FC_FREEFORM([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
-# --------------------------------------------------------
+# AC_FC_FREEFORM([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+# ------------------------------------------------------------------
 # Look for a compiler flag to make the Fortran (FC) compiler accept
 # free-format source code, and adds it to FCFLAGS.  Call
 # ACTION-IF-SUCCESS (defaults to nothing) if successful (i.e. can
