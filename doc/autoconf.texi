@@ -1076,15 +1076,15 @@ how to check the results of previous tests.
 
 @defvar LDFLAGS
 @ovindex LDFLAGS
-Stripping (@samp{-s}) and any other miscellaneous options for the
-linker.  If it is not set in the environment when @code{configure} runs,
-the default value is empty.  @code{configure} uses this variable when
-linking programs to test for C features.
+Stripping (@samp{-s}), path (@samp{-L}), and any other miscellaneous
+options for the linker.  If it is not set in the environment when
+@code{configure} runs, the default value is empty.  @code{configure}
+uses this variable when linking programs to test for C features.
 @end defvar
 
 @defvar LIBS
 @ovindex LIBS
-@samp{-l} and @samp{-L} options to pass to the linker.
+@samp{-l} options to pass to the linker.
 @end defvar
 
 @node Build Directories, Automatic Remaking, Preset Output Variables, Makefile Substitutions
