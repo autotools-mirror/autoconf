@@ -1,3 +1,9 @@
+2003-09-28  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Set DUALCASE=1, for MKS sh.
+	Problem reported by Lars J. Aas in
+	<http://mail.gnu.org/archive/html/autoconf/2003-07/msg00042.html>.
+	
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_COMMANDS): Make sure the

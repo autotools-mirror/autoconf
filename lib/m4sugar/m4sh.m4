@@ -152,6 +152,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
+DUALCASE=1; export DUALCASE # for MKS sh
 
 _AS_UNSET_PREPARE
 
