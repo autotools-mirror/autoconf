@@ -4493,13 +4493,8 @@ commands @var{action-if-found}, otherwise execute
 header file is available, consider using @code{AC_CHECK_HEADERS}
 instead.
 
-Previous versions of Autoconf merely checked whether the header was
-accepted by the preprocessor.  This was changed because the old test
-was inappropriate for typical uses.  Headers are typically used to
-compile, not merely to preprocess, and the old behavior sometimes
-accepted headers that clashed at compile-time.  If you need to check
-whether a header is preprocessable, you can use @code{AC_TRY_CPP} or
-one of its variants (@pxref{Examining Declarations}).
+For compatibility issues with older versions of Autoconf, please read
+below.
 @end defmac
 
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
@@ -4512,7 +4507,34 @@ is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
+
+For compatibility issues with older versions of Autoconf, please read
+below.
 @end defmac
+
+Previous versions of Autoconf merely checked whether the header was
+accepted by the preprocessor.  This was changed because the old test was
+inappropriate for typical uses.  Headers are typically used to compile,
+not merely to preprocess, and the old behavior sometimes accepted
+headers that clashed at compile-time.  If you need to check whether a
+header is preprocessable, you can use @code{AC_TRY_CPP} or one of its
+variants (@pxref{Examining Declarations}).
+
+This scheme, which improves the robustness of the test, also requires
+that you make sure that headers that must be included before the
+@var{header-file} be part of the @var{includes}, (@pxref{Default
+Includes}).  If looking for @file{bar.h}, which requires that
+@file{foo.h} be included before if it exists, we suggest the following
+scheme:
+
+@verbatim
+AC_CHECK_HEADERS([foo.h])
+AC_CHECK_HEADERS([bar.h], [], [],
+[#if HAVE_FOO_H
+# include <foo.h>
+# endif
+])
+@end verbatim
 
 @node Declarations
 @section Declarations

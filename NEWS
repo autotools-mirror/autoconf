@@ -1,6 +1,11 @@
 * Major changes in Autoconf 2.54a                       -*- outline -*-
 
 
+** Documentation
+
+- AC_CHECK_HEADER, AC_CHECK_HEADERS
+  More information on proper use.
+
 ** autoreconf
 
 - Is more robust to different Gettext installations.
