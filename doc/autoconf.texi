@@ -6737,11 +6737,12 @@ the one they were implemented with.
 @node Quadrigraphs
 @subsection Quadrigraphs
 @cindex quadrigraphs
-@cindex @samp{@@<:@@}
-@cindex @samp{@@:>@@}
 @cindex @samp{@@S|@@}
-@cindex @samp{@@%:@@}
 @cindex @samp{@@&t@@}
+@c Info cannot handle `:' in index entries.
+@c @cindex @samp{@@<:@@}
+@c @cindex @samp{@@:>@@}
+@c @cindex @samp{@@%:@@}
 
 When writing an autoconf macro you may occasionally need to generate
 special characters that are difficult to express with the standard
@@ -7425,6 +7426,7 @@ Make the directory @var{filename}, including intervening directories
 as necessary.  This is equivalent to @samp{mkdir -p @var{filename}},
 except that it is portable to older versions of @command{mkdir} that
 lack support for the @option{-p} option.
+@end defmac
 
 @c=================================================== Writing Autoconf Macros.
 
@@ -8445,7 +8447,8 @@ Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
 portable, use @samp{$@{1+"$@@"@}}.
 
 @item $@{@var{var}:-@var{value}@}
-@cindex $@{@var{var}:-@var{value}@}
+@c Info cannot handle `:' in index entries.
+@c @cindex $@{@var{var}:-@var{value}@}
 Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 
@@ -9328,7 +9331,8 @@ Fortunately, this bug only affects @command{trap}.
 @item @command{true}
 @c -----------------
 @prindex @command{true}
-@prindex @command{:}
+@c Info cannot handle `:' in index entries.
+@c @prindex @command{:}
 Don't worry: as far as we know @command{true} is portable.
 Nevertheless, it's not always a builtin (e.g., Bash 1.x), and the
 portable shell community tends to prefer using @command{:}.  This has a
@@ -11979,7 +11983,8 @@ $
 @node New Macros
 @subsection New Macros
 
-@cindex @code{undefined macro: _m4_divert_diversion}
+@cindex undefined macro
+@cindex @code{_m4_divert_diversion}
 
 Because Autoconf has been dormant for years, Automake provided
 Autoconf-like macros for a while.  Autoconf 2.50 now provides better
