@@ -213,7 +213,7 @@ AC_TRY_COMPILER([int main(){return(0);}],
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cc_works)
 if test $ac_cv_prog_cc_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: C compiler cannot create executables.])
+  AC_MSG_ERROR([installation or configuration problem: C compiler cannot create executables.], 77)
 fi
 AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cc_cross)
@@ -232,7 +232,7 @@ AC_TRY_COMPILER([int main(){return(0);}],
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: C++ compiler cannot create executables.])
+  AC_MSG_ERROR([installation or configuration problem: C++ compiler cannot create executables.], 77)
 fi
 AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cxx_cross)
@@ -257,7 +257,7 @@ AC_TRY_COMPILER(
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_f77_works)
 if test $ac_cv_prog_f77_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: Fortran 77 compiler cannot create executables.])
+  AC_MSG_ERROR([installation or configuration problem: Fortran 77 compiler cannot create executables.], 77)
 fi
 AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_f77_cross)
@@ -2924,7 +2924,7 @@ EOF
 
       AC_TRY_LINK_FUNC(${foo_bar}, f77_underscore=double)
 
-      if test x"$f77_case" = x -o x"$f77_underscore" = x; then
+      if test x"$f77_case" = x || test x"$f77_underscore" = x; then
         ac_cv_f77_mangling="unknown"
       else
         ac_cv_f77_mangling="$f77_case case, $f77_underscore underscores"

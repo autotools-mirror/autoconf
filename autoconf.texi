@@ -2631,7 +2631,7 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the particular
 test macros.
 
-@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, o@var{includes})
+@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECL
 If the declaration of @var{symbol} (a function or a variable) is needed
 because it is not declared in @var{includes}, run the shell commands
@@ -4240,11 +4240,11 @@ This macro prints nothing if @code{configure} is run with the
 @samp{--quiet} or @samp{--silent} option.
 @end defmac
 
-@defmac AC_MSG_ERROR (@var{error-description})
+@defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
 @maindex MSG_ERROR
 Notify the user of an error that prevents @code{configure} from
 completing.  This macro prints an error message on the standard error
-output and exits @code{configure} with a nonzero status.
+output and exits @code{configure} with @var{exit-status} (1 by default).
 @var{error-description} should be something like @samp{invalid value
 $HOME for \$HOME}.
 @end defmac

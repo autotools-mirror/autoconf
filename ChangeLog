@@ -1,5 +1,16 @@
 1999-11-13  Akim Demaille  <akim@epita.fr>
 
+	Introduce a means to distinguish failures of `configure' due to
+	extern software (so that the test suite doesn't fail on them).
+
+	* acgeneral.m4 (AC_MSG_ERROR, AC_MSG_ERROR_UNQUOTED): Allow an
+	optional $2: exit status.
+	* doc/autoconf.texi: Document.
+	* acspecific.m4 (AC_PROG_CC_WORKS, PROG_CXX_WORKS,
+	AC_PROG_F77_WORKS): Exit 77 if the compiler does not work.
+
+1999-11-13  Akim Demaille  <akim@epita.fr>
+
 	Clean up a bit the handling of the LANG stack.  More is needed.
 
 	* acgeneral.m4 (AC_LANG_CASE): New macro.
