@@ -478,7 +478,7 @@ $debug ||
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
 define([AC_SHELL_UNSET],
-[$ac_unset $1 || test ${$1+set} != set || $1=$2])
+[$ac_unset $1 || test "${$1+set}" != set || $1=$2])
 
 
 # AC_SHELL_UNSETENV(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
@@ -486,7 +486,7 @@ define([AC_SHELL_UNSET],
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
 define([AC_SHELL_UNSETENV],
-[$ac_unset $1 || test ${$1+set} != set || $1=$2 && export $1])
+[$ac_unset $1 || test "${$1+set}" != set || $1=$2 && export $1])
 
 
 ## --------------------------------------------------- ##
@@ -1063,8 +1063,10 @@ do
     ac_init_help=short ;;
 
   -host | --host | --hos | --ho)
+    cross_compiling=yes
     ac_prev=host ;;
   -host=* | --host=* | --hos=* | --ho=*)
+    cross_compiling=yes
     host=$ac_optarg ;;
 
   -includedir | --includedir | --includedi | --included | --include \
@@ -1879,7 +1881,7 @@ _AC_CANONICAL_THING(build)[]dnl
 AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 [AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_DIVERT([HELP_CANON],
-[[  --host=HOST       configure for building programs running on HOST [BUILD]]])dnl
+[[  --host=HOST       cross-compile to build programs running on HOST [BUILD]]])dnl
 _AC_CANONICAL_THING(host)[]dnl
 ])# AC_CANONICAL_HOST
 

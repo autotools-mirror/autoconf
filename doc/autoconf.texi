@@ -405,8 +405,8 @@ reason, it needs to be changed in only one place; all of the
 configuration scripts can be regenerated automatically to take advantage
 of the updated code.
 
-The Metaconfig package is similar in purpose to Autoconf, but
-the scripts it produces require manual user intervention, which is quite
+The Metaconfig package is similar in purpose to Autoconf, but the
+scripts it produces require manual user intervention, which is quite
 inconvenient when configuring large source trees.  Unlike Metaconfig
 scripts, Autoconf scripts can support cross-compiling, if some care is
 taken in writing them.
@@ -2358,13 +2358,9 @@ already set, set it to @samp{-g -O2} for the @sc{gnu} C compiler
 (@samp{-O2} on systems where GCC does not accept @samp{-g}), or
 @samp{-g} for other compilers.
 
-If the C compiler being used does not produce executables that can run
-on the system where @code{configure} is being run, set the shell
-variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.  In
-other words, this tests whether the build system type is different from
-the host system type (the target system type is irrelevant to this
-test).  @xref{Manual Configuration}, for more on support for cross
-compiling.
+If the compiler being used does not produce executables, fail.  If the
+executables can't be run, and cross-compilation is not enabled, fail.
+@xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
@@ -2440,13 +2436,9 @@ already set, set it to @samp{-g -O2} for the @sc{gnu} C++ compiler
 (@samp{-O2} on systems where G++ does not accept @samp{-g}), or
 @samp{-g} for other compilers.
 
-If the C++ compiler being used does not produce executables that can run
-on the system where @code{configure} is being run, set the shell
-variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.  In
-other words, this tests whether the build system type is different from
-the host system type (the target system type is irrelevant to this
-test).  @xref{Manual Configuration}, for more on support for cross
-compiling.
+If the compiler being used does not produce executables, fail.  If the
+executables can't be run, and cross-compilation is not enabled, fail.
+@xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
@@ -2491,6 +2483,10 @@ already set in the environment, then set it to @samp{-g -02} for
 @code{g77} (or @samp{-O2} where @code{g77} does not accept @samp{-g}).
 Otherwise, set @code{FFLAGS} to @samp{-g} for all other Fortran 77
 compilers.
+
+If the compiler being used does not produce executables, fail.  If the
+executables can't be run, and cross-compilation is not enabled, fail.
+@xref{Manual Configuration}, for more on support for cross compiling.
 @end defmac
 
 @defmac AC_PROG_F77_C_O
@@ -3072,9 +3068,9 @@ functions is not found.
 
 Autoconf follows a philosophy which was hammered along the years by the
 people who fought for portability: isolate the portability issues in
-specific files, and program as if you were on a @sc{posix} host.  Some
-functions cannot be repaired or are completely missing, your package
-must be ready to replace them.
+specific files, and program as if you were in a @sc{posix} environment.
+Some functions cannot be repaired or are completely missing, your
+package must be ready to replace them.
 
 Use the two following macros to specify the function which might be
 replaced, and use the third one to check and replace a function if
@@ -4410,7 +4406,7 @@ distributed with Autoconf produce this warning message.
 To configure for cross-compiling you can also choose a value for those
 parameters based on the canonical system name (@pxref{Manual
 Configuration}).  Alternatively, set up a test results cache file with
-the correct values for the target system (@pxref{Caching Results}).
+the correct values for the host system (@pxref{Caching Results}).
 
 To provide a default for calls of @code{AC_TRY_RUN} that are embedded in
 other macros, including a few of the ones that come with Autoconf, you
@@ -4727,13 +4723,9 @@ is nonportable.  If you combine @samp{&&} and @samp{||} in the same
 statement, keep in mind that they have equal precedence.
 
 @item @command{test} (files)
-@c FIXME: Hm, I'd say the sentence should be
-@c  To enable @code{configure} scripts to support cross-compilation, they
-@c  shouldn't do anything that tests features of the build system instead of
-@c  the host system.
 To enable @code{configure} scripts to support cross-compilation, they
-shouldn't do anything that tests features of the host system instead of
-the target system.  But occasionally you may find it necessary to check
+shouldn't do anything that tests features of the build system instead of
+the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because @sc{4.3bsd} does not
 have it.
@@ -5980,6 +5972,14 @@ for the system type, which has the form:
 @var{cpu}-@var{company}-@var{system}
 @end example
 
+@noindent
+where @var{system} can have one of these forms:
+
+@example
+@var{os}
+@var{kernel}-@var{os}
+@end example
+
 @code{configure} can usually guess the canonical name for the type of
 system it's running on.  To do so it runs a script called
 @code{config.guess}, which derives the name using the @code{uname}
@@ -6003,15 +6003,23 @@ the type of system for which any compiler tools in the package will
 produce code.
 @end table
 
-By default, the build is guessed (by @code{config.guess}), the host
-system is the build system, and the target is the host system.
+By default, the build system type is guessed (by @code{config.guess}),
+the host system is the build system, and the target is the host system.
 
-If you are cross-compiling, you still have to specify the names of the
-cross-tools you use, in particular the C compiler, on the
-@code{configure} command line, e.g.,
+Using @samp{--host=@var{host-type}} enables cross-compilation to
+@var{host-type}.  You still have to specify the names of the cross-tools
+you use, in particular the C compiler, on the @code{configure} command
+line, e.g.,
 
 @example
-./configure --target=m68k-coff CC=m68k-coff-gcc
+./configure --host=m68k-coff CC=m68k-coff-gcc
+@end example
+
+@noindent
+but @code{configure} will fail with unexpected cross-compilers:
+
+@example
+./configure CC=m68k-coff-gcc
 @end example
 
 @code{configure} recognizes short aliases for many system types; for
@@ -6061,9 +6069,8 @@ run on a machine, but work on binaries from another machine.
 
 @defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
 @maindex VALIDATE_CACHED_SYSTEM_TUPLE
-If the cache file is inconsistent with the current host,
-target and build system types, execute @var{cmd} or print a default
-error message.
+If the cache file is inconsistent with the current host, target and
+build system types, execute @var{cmd} or print a default error message.
 @end defmac
 
 @node System Type Variables, Using System Type, Canonicalizing, Manual Configuration

@@ -1,5 +1,23 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	Either we cross-compile the whole package, or we don't.
+	Using --host enables cross-compilation.
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): `--host' enables cross
+	compilation.
+	(AC_CANONICAL_BUILD): The help string should explicitly mention
+	cross compilation.
+	* aclang.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Fortran 77)): Don't
+	set `cross_compiling'.
+	(AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Run your `WORK' partner
+	only if not cross-compiling.
+	(AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS, AC_PROG_F77_WORKS):
+	If does not work, don't assume an implicit cross-compilation:
+	fail.
+	* doc/autoconf.texi: Adjust.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_SHELL_UNSETENV, AC_SHELL_UNSET): Add the
 	missing quotes.
 

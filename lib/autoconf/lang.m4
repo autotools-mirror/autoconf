@@ -182,7 +182,6 @@ define([AC_LANG(C)],
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-cross_compiling=$ac_cv_prog_cc_cross
 ])
 
 
@@ -245,7 +244,6 @@ define([AC_LANG(C++)],
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
 
@@ -289,7 +287,6 @@ define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
-cross_compiling=$ac_cv_prog_f77_cross
 ])
 
 
@@ -399,7 +396,9 @@ ifval([$1],
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
-AC_PROG_CC_WORKS
+if test "$cross_compiling" != yes; then
+  AC_PROG_CC_WORKS
+fi
 AC_PROG_CC_GNU
 
 if test $ac_cv_prog_gcc = yes; then
@@ -447,7 +446,10 @@ if test $ac_cv_prog_cc_works = no; then
 fi
 AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cc_cross)
-cross_compiling=$ac_cv_prog_cc_cross
+if test $cross_compiling,$ac_cv_prog_cc_cross = no,yes; then
+  AC_MSG_ERROR([installation or configuration problem: cannot run C compiled programs.
+To enable cross compilation, use `--host'.])
+fi
 ])# AC_PROG_CC_WORKS
 
 
@@ -594,7 +596,9 @@ AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
 
-AC_PROG_CXX_WORKS
+if test "$cross_compiling" != yes; then
+  AC_PROG_CXX_WORKS
+fi
 AC_PROG_CXX_GNU
 
 if test $ac_cv_prog_gxx = yes; then
@@ -642,7 +646,10 @@ if test $ac_cv_prog_cxx_works = no; then
 fi
 AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cxx_cross)
-cross_compiling=$ac_cv_prog_cxx_cross
+if test $cross_compiling,$ac_cv_prog_cxx_cross = no,yes; then
+  AC_MSG_ERROR([installation or configuration problem: cannot run C++ compiled programs.
+To enable cross compilation, use `--host'.])
+fi
 ])# AC_PROG_CXX_WORKS
 
 
@@ -693,7 +700,9 @@ AC_DEFUN(AC_PROG_F77,
 AC_CHECK_PROGS(F77,
                m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c]))
 
-AC_PROG_F77_WORKS
+if test "$cross_compiling" != yes; then
+  AC_PROG_F77_WORKS
+fi
 AC_PROG_F77_GNU
 
 if test $ac_cv_prog_g77 = yes; then
@@ -739,7 +748,10 @@ if test $ac_cv_prog_f77_works = no; then
 fi
 AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_f77_cross)
-cross_compiling=$ac_cv_prog_f77_cross
+if test $cross_compiling,$ac_cv_prog_f77_cross = no,yes; then
+  AC_MSG_ERROR([installation or configuration problem: cannot run Fortran 77 compiled programs.
+To enable cross compilation, use `--host'.])
+fi
 ])# AC_PROG_F77_WORKS
 
 

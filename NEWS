@@ -52,6 +52,14 @@ test cases in this new frame work.
     ./configure ENV=VAR
   and then --recheck will work properly.  Variables declared with
   AC_ARG_VAR are also preserved.
+- cross-compilation
+  $build defaults to `config.guess`, $host to $build, and then $target
+  to $host.
+  Cross-compilation is a global status of the package, it no longer
+  depends upon the current language.
+  Cross compilation is enabled iff the user specified `--host'.
+  `configure' now fails if it can't run the executables it compiles,
+  unless cross-compilation is enabled.
 
 ** config.status
 - faster
