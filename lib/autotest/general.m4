@@ -1042,15 +1042,24 @@ $2[]_ATEOF
 # This may cause spurious failures when the test suite is run with `-x'.
 #
 m4_define([AT_CHECK],
-[AT_CHECK_NOESCAPE([$1],[$2],AS_ESCAPE([$3]),AS_ESCAPE([$4]),[$5],[$6])])
-
-
+[_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6],1)])
 
 # AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
 # ---------------------------------------------------------
 # Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
 # and STDERR arguments before running the comparison.
+m4_define([AT_CHECK_NOESCAPE],
+[_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6])])
+
+
+
+# _AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
+#           [RUN-IF-FAIL], [RUN-IF-PASS], SHELL_ESCAPE_IO)
+# ---------------------------------------------------------
+# Worker for AT_CHECK & AT_CHECK_NOESCAPE.  The final SHELL-ESCAPE-IO
+# argument determines whether the STDOUT & STDERR arguments will be escaped or
+# not.
 #
 #
 # Implementation Details
@@ -1075,7 +1084,7 @@ m4_define([AT_CHECK],
 #
 #  ( $at_traceon; $1 ) >at-stdout 2>at-stder1
 #
-m4_define([AT_CHECK_NOESCAPE],
+m4_define([_AT_CHECK],
 [$at_traceoff
 echo "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >$at_check_line_file
@@ -1090,14 +1099,14 @@ m4_case([$4],
 	ignore, [echo stderr:; cat $at_stderr],
 	experr, [$at_diff experr $at_stderr || at_failed=:],
 	[],     [$at_diff $at_devnull $at_stderr || at_failed=:],
-	[echo >>$at_stderr; echo "$4" | $at_diff - $at_stderr || at_failed=:])
+	[echo >>$at_stderr; echo "m4_ifval([$7],[AS_ESCAPE([$4])],[$4])" | $at_diff - $at_stderr || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
 	stdout, [echo stdout:; tee stdout <$at_stdout],
 	ignore, [echo stdout:; cat $at_stdout],
 	expout, [$at_diff expout $at_stdout || at_failed=:],
 	[],     [$at_diff $at_devnull $at_stdout || at_failed=:],
-	[echo >>$at_stdout; echo "$3" | $at_diff - $at_stdout || at_failed=:])
+	[echo >>$at_stdout; echo "m4_ifval([$7],[AS_ESCAPE([$3])],[$3])" | $at_diff - $at_stdout || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],
