@@ -1,5 +1,10 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (dir): When verbose, say what are the tools you
+	will use.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	Warnings related to obsolete constructs should be properly
 	classified.
 

@@ -200,6 +200,18 @@ if test $# -ne 0; then
   exit 1
 fi
 
+# If verbose, say what you are going to use.
+if test $verbose = echo; then
+  $autoconf --version |
+    sed "s,.*)\(.*\)$,$me: using autoconf\1: $autoconf,;1q" >&2
+  $autoheader --version |
+    sed "s,.*)\(.*\)$,$me: using autoheader\1: $autoheader,;1q" >&2
+  $automake --version |
+    sed "s,.*)\(.*\)$,$me: using automake\1: $automake,;1q" >&2
+  $aclocal --version |
+    sed "s,.*)\(.*\)$,$me: using aclocal\1: $aclocal,;1q" >&2
+fi
+
 # Dispatch autoreconf's option to the tools.
 # --localdir
 autoconf="$autoconf -l $localdir"
@@ -223,7 +235,6 @@ export autoconf_dir
 if $install; then
   automake="$automake --add-missing `$symlink || echo --copy`"
 fi
-
 
 # Trap on 0 to stop playing with `rm'.
 $debug ||
