@@ -1,3 +1,9 @@
+2003-07-31  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Work around a bug
+	in Bash 2.01.  Problem reported by Brian Gough in
+	<http://mail.gnu.org/archive/html/bug-autoconf/2003-07/msg00106.html>.
+
 2003-07-25  John W. Eaton  <jwe@bevo.che.wisc.edu>
 
 	* lib/autoconf/fortran.m4 (AC_F77_LIBRARY_LDFLAGS): Also ignore
