@@ -1,5 +1,11 @@
 2001-07-04  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Include
+	strings.h if usable with string.h.
+	Suggested by Paul Eggert.
+
+2001-07-04  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in (&scan_file): Skip FILE if there is FILE.in.
 	From Jens Petersen.
 

@@ -12,6 +12,7 @@
 ** Default includes
 - Now include stdint.h.
 - sys/types.h and sys/stat.h are guarded.
+- strings.h is included if available, and not conflicting with string.h.
 
 ** Bug fixes
 - The test suite is more robust and presents less false failures.

@@ -2820,10 +2820,9 @@ Most generic macros provide the following default set of includes:
 #  include <memory.h>
 # endif
 # include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
+#endif
+#if HAVE_STRINGS_H
+# include <strings.h>
 #endif
 #if HAVE_INTTYPES_H
 # include <inttypes.h>
@@ -2839,8 +2838,14 @@ Most generic macros provide the following default set of includes:
 @end example
 
 If the default includes are used, then Autoconf will automatically check
-for the presence of these headers, i.e., you don't need to run
-@code{AC_HEADERS_STDC}, nor check for @file{stdlib.h} etc.
+for the presence of these headers and their compatibility, i.e., you
+don't need to run @code{AC_HEADERS_STDC}, nor check for @file{stdlib.h}
+etc.
+
+These headers are checked for in the same order as they are included.
+For instance, on some systems @file{string.h} and @file{strings.h} both
+exist, but conflict.  Then @code{HAVE_STRING_H} will be defined, but
+@code{HAVE_STRINGS_H} won't.
 
 @node Alternative Programs, Libraries, Common Behavior, Existing Tests
 @section Alternative Programs
