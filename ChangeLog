@@ -1,3 +1,18 @@
+2001-10-22  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_STRERROR_R):
+	Rename ac_cv_func_strerror_r_works to ac_cv_func_strerror_r_char_p,
+	and rename HAVE_WORKING_STRERROR_R to STRERROR_R_CHAR_P, since
+	POSIX decided to standardize on the int flavor of strerror_r.
+	Always do char* test, as there's no reason not to.
+	Assign to a char* var, to catch strerror_r that returns int*.
+
+	* doc/autoconf.texi (Particular Functions):
+	Document the above changes.  Also, document the fact that
+	AC_FUNC_STRERROR_R defines HAVE_DECL_STRERROR_R.
+
+	* NEWS: Mention HAVE_WORKING_STRERROR_R -> STRERROR_R_CHAR_P.
+
 2001-10-20  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): The name of
