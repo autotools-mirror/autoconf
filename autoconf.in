@@ -364,12 +364,12 @@ case $task in
               if (index (\$0, macro))
                 {
                   delete macros [macro]
-                  undefined ("$infile", line, macro)
+                  undefined("$infile", line, macro)
                 }
             }
           close ("$infile")
           for (macro in macros)
-            undefined ("$outfile", macros [macro], macro)
+            undefined("$outfile", macros [macro], macro)
           exit 1
         }
     }

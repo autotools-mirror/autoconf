@@ -5092,13 +5092,13 @@ often possible to avoid this problem using @samp{echo "x$word"}, taking
 the @samp{x} into account later in the pipe.
 
 @table @asis
-@item @command{break}
-@cindex @command{break}
-The use of @samp{break 2} etc. is safe.
-
 @item @command{!}
 @cindex @command{!}
 You can't use @command{!}, you'll have to rewrite your code.
+
+@item @command{break}
+@cindex @command{break}
+The use of @samp{break 2} etc. is safe.
 
 @item @command{case}
 @cindex @command{case}
@@ -5353,6 +5353,21 @@ The small set of tools you can expect to find on any machine can still
 find some limitations you should be aware of.
 
 @table @asis
+@item @command{awk}
+@cindex @command{awk}
+Don't leave white spaces before the parentheses in user functions calls,
+@sc{gnu} awk will reject it:
+
+@example
+$ gawk 'function die () @{ print "Aaaaarg!"  @}
+        BEGIN @{ die () @}'
+gawk: cmd. line:2:         BEGIN @{ die () @}
+gawk: cmd. line:2:                      ^ parse error
+$ gawk 'function die () @{ print "Aaaaarg!"  @}
+        BEGIN @{ die() @}'
+Aaaaarg!
+@end example
+
 @item @command{cat}
 @cindex @command{cat}
 Don't rely on any option.

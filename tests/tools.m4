@@ -262,3 +262,28 @@ configure:3: warning: undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure)
+
+
+
+
+
+## ---------------------------- ##
+## autoconf's AWK portability.  ##
+## ---------------------------- ##
+
+AT_SETUP(AWK portability)
+
+AT_DATA([configure.in],
+[[AC_INIT
+]])
+
+if (gawk --version) >/dev/null 2>&1; then
+  # Generation of the script.
+  AT_CHECK([AWK='gawk --posix' ../autoconf --autoconf-dir .. -l $at_srcdir], 0,
+           [], [])
+  # Tracing.
+  AT_CHECK([AWK='gawk --posix' ../autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
+           ignore, [])
+fi
+
+AT_CLEANUP(configure)
