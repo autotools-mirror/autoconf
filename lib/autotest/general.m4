@@ -1040,6 +1040,7 @@ m4_define([AT_TESTED],
 # The group is testing what DESCRIPTION says.
 m4_define([AT_SETUP],
 [m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
+m4_ifdef([AT_capture_files], [m4_undefine([AT_capture_files])])
 m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], [$1])
@@ -1071,11 +1072,19 @@ m4_case([$1],
       $1 && at_xfail=yes])])])
 
 
-# AT_KEYWORDS(KEYOWRDS)
+# AT_KEYWORDS(KEYWORDS)
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 m4_define([AT_KEYWORDS],
 [m4_append_uniq([AT_keywords], [$1], [ ])])
+
+
+# AT_CAPTURE_FILE(FILE)
+# ---------------------
+# If the current test group does not behave as expected, save the contents of
+# FILE in the test suite log.
+m4_define([AT_CAPTURE_FILE],
+[m4_append_uniq([AT_capture_files], ["$1"], [ ])])
 
 
 # AT_CLEANUP
@@ -1378,7 +1387,10 @@ m4_case([$2],
       at_failed=:;;])
 esac
 AS_IF($at_failed, [$5
+  m4_ifdef([AT_capture_files],
+    [for file in AT_capture_files
+     do echo "$file:"; sed 's/^/> /' "$file"; done])
   echo 1 > "$at_status_file"
   exit 1], [$6])
 $at_traceon
-])# AT_CHECK_NOESCAPE
+])# _AT_CHECK

@@ -258,11 +258,10 @@ m4_define([AT_CHECK_AUTOHEADER],
 # `abs_top_srcdir' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
-[AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
+[AT_CAPTURE_FILE([config.log])[]dnl
+ AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
 	  [$2],
-	  m4_default([$3], [ignore]), [$4],
-	  [{ echo "$srcdir/AT_LINE: config.log"; sed 's/^/> /' config.log; } >>$at_group_log ])
-])
+	  m4_default([$3], [ignore]), [$4])])
 
 
 # AT_CHECK_ENV

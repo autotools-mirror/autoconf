@@ -1,3 +1,13 @@
+2004-12-30  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autotest/general.m4 (AT_CAPTURE_FILE): New macro.
+	(AT_SETUP): Clear AT_capture_files.
+	(_AT_CHECK): On failure, log each of AT_capture_files.  Fix comment.
+	(AT_KEYWORDS): Fix comment typo.
+	* tests/autotest.at (AT_CHECK_AT): Use AT_CAPTURE_FILE.
+	* tests/local.at (AT_CHECK_CONFIGURE): Use AT_CAPTURE_FILE.
+	* doc/autoconf.texi (Writing testsuite.at): Document AT_CAPTURE_FILE.
+
 2004-12-27  Noah Misch  <noah@cs.caltech.edu>
 
 	* BUGS (Minor Problems): Warn about makefile limitations.

@@ -30,6 +30,7 @@ m4_define([AT_CHECK_AT],
 [
 AT_SETUP([$1])
 AT_KEYWORDS([autotest])
+AT_CAPTURE_FILE([micro-suite.log])
 AT_XFAIL_IF([$3])
 
 AT_DATA([package.m4],[[

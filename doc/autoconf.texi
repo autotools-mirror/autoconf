@@ -15460,6 +15460,12 @@ other words, don't fear registering several times the same keyword in a
 test group.
 @end defmac
 
+@defmac AT_CAPTURE_FILE (@var{file})
+@atindex{CAPTURE_FILE}
+If the current test group fails, log the contents of @var{file}.
+Several identical calls within one test group have no additional effect.
+@end defmac
+
 @defmac AT_XFAIL_IF (@var{shell-condition})
 @atindex{XFAIL_IF}
 Determine whether the test is expected to fail because it is a known
