@@ -2906,7 +2906,7 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
 
 dnl Issue this section only if there were actually config files.
 dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
-dnl which are given via [$1], or AC_LIST_LINKS is set.
+dnl which are given via $[1], or AC_LIST_LINKS is set.
 ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)[$1],
 [Files to instantiate:
 ifset($1, [  Configuration files:
@@ -2987,7 +2987,7 @@ EOF
 
 dnl Issue this section only if there were actually config files.
 dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
-dnl which are given via [$1], or AC_LIST_LINKS is set.
+dnl which are given via $[1], or AC_LIST_LINKS is set.
 ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)[$1],
 [cat >> $CONFIG_STATUS <<EOF
 # If there were arguments, don't assign a default value.
