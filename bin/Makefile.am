@@ -53,46 +53,48 @@ $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
 ## All the files below depend on Makefile so that they are rebuilt
-## when the prefix etc. changes.
-autoconf: autoconf.in Makefile
+## when the prefix etc. changes.  It took quite a while to have these
+## rules correct, don't break them!  In particular, we believe there is
+## no solution to factor the code.
+autoconf: $(srcdir)/autoconf.in Makefile
 	rm -f autoconf autoconf.tmp
-	$(edit) autoconf.in >autoconf.tmp
+	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
 	mv autoconf.tmp autoconf
 
-autoheader: autoheader.in Makefile
+autoheader: $(srcdir)/autoheader.in Makefile
 	rm -f autoheader autoheader.tmp
-	$(edit) autoheader.in >autoheader.tmp
+	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
 	chmod +x autoheader.tmp
 	mv autoheader.tmp autoheader
 
-autom4te: autom4te.in Makefile
+autom4te: $(srcdir)/autom4te.in Makefile
 	rm -f autom4te autom4te.tmp
-	$(edit) autom4te.in >autom4te.tmp
+	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod +x autom4te.tmp
 	mv autom4te.tmp autom4te
 
-autoreconf: autoreconf.in Makefile
+autoreconf: $(srcdir)/autoreconf.in Makefile
 	rm -f autoreconf autoreconf.tmp
-	$(edit) autoreconf.in >autoreconf.tmp
+	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
 	chmod +x autoreconf.tmp
 	mv autoreconf.tmp autoreconf
 
-autoscan: autoscan.in Makefile
+autoscan: $(srcdir)/autoscan.in Makefile
 	rm -f autoscan autoscan.tmp
-	$(edit) autoscan.in >autoscan.tmp
+	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
 	chmod +x autoscan.tmp
 	mv autoscan.tmp autoscan
 
-autoupdate: autoupdate.in Makefile
+autoupdate: $(srcdir)/autoupdate.in Makefile
 	rm -f autoupdate autoupdate.tmp
-	$(edit) autoupdate.in >autoupdate.tmp
+	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
 	mv autoupdate.tmp autoupdate
 
-ifnames: ifnames.in Makefile
+ifnames: $(srcdir)/ifnames.in Makefile
 	rm -f ifnames ifnames.tmp
-	$(edit) ifnames.in >ifnames.tmp
+	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
 	chmod +x ifnames.tmp
 	mv ifnames.tmp ifnames
 
@@ -109,8 +111,9 @@ LETTERS = ABCDEFGHIJKLMNOPQRSTUVWXYZ
 DIGITS = 0123456789
 WORD_REGEXP = [$(LETTERS)$(letters)_][$(LETTERS)$(letters)$(DIGITS)_]*
 ETAGS_PERL = --lang=perl \
-  autoreconf.in autoupdate.in autoscan.in autom4te.in
+  autoheader.in autoreconf.in autoupdate.in autoscan.in autom4te.in \
+  ifnames.in
 ETAGS_SH = --lang=none --regex='/\($(WORD_REGEXP)\)=/\1/' \
-  autoconf.in autoheader.in ifnames.in
+  autoconf.in
 
 ETAGS_ARGS = $(ETAGS_PERL) $(ETAGS_SH)

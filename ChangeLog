@@ -1,5 +1,13 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* bin/Makefile.am (ETAGS_SH, ETAGS_PERL): Update: ifnames and
+	autoheader are Perl programs.
+	(autoconf, autoheader, autoreconf, autoupdate, ifnames, autoscan)
+	(autom4te): Specify that the sources are in the $srcdir.
+	* doc/autoconf.texi (Installation Directory Variables): Adjust.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoscan/autoscan.pre (st_blksize, st_blocks, st_rdev)
 	(tm_zone): Move their rules to...
 	* lib/autoconf/types.m4: here, using AN_ macros.

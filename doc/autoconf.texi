@@ -2250,17 +2250,17 @@ edit = sed \
 @end group
 
 @group
-autoconf: Makefile autoconf.in
+autoconf: Makefile $(srcdir)/autoconf.in
         rm -f autoconf autoconf.tmp
-        $(edit) $< >autoconf.tmp
+        $(edit) $(srcdir)/autoconf.in >autoconf.tmp
         chmod +x autoconf.tmp
         mv autoconf.tmp autoconf
 @end group
 
 @group
-autoheader: Makefile autoheader.in
+autoheader: Makefile $(srcdir)/autoheader.in
         rm -f autoheader autoheader.tmp
-        $(edit) $< >autoheader.tmp
+        $(edit) $(srcdir)/autoconf.in >autoheader.tmp
         chmod +x autoheader.tmp
         mv autoheader.tmp autoheader
 @end group
@@ -2303,6 +2303,10 @@ autoconf autoheader: Makefile
 @end example
 
 @xref{Limitations of Make}, for details.
+
+@item @samp{$(srcdir)}
+Be sure to specify the path to the sources, otherwise the package won't
+support separated builds.
 @end table
 
 
