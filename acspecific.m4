@@ -405,9 +405,7 @@ else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
 set dummy $CC; ac_cc=`echo [$]2 |
-changequote(, )dnl
-		      sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`
-changequote([, ])dnl
+		      sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [echo 'foo(){}' >conftest.c
 # Make sure it works both with $CC and with simple cc.
@@ -460,9 +458,7 @@ AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
 set dummy $F77; ac_f77=`echo [$]2 |
-changequote(, )dnl
-sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`
-changequote([, ])dnl
+sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
 [cat >conftest.f <<EOF
        program conftest
@@ -588,10 +584,8 @@ AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
-changequote(, )dnl
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
 eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
-changequote([, ])dnl
 if test -n "$ac_maketemp"; then
   eval ac_cv_prog_make_${ac_make}_set=yes
 else
@@ -1127,9 +1121,7 @@ AC_DEFUN(AC_TYPE_GETGROUPS,
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
 [AC_TRY_RUN(
-changequote(<<, >>)dnl
-<<
-/* Thanks to Mike Rendell for this test.  */
+[/* Thanks to Mike Rendell for this test.  */
 #include <sys/types.h>
 #define NGID 256
 #undef MAX
@@ -1149,8 +1141,7 @@ main ()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short but getgroups modifies an array of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
-}>>,
-changequote([, ])dnl
+}],
   ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int,
   ac_cv_type_getgroups=cross)
 if test $ac_cv_type_getgroups = cross; then
@@ -1889,16 +1880,14 @@ AC_SUBST(NEED_SETGID)dnl
 
 if test $ac_cv_func_getloadavg_setgid = yes; then
   AC_CACHE_CHECK(group of /dev/kmem, ac_cv_group_kmem,
-[changequote(, )dnl
-  # On Solaris, /dev/kmem is a symlink.  Get info on the real file.
+[ # On Solaris, /dev/kmem is a symlink.  Get info on the real file.
   ac_ls_output=`ls -lgL /dev/kmem 2>/dev/null`
   # If we got an error (system does not support symlinks), try without -L.
   test -z "$ac_ls_output" && ac_ls_output=`ls -lg /dev/kmem`
   ac_cv_group_kmem=`echo $ac_ls_output \
-    | sed -ne 's/[ 	][ 	]*/ /g;
+    | sed -ne ['s/[ 	][ 	]*/ /g;
 	       s/^.[sSrwx-]* *[0-9]* *\([^0-9]*\)  *.*/\1/;
-	       / /s/.* //;p;'`
-changequote([, ])dnl
+	       / /s/.* //;p;']`
 ])
   KMEM_GROUP=$ac_cv_group_kmem
 fi
@@ -2004,8 +1993,7 @@ AC_CHECK_HEADERS(sys/time.h unistd.h)
 AC_CHECK_FUNCS(alarm)
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 [AC_TRY_RUN(
-changequote(<<, >>)dnl
-<</* Test program from Paul Eggert (eggert@twinsun.com)
+[/* Test program from Paul Eggert (eggert@twinsun.com)
    and Tony Leneis (tony@plaza.ds.adp.com).  */
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
@@ -2150,8 +2138,7 @@ main ()
   irix_6_4_bug ();
   spring_forward_gap ();
   exit (0);
-}>>,
-changequote([, ])dnl
+}],
 ac_cv_func_working_mktime=yes, ac_cv_func_working_mktime=no,
 ac_cv_func_working_mktime=no)])
 if test $ac_cv_func_working_mktime = no; then
@@ -2298,12 +2285,11 @@ if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_TRY_LINK(
-changequote(<<, >>)dnl
-<<#include <time.h>
+[#include <time.h>
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif>>,
-changequote([, ])dnl
+#endif
+],
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
   if test $ac_cv_var_tzname = yes; then
     AC_DEFINE(HAVE_TZNAME, 1,
@@ -2750,7 +2736,6 @@ EOF
   # This will ultimately be our output variable.
   FLIBS=
 
-changequote(, )dnl
   # If we are using xlf then replace all the commas with spaces.
   if test `echo $ac_link_output | grep xlfentry >/dev/null 2>&1`; then
       ac_link_output=`echo $ac_link_output | sed 's/,/ /g'`
@@ -2783,20 +2768,16 @@ changequote(, )dnl
         case "$ac_arg" in
           /*.a)
             # Append to AC_SEEN if it's not already there.
-changequote([, ])dnl
             AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
                               ac_arg=, ac_seen="$ac_seen $ac_arg")
-changequote(, )dnl
             ;;
           -bI:*)
             # Append to AC_SEEN if it's not already there.
-changequote([, ])dnl
             AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
                               ac_arg=, [AC_LINKER_OPTION([$ac_arg], ac_seen)])
-changequote(, )dnl
             ;;
             # Ignore these flags.
-          -lang* | -lcrt0.o | -l[cm] | -lgcc | -LANG:=*)
+          -lang* | -lcrt0.o | -l[[cm]] | -lgcc | -LANG:=*)
             ac_arg=
             ;;
           -lkernel32)
@@ -2807,7 +2788,7 @@ changequote(, )dnl
               ac_seen="$ac_seen $ac_arg"
             fi
             ;;
-          -[LRu])
+          -[[LRu]])
             # These flags, when seen by themselves, take an argument.
             ac_save_arg=$ac_arg
             ac_arg=
@@ -2816,20 +2797,16 @@ changequote(, )dnl
             temp_arg=
             for ac_i in `echo $ac_arg | sed -e 's%^P,%-L%' -e 's%:% -L%g'`; do
               # Append to AC_SEEN if it's not already there.
-changequote([, ])dnl
               AC_LIST_MEMBER_OF($ac_i, $ac_seen,
                                 temp_arg="$temp_arg $ac_i",
                                 ac_seen="$ac_seen $ac_i")
-changequote(, )dnl
             done
             ac_arg="$temp_arg"
             ;;
-          -[lLR]*)
+          -[[lLR]]*)
             # Append to AC_SEEN if it's not already there.
-changequote([, ])dnl
             AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
                               ac_arg=, ac_seen="$ac_seen $ac_arg")
-changequote(, )dnl
             ;;
           *)
             # Ignore everything else.
@@ -2837,7 +2814,7 @@ changequote(, )dnl
             ;;
         esac
         ;;
-      -[LRu])
+      -[[LRu]])
         ac_arg="$ac_previous_arg $ac_arg"
         ;;
     esac
@@ -2850,10 +2827,8 @@ changequote(, )dnl
   # is seen, then we insist that the "run path" must be an absolute
   # path (i.e. it must begin with a "/").
   ac_ld_run_path=`echo $ac_link_output |
-                  sed -n -e 's%^.*LD_RUN_PATH *= *\(/[^ ]*\).*$%\1%p'`
+                  sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
   test -n "$ac_ld_run_path" && FLIBS="$ac_ld_run_path $FLIBS"
-
-changequote([, ])dnl
 
   ac_cv_flibs="$FLIBS"
 ])

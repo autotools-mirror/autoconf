@@ -1,5 +1,15 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Changequote busters II.
+	They're back to save the world.
+
+	* acspecific.m4 (AC_PROG_CC_C_O, AC_PROG_F77_C_O,
+	AC_PROG_MAKE_SET, AC_TYPE_GETGROUPS, AC_FUNC_GETLOADAVG,
+	AC_FUNC_MKTIME, AC_STRUCT_TIMEZONE, AC_F77_LIBRARY_LDFLAGS): Blast
+	that jelly o' changequote.  Set the quotes free.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Interrupting autoheader left temp files.
 	From Jim Meyering.
 
