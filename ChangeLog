@@ -1,3 +1,9 @@
+2003-05-18  Paolo Bonzini  <bonzini@gnu.org>
+
+        * tests/semantics.at (AC_SEARCH_LIBS): New test.
+	* tests/semantics.at (AC_CHECK_HEADERS_OLD,
+        AC_CHECK_HEADERS_NEW): New tests.
+
 2003-05-17  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/functions.m4: Use the default includes so that
