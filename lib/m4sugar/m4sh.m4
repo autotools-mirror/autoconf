@@ -215,7 +215,7 @@ if test "x$CONFIG_SHELL" = x; then
   AS_IF([test $as_have_required = yes && dnl
 	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
     [],
-    [as_candidate_shells="$SHELL"
+    [as_candidate_shells=
     _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
       [case $as_dir in
 	 /*)
@@ -224,7 +224,7 @@ if test "x$CONFIG_SHELL" = x; then
 	   done
        esac])
 
-      for as_shell in $as_candidate_shells; do
+      for as_shell in $as_candidate_shells ${SHELL-/bin/sh}; do
 	 AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY], [$as_shell 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
