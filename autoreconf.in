@@ -45,7 +45,7 @@ The following options are passed to \`automake':
 Report bugs to <bug-autoconf@gnu.org>."
 
 localdir=
-verbose=no
+verbose=:
 show_version=no
 force=no
 automake_mode=--gnu
@@ -54,7 +54,7 @@ automake_deps=
 test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
 
 while test $# -gt 0; do
-  case "$1" in 
+  case "$1" in
   -h | --help | --h*)
     echo "$usage"; exit 0 ;;
   --localdir=* | --l*=* )
@@ -74,7 +74,7 @@ while test $# -gt 0; do
     AC_MACRODIR="$1"
     shift ;;
   --verbose | --verb*)
-    verbose=yes; shift ;;
+    verbose=echo; shift ;;
   -f | --force)
     force=yes; shift ;;
   --version | --vers*)
@@ -133,39 +133,45 @@ while read dir; do
 
   case "$localdir" in
   "")  localdir_opt=
-       aclocal=aclocal.m4 ;;
+       aclocal_m4=aclocal.m4 ;;
   /*)  localdir_opt="--localdir=$localdir"
-       aclocal=$localdir/aclocal.m4 ;;
+       aclocal_m4=$localdir/aclocal.m4 ;;
   *)   localdir_opt="--localdir=$dots$localdir"
-       aclocal=$dots$localdir/aclocal.m4 ;;
+       aclocal_m4=$dots$localdir/aclocal.m4 ;;
   esac
 
-  # Regenerate aclocal.m4 if necessary.  FIXME: if aclocal searches
-  # nonstandard directories, we need to deal with that here.  The
-  # easiest way is to move this info into configure.in.
+  # Regenerate aclocal.m4 if necessary.
   run_aclocal=no
-  if test -f "$aclocal" &&
-     grep 'generated automatically by aclocal' $aclocal > /dev/null
+  aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
+  if test -f "$aclocal_m4" &&
+     grep 'generated automatically by aclocal' $aclocal_m4 > /dev/null
   then
      run_aclocal=yes
   else
-     if test -f `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`/acinclude.m4
+     if test -f "$aclocal_dir/acinclude.m4"
      then
 	run_aclocal=yes
      fi
   fi
   if test $run_aclocal = yes
   then
+      # If there are flags for aclocal, use them.  Makefile.am and Makefile
+      # may not exists.
+      aclocal_flags=`sed -ne '\
+/^ACLOCAL_[A-Z_]*FLAGS/{
+  s/.*=//
+  p
+  q
+}' Makefile.in 2>/dev/null`
      if test $force = no &&
-        ls -lt configure.in $aclocal \
-	       `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`/acinclude.m4 |
-	  sed 1q |
-          grep 'aclocal\.m4$' > /dev/null
+        ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null|
+	sed 1q |
+        grep 'aclocal\.m4$' > /dev/null
      then
 	:
      else
-	test $verbose = yes && echo running aclocal in $dir, creating $aclocal
-	aclocal --output=$aclocal -I `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`
+	$verbose "running aclocal $aclocal_flags in $dir, creating $aclocal_m4"
+	aclocal $aclocal_flags --output=$aclocal_m4 -I $aclocal_dir
      fi
   fi
 
@@ -175,19 +181,19 @@ while read dir; do
   then
      amforce=
      test $force = no && amforce=--no-force
-     test $verbose = yes && echo running automake`test x"$amforce" = x || echo " ($amforce)"` in $dir
+     $verbose running automake $amforce in $dir
      automake $amforce $automake_mode $automake_deps
   fi
 
-  test ! -f $aclocal && aclocal=
+  test ! -f $aclocal_m4 && aclocal_m4=
 
   if test $force = no && test -f configure &&
-    ls -lt configure configure.in $aclocal | sed 1q |
+    ls -lt configure configure.in $aclocal_m4 | sed 1q |
       grep 'configure$' > /dev/null
   then
     :
   else
-    test $verbose = yes && echo running autoconf in $dir
+    $verbose "running autoconf in $dir"
     $autoconf $macrodir_opt $localdir_opt
   fi
 
@@ -208,19 +214,24 @@ while read dir; do
     stamp=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`/stamp-h`test "$tcount" -gt 1 && echo "$tcount"`.in
     if test ! -f "$template" || grep autoheader "$template" >/dev/null; then
       if test $force = no && test -f $template &&
-	 ls -lt $template configure.in $aclocal $stamp 2>/dev/null \
+	 ls -lt $template configure.in $aclocal_m4 $stamp 2>/dev/null \
 	        `echo $localdir_opt | sed -e 's/--localdir=//' \
 		                          -e '/./ s%$%/%'`acconfig.h |
 	   sed 1q | egrep "$template$|$stamp$" > /dev/null
       then
         :
       else
-        test $verbose = yes && echo running autoheader in $dir
-        $autoheader $macrodir_opt $localdir_opt && 
-        { test $verbose != yes || echo touching $stamp; } &&
+        $verbose "running autoheader in $dir"
+        $autoheader $macrodir_opt $localdir_opt &&
+        $verbose "touching $stamp" &&
         touch $stamp
       fi
     fi
   fi
   )
 done
+
+# Local Variables:
+# mode:shell-script
+# sh-indentation:3
+# End:

@@ -250,7 +250,15 @@
 
 	* config.sub: Recognize armv[234][lb] types (ie. `armv*'). Add
 	alias for the NetWinder; set company to `corel'.
-	
+
+1999-01-11  Akim Demaille  <demaille@inf.enst.fr>
+
+	* autoreconf.sh (verbose): use either `:' or `echo'.
+	(aclocal_m4): Renamed from aclocal.
+	(aclocal_flags): New var.
+	Run aclocal using $aclocal_flags.
+	Redirect ls' stderr to /dev/null to avoid spurious messages.
+
 1999-01-11  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect HP-UX on MPE/iX machines.
