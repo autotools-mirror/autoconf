@@ -1,5 +1,10 @@
 2002-10-22  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): Remove incorrect
+	words about HP-UX cmp: it was actually a user-written cmp.
+
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
 	* tests/foreign.at (Libtool): Don't check autoconf's stderr: there
 	are a few warnings.
 	* lib/autoconf/autoheader.m4 (AH_VERBATIM, _AH_VERBATIM_OLD):

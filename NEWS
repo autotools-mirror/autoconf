@@ -26,10 +26,6 @@
 
 - Portability of the Autoconf package to Solaris.
 
-- Cache files and HP-UX
-  Because of HP-UX' cmp, cache files probably never worked properly.
-  Autoconf no longer uses cmp at all.
-
 - Spurious warnings caused by config.status.
   This bug is benign, but painful: on some systems (typically
   FreeBSD), warnings such as:
