@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate August 17, 2001
+@set lastupdate October 19, 2001
 @c %**end of header
 
 @ifinfo
@@ -116,6 +116,18 @@ Corrections or suggestions for this document should be sent to
 suggested new wording for it; our time is limited.  We prefer a context
 diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
 you don't have those files, please mail your suggestion anyway.
+
+These standards cover the minimum of what is important when writing a
+GNU package.  Likely, the needs for additional standards will come up.
+Sometimes, you might suggest that such standards be added to this
+document.  If you think your standards would be generally useful, please
+do suggest them.
+
+You should also set standards for your package on many questions not
+addressed or not firmly specified here.  The most important point is to
+be self-consistent---try to stick to the conventions you pick, and try
+to document them as much as possible.  That way, your program will be
+more maintainable by others.
 
 @node Legal Issues
 @chapter Keeping Free Software Free
@@ -891,6 +903,24 @@ which changes were made---there's no need to list the years for previous
 versions' changes.  You don't have to mention the name of the program in
 these notices, if that is inconvenient, since it appeared in the first
 line.
+
+Translations of the above lines must preserve the validity of the
+copyright notices (@pxref{Internationalization}).  If the translation's
+character set supports it, the @samp{(C)} should be replaced with the
+copyright symbol, as follows:
+
+@ifinfo 
+(the official copyright symbol, which is the letter C in a circle); 
+@end ifinfo 
+@ifnotinfo 
+@copyright{}
+@end ifnotinfo 
+
+Write the word ``Copyright'' exactly like that, in English.  Do not
+translate it into another language.  International treaties recognize
+the English word ``Copyright''; translations into other languages do not
+have legal significance.
+
 
 @cindex @samp{--help} option
 @item --help
@@ -3688,10 +3718,10 @@ free.
 @contents
 
 @bye
-Local variables:
-update-date-leading-regexp: "@c This date is automagically updated when you save this file:\n@set lastupdate "
-update-date-trailing-regexp: ""
-eval: (load "/gd/gnuorg/update-date.el")
-eval: (add-hook 'write-file-hooks 'update-date)
-compile-command: "make just-standards"
-End:
+@c Local variables:
+@c eval: (add-hook 'write-file-hooks 'time-stamp)
+@c time-stamp-start: "@set lastupdate "
+@c time-stamp-end: "$"
+@c time-stamp-format: "%:b %:d, %:y"
+@c compile-command: "make just-standards"
+@c End:

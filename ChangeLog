@@ -1,5 +1,11 @@
 2001-11-02  Akim Demaille  <akim@epita.fr>
 
+	* config/config.guess, config/config.sub, doc/standards.texi:
+	* config/lispdir.m4: Update from masters.
+	* configure.ac: Bump to 2.52f.
+
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.in (&autoreconf): Set `$aclocal_flags' to ''.
 	Don't run aclocal when aclocal.m4 is not from aclocal.
 	From Ezra Peisach.

@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.52e                       -*- outline -*-
+* Major changes in Autoconf 2.52f                       -*- outline -*-
 
 ** Requirements
 
@@ -7,6 +7,7 @@
   rewritten in Perl.
 
 ** Documentation
+
 - AC_INIT
   Argument requirements, output variables, defined macros.
 - M4sugar, M4sh, Autotest
@@ -17,6 +18,7 @@
   The Autoconf manual is now distributed under the terms of the GNU FDL.
 
 ** configure
+
 - $LINENO
   Now used instead of hard coded line numbers.
   This eases the comparison of `configure's, and diminishes the
@@ -27,9 +29,11 @@
   @top_buildpath@.
 
 ** Emacs
+
   Autoconf and Autotest modes are provided.
 
 ** Executables
+
 - autom4te
   New, used by the Autoconf suite to cache and speed up most processing.
 - --force, -f
@@ -46,11 +50,13 @@
   --m4dir is no longer supported.
 
 ** Bug fixes
+
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
 - AC_TRY_RUN
   Under the user pressure, $? is finally available.  Probably a mistake.
 
 ** C Macros
+
 - AC_C_BIGENDIAN supports the cross-compiling case.
 - AC_C_BIGENDIAN accepts ACTION-IF-TRUE, ACTION-IF-FALSE, and
   ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
@@ -58,12 +64,14 @@
   always did.
 
 ** Generic macros
+
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
   Provide the user with srcdir, ac_srcdir, ac_top_srcdir, ac_builddir,
   ac_top_builddir, ac_srcpath, ac_top_srcpath, ac_buildpath,
   ac_top_buildpath.
 
 ** Library macros
+
 - AC_FUNC_STRERROR_R now sets STRERROR_R_CHAR_P, not HAVE_WORKING_STRERROR_R,
   because POSIX 1003.1-200x draft 7 says strerror_r returns int, not char *.
 
