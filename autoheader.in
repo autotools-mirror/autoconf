@@ -114,7 +114,7 @@ while test $# -gt 0 ; do
    esac
 done
 
-acconfigs="${AC_MACRODIR}/acconfig.h"
+acconfigs=
 test -r $localdir/acconfig.h && acconfigs="${acconfigs} $localdir/acconfig.h"
 
 case $# in
@@ -125,11 +125,6 @@ esac
 
 config_h=undefined
 syms=
-types=
-funcs=
-headers=
-libs=
-decls=
 
 if test "$localdir" != .; then
   use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
@@ -194,8 +189,7 @@ if test -n "$syms"; then
   # Make sure the boundary of template files is also the boundary
   # of the paragraph.  Extra newlines don't hurt since they will
   # be removed.
-  # Undocumented useless feature: stuff outside of @TOP@ and @BOTTOM@
-  # is ignored in the systemwide acconfig.h too.
+  # Stuff outside of @TOP@ and @BOTTOM@ is ignored in all the acconfig.hs.
   for t in $acconfigs; do
     sedscript=""
     grep @TOP@ $t >/dev/null && sedscript="1,/@TOP@/d;"
