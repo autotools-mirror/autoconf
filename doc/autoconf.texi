@@ -5403,9 +5403,9 @@ Don't use @code{length}, @code{substr}, @code{match} and @code{index}.
 Don't use @samp{\?}, @samp{\+} and @samp{\|} in patterns, they are
 not supported on Solaris.
 
-Older @commant{expr} implementations (e.g. SunOS 4 @comamnd{expr} and
+Older @command{expr} implementations (e.g. SunOS 4 @command{expr} and
 Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
-@commant{expr} to fail if the matched substring is longer than 120
+@command{expr} to fail if the matched substring is longer than 120
 bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 @command{expr} fails.
 

@@ -107,8 +107,10 @@ AC_SUBST([SET_MAKE])dnl
 ])# AC_PROG_MAKE_SET
 
 
+# AC_PROG_RANLIB
+# --------------
 AC_DEFUN([AC_PROG_RANLIB],
-[AC_CHECK_PROG(RANLIB, ranlib, ranlib, :)])
+[AC_CHECK_TOOL(RANLIB, ranlib, :)])
 
 
 # Check for mawk first since it's generally faster.
