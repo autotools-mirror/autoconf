@@ -1,5 +1,10 @@
 2003-10-23  Akim Demaille  <akim@epita.fr>
 
+	Version 2.57g.
+	* config/config.guess, config/config.sub: Upgrade from masters.
+
+2003-10-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/fortran.m4 (AC_FC_SRCEXT): Functions using
 	AC_COMPILE_IFELSE that use break skip the clean up.  So do it by
 	hand...
