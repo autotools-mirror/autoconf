@@ -8027,6 +8027,9 @@ packages.
 Some of these external utilities have a portable subset of features; see
 @ref{Limitations of Usual Tools}.
 
+There are other sources of documentation about shells.  See for instance
+@href{http://www.faqs.org/faqs/unix-faq/shell/, the Shell FAQs}.
+
 @menu
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
@@ -8043,10 +8046,12 @@ Some of these external utilities have a portable subset of features; see
 @node Shellology
 @section Shellology
 
-There are several families of shells, most prominently the Bourne
-family and the C shell family which are deeply incompatible.  If you
-want to write portable shell scripts, avoid members of the C shell
-family.
+There are several families of shells, most prominently the Bourne family
+and the C shell family which are deeply incompatible.  If you want to
+write portable shell scripts, avoid members of the C shell family.  The
+@href{http://www.faqs.org/faqs/unix-faq/shell/shell-differences/, the
+Shell difference FAQ} includes a small history of Unix shells, and a
+comparison between several of them.
 
 Below we describe some of the members of the Bourne shell family.
 

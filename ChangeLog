@@ -1,5 +1,9 @@
 2002-03-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Portable Shell): Add pointers to FAQs.
+
+2002-03-26  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Introduction): The GNATS base moved.
 
 2002-03-25  Paul Eggert  <eggert@twinsun.com>
