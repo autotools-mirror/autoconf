@@ -244,9 +244,6 @@ completely with something totally different and better.  (For example,
 feature as well.  (There is a free @code{vi} clone, so we offer it.)
 
 Additional useful features not in Berkeley Unix are welcome.
-Additional programs with no counterpart in Unix may be useful,
-but our first priority is usually to duplicate what Unix already
-has.
 
 @node Using Extensions
 @section Using Non-standard Features
