@@ -1,7 +1,16 @@
+2001-01-23  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* aclang.m4 (_AC_COMPILER_EXEEXT_O): Use
+	AS_IF([AC_TRY_EVAL(ac_link)]) instead of AC_LINK_IFELSE to
+	avoid depending on ac_exeext before it's found.
+	(AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Check for the
+	executable extension BEFORE checking whether the compiler
+	works, as that test depends on a correct ac_exeext.
+
 2001-01-23  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE) <trap>: Typo.
-	
+
 2001-01-22  Pavel Roskin  <proski@gnu.org>
 
 	* autoscan.pl: Use "use strict". Declare all global variables

@@ -651,7 +651,7 @@ m4_divert_pop()dnl
 # addition to `conftest.obj'
 
 
-# We must not AU define them, because autoupdate would them remove
+# We must not AU define them, because autoupdate would then remove
 # them, which is right, but Automake 1.4 would remove the support for
 # $(EXEEXT) etc.
 # FIXME: Remove this once Automake fixed.
@@ -689,7 +689,7 @@ rm -f a.out a.exe conftest$ac_cv_exeext
 m4_define([_AC_COMPILER_EXEEXT_O],
 [# We have not set ac_exeext yet which is needed by `ac_link'.
 ac_exeext=$ac_cv_exeext
-_AC_LINK_IFELSE([],
+AS_IF([AC_TRY_EVAL(ac_link)],
 [# If both `conftest.exe' and `conftest' are `present' (well, observable)
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
 # work properly (i.e., refer to `conftest.exe'), while it won't with
@@ -878,11 +878,11 @@ fi
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CC_G
 # Some people use a C++ compiler to compile C.  Since we use `exit',
 # in C++ we need to declare it.  In case someone uses the same compiler
@@ -1082,11 +1082,11 @@ AC_CHECK_TOOLS(CXX,
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
                g++)
 
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CXX_G
 _AC_PROG_CXX_EXIT_DECLARATION
 AC_LANG_POP(C++)dnl
@@ -1204,6 +1204,8 @@ AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 pgf90 fc])])
 
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 # If we don't use `.F' as extension, the preprocessor is not run on the
 # input file.
@@ -1212,8 +1214,6 @@ ac_ext=F
 _AC_LANG_COMPILER_GNU
 ac_ext=$ac_save_ext
 G77=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_F77_G
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77
