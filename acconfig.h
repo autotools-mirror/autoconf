@@ -7,7 +7,9 @@
    your configure.in uses into your configuration header file templates.
 
    The entries are in sort -df order: alphabetical, case insensitive,
-   ignoring punctuation (such as underscores).
+   ignoring punctuation (such as underscores).  Although this order
+   can split up related entries, it makes it easier to check whether
+   a given entry is in the file.
 
    Leave the following blank line there!!  Autoheader needs it.  */
 
@@ -24,6 +26,10 @@
 
 /* Define to empty if the keyword does not work.  */
 #undef const
+
+/* Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP systems.
+   This function is required for alloca.c support on those systems.  */
+#undef CRAY_STACKSEG_END
 
 /* Define as the proper declaration for yytext.  */
 #undef DECLARE_YYTEXT
