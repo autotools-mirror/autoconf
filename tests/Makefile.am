@@ -40,7 +40,7 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 
 
 
-# EGREP_EXCLUDE
+# FILTER_MACROS
 # -------------
 # The test `syntax.m4' tries to run all the macros of Autoconf to check
 # for syntax problems, etc.  Not all the macros can be run without argument,
@@ -63,25 +63,28 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 #   Used in many places.
 # - _AC_
 #   Internal macros are used elsewhere.
-EGREP_EXCLUDE = egrep -v \
-  -e '^AC_ARG_VAR$$' \
-  -e '^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$' \
-  -e '^AC_CONFIG' \
-  -e '^AC_INIT' \
-  -e '^AC_LINKER_OPTION$$' \
-  -e '^AC_LINK_FILES$$' \
-  -e '^AC_LIST_MEMBER_OF$$' \
-  -e '^AC_PATH_(TOOL|PROG)S?$$' \
-  -e '^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$' \
-  -e '^AC_REPLACE_FUNCS$$' \
-  -e '^AC_SEARCH_LIBS$$' \
-  -e '^AC_TRY' \
-  -e '_AC_'
+#
+# Multiple `-e' to egrep are not portable, so join all the patterns together.
+# We use the fact that automake will replace all the `\\\n' with ` '.
+FILTER_MACROS = egrep -v -e \
+`echo '^AC_ARG_VAR$$\
+^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$\
+^AC_CONFIG\
+^AC_INIT\
+^AC_LINKER_OPTION$$\
+^AC_LINK_FILES$$\
+^AC_LIST_MEMBER_OF$$\
+^AC_PATH_(TOOL|PROG)S?$$\
+^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$\
+^AC_REPLACE_FUNCS$$\
+^AC_SEARCH_LIBS$$\
+^AC_TRY\
+_AC_' | tr ' ' '|'`
 
 macros.m4: $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
 	  sed -ne 's/^A[CU]_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
-	  sort | uniq | $(EGREP_EXCLUDE) >defuns
+	  sort | uniq | $(FILTER_MACROS) >defuns
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
 # them.

@@ -1,3 +1,20 @@
+2000-03-10  Akim Demaille  <akim@epita.fr>
+
+	Multiple `-e' to egrep are not portable.  On IRIX 6.5 and Solaris
+	2.5.1 only the last one is honored:
+	  > echo "foo\nbar" | egrep -e 'foo' -e 'bar'
+	  bar
+	  > echo "foo\nbar" | egrep -e 'bar' -e 'foo'
+	  foo
+	Reported by Nicolas Joly.
+	An alternative would have to use `sed', unfortunately alternation
+	is not portable.
+
+	* tests/actest.m4 (join): New macro.
+	(AC_ENV_SAVE): Join the egrep patterns into a single big one.
+	* tests/Makefile.am (EGREP_EXCLUDE): Rename as FILTER_MACROS.
+	Join the egrep patterns into a single big one.
+
 2000-03-10  Jim Meyering  <meyering@lucent.com>
 
 	* acgeneral.m4 (_AC_CHECK_TOOL_PREFIX): Correct typos in definition:

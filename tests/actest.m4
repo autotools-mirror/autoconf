@@ -1,6 +1,14 @@
 dnl actest.m4                                              -*- autoconf -*-
 dnl Additional Autoconf macros to ease testing.
 
+# join(SEP, ARG1, ARG2...)
+# ------------------------
+# Produce ARG1SEPARG2...SEPARGn.
+define(join,
+[ifelse([$#], [1], [],
+        [$#], [2], [[$2]],
+        [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
+
 
 # AC_ENV_SAVE(FILE)
 # ------------------
@@ -20,20 +28,21 @@ dnl Additional Autoconf macros to ease testing.
 
 AC_DEFUN(AC_ENV_SAVE,
 [(set) 2>&1 |
-  egrep -v \
-  -e '^ac_' \
-  -e '^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=' \
-  -e '^(LIBS|LIBOBJS|LDFLAGS)=' \
-  -e '^INSTALL(_(DATA|PROGRAM|SCRIPT))?=' \
-  -e '^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=' \
-  -e '^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|have_x)=' \
-  -e '^(host|build|target)(_(alias|cpu|vendor|os))?=' \
-  -e '^(cross_compiling)=' \
-  -e '^(interpval)=' \
-  -e '^(f77_(case|underscore))=' \
-  -e '^(ALLOCA|NEED_SETGID|KMEM_GROUP)=' \
-  -e '^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=' \
-  -e '^(_|OLDPWD|PIPESTATUS|SECONDS)=' |
+  egrep -v -e \
+'join([|],
+      [^ac_],
+      [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
+      [^(LIBS|LIBOBJS|LDFLAGS)=],
+      [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
+      [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=],
+      [^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|have_x)=],
+      [^(host|build|target)(_(alias|cpu|vendor|os))?=],
+      [^(cross_compiling)=],
+      [^(interpval)=],
+      [^(f77_(case|underscore))=],
+      [^(ALLOCA|NEED_SETGID|KMEM_GROUP)=],
+      [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
+      [^(_|OLDPWD|PIPESTATUS|SECONDS)=])' |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines
   fgrep = >$1
