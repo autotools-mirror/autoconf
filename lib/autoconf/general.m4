@@ -240,7 +240,7 @@ define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
 define([AC_DEFUN_ONCE],
 [define([$1],
 [AC_PROVIDE_IFELSE([$1],
-                   [AC_WARNING([$1 invoked multiple times])],
+                   [AC_DIAGNOSE([syntax], [$1 invoked multiple times])],
                    [AC_PRO([$1])$2[]AC_EPI()])])])
 
 
@@ -254,7 +254,7 @@ define([AC_DEFUNCT],
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
 # ------------------------------------------
 define(AC_OBSOLETE,
-[AC_WARNING([$1 is obsolete$2])])
+[AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
 
 
 # AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
@@ -280,7 +280,7 @@ define(AC_SPECIALIZE,
 # AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 # ---------------------------------------------
 define(AC_BEFORE,
-[AC_PROVIDE_IFELSE([$2], [AC_WARNING([$2 was called before $1])])])
+[AC_PROVIDE_IFELSE([$2], [AC_DIAGNOSE([syntax], [$2 was called before $1])])])
 
 
 # AC_REQUIRE(MACRO-NAME)
@@ -360,7 +360,7 @@ m4_changequote(, )m4_dnl
 # See `acobsolete.m4' for a longer description.
 define(AU_DEFUN,
 [define([$1],
-[m4_warn([The macro `$1' is obsolete.
+[AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
 $2])dnl
 AU_DEFINE([$1], [$2], [$3])dnl
@@ -500,22 +500,22 @@ define(AC_VAR_IF_SET,
 # --------------------------------
 #
 
-# The idea behind these macros is that we may sometimes have to handle
-# manifest values (e.g. `stdlib.h'), while at other moments, the same
-# code may have to get the value from a variable (e.g., `ac_header').
-# To have a uniform handling of both case, when a new value is about to
-# be processed, declare a local variable, e.g.:
+# Sometimes we may have to handle literals (e.g. `stdlib.h'), while at
+# other moments, the same code may have to get the value from a
+# variable (e.g., `ac_header').  To have a uniform handling of both
+# cases, when a new value is about to be processed, declare a local
+# variable, e.g.:
 #
 #   AC_VAR_PUSHDEF([header], [ac_cv_header_$1])
 #
-# and then in the body of the macro, use `header' as is.  It is of first
-# importance to use `AC_VAR_*' to access this variable.  Don't quote its
-# name: it must be used right away by m4.
+# and then in the body of the macro, use `header' as is.  It is of
+# first importance to use `AC_VAR_*' to access this variable.  Don't
+# quote its name: it must be used right away by m4.
 #
-# If the value `$1' was manifest (e.g. `stdlib.h'), then `header' is in
-# fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect, then
-# `header's value in m4 is in fact `$ac_header', the shell variable that
-# holds all of the magic to get the expansion right.
+# If the value `$1' was a literal (e.g. `stdlib.h'), then `header' is
+# in fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect,
+# then `header's value in m4 is in fact `$ac_header', the shell
+# variable that holds all of the magic to get the expansion right.
 #
 # At the end of the block, free the variable with
 #
@@ -548,7 +548,7 @@ define(AC_VAR_POPDEF,
 
 # The point of this section is to provide high level functions
 # comparable to m4's `translit' primitive, but m4:sh polymorphic.
-# Transliteration of manifest strings should be handled by m4, while
+# Transliteration of literal strings should be handled by m4, while
 # shell variables' content will be translated at runtime (tr or sed).
 
 # AC_TR_CPP(EXPRESSION)
@@ -762,7 +762,7 @@ define(_AC_VERSION_COMPARE,
 # Complain and exit if the Autoconf version is less than VERSION.
 define(AC_PREREQ,
 [ifelse(_AC_VERSION_COMPARE([AC_ACVERSION], [$1]), -1,
-       [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
+     [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
 
 
@@ -2081,11 +2081,45 @@ s%@$1@%%;t t])])
 # directly.  This will also avoid to some people to get it wrong
 # between AC_FATAL and AC_MSG_ERROR.
 
+
+# AC_WARNING_IFELSE(CATEGORY, IF-TRUE, IF-FALSE)
+# ----------------------------------------------
+# If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
+# IF-FALSE.  CATEGORY is enabled iff `AC_WARNING_ENABLE(CATEGORY)' or
+# `AC_WARNING_ENABLE(all)' is defined.
+define([AC_WARNING_IFELSE],
+[ifdef([AC_WARNING_ENABLE($1)], [$2],
+       [ifdef([AC_WARNING_ENABLE(all)], [$2], [$3])])])
+
+
+# _AC_DIAGNOSE(MESSAGE)
+# ---------------------
+# Report MESSAGE as a warning, unless the user requested -W error,
+# in which case report a fatal error.
+define([_AC_DIAGNOSE],
+[ifdef([AC_WARNING_ENABLE(error)],
+       [m4_fatal([$1])],
+       [m4_warn([$1])])])
+
+
+# AC_DIAGNOSE(CATEGORY, MESSAGE)
+# ------------------------------
+# Report a MESSAGE to the autoconf user if the CATEGORY of warnings
+# is requested (in fact, not disabled).
+define([AC_DIAGNOSE],
+[AC_WARNING_IFELSE([$1], [_AC_DIAGNOSE([$2])])])
+
+
 # AC_WARNING(MESSAGE)
-define(AC_WARNING, [m4_warn([$1])])
+# -------------------
+# Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
+# specified.
+define([AC_WARNING], [AC_DIAGNOSE([], [$1])])
+
 
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
-define(AC_FATAL, [m4_fatal([$1], [$2])])
+# --------------------------------
+define([AC_FATAL], [m4_fatal([$1], [$2])])
 
 
 
@@ -2112,7 +2146,8 @@ define(AC_FATAL, [m4_fatal([$1], [$2])])
 define([_AC_SH_QUOTE],
 [ifelse(regexp([[$1]], [\\`]),
         -1, [patsubst([[$1]], [`], [\\`])],
-        [AC_WARNING([backquotes should not be backslashed in: $1])dnl
+        [AC_DIAGNOSE([syntax],
+                     [backquotes should not be backslashed in: $1])dnl
 [$1]])])
 
 
@@ -2289,13 +2324,12 @@ define(AC_INCLUDES_DEFAULT,
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
 AC_DEFUN(AC_CHECK_MEMBER,
-[AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
-dnl Extract the aggregate name, and the member name
-AC_VAR_IF_INDIR([$1],
-[AC_FATAL([$0: requires manifest arguments])])
+[AC_VAR_IF_INDIR([$1], [AC_FATAL([$0: requires literal arguments])])dnl
 ifelse(regexp([$1], [\.]), -1,
        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
+AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
+dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE foo;
@@ -2867,10 +2901,10 @@ rm -f conftest*[]dnl
 # --------------------------------------------------------
 AC_DEFUN([AC_TRY_RUN],
 [if test "$cross_compiling" = yes; then
-  ifelse([$4], ,
-   [AC_WARNING([AC_TRY_RUN called without default to allow cross compiling])dnl
-  AC_MSG_ERROR(cannot run test program while cross compiling)],
-   [$4])
+  m4_default([$4],
+   [AC_DIAGNOSE([cross],
+            [AC_TRY_RUN called without default to allow cross compiling])dnl
+AC_MSG_ERROR(cannot run test program while cross compiling)])
 else
   AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])
 fi
@@ -2925,13 +2959,13 @@ done
 #
 # Check for the existence of FILE.
 AC_DEFUN(AC_CHECK_FILE,
-[AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
+[AC_DIAGNOSE([cross],
+             [Cannot check for file existence when cross compiling])dnl
+AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
 dnl FIXME: why was there this line? AC_REQUIRE([AC_PROG_CC])dnl
 AC_CACHE_CHECK([for $1], ac_File,
-[if test "$cross_compiling" = yes; then
-  AC_WARNING([Cannot check for file existence when cross compiling])dnl
+[test "$cross_compiling" = yes &&
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
-fi
 if test -r "[$1]"; then
   AC_VAR_SET(ac_File, yes)
 else

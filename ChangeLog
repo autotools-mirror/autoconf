@@ -1,5 +1,17 @@
 2000-04-12  Akim Demaille  <akim@epita.fr>
 
+	Provide a fine grained control over autoconf's warnings.
+
+	* acgeneral.m4 (AC_WARNING_IFELSE, _AC_DIAGNOSE, AC_DIAGNOSE):
+	New macros.
+	(AC_DEFUN_ONCE, AC_OBSOLETE, AC_BEFORE, AU_DEFUN, AC_PREREQ,
+	AC_WARNING, AC_FATAL, AC_TRY_RUN): Use AC_DIAGNOSE.
+	* autoconf.sh: Provide support for `--warnings', `-W'.
+	* doc/autoconf.texi (Invoking autoconf): Adjust.
+	(Reporting Messages): New section.
+
+2000-04-12  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_HELP): Move --srcdir in the first
 	section.
 	Document --help=short and recursive.

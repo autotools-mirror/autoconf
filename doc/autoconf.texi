@@ -260,7 +260,7 @@ Results of Tests
 * Defining Symbols::            Defining C preprocessor symbols
 * Setting Output Variables::    Replacing variables in output files
 * Caching Results::             Speeding up subsequent @code{configure} runs
-* Printing Messages::           Notifying users of progress or problems
+* Printing Messages::           Notifying @code{configure} users
 
 Caching Results
 
@@ -272,6 +272,7 @@ Writing Macros
 * Macro Definitions::           Basic format of an Autoconf macro
 * Macro Names::                 What to call your new macros
 * Quoting::                     Protecting macros from unwanted expansion
+* Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
 
 Quoting
@@ -869,10 +870,17 @@ definition it reads overrides the earlier ones.
 @itemx -h
 Print a summary of the command line options and exit.
 
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package file @file{aclocal.m4} in directory @var{dir}
-instead of in the current directory.
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+@itemx -v
+Report processing steps.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files.
 
 @item --macrodir=@var{dir}
 @itemx -m @var{dir}
@@ -881,30 +889,51 @@ Look for the installed macro files in directory @var{dir}.  You can also
 set the @code{AC_MACRODIR} environment variable to a directory; this
 option overrides the environment variable.
 
-@item --version
-@itemx -V
-Print the version number of Autoconf and exit.
-
-@item --trace=@var{macro}[:@var{format}]
-@itemx -t @var{macro}[:@var{format}]
-List the calls to @var{macro} according to the @var{format}.  Multiple
-@samp{--trace} list several macros.  Multiple @samp{--trace} for a
-single macro do not accumulate, nevertheless, @var{format} can be
-arbitrarily long.
-
-It is often needed to check the content of a @file{configure.in} file,
-but it is extremely fragile and error prone to try to parse it.  It is
-suggested to rely upon @samp{--trace} to scan @file{configure.in}.
-
-The @var{format} is a regular string, with new lines if wanted.  It
-defaults to @samp{$f:$l:$n:$@@}.
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package file @file{aclocal.m4} in directory @var{dir}
+instead of in the current directory.
 
 @item --output=@var{file}
 @itemx -o @var{file}
 Save output (script or trace) to @var{file}.  The file @samp{-} stands
 for the standard output.
+
+@item --warnings=@var{category}
+@itemx -W @var{category}
+@evindex WARNINGS
+Report the warnings related to @var{category} (which can actually be a
+comma separated list).  @xref{Reporting Messages}, macro
+@code{AC_DIAGNOSE}, for a comprehensive list of categories.  The special
+category @samp{all} will report all the warnings, and @samp{error}
+treats warnings as errors.
+
+The soon-do-be-standard environment variable @code{WARNINGS} is
+supported: it consists in a comma separated list of categories.  It is
+honored iff @samp{--warnings} was not used.
+
+@item --trace=@var{macro}[:@var{format}]
+@itemx -t @var{macro}[:@var{format}]
+Do not create the @code{configure} script, but list the calls to
+@var{macro} according to the @var{format}.  Multiple @samp{--trace} list
+several macros.  Multiple @samp{--trace} for a single macro do not
+accumulate, nevertheless, @var{format} can be arbitrarily long.
+
+The @var{format} is a regular string, with new lines if wanted.  It
+defaults to @samp{$f:$l:$n:$@@}, see below for details on the
+@var{format}.
+
+@item --initialization
+@itemx -i
+By default @samp{--trace} does not trace the initialization of the
+Autoconf macros (typically the @code{AC_DEFUN} definitions).  This
+results in a noticeable speedup, but can be disabled by this option.
 @end table
 
+
+It is often needed to check the content of a @file{configure.in} file,
+but it is extremely fragile and error prone to try to parse it.  It is
+suggested to rely upon @samp{--trace} to scan @file{configure.in}.
 
 The @var{format} of @samp{--trace} can use the following special
 escapes:
@@ -4548,7 +4577,7 @@ print a message letting the user know the result of the test.
 * Defining Symbols::            Defining C preprocessor symbols
 * Setting Output Variables::    Replacing variables in output files
 * Caching Results::             Speeding up subsequent @code{configure} runs
-* Printing Messages::           Notifying users of progress or problems
+* Printing Messages::           Notifying @code{configure} users
 @end menu
 
 @node Defining Symbols, Setting Output Variables, Results, Results
@@ -4873,17 +4902,13 @@ AM_PATH_GTKMM(0.9.5,, exit 1)
 
 @node Printing Messages,  , Caching Results, Results
 @section Printing Messages
+@cindex Messages, from @code{configure}
 
 @code{configure} scripts need to give users running them several kinds
 of information.  The following macros print messages in ways appropriate
 for each kind.  The arguments to all of them get enclosed in shell
-double quotes, so the shell performs variable and back quote substitution
-on them.  You can print a message containing a comma by quoting the
-message with the @code{m4} quote characters:
-
-@example
-AC_MSG_RESULT([never mind, I found the BASIC compiler])
-@end example
+double quotes, so the shell performs variable and back quote
+substitution on them.
 
 These macros are all wrappers around the @code{echo} shell command.
 @code{configure} scripts should rarely need to run @code{echo} directly
@@ -4891,6 +4916,9 @@ to print messages for the user.  Using these macros makes it easy to
 change how and when each kind of message is printed; such changes need
 only be made to the macro definitions, and all of the callers change
 automatically.
+
+To diagnose static issues, i.e., when @code{autoconf} is run, see
+@ref{Reporting Messages}.
 
 @defmac AC_MSG_CHECKING (@var{feature-description})
 @maindex MSG_CHECKING
@@ -4953,6 +4981,7 @@ Here are some instructions and guidelines for writing Autoconf macros.
 * Macro Definitions::           Basic format of an Autoconf macro
 * Macro Names::                 What to call your new macros
 * Quoting::                     Protecting macros from unwanted expansion
+* Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
 @end menu
 
@@ -5053,7 +5082,7 @@ other macro, followed by one or more words saying what the internal
 macro does.  For example, @code{AC_PATH_X} has internal macros
 @code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
 
-@node Quoting, Dependencies Between Macros, Macro Names, Writing Macros
+@node Quoting, Reporting Messages, Macro Names, Writing Macros
 @section Quoting
 @cindex quotation
 
@@ -5413,7 +5442,53 @@ this happens, the resulting @code{configure} script will contain
 unexpanded macros.  The @code{autoconf} program checks for this problem
 by doing @samp{grep AC_ configure}.
 
-@node Dependencies Between Macros,  , Quoting, Writing Macros
+
+@node Reporting Messages, Dependencies Between Macros, Quoting, Writing Macros
+@section Reporting Messages
+@cindex Messages, from @code{autoconf}
+
+When macros statically diagnose abnormal situations, benign or fatal,
+they should report them using these macros.  For dynamic issues, i.e.,
+when @code{configure} is run, see @ref{Printing Messages}.
+
+@defmac AC_DIAGNOSE (@var{category}, @var{message})
+@maindex DIAGNOSE
+Report @var{message} as a warning (or as an error if requested by the
+user) if it falls into the @var{category}.  You are encouraged to use
+standard categories, which currently include:
+
+@table @samp
+@item all
+messages that don't fall into one of the following category.  Use of an
+empty @var{category} is equivalent.
+
+@item cross
+related to cross compilation issues.
+
+@item obsolete
+use of an obsolete construct.
+
+@item syntax
+dubious syntactic constructs, incorrectly ordered macro calls.
+@end table
+@end defmac
+
+@defmac AC_WARNING (@var{message})
+@maindex WARNING
+Equivalent to @samp{AC_DIAGNOSE([], @var{message})}, but you are
+strongly encouraged to use a finer grained category.
+@end defmac
+
+@defmac AC_FATAL (@var{message})
+@maindex FATAL
+Report a severe error @var{message}, and have @code{autoconf} die.
+@end defmac
+
+When the user runs @samp{autoconf -W error}, warnings from
+@code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
+@ref{Invoking autoconf}.
+
+@node Dependencies Between Macros,  , Reporting Messages, Writing Macros
 @section Dependencies Between Macros
 
 Some Autoconf macros depend on other macros having been called first in

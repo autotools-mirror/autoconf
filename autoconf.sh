@@ -24,23 +24,34 @@
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
-Usage: autoconf [OPTION] ... [TEMPLATE-FILE]
+Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
 \`configure.in' by default.  Output is sent to the standard output if
 TEMPLATE-FILE is given, else into \`configure'.
 
-If the option \`--trace' is used, no configuration script is created.
+Operation modes:
+  -h, --help               print this help, then exit
+  -V, --version            print version number, then exit
+  -v, --verbose            verbosely report processing
+  -d, --debug              don't remove temporary files
+  -m, --macrodir=DIR       directory storing Autoconf's macro files
+  -l, --localdir=DIR       directory storing the \`aclocal.m4' file
+  -o, --output=FILE        save output in FILE (stdout is the default)
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
-  -h, --help            print this help, then exit
-  -V, --version         print version number, then exit
-  -v, --verbose         verbosely report processing
-  -d, --debug           don't remove temporary files
-  -m, --macrodir=DIR    directory storing Autoconf's macro files
-  -l, --localdir=DIR    directory storing the \`aclocal.m4' file
+Warning categories include:
+  \`cross'      cross compilation issues
+  \`obsolete'   use of obsolete macros
+  \`syntax'     dubious syntactic constructs
+  \`all'        all the warnings
+  \`error'      warnings are error
+
+Tracing:
   -t, --trace=MACRO     report the list of calls to MACRO
   -i, --initialization  also trace Autoconf's initialization process
-  -o, --output=FILE     save output in FILE (stdout is the default)
+
+In tracing mode, no configuration script is created.
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -168,6 +179,18 @@ while test $# -gt 0 ; do
        outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
 
+    --warnings | -W )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
+       shift ;;
+    --warnings=* )
+       warnings="$warnings "`echo "$1" | sed -e 's/^[^=]*=//;s/,/ /g'`
+       shift ;;
+    -W* ) # People are used to -Wall, -Werror etc.
+       warnings="$warnings "`echo "$1" | sed -e 's/^.//;s/,/ /g'`
+       shift ;;
+
     -- )     # Stop option processing
        shift; break ;;
     - )	# Use stdin as input.
@@ -181,6 +204,9 @@ while test $# -gt 0 ; do
        break ;;
   esac
 done
+
+# Support $WARNINGS.
+: ${warnings=`echo $WARNINGS | sed -e 's/,/ /g'`}
 
 # Trap on 0 to stop playing with `rm'.
 $debug ||
@@ -239,11 +265,14 @@ esac
 # Initializations are performed.  Proceed to the main task.
 case $task in
 
-  ## --------------------- ##
-  ## Generate the script.  ##
-  ## --------------------- ##
+  ## --------------------------------- ##
+  ## Generate the `configure' script.  ##
+  ## --------------------------------- ##
   script)
-  $run_m4f $infile >$tmp/configure || exit 2
+  # Enable the requested warnings.
+  warnings_opt=`echo "$warnings" |
+                sed -e 's/\([^ ][^ ]*\)/-DAC_WARNING_ENABLE(\1) /g'`
+  $run_m4f $warnings_opt $infile >$tmp/configure || exit 2
 
   # You could add your own prefixes to pattern if you wanted to check for
   # them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do
