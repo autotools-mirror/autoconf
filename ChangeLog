@@ -1,3 +1,15 @@
+2004-02-18  Paul Eggert  <eggert@twinsun.com>
+
+	Fix a dependencies problem, stemming from a Autoconf 2.59 build
+	problem on QNX reported by Stephen Rasku in
+	<http://mail.gnu.org/archive/html/bug-autoconf/2004-02/msg00066.html>.
+
+	* bin/Makefile.am ($(srcdir)/autoconf.in): Depend on
+	$(m4sh_m4f_dependencies); this removes a FIXME.
+	* tests/Makefile.am ($(srcdir)/wrapper.in): Likewise.
+	(MAINTAINERCLEANFILES): Split into pieces,
+	one per related section.  Add $(srcdir)/wrapper.in.
+
 2004-02-09  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Setting Output Variables): Emphasize that

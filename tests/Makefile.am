@@ -27,6 +27,7 @@ EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+MAINTAINERCLEANFILES = Makefile.in 
 
 # Import the dependencies on Autotest and M4sh.
 include ../lib/freeze.mk
@@ -52,7 +53,9 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 ## Wrappers.  ##
 ## ---------- ##
 
-$(srcdir)/wrapper.in: $(srcdir)/wrapper.as
+MAINTAINERCLEANFILES += $(srcdir)/wrapper.in
+
+$(srcdir)/wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
 	./autom4te --language=M4sh $(srcdir)/wrapper.as -o $@
 
 
@@ -111,7 +114,7 @@ installcheck-local:
 ## Maintainer rules.  ##
 ## ------------------ ##
 
-MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
+MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 
 ## Producing the test files.
 

@@ -54,7 +54,7 @@ edit = sed \
 
 # autoconf is written in M4sh.
 AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh --cache ''
-$(srcdir)/autoconf.in: $(srcdir)/autoconf.as # FIXME: $(m4sh_m4f_dependencies)
+$(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
 ## All the files below depend on Makefile so that they are rebuilt
