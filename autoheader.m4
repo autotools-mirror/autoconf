@@ -27,6 +27,7 @@ m4_include(acversion.m4)
 m4_include(acgeneral.m4)
 m4_include(acspecific.m4)
 m4_include(acoldnames.m4)
+m4_namespace_push(autoheader)
 
 
 # AH_DEFUN(MACRO, VALUE)

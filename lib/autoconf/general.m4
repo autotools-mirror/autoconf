@@ -55,6 +55,7 @@
 ## The diversions.  ##
 ## ---------------- ##
 
+m4_namespace_push(autoconf)
 
 # m4 output diversions.  We let m4 output them all in order at the end,
 # except that we explicitly undivert AC_DIVERSION_SED, AC_DIVERSION_CMDS,
@@ -179,6 +180,32 @@ define(AC_SPECIALIZE,
 [ifdef([$1-$2],
        [indir([$1-$2], m4_shift(m4_shift($@)))],
        [indir([$1], m4_shift($@))])])
+
+
+# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
+# -----------------------------------
+# Declare that the macro NAME is now obsoleted, and should be replaced
+# by NEW-CODE.  Tell the user she should run autoupdate, and include
+# the additional MESSAGE.
+#
+# Also define NAME as a macro which code is NEW-CODE.
+#
+# This allows to share the same code for both supporting obsoleted macros,
+# and to update a configure.in.
+# See `acobsolete.m4' for a longer description.
+define(AU_DEFUN,
+[define([$1],
+[m4_warn([The macro `$1' is obsolete.
+You should run autoupdate.])dnl
+$2])dnl
+m4_namespace_define(autoupdate, [$1],
+[m4_changequote([, ])m4_dnl
+m4_enable(libm4)m4_dnl
+m4_warn([Updating use of `$1'. $3])m4_dnl
+$2[]m4_dnl
+m4_disable(libm4)m4_dnl
+m4_changequote(, )m4_dnl
+])])
 
 
 ## ----------------------------- ##
@@ -400,6 +427,7 @@ define(AC_TR_SH,
 #    => -active--b--active-end
 define([AC_FOREACH],
 [m4_foreach([$1], (m4_split(m4_strip(m4_join([$2])))), [$3])])
+
 
 
 
@@ -1170,10 +1198,9 @@ ifelse([$4], , , [else
 fi
 ])
 
-AC_DEFUN(AC_ENABLE,
-[AC_OBSOLETE([$0], [; instead use AC_ARG_ENABLE])dnl
-AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])dnl
-])
+
+AU_DEFUN(AC_ENABLE,
+[AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])])
 
 
 ## ------------------------------ ##
@@ -1198,10 +1225,8 @@ ifelse([$4], , , [else
 fi
 ])
 
-AC_DEFUN(AC_WITH,
-[AC_OBSOLETE([$0], [; instead use AC_ARG_WITH])dnl
-AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
-])
+AU_DEFUN(AC_WITH,
+[AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])])
 
 
 
@@ -2959,6 +2984,7 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 ])])])dnl
 ])dnl
 
+
 # Initialize the list.
 define([AC_LIST_LINKS])
 define([AC_LIST_LINKS_COMMANDS])
@@ -2968,22 +2994,21 @@ define([AC_LIST_LINKS_COMMANDS])
 # ---------------------------------
 # Link each of the existing files SOURCE... to the corresponding
 # link name in DEST...
-AC_DEFUN(AC_LINK_FILES,
-[AC_OBSOLETE([$0], [; instead use AC_CONFIG_LINKS(DEST:SOURCE...)])dnl
-ifelse($#, 2, ,
-  [AC_FATAL([$0: incorrect number of arguments])])dnl
+AU_DEFUN([AC_LINK_FILES],
+[ifelse($#, 2, ,
+        [m4_fatal([$0: incorrect number of arguments])])dnl
+pushdef([AC_Srcs], m4_split(m4_strip(m4_join([$1]))))dnl
+pushdef([AC_Dsts], m4_split(m4_strip(m4_join([$2]))))dnl
 dnl
-pushdef([AC_Sources], m4_split(m4_strip(m4_join([$1]))))dnl
-pushdef([AC_Dests], m4_split(m4_strip(m4_join([$2]))))dnl
+m4_foreach([AC_Dummy], (AC_Srcs),
+[AC_CONFIG_LINKS(m4_car(AC_Dsts):m4_car(AC_Srcs))dnl
+define([AC_Srcs], m4_shift(AC_Srcs))dnl
+define([AC_Dsts], m4_shift(AC_Dsts))])dnl
 dnl
-m4_foreach([AC_Dummy], (AC_Sources),
-[AC_CONFIG_LINKS(m4_car(AC_Dests):m4_car(AC_Sources))
-define([AC_Sources], m4_quote(m4_shift(AC_Sources)))
-define([AC_Dests], m4_quote(m4_shift(AC_Dests)))])dnl
-dnl
-popdef([AC_Sources])dnl
-popdef([AC_Dests])dnl
+popdef([AC_Srcs])dnl
+popdef([AC_Dsts])dnl
 ])# AC_LINK_FILES
+
 
 
 # AC_CONFIG_FILES(FILE...[, COMMANDS])
@@ -3011,6 +3036,8 @@ ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 # Initialize the lists.
 define([AC_LIST_FILES])
 define([AC_LIST_FILES_COMMANDS])
+
+
 
 # AC_CONFIG_COMMANDS(NAME..., COMMANDS)
 # -------------------------------------

@@ -2,7 +2,7 @@
 
 cat <<EOF
 
-Syntax of macros and completeness of the header templates.
+Syntax of macros and completeness of header templates.
 
 EOF
 

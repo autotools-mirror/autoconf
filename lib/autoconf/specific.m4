@@ -3461,9 +3461,8 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 ])
 
 # The old Cygwin32 macro is deprecated.
-AC_DEFUN(AC_CYGWIN32,
-[AC_OBSOLETE([$0], [; instead use AC_CYGWIN])dnl
-AC_CYGWIN])
+AU_DEFUN(AC_CYGWIN32,
+[AC_CYGWIN])
 
 
 # AC_CYGWIN

@@ -2,7 +2,7 @@
 
 cat <<EOF
 
-Checking the semantics of some macros.
+Semantics.
 
 EOF
 

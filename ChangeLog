@@ -1,5 +1,31 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Revamp the autoupdate/AC_OBSOLETE chain.  All the details are
+	given in the prologue of acobsolete.m4.
+
+	* acgeneral.m4 (Prologue): Enter the `autoconf' name space.
+	(AU_DEFUN): New macro.
+
+	* autoupdate.m4: New file.
+	Disable the name spaces `autoconf', and `libm4'.  Disable libm4.
+	* Makefile.am: Tuned to support the changes above.
+
+	* autoupdate.sh: Model after autoconf.sh.
+	Can run on several files at once (for instance m4/*.m4).
+	Don't touch files that are up to date.
+	Run m4 on autoupdate.m4f instead of playing with sed.
+
+
+	Use AU_DEFUN.
+
+	* acgeneral.m4 (AC_LINK_FILES, AC_ENABLE, AC_WITH): Use AU_DEFUN,
+	remove the call to AC_OBSOLETE.
+	* acspecific.m4 (AC_CYGWIN32): Likewise.
+	* acoldnames.m4: Replaced all the definitions via `define' or
+	`AC_DEFUN' to use `AU_DEFUN'.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Clean up some m4 files.
 
 	* acoldnames.m4: Use `#', not `dnl'.
