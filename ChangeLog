@@ -1,5 +1,13 @@
 2001-06-12  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.in (&output_kind): Output the comment only if it exists.
+	(%kind_comment): Add entry for `programs'.
+	(&output_programs): Use &output_kind.
+	(&output_functions, &output_identifiers, &output_headers)
+	(&output_programs): Inline, and remove.
+
+2001-06-12  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in (%kind_comment): New.
 	(output_kind): New.
 	(output_functions, output_identifiers, output_headers): Use it.

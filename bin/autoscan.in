@@ -58,6 +58,7 @@ my %kind_comment =
    'functions' => 'Checks for library functions.',
    'headers' => 'Checks for header files.',
    'identifiers' => 'Checks for typedefs, structures, and compiler characteristics.',
+   'programs' => 'Checks for programs.',
   );
 
 my $configure_scan = 'configure.scan';
@@ -451,12 +452,14 @@ sub output_kind ($)
   my ($kind) = @_;
   my @have;
 
-  print CONF "\n# $kind_comment{$kind}\n";
+  print CONF "\n# $kind_comment{$kind}\n"
+    if exists $kind_comment{$kind};
   foreach my $word (sort keys %{$used{$kind}})
     {
       if (defined $macro{$kind}{$word})
 	{
-	  if ($macro{$kind}{$word} eq $generic_macro{$kind})
+	  if (exists $generic_macro{$kind}
+	      && $macro{$kind}{$word} eq $generic_macro{$kind})
 	    {
 	      push (@have, $word);
 	      push (@{$needed_macros{"$generic_macro{$kind}([$word])"}},
@@ -473,23 +476,6 @@ sub output_kind ($)
 }
 
 
-
-# output_programs ()
-# ------------------
-sub output_programs ()
-{
-  print CONF "\n# Checks for programs.\n";
-  foreach my $word (sort keys %{$used{'programs'}})
-    {
-      print_unique ('programs', $word);
-    }
-  foreach my $word (sort keys %{$used{'makevars'}})
-    {
-      print_unique ('makevars', $word);
-    }
-}
-
-
 # output_libraries ()
 # -------------------
 sub output_libraries ()
@@ -500,30 +486,6 @@ sub output_libraries ()
       print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
       print CONF "AC_CHECK_LIB([$word], [main])\n";
     }
-}
-
-
-# output_headers ()
-# -----------------
-sub output_headers ()
-{
-  output_kind ('headers');
-}
-
-
-# output_identifiers ()
-# ---------------------
-sub output_identifiers ()
-{
-  output_kind ('identifiers');
-}
-
-
-# output_functions ()
-# -------------------
-sub output_functions ()
-{
-  output_kind ('functions');
 }
 
 
@@ -549,11 +511,12 @@ sub output ($)
       print CONF "AC_CONFIG_HEADER([config.h])\n";
     }
 
-  output_programs;
+  output_kind ('programs');
+  output_kind ('makevars');
   output_libraries;
-  output_headers;
-  output_identifiers;
-  output_functions;
+  output_kind ('headers');
+  output_kind ('identifiers');
+  output_kind ('functions');
 
   # Change DIR/Makefile.in to DIR/Makefile.
   foreach my $m (@makefiles)
