@@ -1,3 +1,8 @@
+1999-07-20  Tom Tromey  <tromey@cygnus.com>
+
+	* autoheader.sh: Fixed regexp when searching for missing symbol.
+	From Pavel Roskin.
+
 1999-07-16  Tom Tromey  <tromey@cygnus.com>
 
 	* autoheader.sh: Be more stringent when looking to see if symbol

@@ -267,7 +267,7 @@ status=0
 
 if test -n "$syms"; then
   for sym in $syms; do
-    if grep "^#[a-z]*[ 	]$sym\\>" $TEMPLATES >/dev/null; then
+    if grep "^#[a-z]*[ 	]$sym[ 	]*$" $TEMPLATES >/dev/null; then
       : # All is well.
     else
       echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2
