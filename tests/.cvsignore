@@ -10,5 +10,6 @@ debug-*.sh
 dst1 dst2 src1 src2
 empty
 macros.m4
+mycpp
 state*
-testsuite testsuite.log
+testsuite testsuite.log testsuite.tmp
