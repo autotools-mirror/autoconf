@@ -1,3 +1,11 @@
+2003-08-19  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotest/general.m4: Comment various HELP_* diversions.
+	(PARSE_ARGS_BEGIN): New section for option parsing related
+	initialization.
+	(AT_ARG_OPTION,AT_ARG_OPTION_ARG,_AT_ARG_OPTION): New macros to define
+	package specific options and associated help.
+
 2003-08-19  Akim Demaille  <akim@epita.fr>
 
 	* config/announce-gen, Makefile.cfg: New.
