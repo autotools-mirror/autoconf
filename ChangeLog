@@ -1,3 +1,8 @@
+2005-01-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Warn about
+	sed 'command1;command2'.  Problem reported by Ralf Wildenhues.
+
 2005-01-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in,
