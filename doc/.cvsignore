@@ -10,6 +10,8 @@
 *.ma *.mas
 *.ov *.ovs
 *.pg
+*.ps
+*.pdf
 *.tmp
 *.toc
 *.tp
