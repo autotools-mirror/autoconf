@@ -582,8 +582,9 @@ AC_SUBST(NEED_SETGID)NEED_SETGID=false
 need_func=true
 
 # Check for the 4.4BSD definition of getloadavg.
-AC_HAVE_LIBRARY(util, AC_HAVE_LIBRARY(kvm,
-LIBS="$LIBS -lutil -lkvm" need_func=false))
+AC_HAVE_LIBRARY(util, LIBS="$LIBS -lutil" need_func=false)
+# Some systems with -lutil have (and need) -lkvm as well, some do not.
+AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm")
 
 if $need_func; then
 # There is a commonly available library for RS/6000 AIX.
