@@ -37,7 +37,7 @@ Operation modes:
   -d, --debug     don't remove temporary files
   -f, --force     consider every files are obsolete
   -i, --install   copy missing auxiliary files
-      --symlink   instead of copying, install symbolic links
+  -s, --symlink   instead of copying, install symbolic links
 
 The option \`--install' is similar to the option \`--add-missing' in
 other tools.
@@ -173,7 +173,7 @@ while test $# -gt 0; do
 
      --install | -i )
        install=:; shift ;;
-     --symlink )
+     --symlink | --symbolic | -s )
        symlink=:; shift ;;
 
      # Options of Automake.

@@ -1,5 +1,9 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh: Accept --symbolic and -s.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	Make it clear that the regular user does not need --macrodir.
 	In fact, rename this option as -A, --autoconf-dir.
 
