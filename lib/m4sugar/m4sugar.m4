@@ -1377,6 +1377,22 @@ m4_define([m4_strip],
           [ \(.\)$], [\1])])
 
 
+# m4_normalize(STRING)
+# --------------------
+# Apply m4_flatten and m4_strip to STRING.
+#
+# The argument is quoted, so that the macro is robust to active symbols:
+#
+#    m4_define(active, ACTIVE)
+#    m4_normalize([  act\
+#    ive
+#    active ])end
+#    => active activeend
+
+m4_define([m4_normalize],
+[m4_strip(m4_flatten([$1]))])
+
+
 
 # m4_join(SEP, ARG1, ARG2...)
 # ---------------------------
@@ -1495,7 +1511,7 @@ m4_Prefix1[]dnl
 m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
-m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_flatten([$1])))),
+m4_foreach_quoted([m4_Word], (m4_split(m4_normalize([$1]))),
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.

@@ -1,3 +1,13 @@
+2001-01-17  Pavel Roskin  <proski@gnu.org>
+
+	* m4sugar.m4 (m4_normalize): New macro - superposition of
+	m4_flatten and m4_strip.
+	(m4_join): Use m4_normalize.
+	* acgeneral.m4 (AC_FOREACH): Use m4_normalize.
+	(AC_CONFIG_HEADERS): Normalize the first argument.
+	(AC_CONFIG_LINKS): Likewise.
+	(AC_CONFIG_SUBDIRS): Likewise.
+
 2001-01-17  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_sub_srcdir in case

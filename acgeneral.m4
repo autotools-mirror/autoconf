@@ -503,7 +503,7 @@ m4_define([AC_TR_SH],
 #    ive  ], [-Var-])end
 #    => -active--b--active-end
 m4_define([AC_FOREACH],
-[m4_foreach([$1], m4_split(m4_strip(m4_flatten([$2]))), [$3])])
+[m4_foreach([$1], m4_split(m4_normalize([$2])), [$3])])
 
 
 
@@ -3589,7 +3589,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
-ac_config_headers="$ac_config_headers $1"
+ac_config_headers="$ac_config_headers m4_normalize([$1])"
 ])dnl
 
 # Initialize to empty.  It is much easier and uniform to have a config
@@ -3626,7 +3626,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
-ac_config_links="$ac_config_links $1"
+ac_config_links="$ac_config_links m4_normalize([$1])"
 ])dnl
 
 
@@ -3697,7 +3697,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
-ac_config_files="$ac_config_files $1"
+ac_config_files="$ac_config_files m4_normalize([$1])"
 ])dnl
 
 # Initialize the lists.
@@ -3723,7 +3723,8 @@ AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
 AS_LITERAL_IF([$1], [],
               [AC_DIAGNOSE(syntax, [$0: you should use literals])])
-m4_divert_text([DEFAULTS], [ac_subdirs_all="$ac_subdirs_all $1"])
+m4_divert_text([DEFAULTS],
+               [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
 
