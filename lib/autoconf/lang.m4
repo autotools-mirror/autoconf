@@ -478,8 +478,7 @@ do
         break;;
   esac
 done],
-      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+      [_AC_MSG_LOG_CONFTEST
 AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
 ac_exeext=$ac_cv_exeext
 AC_MSG_RESULT([$ac_file])
@@ -597,8 +596,7 @@ AS_IF([AC_TRY_EVAL(ac_compile)],
        break;;
   esac
 done],
-      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+      [_AC_MSG_LOG_CONFTEST
 AC_MSG_FAILURE([cannot compute suffix of object files: cannot compile])])
 rm -f conftest.$ac_cv_objext conftest.$ac_ext])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl

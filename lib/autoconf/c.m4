@@ -121,7 +121,11 @@ m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 # #line $LINENO "$[0]"
 m4_define([AC_LANG_SOURCE(C)],
 [#line $LINENO "configure"
-#include "confdefs.h"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
 $1])
 
 

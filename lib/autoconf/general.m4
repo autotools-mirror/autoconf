@@ -1972,6 +1972,15 @@ m4_define([AC_MSG_FAILURE],
 [AC_MSG_ERROR([$1
 See `config.log' for more details.], [$2])])
 
+
+# _AC_MSG_LOG_CONFTEST
+# --------------------
+m4_define([_AC_MSG_LOG_CONFTEST],
+[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+sed 's/^/| /' conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+])
+
+
 # AU::AC_CHECKING(FEATURE)
 # ------------------------
 AU_DEFUN([AC_CHECKING],
@@ -2090,8 +2099,7 @@ fi
 if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
-  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+  _AC_MSG_LOG_CONFTEST
   $3
 fi
 rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
@@ -2166,8 +2174,7 @@ rm -f conftest.$ac_objext
 AS_IF([AC_TRY_EVAL(ac_compile) &&
          AC_TRY_COMMAND([test -s conftest.$ac_objext])],
       [$2],
-      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+      [_AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],[$3])dnl])dnl
 rm -f conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
@@ -2206,8 +2213,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext
 AS_IF([AC_TRY_EVAL(ac_link) &&
          AC_TRY_COMMAND([test -s conftest$ac_exeext])],
       [$2],
-      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+      [_AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3], [$3])dnl])[]dnl
 rm -f conftest.$ac_objext conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
@@ -2260,8 +2266,7 @@ rm -f conftest$ac_exeext
 AS_IF([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
       [$2],
       [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
-echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+_AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],
           [( exit $ac_status )
 $3])dnl])[]dnl
