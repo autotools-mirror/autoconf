@@ -1,5 +1,10 @@
 2004-08-19  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C),
+	AC_C_LONG_DOUBLE): Undo 2004-06-04 change, as it didn't work with
+	HP-UX 11.23 cc/aCC or Tru64 4.0 cc.  Problem reported by Noah Misch in
+	<http://lists.gnu.org/archive/html/autoconf/2004-07/msg00004.html>.
+
 	More fixes to support spaces in the name of the build directory.
 	This isn't a complete fix but it's an improvement.
 
