@@ -34,9 +34,6 @@
    This function is required for alloca.c support on those systems.  */
 #undef CRAY_STACKSEG_END
 
-/* Define as the proper declaration for yytext.  */
-#undef DECLARE_YYTEXT
-
 /* Define for DGUX with <sys/dg_sys_info.h>.  */
 #undef DGUX
 
@@ -244,6 +241,9 @@
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
+
+/* Define if lex declares yytext as a char * by default, not a char[].  */
+#undef YYTEXT_POINTER
 
 
 /* Leave that blank line there!!  Autoheader needs it.
