@@ -1,5 +1,11 @@
 2002-11-06  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY): Wrap the `f'
+	declaration in extern "C" too.
+	Reported by Roberto Bagnara.
+
+2002-11-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (Configuring subdirectories): Don't use grep
 	-w.
 	* doc/autoconf.texi (Limitations of Usual Tools): Grep -w.

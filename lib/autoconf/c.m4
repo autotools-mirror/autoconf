@@ -173,11 +173,15 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
+{
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
 char $1 ();
 char (*f) ();
+#ifdef __cplusplus
+}
+#endif
 ],
 [/* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
