@@ -2629,8 +2629,7 @@ fi])
 # prefix. If none can be found with a cross prefix, then use
 # the first one that was found without the cross prefix.
 AC_DEFUN([AC_CHECK_TOOLS],
-[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
-ac_check_tools_first_found=
+[ac_check_tools_first_found=
 for ac_prog in $2
 do
 AC_CHECK_PROG([$1], ${ac_tool_prefix}$ac_prog,
