@@ -29,6 +29,7 @@ Major changes in release 2.0:
   files when they are not enclosed in @ signs.
 * AC_OUTPUT allows the optional environment variable CONFIG_STATUS to
   override the file name "config.status".
+* AC_OUTPUT and AC_CONFIG_HEADER allow you to override the input-file names.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
   AC_CONFIG_AUXDIR, or srcdir or srcdir/.. or srcdir/../.. by default.
 
@@ -43,6 +44,9 @@ Major changes in release 2.0:
   configure. 
 * ifnames to list the symbols used in #if and #ifdef directives in a
   source tree.
+
+* Changed utilities:
+* autoheader can take pieces of acconfig.h to replace config.h.{top,bot}.
 
 Major changes in release 1.11:
 

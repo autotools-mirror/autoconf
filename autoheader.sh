@@ -158,11 +158,20 @@ if test $# -eq 0; then
   exec > $tmpout
 fi
 
+# Support "outfile[:infile]", defaulting infile="outfile.in".
+case "$config_h" in
+*:*) config_h_in=`echo "$config_h"|sed 's%.*:%%'`
+     config_h=`echo "$config_h"|sed 's%:.*%%'` ;;
+*) config_h_in="${config_h}.in" ;;
+esac
+
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-echo "/* ${config_h}.in.  Generated automatically from $infile by autoheader.  */"
+echo "/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */"
 
-test -f ${config_h}.top && cat ${config_h}.top
+test -r ${config_h}.top && cat ${config_h}.top
+test -r acconfig.h && grep @TOP@ acconfig.h >/dev/null &&
+  sed '/@TOP@/,$d' acconfig.h
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
@@ -217,6 +226,8 @@ for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
 #undef HAVE_LIB${sym}"
 done
 
+test -r acconfig.h && grep @BOTTOM@ acconfig.h >/dev/null &&
+  sed '1,/@BOTTOM@/d' acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
 
 status=0
@@ -232,10 +243,10 @@ done
 
 if test $# -eq 0; then
   if test $status -eq 0; then
-    if cmp -s $tmpout ${config_h}.in; then
+    if cmp -s $tmpout ${config_h_in}; then
       rm -f $tmpout
     else
-      mv -f $tmpout ${config_h}.in
+      mv -f $tmpout ${config_h_in}
     fi
   else
     rm -f $tmpout

@@ -52,7 +52,8 @@ SUBDIRS = testsuite
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = info Makefile
 # Files to distribute.
-DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README TODO \
+DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL Makefile.in NEWS \
+	README TODO \ 
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
 	autoconf.sh autoconf.texi install.texi \

@@ -95,7 +95,7 @@ test -r ${AC_MACRODIR}/aclocal.m4 &&
 test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
 MACROFILES="${print_version} ${MACROFILES} ${infile}"
 
-$M4 $MACROFILES > $tmpout || { st=$?; rm -f $tmpin $tmpout; exit $st; }
+$M4 $MACROFILES > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
 
 if test -n "$print_version"; then
   cat $tmpout

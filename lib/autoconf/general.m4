@@ -26,6 +26,9 @@ undefine([include])dnl
 undefine([shift])dnl
 undefine([format])dnl
 dnl
+dnl Some old m4's don't support m4exit.  But they provide
+dnl equivalent functionality by core dumping because of the
+dnl long macros we define.
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4.
 Install it before installing Autoconf or set the
 M4 environment variable to its path name.
@@ -1446,6 +1449,13 @@ ac_given_INSTALL=$INSTALL
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
+  # Support "outfile[:infile]", defaulting infile="outfile.in".
+  case "$ac_file" in
+  *:*) ac_file_in=`echo "$ac_file"|sed 's%.*:%%'`
+       ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
+  *) ac_file_in="${ac_file}.in" ;;
+  esac
+
   # Remove last slash and all that follows it.  Not all systems have dirname.
 changequote(, )dnl
   ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
@@ -1481,7 +1491,7 @@ changequote([, ])dnl
 
   echo creating "$ac_file"
   rm -f "$ac_file"
-  comment_str="Generated automatically from `echo $ac_file|sed 's|.*/||'`.in by configure."
+  comment_str="Generated automatically from `echo $ac_file_in|sed 's|.*/||'` by configure."
   case "$ac_file" in
     *.c | *.h | *.C | *.cc | *.m )
     ac_comsub="1i\\
@@ -1508,7 +1518,7 @@ dnl Shell code in configure.in might set extrasub.
 $extrasub
 dnl Insert the sed substitutions.
 undivert(AC_DIVERSION_SED)dnl
-" $ac_given_srcdir/${ac_file}.in > $ac_file
+" $ac_given_srcdir/$ac_file_in > $ac_file
 fi; done
 ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS, AC_LIST_FILES)])dnl
@@ -1599,9 +1609,16 @@ ac_max_sed_lines=20
 
 CONFIG_HEADERS=${CONFIG_HEADERS-"$1"}
 for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
+  # Support "outfile[:infile]", defaulting infile="outfile.in".
+  case "$ac_file" in
+  *:*) ac_file_in=`echo "$ac_file"|sed 's%.*:%%'`
+       ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
+  *) ac_file_in="${ac_file}.in" ;;
+  esac
+
   echo creating $ac_file
 
-  cp $ac_given_srcdir/$ac_file.in conftest.h1
+  cp $ac_given_srcdir/$ac_file_in conftest.h1
   cp conftest.sed conftest.stm
   while :
   do

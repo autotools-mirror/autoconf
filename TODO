@@ -6,23 +6,11 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Support AC_OUTPUT and AC_CONFIG_HEADER creating FILE from other than FILE.in.
-(Design is a problem; might not do it.)
-
-------------------------------------------------------------------------------
-
 * Add AC_{INCLUDE,LIB}_DIR?  (Noah Friedman's suggestion.)
 
 ------------------------------------------------------------------------------
 
 * Fix up quoting for AC_DEFINE; understand and integrate Jim Avera's patches.
-
-------------------------------------------------------------------------------
-
-* Integrate aclocal.m4, config.h.top, config.h.bot, config.h.in (?).
-Make autoheader search the resulting file.  Use @DEFS@ (?) to
-indicate where autoheader should insert its stuff, defaulting to the
-end.
 
 ------------------------------------------------------------------------------
 
