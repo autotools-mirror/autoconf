@@ -1082,16 +1082,6 @@ AC_CONFIG_COMMANDS([default],
 AC_OUTPUT
 @end group
 @end example
-
-If you pass @var{extra-cmds}, those commands will be inserted into
-@file{config.status} to be run after all its other processing.  If
-@var{init-cmds} are given, they are inserted just before
-@var{extra-cmds}, with shell variable, command, and backslash
-substitutions performed on them in @code{configure}.  You can use
-@var{init-cmds} to pass variables from @code{configure} to the
-@var{extra-cmds}.  If @code{AC_OUTPUT_COMMANDS} has been called, the
-commands given to it are run just before the commands passed to this
-macro.
 @end defmac
 
 If you run @code{make} on subdirectories, you should run it using the

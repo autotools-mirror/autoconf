@@ -1,3 +1,14 @@
+2000-03-17  Akim Demaille  <akim@epita.fr>
+
+	In Autoconf 2.13, although AC_OUTPUT_COMMANDS did double quote its
+	arguments, AC_OUTPUT arguments 2 and 3 were not!  Currently,
+	AC_OUTPUT over quotes too: stop that.
+	Reported by Martin Buchholz.
+
+	* doc/autoconf.texi (Output): Don't expand on the ternary
+	AC_OUTPUT.
+	* acgeneral.m4 (AC_OUTPUT): Don't over quote $2 and $3.
+
 2000-03-17  Joseph S. Myers  <jsm28@cam.ac.uk>
 
 	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): Security fixes: create
