@@ -1,3 +1,8 @@
+2001-08-22  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Indices): New node.
+	Move indices out of the top level menu and into this submenu.
+
 2001-08-22  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL): Use
