@@ -2597,27 +2597,29 @@ AU_DEFUN([AC_CHECK_TOOL_PREFIX])
 
 # AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # -----------------------------------------------------------------------
+# (Use different variables $1 and ac_pt_$1 so that cache vars don't conflict.)
 AC_DEFUN([AC_PATH_TOOL],
-[AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
-             ifelse([$3], , [$2]), $4)
-ifval([$3], [
-if test -z "$ac_cv_prog_$1"; then
+[AC_PATH_PROG($1, ${ac_tool_prefix}$2, , $4)
+if test -z "$ac_cv_path_$1"; then
   if test -n "$ac_tool_prefix"; then
-    AC_PATH_PROG($1, $2, $2, $3)
+    AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
+    $1="$ac_pt_$1"
   else
     $1="$3"
   fi
-fi])
+fi
 ])
 
 
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # ------------------------------------------------------------------------
+# (Use different variables $1 and ac_ct_$1 so that cache vars don't conflict.)
 AC_DEFUN([AC_CHECK_TOOL],
 [AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, , $4)
 if test -z "$ac_cv_prog_$1"; then
   if test -n "$ac_tool_prefix"; then
-    AC_CHECK_PROG($1, $2, $2, $3, $4)
+    AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
+    $1="$ac_ct_$1"
   else
     $1="$3"
   fi

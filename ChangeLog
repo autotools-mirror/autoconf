@@ -1,3 +1,13 @@
+2000-06-19  Steven G. Johnson  <stevenj@gil-galad.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_TOOL): Use two variables in order to
+	avoid cache variable conflicts between AC_CHECK_PROG invocations.
+	(AC_PATH_TOOL): Fix same bugs as in 6/9/00 fixes to AC_CHECK_TOOL.
+	Pass correct arguments to AC_CHECK_PATH (different from
+	AC_CHECK_PROG).  Use AC_CHECK_PATH cache variable, not
+	AC_CHECK_PROG var, and use two variables for two invocations as
+	above.  Quote AC_CHECK_* args.
+
 2000-06-16  Akim Demaille  <akim@epita.fr>
 
 	The test suite reveals AC_OUTPUT_MAKE_DEFS fails on RISC/OS.
