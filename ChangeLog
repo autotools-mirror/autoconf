@@ -1,5 +1,16 @@
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
+	When using Cygwin, in spite of all their efforts, it may happen
+	that `confestval' be read in binary mode.  The shell then fails to
+	properly strip the \r\n.
+	Reported by Lars J. Aas.
+
+	* aclang.m4 (AC_LANG_INT_SAVE): Don't add any trailing new line,
+	and close the file.
+	Suggested by Peter Eisentraut.
+
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Systemology): New section.
 	Some about QNX 4.
 

@@ -400,7 +400,8 @@ m4_define([AC_LANG_INT_SAVE(C)],
 [FILE *f = fopen ("conftestval", "w");
 if (!f)
   exit (1);
-fprintf (f, "%d\n", ($2));])])
+fprintf (f, "%d", ($2));
+fclose (f);])])
 
 
 # ----------------- #
