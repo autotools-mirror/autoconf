@@ -1,7 +1,13 @@
+2003-05-22  Akim Demaille  <akim@epita.fr>
+
+	* config/config.guess, config/config.sub, config/elisp-comp,
+	* config/install-sh, config/mdate-sh, config/mkinstalldirs,
+	* config/texinfo.tex, doc/standards.texi: Update from masters.
+
 2003-05-21  Paolo Bonzini  <bonzini@gnu.org>
 
-	* lib/m4sugar/m4sh.m4 (AS_VAR_SET): Escape
-	the RHS before passing it to eval.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_SET): Escape the RHS before passing
+	it to eval.
 
 2003-05-21  Akim Demaille  <akim@epita.fr>
 
