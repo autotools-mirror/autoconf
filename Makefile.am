@@ -47,7 +47,7 @@ nodistpkgdataDATA = autoconf.m4f
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-EXTRA_DIST = ChangeLog.0 ChangeLog.1 \
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
              acversion.m4.in \
              autoconf.sh autoheader.sh autoreconf.sh autoupdate.in ifnames.sh \
