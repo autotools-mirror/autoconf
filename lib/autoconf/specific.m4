@@ -683,8 +683,7 @@ AC_SUBST(LN_S)dnl
 ])
 
 define(AC_RSH,
-[errprint(__file__:__line__: [$0] has been removed; replace it with equivalent code
-)m4exit(4)])
+[AC_FATAL([$0 has been removed; replace it with equivalent code], 4)])
 
 
 dnl ### Checks for header files
@@ -2127,8 +2126,7 @@ AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])dnl
 
 define(AC_ARG_ARRAY,
-[errprint(__file__:__line__: [$0] has been removed; don't do unportable things with arguments
-)m4exit(4)])
+[AC_FATAL([$0 has been removed; don't do unportable things with arguments], 4)])
 
 dnl Check the object extension used by the compiler: typically .o or
 dnl .obj.  If this is called, some other behaviour will change,
@@ -2548,8 +2546,7 @@ interpval="$ac_cv_sys_interpreter"
 ])
 
 define(AC_HAVE_POUNDBANG,
-[errprint(__file__:__line__: [$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments
-])m4exit(4)])
+[AC_FATAL([$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments], 4)])
 
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,
