@@ -131,8 +131,10 @@ Free Documentation License''.
 @c   @syncodeindex fu pr
 
 
+@ifnottex
 @node Top
 @top Autoconf
+@end ifnottex
 
 @ifinfo
 This file documents the GNU Autoconf package for creating scripts to

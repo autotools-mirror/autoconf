@@ -1,5 +1,9 @@
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Top): Wrap in @ifnottex.
+
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Compute and provide
 	ac_buildpath, ac_top_buildpath, ac_srcpath, and ac_top_srcpath.
 	(_AC_OUTPUT_FILES): Also substitute srcpath, top_srcpath,
