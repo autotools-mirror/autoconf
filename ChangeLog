@@ -1,5 +1,19 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	Transform Autotest's body into a `for test; case $test'.
+	As a known side effect, currently any code outside
+	AT_SETUP/AT_CLEANUP is discarded.
+
+	* acgeneral.m4 (_m4_divert(KILL)): Move to...
+	* m4sugar.m4: here.
+	* tests/atgeneral.m4 (AT_INIT): Use m4_divert_push/pop instead of
+	m4_divert.
+	Put all the tests inside a for;case.
+	Define TESTS.
+	(AT_SETUP, AT_CLEANUP): Open/close each case.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Move divert and undivert into m4_.
 
 	* m4sugar.m4 (m4_divert, divert, undivert): Rename as...

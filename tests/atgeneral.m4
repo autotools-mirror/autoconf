@@ -55,8 +55,8 @@ m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
 
 # Use of diversions:
 #  0 - overall initialization; for each test group: skipping and cleanups;
-#  1 - for each test group: proper code, to reinsert between cleanups;
-#  2 - overall wrap up: generation of debugging scripts and statistics.
+#  2 - for each test group: proper code, to reinsert between cleanups;
+#  3 - overall wrap up: generation of debugging scripts and statistics.
 
 
 # AT_LINE
@@ -71,7 +71,8 @@ AT_DEFINE([AT_LINE],
 # Begin testing suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 AT_DEFINE([AT_INIT],
-[AT_DEFINE([AT_ordinal], 0)
+[m4_divert_push(0)dnl
+AT_DEFINE([AT_ordinal], 0)
 . ./atconfig
 # Snippet (3
 # -e sets to true
@@ -153,7 +154,16 @@ rm -f debug-*.sh
 
 at_failed_list=
 at_ignore_count=0
-m4_divert(2)[]dnl
+m4_divert_push(1)dnl
+
+: ${tests="$TESTS"}
+for test in $tests
+do
+  case $test in
+m4_divert_pop[]dnl
+m4_divert_push(3)[]dnl
+  esac
+done
 
 # Wrap up the testing suite with summary statistics.
 
@@ -227,7 +237,11 @@ if test -n "$at_failed_list"; then
 fi
 
 exit 0
-m4_divert[]dnl
+m4_divert_pop()dnl
+m4_divert_push(1)dnl
+m4_divert_push([KILL])dnl
+m4_wrap([m4_divert_text(0,
+                        [TESTS="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
 ])# AT_INIT
 
 
@@ -241,21 +255,23 @@ AT_DEFINE([AT_SETUP],
 m4_pushdef([AT_data_files], )
 m4_pushdef([AT_data_expout], )
 m4_pushdef([AT_data_experr], )
-if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-m4_divert(1)[]dnl
-  echo AT_LINE > at-check-line
-  echo AT_LINE > at-setup-line
-  if $at_verbose; then
-    echo 'testing $1'
-    echo $at_n "     $at_c"
-  fi
-  if $at_verbose; then
-    echo "AT_ordinal. $srcdir/AT_LINE..."
-  else
-    echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
-  fi
-  if test -z "$at_skip_mode"; then
-    (
+m4_divert_pop()dnl
+  AT_ordinal )
+    if $at_stop_on_error && test -n "$at_failed_list"; then :; else
+m4_divert(2)[]dnl
+    echo AT_LINE > at-check-line
+    echo AT_LINE > at-setup-line
+    if $at_verbose; then
+  	echo 'testing $1'
+  	echo $at_n "     $at_c"
+    fi
+    if $at_verbose; then
+  	echo "AT_ordinal. $srcdir/AT_LINE..."
+    else
+  	echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
+    fi
+    if test -z "$at_skip_mode"; then
+  	(
 [#] Snippet (d[]AT_ordinal[](
 [#] Testing $1
 [#] Snippet )d[]AT_ordinal[])
@@ -273,39 +289,41 @@ $at_traceon
 AT_DEFINE([AT_CLEANUP],
 $at_traceoff
 [[#] Snippet )s[]AT_ordinal[])
-    )
-    at_status=$?
-    $at_verbose &&
-      echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
-    case $at_status in
-      0) echo ok
-         ;;
-      77) echo "ignored near \``cat at-check-line`'"
-          at_ignore_count=`expr $at_ignore_count + 1`
-          ;;
-      *) echo "FAILED near \``cat at-check-line`'"
-         at_failed_list="$at_failed_list AT_ordinal"
-         ;;
-    esac
-  else
-     echo 'ignored (skipped)'
-     at_ignore_count=`expr $at_ignore_count + 1`
-  fi
-  at_test_count=AT_ordinal
-  if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-m4_divert(0)[]dnl
+    	)
+    	at_status=$?
+    	$at_verbose &&
+    	  echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
+    	case $at_status in
+    	  0) echo ok
+    	     ;;
+    	  77) echo "ignored near \``cat at-check-line`'"
+    	      at_ignore_count=`expr $at_ignore_count + 1`
+    	      ;;
+    	  *) echo "FAILED near \``cat at-check-line`'"
+    	     at_failed_list="$at_failed_list AT_ordinal"
+    	     ;;
+    	esac
+      else
+    	 echo 'ignored (skipped)'
+    	 at_ignore_count=`expr $at_ignore_count + 1`
+      fi
+      at_test_count=AT_ordinal
+      if $at_stop_on_error && test -n "$at_failed_list"; then :; else
+m4_divert(1)[]dnl
 [#] Snippet (c[]AT_ordinal[](
 
-rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
-[#] Snippet )c[]AT_ordinal[])
-m4_undivert(1)[]dnl
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
-  fi
-fi
-m4_popdef([AT_data_experr])
-m4_popdef([AT_data_expout])
-m4_popdef([AT_data_files])
-m4_popdef([AT_group_description])[]dnl
+    [#] Snippet )c[]AT_ordinal[])
+m4_undivert(2)[]dnl
+    rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
+      fi
+    fi
+    ;;
+
+m4_popdef([AT_data_experr])dnl
+m4_popdef([AT_data_expout])dnl
+m4_popdef([AT_data_files])dnl
+m4_divert_push([KILL])dnl
 ])# AT_CLEANUP
 
 
@@ -378,6 +396,3 @@ $at_diff expout stdout || at_failed=:],
 fi
 $at_traceon
 ])# AT_CHECK
-
-
-m4_divert(0)dnl

@@ -109,8 +109,6 @@
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
 # of little macros, but it then takes twice longer to run `autoconf'!
-m4_define([_m4_divert(KILL)],           -1)
-
 m4_define([_m4_divert(BINSH)],           0)
 m4_define([_m4_divert(REVISION)],        1)
 m4_define([_m4_divert(NOTICE)],          2)

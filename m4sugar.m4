@@ -637,6 +637,9 @@ m4_define([_m4_divert],
        [m4_indir([_m4_divert($1)])],
        [$1])])
 
+# KILL is only used to suppress output.
+m4_define([_m4_divert(KILL)],           -1)
+
 
 # m4_divert_push(DIVERSION-NAME)
 # ------------------------------
