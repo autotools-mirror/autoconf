@@ -64,7 +64,7 @@
 # has little interest.
 # Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
 # failed there is also a new-line to match.
-define([_AC_PROG_ECHO],
+m4_define([_AC_PROG_ECHO],
 [case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -144,7 +144,7 @@ fi])
 # _AC_DECL_YYTEXT
 # ---------------
 # Check if lex declares yytext as a char * by default, not a char[].
-define([_AC_DECL_YYTEXT],
+m4_define([_AC_DECL_YYTEXT],
 [AC_REQUIRE_CPP()dnl
 AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
 [# The minimal lex program is just a single line: %%.  But some broken lexes
@@ -337,7 +337,7 @@ fi
 # -----------------------------------------------------------------
 # Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 # defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-define([_AC_CHECK_HEADER_DIRENT],
+m4_define([_AC_CHECK_HEADER_DIRENT],
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
 AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
@@ -354,7 +354,7 @@ AC_VAR_POPDEF([ac_Header])dnl
 
 # AH_CHECK_HEADERS_DIRENT(HEADERS...)
 # -----------------------------------
-define([AH_CHECK_HEADERS_DIRENT],
+m4_define([AH_CHECK_HEADERS_DIRENT],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
                [Define if you have the <]AC_Header[> header file, and
@@ -548,7 +548,7 @@ fi
 
 # _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
 # ----------------------------------
-define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
+m4_define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
 [AC_CACHE_CHECK([whether termios.h defines TIOCGWINSZ],
                 ac_cv_sys_tiocgwinsz_in_termios_h,
 [AC_EGREP_CPP([yes],
@@ -565,7 +565,7 @@ define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
 
 # _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
 # ----------------------------------
-define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
+m4_define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
 [AC_CACHE_CHECK([whether sys/ioctl.h defines TIOCGWINSZ],
                 ac_cv_sys_tiocgwinsz_in_sys_ioctl_h,
 [AC_EGREP_CPP([yes],
@@ -971,7 +971,7 @@ with arguments. Remove this warning when you adjust your code.])])
 
 # _AC_SYS_LARGEFILE_SOURCE(PROLOGUE, BODY)
 # ----------------------------------------
-define([_AC_SYS_LARGEFILE_SOURCE],
+m4_define([_AC_SYS_LARGEFILE_SOURCE],
 [AC_LANG_PROGRAM(
 [$1
 @%:@include <sys/types.h>
@@ -984,7 +984,7 @@ int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];],
 #                               DESCRIPTION,
 #                               [INCLUDES], [FUNCTION-BODY])
 # ----------------------------------------------------------
-define([_AC_SYS_LARGEFILE_MACRO_VALUE],
+m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
   $3=no
@@ -1247,7 +1247,7 @@ fi
 # ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-define([_AC_PATH_X_XMKMF],
+m4_define([_AC_PATH_X_XMKMF],
 [rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -1288,7 +1288,7 @@ fi
 # -----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-define([_AC_PATH_X_DIRECT],
+m4_define([_AC_PATH_X_DIRECT],
 [# Standard set of common directories for X headers.
 # Check X11 before X11Rn because it is often a symlink to the current release.
 ac_x_header_dirs='
@@ -1498,7 +1498,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 # ----------
 # Check for Cygwin.  This is a way to set the right value for
 # EXEEXT.
-define([_AC_CYGWIN],
+m4_define([_AC_CYGWIN],
 [AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 [#ifndef __CYGWIN__
@@ -1515,7 +1515,7 @@ test "$ac_cv_cygwin" = yes && CYGWIN=yes[]dnl
 # ----------
 # Check for EMX on OS/2.  This is another way to set the right value
 # for EXEEXT.
-define([_AC_EMXOS2],
+m4_define([_AC_EMXOS2],
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
                    [ac_cv_emxos2=yes],
@@ -1528,7 +1528,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 # -----------
 # Check for mingw32.  This is another way to set the right value for
 # EXEEXT.
-define([_AC_MINGW32],
+m4_define([_AC_MINGW32],
 [AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __MINGW32__;])],
                    [ac_cv_mingw32=yes],
@@ -1558,7 +1558,7 @@ AC_DEFUN([AC_OBJEXT],   [])
 # add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
-define([_AC_EXEEXT],
+m4_define([_AC_EXEEXT],
 [AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
 [case "$CYGWIN $MINGW32 $EMXOS2" in
   *yes*) ac_cv_exeext=.exe ;;
@@ -1588,7 +1588,7 @@ AC_SUBST(EXEEXT)dnl
 # Check the object extension used by the compiler: typically .o or
 # .obj.  If this is called, some other behaviour will change,
 # determined by ac_objext.
-define([_AC_OBJEXT],
+m4_define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 if AC_TRY_EVAL(ac_compile); then

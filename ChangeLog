@@ -1,5 +1,11 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.m4 (define): Reestablish only after having read the
+	`ac' files.
+	Adjust all the Autoconf code to use `m4_define', not `define'.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AU_ALIAS): Don't forget to pass the arguments to
 	the new macro...
 	Reported by Ezra Peisach.
@@ -11,7 +17,7 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.m4: Instead of reactivating the macros before reading
-	Autoconf's file, do it afterwards, so that Autoconf promotes the
+	Autoconf's files, do it afterwards, so that Autoconf promotes the
 	right use, but users still can use the old names.
 	Of course this revealed numerous non updated uses of old macros in
 	Autoconf's files.  Adjust them.

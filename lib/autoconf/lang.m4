@@ -94,7 +94,7 @@
 # ------------------------------------------------------------
 # Expand into IF-LANG1 if the current language is LANG1 etc. else
 # into default.
-define([AC_LANG_CASE],
+m4_define([AC_LANG_CASE],
 [m4_case(_AC_LANG, $@)])
 
 
@@ -102,7 +102,7 @@ define([AC_LANG_CASE],
 # ------------------------------------
 # Call the specialization of MACRO for LANG with ARGS.  Complain if
 # unavailable.
-define([_AC_LANG_DISPATCH],
+m4_define([_AC_LANG_DISPATCH],
 [ifdef([$1($2)],
        [m4_indir([$1($2)], m4_shiftn(2, $@))],
        [AC_FATAL([$1: unknown language: $2])])])
@@ -117,14 +117,14 @@ define([_AC_LANG_DISPATCH],
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[define([_AC_LANG], [$1])dnl
+[m4_define([_AC_LANG], [$1])dnl
 _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_PUSH(LANG)
 # ------------------
 # Save the current language, and use LANG.
-define([AC_LANG_PUSH],
+m4_define([AC_LANG_PUSH],
 [m4_pushdef([_AC_LANG])dnl
 AC_LANG([$1])])
 
@@ -132,7 +132,7 @@ AC_LANG([$1])])
 # AC_LANG_POP
 # -----------
 # Restore the previous language.
-define([AC_LANG_POP],
+m4_define([AC_LANG_POP],
 [m4_popdef([_AC_LANG])dnl
 ifelse(_AC_LANG, [_AC_LANG],
         [AC_FATAL([too many $0])])dnl
@@ -159,7 +159,7 @@ AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 # ---------------
 # Return a short signature of _AC_LANG which can be used in shell
 # variable names, or in M4 macro names.
-define([_AC_LANG_ABBREV],
+m4_define([_AC_LANG_ABBREV],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
@@ -171,7 +171,7 @@ define([_AC_LANG_ABBREV],
 # AC_LANG(C)
 # ----------
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-define([AC_LANG(C)],
+m4_define([AC_LANG(C)],
 [ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
@@ -187,7 +187,7 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
 # _AC_LANG_ABBREV(C)
 # ------------------
-define([_AC_LANG_ABBREV(C)], [c])
+m4_define([_AC_LANG_ABBREV(C)], [c])
 
 
 # ---------------------- #
@@ -198,7 +198,7 @@ define([_AC_LANG_ABBREV(C)], [c])
 # AC_LANG(C++)
 # ------------
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-define([AC_LANG(C++)],
+m4_define([AC_LANG(C++)],
 [ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
@@ -214,7 +214,7 @@ AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 
 # _AC_LANG_ABBREV(C++)
 # --------------------
-define([_AC_LANG_ABBREV(C++)], [cxx])
+m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 
 
 # ----------------------------- #
@@ -224,7 +224,7 @@ define([_AC_LANG_ABBREV(C++)], [cxx])
 
 # AC_LANG(Fortran 77)
 # -------------------
-define([AC_LANG(Fortran 77)],
+m4_define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
@@ -239,7 +239,7 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 # _AC_LANG_ABBREV(Fortran 77)
 # ---------------------------
-define([_AC_LANG_ABBREV(Fortran 77)], [f77])
+m4_define([_AC_LANG_ABBREV(Fortran 77)], [f77])
 
 
 
@@ -256,7 +256,7 @@ define([_AC_LANG_ABBREV(Fortran 77)], [f77])
 # AC_LANG_CONFTEST(BODY)
 # ----------------------
 # Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
-define([AC_LANG_CONFTEST],
+m4_define([AC_LANG_CONFTEST],
 [cat >conftest.$ac_ext <<_ACEOF
 $1
 _ACEOF])
@@ -319,7 +319,7 @@ AC_DEFUN([AC_LANG_INT_SAVE],
 # -----------------------
 # This sometimes fails to find confdefs.h, for some reason.
 # #line __oline__ "$[0]"
-define([AC_LANG_SOURCE(C)],
+m4_define([AC_LANG_SOURCE(C)],
 [#line __oline__ "configure"
 #include "confdefs.h"
 $1])
@@ -327,7 +327,7 @@ $1])
 
 # AC_LANG_PROGRAM(C)([PROLOGUE], [BODY])
 # --------------------------------------
-define([AC_LANG_PROGRAM(C)],
+m4_define([AC_LANG_PROGRAM(C)],
 [$1
 int
 main ()
@@ -343,7 +343,7 @@ $2
 # AC_LANG_CALL(C)(PROLOGUE, FUNCTION)
 # -----------------------------------
 # Avoid conflicting decl of main.
-define([AC_LANG_CALL(C)],
+m4_define([AC_LANG_CALL(C)],
 [AC_LANG_PROGRAM([$1
 ifelse([$2], [main], ,
 [/* Override any gcc2 internal prototype to avoid an error.  */
@@ -360,7 +360,7 @@ char $2 ();])], [$2 ();])])
 # Don't include <ctype.h> because on OSF/1 3.0 it includes
 # <sys/types.h> which includes <sys/select.h> which contains a
 # prototype for select.  Similarly for bzero.
-define([AC_LANG_FUNC_LINK_TRY(C)],
+m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 [AC_LANG_PROGRAM(
 [/* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $1 (); below.  */
@@ -387,7 +387,7 @@ f = $1;
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
 # -------------------------------------------------
-define([AC_LANG_BOOL_COMPILE_TRY(C)],
+m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
 [AC_LANG_PROGRAM([$1], [int _array_ @<:@1 - 2 * !($2)@:>@])])
 
 
@@ -395,7 +395,7 @@ define([AC_LANG_BOOL_COMPILE_TRY(C)],
 # -----------------------------------------
 # We need `stdio.h' to open a `FILE', so the prologue defaults to the
 # inclusion of `stdio.h'.
-define([AC_LANG_INT_SAVE(C)],
+m4_define([AC_LANG_INT_SAVE(C)],
 [AC_LANG_PROGRAM([m4_default([$1], [@%:@include "stdio.h"])],
 [FILE *f = fopen ("conftestval", "w");
 if (!f)
@@ -409,7 +409,7 @@ fprintf (f, "%d\n", ($2));])])
 
 # AC_LANG_SOURCE(C++)(BODY)
 # -------------------------
-define([AC_LANG_SOURCE(C++)],
+m4_define([AC_LANG_SOURCE(C++)],
 [#line __oline__ "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
@@ -421,31 +421,31 @@ $1])
 # AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
 # ----------------------------------------
 # Same as C.
-define([AC_LANG_PROGRAM(C++)], m4_defn([AC_LANG_PROGRAM(C)]))
+m4_define([AC_LANG_PROGRAM(C++)], m4_defn([AC_LANG_PROGRAM(C)]))
 
 
 # AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
 # -------------------------------------
 # Same as C.
-define([AC_LANG_CALL(C++)], m4_defn([AC_LANG_CALL(C)]))
+m4_define([AC_LANG_CALL(C++)], m4_defn([AC_LANG_CALL(C)]))
 
 
 # AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
 # ------------------------------------
 # Same as C.
-define([AC_LANG_FUNC_LINK_TRY(C++)], m4_defn([AC_LANG_FUNC_LINK_TRY(C)]))
+m4_define([AC_LANG_FUNC_LINK_TRY(C++)], m4_defn([AC_LANG_FUNC_LINK_TRY(C)]))
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
 # ---------------------------------------------------
 # Same as C.
-define([AC_LANG_BOOL_COMPILE_TRY(C++)], m4_defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
+m4_define([AC_LANG_BOOL_COMPILE_TRY(C++)], m4_defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
 
 
 # AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
 # -------------------------------------------
 # Same as C.
-define([AC_LANG_INT_SAVE(C++)], m4_defn([AC_LANG_INT_SAVE(C)]))
+m4_define([AC_LANG_INT_SAVE(C++)], m4_defn([AC_LANG_INT_SAVE(C)]))
 
 
 
@@ -458,14 +458,14 @@ define([AC_LANG_INT_SAVE(C++)], m4_defn([AC_LANG_INT_SAVE(C)]))
 # FIXME: Apparently, according to former AC_TRY_COMPILER, the CPP
 # directives must not be included.  But AC_TRY_RUN_NATIVE was not
 # avoiding them, so?
-define([AC_LANG_SOURCE(Fortran 77)],
+m4_define([AC_LANG_SOURCE(Fortran 77)],
 [$1])
 
 
 # AC_LANG_PROGRAM(Fortran 77)([PROLOGUE], [BODY])
 # -----------------------------------------------
 # Yes, we discard the PROLOGUE.
-define([AC_LANG_PROGRAM(Fortran 77)],
+m4_define([AC_LANG_PROGRAM(Fortran 77)],
 [      program main
 $2
       end])
@@ -474,7 +474,7 @@ $2
 # AC_LANG_CALL(Fortran 77)(PROLOGUE, FUNCTION)
 # --------------------------------------------
 # FIXME: This is a guess, help!
-define([AC_LANG_CALL(Fortran 77)],
+m4_define([AC_LANG_CALL(Fortran 77)],
 [AC_LANG_PROGRAM([$1],
 [      call $2])])
 
@@ -494,7 +494,7 @@ define([AC_LANG_CALL(Fortran 77)],
 # Find a compiler for the current LANG.  Note that because we might
 # AC_REQUIRE `AC_LANG_COMPILER(C)' for instance, the latter must be
 # AC_DEFUN'd, not just define'd.
-define([AC_LANG_COMPILER],
+m4_define([AC_LANG_COMPILER],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
@@ -518,7 +518,7 @@ AC_DEFUN([AC_REQUIRE_CPP],
 
 # _AC_LANG_COMPILER_WORKS
 # -----------------------
-define([_AC_LANG_COMPILER_WORKS],
+m4_define([_AC_LANG_COMPILER_WORKS],
 [AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 _AC_LINK_IFELSE([AC_LANG_PROGRAM()],
 [# FIXME: these cross compiler hacks should be removed for autoconf 3.0
@@ -546,7 +546,7 @@ AC_MSG_RESULT($cross_compiling)
 # _AC_LANG_COMPILER_GNU
 # ---------------------
 # Check whether the compiler for the current language is GNU.
-define([_AC_LANG_COMPILER_GNU],
+m4_define([_AC_LANG_COMPILER_GNU],
 [AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
                 [ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
 [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#ifndef __GNUC__
@@ -582,11 +582,11 @@ AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
 AC_BEFORE([$0], [_AC_LANG_COMPILER_WORKS])
 AC_BEFORE([$0], [_AC_EXEEXT])
 
-define([_AC_LANG_COMPILER_WORKS], [cross_compiling=maybe])
+m4_define([_AC_LANG_COMPILER_WORKS], [cross_compiling=maybe])
 
-define([_AC_EXEEXT], [EXEEXT=])
+m4_define([_AC_EXEEXT], [EXEEXT=])
 
-define([AC_LINK_IFELSE],
+m4_define([AC_LINK_IFELSE],
 [AC_FATAL([All the tests involving linking were disabled by $0])])
 
 m4_divert_pop()dnl
@@ -725,7 +725,7 @@ AC_LANG_POP
 # Check whether -g works, even if CFLAGS is set, in case the package
 # plays around with CFLAGS (such as to build both debugging and normal
 # versions of a library), tasteless as that idea is.
-define([_AC_PROG_CC_G],
+m4_define([_AC_PROG_CC_G],
 [ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
 CFLAGS="-g"
@@ -914,7 +914,7 @@ AC_LANG_POP
 # Check whether -g works, even if CXXFLAGS is set, in case the package
 # plays around with CXXFLAGS (such as to build both debugging and
 # normal versions of a library), tasteless as that idea is.
-define([_AC_PROG_CXX_G],
+m4_define([_AC_PROG_CXX_G],
 [ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="-g"
@@ -999,7 +999,7 @@ AC_LANG_POP
 # Check whether -g works, even if FFLAGS is set, in case the package
 # plays around with FFLAGS (such as to build both debugging and normal
 # versions of a library), tasteless as that idea is.
-define([_AC_PROG_F77_G],
+m4_define([_AC_PROG_F77_G],
 [ac_test_FFLAGS=${FFLAGS+set}
 ac_save_FFLAGS=$FFLAGS
 FFLAGS=

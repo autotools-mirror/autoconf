@@ -109,30 +109,30 @@
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
 # of little macros, but it then takes twice longer to run `autoconf'!
-define([_m4_divert(KILL)],           -1)
+m4_define([_m4_divert(KILL)],           -1)
 
-define([_m4_divert(BINSH)],           0)
-define([_m4_divert(REVISION)],        1)
-define([_m4_divert(NOTICE)],          2)
-define([_m4_divert(DEFAULTS)],        3)
-define([_m4_divert(PARSE_ARGS)],      4)
+m4_define([_m4_divert(BINSH)],           0)
+m4_define([_m4_divert(REVISION)],        1)
+m4_define([_m4_divert(NOTICE)],          2)
+m4_define([_m4_divert(DEFAULTS)],        3)
+m4_define([_m4_divert(PARSE_ARGS)],      4)
 
-define([_m4_divert(HELP_BEGIN)],     10)
-define([_m4_divert(HELP_CANON)],     11)
-define([_m4_divert(HELP_ENABLE)],    12)
-define([_m4_divert(HELP_WITH)],      13)
-define([_m4_divert(HELP_VAR)],       14)
-define([_m4_divert(HELP_VAR_END)],   15)
-define([_m4_divert(HELP_END)],       16)
+m4_define([_m4_divert(HELP_BEGIN)],     10)
+m4_define([_m4_divert(HELP_CANON)],     11)
+m4_define([_m4_divert(HELP_ENABLE)],    12)
+m4_define([_m4_divert(HELP_WITH)],      13)
+m4_define([_m4_divert(HELP_VAR)],       14)
+m4_define([_m4_divert(HELP_VAR_END)],   15)
+m4_define([_m4_divert(HELP_END)],       16)
 
-define([_m4_divert(VERSION_BEGIN)],  20)
-define([_m4_divert(VERSION_END)],    21)
+m4_define([_m4_divert(VERSION_BEGIN)],  20)
+m4_define([_m4_divert(VERSION_END)],    21)
 
-define([_m4_divert(INIT_PREPARE)],   30)
+m4_define([_m4_divert(INIT_PREPARE)],   30)
 
-define([_m4_divert(BODY)],           40)
+m4_define([_m4_divert(BODY)],           40)
 
-define([_m4_divert(PREPARE)],       100)
+m4_define([_m4_divert(PREPARE)],       100)
 
 
 
@@ -140,24 +140,24 @@ define([_m4_divert(PREPARE)],       100)
 # ---------------------------------------
 # Output once CONTENT into DIVERSION-NAME (which may be a number
 # actually).  An end of line is appended for free to CONTENT.
-define([AC_DIVERT_ONCE],
+m4_define([AC_DIVERT_ONCE],
 [AC_EXPAND_ONCE([m4_divert([$1], [$2])])])
 
 
 # AC_DIVERT_PUSH(DIVERSION-NAME)
 # ------------------------------
-define([AC_DIVERT_PUSH],
+m4_define([AC_DIVERT_PUSH],
 [m4_divert_push($@)])
 
 
 # AC_DIVERT_POP
 # -------------
-define([AC_DIVERT_POP],
+m4_define([AC_DIVERT_POP],
 [m4_divert_pop($@)])
 
 
 # Initialize the diversion setup.
-define([_m4_divert_diversion], _m4_divert([BODY]))
+m4_define([_m4_divert_diversion], _m4_divert([BODY]))
 # Throw away output until AC_INIT is called.
 m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 
@@ -181,7 +181,7 @@ m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 # macros.  We don't use this macro to define some frequently called
 # macros that are not involved in ordering constraints, to save m4
 # processing.
-define([AC_DEFUN],
+m4_define([AC_DEFUN],
 [m4_defun([$1], [$2[]AC_PROVIDE([$1])])])
 
 
@@ -189,13 +189,13 @@ define([AC_DEFUN],
 # ------------------------------
 # As AC_DEFUN, but issues the EXPANSION only once, and warns if used
 # several times.
-define([AC_DEFUN_ONCE],
+m4_define([AC_DEFUN_ONCE],
 [m4_defun_once([$1], [$2[]AC_PROVIDE([$1])])])
 
 
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
 # ------------------------------------------
-define([AC_OBSOLETE],
+m4_define([AC_OBSOLETE],
 [AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
 
 
@@ -209,7 +209,7 @@ define([AC_OBSOLETE],
 
 # AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 # ---------------------------------------------
-define([AC_BEFORE],
+m4_define([AC_BEFORE],
 [AC_PROVIDE_IFELSE([$2], [AC_DIAGNOSE([syntax], [$2 was called before $1])])])
 
 
@@ -242,21 +242,21 @@ define([AC_BEFORE],
 #   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
-define([_AC_REQUIRE],
+m4_define([_AC_REQUIRE],
 [_m4_require($@)])
 
 
 # AC_REQUIRE(STRING)
 # ------------------
 # If STRING has never been AC_PROVIDE'd, then expand it.
-define([AC_REQUIRE],
+m4_define([AC_REQUIRE],
 [m4_require($@)])
 
 
 # AC_EXPAND_ONCE(TEXT)
 # --------------------
 # If TEXT has never been expanded, expand it *here*.
-define([AC_EXPAND_ONCE],
+m4_define([AC_EXPAND_ONCE],
 [m4_expand_once([$1],
                 [],
                 [AC_PROVIDE([$1])[]$1])])
@@ -266,8 +266,8 @@ define([AC_EXPAND_ONCE],
 # ----------------------
 # Ideally we should use `AC_PROVIDE($1)', but unfortunately many third
 # party macros know that we use `AC_PROVIDE_$1' and they depend on it.
-define([AC_PROVIDE],
-[define([AC_PROVIDE_$1])])
+m4_define([AC_PROVIDE],
+[m4_define([AC_PROVIDE_$1])])
 
 
 # AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
@@ -276,7 +276,7 @@ define([AC_PROVIDE],
 # The purpose of this macro is to provide the user with a means to
 # check macros which are provided without letting her know how the
 # information is coded.
-define([AC_PROVIDE_IFELSE],
+m4_define([AC_PROVIDE_IFELSE],
 [ifdef([AC_PROVIDE_$1],
        [$2], [$3])])
 
@@ -294,7 +294,7 @@ define([AC_PROVIDE_IFELSE],
 # Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
 # wrapping actions required by `autoupdate'.
 # We do not define anything in `autoconf::'.
-define([AU_DEFINE],
+m4_define([AU_DEFINE],
 [AC_DEFUN([$1], [$2])])
 
 
@@ -309,7 +309,7 @@ define([AU_DEFINE],
 # This allows to share the same code for both supporting obsoleted macros,
 # and to update a configure.in.
 # See `acobsolete.m4' for a longer description.
-define([AU_DEFUN],
+m4_define([AU_DEFUN],
 [AU_DEFINE([$1],
            [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
@@ -327,7 +327,7 @@ $2],
 #
 # Do not use `defn' since then autoupdate would replace an old macro
 # call with the new macro body instead of the new macro call.
-define([AU_ALIAS],
+m4_define([AU_ALIAS],
 [AU_DEFUN([$1], [$2($][@)])])
 
 
@@ -341,7 +341,7 @@ define([AU_ALIAS],
 # --------------------
 # Pass TEXT to autoheader.
 # This macro is `read' only via `autoconf --trace', it outputs nothing.
-define([AH_OUTPUT], [])
+m4_define([AH_OUTPUT], [])
 
 
 # AH_VERBATIM(KEY, TEMPLATE)
@@ -350,7 +350,7 @@ define([AH_OUTPUT], [])
 # may occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader
 # TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
 # output as is, with no formating.
-define([AH_VERBATIM],
+m4_define([AH_VERBATIM],
 [AC_VAR_INDIR_IFELSE([$1],,
                      [AH_OUTPUT([$1], _AC_SH_QUOTE([[$2]]))])
 ])
@@ -360,7 +360,7 @@ define([AH_VERBATIM],
 # -----------------------------
 # Issue an autoheader template for KEY, i.e., a comment composed of
 # DESCRIPTION (properly wrapped), and then #undef KEY.
-define([AH_TEMPLATE],
+m4_define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
              m4_text_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
@@ -369,20 +369,20 @@ define([AH_TEMPLATE],
 # AH_TOP(TEXT)
 # ------------
 # Output TEXT at the top of `config.h.in'.
-define([AH_TOP],
-[define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
+m4_define([AH_TOP],
+[m4_define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
 AH_VERBATIM([0000]_AH_COUNTER, [$1])])
 
 
 # AH_BOTTOM(TEXT)
 # ---------------
 # Output TEXT at the bottom of `config.h.in'.
-define([AH_BOTTOM],
-[define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
+m4_define([AH_BOTTOM],
+[m4_define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
 AH_VERBATIM([zzzz]_AH_COUNTER, [$1])])
 
 # Initialize.
-define([_AH_COUNTER], [0])
+m4_define([_AH_COUNTER], [0])
 
 
 
@@ -404,7 +404,7 @@ define([_AH_COUNTER], [0])
 # -------------------------------------------------------
 # If EXPRESSION has shell indirections ($var or `expr`), expand
 # IF-INDIR, else IF-NOT-INDIR.
-define([AC_VAR_INDIR_IFELSE],
+m4_define([AC_VAR_INDIR_IFELSE],
 [ifelse(m4_regexp([$1], [[`$]]),
         -1, [$3],
         [$2])])
@@ -414,7 +414,7 @@ define([AC_VAR_INDIR_IFELSE],
 # Set the VALUE of the shell VARIABLE.
 # If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
 # perform whenever possible at m4 level, otherwise sh level.
-define([AC_VAR_SET],
+m4_define([AC_VAR_SET],
 [AC_VAR_INDIR_IFELSE([$1],
                      [eval "$1=$2"],
                      [$1=$2])])
@@ -425,7 +425,7 @@ define([AC_VAR_SET],
 # Get the value of the shell VARIABLE.
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
-define([AC_VAR_GET],
+m4_define([AC_VAR_GET],
 [AC_VAR_INDIR_IFELSE([$1],
                      [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`],
                      [$[]$1])])
@@ -435,7 +435,7 @@ define([AC_VAR_GET],
 # -------------------------
 # Expands into the `test' expression which is true if VARIABLE
 # is set.  Polymorphic.  Should be dnl'ed.
-define([AC_VAR_TEST_SET],
+m4_define([AC_VAR_TEST_SET],
 [AC_VAR_INDIR_IFELSE([$1],
                      [eval "test \"\${$1+set}\" = set"],
                      [test "${$1+set}" = set])])
@@ -445,7 +445,7 @@ define([AC_VAR_TEST_SET],
 # ----------------------------------------------
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
-define([AC_VAR_SET_IFELSE],
+m4_define([AC_VAR_SET_IFELSE],
 [AS_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
@@ -480,7 +480,7 @@ define([AC_VAR_SET_IFELSE],
 # Define the m4 macro VARNAME to an accessor to the shell variable
 # named VALUE.  VALUE does not need to be a valid shell variable name:
 # the transliteration is handled here.  To be dnl'ed.
-define([AC_VAR_PUSHDEF],
+m4_define([AC_VAR_PUSHDEF],
 [AC_VAR_INDIR_IFELSE([$2],
                      [ac_$1=AC_TR_SH($2)
 m4_pushdef([$1], [$ac_[$1]])],
@@ -490,7 +490,7 @@ m4_pushdef([$1], [$ac_[$1]])],
 # AC_VAR_POPDEF(VARNAME)
 # ----------------------
 # Free the shell variable accessor VARNAME.  To be dnl'ed.
-define([AC_VAR_POPDEF],
+m4_define([AC_VAR_POPDEF],
 [m4_popdef([$1])])
 
 
@@ -509,7 +509,7 @@ define([AC_VAR_POPDEF],
 # Map EXPRESSION to an upper case string which is valid as rhs for a
 # `#define'.  sh/m4 polymorphic.  Make sure to update the definition
 # of `$ac_tr_cpp' if you change this.
-define([AC_TR_CPP],
+m4_define([AC_TR_CPP],
 [AC_VAR_INDIR_IFELSE([$1],
                      [`echo "$1" | $ac_tr_cpp`],
                      [m4_patsubst(m4_translit([[$1]],
@@ -523,7 +523,7 @@ define([AC_TR_CPP],
 # Transform EXPRESSION into a valid shell variable name.
 # sh/m4 polymorphic.
 # Make sure to update the definition of `$ac_tr_sh' if you change this.
-define([AC_TR_SH],
+m4_define([AC_TR_SH],
 [AC_VAR_INDIR_IFELSE([$1],
                      [`echo "$1" | $ac_tr_sh`],
                      [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
@@ -549,7 +549,7 @@ define([AC_TR_SH],
 #    b	act\
 #    ive  ], [-Var-])end
 #    => -active--b--active-end
-define([AC_FOREACH],
+m4_define([AC_FOREACH],
 [m4_foreach([$1], m4_split(m4_strip(m4_join([$2]))), [$3])])
 
 
@@ -601,7 +601,7 @@ define([AC_FOREACH],
 #  | column 2                |
 #  column 0                  column 26
 #
-define([AC_HELP_STRING],
+m4_define([AC_HELP_STRING],
 [m4_pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
 m4_pushdef([AC_Prefix_Format],
            [  %-]m4_eval(m4_len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
@@ -631,11 +631,11 @@ m4_popdef([AC_Prefix])dnl
 
 # _AC_INIT_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
 # ------------------------------------------------
-define([_AC_INIT_PACKAGE],
-[define([AC_PACKAGE_NAME],     [$1])dnl
-define([AC_PACKAGE_VERSION],   [$2])dnl
-define([AC_PACKAGE_STRING],    [$1 $2])dnl
-define([AC_PACKAGE_BUGREPORT], [$3])dnl
+m4_define([_AC_INIT_PACKAGE],
+[m4_define([AC_PACKAGE_NAME],     [$1])dnl
+m4_define([AC_PACKAGE_VERSION],   [$2])dnl
+m4_define([AC_PACKAGE_STRING],    [$1 $2])dnl
+m4_define([AC_PACKAGE_BUGREPORT], [$3])dnl
 ])
 
 
@@ -649,7 +649,7 @@ define([AC_PACKAGE_BUGREPORT], [$3])dnl
 # would have be to use m4_quote to force an evaluation:
 #
 #     m4_patsubst(m4_quote($1), [^], [# ])
-define([AC_COPYRIGHT],
+m4_define([AC_COPYRIGHT],
 [m4_divert([NOTICE],
 [m4_patsubst([
 $1], [^], [@%:@ ])])dnl
@@ -663,7 +663,7 @@ $1])dnl
 # --------------------------
 # The second quote in the translit is just to cope with font-lock-mode
 # which sees the opening of a string.
-define([AC_REVISION],
+m4_define([AC_REVISION],
 [m4_divert([REVISION],
            [@%:@ From configure.in m4_translit([$1], $"").])dnl
 ])
@@ -696,7 +696,7 @@ AU_DEFUN([AC_PREREQ],
 # AC_PREREQ(VERSION)
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
-define([AC_PREREQ],
+m4_define([AC_PREREQ],
 [ifelse(m4_version_compare(m4_defn([AC_ACVERSION]), [$1]), -1,
      [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
@@ -717,7 +717,7 @@ define([AC_PREREQ],
 
 # _AC_INIT_NOTICE
 # ---------------
-define([_AC_INIT_NOTICE],
+m4_define([_AC_INIT_NOTICE],
 [m4_divert([NOTICE],
 [@%:@ Guess values for system-dependent variables and create Makefiles.
 @%:@ Generated by Autoconf AC_ACVERSION[]dnl
@@ -732,7 +732,7 @@ ifset([AC_PACKAGE_BUGREPORT],
 
 # _AC_INIT_COPYRIGHT
 # ------------------
-define([_AC_INIT_COPYRIGHT],
+m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
 [Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
 Free Software Foundation, Inc.
@@ -744,7 +744,7 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 # _AC_INIT_DEFAULTS_ENVIRONMENT
 # -----------------------------
 # Tune the behavior of the shell.
-define([_AC_INIT_DEFAULTS_ENVIRONMENT],
+m4_define([_AC_INIT_DEFAULTS_ENVIRONMENT],
 [# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -780,12 +780,12 @@ AS_UNSET([CDPATH], [:])
 # ---------------------
 # Set up the file descriptors used by `configure'.
 
-define([AC_FD_MSG], 6)
-define([AC_FD_LOG], 5)
+m4_define([AC_FD_MSG], 6)
+m4_define([AC_FD_LOG], 5)
 # That's how it used to be named.
 AU_ALIAS([AC_FD_CC], [AC_FD_LOG])
 
-define([_AC_INIT_DEFAULTS_FDS],
+m4_define([_AC_INIT_DEFAULTS_FDS],
 [# File descriptor usage:
 # 0 standard input
 # 1 file creation
@@ -832,7 +832,7 @@ hostinfo               = `(hostinfo) 2>/dev/null`
 # _AC_INIT_DEFAULTS
 # -----------------
 # Values which defaults can be set from `configure.in'.
-define([_AC_INIT_DEFAULTS],
+m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
 _AC_INIT_DEFAULTS_ENVIRONMENT
@@ -925,7 +925,7 @@ AC_DEFUN([AC_CONFIG_SRCDIR],
 # _AC_INIT_SRCDIR
 # ---------------
 # Compute `srcdir' based on `$ac_unique_file'.
-define([_AC_INIT_SRCDIR],
+m4_define([_AC_INIT_SRCDIR],
 [m4_divert_push([PARSE_ARGS])dnl
 
 # Find the source files, if location was not specified.
@@ -958,7 +958,7 @@ m4_divert_pop()dnl
 
 # _AC_INIT_PARSE_ARGS
 # -------------------
-define([_AC_INIT_PARSE_ARGS],
+m4_define([_AC_INIT_PARSE_ARGS],
 [m4_divert_push([PARSE_ARGS])dnl
 
 # Initialize some variables set by options.
@@ -1336,7 +1336,7 @@ m4_divert_pop()dnl
 # _AC_INIT_HELP
 # -------------
 # Handle the `configure --help' message.
-define([_AC_INIT_HELP],
+m4_define([_AC_INIT_HELP],
 [m4_divert_push([HELP_BEGIN])dnl
 
 #
@@ -1483,7 +1483,7 @@ m4_divert_pop()dnl
 # _AC_INIT_VERSION
 # ----------------
 # Handle the `configure --version' message.
-define([_AC_INIT_VERSION],
+m4_define([_AC_INIT_VERSION],
 [m4_divert([VERSION_BEGIN],
 [if $ac_init_version; then
   cat <<\EOF])dnl
@@ -1505,7 +1505,7 @@ fi])dnl
 # 3. Remember the options given to `configure' for `config.status --recheck'.
 # 4. Ensure a correct environment
 # 5. Required macros (cache, default AC_SUBST etc.)
-define([_AC_INIT_PREPARE],
+m4_define([_AC_INIT_PREPARE],
 [m4_divert_push([INIT_PREPARE])dnl
 
 # Keep a trace of the command line.
@@ -1590,7 +1590,7 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # preamble of the `configure' script.
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
-define([AC_INIT],
+m4_define([AC_INIT],
 [ifval([$2], [_AC_INIT_PACKAGE($@)])dnl
 m4_divert([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS()dnl
@@ -1613,7 +1613,7 @@ ifval([$2], , [ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 # Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
 # generation.  This is used by some tests, and let `autoconf' be used to
 # generate other scripts than `configure'.
-define([AC_PLAIN_SCRIPT],
+m4_define([AC_PLAIN_SCRIPT],
 [m4_divert_pop()])
 
 
@@ -1691,7 +1691,7 @@ AU_DEFUN([AC_WITH],
 #
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
-define([_AC_ARG_VAR_PRECIOUS],
+m4_define([_AC_ARG_VAR_PRECIOUS],
 [AC_DIVERT_ONCE([PARSE_ARGS],
 [ac_env_$1_set=${$1+set}
 ac_env_$1_value=$$1
@@ -1702,7 +1702,7 @@ ac_cv_env_$1_value=$$1])dnl
 
 # _AC_ARG_VAR_VALIDATE
 # --------------------
-define([_AC_ARG_VAR_VALIDATE],
+m4_define([_AC_ARG_VAR_VALIDATE],
 [# Check that the precious variables saved in the cache have kept the same
 # value.
 ac_suggest_removing_cache=false
@@ -1869,7 +1869,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # _AC_CANONICAL_SPLIT(THING)
 # --------------------------
 # Generate the variables THING, THING_{alias cpu vendor os}.
-define([_AC_CANONICAL_SPLIT],
+m4_define([_AC_CANONICAL_SPLIT],
 [AC_SUBST([$1],       [$ac_cv_$1])dnl
 dnl FIXME: AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
 AC_SUBST([$1_cpu],
@@ -1965,7 +1965,7 @@ AU_DEFUN([AC_VALIDATE_CACHED_SYSTEM_TUPLE], [])
 # AC_SITE_LOAD
 # ------------
 # Look for site or system specific initialization scripts.
-define([AC_SITE_LOAD],
+m4_define([AC_SITE_LOAD],
 [# Prefer explicitly selected file to automatically selected ones.
 if test -z "$CONFIG_SITE"; then
   if test "x$prefix" != xNONE; then
@@ -1985,7 +1985,7 @@ done
 
 # AC_CACHE_LOAD
 # -------------
-define([AC_CACHE_LOAD],
+m4_define([AC_CACHE_LOAD],
 [if test -r "$cache_file"; then
   # Some versions of bash will fail to source /dev/null (special
   # files actually), so we avoid doing that.
@@ -2006,7 +2006,7 @@ fi
 # _AC_CACHE_DUMP
 # --------------
 # Dump the cache to stdout.  It can be in a pipe (this is a requirement).
-define([_AC_CACHE_DUMP],
+m4_define([_AC_CACHE_DUMP],
 [# The following way of writing the cache mishandles newlines in values,
 # but we know of no workaround that is simple, portable, and efficient.
 # So, don't put newlines in cache variables' values.
@@ -2036,7 +2036,7 @@ define([_AC_CACHE_DUMP],
 # -------------
 # Save the cache.
 # Allow a site initialization script to override cache values.
-define([AC_CACHE_SAVE],
+m4_define([AC_CACHE_SAVE],
 [cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -2070,7 +2070,7 @@ rm -f confcache[]dnl
 # ------------------------------------------
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
-define([AC_CACHE_VAL],
+m4_define([AC_CACHE_VAL],
 [ifelse(m4_regexp([$2], [AC_DEFINE]), [-1], [],
         [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
@@ -2083,7 +2083,7 @@ AC_VAR_SET_IFELSE([$1],
 # AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
 # -------------------------------------------
 # Do not call this macro with a dnl right behind.
-define([AC_CACHE_CHECK],
+m4_define([AC_CACHE_CHECK],
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])dnl
 AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
@@ -2099,14 +2099,14 @@ AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 # -------------------------------------------
 # This macro is useless, it is used only with --trace to collect the
 # list of *literals* CPP values passed to AC_DEFINE/AC_DEFINE_UNQUOTED.
-define([AC_DEFINE_TRACE_LITERAL])
+m4_define([AC_DEFINE_TRACE_LITERAL])
 
 
 # AC_DEFINE_TRACE(CPP-SYMBOL)
 # ---------------------------
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.
-define([AC_DEFINE_TRACE],
+m4_define([AC_DEFINE_TRACE],
 [AC_VAR_INDIR_IFELSE([$1], [], [AC_DEFINE_TRACE_LITERAL([$1])])])
 
 
@@ -2115,7 +2115,7 @@ define([AC_DEFINE_TRACE],
 # Set VARIABLE to VALUE, verbatim, or 1.  Remember the value
 # and if VARIABLE is affected the same VALUE, do nothing, else
 # die.  The third argument is used by autoheader.
-define([AC_DEFINE],
+m4_define([AC_DEFINE],
 [AC_DEFINE_TRACE([$1])dnl
 ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<\EOF
@@ -2127,7 +2127,7 @@ EOF
 # AC_DEFINE_UNQUOTED(VARIABLE, [VALUE], [DESCRIPTION])
 # ----------------------------------------------------
 # Similar, but perform shell substitutions $ ` \ once on VALUE.
-define([AC_DEFINE_UNQUOTED],
+m4_define([AC_DEFINE_UNQUOTED],
 [AC_DEFINE_TRACE([$1])dnl
 ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<EOF
@@ -2146,14 +2146,14 @@ EOF
 # ----------------------------
 # If VARIABLE has not already been AC_SUBST'ed, append the sed PROGRAM
 # to `_AC_SUBST_SED_PROGRAM'.
-define([_AC_SUBST],
+m4_define([_AC_SUBST],
 [AC_EXPAND_ONCE([m4_append([_AC_SUBST_SED_PROGRAM],
 [$2
 ])])dnl
 ])
 
 # Initialize.
-define([_AC_SUBST_SED_PROGRAM])
+m4_define([_AC_SUBST_SED_PROGRAM])
 
 
 # AC_SUBST(VARIABLE, [VALUE])
@@ -2164,7 +2164,7 @@ define([_AC_SUBST_SED_PROGRAM])
 #
 # Beware that if you change this macro, you also have to change the
 # sed script at the top of _AC_OUTPUT_FILES.
-define([AC_SUBST],
+m4_define([AC_SUBST],
 [m4_ifvanl([$2], [$1=$2])[]dnl
 _AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
 ])# AC_SUBST
@@ -2173,7 +2173,7 @@ _AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
 # AC_SUBST_FILE(VARIABLE)
 # -----------------------
 # Read the comments of the preceding macro.
-define([AC_SUBST_FILE],
+m4_define([AC_SUBST_FILE],
 [_AC_SUBST([$1], [/@$1@/r [$]$1
 s,@$1@,,;t t])])
 
@@ -2192,7 +2192,7 @@ s,@$1@,,;t t])])
 # ------------------------------
 # Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
 # specified.
-define([AC_DIAGNOSE],
+m4_define([AC_DIAGNOSE],
 [m4_warn($@)])
 
 
@@ -2200,13 +2200,13 @@ define([AC_DIAGNOSE],
 # -------------------
 # Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
 # specified.
-define([AC_WARNING],
+m4_define([AC_WARNING],
 [AC_DIAGNOSE([syntax], [$1])])
 
 
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
 # --------------------------------
-define([AC_FATAL],
+m4_define([AC_FATAL],
 [m4_fatal($@)])
 
 
@@ -2225,7 +2225,7 @@ define([AC_FATAL],
 # If STRING contains `\"' or `\`', it's old.
 # Otherwise it's modern.
 # We use two quotes in the pattern to keep highlighting tools at peace.
-define([_AC_SH_QUOTE_IFELSE],
+m4_define([_AC_SH_QUOTE_IFELSE],
 [ifelse(m4_regexp([$1], [\\[\\$]]),
         [-1], [ifelse(m4_regexp([$1], [\\[`""]]),
                       [-1], [$2],
@@ -2240,7 +2240,7 @@ define([_AC_SH_QUOTE_IFELSE],
 # FIXME: In a distant future (2.51 or +), this warning should be
 # classified as `syntax'.  It is claissified as `obsolete' to ease
 # the transition (for Libtool for instance).
-define([_AC_SH_QUOTE],
+m4_define([_AC_SH_QUOTE],
 [_AC_SH_QUOTE_IFELSE([$1],
                      [m4_patsubst([$1], [\([`""]\)], [\\\1])],
                      [AC_DIAGNOSE([obsolete],
@@ -2251,27 +2251,27 @@ $1])])
 # _AC_ECHO_UNQUOTED(STRING, [FD = AC_FD_MSG])
 # -------------------------------------------
 # Perform shell expansions on STRING and echo the string to FD.
-define([_AC_ECHO_UNQUOTED],
+m4_define([_AC_ECHO_UNQUOTED],
 [echo "$1" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # _AC_ECHO(STRING, [FD = AC_FD_MSG])
 # ----------------------------------
 # Protect STRING from backquote expansion, echo the result to FD.
-define([_AC_ECHO],
+m4_define([_AC_ECHO],
 [_AC_ECHO_UNQUOTED([_AC_SH_QUOTE([$1])], $2)])
 
 
 # _AC_ECHO_N(STRING, [FD = AC_FD_MSG])
 # ------------------------------------
 # Same as _AC_ECHO, but echo doesn't return to a new line.
-define([_AC_ECHO_N],
+m4_define([_AC_ECHO_N],
 [echo $ECHO_N "_AC_SH_QUOTE([$1])$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # AC_MSG_NOTICE(STRING)
 # ---------------------
-define([AC_MSG_NOTICE],
+m4_define([AC_MSG_NOTICE],
 [_AC_ECHO([configure:__oline__: notice: $1], AC_FD_LOG)
 _AC_ECHO([$1])[]dnl
 ])
@@ -2279,7 +2279,7 @@ _AC_ECHO([$1])[]dnl
 
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
-define([AC_MSG_CHECKING],
+m4_define([AC_MSG_CHECKING],
 [_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)
 _AC_ECHO_N([checking $1... ])[]dnl
 ])
@@ -2287,7 +2287,7 @@ _AC_ECHO_N([checking $1... ])[]dnl
 
 # AC_MSG_RESULT(RESULT)
 # ---------------------
-define([AC_MSG_RESULT],
+m4_define([AC_MSG_RESULT],
 [_AC_ECHO([configure:__oline__: result: $1], AC_FD_LOG)
 _AC_ECHO([${ECHO_T}$1])[]dnl
 ])
@@ -2296,7 +2296,7 @@ _AC_ECHO([${ECHO_T}$1])[]dnl
 # AC_MSG_RESULT_UNQUOTED(RESULT)
 # ------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
-define([AC_MSG_RESULT_UNQUOTED],
+m4_define([AC_MSG_RESULT_UNQUOTED],
 [_AC_ECHO_UNQUOTED([configure:__oline__: result: $1], AC_FD_LOG)
 _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
@@ -2304,14 +2304,14 @@ _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 
 # AC_MSG_WARN(PROBLEM)
 # --------------------
-define([AC_MSG_WARN],
+m4_define([AC_MSG_WARN],
 [{ _AC_ECHO([configure:__oline__: WARNING: $1], AC_FD_LOG)
 _AC_ECHO([configure: WARNING: $1], 2); }])
 
 
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
-define([AC_MSG_ERROR],
+m4_define([AC_MSG_ERROR],
 [{ _AC_ECHO([configure:__oline__: error: $1], AC_FD_LOG)
   _AC_ECHO([configure: error: $1], 2)
   AS_EXIT([$2]); }])
@@ -2409,7 +2409,7 @@ AC_DEFUN([AC_TRY_COMMAND],
 # Because I don't see any backward compatible means to fix the
 # brokenness of AC_TRY_COMPILE, we are doomed to leave a extra new
 # line here.
-define([AC_INCLUDES_DEFAULT],
+m4_define([AC_INCLUDES_DEFAULT],
 [ifelse([$1], [], [$ac_includes_default], [$1
 ])])
 
@@ -2483,7 +2483,7 @@ $2],
 # POSIX.2 word splitting is done only on the output of word
 # expansions, not every word.  This closes a longstanding sh security
 # hole.
-define([AC_SHELL_PATH_WALK],
+m4_define([AC_SHELL_PATH_WALK],
 [ac_save_IFS=$IFS; IFS=':'
 ac_dummy="m4_default([$1], [$PATH])"
 for ac_dir in $ac_dummy; do
@@ -2787,7 +2787,7 @@ AC_VAR_POPDEF([ac_Lib])dnl
 
 # AH_CHECK_LIB(LIBNAME)
 # ---------------------
-define([AH_CHECK_LIB],
+m4_define([AH_CHECK_LIB],
 [AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
              [Define if you have the `]$1[' library (-l]$1[).])])
 
@@ -2903,7 +2903,7 @@ rm -f conftest*
 # ---------------------------------------------------------------------
 # Try to compile PROGRAM.
 # This macro can be used during the selection of a compiler.
-define([_AC_COMPILE_IFELSE],
+m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
@@ -2944,7 +2944,7 @@ AC_DEFUN([AC_TRY_COMPILE],
 # ------------------------------------------------------------------
 # Try to link PROGRAM.
 # This macro can be used during the selection of a compiler.
-define([_AC_LINK_IFELSE],
+m4_define([_AC_LINK_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
@@ -3002,7 +3002,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # ------------------------------------------------------------
 # Compile, link, and run.
 # This macro can be used during the selection of a compiler.
-define([_AC_RUN_IFELSE],
+m4_define([_AC_RUN_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) &&
@@ -3064,7 +3064,7 @@ AC_VAR_POPDEF([ac_Header])dnl
 ])# AC_CHECK_HEADER
 
 
-define([AH_CHECK_HEADERS],
+m4_define([AH_CHECK_HEADERS],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
                [Define if you have the <]AC_Header[> header file.])])])
@@ -3173,14 +3173,14 @@ $3],
 # AC_LIBOBJ_DECL(FILENAME-NOEXT)
 # ------------------------------
 # Announce we might need the file `FILENAME-NOEXT.c'.
-define([AC_LIBOBJ_DECL], [])
+m4_define([AC_LIBOBJ_DECL], [])
 
 
 # _AC_LIBOBJ(FILENAME-NOEXT, ACTION-IF-INDIR)
 # -------------------------------------------
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
-define([_AC_LIBOBJ],
+m4_define([_AC_LIBOBJ],
 [AC_VAR_INDIR_IFELSE([$1],
                      [$2],
                      [AC_LIBOBJ_DECL([$1])])dnl
@@ -3192,7 +3192,7 @@ LIBOBJS="$LIBOBJS $1.$ac_objext"])
 # -------------------------
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
-define([AC_LIBOBJ],
+m4_define([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],
             [AC_DIAGNOSE(syntax,
                          [$0($1): you should use literals])])dnl
@@ -3209,7 +3209,7 @@ define([AC_LIBOBJ],
 # ---------------------------------------------------------
 # Compute the integer EXPRESSION and store the result in the VARIABLE.
 # Works OK if cross compiling.
-define([_AC_COMPUTE_INT_COMPILE],
+m4_define([_AC_COMPUTE_INT_COMPILE],
 [# Depending upon the size, compute the lo and hi bounds.
 AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
  [ac_lo=0 ac_try=0
@@ -3237,14 +3237,14 @@ $2=$ac_lo[]dnl
 # _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, [INCLUDES], [IF-FAILS])
 # -----------------------------------------------------------------
 # Store the evaluation of the integer EXPRESSION in VARIABLE.
-define([_AC_COMPUTE_INT_RUN],
+m4_define([_AC_COMPUTE_INT_RUN],
 [AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
                [$2=`cat conftestval`], [$4])])
 
 
 # _AC_COMPUTE_INT(EXPRESSION, VARIABLE, INCLUDES, IF-FAILS)
 # ---------------------------------------------------------
-define([_AC_COMPUTE_INT],
+m4_define([_AC_COMPUTE_INT],
 [if test "$cross_compiling" = yes; then
   _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3])
 else
@@ -3360,7 +3360,7 @@ AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), $AC_TR_SH([ac_cv_sizeof_$1]),
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
-define([_AC_CHECK_TYPE_NEW],
+m4_define([_AC_CHECK_TYPE_NEW],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
@@ -3399,7 +3399,7 @@ $2],
 # FIXME: This is an extremely badly chosen name, since this
 # macro actually performs an AC_REPLACE_TYPE.  Some day we
 # have to clean this up.
-define([_AC_CHECK_TYPE_OLD],
+m4_define([_AC_CHECK_TYPE_OLD],
 [_AC_CHECK_TYPE_NEW([$1],,
    [AC_DEFINE_UNQUOTED([$1], [$2],
                        [Define to `$2' if <sys/types.h> does not define.])])dnl
@@ -3414,7 +3414,7 @@ define([_AC_CHECK_TYPE_OLD],
 # that are defining types.
 # Because many people have used `off_t' and `size_t' too, they are added
 # for better common-useward backward compatibility.
-define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
+m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 [ifelse(m4_regexp([$1],
                [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
 	0, 1, 0)dnl
@@ -3424,7 +3424,7 @@ define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # _AC_CHECK_TYPE_MAYBE_TYPE_P(STRING)
 # -----------------------------------
 # Return `1' if STRING looks like a C/C++ type.
-define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
+m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
 [ifelse(m4_regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
 	0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
@@ -3541,7 +3541,7 @@ AC_DEFUN([AC_CHECK_TYPE],
 # is just no way to simply compare two strings in m4, but to use pattern
 # matching.  The big problem is then that the active characters should
 # be quoted.  Currently `+*.' are quoted.
-define([AC_CONFIG_IF_MEMBER],
+m4_define([AC_CONFIG_IF_MEMBER],
 [ifelse(m4_regexp($2, [\(^\| \)]m4_patsubst([$1],
                                             [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
         -1, [$4], [$3])])
@@ -3551,14 +3551,14 @@ define([AC_CONFIG_IF_MEMBER],
 # -----------------------------------------------------
 # This macro does nothing, it's a hook to be read with `autoconf --trace'.
 # It announces DEST depends upon the SOURCE1 etc.
-define([AC_FILE_DEPENDENCY_TRACE], [])
+m4_define([AC_FILE_DEPENDENCY_TRACE], [])
 
 
 # _AC_CONFIG_DEPENDENCY(DEST, [SOURCE1], [SOURCE2...])
 # ----------------------------------------------------
 # Be sure that a missing dependency is expressed as a dependency upon
 # `DEST.in'.
-define([_AC_CONFIG_DEPENDENCY],
+m4_define([_AC_CONFIG_DEPENDENCY],
 [ifval([$2],
        [AC_FILE_DEPENDENCY_TRACE($@)],
        [AC_FILE_DEPENDENCY_TRACE([$1], [$1.in])])])
@@ -3567,7 +3567,7 @@ define([_AC_CONFIG_DEPENDENCY],
 # _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]]...)
 # -------------------------------------------------------
 # Declare the DESTs depend upon their SOURCE1 etc.
-define([_AC_CONFIG_DEPENDENCIES],
+m4_define([_AC_CONFIG_DEPENDENCIES],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
   [_AC_CONFIG_DEPENDENCY(m4_patsubst(AC_File, [:], [,]))])
@@ -3584,7 +3584,7 @@ m4_divert_pop()dnl
 #
 # Note that this macro does not check if the list $[1] itself
 # contains doubles.
-define([_AC_CONFIG_UNIQUE],
+m4_define([_AC_CONFIG_UNIQUE],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
 [m4_pushdef([AC_Dest], m4_patsubst(AC_File, [:.*]))
@@ -3610,13 +3610,13 @@ m4_divert_pop()dnl
 # `config.status'.  This is typically used to pass variables from
 # `configure' to `config.status'.  Note that $[1] is not over quoted as
 # was the case in AC_OUTPUT_COMMANDS.
-define([_AC_CONFIG_COMMANDS_INIT],
+m4_define([_AC_CONFIG_COMMANDS_INIT],
 [ifval([$1],
 [m4_append([_AC_OUTPUT_COMMANDS_INIT], [$1
 ])])])
 
 # Initialize.
-define([_AC_OUTPUT_COMMANDS_INIT])
+m4_define([_AC_OUTPUT_COMMANDS_INIT])
 
 
 # AC_CONFIG_COMMANDS(NAME...,[COMMANDS], [INIT-CMDS])
@@ -3640,8 +3640,8 @@ ac_config_commands="$ac_config_commands $1"
 ])dnl
 
 # Initialize the lists.
-define([AC_LIST_COMMANDS])
-define([AC_LIST_COMMANDS_COMMANDS])
+m4_define([AC_LIST_COMMANDS])
+m4_define([AC_LIST_COMMANDS_COMMANDS])
 
 
 # AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
@@ -3659,7 +3659,7 @@ define([AC_LIST_COMMANDS_COMMANDS])
 # clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
 # depending upon __file__ or the pid).
 AU_DEFUN([AC_OUTPUT_COMMANDS],
-[define([_AC_OUTPUT_COMMANDS_CNT], m4_incr(_AC_OUTPUT_COMMANDS_CNT))dnl
+[m4_define([_AC_OUTPUT_COMMANDS_CNT], m4_incr(_AC_OUTPUT_COMMANDS_CNT))dnl
 dnl Double quoted since that was the case in the original macro.
 AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 ])
@@ -3676,7 +3676,7 @@ AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
 ])])
 
 # Initialize.
-define([AC_OUTPUT_COMMANDS_PRE])
+m4_define([AC_OUTPUT_COMMANDS_PRE])
 
 
 # AC_CONFIG_COMMANDS_POST(CMDS)
@@ -3687,7 +3687,7 @@ AC_DEFUN([AC_CONFIG_COMMANDS_POST],
 ])])
 
 # Initialize.
-define([AC_OUTPUT_COMMANDS_POST])
+m4_define([AC_OUTPUT_COMMANDS_POST])
 
 
 # AC_CONFIG_HEADERS(HEADERS..., [COMMANDS], [INIT-CMDS])
@@ -3720,8 +3720,8 @@ ac_config_headers="$ac_config_headers $1"
 # Initialize to empty.  It is much easier and uniform to have a config
 # list expand to empty when undefined, instead of special casing when
 # not defined (since in this case, AC_CONFIG_FOO expands to AC_CONFIG_FOO).
-define([AC_LIST_HEADERS])
-define([AC_LIST_HEADERS_COMMANDS])
+m4_define([AC_LIST_HEADERS])
+m4_define([AC_LIST_HEADERS_COMMANDS])
 
 
 # AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
@@ -3756,8 +3756,8 @@ ac_config_links="$ac_config_links $1"
 
 
 # Initialize the list.
-define([AC_LIST_LINKS])
-define([AC_LIST_LINKS_COMMANDS])
+m4_define([AC_LIST_LINKS])
+m4_define([AC_LIST_LINKS_COMMANDS])
 
 
 # AC_LINK_FILES(SOURCE..., DEST...)
@@ -3777,7 +3777,7 @@ define([AC_LIST_LINKS_COMMANDS])
 AU_DEFUN([AC_LINK_FILES],
 [ifelse($#, 2, ,
         [m4_fatal([$0: incorrect number of arguments])])dnl
-define([_AC_LINK_FILES_CNT], m4_incr(_AC_LINK_FILES_CNT))dnl
+m4_define([_AC_LINK_FILES_CNT], m4_incr(_AC_LINK_FILES_CNT))dnl
 ac_sources="$1"
 ac_dests="$2"
 while test -n "$ac_sources"; do
@@ -3826,8 +3826,8 @@ ac_config_files="$ac_config_files $1"
 ])dnl
 
 # Initialize the lists.
-define([AC_LIST_FILES])
-define([AC_LIST_FILES_COMMANDS])
+m4_define([AC_LIST_FILES])
+m4_define([AC_LIST_FILES_COMMANDS])
 
 
 # AC_CONFIG_SUBDIRS(DIR ...)
@@ -3854,7 +3854,7 @@ AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
 
 # Initialize the list.
-define([_AC_LIST_SUBDIRS])
+m4_define([_AC_LIST_SUBDIRS])
 
 
 # autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
@@ -3879,7 +3879,7 @@ m4_ifvanl([$2$3],
 # The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADERS.
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
-define([AC_OUTPUT],
+m4_define([AC_OUTPUT],
 [dnl Dispatch the extra arguments to their native macros.
 ifval([$1],
       [AC_CONFIG_FILES([$1])])dnl
@@ -3931,7 +3931,7 @@ AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 # Produce config.status.  Called by AC_OUTPUT.
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
-define([_AC_OUTPUT_CONFIG_STATUS],
+m4_define([_AC_OUTPUT_CONFIG_STATUS],
 [echo creating $CONFIG_STATUS
 cat >$CONFIG_STATUS <<\EOF
 #! /bin/sh
@@ -4153,7 +4153,7 @@ chmod +x $CONFIG_STATUS
 # This is a subroutine of AC_OUTPUT.
 # It is called inside configure, outside of config.status.
 # Using a here document instead of a string reduces the quoting nightmare.
-define([AC_OUTPUT_MAKE_DEFS],
+m4_define([AC_OUTPUT_MAKE_DEFS],
 [[# Transform confdefs.h into DEFS.
 # Protect against shell expansion while executing Makefile rules.
 # Protect against Makefile macro expansion.
@@ -4192,7 +4192,7 @@ rm -f confdef2opt.sed
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define([_AC_OUTPUT_FILES],
+m4_define([_AC_OUTPUT_FILES],
 [cat >>$CONFIG_STATUS <<EOF
 
 #
@@ -4422,7 +4422,7 @@ EOF
 #
 # The result is about, hm, ... times blah... plus....  Ahem.  The
 # result is about much faster.
-define([_AC_OUTPUT_HEADERS],
+m4_define([_AC_OUTPUT_HEADERS],
 [cat >>$CONFIG_STATUS <<\EOF
 
 #
@@ -4622,7 +4622,7 @@ EOF
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define([_AC_OUTPUT_LINKS],
+m4_define([_AC_OUTPUT_LINKS],
 [cat >>$CONFIG_STATUS <<\EOF
 
 #
@@ -4684,7 +4684,7 @@ EOF
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define([_AC_OUTPUT_COMMANDS],
+m4_define([_AC_OUTPUT_COMMANDS],
 [cat >>$CONFIG_STATUS <<\EOF
 
 #
@@ -4710,7 +4710,7 @@ EOF
 # ------------------
 # This is a subroutine of AC_OUTPUT, but it does not go into
 # config.status, rather, it is called after running config.status.
-define([_AC_OUTPUT_SUBDIRS],
+m4_define([_AC_OUTPUT_SUBDIRS],
 [
 #
 # CONFIG_SUBDIRS section.

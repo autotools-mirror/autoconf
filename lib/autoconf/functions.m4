@@ -131,7 +131,7 @@ AU_ALIAS([AC_HAVE_FUNCS], [AC_CHECK_FUNCS])
 # Set up the LIBOBJ replacement of `alloca'.  Well, not exactly
 # AC_LIBOBJ since we actually set the output variable `ALLOCA'.
 # Nevertheless, for Automake, AC_LIBOBJ_DECL it.
-define([_AC_LIBOBJ_ALLOCA],
+m4_define([_AC_LIBOBJ_ALLOCA],
 [# The SVR3 libPW and SVR4 libucb both contain incompatible functions
 # that cause trouble.  Some versions do not even contain alloca or
 # contain a buggy version.  If you still want to use their alloca,
@@ -420,7 +420,7 @@ LIBS=$ac_save_LIBS
 # _AC_LIBOBJ_GETLOADAVG
 # ---------------------
 # Set up the AC_LIBOBJ replacement of `getloadavg'.
-define([_AC_LIBOBJ_GETLOADAVG],
+m4_define([_AC_LIBOBJ_GETLOADAVG],
 [AC_LIBOBJ(getloadavg)
 AC_DEFINE(C_GETLOADAVG, 1, [Define if using `getloadavg.c'.])
 # Figure out what our getloadavg.c needs.
@@ -1183,7 +1183,7 @@ fi
 # If it does, then define HAVE_STAT_EMPTY_STRING_BUG (or
 # HAVE_LSTAT_EMPTY_STRING_BUG) and arrange to compile the wrapper
 # function.
-define([_AC_FUNC_STAT],
+m4_define([_AC_FUNC_STAT],
 [AC_REQUIRE([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])dnl
 AC_CACHE_CHECK([whether $1 accepts an empty string],
                [ac_cv_func_$1_empty_string_bug],
@@ -1217,7 +1217,7 @@ AC_DEFUN([AC_FUNC_LSTAT], [_AC_FUNC_STAT(lstat)])
 
 # _AC_LIBOBJ_STRTOD
 # -----------------
-define([_AC_LIBOBJ_STRTOD],
+m4_define([_AC_LIBOBJ_STRTOD],
 [AC_LIBOBJ(strtod)
 AC_CHECK_FUNC(pow)
 if test $ac_cv_func_pow = no; then

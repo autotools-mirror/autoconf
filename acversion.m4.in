@@ -2,4 +2,4 @@
 # Version of Autoconf.
 # Copyright 1999, 2000 Free Software Foundation, Inc.
 
-define([AC_ACVERSION], [@VERSION@])
+m4_define([AC_ACVERSION], [@VERSION@])
