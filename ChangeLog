@@ -22,6 +22,7 @@
 	(site.exp): Use tests to guard commands from generating error
 	messages if `site.exp' or `site.bak' do not exist. Contributed by
 	Karl Heuer <kwzh@gnu.org>.
+	(dejacheck): Remove unused target.
 	
 1998-09-26  Ben Elliston  <bje@cygnus.com>
 

@@ -40,12 +40,6 @@ all:
 info:
 dvi:
 
-dejacheck:
-	@if $(SHELL) -c 'runtest --version' > /dev/null 2>&1; then :; else \
-	  echo ERROR: the autoconf tests require the DejaGNU runtest program; \
-	  exit 1; \
-	fi
-
 check: site.exp all
 	@if ($(RUNTEST) --version) >/dev/null 2>&1; then \
 	echo $(RUNTEST); \
