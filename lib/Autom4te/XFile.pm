@@ -1,4 +1,4 @@
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -63,9 +63,11 @@ Autom4te::XFile - supply object methods for filehandles with error handling
 
 =head1 DESCRIPTION
 
-C<Autom4te::XFile> inherits from C<IO::File>.  It provides dying
-version of the methods C<open>, C<new>, and C<close>.  It also overrides
-the C<getline> and C<getlines> methods to translate C<\r\n> to C<\n>.
+C<Autom4te::XFile> inherits from C<IO::File>.  It provides the method
+C<name> returning the file name.  It provides dying version of the
+methods C<close>, C<lock> (corresponding to C<flock>), C<new>,
+C<open>, C<seek>, and C<trunctate>.  It also overrides the C<getline>
+and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =head1 SEE ALSO
 
@@ -85,6 +87,7 @@ require 5.000;
 use strict;
 use vars qw($VERSION @EXPORT @EXPORT_OK $AUTOLOAD @ISA);
 use Carp;
+use IO::File;
 use File::Basename;
 
 require Exporter;
@@ -92,18 +95,20 @@ require DynaLoader;
 
 @ISA = qw(IO::File Exporter DynaLoader);
 
-$VERSION = "1.1";
+$VERSION = "1.2";
 
 @EXPORT = @IO::File::EXPORT;
 
 eval {
-    # Make all Fcntl O_XXX constants available for importing
-    require Fcntl;
-    my @O = grep /^O_/, @Fcntl::EXPORT;
-    Fcntl->import(@O);  # first we import what we want to export
-    push(@EXPORT, @O);
+  # Make all Fcntl O_XXX and LOCK_XXX constants available for importing
+  require Fcntl;
+  my @O = grep /^(LOCK|O)_/, @Fcntl::EXPORT, @Fcntl::EXPORT_OK;
+  Fcntl->import (@O);  # first we import what we want to export
+  push (@EXPORT, @O);
 };
 
+# Used in croak error messages.
+my $me = basename ($0);
 
 ################################################
 ## Constructor
@@ -138,7 +143,6 @@ sub open
 
   if (!$fh->SUPER::open (@_))
     {
-      my $me = basename ($0);
       croak "$me: cannot open $file: $!\n";
     }
 
@@ -158,8 +162,7 @@ sub close
   my ($fh) = shift;
   if (!$fh->SUPER::close (@_))
     {
-      my $me = basename ($0);
-      my $file = ${*$fh}{'autom4te_xfile_file'};
+      my $file = $fh->name;
       croak "$me: cannot close $file: $!\n";
     }
 }
@@ -172,11 +175,11 @@ sub close
 # so we do that here.
 sub getline
 {
-    local $_ = $_[0]->SUPER::getline;
-    # Perform a _global_ replacement: $_ may can contains many lines
-    # in slurp mode ($/ = undef).
-    s/\015\012/\n/gs if defined $_;
-    return $_;
+  local $_ = $_[0]->SUPER::getline;
+  # Perform a _global_ replacement: $_ may can contains many lines
+  # in slurp mode ($/ = undef).
+  s/\015\012/\n/gs if defined $_;
+  return $_;
 }
 
 ################################################
@@ -185,10 +188,64 @@ sub getline
 
 sub getlines
 {
-    my @res = ();
-    my $line;
-    push @res, $line while $line = $_[0]->getline;
-    return @res;
+  my @res = ();
+  my $line;
+  push @res, $line while $line = $_[0]->getline;
+  return @res;
+}
+
+################################################
+## Name
+##
+
+sub name
+{
+  my ($fh) = shift;
+  return ${*$fh}{'autom4te_xfile_file'};
+}
+
+################################################
+## Lock
+##
+
+sub lock
+{
+  use Fcntl qw(:DEFAULT :flock);
+  my ($fh) = shift;
+  if (!flock ($fh, @_))
+    {
+      my $file = $fh->name;
+      croak "$me: cannot lock $file with @_: $!\n";
+    }
+}
+
+################################################
+## Seek
+##
+
+sub seek
+{
+  my ($fh) = shift;
+  # Cannot use @_ here.
+  if (!seek ($fh, $_[0], $_[1]))
+    {
+      my $file = $fh->name;
+      croak "$me: cannot rewind $file with @_: $!\n";
+    }
+}
+
+################################################
+## Truncate
+##
+
+sub truncate
+{
+  my ($fh) = shift;
+  if (!truncate ($fh, @_))
+    {
+      my $file = $fh->name;
+      croak "$me: cannot truncate $file with @_: $!\n";
+    }
 }
 
 1;

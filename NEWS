@@ -14,6 +14,11 @@
     configure: WARNING: pi.h: proceeding with the preprocessor's result
       messages.
 
+* Concurrent executions of autom4te
+  autom4te now locks its internal files, which enables concurrent
+  executions of autom4te, likely to happen if automake, autoconf,
+  autoheader etc. are run simultaneously.
+
 * Major changes in Autoconf 2.57
 
   Released 2002-12-03 by Paul Eggert.

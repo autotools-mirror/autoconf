@@ -1,6 +1,13 @@
-2003-05-05  Derek Price  <derek@ximbiot.com>
+2003-05-06  Akim Demaille  <akim@epita.fr>
 
-	* lib/emacs/.cvsignore: Add generated elc-stamp file.
+	Lock autom4te's cache.
+
+	* lib/Autom4te/XFile.pm ($me, &name, &lock, &truncate, &seek): New.
+	* bin/autom4te.in (&Request::save, &Request::load): Use an IO::File
+	argument instead of a file name, so that the request file remains
+	open during the whole autom4te run.
+	($icache_file): New.
+	(&freeze): Lock the $icache_file.
 
 2003-04-29  Derek Price  <derek@ximbiot.com>
 
