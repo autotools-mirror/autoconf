@@ -1295,22 +1295,42 @@ test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 # AC_FUNC_SETVBUF_REVERSED
 # ------------------------
 AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
-[AC_CACHE_CHECK(whether setvbuf arguments are reversed,
+[AC_REQUIRE([AC_C_PROTOTYPES])dnl
+AC_CACHE_CHECK(whether setvbuf arguments are reversed,
   ac_cv_func_setvbuf_reversed,
-[AC_TRY_RUN([#include <stdio.h>
-/* If setvbuf has the reversed format, exit 0. */
-int
-main ()
-{
-  /* This call has the arguments reversed.
-     A reversed system may check and see that the address of main
-     is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
-  if (setvbuf(stdout, _IOLBF, (char *) main, BUFSIZ) != 0)
-    exit(1);
-  putc('\r', stdout);
-  exit(0);			/* Non-reversed systems segv here.  */
-}], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
-rm -f core core.* *.core])
+  [ac_cv_func_setvbuf_reversed=no
+   AC_LINK_IFELSE(
+     [AC_LANG_PROGRAM(
+	[[#include <stdio.h>
+#	  if PROTOTYPES
+	   int (setvbuf) (FILE *, int, char *, size_t);
+#	  endif]],
+	[[char buf; return setvbuf (stdout, _IOLBF, &buf, 1);]])],
+     [AC_LINK_IFELSE(
+	[AC_LANG_PROGRAM(
+	   [[#include <stdio.h>
+#	     if PROTOTYPES
+	      int (setvbuf) (FILE *, int, char *, size_t);
+#	     endif]],
+	   [[char buf; return setvbuf (stdout, &buf, _IOLBF, 1);]])],
+	[# It compiles and links either way, so it must not be declared
+	 # with a prototype and most likely this is a K&R C compiler.
+	 # Try running it.
+	 AC_RUN_IFELSE(
+	   [AC_LANG_PROGRAM(
+	      [[#include <stdio.h>]],
+	      [[/* This call has the arguments reversed.
+		   A reversed system may check and see that the address of buf
+		   is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
+		char buf;
+		if (setvbuf (stdout, _IOLBF, &buf, 1) != 0)
+		  exit (1);
+		putchar ('\r');
+		exit (0); /* Non-reversed systems SEGV here.  */]])],
+	   ac_cv_func_setvbuf_reversed=yes,
+	   rm -f core core.* *.core,
+	   [[: # Assume setvbuf is not reversed when cross-compiling.]])]
+	ac_cv_func_setvbuf_reversed=yes)])])
 if test $ac_cv_func_setvbuf_reversed = yes; then
   AC_DEFINE(SETVBUF_REVERSED, 1,
             [Define to 1 if the `setvbuf' function takes the buffering type as
