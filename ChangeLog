@@ -1,3 +1,10 @@
+2005-02-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Undo previous change, except keep the change to
+	lib/autoconf/programs.m4 that replaced grep with shell
+	pattern-matching.  This is because net-snmp configure reads stdin.
+	Reported by Noah Misch.
+
 2005-02-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Redirect stdin
