@@ -9,6 +9,8 @@
 	(_AC_PROG_GREP): Assume 3rd arg is properly quoted for the shell.
 	All callers changed.  Append /usr/xpg4/bin to the PATH, for
 	Solaris.
+	(_AC_FEATURE_CHECK_LENGTH): Discard stderr, so we don't bother
+	the user with complaints about multiple -e options.
 	* tests/local.at (AC_STATE_SAVE): Use $GREP, not grep.
 	Define it with AC_PROG_GREP.
 	* configure.ac (AC_PROG_GREP): Add.

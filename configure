@@ -2422,7 +2422,7 @@ else
     mv "$tmp/conftest.tmp" "$tmp/conftest.in"
     cp "$tmp/conftest.in" "$tmp/conftest.nl"
     echo 'GREP' >> "$tmp/conftest.nl"
-    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "$tmp/conftest.nl" >"$tmp/conftest.out" || break
+    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "$tmp/conftest.nl" >"$tmp/conftest.out" 2>/dev/null || break
     diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
     if test $ac_count -gt ${ac_path_GREP_max-0}; then
