@@ -1,5 +1,13 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	Work around the Ultrix limitations on ``multiple redirections''.
+	Reported by Harlan Stenn.
+
+	* acgeneral.m4 (_AC_EVAL_STDERR): New.
+	(_AC_PREPROC_IFELSE): Use it.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_data_files): Fix the computation of PATH.
 
 2001-01-16  Akim Demaille  <akim@epita.fr>

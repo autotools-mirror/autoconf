@@ -2240,6 +2240,23 @@ AC_DEFUN([_AC_EVAL],
   (exit $ac_status); }])
 
 
+# _AC_EVAL_STDERR(COMMAND)
+# ------------------------
+# Eval COMMAND, save its stderr into conftest.err, save the exit status
+# in ac_status, and log it.
+# Note that when tracing, most shells will leave the traces in stderr
+
+AC_DEFUN([_AC_EVAL_STDERR],
+[{ (eval echo "$as_me:__oline__: \"$1\"") >&AS_MESSAGE_LOG_FD
+  (eval $1) 2>conftest.er1
+  ac_status=$?
+  egrep -v '^ *\+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&AS_MESSAGE_LOG_FD
+  echo "$as_me:__oline__: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  (exit $ac_status); }])
+
+
 # AC_TRY_EVAL(VARIABLE)
 # ---------------------
 # The purpose of this macro is to "configure:123: command line"
@@ -2721,14 +2738,13 @@ m4_popdef([AC_Lib_Name])dnl
 # Run cpp and set ac_cpp_err to "yes" for an error, to
 # "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if
 # neither warnings nor errors have been detected.  eval is necessary
-# to expand ac_cpp.  It may put trace lines to conftest.err when run
-# under sh -x (e.g. when zsh is used), so we filter them out.
+# to expand ac_cpp.
 #
 # This macro can be used during the selection of a preprocessor.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-if AC_TRY_COMMAND([$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err]); then
-  if egrep -v '^ *\+' conftest.err | grep . >/dev/null; then
+if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext >/dev/null]); then
+  if test -s conftest.err; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
   else
     ac_cpp_err=
@@ -2739,7 +2755,6 @@ fi
 if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
-  cat conftest.err >&AS_MESSAGE_LOG_FD
   echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
   cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
   $3

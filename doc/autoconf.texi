@@ -5201,6 +5201,36 @@ escape, while @samp{echo `cd /zorglub 2>/dev/null`} works properly.
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
+Most shells if not all (including Bash, Zsh, Ash) output traces on stderr
+including for sub shells.  This might result in undesired content if you
+meant to capture the standard error of the inner command:
+
+@example
+$ ash -x -c '(eval "echo foo >&2") 2>stderr'
+$ cat stderr
++ eval echo foo >&2
++ echo foo
+foo
+$ bash -x -c '(eval "echo foo >&2") 2>stderr'
+$ cat stderr
++ eval 'echo foo >&2'
+++ echo foo
+foo
+$ zsh -x -c '(eval "echo foo >&2") 2>stderr'
+@i{# Traces on startup files deleted here.}
+$ cat stderr
++zsh:1> eval echo foo >&2
++zsh:1> echo foo
+foo
+@end example
+
+@noindent
+You'll appreciate the various levels of details...
+
+One way out consists in grepping out uninteresting lines, hoping not to
+remove good ones...
+
+
 @node Shell Substitutions, Assignments, File Descriptors, Portable Shell
 @subsection Shell Substitutions
 

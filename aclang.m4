@@ -805,7 +805,7 @@ if test -z "$CPP"; then
     # Double quotes because CPP needs to be expanded
     for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
     do
-      _AC_PROG_PREPROC_WORKS()
+      _AC_PROG_PREPROC_WORKS
       if test -z "$ac_cpp_err"; then
         break
       fi
@@ -814,7 +814,7 @@ if test -z "$CPP"; then
   ])dnl
   CPP=$ac_cv_prog_CPP
 else
-  _AC_PROG_PREPROC_WORKS()
+  _AC_PROG_PREPROC_WORKS
   ac_cv_prog_CPP=$CPP
 fi
 AC_MSG_RESULT([$CPP])
@@ -1629,10 +1629,10 @@ AC_LANG_PUSH(Fortran 77)dnl
 
 AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 
-# Compile and link our simple test program by passing a flag
-# (argument 1 to this macro) to the Fortran 77 compiler in
-# order to get "verbose" output that we can then parse for the
-# Fortran 77 linker flags.
+# Compile and link our simple test program by passing a flag (argument
+# 1 to this macro) to the Fortran 77 compiler in order to get
+# "verbose" output that we can then parse for the Fortran 77 linker
+# flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS m4_default([$1], [$ac_cv_prog_f77_v])"
 (eval echo $as_me:__oline__: \"$ac_link\") >&AS_MESSAGE_LOG_FD
