@@ -1,5 +1,5 @@
 #! @SHELL@
-# autoheader -- create `config.h.in' from `configure.in'
+# autoheader -- create `config.h.in' from `configure.ac'
 # Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000
 # Free Software Foundation, Inc.
 
@@ -308,7 +308,7 @@ test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
 test -r $localdir/acconfig.h &&
   sed '/@BOTTOM@/,$d;s/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
 
-# Dump the templates from `configure.in'.
+# Dump the templates from `configure.ac'.
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p' | sort`; do
   echo >>$tmp/config.hin
   eval echo '"${'$verb'}"' >>$tmp/config.hin

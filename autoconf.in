@@ -502,11 +502,11 @@ EOF
   # Transform the traces from m4 into an m4 input file.
   # Typically, transform:
   #
-  # | m4trace:configure.in:3: -1- AC_SUBST([exec_prefix], [NONE])
+  # | m4trace:configure.ac:3: -1- AC_SUBST([exec_prefix], [NONE])
   #
   # into
   #
-  # | AT_AC_SUBST([configure.in], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
+  # | AT_AC_SUBST([configure.ac], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
   #
   # Pay attention that the file name might include colons, if under DOS
   # for instance, so we don't use `[^:][^:]*'.

@@ -1,5 +1,5 @@
 #! @PERL@ -w
-# autoscan - Create configure.scan (a preliminary configure.in) for a package.
+# autoscan - Create configure.scan (a preliminary configure.ac) for a package.
 # Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -47,7 +47,7 @@ sub print_usage
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
 common portability problems and create a file `configure.scan' which
-is a preliminary `configure.in' for that package.
+is a preliminary `configure.ac' for that package.
 
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
@@ -117,7 +117,7 @@ sub init_tables
   # The data file format supports only one line of macros per function.
   # If more than that is required for a common portability problem,
   # a new Autoconf macro should probably be written for that case,
-  # instead of duplicating the code in lots of configure.in files.
+  # instead of duplicating the code in lots of configure.ac files.
 
   foreach $kind ('functions', 'headers', 'identifiers', 'programs',
 		 'makevars') {
@@ -317,7 +317,7 @@ sub scan_sh_file
   }
 }
 
-# Print a configure.in.
+# Print a configure.ac.
 sub output
 {
   local (%unique_makefiles);

@@ -874,7 +874,7 @@ m4_divert_pop()dnl
 # The Axel Thimm implementation at work
 # -------------------------------------
 #
-# We consider the macros above, and this configure.in:
+# We consider the macros above, and this configure.ac:
 #
 # 	    AC_INIT
 # 	    TEST1

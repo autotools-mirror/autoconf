@@ -62,7 +62,7 @@
 # KILL is only used to suppress output.
 #
 # The layers of `configure'.  We let m4 undivert them by itself, when
-# it reaches the end of `configure.in'.
+# it reaches the end of `configure.ac'.
 #
 # - BINSH
 #   AC_REQUIRE'd #! /bin/sh line
@@ -268,7 +268,7 @@ m4_define([AU_DEFINE],
 # Also define NAME as a macro which code is NEW-CODE.
 #
 # This allows to share the same code for both supporting obsoleted macros,
-# and to update a configure.in.
+# and to update a configure.ac.
 # See `acobsolete.m4' for a longer description.
 m4_define([AU_DEFUN],
 [AU_DEFINE([$1],
@@ -580,7 +580,7 @@ m4_popdef([AC_Prefix])dnl
 
 
 # It is suggested that the macros in this section appear before
-# AC_INIT in `configure.in'.  Nevertheless, this is just stylistic,
+# AC_INIT in `configure.ac'.  Nevertheless, this is just stylistic,
 # and from the implementation point of, AC_INIT *must* be expanded
 # beforehand: it puts data in diversions which must appear before the
 # data provided by the macros of this section.
@@ -732,7 +732,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 
 # _AC_INIT_DEFAULTS
 # -----------------
-# Values which defaults can be set from `configure.in'.
+# Values which defaults can be set from `configure.ac'.
 # `/bin/machine' is used in `glibcbug'.  The others are used in config.*
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
@@ -1408,7 +1408,8 @@ if test "$ac_init_help" = "recursive"; then
     elif test -f $ac_sub_srcdir/configure; then
       echo
       $SHELL $ac_sub_srcdir/configure  --help=recursive
-    elif test -f $ac_sub_srcdir/configure.in; then
+    elif test -f $ac_sub_srcdir/configure.ac ||
+           test -f $ac_sub_srcdir/configure.in; then
       echo
       $ac_configure --help
     else
@@ -3537,7 +3538,7 @@ m4_define([AC_LIST_COMMANDS_COMMANDS])
 # `default-2' etc. for each call.
 #
 # Unfortunately this scheme is fragile: bad things might happen
-# if you update an included file and configure.in: you might have
+# if you update an included file and configure.ac: you might have
 # clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
 # depending upon __file__ or the pid).
 AU_DEFUN([AC_OUTPUT_COMMANDS],
@@ -4250,7 +4251,7 @@ EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
   sed "$ac_vpsub
-dnl Shell code in configure.in might set extrasub.
+dnl Shell code in configure.ac might set extrasub.
 dnl FIXME: do we really want to maintain this feature?
 $extrasub
 EOF
@@ -4698,7 +4699,8 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       ac_sub_configure="$SHELL $ac_sub_srcdir/configure.gnu"
     elif test -f $ac_sub_srcdir/configure; then
       ac_sub_configure="$SHELL $ac_sub_srcdir/configure"
-    elif test -f $ac_sub_srcdir/configure.in; then
+    elif test -f $ac_sub_srcdir/configure.ac ||
+           test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
       AC_MSG_WARN([no configuration information is in $ac_subdir])

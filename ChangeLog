@@ -1,3 +1,11 @@
+2001-01-12  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4: Last changes for `configure.ac'.
+	(_AC_INIT_HELP, _AC_OUTPUT_SUBDIRS): Take `configure.ac' into
+	account.
+	* autoreconf.sh: Likewise.
+
+	
 2001-01-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* acfunctions.m4 (AC_FUNC_MEMCMP): Missing comma in AC_TRY_RUN

@@ -28,10 +28,10 @@ can be considered for the next release.  If you are using the cache, and
 at some point @file{config.cache} contains results you don't want to
 keep, you may remove or edit it.
 
-The file @file{configure.in} is used to create @file{configure} by a
-program called @code{autoconf}.  You only need @file{configure.in} if
-you want to change it or regenerate @file{configure} using a newer
-version of @code{autoconf}.
+The file @file{configure.ac} (or @file{configure.in}) is used to create
+@file{configure} by a program called @code{autoconf}.  You only need
+@file{configure.ac} if you want to change it or regenerate
+@file{configure} using a newer version of @code{autoconf}.
 
 @noindent
 The simplest way to compile this package is:

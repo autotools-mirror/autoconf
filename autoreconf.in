@@ -298,9 +298,9 @@ update="@SHELL@ $tmp/update.sh"
 
 # Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
-find . -name configure.in -print |
-xargs grep -l AC_OUTPUT |
-sed 's%/configure\.in$%%; s%^./%%' |
+find . -name configure.ac -o -name configure.ac -print |
+xargs grep -l AC_INIT |
+sed 's,/configure\.ac$,,;s,/configure\.in$,,;s,^./,,' |
 while read dir; do
   (
   cd $dir || continue
