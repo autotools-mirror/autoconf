@@ -355,6 +355,7 @@ define(AC_VAR_IF_SET,
 #
 #   AC_VAR_POPDEF([header])
 
+
 # AC_VAR_PUSHDEF(VARNAME, VALUE)
 # ------------------------------
 # Define the m4 macro VARNAME to an accessor to the shell variable
@@ -3052,17 +3053,28 @@ define([AC_LIST_COMMANDS_COMMANDS])
 
 # AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
 # -----------------------------------------
+#
 # Add additional commands for AC_OUTPUT to put into config.status.
-# Use diversions instead of macros so we can be robust in the
-# presence of commas in $1 and/or $2.
-# FIXME: Obsolete it?
-AC_DEFUN(AC_OUTPUT_COMMANDS,
-[AC_DIVERT_PUSH(AC_DIVERSION_CMDS)dnl
-[$1]
-AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
-[$2]
-AC_DIVERT_POP()])
+#
+# This macro is an obsolete version of AC_CONFIG_COMMANDS.  The only
+# difficulty in mapping AC_OUTPUT_COMMANDS to AC_CONFIG_COMMANDS is
+# to give a unique key.  The scheme we have chosen is `default-1',
+# `default-2' etc. for each call.
+#
+# Unfortunately this scheme is fragile: bad things might happen
+# if you update an included file and configure.in: you might have
+# clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
+# depending upon __file__ or the pid).
+AU_DEFUN(AC_OUTPUT_COMMANDS,
+[define([AC_OUTPUT_COMMANDS_CNT], incr(AC_OUTPUT_COMMANDS_CNT))dnl
+dnl Double quoted since that was the case in the original macro.
+AC_CONFIG_COMMANDS([default-]AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
+])
+
+# Initialize both in `autoconf::' and `autoupdate::'.
+define(AC_OUTPUT_COMMANDS_CNT, 0)
+m4_namespace_define(autoupdate,
+                    [AC_OUTPUT_COMMANDS_CNT], 0)
 
 
 # AC_CONFIG_COMMANDS_PRE(CMDS)
@@ -3230,7 +3242,8 @@ define(AC_OUTPUT,
 [dnl Dispatch the extra arguments to their native macros.
 ifval([$1],
       [AC_CONFIG_FILES([$1])])dnl
-AC_OUTPUT_COMMANDS([$2], [$3])dnl
+ifset([$2$3],
+      [AC_OUTPUT_COMMANDS([$2], [$3])])dnl
 trap '' 1 2 15
 AC_CACHE_SAVE
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15

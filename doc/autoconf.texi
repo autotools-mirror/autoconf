@@ -2517,6 +2517,28 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 @end example
 @end defmac
 
+Aside from the fact that @code{AC_CONFIG_COMMANDS} requires an
+additional key, an important difference is that
+@code{AC_OUTPUT_COMMANDS} is quoting its arguments twice, while
+@code{AC_CONFIG_COMMANDS}.  This means that @code{AC_CONFIG_COMMANDS}
+can safely be given macro calls as arguments:
+
+@example
+AC_CONFIG_COMMANDS(foo, [my_FOO()])
+@end example
+
+@noindent
+conversely, where one level of quoting was enough for literal strings
+with @code{AC_OUTPUT_COMMANDS}, you need two with
+@code{AC_CONFIG_COMMANDS}.  The following lines are equivalent:
+
+@example
+@group
+AC_OUTPUT_COMMANDS([echo "Square brackets: []"])
+AC_CONFIG_COMMANDS(default, [[echo "Square brackets: []"]])
+@end group
+@end example
+
 
 @defmac AC_HEADER_DIRENT
 @maindex HEADER_DIRENT

@@ -1,5 +1,17 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	AU_ glue code for AC_OUTPUT_COMMANDS.
+
+	* acgeneral.m4 (AC_OUTPUT_COMMANDS): AU_DEFUNed in terms of
+	AC_CONFIG_COMMANDS.
+	(AC_OUTPUT_COMMANDS_CNT): New variable, declared both in
+	`autoconf::' and `autoupdate::'.
+	(AC_OUTPUT): Register your arguments to AC_OUTPUT_COMMANDS only if
+	there are to avoid spurious `run autoupdate' messages.
+	* doc/autoconf.texi (Libraries): Document the changes.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	Avoid outputting `config_files' code in `config.status' if there
 	are none.
 
