@@ -150,33 +150,6 @@ sub parse_args ()
   # --localdir
   $autoconf   .= " --include=$autoconf_dir --include=$localdir";
   $autoheader .= " --include=$autoconf_dir --include=$localdir";
-  # --force;
-  if ($force)
-    {
-      $autoconf   .= ' --force';
-      $autoheader .= ' --force';
-      $gettextize .= ' --force';
-      $libtoolize .= ' --force';
-    }
-  else
-    {
-      $automake .= ' --no-force';
-    }
-  # --verbose
-  if ($verbose)
-    {
-      $autoconf   .= ' --verbose';
-      $autoheader .= ' --verbose';
-      $aclocal    .= ' --verbose';
-    }
-  # --debug;
-  if ($debug)
-    {
-      $autoconf   .= ' --debug';
-      $autoheader .= ' --debug';
-      $automake   .= ' --verbose';
-      $libtoolize .= ' --debug';
-    }
   # --install and --symlink;
   if ($install)
     {
@@ -188,6 +161,28 @@ sub parse_args ()
       $libtoolize .= ' --copy'
 	unless $symlink;
     }
+  # --force;
+  if ($force)
+    {
+      $autoconf   .= ' --force';
+      $autoheader .= ' --force';
+      $automake   .= ' --force-missing';
+      $gettextize .= ' --force';
+      $libtoolize .= ' --force';
+    }
+  else
+    {
+      $automake .= ' --no-force';
+    }
+  # --debug;
+  if ($debug)
+    {
+      $autoconf   .= ' --verbose --debug';
+      $autoheader .= ' --verbose --debug';
+      $automake   .= ' --verbose';
+      $aclocal    .= ' --verbose';
+      $libtoolize .= ' --debug';
+    }
 }
 
 
@@ -198,7 +193,6 @@ sub autoreconf ()
 {
   # If there it's not `configure.ac' or `configure.in', we are not
   # interested in the directory.
-  verbose "{$_}\n";
   return
     if !/^configure\.(ac|in)$/;
 
@@ -247,7 +241,7 @@ sub autoreconf ()
   # -------------------- #
 
   my $uses_libtool = 0;
-  my $traces = new Autom4te::XFile "$autoconf --trace=AM_PROG_LIBTOOL |";
+  $traces = new Autom4te::XFile "$autoconf --trace=AM_PROG_LIBTOOL |";
   while ($_ = $traces->getline)
     {
       $uses_libtool = 1
@@ -331,7 +325,7 @@ sub autoreconf ()
   # is used too.
   # Just as for autoconf, up to date ness is performed by the tool itself.
   my $uses_autoheader = 0;
-  my $traces = new Autom4te::XFile "$autoconf --trace=AC_CONFIG_HEADERS |";
+  $traces = new Autom4te::XFile "$autoconf --trace=AC_CONFIG_HEADERS |";
   while ($_ = $traces->getline)
     {
       $uses_autoheader = 1

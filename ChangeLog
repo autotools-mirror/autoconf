@@ -1,5 +1,13 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (&autoreconf): Remove debugging code.
+	(&parse_args): Pass verbosity/debugging options to subtools when
+	--debug, not when --verbose.
+	* lib/autom4te.in (Autoreconf-preselections): New.
+	(Autoconf): Use it.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.in (autoreconf): Run libtoolize when appropriate.
 
 2001-10-08  Akim Demaille  <akim@epita.fr>
@@ -7,7 +15,6 @@
 	* doc/autoconf.texi (autoreconf Invocation): Adjust.
 	* bin/autoreconf.in (autoreconf): Run gettextize when appropriate.
 
-	
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.at (AT_CHECK_PERL_SYNTAX): Check autoreconf.
@@ -16,7 +23,6 @@
 	bother with $force since...
 	* lib/Autom4te/General.pm: does.
 
-	
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in: Rewrite in Perl.
@@ -34,7 +40,6 @@
 	(m4_strip, m4_version_unletter): Use it.
 	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH): Likewise.
 
-	
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/autoconf.m4, lib/autoconf/general.m4,
@@ -45,7 +50,6 @@
 	m4_bregexp, m4_bpatsubst, and m4_bmatch.
 	* doc/autoconf.texi (Redefined M4 Macros): Adjust.
 
-	
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4: Use AS_REQUIRE.

@@ -43,6 +43,17 @@ args: --preselect AC_CONFIG_FILES
 end-language: "Automake-preselections"
 
 
+## -------------------------- ##
+## Autoreconf-preselections.  ##
+## -------------------------- ##
+
+begin-language: "Autoreconf-preselections"
+args: --preselect AC_PROG_LIBTOOL
+args: --preselect AM_PROG_LIBTOOL
+args: --preselect AM_GNU_GETTEXT
+end-language: "Autoreconf-preselections"
+
+
 ## ------------------------ ##
 ## Autoscan-preselections.  ##
 ## ------------------------ ##
@@ -125,8 +136,9 @@ args: --mode 777
 args: --warning syntax
 args: --normalize
 args: --language Autoheader-preselections
-args: --language Autoscan-preselections
 args: --language Automake-preselections
+args: --language Autoreconf-preselections
+args: --language Autoscan-preselections
 end-language: "Autoconf"
 
 
