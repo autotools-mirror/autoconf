@@ -1,3 +1,8 @@
+2000-08-01  Greg A. Woods  <woods@weird.com>
+
+	* doc/autoconf.texi (Installation Directory Variables):
+	Clarifications and typos.
+
 2000-08-01  Didier Verna  <didier@lrde.epita.fr>
 
 	* acgeneral.m4 (AC_REVISION): Put a dot at the end of the line.

@@ -1812,12 +1812,12 @@ current value of @code{prefix}.
 A corollary is that you should not use these variables but in
 Makefiles.  For instance instead of trying to resolve the dependencies
 of @code{datadir} upon @code{prefix} and using
-@samp{AC_DEFINE_UNQUOTED(DATADIR, $datadir)}, you should add
-@samp{-DDATADIR=$(datadir)} to your @code{CFLAGS}.
+@samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
+@samp{-DDATADIR="$(datadir)"} to your @code{CFLAGS}.
 
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
 @code{datadir} and friends in your shell scripts and other files, rather
-let @command{make} their replacement.  For instance Autoconf ships
+let @command{make} manage their replacement.  For instance Autoconf ships
 templates of its shell scripts ending with @samp{.sh}, and uses this
 Makefile snippet:
 
@@ -1834,13 +1834,15 @@ Three things are noteworthy:
 @table @samp
 @item @@datadir\@@
 The backslash prevents @command{configure} from replacing
-@samp{@@datadir@@}.
+@samp{@@datadir@@} in the sed expression itself.
 
 @item $(pkgdatadir)
-Don't use @samp{@@datadir@@}!
+Don't use @samp{@@pkgdatadir@@}!  Use the matching makefile variable
+instead.
 
 @item ,
-Don't use @samp{/} since most probably @samp{$(pkgdatadir)} will have
+Don't use @samp{/} in the sed expression(s) since most probably the
+variables you use, such as @samp{$(pkgdatadir)}, will contain
 some.
 @end table
 
