@@ -16,7 +16,44 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-# Written by David MacKenzie <djm@gnu.ai.mit.edu>.
+usage="\
+Usage: autoreconf [--help] [--macrodir=dir] [--verbose] [--version]
+       [directory...]"
+verbose=
+show_version=
+
+test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
+export AC_MACRODIR # Pass it down to autoconf and autoheader.
+
+while test $# -gt 0; do
+  case "$1" in 
+  --help | --hel | --he | --h)
+    echo "$usage"; exit 0 ;;
+  --macrodir=* | --m*=* )
+    AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
+    shift ;;
+  -m | --macrodir | --m*)
+    shift
+    test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
+    AC_MACRODIR="$1"
+    shift ;;
+  --verbose | --verbos | --verbo | --verb)
+    verbose=t; shift ;;
+  --version | --versio | --versi | --vers)
+    show_version=t; shift ;;
+  --)     # Stop option processing.
+    shift; break ;;
+  -*) echo "$usage" 1>&2; exit 1 ;;
+  *) break ;;
+  esac
+done
+
+if test -n "$show_version"; then
+  version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
+    $AC_MACRODIR/acgeneral.m4`
+  echo "Autoconf version $version"
+  exit 0
+fi
 
 if test $# -eq 0; then paths=.; else paths="$@"; fi
 
@@ -27,10 +64,10 @@ while read confin; do
   (
   dir=`echo $confin|sed 's%/[^/][^/]*$%%'`
   cd $dir || exit 1
-  echo running autoconf in $dir
+  test -n "$verbose" && echo running autoconf in $dir
   autoconf
   if grep AC_CONFIG_HEADER configure.in > /dev/null; then
-    echo running autoheader in $dir
+    test -n "$verbose" && echo running autoheader in $dir
     autoheader
   fi
   )
