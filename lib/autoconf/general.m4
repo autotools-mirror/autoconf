@@ -2408,7 +2408,6 @@ m4_ifvaln([$6],
 fi])dnl
 ac_cv_prog_$1="$3"
 echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-AC_TRY_COMMAND([$ac_dir/$ac_word --version </dev/null >&2])
 break])
 m4_ifvaln([$6],
 [if test $ac_prog_rejected = yes; then
@@ -2474,7 +2473,6 @@ AC_CACHE_VAL([ac_cv_path_$1],
 [if AS_EXECUTABLE_P("$ac_dir/$ac_word"); then
    ac_cv_path_$1="$ac_dir/$ac_word"
    echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-   AC_TRY_COMMAND([$ac_dir/$ac_word --version </dev/null >&2])
    break
 fi])
 dnl If no 3rd arg is given, leave the cache variable unset,
