@@ -621,6 +621,10 @@ AC_CACHE_VAL(ac_cv_path_install,
             grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
 	    :
+	  elif test $ac_prog = install &&
+	    grep pwplus $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    # program-specific install script used by HP pwplus--don't use.
+	    :
 	  else
 	    ac_cv_path_install="$ac_dir/$ac_prog -c"
 	    break 2

@@ -1,3 +1,12 @@
+1999-04-01  Ben Elliston  <bje@cygnus.com>
+
+	* standards.texi: Update from FSF.
+
+	* acspecific.m4 (AC_PROG_INSTALL): Avoid using the installation
+	script belonging to HP `pwplus' when running the install
+	program. Contributed by Steven G. Johnson <stevenj@alum.mit.edu>
+	and Dave Adams <adams@hpesdwa.fc.hp.com>.
+
 1999-03-28  Tom Tromey  <tromey@cygnus.com>
 
 	* autoconf.texi (AC_OUTPUT_COMMANDS): Add to macro index.
