@@ -1068,6 +1068,12 @@ AC_COMPILE_IFELSE([[char b[10];]],, [AC_MSG_ERROR([you lose])])
 @noindent
 Voil@`a, you actually produce @samp{char b[10];} this time!
 
+On the other hand, descriptions (e.g., the last parameter of
+@code{AC_DEFINE} or @code{AS_HELP_STRING}) are not literals---they
+are subject to line breaking, for example---and should not be double quoted.
+Even if these descriptions are short and are not actually broken, double
+quoting them yields weird results.
+
 The careful reader will notice that, according to these guidelines, the
 ``properly'' quoted @code{AC_CHECK_HEADER} example above is actually
 lacking three pairs of quotes!  Nevertheless, for the sake of readability,
@@ -8114,9 +8120,11 @@ your macros.  If one or more words have disappeared in the M4
 output, you need more quotes.  When in doubt, quote.
 
 However, it's also possible to put on too many layers of quotes.  If
-this happens, the resulting @command{configure} script will contain
+this happens, the resulting @command{configure} script may contain
 unexpanded macros.  The @command{autoconf} program checks for this problem
-by doing @samp{grep AC_ configure}.
+by looking for the string @samp{AC_} in @file{configure}.  However, this
+heuristic does not work in general: for example, it does not catch
+overquoting in @code{AC_DEFINE} descriptions.
 
 
 @c ---------------------------------------- Using autom4te
@@ -13042,22 +13050,22 @@ Expands into an help string that looks pretty when the user executes
 Options}).  The following example will make this clearer.
 
 @example
-AC_DEFUN([TEST_MACRO],
-[AC_ARG_WITH([foo],
-             AS_HELP_STRING([--with-foo],
-                            [use foo (default is NO)]),
-             [ac_cv_use_foo=$withval], [ac_cv_use_foo=no])
-AC_CACHE_CHECK([whether to use foo],
-               [ac_cv_use_foo], [ac_cv_use_foo=no])])
+AC_ARG_WITH(foo,
+  [AS_HELP_STRING(--with-foo,
+     [use foo (default is no)])],
+  [ac_cv_use_foo=$withval],
+  [ac_cv_use_foo=no])
 @end example
 
-Please note that the call to @code{AS_HELP_STRING} is @strong{unquoted}.
+The second argument of @code{AS_HELP_STRING} is
+not a literal, and should not be double quoted. @xref{Autoconf
+Language}, for a more detailed explanation.
 Then the last few lines of @samp{configure --help} will appear like
 this:
 
 @example
 --enable and --with options recognized:
-  --with-foo              use foo (default is NO)
+  --with-foo              use foo (default is no)
 @end example
 
 The @code{AS_HELP_STRING} macro is particularly helpful when the
@@ -13065,11 +13073,11 @@ The @code{AS_HELP_STRING} macro is particularly helpful when the
 arguments, as shown in the following example.
 
 @example
-AC_DEFUN(MY_ARG_WITH,
-[AC_ARG_WITH([$1],
-             AS_HELP_STRING([--with-$1], [use $1 (default is $2)]),
-             ac_cv_use_$1=$withval, ac_cv_use_$1=no),
-AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
+AC_DEFUN([MY_ARG_WITH],
+  [AC_ARG_WITH([$1],
+     [AS_HELP_STRING([--with-$1], [use $1 (default is $2)])],
+     [ac_cv_use_$1=$withval],
+     [ac_cv_use_$1=no])])
 @end example
 @end defmac
 
