@@ -1509,13 +1509,13 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # generation.  This is used by some tests, and let `autoconf' be used to
 # generate other scripts than `configure'.
 m4_define([AC_PLAIN_SCRIPT],
-[m4_init
+[AS_INIT
 
 # Forbidden tokens and exceptions.
-m4_pattern_forbid([^A]m4_dquote(m4_defn([m4_cr_LETTERS]))[_])
+m4_pattern_forbid([^_?A[CHUM]_])
 m4_pattern_forbid([_AC_])
-m4_pattern_allow([^AF_(INET|UNIX)$])
-m4_pattern_allow([^A[RS]_FLAGS$])
+# Actually reserved by M4sh.
+m4_pattern_allow([^AS_FLAGS$])
 
 m4_divert_push([BODY])dnl
 m4_wrap([m4_divert_pop([BODY])[]])dnl

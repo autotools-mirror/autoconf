@@ -422,3 +422,19 @@ PATH = $PATH
 
 _ASUNAME
 }])
+
+
+
+## ----------------- ##
+## Setting M4sh up.  ##
+## ----------------- ##
+
+
+# AS_INIT
+# -------
+m4_define([AS_INIT],
+[m4_init
+
+# Forbidden tokens and exceptions.
+m4_pattern_forbid([^_?AS_])
+])
