@@ -39,6 +39,8 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
+use Autom4te::ChannelDefs;
+use Autom4te::Channels;
 use Autom4te::Configure_ac;
 use Autom4te::FileUtils;
 use Autom4te::General;
@@ -76,15 +78,7 @@ Operation modes:
   -m, --make               when applicable, re-run ./configure && make
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
-Warning categories include:
-  \`cross\'         cross compilation issues
-  \`obsolete\'      obsolete constructs
-  \`portability\'   portability issues
-  \`syntax\'        dubious syntactic constructs
-  \`all\'           all the warnings
-  \`no-CATEGORY\'   turn off the warnings on CATEGORY
-  \`none\'          turn off all the warnings
-  \`error\'         warnings are error
+" . Autom4te::ChannelDefs::usage . "
 
 The environment variable \`WARNINGS\' is honored.  Some subtools might
 support other warning types, using \`all' is encouraged.
@@ -127,7 +121,7 @@ my $aclocal_supports_force = 0;
 my @prepend_include;
 my @include;
 
-# List of warnings.
+# List of command line warning requests.
 my @warning;
 
 # Rerun `./configure && make'?
@@ -155,6 +149,8 @@ sub parse_args ()
   # Split the warnings as a list of elements instead of a list of
   # lists.
   @warning = map { split /,/ } @warning;
+  parse_WARNINGS;
+  parse_warnings '--warnings', @warning;
 
   # Even if the user specified a configure.ac, trim to get the
   # directory, and look for configure.ac again.  Because (i) the code
@@ -218,9 +214,10 @@ sub parse_args ()
   # --warnings;
   if (@warning)
     {
-      $autoconf   .= ' --warnings=' . join (',', @warning);
-      $autoheader .= ' --warnings=' . join (',', @warning);
-      $automake   .= ' --warnings=' . join (',', @warning)
+      my $warn = ' --warnings=' . join (',', @warning);
+      $autoconf   .= $warn;
+      $autoheader .= $warn;
+      $automake   .= $warn
 	if `$automake --help` =~ /--warnings/;
     }
 }
