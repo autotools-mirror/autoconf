@@ -44,7 +44,7 @@ Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 Should include more tests (e.g., AC_C_CONST etc.)?
 
 ** Document
-GNATS, bug-autoconf, Autoconf Macro Archive, Automake, Libtool.
+Automake, Libtool.
 
 ** Pentateuch
 Heck, there is nothing after `Deuteronomy'!  We're stuck, but we

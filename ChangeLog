@@ -1,5 +1,10 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Introduction): More about CVS, Gnats, the web
+	pages, and the mailing lists.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Prerequisite Macros): Dedocument AC_PROVIDE.
 	(Coding Style): Move some into...
 	(Macro Definitions): here.

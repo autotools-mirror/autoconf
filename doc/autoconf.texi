@@ -14,6 +14,19 @@
 @r{[}@var{\varname\}@r{]}
 @end macro
 
+@c I don't like the way URL are displayed in TeX with @uref.
+@ifhtml
+@macro href{url, title}
+@uref{\url\, \title\}
+@end macro
+@end ifhtml
+@ifnothtml
+@macro href{url, title}
+\title\@footnote{\title\, @url{\url\}.}
+@end macro
+@end ifnothtml
+
+
 @dircategory GNU admin
 @direntry
 * Autoconf: (autoconf).         Create source code configuration scripts
@@ -428,9 +441,36 @@ features that some @sc{unix} versions of M4 do not have, including
 @xref{History}, for the story of Autoconf's development.
 @xref{Questions}, for answers to some common questions about Autoconf.
 
-Mail suggestions and bug reports for Autoconf to
-@code{autoconf@@gnu.org}.  Please include the Autoconf version number,
-which you can get by running @samp{autoconf --version}.
+
+See the @href{http://www.gnu.org/software/autoconf/autoconf.html,
+Autoconf web page} for up to date information, details on the mailing
+lists, pointers to a list of known bugs etc.
+
+Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
+list}.
+
+Bug reports should be preferably submitted to the
+@href{http://sources.redhat.com/cgi-bin/gnatsweb.pl?database=autoconf,
+Autoconf Gnats database}, or sent to @email{bug-autoconf@@gnu.org, the
+Autoconf Bugs mailing list}.  If possible, first check that your bug is
+not already solved in current development versions, and that it has not
+been reported yet.  Be sure to include all the needed information and a
+short @file{configure.in} which demonstrates the problem.
+
+Autoconf's development tree is accessible via @sc{cvs}, see the Autoconf
+web page for details.  There is also a
+@href{http://subversions.gnu.org/cgi-bin/cvsweb/autoconf/, @sc{cvs}web
+interface to the Autoconf development tree}.
+
+Patch relative to the current @sc{cvs} version can be sent for review to
+the @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
+
+Because of its mission, Autoconf includes only a set of highly used
+macros which have already demonstrated their usefulness.  Nevertheless,
+if you wish to share your macros, or find existing ones, see the
+@href{http://research.cys.de/autoconf-archive/, Autoconf Macro
+Repository}, which is kindly run by @email{simons@@cys.de, Peter
+Simons}.
 
 
 @c ================================================= Making configure Scripts.
@@ -1221,9 +1261,9 @@ The @var{copyright-notice} will show up in both the head of
 Copy revision stamp @var{revision-info} into the @code{configure}
 script, with any dollar signs or double-quotes removed.  This macro lets
 you put a revision stamp from @file{configure.in} into @code{configure}
-without RCS or CVS changing it when you check in @code{configure}.  That
-way, you can determine easily which revision of @file{configure.in} a
-particular @code{configure} corresponds to.
+without @sc{rcs} or @code{cvs} changing it when you check in
+@code{configure}.  That way, you can determine easily which revision of
+@file{configure.in} a particular @code{configure} corresponds to.
 
 For example, this line in @file{configure.in}:
 
@@ -8886,15 +8926,15 @@ then let there be light@dots{}
 
 In June 1991 I was maintaining many of the @sc{gnu} utilities for the
 Free Software Foundation.  As they were ported to more platforms and
-more programs were added, the number of @option{-D} options that users had
-to select in the @file{Makefile} (around 20) became burdensome.
+more programs were added, the number of @option{-D} options that users
+had to select in the @file{Makefile} (around 20) became burdensome.
 Especially for me---I had to test each new release on a bunch of
 different systems.  So I wrote a little shell script to guess some of
 the correct settings for the fileutils package, and released it as part
 of fileutils 2.0.  That @code{configure} script worked well enough that
 the next month I adapted it (by hand) to create similar @code{configure}
 scripts for several other @sc{gnu} utilities packages.  Brian Berliner
-also adapted one of my scripts for his CVS revision control system.
+also adapted one of my scripts for his @sc{cvs} revision control system.
 
 Later that summer, I learned that Richard Stallman and Richard Pixley
 were developing similar scripts to use in the @sc{gnu} compiler tools;
