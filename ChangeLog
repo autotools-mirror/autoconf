@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Don't promote non `m4_*' M4 macros.
+	(Making testsuite Scripts): Update.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/Makefile.am (CLEANFILES): Add autom4te.cfg.
 
 2001-08-31  Akim Demaille  <akim@epita.fr>

@@ -1124,9 +1124,9 @@ looks for the optional file @file{acsite.m4} in the directory that
 contains the distributed Autoconf macro files, and for the optional file
 @file{aclocal.m4} in the current directory.  Those files can contain
 your site's or the package's own Autoconf macro definitions
-(@pxref{Writing Autoconf Macros}, for more information).  If a macro is defined
-in more than one of the files that @code{autoconf} reads, the last
-definition it reads overrides the earlier ones.
+(@pxref{Writing Autoconf Macros}, for more information).  If a macro is
+defined in more than one of the files that @code{autoconf} reads, the
+last definition it reads overrides the earlier ones.
 
 @code{autoconf} accepts the following options:
 
@@ -2886,7 +2886,8 @@ AC_CHECK_TYPES(struct $Expensive*)
 @end example
 
 @noindent
-will define the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check succeeds.
+will define the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check
+succeeds.
 
 
 @node Default Includes
@@ -6807,9 +6808,10 @@ Here are some instructions and guidelines for writing Autoconf macros.
 
 @acindex DEFUN
 Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
-similar to the M4 builtin @code{define} macro.  In addition to defining
-a macro, @code{AC_DEFUN} adds to it some code that is used to constrain
-the order in which macros are called (@pxref{Prerequisite Macros}).
+similar to the M4 builtin @code{m4_define} macro.  In addition to
+defining a macro, @code{AC_DEFUN} adds to it some code that is used to
+constrain the order in which macros are called (@pxref{Prerequisite
+Macros}).
 
 An Autoconf macro definition looks like this:
 
@@ -6832,7 +6834,7 @@ the prototype.  For example:
 @example
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
-define([AC_MSG_ERROR],
+m4_define([AC_MSG_ERROR],
 [@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
 @end example
 
@@ -7224,14 +7226,14 @@ syntax-highlighting editors, from behaving improperly.  For instance,
 instead of:
 
 @example
-patsubst([$1], [$"])
+m4_patsubst([$1], [$"])
 @end example
 
 @noindent
 use
 
 @example
-patsubst([$1], [$""])
+m4_patsubst([$1], [$""])
 @end example
 
 @noindent
@@ -11530,21 +11532,19 @@ with a validation suite.
 
 @example
 EXTRA_DIST = testsuite.at testsuite
+TESTSUITE = $(srcdir)/testsuite
+check-local: atconfig atlocal $(TESTSUITE)
+        $(SHELL) $(TESTSUITE)
 
-all-local: atconfig testsuite
-
-check-local: atconfig testsuite
-        $(SHELL) $(srcdir)/testsuite
-
-AUTOM4TE = autom4te -I /usr/local/share/autoconf/lib
-$(srcdir)/testsuite: $(srcdir)/testsuite.at
-        $(AUTOM4TE) -I $(srcdir) autotest/general.m4 $@.at -o $@.tmp
-        chmod +x $@.tmp
+AUTOM4TE = autom4te
+AUTOTEST = $(AUTOM4TE) --language=autotest
+$(TESTSUITE): $(srcdir)/testsuite.at
+        $(AUTOTEST) -I $(srcdir) $@.at -o $@.tmp
         mv $@.tmp $@
 @end example
-assuming Autoconf was installed with @code{prefix} being
-@samp{/usr/local}.  You might want to list explicitly the dependencies,
-i.e., the list of the files @file{testsuite.at} includes.
+
+You might want to list explicitly the dependencies, i.e., the list of
+the files @file{testsuite.at} includes.
 
 With strict Autoconf, you might need to add lines inspired from the
 following:
@@ -11552,11 +11552,13 @@ following:
 @example
 subdir = tests
 
-check: check-local
-
-atconfig: $(top_builddir)/config.status atconfig.in
+atconfig: $(top_builddir)/config.status
 	cd $(top_builddir) && \
-           $(SHELL) ./config.status --file$(subdir)/$@
+           $(SHELL) ./config.status $(subdir)/$@
+
+atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
+	cd $(top_builddir) && \
+           $(SHELL) ./config.status $(subdir)/$@
 @end example
 
 @noindent
@@ -11616,9 +11618,9 @@ builtin macros that it would be difficult to get along without in a
 sophisticated application like Autoconf, including:
 
 @example
-builtin
-indir
-patsubst
+m4_builtin
+m4_indir
+m4_patsubst
 __file__
 __line__
 @end example
