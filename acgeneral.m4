@@ -751,6 +751,43 @@ AC_DEFUN(AC_PREFIX_DEFAULT,
 [AC_DIVERT([DEFAULTS], [ac_default_prefix=$1])])
 
 
+# _AC_INIT_SRCDIR([UNIQUE-FILE-IN-SOURCE-DIR])
+# --------------------------------------------
+# Compute `srcdir'.  UNIQUE-FILE-IN-SOURCE-DIR is
+# a filename unique to this package, relative to the directory that
+# configure is in, which we can look for to find out if srcdir is
+# correct.
+define([_AC_INIT_SRCDIR],
+[AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
+
+# Find the source files, if location was not specified.
+if test -z "$srcdir"; then
+  ac_srcdir_defaulted=yes
+  # Try the directory containing this script, then its parent.
+  ac_prog=[$]0
+  ac_confdir=`echo "$ac_prog" | sed 's%/[[^/][^/]]*$%%'`
+  test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
+  srcdir=$ac_confdir
+  if test ! -r $srcdir/$1; then
+    srcdir=..
+  fi
+else
+  ac_srcdir_defaulted=no
+fi
+if test ! -r $srcdir/$1; then
+  if test "$ac_srcdir_defaulted" = yes; then
+    AC_MSG_ERROR(cannot find sources in $ac_confdir or ..)
+  else
+    AC_MSG_ERROR(cannot find sources in $srcdir)
+  fi
+fi
+dnl Double slashes in pathnames in object file debugging info
+dnl mess up M-x gdb in Emacs.
+srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
+AC_DIVERT_POP()dnl
+])# _AC_INIT_SRCDIR
+
+
 # _AC_INIT_PARSE_ARGS
 # -------------------
 AC_DEFUN(_AC_INIT_PARSE_ARGS,
@@ -1113,6 +1150,10 @@ AC_DIVERT_POP()dnl
 # Handle the `configure --help' message.
 define([_AC_INIT_HELP],
 [AC_DIVERT_PUSH([HELP_BEGIN])dnl
+
+#
+# Report the --help message.
+#
 if $ac_init_help; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
@@ -1233,16 +1274,14 @@ ac_nl='
 IFS=" 	$ac_nl"dnl
 ])
 
-# _AC_INIT_PREPARE([UNIQUE-FILE-IN-SOURCE-DIR])
-# ---------------------------------------------
+# _AC_INIT_PREPARE
+# ----------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
 # 1. Trap and clean up various tmp files.
 # 2. Set up the fd and output files
 # 3. Remember the options given to `configure' for `config.status --recheck'.
 # 4. Ensure a correct environment
-# 5. Find `$srcdir', and check its validity by verifying the presence of
-#    UNIQUE-FILE-IN-SOURCE-DIR.
-# 6. Required macros (cache, default AC_SUBST etc.)
+# 5. Required macros (cache, default AC_SUBST etc.)
 AC_DEFUN([_AC_INIT_PREPARE],
 [AC_DIVERT_PUSH([INIT_PREPARE])dnl
 _AC_INIT_PREPARE_ENVIRONMENT
@@ -1298,35 +1337,6 @@ It was created by configure version AC_ACVERSION, executed with
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo >confdefs.h
-
-# A filename unique to this package, relative to the directory that
-# configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=$1
-
-# Find the source files, if location was not specified.
-if test -z "$srcdir"; then
-  ac_srcdir_defaulted=yes
-  # Try the directory containing this script, then its parent.
-  ac_prog=[$]0
-  ac_confdir=`echo "$ac_prog" | sed 's%/[[^/][^/]]*$%%'`
-  test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
-  srcdir=$ac_confdir
-  if test ! -r $srcdir/$ac_unique_file; then
-    srcdir=..
-  fi
-else
-  ac_srcdir_defaulted=no
-fi
-if test ! -r $srcdir/$ac_unique_file; then
-  if test "$ac_srcdir_defaulted" = yes; then
-    AC_MSG_ERROR(cannot find sources in $ac_confdir or ..)
-  else
-    AC_MSG_ERROR(cannot find sources in $srcdir)
-  fi
-fi
-dnl Double slashes in pathnames in object file debugging info
-dnl mess up M-x gdb in Emacs.
-srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
 
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
@@ -1392,9 +1402,10 @@ AC_DIVERT([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS()dnl
 AC_DIVERT_POP()dnl to NORMAL
 _AC_INIT_PARSE_ARGS
+_AC_INIT_SRCDIR([$1])
 _AC_INIT_HELP
 _AC_INIT_VERSION
-_AC_INIT_PREPARE([$1])dnl
+_AC_INIT_PREPARE
 dnl AC_COPYRIGHT must be called after _AC_INIT_VERSION, since it dumps
 dnl into a diversion prepared by _AC_INIT_VERSION.
 AC_DIVERT([NOTICE],
@@ -1412,7 +1423,7 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 # ------------------------------------
 # Wrapper around _AC_INIT which guarantees _AC_INIT is expanded only
 # once.
-AC_DEFUN([AC_INIT], [AC_EXPAND_ONCE([_AC_INIT])])
+AC_DEFUN([AC_INIT], [AC_EXPAND_ONCE([_AC_INIT($@)])])
 
 
 ## ----------------------------- ##

@@ -1,3 +1,12 @@
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
+	Give a means to compute `srcdir' earlier in configure.
+
+	* acgeneral.m4 (_AC_INIT_SRCDIR): New macro, pulled out from...
+	(_AC_INIT_PREPARE): No longer compute `srcdir'.
+	(_AC_INIT): Use _AC_INIT_SRCDIR.
+	(AC_INIT): Don't forget to pass the argument to _AC_INIT.
+
 2000-03-20  Jim Meyering  <meyering@lucent.com>
 
 	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): Don't test for existence
