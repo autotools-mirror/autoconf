@@ -13053,8 +13053,8 @@ Options}).  The following example will make this clearer.
 AC_ARG_WITH(foo,
   [AS_HELP_STRING(--with-foo,
      [use foo (default is no)])],
-  [ac_cv_use_foo=$withval],
-  [ac_cv_use_foo=no])
+  ac_cv_use_foo=$withval,
+  ac_cv_use_foo=no)
 @end example
 
 The second argument of @code{AS_HELP_STRING} is
@@ -13076,11 +13076,8 @@ arguments, as shown in the following example.
 AC_DEFUN([MY_ARG_WITH],
   [AC_ARG_WITH([$1],
      [AS_HELP_STRING([--with-$1], [use $1 (default is $2)])],
-     [ac_cv_use_$1=$withval],
-     [ac_cv_use_$1=no])
-   AC_CACHE_CHECK([whether to use $1],
-     [ac_cv_use_$1],
-     [ac_cv_use_$1=$2])])
+     ac_cv_use_$1=$withval,
+     ac_cv_use_$1=$2)])
 @end example
 @end defmac
 
