@@ -582,6 +582,7 @@ if test x"$M4" != x; then
   esac
 fi])])
 
+
 # AC_PROG_MAKE_SET
 # ----------------
 # Define SET_MAKE to set ${MAKE} if make doesn't.
@@ -609,12 +610,14 @@ else
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 AC_SUBST([SET_MAKE])dnl
-])
+])# AC_PROG_MAKE_SET
+
 
 AC_DEFUN(AC_PROG_RANLIB,
 [AC_CHECK_PROG(RANLIB, ranlib, ranlib, :)])
 
-dnl Check for mawk first since it's generally faster.
+
+# Check for mawk first since it's generally faster.
 AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
@@ -878,12 +881,155 @@ AC_DEFUNCT(AC_RSH, [; replace it with equivalent code])
 
 
 
+## ------------------------- ##
+## Checks for declarations.  ##
+## ------------------------- ##
+
+
+# AC_DECL_SYS_SIGLIST
+# -------------------
+AC_DEFUN(AC_DECL_SYS_SIGLIST,
+[AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
+  ac_cv_decl_sys_siglist,
+[AC_TRY_COMPILE([#include <sys/types.h>
+#include <signal.h>
+/* NetBSD declares sys_siglist in unistd.h.  */
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+], [char *msg = *(sys_siglist + 1);],
+  ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
+if test $ac_cv_decl_sys_siglist = yes; then
+  AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
+            [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
+fi
+])# AC_DECL_SYS_SIGLIST
+
 
 
 
 ## ------------------------- ##
 ## Checks for header files.  ##
 ## ------------------------- ##
+
+
+# _AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+# ----------------------------------------------------
+# Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
+# defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
+AC_DEFUN(_AC_CHECK_HEADER_DIRENT,
+[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
+AC_MSG_CHECKING([for $1 that defines DIR])
+AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
+[AC_TRY_COMPILE([#include <sys/types.h>
+#include <$1>
+], [DIR *dirp = 0;],
+  eval "ac_cv_header_dirent_$ac_safe=yes",
+  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
+if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
+  AC_MSG_RESULT(yes)
+  $2
+else
+  AC_MSG_RESULT(no)
+fi
+])# _AC_CHECK_HEADER_DIRENT
+
+
+# _AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+# --------------------------------------------------
+# Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
+# defines `DIR'.
+define(_AC_CHECK_HEADERS_DIRENT,
+[for ac_hdr in $1
+do
+_AC_CHECK_HEADER_DIRENT($ac_hdr,
+[changequote(, )dnl
+  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
+changequote([, ])dnl
+  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
+done])# _AC_CHECK_HEADERS_DIRENT
+
+
+# AC_HEADER_DIRENT
+# ----------------
+AC_DEFUN(AC_HEADER_DIRENT,
+[ac_header_dirent=no
+_AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
+  [ac_header_dirent=$ac_hdr; break])
+# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
+if test $ac_header_dirent = dirent.h; then
+  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+else
+  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
+fi
+])# AC_HEADER_DIRENT
+
+
+# AC_HEADER_MAJOR
+# ---------------
+AC_DEFUN(AC_HEADER_MAJOR,
+[AC_CACHE_CHECK(whether sys/types.h defines makedev,
+  ac_cv_header_sys_types_h_makedev,
+[AC_TRY_LINK([#include <sys/types.h>
+], [return makedev(0, 0);],
+  ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
+])
+
+if test $ac_cv_header_sys_types_h_makedev = no; then
+AC_CHECK_HEADER(sys/mkdev.h,
+                [AC_DEFINE(MAJOR_IN_MKDEV, 1,
+                           [Define if `major', `minor', and `makedev' are
+                            declared in <mkdev.h>.])])
+
+  if test $ac_cv_header_sys_mkdev_h = no; then
+    AC_CHECK_HEADER(sys/sysmacros.h,
+                    [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
+                               [Define if `major', `minor', and `makedev' are
+                                declared in <sysmacros.h>.])])
+  fi
+fi
+])# AC_HEADER_MAJOR
+
+
+# AC_HEADER_STAT
+# --------------
+# FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
+AC_DEFUN(AC_HEADER_STAT,
+[AC_CACHE_CHECK(whether stat file-mode macros are broken,
+  ac_cv_header_stat_broken,
+[AC_EGREP_CPP([You lose], [#include <sys/types.h>
+#include <sys/stat.h>
+
+#if defined(S_ISBLK) && defined(S_IFDIR)
+# if S_ISBLK (S_IFDIR)
+You lose.
+# endif
+#endif
+
+#if defined(S_ISBLK) && defined(S_IFCHR)
+# if S_ISBLK (S_IFCHR)
+You lose.
+# endif
+#endif
+
+#if defined(S_ISLNK) && defined(S_IFREG)
+# if S_ISLNK (S_IFREG)
+You lose.
+# endif
+#endif
+
+#if defined(S_ISSOCK) && defined(S_IFREG)
+# if S_ISSOCK (S_IFREG)
+You lose.
+# endif
+#endif
+], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
+if test $ac_cv_header_stat_broken = yes; then
+  AC_DEFINE(STAT_MACROS_BROKEN, 1,
+            [Define if the `S_IS*' macros in <sys/stat.h> do not
+             work properly.])
+fi
+])# AC_HEADER_STAT
 
 
 # AC_HEADER_STDC
@@ -939,145 +1085,6 @@ fi
 ])# AC_HEADER_STDC
 
 
-# AC_HEADER_MAJOR
-# ---------------
-AC_DEFUN(AC_HEADER_MAJOR,
-[AC_CACHE_CHECK(whether sys/types.h defines makedev,
-  ac_cv_header_sys_types_h_makedev,
-[AC_TRY_LINK([#include <sys/types.h>
-], [return makedev(0, 0);],
-  ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
-])
-
-if test $ac_cv_header_sys_types_h_makedev = no; then
-AC_CHECK_HEADER(sys/mkdev.h,
-                [AC_DEFINE(MAJOR_IN_MKDEV, 1,
-                           [Define if `major', `minor', and `makedev' are
-                            declared in <mkdev.h>.])])
-
-  if test $ac_cv_header_sys_mkdev_h = no; then
-    AC_CHECK_HEADER(sys/sysmacros.h,
-                    [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
-                               [Define if `major', `minor', and `makedev' are
-                                declared in <sysmacros.h>.])])
-  fi
-fi
-])# AC_HEADER_MAJOR
-
-
-# _AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
-# ----------------------------------------------------
-# Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
-# defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-AC_DEFUN(_AC_CHECK_HEADER_DIRENT,
-[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
-AC_MSG_CHECKING([for $1 that defines DIR])
-AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <$1>
-], [DIR *dirp = 0;],
-  eval "ac_cv_header_dirent_$ac_safe=yes",
-  eval "ac_cv_header_dirent_$ac_safe=no")])dnl
-if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  $2
-else
-  AC_MSG_RESULT(no)
-fi
-])# _AC_CHECK_HEADER_DIRENT
-
-
-# _AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
-# --------------------------------------------------
-# Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
-# defines `DIR'.
-define(_AC_CHECK_HEADERS_DIRENT,
-[for ac_hdr in $1
-do
-_AC_CHECK_HEADER_DIRENT($ac_hdr,
-[changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
-done])# _AC_CHECK_HEADERS_DIRENT
-
-
-# AC_HEADER_DIRENT
-# ----------------
-AC_DEFUN(AC_HEADER_DIRENT,
-[ac_header_dirent=no
-_AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
-  [ac_header_dirent=$ac_hdr; break])
-# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
-if test $ac_header_dirent = dirent.h; then
-  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
-else
-  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
-fi
-])# AC_HEADER_DIRENT
-
-
-# AC_HEADER_STAT
-# --------------
-# FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
-AC_DEFUN(AC_HEADER_STAT,
-[AC_CACHE_CHECK(whether stat file-mode macros are broken,
-  ac_cv_header_stat_broken,
-[AC_EGREP_CPP([You lose], [#include <sys/types.h>
-#include <sys/stat.h>
-
-#if defined(S_ISBLK) && defined(S_IFDIR)
-# if S_ISBLK (S_IFDIR)
-You lose.
-# endif
-#endif
-
-#if defined(S_ISBLK) && defined(S_IFCHR)
-# if S_ISBLK (S_IFCHR)
-You lose.
-# endif
-#endif
-
-#if defined(S_ISLNK) && defined(S_IFREG)
-# if S_ISLNK (S_IFREG)
-You lose.
-# endif
-#endif
-
-#if defined(S_ISSOCK) && defined(S_IFREG)
-# if S_ISSOCK (S_IFREG)
-You lose.
-# endif
-#endif
-], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
-if test $ac_cv_header_stat_broken = yes; then
-  AC_DEFINE(STAT_MACROS_BROKEN, 1,
-            [Define if the `S_IS*' macros in <sys/stat.h> do not
-             work properly.])
-fi
-])# AC_HEADER_STAT
-
-
-# AC_DECL_SYS_SIGLIST
-# -------------------
-AC_DEFUN(AC_DECL_SYS_SIGLIST,
-[AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
-  ac_cv_decl_sys_siglist,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <signal.h>
-/* NetBSD declares sys_siglist in unistd.h.  */
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-], [char *msg = *(sys_siglist + 1);],
-  ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
-if test $ac_cv_decl_sys_siglist = yes; then
-  AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
-            [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
-fi
-])# AC_DECL_SYS_SIGLIST
-
-
 # AC_HEADER_SYS_WAIT
 # ------------------
 AC_DEFUN(AC_HEADER_SYS_WAIT,
@@ -1101,6 +1108,25 @@ if test $ac_cv_header_sys_wait_h = yes; then
             [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
 fi
 ])# AC_HEADER_SYS_WAIT
+
+
+# AC_HEADER_TIME
+# --------------
+AC_DEFUN(AC_HEADER_TIME,
+[AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
+  ac_cv_header_time,
+[AC_TRY_COMPILE([#include <sys/types.h>
+#include <sys/time.h>
+#include <time.h>
+],
+[struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
+if test $ac_cv_header_time = yes; then
+  AC_DEFINE(TIME_WITH_SYS_TIME, 1,
+            [Define if you can safely include both <sys/time.h> and <time.h>.])
+fi
+])# AC_HEADER_TIME
+
+
 
 
 # A few hasbeen'd macros.
@@ -1232,471 +1258,6 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 ## ---------------------- ##
 
 
-# AC_FUNC_CLOSEDIR_VOID
-# ---------------------
-# Check whether closedir returns void, and #define CLOSEDIR_VOID in
-# that case.
-AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
-[AC_REQUIRE([AC_HEADER_DIRENT])dnl
-AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
-[AC_TRY_RUN(
-[#include <sys/types.h>
-#include <$ac_header_dirent>
-
-int closedir ();
-int
-main ()
-{
-  exit (closedir (opendir (".")) != 0);
-}],
-  ac_cv_func_closedir_void=no,
-  ac_cv_func_closedir_void=yes,
-  ac_cv_func_closedir_void=yes)])
-if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(CLOSEDIR_VOID, 1,
-            [Define if the `closedir' function returns void instead of `int'.])
-fi
-])
-
-
-# AC_FUNC_FNMATCH
-# ---------------
-# We look for fnmatch.h to avoid that the test fails in C++.
-AC_DEFUN(AC_FUNC_FNMATCH,
-[AC_CHECK_HEADERS(fnmatch.h)
-AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
-# Some versions of Solaris or SCO have a broken fnmatch function.
-# So we run a test program.  If we are cross-compiling, take no chance.
-# Thanks to John Oleynick and Franc,ois Pinard for this test.
-[AC_TRY_RUN(
-[#if HAVE_FNMATCH_H
-# include <fnmatch.h>
-#endif
-
-int
-main ()
-{
-  exit (fnmatch ("a*", "abc", 0) != 0);
-}],
-ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
-ac_cv_func_fnmatch_works=no)])
-if test $ac_cv_func_fnmatch_works = yes; then
-  AC_DEFINE(HAVE_FNMATCH, 1,
-            [Define if your system has a working `fnmatch' function.])
-fi
-])# AC_FUNC_FNMATCH
-
-
-# AC_FUNC_MMAP
-# ------------
-AC_DEFUN(AC_FUNC_MMAP,
-[AC_CHECK_HEADERS(unistd.h)
-AC_CHECK_FUNCS(getpagesize)
-AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
-[AC_TRY_RUN(
-[/* Thanks to Mike Haertel and Jim Avera for this test.
-   Here is a matrix of mmap possibilities:
-	mmap private not fixed
-	mmap private fixed at somewhere currently unmapped
-	mmap private fixed at somewhere already mapped
-	mmap shared not fixed
-	mmap shared fixed at somewhere currently unmapped
-	mmap shared fixed at somewhere already mapped
-   For private mappings, we should verify that changes cannot be read()
-   back from the file, nor mmap's back from the file at a different
-   address.  (There have been systems where private was not correctly
-   implemented like the infamous i386 svr4.0, and systems where the
-   VM page cache was not coherent with the file system buffer cache
-   like early versions of FreeBSD and possibly contemporary NetBSD.)
-   For shared mappings, we should conversely verify that changes get
-   propogated back to all the places they're supposed to be.
-
-   Grep wants private fixed already mapped.
-   The main things grep needs to know about mmap are:
-   * does it exist and is it safe to write into the mmap'd area
-   * how to use it (BSD variants)  */
-#include <sys/types.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-
-/* This mess was copied from the GNU getpagesize.h.  */
-#if !HAVE_GETPAGESIZE
-# if HAVE_UNISTD_H
-#  include <unistd.h>
-# endif
-
-/* Assume that all systems that can run configure have sys/param.h.  */
-# if !HAVE_SYS_PARAM_H
-#  define HAVE_SYS_PARAM_H 1
-# endif
-
-# ifdef _SC_PAGESIZE
-#  define getpagesize() sysconf(_SC_PAGESIZE)
-# else /* no _SC_PAGESIZE */
-#  if HAVE_SYS_PARAM_H
-#   include <sys/param.h>
-#   ifdef EXEC_PAGESIZE
-#    define getpagesize() EXEC_PAGESIZE
-#   else /* no EXEC_PAGESIZE */
-#    ifdef NBPG
-#     define getpagesize() NBPG * CLSIZE
-#     ifndef CLSIZE
-#      define CLSIZE 1
-#     endif /* no CLSIZE */
-#    else /* no NBPG */
-#     ifdef NBPC
-#      define getpagesize() NBPC
-#     else /* no NBPC */
-#      ifdef PAGESIZE
-#       define getpagesize() PAGESIZE
-#      endif /* PAGESIZE */
-#     endif /* no NBPC */
-#    endif /* no NBPG */
-#   endif /* no EXEC_PAGESIZE */
-#  else /* no HAVE_SYS_PARAM_H */
-#   define getpagesize() 8192	/* punt totally */
-#  endif /* no HAVE_SYS_PARAM_H */
-# endif /* no _SC_PAGESIZE */
-
-#endif /* no HAVE_GETPAGESIZE */
-
-#ifdef __cplusplus
-extern "C" { void *malloc(unsigned); }
-#else
-char *malloc();
-#endif
-
-int
-main ()
-{
-  char *data, *data2, *data3;
-  int i, pagesize;
-  int fd;
-
-  pagesize = getpagesize ();
-
-  /* First, make a file with some known garbage in it. */
-  data = malloc (pagesize);
-  if (!data)
-    exit (1);
-  for (i = 0; i < pagesize; ++i)
-    *(data + i) = rand ();
-  umask (0);
-  fd = creat ("conftestmmap", 0600);
-  if (fd < 0)
-    exit (1);
-  if (write (fd, data, pagesize) != pagesize)
-    exit (1);
-  close (fd);
-
-  /* Next, try to mmap the file at a fixed address which already has
-     something else allocated at it.  If we can, also make sure that
-     we see the same garbage.  */
-  fd = open ("conftestmmap", O_RDWR);
-  if (fd < 0)
-    exit (1);
-  data2 = malloc (2 * pagesize);
-  if (!data2)
-    exit (1);
-  data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
-  if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
-                     MAP_PRIVATE | MAP_FIXED, fd, 0L))
-    exit (1);
-  for (i = 0; i < pagesize; ++i)
-    if (*(data + i) != *(data2 + i))
-      exit (1);
-
-  /* Finally, make sure that changes to the mapped area do not
-     percolate back to the file as seen by read().  (This is a bug on
-     some variants of i386 svr4.0.)  */
-  for (i = 0; i < pagesize; ++i)
-    *(data2 + i) = *(data2 + i) + 1;
-  data3 = malloc (pagesize);
-  if (!data3)
-    exit (1);
-  if (read (fd, data3, pagesize) != pagesize)
-    exit (1);
-  for (i = 0; i < pagesize; ++i)
-    if (*(data + i) != *(data3 + i))
-      exit (1);
-  close (fd);
-  unlink ("conftestmmap");
-  exit (0);
-}], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
-ac_cv_func_mmap_fixed_mapped=no)])
-if test $ac_cv_func_mmap_fixed_mapped = yes; then
-  AC_DEFINE(HAVE_MMAP, 1,
-            [Define if you have a working `mmap' system call.])
-fi
-])# AC_FUNC_MMAP
-
-
-# AC_FUNC_GETPGRP
-# ---------------
-AC_DEFUN(AC_FUNC_GETPGRP,
-[AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
-[AC_TRY_RUN(
-[/*
- * If this system has a BSD-style getpgrp(),
- * which takes a pid argument, exit unsuccessfully.
- *
- * Snarfed from Chet Ramey's bash pgrp.c test program
- */
-#include <stdio.h>
-#include <sys/types.h>
-
-int     pid;
-int     pg1, pg2, pg3, pg4;
-int     ng, np, s, child;
-
-int
-main ()
-{
-  pid = getpid ();
-  pg1 = getpgrp (0);
-  pg2 = getpgrp ();
-  pg3 = getpgrp (pid);
-  pg4 = getpgrp (1);
-
-  /* If all of these values are the same, it's pretty sure that we're
-     on a system that ignores getpgrp's first argument.  */
-  if (pg2 == pg4 && pg1 == pg3 && pg2 == pg3)
-    exit (0);
-
-  child = fork ();
-  if (child < 0)
-    exit(1);
-  else if (child == 0)
-    {
-      np = getpid ();
-      /*  If this is Sys V, this will not work; pgrp will be set to np
-	 because setpgrp just changes a pgrp to be the same as the
-	 pid.  */
-      setpgrp (np, pg1);
-      ng = getpgrp (0);        /* Same result for Sys V and BSD */
-      if (ng == pg1)
-  	exit (1);
-      else
-  	exit (0);
-    }
-  else
-    {
-      wait (&s);
-      exit (s>>8);
-    }
-}], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
-   AC_MSG_ERROR(cannot check getpgrp if cross compiling))
-])
-if test $ac_cv_func_getpgrp_void = yes; then
-  AC_DEFINE(GETPGRP_VOID, 1,
-            [Define if the `getpgrp' function takes no argument.])
-fi
-])# AC_FUNC_GETPGRP
-
-
-# AC_FUNC_SETPGRP
-# ---------------
-AC_DEFUN(AC_FUNC_SETPGRP,
-[AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
-AC_TRY_RUN(
-[#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-
-/* If this system has a BSD-style setpgrp, which takes arguments, exit
-   successfully.  */
-
-int
-main ()
-{
-  if (setpgrp (1,1) == -1)
-    exit (0);
-  else
-    exit (1);
-}], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes,
-   AC_MSG_ERROR(cannot check setpgrp if cross compiling))
-)
-if test $ac_cv_func_setpgrp_void = yes; then
-  AC_DEFINE(SETPGRP_VOID, 1,
-            [Define if the `setpgrp' function takes no argument.])
-fi
-])# AC_FUNC_SETPGRP
-
-
-# AC_FUNC_VPRINTF
-# ---------------
-# Why the heck is that _doprnt does not define HAVE__DOPRNT???
-# That the logical name!  In addition, why doesn't it use
-# AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
-# FIXME: To be changed in Autoconf 3?
-AC_DEFUN(AC_FUNC_VPRINTF,
-[AC_CHECK_FUNC(vprintf,
-               AC_DEFINE(HAVE_VPRINTF, 1,
-               [Define if you have the `vprintf' function.]))
-if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt,
-              AC_DEFINE(HAVE_DOPRNT, 1,
-                        [Define if you don't have `vprintf' but do have
-                         `_doprnt.']))
-fi
-])
-
-
-# AC_FUNC_VFORK
-# -------------
-AC_DEFUN(AC_FUNC_VFORK,
-[AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADER(vfork.h,
-                AC_DEFINE(HAVE_VFORK_H, 1,
-                          [Define if you have <vfork.h>.]))
-AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
-[AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-#if HAVE_VFORK_H
-# include <vfork.h>
-#endif
-/* On some sparc systems, changes by the child to local and incoming
-   argument registers are propagated back to the parent.  The compiler
-   is told about this with #include <vfork.h>, but some compilers
-   (e.g. gcc -O) don't grok <vfork.h>.  Test for this by using a
-   static variable whose address is put into a register that is
-   clobbered by the vfork.  */
-static
-#ifdef __cplusplus
-sparc_address_test (int arg)
-# else
-sparc_address_test (arg) int arg;
-#endif
-{
-  static pid_t child;
-  if (!child) {
-    child = vfork ();
-    if (child < 0) {
-      perror ("vfork");
-      _exit(2);
-    }
-    if (!child) {
-      arg = getpid();
-      write(-1, "", 0);
-      _exit (arg);
-    }
-  }
-}
-
-int
-main ()
-{
-  pid_t parent = getpid ();
-  pid_t child;
-
-  sparc_address_test ();
-
-  child = vfork ();
-
-  if (child == 0) {
-    /* Here is another test for sparc vfork register problems.  This
-       test uses lots of local variables, at least as many local
-       variables as main has allocated so far including compiler
-       temporaries.  4 locals are enough for gcc 1.40.3 on a Solaris
-       4.1.3 sparc, but we use 8 to be safe.  A buggy compiler should
-       reuse the register of parent for one of the local variables,
-       since it will think that parent can't possibly be used any more
-       in this routine.  Assigning to the local variable will thus
-       munge parent in the parent process.  */
-    pid_t
-      p = getpid(), p1 = getpid(), p2 = getpid(), p3 = getpid(),
-      p4 = getpid(), p5 = getpid(), p6 = getpid(), p7 = getpid();
-    /* Convince the compiler that p..p7 are live; otherwise, it might
-       use the same hardware register for all 8 local variables.  */
-    if (p != p1 || p != p2 || p != p3 || p != p4
-	|| p != p5 || p != p6 || p != p7)
-      _exit(1);
-
-    /* On some systems (e.g. IRIX 3.3), vfork doesn't separate parent
-       from child file descriptors.  If the child closes a descriptor
-       before it execs or exits, this munges the parent's descriptor
-       as well.  Test for this by closing stdout in the child.  */
-    _exit(close(fileno(stdout)) != 0);
-  } else {
-    int status;
-    struct stat st;
-
-    while (wait(&status) != child)
-      ;
-    exit(
-	 /* Was there some problem with vforking?  */
-	 child < 0
-
-	 /* Did the child fail?  (This shouldn't happen.)  */
-	 || status
-
-	 /* Did the vfork/compiler bug occur?  */
-	 || parent != getpid()
-
-	 /* Did the file descriptor bug occur?  */
-	 || fstat(fileno(stdout), &st) != 0
-	 );
-  }
-}],
-ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
-ac_cv_func_vfork_works=$ac_cv_func_vfork)])
-if test "x$ac_cv_func_vfork_works" = xno; then
-  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
-fi
-])# AC_FUNC_VFORK
-
-
-# AC_FUNC_WAIT3
-# -------------
-AC_DEFUN(AC_FUNC_WAIT3,
-[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
-[AC_TRY_RUN(
-[#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <stdio.h>
-/* HP-UX has wait3 but does not fill in rusage at all.  */
-int
-main ()
-{
-  struct rusage r;
-  int i;
-  /* Use a field that we can force nonzero --
-     voluntary context switches.
-     For systems like NeXT and OSF/1 that don't set it,
-     also use the system CPU time.  And page faults (I/O) for Linux.  */
-  r.ru_nvcsw = 0;
-  r.ru_stime.tv_sec = 0;
-  r.ru_stime.tv_usec = 0;
-  r.ru_majflt = r.ru_minflt = 0;
-  switch (fork ())
-    {
-    case 0: /* Child.  */
-      sleep(1); /* Give up the CPU.  */
-      _exit(0);
-    case -1: /* What can we do?  */
-      _exit(0);
-    default: /* Parent.  */
-      wait3(&i, 0, &r);
-      /* Avoid "text file busy" from rm on fast HP-UX machines.  */
-      sleep(2);
-      exit (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
-	    && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
-    }
-}], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
-ac_cv_func_wait3_rusage=no)])
-if test $ac_cv_func_wait3_rusage = yes; then
-  AC_DEFINE(HAVE_WAIT3, 1,
-            [Define if you have the `wait3' system call.])
-fi
-])# AC_FUNC_WAIT3
-
-
 # AC_FUNC_ALLOCA
 # --------------
 AC_DEFUN(AC_FUNC_ALLOCA,
@@ -1794,6 +1355,61 @@ AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 fi
 AC_SUBST(ALLOCA)dnl
 ])# AC_FUNC_ALLOCA
+
+
+# AC_FUNC_CLOSEDIR_VOID
+# ---------------------
+# Check whether closedir returns void, and #define CLOSEDIR_VOID in
+# that case.
+AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
+[AC_REQUIRE([AC_HEADER_DIRENT])dnl
+AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
+[AC_TRY_RUN(
+[#include <sys/types.h>
+#include <$ac_header_dirent>
+
+int closedir ();
+int
+main ()
+{
+  exit (closedir (opendir (".")) != 0);
+}],
+  ac_cv_func_closedir_void=no,
+  ac_cv_func_closedir_void=yes,
+  ac_cv_func_closedir_void=yes)])
+if test $ac_cv_func_closedir_void = yes; then
+  AC_DEFINE(CLOSEDIR_VOID, 1,
+            [Define if the `closedir' function returns void instead of `int'.])
+fi
+])
+
+
+# AC_FUNC_FNMATCH
+# ---------------
+# We look for fnmatch.h to avoid that the test fails in C++.
+AC_DEFUN(AC_FUNC_FNMATCH,
+[AC_CHECK_HEADERS(fnmatch.h)
+AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
+# Some versions of Solaris or SCO have a broken fnmatch function.
+# So we run a test program.  If we are cross-compiling, take no chance.
+# Thanks to John Oleynick and Franc,ois Pinard for this test.
+[AC_TRY_RUN(
+[#if HAVE_FNMATCH_H
+# include <fnmatch.h>
+#endif
+
+int
+main ()
+{
+  exit (fnmatch ("a*", "abc", 0) != 0);
+}],
+ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
+ac_cv_func_fnmatch_works=no)])
+if test $ac_cv_func_fnmatch_works = yes; then
+  AC_DEFINE(HAVE_FNMATCH, 1,
+            [Define if your system has a working `fnmatch' function.])
+fi
+])# AC_FUNC_FNMATCH
 
 
 # AC_FUNC_GETLOADAVG
@@ -1913,84 +1529,6 @@ AC_SUBST(KMEM_GROUP)dnl
 ])# AC_FUNC_GETLOADAVG
 
 
-# AC_FUNC_UTIME_NULL
-# ------------------
-AC_DEFUN(AC_FUNC_UTIME_NULL,
-[AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
-[rm -f conftestdata; >conftestdata
-# Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
-AC_TRY_RUN(
-[#include <sys/types.h>
-#include <sys/stat.h>
-int
-main()
-{
-  struct stat s, t;
-  exit (!(stat ("conftestdata", &s) == 0
-          && utime ("conftestdata", (long *)0) == 0
-          && stat ("conftestdata", &t) == 0
-          && t.st_mtime >= s.st_mtime
-          && t.st_mtime - s.st_mtime < 120));
-}], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
-  ac_cv_func_utime_null=no)
-rm -f core core.* *.core])
-if test $ac_cv_func_utime_null = yes; then
-  AC_DEFINE(HAVE_UTIME_NULL, 1,
-            [Define if `utime(file, NULL)' sets file's timestamp to the
-             present.])
-fi
-])# AC_FUNC_UTIME_NULL
-
-
-# AC_FUNC_STRCOLL
-# ---------------
-AC_DEFUN(AC_FUNC_STRCOLL,
-[AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
-[AC_TRY_RUN([#include <string.h>
-int
-main ()
-{
-  exit (strcoll ("abc", "def") >= 0 ||
-	strcoll ("ABC", "DEF") >= 0 ||
-	strcoll ("123", "456") >= 0);
-}], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
-ac_cv_func_strcoll_works=no)])
-if test $ac_cv_func_strcoll_works = yes; then
-  AC_DEFINE(HAVE_STRCOLL, 1,
-            [Define if you have the `strcoll' function and it is properly
-             defined.])
-fi
-])# AC_FUNC_STRCOLL
-
-
-# AC_FUNC_SETVBUF_REVERSED
-# ------------------------
-AC_DEFUN(AC_FUNC_SETVBUF_REVERSED,
-[AC_CACHE_CHECK(whether setvbuf arguments are reversed,
-  ac_cv_func_setvbuf_reversed,
-[AC_TRY_RUN([#include <stdio.h>
-/* If setvbuf has the reversed format, exit 0. */
-int
-main ()
-{
-  /* This call has the arguments reversed.
-     A reversed system may check and see that the address of main
-     is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
-  if (setvbuf(stdout, _IOLBF, (char *) main, BUFSIZ) != 0)
-    exit(1);
-  putc('\r', stdout);
-  exit(0);			/* Non-reversed systems segv here.  */
-}], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
-rm -f core core.* *.core])
-if test $ac_cv_func_setvbuf_reversed = yes; then
-  AC_DEFINE(SETVBUF_REVERSED, 1,
-            [Define if the `setvbuf' function takes the buffering type as
-             its second argument and the buffer pointer as the third, as on
-             System V before release 3.])
-fi
-])# AC_FUNC_SETVBUF_REVERSED
-
-
 # AC_FUNC_GETMNTENT
 # -----------------
 AC_DEFUN(AC_FUNC_GETMNTENT,
@@ -2001,6 +1539,69 @@ AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
 AC_CHECK_FUNC(getmntent,
               [AC_DEFINE(HAVE_GETMNTENT, 1,
                          [Define if you have the `getmntent' function.])])])
+
+
+# AC_FUNC_GETPGRP
+# ---------------
+AC_DEFUN(AC_FUNC_GETPGRP,
+[AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
+[AC_TRY_RUN(
+[/*
+ * If this system has a BSD-style getpgrp(),
+ * which takes a pid argument, exit unsuccessfully.
+ *
+ * Snarfed from Chet Ramey's bash pgrp.c test program
+ */
+#include <stdio.h>
+#include <sys/types.h>
+
+int     pid;
+int     pg1, pg2, pg3, pg4;
+int     ng, np, s, child;
+
+int
+main ()
+{
+  pid = getpid ();
+  pg1 = getpgrp (0);
+  pg2 = getpgrp ();
+  pg3 = getpgrp (pid);
+  pg4 = getpgrp (1);
+
+  /* If all of these values are the same, it's pretty sure that we're
+     on a system that ignores getpgrp's first argument.  */
+  if (pg2 == pg4 && pg1 == pg3 && pg2 == pg3)
+    exit (0);
+
+  child = fork ();
+  if (child < 0)
+    exit(1);
+  else if (child == 0)
+    {
+      np = getpid ();
+      /*  If this is Sys V, this will not work; pgrp will be set to np
+	 because setpgrp just changes a pgrp to be the same as the
+	 pid.  */
+      setpgrp (np, pg1);
+      ng = getpgrp (0);        /* Same result for Sys V and BSD */
+      if (ng == pg1)
+  	exit (1);
+      else
+  	exit (0);
+    }
+  else
+    {
+      wait (&s);
+      exit (s>>8);
+    }
+}], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
+   AC_MSG_ERROR(cannot check getpgrp if cross compiling))
+])
+if test $ac_cv_func_getpgrp_void = yes; then
+  AC_DEFINE(GETPGRP_VOID, 1,
+            [Define if the `getpgrp' function takes no argument.])
+fi
+])# AC_FUNC_GETPGRP
 
 
 # AC_FUNC_MKTIME
@@ -2164,18 +1765,148 @@ fi
 ])# AC_FUNC_MKTIME
 
 
-# AC_FUNC_STRFTIME
-# ----------------
-AC_DEFUN(AC_FUNC_STRFTIME,
-[AC_CHECK_FUNC(strftime,
-               [AC_DEFINE(HAVE_STRFTIME, 1,
-                          [Define if you have the `strftime' function.])],
-[# strftime is in -lintl on SCO UNIX.
-AC_CHECK_LIB(intl, strftime,
-[AC_DEFINE(HAVE_STRFTIME, 1,
-           [Define if you have the `strftime' function.])
-LIBS="-lintl $LIBS"])])dnl
-])# AC_FUNC_STRFTIME
+# AC_FUNC_MMAP
+# ------------
+AC_DEFUN(AC_FUNC_MMAP,
+[AC_CHECK_HEADERS(unistd.h)
+AC_CHECK_FUNCS(getpagesize)
+AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
+[AC_TRY_RUN(
+[/* Thanks to Mike Haertel and Jim Avera for this test.
+   Here is a matrix of mmap possibilities:
+	mmap private not fixed
+	mmap private fixed at somewhere currently unmapped
+	mmap private fixed at somewhere already mapped
+	mmap shared not fixed
+	mmap shared fixed at somewhere currently unmapped
+	mmap shared fixed at somewhere already mapped
+   For private mappings, we should verify that changes cannot be read()
+   back from the file, nor mmap's back from the file at a different
+   address.  (There have been systems where private was not correctly
+   implemented like the infamous i386 svr4.0, and systems where the
+   VM page cache was not coherent with the file system buffer cache
+   like early versions of FreeBSD and possibly contemporary NetBSD.)
+   For shared mappings, we should conversely verify that changes get
+   propogated back to all the places they're supposed to be.
+
+   Grep wants private fixed already mapped.
+   The main things grep needs to know about mmap are:
+   * does it exist and is it safe to write into the mmap'd area
+   * how to use it (BSD variants)  */
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+
+/* This mess was copied from the GNU getpagesize.h.  */
+#if !HAVE_GETPAGESIZE
+# if HAVE_UNISTD_H
+#  include <unistd.h>
+# endif
+
+/* Assume that all systems that can run configure have sys/param.h.  */
+# if !HAVE_SYS_PARAM_H
+#  define HAVE_SYS_PARAM_H 1
+# endif
+
+# ifdef _SC_PAGESIZE
+#  define getpagesize() sysconf(_SC_PAGESIZE)
+# else /* no _SC_PAGESIZE */
+#  if HAVE_SYS_PARAM_H
+#   include <sys/param.h>
+#   ifdef EXEC_PAGESIZE
+#    define getpagesize() EXEC_PAGESIZE
+#   else /* no EXEC_PAGESIZE */
+#    ifdef NBPG
+#     define getpagesize() NBPG * CLSIZE
+#     ifndef CLSIZE
+#      define CLSIZE 1
+#     endif /* no CLSIZE */
+#    else /* no NBPG */
+#     ifdef NBPC
+#      define getpagesize() NBPC
+#     else /* no NBPC */
+#      ifdef PAGESIZE
+#       define getpagesize() PAGESIZE
+#      endif /* PAGESIZE */
+#     endif /* no NBPC */
+#    endif /* no NBPG */
+#   endif /* no EXEC_PAGESIZE */
+#  else /* no HAVE_SYS_PARAM_H */
+#   define getpagesize() 8192	/* punt totally */
+#  endif /* no HAVE_SYS_PARAM_H */
+# endif /* no _SC_PAGESIZE */
+
+#endif /* no HAVE_GETPAGESIZE */
+
+#ifdef __cplusplus
+extern "C" { void *malloc(unsigned); }
+#else
+char *malloc();
+#endif
+
+int
+main ()
+{
+  char *data, *data2, *data3;
+  int i, pagesize;
+  int fd;
+
+  pagesize = getpagesize ();
+
+  /* First, make a file with some known garbage in it. */
+  data = malloc (pagesize);
+  if (!data)
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    *(data + i) = rand ();
+  umask (0);
+  fd = creat ("conftestmmap", 0600);
+  if (fd < 0)
+    exit (1);
+  if (write (fd, data, pagesize) != pagesize)
+    exit (1);
+  close (fd);
+
+  /* Next, try to mmap the file at a fixed address which already has
+     something else allocated at it.  If we can, also make sure that
+     we see the same garbage.  */
+  fd = open ("conftestmmap", O_RDWR);
+  if (fd < 0)
+    exit (1);
+  data2 = malloc (2 * pagesize);
+  if (!data2)
+    exit (1);
+  data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
+  if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
+                     MAP_PRIVATE | MAP_FIXED, fd, 0L))
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    if (*(data + i) != *(data2 + i))
+      exit (1);
+
+  /* Finally, make sure that changes to the mapped area do not
+     percolate back to the file as seen by read().  (This is a bug on
+     some variants of i386 svr4.0.)  */
+  for (i = 0; i < pagesize; ++i)
+    *(data2 + i) = *(data2 + i) + 1;
+  data3 = malloc (pagesize);
+  if (!data3)
+    exit (1);
+  if (read (fd, data3, pagesize) != pagesize)
+    exit (1);
+  for (i = 0; i < pagesize; ++i)
+    if (*(data + i) != *(data3 + i))
+      exit (1);
+  close (fd);
+  unlink ("conftestmmap");
+  exit (0);
+}], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
+ac_cv_func_mmap_fixed_mapped=no)])
+if test $ac_cv_func_mmap_fixed_mapped = yes; then
+  AC_DEFINE(HAVE_MMAP, 1,
+            [Define if you have a working `mmap' system call.])
+fi
+])# AC_FUNC_MMAP
 
 
 # AC_FUNC_MEMCMP
@@ -2206,7 +1937,7 @@ AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
    [for ac_cv_func_select_arg234 in 'fd_set *' 'int *' 'void *'; do
      for ac_cv_func_select_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
       for ac_cv_func_select_arg5 in 'struct timeval *' 'const struct timeval *'; do
-       AC_TRY_COMPILE(dnl
+       AC_TRY_COMPILE(
 [#if HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
@@ -2234,12 +1965,308 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
  fi
  AC_MSG_RESULT([$ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5])
  AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $ac_cv_func_select_arg1,
-                    [Define to the type of arg1 for `select'.])
+                    [Define to the type of arg 1 for `select'.])
  AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ($ac_cv_func_select_arg234),
                     [Define to the type of args 2, 3 and 4 for `select'.])
  AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($ac_cv_func_select_arg5),
-                    [Define to the type of arg5 for `select'.])
+                    [Define to the type of arg 5 for `select'.])
 ])# AC_FUNC_SELECT_ARGTYPES
+
+
+# AC_FUNC_SETPGRP
+# ---------------
+AC_DEFUN(AC_FUNC_SETPGRP,
+[AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
+AC_TRY_RUN(
+[#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+
+/* If this system has a BSD-style setpgrp, which takes arguments, exit
+   successfully.  */
+
+int
+main ()
+{
+  if (setpgrp (1,1) == -1)
+    exit (0);
+  else
+    exit (1);
+}], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes,
+   AC_MSG_ERROR(cannot check setpgrp if cross compiling))
+)
+if test $ac_cv_func_setpgrp_void = yes; then
+  AC_DEFINE(SETPGRP_VOID, 1,
+            [Define if the `setpgrp' function takes no argument.])
+fi
+])# AC_FUNC_SETPGRP
+
+
+# AC_FUNC_STRFTIME
+# ----------------
+AC_DEFUN(AC_FUNC_STRFTIME,
+[AC_CHECK_FUNC(strftime,
+               [AC_DEFINE(HAVE_STRFTIME, 1,
+                          [Define if you have the `strftime' function.])],
+[# strftime is in -lintl on SCO UNIX.
+AC_CHECK_LIB(intl, strftime,
+[AC_DEFINE(HAVE_STRFTIME, 1,
+           [Define if you have the `strftime' function.])
+LIBS="-lintl $LIBS"])])dnl
+])# AC_FUNC_STRFTIME
+
+
+# AC_FUNC_VFORK
+# -------------
+AC_DEFUN(AC_FUNC_VFORK,
+[AC_REQUIRE([AC_TYPE_PID_T])dnl
+AC_CHECK_HEADER(vfork.h,
+                AC_DEFINE(HAVE_VFORK_H, 1,
+                          [Define if you have <vfork.h>.]))
+AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
+[AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+#if HAVE_VFORK_H
+# include <vfork.h>
+#endif
+/* On some sparc systems, changes by the child to local and incoming
+   argument registers are propagated back to the parent.  The compiler
+   is told about this with #include <vfork.h>, but some compilers
+   (e.g. gcc -O) don't grok <vfork.h>.  Test for this by using a
+   static variable whose address is put into a register that is
+   clobbered by the vfork.  */
+static
+#ifdef __cplusplus
+sparc_address_test (int arg)
+# else
+sparc_address_test (arg) int arg;
+#endif
+{
+  static pid_t child;
+  if (!child) {
+    child = vfork ();
+    if (child < 0) {
+      perror ("vfork");
+      _exit(2);
+    }
+    if (!child) {
+      arg = getpid();
+      write(-1, "", 0);
+      _exit (arg);
+    }
+  }
+}
+
+int
+main ()
+{
+  pid_t parent = getpid ();
+  pid_t child;
+
+  sparc_address_test ();
+
+  child = vfork ();
+
+  if (child == 0) {
+    /* Here is another test for sparc vfork register problems.  This
+       test uses lots of local variables, at least as many local
+       variables as main has allocated so far including compiler
+       temporaries.  4 locals are enough for gcc 1.40.3 on a Solaris
+       4.1.3 sparc, but we use 8 to be safe.  A buggy compiler should
+       reuse the register of parent for one of the local variables,
+       since it will think that parent can't possibly be used any more
+       in this routine.  Assigning to the local variable will thus
+       munge parent in the parent process.  */
+    pid_t
+      p = getpid(), p1 = getpid(), p2 = getpid(), p3 = getpid(),
+      p4 = getpid(), p5 = getpid(), p6 = getpid(), p7 = getpid();
+    /* Convince the compiler that p..p7 are live; otherwise, it might
+       use the same hardware register for all 8 local variables.  */
+    if (p != p1 || p != p2 || p != p3 || p != p4
+	|| p != p5 || p != p6 || p != p7)
+      _exit(1);
+
+    /* On some systems (e.g. IRIX 3.3), vfork doesn't separate parent
+       from child file descriptors.  If the child closes a descriptor
+       before it execs or exits, this munges the parent's descriptor
+       as well.  Test for this by closing stdout in the child.  */
+    _exit(close(fileno(stdout)) != 0);
+  } else {
+    int status;
+    struct stat st;
+
+    while (wait(&status) != child)
+      ;
+    exit(
+	 /* Was there some problem with vforking?  */
+	 child < 0
+
+	 /* Did the child fail?  (This shouldn't happen.)  */
+	 || status
+
+	 /* Did the vfork/compiler bug occur?  */
+	 || parent != getpid()
+
+	 /* Did the file descriptor bug occur?  */
+	 || fstat(fileno(stdout), &st) != 0
+	 );
+  }
+}],
+ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
+ac_cv_func_vfork_works=$ac_cv_func_vfork)])
+if test "x$ac_cv_func_vfork_works" = xno; then
+  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
+fi
+])# AC_FUNC_VFORK
+
+
+# AC_FUNC_VPRINTF
+# ---------------
+# Why the heck is that _doprnt does not define HAVE__DOPRNT???
+# That the logical name!  In addition, why doesn't it use
+# AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
+# FIXME: To be changed in Autoconf 3?
+AC_DEFUN(AC_FUNC_VPRINTF,
+[AC_CHECK_FUNC(vprintf,
+               AC_DEFINE(HAVE_VPRINTF, 1,
+               [Define if you have the `vprintf' function.]))
+if test "$ac_cv_func_vprintf" != yes; then
+AC_CHECK_FUNC(_doprnt,
+              AC_DEFINE(HAVE_DOPRNT, 1,
+                        [Define if you don't have `vprintf' but do have
+                         `_doprnt.']))
+fi
+])
+
+
+# AC_FUNC_WAIT3
+# -------------
+AC_DEFUN(AC_FUNC_WAIT3,
+[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
+[AC_TRY_RUN(
+[#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <stdio.h>
+/* HP-UX has wait3 but does not fill in rusage at all.  */
+int
+main ()
+{
+  struct rusage r;
+  int i;
+  /* Use a field that we can force nonzero --
+     voluntary context switches.
+     For systems like NeXT and OSF/1 that don't set it,
+     also use the system CPU time.  And page faults (I/O) for Linux.  */
+  r.ru_nvcsw = 0;
+  r.ru_stime.tv_sec = 0;
+  r.ru_stime.tv_usec = 0;
+  r.ru_majflt = r.ru_minflt = 0;
+  switch (fork ())
+    {
+    case 0: /* Child.  */
+      sleep(1); /* Give up the CPU.  */
+      _exit(0);
+    case -1: /* What can we do?  */
+      _exit(0);
+    default: /* Parent.  */
+      wait3(&i, 0, &r);
+      /* Avoid "text file busy" from rm on fast HP-UX machines.  */
+      sleep(2);
+      exit (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
+	    && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
+    }
+}], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
+ac_cv_func_wait3_rusage=no)])
+if test $ac_cv_func_wait3_rusage = yes; then
+  AC_DEFINE(HAVE_WAIT3, 1,
+            [Define if you have the `wait3' system call.])
+fi
+])# AC_FUNC_WAIT3
+
+
+# AC_FUNC_UTIME_NULL
+# ------------------
+AC_DEFUN(AC_FUNC_UTIME_NULL,
+[AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
+[rm -f conftestdata; >conftestdata
+# Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
+AC_TRY_RUN(
+[#include <sys/types.h>
+#include <sys/stat.h>
+int
+main()
+{
+  struct stat s, t;
+  exit (!(stat ("conftestdata", &s) == 0
+          && utime ("conftestdata", (long *)0) == 0
+          && stat ("conftestdata", &t) == 0
+          && t.st_mtime >= s.st_mtime
+          && t.st_mtime - s.st_mtime < 120));
+}], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
+  ac_cv_func_utime_null=no)
+rm -f core core.* *.core])
+if test $ac_cv_func_utime_null = yes; then
+  AC_DEFINE(HAVE_UTIME_NULL, 1,
+            [Define if `utime(file, NULL)' sets file's timestamp to the
+             present.])
+fi
+])# AC_FUNC_UTIME_NULL
+
+
+# AC_FUNC_STRCOLL
+# ---------------
+AC_DEFUN(AC_FUNC_STRCOLL,
+[AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
+[AC_TRY_RUN([#include <string.h>
+int
+main ()
+{
+  exit (strcoll ("abc", "def") >= 0 ||
+	strcoll ("ABC", "DEF") >= 0 ||
+	strcoll ("123", "456") >= 0);
+}], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
+ac_cv_func_strcoll_works=no)])
+if test $ac_cv_func_strcoll_works = yes; then
+  AC_DEFINE(HAVE_STRCOLL, 1,
+            [Define if you have the `strcoll' function and it is properly
+             defined.])
+fi
+])# AC_FUNC_STRCOLL
+
+
+# AC_FUNC_SETVBUF_REVERSED
+# ------------------------
+AC_DEFUN(AC_FUNC_SETVBUF_REVERSED,
+[AC_CACHE_CHECK(whether setvbuf arguments are reversed,
+  ac_cv_func_setvbuf_reversed,
+[AC_TRY_RUN([#include <stdio.h>
+/* If setvbuf has the reversed format, exit 0. */
+int
+main ()
+{
+  /* This call has the arguments reversed.
+     A reversed system may check and see that the address of main
+     is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
+  if (setvbuf(stdout, _IOLBF, (char *) main, BUFSIZ) != 0)
+    exit(1);
+  putc('\r', stdout);
+  exit(0);			/* Non-reversed systems segv here.  */
+}], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
+rm -f core core.* *.core])
+if test $ac_cv_func_setvbuf_reversed = yes; then
+  AC_DEFINE(SETVBUF_REVERSED, 1,
+            [Define if the `setvbuf' function takes the buffering type as
+             its second argument and the buffer pointer as the third, as on
+             System V before release 3.])
+fi
+])# AC_FUNC_SETVBUF_REVERSED
+
 
 
 
@@ -2247,23 +2274,6 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
 ## ------------------------------ ##
 ## Checks for structure members.  ##
 ## ------------------------------ ##
-
-
-# AC_HEADER_TIME
-# --------------
-AC_DEFUN(AC_HEADER_TIME,
-[AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
-  ac_cv_header_time,
-[AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-],
-[struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
-if test $ac_cv_header_time = yes; then
-  AC_DEFINE(TIME_WITH_SYS_TIME, 1,
-            [Define if you can safely include both <sys/time.h> and <time.h>.])
-fi
-])# AC_HEADER_TIME
 
 
 # AC_STRUCT_TM
@@ -2656,31 +2666,11 @@ fi
 ])# AC_C_PROTOTYPES
 
 
-# AC_OBJEXT
-# ---------
-# Check the object extension used by the compiler: typically .o or
-# .obj.  If this is called, some other behaviour will change,
-# determined by ac_objext.
-AC_DEFUN(AC_OBJEXT,
-[AC_MSG_CHECKING([for object suffix])
-AC_CACHE_VAL(ac_cv_objext,
-[rm -f conftest*
-echo 'int i = 1;' >conftest.$ac_ext
-if AC_TRY_EVAL(ac_compile); then
-  for ac_file in conftest.*; do
-    case $ac_file in
-    *.c) ;;
-    *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
-    esac
-  done
-else
-  AC_MSG_ERROR([installation or configuration problem; compiler does not work])
-fi
-rm -f conftest*])
-AC_MSG_RESULT($ac_cv_objext)
-OBJEXT=$ac_cv_objext
-ac_objext=$ac_cv_objext
-AC_SUBST(OBJEXT)])
+
+
+## ----------------------------------------- ##
+## Checks for F77 compiler characteristics.  ##
+## ----------------------------------------- ##
 
 
 # AC_F77_LIBRARY_LDFLAGS
@@ -3544,6 +3534,33 @@ dnl Setting ac_exeext will implicitly change the ac_link command.
 ac_exeext=$EXEEXT
 AC_SUBST(EXEEXT)dnl
 ])# AC_EXEEXT
+
+
+# AC_OBJEXT
+# ---------
+# Check the object extension used by the compiler: typically .o or
+# .obj.  If this is called, some other behaviour will change,
+# determined by ac_objext.
+AC_DEFUN(AC_OBJEXT,
+[AC_MSG_CHECKING([for object suffix])
+AC_CACHE_VAL(ac_cv_objext,
+[rm -f conftest*
+echo 'int i = 1;' >conftest.$ac_ext
+if AC_TRY_EVAL(ac_compile); then
+  for ac_file in conftest.*; do
+    case $ac_file in
+    *.c) ;;
+    *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
+    esac
+  done
+else
+  AC_MSG_ERROR([installation or configuration problem; compiler does not work])
+fi
+rm -f conftest*])
+AC_MSG_RESULT($ac_cv_objext)
+OBJEXT=$ac_cv_objext
+ac_objext=$ac_cv_objext
+AC_SUBST(OBJEXT)])
 
 
 
