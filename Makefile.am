@@ -76,20 +76,20 @@ MAINTAINERCLEANFILES = INSTALL.txt
 # The scripts.
 
 editsh = sed \
-	-e 's,@''datadir''@,$(pkgdatadir),g' \
-	-e 's,@''M4''@,$(M4),g' \
-	-e 's,@''AWK''@,$(AWK),g' \
-	-e 's,@''SHELL''@,$(SHELL),g' \
-	-e 's,@''VERSION''@,$(VERSION),g' \
-	-e 's,@''PACKAGE''@,$(PACKAGE),g' \
-	-e 's,@autoconf-name@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name@,'`echo autoheader | sed '$(transform)'`',g'
+	-e 's,@datadir\@,$(pkgdatadir),g' \
+	-e 's,@M4\@,$(M4),g' \
+	-e 's,@AWK\@,$(AWK),g' \
+	-e 's,@SHELL\@,$(SHELL),g' \
+	-e 's,@VERSION\@,$(VERSION),g' \
+	-e 's,@PACKAGE\@,$(PACKAGE),g' \
+	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
+	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g'
 
 editpl = sed \
-	-e 's,@''datadir''@,$(pkgdatadir),g' \
-	-e 's,@''PERL''@,$(PERL),g' \
-	-e 's,@''VERSION''@,$(VERSION),g' \
-	-e 's,@''PACKAGE''@,$(PACKAGE),g'
+	-e 's,@datadir\@,$(pkgdatadir),g' \
+	-e 's,@PERL\@,$(PERL),g' \
+	-e 's,@VERSION\@,$(VERSION),g' \
+	-e 's,@PACKAGE\@,$(PACKAGE),g'
 
 .sh:
 	rm -f $@ $@.tmp

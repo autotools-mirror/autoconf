@@ -1,5 +1,14 @@
 2000-07-28  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Installation Directory Variables): New
+	section, Eved off from `Preset Output Variables', i.e., was a
+	small part of it, grew independent, and is its equal (at least).
+	(Coding Style): `$#' padding.
+	* Makefile.am (editsh, editpl): Do what the doc says you do: use
+	@datadir\@ instead of @''datadir''@.
+
+2000-07-28  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_PROG_CC_GNU, _AC_PROG_CXX_GNU,
 	_AC_PROG_F77_GNU): Use ac_ext.  Use ACEOF instead of EOF.
 	(AC_LANG_CONFTEST): New macro.

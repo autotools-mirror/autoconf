@@ -183,6 +183,7 @@ Initialization and Output Files
 Substitutions in Makefiles
 
 * Preset Output Variables::     Output variables that are always set
+* Installation Directory Variables::  Other preset output variables
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 
@@ -1571,24 +1572,33 @@ GNU Coding Standards}, for more information on what to put in
 
 @menu
 * Preset Output Variables::     Output variables that are always set
+* Installation Directory Variables::  Other preset output variables
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 @end menu
 
-@node Preset Output Variables, Build Directories, Makefile Substitutions, Makefile Substitutions
+@node Preset Output Variables, Installation Directory Variables, Makefile Substitutions, Makefile Substitutions
 @subsection Preset Output Variables
 
 Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
-complete list of output variables.  Here is what each of the preset ones
-contains.  @xref{Directory Variables,, Variables for Installation
-Directories, standards, The GNU Coding Standards}, for more information
-about the variables with names that end in @samp{dir}.
+complete list of output variables.  @xref{Installation Directory
+Variables}, for the list of the preset ones related to installation
+directories.  Below are listed the other preset ones.
 
-@defvar bindir
-@ovindex bindir
-The directory for installing executables that users run.
+@c Just say no to ASCII sorting!  We're humans, not computers.
+@c These variables are listed as they would be in a dictionary:
+@c actor
+@c Actress
+@c actress
+
+@defvar CFLAGS
+@ovindex CFLAGS
+Debugging and optimization options for the C compiler.  If it is not set
+in the environment when @code{configure} runs, the default value is set
+when you call @code{AC_PROG_CC} (or empty if you don't).  @code{configure}
+uses this variable when compiling programs to test for C features.
 @end defvar
 
 @defvar configure_input
@@ -1608,91 +1618,6 @@ example, an input shell script should begin like this:
 @noindent
 The presence of that line also reminds people editing the file that it
 needs to be processed by @code{configure} in order to be used.
-@end defvar
-
-@defvar datadir
-@ovindex datadir
-The directory for installing read-only architecture-independent data.
-@end defvar
-
-@defvar exec_prefix
-@ovindex exec_prefix
-The installation prefix for architecture-dependent files.
-@end defvar
-
-@defvar includedir
-@ovindex includedir
-The directory for installing C header files.
-@end defvar
-
-@defvar infodir
-@ovindex infodir
-The directory for installing documentation in Info format.
-@end defvar
-
-@defvar libdir
-@ovindex libdir
-The directory for installing object code libraries.
-@end defvar
-
-@defvar libexecdir
-@ovindex libexecdir
-The directory for installing executables that other programs run.
-@end defvar
-
-@defvar localstatedir
-@ovindex localstatedir
-The directory for installing modifiable single-machine data.
-@end defvar
-
-@defvar mandir
-@ovindex mandir
-The top-level directory for installing documentation in man format.
-@end defvar
-
-@defvar oldincludedir
-@ovindex oldincludedir
-The directory for installing C header files for non-gcc compilers.
-@end defvar
-
-@defvar prefix
-@ovindex prefix
-The installation prefix for architecture-independent files.
-@end defvar
-
-@defvar sbindir
-@ovindex sbindir
-The directory for installing executables that system
-administrators run.
-@end defvar
-
-@defvar sharedstatedir
-@ovindex sharedstatedir
-The directory for installing modifiable architecture-independent data.
-@end defvar
-
-@defvar srcdir
-@ovindex srcdir
-The directory that contains the source code for that @file{Makefile}.
-@end defvar
-
-@defvar sysconfdir
-@ovindex sysconfdir
-The directory for installing read-only single-machine data.
-@end defvar
-
-@defvar top_srcdir
-@ovindex top_srcdir
-The top-level source code directory for the package.  In the top-level
-directory, this is the same as @code{srcdir}.
-@end defvar
-
-@defvar CFLAGS
-@ovindex CFLAGS
-Debugging and optimization options for the C compiler.  If it is not set
-in the environment when @code{configure} runs, the default value is set
-when you call @code{AC_PROG_CC} (or empty if you don't).  @code{configure}
-uses this variable when compiling programs to test for C features.
 @end defvar
 
 @defvar CPPFLAGS
@@ -1765,7 +1690,162 @@ uses this variable when linking programs to test for C features.
 @option{-l} options to pass to the linker.
 @end defvar
 
-@node Build Directories, Automatic Remaking, Preset Output Variables, Makefile Substitutions
+@defvar srcdir
+@ovindex srcdir
+The directory that contains the source code for that @file{Makefile}.
+@end defvar
+
+@defvar top_srcdir
+@ovindex top_srcdir
+The top-level source code directory for the package.  In the top-level
+directory, this is the same as @code{srcdir}.
+@end defvar
+
+@node Installation Directory Variables, Build Directories, Preset Output Variables, Makefile Substitutions
+@subsection Installation Directory Variables
+
+The following variables specify the directories where the package will
+be installed, see @ref{Directory Variables,, Variables for Installation
+Directories, standards, The GNU Coding Standards}, for more information.
+See the end of this section for details on when and how to use these
+variables.
+
+@defvar bindir
+@ovindex bindir
+The directory for installing executables that users run.
+@end defvar
+
+@defvar datadir
+@ovindex datadir
+The directory for installing read-only architecture-independent data.
+@end defvar
+
+@defvar exec_prefix
+@ovindex exec_prefix
+The installation prefix for architecture-dependent files.
+@end defvar
+
+@defvar includedir
+@ovindex includedir
+The directory for installing C header files.
+@end defvar
+
+@defvar infodir
+@ovindex infodir
+The directory for installing documentation in Info format.
+@end defvar
+
+@defvar libdir
+@ovindex libdir
+The directory for installing object code libraries.
+@end defvar
+
+@defvar libexecdir
+@ovindex libexecdir
+The directory for installing executables that other programs run.
+@end defvar
+
+@defvar localstatedir
+@ovindex localstatedir
+The directory for installing modifiable single-machine data.
+@end defvar
+
+@defvar mandir
+@ovindex mandir
+The top-level directory for installing documentation in man format.
+@end defvar
+
+@defvar oldincludedir
+@ovindex oldincludedir
+The directory for installing C header files for non-gcc compilers.
+@end defvar
+
+@defvar prefix
+@ovindex prefix
+The installation prefix for architecture-independent files.
+@end defvar
+
+@defvar sbindir
+@ovindex sbindir
+The directory for installing executables that system
+administrators run.
+@end defvar
+
+@defvar sharedstatedir
+@ovindex sharedstatedir
+The directory for installing modifiable architecture-independent data.
+@end defvar
+
+@defvar sysconfdir
+@ovindex sysconfdir
+The directory for installing read-only single-machine data.
+@end defvar
+
+
+Most of these variables have values which rely on @code{prefix} or
+@code{exec_prefix}.  It is on purpose that the directory output
+variables keep them unexpanded: typically @samp{@@datadir@@} will be
+replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}.
+
+This behavior is mandated by the @sc{gnu} coding standards, so that when
+the user runs:
+
+@table @samp
+@item make
+she can still specify a different prefix from the one specified to
+@command{configure}, in which case, if needed, the package shall hard
+code dependencies to her late desires.
+
+@item make install
+she can specify a different installation location, in which case the
+package @emph{must} still depend on the location which were compiled in
+(i.e., never recompile when @samp{make install} is run).  This is an
+extremely important feature, as many people may decide to install all
+the files of a package grouped together, and then install links from
+the final locations to there.
+@end table
+
+In order to support these features, it is essential that @code{datadir}
+remains being defined as @samp{$@{prefix@}/share} to depend upon the
+current value of @code{prefix}.
+
+A corollary is that you should not use these variables but in
+Makefiles.  For instance instead of trying to resolve the dependencies
+of @code{datadir} upon @code{prefix} and using
+@samp{AC_DEFINE_UNQUOTED(DATADIR, $datadir)}, you should add
+@samp{-DDATADIR=$(datadir)} to your @code{CFLAGS}.
+
+Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
+@code{datadir} and friends in your shell scripts and other files, rather
+let @command{make} their replacement.  For instance Autoconf ships
+templates of its shell scripts ending with @samp{.sh}, and uses this
+Makefile snippet:
+
+@example
+.sh:
+        rm -f $@@ $@@.tmp
+        set 's,@@datadir\@@,$(pkgdatadir),g' $< >$@@.tmp
+        chmod +x $@@.tmp
+        mv $@@.tmp $@@
+@end example
+
+Three things are noteworthy:
+
+@table @samp
+@item @@datadir\@@
+The backslash prevents @command{configure} from replacing
+@samp{@@datadir@@}.
+
+@item $(pkgdatadir)
+Don't use @samp{@@datadir@@}!
+
+@item ,
+Don't use @samp{/} since most probably @samp{$(pkgdatadir)} will have
+some.
+@end table
+
+
+@node Build Directories, Automatic Remaking, Installation Directory Variables, Makefile Substitutions
 @subsection Build Directories
 
 You can support compiling a software package for several architectures
@@ -6780,6 +6860,11 @@ macro doesn't use @code{AC_REQUIRE} and it is expected never to be the
 object of an @code{AC_REQUIRE} directive, then use @code{define}.  In
 case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
 statements should be at the beginning of the macro, @code{dnl}'ed.
+
+You should not rely on the number of arguments: instead of checking
+whether an argument is missing, test that it is not empty.  It both
+provides a simpler and more predictable interface to the user, and saves
+room for further arguments.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
 beginning of a line, followed by a comment which repeats the name of the
