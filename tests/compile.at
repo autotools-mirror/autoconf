@@ -111,9 +111,13 @@ AT_CHECK_MACRO([GNU Fortran 77],
 [[AC_LANG(Fortran 77)
 AC_LANG_COMPILER
 
-case `$F77 --version`,$G77 in
-  *GNU*,yes) ;;
-  *GNU*,no ) AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler]);;
-     *,yes ) AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler]);;
+if $F77 --version 2> /dev/null | grep GNU >/dev/null; then
+  # Has GNU in --version.
+  test $G77 = no &&
+    AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler]);;
+else
+  # Has not.
+  test $g77 = yes &&
+    AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler]);;
 esac
 exit 0]])
