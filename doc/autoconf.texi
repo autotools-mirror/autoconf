@@ -11855,6 +11855,12 @@ Patterns should not include the separator (unless escaped), even as part
 of a character class.  In conformance with Posix, the Cray
 @command{sed} will reject @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
 
+Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix is
+silent on whether they are allowed, and Unicos 9 @command{sed} rejects
+them.
+
+Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
+
 Sed scripts should not use branch labels longer than 8 characters and
 should not contain comments.
 
