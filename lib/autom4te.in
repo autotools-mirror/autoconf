@@ -127,8 +127,6 @@ end-language: "Autoscan-preselections"
 
 begin-language: "Autoconf"
 args: --prepend-include @datadir@
-args: --site-macro-subdir autoconf
-args: --include-envvar AC_MACRO_PATH
 args: autoconf/autoconf.m4f
 args: acsite.m4?
 args: aclocal.m4?
@@ -147,8 +145,6 @@ end-language: "Autoconf"
 
 begin-language: "Autotest"
 args: --prepend-include @datadir@
-args: --site-macro-subdir autotest
-args: --include-envvar AT_MACRO_PATH
 args: autotest/autotest.m4f
 args: package.m4?
 args: --mode 777
@@ -162,8 +158,6 @@ end-language: "Autotest"
 
 begin-language: "M4sh"
 args: --prepend-include @datadir@
-args: --site-macro-subdir m4sh
-args: --include-envvar M4SH_MACRO_PATH
 args: m4sugar/m4sh.m4f
 args: --mode 777
 args: --language M4sugar
@@ -176,8 +170,6 @@ end-language: "M4sh"
 
 begin-language: "M4sugar"
 args: --prepend-include @datadir@
-args: --site-macro-subdir m4sugar
-args: --include-envvar M4SUGAR_MACRO_PATH
 args: m4sugar/m4sugar.m4f
 args: --warning syntax
 end-language: "M4sugar"

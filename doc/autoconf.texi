@@ -1185,10 +1185,10 @@ Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 
 After searching any directories specified using @option{--prepend-include}
 or @option{--include}, @command{autoconf} will also search the directories
-specified in the @code{AC_MACRO_PATH} environment variable, if set.
+specified in the @code{AUTOM4TE_PATH} environment variable, if set.
 And finally, @command{autoconf} will also search the system-wide site
 macro directory, which is set to
-@samp{$@{datadir@}/autoconf/site_macros/autoconf} by default.
+@samp{$@{datadir@}/autoconf/site_macros} by default.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -7404,15 +7404,6 @@ create Autoconf executable configure scripts.
 @item -B @var{dir}
 Prepend directory @var{dir} to the search path.  This is used to include
 the language-specific files before any third-party macros.
-
-@item --include-envvar=@var{envvar}
-Add directories specified in the environment variable @var{envvar} to
-the search path.
-
-@item --site-macro-subdir=@var{subdir}
-If the site macro directory is set, add the subdirectory @var{subdir}
-of the site macro directory to the search path.
-@end table
 
 @cindex @file{autom4te.cfg}
 As an example, if Autoconf is installed in its default location,

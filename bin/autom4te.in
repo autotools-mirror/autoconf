@@ -486,8 +486,6 @@ sub parse_args ()
   # Process the arguments for real this time.
   my @trace;
   my @prepend_include;
-  my $include_envvar;
-  my @site_macro_subdirs;
   getopt
     (
      # Operation modes:
@@ -499,8 +497,6 @@ sub parse_args ()
      # Library directories:
      "B|prepend-include=s" => \@prepend_include,
      "I|include=s" => \@include,
-     "include-envvar=s" => \$include_envvar,
-     "site-macro-subdir=s" => \@site_macro_subdirs,
 
      # Tracing:
      # Using a hash for traces is seducing.  Unfortunately, upon `-t FOO',
@@ -529,12 +525,12 @@ Try `$me --help' for more information.\n"
     if $freeze;
 
   # Add directories from the appropriate env var to the include path.
-  @include = (@include, split(/:/, $ENV{$include_envvar}))
-    if defined($include_envvar) && exists($ENV{$include_envvar});
+  @include = (@include, split(/:/, $ENV{'AUTOM4TE_PATH'}))
+    if exists($ENV{'AUTOM4TE_PATH'});
 
   # Also add the site macro directory, if applicable.
-  map { @include = (@include, "@SITE_MACRO_DIR@/$_"); } @site_macro_subdirs
-    if ('@SITE_MACRO_DIR@' ne 'no') && @site_macro_subdirs;
+  @include = (@include, '@SITE_MACRO_DIR@')
+    if ('@SITE_MACRO_DIR@' ne 'no');
 
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which

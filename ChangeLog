@@ -1,3 +1,13 @@
+2002-07-29  Mark D. Roth  <roth@feep.net>
+
+	* bin/autom4te.in: Remove --include-envvar and --site-macro-subdir
+	options and use $AUTOM4TE_PATH.
+	* doc/autoconf.texi: Remove documentation of autom4te
+	--include-envvar and --site-macro-subdir options and document
+	use of $AUTOM4TE_PATH.
+	* lib/autom4te.in: Remove --include-envvar and --site-macro-subdir
+	arguments from each language section.
+
 2002-07-29  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/install.texi: Include copyright symbol in copyright notice.
