@@ -38,7 +38,7 @@ dnl released by the Free Software Foundation.  When you make and
 dnl distribute a modified version of Autoconf, you may extend this special
 dnl exception to the GPL to apply to your modified version as well, *unless*
 dnl your modified version has the potential to copy into its output some
-dnl of text that was the non-data portion of the version that you started
+dnl of the text that was the non-data portion of the version that you started
 dnl with.  (In other words, unless your change moves or copies text from
 dnl the non-data portions to the data portions.)  If your modification has
 dnl such potential, you must delete any notice of this special exception
