@@ -274,16 +274,18 @@ AC_CACHE_VAL(ac_cv_prog_LN_S,
 echo >conftest.file
 if ln -s conftest.file conftest.sym 2>/dev/null; then
   ac_cv_prog_LN_S="ln -s"
-else
+elif ln conftest.file conftest.sym 2>/dev/null; then
   ac_cv_prog_LN_S=ln
-fi])dnl
-LN_S=$ac_cv_prog_LN_S
-if test "$ac_cv_prog_LN_S" = "ln -s"; then
-  AC_MSG_RESULT(yes)
 else
-  AC_MSG_RESULT(no)
+  ac_cv_prog_LN_S=cp
 fi
-AC_SUBST(LN_S)dnl
+rm -f conftest.sym conftest.file])dnl
+AC_SUBST([LN_S], [$ac_cv_prog_LN_S])
+if test "$ac_cv_prog_LN_S" = "ln -s"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no, using $LN_S])
+fi
 ])# AC_PROG_LN_S
 
 

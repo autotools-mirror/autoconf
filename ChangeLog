@@ -1,3 +1,8 @@
+2000-10-18  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_PROG_LN_S): If neither `ln -s' nor `ln' work,
+	fall back to `cp'.
+
 2000-10-17  Morten Eriksen  <mortene@sim.no>
 
 	* acgeneral.m4 (AC_CHECK_TOOL): As AC_CHECK_PROG first tests the

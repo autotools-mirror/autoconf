@@ -2704,7 +2704,8 @@ distribution.
 @ovindex LN_S
 If @samp{ln -s} works on the current file system (the operating system
 and file system support symbolic links), set output variable @code{LN_S}
-to @samp{ln -s}, otherwise set it to @samp{ln}.
+to @samp{ln -s}, otherwise if @samp{ln} works, set @code{LN_S} to
+@samp{ln}, and otherwise set to @samp{cp}.
 
 If the link is put in a directory other than the current directory, its
 meaning depends on whether @samp{ln} or @samp{ln -s} is used.  To safely
