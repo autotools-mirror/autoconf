@@ -308,9 +308,10 @@ AC_DEFUN(AC_PROG_LEX,
 if test -z "$LEXLIB"
 then
   case "$LEX" in
-  flex*) AC_CHECK_LIB(fl, main, LEXLIB="-lfl") ;;
-  *) LEXLIB="-ll" ;;
+  flex*) ac_lib=fl ;;
+  *) ac_lib=l ;;
   esac
+  AC_CHECK_LIB($ac_lib, main, LEXLIB="-l$ac_lib")
 fi
 AC_SUBST(LEXLIB)])
 
@@ -527,7 +528,7 @@ AC_DEFUN(AC_CHECK_HEADER_DIRENT,
 [ac_safe=`echo "$1" | tr './' '__'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <$1>], [DIR *dirp = 0;],
   eval "ac_cv_header_dirent_$ac_safe=yes",
   eval "ac_cv_header_dirent_$ac_safe=no")])dnl
@@ -615,7 +616,7 @@ fi
 AC_DEFUN(AC_DECL_SYS_SIGLIST,
 [AC_MSG_CHECKING([for sys_siglist declaration in signal.h or unistd.h])
 AC_CACHE_VAL(ac_cv_decl_sys_siglist,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
@@ -631,7 +632,7 @@ fi
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_MSG_CHECKING([for sys/wait.h that is POSIX.1 compatible])
 AC_CACHE_VAL(ac_cv_header_sys_wait_h,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/wait.h>
 #ifndef WEXITSTATUS
 #define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
@@ -722,7 +723,7 @@ dnl Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN(AC_TYPE_SIGNAL,
 [AC_MSG_CHECKING([return type of signal handlers])
 AC_CACHE_VAL(ac_cv_type_signal,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <signal.h>
 #ifdef signal
 #undef signal
@@ -1132,7 +1133,7 @@ AC_CHECK_HEADER(nlist.h,
 [AC_DEFINE(NLIST_STRUCT)
 AC_MSG_CHECKING([for n_un in struct nlist])
 AC_CACHE_VAL(ac_cv_struct_nlist_n_un,
-[AC_TRY_LINK([#include <nlist.h>],
+[AC_TRY_COMPILE([#include <nlist.h>],
 [struct nlist n; n.n_un.n_name = 0;],
 ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])dnl
 AC_MSG_RESULT($ac_cv_struct_nlist_n_un)
@@ -1270,7 +1271,7 @@ dnl ### Checks for structure members
 AC_DEFUN(AC_HEADER_TIME,
 [AC_MSG_CHECKING([whether time.h and sys/time.h may both be included])
 AC_CACHE_VAL(ac_cv_header_time,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>],
 [struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])dnl
@@ -1283,7 +1284,7 @@ fi
 AC_DEFUN(AC_STRUCT_TM,
 [AC_MSG_CHECKING([whether struct tm is in sys/time.h or time.h])
 AC_CACHE_VAL(ac_cv_struct_tm,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <time.h>],
 [struct tm *tp; tp->tm_sec;],
   ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])dnl
@@ -1297,7 +1298,7 @@ AC_DEFUN(AC_STRUCT_TIMEZONE,
 [AC_REQUIRE([AC_STRUCT_TM])dnl
 AC_MSG_CHECKING([for tm_zone in struct tm])
 AC_CACHE_VAL(ac_cv_struct_tm_zone,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <$ac_cv_struct_tm>], [struct tm tm; tm.tm_zone;],
   ac_cv_struct_tm_zone=yes, ac_cv_struct_tm_zone=no)])dnl
 AC_MSG_RESULT($ac_cv_struct_tm_zone)
@@ -1324,7 +1325,7 @@ fi
 AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 [AC_MSG_CHECKING([for st_blocks in struct stat])
 AC_CACHE_VAL(ac_cv_struct_st_blocks,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blocks;],
 ac_cv_struct_st_blocks=yes, ac_cv_struct_st_blocks=no)])dnl
 AC_MSG_RESULT($ac_cv_struct_st_blocks)
@@ -1339,7 +1340,7 @@ AC_SUBST(LIBOBJS)dnl
 AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
 [AC_MSG_CHECKING([for st_blksize in struct stat])
 AC_CACHE_VAL(ac_cv_struct_st_blksize,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blksize;],
 ac_cv_struct_st_blksize=yes, ac_cv_struct_st_blksize=no)])dnl
 AC_MSG_RESULT($ac_cv_struct_st_blksize)
@@ -1351,7 +1352,7 @@ fi
 AC_DEFUN(AC_STRUCT_ST_RDEV,
 [AC_MSG_CHECKING([for st_rdev in struct stat])
 AC_CACHE_VAL(ac_cv_struct_st_rdev,
-[AC_TRY_LINK([#include <sys/types.h>
+[AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_rdev;],
 ac_cv_struct_st_rdev=yes, ac_cv_struct_st_rdev=no)])dnl
 AC_MSG_RESULT($ac_cv_struct_st_rdev)
@@ -1458,7 +1459,7 @@ AC_DEFUN(AC_C_INLINE,
 [AC_MSG_CHECKING([for inline])
 AC_CACHE_VAL(ac_cv_c_inline,
 [if test "$GCC" = yes; then
-AC_TRY_LINK(, [} inline foo() {], ac_cv_c_inline=yes, ac_cv_c_inline=no)
+AC_TRY_COMPILE(, [} inline foo() {], ac_cv_c_inline=yes, ac_cv_c_inline=no)
 else
   ac_cv_c_inline=no
 fi])dnl
@@ -1473,7 +1474,7 @@ AC_DEFUN(AC_C_CONST,
 dnl and with the result message.
 AC_MSG_CHECKING([for working const])
 AC_CACHE_VAL(ac_cv_c_const,
-[AC_TRY_LINK(,
+[AC_TRY_COMPILE(,
 changequote(<<, >>)dnl
 <<
 /* Ultrix mips cc rejects this.  */
@@ -1870,7 +1871,8 @@ dnl These are kludges which should be replaced by a single POSIX check.
 
 
 AC_DEFUN(AC_AIX,
-[AC_BEFORE([$0], [AC_TRY_LINK])dnl
+[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
+AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for AIX)
 AC_EGREP_CPP(yes,
@@ -1881,7 +1883,8 @@ AC_EGREP_CPP(yes,
 ])
 
 AC_DEFUN(AC_MINIX,
-[AC_BEFORE([$0], [AC_TRY_LINK])dnl
+[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
+AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
@@ -1893,6 +1896,7 @@ fi
 
 AC_DEFUN(AC_ISC_POSIX,
 [AC_BEFORE([$0], [AC_TRY_LINK])dnl
+AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.124
-@set VERSION 1.124
+@set EDITION 1.125
+@set VERSION 1.125
 @set UPDATED October 1994
 
 @iftex
@@ -184,6 +184,7 @@ Typedefs
 Writing Tests
 
 * Examining Declarations::	Detecting header files and declarations.
+* Examining Syntax::            Detecting language syntax features.
 * Examining Libraries::         Detecting functions and global variables.
 * Run Time::		        Testing for run-time features.
 * Portable Shell::              Shell script portability pitfalls.
@@ -490,14 +491,18 @@ checks for system services
 When calling macros that take arguments, there must not be any blank
 space between the macro name and the open parenthesis.  Arguments can be
 more than one line long if they are enclosed within the @code{m4} quote
-characters @samp{[} and @samp{]}.  Some macros handle two cases: what
-to do if the given condition is met, and what to do if the condition is
-not met.  In some places you might want to do something if a
-condition is true but do nothing if it's false, or vice versa.  To omit
-the true case, pass an empty value for the @var{action-if-found}
-argument to the macro.  To omit the false case, omit the
-@var{action-if-not-found} argument to the macro, including the comma
-before it.
+characters @samp{[} and @samp{]}.  If you have a long line such as a
+list of file names, you can generally use a backslash at the end of a
+line to continue it logically on the next line (this is implemented by
+the shell, not by anything special that Autoconf does).
+
+Some macros handle two cases: what to do if the given condition is met,
+and what to do if the condition is not met.  In some places you might
+want to do something if a condition is true but do nothing if it's
+false, or vice versa.  To omit the true case, pass an empty value for
+the @var{action-if-found} argument to the macro.  To omit the false
+case, omit the @var{action-if-not-found} argument to the macro,
+including the comma before it.
 
 You can include comments in @file{configure.in} files by starting them
 with the @code{m4} builtin macro @code{dnl}, which discards text up
@@ -2146,9 +2151,9 @@ is executed when one of the header files is not found.
 @section Structures
 
 The following macros check for certain structures or structure members.
-To check structures not listed here, you can use @code{AC_EGREP_CPP}
-(@pxref{Examining Declarations}) or @code{AC_TRY_LINK} (@pxref{Examining
-Libraries})
+To check structures not listed here, use @code{AC_EGREP_CPP}
+(@pxref{Examining Declarations}) or @code{AC_TRY_COMPILE}
+(@pxref{Examining Syntax}).
 
 @defmac AC_HEADER_STAT
 @maindex HEADER_STAT
@@ -2326,9 +2331,9 @@ builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.
 @section Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
-features.  You can use @code{AC_TRY_LINK} (@pxref{Examining Libraries})
-or @code{AC_TRY_RUN} (@pxref{Run Time}) to check for
-characteristics not listed here.
+features.  To check for characteristics not listed here, use
+@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}) or @code{AC_TRY_RUN}
+(@pxref{Run Time})
 
 @defmac AC_C_BIGENDIAN
 @maindex C_BIGENDIAN
@@ -2560,6 +2565,7 @@ about what they're checking for.
 
 @menu
 * Examining Declarations::	Detecting header files and declarations.
+* Examining Syntax::            Detecting language syntax features.
 * Examining Libraries::         Detecting functions and global variables.
 * Run Time::		        Testing for run-time features.
 * Portable Shell::              Shell script portability pitfalls.
@@ -2568,7 +2574,7 @@ about what they're checking for.
 * Language Choice::             Selecting which language to use for testing.
 @end menu
 
-@node Examining Declarations, Examining Libraries, , Writing Tests
+@node Examining Declarations, Examining Syntax, , Writing Tests
 @section Examining Declarations
 
 The macro @code{AC_TRY_CPP} is used to check whether particular header
@@ -2628,7 +2634,27 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
-@node Examining Libraries, Run Time, Examining Declarations, Writing Tests
+@node Examining Syntax, Examining Libraries, Examining Declarations, Writing Tests
+@section Examining Syntax
+
+To check for a syntax feature of the C or C++ compiler, such as whether
+it recognizes a certain keyword, use @code{AC_TRY_COMPILE} to try to
+compile a small program that uses that feature.  You can also use it to
+check for structures and structure members that are not present on all
+systems.
+
+@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@maindex TRY_COMPILE
+Create a test C program to see whether a function whose body consists of
+@var{function-body} can be compiled; @var{includes} is any
+@code{#include} statements needed by the code in @var{function-body}.
+If the file compiles successfully, run shell commands
+@var{action-if-found}, otherwise run @var{action-if-not-found}.  This
+macro uses @code{CFLAGS} or @code{CXXFLAGS}, and @code{CPPFLAGS}, when
+compiling.
+@end defmac
+
+@node Examining Libraries, Run Time, Examining Syntax, Writing Tests
 @section Examining Libraries
 
 To check for a library, a function, or a global variable, Autoconf
@@ -2649,12 +2675,11 @@ However, some of them can be given options that make the exit status
 correct.  This is a problem that Autoconf does not currently handle
 automatically. 
 
-The below macro is used to compile test programs to test for functions
-and global variables.  It is also used to check for libraries, by adding
-the library being checked for to @code{LIBS} temporarily and trying to
-link a small program.  And it is used to check matters of C syntax, such
-as whether a particular keyword is recognized---a test program using a
-keyword does not compile on systems that don't support it.
+@code{AC_TRY_LINK} is used to compile test programs to test for
+functions and global variables.  It is also used (by
+@code{AC_CHECK_LIB}) to check for libraries, by adding the library being
+checked for to @code{LIBS} temporarily and trying to link a small
+program.
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex TRY_LINK
@@ -3094,13 +3119,14 @@ newlines.
 
 @defmac AC_SUBST_FILE (@var{variable})
 @maindex SUBST_FILE
-Another way to create an output variable from a shell variable.
-Make @code{AC_OUTPUT} substitute the contents of the file named by shell
+Another way to create an output variable from a shell variable.  Make
+@code{AC_OUTPUT} substitute the contents of the file named by shell
 variable @var{variable} into output files (typically one or more
 @file{Makefile}s).  This means that @code{AC_OUTPUT} will replace
 instances of @samp{@@@var{variable}@@} in the @file{Makefile.in} files
 with the contents of the file that the shell variable @var{variable}
-names when @code{AC_OUTPUT} is called.
+names when @code{AC_OUTPUT} is called.  Set the variable to
+@file{/dev/null} for cases which do not have a file to insert.
 
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host

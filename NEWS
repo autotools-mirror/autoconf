@@ -46,19 +46,20 @@ Major changes in release 2.0:
 * AC_CONFIG_AUX_DIR, AC_CANONICAL_SYSTEM, AC_CANONICAL_HOST, AC_LINK_FILES to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
-* AC_ARG_PROGRAM, which uses the options --program-prefix,
+* AC_ARG_PROGRAM to use the options --program-prefix,
   --program-suffix, and --program-transform-name to change the names
   of programs being installed.
-* AC_PREFIX_DEFAULT, to change the default prefix.
-* AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
-* AC_CHECK_LIB, which checks for a particular function in a library.
+* AC_PREFIX_DEFAULT to change the default prefix.
+* AC_TRY_COMPILE to compile a test program without linking it.
+* AC_CHECK_TYPE to check whether sys/types.h defines a given type.
+* AC_CHECK_LIB to check for a particular function in a library.
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
-* AC_SUBST_FILE, to insert one file into another.
-* AC_FUNC_MEMCMP, to check whether memcmp is 8-bit clean.
-* AC_FUNC_STRFTIME, to find strftime even if it's in -lintl.
-* AC_FUNC_GETMNTENT, to find getmntent even if it's in -lsun or -lseq.
-* AC_HEADER_SYS_WAIT, to check whether sys/wait.h is POSIX.1 compatible.
+* AC_SUBST_FILE to insert one file into another.
+* AC_FUNC_MEMCMP to check whether memcmp is 8-bit clean.
+* AC_FUNC_STRFTIME to find strftime even if it's in -lintl.
+* AC_FUNC_GETMNTENT to find getmntent even if it's in -lsun or -lseq.
+* AC_HEADER_SYS_WAIT to check whether sys/wait.h is POSIX.1 compatible.
 
 ** Changed macros:
 * Many macros renamed systematically, but old names are accepted for
