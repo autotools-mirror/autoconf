@@ -281,8 +281,10 @@ Syntax Error], ,
   AC_TRY_CPP([#include <assert.h>
 Syntax Error], , CPP=/lib/cpp))
   ac_cv_prog_CPP="$CPP"])dnl
+  CPP="$ac_cv_prog_CPP"
+else
+  ac_cv_prog_CPP="$CPP"
 fi
-CPP="$ac_cv_prog_CPP"
 AC_MSG_RESULT($CPP)
 AC_SUBST(CPP)dnl
 ])
