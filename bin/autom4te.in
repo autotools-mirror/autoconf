@@ -992,10 +992,11 @@ handle_m4 ($req, keys %{$req->macro})
   if $force || ! $req->valid;
 
 # Issue the warnings each time autom4te was run.
+my $separator = "\n" . ('-' x 25) . " END OF WARNING " . ('-' x 25) . "\n\n";
 handle_traces ($req, "$tmp/warnings",
-	       ('_m4_warn' => "\$1::\$f:\$l::\$2::\$3\n\n"));
-# Warnings are separated by 2 \n.
-for (split (/\n{2,}/, contents ("$tmp/warnings")))
+	       ('_m4_warn' => "\$1::\$f:\$l::\$2::\$3$separator"));
+# Swallow excessive newlines.
+for (split (/\n*$separator\n*/o, contents ("$tmp/warnings")))
 {
   # The message looks like:
   # | syntax::input.as:5::ouch

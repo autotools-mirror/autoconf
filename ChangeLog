@@ -1,3 +1,9 @@
+2003-10-31  Akim Demaille  <akim@epita.fr>
+
+	* bin/autom4te.in (&freeze): Use a less likely warning separator
+	than `\n\n', so that `\n\n\n' is valid in warnings.
+	Reported by Steve Huston.
+
 2003-10-28  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.cfg (local_updates, executable-update): Tweak to be
