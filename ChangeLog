@@ -1,5 +1,10 @@
 2002-03-13  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Header Portability): New.
+	Add information about stdint.h and inttypes.h from Paul Eggert.
+
+2002-03-13  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Some about `cp
 	-p'.
 	From Bob Proulx.

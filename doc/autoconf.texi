@@ -254,6 +254,7 @@ Library Functions
 
 Header Files
 
+* Header Portability::          Collected knowledge on common headers
 * Particular Headers::          Special handling to find certain headers
 * Generic Headers::             How to find other headers
 
@@ -413,7 +414,7 @@ Upgrading From Version 2.13
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
-* AC_LIBOBJ vs. LIBOBJS::
+* AC_LIBOBJ vs. LIBOBJS::       LIBOBJS is a forbidden token
 
 Generating Test Suites with Autotest
 
@@ -4002,9 +4003,29 @@ and you don't need to check for any special properties of
 it, then you can use one of the general header-file check macros.
 
 @menu
+* Header Portability::          Collected knowledge on common headers
 * Particular Headers::          Special handling to find certain headers
 * Generic Headers::             How to find other headers
 @end menu
+
+@node Header Portability
+@subsection Portability of Headers
+
+This section tries to collect knowledge about common headers, and the
+problem they cause.  By definition, this list will always require
+additions.  Please help us keeping it as complete as possible.
+
+@table @asis
+@item @file{inttypes.h} vs. @file{stdint.h}
+Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
+@file{stdint.h}, so there's no need to include @file{stdint.h}
+separately in a standard environment.  Many implementations have
+@file{inttypes.h} but not @file{stdint.h} (e.g. Solaris 7), but I don't
+know of any implementation that has @file{stdint.h} but not
+@file{inttypes.h}.  Nor do I know of any free software that includes
+@file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
+@end table
+
 
 @node Particular Headers
 @subsection Particular Header Checks
