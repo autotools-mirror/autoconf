@@ -1021,26 +1021,26 @@ do
     datadir=$ac_optarg ;;
 
   -disable-* | --disable-*)
-    ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
+    ac_feature=`echo "$ac_option" |sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
-      AC_MSG_ERROR(invalid feature: $ac_feature)
-    fi
-    ac_feature=`echo $ac_feature| sed 's/-/_/g'`
-    eval "enable_${ac_feature}=no" ;;
+    case $ac_feature in
+      *[[^-a-zA-Z0-9_]]*) AC_MSG_ERROR([invalid feature: $ac_feature]);;
+    esac
+    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
+    eval "enable_$ac_feature=no" ;;
 
   -enable-* | --enable-*)
-    ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
+    ac_feature=`echo "$ac_option" | sed -e 's/-*enable-//;s/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
-      AC_MSG_ERROR(invalid feature: $ac_feature)
-    fi
-    ac_feature=`echo $ac_feature| sed 's/-/_/g'`
+    case $ac_feature in
+      [*[^-a-zA-Z0-9_]*]) AC_MSG_ERROR([invalid feature: $ac_feature]);;
+    esac
+    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     case "$ac_option" in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
-    eval "enable_${ac_feature}='$ac_optarg'" ;;
+    eval "enable_$ac_feature='$ac_optarg'" ;;
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
@@ -1212,11 +1212,11 @@ do
     ac_init_version=: ;;
 
   -with-* | --with-*)
-    ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
+    ac_package=`echo "$ac_option"|sed -e 's/-*with-//;s/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_package" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
-      AC_MSG_ERROR(invalid package: $ac_package)
-    fi
+    case $ac_package in
+      [*[^-a-zA-Z0-9_]*]) AC_MSG_ERROR([invalid package: $ac_package]);;
+    esac
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case "$ac_option" in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
@@ -1225,12 +1225,12 @@ do
     eval "with_${ac_package}='$ac_optarg'" ;;
 
   -without-* | --without-*)
-    ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
+    ac_package=`echo "$ac_option" |sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_package" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
-      AC_MSG_ERROR(invalid package: $ac_package)
-    fi
-    ac_package=`echo $ac_package| sed 's/-/_/g'`
+    case $ac_package in
+      [*[^-a-zA-Z0-9_]*]) AC_MSG_ERROR([invalid package: $ac_package]);;
+    esac
+    ac_package=`echo $ac_package | sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
 
   --x)
@@ -1258,17 +1258,17 @@ Try `configure --help' for more information.])
   *=*)
     ac_envvar=`echo "$ac_option" | sed -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_envvar" | grep '[[^a-zA-Z0-9_]]' >/dev/null 2>&1; then
-      AC_MSG_ERROR(invalid variable name: $ac_envvar)
-    fi
+    case $ac_envvar in
+      [*[^a-zA-Z0-9_]*]) AC_MSG_ERROR([invalid variable name: $ac_envvar]);;
+    esac
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
     eval "$ac_envvar='$ac_optarg'"
     export $ac_envvar ;;
 
   *)
-    if echo "$ac_option" | grep '[[^-a-zA-Z0-9.]]' >/dev/null 2>&1; then
-      AC_MSG_WARN([invalid host type: $ac_option])
-    fi
+    case $ac_option in
+      [*[^-a-zA-Z0-9.]*]) AC_MSG_WARN([invalid host type: $ac_option]);;
+    esac
     AC_MSG_WARN([you should use --build, --host, --target])
     : ${build=$ac_option} ${host=$ac_option} ${target=$ac_option}
     ;;

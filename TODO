@@ -13,9 +13,16 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** Doc
+Each use of target, build and host should be checked: it is not
+consistent :(.
+
 ** m4
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
+
+** m4
+F**k!  --trace FOO does not catch indir([FOO], $@)!
 
 ** AC_PROVIDE
 I think it is the epilogue that should provide, not the prologue.  Not

@@ -1,5 +1,16 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Prefer
+	case $foo in
+	*[^-a-zA-Z0-9_]*) AC_ACTION;;
+	esac
+	over
+	if echo "$foo" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
+	AC_ACTION
+	fi
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Testing Values and Files): Delete, move its
 	content into...
 	(Limitations of Usual Tools::test): here.
