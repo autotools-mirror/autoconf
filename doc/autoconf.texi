@@ -14030,7 +14030,7 @@ Note that @code{U} must not be used in your Makefiles.
 
 Since Autoconf 2.50, internal codes uses @code{AC_PREPROC_IFELSE},
 @code{AC_COMPILE_IFELSE}, @code{AC_LINK_IFELSE}, and
-@code{AC_RUN_IFELSE} on the other one hand and @code{AC_LANG_SOURCES},
+@code{AC_RUN_IFELSE} on one hand and @code{AC_LANG_SOURCES},
 and @code{AC_LANG_PROGRAM} on the other hand instead of the deprecated
 @code{AC_TRY_CPP}, @code{AC_TRY_COMPILE}, @code{AC_TRY_LINK}, and
 @code{AC_TRY_RUN}.  The motivations where:
