@@ -1,5 +1,15 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	Fix a bug: some macros (e.g., AC_REVISION, AC_COPYRIGHT etc.) can
+	be used before AC_INIT, but they do require it.  But then, the
+	argument of the explicit AC_INIT call is lost.
+
+	* acgeneral.m4 (AC_CONFIG_SRCDIR): New macro.
+	(_AC_INIT_SRCDIR): Adjust.
+	(_AC_INIT): Pass your argument to AC_CONFIG_SRCDIR.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	* tests/semantics.m4 (AC_PATH_PROG, AC_PATH_PROGS): New tests.
 
 2000-03-21  Akim Demaille  <akim@epita.fr>
