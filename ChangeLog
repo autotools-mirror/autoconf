@@ -1,5 +1,15 @@
 2001-07-18  Akim Demaille  <akim@epita.fr>
 
+	The C-Fortran 77 hooks are available only once AC_F77_DUMMY_MAIN
+	was run, while they are needed also when it is expanded.
+	Reported by Nicolas Joly.
+
+	* aclang.m4 (AC_F77_DUMMY_MAIN): Define _AC_LANG_PROGRAM_C_F77_HOOKS.
+	(AC_LANG_PROGRAM(C)): Use it instead of depending upon
+	AC_F77_DUMMY_MAIN being expanded.
+
+2001-07-18  Akim Demaille  <akim@epita.fr>
+
 	* configure.in: Bump to 2.51a.
 
 2001-07-17  Akim Demaille  <akim@epita.fr>

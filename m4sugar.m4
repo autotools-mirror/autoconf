@@ -371,7 +371,7 @@ m4_define([m4_ifset],
           [$3])])
 
 
-# ifndef(NAME, [IF-NOT-DEFINED], [IF-DEFINED])
+# m4_ifndef(NAME, [IF-NOT-DEFINED], [IF-DEFINED])
 # -----------------------------------------------
 m4_define([m4_ifndef],
 [m4_ifdef([$1], [$3], [$2])])

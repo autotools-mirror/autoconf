@@ -358,14 +358,7 @@ $1])
 # against Fortran code, hence a dummy main might be needed.
 m4_define([AC_LANG_PROGRAM(C)],
 [$1
-m4_provide_ifelse([AC_F77_DUMMY_MAIN],
-[#ifdef F77_DUMMY_MAIN
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-#endif
-])dnl
+m4_ifdef([_AC_LANG_PROGRAM_C_F77_HOOKS], [_AC_LANG_PROGRAM_C_F77_HOOKS()])dnl
 int
 main ()
 {
@@ -1961,6 +1954,14 @@ AC_LANG_POP(Fortran 77)dnl
 #   MAIN _MAIN __MAIN main_ main__ _main (we follow DDD and try these too)
 AC_DEFUN([AC_F77_DUMMY_MAIN],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
+m4_define([_AC_LANG_PROGRAM_C_F77_HOOKS],
+[#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+])
 AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
                ac_cv_f77_dummy_main,
 [AC_LANG_PUSH(C)dnl
