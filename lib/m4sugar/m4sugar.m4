@@ -201,17 +201,29 @@ m4_define([m4_assert],
        [m4_fatal([assert failed: $1], [$2])])])
 
 
+
 ## ------------- ##
 ## 3. Warnings.  ##
 ## ------------- ##
 
 
+# _m4_warn(CATEGORY, MESSAGE, STACK-TRACE)
+# ----------------------------------------
+# Report a MESSAGE to the user if the CATEGORY of warnings is enabled.
+# This is for traces only.
+# The STACK-TRACE is a \n-separated list of "LOCATION: MESSAGE".
+m4_define([_m4_warn], [])
+
+
 # m4_warn(CATEGORY, MESSAGE)
 # --------------------------
-# Report a MESSAGE to the autoconf user if the CATEGORY of warnings
-# is requested (in fact, not disabled).  This is for traces only.
-m4_define([m4_warn], [])
-
+# Report a MESSAGE to the user if the CATEGORY of warnings is enabled.
+m4_define([m4_warn],
+[_m4_warn([$1], [$2],
+m4_ifdef([m4_expansion_stack],
+         [m4_defn([m4_expansion_stack])
+m4_location[: the top level]]))
+])
 
 
 

@@ -78,7 +78,7 @@ my %trace;
 # FIXME: What about `sinclude'?
 my @preselect = ('include',
 		 'm4_pattern_allow', 'm4_pattern_forbid',
-		 'm4_warn');
+		 '_m4_warn');
 
 # M4 include path.
 my @include;
@@ -993,11 +993,23 @@ handle_m4 ($req, keys %{$req->macro})
 
 # Issue the warnings each time autom4te was run.
 handle_traces ($req, "$tmp/warnings",
-	       ('m4_warn' => "\$1::\$f:\$l::\$2\n\n"));
+	       ('_m4_warn' => "\$1::\$f:\$l::\$2::\$3\n\n"));
+# Warnings are separated by 2 \n.
 for (split (/\n{2,}/, contents ("$tmp/warnings")))
 {
-  my ($cat, $loc, $msg) = split '::';
+  # The message looks like:
+  # | syntax::input.as:5::ouch
+  # | ::input.as:4: baz is expanded from...
+  # | input.as:2: bar is expanded from...
+  # | input.as:3: foo is expanded from...
+  # | input.as:5: the top level
+  my ($cat, $loc, $msg, $stacktrace) = split ('::', $_, 4);
   msg $cat, $loc, "warning: $msg";
+  for (split /\n/, $stacktrace)
+    {
+      my ($loc, $trace) = split (': ', $_, 2);
+      msg $cat, $loc, $trace;
+    }
 }
 
 # Now output...
