@@ -828,8 +828,8 @@ fi
 ])# AC_C_LONG_DOUBLE
 
 
-# AC_C_BIGENDIAN
-# --------------
+# AC_C_BIGENDIAN ([ACTION-IF-TRUE], [ACTION-IF-FALSE], [ACTION-IF-UNKNOWN])
+# -------------------------------------------------------------------------
 AC_DEFUN([AC_C_BIGENDIAN],
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
 [# See if sys/param.h defines the BYTE_ORDER macro.
@@ -884,14 +884,16 @@ if test `grep -l LiTTleEnDian conftest.$ac_objext` ; then
 fi])])])])
 case $ac_cv_c_bigendian in
   yes)
-    AC_DEFINE(WORDS_BIGENDIAN, 1,
-	      [Define if your processor stores words with the most significant
-	       byte first (like Motorola and SPARC, unlike Intel and VAX).]);;
+    m4_default([$1],
+      [AC_DEFINE([WORDS_BIGENDIAN], 1,
+        [Define if your processor stores words with the most significant
+	 byte first (like Motorola and SPARC, unlike Intel and VAX).])]) ;;
   no)
-    ;;
+    $2 ;;
   *)
-    AC_MSG_ERROR([unknown endianess
-presetting ac_cv_c_bigendian=no (or yes) will help]);;
+    m4_default([$3],
+      [AC_MSG_ERROR([unknown endianess
+presetting ac_cv_c_bigendian=no (or yes) will help])]) ;;
 esac
 ])# AC_C_BIGENDIAN
 

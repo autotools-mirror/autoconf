@@ -4486,14 +4486,26 @@ features.  To check for characteristics not listed here, use
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}) or @code{AC_TRY_RUN}
 (@pxref{Run Time})
 
-@defmac AC_C_BIGENDIAN
+@defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-unknown})
 @maindex C_BIGENDIAN
 @cvindex WORDS_BIGENDIAN
 @cindex Endianness
 If words are stored with the most significant byte first (like Motorola
-and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
-@end defmac
+and SPARC CPUs), execute @var{action-if-true}.  If words are stored with
+the less significant byte first (like Intel and VAX CPUs), execute
+@var{action-if-false}.
 
+This macro runs a test-case if endianness cannot be determined from the
+system header files.  When cross-compiling the test-case is not run but
+grep'ed for some magic values.  @var{action-if-unknown} is executed if
+the latter case fails to determine the byte sex of the host system.
+
+The default for @var{action-if-true} is to define
+@samp{WORDS_BIGENDIAN}.  The default for @var{action-if-false} is to do
+nothing.  And finally, the default for @var{action-if-unknown} is to
+abort configure and tell the installer which variable he should preset
+to bypass this test.
+@end defmac
 
 @defmac AC_C_CONST
 @maindex C_CONST

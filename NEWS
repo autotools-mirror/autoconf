@@ -12,6 +12,10 @@
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
 ** C Macros
 - AC_C_BIGENDIAN supports the cross-compiling case.
+- AC_C_BIGENDIAN accepts ACTION-IF-TRUE, ACTION-IF-FALSE, and
+  ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
+  for ACTION-IF-TRUE is to define WORDS_BIGENDIAN like AC_C_BIGENDIAN
+  always did.
 
 * Major changes in Autoconf 2.52
 ** Documentation

@@ -1,5 +1,12 @@
 2001-08-11  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Handle ACTION-IF-TRUE,
+	ACTION-IF-FALSE, and ACTION-IF-UNKNOWN.
+	* doc/autoconf.texi (C Compiler Characteristics): Update
+	documentation for AC_C_BIGENDIAN.
+
+2001-08-11  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
 	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Guess endianness by grep'ing
 	magic values from an object file when cross-compiling.
 	Based on code by Guido Draheim <Guido.Draheim@gmx.de>.
