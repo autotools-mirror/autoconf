@@ -1,3 +1,17 @@
+2001-11-16  Paul Eggert  <eggert@twinsun.com>
+	
+	This patch implements a `long double' suggestion by Oliver Kiddle.
+	
+	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Make the array
+	static, to catch errors if the value isn't known at compile-time
+	and the compiler supports dynamic arrays.  Change its name from
+	`_array_' to `test_array' to avoid potential name clashes.
+	(AC_C_LONG_DOUBLE): Make it a compile-time test, not a run-time
+	test.  Do not define HAVE_LONG_DOUBLE if `long double' is no
+	better than double.  Catch a bug in GCC 2.95.2 x86.
+	* doc/autoconf.texi (C Compiler): Document the above.
+	* NEWS: Likewise.
+	
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/m4sh.at (LINENO): Protect from autom4te's substitution by
