@@ -64,8 +64,8 @@ define([sinclude], [builtin([sinclude], $@)])
 #
 # KILL is only used to suppress output.
 #
-# The initialization layers of `configure'.  We let m4 undivert them
-# by itself, when it reaches the end of `configure.in'.  They are.
+# The layers of `configure'.  We let m4 undivert them by itself, when
+# it reaches the end of `configure.in'.
 #
 # - BINSH
 #   AC_REQUIRE'd #! /bin/sh line
@@ -75,6 +75,7 @@ define([sinclude], [builtin([sinclude], $@)])
 #   early initializations (defaults)
 # - INIT_PARSE_ARGS
 #   initialization code, option handling loop.
+#
 # - HELP_BEGIN
 #   Handling `configure --help'.
 # - HELP_CANON
@@ -87,26 +88,32 @@ define([sinclude], [builtin([sinclude], $@)])
 #   Help msg from AC_ARG_VAR.
 # - HELP_END
 #   Tail of the handling of --help.
+#
 # - VERSION_BEGIN
 #   Copyright notice for --version.
 # - VERSION_END
 #   Tail of the handling of --version.
+#
 # - INIT_PREPARE
 #   Tail of initialization code.
 #
-#
-# These diversions are used by AC_REQUIRE.
-#
-# - NORMAL_4
-#   AC_REQUIRE'd code, 4 level deep
-# - NORMAL_3
-#   AC_REQUIRE'd code, 3 level deep
-# - NORMAL_2
-#   AC_REQUIRE'd code, 2 level deep
-# - NORMAL_1
-#   AC_REQUIRE'd code, 1 level deep
-# - NORMAL
+# - BODY
 #   the tests and output code
+#
+#
+# This diversion is used by the AC_DEFUN/AC_REQUIRE machinery.  It is
+# important to keep room before PREPARE because for each nested
+# AC_REQUIRE we use an additional diversion (i.e., two AC_REQUIREs
+# will use PREPARE - 2.  More than 3 levels has never seemed to be
+# needed.)
+#
+# ...
+# - PREPARE - 2
+#   AC_REQUIRE'd code, 2 level deep
+# - PREPARE - 1
+#   AC_REQUIRE'd code, 1 level deep
+# - PREPARE
+#   AC_DEFUN'd macros are elaborated here.
 
 
 # _AC_DIVERT(DIVERSION-NAME)
@@ -134,11 +141,9 @@ define([_AC_DIVERT(VERSION_END)],    21)
 
 define([_AC_DIVERT(INIT_PREPARE)],   30)
 
-define([_AC_DIVERT(NORMAL_4)],       50)
-define([_AC_DIVERT(NORMAL_3)],       51)
-define([_AC_DIVERT(NORMAL_2)],       52)
-define([_AC_DIVERT(NORMAL_1)],       53)
-define([_AC_DIVERT(NORMAL)],         54)
+define([_AC_DIVERT(BODY)],           40)
+
+define([_AC_DIVERT(PREPARE)],       100)
 
 define([_AC_DIVERT],
 [ifdef([_AC_DIVERT($1)],
@@ -150,8 +155,8 @@ define([_AC_DIVERT],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 define([AC_DIVERT_PUSH],
-[pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([$1]))dnl
-divert(AC_DIVERT_DIVERSION)dnl
+[pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([$1]))dnl
+divert(_AC_DIVERT_DIVERSION)dnl
 ])
 
 
@@ -159,9 +164,9 @@ divert(AC_DIVERT_DIVERSION)dnl
 # -------------
 # Change the diversion stream to its previous value, unstacking it.
 define([AC_DIVERT_POP],
-[popdef([AC_DIVERT_DIVERSION])dnl
-ifndef([AC_DIVERT_DIVERSION], [AC_FATAL([too many AC_DIVERT_POP])])dnl
-divert(AC_DIVERT_DIVERSION)dnl
+[popdef([_AC_DIVERT_DIVERSION])dnl
+ifndef([_AC_DIVERT_DIVERSION], [AC_FATAL([too many AC_DIVERT_POP])])dnl
+divert(_AC_DIVERT_DIVERSION)dnl
 ])
 
 
@@ -177,9 +182,9 @@ AC_DIVERT_POP()dnl
 
 
 # Initialize the diversion setup.
-define([AC_DIVERT_DIVERSION], _AC_DIVERT([NORMAL]))
+define([_AC_DIVERT_DIVERSION], _AC_DIVERT([BODY]))
 # Throw away output until AC_INIT is called.
-pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
+pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 
 
 
@@ -206,9 +211,9 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # -------------------------------------
 #
 # When a macro requires another, the other macro is expanded in new
-# diversion, NORMAL_1.  When the outer macro is fully expanded, we first
-# undivert the most nested diversions (NORMAL_2...), and finally
-# undivert NORMAL_1.  To understand why we need several diversions,
+# diversion, PREPARE.  When the outer macro is fully expanded, we first
+# undivert the most nested diversions (PREPARE - 1...), and finally
+# undivert PREPARE.  To understand why we need several diversions,
 # consider the following example:
 #
 # | AC_DEFUN([TEST1], [Test...REQUIRE([TEST2])1])
@@ -219,18 +224,18 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # must keep the expansions of the various level of AC_REQUIRE separated.
 # Right before executing the epilogue of TEST1, we have:
 #
-# 	   NORMAL_3: Test...3
-# 	   NORMAL_1: Test...2
-# 	   NORMAL_1: Test...1
-# 	   NORMAL:
+# 	   PREPARE - 2: Test...3
+# 	   PREPARE - 1: Test...2
+# 	   PREPARE:     Test...1
+# 	   BODY:
 #
-# Finally the epilogue of TEST1 undiverts NORMAL_3, 2, and 1 into the
-# regular flow, NORMAL.
+# Finally the epilogue of TEST1 undiverts PREPARE - 2, PREPARE - 1, and
+# PREPARE into the regular flow, BODY.
 #
-# 	   NORMAL_3:
-# 	   NORMAL_1:
-# 	   NORMAL_1:
-# 	   NORMAL: Test...3; Test...2; Test...1
+# 	   PREPARE - 2:
+# 	   PREPARE - 1:
+# 	   PREPARE:
+# 	   BODY:        Test...3; Test...2; Test...1
 #
 # (The semicolons are here for clarification, but of course are not
 # emitted.)  This is what Autoconf 2.0 (I think) to 2.13 (I'm sure)
@@ -261,20 +266,20 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 #
 # If you strictly apply the rules given in the previous section you get:
 #
-# 	   NORMAL_3: TEST3
-# 	   NORMAL_2: TEST2a; TEST2b
-# 	   NORMAL_1: TEST1
-# 	   NORMAL:
+# 	   PREPARE - 2: TEST3
+# 	   PREPARE - 1: TEST2a; TEST2b
+# 	   PREPARE:     TEST1
+# 	   BODY:
 #
-# (TEST2a, although required by TEST3 is not expanded in NORMAL_4
-# because is has already been expanded before in NORMAL_2, so it has
+# (TEST2a, although required by TEST3 is not expanded in PREPARE - 3
+# because is has already been expanded before in PREPARE - 1, so it has
 # been AC_PROVIDE'd, so it is not expanded again) so when you undivert
 # the stack of diversions, you get:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2:
-# 	   NORMAL_1:
-# 	   NORMAL: TEST3; TEST2a; TEST2b; TEST1
+# 	   PREPARE - 2:
+# 	   PREPARE - 1:
+# 	   PREPARE:
+# 	   BODY:        TEST3; TEST2a; TEST2b; TEST1
 #
 # i.e., TEST2a is expanded after TEST3 although the latter required the
 # former.
@@ -292,46 +297,46 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # In the example above, when TEST2a is expanded, but it's epilogue is
 # not run yet, you have:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2: TEST2a
-# 	   NORMAL_1: Elaboration of TEST1
-# 	   NORMAL:
+# 	   PREPARE - 2:
+# 	   PREPARE - 1: TEST2a
+# 	   PREPARE:     Elaboration of TEST1
+# 	   BODY:
 #
 # The epilogue of TEST2a emits it immediately:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2:
-# 	   NORMAL_1: Elaboration of TEST1
-# 	   NORMAL:   TEST2a
+# 	   PREPARE - 2:
+# 	   PREPARE - 1:
+# 	   PREPARE:     Elaboration of TEST1
+# 	   BODY:        TEST2a
 #
 # TEST2b then requires TEST3, so right before the epilogue of TEST3, you
 # have:
 #
-# 	   NORMAL_3: TEST3
-# 	   NORMAL_2: Elaboration of TEST2b
-# 	   NORMAL_1: Elaboration of TEST1
-# 	   NORMAL:   TEST2a
+# 	   PREPARE - 2: TEST3
+# 	   PREPARE - 1: Elaboration of TEST2b
+# 	   PREPARE:     Elaboration of TEST1
+# 	   BODY:        TEST2a
 #
 # The epilogue of TEST3 emits it:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2: Elaboration of TEST2b
-# 	   NORMAL_1: Elaboration of TEST1
-# 	   NORMAL:   TEST2a; TEST3
+# 	   PREPARE - 2:
+# 	   PREPARE - 1: Elaboration of TEST2b
+# 	   PREPARE:     Elaboration of TEST1
+# 	   BODY:        TEST2a; TEST3
 #
 # TEST2b is now completely expanded, and emitted:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2:
-# 	   NORMAL_1: Elaboration of TEST1
-# 	   NORMAL:   TEST2a; TEST3; TEST2b
+# 	   PREPARE - 2:
+# 	   PREPARE - 1:
+# 	   PREPARE:     Elaboration of TEST1
+# 	   BODY:        TEST2a; TEST3; TEST2b
 #
 # and finally, TEST1 is finished and emitted:
 #
-# 	   NORMAL_3:
-# 	   NORMAL_2:
-# 	   NORMAL_1:
-# 	   NORMAL:   TEST2a; TEST3; TEST2b: TEST1
+# 	   PREPARE - 2:
+# 	   PREPARE - 1:
+# 	   PREPARE:
+# 	   BODY:        TEST2a; TEST3; TEST2b: TEST1
 #
 # The idea, is simple, but the implementation is a bit evolved.  If you
 # are like me, you will want to see the actual functioning of this
@@ -351,7 +356,7 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # AC_REQUIRE at hand to follow the steps.
 #
 # This implements tries not to assume that of the current diversion is
-# NORMAL, so as soon as a macro (AC_DEFUN'd) is expanded, we first
+# BODY, so as soon as a macro (AC_DEFUN'd) is expanded, we first
 # record the current diversion under the name _AC_DIVERT_DUMP (denoted
 # DUMP below for short).  This introduces an important difference with
 # the previous versions of Autoconf: you cannot use AC_REQUIRE if you
@@ -364,113 +369,113 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # any other test was run.  I let you imagine the result of requiring
 # AC_STDC_HEADERS for instance, before AC_PROG_CC was actually run....
 #
-# After AC_INIT was run, the current diversion is NORMAL.
+# After AC_INIT was run, the current diversion is BODY.
 # * AC_INIT was run
 #   DUMP:                undefined
-#   diversion stack:     NORMAL |-
+#   diversion stack:     BODY |-
 #
 # * TEST1 is expanded
 # The prologue of TEST1 sets AC_DIVERSION_DUMP, which is the diversion
 # where the current elaboration will be dumped, to the current
-# diversion.  It also AC_DIVERT_PUSH to NORMAL_1, where the full
+# diversion.  It also AC_DIVERT_PUSH to PREPARE, where the full
 # expansion of TEST1 and its dependencies will be elaborated.
-#   DUMP:       NORMAL
-#   NORMAL:     empty
-#   diversions: NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: PREPARE, BODY |-
 #
 # * TEST1 requires TEST2a: prologue
-# AC_REQUIRE AC_DIVERT_PUSHes another temporary diversion NORMAL_2 (in
+# AC_REQUIRE AC_DIVERT_PUSHes another temporary diversion PREPARE - 1 (in
 # fact, the diversion whose number is one less than the current
 # diversion), and expands TEST2a in there.
-#   DUMP:       NORMAL
-#   NORMAL:     empty
-#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: PREPARE-1, PREPARE, BODY |-
 #
 # * TEST2a is expanded.
 # Its prologue pushes the current diversion again.
-#   DUMP:       NORMAL
-#   NORMAL:     empty
-#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
-# It is expanded in NORMAL_2, and NORMAL_2 is popped by the epilogue
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
+# It is expanded in PREPARE - 1, and PREPARE - 1 is popped by the epilogue
 # of TEST2a.
-#   DUMP:       NORMAL
-#   NORMAL:     nothing
-#   NORMAL_2:   TEST2a
-#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:        BODY
+#   BODY:        nothing
+#   PREPARE - 1: TEST2a
+#   diversions:  PREPARE - 1, PREPARE, BODY |-
 #
 # * TEST1 requires TEST2a: epilogue
 # The content of the current diversion is appended to DUMP (and removed
 # from the current diversion).  A diversion is popped.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   diversions: NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: PREPARE, BODY |-
 #
 # * TEST1 requires TEST2b: prologue
-# AC_REQUIRE pushes NORMAL_2 and expands TEST2b.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+# AC_REQUIRE pushes PREPARE - 1 and expands TEST2b.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: PREPARE - 1, PREPARE, BODY |-
 #
 # * TEST2b is expanded.
 # Its prologue pushes the current diversion again.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
 # The body is expanded here.
 #
 # * TEST2b requires TEST3: prologue
-# AC_REQUIRE pushes NORMAL_3 and expands TEST3.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   diversions: NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+# AC_REQUIRE pushes PREPARE - 2 and expands TEST3.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: PREPARE - 2, PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
 #
 # * TEST3 is expanded.
 # Its prologue pushes the current diversion again.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   diversions: NORMAL_3, NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: PREPARE-2, PREPARE-2, PREPARE-1, PREPARE-1, PREPARE, BODY |-
 # TEST3 requires TEST2a, but TEST2a has already been AC_PROVIDE'd, so
 # nothing happens.  It's body is expanded here, and its epilogue pops a
 # diversion.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a
-#   NORMAL_3:   TEST3
-#   diversions: NORMAL_3, NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:         BODY
+#   BODY:         TEST2a
+#   PREPARE - 2:  TEST3
+#   diversions:   PREPARE - 2, PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
 #
 # * TEST2b requires TEST3: epilogue
 # The current diversion is appended to DUMP, and a diversion is popped.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a; TEST3
-#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3
+#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
 # The content of TEST2b is expanded here.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a; TEST3
-#   NORMAL_2:   TEST2b,
-#   diversions: NORMAL_2, NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:        BODY
+#   BODY:        TEST2a; TEST3
+#   PREPARE - 1: TEST2b,
+#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
 # The epilogue of TEST2b pops a diversion.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a; TEST3
-#   NORMAL_2:   TEST2b,
-#   diversions: NORMAL_2, NORMAL_1, NORMAL |-
+#   DUMP:        BODY
+#   BODY:        TEST2a; TEST3
+#   PREPARE - 1: TEST2b,
+#   diversions:  PREPARE - 1, PREPARE, BODY |-
 #
 # * TEST1 requires TEST2b: epilogue
 # The current diversion is appended to DUMP, and a diversion is popped.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a; TEST3; TEST2b
-#   diversions: NORMAL_1, NORMAL |-
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3; TEST2b
+#   diversions: PREPARE, BODY |-
 #
 # * TEST1 is expanded: epilogue
-# TEST1's own content is in NORMAL_1, and it's epilogue pops a diversion.
-#   DUMP:       NORMAL
-#   NORMAL:     TEST2a; TEST3; TEST2b
-#   NORMAL_1:   TEST1
-#   diversions: NORMAL |-
+# TEST1's own content is in PREPARE, and it's epilogue pops a diversion.
+#   DUMP:    BODY
+#   BODY:    TEST2a; TEST3; TEST2b
+#   PREPARE: TEST1
+#   diversions: BODY |-
 # Here, the epilogue of TEST1 notices the elaboration is done because
 # DUMP and the current diversion are the same, it then undiverts
-# NORMAL_1 by hand, and undefines DUMP.
+# PREPARE by hand, and undefines DUMP.
 #   DUMP:       undefined
-#   NORMAL:     TEST2a; TEST3; TEST2b; TEST1
-#   diversions: NORMAL |-
+#   BODY:       TEST2a; TEST3; TEST2b; TEST1
+#   diversions: BODY |-
 
 
 # _AC_DEFUN_PRO(MACRO-NAME)
@@ -479,9 +484,9 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 define([_AC_DEFUN_PRO],
 [AC_PROVIDE([$1])dnl
 ifdef([_AC_DIVERT_DUMP],
-      [AC_DIVERT_PUSH(defn([AC_DIVERT_DIVERSION]))],
-      [define([_AC_DIVERT_DUMP], defn([AC_DIVERT_DIVERSION]))dnl
-AC_DIVERT_PUSH([NORMAL_1])])dnl
+      [AC_DIVERT_PUSH(defn([_AC_DIVERT_DIVERSION]))],
+      [define([_AC_DIVERT_DUMP], defn([_AC_DIVERT_DIVERSION]))dnl
+AC_DIVERT_PUSH([PREPARE])])dnl
 ])
 
 
@@ -491,8 +496,8 @@ AC_DIVERT_PUSH([NORMAL_1])])dnl
 # the PRO/EPI pairs.
 define([_AC_DEFUN_EPI],
 [AC_DIVERT_POP()dnl
-ifelse(_AC_DIVERT_DUMP, AC_DIVERT_DIVERSION,
-       [undivert(_AC_DIVERT([NORMAL_1]))dnl
+ifelse(_AC_DIVERT_DUMP, _AC_DIVERT_DIVERSION,
+       [undivert(_AC_DIVERT([PREPARE]))dnl
 undefine([_AC_DIVERT_DUMP])])dnl
 ])
 
@@ -559,9 +564,9 @@ define([AC_REQUIRE],
         [AC_FATAL([$0: cannot be used out of an AC_DEFUN'd macro])])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
-                  [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))dnl
+                  [AC_DIVERT_PUSH(m4_eval(_AC_DIVERT_DIVERSION - 1))dnl
 $1
-divert(_AC_DIVERT_DUMP)undivert(AC_DIVERT_DIVERSION)dnl
+divert(_AC_DIVERT_DUMP)undivert(_AC_DIVERT_DIVERSION)dnl
 AC_DIVERT_POP()])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
@@ -1854,7 +1859,7 @@ AC_DIVERT_POP()dnl
 define([_AC_INIT],
 [AC_DIVERT([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS()dnl
-AC_DIVERT_POP()dnl to NORMAL
+AC_DIVERT_POP()dnl to BODY
 _AC_INIT_PARSE_ARGS
 _AC_INIT_SRCDIR
 _AC_INIT_HELP

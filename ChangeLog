@@ -1,5 +1,15 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	Given better names to the diversions.
+
+	* acgeneral.m4 (_AC_DIVERT(NORMAL_2), _AC_DIVERT(NORMAL_3),
+	_AC_DIVERT(NORMAL_4)): Delete, unused.
+	(_AC_DIVERT(NORMAL_1), _AC_DIVERT(NORMAL), AC_DIVERT_DIVERSION):
+	Rename as _AC_DIVERT(PREPARE), _AC_DIVERT(BODY),
+	_AC_DIVERT_DIVERSION.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	The current implementation of AC_REQUIRE fails on
 
 	| AC_DEFUN([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
