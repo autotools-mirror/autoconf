@@ -1,3 +1,10 @@
+2001-10-31  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Do not
+	AC_CONFIG_FILES(atlocal) as it means a file atlocal.in *must* be
+	provided, while it is optional.
+	* configure.ac: Adjust.
+
 2001-10-26  Paul Eggert  <eggert@twinsun.com>
 
 	* NEWS, README, configure.ac, lib/Autom4te/General.pm,

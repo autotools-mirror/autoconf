@@ -32,7 +32,7 @@ AM_INIT_AUTOMAKE(autoconf, 2.52e)
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR(tests)
-AC_CONFIG_FILES(tests/Makefile)
+AC_CONFIG_FILES(tests/Makefile tests/atlocal)
 AC_CONFIG_FILES([tests/autoconf:tests/wrapsh.in],
                 [chmod +x tests/autoconf])
 AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],

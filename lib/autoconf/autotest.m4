@@ -99,8 +99,4 @@ AUTOTEST_PATH='m4_default([$2], [$1])'
 SHELL=\${CONFIG_SHELL-'$SHELL'}
 ATEOF
 ])
-
-if test -f $srcdir/$1/atlocal.in; then
-  AC_CONFIG_FILES([$1/atlocal])
-fi
 ])# AC_CONFIG_TESTDIR
