@@ -120,15 +120,26 @@ as_me=`AS_BASENAME($[0])`
 # configure.  Hence a useless rewrite (not to mention the risk of
 # ``infinite'' rewrites.  Merely check that LINENO is incremented
 # between two lines, which is a property guaranteed for _oline_, hence
-# it protects us from repetitive rewrites.
+# it protects us from repetitive rewrites.  Be sure to have a test
+# that does detect non LINENO support...
 as_lineno_1=$LINENO
 as_lineno_2=$LINENO
-# Compute as_lineno_1 in two steps: some shells restart LINENO for
-# subshells.
-as_lineno_1=`(expr $as_lineno_1 + 1) 2>/dev/null`
-if test "x$as_lineno_1" != "x$as_lineno_2"; then
+as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+if test "x$as_lineno_1"  = "x$as_lineno_2" ||
+   test "x$as_lineno_3" != "x$as_lineno_2";
+  then
+  # Find who we are.
+  case $[0] in
+    *[[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
+    *) _AS_PATH_WALK([],
+                   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
+       ;;
+  esac
+  if test ! -f $as_myself; then
+    AS_ERROR([cannot find myself; rerun with an absolute path])
+  fi
   if test ! -f $as_me.lineno ||
-     test x`ls -1dt $as_me.lineno $as_me 2>/dev/null | sed 1q` \
+     test x`ls -1dt $as_me.lineno $as_myself 2>/dev/null | sed 1q` \
                 != x$as_me.lineno; then
      # Be sure to write the pattern so that it doesn't replace itself:
      # it must not match itself.
@@ -137,10 +148,10 @@ if test "x$as_lineno_1" != "x$as_lineno_2"; then
               while (sub (/[[$]]LINENO/, NR))
                 continue
             print
-          }' <$as_me >$as_me.lineno
+          }' <$as_myself >$as_me.lineno
     chmod +x $as_me.lineno
   fi
-  exec ${SHELL-/bin/sh} ./$as_me.lineno
+  exec ${SHELL-/bin/sh} ./$as_me.lineno ${1+"$[@]"}
 fi
 
 _AS_CR_PREPARE
