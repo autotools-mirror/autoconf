@@ -1,10 +1,20 @@
+2002-06-27  Paul Eggert  <eggert@twinsun.com>
+
+	* config/install-sh: Quote $src.  Prefer || to test's -o option,
+	as per "Limitations of Builtins".
+	* tests/atspecific.m4 (AT_CHECK_ENV): Likewise, for && vs test -a.
+	* tests/semantics.at (AC_C_BIGENDIAN): Likewise.
+
+	* tests/mktests.sh: Use grep instead of fgrep, as per
+	"Limitations of Builtins".
+
 2002-06-15  Paul Eggert  <eggert@twinsun.com>
 
 	* tests/wrapsh.as (AUTOCONF, AUTOHEADER, AUTOM4TE, AUTOM4TE_CFG,
 	autom4te_perllibdir): Set to top build dir or src dir as appropriate,
 	so that we consistently test the just-built programs.
 	* tests/wrappl.as: Likewise.
-	
+
 2002-06-12  Paul Eggert  <eggert@twinsun.com>
 
 	* bin/autoconf.as (AUTOM4TE): Default to a fully qualified path
@@ -14,7 +24,7 @@
 	* bin/autoreconf.in (autoconf, autoheader): Likewise.
 	* bin/autoscan.in (autom4te): Likewise.
 	* bin/autoupdate.in (autom4te): Likewise.
-	
+
 	* lib/autoconf/functions.m4 (_AC_LIBOBJ_FNMATCH): Also check for
 	btowc, to fix a portability bug with diffutils-2.8.2/lib/fnmatch.c
 	on Solaris 2.5.1.
