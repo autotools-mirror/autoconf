@@ -49,8 +49,7 @@ AC_DEFUN([TEST3],
 [REQUIRE_AND_CHECK([TEST2a])
 test3=set])
 
-AC_PLAIN_SCRIPT()
-#! /bin/sh
+AC_PLAIN_SCRIPT()#! /bin/sh
 
 TEST1
 test -z "$test1" &&
@@ -82,8 +81,7 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT()
-#! /bin/sh
+AC_PLAIN_SCRIPT()#! /bin/sh
 
 TEST
 TEST
@@ -127,8 +125,7 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT()
-#! /bin/sh
+AC_PLAIN_SCRIPT()#! /bin/sh
 
 MULTI_TEST
 MULTI_TEST
@@ -167,8 +164,7 @@ AT_DATA([configure.ac],
 AC_DEFUN([INNER_TEST],
 [inner_test=".$inner_test"])
 
-AC_PLAIN_SCRIPT()
-#! /bin/sh
+AC_PLAIN_SCRIPT()#! /bin/sh
 
 AC_PROVIDE([INNER_TEST])
 TEST
