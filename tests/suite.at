@@ -17,6 +17,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+# We need a very up to date version of Autotest, more recent than that
+# needed by configure.ac.
+m4_version_prereq([2.52c])
+
 # Macros specialized for Autoconf testing.
 m4_include([atspecific.m4])
 

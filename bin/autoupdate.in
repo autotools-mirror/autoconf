@@ -123,7 +123,7 @@ sub parse_args ()
   if (! @ARGV)
     {
       my $configure_ac = find_configure_ac;
-      die 'no input file'
+      die "$me: no input file\n"
 	unless $configure_ac;
       push @ARGV, $configure_ac;
     }
@@ -177,14 +177,16 @@ while (<MACROS>)
   {
     chomp;
     /^(AC|AU):(.*):([^:]*)$/ or next;
-    my $filename = basename ($2);
+    # ../lib/m4sugar/m4sugar.m4  -> m4sugar
+    # ../lib/autoconf/general.m4 -> autoconf
+    my $set = basename (dirname ($2));
     if ($1 eq "AC")
       {
-	$ac_macros{$3} = $filename;
+	$ac_macros{$3} = $set;
       }
     else
       {
-	$au_macros{$3} = $filename;
+	$au_macros{$3} = $set;
       }
   }
 close MACROS
@@ -219,7 +221,7 @@ open DISABLE_M4, ">$tmp/disable.m4"
 foreach (sort keys %ac_macros)
   {
     print AC_M4      "_au_define([$_], [[\$0(\$\@)]])\n"
-      unless $ac_macros{$_} eq "m4sugar.m4";
+      unless $ac_macros{$_} eq 'm4sugar';
     print DISABLE_M4 "_au_undefine([$_])\n";
   }
 close DISABLE_M4
@@ -293,7 +295,7 @@ foreach my $file (@ARGV)
 
       # Enable the m4 builtins, m4sugar and the autoquoting AC macros.
       _au_include([$tmp/m4.m4])
-      _au_include([$autoconf_dir/m4sugar/m4sugar.m4])
+      _au_include([m4sugar/m4sugar.m4])
       _au_include([$tmp/ac.m4])
 
       _au_divert(0)])
@@ -362,11 +364,11 @@ EOF
     # Now ask m4 to perform the update.
     if ("$file" eq "$tmp/stdin")
        {
-	 xsystem ("$m4 $tmp/input.m4");
+	 xsystem ("$m4 -I $autoconf_dir $tmp/input.m4");
        }
     else
        {
-	 xsystem ("$m4 $tmp/input.m4 >$tmp/updated");
+	 xsystem ("$m4 -I $autoconf_dir $tmp/input.m4 >$tmp/updated");
 	 if (compare ("$tmp/updated", "$file") == 0)
 	   {
 	     # File didn't change, so don't update its mod time.

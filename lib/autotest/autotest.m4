@@ -47,5 +47,5 @@ divert(-1)#	   					-*- Autoconf -*-
 
 changequote()
 changequote([, ])
-include(m4sugar/m4sh.m4)
-m4_include(autotest/general.m4)
+include([m4sugar/m4sh.m4])
+m4_include([autotest/general.m4])

@@ -23,22 +23,10 @@ distautoconflib_DATA = autoconf.m4 \
 		       lang.m4 c.m4 fortran.m4 \
                        functions.m4 headers.m4 types.m4 libs.m4 programs.m4
 nodistautoconflibdir = $(pkgdatadir)/autoconf
-# The order matters: we need version.m4 to build autoconf.m4f.
-nodistautoconflib_DATA = version.m4 autoconf.m4f
+nodistautoconflib_DATA = autoconf.m4f
 
-EXTRA_DIST = $(distautoconflib_DATA) version.in version.m4
+EXTRA_DIST = $(distautoconflib_DATA)
 
-## version.m4.  ##
-
-# - version.m4 needs to be updated only once, since it depends on
-#   configure.ac, not on the results of a 'configure' run.
-# - It is guaranteed (with GNU Make) that when the version in configure.ac
-#   is changed, version.m4 is built only after the new version number is
-#   propagated to the Makefile.  (Libtool uses the same guarantee.)
-
-$(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
-	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/version.in >version.tm4
-	mv version.tm4 $(srcdir)/version.m4
 
 
 ## --------------- ##

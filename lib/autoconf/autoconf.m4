@@ -1,4 +1,4 @@
-changequote()changequote([, ])include(m4sugar/m4sh.m4)#      -*- Autoconf -*-
+divert(-1)#                                                -*- Autoconf -*-
 # This file is part of Autoconf.
 # Driver that loads the Autoconf macro files.
 # Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
@@ -51,7 +51,9 @@ changequote()changequote([, ])include(m4sugar/m4sh.m4)#      -*- Autoconf -*-
 # yet when Autoconf is frozen.
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 
-m4_include([autoconf/version.m4])
+changequote()
+changequote([, ])
+include([m4sugar/m4sh.m4])
 m4_include([autoconf/general.m4])
 m4_include([autoconf/programs.m4])
 m4_include([autoconf/lang.m4])

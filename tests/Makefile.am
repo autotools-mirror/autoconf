@@ -50,8 +50,7 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
 	   atspecific.m4 \
            $(SUITE)
-	$(AUTOM4TE) \
-	  -I $(srcdir) -I $(top_srcdir) -I $(top_srcdir)/lib \
+	$(AUTOM4TE) -I $(srcdir) -I $(top_srcdir)/lib \
 	  autotest/autotest.m4 suite.at -o $@.tmp
 	chmod +x $@.tmp
 	mv $@.tmp $@

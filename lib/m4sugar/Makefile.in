@@ -66,11 +66,12 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-m4sugarlibdir = $(pkgdatadir)/m4sugar
+distm4sugarlibdir = $(pkgdatadir)/m4sugar
+# We ship version.m4 so that it's in src.  `autoconf' wants all the sources
+# at the same place...
+distm4sugarlib_DATA = version.m4 m4sugar.m4 m4sh.m4
 
-m4sugarlib_DATA = m4sugar.m4 m4sh.m4
-
-EXTRA_DIST = $(m4sugarlib_DATA)
+EXTRA_DIST = $(distm4sugarlib_DATA) version.in
 
 TAGS_FILES = $(m4sugarlib_DATA)
 
@@ -78,7 +79,7 @@ ETAGS_ARGS = --lang=none   --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = 
-DATA =  $(m4sugarlib_DATA)
+DATA =  $(distm4sugarlib_DATA)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -97,23 +98,23 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-install-m4sugarlibDATA: $(m4sugarlib_DATA)
+install-distm4sugarlibDATA: $(distm4sugarlib_DATA)
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(m4sugarlibdir)
-	@list='$(m4sugarlib_DATA)'; for p in $$list; do \
+	$(mkinstalldirs) $(DESTDIR)$(distm4sugarlibdir)
+	@list='$(distm4sugarlib_DATA)'; for p in $$list; do \
 	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4sugarlibdir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4sugarlibdir)/$$p; \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(distm4sugarlibdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(distm4sugarlibdir)/$$p; \
 	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(m4sugarlibdir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(m4sugarlibdir)/$$p; \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(distm4sugarlibdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(distm4sugarlibdir)/$$p; \
 	  fi; fi; \
 	done
 
-uninstall-m4sugarlibDATA:
+uninstall-distm4sugarlibDATA:
 	@$(NORMAL_UNINSTALL)
-	list='$(m4sugarlib_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(m4sugarlibdir)/$$p; \
+	list='$(distm4sugarlib_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(distm4sugarlibdir)/$$p; \
 	done
 
 tags: TAGS
@@ -177,20 +178,20 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-m4sugarlibDATA
+install-data-am: install-distm4sugarlibDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-m4sugarlibDATA
+uninstall-am: uninstall-distm4sugarlibDATA
 uninstall: uninstall-am
 all-am: Makefile $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(m4sugarlibdir)
+	$(mkinstalldirs)  $(DESTDIR)$(distm4sugarlibdir)
 
 
 mostlyclean-generic:
@@ -221,7 +222,7 @@ maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-m4sugarlibDATA install-m4sugarlibDATA tags \
+.PHONY: uninstall-distm4sugarlibDATA install-distm4sugarlibDATA tags \
 mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
 distdir info-am info dvi-am dvi check-local check check-am \
 installcheck-am installcheck install-exec-am install-exec \
@@ -231,9 +232,19 @@ distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
 
+# - version.m4 needs to be updated only once, since it depends on
+#   configure.ac, not on the results of a 'configure' run.
+# - It is guaranteed (with GNU Make) that when the version in configure.ac
+#   is changed, version.m4 is built only after the new version number is
+#   propagated to the Makefile.  (Libtool uses the same guarantee.)
+
+$(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
+	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/version.in >version.tm4
+	mv version.tm4 $(srcdir)/version.m4
+
 check-local:
 	if (cd $(srcdir) && \
-	    egrep '^_?EOF' $(m4sugarlib_DATA)) >eof.log; then \
+	    egrep '^_?EOF' $(distm4sugarlib_DATA)) >eof.log; then \
 	  echo "ERROR: user EOF tags were used:" >&2; \
 	  sed "s,^,$*.m4: ," <eof.log >&2; \
 	  echo >&2; \

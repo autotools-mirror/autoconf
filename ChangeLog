@@ -1,5 +1,23 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	Provide a mean to ``AC_PREREQ'' for M4sugar, M4sh and Autotest.
+
+	* lib/autoconf/version.in: Remove.
+	* lib/m4sugar/version.in: New.
+	* lib/m4sugar/m4sugar.m4 (m4_acversion, m4_version_prereq): New.
+	Adjust callers.
+	* bin/autoupdate.in: Distinguish M4sugar vs. Autoconf macros by
+	the name of the directory they're in, instead of the filename,
+	since version.m4 is now in m4sugar, but m4_acversion must not be
+	classified as an Autoconf macro.
+	($input_m4): Don't qualify the path to m4sugar.
+	Rather, pass autoconf_dir to m4.
+	* tests/Makefile.am (testsuite): Remove -I top_srcdir, unneeded.
+	* tests/suite.at: Require 2.52c.
+
+	
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	testsuite.log should include config.log.
 
 	* lib/autotest/autotest.m4: New.
