@@ -19,8 +19,12 @@
 
 SUFFIXES = .m4 .m4f
 
-AUTOM4TE = $(top_builddir)/tests/autom4te
-$(AUTOM4TE):
+# Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
+# checks if we are independant of Autoconf by defining AUTOM4TE (and
+# others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
+# apply to us.
+MY_AUTOM4TE = $(top_builddir)/tests/autom4te
+$(MY_AUTOM4TE):
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
 
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
@@ -34,7 +38,7 @@ $(AUTOM4TE_CFG):
 # It may happen that the output does not end with a end of line, hence
 # force an end of line when reporting errors.
 .m4.m4f:
-	$(AUTOM4TE)				\
+	$(MY_AUTOM4TE)				\
 		--language=$*			\
 		--freeze			\
 		--include=$(srcdir)/..		\
