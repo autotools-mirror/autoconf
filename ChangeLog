@@ -1,5 +1,10 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Don't neutralize
+	autoconf's warnings.
+	
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	Set AC_LANG_PREPROC_REQUIRE which replaces AC_REQUIRE_CPP.
 	The main difference is that the former requires AC_LANG_COMPILER.
 
@@ -41,7 +46,6 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	* tests/m4sh.at (AS_DIRNAME & AS_DIRNAME_SED): Simplify.
-
 	
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
