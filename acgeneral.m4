@@ -3224,7 +3224,7 @@ fi
 if test -z "$$1"; then
   ac_ct_$1=$$1
   AC_CHECK_PROGS([ac_ct_$1], [$2], [$3], [$4])
-  $1=ac_ct_$1
+  $1=$ac_ct_$1
 fi
 ])# AC_CHECK_TOOLS
 

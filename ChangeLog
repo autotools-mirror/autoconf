@@ -1,3 +1,7 @@
+2000-10-18  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_CHECK_TOOLS): Use `$' when reading a variable.
+
 2000-10-18  Morten Eriksen  <mortene@sim.no>
 
 	* aclang.m4 (_AC_PROG_CC_G): Use the _AC_COMPILE_IFELSE macro
