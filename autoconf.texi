@@ -2824,21 +2824,21 @@ track of whether the remaining cases need to be checked.
 
 @example
 @group
-echo checking how to get filesystem type
+AC_MSG_CHECKING(how to get filesystem type)
 fstype=no
-# SVR4.
+# The order of these tests is important.
 AC_TRY_CPP([#include <sys/statvfs.h>
-#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_STATVFS) fstype=yes)
+#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4)
 if test $fstype = no; then
-# SVR3.
 AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_USG_STATFS) fstype=yes)
+#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3)
 fi
 if test $fstype = no; then
-# AIX.
 AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/vmount.h>], AC_DEFINE(FSTYPE_AIX_STATFS) fstype=yes)
+#include <sys/vmount.h>], AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX)
 fi
+# (more cases omitted here)
+AC_MSG_RESULT($fstype)
 @end group
 @end example
 
