@@ -1,3 +1,12 @@
+2000-09-18  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
+
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Check for configure.gnu
+	as well.
+	(_AC_INIT_HELP): Likewise.
+	(NEWS): Note checking for configure.gnu.
+	* doc/autoconf.texi: Document checking for configure.gnu when
+	recursing subdirectories.
+
 2000-09-18  Jim Meyering  <meyering@lucent.com>
 
 	* acfunctions.m4 (AC_FUNC_GETLOADAVG): Restore the initial value

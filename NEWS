@@ -25,6 +25,10 @@ For autoconf, autoreconf, autoupdate, autoheader, autoscan and ifnames.
 - --warnings
   Specify what category of warnings should be enabled.
 
+- When recursing into subdirectories, try for configure.gnu before
+  configure to adapt for packages not using autoconf on case-insensitive
+  filesystems.
+
 ** autoupdate
 autoupdate is much more powerful, and is able to provide the glue code
 which might be needed to move from an old macro to its newer

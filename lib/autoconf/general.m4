@@ -1812,7 +1812,10 @@ if test "$ac_init_help" = "recursive"; then
     esac
 
     # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f $ac_sub_srcdir/configure; then
+    if test -f $ac_sub_srcdir/configure.gnu; then
+      echo
+      $SHELL $ac_sub_srcdir/configure.gnu  --help=recursive
+    elif test -f $ac_sub_srcdir/configure; then
       echo
       $SHELL $ac_sub_srcdir/configure  --help=recursive
     elif test -f $ac_sub_srcdir/configure.in; then
@@ -5217,7 +5220,9 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     esac
 
     # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f $ac_sub_srcdir/configure; then
+    if test -f $ac_sub_srcdir/configure.gnu; then
+      ac_sub_configure="$SHELL $ac_sub_srcdir/configure.gnu"
+    elif test -f $ac_sub_srcdir/configure; then
       ac_sub_configure="$SHELL $ac_sub_srcdir/configure"
     elif test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
