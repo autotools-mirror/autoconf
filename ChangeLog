@@ -1,3 +1,21 @@
+Mon May 27 13:49:02 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
+
+	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): If $TMPDIR names an
+	existing, writable directory, then test it instead of /tmp, /var/tmp,
+	and /usr/tmp for long file name support.
+
+	* acgeneral.m4 (AC_PREREQ): Prepend "FATAL ERROR: " to msg.
+
+Sun May 26 19:07:15 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
+
+	* acspecific.m4 (AC_PROG_MAKE_SET): Sanitize $MAKE for use as
+	identifier.
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Tighten regexp so ulong doesn't match
+	ulong_t.
+
+	* autoheader.sh: Put $syms in a temporary file and use fgrep -f.
+
 Tue May  7 13:20:33 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
 
 	* acgeneral.m4: Verion 2.10 released.
