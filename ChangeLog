@@ -1,5 +1,10 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	* m4sh.m4 (AS_EXIT): Don't rely on exit == exit $?.
+	Reported by Tim Van Holder.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (editpl, editsh): Merge into...
 	(edit).
 	* m4sh.m4 (AS_UNAME): Eved out from...

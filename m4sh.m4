@@ -104,8 +104,10 @@ AS_UNSET([CDPATH], [:])
 # We cannot simply use "exit N" because some shells (zsh and Solaris sh)
 # will not set $? to N while running the code set by "trap 0"
 # So we set $? by executing "exit N" in the subshell and then exit.
+# Other shells don't use `$?' as default for `exit', hence just repeating
+# the exit value can only help improving portability.
 m4_define([AS_EXIT],
-[{ (exit m4_default([$1], 1)); exit; }])
+[{ (exit m4_default([$1], 1)); exit m4_default([$1], 1); }])
 
 
 # AS_IF(TEST, [IF-TRUE], [IF-FALSE])
