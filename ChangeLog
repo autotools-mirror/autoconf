@@ -1,3 +1,10 @@
+2003-10-03  Akim Demaille  <akim@epita.fr>
+
+	* configure.ac: Quotation and formatting changes.
+	(EMACS): Don't set it if it is not recent enough to support
+	autoconf-mode.el.
+	From Eric Sunshine.
+
 2003-10-02  Akim Demaille  <akim@epita.fr>
 
 	* bin/ifnames.in (&scan_file): Skip C++ comments.

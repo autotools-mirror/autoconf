@@ -87,6 +87,7 @@ PERL = @PERL@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+TEST_EMACS = @TEST_EMACS@
 VERSION = @VERSION@
 ac_ct_STRIP = @ac_ct_STRIP@
 am__leading_dot = @am__leading_dot@
