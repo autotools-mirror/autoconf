@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sh.])
 
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@ AT_SETUP([LINENO])
 # So just skip if the shell is ZSH.
 AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77], ignore)
 
-# AT_DATA_LINENO(FILENAME,
+# AT_DATA_LINENO(FILE-NAME,
 #                UNSET-LINENO = true | false, COUNTER, COUNTER-RE)
 # ----------------------------------------------------------------
-# Produce the FILENAME M4sh script which uses the COUNTER LINENO or
+# Produce the FILE-NAME M4sh script which uses the COUNTER LINENO or
 # _oline_, which we can recognized via COUNTER-RE.  Unset LINENO is
 # UNSET-LINENO.
 #

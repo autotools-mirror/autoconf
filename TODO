@@ -406,9 +406,9 @@ In config.status comment, put the host/target/build types, if used.
 
 ------------------------------------------------------------------------------
 
-It would be nice if I could (in the Makefile.in files) set
-the path to config.h. You have config.h ../config.h ../../config.h's all
-over the place, in the findutils-4.1 directory.
+It would be nice if I could (in the Makefile.in files) set the
+relative name of config.h. You have config.h ../config.h
+../../config.h's all over the place, in the findutils-4.1 directory.
 From: "Randall S. Winchester" <rsw@eng.umd.edu>
 
 ------------------------------------------------------------------------------
@@ -436,7 +436,7 @@ AC_PKG_WITH(hesiod,
 ,,-lhesiod,HESIOD,,)
 AC_PKG_WITH(glue,,,-lglue,GLUE,,)
 AC_PKG_WITH(bind,,/usr/local/bind, [lib/resolv.a lib/lib44bsd.a], ,include)
-After the appropriate checks, the existence of the paths, and libs and such
+After the appropriate checks, the existence of the files, and libs and such
 LIBS=$LIBS $PKG-LIBS
 DEFS=$DEFS $PKG-DEFS
 CPPFLAGS=$PKG-CPPFLAGS $CPPFLAGS
@@ -449,7 +449,7 @@ as order matters.
 
 also an AC_PKG_CHK_HEADER
 and an AC_PKG_CHK_FUNCTION
-so one can give alternate paths to check for stuff ($PKG-ROOT/lib for
+so one can give alternate names to check for stuff ($PKG-ROOT/lib for
 example)
 From: Randall Winchester
 
@@ -532,7 +532,7 @@ Of course, this can be done locally with config.site.
 
 ------------------------------------------------------------------------------
 
-I wonder if it is possible to get the path for X11's app-defaults
+I wonder if it is possible to get the name of X11's app-defaults
 directory by autoconf. Moreover, I'd like to have a general way of
 accessing imake variables by autoconf, something like
 

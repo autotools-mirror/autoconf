@@ -37,14 +37,14 @@ Autom4te::Configure_ac - Locate configure.ac or configure.in.
 
   # Try to locate configure.in or configure.ac in the current
   # directory.  It may be absent.  Complain if both files exist.
-  my $filename = find_configure_ac;
+  my $file_name = find_configure_ac;
 
   # Likewise, but bomb out if the file does not exist.
-  my $filename = require_configure_ac;
+  my $file_name = require_configure_ac;
 
   # Likewise, but in $dir.
-  my $filename = find_configure_ac ($dir);
-  my $filename = require_configure_ac ($dir);
+  my $file_name = find_configure_ac ($dir);
+  my $file_name = require_configure_ac ($dir);
 
 =cut
 

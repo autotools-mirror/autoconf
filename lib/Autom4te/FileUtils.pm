@@ -47,9 +47,9 @@ use vars qw (@ISA @EXPORT);
 	      &xsystem &xqx);
 
 
-=item C<find_file ($filename, @include)>
+=item C<find_file ($file_name, @include)>
 
-Return the first path for a C<$filename> in the C<include>s.
+Return the first name for a C<$file_name> in the C<include>s path.
 
 We match exactly the behavior of GNU M4: first look in the current
 directory (which includes the case of absolute file names), and, if
@@ -60,36 +60,36 @@ if absent, otherwise exit with error.
 
 =cut
 
-# $FILENAME
-# find_file ($FILENAME, @INCLUDE)
-# -------------------------------
+# $FILE-NAME
+# find_file ($FILE-NAME, @INCLUDE)
+# --------------------------------
 sub find_file ($@)
 {
   use File::Spec;
 
-  my ($filename, @include) = @_;
+  my ($file_name, @include) = @_;
   my $optional = 0;
 
   $optional = 1
-    if $filename =~ s/\?$//;
+    if $file_name =~ s/\?$//;
 
-  return File::Spec->canonpath ($filename)
-    if -e $filename;
+  return File::Spec->canonpath ($file_name)
+    if -e $file_name;
 
-  if (File::Spec->file_name_is_absolute ($filename))
+  if (File::Spec->file_name_is_absolute ($file_name))
     {
-      fatal "$filename: no such file or directory"
+      fatal "$file_name: no such file or directory"
 	unless $optional;
       return undef;
     }
 
-  foreach my $path (@include)
+  foreach my $dir (@include)
     {
-      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
-	if -e File::Spec->catfile ($path, $filename)
+      return File::Spec->canonpath (File::Spec->catfile ($dir, $file_name))
+	if -e File::Spec->catfile ($dir, $file_name)
     }
 
-  fatal "$filename: no such file or directory"
+  fatal "$file_name: no such file or directory"
     unless $optional;
 
   return undef;
@@ -290,14 +290,14 @@ sub xsystem ($)
 }
 
 
-=item C<contents ($filename)>
+=item C<contents ($file_name)>
 
-Return the contents of c<$filename>.
+Return the contents of c<$file_name>.
 
 =cut
 
-# contents ($FILENAME)
-# --------------------
+# contents ($FILE-NAME)
+# ---------------------
 sub contents ($)
 {
   my ($file) = @_;

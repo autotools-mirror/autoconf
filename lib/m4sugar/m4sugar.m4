@@ -60,7 +60,7 @@ changequote([, ])
 # long macros we define.
 ifdef([__gnu__], ,
 [errprint(M4sugar requires GNU M4. Install it before installing M4sugar or
-set the M4 environment variable to its path name.)
+set the M4 environment variable to its absolute file name.)
 m4exit(2)])
 
 

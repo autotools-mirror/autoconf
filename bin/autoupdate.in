@@ -265,7 +265,6 @@ xsystem ("$autoconf --trace AU_DEFINE:'_au_defun(\@<:\@\$1\@:>\@,
 
 foreach my $file (@ARGV)
   {
-    my $filename = $file;
     # We need an actual file.
     if ($file eq '-')
       {

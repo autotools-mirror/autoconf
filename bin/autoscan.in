@@ -231,17 +231,17 @@ sub used ($$;$)
 ## ----------------------- ##
 
 
-# scan_c_file ($FILENAME)
-# -----------------------
+# scan_c_file ($FILE-NAME)
+# ------------------------
 sub scan_c_file ($)
 {
-  my ($filename) = @_;
+  my ($file_name) = @_;
   push @cfiles, $File::Find::name;
 
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
 
-  my $file = new Autom4te::XFile "<$filename";
+  my $file = new Autom4te::XFile "<$file_name";
 
   while ($_ = $file->getline)
     {
@@ -304,10 +304,10 @@ sub scan_c_file ($)
 # -----------------------------
 sub scan_makefile ($)
 {
-  my ($filename) = @_;
+  my ($file_name) = @_;
   push @makefiles, $File::Find::name;
 
-  my $file = new Autom4te::XFile "<$filename";
+  my $file = new Autom4te::XFile "<$file_name";
 
   while ($_ = $file->getline)
     {
@@ -346,10 +346,10 @@ sub scan_makefile ($)
 # --------------------------------
 sub scan_sh_file ($)
 {
-  my ($filename) = @_;
+  my ($file_name) = @_;
   push @shfiles, $File::Find::name;
 
-  my $file = new Autom4te::XFile "<$filename";
+  my $file = new Autom4te::XFile "<$file_name";
 
   while ($_ = $file->getline)
     {
@@ -371,7 +371,7 @@ sub scan_sh_file ($)
 
 # scan_file ()
 # ------------
-# Called by &find on each file.  $_ contains the current filename with
+# Called by &find on each file.  $_ contains the current file name with
 # the current directory of the walk through.
 sub scan_file ()
 {

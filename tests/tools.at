@@ -46,7 +46,7 @@ AT_BANNER([Executables (autoheader, autoupdate...).])
 
 AT_SETUP([Syntax of the shell scripts])
 
-# Specify the path to the tool, some shells don't honor PATH when
+# Specify the absolute name of the tool, as some shells don't honor PATH when
 # running `sh PROG'.
 
 AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/bin/autoconf], exit 77)

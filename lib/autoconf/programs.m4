@@ -416,7 +416,7 @@ m4_define([_AC_PROG_GREP],
 # _AC_PATH_PROG_FEATURE_CHECK(VARIABLE, PROGNAME-LIST, FEATURE-TEST, [PATH])
 # --------------------------------------------------------------------------
 # FEATURE-TEST is called repeatedly with $ac_path_VARIABLE set to the
-# path to a program named in PROGNAME-LIST.  FEATURE-TEST must set
+# name of a program in PROGNAME-LIST found in PATH.  FEATURE-TEST must set
 # $ac_cv_path_VARIABLE to the path of an acceptable program, or else
 # _AC_PATH_PROG_FEATURE_CHECK will report that no acceptable program
 # was found, and abort.  If a suitable $ac_path_VARIABLE is found in the
@@ -564,15 +564,15 @@ esac])
   if test "${ac_cv_path_install+set}" = set; then
     INSTALL=$ac_cv_path_install
   else
-    # As a last resort, use the slow shell script.  We don't cache a
-    # path for INSTALL within a source directory, because that will
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for INSTALL within a source directory, because that will
     # break other packages using the cache if that directory is
-    # removed, or if the path is relative.
+    # removed, or if the value is a relative name.
     INSTALL=$ac_install_sh
   fi
 fi
-dnl We do special magic for INSTALL instead of AC_SUBST, to get
-dnl relative paths right.
+dnl Do special magic for INSTALL instead of AC_SUBST, to get
+dnl relative names right.
 AC_MSG_RESULT([$INSTALL])
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.

@@ -88,12 +88,12 @@ sub parse_args ()
 my %occurrence;
 
 
-# &scan_file ($FILENAME)
-# ----------------------
+# &scan_file ($FILE-NAME)
+# -----------------------
 sub scan_file ($)
 {
-  my ($filename) = @_;
-  my $file = new Autom4te::XFile ($filename);
+  my ($file_name) = @_;
+  my $file = new Autom4te::XFile ($file_name);
   while ($_ = $file->getline)
     {
       # Continuation lines.
@@ -111,7 +111,7 @@ sub scan_file ($)
 	    {
 	      next
 		if $word eq 'defined' || $word !~ /^[a-zA-Z_]/;
-	      $occurrence{$word}{$filename} = 1;
+	      $occurrence{$word}{$file_name} = 1;
 	    }
 	}
     }

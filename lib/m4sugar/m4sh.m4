@@ -318,7 +318,7 @@ if test "x$as_myself" = x; then
   as_myself=$[0]
 fi
 if test ! -f "$as_myself"; then
-  AS_ERROR([cannot find myself; rerun with an absolute path])
+  AS_ERROR([cannot find myself; rerun with an absolute file name])
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
@@ -585,9 +585,9 @@ m4_define([AS_ERROR],
 # This section is lexicographically sorted.
 
 
-# AS_DIRNAME(PATHNAME)
-# --------------------
-# Simulate running `dirname(1)' on PATHNAME, not all systems have it.
+# AS_DIRNAME(FILE-NAME)
+# ---------------------
+# Simulate running `dirname(1)' on FILE-NAME.  Not all systems have it.
 # This macro must be usable from inside ` `.
 #
 # Prefer expr to echo|sed, since expr is usually faster and it handles
@@ -618,9 +618,9 @@ AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 AS_DIRNAME_SED([$1])])
 
 
-# AS_BASENAME(PATHNAME)
-# --------------------
-# Simulate running `basename(1)' on PATHNAME, not all systems have it.
+# AS_BASENAME(FILE-NAME)
+# ----------------------
+# Simulate running `basename(1)' on FILE-NAME.  Not all systems have it.
 # Also see the comments for AS_DIRNAME.
 
 m4_defun([AS_BASENAME_EXPR],
@@ -745,7 +745,7 @@ _AS_LINENO_WORKS || {
 
 # _AS_LN_S_PREPARE
 # ----------------
-# Don't use conftest.sym to avoid filename issues on DJGPP, where this
+# Don't use conftest.sym to avoid file name issues on DJGPP, where this
 # would yield conftest.sym.exe for DJGPP < 2.04.  And don't use `conftest'
 # as base name to avoid prohibiting concurrency (e.g., concurrent
 # config.statuses).
@@ -836,8 +836,8 @@ else
 fi
 ])# _AS_MKDIR_P_PREPARE
 
-# AS_MKDIR_P(PATH)
-# ----------------
+# AS_MKDIR_P(DIR)
+# ---------------
 # Emulate `mkdir -p' with plain `mkdir'.
 m4_define([AS_MKDIR_P],
 [AS_REQUIRE([_$0_PREPARE])dnl

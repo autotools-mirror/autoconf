@@ -36,7 +36,7 @@
   Released 2003-11-04, by Akim Demaille
 
 ** ac_abs_builddir etc.
-  Absolute paths were actually relative in 2.58.
+  Absolute file names were actually relative in 2.58.
 
 * Major changes in Autoconf 2.58
 
@@ -885,7 +885,7 @@ Major changes in Autoconf 2.5:
 * New macro: AC_CACHE_CHECK, to make using the cache easier.
 * config.log contains the command being run as well as any output from it.
 * AC_CHECK_LIB can check for libraries with "." or "/" or "+" in their name.
-* AC_PROG_INSTALL doesn't cache a path to install-sh, for sharing caches.
+* AC_PROG_INSTALL doesn't cache a name for install-sh, for sharing caches.
 * AC_CHECK_PROG, AC_PATH_PROG, AC_CHECK_PROGS, AC_PATH_PROGS, and
   AC_CHECK_TOOL can search a path other than $PATH.
 * AC_CHECK_SIZEOF takes an optional size to use when cross-compiling.
@@ -1096,7 +1096,7 @@ Major changes in Autoconf 1.8:
   warns about unknown options.
 * config.status accepts --help, --version options.
 
-** Paths and other changes:
+** File names and other changes:
 * Relative srcdir values are not made absolute.
 * The values of @prefix@ and @exec_prefix@ and @top_srcdir@ get substituted.
 * Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
@@ -1142,7 +1142,7 @@ Major changes in Autoconf 1.4:
 * New macros AC_HAVE_POUNDBANG, AC_TIME_WITH_SYS_TIME, AC_LONG_DOUBLE,
   AC_GETGROUPS_T, AC_DEFINE_UNQUOTED.
 * autoconf and autoheader use the M4 environment variable to determine the
-  path of the m4 program to use.
+  name of the m4 program to use.
 * The --macrodir option to autoconf and autoheader specifies the directory
   in which acspecific.m4, acgeneral.m4, etc. reside if not the default.
 * autoconf and autoheader can take `-' as their file names, which means to
@@ -1155,9 +1155,9 @@ Major changes in Autoconf 1.4:
   AC_DEFINE_UNQUOTED instead.
 * Much textual processing done with external calls to tr and sed have been
   internalized with builtin m4 `patsubst' and `translit' calls.
-* AC_OUTPUT doesn't hardwire the filenames it outputs.  Instead, you can
+* AC_OUTPUT doesn't hardwire the file names it outputs.  Instead, you can
   set the shell variables `gen_files' and `gen_config' to the list of
-  filenames to output.
+  file names to output.
 * AC_DECLARE_YYTEXT does an AC_SUBST of `LEX_OUTPUT_ROOT', which may be
   "lex.yy" or "lexyy", depending on the system.
 * AC_PROGRAMS_CHECK takes an optional third arg.  If given, it is used as

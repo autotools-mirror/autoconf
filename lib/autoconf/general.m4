@@ -458,7 +458,7 @@ fi
 
 # AC_CONFIG_SRCDIR([UNIQUE-FILE-IN-SOURCE-DIR])
 # ---------------------------------------------
-# UNIQUE-FILE-IN-SOURCE-DIR is a filename unique to this package,
+# UNIQUE-FILE-IN-SOURCE-DIR is a file name unique to this package,
 # relative to the directory that configure is in, which we can look
 # for to find out if srcdir is correct.
 AC_DEFUN([AC_CONFIG_SRCDIR],
@@ -492,7 +492,7 @@ if test ! -r $srcdir/$ac_unique_file; then
 fi
 (cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
   AC_MSG_ERROR([sources are in $srcdir, but `cd $srcdir' does not work])
-dnl Double slashes in pathnames in object file debugging info
+dnl Double slashes in file names in object file debugging info
 dnl mess up M-x gdb in Emacs.
 srcdir=`echo "$srcdir" | sed 's%\([[^\\/]]\)[[\\/]]*$%\1%'`
 m4_divert_pop([PARSE_ARGS])dnl
@@ -840,7 +840,7 @@ if test -n "$ac_prev"; then
   AC_MSG_ERROR([missing argument to $ac_option])
 fi
 
-# Be sure to have absolute paths.
+# Be sure to have absolute directory names.
 for ac_var in exec_prefix prefix
 do
   eval ac_val=$`echo $ac_var`
@@ -850,7 +850,7 @@ do
   esac
 done
 
-# Be sure to have absolute paths.
+# Be sure to have absolute directory names.
 for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
 	      localstatedir libdir includedir oldincludedir infodir mandir
 do
@@ -1000,7 +1000,7 @@ if test "$ac_init_help" = "recursive"; then
   ac_popdir=`pwd`
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
     test -d $ac_dir || continue
-    _AC_SRCPATHS(["$ac_dir"])
+    _AC_SRCDIRS(["$ac_dir"])
     cd $ac_dir
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_srcdir/configure.gnu; then
@@ -2406,23 +2406,23 @@ m4_divert_text([DEFAULTS], [ac_config_libobj_dir=$1])[]dnl
 ])
 
 
-# AC_LIBSOURCE(FILENAME)
-# ----------------------
-# Announce we might need the file `FILENAME'.
+# AC_LIBSOURCE(FILE-NAME)
+# -----------------------
+# Announce we might need the file `FILE-NAME'.
 m4_define([AC_LIBSOURCE], [])
 
 
-# AC_LIBSOURCES([FILENAME1, ...])
+# AC_LIBSOURCES([FILE-NAME1, ...])
 # -------------------------------
 # Announce we might need these files.
 m4_define([AC_LIBSOURCES],
-[m4_foreach([_AC_FILENAME], [$1],
-	    [AC_LIBSOURCE(_AC_FILENAME)])])
+[m4_foreach([_AC_FILE_NAME], [$1],
+	    [AC_LIBSOURCE(_AC_FILE_NAME)])])
 
 
-# _AC_LIBOBJ(FILENAME-NOEXT, ACTION-IF-INDIR)
-# -------------------------------------------
-# We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
+# _AC_LIBOBJ(FILE-NAME-NOEXT, ACTION-IF-INDIR)
+# --------------------------------------------
+# We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
@@ -2440,9 +2440,9 @@ esac
 
 
 
-# AC_LIBOBJ(FILENAME-NOEXT)
+# AC_LIBOBJ(FILE-NAME-NOEXT)
 # -------------------------
-# We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
+# We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],

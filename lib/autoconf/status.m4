@@ -120,8 +120,8 @@
 ## Auxiliary macros.  ##
 ## ------------------ ##
 
-# _AC_SRCPATHS(BUILD-DIR-NAME)
-# ----------------------------
+# _AC_SRCDIRS(BUILD-DIR-NAME)
+# ---------------------------
 # Inputs:
 #   - BUILD-DIR-NAME is `top-build -> build' and `top-src -> src'
 #   - `$srcdir' is `top-build -> top-src'
@@ -133,8 +133,8 @@
 # - `ac_srcdir' is `build -> src'.
 # - `ac_top_srcdir' is `build -> top-src'.
 #
-# and `ac_abs_builddir' etc., the absolute paths.
-m4_define([_AC_SRCPATHS],
+# and `ac_abs_builddir' etc., the absolute directory names.
+m4_define([_AC_SRCDIRS],
 [ac_builddir=.
 
 if test $1 != .; then
@@ -153,22 +153,22 @@ case $srcdir in
     else
        ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
     fi ;;
-  [[\\/]]* | ?:[[\\/]]* )  # Absolute path.
+  [[\\/]]* | ?:[[\\/]]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir ;;
-  *) # Relative path.
+  *) # Relative name.
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
 
-# Do not use `cd foo && pwd` to compute absolute paths, because
+# Do not use `cd foo && pwd` to compute absolute names, because
 # the directories may not exist.
 AS_SET_CATFILE([ac_abs_builddir],   [`pwd`],            [$1])
 AS_SET_CATFILE([ac_abs_top_builddir],
 	                            [$ac_abs_builddir], [${ac_top_builddir}.])
 AS_SET_CATFILE([ac_abs_srcdir],     [$ac_abs_builddir], [$ac_srcdir])
 AS_SET_CATFILE([ac_abs_top_srcdir], [$ac_abs_builddir], [$ac_top_srcdir])
-])# _AC_SRCPATHS
+])# _AC_SRCDIRS
 
 
 
@@ -369,7 +369,7 @@ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
   ac_dir=`AS_DIRNAME(["$ac_dest"])`
   AS_MKDIR_P(["$ac_dir"])
-  _AC_SRCPATHS(["$ac_dir"])
+  _AC_SRCDIRS(["$ac_dir"])
 
   AC_MSG_NOTICE([executing $ac_dest commands])
 dnl Some shells don't like empty case/esac
@@ -526,7 +526,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
       [[\\/$]]*)
 	 # Absolute (can't be DOS-style, as IFS=:)
 	 test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-	 # Do quote $f, to prevent DOS paths from being IFS'd.
+	 # Quote $f, to prevent DOS file names from being IFS'd.
 	 echo "$f";;
       *) # Relative
 	 if test -f "$f"; then
@@ -785,7 +785,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   # Make relative symlinks.
   ac_dest_dir=`AS_DIRNAME(["$ac_dest"])`
   AS_MKDIR_P(["$ac_dest_dir"])
-  _AC_SRCPATHS(["$ac_dest_dir"])
+  _AC_SRCDIRS(["$ac_dest_dir"])
 
   case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
@@ -949,7 +949,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
   ac_dir=`AS_DIRNAME(["$ac_file"])`
   AS_MKDIR_P(["$ac_dir"])
-  _AC_SRCPATHS(["$ac_dir"])
+  _AC_SRCDIRS(["$ac_dir"])
 
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [  case $INSTALL in
@@ -1133,7 +1133,7 @@ if test "$no_recursion" != yes; then
 
     AC_MSG_NOTICE([configuring in $ac_dir])
     AS_MKDIR_P(["$ac_dir"])
-    _AC_SRCPATHS(["$ac_dir"])
+    _AC_SRCDIRS(["$ac_dir"])
 
     cd $ac_dir
 
@@ -1154,7 +1154,7 @@ if test "$no_recursion" != yes; then
       # Make the cache file name correct relative to the subdirectory.
       case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
-      *) # Relative path.
+      *) # Relative name.
 	ac_sub_cache_file=$ac_top_builddir$cache_file ;;
       esac
 

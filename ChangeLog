@@ -1,3 +1,16 @@
+2004-08-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS, TODO, configure.ac, bin/autoscan.in,
+	bin/autoupdate.in, bin/ifnames.in, doc/autoconf.texi,
+	doc/install.texi, lib/Autom4te/Configure_ac.pm,
+	lib/Autom4te/FileUtils.pm, lib/autoconf/general.m4,
+	lib/autoconf/programs.m4, lib/autoconf/status.m4,
+	lib/autotest/general.m4, lib/m4sugar/m4sh.m4,
+	lib/m4sugar/m4sugar.m4, tests/local.at, tests/m4sh.at,
+	tests/tools.at, tests/torture.at:
+	Use "file name" rather than "filename" or "path",
+	to be consistent with the terminology of the GNU coding standards.
+	
 2004-08-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C),

@@ -116,7 +116,7 @@ m4_define([_m4_divert(TEST_SCRIPT)],        403)
 # AT_LINE
 # -------
 # Return the current file sans directory, a colon, and the current
-# line.  Be sure to return a _quoted_ filename, so if, for instance,
+# line.  Be sure to return a _quoted_ file name, so if, for instance,
 # the user is lunatic enough to have a file named `dnl' (and I, for
 # one, love to be brainless and stubborn sometimes), then we return a
 # quoted name.
@@ -159,7 +159,7 @@ do
   . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
-# atconfig delivers paths relative to the directory the test suite is
+# atconfig delivers names relative to the directory the test suite is
 # in, but the groups themselves are run in testsuite-dir/group-dir.
 if test -n "$at_top_srcdir"; then
   builddir=../..
@@ -417,7 +417,7 @@ if $at_list_p; then
   cat <<_ATEOF
 AT_TESTSUITE_NAME test groups:
 
- NUM: FILENAME:LINE      TEST-GROUP-NAME
+ NUM: FILE-NAME:LINE     TEST-GROUP-NAME
       KEYWORDS
 
 _ATEOF
@@ -1026,7 +1026,7 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # -------------------
 # Specify the list of programs exercised by the test suite.  Their
 # versions are logged, and in the case of embedded test suite, they
-# must correspond to the version of the package..  The PATH should be
+# must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_TESTED],
 [m4_append_uniq([AT_tested], [$1], [ ])])

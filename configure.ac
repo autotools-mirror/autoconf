@@ -99,7 +99,7 @@ AC_PATH_PROG([EXPR], [expr])
 ## M4.  ##
 ## ---- ##
 
-# We use a path for GNU m4 so even if users have another m4 first in
+# We use an absolute name for GNU m4 so even if users have another m4 first in
 # their path, the installer can configure with a path that has GNU m4
 # first and get that path embedded in the installed autoconf and
 # autoheader scripts.
@@ -120,7 +120,7 @@ AM_MISSING_PROG(HELP2MAN, help2man)
 ## Perl.  ##
 ## ------ ##
 
-# We use a path for perl so the #! line in autoscan will work.
+# We use an absolute name for perl so the #! line in autoscan will work.
 AC_PATH_PROG([PERL], perl, no)
 AC_SUBST([PERL])dnl
 if test "$PERL" = no; then

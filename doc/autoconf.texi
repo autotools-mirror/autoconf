@@ -465,7 +465,7 @@ Portable Shell Programming
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
-* File System Conventions::     File- and pathnames
+* File System Conventions::     File names
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
@@ -1728,7 +1728,7 @@ Invocation}, for more information.
 @c @acindex{INCLUDE}
 @c @c FIXME: There is no longer shell globbing.
 @c Read the macro definitions that appear in the listed files.  A list of
-@c space-separated filenames or shell globbing patterns is expected.  The
+@c space-separated file names or shell globbing patterns is expected.  The
 @c files will be read in the order they're listed.
 @c
 @c Because the order of definition of macros is important (only the last
@@ -1762,7 +1762,7 @@ name is obsolete because some @code{make} have a rule that creates
 @file{install} from it if there is no @file{Makefile}.
 
 The auxiliary directory should not be named @file{aux} for portability
-to MS-DOS, because the filename @file{aux} is reserved under MS-DOS.
+to MS-DOS, because the file name @file{aux} is reserved under MS-DOS.
 @end defmac
 
 @defmac AC_REQUIRE_AUX_FILE (@var{file})
@@ -1919,7 +1919,7 @@ when used in @var{output}, or the standard input when used in the
 interface of @file{./config.status}, see @ref{config.status Invocation},
 for more details.
 
-The @var{inputs} may be absolute or relative filenames.  In the latter
+The @var{inputs} may be absolute or relative file names.  In the latter
 case they are first looked for in the build tree, and then in the source
 tree.
 
@@ -1936,21 +1936,24 @@ The variables set during the execution of @command{configure} are
 
 @table @code
 @item srcdir
-The path from the top build directory to the top source directory.  This
+The name of the top source directory, assuming that the working
+directory is the top build directory.  This
 is what @command{configure}'s option @option{--srcdir} sets.
 
 @item ac_top_srcdir
-The path from the current build directory to the top source directory.
+The name of the top source directory, assuming that the working
+directory is the current build directory.
 
 
 @item ac_top_builddir
-The path from the current build directory to the top build directory.
+The name of the top build directory, assuming that the working
+directory is the current build directory.
 It can be empty, or else ends with a slash, so that you may concatenate
 it.
 
 @item ac_srcdir
-The path from the current build directory to the corresponding source
-directory.
+The name of the corresponding source directory, assuming that the
+working directory is the current build directory.
 @end table
 
 @noindent
@@ -2216,40 +2219,40 @@ Rigorously equal to @samp{.}.  Added for symmetry only.
 
 @defvar abs_builddir
 @ovindex abs_builddir
-Absolute path of @code{builddir}.
+Absolute name of @code{builddir}.
 @end defvar
 
 @defvar top_builddir
 @ovindex top_builddir
-The relative path to the top-level of the current build tree.  In the
+The relative name of the top level of the current build tree.  In the
 top-level directory, this is the same as @code{builddir}.
 @end defvar
 
 @defvar abs_top_builddir
 @ovindex abs_top_builddir
-Absolute path of @code{top_builddir}.
+Absolute name of @code{top_builddir}.
 @end defvar
 
 @defvar srcdir
 @ovindex srcdir
-The relative path to the directory that contains the source code for
+The relative name of the directory that contains the source code for
 that @file{Makefile}.
 @end defvar
 
 @defvar abs_srcdir
 @ovindex abs_srcdir
-Absolute path of @code{srcdir}.
+Absolute name of @code{srcdir}.
 @end defvar
 
 @defvar top_srcdir
 @ovindex top_srcdir
-The relative path to the top-level source code directory for the
+The relative name of the top-level source code directory for the
 package.  In the top-level directory, this is the same as @code{srcdir}.
 @end defvar
 
 @defvar abs_top_srcdir
 @ovindex abs_top_srcdir
-Absolute path of @code{top_srcdir}.
+Absolute name of @code{top_srcdir}.
 @end defvar
 
 @node Installation Directory Variables
@@ -2443,8 +2446,8 @@ autoconf autoheader: Makefile
 @xref{Limitations of Make}, for details.
 
 @item @samp{$(srcdir)}
-Be sure to specify the path to the sources, otherwise the package won't
-support separated builds.
+Be sure to specify the name of the source directory,
+otherwise the package won't support separated builds.
 @end table
 
 
@@ -2738,11 +2741,11 @@ Remake the template file even if newer than its input files.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Append @var{dir} to include path.  Multiple invocations accumulate.
+Append @var{dir} to the include path.  Multiple invocations accumulate.
 
 @item --prepend-include=@var{dir}
 @item -B @var{dir}
-Prepend @var{dir} to include path.  Multiple invocations accumulate.
+Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -2999,10 +3002,10 @@ changes if needed, which include:
 
 @itemize @minus
 @item
-adjusting a relative path for the cache file;
+adjusting a relative name for the cache file;
 
 @item
-adjusting a relative path for the source directory;
+adjusting a relative name for the source directory;
 
 @item
 propagating the current value of @code{$prefix}, including if it was
@@ -3047,11 +3050,11 @@ have already installed.  If you wish to do that, you can call
 @acindex{PREFIX_PROGRAM}
 If the user did not specify an installation prefix (using the
 @option{--prefix} option), guess a value for it by looking for
-@var{program} in @code{PATH}, the way the shell does.  If @var{program}
+@var{program} in @env{PATH}, the way the shell does.  If @var{program}
 is found, set the prefix to the parent of the directory containing
 @var{program}, else default the prefix as described above
 (@file{/usr/local} or @code{AC_PREFIX_DEFAULT}).  For example, if
-@var{program} is @code{gcc} and the @code{PATH} contains
+@var{program} is @code{gcc} and the @env{PATH} contains
 @file{/usr/local/gnu/bin/gcc}, set the prefix to @file{/usr/local/gnu}.
 @end defmac
 
@@ -3282,8 +3285,8 @@ lines.
 @ovindex INSTALL_PROGRAM
 @ovindex INSTALL_DATA
 @ovindex INSTALL_SCRIPT
-Set output variable @code{INSTALL} to the path of a @acronym{BSD}-compatible
-@code{install} program, if one is found in the current @code{PATH}.
+Set output variable @code{INSTALL} to the name of a @acronym{BSD}-compatible
+@code{install} program, if one is found in the current @env{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
 checking the directories specified to @code{AC_CONFIG_AUX_DIR} (or its
 default directories) to determine @var{dir} (@pxref{Output}).  Also set
@@ -3395,7 +3398,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_SED
 @acindex{PROG_SED}
 @ovindex SED
-Set output variable @code{SED} to a @code{sed} on @samp{PATH} that
+Set output variable @code{SED} to a @code{sed} on @env{PATH} that
 truncates as few characters as possible.  If @sc{gnu} Sed is found,
 use that instead.
 @end defmac
@@ -3415,8 +3418,8 @@ These macros are used to find programs not covered by the ``particular''
 test macros.  If you need to check the behavior of a program as well as
 find out whether it is present, you have to write your own test for it
 (@pxref{Writing Tests}).  By default, these macros use the environment
-variable @code{PATH}.  If you need to check for a program that might not
-be in the user's @code{PATH}, you can pass a modified path to use
+variable @env{PATH}.  If you need to check for a program that might not
+be in the user's @env{PATH}, you can pass a modified path to use
 instead, like this:
 
 @example
@@ -3430,7 +3433,7 @@ You are strongly encouraged to declare the @var{variable} passed to
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
 @acindex{CHECK_PROG}
-Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
+Check whether program @var{prog-to-check-for} exists in @env{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
 @var{value-if-not-found}, if given.  Always pass over @var{reject} (an
 absolute file name) even if it is the first found in the search path; in
@@ -3443,7 +3446,7 @@ that case, set @var{variable} using the absolute file name of the
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_PROGS}
 Check for each program in the whitespace-separated list
-@var{progs-to-check-for} existing in the @code{PATH}.  If one is found, set
+@var{progs-to-check-for} existing in the @env{PATH}.  If one is found, set
 @var{variable} to the name of that program.  Otherwise, continue
 checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
@@ -3480,8 +3483,8 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 @end example
 @noindent
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
-@code{PATH}, or otherwise to @samp{ranlib} if that program exists in
-@code{PATH}, or to @samp{:} if neither program exists.
+@env{PATH}, or otherwise to @samp{ranlib} if that program exists in
+@env{PATH}, or to @samp{:} if neither program exists.
 
 In the future, when cross-compiling this macro will @emph{only}
 accept program names that are prefixed with the host type.
@@ -3521,27 +3524,27 @@ accept program names that are not prefixed with the host type.
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_PROG}
-Like @code{AC_CHECK_PROG}, but set @var{variable} to the entire
-path of @var{prog-to-check-for} if found.
+Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
+name of @var{prog-to-check-for} if found.
 @end defmac
 
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_PROGS}
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
-are found, set @var{variable} to the entire path of the program
+are found, set @var{variable} to the absolute name of the program
 found.
 @end defmac
 
 @defmac AC_PATH_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_TARGET_TOOL}
-Like @code{AC_CHECK_TARGET_TOOL}, but set @var{variable} to the entire
-path of the program if it is found.
+Like @code{AC_CHECK_TARGET_TOOL}, but set @var{variable} to the absolute
+name of the program if it is found.
 @end defmac
 
 @defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_TOOL}
-Like @code{AC_CHECK_TOOL}, but set @var{variable} to the entire
-path of the program if it is found.
+Like @code{AC_CHECK_TOOL}, but set @var{variable} to the absolute
+name of the program if it is found.
 
 In the future, when cross-compiling this macro will @emph{not}
 accept program names that are not prefixed with the host type.
@@ -4526,7 +4529,7 @@ AC_LIBOBJ($foo_or_bar)
 @defmac AC_CONFIG_LIBOBJ_DIR (@var{directory})
 @acindex{CONFIG_LIBOBJ_DIR}
 Specify that @code{AC_LIBOBJ} replacement files are to be found in
-@var{directory}, a relative path starting from the top level of the
+@var{directory}, a name relative to the top level of the
 source tree.  The replacement directory defaults to @file{.}, the top
 level directory, and the most typical value is @file{lib}, corresponding
 to @samp{AC_CONFIG_LIBOBJ_DIR(lib)}.
@@ -6141,7 +6144,7 @@ extension for source-code files.  Some compilers, however, only enable
 newer language features for appropriately named files, e.g. Fortran 90
 features only for @file{.f90} files.  On the other hand, some other
 compilers expect all source files to end in @file{.f} and require
-special flags to support other filename extensions.  The
+special flags to support other file name extensions.  The
 @code{AC_FC_SRCEXT} macro deals with both of these issues.
 
 The @code{AC_FC_SRCEXT} tries to get the @code{FC} compiler to accept files
@@ -6161,7 +6164,7 @@ The @code{FCFLAGS_}@var{ext} can @emph{not} be simply absorbed into
 compilers.  First, only one @code{FCFLAGS_}@var{ext} can be used at a
 time, so files with different extensions must be compiled separately.
 Second, @code{FCFLAGS_}@var{ext} must appear @emph{immediately} before
-the source-code filename when compiling.  So, continuing the example
+the source-code file name when compiling.  So, continuing the example
 above, you might compile a @file{foo.f90} file in your Makefile with the
 command:
 
@@ -8342,7 +8345,7 @@ considers it is trashed).
 @itemx -C @var{directory}
 Specify the name of the directory where the result should be cached.
 Passing an empty value disables caching.  Be sure to pass a relative
-path name, as for the time being, global caches are not supported.
+file name, as for the time being, global caches are not supported.
 
 @item --no-cache
 Don't cache the results.
@@ -8376,7 +8379,7 @@ use the following special escapes:
 The character @samp{$}.
 
 @item $f
-The filename from which @var{macro} is called.
+The file name from which @var{macro} is called.
 
 @item $l
 The line number from which @var{macro} is called.
@@ -8713,9 +8716,9 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
-@defmac AS_DIRNAME (@var{pathname})
+@defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
-Return the directory portion of @var{pathname}, using the algorithm
+Return the directory portion of @var{file-name}, using the algorithm
 required by @acronym{POSIX}.  @xref{Limitations of Usual Tools}, for more
 details about what this returns and why it is more portable than the
 @command{dirname} command.
@@ -8728,13 +8731,13 @@ RUN-IF-TRUE, else run shell code RUN-IF-FALSE, with simplifications if either
 RUN-IF-TRUE or RUN-IF-FALSE is empty.
 @end defmac
 
-@defmac AS_MKDIR_P (@var{filename})
+@defmac AS_MKDIR_P (@var{file-name})
 @asindex{MKDIR_P}
-Make the directory @var{filename}, including intervening directories
-as necessary.  This is equivalent to @samp{mkdir -p @var{filename}},
+Make the directory @var{file-name}, including intervening directories
+as necessary.  This is equivalent to @samp{mkdir -p @var{file-name}},
 except that it is portable to older versions of @command{mkdir} that
 lack support for the @option{-p} option.  Also, @code{AS_MKDIR_P}
-succeeds if @var{filename} is a symbolic link to an existing directory,
+succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though @acronym{POSIX} is unclear whether @samp{mkdir -p} should
 succeed in that case.
 @end defmac
@@ -8855,7 +8858,7 @@ Header files.
 @item LIB
 C libraries.
 @item PATH
-The full path names to files, including programs.
+Absolute names of files, including programs.
 @item PROG
 The base names of programs.
 @item MEMBER
@@ -9344,7 +9347,8 @@ after the exclamation point in interpreter specifications, like this:
 @end example
 
 @noindent
-If you omit the space before the path, then 4.2@acronym{BSD} based systems
+If you omit the space before the absolute file name,
+then 4.2@acronym{BSD} based systems
 (such as DYNIX) will ignore the line, because they interpret
 @samp{#! /} as a 4-byte magic number.  Some old systems have quite
 small limits on the length of the @samp{#!} line too, for instance 32
@@ -9367,7 +9371,7 @@ There are other sources of documentation about shells.  See for instance
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
-* File System Conventions::     File- and pathnames
+* File System Conventions::     File names
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
@@ -9697,8 +9701,7 @@ bar}; see @ref{Limitations of Builtins}, @command{mv} for more details.
 
 While @command{autoconf} and friends will usually be run on some Unix
 variety, it can and will be used on other systems, most notably @acronym{DOS}
-variants.  This impacts several assumptions regarding file and
-path names.
+variants.  This impacts several assumptions regarding file names.
 
 @noindent
 For example, the following code:
@@ -9713,7 +9716,7 @@ esac
 @end example
 
 @noindent
-will fail to properly detect absolute paths on those systems, because
+will fail to properly detect absolute file names on those systems, because
 they can use a drivespec, and will usually use a backslash as directory
 separator.  If you want to be portable to @acronym{DOS} variants (at the
 price of rejecting valid but oddball Unix file names like @file{a:\b}),
@@ -9752,7 +9755,7 @@ identifies problems that exist even under Windows.
 
 @table @asis
 @item No multiple dots (@sc{sfn})
-@acronym{DOS} cannot handle multiple dots in filenames.  This is an especially
+@acronym{DOS} cannot handle multiple dots in file names.  This is an especially
 important thing to remember when building a portable configure script,
 as @command{autoconf} uses a .in suffix for template files.
 
@@ -9776,7 +9779,7 @@ AC_OUTPUT
 @end example
 
 @item No leading dot (@sc{sfn})
-@acronym{DOS} cannot handle filenames that start with a dot.  This is usually
+@acronym{DOS} cannot handle file names that start with a dot.  This is usually
 not a very important issue for @command{autoconf}.
 
 @item Case insensitivity (@sc{lfn})
@@ -9788,21 +9791,21 @@ the directory, @samp{make install} will do nothing (unless the
 
 @item The 8+3 limit (@sc{sfn})
 Because the @acronym{DOS} file system only stores the first 8 characters of
-the filename and the first 3 of the extension, those must be unique.
+the file name and the first 3 of the extension, those must be unique.
 That means that @file{foobar-part1.c}, @file{foobar-part2.c} and
-@file{foobar-prettybird.c} all resolve to the same filename
+@file{foobar-prettybird.c} all resolve to the same file name
 (@file{FOOBAR-P.C}).  The same goes for @file{foo.bar} and
 @file{foo.bartender}.
 
 Note: This is not usually a problem under Windows, as it uses numeric
-tails in the short version of filenames to make them unique.  However, a
+tails in the short version of file names to make them unique.  However, a
 registry setting can turn this behavior off.  While this makes it
 possible to share file trees containing long file names between @sc{sfn}
 and @sc{lfn} environments, it also means the above problem applies there
 as well.
 
 @item Invalid characters (@sc{lfn})
-Some characters are invalid in @acronym{DOS} filenames, and should therefore
+Some characters are invalid in @acronym{DOS} file names, and should therefore
 be avoided.  In a @sc{lfn} environment, these are @samp{/}, @samp{\},
 @samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
 In a @sc{sfn} environment, other characters are also invalid.  These
@@ -10174,7 +10177,7 @@ parentheses.  There is a similar problem and workaround with
 parentheses like this:
 
 @example
-case $filename in
+case $file_name in
 (*.c) echo "C source code";;
 esac
 @end example
@@ -10222,11 +10225,11 @@ fallback value is needed.  We list these values below.
 @item CDPATH
 @evindex CDPATH
 When this variable is set it specifies a list of directories to search
-when invoking @code{cd} with a relative filename.  @acronym{POSIX}
+when invoking @code{cd} with a relative file name.  @acronym{POSIX}
 1003.1-2001 says that if a nonempty directory name from @code{CDPATH}
 is used successfully, @code{cd} prints the resulting absolute
-filename.  Unfortunately this output can break idioms like
-@samp{abs=`cd src && pwd`} because @code{abs} receives the path twice.
+file name.  Unfortunately this output can break idioms like
+@samp{abs=`cd src && pwd`} because @code{abs} receives the name twice.
 Also, many shells do not conform to this part of @acronym{POSIX}; for
 example, @command{zsh} prints the result only if a directory name
 other than @file{.} was chosen from @code{CDPATH}.
@@ -10429,7 +10432,7 @@ PS4='+ '
 @evindex PWD
 @acronym{POSIX} 1003.1-2001 requires that @command{cd} and
 @command{pwd} must update the @env{PWD} environment variable to point
-to the logical path to the current directory, but traditional shells
+to the logical name of the current directory, but traditional shells
 do not support this.  This can cause confusion if one shell instance
 maintains @env{PWD} but a subsidiary and different shell does not know
 about @env{PWD} and executes @command{cd}; in this case @env{PWD} will
@@ -10450,7 +10453,7 @@ variable accordingly.
 On DJGPP systems, the @code{PATH_SEPARATOR} environment variable can be
 set to either @samp{:} or @samp{;} to control the path separator
 Bash uses to set up certain environment variables (such as
-@code{PATH}).  Since this only works inside Bash, you want
+@env{PATH}).  Since this only works inside Bash, you want
 @command{configure} to detect the regular @acronym{DOS} path separator
 (@samp{;}), so it can be safely substituted in files that may not support
 @samp{;} as path separator.  So it is recommended to either unset this
@@ -10559,7 +10562,7 @@ bash-2.02$
 
 @noindent
 This is extremely unfortunate, since you are likely to use this code to
-handle Unix or @sc{ms-dos} absolute paths.  To work around this
+handle Unix or @sc{ms-dos} absolute file names.  To work around this
 bug, always put the backslash first:
 
 @example
@@ -11278,15 +11281,15 @@ This handles a few subtleties in the standard way required by
 
 @quotation
 No, under some older flavors of Unix, leading @samp{//} is a special
-path name: it refers to a ``super-root'' and is used to access other
+file name: it refers to a ``super-root'' and is used to access other
 machines' files.  Leading @samp{///}, @samp{////}, etc.@: are equivalent
 to @samp{/}; but leading @samp{//} is special.  I think this tradition
 started with Apollo Domain/OS, an OS that is still in use on some older
 hosts.
 
 @acronym{POSIX} allows but does not require the special treatment for
-@samp{//}.  It says that the behavior of dirname on path names of the
-form @samp{//([^/]+/*)?}  is implementation defined.  In these cases,
+@samp{//}.  It says that the behavior of @command{dirname} on file names of the
+form @samp{//([^/]+/*)?} is implementation defined.  In these cases,
 @acronym{GNU} @command{dirname} returns @samp{/}, but it's more
 portable to return @samp{//} as this works even on those older flavors
 of Unix.
@@ -11521,8 +11524,8 @@ found"} if there are no @samp{.c} files.
 @prindex @command{mkdir}
 @cindex Making directories
 None of @command{mkdir}'s options are portable to older systems.  Instead of
-@samp{mkdir -p @var{filename}}, you should use use
-@code{AS_MKDIR_P(@var{filename})} (@pxref{Programming in M4sh}).
+@samp{mkdir -p @var{file-name}}, you should use use
+@code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh}).
 
 @acronym{POSIX} does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
@@ -12319,13 +12322,13 @@ Algorithm,, How Directory Searches are Performed, make, The @acronym{GNU} Make
 Manual}.
 
 If a target needs to be rebuilt, @acronym{GNU} @command{make} discards the
-filename found during the @code{VPATH} search for this target, and
-builds the file locally using the filename given in the @file{Makefile}.
+file name found during the @code{VPATH} search for this target, and
+builds the file locally using the file name given in the @file{Makefile}.
 If a target does not need to be rebuilt, @acronym{GNU} @command{make} uses the
-filename found during the @code{VPATH} search.
+file name found during the @code{VPATH} search.
 
 Other @command{make} implementations, like NetBSD @command{make}, are
-easier to describe: the filename found during the @code{VPATH} search
+easier to describe: the file name found during the @code{VPATH} search
 will be used whether the target needs to be rebuilt or not.  Therefore
 new files are created locally, but existing files are updated at their
 @code{VPATH} location.
@@ -12379,7 +12382,7 @@ location, and how FreeBSD, OpenBSD, and Tru64 @command{make} always
 update @file{bar.x}, even when @file{../bar.x} is up to date.
 
 Another point worth mentioning is that once @acronym{GNU} @command{make} has
-decided to ignore a @code{VPATH} filename (e.g., it ignored
+decided to ignore a @code{VPATH} file name (e.g., it ignored
 @file{../bar.x} in the above example) it will continue to ignore it when
 the target occurs as a prerequisite of another rule.
 
@@ -12763,7 +12766,7 @@ case $host in
 esac
 @end example
 
-Another example is filenames made to vary according to system
+Another example is file names made to vary according to system
 conventions.  On Unix-like systems ``dot'' files are usual but on DOS
 systems @file{ini} files are usual.  It may be worth allowing the user
 to override such things though, if it's a matter of personal preference,
@@ -13356,7 +13359,7 @@ Require that @var{file} be instantiated as if
 @samp{AC_CONFIG_FILES(@var{file}:@var{template})} was used.  Both
 @var{file} and @var{template} may be @samp{-} in which case the standard
 output and/or standard input, respectively, is used.  If a
-@var{template} filename is relative, it is first looked for in the build
+@var{template} file name is relative, it is first looked for in the build
 tree, and then in the source tree.  @xref{Configuration Actions}, for
 more details.
 
@@ -14964,7 +14967,7 @@ AC_LIBOBJ([malloc])
 @ovindex U
 @cindex @code{$U}
 When asked for automatic de-ANSI-fication, Automake needs
-@code{LIBOBJS}'ed filenames to have @samp{$U} appended to the base
+@code{LIBOBJS}'ed file names to have @samp{$U} appended to the base
 names.  Libtool requires the definition of @code{LTLIBOBJS}, whose
 suffixes are mapped to @samp{.lo}.  People used to run snippets such as:
 
@@ -15282,7 +15285,7 @@ variables.
 @c of `@dots{}'?  This would help both Autoconf and Autotest.
 
 @item tested programs
-The absolute path and answers to @option{--version} of the tested
+The absolute file name and answers to @option{--version} of the tested
 programs (see @ref{Writing testsuite.at}, @code{AT_TESTED}).
 
 @item configuration log
@@ -15315,14 +15318,14 @@ inherits the package bug report address.
 
 @defmac AT_TESTED (@var{executables})
 @atindex{TESTED}
-Log the path and answer to @option{--version} of each program in
+Log the file name and answer to @option{--version} of each program in
 space-separated list @var{executables}.  Several invocations register
 new executables, in other words, don't fear registering one program
 several times.
 @end defmac
 
-Autotest test suites rely on the @code{PATH} to find the tested program.
-This saves from generating the absolute paths to the various tools, and
+Autotest test suites rely on the @env{PATH} to find the tested program.
+This saves from generating the absolute names of the various tools, and
 makes it possible to test installed programs.  Therefore, knowing what
 programs are being exercised is crucial to understand some problems in
 the test suite itself, or its occasional misuses.  It is a good idea to
@@ -15443,15 +15446,15 @@ different environment.
 
 @cindex @code{AUTOTEST_PATH}
 The variable @code{AUTOTEST_PATH} specifies the testing path to prepend
-to @code{PATH}.  It handles specially relative paths (not starting with
-@samp{/}): they are considered to be relative to the top level of the
+to @env{PATH}.  Relative directory names (not starting with
+@samp{/}) are considered to be relative to the top level of the
 package being built.  All the directories are made absolute, first
 starting from the top level @emph{build} tree, then from the
 @emph{source} tree.  For instance @samp{./testsuite
 AUTOTEST_PATH=tests:bin} for a @file{/src/foo-1.0} source package built
 in @file{/tmp/foo} results in @samp{/tmp/foo/tests:/tmp/foo/bin} and
 then @samp{/src/foo-1.0/tests:/src/foo-1.0/bin} being prepended to
-@code{PATH}.
+@env{PATH}.
 
 @item @var{number}
 @itemx @var{number}-@var{number}
@@ -15850,9 +15853,9 @@ Archive}.
 This solution does not conform to the @acronym{GNU} Coding Standards.
 
 @item
-Note that all the previous solutions hard wire the absolute path to
+Note that all the previous solutions hard wire the absolute name of
 these directories in the executables, which is not a good property.  You
-may try to compute the paths relatively to @code{prefix}, and try to
+may try to compute the names relative to @code{prefix}, and try to
 find @code{prefix} at runtime, this way your package is relocatable.
 Some macros are already available to address this issue: see
 @code{adl_COMPUTE_RELATIVE_PATHS} and
