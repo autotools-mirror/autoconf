@@ -70,7 +70,8 @@ AC_CANONICAL_SYSTEM
 AC_PROG_LIBTOOL
 _EOF
 
-AT_CHECK_AUTOCONF
+# FIXME: Once Libtool really fixed, stop ignoring stderr.
+AT_CHECK_AUTOCONF([], [], [], [ignore])
 
 # Ignore stderr, because ltconfig always loads the cache, which is
 # /dev/null, and some shells choke on this.  For instance with Bash

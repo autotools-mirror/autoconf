@@ -65,10 +65,10 @@ m4_define([AH_OUTPUT], [])
 # TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
 # output as is, with no formatting.
 #
-# Quote for Perl "" strings, which are those used by Autoheader.
+# Quote for Perl '' strings, which are those used by Autoheader.
 m4_define([AH_VERBATIM],
 [AS_LITERAL_IF([$1],
-               [AH_OUTPUT([$1], AS_ESCAPE([[$2]], [\"@$]))])
+               [AH_OUTPUT([$1], AS_ESCAPE([[$2]], [\\'']))])
 ])
 
 
@@ -76,10 +76,10 @@ m4_define([AH_VERBATIM],
 # -------------------------------
 # Same as above, but with bugward compatibility.
 #
-# Quote for Perl "" strings, which are those used by Autoheader.
+# Quote for Perl '' strings, which are those used by Autoheader.
 m4_define([_AH_VERBATIM_OLD],
 [AS_LITERAL_IF([$1],
-               [AH_OUTPUT([$1], _AS_QUOTE([[$2]], [\"@$]))])
+               [AH_OUTPUT([$1], _AS_QUOTE([[$2]], [\\'']))])
 ])
 
 

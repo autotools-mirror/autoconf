@@ -1,5 +1,14 @@
 2002-10-22  Akim Demaille  <akim@epita.fr>
 
+	* tests/foreign.at (Libtool): Don't check autoconf's stderr: there
+	are a few warnings.
+	* lib/autoconf/autoheader.m4 (AH_VERBATIM, _AH_VERBATIM_OLD):
+	Quote for Perl '' strings, not "".
+	* bin/autoheader.in: Invoke autoconf to get '' strings, not ""
+	strings.
+
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (_AS_QUOTE): The warning about quoted
 	characters is a syntax warning now.
 	(_AS_QUOTE): Accept $2 as list of characters to quote.

@@ -167,12 +167,12 @@ $autoconf .= ' --verbose' if $verbose;
 
 # Source what the traces are trying to tell us.
 verbose "$me: running $autoconf to trace from $ARGV[0]";
-xsystem ("$autoconf "
+xsystem ("$autoconf"
 	 # If you change this list, update the
 	 # `Autoheader-preselections' section of autom4te.in.
-	 . " --trace AC_CONFIG_HEADERS:'\$\$config_h ||= \"\$1\";'"
-	 . " --trace AH_OUTPUT:'\$\$verbatim{\"\$1\"} = \"\\\n\$2\";'"
-	 . " --trace AC_DEFINE_TRACE_LITERAL:'\$\$symbol{\"\$1\"} = 1;'"
+	 . ' --trace AC_CONFIG_HEADERS:\'$$config_h ||= \'"\'"\'$1\'"\'"\';\''
+	 . ' --trace AH_OUTPUT:\'$$verbatim{\'"\'"\'$1\'"\'"\'} = \'"\'"\'$2\'"\'"\';\''
+	 . ' --trace AC_DEFINE_TRACE_LITERAL:\'$$symbol{\'"\'"\'$1\'"\'"\'} = 1;\''
 	 . " $ARGV[0] >$tmp/traces.pl");
 
 local (%verbatim, %symbol);
@@ -223,7 +223,7 @@ if ($acconfig_h)
 # Dump the templates from `configure.ac'.
 foreach (sort keys %verbatim)
   {
-    print $out "$verbatim{$_}\n";
+    print $out "\n$verbatim{$_}\n";
   }
 
 # Dump bottom portion of `acconfig.h'.
