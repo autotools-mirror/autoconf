@@ -8,7 +8,7 @@
 
 @set EDITION 1.6
 @set VERSION 1.6
-@set UPDATED September 1993
+@set UPDATED October 1993
 
 @iftex
 @finalout
@@ -1265,7 +1265,7 @@ Make @code{AC_OUTPUT} create the file(s) in the
 whitespace-separated list @var{header-to-create} containing C
 preprocessor @code{#define} statements and replace @samp{@@DEFS@@} in
 generated files with @samp{-DHAVE_CONFIG_H} instead of the value of
-@code{DEFS}.  @xref{Setup}, for more information on @code{AC_OUTPUT}.
+@code{DEFS}.  
 This macro should be called right after @code{AC_INIT}.  The usual name
 for @var{header-to-create} is @file{config.h}.
 
@@ -1306,7 +1306,7 @@ done by @code{AC_INIT}.  Use @code{AC_PREPARE} instead of @code{AC_INIT}
 if you want to do argument parsing yourself; never use both.
 @end defmac
 
-@defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{]})
+@defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{]})
 @maindex OUTPUT
 Create output files (typically one or more @file{Makefile}s) and
 @file{config.status}.  If @code{AC_CONFIG_HEADER} has been called, also
@@ -1319,6 +1319,9 @@ the directory that each file is in if it doesn't exist (but not the
 parents of that directory).  A plausible value for the argument to
 @code{AC_OUTPUT} is @samp{Makefile src/Makefile man/Makefile
 X/Imakefile}.
+
+If you pass @var{extra-cmds}, those commands will be inserted into
+@file{config.status} to be run after all its other processing.
 @end defmac
 
 @defmac AC_REVISION (@var{revision-info})
@@ -1339,7 +1342,7 @@ begins with @samp{#!/bin/sh}, like the normal start of a
 For example, this line in @file{configure.in}:
 
 @example
-ifdef([AC_REVISION],AC_REVISION($Revision$),)dnl
+AC_REVISION($Revision$)dnl
 @end example
 
 @noindent
@@ -2113,8 +2116,11 @@ Standards}, for more information on what to put in Makefiles.
 Some @code{make} variables are predefined by the Autoconf macros.
 @code{AC_SUBST} is called for them automatically (@pxref{Setting
 Variables}), so in your @file{Makefile.in} files you can get their
-values by enclosing their names in @samp{@@} characters
-(@pxref{Makefiles}).  The variables that are defined by the general
+values by enclosing their names in @samp{@@} characters.
+@ifinfo
+@xref{Makefiles}, for more information on @samp{@@} substitutions.
+@end ifinfo
+The variables that are defined by the general
 purpose Autoconf macros are:
 
 @defvar srcdir
@@ -2144,22 +2150,24 @@ If @code{configure} has figured out a value for the installation prefix,
 either by the user supplying one on the command line (@pxref{Running
 configure Scripts}) or with @code{AC_PREFIX}, then it substitutes that
 value in @file{Makefile}s that it creates.  Wherever a @file{Makefile.in}
-contains a line like
+contains lines like
 
 @example
 prefix = /usr/local
+exec_prefix = ${prefix}
 @end example
 
 @noindent
 @code{configure} substitutes the value it figured out.  The word
-@samp{prefix} must not be preceded by any other characters on the line.
+@samp{prefix} or @samp{exec_prefix}
+must not be preceded by any other characters on the line.
 If @code{configure} has not figured out a value for the prefix, the
 value in the @file{Makefile.in} is left alone.
 
 There can be separate installation prefixes for architecture-specific
-files and architecture-independent files @pxref{Running configure
-Scripts}).  @code{configure} substitutes the word @code{exec_prefix} in
-the same way that it does @code{prefix}.
+files (@code{exec_prefix}) and architecture-independent files
+(@code{prefix}).  @xref{Running configure Scripts}, for more information
+on setting them.
 
 Autoconf @code{configure} scripts replace these two variables without
 requiring them to be enclosed in @samp{@@} characters, and only if they
