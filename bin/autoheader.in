@@ -106,7 +106,7 @@ sub parse_args ()
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
-	  'W|warning=s' => \@warning);
+	  'W|warnings=s' => \@warning);
 
   if (! @ARGV)
     {
