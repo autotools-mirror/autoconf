@@ -1,3 +1,9 @@
+2001-06-09  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.maint, GNUmakefile: New, from Jim Meyering.
+	* config/prev-version.txt: New.
+	* config/move-if-change: New, for GNU libc.
+
 2001-06-06  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atgeneral.m4 (AT_INIT): Remove "/bin/sh" after $SHELL.

@@ -93,7 +93,7 @@ nodistpkgdataDATA = autoconf.m4f
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2              BUGS INSTALL.txt              acversion.in              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in              autoscan.in              $(distpkgdataDATA)
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2              BUGS INSTALL.txt              acversion.in              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in              autoscan.in              $(distpkgdataDATA)              GNUmakefile Makefile.maint
 
 
 # Files that should be removed, but which Automake does not know:
@@ -104,6 +104,18 @@ CLEANFILES = autoconf.m4f              $(bin_SCRIPTS)
 MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
 edit = sed 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@PERL\@,$(PERL),g' 	-e 's,@datadir\@,$(pkgdatadir),g' 	-e 's,@bindir\@,$(bindir),g' 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' 	-e 's,@M4\@,$(M4),g' 	-e 's,@AWK\@,$(AWK),g' 	-e 's,@VERSION\@,$(VERSION),g' 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
+
+
+move_if_change = $(srcdir)/config/move_if_change
+prev_version_file = $(srcdir)/config/prev-version.txt
+
+# Uploading betas.
+hosts = alpha
+alpha_host = alpha.gnu.org
+alpha_url_dir = gnu/autoconf
+
+# Files to update automatically.
+wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub 	     $(srcdir)/doc/texinfo.tex 	     $(srcdir)/doc/install.texi $(srcdir)/doc/make-stds.texi
 
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -426,7 +438,8 @@ INSTALL.txt: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $< --no-headers --no-validate --no-split --output=$@
 	if test '$(srcdir)' != '.'; then cp $@ $(srcdir); rm -f $@; fi
 
-maintainer-check:
+maintainer-check: maintainer-check-tests
+maintainer-check-tests:
 	cd tests && make maintainer-check
 
 install-data-hook: INSTALL.txt
@@ -504,13 +517,6 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 	fi
 
 autoconf.m4f: $(m4sources)
-
-wget-update:
-	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
-	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/make-stds.texi -O $(srcdir)/doc/make-stds.texi
-	$(WGET) ftp://ftp.gnu.org/gnu/texinfo/texinfo.tex    -O $(srcdir)/doc/texinfo.tex
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config/config.guess
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config/config.sub
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

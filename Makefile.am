@@ -52,7 +52,8 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              acversion.in \
              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
              autoscan.in \
-             $(distpkgdataDATA)
+             $(distpkgdataDATA) \
+             GNUmakefile Makefile.maint
 
 # Files that should be removed, but which Automake does not know:
 # the frozen files and the scripts.
@@ -90,8 +91,8 @@ MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
 
 ## maintainer-check ##
-
-maintainer-check:
+maintainer-check: maintainer-check-tests
+maintainer-check-tests:
 	cd tests && make maintainer-check
 
 ## ----------------------------------- ##
@@ -203,13 +204,19 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 autoconf.m4f: $(m4sources)
 
 
-## ---------- ##
-## Updating.  ##
-## ---------- ##
+## ---------------------------- ##
+## Customizing Makefile.maint.  ##
+## ---------------------------- ##
 
-wget-update:
-	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
-	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/make-stds.texi -O $(srcdir)/doc/make-stds.texi
-	$(WGET) ftp://ftp.gnu.org/gnu/texinfo/texinfo.tex    -O $(srcdir)/doc/texinfo.tex
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config/config.guess
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config/config.sub
+move_if_change = $(srcdir)/config/move_if_change
+prev_version_file = $(srcdir)/config/prev-version.txt
+
+# Uploading betas.
+hosts = alpha
+alpha_host = alpha.gnu.org
+alpha_url_dir = gnu/autoconf
+
+# Files to update automatically.
+wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
+	     $(srcdir)/doc/texinfo.tex \
+	     $(srcdir)/doc/install.texi $(srcdir)/doc/make-stds.texi
