@@ -332,7 +332,9 @@ case $task in
   ## Trace macros.  ##
   ## -------------- ##
   trace)
-  # A program to trace m4 macros.
+  # trace.m4
+  # --------
+  # Routines to process formatted m4 traces.
   cat >$tmp/trace.m4 <<\EOF
 divert(-1)
   changequote([, ])
@@ -371,107 +373,110 @@ divert(-1)
   define([percent], [_$0([$1], args($@))])
   define([star],    [_$0([$1], args($@))])
 EOF
-  # A program to translate user tracing requests into m4 macros.
+
+  # translate.awk
+  # -------------
+  # Translate user tracing requests into m4 macros.
   cat >$tmp/translate.awk <<\EOF
-function trans (arg, sep)
-{
-  # File name.
-  if (arg == "f")
-    return "$1"
-  # Line number.
-  if (arg == "l")
-    return "$2"
-  # Depth.
-  if (arg == "d")
-    return "$3"
-  # Name (also available as $0).
-  if (arg == "n")
-    return "$4"
-  # Escaped dollar.
-  if (arg == "$")
-    return "$"
+  function trans (arg, sep)
+  {
+    # File name.
+    if (arg == "f")
+      return "$1"
+    # Line number.
+    if (arg == "l")
+      return "$2"
+    # Depth.
+    if (arg == "d")
+      return "$3"
+    # Name (also available as $0).
+    if (arg == "n")
+      return "$4"
+    # Escaped dollar.
+    if (arg == "$")
+      return "$"
 
-  # $@, list of quoted effective arguments.
-  if (arg == "@")
-    return "]at([" (separator ? separator : ",") "], $@)["
-  # $*, list of unquoted effective arguments.
-  if (arg == "*")
-    return "]star([" (separator ? separator : ",") "], $@)["
-  # $%, list of smashed unquoted effective arguments.
-  if (arg == "%")
-    return "]percent([" (separator ? separator : ":") "], $@)["
-}
+    # $@, list of quoted effective arguments.
+    if (arg == "@")
+      return "]at([" (separator ? separator : ",") "], $@)["
+    # $*, list of unquoted effective arguments.
+    if (arg == "*")
+      return "]star([" (separator ? separator : ",") "], $@)["
+    # $%, list of smashed unquoted effective arguments.
+    if (arg == "%")
+      return "]percent([" (separator ? separator : ":") "], $@)["
+  }
 
-function error (message)
-{
-  print message | "cat >&2"
-  exit 1
-}
+  function error (message)
+  {
+    print message | "cat >&2"
+    exit 1
+  }
 
-{
-  # Accumulate the whole input.
-  request = request $0 "\n"
-}
+  {
+    # Accumulate the whole input.
+    request = request $0 "\n"
+  }
 
-END {
-  # Chomp.
-  request = substr (request, 1, length (request) - 1)
-  # The default request is `$f:$l:$n:$*'.
-  colon   = index (request, ":")
-  macro   = colon ? substr (request, 1, colon - 1) : request
-  request = colon ? substr (request, colon + 1)    : "$f:$l:$n:$%"
+  END {
+    # Chomp.
+    request = substr (request, 1, length (request) - 1)
+    # The default request is `$f:$l:$n:$*'.
+    colon   = index (request, ":")
+    macro   = colon ? substr (request, 1, colon - 1) : request
+    request = colon ? substr (request, colon + 1)    : "$f:$l:$n:$%"
 
-  res = ""
+    res = ""
 
-  for (cp = request; cp; cp = substr (cp, 2))
-    {
-      char = substr (cp, 1, 1)
-      if (char == "$")
-	{
-	  if (match (cp, /^\$[0-9]+/))
-	    {
-	      # $n -> $(n + 4)
-	      res = res "$" (substr (cp, 2, RLENGTH - 1) + 4)
-	      cp = substr (cp, RLENGTH)
-	    }
-	  else if (substr (cp, 2, 1) ~ /[fldn$@%*]/)
-	    {
-	      # $x, no separator given.
-	      res = res trans(substr (cp, 2, 1))
-	      cp = substr (cp, 2)
-	    }
-          else if (substr (cp, 2, 1) == "{")
-	    {
-	      # ${sep}x, long separator.
-	      end = index (cp, "}")
-	      if (!end)
-	        error("invalid escape: " cp)
-	      separator = substr (cp, 3, end - 3)
-	      if (substr (cp, end + 1, 1) ~ /[*@%]/)
-                res = res trans(substr (cp, end + 1, 1), separator)
-	      else
-	        error("invalid escape: " cp)
-	      cp = substr (cp, end + 1)
-	    }
-          else if (substr (cp, 3, 1) ~ /[*@%]/)
-	    {
-	      # $sx, short separator `s'.
-	      res = res trans(substr (cp, 3, 1), substr (cp, 2, 1))
-	      cp = substr(cp, 3)
-            }
-	  else
-	    {
-	      error("invalid escape: " substr (cp, 1, 2))
-	    }
-	}
-      else
-	res = res char
-    }
+    for (cp = request; cp; cp = substr (cp, 2))
+      {
+  	char = substr (cp, 1, 1)
+  	if (char == "$")
+  	  {
+  	    if (match (cp, /^\$[0-9]+/))
+  	      {
+  		# $n -> $(n + 4)
+  		res = res "$" (substr (cp, 2, RLENGTH - 1) + 4)
+  		cp = substr (cp, RLENGTH)
+  	      }
+  	    else if (substr (cp, 2, 1) ~ /[fldn$@%*]/)
+  	      {
+  		# $x, no separator given.
+  		res = res trans(substr (cp, 2, 1))
+  		cp = substr (cp, 2)
+  	      }
+  	    else if (substr (cp, 2, 1) == "{")
+  	      {
+  		# ${sep}x, long separator.
+  		end = index (cp, "}")
+  		if (!end)
+  		  error("invalid escape: " cp)
+  		separator = substr (cp, 3, end - 3)
+  		if (substr (cp, end + 1, 1) ~ /[*@%]/)
+  		  res = res trans(substr (cp, end + 1, 1), separator)
+  		else
+  		  error("invalid escape: " cp)
+  		cp = substr (cp, end + 1)
+  	      }
+  	    else if (substr (cp, 3, 1) ~ /[*@%]/)
+  	      {
+  		# $sx, short separator `s'.
+  		res = res trans(substr (cp, 3, 1), substr (cp, 2, 1))
+  		cp = substr(cp, 3)
+  	      }
+  	    else
+  	      {
+  		error("invalid escape: " substr (cp, 1, 2))
+  	      }
+  	  }
+  	else
+  	  res = res char
+      }
 
-  # Produce the definition of AT_<MACRO> = the translation of the request.
-  print "define([AT_" macro "], [[" res "]])"
-  close("cat >&2")
-}
+    # Produce the definition of AT_<MACRO> = the translation of the request.
+    print "define([AT_" macro "], [[" res "]])"
+    close("cat >&2")
+  }
 EOF
   # Extract both the m4 program and the m4 options from TRACES.
   eval set dummy "$traces"
