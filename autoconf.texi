@@ -549,8 +549,8 @@ finds.
 @defmac AC_PROG_CC
 @maindex PROG_CC
 If @code{gcc} is found, set @code{make} variable @code{CC} to @samp{gcc},
-and set shell variable @code{GCC} to 1 for use by macros such as
-@code{AC_GCC_TRADITIONAL}.
+and set shell variable @code{GCC} to @samp{yes} for use by macros such as
+@code{AC_GCC_TRADITIONAL}.  Otherwise set @code{GCC} to be empty.
 @end defmac
 
 @defmac AC_PROG_CPP
@@ -573,7 +573,8 @@ Determine a C++ compiler to use.  Check if the environment variable
 variable @code{CXX} to its value.  Otherwise search for a C++ compiler
 under likely names (@code{c++}, @code{g++}, @code{gcc}, and @code{CC}).
 If none of those checks succeed, as a last resort set @code{CXX} to
-@code{gcc}.
+@code{gcc}.  Also set shell variable @code{GXX} to @samp{yes} if it
+found the GNU C++ compiler, the empty string if not.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
