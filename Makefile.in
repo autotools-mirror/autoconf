@@ -98,8 +98,6 @@ CLEANFILES = autoconf.m4f              $(bin_SCRIPTS)
 
 MAINTAINERCLEANFILES = INSTALL.txt
 
-# The scripts.
-
 editsh = sed 	-e 's,@datadir\@,$(pkgdatadir),g' 	-e 's,@M4\@,$(M4),g' 	-e 's,@AWK\@,$(AWK),g' 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@VERSION\@,$(VERSION),g' 	-e 's,@PACKAGE\@,$(PACKAGE),g' 	-e 's,@bindir\@,$(bindir),g' 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g'
 
 
@@ -432,6 +430,9 @@ install-data-hook: INSTALL.txt
 	  echo " $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f"; \
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
+
+# Follow the version number changes.
+$(bin_SCRIPTS): configure.in
 
 .sh:
 	rm -f $@ $@.tmp

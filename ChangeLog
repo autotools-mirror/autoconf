@@ -1,3 +1,8 @@
+2000-09-04  Akim Demaille  <akim@epita.fr>
+
+	* configure.in: Bump version to 2.49b.
+	* Makefile.am (bin_SCRIPTS): Depend upon configure.in.
+
 2000-08-11  Akim Demaille  <akim@epita.fr>
 
 	Version 2.49a.

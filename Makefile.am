@@ -54,6 +54,10 @@ $(distpkgdataDATA)
 CLEANFILES = autoconf.m4f \
              $(bin_SCRIPTS)
 
+## --------- ##
+## INSTALL.  ##
+## --------- ##
+
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
 # $(INSTALL) is not defined, and the install target fails.
@@ -72,7 +76,12 @@ install-data-hook: INSTALL.txt
 
 MAINTAINERCLEANFILES = INSTALL.txt
 
-# The scripts.
+## ------------- ##
+## The scripts.  ##
+## ------------- ##
+
+# Follow the version number changes.
+$(bin_SCRIPTS): configure.in
 
 editsh = sed \
 	-e 's,@datadir\@,$(pkgdatadir),g' \
@@ -103,6 +112,11 @@ editpl = sed \
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
+
+## ------------------ ##
+## The frozen files.  ##
+## ------------------ ##
+
 .m4.m4f:
 	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
 
@@ -111,6 +125,10 @@ common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
 
 autoconf.m4f: autoconf.m4 $(common)
 
+
+## ---------- ##
+## Updating.  ##
+## ---------- ##
 
 wget-update:
 	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
