@@ -1,5 +1,14 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* bin/autoscan.in: Add 'exec-perl-if-not-run-by-perl'.
+	* bin/autoupdate.in: Ditto.
+	* bin/autoheader.in: Reworded a few comments.
+	* bin/autoconf.in: Reworded help text for a few options.
+	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
+	* bin/autoscan.in, bin/autoupdate.in: Ditto.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* lib/Autom4te/XFile.pm (open): Simplified the error message (we
 	already have $file).  Set output files to binary mode (helps avoid
 	CR issues on DOSish systems).

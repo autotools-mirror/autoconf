@@ -390,7 +390,7 @@ Warning categories include:
 The environment variable \`WARNINGS\' is honored.
 
 Library directories:
-  -I, --include=DIR  look for FILES in DIR.  Several invocations accumulate
+  -I, --include=DIR  look for FILES in DIR (cumulative)
 
 Tracing:
   -t, --trace=MACRO      report the MACRO invocations
@@ -627,7 +627,7 @@ sub handle_output ($$)
     }
   else
     {
-      $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode))
+      $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
     }
   die "$me: cannot create $output: $!\n"
     unless $out;

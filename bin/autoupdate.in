@@ -21,6 +21,9 @@
 # Originally written by David MacKenzie <djm@gnu.ai.mit.edu>.
 # Rewritten by Akim Demaille <akim@freefriends.org>.
 
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
 BEGIN
 {
   my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
@@ -55,8 +58,8 @@ Operation modes:
   -V, --version        print version number, then exit
   -v, --verbose        verbosely report processing
   -d, --debug          don't remove temporary files
-  -I, --include=DIR    look for input files in DIR.  Accumulates
-  -f, --force          consider all the files are obsolete
+  -I, --include=DIR    look for input files in DIR (cumulative)
+  -f, --force          consider all files obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";

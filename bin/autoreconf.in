@@ -36,7 +36,7 @@ Operation modes:
   -V, --version   print version number, then exit
   -v, --verbose   verbosely report processing
   -d, --debug     don't remove temporary files
-  -f, --force     consider all the files are obsolete
+  -f, --force     consider all files obsolete
   -i, --install   copy missing auxiliary files
   -s, --symlink   instead of copying, install symbolic links
 
@@ -44,7 +44,7 @@ The option \`--install' is similar to the option \`--add-missing' in
 other tools.
 
 Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
+  -A, --autoconf-dir=ACDIR  location of Autoconf's macro files (rarely needed)
   -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
   -M, --m4dir=M4DIR         this package's Autoconf extensions
 

@@ -20,6 +20,9 @@
 
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
 BEGIN
 {
   my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
@@ -86,7 +89,7 @@ preliminary `configure.ac' for that package.
   -V, --version       print version number, then exit
   -v, --verbose       verbosely report processing
   -d, --debug         don't remove temporary files
-  -I, --include=DIR   look for input files in DIR.  Accumulates
+  -I, --include=DIR   look for input files in DIR (cumulative)
 
 Report bugs to <bug-autoconf\@gnu.org>.\n";
 

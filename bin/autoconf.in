@@ -34,8 +34,8 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
-  -I, --include=DIR        look for input files in DIR.  Accumulates
-  -f, --force              consider all the files are obsolete
+  -I, --include=DIR        look for input files in DIR (cumulative)
+  -f, --force              consider all files obsolete
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 

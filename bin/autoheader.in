@@ -66,8 +66,8 @@ or else \`configure.in\'.
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don\'t remove temporary files
-  -I, --include=DIR        look for input files in DIR.  Accumulates
-  -f, --force              consider all the files are obsolete
+  -I, --include=DIR        look for input files in DIR (cumulative)
+  -f, --force              consider all files obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
@@ -203,7 +203,7 @@ if ($config_h_top)
       }
   }
 
-# Dump `acconfig.h' but its bottom.
+# Dump `acconfig.h', except for its bottom portion.
 if ($acconfig_h)
   {
     my $in = new Autom4te::XFile ($acconfig_h);
@@ -221,7 +221,7 @@ foreach (sort keys %verbatim)
     print $out "$verbatim{$_}\n";
   }
 
-# Dump `acconfig.h' bottom.
+# Dump bottom portion of `acconfig.h'.
 if ($acconfig_h)
   {
     my $in = new Autom4te::XFile ($acconfig_h);
