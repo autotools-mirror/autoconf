@@ -1,5 +1,10 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: s/@%:@line __oline__/#line __oline__/g. __oline__
+	is not a macro, so there is just no use in avoiding `#'.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): When there were no
 	CONFIG_FILES, we had to expand _AC_OUTPUT_FILES into the KILL
 	diversion, because it is AC_OUTPUT_FILES which undiverted the

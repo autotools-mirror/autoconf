@@ -2438,7 +2438,7 @@ AC_DEFUN(AC_TRY_COMPILER,
 [cat >conftest.$ac_ext <<EOF
 AC_LANG_CASE([FORTRAN77], ,
 [
-@%:@line __oline__ "configure"
+#line __oline__ "configure"
 #include "confdefs.h"
 ])
 [$1]
@@ -2589,7 +2589,7 @@ popdef([AC_Lib_Name])dnl
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-@%:@line __oline__ "configure"
+#line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 EOF
@@ -2631,7 +2631,7 @@ AC_DEFUN(AC_EGREP_HEADER,
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat >conftest.$ac_ext <<EOF
-@%:@line __oline__ "configure"
+#line __oline__ "configure"
 #include "confdefs.h"
 [$2]
 EOF
@@ -2670,8 +2670,8 @@ AC_LANG_CASE([FORTRAN77],
 [$2]
       end],
 [dnl This sometimes fails to find confdefs.h, for some reason.
-dnl @%:@line __oline__ "[$]0"
-@%:@line __oline__ "configure"
+dnl #line __oline__ "[$]0"
+#line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 int
@@ -2716,8 +2716,8 @@ AC_LANG_CASE([FORTRAN77],
       end
 ],
 [dnl This sometimes fails to find confdefs.h, for some reason.
-dnl @%:@line __oline__ "[$]0"
-@%:@line __oline__ "configure"
+dnl #line __oline__ "[$]0"
+#line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 int
@@ -2781,7 +2781,7 @@ fi
 # Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
-@%:@line __oline__ "configure"
+#line __oline__ "configure"
 #include "confdefs.h"
 AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
