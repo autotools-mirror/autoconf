@@ -2427,11 +2427,11 @@ AC_VAR_IF_INDIR([$1],
 ifelse(regexp([$1], [\.]), -1,
        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 AC_CACHE_CHECK([for $1], ac_Member,
-[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
-dnl AGGREGATE foo;
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
+[dnl AGGREGATE foo;
 patsubst([$1], [\.[^.]*]) foo;
 dnl foo.MEMBER;
-foo.patsubst([$1], [.*\.]);,
+foo.patsubst([$1], [.*\.]);])],
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Member) = yes],
@@ -2723,7 +2723,7 @@ rm -fr conftest*])
 ## ------------------------ ##
 
 
-# AC_TRY_LINK_FUNC(func, action-if-found, action-if-not-found)
+# AC_TRY_LINK_FUNC(FUNC, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
 # ------------------------------------------------------------
 # Try to link a program that calls FUNC, handling GCC builtins.  If
 # the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
@@ -2909,22 +2909,30 @@ rm -f conftest*
 ## ------------------ ##
 
 
-# AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
-#		 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------
-# FIXME: Should INCLUDES be defaulted here?
-AC_DEFUN(AC_TRY_COMPILE,
+# AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------------------
+# Try to compile PROGRAM.
+AC_DEFUN([AC_COMPILE_IFELSE],
 [cat >conftest.$ac_ext <<EOF
-AC_LANG_PROGRAM([[$1]], [[$2]])
+$1
 EOF
 if AC_TRY_EVAL(ac_compile); then
-  m4_default([$3], :)
+  m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-  $4
+  $3
 fi
-rm -f conftest*])
+rm -f conftest*[]dnl
+])# AC_COMPILE_IFELSE
+
+
+# AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
+#              [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------
+# FIXME: Should INCLUDES be defaulted here?
+AC_DEFUN([AC_TRY_COMPILE],
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
 
 
@@ -2933,28 +2941,36 @@ rm -f conftest*])
 ## --------------------- ##
 
 
+# AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# -----------------------------------------------------------------
+# Try to link PROGRAM.
+AC_DEFUN([AC_LINK_IFELSE],
+[cat >conftest.$ac_ext <<EOF
+$1
+EOF
+if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
+  m4_default([$2], :)
+else
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
+  $3
+fi
+rm -f conftest*[]dnl
+])# AC_LINK_IFELSE
+
+
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------
 # Should the INCLUDES be defaulted here?
+# Contrarily to AC_LINK_IF, this macro double quote its first two args.
 # FIXME: WARNING: The code to compile was different in the case of
 # Fortran between AC_TRY_COMPILE and AC_TRY_LINK, though they should
 # equivalent as far as I can tell from the semantics and the docs.  In
 # the former, $[2] is used as is, in the latter, it is `call' ed.
 # Remove these FIXME: once truth established.
-AC_DEFUN(AC_TRY_LINK,
-[cat >conftest.$ac_ext <<EOF
-AC_LANG_PROGRAM([[$1]], [[$2]])
-EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
-  m4_default([$3], :)
-else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
-  $4
-fi
-rm -f conftest*
-])# AC_TRY_LINK
+AC_DEFUN([AC_TRY_LINK],
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
 
 # AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
@@ -2963,7 +2979,7 @@ rm -f conftest*
 AU_DEFUN(AC_COMPILE_CHECK,
 [ifval([$1], [AC_CHECKING([for $1])
 ])dnl
-AC_TRY_LINK([$2], [$3], [$4], [$5])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 ])
 
 
@@ -3091,11 +3107,11 @@ $2],
 AC_DEFUN([AC_CHECK_DECL],
 [AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])dnl
 AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
-[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [#ifndef $1
   char *p = (char *) $1;
 #endif
-],
+])],
 AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
                 [$2], [$3])dnl
@@ -3306,11 +3322,11 @@ AC_DEFUN([_AC_CHECK_TYPE_NEW],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
-[AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [if (($1 *) 0)
   return 0;
 if (sizeof ($1))
-  return 0;],
+  return 0;])],
                 AC_VAR_SET(ac_Type, yes),
                 AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Type) = yes],

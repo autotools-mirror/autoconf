@@ -709,9 +709,7 @@ AC_SUBST(LEXLIB)])
 # AC_DECL_YYTEXT
 # --------------
 # Check if lex declares yytext as a char * by default, not a char[].
-# FIXME: Why the heck is there the following line?
-undefine([AC_DECL_YYTEXT])
-AC_DEFUN(AC_DECL_YYTEXT,
+AC_DEFUN([AC_DECL_YYTEXT],
 [AC_REQUIRE_CPP()dnl
 AC_REQUIRE([AC_PROG_LEX])dnl
 AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
@@ -737,7 +735,7 @@ ac_cv_prog_lex_yytext_pointer=no
 echo 'extern char *yytext;' >>$LEX_OUTPUT_ROOT.c
 ac_save_LIBS="$LIBS"
 LIBS="$LIBS $LEXLIB"
-AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, , ac_cv_prog_lex_yytext_pointer=yes)
+AC_LINK_IFELSE([`cat $LEX_OUTPUT_ROOT.c`], ac_cv_prog_lex_yytext_pointer=yes)
 LIBS="$ac_save_LIBS"
 rm -f "${LEX_OUTPUT_ROOT}.c"
 ])
@@ -3373,13 +3371,13 @@ dnl FIXME: banish uname from this macro!
     "SunOS 5"*)
       AC_MSG_CHECKING(whether -R must be followed by a space)
       ac_xsave_LIBS="$LIBS"; LIBS="$LIBS -R$x_libraries"
-      AC_TRY_LINK(, , ac_R_nospace=yes, ac_R_nospace=no)
+      AC_LINK_IFELSE([], ac_R_nospace=yes, ac_R_nospace=no)
       if test $ac_R_nospace = yes; then
 	AC_MSG_RESULT(no)
 	X_LIBS="$X_LIBS -R$x_libraries"
       else
 	LIBS="$ac_xsave_LIBS -R $x_libraries"
-	AC_TRY_LINK(, , ac_R_space=yes, ac_R_space=no)
+	AC_LINK_IFELSE([], ac_R_space=yes, ac_R_space=no)
 	if test $ac_R_space = yes; then
 	  AC_MSG_RESULT(yes)
 	  X_LIBS="$X_LIBS -R $x_libraries"

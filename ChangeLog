@@ -1,3 +1,11 @@
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_LINK_IFELSE, AC_COMPILE_IFELSE): New macros.
+	(AC_TRY_LINK, AC_TRY_COMPILE): Use them.
+	(AC_CHECK_MEMBER, AC_COMPILE_CHECK, AC_CHECK_DECL,
+	_AC_CHECK_TYPE_NEW): Adjust.
+	* acspecific.m4 (AC_DECL_YYTEXT, AC_PATH_XTRA): Adjust.
+
 2000-03-23  Steven G. Johnson <stevenj@alum.mit.edu>
 
 	* acspecific.m4 (AC_F77_NAME_MANGLING): Need to use
