@@ -188,6 +188,7 @@ dnl Installation directory options.
 dnl These are left unexpanded so users can "make install exec_prefix=/foo"
 dnl and all the variables that are supposed to be based on exec_prefix
 dnl by default will actually change.
+dnl Use braces instead of parens because sh, perl, etc. also accept them.
 bindir='${exec_prefix}/bin'
 sbindir='${exec_prefix}/sbin'
 libexecdir='${exec_prefix}/libexec'
@@ -1050,8 +1051,9 @@ changequote(, )dnl
 dnl Allow a site initialization script to override cache values.
 # Ultrix sh set writes to stderr and can't be redirected directly,
 # and sets the high bit in the cache file unless we assign to the vars.
+# HP-UX 10.01 sh prints single quotes around any value that contains spaces.
 (set) 2>&1 |
-  sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1='\2'}/p" \
+sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)='*\([^']*\)'*/\1=\${\1='\2'}/p"\
   >> confcache
 changequote([, ])dnl
 if cmp -s $cache_file confcache; then
@@ -1137,11 +1139,13 @@ dnl ### Printing messages
 
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 define(AC_MSG_CHECKING,
-[echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG])
+[echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG
+echo "configure:__oline__: checking $1" >&AC_FD_CC])
 
 dnl AC_CHECKING(FEATURE-DESCRIPTION)
 define(AC_CHECKING,
-[echo "checking $1" 1>&AC_FD_MSG])
+[echo "checking $1" 1>&AC_FD_MSG
+echo "configure:__oline__: checking $1" >&AC_FD_CC])
 
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
 define(AC_MSG_RESULT,
@@ -1252,7 +1256,10 @@ else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
 ifelse([$6], , , [  ac_prog_rejected=no
 ])dnl
-  for ac_dir in ifelse([$5], , $PATH, [$5]); do
+dnl $ac_dummy forces splitting on constant user-supplied paths.
+dnl bash word splitting is done only on the output of word expansions,
+dnl not every word.  This closes a longstanding sh security hole.
+  for ac_dir in ifelse([$5], , $PATH, [$5$ac_dummy]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
 ifelse([$6], , , dnl
@@ -1313,7 +1320,10 @@ AC_CACHE_VAL(ac_cv_path_$1,
   ;;
   *)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in ifelse([$4], , $PATH, [$4]); do
+dnl $ac_dummy forces splitting on constant user-supplied paths.
+dnl bash word splitting is done only on the output of word expansions,
+dnl not every word.  This closes a longstanding sh security hole.
+  for ac_dir in ifelse([$4], , $PATH, [$4$ac_dummy]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
       ac_cv_path_$1="$ac_dir/$ac_word"
@@ -1396,7 +1406,8 @@ AC_DEFUN(AC_PREFIX_PROGRAM,
 changequote(<<, >>)dnl
 define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
 changequote([, ])dnl
-AC_MSG_CHECKING([for prefix by ])
+dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
+echo $ac_n "checking for prefix by $ac_c" 1>&AC_FD_MSG
 AC_PATH_PROG(AC_VAR_NAME, $1)
 changequote(<<, >>)dnl
   if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
@@ -1414,12 +1425,12 @@ dnl ### Checking for libraries
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
-[AC_MSG_CHECKING([for -l$1])
+[AC_MSG_CHECKING([for $2 in -l$1])
 dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
 dnl may have different results.
-ac_lib_var=`echo $1['_']$2 | tr './+\055' '__p_'`
+ac_lib_var=`echo $1['_']$2 | sed 'y%./+-%__p_%'`
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
@@ -1535,7 +1546,10 @@ EOF
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_CC |
+dnl Prevent m4 from eating character classes:
+changequote(, )dnl
   egrep "$1" >/dev/null 2>&1; then
+changequote([, ])dnl
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1602,7 +1616,7 @@ int t() {
 [$2]
 ; return 0; }
 EOF
-if AC_TRY_EVAL(ac_link); then
+if AC_TRY_EVAL(ac_link) && test -s conftest; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1628,7 +1642,14 @@ if test "$cross_compiling" = yes; then
   AC_MSG_ERROR(can not run test program while cross compiling)],
   [$4])
 else
-cat > conftest.$ac_ext <<EOF
+  AC_TRY_RUN_NATIVE([$1], [$2], [$3])
+fi
+])
+
+dnl Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
+dnl AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
+AC_DEFUN(AC_TRY_RUN_NATIVE,
+[cat > conftest.$ac_ext <<EOF
 [#]line __oline__ "configure"
 #include "confdefs.h"
 ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
@@ -1645,7 +1666,6 @@ ifelse([$3], , , [else
   $3
 ])dnl
 fi
-fi
 rm -fr conftest*])
 
 
@@ -1655,7 +1675,7 @@ dnl ### Checking for header files
 dnl AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_HEADER,
 [dnl Do the transliteration at runtime so arg 1 can be a shell variable.
-ac_safe=`echo "$1" | tr './\055' '___'`
+ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_header_$ac_safe,
 [AC_TRY_CPP([#include <$1>], eval "ac_cv_header_$ac_safe=yes",
@@ -1676,7 +1696,7 @@ AC_DEFUN(AC_CHECK_HEADERS,
 do
 AC_CHECK_HEADER($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdefghijklmnopqrstuvwxyz./\055' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ___'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2], $3)dnl
 done
@@ -1781,8 +1801,8 @@ AC_DEFUN(AC_CHECK_TYPE,
 AC_MSG_CHECKING(for $1)
 AC_CACHE_VAL(ac_cv_type_$1,
 [AC_EGREP_CPP(dnl
-changequote(,)dnl
-$1[^a-zA-Z_0-9] dnl
+changequote(<<<,>>>)dnl
+<<<$1[^a-zA-Z_0-9]>>>dnl
 changequote([,]), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
@@ -2255,13 +2275,18 @@ if test "$no_recursion" != yes; then
     ac_popdir=`pwd`
     cd $ac_config_dir
 
+changequote(, )dnl
+      # A "../" for each directory in /$ac_config_dir.
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+changequote([, ])dnl
+
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
     /*) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_config_dir ;;
     *) # Relative path.
-      ac_sub_srcdir=../$srcdir/$ac_config_dir ;;
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
     esac
 
     # Check for guested configure; otherwise get Cygnus style configure.
@@ -2278,10 +2303,6 @@ if test "$no_recursion" != yes; then
     if test -n "$ac_sub_configure"; then
 
       # Make the cache file name correct relative to the subdirectory.
-changequote(, )dnl
-      # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
       case "$cache_file" in
       /*) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.

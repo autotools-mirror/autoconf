@@ -86,6 +86,12 @@ if test $show_version = yes; then
 fi
 
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
+# Disabled until I figure out whether it's really right.
+#if test "$localdir" != .; then
+  # When running autoheader from autoreconf, this is how we get
+  # subdirectories' acconfig.h files.
+  test -r ./acconfig.h && TEMPLATES="${TEMPLATES} ./acconfig.h"
+#fi
 test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
 
 case $# in
@@ -151,7 +157,12 @@ esac
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-echo "/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */"
+cat <<EOF
+/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
+
+#ifndef _CONFIG_H
+#define _CONFIG_H
+EOF
 
 test -r ${config_h}.top && cat ${config_h}.top
 test -r $localdir/acconfig.h &&
@@ -232,6 +243,8 @@ test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
+
+echo '#endif /* _CONFIG_H */'
 
 status=0
 

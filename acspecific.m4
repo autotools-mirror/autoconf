@@ -119,6 +119,8 @@ else
   GCC=
   test "${CFLAGS+set}" = set || CFLAGS="-g"
 fi
+
+AC_PROG_CC_WORKS
 ])
 
 AC_DEFUN(AC_PROG_CXX,
@@ -165,6 +167,37 @@ dnl
 else
   GXX=
   test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
+fi
+
+AC_PROG_CXX_WORKS
+])
+
+dnl This check is derived from macros from Bruno Haible and Cygnus.
+AC_DEFUN(AC_PROG_CC_WORKS,
+[AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) works])
+AC_LANG_SAVE
+AC_LANG_C
+AC_TRY_RUN_NATIVE([main() { exit(0); }],
+           ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no,
+           AC_TRY_LINK(, , ac_cv_prog_cc_works=yes, ac_cv_prog_cc_works=no))
+AC_LANG_RESTORE
+AC_MSG_RESULT($ac_cv_prog_cc_works)
+if test $ac_cv_prog_cc_works = no; then
+  AC_MSG_ERROR([Installation or configuration problem: C compiler cannot create executables.])
+fi
+])
+
+AC_DEFUN(AC_PROG_CXX_WORKS,
+[AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_RUN_NATIVE([main() { exit(0); }],
+           ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no,
+           AC_TRY_LINK(, , ac_cv_prog_cxx_works=yes, ac_cv_prog_cxx_works=no))
+AC_LANG_RESTORE
+AC_MSG_RESULT($ac_cv_prog_cxx_works)
+if test $ac_cv_prog_cxx_works = no; then
+  AC_MSG_ERROR([Installation or configuration problem: C++ compiler cannot create executables.])
 fi
 ])
 
@@ -241,7 +274,7 @@ fi
 dnl Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
-set dummy ${MAKE-make}; ac_make=`echo "[$]2" | tr './\055' '___'`
+set dummy ${MAKE-make}; ac_make=`echo "[$]2" | sed 'y%./+-%__p_%'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat > conftestmake <<\EOF
 all:
@@ -369,7 +402,8 @@ ac_save_LIBS="$LIBS"
 LIBS="$LIBS $LEXLIB"
 AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, , ac_cv_prog_lex_yytext_pointer=yes)
 LIBS="$ac_save_LIBS"
-rm -f "${LEX_OUTPUT_ROOT}.c"])
+rm -f "${LEX_OUTPUT_ROOT}.c"
+])
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER)
@@ -557,7 +591,7 @@ dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
 dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 AC_DEFUN(AC_CHECK_HEADER_DIRENT,
-[ac_safe=`echo "$1" | tr './\055' '___'`
+[ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
 [AC_TRY_COMPILE([#include <sys/types.h>
@@ -580,7 +614,7 @@ define(AC_CHECK_HEADERS_DIRENT,
 do
 AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr 'abcdedfghijklmnopqrstuvwxyz./\055' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ___'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
@@ -791,10 +825,30 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
-[AC_CHECK_FUNCS(valloc getpagesize)
+[AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap,
 [AC_TRY_RUN([
-/* Thanks to Mike Haertel and Jim Avera for this test. */
+/* Thanks to Mike Haertel and Jim Avera for this test.
+   Here is a matrix of mmap possibilities:
+	mmap private not fixed
+	mmap private fixed at somewhere currently unmapped
+	mmap private fixed at somewhere already mapped
+	mmap shared not fixed
+	mmap shared fixed at somewhere currently unmapped
+	mmap shared fixed at somewhere already mapped
+   For private mappings, we should verify that changes cannot be read()
+   back from the file, nor mmap's back from the file at a different
+   address.  (There have been systems where private was not correctly
+   implemented like the infamous i386 svr4.0, and systems where the
+   VM page cache was not coherent with the filesystem buffer cache
+   like early versions of FreeBSD and possibly contemporary NetBSD.)
+   For shared mappings, we should conversely verify that changes get
+   propogated back to all the places they're supposed to be.
+
+   Grep wants private fixed already mapped.
+   The main things grep needs to know about mmap are:
+   * does it exist and is it safe to write into the mmap'd area
+   * how to use it (BSD variants)  */
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -819,44 +873,74 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap,
 # endif
 #endif
 
-#ifndef HAVE_VALLOC
-# define valloc malloc
-#endif
-
 #ifdef __cplusplus
-extern "C" { void *valloc(unsigned), *malloc(unsigned); }
+extern "C" { void *malloc(unsigned); }
 #else
-char *valloc(), *malloc();
+char *malloc();
 #endif
 
 int
 main()
 {
-  char *buf1, *buf2, *buf3;
-  int i = getpagesize(), j;
-  int i2 = i * 2;
-  int fd;
+	char *data, *data2, *data3;
+	int i, pagesize;
+	int fd;
 
-  buf1 = (char *)valloc(i2);
-  buf2 = (char *)valloc(i);
-  buf3 = (char *)malloc(i2);
-  for (j = 0; j < i2; ++j)
-    *(buf1 + j) = rand();
-  fd = open("conftestmmap", O_CREAT | O_RDWR, 0666);
-  write(fd, buf1, i2);
-  mmap(buf2, i, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd, 0);
-  for (j = 0; j < i; ++j)
-    if (*(buf1 + j) != *(buf2 + j))
-      exit(1);
-  lseek(fd, (long)i, 0);
-  read(fd, buf2, i); /* read into mapped memory -- file should not change */
-  /* (it does in i386 SVR4.0 - Jim Avera, jima@netcom.com) */
-  lseek(fd, (long)0, 0);
-  read(fd, buf3, i2);
-  for (j = 0; j < i2; ++j)
-    if (*(buf1 + j) != *(buf3 + j))
-      exit(1);
-  exit(0);
+	pagesize = getpagesize();
+
+	/*
+	 * First, make a file with some known garbage in it.
+	 */
+	data = malloc(pagesize);
+	if (!data)
+		exit(1);
+	for (i = 0; i < pagesize; ++i)
+		*(data + i) = rand();
+	umask(0);
+	fd = creat("conftestmmap", 0600);
+	if (fd < 0)
+		exit(1);
+	if (write(fd, data, pagesize) != pagesize)
+		exit(1);
+	close(fd);
+
+	/*
+	 * Next, try to mmap the file at a fixed address which
+	 * already has something else allocated at it.  If we can,
+	 * also make sure that we see the same garbage.
+	 */
+	fd = open("conftestmmap", O_RDWR);
+	if (fd < 0)
+		exit(1);
+	data2 = malloc(2 * pagesize);
+	if (!data2)
+		exit(1);
+	data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
+	if (data2 != mmap(data2, pagesize, PROT_READ | PROT_WRITE,
+	    MAP_PRIVATE | MAP_FIXED, fd, 0L))
+		exit(1);
+	for (i = 0; i < pagesize; ++i)
+		if (*(data + i) != *(data2 + i))
+			exit(1);
+
+	/*
+	 * Finally, make sure that changes to the mapped area
+	 * do not percolate back to the file as seen by read().
+	 * (This is a bug on some variants of i386 svr4.0.)
+	 */
+	for (i = 0; i < pagesize; ++i)
+		*(data2 + i) = *(data2 + i) + 1;
+	data3 = malloc(pagesize);
+	if (!data3)
+		exit(1);
+	if (read(fd, data3, pagesize) != pagesize)
+		exit(1);
+	for (i = 0; i < pagesize; ++i)
+		if (*(data + i) != *(data3 + i))
+			exit(1);
+	close(fd);
+	unlink("conftestmmap");
+	exit(0);
 }
 ], ac_cv_func_mmap=yes, ac_cv_func_mmap=no, ac_cv_func_mmap=no)])
 if test $ac_cv_func_mmap = yes; then
@@ -922,6 +1006,28 @@ main()
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID)
+fi
+])
+
+AC_DEFUN(AC_FUNC_SETPGRP,
+[AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
+AC_TRY_RUN([
+/*
+ * If this system has a BSD-style setpgrp, which takes arguments, exit
+ * successfully.
+ */
+main()
+{
+    if (setpgrp(1,1) == -1)
+	exit(0);
+    else
+	exit(1);
+}
+], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes,
+   AC_MSG_ERROR(cannot check setpgrp if cross compiling))
+)
+if test $ac_cv_func_setpgrp_void = yes; then
+  AC_DEFINE(SETPGRP_VOID)
 fi
 ])
 
@@ -1883,11 +1989,11 @@ fi # $ac_x_libraries = NO
 
 dnl Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
-[AC_REQUIRE([AC_ISC_POSIX])dnl
-AC_REQUIRE([AC_PATH_X])dnl
+[AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
-  X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
+  AC_DEFINE(X_DISPLAY_MISSING)
+  X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
 else
   if test -n "$x_includes"; then
     X_CFLAGS="$X_CFLAGS -I$x_includes"
@@ -1896,26 +2002,18 @@ else
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
     X_LIBS="$X_LIBS -L$x_libraries"
+dnl FIXME banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space, so we take a different approach.
-    LD_RUN_PATH="$x_libraries"; export LD_RUN_PATH
+    if test "`(uname) 2>/dev/null`" = SunOS &&
+      uname -r | grep '^5' >/dev/null; then
+      CC="LD_RUN_PATH=$x_libraries $CC"
+    fi
   fi
 
-  # Check for libraries that X11R6 Xt/Xaw programs need.
-
-  ac_save_LDFLAGS="$LDFLAGS"
-  LDFLAGS="$LDFLAGS -L$x_libraries"
-  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
-  # check for ICE first), but we must link in the order -lSM -lICE or
-  # we get undefined symbols.  So assume we have SM if we have ICE.
-  # These have to be linked with before -lX11, unlike the other
-  # libraries we check for below, so use a different variable.
-  #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
-  AC_CHECK_LIB(ICE, IceConnectionNumber,
-    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
-  LDFLAGS="$ac_save_LDFLAGS"
-
   # Check for system-dependent libraries X programs must link with.
+  # Do this before checking for the system-independent R6 libraries
+  # (-lICE), since we may need -lsocket or whatever for X linking.
 
   if test "$ISC" = yes; then
     X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
@@ -1931,17 +2029,54 @@ else
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.
-    # Not sure which flavor of 386 UNIX this is, but it seems harmless to
-    # check for it.
-    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
+    # chad@anasazi.com says the Pyramis MIS-ES running DC/OSx (SVR4)
+    # needs -lnsl.
+    # The nsl library prevents programs from opening the X display
+    # on Irix 5.2, according to dickey@clark.net.
+    AC_CHECK_FUNC(gethostbyname)
+    if test $ac_cv_func_gethostbyname = no; then
+      AC_CHECK_LIB(nsl, gethostbyname, X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl")
+    fi
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
-    # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
-    # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
-    if test "`(uname) 2>/dev/null`" != IRIX; then
-      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
+    # socket/setsockopt and other routines are undefined under SCO ODT
+    # 2.0.  But -lsocket is broken on IRIX 5.2 (and is not necessary
+    # on later versions), says simon@lia.di.epfl.ch: it contains
+    # gethostby* variants that don't use the nameserver (or something).
+    # -lsocket must be given before -lnsl if both are needed.
+    # We assume that if connect needs -lnsl, so does gethostbyname.
+    AC_CHECK_FUNC(connect)
+    if test $ac_cv_func_connect = no; then
+      AC_CHECK_LIB(socket, connect, X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS", ,
+	$X_EXTRA_LIBS)
+    fi
+
+    # gomez@mi.uni-erlangen.de says -lposix is necessary on A/UX.
+    AC_CHECK_FUNC(remove)
+    if test $ac_cv_func_remove = no; then
+      AC_CHECK_LIB(posix, remove, X_EXTRA_LIBS="$X_EXTRA_LIBS -lposix")
+    fi
+
+    # BSDI BSD/OS 2.1 needs -lipc for XOpenDisplay.
+    AC_CHECK_FUNC(shmat)
+    if test $ac_cv_func_shmat = no; then
+      AC_CHECK_LIB(ipc, shmat, X_EXTRA_LIBS="$X_EXTRA_LIBS -lipc")
     fi
   fi
+
+  # Check for libraries that X11R6 Xt/Xaw programs need.
+  ac_save_LDFLAGS="$LDFLAGS"
+  LDFLAGS="$LDFLAGS -L$x_libraries"
+  # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
+  # check for ICE first), but we must link in the order -lSM -lICE or
+  # we get undefined symbols.  So assume we have SM if we have ICE.
+  # These have to be linked with before -lX11, unlike the other
+  # libraries we check for below, so use a different variable.
+  #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
+  AC_CHECK_LIB(ICE, IceConnectionNumber,
+    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
+  LDFLAGS="$ac_save_LDFLAGS"
+
 fi
 AC_SUBST(X_CFLAGS)dnl
 AC_SUBST(X_PRE_LIBS)dnl
@@ -1982,7 +2117,6 @@ fi
 AC_DEFUN(AC_ISC_POSIX,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&

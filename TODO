@@ -374,3 +374,41 @@ From:    Julian Onions <j.onions@nexor.co.uk>
 
 ------------------------------------------------------------------------------
 
+It would be nice if the configure script would handle an option such as
+--x-libraries="/usr/openwin/lib /usr/dt/lib".
+
+Rick Boykin <rboykin@cscsun3.larc.nasa.gov>
+
+------------------------------------------------------------------------------
+
+Look into quoting of cache variable values reported by Paul Eggert.
+
+------------------------------------------------------------------------------
+
+Timezone calculations checks.
+
+------------------------------------------------------------------------------
+
+Support different default filesystem layouts, e.g. SVR4, Linux.
+Of course, this can be done locally with config.site.
+
+------------------------------------------------------------------------------
+
+Mention automake, libtool, etc. in the autoconf manual.
+
+------------------------------------------------------------------------------
+
+configure-time pasting together of output files from multiple pieces.
+
+------------------------------------------------------------------------------
+
+I wonder if it is possible to get the path for X11's app-defaults
+directory by autoconf. Moreover, I'd like to have a general way of
+accessing imake variables by autoconf, something like
+
+AC_DEFINE(WINE_APP_DEFAULTS, AC_IMAKE_VAR(XAPPLOADDIR))
+
+Slaven Rezic <eserte@cabulja.herceg.de>
+
+------------------------------------------------------------------------------
+

@@ -1,10 +1,58 @@
 Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* Test release 2.10.1.
+
+	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): New macros
+	adapted from Jim Meyering and automake.
+	(AC_PROG_CC, AC_PROG_CXX): Use them.
+	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Split out of AC_TRY_RUN.
+	(AC_TRY_LINK): Check that the executable exists after linking.
+	(AC_EGREP_CPP): Disable m4 quote chars around egrep, so [] in regexps
+	isn't eaten.
+
+	* autoheader.sh: Add multiple-inclusion protection for config.h.
+	
+	* acgeneral.m4 (AC_PREFIX_PROGRAM): Pretty up the output.
+	(AC_CHECK_LIB): Include the function being tested in the message.
+	(AC_CHECK_PROG, AC_PATH_PROG): Add a dummy variable to force word
+	splitting on the path.
+
+	* acspecific.m4 (AC_FUNC_MMAP): Remove check and uses of valloc.
+	It turns out it's a separate issue, for GNU grep.
+	Replace the test program with a new version from Mike Haertel.
+
+	* acgeneral.m4 (AC_CACHE_SAVE): Accept the HP-UX sh 'set' output
+	format.  From Marcus Daniels <marcus@sysc.pdx.edu>.
+	
+	* acgeneral.m4 (AC_MSG_CHECKING, AC_CHECKING): Write a message to
+	config.log also.  From "T.E.Dickey" <dickey@clark.net>.
+	(AC_CHECK_LIB, AC_CHECK_HEADER, AC_CHECK_HEADERS): Replace use of
+	tr with sed, to avoid a bug in the AIX 4.1.3.0 tr reported by
+	Alain KNAFF <Alain.Knaff@imag.fr>.  He says that version of
+	tr interprets \055 magically like an unquoted -.
+	* acspecific.m4 (AC_PROG_MAKE_SET, AC_CHECK_HEADER_DIRENT,
+	AC_CHECK_HEADERS_DIRENT): Ditto.
+	
+	* acspecific.m4 (AC_FUNC_SETPGRP): New macro.
+        * acconfig.h (SETPGRP_VOID): New entry.
+	From "T.E.Dickey" <dickey@clark.net>.
+
         * acspecific.m4 (AC_PATH_X_DIRECT): Try /lib/usr/lib/X11 for A/UX.
         From Guillermo Gomez <gomez@mi.uni-erlangen.de>.
-	(AC_PATH_XTRA): Replace -R with LD_RUN_PATH in the
-	Solaris kludge.  From Paul Eggert <eggert@twinsun.com>.
-
+	(AC_PATH_XTRA): Replace -R with adding LD_RUN_PATH to CC in the
+	Solaris kludge.  Suggested by Paul Eggert <eggert@twinsun.com>.
+	Define X_DISPLAY_MISSING with AC_DEFINE, and
+	if not using X, clear out the X variables.
+	Check system-dependent libs before system-independent ones.
+	Check for more system-dependent libs.
+	From Karl Berry.
+	Use AC_CHECK_FUNC in the system-dependent libs tests.
+	From Larry Schwimmer <rosebud@cyclone.stanford.edu>.
+	Wart removal: Don't require AC_ISC_POSIX.
+	(AC_ISC_POSIX): Don't blather about being called before AC_TRY_LINK,
+	which is now called in AC_PROG_CC.  Don't encourage using this macro.
+        * acconfig.h (X_DISPLAY_MISSING): Add entry.
+	
 Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Search for /usr/X11 before
@@ -12,6 +60,7 @@ Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_TYPE) [STDC_HEADERS]: Check in stddef.h, too.
 	From "Glenn P. Davis" <davis@unidata.ucar.edu>.
+	Don't require the second char after the type name to be a space.
 	(AC_TRY_RUN): Remove the test files before executing the "failure"
 	case code.
 
@@ -22,9 +71,15 @@ Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	(AC_PROG_CC, AC_PROG_CXX): Check whether -g works even if
 	C[XX]FLAGS is set.  From T.E.Dickey <dickey@clark.net>
 	(AC_FUNC_FNMATCH): New macro.
+	* acconfig.h (HAVE_FNMATCH): New entry.
 	
 	* acgeneral.m4 (AC_REPLACE_FUNCS): Call AC_CHECK_FUNCS to do the work.
 	
+Tue Oct 29 13:03:44 1996  Doug Evans  <dje@canuck.cygnus.com>
+
+	* acgeneral.m4 (AC_OUTPUT_SUBDIRS): Fix thinko in computation of
+	ac_sub_srcdir in relative but not "." case.
+
 Thu Oct 10 22:29:37 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CANONICAL_HOST, AC_CANONICAL_TARGET,
