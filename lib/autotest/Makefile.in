@@ -80,25 +80,78 @@ install_sh = @install_sh@
 lispdir = @lispdir@
 
 autotestlibdir = $(pkgdatadir)/autotest
-
 dist_autotestlib_DATA = autotest.m4 general.m4
+nodist_autotestlib_DATA = autotest.m4f
+CLEANFILES = $(nodist_autotestlib_DATA)
 
 TAGS_FILES = $(dist_autotestlib_DATA)
 
 ETAGS_ARGS = --lang=none \
   --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
 
+
+SUFFIXES = .m4 .m4f
+
+AUTOM4TE = $(top_builddir)/tests/autom4te
+
+AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
+
+# Factor the dependencies between all the frozen files.
+# Some day we should explain to Automake how to use autom4te to compute
+# the dependencies...
+src_libdir = $(top_srcdir)/lib
+build_libdir = $(top_builddir)/lib
+
+m4f_dependencies = $(AUTOM4TE) $(AUTOM4TE_CFG)
+
+m4sugar_m4f_dependencies = \
+	$(m4f_dependencies)			\
+	$(src_libdir)/m4sugar/m4sugar.m4	\
+	$(build_libdir)/m4sugar/version.m4
+
+
+m4sh_m4f_dependencies = \
+	$(m4sugar_m4f_dependencies)		\
+	$(src_libdir)/m4sugar/m4sh.m4
+
+
+autotest_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autotest/autotest.m4	\
+	$(src_libdir)/autotest/general.m4
+
+
+autoconf_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autoconf/general.m4	\
+	$(src_libdir)/autoconf/autoheader.m4	\
+	$(src_libdir)/autoconf/autoupdate.m4	\
+	$(src_libdir)/autoconf/autotest.m4	\
+	$(src_libdir)/autoconf/status.m4	\
+	$(src_libdir)/autoconf/oldnames.m4	\
+	$(src_libdir)/autoconf/specific.m4	\
+	$(src_libdir)/autoconf/lang.m4		\
+	$(src_libdir)/autoconf/c.m4		\
+	$(src_libdir)/autoconf/fortran.m4	\
+	$(src_libdir)/autoconf/functions.m4	\
+	$(src_libdir)/autoconf/headers.m4	\
+	$(src_libdir)/autoconf/types.m4		\
+	$(src_libdir)/autoconf/libs.m4		\
+	$(src_libdir)/autoconf/programs.m4	\
+	$(src_libdir)/autoconf/autoconf.m4
+
 subdir = lib/autotest
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-DATA = $(dist_autotestlib_DATA)
+DATA = $(dist_autotestlib_DATA) $(nodist_autotestlib_DATA)
 
 DIST_COMMON = $(dist_autotestlib_DATA) Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+.SUFFIXES: .m4 .m4f
+$(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../freeze.mk $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/autotest/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -118,6 +171,24 @@ install-dist_autotestlibDATA: $(dist_autotestlib_DATA)
 uninstall-dist_autotestlibDATA:
 	@$(NORMAL_UNINSTALL)
 	@list='$(dist_autotestlib_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(autotestlibdir)/$$f"; \
+	  rm -f $(DESTDIR)$(autotestlibdir)/$$f; \
+	done
+nodist_autotestlibDATA_INSTALL = $(INSTALL_DATA)
+install-nodist_autotestlibDATA: $(nodist_autotestlib_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir)
+	@list='$(nodist_autotestlib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(nodist_autotestlibDATA_INSTALL) $$d$$p $(DESTDIR)$(autotestlibdir)/$$f"; \
+	  $(nodist_autotestlibDATA_INSTALL) $$d$$p $(DESTDIR)$(autotestlibdir)/$$f; \
+	done
+
+uninstall-nodist_autotestlibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nodist_autotestlib_DATA)'; for p in $$list; do \
 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
 	  echo " rm -f $(DESTDIR)$(autotestlibdir)/$$f"; \
 	  rm -f $(DESTDIR)$(autotestlibdir)/$$f; \
@@ -188,7 +259,7 @@ check: check-am
 all-am: Makefile $(DATA)
 
 installdirs:
-	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir)
+	$(mkinstalldirs) $(DESTDIR)$(autotestlibdir) $(DESTDIR)$(autotestlibdir)
 
 install: install-am
 install-exec: install-exec-am
@@ -207,6 +278,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
@@ -230,7 +302,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_autotestlibDATA
+install-data-am: install-dist_autotestlibDATA \
+	install-nodist_autotestlibDATA
 
 install-exec-am:
 
@@ -248,17 +321,19 @@ mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-generic
 
-uninstall-am: uninstall-dist_autotestlibDATA uninstall-info-am
+uninstall-am: uninstall-dist_autotestlibDATA uninstall-info-am \
+	uninstall-nodist_autotestlibDATA
 
 .PHONY: GTAGS all all-am check check-am check-local clean clean-generic \
 	distclean distclean-generic distclean-tags distdir dvi dvi-am \
 	info info-am install install-am install-data install-data-am \
 	install-dist_autotestlibDATA install-exec install-exec-am \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-info install-info-am install-man \
+	install-nodist_autotestlibDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic tags \
 	uninstall uninstall-am uninstall-dist_autotestlibDATA \
-	uninstall-info-am
+	uninstall-info-am uninstall-nodist_autotestlibDATA
 
 
 check-local:
@@ -271,6 +346,26 @@ check-local:
 	else \
 	  rm -f eof.log; \
 	fi
+
+autotest.m4f: $(autotests_m4f_dependencies)
+$(AUTOM4TE):
+	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
+$(AUTOM4TE_CFG):
+	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+
+# When processing the file with diversion disabled, there must be no
+# output but comments and empty lines.
+# If freezing produces output, something went wrong: a bad `divert',
+# or an improper paren etc.
+# It may happen that the output does not end with a end of line, hence
+# force an end of line when reporting errors.
+.m4.m4f:
+	$(AUTOM4TE)				\
+		--language=$*			\
+		--freeze			\
+		--include=$(srcdir)/..		\
+		--include=..			\
+		--output=$@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

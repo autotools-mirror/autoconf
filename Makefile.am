@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@
 
 AUTOMAKE_OPTIONS = check-news 1.5b dist-bzip2 readme-alpha
 
-SUBDIRS = . lib bin config man doc tests
+# bin/ and tests/ must be run first, as they build the tests executables
+# (tests/autom4te etc.), that we happen to use here.
+SUBDIRS = bin tests . lib config man doc
 
 ACLOCAL_AMFLAGS = -I config
 

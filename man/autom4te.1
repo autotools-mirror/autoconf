@@ -6,8 +6,8 @@ autom4te \- Generate files and scripts thanks to M4
 .B autom4te
 [\fIOPTION\fR] ... [\fIFILES\fR]
 .SH DESCRIPTION
-Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
-consists of the traces only, otherwise output the expansion of the FILES.
+Run GNU M4 on the FILES, avoiding useless runs.  Output the traces if tracing,
+the frozen file if freezing, otherwise the expansion of the FILES.
 .PP
 If some of the FILES are named `FILE.m4f' they are considered to be M4
 frozen files of all the previous files (which are therefore not loaded).
@@ -96,6 +96,10 @@ report the MACRO invocations
 .TP
 \fB\-p\fR, \fB\-\-preselect\fR=\fIMACRO\fR
 prepare to trace MACRO in a future run
+.SS "Freezing:"
+.TP
+\fB\-F\fR, \fB\-\-freeze\fR
+produce an M4 frozen state file for FILES
 .SH AUTHOR
 Written by Akim Demaille.
 .PP

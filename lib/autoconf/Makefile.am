@@ -26,7 +26,7 @@ dist_autoconflib_DATA = \
         functions.m4 headers.m4 types.m4 libs.m4 programs.m4
 
 nodist_autoconflib_DATA = autoconf.m4f
-
+CLEANFILES = $(nodist_autoconflib_DATA)
 
 
 ## --------------- ##
@@ -62,71 +62,5 @@ check-local:
 ## The frozen files.  ##
 ## ------------------ ##
 
-SUFFIXES = .m4 .m4f
-M4_INCLUDES =  --include $(srcdir) \
-               --include $(top_builddir)/lib \
-               --include $(top_srcdir)/lib
-
-# When processing the file with diversion disabled, there must be no
-# output but comments and empty lines.
-# If freezing produces output, something went wrong: a bad `divert',
-# or an improper paren etc.
-# It may happen that the output does not end with a end of line, hence
-# force an end of line when reporting errors.
-.m4.m4f:
-	$(M4) $(M4_INCLUDES) --fatal-warning --define divert \
-	      $*.m4 2>error.log | \
-	  sed 's/#.*//;/^$$/d' >process.log
-	if grep . error.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $*.m4 produced errors:" >&2; \
-	  sed "s,^,$*.m4: ," <error.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f error.log; \
-	fi
-	if grep . process.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $*.m4 produced output:" >&2; \
-	  sed "s,^,$*.m4: ," <process.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f process.log; \
-	fi
-	$(M4) $(M4_INCLUDES) --fatal-warning --freeze-state=$*.m4f \
-	      $*.m4 >freeze.log
-	if grep . freeze.log >/dev/null 2>&1; then \
-	  echo "ERROR: Freezing $(libdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$*.m4: ," <freeze.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f freeze.log; \
-	fi
-
-
-# Some day we should explain to Automake how to use autom4te to compute
-# the dependencies...
-srclibdir = $(top_srcdir)/lib
-autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
-              ../m4sugar/version.m4	\
-              $(srclibdir)/m4sugar/m4sh.m4	\
-              $(srclibdir)/autoconf/autoconf.m4	\
-              $(srclibdir)/autoconf/general.m4	\
-              $(srclibdir)/autoconf/autoheader.m4 \
-              $(srclibdir)/autoconf/autoupdate.m4 \
-              $(srclibdir)/autoconf/autotest.m4 \
-              $(srclibdir)/autoconf/status.m4	\
-              $(srclibdir)/autoconf/oldnames.m4	\
-              $(srclibdir)/autoconf/specific.m4	\
-              $(srclibdir)/autoconf/lang.m4	\
-              $(srclibdir)/autoconf/c.m4	\
-              $(srclibdir)/autoconf/fortran.m4	\
-              $(srclibdir)/autoconf/functions.m4 \
-              $(srclibdir)/autoconf/headers.m4	\
-              $(srclibdir)/autoconf/types.m4	\
-              $(srclibdir)/autoconf/libs.m4	\
-              $(srclibdir)/autoconf/programs.m4
-
-# Files that should be removed, but which Automake does not know.
-CLEANFILES = autoconf.m4f
+autoconf.m4f: $(autoconf_m4f_dependencies)
+include ../freeze.mk

@@ -81,7 +81,9 @@ lispdir = @lispdir@
 
 AUTOMAKE_OPTIONS = check-news 1.5b dist-bzip2 readme-alpha
 
-SUBDIRS = . lib bin config man doc tests
+# bin/ and tests/ must be run first, as they build the tests executables
+# (tests/autom4te etc.), that we happen to use here.
+SUBDIRS = bin tests . lib config man doc
 
 ACLOCAL_AMFLAGS = -I config
 

@@ -81,13 +81,64 @@ lispdir = @lispdir@
 
 m4sugarlibdir = $(pkgdatadir)/m4sugar
 dist_m4sugarlib_DATA = m4sugar.m4 m4sh.m4
-nodist_m4sugarlib_DATA = version.m4
-DISTCLEANFILES = $(nodist_m4sugarlib_DATA)
+nodist_m4sugarlib_DATA = version.m4 m4sugar.m4f m4sh.m4f
+CLEANFILES = $(nodist_m4sugarlib_DATA)
 
 TAGS_FILES = $(dist_m4sugarlib_DATA)
 
 ETAGS_ARGS = --lang=none \
   --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
+
+
+SUFFIXES = .m4 .m4f
+
+AUTOM4TE = $(top_builddir)/tests/autom4te
+
+AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
+
+# Factor the dependencies between all the frozen files.
+# Some day we should explain to Automake how to use autom4te to compute
+# the dependencies...
+src_libdir = $(top_srcdir)/lib
+build_libdir = $(top_builddir)/lib
+
+m4f_dependencies = $(AUTOM4TE) $(AUTOM4TE_CFG)
+
+m4sugar_m4f_dependencies = \
+	$(m4f_dependencies)			\
+	$(src_libdir)/m4sugar/m4sugar.m4	\
+	$(build_libdir)/m4sugar/version.m4
+
+
+m4sh_m4f_dependencies = \
+	$(m4sugar_m4f_dependencies)		\
+	$(src_libdir)/m4sugar/m4sh.m4
+
+
+autotest_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autotest/autotest.m4	\
+	$(src_libdir)/autotest/general.m4
+
+
+autoconf_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autoconf/general.m4	\
+	$(src_libdir)/autoconf/autoheader.m4	\
+	$(src_libdir)/autoconf/autoupdate.m4	\
+	$(src_libdir)/autoconf/autotest.m4	\
+	$(src_libdir)/autoconf/status.m4	\
+	$(src_libdir)/autoconf/oldnames.m4	\
+	$(src_libdir)/autoconf/specific.m4	\
+	$(src_libdir)/autoconf/lang.m4		\
+	$(src_libdir)/autoconf/c.m4		\
+	$(src_libdir)/autoconf/fortran.m4	\
+	$(src_libdir)/autoconf/functions.m4	\
+	$(src_libdir)/autoconf/headers.m4	\
+	$(src_libdir)/autoconf/types.m4		\
+	$(src_libdir)/autoconf/libs.m4		\
+	$(src_libdir)/autoconf/programs.m4	\
+	$(src_libdir)/autoconf/autoconf.m4
 
 subdir = lib/m4sugar
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -99,7 +150,8 @@ DIST_COMMON = $(dist_m4sugarlib_DATA) Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+.SUFFIXES: .m4 .m4f
+$(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../freeze.mk $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/m4sugar/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -226,10 +278,10 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -288,7 +340,8 @@ version.m4: $(top_srcdir)/configure.ac
 	{					\
 	  echo '# This file is part of -*- Autoconf -*-.'; \
 	  echo '# Version of Autoconf.'; \
-	  echo '# Copyright 1999, 2000, 2001 Free Software Foundation, Inc.'; \
+	  echo '# Copyright (C) 1999, 2000, 2001, 2002'; \
+	  echo '# Free Software Foundation, Inc.'; \
 	  echo ;\
 	  echo 'm4_define([m4_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
 	  echo 'm4_define([m4_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
@@ -307,6 +360,27 @@ check-local:
 	else \
 	  rm -f eof.log; \
 	fi
+
+m4sugar.m4f: $(m4sugar_m4f_dependencies)
+m4sh.m4f: $(m4sh_m4f_dependencies)
+$(AUTOM4TE):
+	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
+$(AUTOM4TE_CFG):
+	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+
+# When processing the file with diversion disabled, there must be no
+# output but comments and empty lines.
+# If freezing produces output, something went wrong: a bad `divert',
+# or an improper paren etc.
+# It may happen that the output does not end with a end of line, hence
+# force an end of line when reporting errors.
+.m4.m4f:
+	$(AUTOM4TE)				\
+		--language=$*			\
+		--freeze			\
+		--include=$(srcdir)/..		\
+		--include=..			\
+		--output=$@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

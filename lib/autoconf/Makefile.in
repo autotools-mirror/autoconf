@@ -89,6 +89,7 @@ dist_autoconflib_DATA = \
 
 
 nodist_autoconflib_DATA = autoconf.m4f
+CLEANFILES = $(nodist_autoconflib_DATA)
 
 TAGS_FILES = $(dist_autoconflib_DATA)
 
@@ -97,17 +98,55 @@ ETAGS_ARGS = --lang=none \
 
 
 SUFFIXES = .m4 .m4f
-M4_INCLUDES = --include $(srcdir) \
-               --include $(top_builddir)/lib \
-               --include $(top_srcdir)/lib
 
+AUTOM4TE = $(top_builddir)/tests/autom4te
 
+AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
+
+# Factor the dependencies between all the frozen files.
 # Some day we should explain to Automake how to use autom4te to compute
 # the dependencies...
-srclibdir = $(top_srcdir)/lib
+src_libdir = $(top_srcdir)/lib
+build_libdir = $(top_builddir)/lib
 
-# Files that should be removed, but which Automake does not know.
-CLEANFILES = autoconf.m4f
+m4f_dependencies = $(AUTOM4TE) $(AUTOM4TE_CFG)
+
+m4sugar_m4f_dependencies = \
+	$(m4f_dependencies)			\
+	$(src_libdir)/m4sugar/m4sugar.m4	\
+	$(build_libdir)/m4sugar/version.m4
+
+
+m4sh_m4f_dependencies = \
+	$(m4sugar_m4f_dependencies)		\
+	$(src_libdir)/m4sugar/m4sh.m4
+
+
+autotest_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autotest/autotest.m4	\
+	$(src_libdir)/autotest/general.m4
+
+
+autoconf_m4f_dependencies = \
+	$(m4sh_m4f_dependencies)		\
+	$(src_libdir)/autoconf/general.m4	\
+	$(src_libdir)/autoconf/autoheader.m4	\
+	$(src_libdir)/autoconf/autoupdate.m4	\
+	$(src_libdir)/autoconf/autotest.m4	\
+	$(src_libdir)/autoconf/status.m4	\
+	$(src_libdir)/autoconf/oldnames.m4	\
+	$(src_libdir)/autoconf/specific.m4	\
+	$(src_libdir)/autoconf/lang.m4		\
+	$(src_libdir)/autoconf/c.m4		\
+	$(src_libdir)/autoconf/fortran.m4	\
+	$(src_libdir)/autoconf/functions.m4	\
+	$(src_libdir)/autoconf/headers.m4	\
+	$(src_libdir)/autoconf/types.m4		\
+	$(src_libdir)/autoconf/libs.m4		\
+	$(src_libdir)/autoconf/programs.m4	\
+	$(src_libdir)/autoconf/autoconf.m4
+
 subdir = lib/autoconf
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -119,7 +158,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .m4 .m4f
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../freeze.mk $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  lib/autoconf/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -315,6 +354,12 @@ check-local:
 	  rm -f eof.log; \
 	fi
 
+autoconf.m4f: $(autoconf_m4f_dependencies)
+$(AUTOM4TE):
+	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
+$(AUTOM4TE_CFG):
+	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+
 # When processing the file with diversion disabled, there must be no
 # output but comments and empty lines.
 # If freezing produces output, something went wrong: a bad `divert',
@@ -322,54 +367,12 @@ check-local:
 # It may happen that the output does not end with a end of line, hence
 # force an end of line when reporting errors.
 .m4.m4f:
-	$(M4) $(M4_INCLUDES) --fatal-warning --define divert \
-	      $*.m4 2>error.log | \
-	  sed 's/#.*//;/^$$/d' >process.log
-	if grep . error.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $*.m4 produced errors:" >&2; \
-	  sed "s,^,$*.m4: ," <error.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f error.log; \
-	fi
-	if grep . process.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $*.m4 produced output:" >&2; \
-	  sed "s,^,$*.m4: ," <process.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f process.log; \
-	fi
-	$(M4) $(M4_INCLUDES) --fatal-warning --freeze-state=$*.m4f \
-	      $*.m4 >freeze.log
-	if grep . freeze.log >/dev/null 2>&1; then \
-	  echo "ERROR: Freezing $(libdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$*.m4: ," <freeze.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f freeze.log; \
-	fi
-autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
-              ../m4sugar/version.m4	\
-              $(srclibdir)/m4sugar/m4sh.m4	\
-              $(srclibdir)/autoconf/autoconf.m4	\
-              $(srclibdir)/autoconf/general.m4	\
-              $(srclibdir)/autoconf/autoheader.m4 \
-              $(srclibdir)/autoconf/autoupdate.m4 \
-              $(srclibdir)/autoconf/autotest.m4 \
-              $(srclibdir)/autoconf/status.m4	\
-              $(srclibdir)/autoconf/oldnames.m4	\
-              $(srclibdir)/autoconf/specific.m4	\
-              $(srclibdir)/autoconf/lang.m4	\
-              $(srclibdir)/autoconf/c.m4	\
-              $(srclibdir)/autoconf/fortran.m4	\
-              $(srclibdir)/autoconf/functions.m4 \
-              $(srclibdir)/autoconf/headers.m4	\
-              $(srclibdir)/autoconf/types.m4	\
-              $(srclibdir)/autoconf/libs.m4	\
-              $(srclibdir)/autoconf/programs.m4
+	$(AUTOM4TE)				\
+		--language=$*			\
+		--freeze			\
+		--include=$(srcdir)/..		\
+		--include=..			\
+		--output=$@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
