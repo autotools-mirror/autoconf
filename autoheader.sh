@@ -1,4 +1,4 @@
-#! /bin/sh
+#! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
 # Copyright (C) 1992, 1993, 1994, 1996 Free Software Foundation, Inc.
 
