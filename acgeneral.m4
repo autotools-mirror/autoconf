@@ -3651,14 +3651,10 @@ Usage: $[0] [[OPTIONS]] [[FILE]]...
   -V, --version    print version number, then exit
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions
-m4_ifset([AC_LIST_FILES],
-[[  --file=FILE[:TEMPLATE]
-                   instantiate the configuration file FILE
-]])dnl
-m4_ifset([AC_LIST_HEADERS],
-[[  --header=FILE[:TEMPLATE]
-                   instantiate the configuration header FILE
-]])dnl
+  --file=FILE[[:TEMPLATE]]
+                   instantiate a configuration file FILE
+  --header=FILE[[:TEMPLATE]]
+                   instantiate a configuration header FILE
 
 m4_ifset([AC_LIST_FILES],
 [Configuration files:
