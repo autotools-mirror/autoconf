@@ -1,3 +1,23 @@
+2004-08-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	More fixes to support spaces in the name of the build directory.
+	This isn't a complete fix but it's an improvement.
+
+	* bin/autoconf.as (autom4te_options): New var.
+	Use it instead of appending to AUTOM4TE, so that we can allow
+	spaces in the build directory's absolute name.
+	* bin/autoheader.in ($autoconf): Allow spaces in file names.
+	* lib/autotest/general.m4 (AT_INIT, AT_CLEANUP, _AT_CHECK,
+	AT_CHECK_NOESCAPE): Likewise.
+	* tests/wrapper.as (testdir, AUTOM4TE_CFG, autom4te_perllibdir,
+	main program): Likewise.
+
+2004-08-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Quote $ac_popdir uses.
+	From Ralf Corsepius in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2004-08/msg00014.html
+
 2004-08-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Function Portability): Document isinf and
