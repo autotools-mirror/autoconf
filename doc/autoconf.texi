@@ -10066,6 +10066,10 @@ Report processing steps.
 @itemx -d
 Don't remove the temporary files.
 
+@item --force
+@itemx -f
+Force the update even if the file has not changed.  Disregard the cache.
+
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.

@@ -512,8 +512,9 @@ Try `$me --help' for more information.\n"
 
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
-  # invalidates the cache.
-  @include = uniq (@include);
+  # invalidates the cache.  And strip `.' which is implicit and always
+  # first.
+  @include = grep { !/^\.$/ } uniq (@include);
 
   # Convert @trace to %trace, and work around the M4 builtins tracing
   # problem.

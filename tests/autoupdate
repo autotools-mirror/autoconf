@@ -11,4 +11,4 @@
 autom4te_perllibdir=$top_srcdir/lib
 export autom4te_perllibdir
 
-exec ../bin/autoupdate --autoconf-dir ../lib ${1+"$@"}
+exec ../bin/autoupdate --include ../lib --include $top_srcdir/lib ${1+"$@"}

@@ -1,5 +1,12 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&parse_args): Strip `.' from `@include'.
+	* bin/autoupdate.in: Use --include, -I, and --force, -f, too.
+	Use directly autom4te, not autoconf.
+	* tests/autoupdate: $top_srcdir/lib is needed too for melt files.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* tests/semantics.at (AC_C_BIGENDIAN): Missing eol.
 	* bin/autoheader.in (%symbol): Strip arguments of macros.
 

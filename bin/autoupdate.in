@@ -32,9 +32,9 @@ use Autom4te::General;
 use strict;
 
 # Lib files.
-my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
-my $autoconf = $ENV{'AUTOCONF'} || '@autoconf-name@';
-my $localdir = '.';
+my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my @include;
+my $force = 0;
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";
 
@@ -53,14 +53,8 @@ Operation modes:
   -V, --version        print version number, then exit
   -v, --verbose        verbosely report processing
   -d, --debug          don\'t remove temporary files
-
-Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf\'s macro files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4\'
-
-Environment variables:
-  M4         GNU M4 1.4 or above
-  AUTOCONF   autoconf @VERSION@
+  -I, --include=DIR    look for input files in DIR.  Accumulates
+  -f, --force          consider all the files are obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
 END
@@ -92,8 +86,8 @@ sub parse_args ()
   # If fixed some day, use this: '' => sub { push @ARGV, "-" }
   my $update_stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
-  getopt ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
-	  'l|localdir=s' => \$localdir);
+  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+	  'f|force' => \$force);
 
   push @ARGV, '-'
     if $update_stdin;
@@ -111,11 +105,15 @@ sub parse_args ()
 ## -------------- ##
 ## Main program.  ##
 ## -------------- ##
+
 parse_args;
+my $autoconf = "$autom4te --language=autoconf ";
+$autoconf .= join (' --include=', '', @include);
+$autoconf .= " --debug" if $debug;
+$autoconf .= " --force" if $force;
+$autoconf .= " --verbose" if $verbose;
+
 mktmpdir ('au');
-$autoconf .= " --include=$autoconf_dir --include=$localdir ";
-$autoconf .= "--debug " if $debug;
-$autoconf .= "--verbose " if $verbose;
 
 # @M4_BUILTINS -- M4 builtins and a useful comment.
 my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
@@ -148,7 +146,7 @@ close M4_M4
 # @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
 open MACROS, ("$autoconf "
 	      . "--trace AU_DEFUN:'AU:\$f:\$1' --trace define:'AC:\$f:\$1' "
-	      . "-i /dev/null |")
+	      . "--melt /dev/null |")
   or die "$me: cannot open definitions reading pipe: $!\n";
 my (%ac_macros, %au_macros);
 while (<MACROS>)
@@ -197,7 +195,7 @@ my $au_changequote =
 
 # au.m4 -- definitions the AU macros.
 xsystem ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
-\@<:\@\$2\@:>\@)' -i /dev/null "
+\@<:\@\$2\@:>\@)' --melt /dev/null "
 	. ">$tmp/au.m4");
 
 # ac.m4 -- autoquoting definitions of the AC macros (M4sugar excluded).
@@ -350,7 +348,9 @@ EOF
        or die "$me: cannot close $tmp/input.m4: $!\n";
 
     # Now ask m4 to perform the update.
-    xsystem ("$m4 --include=$autoconf_dir $tmp/input.m4 >$tmp/updated");
+    xsystem ("$m4"
+	     . join (' --include=', '', @include)
+	     . " $tmp/input.m4 >$tmp/updated");
     update_file ("$tmp/updated",
 		 "$file" eq "$tmp/stdin" ? '-' : "$file");
   }
