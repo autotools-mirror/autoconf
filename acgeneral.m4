@@ -1128,6 +1128,27 @@ define(AC_INCLUDES,
 [m4_foreach([File], [$1], [AC_INCLUDE(File)])])
 
 
+# _AC_INIT_PREPARE_ENVIRONMENT
+# ----------------------------
+# Tune the envvar we depend upon: IFS, NLS.
+# FIXME: CDPATH.
+define([_AC_INIT_PREPARE_ENVIRONMENT],
+[# NLS nuisances.
+# Only set these to C if already set.  These must not be set unconditionally
+# because not all systems understand e.g. LANG=C (notably SCO).
+# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
+# Non-C LC_CTYPE values break the ctype check.
+if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
+if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+
+# IFS
+# We need space, tab and new line.
+IFS="
+ 	"dnl
+])
+
 # _AC_INIT_PREPARE([UNIQUE-FILE-IN-SOURCE-DIR])
 # ---------------------------------------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
@@ -1140,6 +1161,8 @@ define(AC_INCLUDES,
 # 6. Required macros (cache, default AC_SUBST etc.)
 AC_DEFUN([_AC_INIT_PREPARE],
 [AC_DIVERT_PUSH([INIT_PREPARE])dnl
+_AC_INIT_PREPARE_ENVIRONMENT
+
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 # Keep a trace of the command line.
@@ -1186,16 +1209,6 @@ running configure, to aid debugging if configure makes a mistake.
 It was created by configure version AC_ACVERSION, executed with
  > [$]0 $ac_configure_args
 " 1>&AC_FD_CC
-
-# NLS nuisances.
-# Only set these to C if already set.  These must not be set unconditionally
-# because not all systems understand e.g. LANG=C (notably SCO).
-# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
-# Non-C LC_CTYPE values break the ctype check.
-if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
-if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
-if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
-if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -2219,7 +2232,7 @@ $2],
 # Work like `which -a NAME' in PATH, even if NAME is not executable.
 # Can be used inside backquotes.
 define([_AC_WHICH_A],
-[IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+[ac_save_ifs=$IFS; IFS=':'
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
@@ -2230,7 +2243,7 @@ for ac_dir in $ac_dummy; do
     echo "$ac_dir/$1"
   fi
 done
-IFS="$ac_save_ifs"
+IFS=$ac_save_ifs
 ])
 
 
@@ -2319,7 +2332,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
   ;;
   *)
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_save_ifs=$IFS; IFS=':'
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
@@ -2331,7 +2344,7 @@ dnl not every word.  This closes a longstanding sh security hole.
       break
     fi
   done
-  IFS="$ac_save_ifs"
+  IFS=$ac_save_ifs
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
 ifval([$3], [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"

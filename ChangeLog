@@ -1,5 +1,16 @@
 2000-03-17  Akim Demaille  <akim@epita.fr>
 
+	Install the IFS we need once for all.
+
+	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT): New macro.
+	Handle the NLS envvars, and IFS.
+	(_AC_INIT_PREPARE): Use it, no longer set the NLS envvars.
+	(_AC_WHICH_A, AC_PATH_PROG): Rely on the default IFS.
+	* acspecific.m4 (AC_PROG_INSTALL, AC_FUNC_SELECT_ARGTYPES):
+	Likewise.
+
+2000-03-17  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_TRY_CPP, AC_EGREP_CPP, AC_TRY_COMPILE,
 	AC_TRY_LINK, AC_TRY_RUN_NATIVE): Simplify the removal of the
 	contest files: don't remove them before running the actions, just
