@@ -1,3 +1,18 @@
+2000-03-02  Akim Demaille  <akim@epita.fr>
+
+	The whole family supports -V = --version.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Report and support -V.
+	* autoconf.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* autoheader.sh: Likewise.
+	* autoscan.pl: Likewise.
+	* ifnames.sh: Likewise.
+	In addition, don't dump --help on invalid options.
+	* doc/autoconf.texi: Adjusted.
+	* doc/install.texi: Likewise.
+
 2000-03-02  Lars J. Aas  <larsa@sim.no>
 
 	* libm4.m4 (m4_noquote): New macro.

@@ -33,7 +33,7 @@ TEMPLATE-FILE is given, else into \`configure'.
 If the option \`--trace' is used, no configuration script is created.
 
   -h, --help          print this help, then exit
-      --version       print version number, then exit
+  -V, --version       print version number, then exit
   -m, --macrodir=DIR  directory storing Autoconf's macro files
   -l, --localdir=DIR  directory storing the \`aclocal.m4' file
   -t, --trace=MACRO   report the list of calls to MACRO
@@ -104,7 +104,7 @@ verbose=:
 # Parse command line
 while test $# -gt 0 ; do
   case "$1" in
-    --version | --vers* )
+    --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
     --help | --h* | -h )
        echo "$usage"; exit 0 ;;

@@ -623,6 +623,7 @@ Print the names of the files it examines and the potentially interesting
 symbols it finds in them.  This output can be voluminous.
 
 @item --version
+@itemx -V
 Print the version number of Autoconf and exit.
 @end table
 
@@ -654,6 +655,7 @@ space-separated list of the files in which that identifier occurs.
 Print a summary of the command line options and exit.
 
 @item --version
+@itemx -V
 Print the version number of Autoconf and exit.
 @end table
 
@@ -701,6 +703,7 @@ set the @code{AC_MACRODIR} environment variable to a directory; this
 option overrides the environment variable.
 
 @item --version
+@itemx -V
 Print the version number of Autoconf and exit.
 
 @item --trace=@var{macro}
@@ -796,6 +799,7 @@ Print the name of each directory where @code{autoreconf} runs
 @code{autoconf} (and @code{autoheader}, if appropriate).
 
 @item --version
+@itemx -V
 Print the version number of Autoconf and exit.
 @end table
 
@@ -1550,6 +1554,7 @@ Look for the installed macro files and @file{acconfig.h} in directory
 to a directory; this option overrides the environment variable.
 
 @item --version
+@itemx -V
 Print the version number of Autoconf and exit.
 @end table
 
@@ -5747,6 +5752,7 @@ Print a summary of the command line options, a list of the template
 files and exit.
 
 @item --version
+@itemx -V
 Print the version number of Autoconf used to create the @code{configure}
 script that generated @file{config.status} and exit.
 @end table
@@ -6165,6 +6171,7 @@ environment variable to a directory; this option overrides the
 environment variable.
 
 @item --version
+@itemx -V
 Print the version number of @code{autoupdate} and exit.
 @end table
 

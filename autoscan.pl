@@ -1,6 +1,6 @@
 #! @PERL@
 # autoscan - Create configure.scan (a preliminary configure.in) for a package.
-# Copyright (C) 1994 Free Software Foundation, Inc.
+# Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,10 +47,10 @@ current directory if none is given.  Search the source files for
 common portability problems and create a file `configure.scan' which
 is a preliminary `configure.in' for that package.
 
-  -m, --macrodir=DIR    directory storing data files
+  -h, --help            print this help, then exit
+  -V, --version         print version number, then exit
+      --macrodir=DIR    directory storing data files
   -v, --verbose         verbosely report processing
-  --help                print this help, then exit
-  --version             print version number, then exit
 
 Report bugs to <bug-autoconf@gnu.org>.
 EOD
@@ -59,20 +59,20 @@ EOD
 autoscan (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie.
 
-Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 EOD
 
     foreach $_ (@ARGV) {
 	if (/^--m[a-z]*=(.*)/) {
 	    $datadir = $1;
-	} elsif (/^--h/) {
+	} elsif (/^--h/ || /^-h$/) {
 	    print "$usage";
 	    exit 0;
-	} elsif (/^--verb/) {
+	} elsif (/^--verb/ || /^-v$/) {
 	    $verbose = 1;
-	} elsif (/^--vers/) {
+	} elsif (/^--vers/ || /^-V$/) {
 	    print "$version";
 	    exit 0;
 	} elsif (/^[^-]/) {

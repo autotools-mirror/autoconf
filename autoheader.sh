@@ -33,11 +33,11 @@ use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
 given.
 
   -h, --help            print this help, then exit
-      --version         print version number, then exit
+  -V, --version         print version number, then exit
+  -v, --verbose         verbosely report processing
   -d, --debug           don't remove temporary files
   -m, --macrodir=DIR    directory storing Autoconf's macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
-  -v, --verbose         verbosely report processing
 
 Report bugs to <bug-autoconf@gnu.org>."
 

@@ -220,6 +220,7 @@ operates.
 Print a summary of the options to @code{configure}, and exit.
 
 @item --version
+@itemx -V
 Print the version of Autoconf used to generate the @code{configure}
 script, and exit.
 

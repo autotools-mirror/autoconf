@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoreconf - remake all Autoconf configure scripts in a directory tree
-# Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,12 +30,12 @@ older than their predecessors.  If you install a new version of
 Autoconf, running \`autoreconf' remakes all of the files by giving it
 the \`--force' option.
 
+  -h, --help            print this help, then exit
+  -V, --version         print version number, then exit
+  -v, --verbose         verbosely report processing
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -f, --force           consider every files are obsolete
-  -v, --verbose         verbosely report processing
-  -h, --help            print this help, then exit
-  --version             print version number, then exit
 
 The following options are passed to \`automake':
   --cygnus              assume program is part of Cygnus-style tree
@@ -50,7 +50,7 @@ version="\
 autoreconf (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie.
 
-Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
@@ -69,7 +69,7 @@ while test $# -gt 0; do
   case "$1" in
   --help | --h* | -h )
     echo "$usage"; exit 0 ;;
-  --version | --vers*)
+  --version | --vers* | -V )
     echo "$version"; exit 0 ;;
 
   --localdir=* | --l*=* )

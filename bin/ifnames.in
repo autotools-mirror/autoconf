@@ -1,6 +1,6 @@
 #! @SHELL@
 # ifnames - print the identifiers used in C preprocessor conditionals
-# Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 95, 99, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>
 # and Paul Eggert <eggert@twinsun.com>.
 
+me=`echo "$0" | sed -e 's,.*/,,'`
+
 usage="\
 Usage: ifnames [OPTION] ...  [FILE] ...
 
@@ -32,9 +34,9 @@ identifiers that appear in those files in \`#if', \`#elif', \`#ifdef', or
 \`#ifndef' directives.  Print each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
-  -v, --verbose         verbosely report processing
   -h, --help            print this help, then exit
-      --version         print version number, then exit
+  -V, --version         print version number, then exit
+  -v, --verbose         verbosely report processing
 
 Report bugs to <bug-autoconf@gnu.org>."
 
@@ -42,19 +44,26 @@ version="\
 ifnames (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie and Paul Eggert.
 
-Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
+Copyright (C) 1994, 95, 99, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
+help="\
+Try \`$me --help' for more information."
+
 while test $# -gt 0; do
   case "$1" in
-  -h | --help | --h* )
+  --h* | -h )
     echo "$usage"; exit 0 ;;
-  --version | --versio | --versi | --vers)
+  --v* | -V )
     echo "$version"; exit 0 ;;
   --)     # Stop option processing.
     shift; break ;;
-  -*) echo "$usage" 1>&2; exit 1 ;;
+  -*)
+    exec >&2
+    echo "$me: invalid option $1"
+    echo "$help"
+    exit 1 ;;
   *) break ;;
   esac
 done
