@@ -33,6 +33,9 @@ For safety, we should check that configure scripts do not depend upon
 char intervals.  Introducing ac_A_Z etc. might make it more
 convenient.
 
+** AC_CHECK_TOOL...
+Write a test that checks that it honors the values set by the user.
+
 * Autoconf 2.51 or so
 
 ** AC_FUNC_GETLOADAVG

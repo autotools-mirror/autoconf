@@ -8,6 +8,39 @@
 # Free Software Foundation, Inc.
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
+# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+  set -o posix
+fi
+
+# Support unset when possible.
+if (unset FOO) >/dev/null 2>&1; then
+  ac_unset=unset
+else
+  ac_unset=false
+fi
+
+# NLS nuisances.
+$ac_unset LANG || test "${LANG+set}" != set || { LANG=C; export LANG; }
+$ac_unset LC_ALL || test "${LC_ALL+set}" != set || { LC_ALL=C; export LC_ALL; }
+$ac_unset LC_TIME || test "${LC_TIME+set}" != set || { LC_TIME=C; export LC_TIME; }
+$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || { LC_CTYPE=C; export LC_CTYPE; }
+$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || { LANGUAGE=C; export LANGUAGE; }
+$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || { LC_COLLATE=C; export LC_COLLATE; }
+$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || { LC_NUMERIC=C; export LC_NUMERIC; }
+$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; export LC_MESSAGES; }
+
+# IFS
+# We need space, tab and new line, in precisely that order.
+ac_nl='
+'
+IFS=" 	$ac_nl"
+
+# CDPATH.
+$ac_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
 
 #
 # Initializations.
@@ -583,39 +616,6 @@ gives unlimited permission to copy, distribute and modify it.
 EOF
   exit 0
 fi
-# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-
-# Support unset when possible.
-if (unset FOO) >/dev/null 2>&1; then
-  ac_unset=unset
-else
-  ac_unset=false
-fi
-
-# NLS nuisances.
-$ac_unset LANG || test "${LANG+set}" != set || { LANG=C; export LANG; }
-$ac_unset LC_ALL || test "${LC_ALL+set}" != set || { LC_ALL=C; export LC_ALL; }
-$ac_unset LC_TIME || test "${LC_TIME+set}" != set || { LC_TIME=C; export LC_TIME; }
-$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || { LC_CTYPE=C; export LC_CTYPE; }
-$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || { LANGUAGE=C; export LANGUAGE; }
-$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || { LC_COLLATE=C; export LC_COLLATE; }
-$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || { LC_NUMERIC=C; export LC_NUMERIC; }
-$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; export LC_MESSAGES; }
-
-# IFS
-# We need space, tab and new line, in precisely that order.
-ac_nl='
-'
-IFS=" 	$ac_nl"
-
-# CDPATH.
-$ac_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
 
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 

@@ -1,3 +1,11 @@
+2000-10-17  Morten Eriksen  <mortene@sim.no>
+
+	* acgeneral.m4 (AC_CHECK_TOOL): As AC_CHECK_PROG first tests the
+	value of the VARIABLE argument when looking for executables, we
+	need to set it to the correct value from AC_CHECK_TOOL when not
+	just passing on the incoming VARIABLE directly.
+	(AC_CHECK_TOOLS, AC_PATH_TOOL): Likewise.
+
 2000-10-17  Assar Westerlund  <assar@sics.se>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE): Move the

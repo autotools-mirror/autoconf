@@ -3183,10 +3183,11 @@ AC_DEFUN([AC_PATH_TOOL],
   AC_PATH_PROG([$1], [${ac_tool_prefix}$2], , [$4])
 fi
 if test -z "$ac_cv_path_$1"; then
+  ac_pt_$1=$$1
   AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
-  $1="$ac_pt_$1"
+  $1=$ac_pt_$1
 fi
-])
+])# AC_PATH_TOOL
 
 
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
@@ -3197,10 +3198,11 @@ AC_DEFUN([AC_CHECK_TOOL],
   AC_CHECK_PROG([$1], [${ac_tool_prefix}$2], [${ac_tool_prefix}$2], , [$4])
 fi
 if test -z "$ac_cv_prog_$1"; then
+  ac_ct_$1=$$1
   AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
-  $1="$ac_ct_$1"
+  $1=$ac_ct_$1
 fi
-])
+])# AC_CHECK_TOOL
 
 
 # AC_CHECK_TOOLS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
@@ -3216,11 +3218,13 @@ AC_DEFUN([AC_CHECK_TOOLS],
     AC_CHECK_PROG([$1],
                   [$ac_tool_prefix$ac_prog], [$ac_tool_prefix$ac_prog],,
                   [$4])
-    test "$$1" != "" && break
+    test -n "$$1" && break
   done
 fi
 if test -z "$$1"; then
-  AC_CHECK_PROGS([$1], [$2], [$3], [$4])
+  ac_ct_$1=$$1
+  AC_CHECK_PROGS([ac_ct_$1], [$2], [$3], [$4])
+  $1=ac_ct_$1
 fi
 ])# AC_CHECK_TOOLS
 
