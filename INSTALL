@@ -55,14 +55,14 @@ Compilers and Options
 =====================
 
    Some systems require unusual options for compilation or linking that
-the `configure' script does not know about.  You can give `configure'
-initial values for variables by setting them in the environment.  Using
-a Bourne-compatible shell, you can do that on the command line like
-this:
-     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+the `configure' script does not know about.  Run `./configure --help'
+for details on some of the pertinent environment variables.
 
-Or on systems that have the `env' program, you can do it like this:
-     env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+   You can give `configure' initial values for variables by setting
+them in the environment.  You can do that on the command line like this:
+     ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
+
+   *Note Environment Variables::, for more details.
 
 Compiling For Multiple Architectures
 ====================================
@@ -122,10 +122,10 @@ you can use the `configure' options `--x-includes=DIR' and
 Specifying the System Type
 ==========================
 
-   There may be some features `configure' can not figure out
+   There may be some features `configure' cannot figure out
 automatically, but needs to determine by the type of host the package
 will run on.  Usually `configure' can figure that out, but if it prints
-a message saying it can not guess the host type, give it the
+a message saying it cannot guess the host type, give it the
 `--host=TYPE' option.  TYPE can either be a short name for the system
 type, such as `sun4', or a canonical name with three fields:
      CPU-COMPANY-SYSTEM
@@ -149,6 +149,24 @@ default values for variables like `CC', `cache_file', and `prefix'.
 `PREFIX/etc/config.site' if it exists.  Or, you can set the
 `CONFIG_SITE' environment variable to the location of the site script.
 A warning: not all `configure' scripts look for a site script.
+
+Environment Variables
+=====================
+
+   Variables not defined in a site shell script can be set in the
+environment passed to configure.  However, some packages may run
+configure again during the build, and the customized values of these
+variables may be lost.  In order to avoid this problem, you should set
+them in the `configure' command line, using `VAR=value'.  For example:
+     ./configure CC=/usr/local2/bin/gcc
+   will cause the specified gcc to be used as the C compiler (unless it
+is overridden in the site shell script).
+
+   Please, note that the former interface:
+     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+   or
+     env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+   should be avoided.
 
 Operation Controls
 ==================
