@@ -1,5 +1,12 @@
 2002-04-25  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (autoreconf): Don't let aclocal.m4 be older
+	than some of the input files, hence, on the second run of aclocal,
+	if some of its input are younger, make them older.
+	Suggested by Paul Eggert.
+
+2002-04-25  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): sed and `!'.
 	Thanks to Paul Eggert.
 

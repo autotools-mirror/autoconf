@@ -442,8 +442,46 @@ sub autoreconf ($)
 	{
 	  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
 	  # aclocal may produce no output.
-	  update_file ('aclocal.m4t', 'aclocal.m4')
-	    if -f 'aclocal.m4t';
+	  if (-f 'aclocal.m4t')
+	    {
+	      update_file ('aclocal.m4t', 'aclocal.m4');
+	      # Make sure that the local m4 files are older than
+	      # aclocal.m4.
+	      #
+	      # Why is not always the case?  Because we already run
+	      # aclocal a first (before tracing), which, for instance,
+	      # can find Gettext's macros in .../share/aclocal, so we
+	      # may have had the right aclocal.m4 already.  Then
+	      # gettextize is run, and installs locally these M4
+	      # files.  Then autoreconf, via update_file, sees it is
+	      # the _same_ aclocal.m4, and doesn't change its
+	      # timestamp.  But later, Automake's Makefile expresses
+	      # that aclocal.m4 depends on these local files, which
+	      # are younger, so it triggers aclocal again.
+	      #
+	      # To make sure aclocal.m4 is younger, we change the
+	      # modification times of the local M4 files to be
+	      # slightly older than it.
+	      #
+	      # First, where are the local files?
+	      my $aclocal_local_dir = '.';
+	      if ($aclocal_flags =~ /-I\s+(\S+)/)
+		{
+		  $aclocal_local_dir = $1;
+		}
+	      # All the local files younger than aclocal.m4 are to be
+	      # grown older than it.
+	      my $aclocal_m4_mtime = mtime ('aclocal.m4');
+	      for my $file (glob ("$aclocal_local_dir/*.m4"), 'acinclude.m4')
+		{
+		  if (mtime ($file) >= $aclocal_m4_mtime)
+		    {
+		      debug "making $file younger than aclocal.m4";
+		      utime $aclocal_m4_mtime - 1, $aclocal_m4_mtime - 1,
+			$file;
+		    }
+		}
+	    }
 	}
     }
 
