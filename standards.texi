@@ -85,7 +85,7 @@ Last updated @value{lastupdate}.
 * Formatting::			Formatting Your Source Code
 * Comments::			Commenting Your Work
 * Syntactic Conventions::	Clean Use of C Constructs
-* Names::			Naming Variables and Functions
+* Names::			Naming Variables, Functions and Files
 * Using Extensions::		Using Non-standard Features
 * System Functions::            Portability and ``standard'' library functions
 * Semantics::			Program Behavior for All Programs
@@ -811,7 +811,7 @@ casts to @code{void}.  Zero without a cast is perfectly fine as a null
 pointer constant.
 
 @node  Names
-@chapter Naming Variables and Functions
+@chapter Naming Variables, Functions, and Files
 
 Please use underscores to separate words in a name, so that the Emacs
 word commands can be useful within them.  Stick to lower case; reserve
@@ -841,6 +841,13 @@ this.  @code{doschk} also tests for potential name conflicts if the
 files were loaded onto an MS-DOS file system---something you may or may
 not care about.
 
+In general, use @samp{-} to separate words in file names, not @samp{_}.
+Make all letters in file names be lower case, except when following
+specific conventions that call for upper case in certain kinds of names.
+Conventional occasions for using upper case letters in file names
+include @file{Makefile}, @file{ChangeLog}, @file{COPYING} and
+@file{README}.  It is common to name other @file{README}-like
+documentation files in all upper case just like @file{README}.
 
 @node Using Extensions
 @chapter Using Non-standard Features
