@@ -11608,12 +11608,26 @@ of which are listed here.  First of all, remember that since commands
 are executed by the shell, all its weaknesses are inherited@enddots{}
 
 @table @asis
+
 @item @code{$<}
 @acronym{POSIX} says that the @samp{$<} construct in makefiles can be
 used only in inference rules and in the @samp{.DEFAULT} rule; its
 meaning in ordinary rules is unspecified.  Solaris 8's @command{make}
 for instance will replace it with the empty string.  OpenBSD (3.0 and
 later) @command{make} will diagnose these uses and error out.
+
+@item Command execution
+Since 1992 @acronym{POSIX} has required that @command{make} must invoke
+each command with the equivalent of @samp{sh -c} subshell.  However,
+many @command{make} implementations, including BSD make through circa
+2004, use @samp{sh -e -c} instead, and the @option{-e} option causes the
+subshell to exit immediately if a subsidiary simple-command fails.  For
+example, the command @samp{touch T; rm -f U} will always attempt to
+remove @file{U} with @acronym{POSIX} make, but incompatible
+@command{make} implementations skip the @command{rm} if the
+@command{touch} fails.  One way to work around this is to reword the
+affected simple-commands so that they always succeed, e.g., @samp{touch
+T || :; rm -f U}.
 
 @item Leading underscore in macro names
 Some @command{make}s don't support leading underscores in macro names,

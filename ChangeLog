@@ -1,3 +1,9 @@
+2004-05-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Make): Note that BSD make
+	(until 2004) invoked subcommands with sh -e, contra POSIX.
+	Reported by Kevin Ryde.
+
 2004-05-10  Eric Sunshine  <sunshine@sunshineco.com>
 
 	* programs.m4 (_AC_PROG_GREP): Fixed bug where PATH argument handed to
