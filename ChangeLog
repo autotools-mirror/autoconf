@@ -1,3 +1,8 @@
+2004-03-25  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Specifying Names): Move cross_compiling ovindex to
+	(Run Time): ... here, where it's now mentioned.
+
 2004-03-19  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (autom4te Invocation): Language Autoconf
