@@ -1,5 +1,18 @@
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
+	Move obsolete macros' definitions out of the way.
+
+	* doc/autoconf.texi (Old Macro Names): Rename as...
+	(Old Macros): this.  Change the @table enumeration into a list of
+	@defmac.
+	(AC_CHECKING, AC_CHECK_TYPE, AC_COMPILE_CHECK, AC_C_CROSS,
+	AC_DYNIX_SEQ, AC_HAVE_LIBRARY, AC_IRIX_SUN, AC_LINK_FILES,
+	AC_OUTPUT, AC_OUTPUT_COMMANDS, AC_SCO_INTL, AC_VERBOSE,
+	AC_XENIX_DIR): Move their descriptions into here.
+	Kill a few TeX warnings.
+
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_MSG_ERROR_UNQUOTED): Remove.
 	(AC_MSG_RESULT, AC_MSG_RESULT_UNQUOTED): Output to the log too.
 	(AC_CHECKING, AC_VERBOSE): AU_ define.

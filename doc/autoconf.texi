@@ -135,7 +135,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Questions::                   Questions about Autoconf, with answers
 * Upgrading::                   Tips for upgrading from version 1
 * History::                     History of Autoconf
-* Old Macro Names::             Backward compatibility macros
+* Old Macros::                  Backward compatibility macros
 * Environment Variable Index::  Index of environment variables used
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
@@ -278,7 +278,7 @@ Quoting
 
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
-* Quotation and Nested Macros::  Macro calling macros
+* Quotation and Nested Macros::  Macros calling macros
 * Quotation Thumb Rule::        One parenthesis, one quote
 
 Dependencies Between Macros
@@ -333,7 +333,7 @@ Upgrading From Version 1
 * Changed File Names::          Files you might rename
 * Changed Makefiles::           New things to put in @file{Makefile.in}
 * Changed Macros::              Macro calls you might replace
-* Invoking autoupdate::         Replacing old macro names in @code{configure.in}
+* Invoking autoupdate::         Replacing old macros in @code{configure.in}
 * Changed Results::             Changes in how to check test results
 * Changed Macro Writing::       Better ways to write your own macros
 
@@ -1251,22 +1251,9 @@ to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
 @end defmac
 
-Actually, the full @code{AC_OUTPUT} interface is given below.  This use
-is strongly discouraged.
+@xref{Old Macros}, for a description of the arguments @code{AC_OUTPUT}
+used to support.
 
-@defmac AC_OUTPUT (@ovar{file}@dots{}, @ovar{extra-cmds}, @ovar{init-cmds})
-@maindex OUTPUT
-This obsoleted interface is equivalent to:
-
-@example
-@group
-AC_CONFIG_FILES(@var{file}@dots{})
-AC_CONFIG_COMMANDS([default],
-                   @var{extra-cmds}, @var{init-cmds})
-AC_OUTPUT
-@end group
-@end example
-@end defmac
 
 If you run @code{make} on subdirectories, you should run it using the
 @code{make} variable @code{MAKE}.  Most versions of @code{make} set
@@ -1887,9 +1874,11 @@ Print the version number of Autoconf and exit.
 @node Configuration Commands, Configuration Links, Configuration Headers, Setup
 @section Running Arbitrary Configuration Commands
 
-You may have to execute arbitrary commands either before, when and after
+You execute arbitrary commands either before, during and after
 @file{config.status} is run.  The three following macros accumulate the
 commands to run when they are called multiple times.
+@code{AC_CONFIG_COMMANDS} replaces the obsolete macro
+@code{AC_OUTPUT_COMMANDS}, see @ref{Old Macros}, for details.
 
 @defmac AC_CONFIG_COMMANDS (@var{tag}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_COMMANDS
@@ -1932,47 +1921,6 @@ Execute the @var{cmds} right after creating @file{config.status}.
 @end defmac
 
 
-The former interface to execute arbitrary commands is described below.
-
-@defmac AC_OUTPUT_COMMANDS (@var{extra-cmds}, @ovar{init-cmds})
-@maindex OUTPUT_COMMANDS
-Specify additional shell commands to run at the end of
-@file{config.status}, and shell commands to initialize any variables
-from @code{configure}.  This macro may be called multiple times.  It is
-obsolete, replaced by @code{AC_CONFIG_COMMANDS}.
-
-Here is an unrealistic example:
-
-@example
-fubar=27
-AC_OUTPUT_COMMANDS([echo this is extra $fubar, and so on.],
-                   fubar=$fubar)
-AC_OUTPUT_COMMANDS([echo this is another, extra, bit],
-                   [echo init bit])
-@end example
-@end defmac
-
-Aside from the fact that @code{AC_CONFIG_COMMANDS} requires an
-additional key, an important difference is that
-@code{AC_OUTPUT_COMMANDS} is quoting its arguments twice, while
-@code{AC_CONFIG_COMMANDS}.  This means that @code{AC_CONFIG_COMMANDS}
-can safely be given macro calls as arguments:
-
-@example
-AC_CONFIG_COMMANDS(foo, [my_FOO()])
-@end example
-
-@noindent
-conversely, where one level of quoting was enough for literal strings
-with @code{AC_OUTPUT_COMMANDS}, you need two with
-@code{AC_CONFIG_COMMANDS}.  The following lines are equivalent:
-
-@example
-@group
-AC_OUTPUT_COMMANDS([echo "Square brackets: []"])
-AC_CONFIG_COMMANDS(default, [[echo "Square brackets: []"]])
-@end group
-@end example
 
 
 @node Configuration Links, Subdirectories, Configuration Commands, Setup
@@ -1980,8 +1928,8 @@ AC_CONFIG_COMMANDS(default, [[echo "Square brackets: []"]])
 
 You may find convenient to creates links which destination depends upon
 results from tests.  One can use @code{AC_CONFIG_COMMANDS} but the
-creation of relative symbolic links can be delicate when the package is built
-in another directory than its sources.
+creation of relative symbolic links can be delicate when the package is
+built in another directory than its sources.
 
 @defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_LINKS
@@ -2013,18 +1961,6 @@ is then valid to run:
 to establish the links.
 @end defmac
 
-@defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
-@maindex LINK_FILES
-This is an obsolete version of the previous macro.  The previous example
-would have been written:
-
-@example
-@c Note that there are some @ in the first line, hence the indentation
-@c of the second.
-AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h,
-              host.h              object.h)
-@end example
-@end defmac
 
 
 @node Subdirectories, Default Prefix, Configuration Links, Setup
@@ -2674,17 +2610,6 @@ another (which may not already be in @code{LIBS}).
 @end defmac
 
 
-@defmac AC_HAVE_LIBRARY (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
-@maindex HAVE_LIBRARY
-This macro is equivalent to calling @code{AC_CHECK_LIB} with a
-@var{function} argument of @code{main}.  In addition, @var{library} can
-be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
-all of those cases, the compiler is passed @samp{-lfoo}.  However,
-@var{library} cannot be a shell variable; it must be a literal name.
-This macro is obsolete.
-@end defmac
-
-
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @maindex SEARCH_LIBS
 Search for a library defining @var{function}, if it's not already
@@ -2702,7 +2627,6 @@ as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
 present, because linking the test program will always fail with
 unresolved symbols.
 @end defmac
-
 
 
 
@@ -3590,65 +3514,14 @@ AC_CHECK_TYPES((unsigned long long, uintmax_t))
 
 @end defmac
 
-Autoconf, up to 2.13, used to provide the following version of
-@code{AC_CHECK_TYPE}, broken by design.  First, although it is a member
-of the @code{CHECK} clan, singular sub-family, it does more than just
-checking.  Second, missing types are not typedef'd, they are defined,
-which can lead to incompatible code in the case of pointer types.
+Autoconf, up to 2.13, used to provide to another version of
+@code{AC_CHECK_TYPE}, broken by design.  In order to keep backward
+compatibility, a simple heuristics, quite safe but not totally, is
+implemented.  In case of doubt, the reader is strongly encourage to read
+the documentation of the former @code{AC_CHECK_TYPE}, see @ref{Old
+Macros}.
 
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default})
-@maindex CHECK_TYPE
-This use of @code{AC_CHECK_TYPE} is obsolete and discouraged, see above.
-
-If the type @var{type} is not defined, define it to be the C (or C++)
-builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.
-
-This macro is equivalent to
-@example
-AC_CHECK_TYPE([@var{type}],
-              [AC_DEFINE([@var{type}], [@var{default}],
-                         [Define to `@var{default}' if <sys/types.h>
-                          does not define.])])
-@end example
-@end defmac
-
-In order to keep backward compatibility, the two versions of
-@code{AC_CHECK_TYPE} are implemented, selected by a simple heuristics:
-@itemize @bullet
-@item
-if there are three or four arguments, the modern version is used;
-
-@item
-if the second argument is a C or C++ @strong{builtin} type, then the
-obsolete version is used;
-
-@item
-if the second argument is spelled with the alphabet of valid C and C++
-types, the user is warned and the modern version is used;
-
-@item
-otherwise, the modern version is used.
-@end itemize
-
-@noindent
-In particular, the following code, which was invalid but functional:
-
-@example
-AC_CHECK_TYPE(loff_t, off_t)
-@end example
-
-@noindent
-will be improperly branched to the modern implementation.  You are
-encouraged either to use a valid builtin type, or to use the equivalent
-modern code (see above), or better yet, to use @code{AC_CHECK_TYPES}
-together with
-
-@example
-#if !HAVE_LOFF_T
-typedef loff_t off_t;
-#endif
-@end example
 
 
 @node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Types, Existing Tests
@@ -4070,22 +3943,6 @@ If on AIX, define @code{_ALL_SOURCE}.  Allows the use of some BSD
 functions.  Should be called before any macros that run the C compiler.
 @end defmac
 
-@defmac AC_DYNIX_SEQ
-@maindex DYNIX_SEQ
-If on Dynix/PTX (Sequent UNIX), add @samp{-lseq} to output
-variable @code{LIBS}.  This macro is obsolete; instead, use
-@code{AC_FUNC_GETMNTENT}.
-@end defmac
-
-@defmac AC_IRIX_SUN
-@maindex IRIX_SUN
-If on IRIX (Silicon Graphics UNIX), add @samp{-lsun} to output variable
-@code{LIBS}.  This macro is obsolete.  If you were using it to get
-@code{getmntent}, use @code{AC_FUNC_GETMNTENT} instead.  If you used it
-for the NIS versions of the password and group functions, use
-@samp{AC_CHECK_LIB(sun, getpwnam)}.
-@end defmac
-
 @defmac AC_ISC_POSIX
 @maindex ISC_POSIX
 @cvindex _POSIX_SOURCE
@@ -4107,20 +3964,7 @@ If on Minix, define @code{_MINIX} and @code{_POSIX_SOURCE} and define
 facilities.  Should be called before any macros that run the C compiler.
 @end defmac
 
-@defmac AC_SCO_INTL
-@maindex SCO_INTL
-@ovindex LIBS
-If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.
-This macro is obsolete; instead, use @code{AC_FUNC_STRFTIME}.
-@end defmac
 
-@defmac AC_XENIX_DIR
-@maindex XENIX_DIR
-@ovindex LIBS
-If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
-@file{dirent.h} is being used, add @samp{-ldir} to @code{LIBS}.  This
-macro is obsolete; use @code{AC_HEADER_DIRENT} instead.
-@end defmac
 
 
 @c ========================================================= Writing Tests
@@ -4310,14 +4154,7 @@ If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
 @end defmac
 
-@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
-@maindex COMPILE_CHECK
-This is an obsolete version of @code{AC_TRY_LINK}, with the addition
-that it prints @samp{checking for @var{echo-text}} to the standard
-output first, if @var{echo-text} is non-empty.  Use
-@code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead to print
-messages (@pxref{Printing Messages}).
-@end defmac
+
 
 @node Run Time, Portable Shell, Examining Libraries, Writing Tests
 @section Checking Run Time Behavior
@@ -4384,10 +4221,6 @@ can call @code{AC_PROG_CC} before running them.  Then, if the shell
 variable @code{cross_compiling} is set to @samp{yes}, use an alternate
 method to get the results instead of calling the macros.
 
-@defmac AC_C_CROSS
-@maindex C_CROSS
-This macro is obsolete; it does nothing.
-@end defmac
 
 @node Guidelines, Test Functions, Test Programs, Run Time
 @subsection Guidelines for Test Programs
@@ -5102,28 +4935,6 @@ provide a default (back-up) behavior for the situations they warn about.
 make hard links}.
 @end defmac
 
-The following two macros are an obsolete alternative to
-@code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT}.
-
-@defmac AC_CHECKING (@var{feature-description})
-@maindex CHECKING
-This macro is similar to @code{AC_MSG_CHECKING}, except that it prints a
-newline after the @var{feature-description}.  It is useful mainly to
-print a general description of the overall purpose of a group of feature
-checks, e.g.,
-
-@example
-AC_CHECKING(if stack overflow is detectable)
-@end example
-@end defmac
-
-@defmac AC_VERBOSE (@var{result-description})
-@maindex VERBOSE
-This macro is similar to @code{AC_MSG_RESULT}, except that it is meant
-to follow a call to @code{AC_CHECKING} instead of
-@code{AC_MSG_CHECKING}; it starts the message it prints with a tab.  It
-is considered obsolete.
-@end defmac
 
 
 @c ========================================================== Writing Macros.
@@ -5891,7 +5702,8 @@ cases together, like in this fragment:
 
 @example
 case "$target" in
-i386-*-mach* | i386-*-gnu*) obj_format=aout emulation=mach bfd_gas=yes ;;
+i386-*-mach* | i386-*-gnu*)
+             obj_format=aout emulation=mach bfd_gas=yes ;;
 i960-*-bout) obj_format=bout ;;
 esac
 @end example
@@ -6094,9 +5906,11 @@ Options}).  The following example will make this clearer.
 @example
 AC_DEFUN(TEST_MACRO,
 [AC_ARG_WITH(foo,
-             AC_HELP_STRING([--with-foo], [use foo (default is NO)]),
+             AC_HELP_STRING([--with-foo],
+                            [use foo (default is NO)]),
              ac_cv_use_foo=$withval, ac_cv_use_foo=no),
-AC_CACHE_CHECK(whether to use foo, ac_cv_use_foo, ac_cv_use_foo=no)])
+AC_CACHE_CHECK(whether to use foo,
+               ac_cv_use_foo, ac_cv_use_foo=no)])
 @end example
 
 Please note that the call to @code{AC_HELP_STRING} is @strong{unquoted}.
@@ -6732,7 +6546,7 @@ freeze its internal state in a file that it can read back quickly.
 * Changed File Names::          Files you might rename
 * Changed Makefiles::           New things to put in @file{Makefile.in}
 * Changed Macros::              Macro calls you might replace
-* Invoking autoupdate::         Replacing old macro names in @code{configure.in}
+* Invoking autoupdate::         Replacing old macros in @code{configure.in}
 * Changed Results::             Changes in how to check test results
 * Changed Macro Writing::       Better ways to write your own macros
 @end menu
@@ -6795,8 +6609,8 @@ characters around them has been removed.
 
 Many of the macros were renamed in Autoconf version 2.  You can still
 use the old names, but the new ones are clearer, and it's easier to find
-the documentation for them.  @xref{Old Macro Names}, for a table showing
-the new names for the old macros.  Use the @code{autoupdate} program to
+the documentation for them.  @xref{Old Macros}, for a table showing the
+new names for the old macros.  Use the @code{autoupdate} program to
 convert your @file{configure.in} to using the new macro names.
 @xref{Invoking autoupdate}.
 
@@ -6821,10 +6635,10 @@ calls Autoconf macros by their old names to use the current macro names.
 In version 2 of Autoconf, most of the macros were renamed to use a more
 uniform and descriptive naming scheme.  @xref{Macro Names}, for a
 description of the new scheme.  Although the old names still work
-(@pxref{Old Macro Names}, for a list of the old macro names and the
-corresponding new names), you can make your @file{configure.in} files
-more readable and make it easier to use the current Autoconf
-documentation if you update them to use the new macro names.
+(@pxref{Old Macros}, for a list of the old macros and the corresponding
+new names), you can make your @file{configure.in} files more readable
+and make it easier to use the current Autoconf documentation if you
+update them to use the new macro names.
 
 @evindex SIMPLE_BACKUP_SUFFIX
 If given no arguments, @code{autoupdate} updates @file{configure.in},
@@ -6943,7 +6757,7 @@ encapsulate into macros that you can share.
 
 @c ===================================================== History of Autoconf.
 
-@node History, Old Macro Names, Upgrading, Top
+@node History, Old Macros, Upgrading, Top
 @chapter History of Autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
@@ -7171,202 +6985,536 @@ Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
 have free time again.  I think.  Yeah, right.)
 
 
-@c ========================================================= Old Macro Names.
+@c ========================================================= Old Macros.
 
-@node Old Macro Names, Environment Variable Index, History, Top
-@chapter Old Macro Names
+@node Old Macros, Environment Variable Index, History, Top
+@chapter Old Macros
 
-In version 2 of Autoconf, most of the macros were renamed to use a more
-uniform and descriptive naming scheme.  Here are the old names of the
-macros that were renamed, followed by the current names of those macros.
-Although the old names are still accepted by the @code{autoconf} program
-for backward compatibility, the old names are considered obsolete.
-@xref{Macro Names}, for a description of the new naming scheme.
+Several macros are obsoleted in Autoconf, for various reasons (typically
+they failed to quote properly, couldn't be extended for more recent
+issues etc.).  They are still supported, but deprecated: their use
+should be avoided.
 
-@table @code
-@item AC_ALLOCA
+During the jump between Autoconf version 1 and version 2, most of the
+macros were renamed to use a more uniform and descriptive naming scheme,
+but their signature did not change.  @xref{Macro Names}, for a
+description of the new naming scheme.  Below, there is just the mapping
+from old names to new names for these macros, the reader is invited to
+refer to the definition of the new macro for the signature, and the
+description.
+
+@defmac AC_ALLOCA
 @maindex ALLOCA
 @code{AC_FUNC_ALLOCA}
-@item AC_ARG_ARRAY
+@end defmac
+
+@defmac AC_ARG_ARRAY
 @maindex ARG_ARRAY
 removed because of limited usefulness
-@item AC_CHAR_UNSIGNED
+@end defmac
+
+@defmac AC_C_CROSS
+@maindex C_CROSS
+This macro is obsolete; it does nothing.
+@end defmac
+
+@defmac AC_CHAR_UNSIGNED
 @maindex CHAR_UNSIGNED
 @code{AC_C_CHAR_UNSIGNED}
-@item AC_CONST
+@end defmac
+
+@defmac AC_CHECK_TYPE (@var{type}, @var{default})
+@maindex CHECK_TYPE
+Autoconf, up to 2.13, used to provide to this version of
+@code{AC_CHECK_TYPE}, broken by design.  First, although it is a member
+of the @code{CHECK} clan, singular sub-family, it does more than just
+checking.  Second, missing types are not typedef'd, they are defined,
+which can lead to incompatible code in the case of pointer types.
+
+This use of @code{AC_CHECK_TYPE} is obsolete and discouraged, see
+@ref{Generic Types}, for the description of the current macro.
+
+If the type @var{type} is not defined, define it to be the C (or C++)
+builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.
+
+This macro is equivalent to
+@example
+AC_CHECK_TYPE([@var{type}],
+              [AC_DEFINE([@var{type}], [@var{default}],
+                         [Define to `@var{default}' if <sys/types.h>
+                          does not define.])])
+@end example
+In order to keep backward compatibility, the two versions of
+@code{AC_CHECK_TYPE} are implemented, selected by a simple heuristics:
+@itemize @bullet
+@item
+if there are three or four arguments, the modern version is used;
+
+@item
+if the second argument is a C or C++ @strong{builtin} type, then the
+obsolete version is used;
+
+@item
+if the second argument is spelled with the alphabet of valid C and C++
+types, the user is warned and the modern version is used;
+
+@item
+otherwise, the modern version is used.
+@end itemize
+
+@noindent
+In particular, the following code, which was invalid but functional:
+
+@example
+AC_CHECK_TYPE(loff_t, off_t)
+@end example
+
+@noindent
+will be improperly branched to the modern implementation.  You are
+encouraged either to use a valid builtin type, or to use the equivalent
+modern code (see above), or better yet, to use @code{AC_CHECK_TYPES}
+together with
+
+@example
+#if !HAVE_LOFF_T
+typedef loff_t off_t;
+#endif
+@end example
+@end defmac
+@c end of AC_CHECK_TYPE
+
+@defmac AC_CHECKING (@var{feature-description})
+@maindex CHECKING
+This macro is similar to @code{AC_MSG_CHECKING}, except that it prints a
+newline after the @var{feature-description}.  It is useful mainly to
+print a general description of the overall purpose of a group of feature
+checks, e.g.,
+
+@example
+AC_CHECKING(if stack overflow is detectable)
+@end example
+@end defmac
+
+@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
+@maindex COMPILE_CHECK
+This is an obsolete version of @code{AC_TRY_LINK} (@pxref{Examining
+Libraries}), with the addition that it prints @samp{checking for
+@var{echo-text}} to the standard output first, if @var{echo-text} is
+non-empty.  Use @code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead
+to print messages (@pxref{Printing Messages}).
+@end defmac
+
+@defmac AC_CONST
 @maindex CONST
 @code{AC_C_CONST}
-@item AC_CROSS_CHECK
+@end defmac
+
+@defmac AC_CROSS_CHECK
 @maindex CROSS_CHECK
 @code{AC_C_CROSS}
-@item AC_ERROR
+@end defmac
+
+@defmac AC_DYNIX_SEQ
+@maindex DYNIX_SEQ
+If on Dynix/PTX (Sequent UNIX), add @samp{-lseq} to output variable
+@code{LIBS}.  This macro is obsolete; instead, use
+@code{AC_FUNC_GETMNTENT}.
+@end defmac
+
+@defmac AC_ERROR
 @maindex ERROR
 @code{AC_MSG_ERROR}
-@item AC_FIND_X
+@end defmac
+
+@defmac AC_FIND_X
 @maindex FIND_X
 @code{AC_PATH_X}
-@item AC_FIND_XTRA
+@end defmac
+
+@defmac AC_FIND_XTRA
 @maindex FIND_XTRA
 @code{AC_PATH_XTRA}
-@item AC_FUNC_CHECK
+@end defmac
+
+@defmac AC_FUNC_CHECK
 @maindex FUNC_CHECK
 @code{AC_CHECK_FUNC}
-@item AC_GCC_TRADITIONAL
+@end defmac
+
+@defmac AC_GCC_TRADITIONAL
 @maindex GCC_TRADITIONAL
 @code{AC_PROG_GCC_TRADITIONAL}
-@item AC_GETGROUPS_T
+@end defmac
+
+@defmac AC_GETGROUPS_T
 @maindex GETGROUPS_T
 @code{AC_TYPE_GETGROUPS}
-@item AC_GETLOADAVG
+@end defmac
+
+@defmac AC_GETLOADAVG
 @maindex GETLOADAVG
 @code{AC_FUNC_GETLOADAVG}
-@item AC_HAVE_FUNCS
+@end defmac
+
+@defmac AC_HAVE_FUNCS
 @maindex HAVE_FUNCS
 @code{AC_CHECK_FUNCS}
-@item AC_HAVE_HEADERS
+@end defmac
+
+@defmac AC_HAVE_HEADERS
 @maindex HAVE_HEADERS
 @code{AC_CHECK_HEADERS}
-@item AC_HAVE_POUNDBANG
+@end defmac
+
+@defmac AC_HAVE_LIBRARY (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
+@maindex HAVE_LIBRARY
+This macro is equivalent to calling @code{AC_CHECK_LIB} with a
+@var{function} argument of @code{main}.  In addition, @var{library} can
+be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
+all of those cases, the compiler is passed @samp{-lfoo}.  However,
+@var{library} cannot be a shell variable; it must be a literal name.
+@end defmac
+
+@defmac AC_HAVE_POUNDBANG
 @maindex HAVE_POUNDBANG
 @code{AC_SYS_INTERPRETER} (different calling convention)
-@item AC_HEADER_CHECK
+@end defmac
+
+@defmac AC_HEADER_CHECK
 @maindex HEADER_CHECK
 @code{AC_CHECK_HEADER}
-@item AC_HEADER_EGREP
+@end defmac
+
+@defmac AC_HEADER_EGREP
 @maindex HEADER_EGREP
 @code{AC_EGREP_HEADER}
-@item AC_INLINE
+@end defmac
+
+@defmac AC_INLINE
 @maindex INLINE
 @code{AC_C_INLINE}
-@item AC_LN_S
+@end defmac
+
+@defmac AC_IRIX_SUN
+@maindex IRIX_SUN
+If on IRIX (Silicon Graphics UNIX), add @samp{-lsun} to output variable
+@code{LIBS}.  This macro is obsolete.  If you were using it to get
+@code{getmntent}, use @code{AC_FUNC_GETMNTENT} instead.  If you used it
+for the NIS versions of the password and group functions, use
+@samp{AC_CHECK_LIB(sun, getpwnam)}.
+@end defmac
+
+@defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
+@maindex LINK_FILES
+This is an obsolete version of @code{AC_CONFIG_LINKS}.  An updated
+version of:
+
+@example
+@c Note that there are some @ in the first line, hence the indentation
+@c of the second.
+AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h,
+              host.h              object.h)
+@end example
+
+@noindent
+is:
+
+@example
+AC_CONFIG_LINKS(host.h:config/$@{machine@}.h
+                object.h:config/$@{obj_format@}.h)
+@end example
+@end defmac
+
+@defmac AC_LN_S
 @maindex LN_S
 @code{AC_PROG_LN_S}
-@item AC_LONG_DOUBLE
+@end defmac
+
+@defmac AC_LONG_DOUBLE
 @maindex LONG_DOUBLE
 @code{AC_C_LONG_DOUBLE}
-@item AC_LONG_FILE_NAMES
+@end defmac
+
+@defmac AC_LONG_FILE_NAMES
 @maindex LONG_FILE_NAMES
 @code{AC_SYS_LONG_FILE_NAMES}
-@item AC_MAJOR_HEADER
+@end defmac
+
+@defmac AC_MAJOR_HEADER
 @maindex MAJOR_HEADER
 @code{AC_HEADER_MAJOR}
-@item AC_MINUS_C_MINUS_O
+@end defmac
+
+@defmac AC_MINUS_C_MINUS_O
 @maindex MINUS_C_MINUS_O
 @code{AC_PROG_CC_C_O}
-@item AC_MMAP
+@end defmac
+
+@defmac AC_MMAP
 @maindex MMAP
 @code{AC_FUNC_MMAP}
-@item AC_MODE_T
+@end defmac
+
+@defmac AC_MODE_T
 @maindex MODE_T
 @code{AC_TYPE_MODE_T}
-@item AC_OFF_T
+@end defmac
+
+@defmac AC_OFF_T
 @maindex OFF_T
 @code{AC_TYPE_OFF_T}
-@item AC_PID_T
+@end defmac
+
+@defmac AC_OUTPUT (@ovar{file}@dots{}, @ovar{extra-cmds}, @ovar{init-cmds})
+@maindex OUTPUT
+The use of @code{AC_OUTPUT} with argument is deprecated, this obsoleted
+interface is equivalent to:
+
+@example
+@group
+AC_CONFIG_FILES(@var{file}@dots{})
+AC_CONFIG_COMMANDS([default],
+                   @var{extra-cmds}, @var{init-cmds})
+AC_OUTPUT
+@end group
+@end example
+@end defmac
+
+@defmac AC_OUTPUT_COMMANDS (@var{extra-cmds}, @ovar{init-cmds})
+@maindex OUTPUT_COMMANDS
+Specify additional shell commands to run at the end of
+@file{config.status}, and shell commands to initialize any variables
+from @code{configure}.  This macro may be called multiple times.  It is
+obsolete, replaced by @code{AC_CONFIG_COMMANDS}.
+
+Here is an unrealistic example:
+
+@example
+fubar=27
+AC_OUTPUT_COMMANDS([echo this is extra $fubar, and so on.],
+                   fubar=$fubar)
+AC_OUTPUT_COMMANDS([echo this is another, extra, bit],
+                   [echo init bit])
+@end example
+
+Aside from the fact that @code{AC_CONFIG_COMMANDS} requires an
+additional key, an important difference is that
+@code{AC_OUTPUT_COMMANDS} is quoting its arguments twice, while
+@code{AC_CONFIG_COMMANDS}.  This means that @code{AC_CONFIG_COMMANDS}
+can safely be given macro calls as arguments:
+
+@example
+AC_CONFIG_COMMANDS(foo, [my_FOO()])
+@end example
+
+@noindent
+conversely, where one level of quoting was enough for literal strings
+with @code{AC_OUTPUT_COMMANDS}, you need two with
+@code{AC_CONFIG_COMMANDS}.  The following lines are equivalent:
+
+@example
+@group
+AC_OUTPUT_COMMANDS([echo "Square brackets: []"])
+AC_CONFIG_COMMANDS(default, [[echo "Square brackets: []"]])
+@end group
+@end example
+@end defmac
+
+@defmac AC_PID_T
 @maindex PID_T
 @code{AC_TYPE_PID_T}
-@item AC_PREFIX
+@end defmac
+
+@defmac AC_PREFIX
 @maindex PREFIX
 @code{AC_PREFIX_PROGRAM}
-@item AC_PROGRAMS_CHECK
+@end defmac
+
+@defmac AC_PROGRAMS_CHECK
 @maindex PROGRAMS_CHECK
 @code{AC_CHECK_PROGS}
-@item AC_PROGRAMS_PATH
+@end defmac
+
+@defmac AC_PROGRAMS_PATH
 @maindex PROGRAMS_PATH
 @code{AC_PATH_PROGS}
-@item AC_PROGRAM_CHECK
+@end defmac
+
+@defmac AC_PROGRAM_CHECK
 @maindex PROGRAM_CHECK
 @code{AC_CHECK_PROG}
-@item AC_PROGRAM_EGREP
+@end defmac
+
+@defmac AC_PROGRAM_EGREP
 @maindex PROGRAM_EGREP
 @code{AC_EGREP_CPP}
-@item AC_PROGRAM_PATH
+@end defmac
+
+@defmac AC_PROGRAM_PATH
 @maindex PROGRAM_PATH
 @code{AC_PATH_PROG}
-@item AC_REMOTE_TAPE
+@end defmac
+
+@defmac AC_REMOTE_TAPE
 @maindex REMOTE_TAPE
 removed because of limited usefulness
-@item AC_RESTARTABLE_SYSCALLS
+@end defmac
+
+@defmac AC_RESTARTABLE_SYSCALLS
 @maindex RESTARTABLE_SYSCALLS
 @code{AC_SYS_RESTARTABLE_SYSCALLS}
-@item AC_RETSIGTYPE
+@end defmac
+
+@defmac AC_RETSIGTYPE
 @maindex RETSIGTYPE
 @code{AC_TYPE_SIGNAL}
-@item AC_RSH
+@end defmac
+
+@defmac AC_RSH
 @maindex RSH
 removed because of limited usefulness
-@item AC_SETVBUF_REVERSED
+@end defmac
+
+@defmac AC_SCO_INTL
+@maindex SCO_INTL
+@ovindex LIBS
+If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.  Use
+@code{AC_FUNC_STRFTIME} instead.
+@end defmac
+
+@defmac AC_SETVBUF_REVERSED
 @maindex SETVBUF_REVERSED
 @code{AC_FUNC_SETVBUF_REVERSED}
-@item AC_SET_MAKE
+@end defmac
+
+@defmac AC_SET_MAKE
 @maindex SET_MAKE
 @code{AC_PROG_MAKE_SET}
-@item AC_SIZEOF_TYPE
+@end defmac
+
+@defmac AC_SIZEOF_TYPE
 @maindex SIZEOF_TYPE
 @code{AC_CHECK_SIZEOF}
-@item AC_SIZE_T
+@end defmac
+
+@defmac AC_SIZE_T
 @maindex SIZE_T
 @code{AC_TYPE_SIZE_T}
-@item AC_STAT_MACROS_BROKEN
+@end defmac
+
+@defmac AC_STAT_MACROS_BROKEN
 @maindex STAT_MACROS_BROKEN
 @code{AC_HEADER_STAT}
-@item AC_STDC_HEADERS
+@end defmac
+
+@defmac AC_STDC_HEADERS
 @maindex STDC_HEADERS
 @code{AC_HEADER_STDC}
-@item AC_STRCOLL
+@end defmac
+
+@defmac AC_STRCOLL
 @maindex STRCOLL
 @code{AC_FUNC_STRCOLL}
-@item AC_ST_BLKSIZE
+@end defmac
+
+@defmac AC_ST_BLKSIZE
 @maindex ST_BLKSIZE
 @code{AC_STRUCT_ST_BLKSIZE}
-@item AC_ST_BLOCKS
+@end defmac
+
+@defmac AC_ST_BLOCKS
 @maindex ST_BLOCKS
 @code{AC_STRUCT_ST_BLOCKS}
-@item AC_ST_RDEV
+@end defmac
+
+@defmac AC_ST_RDEV
 @maindex ST_RDEV
 @code{AC_STRUCT_ST_RDEV}
-@item AC_SYS_SIGLIST_DECLARED
+@end defmac
+
+@defmac AC_SYS_SIGLIST_DECLARED
 @maindex SYS_SIGLIST_DECLARED
 @code{AC_DECL_SYS_SIGLIST}
-@item AC_TEST_CPP
+@end defmac
+
+@defmac AC_TEST_CPP
 @maindex TEST_CPP
 @code{AC_TRY_CPP}
-@item AC_TEST_PROGRAM
+@end defmac
+
+@defmac AC_TEST_PROGRAM
 @maindex TEST_PROGRAM
 @code{AC_TRY_RUN}
-@item AC_TIMEZONE
+@end defmac
+
+@defmac AC_TIMEZONE
 @maindex TIMEZONE
 @code{AC_STRUCT_TIMEZONE}
-@item AC_TIME_WITH_SYS_TIME
+@end defmac
+
+@defmac AC_TIME_WITH_SYS_TIME
 @maindex TIME_WITH_SYS_TIME
 @code{AC_HEADER_TIME}
-@item AC_UID_T
+@end defmac
+
+@defmac AC_UID_T
 @maindex UID_T
 @code{AC_TYPE_UID_T}
-@item AC_UTIME_NULL
+@end defmac
+
+@defmac AC_UTIME_NULL
 @maindex UTIME_NULL
 @code{AC_FUNC_UTIME_NULL}
-@item AC_VFORK
+@end defmac
+
+@defmac AC_VERBOSE (@var{result-description})
+@maindex VERBOSE
+This macro is similar to @code{AC_MSG_RESULT}, except that it is meant
+to follow a call to @code{AC_CHECKING} instead of
+@code{AC_MSG_CHECKING}; it starts the message it prints with a tab.  It
+is considered obsolete.
+@end defmac
+
+@defmac AC_VFORK
 @maindex VFORK
 @code{AC_FUNC_VFORK}
-@item AC_VPRINTF
+@end defmac
+
+@defmac AC_VPRINTF
 @maindex VPRINTF
 @code{AC_FUNC_VPRINTF}
-@item AC_WAIT3
+@end defmac
+
+@defmac AC_WAIT3
 @maindex WAIT3
 @code{AC_FUNC_WAIT3}
-@item AC_WARN
+@end defmac
+
+@defmac AC_WARN
 @maindex WARN
 @code{AC_MSG_WARN}
-@item AC_WORDS_BIGENDIAN
+@end defmac
+
+@defmac AC_WORDS_BIGENDIAN
 @maindex WORDS_BIGENDIAN
 @code{AC_C_BIGENDIAN}
-@item AC_YYTEXT_POINTER
+@end defmac
+
+@defmac AC_XENIX_DIR
+@maindex XENIX_DIR
+@ovindex LIBS
+If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
+@file{dirent.h} is being used, add @samp{-ldir} to @code{LIBS}.  Use
+@code{AC_HEADER_DIRENT} instead.
+@end defmac
+
+@defmac AC_YYTEXT_POINTER
 @maindex YYTEXT_POINTER
 @code{AC_DECL_YYTEXT}
-@end table
+@end defmac
 
-@node Environment Variable Index, Output Variable Index, Old Macro Names, Top
+
+@node Environment Variable Index, Output Variable Index, Old Macros, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
