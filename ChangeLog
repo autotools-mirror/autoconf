@@ -1,5 +1,8 @@
 2002-03-21  Paul Eggert  <eggert@twinsun.com>
 
+	* doc/autoconf.texi (Here-Documents): Mention Solaris 8 dtksh
+	problem with here-document buffer boundaries.
+
 	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Unset ENV and BASH_ENV
 	when reinvoking the shell, to work around problems with installers
 	who put strange things like "cd" commands in their environments.
@@ -3613,7 +3616,7 @@
 
 -----
 
-Copyright 2001 Free Software Foundation, Inc.
+Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 
