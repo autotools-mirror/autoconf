@@ -1,3 +1,7 @@
+2004-12-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Update GNU FDL version from 1.1 to 1.2.
+
 2004-12-17  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (AC_SUBST, AC_SUBST_FILES): Pass $1 to
