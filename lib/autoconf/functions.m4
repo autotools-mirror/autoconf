@@ -1723,7 +1723,7 @@ if test "x$ac_cv_func_vfork" = xyes; then
   _AC_FUNC_VFORK
 fi;
 if test "x$ac_cv_func_fork_works" = xcross; then
-  ac_cv_func_vfork_works=ac_cv_func_vfork
+  ac_cv_func_vfork_works=$ac_cv_func_vfork
   AC_MSG_WARN([result $ac_cv_func_vfork_works guessed because of cross compilation])
 fi
 

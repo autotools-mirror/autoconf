@@ -1,3 +1,8 @@
+2003-10-13  Nathanael Nerode  <neroden@gcc.gnu.org>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_FORK): Trivial fix for vfork
+	cross test.
+
 2003-10-11  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Use the new official
