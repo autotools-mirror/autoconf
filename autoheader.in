@@ -310,8 +310,11 @@ test -r $localdir/acconfig.h &&
 
 # Dump the templates from `configure.ac'.
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p' | sort`; do
-  echo >>$tmp/config.hin
-  eval echo '"${'$verb'}"' >>$tmp/config.hin
+  eval value=\$$verb
+  cat >>$tmp/config.hin <<EOF
+
+$value
+EOF
 done
 
 # Handle the case where @BOTTOM@ is the first line of acconfig.h.
