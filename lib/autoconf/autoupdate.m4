@@ -75,7 +75,7 @@ m4_define([AU_DEFINE], [])
 #
 # This allows sharing the same code for both supporting obsoleted macros,
 # and to update a configure.ac.
-# See `acobsolete.m4' for a longer description.
+# See the end of `autoupdate.in' for a longer description.
 m4_define([AU_DEFUN],
 [# This is what autoupdate's m4 run will expand.  It fires
 # the warning (with _au_warn_XXX), outputs it into the

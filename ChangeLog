@@ -1,4 +1,23 @@
-2004-01-30 Paolo Bonzini <bonzini@bogus.example.com>
+2004-02-04   Paolo Bonzini  <bonzini@gnu.org>
+
+	* doc/autoconf.texi (AU_DEFUN): Fix English,
+	suggested by Paul Eggert.
+	* lib/autoconf/autoupdate.m4: Correct reference to
+	acobsolete.m4, suggested by Alexandre Duret-Lutz.
+
+2004-02-02  Paolo Bonzini  <bonzini@gnu.org>
+
+	* bin/autoupdate.in: Define __file__ so that warnings
+	refer to the correct file.
+	* doc/autoconf.texi (AU_DEFUN): Describe more correctly
+	the behavior of the third argument.
+	* lib/autoconf/autoupdate.m4 (AU_DEFUN): Describe more
+	correctly the behavior of the third argument.  Document
+	what the three macros that AU_DEFUN defines do.  Fix
+	warning message when the third argument includes $0
+	(reported by Alexandre Duret-Lutz).
+
+2004-01-30 Paolo Bonzini <bonzini@gnu.org>
            Eric Sunshine <sunshine@sunshineco.com>
            Paul Eggert <eggert@twinsun.com>
 

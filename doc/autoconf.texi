@@ -8941,9 +8941,9 @@ with @code{AC_DEFUN} is that the user will be warned that
 
 If she then uses @command{autoupdate}, the call to @var{old-macro} will be
 replaced by the modern @var{implementation}.  @var{message} should
-include information on what to do after running @command{autoupdate},
-and @command{autoupdate} will print it as a warning, @emph{and} include
-it in the updated @file{configure.ac} file.
+include information on what to do after running @command{autoupdate};
+@command{autoupdate} will print it as a warning, and include it
+in the updated @file{configure.ac} file.
 @end defmac
 
 @node Coding Style
