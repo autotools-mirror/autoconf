@@ -61,8 +61,8 @@ dnl This is separate from AC_INIT to prevent GNU m4 1.0 from coredumping
 dnl when AC_CONFIG_HEADER is used.
 define(AC_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
-# Generated automatically using autoconf.
-dnl [#] Generated automatically using autoconf version AC_ACVERSION
+dnl [#] Generated automatically using autoconf.
+# Generated automatically using autoconf version AC_ACVERSION
 dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Copyright (C) 1991, 1992, 1993 Free Software Foundation, Inc.
 
