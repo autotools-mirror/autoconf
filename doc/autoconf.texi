@@ -235,6 +235,7 @@ Alternative Programs
 
 Library Functions
 
+* Functions Portability::       Pitfalls with usual functions
 * Particular Functions::        Special handling to find certain functions
 * Generic Functions::           How to find other functions
 
@@ -3168,11 +3169,25 @@ and you don't need to check for any special properties of
 it, then you can use one of the general function-check macros.
 
 @menu
+* Functions Portability::       Pitfalls with usual functions
 * Particular Functions::        Special handling to find certain functions
 * Generic Functions::           How to find other functions
 @end menu
 
-@node Particular Functions, Generic Functions, Library Functions, Library Functions
+@node Functions Portability, Particular Functions, Library Functions, Library Functions
+@subsection Portability of Classical Functions
+
+Most usual functions can either be missing, or be buggy, or be limited
+on some architectures.  This section tries to make an inventory of these
+portability issues.  By definition, this list will always require
+additions, please help us keeping it as complete as possible
+
+@table @code
+
+@end table
+
+
+@node Particular Functions, Generic Functions, Functions Portability, Library Functions
 @subsection Particular Function Checks
 @cindex Function, checking
 

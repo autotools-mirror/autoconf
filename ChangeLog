@@ -1,5 +1,9 @@
 2001-06-18  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Functions Portability): New section.
+
+2001-06-18  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in (M4): Pass --nesting-limit=1024, unless already set
 	in $M4.
 	Suggested by Andreas Schwab.
