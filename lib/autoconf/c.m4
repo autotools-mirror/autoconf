@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1075,6 +1075,41 @@ if test $ac_cv_c_const = no; then
             [Define to empty if `const' does not conform to ANSI C.])
 fi
 ])# AC_C_CONST
+
+
+# AC_C_RESTRICT
+# -------------
+# based on acx_restrict.m4, from the GNU Autoconf Macro Archive at:
+# http://www.gnu.org/software/ac-archive/htmldoc/acx_restrict.html
+#
+# Determine whether the C/C++ compiler supports the "restrict" keyword
+# introduced in ANSI C99, or an equivalent.  Do nothing if the compiler
+# accepts it.  Otherwise, if the compiler supports an equivalent,
+# define "restrict" to be that.  Here are some variants:
+# - GCC supports both __restrict and __restrict__
+# - older DEC Alpha C compilers support only __restrict
+# - _Restrict is the only spelling accepted by Sun WorkShop 6 update 2 C
+# Otherwise, define "restrict" to be empty.
+AN_IDENTIFIER([restrict], [AC_C_RESTRICT])
+AC_DEFUN([AC_C_RESTRICT],
+[AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
+  [ac_cv_c_restrict=no
+   # Try the official restrict keyword, then gcc's __restrict__, and
+   # the less common variants.
+   for ac_kw in restrict __restrict __restrict__ _Restrict; do
+     AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+      [float * $ac_kw x;])],
+      [ac_cv_c_restrict=$ac_kw; break])
+   done
+  ])
+ case $ac_cv_c_restrict in
+   restrict) ;;
+   no) AC_DEFINE(restrict,,
+        [Define to equivalent of C99 restrict keyword, or to nothing if this
+        is not supported.  Do not define if restrict is supported directly.]) ;;
+   *)  AC_DEFINE_UNQUOTED(restrict, $ac_cv_c_restrict) ;;
+ esac
+])# AC_C_RESTRICT
 
 
 # AC_C_VOLATILE
