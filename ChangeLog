@@ -1,3 +1,8 @@
+2003-12-29  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/autoreconf.in (autoreconf_current_directory):
+	Fix typo: mkdir without umask arg.
+
 2003-12-27  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (Limitations of Make) <Automatic rule rewriting>:
