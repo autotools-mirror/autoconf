@@ -1,10 +1,11 @@
-/* Template config.h
+/* acconfig.h
    This file is in the public domain.
-   It provides sample descriptive text for the C preprocessor macros
-   that the distributed Autoconf macros can define.
-   No software package will use all of them, but this file is provided
-   so autoheader can copy the ones you use into your own configuration
-   header files.
+
+   Descriptive text for the C preprocessor macros that
+   the distributed Autoconf macros can define.
+   No software package will use all of them; autoheader copies the ones
+   your configure.in uses into your configuration header file templates.
+
    The entries are in sort -df order: alphabetical, case insensitive,
    ignoring punctuation (such as underscores).
 
@@ -24,7 +25,6 @@
 /* Define to empty if the keyword does not work.  */
 #undef const
 
-/* Define if on MINIX.  */
 /* Define as the proper declaration for yytext.  */
 #undef DECLARE_YYTEXT
 
@@ -121,6 +121,12 @@
 /* Define if on MINIX.  */
 #undef _MINIX
 
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef mode_t
+
+/* Define if you don't have dirent.h, but have ndir.h.  */
+#undef NDIR
+
 /* Define if you have memory.h, and string.h doesn't declare the
    mem* functions.  */
 #undef NEED_MEMORY_H
@@ -141,6 +147,9 @@
 /* Define if you have neither a remote shell nor the rexec function.  */
 #undef NO_REMOTE
 
+/* Define to `long' if <sys/types.h> doesn't define.  */
+#undef off_t
+
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef pid_t
 
@@ -159,6 +168,9 @@
    before release 3.  */
 #undef SETVBUF_REVERSED
 
+/* Define to `unsigned' if <sys/types.h> doesn't define.  */
+#undef size_t
+
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
@@ -167,6 +179,9 @@
 	STACK_DIRECTION = 0 => direction of growth unknown
  */
 #undef STACK_DIRECTION
+
+/* Define if the `S_IS*' macros in <sys/stat.h> do not work properly.  */
+#undef STAT_MACROS_BROKEN
 
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
@@ -206,7 +221,7 @@
 #undef VOID_CLOSEDIR
 
 /* Define if your processor stores words with the most significant
-   byte first (like Motorola and Sparc, unlike Intel and VAX).  */
+   byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
 
