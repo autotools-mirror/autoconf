@@ -1,5 +1,12 @@
 2001-03-13  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at (AWK portability): Use AT_CHECK to check for GNU
+	AWK so that there is always a AT_CHECK between
+	AT_SETUP/AT_CLEANUP.
+	Reported by Nicolas Joly.
+
+2001-03-13  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at: Be sure to remove configure.ac~.
 
 2001-03-13  Raja R Harinath  <harinath@cs.umn.edu>

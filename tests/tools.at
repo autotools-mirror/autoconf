@@ -78,17 +78,18 @@ AT_SETUP([AWK portability])
 AT_DATA([configure.ac],
 [])
 
-if (gawk --version) >/dev/null 2>&1; then
-  # Generation of the script.
-  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir], 0,
-           [], [])
-  # Tracing.
-  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
-           ignore, [])
-  # Syntax correctness of ifnames.
-  AT_CHECK([AWK='gawk --posix' ifnames empty], 0,
-           [], [])
-fi
+# Skip if we don't have GNU Awk.
+AT_CHECK([gawk --version || exit 77], 0, ignore, ignore)
+
+# Generation of the script.
+AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir], 0,
+         [], [])
+# Tracing.
+AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
+         ignore, [])
+# Syntax correctness of ifnames.
+AT_CHECK([AWK='gawk --posix' ifnames empty], 0,
+         [], [])
 
 AT_CLEANUP(configure)
 
