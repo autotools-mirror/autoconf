@@ -3344,7 +3344,7 @@ else
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
     X_LIBS="$X_LIBS -L$x_libraries"
-dnl FIXME banish uname from this macro!
+dnl FIXME: banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space.  Words are not sufficient . . . .
     case "`(uname -sr) 2>/dev/null`" in
@@ -3376,7 +3376,7 @@ dnl FIXME banish uname from this macro!
   if test "$ISC" = yes; then
     X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
   else
-    # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
+    # Martyn Johnson says this is needed for Ultrix, if the X
     # libraries were built with DECnet support.  And Karl Berry says
     # the Alpha needs dnet_stub (dnet does not exist).
     AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
@@ -3390,10 +3390,15 @@ dnl FIXME banish uname from this macro!
     # chad@anasazi.com says the Pyramis MIS-ES running DC/OSx (SVR4)
     # needs -lnsl.
     # The nsl library prevents programs from opening the X display
-    # on Irix 5.2, according to dickey@clark.net.
+    # on Irix 5.2, according to T.E. Dickey.
+    # The functions gethostbyname, getservbyname, and inet_addr are
+    # in -lbsd on LynxOS 3.0.1/i386, according to Lars Hecking.
     AC_CHECK_FUNC(gethostbyname)
     if test $ac_cv_func_gethostbyname = no; then
       AC_CHECK_LIB(nsl, gethostbyname, X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl")
+      if test $ac_cv_lib_nsl_gethostbyname = no; then
+        AC_CHECK_LIB(bsd, gethostbyname, X_EXTRA_LIBS="$X_EXTRA_LIBS -lbsd")
+      fi
     fi
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
@@ -3409,7 +3414,7 @@ dnl FIXME banish uname from this macro!
 	$X_EXTRA_LIBS)
     fi
 
-    # gomez@mi.uni-erlangen.de says -lposix is necessary on A/UX.
+    # Guillermo Gomez says -lposix is necessary on A/UX.
     AC_CHECK_FUNC(remove)
     if test $ac_cv_func_remove = no; then
       AC_CHECK_LIB(posix, remove, X_EXTRA_LIBS="$X_EXTRA_LIBS -lposix")
@@ -3430,7 +3435,7 @@ dnl FIXME banish uname from this macro!
   # we get undefined symbols.  So assume we have SM if we have ICE.
   # These have to be linked with before -lX11, unlike the other
   # libraries we check for below, so use a different variable.
-  #  --interran@uluru.Stanford.EDU, Karl Berry
+  # John Interrante, Karl Berry
   AC_CHECK_LIB(ICE, IceConnectionNumber,
     [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"], , $X_EXTRA_LIBS)
   LDFLAGS="$ac_save_LDFLAGS"

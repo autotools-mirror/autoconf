@@ -1,3 +1,8 @@
+2000-03-01  Lars Hecking  <lhecking@nmrc.ucc.ie>
+
+	* acspecific.m4 (AC_PATH_XTRA): On LynxOS 3.0.1/i386,
+	gethostbyname(), getservbyname(), and inet_addr() are in -lbsd.
+
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
 	* tests/actest.m4 (AC_ENV_SAVE): Use multiple -e instead of
