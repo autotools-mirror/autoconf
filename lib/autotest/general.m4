@@ -577,7 +577,7 @@ done
 } >&AS_MESSAGE_LOG_FD
 
 at_start_date=`date`
-at_start_time=`date +%s 2>/dev/null || echo 0`
+at_start_time=`date +%s 2>/dev/null`
 echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
 at_xpass_list=
 at_xfail_list=
@@ -756,17 +756,19 @@ cd "$at_dir"
 
 # Compute the duration of the suite.
 at_stop_date=`date`
-at_stop_time=`date +%s 2>/dev/null || echo 0`
+at_stop_time=`date +%s 2>/dev/null`
 echo "$as_me: ending at: $at_stop_date" >&AS_MESSAGE_LOG_FD
-at_duration_s=`expr $at_stop_time - $at_start_time`
-at_duration_m=`expr $at_duration_s / 60`
-at_duration_h=`expr $at_duration_m / 60`
-at_duration_s=`expr $at_duration_s % 60`
-at_duration_m=`expr $at_duration_m % 60`
-at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
-if test "$at_duration" != "h m s"; then
-  echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD
-fi
+case $at_start_time,$at_stop_time in
+  [[0-9]*,[0-9]*])
+    at_duration_s=`expr $at_stop_time - $at_start_time`
+    at_duration_m=`expr $at_duration_s / 60`
+    at_duration_h=`expr $at_duration_m / 60`
+    at_duration_s=`expr $at_duration_s % 60`
+    at_duration_m=`expr $at_duration_m % 60`
+    at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
+    echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD
+    ;;
+esac
 
 # Wrap up the test suite with summary statistics.
 at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
