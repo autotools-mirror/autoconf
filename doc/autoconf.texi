@@ -2000,6 +2000,32 @@ for example, put it in @file{memchr.c} and use
 @samp{AC_REPLACE_FUNCS(memchr)}.
 @end defmac
 
+@defmac AC_HEADER_SYS_WAIT
+@maindex HEADER_SYS_WAIT
+@cvindex HAVE_SYS_WAIT_H
+If @file{sys/wait.h} exists and is compatible with POSIX.1, define
+@code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
+does not exist, or if it uses the old BSD @code{union wait} instead of
+@code{int} to store a status value.  If @file{sys/wait.h} is not POSIX.1
+compatible, then instead of including it, define the POSIX.1 macros with
+their usual interpretations.  Here is an example:
+
+@example
+@group
+#include <sys/types.h>
+#if HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
+#ifndef WEXITSTATUS
+#define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+#endif
+#ifndef WIFEXITED
+#define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
+#endif
+@end group
+@end example
+@end defmac
+
 @defmac AC_MEMORY_H
 @maindex MEMORY_H
 @cvindex NEED_MEMORY_H
@@ -2248,8 +2274,8 @@ If @code{uid_t} is not defined in @file{sys/types.h}, define
 This macro is used to check for typedefs not covered by the particular
 test macros.
 
-@defmac AC_CHECK_TYPEDEF (@var{type}, @var{default})
-@maindex CHECK_TYPEDEF
+@defmac AC_CHECK_TYPE (@var{type}, @var{default})
+@maindex CHECK_TYPE
 If the type @var{type} is not defined in @file{sys/types.h} or
 @file{stdlib.h} (if that is present), define it to be the C (or C++)
 builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.

@@ -602,6 +602,26 @@ if test $ac_cv_decl_sys_siglist = yes; then
 fi
 ])
 
+AC_DEFUN(AC_HEADER_SYS_WAIT,
+[AC_MSG_CHECKING([for sys/wait.h that is POSIX.1 compatible])
+AC_CACHE_VAL(ac_cv_header_sys_wait_h,
+[AC_TRY_LINK([#include <sys/types.h>
+#include <sys/wait.h>
+#ifndef WEXITSTATUS
+#define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+#endif
+#ifndef WIFEXITED
+#define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
+#endif], [int s;
+wait (&s);
+s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
+ac_cv_header_sys_wait_h=yes, ac_cv_header_sys_wait_h=no)])dnl
+AC_MSG_RESULT($ac_cv_header_sys_wait_h)
+if test $ac_cv_header_sys_wait_h = yes; then
+  AC_DEFINE(HAVE_SYS_WAIT_H)
+fi
+])
+
 
 dnl ### Checks for typedefs
 
@@ -661,16 +681,16 @@ fi
 ])
 
 AC_DEFUN(AC_TYPE_SIZE_T,
-[AC_CHECK_TYPEDEF(size_t, unsigned)])
+[AC_CHECK_TYPE(size_t, unsigned)])
 
 AC_DEFUN(AC_TYPE_PID_T,
-[AC_CHECK_TYPEDEF(pid_t, int)])
+[AC_CHECK_TYPE(pid_t, int)])
 
 AC_DEFUN(AC_TYPE_OFF_T,
-[AC_CHECK_TYPEDEF(off_t, long)])
+[AC_CHECK_TYPE(off_t, long)])
 
 AC_DEFUN(AC_TYPE_MODE_T,
-[AC_CHECK_TYPEDEF(mode_t, int)])
+[AC_CHECK_TYPE(mode_t, int)])
 
 dnl Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN(AC_TYPE_SIGNAL,

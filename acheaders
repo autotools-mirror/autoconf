@@ -10,6 +10,7 @@ stdlib.h	AC_HEADER_STDC
 stddef.h	AC_HEADER_STDC
 stdarg.h	AC_HEADER_STDC
 float.h		AC_HEADER_STDC
+sys/wait.h	AC_HEADER_SYS_WAIT
 X11/Xlib.h	AC_PATH_X
 
 # Others.
