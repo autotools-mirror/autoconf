@@ -1211,7 +1211,7 @@ AC_LANG(FORTRAN77)
 
 # This is the simplest of all Fortran 77 programs.
 cat >conftest.$ac_ext <<EOF
-    end
+      end
 EOF
 
 # Save the "compiler output file descriptor" to FD 8.

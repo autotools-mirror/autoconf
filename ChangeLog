@@ -1,3 +1,9 @@
+2000-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): bug fix in F77 test program
+	(missing whitespace--F77 requires program statements to start in
+	column 7).
+
 2000-03-29  Akim Demaille  <akim@epita.fr>
 
 	Rewrite the autoheader chain on top of `autoconf --trace'.
