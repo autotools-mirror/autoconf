@@ -6,8 +6,8 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.6
-@set VERSION 1.6
+@set EDITION 1.7
+@set VERSION 1.7
 @set UPDATED October 1993
 
 @iftex
