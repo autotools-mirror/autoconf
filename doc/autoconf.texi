@@ -9598,7 +9598,7 @@ and for @command{zsh} versions before 3.1.6-dev-18 you must also
 set @code{NULLCMD} to @samp{:}.  @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
 
-Zsh 3.0.8 is the native @command{/bin/sh} on Mac OS X 10.0.3.
+Zsh 3.0.8 is the native @command{sh} on Mac OS X 10.0.3.
 @end table
 
 The following discussion between Russ Allbery and Robert Lipe is worth
@@ -9635,12 +9635,12 @@ Posix standard, the challenge is to find it.
 @cindex Shell here documents
 
 Don't rely on @samp{\} being preserved just because it has no special
-meaning together with the next symbol.  In the native @command{/bin/sh}
+meaning together with the next symbol.  In the native @command{sh}
 on Open@acronym{BSD} 2.7 @samp{\"} expands to @samp{"} in here-documents with
 unquoted delimiter.  As a general rule, if @samp{\\} expands to @samp{\}
 use @samp{\\} to get @samp{\}.
 
-With Open@acronym{BSD} 2.7's @command{/bin/sh}
+With Open@acronym{BSD} 2.7's @command{sh}
 
 @example
 @group
@@ -10014,9 +10014,9 @@ of a ``bad substitution''.
 
 @sp 1
 
-Solaris' @command{/bin/sh} has a frightening bug in its interpretation
+The Solaris @command{sh} has a frightening bug in its interpretation
 of this.  Imagine you need set a variable to a string containing
-@samp{@}}.  This @samp{@}} character confuses Solaris' @command{/bin/sh}
+@samp{@}}.  This @samp{@}} character confuses the Solaris @command{sh}
 when the affected variable was already set.  This bug can be exercised
 by running:
 
@@ -10582,7 +10582,7 @@ directory, you must use @samp{. ./foo}.
 @prindex @command{!}
 The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
-is still absent from more modern shells (e.g., Solaris 9 @command{/bin/sh}).
+is still absent from more modern shells (e.g., Solaris 9 @command{sh}).
 Shell code like this:
 
 @example
@@ -10636,6 +10636,25 @@ OK
 bash-2.02$ @kbd{case /tmp in [\\/]*) echo OK;; esac}
 OK
 @end example
+
+Many Bourne shells cannot handle closing brackets in character classes
+correctly.
+
+Some shells also have problems with backslash escaping in case you do not want
+to match the backslash: both a backslash and the escaped character match this
+pattern.  To work around this, specify the character class in a variable, so
+that quote removal does not apply afterwards, and the special characters don't
+have to be backslash-escaped:
+
+@example
+$ @kbd{case '\' in [\<]) echo OK;; esac}
+OK
+$ @kbd{scanset='[<]'; case '\' in $scanset) echo OK;; esac}
+$
+@end example
+
+Even with this, SunOS 5.7 ksh matches a backslash if the set contains any
+of the characters @samp{|}, @samp{&}, @samp{(}, or @samp{)}.
 
 Some shells, such as Ash 0.3.8, are confused by an empty
 @code{case}/@code{esac}:
@@ -10691,7 +10710,7 @@ etc.@: for a means to simulate @option{-n}.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  On @samp{echo '\n' | wc -l}, the @command{sh} of
-Digital Unix 4.0 and @acronym{MIPS RISC/OS} 4.52, answer 2, but the Solaris'
+Digital Unix 4.0 and @acronym{MIPS RISC/OS} 4.52, answer 2, but the Solaris
 @command{sh}, Bash, and Zsh (in @command{sh} emulation mode) report 1.
 Please note that the problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
@@ -10872,6 +10891,12 @@ printf %s -foo
 @end example
 
 
+@item @command{read}
+@c ------------------
+@prindex @command{read}
+Not all shells support @option{-r} (Solaris 9 @command{sh} for example).
+
+
 @item @command{pwd}
 @c ----------------
 @prindex @command{pwd}
@@ -10980,7 +11005,7 @@ have it.  Do not use @samp{test -e} either, because Solaris 2.5 does not
 have it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
 Posix 1003.1-2001, but older shells like Solaris 8
-@code{/bin/sh} support only @option{-h}.
+@code{sh} support only @option{-h}.
 
 @item @command{test} (strings)
 @c ---------------------------
