@@ -1,5 +1,10 @@
 1999-10-31  Ben Elliston  <bje@cygnus.com>
 
+	* Makefile.am (CLEANFILES): New explicit variable.
+	(editsh): acdatadir is no longer defined, so use pkgdatadir.
+	(editpl): Likewise. From Akim Demaille <akim@epita.fr>.
+	* Makefile.in: Regenerate.
+
 	* configure: Regenerate.
 	* aclocal.m4: Generate.
 	* Makefile.in: Regenerate with Automake.

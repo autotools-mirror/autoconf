@@ -40,11 +40,16 @@ standards_TEXINFOS = make-stds.texi
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
-	     acfunctions acheaders acidentifiers acmakevars \
+            acfunctions acheaders acidentifiers acmakevars \
              acprograms acconfig.h acgeneral.m4 acoldnames.m4 \
              acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in \
 	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
 	     ifnames.sh autoscan.pl INSTALL.txt
+
+# Files that should be removed, but which Automake does not know.
+# There are texi2dvi files, frozen files, and the scripts.
+CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
+autoconf.ov autoconf.ovs autoconf.m4f autoheader.m4f $(bin_SCRIPTS)
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
@@ -64,10 +69,10 @@ install-data-hook: INSTALL.txt
 
 # The scripts.
 
-editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e \
+editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e \
 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' \
 	-e 's,@''SHELL''@,$(SHELL),g'
-editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
+editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
 .sh:
 	rm -f $@ $@.tmp
