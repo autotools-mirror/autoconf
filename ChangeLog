@@ -1,5 +1,10 @@
 2003-06-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (#define header templates): Don't use quotes in
+	C++ comments as it puzzles Emacs' sh font-lock-mode.
+
+2003-06-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/mktests.sh (au_exclude_egrep): Fix output copyright notice.
 	* lib/autom4te.cfg (args): Add local.at? for Autotest args.
 	* tests/atspecific.m4: Rename as...

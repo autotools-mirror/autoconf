@@ -297,7 +297,7 @@ AC_CONFIG_FILES(defs)
 # Things included in confdefs.h, but which make no sense in
 # config.h, nor in $DEFS.
 cat <<\EOF >>confdefs.h
-/* Hi Mum! Look, I'm doing C++! */
+/* Hi Mum! Look, I am doing C++! */
 #ifdef __cplusplus
 void exit (int status);
 #endif
