@@ -628,7 +628,7 @@ if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conftest.sh
   echo  "exit 0"   >>conftest.sh
   chmod +x conftest.sh
-  if (PATH=".;."; conftest.sh) >/dev/null 2>&1; then
+  if (PATH="/nonexistent;."; conftest.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
