@@ -920,7 +920,7 @@ define([_AC_PROG_F77_GNU],
   yes
 #endif
 _ACEOF
-if AC_TRY_COMMAND($F77 -E conftest.$ac_ext) | grep yes >/dev/null; then
+if AC_TRY_COMMAND($F77 -E - <conftest.$ac_ext) | grep yes >/dev/null; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no

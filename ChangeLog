@@ -1,3 +1,8 @@
+2000-09-05   Dave Love  <fx@gnu.org>
+
+	* aclang.m4 (_AC_PROG_F77_GNU): Run command from standard input so
+	that we can get some standard output.
+
 2000-09-04  Peter Eisentraut  <peter_e@gmx.net>
 
 	* autoscan.pl: Repair broken Getopt::Long use.
