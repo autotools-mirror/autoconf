@@ -2147,9 +2147,16 @@ define(AC_OUTPUT_MAKE_DEFS,
 dnl Using a here document instead of a string reduces the quoting nightmare.
 # Protect against shell expansion while executing Makefile rules.
 # Protect against Makefile macro expansion.
+#
+# If the first sed substitution is executed (which looks for macros that
+# take arguments), then we branch to the cleanup section.  Otherwise,
+# look for a macro that doesn't take arguments.
 cat > conftest.defs <<\EOF
 changequote(<<, >>)dnl
-s%<<#define>> \([^ 	][^ 	]*\) *\(.*\)%-D\1=\2%g
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
+t cleanup
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\2=\3%g
+: cleanup
 s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
@@ -2359,7 +2366,10 @@ cat > conftest.hdr <<\EOF
 changequote(<<, >>)dnl
 s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
-s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) *\(.*\)%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*$\)%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
+t cleanup
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*$\)% ${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+: cleanup
 s%ac_d%ac_u%gp
 s%ac_u%ac_e%gp
 changequote([, ])dnl
