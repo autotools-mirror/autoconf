@@ -20,6 +20,7 @@ signal		AC_TYPE_SIGNAL
 alloca		AC_FUNC_ALLOCA
 fnmatch		AC_FUNC_FNMATCH
 getloadavg	AC_FUNC_GETLOADAVG
+mktime		AC_FUNC_MKTIME
 mmap		AC_FUNC_MMAP
 setvbuf		AC_FUNC_SETVBUF_REVERSED
 strcoll		AC_FUNC_STRCOLL
@@ -40,7 +41,6 @@ getcwd		AC_CHECK_FUNCS
 getwd		AC_CHECK_FUNCS
 mkdir		AC_CHECK_FUNCS
 mkfifo		AC_CHECK_FUNCS
-mktime		AC_CHECK_FUNCS
 putenv		AC_CHECK_FUNCS
 re_comp		AC_CHECK_FUNCS
 regcmp		AC_CHECK_FUNCS

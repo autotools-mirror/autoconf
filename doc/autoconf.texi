@@ -2053,6 +2053,13 @@ If the @code{memcmp} function is not available, or does not work on
 variable @code{LIBOBJS}.
 @end defmac
 
+@defmac AC_FUNC_MKTIME
+@maindex FUNC_MKTIME
+@ovindex LIBOBJS
+If the @code{mktime} function is not available, or does not work
+correctly, add @samp{mktime.o} to output variable @code{LIBOBJS}.
+@end defmac
+
 @defmac AC_FUNC_MMAP
 @maindex FUNC_MMAP
 @cvindex HAVE_MMAP

@@ -1,3 +1,9 @@
+1999-04-17  Paul Eggert  <eggert@twinsun.com>
+
+	* autoconf.texi, acspecific.m4 (AC_FUNC_MKTIME): New macro.
+	taken from automake's AM_FUNC_MKTIME.
+	* acfunctions: mktime now belongs to AC_FUNC_MKTIME.
+
 1999-04-19  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_TRY_LINK_FUNC): Add support for Fortran 77.
