@@ -153,6 +153,8 @@ sub update_file ($$)
     {
       # File didn't change, so don't update its mod time.
       msg 'note', "`$to' is unchanged";
+      unlink ($from)
+        or fatal "cannot not remove $from: $!";
       return
     }
 
