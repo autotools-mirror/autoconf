@@ -1,3 +1,10 @@
+2000-04-07  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4:	s/1>&/>&/g.
+	(AC_FD_LOG): New macro, replaces...
+	(AC_FD_CC): this.  Provide an AU definition.
+	(_AC_ECHO_UNQUOTED, _AC_ECHO_N): Use m4_default.
+
 2000-04-05  Akim Demaille  <akim@epita.fr>
 
 	At the end of `./configure', save the cache values, and the CPP

@@ -1454,16 +1454,17 @@ done
 # 2 errors and warnings
 # 3 some systems may open it to /dev/tty
 # 4 used on the Kubota Titan
-define(AC_FD_MSG, 6)dnl
+define([AC_FD_MSG], 6)dnl
 @%:@ AC_FD_MSG checking for... messages and results
-define(AC_FD_CC, 5)dnl
-@%:@ AC_FD_CC compiler messages saved in config.log
+define([AC_FD_LOG], 5)dnl
+AU_DEFUN([AC_FD_CC], [AC_FD_LOG])dnl That's how it used to be named.
+@%:@ AC_FD_LOG compiler messages saved in config.log
 if test "$silent" = yes; then
   exec AC_FD_MSG>/dev/null
 else
   exec AC_FD_MSG>&1
 fi
-exec AC_FD_CC>./config.log
+exec AC_FD_LOG>./config.log
 
 echo "\
 This file contains any messages produced by compilers while
@@ -1472,7 +1473,7 @@ running configure, to aid debugging if configure makes a mistake.
 It was created by configure ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
  > [$]0 $ac_configure_args
-" 1>&AC_FD_CC
+" >&AC_FD_LOG
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -1801,7 +1802,7 @@ dnl Set the other $[1] vars.  Propagate the failures of config.sub.
   ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
   ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
 else
-  echo $ECHO_N "(cached) $ECHO_C" 1>&AC_FD_MSG
+  echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG
 fi
 
 AC_MSG_RESULT($ac_cv_$1)
@@ -1963,7 +1964,7 @@ define(AC_CACHE_VAL,
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
 AC_VAR_IF_SET([$1],
-              [echo $ECHO_N "(cached) $ECHO_C" 1>&AC_FD_MSG],
+              [echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG],
               [$2])])
 
 
@@ -2099,7 +2100,7 @@ define(_AC_SH_QUOTE,
 # Expands into a sh call to echo onto FD (default is AC_FD_MSG).
 # The shell performs its expansions on STRING.
 define([_AC_ECHO_UNQUOTED],
-[echo "[$1]" 1>&ifelse($2,, AC_FD_MSG, $2)])
+[echo "[$1]" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # _AC_ECHO(STRING, [FD])
@@ -2113,59 +2114,59 @@ define([_AC_ECHO],
 # _AC_ECHO_N(STRING, [FD])
 # ------------------------
 # Same as _AC_ECHO, but echo doesn't return to a new line.
-define(_AC_ECHO_N,
-[echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" 1>&ifelse($2,,AC_FD_MSG,$2)])
+define([_AC_ECHO_N],
+[echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
 
 
 # AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 # ------------------------------------
-define(AC_MSG_CHECKING,
+define([AC_MSG_CHECKING],
 [_AC_ECHO_N([checking $1... ])
-_AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
+_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)])
 
 
 # AC_CHECKING(FEATURE-DESCRIPTION)
 # --------------------------------
-define(AC_CHECKING,
+define([AC_CHECKING],
 [_AC_ECHO([checking $1])
-_AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
+_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)])
 
 
 # AC_MSG_RESULT(RESULT-DESCRIPTION)
 # ---------------------------------
-define(AC_MSG_RESULT,
+define([AC_MSG_RESULT],
 [_AC_ECHO([$ECHO_T""$1])])
 
 
 # AC_MSG_RESULT_UNQUOTED(RESULT-DESCRIPTION)
 # ------------------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
-define(AC_MSG_RESULT_UNQUOTED,
+define([AC_MSG_RESULT_UNQUOTED],
 [_AC_ECHO_UNQUOTED([$ECHO_T""$1])])
 
 
 # AC_VERBOSE(RESULT-DESCRIPTION)
 # ------------------------------
-define(AC_VERBOSE,
+define([AC_VERBOSE],
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
 _AC_ECHO([	$1])])
 
 
 # AC_MSG_WARN(PROBLEM-DESCRIPTION)
 # --------------------------------
-define(AC_MSG_WARN,
+define([AC_MSG_WARN],
 [_AC_ECHO([configure: warning: $1], 2)])
 
 
 # AC_MSG_ERROR(ERROR-DESCRIPTION, [EXIT-STATUS])
 # ----------------------------------------------
-define(AC_MSG_ERROR,
+define([AC_MSG_ERROR],
 [{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 
 # AC_MSG_ERROR_UNQUOTED(ERROR-DESCRIPTION, [EXIT-STATUS])
 # -------------------------------------------------------
-define(AC_MSG_ERROR_UNQUOTED,
+define([AC_MSG_ERROR_UNQUOTED],
 [{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 
@@ -2184,8 +2185,8 @@ define(AC_MSG_ERROR_UNQUOTED,
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
 AC_DEFUN(AC_TRY_EVAL,
-[{ (eval echo configure:__oline__: \"[$]$1\") 1>&AC_FD_CC; dnl
-(eval [$]$1) 2>&AC_FD_CC; }])
+[{ (eval echo configure:__oline__: \"[$]$1\") >&AC_FD_LOG; dnl
+(eval [$]$1) 2>&AC_FD_LOG; }])
 
 
 # AC_TRY_COMMAND(COMMAND)
@@ -2534,7 +2535,7 @@ AC_DEFUN(AC_PREFIX_PROGRAM,
 pushdef(AC_Prog, translit($1, a-z, A-Z))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-echo $ECHO_N "checking for prefix by $ECHO_C" 1>&AC_FD_MSG
+echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
 AC_PATH_PROG(AC_Prog, $1)
   if test -n "$ac_cv_path_[]AC_Prog"; then
     prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's%/[^/][^/]*//*[^/][^/]*$%%']`
@@ -2690,9 +2691,9 @@ ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   m4_default([$2], :)
 else
-  echo "$ac_err" >&AC_FD_CC
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
+  echo "$ac_err" >&AC_FD_LOG
+  echo "configure: failed program was:" >&AC_FD_LOG
+  cat conftest.$ac_ext >&AC_FD_LOG
   $3
 fi
 rm -f conftest*])
@@ -2719,7 +2720,7 @@ AC_LANG_SOURCE([[$2]])
 EOF
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
-if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_CC |
+if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_LOG |
 dnl Prevent m4 from eating character classes:
 changequote(, )dnl
   egrep "$1" >/dev/null 2>&1; then
@@ -2749,8 +2750,8 @@ EOF
 if AC_TRY_EVAL(ac_compile); then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_LOG
+  cat conftest.$ac_ext >&AC_FD_LOG
 ifval([$3],
 [  $3
 ])dnl
@@ -2783,8 +2784,8 @@ EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_LOG
+  cat conftest.$ac_ext >&AC_FD_LOG
 ifval([$3],
 [  $3
 ])dnl
@@ -2835,8 +2836,8 @@ if AC_TRY_EVAL(ac_link) &&
    test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_LOG
+  cat conftest.$ac_ext >&AC_FD_LOG
 ifval([$3],
 [  $3
 ])dnl
@@ -3627,13 +3628,13 @@ ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
-# Save into config.log some informations which might help to debug.
-echo >>config.log
-echo "The cache variables are:" >>config.log
-_AC_CACHE_DUMP | sed -e 's/^/| /' >>config.log
-echo >>config.log
-echo "confdefs.h is:" >>config.log
-cat confdefs.h | sed -e 's/^/| /' >>config.log
+# Save into config.log some information that might help in debugging.
+echo >&AC_FD_LOG
+echo "Cache variables:" >&AC_FD_LOG
+_AC_CACHE_DUMP | sed -e 's/^/| /' >&AC_FD_LOG
+echo >&AC_FD_LOG
+echo "confdefs.h:" >&AC_FD_LOG
+cat confdefs.h | sed -e 's/^/| /' >&AC_FD_LOG
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15

@@ -166,8 +166,8 @@ define([AC_LANG(C)],
 [ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
@@ -229,8 +229,8 @@ define([AC_LANG(C++)],
 [ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
@@ -273,8 +273,8 @@ define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
 # ------------------
 define([AC_LANG(FORTRAN77)],
 [ac_ext=f
-ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
+ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
@@ -452,7 +452,7 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
-fi])dnl
+fi])[]dnl
 ])# AC_PROG_CC_GNU
 
 
@@ -510,15 +510,15 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC'
+ac_try='${CC-cc} -c conftest.c -o conftest.o >&AC_FD_LOG'
 if AC_TRY_EVAL(ac_try) &&
    test -f conftest.o && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if AC_TRY_COMMAND(cc -c conftest.c 1>&AC_FD_CC); then
-      ac_try='cc -c conftest.c -o conftest.o 1>&AC_FD_CC'
+    if AC_TRY_COMMAND(cc -c conftest.c >&AC_FD_LOG); then
+      ac_try='cc -c conftest.c -o conftest.o >&AC_FD_LOG'
       if AC_TRY_EVAL(ac_try) &&
 	 test -f conftest.o && AC_TRY_EVAL(ac_try);
       then
@@ -649,7 +649,7 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
-fi])dnl
+fi])[]dnl
 ])# AC_PROG_CXX_GNU
 
 
@@ -792,7 +792,7 @@ EOF
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
-ac_try='$F77 $FFLAGS -c conftest.f -o conftest.o 1>&AC_FD_CC'
+ac_try='$F77 $FFLAGS -c conftest.f -o conftest.o >&AC_FD_LOG'
 if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
   eval ac_cv_prog_f77_${ac_f77}_c_o=yes
 else
@@ -1215,11 +1215,11 @@ cat >conftest.$ac_ext <<EOF
 EOF
 
 # Save the "compiler output file descriptor" to FD 8.
-exec 8>&AC_FD_CC
+exec 8>&AC_FD_LOG
 
 # Temporarily redirect compiler output to stdout, since this is what
 # we want to capture in AC_LINK_OUTPUT.
-exec AC_FD_CC>&1
+exec AC_FD_LOG>&1
 
 # Compile and link our simple test program by passing the "-v" flag
 # to the Fortran 77 compiler in order to get "verbose" output that
@@ -1231,7 +1231,7 @@ ac_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
 FFLAGS="$ac_save_FFLAGS"
 
 # Restore the "compiler output file descriptor".
-exec AC_FD_CC>&8
+exec AC_FD_LOG>&8
 
 rm -f conftest.*
 
@@ -1427,8 +1427,8 @@ if AC_TRY_EVAL(ac_compile); then
   rm -f conftest*
   rm -f cf77_test*
 else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
+  echo "configure: failed program was:" >&AC_FD_LOG
+  cat conftest.$ac_ext >&AC_FD_LOG
 fi
 AC_LANG_RESTORE()dnl
 ])
