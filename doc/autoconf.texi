@@ -107,8 +107,23 @@ Free Documentation License''.
 @c portability sections and so on.
 @defindex pr
 
-@c Put the programs and funcions into their own index.
-@syncodeindex fn pr
+@c Define an index for functions: `alloca' etc.  Used for the
+@c portability sections and so on.  We can't use `fn' (aka `fnindex),
+@c since `@defmac' goes into it => we'd get all the macros too.
+
+@c   FIXME: Aaarg!  It seems there are too many indices for TeX :(
+@c
+@c   ! No room for a new @write .
+@c   l.112 @defcodeindex fu
+@c
+@c   so don't define yet another one :(  Just put some tags before each
+@c   @prindex which is actually a @funindex.
+@c
+@c   @defcodeindex fu
+@c
+@c
+@c   @c Put the programs and funcions into their own index.
+@c   @syncodeindex fu pr
 
 
 @node Top, Introduction, (dir), (dir)
@@ -3238,13 +3253,15 @@ additions, please help us keeping it as complete as possible
 
 @table @asis
 @item @code{sprintf}
-@findex sprintf
+@c @fuindex sprintf
+@prindex @code{sprintf}
 The ISO C standard says @code{sprintf} and @code{vsprintf} return the
 number of characters written, but on some old systems (SunOS for
 instance) they return the buffer pointer instead.
 
 @item @code{unlink}
-@findex unlink
+@c @fuindex unlink
+@prindex @code{unlink}
 The @sc{posix} spec says that @code{unlink} causes the given files to be
 removed only after there are no more open file handles for it.  Not all
 OS's support this behaviour though.  So even on systems that provide
@@ -3268,6 +3285,8 @@ in some cases how they respond when given certain arguments.
 @cvindex C_ALLOCA
 @cvindex HAVE_ALLOCA_H
 @ovindex ALLOCA
+@c @fuindex alloca
+@prindex @code{alloca}
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
@@ -3318,6 +3337,8 @@ char *alloca ();
 
 @defmac AC_FUNC_CHOWN
 @acindex FUNC_CHOWN
+@c @fuindex chown
+@prindex @code{chown}
 If the @code{chown} function is available and works (in particular, it
 should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.
@@ -3327,6 +3348,8 @@ should accept @option{-1} for @code{uid} and @code{gid}), define
 @defmac AC_FUNC_CLOSEDIR_VOID
 @acindex FUNC_CLOSEDIR_VOID
 @cvindex CLOSEDIR_VOID
+@c @fuindex closedir
+@prindex @code{closedir}
 If the @code{closedir} function does not return a meaningful value,
 define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
 return value for an error indicator.
@@ -3334,12 +3357,16 @@ return value for an error indicator.
 
 @defmac AC_FUNC_ERROR_AT_LINE
 @acindex FUNC_ERROR_AT_LINE
+@c @fuindex error_at_line
+@prindex @code{error_at_line}
 If the @code{error_at_line} function is not found, require an
 @code{AC_LIBOBJ} replacement of @samp{error}.
 @end defmac
 
 @defmac AC_FUNC_FNMATCH
 @acindex FUNC_FNMATCH
+@c @fuindex fnmatch
+@prindex @code{fnmatch}
 If the @code{fnmatch} function is available and works (unlike the one on
 Solaris 2.4), define @code{HAVE_FNMATCH}.
 @end defmac
@@ -3350,6 +3377,10 @@ Solaris 2.4), define @code{HAVE_FNMATCH}.
 @cvindex HAVE_WORKING_FORK
 @cvindex HAVE_WORKING_VFORK
 @cvindex vfork
+@c @fuindex fork
+@prindex @code{fork}
+@c @fuindex vfork
+@prindex @code{vfork}
 This macro checks for the @code{fork} and @code{vfork} functions. If a
 working @code{fork} is found, define @code{HAVE_WORKING_FORK}. This macro
 checks whether @code{fork} is just a stub by trying to run it.
@@ -3379,6 +3410,8 @@ yourself in new code:
 @defmac AC_FUNC_FSEEKO
 @acindex FUNC_FSEEKO
 @cvindex _LARGEFILE_SOURCE
+@c @fuindex fseeko
+@prindex @code{fseeko}
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
 Define @code{_LARGEFILE_SOURCE} if necessary.
 @end defmac
@@ -3386,6 +3419,8 @@ Define @code{_LARGEFILE_SOURCE} if necessary.
 @defmac AC_FUNC_GETGROUPS
 @acindex FUNC_GETGROUPS
 @ovindex GETGROUPS_LIBS
+@c @fuindex getgroups
+@prindex @code{getgroups}
 If the @code{getgroups} function is available and works (unlike on
 Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
@@ -3407,6 +3442,8 @@ needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @ovindex NEED_SETGID
 @ovindex KMEM_GROUP
 @ovindex GETLOADAVG_LIBS
+@c @fuindex getloadavg
+@prindex @code{getloadavg}
 Check how to get the system load averages.  If the system has the
 @code{getloadavg} function, define @code{HAVE_GETLOADAVG}, and set
 @code{GETLOADAVG_LIBS} to any libraries needed to get that function.
@@ -3445,6 +3482,8 @@ program.
 @defmac AC_FUNC_GETMNTENT
 @acindex FUNC_GETMNTENT
 @cvindex HAVE_GETMNTENT
+@c @fuindex getmntent
+@prindex @code{getmntent}
 Check for @code{getmntent} in the @file{sun}, @file{seq}, and @file{gen}
 libraries, for Irix 4, PTX, and Unixware, respectively.  Then, if
 @code{getmntent} is available, define @code{HAVE_GETMNTENT}.
@@ -3453,6 +3492,8 @@ libraries, for Irix 4, PTX, and Unixware, respectively.  Then, if
 @defmac AC_FUNC_GETPGRP
 @acindex FUNC_GETPGRP
 @cvindex GETPGRP_VOID
+@c @fuindex getpgrp
+@prindex @code{getpgrp}
 If @code{getpgrp} takes no argument (the @sc{posix.1} version), define
 @code{GETPGRP_VOID}.  Otherwise, it is the @sc{bsd} version, which takes
 a process ID as an argument.  This macro does not check whether
@@ -3463,6 +3504,8 @@ first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @defmac AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 @acindex FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 @cvindex LSTAT_FOLLOWS_SLASHED_SYMLINK
+@c @fuindex lstat
+@prindex @code{lstat}
 If @file{link} is a symbolic link, then @code{lstat} should treat
 @file{link/} the same as @file{link/.}.  However, many older
 @code{lstat} implementations incorrectly ignore trailing slashes.
@@ -3478,6 +3521,8 @@ If @code{lstat} behaves properly, define
 
 @defmac AC_FUNC_MALLOC
 @acindex FUNC_MALLOC
+@c @fuindex malloc
+@prindex @code{malloc}
 If the @code{malloc} works correctly (@samp{malloc (0)} returns a valid
 pointer), define @code{HAVE_MALLOC}.
 @end defmac
@@ -3485,6 +3530,8 @@ pointer), define @code{HAVE_MALLOC}.
 @defmac AC_FUNC_MEMCMP
 @acindex FUNC_MEMCMP
 @ovindex LIBOBJS
+@c @fuindex memcmp
+@prindex @code{memcmp}
 If the @code{memcmp} function is not available, or does not work on
 8-bit data (like the one on SunOS 4.1.3), or fails when comparing 16
 bytes or more and with at least one buffer not starting on a 4-byte
@@ -3495,6 +3542,8 @@ boundary (such as the one on NeXT x86 OpenStep), require an
 @defmac AC_FUNC_MKTIME
 @acindex FUNC_MKTIME
 @ovindex LIBOBJS
+@c @fuindex mktime
+@prindex @code{mktime}
 If the @code{mktime} function is not available, or does not work
 correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
 @end defmac
@@ -3502,6 +3551,8 @@ correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
 @defmac AC_FUNC_MMAP
 @acindex FUNC_MMAP
 @cvindex HAVE_MMAP
+@c @fuindex mmap
+@prindex @code{mmap}
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.  Only checks private fixed mapping of already-mapped
 memory.
@@ -3520,6 +3571,8 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @cvindex SELECT_TYPE_ARG1
 @cvindex SELECT_TYPE_ARG234
 @cvindex SELECT_TYPE_ARG5
+@c @fuindex select
+@prindex @code{select}
 Determines the correct type to be passed for each of the
 @code{select} function's arguments, and defines those types
 in @code{SELECT_TYPE_ARG1}, @code{SELECT_TYPE_ARG234}, and
@@ -3531,6 +3584,8 @@ and @code{SELECT_TYPE_ARG5} defaults to @samp{struct timeval *}.
 @defmac AC_FUNC_SETPGRP
 @acindex FUNC_SETPGRP
 @cvindex SETPGRP_VOID
+@c @fuindex setpgrp
+@prindex @code{setpgrp}
 If @code{setpgrp} takes no argument (the @sc{posix.1} version), define
 @code{SETPGRP_VOID}.  Otherwise, it is the @sc{bsd} version, which takes
 two process IDs as arguments.  This macro does not check whether
@@ -3544,6 +3599,10 @@ first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
 @acindex FUNC_LSTAT
 @cvindex HAVE_STAT_EMPTY_STRING_BUG
 @cvindex HAVE_LSTAT_EMPTY_STRING_BUG
+@c @fuindex stat
+@prindex @code{stat}
+@c @fuindex lstat
+@prindex @code{lstat}
 Determine whether @code{stat} or @code{lstat} have the bug that it
 succeeds when given the zero-length file name argument.  The @code{stat}
 and @code{lstat} from SunOS 4.1.4 and the Hurd (as of 1998-11-01) do
@@ -3557,6 +3616,8 @@ replacement of it.
 @defmac AC_FUNC_SETVBUF_REVERSED
 @acindex FUNC_SETVBUF_REVERSED
 @cvindex SETVBUF_REVERSED
+@c @fuindex setvbuf
+@prindex @code{setvbuf}
 If @code{setvbuf} takes the buffering type as its second argument and
 the buffer pointer as the third, instead of the other way around, define
 @code{SETVBUF_REVERSED}.
@@ -3565,6 +3626,8 @@ the buffer pointer as the third, instead of the other way around, define
 @defmac AC_FUNC_STRCOLL
 @acindex FUNC_STRCOLL
 @cvindex HAVE_STRCOLL
+@c @fuindex strcoll
+@prindex @code{strcoll}
 If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
 @samp{AC_CHECK_FUNCS(strcoll)}, because some systems have incorrect
@@ -3574,6 +3637,8 @@ definitions of @code{strcoll} that should not be used.
 @defmac AC_FUNC_STRTOD
 @acindex FUNC_STRTOD
 @ovindex POW_LIB
+@c @fuindex strtod
+@prindex @code{strtod}
 If the @code{strtod} function does not exist or doesn't work correctly,
 ask for an @code{AC_LIBOBJ} replacement of @samp{strtod}.  In this case,
 because @file{strtod.c} is likely to need @samp{pow}, set the output
@@ -3584,6 +3649,8 @@ variable @code{POW_LIB} to the extra library needed.
 @acindex FUNC_STRERROR_R
 @cvindex HAVE_STRERROR_R
 @cvindex HAVE_WORKING_STRERROR_R
+@c @fuindex strerror_r
+@prindex @code{strerror_r}
 If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}.  If
 its implementation correctly returns a @code{char *}, define
 @code{HAVE_WORKING_STRERROR_R}.  On at least DEC UNIX 4.0[A-D] and HP-UX
@@ -3595,6 +3662,8 @@ This is used by the common @file{error.c}.
 @defmac AC_FUNC_STRFTIME
 @acindex FUNC_STRFTIME
 @cvindex HAVE_STRFTIME
+@c @fuindex strftime
+@prindex @code{strftime}
 Check for @code{strftime} in the @file{intl} library, for SCO @sc{unix}.
 Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 @end defmac
@@ -3602,6 +3671,8 @@ Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 @defmac AC_FUNC_UTIME_NULL
 @acindex FUNC_UTIME_NULL
 @cvindex HAVE_UTIME_NULL
+@c @fuindex utime
+@prindex @code{utime}
 If @samp{utime(@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
 @end defmac
@@ -3610,6 +3681,8 @@ the present, define @code{HAVE_UTIME_NULL}.
 @acindex FUNC_VPRINTF
 @cvindex HAVE_VPRINTF
 @cvindex HAVE_DOPRNT
+@c @fuindex vprintf
+@prindex @code{vprintf}
 If @code{vprintf} is found, define @code{HAVE_VPRINTF}.  Otherwise, if
 @code{_doprnt} is found, define @code{HAVE_DOPRNT}.  (If @code{vprintf}
 is available, you may assume that @code{vfprintf} and @code{vsprintf}

@@ -32,6 +32,7 @@ CLEANFILES = autoconf.cvs \
 	     autoconf.ev autoconf.evs autoconf.ac autoconf.acs \
              autoconf.ov autoconf.ovs autoconf.ms autoconf.mss \
 	     autoconf.at autoconf.ats autoconf.pr autoconf.prs \
+	     autoconf.fu autoconf.fus \
 	     autoconf.tmp \
 	     autoconf*.html standards*.html \
 	     autoconf*.pdf standards*.pdf
