@@ -1,3 +1,10 @@
+2001-06-05  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): `prefix' and `exec_prefix'
+	can be empty.
+	`*dir' variables cannot be NONE.
+	Reported by Mark Kettenis.
+
 2001-06-05  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi: Fix references to Solaris and SunOS versions.
