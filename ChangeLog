@@ -1,3 +1,10 @@
+1998-10-29  Alexandre Oliva  <oliva@dcc.unicamp.br>
+
+	* autoreconf.sh: Support several automake command line options,
+	and run aclocal and automake when needed. Also, create stamp files
+	just like automake's Makefiles would do for config headers.
+	Additional contributions from Tom Tromey <tromey@cygnus.com>.
+	
 1998-10-24  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_LANG_FORTRAN77): Remove [] (i.e. the m4 quotes)
