@@ -1,5 +1,9 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
+	* autoupdate.sh (m4.txt): Use `dumpdef' and m4 to build it.
+
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (popdef, pushdef): Rename as...
 	(m4_popdef, m4_pushdef): these.
 	Adjust dependencies.
