@@ -747,6 +747,9 @@ and @code{unexpand}.
 @item avoid-wraps
 @samp{-n} in @code{wdiff}.
 
+@item background
+For server programs, run in the background.
+
 @item backward-search
 @samp{-B} in @code{ctags}.
 
@@ -1002,6 +1005,11 @@ Used in @code{makeinfo}.
 
 @item force-prefix
 @samp{-F} in @code{shar}.
+
+@item foreground
+For server programs, run in the foreground;
+in other words, don't do anything special to run the server
+in the background.
 
 @item format
 Used in @code{ls}, @code{time}, and @code{ptx}.
@@ -1572,6 +1580,12 @@ Used in many programs to inhibit the usual output.
 
 @item size
 @samp{-s} in @code{ls}.
+
+@item socket
+Specify a file descriptor for a network server to use for its socket,
+instead of opening and binding a new socket.  This provides a way to
+run, in a nonpriveledged process, a server that normally needs a
+reserved port number.
 
 @item sort
 Used in @code{ls}.
