@@ -5113,7 +5113,7 @@ portable, use @samp{$@{1+"$@@"@}}.
 
 @item $@{@var{var}:-@var{value}@}
 @cindex $@{@var{var}:-@var{value}@}
-0Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
+Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 
 @item $(@var{commands})
