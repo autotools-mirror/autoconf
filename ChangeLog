@@ -1,5 +1,22 @@
 2001-07-24  Akim Demaille  <akim@epita.fr>
 
+	Let autoconf use autom4te for traces.
+
+	* autoconf.in ($task, task trace): Remove, merely pass --trace to
+	autom4te.
+	* autoheader.in: Don't pass `-' to autoconf, rather, a tmp file.
+	(Because I found no way for autom4te to accept `-').
+	* autom4te.in (&Request::request): Beware of M4 builtins.
+	(END): Don't try to remove the content of an empty dir.
+	(&parse_args): Default is `$f:$l:$n:$%', not `$f:$l:$n:$*'.
+	(&handle_output): Set a default value to `$forbidden'.
+	* autoupdate.in (&verbose, &xsystem): New, from autom4te.in.
+	($autoconf): Pass --debug and --verbose.
+	* tests/atspecific.m4 (AT_CHECK_AUTOCONF): Clean up autom4te's
+	cache.
+
+2001-07-24  Akim Demaille  <akim@epita.fr>
+
 	Let autoconf use autom4te to create configure.
 
 	* autoconf.in ($automate): New var.

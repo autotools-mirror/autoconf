@@ -122,7 +122,7 @@ while test $# -gt 0 ; do
        shift ;;
 
     --autoconf-dir=* | -A?* )
-      autoconf_dir=$optarg
+       autoconf_dir=$optarg
        shift ;;
     --autoconf-dir | -A )
        test $# = 1 && eval "$exit_missing_arg"
@@ -238,8 +238,17 @@ case $# in
       * )
         echo "$me: no input file" >&2
         (exit 1); exit 1;;
-    esac;;
-  1) infile=$1 ;;
+    esac
+    infilename=$infile
+    ;;
+  1) if test "x$1" = "x-"; then
+       cat >$tmp/stdin
+       infile=$tmp/stdin
+     else
+       infile=$1
+     fi
+     infilename="Standard input"
+     ;;
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
@@ -247,7 +256,9 @@ case $# in
 esac
 
 # Set up autoconf.
-autoconf="$autoconf -l $localdir"
+autoconf="$autoconf -l $localdir "\
+`$verbose "--verbose "`\
+`$debug && echo "--debug "`
 export autoconf_dir
 
 # ----------------------- #
@@ -299,7 +310,7 @@ esac
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmp/config.hin
-/* $config_h_in.  Generated automatically from $infile by autoheader.  */
+/* $config_h_in.  Generated automatically from $infilename by autoheader.  */
 EOF
 
 # Dump the top.

@@ -44,7 +44,7 @@ AC_STATE_SAVE(after)
 # Also remove `configure.in', just in case one remained from a previous
 # run.
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CLEANUP_FILES(configure.in configure)dnl
+[AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1],
          m4_default([$2], [0]), [$3], [$4])])
 

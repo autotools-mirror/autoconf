@@ -67,6 +67,15 @@ sub mktmpdir ()
 }
 
 
+# verbose
+# -------
+sub verbose (@)
+{
+  print STDERR "$me: ", @_, "\n"
+    if $verbose;
+}
+
+
 # END
 # ---
 # Exit nonzero whenever closing STDOUT fails.
@@ -97,6 +106,23 @@ sub END
 }
 
 
+# xsystem ($COMMAND)
+# ------------------
+sub xsystem ($)
+{
+  my ($command) = @_;
+
+  verbose "running: $command";
+
+  (system $command) == 0
+    or die ("$me: "
+	    . (split (' ', $command))[0]
+	    . " failed with exit status: "
+	    . ($? >> 8)
+	    . "\n");
+}
+
+
 # print_usage ()
 # --------------
 # Display usage (--help).
@@ -105,19 +131,19 @@ sub print_usage ()
   print <<"END";
 Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
 
-Update the TEMPLATE-FILE... if given, or \`configure.ac' if present,
-or else \`configure.in', to the syntax of the current version of
+Update the TEMPLATE-FILE... if given, or \`configure.ac\' if present,
+or else \`configure.in\', to the syntax of the current version of
 Autoconf.  The original files are backed up.
 
 Operation modes:
   -h, --help           print this help, then exit
   -V, --version        print version number, then exit
   -v, --verbose        verbosely report processing
-  -d, --debug          don't remove temporary files
+  -d, --debug          don\'t remove temporary files
 
 Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4'
+  -A, --autoconf-dir=ACDIR  Autoconf\'s macro files location (rarely needed)
+  -l, --localdir=DIR        location of \`aclocal.m4\'
 
 Environment variables:
   M4         GNU M4 1.4 or above
@@ -186,8 +212,10 @@ sub parse_args ()
 			    'V|version' => \&print_version,
 			    'v|verbose' => \$verbose)
     or exit 1;
+
   push @ARGV, '-'
     if $update_stdin;
+
   if (! @ARGV)
     {
       my $configure_ac = find_configure_ac;
@@ -237,8 +265,9 @@ sub find_slaves ()
 find_slaves;
 parse_args;
 mktmpdir;
-$autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir";
-
+$autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir ";
+$autoconf .= "--debug " if $debug;
+$autoconf .= "--verbose " if $verbose;
 
 # @M4_BUILTINS -- M4 builtins and a useful comment.
 my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
@@ -306,7 +335,7 @@ my $au_changequote =
   's/\b(' . join ('|', keys %au_macros) . ')\b/_au_changequote([,])$1/g';
 
 # au.m4 -- definitions the AU macros.
-system ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
+xsystem ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
 \@<:\@\$2\@:>\@)' -i /dev/null "
 	. ">$tmp/au.m4");
 

@@ -340,7 +340,7 @@ AC_DEFINE(this, "whatever you want.")
 ]])
 
 AT_CHECK([autoheader --autoconf-dir .. -<configure.ac], 0,
-[[/* config.h.in.  Generated automatically from - by autoheader.  */
+[[/* config.h.in.  Generated automatically from Standard input by autoheader.  */
 /* Define this to whatever you want. */
 #undef this
 ]], ignore)
@@ -382,7 +382,7 @@ AH_BOTTOM([Bottom2 from configure.ac.])
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
 AT_CHECK([autoheader --autoconf-dir .. -<configure.ac], 0,
-[[/* config.h.in.  Generated automatically from - by autoheader.  */
+[[/* config.h.in.  Generated automatically from Standard input by autoheader.  */
 /* Top from acconfig.h. */
 
 /* Middle from acconfig.h. */

@@ -128,7 +128,9 @@ sub request
     {
       if (! exists ${$obj->macro}{$_})
         {
+	  s/^m4_//;
 	  ${$obj->macro}{$_} = 1;
+          ${$obj->macro}{"m4_$_"} = 1;
           $obj->valid (0);
 	}
     }
@@ -320,8 +322,11 @@ sub END
 
   if (!$debug && defined $tmp && -d $tmp)
     {
-      unlink <$tmp/*>
-	or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
+      if (<$tmp/*>)
+	{
+	  unlink <$tmp/*>
+	    or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
+	}
       rmdir $tmp
 	or warn ("$me: cannot remove $tmp: $!\n"), _exit (1);
     }
@@ -374,7 +379,7 @@ sub find_file ($)
 	if -f File::Spec->catfile ($path, $filename)
     }
 
-  die "$me: programming error";
+  die "$me: programming error: $filename";
 }
 
 
@@ -418,7 +423,7 @@ Tracing:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
-  # Help font-lock: `
+  # Help font-lock-mode find an closing back quote: `
   exit 0;
 }
 
@@ -467,21 +472,21 @@ sub parse_args ()
      # instead of mapping `FOO' to undef, Getopt maps it to `1', preventing
      # us from distinguishing `-t FOO' from `-t FOO=1'.  So let's do it
      # by hand.
-     "t|trace=s"        => \@trace,
+     "t|trace=s" => \@trace,
     )
       or exit 1;
-
-  # Convert @trace to %trace.
-  # The default format is `$f:$l:$n:$*'.
-  foreach (@trace)
-    {
-      /^([^:]+)(?::(.*))?$/;
-      $trace{$1} = defined $2 ? $2 : '$f:$l:$n:$*';
-    }
 
   die "$me: too few arguments
 Try `$me --help' for more information.\n"
     unless @ARGV;
+
+  # Convert @trace to %trace.
+  # The default format is `$f:$l:$n:$%'.
+  foreach (@trace)
+    {
+      /^([^:]+)(?::(.*))?$/ms;
+      $trace{$1} = defined $2 ? $2 : '$f:$l:$n:$%';
+    }
 
   # We don't want to depend upon m4's --include to find the top level
   # files.  Try to get a canonical name, as it's a key for caching.
@@ -551,7 +556,7 @@ sub handle_output ($)
   verbose "creating $output";
 
   # Load the forbidden/allowed patterns.
-  my $forbidden;
+  my $forbidden = "^\$";
   if (-f "$tmp/forbidden.rx")
     {
       my $fh = new IO::File ("$tmp/forbidden.rx");
@@ -980,8 +985,8 @@ sub up_to_date_p ($$)
 ## Main program.  ##
 ## -------------- ##
 
-parse_args;
 mktmpdir ('t4');
+parse_args;
 
 # We need our cache directory.
 if (! -d "$me.cache")
