@@ -449,6 +449,42 @@ sub autoreconf ($)
 
 
   # ------------------ #
+  # Running autoconf.  #
+  # ------------------ #
+
+  # Don't try to be smarter than `autoconf', which does its own up to
+  # date checks.
+  #
+  # We prefer running autoconf before autoheader, because (i) the
+  # latter runs the former, and (ii) autoconf is stricter than
+  # autoheader.  So all in all, autoconf should give better error
+  # messages.
+  xsystem ($autoconf);
+
+
+  # -------------------- #
+  # Running autoheader.  #
+  # -------------------- #
+
+  # We now consider that if AC_CONFIG_HEADERS is used, then autoheader
+  # is used too.
+  #
+  # Just as for autoconf, up to date ness is performed by the tool
+  # itself.
+  #
+  # Run it before automake, since the latter checks the presence of
+  # config.h.in when it sees an AC_CONFIG_HEADERS.
+  if (!$uses_autoheader)
+    {
+      verbose "$configure_ac: not using Autoheader";
+    }
+  else
+    {
+      xsystem ($autoheader);
+    }
+
+
+  # ------------------ #
   # Running automake.  #
   # ------------------ #
 
@@ -463,32 +499,6 @@ sub autoreconf ($)
       # update the file or not.  In fact, the effect of `$force' is already
       # included in `$automake' via `--no-force'.
       xsystem ($automake);
-    }
-
-
-  # ------------------ #
-  # Running autoconf.  #
-  # ------------------ #
-
-  # Don't try to be smarter than `autoconf', which does its own
-  # up to date checks.
-  xsystem ($autoconf);
-
-
-  # -------------------- #
-  # Running autoheader.  #
-  # -------------------- #
-
-  # We now consider that if AC_CONFIG_HEADERS is used, then autoheader
-  # is used too.
-  # Just as for autoconf, up to date ness is performed by the tool itself.
-  if (!$uses_autoheader)
-    {
-      verbose "$configure_ac: not using Autoheader";
-    }
-  else
-    {
-      xsystem ($autoheader);
     }
 
   chdir $cwd

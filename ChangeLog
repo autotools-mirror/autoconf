@@ -1,3 +1,9 @@
+2002-04-24  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (autoreconf): Run automake after autoconf and
+	autoheader, so that automake does not complain about a missing
+	config.h.in that was to be created.
+
 2002-04-23  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoheader.in (parse_args): --warning takes an argument.
