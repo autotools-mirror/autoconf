@@ -2894,7 +2894,7 @@ AC_TRY_EVAL(ac_link) &&
 ac_status=$?
 AS_IFELSE([test $ac_status == 0],
           [$2],
-[echo "$as_me: program exited with status: $ac_status" >&AS_MESSAGE_LOG_FD
+[echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvanl([$3], [$3])dnl])
