@@ -1762,7 +1762,8 @@ m4_include([m4sugar/version.m4])
 m4_define([m4_version_prereq],
 [m4_if(m4_version_compare(m4_defn([m4_PACKAGE_VERSION]), [$1]), -1,
        [m4_default([$3],
-		   [m4_fatal([Autoconf version $1 or higher is required])])],
+		   [m4_fatal([Autoconf version $1 or higher is required],
+			     63)])],
        [$2])[]dnl
 ])
 

@@ -1,5 +1,12 @@
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sugar.m4 (m4_version_prereq): Failure causes an
+	exit 63, so that we (or Automake's "missing") can tell the
+	difference with a plain failure.
+	* doc/autoconf.texi (Notices): Adjust.
+
+2003-05-23  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am, bin/Makefile.am, config/Makefile.am,
 	* doc/Makefile.am, lib/autoconf/Makefile.am, tests/Makefile.am:
 	White spaces cleanup.

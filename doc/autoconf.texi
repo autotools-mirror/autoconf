@@ -1639,9 +1639,9 @@ scripts.  Using them is optional.
 @acindex{PREREQ}
 @cindex Version
 Ensure that a recent enough version of Autoconf is being used.  If the
-version of Autoconf being used to create @command{configure} is earlier
-than @var{version}, print an error message to the standard error output
-and do not create @command{configure}.  For example:
+version of Autoconf being used to create @command{configure} is
+earlier than @var{version}, print an error message to the standard
+error output and exit with failure (exit status is 63).  For example:
 
 @example
 AC_PREREQ(@value{VERSION})
