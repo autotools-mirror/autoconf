@@ -1,3 +1,9 @@
+2002-09-12  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Defining Symbols): Present two different
+	prototypes for AC_DEFINE and AC_DEFINE_UNQUOTED to emphasize the
+	difference between 1 argument calls, and 2-3 argument calls.
+
 2002-09-12  Peter Eisentraut  <peter_e@gmx.net>
 
 	* doc/autoconf.texi: Review grammar and punctuation.

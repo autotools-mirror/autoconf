@@ -6088,7 +6088,8 @@ correct values into @code{#define} statements in a template file.
 @xref{Configuration Headers}, for more information about this kind of
 output.
 
-@defmac AC_DEFINE (@var{variable}, @ovar{value}, @ovar{description})
+@defmac AC_DEFINE (@var{variable}, @var{value}, @ovar{description})
+@defmacx AC_DEFINE (@var{variable})
 @acindex DEFINE
 Define the C preprocessor variable @var{variable} to @var{value} (verbatim).
 @var{value} should not contain literal newlines, and if you are not
@@ -6110,10 +6111,10 @@ If neither @var{value} nor @var{description} are given, then
 @var{value} defaults to 1 instead of to the empty string.  This is for
 backwards compatibility with older versions of Autoconf, but this usage
 is obsolescent and may be withdrawn in future versions of Autoconf.
-
 @end defmac
 
-@defmac AC_DEFINE_UNQUOTED (@var{variable}, @ovar{value}, @ovar{description})
+@defmac AC_DEFINE_UNQUOTED (@var{variable}, @var{value}, @ovar{description})
+@defmacx AC_DEFINE_UNQUOTED (@var{variable})
 @acindex DEFINE_UNQUOTED
 Like @code{AC_DEFINE}, but three shell expansions are
 performed---once---on @var{variable} and @var{value}: variable expansion
