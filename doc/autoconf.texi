@@ -1153,7 +1153,8 @@ Remake @file{configure} even if newer than its input files.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Also look for input files in @var{dir}.  Multiple invocations accumulate.
+Also look for input files in @var{dir}.  Multiple invocations
+accumulate.  Latest directories are looking in first.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -2510,6 +2511,7 @@ Remake the template file even if newer than its input files.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.
+Latest directories are looking in first.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -10073,6 +10075,7 @@ Force the update even if the file has not changed.  Disregard the cache.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.
+Latest directories are looking in first.
 @end table
 
 @node Obsolete Macros

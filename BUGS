@@ -35,21 +35,6 @@ address them.
 
 * Status
 
-/*------------------------------------------------------------------.
-| Do not use without perfect knowledge of AC_CHECK_HEADER changes.  |
-`------------------------------------------------------------------*/
-
-** AC_CHECK_HEADER
-
-The handling is being revamped, and has not been tested enough to be
-trusted.  We are *extremely* interested in your comments and
-experience with this being-built new semantics.  Nonetheless it is way
-too soon to use this version even for beta releases.
-
-** make distcheck
-Always fails.  Don't even try.  But once installed Autoconf is usable.
-
-** make check
-Might fail if you have an old version of 2.52c installed on your
-machine.  Please, then run make install before. But once installed
-Autoconf is usable.
+                    /*--------------------------.
+                    | Sane for full scale use.  |
+                    `--------------------------*/

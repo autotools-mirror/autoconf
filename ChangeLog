@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (&find_file): Browse the includes in the
+	inverse order.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoupdate.in (@include): `installcheck' revealed the path
 	to m4sugar was lacking!
 
