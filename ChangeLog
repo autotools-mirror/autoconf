@@ -1,5 +1,10 @@
 2001-07-04  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Actually apply
+	the ``strings.h'' change claimed below.
+
+2001-07-04  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_LANG_COMPILER_GNU): s/-dumpspecs/-v/.
 
 2001-07-04  Akim Demaille  <akim@epita.fr>

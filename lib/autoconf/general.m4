@@ -2218,10 +2218,9 @@ ac_includes_default="\
 #  include <memory.h>
 # endif
 # include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
+#endif
+#if HAVE_STRINGS_H
+# include <strings.h>
 #endif
 #if HAVE_INTTYPES_H
 # include <inttypes.h>
