@@ -313,7 +313,7 @@ then
   flex*) ac_lib=fl ;;
   *) ac_lib=l ;;
   esac
-  AC_CHECK_LIB($ac_lib, main, LEXLIB="-l$ac_lib")
+  AC_CHECK_LIB($ac_lib, yywrap, LEXLIB="-l$ac_lib")
 fi
 AC_SUBST(LEXLIB)])
 
@@ -517,9 +517,9 @@ AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
-AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+AC_CHECK_LIB(dir, opendir, LIBS="-ldir $LIBS")
 else
-AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
+AC_CHECK_LIB(x, opendir, LIBS="-lx $LIBS")
 fi
 ])
 
@@ -730,7 +730,10 @@ AC_CACHE_VAL(ac_cv_type_signal,
 #ifdef signal
 #undef signal
 #endif
-extern void (*signal ()) ();],
+#ifdef __cplusplus
+extern "C"
+#endif
+void (*signal ()) ();],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])dnl
 AC_MSG_RESULT($ac_cv_type_signal)
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
@@ -985,7 +988,7 @@ main() {
   case -1: _exit(0); /* What can we do?  */
   default: /* Parent.  */
     wait3(&i, 0, &r);
-    sleep(1); /* Avoid "text file busy" from rm on fast HP-UX machines.  */
+    sleep(2); /* Avoid "text file busy" from rm on fast HP-UX machines.  */
     exit(r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
@@ -1084,24 +1087,19 @@ AC_SUBST(ALLOCA)dnl
 ])
 
 AC_DEFUN(AC_FUNC_GETLOADAVG,
-[# Some definitions of getloadavg require that the program be installed setgid.
-NEED_SETGID=false
-AC_SUBST(NEED_SETGID)dnl
-ac_have_func=no
+[ac_have_func=no
 
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
-# If it is needed, it will be needed to detect getloadavg in -lutil.
-ac_LIBS_before_kvm="$LIBS"
-AC_CHECK_LIB(kvm, kvm_open, ac_LIBS_kvm=-lkvm, ac_LIBS_kvm=)
+AC_CHECK_LIB(kvm, kvm_open,  LIBS="-lkvm $LIBS")
 # Check for the 4.4BSD definition of getloadavg.
-AC_CHECK_LIB(util, getloadavg, [
-LIBS="$ac_LIBS_before_kvm -lutil $ac_LIBS_kvm" ac_have_func=yes])
+AC_CHECK_LIB(util, getloadavg,
+  [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])
 
 if test $ac_have_func = no; then
 # There is a commonly available library for RS/6000 AIX.
 # Since it is not a standard part of AIX, it might be installed locally.
 ac_save_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
-AC_CHECK_LIB(getloadavg, getloadavg, LIBS="$LIBS -lgetloadavg", LIBS="$ac_save_LIBS")
+AC_CHECK_LIB(getloadavg, getloadavg, LIBS="-lgetloadavg $LIBS", LIBS="$ac_save_LIBS")
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -1112,24 +1110,24 @@ if test $ac_cv_func_getloadavg = yes; then
 else
 ac_have_func=no
 AC_CHECK_HEADER(sys/dg_sys_info.h,
-[ac_have_func=yes AC_DEFINE(DGUX)
+[ac_have_func=yes; AC_DEFINE(DGUX)
 AC_CHECK_LIB(dgc, dg_sys_info)])
 if test $ac_have_func = no; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
 AC_CHECK_LIB(elf, elf_begin,
-  [LIBS="$LIBS -lelf" ac_have_func=yes AC_DEFINE(SVR4)
-  AC_CHECK_LIB(kvm, kvm_open, LIBS="$LIBS -lkvm")])
+  [LIBS="-lelf $LIBS" ac_have_func=yes; AC_DEFINE(SVR4)
+  AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(inq_stats/cpustats.h,
-  [ac_have_func=yes AC_DEFINE(UMAX)
+  [ac_have_func=yes; AC_DEFINE(UMAX)
    AC_DEFINE(UMAX4_3)])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(sys/cpustats.h,
-  [ac_have_func=yes AC_DEFINE(UMAX)])
+  [ac_have_func=yes; AC_DEFINE(UMAX)])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADERS(mach/mach.h)
@@ -1148,9 +1146,10 @@ if test $ac_cv_struct_nlist_n_un = yes; then
 fi
 ])dnl
 
-dnl FIXME two bugs here:
-dnl Hardwiring the path of getloadavg.c in the top-level directory,
-dnl and not checking whether a getloadavg from a library needs privileges.
+fi # Do not have getloadavg in system libraries.
+
+# Some definitions of getloadavg require that the program be installed setgid.
+dnl FIXME Don't hardwire the path of getloadavg.c in the top-level directory.
 AC_MSG_CHECKING(whether getloadavg requires setgid)
 AC_CACHE_VAL(ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
@@ -1161,12 +1160,13 @@ Yowza Am I SETGID yet
   ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])dnl
 AC_MSG_RESULT($ac_cv_func_getloadavg_setgid)
 if test $ac_cv_func_getloadavg_setgid = yes; then
-  NEED_SETGID=true AC_DEFINE(GETLOADAVG_PRIVILEGED)
+  NEED_SETGID=true; AC_DEFINE(GETLOADAVG_PRIVILEGED)
+else
+  NEED_SETGID=false
 fi
+AC_SUBST(NEED_SETGID)dnl
 
-fi # Do not have getloadavg in system libraries.
-
-if test "$NEED_SETGID" = true; then
+if test $ac_cv_func_getloadavg_setgid = yes; then
   AC_MSG_CHECKING(group of /dev/kmem)
 AC_CACHE_VAL(ac_cv_group_kmem,
 [changequote(, )dnl
@@ -1246,13 +1246,13 @@ fi
 
 AC_DEFUN(AC_FUNC_GETMNTENT,
 [# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX.
-AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun",
-  [AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")])
+AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
+  [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")])
 AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
 
 AC_DEFUN(AC_FUNC_STRFTIME,
 [# strftime is in -lintl on SCO UNIX.
-AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
+AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
 AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)])])
 
 AC_DEFUN(AC_FUNC_MEMCMP,
@@ -1681,13 +1681,14 @@ EOF
     then
       ac_im_usrlibdir=$ac_im_libdir
     fi
+    # Screen out bogus values from the imake configuration.
     case "$ac_im_incroot" in
 	/usr/include) ;;
-	*) ac_x_includes="$ac_im_incroot" ;;
+	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes="$ac_im_incroot" ;;
     esac
     case "$ac_im_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) ac_x_libraries="$ac_im_usrlibdir" ;;
+	*) test -d "$ac_im_usrlibdir" && ac_x_libraries="$ac_im_usrlibdir" ;;
     esac
   fi
   cd ..
@@ -1750,7 +1751,7 @@ AC_TRY_CPP([#include <$x_direct_test_include>],
 # See if we find them without any special options.
 # Don't add to $LIBS permanently.
 ac_save_LIBS="$LIBS"
-LIBS="$LIBS -l$x_direct_test_library"
+LIBS="-l$x_direct_test_library $LIBS"
 AC_TRY_LINK(, [${x_direct_test_function}()],
 [LIBS="$ac_save_LIBS" no_x= ac_x_libraries=],
 [LIBS="$ac_save_LIBS"
@@ -1834,34 +1835,34 @@ else
   # libraries we check for below, so use a different variable.
   #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
   AC_CHECK_LIB(ICE, IceConnectionNumber,
-    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
+    [X_PRE_LIBS="-lSM -lICE $X_PRE_LIBS"])
   LDFLAGS="$ac_save_LDFLAGS"
 
   # Check for system-dependent libraries X programs must link with.
 
   if test "$ISC" = yes; then
-    X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
+    X_EXTRA_LIBS="-lnsl_s -linet $X_EXTRA_LIBS"
   else
     # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
     # libraries were built with DECnet support.  And karl@cs.umb.edu says
     # the Alpha needs dnet_stub (dnet does not exist).
-    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
+    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="-ldnet $X_EXTRA_LIBS"])
     if test $ac_cv_lib_dnet = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
-        [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
+        [X_EXTRA_LIBS="-ldnet_stub $X_EXTRA_LIBS"])
     fi
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.
     # Not sure which flavor of 386 UNIX this is, but it seems harmless to
     # check for it.
-    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
+    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="-lnsl $X_EXTRA_LIBS"])
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
     # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
     if test "`(uname) 2>/dev/null`" != IRIX; then
-      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
+      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS"])
     fi
   fi
 fi
@@ -1874,6 +1875,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 
 dnl ### Checks for UNIX variants
 dnl These are kludges which should be replaced by a single POSIX check.
+dnl They aren't cached, to discourage their use.
 
 
 AC_DEFUN(AC_AIX,
@@ -1901,7 +1903,7 @@ fi
 ])
 
 AC_DEFUN(AC_ISC_POSIX,
-[AC_BEFORE([$0], [AC_TRY_LINK])dnl
+[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for POSIXized ISC)
@@ -1933,22 +1935,22 @@ AC_EGREP_CPP(yes,
 ], [AC_MSG_RESULT(yes); XENIX=yes], [AC_MSG_RESULT(no); XENIX=])
 if test "$XENIX" = yes; then
   # Make sure -ldir precedes -lx.
-  test $ac_header_dirent = dirent.h && LIBS="$LIBS -ldir"
-  LIBS="$LIBS -lx"
+  test $ac_header_dirent = dirent.h && LIBS="-ldir $LIBS"
+  LIBS="-lx $LIBS"
 fi
 ])
 
 AC_DEFUN(AC_DYNIX_SEQ,
 [AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl
-AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
+AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")
 ])
 
 AC_DEFUN(AC_IRIX_SUN,
 [AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])dnl
-AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
+AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS")
 ])
 
 AC_DEFUN(AC_SCO_INTL,
 [AC_OBSOLETE([$0], [; instead use AC_FUNC_STRFTIME])dnl
-AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
+AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
 ])

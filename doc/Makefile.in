@@ -169,23 +169,25 @@ Makefile: Makefile.in config.status
 config.status: configure
 	./config.status --recheck
 
-clean mostlyclean distclean realclean::
+maintainer-clean::
+	@echo "This command is intended for maintainers to use;"
+	@echo "rebuilding the deleted files requires makeinfo."
+	rm -f TAGS *.info* INSTALL
+
+clean mostlyclean distclean maintainer-clean::
 	for dir in $(SUBDIRS); do \
 	  echo making $@ in $$dir ; \
 	  (cd $$dir; $(MAKE) $@) ; \
 	done
 
-clean mostlyclean distclean realclean::
+clean mostlyclean distclean maintainer-clean::
 	rm -f $(SCRIPTS) *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
 	rm -f *.ev *.evs *.ov *.ovs *.cv *.cvs *.ma *.mas
 
-distclean realclean::
+distclean maintainer-clean::
 	rm -f Makefile config.status config.cache config.log
-
-realclean::
-	rm -f TAGS *.info* INSTALL
 
 TAGS:
 	etags ${srcdir}/*.m4 ${srcdir}/*.sh ${srcdir}/[a-z]*.in ${srcdir}/*.texi

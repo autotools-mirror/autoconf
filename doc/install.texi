@@ -59,7 +59,7 @@ You can remove the program binaries and object files from the source code
 directory by typing @samp{make clean}.  To also remove the files that
 @code{configure} created (so you can compile the package for a different
 kind of computer), type @samp{make distclean}.  There is also a
-@samp{make realclean} target, but that is intended mainly for the
+@samp{make maintainer-clean} target, but that is intended mainly for the
 package's developers.  If you use it, you may have to get all sorts of
 other programs in order to regenerate files that came with the distribution.
 @end enumerate

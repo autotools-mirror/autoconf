@@ -39,7 +39,8 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
-tmpout=/tmp/acout.$$
+: ${TMPDIR=/tmp}
+tmpout=${TMPDIR}/acout.$$
 localdir=
 show_version=no
 
@@ -91,7 +92,7 @@ esac
 
 trap 'rm -f $tmpin $tmpout; exit 1' 1 2 15
 
-tmpin=/tmp/acin.$$ # Always set this, to avoid bogus errors from some rm's.
+tmpin=${TMPDIR}/acin.$$ # Always set this, to avoid bogus errors from some rm's.
 if test z$infile = z-; then
   infile=$tmpin
   cat > $infile

@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.1)
+define(AC_ACVERSION, 2.1.1)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1009,8 +1009,8 @@ AC_DEFUN(AC_LANG_C,
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} $CFLAGS $CPPFLAGS conftest.$ac_ext -c 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_compile='${CC-cc} conftest.$ac_ext $CFLAGS $CPPFLAGS -c 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='${CC-cc} conftest.$ac_ext $CFLAGS $CPPFLAGS $LDFLAGS -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -1164,6 +1164,7 @@ AC_DEFUN(AC_PREFIX_PROGRAM,
 changequote(<<, >>)dnl
 define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
 changequote([, ])dnl
+AC_MSG_CHECKING([for prefix by ])
 AC_PATH_PROG(AC_VAR_NAME, $1)
 changequote(<<, >>)dnl
   if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
@@ -1184,7 +1185,7 @@ AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
 AC_CACHE_VAL(ac_cv_lib_$1,
 [ac_save_LIBS="$LIBS"
-LIBS="$LIBS -l$1 $5"
+LIBS="-l$1 $LIBS $5"
 AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$1=yes", eval "ac_cv_lib_$1=no")dnl
 LIBS="$ac_save_LIBS"
 ])dnl
@@ -1195,7 +1196,7 @@ if eval "test \"`echo '$ac_cv_lib_'$1`\" = yes"; then
   ac_tr_lib=HAVE_LIB`echo $1 | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_lib)
-  LIBS="$LIBS -l$1"
+  LIBS="-l$1 $LIBS"
 ], [$3])
 else
   AC_MSG_RESULT(no)
@@ -1216,7 +1217,7 @@ changequote([, ])dnl
 AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="$LIBS"
-LIBS="$LIBS -l[]AC_LIB_NAME[] $4"
+LIBS="-l[]AC_LIB_NAME[] $LIBS $4"
 AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="$ac_save_LIBS"
 ])dnl
@@ -1224,7 +1225,7 @@ AC_MSG_RESULT($AC_CV_NAME)
 if test "$AC_CV_NAME" = yes; then
   ifelse([$2], , 
 [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
-  LIBS="$LIBS -l[]AC_LIB_NAME[]"
+  LIBS="-l[]AC_LIB_NAME[] $LIBS"
 ], [$2])
 ifelse([$3], , , [else
   $3
@@ -1621,7 +1622,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
 
 ifdef([AC_LIST_HEADER],
-[trap 'rm -fr $1 AC_LIST_HEADER conftest*; exit 1' 1 2 15],
+[trap 'rm -fr `echo $1 AC_LIST_HEADER | tr : " "` conftest*; exit 1' 1 2 15],
 [trap 'rm -f $1; exit 1' 1 2 15])
 
 AC_OUTPUT_FILES($1)

@@ -89,25 +89,16 @@ in a dnl comment.  (Seems to be hard.)
 
 ------------------------------------------------------------------------------
 
-* Look at user contributed macros: prototypes, IEEE double precision math, 
-shared libraries, various other things.
+* Look at user contributed macros:
+	prototypes
+	IEEE double precision math
+	shared libraries
 
 ------------------------------------------------------------------------------
 
 For AC_TYPE_SIGNAL signal handlers, provide a way for code to know
 whether to do "return 0" or "return" (int vs void) to avoid compiler
 warnings.  (Roland McGrath)
-
-------------------------------------------------------------------------------
-
-It would be very useful if autoconf allowed checking for multiple libraries
-that are required together.  For example:
-
-AC_HAVE_LIBRARY([-lsocket -lnsl], [LIBS="$LIBS -lsocket -lnsl"])
-
-I have been informed that SVR4 requires both -lnsl to be used with -lsocket,
-so a test just for -lsocket fails, as that will not compile.
-From: markd@grizzly.COM (Mark Diekhans)
 
 ------------------------------------------------------------------------------
 
@@ -120,17 +111,12 @@ substitutions done on them.
 
 ------------------------------------------------------------------------------
 
-Have AC_CANONICAL_HOST cache the host/build/target types.
-
-------------------------------------------------------------------------------
-
-	AC_OUTPUT(Makefile.out:Makefile.in)
-generates 
-	trap 'rm -f Makefile.out:Makefile.in; exit 1' 1 2 15
+Have AC_CANONICAL_* cache the host/build/target types.
 
 ------------------------------------------------------------------------------
 
 Look at contributions:
+	ifnames rewrite using nawk (Paul Eggert)
 	ac_include (Karl Berry)
 	tool_prefix (Roland McGrath)
 	aclocal.h tom@basil.icce.rug.NL (Tom R.Hageman)
@@ -187,19 +173,6 @@ disabling the m4 "comment" feature when processing user-supplied strings.
 
 ------------------------------------------------------------------------------
 
-- I would like the default behavior of the library command to change
-so that the newly tested library is tried in front of $LIBS instead of
-after it.  This makes it possible to test for more complicated sets of
-dependencies.  For instance: on some SVR4 systems (e.g. Sequent),
--lsocket requires -linet and -lnsl.  The link order must be
-"-lsocket -linet -lnsl".  On some other SVR4 systems either -linet or
--lnsl does not exist.  Now if I test for -lnsl first, the test for
--linet fails because it tries "-lnsl -linet"; but if I test for
--linet it fails because it only works if -lnsl is also specified.
---Guido van Rossum, CWI, Amsterdam <mailto:Guido.van.Rossum@cwi.nl>
-
-------------------------------------------------------------------------------
-
 on hal.gnu.ai.mit.edu, configure is getting the wrong answer for
 AC_CHECK_FUNCS(select).
 
@@ -218,7 +191,7 @@ From: kwzh@gnu.ai.mit.edu (Karl Heuer)
 ------------------------------------------------------------------------------
 
 put all the config.* stuff somewhere like config/?
-All these extrainious file sure clutter up a toplevel directory.
+All these extraneous files sure clutter up a toplevel directory.
 From: "Randall S. Winchester" <rsw@eng.umd.edu>
 
 ------------------------------------------------------------------------------
@@ -230,9 +203,70 @@ From: "Randall S. Winchester" <rsw@eng.umd.edu>
 
 ------------------------------------------------------------------------------
 
-    define([AC_DEFUN],
-    [define($1, [AC_PRO([$1])[$2][]AC_EPI()])])
-to fix a quoting bug (Noah Friedman).
+Handle trailing slashes in PATH elements in AC_CHECK_PROG,
+AC_PATH_PROG, AC_PROG_INSTALL.
+
+------------------------------------------------------------------------------
+
+In libc and make in aclocal.m4 I have AC_CHECK_SYMBOL, which checks for
+sys_siglist et al.  Using AC_CHECK_FUNC doesn't work on some system that
+winds up caring that you reference it as a function and it is really a
+variable.  My version always declares the symbol as a char *[]; if that
+ends up a bad idea, we can have it take an arg with the C decl, but that is
+a bit verbose to write if it's actually superfluous.
+From Roland McGrath.
+
+------------------------------------------------------------------------------
+
+In /gd4/gnu/hurd/aclocal.m4 I wrote AC_CHECK_TOOL, which is a boon when
+doing a lot of cross compilation, and I think a good thing to use
+generically (AC_PROG_{CC,RANLIB} should use it).  I want this merged so I
+can convert mach4's configure.in to stop using local hack macros, and
+finally get a configure.in up for hurd (and then rewrite its makefiles
+again).
+From Roland McGrath.
+
+------------------------------------------------------------------------------
+
+	ls -lt configure configure.in | sort
+doesn't work right if configure.in is from a symlink farm, where the
+symlink has either a timestamp of it's own, or under BSD 4.4, it has
+the timestamp of the current directory, neither of which
+helps. Changing it to
+	ls -Llt configure configure.in | sort
+works for me, though I don't know how portable that is
+_Mark_ <eichin@cygnus.com>
+
+------------------------------------------------------------------------------
+
+Here is the thing I would like the most;
+AC_PKG_WITH(PACKAGE, HELP_STRING, PACKAGE-ROOT, PACKAGE-LIBS, PACKAGE-DEFS,
+	PACKAGE-CCPFLAGS)
+like
+
+AC_PKG_WITH(kerberos,,/usr/local/athena,-lkrb -ldes,[KERBEROS KRB4 
+CRYPT],include)
+AC_PKG_WITH(hesiod,
+[if hesiod is not in kerberos-root add --with-hesiod-root=somewhere]
+,,-lhesiod,HESIOD,,)
+AC_PKG_WITH(glue,,,-lglue,GLUE,,)
+AC_PKG_WITH(bind,,/usr/local/bind, [lib/resolv.a lib/lib44bsd.a], ,include)
+After the apropriate checks, the existance of the paths, and libs and such
+LIBS=$LIBS $PKG-LIBS
+DEFS=$DEFS $PKG-DEFS
+CPPFLAGS=$PKG-CPPFLAGS $CPPFLAGS
+$PKG-ROOT=$PKG-ROOT
+The cppflags should reverse the order so that you can have;
+-I/usr/local/bind/include -I/usr/local/athena/include
+and
+-L/usr/local/athena/lib -lkrb -ldes /usr/local/bind/lib/libresolv.a
+as order matters.
+
+also an AC_PKG_CHK_HEADER
+and an AC_PKG_CHK_FUNCTION
+so one can give alternate paths to check for stuff ($PKG-ROOT/lib for 
+example)
+From: Randall Winchester
 
 ------------------------------------------------------------------------------
 

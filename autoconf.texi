@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.1
-@set VERSION 2.1
-@set UPDATED November 1994
+@set EDITION 2.1.1
+@set VERSION 2.1.1
+@set UPDATED February 1995
 
 @iftex
 @finalout
@@ -1577,7 +1577,15 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 These macros are used to find programs not covered by the particular
 test macros.  If you need to check the behavior of a program as well as
 find out whether it is present, you have to write your own test for
-it (@pxref{Writing Tests}).
+it (@pxref{Writing Tests}).  If you need to check for a program that
+might not be in the user's @code{PATH}, you can temporarily add to it:
+
+@example
+ac_save_path="$PATH"
+PATH=/usr/libexec:/usr/sbin:/usr/etc:/etc
+AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd)
+PATH="$ac_save_path"
+@end example
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found}@r{]})
 @maindex CHECK_PROG
