@@ -9281,7 +9281,7 @@ The options have one of these forms:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
---with-@var{package}=[@var{arg}]
+--with-@var{package}[=@var{arg}]
 --without-@var{package}
 @end example
 
@@ -9360,7 +9360,7 @@ compile them.  The options have one of these forms:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
---enable-@var{feature}=[@var{arg}]
+--enable-@var{feature}[=@var{arg}]
 --disable-@var{feature}
 @end example
 
@@ -11314,16 +11314,16 @@ with @code{AT_DATA}.
 @defmac AT_DATA (@var{file}, @var{contents})
 @atindex DATA
 Initialize an input data @var{file} with given @var{contents}.  Of
-course, @var{contents} has to be properly quoted between square brackets
-to protect against included commas or spurious @code{m4} expansion.  The
-contents ought to end with an end of line.
+course, the @var{contents} have to be properly quoted between square
+brackets to protect against included commas or spurious @code{m4}
+expansion.  The contents ought to end with an end of line.
 @end defmac
 
 @defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @ovar{stdout}, @ovar{stderr})
 @atindex CHECK
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
-@var{stdout} and @var{stderr} contents.  If @var{commands} exits with
+@var{stdout} and @var{stderr} contents.  If @var{commands} exit with
 status 77, then the whole test group is skipped.
 
 The @var{commands} @emph{must not} redirect the standard output, nor the
