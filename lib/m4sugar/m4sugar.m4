@@ -843,7 +843,7 @@ m4_define([m4_undivert],
 # m4_require'd.
 #
 # The implementation is based on two ideas, (i) using diversions to
-# prepare the expansion of the macro and its dependencies (by François
+# prepare the expansion of the macro and its dependencies (by Franc,ois
 # Pinard), and (ii) expand the most recently m4_require'd macros _after_
 # the previous macros (by Axel Thimm).
 #
