@@ -1,5 +1,10 @@
 2000-10-27  Pavel Roskin  <proski@gnu.org>
 
+	* acfunctions.m4 (AC_FUNC_MMAP): Remove conftestmmap from the
+	shell, not from the test program.
+
+2000-10-27  Pavel Roskin  <proski@gnu.org>
+
 	* doc/autoconf.texi (Limitations of Builtins): Recommend using
 	AC_MSG_ERROR instead of	exit.
 	(Autoconf Language): Fix examples.

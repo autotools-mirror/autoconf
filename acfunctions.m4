@@ -1060,7 +1060,6 @@ main ()
     if (*(data + i) != *(data3 + i))
       exit (1);
   close (fd);
-  unlink ("conftestmmap");
   exit (0);
 }], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
 ac_cv_func_mmap_fixed_mapped=no)])
@@ -1068,6 +1067,7 @@ if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE(HAVE_MMAP, 1,
             [Define if you have a working `mmap' system call.])
 fi
+rm -f conftestmmap
 ])# AC_FUNC_MMAP
 
 
