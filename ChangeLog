@@ -1,5 +1,10 @@
 2000-11-17  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Also include `PATH' and
+	`/bin/machine' in the log.
+
+2000-11-17  Akim Demaille  <akim@epita.fr>
+
 	Let AC_TRY_RUN be more verbose
 
 	* acgeneral.m4 (_AC_RUN_IFELSE): Instead of canceling the output

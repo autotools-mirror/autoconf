@@ -735,6 +735,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 # _AC_INIT_DEFAULTS
 # -----------------
 # Values which defaults can be set from `configure.in'.
+# `/bin/machine' is used in `glibcbug'.  The others are used in config.*
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
@@ -758,12 +759,15 @@ uname -v = `(uname -v) 2>/dev/null || echo unknown`
 /usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
 /bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
 
-hostinfo               = `(hostinfo) 2>/dev/null`
-/bin/universe          = `(/bin/universe) 2>/dev/null`
-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
 /bin/arch              = `(/bin/arch) 2>/dev/null`
-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
 /usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
+hostinfo               = `(hostinfo) 2>/dev/null`
+/bin/machine           = `(/bin/machine) 2>/dev/null`
+/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+/bin/universe          = `(/bin/universe) 2>/dev/null`
+
+PATH = $PATH
 EOF
 
 _AC_INIT_DEFAULTS_FDS
