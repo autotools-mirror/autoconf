@@ -4409,7 +4409,7 @@ The following macros check for Fortran 77 compiler characteristics.  To
 check for characteristics not listed here, use @code{AC_TRY_COMPILE}
 (@pxref{Examining Syntax}) or @code{AC_TRY_RUN} (@pxref{Run Time}),
 making sure to first set the current language to Fortran 77
-@code{AC_LANG_FORTRAN77} (@pxref{Language Choice}).
+@code{AC_LANG(Fortran 77)} (@pxref{Language Choice}).
 
 @defmac AC_F77_LIBRARY_LDFLAGS
 @maindex F77_LIBRARY_LDFLAGS
@@ -6044,10 +6044,12 @@ AC_MSG_RESULT([$fstype])
 @section Language Choice
 @cindex Language
 
-Packages that use both C and C++ need to test features of both
-compilers.  Autoconf-generated @code{configure} scripts check for C
-features by default.  The following macros determine which language's
-compiler is used in tests that follow in @file{configure.in}.
+Autoconf-generated @code{configure} scripts check for the C compiler and
+its features by default.  Packages that use other programming languages
+(maybe more than one, e.g. C and C++) need to test features of the
+compilers for the respective languages.  The following macros determine
+which programming language is used in the subsequent tests in
+@file{configure.in}.
 
 @defmac AC_LANG (@var{language})
 Do compilation tests using the compiler, preprocessor and file
