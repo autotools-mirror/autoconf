@@ -1,3 +1,9 @@
+Major changes in release 2.3:
+
+* Fix the cleanup trap in several ways.
+* Handle C compilers that are picky about option placement.
+* ifnames gets the version number from the right directory.
+
 Major changes in release 2.2:
 
 * The ifnames utility is much faster but requires a "new awk" interpreter.
