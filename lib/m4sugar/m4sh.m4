@@ -938,7 +938,7 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 m4_defun([_AS_TR_SH_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 # Sed expression to map a string onto a valid variable name.
-as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
+as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 ])
 
 
@@ -960,7 +960,7 @@ AS_LITERAL_IF([$1],
 m4_defun([_AS_TR_CPP_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 # Sed expression to map a string onto a valid CPP name.
-as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
+as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g'"
 ])
 
 

@@ -1,3 +1,9 @@
+2003-10-20  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_TR_SH_PREPARE, _AS_TR_CPP_PREPARE):
+	Use 'eval', so that the resulting configure scripts work even if
+	the current directory has a weird file name like 'y%s+%pp%;s%@%_%g'.
+
 2003-10-20  Daniel Jacobowitz  <drow@mvista.com>
 
 	* lib/autoconf/lang.m4 (AC_LANG_WERROR): New macro.
