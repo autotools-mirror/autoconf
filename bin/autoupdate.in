@@ -110,16 +110,16 @@ my @m4_builtins;
 sub handle_m4_macros ()
 {
   # Get the list of builtins.
-  xsystem ("echo dumpdef | $m4 2>$tmp/sugar.defs >/dev/null");
-  my $sugar_defs = new IO::File "$tmp/sugar.defs"
-    or die "$me: cannot open $tmp/sugar.defs: $!\n";
-  while ($_ = $sugar_defs->getline)
+  xsystem ("echo dumpdef | $m4 2>$tmp/m4.defs >/dev/null");
+  my $m4_defs = new IO::File "$tmp/m4.defs"
+    or die "$me: cannot open $tmp/m4.defs: $!\n";
+  while ($_ = $m4_defs->getline)
     {
       push @m4_builtins, $1
         if /^(\w+):/;
     }
-  $sugar_defs->close
-    or die "$me: cannot close $tmp/sugar.defs: $!\n";
+  $m4_defs->close
+    or die "$me: cannot close $tmp/m4.defs: $!\n";
 
   # Output the files.
   my $m4_m4 = new IO::File ">$tmp/m4.m4"
@@ -128,14 +128,17 @@ sub handle_m4_macros ()
   my $unm4_m4 = new IO::File ">$tmp/unm4.m4"
     or die "$me: cannot create $tmp/unm4.m4: $!\n";
   print $unm4_m4 "# unm4.m4 -- disable the m4 builtins.\n";
+  print $unm4_m4 "# Because Autoconf, via M4sugar, redefines some of these\n";
+  print $unm4_m4 "# macros, and therefore since unac.m4 disables them,\n";
+  print $unm4_m4 "# disable only if defined.\n";
   my $m4save_m4 = new IO::File ">$tmp/m4save.m4"
     or die "$me: cannot create $tmp/unm4.m4: $!\n";
   print $m4save_m4 "# savem4.m4 -- save the m4 builtins.\n";
   foreach (@m4_builtins)
     {
-      print $m4_m4     "_au_define([$_], _au_defn([_au_$_]))\n";
-      print $unm4_m4   "_au_undefine([$_])\n";
       print $m4save_m4 "define([_au_$_], defn([$_]))\n";
+      print $unm4_m4   "_au_ifdef([$_], [_au_undefine([$_])])\n";
+      print $m4_m4     "_au_define([$_], _au_defn([_au_$_]))\n";
     }
   $m4save_m4->close
     or die "$me: cannot close $tmp/m4save.m4: $!\n";
