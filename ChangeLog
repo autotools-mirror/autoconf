@@ -1,3 +1,22 @@
+2002-10-16  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoconf.as: Kill dead options.
+	* bin/autoupdate.in (&parse_args): Kill old options.
+	* bin/autoreconf.in (&parse_args): Remove dead options.
+	Factor some code.
+	(&autoreconf): Report the directories we enter *and leave*, so
+	that error messages can be easily located, and use GNU Make
+	format, so that Emacs' compile mode understands us.
+	* lib/Autom4te/General.pm (&update_file): Use `verbose' to report
+	if some file was changed instead of `print'.
+	* bin/autoheader.in: Suggest AC_DEFINE with 3 args when needed.
+	(&parse_args): Remove the dead options.
+	* tests/atspecific.m4 (AT_CHECK_AUTOHEADER): Adjust to the new
+	autoheader's quiet mode.
+	(AT_CHECK_AUTOUPDATE): Likewise.
+	* tests/tools.at (autoupdate): Adjust.
+	* tests/semantics.at (AC_C_BIGENDIAN): Likewise.
+
 2002-10-11  Akim Demaille  <akim@epita.fr>
 
 	No longer use CPP to check for the existing of headers: use CC to

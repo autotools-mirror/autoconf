@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright 2001 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -431,7 +431,7 @@ sub update_file ($$)
   if (-f "$to" && compare ("$from", "$to") == 0)
     {
       # File didn't change, so don't update its mod time.
-      print STDERR "$me: `$to' is unchanged\n";
+      verbose "`$to' is unchanged";
       unlink ($from)
 	or error "cannot not remove $from: $!";
       return
@@ -444,13 +444,13 @@ sub update_file ($$)
 	or error "cannot not backup $to: $!";
       move ("$from", "$to")
 	or error "cannot not rename $from as $to: $!";
-      print STDERR "$me: `$to' is updated\n";
+      verbose "`$to' is updated";
     }
   else
     {
       move ("$from", "$to")
 	or error "cannot not rename $from as $to: $!";
-      print STDERR "$me: `$to' is created\n";
+      verbose "`$to' is created";
     }
 }
 

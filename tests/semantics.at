@@ -364,8 +364,7 @@ _AT_CHECK_AC_MACRO(
 
 # Make sure AC_C_BIGENDIAN with no argument will define WORDS_BIGENDIAN
 AT_CONFIGURE_AC([AC_C_BIGENDIAN])
-AT_CHECK_AUTOHEADER([], [], [], [autoheader: `config.hin' is updated
-])
+AT_CHECK_AUTOHEADER
 AT_CHECK([grep WORDS_BIGENDIAN config.hin], [], [ignore])
 
 AT_CLEANUP(at-endian)

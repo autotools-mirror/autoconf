@@ -55,13 +55,13 @@ or else `configure.in', to the syntax of the current version of
 Autoconf.  The original files are backed up.
 
 Operation modes:
-  -h, --help           print this help, then exit
-  -V, --version        print version number, then exit
-  -v, --verbose        verbosely report processing
-  -d, --debug          don't remove temporary files
+  -h, --help                 print this help, then exit
+  -V, --version              print version number, then exit
+  -v, --verbose              verbosely report processing
+  -d, --debug                don't remove temporary files
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
-  -f, --force          consider all files obsolete
+  -f, --force                consider all files obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";
@@ -88,9 +88,9 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+  getopt ('I|include=s'         => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
-	  'f|force' => \$force);
+	  'f|force'             => \$force);
 
   if (! @ARGV)
     {

@@ -1,6 +1,13 @@
 * Major changes in Autoconf 2.54a                       -*- outline -*-
 
 
+** autoreconf
+
+- Is more robust to different Gettext installations.
+
+- Produces messages (when --verbose) to be understood by Emacs'
+  compile mode.
+
 ** Macros
 
 - AC_CHECK_HEADER/AC_CHECK_HEADERS

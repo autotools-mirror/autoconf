@@ -118,10 +118,10 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
-	  'B|prepend-include=s'			     => \@prepend_include,
-	  'i|install'                                        => \$install,
-	  's|symlink'                                        => \$symlink);
+  getopt ('I|include=s'           => \@include,
+	  'B|prepend-include=s'	  => \@prepend_include,
+	  'i|install'             => \$install,
+	  's|symlink'             => \$symlink);
 
   # Even if the user specified a configure.ac, trim to get the
   # directory, and look for configure.ac again.  Because (i) the code
@@ -132,18 +132,14 @@ sub parse_args ()
 
   if ($verbose && $debug)
     {
-      xsystem ("$autoconf --version | sed 1q >&2");
-      print STDERR "\n";
-      xsystem ("$autoheader --version | sed 1q >&2");
-      print STDERR "\n";
-      xsystem ("$automake --version | sed 1q >&2");
-      print STDERR "\n";
-      xsystem ("$aclocal --version | sed 1q >&2");
-      print STDERR "\n";
-      xsystem ("$autopoint --version | sed 1q >&2");
-      print STDERR "\n";
-      xsystem ("$libtoolize --version | sed 1q >&2");
-      print STDERR "\n";
+      for my $prog ($autoconf, $autoheader,
+		    $automake, $aclocal,
+		    $autopoint,
+		    $libtoolize)
+	{
+	  xsystem ("$prog --version | sed 1q >&2");
+	  print STDERR "\n";
+	}
     }
 
   # Dispatch autoreconf's option to the tools.
@@ -192,7 +188,9 @@ sub autoreconf ($)
 {
   my ($directory) = @_;
 
-  verbose "working in `$directory'";
+  # The format for this message is not free: taken from Emacs, itself
+  # using GNU Make's format.
+  verbose "Entering directory `$directory'";
   chdir $directory
     or error "cannot chdir to $directory: $!";
 
@@ -506,6 +504,9 @@ sub autoreconf ($)
       xsystem ($automake);
     }
 
+  # The format is not free: taken from Emacs, itself using GNU Make's
+  # format.
+  verbose "Leaving directory `$directory'";
   chdir $cwd
     or error "cannot chdir to $cwd: $!";
 }

@@ -93,15 +93,15 @@ to the standard output if TEMPLATE-FILE is given, else into
 \`configure'.
 
 Operation modes:
-  -h, --help               print this help, then exit
-  -V, --version            print version number, then exit
-  -v, --verbose            verbosely report processing
-  -d, --debug              don't remove temporary files
+  -h, --help                  print this help, then exit
+  -V, --version               print version number, then exit
+  -v, --verbose               verbosely report processing
+  -d, --debug                 don't remove temporary files
   -B, --prepend-include=DIR   prepend directory DIR to search path
   -I, --include=DIR           append directory DIR to search path
-  -f, --force              consider all files obsolete
-  -o, --output=FILE        save output in FILE (stdout is the default)
-  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
+  -f, --force                 consider all files obsolete
+  -o, --output=FILE           save output in FILE (stdout is the default)
+  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
   \`cross'         cross compilation issues
@@ -197,18 +197,6 @@ while test $# -gt 0 ; do
        test $# = 1 && eval "$exit_missing_arg"
        AUTOM4TE="$AUTOM4TE $option $2"
        shift 2 ;;
-
-    # Obsolete options.
-    --localdir=* | -l?* | --autoconf-dir=* | -A?* | --macrodir=* | -m?* )
-       echo "$me: warning: $option is obsolete, use --include" >&2
-       AUTOM4TE="$AUTOM4TE --include=$optarg"
-       shift ;;
-    --localdir | -l | --autoconf-dir | -A | --macrodir | -m )
-       echo "$me: warning: $option is obsolete, use --include" >&2
-       test $# = 1 && eval "$exit_missing_arg"
-       shift
-       AUTOM4TE="$AUTOM4TE --include=$1"
-       shift ;;
 
     --trace=* | -t?* )
        traces="$traces --trace='"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"

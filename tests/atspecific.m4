@@ -171,14 +171,11 @@ m4_define([AT_CHECK_AUTOCONF],
           [$2], [$3], [$4])])
 
 
-# AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0],
-#                     STDOUT, [STDERR = `autoheader: `config.hin' is created'])
-# -----------------------------------------------------------------------------
+# AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# ------------------------------------------------------------
 m4_define([AT_CHECK_AUTOHEADER],
-[AT_CHECK([autoheader $1], [$2],
-          [$3],
-          m4_default([$4], [[autoheader: `config.hin' is created
-]]))])
+[AT_CHECK([autoheader $1], [$2], [$3], [$4])
+])
 
 
 # AT_CHECK_CONFIGURE(END-COMMAND,
@@ -237,9 +234,8 @@ m4_define([AT_CHECK_DEFINES],
 # AT_CHECK_AUTOUPDATE
 # -------------------
 m4_define([AT_CHECK_AUTOUPDATE],
-[AT_CHECK([autoupdate], 0,
-          [], [autoupdate: `configure.ac' is updated
-])])
+[AT_CHECK([autoupdate $1], [$2], [$3], [$4])
+])
 
 
 # _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)

@@ -503,9 +503,7 @@ AC_OUTPUT
 AT_CHECK_AUTOUPDATE
 AT_CHECK([cat configure.ac], 0, [expout])
 # Checking that `autoupdate' is idempotent
-AT_CHECK([autoupdate], 0, [],
-         [autoupdate: `configure.ac' is unchanged
-])
+AT_CHECK_AUTOUPDATE
 AT_CHECK([cat configure.ac], 0, [expout])
 
 AT_CLEANUP(configure.ac~)

@@ -104,7 +104,7 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+  getopt ('I|include=s' => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
 	  'W|warnings=s' => \@warning);
 
@@ -127,11 +127,11 @@ parse_args;
 
 # Preach.
 my $config_h_top = find_file ("config.h.top?",
-			      reverse(@prepend_include), @include);
+			      reverse (@prepend_include), @include);
 my $config_h_bot = find_file ("config.h.bot?",
-			      reverse(@prepend_include), @include);
+			      reverse (@prepend_include), @include);
 my $acconfig_h = find_file ("acconfig.h?",
-			    reverse(@prepend_include), @include);
+			    reverse (@prepend_include), @include);
 if ($config_h_top || $config_h_bot || $acconfig_h)
   {
     my $msg = << "END";
@@ -252,6 +252,7 @@ $out->close;
 # Check that all the symbols have a template.
 {
   my $in = new Autom4te::XFile ("$tmp/config.hin");
+  my $suggest_ac_define = 1;
   while ($_ = $in->getline)
     {
       my ($symbol) = /^\#\s*\w+\s+(\w+)/
@@ -261,6 +262,12 @@ $out->close;
   foreach (sort keys %symbol)
     {
       print STDERR "$me: missing template: $_\n";
+      if ($suggest_ac_define)
+	{
+	  print STDERR "Use AC_DEFINE([$_], [], [Description])";
+	  $suggest_ac_define = 0;
+	}
+
     }
   exit 1
     if keys %symbol;
