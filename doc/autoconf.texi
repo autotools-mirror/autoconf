@@ -4057,7 +4057,7 @@ using the program @code{ansi2knr}, which comes with Automake.
 @maindex PROG_CPP
 @ovindex CPP
 Set output variable @code{CPP} to a command that runs the
-C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
+C preprocessor.  If @samp{$CC -E} doesn't work, @file{/lib/cpp} is used.
 It is only portable to run @code{CPP} on files with a @file{.c}
 extension.
 
@@ -4065,6 +4065,11 @@ If the current language is C (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CPP} indirectly by calling
 @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER}, @code{AC_EGREP_HEADER}, or
 @code{AC_EGREP_CPP}.
+
+Some preprocessors don't indicate missing include files by the error
+status.  For such preprocessors an internal variable is set that causes
+other macros to check the standard error from the preprocessor and
+consider the test failed if any warnings have been reported.
 @end defmac
 
 @defmac AC_PROG_CXX (@ovar{compiler-search-list})
@@ -4102,7 +4107,7 @@ compilers.
 @maindex PROG_CXXCPP
 @ovindex CXXCPP
 Set output variable @code{CXXCPP} to a command that runs the C++
-preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
+preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
 It is only portable to run @code{CXXCPP} on files with a @file{.c},
 @file{.C}, or @file{.cc} extension.
 
@@ -4110,6 +4115,12 @@ If the current language is C++ (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CXXCPP} indirectly by
 calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
+
+Some preprocessors don't indicate missing include files by the error
+status.  For such preprocessors an internal variable is set that causes
+other macros to check the standard error from the preprocessor and
+consider the test failed if any warnings have been reported.  However,
+it is not known whether such broken preprocessors exist for C++.
 @end defmac
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})

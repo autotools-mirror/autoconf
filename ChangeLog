@@ -1,5 +1,11 @@
 2000-10-19  Pavel Roskin  <proski@gnu.org>
 
+	* NEWS: Documented changes in AC_PROG_CPP and AC_TRY_CPP.
+	* doc/autoconf.texi (Compilers and Preprocessors): Likewise.
+	* acgeneral.m4 (AC_TRY_CPP): Comment changes.
+
+2000-10-19  Pavel Roskin  <proski@gnu.org>
+
 	* doc/autoconf.texi (Shellology): Documented quirks in ash-0.2.
 
 2000-10-18  Pavel Roskin  <proski@gnu.org>

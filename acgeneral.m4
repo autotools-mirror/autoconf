@@ -3389,10 +3389,9 @@ fi
 
 # AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------
-# Capture the stderr of cpp.  eval is necessary to expand ac_cpp.  We
-# used to copy stderr to stdout and capture it in a variable, but that
-# breaks under sh -x, which writes compile commands starting with ` +'
-# to stderr in eval and subshells.
+# AC_TRY_CPP is used to check whether particular header files exist.
+# You can check for one at a time, or more than one if you need several
+# header files to all exist for some purpose.
 #
 # INCLUDES are not defaulted.
 AC_DEFUN([AC_TRY_CPP],

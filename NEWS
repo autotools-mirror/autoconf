@@ -191,6 +191,10 @@ test cases in this new frame work.
   Checks if the compiler supports ISO C, included when needs special
   options.
 
+- AC_PROG_CPP
+  Checking whether the preprocessor indicates missing includes by the
+  error code. stderr is checked by AC_TRY_CPP only as a fallback.
+
 - AC_LANG
   Takes a language as argument and replaces AC_LANG_C,
   AC_LANG_CPLUSPLUS and AC_LANG_FORTRAN77.
