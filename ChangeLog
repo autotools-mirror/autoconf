@@ -1,3 +1,9 @@
+2002-07-17  Andreas Buening  <andreas.buening@nexgo.de>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_FORK): Don't set
+	ac_cv_func_fork_works before running _AC_FUNC_FORK, do it if the
+	latter was not run.
+
 2002-07-17  Akim Demaille  <akim@epita.fr>
 
 	* lib/Autom4te/General.pm (find_file): Browse the directories in

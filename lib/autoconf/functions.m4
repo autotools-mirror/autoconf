@@ -1522,9 +1522,10 @@ AC_DEFUN([AC_FUNC_FORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
 AC_CHECK_HEADERS(unistd.h vfork.h)
 AC_CHECK_FUNCS(fork vfork)
-ac_cv_func_fork_works=$ac_cv_func_fork
 if test "x$ac_cv_func_fork" = xyes; then
   _AC_FUNC_FORK
+else
+  ac_cv_func_fork_works=$ac_cv_func_fork
 fi
 if test "x$ac_cv_func_fork_works" = xcross; then
   case $host in
