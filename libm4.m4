@@ -473,6 +473,16 @@ define(_m4_foreach,
 define([m4_quote], [[$@]])
 
 
+# m4_noquote(STRING)
+# ------------------
+# Return the result of ignoring all quotes in STRING and invoking the
+# macros it contains.  Amongst other things useful for enabling macro
+# invocations inside strings with [] blocks (for instance regexps and
+# help-strings).
+define([m4_noquote],
+[changequote(-=<{,}>=-)$1-=<{}>=-changequote([,])])
+
+
 # m4_split(STRING, [REGEXP])
 # --------------------------
 #

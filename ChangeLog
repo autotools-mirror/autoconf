@@ -1,3 +1,7 @@
+2000-03-02  Lars J. Aas  <larsa@sim.no>
+
+	* libm4.m4 (m4_noquote): New macro.
+
 2000-03-02  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Moved all the shell variable
