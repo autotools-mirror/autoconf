@@ -237,7 +237,7 @@ done
 $debug ||
 {
   trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap '(exit $?); exit' 1 2 13 15
+  trap '(exit 1); exit 1' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -252,7 +252,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   (exit 1); exit;
+   (exit 1); exit 1;
 }
 
 # Running m4.
@@ -282,7 +282,7 @@ case $# in
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
-     (exit 1); exit ;;
+     (exit 1); exit 1 ;;
 esac
 
 # Unless specified, the output is stdout.
@@ -294,7 +294,7 @@ if test z$infile = z-; then
   cat >$infile
 elif test ! -r "$infile"; then
   echo "$me: $infile: No such file or directory" >&2
-  (exit 1); exit
+  (exit 1); exit 1
 fi
 
 # Output is produced into FD 4.  Prepare it.
@@ -316,7 +316,7 @@ case $task in
   : >$tmp/forbidden.rx
   : >$tmp/allowed.rx
   $run_m4f -Dm4_warnings=$m4_warnings $infile >$tmp/configure ||
-    { (exit 1); exit; }
+    { (exit 1); exit 1; }
 
   if test "x$outfile" != x-; then
     chmod +x $outfile
@@ -429,7 +429,7 @@ EOF
          `$verbose "-v verbose=1"` \
          -f "$tmp/finalize.awk" <$tmp/configure >&4 ||
       { test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
-        (exit 1); exit; }
+        (exit 1); exit 1; }
     test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
   ;; # End of the task script.
 
@@ -691,16 +691,16 @@ EOF
       trace_opt="$trace_opt -t $base_name -t m4_$base_name"
       echo "$base_name$trace_format" |
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
-          { (exit 1); exit; }
+          { (exit 1); exit 1; }
       echo "m4_$base_name$trace_format" |
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
-          { (exit 1); exit; }
+          { (exit 1); exit 1; }
     else
       # MACRO_NAME is not a builtin.
       trace_opt="$trace_opt -t $macro_name"
       echo "$trace" |
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
-          { (exit 1); exit; }
+          { (exit 1); exit 1; }
     fi
     echo >>$tmp/trace.m4
   done
@@ -740,7 +740,7 @@ EOF
 	' >&4 ||
       {
         echo "$me: tracing failed" >&2
-	(exit 1); exit
+	(exit 1); exit 1
       }
   ;;
 
@@ -750,7 +750,7 @@ EOF
   ## ------------ ##
 
   *) echo "$me: internal error: unknown task: $task" >&2
-    (exit 1); exit
+    (exit 1); exit 1
 esac
 
-(exit $status); exit
+(exit $status); exit $status

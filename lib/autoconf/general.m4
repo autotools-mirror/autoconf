@@ -1472,7 +1472,7 @@ trap 'exit_status=$?
     exit $exit_status
      ' 0
 for ac_signal in 1 2 13 15; do
-  trap 'ac_status=$?; ac_signal='$ac_signal'; AS_EXIT([$ac_status])' $ac_signal
+  trap 'ac_signal='$ac_signal'; AS_EXIT([1])' $ac_signal
 done
 ac_signal=0
 

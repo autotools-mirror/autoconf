@@ -479,7 +479,7 @@ m4_define([AS_TMPDIR],
 $debug ||
 {
   trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
-  trap 'AS_EXIT([$?])' 1 2 13 15
+  trap 'AS_EXIT([1])' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.

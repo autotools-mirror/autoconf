@@ -181,7 +181,7 @@ done
 $debug ||
 {
   trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap '(exit $?); exit' 1 2 13 15
+  trap '(exit 1); exit 1' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -196,7 +196,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   (exit 1); exit
+   (exit 1); exit 1
 }
 
 # Preach.
@@ -219,7 +219,7 @@ if ($warning_all || $warning_obsolete) &&
     More sophisticated templates can also be produced, see the
     documentation.
 EOF
-  $warning_error && { (exit 1); exit; }
+  $warning_error && { (exit 1); exit 1; }
 fi
 
 acconfigs=
@@ -237,13 +237,13 @@ case $# in
       *in ) infile=configure.in;;
       * )
         echo "$me: no input file" >&2
-        exit 1;;
+        (exit 1); exit 1;;
     esac;;
   1) infile=$1 ;;
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
-     (exit 1); exit ;;
+     (exit 1); exit 1;;
 esac
 
 # Set up autoconf.
@@ -261,14 +261,14 @@ $autoconf  \
   --trace AH_OUTPUT:'ac_verbatim_$1="\
 $2"' \
   --trace AC_DEFINE_TRACE_LITERAL:'syms="$$syms $1"' \
-  $infile >$tmp/traces.sh || { (exit 1); exit; }
+  $infile >$tmp/traces.sh || { (exit 1); exit 1; }
 
 $verbose $me: sourcing $tmp/traces.sh >&2
 if (set -e && . $tmp/traces.sh) >/dev/null 2>&1; then
   . $tmp/traces.sh
 else
   echo "$me: error: shell error while sourcing $tmp/traces.sh" >&2
-  (exit 1); exit
+  (exit 1); exit 1
 fi
 
 
@@ -290,7 +290,7 @@ config_h=`set X $config_h; echo $2`
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
 "") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2
-    (exit 1); exit ;;
+    (exit 1); exit 1 ;;
 *:*) config_h_in=`echo "$config_h" | sed 's/.*://'`
      config_h=`echo "$config_h" | sed 's/:.*//'` ;;
 *) config_h_in="$config_h.in" ;;
@@ -357,4 +357,4 @@ if test $status = 0; then
   fi
 fi
 
-(exit $status); exit
+(exit $status); exit $status

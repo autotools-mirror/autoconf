@@ -346,3 +346,21 @@ at_here=`pwd`
 AT_CHECK([cd at-dir && $at_here/configure], [], [ignore])
 
 AT_CLEANUP(at-dir foo.in foo)
+
+
+## ----------------- ##
+## Signal handling.  ##
+## ----------------- ##
+
+AT_SETUP([Signal handling])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+kill -2 $$
+exit 77
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], 1, ignore, ignore)
+
+AT_CLEANUP
