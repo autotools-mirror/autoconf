@@ -2405,9 +2405,9 @@ ifval([$3], [test -n "[$]$1" || $1="$3"
 ## -------------------- ##
 
 
-# _AC_CHECK_TOOL_PREFIX
+# AC_CHECK_TOOL_PREFIX
 # ---------------------
-AC_DEFUN(_AC_CHECK_TOOL_PREFIX,
+AC_DEFUN(AC_CHECK_TOOL_PREFIX,
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 if test $host != $build; then
@@ -2415,13 +2415,13 @@ if test $host != $build; then
 else
   ac_tool_prefix=
 fi
-])# _AC_CHECK_TOOL_PREFIX
+])# AC_CHECK_TOOL_PREFIX
 
 
 # AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # -----------------------------------------------------------------------
 AC_DEFUN(AC_PATH_TOOL,
-[AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
+[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
 AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
              ifelse([$3], , [$2]), $4)
 ifval([$3], [
@@ -2438,7 +2438,7 @@ fi])
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # ------------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_TOOL,
-[AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
+[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
 AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
 ifval([$3], [

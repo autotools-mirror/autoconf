@@ -1,5 +1,10 @@
 2000-03-27  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_CHECK_TOOL_PREFIX): Rename back as
+	AC_CHECK_TOOL_PREFIX since some packages rely on it.
+
+2000-03-27  Akim Demaille  <akim@epita.fr>
+
 	Move all the language dependent macros into aclang.m4.
 
 	* aclang.m4: New file.
