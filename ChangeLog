@@ -1,3 +1,19 @@
+2001-01-29  Pavel Roskin  <proski@gnu.org>
+
+	Don't use filenames that can be reduced to "conftest" on DOS.
+
+	* acfunctions.m4 (AC_FUNC_MMAP): Use conftest.mmap, not
+	conftestmmap.
+	(AC_FUNC_UTIME_NULL): Use conftest.data, not conftestdata.
+	* acspecific.m4 (AC_PROG_MAKE_SET): Use conftest.make, not
+	conftestmake.
+	(_AC_PATH_X_XMKMF): Use conftest.dir, not conftestdir.
+	* acgeneral.m4 (AC_ARG_PROGRAM): Use conftest.sed, not
+	conftestsed.
+	* m4/sanity.m4: Use conftest.file, not conftestfile.
+	* doc/autoconf.texi (Guidelines for Test Programs): Suggest
+	using conftest.data, not conftestdata.
+
 2001-01-29  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4: Don't redirect builtins' stderr as Ultrix

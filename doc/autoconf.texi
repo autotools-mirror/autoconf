@@ -4952,7 +4952,7 @@ example, if you call @code{AC_HEADER_STDC}, then later on in
 @end example
 
 If a test program needs to use or create a data file, give it a name
-that starts with @file{conftest}, such as @file{conftestdata}.  The
+that starts with @file{conftest}, such as @file{conftest.data}.  The
 @code{configure} script cleans up by running @samp{rm -rf conftest*}
 after running test programs and if the script is interrupted.
 

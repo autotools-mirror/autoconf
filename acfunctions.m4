@@ -1030,7 +1030,7 @@ main ()
   for (i = 0; i < pagesize; ++i)
     *(data + i) = rand ();
   umask (0);
-  fd = creat ("conftestmmap", 0600);
+  fd = creat ("conftest.mmap", 0600);
   if (fd < 0)
     exit (1);
   if (write (fd, data, pagesize) != pagesize)
@@ -1040,7 +1040,7 @@ main ()
   /* Next, try to mmap the file at a fixed address which already has
      something else allocated at it.  If we can, also make sure that
      we see the same garbage.  */
-  fd = open ("conftestmmap", O_RDWR);
+  fd = open ("conftest.mmap", O_RDWR);
   if (fd < 0)
     exit (1);
   data2 = (char *) malloc (2 * pagesize);
@@ -1077,7 +1077,7 @@ if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE(HAVE_MMAP, 1,
             [Define if you have a working `mmap' system call.])
 fi
-rm -f conftestmmap
+rm -f conftest.mmap
 ])# AC_FUNC_MMAP
 
 
@@ -1383,7 +1383,7 @@ AU_ALIAS([AC_STRCOLL], [AC_FUNC_STRCOLL])
 # ------------------
 AC_DEFUN([AC_FUNC_UTIME_NULL],
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
-[rm -f conftestdata; >conftestdata
+[rm -f conftest.data; >conftest.data
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
 AC_TRY_RUN(
 [#include <sys/types.h>
@@ -1392,9 +1392,9 @@ int
 main ()
 {
   struct stat s, t;
-  exit (!(stat ("conftestdata", &s) == 0
-          && utime ("conftestdata", (long *)0) == 0
-          && stat ("conftestdata", &t) == 0
+  exit (!(stat ("conftest.data", &s) == 0
+          && utime ("conftest.data", (long *)0) == 0
+          && stat ("conftest.data", &t) == 0
           && t.st_mtime >= s.st_mtime
           && t.st_mtime - s.st_mtime < 120));
 }], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
@@ -1405,7 +1405,7 @@ if test $ac_cv_func_utime_null = yes; then
             [Define if `utime(file, NULL)' sets file's timestamp to the
              present.])
 fi
-rm -f conftestdata
+rm -f conftest.data
 ])# AC_FUNC_UTIME_NULL
 
 

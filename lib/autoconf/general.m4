@@ -1702,11 +1702,11 @@ if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF >conftestsed
+  cat <<\EOF >conftest.sed
 s,\\,\\\\,g; s,\$,$$,g
 EOF
-  program_transform_name=`echo $program_transform_name | sed -f conftestsed`
-  rm -f conftestsed
+  program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
+  rm -f conftest.sed
 fi
 test "$program_prefix" != NONE &&
   program_transform_name="s,^,${program_prefix},;$program_transform_name"

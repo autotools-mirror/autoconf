@@ -84,18 +84,18 @@ AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \${MAKE}])
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
-[cat >conftestmake <<\EOF
+[cat >conftest.make <<\EOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
+eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
 if test -n "$ac_maketemp"; then
   eval ac_cv_prog_make_${ac_make}_set=yes
 else
   eval ac_cv_prog_make_${ac_make}_set=no
 fi
-rm -f conftestmake])dnl
+rm -f conftest.make])dnl
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
   AC_MSG_RESULT([yes])
   SET_MAKE=
@@ -568,9 +568,9 @@ AC_DEFUN([AC_SYS_POSIX_TERMIOS],
 # Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_XMKMF],
-[rm -fr conftestdir
-if mkdir conftestdir; then
-  cd conftestdir
+[rm -fr conftest.dir
+if mkdir conftest.dir; then
+  cd conftest.dir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
   cat >Imakefile <<'EOF'
 acfindx:
@@ -599,7 +599,7 @@ EOF
     esac
   fi
   cd ..
-  rm -fr conftestdir
+  rm -fr conftest.dir
 fi
 ])# _AC_PATH_X_XMKMF
 
