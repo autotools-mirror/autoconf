@@ -59,8 +59,7 @@
 m4_namespace_push(autoconf)
 
 # m4 output diversions.  We let m4 output them all in order at the end,
-# except that we explicitly undivert AC_DIVERSION_CMDS,
-# and AC_DIVERSION_ICMDS.
+# except that we explicitly undivert AC_DIVERSION_ICMDS.
 
 define(AC_DIVERSION_KILL,    -1)# suppress output
 define(AC_DIVERSION_BINSH,    0)# AC_REQUIRE'd #! /bin/sh line
@@ -71,8 +70,7 @@ define(AC_DIVERSION_NORMAL_3, 4)# AC_REQUIRE'd code, 3 level deep
 define(AC_DIVERSION_NORMAL_2, 5)# AC_REQUIRE'd code, 2 level deep
 define(AC_DIVERSION_NORMAL_1, 6)# AC_REQUIRE'd code, 1 level deep
 define(AC_DIVERSION_NORMAL,   7)# the tests and output code
-define(AC_DIVERSION_CMDS,     8)# extra shell commands in config.status
-define(AC_DIVERSION_ICMDS,    9)# extra initialization in config.status
+define(AC_DIVERSION_ICMDS,    8)# extra initialization in config.status
 
 
 # AC_DIVERT_PUSH(STREAM)
@@ -3668,11 +3666,6 @@ ifset([AC_LIST_COMMANDS],
 
 cat >>$CONFIG_STATUS <<\EOF
 
-#
-# CONFIG_COMMANDS section.
-#
-
-undivert(AC_DIVERSION_CMDS)dnl
 exit 0
 EOF
 chmod +x $CONFIG_STATUS
