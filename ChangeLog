@@ -1,3 +1,9 @@
+2005-02-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_N_PREPARE): Don't set ECHO_C to
+	newline if neither \c nor -n work, as that would output two
+	newlines.  Prefer -n to \c.  Reported by Stepan Kasal.
+
 2005-02-12  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (AS_IF): Define by m4_defun, not m4_define.
