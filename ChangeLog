@@ -1,6 +1,6 @@
 2000-02-28  Akim Demaille  <akim@epita.fr>
 
-	* doc/Makefile.am (MAKEINFO): s/makefino/@MAKEINFO@/.
+	* doc/Makefile.am (MAKEINFO): s/makeinfo/@MAKEINFO@/.
 	* missing: chmod +x.
 
 2000-02-28  Akim Demaille  <akim@epita.fr>
