@@ -22,17 +22,17 @@ AT_DATA([configure.in],
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])
-AT_CHECK([libtoolize | sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"] >at-path],
-         0, [], ignore)
+AT_CHECK([libtoolize | sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"]],
+         0, [stdout], ignore)
 
 # Make sure at-path contains something valid, and let the test suite
 # display it when verbose.  And fail, skipping would too easily hide
 # problems.
-AT_CHECK([grep . at-path], 0, [ignore])
-AT_CHECK([test -f "`cat at-path`"])
+AT_CHECK([grep . stdout], 0, [ignore])
+AT_CHECK([test -f "`cat stdout`"])
 
 # Build the concatenation of libtool.m4 and configure.ac.
-cp `cat at-path` configure.in
+cp `cat stdout` configure.in
 cat >>configure.in <<_EOF
 AC_INIT
 AC_CONFIG_AUX_DIR(.)

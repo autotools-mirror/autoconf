@@ -210,10 +210,10 @@ AS_FOO
 _AS_BAR
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [], [stderr])
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
-AT_CHECK([sort <err], 0,
+AT_CHECK([sort stderr], 0,
 [[configure.ac:2: error: undefined macro: AC_FOO
 configure.ac:3: error: undefined macro: _AC_BAR
 configure.ac:4: error: undefined macro: m4_foo
@@ -222,7 +222,7 @@ configure.ac:8: error: undefined macro: AS_FOO
 configure.ac:9: error: undefined macro: _AS_BAR
 ]])
 
-AT_CLEANUP(configure err)
+AT_CLEANUP(configure)
 
 
 # autoconf: forbidden tokens, exceptions
@@ -251,10 +251,10 @@ BAC_DEFINE
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [], [stderr])
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
-AT_CHECK([sort <err], 0,
+AT_CHECK([sort stderr], 0,
 [[configure.ac:10: error: undefined macro: FORBIDDEN
 configure.ac:14: error: undefined macro: AC_THIS_IS_INVALID
 configure.ac:14: error: undefined macro: _AC_THIS_IS_INVALID_TOO

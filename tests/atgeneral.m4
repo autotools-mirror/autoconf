@@ -88,7 +88,8 @@ m4_define([AT_LINE],
 m4_define([AT_INIT],
 [m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-m4_define([AT_data_files], [stdout stderr ])
+m4_define([AT_data_files],
+          [stdout expout at-stdout stderr experr at-stder1 at-stderr ])
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -96,6 +97,7 @@ AS_SHELL_SANITIZE
 
 # Name of the executable.
 as_me=`echo "$[0]" | sed 's,.*/,,'`
+SHELL=${CONFIG_SHELL-/bin/sh}
 
 . ./atconfig
 # Use absolute file notations, as the test might change directories.
@@ -153,9 +155,9 @@ done
 test -z "$at_tests" && at_tests=$at_tests_all
 
 # Help message.
-# Display only the title of selected tests.
 if $at_help; then
-  cat <<EOF
+  # If tests were specified, display only their title.
+  test -z "$at_tests" && cat <<EOF
 Usage: $[0] [[OPTION]]... [[TESTS]]
 
 Run all the tests, or the selected TESTS.
@@ -164,6 +166,7 @@ Options:
   -h  Display this help message and the description of TESTS
   -e  Abort the full suite and inhibit normal clean up if a test fails
   -v  Force more detailed output, default for debugging scripts
+  -d  Inhibit clean up and debug script creation, default for debugging scripts
   -x  Have the shell to trace command execution
 
 Tests:
@@ -177,31 +180,15 @@ EOF
   exit 0
 fi
 
-# To check whether a test succeeded or not, we compare an expected
-# output with a reference.  In the testing suite, we just need `cmp'
-# but in debugging scripts, we want more information, so we prefer
-# `diff -u'.  Nonetheless we will use `diff' only, because in DOS
-# environments, `diff' considers that two files are equal included
-# when there are only differences on the coding of new lines. `cmp'
-# does not.
-#
-# Finally, not all the `diff' support `-u', and some, like Tru64, even
-# refuse to `diff' /dev/null.
+# Use `diff -u' when possible.
 : >empty
-
 if diff -u empty empty >/dev/null 2>&1; then
   at_diff='diff -u'
 else
   at_diff='diff'
 fi
 
-
-
-# Each generated debugging script, containing a single test group, cleans
-# up files at the beginning only, not at the end.  This is so we can repeat
-# the script many times and browse left over files.  To cope with such left
-# over files, the full test suite cleans up both before and after test groups.
-
+# Tester and tested.
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
   AS_BOX([Testing suite for $at_package $at_version])
 else
@@ -217,8 +204,8 @@ else
   exec 5>/dev/null
 fi
 
-at_failed_list=
-at_skip_count=0
+at_fail_list=
+at_skip_list=
 at_test_count=0
 m4_divert([TESTS])dnl
 
@@ -241,10 +228,10 @@ m4_divert([TAIL])[]dnl
         0) echo ok
            ;;
         77) echo "ok (skipped near \``cat at-check-line`')"
-            at_skip_count=`expr $at_skip_count + 1`
+            at_skip_list="$at_skip_list $at_test"
             ;;
         *) echo "FAILED near \``cat at-check-line`'"
-           at_failed_list="$at_failed_list $at_test"
+           at_fail_list="$at_fail_list $at_test"
            $at_stop_on_error && break
            ;;
       esac
@@ -256,14 +243,15 @@ done
 # Wrap up the testing suite with summary statistics.
 
 rm -f at-check-line at-setup-line
-if test -z "$at_failed_list"; then
-  if test "$at_skip_count" = 0; then
+at_skip_count=`set dummy $at_skip_list; shift; echo $[#]`
+at_fail_count=`set dummy $at_fail_list; shift; echo $[#]`
+if test $at_fail_count = 0; then
+  if test $at_skip_count = 0; then
     AS_BOX([All $at_test_count tests were successful])
   else
     AS_BOX([All $at_test_count tests were successful ($at_skip_count skipped)])
   fi
 elif test $at_debug = false; then
-  at_fail_count=`set dummy $at_failed_list; shift; echo $[#]`
   if $at_stop_on_error; then
     AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests])
   else
@@ -274,7 +262,7 @@ elif test $at_debug = false; then
   rm -f debug-*.sh $[0].log
   echo
   echo $at_n "Writing \`debug-NN.sh' scripts, NN =$at_c"
-  for at_group in $at_failed_list; do
+  for at_group in $at_fail_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
       echo 'exec ${CONFIG_SHELL-/bin/sh} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
@@ -290,13 +278,38 @@ elif test $at_debug = false; then
   echo 'Now, failed tests will be executed again, verbosely, and logged'
   echo 'in the file '$[0]'.log.'
 
-  AS_UNAME >$[0].log
-  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_failed_list 2>&1 | tee -a $[0].log
+  {
+    AS_BOX([Testing suite log for $at_package $at_version])
+    echo
+
+    # Try to find a few ChangeLogs in case it might help determining the
+    # exact version.
+    find "$at_top_srcdir" -follow -maxdepth 3 -name ChangeLog \
+      -exec echo {} : ';' \
+      -exec sed 's/^/| /;10q' {} ';' \
+      -exec echo ';'
+
+    # Summary of failed and skipped tests.
+    if test $at_fail_count != 0; then
+      echo "Failed tests:"
+      $SHELL $[0] $at_fail_list --help
+      echo
+    fi
+    if test $at_skip_count != 0; then
+      echo "Skipped tests:"
+      $SHELL $[0] $at_skip_list --help
+      echo
+    fi
+
+    AS_UNAME
+  } >>$[0].log
+
+  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_fail_list 2>&1 | tee -a $[0].log
   AS_BOX([$[0].log is created])
 
   echo
-  echo "Please send \`$[0].log' to <$at_bugreport> together with as"
-  echo 'information as you think might help.'
+  echo "Please send \`$[0].log' to <$at_bugreport> together with all"
+  echo "the information you think might help."
   exit 1
 fi
 
@@ -374,11 +387,10 @@ m4_define([AT_CLEANUP_FILES],
 # AT_CLEANUP(FILES)
 # -----------------
 # Complete a group of related tests, recursively remove those FILES
-# created within the test.  There is no need to list stdout, stderr,
-# nor files created with AT_DATA.
+# created within the test.  There is no need to list files created with
+# AT_DATA.
 m4_define([AT_CLEANUP],
 [AT_CLEANUP_FILES([$1])dnl
-      $at_traceoff
     )
     at_status=$?
     ;;
@@ -420,40 +432,94 @@ $2[]_ATEOF
 ])
 
 
-# AT_CHECK(COMMANDS, [STATUS], STDOUT, STDERR)
-# --------------------------------------------
+# AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR)
+# ------------------------------------------------
 # Execute a test by performing given shell COMMANDS.  These commands
 # should normally exit with STATUS, while producing expected STDOUT and
-# STDERR contents.  The special word `expout' for STDOUT means that file
-# `expout' contents has been set to the expected stdout.  The special word
-# `experr' for STDERR means that file `experr' contents has been set to
-# the expected stderr.
-# STATUS is not checked if it is empty.
-# STDOUT and STDERR can be the special value `ignore', in which case
-# their content is not checked.
+# STDERR contents.
+#
+# STATUS, STDOUT, and STDERR are not checked if equal to `ignore'.
+#
+# If STDOUT is `expout', then stdout is compared to the content of the file
+# `expout'.  Likewise for STDERR and `experr'.
+#
+# If STDOUT is `stdout', then the stdout is left in the file `stdout',
+# likewise for STDERR and `stderr'.  Don't do this:
+#
+#    AT_CHECK([command >out])
+#    # Some checks on `out'
+#
+# do this instead:
+#
+#    AT_CHECK([command], [], [stdout])
+#    # Some checks on `stdout'
+#
+# This is an unfortunate limitation inherited from Ultrix which will not
+# let you redirect several times the same FD (see the Autoconf documentation).
+# If you use the `AT_CHECK([command >out])' be sure to have the test
+# suite introduces spurious failures.
+#
+# You might wander why not just use `ignore' and directly use stdout and
+# stderr left by the test suite.  Firstly because the names of these files
+# is an internal detail, and secondly, because
+#
+#    AT_CHECK([command], [], [ignore])
+#    AT_CHECK([check stdout])
+#
+# will use `stdout' both in input and output: undefined behavior would
+# certainly result.  That's why the test suite will save them in `at-stdout'
+# and `at-stderr', and will provide you with `stdout' and `stderr'.
+#
+# Any line of stderr starting with leading blanks and a `+' are filtered
+# out, since most shells when tracing include subshell traces in stderr.
+# This may cause spurious failures when the test suite is run with `-x'.
+#
+#
+# Implementation Details
+# ----------------------
+# Ideally, we would like to run
+#
+#    ( $at_traceon; COMMANDS >at-stdout 2> at-stderr )
+#
+# but we must group COMMANDS as it is not limited to a single command, and
+# then the shells will save the traces in at-stderr. So we have to filter
+# them out when checking stderr, and we must send them into the test suite's
+# stderr to honor -x properly.
+#
+# Limiting COMMANDS to a single command is not good either, since them
+# the user herself would use {} or (), and then we face the same problem.
+#
+# But then, there is no point in running
+#
+#   ( $at_traceon { $1 ; } >at-stdout 2>at-stder1 )
+#
+# instead of the simpler
+#
+#  ( $at_traceon; $1 ) >at-stdout 2>at-stder1
+#
 m4_define([AT_CHECK],
 [$at_traceoff
-$at_verbose "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
+$at_verbose "$srcdir/AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >at-check-line
-$at_traceon
-( $1 ) >stdout 2>stderr
+( $at_traceon; $1 ) >at-stdout 2>at-stder1
 at_status=$?
-$at_traceoff
+egrep '^ *\+' at-stder1 >&2
+egrep -v '^ *\+' at-stder1 >at-stderr
 at_failed=false
 dnl Check stderr.
 m4_case([$4],
-        ignore, [cat stderr >&5],
-        experr, [AT_CLEANUP_FILE([experr])dnl
-$at_diff experr stderr >&5 || at_failed=:],
-        [], [$at_diff empty stderr >&5 || at_failed=:],
-        [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr >&5 || at_failed=:])
+        stderr, [(echo stderr:; tee stderr <at-stderr) >&5],
+        ignore, [(echo stderr:; cat at-stderr) >&5],
+        experr, [$at_diff experr at-stderr >&5 || at_failed=:],
+        [],     [$at_diff empty  at-stderr >&5 || at_failed=:],
+        [echo $at_n "AS_ESCAPE([$4])$at_c" | $at_diff - at-stderr >&5 || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
-        ignore, [cat stdout >&5],
-        expout, [AT_CLEANUP_FILES([expout])dnl
-$at_diff expout stdout >&5 || at_failed=:],
-        [], [$at_diff empty stdout >&5 || at_failed=:],
-        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_failed=:])
+        stdout, [(echo stdout:; tee stdout <at-stdout) >&5],
+        ignore, [(echo stdout:; cat at-stdout) >&5],
+        expout, [$at_diff expout at-stdout >&5 || at_failed=:],
+        [],     [$at_diff empty  at-stdout >&5 || at_failed=:],
+        [echo $at_n "AS_ESCAPE([$3])$at_c" | $at_diff - at-stdout >&5 || at_failed=:])
 dnl Check exit val.
 case $at_status in
   77) exit 77;;

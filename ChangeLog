@@ -1,5 +1,27 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* sh.m4 (AS_ESCAPE): New.
+	(_AS_QUOTE_IFELSE): Use it.
+	* tests/atgeneral.m4 (AT_INIT) <SHELL>: Define and use.
+	<--help> Don't display the options help when tests were selected.
+	Document -d.
+	<at_skip_list>: New.
+	<testsuite.log>: Give a banner, include ChangeLog snippets, list
+	the failed and skipped tests.
+	Remove useless $at_traceoff in sub shells, this improves the
+	readability of the traces by removing testsuite's implementation
+	details.
+	(AT_CHECK): Filter out the shell traces from the tested command's
+	stderr.
+	Use AS_ESCAPE.
+	Don't register experr and expout for clean up, as it's hairy and
+	easier to do from...
+	Support STDOUT = stdout, and STDERR = stderr.
+	Force the output of shell traces.
+	(AT_INIT): Here.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INIT, AC_OUTPUT): Don't take care of completing
 	the log.
 	(_AC_INIT_PREPARE): Do it in the trap 0.

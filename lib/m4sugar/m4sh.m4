@@ -165,6 +165,15 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # too.
 
 
+# AS_ESCAPE(STRING, [CHARS = $"'\])
+# ---------------------------------
+# Escape the CHARS in STRING.
+m4_define([AS_ESCAPE],
+[m4_patsubst([$1],
+             m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
+             [\\\1])])
+
+
 # _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
 # ---------------------------------------------------------------
 # Compatibility glue between the old AS_MSG suite which did not
@@ -197,7 +206,7 @@ m4_define([_AS_ECHO_UNQUOTED],
 # the transition (for Libtool for instance).
 m4_define([_AS_QUOTE],
 [_AS_QUOTE_IFELSE([$1],
-                  [m4_patsubst([$1], [\([`""]\)], [\\\1])],
+                  [AS_ESCAPE([$1], [`""])],
                   [m4_warn([obsolete],
            [back quotes and double quotes should not be escaped in: $1])dnl
 $1])])
