@@ -151,8 +151,8 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
 	     GNUmakefile Makefile.maint Makefile.cfg
 
-MAINTAINERCLEANFILES = INSTALL
-pkgdata_DATA = INSTALL
+MAINTAINERCLEANFILES = $(srcdir)/INSTALL
+pkgdata_DATA = $(srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 automake_cvsweb = \
    http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/automake
@@ -592,8 +592,8 @@ html:
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@
 
 .PHONY: html
-INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
+$(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $@ \
 	  $(top_srcdir)/doc/install.texi
 
 maintainer-check: maintainer-check-tests

@@ -114,13 +114,18 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-dist_man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 \
-autoscan.1 autom4te.1 config.guess.1 config.sub.1
+dist_man_MANS = \
+	$(srcdir)/autoconf.1 \
+	$(srcdir)/autoheader.1 \
+	$(srcdir)/autom4te.1 \
+	$(srcdir)/autoreconf.1 \
+	$(srcdir)/autoscan.1 \
+	$(srcdir)/autoupdate.1 \
+	$(srcdir)/ifnames.1 \
+	$(srcdir)/config.guess.1 \
+	$(srcdir)/config.sub.1
 
-man_aux = autoconf.x autoreconf.x autoheader.x autoupdate.x ifnames.x \
-autoscan.x autom4te.x config.guess.x config.sub.x
-
-EXTRA_DIST = $(man_aux) common.x
+EXTRA_DIST = $(dist_man_MANS:.1=.x) common.x
 MAINTAINERCLEANFILES = $(dist_man_MANS)
 
 # Depend on configure.ac to get version number changes.
@@ -214,6 +219,7 @@ CTAGS:
 
 
 distdir: $(DISTFILES)
+	$(mkdir_p) $(distdir)/$(srcdir)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -329,26 +335,26 @@ uninstall-man: uninstall-man1
 	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
 	uninstall-am uninstall-info-am uninstall-man uninstall-man1
 
-autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
-autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
-autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
-autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
-autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
-autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
-ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
+$(srcdir)/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
+$(srcdir)/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
+$(srcdir)/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
+$(srcdir)/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
+$(srcdir)/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
+$(srcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
+$(srcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 # Independent from this package.
-config.guess.1: $(top_srcdir)/config/config.guess
-config.sub.1:   $(top_srcdir)/config/config.sub
+$(srcdir)/config.guess.1: $(top_srcdir)/config/config.guess
+$(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 
 .x.1:
 	echo "Updating man page $@"
 	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
-	    --include=$(srcdir)/$*.x \
+	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ $*
+	    --output=$@ `echo "$*" | sed 's,^$(srcdir)/,,'`
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
