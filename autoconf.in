@@ -105,11 +105,12 @@ status=0
 #   Produce the configure script (default)
 task=script
 : ${TMPDIR=/tmp}
-tmpin=$TMPDIR/ac$$.in
-tmpout=$TMPDIR/ac$$.out
-silent_m4=$TMPDIR/silent$$.m4
-trace_m4=$TMPDIR/trace$$.m4
-translate_awk=$TMPDIR/trans$$.awk
+tmpbase=$TMPDIR/ac$$
+tmpin=${tmpbase}.in
+tmpout=${tmpbase}.out
+silent_m4=${tmpbase}silent.m4
+trace_m4=${tmpbase}trace.m4
+translate_awk=${tmpbase}trans.awk
 verbose=:
 
 # Parse command line
@@ -204,9 +205,7 @@ esac
 # Trap on 0 to stop playing with `rm'.
 $debug ||
 {
-  trap 'status=$?
-        rm -f $tmpin $tmpout $silent_m4 $trace_m4 $translate_awk &&
-          exit $status' 0
+  trap 'status=$?; rm -f $tmpbase* && exit $status' 0
   trap 'exit $?' 1 2 13 15
 }
 
@@ -313,65 +312,95 @@ EOF
   # A program to translate user tracing requests into m4 macros.
   cat >$translate_awk <<\EOF
 BEGIN {
+  # We want AWK to consider the whole file is a single record.
+  # This allows to use `\n' as a separator.
+  RS = "\0" ;
+}
+
+function trans (arg, sep)
+{
   # File name.
-  trans["f"] = "$1";
+  if (arg == "f")
+    return "$1"
   # Line number.
-  trans["l"] = "$2";
+  if (arg == "l")
+    return "$2"
   # Depth.
-  trans["d"] = "$3";
+  if (arg == "d")
+    return "$3"
   # Name (also available as $0).
-  trans["n"] = "$4";
+  if (arg == "n")
+    return "$4"
   # Escaped dollar.
-  trans["$"] = "$";
+  if (arg == "$")
+    return "$"
+
   # $@, list of quoted effective arguments.
-  trans["@"] = "]at([,], $@)[";
+  if (arg == "@")
+    return "]at([" (separator ? separator : ",") "], $@)["
   # $*, list of unquoted effective arguments.
-  trans["*"] = "]star([:], $@)[";
+  if (arg == "*")
+    return "]star([" (separator ? separator : ":") "], $@)["
+}
+
+function error (message)
+{
+  print message >"/dev/stderr"
+  exit 1
 }
 
 {
-  res = "";
+  res = ""
 
-  for (cp = $0; cp; cp = substr(cp, 2))
+  for (cp = $0; cp; cp = substr (cp, 2))
     {
-      char = substr (cp, 1, 1);
+      char = substr (cp, 1, 1)
       if (char == "$")
 	{
 	  if (match (cp, /^\$[0-9]+/))
 	    {
 	      # $n -> $(n + 4)
-	      res = res "$" (substr (cp, 2, RLENGTH - 1) + 4);
-	      cp = substr (cp, RLENGTH);
+	      res = res "$" (substr (cp, 2, RLENGTH - 1) + 4)
+	      cp = substr (cp, RLENGTH)
 	    }
 	  else if (substr (cp, 2, 1) ~ /[fldn$@*]/)
 	    {
-	      res = res trans[substr (cp, 2, 1)];
-	      cp = substr(cp, 2);
+	      # $x, no separator given.
+	      res = res trans(substr (cp, 2, 1))
+	      cp = substr (cp, 2)
 	    }
-          else if (substr (cp, 3, 1) == "@")
+          else if (substr (cp, 2, 1) == "{")
 	    {
-	      res = res "]at([" substr (cp, 2, 1)  "], $@)[";
-	      cp = substr(cp, 3);
-            }
-          else if (substr (cp, 3, 1) == "*")
+	      # ${sep}x, long separator.
+	      end = index (cp, "}")
+	      if (!end)
+	        error("invalid escape: " cp)
+	      separator = substr (cp, 3, end - 3)
+	      if (substr (cp, end + 1, 1) ~ /[*@]/)
+                res = res trans(substr (cp, end + 1, 1), separator)
+	      else
+	        error("invalid escape: " cp)
+	      cp = substr (cp, end + 1)
+	    }
+          else if (substr (cp, 3, 1) ~ /[$@]/)
 	    {
-	      res = res "]star([" substr (cp, 2, 1)  "], $@)[";
-	      cp = substr(cp, 3);
+	      # $sx, short separator `s'.
+	      res = res trans(substr (cp, 3, 1), substr (cp, 2, 1))
+	      cp = substr(cp, 3)
             }
 	  else
 	    {
-	      print "invalid escape: " substr (cp, 1, 2) >"/dev/stderr";
-	      exit 1
+	      error("invalid escape: " substr (cp, 1, 2))
 	    }
 	}
       else
-	res = res char;
+	res = res char
     }
-  print res;
+  print res
 }
 EOF
   # Extract both the m4 program and the m4 options from TRACES.
-  eval set dummy $traces
+  eval set dummy "$traces"
   shift
   for trace
   do
@@ -387,7 +416,7 @@ EOF
         # Default request.
         echo "define([AT_$trace], [[\$f:\$l:\$n:\$*]])";;
     esac |
-      $AWK -f $translate_awk >>$trace_m4
+      $AWK -f $translate_awk >>$trace_m4 || exit 1
   done
   echo "divert(0)dnl" >>$trace_m4
 
@@ -405,8 +434,15 @@ EOF
         -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' >>$trace_m4
 
   # Now we are ready to run m4 to process the trace file.
+  # It makes no sense to try to transform __oline__.
   $verbose "Running $M4 $trace_m4" >&2
-  $M4 $trace_m4 >&4
+  $M4 $trace_m4 |
+    sed '
+      s/@<:@/[/g
+      s/@:>@/]/g
+      s/@S|@/$/g
+      s/@%:@/#/g
+      ' >&4
   ;;
 
 

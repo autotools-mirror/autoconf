@@ -1,5 +1,23 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (tmpbase): New var.  Adjust trap code and other tmp
+	file names.
+	(translate_awk::BEGIN): Set RS to "\0" so that the whole file be a
+	single record.
+	(translate_awk::trans): Convert from array to function.
+	(translate_awk::error): New function.
+	(translate_awk::main action): Implement support for ${sep}@ and
+	${sep}*.  Use trans() and error().
+	(translate_awk): Don't put space before user functions call, it is
+	not portable.
+	Remove trailing `;', this is not C :).
+	(task trace): Quote `$traces' when you eval it, to protect the
+	white spaces.
+	Propagate `translate_awk' failures to `autoconf.sh'.
+	Translate the quadrigraphs.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	Trap on 0 is not executed when `exit' is called without argument.
 
 	* autoheader.sh (trap 1 2 13 15): s/exit/exit $?/.
