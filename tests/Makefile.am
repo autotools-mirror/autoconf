@@ -58,8 +58,6 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 #   infinite m4 recursion if AC_INIT it used twice.
 # - AC_LANG*
 #   Heavily used by other macros.
-# - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
-#   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
@@ -73,6 +71,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 #   Is a number.
 # - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE)
 #   Checked in semantics.
+# - AC_CYGWIN, AC_CYGWIN32, AC_EMXOS2, AC_MING32, AC_EXEEXT, AC_OBJEXT
+#   AU defined to nothing.
 #
 # Multiple `-e' to egrep are not portable, so join all the patterns together.
 # We use the fact that automake will replace all the `\\\n' with ` '.
@@ -88,13 +88,13 @@ FILTER_MACROS = egrep -v -e \
 ^AC_LIST_MEMBER_OF$$\
 ^AC_OUTPUT$$\
 ^AC_PATH_(TOOL|PROG)S?$$\
-^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$\
 ^AC_REPLACE_FUNCS$$\
 ^AC_SEARCH_LIBS$$\
 ^AC_TRY\
 ^AC_.*_IFELSE$$\
 ^AC_FD_CC$$\
 ^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$$\
+^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$$\
 _AC_' | tr ' ' '|'`
 
 # The files which contains macro we check for syntax.

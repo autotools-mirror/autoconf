@@ -194,6 +194,7 @@ Existing Tests
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
+* Compilers and Preprocessors::  Checking for compiling programs
 * C Compiler Characteristics::
 * Fortran 77 Compiler Characteristics::
 * System Services::             Operating system services
@@ -2211,6 +2212,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
+* Compilers and Preprocessors::  Checking for compiling programs
 * C Compiler Characteristics::
 * Fortran 77 Compiler Characteristics::
 * System Services::             Operating system services
@@ -2343,177 +2345,6 @@ finds.  It tries @code{mawk} first because that is reported to be the
 fastest implementation.
 @end defmac
 
-@defmac AC_PROG_CC (@ovar{compiler-search-list})
-@maindex PROG_CC
-@ovindex CC
-@ovindex CFLAGS
-Determine a C compiler to use.  If @code{CC} is not already set in the
-environment, check for @code{gcc}, and use @code{cc} if that's not found.
-Set output variable @code{CC} to the name of the compiler found.
-
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of C compilers to
-search for.  This just gives the user an opportunity to specify an
-alternative search list for the C compiler.  For example, if you didn't
-like the default order, then you could invoke @code{AC_PROG_CC} like
-this:
-
-@example
-AC_PROG_CC(cl egcs gcc cc)
-@end example
-
-If using the @sc{gnu} C compiler, set shell variable @code{GCC} to
-@samp{yes}.  If output variable @code{CFLAGS} was not already set, set
-it to @samp{-g -O2} for the @sc{gnu} C compiler (@samp{-O2} on systems
-where GCC does not accept @samp{-g}), or @samp{-g} for other compilers.
-
-If the compiler being used does not produce executables, fail.  If the
-executables can't be run, and cross-compilation is not enabled, fail.
-@xref{Manual Configuration}, for more on support for cross compiling.
-@end defmac
-
-@defmac AC_PROG_CC_C_O
-@maindex PROG_CC_C_O
-@cvindex NO_MINUS_C_MINUS_O
-If the C compiler does not accept the @samp{-c} and @samp{-o} options
-simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
-tests both the compiler found by @code{AC_PROG_CC}, and, if different,
-the first @code{cc} in the path.  The test fails if one fails.  This
-macro was created for @sc{gnu} Make to choose the default C compilation
-rule.
-@end defmac
-
-@defmac AC_PROG_CC_STDC
-@maindex PROG_CC_STDC
-@ovindex CC
-If the C compiler in not in @sc{ansi} C mode by default, try to add an
-option to output variable @code{CC} to make it so.  This macro tries
-various options that select @sc{ansi} C on some system or another.  It
-considers the compiler to be in @sc{ansi} C mode if it handles function
-prototypes correctly.
-
-If you use this macro, you should check after calling it whether the C
-compiler has been set to accept @sc{ansi} C; if not, the shell variable
-@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
-code in @sc{ansi} C, you can make an un-@sc{ansi}fied copy of it by
-using the program @code{ansi2knr}, which comes with Ghostscript.
-@end defmac
-
-
-@defmac AC_PROG_CPP
-@maindex PROG_CPP
-@ovindex CPP
-Set output variable @code{CPP} to a command that runs the
-C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
-It is only portable to run @code{CPP} on files with a @file{.c}
-extension.
-
-If the current language is C (@pxref{Language Choice}), many of the
-specific test macros use the value of @code{CPP} indirectly by calling
-@code{AC_TRY_CPP}, @code{AC_CHECK_HEADER}, @code{AC_EGREP_HEADER}, or
-@code{AC_EGREP_CPP}.
-@end defmac
-
-@defmac AC_PROG_CXX (@ovar{compiler-search-list})
-@maindex PROG_CXX
-@ovindex CXX
-@ovindex CXXFLAGS
-Determine a C++ compiler to use.  Check if the environment variable
-@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
-variable @code{CXX} to its value.
-
-Otherwise, if the macro is invoked without an argument, then search for
-a C++ compiler under the likely names @code{c++}, @code{g++},
-@code{gcc}, @code{CC}, @code{cxx}, @code{cc++} and @code{cl} (in that
-order).  If none of those checks succeed, then as a last resort set
-@code{CXX} to @code{gcc}.
-
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of C++ compilers to
-search for.  This just gives the user an opportunity to specify an
-alternative search list for the C++ compiler.  For example, if you
-didn't like the default order, then you could invoke @code{AC_PROG_CXX}
-like this:
-
-@example
-AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
-@end example
-
-If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
-@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @samp{-g -O2} for the @sc{gnu} C++ compiler (@samp{-O2} on systems
-where G++ does not accept @samp{-g}), or @samp{-g} for other compilers.
-
-If the compiler being used does not produce executables, fail.  If the
-executables can't be run, and cross-compilation is not enabled, fail.
-@xref{Manual Configuration}, for more on support for cross compiling.
-@end defmac
-
-@defmac AC_PROG_CXXCPP
-@maindex PROG_CXXCPP
-@ovindex CXXCPP
-Set output variable @code{CXXCPP} to a command that runs the
-C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
-It is only portable to run @code{CXXCPP} on files with a @file{.c},
-@file{.C}, or @file{.cc} extension.
-
-If the current language is C++ (@pxref{Language Choice}), many of the
-specific test macros use the value of @code{CXXCPP} indirectly by
-calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
-@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
-@end defmac
-
-@defmac AC_PROG_F77 (@ovar{compiler-search-list})
-@maindex PROG_FORTRAN
-@ovindex F77
-@ovindex FFLAGS
-Determine a Fortran 77 compiler to use.  If @code{F77} is not already
-set in the environment, then check for @code{g77}, @code{f77},
-@code{xlf}, @code{cf77}, @code{fl32}, @code{fort77}, @code{f90},
-@code{xlf90} and @code{f2c}, in that order.  Set the output variable
-@code{F77} to the name of the compiler found.
-
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of Fortran 77
-compilers to search for.  This just gives the user an opportunity to
-specify an alternative search list for the Fortran 77 compiler.  For
-example, if you didn't like the default order, then you could invoke
-@code{AC_PROG_F77} like this:
-
-@example
-AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90 f2c)
-@end example
-
-If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
-@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
-If the output variable @code{FFLAGS} was not already set in the
-environment, then set it to @samp{-g -02} for @code{g77} (or @samp{-O2}
-where @code{g77} does not accept @samp{-g}).  Otherwise, set
-@code{FFLAGS} to @samp{-g} for all other Fortran 77 compilers.
-
-If the compiler being used does not produce executables, fail.  If the
-executables can't be run, and cross-compilation is not enabled, fail.
-@xref{Manual Configuration}, for more on support for cross compiling.
-@end defmac
-
-@defmac AC_PROG_F77_C_O
-@maindex PROG_F77_C_O
-@cvindex F77_NO_MINUS_C_MINUS_O
-Test if the Fortran 77 compiler accepts the options @samp{-c} and
-@samp{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
-does not.
-@end defmac
-
-@defmac AC_PROG_GCC_TRADITIONAL
-@maindex PROG_GCC_TRADITIONAL
-@ovindex CC
-Add @samp{-traditional} to output variable @code{CC} if using the
-@sc{gnu} C compiler and @code{ioctl} does not work properly without
-@samp{-traditional}.  That usually happens when the fixed header files
-have not been installed on an old system.  Since recent versions of the
-@sc{gnu} C compiler fix the header files automatically when installed,
-this is becoming a less prevalent problem.
-@end defmac
 
 @defmac AC_PROG_INSTALL
 @maindex PROG_INSTALL
@@ -3624,7 +3455,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev, struct stat.st_blksize])
 @end defmac
 
 
-@node Types, C Compiler Characteristics, Structures, Existing Tests
+@node Types, Compilers and Preprocessors, Structures, Existing Tests
 @section Types
 
 The following macros check for C types, either builtin or typedefs.  If
@@ -3740,9 +3571,197 @@ the documentation of the former @code{AC_CHECK_TYPE}, see @ref{Obsolete
 Macros}.
 
 
+@node Compilers and Preprocessors, C Compiler Characteristics, Types, Existing Tests
+@section Compilers and Preprocessors
+
+@ovindex EXEEXT
+All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
+@code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
+the output of the compiler, after @samp{.$ac_ext} (i.e. source files of
+the current language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files
+have been excluded.  Typically set to empty string if Unix and
+@samp{.exe} if Win32 or OS/2.
+
+@ovindex CYGWIN
+@ovindex EMXOS2
+@ovindex MINGW32
+They also set the shell variable @code{CYGWIN} to @samp{yes} if run in
+the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
+environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
+compiler.
+
+@ovindex OBJEXT
+Finally, they define the output variable @code{OBJEXT} based on the
+output of the compiler, after .c files have been excluded.  Typically
+set to @samp{o} if Unix, @samp{obj} if Win32.
+
+If the compiler being used does not produce executables, they fail.  If
+the executables can't be run, and cross-compilation is not enabled, they
+fail too.  @xref{Manual Configuration}, for more on support for cross
+compiling.
+
+@defmac AC_PROG_CC (@ovar{compiler-search-list})
+@maindex PROG_CC
+@ovindex CC
+@ovindex CFLAGS
+Determine a C compiler to use.  If @code{CC} is not already set in the
+environment, check for @code{gcc}, and use @code{cc} if that's not found.
+Set output variable @code{CC} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of C compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the C compiler.  For example, if you didn't
+like the default order, then you could invoke @code{AC_PROG_CC} like
+this:
+
+@example
+AC_PROG_CC(cl egcs gcc cc)
+@end example
+
+If using the @sc{gnu} C compiler, set shell variable @code{GCC} to
+@samp{yes}.  If output variable @code{CFLAGS} was not already set, set
+it to @samp{-g -O2} for the @sc{gnu} C compiler (@samp{-O2} on systems
+where GCC does not accept @samp{-g}), or @samp{-g} for other compilers.
+@end defmac
+
+@defmac AC_PROG_CC_C_O
+@maindex PROG_CC_C_O
+@cvindex NO_MINUS_C_MINUS_O
+If the C compiler does not accept the @samp{-c} and @samp{-o} options
+simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
+tests both the compiler found by @code{AC_PROG_CC}, and, if different,
+the first @code{cc} in the path.  The test fails if one fails.  This
+macro was created for @sc{gnu} Make to choose the default C compilation
+rule.
+@end defmac
+
+@defmac AC_PROG_CC_STDC
+@maindex PROG_CC_STDC
+@ovindex CC
+If the C compiler in not in @sc{ansi} C mode by default, try to add an
+option to output variable @code{CC} to make it so.  This macro tries
+various options that select @sc{ansi} C on some system or another.  It
+considers the compiler to be in @sc{ansi} C mode if it handles function
+prototypes correctly.
+
+If you use this macro, you should check after calling it whether the C
+compiler has been set to accept @sc{ansi} C; if not, the shell variable
+@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
+code in @sc{ansi} C, you can make an un-@sc{ansi}fied copy of it by
+using the program @code{ansi2knr}, which comes with Ghostscript.
+@end defmac
 
 
-@node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Types, Existing Tests
+@defmac AC_PROG_CPP
+@maindex PROG_CPP
+@ovindex CPP
+Set output variable @code{CPP} to a command that runs the
+C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
+It is only portable to run @code{CPP} on files with a @file{.c}
+extension.
+
+If the current language is C (@pxref{Language Choice}), many of the
+specific test macros use the value of @code{CPP} indirectly by calling
+@code{AC_TRY_CPP}, @code{AC_CHECK_HEADER}, @code{AC_EGREP_HEADER}, or
+@code{AC_EGREP_CPP}.
+@end defmac
+
+@defmac AC_PROG_CXX (@ovar{compiler-search-list})
+@maindex PROG_CXX
+@ovindex CXX
+@ovindex CXXFLAGS
+Determine a C++ compiler to use.  Check if the environment variable
+@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
+variable @code{CXX} to its value.
+
+Otherwise, if the macro is invoked without an argument, then search for
+a C++ compiler under the likely names @code{c++}, @code{g++},
+@code{gcc}, @code{CC}, @code{cxx}, @code{cc++} and @code{cl} (in that
+order).  If none of those checks succeed, then as a last resort set
+@code{CXX} to @code{gcc}.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of C++ compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the C++ compiler.  For example, if you
+didn't like the default order, then you could invoke @code{AC_PROG_CXX}
+like this:
+
+@example
+AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
+@end example
+
+If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
+@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
+it to @samp{-g -O2} for the @sc{gnu} C++ compiler (@samp{-O2} on systems
+where G++ does not accept @samp{-g}), or @samp{-g} for other compilers.
+@end defmac
+
+@defmac AC_PROG_CXXCPP
+@maindex PROG_CXXCPP
+@ovindex CXXCPP
+Set output variable @code{CXXCPP} to a command that runs the
+C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
+It is only portable to run @code{CXXCPP} on files with a @file{.c},
+@file{.C}, or @file{.cc} extension.
+
+If the current language is C++ (@pxref{Language Choice}), many of the
+specific test macros use the value of @code{CXXCPP} indirectly by
+calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
+@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
+@end defmac
+
+@defmac AC_PROG_F77 (@ovar{compiler-search-list})
+@maindex PROG_FORTRAN
+@ovindex F77
+@ovindex FFLAGS
+Determine a Fortran 77 compiler to use.  If @code{F77} is not already
+set in the environment, then check for @code{g77}, @code{f77},
+@code{xlf}, @code{cf77}, @code{fl32}, @code{fort77}, @code{f90},
+@code{xlf90} and @code{f2c}, in that order.  Set the output variable
+@code{F77} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of Fortran 77
+compilers to search for.  This just gives the user an opportunity to
+specify an alternative search list for the Fortran 77 compiler.  For
+example, if you didn't like the default order, then you could invoke
+@code{AC_PROG_F77} like this:
+
+@example
+AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90 f2c)
+@end example
+
+If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
+@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
+If the output variable @code{FFLAGS} was not already set in the
+environment, then set it to @samp{-g -02} for @code{g77} (or @samp{-O2}
+where @code{g77} does not accept @samp{-g}).  Otherwise, set
+@code{FFLAGS} to @samp{-g} for all other Fortran 77 compilers.
+@end defmac
+
+@defmac AC_PROG_F77_C_O
+@maindex PROG_F77_C_O
+@cvindex F77_NO_MINUS_C_MINUS_O
+Test if the Fortran 77 compiler accepts the options @samp{-c} and
+@samp{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
+does not.
+@end defmac
+
+@defmac AC_PROG_GCC_TRADITIONAL
+@maindex PROG_GCC_TRADITIONAL
+@ovindex CC
+Add @samp{-traditional} to output variable @code{CC} if using the
+@sc{gnu} C compiler and @code{ioctl} does not work properly without
+@samp{-traditional}.  That usually happens when the fixed header files
+have not been installed on an old system.  Since recent versions of the
+@sc{gnu} C compiler fix the header files automatically when installed,
+this is becoming a less prevalent problem.
+@end defmac
+
+
+@node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Compilers and Preprocessors, Existing Tests
 @section C Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
@@ -4039,32 +4058,6 @@ The @code{AC_F77_FUNC_WRAPPER} macro uses the
 @section System Services
 
 The following macros check for operating system services or capabilities.
-
-@defmac AC_EXEEXT
-@maindex EXEEXT
-@ovindex EXEEXT
-@maindex CYGWIN
-@maindex EMXOS2
-@maindex MINGW32
-Defines substitute variable @code{EXEEXT} based on the output of the
-compiler, after @samp{.$ac_ext} (i.e. source files of the current
-language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files have been
-excluded.  Typically set to empty string if Unix and @samp{.exe} if
-Win32 or OS/2.
-
-This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in
-the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
-environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
-compiler.
-@end defmac
-
-@defmac AC_OBJEXT
-@maindex OBJEXT
-@ovindex OBJEXT
-Defines substitute variable @code{OBJEXT} based on the output of the
-compiler, after .c files have been excluded.  Typically
-set to @samp{o} if Unix, @samp{obj} if Win32.
-@end defmac
 
 @defmac AC_PATH_X
 @maindex PATH_X
@@ -7720,6 +7713,26 @@ If on Dynix/PTX (Sequent @sc{unix}), add @samp{-lseq} to output variable
 @code{AC_FUNC_GETMNTENT}.
 @end defmac
 
+@defmac AC_EXEEXT
+@maindex EXEEXT
+@ovindex EXEEXT
+@ovindex CYGWIN
+@ovindex EMXOS2
+@ovindex MINGW32
+Defined the output variable @code{EXEEXT} based on the output of the
+compiler, after @samp{.$ac_ext} (i.e. source files of the current
+language), @samp{.o}, @samp{.obj} and @samp{.xcoff} files have been
+excluded.  Typically set to empty string if Unix and @samp{.exe} if
+Win32 or OS/2.
+
+This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in
+the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
+environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
+compiler.
+
+Now handled by the macros checking for the compiler.
+@end defmac
+
 @defmac AC_EMXOS2
 @maindex EMXOS2
 Checks for the EMX environment on OS/2in which case the shell variable
@@ -7909,6 +7922,15 @@ handles this task.
 @defmac AC_MODE_T
 @maindex MODE_T
 @code{AC_TYPE_MODE_T}
+@end defmac
+
+@defmac AC_OBJEXT
+@maindex OBJEXT
+@ovindex OBJEXT
+Defined the output variable @code{OBJEXT} based on the output of the
+compiler, after .c files have been excluded.  Typically set to @samp{o}
+if Unix, @samp{obj} if Win32.  Now the compiler checking macros handle
+this.
 @end defmac
 
 @defmac AC_OBSOLETE (@var{this-macro-name}, @ovar{suggestion})

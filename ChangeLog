@@ -1,5 +1,25 @@
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
+	Simplify the interface: users shouldn't need to explicitly check
+	for special environments.
+
+	* acspecific.m4 (AC_EXEEXT, AC_OBJEXT): AU defined to
+	nothing.  Replace them by...
+	(_AC_EXEEXT, _AC_OBJEXT): this.
+	* aclang.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): Call them.
+	(AC_PROG_CC_G, AC_PROG_CXX_G, AC_PROG_F77_G): Rename as...
+	(_AC_PROG_CC_G, _AC_PROG_CXX_G, _AC_PROG_F77_G): this.
+	Adjust dependencies.
+	* tests/Makefile.am (FILTER_MACROS): Adjust.
+	* doc/autoconf.texi (Compilers and Preprocessors): New section,
+	move the documentation of AC_PROG_CC, AC_PROG_CC_C_O,
+	AC_PROG_CC_STDC, AC_PROG_CPP, AC_PROG_CXX, AC_PROG_CXXCPP,
+	AC_PROG_F77, AC_PROG_F77_C_O, AC_PROG_GCC_TRADITIONAL here.
+	Factor the comment documentation of AC_PROG_CC, AC_PROG_CXX,
+	AC_PROG_F77.
+
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
 	Modernize AC_EXEEXT and AC_OBJEXT.
 	Now work with other languages than C and C++.
 

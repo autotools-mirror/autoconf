@@ -2543,14 +2543,16 @@ AU_DEFUN([AC_CYGWIN32], [])
 AU_DEFUN([AC_EMXOS2],   [])
 AU_DEFUN([AC_MING32],   [])
 
+AU_DEFUN([AC_EXEEXT],   [])
+AU_DEFUN([AC_OBJEXT],   [])
 
-# AC_EXEEXT
-# ---------
+# _AC_EXEEXT
+# -_--------
 # Check for the extension used for executables.  This knows that we
 # add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
-AC_DEFUN([AC_EXEEXT],
+define([_AC_EXEEXT],
 [_AC_CYGWIN
 _AC_MINGW32
 _AC_EMXOS2
@@ -2573,15 +2575,15 @@ test "$ac_cv_exeext" != no && EXEEXT=$ac_cv_exeext
 dnl Setting ac_exeext will implicitly change the ac_link command.
 ac_exeext=$EXEEXT
 AC_SUBST(EXEEXT)dnl
-])# AC_EXEEXT
+])# _AC_EXEEXT
 
 
-# AC_OBJEXT
-# ---------
+# _AC_OBJEXT
+# ----------
 # Check the object extension used by the compiler: typically .o or
 # .obj.  If this is called, some other behaviour will change,
 # determined by ac_objext.
-AC_DEFUN([AC_OBJEXT],
+define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
    [for ac_file in conftest.*; do
@@ -2593,7 +2595,7 @@ AC_DEFUN([AC_OBJEXT],
    [AC_MSG_ERROR([cannot compile])])])
 AC_SUBST(OBJEXT, $ac_cv_objext)dnl
 ac_objext=$ac_cv_objext
-])
+])# _AC_OBJEXT
 
 
 

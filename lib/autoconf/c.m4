@@ -470,7 +470,7 @@ dnl normal versions of a library), tasteless as that idea is.
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
 CFLAGS=
-AC_PROG_CC_G
+_AC_PROG_CC_G
 if test "$ac_test_CFLAGS" = set; then
   CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
@@ -486,6 +486,8 @@ else
     CFLAGS=
   fi
 fi
+AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
 ])# AC_PROG_CC
 
@@ -513,9 +515,9 @@ fi[]dnl
 ])# _AC_PROG_CC_GNU
 
 
-# AC_PROG_CC_G
+# _AC_PROG_CC_G
 # ------------
-AC_DEFUN([AC_PROG_CC_G],
+define([_AC_PROG_CC_G],
 [AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [echo 'void f(){}' >conftest.c
 if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
@@ -524,7 +526,7 @@ else
   ac_cv_prog_cc_g=no
 fi
 rm -f conftest*
-])])
+])])# _AC_PROG_CC_G
 
 
 # AC_PROG_GCC_TRADITIONAL
@@ -648,7 +650,7 @@ dnl normal versions of a library), tasteless as that idea is.
 ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS=
-AC_PROG_CXX_G
+_AC_PROG_CXX_G
 if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
@@ -664,6 +666,8 @@ else
     CXXFLAGS=
   fi
 fi
+AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
 ])# AC_PROG_CXX
 
@@ -692,9 +696,9 @@ fi[]dnl
 ])# _AC_PROG_CXX_GNU
 
 
-# AC_PROG_CXX_G
+# _AC_PROG_CXX_G
 # -------------
-AC_DEFUN([AC_PROG_CXX_G],
+define([_AC_PROG_CXX_G],
 [AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
 [echo 'void f(){}' >conftest.cc
 if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
@@ -703,7 +707,7 @@ else
   ac_cv_prog_cxx_g=no
 fi
 rm -f conftest*
-])])# AC_PROG_CXX_G
+])])# _AC_PROG_CXX_G
 
 
 
@@ -731,7 +735,7 @@ dnl normal versions of a library), tasteless as that idea is.
 ac_test_FFLAGS=${FFLAGS+set}
 ac_save_FFLAGS=$FFLAGS
 FFLAGS=
-AC_PROG_F77_G
+_AC_PROG_F77_G
 if test "$ac_test_FFLAGS" = set; then
   FFLAGS=$ac_save_FFLAGS
 elif test $ac_cv_prog_f77_g = yes; then
@@ -747,6 +751,8 @@ else
     FFLAGS=
   fi
 fi
+AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_LANG_POP
 ])# AC_PROG_F77
 
@@ -776,11 +782,11 @@ fi[]dnl
 ])# _AC_PROG_F77_GNU
 
 
-# AC_PROG_F77_G
+# _AC_PROG_F77_G
 # -------------
 # Test whether the Fortran 77 compiler can accept the `-g' option to
 # enable debugging.
-AC_DEFUN([AC_PROG_F77_G],
+define([_AC_PROG_F77_G],
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [cat >conftest.f <<EOF
        program conftest
@@ -792,7 +798,7 @@ else
   ac_cv_prog_f77_g=no
 fi
 rm -f conftest*
-])])# AC_PROG_F77_G
+])])# _AC_PROG_F77_G
 
 
 # AC_PROG_F77_C_O
