@@ -420,12 +420,16 @@ fi
 # it protects us from repetitive rewrites.  Be sure to have a test
 # that does detect non LINENO support...
 m4_define([_AS_LINENO_PREPARE],
-[as_lineno_1=$LINENO
-as_lineno_2=$LINENO
-as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-if test "x$as_lineno_1"  = "x$as_lineno_2" ||
-   test "x$as_lineno_3" != "x$as_lineno_2";
-  then
+[as_command='
+  as_lineno_1=$LINENO
+  as_lineno_2=$LINENO
+  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+  test "x$as_lineno_1" != "x$as_lineno_2" &&
+  test "x$as_lineno_3"  = "x$as_lineno_2"
+'
+if eval "$as_command"; then
+  :
+else
   # Find who we are.  Look in the path if we contain no path at all
   # relative or not.
   case $[0] in
@@ -442,6 +446,20 @@ if test "x$as_lineno_1"  = "x$as_lineno_2" ||
   if test ! -f "$as_myself"; then
     AS_ERROR([cannot find myself; rerun with an absolute path])
   fi
+  case $CONFIG_SHELL in
+  '')
+    _AS_PATH_WALK([/bin:/usr/bin:$PATH],
+      [for as_base in sh bash ksh sh5; do
+	 case $as_dir in
+	 /*)
+	   if ("$as_dir/$as_base" -c "$as_command") 2>/dev/null; then
+	     CONFIG_SHELL=$as_dir/$as_base
+	     export CONFIG_SHELL
+	     exec "$CONFIG_SHELL" "$[0]" ${1+"$[@]"}
+	   fi;;
+	 esac
+       done]);;
+  esac
   if test ! -f "$as_me.lineno" ||
      test x`ls -1dt "$as_me.lineno" "$as_myself" 2>/dev/null | sed 1q` \
                 != x"$as_me.lineno"; then
