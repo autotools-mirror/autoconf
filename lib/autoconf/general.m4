@@ -2491,16 +2491,16 @@ dnl ])
 dnl ### Checking for declared symbols
 
 
-dnl AC_NEED_DECL(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl AC_NEED_DECL(SYMBOL, [ACTION-IF-NEEDED [, ACTION-IF-NOT-NEEDED
 dnl              [, INCLUDES,]]])
-dnl ------------------------------------------------------------
+dnl --------------------------------------------------------------
 dnl Check if SYMBOL (a variable or a function) is declared.
 dnl This macro is not a _CHECK_, because it is better not to declare
 dnl a symbol if you don't really need it.
 AC_DEFUN([AC_NEED_DECL],
-[AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_decl_$1])dnl
-AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
-[AC_TRY_COMPILE([#include <stdio.h>
+[AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_need_decl_$1])dnl
+AC_CACHE_CHECK([whether $1 needs to be declared], ac_Symbol,
+[AC_TRY_COMPILE(m4_default([$4], [#include <stdio.h>
 #ifdef HAVE_STRING_H
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
@@ -2522,36 +2522,36 @@ AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-$4],
+]),
 [#ifndef $1
 char *p = (char *) $1;
 #endif
 ],
-AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
+AC_VAR_SET(ac_Symbol, no), AC_VAR_SET(ac_Symbol, yes))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Symbol) = yes,
-               [$2], [$3])dnl
+                [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
 ])dnl AC_NEED_DECL
 
-dnl AC_NEED_DECLS(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl               [, INCLUDES,]]])
-dnl -------------------------------------------------------------
+dnl AC_NEED_DECLS(SYMBOL, [ACTION-IF-NEEDED [, ACTION-IF-NOT-NEEDED
+dnl               [, INCLUDES]]])
+dnl ---------------------------------------------------------------
 AC_DEFUN([AC_NEED_DECLS],
-[AC_FOREACH([ac_Symbol], [$1],
-  [AC_SPECIALIZE([AC_NEED_DECL], ac_Symbol,
-                 [$2],
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(NEED_[]ac_Symbol[]_DECL))
-$3],
-                 [$4])])])
+[AC_FOREACH([AC_Symbol], [$1],
+  [AC_SPECIALIZE([AC_NEED_DECL], AC_Symbol,
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(NEED_DECL_[]AC_Symbol))
+$2],
+                 [$3],
+                 [$4])])
 ])dnl AC_NEED_DECLS
 
-dnl This is the pure sh versions of the macro above.
+dnl This is the pure sh version of the macro above.
 dnl [for ac_sym in [$1]
 dnl do
 dnl AC_NEED_DECL($ac_sym,
-dnl 		 [$4],
-dnl 		 [AC_DEFINE_UNQUOTED(AC_TR_CPP(${ac_sym}_DECLARED)) $2],
-dnl 		 [$3])dnl
+dnl 		 [$2],
+dnl 		 [AC_DEFINE_UNQUOTED(AC_TR_CPP(${ac_sym}_DECLARED)) $3],
+dnl 		 [$4])dnl
 dnl done
 
 dnl ### Checking for library functions

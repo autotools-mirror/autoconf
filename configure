@@ -913,6 +913,7 @@ Usage: $CONFIG_STATUS [OPTIONS] FILE...
 Files to instanciate:
   Configuration files:
     Makefile testsuite/Makefile 
+
 Report bugs to <bug-autoconf@gnu.org>."
 
 ac_cs_version="\

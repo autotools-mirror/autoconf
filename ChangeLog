@@ -1,3 +1,19 @@
+1999-09-28  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_NEED_DECL): When $4 is given, don't provide
+	defaults headers.
+	Change the message from `have' to `need'.
+	Change the actions for `if-(not-)found' to `if-(not-)needed.
+	Remove trailing parentheses.
+
+	* acgeneral.m4 (AC_NEED_DECLS): Change the actions for
+	`if-(not-)found' to `if-(not-)needed.
+	Define NEED_DECL_foo, instead of NEED_foo_DECL.
+
+	* autoheader.sh (decls): Reflect this.
+
+	* autoconf.texi (Generic Declarations): Update.
+
 1999-09-27  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): Divert AC_OUTPUT_FILE to

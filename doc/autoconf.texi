@@ -2633,30 +2633,29 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the particular
 test macros.
 
-@defmac AC_NEED_DECL (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@defmac AC_NEED_DECL (@var{symbol} @r{[}, @var{action-if-needed}@r{[}, @var{action-if-not-needed} @r{[},@var{includes} @r{]]]})
 @maindex NEED_DECL
-If @var{symbol} (a function or a variable) is declared in
-@file{stdio.h}, @file{stdlib.h}, @file{stddef.h}, @file{memory.h},
-@file{string.h}, @file{strings.h}, and @file{unistd.h}.  (plus
-@var{includes} if given), run the shell commands @var{action-if-found},
-otherwise @var{action-if-not-found}.
+If the declaration of @var{symbol} (a function or a variable) is needed
+because it is not declared in @var{includes}, run the shell commands
+@var{action-if-needed}, otherwise @var{action-if-not-needed}.  If no
+@var{includes} are given at all, by default @file{stdio.h},
+@file{stdlib.h}, @file{stddef.h}, @file{memory.h}, @file{string.h},
+@file{strings.h}, and @file{unistd.h} will be included.
 
 This macro actually tests whether it is valid to use @var{symbol} as an
 r-value, not if it is really declared, because it is much safer to avoid
 introducing extra declarations when not needed.
-
-Please, note that @var{action-if-found} when the symbol is declared, not
-when it is needed.
 @end defmac
 
-@defmac AC_NEED_DECLS (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@defmac AC_NEED_DECLS (@var{symbol} @r{[}, @var{action-if-needed}@r{[}, @var{action-if-not-needed} @r{[},@var{includes} @r{]]]})
 @maindex NEED_DECLS
-@cvindex NEED_@var{symbol}_DECL
+@cvindex NEED_DECL_@var{symbol}
 For each given @var{symbol} (whitespace-separated), define
-@code{NEED_@var{symbol}_DECL} (in all capitals) if @var{symbol} has to
-be declared to be used as an r-value.  If @var{action-if-found} is
+@code{NEED_DECL_@var{symbol}} (in all capitals) if @var{symbol} has to
+be declared to be used as an r-value.  If @var{action-if-needed} is
 given, it is additional shell code to execute when one of the function
-declarations is found, otherwise @var{action-if-not-found} is executed.
+declarations is needed, otherwise @var{action-if-not-needed} is
+executed.
 @end defmac
 
 
