@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -824,10 +824,10 @@ static char *f (char * (*g) (char **, int), char **p, ...)
 /* OSF 4.0 Compaq cc is some sort of almost-ANSI by default.  It has
    function prototypes and stuff, but not '\xHH' hex character constants.
    These don't provoke an error unfortunately, instead are silently treated
-   as 'x'.  The following induces an error, until -std1 is added to get
+   as 'x'.  The following induces an error, until -std is added to get
    proper ANSI mode.  Curiously '\x00'!='x' always comes out true, for an
    array size at least.  It's necessary to write '\x00'==0 to get something
-   that's true only with -std1.  */
+   that's true only with -std.  */
 int osf4_cc_array ['\x00' == 0 ? 1 : -1];
 
 int test (int i, double x);
@@ -840,11 +840,11 @@ char **argv;]],
 # Don't try gcc -ansi; that turns off useful extensions and
 # breaks some systems' header files.
 # AIX			-qlanglvl=ansi
-# Ultrix and OSF/1	-std1
+# Ultrix, OSF/1, Tru64	-std
 # HP-UX 10.20 and later	-Ae
 # HP-UX older versions	-Aa -D_HPUX_SOURCE
 # SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+for ac_arg in "" -qlanglvl=ansi -std -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
 do
   CC="$ac_save_CC $ac_arg"
   _AC_COMPILE_IFELSE([],

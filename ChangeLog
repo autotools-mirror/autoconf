@@ -1,3 +1,10 @@
+2004-01-15  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Try -std, not -std1, since
+	-std1 disables some useful extensions on Tru64.  Problem reported
+	by N. Lichtmaier in
+	<http://mail.gnu.org/archive/html/autoconf/2004-01/msg00100.html>.
+
 2004-01-14  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Programming in M4sh): Document that
