@@ -9,13 +9,22 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Soon
 
+** AC_PROG_INSTALL
+This test should be extended to check that install supports the GNU
+Install syntax: install FILES... DIR.  This will relieve everybody
+form having to use mkinstalldirs to create the directories, as install
+does it itself.  install-sh is already handling this case.  This also
+makes it simple not to create the directories where nothing will be
+installed because of configuration options, which is next to
+impossible using the current setting.
+
+In other words: everything is ready (install-sh and Automake), we just
+need a good reimplementation of AC_PROG_INSTALL.
+
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
-
-** RedHat's Autoconf page
-should be removed.
 
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
@@ -56,9 +65,6 @@ I have still not understood what's the difference  between the two
 which requires to have two different sources: AC_LANG_CALL and
 AC_LANG_FUNC_LINK_TRY (which names seem to be inappropriate).
 Wouldn't one be enough?
-
-** Autotest
-Document it.
 
 ** Document AC_COMPILE_IFELSE, AC_LANG_PROGRAM etc.
 And make AC_TRY_COMPILE etc. obsolete.
@@ -191,23 +197,6 @@ and use a doc-block extraction/merge technique to get docuemntation
 into texi-file.  This should help avoid bit-rot in the doc, and make
 the doc easier to update when people add/change macros.  The name
 "autodoc" is probably already taken so we probably need another one.
-
-------------------------------------------------------------------------------
-
-* Automake
-
-** missing.m4
-The test for a recent missing doesn't hide the error messages from the
-old missing.
-
-** AU_DEFUN
-The section for old macros is not completely up to date.  For
-instance, there is still AM_PROG_LIBTOOL.  Anyway, since autoupdate
-takes care of them, it is no longer the role of Automake to handle
-this.  Most should be removed.
-
-** Macros now swallowed by Autoconf.
-error.m4, obstack.m4, ptrdiff.m4, strtod.m4, termios.m4, winsz.m4.
 
 ------------------------------------------------------------------------------
 
