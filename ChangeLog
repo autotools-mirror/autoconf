@@ -1,3 +1,27 @@
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
+	* configure.ac: Also find tested executables in bin.
+	* bin/autoconf.in, bin/autoheader.in, bin/autoreconf.in,
+	* bin/autoscan.in, autoupdate.in: Use exclusively the name of the
+	installed peer executables, only PATH is allowed to resolve it.
+	Pass `autoconf_dir' via options, not via invisible envvars.
+	* lib/Autom4te/General.pm (&find_peer): Remove.
+	* lib/autotest/general.m4 (AT_INIT): `AUTOTEST_PATH=a:b' gives
+	`abuild:asrc:bbuild:bsrc', not `abuild:bbuild:asrc:bsrc'.
+	* man/Makefile.am: Let help2man rely on PATH instead of trying to
+	find the executables for it.
+	* tests/Makefile.am: Major cleanup.  Too lazy to document...
+	* tests/atlocal.in: Remove all the obscure envvar manipulations.
+	We only need PERL.
+	* tests/atspecific.m4, tests/tools.at: Passing --localdir is
+	indeed related to running the test suite, while passing
+	--autoconf-dir and others is related to running non installed
+	Autoconf executables.  So don't do that, leave it to...
+	* tests/autoconf, tests/autoheader, tests/autom4te, tests/autoupdate,
+	* tests/autoscan: New.
+	* tests/atspecific.m4 (AT_CHECK_M4SUGAR, AT_CHECK_M4SH): Don't
+	refer to library files: rely on --language.
+
 2001-08-29  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in, lib/autom4te.in, bin/autoconf.in:

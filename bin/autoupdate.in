@@ -37,7 +37,7 @@ use strict;
 
 # Lib files.
 my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
-my $autoconf = find_peer ('autoconf', "@bindir@", 'autoconf-name');
+my $autoconf = $ENV{'AUTOCONF'} || '@autoconf-name@';
 my $localdir = '.';
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";

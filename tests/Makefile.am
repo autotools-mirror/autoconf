@@ -18,72 +18,94 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = gnits
+# We don't actually distribute the testsuite, since one only
+# needs m4 to build it, m4 being required anyway to install Autoconf.
+EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
+             atlocal.in
 
-SUITE_GENERATED = \
+# Running the uninstalled scripts.
+WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate
+
+DISTCLEANFILES       = atconfig atlocal $(TESTSUITE)
+
+TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
 	acgeneral.at acstatus.at \
 	acautoheader.at acautoupdate.at \
 	acspecific.at acfunctions.at acheaders.at actypes.at \
 	aclibs.at acprograms.at
 
-SUITE = suite.at \
+TESTSUITE_HAND_AT = \
+	suite.at \
         m4sugar.at m4sh.at \
         base.at tools.at torture.at \
 	compile.at \
-	$(SUITE_GENERATED) \
 	semantics.at \
 	foreign.at
 
-# We don't actually distribute the testsuite, since one only
-# needs m4 to build it, m4 being required anyway to install Autoconf.
-# atlocal.in is to be listed, since Automake doesn't see it...
-EXTRA_DIST = README \
-             atspecific.m4 aclocal.m4 \
-             atlocal.in $(SUITE) mktests.sh
+TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
+TESTSUITE = ./testsuite
 
-check-local: atconfig atlocal testsuite
-	$(SHELL) testsuite
-
-AUTOM4TE = AUTOM4TE_CFG='$(top_builddir)/lib/autom4te.cfg' \
-           AC_MACRODIR='$(top_srcdir)/lib' \
-           ../bin/autom4te
+# Run the non installed autom4te.
+AUTOM4TE = $(srcdir)/autom4te
+AUTOTEST = $(AUTOM4TE) --language=autotest
 testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
 	   atspecific.m4 \
-           $(SUITE)
-	$(AUTOM4TE) --language=autotest -I $(srcdir) -I $(top_srcdir)/lib \
-	  suite.at -o $@.tmp
+           $(TESTSUITE_AT)
+	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 
-# The files which contains macro we check for syntax.  Don't use $(top_srcdir)
-# here since below we explicitly `cd' to $srcdir.  As for the dependencies,
-# thanks God for VPATH.  Hm...
-MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
-              $(top_srcdir)/lib/autoconf/status.m4 \
-              $(top_srcdir)/lib/autoconf/autoheader.m4 \
-              $(top_srcdir)/lib/autoconf/autoupdate.m4 \
-              $(top_srcdir)/lib/autoconf/specific.m4 \
-              $(top_srcdir)/lib/autoconf/functions.m4 \
-              $(top_srcdir)/lib/autoconf/lang.m4 \
-              $(top_srcdir)/lib/autoconf/c.m4 \
-              $(top_srcdir)/lib/autoconf/fortran.m4 \
-              $(top_srcdir)/lib/autoconf/headers.m4 \
-              $(top_srcdir)/lib/autoconf/libs.m4 \
-              $(top_srcdir)/lib/autoconf/types.m4	\
-              $(top_srcdir)/lib/autoconf/programs.m4
+atconfig: $(top_builddir)/config.status
+	cd $(top_builddir) && ./config.status tests/$@
 
-$(SUITE_GENERATED): mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
+	cd $(top_builddir) && ./config.status tests/$@
 
-DISTCLEANFILES = atconfig atlocal testsuite
+clean-local:
+	$(SHELL) $(TESTSUITE) --clean
+	rm -rf autom4te.cache
+
+check-local: atconfig atlocal $(TESTSUITE)
+	$(SHELL) $(TESTSUITE)
+
+# Run the test suite on the *installed* tree.
+installcheck-local:
+	$(SHELL) $(TESTSUITE) AUTOTEST_PATH=$(exec_prefix)/bin
+
 
 
 ## ------------------ ##
 ## Maintainer rules.  ##
 ## ------------------ ##
+
+MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
+
+## Producing the test files.
+
+# The files which contains macro we check for syntax.  Don't use $(top_srcdir)
+# here since below we explicitly `cd' to $srcdir.  As for the dependencies,
+# thanks God for VPATH.  Hm...
+autoconfdir = $(top_srcdir)/lib/autoconf
+AUTOCONF_FILES = $(autoconfdir)/general.m4 \
+                 $(autoconfdir)/status.m4 \
+                 $(autoconfdir)/autoheader.m4 \
+                 $(autoconfdir)/autoupdate.m4 \
+                 $(autoconfdir)/specific.m4 \
+                 $(autoconfdir)/functions.m4 \
+                 $(autoconfdir)/lang.m4 \
+                 $(autoconfdir)/c.m4 \
+                 $(autoconfdir)/fortran.m4 \
+                 $(autoconfdir)/headers.m4 \
+                 $(autoconfdir)/libs.m4 \
+                 $(autoconfdir)/types.m4	\
+                 $(autoconfdir)/programs.m4
+
+$(TESTSUITE_GENERATED_AT): mktests.sh $(AUTOCONF_FILES)
+	cd $(srcdir) && ./mktests.sh $(AUTOCONF_FILES)
+
 
 ## maintainer-check ##
 
@@ -109,7 +131,3 @@ maintainer-check-posix: expr
 # Try using G++ as a C compiler.
 maintainer-check-c++:
 	CC=g++ make check
-
-clean-local:
-	./testsuite --clean
-	-rm -rf autom4te.cache

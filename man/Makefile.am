@@ -45,17 +45,10 @@ config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config/config.sub
 SUFFIXES = .x .1
 
 .x.1:
-	test -f $(top_builddir)/bin/$* && prog=$(top_builddir)/bin/$*; \
-	test -f $(top_srcdir)/config/$* && prog=$(top_srcdir)/config/$*; \
-	if test -n "$$prog"; then \
-	  echo "Updating man page $@"; \
-	  autom4te_perllibdir="$(top_srcdir)/lib" \
-	  AUTOM4TE_CFG="$(top_builddir)/lib/autom4te.cfg" \
-	  $(HELP2MAN) \
+	echo "Updating man page $@"
+	PATH=$(top_builddir)/bin:$(top_srcdir)/config:$$PATH ;\
+	export PATH ;\
+	$(HELP2MAN) \
 	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ $$prog; \
-	else \
-	  echo "WARNING: The man page $@ cannot be updated yet."; \
-	  echo "         Retry once the corresponding executable is built."; \
-	fi
+	    --output=$@ $*

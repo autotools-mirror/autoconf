@@ -259,39 +259,28 @@ at_IFS_save=$IFS
 IFS=$PATH_SEPARATOR
 at_sep=
 at_path=
-# Build first.
-for at_dir in $AUTOTEST_PATH; do
+for at_dir in $AUTOTEST_PATH $PATH
+do
   case $at_dir in
     [[\\/]]* | ?:[[\\/]]* )
-       at_dir=`(cd "$at_dir" && pwd) 2>/dev/null` ;;
+      if test -d "$at_dir"; then
+        at_path="$at_path$at_sep$at_dir"
+        at_sep=$PATH_SEPARATOR
+      fi
+      ;;
     * )
-       at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null` ;;
+      at_build_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
+      if test -d "$at_build_dir"; then
+        at_path="$at_path$at_sep$at_build_dir"
+        at_sep=$PATH_SEPARATOR
+      fi
+      at_src_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
+      if test -d "$at_src_dir"; then
+        at_path="$at_path$at_sep$at_src_dir"
+        at_sep=$PATH_SEPARATOR
+      fi
+      ;;
   esac
-  if test -d "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
-done
-# Then source.
-for at_dir in $AUTOTEST_PATH; do
-  case $at_dir in
-    [[\\/]]* | ?:[[\\/]]* )
-       at_dir=`(cd "$at_dir" && pwd) 2>/dev/null` ;;
-    * )
-       at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null` ;;
-  esac
-  if test -d "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
-done
-# And finally PATH.
-for at_dir in $PATH; do
-  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  if test -d "$at_dir"; then
-    at_path="$at_path$at_sep$at_dir"
-    at_sep=$PATH_SEPARATOR
-  fi
 done
 IFS=$at_IFS_save
 PATH=$at_path

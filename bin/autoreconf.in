@@ -1,7 +1,7 @@
 #! @SHELL@
 # -*- shell-script -*-
 # autoreconf - remake all Autoconf configure scripts in a directory tree
-# Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
+# Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -91,6 +91,13 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
+: ${AUTOCONF=@autoconf-name@}
+: ${AUTOHEADER=@autoheader-name@}
+# Looking for automake.
+: ${AUTOMAKE=automake}
+# Looking for aclocal.
+: ${ACLOCAL=aclocal}
+
 debug=false
 dir=`echo "$0" | sed -e 's,[^\\/]*$,,'`
 force=false
@@ -103,28 +110,6 @@ status=0
 # symlink -- when --install, use symlinks instead.
 symlink=false
 verbose=:
-
-# Looking for autoconf.
-# We test "$dir/autoconf" in case we are in the build tree, in which case
-# the names are not transformed yet.
-for autoconf in "$AUTOCONF" \
-                "$dir/@autoconf-name@" \
-                "$dir/autoconf" \
-                "@bindir@/@autoconf-name@"; do
-  test -f "$autoconf" && break
-done
-
-# Looking for autoheader.
-for autoheader in "$AUTOHEADER" \
-                  "$dir/@autoheader-name@" \
-                  "$dir/autoheader" \
-                  "@bindir@/@autoheader-name@"; do
-  test -f "$autoheader" && break
-done
-# Looking for automake.
-: ${automake=${AUTOMAKE=automake}}
-# Looking for aclocal.
-: ${aclocal=${ACLOCAL=aclocal}}
 
 # Parse command line.
 while test $# -gt 0; do
@@ -189,7 +174,7 @@ while test $# -gt 0; do
 
      # Options of Automake.
      --cygnus | --foreign | --gnits | --gnu | --include-deps | -i )
-       automake="$automake $1"; shift ;;
+       AUTOMAKE="$AUTOMAKE $1"; shift ;;
 
      -- )     # Stop option processing.
        shift; break ;;
@@ -213,22 +198,22 @@ fi
 
 # If verbose, say what you are going to use.
 if test $verbose = echo; then
-  $autoconf --version |
+  $AUTOCONF --version |
     sed "s,.*)\(.*\)$,$me: using autoconf\1: $autoconf,;1q" >&2
-  $autoheader --version |
+  $AUTOHEADER --version |
     sed "s,.*)\(.*\)$,$me: using autoheader\1: $autoheader,;1q" >&2
-  $automake --version |
+  $AUTOMAKE --version |
     sed "s,.*)\(.*\)$,$me: using automake\1: $automake,;1q" >&2
-  $aclocal --version |
+  $ACLOCAL --version |
     sed "s,.*)\(.*\)$,$me: using aclocal\1: $aclocal,;1q" >&2
 fi
 
 # Dispatch autoreconf's option to the tools.
 # --localdir
-autoconf="$autoconf -l $localdir"
-autoheader="$autoheader -l $localdir"
+autoconf="$AUTOCONF -A $autoconf_dir -l $localdir"
+autoheader="$AUTOHEADER -A $autoconf_dir -l $localdir"
 # --force
-$force || automake="$automake --no-force"
+$force || AUTOMAKE="$AUTOMAKE --no-force"
 $force &&
 {
   autoconf="$autoconf --force"
@@ -238,15 +223,13 @@ $force &&
 autoconf="$autoconf `$verbose --verbose`"
 autoheader="$autoheader `$verbose --verbose`"
 automake="$automake `$verbose --verbose`"
-aclocal="$aclocal `$verbose --verbose`"
+aclocal="$ACLOCAL `$verbose --verbose`"
 # --debug
 $debug &&
 {
   autoconf="$autoconf --debug"
   autoheader="$autoheader --debug"
 }
-# --macrodir
-export autoconf_dir
 # --install and --symlink
 if $install; then
   automake="$automake --add-missing `$symlink || echo --copy`"

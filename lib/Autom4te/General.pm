@@ -28,7 +28,7 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &find_peer &mktmpdir &mtime
+@EXPORT = qw (&find_configure_ac &mktmpdir &mtime
               &uniq &verbose &xsystem
 	      $me $verbose $debug $tmp);
 
@@ -101,44 +101,6 @@ sub find_configure_ac ()
       return 'configure.in';
     }
   return;
-}
-
-
-# $PEER_PATH
-# find_peer($PEER, $BINDIR, $PEER-NAME)
-# -------------------------------------
-# Look for $PEER executables: autoconf, autoheader etc.
-# $BINDIR is @bindir@, and $PEER-NAME the transformed peer name
-# (when configured with --transform-program-names etc.).
-# We could have it AC_SUBST'ed in here, but it then means General.pm
-# is in builddir, hence more paths to adjust etc.  Yick.
-sub find_peer ($$$)
-{
-  my ($peer, $bindir, $peer_name) = @_;
-  my $res = undef;
-  my $PEER = uc $peer;
-  my $dir = dirname ($0);
-
-  # We test "$dir/autoconf" in case we are in the build tree, in which case
-  # the names are not transformed yet.
-  foreach my $file ($ENV{"$PEER"} || '',
-		    "$dir/$peer_name",
-		    "$dir/$peer",
-		    "$bindir/$peer_name")
-    {
-      # FIXME: This prevents passing options...  Maybe run --version?
-      if (-x $file)
-	{
-	  $res = $file;
-	  last;
-	}
-    }
-
-  # This is needed because perl's '-x' isn't a smart as bash's; that
-  # is, it won't find `autoconf.sh' etc.
-  $res ||= $peer;
-
-  return $res;
 }
 
 

@@ -28,7 +28,9 @@ AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52c)
 
 # Initialize the test suite.
-AC_CONFIG_TESTDIR(tests, bin)
+# Some of our bins are location independant, e.g., ifnames.
+# We don't need wrappers for them.
+AC_CONFIG_TESTDIR(tests, tests:bin)
 AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in

@@ -79,15 +79,8 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
+: ${AUTOCONF=@autoconf-name@}
 dir=`echo "$0" | sed -e 's,[^/]*$,,'`
-# We test "$dir/autoconf" in case we are in the build tree, in which case
-# the names are not transformed yet.
-for autoconf in "$AUTOCONF" \
-                "$dir/@autoconf-name@" \
-                "$dir/autoconf" \
-                "@bindir@/@autoconf-name@"; do
-  test -f "$autoconf" && break
-done
 debug=false
 localdir=.
 force=false
@@ -260,10 +253,9 @@ case $# in
 esac
 
 # Set up autoconf.
-autoconf="$autoconf -l $localdir "\
+autoconf="$AUTOCONF -A $autoconf_dir -l $localdir "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`
-export autoconf_dir
 
 # ----------------------- #
 # Real work starts here.  #

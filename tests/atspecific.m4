@@ -27,7 +27,7 @@
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
 [AT_CLEANUP_FILES([script.4s script autom4te.cache])dnl
-AT_CHECK([autom4te -I $top_srcdir/lib m4sugar/m4sugar.m4 script.s4g -o script $1],
+AT_CHECK([autom4te --language=m4sugar script.s4g -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -35,7 +35,7 @@ AT_CHECK([autom4te -I $top_srcdir/lib m4sugar/m4sugar.m4 script.s4g -o script $1
 # -------------------------------------------------------
 m4_define([AT_CHECK_M4SH],
 [AT_CLEANUP_FILES([script.as script autom4te.cache])dnl
-AT_CHECK([autom4te -I $top_srcdir/lib m4sugar/m4sh.m4 script.as -o script $1],
+AT_CHECK([autom4te --language=m4sh script.as -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -65,7 +65,7 @@ AC_STATE_SAVE(after)
 # -----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
-AT_CHECK([autoconf --autoconf-dir ../lib -l $at_srcdir $1],
+AT_CHECK([autoconf --localdir=$srcdir $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -73,7 +73,7 @@ AT_CHECK([autoconf --autoconf-dir ../lib -l $at_srcdir $1],
 # -------------------
 m4_define([AT_CHECK_AUTOHEADER],
 [AT_CLEANUP_FILES(config.hin)dnl
-AT_CHECK([autoheader --autoconf-dir ../lib -l $at_srcdir], 0, [], [])])
+AT_CHECK([autoheader --localdir=$srcdir], 0, [], [])])
 
 
 # AT_CHECK_CONFIGURE(END-COMMAND,
@@ -125,7 +125,7 @@ m4_define([AT_CHECK_DEFINES],
 # AT_CHECK_AUTOUPDATE
 # -------------------
 m4_define([AT_CHECK_AUTOUPDATE],
-[AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir/lib], 0,
+[AT_CHECK([autoupdate], 0,
           [], [autoupdate: `configure.ac' is updated
 ])])
 
@@ -147,8 +147,9 @@ AT_CHECK_ENV
 ])# _AT_CHECK_AC_MACRO
 
 
-# AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS], [AUTOCONF-FLAGS])
-# -----------------------------------------------------------------------
+# AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS],
+#                [AUTOCONF-FLAGS = -W obsolete])
+# -----------------------------------------------------
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.

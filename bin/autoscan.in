@@ -71,7 +71,7 @@ my $log = new IO::File ">$me.log"
   or die "$me: cannot open $me.log: $!\n";
 
 # Autoconf and lib files.
-my $autoconf = find_peer ('autoconf', "@bindir@", 'autoconf-name');
+my $autoconf = $ENV{'AUTOCONF'} || '@autoconf_name@';
 my $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 
 
