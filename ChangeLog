@@ -1,5 +1,15 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AU_ALIAS): Don't forget to pass the arguments to
+	the new macro...
+	Reported by Ezra Peisach.
+	* tests/semantics.m4 (AC_HAVE_FUNCS): New test.
+	* tests/tools.at (autoupdate): As a benign side effect, updating a
+	macro that takes no argument produces `UPDATED([])', no longer
+	`UPDATED()'.  Adjust the test.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.m4: Instead of reactivating the macros before reading
 	Autoconf's file, do it afterwards, so that Autoconf promotes the
 	right use, but users still can use the old names.

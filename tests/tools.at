@@ -176,7 +176,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 # Checking `autoupdate'.
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
 [[AC_INIT
-AC_CANONICAL_TARGET()
+AC_CANONICAL_TARGET([])
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])
@@ -237,6 +237,7 @@ AT_CHECK([echo "AC_PREREQ(999.99)" |
          1, [], [ignore])
 
 AT_CLEANUP
+
 
 
 

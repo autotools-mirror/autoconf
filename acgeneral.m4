@@ -328,7 +328,7 @@ $2],
 # Do not use `defn' since then autoupdate would replace an old macro
 # call with the new macro body instead of the new macro call.
 define([AU_ALIAS],
-[AU_DEFUN([$1], [$2])])
+[AU_DEFUN([$1], [$2($][@)])])
 
 
 
