@@ -1,6 +1,6 @@
 #!/bin/sh
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,16 +69,16 @@ if test -z "$print_version"; then
     *) echo "$usage" >&2; exit 1 ;;
   esac
 
+  trap 'rm -f $tmpin $tmpout; exit 1' 1 2 15
+
   if test z$infile = z-; then
-    infile=/tmp/acin.$$
-    trap 'rm -f $infile' 1 2 15
+    tmpin=/tmp/acin.$$
+    infile=$tmpin
     cat > $infile
   elif test ! -s "${infile}"; then
     echo "autoconf: ${infile}: No such file or directory" >&2
     exit 1
   fi
-
-  trap 'rm -f $tmpout; exit 1' 1 2 15
 fi
 
 MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4"
@@ -87,13 +87,13 @@ test -r ${AC_MACRODIR}/aclocal.m4 \
 test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
 MACROFILES="${print_version} ${MACROFILES}"
 
-$M4 $MACROFILES $infile > $tmpout
+$M4 $MACROFILES $infile > $tmpout || { st=$?; rm -f $tmpin $tmpout; exit $st; }
 
 test -n "$print_version" && exit 0
 
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do
-# alternation, and GNU sed is dreadfully slow.  Sigh.
+# alternation.
 pattern="AC_"
 
 status=0
