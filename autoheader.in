@@ -97,7 +97,7 @@ while test $# -gt 0 ; do
          shift ;;
       -l | --localdir | --l*)
          shift
-         test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
+         test $# -eq 0 && { echo "$help" >&2; exit 1; }
          localdir=$1
          shift ;;
       --macrodir=* | --m*=* )
@@ -105,7 +105,7 @@ while test $# -gt 0 ; do
          shift ;;
       -m | --macrodir | --m* )
          shift
-         test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
+         test $# -eq 0 && { echo "$help" >&2; exit 1; }
          AC_MACRODIR=$1
          shift ;;
       -- )     # Stop option processing
@@ -113,7 +113,7 @@ while test $# -gt 0 ; do
       - )     # Use stdin as input.
         break ;;
       -* )
-        exec 1>&2
+        exec >&2
         echo "$me: invalid option $1"
         echo "$help"
         exit 1 ;;
@@ -128,7 +128,7 @@ test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 case $# in
   0) infile=configure.in ;;
   1) infile=$1 ;;
-  *) exec 1>&2
+  *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
      exit 1 ;;

@@ -74,7 +74,7 @@ while test $# -gt 0; do
     shift ;;
   --localdir | --l* | -l )
     shift
-    test $# -eq 0 && { echo "$help" 1>&2; exit 1; }
+    test $# -eq 0 && { echo "$help" >&2; exit 1; }
     localdir="${1}"
     shift ;;
   --macrodir=* | --m*=* )
@@ -82,7 +82,7 @@ while test $# -gt 0; do
     shift ;;
   --macrodir | --m* | -m )
     shift
-    test $# -eq 0 && { echo "help" 1>&2; exit 1; }
+    test $# -eq 0 && { echo "help" >&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
   -v | --verbose | --verb*)
@@ -98,7 +98,7 @@ while test $# -gt 0; do
   --)     # Stop option processing.
     shift; break ;;
   -*)
-    exec 1>&2
+    exec >&2
     echo "$me: invalid option $1"
     echo "$help"
     exit 1 ;;
@@ -107,7 +107,7 @@ while test $# -gt 0; do
 done
 
 if test $# -ne 0; then
-  exec 1>&2
+  exec >&2
   echo "$me: invalid number of arguments."
   echo "$help"
   exit 1 ;;
