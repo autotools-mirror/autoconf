@@ -9915,7 +9915,7 @@ executed by the shell, all its weaknesses are inherited@dots{}
 @item @code{$<}
 @sc{posix} says that the @samp{$<} construct in makefiles can be used
 only in inference rules and in the @samp{.DEFAULT} rule; its meaning in
-ordinary rules is unspecified.  Solaris 8's @command{make} for instance
+ordinary rules is unspecified.  Solaris 8's Make for instance
 will replace it with the argument.
 
 @item Leading underscore in macro names
@@ -9937,10 +9937,344 @@ $ @kbd{make -f Makefile2}
 this is test
 @end example
 
+@item @code{make macro=value} and sub-@command{make}s.
+
+A command argument definition such as @code{foo=bar} overrides any foo
+definition in the Makefile.  Some Make implementations (such as @sc{gnu}
+Make) will propagate this override to sub-invocations of @command{make},
+but @sc{posix} conformant implementations won't.
+
+@example
+% @kbd{cat Makefile}
+foo = foo
+one:
+        @@echo $(foo)
+        $(MAKE) two
+two:
+        @@echo $(foo)
+% @kbd{make foo=bar}		# GNU make 3.79.1
+bar
+make two
+make[1]: Entering directory `/home/adl'
+bar
+make[1]: Leaving directory `/home/adl'
+% @kbd{pmake foo=bar}		# BSD make
+bar
+pmake two
+foo
+@end example
+
+You have a few possibilities if you do want the @code{foo=bar} override
+to propagate to sub-@command{make}s.  One is to use the @code{-e}
+option, which causes all environment variables to have precedence over
+the @file{Makefile} macro definitions, and declare foo as an environment
+variable:
+
+@example
+% @kbd{env foo=bar make -e}
+@end example
+
+The @code{-e} option is propagated to sub-@command{make}s automatically,
+and since the environment is inherited between @command{make}
+invocations the @code{foo} macro will be overridden in
+sub-@code{make}s as expected.
+
+Using @code{-e} could have unexpected side-effects if your environment
+contains some other macros usually defined by the Makefile.  (See
+also the note about @code{make -e} and @code{SHELL} below.)
+
+Another way to propagate overrides to sub-@command{make}s is to do it
+manually, from your @file{Makefile}:
+
+@example
+foo = foo
+one:
+        @@echo $(foo)
+        $(MAKE) foo=$(foo) two
+two:
+        @@echo $(foo)
+@end example
+
+You need to foresee all macros that a user might want to override if
+you do that.
+
+@item The @code{SHELL} macro
+@cindex @code{SHELL} and Make
+@cindex Make and @code{SHELL}
+
+POSIX Makes internally use the @code{$(SHELL)} macro to spawn shell
+processes and execute @file{Makefile} rules.  This is a built-in
+macro supplied by Make, but it can be modified from the Makefile or a
+command line argument.
+
+Not all Makes will define this @code{SHELL} macro.  OSF/Tru64 Make is
+an example, this implementation will always use @code{/bin/sh}.  So it's
+a good idea to always define @code{SHELL} in your @file{Makefile}s.  If
+you use Autoconf, do
+
+@example
+SHELL = @@SHELL@@
+@end example
+
+@sc{posix} compliant makes should never acquire the value of $(SHELL)
+from the environment, even when @code{make -e} is used (otherwise, think
+about what would happen to your rules if @code{SHELL=/bin/tcsh}).
+
+However not all Make implementations will make this exception.
+For instance it's not surprising that OSF/Tru64 Make doesn't
+protect @code{SHELL}, since it doesn't use it.
+
+@example
+% @kbd{cat Makefile}
+SHELL = /bin/sh
+FOO = foo
+all:
+        @@echo $(SHELL)
+        @@echo $(FOO)
+% @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # OSF1 V4.0 Make
+/bin/tcsh
+bar
+% @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
+/bin/sh
+bar
+@end example
+
 @item @code{VPATH}
 @cindex @code{VPATH}
-Don't use it!  For instance any assignment to @code{VPATH} causes Sun
-@command{make} to only execute the first set of double-colon rules.
+
+There is no @code{VPATH} support specified in @sc{posix}.  Many Makes
+have a form of @code{VPATH} support, but its implementation is not
+consistent amongst Makes.
+
+Maybe the best suggestion to give to people who need the @code{VPATH}
+feature is to choose a Make implementation and stick to it.  Since the
+resulting @file{Makefile}s are not portable anyway, better chose a
+portable Make (hint, hint).
+
+Here are a couple of known issues with some @code{VPATH}
+implementations.
+
+@table @asis
+
+@item @code{VPATH} and double-colon rules
+@cindex @code{VPATH} and double-colon rules
+@cindex double-colon rules and @code{VPATH}
+Any assignment to @code{VPATH} causes Sun Make to only execute the first
+set of double-colon rules.  (This comments has been here since 1994 and the
+context has been lost.  It's probably about SunOS 4.  If you can
+reproduce this, please send us a testcase for illustration.)
+
+@item @code{$<} in inference rules:
+@cindex suffix rules, @code{$<}, and @code{VPATH}
+@cindex @code{$<}, inference rules, and @code{VPATH}
+@cindex @code{VPATH}, inference rules, and @code{$<}
+An implementation of make would not prefix @code{$<} if this
+prerequisite has been found in a @code{VPATH} dir.  This means that
+
+@example
+VPATH = ../src
+.c.o:
+        cc -c $< -o $@
+@end example
+
+@noindent
+would run @code{cc -c foo.c -o foo.o}, even if @file{foo.c} was actually
+found in @file{../src/}.
+
+This can be fixed as follows.
+
+@example
+VPATH = ../src
+.c.o:
+        cc -c `test -f $< || echo ../src/`$< -o $@
+@end example
+
+This kludge was introduced in Automake in 2000, but the exact context
+have has lost.  If you know which make implementation is involved here,
+please drop us a note.
+
+
+@item @code{$<} not supported in explicit rules
+@cindex explicit rules, @code{$<}, and @code{VPATH}
+@cindex @code{$<}, explicit rules, and @code{VPATH}
+@cindex @code{VPATH}, explicit rules, and @code{$<}
+
+As said elsewhere, using @code{$<} in explicit rules is not portable.
+You have to perform a @code{VPATH} search manually.  For instance, using
+the same pattern as above:
+
+@example
+VPATH = ../src
+foo.o: foo.c
+        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+@end example
+
+@item Automatic rule rewriting
+@cindex @code{VPATH} and automatic rule rewriting
+@cindex automatic rule rewriting and @code{VPATH}
+
+Some Make implementations, such as SunOS Make, will
+search prerequisites in @code{VPATH} and rewrite all their occurrences in
+the rule appropriately.
+
+For instance
+
+@example
+VPATH = ../src
+foo.o: foo.c
+        cc -c foo.c -o foo.o
+@end example
+
+@noindent
+would execute @code{cc -c ../src/foo.c -o foo.o} if @file{foo.c} was
+found in @file{../src}.  That sounds great.
+
+However, for the sake of other Make implementations, we can't
+rely on this, and we have to search @code{VPATH} manually:
+
+@example
+VPATH = ../src
+foo.o: foo.c
+        cc -c `test -f foo.c || echo ../src/`foo.c -o foo.o
+@end example
+
+@noindent
+However the "prerequisite rewriting" still applies here.  So if
+@file{foo.c} is in @file{../src}, SunOS Make will execute
+
+@example
+@code{cc -c `test -f ../src/foo.c || echo ../src/`foo.c -o foo.o}
+@end example
+
+@noindent
+which reduces to
+
+@example
+cc -c foo.c -o foo.o
+@end example
+
+@noindent
+and thus fails.  Oops.
+
+One workaround is to make sure that foo.c never appears as a plain word
+in the rule.  For instance these three rules would be safe.
+
+@example
+VPATH = ../src
+foo.o: foo.c
+        cc -c `test -f ./foo.c || echo ../src/`foo.c -o foo.o
+foo2.o: foo2.c
+        cc -c `test -f 'foo2.c' || echo ../src/`foo2.c -o foo2.o
+foo3.o: foo3.c
+        cc -c `test -f "foo3.c" || echo ../src/`foo3.c -o foo3.o
+@end example
+
+Things get worse when your prerequisites are in a macro.
+
+@example
+VPATH = ../src
+HEADERS = foo.h foo2.h foo3.h
+install-HEADERS: $(HEADERS)
+        for i in $(HEADERS); do \
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
+@end example
+
+The above @code{install-HEADERS} rule is not sun-proof because @code{for
+i in $(HEADERS);} will expanded as @code{for i in foo.h foo2.h foo3.h;}
+where @code{foo.h} and @code{foo2.h} are plain words and are hence
+subject to @code{VPATH} adjustments.
+
+If the three files are in @file{../src}, the rule is run as
+
+@example
+for i in ../src/foo.h ../src/foo2.h foo3.h; do \
+  install -m 644 `test -f $i || echo ../src/`$i \
+     /usr/local/include/$i; \
+done
+@end example
+
+where the two first @command{install} calls will fails.  For instance,
+consider the @code{foo.h} installation:
+
+@example
+install -m 644 `test -f ../src/foo.h || echo ../src/`../src/foo.h \
+  /usr/local/inclue/../src/foo.h;
+@end example
+@noindent
+It reduces to:
+
+@example
+install -m 644 ../src/foo.h /usr/local/include/../src/foo.h;
+@end example
+
+Note that the manual @code{VPATH} search did not cause any problem here;
+however this command fails to install @file{foo.h} in the correct
+directory.
+
+Trying to quote @code{$(HEADERS)} in some way, like we did for
+@code{foo.c} a few @file{Makefile}s ago, does not help:
+
+@example
+install-HEADERS: $(HEADERS)
+        headers='$(HEADERS)'; for i in $$headers; do \
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
+@end example
+
+Indeed, @code{headers='$(HEADERS)'} expands to @code{headers='foo.h
+foo2.h foo3.h'} where @code{foo2.h} is still a plain word.  (Aside: the
+@code{headers='$(HEADERS)'; for i in $$headers;} idiom is this a good
+idea if @code{$(HEADERS)} can be empty, because some shell produce a
+syntax error on @code{for i in;}.)
+
+One workaround is to strip this unwanted @file{../src/} prefix manually:
+@example
+VPATH = ../src
+HEADERS = foo.h foo2.h foo3.h
+install-HEADERS: $(HEADERS)
+        headers='$(HEADERS)'; for i in $$headers; do \
+          i=`expr "$$i" : '../src/\(.*\)'`;
+          $(INSTALL) -m 644 `test -f $$i || echo ../src/`$$i \
+            $(DESTDIR)$(includedir)/$$i; \
+        done
+@end example
+
+
+@item OSF/Tru64 make creates prerequisite directories magically
+@cindex @code{VPATH} and prerequisite directories
+@cindex prerequisite directories and @code{VPATH}
+
+When a prerequisite is a sub-directory of @code{VPATH}, Tru64
+Make will create it in the current directory.
+
+@example
+% @kbd{mkdir -p foo/bar build}
+% @kbd{cd build}
+% @kbd{cat >Makefile <<END
+VPATH = ..
+all: foo/bar
+END}
+% @kbd{make}
+mkdir foo
+mkdir foo/bar
+@end example
+
+This can yield unexpected results if a rule uses a manual @code{VPATH}
+search as presented before.
+
+@example
+VPATH = ..
+all : foo/bar
+        command `test -d foo/bar || echo ../`foo/bar
+@end example
+
+The above @command{command} will be run on the empty @file{foo/bar}
+directory created in the current directory.
+
+@end table
 @end table
 
 
