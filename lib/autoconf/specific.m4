@@ -21,7 +21,7 @@ dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 dnl Roland McGrath, and Noah Friedman.
 dnl
 dnl
-dnl checks for programs
+dnl ### checks for programs
 dnl
 dnl
 define(AC_PROG_CC,
@@ -201,7 +201,8 @@ AC_SUBST(LEX_OUTPUT_ROOT)dnl
 ])dnl
 dnl
 define(AC_PROG_INSTALL,
-[# Make sure to not get the incompatible SysV /etc/install and
+[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
+# Make sure to not get the incompatible SysV /etc/install and
 # /usr/sbin/install, which might be in PATH before a BSD-like install,
 # or the SunOS /usr/etc/install directory, or the AIX /bin/install,
 # or the AFS install, which mishandles nonexistent args, or
@@ -246,13 +247,8 @@ if test "z${INSTALL}" = "z" ; then
   IFS="$ac_save_ifs"
 fi
 if test -z "$INSTALL"; then
-  if test -f ${srcdir}/install.sh; then
-    # As a last resort, use the slow shell script.
-    INSTALL=AC_PROG_INSTALL_INSTALL_SH
-  else
-    AC_WARN(${srcdir}/install.sh not found; using cp)
-    INSTALL=cp
-  fi
+  # As a last resort, use the slow shell script.
+  INSTALL="$ac_install_sh"
 fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
@@ -265,10 +261,6 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL}'
 AC_SUBST(INSTALL_DATA)dnl
 AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
-dnl Defined separately so a configure.in can redefine if necessary.
-dnl We want the top-level source directory, not the subdir's srcdir.
-dnl This relies on top_srcdir being substituted after INSTALL.
-define(AC_PROG_INSTALL_INSTALL_SH, ['@top_srcdir@/install.sh -c'])dnl
 dnl
 define(AC_LN_S,
 [AC_CHECKING(for ln -s)
@@ -277,8 +269,10 @@ if ln -s X conftestdata 2>/dev/null
 then
   rm -f conftestdata
   LN_S="ln -s"
+  AC_VERBOSE(ln -s is supported)
 else
   LN_S=ln
+  AC_VERBOSE(ln -s is not supported)
 fi
 AC_SUBST(LN_S)
 ])dnl
@@ -296,7 +290,7 @@ AC_SUBST(RTAPELIB)dnl
 ])dnl
 dnl
 dnl
-dnl checks for header files
+dnl ### checks for header files
 dnl
 dnl
 define(AC_STDC_HEADERS,
@@ -377,8 +371,42 @@ if test -z "$ac_dir_header"; then
 		   AC_DEFINE($2) ac_dir_header=$1)dnl
 fi])dnl
 dnl
+define(AC_STAT_MACROS_BROKEN,[AC_CHECKING(for broken stat file mode macros)
+AC_PROGRAM_EGREP([You lose], [#include <sys/types.h>
+#include <sys/stat.h>
+#ifdef S_ISBLK
+#if S_ISBLK (S_IFDIR)
+You lose.
+#endif
+#ifdef S_IFCHR
+#if S_ISBLK (S_IFCHR)
+You lose.
+#endif
+#endif /* S_IFCHR */
+#endif /* S_ISBLK */
+#ifdef S_ISLNK
+#if S_ISLNK (S_IFREG)
+You lose.
+#endif
+#endif /* S_ISLNK */
+#ifdef S_ISSOCK
+#if S_ISSOCK (S_IFREG)
+You lose.
+#endif
+#endif /* S_ISSOCK */
+], AC_DEFINE(STAT_MACROS_BROKEN))])dnl
 dnl
-dnl checks for typedefs
+define(AC_SYS_SIGLIST_DECLARED,[dnl
+AC_COMPILE_CHECK(sys_siglist declaration in signal.h or unistd.h,
+		 [#include <signal.h>
+/* NetBSD declares sys_siglist in <unistd.h>.  */
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif], [char *msg = *(sys_siglist + 1);],
+		 AC_DEFINE(SYS_SIGLIST_DECLARED))])dnl
+dnl
+dnl
+dnl ### checks for typedefs
 dnl
 dnl
 define(AC_GETGROUPS_T,
@@ -447,7 +475,7 @@ extern void (*signal ()) ();],
 )dnl
 dnl
 dnl
-dnl checks for functions
+dnl ### checks for functions
 dnl
 dnl
 define(AC_MMAP, [
@@ -473,7 +501,11 @@ AC_TEST_PROGRAM([/* Thanks to Mike Haertel and Jim Avera for this test. */
 #define CLSIZE 1
 #endif /* no CLSIZE */
 #else /* no NBPG */
+#ifdef NBPC
 #define getpagesize() NBPC
+#else /* no NBPC */
+#define getpagesize() PAGESIZE /* SVR4 */
+#endif /* no NBPC */
 #endif /* no NBPG */
 #endif /* no EXEC_PAGESIZE */
 #endif /* not HAVE_GETPAGESIZE */
@@ -826,7 +858,7 @@ rm -f core
 ])dnl
 dnl
 dnl
-dnl checks for structure members
+dnl ### checks for structure members
 dnl
 dnl
 define(AC_STRUCT_TM,
@@ -886,7 +918,7 @@ define(AC_ST_RDEV,
 AC_DEFINE(HAVE_ST_RDEV))])dnl
 dnl
 dnl
-dnl checks for compiler characteristics
+dnl ### checks for compiler characteristics
 dnl
 dnl
 define(AC_CROSS_CHECK,
@@ -1021,7 +1053,7 @@ AC_COMPILE_CHECK([dnl Do not "break" this again.
 lack of working const], , [$ac_prog], , AC_DEFINE(const,))])dnl
 dnl
 dnl
-dnl checks for operating system services
+dnl ### checks for operating system services
 dnl
 dnl
 define(AC_HAVE_POUNDBANG, [dnl
@@ -1293,7 +1325,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 ])dnl
 dnl
 dnl
-dnl checks for UNIX variants
+dnl ### checks for UNIX variants
 dnl
 dnl
 define(AC_AIX,
@@ -1357,39 +1389,3 @@ dnl
 define(AC_DYNIX_SEQ,
 [AC_HAVE_LIBRARY(seq, LIBS="$LIBS -lseq")
 ])dnl
-dnl
-define(AC_STAT_MACROS_BROKEN,[AC_CHECKING(for broken stat file mode macros)
-AC_PROGRAM_EGREP([You lose], [#include <sys/types.h>
-#include <sys/stat.h>
-#ifdef S_ISBLK
-#if S_ISBLK (S_IFDIR)
-You lose.
-#endif
-#ifdef S_IFCHR
-#if S_ISBLK (S_IFCHR)
-You lose.
-#endif
-#endif /* S_IFCHR */
-#endif /* S_ISBLK */
-#ifdef S_ISLNK
-#if S_ISLNK (S_IFREG)
-You lose.
-#endif
-#endif /* S_ISLNK */
-#ifdef S_ISSOCK
-#if S_ISSOCK (S_IFREG)
-You lose.
-#endif
-#endif /* S_ISSOCK */
-], AC_DEFINE(STAT_MACROS_BROKEN))])dnl
-dnl
-dnl
-define(AC_SYS_SIGLIST_DECLARED,[dnl
-AC_COMPILE_CHECK(sys_siglist declaration in signal.h or unistd.h,
-		 [#include <signal.h>
-/* NetBSD declares sys_siglist in <unistd.h>.  */
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif], [char *msg = *(sys_siglist + 1);],
-		 AC_DEFINE(SYS_SIGLIST_DECLARED))])dnl
-dnl
