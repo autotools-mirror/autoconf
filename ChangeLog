@@ -1,5 +1,13 @@
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4: Prefer "TAB-SP" to "SP-TAB", because of
+	Emacs' danger whitespace.el behavior (smashing "useless" spaces in
+	the middle of a line).
+	* lib/m4sugar/m4sugar.m4: Likewise.
+	Remove useless spaces in comments.
+	
+2003-05-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_version_prereq): Failure causes an
 	exit 63, so that we (or Automake's "missing") can tell the
 	difference with a plain failure.

@@ -490,12 +490,12 @@ m4_define([_AC_OUTPUT_HEADERS],
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
 dnl Double quote for the `[ ]' and `define'.
-[ac_dA='s,^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-ac_dB='[ 	].*$,\1#\2'
+[ac_dA='s,^\([	 ]*\)#\([	 ]*define[	 ][	 ]*\)'
+ac_dB='[	 ].*$,\1#\2'
 ac_dC=' '
 ac_dD=',;t'
 # ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_uA='s,^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_uA='s,^\([	 ]*\)#\([	 ]*\)undef\([	 ][	 ]*\)'
 ac_uB='$,\1#\2define\3'
 ac_uC=' '
 ac_uD=',;t']
@@ -539,7 +539,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
       esac
     done` || AS_EXIT([1])
   # Remove the trailing spaces.
-  sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
+  sed 's/[[	 ]]*$//' $ac_file_inputs >$tmp/in
 
 _ACEOF
 
@@ -563,9 +563,9 @@ dnl Double quote for `[ ]' and `define'.
 s,[\\$`],\\&,g
 t clear
 : clear
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*\)\(([^)]*)\)[ 	]*\(.*\)$,${ac_dA}\1${ac_dB}\1\2${ac_dC}\3${ac_dD},gp
+s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*\)\(([^)]*)\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1\2${ac_dC}\3${ac_dD},gp
 t end
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
+s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
 : end]
 _ACEOF
 # If some macros were called several times there might be several times
@@ -579,13 +579,13 @@ rm -f confdef2sed.sed
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
 cat >>conftest.undefs <<\_ACEOF
-[s,^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,]
+[s,^[	 ]*#[	 ]*undef[	 ][	 ]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,]
 _ACEOF
 
 # Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if grep ["^[ 	]*#[ 	]*define"] $tmp/in >/dev/null; then' >>$CONFIG_STATUS
+echo '  if grep ["^[	 ]*#[	 ]*define"] $tmp/in >/dev/null; then' >>$CONFIG_STATUS
 echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
 echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
@@ -594,7 +594,7 @@ do
   # Write a limited-size here document to $tmp/defines.sed.
   echo '  cat >$tmp/defines.sed <<CEOF' >>$CONFIG_STATUS
   # Speed up: don't consider the non `#define' lines.
-  echo ['/^[ 	]*#[ 	]*define/!b'] >>$CONFIG_STATUS
+  echo ['/^[	 ]*#[	 ]*define/!b'] >>$CONFIG_STATUS
   # Work around the forget-to-reset-the-flag bug.
   echo 't clr' >>$CONFIG_STATUS
   echo ': clr' >>$CONFIG_STATUS
@@ -621,7 +621,7 @@ do
   # Write a limited-size here document to $tmp/undefs.sed.
   echo '  cat >$tmp/undefs.sed <<CEOF' >>$CONFIG_STATUS
   # Speed up: don't consider the non `#undef'
-  echo ['/^[ 	]*#[ 	]*undef/!b'] >>$CONFIG_STATUS
+  echo ['/^[	 ]*#[	 ]*undef/!b'] >>$CONFIG_STATUS
   # Work around the forget-to-reset-the-flag bug.
   echo 't clr' >>$CONFIG_STATUS
   echo ': clr' >>$CONFIG_STATUS
@@ -1217,13 +1217,13 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub=['/^[ 	]*VPATH[ 	]*=/{
+  ac_vpsub=['/^[	 ]*VPATH[	 ]*=/{
 s/:*\$(srcdir):*/:/;
 s/:*\${srcdir}:*/:/;
 s/:*@srcdir@:*/:/;
-s/^\([^=]*=[ 	]*\):*/\1/;
+s/^\([^=]*=[	 ]*\):*/\1/;
 s/:*$//;
-s/^[^=]*=[ 	]*$//;
+s/^[^=]*=[	 ]*$//;
 }']
 fi
 
@@ -1576,13 +1576,13 @@ m4_define([AC_OUTPUT_MAKE_DEFS],
 cat >confdef2opt.sed <<\_ACEOF
 t clear
 : clear
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
+s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\),-D\1=\2,g
 t quote
-s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
+s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\),-D\1=\2,g
 t quote
 d
 : quote
-s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
+s,[	 `~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
 s,\$,$$,g
