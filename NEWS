@@ -13,6 +13,10 @@ Major changes in release 2.13:
   AC_C_STRINGIZE, AC_CHECK_FILE(S), AC_PROG_F77 (and friends).
 * AC_DEFINE now has an optional third argument for a description to be
   placed in the config header input file (e.g. config.h.in).
+* The C++ code fragment compiled for the C++ compiler test had to be
+  improved to include an explicit return type for main(). This was
+  causing failures on systems using recent versions of the EGCS C++
+  compiler.
 * Fixed an important bug in AC_CHECK_TYPE that would cause a configure
   script to report that `sometype_t' was present when only `type_t'
   was defined.
