@@ -37,7 +37,9 @@ AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])])
 
 
 # AT_CHECK_CONFIGURE
-# -------------------
+# ------------------
+# `top_srcdir' is needed so that `./configure' finds install-sh.
+# Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
 [AT_CLEANUP_FILE_IFELSE([config.hin],
                         [AT_CLEANUP_FILE(config.h)])dnl

@@ -1,10 +1,6 @@
 #							-*- autoconf -*-
 
-cat <<EOF
-
-Semantics.
-
-EOF
+AT_BANNER([Semantics.])
 
 
 # AC_TRY_LINK_FUNC
@@ -361,7 +357,7 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP()dnl
+AT_CLEANUP
 
 
 # Non-strict preprocessors work if they produce no warnings.
@@ -391,4 +387,24 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP()dnl
+AT_CLEANUP
+
+
+
+
+## -------------- ##
+## AC_PATH_XTRA.  ##
+## -------------- ##
+
+
+AT_SETUP([AC_PATH_XTRA])
+
+_AT_CHECK_AC_MACRO([AC_PATH_XTRA])
+
+# Check X_DISPLAY_MISSING.
+AT_CHECK([top_srcdir=$top_srcdir ./configure --without-x], 0, ignore)
+AT_CHECK_DEFINES(
+[#define X_DISPLAY_MISSING 1
+])
+
+AT_CLEANUP

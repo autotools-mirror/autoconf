@@ -450,7 +450,7 @@ m4_case([$3],
         expout, [AT_CLEANUP_FILES([expout])dnl
 $at_diff expout stdout >&5 || at_continue='exit 1'],
         [], [$at_diff empty stdout >&5 || at_continue='exit 1'],
-        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_continue=:])
+        [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout >&5 || at_continue='exit 1'])
 dnl Check exit val.
 case $at_status in
   77) exit 77;;

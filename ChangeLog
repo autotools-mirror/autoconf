@@ -1,3 +1,10 @@
+2000-12-07  Akim Demaille  <akim@epita.fr>
+
+	* tests/atgeneral.m4 (AT_CHECK): Bad typo: assign `exit 1' to
+	at_continue if something failed, not `:'.
+	* tests/semantics.at (AC_PATH_XTRA): New.
+	* acspecific.m4 (_AC_PATH_X): New, extracted form AC_PATH_X.
+
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump version to 2.49c.

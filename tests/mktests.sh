@@ -89,10 +89,13 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #   Already tested by `AT_CHECK_MACRO'.
 # - AC_FD_CC
 #   Is a number.
-# - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE)
+# - AC_PROG_CC, AC_C_(CONST|INLINE|VOLATILE), AC_PATH_XTRA
 #   Checked in semantics.
 # - AC_CYGWIN, AC_CYGWIN32, AC_EMXOS2, AC_MING32, AC_EXEEXT, AC_OBJEXT
 #   AU defined to nothing.
+# - AC_PATH_XTRA
+#   Checked in semantics.
+#
 syntax_exclude_list='^AC_ARG_VAR$
 ^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
@@ -112,6 +115,7 @@ syntax_exclude_list='^AC_ARG_VAR$
 ^AC_FD_CC$
 ^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$
 ^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$
+^AC_PATH_XTRA$
 _AC_'
 
 # syntax_exclude_egrep --

@@ -823,65 +823,9 @@ AC_DEFUN([AC_SYS_POSIX_TERMIOS],
 ## --------------------- ##
 
 
-# AC_PATH_X
-# ---------
-# If we find X, set shell vars x_includes and x_libraries to the
-# paths, otherwise set no_x=yes.
-# Uses ac_ vars as temps to allow command line to override cache and checks.
-# --without-x overrides everything else, but does not touch the cache.
-AC_DEFUN([AC_PATH_X],
-[dnl Document the X abnormal options inherited from history.
-AC_DIVERT_ONCE([HELP_BEGIN], [
-X features:
-  --x-includes=DIR    X include files are in DIR
-  --x-libraries=DIR   X library files are in DIR])dnl
-AC_MSG_CHECKING([for X])
-
-AC_ARG_WITH(x, [  --with-x                use the X Window System])
-# $have_x is `yes', `no', `disabled', or empty when we do not yet know.
-if test "x$with_x" = xno; then
-  # The user explicitly disabled X.
-  have_x=disabled
-else
-  if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
-    # Both variables are already set.
-    have_x=yes
-  else
-AC_CACHE_VAL(ac_cv_have_x,
-[# One or both of the vars are not set, and there is no cached value.
-ac_x_includes=no ac_x_libraries=no
-_AC_PATH_X_XMKMF
-_AC_PATH_X_DIRECT
-if test "$ac_x_includes" = no || test "$ac_x_libraries" = no; then
-  # Didn't find X anywhere.  Cache the known absence of X.
-  ac_cv_have_x="have_x=no"
-else
-  # Record where we found X for the cache.
-  ac_cv_have_x="have_x=yes \
-	        ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
-fi])dnl
-  fi
-  eval "$ac_cv_have_x"
-fi # $with_x != no
-
-if test "$have_x" != yes; then
-  AC_MSG_RESULT([$have_x])
-  no_x=yes
-else
-  # If each of the values was on the command line, it overrides each guess.
-  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
-  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
-  # Update the cache value to reflect the command line values.
-  ac_cv_have_x="have_x=yes \
-		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
-  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
-fi
-])# AC_PATH_X
-
-
 # _AC_PATH_X_XMKMF
 # ----------------
-# Internal subroutine of AC_PATH_X.
+# Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_XMKMF],
 [rm -fr conftestdir
@@ -922,7 +866,7 @@ fi
 
 # _AC_PATH_X_DIRECT
 # -----------------
-# Internal subroutine of AC_PATH_X.
+# Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_DIRECT],
 [# Standard set of common directories for X headers.
@@ -1001,6 +945,71 @@ fi # $ac_x_libraries = no
 ])# _AC_PATH_X_DIRECT
 
 
+# _AC_PATH_X
+# ----------
+# Compute ac_cv_have_x.
+AC_DEFUN([_AC_PATH_X],
+[AC_CACHE_VAL(ac_cv_have_x,
+[# One or both of the vars are not set, and there is no cached value.
+ac_x_includes=no ac_x_libraries=no
+_AC_PATH_X_XMKMF
+_AC_PATH_X_DIRECT
+if test "$ac_x_includes" = no || test "$ac_x_libraries" = no; then
+  # Didn't find X anywhere.  Cache the known absence of X.
+  ac_cv_have_x="have_x=no"
+else
+  # Record where we found X for the cache.
+  ac_cv_have_x="have_x=yes \
+	        ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
+fi])dnl
+])
+
+
+# AC_PATH_X
+# ---------
+# If we find X, set shell vars x_includes and x_libraries to the
+# paths, otherwise set no_x=yes.
+# Uses ac_ vars as temps to allow command line to override cache and checks.
+# --without-x overrides everything else, but does not touch the cache.
+AC_DEFUN([AC_PATH_X],
+[dnl Document the X abnormal options inherited from history.
+AC_DIVERT_ONCE([HELP_BEGIN], [
+X features:
+  --x-includes=DIR    X include files are in DIR
+  --x-libraries=DIR   X library files are in DIR])dnl
+AC_MSG_CHECKING([for X])
+
+AC_ARG_WITH(x, [  --with-x                use the X Window System])
+# $have_x is `yes', `no', `disabled', or empty when we do not yet know.
+if test "x$with_x" = xno; then
+  # The user explicitly disabled X.
+  have_x=disabled
+else
+  if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
+    # Both variables are already set.
+    have_x=yes
+  else
+    _AC_PATH_X
+  fi
+  eval "$ac_cv_have_x"
+fi # $with_x != no
+
+if test "$have_x" != yes; then
+  AC_MSG_RESULT([$have_x])
+  no_x=yes
+else
+  # If each of the values was on the command line, it overrides each guess.
+  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
+  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
+  # Update the cache value to reflect the command line values.
+  ac_cv_have_x="have_x=yes \
+		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+fi
+])# AC_PATH_X
+
+
+
 # AC_PATH_XTRA
 # ------------
 # Find additional X libraries, magic flags, etc.
@@ -1008,7 +1017,7 @@ AC_DEFUN([AC_PATH_XTRA],
 [AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
-  AC_DEFINE(X_DISPLAY_MISSING, 1,
+  AC_DEFINE([X_DISPLAY_MISSING], 1,
             [Define if the X Window System is missing or not being used.])
   X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
 else
