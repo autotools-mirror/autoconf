@@ -1,3 +1,8 @@
+2001-10-09  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/autoconf.m4 (m4_patsubst, m4_regexp): New
+	transition code.
+
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (&autoreconf): Remove debugging code.
