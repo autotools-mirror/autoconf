@@ -1229,7 +1229,7 @@ dnl ### Checking for programs
 
 
 dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
-dnl               [, VALUE-IF-NOT-FOUND [, PATH]])
+dnl               [, [VALUE-IF-NOT-FOUND] [, [PATH] [, [REJECT]]]])
 AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -1239,14 +1239,43 @@ AC_CACHE_VAL(ac_cv_prog_$1,
   ac_cv_prog_$1="[$]$1" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+ifelse([$6], , , [  ac_prog_rejected=no
+])dnl
   for ac_dir in ifelse([$5], , $PATH, [$5]); do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
+ifelse([$6], , , dnl
+[      if test "[$ac_dir/$ac_word]" = "$6"; then
+        ac_prog_rejected=yes
+	continue
+      fi
+])dnl
       ac_cv_prog_$1="$3"
       break
     fi
   done
   IFS="$ac_save_ifs"
+ifelse([$6], , , [if test $ac_prog_rejected = yes; then
+  # We found a bogon in the path, so make sure we never use it.
+  set dummy [$]ac_cv_prog_$1
+  shift
+  if test [$]# -gt 0; then
+    # We chose a different compiler from the bogus one.
+    # However, it has the same basename, so the bogon will be chosen
+    # first if we set $1 to just the basename; use the full file name.
+    shift
+    set dummy "$ac_dir/$ac_word" "[$]@"
+    shift
+    ac_cv_prog_$1="[$]@"
+ifelse([$2], [$4], dnl
+[  else
+    # Default is a loser.
+    AC_MSG_ERROR([$1=$6 unacceptable, but no other $4 found in dnl
+ifelse([$5], , [\$]PATH, [$5])])
+])dnl
+  fi
+fi
+])dnl
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_CHECK_PROGS will keep looking.
 ifelse([$4], , , [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
