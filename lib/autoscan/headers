@@ -1,0 +1,27 @@
+# Ones that have their own macros.
+dirent.h	AC_DIR_HEADER
+sys/ndir.h	AC_DIR_HEADER
+sys/dir.h	AC_DIR_HEADER
+ndir.h		AC_DIR_HEADER
+sys/mkdev.h	AC_MAJOR_HEADER
+string.h	AC_STDC_HEADERS
+strings.h	AC_STDC_HEADERS
+stdlib.h	AC_STDC_HEADERS
+stddef.h	AC_STDC_HEADERS
+stdarg.h	AC_STDC_HEADERS
+float.h		AC_STDC_HEADERS
+sys/mtio.h	AC_REMOTE_TAPE
+X11/Xlib.h	AC_FIND_X
+
+# Others.
+fcntl.h		AC_HAVE_HEADERS
+limits.h	AC_HAVE_HEADERS
+paths.h		AC_HAVE_HEADERS
+sgtty.h		AC_HAVE_HEADERS
+sys/file.h	AC_HAVE_HEADERS
+sys/ioctl.h	AC_HAVE_HEADERS
+sys/time.h	AC_HAVE_HEADERS
+sys/window.h	AC_HAVE_HEADERS
+syslog.h	AC_HAVE_HEADERS
+termio.h	AC_HAVE_HEADERS
+unistd.h	AC_HAVE_HEADERS
