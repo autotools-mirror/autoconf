@@ -1,5 +1,9 @@
 2000-02-11  Akim Demaille  <akim@epita.fr>
 
+	* tests/atspecific.m4: Really added to the CVS repository.
+
+2000-02-11  Akim Demaille  <akim@epita.fr>
+
 	Don't use `cat -s' to single out new-lines, it is not portable.
 	Also remove trailing blanks.
 
