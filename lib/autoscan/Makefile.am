@@ -38,5 +38,5 @@ autoscan.list: $(srcdir)/autoscan.pre $(autoconf_m4f_dependencies) Makefile.am
 	sed '/^[#]/!q' $(srcdir)/autoscan.pre                  >>autoscan.list
 	( \
 	  sed -n '/^[^#]/p' $(srcdir)/autoscan.pre; \
-	  $(MY_AUTOM4TE) -M -l autoconf -t'AN_OUTPUT:$$1: $$2		$$3' \
+	  $(MY_AUTOM4TE) --cache '' -M -l autoconf -t'AN_OUTPUT:$$1: $$2		$$3' \
 	) | LC_ALL=C sort                                      >>autoscan.list

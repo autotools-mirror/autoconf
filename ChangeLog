@@ -14,6 +14,8 @@
 	autoscan.pre is not to be installed, and autoscan.list is not to
 	be shipped.
 	(CLEANFILES): Add autoscan.list.
+	(autoscan.list): Disable the cache.
+	* bin/Makefile.am: Include freeze.mk.
 
 2002-10-25  Akim Demaille  <akim@epita.fr>
 

@@ -18,6 +18,8 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
+include ../lib/freeze.mk
+
 bin_SCRIPTS = autom4te \
               autoconf autoheader autoreconf ifnames autoscan autoupdate
 
@@ -48,7 +50,7 @@ edit = sed \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
 # autoconf is written in M4sh.
-AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh
+AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh --cache ''
 $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
 
