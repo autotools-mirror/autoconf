@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.9)dnl
+define(AC_ACVERSION, 1.7.10)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -89,6 +89,7 @@ ac_configure_args="[$]*"
 changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets]
+--disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
 --enable-FEATURE[=VAL]	include FEATURE [VAL=yes]
 --exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
 --help			print this message
@@ -128,12 +129,12 @@ do
     continue
   fi
 
-  # Accept but ignore most of the Cygnus configure options,
-  # so we can diagnose typos and other invalid options.
+  # Accept (but ignore some of) the most important Cygnus configure
+  # options, so we can diagnose typos.
 
   case "$ac_option" in
 changequote(,)dnl
-  *=*) ac_optarg=`echo "$ac_option" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  -*=*) ac_optarg=`echo "$ac_option" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
 changequote([,])dnl
   *) ac_optarg= ;;
   esac
@@ -144,6 +145,17 @@ changequote([,])dnl
     ac_prev=build ;;
   -build=* | --build=* | --buil=* | --bui=* | --bu=* | --b=*)
     build="$ac_optarg" ;;
+
+  -disable-* | --disable-*)
+    ac_feature=`echo $ac_option|sed -e 's/-*disable-//'`
+    # Reject names that aren't valid shell variable names.
+changequote(,)dnl
+    if test -n "`echo $ac_feature| sed 's/[-a-zA-Z0-9_]//g'`"; then
+changequote([,])dnl
+      AC_ERROR($ac_feature: invalid feature name)
+    fi
+    ac_feature=`echo $ac_feature| sed 's/-/_/g'`
+    eval "enable_${ac_feature}=no" ;;
 
   -enable-* | --enable-*)
     ac_feature=`echo $ac_option|sed -e 's/-*enable-//' -e 's/=.*//'`
@@ -228,11 +240,6 @@ EOF
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
     ac_silent=yes ;;
-
-  -site | --site | --sit)
-    ac_prev=site ;;
-  -site= | --site=* | --sit=*)
-    site="$ac_optarg" ;;
 
   -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
     ac_prev=srcdir ;;
