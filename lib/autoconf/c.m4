@@ -1094,7 +1094,7 @@ AN_IDENTIFIER([restrict], [AC_C_RESTRICT])
 AC_DEFUN([AC_C_RESTRICT],
 [AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
   [ac_cv_c_restrict=no
-   # Try the official restrict keyword, then gcc's __restrict__, and
+   # Try the official restrict keyword, then gcc's __restrict, and
    # the less common variants.
    for ac_kw in restrict __restrict __restrict__ _Restrict; do
      AC_COMPILE_IFELSE([AC_LANG_SOURCE(
