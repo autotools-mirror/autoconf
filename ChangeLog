@@ -1,5 +1,10 @@
 2003-04-08  Akim Demaille  <akim@epita.fr>
 
+	* bin/ifnames.in: Skip C++ comments.
+	From Jeremy Yallop.
+
+2003-04-08  Akim Demaille  <akim@epita.fr>
+
 	* GNUmakefile (SHELL): Don't assume sh is in /bin/.
 	From Ilya Zakharevich.
 
