@@ -16,7 +16,7 @@ current configuration, and a file @file{config.log} containing compiler
 output (useful mainly for debugging @code{configure}).
 
 It can also use an optional file (typically called @file{config.cache}
-and enabled with @option{--cache-file=./config.cache} or simply
+and enabled with @option{--cache-file=config.cache} or simply
 @option{-C}) that saves the results of its tests to speed up
 reconfiguring.  (Caching is disabled by default to prevent problems with
 accidental use of stale cache files.)
@@ -234,12 +234,12 @@ script, and exit.
 @item --cache-file=@var{file}
 @cindex Cache, enabling
 Enable the cache: use and save the results of the tests in @var{file},
-traditionally @file{./config.cache}.  @var{file} defaults to
+traditionally @file{config.cache}.  @var{file} defaults to
 @file{/dev/null} to disable caching.
 
 @item --config-cache
 @itemx -C
-Alias for @option{--cache-file=./config.cache}.
+Alias for @option{--cache-file=config.cache}.
 
 @item --quiet
 @itemx --silent

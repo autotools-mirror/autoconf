@@ -1280,7 +1280,7 @@ do
     cache_file=$ac_optarg ;;
 
   --config-cache | -C)
-    cache_file=./config.cache ;;
+    cache_file=config.cache ;;
 
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
@@ -1612,7 +1612,7 @@ Configuration:
   -V, --version           display version information and exit
   -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for \`--cache-file=./config.cache'
+  -C, --config-cache      alias for \`--cache-file=config.cache'
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
@@ -2254,10 +2254,15 @@ done
 # -------------
 define([AC_CACHE_LOAD],
 [if test -r "$cache_file"; then
-  test "x$cache_file" != "x/dev/null" && echo "loading cache $cache_file"
-  dnl Some versions of bash will fail to source /dev/null, so we
-  dnl avoid doing that.
-  test -f "$cache_file" && . $cache_file
+  # Some versions of bash will fail to source /dev/null (special
+  # files actually), so we avoid doing that.
+  if test -f "$cache_file"; then
+    echo "loading cache $cache_file"
+    case $cache_file in
+      [[\\/]]* | ?:[[\\/]]* ) . $cache_file;;
+      *)                      . ./$cache_file;;
+    esac
+  fi
 else
   echo "creating cache $cache_file"
   >$cache_file
@@ -2304,7 +2309,7 @@ define([AC_CACHE_SAVE],
 # scripts and configure runs.  It is not useful on other systems.
 # If it contains results you don't want to keep, you may remove or edit it.
 #
-# By default, configure uses ./config.cache as the cache file,
+# By default, configure uses `config.cache' as the cache file,
 # creating it if it does not exist already.  You can give configure
 # the --cache-file=FILE option to use a different cache file; that is
 # what configure does when it calls configure scripts in

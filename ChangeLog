@@ -1,7 +1,7 @@
-2000-07-03  Akim Demaille  <akim@epita.fr>
+2000-07-04  Akim Demaille  <akim@epita.fr>
 
-	* acgeneral.m4 (_AC_INIT_PARSE_ARGS) <-C>: Use `./config.cache', not
-	`config.cache'.
+	* acgeneral.m4 (AC_CACHE_LOAD): Be ready to read the cache even
+	when `.' is not in the PATH.
 	* doc/install.texi (configure Invocation): Adjust.
 
 2000-06-30  Jim Meyering  <meyering@lucent.com>

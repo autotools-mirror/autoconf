@@ -461,7 +461,7 @@ the files listed above (@pxref{config.status Invocation});
 
 @item
 an optional shell script normally called called @file{config.cache}
-(created when using @samp{configure --cache-file=./config.cache}) that
+(created when using @samp{configure --cache-file=config.cache}) that
 saves the results of running many of the tests (@pxref{Cache Files});
 
 @item
@@ -5587,8 +5587,8 @@ By default, configure uses no cache file (technically, it uses
 accidental use of stale cache files.
 
 To enable caching, @code{configure} accepts
-@option{--cache-file=@var{file}} where @var{file} is the name of the cache
-file to use, traditionally @file{./config.cache}.  The cache file is
+@option{--cache-file=@var{file}} where @var{file} is the name of the
+cache file to use, traditionally @file{config.cache}.  The cache file is
 created if it does not exist already.  When @code{configure} calls
 @code{configure} scripts in subdirectories, it uses the
 @option{--cache-file} argument so that they share the same cache.
