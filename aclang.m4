@@ -552,11 +552,18 @@ AC_MSG_RESULT([$cross_compiling])
 # _AC_LANG_COMPILER_GNU
 # ---------------------
 # Check whether the compiler for the current language is GNU.
+#
+# It doesn't seem necessary right now to have a different source
+# according to the current language, since this works fine.  Some day
+# it might be needed.  Nevertheless, pay attention to the fact that
+# the position of `choke me' on the seventh column is meant: otherwise
+# some Fortran compilers (e.g., SGI) might consider it's a
+# continuation line, and warn instead of reporting an error.
 m4_define([_AC_LANG_COMPILER_GNU],
 [AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
                 [ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
 [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[#ifndef __GNUC__
-  choke me
+       choke me
 #endif
 ]])],
                    [ac_compiler_gnu=yes],
