@@ -627,31 +627,32 @@ $as_ln_s $1 $2
 ])
 
 
+# _AS_MKDIR_P_PREPARE
+# -------------------
+m4_defun([_AS_MKDIR_P_PREPARE],
+[if mkdir -p . 2>/dev/null; then
+  as_mkdir_p=:
+else
+  as_mkdir_p=false
+fi
+])# _AS_MKDIR_P_PREPARE
+
 # AS_MKDIR_P(PATH)
 # ----------------
 # Emulate `mkdir -p' with plain `mkdir'.
-#
-# Don't set IFS to '\\/' (see the doc): you would end up with
-# directories called foo\bar and foo?az and others depending upon the
-# shell.
 m4_define([AS_MKDIR_P],
-[{ case $1 in
-  [[\\/]]* | ?:[[\\/]]* ) as_incr_dir=;;
-  *)                      as_incr_dir=.;;
-esac
-as_dummy=$1
-for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$[@]"`; do
-  case $as_mkdir_dir in
-    # Skip DOS drivespec
-    ?:) as_incr_dir=$as_mkdir_dir ;;
-    *)
-      as_incr_dir=$as_incr_dir/$as_mkdir_dir
-      test -d "$as_incr_dir" ||
-        mkdir "$as_incr_dir" ||
-	AS_ERROR([cannot create $1])
-    ;;
-  esac
-done; }
+[AS_REQUIRE([_$0_PREPARE])dnl
+{ if $as_mkdir_p; then
+    mkdir -p $1
+  else
+    as_dir=$1
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`AS_DIRNAME("$as_dir")`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || AS_ERROR([cannot create directory $1]); }
 ])# AS_MKDIR_P
 
 
