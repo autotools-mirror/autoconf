@@ -2151,7 +2151,7 @@ popdef([AC_Prog])dnl
 # language.
 AC_DEFUN(AC_TRY_COMPILER,
 [cat >conftest.$ac_ext <<EOF
-ifelse(AC_LANG, [FORTRAN77], ,
+AC_LANG_CASE([FORTRAN77], ,
 [
 @PND@line __oline__ "configure"
 #include "confdefs.h"
@@ -2184,13 +2184,12 @@ rm -fr conftest*])
 # Try to link a program that calls FUNC, handling GCC builtins.  If
 # the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
 # ACTION-IF-NOT-FOUND.
-
 AC_DEFUN(AC_TRY_LINK_FUNC,
-AC_TRY_LINK(dnl
-ifelse(AC_LANG, [FORTRAN77], ,
+[AC_TRY_LINK(
+AC_LANG_CASE([FORTRAN77], ,
 ifelse([$1], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
@@ -2200,7 +2199,7 @@ char $1();
 ])),
 [$1()],
 [$2],
-[$3]))
+[$3])])
 
 
 # AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS,
@@ -2248,10 +2247,10 @@ AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK(dnl
-ifelse(AC_LANG, [FORTRAN77], ,
+AC_LANG_CASE([FORTRAN77], ,
 ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
@@ -2363,7 +2362,7 @@ rm -f conftest*
 # FIXME: Should INCLUDES be defaulted here?
 AC_DEFUN(AC_TRY_COMPILE,
 [cat >conftest.$ac_ext <<EOF
-ifelse(AC_LANG, [FORTRAN77],
+AC_LANG_CASE([FORTRAN77],
 [      program main
 [$2]
       end],
@@ -2416,7 +2415,7 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])
 # Should the INCLUDES be defaulted here?
 AC_DEFUN(AC_TRY_LINK,
 [cat >conftest.$ac_ext <<EOF
-ifelse(AC_LANG, [FORTRAN77],
+AC_LANG_CASE([FORTRAN77],
 [
       program main
       call [$2]
@@ -2478,7 +2477,7 @@ AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
 @PND@line __oline__ "configure"
 #include "confdefs.h"
-ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
 #endif
 ])dnl
@@ -2632,7 +2631,7 @@ dnl select.  Similarly for bzero.
     which can conflict with char $1(); below.  */
 #include <assert.h>
 /* Override any gcc2 internal prototype to avoid an error.  */
-]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
