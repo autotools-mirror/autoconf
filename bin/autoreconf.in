@@ -308,7 +308,7 @@ sub autoreconf_current_directory ()
 
   if (!$uses_autoconf)
     {
-      verbose "$configure_ac: not using Autoconf";
+      verb "$configure_ac: not using Autoconf";
       return;
     }
 
@@ -335,11 +335,11 @@ sub autoreconf_current_directory ()
   # scanning configure.ac.
   if (!$uses_gettext)
     {
-      verbose "$configure_ac: not using Gettext";
+      verb "$configure_ac: not using Gettext";
     }
   elsif (!$install)
     {
-      verbose "$configure_ac: not running autopoint: --install not given";
+      verb "$configure_ac: not running autopoint: --install not given";
     }
   else
     {
@@ -388,7 +388,7 @@ sub autoreconf_current_directory ()
 
   if (!$uses_aclocal)
     {
-      verbose "$configure_ac: not using aclocal";
+      verb "$configure_ac: not using aclocal";
     }
   else
     {
@@ -422,7 +422,7 @@ sub autoreconf_current_directory ()
   my $uses_libtool;
   my $uses_autoheader;
   my @subdir;
-  verbose "$configure_ac: tracing";
+  verb "$configure_ac: tracing";
   my $traces = new Autom4te::XFile
     ("$autoconf"
      . join (' --trace=', '',
@@ -449,12 +449,12 @@ sub autoreconf_current_directory ()
     {
       if (-d)
 	{
-	  verbose "$configure_ac: subdirectory $_ to autoreconf";
+	  verb "$configure_ac: subdirectory $_ to autoreconf";
 	  autoreconf ($_);
 	}
       else
 	{
-	  verbose "$configure_ac: subdirectory $_ not present";
+	  verb "$configure_ac: subdirectory $_ not present";
 	}
     }
 
@@ -471,7 +471,7 @@ sub autoreconf_current_directory ()
 
   if (!$uses_libtool)
     {
-      verbose "$configure_ac: not using Libtool";
+      verb "$configure_ac: not using Libtool";
     }
   elsif ($install)
     {
@@ -480,7 +480,7 @@ sub autoreconf_current_directory ()
     }
   else
     {
-      verbose "$configure_ac: not running libtoolize: --install not given";
+      verb "$configure_ac: not running libtoolize: --install not given";
     }
 
 
@@ -495,7 +495,7 @@ sub autoreconf_current_directory ()
     {
       if (!$uses_aclocal)
 	{
-	  verbose "$configure_ac: not using aclocal";
+	  verb "$configure_ac: not using aclocal";
 	}
       else
 	{
@@ -532,7 +532,7 @@ sub autoreconf_current_directory ()
   # config.h.in when it sees an AC_CONFIG_HEADERS.
   if (!$uses_autoheader)
     {
-      verbose "$configure_ac: not using Autoheader";
+      verb "$configure_ac: not using Autoheader";
     }
   else
     {
@@ -547,7 +547,7 @@ sub autoreconf_current_directory ()
   # Assumes that there is a Makefile.am in the topmost directory.
   if (!-f 'Makefile.am')
     {
-      verbose "$configure_ac: not using Automake";
+      verb "$configure_ac: not using Automake";
     }
   else
     {
@@ -566,7 +566,7 @@ sub autoreconf_current_directory ()
     {
       if (!-f "config.status")
 	{
-	  verbose "no config.status: cannot re-make";
+	  verb "no config.status: cannot re-make";
 	}
       else
 	{
@@ -574,7 +574,7 @@ sub autoreconf_current_directory ()
 	  xsystem ("./config.status");
 	  if (!-f "Makefile")
 	    {
-	      verbose "no Makefile: cannot re-make";
+	      verb "no Makefile: cannot re-make";
 	    }
 	  else
 	    {
@@ -595,7 +595,7 @@ sub autoreconf ($)
 
   # The format for this message is not free: taken from Emacs, itself
   # using GNU Make's format.
-  verbose "Entering directory `$directory'";
+  verb "Entering directory `$directory'";
   chdir $directory
     or error "cannot chdir to $directory: $!";
 
@@ -603,7 +603,7 @@ sub autoreconf ($)
 
   # The format is not free: taken from Emacs, itself using GNU Make's
   # format.
-  verbose "Leaving directory `$directory'";
+  verb "Leaving directory `$directory'";
   chdir $cwd
     or error "cannot chdir to $cwd: $!";
 }

@@ -36,8 +36,8 @@ used in several executables of the Autoconf and Automake packages.
 use 5.005_03;
 use Exporter;
 use Autom4te::ChannelDefs;
+use Autom4te::Channels;
 use File::Basename;
-use File::Spec;
 use File::stat;
 use IO::File;
 use Carp;
@@ -54,9 +54,8 @@ my @export_vars =
 # Functions we define and export.
 my @export_subs =
   qw (&debug
-      &file_name_is_absolute
       &getopt &mktmpdir
-      &uniq &verbose);
+      &uniq);
 
 # Functions we forward (coming from modules we use).
 my @export_forward_subs =
@@ -146,12 +145,6 @@ $version = undef;
 
 =cut
 
-
-## ------------ ##
-## Prototypes.  ##
-## ------------ ##
-
-sub verbose (@);
 
 
 ## ----- ##
@@ -247,24 +240,6 @@ sub debug (@)
 }
 
 
-=item C<file_name_is_absolute ($filename)>
-
-Wrapper around C<File::Spec->file_name_is_absolute>.  Return true iff
-C<$filename> is absolute.
-
-=cut
-
-# $BOOLEAN
-# &file_name_is_absolute ($FILE)
-# ------------------------------
-sub file_name_is_absolute ($)
-{
-  my ($file) = @_;
-  return File::Spec->file_name_is_absolute ($file);
-}
-
-
-
 =item C<getopt (%option)>
 
 Wrapper around C<Getopt::Long>.  In addition to the user C<option>s,
@@ -311,6 +286,9 @@ sub getopt (%)
 
   push @ARGV, '-'
     if $stdin;
+
+  setup_channel 'note', silent => !$verbose;
+  setup_channel 'verb', silent => !$verbose;
 }
 
 
@@ -369,24 +347,6 @@ sub uniq (@)
 	}
     }
   return wantarray ? @res : "@res";
-}
-
-
-=item C<verbose (@message)>
-
-If the verbose mode is enabled (C<$verbose>), report the C<@message>
-on C<STDERR>, signed with the name of the program.  These messages are
-meant for ordinary users, and typically make explicit the steps being
-performed.
-
-=cut
-
-# verbose(@MESSAGE)
-# -----------------
-sub verbose (@)
-{
-  print STDERR "$me: ", @_, "\n"
-    if $verbose;
 }
 
 

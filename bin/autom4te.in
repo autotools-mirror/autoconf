@@ -716,7 +716,7 @@ sub handle_output ($$)
 {
   my ($req, $output) = @_;
 
-  verbose "creating $output";
+  verb "creating $output";
 
   # Load the forbidden/allowed patterns.
   handle_traces ($req, "$tmp/patterns",
@@ -729,10 +729,10 @@ sub handle_output ($$)
   my $forbidden = join ('|', map { /^forbid:([^:]+)/ } @patterns) || "^\$";
   my $allowed   = join ('|', map { /^allow:([^:]+)/  } @patterns) || "^\$";
 
-  verbose "forbidden tokens: $forbidden";
-  verbose "forbidden token : $_ => $forbidden{$_}"
+  verb "forbidden tokens: $forbidden";
+  verb "forbidden token : $_ => $forbidden{$_}"
     foreach (sort keys %forbidden);
-  verbose "allowed   tokens: $allowed";
+  verb "allowed   tokens: $allowed";
 
   # Read the (cached) raw M4 output, produce the actual result.  We
   # have to use the 2nd arg to have Autom4te::XFile honor the third, but then
@@ -902,7 +902,7 @@ sub handle_traces ($$%)
 {
   my ($req, $output, %trace) = @_;
 
-  verbose "formatting traces for `$output': ", join (', ', sort keys %trace);
+  verb "formatting traces for `$output': " . join (', ', sort keys %trace);
 
   # Processing the traces.
   my $trace_m4 = new Autom4te::XFile (">$tmp/traces.m4");
@@ -1183,7 +1183,7 @@ $req->valid (0)
   if $force || ! up_to_date ($req);
 
 # We now know whether we can trust the Request object.  Say it.
-verbose "$me: the trace request object is:\n" . $req->marshall;
+verb "the trace request object is:\n" . $req->marshall;
 
 # We need to run M4 if (i) the users wants it (--force), (ii) $REQ is
 # invalid.

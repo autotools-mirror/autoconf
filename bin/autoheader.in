@@ -113,8 +113,6 @@ sub parse_args ()
 	  'B|prepend-include=s' => \@prepend_include,
 	  'W|warnings=s'        => \&parse_warnings);
 
-  setup_channel 'note', silent => !$verbose;
-
   if (! @ARGV)
     {
       my $configure_ac = require_configure_ac;
@@ -171,7 +169,7 @@ $autoconf .= ' --verbose' if $verbose;
 # ----------------------- #
 
 # Source what the traces are trying to tell us.
-verbose "$me: running $autoconf to trace from $ARGV[0]";
+verb "$me: running $autoconf to trace from $ARGV[0]";
 xsystem ("$autoconf"
 	 # If you change this list, update the
 	 # `Autoheader-preselections' section of autom4te.in.

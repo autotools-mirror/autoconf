@@ -147,7 +147,7 @@ Try `$me --help' for more information.\n"
 
   my $srcdir = $ARGV[0] || ".";
 
-  verbose "srcdir = $srcdir";
+  verb "srcdir = $srcdir";
   chdir $srcdir || error "cannot cd to $srcdir: $!";
 }
 
@@ -566,7 +566,7 @@ sub check_configure_ac ($)
     join (' --trace=', '',
 	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
 
-  verbose "running: $autoconf $trace_option $configure_ac";
+  verb "running: $autoconf $trace_option $configure_ac";
   my $traces =
     new Autom4te::XFile "$autoconf $trace_option $configure_ac|";
 

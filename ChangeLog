@@ -1,5 +1,15 @@
 2003-08-21  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (&file_name_is_absolute): Remove.
+	(&verbose): Remove.
+	(&getopt): Adjust the note and verb channels, depending upon
+	--verbose.
+	* bin/autoheader.in, bin/autom4te.in, bin/autoscan.in,
+	* bin/autoupdate.in: Adjust.
+	Use &verb, not &verbose.
+
+2003-08-21  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoheader.in (&parse_args): Use &parse_warnings and
 	&parse_WARNINGS.
 	($help): Use Autom4te::ChannelDefs::usage.

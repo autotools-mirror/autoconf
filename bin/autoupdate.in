@@ -105,8 +105,6 @@ sub parse_args ()
 	  'B|prepend-include=s' => \@prepend_include,
 	  'f|force'             => \$force);
 
-  setup_channel 'note', silent => !$verbose;
-
   if (! @ARGV)
     {
       my $configure_ac = require_configure_ac;
