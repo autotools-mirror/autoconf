@@ -97,7 +97,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 MAINTAINERCLEANFILES = COPYING INSTALL
 
 pkgdata_DATA = INSTALL
-MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
+AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 
 prev_version_file = $(srcdir)/config/prev-version.txt
 move_if_change = $(srcdir)/config/move-if-change
@@ -465,7 +465,8 @@ html pdf:
 
 .PHONY: html pdf
 INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
+	  $(top_srcdir)/doc/install.texi
 
 maintainer-clean-local:
 	-rm -rf autom4te.cache
