@@ -24,12 +24,13 @@
 
 
 # AT_DATA_M4SUGAR(FILENAME, CONTENTS)
-# --------------------------------
+# -----------------------------------
 # Escape the invalid tokens with @&t@.
 m4_define([AT_DATA_M4SUGAR],
 [AT_DATA([$1],
-[m4_bpatsubst(m4_bpatsubst([[$2]], [\(m4\)_], [\1@&t@_]),
-                           [dnl], [d@&t@nl])])])
+[m4_bpatsubsts([$2],
+               [\(m4\)_], [\1@&t@_],
+               [dnl],     [d@&t@nl])])])
 
 
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
@@ -51,8 +52,9 @@ AT_CHECK([autom4te --language=m4sugar script.4s -o script $1],
 # Escape the invalid tokens with @&t@.
 m4_define([AT_DATA_M4SH],
 [AT_DATA([$1],
-[m4_bpatsubst(m4_bpatsubst([[$2]], [\(m4\|AS\)_], [\1@&t@_]),
-                           [dnl], [d@&t@nl])])])
+[m4_bpatsubsts([$2],
+               [\(m4\|AS\)_], [\1@&t@_],
+               [dnl],         [d@&t@nl])])])
 
 
 # AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)

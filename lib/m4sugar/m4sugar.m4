@@ -400,7 +400,7 @@ m4_define([m4_case],
        [$#], 1, [],
        [$#], 2, [$2],
        [$1], [$2], [$3],
-       [m4_case([$1], m4_shiftn(3, $@))])])
+       [$0([$1], m4_shiftn(3, $@))])])
 
 
 # m4_bmatch(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
@@ -422,7 +422,7 @@ m4_define([m4_bmatch],
 [m4_if([$#], 0, [],
        [$#], 1, [],
        [$#], 2, [$2],
-       m4_bregexp([$1], [$2]), -1, [m4_bmatch([$1], m4_shiftn(3, $@))],
+       m4_bregexp([$1], [$2]), -1, [$0([$1], m4_shiftn(3, $@))],
        [$3])])
 
 
@@ -430,6 +430,30 @@ m4_define([m4_bmatch],
 ## ---------------------------------------- ##
 ## 6. Enhanced version of some primitives.  ##
 ## ---------------------------------------- ##
+
+# m4_patsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
+# ---------------------------------------------------
+# m4 equivalent of
+#
+#   $_ = STRING;
+#   s/RE1/SUBST1/g;
+#   s/RE2/SUBST2/g;
+#   ...
+#
+# All the values are optional, and the macro is robust to active symbols
+# properly quoted.
+#
+# I would have liked to name this macro `m4_patsubst', unfortunately,
+# due to quotation problems, I need to double quote $1 below, therefore
+# the anchors are broken :(  I can't let users be trapped by that.
+m4_define([m4_bpatsubsts],
+[m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
+       [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
+       [$#], 2, [m4_builtin([patsubst], $@)],
+       [$0(m4_builtin([patsubst], [[$1]], [$2], [$3]),
+           m4_shiftn(3, $@))])])
+
+
 
 # m4_do(STRING, ...)
 # ------------------
@@ -1442,17 +1466,16 @@ m4_define([m4_flatten],
 # of brackets around $1 (don't forget that the result must be quoted
 # too, hence one more quoting than applications).
 #
-# Then notice the patsubst of the middle: it is in charge of removing
-# the leading space.  Why not just `patsubst(..., [^ ])'?  Because this
-# macro will receive the output of the preceding patsubst, i.e. more or
-# less [[STRING]].  So if there is a leading space in STRING, then it is
-# the *third* character, since there are two leading `['; Equally for
-# the outer patsubst.
+# Then notice the 2 last pattens: they are in charge of removing the
+# leading/trailing spaces.  Why not just `[^ ]'?  Because they are
+# applied to doubly quoted strings, i.e. more or less [[STRING]].  So
+# if there is a leading space in STRING, then it is the *third*
+# character, since there are two leading `['; equally for the last pattern.
 m4_define([m4_strip],
-[m4_bpatsubst(m4_bpatsubst(m4_bpatsubst([[[[$1]]]],
-                                        [[ 	]+], [ ]),
-                           [^\(..\) ], [\1]),
-              [ \(.\)$], [\1])])
+[m4_bpatsubsts([[$1]],
+               [[ 	]+], [ ],
+               [^\(..\) ],    [\1],
+               [ \(..\)$],    [\1])])
 
 
 # m4_normalize(STRING)
@@ -1479,7 +1502,7 @@ m4_defun([m4_join],
 [m4_case([$#],
          [1], [],
          [2], [[$2]],
-         [[$2][$1]m4_join([$1], m4_shift(m4_shift($@)))])])
+         [[$2][$1]$0([$1], m4_shiftn(2, $@))])])
 
 
 
@@ -1660,12 +1683,12 @@ m4_define([m4_cmp],
 #   m4_list_cmp((1),        (1, 2)) -> -1
 m4_define([m4_list_cmp],
 [m4_if([$1$2], [()()], 0,
-       [$1], [()], [m4_list_cmp((0), [$2])],
-       [$2], [()], [m4_list_cmp([$1], (0))],
+       [$1], [()], [$0((0), [$2])],
+       [$2], [()], [$0([$1], (0))],
        [m4_case(m4_cmp(m4_car$1, m4_car$2),
                 -1, -1,
                  1, 1,
-                 0, [m4_list_cmp((m4_shift$1), (m4_shift$2))])])])
+                 0, [$0((m4_shift$1), (m4_shift$2))])])])
 
 
 
@@ -1684,13 +1707,13 @@ m4_define([m4_list_cmp],
 # This macro is absolutely not robust to active macro, it expects
 # reasonable version numbers and is valid up to `z', no double letters.
 m4_define([m4_version_unletter],
-[m4_translit(m4_bpatsubst(m4_bpatsubst(m4_bpatsubst([$1],
-                                                   [\([0-9]+\)\([abcdefghi]\)],
-                                                    [m4_eval(\1 + 1).-1.\2]),
-                                       [\([0-9]+\)\([jklmnopqrs]\)],
-                                       [m4_eval(\1 + 1).-1.1\2]),
+[m4_translit(m4_bpatsubsts([$1],
+                           [\([0-9]+\)\([abcdefghi]\)],
+                             [m4_eval(\1 + 1).-1.\2],
+                           [\([0-9]+\)\([jklmnopqrs]\)],
+                             [m4_eval(\1 + 1).-1.1\2],
                            [\([0-9]+\)\([tuvwxyz]\)],
-                           [m4_eval(\1 + 1).-1.2\2]),
+                             [m4_eval(\1 + 1).-1.2\2]),
              [abcdefghijklmnopqrstuvwxyz],
              [12345678901234567890123456])])
 

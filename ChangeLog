@@ -1,5 +1,14 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sugar.m4 (m4_case, m4_bmatch, m4_normalize)
+	(m4_list_cmp): Use $0 to reinvoke yourself.
+	(m4_patsubsts): New.
+	(m4_strip, m4_version_unletter): Use it.
+	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH): Likewise.
+
+	
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autoconf.m4, lib/autoconf/general.m4,
 	* lib/autoconf/libs.m4, lib/autoconf/status.m4,
 	* lib/autoconf/types.m4, lib/autotest/general.m4,

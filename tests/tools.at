@@ -247,7 +247,7 @@ m4_foo
 _m4_bar
 AS_FOO
 _AS_BAR
-[d@&t@nl]
+[dnl]
 ]])
 
 AT_DATA_M4SH([experr],
