@@ -22,13 +22,13 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ(2.52e)
 
-AC_INIT(GNU Autoconf, 2.52f, bug-autoconf@gnu.org)
+AC_INIT(GNU Autoconf, 2.52g, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(ChangeLog)
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_FILES(config/Makefile)
 
-AM_INIT_AUTOMAKE(autoconf, 2.52f)
+AM_INIT_AUTOMAKE(autoconf, 2.52g)
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR(tests)
