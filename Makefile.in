@@ -48,30 +48,16 @@ infodir = $(prefix)/info
 
 SHELL = /bin/sh
 
-# Files that can be generated, but should be in the distribution.
-DISTSTUFF = info Makefile
+# Files that can be generated, but should be up to date for a distribution.
+DISTDEP = info Makefile
 # Files to distribute.
-DISTROOT = COPYING Makefile.in README \
+DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README \
+	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
+	acmakevars acprograms acspecific.m4 autoconf.info* \
+	autoconf.sh autoconf.texi autoheader.sh autoreconf.sh autoscan.pl \
 	config.guess config.sub configure configure.in \
-	install.sh move-if-change
-DISTAUTOCONF = autoconf/ChangeLog \
-	autoconf/INSTALL autoconf/Makefile.in autoconf/NEWS \
-	autoconf/README autoconf/acconfig.h autoconf/acfunctions \
-	autoconf/acgeneral.m4 autoconf/acheaders autoconf/acidentifiers \
-	autoconf/acmakevars autoconf/acprograms autoconf/acspecific.m4 \
-	autoconf/autoconf.sh autoconf/autoconf.texi \
-	autoconf/autoheader.sh autoconf/autoscan.pl autoconf/autoreconf.sh \
-	autoconf/configure autoconf/configure.in autoconf/mkinstalldirs \
-	autoconf/autoconf.info*
-
-DISTETC = etc/Makefile.in \
-	etc/cfg-paper.texi etc/configure.in etc/configure.man \
-	etc/configure.texi etc/standards.texi etc/make-stds.texi \
-	etc/cfg-paper.info* etc/configure.info* etc/standards.info*
-DISTTEXINFO = texinfo/tex3patch texinfo/texinfo.tex
-
-# Where to find texinfo.tex to format documentation with TeX.
-TEXIDIR = $(srcdir)/../texinfo
+	install.sh mkinstalldirs texinfo.tex \
+	standards.texi make-stds.texi standards.info*
 
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
 editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
@@ -94,15 +80,21 @@ autoscan: autoscan.pl
 	rm -f $@ $@.tmp
 	$(editpl) $(srcdir)/autoscan.pl > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
-info: autoconf.info
+info: autoconf.info @standards_info@
 
 autoconf.info: autoconf.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --output=$@
 
-dvi: autoconf.dvi
+standards.info: standards.texi make-stds.texi
+	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --output=$@
+
+dvi: autoconf.dvi @standards_dvi@
 
 autoconf.dvi: autoconf.texi
-	TEXINPUTS=$(TEXIDIR):$$TEXINPUTS $(TEXI2DVI) $(srcdir)/autoconf.texi
+	$(TEXI2DVI) $(srcdir)/autoconf.texi
+
+standards.dvi: standards.texi make-stds.texi
+	$(TEXI2DVI) $(srcdir)/standards.texi
 
 check:
 installcheck:
@@ -128,8 +120,12 @@ install: acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	else :; fi
 
 install-info: installdirs
-	-if test -f autoconf.info; then d=.; else d=$(srcdir); fi; \
-	cd $$d; for i in *.info*; do \
+	-test -f autoconf.info || cd $(srcdir); \
+	for i in autoconf.info*; do \
+	$(INSTALL_DATA) $$i $(infodir)/$$i; \
+	done
+	-test -f standards.info || cd $(srcdir); \
+	for i in standards.info*; do \
 	$(INSTALL_DATA) $$i $(infodir)/$$i; \
 	done
 
@@ -138,6 +134,8 @@ uninstall:
 	rm -f $(bindir)/autoreconf
 	rm -fr $(acdatadir)
 	cd $(infodir); rm -f autoconf.info*
+	if test -f standards.info || test -f $(srcdir)/standards.info; \
+	then cd $(infodir); rm -f standards.info*; fi
 
 configure: configure.in acgeneral.m4 acspecific.m4
 	cd $(srcdir); \
@@ -166,31 +164,15 @@ realclean: distclean
 TAGS:
 	etags ${srcdir}/*.m4 ${srcdir}/*.sh ${srcdir}/[a-z]*.in ${srcdir}/*.texi
 
-diststuff: $(DISTSTUFF)
-
-dist: diststuff
-	cd ../etc; ${MAKE} info
+dist: $(DISTDEP) $(DISTFILES)
+	chmod -R a+rX .
 	distname=`sed -e '/define(AC_ACVERSION,/!d' \
 	-e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' -e q acgeneral.m4`; \
-	cd ..; \
-	chmod -R go+rX .; \
 	rm -fr $$distname; \
-	mkdir $$distname $$distname/autoconf $$distname/etc $$distname/texinfo; \
-	for file in $(DISTROOT); do \
+	mkdir $$distname; \
+	for file in $(DISTFILES); do \
 	  ln $$file $$distname \
 	  || { echo copying $$file instead; cp -p $$file $$distname;}; \
 	done; \
-	for file in $(DISTAUTOCONF); do \
-	  ln $$file $$distname/autoconf \
-	  || { echo copying $$file instead; cp -p $$file $$distname/autoconf;}; \
-	done; \
-	for file in $(DISTETC); do \
-	  ln $$file $$distname/etc \
-	  || { echo copying $$file instead; cp -p $$file $$distname/etc;}; \
-	done; \
-	for file in $(DISTTEXINFO); do \
-	  ln $$file $$distname/texinfo \
-	  || { echo copying $$file instead; cp -p $$file $$distname/texinfo;}; \
-	done; \
-	tar -chz -f autoconf/$$distname.tar.gz $$distname; \
+	tar -chz -f $$distname.tar.gz $$distname; \
 	rm -fr $$distname
