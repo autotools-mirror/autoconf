@@ -1,5 +1,7 @@
 * Major changes in Autoconf 2.57a                       -*- outline -*-
 
+  Released 2003-06-20 by Akim Demaille.
+
 ** New macros
   AC_C_RESTRICT, AC_INCLUDES_DEFAULT.
 
@@ -46,13 +48,13 @@ The Free Documentation License has been upgraded from 1.1 to 1.2.
 
 * Major changes in Autoconf 2.56
 
-  Released November 15th, 2002 by Akim Demaille.
+  Released 2002-11-15 by Akim Demaille.
 
 One packaging problem fixed (config/install-sh was not executable).
 
 * Major changes in Autoconf 2.55
 
-  Released November 14th, 2002 by Akim Demaille.
+  Released 2002-11-14 by Akim Demaille.
 
 Release tips:
 
@@ -185,7 +187,7 @@ Release tips:
 
 * Major changes in Autoconf 2.54
 
-  Released September 13th, 2002.
+  Released 2002-09-13 by Akim Demaille.
 
 ** Executables
 
@@ -281,7 +283,7 @@ Release tips:
 
 * Major changes in Autoconf 2.53
 
-  Released March 8th, 2002.
+  Released 2002-03-08 by Akim Demaille.
 
 ** Requirements
 
@@ -404,7 +406,7 @@ Release tips:
 
 * Major changes in Autoconf 2.52
 
-  Released July 18th, 2001.
+  Released 2001-07-18 by Akim Demaille.
 
 ** Documentation
 - AC_ARG_VAR
@@ -463,9 +465,15 @@ Release tips:
   Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
 - AC_FUNC_GETPGRG behaves better when cross-compiling.
 
+* Major changes in Autoconf 2.51
+There was no release of Autoconf 2.51 since some packagers had used
+this version number without permission to ship intermediary versions
+of 2.50.  The version was skipped to avoid confusion.
+
+
 * Major changes in Autoconf 2.50
 
-  Released May 21st, 2001.
+  Released 2001-05-21 by Akim Demaille.
 
 ** Lots of bug fixes
 There have been far too many to enumerate them here.  Check out
@@ -701,7 +709,7 @@ Major changes in Autoconf 2.14:
 
 Major changes in Autoconf 2.13:
 
-  Released May 1st, 1999, by Ben Elliston
+  Released 1999-05-01 by Ben Elliston.
 
 * Support for building on Win32 systems where the only available C or
   C++ compiler is the Microsoft Visual C++ command line compiler
@@ -734,7 +742,7 @@ Major changes in Autoconf 2.13:
 
 Major changes in Autoconf 2.12:
 
-  Released November 26th, 1996, by David J. MacKenzie
+  Released 1996-11-26 by David J. MacKenzie
 
 * AC_OUTPUT and AC_CONFIG_HEADER can create output files by
   concatenating multiple input files separated by colons, like so:
