@@ -753,22 +753,24 @@ echo creating $file
 # They are passed to sed as "A NAME B NAME C VALUE D", where NAME
 # is the cpp macro being defined and VALUE is the value it is being given.
 # Each defining turns into a single global substitution command.
+# Hopefully no one uses "!" as a variable value.
+# Other candidates for the sed separators, like , and @, do get used.
 #
 # SEDd sets the value in "#define NAME VALUE" lines.
-SEDdA='s@^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-SEDdB='\([ 	][ 	]*\)[^ 	]*@\1#\2'
+SEDdA='s!^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+SEDdB='\([ 	][ 	]*\)[^ 	]*!\1#\2'
 SEDdC='\3'
-SEDdD='@g'
+SEDdD='!g'
 # SEDu turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
-SEDuA='s@^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-SEDuB='\([ 	]\)@\1#\2define\3'
+SEDuA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+SEDuB='\([ 	]\)!\1#\2define\3'
 SEDuC=' '
-SEDuD='\4@g'
+SEDuD='\4!g'
 # SEDe turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-SEDeA='s@^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-SEDeB='<<$>>@\1#\2define\3'
+SEDeA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+SEDeB='<<$>>!\1#\2define\3'
 SEDeC=' '
-SEDeD='@g'
+SEDeD='!g'
 changequote([,])dnl
 rm -f conftest.sed
 EOF
