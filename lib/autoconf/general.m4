@@ -314,93 +314,121 @@ dnl Returns EXP1 if non empty, otherwise EXP2.
 define([m4_default], [ifval([$1], [$1], [$2])])
 
 
-dnl m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
-dnl -----------------------------------------------------------
-dnl m4 equivalent of
-dnl switch (SWITCH)
-dnl {
-dnl   case VAL1:
-dnl     IF-VAL1;
-dnl     break;
-dnl   case VAL2:
-dnl     IF-VAL2;
-dnl     break;
-dnl   ...
-dnl   default:
-dnl     DEFAULT;
-dnl     break;
-dnl }.
-dnl All the values are optional, and the macro is robust to active
-dnl symbols properly quoted.
+# m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
+# -----------------------------------------------------------
+# m4 equivalent of
+# switch (SWITCH)
+# {
+#   case VAL1:
+#     IF-VAL1;
+#     break;
+#   case VAL2:
+#     IF-VAL2;
+#     break;
+#   ...
+#   default:
+#     DEFAULT;
+#     break;
+# }.
+# All the values are optional, and the macro is robust to active
+# symbols properly quoted.
 define(m4_case,
-[ifelse([$1], 1,,
+[ifelse([$#], 0, [],
+	[$#], 1, [],
 	[$#], 2, [$2],
         [$1], [$2], [$3],
-        [m4_case([$1], m4_shift(m4_shift($@)))])])
+        [m4_case([$1], m4_shift(m4_shift(m4_shift($@))))])])
 
 
-dnl ### Implementing m4 loops
-
-dnl Implementing loops (`foreach' loops) in m4 is much more tricky than it
-dnl may seem.  Actually, the example of a `foreach' loop in the m4
-dnl documentation is wrong: it does not quote the arguments properly,
-dnl which leads to undesired expansions.
-dnl
-dnl The example in the documentation is:
-dnl
-dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-dnl | define(`foreach',
-dnl |        `pushdef(`$1', `')_foreach(`$1', `$2', `$3')popdef(`$1')')
-dnl | define(`_arg1', `$1')
-dnl | define(`_foreach',
-dnl | 	  `ifelse(`$2', `()', ,
-dnl | 		  `define(`$1', _arg1$2)$3`'_foreach(`$1', (shift$2), `$3')')')
-dnl
-dnl But then if you run
-dnl
-dnl | define(a, 1)
-dnl | define(b, 2)
-dnl | define(c, 3)
-dnl | foreach(`f', `(`a', `(b', `c)')', `echo f
-dnl | ')
-dnl
-dnl it gives
-dnl
-dnl  => echo 1
-dnl  => echo (2,3)
-dnl
-dnl which is not what is expected.
-dnl
-dnl Once you understood this, you turn yourself into a quoting wizard,
-dnl and come up with the following solution:
-dnl
-dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-dnl | define(`foreach', `pushdef(`$1', `')_foreach($@)popdef(`$1')')
-dnl | define(`_arg1', ``$1'')
-dnl | define(`_foreach',
-dnl |  `ifelse($2, `()', ,
-dnl | 	       `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
-dnl
-dnl which this time answers
-dnl
-dnl  => echo a
-dnl  => echo (b
-dnl  => echo c)
-dnl
-dnl Bingo!
+# m4_match(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
+# ----------------------------------------------------
+# m4 equivalent of
+#
+# if (SWITCH =~ RE1)
+#   VAL1;
+# elif (SWITCH =~ RE2)
+#   VAL2;
+# elif ...
+#   ...
+# else
+#   DEFAULT
+#
+# All the values are optional, and the macro is robust to active symbols
+# properly quoted.
+define(m4_match,
+[ifelse([$#], 0, [],
+	[$#], 1, [],
+	[$#], 2, [$2],
+        regexp([$1], [$2]), -1, [m4_match([$1],
+                                          m4_shift(m4_shift(m4_shift($@))))],
+        [$3])])
 
 
-dnl M4_FOREACH(VARIABLE, LIST, EXPRESSION)
-dnl --------------------------------------
-dnl Expand EXPRESSION assigning to VARIABLE each value of the LIST
-dnl (LIST should have the form `[(item_1, item_2, ..., item_n)]'),
-dnl i.e. the whole list should be *quoted*.  Quote members too if
-dnl you don't want them to be expanded.
-dnl
-dnl This macro is robust to active symbols:
-dnl    define(active, ACTIVE)
-dnl    m4_foreach([Var], [([active], [b], [active])], [-Var-])end
-dnl    => -active--b--active-end
+## --------------------- ##
+## Implementing m4 loops ##
+## --------------------- ##
+
+
+# Implementing loops (`foreach' loops) in m4 is much more tricky than it
+# may seem.  Actually, the example of a `foreach' loop in the m4
+# documentation is wrong: it does not quote the arguments properly,
+# which leads to undesired expansions.
+#
+# The example in the documentation is:
+#
+# | # foreach(x, (item_1, item_2, ..., item_n), stmt)
+# | define(`foreach',
+# |        `pushdef(`$1', `')_foreach(`$1', `$2', `$3')popdef(`$1')')
+# | define(`_arg1', `$1')
+# | define(`_foreach',
+# | 	  `ifelse(`$2', `()', ,
+# | 		  `define(`$1', _arg1$2)$3`'_foreach(`$1', (shift$2), `$3')')')
+#
+# But then if you run
+#
+# | define(a, 1)
+# | define(b, 2)
+# | define(c, 3)
+# | foreach(`f', `(`a', `(b', `c)')', `echo f
+# | ')
+#
+# it gives
+#
+#  => echo 1
+#  => echo (2,3)
+#
+# which is not what is expected.
+#
+# Once you understood this, you turn yourself into a quoting wizard,
+# and come up with the following solution:
+#
+# | # foreach(x, (item_1, item_2, ..., item_n), stmt)
+# | define(`foreach', `pushdef(`$1', `')_foreach($@)popdef(`$1')')
+# | define(`_arg1', ``$1'')
+# | define(`_foreach',
+# |  `ifelse($2, `()', ,
+# | 	       `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
+#
+# which this time answers
+#
+#  => echo a
+#  => echo (b
+#  => echo c)
+#
+# Bingo!
+
+
+# m4_foreach(VARIABLE, LIST, EXPRESSION)
+# --------------------------------------
+# Expand EXPRESSION assigning to VARIABLE each value of the LIST
+# (LIST should have the form `[(item_1, item_2, ..., item_n)]'),
+# i.e. the whole list should be *quoted*.  Quote members too if
+# you don't want them to be expanded.
+#
+# This macro is robust to active symbols:
+#    define(active, ACTIVE)
+#    m4_foreach([Var], [([active], [b], [active])], [-Var-])end
+#    => -active--b--active-end
 define(m4_foreach,
 [pushdef([$1], [])_m4_foreach($@)popdef([$1])])
 

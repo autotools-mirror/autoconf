@@ -80,10 +80,12 @@ undefine([undefine])
 # All the values are optional, and the macro is robust to active
 # symbols properly quoted.
 AT_DEFINE(AT_CASE,
-[ifelse([$1], 1,,
+[ifelse([$#], 0, [],
+	[$#], 1, [],
 	[$#], 2, [$2],
         [$1], [$2], [$3],
-        [AT_CASE([$1], AT_SHIFT(AT_SHIFT($@)))])])
+        [AT_CASE([$1], AT_SHIFT(AT_SHIFT(AT_SHIFT($@))))])])
+
 
 # Use of diversions:
 #  0 - overall initialization; for each test group: skipping and cleanups;
@@ -371,4 +373,4 @@ fi
 $at_traceon
 ])
 
-divert[]dnl
+divert(0)dnl
