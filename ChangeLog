@@ -1,3 +1,8 @@
+2001-01-11  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_PROG_F77): Add pgf90 to the list of compilers to
+	look for, after the other Fortran 90 compilers.
+
 2001-01-11  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4: Use m4_copy to duplicate macros.

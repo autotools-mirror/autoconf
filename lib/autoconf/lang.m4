@@ -1162,7 +1162,7 @@ AC_ARG_VAR([F77], [Fortran 77 compiler command])
 AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc])])
+                  [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 pgf90 fc])])
 
 _AC_LANG_COMPILER_WORKS
 # If we don't use `.F' as extension, the preprocessor is not run on the
