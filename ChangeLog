@@ -1,5 +1,20 @@
 2000-02-17  Akim Demaille  <akim@epita.fr>
 
+	Move the documentation into doc/.
+	Some CVS tricks were used so that history is kept in both the top
+	directory, and in doc/.
+
+	* doc/Makefile.am: New file.
+	* Makefile.am: Adjusted.
+	* configure.in: Adjusted.
+	* autoconf.texi: Moved from here to...
+	* doc/autoconf.texi: here.
+	* make-stdts.texi: Likewise.
+	* install.texi: Likewise.
+	* texinfo.tex: Likewise.
+
+2000-02-17  Akim Demaille  <akim@epita.fr>
+
 	* tests/actest.m4 (AC_ENV_SAVE): Added ALLOCA.
 
 2000-02-17  Akim Demaille  <akim@epita.fr>

@@ -1175,7 +1175,8 @@ cat >$CONFIG_STATUS <<EOF
 
 # Files that config.status was made for.
 config_files="\\
-  acversion.m4 Makefile m4/Makefile man/Makefile tests/Makefile tests/atconfig"
+  acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile tests/Makefile
+  tests/atconfig"
 
 ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
@@ -1251,6 +1252,7 @@ Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
   'Makefile' ) CONFIG_FILES="\$CONFIG_FILES Makefile" ;;
   'm4/Makefile' ) CONFIG_FILES="\$CONFIG_FILES m4/Makefile" ;;
   'man/Makefile' ) CONFIG_FILES="\$CONFIG_FILES man/Makefile" ;;
+  'doc/Makefile' ) CONFIG_FILES="\$CONFIG_FILES doc/Makefile" ;;
   'tests/Makefile' ) CONFIG_FILES="\$CONFIG_FILES tests/Makefile" ;;
   'tests/atconfig' ) CONFIG_FILES="\$CONFIG_FILES tests/atconfig" ;;
 

@@ -41,4 +41,5 @@ if test -f $srcdir/standards.texi; then
 fi
 AC_SUBST(standards_texi)dnl
 
-AC_OUTPUT(acversion.m4 Makefile m4/Makefile man/Makefile tests/Makefile tests/atconfig)
+AC_OUTPUT(acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile
+          tests/Makefile tests/atconfig)

@@ -20,10 +20,8 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
-SUBDIRS = . m4 man tests
+SUBDIRS = . m4 man doc tests
 
-MAKEINFO = makeinfo --no-split
-TEXI2HTML = texi2html
 SUFFIXES = .m4 .m4f .pl .sh
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
@@ -45,29 +43,25 @@ nodistpkgdataDATA = autoconf.m4f autoheader.m4f autoupdate.m4f acversion.m4
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-info_TEXINFOS = autoconf.texi standards.texi
-autoconf_TEXINFOS = install.texi
-standards_TEXINFOS = make-stds.texi
-
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
 autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
 ifnames.sh autoscan.pl INSTALL.txt \
 $(distpkgdataDATA)
 
-# Files that should be removed, but which Automake does not know.
-# There are texi2dvi files, frozen files, and the scripts.
-CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
-autoconf.ov autoconf.ovs autoconf.tmp \
-autoconf.m4f autoheader.m4f autoupdate.m4f \
-$(bin_SCRIPTS)
+# Files that should be removed, but which Automake does not know:
+# the frozen files and the scripts.
+CLEANFILES = autoconf.m4f autoheader.m4f autoupdate.m4f \
+             $(bin_SCRIPTS)
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
 # $(INSTALL) is not defined, and the install target fails.
 
-INSTALL.txt: install.texi
-	$(MAKEINFO) -I$(srcdir) $< --no-headers --no-validate --output=$@
+MAKEINFO = makeinfo --no-split
+
+INSTALL.txt: $(top_srcdir)/doc/install.texi
+	$(MAKEINFO) $< --no-headers --no-validate --output=$@
 
 install-data-hook: INSTALL.txt
 	@$(NORMAL_INSTALL)
@@ -107,14 +101,3 @@ common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
 autoconf.m4f: autoconf.m4 $(common)
 autoheader.m4f: autoheader.m4 $(common)
 autoupdate.m4f: autoupdate.m4 $(common)
-
-
-# The documentation
-
-html: autoconf_1.html standards_1.html
-
-autoconf_1.html: autoconf.texi install.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/autoconf.texi
-
-standards_1.html: standards.texi make-stds.texi
-	$(TEXI2HTML) -split_chapter $(srcdir)/standards.texi
