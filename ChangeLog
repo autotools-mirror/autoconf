@@ -1,3 +1,7 @@
+1999-02-11  Ben Elliston  <bje@cygnus.com>
+
+	* standards.texi: Update from FSF.
+
 1999-01-29  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_EXEEXT): Ignore C++ source files.

@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate August 26, 1998
+@set lastupdate February  9, 1999
 @c %**end of header
 
 @ifinfo
@@ -28,7 +28,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -84,13 +84,14 @@ Last updated @value{lastupdate}.
 @end ifinfo
 
 @menu
-* Preface::                     About the GNU Coding Standards
-* Intellectual Property::       Keeping Free Software Free
-* Design Advice::               General Program Design
-* Program Behavior::            Program Behavior for All Programs
-* Writing C::                   Making The Best Use of C
-* Documentation::               Documenting Programs
-* Managing Releases::           The Release Process
+* Preface::                 About the GNU Coding Standards
+* Legal Issues::            Keeping Free Software Free
+* Design Advice::           General Program Design
+* Program Behavior::        Program Behavior for All Programs
+* Writing C::               Making The Best Use of C
+* Documentation::           Documenting Programs
+* Managing Releases::       The Release Process
+* References::              References to Non-Free Software or Documentation
 @end menu
 
 @node Preface
@@ -113,7 +114,7 @@ you don't have those files, please mail your suggestion anyway.
 This release of the GNU Coding Standards was last updated
 @value{lastupdate}.
 
-@node Intellectual Property
+@node Legal Issues
 @chapter Keeping Free Software Free
 
 This @value{CHAPTER} discusses how you can make sure that GNU software
@@ -161,11 +162,12 @@ to free memory, or use a new GNU facility such as obstacks.
 @node Contributions
 @section Accepting Contributions
 
-If someone else sends you a piece of code to add to the program you are
-working on, we need legal papers to use it---the same sort of legal
-papers we will need to get from you.  @emph{Each} significant
-contributor to a program must sign some sort of legal papers in order
-for us to have clear title to the program.  The main author alone is not
+If the program you are working on is copyrighted by the Free Software
+Foundation, then when someone else sends you a piece of code to add to
+the program, we need legal papers to use it---just as we asked you to
+sign papers initially.  @emph{Each} person who makes a nontrivial
+contribution to a program must sign some sort of legal papers in order
+for us to have clear title to the program; the main author alone is not
 enough.
 
 So, before adding in any contributions from other people, please tell
@@ -181,16 +183,17 @@ This also applies to comments and documentation files.  For copyright
 law, comments and code are just text.  Copyright applies to all kinds of
 text, so we need legal papers for all kinds.
 
+We know it is frustrating to ask for legal papers; it's frustrating for
+us as well.  But if you don't wait, you are going out on a limb---for
+example, what if the contributor's employer won't sign a disclaimer?
+You might have to take that code out again!
+
 You don't need papers for changes of a few lines here or there, since
 they are not significant for copyright purposes.  Also, you don't need
 papers if all you get from the suggestion is some ideas, not actual code
-which you use.  For example, if you write a different solution to the
-problem, you don't need to get papers.
-
-We know this is frustrating; it's frustrating for us as well.  But if
-you don't wait, you are going out on a limb---for example, what if the
-contributor's employer won't sign a disclaimer?  You might have to take
-that code out again!
+which you use.  For example, if someone send you one implementation, but
+you write a different implementation of the same idea, you don't need to
+get papers.
 
 The very worst thing is if you forget to tell us about the other
 contributor.  We could be very embarrassed in court some day as a
@@ -384,9 +387,13 @@ all data structures dynamically.  In most Unix utilities, ``long lines
 are silently truncated''.  This is not acceptable in a GNU utility.
 
 Utilities reading files should not drop NUL characters, or any other
-nonprinting characters @emph{including those with codes above 0177}.  The
-only sensible exceptions would be utilities specifically intended for
-interface to certain types of printers that can't handle those characters.
+nonprinting characters @emph{including those with codes above 0177}.
+The only sensible exceptions would be utilities specifically intended
+for interface to certain types of terminals or printers
+that can't handle those characters.
+Whenever possible, try to make programs work properly with
+sequences of bytes that represent multibyte characters, using encodings
+such as UTF-8 and others.
 
 Check every system call for an error return, unless you know you wish to
 ignore errors.  Include the system error text (from @code{perror} or
@@ -428,7 +435,7 @@ Try to avoid low-level interfaces to obscure Unix data structures (such
 as file directories, utmp, or the layout of kernel memory), since these
 are less likely to work compatibly.  If you need to find all the files
 in a directory, use @code{readdir} or some other high-level interface.
-These will be supported compatibly by GNU.
+These are supported compatibly by GNU.
 
 The preferred signal handling facilities are the BSD variant of
 @code{signal}, and the @sc{posix} @code{sigaction} function; the
@@ -2599,6 +2606,9 @@ explanation of the underlying concepts.  (There are, of course
 exceptions.)  Also Unix man pages use a particular format which is
 different from what we use in GNU manuals.
 
+Please include an email address in the manual for where to report
+bugs @emph{in the manual}.
+
 Please do not use the term ``pathname'' that is used in Unix
 documentation; use ``file name'' (two words) instead.  We use the term
 ``path'' only for search paths, which are lists of file names.
@@ -2682,7 +2692,8 @@ you.
 
 Another alternative is to record change log information with a version
 control system such as RCS or CVS.  This can be converted automatically
-to a @file{ChangeLog} file.
+to a @file{ChangeLog} file using @code{rcs2log}; in Emacs, the command
+@kbd{C-x v a} (@code{vc-update-change-log}) does the job.
 
 There's no need to describe the full purpose of the changes or how they
 work together.  If you think that a change calls for explanation, you're
@@ -3053,6 +3064,21 @@ files} and @dfn{non-source files}.  Source files are written by humans
 and never changed automatically; non-source files are produced from
 source files by programs under the control of the Makefile.
 
+The distribution should contain a file named @file{README} which gives
+the name of the package, and a general description of what it does.  It
+is also good to explain the purpose of each of the first-level
+subdirectories in the package, if there are any.  The @file{README} file
+should either state the version number of the package, or refer to where
+in the package it can be found.
+
+The @file{README} file should refer to the file @file{INSTALL}, which
+should contain an explanation of the installation procedure.
+
+The @file{README} file should also refer to the file which contains the
+copying conditions.  The GNU GPL, if used, should be in a file called
+@file{COPYING}.  If the GNU LGPL is used, it should be in a file called
+@file{COPYING.LIB}.
+
 Naturally, all the source files must be in the distribution.  It is okay
 to include non-source files in the distribution, provided they are
 up-to-date and machine-independent, so that building the distribution
@@ -3104,6 +3130,31 @@ getopt, obstack, or termcap, include them in the distribution file.
 Leaving them out would make the distribution file a little smaller at
 the expense of possible inconvenience to a user who doesn't know what
 other files to get.
+
+@node References
+@chapter References to Non-Free Software and Documentation
+
+A GNU program should not recommend use of any non-free program.  We
+can't stop some people from writing proprietary programs, or stop other
+people from using them.  But we can and should avoid helping to
+advertise them to new customers.
+
+Sometimes it is important to mention how to build your package on top of
+some non-free operating system or other non-free base package.  In such
+cases, please mention the name of the non-free package or system in the
+briefest possible way.  Don't include any references for where to find
+more information about the proprietary program.  The goal should be that
+people already using the proprietary program will get the advice they
+need about how to use your free program, while people who don't already
+use the proprietary program will not see anything to encourage them to
+take an interest in it.
+
+Likewise, a GNU package should not refer the user to any non-free
+documentation for free software.  The need for free documentation to go
+with free software is now a major focus of the GNU project; to show that
+we are serious about the need for free documentation, we must not
+undermine our position by recommending use of documentation that isn't
+free.
 
 @contents
 
