@@ -72,6 +72,7 @@ M4 = @M4@
 PACKAGE = @PACKAGE@
 PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
+STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@

@@ -72,6 +72,7 @@ M4 = @M4@
 PACKAGE = @PACKAGE@
 PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
+STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
@@ -122,7 +123,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 	Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 configure \
-	configure.ac
+	configure.ac depcomp missing
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
