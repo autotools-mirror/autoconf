@@ -4,8 +4,6 @@
 
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
-	* doc/autoconf.texi (Redefined M4 Macros):
-
 	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Consider
 	inttypes.h is missing if it conflicts with sys/types.h, as on IRIX
 	5.3.
