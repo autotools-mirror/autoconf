@@ -1,3 +1,8 @@
+2003-08-07  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotest/general.m4 (AT_CHECK): Move core functionality...
+	(AT_CHECK_NOESCAPE): ...to this new macro.
+
 2003-07-31  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Work around a bug

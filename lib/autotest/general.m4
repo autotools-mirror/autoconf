@@ -997,11 +997,13 @@ $2[]_ATEOF
 ])
 
 
-# AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR)
+# AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
+#          [RUN-IF-FAIL], [RUN-IF-PASS])
 # ------------------------------------------------
 # Execute a test by performing given shell COMMANDS.  These commands
 # should normally exit with STATUS, while producing expected STDOUT and
-# STDERR contents.
+# STDERR contents.  Shell metacharacters in STDOUT and STDERR are
+# _not_ processed by the shell, but are treated as string literals.
 #
 # STATUS, STDOUT, and STDERR are not checked if equal to `ignore'.
 #
@@ -1039,6 +1041,17 @@ $2[]_ATEOF
 # out, since most shells when tracing include subshell traces in stderr.
 # This may cause spurious failures when the test suite is run with `-x'.
 #
+m4_define([AT_CHECK],
+[AT_CHECK_NOESCAPE([$1],[$2],AS_ESCAPE([$3]),AS_ESCAPE([$4]),[$5],[$6])])
+
+
+
+# AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
+#                   [RUN-IF-FAIL], [RUN-IF-PASS])
+# ---------------------------------------------------------
+# Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
+# and STDERR arguments before running the comparison.
+#
 #
 # Implementation Details
 # ----------------------
@@ -1062,7 +1075,7 @@ $2[]_ATEOF
 #
 #  ( $at_traceon; $1 ) >at-stdout 2>at-stder1
 #
-m4_define([AT_CHECK],
+m4_define([AT_CHECK_NOESCAPE],
 [$at_traceoff
 echo "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >$at_check_line_file
@@ -1077,14 +1090,14 @@ m4_case([$4],
 	ignore, [echo stderr:; cat $at_stderr],
 	experr, [$at_diff experr $at_stderr || at_failed=:],
 	[],     [$at_diff $at_devnull $at_stderr || at_failed=:],
-	[echo >>$at_stderr; echo "AS_ESCAPE([$4])" | $at_diff - $at_stderr || at_failed=:])
+	[echo >>$at_stderr; echo "$4" | $at_diff - $at_stderr || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
 	stdout, [echo stdout:; tee stdout <$at_stdout],
 	ignore, [echo stdout:; cat $at_stdout],
 	expout, [$at_diff expout $at_stdout || at_failed=:],
 	[],     [$at_diff $at_devnull $at_stdout || at_failed=:],
-	[echo >>$at_stdout; echo "AS_ESCAPE([$3])" | $at_diff - $at_stdout || at_failed=:])
+	[echo >>$at_stdout; echo "$3" | $at_diff - $at_stdout || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],
@@ -1104,4 +1117,4 @@ AS_IF($at_failed, [$5
   echo 1 > $at_status_file
   exit 1], [$6])
 $at_traceon
-])# AT_CHECK
+])# AT_CHECK_NOESCAPE
