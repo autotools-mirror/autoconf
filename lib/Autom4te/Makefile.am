@@ -2,11 +2,13 @@
 
 perllibdir = $(pkgdatadir)/Autom4te
 dist_perllib_DATA = \
+  C4che.pm \
   ChannelDefs.pm \
   Channels.pm \
   Configure_ac.pm \
   FileUtils.pm \
   General.pm \
+  Request.pm \
   Struct.pm \
   XFile.pm
 

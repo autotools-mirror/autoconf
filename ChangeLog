@@ -1,3 +1,8 @@
+2003-08-22  Akim Demaille  <akim@epita.fr>
+
+	* lib/Autom4te/Request.pm, lib/Autom4te/C4che.pm: New.
+	* bin/autom4te.in: Adjust.
+
 2003-08-21  Akim Demaille  <akim@epita.fr>
 
 	* lib/Autom4te/General.pm (&file_name_is_absolute): Remove.
