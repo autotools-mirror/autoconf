@@ -35,8 +35,12 @@ end-language: "Autoheader-preselections"
 ## ------------------------ ##
 
 begin-language: "Automake-preselections"
+args: --preselect AC_CANONICAL_BUILD
 args: --preselect AC_CANONICAL_HOST
+# AC_CANONICAL_SYSTEM was traced from Automake 1.7 to Automake 1.9.
+# Later versions trace AC_CANONICAL_TARGET instead.
 args: --preselect AC_CANONICAL_SYSTEM
+args: --preselect AC_CANONICAL_TARGET
 args: --preselect AC_CONFIG_AUX_DIR
 args: --preselect AC_CONFIG_FILES
 args: --preselect AC_CONFIG_HEADERS

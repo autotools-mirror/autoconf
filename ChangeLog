@@ -1,3 +1,9 @@
+2004-08-02  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Automake-preselections): Preselect
+	AC_CANONICAL_BUILD and AC_CANONICAL_TARGET.  Automake 1.9.1 will
+	trace them.
+
 2004-07-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Set BIN_SH, for
@@ -75,7 +81,7 @@
 
 	* doc/autoconf.texi (testsuite Scripts): Fix typo.
 	Problem reported by Stepan Kasal.
-	
+
 2004-05-24  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/Makefile.am (autoconfdir): Fix to match comment (trivial
