@@ -1,3 +1,9 @@
+2003-06-20  Akim Demaille  <akim@epita.fr>
+
+	* config/config.guess, config/config.sub, config/elisp-comp,
+	* config/install-sh, config/mkinstalldirs, doc/standards.texi:
+	Update from masters.
+
 2003-06-11  Paolo Bonzini  <bonzini@gnu.org>
 
 	* doc/autoconf.texi (Writing testsuite.at): Document AT_XFAIL_IF

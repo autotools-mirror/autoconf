@@ -2620,6 +2620,15 @@ that is the case, it is better to spend your time adding features that
 will be useful on GNU and GNU/Linux, rather than on supporting other
 incompatible systems.
 
+If you do support Windows, please do not abbreviate it as ``win''.  In
+hacker terminology, calling something a ``win'' is a form of praise.
+You're free to praise Microsoft Windows on your own if you want, but
+please don't do this in GNU packages.  Instead of abbreviating
+``Windows'' to ``un'', you can write it in full or abbreviate it to
+``woe'' or ``w''.  In GNU Emacs, for instance, we use @samp{w32} in
+file names of Windows-specific files, but the macro for Windows
+conditionals is called @code{WINDOWSNT}.
+
 It is a good idea to define the ``feature test macro''
 @code{_GNU_SOURCE} when compiling your C files.  When you compile on GNU
 or GNU/Linux, this will enable the declarations of GNU library extension
@@ -3663,6 +3672,10 @@ ignore most of its arguments.
 @node Releases
 @section Making Releases
 @cindex packaging
+
+You should identify each release with a pair of version numbers, a
+major version and a minor.  We have no objection to using more than
+two numbers, but it is very unlikely that you really need them.
 
 Package the distribution of @code{Foo version 69.96} up in a gzipped tar
 file with the name @file{foo-69.96.tar.gz}.  It should unpack into a
