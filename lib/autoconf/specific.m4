@@ -517,9 +517,9 @@ AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
   [ac_header_dirent=$ac_hdr; break])
 # Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
 if test $ac_header_dirent = dirent.h; then
-AC_CHECK_LIB(dir, opendir, LIBS="-ldir $LIBS")
+AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
 else
-AC_CHECK_LIB(x, opendir, LIBS="-lx $LIBS")
+AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
 fi
 ])
 
@@ -1117,8 +1117,7 @@ if test $ac_have_func = no; then
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
 AC_CHECK_LIB(elf, elf_begin,
-  [LIBS="-lelf $LIBS" ac_have_func=yes; AC_DEFINE(SVR4)
-  AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")])
+  [LIBS="-lelf $LIBS" ac_have_func=yes; AC_DEFINE(SVR4)])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(inq_stats/cpustats.h,
@@ -1835,34 +1834,34 @@ else
   # libraries we check for below, so use a different variable.
   #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
   AC_CHECK_LIB(ICE, IceConnectionNumber,
-    [X_PRE_LIBS="-lSM -lICE $X_PRE_LIBS"])
+    [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"])
   LDFLAGS="$ac_save_LDFLAGS"
 
   # Check for system-dependent libraries X programs must link with.
 
   if test "$ISC" = yes; then
-    X_EXTRA_LIBS="-lnsl_s -linet $X_EXTRA_LIBS"
+    X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
   else
     # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
     # libraries were built with DECnet support.  And karl@cs.umb.edu says
     # the Alpha needs dnet_stub (dnet does not exist).
-    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="-ldnet $X_EXTRA_LIBS"])
+    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
     if test $ac_cv_lib_dnet = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
-        [X_EXTRA_LIBS="-ldnet_stub $X_EXTRA_LIBS"])
+        [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
     fi
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.
     # Not sure which flavor of 386 UNIX this is, but it seems harmless to
     # check for it.
-    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="-lnsl $X_EXTRA_LIBS"])
+    AC_CHECK_LIB(nsl, t_accept, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl"])
 
     # lieder@skyler.mavd.honeywell.com says without -lsocket,
     # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
     # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
     if test "`(uname) 2>/dev/null`" != IRIX; then
-      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="-lsocket $X_EXTRA_LIBS"])
+      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
     fi
   fi
 fi
@@ -1936,7 +1935,7 @@ AC_EGREP_CPP(yes,
 if test "$XENIX" = yes; then
   # Make sure -ldir precedes -lx.
   test $ac_header_dirent = dirent.h && LIBS="-ldir $LIBS"
-  LIBS="-lx $LIBS"
+  LIBS="$LIBS -lx"
 fi
 ])
 

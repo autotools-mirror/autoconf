@@ -1185,7 +1185,7 @@ AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
 AC_CACHE_VAL(ac_cv_lib_$1,
 [ac_save_LIBS="$LIBS"
-LIBS="-l$1 $LIBS $5"
+LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$1=yes", eval "ac_cv_lib_$1=no")dnl
 LIBS="$ac_save_LIBS"
 ])dnl
@@ -1217,7 +1217,7 @@ changequote([, ])dnl
 AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="$LIBS"
-LIBS="-l[]AC_LIB_NAME[] $LIBS $4"
+LIBS="-l[]AC_LIB_NAME[] $4 $LIBS"
 AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="$ac_save_LIBS"
 ])dnl
