@@ -16,3 +16,6 @@ state*
 syntax.sh expr
 *.log
 testsuite testsuite.tmp
+autom4te.cache
+command.in header.in link.in
+script.s4g

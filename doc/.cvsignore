@@ -7,7 +7,8 @@
 *.info
 *.ky
 *.log
-*.ma *.mas
+*.ac *.acs
+*.at *.ats
 *.ms *.mss
 *.ov *.ovs
 *.pg

@@ -8,3 +8,4 @@ configure.scan
 autoconf-[0-9].*
 *.log log
 releases
+autom4te.cache
