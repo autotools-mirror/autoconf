@@ -18,7 +18,7 @@
 # 02111-1307, USA.
 
 # We need a very up to date version of Autotest.
-m4_version_prereq([2.53])
+m4_version_prereq([2.57])
 
 # Used in many tests.
 m4_pattern_allow([^AS_EXIT$])
@@ -90,7 +90,7 @@ m4_define([AT_DATA_M4SUGAR],
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
 [AT_CHECK_AUTOM4TE([--language=m4sugar script.4s -o script $1],
-	  m4_default([$2], [0]), [$3], [$4])])
+	           [$2], [$3], [$4])])
 
 
 
@@ -113,8 +113,8 @@ m4_define([AT_DATA_M4SH],
 # AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -------------------------------------------------------
 m4_define([AT_CHECK_M4SH],
-[AT_CHECK([autom4te --language=m4sh script.as -o script $1],
-	  m4_default([$2], [0]), [$3], [$4])])
+[AT_CHECK_AUTOM4TE([--language=m4sh script.as -o script $1],
+	           [$2], [$3], [$4])])
 
 
 
@@ -359,7 +359,7 @@ AT_CHECK_CONFIGURE
 AT_CHECK_ENV
 
 AT_CLEANUP()dnl
-])# AT_CHECK_UPDATE
+])# AT_CHECK_AU_MACRO
 
 
 
@@ -368,4 +368,3 @@ AT_CLEANUP()dnl
 ## ----------------------- ##
 
 AT_INIT
-

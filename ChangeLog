@@ -1,5 +1,16 @@
 2003-08-27  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sugar.at (cross_warning): Make sure to enable the
+	output, so that we can track spurious m4sugar output.
+	* tests/local.at: Require 2.57.
+	(AT_CHECK_M4SUGAR, AT_CHECK_M4SH): Don't m4_default the arguments that
+	are defaulted by AT_CHECK anyway.
+	Use AT_CHECK_AUTOM4TE.
+	* lib/m4sugar/m4sugar.m4: There should be no output at all: add a
+	missing dnl.
+
+2003-08-27  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoheader.in: Issue the "Using auxiliary..." message only
 	when -Wobsolete is set.
 	Set it on by default.

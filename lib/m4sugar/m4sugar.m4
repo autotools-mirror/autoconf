@@ -222,7 +222,7 @@ m4_define([m4_warn],
 [_m4_warn([$1], [$2],
 m4_ifdef([m4_expansion_stack],
          [m4_defn([m4_expansion_stack])
-m4_location[: the top level]]))
+m4_location[: the top level]]))dnl
 ])
 
 
