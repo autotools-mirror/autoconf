@@ -11370,8 +11370,9 @@ instead of @code{AM_}.  But in order to ease the upgrading via
 @command{autoupdate}, bindings to such @code{AM_} macros are provided.
 
 Unfortunately Automake did not quote the name of these macros!
-Therefore, when @command{m4} find in @file{aclocal.m4} something like
-@samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, ...)}, @code{AM_TYPE_PTRDIFF_T} is
+Therefore, when @command{m4} finds something like
+@samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, ...)} in @file{aclocal.m4},
+@code{AM_TYPE_PTRDIFF_T} is
 expanded, replaced with its Autoconf definition.
 
 Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and will
