@@ -9,8 +9,6 @@ Required for 2.0:
 ------------------------------------------------------------------------------
 
 * Try it on Emacs configure.in, and adapt that to use the new features.
-Add equivalents of CFLAGS and LDFLAGS for the system to set,
-and which CPP will also use?
 
 ------------------------------------------------------------------------------
 

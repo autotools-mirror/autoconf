@@ -1970,8 +1970,8 @@ shell commands @var{action-if-false}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.  It does not use @code{CFLAGS}, because -g, -O,
-etc. are not valid options to many C preprocessors. 
+been called already.  It uses @code{CPPFLAGS}, but not @code{CFLAGS},
+because -g, -O, etc. are not valid options to many C preprocessors.
 @end defmac
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -1981,8 +1981,8 @@ Create a test C program to see whether a function whose body consists of
 @code{#include} statements needed by the code in @var{function-body}.
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.  This
-macro uses @code{CFLAGS} and @code{LDFLAGS} and @code{LIBS} when
-compiling.
+macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
+@code{LDFLAGS}, and @code{LIBS} when compiling.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
@@ -1991,8 +1991,9 @@ compiling.
 backquote substitutions are performed.  If it compiles and links
 successfully and returns an exit status of 0 when executed, run shell
 commands @var{action-if-true}.  Otherwise run shell commands
-@var{action-if-false}.  This macro uses @code{CFLAGS} and @code{LDFLAGS}
-and @code{LIBS} when compiling.
+@var{action-if-false}.  This macro uses @code{CFLAGS} or
+@code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS} when
+compiling.
 
 If the C compiler being used does not produce executables that run on
 the system where @code{configure} is being run, then the test program is
@@ -2191,7 +2192,8 @@ set @var{variable} to that value (verbatim), otherwise set it to 1.
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADER} it should not contain any @samp{#}
 characters, as @code{make} tends to eat them.  To use a shell variable
-as the value, use @code{AC_DEFINE_UNQUOTED} instead.
+or a value containing the @code{m4} quote characters @samp{[} or
+@samp{]}, use @code{AC_DEFINE_UNQUOTED} instead.
 
 @code{AC_OUTPUT} substitutes the values defined by this macro as the
 variable @code{DEFS} in the file(s) that it generates (typically
@@ -2303,6 +2305,7 @@ command.  As an example, Autoconf automatically calls this macro like this:
 @example
 AC_SUBST_DEFAULT(CFLAGS, -g)dnl
 AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
+AC_SUBST_DEFAULT(CPPFLAGS, )dnl
 AC_SUBST_DEFAULT(LDFLAGS, )dnl
 @end example
 @end defmac
@@ -3228,19 +3231,25 @@ directory, this is the same as @code{srcdir}.
 @end defvar
 
 @defvar CFLAGS
-Debugging, optimization, header file search directory, and other
-miscellaneous options for the C compiler.  The default value is
-@samp{-g} if it is not set in the environment when @code{configure} runs.
-@code{configure} uses this variable when compiling programs to test
-for C features.
+Debugging and optimization options for the C compiler.  The default
+value is @samp{-g} if it is not set in the environment when
+@code{configure} runs.  @code{configure} uses this variable when
+compiling programs to test for C features.
+@end defvar
+
+@defvar CPPFLAGS
+Header file search directory (@samp{-I@var{dir}}) and any other
+miscellaneous options for the C preprocessor and compiler.  The default
+value is empty if it is not set in the environment when @code{configure}
+runs.  @code{configure} uses this variable when compiling or
+preprocessing programs to test for C features.
 @end defvar
 
 @defvar CXXFLAGS
-Debugging, optimization, header file search directory, and other
-miscellaneous options for the C++ compiler.  The default value is
-@samp{-g} if it is not set in the environment when @code{configure} runs.
-@code{configure} uses this variable when compiling programs to test
-for C++ features.
+Debugging and optimization options for the C++ compiler.  The default
+value is @samp{-g} if it is not set in the environment when
+@code{configure} runs.  @code{configure} uses this variable when
+compiling programs to test for C++ features.
 @end defvar
 
 @defvar DEFS
@@ -3250,11 +3259,10 @@ is called, @code{configure} replaces @samp{@@DEFS@@} with
 @end defvar
 
 @defvar LDFLAGS
-Stripping, library search directories, and other miscellaneous options
-for the linker.  The default value is empty if it is not set in the
-environment when @code{configure} runs.
-@code{configure} uses this variable when linking programs to test
-for C features.
+Stripping (@samp{-s}) and any other miscellaneous options for the
+linker.  The default value is empty if it is not set in the environment
+when @code{configure} runs.  @code{configure} uses this variable when
+linking programs to test for C features.
 @end defvar
 
 @defvar LIBS

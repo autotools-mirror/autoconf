@@ -480,6 +480,7 @@ AC_SUBST(exec_prefix)dnl
 AC_SUBST(DEFS)dnl
 AC_SUBST_DEFAULT(CFLAGS, -g)dnl
 AC_SUBST_DEFAULT(CXXFLAGS, -g)dnl
+AC_SUBST_DEFAULT(CPPFLAGS, )dnl
 AC_SUBST_DEFAULT(LDFLAGS, )dnl
 ])dnl
 dnl
@@ -915,8 +916,8 @@ AC_DEFUN(AC_LANG_C,
 [define([AC_LANG], [C])dnl
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='${CPP}'
-ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='${CPP} $CPPFLAGS'
+ac_compile='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])dnl
 dnl
 dnl AC_LANG_CPLUSPLUS()
@@ -924,8 +925,8 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 [define([AC_LANG], [CPLUSPLUS])dnl
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='${CXXCPP}'
-ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='${CXXCPP} $CPPFLAGS'
+ac_compile='${CXX-gcc} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])dnl
 dnl
 dnl Push the current language on a stack.
