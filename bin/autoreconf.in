@@ -391,6 +391,5 @@ parse_args;
 
 # Autoreconf all the given configure.ac.  A while loop, not a for,
 # since the list can change at runtime because of AC_CONFIG_SUBDIRS.
-print STDERR "@ARGV\n";
 autoreconf (shift @ARGV)
   while (@ARGV);

@@ -8253,7 +8253,7 @@ $ @kbd{sed '=' <lineno |}
 7. 7
 8. 8
 9. 9
-10. 10 
+10. 10
 @end group
 @end example
 
@@ -11465,7 +11465,8 @@ test group, or a sequence of test groups all addressing some common
 functionality in the package.  In such cases, file @file{testsuite.at}
 only initializes the whole validation suite, and sometimes do elementary
 health checking, before listing include statements for all other test
-files.
+files.  The special file @file{package.m4} is automatically included if
+found.
 
 The validation scripts that Autotest produces are by convention called
 @command{testsuite}.  When run, @command{testsuite} executes each test
@@ -11473,10 +11474,10 @@ group in turn, producing only one summary line per test to say if that
 particular test succeeded or failed.  At end of all tests, summarizing
 counters get printed.  If any test failed, one debugging script gets
 automatically generated for each test group which failed.  These
-debugging scripts are named @file{debug-@var{nn}.sh}, using for @var{nn}
+debugging scripts are named @file{testsuite.@var{nn}}, where @var{nn} is
 the sequence number of the test group.  In the ideal situation, none of
-the tests tests fail, and consequently, no debugging script is generated
-out of validation.
+the tests fail, and consequently, no debugging script is generated out
+of validation.
 
 The automatic generation of debugging scripts for failed test has the
 purpose of easing the chase for bugs.
@@ -11487,10 +11488,10 @@ Some of this information, common for all validation suites, is provided
 through the file @file{atconfig}, automatically created by
 @code{AC_CONFIG_TESTDIR}.  For configuration informations which your
 testing environment specifically needs, you might prepare an optionnal
-file named @file{atlocal.in}.  The configuration process produces
-@file{atconfig} and @file{atlocal} out of these two input files, and
-these two produced files are automatically read by the @file{testsuite}
-script.
+file named @file{atlocal.in}, instantiated by @code{AC_CONFIG_FILES}.
+The configuration process produces @file{atconfig} and @file{atlocal}
+out of these two input files, and these two produced files are
+automatically read by the @file{testsuite} script.
 
 Here is a diagram showing the relationship between files.
 
@@ -11498,16 +11499,22 @@ Here is a diagram showing the relationship between files.
 Files used in preparing a software package for distribution:
 
 @example
-testsuite.at --> autom4te* --> testsuite
+subfile-1.at ->.
+    ...         \
+subfile-i.at ---->-- testsuite.at -->.
+    ...         /                     \
+subfile-n.at ->'                       >-- autom4te* -->testsuite
+                                      /
+                      [package.m4] ->'
 @end example
 
 @noindent
 Files used in configuring a software package:
 
 @example
-                                     .-> atconfig
+                                     .-> package.m4
                                     /
-[atlocal.in] -->  config.status* --<
+[atlocal.in] -->  config.status* --<---> atconfig
                                     \
                                      `-> [atlocal]
 @end example
@@ -11520,7 +11527,7 @@ atconfig -->.                    .--> testsuite.log
              \                  /
               >-- testsuite* --<
              /                  \
-[atlocal] ->'                    `--> [debug-@var{nn}.sh*]
+[atlocal] ->'                    `--> [testsuite.@var{nn}*]
 @end example
 
 @node Writing testsuite.at
@@ -11535,37 +11542,66 @@ test groups.  Each test group begins with one call to @code{AT_SETUP},
 it contains an arbitrary number of shell commands or calls to
 @code{AT_CHECK}, and it completes with one call to @code{AT_CLEANUP}.
 
-@defmac AT_INIT (@var{program})
+@defmac AT_INIT (@ovar{name})
 @atindex INIT
 @c FIXME: Not clear, plus duplication of the information.
-Initialize Autotest. This macro accepts a single argument, which is the
-file name of the executable program to use for checking version.  At the
-time the validation suite gets executed, the program search path should
-be already preset so the proper executable will be selected.  This is
-usually guaranteed through some @file{Makefile} magic.
-
-@var{program} is then used to check that the test suite is ready to be
-run (@var{program} was found), and corresponds to the current version of
-the package (@samp{@var{program} --version} is run and checked against
-the package version).
+Initialize Autotest.  Giving a @var{name} to the test suite is
+encouraged if your package includes several test suites.  In any case,
+the test suite always displays the package name and version.  It also
+inherits the package bug report address.
 @end defmac
+
+@defmac AT_TESTED (@var{executables})
+@atindex TESTED
+Log the path and answer to @option{--version} of each program in
+space-separated list @var{executables}.  Several invocations register
+new executables, in other words, don't fear registering one program
+several times.
+@end defmac
+
+Autotest test suites rely on the @code{PATH} to find the tested program.
+This saves from generating the absolute paths to the various tools, and
+makes it possible to test installed programs.  Therefore, knowing what
+programs are being exercised is crucial to understand some problems in
+the test suite itself, or its occasional misuses.  It is a good idea to
+also subscribe foreign programs you depend upon, to ease incompatibility
+diagnostics.
+
+@sp 1
 
 @defmac AT_SETUP (@var{test-group-name})
 @atindex SETUP
-This macro starts a group of related tests, all to be executed in the same
-subshell.  It accepts a single argument, which holds a few words (no more
-than about 30 or 40 characters) quickly describing the purpose of the test
-group being started.
+This macro starts a group of related tests, all to be executed in the
+same subshell.  It accepts a single argument, which holds a few words
+(no more than about 30 or 40 characters) quickly describing the purpose
+of the test group being started.
+@end defmac
+
+@defmac AT_KEYWORDS (@var{keywords})
+@atindex KEYWORDS
+Associate the space-separated list of @var{keywords} to the enclosing
+test group.  This makes it possible to run ``slices'' of the test suite.
+For instance if some of your test groups exercise some @samp{foo}
+feature, then using @samp{AT_KEYWORDS(foo)} lets you run
+@samp{./testsuite -k foo} to run exclusively these test groups.  The
+@var{title} of the test group is automatically recorded to
+@code{AT_KEYWORDS}.
+
+Several invocations within a test group accumulate new keywords.  In
+other words, don't fear registering several times the same keyword in a
+test group.
 @end defmac
 
 @defmac AT_CLEANUP (@ovar{generated-files})
 @atindex CLEANUP
-This macro completes a group of related tests.  It accepts a single argument,
-which is a white separated list of files which have been created within the
-test group.  It has the effect of recursively removing those listed files.
-There is no need to list @file{stdout}, @file{stderr}, nor files created
-with @code{AT_DATA}.
+This macro completes a group of related tests.  It accepts a single
+argument, which is a white separated list of files which have been
+created within the test group.  It has the effect of recursively
+removing those listed files.  There is no need to list @file{stdout},
+@file{stderr}, nor files created with @code{AT_DATA}.
 @end defmac
+
+@sp 1
 
 @defmac AT_DATA (@var{file}, @var{contents})
 @atindex DATA
@@ -11600,50 +11636,95 @@ Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
 @section Running @command{testsuite} Scripts
 @cindex @command{testsuite}
 
-The @command{testsuite} script, as well as all generated debugging
-scripts, accept the following options.
-
-@c FIXME: Completely obsolete now...
+Autotest test suites support the following arguments:
 
 @table @samp
-
 @item --help
-This option inhibits normal execution of the script, and merely gives a
-summary of available options instead.
+@itemx -h
+Display the list of options and exit successfully.
 
 @item --version
-This option inhibits normal execution of the script, and gives the package
-name and version numbers to be tested.
+@itemx -V
+Display the version of the test suite and exit successfully.
 
-@item -e
-This option is only meaningful for the full testsuite, it is not really
-useful for generated debugging scripts.  If any test fails in the suite,
-immediately abort testing and inhibit normal clean up.  The default action
-is to clean up and proceed with the following tests, as the usual goal of
-the whole validation suite is to produce result counts and debugging scripts.
+@item --clean
+@itemx -c
+Remove all the files the test suite might have created and exit.  Meant
+for @code{clean} Makefile targets.
 
-@item -n
-For checking the contents of standard output and standard error output, their
-contents are normally redirected into special files named @file{stdout}
-and @file{stderr}.  This option prevents the redirection to occur, so
-standard error output and standard error output appear @emph{normally}.
-This option causes any testing of the contents of standard output or
-standard error output to be bypassed.
+@item --list
+@itemx -l
+List all the tests (or only the selection), including their possible
+keywords.
+@end table
 
-@item -s
-When the full test suite is generating debugging scripts, or when the
-generated debugging scripts get executed, many informative details are given
-about what is being done.  This option inhibits those informative details.
+@sp 1
 
-@item -v
-This option is only meaningful for the full testsuite, as it is automatically
-selected in the generated debugging scripts (unless option @samp{-s} is
-also used).  It has the purpose of forcing more verbosity in the detailed
-output of what is being done.
+By default all the tests are performed (or described with
+@option{--list}) in the default environment first silently, then
+verbosely, but the environment, set of tests, and verbosity level can be
+tuned:
 
-@item -x
-This option is transmitted to the shell at appropriate places, and asks for
-a trace of command execution.  This option also implies option @samp{-n}.
+@table @samp
+@item @var{variable}=@var{value}
+Set the environment @var{variable} to @var{value}.  Do not run
+@samp{FOO=foo ./testsuite} as debugging scripts would then run in a
+different environment.
+
+@cindex @code{AUTOTEST_PATH}
+The variable @code{AUTOTEST_PATH} specifies the testing path to prepend
+to @code{PATH}.  It handles specially relative paths (not starting with
+@samp{/}): they are considered to be relative to the top level of the
+package being built.  All the directories are made absolute, first
+starting from the top level @emph{build} tree, then from the
+@emph{source} tree.  For instance @samp{./testsuite
+AUTOTEST_PATH=tests:bin} for a @file{/src/foo-1.0} source package built
+in @file{/tmp/foo} results in @samp{/tmp/foo/tests:/tmp/foo/bin} and
+then @samp{/src/foo-1.0/tests:/src/foo-1.0/bin} being prepended to
+@code{PATH}.
+
+@item @var{number}
+@itemx @var{number}-@var{number}
+@itemx @var{number}-
+@itemx -@var{number}
+Add the corresponding test groups, with obvious semantics, to the
+selection.
+
+@item --keywords=@var{keywords}
+@itemx -k @var{keywords}
+Add to the selection the test groups which title or keywords (arguments
+to @code{AT_SETUP} or @code{AT_KEYWORDS}) match @emph{all} the keywords
+of the comma separated list @var{keywords}.
+
+Running @samp{./testsuite -k autoupdate,FUNC} will select all the tests
+tagged with @samp{autoupdate} @emph{and} @samp{FUNC} (as in
+@samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH} etc.) while
+@samp{./testsuite -k autoupdate -k FUNC} runs all the tests tagged with
+@samp{autoupdate} @emph{or} @samp{FUNC}.
+
+@item --errexit
+@itemx -e
+If any test fails, immediately abort testing.  It implies
+@option{--debug}: post test group clean up, debugging script generation,
+and logging are inhibited.  This option is meant for the full test
+suite, it is not really useful for generated debugging scripts.
+
+@item --verbose
+@itemx -v
+Force more verbosity in the detailed output of what is being done.  This
+is the default for debugging scripts.
+
+@item --debug
+@itemx -d
+Do not remove the files after a test group was performed ---but they are
+still removed @emph{before}, therefore using this option is sane when
+running several test groups.  Do not create debugging scripts.  Do not
+log (in order to preserve supposedly existing full log file).  This is
+the default for debugging scripts.
+
+@item --trace
+@itemx -x
+Trigger shell tracing of the test groups.
 @end table
 
 
@@ -11683,8 +11764,8 @@ below.
 
 @end itemize
 
-With Automake, here is a minimal example about how to link @samp{make check}
-with a validation suite.
+With Automake, here is a minimal example about how to link @samp{make
+check} with a validation suite.
 
 @example
 EXTRA_DIST = testsuite.at testsuite
@@ -11692,7 +11773,6 @@ TESTSUITE = $(srcdir)/testsuite
 check-local: atconfig atlocal $(TESTSUITE)
         $(SHELL) $(TESTSUITE)
 
-AUTOM4TE = autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
         $(AUTOTEST) -I $(srcdir) $@.at -o $@.tmp

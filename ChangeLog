@@ -1,3 +1,8 @@
+2001-11-05  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (testsuite Invocation): Update.
+	(Writing testsuite.at): Update.
+
 2001-11-03  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi: s/@code/@command/ where appropriate.
@@ -28,7 +33,6 @@
 	Move aclocal.m4t only if it exists.
 	Reported by Ezra Peisach.
 
-	
 2001-11-03  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (&parse_args): Work only on the configure.ac
