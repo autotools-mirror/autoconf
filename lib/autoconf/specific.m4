@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -1089,10 +1089,13 @@ NEED_SETGID=false
 AC_SUBST(NEED_SETGID)dnl
 ac_have_func=no
 
-# Check for the 4.4BSD definition of getloadavg.
-AC_CHECK_LIB(util, getloadavg, [LIBS="$LIBS -lutil" ac_have_func=yes
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
-AC_CHECK_LIB(kvm, kvm_open,  LIBS="$LIBS -lkvm")])
+# If it is needed, it will be needed to detect getloadavg in -lutil.
+ac_LIBS_before_kvm="$LIBS"
+AC_CHECK_LIB(kvm, kvm_open, ac_LIBS_kvm=-lkvm, ac_LIBS_kvm=)
+# Check for the 4.4BSD definition of getloadavg.
+AC_CHECK_LIB(util, getloadavg, [
+LIBS="$ac_LIBS_before_kvm -lutil $ac_LIBS_kvm" ac_have_func=yes])
 
 if test $ac_have_func = no; then
 # There is a commonly available library for RS/6000 AIX.
