@@ -24,6 +24,7 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
+TEXI2DVI = texi2dvi
 M4 = m4
 
 prefix = /usr/local
@@ -59,11 +60,21 @@ autoheader: autoheader.sh
 	rm -f $@
 	$(editsh) $(srcdir)/autoheader.sh > $@ && chmod +x $@
 
+info: autoconf.info standards.info
+
 autoconf.info: autoconf.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --no-split --output=$@
 
 standards.info: standards.texi make-stds.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --no-split --output=$@
+
+dvi: autoconf.dvi standards.dvi
+
+autoconf.dvi: autoconf.texi
+	$(TEXI2DVI) $(srcdir)/autoconf.texi
+
+standards.dvi: standards.texi make-stds.texi
+	$(TEXI2DVI) $(srcdir)/standards.texi
 
 check:
 
@@ -78,9 +89,15 @@ install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(datadir)/acconfig.h
 	test ! -r $(srcdir)/aclocal.m4 || $(INSTALL_DATA) $(srcdir)/aclocal.m4 $(datadir)/aclocal.m4
 	-if test -f autoconf.info; then d=.; else d=$(srcdir); fi; \
-	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info
+	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info; \
+        if install-info --version >/dev/null 2>&1; then \
+          install-info --infodir=$(infodir) $$d/autoconf.info; \
+        else true; fi
 	-if test -f standards.info; then d=.; else d=$(srcdir); fi; \
-	$(INSTALL_DATA) $$d/standards.info $(infodir)/standards.info
+	$(INSTALL_DATA) $$d/standards.info $(infodir)/standards.info; \
+        if install-info --version >/dev/null 2>&1; then \
+          install-info --infodir=$(infodir) $$d/standards.info; \
+        else true; fi
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader
