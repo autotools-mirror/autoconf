@@ -3527,12 +3527,29 @@ If the @code{error_at_line} function is not found, require an
 @code{AC_LIBOBJ} replacement of @samp{error}.
 @end defmac
 
-@defmac AC_FUNC_FNMATCH
+@defmac AC_FUNC_FNMATCH (@ovar{dir})
 @acindex FUNC_FNMATCH
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
-If the @code{fnmatch} function is available and works (unlike the one on
-Solaris 2.4), define @code{HAVE_FNMATCH}.
+If the @code{fnmatch} function conforms to @acronym{POSIX}, define
+@code{HAVE_FNMATCH}.  Detect common implementation bugs, for example,
+the bugs in Solaris 2.4.  If @var{dir} is nonempty, the files
+@file{fnmatch.c}, @file{fnmatch_loop.c}, and @file{fnmatch_.h} in the
+directory @var{dor} are assumed to contain a copy of the source code
+of @acronym{GNU} @code{fnmatch}.  If necessary, this source code is
+compiled as an @code{AC_LIBOBJ} replacement, and the @file{fnmatch_.h}
+file is linked to @file{fnmatch.h} so that it can be included in place
+of the system @code{<fnmatch.h>}.
+@end defmac
+
+@defmac AC_FUNC_FNMATCH_GNU (@ovar{dir})
+@acindex FUNC_FNMATCH_GNU
+@c @fuindex fnmatch
+@prindex @code{fnmatch}
+Behave like @code{AC_FUNC_FNMATCH(@var{dir})}, but also test whether
+@code{fnmatch} supports @acronym{GNU} extensions.  Detect common
+implementation bugs, for example, the bugs in the @acronym{GNU} C
+Library 2.1.
 @end defmac
 
 @defmac AC_FUNC_FORK
@@ -5346,6 +5363,14 @@ available or the environments they provide.
 @cvindex _ALL_SOURCE
 If on AIX, define @code{_ALL_SOURCE}.  Allows the use of some @sc{bsd}
 functions.  Should be called before any macros that run the C compiler.
+@end defmac
+
+@defmac AC_GNU_SOURCE
+@acindex GNU_SOURCE
+@cvindex _GNU_SOURCE
+If using the GNU C library, define @code{_GNU_SOURCE}.  Allows the use
+of some @acronym{GNU} functions.  Should be called before any macros
+that run the C compiler.
 @end defmac
 
 @defmac AC_ISC_POSIX
