@@ -413,7 +413,7 @@ m4_define([_AC_PROG_GREP],
 # $ac_cv_path_VARIABLE to the path of an acceptable program, or else
 # _AC_PATH_PROG_FEATURE_CHECK will report that no acceptable program
 # was found, and abort.  If a suitable $ac_path_VARIABLE is found,
-# `break 2' will accept it without any further checks.
+# `break 3' will accept it without any further checks.
 m4_define([_AC_PATH_PROG_FEATURE_CHECK],
 [# Extract the first word of "$2" to use in msg output
 if test -z "$$1"; then
@@ -456,7 +456,7 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
   # Check for GNU $1 and select it if it is found.
   _AC_PATH_PROG_FLAVOR_GNU([$$1],
     [$2="$$1"
-    break 2
+    break 3
   ])
 
   ac_count=0
