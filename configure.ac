@@ -1,7 +1,7 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 # 02111-1307, USA.
 
 # We need AC_CONFIG_TESTDIR.
-AC_PREREQ([2.55])
+AC_PREREQ([2.57])
 
 AC_INIT([GNU Autoconf], [2.57a], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
@@ -29,7 +29,7 @@ AC_CONFIG_SRCDIR([ChangeLog])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_FILES([config/Makefile])
 
-AM_INIT_AUTOMAKE([check-news 1.7.1 dist-bzip2 readme-alpha])
+AM_INIT_AUTOMAKE([check-news 1.7.2 dist-bzip2 readme-alpha])
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])
