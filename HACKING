@@ -90,6 +90,7 @@ In configure.ac.  Run `make', check this in.
 ** Announce
 Complete/fix the announcement file, and send it at least to
 info@gnu.org (if a real release, or a ``serious beta''),
+autotools-announce@gnu.org (even for ``non serious beta''),
 autoconf@gnu.org, automake@gnu.org, libtool@gnu.org, and
 bug-gnu-utils@gnu.org.
 
