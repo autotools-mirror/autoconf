@@ -1,5 +1,19 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	Fix the handling of `./configure foo=bar' and test it.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS, getopt loop): Always define
+	ac_optarg as the rhs of the first `=', not only on `-.*=', so that
+	`configure var=val' defines ac_optarg=val.
+	Improve the robustness to shell special characters:
+	 - Use grep when checking that shell variable names are valid.
+	 - Quote the quotes in ac_optarg before `eval var='$ac_optarg''.
+	 - Quote the quotes when building ac_configure_args.
+
+	* tests/torture.m4: Test that `./configure foo=bar' works properly.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	Resynchronize `INSTALL' with the current `configure', and
 	conversely...
 

@@ -79,3 +79,41 @@ AT_DATA(expout,
 
 dnl Remove test files.
 rm -f dummy dummy.in
+
+
+
+dnl ## ------------------------------------------------------ ##
+dnl ## Check that `configure' and `config.status' honor their ##
+dnl ## interface.                                             ##
+dnl ## ------------------------------------------------------ ##
+
+dnl We run `./configure result=val' and verify that (i) `configure'
+dnl correctly receives `val' and (ii) correctly passes it to
+dnl `config.status', which we check by running `config.status
+dnl --recheck' (which *must* preserve the value of `result').
+
+AT_SETUP(command line interface)
+
+AT_DATA(configure.in,
+[[AC_INIT
+echo "result=$result"
+AC_OUTPUT
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
+
+AT_CHECK([./configure result=result | sed -n -e 's/^result=//p'], 0,
+         [result
+], ignore)
+AT_CHECK([./config.status --recheck | sed -n -e 's/^result=//p'], 0,
+         [result
+], ignore)
+
+AT_CHECK([./configure result="\"'$" | sed -n -e 's/^result=//p'], 0,
+         ["'$
+], ignore)
+AT_CHECK([./config.status --recheck | sed -n -e 's/^result=//p'], 0,
+         ["'$
+], ignore)
+
+AT_CLEANUP(configure config.status config.log config.cache)
