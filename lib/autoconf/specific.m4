@@ -1194,28 +1194,35 @@ AC_DEFUN([AC_OBJEXT],   [])
 # add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
+#
+# This macro is called by AC_LANG_COMPILER, the latter being required
+# by the AC_COMPILE_IFELSE macros, so use AC_TRY_EVAL.
 m4_define([_AC_EXEEXT],
 [AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
 [case "$CYGWIN $MINGW32 $EMXOS2" in
   *yes*) ac_cv_exeext=.exe ;;
   *)
-  _AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-  [if test ! -f conftest; then
-    for ac_file in conftest.*; do
-       case $ac_file in
-         *.$ac_ext | *.o | *.obj | *.xcoff) ;;
-         *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`;;
-       esac
-     done
-   fi],
-  [AC_MSG_ERROR([cannot compile and link])])
-  test -n "$ac_cv_exeext" && ac_cv_exeext=no;;
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+    if AC_TRY_EVAL(ac_link); then
+      # If both `conftest.exe' and `conftest' are `present' (well, observable)
+      # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+      # work properly (i.e., refer to `conftest.exe'), while it won't with
+      # `rm'.
+      for ac_file in `ls conftest.exe conftest conftest.* 2>/dev/null`; do
+    	case $ac_file in
+    	  *.$ac_ext | *.o | *.obj | *.xcoff | *.tds) ;;
+    	  *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`
+    	     break;;
+    	esac
+      done
+      rm -f conftest.$ac_objext conftest.$ac_ext
+    else
+      AC_MSG_ERROR([cannot compile and link])
+    fi
+    ;;
 esac])
-EXEEXT=
-test "$ac_cv_exeext" != no && EXEEXT=$ac_cv_exeext
-dnl Setting ac_exeext will implicitly change the ac_link command.
+AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
 ac_exeext=$EXEEXT
-AC_SUBST(EXEEXT)dnl
 ])# _AC_EXEEXT
 
 
@@ -1228,24 +1235,26 @@ AC_SUBST(EXEEXT)dnl
 # When the w32 free Borland C++ command line compiler links a program
 # (conftest.exe), it also produces a file named `conftest.tds' in
 # addition to `conftest.obj'
+#
+# This macro is called by AC_LANG_COMPILER, the latter being required
+# by the AC_COMPILE_IFELSE macros, so use AC_TRY_EVAL.
 m4_define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 if AC_TRY_EVAL(ac_compile); then
   for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
     case $ac_file in
-      *.o | *.obj )       ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`;;
       *.$ac_ext | *.tds ) ;;
-      *)                  ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`;;
+      *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
+         break;;
     esac
   done
+  rm -f conftest.$ac_objext conftest.$ac_ext
 else
-  rm -f conftest.$ac_ext
   AC_MSG_ERROR([cannot compile])
 fi])
 AC_SUBST(OBJEXT, $ac_cv_objext)dnl
 ac_objext=$ac_cv_objext
-rm -f conftest.$ac_objext conftest.$ac_ext
 ])# _AC_OBJEXT
 
 

@@ -1,5 +1,16 @@
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_EXEEXT, _AC_OBJEXT): Make the two macros more
+	alike: a loop over a sorted list of possible files.
+	Don't cleanup on errors, the trap will do it.
+	Cleanup when there are no errors.
+	(_AC_EXEEXT): Use the empty string instead of `no' as the cached
+	value.
+	Be sure to prefer `.exe' to `' when the two are observable.
+	Suggested by Lars and Earnie.
+
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
 	When using Cygwin, in spite of all their efforts, it may happen
 	that `confestval' be read in binary mode.  The shell then fails to
 	properly strip the \r\n.
