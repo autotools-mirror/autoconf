@@ -8488,7 +8488,7 @@ aliases'': let it convert @samp{$@{1+"$@@"@}} into @samp{"$@@"} by
 itself:
 
 @example
-test -n "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
+test "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
 
