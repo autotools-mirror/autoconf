@@ -94,10 +94,6 @@
 
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
-	* autoheader.sh: Use run_m4f, not run_m4.
-
-2000-03-14  Akim Demaille  <akim@epita.fr>
-
 	Introduce AC_SUBST(VAR, VAL).
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Stop global double quoting,
