@@ -1235,36 +1235,10 @@ would use @option{-W none,obsolete}.
 
 @cindex Back trace
 @cindex Macro invocation stack
-@command{autoconf} displays a back trace for errors, but not for
-warnings; if you want them, just pass @option{-W error}.  For instance,
-on this @file{configure.ac}:
-
-@example
-AC_DEFUN([INNER],
-[AC_TRY_RUN([exit (0)])])
-
-AC_DEFUN([OUTER],
-[INNER])
-
-AC_INIT
-OUTER
-@end example
-
-@noindent
-you get:
-
-@example
-$ @kbd{autoconf -Wcross}
-configure.ac:8: warning: AC_TRY_RUN called without default \
-to allow cross compiling
-$ @kbd{autoconf -Wcross,error}
-configure.ac:8: error: AC_TRY_RUN called without default \
-to allow cross compiling
-acgeneral.m4:3044: AC_TRY_RUN is expanded from...
-configure.ac:2: INNER is expanded from...
-configure.ac:5: OUTER is expanded from...
-configure.ac:8: the top level
-@end example
+Because @command{autoconf} uses @command{autom4te} behind the scenes, it
+displays a back trace for errors, but not for warnings; if you want
+them, just pass @option{-W error}.  @xref{Invoking autom4te}, for some
+examples.
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
@@ -1276,7 +1250,7 @@ just make @var{format} as long as needed.
 
 The @var{format} is a regular string, with newlines if desired, and
 several special escape codes.  It defaults to @samp{$f:$l:$n:$%}; see
-below for details on the @var{format}.
+@ref{Invoking autom4te}, for details on the @var{format}.
 
 @item --initialization
 @itemx -i
@@ -1289,55 +1263,8 @@ results in a noticeable speedup, but can be disabled by this option.
 It is often necessary to check the content of a @file{configure.ac}
 file, but parsing it yourself is extremely fragile and error-prone.  It
 is suggested that you rely upon @option{--trace} to scan
-@file{configure.ac}.
-
-The @var{format} of @option{--trace} can use the following special
-escapes:
-
-@table @samp
-@item $$
-The character @samp{$}.
-
-@item $f
-The filename from which @var{macro} is called.
-
-@item $l
-The line number from which @var{macro} is called.
-
-@item $d
-The depth of the @var{macro} call.  This is an M4 technical detail that
-you probably don't want to know about.
-
-@item $n
-The name of the @var{macro}.
-
-@item $@var{num}
-The @var{num}th argument of the call to @var{macro}.
-
-@item $@@
-@itemx $@var{sep}@@
-@itemx $@{@var{separator}@}@@
-All the arguments passed to @var{macro}, separated by the character
-@var{sep} or the string @var{separator} (@samp{,} by default).  Each
-argument is quoted, i.e., enclosed in a pair of square brackets.
-
-@item $*
-@itemx $@var{sep}*
-@itemx $@{@var{separator}@}*
-As above, but the arguments are not quoted.
-
-@item $%
-@itemx $@var{sep}%
-@itemx $@{@var{separator}@}%
-As above, but the arguments are not quoted, all new line characters in
-the arguments are smashed, and the default separator is @samp{:}.
-
-The escape @samp{$%} produces single-line trace outputs (unless you put
-newlines in the @samp{separator}), while @samp{$@@} and @samp{$*} do
-not.
-@end table
-
-For instance, to find the list of variables that are substituted, use:
+@file{configure.ac}.  For instance, to find the list of variables that
+are substituted, use:
 
 @example
 @group
@@ -3386,8 +3313,9 @@ in the presence of another that is not already in @code{LIBS}.
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex SEARCH_LIBS
 Search for a library defining @var{function} if it's not already
-available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
-with no libraries, then for each library listed in @var{search-libs}.
+available.  This equates to calling
+@samp{AC_LINK_IFELSE([AC_LANG_CALL([@var{function}])])} first with no
+libraries, then for each library listed in @var{search-libs}.
 
 Add @option{-l@var{library}} to @code{LIBS} for the first library found
 to contain @var{function}, and run @var{action-if-found}.  If the
@@ -5030,7 +4958,7 @@ consider the test failed if any warnings have been reported.
 The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
-@code{AC_TRY_RUN} (@pxref{Run Time})
+@code{AC_RUN_IFELSE} (@pxref{Run Time}).
 
 @defmac AC_C_BACKSLASH_A
 @acindex HAVE_C_BACKSLASH_A
@@ -5284,8 +5212,8 @@ does not.
 
 The following macros check for Fortran 77 compiler characteristics.  To
 check for characteristics not listed here, use @code{AC_COMPILE_IFELSE}
-(@pxref{Running the Compiler}) or @code{AC_TRY_RUN} (@pxref{Run Time}),
-making sure to first set the current language to Fortran 77
+(@pxref{Running the Compiler}) or @code{AC_RUN_IFELSE} (@pxref{Run
+Time}), making sure to first set the current language to Fortran 77
 @code{AC_LANG(Fortran 77)} (@pxref{Language Choice}).
 
 
@@ -6107,24 +6035,22 @@ your program initializes itself.
 
 If you really need to test for a run-time behavior while configuring,
 you can write a test program to determine the result, and compile and
-run it using @code{AC_TRY_RUN}.  Avoid running test programs if
+run it using @code{AC_RUN_IFELSE}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
 cross-compiling.
 
-@defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
-@acindex TRY_RUN
+@defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{action-if-cross-compiling})
+@acindex RUN_IFELSE
 If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
 Otherwise, run shell commands @var{action-if-false}.
 
-This macro double quotes @var{program}, the text of a program in the
-current language (@pxref{Language Choice}), on which shell variable and
-back quote substitutions are performed.  This macro uses @code{CFLAGS}
-or @code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS}
-when compiling.
+The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.  This
+macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
+@code{LDFLAGS}, and @code{LIBS}
 
-If the C compiler being used does not produce executables that run on
-the system where @command{configure} is being run, then the test program is
+If the compiler being used does not produce executables that run on the
+system where @command{configure} is being run, then the test program is
 not run.  If the optional shell commands @var{action-if-cross-compiling}
 are given, they are run instead.  Otherwise, @command{configure} prints
 an error message and exits.
@@ -6141,24 +6067,24 @@ tired of receiving ``bug reports''.
 
 Try to provide a pessimistic default value to use when cross-compiling
 makes run-time tests impossible.  You do this by passing the optional
-last argument to @code{AC_TRY_RUN}.  @command{autoconf} prints a warning
-message when creating @command{configure} each time it encounters a call to
-@code{AC_TRY_RUN} with no @var{action-if-cross-compiling} argument
-given.  You may ignore the warning, though users will not be able to
-configure your package for cross-compiling.  A few of the macros
-distributed with Autoconf produce this warning message.
+last argument to @code{AC_RUN_IFELSE}.  @command{autoconf} prints a
+warning message when creating @command{configure} each time it
+encounters a call to @code{AC_RUN_IFELSE} with no
+@var{action-if-cross-compiling} argument given.  You may ignore the
+warning, though users will not be able to configure your package for
+cross-compiling.  A few of the macros distributed with Autoconf produce
+this warning message.
 
 To configure for cross-compiling you can also choose a value for those
 parameters based on the canonical system name (@pxref{Manual
 Configuration}).  Alternatively, set up a test results cache file with
 the correct values for the host system (@pxref{Caching Results}).
 
-To provide a default for calls of @code{AC_TRY_RUN} that are embedded in
-other macros, including a few of the ones that come with Autoconf, you
-can call @code{AC_PROG_CC} before running them.  Then, if the shell
-variable @code{cross_compiling} is set to @samp{yes}, use an alternate
-method to get the results instead of calling the macros.
-
+To provide a default for calls of @code{AC_RUN_IFELSE} that are embedded
+in other macros, including a few of the ones that come with Autoconf,
+you can test whether the shell variable @code{cross_compiling} is set to
+@samp{yes}, and then use an alternate method to get the results instead
+of calling the macros.
 
 
 @node Systemology
@@ -6230,18 +6156,18 @@ track of whether the remaining cases need to be checked.
 AC_MSG_CHECKING([how to get file system type])
 fstype=no
 # The order of these tests is important.
-AC_TRY_CPP([#include <sys/statvfs.h>
-#include <sys/fstyp.h>],
-           [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statvfs.h>
+#include <sys/fstyp.h>]])],
+                  [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
 if test $fstype = no; then
-  AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/fstyp.h>],
-             [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
+#include <sys/fstyp.h>]])],
+                  [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
 fi
 if test $fstype = no; then
-  AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/vmount.h>],
-             [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
+#include <sys/vmount.h>]])]),
+                  [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
 fi
 # (more cases omitted here)
 AC_MSG_RESULT([$fstype])
@@ -7455,7 +7381,7 @@ on this @file{configure.ac}:
 
 @example
 AC_DEFUN([INNER],
-[AC_TRY_RUN([exit (0)])])
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([exit (0)])])])
 
 AC_DEFUN([OUTER],
 [INNER])
@@ -7469,16 +7395,17 @@ you get:
 
 @example
 $ @kbd{autom4te -l autoconf -Wcross}
-configure.ac:8: warning: AC_TRY_RUN called without default \
+configure.ac:8: warning: AC_RUN_IFELSE called without default \
 to allow cross compiling
-$ @kbd{autom4te -l autoconf -Wcross,error}
-configure.ac:8: error: AC_TRY_RUN called without default \
+$ @kbd{autom4te -l autoconf -Wcross,error -f}
+configure.ac:8: error: AC_RUN_IFELSE called without default \
 to allow cross compiling
-acgeneral.m4:3044: AC_TRY_RUN is expanded from...
+acgeneral.m4:3044: AC_RUN_IFELSE is expanded from...
 configure.ac:2: INNER is expanded from...
 configure.ac:5: OUTER is expanded from...
 configure.ac:8: the top level
 @end example
+
 
 @item --melt
 @itemx -m
@@ -8366,7 +8293,7 @@ AC_CACHE_CHECK([for EMX OS/2 environment],
                                   [ac_cv_emxos2=no])])
 @end example
 
-When using @code{AC_TRY_RUN} or any macro that cannot work when
+When using @code{AC_RUN_IFELSE} or any macro that cannot work when
 cross-compiling, provide a pessimistic value (typically @samp{no}).
 
 Feel free to use various tricks to prevent auxiliary tools, such as
@@ -12419,11 +12346,12 @@ Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
 @acindex COMPILE_CHECK
-This is an obsolete version of @code{AC_TRY_COMPILE} (@pxref{Running the
-Compiler}), with the addition that it prints @samp{checking for
-@var{echo-text}} to the standard output first, if @var{echo-text} is
-non-empty.  Use @code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead
-to print messages (@pxref{Printing Messages}).
+This is an obsolete version of @code{AC_TRY_COMPILE} itself replaced by
+@code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}), with the
+addition that it prints @samp{checking for @var{echo-text}} to the
+standard output first, if @var{echo-text} is non-empty.  Use
+@code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead to print
+messages (@pxref{Printing Messages}).
 @end defmac
 
 @defmac AC_CONST
@@ -12985,7 +12913,7 @@ issue.
 
 @defmac AC_TEST_PROGRAM
 @acindex TEST_PROGRAM
-@code{AC_TRY_RUN}
+@code{AC_TRY_RUN}, replaced with @code{AC_RUN_IFELSE}.
 @end defmac
 
 @defmac AC_TIMEZONE
@@ -13057,6 +12985,14 @@ This macro is equivalent to
 [[@var{function-body}]])], [@var{action-if-true}],
 [@var{action-if-false}])}.
 @end defmac
+
+@defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
+@acindex TRY_RUN
+Same as @samp{AC_RUN_IFELSE([AC_LANG_SOURCE([[@var{program}]],
+[@var{action-if-true}], [@var{action-if-false}],
+[@var{action-if-cross-compiling}])} (@pxref{Run Time}).
+@end defmac
+
 
 @defmac AC_UID_T
 @acindex UID_T

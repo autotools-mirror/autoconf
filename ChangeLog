@@ -1,5 +1,16 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Run Time): Document AC_RUN_IFELSE.
+	Move the documentation of AC_TRY_RUN to...
+	(Obsolete Macros): here.
+	Adjust all the old samples still using AC_TRY_RUN to AC_RUN_IFELSE.
+	(autoconf Invocation): Remove the duplicates with `invoking
+	autom4te'.
+	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Don't use AC_TRY_RUN.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Likewise.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Generating Sources): Document AC_LANG_CALL
 	and AC_LANG_FUNC_LINK_TRY.
 	(Examining Libraries): Rename as...

@@ -586,13 +586,14 @@ fi
 
 if test $ac_cv_header_stdc = yes; then
   # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-  AC_TRY_RUN(
-[#include <ctype.h>
+  AC_RUN_IFELSE([AC_LANG_SOURCE(
+[[#include <ctype.h>
 #if ((' ' & 0x0FF) == 0x020)
 # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
 #else
-# define ISLOWER(c) (('a' <= (c) && (c) <= 'i') \
+# define ISLOWER(c) \
+                   (('a' <= (c) && (c) <= 'i') \
                      || ('j' <= (c) && (c) <= 'r') \
                      || ('s' <= (c) && (c) <= 'z'))
 # define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
@@ -608,7 +609,7 @@ main ()
         || toupper (i) != TOUPPER (i))
       exit(2);
   exit (0);
-}], , ac_cv_header_stdc=no, :)
+}]])], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
   AC_DEFINE(STDC_HEADERS, 1,

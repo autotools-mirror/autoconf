@@ -892,8 +892,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #endif
 ])], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=no])],
 [# It does not; compile a test program.
-AC_TRY_RUN(
-[int
+AC_RUN_IFELSE(
+[AC_LANG_SOURCE([[int
 main ()
 {
   /* Are we little or big endian?  From Harbison&Steele.  */
@@ -904,7 +904,9 @@ main ()
   } u;
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
-}], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes],
+}]])],
+              [ac_cv_c_bigendian=no],
+              [ac_cv_c_bigendian=yes],
 [# try to guess the endianness by grepping values into an object file
   ac_cv_c_bigendian=unknown
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
