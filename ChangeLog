@@ -1,3 +1,16 @@
+1999-10-02  Akim Demaille  <akim@epita.fr>
+
+	Remove hasbeen'ed macros from the documentation.
+
+	* autoconf.texi (Obsolete Macros): Document AC_HASBEEN.
+
+	* autoconf.texi (Libraries): Remove the documentation of
+	AC_HAVE_LIB.
+	(Particular Headers): likewise for AC_UNISTD_H, AC_MEMORY_H,
+	AC_USG.
+	(C Compiler Characteristics): Likewise for AC_INT_16_BITS,
+	AC_LONG_64_BITS.
+
 1999-10-01  Akim Demaille  <akim@epita.fr>
 
 	Make the handling of the configuration links (AC_LINK_FILES)

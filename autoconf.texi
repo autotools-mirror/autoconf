@@ -1952,16 +1952,6 @@ to cases where it is desirable to test for the library in the presence of
 another (which may not already be in @code{LIBS}).
 @end defmac
 
-@defmac AC_HAVE_LIBRARY (@var{library}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
-@maindex HAVE_LIBRARY
-This macro is equivalent to calling @code{AC_CHECK_LIB} with a
-@var{function} argument of @code{main}.  In addition, @var{library} can
-be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
-all of those cases, the compiler is passed @samp{-lfoo}.  However,
-@var{library} can not be a shell variable; it must be a literal name.
-This macro is considered obsolete.
-@end defmac
-
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
 @maindex SEARCH_LIBS
 Search for a library defining @var{function}, if it's not already
@@ -2525,20 +2515,11 @@ their usual interpretations.  Here is an example:
 @end example
 @end defmac
 
-@defmac AC_MEMORY_H
-@maindex MEMORY_H
-@cvindex NEED_MEMORY_H
-Define @code{NEED_MEMORY_H} if @code{memcpy}, @code{memcmp}, etc. are
-not declared in @file{string.h} and @file{memory.h} exists.  This macro
-is obsolete; instead, use @code{AC_CHECK_HEADERS(memory.h)}.  See the
-example for @code{AC_HEADER_STDC}.
-@end defmac
-
-@defmac AC_UNISTD_H
-@maindex UNISTD_H
-@cvindex HAVE_UNISTD_H
-Define @code{HAVE_UNISTD_H} if the system has @file{unistd.h}.  This
-macro is obsolete; instead, use @samp{AC_CHECK_HEADERS(unistd.h)}.
+@cvindex _POSIX_VERSION
+@code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
+POSIX.1 systems.  If there is no @file{unistd.h}, it is definitely not a
+POSIX.1 system.  However, some non-POSIX.1 systems do have
+@file{unistd.h}.
 
 The way to check if the system supports POSIX.1 is:
 
@@ -2555,22 +2536,6 @@ The way to check if the system supports POSIX.1 is:
 @end group
 @end example
 
-@cvindex _POSIX_VERSION
-@code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
-POSIX.1 systems.  If there is no @file{unistd.h}, it is definitely not a
-POSIX.1 system.  However, some non-POSIX.1 systems do have @file{unistd.h}.
-@end defmac
-
-@defmac AC_USG
-@maindex USG
-@cvindex USG
-Define @code{USG} if the system does not have @file{strings.h},
-@code{rindex}, @code{bzero}, etc.  This implies that it has
-@file{string.h}, @code{strrchr}, @code{memset}, etc.
-
-The symbol @code{USG} is obsolete.  Instead of this macro, see the
-example for @code{AC_HEADER_STDC}.
-@end defmac
 
 @node Generic Headers,  , Particular Headers, Header Files
 @subsection Generic Header Checks
@@ -2940,21 +2905,6 @@ AC_CHECK_SIZEOF(int *)
 defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
-@defmac AC_INT_16_BITS
-@maindex INT_16_BITS
-@cvindex INT_16_BITS
-If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
-This macro is obsolete; it is more general to use
-@samp{AC_CHECK_SIZEOF(int)} instead.
-@end defmac
-
-@defmac AC_LONG_64_BITS
-@maindex LONG_64_BITS
-@cvindex LONG_64_BITS
-If the C type @code{long int} is 64 bits wide, define
-@code{LONG_64_BITS}.  This macro is obsolete; it is more general to use
-@samp{AC_CHECK_SIZEOF(long)} instead.
-@end defmac
 
 
 @node Fortran 77 Compiler Characteristics, System Services, C Compiler Characteristics, Existing Tests
@@ -4469,6 +4419,20 @@ macro that is calling @code{AC_OBSOLETE}.  If @var{suggestion} is given,
 it is printed at the end of the warning message; for example, it can be
 a suggestion for what to use instead of @var{this-macro-name}.
 @end defmac
+
+Supporting old macros can quickly become a maintenance nightmare, so the
+temptation of removing obsolete macros is high.  The following macro
+intends to free the maintainer from this nightmare while still report an
+error to the users.
+
+@defmac AC_HASBEEN (@var{this-macro-name} @r{[}, @var{suggestion}@r{]})
+@maindex HASBEEN
+This is a stronger version of @code{AC_OBSOLETE} to be used when a macro
+is no longer implemented: @code{autoconf} dies on each occurence of
+@code{AC_HASBEEN}.  Macros which have been left obsolete for a long time
+are likely to be hasbeen'ed.
+@end defmac
+
 
 @node Manual Configuration, Site Configuration, Writing Macros, Top
 @chapter Manual Configuration
