@@ -1,5 +1,12 @@
 2001-09-30  Paul Eggert  <eggert@twinsun.com>
 
+	* lib/autoconf/status.m4 (AC_OUTPUT_MAKE_DEFS):
+	Don't use nested parenthesization.  This patch was originally
+	suggested to bug-autoconf by Philippe De Muyter on 2000-05-28,
+	but somehow it didn't get incorporated then.
+	* doc/autoconf.texi (Limitations of Usual Tools):
+	Clarify remark about sed and nested parenthesization.
+
 	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF):
 	Report an error if the size cannot be determined even though
 	the type exists.
