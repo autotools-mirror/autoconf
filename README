@@ -16,9 +16,10 @@ Autoconf, so that Autoconf's configure script can find it.  The
 configuration scripts produced by Autoconf are self-contained, so
 their users do not need to have Autoconf (or GNU M4).
 
-Some optional utilities that come with Autoconf use Perl.  However, it
-is not required in order to use the main Autoconf programs.  If it is
-not present, the affected Autoconf utilities will not be installed.
+Some optional utilities that come with Autoconf, autoscan and
+autoupdate, use Perl 5.5.  However, it is not required in order to use
+the main Autoconf programs.  If it is not present, the affected
+Autoconf utilities will not be installed.
 
 The file INSTALL should be distributed with packages that use
 Autoconf-generated configure scripts and Makefiles that conform to the
@@ -30,6 +31,14 @@ to maintain many similar sets of installation instructions.
 Be sure to read BUGS (especially if this Autoconf is not an official
 release) and INSTALL.
 
-Mail suggestions and bug reports for Autoconf to autoconf@gnu.org.
+This version of the package Autoconf uses a fixed version of Automake
+1.4.  If ever you alter some Makefile.am (i.e., if you hack Autoconf
+itself), you'll have to use either a more recent release of Automake,
+or download the patch from
+
+   http://packages.debian.org/stable/devel/automake.html
+
+Mail suggestions to autoconf@gnu.org, bug reports to
+autoconf-bugs@gnu.org, and patches to autoconf-patches@gnu.org.
 Please include the Autoconf version number, which you can get by
 running `autoconf --version'.
