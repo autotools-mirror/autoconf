@@ -820,12 +820,14 @@ EOF
     or die "$me: cannot open $me.cache/" . $req->cache . ": $!\n";
   while ($_ = $traces->getline)
     {
-      # Multiline traces.
+      # Trace with arguments, as the example above.  We don't try
+      # to match the trailing parenthesis as it might be on a
+      # separate line.
       s{^m4trace:(.+):(\d+): -(\d+)- ([^(]+)\((.*)$}
        {AT_$4([$1], [$2], [$3], [$4], $5};
-      # Single line traces, as the example above.
-      s{^m4trace:(.+):(\d+): -(\d+)- (.*)$}
-       {AT_$4([$1], [$2], [$3], [$4]};
+      # Traces without arguments, always on a single line.
+      s{^m4trace:(.+):(\d+): -(\d+)- ([^)]*)\n$}
+       {AT_$4([$1], [$2], [$3], [$4])\n};
       print $trace_m4 "$_";
     }
   $trace_m4->close;
