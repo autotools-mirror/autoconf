@@ -1,3 +1,11 @@
+2004-11-23  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Pretty Help Strings): Fix quoting issues
+	with the examples; fix the bug in MY_ARG_WITH example reported
+	by Alexandre Duret-Lutz.
+	* lib/autoconf/general.m4 (AC_ARG_ENABLE, AC_ARG_ENABLE): Enable
+	expansion of $1 in the comment emitted to configure.
+
 2004-11-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Pretty Help Strings): Fix typo
