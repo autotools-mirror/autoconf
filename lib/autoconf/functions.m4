@@ -392,17 +392,6 @@ AC_DEFUN([AC_FUNC_FNMATCH],
 ])# AC_FUNC_FNMATCH
 
 
-# AC_FUNC_FNMATCH_GNU
-# -------------------
-AC_DEFUN([AC_FUNC_FNMATCH_GNU],
-[AC_REQUIRE([AC_GNU_SOURCE])
-_AC_FUNC_FNMATCH_IF([GNU], [ac_cv_func_fnmatch_gnu],
-                    [AC_DEFINE([HAVE_FNMATCH], 1,
-                    [Define to 1 if your system has a working GNU `fnmatch'
-                    function.])])
-])# AC_FUNC_FNMATCH_GNU
-
-
 # _AC_LIBOBJ_FNMATCH
 # ------------------
 # Prepare the replacement of fnmatch.
@@ -429,14 +418,14 @@ AC_DEFUN([AC_REPLACE_FUNC_FNMATCH],
 ])# AC_REPLACE_FUNC_FNMATCH
 
 
-# AC_REPLACE_FUNC_FNMATCH_GNU
-# ---------------------------
-AC_DEFUN([AC_REPLACE_FNMATCH_GNU],
+# AC_FUNC_FNMATCH_GNU
+# -------------------
+AC_DEFUN([AC_FUNC_FNMATCH_GNU],
 [AC_REQUIRE([AC_GNU_SOURCE])
 _AC_FUNC_FNMATCH_IF([GNU], [ac_cv_func_fnmatch_gnu],
                     [rm -f $ac_config_libobj_dir/fnmatch.h],
                     [_AC_LIBOBJ_FNMATCH])
-])# AC_REPLACE_FUNC_FNMATCH_GNU
+])# AC_FUNC_FNMATCH_GNU
 
 
 # AU::AM_FUNC_FNMATCH

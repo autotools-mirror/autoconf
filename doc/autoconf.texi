@@ -3557,9 +3557,10 @@ broken/missing @code{fnmatch}.  See @code{AC_REPLACE_FNMATCH} below.
 @acindex FUNC_FNMATCH_GNU
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
-Behave like @code{AC_FUNC_FNMATCH}, but also test whether @code{fnmatch}
-supports @acronym{GNU} extensions.  Detect common implementation bugs,
-for example, the bugs in the @acronym{GNU} C Library 2.1.
+Behave like @code{AC_REPLACE_FNMATCH} (@emph{replace}) but also test
+whether @code{fnmatch} supports @acronym{GNU} extensions.  Detect common
+implementation bugs, for example, the bugs in the @acronym{GNU} C
+Library 2.1.
 @end defmac
 
 @defmac AC_FUNC_FORK
@@ -3922,14 +3923,6 @@ copy of the source code of @acronym{GNU} @code{fnmatch}.  If necessary,
 this source code is compiled as an @code{AC_LIBOBJ} replacement, and the
 @file{fnmatch_.h} file is linked to @file{fnmatch.h} so that it can be
 included in place of the system @code{<fnmatch.h>}.
-@end defmac
-
-@defmac AC_REPLACE_FNMATCH_GNU
-@acindex REPLACE_FNMATCH_GNU
-@c @fuindex fnmatch
-@prindex @code{fnmatch}
-Samr as @code{AC_REPLACE_FNMATCH}, but requiring the @acronym{GNU}
-extensions to @code{fnmatch} (see @code{AC_FUNC_FNMATCH_GNU}).
 @end defmac
 
 
