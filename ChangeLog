@@ -1,14 +1,19 @@
+2001-03-27  Lars J. Aas  <larsa@sim.no>
+
+	* acgeneral.m4 (AC_INIT_VERSION): Improved version information string
+	for `configure --version'.
+
 2001-03-27  Akim Demaille  <akim@epita.fr>
 
 	* autoheader.sh (config_h): Be robust to new lines when extracting
 	the first argument of AC_CONFIG_HEADERS.
 	Reported by Lars J. Aas.
 
-2001-03-27  Tim Van Holder <tim.van.holder@pandora.be>
+2001-03-27  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi: Minor tweaks.
 
-2001-03-27  Tim Van Holder <tim.van.holder@pandora.be>
+2001-03-27  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* Makefile.am, configure.in: autoupdate is a Perl script.
 
@@ -83,7 +88,7 @@
 	compile time, not run time.
 	Suggested by Nicolas Joly.
 
-2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
+2001-03-13  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* tests/aclocal.m4: Fix some typos.  Also ignore $PATH_SEPARATOR.
 	* tests/atconfig.in: Set PATH_SEPARATOR to the proper
@@ -93,7 +98,7 @@
 	deciding whether the help text is needed.
 	* tests/semantics.at: Use the correct path separator.
 
-2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
+2001-03-13  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* doc/autoconf.texi: Expand section on DOS issues.
 	Add link to the `doschk' package.  Fix minor typo.
@@ -182,7 +187,7 @@
 
 	* man/Makefile.am: autoupdate.1 now depends on autoupdate.in.
 
-2001-02-25  Tim Van Holder <tim.van.holder@pandora.be>
+2001-02-25  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* autoupdate.in: Support DOS paths.  Initialize $tmp to
 	avoid warnings.  Default $autoconf to 'autoconf'.

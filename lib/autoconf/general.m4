@@ -1371,7 +1371,7 @@ m4_define([_AC_INIT_VERSION],
   cat <<\EOF])dnl
 m4_ifset([AC_PACKAGE_STRING],
          [m4_divert_text([VERSION_BEGIN],
-                         [configure (AC_PACKAGE_STRING) AC_ACVERSION])])
+                         [AC_PACKAGE_STRING configure, by GNU Autoconf AC_ACVERSION])])
 m4_divert_text([VERSION_END],
 [EOF
   exit 0
