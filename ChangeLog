@@ -1,7 +1,7 @@
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
 	The test suite are sometimes assigning timings incorrectly.
-	Reported by Paivio Pollari.
+	Reported by Henk Krus.
 	Diagnosed by Nicolas Joly.
 
 	* lib/autotest/general.m4 (AT_CLEANUP): Rename AT_help as
