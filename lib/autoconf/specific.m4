@@ -52,9 +52,10 @@ AC_CHECK_PROG(CC, gcc, gcc, cc)
 
 AC_MSG_CHECKING(whether we are using GNU C)
 AC_CACHE_VAL(ac_cv_prog_gcc,
-[cat > conftest.c <<EOF
+[dnl The semicolon is to pacify NeXT's syntax-checking cpp.
+cat > conftest.c <<EOF
 #ifdef __GNUC__
-  yes
+  yes;
 #endif
 EOF
 if ${CC-cc} -E conftest.c 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
