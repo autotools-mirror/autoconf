@@ -1,3 +1,9 @@
+2001-02-06  Paul Eggert  <eggert@twinsun.com>
+
+	* acspecific.m4 (AC_SYS_LARGEFILE_TEST_INCLUDES): Don't reject
+	C++ compilers that are masquerading as C compilers, and that
+	incorrectly reject large integers.
+
 2001-02-07  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (AC_OUTPUT): Remove $(srcdir), ${srcdir} and
