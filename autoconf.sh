@@ -354,7 +354,7 @@ case $task in
 
     function undefined (file, line, macro)
     {
-      errprint(file ":" line ": error: undefined macro: " macro)
+      errprint(file ":" line ": error: possibly undefined macro: " macro)
     }
 
     # Body.
