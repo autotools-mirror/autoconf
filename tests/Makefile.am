@@ -67,7 +67,8 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 	cd $(top_builddir) && ./config.status tests/$@
 
 clean-local:
-	$(SHELL) $(TESTSUITE) --clean
+	test ! -f $(TESTSUITE) || $(SHELL) $(TESTSUITE) --clean
+	rm -f *.tmp
 	rm -rf autom4te.cache
 
 check-local: atconfig atlocal $(TESTSUITE)
