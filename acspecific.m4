@@ -105,7 +105,8 @@ rm -f conftest*
 dnl
 dnl Define SET_MAKE to set ${MAKE} if make doesn't.
 define(AC_SET_MAKE,
-[cat > conftestmake <<'EOF'
+[AC_CHECKING(whether ${MAKE-make} sets \$MAKE)
+cat > conftestmake <<'EOF'
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
