@@ -1,3 +1,8 @@
+2001-04-13  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Still more minor modifications for clarity,
+	felicity, and grammar.
+
 2001-04-11  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi (AC_F77_WRAPPERS): Mention C++ as well as C.
