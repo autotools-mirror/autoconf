@@ -1,3 +1,9 @@
+2000-07-13  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS): Properly
+	handle absolute input file names.
+	From Alexandre Oliva.
+
 2000-07-12 Martin Wilck <martin@tropos.de>
 
 	* aclang.m4 (AC_PROG_F77): Delete AC_BEFORE(AC_PROG_CPP) that

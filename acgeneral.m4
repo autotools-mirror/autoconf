@@ -4635,21 +4635,26 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   # First look for the input files in the build tree, otherwise in the
   # src tree.
   ac_file_inputs=`IFS=:
-     for f in $ac_file_in; do
-       case $f in
-       -) echo $tmp/stdin ;;
-       *) if test -f "$f"; then
-	    # Build tree or absolute
-            echo $f
-          elif test -f "$ac_given_srcdir/$f"; then
-            # Source tree
-            echo $ac_given_srcdir/$f
-          else
-            # /dev/null tree
-            AC_MSG_ERROR([cannot find input file \\`$f'])
-          fi;;
-       esac
-     done`
+    for f in $ac_file_in; do
+      case $f in
+      -) echo $tmp/stdin ;;
+      [[\\/$]]* | ?:[[\\/]]*)
+         # Absolute
+         test -f "$f" || AC_MSG_ERROR([cannot find input file \\`$f'])
+         echo $f;;
+      *) # Relative
+         if test -f "$f"; then
+           # Build tree
+           echo $f
+         elif test -f "$ac_given_srcdir/$f"; then
+           # Source tree
+           echo $ac_given_srcdir/$f
+         else
+           # /dev/null tree
+           AC_MSG_ERROR([cannot find input file \\`$f'])
+         fi;;
+      esac
+    done`
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
@@ -4777,21 +4782,26 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # First look for the input files in the build tree, otherwise in the
   # src tree.
   ac_file_inputs=`IFS=:
-     for f in $ac_file_in; do
-       case $f in
-       -) echo $tmp/stdin ;;
-       *) if test -f "$f"; then
-            # Build tree or absolute
-            echo $f
-          elif test -f "$ac_given_srcdir/$f"; then
-            # Source tree
-            echo $ac_given_srcdir/$f
-          else
-            # /dev/null tree
-            AC_MSG_ERROR([cannot find input file \\`$f'])
-          fi;;
-       esac
-     done`
+    for f in $ac_file_in; do
+      case $f in
+      -) echo $tmp/stdin ;;
+      [[\\/$]]* | ?:[[\\/]]*)
+         # Absolute
+         test -f "$f" || AC_MSG_ERROR([cannot find input file \\`$f'])
+         echo $f;;
+      *) # Relative
+         if test -f "$f"; then
+           # Build tree
+           echo $f
+         elif test -f "$ac_given_srcdir/$f"; then
+           # Source tree
+           echo $ac_given_srcdir/$f
+         else
+           # /dev/null tree
+           AC_MSG_ERROR([cannot find input file \\`$f'])
+         fi;;
+      esac
+    done`
   # Remove the trailing spaces.
   sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 
