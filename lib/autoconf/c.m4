@@ -1020,12 +1020,25 @@ $ac_kw foo_t foo () {return 0; }
 		    [ac_cv_c_inline=$ac_kw; break])
 done
 ])
+AH_VERBATIM([inline],
+[/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+#undef inline
+#endif])
 case $ac_cv_c_inline in
   inline | yes) ;;
-  no) AC_DEFINE(inline,,
-		[Define as `__inline' if that's what the C compiler calls it,
-		 or to nothing if it is not supported.]) ;;
-  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
+  *)
+    case $ac_cv_c_inline in
+      no) ac_val=;;
+      *) ac_val=$ac_cv_c_inline;;
+    esac
+    cat >>confdefs.h <<_ACEOF
+#ifndef __cplusplus
+#define inline $ac_val
+#endif
+_ACEOF
+    ;;
 esac
 ])# AC_C_INLINE
 
