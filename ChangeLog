@@ -1,5 +1,8 @@
 1999-04-08  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_PROG_CC): Try using the `cl' C compiler under
+	Cygwin. Contributed by Scott Stanton <stanton@scriptics.com>.
+	
 	* config.sub: Handle MPE/iX.
 
 1999-04-07  Ben Elliston  <bje@cygnus.com>

@@ -77,7 +77,7 @@ if test -z "$CC"; then
   AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
   if test -z "$CC"; then
     case "`uname -s`" in
-    *win32* | *WIN32*)
+    *win32* | *WIN32* | *CYGWIN*)
       AC_CHECK_PROG(CC, cl, cl) ;;
     esac
   fi
