@@ -84,7 +84,7 @@ AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
 MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/lib/autoconf/specific.m4               $(top_srcdir)/lib/autoconf/functions.m4               $(top_srcdir)/lib/autoconf/lang.m4               $(top_srcdir)/lib/autoconf/c.m4               $(top_srcdir)/lib/autoconf/fortran.m4               $(top_srcdir)/lib/autoconf/headers.m4               $(top_srcdir)/lib/autoconf/types.m4
 
 
-CLEANFILES =  	debug-*.sh state-* at-* stderr stdout 	autom4te.cache					script.s4g script.as script				configure configure.in configure.ac config.status config.cache 	config.log config.h.in config.hin config.h 	config.guess config.sub install-sh		expr						libtool ltconfig ltmain.sh
+CLEANFILES =  	debug-*.sh state-* at-* stderr stdout 	script.s4g script.as script				configure configure.in configure.ac config.status config.cache 	config.log config.h.in config.hin config.h 	config.guess config.sub install-sh		expr						libtool ltconfig ltmain.sh
 
 
 DISTCLEANFILES = atconfig testsuite testsuite.log
@@ -174,7 +174,7 @@ mostlyclean-am:  mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-generic mostlyclean-am
+clean-am:  clean-generic mostlyclean-am clean-local
 
 clean: clean-am
 
@@ -254,6 +254,9 @@ maintainer-check-posix: expr
 # Try using G++ as a C compiler.
 maintainer-check-c++:
 	CC=g++ make check
+
+clean-local:
+	-rm -rf autom4te.cache
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

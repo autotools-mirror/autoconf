@@ -329,7 +329,7 @@ distclean: distclean-recursive
 	-rm -f config.status
 
 maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
+		distclean-am maintainer-clean-local
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -357,6 +357,9 @@ html pdf:
 INSTALL.txt: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL.txt
 	cp $(srcdir)/INSTALL.txt $(srcdir)/INSTALL
+
+maintainer-clean-local:
+	-rm -rf autom4te.cache
 
 maintainer-check: maintainer-check-tests
 maintainer-check-tests:
