@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate May  4, 1998
+@set lastupdate May 18, 1998
 @c %**end of header
 
 @ifinfo
@@ -431,7 +431,7 @@ in a directory, use @code{readdir} or some other high-level interface.
 These will be supported compatibly by GNU.
 
 The preferred signal handling facilities are the BSD variant of
-@code{signal}, andthe @sc{posix} @code{sigaction} function; the
+@code{signal}, and the @sc{posix} @code{sigaction} function; the
 alternative USG @code{signal} interface is an inferior design.
 
 Nowadays, using the @sc{posix} signal functions may be the easiest way
