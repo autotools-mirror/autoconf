@@ -10292,13 +10292,13 @@ one:
         $(MAKE) two
 two:
         @@echo $(foo)
-% @kbd{make foo=bar}		# GNU make 3.79.1
+% @kbd{make foo=bar}            # GNU make 3.79.1
 bar
 make two
 make[1]: Entering directory `/home/adl'
 bar
 make[1]: Leaving directory `/home/adl'
-% @kbd{pmake foo=bar}		# BSD make
+% @kbd{pmake foo=bar}           # BSD make
 bar
 pmake two
 foo
@@ -13442,11 +13442,11 @@ following:
 subdir = tests
 
 atconfig: $(top_builddir)/config.status
-	cd $(top_builddir) && \
+        cd $(top_builddir) && \
            $(SHELL) ./config.status $(subdir)/$@
 
 atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
-	cd $(top_builddir) && \
+        cd $(top_builddir) && \
            $(SHELL) ./config.status $(subdir)/$@
 @end example
 
