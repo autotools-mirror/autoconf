@@ -320,6 +320,7 @@ M4 Quotation
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
+* Changequote is Evil::         Worse than INTERCAL: M4 + changequote
 * Quadrigraphs::                Another way to escape special characters
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 
@@ -6385,6 +6386,7 @@ former helps one to follow the latter.
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
+* Changequote is Evil::         Worse than INTERCAL: M4 + changequote
 * Quadrigraphs::                Another way to escape special characters
 * Quotation Rule Of Thumb::     One parenthesis, one quote
 @end menu
@@ -6644,6 +6646,58 @@ Commas and other active symbols are interpreted by @code{m4} before
 they are given to the macro, often not in the way the users expect.
 Also, because @code{qar} behaves differently from the other macros,
 it's an exception that should be avoided in Autoconf.
+
+@node Changequote is Evil
+@subsection @code{changequote} is Evil
+
+The temptation is often high to bypass proper quotation, in particular
+when it's late at night.  Then, many experienced Autoconf hackers
+finally surrender to the dark side of the force and use the ultimate
+weapon: @code{changequote}.
+
+The M4 builtin @code{changequote} belongs to a set of primitives that
+allow one to adjust the syntax of the language to adjust it to her
+needs.  For instance, by default M4 uses @samp{`} and @samp{'} as
+quotes, but in the context of shell programming (and actually of most
+programming languages), it's about the worst choice one can make:
+because of strings and back quoted expression in shell (such as
+@samp{'this'} and @samp{`that`}), because of literal characters in usual
+programming language (as in @samp{'0'}), there are many unbalanced
+@samp{`} and @samp{'}.  Proper M4 quotation then becomes a nightmare, if
+not impossible.  In order to make M4 useful in such a context, its
+designers have equipped it with @code{changequote}, which makes it
+possible to chose another pair of quotes.  M4sugar, M4sh, Autoconf, and
+Autotest all have chosen to use @samp{[} and @samp{]}.  Not especially
+because they are unlikely characters, but @emph{because they are
+characters unlikely to be unbalanced}.
+
+There are other magic primitives, such as @code{changecom} to specify
+what syntactic forms are comments (it is common to see
+@samp{changecom(<!--, -->)} when M4 is used to produce HTML pages),
+@code{changeword} and @code{changesyntax} to change other syntactic
+details (such as the character to denote the n-th argument, @samp{$} by
+default, the parenthesis around arguments etc.).
+
+These primitives are really meant to make M4 more useful for specific
+domains: they should be considered like command line options:
+@option{--quotes}, @option{--comments}, @option{--words}, and
+@code{--syntax}.  Nevertheless, they are implemented as M4 builtins, as
+it makes M4 libraries self contained (no need for additional options).
+
+There lies the problem...
+
+@sp 1
+
+The problem is that it is then tempting to use them in the middle of an
+M4 script, as opposed to its initialization.  This, if not carefully
+thought, can lead to disastrous effects: @emph{you are changing the
+language in the middle of the execution}.  Changing and restoring the
+syntax is often not enough: if you happened to invoke macros in between,
+these macros will be lost, as the current syntax will probably not be
+the one they were implemented with.
+
+@c FIXME: I've been looking for a short, real case example, but I
+@c lost them all :(
 
 
 @node Quadrigraphs

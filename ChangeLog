@@ -1,3 +1,7 @@
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Changequote is Evil): New.
+
 2002-03-03  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Portable Shell): Mention 32-byte #! length limit
