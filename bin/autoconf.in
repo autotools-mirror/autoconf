@@ -67,7 +67,7 @@ if test "x$as_myself" = x; then
   as_myself=$0
 fi
 if test ! -f "$as_myself"; then
-  { echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2
+  { echo "$as_me: error: cannot find myself; rerun with an absolute file name" >&2
    { (exit 1); exit 1; }; }
 fi
 
