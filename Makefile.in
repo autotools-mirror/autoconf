@@ -100,7 +100,7 @@ uninstall:
 	-rmdir $(datadir)
 	cd $(infodir); rm -f autoconf.info standards.info
 
-Makefile: Makefile.in config.status
+Makefile: Makefile.in
 	$(SHELL) config.status
 config.status: configure
 	$(SHELL) config.status --recheck
