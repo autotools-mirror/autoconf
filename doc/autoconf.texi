@@ -132,10 +132,9 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Site Configuration::          Local defaults for @code{configure}
 * Running configure scripts::   How to use the Autoconf output
 * Invoking config.status::      Recreating a configuration
-* Questions::                   Questions about Autoconf, with answers
-* Upgrading::                   Tips for upgrading from version 1
-* History::                     History of Autoconf
 * Obsolete Constructs::         Kept for backward compatibility
+* Questions::                   Questions about Autoconf, with answers
+* History::                     History of Autoconf
 * Environment Variable Index::  Index of environment variables used
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
@@ -326,21 +325,28 @@ Running @code{configure} Scripts
 * Environment Variables::       Defining environment variables.
 * Invoking configure::          Changing how @code{configure} runs
 
-Questions About Autoconf
+Obsolete Constructs
 
-* Distributing::                Distributing @code{configure} scripts
-* Why GNU m4::                  Why not use the standard @code{m4}?
-* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
-* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
+* Obsolete config.status Use::  Different calling convention
+* acconfig.h::                  Additional entries in @file{config.h.in}
+* Invoking autoupdate::         Automatic update of @file{configure.in}
+* Obsolete Macros::             Backward compatibility macros
+* Autoconf 1::                  Tips for upgrading your files
 
 Upgrading From Version 1
 
 * Changed File Names::          Files you might rename
 * Changed Makefiles::           New things to put in @file{Makefile.in}
 * Changed Macros::              Macro calls you might replace
-* Invoking autoupdate::         Replacing old macros in @code{configure.in}
 * Changed Results::             Changes in how to check test results
 * Changed Macro Writing::       Better ways to write your own macros
+
+Questions About Autoconf
+
+* Distributing::                Distributing @code{configure} scripts
+* Why GNU m4::                  Why not use the standard @code{m4}?
+* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
+* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 
 History of Autoconf
 
@@ -349,12 +355,6 @@ History of Autoconf
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
-
-Obsolete Constructs
-
-* Obsolete config.status Use::  Different calling convention
-* acconfig.h::                  Additional entries in @file{config.h.in}
-* Obsolete Macros::             Backward compatibility macros
 
 @end detailmenu
 @end menu
@@ -429,7 +429,7 @@ It uses features that some @sc{unix} versions of @code{m4} do not have,
 including @sc{gnu} @code{m4} 1.3.  You must use version 1.4 or later of
 @sc{gnu} @code{m4}.
 
-@xref{Upgrading}, for information about upgrading from version 1.
+@xref{Autoconf 1}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.
 @xref{Questions}, for answers to some common questions about Autoconf.
 
@@ -6807,7 +6807,7 @@ may use comes with Autoconf.
 
 @c ============================================== Recreating a Configuration
 
-@node Invoking config.status, Questions, Running configure scripts, Top
+@node Invoking config.status, Obsolete Constructs, Running configure scripts, Top
 @chapter Recreating a Configuration
 @cindex @code{config.status}
 
@@ -6919,676 +6919,9 @@ The calling convention of @file{config.status} has changed, see
 @ref{Obsolete config.status Use}, for details.
 
 
-@c ================================================ Questions About Autoconf.
-
-@node Questions, Upgrading, Invoking config.status, Top
-@chapter Questions About Autoconf
-
-Several questions about Autoconf come up occasionally.  Here some of them
-are addressed.
-
-@menu
-* Distributing::                Distributing @code{configure} scripts
-* Why GNU m4::                  Why not use the standard @code{m4}?
-* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
-* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
-@end menu
-
-@node Distributing, Why GNU m4, Questions, Questions
-@section Distributing @code{configure} Scripts
-
-@display
-What are the restrictions on distributing @code{configure}
-scripts that Autoconf generates?  How does that affect my
-programs that use them?
-@end display
-
-There are no restrictions on how the configuration scripts that Autoconf
-produces may be distributed or used.  In Autoconf version 1, they were
-covered by the @sc{gnu} General Public License.  We still encourage
-software authors to distribute their work under terms like those of the
-GPL, but doing so is not required to use Autoconf.
-
-Of the other files that might be used with @code{configure},
-@file{config.h.in} is under whatever copyright you use for your
-@file{configure.in}, since it is derived from that file and from the
-public domain file @file{acconfig.h}.  @file{config.sub} and
-@file{config.guess} have an exception to the GPL when they are used with
-an Autoconf-generated @code{configure} script, which permits you to
-distribute them under the same terms as the rest of your package.
-@file{install-sh} is from the X Consortium and is not copyrighted.
-
-@node Why GNU m4, Bootstrapping, Distributing, Questions
-@section Why Require @sc{gnu} @code{m4}?
-
-@display
-Why does Autoconf require @sc{gnu} @code{m4}?
-@end display
-
-Many @code{m4} implementations have hard-coded limitations on the size
-and number of macros, which Autoconf exceeds.  They also lack several
-builtin macros that it would be difficult to get along without in a
-sophisticated application like Autoconf, including:
-
-@example
-builtin
-indir
-patsubst
-__file__
-__line__
-@end example
-
-Autoconf requires version 1.4 or above of @sc{gnu} @code{m4} because it
-uses frozen state files.
-
-Since only software maintainers need to use Autoconf, and since @sc{gnu}
-@code{m4} is simple to configure and install, it seems reasonable to
-require @sc{gnu} @code{m4} to be installed also.  Many maintainers of
-@sc{gnu} and other free software already have most of the @sc{gnu}
-utilities installed, since they prefer them.
-
-@node Bootstrapping, Why Not Imake, Why GNU m4, Questions
-@section How Can I Bootstrap?
-
-@display
-If Autoconf requires @sc{gnu} @code{m4} and @sc{gnu} @code{m4} has an
-Autoconf @code{configure} script, how do I bootstrap?  It seems like a
-chicken and egg problem!
-@end display
-
-This is a misunderstanding.  Although @sc{gnu} @code{m4} does come with
-a @code{configure} script produced by Autoconf, Autoconf is not required
-in order to run the script and install @sc{gnu} @code{m4}.  Autoconf is
-only required if you want to change the @code{m4} @code{configure}
-script, which few people have to do (mainly its maintainer).
-
-@node Why Not Imake,  , Bootstrapping, Questions
-@section Why Not Imake?
-
-@display
-Why not use Imake instead of @code{configure} scripts?
-@end display
-
-Several people have written addressing this question, so I include
-adaptations of their explanations here.
-
-The following answer is based on one written by Richard Pixley:
-
-@quotation
-Autoconf generated scripts frequently work on machines which it has
-never been set up to handle before.  That is, it does a good job of
-inferring a configuration for a new system.  Imake cannot do this.
-
-Imake uses a common database of host specific data.  For X11, this makes
-sense because the distribution is made as a collection of tools, by one
-central authority who has control over the database.
-
-@sc{gnu} tools are not released this way.  Each @sc{gnu} tool has a
-maintainer; these maintainers are scattered across the world.  Using a
-common database would be a maintenance nightmare.  Autoconf may appear
-to be this kind of database, but in fact it is not.  Instead of listing
-host dependencies, it lists program requirements.
-
-If you view the @sc{gnu} suite as a collection of native tools, then the
-problems are similar.  But the @sc{gnu} development tools can be
-configured as cross tools in almost any host+target permutation.  All of
-these configurations can be installed concurrently.  They can even be
-configured to share host independent files across hosts.  Imake doesn't
-address these issues.
-
-Imake templates are a form of standardization.  The @sc{gnu} coding
-standards address the same issues without necessarily imposing the same
-restrictions.
-@end quotation
-
-
-Here is some further explanation, written by Per Bothner:
-
-@quotation
-One of the advantages of Imake is that it easy to generate large
-Makefiles using @code{cpp}'s @samp{#include} and macro mechanisms.
-However, @code{cpp} is not programmable: it has limited conditional
-facilities, and no looping.  And @code{cpp} cannot inspect its
-environment.
-
-All of these problems are solved by using @code{sh} instead of
-@code{cpp}.  The shell is fully programmable, has macro substitution,
-can execute (or source) other shell scripts, and can inspect its
-environment.
-@end quotation
-
-
-Paul Eggert elaborates more:
-
-@quotation
-With Autoconf, installers need not assume that Imake itself is already
-installed and working well.  This may not seem like much of an advantage
-to people who are accustomed to Imake.  But on many hosts Imake is not
-installed or the default installation is not working well, and requiring
-Imake to install a package hinders the acceptance of that package on
-those hosts.  For example, the Imake template and configuration files
-might not be installed properly on a host, or the Imake build procedure
-might wrongly assume that all source files are in one big directory
-tree, or the Imake configuration might assume one compiler whereas the
-package or the installer needs to use another, or there might be a
-version mismatch between the Imake expected by the package and the Imake
-supported by the host.  These problems are much rarer with Autoconf,
-where each package comes with its own independent configuration
-processor.
-
-Also, Imake often suffers from unexpected interactions between
-@code{make} and the installer's C preprocessor.  The fundamental problem
-here is that the C preprocessor was designed to preprocess C programs,
-not @file{Makefile}s.  This is much less of a problem with Autoconf,
-which uses the general-purpose preprocessor @code{m4}, and where the
-package's author (rather than the installer) does the preprocessing in a
-standard way.
-@end quotation
-
-
-Finally, Mark Eichin notes:
-
-@quotation
-Imake isn't all that extensible, either.  In order to add new features to
-Imake, you need to provide your own project template, and duplicate most
-of the features of the existing one.  This means that for a sophisticated
-project, using the vendor-provided Imake templates fails to provide any
-leverage---since they don't cover anything that your own project needs
-(unless it is an X11 program).
-
-On the other side, though:
-
-The one advantage that Imake has over @code{configure}:
-@file{Imakefile}s tend to be much shorter (likewise, less redundant)
-than @file{Makefile.in}s.  There is a fix to this, however---at least
-for the Kerberos V5 tree, we've modified things to call in common
-@file{post.in} and @file{pre.in} @file{Makefile} fragments for the
-entire tree.  This means that a lot of common things don't have to be
-duplicated, even though they normally are in @code{configure} setups.
-@end quotation
-
-
-
-@c ================================================= Upgrading From Version 1.
-
-@node Upgrading, History, Questions, Top
-@chapter Upgrading From Version 1
-
-Autoconf version 2 is mostly backward compatible with version 1.
-However, it introduces better ways to do some things, and doesn't
-support some of the ugly things in version 1.  So, depending on how
-sophisticated your @file{configure.in} files are, you might have to do
-some manual work in order to upgrade to version 2.  This chapter points
-out some problems to watch for when upgrading.  Also, perhaps your
-@code{configure} scripts could benefit from some of the new features in
-version 2; the changes are summarized in the file @file{NEWS} in the
-Autoconf distribution.
-
-First, make sure you have @sc{gnu} @code{m4} version 1.1 or higher
-installed, preferably 1.3 or higher.  Versions before 1.1 have bugs that
-prevent them from working with Autoconf version 2.  Versions 1.3 and
-later are much faster than earlier versions, because as of version 1.3,
-@sc{gnu} @code{m4} has a more efficient implementation of diversions and
-can freeze its internal state in a file that it can read back quickly.
-
-@menu
-* Changed File Names::          Files you might rename
-* Changed Makefiles::           New things to put in @file{Makefile.in}
-* Changed Macros::              Macro calls you might replace
-* Invoking autoupdate::         Replacing old macros in @code{configure.in}
-* Changed Results::             Changes in how to check test results
-* Changed Macro Writing::       Better ways to write your own macros
-@end menu
-
-@node Changed File Names, Changed Makefiles, Upgrading, Upgrading
-@section Changed File Names
-
-If you have an @file{aclocal.m4} installed with Autoconf (as opposed to
-in a particular package's source directory), you must rename it to
-@file{acsite.m4}.  @xref{Invoking autoconf}.
-
-If you distribute @file{install.sh} with your package, rename it to
-@file{install-sh} so @code{make} builtin rules won't inadvertently
-create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
-looks for the script under both names, but it is best to use the new name.
-
-If you were using @file{config.h.top} or @file{config.h.bot}, you still
-can, but you will have less clutter if you merge them into
-@file{acconfig.h}.  @xref{Invoking autoheader}.
-
-@node Changed Makefiles, Changed Macros, Changed File Names, Upgrading
-@section Changed Makefiles
-
-Add @samp{@@CFLAGS@@}, @samp{@@CPPFLAGS@@}, and @samp{@@LDFLAGS@@} in
-your @file{Makefile.in} files, so they can take advantage of the values
-of those variables in the environment when @code{configure} is run.
-Doing this isn't necessary, but it's a convenience for users.
-
-Also add @samp{@@configure_input@@} in a comment to each input file for
-@code{AC_OUTPUT}, so that the output files will contain a comment saying
-they were produced by @code{configure}.  Automatically selecting the
-right comment syntax for all the kinds of files that people call
-@code{AC_OUTPUT} on became too much work.
-
-Add @file{config.log} and @file{config.cache} to the list of files you
-remove in @code{distclean} targets.
-
-If you have the following in @file{Makefile.in}:
-
-@example
-prefix = /usr/local
-exec_prefix = $(prefix)
-@end example
-
-@noindent
-you must change it to:
-
-@example
-prefix = @@prefix@@
-exec_prefix = @@exec_prefix@@
-@end example
-
-@noindent
-The old behavior of replacing those variables without @samp{@@}
-characters around them has been removed.
-
-@node Changed Macros, Invoking autoupdate, Changed Makefiles, Upgrading
-@section Changed Macros
-
-Many of the macros were renamed in Autoconf version 2.  You can still
-use the old names, but the new ones are clearer, and it's easier to find
-the documentation for them.  @xref{Obsolete Macros}, for a table showing the
-new names for the old macros.  Use the @code{autoupdate} program to
-convert your @file{configure.in} to using the new macro names.
-@xref{Invoking autoupdate}.
-
-Some macros have been superseded by similar ones that do the job better,
-but are not call-compatible.  If you get warnings about calling obsolete
-macros while running @code{autoconf}, you may safely ignore them, but
-your @code{configure} script will generally work better if you follow
-the advice it prints about what to replace the obsolete macros with.  In
-particular, the mechanism for reporting the results of tests has
-changed.  If you were using @code{echo} or @code{AC_VERBOSE} (perhaps
-via @code{AC_COMPILE_CHECK}), your @code{configure} script's output will
-look better if you switch to @code{AC_MSG_CHECKING} and
-@code{AC_MSG_RESULT}.  @xref{Printing Messages}.  Those macros work best
-in conjunction with cache variables.  @xref{Caching Results}.
-
-@node Invoking autoupdate, Changed Results, Changed Macros, Upgrading
-@section Using @code{autoupdate} to Modernize @code{configure}
-@cindex @code{autoupdate}
-
-The @code{autoupdate} program updates a @file{configure.in} file that
-calls Autoconf macros by their old names to use the current macro names.
-In version 2 of Autoconf, most of the macros were renamed to use a more
-uniform and descriptive naming scheme.  @xref{Macro Names}, for a
-description of the new scheme.  Although the old names still work
-(@pxref{Obsolete Macros}, for a list of the old macros and the corresponding
-new names), you can make your @file{configure.in} files more readable
-and make it easier to use the current Autoconf documentation if you
-update them to use the new macro names.
-
-@evindex SIMPLE_BACKUP_SUFFIX
-If given no arguments, @code{autoupdate} updates @file{configure.in},
-backing up the original version with the suffix @file{~} (or the value
-of the environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is
-set).  If you give @code{autoupdate} an argument, it reads that file
-instead of @file{configure.in} and writes the updated file to the
-standard output.
-
-@noindent
-@code{autoupdate} accepts the following options:
-
-@table @code
-@item --help
-@itemx -h
-Print a summary of the command line options and exit.
-
-@item --version
-@itemx -V
-Print the version number of Autoconf and exit.
-
-@item --verbose
-@itemx -v
-Report processing steps.
-
-@item --debug
-@itemx -d
-Don't remove the temporary files.
-
-@item --macrodir=@var{dir}
-@itemx -m @var{dir}
-@evindex AC_MACRODIR
-Look for the installed macro files in directory @var{dir}.  You can also
-set the @code{AC_MACRODIR} environment variable to a directory; this
-option overrides the environment variable.
-
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package file @file{aclocal.m4} in directory @var{dir}
-instead of in the current directory.
-@end table
-
-@node Changed Results, Changed Macro Writing, Invoking autoupdate, Upgrading
-@section Changed Results
-
-If you were checking the results of previous tests by examining the
-shell variable @code{DEFS}, you need to switch to checking the values of
-the cache variables for those tests.  @code{DEFS} no longer exists while
-@code{configure} is running; it is only created when generating output
-files.  This difference from version 1 is because properly quoting the
-contents of that variable turned out to be too cumbersome and
-inefficient to do every time @code{AC_DEFINE} is called.  @xref{Cache
-Variable Names}.
-
-For example, here is a @file{configure.in} fragment written for Autoconf
-version 1:
-
-@example
-AC_HAVE_FUNCS(syslog)
-case "$DEFS" in
-*-DHAVE_SYSLOG*) ;;
-*) # syslog is not in the default libraries.  See if it's in some other.
-  saved_LIBS="$LIBS"
-  for lib in bsd socket inet; do
-    AC_CHECKING(for syslog in -l$lib)
-    LIBS="$saved_LIBS -l$lib"
-    AC_HAVE_FUNCS(syslog)
-    case "$DEFS" in
-    *-DHAVE_SYSLOG*) break ;;
-    *) ;;
-    esac
-    LIBS="$saved_LIBS"
-  done ;;
-esac
-@end example
-
-Here is a way to write it for version 2:
-
-@example
-AC_CHECK_FUNCS(syslog)
-if test $ac_cv_func_syslog = no; then
-  # syslog is not in the default libraries.  See if it's in some other.
-  for lib in bsd socket inet; do
-    AC_CHECK_LIB($lib, syslog, [AC_DEFINE(HAVE_SYSLOG)
-      LIBS="$LIBS -l$lib"; break])
-  done
-fi
-@end example
-
-If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
-backslashes before quotes, you need to remove them.  It now works
-predictably, and does not treat quotes (except back quotes) specially.
-@xref{Setting Output Variables}.
-
-All of the boolean shell variables set by Autoconf macros now use
-@samp{yes} for the true value.  Most of them use @samp{no} for false,
-though for backward compatibility some use the empty string instead.  If
-you were relying on a shell variable being set to something like 1 or
-@samp{t} for true, you need to change your tests.
-
-@node Changed Macro Writing,  , Changed Results, Upgrading
-@section Changed Macro Writing
-
-When defining your own macros, you should now use @code{AC_DEFUN}
-instead of @code{define}.  @code{AC_DEFUN} automatically calls
-@code{AC_PROVIDE} and ensures that macros called via @code{AC_REQUIRE}
-do not interrupt other macros, to prevent nested @samp{checking@dots{}}
-messages on the screen.  There's no actual harm in continuing to use the
-older way, but it's less convenient and attractive.  @xref{Macro
-Definitions}.
-
-You probably looked at the macros that came with Autoconf as a guide for
-how to do things.  It would be a good idea to take a look at the new
-versions of them, as the style is somewhat improved and they take
-advantage of some new features.
-
-If you were doing tricky things with undocumented Autoconf internals
-(macros, variables, diversions), check whether you need to change
-anything to account for changes that have been made.  Perhaps you can
-even use an officially supported technique in version 2 instead of
-kludging.  Or perhaps not.
-
-To speed up your locally written feature tests, add caching to them.
-See whether any of your tests are of general enough usefulness to
-encapsulate into macros that you can share.
-
-
-@c ===================================================== History of Autoconf.
-
-@node History, Obsolete Constructs, Upgrading, Top
-@chapter History of Autoconf
-
-You may be wondering, Why was Autoconf originally written?  How did it
-get into its present form?  (Why does it look like gorilla spit?)  If
-you're not wondering, then this chapter contains no information useful
-to you, and you might as well skip it.  If you @emph{are} wondering,
-then let there be light@dots{}
-
-@menu
-* Genesis::                     Prehistory and naming of @code{configure}
-* Exodus::                      The plagues of @code{m4} and Perl
-* Leviticus::                   The priestly code of portability arrives
-* Numbers::                     Growth and contributors
-* Deuteronomy::                 Approaching the promises of easy configuration
-@end menu
-
-@node Genesis, Exodus, History, History
-@section Genesis
-
-In June 1991 I was maintaining many of the @sc{gnu} utilities for the
-Free Software Foundation.  As they were ported to more platforms and
-more programs were added, the number of @samp{-D} options that users had
-to select in the @file{Makefile} (around 20) became burdensome.
-Especially for me---I had to test each new release on a bunch of
-different systems.  So I wrote a little shell script to guess some of
-the correct settings for the fileutils package, and released it as part
-of fileutils 2.0.  That @code{configure} script worked well enough that
-the next month I adapted it (by hand) to create similar @code{configure}
-scripts for several other @sc{gnu} utilities packages.  Brian Berliner
-also adapted one of my scripts for his CVS revision control system.
-
-Later that summer, I learned that Richard Stallman and Richard Pixley
-were developing similar scripts to use in the @sc{gnu} compiler tools;
-so I adapted my @code{configure} scripts to support their evolving
-interface: using the file name @file{Makefile.in} as the templates;
-adding @samp{+srcdir}, the first option (of many); and creating
-@file{config.status} files.
-
-@node Exodus, Leviticus, Genesis, History
-@section Exodus
-
-As I got feedback from users, I incorporated many improvements, using
-Emacs to search and replace, cut and paste, similar changes in each of
-the scripts.  As I adapted more @sc{gnu} utilities packages to use
-@code{configure} scripts, updating them all by hand became impractical.
-Rich Murphey, the maintainer of the @sc{gnu} graphics utilities, sent me
-mail saying that the @code{configure} scripts were great, and asking if
-I had a tool for generating them that I could send him.  No, I thought,
-but I should!  So I started to work out how to generate them.  And the
-journey from the slavery of hand-written @code{configure} scripts to the
-abundance and ease of Autoconf began.
-
-Cygnus @code{configure}, which was being developed at around that time,
-is table driven; it is meant to deal mainly with a discrete number of
-system types with a small number of mainly unguessable features (such as
-details of the object file format).  The automatic configuration system
-that Brian Fox had developed for Bash takes a similar approach.  For
-general use, it seems to me a hopeless cause to try to maintain an
-up-to-date database of which features each variant of each operating
-system has.  It's easier and more reliable to check for most features on
-the fly---especially on hybrid systems that people have hacked on
-locally or that have patches from vendors installed.
-
-I considered using an architecture similar to that of Cygnus
-@code{configure}, where there is a single @code{configure} script that
-reads pieces of @file{configure.in} when run.  But I didn't want to have
-to distribute all of the feature tests with every package, so I settled
-on having a different @code{configure} made from each
-@file{configure.in} by a preprocessor.  That approach also offered more
-control and flexibility.
-
-I looked briefly into using the Metaconfig package, by Larry Wall,
-Harlan Stenn, and Raphael Manfredi, but I decided not to for several
-reasons.  The @code{Configure} scripts it produces are interactive,
-which I find quite inconvenient; I didn't like the ways it checked for
-some features (such as library functions); I didn't know that it was
-still being maintained, and the @code{Configure} scripts I had
-seen didn't work on many modern systems (such as System V R4 and NeXT);
-it wasn't very flexible in what it could do in response to a feature's
-presence or absence; I found it confusing to learn; and it was too big
-and complex for my needs (I didn't realize then how much Autoconf would
-eventually have to grow).
-
-I considered using Perl to generate my style of @code{configure}
-scripts, but decided that @code{m4} was better suited to the job of
-simple textual substitutions: it gets in the way less, because output is
-implicit.  Plus, everyone already has it.  (Initially I didn't rely on
-the @sc{gnu} extensions to @code{m4}.)  Also, some of my friends at the
-University of Maryland had recently been putting @code{m4} front ends on
-several programs, including @code{tvtwm}, and I was interested in trying
-out a new language.
-
-@node Leviticus, Numbers, Exodus, History
-@section Leviticus
-
-Since my @code{configure} scripts determine the system's capabilities
-automatically, with no interactive user intervention, I decided to call
-the program that generates them Autoconfig.  But with a version number
-tacked on, that name would be too long for old @sc{unix} file systems,
-so I shortened it to Autoconf.
-
-In the fall of 1991 I called together a group of fellow questers after
-the Holy Grail of portability (er, that is, alpha testers) to give me
-feedback as I encapsulated pieces of my handwritten scripts in @code{m4}
-macros and continued to add features and improve the techniques used in
-the checks.  Prominent among the testers were
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, who came up with the idea of making an @file{autoconf} shell
-script to run @code{m4} and check for unresolved macro calls; Richard
-Pixley, who suggested running the compiler instead of searching the file
-system to find include files and symbols, for more accurate results;
-Karl Berry, who got Autoconf to configure @TeX{} and added the
-macro index to the documentation; and Ian Taylor, who added support for
-creating a C header file as an alternative to putting @samp{-D} options
-in a @file{Makefile}, so he could use Autoconf for his UUCP package.  The
-alpha testers cheerfully adjusted their files again and again as the
-names and calling conventions of the Autoconf macros changed from
-release to release.  They all contributed many specific checks, great
-ideas, and bug fixes.
-
-@node Numbers, Deuteronomy, Leviticus, History
-@section Numbers
-
-In July 1992, after months of alpha testing, I released Autoconf 1.0,
-and converted many @sc{gnu} packages to use it.  I was surprised by how
-positive the reaction to it was.  More people started using it than I
-could keep track of, including people working on software that wasn't
-part of the @sc{gnu} Project (such as TCL, FSP, and Kerberos V5).
-Autoconf continued to improve rapidly, as many people using the
-@code{configure} scripts reported problems they encountered.
-
-Autoconf turned out to be a good torture test for @code{m4}
-implementations.  @sc{unix} @code{m4} started to dump core because of
-the length of the macros that Autoconf defined, and several bugs showed
-up in @sc{gnu} @code{m4} as well.  Eventually, we realized that we
-needed to use some features that only @sc{gnu} @code{m4} has.
-4.3@sc{bsd} @code{m4}, in particular, has an impoverished set of builtin
-macros; the System V version is better, but still doesn't provide
-everything we need.
-
-More development occurred as people put Autoconf under more stresses
-(and to uses I hadn't anticipated).  Karl Berry added checks for X11.
-david zuhn contributed C++ support.
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard made it diagnose invalid arguments.  Jim Blandy bravely coerced
-it into configuring @sc{gnu} Emacs, laying the groundwork for several
-later improvements.  Roland McGrath got it to configure the @sc{gnu} C
-Library, wrote the @code{autoheader} script to automate the creation of
-C header file templates, and added a @samp{--verbose} option to
-@code{configure}.  Noah Friedman added the @samp{--macrodir} option and
-@code{AC_MACRODIR} environment variable.  (He also coined the term
-@dfn{autoconfiscate} to mean ``adapt a software package to use
-Autoconf''.)  Roland and Noah improved the quoting protection in
-@code{AC_DEFINE} and fixed many bugs, especially when I got sick of
-dealing with portability problems from February through June, 1993.
-
-@node Deuteronomy,  , Numbers, History
-@section Deuteronomy
-
-A long wish list for major features had accumulated, and the effect of
-several years of patching by various people had left some residual
-cruft.  In April 1994, while working for Cygnus Support, I began a major
-revision of Autoconf.  I added most of the features of the Cygnus
-@code{configure} that Autoconf had lacked, largely by adapting the
-relevant parts of Cygnus @code{configure} with the help of david zuhn
-and Ken Raeburn.  These features include support for using
-@file{config.sub}, @file{config.guess}, @samp{--host}, and
-@samp{--target}; making links to files; and running @code{configure}
-scripts in subdirectories.  Adding these features enabled Ken to convert
-@sc{gnu} @code{as}, and Rob Savoye to convert DejaGNU, to using
-Autoconf.
-
-I added more features in response to other peoples' requests.  Many
-people had asked for @code{configure} scripts to share the results of
-the checks between runs, because (particularly when configuring a large
-source tree, like Cygnus does) they were frustratingly slow.  Mike
-Haertel suggested adding site-specific initialization scripts.  People
-distributing software that had to unpack on MS-DOS asked for a way to
-override the @file{.in} extension on the file names, which produced file
-names like @file{config.h.in} containing two dots.  Jim Avera did an
-extensive examination of the problems with quoting in @code{AC_DEFINE}
-and @code{AC_SUBST}; his insights led to significant improvements.
-Richard Stallman asked that compiler output be sent to @file{config.log}
-instead of @file{/dev/null}, to help people debug the Emacs
-@code{configure} script.
-
-I made some other changes because of my dissatisfaction with the quality
-of the program.  I made the messages showing results of the checks less
-ambiguous, always printing a result.  I regularized the names of the
-macros and cleaned up coding style inconsistencies.  I added some
-auxiliary utilities that I had developed to help convert source code
-packages to use Autoconf.  With the help of
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, I made the macros not interrupt each others' messages.  (That
-feature revealed some performance bottlenecks in @sc{gnu} @code{m4},
-which he hastily corrected!)  I reorganized the documentation around
-problems people want to solve.  And I began a test suite, because
-experience had shown that Autoconf has a pronounced tendency to regress
-when we change it.
-
-Again, several alpha testers gave invaluable feedback, especially
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn, and Mark
-Eichin.
-
-Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
-have free time again.  I think.  Yeah, right.)
-
-
 @c =================================================== Obsolete Constructs
 
-@node Obsolete Constructs, Environment Variable Index, History, Top
+@node Obsolete Constructs, Questions, Invoking config.status, Top
 @chapter Obsolete Constructs
 
 Autoconf changes, and along the years, some constructs are obsoleted.
@@ -7602,7 +6935,9 @@ understanding how to move to more modern constructs.
 @menu
 * Obsolete config.status Use::  Different calling convention
 * acconfig.h::                  Additional entries in @file{config.h.in}
+* Invoking autoupdate::         Automatic update of @file{configure.in}
 * Obsolete Macros::             Backward compatibility macros
+* Autoconf 1::                  Tips for upgrading your files
 @end menu
 
 @node Obsolete config.status Use, acconfig.h, Obsolete Constructs, Obsolete Constructs
@@ -7663,7 +6998,7 @@ no need to set @code{CONFIG_HEADERS} in the @code{make} rules, equally
 for @code{CONFIG_COMMANDS} etc.)
 
 
-@node acconfig.h, Obsolete Macros, Obsolete config.status Use, Obsolete Constructs
+@node acconfig.h, Invoking autoupdate, Obsolete config.status Use, Obsolete Constructs
 @section @file{acconfig.h}
 
 @cindex @file{acconfig.h}
@@ -7699,7 +7034,62 @@ another directory, they give you a way to put custom boilerplate in each
 individual @file{config.h.in}.
 
 
-@node Obsolete Macros,  , acconfig.h, Obsolete Constructs
+@node Invoking autoupdate, Obsolete Macros, acconfig.h, Obsolete Constructs
+@section Using @code{autoupdate} to Modernize @code{configure}
+@cindex @code{autoupdate}
+
+The @code{autoupdate} program updates a @file{configure.in} file that
+calls Autoconf macros by their old names to use the current macro names.
+In version 2 of Autoconf, most of the macros were renamed to use a more
+uniform and descriptive naming scheme.  @xref{Macro Names}, for a
+description of the new scheme.  Although the old names still work
+(@pxref{Obsolete Macros}, for a list of the old macros and the corresponding
+new names), you can make your @file{configure.in} files more readable
+and make it easier to use the current Autoconf documentation if you
+update them to use the new macro names.
+
+@evindex SIMPLE_BACKUP_SUFFIX
+If given no arguments, @code{autoupdate} updates @file{configure.in},
+backing up the original version with the suffix @file{~} (or the value
+of the environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is
+set).  If you give @code{autoupdate} an argument, it reads that file
+instead of @file{configure.in} and writes the updated file to the
+standard output.
+
+@noindent
+@code{autoupdate} accepts the following options:
+
+@table @code
+@item --help
+@itemx -h
+Print a summary of the command line options and exit.
+
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+@itemx -v
+Report processing steps.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files.
+
+@item --macrodir=@var{dir}
+@itemx -m @var{dir}
+@evindex AC_MACRODIR
+Look for the installed macro files in directory @var{dir}.  You can also
+set the @code{AC_MACRODIR} environment variable to a directory; this
+option overrides the environment variable.
+
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package file @file{aclocal.m4} in directory @var{dir}
+instead of in the current directory.
+@end table
+
+@node Obsolete Macros, Autoconf 1, Invoking autoupdate, Obsolete Constructs
 @section Obsolete Macros
 
 Several macros are obsoleted in Autoconf, for various reasons (typically
@@ -8385,8 +7775,614 @@ AC_EGREP_CPP(yes,
 @code{AC_DECL_YYTEXT}
 @end defmac
 
+@node Autoconf 1,  , Obsolete Macros, Obsolete Constructs
+@section Upgrading From Version 1
 
-@node Environment Variable Index, Output Variable Index, Obsolete Constructs, Top
+Autoconf version 2 is mostly backward compatible with version 1.
+However, it introduces better ways to do some things, and doesn't
+support some of the ugly things in version 1.  So, depending on how
+sophisticated your @file{configure.in} files are, you might have to do
+some manual work in order to upgrade to version 2.  This chapter points
+out some problems to watch for when upgrading.  Also, perhaps your
+@code{configure} scripts could benefit from some of the new features in
+version 2; the changes are summarized in the file @file{NEWS} in the
+Autoconf distribution.
+
+@menu
+* Changed File Names::          Files you might rename
+* Changed Makefiles::           New things to put in @file{Makefile.in}
+* Changed Macros::              Macro calls you might replace
+* Changed Results::             Changes in how to check test results
+* Changed Macro Writing::       Better ways to write your own macros
+@end menu
+
+@node Changed File Names, Changed Makefiles, Autoconf 1, Autoconf 1
+@subsection Changed File Names
+
+If you have an @file{aclocal.m4} installed with Autoconf (as opposed to
+in a particular package's source directory), you must rename it to
+@file{acsite.m4}.  @xref{Invoking autoconf}.
+
+If you distribute @file{install.sh} with your package, rename it to
+@file{install-sh} so @code{make} builtin rules won't inadvertently
+create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
+looks for the script under both names, but it is best to use the new name.
+
+If you were using @file{config.h.top} or @file{config.h.bot}, you still
+can, but you will have less clutter if you merge them into
+@file{acconfig.h}.  @xref{Invoking autoheader}.
+
+@node Changed Makefiles, Changed Macros, Changed File Names, Autoconf 1
+@subsection Changed Makefiles
+
+Add @samp{@@CFLAGS@@}, @samp{@@CPPFLAGS@@}, and @samp{@@LDFLAGS@@} in
+your @file{Makefile.in} files, so they can take advantage of the values
+of those variables in the environment when @code{configure} is run.
+Doing this isn't necessary, but it's a convenience for users.
+
+Also add @samp{@@configure_input@@} in a comment to each input file for
+@code{AC_OUTPUT}, so that the output files will contain a comment saying
+they were produced by @code{configure}.  Automatically selecting the
+right comment syntax for all the kinds of files that people call
+@code{AC_OUTPUT} on became too much work.
+
+Add @file{config.log} and @file{config.cache} to the list of files you
+remove in @code{distclean} targets.
+
+If you have the following in @file{Makefile.in}:
+
+@example
+prefix = /usr/local
+exec_prefix = $(prefix)
+@end example
+
+@noindent
+you must change it to:
+
+@example
+prefix = @@prefix@@
+exec_prefix = @@exec_prefix@@
+@end example
+
+@noindent
+The old behavior of replacing those variables without @samp{@@}
+characters around them has been removed.
+
+@node Changed Macros, Changed Results, Changed Makefiles, Autoconf 1
+@subsection Changed Macros
+
+Many of the macros were renamed in Autoconf version 2.  You can still
+use the old names, but the new ones are clearer, and it's easier to find
+the documentation for them.  @xref{Obsolete Macros}, for a table showing the
+new names for the old macros.  Use the @code{autoupdate} program to
+convert your @file{configure.in} to using the new macro names.
+@xref{Invoking autoupdate}.
+
+Some macros have been superseded by similar ones that do the job better,
+but are not call-compatible.  If you get warnings about calling obsolete
+macros while running @code{autoconf}, you may safely ignore them, but
+your @code{configure} script will generally work better if you follow
+the advice it prints about what to replace the obsolete macros with.  In
+particular, the mechanism for reporting the results of tests has
+changed.  If you were using @code{echo} or @code{AC_VERBOSE} (perhaps
+via @code{AC_COMPILE_CHECK}), your @code{configure} script's output will
+look better if you switch to @code{AC_MSG_CHECKING} and
+@code{AC_MSG_RESULT}.  @xref{Printing Messages}.  Those macros work best
+in conjunction with cache variables.  @xref{Caching Results}.
+
+
+
+@node Changed Results, Changed Macro Writing, Changed Macros, Autoconf 1
+@subsection Changed Results
+
+If you were checking the results of previous tests by examining the
+shell variable @code{DEFS}, you need to switch to checking the values of
+the cache variables for those tests.  @code{DEFS} no longer exists while
+@code{configure} is running; it is only created when generating output
+files.  This difference from version 1 is because properly quoting the
+contents of that variable turned out to be too cumbersome and
+inefficient to do every time @code{AC_DEFINE} is called.  @xref{Cache
+Variable Names}.
+
+For example, here is a @file{configure.in} fragment written for Autoconf
+version 1:
+
+@example
+AC_HAVE_FUNCS(syslog)
+case "$DEFS" in
+*-DHAVE_SYSLOG*) ;;
+*) # syslog is not in the default libraries.  See if it's in some other.
+  saved_LIBS="$LIBS"
+  for lib in bsd socket inet; do
+    AC_CHECKING(for syslog in -l$lib)
+    LIBS="$saved_LIBS -l$lib"
+    AC_HAVE_FUNCS(syslog)
+    case "$DEFS" in
+    *-DHAVE_SYSLOG*) break ;;
+    *) ;;
+    esac
+    LIBS="$saved_LIBS"
+  done ;;
+esac
+@end example
+
+Here is a way to write it for version 2:
+
+@example
+AC_CHECK_FUNCS(syslog)
+if test $ac_cv_func_syslog = no; then
+  # syslog is not in the default libraries.  See if it's in some other.
+  for lib in bsd socket inet; do
+    AC_CHECK_LIB($lib, syslog, [AC_DEFINE(HAVE_SYSLOG)
+      LIBS="$LIBS -l$lib"; break])
+  done
+fi
+@end example
+
+If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
+backslashes before quotes, you need to remove them.  It now works
+predictably, and does not treat quotes (except back quotes) specially.
+@xref{Setting Output Variables}.
+
+All of the boolean shell variables set by Autoconf macros now use
+@samp{yes} for the true value.  Most of them use @samp{no} for false,
+though for backward compatibility some use the empty string instead.  If
+you were relying on a shell variable being set to something like 1 or
+@samp{t} for true, you need to change your tests.
+
+@node Changed Macro Writing,  , Changed Results, Autoconf 1
+@subsection Changed Macro Writing
+
+When defining your own macros, you should now use @code{AC_DEFUN}
+instead of @code{define}.  @code{AC_DEFUN} automatically calls
+@code{AC_PROVIDE} and ensures that macros called via @code{AC_REQUIRE}
+do not interrupt other macros, to prevent nested @samp{checking@dots{}}
+messages on the screen.  There's no actual harm in continuing to use the
+older way, but it's less convenient and attractive.  @xref{Macro
+Definitions}.
+
+You probably looked at the macros that came with Autoconf as a guide for
+how to do things.  It would be a good idea to take a look at the new
+versions of them, as the style is somewhat improved and they take
+advantage of some new features.
+
+If you were doing tricky things with undocumented Autoconf internals
+(macros, variables, diversions), check whether you need to change
+anything to account for changes that have been made.  Perhaps you can
+even use an officially supported technique in version 2 instead of
+kludging.  Or perhaps not.
+
+To speed up your locally written feature tests, add caching to them.
+See whether any of your tests are of general enough usefulness to
+encapsulate into macros that you can share.
+
+
+@c ================================================ Questions About Autoconf.
+
+@node Questions, History, Obsolete Constructs, Top
+@chapter Questions About Autoconf
+
+Several questions about Autoconf come up occasionally.  Here some of them
+are addressed.
+
+@menu
+* Distributing::                Distributing @code{configure} scripts
+* Why GNU m4::                  Why not use the standard @code{m4}?
+* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
+* Why Not Imake::               Why GNU uses @code{configure} instead of Imake
+@end menu
+
+@node Distributing, Why GNU m4, Questions, Questions
+@section Distributing @code{configure} Scripts
+
+@display
+What are the restrictions on distributing @code{configure}
+scripts that Autoconf generates?  How does that affect my
+programs that use them?
+@end display
+
+There are no restrictions on how the configuration scripts that Autoconf
+produces may be distributed or used.  In Autoconf version 1, they were
+covered by the @sc{gnu} General Public License.  We still encourage
+software authors to distribute their work under terms like those of the
+GPL, but doing so is not required to use Autoconf.
+
+Of the other files that might be used with @code{configure},
+@file{config.h.in} is under whatever copyright you use for your
+@file{configure.in}, since it is derived from that file and from the
+public domain file @file{acconfig.h}.  @file{config.sub} and
+@file{config.guess} have an exception to the GPL when they are used with
+an Autoconf-generated @code{configure} script, which permits you to
+distribute them under the same terms as the rest of your package.
+@file{install-sh} is from the X Consortium and is not copyrighted.
+
+@node Why GNU m4, Bootstrapping, Distributing, Questions
+@section Why Require @sc{gnu} @code{m4}?
+
+@display
+Why does Autoconf require @sc{gnu} @code{m4}?
+@end display
+
+Many @code{m4} implementations have hard-coded limitations on the size
+and number of macros, which Autoconf exceeds.  They also lack several
+builtin macros that it would be difficult to get along without in a
+sophisticated application like Autoconf, including:
+
+@example
+builtin
+indir
+patsubst
+__file__
+__line__
+@end example
+
+Autoconf requires version 1.4 or above of @sc{gnu} @code{m4} because it
+uses frozen state files.
+
+Since only software maintainers need to use Autoconf, and since @sc{gnu}
+@code{m4} is simple to configure and install, it seems reasonable to
+require @sc{gnu} @code{m4} to be installed also.  Many maintainers of
+@sc{gnu} and other free software already have most of the @sc{gnu}
+utilities installed, since they prefer them.
+
+@node Bootstrapping, Why Not Imake, Why GNU m4, Questions
+@section How Can I Bootstrap?
+
+@display
+If Autoconf requires @sc{gnu} @code{m4} and @sc{gnu} @code{m4} has an
+Autoconf @code{configure} script, how do I bootstrap?  It seems like a
+chicken and egg problem!
+@end display
+
+This is a misunderstanding.  Although @sc{gnu} @code{m4} does come with
+a @code{configure} script produced by Autoconf, Autoconf is not required
+in order to run the script and install @sc{gnu} @code{m4}.  Autoconf is
+only required if you want to change the @code{m4} @code{configure}
+script, which few people have to do (mainly its maintainer).
+
+@node Why Not Imake,  , Bootstrapping, Questions
+@section Why Not Imake?
+
+@display
+Why not use Imake instead of @code{configure} scripts?
+@end display
+
+Several people have written addressing this question, so I include
+adaptations of their explanations here.
+
+The following answer is based on one written by Richard Pixley:
+
+@quotation
+Autoconf generated scripts frequently work on machines which it has
+never been set up to handle before.  That is, it does a good job of
+inferring a configuration for a new system.  Imake cannot do this.
+
+Imake uses a common database of host specific data.  For X11, this makes
+sense because the distribution is made as a collection of tools, by one
+central authority who has control over the database.
+
+@sc{gnu} tools are not released this way.  Each @sc{gnu} tool has a
+maintainer; these maintainers are scattered across the world.  Using a
+common database would be a maintenance nightmare.  Autoconf may appear
+to be this kind of database, but in fact it is not.  Instead of listing
+host dependencies, it lists program requirements.
+
+If you view the @sc{gnu} suite as a collection of native tools, then the
+problems are similar.  But the @sc{gnu} development tools can be
+configured as cross tools in almost any host+target permutation.  All of
+these configurations can be installed concurrently.  They can even be
+configured to share host independent files across hosts.  Imake doesn't
+address these issues.
+
+Imake templates are a form of standardization.  The @sc{gnu} coding
+standards address the same issues without necessarily imposing the same
+restrictions.
+@end quotation
+
+
+Here is some further explanation, written by Per Bothner:
+
+@quotation
+One of the advantages of Imake is that it easy to generate large
+Makefiles using @code{cpp}'s @samp{#include} and macro mechanisms.
+However, @code{cpp} is not programmable: it has limited conditional
+facilities, and no looping.  And @code{cpp} cannot inspect its
+environment.
+
+All of these problems are solved by using @code{sh} instead of
+@code{cpp}.  The shell is fully programmable, has macro substitution,
+can execute (or source) other shell scripts, and can inspect its
+environment.
+@end quotation
+
+
+Paul Eggert elaborates more:
+
+@quotation
+With Autoconf, installers need not assume that Imake itself is already
+installed and working well.  This may not seem like much of an advantage
+to people who are accustomed to Imake.  But on many hosts Imake is not
+installed or the default installation is not working well, and requiring
+Imake to install a package hinders the acceptance of that package on
+those hosts.  For example, the Imake template and configuration files
+might not be installed properly on a host, or the Imake build procedure
+might wrongly assume that all source files are in one big directory
+tree, or the Imake configuration might assume one compiler whereas the
+package or the installer needs to use another, or there might be a
+version mismatch between the Imake expected by the package and the Imake
+supported by the host.  These problems are much rarer with Autoconf,
+where each package comes with its own independent configuration
+processor.
+
+Also, Imake often suffers from unexpected interactions between
+@code{make} and the installer's C preprocessor.  The fundamental problem
+here is that the C preprocessor was designed to preprocess C programs,
+not @file{Makefile}s.  This is much less of a problem with Autoconf,
+which uses the general-purpose preprocessor @code{m4}, and where the
+package's author (rather than the installer) does the preprocessing in a
+standard way.
+@end quotation
+
+
+Finally, Mark Eichin notes:
+
+@quotation
+Imake isn't all that extensible, either.  In order to add new features to
+Imake, you need to provide your own project template, and duplicate most
+of the features of the existing one.  This means that for a sophisticated
+project, using the vendor-provided Imake templates fails to provide any
+leverage---since they don't cover anything that your own project needs
+(unless it is an X11 program).
+
+On the other side, though:
+
+The one advantage that Imake has over @code{configure}:
+@file{Imakefile}s tend to be much shorter (likewise, less redundant)
+than @file{Makefile.in}s.  There is a fix to this, however---at least
+for the Kerberos V5 tree, we've modified things to call in common
+@file{post.in} and @file{pre.in} @file{Makefile} fragments for the
+entire tree.  This means that a lot of common things don't have to be
+duplicated, even though they normally are in @code{configure} setups.
+@end quotation
+
+
+
+
+@c ===================================================== History of Autoconf.
+
+@node History, Environment Variable Index, Questions, Top
+@chapter History of Autoconf
+
+You may be wondering, Why was Autoconf originally written?  How did it
+get into its present form?  (Why does it look like gorilla spit?)  If
+you're not wondering, then this chapter contains no information useful
+to you, and you might as well skip it.  If you @emph{are} wondering,
+then let there be light@dots{}
+
+@menu
+* Genesis::                     Prehistory and naming of @code{configure}
+* Exodus::                      The plagues of @code{m4} and Perl
+* Leviticus::                   The priestly code of portability arrives
+* Numbers::                     Growth and contributors
+* Deuteronomy::                 Approaching the promises of easy configuration
+@end menu
+
+@node Genesis, Exodus, History, History
+@section Genesis
+
+In June 1991 I was maintaining many of the @sc{gnu} utilities for the
+Free Software Foundation.  As they were ported to more platforms and
+more programs were added, the number of @samp{-D} options that users had
+to select in the @file{Makefile} (around 20) became burdensome.
+Especially for me---I had to test each new release on a bunch of
+different systems.  So I wrote a little shell script to guess some of
+the correct settings for the fileutils package, and released it as part
+of fileutils 2.0.  That @code{configure} script worked well enough that
+the next month I adapted it (by hand) to create similar @code{configure}
+scripts for several other @sc{gnu} utilities packages.  Brian Berliner
+also adapted one of my scripts for his CVS revision control system.
+
+Later that summer, I learned that Richard Stallman and Richard Pixley
+were developing similar scripts to use in the @sc{gnu} compiler tools;
+so I adapted my @code{configure} scripts to support their evolving
+interface: using the file name @file{Makefile.in} as the templates;
+adding @samp{+srcdir}, the first option (of many); and creating
+@file{config.status} files.
+
+@node Exodus, Leviticus, Genesis, History
+@section Exodus
+
+As I got feedback from users, I incorporated many improvements, using
+Emacs to search and replace, cut and paste, similar changes in each of
+the scripts.  As I adapted more @sc{gnu} utilities packages to use
+@code{configure} scripts, updating them all by hand became impractical.
+Rich Murphey, the maintainer of the @sc{gnu} graphics utilities, sent me
+mail saying that the @code{configure} scripts were great, and asking if
+I had a tool for generating them that I could send him.  No, I thought,
+but I should!  So I started to work out how to generate them.  And the
+journey from the slavery of hand-written @code{configure} scripts to the
+abundance and ease of Autoconf began.
+
+Cygnus @code{configure}, which was being developed at around that time,
+is table driven; it is meant to deal mainly with a discrete number of
+system types with a small number of mainly unguessable features (such as
+details of the object file format).  The automatic configuration system
+that Brian Fox had developed for Bash takes a similar approach.  For
+general use, it seems to me a hopeless cause to try to maintain an
+up-to-date database of which features each variant of each operating
+system has.  It's easier and more reliable to check for most features on
+the fly---especially on hybrid systems that people have hacked on
+locally or that have patches from vendors installed.
+
+I considered using an architecture similar to that of Cygnus
+@code{configure}, where there is a single @code{configure} script that
+reads pieces of @file{configure.in} when run.  But I didn't want to have
+to distribute all of the feature tests with every package, so I settled
+on having a different @code{configure} made from each
+@file{configure.in} by a preprocessor.  That approach also offered more
+control and flexibility.
+
+I looked briefly into using the Metaconfig package, by Larry Wall,
+Harlan Stenn, and Raphael Manfredi, but I decided not to for several
+reasons.  The @code{Configure} scripts it produces are interactive,
+which I find quite inconvenient; I didn't like the ways it checked for
+some features (such as library functions); I didn't know that it was
+still being maintained, and the @code{Configure} scripts I had
+seen didn't work on many modern systems (such as System V R4 and NeXT);
+it wasn't very flexible in what it could do in response to a feature's
+presence or absence; I found it confusing to learn; and it was too big
+and complex for my needs (I didn't realize then how much Autoconf would
+eventually have to grow).
+
+I considered using Perl to generate my style of @code{configure}
+scripts, but decided that @code{m4} was better suited to the job of
+simple textual substitutions: it gets in the way less, because output is
+implicit.  Plus, everyone already has it.  (Initially I didn't rely on
+the @sc{gnu} extensions to @code{m4}.)  Also, some of my friends at the
+University of Maryland had recently been putting @code{m4} front ends on
+several programs, including @code{tvtwm}, and I was interested in trying
+out a new language.
+
+@node Leviticus, Numbers, Exodus, History
+@section Leviticus
+
+Since my @code{configure} scripts determine the system's capabilities
+automatically, with no interactive user intervention, I decided to call
+the program that generates them Autoconfig.  But with a version number
+tacked on, that name would be too long for old @sc{unix} file systems,
+so I shortened it to Autoconf.
+
+In the fall of 1991 I called together a group of fellow questers after
+the Holy Grail of portability (er, that is, alpha testers) to give me
+feedback as I encapsulated pieces of my handwritten scripts in @code{m4}
+macros and continued to add features and improve the techniques used in
+the checks.  Prominent among the testers were
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, who came up with the idea of making an @file{autoconf} shell
+script to run @code{m4} and check for unresolved macro calls; Richard
+Pixley, who suggested running the compiler instead of searching the file
+system to find include files and symbols, for more accurate results;
+Karl Berry, who got Autoconf to configure @TeX{} and added the
+macro index to the documentation; and Ian Taylor, who added support for
+creating a C header file as an alternative to putting @samp{-D} options
+in a @file{Makefile}, so he could use Autoconf for his UUCP package.  The
+alpha testers cheerfully adjusted their files again and again as the
+names and calling conventions of the Autoconf macros changed from
+release to release.  They all contributed many specific checks, great
+ideas, and bug fixes.
+
+@node Numbers, Deuteronomy, Leviticus, History
+@section Numbers
+
+In July 1992, after months of alpha testing, I released Autoconf 1.0,
+and converted many @sc{gnu} packages to use it.  I was surprised by how
+positive the reaction to it was.  More people started using it than I
+could keep track of, including people working on software that wasn't
+part of the @sc{gnu} Project (such as TCL, FSP, and Kerberos V5).
+Autoconf continued to improve rapidly, as many people using the
+@code{configure} scripts reported problems they encountered.
+
+Autoconf turned out to be a good torture test for @code{m4}
+implementations.  @sc{unix} @code{m4} started to dump core because of
+the length of the macros that Autoconf defined, and several bugs showed
+up in @sc{gnu} @code{m4} as well.  Eventually, we realized that we
+needed to use some features that only @sc{gnu} @code{m4} has.
+4.3@sc{bsd} @code{m4}, in particular, has an impoverished set of builtin
+macros; the System V version is better, but still doesn't provide
+everything we need.
+
+More development occurred as people put Autoconf under more stresses
+(and to uses I hadn't anticipated).  Karl Berry added checks for X11.
+david zuhn contributed C++ support.
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard made it diagnose invalid arguments.  Jim Blandy bravely coerced
+it into configuring @sc{gnu} Emacs, laying the groundwork for several
+later improvements.  Roland McGrath got it to configure the @sc{gnu} C
+Library, wrote the @code{autoheader} script to automate the creation of
+C header file templates, and added a @samp{--verbose} option to
+@code{configure}.  Noah Friedman added the @samp{--macrodir} option and
+@code{AC_MACRODIR} environment variable.  (He also coined the term
+@dfn{autoconfiscate} to mean ``adapt a software package to use
+Autoconf''.)  Roland and Noah improved the quoting protection in
+@code{AC_DEFINE} and fixed many bugs, especially when I got sick of
+dealing with portability problems from February through June, 1993.
+
+@node Deuteronomy,  , Numbers, History
+@section Deuteronomy
+
+A long wish list for major features had accumulated, and the effect of
+several years of patching by various people had left some residual
+cruft.  In April 1994, while working for Cygnus Support, I began a major
+revision of Autoconf.  I added most of the features of the Cygnus
+@code{configure} that Autoconf had lacked, largely by adapting the
+relevant parts of Cygnus @code{configure} with the help of david zuhn
+and Ken Raeburn.  These features include support for using
+@file{config.sub}, @file{config.guess}, @samp{--host}, and
+@samp{--target}; making links to files; and running @code{configure}
+scripts in subdirectories.  Adding these features enabled Ken to convert
+@sc{gnu} @code{as}, and Rob Savoye to convert DejaGNU, to using
+Autoconf.
+
+I added more features in response to other peoples' requests.  Many
+people had asked for @code{configure} scripts to share the results of
+the checks between runs, because (particularly when configuring a large
+source tree, like Cygnus does) they were frustratingly slow.  Mike
+Haertel suggested adding site-specific initialization scripts.  People
+distributing software that had to unpack on MS-DOS asked for a way to
+override the @file{.in} extension on the file names, which produced file
+names like @file{config.h.in} containing two dots.  Jim Avera did an
+extensive examination of the problems with quoting in @code{AC_DEFINE}
+and @code{AC_SUBST}; his insights led to significant improvements.
+Richard Stallman asked that compiler output be sent to @file{config.log}
+instead of @file{/dev/null}, to help people debug the Emacs
+@code{configure} script.
+
+I made some other changes because of my dissatisfaction with the quality
+of the program.  I made the messages showing results of the checks less
+ambiguous, always printing a result.  I regularized the names of the
+macros and cleaned up coding style inconsistencies.  I added some
+auxiliary utilities that I had developed to help convert source code
+packages to use Autoconf.  With the help of
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, I made the macros not interrupt each others' messages.  (That
+feature revealed some performance bottlenecks in @sc{gnu} @code{m4},
+which he hastily corrected!)  I reorganized the documentation around
+problems people want to solve.  And I began a test suite, because
+experience had shown that Autoconf has a pronounced tendency to regress
+when we change it.
+
+Again, several alpha testers gave invaluable feedback, especially
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn, and Mark
+Eichin.
+
+Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
+have free time again.  I think.  Yeah, right.)
+
+
+@c ========================================================== Appendices
+
+@node Environment Variable Index, Output Variable Index, History, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf

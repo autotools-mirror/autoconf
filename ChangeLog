@@ -1,5 +1,17 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	Merge `Upgrading' and `Obsolete Constructs' together.
+
+	* doc/autoconf.texi (Obsolete Constructs): Move right after
+	`Recreation a Configuration.
+	(Invoking autoupdate): Be a subsection of
+	`Obsolete Constructs'.
+	(Upgrading): Demote from chapter to section.
+	Be a section of `Obsolete Constructs'.
+	Rename as `Autoconf 1'.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	Find a means to extract integers from the compiler.
 	Use this technology to compute `sizeof' even when cross-compiling.
 	Ideas and initial suggestion by Kaveh Ghazi.
