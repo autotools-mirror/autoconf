@@ -74,6 +74,29 @@ esac
 ]])
 
 
+
+## -------------------------- ##
+## Broken/missing compilers.  ##
+## -------------------------- ##
+
+
+# Check that Autoconf correctly diagnoses broken compilers, and in
+# particular, if it does not exit 77, the test suite is in trouble...
+# FIXME: Once a precise message decided, check stderr of configure.
+AT_SETUP([Broken/missing compilers])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+CC=no-such-compiler
+AC_PROG_CC
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], 77)
+
+AT_CLEANUP
+
+
 ## ------------ ##
 ## C keywords.  ##
 ## ------------ ##

@@ -1,5 +1,11 @@
 2001-01-30  Akim Demaille  <akim@epita.fr>
 
+	* tests/compile.at: New test.
+	* tests/atspecific.at (AT_CHECK): When given 77 as expected exit
+	status, don't include the `skip' mechanism.
+
+2001-01-30  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.at (AC_CACHE_CHECK): Typo and clean up.
 	Check only --quiet.
 

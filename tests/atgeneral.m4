@@ -526,9 +526,13 @@ m4_case([$3],
         expout, [$at_diff expout at-stdout >&5 || at_failed=:],
         [],     [$at_diff empty  at-stdout >&5 || at_failed=:],
         [echo $at_n "AS_ESCAPE([$3])$at_c" | $at_diff - at-stdout >&5 || at_failed=:])
-dnl Check exit val.
+dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
-  77) exit 77;;
+m4_case([$2],
+  [77],
+    [],
+    [   77) exit 77;;
+])dnl
 m4_case([$2],
   [ignore],
     [   *);;],
