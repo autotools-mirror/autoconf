@@ -84,8 +84,7 @@ AT_DEFINE(AT_TEST_MACRO,
 
 dnl Produce the configure.in
 AT_DATA(configure.in,
-[AC_INCLUDE(actest.m4)
-AC_INIT
+[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_ENV_SAVE(expout)
@@ -104,7 +103,7 @@ AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, ignore)
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
 
 dnl Some tests might exit prematurely when they find a problem, in
-dnl which case `env-after is probably missing.  Don't check it then.
+dnl which case `env-after' is probably missing.  Don't check it then.
 if test -f env-after; then
   AT_CHECK([cat env-after], 0, expout)
 fi

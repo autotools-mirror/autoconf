@@ -59,8 +59,7 @@ AT_DATA(dummy.in,
 ])])
 
 AT_DATA(configure.in,
-[AC_INCLUDE(actest.m4)
-AC_INIT
+[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_FILES(dummy)
 [define]([AC_DEFUBST_VALUE], Big_Value)

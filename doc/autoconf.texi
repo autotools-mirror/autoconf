@@ -1223,27 +1223,29 @@ with @samp{--srcdir}; this is a safety check.  @xref{Invoking
 configure}, for more information.
 @end defmac
 
-Small packages may store all their macros in @code{aclocal.m4}.  As the
-set of macros grows, or for maintenance reasons, a maintainer may prefer
-to split the macros in several files.  In this case, Autoconf must be
-told which files to load, and in which order.
-
-@defmac AC_INCLUDE (@var{file}...)
-@maindex INCLUDE
-@c FIXME: There is no longer shell globbing.
-Read the macro definitions that appear in the listed files.  A list of
-space-separated filenames or shell globbing patterns is expected.  The
-files will be read in the order they're listed.
-
-Because the order of definition of macros is important (only the last
-definition of a macro is used), beware that it is @code{AC_INIT} that
-loads @file{acsite.m4} and @file{aclocal.m4}.  Note that
-@code{AC_INCLUDE}ing a file before @code{AC_INIT} or within
-@file{aclocal.m4} is different from doing so after @code{AC_INIT}: in
-the latter case, non-macro lines from included files may end up in the
-@file{configure} script, whereas in the former case, they'd be discarded
-just like any text that appear before @code{AC_INIT}.
-@end defmac
+@c FIXME: Remove definitively once --install explained.
+@c
+@c Small packages may store all their macros in @code{aclocal.m4}.  As the
+@c set of macros grows, or for maintenance reasons, a maintainer may prefer
+@c to split the macros in several files.  In this case, Autoconf must be
+@c told which files to load, and in which order.
+@c
+@c @defmac AC_INCLUDE (@var{file}...)
+@c @maindex INCLUDE
+@c @c FIXME: There is no longer shell globbing.
+@c Read the macro definitions that appear in the listed files.  A list of
+@c space-separated filenames or shell globbing patterns is expected.  The
+@c files will be read in the order they're listed.
+@c
+@c Because the order of definition of macros is important (only the last
+@c definition of a macro is used), beware that it is @code{AC_INIT} that
+@c loads @file{acsite.m4} and @file{aclocal.m4}.  Note that
+@c @code{AC_INCLUDE}ing a file before @code{AC_INIT} or within
+@c @file{aclocal.m4} is different from doing so after @code{AC_INIT}: in
+@c the latter case, non-macro lines from included files may end up in the
+@c @file{configure} script, whereas in the former case, they'd be discarded
+@c just like any text that appear before @code{AC_INIT}.
+@c @end defmac
 
 Packages that do manual configuration or use the @code{install} program
 might need to tell @code{configure} where to find some other shell
@@ -2209,7 +2211,7 @@ underscore is mapped to an underscore.
 For instance
 
 @example
-AC_CHECK_TYPES((struct $Expensive*))
+AC_CHECK_TYPES(struct $Expensive*)
 @end example
 
 @noindent
@@ -3413,10 +3415,10 @@ r-value, not if it is really declared, because it is much safer to avoid
 introducing extra declarations when not needed.
 @end defmac
 
-@defmac AC_CHECK_DECLS ((@var{symbol}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECLS
 @cvindex HAVE_DECL_@var{symbol}
-For each given @var{symbol} (comma separated list), define
+For each of the @var{symbols} (comma separated list), define
 @code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
 @var{symbol} is declared, otherwise to @samp{0}.  If
 @var{action-if-not-found} is given, it is additional shell code to
@@ -3425,8 +3427,9 @@ execute when one of the function declarations is needed, otherwise
 
 This macro uses an m4 list as first argument:
 @example
-AC_CHECK_DECLS((strlen))
-AC_CHECK_DECLS((malloc, realloc, calloc, free))
+AC_CHECK_DECLS(strdup)
+AC_CHECK_DECLS([strlen])
+AC_CHECK_DECLS([malloc, realloc, calloc, free])
 @end example
 
 Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not
@@ -3558,16 +3561,16 @@ AC_CHECK_MEMBER(struct passwd.pw_gecos,,
 @end example
 @end defmac
 
-@defmac AC_CHECK_MEMBERS ((@var{aggregate}.@var{member}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_MEMBERS
-Check for the existence of each aggregate members using the previous
-macro.  When @var{member} belong to @var{aggregate}, define
-@code{HAVE_@var{aggregate}_@var{member}} (in all capitals, with spaces
-and dot replaced by underscore).
+Check for the existence of each @samp{@var{aggregate}.@var{member}} of
+@var{members} using the previous macro.  When @var{member} belong to
+@var{aggregate}, define @code{HAVE_@var{aggregate}_@var{member}} (in all
+capitals, with spaces and dot replaced by underscore).
 
 This macro uses m4 lists:
 @example
-AC_CHECK_MEMBERS((struct stat.st_rdev, struct stat.st_blksize))
+AC_CHECK_MEMBERS([struct stat.st_rdev, struct stat.st_blksize])
 @end example
 @end defmac
 
@@ -3663,19 +3666,19 @@ or defined by the @ovar{includes} (@pxref{Default Includes}).
 @end defmac
 
 
-@defmac AC_CHECK_TYPES ((@var{type}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
+@defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_TYPES
-For each defined @var{type} define @code{HAVE_@var{type}} (in all
-capitals).  If no @var{includes} are specified, the default includes are
-used (@pxref{Default Includes}).  If @var{action-if-found} is given, it
-is additional shell code to execute when one of the types is found.  If
-@var{action-if-not-found} is given, it is executed when one of the types
-is not found.
+For each @var{type} of the @var{types} which is defined, define
+@code{HAVE_@var{type}} (in all capitals).  If no @var{includes} are
+specified, the default includes are used (@pxref{Default Includes}).  If
+@var{action-if-found} is given, it is additional shell code to execute
+when one of the types is found.  If @var{action-if-not-found} is given,
+it is executed when one of the types is not found.
 
 This macro uses m4 lists:
 @example
-AC_CHECK_TYPES((ptrdiff_t))
-AC_CHECK_TYPES((unsigned long long, uintmax_t))
+AC_CHECK_TYPES(ptrdiff_t)
+AC_CHECK_TYPES([unsigned long long, uintmax_t])
 @end example
 
 @end defmac

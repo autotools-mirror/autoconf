@@ -24,7 +24,7 @@ SUITE = torture.m4 semantics.m4 syntax.m4 base.m4 tools.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
+EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 aclocal.m4 $(SUITE)
 
 PERL = perl
 

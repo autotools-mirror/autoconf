@@ -1735,7 +1735,7 @@ fi
 # external array `tzname' is found, define `HAVE_TZNAME'.
 AC_DEFUN(AC_STRUCT_TIMEZONE,
 [AC_REQUIRE([AC_STRUCT_TM])dnl
-AC_CHECK_MEMBERS((struct tm.tm_zone),,,[#include <sys/types.h>
+AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#include <sys/types.h>
 #include <$ac_cv_struct_tm>
 ])
 if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
@@ -1773,7 +1773,7 @@ AU_DEFUN(AC_STRUCT_ST_BLKSIZE,
         your code should no longer depend upon `HAVE_ST_BLKSIZE', but
         `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this AC_WARNING and
         the `AC_DEFINE' when you adjust the code.])
-AC_CHECK_MEMBERS((struct stat.st_blksize),
+AC_CHECK_MEMBERS([struct stat.st_blksize],
                   [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
                              [Define if your `struct stat' has
                               `st_blksize'.  Deprecated, use
@@ -1793,13 +1793,13 @@ AC_CHECK_MEMBERS((struct stat.st_blksize),
 # this macro, so don't obsolete it right now.
 #
 # AC_OBSOLETE([$0], [; replace it with
-#   AC_CHECK_MEMBERS((struct stat.st_blocks),
+#   AC_CHECK_MEMBERS([struct stat.st_blocks],
 #                     [AC_LIBOBJ([fileblocks])])
 # Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
 # and not `HAVE_ST_BLOCKS'.])dnl
 #
 AC_DEFUN(AC_STRUCT_ST_BLOCKS,
-[AC_CHECK_MEMBERS((struct stat.st_blocks),
+[AC_CHECK_MEMBERS([struct stat.st_blocks],
                   [AC_DEFINE(HAVE_ST_BLOCKS, 1,
                              [Define if your `struct stat' has
                               `st_blocks'.  Deprecated, use
@@ -1818,11 +1818,11 @@ AU_DEFUN(AC_STRUCT_ST_RDEV,
         your code should no longer depend upon `HAVE_ST_RDEV', but
         `HAVE_STRUCT_STAT_ST_RDEV'.  Remove this AC_WARNING and
         the `AC_DEFINE' when you adjust the code.])
-AC_CHECK_MEMBERS((struct stat.st_rdev),
-                  [AC_DEFINE(HAVE_ST_RDEV, 1,
-                             [Define if your `struct stat' has `st_rdev'.
-                              Deprecated, use
-                              `HAVE_STRUCT_STAT_ST_RDEV' instead.])],,
+AC_CHECK_MEMBERS([struct stat.st_rdev],
+                 [AC_DEFINE(HAVE_ST_RDEV, 1,
+                            [Define if your `struct stat' has `st_rdev'.
+                             Deprecated, use `HAVE_STRUCT_STAT_ST_RDEV'
+                             instead.])],,
                   [#include <sys/types.h>
 #include <sys/stat.h>
 ])dnl

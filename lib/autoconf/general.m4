@@ -647,7 +647,7 @@ define(AC_TR_SH,
 #    ive  ], [-Var-])end
 #    => -active--b--active-end
 define([AC_FOREACH],
-[m4_foreach([$1], (m4_split(m4_strip(m4_join([$2])))), [$3])])
+[m4_foreach([$1], m4_split(m4_strip(m4_join([$2]))), [$3])])
 
 
 
@@ -1445,18 +1445,6 @@ AC_DIVERT([VERSION_END],
 fi])dnl
 ])# _AC_INIT_VERSION
 
-
-# AC_INCLUDE(FILE)
-# ----------------
-# Wrapper around m4_include.
-define(AC_INCLUDE,
-[m4_include([$1])])
-
-
-# AC_INCLUDES((FILE, ...))
-# ------------------------
-define(AC_INCLUDES,
-[m4_foreach([File], [$1], [AC_INCLUDE(File)])])
 
 
 # _AC_INIT_PREPARE_ENVIRONMENT
@@ -2412,13 +2400,11 @@ AC_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
 
-# AC_CHECK_MEMBER((AGGREGATE.MEMBER, ...),
+# AC_CHECK_MEMBER([AGGREGATE.MEMBER, ...],
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
 #                 [INCLUDES])
 # --------------------------------------------------------
-# The first argument is an m4 list.  First because we want to
-# promote m4 lists, and second because anyway there can be spaces
-# in some types (struct etc.).
+# The first argument is an m4 list.
 AC_DEFUN(AC_CHECK_MEMBERS,
 [m4_foreach([AC_Member], [$1],
   [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
@@ -3081,13 +3067,13 @@ AC_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
 
 
-# AC_CHECK_DECLS(SYMBOL,
+# AC_CHECK_DECLS(SYMBOLS,
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                [INCLUDES])
 # --------------------------------------------------------
 # Defines HAVE_DECL_SYMBOL to 1 if declared, 0 otherwise.  See the
 # documentation for a detailed explanation of this difference with
-# other AC_CHECK_*S macros.
+# other AC_CHECK_*S macros.  SYMBOLS is an m4 list.
 AC_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
   [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
@@ -3322,11 +3308,11 @@ AC_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
 
-# AC_CHECK_TYPES((TYPE, ...),
+# AC_CHECK_TYPES(TYPES,
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                [INCLUDES])
 # --------------------------------------------------------
-# TYPEs is an m4 list.  There are no ambiguities here, we mean the newer
+# TYPES is an m4 list.  There are no ambiguities here, we mean the newer
 # AC_CHECK_TYPE.
 AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],

@@ -433,21 +433,23 @@ ifelse($1, [$2], [],
 #
 # The example in the documentation is:
 #
-# | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-# | define(`foreach',
-# |        `pushdef(`$1', `')_foreach(`$1', `$2', `$3')popdef(`$1')')
-# | define(`_arg1', `$1')
-# | define(`_foreach',
-# | 	  `ifelse(`$2', `()', ,
-# | 		  `define(`$1', _arg1$2)$3`'_foreach(`$1', (shift$2), `$3')')')
+# | # foreach(VAR, (LIST), STMT)
+# | define([foreach],
+# |        [pushdef([$1])_foreach([$1], [$2], [$3])popdef([$1])])
+# | define([_arg1], [$1])
+# | define([_foreach],
+# | 	   [ifelse([$2], [()], ,
+# | 		   [define([$1], _arg1$2)$3[]_foreach([$1],
+# |                                                   (shift$2),
+# |                                                   [$3])])])
 #
 # But then if you run
 #
 # | define(a, 1)
 # | define(b, 2)
 # | define(c, 3)
-# | foreach(`f', `(`a', `(b', `c)')', `echo f
-# | ')
+# | foreach([f], [([a], [(b], [c)])], [echo f
+# | ])
 #
 # it gives
 #
@@ -456,15 +458,20 @@ ifelse($1, [$2], [],
 #
 # which is not what is expected.
 #
-# Once you understood this, you turn yourself into a quoting wizard,
-# and come up with the following solution:
+# Of course the problem is that many quotes are missing.  So you add
+# plenty of quotes at random places, until you reach the expected
+# result.  Alternatively, if you are a quoting wizard, you directly
+# reach the following implementation (but if you really did, then
+# apply to the maintenance of libm4!).
 #
-# | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-# | define(`foreach', `pushdef(`$1', `')_foreach($@)popdef(`$1')')
-# | define(`_arg1', ``$1'')
-# | define(`_foreach',
-# |  `ifelse($2, `()', ,
-# | 	     `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
+# | # foreach(VAR, (LIST), STMT)
+# | define([foreach], [pushdef([$1])_foreach($@)popdef([$1])])
+# | define([_arg1], [[$1]])
+# | define([_foreach],
+# |  [ifelse($2, [()], ,
+# | 	     [define([$1], [_arg1$2])$3[]_foreach([$1],
+# |                                               [(shift$2)],
+# |                                               [$3])])])
 #
 # which this time answers
 #
@@ -473,30 +480,59 @@ ifelse($1, [$2], [],
 #  => echo c)
 #
 # Bingo!
+#
+# Well, not quite.
+#
+# With a better look, you realize that the parens are more a pain than
+# a help: since anyway you need to quote properly the list, you end up
+# with always using an outermost pair of parens and an outermost pair
+# of quotes.  Rejecting the parens both eases the implementation, and
+# simplifies the use:
+#
+# | # foreach(VAR, (LIST), STMT)
+# | define([foreach], [pushdef([$1])_foreach($@)popdef([$1])])
+# | define([_arg1], [$1])
+# | define([_foreach],
+# |  [ifelse($2, [], ,
+# | 	     [define([$1], [_arg1($2)])$3[]_foreach([$1],
+# |                                                 [shift($2)],
+# |                                                 [$3])])])
+#
+#
+# Now, just replace the `$2' with `m4_quote($2)' in the outer `ifelse'
+# to improve robustness, and you come up with a quite satisfactory
+# implementation.
 
 
 # m4_foreach(VARIABLE, LIST, EXPRESSION)
 # --------------------------------------
-# Expand EXPRESSION assigning to VARIABLE each value of the LIST
-# (LIST should have the form `[(item_1, item_2, ..., item_n)]'),
-# i.e. the whole list should be *quoted*.  Quote members too if
-# you don't want them to be expanded.
+#
+# Expand EXPRESSION assigning each value of the LIST to VARIABLE.
+# LIST should have the form `item_1, item_2, ..., item_n', i.e. the
+# whole list must *quoted*.  Quote members too if you don't want them
+# to be expanded.
 #
 # This macro is robust to active symbols:
-#    define(active, ACTIVE)
-#    m4_foreach([Var], [([active], [b], [active])], [-Var-])end
-#    => -active--b--active-end
-define(m4_foreach,
-[pushdef([$1], [])_m4_foreach($@)popdef([$1])])
+#      | define(active, [ACT, IVE])
+#      | m4_foreach(Var, [active, active], [-Var-])
+#     => -ACT--IVE--ACT--IVE-
+#
+#      | m4_foreach(Var, [[active], [active]], [-Var-])
+#     => -ACT, IVE--ACT, IVE-
+#
+#      | m4_foreach(Var, [[[active]], [[active]]], [-Var-])
+#     => -active--active-
+define([m4_foreach],
+[pushdef([$1])_m4_foreach($@)popdef([$1])])
 
 # Low level macros used to define m4_foreach.
 # Use m4_define for temporaries.
-define(m4_car, [[$1]])
-define(_m4_foreach,
-[ifelse($2, [()], ,
-        [m4_define([$1], [m4_car$2])$3[]_m4_foreach([$1],
-                                                    [(m4_shift$2)],
-                                                    [$3])])])
+define([m4_car], [$1])
+define([_m4_foreach],
+[ifelse(m4_quote($2), [], [],
+        [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
+                                                      [m4_shift($2)],
+                                                      [$3])])])
 
 
 ## ----------------- ##
@@ -663,6 +699,22 @@ ifdef([$1], [defn([$1]), ])[$2])])
 ## Helping macros to display strings.  ##
 ## ----------------------------------- ##
 
+# m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)
+# ---------------------------------------------
+# FIXME: This macro should not exists.  Currently it's used only in
+# m4_wrap, which needs to be rewritten.  But it's godam hard.
+define(m4_foreach_quoted,
+[pushdef([$1], [])_m4_foreach_quoted($@)popdef([$1])])
+
+# Low level macros used to define m4_foreach.
+# Use m4_define for temporaries.
+define(m4_car_quoted, [[$1]])
+define(_m4_foreach_quoted,
+[ifelse($2, [()], ,
+        [m4_define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
+                                                                [(m4_shift$2)],
+                                                                [$3])])])
+
 
 # m4_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
 # --------------------------------------------------
@@ -711,7 +763,7 @@ m4_Prefix1[]dnl
 ifelse(m4_eval(m4_Cursor > len(m4_Prefix)),
        1, [define([m4_Cursor], len(m4_Prefix))
 m4_Prefix])[]dnl
-m4_foreach([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
+m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.

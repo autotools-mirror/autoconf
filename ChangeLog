@@ -1,5 +1,27 @@
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4 (m4_foreach): Rewritten so that it does not require
+	lists in between parens.
+	(m4_foreach_quoted): new copy of the previous `m4_foreach' which
+	is still used by `m4_wrap'.
+	* acgeneral.m4 (AC_INCLUDE, AC_INCLUDES): Removed.
+	(AC_FOREACH): Don't use parens with `m4_foreach'.
+	(AC_CHECK_MEMBER, AC_CHECK_DECLS, AC_CHECK_TYPES): Adjust the
+	description.
+	* acspecific.m4 (AC_STRUCT_TIMEZONE, AC_STRUCT_ST_BLKSIZE,
+	AC_STRUCT_ST_BLOCKS, AC_STRUCT_ST_RDEV): Adjust.
+	* autoconf.texi (AC_CHECK_MEMBER, AC_CHECK_DECLS, AC_CHECK_TYPES):
+	Adjust their documentation.
+	(AC_INCLUDE): Undocument.
+	* tests/semantics.m4: Adjust.
+	* tests/actest.m4: Rename as...
+	* tests/aclocal.m4: this.
+	* tests/atspecific.m4: No longer include actest.m4.
+	* tests/torture.m4: Likewise.
+	* tests/Makefile.am: Adjust.
+
+2000-05-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Obsolete Macros): Document `AU_DEFUN'.
 	Move the documentation of `AC_OBSOLETE' from here, to...
 	(Old Macros): here.

@@ -31,8 +31,8 @@ AC_CHECK_LIB(m, cos,, exit 1)])
 # Check that it performs the correct actions:
 # Must define NEED_NO_DECL, but not NEED_YES_DECL.
 AT_TEST_MACRO(AC_CHECK_DECLS,
-[AC_CHECK_DECLS((yes, no),,,
-                [int yes = 1;])],
+[[AC_CHECK_DECLS([yes, no],,,
+                 [int yes = 1;])]],
 [AT_CHECK_DEFINES(
 [#define HAVE_DECL_NO 0
 #define HAVE_DECL_YES 1
@@ -70,8 +70,8 @@ AT_TEST_MACRO(AC_CHECK_HEADERS,
 # Check that it performs the correct actions.
 # Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
 AT_TEST_MACRO(AC_CHECK_MEMBERS,
-[AC_CHECK_MEMBERS((struct yes_s.yes, struct yes_s.no),,,
-                  [struct yes_s { int yes ;} ;])],
+[[AC_CHECK_MEMBERS([struct yes_s.yes, struct yes_s.no],,,
+                   [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_STRUCT_YES_S_NO */
 #define HAVE_STRUCT_YES_S_YES 1
@@ -104,8 +104,8 @@ typedef struct
 # `int' and `struct yes_s' are both checked to test both the compiler
 # builtin types, and defined types.
 AT_TEST_MACRO(AC_CHECK_TYPES,
-[AC_CHECK_TYPES((int, struct yes_s, struct no_s),,,
-                [struct yes_s { int yes ;} ;])],
+[[AC_CHECK_TYPES([int, struct yes_s, struct no_s],,,
+                 [struct yes_s { int yes ;} ;])]],
 [AT_CHECK_DEFINES(
 [#define HAVE_INT 1
 /* #undef HAVE_STRUCT_NO_S */
