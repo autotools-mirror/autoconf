@@ -1,3 +1,7 @@
+1999-11-10  Ben Elliston  <bje@cygnus.com>
+
+	* testsuite/autoconf.s/defines.exp: Remove test case.
+
 1999-11-09  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Avoid using double quotes
