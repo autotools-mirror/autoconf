@@ -386,9 +386,8 @@ Makefile.in -------------------------------> Makefile.in
 Files used in configuring a software package:
 @example
 @group
-configure* ------------+-------------> config.cache
-                       |
-                       +-------------> config.log
+                       .-------------> config.cache
+configure* ------------+-------------> config.log
                        |
 [config.h.in] -.       v            .-> [config.h] -.
                +--> config.status* -+               +--> make*
@@ -923,8 +922,7 @@ provide a help string.
 @node Versions, , Command Line, Operation
 @section Controlling Autoconf Versions
 
-The following macros handle issues of version numbers in producing
-@code{configure} scripts.
+The following macros manage version numbers for @code{configure} scripts.
 
 @defmac AC_PREREQ (@var{version})
 @maindex PREREQ
@@ -1211,10 +1209,8 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex PATH_PROG
-Similar to @code{AC_CHECK_PROG}, but set @var{variable} to the entire
-path of @var{prog-to-check-for} if found.  Otherwise, set @var{variable}
-to @var{value-if-not-found}, if given.  If @var{variable} was already
-set, do nothing.  Calls @code{AC_SUBST} for @var{variable}.
+Like @code{AC_CHECK_PROG}, but set @var{variable} to the entire
+path of @var{prog-to-check-for} if found.
 @end defmac
 
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
@@ -1686,16 +1682,17 @@ These macros check for particular C functions.
 @cvindex HAVE_ALLOCA_H
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
-@code{__GNUC__} and @code{_AIX}.  If that fails, it looks for the function
-in the standard C library.  If any of those methods succeed, it defines
-@code{HAVE_ALLOCA}.  Otherwise, it sets the @code{make}
-variable @code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA}
-(so programs can periodically call @samp{alloca(0)} to garbage collect).
+@code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
+it defines @code{HAVE_ALLOCA_H}.
+
+If those attempts fail, it looks for the function in the standard C
+library.  If any of those methods succeed, it defines
+@code{HAVE_ALLOCA}.  Otherwise, it sets the @code{make} variable
+@code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA} (so
+programs can periodically call @samp{alloca(0)} to garbage collect).
 This variable is separate from @code{LIBOBJS} so multiple programs can
 share the value of @code{ALLOCA} without needing to create an actual
 library, in case only some of them use the code in @code{LIBOBJS}.
-
-If this macro finds @file{alloca.h}, it defines @code{HAVE_ALLOCA_H}.
 
 This macro does not try to get @code{alloca} from the System V R3
 @file{libPW} or the System V R4 @file{libucb} because those libraries
@@ -2371,7 +2368,7 @@ AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4); LIBS="$LIBS -lelf")
 
 @defmac AC_DEFINE_UNQUOTED (@var{variable} @r{[}, @var{value}@r{]})
 @maindex DEFINE_UNQUOTED
-Like @code{AC_DEFINE}, but three shell expansions are performed once on
+Like @code{AC_DEFINE}, but three shell expansions are performed---once---on
 @var{value}: variable expansion (@samp{$}), command substitution
 (@samp{`}), and backslash escaping (@samp{\}).  Use this macro instead
 of @code{AC_DEFINE} when @var{value} is a shell variable.  For
@@ -2897,7 +2894,7 @@ called in an order that might cause incorrect operation.
 @subsection Prerequisite Macros
 
 A macro that you write might need to use values that have previously
-been computed by other macros.  For example, @code{AC_PROG_YYTEXT}
+been computed by other macros.  For example, @code{AC_DECL_YYTEXT}
 examines the output of @code{flex} or @code{lex}, so it depends on
 @code{AC_PROG_LEX} having been called first to set the shell variable
 @code{LEX}.
@@ -3139,10 +3136,10 @@ the target system.
 
 @menu
 * Guidelines::			General rules for writing test programs.
-* Tricks::			Special ways to work around problems.
+* Test Functions::		Special ways to work around problems.
 @end menu
 
-@node Guidelines, Tricks, , Test Programs
+@node Guidelines, Test Functions, , Test Programs
 @subsection Guidelines for Test Programs
 
 Test programs should not write anything to the standard output.  They
@@ -3151,29 +3148,7 @@ can be distinguished easily from a core dump or other failure;
 segmentation violations and other failures produce a nonzero exit
 status.  Test programs should @code{exit}, not @code{return}, from
 @code{main}, because on some systems (old Suns, at least) the argument
-to @code{return} in @code{main} is ignored.  Functions that take
-arguments should have a prototype conditionalized for C++.  In practice,
-test programs rarely need functions that take arguments.
-
-@example
-#ifdef __cplusplus
-foo(int i)
-#else
-foo(i) int i;
-#endif
-@end example
-
-Functions that test programs declare should also be conditionalized for
-C++, which requires @samp{extern "C"} prototypes.  Make sure to not
-include any header files containing clashing prototypes.
-
-@example
-#ifdef __cplusplus
-extern "C" void *malloc(size_t);
-#else
-char *malloc();
-#endif
-@end example
+to @code{return} in @code{main} is ignored.
 
 Test programs can use @code{#if} or @code{#ifdef} to check the values of
 preprocessor macros defined by tests that have already run.  For
@@ -3194,8 +3169,32 @@ that starts with @file{conftest}, such as @file{conftestdata}.  The
 @code{configure} script cleans up by running @samp{rm -rf conftest*}
 after running test programs and if the script is interrupted.
 
-@node Tricks, , Guidelines, Test Programs
-@subsection Tricks for Test Programs
+@node Test Functions, , Guidelines, Test Programs
+@subsection Test Functions
+
+Functions that take arguments should have a prototype conditionalized
+for C++.  In practice, test programs rarely need functions that take
+arguments.
+
+@example
+#ifdef __cplusplus
+foo(int i)
+#else
+foo(i) int i;
+#endif
+@end example
+
+Functions that test programs declare should also be conditionalized for
+C++, which requires @samp{extern "C"} prototypes.  Make sure to not
+include any header files containing clashing prototypes.
+
+@example
+#ifdef __cplusplus
+extern "C" void *malloc(size_t);
+#else
+char *malloc();
+#endif
+@end example
 
 If a test program calls a function with invalid parameters (just to see
 whether it exists), organize the program to ensure that it never invokes
@@ -3374,10 +3373,7 @@ know about are passed through unchanged.
 There is no point in checking for the correct value to give a variable
 that is never used.  Every variable that the @code{configure} script
 might set a value for should appear in a @samp{@@@var{variable}@@} reference
-in at least one @file{Makefile.in}.  If @code{AC_CONFIG_HEADER} is
-called, @code{configure} replaces @samp{@@DEFS@@} with
-@samp{-DHAVE_CONFIG_H}, since the contents of @code{DEFS} would be
-redundant.
+in at least one @file{Makefile.in}.
 
 @xref{Makefile Conventions, , Makefile Conventions, standards.info, The
 GNU Coding Standards}, for more information on what to put in Makefiles.
@@ -3848,8 +3844,8 @@ can, but you will have less clutter if you merge them into
 
 Add @samp{@@CFLAGS@@}, @samp{@@CPPFLAGS@@}, and @samp{@@LDFLAGS@@} in
 your @file{Makefile.in} files, so they can take advantage of the values
-of those variables in the environment when @code{configure} was run.
-This isn't necessary, but it's a convenience for users.
+of those variables in the environment when @code{configure} is run.
+Doing this isn't necessary, but it's a convenience for users.
 
 If you have the following in @file{Makefile.in}:
 
@@ -3882,7 +3878,7 @@ convert your @file{configure.in} to using the new macro names.
 
 Some macros have been superseded by similar ones that do the job better,
 but are not call-compatible.  If you get warnings about calling obsolete
-macros while running @code{autoconf}, you may ignore them, but your
+macros while running @code{autoconf}, you may safely ignore them, but your
 @code{configure} script will generally work better if you follow the
 advice it prints about what to replace the obsolete macros with.  In
 particular, the mechanism for reporting the results of tests has
@@ -3940,9 +3936,9 @@ fi
 @end example
 
 If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
-backslashes before quotes, you probably need to remove them.  It now
-works predictably, and does not treat quotes (except backquotes)
-specially.  @xref{Setting Variables}.
+backslashes before quotes, you need to remove them.  It now works
+predictably, and does not treat quotes (except backquotes) specially.
+@xref{Setting Variables}.
 
 @node Changed Macro Writing, , Changed Results, Upgrading
 @section Changed Macro Writing
