@@ -4040,33 +4040,21 @@ The @code{AC_F77_FUNC_WRAPPER} macro uses the
 
 The following macros check for operating system services or capabilities.
 
-@defmac AC_CYGWIN
-@maindex CYGWIN
-Checks for the Cygwin environment.  If present, sets shell variable
-@code{CYGWIN} to @samp{yes}.  If not present, sets @code{CYGWIN}
-to the empty string.
-@end defmac
-
-@defmac AC_MINGW32
-@maindex MINGW32
-Checks for the MingW32 compiler environment.  If present, sets shell
-variable @code{MINGW32} to @samp{yes}.  If not present, sets
-@code{MINGW32} to the empty string.
-@end defmac
-
-@defmac AC_EMXOS2
-@maindex EMXOS2
-Checks for the EMX environment on OS/2.  If present, sets shell variable
-@code{EMXOS2} to @samp{yes}.  If not present. sets @code{EMXOS2} to the
-empty string.
-@end defmac
-
 @defmac AC_EXEEXT
 @maindex EXEEXT
 @ovindex EXEEXT
+@maindex CYGWIN
+@maindex EMXOS2
+@maindex MINGW32
 Defines substitute variable @code{EXEEXT} based on the output of the
-compiler, after .c, .o, and .obj files have been excluded.  Typically
-set to empty string if Unix and @samp{.exe} if Win32 or OS/2.
+compiler, after @samp{.c}, @samp{.C}, @samp{.o}, @samp{.obj} and
+@samp{.xcoff} files have been excluded.  Typically set to empty string
+if Unix and @samp{.exe} if Win32 or OS/2.
+
+This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in
+the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
+environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
+compiler.
 @end defmac
 
 @defmac AC_OBJEXT
@@ -7713,6 +7701,13 @@ to print messages (@pxref{Printing Messages}).
 @code{AC_C_CROSS}
 @end defmac
 
+@defmac AC_CYGWIN
+@maindex CYGWIN
+Checked for the Cygwin environment in which case the shell variable
+@code{CYGWIN} is set to @samp{yes}.  @code{AC_EXEEXT} now handles this
+task.
+@end defmac
+
 @defmac AC_DECL_YYTEXT
 Does nothing, now integrated in @code{AC_PROG_LEX}.
 @end defmac
@@ -7722,6 +7717,13 @@ Does nothing, now integrated in @code{AC_PROG_LEX}.
 If on Dynix/PTX (Sequent @sc{unix}), add @samp{-lseq} to output variable
 @code{LIBS}.  This macro is obsolete; instead, use
 @code{AC_FUNC_GETMNTENT}.
+@end defmac
+
+@defmac AC_EMXOS2
+@maindex EMXOS2
+Checks for the EMX environment on OS/2in which case the shell variable
+@code{EMXOS2} is set to @samp{yes}.  @code{AC_EXEEXT} now handles this
+task.
 @end defmac
 
 @defmac AC_ERROR
@@ -7884,6 +7886,13 @@ AC_CONFIG_LINKS(host.h:config/$machine.h
 @defmac AC_MAJOR_HEADER
 @maindex MAJOR_HEADER
 @code{AC_HEADER_MAJOR}
+@end defmac
+
+@defmac AC_MINGW32
+@maindex MINGW32
+Checked for the MingW32 compiler environment, in which case the shell
+variable @code{MINGW32} is set to @samp{yes}.  @code{AC_EXEEXT} now
+handles this task.
 @end defmac
 
 @defmac AC_MINUS_C_MINUS_O

@@ -1,5 +1,17 @@
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
+	Simplify the interface: users shouldn't need to explicitly check
+	for special environments.
+
+	* acspecific.m4	(AC_CYGWIN, AC_EMXOS2, AC_MINGW32): AU defined to
+	nothing.  Replace them by...
+	(_AC_CYGWIN, _AC_EMXOS2, _AC_MINGW32): these, which are
+	automatically called by...
+	(AC_EXEEXT): this.
+	* doc/autoconf.texi (System Services, Obsolete Macros): Adjust.
+
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
 	AC_PROG_GNU_M4 should actually be private to the package
 	Autoconf.
 

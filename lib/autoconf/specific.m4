@@ -2492,16 +2492,13 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 ## Checks for not-quite-Unix variants.  ##
 ## ------------------------------------ ##
 
-# The old Cygwin32 macro is deprecated.
-AU_DEFUN([AC_CYGWIN32],
-[AC_CYGWIN])
 
 
-# AC_CYGWIN
-# ---------
+# _AC_CYGWIN
+# ----------
 # Check for Cygwin.  This is a way to set the right value for
 # EXEEXT.
-AC_DEFUN([AC_CYGWIN],
+define([_AC_CYGWIN],
 [AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 [#ifndef __CYGWIN__
@@ -2510,34 +2507,41 @@ AC_DEFUN([AC_CYGWIN],
 return __CYGWIN__;])],
                    [ac_cv_cygwin=yes],
                    [ac_cv_cygwin=no])])
-CYGWIN=
-test "$ac_cv_cygwin" = yes && CYGWIN=yes])
+test "$ac_cv_cygwin" = yes && CYGWIN=yes[]dnl
+])# _AC_CYGWIN
 
 
-# AC_MINGW32
+# _AC_EMXOS2
 # ----------
-# Check for mingw32.  This is another way to set the right value for
-# EXEEXT.
-AC_DEFUN([AC_MINGW32],
-[AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __MINGW32__;])],
-                   [ac_cv_mingw32=yes],
-                   [ac_cv_mingw32=no])])
-MINGW32=
-test "$ac_cv_mingw32" = yes && MINGW32=yes])
-
-
-# AC_EMXOS2
-# ---------
 # Check for EMX on OS/2.  This is another way to set the right value
 # for EXEEXT.
-AC_DEFUN([AC_EMXOS2],
+define([_AC_EMXOS2],
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
                    [ac_cv_emxos2=yes],
                    [ac_cv_emxos2=no])])
-EMXOS2=
-test "$ac_cv_emxos2" = yes && EMXOS2=yes])
+test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
+])# _AC_EMXOS2
+
+
+# _AC_MINGW32
+# -----------
+# Check for mingw32.  This is another way to set the right value for
+# EXEEXT.
+define([_AC_MINGW32],
+[AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __MINGW32__;])],
+                   [ac_cv_mingw32=yes],
+                   [ac_cv_mingw32=no])])
+test "$ac_cv_mingw32" = yes && MINGW32=yes[]dnl
+])# _AC_MINGW32
+
+
+# The user is no longer supposed to call these macros.
+AU_DEFUN([AC_CYGWIN],   [])
+AU_DEFUN([AC_CYGWIN32], [])
+AU_DEFUN([AC_EMXOS2],   [])
+AU_DEFUN([AC_MING32],   [])
 
 
 # AC_EXEEXT
@@ -2547,9 +2551,9 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes])
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
 AC_DEFUN([AC_EXEEXT],
-[AC_REQUIRE([AC_CYGWIN])dnl
-AC_REQUIRE([AC_MINGW32])dnl
-AC_REQUIRE([AC_EMXOS2])dnl
+[_AC_CYGWIN
+_AC_MINGW32
+_AC_EMXOS2
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
 [if test "$CYGWIN" = yes || test "$MINGW32" = yes || test "$EMXOS2" = yes; then
