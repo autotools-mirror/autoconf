@@ -307,6 +307,7 @@ Programming in M4
 
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Programming in M4sugar::      Convenient pure M4 macros
+* Programming in M4sh::         Common Shell Constructs
 
 M4 Quotation
 
@@ -320,7 +321,6 @@ Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
-* Common Shell Constructs::     Working around shell portability problems
 
 Writing Autoconf Macros
 
@@ -429,6 +429,17 @@ History of Autoconf
 Copying This Manual
 
 * GNU Free Documentation License::  License for copying this manual
+
+Indices
+
+* Environment Variable Index::  Index of environment variables used
+* Output Variable Index::       Index of variables set in output files
+* Preprocessor Symbol Index::   Index of C preprocessor symbols defined
+* Autoconf Macro Index::        Index of Autoconf macros
+* M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
+* Autotest Macro Index::        Index of Autotest macros
+* Program & Function Index::    Index of those with portability problems
+* Concept Index::               General index
 
 @end detailmenu
 @end menu
@@ -6230,6 +6241,7 @@ and their interface might change in the future.  As a matter of fact,
 @menu
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Programming in M4sugar::      Convenient pure M4 macros
+* Programming in M4sh::         Common Shell Constructs
 @end menu
 
 @node M4 Quotation
@@ -6689,8 +6701,6 @@ M4sugar''.
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
-* Common Shell Constructs::     Working around shell portability problems
-
 @end menu
 
 @node Redefined M4 Macros
@@ -6794,10 +6804,13 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
 @end defmac
 
-@node Common Shell Constructs
-@subsection Common Shell Constructs
+@node Programming in M4sh
+@section Programming in M4sh
 
-M4sugar provides portable alternatives for some common shell constructs
+@c FIXME: Eventually will become a chapter, as it is not related to
+@c programming in M4 per se.
+
+M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
 @defmac AS_DIRNAME (@var{pathname})
@@ -8823,10 +8836,10 @@ Some implementations, such as Tru64's, fail when comparing to
 @c --------------------
 @prindex @command{dirname}
 Not all hosts have a working @command{dirname}, and you should instead
-use @code{AS_DIRNAME} (@pxref{Common Shell Constructs}).  For example.
+use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
 
 @example
-dir=`dirname "$file"` # This is not portable.
+dir=`dirname "$file"`       # This is not portable.
 dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @end example
 
