@@ -368,6 +368,55 @@ if (gawk --version) >/dev/null 2>&1; then
   # Tracing.
   AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
            ignore, [])
+  # Syntax correctness of ifnames.
+  AT_CHECK([AWK='gawk --posix' ifnames empty], 0,
+           [], [])
 fi
+
+AT_CLEANUP(configure)
+
+
+
+
+
+## --------- ##
+## ifnames.  ##
+## --------- ##
+
+AT_SETUP(ifnames)
+
+AT_DATA([iftest1.c],
+[[#ifdef DEF1
+#ifndef DEF2
+#if !defined(DEF3) && defined(DEF4) /* but not defined(DEF5) */
+    # if SPACES
+	#	if	TABS
+/* #if C_COMMENTS */
+// #if CXX_COMMENTS
+#if LINE1 = \
+LINE2
+#if (VAL1*VAL2)==VAL3+VAL4 /* Not VAL5 !!! */
+]])
+
+AT_DATA([iftest2.c],
+[[#ifdef IFTEST2
+#if VAL1
+]])
+
+AT_CHECK([ifnames iftest1.c iftest2.c], 0,
+[DEF1 iftest1.c
+DEF2 iftest1.c
+DEF3 iftest1.c
+DEF4 iftest1.c
+IFTEST2 iftest2.c
+LINE1 iftest1.c
+LINE2 iftest1.c
+SPACES iftest1.c
+TABS iftest1.c
+VAL1 iftest1.c iftest2.c
+VAL2 iftest1.c
+VAL3 iftest1.c
+VAL4 iftest1.c
+], [])
 
 AT_CLEANUP(configure)

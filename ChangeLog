@@ -1,5 +1,13 @@
 2000-11-02  Pavel Roskin  <proski@gnu.org>
 
+	* ifnames.sh: Put the opening brace on the same line with
+	patterns. Reported by Paul Martinolich.
+	* tests/tools.at (AWK portability): Check ifnames.
+	(ifnames): New test for ifnames.
+	* THANKS: Updated.
+
+2000-11-02  Pavel Roskin  <proski@gnu.org>
+
 	* m4/atconfig.m4 (AT_CONFIG): s/AT_TESTPATH/AUTOTEST_PATH/
 	because AT_TESTPATH looks like a macro.
 	* tests/atconfig.in: Likewise.

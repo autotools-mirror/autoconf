@@ -103,8 +103,7 @@ $AWK '
     }
   }
 
-  /^[\t ]*#/
-  {
+  /^[\t ]*#/ {
     if (sub(/^[\t ]*#[\t ]*ifn?def[\t ]+/, "", $0))
     {
       sub(/[^A-Za-z_0-9].*/, "", $0)
@@ -125,8 +124,7 @@ $AWK '
     }
   }
 
-  END
-  {
+  END {
     for (sym in files)
     {
       print sym files[sym]
