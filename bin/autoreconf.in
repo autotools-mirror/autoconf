@@ -288,6 +288,16 @@ sub autoreconf ($)
     }
   else
     {
+      # Some filesystems have sub-second time stamps, and if so we may
+      # run into trouble later, after we rerun autoconf and set the
+      # time stamps of input files to be no greater than aclocal.m4,
+      # because the time-stamp-setting operation (utime) has a
+      # resolution of only 1 second.  Work around the problem by
+      # ensuring that there is at least a one-second window before the
+      # time stamp of aclocal.m4t in which no file time stamps can
+      # fall.
+      sleep 1;
+
       xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
       # aclocal may produce no output.
       update_file ('aclocal.m4t', 'aclocal.m4')
@@ -449,7 +459,7 @@ sub autoreconf ($)
 	      # aclocal.m4.
 	      #
 	      # Why is not always the case?  Because we already run
-	      # aclocal a first (before tracing), which, for instance,
+	      # aclocal at first (before tracing), which, for instance,
 	      # can find Gettext's macros in .../share/aclocal, so we
 	      # may have had the right aclocal.m4 already.  Then
 	      # gettextize is run, and installs locally these M4
@@ -457,11 +467,11 @@ sub autoreconf ($)
 	      # the _same_ aclocal.m4, and doesn't change its
 	      # timestamp.  But later, Automake's Makefile expresses
 	      # that aclocal.m4 depends on these local files, which
-	      # are younger, so it triggers aclocal again.
+	      # are newer, so it triggers aclocal again.
 	      #
-	      # To make sure aclocal.m4 is younger, we change the
+	      # To make sure aclocal.m4 is no older, we change the
 	      # modification times of the local M4 files to be
-	      # slightly older than it.
+	      # not newer than it.
 	      #
 	      # First, where are the local files?
 	      my $aclocal_local_dir = '.';
@@ -469,16 +479,15 @@ sub autoreconf ($)
 		{
 		  $aclocal_local_dir = $1;
 		}
-	      # All the local files younger than aclocal.m4 are to be
-	      # grown older than it.
+	      # All the local files newer than aclocal.m4 are to be
+	      # made not newer than it.
 	      my $aclocal_m4_mtime = mtime ('aclocal.m4');
 	      for my $file (glob ("$aclocal_local_dir/*.m4"), 'acinclude.m4')
 		{
-		  if (mtime ($file) >= $aclocal_m4_mtime)
+		  if ($aclocal_m4_mtime < mtime ($file))
 		    {
-		      debug "making $file younger than aclocal.m4";
-		      utime $aclocal_m4_mtime - 1, $aclocal_m4_mtime - 1,
-			$file;
+		      debug "aging $file to be not newer than aclocal.m4";
+		      utime $aclocal_m4_mtime, $aclocal_m4_mtime, $file;
 		    }
 		}
 	    }
