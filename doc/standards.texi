@@ -1032,7 +1032,8 @@ calling @code{free}.
 If @code{malloc} fails in a noninteractive program, make that a fatal
 error.  In an interactive program (one that reads commands from the
 user), it is better to abort the command and return to the command
-reader loop.
+reader loop.  This allows the user to kill other processes to free up
+virtual memory, and then try the command again.
 
 Use @code{getopt_long} to decode arguments, unless the argument syntax
 makes this unreasonable.
