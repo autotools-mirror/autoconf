@@ -5133,7 +5133,7 @@ program will compile, when it wouldn't before.
 In general, the @code{volatile} keyword is a feature of @acronym{ANSI} C, so
 you might expect that @code{volatile} is available only when
 @code{__STDC__} is defined.  However, Ultrix 4.3's native compiler does
-support volatile, but does not defined @code{__STDC__}.
+support volatile, but does not define @code{__STDC__}.
 @end defmac
 
 @defmac AC_C_INLINE
