@@ -1,10 +1,10 @@
-* Major changes in Autoconf 2.54d                       -*- outline -*-
+* Major changes in Autoconf 2.54c                       -*- outline -*-
 
 
 Release tips:
 
            Have your configure.ac checked by autoscan ("autoscan").
-  	      Try the warning options ("autoreconf -fv -Wall").
+             Try the warning options ("autoreconf -fv -Wall").
 
 ** Documentation
 
@@ -58,6 +58,24 @@ Release tips:
   should be avoided in configure.ac.  Running autoupdate is advised.
   AC_DECL_SYS_SIGLIST.
 
+- AC_DEFINE/AC_DEFINE_UNQUOTED
+
+  We have to stop using the old compatibility scheme --that tried to
+  avoid useless backslashes-- because Libtool 1.4.3 contains a
+
+  AC_DEFINE([error_t], [int],
+            [Define to a type to use for \`error_t' if it is not
+             otherwise available.])
+
+  We have to quote the single quotes and backslashes with \.  The old
+  compatibility scheme saw that ` was backslashed, and therefore did
+  not quote the single quote...  Failure.  Hence, Autoconf 2.54 is not
+  compatible with Libtool.  Autoconf 2.55 is, but in some cases might
+  produce more \ than wanted.
+
+  Please, note that in the future the same problem will happen with
+  AC_MSG_*: use `autoreconf -f -Wall'.
+
 ** Bug Fixes
 
 - Portability of the Autoconf package to Solaris.
@@ -101,6 +119,13 @@ Release tips:
   Autoconf 2.55 on it, and report the results to
   bug-autoconf@gnu.org.
 
+- AC_MSG_*
+
+  Special characters in AC_MSG_* need not be quoted.  Currently,
+  Autoconf has heuristics to decide when a string is escaped, or has
+  to be escaped.  This scheme is fragile, and will be removed; the
+  only risk is uglified messages.  Please, run `autoreconf -f -Wall'
+  to find occurrences that will be affected.
 
 * Major changes in Autoconf 2.54
 

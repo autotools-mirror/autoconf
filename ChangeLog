@@ -1,3 +1,17 @@
+2002-11-05  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/autoheader.m4 (_AH_TEMPLATE_OLD, _AH_VERBATIM_OLD):
+	Remove.
+	We _have_ to stop using the old compatibility scheme that tried to
+	avoid useless backslashes because Libtool 1.4.3 contains a
+	AC_DEFINE([error_t], [int],
+	[Define to a type to use for \`error_t' if it is not
+	otherwise available.])
+	We _have_ to quote the single quote and backslashes with \.  The
+	old compatibility scheme saw that ` was backslashed, and therefore
+	did not quote the single quote.  Hence before this patch, Autoconf
+	was not compatible with Libtool.
+
 2002-11-04  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Set the following variables,

@@ -72,17 +72,6 @@ m4_define([AH_VERBATIM],
 ])
 
 
-# _AH_VERBATIM_OLD(KEY, TEMPLATE)
-# -------------------------------
-# Same as above, but with bugward compatibility.
-#
-# Quote for Perl '' strings, which are those used by Autoheader.
-m4_define([_AH_VERBATIM_OLD],
-[AS_LITERAL_IF([$1],
-               [AH_OUTPUT([$1], _AS_QUOTE([[$2]], [\\'']))])
-])
-
-
 # AH_TEMPLATE(KEY, DESCRIPTION)
 # -----------------------------
 # Issue an autoheader template for KEY, i.e., a comment composed of
@@ -90,15 +79,6 @@ m4_define([_AH_VERBATIM_OLD],
 m4_define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
              m4_text_wrap([$2 */], [   ], [/* ])[
-#undef $1])])
-
-
-# _AH_TEMPLATE_OLD(KEY, DESCRIPTION)
-# ----------------------------------
-# Same as above, but with bugward compatibility.
-m4_define([_AH_TEMPLATE_OLD],
-[_AH_VERBATIM_OLD([$1],
-                  m4_text_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
 
 

@@ -1857,7 +1857,7 @@ m4_define([AC_DEFINE_TRACE],
 # die.  The third argument is used by autoheader.
 m4_define([AC_DEFINE],
 [AC_DEFINE_TRACE([$1])dnl
-m4_ifval([$3], [_AH_TEMPLATE_OLD([$1], [$3])])dnl
+m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<\_ACEOF
 [@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
 _ACEOF
@@ -1869,7 +1869,7 @@ _ACEOF
 # Similar, but perform shell substitutions $ ` \ once on VALUE.
 m4_define([AC_DEFINE_UNQUOTED],
 [AC_DEFINE_TRACE([$1])dnl
-m4_ifval([$3], [_AH_TEMPLATE_OLD([$1], [$3])])dnl
+m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<_ACEOF
 [@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
 _ACEOF
