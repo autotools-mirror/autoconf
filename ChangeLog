@@ -1,3 +1,10 @@
+1998-09-26  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_CHECK_FILE): New macro. Checks for the
+	existence of a file in the file system (native only).
+	Contributed by Theodore Y. Ts'o <tytso@mit.edu>.
+	(AC_CHECK_FILES): Likewise.
+
 1998-09-15  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Handle strange processor ID assignments on AIX
