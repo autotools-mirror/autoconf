@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-MAKEINFO = makeinfo --no-split
+MAKEINFO = @MAKEINFO@ --no-split
 TEXI2HTML = texi2html
 
 info_TEXINFOS = autoconf.texi standards.texi

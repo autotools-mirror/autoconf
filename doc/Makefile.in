@@ -57,17 +57,14 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-AT_TESTPATH = @AT_TESTPATH@
 AWK = @AWK@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
-PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
-VERSION = @VERSION@
 standards_texi = @standards_texi@
 
-MAKEINFO = makeinfo --no-split
+MAKEINFO = @MAKEINFO@ --no-split
 TEXI2HTML = texi2html
 
 info_TEXINFOS = autoconf.texi standards.texi
@@ -87,6 +84,9 @@ TEXINFOS = autoconf.texi standards.texi
 DIST_COMMON =  $(autoconf_TEXINFOS) $(standards_TEXINFOS) Makefile.am \
 Makefile.in mdate-sh stamp-vti texinfo.tex version.texi
 
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
