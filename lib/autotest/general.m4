@@ -142,7 +142,7 @@ m4_define([AT_TESTSUITE_NAME],
 	  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-AS_INIT
+AS_INIT_WITH_SHELL_FN
 AS_PREPARE
 m4_divert_push([DEFAULTS])dnl
 

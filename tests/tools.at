@@ -74,6 +74,8 @@ AT_CHECK([/bin/sh ./syntax.sh])
 # running `sh PROG'.
 
 AT_CHECK([/bin/sh -n $abs_top_builddir/bin/autoconf],   0)
+AT_CHECK([/bin/sh -n $abs_top_builddir/tests/autoconf],   0)
+AT_CHECK([/bin/sh -n $abs_top_builddir/tests/testsuite],   0)
 
 # These are not built, they are in the src tree.
 AT_CHECK([/bin/sh -n $abs_top_srcdir/config/install-sh], 0)

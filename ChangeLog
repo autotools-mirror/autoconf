@@ -1,3 +1,23 @@
+2003-11-26  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE):
+	Extracted from AS_SHELL_SANITIZE.
+	(_AS_SHELL_FN_WORK, AS_INIT_WITH_SHELL_FN): New
+	macros.
+	(AS_SHELL_SANITIZE): Move reinvocation code from
+	_AS_LINENO_WORKS, use it to find out if shell
+	functions work.
+	(_AS_LINENO_WORKS): Don't find another shell if $LINENO
+	does not work.
+	(AS_INIT): Pass parameter down to AS_SHELL_SANITIZE.
+	(AS_REQUIRE_SHELL_FN): Test that AS_INIT_WITH_SHELL_FN
+	was called.
+	* lib/autotest/general.m4: Use AS_INIT_WITH_SHELL_FN.
+	* bin/autoconf.in: Regenerate.
+	* tests/wrapper.in: Regenerate.
+	* tests/tools.at: Test the syntax of tests/autoconf
+	and tests/testsuite.
+
 2003-11-24  Akim Demaille  <akim@epita.fr>
 
 	* config/announce-gen (&print_locations, &print_signatures)

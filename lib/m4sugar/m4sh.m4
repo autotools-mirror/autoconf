@@ -141,21 +141,19 @@ m4_define([AS_REQUIRE],
 # xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
 #
 m4_define([AS_REQUIRE_SHELL_FN],
-[m4_provide_if([AS_SHELL_FN_$1], [],
+[m4_provide_if([AS_INIT_WITH_SHELL_FN],
+	       [m4_warn([syntax], [AS_INIT_WITH_SHELL_FN not called.])])dnl
+m4_provide_if([AS_SHELL_FN_$1], [],
                [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
 $2
 }])])])
 
 
-# AS_SHELL_SANITIZE
-# -----------------
+# _AS_BOURNE_COMPATIBLE
+# ---------------------
 # Try to be as Bourne and/or POSIX as possible.
-m4_defun([AS_SHELL_SANITIZE],
-[## --------------------- ##
-## M4sh Initialization.  ##
-## --------------------- ##
-
-# Be Bourne compatible
+m4_define([_AS_BOURNE_COMPATIBLE],
+[# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
@@ -166,8 +164,111 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
+])
 
+
+# _AS_SHELL_FN_WORK(TESTED-SHELL)
+# --------------------------------------------------
+# This is a spy to detect "in the wild" shells that do not support shell
+# functions correctly.  It is based on the m4sh.at Autotest testcases.
+m4_define([_AS_SHELL_FN_WORK],
+[{ $1 <<\_ASEOF
+_AS_BOURNE_COMPATIBLE
+func_return () {
+  (exit [$]1)
+}
+
+func_success () {
+  func_return 0
+}
+
+func_failure () {
+  func_return 1
+}
+
+func_ret_success () {
+  return 0
+}
+
+func_ret_failure () {
+  return 1
+}
+
+exitcode=0
+AS_IF([func_success], [], [
+  exitcode=1
+  echo func_failure succeeded.
+])
+AS_IF([func_failure], [
+  exitcode=1
+  echo func_success failed.
+])
+AS_IF([func_ret_success], [], [
+  exitcode=1
+  echo func_ret_success failed.
+])
+AS_IF([func_ret_failure], [
+  exitcode=1
+  echo func_ret_failure succeeded.
+])
+AS_EXIT($exitcode)
+_ASEOF
+}])
+
+# AS_SHELL_SANITIZE(WHAT-IF-SHELL-FUNCTIONS-DO-NOT-WORK)
+# ------------------------------------------------------
+# The parameter is temporary; it will go away and you
+# should not rely on it.
+m4_defun([AS_SHELL_SANITIZE],
+[## --------------------- ##
+## M4sh Initialization.  ##
+## --------------------- ##
+
+_AS_BOURNE_COMPATIBLE
+
+# PATH needs CR
+_AS_CR_PREPARE
+_AS_PATH_SEPARATOR_PREPARE
 _AS_UNSET_PREPARE
+
+# Find who we are.  Look in the path if we contain no path at all
+# relative or not.
+case $[0] in
+  *[[\\/]]* ) as_myself=$[0] ;;
+  *) _AS_PATH_WALK([],
+		   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
+     ;;
+esac
+# We did not find ourselves, most probably we were run as `sh COMMAND'
+# in which case we are not to be found in the path.
+if test "x$as_myself" = x; then
+  as_myself=$[0]
+fi
+if test ! -f "$as_myself"; then
+  AS_ERROR([cannot find myself; rerun with an absolute path])
+fi
+
+dnl In the future, the `else' branch will be that in AS_INIT_WITH_SHELL_FN.
+AS_IF([_AS_SHELL_FN_WORK([$SHELL])], [], [
+  case $CONFIG_SHELL in
+  '')
+    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
+      [for as_base in sh bash ksh sh5; do
+	 case $as_dir in
+	 /*)
+	   AS_IF([_AS_SHELL_FN_WORK([$as_dir/$as_base])], [
+	     AS_UNSET(BASH_ENV)
+	     AS_UNSET(ENV)
+	     CONFIG_SHELL=$as_dir/$as_base
+	     export CONFIG_SHELL
+	     exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}
+	   ]);;
+	 esac
+       done]);;
+  *)
+    $1;;
+  esac
+])
 
 # Work around bugs in pre-3.0 UWIN ksh.
 $as_unset ENV MAIL MAILPATH
@@ -211,10 +312,7 @@ as_me=`AS_BASENAME("$[0]")`
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[# PATH needs CR, and LINENO needs CR and PATH.
-_AS_CR_PREPARE
-_AS_PATH_SEPARATOR_PREPARE
-_AS_LINENO_PREPARE
+[_AS_LINENO_PREPARE
 
 _AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
@@ -539,8 +637,7 @@ m4_define([_AS_LINENO_WORKS],
   as_lineno_2=$LINENO
   as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2" dnl
-])
+  test "x$as_lineno_3"  = "x$as_lineno_2"])
 
 # _AS_LINENO_PREPARE
 # ------------------
@@ -553,38 +650,6 @@ m4_define([_AS_LINENO_WORKS],
 m4_define([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 _AS_LINENO_WORKS || {
-  # Find who we are.  Look in the path if we contain no path at all
-  # relative or not.
-  case $[0] in
-    *[[\\/]]* ) as_myself=$[0] ;;
-    *) _AS_PATH_WALK([],
-		   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
-       ;;
-  esac
-  # We did not find ourselves, most probably we were run as `sh COMMAND'
-  # in which case we are not to be found in the path.
-  if test "x$as_myself" = x; then
-    as_myself=$[0]
-  fi
-  if test ! -f "$as_myself"; then
-    AS_ERROR([cannot find myself; rerun with an absolute path])
-  fi
-  case $CONFIG_SHELL in
-  '')
-    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
-      [for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   if ("$as_dir/$as_base" -c '_AS_LINENO_WORKS') 2>/dev/null; then
-	     AS_UNSET(BASH_ENV)
-	     AS_UNSET(ENV)
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$[0]" ${1+"$[@]"}
-	   fi;;
-	 esac
-       done]);;
-  esac
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
   # uniformly replaced by the line number.  The first 'sed' inserts a
@@ -1122,8 +1187,10 @@ m4_define([AS_VAR_POPDEF],
 ## ----------------- ##
 
 
-# AS_INIT
-# -------
+# AS_INIT(WHAT-IF-SHELL-FUNCTIONS-DO-NOT-WORK)
+# --------------------------------------------
+# The parameter is temporary; it will go away and you
+# should not rely on it.
 m4_define([AS_INIT],
 [m4_init
 
@@ -1132,9 +1199,26 @@ m4_pattern_forbid([^_?AS_])
 
 # Bangshe and minimal initialization.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
-m4_divert_text([M4SH-INIT], [AS_SHELL_SANITIZE])
+m4_divert_text([M4SH-INIT], [AS_SHELL_SANITIZE([m4_default([$1], [
+echo Found no shell that has working shell functions.
+echo
+echo Please tell autoconf@gnu.org about your system.
+])])])
 
 # Let's go!
 m4_wrap([m4_divert_pop([BODY])[]])
 m4_divert_push([BODY])[]dnl
 ])
+
+# AS_INIT_WITH_SHELL_FN
+# ---------------------
+# Same as AS_INIT, but exit if shell functions are
+# not supported.
+m4_define([AS_INIT_WITH_SHELL_FN],
+[AS_INIT([
+echo Shell functions are not supported on any shell I could find 
+echo on your system.  This script requires shell functions: please
+echo install a modern shell, or manually run the script under such
+echo a shell if you do have one.
+AS_EXIT(1)
+])])
