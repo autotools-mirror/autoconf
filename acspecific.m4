@@ -810,11 +810,14 @@ dnl FIXME: banish uname from this macro!
     # Martyn Johnson says this is needed for Ultrix, if the X
     # libraries were built with DECnet support.  And Karl Berry says
     # the Alpha needs dnet_stub (dnet does not exist).
-    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
+    ac_xsave_LIBS="$LIBS"; LIBS="$LIBS $X_LIBS -lX11"
+    AC_TRY_LINK_FUNC(XOpenDisplay, ,
+    [AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
     if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
 	[X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
-    fi
+    fi])
+    LIBS="$ac_xsave_LIBS"
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
     # to get the SysV transport functions.

@@ -1,3 +1,8 @@
+2001-06-12  Maciej W. Rozycki  <macro@ds2.pg.gda.pl>
+
+	* acspecific.m4 (AC_PATH_XTRA): Check if linking against libX11
+	succeeds and only try adding libdnet upon a failure.
+
 2001-06-12  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.in (&output_kind): Output the comment only if it exists.
