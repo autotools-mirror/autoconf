@@ -1,3 +1,7 @@
+2003-09-04  Akim Demaille  <akim@epita.fr>
+
+	* tests/mktests.sh (ac_exclude_list): Add AC_FC_FUNC.
+
 2003-09-02  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Add support for newer Fortran dialects.  The F77 interface is

@@ -1057,8 +1057,9 @@ m4_if(m4_index([$1],[_]),-1,[],
 m4_default([$2],[$1])="$ac_val"
 ])# _AC_FC_FUNC
 
+
 # AC_F77_FUNC(NAME, [SHELLVAR = NAME])
-# ----------------------
+# ------------------------------------
 AC_DEFUN([AC_F77_FUNC],
 [AC_REQUIRE([_AC_F77_NAME_MANGLING])dnl
 AC_LANG_PUSH(Fortran 77)dnl
@@ -1066,8 +1067,9 @@ _AC_FC_FUNC([$1],[$2])
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_FUNC
 
+
 # AC_FC_FUNC(NAME, [SHELLVAR = NAME])
-# ----------------------
+# -----------------------------------
 AC_DEFUN([AC_FC_FUNC],
 [AC_REQUIRE([_AC_FC_NAME_MANGLING])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -1075,12 +1077,13 @@ _AC_FC_FUNC([$1],[$2])
 AC_LANG_POP(Fortran)dnl
 ])# AC_FC_FUNC
 
+
 # AC_FC_SRCEXT(EXT, [ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
-# ----------------------
+# -----------------------------------------------------------
 # Set the source-code extension used in Fortran (FC) tests to EXT (which
 # defaults to f).  Also, look for any necessary additional FCFLAGS needed
 # to allow this extension, and store them in the output variable
-# FCFLAGS_<EXT> (e.g. FCFLAGS_f90 for EXT=f90).  If successful, 
+# FCFLAGS_<EXT> (e.g. FCFLAGS_f90 for EXT=f90).  If successful,
 # call ACTION-IF-SUCCESS.  If unable to compile source code with EXT,
 # call ACTION-IF-FAILURE, which defaults to failing with an error
 # message.
@@ -1162,7 +1165,7 @@ if test "x$ac_cv_fc_freeform" = xunknown; then
 else
   if test "x$ac_cv_fc_freeform" != xnone; then
     FCFLAGS="$FCFLAGS $ac_cv_fc_freeform"
-  fi 
+  fi
   $1
 fi
 ])# AC_FC_FREEFORM
