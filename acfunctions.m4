@@ -333,7 +333,9 @@ fi
 
 # AU::AM_FUNC_ERROR_AT_LINE
 # -------------------------
-AU_ALIAS([AM_FUNC_ERROR_AT_LINE], [AC_FUNC_ERROR_AT_LINE])
+# FIXME: Because Automake macros are defined with their name unquoted,
+# we can't yet provide the Autoupdate glue.
+# AU_ALIAS([AM_FUNC_ERROR_AT_LINE], [AC_FUNC_ERROR_AT_LINE])
 
 
 # AC_FUNC_FNMATCH
@@ -368,7 +370,9 @@ fi
 # and
 # AU::fp_FUNC_FNMATCH
 # -------------------
-AU_ALIAS([AM_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
+# FIXME: Because Automake macros are defined with their name unquoted,
+# we can't yet provide the Autoupdate glue.
+# AU_ALIAS([AM_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 AU_ALIAS([fp_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 
 
@@ -912,7 +916,9 @@ fi
 
 # AU::AM_FUNC_MKTIME
 # ------------------
-AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
+# FIXME: Because Automake macros are defined with their name unquoted,
+# we can't yet provide the Autoupdate glue.
+# AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
 
 
 # AC_FUNC_MMAP
@@ -1085,7 +1091,9 @@ fi
 
 # AU::AM_FUNC_OBSTACK
 # -------------------
-AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
+# FIXME: Because Automake macros are defined with their name unquoted,
+# we can't yet provide the Autoupdate glue.
+# AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 
 
 # AC_FUNC_SELECT_ARGTYPES
@@ -1256,7 +1264,9 @@ fi
 
 # AU::AM_FUNC_STRTOD
 # -------------------
-AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
+# FIXME: Because Automake macros are defined with their name unquoted,
+# we can't yet provide the Autoupdate glue.
+# AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
 
 
 # AC_FUNC_STRERROR_R

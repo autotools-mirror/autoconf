@@ -1,3 +1,11 @@
+2000-08-11  Akim Demaille  <akim@epita.fr>
+
+	* acfunctions.m4 (AM_FUNC_ERROR_AT_LINE, AM_FUNC_FNMATCH,
+	AM_FUNC_MKTIME, AM_FUNC_OBSTACK, AM_FUNC_STRTOD): Deactivate
+	their AU_ALIAS definition: Automake 1.4 does not quote the name of
+	these macros, hence when Autoconf reads Automake's definition the
+	name is expanded with unpredictable results.
+
 2000-08-09  Akim Demaille  <akim@epita.fr>
 
 	* autoreconf.sh (Installing Autoconf extensions files): Remove.
