@@ -1,5 +1,9 @@
 1999-09-14  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
+	* acgeneral.m4 (AC_OUTPUT_SUBDIRS): Save INSTALL in
+	ac_given_INSTALL, so that we can adjust relative pathnames for
+	sub-configures.
+
 	* acgeneral.m4 (Configuration): Accept --env-VAR=VALUE and
 	VAR=value.
 	* autoconf.texi, install.texi: Document it.

@@ -3047,6 +3047,9 @@ if test "$no_recursion" != yes; then
     esac
   done
 
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  ac_given_INSTALL="$INSTALL"
+])dnl
+
   for ac_config_dir in $1; do
 
     # Do not complain, so a configure script can configure whichever
