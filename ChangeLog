@@ -1,3 +1,8 @@
+2000-10-25  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_PREPARE_FDS): Give some information on
+	the host in config.log.
+
 2000-10-24  Pavel Roskin  <proski@gnu.org>
 
 	* tests/mktests.sh: Set locale to C to make sure that syntax.m4

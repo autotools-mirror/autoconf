@@ -1278,7 +1278,7 @@ AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
 
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
-# so uname gets run too.  Use two double quotes for font-lock.
+# so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 
 # Avoid depending upon Character Ranges.
@@ -1992,6 +1992,23 @@ running configure, to aid debugging if configure makes a mistake.
 It was created by configure ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
  > $[0] $ac_configure_args
+
+on $ac_hostname:
+
+uname -m = `(uname -m) 2>/dev/null || echo unknown`
+uname -r = `(uname -r) 2>/dev/null || echo unknown`
+uname -s = `(uname -s) 2>/dev/null || echo unknown`
+uname -v = `(uname -v) 2>/dev/null || echo unknown`
+
+/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
+/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
+
+hostinfo               = `(hostinfo) 2>/dev/null`
+/bin/universe          = `(/bin/universe) 2>/dev/null`
+/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
+/bin/arch              = `(/bin/arch) 2>/dev/null`
+/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
+/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
 " >&AC_FD_LOG
 ])# _AC_INIT_PREPARE_FDS
 
