@@ -2,7 +2,7 @@
 
 autotestlibdir = $(pkgdatadir)/autotest
 
-autotestlib_DATA = general.m4
+autotestlib_DATA = autotest.m4 general.m4
 
 EXTRA_DIST = $(autotestlib_DATA)
 

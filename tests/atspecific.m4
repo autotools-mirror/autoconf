@@ -1,5 +1,4 @@
-changequote()changequote([, ])include(autotest/general.m4)# -*- Autoconf -*-
-# M4 macros used in building Autoconf test suites.
+# M4 macros used in building Autoconf test suites.        -*- Autotest -*-
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 
 # Copyright 2000, 2001 Free Software Foundation, Inc.

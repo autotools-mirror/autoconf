@@ -1,3 +1,22 @@
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
+	testsuite.log should include config.log.
+
+	* lib/autotest/autotest.m4: New.
+	* lib/autotest/general.m4, tests/atspecific.m4:	Adjust.
+	* tests/suite.at : Adjust.
+	(AT_INIT): Log config.log.
+	* lib/m4sugar/m4sugar.m4 (m4_text_box): New.
+	* lib/m4sugar/m4sh.m4 (_AS_BOX_LITERAL): Adjust.
+	* lib/autoconf/general.m4 (_AC_INIT_CONFIG_LOG): Use them.
+	(_AC_INIT_PREPARE): Fix the incredibly messy and buggy completion
+	of config.log on traps.
+	(_AC_OUTPUT_CONFIG_STATUS): Use AS_BOX.
+	Use consistently `_ACEOF' for configure's here docs, and `_CSEOF'
+	for config.status'.
+	Open the log as soon as possible.
+	Use the same log introduction as configure's.
+
 2001-08-22  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Indices): New node.

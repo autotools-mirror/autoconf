@@ -479,7 +479,7 @@ m4_defun([_AS_TEST_PREPARE],
 # This section is lexicographically sorted.
 
 
-# AS_BOX(MESSAGE, [FRAME-CHARACTER = `='])
+# AS_BOX(MESSAGE, [FRAME-CHARACTER = `-'])
 # ----------------------------------------
 # Output MESSAGE, a single line text, framed with FRAME-CHARACTER (which
 # must not be `/').
@@ -488,20 +488,18 @@ m4_define([AS_BOX],
                [_AS_BOX_LITERAL($@)],
                [_AS_BOX_INDIR($@)])])
 
-# _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `='])
+# _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
 [cat <<\_ASBOX
-m4_patsubst([$1], [.], m4_if([$2], [], [[=]], [[$2]]))
-$1
-m4_patsubst([$1], [.], m4_if([$2], [], [[=]], [[$2]]))
+m4_text_box($@)
 _ASBOX])
 
-# _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `='])
+# _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `-'])
 # -----------------------------------------------
 m4_define([_AS_BOX_INDIR],
-[sed 'h;s/./m4_default([$2], [=])/g;p;x;p;x' <<_ASBOX
-$1
+[sed 'h;s/./m4_default([$2], [-])/g;s/^.../@%:@@%:@ /;s/...$/ @%:@@%:@/;p;x;p;x' <<_ASBOX
+@%:@@%:@ $1 @%:@@%:@
 _ASBOX])
 
 
@@ -553,9 +551,7 @@ $debug ||
 m4_define([AS_UNAME],
 [{
 cat <<_ASUNAME
-## ---------- ##
-## Platform.  ##
-## ---------- ##
+m4_text_box([Platform.])
 
 hostname = `(hostname || uname -n) 2>/dev/null | sed 1q`
 uname -m = `(uname -m) 2>/dev/null || echo unknown`

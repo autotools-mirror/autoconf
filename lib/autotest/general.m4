@@ -1,5 +1,4 @@
-changequote()changequote([, ])include(m4sugar/m4sh.m4)#	   -*- Autoconf -*-
-# This file is part of Autoconf.
+# This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 
@@ -136,7 +135,7 @@ at_tests=
 dnl Other vars inserted here (DEFAULT).
 m4_divert([OPTIONS])
 
-while test $[#] -gt 0; do
+while test $[@%:@] -gt 0; do
   case $[1] in
     --help | -h) at_help=: ;;
     --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
@@ -226,28 +225,39 @@ test -r ./atlocal && . ./atlocal
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
   AS_BOX([Test suite for $at_package $at_version])
   {
-    AS_BOX([Test suite log for $at_package $at_version])
+    AS_BOX([     Test suite log for $at_package $at_version.     ])
     echo
 
     # Try to find a few ChangeLogs in case it might help determining the
     # exact version.  Use the relative dir: if the top dir is a symlink,
     # find will not follow it (and options to follow the links are not
     # portable), which would result in no output here.
+
+    AS_BOX([ChangeLogs.])
+    echo
     find "$top_srcdir" -name ChangeLog \
-      -exec echo {} : ';' \
+      -exec echo "$as_me: {}:" ';' \
       -exec sed 's/^/| /;10q' {} ';' \
       -exec echo ';'
 
     AS_UNAME
     echo
 
-   # Inform about the contents of the config files.
-   echo "$as_me: atconfig:" >&6
-   sed 's/^/| /' atconfig >&6
-   if test -r ./atlocal; then
-     echo "$as_me: atlocal:" >&6
-     sed 's/^/| /' atlocal >&6
-   fi
+    AS_BOX([Configuration logs.])
+    echo
+    find "$top_srcdir" -name config.log \
+      -exec echo "$as_me: {}:" ';' \
+      -exec sed 's/^/| /' {} ';' \
+      -exec echo ';'
+
+    # Inform about the contents of the config files.
+    echo "$as_me: atconfig:" >&6
+    sed 's/^/| /' atconfig >&6
+    if test -r ./atlocal; then
+      echo "$as_me: atlocal:" >&6
+      sed 's/^/| /' atlocal >&6
+    fi
+    echo
 
     AS_BOX([Running silently the tests])
   } >&6
