@@ -4578,6 +4578,14 @@ Define @code{GETGROUPS_T} to be whichever of @code{gid_t} or @code{int}
 is the base type of the array argument to @code{getgroups}.
 @end defmac
 
+@defmac AC_TYPE_MBSTATE_T
+@acindex TYPE_MBSTATE_T
+@cvindex mbstate_t
+Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
+@code{mbstate_t} type.  Also, define @code{mbstate_t} to be a type if
+@code{<wchar.h>} does not declare it.
+@end defmac
+
 @defmac AC_TYPE_MODE_T
 @acindex TYPE_MODE_T
 @cvindex mode_t
