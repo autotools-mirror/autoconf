@@ -1,3 +1,18 @@
+Tue Mar 12 02:51:24 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_OUTPUT_HEADER): Apply Jan 15 fix to
+ 	AC_OUTPUT_MAKE_DEFS here too: Match `#define foo' without trailing
+ 	space in confdefs.h.  Before configure would lose if all its trailing
+ 	whitespace got stripped, and that can happen in mail.
+
+Sun Mar 10 20:30:09 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_INIT_NOTICE): Add 95 and 96 to copyright years.
+
+Sat Mar  9 18:28:42 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Add missing [.
+
 Fri Mar  8 15:06:48 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Declare $2 to override gcc2 internal
