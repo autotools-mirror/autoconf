@@ -33,7 +33,7 @@ dnl
 dnl ### Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.10.1)dnl
+define(AC_ACVERSION, 1.90)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -464,10 +464,9 @@ fi
 dnl
 define(AC_CONFIG_HEADER, [define(AC_CONFIG_NAMES, $1)])dnl
 dnl
-define(AC_DOREV, [#!/bin/sh
-# From configure.in $1
+define(AC_REVISION, [#!/bin/sh
+# From configure.in translit($1,$")
 ])dnl
-define(AC_REVISION, [AC_DOREV(translit($1,$"))])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
 dnl
@@ -534,11 +533,11 @@ AC_PROVIDE([AC_CONFIG_AUX_DEFAULT])dnl
 ])dnl
 dnl
 dnl Canonicalize the host, target, and build system types.
-define(AC_SYSTEM_TYPE,
+define(AC_CANON_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
-#    configure --host=HOST --target=TARGET NONOPT
+#    configure --host=HOST --target=TARGET --build=BUILD NONOPT
 #
 # The rules are:
 # 1. You aren't allowed to specify --host, --target, and nonopt at the
@@ -548,6 +547,7 @@ define(AC_SYSTEM_TYPE,
 #    as determined by config.guess.
 # 4. Target defaults to nonopt.
 # 5. If nonopt is not specified, then target defaults to host.
+# 6. build defaults to empty.
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
@@ -564,14 +564,14 @@ if ${ac_config_sub} sun4 >/dev/null 2>&1; then :
 else AC_ERROR(can not run ${ac_config_sub})
 fi
 
-AC_HOST_TYPE
-AC_TARGET_TYPE
-AC_BUILD_TYPE
+AC_CANON_HOST
+AC_CANON_TARGET
+AC_CANON_BUILD
 ])dnl
 dnl
-dnl Subroutines of AC_SYSTEM_TYPE.
+dnl Subroutines of AC_CANON_SYSTEM.
 dnl
-define(AC_HOST_TYPE,
+define(AC_CANON_HOST,
 [AC_CHECKING(host type)
 
 case "${host_alias}" in
@@ -594,7 +594,7 @@ AC_SUBST(host)dnl
 AC_SUBST(host_alias)dnl
 ])dnl
 dnl
-define(AC_TARGET_TYPE,
+define(AC_CANON_TARGET,
 [AC_CHECKING(target type)
 
 case "${target_alias}" in
@@ -614,7 +614,7 @@ AC_SUBST(target)dnl
 AC_SUBST(target_alias)dnl
 ])dnl
 dnl
-define(AC_BUILD_TYPE,
+define(AC_CANON_BUILD,
 [AC_CHECKING(build type)
 
 case "${build_alias}" in
@@ -984,8 +984,7 @@ EOF
 eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
 if egrep "$1" conftest.out >/dev/null 2>&1; then
   ifelse([$3], , :, [rm -rf conftest*
-  $3
-])
+  $3])
 ifelse([$4], , , [else
   rm -rf conftest*
   $4
@@ -1014,8 +1013,7 @@ EOF
 dnl Don't try to run the program, which would prevent cross-configuring.
 if eval $ac_compile; then
   ifelse([$3], , :, [rm -rf conftest*
-  $3
-])
+  $3])
 ifelse([$4], , , [else
   rm -rf conftest*
   $4
@@ -1026,20 +1024,19 @@ rm -f conftest*]
 dnl
 define(AC_TEST_PROGRAM,
 [AC_PROVIDE([$0])dnl
-ifelse([$4], , , [AC_REQUIRE([AC_CROSS_CHECK])dnl
-if test -n "$cross_compiling"
-then
-  $4
-else
+AC_REQUIRE([AC_CROSS_CHECK])dnl
+if test -n "$cross_compiling"; then
+  ifelse([$4], , AC_ERROR(can not run test program while cross compiling),
+  [$4
 ])dnl
+else
 cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
 eval $ac_compile
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
-  ifelse([$2], , :, [$2
-])
+  ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
   $3
 ])dnl
@@ -1059,8 +1056,7 @@ EOF
 ac_err=`eval "($ac_cpp conftest.${ac_ext} >/dev/null) 2>&1"`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
-  $2
-])
+  $2])
 ifelse([$3], , , [else
   rm -rf conftest*
   $3
@@ -1080,7 +1076,7 @@ AC_CACHE_VAL(ac_cv_header_$ac_var,
 [AC_TEST_CPP([#include <$1>], eval "ac_cv_header_$ac_var=yes",
   eval "ac_cv_header_$ac_var=no")])dnl
 if eval "test \"`echo '$ac_cv_header_'$ac_var`\" = yes"; then
-  ifelse([$2], , :, $2)
+  ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
   $3
 ])dnl
@@ -1102,7 +1098,7 @@ extern char $1(); $1();
 #endif
 ], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
 if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
-  ifelse([$2], , :, $2)
+  ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
   $3
 ])dnl
@@ -1115,8 +1111,7 @@ do
 changequote(,)dnl
 ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([,])dnl
-AC_FUNC_CHECK(${ac_func},
-AC_DEFINE(${ac_tr_func}))dnl
+AC_FUNC_CHECK(${ac_func}, AC_DEFINE(${ac_tr_func}))dnl
 done
 ])dnl
 dnl
@@ -1127,8 +1122,7 @@ do
 changequote(,)dnl
 ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([,])dnl
-AC_HEADER_CHECK(${ac_hdr},
-AC_DEFINE(${ac_tr_hdr}))dnl
+AC_HEADER_CHECK(${ac_hdr}, AC_DEFINE(${ac_tr_hdr}))dnl
 done
 ])dnl
 dnl
@@ -1172,19 +1166,14 @@ dnl
 dnl
 define(AC_OUTPUT,
 [AC_CACHE_SAVE
-changequote(,)dnl
-# Set default prefixes.
-if test -n "$prefix"; then
-  test -z "$exec_prefix" && exec_prefix='${prefix}' # Let make expand it.
-  ac_prsub="s%^prefix\\([ 	]*\\)=\\([ 	]*\\).*$%prefix\\1=\\2$prefix%"
-fi
-if test -n "$exec_prefix"; then
-  ac_prsub="$ac_prsub
-s%^exec_prefix\\([ 	]*\\)=\\([ 	]*\\).*$%exec_prefix\\1=\\2$exec_prefix%"
-fi
+
+test -z "$prefix" && prefix=/usr/local
+test -z "$exec_prefix" && exec_prefix='${prefix}' # Let make expand it.
+
 # Any assignment to VPATH causes Sun make to only execute
 # the first set of double-colon rules, so remove it if not needed.
 # If there is a colon in the path, we need to keep it.
+changequote(,)dnl
 if test "x$srcdir" = x.; then
   ac_vpsub='/^[ 	]*VPATH[ 	]*=[^:]*$/d'
 fi
@@ -1213,7 +1202,6 @@ s%@DEFS@%$DEFS%]
 DEFS='$DEFS'
 ])dnl
 divert(2)dnl
-ac_prsub='$ac_prsub'
 ac_vpsub='$ac_vpsub'
 extrasub='$extrasub'
 divert(0)dnl
@@ -1312,7 +1300,6 @@ a\\
   esac
   sed -e "
 $ac_comsub
-$ac_prsub
 $ac_vpsub
 dnl Shell code in configure.in might set extrasub.
 $extrasub
