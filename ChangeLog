@@ -1832,7 +1832,7 @@
 
 	* Makefile.am (CLEANFILES): New explicit variable.
 	(editsh): acdatadir is no longer defined, so use pkgdatadir.
-	(editpl): Likewise. From Akim Demaille <akim@epita.fr>.
+	(editpl): Likewise. From Akim Demaille.
 	* Makefile.in: Regenerate.
 
 	* configure: Regenerate.
@@ -1871,7 +1871,7 @@
 	the test is obsolete.
 	* acspecific.m4 (AC_PROG_BINSH, AC_PROG_SED): Don't quote the name
 	of the macro defined; the test suite does not recognize this
-	syntax. From Akim Demaille <akim@epita.fr>.
+	syntax. From Akim Demaille.
 
 1999-10-27  Ben Elliston  <bje@cygnus.com>
 
@@ -2284,7 +2284,7 @@
 
 	* acspecific.m4 (AC_HEADER_STDC): Define ISLOWER and ISUPPER
 	macros correctly on EBCDIC systems. Contributed by Kurt D.
-	Zeilenga <kurt@openldap.org>. Fix for PR autoconf/6.
+	Zeilenga. Fix for PR autoconf/6.
 
 1999-09-24  Jim Blandy  <jimb@zwingli.cygnus.com>
 
@@ -2296,7 +2296,7 @@
 
 	* autoreconf.sh: Do not run autoheader if AC_CONFIG_HEADER is
 	commented out in configure.in. Reported by Erez Zadok
-	<ezk@cs.columbia.edu> as a fix for PR autoconf/21.
+	as a fix for PR autoconf/21.
 
 	* install.texi: Replace `can not' with `cannot'.
 
@@ -2350,7 +2350,7 @@
 	* config.guess: Clear the CCOPTS environment variable before
 	invoking the C compiler on HP-UX. This is necessary to guarantee
 	that the test program is compiled correctly. Reported by Dietmar
-	P. Schindler <schd@mra.man.de>.
+	P. Schindler.
 
 1999-09-22  Linas Vepstas  <linas@linas.org>
 
@@ -2365,7 +2365,7 @@
 
 	* configure.in: Check if an appropriate version of GNU m4 is
 	installed at configure-time rather than at runtime. From Pavel
-	Roskin <pavel_roskin@geocities.com>. Fix for PR autoconf/2.
+	Roskin. Fix for PR autoconf/2.
 	* configure: Regenerate.
 
 1999-09-21  Akim Demaille  <akim@epita.fr>
@@ -2438,8 +2438,7 @@
 
 1999-09-20  Ben Elliston  <bje@cygnus.com>
 
-	* autoheader.sh: Bourne shell compatibility fix. From Pavel Roskin
-	<pavel_roskin@geocities.com>.
+	* autoheader.sh: Bourne shell compatibility fix. From Pavel Roskin.
 
 1999-09-20  Pavel Roskin  <pavel_roskin@geocities.com>
 
@@ -2593,12 +2592,12 @@
 1999-09-05  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (CONFIG_AUX_DIRS): Try running `shtool install'.
-	Contributed by Ralf S. Engelschall <rse@engelschall.com>.
+	Contributed by Ralf S. Engelschall.
 
 1999-09-04  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Use POSIX compliant shell code on DG/UX.
-	Suggested by Stephen Gildea <gildea@alum.mit.edu>.
+	Suggested by Stephen Gildea.
 
 1999-09-04  Pavel Roskin  <pavel_roskin@geocities.com>
 
@@ -2675,7 +2674,7 @@
 1999-08-28  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Once and for all, emit the correct string for
-	Unixware 7! Contributed by Mike Hopkirk <hops@sco.com>.
+	Unixware 7! Contributed by Mike Hopkirk.
 
 	* acspecific.m4 (AC_C_INLINE): Qualify the return type of the
 	dummy inlined function to satisfy newer C++ compilers. Fix for
@@ -2706,8 +2705,7 @@
 	additions to the Fortran 77 compiler search list.
 
 	* acspecific.m4 (AC_PROG_F77): Add more Fortran 77 compilers to
-	the search list.  Contributed by Steven G. Johnson
-	<stevenj@alum.mit.edu>.
+	the search list.  Contributed by Steven G. Johnson.
 
 	(AC_PROG_CC): Likewise.
 	(AC_PROG_CXX): Likewise.
@@ -2719,7 +2717,7 @@
 
 	* config.guess: Remove "/MP" from the release string on
 	multiprocessor x86 machines running SVR4.0. Suggested by Tom
-	Purcell <Tom.Purcell@wang.com>.
+	Purcell.
 
 1999-08-16  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
 
@@ -2741,7 +2739,7 @@
 1999-08-05  Ben Elliston  <bje@cygnus.com>
 
 	* config.sub: Accept version number appended to OS name for MiNT.
-	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
+	Contributed by Guido Flohr.
 
 1999-08-04  Ben Elliston  <bje@cygnus.com>
 
@@ -2786,7 +2784,7 @@
 1999-06-12  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Handle `elf32ppclinux' from ld. Contributed by
-	Cort Dougan <cort@cs.nmt.edu>.
+	Cort Dougan.
 
 1999-06-09  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
@@ -2864,7 +2862,7 @@
 
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Change sed regexps to
 	recognize CPP macros that take arguments.  Reported, and based on
-	a patch, by Steven G. Johnson <stevenj@alum.mit.edu>.
+	a patch, by Steven G. Johnson.
 	(AC_OUTPUT_HEADER): Likewise.
 
 	* autoconf.texi (Fortran 77 Compiler Characteristics): Document
@@ -2893,8 +2891,7 @@
 
 1999-05-22  Ben Elliston  <bje@cygnus.com>
 
-	* config.guess: Handle NEC UX/4800. Contributed by Jiro Takabatake
-	<jiro@din.or.jp>.
+	* config.guess: Handle NEC UX/4800. Contributed by Jiro Takabatake.
 
 1999-05-17  Ben Elliston  <bje@cygnus.com>
 
@@ -2911,7 +2908,7 @@
 1999-04-29  Ben Elliston  <bje@cygnus.com>
 
 	* config.sub: Handle `t3e' alias for Cray T3E. Contributed by
-	James A. Lupo <lupoja@feynman.ml.wpafb.af.mil>.
+	James A. Lupo.
 
 1999-04-19  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
@@ -2954,12 +2951,12 @@
 
 	* mkinstalldirs: Add `-m' flag to specify the mode of a newly
 	created directory. Add command line usage and `-h', `--help'
-	options. Contributed by Jeff Garzik <jgarzik@pobox.com>.
+	options. Contributed by Jeff Garzik.
 
 1999-04-08  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_PROG_CC): Try using the `cl' C compiler under
-	Cygwin. Contributed by Scott Stanton <stanton@scriptics.com>.
+	Cygwin. Contributed by Scott Stanton.
 
 	* config.sub: Handle MPE/iX.
 
@@ -2982,8 +2979,7 @@
 	(AC_MINGW32): Likewise.
 	(AC_EMXOS2): Likewise.
 
-	* acspecific.m4 (AC_EMXOS2): New macro. Contributed by Ryuji Abe
-	<raeva@t3.rim.or.jp>.
+	* acspecific.m4 (AC_EMXOS2): New macro. Contributed by Ryuji Abe.
 	(AC_EXEEXT): Handle case for OS/2.
 	(AC_PROG_CC_WORKS): Show $CPPFLAGS when running the compiler.
 	(AC_PROG_CXX_WORKS): Likewise.
@@ -3004,11 +3000,9 @@
 
 	* acspecific.m4 (AC_PROG_INSTALL): Avoid using the installation
 	script belonging to HP `pwplus' when running the install
-	program. Contributed by Steven G. Johnson <stevenj@alum.mit.edu>
-	and Dave Adams <adams@hpesdwa.fc.hp.com>.
+	program. Contributed by Steven G. Johnson and Dave Adams.
 	(AC_EXEEXT): Do not consider `.xcoff' as a possible executable
-	filename extension. Contributed by Robert S. Maier
-	<rsm@math.arizona.edu>.
+	filename extension. Contributed by Robert S. Maier.
 
 1999-03-28  Tom Tromey  <tromey@cygnus.com>
 
@@ -3034,8 +3028,7 @@
 
 1999-03-11  Ben Elliston  <bje@cygnus.com>
 
-	* config.sub: Recognise hppa2.0w. Contributed by Erez Zadok
-	<ezk@cs.columbia.edu>.
+	* config.sub: Recognise hppa2.0w. Contributed by Erez Zadok.
 
 1999-03-11  Pavel Roskin  <pavel_roskin@geocities.com>
 
@@ -3048,7 +3041,7 @@
 1999-03-11  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Recognise MiNT and TOS on Atari machines.
-	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
+	Contributed by Guido Flohr.
 
 	* config.sub: Add aliases for MiNT.
 
@@ -3068,8 +3061,7 @@
 	when $ac_cv_func_vfork_works is the empty string. Contributed by
 	<red@nym.alias.net>.
 
-	* config.sub: Add `oskit' as a basic system type. From Godmar Back
-	<gback@cs.utah.edu>.
+	* config.sub: Add `oskit' as a basic system type. From Godmar Back.
 
 1999-02-26  Ben Elliston  <bje@cygnus.com>
 
@@ -3080,19 +3072,19 @@
 1999-02-24  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect LynxOS 3.x. Contributed by Giuseppe
-	Guerrini <guisguerrini@racine.ra.it>.
+	Guerrini.
 
 1999-02-23  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect ReliantUNIX on MIPS. Contributed by Andrej
-	Borsenkow <borsenkow.msk@sni.de>.
+	Borsenkow.
 	Also remove random trailing whitespace.
 
 1999-02-22  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (System Services): Explain the semantics of the
 	AC_SYS_RESTARTABLE_SYSCALLS macro in greater detail. Suggested by
-	Franc,ois Pinard <pinard@iro.umontreal.ca>.
+	Franc,ois Pinard.
 
 1999-02-22  Stu Grossman  <grossman@cygnus.com>
 
@@ -3110,7 +3102,7 @@
 1999-02-19  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Make C code clean for C++ compilers. Contributed
-	by Markus Oberhumer <markus.oberhumer@jk.uni-linz.ac.at>.
+	by Markus Oberhumer.
 
 1999-02-19  Ben Elliston <bje@cygnus.com>
 
@@ -3125,8 +3117,7 @@
 
 1999-02-18  Ben Elliston  <bje@cygnus.com>
 
-	* config.guess: Detect NEC EWS4800. Contributed by Koji Arai
-	<JCA02266@nifty.ne.jp>.
+	* config.guess: Detect NEC EWS4800. Contributed by Koji Arai.
 
 1999-02-11  Ben Elliston  <bje@cygnus.com>
 
@@ -3156,7 +3147,7 @@
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
 	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by
-	Jeff Garzik <jgarzik@pobox.com>.
+	Jeff Garzik.
 
 	* Makefile.in (clean mostlyclean distclean maintainer-clean):
 	Remove .m4f files.
@@ -3169,10 +3160,10 @@
 1999-01-23  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Catch more NILE system models. Contributed by
-	Akim Demaille <demaille@inf.enst.fr> and probably Graham Jenkins.
+	Akim Demaille and Graham Jenkins.
 
 	* autoheader.sh: Force $tmpout to close to avoid Windows file
-	sharing conflicts. From Mark Elbrecht <snowball3@usa.net>.
+	sharing conflicts. From Mark Elbrecht.
 
 1999-01-21  Ben Elliston  <bje@cygnus.com>
 
@@ -3189,7 +3180,7 @@
 
 	* acspecific.m4 (AC_PROG_CXXCPP): Substitute @CXXCPP@ correctly
 	when $CXXCPP is overridden in the supervisory shell. Contributed
-	by Michael Schoene <mrs@mlc.de>.
+	by Michael Schoene.
 
 1999-01-16  Ben Elliston  <bje@cygnus.com>
 
@@ -3229,7 +3220,7 @@
 1999-01-10  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect Rhapsody on PowerPC and other machines.
-	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+	Contributed by Wilfredo Sanchez.
 
 	* config.sub: Add rhapsody and openstep aliases.
 
@@ -3237,14 +3228,14 @@
 
 	* Makefile.in (html): New target. Generate HTML documentation.
 	(install-strip): Add.
-	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+	Contributed by Wilfredo Sanchez.
 
 	* autoconf.texi (AC_CHECK_LIB): Explain more. Contributed by Bob
-	Friesenhahn <bfriesen@simple.dallas.tx.us>.
+	Friesenhahn.
 	(UPDATED): Bump to 1999.
 
 	* config.guess: Distinguish between OpenStep and NeXTStep
-	platforms. Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+	platforms. Contributed by Wilfredo Sanchez.
 
 1999-01-09  J"orn Rennecke  <amylaar@cygnus.co.uk>
 
@@ -3259,7 +3250,7 @@
 1999-01-08  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: More useful and up-to-date help from the --help
-	option. Contributed by Akim Demaille <demaille@inf.enst.fr>.
+	option. Contributed by Akim Demaille.
 
 	* autoheader.sh: Likewise.
 
@@ -3272,7 +3263,7 @@
 	* ifnames.sh: Likewise.
 
 	* config.guess: Detect Cray T3E and NEC SX-4, SX-5 machines.
-	Contributed by Andreas Schott <schott@rzg.mpg.de>.
+	Contributed by Andreas Schott.
 
 1999-01-06  Ben Elliston  <bje@cygnus.com>
 
@@ -3337,7 +3328,7 @@
 
 	* config.guess: Likewise.
 	Handle BSD/OS variants for non-x86 machines. Contributed by Chris
-	P. Ross <cross@uu.net>.
+	P. Ross.
 
 	* NEWS: Update.
 
@@ -3348,8 +3339,7 @@
 	* autoreconf.sh (stamp): Add missing quote.
 
 	* mkinstalldirs: Write output which is not diagnostic to standard
-	output and not standard error. Suggested by Steve Robbins
-	<steve@nyongwa.montreal.qc.ca>.
+	output and not standard error. Suggested by Steve Robbins.
 
 1998-12-11  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
@@ -3375,7 +3365,7 @@
 	* autoreconf.sh: Support several automake command line options,
 	and run aclocal and automake when needed. Also, create stamp files
 	just like automake's Makefiles would do for config headers.
-	Additional contributions from Tom Tromey <tromey@cygnus.com>.
+	Additional contributions from Tom Tromey.
 
 1998-10-24  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
@@ -3393,21 +3383,19 @@
 1998-10-24  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_FUNC_SELECT_ARGTYPES): New macro. Detects the
-	types of formal arguments to select(). Contributed by Lars Hecking
-	<lhecking@nmrc.ucc.ie>.
+	types of formal arguments to select(). Contributed by Lars Hecking.
 
 	* acconfig.h (SELECT_TYPE_ARG1): Add.
 	(SELECT_TYPE_ARG234): Likewise.
 	(SELECT_TYPE_ARG5): Likewise.
 
 	* config.guess: Hide warnings emitted by the HP linker when
-	generating a PA 2.0 object file. Contributed by Marcus Thiessel
-	<marcus@xemacs.org>.
+	generating a PA 2.0 object file. Contributed by Marcus Thiessel.
 
 1998-10-20  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_LANG_RESTORE): Fix a typo spotted by Noah
-	Elliott <elliott@hera.llnl.gov>.
+	Elliott.
 
 1998-10-09  Tom Tromey  <tromey@cygnus.com>
 
@@ -3441,25 +3429,23 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 	* acgeneral.m4 (AC_VALIDATE_CACHED_SYSTEM_TUPLE): New macro. This
 	macro can be used to ensure that a configure script will not run
 	on a second system without removing the cache and re-running
-	configure. Contributed by Alexandre Oliva <oliva@dcc.unicamp.br>.
+	configure. Contributed by Alexandre Oliva.
 
 1998-09-29  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_SEARCH_LIBS): New macro. Searches a series of
-	libraries for a given function. Contributed by Jim Blandy
-	<jimb@cygnus.com>.
+	libraries for a given function. Contributed by Jim Blandy.
 	(AC_TRY_LINK_FUNC): New macro. Again, from Jim.
 
 1998-09-28  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect multiprocessor DC/OSx running on Pyramid
-	MIServer machines.  Contributed by Graham K. Jenkins
-	<Graham.K.Jenkins@corpmail.telstra.com.au>.
+	MIServer machines.  Contributed by Graham K. Jenkins.
 
 	* acgeneral.m4 (AC_CHECK_PROG): Fix a bug if the supplied path
 	contains colons. This was observed with some versions of NetBSD
 	`sh' and some versions of `bash'.
-	(AC_PATH_PROG): Likewise. Contributed by Tom Yu <tlyu@mit.edu>.
+	(AC_PATH_PROG): Likewise. Contributed by Tom Yu.
 
 1998-09-27  Ben Elliston  <bje@cygnus.com>
 
@@ -3467,7 +3453,7 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 	(install): Do not freeze .m4 files. Install pre-frozen .m4f files
 	using $(INSTALL_DATA).
 	(.m4.m4f): Freeze files if m4 supports stored internal state.
-	Contributed by Karl Heuer <kwzh@gnu.org>.
+	Contributed by Karl Heuer.
 
 	* install-sh: Import latest version from the FSF.
 
@@ -3475,14 +3461,14 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 
 	* config.guess: Apply the sysconf(2) test to HP 9000/600-series,
 	9000/802, 9000/804 and 9000/892 machines.  Contributed by Pavel
-	Roskin <pavel.roskin@ecsoft.co.uk>.
-	Detect UnixWare 7.  Contributed by Paul Gampe <paulg@apnic.net>.
+	Roskin.
+	Detect UnixWare 7.  Contributed by Paul Gampe.
 
 	* acspecific.m4 (AC_PROG_INSTALL): Substitute `INSTALL_SCRIPT'.
-	Contributed by Franc,ois Pinard <pinard@iro.umontreal.ca>.
+	Contributed by Franc,ois Pinard
 	(AC_C_STRINGIZE): New macro to test the availability of the
 	stringizing operator in the C preprocessor. Contributed by Arnold
-	Robbins <arnold@gnu.org> on behalf of the GNU AWK project.
+	Robbins on behalf of the GNU AWK project.
 
 	* acconfig.h (HAVE_STRINGIZE): Add for the AC_C_STRINGIZE macro.
 
@@ -3490,7 +3476,7 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 	print a warning and skip the `dejacheck' target (which will fail).
 	(site.exp): Use tests to guard commands from generating error
 	messages if `site.exp' or `site.bak' do not exist. Contributed by
-	Karl Heuer <kwzh@gnu.org>.
+	Karl Heuer.
 	(dejacheck): Remove unused target.
 
 1998-09-26  Ben Elliston  <bje@cygnus.com>
@@ -3499,11 +3485,11 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 
 	* config.guess: Treat all SPARC variant processors running BSD/OS
 	as just `sparc' for compatibility reasons.  Contributed by Chris
-	Torek <torek@bsdi.com>.
+	Torek.
 
 	* acgeneral.m4 (AC_CHECK_FILE): New macro. Checks for the
 	existence of a file in the file system (native only).
-	Contributed by Ken Raeburn <raeburn@cygnus.com>.
+	Contributed by Ken Raeburn.
 	(AC_CHECK_FILES): Likewise.
 
 1998-09-15  Didier Verna  <verna@inf.enst.fr>
@@ -3514,7 +3500,7 @@ Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
 1998-09-15  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Handle strange processor ID assignments on AIX
-	machines.  Contributed by Didier Desseaux <didess@infonie.fr>.
+	machines.  Contributed by Didier Desseaux.
 
 Sat Sep 12 16:25:00 1998  Aaron Crane  <aaronc@pobox.com>
 
@@ -3658,8 +3644,7 @@ Tue Aug  5 23:00:05 1997  Ian Lance Taylor  <ian@cygnus.com>
 Tue Dec 10 19:38:59 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Use grep to prevent overflowing
-	HP-UX 9.05 /bin/sh buffer in case statement.  From Eric Backus
-	<ericb@lsid.hp.com>.
+	HP-UX 9.05 /bin/sh buffer in case statement.  From Eric Backus.
 
 Mon Dec  9 23:39:17 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
@@ -3693,11 +3678,11 @@ Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Handle cache variable values
 	correctly even if they contain single quote, or are quoted by
-	the shell.  From Paul Eggert <eggert@twinsun.com>.
+	the shell.  From Paul Eggert.
 	(AC_INIT_PREPARE): Set LC_MESSAGES to C if set.
-	From Hans Olsson <Hans.Olsson@dna.lth.se>.
+	From Hans Olsson.
 	Set LC_CTYPE to C if set.
-	From tom@vlsivie.tuwien.ac.AT (Thomas Winder).
+	From Thomas Winder.
 	* autoconf.sh, autoheader.sh: Likewise set LC_MESSAGES and LC_CTYPE.
 
 Tue Nov 19 10:29:06 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
@@ -3706,12 +3691,12 @@ Tue Nov 19 10:29:06 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_OUTPUT_FILES, AC_OUTPUT_HEADER): Support
 	creating output files from multiple pieces, concatenated.
-	Suggested by "Theodore Ts'o" <tytso@MIT.EDU>.
+	Suggested by Theodore Ts'o.
 	(AC_LINK_FILES): If called more than once, concatenate the
 	arguments.  From Roland McGrath.
 	(AC_CONFIG_SUBDIRS): Likewise.
 	(AC_OUTPUT_COMMANDS): New macro.  Suggested by
-	Tom Tromey <tromey@creche.cygnus.com>.
+	Tom Tromey.
 	(AC_OUTPUT): Use the lists it sets.
 
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Fail if linking fails, like
@@ -3784,7 +3769,7 @@ Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* Test release 2.10.3.
 
 	* testsuite/Makefile.in (dejacheck): New target, suggested by Tom
-	Tromey <tromey@creche.cygnus.com>.
+	Tromey.
 	(check): Depend on dejacheck.
 
 Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
@@ -3792,7 +3777,7 @@ Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* acgeneral.m4 (AC_OUTPUT_FILES): Split the list of sed commands in
 	conftest.subs into multiple files named conftest.s[1-9][0-9]*.
 	Create a pipeline of sed commands that use these files, then delete
-	the temporary files.  From John W. Eaton <jwe@bevo.che.wisc.edu>.
+	the temporary files.  From John W. Eaton.
 
 	* acspecific.m4 (AC_AIX, AC_MINIX): Remove warnings about AC_TRY_LINK.
 	These macros don't change the linkage options.
@@ -3804,11 +3789,10 @@ Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Support passing
 	AC_CONFIG_HEADER a value containing shell variables.  Suggested by
-	Markku Savela <msa@msa.tte.vtt.fi> and Julian Onions
-	<j.onions@nexor.co.uk>.
+	Markku Savela and Julian Onions.
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE, AC_TRY_LINK, AC_TRY_COMPILE,
 	AC_TRY_CPP): Show the test program in config.log if the test fails.
-	From Karl Berry <karl@cs.umb.edu>.
+	From Karl Berry.
 
 	* testsuite/config/unix.exp: Run the configure script as "./script"
 	in case the user doesn't have "." in their PATH.
@@ -3823,7 +3807,7 @@ Mon Nov 11 18:02:58 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Rename ac_save_LIBS to avoid
 	a clash with AC_CHECK_LIB.
-	From Jim Meyering <meyering@asic.sc.ti.com>.
+	From Jim Meyering.
 	(AC_FUNC_FNMATCH, AC_FUNC_MMAP, AC_FUNC_VFORK, AC_FUNC_WAIT3,
 	AC_FUNC_STRCOLL, AC_FUNC_MEMCMP): Rename cache variables to avoid
 	wrong results if someone calls AC_CHECK_FUNC for these functions.
@@ -3837,7 +3821,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* Test release 2.10.1.
 
 	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): New macros
-	adapted from Bruno Haible <haible@ilog.fr>.
+	adapted from Bruno Haible.
 	(AC_PROG_CC, AC_PROG_CXX): Use them.
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Split out of AC_TRY_RUN.
 	(AC_TRY_LINK): Check that the executable exists after linking.
@@ -3856,32 +3840,32 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	Replace the test program with a new version from Mike Haertel.
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Accept the HP-UX sh 'set' output
-	format.  From Marcus Daniels <marcus@sysc.pdx.edu>.
+	format.  From Marcus Daniels.
 
 	* acgeneral.m4 (AC_MSG_CHECKING, AC_CHECKING): Write a message to
-	config.log also.  From "T.E.Dickey" <dickey@clark.net>.
+	config.log also.  From T.E.Dickey.
 	(AC_CHECK_LIB, AC_CHECK_HEADER, AC_CHECK_HEADERS): Replace use of
 	tr with sed, to avoid a bug in the AIX 4.1.3.0 tr reported by
-	Alain KNAFF <Alain.Knaff@imag.fr>.  He says that version of
-	tr interprets \055 as a range specifier, like an unquoted -.
+	Alain Knaff.  He says that version of tr interprets \055 as a
+	range specifier, like an unquoted -.
 	* acspecific.m4 (AC_PROG_MAKE_SET, AC_CHECK_HEADER_DIRENT,
 	AC_CHECK_HEADERS_DIRENT): Ditto.
 
 	* acspecific.m4 (AC_FUNC_SETPGRP): New macro.
 	* acconfig.h (SETPGRP_VOID): New entry.
-	From "T.E.Dickey" <dickey@clark.net>.
+	From T.E.Dickey.
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Try /lib/usr/lib/X11 for A/UX.
-	From Guillermo Gomez <gomez@mi.uni-erlangen.de>.
+	From Guillermo Gomez.
 	(AC_PATH_XTRA): Replace -R with adding LD_RUN_PATH to CC in the
-	Solaris kludge.  Suggested by Paul Eggert <eggert@twinsun.com>.
+	Solaris kludge.  Suggested by Paul Eggert.
 	Define X_DISPLAY_MISSING with AC_DEFINE, and
 	if not using X, clear out the X variables.
 	Check system-dependent libs before system-independent ones.
 	Check for more system-dependent libs.
 	From Karl Berry.
 	Use AC_CHECK_FUNC in the system-dependent libs tests.
-	From Larry Schwimmer <rosebud@cyclone.stanford.edu>.
+	From Larry Schwimmer.
 	Wart removal: Don't require AC_ISC_POSIX.
 	(AC_ISC_POSIX): Require AC_PROG_CC, since it uses $GCC.
 	From gvran@uddeborg.pp.se.
@@ -3895,13 +3879,13 @@ Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	/usr/X11Rn, etc.  From bostic@bsdi.com (Keith Bostic).
 
 	* acgeneral.m4 (AC_CHECK_TYPE) [STDC_HEADERS]: Check in stddef.h, too.
-	From "Glenn P. Davis" <davis@unidata.ucar.edu>.
+	From Glenn P. Davis.
 	Don't require the second char after the type name to be a space.
 	(AC_TRY_RUN): Remove the test files before executing the "failure"
 	case code.
 
 	* acspecific.m4 (AC_PROG_CXX): Check for cc++ for NexT.
-	From Carl Edman <cedman@princeton.edu>.
+	From Carl Edman.
 	(AC_PROG_CC, AC_PROG_CXX): Check whether -g works even if
 	C[XX]FLAGS is set.  From T.E.Dickey <dickey@clark.net>
 	(AC_FUNC_FNMATCH): New macro.
@@ -4094,7 +4078,7 @@ Wed Nov 22 11:01:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	(AC_ARG_PROGRAM): Use cat instead of echo to avoid SysV echo
 	interpreting backslashes.  From kim@tac.nyc.ny.US (Kimmo Suominen).
 	(AC_OUTPUT_FILES): Quote $ and \ for being in an unquoted here
-	document.  From Paul Eggert <eggert@twinsun.com>.
+	document.  From Paul Eggert.
 
 	* acspecific.m4 (AC_PATH_X_XMKMF): Use ${MAKE-make}, not plain make.
 	(AC_C_CONST): Avoid a warning from g++.
@@ -4106,7 +4090,7 @@ Wed Nov 22 11:01:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	(AC_TYPE_SIGNAL) [__cplusplus]: Give a full prototype.
 	From churritz@cts.com (Chad Hurwitz).
 	(AC_FUNC_VFORK): If cross-compiling, use AC_CHECK_FUNC instead.
-	From steve chamberlain <sac@cygnus.com>.
+	From Steve Chamberlain.
 
 Tue Sep  5 20:37:48 1995  Paul Eggert  <eggert@twinsun.com>
 
@@ -4145,7 +4129,7 @@ Fri Nov 17 15:23:04 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Don't start tr argument with '+',
 	 so as not to confuse old GNU tr's.  From
-	 Ian Lance Taylor <ian@cygnus.com>.
+	 Ian Lance Taylor.
 	 (AC_INIT_PARSE_ARGS): Make sure MFLAGS and MAKEFLAGS are empty.
 	 From Paul Townsend (aab@cc.purdue.edu).
 	 (AC_CHECK_LIB, AC_CHECK_HEADERS, AC_CHECK_FUNC): Remove
@@ -4153,7 +4137,7 @@ Fri Nov 17 15:23:04 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_USG): Define USG if we don't have rindex and
 	 bzero, not if we do have them.
-	 From Viktor Dukhovni <viktor@anaheim.esm.com>.
+	 From Viktor Dukhovni.
 
 Sun Oct 29 15:13:37 1995  Richard Stallman  <rms@mole.gnu.ai.mit.edu>
 
@@ -4326,7 +4310,7 @@ Tue Feb 21 13:00:07 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	 4.1 bug reported by hyc@locus.com (Howard Chu).
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for -lelf before -lkvm.
-	Reported by Kaveh R. Ghazi <ghazi@caip.rutgers.edu>.
+	Reported by Kaveh R. Ghazi.
 	(AC_HEADER_STAT): Check whether S_IFDIR is defined, to work around
 	ISC bug reported by rick@anasazi.com (Rick Coupland).
 
@@ -4481,7 +4465,7 @@ Fri Nov  4 09:08:33 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 	* Version 2.1.
 
 	* autoreconf.sh: Add -f --force option.
-	From "Theodore Ts'o" <tytso@MIT.EDU>.
+	From Theodore Ts'o.
 
 Thu Nov  3 10:24:08 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 
@@ -4552,7 +4536,7 @@ Thu Oct 20 07:11:22 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 Wed Oct 19 09:14:50 1994  David J. MacKenzie  (djm@churchy.gnu.ai.mit.edu)
 
 	* acgeneral.m4 (AC_PREREQ_COMPARE): Allow secondary and ternary
-	numbers >99.  From John Eaton <jwe@che.utexas.edu>.
+	numbers >99.  From John Eaton.
 
 Wed Oct 19 00:06:40 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 
@@ -4915,7 +4899,7 @@ Sun Aug 28 17:37:26 1994  David J. MacKenzie  (djm@bennett.eng.umd.edu)
 Sat Aug 27 13:31:58 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Remove comments from within sed
-	script.  From Kaveh Ghazi <ghazi@wilhelm.rutgers.edu>.
+	script.  From Kaveh Ghazi.
 
 Fri Aug 26 17:03:18 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
@@ -5417,7 +5401,7 @@ Wed May 25 08:18:07 1994  David J. Mackenzie  (djm@rtl.cygnus.com)
 Tue May 24 18:49:35 1994  David J. Mackenzie  (djm@rtl.cygnus.com)
 
 	* acspecific.m4 (AC_ALLOCA): Don't declare alloca if it's already
-	defined.  From Bill Sommerfeld <sommerfeld@apollo.hp.com>.
+	defined.  From Bill Sommerfeld.
 
 	* acgeneral.m4 (AC_TEST_PROGRAM): Verbosely note when using the
 	cross-compiling default.
