@@ -1,5 +1,8 @@
 2004-08-12  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Function Portability): Document isinf and
+	and isnan.  From a suggestion by Kevin Ryde.
+
 	* lib/Autom4te/General.pm (END): Return correct exit status even
 	if unlink succeeds and sets $?.  Needed with Solaris 8's perl 5.00503.
 
