@@ -20,16 +20,16 @@
 # 02111-1307, USA.
 
 # We need AC_CONFIG_TESTDIR.
-AC_PREREQ([2.57])
+AC_PREREQ([2.59])
 
-AC_INIT([GNU Autoconf], [2.59], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], [2.59a], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_FILES([config/Makefile])
 
-AM_INIT_AUTOMAKE([check-news 1.7.8 dist-bzip2 readme-alpha])
+AM_INIT_AUTOMAKE([check-news 1.7.9 dist-bzip2 readme-alpha])
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])
