@@ -1,5 +1,20 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	Get rid of the m4 name spaces.
+
+	* libm4.m4 (m4_changequote, m4_define, m4_defn, m4_dnl, m4_indir,
+	m4_popdef, m4_pushdef, m4_undefine, m4_namespace_push,
+	m4_namespace_pop, m4_namespace_register, m4_namespace_define,
+	m4_disable, m4_enable):	Removed.
+	All dependencies adjusted.
+	* libm4.m4: Remove all the name space initialization.
+	* acgeneral.m4: Adjust.
+	(AU_DEFINE): Redefine as `AC_DEFUN'.
+	* autoupdate.m4: Adjust.
+	* tests/tools.m4: Temporarily disable the `autoupdate' test.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	Eradicate AC_TRY_COMPILE.
 
 	* aclang.m4 (AC_PROG_CC_STDC, AC_C_BIGENDIAN, AC_C_INLINE,

@@ -28,9 +28,4 @@ m4_include(acgeneral.m4)
 m4_include(aclang.m4)
 m4_include(acspecific.m4)
 m4_include(acoldnames.m4)
-m4_disable(autoconf)
-m4_enable(autoupdate)
-# Disable m4
-m4_disable(libm4)
-m4_changequote(, )
-divert(0)m4_dnl
+divert(0)dnl

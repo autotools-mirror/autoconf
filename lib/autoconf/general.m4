@@ -49,8 +49,6 @@
 # Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
-m4_namespace_push(autoconf)
-
 
 
 ## ---------------- ##
@@ -311,11 +309,8 @@ define(AC_EXPAND_ONCE,
 
 # AC_PROVIDE(MACRO-NAME)
 # ----------------------
-# We use `m4_define' and not `define' to avoid the cost of the name
-# space machinery.  It makes no difference for any of the name
-# spaces.
 define(AC_PROVIDE,
-[m4_define([AC_PROVIDE_$1])])
+[define([AC_PROVIDE_$1])])
 
 
 # AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
@@ -343,14 +338,7 @@ define(AC_PROVIDE_IFELSE,
 # wrapping actions required by `autoupdate'.
 # We do not define anything in `autoconf::'.
 define(AU_DEFINE,
-[m4_namespace_define(autoupdate, [$1],
-[m4_changequote([, ])m4_dnl
-m4_enable(libm4)m4_dnl
-m4_warn([Updating use of `$1'. $3])m4_dnl
-$2[]m4_dnl
-m4_disable(libm4)m4_dnl
-m4_changequote(, )m4_dnl
-])])
+[AC_DEFUN([$1], [$2])])
 
 
 # AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
@@ -365,11 +353,11 @@ m4_changequote(, )m4_dnl
 # and to update a configure.in.
 # See `acobsolete.m4' for a longer description.
 define(AU_DEFUN,
-[define([$1],
-[AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
+[AU_DEFINE([$1],
+           [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
-$2])dnl
-AU_DEFINE([$1], [$2], [$3])dnl
+$2],
+           [$3])dnl
 ])
 
 
@@ -412,7 +400,7 @@ define([AH_TEMPLATE],
 # ------------
 # Output TEXT at the top of `config.h.in'.
 define([AH_TOP],
-[m4_define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+[define([_AH_COUNTER], incr(_AH_COUNTER))dnl
 AH_VERBATIM([0000]_AH_COUNTER, [$1])])
 
 
@@ -420,7 +408,7 @@ AH_VERBATIM([0000]_AH_COUNTER, [$1])])
 # ---------------
 # Output TEXT at the bottom of `config.h.in'.
 define([AH_BOTTOM],
-[m4_define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+[define([_AH_COUNTER], incr(_AH_COUNTER))dnl
 AH_VERBATIM([zzzz]_AH_COUNTER, [$1])])
 
 # Initialize.
@@ -3567,9 +3555,7 @@ AC_CONFIG_COMMANDS([default-]AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 ])
 
 # Initialize both in `autoconf::' and `autoupdate::'.
-define(AC_OUTPUT_COMMANDS_CNT, 0)
-m4_namespace_define(autoupdate,
-                    [AC_OUTPUT_COMMANDS_CNT], 0)
+AU_DEFINE([AC_OUTPUT_COMMANDS_CNT], 0)
 
 
 # AC_CONFIG_COMMANDS_PRE(CMDS)
@@ -3696,9 +3682,7 @@ AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
 
 
 # Initialize both in `autoconf::' and `autoupdate::'.
-define(_AC_LINK_FILES_CNT, 0)
-m4_namespace_define(autoupdate,
-                    [_AC_LINK_FILES_CNT], 0)
+AU_DEFINE([_AC_LINK_FILES_CNT], 0)
 
 
 
@@ -3748,6 +3732,23 @@ AC_SUBST(subdirs)dnl
 define([AC_LIST_SUBDIRS])
 
 
+# autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
+# -------------------------------------------------------------------
+#
+# If there are arguments given to AC_OUTPUT, dispatch them to the
+# proper modern macros.
+
+AU_DEFINE([AC_OUTPUT],
+[ifval([$1],
+      [AC_CONFIG_FILES([$1])
+])dnl
+ifval([$2$3],
+      [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])
+])dnl
+[AC_OUTPUT]],
+[`AC_OUTPUT' should be used without arguments.])
+
+
 # AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
 # -------------------------------------------------------
 # The big finish.
@@ -3755,7 +3756,7 @@ define([AC_LIST_SUBDIRS])
 # The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADERS.
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
-define(AC_OUTPUT,
+define([AC_OUTPUT],
 [dnl Dispatch the extra arguments to their native macros.
 ifval([$1],
       [AC_CONFIG_FILES([$1])])dnl
@@ -3802,23 +3803,6 @@ test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifset([AC_LIST_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 ])# AC_OUTPUT
-
-
-# autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
-# -------------------------------------------------------------------
-#
-# If there are arguments given to AC_OUTPUT, dispatch them to the
-# proper modern macros.
-
-AU_DEFINE([AC_OUTPUT],
-[ifval([$1],
-      [AC_CONFIG_FILES([$1])
-])dnl
-ifval([$2$3],
-      [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])
-])dnl
-[AC_OUTPUT]],
-[`AC_OUTPUT' should be used without arguments.])
 
 
 # _AC_OUTPUT_CONFIG_STATUS

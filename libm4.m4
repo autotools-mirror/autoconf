@@ -65,140 +65,12 @@ m4exit(2)])
 ## Defining macros and name spaces.  ##
 ## --------------------------------- ##
 
-# Name spaces.
-
-# Sometimes we want to disable some *set* of macros, and restore them
-# later.  We provide support for this via name spaces.
-
-# There are basically three characters playing this scene: defining a
-# macro in a namespace, disabling a namespace, and restoring a namespace
-# (i.e., all the definitions it holds).
-
-# Technically, to define a MACRO in NAMESPACE means to define the
-# macro named `NAMESPACE::MACRO' to the VALUE.  At the same time, we
-# append `undefine(NAME)' in the macro named `m4_disable(NAMESPACE)',
-# and similarly a binding of NAME to the value of `NAMESPACE::MACRO'
-# in `m4_enable(NAMESPACE)'.  These mechanisms allow to bind the
-# macro of NAMESPACE and to unbind them at will.
-
-# Of course this implementation is not really efficient: m4 has to
-# grow strings which can become quickly huge, which slows it
-# significantly.  A better implementation should be a list of the
-# symbols associated to the name space, and m4_enable?m4_disable
-# would just loop over this list.  Unfortunately loops of active
-# symbols are extremely delicate in m4, and I'm still unsure of the
-# implementation I want.  So, until we reach a perfect agreement on
-# foreach loops implementation, I prefer to use the brute force.
-
-# It should be noted that one should avoid as much as possible to use
-# `define' for temporaries.  Now that `define' as quite a complex
-# meaning, it is an expensive operations that should be limited to
-# macros.  Use `m4_define' for temporaries.
-
-# Private copies of the macros we used in entering / exiting the
-# libm4 name space.  It is much more convenient than fighting with
-# the renamed version of define etc.
-
-define([m4_changequote], defn([changequote]))
-define([m4_define],      defn([define]))
-define([m4_defn],        defn([defn]))
-define([m4_dnl],         defn([dnl]))
-define([m4_indir],       defn([indir]))
-define([m4_popdef],      defn([popdef]))
-define([m4_pushdef],     defn([pushdef]))
-define([m4_undefine],    defn([undefine]))
-
-
-m4_define([m4_namespace_push], [m4_pushdef([m4_namespace], [$1])])
-m4_define([m4_namespace_pop],  [m4_popdef([m4_namespace])])
-
-m4_namespace_push([libm4])
-
-
-
-# m4_namespace_register(NAMESPACE, NAME)
-# --------------------------------------
-#
-# Register NAME in NAMESPACE, i.e., append the binding/unbinding in
-# `m4_disable(NAMESPACE)'/`m4_enable(NAMESPACE)'.
-m4_define([m4_namespace_register],
-[m4_define([m4_disable($1)],
-           m4_defn([m4_disable($1)])[m4_undefine([$2])])dnl
-m4_define([m4_enable($1)],
-           m4_defn([m4_enable($1)])[m4_define([$2], m4_defn([$1::$2]))])dnl
-])
-
-
-# m4_namespace_define(NAMESPACE, NAME, VALUE)
-# -------------------------------------------
-#
-# Assign VALUE to NAME in NAMESPACE, and register it.
-m4_define([m4_namespace_define],
-[m4_define([$1::$2], [$3])dnl
-m4_namespace_register([$1], [$2])dnl
-])
-
-
-# define(NAME, VALUE)
-# -------------------
-#
-# Assign VALUE to NAME in the current name space, and bind it at top level.
-m4_define([define],
-[m4_namespace_define(m4_namespace, [$1], [$2])dnl
-m4_define([$1], [$2])dnl
-])
-
-# Register define too.
-m4_namespace_define(libm4, [define], defn([define]))
-
-
-# Put the m4 builtins into the `libm4' name space.  We cannot use `define'
-# here because of the very special handling of `defn' for builtins.
-
-# The following macro is useless but here, so undefine once done.
-m4_define(m4_namespace_builtin,
-[m4_define([libm4::$1], defn([$1]))
-m4_namespace_register(libm4, [$1])])
-
-m4_namespace_builtin([builtin])
-m4_namespace_builtin([changequote])
-m4_namespace_builtin([defn])
-m4_namespace_builtin([dnl])
-m4_namespace_builtin([esyscmd])
-m4_namespace_builtin([ifdef])
-m4_namespace_builtin([ifelse])
-m4_namespace_builtin([indir])
-m4_namespace_builtin([patsubst])
-m4_namespace_builtin([popdef])
-m4_namespace_builtin([pushdef])
-m4_namespace_builtin([regexp])
-m4_namespace_builtin([undefine])
-m4_namespace_builtin([syscmd])
-m4_namespace_builtin([sysval])
-
-m4_undefine([m4_namespace_builtin])
-
-
-# m4_disable(NAMESPACE)
-# ---------------------
-#
-# Undefine all the macros of NAMESPACE.
-m4_define([m4_disable], [m4_indir([m4_disable($1)])])
-
-
-# m4_enable(NAMESPACE)
-# --------------------
-#
-# Restore all the macros of NAMESPACE.
-m4_define([m4_enable], [m4_indir([m4_enable($1)])])
-
-
 # m4_rename(SRC, DST)
 # -------------------
 #
 # Rename the macro SRC as DST.
 define([m4_rename],
-[m4_define([$2], m4_defn([$1]))m4_undefine([$1])])
+[define([$2], defn([$1]))undefine([$1])])
 
 # Some m4 internals have names colliding with tokens we might use.
 # Rename them a` la `m4 --prefix-builtins'.
@@ -231,6 +103,7 @@ define(m4_fatal,
 [m4_errprint([error: $1])dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
+
 # m4_assert( EXPRESSION [, EXIT-STATUS = 1 ])
 # ------------------------------------------
 # This macro ensures that EXPRESSION evaluates to true, and exits if
@@ -239,6 +112,7 @@ define([m4_assert],
 [ifelse(m4_eval([$1]), 0,
         [m4_fatal([assert failed: $1], [$2])],
         [])])
+
 
 # We also want to neutralize include (and sinclude for symmetry),
 # but we want to extend them slightly: warn when a file is included
@@ -423,7 +297,7 @@ popdef([$1])])
 define([_m4_for],
 [$4[]dnl
 ifelse($1, [$2], [],
-       [m4_define([$1], m4_eval($1+[$3]))_m4_for([$1], [$2], [$3], [$4])])])
+       [define([$1], m4_eval($1+[$3]))_m4_for([$1], [$2], [$3], [$4])])])
 
 
 # Implementing `foreach' loops in m4 is much more tricky than it may
@@ -526,13 +400,12 @@ define([m4_foreach],
 [pushdef([$1])_m4_foreach($@)popdef([$1])])
 
 # Low level macros used to define m4_foreach.
-# Use m4_define for temporaries.
 define([m4_car], [$1])
 define([_m4_foreach],
 [ifelse(m4_quote($2), [], [],
-        [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
-                                                      [m4_shift($2)],
-                                                      [$3])])])
+        [define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
+                                                   [m4_shift($2)],
+                                                   [$3])])])
 
 
 ## ----------------- ##
@@ -574,12 +447,7 @@ define([m4_noquote],
 # obvious reasons (we want to insert square brackets).  Outer
 # changequotes are needed because otherwise the m4 parser, when it
 # sees the closing bracket we add to the result, believes it is the
-# end of the body of the macro we define.  And since the active quote
-# when `define' is called are not the ones which were used in its
-# definition, we cannot use `define' as defined above.  Therefore,
-# using m4's builtin `m4_define', which is indepedent from the
-# current quotes, to define `m4_split', and then register `m4_split'
-# in libm4.
+# end of the body of the macro we define.
 #
 # Also, notice that $1 is quoted twice, since we want the result to
 # be quoted.  Then you should understand that the argument of
@@ -591,7 +459,7 @@ define([m4_noquote],
 #   => [active], [active], []end
 
 changequote(<<, >>)
-m4_define(m4_split,
+define(<<m4_split>>,
 <<changequote(``, '')dnl
 [dnl Can't use m4_default here instead of ifelse, because m4_default uses
 dnl [ and ] as quotes.
@@ -600,8 +468,6 @@ patsubst(````$1'''',
 	  ``], ['')]dnl
 changequote([, ])>>)
 changequote([, ])
-
-m4_namespace_register([m4_split], [libm4])
 
 
 
@@ -681,7 +547,7 @@ define([m4_strip],
 #    =>
 #    => active
 define(m4_append,
-[m4_define([$1],
+[define([$1],
 ifdef([$1], [defn([$1])])[$2])])
 
 
@@ -689,7 +555,7 @@ ifdef([$1], [defn([$1])])[$2])])
 # ----------------------------------
 # Same as `m4_append', but each element is separated by `, '.
 define(m4_list_append,
-[m4_define([$1],
+[define([$1],
 ifdef([$1], [defn([$1]), ])[$2])])
 
 
@@ -707,13 +573,12 @@ define(m4_foreach_quoted,
 [pushdef([$1], [])_m4_foreach_quoted($@)popdef([$1])])
 
 # Low level macros used to define m4_foreach.
-# Use m4_define for temporaries.
 define(m4_car_quoted, [[$1]])
 define(_m4_foreach_quoted,
 [ifelse($2, [()], ,
-        [m4_define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
-                                                                [(m4_shift$2)],
-                                                                [$3])])])
+        [define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
+                                                               [(m4_shift$2)],
+                                                               [$3])])])
 
 
 # m4_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -764,7 +629,7 @@ ifelse(m4_eval(m4_Cursor > len(m4_Prefix)),
        1, [define([m4_Cursor], len(m4_Prefix))
 m4_Prefix])[]dnl
 m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
-[m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
+[define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 ifelse(m4_eval(m4_Cursor > m4_Width),
@@ -772,7 +637,7 @@ ifelse(m4_eval(m4_Cursor > m4_Width),
 m4_Prefix,
        [m4_Separator])[]dnl
 m4_Word[]dnl
-m4_define([m4_Separator], [ ])])dnl
+define([m4_Separator], [ ])])dnl
 popdef([m4_Separator])dnl
 popdef([m4_Cursor])dnl
 popdef([m4_Width])dnl

@@ -128,8 +128,8 @@ AT_SETUP([AC_CHECK_TYPES])
 
 AT_DATA(configure.in,
 [[AC_INIT
-m4_define([_AC_CHECK_TYPE_NEW], [NEW])
-m4_define([_AC_CHECK_TYPE_OLD], [OLD])
+define([_AC_CHECK_TYPE_NEW], [NEW])
+define([_AC_CHECK_TYPE_OLD], [OLD])
 #(cut-from-here
 AC_CHECK_TYPE(ptrdiff_t)
 AC_CHECK_TYPE(ptrdiff_t, int)

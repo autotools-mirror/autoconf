@@ -105,7 +105,7 @@ define([_AC_LANG_DISPATCH],
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[m4_define([_AC_LANG], [$1])dnl
+[define([_AC_LANG], [$1])dnl
 _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
