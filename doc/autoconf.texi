@@ -9490,7 +9490,7 @@ as @file{host.h} or @file{target.c} (@pxref{Configuration Links}).  The
 cases together, like in this fragment:
 
 @example
-case "$target" in
+case $target in
 i386-*-mach* | i386-*-gnu*)
              obj_format=aout emulation=mach bfd_gas=yes ;;
 i960-*-bout) obj_format=bout ;;
@@ -9498,11 +9498,34 @@ esac
 @end example
 
 @noindent
-and in @file{configure.ac}, use:
+and later in @file{configure.ac}, use:
 
 @example
 AC_CONFIG_LINKS(host.h:config/$machine.h
                 object.h:config/$obj_format.h)
+@end example
+
+Note that the above example uses @code{$target} because it's taken from
+a tool which can be built on some architecture (@code{$build}), run on
+another (@code{$host}), but yet handle data for a third architecture
+(@code{$target}).  Such tools are usually part of a compiler suite, they
+generate code for a specific @code{$target}.
+
+However @code{$target} should be meaningless for most packages.  If you
+want to base a decision on the system where your program will be run,
+make sure you use the @code{$host} variable, as in the following
+excerpt:
+
+@example
+case $host in
+  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
+    MUMBLE_INIT="mumble.ini"
+    ;;
+  *)
+    MUMBLE_INIT=".mumbleinit"
+    ;;
+esac
+AC_SUBST([MUMBLE_INIT])
 @end example
 
 You can also use the host system type to find cross-compilation tools.
