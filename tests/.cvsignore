@@ -1,7 +1,13 @@
-atconfig
 Makefile
+at-check-line
+atconfig
+config.log
+config.status
+configure
+configure.in
+debug-*.sh
 empty
 macros.m4
+stderr
+stdout
 testsuite
-debug-*.sh
-at-check-line
