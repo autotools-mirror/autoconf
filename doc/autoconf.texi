@@ -2520,6 +2520,7 @@ Some software packages might want to install in a directory besides
 @code{AC_PREFIX_DEFAULT} macro.
 
 @defmac AC_PREFIX_DEFAULT (@var{prefix})
+@maindex PREFIX_DEFAULT
 Set the default installation prefix to @var{prefix} instead of
 @file{/usr/local}.
 @end defmac
