@@ -1,4 +1,10 @@
-2001-04-13  Lars J. Aas  <larsa@sim.no>
+2001-04-15  Lars J. Aas  <larsa@sim.no>
+
+        * acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Alter response on
+        `config.status --version' to be more compliant with the GNU Coding
+        Standards.
+
+2001-04-15  Lars J. Aas  <larsa@sim.no>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Show options `--file'
 	and `--header' unconditionally.
