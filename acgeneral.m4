@@ -1166,7 +1166,7 @@ define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
 changequote([,])dnl
 AC_CHECKING(size of $1)
 AC_CACHE_VAL(AC_CV_NAME,
-[AC_CV_NAME=configure_failure
+[dnl If cross-compiling, the caller has to decide what to do; we can't.
 AC_TEST_PROGRAM([#include <stdio.h>
 main()
 {
@@ -1174,7 +1174,7 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], AC_CV_NAME=`cat conftestval`)])dnl
+}], AC_CV_NAME=`cat conftestval`, AC_ERROR(can not determine size of $1))])dnl
 AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine(AC_TYPE_NAME)dnl
 undefine(AC_CV_NAME)dnl
@@ -1293,7 +1293,9 @@ changequote(,)dnl
   ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
 changequote([,])dnl
   case "$ac_given_srcdir" in
-  .)  srcdir=.; top_srcdir="$ac_dots." ;;
+  .)  srcdir=.
+      if test -z "$ac_dir_suffix"; then top_srcdir=.
+      else top_srcdir=`echo $ac_dots|sed 's%/$%%'`; fi ;;
   /*) srcdir="$ac_given_srcdir$ac_dir_suffix"; top_srcdir="$ac_given_srcdir" ;;
   *) # Relative path.
     srcdir="$ac_dots$ac_given_srcdir$ac_dir_suffix"
@@ -1338,7 +1340,8 @@ $2
 exit 0
 EOF
 chmod +x config.status
-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} config.status
+# Some shells look in PATH for config.status without the "./".
+test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} ./config.status
 dnl config.status should never do recursion.
 ifdef([AC_SUBDIR_LIST],[AC_OUTPUT_CONFIG_SUBDIRS(AC_SUBDIR_LIST)])dnl
 ])dnl
