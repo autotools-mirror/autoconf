@@ -2225,7 +2225,6 @@ AC_DEFUN([_AC_EVAL],
 # Eval COMMAND, save its stderr into conftest.err, save the exit status
 # in ac_status, and log it.
 # Note that when tracing, most shells will leave the traces in stderr
-
 AC_DEFUN([_AC_EVAL_STDERR],
 [{ (eval echo "$as_me:__oline__: \"$1\"") >&AS_MESSAGE_LOG_FD
   (eval $1) 2>conftest.er1
@@ -2242,13 +2241,13 @@ AC_DEFUN([_AC_EVAL_STDERR],
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
 AC_DEFUN([AC_TRY_EVAL],
-[_AC_EVAL([$]$1)])
+[_AC_EVAL([$$1])])
 
 
 # AC_TRY_COMMAND(COMMAND)
 # -----------------------
 AC_DEFUN([AC_TRY_COMMAND],
-[_AC_EVAL([$1])])
+[{ ac_try='$1'; _AC_EVAL([$ac_try]); }])
 
 
 ## ------------------ ##

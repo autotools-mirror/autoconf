@@ -18,7 +18,7 @@
 	`quote' section, `p'rint the result.
 	If neither `#define' pattern match, just call `d' to start a new
 	cycle.
-	Call this sed program with -n.
+	Invoke this sed program with -n.
 
 2001-01-30  Akim Demaille  <akim@epita.fr>
 
