@@ -75,7 +75,7 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002 Free Software Foundation, Inc.
+2001, 2002, 2003 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -5549,7 +5549,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cvindex _LARGE_FILES
 @ovindex CC
 Arrange for
-@href{http://www.sas.com/standards/large.file/x_open.20Mar96.html,
+@href{http://www.unix-systems.org/version2/whatsnew/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
