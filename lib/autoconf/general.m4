@@ -679,9 +679,9 @@ set | sed -n "/^[a-zA-Z0-9_]*_cv_/s/=\(.*\)/='\1'/p" >> $cache_file
 changequote([,])dnl
 fi])dnl
 dnl
-dnl AC_CACHE_USE(cache-id, commands-to-set-it)
+dnl AC_CACHE_VAL(cache-id, commands-to-set-it)
 dnl The name cache-id must contain the string `_cv_' in order to get saved.
-define(AC_CACHE_USE,
+define(AC_CACHE_VAL,
 [if test "x${$1-unset}" != xunset; then 
   AC_VERBOSE(using cached value for $1)
 else
@@ -857,7 +857,7 @@ dnl
 dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
-  AC_CACHE_USE(ac_cv_program_$1,
+  AC_CACHE_VAL(ac_cv_program_$1,
 [# Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
@@ -879,7 +879,7 @@ AC_SUBST($1)dnl
 dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
-  AC_CACHE_USE(ac_cv_program_$1,
+  AC_CACHE_VAL(ac_cv_program_$1,
 [# Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
@@ -926,24 +926,25 @@ changequote(/,/)dnl
 define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 changequote([,])dnl
-ac_save_LIBS="${LIBS}"
+AC_CACHE_VAL(ac_cv_lib_[]AC_LIB_NAME,
+[ac_save_LIBS="${LIBS}"
 LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-ac_have_lib=""
-AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();], [ac_have_lib="1"])dnl
+AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();],
+ac_cv_lib_[]AC_LIB_NAME=true, ac_cv_lib_[]AC_LIB_NAME=false)dnl
 LIBS="${ac_save_LIBS}"
+])dnl
+if test "${ac_cv_lib_[]AC_LIB_NAME}" = true; then
 ifelse($#, 1, [dnl
-if test -n "${ac_have_lib}"; then
    AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
    LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-fi
 undefine(AC_LIB_NAME)dnl
 ], [dnl
-if test -n "${ac_have_lib}"; then
    :; $2
 else
    :; $3
+])dnl
 fi
-])])dnl
+])dnl
 dnl
 dnl
 dnl ### Checking for C features - fundamental (no caching)
