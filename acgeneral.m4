@@ -302,7 +302,7 @@ define(AC_PREREQ_COMPARE,
 [errprint(Autoconf version $7 or higher is required
 )m4exit(3)])])dnl
 dnl
-dnl Complain if the Autoconf version is less than $1.
+dnl Complain and exit if the Autoconf version is less than $1.
 define(AC_PREREQ,
 [AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
