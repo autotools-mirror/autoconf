@@ -82,6 +82,7 @@ AT_DATA(acconfig.h,
 #undef this
 ]])
 
+
 # 1. Check that `acconfig.h' is still honored.
 AT_DATA(configure.in,
 [[AC_INIT
@@ -89,12 +90,12 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(this, "whatever you want.")
 ]])
 
-
 AT_CHECK([../autoheader -m .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Define this to whatever you want. */
 #undef this
 ]], ignore)
+
 
 # 2. Check that missing templates are a fatal error.
 AT_DATA(configure.in,
@@ -104,6 +105,49 @@ AC_DEFINE(that, "whatever you want.")
 ]])
 
 AT_CHECK([../autoheader -m .. -<configure.in], 1, ignore, ignore)
+
+
+# 3. Check TOP and BOTTOM.
+AT_DATA(acconfig.h,
+[[/* Top from acconfig.h. */
+@TOP@
+/* Middle from acconfig.h. */
+@BOTTOM@
+/* Bottom from acconfig.h. */
+]])
+
+AT_DATA(configure.in,
+[[AC_INIT
+AC_CONFIG_HEADERS(config.h)
+AH_TOP([Top1 from configure.in.])
+AH_TOP([Top2 from configure.in.])
+AH_VERBATIM([Middle], [Middle from configure.in.])
+AH_BOTTOM([Bottom1 from configure.in.])
+AH_BOTTOM([Bottom2 from configure.in.])
+]])
+
+
+# Yes, that's right: the `middle' part of `acconfig.h' is still before
+# the AH_TOP part.  But so what, you're not supposed to use the two
+# together.
+AT_CHECK([../autoheader -m .. -<configure.in], 0,
+[[/* config.h.in.  Generated automatically from - by autoheader.  */
+/* Top from acconfig.h. */
+
+/* Middle from acconfig.h. */
+
+Top1 from configure.in.
+
+Top2 from configure.in.
+
+Middle from configure.in.
+
+Bottom1 from configure.in.
+
+Bottom2 from configure.in.
+/* Bottom from acconfig.h. */
+]], ignore)
+
 
 AT_CLEANUP
 

@@ -1,5 +1,11 @@
 2000-05-04  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AH_TOP, AH_BOTTOM): New macros.
+	(_AH_COUNTER): New variable.
+	* tests/tools.m4 (autoheader): Check their proper functioning.
+
+2000-05-04  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Obsolete Macros): Rename as...
 	(Obsoleting Macros): this.
 	(Old Macros): Rename as...

@@ -379,8 +379,8 @@ AU_DEFINE([$1], [$2], [$3])dnl
 ## ------------------------- ##
 
 
-# AH_OUTPUT(TEXT)
-# ---------------
+# AH_OUTPUT(KEY, TEXT)
+# --------------------
 # Pass TEXT to autoheader.
 # This macro is `read' only via `autoconf --trace', it outputs nothing.
 define([AH_OUTPUT], [])
@@ -407,6 +407,24 @@ define([AH_TEMPLATE],
              m4_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
 
+
+# AH_TOP(TEXT)
+# ------------
+# Output TEXT at the top of `config.h.in'.
+define([AH_TOP],
+[m4_define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+AH_VERBATIM([0000]_AH_COUNTER, [$1])])
+
+
+# AH_BOTTOM(TEXT)
+# ---------------
+# Output TEXT at the bottom of `config.h.in'.
+define([AH_BOTTOM],
+[m4_define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+AH_VERBATIM([zzzz]_AH_COUNTER, [$1])])
+
+# Initialize.
+define([_AH_COUNTER], [0])
 
 
 ## --------------------- ##
