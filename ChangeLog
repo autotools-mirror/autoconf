@@ -1,3 +1,9 @@
+2002-03-21  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Unset ENV and BASH_ENV
+	when reinvoking the shell, to work around problems with installers
+	who put strange things like "cd" commands in their environments.
+
 2002-03-19  Akim Demaille  <akim@epita.fr>
 
 	* tests/semantics.at (AC_C_BIGENDIAN): s/unknow/unknown/.
