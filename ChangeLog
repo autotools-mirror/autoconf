@@ -1,3 +1,8 @@
+2001-06-18  Nicolas Joly  <njoly@pasteur.fr>
+
+	* tests/torture.at (AC_ARG_VAR): Set variables and export them
+	in separate statements for compatibility with Tru64 v5.1.
+
 2001-06-17  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_ARG_VAR_VALIDATE): Be sure to cache the

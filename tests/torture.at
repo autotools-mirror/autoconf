@@ -55,7 +55,7 @@ AT_CHECK([cat file], [], [`'
 
 
 # Set to `diamonds'.
-export precious=diamonds
+precious=diamonds; export precious
 AT_CHECK_CONFIGURE([--config-cache], [], [],
 [configure: WARNING: `precious' was not set in the previous run
 configure: WARNING: changes in the environment can compromise the build
@@ -72,7 +72,7 @@ AT_CHECK([cat file], [], [`diamonds'
 
 
 # Set to `apple of my eye'.
-export precious='apple of my eye'
+precious='apple of my eye'; export precious
 AT_CHECK_CONFIGURE([--config-cache], [], [],
 [configure: WARNING: `precious' has changed since the previous run:
 configure: WARNING:   former value:  diamonds
