@@ -452,6 +452,7 @@ Dependencies Between Macros
 
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
+* One-Shot Macros::             Ensuring a macro is called only once
 
 Portable Shell Programming
 
@@ -462,6 +463,7 @@ Portable Shell Programming
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
+* Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
@@ -8947,6 +8949,7 @@ called in an order that might cause incorrect operation.
 @menu
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
+* One-Shot Macros::             Ensuring a macro is called only once
 @end menu
 
 @node Prerequisite Macros
@@ -9088,6 +9091,31 @@ macro @var{called-macro-name} must have been defined using
 @code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
 that it has been called.
 @end defmac
+
+@node One-Shot Macros
+@subsection One-Shot Macros
+@cindex One-shot macros
+@cindex Macros, called once
+
+Some macros should be called only once, either because calling them
+multiple time is unsafe, or because it is bad style.  For instance
+Autoconf ensures that @code{AC_CANONICAL_BUILD} and cousins
+(@pxref{Canonicalizing}) are evaluated only once, because it makes no
+sense to run these expensive checks more than once.  Such one-shot
+macros can be defined using @code{AC_DEFUN_ONCE}.
+
+@defmac AC_DEFUN_ONCE (@var{macro-name}, @var{macro-body})
+@acindex{DEFUN_ONCE}
+
+Declare macro @var{macro-name} like @code{AC_DEFUN} would (@pxref{Macro
+Definitions}), and emit a warning any time the macro is called more than
+once.
+@end defmac
+
+Obviously it is not sensible to evaluate a macro defined by
+@code{AC_DEFUN_ONCE} in a macro defined by @code{AC_DEFUN}, most of the
+times you will want to use @code{AC_REQUIRE} (@pxref{Prerequisite
+Macros}).
 
 @node Obsoleting Macros
 @section Obsoleting Macros
