@@ -136,7 +136,8 @@ else
   ac_cv_prog_gxx_g=no
 fi
 rm -f conftest*
-])dnl
+])
+dnl
     if test $ac_cv_prog_gxx_g = yes; then
       CXXFLAGS="-g -O"
     else
@@ -346,7 +347,8 @@ ac_save_LIBS="$LIBS"
 LIBS="$LIBS $LEXLIB"
 AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, , ac_cv_prog_lex_yytext_pointer=yes)
 LIBS="$ac_save_LIBS"
-rm -f "${LEX_OUTPUT_ROOT}.c"])dnl
+rm -f "${LEX_OUTPUT_ROOT}.c"])
+dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER)
 fi
@@ -486,7 +488,7 @@ AC_DEFUN(AC_USG,
   [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);],
-  [AC_MSG_RESULT(yes); AC_DEFINE(USG)], [AC_MSG_RESULT(no)])])
+  [AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no); AC_DEFINE(USG)])])
 
 
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.

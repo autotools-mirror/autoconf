@@ -2,6 +2,18 @@ Fri Nov 17 15:05:44 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* Version 2.5 released.
 
+Fri Nov 17 15:23:04 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Don't start tr argument with '+',
+	  so as not to confuse old GNU tr's.  From
+	  Ian Lance Taylor <ian@cygnus.com>.
+	  (AC_INIT_PARSE_ARGS): Make sure MFLAGS and MAKEFLAGS are empty.
+	  From Paul Townsend (aab@cc.purdue.edu).
+
+	* acspecific.m4 (AC_USG): Define USG if we don't have rindex and
+	  bzero, not if we do have them.
+	  From Viktor Dukhovni <viktor@anaheim.esm.com>.
+
 Sun Oct 29 15:13:37 1995  Richard Stallman  <rms@mole.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_PROG): Use arg 5 as search list, not arg 4.
