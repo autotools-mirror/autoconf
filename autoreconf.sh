@@ -303,6 +303,101 @@ while read dir; do
   fi
 
 
+  # -------------------------------------- #
+  # Installing Autoconf extensions files.  #
+  # -------------------------------------- #
+
+  # We want to know which are the library files which are used by
+  # configure.in.
+
+  # An m4 program that reports what macros are requested, and where
+  # they were defined.
+  sed 's/  //' >$tmp/request.m4 <<\EOF
+  # Keep the definitions of `define' and `errprint'.
+  define([AR_DEFUN], defn([AC_DEFUN]))
+  define([AR_ERRPRINT], defn([errprint]))
+
+  # Neutralize errprint: we don't want the warnings etc.
+  define([errprint])
+
+  # Report the first use of a macro.
+  define([AR_REPORT],
+  [ifdef([AR_REPORT($3)], [],
+         [define([AR_REPORT($3)])AR_ERRPRINT([$1:$2: $3
+  ])])])
+
+  # Define the macro so that the first time it is expanded, it reports
+  # on stderr its name, and where it was defined.
+  define([AC_DEFUN],
+         [AR_DEFUN([$1],
+                   [AR_REPORT(]__file__[, ]__line__[, [$1])dnl
+  $2])])
+EOF
+
+  for i in `ls $localdir/*.m4 $AC_ACLOCALDIR/*.m4 2>/dev/null`; do
+    echo "m4_include([$i])" >>$tmp/request.m4
+  done
+  echo "m4_include([./configure.in])" >>$tmp/request.m4
+
+  # Run m4 with all the library files, discard stdout, save stderr in
+  # $requested.
+  $verbose $me: running $autoconf -l /dev/null $tmp/request.m4
+  $autoconf -l /dev/null $tmp/request.m4 2>&1 >/dev/null |
+    # Keep only the good lines, there may be other outputs.
+    grep '^[^: ]*:[0-9][0-9]*:[^:]*$' >$tmp/requested
+
+  # Extract the files that are not in the local dir, and install the links.
+  # Save in `installed' the list of installed links.
+  $verbose "$me: required macros:" >&2
+  test $verbose = echo &&
+    sed -e "s/^/$me: /" $tmp/requested >&2
+  : >$tmp/installed
+  cat $tmp/requested |
+    while read line
+    do
+      file=`echo "$line" | sed 's/:.*//'`
+      filename=`echo "$file" | sed 's,.*/,,'`
+      macro=`echo "$line" | sed 's/.*:[ 	]*//'`
+      if test -f "$file" && test "x$file" != "xconfigure.in"; then
+        if test -f $localdir/$filename; then
+          $verbose "$filename already installed" >&2
+  	else
+  	  $verbose "installing $file which provides $macro" >&2
+          $symlink &&
+            ln -s "$file" "$localdir/$filename" ||
+  	    cp "$file" "$localdir/$filename" ||
+  	    {
+  	      echo "$me: cannot install $file" >&2
+  	      exit 1
+  	    }
+  	fi
+        echo "$localdir/$filename" >>$tmp/installed
+      fi
+    done
+  # Now that we have installed the links, and that we know that the
+  # user needs the FILES, check that there is an exact correspondence.
+  # Use yourself to get the list of the included files.
+  export AC_ACLOCALDIR
+  export AC_MACRODIR
+  $autoconf -t include:'$1' -t m4_include:'$1' -t m4_sinclude:'$1' configure.in |
+    sort |
+    uniq >$tmp/included
+  # All the included files are needed.
+  for file in `cat $tmp/included`;
+  do
+    if fgrep "$file" $tmp/installed >/dev/null 2>&1; then :; else
+      echo "\`$file' is uselessly included" >&2
+    fi
+  done
+  # All the needed files are included.
+  for file in `sort $tmp/installed | uniq`;
+  do
+    if fgrep "$file" $tmp/included >/dev/null 2>&1; then :; else
+      echo "\`$file' is not included" >&2
+    fi
+  done
+
+
   # ------------------ #
   # Running automake.  #
   # ------------------ #

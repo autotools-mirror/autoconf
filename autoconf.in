@@ -119,8 +119,6 @@ outfile=
 # Exit status.
 status=0
 # Tasks:
-# - install
-#   Install links to the needed *.m4 extensions.
 # - trace
 #   Trace the first arguments of some macros
 # - script
@@ -162,10 +160,6 @@ while test $# -gt 0 ; do
        shift
        AC_MACRODIR=$1
        shift ;;
-
-    --install )
-       task=install
-       shift;;
 
     --trace | -t )
        test $# = 1 && eval "$exit_missing_arg"
@@ -550,88 +544,6 @@ EOF
       s/@%:@/#/g
       ' >&4
   ;;
-
-
-
-
-  ## -------------------------------------------------------- ##
-  ## Task --install.  Install links to the library m4 files.  ##
-  ## -------------------------------------------------------- ##
-  install)
-  # An m4 program that reports what macros are requested, and where
-  # they were defined.
-  cat >$tmp/request.m4 <<\EOF
-dnl Keep the definition of the old AC_DEFUN
-define([AC_DEFUN_OLD], defn([AC_DEFUN]))
-
-dnl Define the macro so that the first time it is expanded, it reports
-dnl on stderr its name, and where it was defined.
-define([AC_DEFUN],
-[AC_DEFUN_OLD([$1],
-   [ifdef([AC_DECLARED{$1}],,
-	  [define([AC_DECLARED{$1}])errprint(]]__file__:__line__:[[ [$1]
-)])dnl
-][$2])])
-EOF
-
-  # Run m4 with all the library files, discard stdout, save stderr in
-  # $requested.
-  run_m4_request="$run_m4f -dipa -t m4_include -t m4_sinclude $tmp/request.m4"
-  $verbose $run_m4_request $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >&2
-  $run_m4_request $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile 2>&1 >/dev/null |
-    # Keep only the good lines, there may be other outputs
-    grep '^[^: ]*:[0-9][0-9]*:[^:]*$' >$tmp/requested
-
-  # Extract the files that are not in the local dir, and install the links.
-  # Save in `installed' the list of installed links.
-  $verbose "Required macros:" >&2
-  $verbose "`sed -e 's/^/| /' $tmp/requested`" >&2
-  : >$tmp/installed
-  cat $tmp/requested |
-    while read line
-    do
-      file=`echo "$line" | sed -e 's/:.*//'`
-      filename=`echo "$file" | sed -e 's,.*/,,'`
-      macro=`echo "$line" | sed -e 's/.*:[ 	]*//'`
-      if test -f "$file" && test "x$file" != "x$infile"; then
-        if test -f $localdir/$filename; then
-          $verbose "$filename already installed" >&2
-  	else
-  	  $verbose "installing $file which provides $macro" >&2
-  	  ln -s "$file" "$localdir/$filename" ||
-  	  cp "$file" "$localdir/$filename" ||
-  	  {
-  	    echo "$me: cannot link from $file to $localdir/$filename" >&2
-  	    exit 1
-  	  }
-  	fi
-        echo "$localdir/$filename" >>$tmp/installed
-      fi
-    done
-  # Now that we have installed the links, and that we know that the
-  # user needs the FILES, check that there is an exact correspondence.
-  # Use yourself to get the list of the included files.
-  export AC_ACLOCALDIR
-  export AC_MACRODIR
-  $0 -l "$localdir" -t include:'$1' -t m4_include:'$1' -t m4_sinclude:'$1' $infile |
-    sort |
-    uniq >$tmp/included
-  # All the included files are needed.
-  for file in `cat $tmp/included`;
-  do
-    if fgrep "$file" $tmp/installed >/dev/null 2>&1; then :; else
-      echo "\`$file' is uselessly included" >&2
-    fi
-  done
-  # All the needed files are included.
-  for file in `sort $tmp/installed | uniq`;
-  do
-    if fgrep "$file" $tmp/included >/dev/null 2>&1; then :; else
-      echo "\`$file' is not included" >&2
-    fi
-  done
-  ;;
-
 
 
   ## ------------ ##
