@@ -417,7 +417,7 @@ AU_DEFUN([AC_INT_16_BITS],
 [AC_CHECK_SIZEOF([int])
 AC_DIAGNOSE([obsolete], [$0:
 	your code should no longer depend upon `INT_16_BITS', but upon
-	`SIZEOF_INT'.  Remove this warning and the `AC_DEFINE' when you
+	`SIZEOF_INT == 2'.  Remove this warning and the `AC_DEFINE' when you
 	adjust the code.])dnl
 test $ac_cv_sizeof_int = 2 &&
   AC_DEFINE(INT_16_BITS, 1,
@@ -431,7 +431,7 @@ AU_DEFUN([AC_LONG_64_BITS],
 [AC_CHECK_SIZEOF([long int])
 AC_DIAGNOSE([obsolete], [$0:
 	your code should no longer depend upon `LONG_64_BITS', but upon
-	`SIZEOF_LONG_INT'.  Remove this warning and the `AC_DEFINE' when
+	`SIZEOF_LONG_INT == 8'.  Remove this warning and the `AC_DEFINE' when
 	you adjust the code.])dnl
 test $ac_cv_sizeof_long_int = 8 &&
   AC_DEFINE(LONG_64_BITS, 1,

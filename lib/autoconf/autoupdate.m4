@@ -50,22 +50,12 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
-## --------------------------------- ##
-## Defining macros in autoupdate::.  ##
-## --------------------------------- ##
+## ----------------------------------- ##
+## Defining macros to be autoupdated.  ##
+## ----------------------------------- ##
 
 
-# AU_DEFINE(NAME, GLUE-CODE, [MESSAGE])
-# -------------------------------------
-#
-# Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
-# wrapping actions required by `autoupdate'.
-# We do not define anything in `autoconf::'.
-m4_define([AU_DEFINE],
-[AC_DEFUN([$1], [$2])])
-
-
-# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
+# AU_DEFUN(NAME, NEW-CODE)
 # -----------------------------------
 # Declare that the macro NAME is now obsoleted, and should be replaced
 # by NEW-CODE.  Tell the user she should run autoupdate, and include
@@ -77,12 +67,10 @@ m4_define([AU_DEFINE],
 # and to update a configure.ac.
 # See `acobsolete.m4' for a longer description.
 m4_define([AU_DEFUN],
-[AU_DEFINE([$1],
+[AC_DEFUN([$1],
 	   [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
-$2],
-	   [$3])dnl
-])
+$2])])
 
 
 # AU_ALIAS(OLD-NAME, NEW-NAME)

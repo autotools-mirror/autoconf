@@ -1,3 +1,28 @@
+2003-11-24  Paolo Bonzini  <bonzini@gnu.org>
+
+        * TODO: Remove already done things.  Update the part
+        about finding tools for the target.
+
+2003-11-24  Paolo Bonzini <bonzini@gnu.org>
+
+        * lib/autoconf/headers.m4 (AC_USG, AC_MEMORY_H,
+        AC_DIR_HEADER): Make wording more consistent.
+        * lib/autoconf/specific.m4 (AC_CYGWIN, AC_EMXOS2,
+        AC_MINGW32): Explain the transition better.
+        * lib/autoconf/types.m4 (AC_INT_16_BITS,
+        AC_LONG_64_BITS): Explain the transition better.
+
+2003-11-24  Paolo Bonzini  <bonzini@gnu.org>
+
+        * doc/autoconf.texi (Obsoleting Macros): Don't
+        document the third parameter of AU_DEFUN.
+        * lib/autoconf/autoupdate.m4 (AU_DEFINE): Remove.
+        (AU_DEFUN): Remove the third parameter, it was not used.
+        Use AC_DEFUN directly, not AU_DEFINE.
+        * lib/autoconf/status.m4 (AC_LINK_FILES): Move the message
+        into the expanded body, consistently with other macros
+        such as AC_USG.
+
 2003-11-17  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Put at least 14 bytes

@@ -355,7 +355,7 @@ AC_DEFINE([_GNU_SOURCE])
 AU_DEFUN([AC_CYGWIN],
 [AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
+	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *cygwin*])dnl
 case $host_os in
   *cygwin* ) CYGWIN=yes;;
 	 * ) CYGWIN=no;;
@@ -370,7 +370,7 @@ esac
 AU_DEFUN([AC_EMXOS2],
 [AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
+	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *emx*])dnl
 case $host_os in
   *emx* ) EMXOS2=yes;;
       * ) EMXOS2=no;;
@@ -385,7 +385,7 @@ esac
 AU_DEFUN([AC_MINGW32],
 [AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
+	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *mingw32*])dnl
 case $host_os in
   *mingw32* ) MINGW32=yes;;
 	  * ) MINGW32=no;;

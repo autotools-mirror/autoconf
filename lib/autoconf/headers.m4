@@ -732,7 +732,7 @@ AU_DEFUN([AC_UNISTD_H],
 # Define `USG' if string functions are in strings.h.
 AU_DEFUN([AC_USG],
 [AC_DIAGNOSE([obsolete],
-[$0: Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this `AC_WARNING'
+[$0: Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this `AC_DIAGNOSE'
 when you adjust your code to use HAVE_STRING_H.])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
@@ -761,7 +761,7 @@ AC_CHECK_HEADERS(string.h)
 # But it is better to check for both headers, and alias NEED_MEMORY_H to
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
-[AC_DIAGNOSE([obsolete], [$0: Remove this warning and
+[AC_DIAGNOSE([obsolete], [$0: Remove this `AC_DIAGNOSE' and
 `AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you adjust your code to
 use and HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])dnl
 AC_CHECK_HEADER(memory.h,
@@ -780,7 +780,7 @@ AU_DEFUN([AC_DIR_HEADER],
 [AC_HEADER_DIRENT
 AC_FUNC_CLOSEDIR_VOID
 AC_DIAGNOSE([obsolete],
-[$0: Remove this warning and the four `AC_DEFINE' when you
+[$0: Remove this `AC_DIAGNOSE' and the four `AC_DEFINE' when you
 adjust your code to use `AC_HEADER_DIRENT'.])
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])

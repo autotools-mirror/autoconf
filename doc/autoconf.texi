@@ -8840,16 +8840,18 @@ with their modern implementation.
 
 Autoconf provides a simple means to obsolete a macro.
 
-@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
+@defmac AU_DEFUN (@var{old-macro}, @var{implementation})
 @acindex{DEFUN}
 @acindex{AU_DEFUN}
 Define @var{old-macro} as @var{implementation}.  The only difference
 with @code{AC_DEFUN} is that the user will be warned that
-@var{old-macro} is now obsolete.
+@var{old-macro} is now obsolete; if she then uses @command{autoupdate},
+the call to @var{old-macro} will be replaced by the modern
+@var{implementation}.
 
-If she then uses @command{autoupdate}, the call to @var{old-macro} will be
-replaced by the modern @var{implementation}.  The additional
-@var{message} is then printed.
+Note that you can provide another definition with @code{AC_DEFUN} in
+order to update the way a macro is used without making it completely
+obsolete.
 @end defmac
 
 @node Coding Style

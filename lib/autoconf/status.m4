@@ -735,7 +735,12 @@ m4_define([AC_LIST_LINKS_COMMANDS])
 #
 # _AC_LINK_CNT is used to be robust to multiple calls.
 AU_DEFUN([AC_LINK_FILES],
-[m4_if($#, 2, ,
+[AC_DIAGNOSE([obsolete], [
+It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
+to AC_CONFIG_FILES.  `autoupdate' provides a functional but inelegant
+update, you should probably tune the result yourself and remove this
+warning.])
+m4_if($#, 2, ,
        [m4_fatal([$0: incorrect number of arguments])])dnl
 m4_define([_AC_LINK_FILES_CNT], m4_incr(_AC_LINK_FILES_CNT))dnl
 ac_sources="$1"
@@ -746,11 +751,7 @@ while test -n "$ac_sources"; do
   [ac_config_links_]_AC_LINK_FILES_CNT="$[ac_config_links_]_AC_LINK_FILES_CNT $ac_dest:$ac_source"
 done
 AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
-],
-[
-  It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
-  to AC_CONFIG_FILES.  `autoupdate' provides a functional but inelegant
-  update, you should probably tune the result yourself.])# AC_LINK_FILES
+])
 
 
 # Initialize.
