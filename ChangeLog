@@ -1,3 +1,16 @@
+2001-10-31  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Use Sed rather than
+	Awk.  Fix the sed prepass to work even if there are multiple
+	instances of $LINENO on the same line.  Do not substitute for
+	other variables like $LINENOT.  Do not check file dates; such a
+	check is unreliable on sufficiently fast machines, and removing
+	the check makes the code simpler and more reliable.  Check for
+	output and chmod failures.
+
+	* doc/autoconf.texi (Special Shell Variables): Document
+	the above.
+
 2001-10-31  Akim Demaille  <akim@epita.fr>
 
 	* tests/Makefile.am (atconfig): Remove this target, Automake
