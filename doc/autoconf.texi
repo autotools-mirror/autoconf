@@ -2049,17 +2049,17 @@ In order to support these features, it is essential that @code{datadir}
 remains being defined as @samp{$@{prefix@}/share} to depend upon the
 current value of @code{prefix}.
 
-A corollary is that you should not use these variables but in
-Makefiles.  For instance, instead of trying to evaluate @code{datadir}
-in @file{configure} and hardcoding it in Makefiles using
+A corollary is that you should not use these variables but in Makefiles.
+For instance, instead of trying to evaluate @code{datadir} in
+@file{configure} and hardcoding it in Makefiles using
 e.g. @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
-@samp{-DDATADIR="$(datadir)"} to your @code{CFLAGS}.
+@samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
 @code{datadir} and friends in your shell scripts and other files, rather
-let @command{make} manage their replacement.  For instance Autoconf ships
-templates of its shell scripts ending with @samp{.sh}, and uses this
-Makefile snippet:
+let @command{make} manage their replacement.  For instance Autoconf
+ships templates of its shell scripts ending with @samp{.sh}, and uses
+this Makefile snippet:
 
 @example
 .sh:
