@@ -7543,7 +7543,9 @@ after the exclamation point in interpreter specifications, like this:
 @noindent
 If you omit the space before the path, then 4.2@sc{bsd} based systems
 (such as Sequent DYNIX) will ignore the line, because they interpret
-@samp{#! /} as a 4-byte magic number.
+@samp{#! /} as a 4-byte magic number.  Some old systems have quite
+small limits on the length of the @samp{#!} line too, for instance 32
+bytes (not including the newline) on SunOS 4.
 
 The set of external programs you should run in a @command{configure} script
 is fairly small.  @xref{Utilities in Makefiles,, Utilities in
