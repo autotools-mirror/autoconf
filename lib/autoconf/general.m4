@@ -65,17 +65,17 @@ dnl [#] Generated automatically using autoconf.
 # Generated automatically using autoconf version] AC_ACVERSION [
 dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Copyright (C) 1991, 1992, 1993, 1994 Free Software Foundation, Inc.
-
+#
 # This configure script is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as published
 # by the Free Software Foundation; either version 2, or (at your option)
 # any later version.
-
+#
 # This script is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
 # Public License for more details.
-
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -167,7 +167,7 @@ changequote([,])dnl
 
   -disable-* | --disable-*)
     ac_feature=`echo $ac_option|sed -e 's/-*disable-//'`
-    # Reject names that aren't valid shell variable names.
+    # Reject names that are not valid shell variable names.
 changequote(,)dnl
     if test -n "`echo $ac_feature| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([,])dnl
@@ -178,7 +178,7 @@ changequote([,])dnl
 
   -enable-* | --enable-*)
     ac_feature=`echo $ac_option|sed -e 's/-*enable-//' -e 's/=.*//'`
-    # Reject names that aren't valid shell variable names.
+    # Reject names that are not valid shell variable names.
 changequote(,)dnl
     if test -n "`echo $ac_feature| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([,])dnl
@@ -191,7 +191,6 @@ changequote([,])dnl
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
 
-  # For backward compatibility, recognize -exec-prefix and --exec_prefix.
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
   | --exec | --exe | --ex)
@@ -202,7 +201,8 @@ changequote([,])dnl
     exec_prefix="$ac_optarg" ;;
 
   -gas | --gas | --ga | --g)
-    with_gas=yes ;; # Obsolete; use --with-gas.
+    # Obsolete; use --with-gas.
+    with_gas=yes ;;
 
   -help | --help | --hel | --he)
     cat << EOF
@@ -216,7 +216,8 @@ EOF
     host="$ac_optarg" ;;
 
   -nfp | --nfp | --nf)
-    with_fp=no ;; # Obsolete; use --without-fp.
+    # Obsolete; use --without-fp.
+    with_fp=no ;;
 
   -no-create | --no-create | --no-creat | --no-crea | --no-cre \
   | --no-cr | --no-c)
@@ -285,7 +286,7 @@ EOF
 
   -with-* | --with-*)
     ac_package=`echo $ac_option|sed -e 's/-*with-//' -e 's/=.*//'`
-    # Reject names that aren't valid shell variable names.
+    # Reject names that are not valid shell variable names.
 changequote(,)dnl
     if test -n "`echo $ac_package| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([,])dnl
@@ -300,7 +301,7 @@ changequote([,])dnl
 
   -without-* | --without-*)
     ac_package=`echo $ac_option|sed -e 's/-*without-//'`
-    # Reject names that aren't valid shell variable names.
+    # Reject names that are not valid shell variable names.
 changequote(,)dnl
     if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([,])dnl
@@ -309,7 +310,9 @@ changequote([,])dnl
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
 
-  --x) with_x=yes ;; # Obsolete; use --with-x.
+  --x)
+    # Obsolete; use --with-x.
+    with_x=yes ;;
 
   -x-includes | --x-includes | --x-include | --x-includ | --x-inclu \
   | --x-incl | --x-inc | --x-in | --x-i)
@@ -364,7 +367,7 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 # 1 file creation
 # 2 errors and warnings
 # 3 unused; some systems may open it to /dev/tty
-# 4 "checking for..."
+# 4 checking for...
 # 5 test results
 if test "$silent" = yes; then
   exec 4>/dev/null
@@ -379,7 +382,7 @@ fi
 
 # Save the original args if we used an alternate arg parser.
 ac_configure_temp="${configure_args-[$]*}"
-# Strip out --no-create and --norecursion so they don't pile up.
+# Strip out --no-create and --norecursion so they do not pile up.
 configure_args=
 for ac_arg in $ac_configure_temp; do
   case "$ac_arg" in
@@ -392,7 +395,7 @@ for ac_arg in $ac_configure_temp; do
 done
 
 # NLS nuisances.
-# Only set `LANG' and `LC_ALL' to "C" if already set.
+# Only set LANG and LC_ALL to C if already set.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
 if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
@@ -410,7 +413,7 @@ ac_unique_file=$1
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
-  # Try the directory containing this script, then `..'.
+  # Try the directory containing this script, then its parent.
   ac_prog=[$]0
 changequote(,)dnl
   ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
@@ -462,9 +465,9 @@ dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
 define(AC_CONFIG_HEADER, [define(AC_CONFIG_NAMES, $1)])dnl
 dnl
 dnl AC_REVISION(REVISION-INFO)
-define(AC_REVISION, [#!/bin/sh
-# From configure.in translit($1,$")
-])dnl
+define(AC_REVISION, [translit([#!/bin/sh
+# From configure.in $1
+],$")])dnl
 dnl
 dnl Subroutines of AC_PREREQ.
 dnl
@@ -542,7 +545,7 @@ define(AC_CANON_SYSTEM,
 #    configure --host=HOST --target=TARGET --build=BUILD NONOPT
 #
 # The rules are:
-# 1. You aren't allowed to specify --host, --target, and nonopt at the
+# 1. You are not allowed to specify --host, --target, and nonopt at the
 #    same time. 
 # 2. Host defaults to nonopt.
 # 3. If nonopt is not specified, then host defaults to the current host,
@@ -667,13 +670,13 @@ dnl
 define(AC_CACHE_SAVE,
 [if test -w $cache_file; then
 AC_VERBOSE(saving test results in cache file $cache_file)
-cat <<\CEOF > $cache_file
+cat > $cache_file <<\CEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
 # If its contents are invalid for some reason, you may edit or delete it.
 #
-# By default, configure uses `./config.cache' as the cache file,
+# By default, configure uses ./config.cache as the cache file,
 # creating it if it does not exist already.  You can give configure
 # the --cache-file=FILE option to use a different cache file; that is
 # what configure does when it calls configure scripts in
@@ -810,19 +813,19 @@ dnl
 dnl
 dnl AC_CHECKING(FEATURE-DESCRIPTION)
 define(AC_CHECKING,
-[echo "checking $1" >&4])dnl
+[echo "checking $1" 1>&4])dnl
 dnl
 dnl AC_VERBOSE(RESULT-DESCRIPTION)
 define(AC_VERBOSE,
-[echo "	$1" >&5])dnl
+[echo "	$1" 1>&5])dnl
 dnl
 dnl AC_WARN(PROBLEM-DESCRIPTION)
 define(AC_WARN,
-[echo "configure: warning: $1" >&2])dnl
+[echo "configure: warning: $1" 1>&2])dnl
 dnl
 dnl AC_ERROR(ERROR-DESCRIPTION)
 define(AC_ERROR,
-[echo "configure: $1" >&2; exit 1])dnl
+[echo "configure: $1" 1>&2; exit 1])dnl
 dnl
 dnl
 dnl ### Selecting which language to use for testing
@@ -883,7 +886,7 @@ dnl
 dnl AC_PROGRAM_CHECK(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
 dnl                  [, VALUE-IF-NOT-FOUND])
 define(AC_PROGRAM_CHECK,
-[# Extract the first word of `$2', so it can be a program name with args.
+[# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
 AC_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_program_$1,
@@ -911,7 +914,7 @@ AC_SUBST($1)dnl
 dnl
 dnl AC_PROGRAM_PATH(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND])
 define(AC_PROGRAM_PATH,
-[# Extract the first word of `$2', so it can be a program name with args.
+[# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
 AC_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_path_$1,
@@ -1236,7 +1239,8 @@ define(AC_OUTPUT,
 [AC_CACHE_SAVE
 
 test -z "$prefix" && prefix=/usr/local
-test -z "$exec_prefix" && exec_prefix='${prefix}' # Let make expand it.
+# Let make expand exec_prefix.
+test -z "$exec_prefix" && exec_prefix='${prefix}'
 
 # Any assignment to VPATH causes Sun make to only execute
 # the first set of double-colon rules, so remove it if not needed.
@@ -1322,7 +1326,7 @@ for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
 changequote(,)dnl
   ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
-  if test "$ac_dir" != "$ac_file"; then
+  if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
     test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/$ac_dir"
@@ -1450,7 +1454,7 @@ rm -f conftest.sh
 
 # Now back to your regularly scheduled config.status.
 cat >> config.status <<\EOF
-# This sed command replaces #undef's with comments.  This is necessary, for
+# This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it in
 [#] $1.
@@ -1523,7 +1527,7 @@ dnl
 define(AC_OUTPUT_CONFIG_SUBDIRS,
 [if test -z "${norecursion}"; then
 
-  # Remove --cache-file arguments so they don't pile up.
+  # Remove --cache-file arguments so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
   for ac_arg in $configure_args; do
@@ -1544,7 +1548,7 @@ define(AC_OUTPUT_CONFIG_SUBDIRS,
 
   for ac_config_dir in $1; do
 
-    # Don't complain, so a configure script can configure whichever
+    # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
     if test ! -d ${srcdir}/${ac_config_dir}; then
       continue
@@ -1566,7 +1570,7 @@ define(AC_OUTPUT_CONFIG_SUBDIRS,
     cd ${ac_config_dir}
 
     case "${srcdir}" in
-    .) # No --srcdir option.  We're building in place.
+    .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=${srcdir} ;;
     /*) # Absolute path.
       ac_sub_srcdir=${srcdir}/${ac_config_dir} ;;
