@@ -1,5 +1,14 @@
 2003-06-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Report a single config.log,
+	not all of them.  This fixes 1. the fact that when testing
+	Autoconf there are many many config.log, 2. the incorrect use of
+	top_srcdir to find config.log.
+	Don't mix the detailed output of failed test with the summary of
+	failures.  Rather, append detailed log afterwards.
+
+2003-06-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/local.at (AT_CHECK_CONFIGURE): Adjust to the verbose being
 	always run: output config.log on $at_group_log.
 

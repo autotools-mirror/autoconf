@@ -686,10 +686,9 @@ _ATEOF
 	  ;;
 	*)
 	  # Upon failure, include the log into the testsuite's global
-	  # log.  The failure message is written in the group log and
-	  # then included in the global log.
+	  # log.  The failure message is written in the group log.  It
+	  # is later included in the global log.
 	  echo "$at_log_msg" >> $at_group_log
-	  cat $at_group_log >&AS_MESSAGE_LOG_FD
 
 	  # Upon failure, keep the group directory for autopsy, and
 	  # create the debugging script.
@@ -819,58 +818,65 @@ if test $at_unexpected_count = 0; then
 else
   echo "ERROR: $at_result" >&2
   echo "ERROR: $at_result" >&AS_MESSAGE_LOG_FD
+  {
+    echo
+    AS_BOX([Summary of the failures.])
+
+    # Summary of failed and skipped tests.
+    if test $at_fail_count != 0; then
+      echo "Failed tests:"
+      $SHELL $[0] $at_fail_list --list
+      echo
+    fi
+    if test $at_skip_count != 0; then
+      echo "Skipped tests:"
+      $SHELL $[0] $at_skip_list --list
+      echo
+    fi
+    if test $at_xpass_count != 0; then
+      echo "Unexpected passes:"
+      $SHELL $[0] $at_xpass_list --list
+      echo
+    fi
+    if test $at_fail_count != 0; then
+      AS_BOX([Detailed failed tests.])
+      echo
+      for at_group in $at_fail_list
+      do
+        # Normalize the test group number.
+        at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
+        # Create a fresh directory for the next test group, and enter.
+        at_group_dir=$at_suite_dir/$at_group_normalized
+        at_group_log=$at_group_dir/$as_me.log
+        cat $at_group_log
+        echo
+      done
+      echo
+    fi
+    if test -n "$at_top_srcdir"; then
+      AS_BOX([$at_top_builddir/config.log])
+      sed 's/^/| /' $at_top_builddir/config.log
+      echo
+    fi
+  } >&AS_MESSAGE_LOG_FD
+
+  AS_BOX([$as_me.log was created.])
+
+  echo
+  echo "Please send \`$as_me.log' and all information you think might help:"
+  echo
+  echo "   To: <AT_PACKAGE_BUGREPORT>"
+  echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
+$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}dnl
+$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
+  echo
   if test $at_debug_p = false; then
     echo
     echo 'You may investigate any problem if you feel able to do so, in which'
     echo 'case the test suite provides a good starting point.'
     echo
-    echo 'Failed tests have been logged in the file '$as_me'.log.'
-
-    {
-      echo
-      echo
-      AS_BOX([Summary of the failures.])
-
-      # Summary of failed and skipped tests.
-      if test $at_fail_count != 0; then
-        echo "Failed tests:"
-        $SHELL $[0] $at_fail_list --list
-        echo
-      fi
-      if test $at_skip_count != 0; then
-        echo "Skipped tests:"
-        $SHELL $[0] $at_skip_list --list
-        echo
-      fi
-      if test $at_xpass_count != 0; then
-        echo "Unexpected passes:"
-        $SHELL $[0] $at_xpass_list --list
-        echo
-      fi
-      if test -n "$at_top_srcdir"; then
-        AS_BOX([Configuration logs.])
-        echo
-        for at_file in `find "$at_top_srcdir" -name config.log -print`
-        do
-  	  echo "$as_me: $at_file:"
-  	  sed 's/^/| /' $at_file
-  	  echo
-        done
-      fi
-    } >&AS_MESSAGE_LOG_FD
-
-    AS_BOX([$as_me.log was created.])
-
-    echo
-    echo "Please send \`$as_me.log' and all information you think might help:"
-    echo
-    echo "   To: <AT_PACKAGE_BUGREPORT>"
-    echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
-$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}dnl
-$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
-    echo
-    exit 1
   fi
+    exit 1
 fi
 
 exit 0
