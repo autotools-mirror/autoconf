@@ -49,7 +49,7 @@ is a preliminary `configure.in' for that package.
 
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
-      --macrodir=DIR    directory storing data files
+  -m, --macrodir=DIR    directory storing data files
   -v, --verbose         verbosely report processing
 
 Report bugs to <bug-autoconf@gnu.org>.
@@ -64,9 +64,13 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 EOD
 
+    local $need_datadir = 0;
+
     foreach $_ (@ARGV) {
 	if (/^--m[a-z]*=(.*)/) {
 	    $datadir = $1;
+	} elsif (/^-m$/) {
+	   $need_datadir = 1;
 	} elsif (/^--h/ || /^-h$/) {
 	    print "$usage";
 	    exit 0;
@@ -76,13 +80,20 @@ EOD
 	    print "$version";
 	    exit 0;
 	} elsif (/^[^-]/) {
-	    die "$usage" if defined($srcdir);
-	    # Top level directory of the package being autoscanned.
-	    $srcdir = $_;
+	    if ($need_datadir) {
+		$datadir = $_;
+		$need_datadir = 0;
+	    } else {
+		die "$usage" if defined($srcdir);
+		# Top level directory of the package being autoscanned.
+		$srcdir = $_;
+	    }
 	} else {
 	    die "$usage";
 	}
     }
+
+    die $usage if $need_datadir;
 
     $srcdir="." if !defined($srcdir);
 
