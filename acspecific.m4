@@ -58,7 +58,7 @@ dnl Idea borrowed from dist 3.0.
 dnl Internal use only.
 AC_DEFUN(AC_PROG_ECHO_N,
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
-  # Stardent Vistra SVR4 grep lacks -e, says ghazi@caip.rutgers.edu.
+  # Stardent Vistra SVR4 grep lacks -e, says Kaveh Ghazi
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
     ac_n= ac_c='
 ' ac_t='	'
@@ -2702,8 +2702,6 @@ dnl <langston@SLAC.Stanford.EDU>.  However, nearly all of this macro
 dnl came from the "OCTAVE_FLIBS" macro in "octave-2.0.13/aclocal.m4",
 dnl and full credit should go to John W. Eaton for writing this
 dnl extremely useful macro.  Thank you John.
-dnl
-dnl AC_F77_LIBRARY_LDFLAGS()
 
 dnl We have to "pushdef" this macro for now, because I haven't checked
 dnl this version of the macro into the Autoconf repository yet.  --MDL
@@ -2957,12 +2955,12 @@ dnl We need to pop the language stack twice.
 ])])
 
 
+dnl AC_F77_WRAPPERS
+dnl ---------------
 dnl Defines C macros F77_FUNC(name,NAME) and F77_FUNC_(name,NAME) to
 dnl properly mangle the names of C identifiers, and C identifiers with
 dnl underscores, respectively, so that they match the name mangling
 dnl scheme used by the Fortran 77 compiler.
-dnl
-dnl AC_F77_WRAPPERS()
 AC_DEFUN(AC_F77_WRAPPERS,
 [
   AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
@@ -3368,7 +3366,7 @@ dnl FIXME banish uname from this macro!
     X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
   else
     # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
-    # libraries were built with DECnet support.  And karl@cs.umb.edu says
+    # libraries were built with DECnet support.  And Karl Berry says
     # the Alpha needs dnet_stub (dnet does not exist).
     AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
     if test $ac_cv_lib_dnet_dnet_ntoa = no; then
@@ -3421,7 +3419,7 @@ dnl FIXME banish uname from this macro!
   # we get undefined symbols.  So assume we have SM if we have ICE.
   # These have to be linked with before -lX11, unlike the other
   # libraries we check for below, so use a different variable.
-  #  --interran@uluru.Stanford.EDU, kb@cs.umb.edu.
+  #  --interran@uluru.Stanford.EDU, Karl Berry
   AC_CHECK_LIB(ICE, IceConnectionNumber,
     [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"], , $X_EXTRA_LIBS)
   LDFLAGS="$ac_save_LDFLAGS"

@@ -1912,8 +1912,8 @@ AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 dnl ### Defining symbols
 
 
-dnl AC_DEFINE(VARIABLE [, VALUE[, DESCRIPTION]])
-dnl --------------------------------------------
+dnl AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
+dnl -------------------------------------------
 dnl Set VARIABLE to VALUE, verbatim, or 1.  Remember the value
 dnl and if VARIABLE is affected the same VALUE, do nothing, else
 dnl die.  The third argument is used by autoheader.
@@ -1925,8 +1925,8 @@ EOF
 
 
 
-dnl AC_DEFINE_UNQUOTED(VARIABLE [, VALUE[, DESCRIPTION]])
-dnl -----------------------------------------------------
+dnl AC_DEFINE_UNQUOTED(VARIABLE, [VALUE], [DESCRIPTION])
+dnl ----------------------------------------------------
 dnl Similar, but perform shell substitutions $ ` \ once on VALUE.
 define(AC_DEFINE_UNQUOTED,
 [cat >>confdefs.h <<EOF

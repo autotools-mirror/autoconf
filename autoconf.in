@@ -221,16 +221,18 @@ case $task in
   # Put the real line numbers into configure to make config.log more helpful.
   # Because quoting can sometimes get really painful in m4, there are special
   # @tokens@ to substitute.
-  $AWK '
-  /__oline__/ { printf "%d:", NR + 1 }
-  	     { print }
-  ' $tmpout | sed '
-  /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
-  s/@BKL@/[/g
-  s/@BKR@/]/g
-  s/@DLR@/$/g
-  s/@PND@/#/g
-  ' >&4
+  cat -s $tmpout |
+    $AWK '
+      /__oline__/ { printf "%d:", NR + 1 }
+  	         { print }
+      ' |
+    sed '
+      /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
+      s/@BKL@/[/g
+      s/@BKR@/]/g
+      s/@DLR@/$/g
+      s/@PND@/#/g
+      ' >&4
   ;; # End of the task script.
 
   ## -------------- ##
@@ -288,8 +290,6 @@ EOF
   # Run m4 with all the library files, save its report on strderr.
   $verbose Running $run_m4 -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile
   $run_m4 -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >the-script 2>$tmpout
-  cp $tmpout LOG
-  cp $tmpin tmpin
   # Keep only the good lines, there may be other outputs
   grep '^[^: ]*:[0-9][0-9]*:[^:]*$' $tmpout >$tmpin
   # Extract the files that are not in the local dir, and install the links.

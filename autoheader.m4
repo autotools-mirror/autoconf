@@ -31,8 +31,8 @@ dnl each definition seems to be necessary to prevent m4 from eating
 dnl the newline, which makes the @@@ not always be at the beginning of
 dnl a line.
 
-dnl AH_DEFINE(VARIABLE [, VALUE[, DESCRIPTION]])
-dnl --------------------------------------------
+dnl AH_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
+dnl -------------------------------------------
 dnl When running autoheader, this macro replaces AC_DEFINE and
 dnl AC_DEFINE_UNQUOTED.
 dnl
