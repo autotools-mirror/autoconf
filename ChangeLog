@@ -1,5 +1,7 @@
 1999-04-05  Ben Elliston  <bje@cygnus.com>
 
+	* config.sub: Add modern Alpha processors.
+
 	* acspecific.m4 (AC_CYGWIN): Do not remove conftest*; let
 	AC_TRY_COMPILE clean up after itself.
 	(AC_MINGW32): Likewise.
