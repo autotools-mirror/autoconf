@@ -804,7 +804,7 @@ $debug ||
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
 define([AC_SHELL_UNSET],
-[$ac_unset $1 || test "${$1+set}" != set || $1=$2 && export $1])
+[$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
 # AC_SHELL_MKDIR_P(PATH)
