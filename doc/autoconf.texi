@@ -304,10 +304,13 @@ configure.in  /                          |    |                   \
   |    |                                 |    |             make* -> your
   |    |                                 |    |                   /package
   |    |                              config.status* -> config.h /
-configure.in  \                                      /
-autoheader*   -> - - - - - - - - - - -> config.h.in /
-acconfig.h    /
-config.h.top /
+configure.in \                                       /
+acspecific.m4 \                                    /
+acgeneral.m4   \                                 /
+aclocal.m4      \                              /
+autoheader*     -> m4* - - - --> config.h.in /
+acconfig.h      /
+config.h.top   /
 @end example
 
 @noindent
@@ -2598,7 +2601,7 @@ configure: configure.in aclocal.m4
 
 # autoheader might not change config.h.in
 config.h.in: stamp-h.in
-stamp-h.in: configure.in acconfig.h config.h.top
+stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top
         cd $@{srcdir@}; autoheader
         touch $@{srcdir@}/stamp-h.in
 
