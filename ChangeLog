@@ -1,3 +1,7 @@
+2004-01-10  Jim Meyering  <jim@meyering.net>
+
+	* doc/autoconf.texi (Running the Preprocessor): Correct grammar.
+
 2004-01-09  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/general.m4: Fix bug: AC_CHECK_SIZEOF evokes a warning
