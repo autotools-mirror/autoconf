@@ -5440,9 +5440,10 @@ If you want to explicitly refer to the positional arguments, given the
 @samp{$@@} bug (@pxref{Shell Substitutions}), use:
 
 @example
-for arg in ${1+"$@@"}; do
+for arg in $@{1+"$@@"@}; do
   echo "$arg"
 done
+@end example
 
 @item @command{if}
 @cindex @command{if}
