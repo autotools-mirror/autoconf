@@ -1006,7 +1006,7 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 m4_define([AS_VAR_SET],
 [AS_LITERAL_IF([$1],
                [$1=$2],
-               [eval "$1=$2"])])
+               [eval "$1=AS_ESCAPE([$2])"])])
 
 
 # AS_VAR_GET(VARIABLE)

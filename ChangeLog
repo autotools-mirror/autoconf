@@ -1,3 +1,8 @@
+2003-05-21  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/m4sugar/m4sh.m4 (AS_VAR_SET): Escape
+	the RHS before passing it to eval.
+
 2003-05-21  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoupdate.in ($m4): Fix quotation.
