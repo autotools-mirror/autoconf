@@ -71,24 +71,21 @@ define(_m4_foreach,
 ## ---------------------------------------- ##
 
 
-
-# AT_TEST_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
-# ----------------------------------------------------------------
+# _AT_CHECK_AC_MACRO(AC-BODY)
+# ---------------------------
 # Create a minimalist configure.in running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
 # `config.guess' etc.).
-AT_DEFINE(AT_TEST_MACRO,
-[AT_SETUP([$1])
-
-dnl Produce the configure.in
-AT_DATA(configure.in,
+AT_DEFINE([_AT_CHECK_AC_MACRO],
+[dnl Produce the configure.in
+AT_DATA([configure.in],
 [AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_ENV_SAVE(expout)
-ifelse([$2],,[$1], [$2])
+$1
 AC_ENV_SAVE(env-after)
 AC_OUTPUT
 ])
@@ -97,8 +94,8 @@ dnl FIXME: Here we just don't consider the stderr from Autoconf.
 dnl Maybe some day we could be more precise and filter out warnings.
 dnl The problem is that currently some warnings are spread on several
 dnl lines, so grepping -v warning is not enough.
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
-AT_CHECK([../autoheader --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, ignore)
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
 
@@ -107,9 +104,23 @@ dnl which case `env-after' is probably missing.  Don't check it then.
 if test -f env-after; then
   AT_CHECK([cat env-after], 0, expout)
 fi
+])# _AT_CHECK_AC_MACRO
+
+
+# AT_TEST_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
+# ----------------------------------------------------------------
+# Create a minimalist configure.in running the macro named
+# NAME-OF-THE-MACRO, check that autoconf runs on that script,
+# and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
+# `config.guess' etc.).
+AT_DEFINE([AT_TEST_MACRO],
+[AT_SETUP([$1])
+
+_AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
 $3
 AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
-])dnl AT_TEST_MACRO
+])# AT_TEST_MACRO
 
 
 
@@ -121,6 +132,6 @@ AT_CLEANUP(configure config.status config.log config.cache config.hin config.h e
 # but those of automatically checked features (STDC_HEADERS etc.).
 # AT_CHECK_HEADER is a better name, but too close from AC_CHECK_HEADER.
 AT_DEFINE(AT_CHECK_DEFINES,
-[AT_CHECK([fgrep '#' config.h |  grep -v 'STDC_HEADERS'],, [$1])])
+[AT_CHECK([[fgrep '#' config.h | grep -v 'STDC_HEADERS']],, [$1])])
 
 divert(0)dnl

@@ -309,6 +309,69 @@ case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
 esac]])
 
 
+## ------------- ##
+## AC_PROG_CPP.  ##
+## ------------- ##
+
+
+# It's Ok for strict preprocessors to produce warnings.
+
+AT_SETUP([AC_PROG_CPP with warnings])
+
+AT_DATA([mycpp],
+[[#! /bin/sh
+${1+"$@"}
+err_code=$?
+echo noise >&2
+exit $err_code
+]])
+
+chmod +x mycpp
+
+_AT_CHECK_AC_MACRO(
+[AC_PROG_CPP
+# If the preprocessor is not strict, just ignore
+test "x$ac_c_preproc_warn_flag" = xyes && exit 77
+CPP="./mycpp $CPP"
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+
+AT_CHECK_DEFINES(
+[/* #undef HAVE_AUTOCONF_IO_H */
+#define HAVE_STDIO_H 1
+])
+
+AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+
+
+# Non-strict preprocessors work if they produce no warnings.
+
+AT_SETUP([AC_PROG_CPP without warnings])
+
+AT_DATA([mycpp],
+[[#! /bin/sh
+/lib/cpp ${1+"$@"}
+exit 0
+]])
+
+chmod +x mycpp
+
+_AT_CHECK_AC_MACRO(
+[# Ignore if /lib/cpp doesn't work
+/lib/cpp </dev/null >/dev/null 2>&1 || exit 77
+CPP=./mycpp
+AC_PROG_CPP
+test "x$ac_c_preproc_warn_flag" != xyes && exit 1
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+
+AT_CHECK_DEFINES(
+[/* #undef HAVE_AUTOCONF_IO_H */
+#define HAVE_STDIO_H 1
+])
+
+AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+
+
+
 
 
 ## ------------- ##
