@@ -27,7 +27,6 @@ BEGIN
   unshift @INC, "$perllibdir";
 }
 
-use Getopt::Long;
 use File::Basename;
 use Autom4te::General;
 use strict;
@@ -40,17 +39,9 @@ my $localdir = '.';
 my $m4 = $ENV{"M4"} || "@M4@";
 
 
-## ---------- ##
-## Routines.  ##
-## ---------- ##
-
-
-# print_usage ()
-# --------------
-# Display usage (--help).
-sub print_usage ()
-{
-  print <<"END";
+# $HELP
+# -----
+$help = <<"END";
 Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
 
 Update the TEMPLATE-FILE... if given, or \`configure.ac\' if present,
@@ -73,16 +64,10 @@ Environment variables:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 END
-  exit 0;
-}
 
-
-# print_version ()
-# ----------------
-# Display version (--version).
-sub print_version
-{
-  print <<END;
+# $VERSION
+# --------
+$version = <<"END";
 autoupdate (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
@@ -90,8 +75,11 @@ Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 END
-  exit 0;
-}
+
+
+## ---------- ##
+## Routines.  ##
+## ---------- ##
 
 
 # parse_args ()
@@ -104,14 +92,8 @@ sub parse_args ()
   # If fixed some day, use this: '' => sub { push @ARGV, "-" }
   my $update_stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
-  Getopt::Long::config ("bundling");
-  Getopt::Long::GetOptions ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
-			    'l|localdir=s' => \$localdir,
-			    'd|debug'      => \$debug,
-			    'h|help'    => \&print_usage,
-			    'V|version' => \&print_version,
-			    'v|verbose' => \$verbose)
-    or exit 1;
+  getopt ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
+	  'l|localdir=s' => \$localdir);
 
   push @ARGV, '-'
     if $update_stdin;

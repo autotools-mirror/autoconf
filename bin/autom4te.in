@@ -230,7 +230,6 @@ sub load
 package Autom4te;
 
 use Autom4te::General;
-use Getopt::Long;
 use File::Basename;
 use IO::File;
 use strict;
@@ -352,21 +351,9 @@ my %m4_builtin_alternate_name;
 @m4_builtin_alternate_name{"m4wrap", "m4_wrap"} = ("m4_wrap", "m4wrap");
 
 
-
-
-
-## ---------- ##
-## Routines.  ##
-## ---------- ##
-
-
-# print_usage ()
-# --------------
-# Display usage (--help).
-sub print_usage ()
-{
-  # Quotes are backslahed to help Emacs' font-lock-mode.
-  print <<EOF;
+# $HELP
+# -----
+$help = << "EOF";
 Usage: $0 [OPTION] ... [FILES]
 
 Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
@@ -415,16 +402,10 @@ Tracing:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
-  exit 0;
-}
 
-
-# print_version ()
-# ----------------
-# Display version (--version).
-sub print_version
-{
-  print <<EOF;
+# $VERSION
+# --------
+$version =  <<"EOF";
 autom4te (@PACKAGE_NAME@) @VERSION@
 Written by Akim Demaille.
 
@@ -433,8 +414,10 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 EOF
 
-  exit 0;
-}
+
+## ---------- ##
+## Routines.  ##
+## ---------- ##
 
 
 # load_configuration ()
@@ -486,16 +469,8 @@ sub parse_args ()
 
   # We want to look for the early options, which should not be found
   # in the configuration file.  Prepend to the user arguments.
-  Getopt::Long::Configure ("bundling", "pass_through");
-  GetOptions (
-	      "h|help"     => \&print_usage,
-	      "V|version"  => \&print_version,
-
-	      "s|language=s" => \$language,
-	      "v|verbose"    => \$verbose,
-	      "d|debug"      => \$debug,
-	     )
-    or exit 1;
+  Getopt::Long::Configure ("pass_through");
+  getopt ("s|language=s" => \$language);
   Getopt::Long::Configure ("defaults");
   unshift @ARGV, @{$language{$language}}
     if $language;
@@ -504,8 +479,7 @@ sub parse_args ()
     if $debug;
 
   # Process the arguments for real this time.
-  Getopt::Long::Configure ("bundling");
-  GetOptions
+  getopt
     (
      # Operation modes:
      "o|output=s"   => \$output,
@@ -525,8 +499,7 @@ sub parse_args ()
      # by hand.
      "t|trace=s"     => \@trace,
      "p|preselect=s" => \@preselect,
-    )
-      or exit 1;
+    );
 
   die "$me: too few arguments
 Try `$me --help' for more information.\n"

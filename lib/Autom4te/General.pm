@@ -20,7 +20,6 @@ package Autom4te::General;
 
 use 5.005;
 use Exporter;
-use Getopt::Long;
 use File::Basename;
 use File::stat;
 use IO::File;
@@ -30,25 +29,31 @@ use strict;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &find_file &mktmpdir &mtime
+@EXPORT = qw (&find_configure_ac &find_file &getopt &mktmpdir &mtime
               &uniq &update_file &verbose &xsystem
-	      $me $verbose $debug $tmp);
+	      $debug $help $me $tmp $verbose $version);
 
 # Variable we share with the main package.  Be sure to have a single
 # copy of them: using `my' together with multiple inclusion of this
 # package would introduce several copies.
-use vars qw ($me);
-$me = basename ($0);
-
-use vars qw ($verbose);
-$verbose = 0;
-
 use vars qw ($debug);
 $debug = 0;
+
+use vars qw ($help);
+$help = undef;
+
+use vars qw ($me);
+$me = basename ($0);
 
 # Our tmp dir.
 use vars qw ($tmp);
 $tmp = undef;
+
+use vars qw ($verbose);
+$verbose = 0;
+
+use vars qw ($version);
+$version = undef;
 
 
 # END
@@ -145,6 +150,26 @@ sub find_file ($@)
     unless $optional;
 
   return undef;
+}
+
+
+# getopt (%OPTIONS)
+# -----------------
+sub getopt (%)
+{
+  my (%option) = @_;
+  use Getopt::Long;
+
+  %option = (%option,
+	     "h|help"     => sub { print $help; exit 0 },
+             "V|version"  => sub { print $version; exit 0 },
+
+             "v|verbose"    => \$verbose,
+             "d|debug"      => \$debug,
+	    );
+  Getopt::Long::Configure ("bundling");
+  GetOptions (%option)
+    or exit 1;
 }
 
 

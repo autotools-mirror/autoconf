@@ -53,17 +53,9 @@ my $m4 = $ENV{"M4"} || "@M4@";
 my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 
 
-## ---------- ##
-## Routines.  ##
-## ---------- ##
-
-
-# print_usage ()
-# --------------
-# Display usage (--help).
-sub print_usage ()
-{
-  print <<"END";
+# $HELP
+# -----
+$help = <<"END";
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Create a template file of C \`#define\' statements for \`configure\' to
@@ -90,16 +82,11 @@ Library directories:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 END
-  exit 0;
-}
 
 
-# print_version ()
-# ----------------
-# Display version (--version).
-sub print_version
-{
-  print <<END;
+# $VERSION
+# --------
+$version = <<"END";
 autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath.
 
@@ -108,8 +95,11 @@ Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 END
-  exit 0;
-}
+
+
+## ---------- ##
+## Routines.  ##
+## ---------- ##
 
 
 # parse_args ()
@@ -122,16 +112,10 @@ sub parse_args ()
   # If fixed some day, use this: '' => sub { push @ARGV, "-" }
   my $stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
-  Getopt::Long::config ("bundling");
-  Getopt::Long::GetOptions ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
-			    'l|localdir=s' => \$localdir,
-			    'd|debug'      => \$debug,
-			    'h|help'    => \&print_usage,
-			    'V|version' => \&print_version,
-			    'v|verbose' => \$verbose,
-			    'f|force'   => \$force,
-			    'W|warning' => \@warning)
-    or exit 1;
+  getopt ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
+	  'l|localdir=s' => \$localdir,
+	  'f|force'   => \$force,
+	  'W|warning' => \@warning);
 
   push @ARGV, '-'
     if $stdin;
@@ -180,8 +164,9 @@ END
 
 # Set up autoconf.
 $autoconf .= " --include=$autoconf_dir --include=$localdir";
-$autoconf .= ' --verbose' if $verbose;
 $autoconf .= ' --debug' if $debug;
+$autoconf .= ' --force' if $force;
+$autoconf .= ' --verbose' if $verbose;
 
 # ----------------------- #
 # Real work starts here.  #
@@ -219,7 +204,7 @@ if ($config_h_top)
     my $in = new IO::File ($config_h_top);
     while ($_ = $in->getline)
       {
-	print $out;
+	print $out $_;
       }
   }
 
@@ -231,7 +216,7 @@ if ($acconfig_h)
       {
 	last if /\@BOTTOM\@/;
 	next if /\@TOP\@/;
-	print $out;
+	print $out $_;
       }
   }
 
@@ -248,7 +233,7 @@ if ($acconfig_h)
     my $dump = 0;
     while ($_ = $in->getline)
       {
-	print $out if $dump;
+	print $out $_ if $dump;
 	$dump = 1  if /\@BOTTOM\@/;
       }
   }
@@ -259,7 +244,7 @@ if ($config_h_bot)
     my $in = new IO::File ($config_h_bot);
     while ($_ = $in->getline)
       {
-	print $out;
+	print $out $_;
       }
   }
 

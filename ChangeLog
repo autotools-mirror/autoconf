@@ -1,5 +1,16 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm ($version, $help, &getopt): New.
+	* bin/autoupdate.in, bin/autoheader.in, bin/autom4te.in: Use them.
+	* bin/autom4te.in ($autoconf): Pass --force.
+	`print $out' doesn't print `$_' but `$out'.
+	* tests/tools.at (Syntax of the Perl scripts): Pass the lib dir.
+	(autoheader): Pass --force since the test suite goes too fast for
+	the time stamps.
+	Adjust to the new autoheader messages.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoheader.in: Handle the acconfig.h etc. junk files.
 	Check the completeness of the #template.
 	* lib/Autom4te/General.pm (&update_file): s/remove/unlink/.
