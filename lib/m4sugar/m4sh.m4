@@ -483,6 +483,15 @@ m4_define([AS_ESCAPE],
 	     m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
 	     [\\\1])])
 
+# AS_ESCAPE_FOR_EXPAND(STRING)
+# ----------------------------
+# Escape characters in STRING that have special meaning to the shell
+# within double quotes, but leave parameter expansions active.
+# These substitutions come from sed_double_backslash in GNU Libtool.
+m4_define([AS_ESCAPE_FOR_EXPAND],
+[m4_bpatsubsts([AS_ESCAPE([$1], [`"\])],
+               [^\(\(\\\\\\\\\)*\\\\\)\$], [\1\\$],
+           [\([^\\]\(\\\\\\\\\)*\\\\\)\$], [\1\\$])])
 
 # _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
 # ---------------------------------------------------------------

@@ -30,6 +30,9 @@ m4_include([m4sugar.at])
 # M4sh.m4.
 m4_include([m4sh.at])
 
+# Autotest.
+m4_include([autotest.at])
+
 # Autoconf base macros.
 m4_include([base.at])
 

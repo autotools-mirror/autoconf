@@ -15442,6 +15442,29 @@ commands @var{run-if-pass}.
 The @var{commands} @emph{must not} redirect the standard output, nor the
 standard error.
 
+If the @var{commands} may contain a newline, @command{testsuite} will
+not enable shell tracing for them when the user passes @option{-x}.
+Since unquoted, unescaped literal newlines are never necessary to
+achieve particular semantics, escape them.  For example, avoid this:
+
+@display
+cat LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG |
+  grep fairly-long-in-its-own-right
+echo "A sentence."
+@end display
+
+Write this instead:
+
+@display
+cat LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG | \
+  grep fairly-long-in-its-own-right ; \
+echo "A sentence."
+@end display
+
+The presence in @var{commands} of any command substitution or a
+parameter expansion yielding multiple lines also inhibits shell tracing,
+but those constructs are rarely so easy to remove.
+
 If @var{status}, or @var{stdout}, or @var{stderr} is @samp{ignore}, then
 the corresponding value is not checked.
 

@@ -87,7 +87,7 @@ TESTSUITE_GENERATED_AT = \
 
 TESTSUITE_HAND_AT = \
 	suite.at \
-	m4sugar.at m4sh.at \
+	m4sugar.at m4sh.at autotest.at \
 	base.at tools.at torture.at \
 	compile.at c.at fortran.at \
 	semantics.at \

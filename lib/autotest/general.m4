@@ -272,7 +272,7 @@ do
 	;;
 
     --trace | -x )
-	at_traceon='set -vx'; at_traceoff='set +vx'
+	at_traceon='set -x'; at_traceoff='set +x'
 	;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
@@ -1205,7 +1205,10 @@ m4_define([AT_CHECK_NOESCAPE],
 # but we must group COMMANDS as it is not limited to a single command, and
 # then the shells will save the traces in at-stderr. So we have to filter
 # them out when checking stderr, and we must send them into the test suite's
-# stderr to honor -x properly.
+# stderr to honor -x properly. Since only the first line of the trace of a
+# multiline command starts with a `+', and I know of no straightforward way to
+# filter out the unadorned trace lines, we disable shell tracing entirely for
+# commands that could span multiple lines.
 #
 # Limiting COMMANDS to a single command is not good either, since them
 # the user herself would use {} or (), and then we face the same problem.
@@ -1222,10 +1225,35 @@ m4_define([_AT_CHECK],
 [$at_traceoff
 echo "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >"$at_check_line_file"
-( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
-at_status=$?
-grep '^ *+' "$at_stder1" >&2
-grep -v '^ *+' "$at_stder1" >"$at_stderr"
+
+at_trace_this=
+if test -n "$at_traceon"; then
+    at_lf='
+'
+    at_cmd_expanded="AS_ESCAPE_FOR_EXPAND([$1])"
+    case "$at_cmd_expanded" in
+        *\$\(*\)*)         at_reason='a $(...) command substitution' ;;
+        *\`*\`*)           at_reason='a `...` command substitution' ;;
+        *[[^\\]]"$at_lf"*) at_reason='an embedded newline' ;;
+        *)                 at_reason= ;;
+    esac
+    if test -n "$at_reason"; then
+        echo "Not enabling shell tracing (command contains $at_reason)"
+    else
+        at_trace_this=yes
+    fi
+fi
+
+if test -n "$at_trace_this"; then
+    ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
+    at_status=$?
+    grep '^ *+' "$at_stder1" >&2
+    grep -v '^ *+' "$at_stder1" >"$at_stderr"
+else
+    ( $1 ) >"$at_stdout" 2>"$at_stderr"
+    at_status=$?
+fi
+
 at_failed=false
 dnl Check stderr.
 m4_case([$4],

@@ -1,0 +1,138 @@
+#							-*- Autotest -*-
+
+AT_BANNER([Autotest.])
+
+# Copyright (C) 2004 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+# AT_CHECK_AT(TITLE, SUITE-CODE, [XFAIL-CONDITION])
+# -------------------------------------------------
+# Create a new test named TITLE that runs a minimal Autotest test suite,
+# SUITE-CODE.  If given, XFAIL-CONDITION is passed to AT_XFAIL_IF.
+m4_define([AT_CHECK_AT],
+[
+AT_SETUP([$1])
+AT_KEYWORDS([autotest])
+AT_XFAIL_IF([$3])
+
+AT_DATA([package.m4],[[
+m4_define([AT_PACKAGE_NAME],      [GNU Nonsense])
+m4_define([AT_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT_PACKAGE_VERSION],   [1.0])
+m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+]])
+
+AT_DATA([mysuite.at], [$2])
+
+# Do not use `testsuite' as the name of the small test suite, or the
+# log file it generates will overwrite the log that the Autoconf test
+# suite produces for this test case.
+AT_CHECK_AUTOM4TE([--language=autotest -o micro-suite mysuite.at])
+AT_CHECK([./micro-suite], 0, [ignore], [])
+AT_CHECK([./micro-suite -v -x], 0, [ignore], [])
+AT_CLEANUP
+])
+
+# AT_CHECK_AT_TEST(TITLE, SUITE-SNIPPET, [XFAIL-CONDITION])
+# ---------------------------------------------------------
+# Like AT_CHECK_AT, but surrounds SUITE-SNIPPET with a boilerplate
+# AT_INIT, AT_SETUP, and AT_CLEANUP.
+m4_define([AT_CHECK_AT_TEST],
+[AT_CHECK_AT([$1],
+[[
+AT_INIT([artificial test suite])
+AT_SETUP([my only test])
+$2
+AT_CLEANUP
+]], $3)])
+
+# Here documents for these tests contain forbidden macros.
+m4_pattern_allow([^AT_])
+
+## ------------------------------------------------------ ##
+## Newlines and command substitutions in test commandds.  ##
+## ------------------------------------------------------ ##
+
+AT_CHECK_AT_TEST([Truth],
+  [AT_CHECK([:], 0, [], [])])
+
+AT_CHECK_AT_TEST([Fallacy],
+  [AT_CHECK([false], ignore, [], [])])
+
+AT_CHECK_AT_TEST([Literal multiline command],
+  [AT_CHECK([echo Auto'
+'conf], 0, [Auto
+conf
+], [])])
+
+AT_CHECK_AT_TEST([Multiline parameter expansion],
+  [FOO='one
+two'
+   AT_CHECK([echo "$FOO"], 0, [one
+two
+], [])])
+
+AT_CHECK_AT_TEST([Backquote command substition],
+  [AT_CHECK([echo `echo hi`], 0, [hi
+], [])])
+
+AT_CHECK_AT_TEST([Multiline backquote command substition],
+  [AT_DATA([myfile],[foo
+bar
+])
+   AT_CHECK([echo "`cat myfile`"], 0, [foo
+bar
+], [])])
+
+AT_CHECK_AT_TEST([Parenthetical command substition],
+  [AT_CHECK([echo $(echo hi)], 0, [hi
+], [])])
+
+AT_CHECK_AT_TEST([Multiline parenthetical command substition],
+  [AT_DATA([myfile],[foo
+bar
+])
+   AT_CHECK([echo "$(cat myfile)"], 0, [foo
+bar
+], [])])
+
+## ------------------------------- ##
+## Funny characters in test names. ##
+## ------------------------------- ##
+
+# AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, [XFAIL-CONDITION])
+# ----------------------------------------------------------
+# Create a new test named TITLE that runs an Autotest test suite
+# comprised of a trivial test named TITLE-TO-TEST.  XFAIL-CONDITION
+# passes verbatim to AT_CHECK_AT.
+m4_define([AT_CHECK_AT_TITLE],
+[AT_CHECK_AT([$1],
+[[
+AT_INIT([artificial test suite])
+AT_SETUP([$2])
+AT_CHECK([:])
+AT_CLEANUP
+]], [$3])])
+
+m4_define([AT_CHECK_AT_TITLE_CHAR],
+[AT_CHECK_AT_TITLE([$1 in a test title], [A $2 in my name], $3)])
+
+AT_CHECK_AT_TITLE_CHAR([Backquote],    [`], [:])
+AT_CHECK_AT_TITLE_CHAR([Single-quote], ['], [:])
+AT_CHECK_AT_TITLE_CHAR([Double-quote], ["], [:])
+AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])

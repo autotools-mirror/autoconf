@@ -1,6 +1,26 @@
+2004-12-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* bin/.cvsignore: Add autoconf.in.
+	* tests/.cvsignore: Add wrapper.in.
+	* lib/autotest/general.m4: Escape '$' in case pattern.
+
 2004-12-09  Noah Misch  <noah@cs.caltech.edu>
 
 	* man/Makefile.am (autoconf.1): Regenerate when `autoconf.as' changes.
+
+	* lib/autotest/general.m4 [--trace] (AT_INIT): Do not `set -v'.
+
+	* tests/autotest.at: New file.
+	* tests/suite.at: Include it.
+	* tests/Makefile.am: Distribute it.
+
+	* lib/autotest/general.m4 [--trace] (_AT_CHECK): Do not enable
+	  shell tracing on a command that could contain multiple lines.
+	* doc/autoconf.text: Document that fact and its implications.
+	* lib/m4sugar/m4sh.m4 (AS_ESCAPE_FOR_EXPAND): New macro.
+	* tests/autotest.at (Multiline backquote command substitution,
+	  Multiline parameter expansion, Literal multiline command,
+	  Multiline parenthetical command substitution): Remove XFAIL.
 
 2004-12-09  Paul Eggert  <eggert@cs.ucla.edu>
 
