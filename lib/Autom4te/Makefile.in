@@ -109,7 +109,15 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 perllibdir = $(pkgdatadir)/Autom4te
-dist_perllib_DATA = General.pm Struct.pm XFile.pm
+dist_perllib_DATA = \
+  ChannelDefs.pm \
+  Channels.pm \
+  Configure_ac.pm \
+  FileUtils.pm \
+  General.pm \
+  Struct.pm \
+  XFile.pm
+
 TAGS_FILES = $(dist_perllib_DATA)
 ETAGS_ARGS = --lang=perl
 all: all-am

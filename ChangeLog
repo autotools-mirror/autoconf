@@ -1,5 +1,11 @@
 2003-08-20  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/Channels.pm, lib/Autom4te/ChannelDefs.pm
+	* lib/Autom4te/Configure_ac.pm, lib/Autom4te/FileUtils.pm: New,
+	from CVS Automake.
+
+2003-08-20  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (automake_cvsweb, automake_cvsargs, autom4te_files)
 	(autom4te-update): New.
 	* Makefile.cfg (update): Bind autom4te-update.
