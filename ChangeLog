@@ -1,5 +1,8 @@
 1999-11-09  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Avoid using double quotes
+	inside "`...`": some shells parse this incorrectly.
+
 	* autoheader.m4 (AH_CHECK_LIB): Template HAVE_LIBFOO, not
 	HAVE_FOO.
 
