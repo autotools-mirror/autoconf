@@ -28,6 +28,15 @@ Major changes in release 2.0:
 * autoreconf to recursively remake configure and configuration header
   files in a source tree.
 
+Major changes in release 1.11:
+
+* AC_PROG_INSTALL calls install.sh with the -c option.
+* AC_SET_MAKE cleans up after itself.
+* AC_OUTPUT sets prefix and exec_prefix if they weren't set already.
+* AC_OUTPUT prevents shells from looking in PATH for config.status.
+
+Plus a few other bug fixes.
+
 Major changes in release 1.10:
 
 * autoheader uses config.h.bot if present, analogous to config.h.top.
