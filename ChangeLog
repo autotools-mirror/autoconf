@@ -1,3 +1,16 @@
+2004-11-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix documentation problems reported by Russ Boylan in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2004-11/msg00056.html>,
+	along with some nearby cruft.
+	* doc/autoconf.texi (Libtool): Libtool can be used without
+	Automake (not without Autoconf).
+	(Introduction): Mention lists.gnu.org.
+	* BUGS: Don't mention bugs.gnu.org.
+	Remove mention of ancient libtool compatibility problem.
+	* NEWS: Mention that bugs.gnu.org is kaput.
+	* README: Likewise.  Mention where mailing list archives can be found.
+
 2004-11-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Pretty Help Strings): Go back to

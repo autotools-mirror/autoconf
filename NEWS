@@ -348,8 +348,9 @@ Release tips:
   More of them.
 
 - GNATS
-  The GNATS base has moved to
+  The GNATS base moved to
   http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf
+  (It is no longer available, though.)
 
 ** Misc.
 

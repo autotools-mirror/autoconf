@@ -667,6 +667,10 @@ Summary} for details.  Patches relative to the
 current @acronym{CVS} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
 
+Archives of @email{bug-autoconf@@gnu.org} can be
+found in @uref{http://lists.gnu.org/archive/html/bug-autoconf/}, and
+similarly for the other mailing lists.
+
 Because of its mission, Autoconf includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
@@ -761,7 +765,7 @@ shared libraries, linking reliably with shared libraries before they are
 installed by the superuser, and supplying a consistent versioning system
 (so that different versions of a library can be installed or upgraded
 without breaking binary compatibility).  Although Libtool, like
-Autoconf, can be used on its own, it is most simply utilized in
+Autoconf, can be used without Automake, it is most simply utilized in
 conjunction with Automake---there, Libtool is used automatically
 whenever shared libraries are needed, and you need not know its syntax.
 

@@ -26,24 +26,10 @@ file before using Autoconf, and especially CVS versions of Autoconf.
 Autoconf must not be used in production if there are ``Serious'' bugs,
 and use with caution an Autoconf with ``Important bugs''.
 
-Many other bugs are registered on the GNATS server:
-
-     http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf
-
-Please, don't register bugs listed below: we already know we have to
-address them.
-
 * Status
 
                     /*--------------------------.
                     | Sane for full scale use.  |
                     `--------------------------*/
 
-* Interoperability bugs
-
-** libtool 1.4.2, configure.ac, and AC_CONFIG_AUX_DIR
-
-configure.ac files that use AC_CONFIG_AUX_DIR do not work with libtool
-1.4.2.  To work around the problem, you can rename configure.ac to
-configure.in.  Or you can apply Roger Leigh's patch to libtool; see
-<http://mail.gnu.org/pipermail/libtool-patches/2002-January/001659.html>.
+* No known serious or important bugs.

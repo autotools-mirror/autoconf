@@ -34,11 +34,12 @@ to maintain many similar sets of installation instructions.
 Be sure to read BUGS (especially if this version is not an official
 release) and INSTALL.
 
-Mail suggestions to autoconf@gnu.org, report bugs on
-http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf or to
+Mail suggestions to autoconf@gnu.org, report bugs to
 bug-autoconf@gnu.org, and submit patches to autoconf-patches@gnu.org.
 Always include the Autoconf version number, which you can get by
-running `autoconf --version'.
+running `autoconf --version'.  Archives of bug-autoconf@gnu.org can be
+found in <http://lists.gnu.org/archive/html/bug-autoconf/>, and
+similarly for the other mailing lists.
 
 -----
 
