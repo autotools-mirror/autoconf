@@ -17,12 +17,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-# We need a very up to date version of Autotest, more recent than that
-# needed by configure.ac.
-m4_version_prereq([2.52c])
+# We need a very up to date version of Autotest.
+m4_version_prereq([2.52d])
 
 # Macros specialized for Autoconf testing.
 m4_include([atspecific.m4])
+
+AT_VICTIMS([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
 # Still many parts of `autoconf' are not exercised by the test suite.  A few
 # FIXME's, below, are used to list tests that we would need.  Do you feel
@@ -30,13 +31,6 @@ m4_include([atspecific.m4])
 # `autoconf@gnu.org', so no two people work at the same thing.
 
 AT_INIT
-
-AT_VICTIMS([autom4te autoconf autoheader autoupdate
-            autoreconf])
-
-AT_BANNER(
-[Some tests might be skipped if you don't have the software which the
-macros check (e.g., a Fortran compiler).])
 
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.

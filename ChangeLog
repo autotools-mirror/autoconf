@@ -1,5 +1,24 @@
 2001-09-18  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): No INIT-CMDS in
+	the AC_CONFIG_COMMANDS invocation.
+	This also solves the name clash problems.
+	Don't set the package's ID.
+	* lib/m4sugar/Makefile.am (version.m4): Revamp.
+	No longer to be shipped.
+	(version.in): Remove.
+	* lib/m4sugar/m4sugar.m4, lib/autoconf/general.m4,
+	* lib/autoconf/status.m4: Adjust.
+	Use `m4_PACKAGE_STRING'.
+	* lib/autotest/general.m4 (AT_INIT): N-th signature change: now
+	the only optional argument is the name of the test suite.
+	Expect `package.m4' to define the package signature.
+	* lib/autom4te.in (Autotest): Add `package.m4?'.
+	* tests/Makefile.am (package.m4): New.
+	* tests/suite.at: ifnames is a victim.
+
+2001-09-18  Akim Demaille  <akim@epita.fr>
+
 	* lib/autom4te.in (Autoconf): Preselect AM_CONDITIONAL,
 	AC_LIBSOURCE, AC_CONFIG_FILES.
 	* lib/autotest/general.m4 (AT_INIT): Don't abort when a tested

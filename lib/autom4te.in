@@ -113,6 +113,7 @@ begin-language: "Autotest"
 # patterns: *.at
 args: --include @datadir@
 args: autotest/autotest.m4
+args: package.m4?
 args: --mode 777
 args: --warning syntax
 end-language: "Autotest"

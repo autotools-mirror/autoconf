@@ -84,12 +84,14 @@ m4_define([AT_LINE],
 [m4_patsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
-# AT_INIT([TESTSUITE-NAME], [BUG-REPORT])
-# ---------------------------------------
+# AT_INIT([TESTSUITE-NAME])
+# -------------------------
 # Begin test suite.
 m4_define([AT_INIT],
 [AS_INIT
 m4_pattern_forbid([^_?AT_])
+m4_define([AT_TESTSUITE_NAME],
+          m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1])[.])
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files], [stdout expout at-* stderr experr])
@@ -102,10 +104,6 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
 at_cli_args=${1+"$[@]"}
-
-# Who are we?
-at_testsuite_name='$1'
-at_bugreport='$2'
 
 # Load the config file.
 for at_file in atconfig atlocal
@@ -149,13 +147,7 @@ while test $[@%:@] -gt 0; do
         ;;
 
     --version)
-        if test -n "$at_package_string"; then
-          echo "$as_me ($at_package_string)"
-          echo "Embedded test suite."
-        else
-          echo "$as_me ($at_testsuite_name)"
-          echo "Stand-alone test suite."
-        fi
+        echo "$as_me (PACKAGE_STRING)"
         exit 0
         ;;
 
@@ -286,7 +278,7 @@ _ATEOF
              if ($[4]) printf "      %s\n", $[4] } ';;
   esac
   echo
-  echo "Report bugs to <$at_bugreport>."
+  echo "Report bugs to <PACKAGE_BUGREPORT>."
   exit 0
 fi
 
@@ -369,17 +361,9 @@ else
 fi
 
 # Banners and logs.
-if test -n "$at_package_string"; then
-  AS_BOX([$at_package_string test suite.])
-else
-  AS_BOX([$at_testsuite_name test suite.])
-fi
+AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
 {
-  if test -n "$at_package_string"; then
-    AS_BOX([Embedded $at_package_string test suite.])
-  else
-    AS_BOX([$at_testsuite_name test suite.])
-  fi
+  AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
   echo
 
   echo "$as_me: command line was:"
@@ -473,7 +457,7 @@ m4_divert([TAIL])[]dnl
         sed "s/^ */$as_me: warning: /" <<_ATEOF
         A failure happened in a test group before any test could be
         run. This means that test suite is improperly designed.  Please
-        report this failure to <$at_bugreport>.
+        report this failure to <PACKAGE_BUGREPORT>.
 _ATEOF
     	echo "$at_setup_line" >at-check-line
       fi
@@ -583,8 +567,8 @@ elif test $at_debug = false; then
   AS_BOX([$as_me.log is created.])
 
   echo
-  echo "Please send \`$as_me.log' to <$at_bugreport>, along with all"
-  echo "information you think might help."
+  echo "Please send \`$as_me.log' to <PACKAGE_BUGREPORT>,"
+  echo "along with all information you think might help."
   exit 1
 fi
 

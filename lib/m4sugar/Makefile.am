@@ -1,28 +1,25 @@
 ## Process this file with automake to create Makefile.in
 
 m4sugarlibdir = $(pkgdatadir)/m4sugar
-# We ship version.m4 so that it's in src.  `autoconf' wants all the sources
-# at the same place...
-dist_m4sugarlib_DATA = version.m4 m4sugar.m4 m4sh.m4
-
-EXTRA_DIST = version.in
-
+dist_m4sugarlib_DATA = m4sugar.m4 m4sh.m4
+nodist_m4sugarlib_DATA = version.m4
 
 ## ------------ ##
 ## version.m4.  ##
 ## ------------ ##
 
-# - version.m4 needs to be updated only once, since it depends on
-#   configure.ac, not on the results of a 'configure' run.
-# - It is guaranteed (with GNU Make) that when the version in configure.ac
-#   is changed, version.m4 is built only after the new version number is
-#   propagated to the Makefile.  (Libtool uses the same guarantee.)
-
-$(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
-	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/version.in >version.tm4
-	mv version.tm4 $(srcdir)/version.m4
-
-
+version.m4: $(top_srcdir)/configure.ac
+	{					\
+	  echo '# This file is part of -*- Autoconf -*-.'; \
+	  echo '# Version of Autoconf.'; \
+	  echo '# Copyright 1999, 2000, 2001 Free Software Foundation, Inc.'; \
+	  echo ;\
+	  echo 'm4_define([m4_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
+	  echo 'm4_define([m4_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
+	  echo 'm4_define([m4_PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
+	  echo 'm4_define([m4_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
+	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	} >version.m4
 
 
 ## --------------- ##

@@ -1706,8 +1706,12 @@ m4_define([m4_version_compare],
              (m4_split(m4_version_unletter([$2]), [\.])))])
 
 
-# m4_acversion
-# ------------
+# m4_PACKAGE_NAME
+# m4_PACKAGE_TARNAME
+# m4_PACKAGE_VERSION
+# m4_PACKAGE_STRING
+# m4_PACKAGE_BUGREPORT
+# --------------------
 m4_include([m4sugar/version.m4])
 
 
@@ -1715,7 +1719,7 @@ m4_include([m4sugar/version.m4])
 # ----------------------------------------------------
 # Check this Autoconf version against VERSION.
 m4_define([m4_version_prereq],
-[m4_if(m4_version_compare(m4_defn([m4_acversion]), [$1]), -1,
+[m4_if(m4_version_compare(m4_defn([m4_PACKAGE_VERSION]), [$1]), -1,
        [m4_default([$3],
                    [m4_fatal([Autoconf version $1 or higher is required])])],
        [$2])[]dnl

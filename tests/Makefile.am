@@ -26,7 +26,7 @@ EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
 # Running the uninstalled scripts.
 WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate ifnames
 
-DISTCLEANFILES       = atconfig atlocal $(TESTSUITE)
+DISTCLEANFILES       = atconfig atlocal package.m4 $(TESTSUITE)
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -53,6 +53,7 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
+	   package.m4 \
 	   atspecific.m4 \
            $(TESTSUITE_AT)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
@@ -74,6 +75,23 @@ check-local: atconfig atlocal $(TESTSUITE)
 # Run the test suite on the *installed* tree.
 installcheck-local:
 	$(SHELL) $(TESTSUITE) AUTOTEST_PATH=$(exec_prefix)/bin
+
+
+
+## ------------ ##
+## package.m4.  ##
+## ------------ ##
+
+package.m4: $(top_srcdir)/configure.ac
+	{					\
+	  echo '# Signature of the current package.'; \
+	  echo 'm4_define([PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
+	  echo 'm4_define([PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
+	  echo 'm4_define([PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
+	  echo 'm4_define([PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
+	  echo 'm4_define([PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	} >package.m4
+
 
 
 
