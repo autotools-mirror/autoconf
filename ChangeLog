@@ -1,5 +1,11 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): Don't use FFLAGS_SAVE
+	but ac_save_FFLAGS.
+	(AC_F77_NAME_MANGLING): Don't use foo_bar but ac_foo_bar.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_C_INLINE): Proceed as for AC_C_CONST:
 	condition out the test case if __cpluscplus.
 	Don't document the autoheader template twice, one is enough.

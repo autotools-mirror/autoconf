@@ -2727,10 +2727,10 @@ EOF
     # to the Fortran 77 compiler in order to get "verbose" output that
     # we can then parse for the Fortran 77 linker flags.  I don't know
     # what to do if your compiler doesn't have -v.
-    FFLAGS_SAVE="$FFLAGS"
+    ac_save_FFLAGS="$FFLAGS"
     FFLAGS="$FFLAGS -v"
     f77_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
-    FFLAGS="$FFLAGS_SAVE"
+    FFLAGS="$ac_save_FFLAGS"
 
     # Restore the "compiler output file descriptor".
     exec AC_FD_CC>&8
@@ -2851,30 +2851,31 @@ changequote([, ])dnl
 ])
 
 
-dnl Test for the name mangling scheme used by the Fortran 77 compiler.
-dnl Two variables are set by this macro:
-dnl
-dnl        f77_case: Set to either "upper" or "lower", depending on the
-dnl                  case of the name mangling.
-dnl
-dnl  f77_underscore: Set to either "no", "single" or "double", depending
-dnl                  on how underscores (i.e. "_") are appended to
-dnl                  identifiers, if at all.
-dnl
-dnl                  If no underscores are appended, then the value is
-dnl                  "no".
-dnl
-dnl                  If a single underscore is appended, even with
-dnl                  identifiers which already contain an underscore
-dnl                  somewhere in their name, then the value is
-dnl                  "single".
-dnl
-dnl                  If a single underscore is appended *and* two
-dnl                  underscores are appended to identifiers which
-dnl                  already contain an underscore somewhere in their
-dnl                  name, then the value is "double".
-dnl
-dnl AC_F77_NAME_MANGLING()
+# AC_F77_NAME_MANGLING
+# --------------------
+# Test for the name mangling scheme used by the Fortran 77 compiler.
+# Two variables are set by this macro:
+#
+#	 f77_case: Set to either "upper" or "lower", depending on the
+#		   case of the name mangling.
+#
+#  f77_underscore: Set to either "no", "single" or "double", depending
+#		   on how underscores (i.e. "_") are appended to
+#		   identifiers, if at all.
+#
+#		   If no underscores are appended, then the value is
+#		   "no".
+#
+#		   If a single underscore is appended, even with
+#		   identifiers which already contain an underscore
+#		   somewhere in their name, then the value is
+#		   "single".
+#
+#		   If a single underscore is appended *and* two
+#		   underscores are appended to identifiers which
+#		   already contain an underscore somewhere in their
+#		   name, then the value is "double".
+#
 AC_DEFUN(AC_F77_NAME_MANGLING,
 [
   AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
@@ -2911,21 +2912,21 @@ EOF
       AC_TRY_LINK_FUNC(foobar,
         f77_case=lower
         f77_underscore=no
-        foo_bar=foo_bar_,
+        ac_foo_bar=foo_bar_,
         AC_TRY_LINK_FUNC(foobar_,
           f77_case=lower
           f77_underscore=single
-          foo_bar=foo_bar__,
+          ac_foo_bar=foo_bar__,
           AC_TRY_LINK_FUNC(FOOBAR,
             f77_case=upper
             f77_underscore=no
-            foo_bar=FOO_BAR_,
+            ac_foo_bar=FOO_BAR_,
             AC_TRY_LINK_FUNC(FOOBAR_,
               f77_case=upper
               f77_underscore=single
-              foo_bar=FOO_BAR__))))
+              ac_foo_bar=FOO_BAR__))))
 
-      AC_TRY_LINK_FUNC(${foo_bar}, f77_underscore=double)
+      AC_TRY_LINK_FUNC(${ac_foo_bar}, f77_underscore=double)
 
       if test x"$f77_case" = x || test x"$f77_underscore" = x; then
         ac_cv_f77_mangling="unknown"
