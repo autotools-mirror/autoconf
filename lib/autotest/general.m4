@@ -678,7 +678,8 @@ _ATEOF
 	    at_errexit=$at_errexit_p
 	    ;;
       esac
-      echo $at_msg
+      # Make sure there is a separator even with long titles.
+      echo " $at_msg"
       at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
       case $at_status in
 	0|77)

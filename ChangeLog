@@ -1,5 +1,10 @@
 2004-12-21  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Make sure the "ok" etc. are
+	separated from the test title by forcing a white space.
+
+2004-12-21  Akim Demaille  <akim@epita.fr>
+
 	Enable Emacs navigation within testsuite.log files.
 
 	* lib/autotest/general.m4 (AT_CLEANUP): Add an hint for Emacs to
