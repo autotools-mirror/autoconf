@@ -14508,7 +14508,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 @cindex Autotest
 
 @display
-@strong{Note: This section describes an experimental feature which will
+@strong{N.B.: This section describes an experimental feature which will
 be part of Autoconf in a forthcoming release.  Although we believe
 Autotest is stabilizing, this documentation describes an interface which
 might change in the future: do not depend upon Autotest without
