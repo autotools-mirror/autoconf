@@ -1,3 +1,8 @@
+2003-08-16  Derek Price  <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Writing testsuite.at): Document defaults for
+	STDOUT & STDERR arguments.
+
 2003-08-14  Derek Price  <derek@ximbiot.com>
 
 	* lib/autotestgeneral.m4 (AT_INIT): Reformat test summary line to print

@@ -14401,7 +14401,7 @@ brackets to protect against included commas or spurious M4
 expansion.  The contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @ovar{stdout}, @ovar{stderr})
+@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @dvar{stdout, @samp{}}, @dvar{stderr, @samp{}})
 @atindex CHECK
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
