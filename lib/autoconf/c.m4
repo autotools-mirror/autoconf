@@ -804,33 +804,36 @@ AC_DEFUN([AC_LANG_PREPROC(C)],
 [AC_REQUIRE([AC_PROG_CPP])])
 
 
-# _AC_PROG_PREPROC_WORKS
-# ----------------------
+# _AC_PROG_PREPROC_WORKS_IFELSE(IF-WORKS, IF-NOT)
+# -----------------------------------------------
 # Check if $ac_cpp is a working preprocessor that can flag absent
-# includes either by the exit status or by warnings
-# Set ac_cpp_err to a non-empty value if the preprocessor failed
-# This macro is for all languages, not only C
-AC_DEFUN([_AC_PROG_PREPROC_WORKS],
-[# Use a header file that comes with gcc, so configuring glibc
+# includes either by the exit status or by warnings.
+# Set ac_cpp_err to a non-empty value if the preprocessor failed.
+# This macro is for all languages, not only C.
+AC_DEFUN([_AC_PROG_PREPROC_WORKS_IFELSE],
+[# We don't know yet if stderr is the criterion (vs exit status).
+ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=maybe
+
+# Use a header file that comes with gcc, so configuring glibc
 # with a fresh cross-compiler works.
 # On the NeXT, cc -E runs the code through the compiler's parser,
 # not just through cpp. "Syntax error" is here to catch this case.
-ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=maybe
 _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <assert.h>
 Syntax error]])],
-[# Now check whether non-existent headers can be detected and how
-# Skip if ac_cpp_err is not empty - ac_cpp is broken
-if test -z "$ac_cpp_err"; then
-  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
-  [# cannot detect missing includes at all
-ac_cpp_err=yes],
-  [if test "x$ac_cpp_err" = xmaybe; then
-      ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=yes
-    else
-      ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=
-    fi
-    ac_cpp_err=])
-fi])])# _AC_PROG_PREPROC_WORKS
+[# OK, works on sane cases.  Now check whether non-existent headers can
+# be detected and how.
+_AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
+[# Broken: cannot detect missing includes.
+m4_default([$2], :)],
+[# OK, detects failures.  How?
+if test "x$ac_cpp_err" = xmaybe; then
+   ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=yes
+else
+   ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=
+fi
+$1])],
+                  [# Broken: fails on valid input.
+m4_default([$2], :)])])# _AC_PROG_PREPROC_WORKS_IFELSE
 
 
 # AC_PROG_CPP
@@ -856,22 +859,17 @@ if test -z "$CPP"; then
     # Double quotes because CPP needs to be expanded
     for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
     do
-      _AC_PROG_PREPROC_WORKS
-      if test -z "$ac_cpp_err"; then
-        break
-      fi
+      _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
     ac_cv_prog_CPP=$CPP
   ])dnl
   CPP=$ac_cv_prog_CPP
 else
-  _AC_PROG_PREPROC_WORKS
   ac_cv_prog_CPP=$CPP
 fi
 AC_MSG_RESULT([$CPP])
-if test -n "$ac_cpp_err"; then
-  AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
-fi
+_AC_PROG_PREPROC_WORKS_IFELSE([],
+                    [AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])])
 AC_SUBST(CPP)dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CPP
@@ -1071,22 +1069,17 @@ if test -z "$CXXCPP"; then
     # Double quotes because CXXCPP needs to be expanded
     for CXXCPP in "$CXX -E" "/lib/cpp"
     do
-      _AC_PROG_PREPROC_WORKS()
-      if test -z "$ac_cpp_err"; then
-        break
-      fi
+      _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
     ac_cv_prog_CXXCPP=$CXXCPP
   ])dnl
   CXXCPP=$ac_cv_prog_CXXCPP
 else
-  _AC_PROG_PREPROC_WORKS()
   ac_cv_prog_CXXCPP=$CXXCPP
 fi
 AC_MSG_RESULT([$CXXCPP])
-if test -n "$ac_cpp_err"; then
-  AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
-fi
+_AC_PROG_PREPROC_WORKS_IFELSE([],
+              [AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])])
 AC_SUBST(CXXCPP)dnl
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXXCPP

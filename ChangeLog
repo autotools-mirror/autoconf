@@ -1,3 +1,11 @@
+2001-04-27  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_PROG_PREPROC_WORKS): Rename and extend as...
+	(_AC_PROG_PREPROC_WORKS_IFELSE): this.
+	Adjust to admit
+	(AC_PROG_CPP, AC_PROG_CXXCPP): Use it.
+	Reported by Daniel Carroll.
+
 2001-04-26  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use two backslashes

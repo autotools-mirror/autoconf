@@ -2715,12 +2715,11 @@ m4_popdef([AC_Lib_Name])dnl
 # ----------------------------------------------------------------
 # Try to preprocess PROGRAM.
 #
+# This macro can be used during the selection of a preprocessor.
 # Run cpp and set ac_cpp_err to "yes" for an error, to
 # "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if
 # neither warnings nor errors have been detected.  eval is necessary
 # to expand ac_cpp.
-#
-# This macro can be used during the selection of a preprocessor.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
