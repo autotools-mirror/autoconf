@@ -4946,12 +4946,16 @@ fall back, see @ref{Limitations of Builtins}.
 @evindex LC_MESSAGES
 
 These must not be set unconditionally because not all systems understand
-e.g. @samp{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
+e.g. @samp{LANG=C} (notably SCO).  Fixing @env{LC_MESSAGES} prevents
 Solaris @command{sh} from translating var values in @code{set}!  Non-C
-@code{LC_CTYPE} values break the ctype check.  Fixing @code{LC_COLLATE}
-prevents accented characters from being match by @samp{[a-z]} etc.  You
-are nevertheless encouraged to list explicitly the characters instead of
-relying on ranges.  @code{LANGUAGE} is a @sc{gnu} extension.
+@env{LC_CTYPE} values break the ctype check.  Fixing @env{LC_COLLATE}
+makes scripts more portable in some cases.  For example, it causes the
+regular expression @samp{[a-z]} to match only lower-case letters on
+@sc{ascii} platforms.  However, @samp{[a-z]} does not work in general
+even when @env{LC_COLLATE} is fixed; for example, it does not work for
+@sc{ebcdic} platforms.  For maximum portability, you should use regular
+expressions like @samp{[abcdefghijklmnopqrstuvwxyz]} that list
+characters explicitly instead of relying on ranges.
 
 @emph{If} one of these variables is set, you should try to unset it,
 using @samp{C} as a fall back value. see @ref{Limitations of Builtins},
