@@ -1,5 +1,11 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4 (near m4_split): Remove the buggy additional
+	changequote.
+	Quote properly `m4_split' when registering it.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	The AU-glue code for AC_LINK_FILES was not fully compatible: in
 	  AC_LINK_FILES($from, $to)
 	`$from' and `$to' can be lists, hence `AC_CONFIG_LINKS($to:$from)'

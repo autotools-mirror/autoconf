@@ -512,9 +512,8 @@ patsubst(````$1'''',
 	  ``], ['')]dnl
 changequote([, ])>>)
 changequote([, ])
-changequote(<<, >>)
 
-m4_namespace_register(m4_split, [libm4])
+m4_namespace_register([m4_split], [libm4])
 
 
 
