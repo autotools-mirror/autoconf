@@ -18,8 +18,7 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Fix AC_ARG_{ENABLE,WITH}, and AC_PATH_X*, and AC_REQUIRE
-  interrupting messages.
+* Fix AC_ARG_{ENABLE,WITH}, and AC_REQUIRE interrupting messages.
 
 ------------------------------------------------------------------------------
 
@@ -36,6 +35,14 @@ functions (POSIX, NIS) that do everything necessary, instead.
 ------------------------------------------------------------------------------
 
 * Support copying and adding "dir" commands to .gdbinit.
+
+------------------------------------------------------------------------------
+
+* Add a --indent option to autoconf to call shindent.
+
+------------------------------------------------------------------------------
+
+* Doc: Add indexes of concepts, env vars.
 
 ------------------------------------------------------------------------------
 

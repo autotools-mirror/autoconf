@@ -1444,45 +1444,48 @@ fi
 dnl
 AC_DEFUN(AC_PATH_X,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_PATH_X_DIRECT conditionally.
-# If we find X, set shell vars x_includes and x_libraries to the paths.
-no_x=yes
-if test "x$with_x" != xno; then
+# If we find X, set shell vars x_includes and x_libraries to the
+# paths, otherwise set no_x=yes.
+# Uses ac_ vars as temps to allow command line to override cache and checks.
+# --without-x overrides everything else, but does not touch the cache.
+AC_MSG_CHECKING(for X)
 
-# Command line options override cache.
-# FIXME We need to allow --x=includes= to work, I think.
-test -n "$x_includes" && ac_cv_x_includes="$x_includes"
-test -n "$x_libraries" && ac_cv_x_includes="$x_libraries"
-if test "${ac_cv_x_includes+set}" = set &&
-  test "${ac_cv_x_libraries+set}" = set; then
-  AC_VERBOSE(using cached values for ac_cv_x_includes and ac_cv_x_libraries)
+if test "x$with_x" = xno; then
+  no_x=yes
 else
+  if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
+    no_x=
+  else
+AC_CACHE_VAL(ac_cv_path_x,
+[# One or both of the vars are not set, and there is no cached value.
+no_x=yes
 AC_PATH_X_XMKMF
-fi
-if test "${ac_cv_x_includes+set}" != set ||
-  test "${ac_cv_x_libraries+set}" != set; then
+if test "$no_x" = yes; then
 AC_PATH_X_DIRECT
 fi
-test -z "$ac_cv_x_includes" && ac_cv_x_includes=NONE
-test -z "$ac_cv_x_libraries" && ac_cv_x_libraries=NONE
+if test "$no_x" = yes; then
+  ac_cv_path_x="no_x=yes"
+else
+  ac_cv_path_x="no_x= ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
+fi])dnl
+  fi
+  eval "$ac_cv_path_x"
+fi # $with_x != no
 
-# FIXME can we reliably distinguish cache values that are set to empty
-# from those that aren't set?
-if test -z "$x_includes" && test "$ac_cv_x_includes" != NONE; then
-  x_includes="$ac_cv_x_includes"
+if test "$no_x" = yes; then
+  AC_MSG_RESULT(no)
+else
+  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
+  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
+  ac_cv_path_x="no_x= ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
-if test -z "$x_libraries" && test "$ac_cv_x_libraries" != NONE; then
-  x_libraries="$ac_cv_x_libraries"
-fi
-
-test -n "$x_includes" && AC_VERBOSE(X11 headers are in $x_includes)
-test -n "$x_libraries" && AC_VERBOSE(X11 libraries are in $x_libraries)
-fi # No --with-x=no.
 ])dnl
 dnl
 dnl Internal subroutine of AC_PATH_X.
+dnl Set ac_x_includes, ac_x_libraries, and no_x (initially yes).
 AC_DEFUN(AC_PATH_X_XMKMF,
-[AC_CHECKING(for X include and library files with xmkmf)
-rm -fr conftestdir
+[rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
@@ -1501,11 +1504,11 @@ EOF
     fi
     case "$ac_im_incroot" in
 	/usr/include) ;;
-	*) test -z "$ac_cv_x_includes" && ac_cv_x_includes="$ac_im_incroot" ;;
+	*) ac_x_includes="$ac_im_incroot" ;;
     esac
     case "$ac_im_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) test -z "$ac_cv_x_libraries" && ac_cv_x_libraries="$ac_im_usrlibdir" ;;
+	*) ac_x_libraries="$ac_im_usrlibdir" ;;
     esac
   fi
   cd ..
@@ -1514,12 +1517,12 @@ fi
 ])dnl
 dnl
 dnl Internal subroutine of AC_PATH_X.
+dnl Set ac_x_includes, ac_x_libraries, and no_x (initially yes).
 AC_DEFUN(AC_PATH_X_DIRECT,
-[AC_CHECKING(for X include and library files directly)
-test -z "$x_direct_test_library" && x_direct_test_library=Xt
+[test -z "$x_direct_test_library" && x_direct_test_library=Xt
 test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
-AC_TRY_CPP([#include <$x_direct_test_include>], no_x=,
-  for ac_dir in               \
+AC_TRY_CPP([#include <$x_direct_test_include>], [no_x= ac_x_includes=],
+[  for ac_dir in               \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
@@ -1557,16 +1560,15 @@ AC_TRY_CPP([#include <$x_direct_test_include>], no_x=,
     ; \
   do
     if test -r "$ac_dir/$x_direct_test_include"; then
-      test -z "$ac_cv_x_includes" && ac_cv_x_includes=$ac_dir
-      no_x=
+      no_x= ac_x_includes=$ac_dir
       break
     fi
-  done)
+  done])
 
 # Check for the libraries.  First see if replacing the include by
 # lib works.
-AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
-for ac_dir in `echo "$ac_cv_x_includes" | sed s/include/lib/` \
+AC_CHECK_LIB("$x_direct_test_library", main, [no_x= ac_x_libraries=],
+[for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
     /usr/X11R6/lib        \
     /usr/X11R5/lib        \
     /usr/X11R4/lib        \
@@ -1605,61 +1607,58 @@ for ac_dir in `echo "$ac_cv_x_includes" | sed s/include/lib/` \
 do
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
-      test -z "$ac_cv_x_libraries" && ac_cv_x_libraries=$ac_dir
-      no_x=
+      no_x= ac_x_libraries=$ac_dir
       break 2
     fi
   done
-done)])dnl
+done])])dnl
 dnl
 dnl Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
 [AC_REQUIRE([AC_OS_ISC])dnl
 AC_REQUIRE([AC_PATH_X])dnl
 AC_CHECKING(for additional X libraries and flags)
-if test -n "$x_includes"; then
-  X_CFLAGS="$X_CFLAGS -I$x_includes"
-elif test "$no_x" = yes; then 
+if test "$no_x" = yes; then 
   # Not all programs may use this symbol, but it does not hurt to define it.
   X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
-fi
-
-# It would be nice to have a more robust check for the -R ld option than
-# just checking for Solaris.
-# It would also be nice to do this for all -L options, not just this one.
-if test -n "$x_libraries"; then
-  X_LIBS="$X_LIBS -L$x_libraries"
-  if test "`(uname) 2>/dev/null`" = SunOS &&
-    uname -r | grep '^5' >/dev/null; then
-    X_LIBS="$X_LIBS -R$x_libraries"
-  fi
-fi
-
-# Check for additional X libraries.
-
-if test "$ISC" = yes; then
-  X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
 else
-  # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
-  # libraries were built with DECnet support.  And karl@cs.umb.edu says
-  # the Alpha needs dnet_stub (dnet does not exist).
-  AC_CHECK_LIB(dnet, dnet_ntoa,
-    [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet" ac_have_dnet=yes], ac_have_dnet=no)
-  if test "$ac_have_dnet" = no; then
-    AC_CHECK_LIB(dnet_stub, dnet_ntoa,
-      [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
+  if test -n "$x_includes"; then
+    X_CFLAGS="$X_CFLAGS -I$x_includes"
   fi
-  # lieder@skyler.mavd.honeywell.com says without -lsocket,
-  # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
-  # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
-  if test "`(uname) 2>/dev/null`" != IRIX; then
-    AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
+
+  # It would be nice to have a more robust check for the -R ld option than
+  # just checking for Solaris.
+  # It would also be nice to do this for all -L options, not just this one.
+  if test -n "$x_libraries"; then
+    X_LIBS="$X_LIBS -L$x_libraries"
+    if test "`(uname) 2>/dev/null`" = SunOS &&
+      uname -r | grep '^5' >/dev/null; then
+      X_LIBS="$X_LIBS -R$x_libraries"
+    fi
+  fi
+
+  # Check for additional X libraries.
+
+  if test "$ISC" = yes; then
+    X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
+  else
+    # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
+    # libraries were built with DECnet support.  And karl@cs.umb.edu says
+    # the Alpha needs dnet_stub (dnet does not exist).
+    AC_CHECK_LIB(dnet, dnet_ntoa,
+      [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet" ac_have_dnet=yes], ac_have_dnet=no)
+    if test "$ac_have_dnet" = no; then
+      AC_CHECK_LIB(dnet_stub, dnet_ntoa,
+        [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
+    fi
+    # lieder@skyler.mavd.honeywell.com says without -lsocket,
+    # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
+    # But -lsocket is broken on IRIX, according to simon@lia.di.epfl.ch.
+    if test "`(uname) 2>/dev/null`" != IRIX; then
+      AC_CHECK_LIB(socket, socket, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lsocket"])
+    fi
   fi
 fi
-#
-AC_VERBOSE(X compiler flags: $X_CFLAGS)
-AC_VERBOSE(X library flags: $X_LIBS)
-AC_VERBOSE(extra X libraries: $X_EXTRA_LIBS)
 AC_SUBST(X_CFLAGS)dnl
 AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl

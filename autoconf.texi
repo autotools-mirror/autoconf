@@ -105,6 +105,7 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * Site Default Values::         Providing local defaults for @code{configure}.
 * Old Macro Names::		Backward compatibility macros.
 * Example::                     Sample Autoconf input files.
+* History::                     History of Autoconf.
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined.
 * Macro Index::                 Index of Autoconf macros.
 
@@ -189,6 +190,14 @@ An Example
 
 * Sample configure.in::		An example of a @file{configure} template.
 * Sample Makefile.in::		An example of a @file{Makefile} template.
+
+History of Autoconf
+
+* Genesis::			Prehistory and naming of @code{configure}.
+* Exodus::			The plagues of @code{m4} and Perl.
+* Leviticus::			The priestly code of portability arrives.
+* Numbers::			Listing of growth and contributors.
+* Deuteronomy::			Approaching the promises of easy configuration.
 @end menu
 
 @node Introduction, Distributing, Top, Top
@@ -1239,12 +1248,12 @@ library, in case only some of them use the code in @code{LIBOBJS}.
 
 If this macro finds @file{alloca.h}, it defines @code{HAVE_ALLOCA_H}.
 
-This macro does not try to get @code{alloca} from the SVR3 @file{libPW}
-or the SVR4 @file{libucb} because those libraries contain some
-incompatible functions that cause trouble.  Some versions do not even
-contain @code{alloca} or contain a buggy version.  If you still want to
-use their @code{alloca}, use @code{ar} to extract @file{alloca.o} from
-them instead of compiling @file{alloca.c}.
+This macro does not try to get @code{alloca} from the System V R3
+@file{libPW} or the System V R4 @file{libucb} because those libraries
+contain some incompatible functions that cause trouble.  Some versions
+do not even contain @code{alloca} or contain a buggy version.  If you
+still want to use their @code{alloca}, use @code{ar} to extract
+@file{alloca.o} from them instead of compiling @file{alloca.c}.
 
 Source files that use @code{alloca} should start with a piece of code
 like the following, to declare it properly.  Note that in some versions
@@ -2958,19 +2967,21 @@ error (in case the file doesn't exist) of @code{grep} to
 whether it found a match.
 
 To check whether the Autoconf macros have already defined a certain C
-preprocessor symbol, you can use a @code{case} statement like this:
+preprocessor symbol, test the value of the appropriate cache variable,
+as in this example:
 
 @example
-case "$DEFS" in
-  *HAVE_FOO*) ;;
-  *) LIBOBJS="$LIBOBJS foo.o" ;;
-esac
+AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
+if test "$ac_cv_func_vprintf" != yes; then
+AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
+fi
 @end example
 
 @noindent
-Make sure to enclose the variable name you are checking (usually
-@code{DEFS}) in double quotes, because otherwise some old versions of
-@code{bash} misinterpret the statement.
+Unlike in Autoconf version 1, there is no shell variable @code{DEFS} set
+while @code{configure} is running.  This difference is because properly
+quoting the contents of that variable turned out to be too cumbersome to
+do every time @code{AC_DEFINE} is called.
 
 @node Test Programs, Multiple Cases, Checking for Symbols, Writing Macros
 @section Test Programs
@@ -3805,7 +3816,7 @@ removed
 @code{AC_OS_DYNIX}
 @end table
 
-@node Example, Preprocessor Symbol Index, Old Macro Names, Top
+@node Example, History, Old Macro Names, Top
 @chapter An Example
 
 Here are sample @file{configure.in} and @file{Makefile.in} files, to
@@ -3889,8 +3900,8 @@ RTAPELIB = @@RTAPELIB@@
 CFLAGS = -g
 LDFLAGS = -g
 
-prefix = /usr/local
-exec_prefix = $(prefix)
+prefix = @@prefix@@
+exec_prefix = @@exec_prefix@@
 binprefix =
 manprefix =
 
@@ -3986,7 +3997,193 @@ dist: $(DISTFILES)
         rm -rf `cat .fname` .fname
 @end example
 
-@node Preprocessor Symbol Index, Macro Index, Example, Top
+@node History, Preprocessor Symbol Index, Example, Top
+@chapter History of Autoconf
+
+You may be wondering, Why was Autoconf originally written?  How did it
+get into its present form?  (Why does it look like gorilla spit?)  If
+you're not wondering, then this chapter contains no information useful
+to you, and you might as well skip it.  If you @emph{are} wondering,
+then let there be light.
+
+@menu
+* Genesis::			Prehistory and naming of @code{configure}.
+* Exodus::			The plagues of @code{m4} and Perl.
+* Leviticus::			The priestly code of portability arrives.
+* Numbers::			Listing of growth and contributors.
+* Deuteronomy::			Approaching the promises of easy configuration.
+@end menu
+
+@node Genesis, Exodus, , History
+@section Genesis
+
+In June 1991 I was maintaining many of the GNU utilities for the Free
+Software Foundation.  As they were ported to more platforms and more
+programs were added, the number of @samp{-D} options that users had to
+select in the @file{Makefile} (around 20) became burdensome.  Especially
+for me---I had to test each new release on a bunch of different systems.
+So I wrote a little shell script to guess some of the correct settings
+for the fileutils package, and released it as part of fileutils 2.0.
+That @code{configure} script worked well enough that the next month I
+adapted it (by hand) to create similar @code{configure} scripts for
+several other GNU utilities packages.  Brian Berliner also adapted one
+of my scripts for his CVS revision control system.
+
+Later that summer, I learned that Richard Stallman and Richard Pixley
+were developing similar scripts to use in the GNU compiler tools; so I
+adapted my @code{configure} scripts to support their evolving interface:
+using the file name @file{Makefile.in} as the templates; adding
+@samp{+srcdir}, the first option (of many); and creating
+@file{config.status} files.
+
+@node Exodus, Leviticus, Genesis, History
+@section Exodus
+
+As I got feedback from users, I incorporated many improvements, using
+Emacs to search and replace, cut and paste, similar changes in each of
+the scripts.  As I adapted more GNU utilities packages to use
+@code{configure} scripts, updating them all by hand became burdensome.
+Rich Murphey, the maintainer of the GNU graphics utilities, sent me mail
+saying that the @code{configure} scripts were great, and asking if I had
+a program for generating them that I could send him.  No, I thought, but
+I should!  So I started to work out how to generate them.  And the
+journey from the bondage of hand-written @file{configure} scripts to the
+promise of Autoconf began.
+
+I looked briefly into using Larry Wall's Metaconfig program, but I
+decided not to for several reasons.  The @code{Configure} scripts it
+produces are interactive, which I find quite inconvenient; I didn't like
+the ways it checked for some features (such as library functions); it
+was not being maintained, and its scripts didn't work on many modern
+systems (such as System V R4 and NeXT); it wasn't very flexible in what
+it could do in response to a feature's presence or absence; I found it
+confusing to learn; and it was too big and complex for my needs (I
+didn't realize then how much Autoconf would eventually have to grow).  I
+considered using Perl to generate my style of @code{configure} scripts,
+but decided that @code{m4} was better suited to the job of simple
+textual substitutions: it gets in the way less, because output is
+implicit.  Plus, everyone already has it.  (Initially I didn't rely on
+the GNU extensions to @code{m4}.)  Also, some of my friends at the
+University of Maryland had recently been putting @code{m4} front ends on
+several programs, including @code{tvtwm}, and I was interested in trying
+out a new language.
+
+@node Leviticus, Numbers, Exodus, History
+@section Leviticus
+
+Since my @code{configure} scripts determine the system's capabilities
+automatically, with no interactive user intervention, I decided to call
+the program that generates them Autoconfig.  But with a version number
+tacked on, that name would be too long for System V R3 file systems, so
+I shortened it to Autoconf.
+
+I called together a group of priests of portability (er, alpha testers)
+to give me feedback as I encapsulated pieces of my handwritten scripts
+in @code{m4} macros and continued to add features and improve the
+techniques used in the checks.  Prominent among the testers were
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, who came up with the idea of making an @file{autoconf} shell
+script to run @code{m4} and check for unresolved macro calls; Karl
+Berry, who championed standardizing the @code{HAVE_@var{feature}} form
+for C preprocessor symbols; and Ian Taylor, who added support for
+creating a C header file as an alternative to putting @samp{-D} options
+in a @file{Makefile}, so he could use it in his UUCP package.  The alpha
+testers cheerfully adjusted their files again and again as the names and
+calling conventions of the Autoconf macros changed from release to
+release.  They all contributed many specific checks, great ideas, and
+bug fixes.
+
+@node Numbers, Deuteronomy, Leviticus, History
+@section Numbers
+
+In July 1992, after months of alpha testing, I released Autoconf 1.0,
+and converted many of GNU packages to use it.  I was surprised by how
+positive the reaction to it was.  More people started using it than I
+could keep track of, including people working on software that wasn't
+part of the GNU Project (such as TCL, FSP, @TeX{}, and Kerberos v5).
+Autoconf continued to improve rapidly, as many people using the
+@code{configure} scripts reported problems they encountered.
+
+Autoconf turned out to be a good torture test for @code{m4}
+implementations.  Unix @code{m4} started to dump core because of the
+length of the macros that Autoconf defined, and several bugs showed up
+in GNU @code{m4} as well.  Eventually, we realized that we needed to use
+some features that only GNU @code{m4} has.  BSD @code{m4}, in
+particular, has an impoverished set of builtin macros; the System V
+version is better, but still doesn't have everything we need.
+
+More development occurred as people put Autoconf under more stresses
+(and to uses I'd never imagined).  Karl Berry added checks for X11.
+david zuhn contributed C++ support.
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard made it diagnose invalid arguments.  Jim Blandy bravely coerced
+it into configuring GNU Emacs, laying the groundwork for several later
+improvements.  Roland McGrath got it to configure the GNU C Library,
+wrote the @code{autoheader} script to automate the creation of C header
+file templates, and added a @samp{--verbose} option to @code{configure}.
+Noah Friedman added the @samp{--macrodir} option and @code{AC_MACRODIR}
+environment variable.  Roland and Noah improved the quoting protection
+in @code{AC_DEFINE} and fixed many bugs, especially when I got sick of
+dealing with portability problems from February through June, 1993.
+
+@node Deuteronomy, , Numbers, History
+@section Deuteronomy
+
+A long wish list for major features had accumulated, and the effect of
+several years of patching by various people had left some residual
+cruft.  In April 1994, while working for Cygnus Support, I began a major
+revision of Autoconf.  I added most of the features of the Cygnus
+@code{configure} that Autoconf had lacked; for example, support for
+using @file{config.sub} and options like @samp{--host}, derived from
+work that david zuhn and Ken Raeburn contributed while converting GNU
+@code{as} to use Autoconf.  Rob Savoye required the ability to run
+@code{configure} scripts in subdirectories when he made DejaGNU use
+Autoconf.
+
+I added more features in response to other peoples' requests.  Many
+people had asked for @code{configure} scripts to share the results of
+the checks between runs, because (particularly when configuring a large
+source tree, like Cygnus does) they were frustratingly slow.  Mike
+Haertel suggested adding site-specific initialization scripts.  People
+distributing software that had to unpack on MS-DOS asked for a way to
+override the @file{.in} extension on the file names.  Jim Avera did an
+extensive examination of the problems with quoting in @code{AC_DEFINE}
+and contributed significant improvements to it.  Richard Stallman asked
+that compiler output be sent to @file{config.log} instead of
+@file{/dev/null}, to help people debug the Emacs @code{configure}
+script.
+
+I made some other changes because of my dissatisfaction with the quality
+of the program.  I made the messages showing results of the checks less
+ambiguous, always printing a result.  I regularized the names of the
+macros and cleaned up coding style inconsistencies.  I added several
+useful auxiliary utilities that I had developed to help convert source
+code packages to use Autoconf.  And I began a testsuite, because
+experience had shown that Autoconf had a pronounced tendency to regress
+when we changed it.
+
+Again, several alpha testers gave invaluable feedback, especially
+@ifinfo
+Franc,ois
+@end ifinfo
+@tex
+Fran\c cois
+@end tex
+Pinard, Rob Savoye, and Ken Raeburn.
+
+Finally, version 2.0 was ready.
+
+@node Preprocessor Symbol Index, Macro Index, History, Top
 @unnumbered Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
