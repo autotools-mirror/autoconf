@@ -75,6 +75,12 @@ AC_DEFUN(AC_PROG_CC,
 AC_CHECK_PROG(CC, gcc, gcc)
 if test -z "$CC"; then
   AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+  if test -z "$CC"; then
+    case "`uname -s`" in
+    *win32* | *WIN32*)
+      AC_CHECK_PROG(CC, cl, cl) ;;
+    esac
+  fi
   test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 fi
 
@@ -83,52 +89,68 @@ AC_PROG_CC_GNU
 
 if test $ac_cv_prog_gcc = yes; then
   GCC=yes
+else
+  GCC=
+fi
+
 dnl Check whether -g works, even if CFLAGS is set, in case the package
 dnl plays around with CFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-  ac_test_CFLAGS="${CFLAGS+set}"
-  ac_save_CFLAGS="$CFLAGS"
-  CFLAGS=
-  AC_PROG_CC_G
-  if test "$ac_test_CFLAGS" = set; then
-    CFLAGS="$ac_save_CFLAGS"
-  elif test $ac_cv_prog_cc_g = yes; then
+ac_test_CFLAGS="${CFLAGS+set}"
+ac_save_CFLAGS="$CFLAGS"
+CFLAGS=
+AC_PROG_CC_G
+if test "$ac_test_CFLAGS" = set; then
+  CFLAGS="$ac_save_CFLAGS"
+elif test $ac_cv_prog_cc_g = yes; then
+  if test "$GCC" = yes; then
     CFLAGS="-g -O2"
   else
-    CFLAGS="-O2"
+    CFLAGS="-g"
   fi
 else
-  GCC=
-  test "${CFLAGS+set}" = set || CFLAGS="-g"
+  if test "$GCC" = yes; then
+    CFLAGS="-O2"
+  else
+    CFLAGS=
+  fi
 fi
 ])
 
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++, gcc)
+AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++ cl, gcc)
 
 AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
 
 if test $ac_cv_prog_gxx = yes; then
   GXX=yes
+else
+  GXX=
+fi
+
 dnl Check whether -g works, even if CXXFLAGS is set, in case the package
 dnl plays around with CXXFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-  ac_test_CXXFLAGS="${CXXFLAGS+set}"
-  ac_save_CXXFLAGS="$CXXFLAGS"
-  CXXFLAGS=
-  AC_PROG_CXX_G
-  if test "$ac_test_CXXFLAGS" = set; then
-    CXXFLAGS="$ac_save_CXXFLAGS"
-  elif test $ac_cv_prog_cxx_g = yes; then
+ac_test_CXXFLAGS="${CXXFLAGS+set}"
+ac_save_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS=
+AC_PROG_CXX_G
+if test "$ac_test_CXXFLAGS" = set; then
+  CXXFLAGS="$ac_save_CXXFLAGS"
+elif test $ac_cv_prog_cxx_g = yes; then
+  if test "$GXX" = yes; then
     CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="-O2"
+    CXXFLAGS="-g"
   fi
 else
-  GXX=
-  test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
+  if test "$GXX" = yes; then
+    CXXFLAGS="-O2"
+  else
+    CXXFLAGS=
+  fi
 fi
 ])
 
@@ -340,7 +362,10 @@ dnl with a fresh cross-compiler works.
 Syntax Error], ,
   CPP="${CC-cc} -E -traditional-cpp"
   AC_TRY_CPP([#include <assert.h>
-Syntax Error], , CPP=/lib/cpp))
+Syntax Error], ,
+  CPP="${CC-cc} -nologo -E"
+  AC_TRY_CPP([#include <assert.h>
+Syntax Error], , CPP=/lib/cpp)))
   ac_cv_prog_CPP="$CPP"])dnl
   CPP="$ac_cv_prog_CPP"
 else
@@ -430,25 +455,27 @@ AC_DEFUN(AC_PROG_INSTALL,
 # SunOS /usr/etc/install
 # IRIX /sbin/install
 # AIX /bin/install
+# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 AC_MSG_CHECKING(for a BSD compatible install)
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
-[  IFS="${IFS= 	}"; ac_save_IFS="$IFS"; IFS="${IFS}:"
+[  IFS="${IFS= 	}"; ac_save_IFS="$IFS"; IFS=":"
   for ac_dir in $PATH; do
     # Account for people who put trailing slashes in PATH elements.
     case "$ac_dir/" in
     /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
-      for ac_prog in ginstall installbsd scoinst install; do
+      # Don't use installbsd from OSF since it installs stuff as root
+      # by default.
+      for ac_prog in ginstall scoinst install; do
         if test -f $ac_dir/$ac_prog; then
 	  if test $ac_prog = install &&
             grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
-	    # OSF/1 installbsd also uses dspmsg, but is usable.
 	    :
 	  else
 	    ac_cv_path_install="$ac_dir/$ac_prog -c"
@@ -1047,6 +1074,10 @@ fi
 AC_DEFUN(AC_FUNC_SETPGRP,
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
 AC_TRY_RUN([
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 /*
  * If this system has a BSD-style setpgrp, which takes arguments, exit
  * successfully.
@@ -1169,7 +1200,8 @@ main() {
 	 );
   }
 }],
-ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork))])
+ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
+ac_cv_func_vfork_works=$ac_cv_func_vfork)])
 if test $ac_cv_func_vfork_works = no; then
   AC_DEFINE(vfork, fork)
 fi
@@ -1227,14 +1259,19 @@ AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
 #ifdef __GNUC__
 # define alloca __builtin_alloca
 #else
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
+# ifdef _MSC_VER
+#  include <malloc.h>
+#  define alloca _alloca
 # else
-#  ifdef _AIX
- #pragma alloca
+#  if HAVE_ALLOCA_H
+#   include <alloca.h>
 #  else
-#   ifndef alloca /* predefined by HP cc +Olibcalls */
+#   ifdef _AIX
+ #pragma alloca
+#   else
+#    ifndef alloca /* predefined by HP cc +Olibcalls */
 char *alloca ();
+#    endif
 #   endif
 #  endif
 # endif
@@ -1250,7 +1287,7 @@ if test $ac_cv_func_alloca_works = no; then
   # that cause trouble.  Some versions do not even contain alloca or
   # contain a buggy version.  If you still want to use their alloca,
   # use ar to extract alloca.o from them instead of compiling alloca.c.
-  ALLOCA=alloca.o
+  ALLOCA=alloca.${ac_objext}
   AC_DEFINE(C_ALLOCA)
 
 AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
@@ -1471,7 +1508,7 @@ main()
 }
 ], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
 ac_cv_func_memcmp_clean=no)])
-test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.o"
+test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.${ac_objext}"
 AC_SUBST(LIBOBJS)dnl
 ])
 
@@ -1535,7 +1572,7 @@ ac_cv_struct_st_blocks=yes, ac_cv_struct_st_blocks=no)])
 if test $ac_cv_struct_st_blocks = yes; then
   AC_DEFINE(HAVE_ST_BLOCKS)
 else
-  LIBOBJS="$LIBOBJS fileblocks.o"
+  LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
 fi
 AC_SUBST(LIBOBJS)dnl
 ])
@@ -1731,6 +1768,30 @@ fi
 define(AC_ARG_ARRAY,
 [errprint(__file__:__line__: [$0] has been removed; don't do unportable things with arguments
 )m4exit(4)])
+
+dnl Check the object extension used by the compiler: typically .o or
+dnl .obj.  If this is called, some other behaviour will change,
+dnl determined by ac_objext.
+AC_DEFUN(AC_OBJEXT,
+[AC_MSG_CHECKING([for object suffix])
+AC_CACHE_VAL(ac_cv_objext,
+[rm -f conftest*
+echo 'int i = 1;' > conftest.$ac_ext
+if AC_TRY_EVAL(ac_compile); then
+  for ac_file in conftest.*; do
+    case $ac_file in
+    *.c) ;;
+    *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
+    esac
+  done
+else
+  AC_MSG_ERROR([installation or configuration problem; compiler does not work])
+fi
+rm -f conftest*])
+AC_MSG_RESULT($ac_cv_objext)
+OBJEXT=$ac_cv_objext
+ac_objext=$ac_cv_objext
+AC_SUBST(OBJEXT)])
 
 
 dnl ### Checks for operating system services
@@ -2136,6 +2197,61 @@ AC_SUBST(X_PRE_LIBS)dnl
 AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
 ])
+
+dnl Check for cygwin32.  This is a way to set the right value for
+dnl EXEEXT.
+AC_DEFUN(AC_CYGWIN32,
+[AC_CACHE_CHECK(for cygwin32 environment, ac_cv_cygwin32,
+[AC_TRY_COMPILE(,[return __CYGWIN32__;],
+ac_cv_cygwin32=yes, ac_cv_cygwin32=no)
+rm -f conftest*])
+CYGWIN32=
+test "$ac_cv_cygwin32" = yes && CYGWIN32=yes])
+
+dnl Check for mingw32.  This is another way to set the right value for
+dnl EXEEXT.
+AC_DEFUN(AC_MINGW32,
+[AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
+[AC_TRY_COMPILE(,[return __MINGW32__;],
+ac_cv_mingw32=yes, ac_cv_mingw32=no)
+rm -f conftest*])
+MINGW32=
+test "$ac_cv_mingw32" = yes && MINGW32=yes])
+
+dnl Check for the extension used for executables.  This knows that we
+dnl add .exe for cygwin32 or mingw32.  Otherwise, it compiles a test
+dnl executable.  If this is called, the executable extensions will be
+dnl automatically used by link commands run by the configure script.
+AC_DEFUN(AC_EXEEXT,
+[AC_REQUIRE([AC_CYGWIN32])
+AC_REQUIRE([AC_MINGW32])
+AC_MSG_CHECKING([for executable suffix])
+AC_CACHE_VAL(ac_cv_exeext,
+[if test "$CYGWIN32" = yes || test "$MINGW32" = yes; then
+  ac_cv_exeext=.exe
+else
+  rm -f conftest*
+  echo 'int main () { return 0; }' > conftest.$ac_ext
+  ac_cv_exeext=
+  if AC_TRY_EVAL(ac_link); then
+    for file in conftest.*; do
+      case $file in
+      *.c | *.o | *.obj) ;;
+      *) ac_cv_exeext=`echo $file | sed -e s/conftest//` ;;
+      esac
+    done
+  else
+    AC_MSG_ERROR([installation or configuration problem: compiler cannot create executables.])
+  fi
+  rm -f conftest*
+  test x"${ac_cv_exeext}" = x && ac_cv_exeext=no
+fi])
+EXEEXT=""
+test x"${ac_cv_exeext}" != xno && EXEEXT=${ac_cv_exeext}
+AC_MSG_RESULT(${ac_cv_exeext})
+dnl Setting ac_exeext will implicitly change the ac_link command.
+ac_exeext=$EXEEXT
+AC_SUBST(EXEEXT)])
 
 
 dnl ### Checks for UNIX variants
