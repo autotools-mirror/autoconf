@@ -1,8 +1,9 @@
 * Major changes in Autoconf 2.52e                       -*- outline -*-
 
 ** Requirements
-  Perl 5.005 is required: autom4te is written in Perl and is needed by
-  autoconf.  autoheader, autoreconf, ifnames, and autoscan are
+
+  Perl 5.005_03 or later is required: autom4te is written in Perl and is
+  needed by autoconf.  autoheader, autoreconf, ifnames, and autoscan are
   rewritten in Perl.
 
 ** Documentation
