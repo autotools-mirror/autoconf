@@ -137,6 +137,17 @@ m4_define([AS_REQUIRE],
 # AS_SHELL_SANITIZE
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.
+#
+# This macro has a very special status.  Normal use of M4sh relies
+# heavily on AS_REQUIRE, so that needed initiatizations (such as
+# _AS_TEST_PREPARE) are performed on need, not on demand.  But
+# Autoconf is the first client of M4sh, and for two reasons: configure
+# and config.status.  Relying on AS_REQUIRE is of course fine for
+# configure, but fails for config.status (which is created by
+# configure).  So we need a means to force the inclusion of the
+# various _AS_PREPARE_* on top of config.status.  That's basically why
+# there are so many _AS_PREPARE_* below, and that's also why it is
+# important not to forget some: config.status needs them.
 m4_defun([AS_SHELL_SANITIZE],
 [
 ## --------------------- ##
@@ -173,6 +184,7 @@ _AS_LINENO_PREPARE
 _AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
+_AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE

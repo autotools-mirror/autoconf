@@ -1,3 +1,8 @@
+2002-04-02  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Invoke
+	_AS_MKDIR_P_PREPARE.
+
 2002-03-28  Kevin Ryde  <user42@zip.com.au>
 
 	* lib/autoconf/c.m4 (AC_C_INLINE): Test with a typedef return value,
