@@ -671,8 +671,11 @@ elif test $at_debug_p = false; then
   AS_BOX([$as_me.log is created.])
 
   echo
-  echo "Please send \`$as_me.log' to <AT_PACKAGE_BUGREPORT>,"
-  echo "along with all information you think might help."
+  echo "Please send \`$as_me.log' and all information you think might help:"
+  echo
+  echo "   To: <AT_PACKAGE_BUGREPORT>"
+  echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me.log: $at_fail_count failures"
+  echo
   exit 1
 fi
 

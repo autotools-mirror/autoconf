@@ -1,3 +1,8 @@
+2002-02-28  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4 (AT_INIT): Suggest a title to the
+	message to be sent.
+
 2002-02-25  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_SETPGRP): Fix the test.
