@@ -87,7 +87,11 @@ fi
 ])dnl
 dnl
 define(AC_MINUS_C_MINUS_O,
-[AC_CHECKING(whether $CC and cc understand -c and -o together)
+[if test "x$CC" != xcc; then
+  AC_CHECKING(whether $CC and cc understand -c and -o together)
+else
+  AC_CHECKING(whether cc understands -c and -o together)
+fi
 echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
@@ -95,15 +99,17 @@ echo 'foo(){}' > conftest.c
 if ${CC-cc} -c conftest.c -o conftest.o >/dev/null 2>&1 \
  && test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o >/dev/null 2>&1
 then
-  # Test first that cc exists at all.
-  if cc -c conftest.c >/dev/null 2>&1
-  then
-    if cc -c conftest.c -o conftest2.o >/dev/null 2>&1 && \
-       test -f conftest2.o && cc -c conftest.c -o conftest2.o >/dev/null 2>&1
+  if test "x$CC" != xcc; then
+    # Test first that cc exists at all.
+    if cc -c conftest.c >/dev/null 2>&1
     then
-      :
-    else
-      AC_DEFINE(NO_MINUS_C_MINUS_O)
+      if cc -c conftest.c -o conftest2.o >/dev/null 2>&1 && \
+         test -f conftest2.o && cc -c conftest.c -o conftest2.o >/dev/null 2>&1
+      then
+        :
+      else
+        AC_DEFINE(NO_MINUS_C_MINUS_O)
+      fi
     fi
   fi
 else
