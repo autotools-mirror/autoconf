@@ -2647,7 +2647,7 @@ use a non-autoconf script @code{Configure}, which can't be called
 through a wrapper @code{configure} since it would be the same file on
 case-insensitive filesystems. Likewise, if a @var{dir} contains
 @file{configure.ac} but no @code{configure}, the Cygnus @code{configure}
-script found by @code{AC_CONFIG_AUXDIR} is used.
+script found by @code{AC_CONFIG_AUX_DIR} is used.
 
 The subdirectory @code{configure} scripts are given the same command
 line options that were given to this @code{configure} script, with minor
