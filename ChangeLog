@@ -30,7 +30,7 @@
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
 	* bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in (BEGIN): Make
 	them uniform, and more robust to Perl special characters.
-	Reported by Martin Mokrej.
+	Reported by Martin Mokrejs.
 
 2003-05-14  Akim Demaille  <akim@epita.fr>
 
@@ -5246,7 +5246,7 @@
 
 	* acfunctions.m4 (AC_FUNC_FORK): Fix typos.
 
-2001-06-18  Rüdiger Kuhlmann  <info@ruediger-kuhlmann.de>
+2001-06-18  Ruediger Kuhlmann  <info@ruediger-kuhlmann.de>
 
 	* acfunctions.m4: (AC_FUNC_VFORK) rename as...
 	(_AC_FUNC_VFORK): this.
