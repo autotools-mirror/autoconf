@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 10 November 1994
+@set lastupdate 15 November 1994
 @c %**end of header
 
 @ifinfo
@@ -197,7 +197,8 @@ can help eliminate conceptual inconsistencies between different parts
 of a program; they can give you a history of how the conflicting
 concepts arose.
 
-Use the Emacs command @kbd{M-x add-change} to start a new entry in the
+Use the Emacs command @kbd{M-x add-change-log-entry} to start a new
+entry in the
 change log.  An entry should have an asterisk, the name of the changed
 file, and then in parentheses the name of the changed functions,
 variables or whatever, followed by a colon.  Then describe the changes
