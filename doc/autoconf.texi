@@ -4544,16 +4544,17 @@ otherwise set it to the empty string.
 @ovindex X_LIBS
 @ovindex X_EXTRA_LIBS
 @ovindex X_PRE_LIBS
-An enhanced version of @code{AC_PATH_X}.  It adds the C compiler flags that
-X needs to output variable @code{X_CFLAGS}, and the X linker flags to
-@code{X_LIBS}.  If X is not available, adds @option{-DX_DISPLAY_MISSING} to
-@code{X_CFLAGS}.
+@cvindex X_DISPLAY_MISSING
+An enhanced version of @code{AC_PATH_X}.  It adds the C compiler flags
+that X needs to output variable @code{X_CFLAGS}, and the X linker flags
+to @code{X_LIBS}.  Define @code{X_DISPLAY_MISSING} if X is not
+available.
 
 This macro also checks for special libraries that some systems need in
 order to compile X programs.  It adds any that the system needs to
 output variable @code{X_EXTRA_LIBS}.  And it checks for special X11R6
-libraries that need to be linked with before @option{-lX11}, and adds any
-found to the output variable @code{X_PRE_LIBS}.
+libraries that need to be linked with before @option{-lX11}, and adds
+any found to the output variable @code{X_PRE_LIBS}.
 
 @c This is an incomplete kludge.  Make a real way to do it.
 @c If you need to check for other X functions or libraries yourself, then
