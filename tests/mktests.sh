@@ -93,7 +93,7 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_PATH_PROGS?, AC_F77_FUNC
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
-# - AC_TRY, AC_.*_IFELSE
+# - AC_TRY, AC_.*_IFELSE, AC_RUN_LOG.
 #   Used in many places.
 # - _AC_
 #   Internal macros are used elsewhere.
@@ -122,7 +122,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_PATH_(TOOL|PROG)S?$
 ^AC_REPLACE_FUNCS$
 ^AC_SEARCH_LIBS$
-^AC_TRY
+^(AC_TRY.*|AC_RUN_LOG)$
 ^AC_.*_IFELSE$
 ^AC_FD_CC$
 ^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$

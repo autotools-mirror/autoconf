@@ -1,3 +1,9 @@
+2001-02-06  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_RUN_LOG, _AC_RUN_LOG_STDERR, AC_RUN_LOG): New.
+	(_AC_EVAL_STDERR,  _AC_EVAL): Use them.
+	(_AC_INIT_PREPARE_FS_SEPARATORS): Use AC_RUN_LOG.
+
 2001-02-05  Derek Price  <derek.price@openavenue.com>
 
 	* autoheader.sh: Only set config_h for the first call to
