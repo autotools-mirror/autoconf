@@ -1,3 +1,8 @@
+2000-05-03  Nicolas Joly  <njoly@pasteur.fr>
+
+	* autoheader.sh (config_h): Added templates sort. Under NetBSD 1.4.1
+	/bin/sh `set' command do not return a sorted variables list.
+
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.m4 (autoheader): Don't pass `-l at_srcdir' to

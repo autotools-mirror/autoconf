@@ -252,7 +252,7 @@ test -r $localdir/acconfig.h &&
   sed -e '/@BOTTOM@/,$d' -e 's/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
 
 # Dump the templates from `configure.in'.
-for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
+for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p' | sort`; do
   echo >>$tmp/config.hin
   eval echo '"${'$verb'}"' >>$tmp/config.hin
 done
