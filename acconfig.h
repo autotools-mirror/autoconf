@@ -56,6 +56,9 @@
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
 
+/* Define if your system has its own `getloadavg' function.  */
+#undef HAVE_GETLOADAVG
+
 /* Define if the `long double' type works.  */
 #undef HAVE_LONG_DOUBLE
 
