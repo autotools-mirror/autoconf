@@ -69,6 +69,49 @@ AT_CLEANUP
 
 
 ## ------------ ##
+## autoheader.  ##
+## ------------ ##
+
+# autoheader is intensively used in its modern form throught this
+# test suite.  But we also have to check that acconfig.h still works.
+
+AT_SETUP(autoheader)
+
+AT_DATA(acconfig.h,
+[[/* Define this to whatever you want. */
+#undef this
+]])
+
+# 1. Check that `acconfig.h' is still honored.
+AT_DATA(configure.in,
+[[AC_INIT
+AC_CONFIG_HEADERS(config.h)
+AC_DEFINE(this, "whatever you want.")
+]])
+
+
+AT_CHECK([../autoheader -m .. -l $at_srcdir -<configure.in], 0,
+[[/* config.h.in.  Generated automatically from - by autoheader.  */
+
+/* Define this to whatever you want. */
+#undef this
+]], ignore)
+
+# 2. Check that missing templates are a fatal error.
+AT_DATA(configure.in,
+[[AC_INIT
+AC_CONFIG_HEADERS(config.h)
+AC_DEFINE(that, "whatever you want.")
+]])
+
+AT_CHECK([../autoheader -m .. -l $at_srcdir -<configure.in], 1, ignore, ignore)
+
+AT_CLEANUP
+
+
+
+
+## ------------ ##
 ## autoupdate.  ##
 ## ------------ ##
 
@@ -95,6 +138,8 @@ AC_OUTPUT
 ]], ignore)
 
 AT_CLEANUP
+
+
 
 
 ## ------------------ ##

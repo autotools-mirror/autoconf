@@ -162,20 +162,29 @@ config_h=
 syms=
 
 # Source what the traces are trying to tell us.
-autoconf=`echo "$0" | sed -e 's/autoheader$/autoconf/'`
+autoconf=`echo "$0" | sed -e 's,[^/]*$,autoconf,'`
 test -n "$localdir" && autoconf="$autoconf -l $localdir"
 export AC_MACRODIR
-$autoconf  --trace AC_CONFIG_HEADERS:'config_h="$1"' \
- --trace AH_OUTPUT:'ac_verbatim_$1="\
+$autoconf  \
+  --trace AC_CONFIG_HEADERS:'config_h="$1"' \
+  --trace AH_OUTPUT:'ac_verbatim_$1="\
 $2"' \
-  $infile >$tmp/traces.sh
+  --trace AC_DEFINE:'syms="$$syms $1"' \
+  --trace AC_DEFINE_UNQUOTED:'syms="$$syms $1"' \
+  $infile >$tmp/traces.sh || exit 1
 . $tmp/traces.sh
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
 # to reduce the possibility of mistakenly matching another symbol that
 # is a substring of it.
-syms=`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`
+# Beware that some of the symbols might actually be macro with arguments:
+# keep only their name.
+syms=`for sym in $syms; do echo $sym; done |
+  sed -e 's/(.*//' |
+  sort |
+  uniq |
+  sed -e 's@^@ @'`
 
 
 # We template only the first CONFIG_HEADER.

@@ -1,5 +1,14 @@
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
+	Support of acconfig.h was broken.  Fix and test.
+	Reported by Jim Meyering.
+
+	* autoheader.sh: Trace AC_DEFINE and AC_DEFINE_UNQUOTED to build
+	the list of $syms which are defined.
+	* tests/tools.m4 (autoheader): New test.
+
+2000-05-03  Akim Demaille  <akim@epita.fr>
+
 	Rename the language FORTRAN77 as Fortran 77.
 
 	* aclang.m4 (AC_LANG(FORTRAN77), AC_LANG_SOURCE(FORTRAN77),
