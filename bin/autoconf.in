@@ -327,6 +327,8 @@ case $task in
 
       while ((getline pattern < (tmp "/allowed.rx")) > 0)
         allowed = (allowed ? allowed "|" : "") pattern
+      if (!allowed)
+        allowed = "^$"
       close (tmp "/allowed.rx")
       if (verbose)
         errprint("$me: allowed: " allowed)

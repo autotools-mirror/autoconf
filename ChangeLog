@@ -1,3 +1,11 @@
+2000-12-15  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: If the "allowed" pattern is not defined set it
+	to "^$".
+	* tests/tools.at (autoconf: forbidden tokens, basic): New test.
+	(autoconf: forbidden tokens): Renamed to ...
+	(autoconf: forbidden tokens, exceptions): ... this.
+
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_PROG_CXXCPP, AC_PROG_CPP): Require AC_PROG_CXX/CC.

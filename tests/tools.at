@@ -190,7 +190,39 @@ AT_CLEANUP
 ## autoconf: forbidden tokens.  ##
 ## ---------------------------- ##
 
-AT_SETUP([autoconf: forbidden tokens])
+# autoconf: forbidden tokens, basic
+# ---------------------------------
+AT_SETUP([autoconf: forbidden tokens, basic])
+
+AT_DATA([configure.in],
+[[AC_PLAIN_SCRIPT()dnl
+AC_FOO
+_AC_BAR
+m4_foo
+_m4_bar
+BAC_FOO
+B_AC_FOO
+AS_FOO
+_AS_BAR
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
+# The output of autoconf is not deterministic here because it
+# uses `for (ind in array)'.  So be sure to have a unique representation.
+AT_CHECK([sort <err], 0,
+[[configure.in:2: error: undefined macro: AC_FOO
+configure.in:3: error: undefined macro: _AC_BAR
+configure.in:4: error: undefined macro: m4_foo
+configure.in:7: error: undefined macro: B_AC_FOO
+configure.in:8: error: undefined macro: AS_FOO
+]])
+
+AT_CLEANUP(configure err)
+
+
+# autoconf: forbidden tokens, exceptions
+# --------------------------------------
+AT_SETUP([autoconf: forbidden tokens, exceptions])
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
