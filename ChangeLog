@@ -1,5 +1,10 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Multiple Cases, Quotation Rule Of Thumb):
+	Follow the coding style.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Obsoleting Macros): Is not a subsection of
 	`Dependencies Between Macros', but rather a section of `Writing
 	Macros'.

@@ -5214,14 +5214,17 @@ AC_MSG_CHECKING(how to get file system type)
 fstype=no
 # The order of these tests is important.
 AC_TRY_CPP([#include <sys/statvfs.h>
-#include <sys/fstyp.h>], [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
+#include <sys/fstyp.h>],
+           [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
 if test $fstype = no; then
   AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/fstyp.h>], [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
+#include <sys/fstyp.h>],
+             [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
 fi
 if test $fstype = no; then
   AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/vmount.h>], [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
+#include <sys/vmount.h>],
+             [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
 fi
 # (more cases omitted here)
 AC_MSG_RESULT($fstype)
@@ -6157,7 +6160,9 @@ AC_TRY_LINK(
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif],
-[atoi (*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)
+            [atoi (*tzname);],
+            [ac_cv_var_tzname=yes],
+            [ac_cv_var_tzname=no])
 @end example
 
 @noindent
@@ -6191,7 +6196,9 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM(
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif]],
-[atoi (*tzname);])], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)
+                                [atoi (*tzname);])],
+               [ac_cv_var_tzname=yes],
+               [ac_cv_var_tzname=no])
 @end example
 
 @c FIXME: Quadrigraphs and hopeless cases.
