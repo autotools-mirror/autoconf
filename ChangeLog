@@ -1,5 +1,14 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	AC_CONFIG_AUX_DIR_DEFAULTS overrides AC_CONFIG_AUX_DIR.  Ouch.
+	Reported by Paul Martinolich.
+
+	* acgeneral.m4 (AC_PROVIDE): Don't forget to `m4_provide'!!!
+	Tss, novice...
+	* tests/base.at (AC_REQUIRE & AC_PROVIDE): New test.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_location): When using its value, don't use
 	`m4_defn', since m4_location is not a variable, it's a macro which
 	expands to __file__:__line__.

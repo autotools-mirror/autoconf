@@ -264,10 +264,11 @@ m4_define([AC_EXPAND_ONCE],
 
 # AC_PROVIDE(MACRO-NAME)
 # ----------------------
-# Ideally we should use `AC_PROVIDE($1)', but unfortunately many third
-# party macros know that we use `AC_PROVIDE_$1' and they depend on it.
+# Ideally we should just use `m4_provide($1)', but unfortunately many
+# third party macros know that we use `AC_PROVIDE_$1' and they depend
+# on it.
 m4_define([AC_PROVIDE],
-[m4_define([AC_PROVIDE_$1])])
+[m4_define([AC_PROVIDE_$1])m4_provide([$1])])
 
 
 # AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
