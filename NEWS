@@ -15,6 +15,9 @@ For autoconf, autoreconf, autoupdate, autoheader, autoscan and ifnames.
   provide the parsing layer for tools which need to `study'
   configure.in.
 
+- --warnings
+  Specify what category of warnings should be enabled.
+
 ** autoupdate
 autoupdate is now much more powerful, and is able to provide the glue
 code which might be needed to move from an old macro to its newer

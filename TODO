@@ -24,10 +24,6 @@ Document --install.  Should --install `fix' configure.in for the user?
 2.15 cannot be released without having `make check' succeed under
 DJGPP.  EMX will be a requirement for the next release, not this one.
 
-** Doc:
-Should we document AC_LANG_* and AC_*_IFELSE?  I hope the interface is
-right...
-
 ** autoconf --install
 We must finalize the interface we want.
 
@@ -38,9 +34,6 @@ ${1+"$@"}, set dummy.
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
-
-** More macros from Jim
-Those related to *_SLASH_*.
 
 ** AC_FUNC_GETLOADAVG
 We must find a solution for this macro which needs to find
@@ -60,23 +53,12 @@ might hurt feelings?  In addition, it means that the Messiah has come,
 which might be slightly presumptuous :).  Still, someone fluent in
 English should write it.
 
-** AUTHORS
-Now what?
-
 ** More C compilers (How come this has never been handled?  --akim)
 Question: at least one common UNIX variant has a "cc" that is old K&R
 and "c89" for ANSI C.  Is there any reason why AC_PROG_CC couldn't
 check for c89 before cc if it can't find gcc?
 
 hpa@yggdrasil.com (H. Peter Anvin)
-
-** @magic@ expanded in all the AC_SUBST (I think this one is obsoleted
-with the existence of Automake.  Remove this wish?  --akim)
-Perhaps Autoconf could have a single @magic@ frob that gets replaced with
-assignments for all the *dir variables?  There is quite a plethora for each
-Makefile.in to have foodir = @foodir@.
-
-From: Roland McGrath <roland@gnu.ai.mit.edu>
 
 
 * Autoconf 2.51 or so
@@ -109,13 +91,6 @@ Decide with the Automake team whether this macro should list only `.c'
 files, or it should include the `.h' too.  For instance the
 AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
 the macro which allows to choose a regex engine.
-
-** Document the coding style
-Browse the Autoconf Macro Archive, spot what we don't like, and
-document it.  Explain AC_DEFUN vs. define.  Explain people should
-really quote the names of the macros when they define it.  Stress that
-AC_FUNC_* which AC_REPLACE should not inline the setup of the
-replacement function, it's unreadable.
 
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
