@@ -2671,14 +2671,14 @@ popdef([AC_Prog])dnl
 # language.
 AC_DEFUN(AC_TRY_COMPILER,
 [AC_LINK_IFELSE([AC_LANG_SOURCE([[$1]])],
-[[$2]=yes
+[$2=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
-    [$3]=no
+    $3=no
   else
-    [$3]=yes
+    $3=yes
   fi],
-[[$2]=no])[]dnl
+[$2=no])[]dnl
 ])# AC_TRY_COMPILER
 
 
