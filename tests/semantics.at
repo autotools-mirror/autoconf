@@ -38,12 +38,12 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 # AC_CHECK_FUNCS
 # --------------
 # Check that it performs the correct actions:
-# Must define HAVE_EXIT, but not HAVE_AUTOCONF_TIXE
+# Must define HAVE_PRINTF, but not HAVE_AUTOCONF_FTNIRP
 AT_CHECK_MACRO([AC_CHECK_FUNCS],
-[AC_CHECK_FUNCS(exit autoconf_tixe)],
+[AC_CHECK_FUNCS(printf autoconf_ftnirp)],
 [AT_CHECK_DEFINES(
-[/* #undef HAVE_AUTOCONF_TIXE */
-#define HAVE_EXIT 1
+[/* #undef HAVE_AUTOCONF_FTNIRP */
+#define HAVE_PRINTF 1
 ])])
 
 
@@ -52,10 +52,10 @@ AT_CHECK_MACRO([AC_CHECK_FUNCS],
 # This macro is an obsolete version of AC_CHECK_FUNCS.  Running this
 # test allows to check that AU_ALIAS'ed macros work properly.
 AT_CHECK_MACRO([AC_HAVE_FUNCS],
-[AC_CHECK_FUNCS(exit autoconf_tixe)],
+[AC_HAVE_FUNCS(printf autoconf_ftnirp)],
 [AT_CHECK_DEFINES(
-[/* #undef HAVE_AUTOCONF_TIXE */
-#define HAVE_EXIT 1
+[/* #undef HAVE_AUTOCONF_FTNIRP */
+#define HAVE_PRINTF 1
 ])])
 
 

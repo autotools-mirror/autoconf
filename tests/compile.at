@@ -109,8 +109,8 @@ AT_CLEANUP
 ## ------------------ ##
 
 AT_CHECK_MACRO([AC_TRY_LINK_FUNC],
-[AC_TRY_LINK_FUNC(exit,,
-                  [AC_MSG_ERROR([cannot find `exit'])])
+[AC_TRY_LINK_FUNC(printf,,
+                  [AC_MSG_ERROR([cannot find `printf'])])
 AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
                  [AC_MSG_ERROR([found a nonexistent function])])])
 

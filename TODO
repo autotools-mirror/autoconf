@@ -40,6 +40,12 @@ Write a test that checks that it honors the values set by the user.
 Chose a means to declare patterns to catch, means to escape the
 control, and document it.
 
+** AC_CHECK_FUNCS and AC_TRY_LINK_FUNC
+I have still not understood what's the difference  between the two
+which requires to have two different sources: AC_LANG_CALL and
+AC_LANG_FUNC_LINK_TRY (which names seem to be inappropriate).
+Wouldn't one be enough?
+
 * Autoconf 2.51 or so
 
 ** AC_FUNC_GETLOADAVG

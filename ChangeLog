@@ -1,3 +1,14 @@
+2001-01-11  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): New.
+	(AC_PROG_CC, AC_PROG_CXX): Use it.
+	(AC_PROG_CC_STDC): Be sure to remove tmp files.
+	* tests/compile.at (AC_TRY_LINK_FUNC): Don't use exit to test it,
+	since it produces a prototype which conflicts with the one
+	computed by _AC_PROG_CXX_EXIT_DECLARATION.
+	* tests/semantics.at (AC_CHECK_FUNCS, AC_HAVE_FUNCS): Likewise.
+	(AC_HAVE_FUNCS): Test AC_HAVE_FUNCS!
+
 2001-01-11  Kevin Ryde  <user42@zip.com.au>
 
 	* autoconf.texi (Shellology): Fix an @end itemize, and a typo.

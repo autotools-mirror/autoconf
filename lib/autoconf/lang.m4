@@ -405,7 +405,7 @@ m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
 # We need `stdio.h' to open a `FILE', so the prologue defaults to the
 # inclusion of `stdio.h'.
 m4_define([AC_LANG_INT_SAVE(C)],
-[AC_LANG_PROGRAM([m4_default([$1], [@%:@include "stdio.h"])],
+[AC_LANG_PROGRAM([m4_default([$1], [@%:@include <stdio.h>])],
 [FILE *f = fopen ("conftestval", "w");
 if (!f)
   exit (1);
@@ -419,42 +419,31 @@ fclose (f);])])
 
 # AC_LANG_SOURCE(C++)(BODY)
 # -------------------------
-m4_define([AC_LANG_SOURCE(C++)],
-[#line __oline__ "configure"
-#include "confdefs.h"
-#ifdef __cplusplus
-extern "C" void exit (int);
-#endif
-$1])
+m4_copy([AC_LANG_SOURCE(C)], [AC_LANG_SOURCE(C++)])
 
 
 # AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
 # ----------------------------------------
-# Same as C.
 m4_copy([AC_LANG_PROGRAM(C)], [AC_LANG_PROGRAM(C++)])
 
 
 # AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
 # -------------------------------------
-# Same as C.
 m4_copy([AC_LANG_CALL(C)], [AC_LANG_CALL(C++)])
 
 
 # AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
 # ------------------------------------
-# Same as C.
 m4_copy([AC_LANG_FUNC_LINK_TRY(C)], [AC_LANG_FUNC_LINK_TRY(C++)])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
 # ---------------------------------------------------
-# Same as C.
 m4_copy([AC_LANG_BOOL_COMPILE_TRY(C)], [AC_LANG_BOOL_COMPILE_TRY(C++)])
 
 
 # AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
 # -------------------------------------------
-# Same as C.
 m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(C++)])
 
 
@@ -879,6 +868,14 @@ GCC=`test $ac_compiler_gnu = yes && echo yes`
 AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
 AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CC_G
+# Some people use a C++ compiler to compile C.  Since we use `exit',
+# in C++ we need to declare it.  In case someone uses the same compiler
+# for both compiling C and C++ we need to have the C++ compiler decide
+# the declaration of exit, since it's the most demanding environment.
+_AC_COMPILE_IFELSE([@%:@ifndef __cplusplus
+  choke me
+@%:@endif],
+                   [_AC_PROG_CXX_EXIT_DECLARATION])
 AC_LANG_POP
 ])# AC_PROG_CC
 
@@ -987,7 +984,6 @@ fi
 ])# AC_PROG_CC_C_O
 
 
-
 # ---------------------- #
 # 3c. The C++ compiler.  #
 # ---------------------- #
@@ -1076,6 +1072,7 @@ GXX=`test $ac_compiler_gnu = yes && echo yes`
 AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
 AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CXX_G
+_AC_PROG_CXX_EXIT_DECLARATION
 AC_LANG_POP
 ])# AC_PROG_CXX
 
@@ -1110,6 +1107,32 @@ else
 fi[]dnl
 ])# _AC_PROG_CXX_G
 
+
+# _AC_PROG_CXX_EXIT_DECLARATION
+# -----------------------------
+# Find a valid prototype for exit and declare it in confdefs.h.
+m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
+[for ac_declaration in \
+   'extern "C" void std::exit (int) throw (); using std::exit;' \
+   'extern "C" void std::exit (int); using std::exit;' \
+   'extern "C" void exit (int) throw ();' \
+   'extern "C" void exit (int);' \
+   'void exit (int);' \
+   ''
+do
+  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@include <stdlib.h>
+$ac_declaration],
+                                      [exit (42);])],
+                     [],
+                     [continue])
+  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration],
+                                      [exit (42);])],
+                     [break])
+done
+echo '#ifdef __cplusplus' >>confdefs.h
+echo $ac_declaration      >>confdefs.h
+echo '#endif'             >>confdefs.h
+])# _AC_PROG_CXX_EXIT_DECLARATION
 
 
 # ----------------------------- #
@@ -1317,9 +1340,9 @@ do
   CC="$ac_save_CC $ac_arg"
   AC_COMPILE_IFELSE([],
                     [ac_cv_prog_cc_stdc=$ac_arg
-rm -f conftest.$ac_ext conftest.$ac_objext
 break])
 done
+rm -f conftest.$ac_ext conftest.$ac_objext
 CC=$ac_save_CC
 ])
 case "x$ac_cv_prog_cc_stdc" in
