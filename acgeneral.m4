@@ -899,7 +899,7 @@ fi
 dnl
 define(AC_SIZEOF_TYPE,
 [AC_CHECKING(size of $1)
-$2=0
+ac_size=0
 AC_TEST_PROGRAM([#include <stdio.h>
 main()
 {
@@ -907,7 +907,8 @@ main()
   if (!f) exit(1);
   fprintf(f, "%d\n", sizeof($1));
   exit(0);
-}], $2=`cat conftestval`)])dnl
+}], ac_size=`cat conftestval`)
+AC_DEFINE_UNQUOTED(changequote(<<,>>) translit(sizeof_$1, [a-z *], [A-Z_P])<<>>changequote([,]), $ac_size))])dnl
 dnl
 dnl
 dnl The big finish
