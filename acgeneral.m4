@@ -738,9 +738,56 @@ define(AC_PREREQ,
 AC_DEFUN(_AC_INIT_DEFAULTS,
 [AC_DIVERT_PUSH([DEFAULTS])dnl
 
-# Defaults:
+#
+# Initializations.
+#
 ac_default_prefix=/usr/local
-@%:@ Any additions from configure.in:
+subdirs=
+MFLAGS= MAKEFLAGS=
+AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
+# Maximum number of lines to put in a shell here document.
+dnl This variable seems obsolete.  It should probably be removed, and
+dnl only ac_max_sed_lines should be used.
+: ${ac_max_here_lines=48}
+# Sed expression to map a string onto a valid sh and CPP variable names.
+ac_tr_sh='sed -e y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
+ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
+
+# By default always use an empty string as the executable extension.
+# Only change it if the script calls AC_EXEEXT.
+ac_exeext=
+# By default assume that objects files use an extension of .o.  Only
+# change it if the script calls AC_OBJEXT.
+ac_objext=o
+# Factoring default headers for most tests.
+dnl If ever you change this variable, please keep autoconf.texi in sync.
+ac_includes_default="\
+#include <stdio.h>
+#include <sys/types.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif"
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_DEFAULTS
 
@@ -833,18 +880,6 @@ AC_SUBST(includedir,     '${prefix}/include')dnl
 AC_SUBST(oldincludedir,  '/usr/include')dnl
 AC_SUBST(infodir,        '${prefix}/info')dnl
 AC_SUBST(mandir,         '${prefix}/man')dnl
-
-# Initialize some other variables.
-subdirs=
-MFLAGS= MAKEFLAGS=
-AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
-# Maximum number of lines to put in a shell here document.
-dnl This variable seems obsolete.  It should probably be removed, and
-dnl only ac_max_sed_lines should be used.
-: ${ac_max_here_lines=48}
-# Sed expression to map a string onto a valid sh and CPP variable names.
-ac_tr_sh='sed -e y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
-ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
 
 ac_prev=
 for ac_option
@@ -1342,41 +1377,6 @@ dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
 AC_LANG_C
-dnl By default always use an empty string as the executable
-dnl extension.  Only change it if the script calls AC_EXEEXT.
-ac_exeext=
-dnl By default assume that objects files use an extension of .o.  Only
-dnl change it if the script calls AC_OBJEXT.
-ac_objext=o
-# Factoring default headers for most tests.
-dnl If ever you change this variable, please keep autoconf.texi in sync.
-ac_includes_default="\
-#include <stdio.h>
-#include <sys/types.h>
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# if HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if HAVE_INTTYPES_H
-# include <inttypes.h>
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif"
 
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.

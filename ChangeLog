@@ -1,5 +1,11 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PREPARE, _AC_INIT_PARSE_ARGS): Move more
+	initializations to...
+	(_AC_INIT_DEFAULTS): here.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	Give a means to compute `srcdir' earlier in configure.
 
 	* acgeneral.m4 (_AC_INIT_SRCDIR): New macro, pulled out from...
