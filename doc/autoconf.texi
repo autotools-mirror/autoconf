@@ -13628,6 +13628,13 @@ can alter its behavior:
 The shell with which to run @command{configure} for the @option{--recheck}
 option.  It must be Bourne-compatible.  The default is a shell that
 supports @env{LINENO} if available, and @file{/bin/sh} otherwise.
+Invoking @command{configure} by hand bypasses this setting, so you may
+need to use a command like @samp{/bin/bash ./configure
+CONFIG_SHELL=/bin/bash} to insure that the same shell is used
+everywhere.
+@example
+
+@end example
 @end defvar
 
 @defvar CONFIG_STATUS
