@@ -22,7 +22,7 @@
 	instead of `AC_TYPE_GETGROUPS'.
 	* doc/autoconf.texi (Particular Functions): Adjust.
 
-2000-05-22  unknown
+2000-05-22  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4: Quote the names being m4-defined.
 	* acspecific.m4: Likewise.
