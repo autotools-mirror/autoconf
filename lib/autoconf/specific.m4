@@ -40,7 +40,8 @@ rm -f conftest*
 ])dnl
 dnl
 define(AC_PROG_CXX,
-[AC_BEFORE([$0], [AC_PROG_CXXCPP])AC_PROVIDE([$0])AC_PROGRAMS_CHECK(CXX, $CCC c++ g++ gcc CC, gcc)
+[AC_BEFORE([$0],[AC_PROG_CXXCPP])AC_PROVIDE([$0])
+AC_PROGRAMS_CHECK(CXX, $CCC c++ g++ gcc CC cxx, gcc)
 # Find out if we are using GNU C++, under whatever name.
 cat > conftest.C <<EOF
 #ifdef __GNUC__
@@ -1057,7 +1058,7 @@ dnl ### checks for operating system services
 dnl
 dnl
 define(AC_HAVE_POUNDBANG, [dnl
-AC_CHECKING(whether \`#!' works in shell scripts)
+AC_CHECKING(whether \`[#]!' works in shell scripts)
 echo '#!/bin/cat
 exit 69
 ' > conftest
