@@ -1,5 +1,10 @@
 2003-06-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/local.at (AT_CHECK_CONFIGURE): Adjust to the verbose being
+	always run: output config.log on $at_group_log.
+
+2003-06-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (#define header templates): Don't use quotes in
 	C++ comments as it puzzles Emacs' sh font-lock-mode.
 

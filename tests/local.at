@@ -239,7 +239,7 @@ m4_define([AT_CHECK_CONFIGURE],
 [AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
 	  [$2],
 	  m4_default([$3], [ignore]), [$4],
-	  [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
+	  [{ echo "$srcdir/AT_LINE: config.log"; sed 's/^/> /' config.log; } >>$at_group_log ])])
 
 
 # AT_CHECK_ENV
