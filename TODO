@@ -61,6 +61,45 @@ situations.
 
 * Later
 
+** config.site
+This guy is really a problem.  It's contents should be read before
+handling the options, so that the latter properly override the latter,
+but most people would want a means to have a config.site that depends
+on $prefix for instance.
+
+Some other would like config.site to be looked for in the current
+directory.
+
+Harlan:
+
+   I'll go further.
+
+   I'd like to see several layers of config.site available.
+
+   I'm starting to use "modules" at more places to handle software
+   installation, and it would be helpful to set general things like:
+
+   	prefix=/opt/pkg/@PACKAGE@/@VERSION@
+
+   once at a global level, and then, for example, have things like:
+
+   	--with-etcdir=$prefix/etc
+
+   stuffed "above" the various versions of SSH so I wouldn't have to hunt for
+   these things every time it was time to recompile a new version of a
+   previously installed package.
+
+   Something like:
+
+     src/config.site		Global stuff
+     ...
+     src/ssh/config.site		package-specific stuff
+     src/ssh/ssh-1.2.27/		the actual source code
+
+   I'd like to see automake/autoconf better support packaging tools (like
+   modules, the *BSD ports/ stuff, and others would like hooks for RPMs).
+
+
 ** Languages
 Integrate other Fortrans etc.
 
