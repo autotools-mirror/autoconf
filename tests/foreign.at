@@ -15,9 +15,9 @@ AT_CHECK([libtoolize --version || exit 77],
 AT_CHECK([[
 case `libtoolize --version |
       sed -n '/^.* \([0-9][0-9.a-z]*\)$/{s//\1/;p;q;}'` in
-  *" "0.*          ) exit 77;;
-  *" "1.[012]*     ) exit 77;;
-  *" "1.3.[01234]* ) exit 77;;
+  0.*          ) exit 77;;
+  1.[012]*     ) exit 77;;
+  1.3.[01234]* ) exit 77;;
 esac]],
          ignore, ignore, ignore)
 
