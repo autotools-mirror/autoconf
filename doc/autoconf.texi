@@ -168,7 +168,8 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Copying This Manual::         How to make copies of this manual
 * Indices::                     Indices of symbols, concepts, etc.
 
-@detailmenu --- The Detailed Node Listing ---
+@detailmenu
+ --- The Detailed Node Listing ---
 
 The GNU build system
 
@@ -408,10 +409,15 @@ Upgrading From Version 2.13
 
 Generating Test Suites with Autotest
 
-* testsuite Scripts::           The concepts of Autotest
+* Using an Autotest Test Suite::  Autotest and the user
 * Writing testsuite.at::        Autotest macros
 * testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
+
+Using an Autotest Test Suite
+
+* testsuite Scripts::           The concepts of Autotest
+* Autotest Logs::               Their contents
 
 Questions About Autoconf
 
@@ -11454,14 +11460,22 @@ Nonetheless, compared to DejaGNU, Autotest is inadequate for interactive
 tool testing, which is probably its main limitation.
 
 @menu
-* testsuite Scripts::           The concepts of Autotest
+* Using an Autotest Test Suite::  Autotest and the user
 * Writing testsuite.at::        Autotest macros
 * testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 @end menu
 
+@node Using an Autotest Test Suite
+@section Using an Autotest Test Suite
+
+@menu
+* testsuite Scripts::           The concepts of Autotest
+* Autotest Logs::               Their contents
+@end menu
+
 @node testsuite Scripts
-@section @command{testsuite} Scripts
+@subsection @command{testsuite} Scripts
 
 @cindex @command{testsuite}
 
@@ -11560,6 +11574,65 @@ atconfig -->.                    .--> testsuite.log
              /                  \
 [atlocal] ->'                    `--> [testsuite.@var{nn}*]
 @end example
+
+
+@node Autotest Logs
+@subsection Autotest Logs
+
+When run, the test suite creates a log file named after itself, e.g., a
+test suite named @command{testsuite} creates @file{testsuite.log}.  It
+contains a lot of information, usually more than maintainers actually
+need, but therefore most of the time it contains all that is needed:
+
+@table @asis
+@item command line arguments
+@c akim s/to consist in/to consist of/
+A very bad Unix habit which is unfortunately wide spread consists of
+setting environment variables before the command, such as in
+@samp{CC=my-home-grown-cc ./testsuite}.  This results in the test suite
+not knowing this change, hence (i) it can't report it to you, and (ii)
+it cannot preserve the value of @code{CC} for subsequent runs@footnote{
+@c
+When a failure occurs, the test suite is rerun, verbosely, and the user
+is asked to ``play'' with this failure to provide better information.
+It is important to keep the same environment between the first run, and
+bug-tracking runs.
+@c
+}.  Autoconf faced exactly the same problem, and solved it by asking
+users to pass the variable definitions as command line arguments.
+Autotest requires this rule too, but has no means to enforce it; the log
+then contains a trace of the variables the user changed.
+
+@item @file{ChangeLog} excerpts
+The topmost lines of all the @file{ChangeLog}s found in the source
+hierarchy.  This is especially useful when bugs are reported against
+development versions of the package, since the version string does not
+provide sufficient information to know the exact state of the sources
+the user compiled.  Of course this relies on the use of a
+@file{ChangeLog}.
+
+@item build machine
+Running a test suite in a cross-compile environment is not an easy task,
+since it would mean having the test suite run on a machine @var{build},
+while running programs on a machine @var{host}.  It is much simpler to
+run both the test suite and the programs on @var{host}, but then, from
+the point of view of the test suite, there remains a single environment,
+@var{host} = @var{build}.  The log contains relevant information on the
+state of the build machine, including some important environment
+variables.
+@c FIXME: How about having an M4sh macro to say `hey, log the value
+@c of `...'?  This would help both Autoconf and Autotest.
+
+@item tested programs
+The absolute path and answers to @option{--version} of the tested
+programs (see @ref{Writing testsuite.at}, @code{AT_TESTED}).
+
+@item configuration log
+The contents of @file{config.log}, as created by @command{configure},
+are appended.  It contains the configuration flags and a detailed report
+on the configuration itself.
+@end table
+
 
 @node Writing testsuite.at
 @section Writing @file{testsuite.at}

@@ -1,5 +1,11 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Using an Autotest Test Suite): New.
+	(testsuite Scripts): Be one of its subsection.
+	(Autotest Logs): New.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	Test groups are now run two directories deeper.
 
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Replace srcdir,
