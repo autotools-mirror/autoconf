@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ AS_PREPARE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
-at_cli_args=${1+"$[@]"}
+at_cli_args="$[@]"
 
 # Load the config file.
 for at_file in atconfig atlocal
@@ -569,6 +569,7 @@ _ATEOF
             # Create the debugging script.
             {
               echo "#! /bin/sh"
+              echo '${ZSH_VERSION-:} alias -g '\''${1+"$@"}'\''='\''"$@"'\'''
               echo "cd $at_dir"
               echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
                    '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
