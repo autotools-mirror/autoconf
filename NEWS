@@ -4,11 +4,6 @@
 
 - autoreconf is adjusted to GNU Gettext 0.11.
 
-** Bug fixes
-
-- config.status 2.53 may fail on some architectures where `mkdir -p'
-  fails on existing directories.
-
 ** Macros
 
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
