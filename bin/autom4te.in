@@ -279,7 +279,7 @@ my $freeze = 0;
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 die "$me: need GNU m4 1.4 or later: $m4\n"
-  if system "$m4 --help </dev/null 2>&1 | fgrep reload-state >/dev/null";
+  if system "$m4 --help </dev/null 2>&1 | grep reload-state >/dev/null";
 
 # Set some high recursion limit as the default limit, 250, has already
 # been hit with AC_OUTPUT.  Don't override the user's choice.
