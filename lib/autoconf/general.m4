@@ -3079,7 +3079,7 @@ $2=$ac_lo[]dnl
 # Store the evaluation of the integer EXPRESSION in VARIABLE.
 m4_define([_AC_COMPUTE_INT_RUN],
 [AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
-               [$2=`cat conftestval`], [$4])])
+               [$2=`cat conftest.val`], [$4])])
 
 
 # _AC_COMPUTE_INT(EXPRESSION, VARIABLE, INCLUDES, IF-FAILS)
@@ -3090,7 +3090,7 @@ m4_define([_AC_COMPUTE_INT],
 else
   _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
 fi
-rm -f conftestval[]dnl
+rm -f conftest.val[]dnl
 ])# _AC_COMPUTE_INT
 
 

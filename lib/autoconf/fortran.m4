@@ -326,7 +326,7 @@ AC_DEFUN([AC_LANG_BOOL_COMPILE_TRY],
 # AC_LANG_INT_SAVE(PROLOGUE, EXPRESSION)
 # --------------------------------------
 # Produce a program that saves the runtime evaluation of the integer
-# EXPRESSION into `conftestval'.
+# EXPRESSION into `conftest.val'.
 AC_DEFUN([AC_LANG_INT_SAVE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
@@ -417,7 +417,7 @@ m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
 # inclusion of `stdio.h'.
 m4_define([AC_LANG_INT_SAVE(C)],
 [AC_LANG_PROGRAM([m4_default([$1], [@%:@include <stdio.h>])],
-[FILE *f = fopen ("conftestval", "w");
+[FILE *f = fopen ("conftest.val", "w");
 if (!f)
   exit (1);
 fprintf (f, "%d", ($2));

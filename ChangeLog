@@ -1,3 +1,10 @@
+2001-01-22  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* aclang.m4 (AC_LANG_INT_SAVE, AC_LANG_INT_SAVE(C)): Use
+	conftest.val, not conftestval.
+	* acgeneral.m4 (_AC_COMPUTE_INT_RUN, _AC_COMPUTE_INT):
+	Likewise.
+
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
 	Create actypes.m4.
@@ -15,7 +22,6 @@
 	* actypes.m4: here.
 	Adjust the test suite.
 
-	
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_INIT): Include a default case for non
@@ -28,7 +34,6 @@
 	* tests/mktest.sh: Create one test file per Autoconf source
 	file instead of separating syntax/update.
 
-	
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi: Some about diff and cmp.
