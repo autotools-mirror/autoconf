@@ -599,7 +599,7 @@ echo "\
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
 
-It was created by configure version 2.14a, executed with
+It was created by configure (Autoconf 2.14a) 2.14a, executed with
  > $0 $ac_configure_args
 " 1>&5
 
@@ -1151,20 +1151,23 @@ EOF
 # So, don't put newlines in cache variables' values.
 # Ultrix sh set writes to stderr and can't be redirected directly,
 # and sets the high bit in the cache file unless we assign to the vars.
-(set) 2>&1 |
-  case `(ac_space=' '; set | grep ac_space) 2>&1` in
-  *ac_space=\ *)
-    # `set' does not quote correctly, so add quotes (double-quote substitution
-    # turns \\\\ into \\, and sed turns \\ into \).
-    sed -n \
-      -e "s/'/'\\\\''/g" \
-      -e "s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1=\${\\1='\\2'}/p"
-    ;;
-  *)
-    # `set' quotes correctly as required by POSIX, so do not add quotes.
-    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
-    ;;
-  esac >>confcache
+{
+  (set) 2>&1 |
+    case `(ac_space=' '; set | grep ac_space) 2>&1` in
+    *ac_space=\ *)
+      # `set' does not quote correctly, so add quotes (double-quote substitution
+      # turns \\\\ into \\, and sed turns \\ into \).
+      sed -n \
+    	-e "s/'/'\\\\''/g" \
+    	-e "s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1='\\2'/p"
+      ;;
+    *)
+      # `set' quotes correctly as required by POSIX, so do not add quotes.
+      sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p'
+      ;;
+    esac;
+} |
+  sed -e 's/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
@@ -1174,7 +1177,6 @@ if cmp -s $cache_file confcache; then :; else
   fi
 fi
 rm -f confcache
-
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 test "x$prefix" = xNONE && prefix=$ac_default_prefix
@@ -1214,6 +1216,34 @@ EOF
 ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -f conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f conftest.defs
+
+# Save into config.log some informations which might help to debug.
+echo >>config.log
+echo "The cache variables are:" >>config.log
+# The following way of writing the cache mishandles newlines in values,
+# but we know of no workaround that is simple, portable, and efficient.
+# So, don't put newlines in cache variables' values.
+# Ultrix sh set writes to stderr and can't be redirected directly,
+# and sets the high bit in the cache file unless we assign to the vars.
+{
+  (set) 2>&1 |
+    case `(ac_space=' '; set | grep ac_space) 2>&1` in
+    *ac_space=\ *)
+      # `set' does not quote correctly, so add quotes (double-quote substitution
+      # turns \\\\ into \\, and sed turns \\ into \).
+      sed -n \
+    	-e "s/'/'\\\\''/g" \
+    	-e "s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1='\\2'/p"
+      ;;
+    *)
+      # `set' quotes correctly as required by POSIX, so do not add quotes.
+      sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p'
+      ;;
+    esac;
+} | sed -e 's/^/| /' >>config.log
+echo >>config.log
+echo "confdefs.h is:" >>config.log
+cat confdefs.h | sed -e 's/^/| /' >>config.log
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15

@@ -1,3 +1,14 @@
+2000-04-05  Akim Demaille  <akim@epita.fr>
+
+	At the end of `./configure', save the cache values, and the CPP
+	values.
+
+	* acgeneral.m4 (_AC_CACHE_DUMP): New macro.
+	(AC_CACHE_SAVE, AC_OUTPUT): Use it.
+	(AC_OUTPUT): Dump confdefs.h into config.log.
+	(_AC_INIT_PREPARE::config.log): Name the package being configured
+	if you can.
+
 2000-04-05  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Disable caching by default, so as not to cause problems when

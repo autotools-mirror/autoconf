@@ -1469,7 +1469,8 @@ echo "\
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
 
-It was created by configure version AC_ACVERSION, executed with
+It was created by configure ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
  > [$]0 $ac_configure_args
 " 1>&AC_FD_CC
 
@@ -1876,7 +1877,7 @@ done
 
 # AC_CACHE_LOAD
 # -------------
-define(AC_CACHE_LOAD,
+define([AC_CACHE_LOAD],
 [if test -r "$cache_file"; then
   test "x$cache_file" != "x/dev/null" && echo "loading cache $cache_file"
   dnl Some versions of bash will fail to source /dev/null, so we
@@ -1886,15 +1887,43 @@ else
   echo "creating cache $cache_file"
   >$cache_file
 fi
-])
+])# AC_CACHE_LOAD
+
+
+# _AC_CACHE_DUMP
+# --------------
+# Dump the cache to stdout.  It can be in a pipe (this is a requirement).
+define([_AC_CACHE_DUMP],
+[# The following way of writing the cache mishandles newlines in values,
+# but we know of no workaround that is simple, portable, and efficient.
+# So, don't put newlines in cache variables' values.
+# Ultrix sh set writes to stderr and can't be redirected directly,
+# and sets the high bit in the cache file unless we assign to the vars.
+{
+  (set) 2>&1 |
+    case `(ac_space=' '; set | grep ac_space) 2>&1` in
+    *ac_space=\ *)
+      # `set' does not quote correctly, so add quotes (double-quote substitution
+      # turns \\\\ into \\, and sed turns \\ into \).
+      sed -n \
+    	-e "s/'/'\\\\''/g" \
+    	-e ["s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1='\\2'/p"]
+      ;;
+    *)
+      # `set' quotes correctly as required by POSIX, so do not add quotes.
+      sed -n -e '[s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p]'
+      ;;
+    esac;
+}dnl
+])# _AC_CACHE_DUMP
 
 
 # AC_CACHE_SAVE
 # -------------
 # Save the cache.
 # Allow a site initialization script to override cache values.
-define(AC_CACHE_SAVE,
-[[cat >confcache <<\EOF
+define([AC_CACHE_SAVE],
+[cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
@@ -1910,25 +1939,8 @@ define(AC_CACHE_SAVE,
 # --recheck option to rerun configure.
 #
 EOF
-# The following way of writing the cache mishandles newlines in values,
-# but we know of no workaround that is simple, portable, and efficient.
-# So, don't put newlines in cache variables' values.
-# Ultrix sh set writes to stderr and can't be redirected directly,
-# and sets the high bit in the cache file unless we assign to the vars.
-(set) 2>&1 |
-  case `(ac_space=' '; set | grep ac_space) 2>&1` in
-  *ac_space=\ *)
-    # `set' does not quote correctly, so add quotes (double-quote substitution
-    # turns \\\\ into \\, and sed turns \\ into \).
-    sed -n \
-      -e "s/'/'\\\\''/g" \
-      -e "s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1=\${\\1='\\2'}/p"
-    ;;
-  *)
-    # `set' quotes correctly as required by POSIX, so do not add quotes.
-    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
-    ;;
-  esac >>confcache
+_AC_CACHE_DUMP() |
+  sed -e 's/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
@@ -1937,8 +1949,9 @@ if cmp -s $cache_file confcache; then :; else
     echo "not updating unwritable cache $cache_file"
   fi
 fi
-rm -f confcache
-]])
+rm -f confcache[]dnl
+])# AC_CACHE_SAVE
+
 
 # AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 # ------------------------------------------
@@ -3613,6 +3626,14 @@ ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
 dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
+
+# Save into config.log some informations which might help to debug.
+echo >>config.log
+echo "The cache variables are:" >>config.log
+_AC_CACHE_DUMP | sed -e 's/^/| /' >>config.log
+echo >>config.log
+echo "confdefs.h is:" >>config.log
+cat confdefs.h | sed -e 's/^/| /' >>config.log
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
