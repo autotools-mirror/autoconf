@@ -2095,20 +2095,40 @@ packages in subdirectories.
 @maindex CONFIG_SUBDIRS
 @ovindex subdirs
 Make @code{AC_OUTPUT} run @code{configure} in each subdirectory
-@var{dir} in the given whitespace-separated list.  If a given @var{dir}
-is not found, no error is reported, so a @code{configure} script can
-configure whichever parts of a large source tree are present.  If a
-given @var{dir} contains @file{configure.in} but no @code{configure},
-the Cygnus @code{configure} script found by @code{AC_CONFIG_AUXDIR} is
-used.
+@var{dir} in the given whitespace-separated list.  Each @var{dir} should
+be a literal, i.e., please do not use:
 
-The subdirectory @code{configure} scripts are given the same
-command line options that were given to this @code{configure} script,
-with minor changes if needed (e.g., to adjust a relative path for the
-cache file or source directory).  This macro also sets the output
-variable @code{subdirs} to the list of directories @samp{@var{dir}
-@dots{}}.  @file{Makefile} rules can use this variable to determine
-which subdirectories to recurse into.  This macro may be called multiple
+@example
+if test "$package_foo_enabled" = yes; then
+  $my_subdirs="$my_subdirs foo"
+fi
+AC_CONFIG_SUBDIRS($my_subdirs)
+@end example
+
+@noindent
+because this prevents @samp{./configure --help=recursive} from
+displaying the options of the package @code{foo}.  Rather, you should
+write:
+
+@example
+if test "$package_foo_enabled" = yes then;
+  AC_CONFIG_SUBDIRS(foo)
+fi
+@end example
+
+If a given @var{dir} is not found, no error is reported, so a
+@code{configure} script can configure whichever parts of a large source
+tree are present.  If a given @var{dir} contains @file{configure.in} but
+no @code{configure}, the Cygnus @code{configure} script found by
+@code{AC_CONFIG_AUXDIR} is used.
+
+The subdirectory @code{configure} scripts are given the same command
+line options that were given to this @code{configure} script, with minor
+changes if needed (e.g., to adjust a relative path for the cache file or
+source directory).  This macro also sets the output variable
+@code{subdirs} to the list of directories @samp{@var{dir} @dots{}}.
+@file{Makefile} rules can use this variable to determine which
+subdirectories to recurse into.  This macro may be called multiple
 times.
 @end defmac
 

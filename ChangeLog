@@ -1,5 +1,27 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	AC_CONFIG_SUBDIRS needs two lists: one, ac_subdirs_all, which
+	contains all the possible subdirs for `--help=recursive', and
+	another, `subdirs' which can be built dynamically for launching
+	sub configurations.
+
+	* acgeneral.m4 	(AC_CONFIG_SUBDIRS): Define `subdirs' dynamically.
+	Define `ac_subdirs_all' statically.
+	Warn if the argument is not a literal.
+	(AC_LIST_SUBDIRS): Rename as...
+	(_AC_LIST_SUBDIRS): this.
+	(_AC_INIT_HELP): Loop over `ac_subdirs_all', not `subdirs'.
+	(_AC_OUTPUT_SUBDIRS): Loop over `subdirs', not `AC_LIST_SUBDIRS'.
+	* doc/autoconf.texi (Subdirectories): Adjust.
+
+	* acgeneral.m4: Replace all the `test ! -d foo && bar' with
+	`test -d foo || bar'.
+
+	* Makefile.am (.m4.m4f): Stop hiding what you're doing.
+	Don't check for GNU m4, let it die.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	The Associated Rewriters are even prouder to present...
 		  .
 		  |

@@ -88,11 +88,7 @@ editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' \
 	$(editpl) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
 
 .m4.m4f:
-	@case `$(M4) --help </dev/null 2>&1` in \
-	*reload-state*) echo freezing $*.m4; \
-	  $(M4) -F $*.m4f -I$(srcdir) $(srcdir)/$*.m4 ;; \
-	*) echo Error: Autoconf requires GNU m4 1.4 or later; exit 1 ;; \
-	esac
+	$(M4) -F $*.m4f -I$(srcdir) $(srcdir)/$*.m4
 
 common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
          aclang.m4

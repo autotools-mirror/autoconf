@@ -1383,7 +1383,7 @@ fi
 if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   ac_popdir=`pwd`
-  for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
+  for ac_subdir in : $ac_subdirs_all; do test "x$ac_subdir" = x: && continue
     cd $ac_subdir
     # A "../" for each directory in /$ac_subdir.
     ac_dots=`echo $ac_subdir |
@@ -3483,7 +3483,7 @@ AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_LINKS.])])
-  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_SUBDIRS],
+  AC_CONFIG_IF_MEMBER(AC_Dest, [_AC_LIST_SUBDIRS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_SUBDIRS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_COMMANDS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_COMMANDS.])])
@@ -3719,17 +3719,29 @@ define([AC_LIST_FILES_COMMANDS])
 
 # AC_CONFIG_SUBDIRS(DIR ...)
 # --------------------------
-# FIXME: `subdirs=' should not be here.
-AC_DEFUN(AC_CONFIG_SUBDIRS,
+# We define two variables:
+# - ac_subdirs_all
+#   is built in the `default' section, and should contain *all*
+#   the arguments of AC_CONFIG_SUBDIRS.  It is used for --help=recursive.
+#   It makes no sense for arguments which are sh variables.
+# - subdirs
+#   which is built at runtime, so some of these dirs might not be
+#   included, if for instance the user refused a part of the tree.
+#   This is used in _AC_OUTPUT_SUBDIRS.
+# _AC_LIST_SUBDIRS is used only for _AC_CONFIG_UNIQUE.
+AC_DEFUN([AC_CONFIG_SUBDIRS],
 [_AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-m4_append([AC_LIST_SUBDIRS], [ $1])dnl
-subdirs="AC_LIST_SUBDIRS"
-AC_SUBST(subdirs)dnl
+m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
+AC_VAR_IF_INDIR([$1],
+                [AC_DIAGNOSE(syntax,
+                             [$0: you should use literals])])
+AC_DIVERT([DEFAULTS], [ac_subdirs_all="$ac_subdirs_all $1"])
+AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
 
 # Initialize the list.
-define([AC_LIST_SUBDIRS])
+define([_AC_LIST_SUBDIRS])
 
 
 # autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
@@ -3801,7 +3813,7 @@ AC_OUTPUT_COMMANDS_POST()dnl
 
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
-ifset([AC_LIST_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
+AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 ])# AC_OUTPUT
 
 
@@ -4152,7 +4164,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
     # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
 dnl to be created too).
-    test ! -d "$ac_dir" && mkdir "$ac_dir"
+    test -d "$ac_dir" || mkdir "$ac_dir"
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
     ac_dots=`echo "$ac_dir_suffix" | sed 's%/[[^/]]*%../%g'`
@@ -4431,7 +4443,7 @@ cat >>$CONFIG_STATUS <<\EOF
       # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
 dnl to be created too).
-      test ! -d "$ac_dir" && mkdir "$ac_dir"
+      test -d "$ac_dir" || mkdir "$ac_dir"
     fi
     rm -f $ac_file
     mv $tmp/config.h $ac_file
@@ -4482,7 +4494,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
     # The dest file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
 dnl to be created too).
-    test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
+    test -d "$ac_dest_dir" || mkdir "$ac_dest_dir"
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
     ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[[^/]]*%../%g'`
@@ -4576,19 +4588,17 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [  ac_given_INSTALL=$INSTALL
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
+[  ac_given_INSTALL=$INSTALL
 ])dnl
 
-  for ac_subdir in AC_LIST_SUBDIRS; do
+  for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
-    if test ! -d $srcdir/$ac_subdir; then
-      continue
-    fi
+    test -d $srcdir/$ac_subdir || continue
 
     echo configuring in $ac_subdir
-
     case "$srcdir" in
     .) ;;
     *)
@@ -4629,7 +4639,6 @@ dnl to be created too).
 
     # The recursion is here.
     if test -n "$ac_sub_configure"; then
-
       # Make the cache file name correct relative to the subdirectory.
       case "$cache_file" in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;

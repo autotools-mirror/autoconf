@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.14a			-*- outline -*-
+* Major changes in Autoconf 2.14a                       -*- outline -*-
 
 ** Use of Automake
 All the standard GNU Makefile targets are supported.  The layout has
@@ -39,11 +39,9 @@ equivalent.
 
 ** config.status
 - faster
-  Much faster on most architectures
+  Much faster on most architectures.
 - concurrent executions
   It is safe to use `make -j' with config.status.
-- files to links (AC_CONFIG_LINKS) can be specified via CONFIG_LINKS.
-- commands to run (AC_CONFIG_COMMANDS) can be specified via CONFIG_COMMANDS.
 - human interface improved
   It is possible to invoke
     ./config.status foobar
@@ -64,12 +62,43 @@ equivalent.
 - AC_PACKAGE
   Identify the configure.in's package.
 
+
 ** General changes.
 - Uniform quotation
   Most macros, if not all, now strictly follow the `one quotation
   level' rule.  This results in a more predictable expansion.
 
-** Generic Macros
+
+** Setup Macros
+- AC_ARG_VAR
+  Document and ask for the registration of an envvar.
+
+- AC_CONFIG_COMMANDS
+  To add new actions to config.status.  Should be used instead of
+  AC_OUTPUT_COMMANDS.
+
+- AC_CONFIG_LINKS
+  Replaces AC_LINK_FILES.
+
+- AC_CONFIG_SUBDIRS
+  It now has a dynamic behavior: you should no longer use shell
+  variables as argument.  Instead of
+
+        test "$package_foo_enabled" = yes && $my_subdirs="$my_subdirs foo"
+        AC_CONFIG_SUBDIRS($my_subdirs)
+
+  write
+
+        if test "$package_foo_enabled" = yes; then
+          AC_CONFIG_SUBDIRS(foo)
+        fi
+
+- AC_HELP_STRING
+  To format an Autoconf macro's help string so that it looks pretty
+  when the user executes `configure --help'.
+
+
+** Generic Test Macros
 - AC_CHECK families
   The interface of the AC_CHECK families of macros (decl, header,
   type, member, func) is now uniform.  They support the same set of
@@ -94,19 +123,6 @@ equivalent.
   Check for given members in aggregates (e.g., pw_gecos in struct
   passwd).
 
-- AC_HELP_STRING
-  To format an Autoconf macro's help string so that it looks pretty
-  when the user executes `configure --help'.
-
-- AC_ARG_VAR
-  Document and ask for the registration of an envvar.
-
-- AC_CONFIG_LINKS
-  Replaces AC_LINK_FILES.
-
-- AC_CONFIG_COMMANDS
-  To add new actions to config.status.  Should be used instead of
-  AC_OUTPUT_COMMANDS.
 
 - AC_PROG_CC_STDC
   Checks if the compiler supports ISO C, included when needs special
@@ -118,7 +134,6 @@ equivalent.
 
 
 ** Specific Macros
-
 - AC_PROG_LEX
   Now integrates `AC_DECL_YYTEXT' which is obsoleted.
 
