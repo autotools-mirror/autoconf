@@ -1,5 +1,14 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in: Rewrite in Perl.
+	* configure.ac: Adjust.
+	* lib/Autom4te/General.pm (&up_to_date_p): New.
+	* bin/autom4te.in (&up_to_date_p): Use it.
+	Rename as...
+	(&up_to_date): this.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_case, m4_bmatch, m4_normalize)
 	(m4_list_cmp): Use $0 to reinvoke yourself.
 	(m4_patsubsts): New.

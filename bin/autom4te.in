@@ -942,13 +942,13 @@ EOF
 
 
 # $BOOL
-# up_to_date_p ($REQ)
-# -------------------
+# up_to_date ($REQ)
+# -----------------
 # Are the cache files of $REQ up to date?
 # $REQ is `valid' if it corresponds to the request and exists, which
 # does not mean it is up to date.  It is up to date if, in addition,
 # its files are younger than its dependencies.
-sub up_to_date_p ($)
+sub up_to_date ($)
 {
   my ($req) = @_;
 
@@ -983,20 +983,7 @@ sub up_to_date_p ($)
   push @dep, map { chomp; find_file ($_, @include) } $deps->getlines;
 
   # If $FILE is younger than one of its dependencies, it is outdated.
-  verbose "$file is the youngest cache file";
-  foreach (@dep)
-    {
-      verbose "  dependency: $_";
-      if ($mtime < mtime ($_))
-	{
-	  verbose "cache files are outdated: $_ is more recent";
-	  return 0;
-	}
-    }
-
-  # Well, really, it's fine!
-  verbose "cache files are up to date";
-  return 1;
+  return up_to_date_p ($file, @dep);
 }
 
 
@@ -1028,7 +1015,7 @@ my $req = Request->request ('input' => \@ARGV,
 
 # If $REQ's cache files are not up to date, declare it invalid.
 $req->valid (0)
-  if ! up_to_date_p ($req);
+  if ! up_to_date ($req);
 
 # We now know whether we can trust the Request object.  Say it.
 if ($verbose)

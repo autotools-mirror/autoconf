@@ -30,7 +30,7 @@ use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
 @EXPORT = qw (&debug &find_configure_ac &find_file &getopt &mktmpdir &mtime
-              &uniq &update_file &verbose &xsystem
+              &uniq &update_file &up_to_date_p &verbose &xsystem
 	      $debug $help $me $tmp $verbose $version);
 
 # Variable we share with the main package.  Be sure to have a single
@@ -55,6 +55,12 @@ $verbose = 0;
 use vars qw ($version);
 $version = undef;
 
+
+## ------------ ##
+## Prototypes.  ##
+## ------------ ##
+
+sub verbose (@);
 
 # END
 # ---
@@ -242,17 +248,40 @@ sub mtime ($)
 # Return LIST with no duplicates.
 sub uniq (@)
 {
-   my @res = ();
-   my %seen = ();
-   foreach my $item (@_)
-     {
-       if (! exists $seen{$item})
-	 {
-	   $seen{$item} = 1;
-	   push (@res, $item);
-	 }
-     }
-   return wantarray ? @res : "@res";
+  my @res = ();
+  my %seen = ();
+  foreach my $item (@_)
+    {
+      if (! exists $seen{$item})
+	{
+	  $seen{$item} = 1;
+	  push (@res, $item);
+	}
+    }
+  return wantarray ? @res : "@res";
+}
+
+
+# $BOOLEAN
+# &up_to_date_p ($FILE, @DEPS)
+# ----------------------------
+# Is $FILE more recent than @DEPS?
+sub up_to_date_p ($@)
+{
+  my ($file, @dep) = @_;
+  my $mtime = mtime ($file);
+
+  foreach my $dep (@dep)
+    {
+      if ($mtime < mtime ($dep))
+	{
+	  verbose "up_to_date ($file): outdated: $dep";
+	  return 0;
+	}
+    }
+
+  verbose "up_to_date ($file): up to date";
+  return 1;
 }
 
 
