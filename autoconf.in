@@ -125,6 +125,16 @@ if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
 fi
 
 
+# We test "$dir/autom4te" in case we are in the build tree, in which case
+# the names are not transformed yet.
+for autom4te in "$AUTOM4TE" \
+                "$dir/@autom4te-name@" \
+                "$dir/autom4te" \
+                "@bindir@/@autom4te-name@"; do
+  test -f "$autom4te" && break
+done
+
+
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 test -z "$AC_ACLOCALDIR" &&
@@ -235,23 +245,6 @@ while test $# -gt 0 ; do
   esac
 done
 
-# The warnings are the concatenation of 1. application's defaults,
-# 2. $WARNINGS, $3 command line options, in that order.
-# Set them in the order expected by the M4 macros: the converse.
-alphabet='abcdefghijklmnopqrstuvwxyz'
-ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-NUMBERS='0123456789'
-WORDCHAR=_$alphabet$ALPHABET$NUMBERS
-
-m4_warnings=
-for warning in `IFS=,; echo syntax $WARNINGS $warnings |
-                         tr $ALPHABET $alphabet`
-do
-  test -n $warning || continue
-  m4_warnings="$warning"`test -n "$m4_warnings" && echo ",$m4_warnings"`
-done
-
-
 # Trap on 0 to stop playing with `rm'.
 $debug ||
 {
@@ -281,6 +274,16 @@ m4_common="-I $autoconf_dir -I $localdir -Dm4_tmpdir=$tmp"
 m4_prefiles="                $autoconf_dir/autoconf.m4  $acsite_m4 $aclocal_m4"
 m4f_prefiles="--reload-state=$autoconf_dir/autoconf.m4f $acsite_m4 $aclocal_m4"
 run_m4="$M4 $m4_common"
+
+# Running autom4te.
+run_autom4te="$autom4te "\
+`$verbose "--verbose "`\
+`$debug && echo "--debug "`\
+"--include $autoconf_dir --include $localdir "\
+"--warning syntax,$warnings "\
+"autoconf.m4"`$initialization || echo f`" "\
+"$acsite_m4 "\
+"$aclocal_m4 "
 
 # Find the input file.
 case $# in
@@ -316,14 +319,6 @@ elif test ! -r "$infile"; then
   (exit 1); exit 1
 fi
 
-# Output is produced into FD 4.  Prepare it.
-case $outfile in
- -)  # Output to stdout
-  exec 4>&1 ;;
- * )
-  exec 4>$outfile;;
-esac
-
 # Initializations are performed.  Proceed to the main task.
 case $task in
 
@@ -334,123 +329,14 @@ case $task in
   # M4 expansion.
   : >$tmp/forbidden.rx
   : >$tmp/allowed.rx
-  $verbose "$me: running $run_m4 -Dm4_warnings=$m4_warnings $m4f_prefiles $infile" >&2
-  $run_m4 -Dm4_warnings=$m4_warnings $m4f_prefiles $infile >$tmp/configure ||
+  $verbose "$me: running $run_autom4te $infile --output $outfile" >&2
+  $run_autom4te $infile --output $outfile ||
     { (exit 1); exit 1; }
 
   if test "x$outfile" != x-; then
     chmod +x $outfile
   fi
 
-  # Put the real line numbers into configure to make config.log more
-  # helpful.  Because quoting can sometimes get really painful in m4,
-  # there are special @tokens@ to substitute.
-  sed 's/^    //' >"$tmp/finalize.awk" <<EOF
-    # Load the list of tokens which escape the forbidden patterns.
-    BEGIN {
-      # Be sure the read GAWK documentation to understand the parens
-      # around \`tmp "/forbidden.rx"'.
-      while ((getline pattern < (tmp "/forbidden.rx")) > 0)
-        forbidden = (forbidden ? forbidden "|" : "") pattern
-      close (tmp "/forbidden.rx")
-      if (verbose)
-        errprint("$me: forbidden: " forbidden)
-
-      while ((getline pattern < (tmp "/allowed.rx")) > 0)
-        allowed = (allowed ? allowed "|" : "") pattern
-      if (!allowed)
-        allowed = "^$"
-      close (tmp "/allowed.rx")
-      if (verbose)
-        errprint("$me: allowed: " allowed)
-    }
-
-    function errprint (message)
-    {
-      # BAD! the pipe to 'cat >&2' doesn't work for DJGPP.
-      #  print message | "cat >&2"
-      # Use normal redirection instead:
-      print message > "$tmp/finalize.err"
-    }
-
-    function undefined (file, line, macro)
-    {
-      errprint(file ":" line ": error: possibly undefined macro: " macro)
-    }
-
-    # Body.
-    {
-      sub (/[ \t]*$/, "")
-      if (\$0 == "")
-        {
-          if (!duplicate)
-            {
-               oline++
-               print
-            }
-          duplicate = 1
-          next
-        }
-      duplicate = 0
-      oline++
-      if (\$0 ~ /__oline__/)
-        while (sub (/__oline__/, oline))
-          continue
-      while (sub (/@<:@/, "["))
-        continue
-      while (sub (/@:>@/, "]"))
-        continue
-      while (sub (/@S\|@/, "$"))
-        continue
-      while (sub (/@%:@/, "#"))
-        continue
-
-      print
-
-      # Dubious feature: we tolerate macro names when commented.
-      sub (/#.*/, "")
-
-      # Get the tokens.
-      split (\$0, tokens, /[^$WORDCHAR]*/)
-
-      for (token in tokens)
-        if (match (tokens[token], forbidden) &&
-            !match (tokens[token], allowed))
-          {
-            macros [tokens [token]] = oline
-            some_macros_were_not_expanded = 1
-          }
-    }
-
-    # If there are some macros which are left unexpanded in the output,
-    # try to find the input which is responsible.  Otherwise, try to help.
-    END {
-      if (some_macros_were_not_expanded)
-        {
-          line = 0
-          while (getline < "$infile")
-            {
-              line++
-              for (macro in macros)
-                if (index (\$0, macro))
-                  {
-                    delete macros [macro]
-                    undefined("$infile", line, macro)
-                  }
-            }
-          close ("$infile")
-          for (macro in macros)
-            undefined("$outfile", macros [macro], macro)
-          exit 1
-        }
-    }
-EOF
-    $AWK -v tmp="$tmp" \
-         `$verbose "-v verbose=1"` \
-         -f "$tmp/finalize.awk" <$tmp/configure >&4 ||
-      { test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
-        (exit 1); exit 1; }
-    test -f "$tmp/finalize.err" && cat "$tmp/finalize.err" >&2
   ;; # End of the task script.
 
 
@@ -755,6 +641,14 @@ EOF
       echo "$me: tracing failed" >&2
       (exit 1); exit 1
     }
+
+  # Output is produced into FD 4.  Prepare it.
+  case $outfile in
+   -)  # Output to stdout
+    exec 4>&1 ;;
+   * )
+    exec 4>$outfile;;
+  esac
 
   $verbose "$me: running $M4 $tmp/trace.m4" >&2
   sed -f $tmp/trace2m4.sed $tmp/traces |

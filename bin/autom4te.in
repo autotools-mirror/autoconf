@@ -47,6 +47,7 @@ use Autoconf::Struct;
 use Carp;
 use Getopt::Long;
 use IO::File;
+use File::Spec;
 use strict;
 
 # List of requests.
@@ -249,7 +250,11 @@ my $debug = 0;
 my $output = '-';
 my @warning;
 
+# M4 include path.
 my @include;
+
+# 0 for EXIT_SUCCESS.
+my $exit_status = 0;
 
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
@@ -341,8 +346,37 @@ sub xsystem ($)
   (system $command) == 0
     or die ("$me: "
 	    . (split (' ', $command))[0]
-	    . " failed with exit status: $?\n");
+	    . " failed with exit status: "
+	    . ($? >> 8)
+	    . "\n");
 }
+
+
+# $FILENAME
+# find_file ($FILENAME)
+# ---------------------
+# We match exactly the behavior of GNU m4: first look in the current
+# directory (which includes the case of absolute file names), and, if
+# the file is not absolute, just fail.  Otherwise, look in the path.
+sub find_file ($)
+{
+  my ($filename) = @_;
+
+  return File::Spec->canonpath ($filename)
+    if -f $filename;
+
+  die "$me: no such for or directory: $filename\n"
+    if File::Spec->file_name_is_absolute ($filename);
+
+  foreach my $path (@include)
+    {
+      return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
+	if -f File::Spec->catfile ($path, $filename)
+    }
+
+  die "$me: programming error";
+}
+
 
 # print_usage ()
 # --------------
@@ -423,7 +457,7 @@ sub parse_args ()
      "v|verbose"    => \$verbose,
      "d|debug"      => \$debug,
      "o|output=s"   => \$output,
-     "w|warnings=s" => \@warning,
+     "W|warnings=s" => \@warning,
 
      # Library directories:
      "I|include=s" => \@include,
@@ -448,16 +482,24 @@ sub parse_args ()
   die "$me: too few arguments
 Try `$me --help' for more information.\n"
     unless @ARGV;
+
+  # We don't want to depend upon m4's --include to find the top level
+  # files.  Try to get a canonical name, as it's a key for caching.
+  for (my $i = 0; $i < $#ARGV; ++$i)
+    {
+      $ARGV[$i] = find_file ($ARGV[$i]);
+    }
 }
 
 
 # handle_m4 ($REQ, @TRACE)
 # ------------------------
 # Run m4 on the input files, and save the traces on the @TRACE macros.
-sub handle_m4 ($%)
+sub handle_m4 ($@)
 {
   my ($req, @trace) = @_;
 
+  # Find the files.  We don't want to depend upon m4's --include.
   # *.m4f files have to be reloaded.
   my $files;
   foreach (@ARGV)
@@ -468,19 +510,33 @@ sub handle_m4 ($%)
       $files .= "$_";
     }
 
+  # The warnings are the concatenation of 1. application's defaults,
+  # 2. $WARNINGS, $3 command line options, in that order.
+  # Set them in the order expected by the M4 macros: the converse.
+  my $m4_warnings =
+    lc join (',', reverse (split (',', ($ENV{'WARNINGS'} || '')),
+			   map { split /,/ } @warning));
+
   # GNU m4 appends when using --error-output.
   unlink ("$me.cache/" . $req->cache);
 
   # Run m4.
-  xsystem ("$m4"
-	   . " --define m4_tmpdir=$tmp"
-	   . " --define m4_warnings=" # FIXME: Pass the warnings.
-	   . ' --debug=aflq'
-	   . " --error-output=$me.cache/" . $req->cache
-	   . join (' --trace=',   '', @trace)
-	   . join (' --include=', '', @include)
-	   . $files
-	   . " >$tmp/output");
+  my $command = ("$m4"
+		 . " --define m4_tmpdir=$tmp"
+		 . " --define m4_warnings=$m4_warnings"
+		 . ' --debug=aflq'
+		 . " --error-output=$me.cache/" . $req->cache
+		 . join (' --trace=',   '', @trace)
+		 . join (' --include=', '', @include)
+		 . $files
+		 . " >$tmp/output");
+  verbose "running: $command";
+  system $command;
+  if ($?)
+    {
+      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
+      exit $? >> 8;
+    }
 }
 
 
@@ -541,33 +597,48 @@ sub handle_output ($)
 
       print $out "$_\n";
 
-      foreach (split ('\W+'))
+      # Don't complain in comments.  Well, until we have something
+      # better, don't consider `#include' etc. are comments.
+      s/\#.*//
+	unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
+      foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $oline
 	    if /$forbidden/ && !/$allowed/;
 	}
     }
 
-  if (%prohibited)
-    {
-      my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
-      my $in = new IO::File ($ARGV[$#ARGV])
-        or die "$me: cannot open $ARGV[$#ARGV]: $!\n";
+  # If no forbidden words, we're done.
+  return
+    if ! %prohibited;
 
-      while ($_ = $in->getline)
-        {
-	  if (/$prohibited/)
-	    {
-	      warn "$ARGV[$#ARGV]: $.: undefined macro: $1\n"
-		if exists $prohibited{$1};
-	      delete $prohibited{$1};
-	    }
-	}
-      foreach (keys %prohibited)
+  # Locate the forbidden words in the last source file.
+  # This is unsatisfying but...
+  my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
+  my $file = new IO::File ($ARGV[$#ARGV])
+    or die "$me: cannot open $ARGV[$#ARGV]: $!\n";
+  $exit_status = 1;
+
+  while ($_ = $file->getline)
+    {
+      # Don't complain in comments.  Well, until we have something
+      # better, don't consider `#include' etc. are comments.
+      s/\#.*//
+	unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
+
+      # Complain once per word, but possibly several times per line.
+      while (/$prohibited/)
 	{
-	  warn "$output: $prohibited{$_}: undefined macro: $_\n";
+	  warn "$ARGV[$#ARGV]:$.: error: possibly undefined macro: $1\n";
+	  delete $prohibited{$1};
+	  # If we're done, exit.
+	  return
+	    if ! %prohibited;
+	  $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
 	}
     }
+  warn "$output:$prohibited{$_}: error: possibly undefined macro: $_\n"
+    foreach (keys %prohibited);
 }
 
 
@@ -607,6 +678,7 @@ sub trace_requests
 sub trace_format_to_m4 ($)
 {
   my ($format) = @_;
+  my ($underscore) = $_;
   my %escape = (# File name.
 		'f' => '$1',
 		# Line number.
@@ -663,6 +735,7 @@ sub trace_format_to_m4 ($)
         }
     }
 
+  $_ = $underscore;
   return '[[' . $res . ']]';
 }
 
@@ -721,7 +794,7 @@ sub handle_traces ($$%)
 	}
     }
 
-  verbose "formatting traces for `$output': ", join (', ', keys %trace);
+  verbose "formatting traces for `$output': ", join (', ', sort keys %trace);
 
   # Processing the traces.
   my $trace_m4 = new IO::File (">$tmp/traces.m4")
@@ -795,7 +868,7 @@ EOF
    "## -------------------------------------- ##\n",
    "\n";
   print $trace_m4 "at_define([AT_$_], [at_dnl])\n"
-    foreach (keys %{$req->macro});
+    foreach (sort keys %{$req->macro});
   print $trace_m4 "\n";
 
   # Implement traces for current requests (%TRACE).
@@ -804,10 +877,13 @@ EOF
     "## Trace processing macros.  ##\n",
     "## ------------------------- ##\n",
     "\n";
-  foreach my $key (keys %trace)
+  foreach (sort keys %trace)
     {
-      print $trace_m4 "at_define([AT_$key],\n";
-      print $trace_m4 trace_format_to_m4 ($trace{$key}) . ")\n\n";
+      # Trace request can be embed \n.
+      (my $comment = "Trace $_:$trace{$_}") =~ s/^/\# /;
+      print $trace_m4 "$comment\n";
+      print $trace_m4 "at_define([AT_$_],\n";
+      print $trace_m4 trace_format_to_m4 ($trace{$_}) . ")\n\n";
     }
   print $trace_m4 "\n";
 
@@ -835,7 +911,6 @@ EOF
       # Single line traces, as the example above.
       s{^m4trace:(.+):(\d+): -(\d+)- (.*)$}
        {AT_$4([$1], [$2], [$3], [$4]};
-
       print $trace_m4 "$_";
     }
   $trace_m4->close;
@@ -880,18 +955,15 @@ sub up_to_date_p ($$)
 
   # Files may include others.  We can use traces since we just checked
   # if they are available.
-  handle_traces ($req, "$tmp/dependencies", ('include' => '$1'));
+  # If $FILE is younger than one of its dependencies, it is outdated.
+  handle_traces ($req, "$tmp/dependencies",('include' => '$1'));
+  my $mtime = (stat ($file))[9];
   my $deps = new IO::File ("$tmp/dependencies");
   while ($_ = $deps->getline)
     {
       chop;
-      push @dep, $_;
-    }
-
-  # If $FILE is younger than one of its dependencies, it is outdated.
-  my $mtime = (stat ($file))[9];
-  foreach (@dep)
-    {
+      $_ = find_file ($_);
+      verbose "$file depends on $_";
       if ($mtime < (stat ($_))[9])
 	{
 	  verbose "$file depends on $_ which is more recent";
@@ -965,4 +1037,4 @@ $req->valid (1);
 
 Request->save ("$me.cache/requests");
 
-exit 0;
+exit $exit_status;

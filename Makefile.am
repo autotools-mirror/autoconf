@@ -122,6 +122,7 @@ edit = sed \
 	-e 's,@prefix\@,$(prefix),g' \
 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
+	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
 	-e 's,@M4\@,$(M4),g' \
 	-e 's,@AWK\@,$(AWK),g' \
 	-e 's,@VERSION\@,$(VERSION),g' \

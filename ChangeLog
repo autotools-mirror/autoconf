@@ -1,5 +1,23 @@
 2001-07-24  Akim Demaille  <akim@epita.fr>
 
+	Let autoconf use autom4te to create configure.
+
+	* autoconf.in ($automate): New var.
+	(task script): Use autom4te.
+	* autom4te.in (File::Spec): Use it.
+	(&find_file): New.
+	(&parse_args): --warning is -W, not -w.
+	Find the top level files.
+	(&handle_m4): Pass the warnings flags.
+	Don't report verbosely m4's failures, unless requested.
+	(&handle_output): Don't complain for forbidden tokens in comments.
+	Be sure to report all the forbidden tokens within a single line.
+	(&trace_format_to_m4): Preserve `$_'.
+	(&handle_traces): Sort the output macros.
+	(&up_to_date_p): Find the files before trying to get its time stamp.
+
+2001-07-24  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am: Ship, build and install Autom4te.
 	(SUBDIRS): Add lib.
 	* lib/Autoconf/Struct.pm: New, from Automake 1.5.
