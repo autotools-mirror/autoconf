@@ -288,6 +288,7 @@ if test $ac_cv_func_chown_works = yes; then
   AC_DEFINE(HAVE_CHOWN, 1,
             [Define if your system has a working `chown' function.])
 fi
+rm -f conftestchown
 ])# AC_FUNC_CHOWN
 
 
@@ -674,6 +675,7 @@ else
   # have an lstat function.
   ac_cv_func_lstat_dereferences_slashed_symlink=no
 fi
+rm -f conftest.sym conftest.file
 ])
 
 test $ac_cv_func_lstat_dereferences_slashed_symlink = yes &&
@@ -1138,6 +1140,7 @@ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ($[2]),
                    [Define to the type of args 2, 3 and 4 for `select'.])
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($[3]),
                    [Define to the type of arg 5 for `select'.])
+rm -f conftest*
 ])# AC_FUNC_SELECT_ARGTYPES
 
 
@@ -1399,6 +1402,7 @@ if test $ac_cv_func_utime_null = yes; then
             [Define if `utime(file, NULL)' sets file's timestamp to the
              present.])
 fi
+rm -f conftestdata
 ])# AC_FUNC_UTIME_NULL
 
 

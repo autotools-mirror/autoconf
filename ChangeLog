@@ -1,3 +1,13 @@
+2000-10-21  Pavel Roskin  <proski@gnu.org>
+
+	* acfunctions.m4 (AC_FUNC_CHOWN): Remove temporary files on exit.
+	(AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK): Likewise.
+	(AC_FUNC_SELECT_ARGTYPES): Likewise.
+	(AC_FUNC_UTIME_NULL): Likewise.
+	* acgeneral.m4 (_AC_COMPUTE_INT): Likewise.
+	* aclang.m4 (_AC_F77_NAME_MANGLING): Likewise.
+	* acspecific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE): Likewise.
+
 2000-10-20  Pavel Roskin  <proski@gnu.org>
 
 	* tests/tools.m4 (autoupdating AC_LINK FILES): Clean up "src1"

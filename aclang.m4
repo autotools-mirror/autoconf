@@ -1671,7 +1671,7 @@ AC_COMPILE_IFELSE(
 
   LIBS=$ac_save_LIBS
   AC_LANG_POP()dnl
-  rm -f cf77_test*])
+  rm -f cf77_test* conftest*])
 AC_LANG_POP()dnl
 ])
 ])# _AC_F77_NAME_MANGLING

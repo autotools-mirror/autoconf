@@ -3796,7 +3796,8 @@ define([_AC_COMPUTE_INT],
   _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3])
 else
  _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
-fi[]dnl
+fi
+rm -f conftestval[]dnl
 ])# _AC_COMPUTE_INT
 
 
