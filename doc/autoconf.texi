@@ -3583,10 +3583,10 @@ library archive files.
 
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{CHECK_LIB}
-Depending on the current language(@pxref{Language Choice}), try to
-ensure that the C, C++, or Fortran function @var{function} is
-available by checking whether a test program can be linked with the
-library @var{library} to get the function.  @var{library} is the base
+Test whether the library @var{library} is available by trying to link
+a test program that calls function @var{function} with the library.
+@var{function} should be a function provided by the library.
+Use the base
 name of the library; e.g., to check for @option{-lmp}, use @samp{mp} as
 the @var{library} argument.
 
@@ -3610,6 +3610,14 @@ that @var{library} is present, because linking the test program will
 always fail with unresolved symbols.  The @var{other-libraries} argument
 should be limited to cases where it is desirable to test for one library
 in the presence of another that is not already in @code{LIBS}.
+
+@code{AC_CHECK_LIB} requires some care in usage, and should be avoided
+in some common cases.  Many standard functions like @code{gethostbyname}
+appear the standard C library on some hosts, and in special libraries
+like @code{nsl} on other hosts.  On some hosts the special libraries
+contain variant implementations that you may not want to use.  These
+days it is normally better to use @code{AC_SEARCH_LIBS(gethostbyname,
+nsl)} instead of @code{AC_CHECK_LIB(nsl, gethostbyname)}.
 @end defmac
 
 
