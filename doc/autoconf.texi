@@ -7475,7 +7475,7 @@ the language-specific files before any third-party macros.
 As an example, if Autoconf is installed in its default location,
 @file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is
 strictly equivalent to running @samp{autom4te --prepend-include
-/usr/local/share/autoconf m4sugar/m4sugar.m4f --warning syntax foo.m4}.
+/usr/local/share/autoconf m4sugar/m4sugar.m4f --warnings syntax foo.m4}.
 Recursive expansion applies: running @samp{autom4te -l m4sh foo.m4}
 is the same as @samp{autom4te --language M4sugar m4sugar/m4sh.m4f
 foo.m4}, i.e., @samp{autom4te --prepend-include /usr/local/share/autoconf
