@@ -1,5 +1,5 @@
-# acfunctions -- autoscan's mapping from functions to Autoconf macros
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
+# functions -- autoscan's mapping from functions to Autoconf macros
+# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -59,6 +59,7 @@ stat		AC_FUNC_STAT
 strcoll		AC_FUNC_STRCOLL
 strerror_r	AC_FUNC_STRERROR_R
 strftime	AC_FUNC_STRFTIME
+strnlen		AC_FUNC_STRNLEN
 strtod		AC_FUNC_STRTOD
 utime		AC_FUNC_UTIME_NULL
 utime		AC_CHECK_FUNCS
@@ -150,7 +151,6 @@ strdup
 strerror
 strncasecmp
 strndup
-strnlen
 strpbrk
 strrchr
 strspn

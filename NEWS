@@ -97,6 +97,9 @@
 
 - AC_FUNC_STRTOD substitutes POW_LIB.
 
+- AC_FUNC_STRNLEN
+  New.
+
 
 * Major changes in Autoconf 2.52
 ** Documentation

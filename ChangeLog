@@ -1,3 +1,12 @@
+2002-01-11  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_STRNLEN): New, from Jim
+	Meyering.
+	* doc/autoconf.texi (Function Portability): Document the strnlen
+	limitation.
+	(Particular Functions): Document AC_FUNC_STRNLEN.
+	* lib/autoscan/functions: Adjust.
+
 2002-01-06  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Don't create
@@ -7,7 +16,7 @@
 	* tests/Makefile.am (package.m4): New.
 	EXTRA_DIST it since its a source.
 
-	
+
 2002-01-06  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Move the AC_SUBST
@@ -21,7 +30,7 @@
 	* tests/tools.at (autoheader): Adjust.
 	* tests/atspecific.m4 (AT_CHECK_DEFINES): Adjust.
 
-	
+
 2002-01-06  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoscan.in (scan_file): Use `&used'.
