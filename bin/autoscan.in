@@ -22,14 +22,12 @@
 
 BEGIN
 {
-  my $prefix = "@prefix@";
   my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
   unshift @INC, "$perllibdir";
 }
 
 use File::Basename;
 use File::Find;
-use Getopt::Long;
 use IO::File;
 use Autom4te::General;
 use strict;
@@ -71,21 +69,13 @@ my $log = new IO::File ">$me.log"
   or die "$me: cannot open $me.log: $!\n";
 
 # Autoconf and lib files.
-my $autoconf = $ENV{'AUTOCONF'} || '@autoconf_name@';
-my $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
+my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my $autoconf = "$autom4te --language=autoconf";
+my @include = ('@datadir@');
 
-
-## ------------------------ ##
-## Command line interface.  ##
-## ------------------------ ##
-
-
-# print_usage ()
-# --------------
-# Display usage (--help).
-sub print_usage ()
-{
-  print "Usage: $0 [OPTION] ... [SRCDIR]
+# $help
+# -----
+$help = "Usage: $0 [OPTION] ... [SRCDIR]
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
@@ -93,55 +83,44 @@ common portability problems, check for incompleteness of
 `configure.ac', and create a file `$configure_scan' which is a
 preliminary `configure.ac' for that package.
 
-  -h, --help            print this help, then exit
-  -V, --version         print version number, then exit
-  -v, --verbose         verbosely report processing
-
-Library directories:
-  -A, --autoconf-dir=ACDIR  Autoconf's files location (rarely needed)
-  -l, --localdir=DIR        location of `aclocal.m4' and `acconfig.h'
+  -h, --help          print this help, then exit
+  -V, --version       print version number, then exit
+  -v, --verbose       verbosely report processing
+  -d, --debug         don't remove temporary files
+  -I, --include=DIR   look for input files in DIR.  Accumulates
 
 Report bugs to <bug-autoconf\@gnu.org>.\n";
-  exit 0;
-}
 
-
-# print_version ()
-# ----------------
-# Display version (--version).
-sub print_version
-{
-  print "autoscan (@PACKAGE_NAME@) @VERSION@
+# $version
+# --------
+$version = "autoscan (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie.
 
 Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
-  exit 0;
-}
 
+
+
+
+## ------------------------ ##
+## Command line interface.  ##
+## ------------------------ ##
 
 # parse_args ()
 # -------------
 # Process any command line arguments.
 sub parse_args ()
 {
-  my $srcdir;
-  Getopt::Long::config ("bundling");
-  Getopt::Long::GetOptions ("A|autoconf-dir|m|macrodir=s" => \$datadir,
-			    "h|help" => \&print_usage,
-			    "V|version" => \&print_version,
-			    "v|verbose" => \$verbose)
-    or exit 1;
+  getopt ("I|include|A|autoconf-dir|m|macrodir=s" => \@include);
 
   die "$me: too many arguments
 Try `$me --help' for more information.\n"
-    if (@ARGV > 1);
-  ($srcdir) = @ARGV;
-  $srcdir = "."
-    if !defined $srcdir;
+    if @ARGV > 1;
 
-  print "srcdir=$srcdir\n" if $verbose;
+  my $srcdir = $ARGV[0] || ".";
+
+  verbose "srcdir = $srcdir";
   chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
 }
 
@@ -170,7 +149,7 @@ sub init_tables ()
   my $tables_are_consistent = 1;
   foreach my $kind (@kinds)
     {
-      my $file = "$datadir/autoscan/$kind";
+      my $file = find_file ("autoscan/$kind", @include);
       my $table = new IO::File $file
 	or die "$me: cannot open $file: $!\n";
       while ($_ = $table->getline)
@@ -189,7 +168,7 @@ sub init_tables ()
 	  # consistency checks.
 	  if (!defined $2 && exists $macro{$kind}{$word})
 	    {
-	      warn ("$datadir/autoscan/$kind:$.: "
+	      warn ("$file:$.: "
 		    . "ignoring implicit call to the generic macro for $word\n");
 	      $tables_are_consistent = 0;
 	    }
@@ -213,8 +192,8 @@ sub init_tables ()
 ## ----------------------- ##
 
 
-# scan_c_file(FILENAME)
-# ---------------------
+# scan_c_file($FILENAME)
+# ----------------------
 sub scan_c_file ($)
 {
   my ($filename) = @_;
@@ -277,8 +256,8 @@ sub scan_c_file ($)
 }
 
 
-# scan_makefile(MAKEFILE-NAME)
-# ----------------------------
+# scan_makefile($MAKEFILE-NAME)
+# -----------------------------
 sub scan_makefile ($)
 {
   my ($filename) = @_;
@@ -317,8 +296,8 @@ sub scan_makefile ($)
 }
 
 
-# scan_sh_file(SHELL-SCRIPT-NAME)
-# -------------------------------
+# scan_sh_file($SHELL-SCRIPT-NAME)
+# --------------------------------
 sub scan_sh_file ($)
 {
   my ($filename) = @_;
@@ -477,8 +456,8 @@ sub output_libraries ($)
 }
 
 
-# output (CONFIGURE_SCAN)
-# -----------------------
+# output ($CONFIGURE_SCAN)
+# ------------------------
 # Print a proto configure.ac.
 sub output ($)
 {
@@ -524,8 +503,8 @@ sub output ($)
 ## --------------------------------------- ##
 
 
-# check_configure_ac (CONFIGURE_AC)
-# ---------------------------------
+# check_configure_ac ($CONFIGURE_AC)
+# ----------------------------------
 # Use autoconf to check if all the suggested macros are included
 # in CONFIGURE_AC.
 sub check_configure_ac ($)
@@ -539,9 +518,9 @@ sub check_configure_ac ($)
     join (' -t ', '',
 	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
 
-  verbose "running: $autoconf -A $datadir $trace_option $configure_ac";
+  verbose "running: $autoconf $trace_option $configure_ac";
   my $traces =
-    new IO::File "$autoconf -A $datadir $trace_option $configure_ac|"
+    new IO::File "$autoconf $trace_option $configure_ac|"
       or die "$me: cannot open traces reading pipe: $!\n";
 
   while ($_ = $traces->getline)
@@ -592,6 +571,10 @@ sub check_configure_ac ($)
 ## -------------- ##
 
 parse_args;
+$autoconf .= " --debug" if $debug;
+$autoconf .= " --verbose" if $verbose;
+$autoconf .= join (' --include=', '', @include);
+
 my $configure_ac = find_configure_ac;
 init_tables;
 scan_files;

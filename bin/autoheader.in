@@ -104,16 +104,10 @@ END
 sub parse_args ()
 {
   my $srcdir;
-  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
-  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
-  my $stdin = grep /^-$/, @ARGV;
-  @ARGV = grep !/^-$/, @ARGV;
+
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
 	  'f|force'   => \$force,
 	  'W|warning' => \@warning);
-
-  push @ARGV, '-'
-    if $stdin;
 
   if (! @ARGV)
     {

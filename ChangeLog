@@ -1,5 +1,14 @@
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (&getopt): Work around the `-' Getopt bug.
+	* bin/autoheader.in, bin/autoupdate.in (&parse_args): Adjust.
+
+	* bin/autoscan.in: Use `getopt' and `find_files' etc.
+	Add -I, --include support.
+	* doc/autoconf.texi (autoscan Invocation): Adjust.
+
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
 	CVS GNU M4 doesn't like `undefine(undefined)'.
 
 	* bin/autoupdate.in (&handle_m4_macros, &handle_autoconf_macros):

@@ -42,7 +42,6 @@ use Data::Dumper;
 use Autom4te::General;
 use Autom4te::Struct;
 use Carp;
-use Getopt::Long;
 use IO::File;
 use strict;
 

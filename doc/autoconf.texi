@@ -1061,15 +1061,10 @@ Print the version number of Autoconf and exit.
 Print the names of the files it examines and the potentially interesting
 symbols it finds in them.  This output can be voluminous.
 
-@item --autoconf-dir=@var{dir}
-@itemx -A @var{dir}
-@evindex AC_MACRODIR
-Override the location where the installed Autoconf data files are looked
-for.  You can also set the @code{AC_MACRODIR} environment variable to a
-directory; this option overrides the environment variable.
-
-This option is rarely needed and dangerous; it is only used when one
-plays with different versions of Autoconf simultaneously.
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations
+accumulate.  Latest directories are looking in first.
 @end table
 
 @node ifnames Invocation

@@ -33,6 +33,7 @@ use strict;
 
 # Lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my $autoconf = "$autom4te --language=autoconf";
 # We need to find m4sugar.
 my @include = ('@datadir@');
 my $force = 0;
@@ -42,35 +43,32 @@ my $m4 = $ENV{"M4"} || "@M4@";
 
 # $HELP
 # -----
-$help = <<"END";
-Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
+$help = "Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
 
-Update the TEMPLATE-FILE... if given, or \`configure.ac\' if present,
-or else \`configure.in\', to the syntax of the current version of
+Update the TEMPLATE-FILE... if given, or `configure.ac' if present,
+or else `configure.in', to the syntax of the current version of
 Autoconf.  The original files are backed up.
 
 Operation modes:
   -h, --help           print this help, then exit
   -V, --version        print version number, then exit
   -v, --verbose        verbosely report processing
-  -d, --debug          don\'t remove temporary files
+  -d, --debug          don't remove temporary files
   -I, --include=DIR    look for input files in DIR.  Accumulates
   -f, --force          consider all the files are obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
-END
+";
 
 # $VERSION
 # --------
-$version = <<"END";
-autoupdate (@PACKAGE_NAME@) @VERSION@
+$version = "autoupdate (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Akim Demaille.
 
 Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-END
-
+";
 
 ## ---------- ##
 ## Routines.  ##
@@ -83,15 +81,9 @@ END
 sub parse_args ()
 {
   my $srcdir;
-  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
-  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
-  my $update_stdin = grep /^-$/, @ARGV;
-  @ARGV = grep !/^-$/, @ARGV;
+
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
 	  'f|force' => \$force);
-
-  push @ARGV, '-'
-    if $update_stdin;
 
   if (! @ARGV)
     {
@@ -109,8 +101,8 @@ sub parse_args ()
 
 my @m4_builtins;
 
-# HANDLE_M4_SYMBOLS ()
-# --------------------
+# &handle_m4_symbols ()
+# ---------------------
 # Create the following $tmp files:
 # m4.m4 -- enable the m4 builtins.
 # unm4.m4 -- disable the m4 builtins.
@@ -243,11 +235,10 @@ sub handle_autoconf_macros ()
 ## -------------- ##
 
 parse_args;
-my $autoconf = "$autom4te --language=autoconf ";
-$autoconf .= join (' --include=', '', @include);
 $autoconf .= " --debug" if $debug;
 $autoconf .= " --force" if $force;
 $autoconf .= " --verbose" if $verbose;
+$autoconf .= join (' --include=', '', @include);
 
 mktmpdir ('au');
 handle_m4_macros;

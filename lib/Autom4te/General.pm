@@ -153,13 +153,19 @@ sub find_file ($@)
 }
 
 
-# getopt (%OPTIONS)
-# -----------------
+# getopt (%OPTION)
+# ----------------
+# Handle the %OPTION, plus all the common options.
+# Work around Getopt bugs wrt `-'.
 sub getopt (%)
 {
   my (%option) = @_;
   use Getopt::Long;
 
+  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
+  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
+  my $stdin = grep /^-$/, @ARGV;
+  @ARGV = grep !/^-$/, @ARGV;
   %option = (%option,
 	     "h|help"     => sub { print $help; exit 0 },
              "V|version"  => sub { print $version; exit 0 },
@@ -170,6 +176,9 @@ sub getopt (%)
   Getopt::Long::Configure ("bundling");
   GetOptions (%option)
     or exit 1;
+
+    push @ARGV, '-'
+    if $stdin;
 }
 
 
