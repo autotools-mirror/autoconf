@@ -312,7 +312,7 @@ while read dir; do
 
   # uses_aclocal -- is this package using aclocal?
   uses_aclocal=false
-  if grep 'generated .* by aclocal' $localddir/aclocal.m4 >/dev/null 2>&1 ||
+  if grep 'generated .* by aclocal' $localdir/aclocal.m4 >/dev/null 2>&1 ||
      test -f "$localdir/acinclude.m4"; then
      uses_aclocal=:
   fi

@@ -1,3 +1,8 @@
+2000-12-25  Pavel Roskin  <proski@gnu.org>
+
+	* autoreconf.sh: s/localddir/localdir/.
+	Reported by Motoyuki Kasahara.
+
 2000-12-23  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh: Promote `configure.ac' over `configure.in'.
