@@ -1,5 +1,11 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_FILES): Simplify some excess in
+	changequote.
+	(AC_OUTPUT_SUBDIRS): Likewise.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* autoupdate.sh: Don't dump --help on --wrong-option.
 	* autoconf.sh: Reformating, and use >&2 instead of 1>&2.
 	* autoreconf.sh: Likewise.

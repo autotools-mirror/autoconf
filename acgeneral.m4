@@ -3544,13 +3544,11 @@ changequote([, ])dnl
   esac
 
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-[  case "$ac_given_INSTALL" in
-changequote(, )dnl
+[[  case "$ac_given_INSTALL" in
   [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
   *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
-])dnl
+]])dnl
 
   echo creating "$ac_file"
   rm -f "$ac_file"
@@ -4000,13 +3998,11 @@ changequote([, ])dnl
         ac_sub_cache_file="$ac_dots$cache_file" ;;
       esac
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
-      [  case "$ac_given_INSTALL" in
-changequote(, )dnl
+[[      case "$ac_given_INSTALL" in
         [/$]*) INSTALL="$ac_given_INSTALL" ;;
-changequote([, ])dnl
         *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
-        esac
-])dnl
+      esac
+]])dnl
 
       echo "[running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
       # The eval makes quoting arguments work.
