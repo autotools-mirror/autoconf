@@ -4868,7 +4868,7 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
 size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
 of 0.  If no @var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).  If you provide @var{include}, make sure to
+(@pxref{Default Includes}).  If you provide @var{include}, be sure to
 include @file{stdio.h} which is required for this macro to run.
 
 This macro now works even when cross-compiling.  The @var{unused}
@@ -5480,7 +5480,7 @@ If the system supports file names longer than 14 characters, define
 @cindex POSIX termios headers
 @cindex termios POSIX headers
 Check to see if POSIX termios headers and functions are available on the
-system.  If so, set the shell variable @code{am_cv_sys_posix_termios} to
+system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
 @end defmac
 
@@ -5863,7 +5863,7 @@ never invoked.  You can't do it by putting it after a call to
 @code{exit}, because GCC version 2 knows that @code{exit} never returns
 and optimizes out any code that follows it in the same block.
 
-If you include any header files, make sure to call the functions
+If you include any header files, be sure to call the functions
 relevant to them with the correct number of arguments, even if they are
 just 0, to avoid compilation errors due to prototypes.  GCC version 2
 has internal prototypes for several functions that it automatically
