@@ -456,7 +456,7 @@ AT_CLEANUP(path)
 ## AC_C_BIGENDIAN.  ##
 ## ---------------- ##
 
-AT_SETUP([[AC_C_BIGENDIAN]])
+AT_SETUP([AC_C_BIGENDIAN])
 AT_KEYWORDS([cross])
 
 # Make sure that AC_C_BIGENDIAN behave the same whether we are
@@ -493,7 +493,7 @@ AT_CLEANUP(at-endian)
 # AC_PATH_PROG & AC_PATH_PROGS.  #
 # ------------------------------ #
 
-AT_SETUP([[AC_PATH_PROG & AC_PATH_PROGS]])
+AT_SETUP([AC_PATH_PROG & AC_PATH_PROGS])
 
 AT_CHECK_PROGS_PREPARE
 
