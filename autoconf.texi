@@ -27,7 +27,7 @@ This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
 
-Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -3358,7 +3358,7 @@ correct values into @code{#define} statements in a template file.
 @xref{Configuration Headers}, for more information about this kind of
 output.
 
-@defmac AC_DEFINE (@var{variable} @r{[}, @var{value}@r{]})
+@defmac AC_DEFINE (@var{variable} @r{[}, @var{value} @r{[}, @var{description}@r{]}@r{]})
 @maindex DEFINE
 Define C preprocessor variable @var{variable}.  If @var{value} is given,
 set @var{variable} to that value (verbatim), otherwise set it to 1.
@@ -3367,16 +3367,19 @@ using @code{AC_CONFIG_HEADER} it should not contain any @samp{#}
 characters, as @code{make} tends to eat them.  To use a shell variable
 (which you need to do in order to define a value containing the
 @code{m4} quote characters @samp{[} or @samp{]}), use
-@code{AC_DEFINE_UNQUOTED} instead.  The following example defines the C
-preprocessor variable @code{EQUATION} to be the string constant
-@samp{"$a > $b"}:
+@code{AC_DEFINE_UNQUOTED} instead.  @var{description} is only useful if
+you are using @code{AC_CONFIG_HEADER}.  In this case, @var{description}
+is put into the generated @file{config.h.in} as the comment before the
+macro define; the macro need not be mentioned in @file{acconfig.h}.  The
+following example defines the C preprocessor variable @code{EQUATION} to
+be the string constant @samp{"$a > $b"}:
 
 @example
 AC_DEFINE(EQUATION, "$a > $b")
 @end example
 @end defmac
 
-@defmac AC_DEFINE_UNQUOTED (@var{variable} @r{[}, @var{value}@r{]})
+@defmac AC_DEFINE_UNQUOTED (@var{variable} @r{[}, @var{value} @r{[}, @var{description}@r{]}@r{]})
 @maindex DEFINE_UNQUOTED
 Like @code{AC_DEFINE}, but three shell expansions are
 performed---once---on @var{variable} and @var{value}: variable expansion

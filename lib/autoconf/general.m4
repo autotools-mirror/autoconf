@@ -1,7 +1,7 @@
 dnl Parameterized macros.
 dnl Requires GNU m4.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 93, 94, 95, 96, 1998 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -1152,14 +1152,14 @@ dnl Set VARIABLE to VALUE, verbatim, or 1.
 dnl AC_DEFINE(VARIABLE [, VALUE])
 define(AC_DEFINE,
 [cat >> confdefs.h <<\EOF
-[#define] $1 ifelse($#, 2, [$2], 1)
+[#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
 
 dnl Similar, but perform shell substitutions $ ` \ once on VALUE.
 define(AC_DEFINE_UNQUOTED,
 [cat >> confdefs.h <<EOF
-[#define] $1 ifelse($#, 2, [$2], 1)
+[#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
 

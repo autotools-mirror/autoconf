@@ -7,6 +7,17 @@
 
 	* acgeneral.m4 (AC_TRY_LINK_FUNC): Fix macro ordering.
 
+Sun Oct  4 21:57:20 1998  Tom Tromey  <tromey@cygnus.com>
+
+	* autoconf.texi (Defining Symbols): Documented third argument to
+	AC_DEFINE.
+	* autoheader.m4 (AC_DEFINE_UNQUOTED): Generate `verbatim'
+	assignment if third argument given.
+	(AC_DEFINE): Likewise.
+	* acgeneral.m4 (AC_DEFINE): Handle case where $# is 3.
+	(AC_DEFINE_UNQUOTED): Likewise.
+	* autoheader.sh: Echo $verbatim if not empty.
+
 1998-10-03  Ben Elliston  <bje@cygnus.com>
 
 	* acconfig.h (FC_NO_MINUS_C_MINUS_O): Add to complete the Fortran
