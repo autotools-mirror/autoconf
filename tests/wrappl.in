@@ -1,4 +1,5 @@
 #! /bin/sh
+# @configure_input@
 # Running `$0' as if it were installed.
 
 me=`echo "$0" | sed -e 's,.*[\\/],,'`
@@ -11,4 +12,18 @@ me=`echo "$0" | sed -e 's,.*[\\/],,'`
 autom4te_perllibdir=@top_srcpath@/lib
 export autom4te_perllibdir
 
-exec @top_buildpath@/bin/$me ${1+"$@"}
+case $me in
+  ifnames)
+     # Does not have lib files.
+     exec @top_buildpath@/bin/$me ${1+"$@"}
+     ;;
+  autom4te)
+     AUTOM4TE_CFG=@top_buildpath@/lib/autom4te.cfg
+     export AUTOM4TE_CFG
+     ;;
+esac
+
+# We might need files from build (frozen files), in addition of src files.
+exec @top_buildpath@/bin/$me \
+     -I @top_buildpath@/lib \
+     -I @top_srcpath@/lib ${1+"$@"}

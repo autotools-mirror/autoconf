@@ -43,7 +43,7 @@ sys/wait.h	AC_HEADER_SYS_WAIT
 OS.h
 argz.h
 arpa/inet.h
-errno.h
+# errno.h is portable.
 fcntl.h
 fenv.h
 fs_info.h

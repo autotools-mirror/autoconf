@@ -1,5 +1,14 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* tests/autoreconf.in, tests/autom4te.in, tests/autoupdate.in:
+	Remove, replaced by...
+	* tests/wrappl.in: Be common for all the Perl executables.
+	In particular autoscan and autoheader want -I.
+	* configure.ac: Adjust.
+	* lib/autoscan/headers: errno.h is portable.
+
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (used): New.
 	Use it.
 

@@ -134,8 +134,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = atlocal autoconf autoheader autom4te autoreconf \
 	autoscan autoupdate ifnames
 DIST_SOURCES =
-DIST_COMMON = Makefile.am Makefile.in atlocal.in autom4te.in \
-	autoupdate.in wrappl.in wrapsh.in
+DIST_COMMON = Makefile.am Makefile.in atlocal.in wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:
@@ -150,13 +149,13 @@ autoconf: $(top_builddir)/config.status wrapsh.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoheader: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-autom4te: $(top_builddir)/config.status autom4te.in
+autom4te: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoreconf: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 autoscan: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-autoupdate: $(top_builddir)/config.status autoupdate.in
+autoupdate: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 ifnames: $(top_builddir)/config.status wrappl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
