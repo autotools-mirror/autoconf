@@ -1,3 +1,7 @@
+2001-04-20  Akim Demaille  <akim@epita.fr>
+
+	* tests/foreign.at (Libtool): Ignore configure's stderr.
+
 2001-04-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* acgeneral.m4 (AC_OUTPUT): Close the descriptor before running

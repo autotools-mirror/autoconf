@@ -19,6 +19,9 @@ AT_CHECK([[libtoolize --version | egrep '1\.3(\.[0-4])?$' && exit 77]],
 # Using a configure.in, have libtoolize confess where libtool.m4 is.
 AT_DATA([configure.in],
 [[AC_INIT
+# The other tests are relying on Autoconf's own copy of install-sh
+# etc. via AC_CONFIG_AUX_DIR(..).  Don't do that here, since we don't
+# want libtoolize to pollute Autoconf's srcdir.
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])
@@ -31,6 +34,9 @@ AT_CHECK([libtoolize | sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"]],
 AT_CHECK([grep . stdout], 0, [ignore])
 AT_CHECK([test -f "`cat stdout`"])
 
+# libtoolize installed everything but install-sh...
+touch install-sh
+
 # Build the concatenation of libtool.m4 and configure.ac.
 cp `cat stdout` configure.in
 cat >>configure.in <<_EOF
@@ -42,7 +48,14 @@ _EOF
 
 AT_CHECK_AUTOCONF
 
-touch install-sh
-AT_CHECK_CONFIGURE
+# Ignore stderr, because ltconfig always loads the cache, which is
+# /dev/null, and some shells choke on this.  For instance with Bash
+# 2.05, you get:
+#
+#   loading cache /dev/null within ltconfig
+#   ./ltconfig: .: /dev/null: not a regular file
+#
+# But the script executes properly.
+AT_CHECK_CONFIGURE([], [], [], [ignore])
 
 AT_CLEANUP(install-sh ltconfig libtool at-path ltmain.sh config.guess config.sub)
