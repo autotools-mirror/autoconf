@@ -33,6 +33,7 @@ if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
 
 : ${AC_MACRODIR=@datadir@}
 : ${M4=@M4@}
+: ${AWK=@AWK@}
 case "${M4}" in
 /*) # Handle the case that m4 has moved since we were configured.
     # It may have been found originally in a build directory.
@@ -141,7 +142,7 @@ else
 fi
 
 # Put the real line numbers into configure to make config.log more helpful.
-awk '
+$AWK '
 /__oline__/ { printf "%d:", NR + 1 }
            { print }
 ' $tmpout | sed '
