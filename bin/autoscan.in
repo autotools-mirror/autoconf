@@ -49,7 +49,7 @@ my %generic_macro =
    'functions'   => 'AC_CHECK_FUNCS',
    'headers'     => 'AC_CHECK_HEADERS',
    'identifiers' => 'AC_CHECK_TYPES',
-   'programs'    => 'AC_CHECK_PROGS'
+   'programs'    => 'AC_CHECK_PROGS',
    'libraries'   => 'AC_CHECK_LIB'
   );
 
@@ -416,13 +416,17 @@ sub scan_sh_file ($)
 }
 
 
-# print_unique ($MACRO, @WHERE)
-# -----------------------------
-# $MACRO is wanted from $WHERE, hence (i) print $MACRO in $configure_scan
-# if it exists and hasn't been printed already, (ii), remember it's needed.
+# print_unique ($KIND, $WORD)
+# ---------------------------
+# $WORD, of some $KIND, is used, and needs to be checked.  (i) output
+# the needed macro invocation in $configure_scan if it exists and
+# hasn't been printed already, (ii), remember this macro needed.
 sub print_unique ($@)
 {
-  my ($macro, @where) = @_;
+  my ($kind, $word) = @_;
+
+  my $macro = $macro{$kind}{$word};
+  my @where = @{$used{$kind}{$word}};
 
   if (defined $macro && !defined $printed{$macro})
     {
@@ -441,11 +445,11 @@ sub output_programs ()
   print CONF "\n# Checks for programs.\n";
   foreach my $word (sort keys %{$used{'programs'}})
     {
-      print_unique ($macro{'programs'}{$word}, @{$used{'programs'}{$word}});
+      print_unique ('programs', $word);
     }
   foreach my $word (sort keys %{$used{'makevars'}})
     {
-      print_unique ($macro{'makevars'}{$word}, @{$used{'makevars'}{$word}});
+      print_unique ('makevars', $word);
     }
 }
 
@@ -482,8 +486,7 @@ sub output_headers ()
 	    }
 	  else
 	    {
-	      print_unique ($macro{'headers'}{$word},
-			    @{$used{'headers'}{$word}});
+	      print_unique ('headers', $word);
 	    }
 	}
     }
@@ -511,8 +514,7 @@ sub output_identifiers ()
 	    }
 	  else
 	    {
-	      print_unique ($macro{'identifiers'}{$word},
-			    @{$used{'identifiers'}{$word}});
+	      print_unique ('identifiers', $word);
 	    }
 	}
     }
@@ -540,8 +542,7 @@ sub output_functions ()
 	    }
 	  else
 	    {
-	      print_unique ($macro{'functions'}{$word},
-			    @{$used{'functions'}{$word}});
+	      print_unique ('functions', $word);
 	    }
 	}
     }
