@@ -4226,6 +4226,18 @@ If the Fortran 77 identifier contains an underscore
 77 compilers mangle names differently if they contain an underscore.
 @end defmac
 
+@defmac AC_F77_FUNC  (@var{name}, @ovar{shellvar})
+@maindex F77_FUNC
+Given an identifier @var{name}, set the shell variable @var{shellvar} to
+hold the mangled version @var{name} according to the rules of the
+Fortran 77 linker (see also @code{AC_F77_WRAPPERS}).  @var{shellvar} is
+optional; if it is not supplied, the shell variable will be simply
+@var{name}.  The purpose of this macro is to give the caller a way to
+access the name-mangling information other than through the C
+preprocessor as above; for example, to call Fortran routines from some
+language other than C/C++.
+@end defmac
+
 @node System Services, UNIX Variants, Fortran 77 Compiler Characteristics, Existing Tests
 @section System Services
 

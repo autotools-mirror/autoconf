@@ -1,3 +1,11 @@
+2000-07-24  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_FUNC): New macro to give the user a clean
+	way of accessing Fortran name-mangling information other than
+	through CPP, and without having to know the different possible
+	name-mangling schemes.
+	* autoconf.texi: Documented AC_F77_FUNC
+
 2000-07-24  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_CHECK_TYPE_BUILTIN_P): Add `off_t' and

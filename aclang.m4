@@ -1620,3 +1620,24 @@ case $ac_cv_f77_mangling in
           ;;
 esac
 ])# AC_F77_WRAPPERS
+
+# AC_F77_FUNC(NAME, [SHELLVAR = NAME])
+# -------------------
+# For a Fortran subroutine of given NAME, define a shell variable
+# $SHELLVAR to the Fortran-77 mangled name.  If the SHELLVAR
+# argument is not supplied, it defaults to NAME.
+AC_DEFUN([AC_F77_FUNC],
+[AC_REQUIRE([_AC_F77_NAME_MANGLING])dnl
+case $ac_cv_f77_mangling in
+  upper*) ac_val="translit([$1],[a-z],[A-Z])" ;;
+  lower*) ac_val="translit([$1],[A-Z],[a-z])" ;;
+  *)      ac_val="unknown" ;;
+esac
+case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
+ifelse(index([$1],[_]),-1,[],
+[case $ac_cv_f77_mangling in *," extra underscore"*) ac_val="$ac_val"_ ;; esac
+])
+m4_default([$2],[$1])="$ac_val"
+]) # AC_F77_FUNC
+
+
