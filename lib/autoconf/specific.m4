@@ -25,7 +25,9 @@ dnl ### checks for programs
 dnl
 dnl
 define(AC_PROG_CC,
-[AC_BEFORE([$0], [AC_PROG_CPP])AC_PROVIDE([$0])AC_PROGRAM_CHECK(CC, gcc, gcc, cc)
+[AC_BEFORE([$0], [AC_PROG_CPP])dnl
+AC_PROVIDE([$0])dnl
+AC_PROGRAM_CHECK(CC, gcc, gcc, cc)
 # Find out if we are using GNU C, under whatever name.
 cat > conftest.c <<EOF
 #ifdef __GNUC__
@@ -42,7 +44,8 @@ rm -f conftest*
 ])dnl
 dnl
 define(AC_PROG_CXX,
-[AC_BEFORE([$0],[AC_PROG_CXXCPP])AC_PROVIDE([$0])
+[AC_BEFORE([$0],[AC_PROG_CXXCPP])dnl
+AC_PROVIDE([$0])dnl
 AC_PROGRAMS_CHECK(CXX, $CCC c++ g++ gcc CC cxx, gcc)
 # Find out if we are using GNU C++, under whatever name.
 cat > conftest.C <<EOF
@@ -60,7 +63,9 @@ rm -f conftest*
 ])dnl
 dnl
 define(AC_GCC_TRADITIONAL,
-[AC_REQUIRE([AC_PROG_CC])AC_REQUIRE([AC_PROG_CPP])if test -n "$GCC"; then
+[AC_REQUIRE([AC_PROG_CC])dnl
+AC_REQUIRE([AC_PROG_CPP])dnl
+if test -n "$GCC"; then
   AC_CHECKING(whether -traditional is needed)
 changequote(,)dnl
   ac_pattern="Autoconf.*'x'"
@@ -134,7 +139,8 @@ dnl
 define(AC_PROG_YACC,[AC_PROGRAMS_CHECK(YACC, 'bison -y' byacc, yacc)])dnl
 dnl
 define(AC_PROG_CPP,
-[AC_PROVIDE([$0])AC_CHECKING(how to run the C preprocessor)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(how to run the C preprocessor)
 if test -z "$CPP"; then
   # This must be in double quotes, not single quotes, because CPP may get
   # substituted into the Makefile and ``${CC-cc}'' will simply confuse
@@ -153,7 +159,8 @@ AC_SUBST(CPP)dnl
 ])dnl
 dnl
 define(AC_PROG_CXXCPP,
-[AC_PROVIDE([$0])AC_CHECKING(how to run the C++ preprocessor)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(how to run the C++ preprocessor)
 AC_LANG_SAVE[]dnl
 AC_LANG_CPLUSPLUS[]dnl
 if test -z "$CXXCPP"; then
@@ -171,7 +178,8 @@ define(AC_REQUIRE_CPP,
 [ifelse(AC_LANG,C,[AC_REQUIRE([AC_PROG_CPP])],[AC_REQUIRE([AC_PROG_CXXCPP])])])dnl
 dnl
 define(AC_PROG_LEX,
-[AC_PROVIDE([$0])AC_PROGRAM_CHECK(LEX, flex, flex, lex)
+[AC_PROVIDE([$0])dnl
+AC_PROGRAM_CHECK(LEX, flex, flex, lex)
 if test -z "$LEXLIB"
 then
   case "$LEX" in
@@ -183,7 +191,8 @@ AC_VERBOSE(setting LEXLIB to $LEXLIB)
 AC_SUBST(LEXLIB)])dnl
 dnl
 define(AC_YYTEXT_POINTER,[dnl
-AC_REQUIRE_CPP()AC_REQUIRE([AC_PROG_LEX])dnl
+AC_REQUIRE_CPP()dnl
+AC_REQUIRE([AC_PROG_LEX])dnl
 AC_CHECKING(for yytext declaration)
 # POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent. Figure out which it is, since
@@ -350,8 +359,10 @@ define(AC_UNISTD_H, [AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(unistd.h)]
   AC_DEFINE(HAVE_UNISTD_H))])dnl
 dnl
 define(AC_USG,
-[AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(string.h) and HAVE_STRING_H])AC_COMPILE_CHECK([BSD string and memory functions],
-[#include <strings.h>], [rindex(0, 0); bzero(0, 0);], , AC_DEFINE(USG))])dnl
+[AC_OBSOLETE([$0],
+  [; instead use AC_HAVE_HEADERS(string.h) and HAVE_STRING_H])dnl
+AC_CHECKING([for BSD string and memory functions])
+AC_TEST_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);], , AC_DEFINE(USG))])dnl
 dnl
 dnl
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
@@ -363,8 +374,8 @@ AC_HEADER_EGREP(memchr, string.h, ,
 )dnl
 dnl
 define(AC_MAJOR_HEADER,
-[AC_COMPILE_CHECK([major, minor and makedev header],
-[#include <sys/types.h>],
+[AC_CHECKING([for major, minor and makedev header])
+AC_TEST_LINK([#include <sys/types.h>],
 [return makedev(0, 0);], ac_have_makedev=yes, ac_have_makedev=no)
 if test "$ac_have_makedev" = no; then
 AC_HEADER_CHECK(sys/mkdev.h, AC_DEFINE(MAJOR_IN_MKDEV) ac_have_makedev=yes)
@@ -375,7 +386,8 @@ fi]
 )dnl
 dnl
 define(AC_DIR_HEADER,
-[AC_PROVIDE([$0])AC_CHECKING(for directory library header)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(for directory library header)
 ac_dir_header=
 AC_DIR_HEADER_CHECK(dirent.h, DIRENT)
 AC_DIR_HEADER_CHECK(sys/ndir.h, SYSNDIR)
@@ -396,7 +408,8 @@ dnl It must not only exist, but also correctly define the `DIR' type.
 dnl If it is really winning, define $2 and set shell var `ac_dir_header' to $1.
 define(AC_DIR_HEADER_CHECK, [dnl
 if test -z "$ac_dir_header"; then
-  AC_COMPILE_CHECK($1, [#include <sys/types.h>
+  AC_CHECKING([for $1])
+  AC_TEST_LINK([#include <sys/types.h>
 #include <]$1[>],
 	  	   [DIR *dirp = 0;],
 		   AC_DEFINE($2) ac_dir_header=$1)dnl
@@ -428,8 +441,8 @@ You lose.
 ], AC_DEFINE(STAT_MACROS_BROKEN))])dnl
 dnl
 define(AC_SYS_SIGLIST_DECLARED,[dnl
-AC_COMPILE_CHECK(sys_siglist declaration in signal.h or unistd.h,
-		 [#include <signal.h>
+AC_CHECKING([for sys_siglist declaration in signal.h or unistd.h])
+AC_TEST_LINK([#include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -472,7 +485,8 @@ AC_TEST_PROGRAM([$ac_prog],
 ])dnl
 dnl
 define(AC_UID_T,
-[AC_PROVIDE([$0])AC_CHECKING(for uid_t in sys/types.h)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(for uid_t in sys/types.h)
 AC_HEADER_EGREP(uid_t, sys/types.h, ,
   AC_DEFINE(uid_t, int) AC_DEFINE(gid_t, int))])dnl
 dnl
@@ -481,11 +495,13 @@ define(AC_SIZE_T,
 AC_HEADER_EGREP(size_t, sys/types.h, , AC_DEFINE(size_t, unsigned))])dnl
 dnl
 define(AC_PID_T,
-[AC_PROVIDE([$0])AC_CHECKING(for pid_t in sys/types.h)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(for pid_t in sys/types.h)
 AC_HEADER_EGREP(pid_t, sys/types.h, , AC_DEFINE(pid_t, int))])dnl
 dnl
 define(AC_OFF_T,
-[AC_PROVIDE([$0])AC_CHECKING(for off_t in sys/types.h)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(for off_t in sys/types.h)
 AC_HEADER_EGREP(off_t, sys/types.h, , AC_DEFINE(off_t, long))])dnl
 dnl
 define(AC_MODE_T,
@@ -494,8 +510,9 @@ AC_HEADER_EGREP(mode_t, sys/types.h, , AC_DEFINE(mode_t, int))])dnl
 dnl
 dnl Note that identifiers starting with SIG are reserved by ANSI C.
 define(AC_RETSIGTYPE,
-[AC_PROVIDE([$0])AC_COMPILE_CHECK([return type of signal handlers],
-[#include <sys/types.h>
+[AC_PROVIDE([$0])dnl
+AC_CHECKING([return type of signal handlers])
+AC_TEST_LINK([#include <sys/types.h>
 #include <signal.h>
 #ifdef signal
 #undef signal
@@ -582,15 +599,18 @@ main()
 ])dnl
 dnl
 define(AC_VPRINTF,
-[AC_COMPILE_CHECK([vprintf], , [vprintf();],
+[AC_CHECKING([for vprintf])
+AC_TEST_LINK( , [vprintf();],
   [ac_have_vprintf=yes AC_DEFINE(HAVE_VPRINTF)], ac_have_vprintf=no)
 if test "$ac_have_vprintf" = no; then
-AC_COMPILE_CHECK([_doprnt], , [_doprnt();], AC_DEFINE(HAVE_DOPRNT))
+AC_CHECKING([for _doprnt])
+AC_TEST_LINK( , [_doprnt();], AC_DEFINE(HAVE_DOPRNT))
 fi
 ])dnl
 dnl
 define(AC_VFORK,
-[AC_REQUIRE([AC_PID_T])AC_HEADER_CHECK(vfork.h, AC_DEFINE(HAVE_VFORK_H))
+[AC_REQUIRE([AC_PID_T])dnl
+AC_HEADER_CHECK(vfork.h, AC_DEFINE(HAVE_VFORK_H))
 AC_CHECKING(for working vfork)
 AC_REQUIRE([AC_RETSIGTYPE])
 AC_TEST_PROGRAM([/* Thanks to Paul Eggert for this test.  */
@@ -709,7 +729,8 @@ dnl
 define(AC_ALLOCA,
 [# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
-AC_COMPILE_CHECK(working alloca.h, [#include <alloca.h>],
+AC_CHECKING([for working alloca.h])
+AC_TEST_LINK([#include <alloca.h>],
   [char *p = alloca(2 * sizeof(int));], AC_DEFINE(HAVE_ALLOCA_H))
 
 ac_decl="#ifdef __GNUC__
@@ -726,7 +747,8 @@ char *alloca ();
 #endif
 #endif
 "
-AC_COMPILE_CHECK([alloca], $ac_decl,
+AC_CHECKING([for alloca])
+AC_TEST_LINK($ac_decl,
 [char *p = (char *) alloca(1);],
 [ac_have_alloca=yes AC_DEFINE([HAVE_ALLOCA])], ac_have_alloca=no)
 
@@ -822,7 +844,8 @@ fi
 
 AC_HEADER_CHECK(nlist.h,
 [AC_DEFINE(NLIST_STRUCT)
-AC_COMPILE_CHECK(n_un in struct nlist, [#include <nlist.h>],
+AC_CHECKING([for n_un in struct nlist])
+AC_TEST_LINK([#include <nlist.h>],
 [struct nlist n; n.n_un.n_name = 0;],
 AC_DEFINE(NLIST_NAME_UNION))])dnl
 
@@ -899,20 +922,22 @@ dnl ### checks for structure members
 dnl
 dnl
 define(AC_STRUCT_TM,
-[AC_PROVIDE([$0])AC_COMPILE_CHECK([struct tm in time.h],
-[#include <sys/types.h>
+[AC_PROVIDE([$0])dnl
+AC_CHECKING([for struct tm in time.h])
+AC_TEST_LINK([#include <sys/types.h>
 #include <time.h>],
 [struct tm *tp; tp->tm_sec;], , AC_DEFINE(TM_IN_SYS_TIME))])dnl
 dnl
 define(AC_TIME_WITH_SYS_TIME,
-[AC_COMPILE_CHECK([whether time.h and sys/time.h may both be included],
-[#include <sys/types.h>
+[AC_CHECKING([whether time.h and sys/time.h may both be included])
+AC_TEST_LINK([#include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>],
 [struct tm *tp;], AC_DEFINE(TIME_WITH_SYS_TIME))])dnl
 dnl
 define(AC_TIMEZONE,
-[AC_REQUIRE([AC_STRUCT_TM])ac_decl='#include <sys/types.h>
+[AC_REQUIRE([AC_STRUCT_TM])dnl
+ac_decl='#include <sys/types.h>
 '
 case "$DEFS" in
   *TM_IN_SYS_TIME*) ac_decl="$ac_decl
@@ -922,12 +947,14 @@ case "$DEFS" in
 #include <time.h>
 " ;;
 esac
-AC_COMPILE_CHECK([tm_zone in struct tm], $ac_decl,
+AC_CHECKING([for tm_zone in struct tm])
+AC_TEST_LINK($ac_decl,
 [struct tm tm; tm.tm_zone;],
 [ac_have_tm_zone=yes AC_DEFINE(HAVE_TM_ZONE)], ac_have_tm_zone=no)
 
 if test "$ac_have_tm_zone" = no; then
-AC_COMPILE_CHECK(tzname, changequote(<<,>>)dnl
+AC_CHECKING([for tzname])
+AC_TEST_LINK(changequote(<<,>>)dnl
 <<#include <time.h>
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
@@ -937,22 +964,22 @@ fi
 ])dnl
 dnl
 define(AC_ST_BLOCKS,
-[AC_COMPILE_CHECK([st_blocks in struct stat],
-[#include <sys/types.h>
+[AC_CHECKING([for st_blocks in struct stat])
+AC_TEST_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blocks;],
 AC_DEFINE(HAVE_ST_BLOCKS), LIBOBJS="$LIBOBJS fileblocks.o")dnl
 AC_SUBST(LIBOBJS)dnl
 ])dnl
 dnl
 define(AC_ST_BLKSIZE,
-[AC_COMPILE_CHECK([st_blksize in struct stat],
-[#include <sys/types.h>
+[AC_CHECKING([for st_blksize in struct stat])
+AC_TEST_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blksize;],
 AC_DEFINE(HAVE_ST_BLKSIZE))])dnl
 dnl
 define(AC_ST_RDEV,
-[AC_COMPILE_CHECK([st_rdev in struct stat],
-[#include <sys/types.h>
+[AC_CHECKING([for st_rdev in struct stat])
+AC_TEST_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_rdev;],
 AC_DEFINE(HAVE_ST_RDEV))])dnl
 dnl
@@ -961,7 +988,8 @@ dnl ### checks for compiler characteristics
 dnl
 dnl
 define(AC_CROSS_CHECK,
-[AC_PROVIDE([$0])AC_CHECKING(whether cross-compiling)
+[AC_PROVIDE([$0])dnl
+AC_CHECKING(whether cross-compiling)
 # If we cannot run a trivial program, we must be cross compiling.
 AC_TEST_PROGRAM([main(){exit(0);}], cross_compiling=, cross_compiling=yes)
 if test "$cross_compiling" = yes; then
@@ -1044,8 +1072,10 @@ rm -f core
 ])dnl
 dnl
 define(AC_INLINE,
-[AC_REQUIRE([AC_PROG_CC])if test "$GCC" = yes; then
-AC_COMPILE_CHECK([inline], , [} inline foo() {], , AC_DEFINE(inline, __inline))
+[AC_REQUIRE([AC_PROG_CC])dnl
+if test "$GCC" = yes; then
+AC_CHECKING([for inline])
+AC_TEST_LINK( , [} inline foo() {], , AC_DEFINE(inline, __inline))
 fi
 ])dnl
 define(AC_CONST,
@@ -1090,8 +1120,9 @@ ccp = (char const *const *) p;
   const int foo = 10;
 }'
 changequote([,])dnl
-AC_COMPILE_CHECK([dnl Do not "break" this again.
-lack of working const], , [$ac_prog], , AC_DEFINE(const,))])dnl
+dnl Do not "break" this again.
+AC_CHECKING([for lack of working const])
+AC_TEST_LINK( , [$ac_prog], , AC_DEFINE(const,))])dnl
 dnl
 dnl
 dnl ### checks for operating system services
@@ -1167,7 +1198,8 @@ main () {
 dnl
 define(AC_FIND_X,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_FIND_X_DIRECT conditionally.
-AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
+AC_PROVIDE([$0])dnl
+# If we find X, set shell vars x_includes and x_libraries to the paths.
 no_x=yes
 if test "x$with_x" != xno; then
 AC_FIND_X_XMKMF
@@ -1317,7 +1349,9 @@ do
 done)])dnl
 dnl
 dnl Find additional X libraries, magic flags, etc.
-define(AC_FIND_XTRA, [AC_REQUIRE([AC_ISC_POSIX])AC_REQUIRE([AC_FIND_X])
+define(AC_FIND_XTRA,
+[AC_REQUIRE([AC_ISC_POSIX])dnl
+AC_REQUIRE([AC_FIND_X])dnl
 AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
@@ -1373,7 +1407,11 @@ dnl
 dnl
 define(AC_AIX,
 [AC_CHECKING(for AIX)
-AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])AC_PROGRAM_EGREP(yes,
+AC_BEFORE([$0], [AC_TEST_LINK])dnl
+AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_TEST_CPP])dnl
+AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
+AC_PROGRAM_EGREP(yes,
 [#ifdef _AIX
   yes
 #endif
@@ -1381,10 +1419,10 @@ AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([
 ])dnl
 dnl
 define(AC_MINIX,
-[AC_BEFORE([$0], [AC_COMPILE_CHECK])dnl
+[AC_BEFORE([$0], [AC_TEST_LINK])dnl
 AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
-AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
+AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
 AC_HEADER_CHECK(minix/config.h, MINIX=yes, MINIX=)
 # The Minix shell can't assign to the same variable on the same line!
 if test "$MINIX" = yes; then
@@ -1395,7 +1433,12 @@ fi
 ])dnl
 dnl
 define(AC_ISC_POSIX,
-[AC_PROVIDE([$0])AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])AC_CHECKING(for POSIXized ISC)
+[AC_PROVIDE([$0])dnl
+AC_BEFORE([$0], [AC_TEST_LINK])dnl
+AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_TEST_CPP])dnl
+AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
+AC_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
@@ -1412,7 +1455,8 @@ fi
 ])dnl
 dnl
 define(AC_XENIX_DIR,
-[AC_REQUIRE([AC_DIR_HEADER])AC_CHECKING(for Xenix)
+[AC_REQUIRE([AC_DIR_HEADER])dnl
+AC_CHECKING(for Xenix)
 AC_PROGRAM_EGREP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes

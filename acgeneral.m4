@@ -494,7 +494,8 @@ dnl
 dnl Run configure in subdirectories $1.
 dnl Not actually done until AC_OUTPUT_CONFIG_SUBDIRS.
 define(AC_CONFIG_SUBDIRS,
-[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])define([AC_SUBDIR_LIST],[$1])])dnl
+[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
+define([AC_SUBDIR_LIST],[$1])])dnl
 dnl
 dnl
 dnl ### Canonicalizing the system type
@@ -818,14 +819,18 @@ dnl ### Selecting which language to use for testing
 dnl
 dnl
 define(AC_LANG_C,
-[define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
+[define([AC_LANG],[C])dnl
+AC_PROVIDE([$0])dnl
+ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CPP}'
 ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
 ])dnl
 dnl
 define(AC_LANG_CPLUSPLUS,
-[define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
+[define([AC_LANG],[CPLUSPLUS])dnl
+AC_PROVIDE([$0])dnl
+ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP}'
 ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
@@ -964,7 +969,9 @@ dnl ### Checking for C features - fundamental (no caching)
 dnl
 dnl
 define(AC_HEADER_EGREP,
-[AC_REQUIRE_CPP()AC_PROVIDE([$0])echo '#include "confdefs.h"
+[AC_REQUIRE_CPP()dnl
+AC_PROVIDE([$0])dnl
+echo '#include "confdefs.h"
 #include <$2>' > conftest.${ac_ext}
 eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
 if egrep "$1" conftest.out >/dev/null 2>&1; then
@@ -982,7 +989,9 @@ dnl
 dnl Because this macro is used by AC_GCC_TRADITIONAL, which must come early,
 dnl it is not included in AC_BEFORE checks.
 define(AC_PROGRAM_EGREP,
-[AC_REQUIRE_CPP()AC_PROVIDE([$0])cat > conftest.${ac_ext} <<EOF
+[AC_REQUIRE_CPP()dnl
+AC_PROVIDE([$0])dnl
+cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
 EOF
@@ -1002,7 +1011,8 @@ dnl
 define(AC_COMPILE_CHECK,
 [AC_PROVIDE([$0])dnl
 AC_OBSOLETE([$0], [; instead use AC_TEST_LINK])dnl
-ifelse([$1], , , [AC_CHECKING([for $1])])
+ifelse([$1], , , [AC_CHECKING([for $1])
+])dnl
 AC_TEST_LINK([$2], [$3], [$4], [$5])dnl
 ])dnl
 dnl
@@ -1029,7 +1039,9 @@ rm -f conftest*]
 )dnl
 dnl
 define(AC_TEST_PROGRAM,
-[AC_PROVIDE([$0])ifelse([$4], , , [AC_REQUIRE([AC_CROSS_CHECK])if test -n "$cross_compiling"
+[AC_PROVIDE([$0])dnl
+ifelse([$4], , , [AC_REQUIRE([AC_CROSS_CHECK])dnl
+if test -n "$cross_compiling"
 then
   $4
 else
