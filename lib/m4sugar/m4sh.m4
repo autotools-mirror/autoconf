@@ -131,7 +131,7 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 #
 m4_define([AS_REQUIRE],
 [m4_provide_if([$1], [],
-	       [m4_divert_text([M4SH-INIT], [$1])])])
+	       [m4_divert_text([M4SH-INIT], [m4_default([$2], [$1])])])])
 
 
 # AS_SHELL_SANITIZE
