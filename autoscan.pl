@@ -466,7 +466,8 @@ sub output
        join ("\n                 ", keys(%unique_makefiles)), "])\n";
   print CONF "AC_OUTPUT\n";
 
-  close CONF;
+  close CONF ||
+    die "$me: closing configure.scan: $!\n";
 }
 
 # Print Autoconf macro $1 if it's not undef and hasn't been printed already.
