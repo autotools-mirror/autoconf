@@ -35,10 +35,9 @@ EXTRA_SCRIPTS = autoscan
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
 # and adapt dependencies once we use a more recent Automake
 
-distpkgdataDATA = \
-acfunctions acheaders acidentifiers acmakevars acprograms \
-libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 \
-aclang.m4 acversion.m4
+distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
+                  libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 \
+                  autoconf.m4 aclang.m4 acversion.m4 acfunctions.m4
 
 nodistpkgdataDATA = autoconf.m4f
 
@@ -107,7 +106,7 @@ editpl = sed \
 	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
 
 common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
-         aclang.m4
+         aclang.m4 acfunctions.m4
 
 autoconf.m4f: autoconf.m4 $(common)
 

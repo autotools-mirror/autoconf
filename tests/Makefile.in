@@ -113,7 +113,7 @@ FILTER_MACROS = egrep -v -e `echo '^AC_ARG_VAR$$ ^AC_CANONICALIZE$$ ^AC_CHECK_(D
 
 
 # The files which contains macro we check for syntax.
-MACRO_FILES = $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4               $(top_srcdir)/aclang.m4
+MACRO_FILES = $(top_srcdir)/acgeneral.m4   $(top_srcdir)/acspecific.m4               $(top_srcdir)/acfunctions.m4 $(top_srcdir)/aclang.m4
 
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status config.cache config.log config.h.in config.h

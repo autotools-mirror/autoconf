@@ -1,5 +1,38 @@
 2000-08-01  Akim Demaille  <akim@epita.fr>
 
+	Create acfunctions.m4, in charge of the macros related to
+	functions.
+
+	* acgeneral.m4 (AC_CHECK_FUNC, AC_CHECK_FUNCS, AC_REPLACE_FUNCS):
+	Move to...
+	* acfunctions.m4: here, new file.
+	* acspecific.m4 (_AC_LIBOBJ_ALLOCA, AC_FUNC_ALLOCA, AC_FUNC_CHOWN,
+	AC_FUNC_CLOSEDIR_VOID, AC_FUNC_FNMATCH, AC_FUNC_GETGROUPS,
+	_AC_LIBOBJ_GETLOADAVG, AC_FUNC_GETLOADAVG, AC_FUNC_GETMNTENT,
+	AC_FUNC_GETPGRP, AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK,
+	AC_FUNC_MALLOC, AC_FUNC_MEMCMP, AC_FUNC_MKTIME, AC_FUNC_MMAP,
+	AC_FUNC_SELECT_ARGTYPES, AC_FUNC_SETPGRP, _AC_FUNC_STAT,
+	AC_FUNC_STAT, AC_FUNC_LSTAT, AC_FUNC_STRERROR_R, AC_FUNC_STRFTIME,
+	AC_FUNC_VFORK, AC_FUNC_VPRINTF, AC_FUNC_WAIT3, AC_FUNC_UTIME_NULL,
+	AC_FUNC_STRCOLL, AC_FUNC_SETVBUF_REVERSED): Likewise.
+	* Makefile.am: Adjust.
+
+	Move also the old definitions into acfunctions.m4, and adjust the
+	test suite.
+
+	* acgeneral.m4 (AU_ALIAS): New macro.
+	* acoldnames (AC_FUNC_CHECK, AC_HAVE_FUNCS, AC_ALLOCA,
+	AC_GETLOADAVG, AC_MMAP, AC_SETVBUF_REVERSED, AC_STRCOLL,
+	AC_UTIME_NULL, AC_VFORK, AC_VPRINTF, AC_WAIT3, AM_FUNC_FNMATCH,
+	AM_FUNC_MKTIME, fp_FUNC_FNMATCH): Move to...
+	* acfunctions.m4: here, using AU_ALIAS.
+	* acgeneral.m4 (AC_FD_CC, AC_CANONICAL_SYSTEM): Use AU_ALIAS to
+	define them.
+	* acoldnames.m4: Use AU_ALIAS instead of AU_DEFUN.
+	* tests/Makefile.am (MACRO_FILES): Adjust.
+
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Use Getopt::Long;
 	* acidentifiers: Classify, sort.
 

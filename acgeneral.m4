@@ -645,6 +645,16 @@ $2],
 ])
 
 
+# AU_ALIAS(OLD-NAME, NEW-NAME)
+# ----------------------------
+# The OLD-NAME is no longer used, just use NEW-NAME instead.  There is
+# little difference with using AU_DEFUN but the fact there is little
+# interest in running the test suite on both OLD-NAME and NEW-NAME.
+# This macro makes it possible to distinguish such cases.
+define([AU_ALIAS],
+[AU_DEFUN([$1], defn([$2]))])
+
+
 
 ## ------------------------- ##
 ## Interface to autoheader.  ##
@@ -1838,7 +1848,7 @@ AC_SHELL_UNSET([CDPATH], [:])
 define([AC_FD_MSG], 6)
 define([AC_FD_LOG], 5)
 # That's how it used to be named.
-AU_DEFUN([AC_FD_CC], [AC_FD_LOG])
+AU_ALIAS([AC_FD_CC], [AC_FD_LOG])
 
 define([_AC_INIT_PREPARE_FDS],
 [# File descriptor usage:
@@ -2322,7 +2332,7 @@ test -n "$target_alias" &&
 ])# AC_CANONICAL_TARGET
 
 
-AU_DEFUN([AC_CANONICAL_SYSTEM], [AC_CANONICAL_TARGET])
+AU_ALIAS([AC_CANONICAL_SYSTEM], [AC_CANONICAL_TARGET])
 
 
 # AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])
@@ -3523,37 +3533,6 @@ $3],
 ## -------------------------------- ##
 
 
-# AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# -----------------------------------------------------------------
-AC_DEFUN([AC_CHECK_FUNC],
-[AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
-AC_CACHE_CHECK([for $1], ac_var,
-[AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
-                [AC_VAR_SET(ac_var, yes)],
-                [AC_VAR_SET(ac_var, no)])])
-AC_SHELL_IFELSE([test AC_VAR_GET(ac_var) = yes],
-               [$2], [$3])dnl
-AC_VAR_POPDEF([ac_var])dnl
-])# AC_CHECK_FUNC
-
-
-# AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ---------------------------------------------------------------------
-# FIXME: Should we die if there are not enough arguments, or just
-# ignore?
-AC_DEFUN([AC_CHECK_FUNCS],
-[AC_FOREACH([AC_Func], [$1],
-  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
-               [Define if you have the `]AC_Func[' function.])])dnl
-for ac_func in $1
-do
-AC_CHECK_FUNC($ac_func,
-              [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_func)) $2],
-              [$3])dnl
-done
-])
-
-
 # AC_LIBOBJ_DECL(FILENAME-NOEXT)
 # ------------------------------
 # Announce we might need the file `FILENAME-NOEXT.c'.
@@ -3580,14 +3559,6 @@ define([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],
             [AC_DIAGNOSE(syntax,
                          [$0($1): you should use literals])])dnl
-])
-
-
-# AC_REPLACE_FUNCS(FUNCTION...)
-# -----------------------------
-AC_DEFUN([AC_REPLACE_FUNCS],
-[AC_FOREACH([AC_Func], [$1], [AC_LIBOBJ_DECL(AC_Func)])dnl
-AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ(${ac_func})])
 ])
 
 

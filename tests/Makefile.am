@@ -98,8 +98,8 @@ FILTER_MACROS = egrep -v -e \
 _AC_' | tr ' ' '|'`
 
 # The files which contains macro we check for syntax.
-MACRO_FILES = $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 \
-              $(top_srcdir)/aclang.m4
+MACRO_FILES = $(top_srcdir)/acgeneral.m4   $(top_srcdir)/acspecific.m4 \
+              $(top_srcdir)/acfunctions.m4 $(top_srcdir)/aclang.m4
 
 macros.m4: $(MACRO_FILES) $(srcdir)/Makefile.am
 	cat $(MACRO_FILES) | \
