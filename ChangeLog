@@ -1,3 +1,13 @@
+2004-10-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Standardize spelling of "Posix" (as opposed
+	to "POSIX" or "@acronym{POSIX}"), and similarly for "DOS
+	variants", "Unix", and some related minor wording fixups.
+
+2004-10-10  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (One-Shot Macros): New node.
+
 2004-09-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Function Portability): Fix misdescription
