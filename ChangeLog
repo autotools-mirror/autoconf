@@ -8,6 +8,7 @@
 	Detect all HP 9000 machines.
 	Determine machine types more completely on older UnixWare systems.
 	Determine C library version on GNU/Linux for the PowerPC.
+	* config.sub: Numerous additions. Some cleanup.
 
 1999-04-29  Ben Elliston  <bje@cygnus.com>
 
