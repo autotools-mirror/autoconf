@@ -1215,7 +1215,7 @@ m4_define([_AC_EXEEXT],
     	     break;;
     	esac
       done
-      rm -f conftest.$ac_objext conftest.$ac_ext
+      rm -f conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
     else
       AC_MSG_ERROR([cannot compile and link])
     fi
