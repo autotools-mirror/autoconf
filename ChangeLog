@@ -4,6 +4,8 @@ Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_OUTPUT): Remove a now-wrong test for whether to
 	make an unquoted here document.
+	(AC_CACHE_SAVE): Double-up backslashes in double quotes.
+	From Paul Eggert.
 
 	* Test release 2.11.1.
 

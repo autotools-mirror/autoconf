@@ -1069,7 +1069,7 @@ changequote(, )dnl
     # turns \\\\ into \\, and sed turns \\ into \).
     sed -n \
       -e "s/'/'\\\\''/g" \
-      -e "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1='\2'}/p"
+      -e "s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1=\${\\1='\\2'}/p"
     ;;
   *)
     # `set' quotes correctly as required by POSIX, so do not add quotes.
