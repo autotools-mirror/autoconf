@@ -49,6 +49,7 @@ Major changes in release 2.0:
 * AC_ARG_PROGRAM, which uses the options --program-prefix,
   --program-suffix, and --program-transform-name to change the names
   of programs being installed.
+* AC_PREFIX_DEFAULT, to change the default prefix.
 * AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
 * AC_CHECK_LIB, which checks for a particular function in a library.
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
@@ -99,8 +100,8 @@ Major changes in release 2.0:
 * Comes with config.sub and config.guess, and uses them optionally.
 * Uses config.cache to cache test results.  An alternate cache file
   can be selected with the --cache-file=FILE option.
-* Uses optional shell scripts $exec_prefix/lib/config.site and
-  $prefix/lib/config.site to perform site or system specific initializations. 
+* Uses optional shell scripts $prefix/share/config.site and
+  $prefix/etc/config.site to perform site or system specific initializations. 
 * configure saves compiler output to ./config.log for debugging.
 * New files autoconf.m4 and autoheader.m4 load the other Autoconf macros.
 * acsite.m4 is the new name for the system-wide aclocal.m4.
