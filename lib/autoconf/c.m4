@@ -1182,7 +1182,7 @@ AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(PROTOTYPES, 1,
-            [Define if the C compiler supports function prototypes.])
+            [Define if the compiler supports function prototypes.])
 else
   AC_MSG_RESULT(no)
 fi
