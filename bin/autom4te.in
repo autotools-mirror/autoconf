@@ -239,9 +239,6 @@ my %language;
 
 my $output = '-';
 
-# Should we normalize the output?
-my $normalize = 0;
-
 # Mode of the output file except for traces.
 my $mode = "0666";
 
@@ -360,7 +357,6 @@ Operation modes:
   -v, --verbose            verbosely report processing
   -d, --debug              don\'t remove temporary files
   -o, --output=FILE        save output in FILE (defaults to \`-\', stdout)
-      --normalize          smash successive empty lines
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
   -l, --language=LANG      specify the set of M4 macros to use
@@ -483,7 +479,6 @@ sub parse_args ()
     (
      # Operation modes:
      "o|output=s"   => \$output,
-     "normalize"    => \$normalize,
      "W|warnings=s" => \@warning,
      "m|mode=s"     => \$mode,
      "M|melt"       => \$melt,
@@ -631,29 +626,12 @@ sub handle_output ($$)
     unless $out;
   my $in = new Autom4te::XFile ($ocache . $req->id);
 
-  my $separate = 0;
-  my $oline = 0;
   my %prohibited;
   my $res;
   while ($_ = $in->getline)
     {
       s/\s+$//;
-      if ($normalize && /^$/)
-	{
-	  $separate = 1;
-	  next;
-	}
-
-      if ($separate)
-	{
-	  $oline++;
-	  print $out "\n";
-	}
-      $separate = 0;
-
-      $oline++;
-      s/__oline__/$oline/g;
-
+      s/__oline__/$./g;
       s/\@<:\@/[/g;
       s/\@:>\@/]/g;
       s/\@S\|\@/\$/g;
@@ -667,7 +645,7 @@ sub handle_output ($$)
 	unless /^\#\s*(if|include|endif|ifdef|ifndef|define)\b/;
       foreach (split (/\W+/))
 	{
-	  $prohibited{$_} = $oline
+	  $prohibited{$_} = $.
 	    if /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
 	}
 

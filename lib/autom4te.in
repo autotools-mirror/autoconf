@@ -134,7 +134,6 @@ args: acsite.m4?
 args: aclocal.m4?
 args: --mode 777
 args: --warning syntax
-args: --normalize
 args: --language Autoheader-preselections
 args: --language Automake-preselections
 args: --language Autoreconf-preselections
