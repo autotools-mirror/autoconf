@@ -22,6 +22,7 @@
 
 require 5.005;
 use Getopt::Long;
+use File::Basename;
 use strict;
 
 (my $me = $0) =~ s,.*[\\/],,;
@@ -276,13 +277,14 @@ while (<MACROS>)
   {
     chomp;
     /^(AC|AU):(.*):([^:]*)$/ or next;
+    my $filename = basename ($2);
     if ($1 eq "AC")
       {
-	$ac_macros{$3} = $2;
+	$ac_macros{$3} = $filename;
       }
     else
       {
-	$au_macros{$3} = $2;
+	$au_macros{$3} = $filename;
       }
   }
 close MACROS

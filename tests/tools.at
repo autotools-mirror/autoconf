@@ -440,7 +440,7 @@ AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
 ])
 AT_CHECK([cat configure.ac], 0, [expout])
 
-AT_CLEANUP
+AT_CLEANUP(configure.ac~)
 
 
 # autoupdating AC_LINK_FILES
@@ -469,7 +469,7 @@ AT_CHECK([cat src1], 0, [dst1
 AT_CHECK([cat src2], 0, [dst2
 ])
 
-AT_CLEANUP(src1 src2)
+AT_CLEANUP(src1 src2 configure.ac~)
 
 
 # autoupdating AC_PREREQ

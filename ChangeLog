@@ -1,3 +1,12 @@
+2001-03-13  Akim Demaille  <akim@epita.fr>
+
+	* tests/tools.at: Be sure to remove configure.ac~.
+
+2001-03-13  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* autoupdate.in (File::Basename): Use package.
+	(%ac_macros, %au_macros): Save only base filenames.
+
 2001-03-08  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): In the AU_DEFUN definition, don't try
