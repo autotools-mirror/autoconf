@@ -10258,6 +10258,23 @@ $ @kbd{make -f Makefile2}
 this is test
 @end example
 
+@item Trailing backslash in macro
+HP-UX 11.20 on IA-64 will read multiple newlines following a
+backslash, continuing to the next non-empty line.  For example,
+
+@example
+FOO = one \
+
+BAR = two
+
+test:
+	: FOO is "$(FOO)"
+	: BAR is "$(BAR)"
+@end example
+
+shows @code{FOO} equal to @code{one BAR = two}.  Other Makes sensibly
+let a backslash continue only to the immediately following line.
+
 @item @code{make macro=value} and sub-@command{make}s.
 
 A command-line variable definition such as @code{foo=bar} overrides any
