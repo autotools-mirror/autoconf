@@ -143,57 +143,36 @@ Try `$me --help' for more information.\n"
 # Put values in the tables of what to do with each token.
 sub init_tables ()
 {
-  # Initialize a table of C keywords (to ignore).
-  # Taken from K&R 1st edition p. 180.
-  # ANSI C, GNU C, and C++ keywords can introduce portability problems,
-  # so don't ignore them.
-
   # The data file format supports only one line of macros per function.
   # If more than that is required for a common portability problem,
   # a new Autoconf macro should probably be written for that case,
   # instead of duplicating the code in lots of configure.ac files.
+  my $file = find_file ("autoscan/autoscan.list",
+			reverse (@prepend_include), @include);
+  my $table = new Autom4te::XFile $file;
   my $tables_are_consistent = 1;
-  foreach my $kind (@kinds)
+
+  while ($_ = $table->getline)
     {
-      my $file = find_file ("autoscan/$kind",
-                            reverse(@prepend_include), @include);
-      my $table = new Autom4te::XFile $file;
-      while ($_ = $table->getline)
+      # Ignore blank lines and comments.
+      next
+	if /^\s*$/ || /^\s*\#/;
+
+      # '<kind>: <word> <macro invocation>' or...
+      # '<kind>: <word> warn: <message>'.
+      if (/^(\S+):\s+(\S+)\s+(\S.*)$/)
 	{
-	  # Ignore blank lines and comments.
-	  next
-	    if /^\s*$/ || /^\s*\#/;
-
-	  # '<kind>: <word> <macro invocation>' or...
-	  # '<kind>: <word> warn: <message>'.
-	  if (/^(\S+):\s+(\S+)\s+(\S.*)$/)
-	    {
-	      my ($mkind, $word, $macro) = ($1, $2, $3);
-	      die "$mkind:$kind\n"
-		unless "${mkind}s" eq $kind;
-	      # The default macro must be explicitly listed for words
-	      # which have a specific macros.  This allows to enforce
-	      # consistency checks.
-	      if (!defined $word && exists $macro{$kind}{$word})
-		{
-		  warn ("$file:$.: "
-			. "ignoring implicit call to the generic macro for $word\n");
-		  $tables_are_consistent = 0;
-		}
-	      else
-		{
-		  push @{$macro{$kind}{$word}}, $macro;
-		}
-	      next;
-	    }
-
-	  error "cannot parse definition in $file:\n$_";
+	  my ($kind, $word, $macro) = ("$1s", $2, $3);
+	  error "$file:$.: invalid kind: $_"
+	    unless grep { $_ eq $kind } @kinds;
+	  push @{$macro{$kind}{$word}}, $macro;
 	}
-      $table->close;
+      else
+	{
+	  error "$file:$.: invalid definition: $_";
+	}
     }
 
-  error "some tables are inconsistent"
-    if !$tables_are_consistent;
 }
 
 
@@ -207,7 +186,7 @@ sub used ($$;$)
   if (
       # Check for all the libraries.  But `-links' is certainly a
       # `find' argument, and `-le', a `test' argument.
-      ($kind eq 'libraries' && $word !~ /^e|inks$/)
+      ($kind eq 'libraries' && $word !~ /^(e|inks)$/)
       # Other than libraries are to be checked only if listed in
       # the Autoscan library files.
       || defined $macro{$kind}{$word}

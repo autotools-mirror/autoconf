@@ -2,5 +2,4 @@
 
 autoscanlibdir = $(pkgdatadir)/autoscan
 
-dist_autoscanlib_DATA = headers libraries programs functions \
-identifiers makevars
+dist_autoscanlib_DATA = autoscan.list

@@ -2,6 +2,14 @@
 
 	* lib/autoscan/functions, lib/autoscan/headers,
 	* lib/autoscan/identifiers, lib/autoscan/makevars,
+	* lib/autoscan/programs: Merge into...
+	* lib/autoscan/autoscan.list: this.
+	* bin/autoscan.in (&init_tables): Adjust.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoscan/functions, lib/autoscan/headers,
+	* lib/autoscan/identifiers, lib/autoscan/makevars,
 	* lib/autoscan/programs: Make the `kind' explicit, i.e., each
 	`functions' line is now prefixed with `function:'.
 	* bin/autoscan.in (&init_tables): Adjust.
