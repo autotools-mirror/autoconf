@@ -94,6 +94,7 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
 at_cli_args=${1+"$[@]"}
+at_debug_args=
 
 . ./atconfig
 
@@ -166,6 +167,7 @@ while test $[@%:@] -gt 0; do
         at_tests="$at_tests$at_range ";;
 
     *=*)
+      at_debug_args="$1"
       at_envvar=`expr "x$[1]" : 'x\([[^=]]*\)='`
       # Reject names that are not valid shell variable names.
       expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
@@ -431,7 +433,7 @@ elif test $at_debug = false; then
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
       echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-           '-v -d' "$at_cli_args" "$at_group" '${1+"$[@]"}'
+           '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh

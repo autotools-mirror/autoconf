@@ -1,5 +1,12 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Don't pass all the args to
+	debug scripts, in particular passing explicitly listed tests to
+	run is stupid.
+
+	
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&parse_args): Strip `.' from `@include'.
 	* bin/autoupdate.in: Use --include, -I, and --force, -f, too.
 	Use directly autom4te, not autoconf.
