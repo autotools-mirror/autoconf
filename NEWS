@@ -27,6 +27,8 @@
 - Using --program-suffix/--program-prefix is portable.
 - Failures to detect the default compiler's output extension are less
   likely.
+- `config.status foo' works properly when `foo' depends on variables
+  set in an AC_CONFIG_THING INIT-CMD.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
