@@ -73,13 +73,7 @@ the @code{configure} script does not know about.  You can give
 environment.  Using a Bourne-compatible shell, you can do that on the
 command line like this:
 @example
-CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-@end example
-
-@noindent
-Or on systems that have the @code{env} program, you can do it like this:
-@example
-env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 @end example
 
 @node Multiple Architectures
@@ -173,6 +167,19 @@ default values for variables like @code{CC}, @code{cache_file}, and
 @file{@var{prefix}/etc/config.site} if it exists.  Or, you can set
 the @code{CONFIG_SITE} environment variable to the location of the site
 script.  A warning: not all @code{configure} scripts look for a site script.
+
+@node Environment Variables
+@section Environment Variables
+
+Variables not defined in a site shell script can be set in the
+environment passed to configure.  However, some packages may run
+configure again during the build, and the customized values of these
+variables may be lost.  In order to avoid this problem, you can set them
+in the @code{configure} command line, using @samp{--env-VAR=value} or
+@samp{VAR=value}.  For example, the switch
+@samp{--env-CC=/usr/local2/bin/gcc} will cause the specified gcc to be
+used as the C compiler (unless it is overridden in the site shell
+script).
 
 @node Operation Controls
 @section Operation Controls

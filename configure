@@ -120,6 +120,19 @@ do
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
 
+  -env-* | --env-*)
+    ac_envvar=`echo $ac_option|sed -e 's/^-*env-//' -e 's/=.*//'`
+    # Reject names that are not valid shell variable names.
+    if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
+      { echo "configure: error: $ac_envvar: invalid variable name" 1>&2; exit 1; }
+    fi
+    case "$ac_option" in
+      *=*) ;;
+      *) { echo "configure: error: $ac_envvar: missing value" 1>&2; exit 1; } ;;
+    esac
+    eval "${ac_envvar}='$ac_optarg'"
+    export $ac_envvar ;;
+
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
   | --exec | --exe | --ex)
@@ -141,6 +154,7 @@ Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
 Configuration:
   --cache-file=FILE       cache test results in FILE
+  [--env-]VAR=VALUE       set environment variable VAR to VALUE
   --help                  print this message
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
@@ -380,6 +394,15 @@ EOF
 
   -*) { echo "configure: error: $ac_option: invalid option; use --help to show usage" 1>&2; exit 1; }
     ;;
+
+  *=*) 
+    ac_envvar=`echo $ac_option|sed -e 's/=.*//'`
+    # Reject names that are not valid shell variable names.
+    if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
+      { echo "configure: error: $ac_envvar: invalid variable name" 1>&2; exit 1; }
+    fi
+    eval "${ac_envvar}='$ac_optarg'"
+    export $ac_envvar ;;
 
   *)
     if test -n "`echo $ac_option| sed 's/[-a-z0-9.]//g'`"; then
@@ -897,8 +920,7 @@ ac_given_INSTALL="$INSTALL"
 # Allow concurrent executions
 conftest=cft\$\$
 
-: \${CONFIG_FILES="Makefile
-testsuite/Makefile"}
+: \${CONFIG_FILES="Makefile testsuite/Makefile"}
 rm -fr \`echo "\$CONFIG_FILES " | sed "s/:@BKL@^ @BKR@*//g"\`
 trap 'rm -fr \$conftest*; exit 1' 1 2 15
 

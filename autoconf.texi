@@ -281,6 +281,7 @@ Running @code{configure} Scripts
 * Optional Features::           Selecting optional features
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
+* Environment Variables::       Defining environment variables.
 * Operation Controls::          Changing how @code{configure} runs
 
 Questions About Autoconf
@@ -5003,6 +5004,7 @@ may use comes with Autoconf.
 * Optional Features::           Selecting optional features
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
+* Environment Variables::       Defining environment variables.
 * Operation Controls::          Changing how @code{configure} runs
 @end menu
 

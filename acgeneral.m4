@@ -712,6 +712,21 @@ changequote([, ])dnl
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
 
+  -env-* | --env-*)
+    ac_envvar=`echo $ac_option|sed -e 's/^-*env-//' -e 's/=.*//'`
+    # Reject names that are not valid shell variable names.
+changequote(, )dnl
+    if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
+changequote([, ])dnl
+      AC_MSG_ERROR($ac_envvar: invalid variable name)
+    fi
+    case "$ac_option" in
+      *=*) ;;
+      *) AC_MSG_ERROR($ac_envvar: missing value) ;;
+    esac
+    eval "${ac_envvar}='$ac_optarg'"
+    export $ac_envvar ;;
+
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
   | --exec | --exe | --ex)
@@ -734,6 +749,7 @@ Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
 Configuration:
   --cache-file=FILE       cache test results in FILE
+  [--env-]VAR=VALUE       set environment variable VAR to VALUE
   --help                  print this message
   --no-create             do not create output files
   --quiet, --silent       do not print \`checking...' messages
@@ -978,6 +994,17 @@ changequote([, ])dnl
 
   -*) AC_MSG_ERROR([$ac_option: invalid option; use --help to show usage])
     ;;
+
+  *=*) 
+    ac_envvar=`echo $ac_option|sed -e 's/=.*//'`
+    # Reject names that are not valid shell variable names.
+changequote(, )dnl
+    if test -n "`echo $ac_envvar| sed 's/[_a-zA-Z0-9]//g'`"; then
+changequote([, ])dnl
+      AC_MSG_ERROR($ac_envvar: invalid variable name)
+    fi
+    eval "${ac_envvar}='$ac_optarg'"
+    export $ac_envvar ;;
 
   *)
 changequote(, )dnl

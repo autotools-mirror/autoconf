@@ -1,3 +1,10 @@
+1999-09-14  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
+
+	* acgeneral.m4 (Configuration): Accept --env-VAR=VALUE and
+	VAR=value.
+	* autoconf.texi, install.texi: Document it.
+	* configure: Rebuilt.
+
 1999-09-14  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_HELP_STRING): Rewrite in m4.  Have m4 work, and
