@@ -29,6 +29,7 @@
 m4_define([AT_DATA_M4SUGAR],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
+               [@&t@],    [@&@&t@t@],
                [\(m4\)_], [\1@&t@_],
                [dnl],     [d@&t@nl])])])
 
@@ -52,6 +53,7 @@ m4_define([AT_CHECK_M4SUGAR],
 m4_define([AT_DATA_M4SH],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
+               [@&t@],        [@&@&t@t@],
                [\(m4\|AS\)_], [\1@&t@_],
                [dnl],         [d@&t@nl])])])
 
@@ -75,6 +77,7 @@ m4_define([AT_CHECK_M4SH],
 m4_define([AT_DATA_AUTOCONF],
 [AT_DATA([$1],
 [m4_bpatsubsts([$2],
+               [@&t@],            [@&@&t@t@],
                [\(m4\|AS\|AC\)_], [\1@&t@_],
                [dnl],             [d@&t@nl])])])
 
@@ -110,7 +113,7 @@ m4_define([AT_DATA_AUTOCONF],
 #   From acfunctions.m4.
 #
 m4_define([AT_CONFIGURE_AC],
-[AT_DATA_AUTOCONF([configure.ac],
+[AT_DATA_AUTOCONF([aclocal.m4],
 [[
 # AC_STATE_SAVE(FILE)
 # ------------------
@@ -142,36 +145,39 @@ m4_defun([AC_STATE_SAVE],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.
-  grep '^m4_defn([m4_re_word])=' >state-env.$1
-test $? = 0 || rm -f state-env.$1
+  grep '^m4_defn([m4_re_word])=' >state-env.$[@]&t@1
+test $? = 0 || rm -f state-env.$[@]&t@1
 
-ls -1 | egrep -v '^(at-|state-|config\.)' | sort >state-ls.$1
+ls -1 | egrep -v '^(at-|state-|config\.)' | sort >state-ls.$[@]&t@1
 ])# AC_STATE_SAVE
+]])
 
-AC_INIT
+AT_DATA([configure.ac],
+[[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/config)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_STATE_SAVE(before)]
 $1
 [AC_OUTPUT
 AC_STATE_SAVE(after)
-]])])
+]])
+])# AT_CONFIGURE_AC
 
 
 # AT_CHECK_AUTOCONF(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CHECK([autoconf --include=$srcdir $1],
-         [$2], [$3], [$4])])
+[AT_CHECK([autoconf $1],
+          [$2], [$3], [$4])])
 
 
 # AT_CHECK_AUTOHEADER(ARGS, [EXIT-STATUS = 0],
 #                     STDOUT, [STDERR = `autoheader: `config.hin' is created'])
 # -----------------------------------------------------------------------------
 m4_define([AT_CHECK_AUTOHEADER],
-[AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
-         [$3],
-         m4_default([$4], [[autoheader: `config.hin' is created
+[AT_CHECK([autoheader $1], [$2],
+          [$3],
+          m4_default([$4], [[autoheader: `config.hin' is created
 ]]))])
 
 
@@ -179,13 +185,13 @@ m4_define([AT_CHECK_AUTOHEADER],
 #                    [EXIT-STATUS = 0],
 #                    [SDOUT = IGNORE], STDERR)
 # --------------------------------------------
-# `top_srcdir' is needed so that `./configure' finds install-sh.
+# `top_srcpath' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
-[AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
-         [$2],
-         m4_default([$3], [ignore]), [$4],
-         [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
+[AT_CHECK([top_srcdir=$top_srcpath ./configure $1],
+          [$2],
+          m4_default([$3], [ignore]), [$4],
+          [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
 
 
 # AT_CHECK_ENV
@@ -231,8 +237,6 @@ m4_define([AT_CHECK_AUTOUPDATE],
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
-# `config.guess' etc.).
 m4_define([_AT_CHECK_AC_MACRO],
 [AT_CONFIGURE_AC([$1])
 $2
@@ -249,8 +253,6 @@ AT_CHECK_ENV
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
-# `config.guess' etc.).
 #
 # New macros are not expected to depend upon obsolete macros.
 m4_define([AT_CHECK_MACRO],
@@ -272,8 +274,6 @@ AT_CLEANUP()dnl
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, autoupdate this script, check that autoconf runs
 # on that script, and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need
-# `install-sh', `config.guess' etc.).
 #
 # Updated configure.ac shall not depend upon obsolete macros, which votes
 # in favor of `-W obsolete', but since many of these macros leave a message

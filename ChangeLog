@@ -1,5 +1,18 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* tests/atspecific.m4 (AT_DATA_M4SUGAR, AT_DATA_M4SH)
+	(AT_DATA_AUTOCONF):  Also protect @&t@ from autom4te.
+	(AT_CHECK_AUTOCONF, AT_CHECK_AUTOHEADER): Pass no --include
+	option.
+	(AT_CHECK_CONFIGURE): Use absolute paths.
+	(_AT_CHECK_AC_MACRO): Create aclocal.m4 with AC_STATE_SAVE in it.
+	The problem is still the old one: there is no means in M4 (that I
+	know about) to create a defining macro, because there is no means
+	to create `$1' etc., therefore, the defining macro ``swallows''
+	all the arguments meant to the defined macro.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (AT_DATA_AUTOCONF): New.
         (AT_CONFIGURE_AC): Output the definition of AC_STATE_SAVE in
         configure.ac.
