@@ -1101,19 +1101,6 @@ dnl
 dnl ### Checks for structure members
 dnl
 dnl
-AC_DEFUN(AC_STRUCT_TM,
-[AC_MSG_CHECKING([whether struct tm is in sys/time.h or time.h])
-AC_CACHE_VAL(ac_cv_struct_tm,
-[AC_TRY_LINK([#include <sys/types.h>
-#include <time.h>],
-[struct tm *tp; tp->tm_sec;],
-  ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])dnl
-AC_MSG_RESULT($ac_cv_struct_tm)
-if test $ac_cv_struct_tm = sys/time.h; then
-  AC_DEFINE(TM_IN_SYS_TIME)
-fi
-])dnl
-dnl
 AC_DEFUN(AC_HEADER_TIME,
 [AC_MSG_CHECKING([whether time.h and sys/time.h may both be included])
 AC_CACHE_VAL(ac_cv_header_time,
@@ -1124,6 +1111,19 @@ AC_CACHE_VAL(ac_cv_header_time,
 AC_MSG_RESULT($ac_cv_header_time)
 if test $ac_cv_header_time = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME)
+fi
+])dnl
+dnl
+AC_DEFUN(AC_STRUCT_TM,
+[AC_MSG_CHECKING([whether struct tm is in sys/time.h or time.h])
+AC_CACHE_VAL(ac_cv_struct_tm,
+[AC_TRY_LINK([#include <sys/types.h>
+#include <time.h>],
+[struct tm *tp; tp->tm_sec;],
+  ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])dnl
+AC_MSG_RESULT($ac_cv_struct_tm)
+if test $ac_cv_struct_tm = sys/time.h; then
+  AC_DEFINE(TM_IN_SYS_TIME)
 fi
 ])dnl
 dnl
@@ -1208,8 +1208,7 @@ AC_MSG_RESULT($ac_cv_c_cross)
 ])dnl
 dnl
 AC_DEFUN(AC_C_CHAR_UNSIGNED,
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_MSG_CHECKING(whether char is unsigned)
+[AC_MSG_CHECKING(whether char is unsigned)
 AC_CACHE_VAL(ac_cv_c_char_unsigned,
 [AC_TRY_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
@@ -1227,8 +1226,7 @@ fi
 ])dnl
 dnl
 AC_DEFUN(AC_C_LONG_DOUBLE,
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_MSG_CHECKING(for long double)
+[AC_MSG_CHECKING(for long double)
 AC_CACHE_VAL(ac_cv_c_long_double,
 [if test "$GCC" = yes; then
   ac_cv_c_long_double=yes
@@ -1282,8 +1280,7 @@ fi
 ])dnl
 dnl
 AC_DEFUN(AC_C_INLINE,
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_MSG_CHECKING([for inline])
+[AC_MSG_CHECKING([for inline])
 AC_CACHE_VAL(ac_cv_c_inline,
 [if test "$GCC" = yes; then
 AC_TRY_LINK(, [} inline foo() {], ac_cv_c_inline=yes, ac_cv_c_inline=no)
