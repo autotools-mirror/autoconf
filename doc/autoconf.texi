@@ -541,7 +541,7 @@ Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
 list}.
 
 Bug reports should be preferably submitted to the
-@href{http://sources.redhat.com/cgi-bin/gnatsweb.pl?database=autoconf,
+@href{http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf,
 Autoconf Gnats database}, or sent to @email{bug-autoconf@@gnu.org, the
 Autoconf Bugs mailing list}.  If possible, first check that your bug is
 not already solved in current development versions, and that it has not

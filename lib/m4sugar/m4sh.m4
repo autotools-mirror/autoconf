@@ -733,7 +733,7 @@ _ASBOX])
 # definitely a literal, but will not be recognized as such.
 m4_define([AS_LITERAL_IF],
 [m4_bmatch([$1], [[`$]],
-          [$3], [$2])])
+           [$3], [$2])])
 
 
 # AS_TMPDIR(PREFIX)

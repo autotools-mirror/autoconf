@@ -1,3 +1,7 @@
+2002-03-26  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Introduction): The GNATS base moved.
+
 2002-03-25  Paul Eggert  <eggert@twinsun.com>
 
 	* tests/m4sh.at: Don't rely on "PATH=test:$PATH test-1" working
