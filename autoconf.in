@@ -66,6 +66,11 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 help="\
 Try \`$me --help' for more information."
 
+exit_missing_arg="\
+echo \"$me: option \\\`\$1' requires an argument\" >&2
+echo \"\$help\" >&2
+exit 1"
+
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally
 # because not all systems understand e.g. LANG=C (notably SCO).
@@ -138,8 +143,8 @@ while test $# -gt 0 ; do
        localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     --localdir | --l* | -l )
+       test $# = 1 && eval "$exit_missing_arg"
        shift
-       test $# = 0 && { echo "$help" >&2; exit 1; }
        localdir=$1
        shift ;;
 
@@ -147,8 +152,8 @@ while test $# -gt 0 ; do
        AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     --macrodir | --m* | -m )
+       test $# = 1 && eval "$exit_missing_arg"
        shift
-       test $# = 0 && { echo "$help" >&2; exit 1; }
        AC_MACRODIR=$1
        shift ;;
 
@@ -157,9 +162,9 @@ while test $# -gt 0 ; do
        shift;;
 
     --trace | -t )
+       test $# = 1 && eval "$exit_missing_arg"
        task=trace
        shift
-       test $# = 0 && { echo "$help" >&2; exit 1; }
        traces="$traces '"`echo "$1" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --trace=* )
@@ -172,8 +177,8 @@ while test $# -gt 0 ; do
        shift;;
 
     --output | -o )
+       test $# = 1 && eval "$exit_missing_arg"
        shift
-       test $# = 0 && { echo "$help" >&2; exit 1; }
        outfile=$1
        shift ;;
     --output=* )
@@ -181,8 +186,8 @@ while test $# -gt 0 ; do
        shift ;;
 
     --warnings | -W )
+       test $# = 1 && eval "$exit_missing_arg"
        shift
-       test $# = 0 && { echo "$help" >&2; exit 1; }
        warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
        shift ;;
     --warnings=* )
