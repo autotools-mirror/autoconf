@@ -36,6 +36,11 @@ Operation modes:
   -v, --verbose   verbosely report processing
   -d, --debug     don't remove temporary files
   -f, --force     consider every files are obsolete
+  -i, --install   copy missing auxiliary files
+      --symlink   instead of copying, install symbolic links
+
+The option \`--install' is similar to the option \`--add-missing' in
+other tools.
 
 Library directories:
   -m, --macrodir=ACDIR  Autoconf's macro files location (rarely needed)
@@ -89,9 +94,13 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 debug=false
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
 force=false
+# --install -- as --add-missing in other tools.
+install=false
 localdir=.
 # m4dir -- local Autoconf extensions.  Typically `m4'.
 m4dir=
+# symlink -- when --install, use symlinks instead.
+symlink=false
 verbose=:
 
 # Looking for autoconf.
@@ -161,6 +170,11 @@ while test $# -gt 0; do
      --force | -f )
        force=:; shift ;;
 
+     --install | -i )
+       install=:; shift ;;
+     --symlink )
+       symlink=:; shift ;;
+
      # Options of Automake.
      --cygnus | --foreign | --gnits | --gnu | --include-deps | -i )
        automake="$automake $1"; shift ;;
@@ -186,12 +200,23 @@ if test $# -ne 0; then
 fi
 
 # Dispatch autoreconf's option to the tools.
-autoconf="$autoconf -l $localdir `$verbose --verbose`"
-autoheader="$autoheader -l $localdir `$verbose --verbose`"
+# --localdir
+autoconf="$autoconf -l $localdir"
+autoheader="$autoheader -l $localdir"
+# --force
 $force || automake="$automake --no-force"
+# --verbose
+autoconf="$autoconf `$verbose --verbose`"
+autoheader="$autoheader `$verbose --verbose`"
 automake="$automake `$verbose --verbose`"
 aclocal="$aclocal `$verbose --verbose`"
+# --macrodir
 export AC_MACRODIR
+# --install and --symlink
+if $install; then
+  automake="$automake --add-missing `$symlink || echo --copy`"
+fi
+
 
 # Trap on 0 to stop playing with `rm'.
 $debug ||
@@ -292,7 +317,7 @@ while read dir; do
   test -f "Makefile.am" &&
     uses_automake=:
   if $uses_automake &&
-     { $force || $update Makefile.in Makefile.am; } then
+     { $force || $install || $update Makefile.in Makefile.am; } then
     $verbose running $automake in $dir >&2
     $automake
   fi
