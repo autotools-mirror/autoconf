@@ -1729,26 +1729,25 @@ test "$host_alias" != "$target_alias" &&
 ])
 
 
+
 dnl Subroutines of AC_CANONICAL_SYSTEM.
 
+dnl AC_CANONICAL_THING(THING)
+dnl -------------------------
 dnl Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
 dnl `host', `target', or `build'.  Canonicalize the appropriate thing,
 dnl generating the variables THING, THING_{alias cpu vendor os}, and the
 dnl associated cache entries.  We also redo the cache entries if the user
 dnl specifies something different from ac_cv_$THING_alias on the command line.
-
-dnl AC_CANONICAL_THING(THING)
-dnl -------------------------
-AC_DEFUN(AC_CANONICAL_THING,
+define(AC_CANONICAL_THING,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-
 ifelse([$1], [host], , [AC_REQUIRE([AC_CANONICAL_HOST])])dnl
 AC_MSG_CHECKING([$1 system type])
 if test "x$ac_cv_$1" = "x" || (test "x$$1" != "xNONE" && test "x$$1" != "x$ac_cv_$1_alias"); then
 
-# Make sure we can run config.sub.
-  if $ac_config_sub sun4 >/dev/null 2>&1; then :
-    else AC_MSG_ERROR(cannot run $ac_config_sub)
+  # Make sure we can run config.sub.
+  if $ac_config_sub sun4 >/dev/null 2>&1; then :; else
+    AC_MSG_ERROR(cannot run $ac_config_sub)
   fi
 
 dnl Set $1_alias.
@@ -1767,8 +1766,8 @@ ifelse([$1], [host],[dnl
     esac ;;
   esac
 
-dnl Set the other $[1] vars.
-  ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias`
+dnl Set the other $[1] vars.  Propagate the failures of config.sub.
+  ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias` || exit 1
   ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
   ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
   ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
@@ -1783,14 +1782,11 @@ $1_alias=$ac_cv_$1_alias
 $1_cpu=$ac_cv_$1_cpu
 $1_vendor=$ac_cv_$1_vendor
 $1_os=$ac_cv_$1_os
-
 AC_SUBST($1)dnl
 AC_SUBST($1_alias)dnl
 AC_SUBST($1_cpu)dnl
 AC_SUBST($1_vendor)dnl
 AC_SUBST($1_os)dnl
-
-AC_PROVIDE([$0])
 ])dnl AC_CANONICAL_THING
 
 AC_DEFUN(AC_CANONICAL_HOST, [AC_CANONICAL_THING([host])])
@@ -3361,21 +3357,19 @@ changequote(, )dnl
 changequote([, ])dnl
 fi
 
-trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
-
 ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
 dnl Commands to run before creating config.status.
-AC_OUTPUT_PRE_COMMANDS()dnl
+AC_OUTPUT_COMMANDS_PRE()dnl
 
-# Without the "./", some shells look in PATH for config.status.
 : ${CONFIG_STATUS=./config.status}
+trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 AC_OUTPUT_CONFIG_STATUS()dnl
 rm -fr confdefs* $ac_clean_files
 trap 'exit 1' 1 2 15
 
 dnl Commands to run after config.status was created
-AC_OUTPUT_POST_COMMANDS()dnl
+AC_OUTPUT_COMMANDS_POST()dnl
 
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.

@@ -3009,10 +3009,10 @@ dnl Be optimistic at first.
 dnl ### Checks for operating system services
 
 
+dnl AC_SYS_INTERPRETER
+dnl ------------------
 AC_DEFUN(AC_SYS_INTERPRETER,
-[# Pull the hash mark out of the macro call to avoid m4 problems.
-ac_msg="whether #! works in shell scripts"
-AC_CACHE_CHECK($ac_msg, ac_cv_sys_interpreter,
+[AC_CACHE_CHECK(whether @PND@! works in shell scripts, ac_cv_sys_interpreter,
 [echo '#! /bin/cat
 exit 69
 ' >conftest
@@ -3055,8 +3055,8 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   test -w $ac_dir || continue # It is less confusing to not echo anything here.
   (echo 1 >$ac_dir/conftest9012345) 2>/dev/null
   (echo 2 >$ac_dir/conftest9012346) 2>/dev/null
-  val=`cat $ac_dir/conftest9012345 2>/dev/null`
-  if test ! -f $ac_dir/conftest9012345 || test "$val" != 1; then
+  ac_val=`cat $ac_dir/conftest9012345 2>/dev/null`
+  if test ! -f $ac_dir/conftest9012345 || test "$ac_val" != 1; then
     ac_cv_sys_long_file_names=no
     rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
     break
@@ -3479,10 +3479,10 @@ else
   echo 'int main () { return 0; }' >conftest.$ac_ext
   ac_cv_exeext=
   if AC_TRY_EVAL(ac_link); then
-    for file in conftest.*; do
-      case $file in
+    for ac_file in conftest.*; do
+      case $ac_file in
       *.c | *.C | *.o | *.obj | *.xcoff) ;;
-      *) ac_cv_exeext=`echo $file | sed -e s/conftest//` ;;
+      *) ac_cv_exeext=`echo $ac_file | sed -e s/conftest//` ;;
       esac
     done
   else

@@ -24,13 +24,13 @@ SUITE = syntax.m4 semantics.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 suite.m4 macros.m4 $(SUITE)
+EXTRA_DIST = atgeneral.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
 
 PERL = perl
 
-all-local: atconfig testsuite macros.m4
+all-local: atconfig testsuite
 
-check-local: atconfig testsuite macros.m4
+check-local: atconfig testsuite
 	$(SHELL) testsuite
 
 testsuite: atgeneral.m4 suite.m4 macros.m4 $(SUITE)
@@ -41,12 +41,19 @@ testsuite: atgeneral.m4 suite.m4 macros.m4 $(SUITE)
 macros.m4: $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
 	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\).*/\1/p' | \
-	  sort >macros
-	rm -f $@-t
-	for macro in `cat macros`; do \
-	  echo "TEST_MACRO([$$macro])" >>$@-t; \
+	  sort >defuns
+# Get the list of macros that are required: there is little interest
+# in testing them since they will be run but the guy who requires
+# them.
+	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
+	  sed -ne 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
+	  sort | uniq >requires
+	for macro in `cat defuns`; do \
+	  if fgrep "$$macro" requires >/dev/null 2>&1; then :; else \
+	    echo "TEST_MACRO([$$macro])" >>$@-t; \
+	  fi; \
 	done
-	rm macros
+	rm defuns requires
 	mv $@-t $@
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status \

@@ -1,5 +1,24 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	Test that the macros respect the user variable name space.
+
+	* acgeneral.m4 (AC_CANONICAL_THING): define, not AC_DEFUN.
+	Don't AC_PROVIDE, there is no need.
+	When calling `config.sub`, also || exit 1, to catch failures from
+	config.sub.
+	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): Use ac_val, not val.
+	(AC_EXEEXT): Use ac_file, not file.
+	* tests/actest.m4: New file, holding extra Autoconf macros used
+	during the testing.
+	(AC_ENV_SAVE): New macro, save the sh variables in a file.
+	* tests/suite.m4 (AT_TEST_MACRO, Generation of configure.in):
+	include actest.m4, and call twice AC_ENV_SAVE to compare the
+	variables before and after the macro.
+	* tests/Makefile.am (macro.m4): Don't test macros that are
+	required: they will be tested somewhere else.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4(AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS):
 	Renamed AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.  All
 	dependencies changed.
