@@ -2507,8 +2507,7 @@ s,@$1@,,;t t])])
 # AC_WARNING_IFELSE(CATEGORY, IF-TRUE, IF-FALSE)
 # ----------------------------------------------
 # If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
-# IF-FALSE.  CATEGORY is enabled iff `AC_WARNING_ENABLE(CATEGORY)' or
-# `AC_WARNING_ENABLE(all)' is defined.
+# IF-FALSE.
 #
 # The variable `_AC_WARNINGS' contains a comma separated list of
 # warnings which order is the converse from the one specified by
@@ -2539,9 +2538,9 @@ define([_AC_WARNING_IFELSE],
 # Report MESSAGE as a warning, unless the user requested -W error,
 # in which case report a fatal error.
 define([_AC_DIAGNOSE],
-[ifdef([AC_WARNING_ENABLE(error)],
-       [m4_fatal([$1])],
-       [m4_warn([$1])])])
+[AC_WARNING_IFELSE([error],
+                   [m4_fatal([$1])],
+                   [m4_warn([$1])])])
 
 
 # AC_DIAGNOSE(CATEGORY, MESSAGE)

@@ -1,5 +1,12 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	autoconf -W error does not work.
+
+	* acgeneral.m4 (_AC_DIAGNOSE): use _AC_WARNING_IFELSE,
+	_AC_WARNING_ENABLE is dead.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	Martin Wilck found a Fortran 77 compiler which always exits with
 	success.
 
