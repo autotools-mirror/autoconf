@@ -206,70 +206,11 @@ m4_define([m4_assert],
 ## ------------- ##
 
 
-# m4_warning_ifelse(CATEGORY, IF-TRUE, IF-FALSE)
-# ----------------------------------------------
-# If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
-# IF-FALSE.
-#
-# The variable `m4_warnings' contains a comma separated list of
-# warnings which order is the converse from the one specified by
-# the user, i.e., if she specified `-W error,none,obsolete',
-# `m4_warnings' is `obsolete,none,error'.  We read it from left to
-# right, and:
-# - if none or noCATEGORY is met, run IF-FALSE
-# - if all or CATEGORY is met, run IF-TRUE
-# - if there is nothing left, run IF-FALSE.
-m4_define([m4_warning_ifelse],
-[_m4_warning_ifelse([$1], [$2], [$3], m4_warnings)])
-
-
-# _m4_warning_ifelse(CATEGORY, IF-TRUE, IF-FALSE, WARNING1, ...)
-# --------------------------------------------------------------
-# Implementation of the loop described above.
-m4_define([_m4_warning_ifelse],
-[m4_case([$4],
-	 [$1],    [$2],
-	 [all],   [$2],
-	 [],      [$3],
-	 [none],  [$3],
-	 [no-$1], [$3],
-	 [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
-
-
-# _m4_warning_error_ifelse(IF-TRUE, IF-FALSE)
-# -------------------------------------------
-# The same as m4_warning_ifelse, but scan for `error' only.
-m4_define([_m4_warning_error_ifelse],
-[__m4_warning_error_ifelse([$1], [$2], m4_warnings)])
-
-
-# __m4_warning_error_ifelse(IF-TRUE, IF-FALSE)
-# --------------------------------------------
-# The same as _m4_warning_ifelse, but scan for `error' only.
-m4_define([__m4_warning_error_ifelse],
-[m4_case([$3],
-	 [error],    [$1],
-	 [],         [$2],
-	 [no-error], [$2],
-	 [$0([$1], [$2], m4_shiftn(3, $@))])])
-
-
-
-# _m4_warn(MESSAGE)
-# -----------------
-# Report MESSAGE as a warning, unless the user requested -W error,
-# in which case report a fatal error.
-m4_define([_m4_warn],
-[_m4_warning_error_ifelse([m4_fatal([$1])],
-			  [m4_warning([$1])])])
-
-
 # m4_warn(CATEGORY, MESSAGE)
 # --------------------------
 # Report a MESSAGE to the autoconf user if the CATEGORY of warnings
-# is requested (in fact, not disabled).
-m4_define([m4_warn],
-[m4_warning_ifelse([$1], [_m4_warn([$2])])])
+# is requested (in fact, not disabled).  This is for traces only.
+m4_define([m4_warn], [])
 
 
 

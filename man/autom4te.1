@@ -72,23 +72,35 @@ create M4sugar output
 `cross'
 cross compilation issues
 .TP
+`gnu'
+GNU coding standards (default in gnu and gnits modes)
+.TP
 `obsolete'
-obsolete constructs
+obsolete features or constructions
+.TP
+`override'
+user redefinitions of Automake rules or variables
+.TP
+`portability'
+portability issues
 .TP
 `syntax'
-dubious syntactic constructs
+dubious syntactic constructs (default)
+.TP
+`unsupported'
+unsupported or incomplete features (default)
 .TP
 `all'
 all the warnings
 .TP
 `no-CATEGORY'
-turn off the warnings on CATEGORY
+turn off warnings in CATEGORY
 .TP
 `none'
 turn off all the warnings
 .TP
 `error'
-warnings are error
+treat warnings as errors
 .PP
 The environment variable `WARNINGS' is honored.
 .SS "Library directories:"

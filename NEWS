@@ -3,6 +3,11 @@
 ** Autotest and local.at
   The optional file local.at is always included in Autotest test suites.
 
+** Warnings
+  The warnings are always issued, including with cached runs.
+  This became a significant problem since aclocal and automake can
+  run autoconf behind the scene.
+
 * Major changes in Autoconf 2.57a
 
   Released 2003-06-20 by Akim Demaille.

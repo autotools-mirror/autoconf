@@ -23,7 +23,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Support unset when possible.
-if (as_foo=foo; unset as_foo) >/dev/null 2>&1; then
+if ((MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   as_unset=unset
 else
   as_unset=false
@@ -2118,7 +2118,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Support unset when possible.
-if (as_foo=foo; unset as_foo) >/dev/null 2>&1; then
+if ((MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   as_unset=unset
 else
   as_unset=false

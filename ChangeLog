@@ -1,5 +1,39 @@
 2003-08-21  Akim Demaille  <akim@epita.fr>
 
+	First stab at preserving warnings between calls to autom4te,
+	including when the cache is used.
+
+	There are still several issues: (i) there are too many runs of m4
+	(one for include, one for warnings, and some more), (ii) warnings
+	spreading on several lines are not handled gracefully, (iii) the
+	code meant to have the call stack display for errors does not work
+	(its handling should move from m4 to autom4te).
+
+	* bin/autom4te.in Autom4te::Channels, Autom4te::ChannelDefs):
+	Use them.
+	(@preselect): Add m4_warn.
+	($exit_status): Remove, use $exit_code.
+	($help): Use Autom4te::ChannelDefs::usage.
+	(&handle_m4): No longer define the m4_warnings.
+	At each run, extract and report the warnings.
+	Always cache the result, including if the exit status is on
+	failure, since if nothing changes, we should result in the same
+	failure, hence we can use the cache.
+	* lib/m4sugar/m4sugar.m4 (m4_warning_ifelse, _m4_warning_ifelse)
+	(_m4_warning_error_ifelse, __m4_warning_error_ifelse, _m4_warn):
+	Remove.
+	(m4_warn): Redefine as a do-nothing: it is its invocation that
+	matters, as warnings are now reported via traces.
+	* lib/autoconf/general.m4 (AC_DIAGNOSE): Don't make it a copy of
+	the contents of m4_warn: make it _call_ m4_warn, so that tracing
+	the latter reveals calls to the former.
+
+	Adjust the tests.
+
+	* tests/m4sugar.at (m4@&t@_warn): Use existing warning categories.
+
+2003-08-21  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.pm (Autom4te::Channels, Autom4te::ChannelDefs):
 	Use them.
 

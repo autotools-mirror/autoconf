@@ -1875,8 +1875,8 @@ m4_define([AC_SUBST_FILE],
 # AC_DIAGNOSE(CATEGORY, MESSAGE)
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
 # --------------------------------
-m4_copy([m4_warn],  [AC_DIAGNOSE])
-m4_copy([m4_fatal], [AC_FATAL])
+m4_define([AC_DIAGNOSE], [m4_warn($@)])
+m4_define([AC_FATAL],    [m4_fatal($@)])
 
 
 # AC_WARNING(MESSAGE)

@@ -236,6 +236,8 @@ sub load
 
 package Autom4te;
 
+use Autom4te::ChannelDefs;
+use Autom4te::Channels;
 use Autom4te::FileUtils;
 use Autom4te::General;
 use File::Basename;
@@ -273,16 +275,12 @@ my %trace;
 # `m4_pattern_allow' to check the output.
 #
 # FIXME: What about `sinclude'?
-my @preselect = ('include', 'm4_pattern_allow', 'm4_pattern_forbid');
-
-# List of warnings.
-my @warning;
+my @preselect = ('include',
+		 'm4_pattern_allow', 'm4_pattern_forbid',
+		 'm4_warn');
 
 # M4 include path.
 my @include;
-
-# 0 for EXIT_SUCCESS.
-my $exit_status = 0;
 
 # Do we freeze?
 my $freeze = 0;
@@ -356,8 +354,7 @@ my %m4_builtin_alternate_name;
 
 # $HELP
 # -----
-$help = << "EOF";
-Usage: $0 [OPTION] ... [FILES]
+$help = "Usage: $0 [OPTION] ... [FILES]
 
 Run GNU M4 on the FILES, avoiding useless runs.  Output the traces if tracing,
 the frozen file if freezing, otherwise the expansion of the FILES.
@@ -391,14 +388,7 @@ Languages include:
   \`M4sh\'       create M4sh shell scripts
   \`M4sugar\'    create M4sugar output
 
-Warning categories include:
-  \`cross\'         cross compilation issues
-  \`obsolete\'      obsolete constructs
-  \`syntax\'        dubious syntactic constructs
-  \`all\'           all the warnings
-  \`no-CATEGORY\'   turn off the warnings on CATEGORY
-  \`none\'          turn off all the warnings
-  \`error\'         warnings are error
+" . Autom4te::ChannelDefs::usage . "
 
 The environment variable \`WARNINGS\' is honored.
 
@@ -414,7 +404,7 @@ Freezing:
   -F, --freeze   produce an M4 frozen state file for FILES
 
 Report bugs to <bug-autoconf\@gnu.org>.
-EOF
+";
 
 # $VERSION
 # --------
@@ -540,11 +530,12 @@ sub parse_args ()
   # Process the arguments for real this time.
   my @trace;
   my @prepend_include;
+  parse_WARNINGS;
   getopt
     (
      # Operation modes:
      "o|output=s"   => \$output,
-     "W|warnings=s" => \@warning,
+     "W|warnings=s" => \&parse_warnings,
      "m|mode=s"     => \$mode,
      "M|melt"       => \$melt,
 
@@ -656,13 +647,6 @@ sub handle_m4 ($@)
 {
   my ($req, @macro) = @_;
 
-  # The warnings are the concatenation of 1. application's defaults,
-  # 2. $WARNINGS, $3 command line options, in that order.
-  # Set them in the order expected by the M4 macros: the converse.
-  my $m4_warnings =
-    lc join (',', reverse (split (',', ($ENV{'WARNINGS'} || '')),
-			   map { split /,/ } @warning));
-
   # GNU m4 appends when using --error-output.
   unlink ($tcache . $req->id . "t");
 
@@ -674,7 +658,6 @@ sub handle_m4 ($@)
   # when we are interrupted (that leaves corrupted files).
   xsystem ("$m4"
 	   . join (' --include=', '', @include)
-	   . " --define=m4_warnings=$m4_warnings"
 	   . ' --debug=aflq'
 	   . (!exists $ENV{'AUTOM4TE_NO_FATAL'} ? ' --fatal-warning' : '')
 	   . " --error-output=$tcache" . $req->id . "t"
@@ -805,7 +788,7 @@ sub handle_output ($$)
   # This is unsatisfying but...
   my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
   my $file = new Autom4te::XFile ($ARGV[$#ARGV]);
-  $exit_status = 1;
+  $exit_code = 1;
 
   while ($_ = $file->getline)
     {
@@ -1207,6 +1190,15 @@ verbose "$me: the trace request object is:\n" . $req->marshall;
 handle_m4 ($req, keys %{$req->macro})
   if $force || ! $req->valid;
 
+# Issue the warnings each time autom4te was run.
+handle_traces ($req, "$tmp/warnings",
+	       ('m4_warn' => "\$1::\$f:\$l::\$2\n\n"));
+for (split (/\n{2,}/, contents ("$tmp/warnings")))
+{
+  my ($cat, $loc, $msg) = split '::';
+  msg $cat, $loc, "warning: $msg";
+}
+
 # Now output...
 if (%trace)
   {
@@ -1225,13 +1217,11 @@ else
       if mtime ($output) < mtime ($ocache . $req->id);
   }
 
-# If all went fine, the cache is valid.
-$req->valid (1)
-  if $exit_status == 0;
-
+# If we ran up to here, the cache is valid.
+$req->valid (1);
 Request->save ($icache_file);
 
-exit $exit_status;
+exit $exit_code;
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:
