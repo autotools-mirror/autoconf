@@ -1,5 +1,9 @@
 2003-09-12  Akim Demaille  <akim@epita.fr>
 
+	Version 2.57c.
+
+2003-09-12  Akim Demaille  <akim@epita.fr>
+
 	* config/config.guess, config/config.sub, config/missing,
 	* lib/Autom4te/Channels.pm, lib/Autom4te/Configure_ac.pm: Update
 	from masters.
