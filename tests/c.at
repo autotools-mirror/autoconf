@@ -2,7 +2,7 @@
 
 AT_BANNER([C low level compiling/preprocessing macros.])
 
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ AT_SETUP([AC_PROG_CPP with warnings])
 AT_DATA([mycpp],
 [[#! /bin/sh
 echo noise >&2
-exec ${1+"$@"}
+exec "$@"
 ]])
 
 chmod +x mycpp
@@ -146,7 +146,7 @@ AT_CHECK([/lib/cpp </dev/null || exit 77], [], [ignore], [ignore])
 # A cpp which exit status is meaningless.
 AT_DATA([mycpp],
 [[#! /bin/sh
-/lib/cpp ${1+"$@"}
+/lib/cpp "$@"
 exit 0
 ]])
 
