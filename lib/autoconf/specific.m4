@@ -272,7 +272,7 @@ dnl --------------
 AC_DEFUN(AC_PROG_CC_GNU,
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
-cat > conftest.c <<EOF
+cat >conftest.c <<EOF
 #ifdef __GNUC__
   yes;
 #endif
@@ -289,7 +289,7 @@ dnl ---------------
 AC_DEFUN(AC_PROG_CXX_GNU,
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
-cat > conftest.C <<EOF
+cat >conftest.C <<EOF
 #ifdef __GNUC__
   yes;
 #endif
@@ -308,7 +308,7 @@ dnl Compiler).  This test depends on whether the Fortran 77 compiler can
 dnl do CPP pre-processing.
 AC_DEFUN(AC_PROG_F77_GNU,
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
-[cat > conftest.fpp <<EOF
+[cat >conftest.fpp <<EOF
 #ifdef __GNUC__
   yes
 #endif
@@ -324,7 +324,7 @@ dnl AC_PROG_CC_G
 dnl ------------
 AC_DEFUN(AC_PROG_CC_G,
 [AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
-[echo 'void f(){}' > conftest.c
+[echo 'void f(){}' >conftest.c
 if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
   ac_cv_prog_cc_g=yes
 else
@@ -338,7 +338,7 @@ dnl AC_PROG_CXX_G
 dnl -------------
 AC_DEFUN(AC_PROG_CXX_G,
 [AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
-[echo 'void f(){}' > conftest.cc
+[echo 'void f(){}' >conftest.cc
 if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
   ac_cv_prog_cxx_g=yes
 else
@@ -354,7 +354,7 @@ dnl Test whether the Fortran 77 compiler can accept the `-g' option to
 dnl enable debugging.
 AC_DEFUN(AC_PROG_F77_G,
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
-[cat > conftest.f << EOF
+[cat >conftest.f <<EOF
        program conftest
        end
 EOF
@@ -405,7 +405,7 @@ changequote(, )dnl
 		       sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
-[echo 'foo(){}' > conftest.c
+[echo 'foo(){}' >conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
@@ -460,7 +460,7 @@ changequote(, )dnl
 sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
-[cat > conftest.f << EOF
+[cat >conftest.f <<EOF
        program conftest
        end
 EOF
@@ -571,7 +571,7 @@ AC_DEFUN(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
 set dummy ${MAKE-make}; ac_make=`echo "[$]2" | sed 'y%./+-%__p_%'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
-[cat > conftestmake <<\EOF
+[cat >conftestmake <<\EOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
@@ -1833,7 +1833,7 @@ AC_SUBST(KMEM_GROUP)dnl
 
 AC_DEFUN(AC_FUNC_UTIME_NULL,
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
-[rm -f conftestdata; > conftestdata
+[rm -f conftestdata; >conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
 AC_TRY_RUN([#include <sys/types.h>
 #include <sys/stat.h>
@@ -2428,7 +2428,7 @@ dnl --------------
 dnl Checks if `#' can be used to glue strings together at the CPP level.
 dnl Defines HAVE_STRINGIZE if positive.
 AC_DEFUN(AC_C_STRINGIZE,
-[AC_REQUIRE([AC_PROG_CPP])
+[AC_REQUIRE([AC_PROG_CPP])dnl
 AC_MSG_CHECKING([for preprocessor stringizing operator])
 AC_CACHE_VAL(ac_cv_c_stringize,
 AC_EGREP_CPP([#teststring],[
@@ -2472,7 +2472,7 @@ AC_DEFUN(AC_OBJEXT,
 [AC_MSG_CHECKING([for object suffix])
 AC_CACHE_VAL(ac_cv_objext,
 [rm -f conftest*
-echo 'int i = 1;' > conftest.$ac_ext
+echo 'int i = 1;' >conftest.$ac_ext
 if AC_TRY_EVAL(ac_compile); then
   for ac_file in conftest.*; do
     case $ac_file in
@@ -2529,14 +2529,14 @@ AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
   AC_CACHE_CHECK([for Fortran 77 libraries],
                  ac_cv_flibs,
   [
-    AC_REQUIRE([AC_PROG_F77])
-    AC_REQUIRE([AC_CYGWIN])
+    AC_REQUIRE([AC_PROG_F77])dnl
+    AC_REQUIRE([AC_CYGWIN])dnl
 
     AC_LANG_SAVE
     AC_LANG_FORTRAN77
 
 # This is the simplest of all Fortran 77 programs.
-    cat > conftest.$ac_ext <<EOF
+    cat >conftest.$ac_ext <<EOF
       end
 EOF
 
@@ -2569,7 +2569,7 @@ EOF
 changequote(, )dnl
 
     # If we are using xlf then replace all the commas with spaces.
-    if test `echo $f77_link_output | grep xlfentry > /dev/null 2>&1`; then
+    if test `echo $f77_link_output | grep xlfentry >/dev/null 2>&1`; then
         f77_link_output=`echo $f77_link_output | sed 's/,/ /g'`
     fi
 
@@ -2704,13 +2704,13 @@ AC_DEFUN(AC_F77_NAME_MANGLING,
   AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
                  ac_cv_f77_mangling,
   [
-    AC_REQUIRE([AC_PROG_CC])
-    AC_REQUIRE([AC_PROG_F77])
+    AC_REQUIRE([AC_PROG_CC])dnl
+    AC_REQUIRE([AC_PROG_F77])dnl
 
     AC_LANG_SAVE
     AC_LANG_FORTRAN77
 
-cat > conftest.$ac_ext <<EOF
+cat >conftest.$ac_ext <<EOF
       subroutine foobar()
       return
       end
@@ -2788,7 +2788,7 @@ AC_DEFUN(AC_F77_WRAPPERS,
 dnl Be optimistic at first.
     ac_cv_f77_wrappers="yes"
 
-    AC_REQUIRE([AC_F77_NAME_MANGLING])
+    AC_REQUIRE([AC_F77_NAME_MANGLING])dnl
     case "$f77_case" in
         lower)
             case "$f77_underscore" in
@@ -2844,7 +2844,7 @@ ac_msg="whether #! works in shell scripts"
 AC_CACHE_CHECK($ac_msg, ac_cv_sys_interpreter,
 [echo '#! /bin/cat
 exit 69
-' > conftest
+' >conftest
 chmod u+x conftest
 (SHELL=/bin/sh; export SHELL; ./conftest >/dev/null)
 if test $? -ne 69; then
@@ -2880,8 +2880,8 @@ fi
 for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   test -d $ac_dir || continue
   test -w $ac_dir || continue # It is less confusing to not echo anything here.
-  (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
-  (echo 2 > $ac_dir/conftest9012346) 2>/dev/null
+  (echo 1 >$ac_dir/conftest9012345) 2>/dev/null
+  (echo 2 >$ac_dir/conftest9012346) 2>/dev/null
   val=`cat $ac_dir/conftest9012345 2>/dev/null`
   if test ! -f $ac_dir/conftest9012345 || test "$val" != 1; then
     ac_cv_sys_long_file_names=no
@@ -2977,7 +2977,7 @@ AC_DEFUN(AC_PATH_X_XMKMF,
 if mkdir conftestdir; then
   cd conftestdir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
-  cat > Imakefile <<'EOF'
+  cat >Imakefile <<'EOF'
 acfindx:
 	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
 EOF
@@ -3279,21 +3279,24 @@ ac_cv_emxos2=yes, ac_cv_emxos2=no)])
 EMXOS2=
 test "$ac_cv_emxos2" = yes && EMXOS2=yes])
 
+
+dnl AC_EXEEXT
+dnl ---------
 dnl Check for the extension used for executables.  This knows that we
 dnl add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 dnl executable.  If this is called, the executable extensions will be
 dnl automatically used by link commands run by the configure script.
 AC_DEFUN(AC_EXEEXT,
-[AC_REQUIRE([AC_CYGWIN])
-AC_REQUIRE([AC_MINGW32])
-AC_REQUIRE([AC_EMXOS2])
+[AC_REQUIRE([AC_CYGWIN])dnl
+AC_REQUIRE([AC_MINGW32])dnl
+AC_REQUIRE([AC_EMXOS2])dnl
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
 [if test "$CYGWIN" = yes || test "$MINGW32" = yes || test "$EMXOS2" = yes; then
   ac_cv_exeext=.exe
 else
   rm -f conftest*
-  echo 'int main () { return 0; }' > conftest.$ac_ext
+  echo 'int main () { return 0; }' >conftest.$ac_ext
   ac_cv_exeext=
   if AC_TRY_EVAL(ac_link); then
     for file in conftest.*; do
@@ -3313,7 +3316,8 @@ test x"${ac_cv_exeext}" != xno && EXEEXT=${ac_cv_exeext}
 AC_MSG_RESULT(${ac_cv_exeext})
 dnl Setting ac_exeext will implicitly change the ac_link command.
 ac_exeext=$EXEEXT
-AC_SUBST(EXEEXT)])
+AC_SUBST(EXEEXT)dnl
+])dnl AC_EXEEXT
 
 
 dnl ### Checks for UNIX variants

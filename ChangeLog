@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Prefer `>file' over `> file' etc.
+	* acspecific.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Rename the family AC_NEED_DECL as AC_CHECK: it is more uniform,
 	but keep defining NEED_FOO_DECL when `foo' is not declared.  Files
 	not using Autoconf behave better when declarations lacks than when

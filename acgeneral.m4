@@ -931,7 +931,7 @@ changequote([, ])dnl
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
 changequote(, )dnl
-    cat << \EOF
+    cat <<\EOF
 `configure' configures software source code packages to adapt to many kinds
 of systems.
 
@@ -977,7 +977,7 @@ Program names:
                           run sed PROGRAM on installed program names
 
 EOF
-    cat << \EOF
+    cat <<\EOF
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
@@ -1331,7 +1331,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
-echo > confdefs.h
+echo >confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
@@ -1489,7 +1489,7 @@ AC_DEFUN(AC_ARG_PROGRAM,
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF_SED > conftestsed
+  cat <<\EOF_SED >conftestsed
 s,\\,\\\\,g; s,\$,$$,g
 EOF_SED
   program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
@@ -1753,13 +1753,13 @@ define(AC_CACHE_LOAD,
   test -f "$cache_file" && . $cache_file
 else
   echo "creating cache $cache_file"
-  > $cache_file
+  >$cache_file
 fi
 ])
 
 dnl AC_CACHE_SAVE()
 define(AC_CACHE_SAVE,
-[cat > confcache <<\EOF
+[cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
@@ -1795,14 +1795,14 @@ changequote(, )dnl
     # `set' quotes correctly as required by POSIX, so do not add quotes.
     sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
     ;;
-  esac >> confcache
+  esac >>confcache
 changequote([, ])dnl
 if cmp -s $cache_file confcache; then
   :
 else
   if test -w $cache_file; then
     echo "updating cache $cache_file"
-    cat confcache > $cache_file
+    cat confcache >$cache_file
   else
     echo "not updating unwritable cache $cache_file"
   fi
@@ -1841,7 +1841,7 @@ dnl Set VARIABLE to VALUE, verbatim, or 1.  Remember the value
 dnl and if VARIABLE is affected the same VALUE, do nothing, else
 dnl die.  The third argument is used by autoheader.
 define(AC_DEFINE,
-[cat >> confdefs.h <<\EOF
+[cat >>confdefs.h <<\EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
@@ -1852,7 +1852,7 @@ dnl AC_DEFINE_UNQUOTED(VARIABLE [, VALUE[, DESCRIPTION]])
 dnl -----------------------------------------------------
 dnl Similar, but perform shell substitutions $ ` \ once on VALUE.
 define(AC_DEFINE_UNQUOTED,
-[cat >> confdefs.h <<EOF
+[cat >>confdefs.h <<EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
@@ -2342,7 +2342,7 @@ dnl executables, otherwise set it to `no'.  Before calling
 dnl `AC_TRY_COMPILER()', call `AC_LANG_*' to set-up for the right
 dnl language.
 AC_DEFUN(AC_TRY_COMPILER,
-[cat > conftest.$ac_ext << EOF
+[cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77], ,
 [
 [#]line __oline__ "configure"
@@ -2474,7 +2474,7 @@ dnl ### Examining declarations
 dnl AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
-cat > conftest.$ac_ext <<EOF
+cat >conftest.$ac_ext <<EOF
 [#]line __oline__ "configure"
 #include "confdefs.h"
 [$1]
@@ -2510,7 +2510,7 @@ dnl AC_EGREP_CPP(PATTERN, PROGRAM, [ACTION-IF-FOUND [,
 dnl              ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
-cat > conftest.$ac_ext <<EOF
+cat >conftest.$ac_ext <<EOF
 [#]line __oline__ "configure"
 #include "confdefs.h"
 [$2]
@@ -2539,7 +2539,7 @@ dnl ### Examining syntax
 dnl AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
 dnl                [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_COMPILE,
-[cat > conftest.$ac_ext <<EOF
+[cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
 [      program main
 [$2]
@@ -2581,7 +2581,7 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_LINK,
-[cat > conftest.$ac_ext <<EOF
+[cat >conftest.$ac_ext <<EOF
 ifelse(AC_LANG, [FORTRAN77],
 [
       program main
@@ -2629,7 +2629,7 @@ fi
 dnl Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 dnl AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
 AC_DEFUN(AC_TRY_RUN_NATIVE,
-[cat > conftest.$ac_ext <<EOF
+[cat >conftest.$ac_ext <<EOF
 [#]line __oline__ "configure"
 #include "confdefs.h"
 ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
@@ -3127,7 +3127,7 @@ dnl Pay special attention not to have too long here docs: some old
 dnl shells die.  Unfortunately the limit is not known precisely...
 define(AC_OUTPUT_CONFIG_STATUS,
 [echo creating $CONFIG_STATUS
-cat > $CONFIG_STATUS <<EOF
+cat >$CONFIG_STATUS <<EOF
 #! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
@@ -3240,7 +3240,7 @@ dnl Issue this section only if there were actually config files.
 dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 ifval(AC_LIST_HEADERS AC_LIST_LINKS AC_LIST_FILES AC_LIST_COMMANDS,
-[cat >> $CONFIG_STATUS <<EOF
+[cat >>$CONFIG_STATUS <<EOF
 # If there were arguments and we reach this point, then the user
 # has specified the files to intantiate.  If there were no arguments,
 # then the files were specified by envvars.  Set only the envvar that
@@ -3283,10 +3283,10 @@ ifset([AC_LIST_LINKS],
 ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
-cat >> $CONFIG_STATUS <<EOF
+cat >>$CONFIG_STATUS <<EOF
 undivert(AC_DIVERSION_ICMDS)dnl
 EOF
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
 undivert(AC_DIVERSION_CMDS)dnl
 exit 0
 EOF
@@ -3309,7 +3309,7 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat > $ac_cs_root.defs <<\EOF
+cat >$ac_cs_root.defs <<\EOF
 changequote(<<, >>)dnl
 s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
@@ -3353,7 +3353,7 @@ dnl of the sed commands issued by AC_SUBST.  So if you change one, change
 dnl the other too.
 changequote(, )dnl
 sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' > \$ac_cs_root.subs <<\\CEOF
+ s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
@@ -3363,7 +3363,7 @@ CEOF
 
 EOF
 
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
 # Split the substitutions into bite-sized pieces for seds with
 # small command number limits, like on Digital OSF/1 and HP-UX.
 dnl One cannot portably go further than 100 commands because of HP-UX.
@@ -3376,9 +3376,9 @@ ac_more_lines=:
 ac_sed_cmds=""
 while $ac_more_lines; do
   if test $ac_beg -gt 1; then
-    sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs > $ac_cs_root.sfrag
+    sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
   else
-    sed "${ac_end}q" $ac_cs_root.subs > $ac_cs_root.sfrag
+    sed "${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
   fi
   if test ! -s $ac_cs_root.sfrag; then
     ac_more_lines=false
@@ -3389,7 +3389,7 @@ while $ac_more_lines; do
     # is no need to browse any of the substitutions).
     # These are the two extra sed commands mentioned above.
     (echo ':t
-/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $ac_cs_root.sfrag) > $ac_cs_root.s$ac_sed_frag
+/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
     if test -z "$ac_sed_cmds"; then
       ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
     else
@@ -3406,7 +3406,7 @@ fi
 
 EOF
 
-cat >> $CONFIG_STATUS <<\EOF
+cat >>$CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 changequote(, )dnl
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
@@ -3486,7 +3486,7 @@ s%@top_srcdir@%$top_srcdir%;t t
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
-" $ac_file_inputs | (eval "$ac_sed_cmds") > $ac_cs_root.out
+" $ac_file_inputs | (eval "$ac_sed_cmds") >$ac_cs_root.out
 dnl This would break Makefile dependencies.
 dnl  if cmp -s $ac_file $ac_cs_root.out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
@@ -3588,8 +3588,8 @@ dnl first two small commands), we need to clear the `t' flag.  This is the
 dnl purpose of `t clear; : clear'.
 dnl
 dnl Additionally, this works around a bug of IRIX' sed which does not
-dnl clear the `t' flag between to cycles.
-cat > $ac_cs_root.hdr <<\EOF
+dnl clear the `t' flag between two cycles.
+cat >$ac_cs_root.hdr <<\EOF
 changequote(<<, >>)dnl
 s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
@@ -3677,7 +3677,7 @@ dnl
 dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
 dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_LINKS,
-[cat >> $CONFIG_STATUS <<\EOF
+[cat >>$CONFIG_STATUS <<\EOF
 
 #
 # CONFIG_LINKS section.
@@ -3744,7 +3744,7 @@ dnl
 dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
 dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_COMMANDS_COMMANDS,
-[cat >> $CONFIG_STATUS <<\EOF
+[cat >>$CONFIG_STATUS <<\EOF
 
 #
 # CONFIG_COMMANDS section.
@@ -3755,7 +3755,7 @@ for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
 
   echo "executing commands of $ac_dest"
   case "$ac_dest" in
-AC_LIST_COMMANDS_COMMANDS[]dnl
+AC_LIST_COMMANDS_COMMANDS()dnl
   esac
 fi;done
 EOF
