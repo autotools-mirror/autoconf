@@ -90,6 +90,7 @@ m4_define([AT_LINE],
 m4_define([AT_INIT],
 [AS_INIT
 m4_pattern_forbid([^_?AT_])
+m4_pattern_forbid([PACKAGE_(BUGREPORT|STRING)$])
 m4_define([AT_TESTSUITE_NAME],
           m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1])[.])
 m4_define([AT_ordinal], 0)
@@ -132,7 +133,17 @@ at_debug=false
 at_help=no
 # Tests to run
 at_tests=
-dnl Other vars inserted here (DEFAULT).
+m4_wrap([m4_divert_text([DEFAULT],
+[# List of the tested programs.
+at_tested='m4_ifdef([AT_tested], [AT_tested])'
+# List of the tests.
+at_tests_all='AT_tests_all'
+# Number of the last test.
+at_last_test=AT_ordinal
+# Description of all the tests.
+at_help_all='AT_help'
+# List of the output files.
+at_data_files='AT_data_files'])])dnl
 m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
@@ -371,7 +382,6 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
   # exact version.  Use the relative dir: if the top dir is a symlink,
   # find will not follow it (and options to follow the links are not
   # portable), which would result in no output here.
-
   if test -n "$top_srcdir"; then
     AS_BOX([ChangeLogs.])
     echo
@@ -386,7 +396,7 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
     echo
   fi
 
-  # Inform about the contents of the config files.
+  # Contents of the config files.
   for at_file in atconfig atlocal
   do
     test -r $at_file || continue
@@ -395,12 +405,12 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
     echo
   done
 
-  AS_BOX([Victims.])
+  AS_BOX([Tested programs.])
   echo
 } >&AS_MESSAGE_LOG_FD
 
 # Report what programs are being tested.
-for at_program in : $at_victims
+for at_program in : $at_tested
 do
   test "$at_program" = : && continue
   _AS_PATH_WALK([$PATH], [test -f $as_dir/$at_program && break])
@@ -584,28 +594,17 @@ fi
 
 exit 0
 m4_divert_pop([TAIL])dnl
-m4_wrap([m4_divert_text([DEFAULT],
-                        [# List of the tested programs.
-at_victims="AT_victims"
-# List of the tests.
-at_tests_all="AT_tests_all "
-# Number of the last test.
-at_last_test=AT_ordinal
-# Description of all the tests.
-at_help_all="AT_help"
-# List of the output files.
-at_data_files="AT_data_files "])])dnl
 ])# AT_INIT
 
 
-# AT_VICTIMS(PROGRAMS)
-# --------------------
+# AT_TESTED(PROGRAMS)
+# -------------------
 # Specify the list of programs exercised by the test suite.  Their
 # versions are logged, and in the case of embedded test suite, they
 # must correspond to the version of the package..  The PATH should be
 # already preset so the proper executable will be selected.
-m4_define([AT_VICTIMS],
-[m4_append_uniq([AT_victims], [$1], [ ])])
+m4_define([AT_TESTED],
+[m4_append_uniq([AT_tested], [$1], [ ])])
 
 
 # AT_SETUP(DESCRIPTION)

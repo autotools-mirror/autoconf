@@ -1,3 +1,11 @@
+2001-09-28  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4 (AT_VICTIMS): Rename as...
+	(AT_TESTED): this.
+	(AT_INIT): More the wrapped section to where it will be expanded.
+	Output `AT_tested' only when existing.
+	Catch unexpanded PACKAGE_STRING and PACKAGE_BUGREPORT.
+
 2001-09-27  Akim Demaille  <akim@epita.fr>
 
 	Fix the passing of $? to ACTION-IF-FAILED in AC_TRY_RUN, that
