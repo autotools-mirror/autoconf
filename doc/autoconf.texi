@@ -5818,8 +5818,8 @@ the variables this macro sets.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
-@defmac AC_CANONICAL_BUILD
-@defmac AC_CANONICAL_TARGET
+@defmacx AC_CANONICAL_BUILD
+@defmacx AC_CANONICAL_TARGET
 @maindex CANONICAL_HOST
 @maindex CANONICAL_BUILD
 @maindex CANONICAL_TARGET
