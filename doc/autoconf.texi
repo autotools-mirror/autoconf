@@ -1627,7 +1627,7 @@ Header file search directory (@option{-I@var{dir}}) and any other
 miscellaneous options for the C and C++ preprocessors and compilers.  If
 it is not set in the environment when @code{configure} runs, the default
 value is empty.  @code{configure} uses this variable when compiling or
-preprocessing programs to test for C features.
+preprocessing programs to test for C and C++ features.
 @end defvar
 
 @defvar CXXFLAGS
@@ -1681,14 +1681,20 @@ Fortran 77 features.
 @defvar LDFLAGS
 @ovindex LDFLAGS
 Stripping (@option{-s}), path (@option{-L}), and any other miscellaneous
-options for the linker.  If it is not set in the environment when
-@code{configure} runs, the default value is empty.  @code{configure}
-uses this variable when linking programs to test for C features.
+options for the linker.  Don't use this variable to pass library names
+(@option{-l}) to the linker, use @code{LIBS} instead.  If it is not set
+in the environment when @code{configure} runs, the default value is empty.
+@code{configure} uses this variable when linking programs to test for
+C, C++ and Fortran 77 features.
 @end defvar
 
 @defvar LIBS
 @ovindex LIBS
-@option{-l} options to pass to the linker.
+@option{-l} options to pass to the linker.  The default value is empty,
+but some Autoconf macros may prepend extra libraries to this variable if
+those libraries are found and provide necessary functions, see
+@ref{Libraries}.  @code{configure} uses this variable when linking
+programs to test for C, C++ and Fortran 77 features.
 @end defvar
 
 @defvar srcdir
@@ -3987,7 +3993,7 @@ If you use this macro, you should check after calling it whether the C
 compiler has been set to accept @sc{ansi} C; if not, the shell variable
 @code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
 code in @sc{ansi} C, you can make an un-@sc{ansi}fied copy of it by
-using the program @code{ansi2knr}, which comes with Ghostscript.
+using the program @code{ansi2knr}, which comes with Automake.
 @end defmac
 
 
@@ -4209,7 +4215,7 @@ found in macros such as this:
 Check to see if function prototypes are understood by the compiler.  If
 so, define @samp{PROTOTYPES}.  In the case the compiler does not handle
 prototypes, you should use @code{ansi2knr}, which comes with the
-Ghostscript distribution, to unprotoize function definitions.  For
+Automake distribution, to unprotoize function definitions.  For
 function prototypes, you should first define @code{PARAMS}:
 
 @example
@@ -6419,7 +6425,7 @@ car([[active]])
 
 In the first case, the top level looks for the arguments of @code{car},
 and finds @samp{active}.  Because @code{m4} evaluates its arguments
-before applying the macro, @samp{active} is expanded, what results in
+before applying the macro, @samp{active} is expanded, which results in
 
 @example
 car(ACT, IVE)
@@ -6428,7 +6434,7 @@ car(ACT, IVE)
 
 @noindent
 In the second case, the top level gives @samp{active} as first and only
-argument of @code{car}, what results in
+argument of @code{car}, which results in
 
 @example
 active
@@ -6437,7 +6443,7 @@ active
 
 @noindent
 i.e., the argument is evaluated @emph{after} the macro that invokes it.
-In the third case, @code{car} receives @samp{[active]}, what results in
+In the third case, @code{car} receives @samp{[active]}, which results in
 
 @example
 [active]
@@ -6460,13 +6466,12 @@ car([[int tab[10];]])
 
 @noindent
 Huh?  The first case is easily understood, but why is the second wrong,
-and the third right?  Just apply the evaluation rules to understand:
-
-@example
-car([int tab[10];])
-@result{}int tab[10];
-@result{}int tab10;
-@end example
+and the third right?  To understand that, you must know that after
+@code{m4} expands a macro the resulting text is immediately subjected
+to macro expansion and quote removal.  This means that the quote removal
+occurs twice - first time before the argument is passed to the @code{car}
+macro, and the second time after the @code{car} macro expands to the
+first argument.
 
 As the author of the Autoconf macro @code{car} you then consider it is
 incorrect to require that your users have to double quote the arguments
@@ -6519,8 +6524,10 @@ qar(my_includes)
 
 This macro, @code{qar}, because it double quotes its arguments, forces
 its users to leave their macro calls unquoted, which is dangerous.
-Also, because it behaves differently from the other macro, it's an
-exception, which we are avoiding in Autoconf.
+Commas and other active symbols are interpreted by @code{m4} before
+they are given to the macro, often not in the way the users expect.
+Also, because @code{qar} behaves differently from the other macros,
+it's an exception that should be avoided in Autoconf.
 
 @node Quotation Rule Of Thumb,  , Quotation and Nested Macros, Quoting
 @subsection Quotation Rule Of Thumb
