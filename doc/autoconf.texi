@@ -2813,15 +2813,20 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @subsection Generic Typedef Checks
 
 This macro is used to check for typedefs not covered by the particular
-test macros.
+test macros.  This macro does not fit well with the rest of Autoconf,
+and its design will probably change in the future.
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default})
+One of its main flaws is that missing types are not typedef'd, they are
+defined, which can lead to incompatible code in the case of pointer types.
+
+@defmac AC_CHECK_TYPE (@var{type}, @var{default}@r{[}, @var{includes}@r{]})
 @maindex CHECK_TYPE
 If the type @var{type} is not defined in @file{sys/types.h}, or
-@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the
-C (or C++) builtin type @var{default}; e.g., @samp{short} or
+@file{stdlib.h} or @file{stddef.h} if they exist, define it to be the C
+(or C++) builtin type @var{default}; e.g., @samp{short} or
 @samp{unsigned}.
 @end defmac
+
 
 @node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Typedefs, Existing Tests
 @section C Compiler Characteristics
@@ -2886,7 +2891,7 @@ found in macros such as this:
 @end example
 @end defmac
 
-@defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{]})
+@defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{[}, @var{includes}@r{]]})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
@@ -5083,12 +5088,29 @@ may use comes with Autoconf.
 @node Invoking config.status, Questions, Invoking configure, Top
 @chapter Recreating a Configuration
 
-The @code{configure} script creates a file named @file{config.status}
-which describes which configuration options were specified when the
-package was last configured.  This file is a shell script which,
-if run, will recreate the same configuration.
+The @code{configure} script creates a file named @file{config.status},
+which actually configures, @dfn{intanciates}, the template files.  It
+also keeps the configuration options that were specified when the
+package was last configured in case reconfiguring is needed.
 
-It supports the following options:
+Synopsis:
+@example
+./config.status [@var{file}@dots{}]
+./config.status @var{option}
+@end example
+
+In the first form, it configures the @var{files}, if none are specified,
+all the templates are instanciated.  The files may be specified with or
+without their dependencies, i.e., if the files  @file{foo.in} and
+@file{bar.in} are precursors of @file{foobar}, the two following lines
+are equivalent:
+@example
+./config.status foobar
+./config.status foobar:foo.in:bar.in
+@end example
+
+In the second form, no file is instanciated, but a specific action is
+taken:
 @table @code
 @item --recheck
 Ask @file{config.status} to update itself.  This option is useful if you
@@ -5104,7 +5126,8 @@ changes; @pxref{Automatic Remaking}, for an example).
 
 @item --help
 @itemx -h
-Print a summary of the command line options and exit.
+Print a summary of the command line options, a list of the template
+files and exit.
 
 @item --version
 Print the version number of Autoconf used to create the @code{configure}
@@ -5138,14 +5161,15 @@ one of them, perhaps a common library, does.  These variables allow a
 @defvar CONFIG_FILES
 @evindex CONFIG_FILES
 The files in which to perform @samp{@@@var{variable}@@} substitutions.
-The default is the arguments given to @code{AC_OUTPUT} in @file{configure.in}.
+The default is the arguments given to @code{AC_OUTPUT} in
+@file{configure.in}.
 @end defvar
 
 @defvar CONFIG_HEADERS
 @evindex CONFIG_HEADERS
-The files in which to substitute C @code{#define} statements.
-The default is the arguments given to @code{AC_CONFIG_HEADER}; if that
-macro was not called, @file{config.status} ignores this variable.
+The files in which to substitute C @code{#define} statements.  The
+default is the arguments given to @code{AC_CONFIG_HEADER}; if that macro
+was not called, @file{config.status} ignores this variable.
 @end defvar
 
 These variables also allow you to write @file{Makefile} rules that
@@ -5169,6 +5193,20 @@ Makefile: Makefile.in config.status
 @noindent
 (If @file{configure.in} does not call @code{AC_CONFIG_HEADER}, there is
 no need to set @code{CONFIG_HEADERS} in the @code{make} rules.)
+
+Note that this example could also have been written
+
+@example
+@group
+config.h: stamp-h
+stamp-h: config.h.in config.status
+        ./config.status config.h
+        echo > stamp-h
+
+Makefile: Makefile.in config.status
+        ./config.status Makefile
+@end group
+@end example
 
 @node Questions, Upgrading, Invoking config.status, Top
 @chapter Questions About Autoconf

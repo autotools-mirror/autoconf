@@ -2,9 +2,14 @@ Major changes in release 2.15:
 
 * config.status
   - much faster on most architectures
-  - now has a useful --help
+  - has a useful --help
   - concurrent executions
-    It is now safe to use `make -j' with configure.
+    It is safe to use `make -j' with configure.
+  - human interface improved
+    It is possible to invoke
+      ./config.status foobar
+    instead of the former form (still valid)
+      CONFIG_HEADERS= CONFIG_FILES=foobar:foo.in:bar.in
 * New macros
   - AC_CHECK_DECL and AC_CHECK_DECLS
     To check whether a symbol is declared.

@@ -70,10 +70,11 @@ else
 fi
 ])
 
-dnl AC_PROG_CC takes an optional first argument which, if specified,
-dnl must be a space separated list of C compilers to search for.  This
-dnl just gives the user an opportunity to specify an alternative search
-dnl list for the C compiler.
+dnl AC_PROG_CC([COMPILER ...])
+dnl --------------------------
+dnl COMPILER ... is a space separated list of C compilers to search for.
+dnl This just gives the user an opportunity to specify an alternative
+dnl search list for the C compiler.
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
@@ -484,9 +485,64 @@ dnl Check for mawk first since it's generally faster.
 AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
+dnl AC_PROG_SED
+dnl -----------
+dnl Check whether the first sed in the path supports long scripts.
+dnl Set the variable $ac_cv_prog_sed_max_cmd to the maximum number
+dnl of commands to put in a sed script, `infinite' meaning a priori
+dnl infinite.
+AC_DEFUN([AC_PROG_SED],
+[AC_CACHE_CHECK([for max sed script length], ac_cv_prog_sed_max_cmd,
+[echo >conftest.s "\
+s/0/1/;s/1/2/;s/2/3/;s/3/4/;s/4/5/;s/5/6/;s/6/7/;s/7/8/;s/8/9/;s/9/0/;s/9/O/;"
+dnl 2^4 = 16 lines of 10 commands.
+for ac_cnt in 0 1 2 3
+do
+  cat conftest.s conftest.s >conftest.s1
+  mv conftest.s1 conftest.s
+done
+if test "`echo 0 | sed -f conftest.s`" != 0; then
+dnl HP-UX sed dies with scripts longer than 100 commands.
+  ac_cv_prog_sed_max_cmd=100
+else
+  ac_cv_prog_sed_max_cmd=infinite
+fi
+])dnl
+])
+
+dnl AC_PROG_BINSH
+dnl -------------
+dnl Check the maximum length of an here document.
+dnl FIXME: Is this test really reliable?
+AC_DEFUN([AC_PROG_BINSH],
+[AC_CACHE_CHECK([for max here document length], ac_cv_prog_binsh_max_heredoc,
+[echo >conftest.s1 "\
+ac_test='This is a sample string to test here documents.'"
+dnl 2^8 = 256 lines
+for ac_cnt in 0 1 2 3 4 5 6 7
+do
+  cat conftest.s1 conftest.s1 >conftest.sh
+  mv conftest.sh conftest.s1
+done
+echo 'cat >conftest.s1 <<CEOF' >conftest.sh
+cat conftest.s1 >>conftest.sh
+echo 'echo "Success"' >>conftest.sh
+echo 'CEOF' >>conftest.sh
+$SHELL ./conftest.sh
+if test "`$SHELL ./conftest.s1`" != Success; then
+dnl Some people say to limit oneself to 12, which seems incredibly small.
+  ac_cv_prog_binsh_max_heredoc=12
+else
+  ac_cv_prog_binsh_max_heredoc=infinite
+fi
+])dnl
+])dnl AC_PROG_BINSH
+
 AC_DEFUN(AC_PROG_YACC,
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)])
 
+dnl AC_PROG_CPP
+dnl -----------
 AC_DEFUN(AC_PROG_CPP,
 [AC_MSG_CHECKING(how to run the C preprocessor)
 # On Suns, sometimes $CPP names a directory.
@@ -1978,11 +2034,11 @@ AC_DEFUN(AC_C_LONG_DOUBLE,
 [if test "$GCC" = yes; then
   ac_cv_c_long_double=yes
 else
-AC_TRY_COMPILE(,
-[/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
+AC_TRY_RUN([int main() {
+/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
 long double foo = 0.0;
 /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
-switch (0) case 0: case (sizeof(long double) >= sizeof(double)):;],
+exit(sizeof(long double) < sizeof(double)); }],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
