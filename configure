@@ -1174,8 +1174,7 @@ cat >$CONFIG_STATUS <<EOF
 
 # Files that config.status was made for.
 config_files="\\
-  acversion.m4 Makefile m4/Makefile man/Makefile tests/Makefile tests/atconfig
-  testsuite/Makefile"
+  acversion.m4 Makefile m4/Makefile man/Makefile tests/Makefile tests/atconfig"
 
 ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
@@ -1252,7 +1251,6 @@ do
   'man/Makefile' ) CONFIG_FILES="\$CONFIG_FILES man/Makefile" ;;
   'tests/Makefile' ) CONFIG_FILES="\$CONFIG_FILES tests/Makefile" ;;
   'tests/atconfig' ) CONFIG_FILES="\$CONFIG_FILES tests/atconfig" ;;
-  'testsuite/Makefile' ) CONFIG_FILES="\$CONFIG_FILES testsuite/Makefile" ;;
 
   # This is an error.
   -*) echo "$CONFIG_STATUS: invalid option: \$1"; exit 1 ;;
