@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for programs.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2004
-# Free Software Foundation, Inc.
+
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+# 2002, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -680,6 +681,7 @@ AC_DEFUN([AC_PROG_MAKE_SET],
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,:./+-,___p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
+SHELL = /bin/sh
 all:
 	@echo 'ac_maketemp="$(MAKE)"'
 _ACEOF
