@@ -631,14 +631,6 @@ build the @code{hello} program, and @code{make install} will install it
 in @file{/usr/local/bin} (or whatever prefix was given to
 @command{configure}, if not @file{/usr/local}).
 
-Automake may require that additional tools be present on the
-@emph{developer's} machine.  For example, the @code{Makefile.in} that
-the developer works with may not be portable (e.g., it might use special
-features of your compiler to automatically generate dependency
-information).  Running @code{make dist}, however, produces a
-@file{hello-1.0.tar.gz} package (or whatever the program/version is)
-with a @code{Makefile.in} that will work on any system.
-
 The benefits of Automake increase for larger packages (especially ones
 with subdirectories), but even for small programs the added convenience
 and portability can be substantial.  And that's not all@enddots{}
@@ -11021,36 +11013,6 @@ the first set of double-colon rules.  (This comment has been here since
 1994 and the context has been lost.  It's probably about SunOS 4.  If
 you can reproduce this, please send us a test case for illustration.)
 
-@item @code{$<} in inference rules:
-@cindex suffix rules, @code{$<}, and @code{VPATH}
-@cindex @code{$<}, inference rules, and @code{VPATH}
-@cindex @code{VPATH}, inference rules, and @code{$<}
-One implementation of @command{make} would not prefix @code{$<} if this
-prerequisite has been found in a @code{VPATH} dir.  This means that
-
-@example
-VPATH = ../src
-.c.o:
-        cc -c $< -o $@@
-@end example
-
-@noindent
-would run @code{cc -c foo.c -o foo.o}, even if @file{foo.c} was actually
-found in @file{../src/}.
-
-This can be fixed as follows.
-
-@example
-VPATH = ../src
-.c.o:
-        cc -c `test -f $< || echo ../src/`$< -o $@@
-@end example
-
-This kludge was introduced in Automake in 2000, but the exact context
-have been lost.  If you know which @command{make} implementation is
-involved here, please drop us a note.
-
-
 @item @code{$<} not supported in explicit rules
 @cindex explicit rules, @code{$<}, and @code{VPATH}
 @cindex @code{$<}, explicit rules, and @code{VPATH}
@@ -11059,7 +11021,7 @@ involved here, please drop us a note.
 As said elsewhere, using @code{$<} in explicit rules is not portable.
 The prerequisite file must be named explicitly in the rule.  If you want
 to find the prerequisite via a @code{VPATH} search, you have to code the
-whole thing manually.  For instance, using the same pattern as above:
+whole thing manually.  For instance, using the following pattern:
 
 @example
 VPATH = ../src
@@ -11199,6 +11161,7 @@ install-HEADERS: $(HEADERS)
         done
 @end example
 
+Automake does something similar.
 
 @item OSF/Tru64 @command{make} creates prerequisite directories magically
 @cindex @code{VPATH} and prerequisite directories
@@ -11245,11 +11208,15 @@ builds the file locally using the filename given in the @file{Makefile}.
 If a target does not need to be rebuilt, @acronym{GNU} @command{make} uses the
 filename found during the @code{VPATH} search.
 
-Other @command{make} implementations, like BSD @command{make}, are
+Other @command{make} implementations, like NetBSD @command{make}, are
 easier to describe: the filename found during the @code{VPATH} search
 will be used whether the target needs to be rebuilt or not.  Therefore
 new files are created locally, but existing files are updated at their
 @code{VPATH} location.
+
+OpenBSD and FreeBSD @command{make}s, however, will never perform a
+@code{VPATH} search for a dependency which has an explicit rule.
+This is extremely annoying.
 
 When attempting a @code{VPATH} build for an autoconfiscated package
 (e.g, @code{mkdir build; ../configure}), this means the @acronym{GNU}
@@ -11268,10 +11235,31 @@ foo.x bar.x: newer.x
 % @kbd{make}        # GNU make
 Building foo.x
 Building bar.x
-% @kbd{pmake}       # BSD make
+% @kbd{pmake}       # NetBSD make
 Building foo.x
 Building ../bar.x
+% @kbd{fmake}       # FreeBSD make, OpenBSD make
+Building foo.x
+Building bar.x
+% @kbd{tmake}       # Tru64 make
+Building foo.x
+Building bar.x
+% @kbd{touch ../bar.x}
+% @kbd{make}        # GNU make
+Building foo.x
+% @kbd{pmake}       # NetBSD make
+Building foo.x
+% @kbd{fmake}       # FreeBSD make, OpenBSD make
+Building foo.x
+Building bar.x
+% @kbd{tmake}       # Tru64 make
+Building foo.x
+Building bar.x
 @end example
+
+Note how NetBSD @command{make} updates @file{../bar.x} in its VPATH
+location, and how FreeBSD, OpenBSD, and Tru64 @command{make} always
+update @file{bar.x}, even when @file{../bar.x} is up to date.
 
 Another point worth mentioning is that once @acronym{GNU} @command{make} has
 decided to ignore a @code{VPATH} filename (e.g., it ignored
@@ -11299,16 +11287,26 @@ Building bar.x
 cp bar.x bar.y
 cp: cannot stat `bar.x': No such file or directory
 make: *** [bar.y] Error 1
-% @kbd{pmake}       # BSD make
+% @kbd{pmake}       # NetBSD make
 Building ../bar.x
 cp ../bar.x bar.y
+% @kbd{rm bar.y}
+% @kbd{fmake}       # FreeBSD make, OpenBSD make
+echo Building bar.x
+cp bar.x bar.y
+cp: cannot stat `bar.x': No such file or directory
+*** Error code 1
+% @kbd{tmake}       # Tru64 make
+Building bar.x
+cp: bar.x: No such file or directory
+*** Exit 1
 @end example
 
 Note that if you drop away the command from the @code{bar.x: newer.x}
-rule, things will magically start to work: @acronym{GNU}
-@command{make} knows that @code{bar.x} hasn't been updated, therefore
-it doesn't discard the result from @code{VPATH} (@file{../bar.x}) in
-succeeding uses.
+rule, @acronym{GNU} @command{make} will magically start to work: it
+knows that @code{bar.x} hasn't been updated, therefore it doesn't
+discard the result from @code{VPATH} (@file{../bar.x}) in succeeding
+uses.  Tru64 will also work, but FreeBSD and OpenBSD still don't.
 
 @example
 % @kbd{cat Makefile}
@@ -11323,9 +11321,21 @@ bar.x: newer.x
 % @kbd{make}        # GNU make
 cp ../bar.x bar.y
 % @kbd{rm bar.y}
-% @kbd{pmake}       # BSD make
+% @kbd{pmake}       # NetBSD make
+cp ../bar.x bar.y
+% @kbd{rm bar.y}
+% @kbd{fmake}       # FreeBSD make, OpenBSD make
+cp bar.x bar.y
+cp: cannot stat `bar.x': No such file or directory
+*** Error code 1
+% @kbd{tmake}       # True64 make
 cp ../bar.x bar.y
 @end example
+
+It seems the sole solution that would please every @command{make}
+implementation is to never rely on @code{VPATH} searches for targets.
+In other words, @code{VPATH} should be reserved to unbuilt sources.
+
 @end table
 @c end item about VPATH
 

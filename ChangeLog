@@ -1,3 +1,12 @@
+2003-02-28  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (Limitations of Make): Remove the section
+	about `$<' in inference rules, it was a bogus interpretation of
+	an old Automake change.  Discuss NetBSD, FreeBSD, OpenBSD, and
+	Tru64 make in the "target lookup" section.
+	(Automake): Automake 1.5+ no longer requires special tools to be
+	present on the developer's host.
+
 2003-02-26  Richard Dawe  <rich@phekda.freeserve.co.uk>
 
 	* bin/autoheader.in (BEGIN): For DJGPP SHELL may not be set
