@@ -1,5 +1,13 @@
 2000-10-24  Akim Demaille  <akim@epita.fr>
 
+	Start avoiding dependence upon character ranges.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Introduce `ac_cr_AZ',
+	`ac_cr_az', `ac_cr_09', `ac_cr_alnum' and `ac_hostname'.
+	Spread their use.
+
+2000-10-24  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_OUTPUT): Don't play with `trap'.
 	(_AC_INIT_PREPARE): Trap after having created config.log.
 	Also trap on 0.

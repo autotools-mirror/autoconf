@@ -1270,13 +1270,26 @@ cross_compiling=no
 subdirs=
 MFLAGS= MAKEFLAGS=
 AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
+
 # Maximum number of lines to put in a shell here document.
 # This variable seems obsolete.  It should probably be removed, and
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
+
+# Name of the host.
+# hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+# so uname gets run too.  Use two double quotes for font-lock.
+ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
+
+# Avoid depending upon Character Ranges.
+ac_cr_az='abcdefghijklmnopqrstuvwxyz'
+ac_cr_AZ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+ac_cr_09='0123456789'
+ac_cr_alnum=$ac_cr_az$ac_cr_AZ$ac_cr_09
+
 # Sed expression to map a string onto a valid sh and CPP variable names.
-ac_tr_sh='sed y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
-ac_tr_cpp='sed y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
+ac_tr_sh="sed y%*+%pp%;s%[[^_$ac_cr_alnum]]%_%g"
+ac_tr_cpp="sed y%*$ac_cr_az%P$ac_cr_AZ%;s%[[^_$ac_cr_alnum]]%_%g"
 
 # By default always use an empty string as the executable extension.
 # Only change it if the script calls AC_EXEEXT.
@@ -1453,7 +1466,7 @@ do
   -disable-* | --disable-*)
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
+    expr "x$ac_feature" : "[.*[^-_$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     eval "enable_$ac_feature=no" ;;
@@ -1461,7 +1474,7 @@ do
   -enable-* | --enable-*)
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([[^=]]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
+    expr "x$ac_feature" : "[.*[^-_$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     case $ac_option in
@@ -1642,7 +1655,7 @@ do
   -with-* | --with-*)
     ac_package=`expr "x$ac_option" : 'x-*with-\([[^=]]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
+    expr "x$ac_package" : "[.*[^-_$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case $ac_option in
@@ -1654,7 +1667,7 @@ do
   -without-* | --without-*)
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-a-zA-Z0-9_]]" >/dev/null &&
+    expr "x$ac_package" : "[.*[^-_$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package | sed 's/-/_/g'`
     eval "with_$ac_package=no" ;;
@@ -1684,7 +1697,7 @@ Try `configure --help' for more information.])
   *=*)
     ac_envvar=`expr "x$ac_option" : 'x\([[^=]]*\)='`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_envvar" : "[.*[^a-zA-Z0-9_]]" >/dev/null &&
+    expr "x$ac_envvar" : "[.*[^_$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid variable name: $ac_envvar])
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
     eval "$ac_envvar='$ac_optarg'"
@@ -1693,7 +1706,7 @@ Try `configure --help' for more information.])
   *)
     # FIXME: should be removed in autoconf 3.0.
     AC_MSG_WARN([you should use --build, --host, --target])
-    expr "x$ac_option" : "[.*[^a-zA-Z0-9.]]" >/dev/null &&
+    expr "x$ac_option" : "[.*[^.$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_WARN([invalid host type: $ac_option])
     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
@@ -2531,15 +2544,16 @@ define([_AC_CACHE_DUMP],
   (set) 2>&1 |
     case `(ac_space=' '; set | grep ac_space) 2>&1` in
     *ac_space=\ *)
-      # `set' does not quote correctly, so add quotes (double-quote substitution
-      # turns \\\\ into \\, and sed turns \\ into \).
+      # `set' does not quote correctly, so add quotes (double-quote
+      # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
-    	-e "s/'/'\\\\''/g" \
-    	-e ["s/^\\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\\)=\\(.*\\)/\\1='\\2'/p"]
+        ["s/'/'\\\\''/g \
+    	  s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"]
       ;;
     *)
       # `set' quotes correctly as required by POSIX, so do not add quotes.
-      sed -n '[s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p]'
+      sed -n \
+        ["s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"]
       ;;
     esac;
 }dnl
@@ -4571,12 +4585,10 @@ $config_commands
 Report bugs to <bug-autoconf@gnu.org>."
 EOF
 
-dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
-dnl so uname gets run too.  Use two double quotes for font-lock.
 cat >>$CONFIG_STATUS <<EOF
 ac_cs_version="\\
 $CONFIG_STATUS generated by autoconf version AC_ACVERSION.
-Configured on host `(hostname || uname -n) 2>/dev/null | sed 1q` by
+Configured on host $ac_hostname by
   `echo "[$]0 $ac_configure_args" | sed 's/[[\\""\`\$]]/\\\\&/g'`"
 
 ac_given_srcdir=$srcdir
