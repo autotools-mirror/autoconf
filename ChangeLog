@@ -1,3 +1,34 @@
+2001-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Replace all tab characters with (8) spaces,
+	lest the formatting of example code, etcetera, be messed up.
+
+2001-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Rephrase various parts for clarity, felicity,
+	and/or grammar.
+
+2001-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Clean up cache documentation: Document
+	--config-cache/-C option, and recommend instead of --cache-file.
+	Indent example AC_CACHE_VAL macros for clarity.  Add new
+	"Cache Checkpointing" section for AC_CACHE_SAVE (and
+	AC_CACHE_LOAD), so that the "Cache Files" section focuses solely
+	on features visible to end-users (e.g. to better fit the cross
+	references).  Various minor rewordings for clarity, felicity,
+	and/or grammar.
+
+2001-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi: Revert to "configure.in" in the history, since
+	"configure.ac" wasn't used in the past, and in any case it is
+	probably a good idea to preserve this section verbatim.
+
+2001-03-31  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* AUTHORS: Fix grammar.
+
 2001-04-09  Lars J. Aas  <larsa@sim.no>
 
 	* Makefile.am: Manual addition of @PACKAGE@ substitution variable
