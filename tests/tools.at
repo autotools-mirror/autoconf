@@ -218,13 +218,13 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
 AT_CHECK([sort <err], 0,
-[[configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
-configure.in:12: error: undefined macro: AZ_THIS_IS_INVALID_TOO
-configure.in:13: error: undefined macro: ALTHOUGH_AC_THIS_IS
-configure.in:5: error: undefined macro: AC_ALLOWED_NOT
-configure.in:5: error: undefined macro: NOT_AC_ALLOWED
-configure.in:8: error: undefined macro: FORBIDDEN
-configure:16: error: undefined macro: AC_OUTPUT
+[[configure.in:10: error: undefined macro: FORBIDDEN
+configure.in:14: error: undefined macro: AC_THIS_IS_INVALID
+configure.in:14: error: undefined macro: AZ_THIS_IS_INVALID_TOO
+configure.in:15: error: undefined macro: ALTHOUGH_AC_THIS_IS
+configure.in:7: error: undefined macro: AC_ALLOWED_NOT
+configure.in:7: error: undefined macro: NOT_AC_ALLOWED
+configure:18: error: undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure err)

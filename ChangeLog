@@ -1,5 +1,10 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at (autoconf: forbidden tokens): Adjust expected
+	result.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* man/config.guess.x: New file.
 	* man/config.sub.x: New file.
 
