@@ -7559,7 +7559,9 @@ car((foo, bar))
 @result{}(foo, bar)
 car([(foo], [bar)])
 @result{}(foo
-define([a], [b])car(a)
+define([a], [b])
+@result{}
+car(a)
 @result{}b
 car([a])
 @result{}b
@@ -7567,12 +7569,6 @@ car([[a]])
 @result{}a
 car([[[a]]])
 @result{}[a]
-car([])
-@result{}
-car([[]])
-@result{}
-car([[[]]])
-@result{}[]
 @end example
 
 With this in mind, we can explore the cases where macros invoke
