@@ -28,14 +28,14 @@ Be sure to read BUGS (especially if this version is not an official
 release) and INSTALL.
 
 Mail suggestions to autoconf@gnu.org, report bugs on
-http://sources.redhat.com/cgi-bin/gnatsweb.pl?database=autoconf or to
+http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf or to
 bug-autoconf@gnu.org, and submit patches to autoconf-patches@gnu.org.
 Always include the Autoconf version number, which you can get by
 running `autoconf --version'.
 
 -----
 
-Copyright (C) 1992, 1993, 1994, 1998, 2000, 2001 Free Software
+Copyright (C) 1992, 1993, 1994, 1998, 2000, 2001, 2002 Free Software
 Foundation, Inc.
 
 This file is part of GNU Autoconf.
