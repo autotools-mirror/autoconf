@@ -1,3 +1,14 @@
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
+	Stop being ridiculous :*(
+
+	* acgeneral.m4 (AC_SHELL_DIRNAME):  When using m4 the argument
+	is named `$1' not `$dir'.
+	When using m4 you ought to quote properly.
+	When using m4, you should check that there are not too many shell
+	quotes (inside the macro itself, and where it is called).
+	When you do this, Autoconf, hm, works better.
+
 2000-07-10  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Improve --help documentation of important environment variables.

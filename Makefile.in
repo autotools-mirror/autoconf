@@ -70,6 +70,7 @@ SUBDIRS = . m4 man doc tests
 
 SUFFIXES = .m4 .m4f .pl .sh
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
+WGET = wget
 
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
@@ -445,6 +446,13 @@ install-data-hook: INSTALL.txt
 	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
 
 autoconf.m4f: autoconf.m4 $(common)
+
+wget-update:
+	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
+	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/make-stds.texi -O $(srcdir)/doc/make-stds.texi
+	$(WGET) ftp://ftp.gnu.org/gnu/texinfo/texinfo.tex    -O $(srcdir)/doc/texinfo.tex
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config.guess
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config.sub
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -791,11 +791,11 @@ done; }
 # I have heard rumors that this special treatment of // may be dropped
 # in future versions of POSIX, but for now it's still the standard.
 define([_AC_SHELL_DIRNAME],
-[expr "X$dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-      "X$dir" : 'X\(//\)[^/]' \| \
-      "X$dir" : 'X\(//\)$' \| \
-      "X$dir" : 'X\(/\)' \| \
-      .       : '\(.\)'])
+[expr X$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
+      X$1 : 'X\(//\)[[^/]]' \| \
+      X$1 : 'X\(//\)$' \| \
+      X$1 : 'X\(/\)' \| \
+      .   : '\(.\)'])
 
 
 ## --------------------------------------------------- ##

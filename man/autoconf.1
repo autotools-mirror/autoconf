@@ -33,7 +33,7 @@ directory storing the `aclocal.m4' file
 save output in FILE (stdout is the default)
 .TP
 \fB\-W\fR, \fB\-\-warnings\fR=\fICATEGORY\fR
-report the warnings falling in CATEGORY
+report the warnings falling in CATEGORY [syntax]
 .SS "Warning categories include:"
 .TP
 `cross'
@@ -48,8 +48,16 @@ dubious syntactic constructs
 `all'
 all the warnings
 .TP
+`noCATEGORY'
+turn off the warnings on CATEGORY
+.TP
+`none'
+turn off all the warnings
+.TP
 `error'
 warnings are error
+.PP
+The environment variable `WARNINGS' is honored.
 .SS "Tracing:"
 .TP
 \fB\-t\fR, \fB\-\-trace\fR=\fIMACRO\fR
