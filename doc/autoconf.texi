@@ -3016,10 +3016,10 @@ in some cases whether they support certain features.
 @defmac AC_PROG_AWK
 @acindex PROG_AWK
 @ovindex AWK
-Check for @code{mawk}, @code{gawk}, @code{nawk}, and @code{awk}, in that
+Check for @code{gawk}, @code{mawk}, @code{nawk}, and @code{awk}, in that
 order, and set output variable @code{AWK} to the first one that is found.
-It tries @code{mawk} first because that is reported to be the
-fastest implementation.
+It tries @code{gawk} first because that is reported to be the
+best implementation.
 @end defmac
 
 
