@@ -194,7 +194,7 @@ m4_define([_AC_CHECK_TYPE_OLD],
 # for better common-useward backward compatibility.
 m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 [m4_if(m4_regexp([$1],
-                 [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+                 [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|[_a-zA-Z][_a-zA-Z0-9]*_t\)[][_a-zA-Z0-9() *]*$]),
        0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
 

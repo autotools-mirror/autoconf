@@ -1,5 +1,11 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	* actypes.m4 (_AC_CHECK_TYPE_REPLACEMENT_TYPE_P): `foo_t' is a
+	replacement type.
+	From Paul Eggert.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.maint: Sync. with cppi 1.10.
 
 2001-07-17  Akim Demaille  <akim@epita.fr>

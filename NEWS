@@ -36,10 +36,13 @@
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
-  specify pre-includes.
+  specify pre-includes.  In this case, the headers are compiler with
+  cc, not merely preprocessed by cpp.  Therefore it is the _usability_
+  of a header which is checked for, not just its availability.
 - AC_ARG_VAR refuses to run configure when precious variables have
   changed.
 - Versions of compilers are dumped in the logs.
+- AC_CHECK_TYPE recognizes use of `foo_t' as a replacement type.
 
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.

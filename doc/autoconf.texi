@@ -9858,9 +9858,11 @@ In order to keep backward compatibility, the two versions of
 If there are three or four arguments, the modern version is used.
 
 @item
-If the second argument is a C or C++ @emph{builtin} type, then the
-obsolete version is used.  Because many people have used @samp{off_t}
-and @samp{size_t} as replacement types, they are recognized too.
+If the second argument appears to be a C or C++ type, then the
+obsolete version is used.  This happens if the argument is a C or C++
+@emph{builtin} type or a C identifier ending in @samp{_t}, optionally
+followed by one of @samp{[(* } and then by a string of zero or more
+characters taken from the set @samp{[]()* _a-zA-Z0-9}.
 
 @item
 If the second argument is spelled with the alphabet of valid C and C++
