@@ -1,3 +1,8 @@
+1999-04-29  Ben Elliston  <bje@cygnus.com>
+
+	* config.sub: Handle `t3e' alias for Cray T3E. Contributed by
+	James A. Lupo <lupoja@feynman.ml.wpafb.af.mil>.
+
 1999-04-17  Paul Eggert  <eggert@twinsun.com>
 
 	* autoconf.texi, acspecific.m4 (AC_FUNC_MKTIME): New macro.

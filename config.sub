@@ -185,7 +185,7 @@ case $basic_machine in
 	      | sparc64-* | mips64-* | mipsel-* \
 	      | mips64el-* | mips64orion-* | mips64orionel-*  \
 	      | mipstx39-* | mipstx39el-* \
-	      | f301-* | armv*-*)
+	      | f301-* | armv*-* | t3e-*)
 		;;
 	# Recognize the various machine names and aliases which stand
 	# for a CPU type and a company and sometimes even an OS.
@@ -583,6 +583,10 @@ case $basic_machine in
 	symmetry)
 		basic_machine=i386-sequent
 		os=-dynix
+		;;
+	t3e)
+		basic_machine=t3e-cray
+		os=-unicos
 		;;
 	tx39)
 		basic_machine=mipstx39-unknown
