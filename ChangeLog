@@ -1,3 +1,10 @@
+2001-07-05  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (move_if_change): New.  Use it instead of `mv'.
+	(acversion.m4): Name it `$(srcdir)/acversion.m4' to ease broken
+	Makes' lives.
+	Reported by Nicolas Joly.
+
 2001-07-04  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_RUN_IFELSE): Remove conftest.o when cleaning
