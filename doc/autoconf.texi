@@ -3314,8 +3314,8 @@ in the presence of another that is not already in @code{LIBS}.
 @acindex SEARCH_LIBS
 Search for a library defining @var{function} if it's not already
 available.  This equates to calling
-@samp{AC_LINK_IFELSE([AC_LANG_CALL([@var{function}])])} first with no
-libraries, then for each library listed in @var{search-libs}.
+@samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])])} first with
+no libraries, then for each library listed in @var{search-libs}.
 
 Add @option{-l@var{library}} to @code{LIBS} for the first library found
 to contain @var{function}, and run @var{action-if-found}.  If the
@@ -5850,13 +5850,12 @@ not encouraged, as it violates strongly the typing system.
 @end defmac
 
 
-@defmac AC_LANG_FUNC_LINK_TRY (@var{prologue}, @var{function})
+@defmac AC_LANG_FUNC_LINK_TRY (@var{function})
 @acindex LANG_FUNC_LINK_TRY
-Expands into a source file which consists of the @var{prologue}, and
-then a pseudo use of the @var{function} as body of the main function
-(e.g., @code{main} in C): a simple (function pointer) assignment.  Since
-it uses @code{AC_LANG_PROGRAMS}, the feature of the latter are
-available.
+Expands into a source file which consists of a pseudo use of the
+@var{function} as body of the main function (e.g., @code{main} in C): a
+simple (function pointer) assignment.  Since it uses
+@code{AC_LANG_PROGRAMS}, the feature of the latter are available.
 
 As @code{AC_LANG_CALL}, this macro is documented only for completeness.
 It is considered to be severely broken, and in the future will be
@@ -5969,8 +5968,10 @@ the currently selected language, as well as @code{CPPFLAGS}, when
 compiling.  If Fortran 77 is the currently selected language then
 @code{FFLAGS} will be used when compiling.
 
-This macro does not try to link; use @code{AC_LINK_IFELSE} if you need
-to do that (@pxref{Running the Linker}).
+It is customary to report unexpected failures with
+@code{AC_MSG_FAILURE}.  This macro does not try to link; use
+@code{AC_LINK_IFELSE} if you need to do that (@pxref{Running the
+Linker}).
 @end defmac
 
 @node Running the Linker
@@ -6018,8 +6019,9 @@ the currently selected language, as well as @code{CPPFLAGS}, when
 compiling.  If Fortran 77 is the currently selected language then
 @code{FFLAGS} will be used when compiling.
 
-This macro does not try to execute the program; use @code{AC_RUN_IFELSE}
-if you need to do that (@pxref{Run Time}).
+It is customary to report unexpected failures with
+@code{AC_MSG_FAILURE}.  This macro does not try to execute the program;
+use @code{AC_RUN_IFELSE} if you need to do that (@pxref{Run Time}).
 @end defmac
 
 
@@ -6063,6 +6065,9 @@ no guarantee that this exit status is issued by the @var{program}, or by
 the failure of its compilation.  In other words, use this feature if
 sadist only, it was reestablished because the Autoconf maintainers grew
 tired of receiving ``bug reports''.
+
+It is customary to report unexpected failures with
+@code{AC_MSG_FAILURE}.
 @end defmac
 
 Try to provide a pessimistic default value to use when cross-compiling

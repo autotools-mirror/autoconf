@@ -231,14 +231,16 @@ AC_DEFUN([AC_LANG_PROGRAM],
 # --------------------------------
 # Call the FUNCTION.
 AC_DEFUN([AC_LANG_CALL],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[m4_ifval([$2], [], [m4_warn([syntax], [$0: no function given])])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_FUNC_LINK_TRY(FUNCTION)
 # -------------------------------
 # Produce a source which links correctly iff the FUNCTION exists.
 AC_DEFUN([AC_LANG_FUNC_LINK_TRY],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[m4_ifval([$1], [], [m4_warn([syntax], [$0: no function given])])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(PROLOGUE, EXPRESSION)

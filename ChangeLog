@@ -1,5 +1,13 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: More AC_MSG_FAILURE promotion.
+	* lib/autoconf/fortran.m4 (_AC_F77_NAME_MANGLING):
+	Die when a simple Fortran program cannot be compiled.
+	* lib/autoconf/lang.m4 (AC_LANG_CALL, AC_LANG_FUNC_LINK_TRY):
+	Issue a warning if no function is given.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Run Time): Document AC_RUN_IFELSE.
 	Move the documentation of AC_TRY_RUN to...
 	(Obsolete Macros): here.
