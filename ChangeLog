@@ -1,3 +1,8 @@
+1999-09-06  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_FUNC_ALLOCA): Rename cache variable to avoid
+	name clashes with AC_CHECK_HEADER(alloca.h).
+
 1999-09-05  Steve Chamberlain  <sac@pobox.com>
 
 	* config.sub: Add support for configuring for picoJava (pj).

@@ -1398,10 +1398,10 @@ AC_DEFUN(AC_FUNC_ALLOCA,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
-AC_CACHE_CHECK([for working alloca.h], ac_cv_header_alloca_h,
+AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 [AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
-  ac_cv_header_alloca_h=yes, ac_cv_header_alloca_h=no)])
-if test $ac_cv_header_alloca_h = yes; then
+  ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
+if test $ac_cv_working_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H)
 fi
 
