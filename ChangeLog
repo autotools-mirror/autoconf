@@ -1,3 +1,13 @@
+2003-10-03  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* lib/autoconf/fortran.m4 (AC_PROG_FC): Reverse the order of the
+	arguments so that it can be used with syntax identical to
+	AC_PROG_F77, and so that we can more easily decide to
+	remove/deprecate the DIALECT optional argument in the future if it
+	proves troublesome.
+	(AC_FC_FREEFORM): Exit 77 upon failure to fix test suite for
+	non-freeform-supporting compilers.  Document freeform flags.
+
 2003-10-03  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Look for emacs, not macs.
