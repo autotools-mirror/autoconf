@@ -165,6 +165,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 elif test -n "${BASH_VERSION+set}${KSH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
+BIN_SH=xpg4; export BIN_SH # for Tru64
 DUALCASE=1; export DUALCASE # for MKS sh
 ])
 
