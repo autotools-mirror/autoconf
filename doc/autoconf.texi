@@ -3942,7 +3942,7 @@ define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
 return value for an error indicator.
 
 Currently this test is implemented by running a test program.  When
-cross compiling the pessimistic assumption that `closedir' does not
+cross compiling the pessimistic assumption that @code{closedir} does not
 return a meaningful value is made.
 @end defmac
 
@@ -11433,7 +11433,7 @@ status of @code{grep} to determine whether it found a match.
 Some traditional @command{grep} implementations do not work on long
 input lines.  Also, many implementations do not support multiple regexps
 with @option{-e}: they either reject @samp{-e} entirely (e.g., Solaris
-9) or honor only the the last pattern (e.g., @acronym{IRIX} 6.5).  To
+9) or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
