@@ -1268,7 +1268,7 @@ dnl Shell code in configure.in might set extrasub.
 $extrasub
 dnl Insert the sed substitutions.
 undivert(1)dnl
-" $ac_given_srcdir/${ac_file}.in >> $ac_file
+" $ac_given_srcdir/${ac_file}.in > $ac_file
 fi; done
 ifdef([AC_CONFIG_NAMES],[AC_OUTPUT_HEADER(AC_CONFIG_NAMES)])dnl
 ifdef([AC_LINK_LIST],[AC_OUTPUT_MAKE_LINKS(AC_LINK_LIST,AC_FILE_LIST)])dnl
