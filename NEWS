@@ -6,6 +6,9 @@
 ** AC_DECL_SYS_SIGLIST
   Works again.
 
+** AC_FUNC_MKTIME
+  Now checks that mktime is the inverse of localtime.
+
 ** Improve DJGPP portability
   The Autoconf tools and configure behave better under DJGPP.
 

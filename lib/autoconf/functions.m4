@@ -940,7 +940,7 @@ test $ac_cv_func_memcmp_working = no && AC_LIBOBJ([memcmp])
 AN_FUNCTION([mktime], [AC_FUNC_MKTIME])
 AC_DEFUN([AC_FUNC_MKTIME],
 [AC_REQUIRE([AC_HEADER_TIME])dnl
-AC_CHECK_HEADERS(sys/time.h unistd.h)
+AC_CHECK_HEADERS(stdlib.h sys/time.h unistd.h)
 AC_CHECK_FUNCS(alarm)
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
@@ -956,6 +956,10 @@ AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 # endif
 #endif
 
+#if HAVE_STDLIB_H
+# include <stdlib.h>
+#endif
+
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -968,10 +972,11 @@ AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 #undef putenv
 
 static time_t time_t_max;
+static time_t time_t_min;
 
 /* Values we'll use to set the TZ environment variable.  */
-static const char *const tz_strings[] = {
-  (const char *) 0, "TZ=GMT0", "TZ=JST-9",
+static char *tz_strings[] = {
+  (char *) 0, "TZ=GMT0", "TZ=JST-9",
   "TZ=EST+3EDT+2,M10.1.0/00:00:00,M2.3.0/00:00:00"
 };
 #define N_STRINGS (sizeof (tz_strings) / sizeof (tz_strings[0]))
@@ -1002,15 +1007,21 @@ spring_forward_gap ()
 }
 
 static void
-mktime_test (now)
+mktime_test1 (now)
      time_t now;
 {
   struct tm *lt;
   if ((lt = localtime (&now)) && mktime (lt) != now)
     exit (1);
-  now = time_t_max - now;
-  if ((lt = localtime (&now)) && mktime (lt) != now)
-    exit (1);
+}
+
+static void
+mktime_test (now)
+     time_t now;
+{
+  mktime_test1 (now);
+  mktime_test1 ((time_t) (time_t_max - now));
+  mktime_test1 ((time_t) (time_t_min + now));
 }
 
 static void
@@ -1070,6 +1081,9 @@ main ()
   for (time_t_max = 1; 0 < time_t_max; time_t_max *= 2)
     continue;
   time_t_max--;
+  if ((time_t) -1 < 0)
+    for (time_t_min = -1; (time_t) (time_t_min * 2) < 0; time_t_min *= 2)
+      continue;
   delta = time_t_max / 997; /* a suitable prime number */
   for (i = 0; i < N_STRINGS; i++)
     {
@@ -1078,8 +1092,9 @@ main ()
 
       for (t = 0; t <= time_t_max - delta; t += delta)
 	mktime_test (t);
-      mktime_test ((time_t) 60 * 60);
-      mktime_test ((time_t) 60 * 60 * 24);
+      mktime_test ((time_t) 1);
+      mktime_test ((time_t) (60 * 60));
+      mktime_test ((time_t) (60 * 60 * 24));
 
       for (j = 1; 0 < j; j *= 2)
 	bigtime_test (j);

@@ -1,3 +1,9 @@
+2003-05-28  Paul Eggert  <eggert@twinsun.com>
+
+	* NEWS, doc/autoconf.texi (Particular Functions),
+	lib/autoconf/functions.m4 (AC_FUNC_MKTIME): Check that mktime
+	is the inverse of localtime.
+
 2003-05-25  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/Autom4te/General.pm (END): Print diagnostics to STDERR.

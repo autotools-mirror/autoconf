@@ -3945,6 +3945,9 @@ type @code{mbstate_t} are properly declared.
 @prindex @code{mktime}
 If the @code{mktime} function is not available, or does not work
 correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
+For the purposes of this test, @code{mktime} should conform to the
+@acronym{POSIX} standard and should be the inverse of
+@code{localtime}.
 @end defmac
 
 @defmac AC_FUNC_MMAP
