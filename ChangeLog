@@ -1,3 +1,14 @@
+2001-07-12  Akim Demaille  <akim@epita.fr>
+
+	For some AWK, such as on HPUX 11, `xfoo' does not match `foo|^bar'.
+	Reported by Michael Elizabeth Chastain.
+
+	* autoconf.in: Refuse such AWK.
+	* configure.in: Likewise.
+	* Makefile.am (acversion.m4): Do not use move-if-change this file
+	has dependencies.
+	* doc/autoconf.texi (Fortran 77 Compiler): Some typos.
+
 2001-07-10  Jens Petersen  <petersen@redhat.com>
 
 	* autoscan.in (&scan_makefile): Improve programs regexp to parse

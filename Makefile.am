@@ -36,8 +36,9 @@ EXTRA_SCRIPTS = autoscan autoupdate
 # and adapt dependencies once we use a more recent Automake
 
 m4sources =  m4sugar.m4 m4sh.m4  \
+             $(srcdir)/acversion.m4 \
              autoconf.m4 \
-             acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4 \
+             acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 \
              acfunctions.m4 acheaders.m4 actypes.m4
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
@@ -74,12 +75,10 @@ move_if_change = $(top_srcdir)/config/move-if-change
 # - It is guaranteed (with GNU Make) that when the version in configure.in
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
-# - Refer to `$(srcdir)/acversion.m4', not `acversion.m4' to help
-#   broken Makes understand it's the same file.
 
 $(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
-	$(move_if_change) acversion.tm4 $(srcdir)/acversion.m4
+	mv acversion.tm4 $(srcdir)/acversion.m4
 
 ## INSTALL.  ##
 
@@ -220,7 +219,6 @@ autoconf.m4f: $(m4sources)
 ## Customizing Makefile.maint.  ##
 ## ---------------------------- ##
 
-move_if_change = $(srcdir)/config/move-if-change
 prev_version_file = $(srcdir)/config/prev-version.txt
 
 # Uploading betas.

@@ -115,11 +115,20 @@ case " $M4 " in
   ;;
 esac
 
+
+# Find a good AWK.
+: ${AWK=@AWK@}
+if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
+  echo "$me: the regex engine of $AWK is too broken to be used" >&2
+  echo "$me: you might want to install GNU AWK" >&2
+  exit 1
+fi
+
+
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 test -z "$AC_ACLOCALDIR" &&
   AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`
-: ${AWK=@AWK@}
 debug=false
 # Trace Autoconf's initialization?
 initialization=false

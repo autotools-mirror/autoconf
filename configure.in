@@ -21,8 +21,13 @@ fi
 # a AC-SUBST inside AC-PROG-GNU-M4.  Grmph!
 AC_SUBST(M4)
 
-# `autoconf' and `ifnames' use AWK.
+# `autoconf' and `ifnames' use AWK.  And we need decent RE support.
 AC_PROG_AWK
+# Some AWK fail
+if echo xfoo | $AWK '/foo|^bar$/ { print }' | grep xfoo >/dev/null; then :; else
+  AC_MSG_ERROR([the regex engine of $AWK is too broken to be used
+                you might want to install GNU AWK])
+fi
 
 # Generating man pages.
 AM_MISSING_PROG(HELP2MAN, help2man)

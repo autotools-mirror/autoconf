@@ -83,7 +83,7 @@ EXTRA_SCRIPTS = autoscan autoupdate
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
 # and adapt dependencies once we use a more recent Automake
 
-m4sources = m4sugar.m4 m4sh.m4               autoconf.m4              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4              acfunctions.m4 acheaders.m4 actypes.m4
+m4sources = m4sugar.m4 m4sh.m4               $(srcdir)/acversion.m4              autoconf.m4              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4              acfunctions.m4 acheaders.m4 actypes.m4
 
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms                   aclibraries $(m4sources)
@@ -101,11 +101,12 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2              BUGS INSTALL.txt  
 CLEANFILES = autoconf.m4f              $(bin_SCRIPTS)
 
 
-move_if_change = $(srcdir)/config/move-if-change
+move_if_change = $(top_srcdir)/config/move-if-change
 
 MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
 edit = sed 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@PERL\@,$(PERL),g' 	-e 's,@datadir\@,$(pkgdatadir),g' 	-e 's,@bindir\@,$(bindir),g' 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' 	-e 's,@M4\@,$(M4),g' 	-e 's,@AWK\@,$(AWK),g' 	-e 's,@VERSION\@,$(VERSION),g' 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
+
 
 prev_version_file = $(srcdir)/config/prev-version.txt
 
@@ -323,6 +324,7 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
+	$(mkinstalldirs) $(distdir)/$(srcdir)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -425,12 +427,10 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 # - It is guaranteed (with GNU Make) that when the version in configure.in
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
-# - Refer to `$(srcdir)/acversion.m4', not `acversion.m4' to help
-#   broken Makes understand it's the same file.
 
 $(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
-	$(move_if_change) acversion.tm4 $(srcdir)/acversion.m4
+	mv acversion.tm4 $(srcdir)/acversion.m4
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
