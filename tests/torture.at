@@ -1,15 +1,6 @@
 #							-*- Autotest -*-
 
-AT_BANNER([[Testing config.status.
-
-## ---------------------------------------------------------------- ##
-## This section of torture tests is trying to make Autoconf produce ##
-## failing `configure' scripts, which must never happen.  If one of ##
-## these tests ever fails, it is extremely important that you       ##
-## report the failure to bug-autoconf@gnu.org.                      ##
-## ---------------------------------------------------------------- ##]])
-
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright 2000, 2001, 2002 (C) Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +16,18 @@ AT_BANNER([[Testing config.status.
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
+
+
+AT_BANNER([[Testing config.status.]])
+
+
+## ---------------------------------------- ##
+## AC_CONFIG_COMMANDS with empty commands.  ##
+## ---------------------------------------- ##
+
+AT_CHECK_MACRO([AC_CONFIG_COMMANDS with empty commands],
+[[AC_CONFIG_COMMANDS([foo], [], [:])
+]])
 
 
 ## ------------ ##
@@ -179,8 +182,7 @@ AT_CHECK_CONFIG_CREATION(command)
 # Create a link
 AT_CHECK_CONFIG_CREATION(link)
 
-AT_CLEANUP(header file link commandvar-header var-file var-link var-command
-           input)
+AT_CLEANUP
 
 
 
@@ -246,7 +248,7 @@ AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
          ["'$ " ' $ "'$
 ])
 
-AT_CLEANUP(configure config.status config.log config.cache)
+AT_CLEANUP
 
 
 
@@ -453,7 +455,7 @@ AT_DATA([expout],
 [AT_BIG_VALUE
 ])])
 
-AT_CLEANUP(dummy)
+AT_CLEANUP
 
 
 ## -------- ##
@@ -493,7 +495,7 @@ AT_CHECK([cd at-dir && ../configure], [], [ignore])
 at_here=`pwd`
 AT_CHECK([cd at-dir && $at_here/configure], [], [ignore])
 
-AT_CLEANUP(at-dir foo.in foo)
+AT_CLEANUP
 
 
 ## ----------------- ##

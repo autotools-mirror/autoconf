@@ -361,9 +361,12 @@ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   _AC_SRCPATHS(["$ac_dir"])
 
   AC_MSG_NOTICE([executing $ac_dest commands])
-  case $ac_dest in
+dnl Some shells don't like empty case/esac
+m4_ifset([AC_LIST_COMMANDS_COMMANDS],
+[  case $ac_dest in
 AC_LIST_COMMANDS_COMMANDS()dnl
   esac
+])dnl
 done
 _ACEOF
 ])# _AC_OUTPUT_COMMANDS

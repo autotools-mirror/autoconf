@@ -1,5 +1,12 @@
 2002-02-06  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_COMMANDS): Don't output empty
+	case/esac, some shells don't support it.
+	Reported by Zack Weinberg.
+	* tests/torture.at (AC_CONFIG_COMMANDS with empty commands): New.
+
+2002-02-06  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): When handling --keywords, be
 	sure not to introduce newlines in at_groups.
 	* lib/autotest/Makefile.am (autotest.m4f): Typo.
