@@ -10049,7 +10049,8 @@ can alter its behavior:
 @defvar CONFIG_SHELL
 @evindex CONFIG_SHELL
 The shell with which to run @code{configure} for the @option{--recheck}
-option.  It must be Bourne-compatible.  The default is @file{/bin/sh}.
+option.  It must be Bourne-compatible.  The default is a shell that
+supports @env{LINENO} if available, and @file{/bin/sh} otherwise.
 @end defvar
 
 @defvar CONFIG_STATUS
