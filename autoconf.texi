@@ -2753,7 +2753,7 @@ This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
 preprocessors.
 @end defmac
 
-Here is now to find out whether a header file contains a particular
+Here is how to find out whether a header file contains a particular
 declaration, such as a typedef, a structure, a structure member, or a
 function.  Use @code{AC_EGREP_HEADER} instead of running @code{grep}
 directly on the header file; on some systems the symbol might be defined
