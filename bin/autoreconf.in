@@ -205,19 +205,55 @@ sub autoreconf ($)
   # ---------------------- #
 
   my $uses_autoconf;
+  my $uses_gettext;
   my $configure_ac_file = new Autom4te::XFile $configure_ac;
   while ($_ = $configure_ac_file->getline)
      {
-       if (/AC_INIT/)
-	 {
-	   $uses_autoconf = 1;
-	   last;
-	 }
+       s/#.*//;
+       s/dnl.*//;
+       $uses_autoconf = 1 if /AC_INIT/;
+       # See below for why we look for gettext here.
+       $uses_gettext = 1  if /^AM_GNU_GETTEXT_VERSION/;
      }
+
   if (!$uses_autoconf)
     {
       verbose "$configure_ac: not using Autoconf";
       return;
+    }
+
+
+  # ------------------- #
+  # Running autopoint.  #
+  # ------------------- #
+
+  # Gettext is a bit of a problem: its macros are not necessarily
+  # visible to aclocal, so if we start with a completely striped down
+  # package (think of a fresh CVS checkout), running `aclocal' first
+  # will fail: the Gettext macros are missing.
+  #
+  # Therefore, we can't use the traces to decide if we use Gettext or
+  # not.  I guess that once Gettext move to 2.5x we will be able to,
+  # but in the meanwhile forget it.
+  #
+  # We can only grep for AM_GNU_GETTEXT_VERSION in configure.ac.  You
+  # might think this approach is naive, and indeed it is, as it
+  # prevents one to embed AM_GNU_GETTEXT_VERSION in another *.m4, but
+  # anyway we don't limit the generality, since... that's what
+  # autopoint does.  Actually, it is even more restrictive, as it
+  # greps for `^AM_GNU_GETTEXT_VERSION('.  We did this above, while
+  # scanning configure.ac.
+  if (!$uses_gettext)
+    {
+      verbose "$configure_ac: not using Gettext";
+    }
+  elsif (!$install)
+    {
+      verbose "$configure_ac: not running autopoint: --install not given";
+    }
+  else
+    {
+      xsystem "$autopoint";
     }
 
 
@@ -282,9 +318,10 @@ sub autoreconf ($)
 	if -f 'aclocal.m4t';
     }
 
-  # We might have to rerun aclocal if Libtool or Gettext import new
+  # We might have to rerun aclocal if Libtool (or others) imports new
   # macros.
   my $rerun_aclocal = 0;
+
 
 
   # ------------------------------- #
@@ -294,7 +331,7 @@ sub autoreconf ($)
   # Perform a single trace reading to avoid --force forcing a rerun
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
-  my $uses_gettext;
+  my $uses_gettext_via_traces;
   my $uses_libtool;
   my $uses_autoheader;
   my @subdir;
@@ -310,7 +347,7 @@ sub autoreconf ($)
   while ($_ = $traces->getline)
     {
       $uses_autoconf = 1            if /AC_INIT/;
-      $uses_gettext = 1             if /AM_GNU_GETTEXT/;
+      $uses_gettext_via_traces = 1  if /AM_GNU_GETTEXT/;
       $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
       $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
@@ -330,25 +367,11 @@ sub autoreconf ($)
 	}
     }
 
-
-
-  # ------------------- #
-  # Running autopoint.  #
-  # ------------------- #
-
-  if (!$uses_gettext)
-    {
-      verbose "$configure_ac: not using Gettext";
-    }
-  elsif (!$install)
-    {
-      verbose "$configure_ac: not running autopoint: --install not given";
-    }
-  else
-    {
-      xsystem "$autopoint";
-      $rerun_aclocal = 1;
-    }
+  # Gettext consistency checks...
+  error "$configure_ac: AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
+    if $uses_gettext_via_traces && ! $uses_gettext;
+  error "$configure_ac: AM_GNU_GETTEXT_VERSION is used, but not AM_GNU_GETTEXT"
+    if $uses_gettext && ! $uses_gettext_via_traces;
 
 
   # -------------------- #
@@ -368,6 +391,7 @@ sub autoreconf ($)
     {
       verbose "$configure_ac: not running libtoolize: --install not given";
     }
+
 
 
   # ------------------- #

@@ -1,3 +1,12 @@
+2002-10-08  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (&autoreconf): Run autopoint before the first
+	aclocal invocation, as Gettext macros might not be visible to
+	aclocal.
+	Instead of blindly running autopoint, scan configure.ac (not the
+	traces) for AM_GNU_GETTEXT_VERSION uses, as autopoint does.
+	Reported by Paul D. Smith.
+
 2002-10-08  Paul Eggert  <eggert@twinsun.com>
 
 	Work around problems found when POSIXLY_CORRECT=1 is set.
