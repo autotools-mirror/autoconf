@@ -1,3 +1,9 @@
+Major changes in release 1.6:
+
+* --with-NAME can take a value, e.g., --with-targets=sun4,hp300bsd.
+* All macros that look for libraries now use AC_HAVE_LIBRARY.
+* The usual bug fixes.
+
 Major changes in release 1.5:
 
 * New macros AC_FIND_X, AC_OFF_T, AC_STAT_MACROS_BROKEN, AC_REVISION.
