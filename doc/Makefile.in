@@ -27,7 +27,7 @@ MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 M4 = @M4@
 
-PROGS = autoconf autoheader autoreconf ifnames @PROGS@
+PROGS = autoconf autoheader autoreconf autoupdate ifnames @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
@@ -54,9 +54,10 @@ DISTDEP = info Makefile
 # Files to distribute.
 DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
-	acmakevars acprograms acspecific.m4 autoconf.info* \
+	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
 	autoconf.sh autoconf.texi install.texi \
-	autoheader.sh autoreconf.sh autoscan.pl shindent.sh ifnames.sh \
+	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh \
+	shindent.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
 	install.sh mkinstalldirs texinfo.tex \
 	testsuite/Makefile.in testsuite/config/*.exp \
@@ -79,6 +80,10 @@ autoheader: autoheader.sh
 autoreconf: autoreconf.sh
 	rm -f $@ $@.tmp
 	$(editsh) $(srcdir)/autoreconf.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
+
+autoupdate: autoupdate.sh
+	rm -f $@ $@.tmp
+	$(editsh) $(srcdir)/autoupdate.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
 shindent: shindent.sh
 	rm -f $@ $@.tmp
@@ -122,12 +127,15 @@ installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 
 # References to install-info have been removed until it's released.
-install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs install-info
+install: all acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
+	installdirs install-info 
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
 	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
+	$(INSTALL_PROGRAM) autoupdate $(bindir)/autoupdate
 	$(INSTALL_PROGRAM) ifnames $(bindir)/ifnames
 	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(acdatadir)/acgeneral.m4
+	$(INSTALL_DATA) $(srcdir)/acoldnames.m4 $(acdatadir)/acoldnames.m4
 	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(acdatadir)/acspecific.m4
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(acdatadir)/acconfig.h
 	-if test -f autoscan; then \
@@ -154,16 +162,17 @@ install-info: info installdirs
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader $(bindir)/autoscan 
-	rm -f $(bindir)/autoreconf $(bindir)/shindent $(bindir)/ifnames
+	rm -f $(bindir)/autoreconf $(bindir)/autoupdate
+	rm -f $(bindir)/shindent $(bindir)/ifnames 
 	rm -fr $(acdatadir)
 	cd $(infodir); rm -f autoconf.info*
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
 	then cd $(infodir); rm -f standards.info*; fi
 
-configure: configure.in acgeneral.m4 acspecific.m4
+configure: configure.in acgeneral.m4 acspecific.m4 acoldnames.m4
 	cd $(srcdir); \
 	rm -f $@ $@.tmp; \
-	$(M4) acgeneral.m4 acspecific.m4 configure.in > $@.tmp && \
+	$(M4) acgeneral.m4 acspecific.m4 acoldnames.m4 configure.in > $@.tmp && \
 	mv $@.tmp $@ && \
 	chmod +x $@
 Makefile: Makefile.in config.status
@@ -178,7 +187,8 @@ clean mostlyclean distclean realclean::
 	done
 
 clean::
-	rm -f autoconf autoheader autoscan autoreconf shindent ifnames *.tmp
+	rm -f autoconf autoheader autoscan autoreconf autoupdate
+	rm -f shindent ifnames *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
 

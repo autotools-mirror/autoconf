@@ -21,8 +21,8 @@
 # the given template file.
 
 usage="\
-Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir] 
-       [-v] [--version] [template-file]" 
+Usage: autoconf [-hv] [--help] [-m dir] [--macrodir=dir] 
+       [--version] [template-file]" 
 
 # NLS nuisances.
 # Only set `LANG' and `LC_ALL' to "C" if already set.
@@ -40,8 +40,8 @@ case "${M4}" in
 esac
 
 tmpout=/tmp/acout.$$
-
 print_version=
+
 while test $# -gt 0 ; do
    case "${1}" in 
       -h | --help | --h* )
@@ -88,13 +88,14 @@ if test -z "$print_version"; then
   fi
 fi
 
-MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4"
-test -r ${AC_MACRODIR}/aclocal.m4 \
-   && MACROFILES="${MACROFILES} ${AC_MACRODIR}/aclocal.m4"
+MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4 \
+${AC_MACRODIR}/acoldnames.m4"
+test -r ${AC_MACRODIR}/aclocal.m4 &&
+  MACROFILES="${MACROFILES} ${AC_MACRODIR}/aclocal.m4"
 test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
-MACROFILES="${print_version} ${MACROFILES}"
+MACROFILES="${print_version} ${MACROFILES} ${infile}"
 
-$M4 $MACROFILES $infile > $tmpout || { st=$?; rm -f $tmpin $tmpout; exit $st; }
+$M4 $MACROFILES > $tmpout || { st=$?; rm -f $tmpin $tmpout; exit $st; }
 
 if test -n "$print_version"; then
   cat $tmpout
