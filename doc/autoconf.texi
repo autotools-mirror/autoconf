@@ -1678,7 +1678,7 @@ underscores, and asterisks changed to @samp{P}.  For example, the call
 AC_SIZEOF_TYPE(int *)
 @end example
 @noindent
-defines @code{SIZEOF_INT_P} to be 64 on DEC Alpha AXP systems.
+defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
 @defmac AC_TEST_PROGRAM (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
