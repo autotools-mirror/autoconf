@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_CONFIG_STATUS): Implement `config.status
+	--file' and `--header'.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.m4 (AH_TEMPLATE): Quote $2 once, now _AC_SH_QUOTE
 	behaves properly.
 

@@ -3275,24 +3275,27 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
+ifset([AC_LIST_HEADERS],
+[  --header=FILE@BKL@:TEMPLATE@BKR@
+               Instantiate the configuration header FILE])
+ifset([AC_LIST_HEADERS],
+[  --file=FILE@BKL@:TEMPLATE@BKR@
+               Instantiate the configuration file FILE])
 
-dnl Issue this section only if there were actually config files.
-dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
-dnl or AC_LIST_LINKS is set.
-ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
-[Files to instantiate:
-ifset([AC_LIST_FILES], [  Configuration files:
+ifset([AC_LIST_FILES], [Configuration files:
 \$config_files
+
 ])dnl
-ifset([AC_LIST_HEADERS], [  Configuration headers:
+ifset([AC_LIST_HEADERS], [Configuration headers:
 \$config_headers
+
 ])dnl
-ifset([AC_LIST_LINKS], [  Links to install:
+ifset([AC_LIST_LINKS], [Links to install:
 \$config_links
+
 ])dnl
-ifset([AC_LIST_COMMANDS], [  Individual commands to run:
+ifset([AC_LIST_COMMANDS], [Individual commands to run:
 \$config_commands
-])dnl
 
 ])dnl
 Report bugs to <bug-autoconf@gnu.org>."
@@ -3312,9 +3315,27 @@ ac_given_srcdir=$srcdir
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
 
-for ac_option
+# If no file are specified by the user, then we need to provide default
+# value.  By we need to know if files were specified by the user.
+ac_need_defaults=:
+while test [\$]@PND@ != 0
 do
-  case "[\$]ac_option" in
+  case "[\$]1" in
+  --*=*)
+    ac_option=\`echo "[\$]1" | sed -e 's/=.*//'\`
+    ac_optarg=\`echo "[\$]1" | sed -e 's/@BKL@^=@BKR@*=//'\`
+    shift
+    set dummy "[\$]ac_option" "[\$]ac_optarg" [\$]{1+"[\$]@"}
+    shift
+    ;;
+  -*);;
+  *) # This is not an option, so the user has probably given explicit
+     # arguments.
+     ac_need_defaults=false;;
+  esac
+
+  case "[\$]1" in
+
   # Handling of the options.
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
 dnl FIXME: This line is suspicious, it contains "" inside a "`...`".
@@ -3322,8 +3343,20 @@ dnl FIXME: This line is suspicious, it contains "" inside a "`...`".
     exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args --no-create --no-recursion ;;
   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
     echo "[\$]ac_cs_version"; exit 0 ;;
-  -help | --help | --hel | --he | --h)
+  --he | --h)
+    # Conflict between --help and --header
+    echo "$CONFIG_STATUS: ambiguous option: [\$]ac_option"; exit 1 ;;
+  -help | --help | --hel )
     echo "[\$]ac_cs_usage"; exit 0 ;;
+  --file | --fil | --fi | --f )
+    shift
+    CONFIG_FILES="[\$]CONFIG_FILES [\$]1"
+    ac_need_defaults=false;;
+  --header | --heade | --head | --hea )
+    shift
+    CONFIG_HEADERS="[\$]CONFIG_FILES [\$]1"
+    ac_need_defaults=false;;
+
   # Handling of arguments.
 AC_FOREACH([AC_File], AC_LIST_FILES,
 [  'patsubst(AC_File, [:.*])' )dnl
@@ -3341,9 +3374,12 @@ AC_FOREACH([AC_File], AC_LIST_HEADERS,
 [  'patsubst(AC_File, [:.*])' )dnl
  CONFIG_HEADERS="[\$]CONFIG_HEADERS AC_File" ;;
 ])dnl
+
   # This is an error.
-  *) echo "$CONFIG_STATUS: invalid argument: [\$]ac_option"; exit 1 ;;
+  -*) echo "$CONFIG_STATUS: invalid option: [\$]1"; exit 1 ;;
+  *) echo "$CONFIG_STATUS: invalid argument: [\$]1"; exit 1 ;;
   esac
+  shift
 done
 
 EOF
@@ -3353,11 +3389,9 @@ dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [cat >>$CONFIG_STATUS <<EOF
-# If there were arguments and we reach this point, then the user
-# has specified the files to intantiate.  If there were no arguments,
-# then the files were specified by envvars.  Set only the envvar that
-# are not set.
-if test \$[#] = 0; then
+# If the user did not use the arguments to specify the items to instantiate,
+# then the envvar interface is used.  Set only those that are not.
+if [\$]ac_need_defaults; then
 ifset([AC_LIST_FILES], [  : \${CONFIG_FILES="\$config_files"}
 ])dnl
 ifset([AC_LIST_HEADERS], [  : \${CONFIG_HEADERS="\$config_headers"}
