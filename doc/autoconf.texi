@@ -6751,8 +6751,7 @@ your @file{Makefile.in} files, so they can take advantage of the values
 of those variables in the environment when @code{configure} is run.
 Doing this isn't necessary, but it's a convenience for users.
 
-Also add @samp{@@configure_input@@} in a comment to each non-@file{Makefile}
-input file for
+Also add @samp{@@configure_input@@} in a comment to each input file for
 @code{AC_OUTPUT}, so that the output files will contain a comment saying
 they were produced by @code{configure}.  Automatically selecting the
 right comment syntax for all the kinds of files that people call

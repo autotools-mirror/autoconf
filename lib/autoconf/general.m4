@@ -4164,14 +4164,9 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in |
                                                  sed 's%.*/%%'` by configure."
-  case "$ac_file" in
-  *[[Mm]]akefile*) ac_comsub="1i\\
-# $configure_input" ;;
-  *) ac_comsub= ;;
-  esac
 
-  # Don't redirect the output to AC_FILE directly: use `mv' so that updating
-  # is atomic, and doesn't need trapping.
+  # Don't redirect the output to AC_FILE directly: use `mv' so that
+  # updating is atomic, and doesn't need trapping.
   ac_file_inputs=`echo "$ac_file_in" |
                   sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
   for ac_file_input in $ac_file_inputs;
@@ -4181,9 +4176,8 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   done
 EOF
 cat >>$CONFIG_STATUS <<EOF
-  sed -e "$ac_comsub
 dnl Neutralize VPATH when `$srcdir' = `.'.
-$ac_vpsub
+  sed -e "$ac_vpsub
 dnl Shell code in configure.in might set extrasub.
 dnl FIXME: do we really want to maintain this feature?
 $extrasub
