@@ -370,7 +370,7 @@ Operation modes:
       --normalize          smash successive empty lines
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
-  -s, --language=LANG      specify the set of M4 macros to use
+  -l, --language=LANG      specify the set of M4 macros to use
   -m, --mode=OCTAL         change the non trace output file mode (0666)
   -M, --melt               don\'t use M4 frozen files
 
@@ -467,7 +467,7 @@ sub parse_args ()
   # We want to look for the early options, which should not be found
   # in the configuration file.  Prepend to the user arguments.
   Getopt::Long::Configure ("pass_through");
-  getopt ("s|language=s" => \$language);
+  getopt ("l|language=s" => \$language);
   Getopt::Long::Configure ("defaults");
 
   if ($language)

@@ -1,5 +1,9 @@
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in: --language is -l, not -s.
+
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
 	Be ready to handle filenames as stupid as `dnl.at', for if even
 	the maintainer is dumb enough to do that...
 
