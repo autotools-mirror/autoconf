@@ -1,6 +1,12 @@
+2004-09-02  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Builtins): Swap "cd" and
+	"case" to restore ordering.
+	Reported by Stepan Kasal.
+
 2004-08-26  Akim Demaille  <akim@epita.fr>
 
-	* doc/autoconf.texi: Typos and stylos.
+	* doc/autoconf.texi: Minor typos and stylos.
 
 2004-08-20  Paul Eggert  <eggert@cs.ucla.edu>
 
