@@ -1,3 +1,17 @@
+2000-07-17  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Configuration Actions): Explain the
+	behavior of  AC_CONFIG_HEADERS and AC_CONFIG_FILES with respect to
+	absolute and relative filenames, and stdin/stdout.
+	(config.status invocation): Likewise.
+
+2000-07-17  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Configuration Actions): Explain the
+	behavior of  AC_CONFIG_HEADERS and AC_CONFIG_FILES with respect to
+	absolute and relative filenames, and stdin/stdout.
+	(config.status invocation): Likewise.
+
 2000-07-13  Akim Demaille  <akim@epita.fr>
 
 	Make it easier to trace what autoreconf does.

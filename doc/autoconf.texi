@@ -319,7 +319,7 @@ Running @code{configure} Scripts
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* configure Invocation::          Changing how @code{configure} runs
+* configure Invocation::        Changing how @code{configure} runs
 
 Obsolete Constructs
 
@@ -1425,27 +1425,50 @@ and use this instead:
 ... && AC_CONFIG_FOOS(foooo)
 @end example
 
+The macro @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
+specials @var{tag}s: they may have the form @samp{@var{output}} or
+@samp{@var{output}:@var{inputs}}. The file @var{output} is instantiated
+from its templates, @var{inputs} if specified, defaulting to
+@samp{@var{output}.in}.
+
+For instance
+@samp{AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk)} asks for
+the creation of @file{Makefile} which will be the expansion of the
+output variables in the concatenation of @file{boiler/top.mk} and
+@file{boiler/bot.mk}.
+
+The special value @samp{-} might be used to denote the standard output
+when used in @var{output}, or the standard input when used in the
+@var{inputs}.  You most probably don't need to use this in
+@file{configure.in}, but it is convenient when using the command line
+interface of @file{./config.status}, see @ref{config.status Invocation},
+for more details.
+
+The @var{inputs} may be absolute or relative filenames, in which case
+they are first looked for in the build tree, and then in the source
+tree.
+
+
 @node Configuration Files, Makefile Substitutions, Configuration Actions, Setup
 @section Creating Configuration Files
 
+Be sure to read the previous section, @ref{Configuration Actions}.
 
 @defmac AC_CONFIG_FILES (@var{file}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_FILES
-@c FIXME: The doc does say that the parents are not created (mkdir -p)
-@c Once this `bug' is fixed, remove the limitation.
-This macro creates each file @file{@var{file}} by copying an input file
-(by default named @file{@var{file}.in}), substituting the output
-variable values.
+Make @code{AC_OUTPUT} create each @file{@var{file}} by copying an input
+file (by default @file{@var{file}.in}), substituting the output variable
+values.
 @c FIXME: Before we used to have this feature, which was later rejected
 @c because it complicates the write of Makefiles:
 @c If the file would be unchanged, it is left untouched, to preserve
 @c timestamp.
-@xref{Makefile Substitutions}, for more information on using output
-variables.  @xref{Setting Output Variables}, for more information on
-creating them.  This macro creates the directory that the file is in if
-it doesn't exist (but not the parents of that directory).  Usually,
-@file{Makefile}s are created this way, but other files, such as
-@file{.gdbinit}, can be specified as well.
+This macro is one of the instantiating macros, see @ref{Configuration
+Actions}.  @xref{Makefile Substitutions}, for more information on using
+output variables.  @xref{Setting Output Variables}, for more information
+on creating them.  This macro creates the directory that the file is in
+if it doesn't exist.  Usually, @file{Makefile}s are created this way,
+but other files, such as @file{.gdbinit}, can be specified as well.
 
 Typical calls to @code{AC_CONFIG_FILES} looks like this:
 
@@ -1461,6 +1484,8 @@ colon-separated list of input files.  Examples:
 AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk
                 lib/Makefile:boiler/lib.mk)
 @end example
+
+@noindent
 Doing this allows you to keep your file names acceptable to MS-DOS, or
 to prepend and/or append boilerplate to the file.
 @end defmac
@@ -1814,13 +1839,14 @@ also be configured without finding the @file{config.h} from the source
 directory.
 
 @defmac AC_CONFIG_HEADERS (@var{header} @dots{}, @ovar{cmds}, @ovar{init-cmds})
-@maindex CONFIG_HEADER
+@maindex CONFIG_HEADERS
 @cvindex HAVE_CONFIG_H
-Make @code{AC_OUTPUT} create the file(s) in the whitespace-separated
-list @var{header} containing C preprocessor @code{#define} statements,
-and replace @samp{@@DEFS@@} in generated files with
-@option{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.  The usual
-name for @var{header} is @file{config.h}.
+This macro is one of the instantiating macros, see @ref{Configuration
+Actions}.  Make @code{AC_OUTPUT} create the file(s) in the
+whitespace-separated list @var{header} containing C preprocessor
+@code{#define} statements, and replace @samp{@@DEFS@@} in generated
+files with @option{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.
+The usual name for @var{header} is @file{config.h}.
 
 If @var{header} already exists and its contents are identical to what
 @code{AC_OUTPUT} would put in it, it is left alone.  Doing this allows
@@ -1840,6 +1866,8 @@ AC_CONFIG_HEADERS(defines.h:defs.pre:defines.h.in:defs.post)
 Doing this allows you to keep your file names acceptable to MS-DOS, or
 to prepend and/or append boilerplate to the file.
 @end defmac
+
+@xref{Configuration Actions}, for more details on @var{header}.
 
 @menu
 * Header Templates::            Input for the configuration headers
@@ -2063,7 +2091,8 @@ Specify additional shell commands to run at the end of
 @file{config.status}, and shell commands to initialize any variables
 from @code{configure}.  Associate the commands to the @var{tag}.  Since
 typically the @var{cmds} create a file, @var{tag} should naturally be
-the name of that file.
+the name of that file.  This macro is one of the instantiating macros,
+see @ref{Configuration Actions}.
 
 Here is an unrealistic example:
 @example
@@ -2115,7 +2144,8 @@ Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
 possible, otherwise a hard link.  The @var{dest} and @var{source} names
 should be relative to the top level source or build directory.  This
-macro may be called multiple times.
+macro is one of the instantiating macros, see @ref{Configuration
+Actions}.
 
 For example, this call:
 
@@ -7413,7 +7443,7 @@ may use comes with Autoconf.
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
-* configure Invocation::          Changing how @code{configure} runs
+* configure Invocation::        Changing how @code{configure} runs
 @end menu
 
 @include install.texi
@@ -7438,6 +7468,7 @@ Synopsis:
 It configures the @var{files}, if none are specified, all the templates
 are instantiated.  The files must be specified without their
 dependencies, as in
+
 @example
 ./config.status foobar
 @end example
@@ -7467,7 +7498,11 @@ Don't remove the temporary files.
 
 @item --file=@var{file}[:@var{template}]
 Require that @var{file} be instantiated as if
-@samp{AC_CONFIG_FILES(@var{file}:@var{template})} was used.
+@samp{AC_CONFIG_FILES(@var{file}:@var{template})} was used.  Both
+@var{file} and @var{template} may be @samp{-} in which case the standard
+output and/or standard input is used.  If a @var{template} filename is
+relative, it is first looked for in the build tree, and then in the
+source tree. @xref{Configuration Actions}, for more details.
 
 This option and the following provide one way for separately distributed
 packages to share the values computed by @code{configure}.  Doing so can
@@ -7478,8 +7513,7 @@ one of them, perhaps a common library, does.  These options allow a
 package.
 
 @item --header=@var{file}[:@var{template}]
-Require that @var{file} be instantiated as if
-@samp{AC_CONFIG_HEADERS(@var{file}:@var{template})} was used.
+Same as @option{--file} above, but with @samp{AC_CONFIG_HEADERS}.
 
 @item --recheck
 Ask @file{config.status} to update itself and exit (no instantiation).
