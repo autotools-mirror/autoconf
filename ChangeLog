@@ -1,3 +1,8 @@
+2001-09-23  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Special Shell Variables): Add pdksh output
+	for $LINENO.
+
 2001-09-22  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/autotest.m4: Create `package.m4'.
