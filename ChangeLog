@@ -1,3 +1,8 @@
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
+	* autoreconf.sh: Forward --debug to sub tools.
+	Let them share the same tmp dir.
+
 2000-07-18  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (AC_MING32): Rename as AC_MINGW32.

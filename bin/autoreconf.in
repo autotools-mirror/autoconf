@@ -210,6 +210,12 @@ autoconf="$autoconf `$verbose --verbose`"
 autoheader="$autoheader `$verbose --verbose`"
 automake="$automake `$verbose --verbose`"
 aclocal="$aclocal `$verbose --verbose`"
+# --debug
+$debug &&
+{
+  autoconf="$autoconf --debug"
+  autoheader="$autoheader --debug"
+}
 # --macrodir
 export AC_MACRODIR
 # --install and --symlink
@@ -238,6 +244,11 @@ $debug ||
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
    exit 1;
 }
+
+# When debugging, it is convenient that all the related temporary
+# files be at the same place.
+TMPDIR=$tmp
+export TMPDIR
 
 # alflags.sed -- Fetch the aclocal flags.
 cat >$tmp/alflags.sed <<EOF
