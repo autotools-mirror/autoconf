@@ -1,5 +1,10 @@
 2003-09-04  Akim Demaille  <akim@epita.fr>
 
+	* tests/mktests.sh (ac_exclude_list): Fix the filtering of
+	AC_FUNC_WAIT3.
+
+2003-09-04  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in: Use &fatal where more appropriate than &error.
 	(freeze): When exiting, use $exit_code.
 	* lib/autoconf/fortran.m4: Comment changes.
