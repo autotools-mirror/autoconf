@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -1644,40 +1644,48 @@ AC_DEFUN(AC_PATH_X,
 AC_MSG_CHECKING(for X)
 
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
+# $have_x is `yes', `no', `disabled', or empty when we do not yet know.
 if test "x$with_x" = xno; then
-  no_x=yes
+  # The user explicitly disabled X.
+  have_x=disabled
 else
   if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
-    no_x=
+    # Both variables are already set.
+    have_x=yes
   else
-AC_CACHE_VAL(ac_cv_path_x,
+AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
-no_x=yes
+ac_x_includes=NO ac_x_libraries=NO
 AC_PATH_X_XMKMF
-if test "$no_x" = yes; then
 AC_PATH_X_DIRECT
-fi
-if test "$no_x" = yes; then
-  ac_cv_path_x="no_x=yes"
+if test "$ac_x_includes" = NO || test "$ac_x_libraries" = NO; then
+  # Didn't find X anywhere.  Cache the known absence of X.
+  ac_cv_have_x="have_x=no"
 else
-  ac_cv_path_x="no_x= ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
+  # Record where we found X for the cache.
+  ac_cv_have_x="have_x=yes \
+	        ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
 fi])dnl
   fi
-  eval "$ac_cv_path_x"
+  eval "$ac_cv_have_x"
 fi # $with_x != no
 
-if test "$no_x" = yes; then
-  AC_MSG_RESULT(no)
+if test "$have_x" != yes; then
+  AC_MSG_RESULT($have_x)
+  no_x=yes
 else
+  # If each of the values was on the command line, it overrides each guess.
   test "x$x_includes" = xNONE && x_includes=$ac_x_includes
   test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
-  ac_cv_path_x="no_x= ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
+  # Update the cache value to reflect the command line values.
+  ac_cv_have_x="have_x=yes \
+		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
 ])
 
 dnl Internal subroutine of AC_PATH_X.
-dnl Set ac_x_includes, ac_x_libraries, and no_x (initially yes).
+dnl Set ac_x_includes and/or ac_x_libraries.
 AC_DEFUN(AC_PATH_X_XMKMF,
 [rm -fr conftestdir
 if mkdir conftestdir; then
@@ -1688,7 +1696,6 @@ acfindx:
 	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
 EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
-    no_x=
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
@@ -1714,14 +1721,18 @@ fi
 ])
 
 dnl Internal subroutine of AC_PATH_X.
-dnl Set ac_x_includes, ac_x_libraries, and no_x (initially yes).
+dnl Set ac_x_includes and/or ac_x_libraries.
 AC_DEFUN(AC_PATH_X_DIRECT,
-[test -z "$x_direct_test_library" && x_direct_test_library=Xt
-test -z "$x_direct_test_function" && x_direct_test_function=XtMalloc
-test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
+[if test "$ac_x_includes" = NO; then
+  # Guess where to find include files, by looking for this one X11 .h file.
+  test -z "$x_direct_test_include" && x_direct_test_include=X11/Intrinsic.h
+
+  # First, try using that file with no special directory specified.
 AC_TRY_CPP([#include <$x_direct_test_include>],
-[no_x= ac_x_includes=],
-[  for ac_dir in               \
+[# We can compile using X headers with no special include directory.
+ac_x_includes=],
+[# Look for the header file in a standard set of common directories.
+  for ac_dir in               \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
@@ -1759,18 +1770,26 @@ AC_TRY_CPP([#include <$x_direct_test_include>],
     ; \
   do
     if test -r "$ac_dir/$x_direct_test_include"; then
-      no_x= ac_x_includes=$ac_dir
+      ac_x_includes=$ac_dir
       break
     fi
   done])
+fi # $ac_x_includes = NO
 
-# Check for the libraries.
-# See if we find them without any special options.
-# Don't add to $LIBS permanently.
-ac_save_LIBS="$LIBS"
-LIBS="-l$x_direct_test_library $LIBS"
+if test "$ac_x_libraries" = NO; then
+  # Check for the libraries.
+
+  test -z "$x_direct_test_library" && x_direct_test_library=Xt
+  test -z "$x_direct_test_function" && x_direct_test_function=XtMalloc
+
+  # See if we find them without any special options.
+  # Don't add to $LIBS permanently.
+  ac_save_LIBS="$LIBS"
+  LIBS="-l$x_direct_test_library $LIBS"
 AC_TRY_LINK(, [${x_direct_test_function}()],
-[LIBS="$ac_save_LIBS" no_x= ac_x_libraries=],
+[LIBS="$ac_save_LIBS"
+# We can link X programs with no special library path.
+ac_x_libraries=],
 [LIBS="$ac_save_LIBS"
 # First see if replacing the include by lib works.
 for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
@@ -1810,13 +1829,16 @@ for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
     /usr/openwin/share/lib \
     ; \
 do
+dnl XXX Shouldn't this really use AC_TRY_LINK to be portable & robust??
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
-      no_x= ac_x_libraries=$ac_dir
+      ac_x_libraries=$ac_dir
       break 2
     fi
   done
-done])])
+done])
+fi # $ac_x_libraries = NO
+])
 
 dnl Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
