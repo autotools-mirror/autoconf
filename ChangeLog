@@ -1,5 +1,12 @@
 1999-11-13  Akim Demaille  <akim@epita.fr>
 
+	Really install this patch.
+
+	* acgeneral.m4 (AC_MSG_ERROR, AC_MSG_ERROR_UNQUOTED): Allow an
+	optional $2: exit status.
+
+1999-11-13  Akim Demaille  <akim@epita.fr>
+
 	Check that the AC_DEFINEs from acspecific.m4 do have a template.
 	Fix the discovered bugs.
 

@@ -2079,11 +2079,11 @@ define(AC_MSG_WARN,
 
 dnl AC_MSG_ERROR(ERROR-DESCRIPTION)
 define(AC_MSG_ERROR,
-[{ _AC_ECHO([configure: error: $1], 2); exit 1; }])
+[{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 dnl AC_MSG_ERROR_UNQUOTED(ERROR-DESCRIPTION)
 define(AC_MSG_ERROR_UNQUOTED,
-[{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit 1; }])
+[{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 
 dnl ### Selecting which language to use for testing
