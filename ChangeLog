@@ -1,3 +1,9 @@
+2004-02-23  Gary V. Vaughan  <gary@gnu.org>
+
+	* bin/autoreconf.in (autoreconf_current_directory): Recognize LT_INIT
+	from the next generation of Libtool.
+	* lib/autom4te.in (Autoreconf-preselections): Ditto.
+
 2004-02-20  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (Limitations of Usual Tools) <mkdir>: `mkdir -p'

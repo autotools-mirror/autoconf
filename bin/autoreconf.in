@@ -443,6 +443,7 @@ sub autoreconf_current_directory ()
 	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1',
 	     'AC_INIT',
 	     'AC_PROG_LIBTOOL',
+	     'LT_INIT',
 	     'AM_GNU_GETTEXT',
 	    )
      . ' |');
@@ -451,7 +452,7 @@ sub autoreconf_current_directory ()
       $aux_dir = $1                 if /AC_CONFIG_AUX_DIR:(.*)/;
       $uses_autoconf = 1            if /AC_INIT/;
       $uses_gettext_via_traces = 1  if /AM_GNU_GETTEXT/;
-      $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
+      $uses_libtool = 1             if /(AC_PROG_LIBTOOL|LT_INIT)/;
       $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
     }
