@@ -1,3 +1,10 @@
+1998-09-29  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_SEARCH_LIBS): New macro. Searches a series of
+	libraries for a given function. Contributed by Jim Blandy
+	<jimb@cygnus.com>.
+	(AC_TRY_LINK_FUNC): New macro. Again, from Jim.
+
 1998-09-28  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect multiprocessor DC/OSx running on Pyramid

@@ -1483,6 +1483,31 @@ rm -fr conftest*])
 dnl ### Checking for libraries
 
 
+dnl AC_SEARCH_LIBS(func, searchlibs, [action-if-found], [action-if-not-found])
+dnl Search for a library defining FUNC, if it's not already available.
+
+AC_DEFUN(AC_SEARCH_LIBS,
+[AC_PREREQ([2.12])
+AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
+[ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_$1="no"
+AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
+test "$ac_cv_search_$1" = "no" && for i in $2; do
+LIBS="-l$i $ac_func_search_save_LIBS"
+AC_TRY_LINK_FUNC([$1],
+[ac_cv_search_$1="-l$i"
+break])
+done
+LIBS="$ac_func_search_save_LIBS"])
+if test "$ac_cv_search_$1" != "no"; then
+  test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+  $3
+else :
+  $4
+fi])
+
+
+
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
@@ -1689,6 +1714,27 @@ ifelse([$4], , , [  rm -rf conftest*
 ])dnl
 fi
 rm -f conftest*])
+
+dnl AC_TRY_LINK_FUNC(func, action-if-found, action-if-not-found)
+dnl Try to link a program that calls FUNC, handling GCC builtins.  If
+dnl the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
+dnl ACTION-IF-NOT-FOUND.
+
+AC_DEFUN(AC_TRY_LINK_FUNC,
+AC_TRY_LINK(dnl
+ifelse([$2], [main], , dnl Avoid conflicting decl of main.
+[/* Override any gcc2 internal prototype to avoid an error.  */
+]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C"
+#endif
+])dnl
+[/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char $1();
+]),
+[$1()],
+[$2],
+[$3]))
 
 
 dnl ### Checking for run-time features
