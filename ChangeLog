@@ -1,5 +1,11 @@
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
+	* sh.m4 (AS_EXIT): Don't rely on false exiting 1.
+	Actually, always use `(exit $val); exit', don't try smart stuff.
+	* doc/autoconf.texi (Limitations of Builtins) <false>: new.
+
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
 	* sh.m4 (_AS_EXPR_PREPARE): Don't rely on the exit status of a
 	back quote evaluation since the very system for which the test was
 	written does not propagate it.  Groumph!

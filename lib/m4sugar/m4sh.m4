@@ -106,11 +106,7 @@ AS_UNSET([CDPATH], [:])
 # So we set $? by executing "exit N" in the subshell and then exit.
 # "false" is used for exit code 1 (default), ":" is used for 0
 m4_define([AS_EXIT],
-[{ m4_case([$1],
-           [0], [:; exit],
-           [],  [false; exit],
-           [1], [false; exit],
-           [(exit $1); exit]); }])
+[{ (exit m4_default([$1], 1)); exit; }])
 
 
 # AS_IFELSE(TEST, [IF-TRUE], [IF-FALSE])

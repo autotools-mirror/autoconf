@@ -239,7 +239,7 @@ do
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
       {  echo "$as_me: error: invalid feature name: $ac_feature" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     eval "enable_$ac_feature=no" ;;
 
@@ -248,7 +248,7 @@ do
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
       {  echo "$as_me: error: invalid feature name: $ac_feature" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     case $ac_option in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
@@ -430,7 +430,7 @@ do
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
       {  echo "$as_me: error: invalid package name: $ac_package" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case $ac_option in
       *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
@@ -443,7 +443,7 @@ do
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
       {  echo "$as_me: error: invalid package name: $ac_package" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ac_package=`echo $ac_package | sed 's/-/_/g'`
     eval "with_$ac_package=no" ;;
 
@@ -467,7 +467,7 @@ do
 
   -*) {  echo "$as_me: error: unrecognized option: $ac_option
 Try \`$0 --help' for more information." >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ;;
 
   *=*)
@@ -475,7 +475,7 @@ Try \`$0 --help' for more information." >&2
     # Reject names that are not valid shell variable names.
     expr "x$ac_envvar" : ".*[^_$ac_cr_alnum]" >/dev/null &&
       {  echo "$as_me: error: invalid variable name: $ac_envvar" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
     eval "$ac_envvar='$ac_optarg'"
     export $ac_envvar ;;
@@ -496,7 +496,7 @@ done
 if test -n "$ac_prev"; then
   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
   {  echo "$as_me: error: missing argument to $ac_option" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
 fi
 
 # Be sure to have absolute paths.
@@ -509,7 +509,7 @@ do
     [\\/$]* | ?:[\\/]* ) ;;
     NONE ) ;;
     *)  {  echo "$as_me: error: expected an absolute path for --$ac_var: $ac_val" >&2
-  { false; exit; }; };;
+  { (exit 1); exit; }; };;
   esac
 done
 
@@ -552,10 +552,10 @@ fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
     {  echo "$as_me: error: cannot find sources in $ac_confdir or .." >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
   else
     {  echo "$as_me: error: cannot find sources in $srcdir" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
   fi
 fi
 srcdir=`echo "$srcdir" | sed 's%\([^/]\)/*$%\1%'`
@@ -841,7 +841,7 @@ for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
 done
 if test -z "$ac_aux_dir"; then
   {  echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
 fi
 ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"
@@ -944,7 +944,7 @@ if (
       # happened.  Such a system could not be considered "sane".
       {  echo "$as_me: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
    fi
 
    test "$2" = conftestfile
@@ -955,7 +955,7 @@ then
 else
    {  echo "$as_me: error: newly created file is older than distributed files!
 Check your system clock" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
 fi
 rm -f conftest*
 echo "$as_me:961: result: yes" >&5
@@ -1014,7 +1014,7 @@ VERSION=2.49b
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   {  echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
 fi
 
 cat >>confdefs.h <<EOF
@@ -1166,7 +1166,7 @@ echo "$as_me:1165: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   {  echo "$as_me: error: GNU m4 1.4 is required" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
 fi
 # This is needed because Automake does not seem to realize there is
 # an AC_SUBST inside AC_PROG_GNU_M4.  Grmph!
@@ -1637,7 +1637,7 @@ cat >>$CONFIG_STATUS <<\EOF
     # Conflict between --help and --header
     {  echo "$as_me: error: ambiguous option: $ac_option
 Try \`$0 --help' for more information." >&2
-  { false; exit; }; };;
+  { (exit 1); exit; }; };;
   --help | --hel | -h )
     echo "$ac_cs_usage"; exit 0 ;;
   --debug | --d* | -d )
@@ -1662,9 +1662,9 @@ Try \`$0 --help' for more information." >&2
   # This is an error.
   -*) {  echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2
-  { false; exit; }; } ;;
+  { (exit 1); exit; }; } ;;
   *) {  echo "$as_me: error: invalid argument: $1" >&2
-  { false; exit; }; };;
+  { (exit 1); exit; }; };;
   esac
   shift
 done
@@ -1697,7 +1697,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   { false; exit; }
+   { (exit 1); exit; }
 }
 
 EOF
@@ -1885,7 +1885,7 @@ echo "creating $ac_file" >&6;}
       [\\/$]* | ?:[\\/]*)
          # Absolute
          test -f "$f" || {  echo "$as_me: error: cannot find input file: $f" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
          echo $f;;
       *) # Relative
          if test -f "$f"; then
@@ -1897,10 +1897,10 @@ echo "creating $ac_file" >&6;}
          else
            # /dev/null tree
            {  echo "$as_me: error: cannot find input file: $f" >&2
-  { false; exit; }; }
+  { (exit 1); exit; }; }
          fi;;
       esac
-    done` || { false; exit; }
+    done` || { (exit 1); exit; }
 EOF
 cat >>$CONFIG_STATUS <<EOF
   sed "$ac_vpsub
@@ -1932,5 +1932,5 @@ EOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
 
-test "$no_create" = yes || $SHELL $CONFIG_STATUS || { false; exit; }
+test "$no_create" = yes || $SHELL $CONFIG_STATUS || { (exit 1); exit; }
 
