@@ -726,13 +726,11 @@ adjust the code.])
 # -----------
 # Check for a fully functional sed program that truncates
 # as few characters as possible.  Prefer GNU sed if found.
-#
-# Solaris /usr/xpg4/bin/sed is suitable, but /usr/bin/sed truncates output.
 AC_DEFUN([AC_PROG_SED],
 [AC_CACHE_CHECK([for a sed that does not truncate output], ac_cv_path_SED,
     [_AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
-		["$ac_path_SED" -e 's/a$//'])], [$PATH:/usr/xpg4/bin])])
+		["$ac_path_SED" -e 's/a$//'])])])
  SED="$ac_cv_path_SED"
  AC_SUBST([SED])
 ])# AC_PROG_SED
