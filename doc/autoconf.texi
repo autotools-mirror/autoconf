@@ -9366,8 +9366,8 @@ Substitutions}, item ``Command Substitution''.
 
 @item Bash
 @cindex Bash
-To detect whether you are running @command{bash}, test if
-@code{BASH_VERSION} is set.  To disable its extensions and require
+To detect whether you are running @command{bash}, test whether
+@code{BASH_VERSION} is set.  To require
 @acronym{POSIX} compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
 Mode,, Bash @acronym{POSIX} Mode, bash, The @acronym{GNU} Bash Reference
 Manual}, for details.
@@ -9407,6 +9407,9 @@ not have it.
 A public-domain clone of the Korn shell called @samp{pdksh} is also
 widely available: it has most of the @samp{ksh88} features along with
 a few of its own.
+Similarly to @command{bash}, you can detect whether you are running
+@samp{pdksh} by testing whether @code{KSH_VERSION} is set, and you can
+require @acronym{POSIX} compatibility by running @samp{set -o posix}.
 
 @item Zsh
 @cindex Zsh
