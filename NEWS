@@ -10,6 +10,8 @@ Major changes in release 2.0:
 * AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
+* AC_TEST_LINK which should be used instead of AC_COMPILE_CHECK, in
+  order to use results caching.
 
 ** Changed macros:
 * AC_OUTPUT adds the "automatically generated" comment after "#!" lines, 
