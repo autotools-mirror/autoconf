@@ -224,3 +224,12 @@ operates.
 `configure' also accepts some other, not widely useful, options.  Run
 `configure --help' for more details.
 
+Copyright Notice for the `INSTALL' File
+=======================================
+
+   Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software
+Foundation, Inc.
+
+   The `INSTALL' file is free documentation; the Free Software
+Foundation gives unlimited permission to copy, distribute and modify it.
+

@@ -352,6 +352,7 @@ Running @code{configure} Scripts
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
 * configure Invocation::        Changing how @code{configure} runs
+* INSTALL Copyright Notice::    Copyright notice for the @file{INSTALL} file
 
 Obsolete Constructs
 
@@ -9566,6 +9567,7 @@ may use comes with Autoconf.
 * Sharing Defaults::            Setting site-wide defaults for @code{configure}
 * Environment Variables::       Defining environment variables.
 * configure Invocation::        Changing how @code{configure} runs
+* INSTALL Copyright Notice::    Copyright notice for the @file{INSTALL} file
 @end menu
 
 @include install.texi

@@ -1,5 +1,10 @@
 2001-08-11  Paul Eggert  <eggert@twinsun.com>
 
+	* doc/autoconf.texi, doc/install.texi: Add a copyright notice
+	to the INSTALL file.
+
+2001-08-11  Paul Eggert  <eggert@twinsun.com>
+
 	* NEWS: The autoconf manual now is distributed under the terms
 	of the GNU Free Documentation License.
 
