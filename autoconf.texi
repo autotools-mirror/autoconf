@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.122
-@set VERSION 1.122
+@set EDITION 1.123
+@set VERSION 1.123
 @set UPDATED October 1994
 
 @iftex
@@ -135,6 +135,7 @@ Initialization and Output Files
 * Makefile Substitutions::      Using output variables in @file{Makefile}s.
 * Configuration Headers::       Creating a configuration header file.
 * Subdirectories::              Configuring independent packages together.
+* Default Prefix::              Changing the default installation prefix.
 * Versions::                    Version numbers in @code{configure}.
 
 Substitutions in Makefiles
@@ -235,6 +236,12 @@ Site Configuration
 * Site Details::                Configuring site details.
 * Transforming Names::          Changing program names when installing.
 * Site Defaults::               Giving @code{configure} local defaults.
+
+Transforming Program Names When Installing
+
+* Transformation Options::      @code{configure} options to transforme names.
+* Transformation Examples::     Sample uses of transforming names.
+* Transformation Rules::        @file{Makefile} uses of transforming names.
 
 Running @code{configure} Scripts
 
@@ -514,13 +521,15 @@ source files for common portability problems and creates a file
 that package.
 
 You should manually examine @file{configure.scan} before renaming it to
-@file{configure.in}; it will probably need some adjustments.  For
-example, if you want the package to use a configuration header file, you
-will have to add a call to @code{AC_CONFIG_HEADER} (@pxref{Configuration
-Headers}).  You might also have to change or add some @code{#if}
-directives to your program in order to make it work with Autoconf
-(@pxref{Invoking ifnames}, for information about a program that can help
-with that job).
+@file{configure.in}; it will probably need some adjustments.
+Occasionally @code{autoscan} outputs a macro in the wrong order relative
+to another macro, so that @code{autoconf} produces a warning; you need
+to move such macros manually.  Also, if you want the package to use a
+configuration header file, you must add a call to
+@code{AC_CONFIG_HEADER} (@pxref{Configuration Headers}).  You might also
+have to change or add some @code{#if} directives to your program in
+order to make it work with Autoconf (@pxref{Invoking ifnames}, for
+information about a program that can help with that job).
 
 @code{autoscan} uses several data files, which are installed along with the
 distributed Autoconf macro files, to determine which macros to output
@@ -695,6 +704,7 @@ initialization and creating output files.
 * Makefile Substitutions::      Using output variables in @file{Makefile}s.
 * Configuration Headers::       Creating a configuration header file.
 * Subdirectories::              Configuring independent packages together.
+* Default Prefix::              Changing the default installation prefix.
 * Versions::                    Version numbers in @code{configure}.
 @end menu
 
@@ -846,12 +856,12 @@ contains.
 
 @defvar configure_input
 @ovindex configure_input
-A comment saying that the file was generated automatically by configure
-and giving the name of the input file.  @code{AC_OUTPUT} adds a comment
-line containing this variable to the top of every @file{Makefile} it
-creates.  For other files, you should reference this variable in a
-comment at the top of each input file.  For example, an input
-shell script should begin like this:
+A comment saying that the file was generated automatically by
+@code{configure} and giving the name of the input file.
+@code{AC_OUTPUT} adds a comment line containing this variable to the top
+of every @file{Makefile} it creates.  For other files, you should
+reference this variable in a comment at the top of each input file.  For
+example, an input shell script should begin like this:
 
 @example
 #!/bin/sh
@@ -865,7 +875,7 @@ needs to be processed by @code{configure} in order to be used.
 
 @defvar exec_prefix
 @ovindex exec_prefix
-The installation prefix for architecture-specific files.
+The installation prefix for architecture-dependent files.
 @end defvar
 
 @defvar prefix
@@ -1191,7 +1201,7 @@ to a directory; this option overrides the environment variable.
 Print the version number of Autoconf and exit.
 @end table
 
-@node Subdirectories, Versions, Configuration Headers, Setup
+@node Subdirectories, Default Prefix, Configuration Headers, Setup
 @section Configuring Other Packages in Subdirectories
 
 In most situations, calling @code{AC_OUTPUT} is sufficient to produce
@@ -1218,7 +1228,41 @@ variable @code{subdirs} to the list of directories @samp{@var{dir}
 which subdirectories to recurse into.
 @end defmac
 
-@node Versions, , Subdirectories, Setup
+@node Default Prefix, Versions, Subdirectories, Setup
+@section Default Prefix
+
+By default, @code{configure} sets the prefix for files it installs to
+@file{/usr/local}.  The user of @code{configure} can select a different
+prefix using the @samp{--prefix} and @samp{--exec-prefix} options.
+There are two ways to change the default: when creating
+@code{configure}, and when running it.
+
+Some software packages might want to install in a directory besides
+@file{/usr/local} by default.  To accomplish that, use the
+@code{AC_PREFIX_DEFAULT} macro.
+
+@defmac AC_PREFIX_DEFAULT (@var{prefix})
+Set the default installation prefix to @var{prefix} instead of @file{/usr/local}.
+@end defmac
+
+It may be convenient for users to have @code{configure} guess the
+installation prefix from the location of a related program that they
+have already installed.  If you wish to do that, you can call
+@code{AC_PREFIX_PROGRAM}.
+
+@defmac AC_PREFIX_PROGRAM (@var{program})
+@maindex PREFIX_PROGRAM
+If the user did not specify an installation prefix (using the
+@samp{--prefix} option), guess a value for it by looking for
+@var{program} in @code{PATH}, the way the shell does.  If @var{program}
+is found, set the prefix to the parent of the directory containing
+@var{program}; otherwise leave the prefix specified in
+@file{Makefile.in} unchanged.  For example, if @var{program} is
+@code{gcc} and the @code{PATH} contains @file{/usr/local/gnu/bin/gcc},
+set the prefix to @file{/usr/local/gnu}.
+@end defmac
+
+@node Versions, , Default Prefix, Setup
 @section Version Numbers in @code{configure}
 
 The following macros manage version numbers for @code{configure}
@@ -1520,18 +1564,6 @@ path of @var{prog-to-check-for} if found.
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the entire path of the program
 found.
-@end defmac
-
-@defmac AC_PREFIX_PROGRAM (@var{program})
-@maindex PREFIX_PROGRAM
-If the user did not specify an installation prefix (using the
-@samp{--prefix} option), guess a value for it by looking for
-@var{program} in @code{PATH}, the way the shell does.  If @var{program}
-is found, set the prefix to the parent of the directory containing
-@var{program}; otherwise leave the prefix specified in
-@file{Makefile.in} unchanged.  For example, if @var{program} is
-@code{gcc} and the @code{PATH} contains @file{/usr/local/gnu/bin/gcc},
-set the prefix to @file{/usr/local/gnu}.
 @end defmac
 
 @node Libraries, Library Functions, Alternative Programs, Existing Tests
@@ -2023,13 +2055,13 @@ their usual interpretations.  Here is an example:
 @group
 #include <sys/types.h>
 #if HAVE_SYS_WAIT_H
-#include <sys/wait.h>
+# include <sys/wait.h>
 #endif
 #ifndef WEXITSTATUS
-#define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
+# define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
 #endif
 #ifndef WIFEXITED
-#define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
+# define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
 #endif
 @end group
 @end example
@@ -2409,10 +2441,10 @@ otherwise set it to the empty string.
 @ovindex X_LIBS
 @ovindex X_EXTRA_LIBS
 @ovindex X_PRE_LIBS
-An enhanced version of @code{AC_PATH_X}.  Put the C compiler flags that
-X needs into output variable @code{X_CFLAGS}, and the X linker
-flags into @code{X_LIBS}.  If X is not available, put
-@samp{-DX_DISPLAY_MISSING} into @code{X_CFLAGS}.
+An enhanced version of @code{AC_PATH_X}.  Add the C compiler flags that
+X needs to output variable @code{X_CFLAGS}, and the X linker flags to
+@code{X_LIBS}.  If X is not available, add @samp{-DX_DISPLAY_MISSING} to
+@code{X_CFLAGS}.
 
 Also check for special libraries that some systems need in order to
 compile X programs.  Add any that the system needs to output variable
@@ -3870,27 +3902,42 @@ location such as the user's home directory.  It could even be specified
 by an environment variable.  The programs should examine that file at
 run time, rather than at compile time.  That approach is more convenient
 for users and makes the configuration process simpler than getting the
-information while configuring.
+information while configuring.  @xref{Directory Variables, , Variables
+for Installation Directories, standards, GNU Coding Standards}, for more
+information on where to put data files.
 
 @node Transforming Names, Site Defaults, Site Details, Site Configuration
 @section Transforming Program Names When Installing
 
-Autoconf supports giving @code{configure} command line options to change
-the names of programs being installed.  These transformations are useful
-with programs that can be part of a cross-compilation development
-environment.  For example, a cross-assembler running on a Sun 4
-configured with @samp{--target=i960-vxworks} is normally installed as
-@file{i960-vxworks-as}, rather than @file{as}, which could be confused
-with a native Sun 4 assembler.
+Autoconf supports changing the names of programs when installing them.
+In order to use these transformations, @file{configure.in} must call the
+macro @code{AC_ARG_PROGRAM}.
 
-You can also force a program name to begin with @file{g}, if you don't
-want GNU programs installed on your system to shadow system programs by
-the same name.  For example, if GNU @code{make} used this mechanism, you
-could configure it with @samp{--program-prefix=g} and when you ran
-@samp{make install}, it would be installed as
-@file{/usr/local/bin/gmake}.
+@defmac AC_ARG_PROGRAM
+@maindex ARG_PROGRAM
+@ovindex program_transform_name
+Place in output variable @code{program_transform_name} a sequence of
+@code{sed} commands for changing the names of installed programs.
 
-The @code{configure} options are:
+If any of the options described below are given to @code{configure},
+program names are transformed accordingly.  Otherwise, if
+@code{AC_CANONICAL_SYSTEM} has been called and a @samp{--target} value
+is given that differs from the host type (specified with @samp{--host}
+or defaulted by @code{config.sub}), the target type followed by a dash
+is used as a prefix.  Otherwise, no program name transformation is done.
+@end defmac
+
+@menu
+* Transformation Options::      @code{configure} options to transforme names.
+* Transformation Examples::     Sample uses of transforming names.
+* Transformation Rules::        @file{Makefile} uses of transforming names.
+@end menu
+
+@node Transformation Options, Transformation Examples, , Transforming Names
+@subsection Transformation Options
+
+You can specify name transformations by giving @code{configure} these
+command line options:
 
 @table @code
 @item --program-prefix=@var{prefix}
@@ -3900,35 +3947,44 @@ prepend @var{prefix} to the names;
 append @var{suffix} to the names;
 
 @item --program-transform-name=@var{expression}
-perform @code{sed} substitution @var{expression} on the names.  For
-example, you could use
+perform @code{sed} substitution @var{expression} on the names.
+@end table
+
+@node Transformation Examples, Transformation Rules, Transformation Options, Transforming Names
+@subsection Transformation Examples
+
+These transformations are useful with programs that can be part of a
+cross-compilation development environment.  For example, a
+cross-assembler running on a Sun 4 configured with
+@samp{--target=i960-vxworks} is normally installed as
+@file{i960-vxworks-as}, rather than @file{as}, which could be confused
+with a native Sun 4 assembler.
+
+You can force a program name to begin with @file{g}, if you don't want
+GNU programs installed on your system to shadow other programs with the
+same name.  For example, if you configure GNU @code{diff} with
+@samp{--program-prefix=g}, then when you run @samp{make install} it is
+installed as @file{/usr/local/bin/gdiff}.
+
+As a more sophistocated example, you could use
 @example
 --program-transform-name='s/^/g/; s/^gg/g/; s/^gless/less/'
 @end example
 @noindent
-to prepend a @samp{g} to most of the program names in a source tree,
+to prepend @samp{g} to most of the program names in a source tree,
 excepting those like @code{gdb} that already have one and those like
 @code{less} and @code{lesskey} that aren't GNU programs.  (That is
 assuming that you have a source tree containing those programs that is
-set up to use this option.)
-@end table
+set up to use this feature.)
 
-In order to use the values given to these options, @file{configure.in}
-must call the macro @code{AC_ARG_PROGRAM}.
+One way to install multiple versions of some programs simultaneously is
+to append a version number to the name of one or both.  For example, you
+can configure Autoconf using @samp{--program-suffix=2} to install the
+programs as @file{/usr/local/bin/autoconf2}, @file{/usr/local/bin/autoheader2},
+etc.
 
-@defmac AC_ARG_PROGRAM
-@maindex ARG_PROGRAM
-@ovindex program_transform_name
-Place in output variable @code{program_transform_name} a sequence of
-@code{sed} commands for changing the names of installed programs.
-
-If any of the above options are given to @code{configure}, program names
-are transformed accordingly.  Otherwise, if @code{AC_CANONICAL_SYSTEM}
-has been called and a @samp{--target} value is given that differs from
-the host type (specified with @samp{--host} or defaulted by
-@code{config.sub}), the target type followed by a dash is used as a
-prefix.  Otherwise, no program name transformation is done.
-@end defmac
+@node Transformation Rules, , Transformation Examples, Transforming Names
+@subsection Transformation Rules
 
 Here is how to use the variable @code{program_transform_name} in a
 @file{Makefile.in}:
@@ -3960,9 +4016,9 @@ site- and system-wide initialization files.
 @evindex CONFIG_SITE
 If the environment variable @code{CONFIG_SITE} is set, @code{configure}
 uses its value as the name of a shell script to read.  Otherwise, it
-reads the shell script @file{@var{prefix}/lib/config.site} if it exists,
-then @file{@var{exec_prefix}/lib/config.site} if it exists.  Thus,
-settings in system-dependent files override those in system-independent
+reads the shell script @file{@var{prefix}/share/config.site} if it exists,
+then @file{@var{prefix}/etc/config.site} if it exists.  Thus,
+settings in machine-specific files override those in machine-independent
 ones in case of conflict.
 
 Site files can be arbitrary shell scripts, but only certain kinds of
@@ -3986,7 +4042,7 @@ You can set some cache values in the site file itself.  Doing this is
 useful if you are cross-compiling, so it is impossible to check features
 that require running a test program.  You could ``prime the cache'' by
 setting those values correctly for that system in
-@file{@var{exec_prefix}/lib/config.site}.  To find out the names of the
+@file{@var{prefix}/etc/config.site}.  To find out the names of the
 cache variables you need to set, look for shell variables with
 @samp{_cv_} in their names in the affected configure scripts, or in the
 Autoconf @code{m4} source code for those macros.
@@ -3997,23 +4053,24 @@ site files.  Your code should check that variables such as @code{prefix}
 and @code{cache_file} have their default values (as set near the top of
 @code{configure}) before changing them.
 
-Here is a sample file @file{/usr/share/local/gnu/lib/config.site}.  The
+Here is a sample file @file{/usr/share/local/gnu/share/config.site}.  The
 command @samp{configure --prefix=/usr/share/local/gnu} would read this
 file (if @code{CONFIG_SITE} is not set).
 
 @example
 # config.site for configure
 #
+# Default --prefix and --exec-prefix.
+test "$prefix" = NONE && prefix=/usr/share/local/gnu
+test "$exec_prefix" = NONE && exec_prefix=/usr/local/gnu
+#
 # Give Autoconf 2.x generated configure scripts a shared default
 # cache file for feature test results, architecture-specific.
-if test $cache_file = ./config.cache; then
-  cache_file=/usr/local/gnu/lib/config.cache
+if test "$cache_file" = ./config.cache; then
+  cache_file="$prefix/var/config.cache"
   # A cache file is only valid for one C compiler.
   CC=gcc
 fi
-# Default --prefix and --exec-prefix.
-test $prefix = NONE && prefix=/usr/share/local/gnu
-test $exec_prefix = NONE && exec_prefix=/usr/local/gnu
 @end example
 
 @node Invoking configure, Invoking config.status, Site Configuration, Top
