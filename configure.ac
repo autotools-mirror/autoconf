@@ -26,7 +26,7 @@ AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52c)
 
 # Initialize the test suite.
-AT_CONFIG(tests, bin)
+AT_CONFIG(tests, ../bin)
 AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in
