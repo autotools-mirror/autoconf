@@ -103,6 +103,7 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * Invoking configure::          How to use the Autoconf output.
 * Invoking config.status::      Recreating a configuration.
 * Site Default Values::         Providing local defaults for @code{configure}.
+* Old Macro Names::		Backward compatibility macros.
 * Example::                     Sample Autoconf input files.
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined.
 * Macro Index::                 Index of Autoconf macros.
