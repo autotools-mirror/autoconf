@@ -5942,7 +5942,10 @@ OK
 @c -----------------
 @cindex @command{echo}
 The simple @code{echo} is probably the most surprising source of
-portability troubles.
+portability troubles.  It is not possible to use @samp{echo} portably
+unless both options and escape sequences are omitted.  New applications
+which are not aiming at portability should use @samp{printf} instead of
+@samp{echo}.
 
 Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
 etc. for a means to simulate @option{-c}.

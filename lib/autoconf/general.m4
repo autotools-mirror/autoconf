@@ -3555,7 +3555,7 @@ m4_ifval([$2$3],
          [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
 m4_ifval([$1$2$3],
          [AC_DIAGNOSE([obsolete],
-                      [$0 should be used witout arguments.
+                      [$0 should be used without arguments.
 You should run autoupdate.])])dnl
 AC_CACHE_SAVE
 
