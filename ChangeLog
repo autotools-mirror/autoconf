@@ -1,5 +1,12 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4(AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS):
+	Renamed AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.  All
+	dependencies changed.
+	From Jim Meyering.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 	* acspecific.m4: Likewise.
 

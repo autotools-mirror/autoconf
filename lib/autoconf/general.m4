@@ -3296,26 +3296,26 @@ AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
 AC_DIVERT_POP()])
 
 
-dnl AC_CONFIG_PRE_COMMANDS(CMDS)
+dnl AC_CONFIG_COMMANDS_PRE(CMDS)
 dnl ----------------------------
 dnl Commands to run right before config.status is created. Accumulates.
-AC_DEFUN([AC_CONFIG_PRE_COMMANDS],
-[m4_append([AC_OUTPUT_PRE_COMMANDS], [$1
+AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
+[m4_append([AC_OUTPUT_COMMANDS_PRE], [$1
 ])])
 
 dnl Initialize.
-define([AC_OUTPUT_PRE_COMMANDS])
+define([AC_OUTPUT_COMMANDS_PRE])
 
 
-dnl AC_CONFIG_POST_COMMANDS(CMDS)
+dnl AC_CONFIG_COMMANDS_POST(CMDS)
 dnl -----------------------------
 dnl Commands to run after config.status was created.  Accumulates.
-AC_DEFUN([AC_CONFIG_POST_COMMANDS],
-[m4_append([AC_OUTPUT_POST_COMMANDS], [$1
+AC_DEFUN([AC_CONFIG_COMMANDS_POST],
+[m4_append([AC_OUTPUT_COMMANDS_POST], [$1
 ])])
 
 dnl Initialize.
-define([AC_OUTPUT_POST_COMMANDS])
+define([AC_OUTPUT_COMMANDS_POST])
 
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
