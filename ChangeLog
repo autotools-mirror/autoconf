@@ -1,3 +1,5 @@
+
+2003-06-02  Alexandre Duret-Lutz  <adl@gnu.org>
 2003-06-02  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in, bin/autoscan.in, bin/autoheader.in: White space

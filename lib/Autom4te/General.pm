@@ -665,7 +665,7 @@ sub verbose (@)
 =item C<handle_exec_errors ($command)>
 
 Display an error message for C<$command>, based on the content of
-C<$?> and C<$!>. 
+C<$?> and C<$!>.
 
 =cut
 
