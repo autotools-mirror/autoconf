@@ -1,3 +1,8 @@
+2000-11-28  Pavel Roskin  <proski@gnu.org>
+
+	* doc/install.texi: Minor changes to eliminate TeX warnings.
+	* doc/autoconf.texi: Likewise. Typo fixes.
+
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/atconfig.in: Move code into...

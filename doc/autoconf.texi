@@ -1037,11 +1037,11 @@ you get:
 
 @example
 /tmp % ace -Wcross
-configure.in:8: warning: AC_TRY_RUN called without default to allow \
-cross compiling
+configure.in:8: warning: AC_TRY_RUN called without default \
+to allow cross compiling
 /tmp % ace -Wcross,error
-configure.in:8: error: AC_TRY_RUN called without default to allow \
-cross compiling
+configure.in:8: error: AC_TRY_RUN called without default \
+to allow cross compiling
 acgeneral.m4:3044: AC_TRY_RUN is expanded from...
 configure.in:2: INNER is expanded from...
 configure.in:5: OUTTER is expanded from...
@@ -1518,7 +1518,7 @@ of @file{config.status} is to @emph{instantiate} files.
 
 This section describes the common behavior of the four standard
 instantiating macros: @code{AC_CONFIG_FILES}, @code{AC_CONFIG_HEADERS},
-macro @code{AC_CONFIG_COMMANDS}, and @code{AC_CONFIG_LINKS}.  They all
+@code{AC_CONFIG_COMMANDS} and @code{AC_CONFIG_LINKS}.  They all
 have this prototype:
 
 @c Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
@@ -1910,9 +1910,9 @@ remains being defined as @samp{$@{prefix@}/share} to depend upon the
 current value of @code{prefix}.
 
 A corollary is that you should not use these variables but in
-Makefiles.  For instance instead of trying to resolve the dependencies
-of @code{datadir} upon @code{prefix} and using
-@samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
+Makefiles.  For instance, instead of trying to evaluate @code{datadir}
+in @file{configure} and hardcoding it in Makefiles using
+e.g. @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir")}, you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CFLAGS}.
 
 Similarly you should not rely on @code{AC_OUTPUT_FILES} to replace
@@ -3906,7 +3906,7 @@ If no @var{includes} are specified, the default includes are used
 
 @example
 AC_CHECK_MEMBER(struct passwd.pw_gecos,,
-                [AC_MSG_ERROR([We need `struct passwd.pw_gecos'!])],
+                [AC_MSG_ERROR([We need `passwd.pw_gecos'!])],
                 [#include <pwd.h>])
 @end example
 
@@ -4581,7 +4581,7 @@ options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
 @code{_FILE_OFFSET_BITS} and @code{_LARGE_FILES} if necessary.
 
-The user can disable large-file support by configuring with the
+Large-file support can be disabled by configuring with the
 @option{--disable-largefile} option.
 
 If you use this macro, check that your program works even when
@@ -5223,7 +5223,7 @@ releases of Solaris don't support it:
 
 @example
 $ uname -a
-SunOS shelby.Stanford.EDU 5.7 Generic_106541-10 sun4u sparc SUNW,Ultra-1
+SunOS shelby 5.7 Generic_106541-10 sun4u sparc SUNW,Ultra-1
 $ echo $(echo blah)
 syntax error: `(' unexpected
 @end example
@@ -5320,9 +5320,15 @@ bash-2.02 % (CDPATH=.: cd foo)
 @end example
 
 Therefore a portable solution to neutralize @samp{CDPATH} is
-@samp{CDPATH=$@{ZSH_VERSION+.@}:}.  Note that since @command{zsh}
-support @command{unset}, you may unset @samp{CDPATH} using @samp{:} as a
-fall back, see @ref{Limitations of Builtins}.
+
+@example
+CDPATH=$@{ZSH_VERSION+.@}:
+@end example
+
+@noindent
+Note that since @command{zsh} supports @command{unset}, you may unset
+@samp{CDPATH} using @samp{:} as a fallback, see
+@ref{Limitations of Builtins}.
 
 @item LANG
 @itemx LC_ALL
@@ -8012,10 +8018,11 @@ Here is how to use the variable @code{program_transform_name} in a
 @example
 transform = @@program_transform_name@@
 install: all
-        $(INSTALL_PROGRAM) myprog $(bindir)/`echo myprog|sed '$(transform)'`
+        $(INSTALL_PROGRAM) myprog $(bindir)/`echo myprog | \
+                                               sed '$(transform)'`
 
 uninstall:
-        rm -f $(bindir)/`echo myprog|sed '$(transform)'`
+        rm -f $(bindir)/`echo myprog | sed '$(transform)'`
 @end example
 
 @noindent
@@ -8025,12 +8032,13 @@ If you have more than one program to install, you can do it in a loop:
 PROGRAMS = cp ls rm
 install:
         for p in $(PROGRAMS); do \
-          $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
+          $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p | \
+                                              sed '$(transform)'`; \
         done
 
 uninstall:
         for p in $(PROGRAMS); do \
-          rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
+          rm -f $(bindir)/`echo $$p | sed '$(transform)'`; \
         done
 @end example
 
@@ -8495,10 +8503,10 @@ Determine the system type and set output variables to the names of the
 canonical system types.  @xref{Canonicalizing}, for details about the
 variables this macro sets.
 
-The user is encouraged to explicitly use either
-@code{AC_CANONICAL_BUILD}, or @code{AC_CANONICAL_HOST}, or
-@code{AC_CANONICAL_TARGET}, depending on her needs.  Using
-@code{AC_CANONICAL_TARGET} is enough to run the three macros.
+The user is encouraged to use either @code{AC_CANONICAL_BUILD}, or
+@code{AC_CANONICAL_HOST}, or @code{AC_CANONICAL_TARGET}, depending on
+the needs.  Using @code{AC_CANONICAL_TARGET} is enough to run the two
+other macros.
 @end defmac
 
 @defmac AC_CHAR_UNSIGNED
@@ -8795,8 +8803,7 @@ by @code{AC_LANG_SAVE}, remove it from the stack, and call
 @defmac AC_LANG_SAVE
 @maindex LANG_SAVE
 Remember the current language (as set by @code{AC_LANG}) on a stack.
-Doe not change which language is current.  @code{AC_LANG_PUSH} is
-preferred.
+The current language does not change.  @code{AC_LANG_PUSH} is preferred.
 @end defmac
 
 @defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
@@ -8826,8 +8833,8 @@ AC_CONFIG_LINKS(host.h:config/$machine.h
 @defmac AC_LONG_64_BITS
 @maindex LONG_64_BITS
 @cvindex LONG_64_BITS
-If the C type @code{long int} is 16 bits wide, define
-@code{LONG_64_BITS}.  Use @samp{AC_CHECK_SIZEOF(long int)} instead.
+Define @code{LONG_64_BITS} if the C type @code{long int} is 64 bits wide.
+Use the generic macro @samp{AC_CHECK_SIZEOF([long int])} instead.
 @end defmac
 
 @defmac AC_LONG_DOUBLE

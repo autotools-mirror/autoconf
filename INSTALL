@@ -147,9 +147,9 @@ where SYSTEM can have one of these forms:
 `config.sub' isn't included in this package, then this package doesn't
 need to know the host type.
 
-   If you are _building_ compiler tools for cross-compiling, you can
-also use the `--target=TYPE' option to select the type of system they
-will produce code for.
+   If you are _building_ compiler tools for cross-compiling, you should
+use the `--target=TYPE' option to select the type of system they will
+produce code for.
 
    If you want to _use_ a cross compiler, that generates code for a
 platform different from the build platform, you should specify the host
