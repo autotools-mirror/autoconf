@@ -2321,13 +2321,18 @@ translations for this package from the translations for other packages.
 Normally, the text domain name should be the same as the name of the
 package---for example, @samp{fileutils} for the GNU file utilities.
 
-To enable gettext to work, avoid writing code that makes assumptions
-about the structure of words.  Don't construct words from parts.  Here
-is an example of what not to do:
+To enable gettext to work well, avoid writing code that makes
+assumptions about the structure of words or sentences.  When you want
+the precise text of a sentence to vary depending on the data, use two or
+more alternative string constants each containing a complete sentences,
+rather than inserting conditionalized words or phrases into a single
+sentence framework.
+
+Here is an example of what not to do:
 
 @example
 printf ("%d file%s processed", nfiles,
-       nfiles != 1 ? "s" : "");
+        nfiles != 1 ? "s" : "");
 @end example
 
 @noindent
@@ -2336,7 +2341,7 @@ by adding `s'.  If you apply gettext to the format string, like this,
 
 @example
 printf (gettext ("%d file%s processed"), nfiles,
-       nfiles != 1 ? "s" : "");
+        nfiles != 1 ? "s" : "");
 @end example
 
 @noindent
@@ -2345,8 +2350,8 @@ the message can use different words, but it will still be forced to use
 
 @example
 printf ((nfiles != 1 ? "%d files processed"
-        : "%d file processed"),
-       nfiles);
+         : "%d file processed"),
+        nfiles);
 @end example
 
 @noindent
@@ -2355,13 +2360,35 @@ independently:
 
 @example
 printf ((nfiles != 1 ? gettext ("%d files processed")
-        : gettext ("%d file processed")),
-       nfiles);
+         : gettext ("%d file processed")),
+        nfiles);
 @end example
 
 @noindent
-This can handle any language, no matter how it forms the plural of the
-word for ``file''.
+This can any method of forming the plural of the word for ``file'', and
+also handles languages that require agreement in the word for
+``processed''.
+
+A similar problem appears at the level of sentence structure with this
+code:
+
+@example
+printf ("#  Implicit rule search has%s been done.\n",
+        f->tried_implicit ? "" : " not");
+@end example
+
+@noindent
+Adding @code{gettext} calls to this code cannot give correct results for
+all languages, because negation in some languages requires adding words
+at more than one place in the sentence.  By contrast, adding
+@code{gettext} calls does the job straightfowardly if the code starts
+out like this:
+
+@example
+printf (f->tried_implicit
+        ? "#  Implicit rule search has been done.\n",
+        : "#  Implicit rule search has not been done.\n");
+@end example
 
 @node Documentation
 @chapter Documenting Programs
