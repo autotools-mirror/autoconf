@@ -207,7 +207,7 @@ else
 fi
 
 at_failed_list=
-at_ignore_count=0
+at_skip_count=0
 at_test_count=0
 m4_divert([TESTS])dnl
 
@@ -227,8 +227,8 @@ m4_divert([TAIL])[]dnl
       case $at_status in
         0) echo ok
            ;;
-        77) echo "ignored near \``cat at-check-line`'"
-            at_ignore_count=`expr $at_ignore_count + 1`
+        77) echo "ok (skipped near \``cat at-check-line`')"
+            at_skip_count=`expr $at_skip_count + 1`
             ;;
         *) echo "FAILED near \``cat at-check-line`'"
            at_failed_list="$at_failed_list $at_test"
@@ -243,16 +243,22 @@ done
 # Wrap up the testing suite with summary statistics.
 
 rm -f at-check-line at-setup-line
-at_fail_count=0
 if test -z "$at_failed_list"; then
-  if test "$at_ignore_count" = 0; then
-    at_banner="All $at_test_count tests were successful"
+  if test "$at_skip_count" = 0; then
+    AS_BOX([All $at_test_count tests were successful])
   else
-    at_banner="All $at_test_count tests were successful ($at_ignore_count ignored)"
+    AS_BOX([All $at_test_count tests were successful ($at_skip_count skipped)])
   fi
 elif test $at_debug = false; then
+  at_fail_count=`set dummy $at_failed_list; shift; echo $[#]`
+  if $at_stop_on_error; then
+    AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests])
+  else
+    AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed])
+  fi
+
   # Remove any debugging script resulting from a previous run.
-  rm -f debug-*.sh
+  rm -f debug-*.sh $[0].log
   echo
   echo $at_n "Writing \`debug-NN.sh' scripts, NN =$at_c"
   for at_group in $at_failed_list; do
@@ -262,28 +268,18 @@ elif test $at_debug = false; then
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
-    at_fail_count=`expr $at_fail_count + 1`
   done
   echo ', done'
-  if $at_stop_on_error; then
-    at_banner='ERROR: One of the tests failed, inhibiting subsequent tests'
-  else
-    at_banner="ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed"
-  fi
-fi
-AS_BOX($at_banner)
-
-if test $at_debug = false && test -n "$at_failed_list"; then
   echo
-  echo 'When reporting failed tests to maintainers, do not merely list test'
-  echo 'numbers, as the numbering changes between releases and pretests.'
-  echo 'Be careful to give at least all the information you got about them.'
   echo 'You may investigate any problem if you feel able to do so, in which'
   echo 'case the testsuite provide a good starting point.'
-  echo 'information.  Now, failed tests will be executed again, verbosely.'
-  for at_group in $at_failed_list; do
-    ./debug-$at_group.sh
-  done
+  echo
+  echo 'Now, failed tests will be executed again, verbosely, and logged'
+  echo 'in the file '$[0]'.log.  When sending this file to the maintainers,'
+  echo 'be careful to give at least all the information you have: version'
+  echo 'numbers, decription of your environment etc.'
+  ${CONFIG_SHELL-/bin/sh} $[0] -v -d $at_failed_list 2>&1 | tee $[0].log
+  AS_BOX([$[0].log is created])
   exit 1
 fi
 

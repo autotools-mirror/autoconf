@@ -1,5 +1,17 @@
 2001-01-15  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT): When the suite failed, complain
+	before creating the debug scripts.
+	Create a log file.
+	When ignoring a test, display a reassuring `ok' for stressed
+	users, and say `skipped' instead.
+	Simply run `testsuite' with the failed tests instead of running
+	the debug scripts, this avoids having zillions of banners `Testing
+	Blabla 2.13' (another means to avoid these banners is to have the
+	test suite succeed :-).
+
+2001-01-15  Akim Demaille  <akim@epita.fr>
+
 	* sh.m4 (AS_BOX, _AS_BOX_LITERAL, _AS_BOX_INDIR): New.
 	* tests/atgeneral.m4: Use it.
 
