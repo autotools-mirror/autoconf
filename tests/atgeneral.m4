@@ -111,6 +111,7 @@ test -f atlocal && . ./atlocal
 at_stop_on_error=false
 # Shall we be verbose?
 at_verbose=:
+at_quiet=echo
 # Shall we keep the debug scripts?  Must be `:' when testsuite is
 # run by a debug script, so that the script doesn't remove itself.
 at_debug=false
@@ -128,7 +129,7 @@ while test $[#] -gt 0; do
 
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
-    -v) at_verbose=echo;;
+    -v) at_verbose=echo; at_quiet=:;;
     -x) at_traceon='set -vx'; at_traceoff='set +vx';;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
@@ -215,6 +216,8 @@ for at_test in $at_tests
 do
   at_status=0
   rm -rf $at_data_files
+  # Clearly separate the tests when verbose.
+  test $at_test_count != 0 && $at_verbose
   case $at_test in
 dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
@@ -223,7 +226,7 @@ m4_divert([TAIL])[]dnl
     banner-*) ;;
     *)
       at_test_count=`expr 1 + $at_test_count`
-      $at_verbose $at_n "     $at_test. $srcdir/`cat at-setup-line`: $at_c"
+      $at_verbose $at_n "$at_test. $srcdir/`cat at-setup-line`: $at_c"
       case $at_status in
         0) echo ok
            ;;
@@ -307,13 +310,8 @@ m4_divert_text([HELP],
 m4_divert_push([TESTS])dnl
   AT_ordinal ) [#] AT_ordinal. AT_LINE: $1
     echo AT_LINE >at-setup-line
-    $at_verbose 'testing $1'
-    $at_verbose $at_n "     $at_c"
-    if test $at_verbose = echo; then
-      echo "AT_ordinal. $srcdir/AT_LINE..."
-    else
-      echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
-    fi
+    $at_verbose "AT_ordinal. $srcdir/AT_LINE: testing $1..."
+    $at_quiet $at_n "m4_format([%3d: %-18s], AT_ordinal, AT_LINE)[]$at_c"
     (
       $at_traceon
 ])

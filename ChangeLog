@@ -1,5 +1,10 @@
 2001-01-15  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_INIT): Simplify the hairy display of the
+	identity of the tests.
+
+2001-01-15  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_INIT): When the suite failed, complain
 	before creating the debug scripts.
 	Create a log file.
