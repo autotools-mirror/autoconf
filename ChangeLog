@@ -1,3 +1,7 @@
+1999-01-16  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_ACVERSION): Bump to 2.14.1 for prereleases.
+
 1999-01-13  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.sh: Remove -v and --verbose from the command line usage
