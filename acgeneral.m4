@@ -655,9 +655,7 @@ define([_AC_REQUIRE],
 [pushdef([_AC_EXPANSION_STACK],
          m4_location[: $1 is required by...])dnl
 ifdef([_AC_EXPANDING($1)],
-      [m4_diagnose([AC_REQUIRE: circular dependency of $1])dnl
-_AC_EXPANSION_STACK_DUMP()dnl
-m4exit(1)])dnl
+      [AC_FATAL([AC_REQUIRE: circular dependency of $1])])dnl
 ifndef([_AC_DIVERT_DUMP],
     [AC_FATAL([AC_REQUIRE: cannot be used outside of an AC_DEFUN'd macro])])dnl
 AC_PROVIDE_IFELSE([$1],
@@ -2763,7 +2761,10 @@ define([AC_WARNING], [AC_DIAGNOSE([syntax], [$1])])
 
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
 # --------------------------------
-define([AC_FATAL], [m4_fatal([$1], [$2])])
+define([AC_FATAL],
+[m4_diagnose([$1])
+_AC_EXPANSION_STACK_DUMP()
+m4exit(m4_default([$2], [1]))])
 
 
 

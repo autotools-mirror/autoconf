@@ -1,5 +1,10 @@
 2000-10-17  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_FATAL): Use _AC_EXPANSION_STACK_DUMP.
+	(_AC_REQUIRE): Use AC_FATAL.
+
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
 	Give a means to report where the macros have been defined in error
 	messages.
 
