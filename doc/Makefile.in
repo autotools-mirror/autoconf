@@ -31,8 +31,8 @@ PROGS = autoconf autoheader autoreconf @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
-prefix = /usr/local
-exec_prefix = $(prefix)
+prefix = @prefix@
+exec_prefix = @exec_prefix@
 
 # Directory in which to install scripts.
 bindir = $(exec_prefix)/bin
