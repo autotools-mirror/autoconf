@@ -1,5 +1,7 @@
 Mon Nov 20 15:26:50 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* Version 2.6.
+
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Prettify usage message somewhat.
 
 	* Makefile.in: Use @bindir@, @datadir@, @infodir@.

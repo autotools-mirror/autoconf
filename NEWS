@@ -1,3 +1,7 @@
+Major changes in release 2.6:
+
+Just fixed a few silly bugs.
+
 Major changes in release 2.5:
 
 * New configure options --bindir, --libdir, --datadir, etc., with
