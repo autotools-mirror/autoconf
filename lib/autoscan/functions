@@ -72,7 +72,7 @@ vsprintf	AC_FUNC_VPRINTF
 wait3		AC_FUNC_WAIT3
 
 # Functions we should no longer use.
-getwd          warn: getwd is depecrated, use getcwd instead
+getwd          warn: getwd is deprecated, use getcwd instead
 
 # Others, checked with AC_CHECK_FUNCS.
 __argz_count
