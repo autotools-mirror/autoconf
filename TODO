@@ -318,6 +318,12 @@ Make easy macros for checking for X functions and libraries.
 
 ------------------------------------------------------------------------------
 
+We probably shouldn't cache a path for INSTALL within a source
+directory, because that will break other packages using the cache if
+that directory is removed.
+
+------------------------------------------------------------------------------
+
 * Test suite: more things to test:
 ** That the shell scripts produce correct output on some simple data.
 ** Configuration header files.  That autoheader does the right thing,
