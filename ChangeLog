@@ -1,5 +1,19 @@
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
+	Macros used by AC_LANG_COMPILER macros shall not AC_REQUIRE
+	AC_LANG_COMPILER by the way of AC_COMPILE_IFELSE etc.
+
+	* acspecific.m4 (_AC_EXEEXT): Use _AC_LINK_IFELSE, not
+	AC_LINK_IFELSE to avoid AC_REQUIREing AC_PROG_CC which precisely
+	requires _AC_EXEEXT.
+	Don't run _AC_CYGWIN, _AC_MINGW32, _AC_EMXOS2.
+	* aclang.m4 (_AC_PROG_F77_G): Use _AC_COMPILE_IFELSE, not
+	AC_COMPILE_IFELSE.
+	(_AC_LANG_COMPILER_WORKS): Use _AC_LINK_IFELSE, not
+	AC_LINK_IFELSE.
+
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
 	Diagnose AC_REQUIRE circular dependencies.
 
 	* acgeneral.m4 (_AC_DEFUN_PRO, _AC_DEFUN_EPI): Keep a stack of

@@ -519,7 +519,7 @@ AC_DEFUN([AC_REQUIRE_CPP],
 # -----------------------
 define([_AC_LANG_COMPILER_WORKS],
 [AC_MSG_CHECKING([whether the _AC_LANG compiler works])
-AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+_AC_LINK_IFELSE([AC_LANG_PROGRAM()],
 [# FIXME: these cross compiler hacks should be removed for autoconf 3.0
 # If not cross compiling, check that we can run a simple program.
 if test "$cross_compiling" != yes; then
@@ -1051,7 +1051,7 @@ ac_save_FFLAGS=$FFLAGS
 FFLAGS=
 AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [FFLAGS=-g
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_g=yes],
 [ac_cv_prog_f77_g=no])
 ])

@@ -9,6 +9,10 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Autoconf 2.50
 
+** AC_EXEEXT, AC_OBJEXT
+We need a good implement.  As much as possible, they should not depend
+upon AC_EMXOS2 etc.
+
 ** More tests
 Check that AC_REQUIRE circular dependencies are caught.
 

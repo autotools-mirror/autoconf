@@ -1559,14 +1559,11 @@ AC_DEFUN([AC_OBJEXT],   [])
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
 define([_AC_EXEEXT],
-[_AC_CYGWIN
-_AC_MINGW32
-_AC_EMXOS2
-AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
+[AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
 [case "$CYGWIN $MINGW32 $EMXOS2" in
   *yes*) ac_cv_exeext=.exe ;;
   *)
-  AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+  _AC_LINK_IFELSE([AC_LANG_PROGRAM()],
   [if test ! -f conftest; then
     for ac_file in conftest.*; do
        case $ac_file in
@@ -1594,18 +1591,17 @@ AC_SUBST(EXEEXT)dnl
 define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
- if AC_TRY_EVAL(ac_compile); then
-   for ac_file in conftest.*; do
-   case $ac_file in
-     *.$ac_ext) ;;
-     *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
-   esac
-   done
- else
-   rm -f conftest.$ac_ext
-   AC_MSG_ERROR([cannot compile])
- fi
-])
+if AC_TRY_EVAL(ac_compile); then
+  for ac_file in conftest.*; do
+  case $ac_file in
+    *.$ac_ext) ;;
+    *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
+  esac
+  done
+else
+  rm -f conftest.$ac_ext
+  AC_MSG_ERROR([cannot compile])
+fi])
 AC_SUBST(OBJEXT, $ac_cv_objext)dnl
 ac_objext=$ac_cv_objext
 rm -f conftest.$ac_objext conftest.$ac_ext
