@@ -1,3 +1,5 @@
+--no-info
+
 [name]
 config.guess \- guess the build system triplet
 
@@ -20,6 +22,3 @@ build a compiler, assembler etc., the `target' machine, for which the
 compiler being built will produce code.
 
 This script will guess the type of the `build' machine.
-
-[reporting bugs]
-Report bugs and patches to <config-patches@gnu.org>.
