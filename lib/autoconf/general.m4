@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -495,7 +495,7 @@ AC_DEFUN([AC_PREFIX_PROGRAM],
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   _AS_ECHO_N([checking for prefix by ])
   AC_PATH_PROG(ac_prefix_program, [$1])
-  if test -n $ac_prefix_program; then
+  if test -n "$ac_prefix_program"; then
     prefix=`AS_DIRNAME(["$ac_prefix_program"])`
     prefix=`AS_DIRNAME(["$prefix"])`
   fi

@@ -1,3 +1,9 @@
+2003-02-20  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (AC_PREFIX_PROGRAM): Quote
+	$ac_prefix_program.
+	From Larry Jones.
+
 2002-12-23  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Define $1 to an
@@ -37,7 +43,7 @@
 	the location has moved.
 
 2002-12-02  Martin Frydl  <martin@systinet.com>
-	
+
 	* bin/autom4te.in (at_flatten): rewritten to avoid M4 problem when
 	\(.*\) match is too long and there is something more to be checked.
 	<http://mail.gnu.org/pipermail/autoconf/2002-November/014524.html>
