@@ -2835,3 +2835,87 @@ changequote([, ])dnl
   done
 fi
 ])
+
+
+dnl AC_LINKER_OPTION
+dnl ----------------
+dnl
+dnl usage: AC_LINKER_OPTION(LINKER-OPTIONS, SHELL-VARIABLE)
+dnl
+dnl Specifying options to the compiler (whether it be the C, C++ or
+dnl Fortran 77 compiler) that are meant for the linker is compiler
+dnl dependent.  This macro lets you give options to the compiler that
+dnl are meant for the linker in a portable, compiler-independent way.
+dnl
+dnl This macro take two arguments, a list of linker options that the
+dnl compiler should pass to the linker (LINKER-OPTIONS) and the name of
+dnl a shell variable (SHELL-VARIABLE).  The list of linker options are
+dnl appended to the shell variable in a compiler-dependent way.
+dnl
+dnl For example, if the selected language is C, then this:
+dnl
+dnl   AC_LINKER_OPTION([-R /usr/local/lib/foo], foo_LDFLAGS)
+dnl
+dnl will expand into this if the selected C compiler is gcc:
+dnl
+dnl   foo_LDFLAGS="-Xlinker -R -Xlinker /usr/local/lib/foo"
+dnl
+dnl otherwise, it will expand into this:
+dnl
+dnl   foo_LDFLAGS"-R /usr/local/lib/foo"
+dnl
+dnl You are encouraged to add support for compilers that this macro
+dnl doesn't currently support.
+dnl
+dnl pushdef([AC_LINKER_OPTION],
+AC_DEFUN(AC_LINKER_OPTION,
+[
+  using_gnu_compiler=
+
+  ifelse(AC_LANG, [C],         test x"$GCC" = xyes && using_gnu_compiler=yes,
+ [ifelse(AC_LANG, [CPLUSPLUS], test x"$GXX" = xyes && using_gnu_compiler=yes,
+ [ifelse(AC_LANG, [FORTRAN77], test x"$G77" = xyes && using_gnu_compiler=yes)])])
+
+  for i in $1; do
+    if test x"$using_gnu_compiler" = xyes; then
+      $2="[$]$2 -Xlinker $i"
+    else
+      $2="[$]$2 $i"
+    fi
+  done
+])
+
+
+dnl AC_LIST_MEMBER_OF
+dnl -----------------
+dnl
+dnl usage: AC_LIST_MEMBER_OF(ELEMENT, LIST, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl
+dnl Processing the elements of a list is tedious in shell programming,
+dnl as lists tend to be implemented as space delimited strings.
+dnl
+dnl This macro searches LIST for ELEMENT, and executes ACTION-IF-FOUND
+dnl if ELEMENT is a member of LIST, otherwise it executes
+dnl ACTION-IF-NOT-FOUND.
+dnl
+dnl pushdef([AC_LIST_MEMBER_OF],
+AC_DEFUN(AC_LIST_MEMBER_OF,
+[
+  dnl Do some sanity checking of the arguments.
+  ifelse($1, , [AC_MSG_ERROR([$0]: 1st arg must be defined)])
+  ifelse($2, , [AC_MSG_ERROR([$0]: 2nd arg must be defined)])
+
+  exists=false
+  for i in $2; do
+      if test x"$1" = x"$i"; then
+          exists=true
+          break
+      fi
+  done
+
+  if test x"$exists" = xtrue; then
+      ifelse($3, , :, $3)
+  else
+      ifelse($4, , :, $4)
+  fi
+])
