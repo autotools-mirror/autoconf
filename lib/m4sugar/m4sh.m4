@@ -266,35 +266,38 @@ fi
 # This is a spy to detect "in the wild" shells that do not support shell
 # functions correctly.  It is based on the m4sh.at Autotest testcases.
 m4_define([_AS_SHELL_FN_WORK],
-[func_return () {
+[as_func_return () {
   (exit [$]1)
 }
-func_success () {
-  func_return 0
+as_func_success () {
+  as_func_return 0
 }
-func_failure () {
-  func_return 1
+as_func_failure () {
+  as_func_return 1
 }
-func_ret_success () {
+as_func_ret_success () {
   return 0
 }
-func_ret_failure () {
+as_func_ret_failure () {
   return 1
 }
 
 exitcode=0
-AS_IF([func_success], [],
+AS_IF([as_func_success], [],
   [exitcode=1
-  echo func_failure succeeded.])
-AS_IF([func_failure],
+  echo as_func_failure succeeded.])
+AS_IF([as_func_failure],
   [exitcode=1
-  echo func_success failed.])
-AS_IF([func_ret_success], [],
+  echo as_func_success failed.])
+AS_IF([as_func_ret_success], [],
   [exitcode=1
-  echo func_ret_success failed.])
-AS_IF([func_ret_failure],
+  echo as_func_ret_success failed.])
+AS_IF([as_func_ret_failure],
   [exitcode=1
-  echo func_ret_failure succeeded.])
+  echo as_func_ret_failure succeeded.])
+AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
+  [exitcode=1
+  echo positional parameters were not saved.])
 test $exitcode = 0])
 
 
