@@ -131,7 +131,7 @@ m4_define([_m4_divert(TEST_SCRIPT)],        403)
 # even think about using `?' or `\?'.  Bah, `*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!
 m4_define([AT_LINE],
-[$at_srcdir/m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
+[m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
 # AT_INIT([TESTSUITE-NAME])
@@ -533,7 +533,7 @@ do
   _AS_PATH_WALK([$PATH], [test -f $as_dir/$at_program && break])
   if test -f $as_dir/$at_program; then
     {
-      echo "AT_LINE: $as_dir/$at_program --version"
+      echo "$at_srcdir/AT_LINE: $as_dir/$at_program --version"
       $as_dir/$at_program --version
       echo
     } >&AS_MESSAGE_LOG_FD 2>&1
@@ -1329,7 +1329,7 @@ m4_popdef([at_reason])])
 #
 m4_define([_AT_CHECK],
 [$at_traceoff
-echo "AT_LINE: AS_ESCAPE([$1])"
+echo "$at_srcdir/AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >"$at_check_line_file"
 
 at_trace_this=
@@ -1374,7 +1374,7 @@ m4_case([$2],
   [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
-   *) echo "AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"
+   *) echo "$at_srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"
       at_failed=:;;])
 esac
 AS_IF($at_failed, [$5

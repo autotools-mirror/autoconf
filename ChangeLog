@@ -1,3 +1,9 @@
+2004-12-21  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4 (AT_LINE): Don't add srcdir here, to
+	avoid cluttering displayed messages.  Rather, prepend srcdir where
+	AT_LINE is used for log files.
+
 2004-12-21  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/status.m4: Quote ``$tmp'' in many places.
