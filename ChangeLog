@@ -1,3 +1,7 @@
+1999-09-04  Jeremy Elson  <jelson@circlemud.org>
+
+	* autoheader.m4 (AC_CHECK_HEADER): Define.
+
 1999-08-28  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Once and for all, emit the correct string for
@@ -22,6 +26,21 @@
 	* autoreconf.sh: Run aclocal with the -I option only if
 	aclocal_dir != `.'.  Fix for autoconf/44.
 	
+1999-08-18  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Remove "/MP" from the release string on
+	multiprocessor x86 machines running SVR4.0. Suggested by Tom
+	Purcell <Tom.Purcell@wang.com>.
+
+1999-08-16  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Add optional third argument
+	INCLUDES, which specifies the headers in which to search for the
+	type in question. Also, pass a "description" argument to
+	AC_DEFINE_UNQUOTED.
+	* acconfig.h (mode_t, off_t, pid_t, size_t): Remove definitions.
+	* autoconf.texi (AC_CHECK_TYPE): Document optional third argument.
+
 1999-08-05  Jeffrey A Law  <law@cygnus.com>
 
 	* config.sub (-wrs case): Use os=-vxworks, not os=vxworks.
