@@ -163,11 +163,13 @@ done
 
 # The warnings are the concatenation of 1. application's defaults
 # (here, none), 2. $WARNINGS, $3 command line options, in that order.
+alphabet='abcdefghijklmnopqrstuvwxyz'
+ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 _ac_warnings=
-for warning in `IFS=,; echo $WARNINGS,$warnings | tr 'A-Z' 'a-z'`
+for warning in `IFS=,; echo $WARNINGS,$warnings | tr $ALPHABET $alphabet`
 do
   case $warning in
-  '')   continue;;
+  '' | ,)   continue;;
   no-*) eval warning_`expr x$warning : 'xno-\(.*\)'`=false;;
   *)    eval warning_$warning=:;;
   esac
