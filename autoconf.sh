@@ -88,14 +88,7 @@ if test -z "$print_version"; then
   fi
 fi
 
-MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4 \
-${AC_MACRODIR}/acoldnames.m4"
-test -r ${AC_MACRODIR}/aclocal.m4 &&
-  MACROFILES="${MACROFILES} ${AC_MACRODIR}/aclocal.m4"
-test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
-MACROFILES="${print_version} ${MACROFILES} ${infile}"
-
-$M4 $MACROFILES > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
+$M4 -I$AC_MACRODIR $print_version autoconf.m4 $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
 
 if test -n "$print_version"; then
   cat $tmpout

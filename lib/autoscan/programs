@@ -1,4 +1,4 @@
-ln		AC_LN_S
+ln		AC_PROG_LN_S
 awk		AC_PROG_AWK
 nawk		AC_PROG_AWK
 gawk		AC_PROG_AWK
@@ -15,4 +15,4 @@ ranlib		AC_PROG_RANLIB
 yacc		AC_PROG_YACC
 byacc		AC_PROG_YACC
 bison		AC_PROG_YACC
-make		AC_SET_MAKE
+make		AC_PROG_MAKE_SET

@@ -52,7 +52,7 @@ AC_CACHE_VAL(ac_cv_prog_gcc,
   yes
 #endif
 EOF
-if ${CC-cc} -E conftest.c 2>&5 | egrep yes >/dev/null 2>&1; then
+if ${CC-cc} -E conftest.c 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -72,7 +72,7 @@ AC_CACHE_VAL(ac_cv_prog_gxx,
   yes
 #endif
 EOF
-if ${CXX-gcc} -E conftest.C 2>&5 | egrep yes >/dev/null 2>&1; then
+if ${CXX-gcc} -E conftest.C 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
@@ -117,15 +117,15 @@ echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-if ${CC-cc} -c conftest.c -o conftest.o 1>&5 2>&5 &&
-  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&5 2>&5
+if ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC &&
+  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC
 then
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if cc -c conftest.c 1>&5 2>&5
+    if cc -c conftest.c 1>&AC_FD_CC 2>&AC_FD_CC
     then
-      if cc -c conftest.c -o conftest2.o 1>&5 2>&5 &&
-        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&5 2>&5
+      if cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC &&
+        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC
       then
         eval ac_cv_prog_cc_${ac_cc}_c_o=yes
       fi
@@ -492,7 +492,7 @@ fi
 ])dnl
 dnl
 AC_DEFUN(AC_HEADER_STAT,
-[AC_MSG_CHECKING(for broken stat file mode macros)
+[AC_MSG_CHECKING(whether stat file-mode macros are broken)
 AC_CACHE_VAL(ac_cv_header_stat_broken,
 [AC_EGREP_CPP([You lose], [#include <sys/types.h>
 #include <sys/stat.h>
@@ -905,9 +905,9 @@ wenotbecray
 ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])dnl
 AC_MSG_RESULT($ac_cv_os_cray)
 if test $ac_cv_os_cray = yes; then
-AC_CHECK_FUNC([_getb67], AC_DEFINE(CRAY_STACKSEG_END, _getb67),
-AC_CHECK_FUNC([GETB67], AC_DEFINE(CRAY_STACKSEG_END, GETB67),
-AC_CHECK_FUNC([getb67], AC_DEFINE(CRAY_STACKSEG_END, getb67))))
+AC_CHECK_FUNC(_getb67, AC_DEFINE(CRAY_STACKSEG_END, _getb67),
+AC_CHECK_FUNC(GETB67, AC_DEFINE(CRAY_STACKSEG_END, GETB67),
+AC_CHECK_FUNC(getb67, AC_DEFINE(CRAY_STACKSEG_END, getb67))))
 fi
 
 AC_MSG_CHECKING(stack direction for C alloca)
@@ -1384,21 +1384,6 @@ ifelse([$2], , , [else
   $2
 ])dnl
 fi
-])dnl
-AC_DEFUN(AC_SYS_REMOTE_TAPE,
-[AC_CHECK_HEADER(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H))
-
-if test "$ac_cv_header_sys_mtio_h" = yes; then
-AC_MSG_CHECKING(for remote tape header files)
-AC_CACHE_VAL(ac_cv_header_rmt,
-[AC_TRY_CPP([#include <sgtty.h>
-#include <sys/socket.h>], ac_cv_header_rmt=yes, ac_cv_header_rmt=no)])dnl
- AC_MSG_RESULT($ac_cv_header_rmt)
- if test $ac_cv_header_rmt = yes; then
-    PROGS="$PROGS rmt"
-  fi
-fi
-AC_SUBST(PROGS)dnl
 ])dnl
 dnl
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,

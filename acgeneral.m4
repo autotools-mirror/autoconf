@@ -79,7 +79,7 @@ AC_DEFUN(AC_INIT_NOTICE,
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])dnl
 dnl
-AC_DEFUN(AC_INIT_PARSEARGS,
+AC_DEFUN(AC_INIT_PARSE_ARGS,
 [AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
 AC_BEFORE([$0], [AC_ARG_WITH])dnl
 # Save the original args to write them into config.status later.
@@ -134,8 +134,8 @@ silent=
 srcdir=
 target=NONE
 verbose=
-x_includes=
-x_libraries=
+x_includes=NONE
+x_libraries=NONE
 
 # Initialize some other variables.
 subdirs=
@@ -370,7 +370,7 @@ dnl
 AC_DEFUN(AC_INIT,
 [AC_REQUIRE([AC_BINSH])dnl
 AC_INIT_NOTICE
-AC_INIT_PARSEARGS
+AC_INIT_PARSE_ARGS
 AC_INIT_PREPARE($1)])dnl
 dnl
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
@@ -389,19 +389,21 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 # 1 file creation
 # 2 errors and warnings
 # 3 unused; some systems may open it to /dev/tty
-# 4 checking for... messages and results
-# 5 compiler messages
+define(AC_FD_MSG, 4)dnl
+[#] AC_FD_MSG checking for... messages and results
+define(AC_FD_CC, 5)dnl
+[#] AC_FD_CC compiler messages saved in config.log
 if test "$silent" = yes; then
-  exec 4>/dev/null
+  exec AC_FD_MSG>/dev/null
 else
-  exec 4>&1
+  exec AC_FD_MSG>&1
 fi
-exec 5>./config.log
+exec AC_FD_CC>./config.log
 
 echo "\
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
-" 1>&5
+" 1>&AC_FD_CC
 
 # Save the original args if we used an alternate arg parser.
 ac_configure_temp="${configure_args-[$]@}"
@@ -749,19 +751,22 @@ dnl
 dnl
 dnl Look for site or system specific initialization scripts.
 AC_DEFUN(AC_SITE_LOAD,
-[ac_site_dirs=/usr/local
-if test "x$prefix" != xNONE; then
-  ac_site_dirs=$prefix
+[# Prefer explicitly selected file to automatically selected ones.
+if test ! -r "$CONFIG_SITE"; then
+  if test "x$prefix" != xNONE; then
+    CONFIG_SITE=$prefix/lib/config.site
+  else
+    CONFIG_SITE=/usr/local/lib/config.site
+  fi
+  # System dependent files override system independent ones.
+  if test "x$exec_prefix" != xNONE && test "x$exec_prefix" != "x$prefix"; then
+    CONFIG_SITE="$CONFIG_SITE $exec_prefix/lib/config.site"
+  fi
 fi
-# System dependent files override system independent ones in case of conflict.
-if test "x$exec_prefix" != xNONE && test "x$exec_prefix" != "x$prefix"; then
-  ac_site_dirs="$ac_site_dirs $exec_prefix"
-fi
-for ac_site_dir in $ac_site_dirs; do
-  ac_site_file=$ac_site_dir/lib/config.site
+for ac_site_file in $CONFIG_SITE; do
   if test -r "$ac_site_file"; then
     echo "loading site script $ac_site_file"
-    . $ac_site_file
+    . "$ac_site_file"
   fi
 done
 ])dnl
@@ -790,6 +795,7 @@ cat > $cache_file <<\CEOF
 # the --cache-file=FILE option to use a different cache file; that is
 # what configure does when it calls configure scripts in
 # subdirectories, so they share the cache.
+# Giving --cache-file=/dev/null disables caching, for debugging configure.
 # config.status only pays attention to the cache file if you give it the
 # --recheck option to rerun configure.
 CEOF
@@ -811,7 +817,7 @@ dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
 if eval "test \"`echo '${'$1'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&4
+  echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
 else
   $2
 fi
@@ -946,19 +952,19 @@ dnl
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 AC_DEFUN(AC_MSG_CHECKING,
 [AC_REQUIRE([AC_PROG_ECHO_N])dnl
-echo $ac_n "checking $1""... $ac_c" 1>&4])dnl
+echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG])dnl
 dnl
 AC_DEFUN(AC_CHECKING,
-[echo "checking $1" 1>&4])dnl
+[echo "checking $1" 1>&AC_FD_MSG])dnl
 dnl
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
 AC_DEFUN(AC_MSG_RESULT,
 [AC_REQUIRE([AC_PROG_ECHO_N])dnl
-echo "$ac_t""$1" 1>&4])dnl
+echo "$ac_t""$1" 1>&AC_FD_MSG])dnl
 dnl
 AC_DEFUN(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
-echo "	$1" 1>&4])dnl
+echo "	$1" 1>&AC_FD_MSG])dnl
 dnl
 dnl AC_MSG_WARN(PROBLEM-DESCRIPTION)
 AC_DEFUN(AC_MSG_WARN,
@@ -977,7 +983,7 @@ AC_DEFUN(AC_LANG_C,
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CPP}'
-ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&5 2>&5'
+ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])dnl
 dnl
 AC_DEFUN(AC_LANG_CPLUSPLUS,
@@ -985,7 +991,7 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP}'
-ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&5 2>&5'
+ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])dnl
 dnl
 dnl Push the current language on a stack.
@@ -1379,6 +1385,7 @@ dnl
 dnl ### The big finish
 dnl
 dnl
+dnl Produce config.status, config.h, and links, and configure subdirs.
 dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS])
 AC_DEFUN(AC_OUTPUT,
 [AC_CACHE_SAVE
@@ -1459,10 +1466,25 @@ ifdef([AC_LIST_HEADERS],
 [trap 'rm -f $1; exit 1' 1 2 15])
 
 ac_given_srcdir=$srcdir
+
 EOF
 cat >> ${CONFIG_STATUS} <<\EOF
-
-CONFIG_FILES=${CONFIG_FILES-"$1"}
+AC_OUTPUT_FILES($1)
+ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
+ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS, AC_LIST_FILES)])dnl
+$2
+exit 0
+EOF
+chmod +x ${CONFIG_STATUS}
+test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} ${CONFIG_STATUS}
+dnl config.status should never do recursion.
+ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
+])dnl
+dnl
+dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
+dnl here document whose contents are going into config.status.
+AC_DEFUN(AC_OUTPUT_FILES,
+[CONFIG_FILES=${CONFIG_FILES-"$1"}
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile]", defaulting infile="outfile.in".
   case "$ac_file" in
@@ -1470,6 +1492,8 @@ for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
        ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
   *) ac_file_in="${ac_file}.in" ;;
   esac
+
+  # Adjust relative srcdir, etc. for subdirectories.
 
   # Remove last slash and all that follows it.  Not all systems have dirname.
 changequote(, )dnl
@@ -1507,7 +1531,7 @@ changequote([, ])dnl
 ])dnl
   echo creating "$ac_file"
   rm -f "$ac_file"
-  comment_str="Generated automatically from `echo $ac_file_in|sed 's|.*/||'` by configure."
+  comment_str="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
   case "$ac_file" in
     *.c | *.h | *.C | *.cc | *.cpp | *.hpp | *.m )
     ac_comsub="1i\\
@@ -1544,15 +1568,6 @@ EOF
 cat >> ${CONFIG_STATUS} <<\EOF
 " $ac_given_srcdir/$ac_file_in > $ac_file
 fi; done
-ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
-ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS, AC_LIST_FILES)])dnl
-$2
-exit 0
-EOF
-chmod +x ${CONFIG_STATUS}
-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} ${CONFIG_STATUS}
-dnl config.status should never do recursion.
-ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])dnl
 dnl
 dnl Create the header files listed in $1.
@@ -1560,7 +1575,6 @@ dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
 AC_DEFUN(AC_OUTPUT_HEADER,
 [changequote(<<, >>)dnl
-
 # These sed commands are put into ac_sed_defs when defining a macro.
 # They are broken into pieces to make the sed script easier to manage.
 # They are passed to sed as "A NAME B NAME C VALUE D", where NAME
@@ -1766,19 +1780,20 @@ changequote([, ])dnl
       ac_sub_configure=
     fi
 
-    # Make the cache file name correct relative to the subdirectory.
-changequote(, )dnl
-    # A "../" for each directory in /${ac_config_dir}.
-    ac_dots=`echo /${ac_config_dir}|sed 's%/[^/]*%../%g'`
-changequote([, ])dnl
-    case "$cache_file" in
-    /*) ac_sub_cache_file=$cache_file ;;
-    *) # Relative path.
-      ac_sub_cache_file="$ac_dots$cache_file" ;;
-    esac
-
     # The recursion is here.
     if test -n "${ac_sub_configure}"; then
+
+      # Make the cache file name correct relative to the subdirectory.
+changequote(, )dnl
+      # A "../" for each directory in /${ac_config_dir}.
+      ac_dots=`echo /${ac_config_dir}|sed 's%/[^/]*%../%g'`
+changequote([, ])dnl
+      case "$cache_file" in
+      /*) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+        ac_sub_cache_file="$ac_dots$cache_file" ;;
+      esac
+
       echo "[running ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file] --srcdir=${ac_sub_srcdir}"
       if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file --srcdir=${ac_sub_srcdir}
       then :

@@ -70,12 +70,6 @@ done
 
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
 test -r acconfig.h && TEMPLATES="${TEMPLATES} acconfig.h"
-MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4 \
-${AC_MACRODIR}/acoldnames.m4"
-test -r ${AC_MACRODIR}/aclocal.m4 \
-   && MACROFILES="${MACROFILES} ${AC_MACRODIR}/aclocal.m4"
-test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
-MACROFILES="${print_version} ${MACROFILES}"
 
 case $# in
   0) if test -n "$print_version"
@@ -110,13 +104,13 @@ changequote(/,/)dnl
 define(/libname/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 changequote([,])dnl
-  ifelse([$2], , [
+  ifelse([$3], , [
 @@@libs="$libs libname"@@@
 ], [
 # If it was found, we do:
-$2
-# If it was not found, we do:
 $3
+# If it was not found, we do:
+$4
 ])
 ])dnl
 dnl
@@ -132,9 +126,9 @@ libs=
 # We extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-eval "`echo \"$frob\" \
-       | $M4 $MACROFILES - $infile \
-       | sed -n -e '
+eval "`echo \"$frob\" |
+       $M4 -I$AC_MACRODIR $print_version autoconf.m4 - $infile |
+       sed -n -e '
 		: again
 		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
 		/^@@@/{

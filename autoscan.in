@@ -355,13 +355,13 @@ sub output_headers
 
     print CONF "dnl Checks for header files.\n";
     foreach $word (sort keys %headers) {
-	if ($headers_macros{$word} eq 'AC_HAVE_HEADERS') {
+	if ($headers_macros{$word} eq 'AC_CHECK_HEADERS') {
 	    push(@have_headers, $word);
 	} else {	
 	    &print_unique($headers_macros{$word});
 	}
     }
-    print CONF "AC_HAVE_HEADERS(" . join(' ', sort(@have_headers)) . ")\n"
+    print CONF "AC_CHECK_HEADERS(" . join(' ', sort(@have_headers)) . ")\n"
 	if defined(@have_headers);
 }
 
@@ -381,12 +381,12 @@ sub output_functions
 
     print CONF "dnl Checks for functions.\n";
     foreach $word (sort keys %functions) {
-	if ($functions_macros{$word} eq 'AC_HAVE_FUNCS') {
+	if ($functions_macros{$word} eq 'AC_CHECK_FUNCS') {
 	    push(@have_funcs, $word);
 	} else {	
 	    &print_unique($functions_macros{$word});
 	}
     }
-    print CONF "AC_HAVE_FUNCS(" . join(' ', sort(@have_funcs)) . ")\n"
+    print CONF "AC_CHECK_FUNCS(" . join(' ', sort(@have_funcs)) . ")\n"
 	if defined(@have_funcs);
 }

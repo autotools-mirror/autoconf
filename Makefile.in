@@ -56,7 +56,7 @@ DISTFILES = COPYING ChangeLog ChangeLog.1 ChangeLog.0 INSTALL \
 	Makefile.in NEWS README TODO \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
-	autoconf.sh autoconf.texi install.texi \
+	autoconf.m4 autoconf.sh autoconf.texi install.texi \
 	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh \
 	shindent.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
@@ -170,10 +170,10 @@ uninstall:
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
 	then cd $(infodir); rm -f standards.info*; fi
 
-configure: configure.in acgeneral.m4 acspecific.m4 acoldnames.m4
+configure: configure.in autoconf.m4 acgeneral.m4 acspecific.m4 acoldnames.m4
 	cd $(srcdir); \
 	rm -f $@ $@.tmp; \
-	$(M4) acgeneral.m4 acspecific.m4 acoldnames.m4 configure.in > $@.tmp && \
+	$(M4) autoconf.m4 configure.in > $@.tmp && \
 	mv $@.tmp $@ && \
 	chmod +x $@
 Makefile: Makefile.in config.status

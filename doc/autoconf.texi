@@ -275,8 +275,9 @@ General Public License.  This is because they consist almost entirely of
 parts of Autoconf itself, rearranged somewhat, and Autoconf is
 distributed under the terms of the GPL.  As applied to Autoconf, the GPL
 just means that you need to distribute @file{configure.in}, and
-@file{aclocal.m4}, @file{acconfig.h}, and @file{@var{config}.h.top} and
-@file{@var{config}.h.bot} if you use them, along with @file{configure}.
+@file{acsite.m4}, @file{aclocal.m4}, @file{acconfig.h}, and
+@file{@var{config}.h.top} and @file{@var{config}.h.bot} if you use them,
+along with @file{configure}.
 
 Programs that use Autoconf scripts to configure themselves do not
 automatically come under the GPL.  Distributing an Autoconf
@@ -330,9 +331,8 @@ file @file{config.h.in} with the package.
 Here is a diagram showing how the files that can be used in
 configuration are produced.  Programs that are executed are suffixed by
 @samp{*}.  Optional files are enclosed in square brackets (@samp{[]}).
-@code{autoconf} and @code{autoheader} also read the installed files
-@file{acgeneral.m4} and @file{acspecific.m4}, and also an installed
-@file{aclocal.m4} if it exists.
+@code{autoconf} and @code{autoheader} also read the installed Autoconf
+macro files (by reading @file{autoconf.m4}).
 
 @noindent
 Files used in preparing a software package for distribution:
@@ -342,7 +342,8 @@ your source files --> [autoscan*] --> [configure.scan] --> configure.in
 
 configure.in --.   .------> autoconf* -----> configure
                +---+ 
-[aclocal.m4] --'   `---.
+[aclocal.m4] --+   `---.
+[acsite.m4] ---'       |
                        +--> [autoheader*] -> [config.h.in]
 [acconfig.h] ----.     |
                  +-----'
@@ -447,18 +448,15 @@ to the standard output instead of to @file{configure}.  If you give
 instead of @file{configure.in} and writes the configuration script on
 the standard output.
 
-The Autoconf macros are defined in two or more files.  Two of the files
-are distributed with Autoconf: @code{autoconf} first reads
-@file{acgeneral.m4} (@pxref{General Purpose Macros}), then
-@file{acspecific.m4} (@pxref{Specific Tests}).  After reading them,
-@code{autoconf} looks for an optional file called @file{aclocal.m4},
-first in the directory that contains other installed Autoconf macro
-files, and then in the current directory.  If both files exist, it uses
-both of them.  Those files can contain your site's own locally written
-Autoconf macro definitions (@pxref{Writing Macros}, for more
-information).  If a macro is defined in more than one of the files that
-@code{autoconf} reads, the last definition it reads overrides the
-earlier ones.
+The Autoconf macros are defined in several files.  Some of the files are
+distributed with Autoconf; @code{autoconf} reads them first.  Then it
+looks for the optional file @file{acsite.m4} in the directory that
+contains the distributed Autoconf macro files, and for the optional file
+@file{aclocal.m4} in the current directory.  Those files can contain
+your site's own locally written Autoconf macro definitions
+(@pxref{Writing Macros}, for more information).  If a macro is defined
+in more than one of the files that @code{autoconf} reads, the last
+definition it reads overrides the earlier ones.
 
 You can override the directory where @code{autoconf} looks for the
 installed macro files by setting the @code{AC_MACRODIR} environment
@@ -643,9 +641,11 @@ more readable and make it easier to use the current Autoconf
 documentation if you update them to use the new macro names.
 
 If given no arguments, @code{autoupdate} updates @file{configure.in},
-backing up the original version in the file @file{configure.in~}.  If
-you give @code{autoupdate} an argument, it reads that file instead of
-@file{configure.in} and writes the updated file to the standard output.
+backing up the original version with the suffix @file{~} (or the value
+of the environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is
+set).  If you give @code{autoupdate} an argument, it reads that file
+instead of @file{configure.in} and writes the updated file to the
+standard output.
 
 @noindent
 @code{autoupdate} accepts the following options:
@@ -677,7 +677,8 @@ program, which uses @code{bash} to give a Bourne shell script readable
 indentation. 
 
 @code{shindent} indents each script named on the command line, backing
-up the original version using the original file name with @samp{~} appended.
+up the original version with the suffix @file{~} (or the value of the
+environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is set).
 @code{shindent} places some restrictions on its input, due to the way it
 uses @code{bash} to do the indentation:
 
@@ -1597,14 +1598,6 @@ you should let it call @code{AC_PATH_X} rather than doing that yourself.
 @vindex HAVE_LONG_FILE_NAMES
 If the system supports file names longer than 14 characters, define
 @code{HAVE_LONG_FILE_NAMES}.
-@end defmac
-
-@defmac AC_SYS_REMOTE_TAPE
-@maindex SYS_REMOTE_TAPE
-@vindex HAVE_SYS_MTIO_H
-If BSD tape drive ioctls are available, define @code{HAVE_SYS_MTIO_H},
-and if sockets are available add @code{rmt} to @code{make} variable
-@code{PROGS}.
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS
@@ -2771,9 +2764,10 @@ general to most specific.   The names of their cache variables use the
 same convention (@pxref{Cache Variables}, for more information on them).
 
 The first word of the name after @samp{AC_} usually tells the category
-of feature being tested.  Here are the categories for specific test
-macros, the kind of macro that you are more likely to write.  You are
-not required to use these names, but consistency helps readability.
+of feature being tested.  Here are the categories used in Autoconf for
+specific test macros, the kind of macro that you are more likely to
+write.  They are also used for cache variables, in all-lowercase.  Use
+them where applicable; where they're not, invent your own categories.
 
 @table @code
 @item C
@@ -2782,20 +2776,26 @@ C language builtin features.
 Declarations of C variables in header files.
 @item FUNC
 Functions in libraries.
+@item GROUP
+Unix group owners of files.
 @item HEADER
 Header files.
+@item LIB
+C libraries.
 @item OS
 Quirks of particular operating systems.
 @item PATH
-The full path names to files.
+The full path names to files, including programs.
 @item PROG
-The names of programs.
+The base names of programs.
 @item STRUCT
 Definitions of C structures in header files.
 @item SYS
 Operating system features.
 @item TYPE
 C builtin or declared types. 
+@item VAR
+C variables in libraries.
 @end table
 
 After the category comes the name of the particular feature being
@@ -2803,6 +2803,12 @@ tested.  Any further words in the macro name indicate particular aspects
 of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
 behavior of the @code{utime} function when called with a @code{NULL}
 pointer.
+
+A macro that is an internal subroutine of another macro should have a
+name that starts with the name of that other macro, followed by one or
+more words saying what the internal macro does.  For example,
+@code{AC_PATH_X} has internal macros @code{AC_PATH_X_XMKMF} and
+@code{AC_PATH_X_DIRECT}.
 
 @node Quoting, Dependencies Between Macros, Macro Naming, Writing Macros
 @section Quoting
@@ -3171,46 +3177,7 @@ Indicates that this shell variable is a cache value.
 
 @item @var{value-type}
 A convention for classifying cache values, to produce a rational naming
-system.  The values used in Autoconf are for the following classes of
-features; use them where applicable, otherwise invent your own categories:
-
-@table @code
-@item c
-C language
-
-@item func
-C functions
-
-@item group
-Unix groups
-
-@item header
-C header files
-
-@item lib
-C libraries
-
-@item path
-the absolute path names of programs
-
-@item prog
-the base names of programs
-
-@item struct
-C structures
-
-@item sys
-operating system features
-
-@item type
-C types
-
-@item var
-C variables in libraries
-
-@item x
-X Window System
-@end table
+system.  The values used in Autoconf are listed in @ref{Macro Naming}.
 
 @item @var{specific-value}
 Which member of the class of cache values this test applies to.
@@ -3505,7 +3472,9 @@ initialization files.  You can create these files to provide default
 values for some configuration values, both on all of your systems and
 separately for each architecture.
 
-@code{configure} reads the shell script
+If the environment variable @code{CONFIG_SITE} is set and contains the
+name of a readable file, @code{configure} reads that file as a shell
+script.  Otherwise, it reads the shell script
 @file{@var{exec_prefix}/lib/config.site} if it exists, then
 @file{@var{prefix}/lib/config.site} if it exists.  Thus, settings in
 system dependent files override those in system independent ones in case
@@ -3520,9 +3489,8 @@ are good places to set default values for other shell variables like
 @code{CC}, if you need to give them unusual values: anything you would
 normally do, repetitively, on the command line.  If you use non-default
 values for @var{prefix} or @var{exec_prefix} (wherever you locate the
-site file), you can't set them in the site file, since you have to
-specify them on the command line in order for @code{configure} to find
-the site file!
+site file), you can set them in the site file if you specify it with the
+@code{CONFIG_SITE} environment variable.
 
 It is possible to set some cache values in the site file.
 If you are cross-compiling, it is impossible to check features that
@@ -3564,10 +3532,6 @@ for backward compatibility, the old names are considered obsolete.
 @vindex NOTICE
 @vindex INIT_NOTICE
 @code{AC_INIT_NOTICE}
-@item AC_PARSEARGS
-@vindex PARSEARGS
-@vindex INIT_PARSEARGS
-@code{AC_INIT_PARSEARGS}
 @item AC_PREPARE
 @vindex PREPARE
 @vindex INIT_PREPARE
@@ -3786,8 +3750,7 @@ for backward compatibility, the old names are considered obsolete.
 @code{AC_C_CONST}
 @item AC_REMOTE_TAPE
 @vindex REMOTE_TAPE
-@vindex SYS_REMOTE_TAPE
-@code{AC_SYS_REMOTE_TAPE}
+removed
 @item AC_LONG_FILE_NAMES
 @vindex LONG_FILE_NAMES
 @vindex SYS_LONG_FILE_NAMES
@@ -3879,8 +3842,14 @@ AC_OS_MINIX
 AC_OS_ISC
 AC_TYPE_SIGNAL
 AC_HEADER_MAJOR
-AC_SYS_REMOTE_TAPE
-test -n "$have_mtio" && PROGS="$PROGS mt"
+
+AC_CHECKING(for remote tape and socket header files)
+AC_HEADER_CHECK(sys/mtio.h,
+[AC_DEFINE(HAVE_SYS_MTIO_H)
+PROGS="$PROGS mt"
+AC_TEST_CPP([#include <sgtty.h>
+#include <sys/socket.h>], PROGS="$PROGS rmt")])
+
 AC_PROG_RSH
 AC_C_CONST
 AC_TYPE_UID_T

@@ -11,6 +11,8 @@ Major changes in release 2.0:
 * Uses optional shell scripts $exec_prefix/lib/config.site and
   $prefix/lib/config.site to perform site or system specific initializations. 
 * configure saves compiler output to ./config.log for debugging.
+* New file autoconf.m4 loads the rest of the Autoconf macros.
+* acsite.m4 is the new name for the system-wide aclocal.m4.
 * Has the beginnings of a DejaGnu test suite.
 
 ** New macros:
@@ -40,6 +42,7 @@ Major changes in release 2.0:
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
 * AC_CHECK_FUNCS and AC_CHECK_HEADERS take optional shell commands to
   execute on success.
+* AC_REMOTE_TAPE removed; it was too specific to tar and cpio.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by
