@@ -6,8 +6,8 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.7.6
-@set VERSION 1.7.6
+@set EDITION 1.7.7
+@set VERSION 1.7.7
 @set UPDATED March 1994
 
 @iftex
@@ -1500,6 +1500,31 @@ If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
 @end defmac
 
+@defmac AC_ENABLE (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
+@maindex ENABLE
+If the user gave @code{configure} the option
+@samp{--enable-@var{feature}}, run shell commands @var{action-if-true}.
+Otherwise run shell commands @var{action-if-false}.  The name
+@var{feature} should consist only of alphanumeric characters and dashes.
+
+The @var{feature} indicates an optional user-level facility.  This
+allows users to choose which optional features to build and install.
+
+The user can give a value by following the feature name with @samp{=}
+and the value.  Giving a value of @samp{no} specifies that the feature
+is @emph{not} available.  A feature with a value looks like
+@samp{--enable-debug=stabs}.
+
+The value given is available to the shell commands @var{action-if-true}
+in the shell variable @code{enableval}.  If no value was given,
+@code{enableval} is @samp{yes}.  For example,
+
+@example
+AC_ENABLE(fubar, echo "got --enable-fubar=$enableval",
+        echo no --enable-fubar)
+@end example
+@end defmac
+
 @defmac AC_FUNC_CHECK (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex FUNC_CHECK
 If @var{function} is available, run shell commands
@@ -1684,24 +1709,29 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
-@defmac AC_WITH (@var{feature}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
+@defmac AC_WITH (@var{package}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex WITH
 If the user gave @code{configure} the option
-@samp{--with-@var{feature}}, run shell commands @var{action-if-true}.
+@samp{--with-@var{package}}, run shell commands @var{action-if-true}.
 Otherwise run shell commands @var{action-if-false}.  The name
-@var{feature} should consist only of alphanumeric characters and dashes;
-typical feature names are @samp{gnu-libc} and @samp{x}.
+@var{package} should consist only of alphanumeric characters and dashes.
 
-The user can give a value by following the feature name with @samp{=}
-and the value; for example,
+The @var{package} indicates another software package that this program
+should work with.  For example, @samp{--with-gnu-ld} means work with the
+GNU linker instead of some other linker.  @samp{--with-x11} means work
+with X11.
+
+The user can give a value by following the package name with @samp{=}
+and the value.  Giving a value of @samp{no} specifies that the package
+is @emph{not} available.  For example,
 
 @example
-./configure --with-targets=sun4,hp300bsd
+./configure --with-gnu-libc=no
 @end example
 
 The value given is available to the shell commands @var{action-if-true}
 in the shell variable @code{withval}.  If no value was given,
-@code{withval} is 1.  For example,
+@code{withval} is @samp{yes}.  For example,
 
 @example
 AC_WITH(fubar, echo "got --with-fubar=$withval",
@@ -2389,8 +2419,18 @@ values by enclosing their names in @samp{@@} characters.
 The variables that are defined by the general
 purpose Autoconf macros are:
 
+@defvar exec_prefix
+The installation prefix for architecture-specific files.
+@end defvar
+
+@defvar prefix
+The installation prefix for architecture-independent files.
+@xref{Installation Prefixes}, for an alternate way to set this variable.
+@end defvar
+
 @defvar srcdir
 The directory that contains the source code for that @file{Makefile}.
+@xref{Installation Prefixes}, for an alternate way to set this variable.
 @end defvar
 
 @defvar DEFS
@@ -2412,11 +2452,15 @@ Names of object files (ending in @file{.o}).  Set by
 @node Installation Prefixes, VPATH Substitutions, Predefined Variables, Makefiles
 @section Installation Prefixes
 
+Autoconf-generated @code{configure} scripts support an alternate
+method for substituting two particular variables, for compatibility with
+Cygnus @code{configure}.  This method is not recommended.
+
 If @code{configure} has figured out a value for the installation prefix,
 either by the user supplying one on the command line (@pxref{Invoking
-configure}) or with @code{AC_PREFIX}, then it substitutes that
-value in @file{Makefile}s that it creates.  Wherever a @file{Makefile.in}
-contains lines like
+configure}) or with @code{AC_PREFIX} (@pxref{General Tests}), then it
+substitutes that value in @file{Makefile}s that it creates.  Wherever a
+@file{Makefile.in} contains lines like
 
 @example
 prefix = /usr/local
@@ -2424,11 +2468,10 @@ exec_prefix = $@{prefix@}
 @end example
 
 @noindent
-@code{configure} substitutes the value it figured out.  The word
-@samp{prefix} or @samp{exec_prefix}
-must not be preceded by any other characters on the line.
-If @code{configure} has not figured out a value for the prefix, the
-value in the @file{Makefile.in} is left alone.
+@code{configure} substitutes the value it figured out.  The substitution
+only occurs if the word @samp{prefix} or @samp{exec_prefix} is not
+preceded by any other characters on the line, and @code{configure} has
+figured out a value for the prefix.
 
 There can be separate installation prefixes for architecture-specific
 files (@code{exec_prefix}) and architecture-independent files
