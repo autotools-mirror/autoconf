@@ -4,16 +4,18 @@ Major changes in release 1.8:
   AC_PROG_CXX, AC_PROG_CXXCPP, AC_REQUIRE_CPP
   for checking both C++ and C features in one configure script.
 * New macros AC_CHECKING, AC_VERBOSE, AC_WARN, AC_ERROR for printing messages.
-* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE, AC_PREREQ.
+* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE, AC_PREREQ, AC_SET_MAKE.
 * AC_FIND_X looks for X in more places.
 * AC_PROG_INSTALL defaults to install.sh instead of cp, if it's in srcdir.
   install.sh is distributed with Autoconf.
+* AC_DECLARE_YYTEXT has been removed because it can't work, pending
+  a rewrite of quoting in AC_DEFINE.
 * AC_OUTPUT adds its comments in C format when substituting in C files.
 * Relative srcdir values are not made absolute.
 * The values of @prefix@ and @exec_prefix@ get substituted.
-* configure accepts --help, --version, --silent/--quiet, --enable-FEATURE[=VAL]
-  options.
-* configure silently accepts all other Cygnus configure options, and
+* configure accepts --enable-FEATURE[=VAL] option; new macro AC_ENABLE.
+* configure accepts --help, --version, --silent/--quiet options.
+* configure accepts and ignores most other Cygnus configure options, and
   warns about unknown options.
 * config.status accepts --help, --version options.
 * Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
