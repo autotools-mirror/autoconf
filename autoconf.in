@@ -1,6 +1,6 @@
 #! /bin/sh
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1996 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 # the given template file.
 
 usage="\
-Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir] 
-       [-l dir] [--localdir=dir] [--version] [template-file]" 
+Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir]
+       [-l dir] [--localdir=dir] [--version] [template-file]"
 
 # NLS nuisances.
 # Only set `LANG' and `LC_ALL' to "C" if already set.
@@ -46,7 +46,7 @@ localdir=
 show_version=no
 
 while test $# -gt 0 ; do
-   case "${1}" in 
+   case "${1}" in
       -h | --help | --h* )
          echo "${usage}" 1>&2; exit 0 ;;
       --localdir=* | --l*=* )
@@ -60,7 +60,7 @@ while test $# -gt 0 ; do
       --macrodir=* | --m*=* )
          AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
-      -m | --macrodir | --m* ) 
+      -m | --macrodir | --m* )
          shift
          test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
          AC_MACRODIR="${1}"
@@ -128,9 +128,10 @@ pattern="AC_"
 status=0
 if grep "${pattern}" $tmpout > /dev/null 2>&1; then
   echo "autoconf: Undefined macros:" >&2
-  grep "${pattern}" $tmpout | sed "s/.*\(${pattern}[_A-Za-z0-9]*\).*/\1/" |
+  grep "${pattern}" $tmpout | sed "s/.*\\(${pattern}[_A-Za-z0-9]*\\).*/\\1/" |
     while read name; do
       grep -n $name $infile /dev/null
+      test $? -eq 1 && echo >&2 "***BUG in Autoconf--please report*** $name"
     done | sort -u >&2
   status=1
 fi
