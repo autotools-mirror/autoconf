@@ -1238,7 +1238,7 @@ do
     -q | -quiet | --quiet | --quie | --qui | --qu | --q \
     | -silent | --silent | --silen | --sile | --sil)
       continue ;;
-    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+    *" "*|*"	"*|*[\\\[\~\#\$\^\&\*\(\)\{\}\|\;\<\>\?\"\']*|*\]*)
       ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
     case $ac_pass in
@@ -1456,7 +1456,7 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
   # Pass precious variables to config.status.
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+    *" "*|*"	"*|*[\\\[\~\#\$\^\&\*\(\)\{\}\|\;\<\>\?\"\']*|*\]*)
       ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
     *) ac_arg=$ac_var=$ac_new_val ;;
     esac
