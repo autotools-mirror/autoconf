@@ -51,7 +51,7 @@
 
 	* acgeneral.m4 (AC_CHECK_FILE): New macro. Checks for the
 	existence of a file in the file system (native only).
-	Contributed by Theodore Y. Ts'o <tytso@mit.edu>.
+	Contributed by Ken Raeburn <raeburn@cygnus.com>.
 	(AC_CHECK_FILES): Likewise.
 
 1998-09-15  Didier Verna  <verna@inf.enst.fr>
