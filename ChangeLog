@@ -23,7 +23,7 @@
 	while it was not before.
 	* tests/tools.m4 (autoupdate): Re-enable.  Adjust the expected
 	output with the right quotation (yeah!).
-	Pass `-m $top_srcdir': autoupdate want the `.m4' files, not the
+	Pass `-m $top_srcdir': autoupdate wants the `.m4' files, not the
 	frozen files.
 	* Makefile.am (nodistpkgdataDATA): Move `acversion.m4' to
 	(distpkgdataDATA): here, so that all the `.m4' files are in the
@@ -42,10 +42,10 @@
 
 	The Associated Rewriters are proud to present...
 
-	^
-	/ \  U  T  O  U  P  D  A  T  E    I I I
-	/===\
-	/     \      It bells, It whistles...
+	      ^
+	     / \  U  T  O  U  P  D  A  T  E    I I I
+	    /===\
+	   /     \      It bells, It whistles...
 
 	* autoupdate.sh: Complete rewrite.  See that file for a detailed
 	explanation.
@@ -94,7 +94,7 @@
 	(AC_PROG_CC_WORKS, AC_PROG_CXXCPP, AC_PROG_CXX_WORKS,
 	AC_PROG_F77_WORKS, AC_F77_LIBRARY_LDFLAGS, AC_F77_NAME_MANGLING):
 	Use them.
-	(AC_F77_LIBRARY_LDFLAGS): Move the requirements at its top.
+	(AC_F77_LIBRARY_LDFLAGS): Move the requirements to its top.
 	* doc/autoconf.texi (Language Choice): Document them.
 	(Old Macros): Welcome AC_LANG_SAVE and AC_LANG_RESTORE.
 
@@ -138,7 +138,7 @@
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_F77_NAME_MANGLING): Use AC_COMPILE_IFELSE.
-	Move the requirements at the top of the macro.
+	Move the requirements to the top of the macro.
 
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
