@@ -144,8 +144,33 @@ editpl = sed \
 ## The frozen files.  ##
 ## ------------------ ##
 
+
+# When processing the file with diversion disabled, there must be no
+# output but comments and empty lines.
+# If freezing produces output, something went wrong: a bad `divert',
+# or an improper paren etc.
+# It may happen that the output does not end with a end of line, hence
+# force an end of line when reporting errors.
 .m4.m4f:
-	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
+	$(M4) -I $(srcdir) $(srcdir)/$*.m4 -D divert | \
+	  sed 's/#.*//;/^$$/d' >process.log
+	if grep . process.log >/dev/null 2>&1; then \
+	  echo "Processing $(srcdir)/$*.m4 produced output:" >&2; \
+	  sed "s,^,$(srcdir)/$*.m4: ," < process.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f process.log; \
+	fi
+	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f >freeze.log
+	if grep . freeze.log >/dev/null 2>&1; then \
+	  echo "Freezing $(srcdir)/$*.m4 produced output:" >&2; \
+	  sed "s,^,$(srcdir)/$*.m4: ," < freeze.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f freeze.log; \
+	fi
 
 autoconf.m4f: $(m4sources)
 

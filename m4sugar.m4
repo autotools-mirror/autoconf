@@ -1,4 +1,4 @@
-divert(-1)                                                   -*- Autoconf -*-
+divert(-1)#                                                  -*- Autoconf -*-
 # This file is part of Autoconf.
 # Base m4 layer.
 # Requires GNU m4.

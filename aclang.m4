@@ -1475,7 +1475,7 @@ if test -z "$ac_cv_prog_f77_v"; then
 fi],
                   [AC_MSG_WARN([compilation failed])])
 AC_LANG_POP()dnl
-])]) # _AC_PROG_F77_V
+])])# _AC_PROG_F77_V
 
 
 # AC_F77_LIBRARY_LDFLAGS
@@ -1743,4 +1743,4 @@ ifelse(m4_index([$1],[_]),-1,[],
 [case $ac_cv_f77_mangling in *," extra underscore"*) ac_val="$ac_val"_ ;; esac
 ])
 m4_default([$2],[$1])="$ac_val"
-]) # AC_F77_FUNC
+])# AC_F77_FUNC

@@ -1,5 +1,14 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.am (.m4.m4f): Check that processing produces only
+	comments and empty lines.
+	Check that freezing produced no output.
+	* m4sugar.m4: Commentize what was not.
+	* m4sh.m4: Likewise.
+	* aclang.m4: Formatting changes.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.m4 (define): Reestablish only after having read the
 	`ac' files.
 	Adjust all the Autoconf code to use `m4_define', not `define'.
