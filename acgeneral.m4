@@ -1258,67 +1258,88 @@ define([_AC_INIT_HELP],
 if test "$ac_init_help" = "long"; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
-  cat <<\EOF
-`configure' configures ifset([AC_PACKAGE_STRING],
-                       [AC_PACKAGE_STRING],
-                       [this package]) to adapt to many kinds
+  cat <<EOF
+\`configure' configures ifset([AC_PACKAGE_STRING],
+                        [AC_PACKAGE_STRING],
+                        [this package]) to adapt to many kinds of systems.
 
-[Usage: configure [OPTION]... [VAR=VALUE]... [HOST]
+Usage: $[0] [[OPTION]... [VAR=VALUE]... [HOST]]
 
-To safely assign special values to environment variables (e.g., CC,
-CFLAGS...), give to `configure' the definition as VAR=VALUE.
+[To assign environment variables (e.g., CC, CFLAGS...), specify them as
+VAR=VALUE.
 
 Defaults for the options are specified in brackets.
 
 Configuration:
-  -h, --help              print this message
-  -V, --version           print the version of autoconf that created configure
-  -q, --quiet, --silent   do not print `checking...' messages
+  -h, --help              display this help and exit
+      --help=short        display options specific to this package
+      --help=recursive    display the short help of all the included packages
+  -V, --version           display version information and exit
+  -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
   -n, --no-create         do not create output files
+      --srcdir=DIR        find the sources in DIR [configure dir or ..]
 
 EOF
 
   cat <<EOF
-Directories:
+Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-                          [same as prefix]
-  --bindir=DIR            user executables in DIR [EPREFIX/bin]
-  --sbindir=DIR           system admin executables in DIR [EPREFIX/sbin]
-  --libexecdir=DIR        program executables in DIR [EPREFIX/libexec]
-  --datadir=DIR           read-only architecture-independent data in DIR
-                          [PREFIX/share]
-  --sysconfdir=DIR        read-only single-machine data in DIR [PREFIX/etc]
-  --sharedstatedir=DIR    modifiable architecture-independent data in DIR
-                          [PREFIX/com]
-  --localstatedir=DIR     modifiable single-machine data in DIR [PREFIX/var]
-  --libdir=DIR            object code libraries in DIR [EPREFIX/lib]
-  --includedir=DIR        C header files in DIR [PREFIX/include]
-  --oldincludedir=DIR     C header files for non-gcc in DIR [/usr/include]
-  --infodir=DIR           info documentation in DIR [PREFIX/info]
-  --mandir=DIR            man documentation in DIR [PREFIX/man]
-  --srcdir=DIR            find the sources in DIR [configure dir or ..]
+                          [PREFIX]
+
+By default, \`make install' will install all the files in
+\`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
+an installation prefix other than \`$ac_default_prefix' using \`--prefix',
+for instance \`--prefix=\$HOME'.
+
+For better control, use the options below.
+
+Fine tuning of the installation directories:
+  --bindir=DIR           user executables [EPREFIX/bin]
+  --sbindir=DIR          system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR       program executables [EPREFIX/libexec]
+  --datadir=DIR          read-only architecture-independent data [PREFIX/share]
+  --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
+  --libdir=DIR           object code libraries [EPREFIX/lib]
+  --includedir=DIR       C header files [PREFIX/include]
+  --oldincludedir=DIR    C header files for non-gcc [/usr/include]
+  --infodir=DIR          info documentation [PREFIX/info]
+  --mandir=DIR           man documentation [PREFIX/man]
 EOF
 
   cat <<\EOF
 
 Host type:
-  --build=BUILD      configure for building on BUILD [BUILD=HOST]
   --host=HOST        configure for HOST [guessed]
+  --build=BUILD      configure for building on BUILD [BUILD=HOST]
   --target=TARGET    configure for TARGET [TARGET=HOST]
 EOF
   cat <<\EOF]
 AC_DIVERT_POP()dnl
+dnl The order of the diversions here is
+dnl HELP_BEGIN, which may be prolongated by extra generic options
+dnl             such as with X or AC_ARG_PROGRAM.  Displayed only
+dnl             in long --help.
+dnl HELP_ENABLE, which starts with the trailer of the HELP_BEGIN
+dnl              section, then implements the header of the non
+dnl              generic options.
+dnl HELP_WITH,
+dnl HELP_VAR,
+dnl HELP_END, initialized below, in which we dump the trailer
+dnl           (handling of the recursion for instance).
 AC_DIVERT_PUSH([HELP_ENABLE])dnl
 EOF
 fi
 
 if test -n "$ac_init_help"; then
 ifset([AC_PACKAGE_STRING],
-[  $ac_init_help ||
-     echo "Configuration of AC_PACKAGE_STRING:"])
+[  case "$ac_init_help" in
+     short | recursive ) echo "Configuration of AC_PACKAGE_STRING:";;
+   esac])
   cat <<\EOF
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH([HELP_END])dnl

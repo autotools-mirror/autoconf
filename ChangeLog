@@ -1,3 +1,18 @@
+2000-04-12  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_HELP): Move --srcdir in the first
+	section.
+	Document --help=short and recursive.
+	Split the `Directory' section into `Installation directories' for
+	--prefix and --exec-prefix, and all the others into `Fine tuning
+	of the installation directories'.
+	In the latter, don't repeat `in DIR', the user understands, and it
+	comes out better.
+	Default for --exec-prefix is PREFIX.
+	Reported by Kathryn Hargreaves.
+	Move --host before --build.
+	Fix a test on `$ac_init_help' which was not updated.
+
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
 	Have `make check' succeed with CC=g++.
