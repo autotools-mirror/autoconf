@@ -183,9 +183,8 @@ test \$exitcode = 0) || { (exit 1); exit 1; }
 (
   as_lineno_1=\$LINENO
   as_lineno_2=\$LINENO
-  as_lineno_3=\`(expr \$as_lineno_1 + 1) 2>/dev/null\`
   test \"x\$as_lineno_1\" != \"x\$as_lineno_2\" &&
-  test \"x\$as_lineno_3\"  = \"x\$as_lineno_2\") || { (exit 1); exit 1; }
+  test \"x\`expr \$as_lineno_1 + 1\`\" = \"x\$as_lineno_2\") || { (exit 1); exit 1; }
 ") 2> /dev/null; then
   :
 else
@@ -287,9 +286,8 @@ test $exitcode = 0) || { (exit 1); exit 1; }
 (
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2") || { (exit 1); exit 1; }
+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2") || { (exit 1); exit 1; }
 
 _ASEOF
 }; then
@@ -376,9 +374,8 @@ test \$exitcode = 0") || {
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2" || {
+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2" || {
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
   # uniformly replaced by the line number.  The first 'sed' inserts a
@@ -518,7 +515,7 @@ PACKAGE_STRING='GNU Autoconf 2.59c'
 PACKAGE_BUGREPORT='bug-autoconf@gnu.org'
 
 ac_unique_file="ChangeLog"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar ac_cv_sh_n_works EXPR M4 HELP2MAN PERL TEST_EMACS EMACS EMACSLOADPATH lispdir GREP LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datarootdir datadir sysconfdir sharedstatedir localstatedir includedir oldincludedir docdir infodir htmldir dvidir pdfdir psdir libdir localedir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar ac_cv_sh_n_works EXPR M4 HELP2MAN PERL TEST_EMACS EMACS EMACSLOADPATH lispdir GREP LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -546,18 +543,26 @@ x_libraries=NONE
 # and all the variables that are supposed to be based on exec_prefix
 # by default will actually change.
 # Use braces instead of parens because sh, perl, etc. also accept them.
+# (The list follows the same order as the GNU Coding Standards.)
 bindir='${exec_prefix}/bin'
 sbindir='${exec_prefix}/sbin'
 libexecdir='${exec_prefix}/libexec'
-datadir='${prefix}/share'
+datarootdir='${prefix}/share'
+datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-libdir='${exec_prefix}/lib'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
-infodir='${prefix}/info'
-mandir='${prefix}/man'
+docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+infodir='${datarootdir}/info'
+htmldir='${docdir}'
+dvidir='${docdir}'
+pdfdir='${docdir}'
+psdir='${docdir}'
+libdir='${exec_prefix}/lib'
+localedir='${datarootdir}/locale'
+mandir='${datarootdir}/man'
 
 ac_prev=
 ac_dashdash=
@@ -598,11 +603,17 @@ do
   --config-cache | -C)
     cache_file=config.cache ;;
 
-  -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
+  -datadir | --datadir | --datadi | --datad)
     ac_prev=datadir ;;
-  -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
-  | --da=*)
+  -datadir=* | --datadir=* | --datadi=* | --datad=*)
     datadir=$ac_optarg ;;
+
+  -datarootdir | --datarootdir | --datarootdi | --datarootd | --dataroot \
+  | --dataroo | --dataro | --datar)
+    ac_prev=datarootdir ;;
+  -datarootdir=* | --datarootdir=* | --datarootdi=* | --datarootd=* \
+  | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
+    datarootdir=$ac_optarg ;;
 
   -disable-* | --disable-*)
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
@@ -612,6 +623,11 @@ do
    { (exit 1); exit 1; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     eval "enable_$ac_feature=no" ;;
+
+  -dvidir | --dvidir | --dvidi | --dvid | --dvi | --dv)
+    ac_prev=dvidir ;;
+  -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
+    dvidir=$ac_optarg ;;
 
   -enable-* | --enable-*)
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
@@ -651,6 +667,12 @@ do
   -host=* | --host=* | --hos=* | --ho=*)
     host_alias=$ac_optarg ;;
 
+  -htmldir | --htmldir | --htmldi | --htmld | --html | --htm | --ht)
+    ac_prev=htmldir ;;
+  -htmldir=* | --htmldir=* | --htmldi=* | --htmld=* | --html=* | --htm=* \
+  | --ht=*)
+    htmldir=$ac_optarg ;;
+
   -includedir | --includedir | --includedi | --included | --include \
   | --includ | --inclu | --incl | --inc)
     ac_prev=includedir ;;
@@ -675,13 +697,16 @@ do
   | --libexe=* | --libex=* | --libe=*)
     libexecdir=$ac_optarg ;;
 
+  -localedir | --localedir | --localedi | --localed | --locale)
+    ac_prev=localedir ;;
+  -localedir=* | --localedir=* | --localedi=* | --localed=* | --locale=*)
+    localedir=$ac_optarg ;;
+
   -localstatedir | --localstatedir | --localstatedi | --localstated \
-  | --localstate | --localstat | --localsta | --localst \
-  | --locals | --local | --loca | --loc | --lo)
+  | --localstate | --localstat | --localsta | --localst | --locals)
     ac_prev=localstatedir ;;
   -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
-  | --localstate=* | --localstat=* | --localsta=* | --localst=* \
-  | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
+  | --localstate=* | --localstat=* | --localsta=* | --localst=* | --locals=*)
     localstatedir=$ac_optarg ;;
 
   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
@@ -745,6 +770,16 @@ do
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
     program_transform_name=$ac_optarg ;;
+
+  -pdfdir | --pdfdir | --pdfdi | --pdfd | --pdf | --pd)
+    ac_prev=pdfdir ;;
+  -pdfdir=* | --pdfdir=* | --pdfdi=* | --pdfd=* | --pdf=* | --pd=*)
+    pdfdir=$ac_optarg ;;
+
+  -psdir | --psdir | --psdi | --psd | --ps)
+    ac_prev=psdir ;;
+  -psdir=* | --psdir=* | --psdi=* | --psd=* | --ps=*)
+    psdir=$ac_optarg ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
@@ -879,8 +914,10 @@ do
 done
 
 # Be sure to have absolute directory names.
-for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
-	      localstatedir libdir includedir oldincludedir infodir mandir
+for ac_var in bindir sbindir libexecdir datarootdir datadir sysconfdir \
+              sharedstatedir localstatedir includedir oldincludedir \
+              docdir infodir htmldir dvidir pdfdir psdir libdir \
+              localedir mandir
 do
   eval ac_val=$`echo $ac_var`
   case $ac_val in
@@ -1018,15 +1055,22 @@ Fine tuning of the installation directories:
   --bindir=DIR           user executables [EPREFIX/bin]
   --sbindir=DIR          system admin executables [EPREFIX/sbin]
   --libexecdir=DIR       program executables [EPREFIX/libexec]
-  --datadir=DIR          read-only architecture-independent data [PREFIX/share]
   --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
   --libdir=DIR           object code libraries [EPREFIX/lib]
   --includedir=DIR       C header files [PREFIX/include]
   --oldincludedir=DIR    C header files for non-gcc [/usr/include]
-  --infodir=DIR          info documentation [PREFIX/info]
-  --mandir=DIR           man documentation [PREFIX/man]
+  --datarootdir=DIR      read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR          read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR          info documentation [DATAROOTDIR/info]
+  --localedir=DIR        locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR           man documentation [DATAROOTDIR/man]
+  --docdir=DIR           documentation root [DATAROOTDIR/doc/autoconf]
+  --htmldir=DIR          html documentation [DOCDIR]
+  --dvidir=DIR           dvi documentation [DOCDIR]
+  --pdfdir=DIR           pdf documentation [DOCDIR]
+  --psdir=DIR            ps documentation [DOCDIR]
 _ACEOF
 
   cat <<\_ACEOF
@@ -2741,9 +2785,8 @@ echo X/"$0" |
 
   as_lineno_1=$LINENO
   as_lineno_2=$LINENO
-  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
   test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x$as_lineno_3"  = "x$as_lineno_2" || {
+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2" || {
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
   # uniformly replaced by the line number.  The first 'sed' inserts a
@@ -3108,14 +3151,21 @@ s,@program_transform_name@,$program_transform_name,;t t
 s,@bindir@,$bindir,;t t
 s,@sbindir@,$sbindir,;t t
 s,@libexecdir@,$libexecdir,;t t
+s,@datarootdir@,$datarootdir,;t t
 s,@datadir@,$datadir,;t t
 s,@sysconfdir@,$sysconfdir,;t t
 s,@sharedstatedir@,$sharedstatedir,;t t
 s,@localstatedir@,$localstatedir,;t t
-s,@libdir@,$libdir,;t t
 s,@includedir@,$includedir,;t t
 s,@oldincludedir@,$oldincludedir,;t t
+s,@docdir@,$docdir,;t t
 s,@infodir@,$infodir,;t t
+s,@htmldir@,$htmldir,;t t
+s,@dvidir@,$dvidir,;t t
+s,@pdfdir@,$pdfdir,;t t
+s,@psdir@,$psdir,;t t
+s,@libdir@,$libdir,;t t
+s,@localedir@,$localedir,;t t
 s,@mandir@,$mandir,;t t
 s,@build_alias@,$build_alias,;t t
 s,@host_alias@,$host_alias,;t t
