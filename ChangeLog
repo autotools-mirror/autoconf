@@ -1,3 +1,19 @@
+Tue Dec 10 19:38:59 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_CACHE_SAVE): Use grep to prevent overflowing
+	HP-UX 9.05 /bin/sh buffer in case statement.  From Eric Backus
+	<ericb@lsid.hp.com>.
+
+Mon Dec  9 23:39:17 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Add a semicolon between
+	shell variable assignments; the evaluation order varies between
+	implementations. 
+
+Tue Nov 26 13:00:28 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Version 2.12.
+
 Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Test release 2.11.2.

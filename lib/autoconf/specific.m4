@@ -1306,7 +1306,7 @@ AC_CHECK_LIB(util, getloadavg,
 if test $ac_have_func = no; then
   # There is a commonly available library for RS/6000 AIX.
   # Since it is not a standard part of AIX, it might be installed locally.
-  ac_getloadavg_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
+  ac_getloadavg_LIBS="$LIBS"; LIBS="-L/usr/local/lib $LIBS"
   AC_CHECK_LIB(getloadavg, getloadavg,
     LIBS="-lgetloadavg $LIBS", LIBS="$ac_getloadavg_LIBS")
 fi
