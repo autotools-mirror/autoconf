@@ -1,3 +1,10 @@
+2000-11-10  Akim Demaille  <akim@epita.fr>
+
+	* m4sh.m4 (AS_MKDIR_P, AS_DIRNAME_SED): Don't shell quote $1.
+	Adjust callers.
+	Reported by Paul Eggert.
+	* tests/m4sh.at: Sort.
+
 2000-11-09  Pavel Roskin  <proski@gnu.org>
 
 	* install-sh: Use ":" instead of "true".

@@ -2698,7 +2698,7 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
   AC_PATH_PROG(m4_quote(AC_Prog), [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`AS_DIRNAME([$ac_cv_path_[]AC_Prog])`
+    prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
   fi
 fi
 m4_popdef([AC_Prog])dnl
@@ -4273,9 +4273,9 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
-  ac_dir=`AS_DIRNAME("$ac_file")`
+  ac_dir=`AS_DIRNAME(["$ac_file"])`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-    AS_MKDIR_P("$ac_dir")
+    AS_MKDIR_P(["$ac_dir"])
     ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dir_suffix.
     ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
@@ -4595,9 +4595,9 @@ cat >>$CONFIG_STATUS <<\EOF
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
       echo "$ac_file is unchanged"
     else
-      ac_dir=`AS_DIRNAME("$ac_file")`
+      ac_dir=`AS_DIRNAME(["$ac_file"])`
       if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-        AS_MKDIR_P("$ac_dir")
+        AS_MKDIR_P(["$ac_dir"])
       fi
       rm -f $ac_file
       mv $tmp/config.h $ac_file
@@ -4646,9 +4646,9 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   rm -f $ac_dest
 
   # Make relative symlinks.
-  ac_dest_dir=`AS_DIRNAME("$ac_dest")`
+  ac_dest_dir=`AS_DIRNAME(["$ac_dest"])`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
-    AS_MKDIR_P("$ac_dest_dir")
+    AS_MKDIR_P(["$ac_dest_dir"])
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
     ac_dots=`echo $ac_dest_dir_suffix|sed 's,/[[^/]]*,../,g'`
@@ -4757,10 +4757,10 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     echo configuring in $ac_subdir
     case $srcdir in
     .) ;;
-    *) AS_MKDIR_P(./$ac_subdir)
+    *) AS_MKDIR_P(["./$ac_subdir"])
        if test -d ./$ac_subdir; then :;
        else
-         AC_MSG_ERROR(cannot create `pwd`/$ac_subdir)
+         AC_MSG_ERROR([cannot create `pwd`/$ac_subdir])
        fi
        ;;
     esac

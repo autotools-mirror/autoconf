@@ -7,36 +7,6 @@ Autoshell.
 EOF
 
 
-## ------------ ##
-## AS_MKDIR_P.  ##
-## ------------ ##
-
-# Build nested dirs.
-
-AT_SETUP(AC_SHELL_MKDIR_P)
-
-AT_DATA(configure.in,
-[[AC_PLAIN_SCRIPT
-pwd=`pwd`
-set -e
-# Absolute
-AS_MKDIR_P($pwd/1/2/3/4/5/6)
-test -d $pwd/1/2/3/4/5/6 ||
-  AC_MSG_ERROR([$pwd/1/2/3/4/5/6 has not been properly created])
-# Relative
-AS_MKDIR_P(a/b/c/d/e/f)
-test -d a/b/c/d/e/f ||
-  AC_MSG_ERROR([a/b/c/d/e/f has not been properly created])
-AS_EXIT(0)
-]])
-
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0)
-
-AT_CLEANUP(configure 1 a)
-
-
-
 ## ----------------------------- ##
 ## AS_DIRNAME & AS_DIRNAME_SED.  ##
 ## ----------------------------- ##
@@ -102,7 +72,37 @@ AS_DIRNAME_SED_TEST([../../2//3/],	[../../2])
 AS_EXIT(0)
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure)
+
+
+
+## ------------ ##
+## AS_MKDIR_P.  ##
+## ------------ ##
+
+# Build nested dirs.
+
+AT_SETUP(AC_SHELL_MKDIR_P)
+
+AT_DATA(configure.in,
+[[AC_PLAIN_SCRIPT
+pwd=`pwd`
+set -e
+# Absolute
+AS_MKDIR_P(["$pwd/1/2/3/4/5/6"])
+test -d "$pwd/1/2/3/4/5/6" ||
+  AC_MSG_ERROR([$pwd/1/2/3/4/5/6 has not been properly created])
+# Relative
+AS_MKDIR_P(["a/b/c/d/e/f"])
+test -d a/b/c/d/e/f ||
+  AC_MSG_ERROR([a/b/c/d/e/f has not been properly created])
+AS_EXIT(0)
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure 1 a)

@@ -133,7 +133,7 @@ m4_define([AS_MKDIR_P],
   [[\\/]]* | ?:[[\\/]]* ) ac_incr_dir=;;
   *)                      ac_incr_dir=.;;
 esac
-ac_dummy="$1"
+ac_dummy=$1
 for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$[@]"`; do
   ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
   test -d $ac_incr_dir || mkdir $ac_incr_dir
@@ -160,7 +160,7 @@ m4_define([AS_DIRNAME_EXPR],
       .     : '\(.\)'])
 
 m4_define([AS_DIRNAME_SED],
-[echo "X[]$1" |
+[echo X[]$1 |
     sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
   	  /^X\(\/\/\)$/{ s//\1/; q; }
