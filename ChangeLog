@@ -1,5 +1,9 @@
 2000-12-12  Akim Demaille  <akim@epita.fr>
 
+	* tests/suite.at: Run `tools.at' first.
+
+2000-12-12  Akim Demaille  <akim@epita.fr>
+
 	* tests/aclocal.m4 (AC_STATE_SAVE): Use a more precise regexp to
 	keep envvars.
 

@@ -15,6 +15,10 @@ macros are supposed to test (e.g., a Fortran compiler).])
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.
 
+# The executables.
+# Even the tests on M4sugar and M4sh use `autoconf', so check it first.
+m4_include([tools.at])
+
 # M4sugar.
 m4_include([m4sugar.at])
 
@@ -23,9 +27,6 @@ m4_include([m4sh.at])
 
 # Autoconf base macros.
 m4_include([base.at])
-
-# The executables.
-m4_include([tools.at])
 
 # Testing config.status
 # ---------------------
