@@ -37,7 +37,8 @@ subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
 DIST_COMMON = $(autoconf_TEXINFOS) $(srcdir)/Makefile.in \
-	$(standards_TEXINFOS) Makefile.am stamp-vti version.texi
+	$(standards_TEXINFOS) Makefile.am stamp-vti texinfo.tex \
+	version.texi
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 SOURCES =
