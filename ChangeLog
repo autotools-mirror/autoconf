@@ -1,3 +1,18 @@
+2000-03-07 Mark Elbrecht <snowball3@bigfoot.com>
+
+	Support absolute DOS-style paths.
+
+	Any character before the colon is accepted because network drives
+	can be assigned characters outside the [a-zA-Z] range. DOS-style
+	relative paths (?:foo/bar) are also considered absolute for
+	Autoconf's purposes since the path '../?:foo/bar' is invalid.
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Treat DOS-style paths (?:*') as
+	absolute.
+	(AC_OUTPUT_SUBDIRS): Likewise.
+	(AC_PATH_PROG): Make pattern for matching DOS-style paths the same
+	as that used in AC_OUTPUT_FILES and AC_OUTPUT_SUBDIRS.
+
 2000-03-06  Akim Demaille  <akim@epita.fr>
 
 	* tests/atspecific.m4 (m4_match): Remove, no longer used.
