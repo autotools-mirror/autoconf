@@ -1559,8 +1559,9 @@ Print the version number of Autoconf and exit.
 @node Configuration Commands, Configuration Links, Configuration Headers, Setup
 @section Running Arbitrary Configuration Commands
 
-You may have to execute arbitrary commands when @file{config.status} is
-run.  This macro may be called multiple times.
+You may have to execute arbitrary commands either before, when and after
+@file{config.status} is run.  The three following macros accumulate the
+commands to run when they are called multiple times.
 
 @defmac AC_CONFIG_COMMANDS (@var{tag}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_COMMANDS
@@ -1583,6 +1584,25 @@ Here is a better one:
 AC_CONFIG_COMMANDS(time-stamp, [date >time-stamp])
 @end example
 @end defmac
+
+@defmac AC_CONFIG_COMMANDS_PRE(@var{cmds})
+@maindex OUTPUT_COMMANDS_PRE
+Execute the @var{cmds} right before creating @file{config.status}.  A
+typical use is computing values derived from variables built during the
+execution of @code{configure}:
+
+@example
+AC_CONFIG_COMMANDS_PRE(
+[LTLIBOBJS=`echo $LIBOBJS | sed 's/\.o/\.lo/g'`
+AC_SUBST(LTLIBOBJS)])
+@end example
+@end defmac
+
+@defmac AC_CONFIG_COMMANDS_POST(@var{cmds})
+@maindex OUTPUT_COMMANDS_POST
+Execute the @var{cmds} right after creating @file{config.status}.
+@end defmac
+
 
 The former interface to execute arbitrary commands is described below.
 
