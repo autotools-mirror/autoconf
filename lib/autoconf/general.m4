@@ -2993,45 +2993,6 @@ fi
 
 
 
-## --------------------------- ##
-## Checking for header files.  ##
-## --------------------------- ##
-
-
-# AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ----------------------------------------------------------------------
-AC_DEFUN([AC_CHECK_HEADER],
-[AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_ARG_VAR([CPPFLAGS], [C/C++ preprocessor flags, e.g. -I<include dir> if you have headers in a nonstandard directory <include dir>])
-AC_CACHE_CHECK([for $1], ac_Header,
-[AC_TRY_CPP([#include <$1>
-],
-AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
-AS_IFELSE([test AC_VAR_GET(ac_Header) = yes],
-          [$2], [$3])dnl
-AC_VAR_POPDEF([ac_Header])dnl
-])# AC_CHECK_HEADER
-
-
-m4_define([AH_CHECK_HEADERS],
-[AC_FOREACH([AC_Header], [$1],
-  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
-               [Define if you have the <]AC_Header[> header file.])])])
-
-# AC_CHECK_HEADERS(HEADER-FILE...
-#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ----------------------------------------------------------
-AC_DEFUN([AC_CHECK_HEADERS],
-[AH_CHECK_HEADERS([$1])dnl
-for ac_header in $1
-do
-AC_CHECK_HEADER($ac_header,
-                [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_header)) $2],
-                [$3])dnl
-done
-])
-
-
 ## ------------------------------------- ##
 ## Checking for the existence of files.  ##
 ## ------------------------------------- ##

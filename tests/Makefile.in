@@ -75,7 +75,7 @@ EXTRA_DIST = README              atgeneral.m4 atspecific.m4 aclocal.m4          
 
 
 # The files which contains macro we check for syntax.
-MACRO_FILES = ../acgeneral.m4   ../acspecific.m4               ../acfunctions.m4 ../aclang.m4
+MACRO_FILES = ../acgeneral.m4   ../acspecific.m4               ../acfunctions.m4 ../aclang.m4 ../acheaders.m4
 
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status              config.cache config.log config.h.in config.h

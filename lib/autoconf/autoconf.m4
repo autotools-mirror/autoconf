@@ -30,6 +30,7 @@ m4_include([acversion.m4])
 m4_include([acgeneral.m4])
 m4_include([aclang.m4])
 m4_include([acfunctions.m4])
+m4_include([acheaders.m4])
 m4_include([acspecific.m4])
 m4_include([acoldnames.m4])
 

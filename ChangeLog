@@ -1,5 +1,20 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	Create acheaders.m4.
+
+	* acgeneral.m4 (AC_CHECK_HEADER, AC_CHECK_HEADERS)
+	(AH_CHECK_HEADERS): Move to...
+	* acheaders.m4: here, a new file.
+	* acspecific.m4	(_AC_CHECK_HEADER_DIRENT, AH_CHECK_HEADERS_DIRENT)
+	(AC_HEADER_DIRENT, AC_HEADER_MAJOR, AC_HEADER_STAT, AC_HEADER_STDC)
+	(AC_HEADER_SYS_WAIT, AC_HEADER_TIME)
+	(_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H)
+	(_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL, AC_HEADER_TIOCGWINSZ): Move
+	to...
+	* acheaders.m4: here.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	Move AC_MSG_* into M4sh.
 
 	* acgeneral.m4 (_AC_SH_QUOTE, _AC_SH_QUOTE_IFELSE, _AC_ECHO): Move

@@ -43,7 +43,7 @@ testsuite: atgeneral.m4 atspecific.m4 $(SUITE)
 
 # The files which contains macro we check for syntax.
 MACRO_FILES = ../acgeneral.m4   ../acspecific.m4 \
-              ../acfunctions.m4 ../aclang.m4
+              ../acfunctions.m4 ../aclang.m4 ../acheaders.m4
 
 syntax.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)

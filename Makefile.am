@@ -38,7 +38,7 @@ EXTRA_SCRIPTS = autoscan
 m4sources =  m4sugar.m4 m4sh.m4  \
              autoconf.m4 \
              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4 \
-             acfunctions.m4
+             acfunctions.m4 acheaders.m4
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
                  $(m4sources)
