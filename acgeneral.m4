@@ -782,7 +782,7 @@ define(_AC_VERSION_COMPARE,
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
 define(AC_PREREQ,
-[ifelse(_AC_VERSION_COMPARE([AC_ACVERSION], [$1]), -1,
+[ifelse(_AC_VERSION_COMPARE(AC_ACVERSION, [$1]), -1,
      [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
 

@@ -1,5 +1,12 @@
 2000-05-04  Akim Demaille  <akim@epita.fr>
 
+	AC_PREREQ understand `2.14a' as `2.141'.
+	Reported by Didier Verna.
+
+	* acgeneral.m4 (AC_PREREQ): Don't quote AC_ACVERSION.
+
+2000-05-04  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AH_TOP, AH_BOTTOM): New macros.
 	(_AH_COUNTER): New variable.
 	* tests/tools.m4 (autoheader): Check their proper functioning.
