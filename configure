@@ -6,6 +6,18 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 
+
+
+
+
+
+
+
+
+
+
+
+
 # Defaults:
 ac_arg_with_help=
 ac_arg_enable_help=
@@ -1470,4 +1482,3 @@ rm -fr confdefs* $ac_clean_files
 trap 'exit 1' 1 2 15
 
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
-
