@@ -7638,13 +7638,10 @@ executing the macro at all.
 Some file descriptors shall not be used, since some systems, admittedly
 arcane, use them for special purpose:
 
-@table @asis
-@item 3
-some systems may open it to @samp{/dev/tty}.
-
-@item 4
-used on the Kubota Titan.
-@end table
+@display
+3 --- some systems may open it to @samp{/dev/tty}.
+4 --- used on the Kubota Titan.
+@end display
 
 Don't redirect several times the same file descriptor, as you are doomed
 to failure under Ultrix.
