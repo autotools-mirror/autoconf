@@ -1,3 +1,7 @@
+1999-04-11  Philipp Thomas  <kthomas@gwdg.de>
+
+	* config.sub: Set basic_machine to i586 when target_alias = k6-*.
+
 1999-04-11  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* autoheader.m4: Do not complain about using AC_TRY_RUN without a
