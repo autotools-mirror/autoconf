@@ -1,3 +1,17 @@
+1999-10-05  Andreas Schwab  <schwab@issan.cs.uni-dortmund.de>
+
+	Shell meta characters in an argument causes the configure script
+	to freak out and generate a config.status file that contains
+	syntax errors.
+	Bug triggered by ./configure --with-foobar=\''`"$'.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Quote single quotes that end
+	up between single quotes.  Protect arguments of echo with double
+	quotes.
+	(AC_INIT_PREPARE): Likewise.
+	(AC_PATH_PROG): Protect argument of test.
+	(AC_OUTPUT): Quote meta characters in ac_configure_args.
+
 1999-10-05  Akim Demaille  <akim@epita.fr>
 
 	The sed quoting script depends on the shape of the commands used

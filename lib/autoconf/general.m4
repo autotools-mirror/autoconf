@@ -854,10 +854,10 @@ changequote([, ])dnl
     datadir="$ac_optarg" ;;
 
   -disable-* | --disable-*)
-    ac_feature=`echo $ac_option|sed -e 's/-*disable-//'`
+    ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo $ac_feature| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if test -n "`echo "$ac_feature"| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_feature: invalid feature name)
     fi
@@ -865,16 +865,16 @@ changequote([, ])dnl
     eval "enable_${ac_feature}=no" ;;
 
   -enable-* | --enable-*)
-    ac_feature=`echo $ac_option|sed -e 's/-*enable-//' -e 's/=.*//'`
+    ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo $ac_feature| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if test -n "`echo "$ac_feature"| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_feature: invalid feature name)
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     case "$ac_option" in
-      *=*) ;;
+      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
     eval "enable_${ac_feature}='$ac_optarg'" ;;
@@ -1118,25 +1118,25 @@ Some of the influent environment variables:$ac_arg_var_help"
     exit 0 ;;
 
   -with-* | --with-*)
-    ac_package=`echo $ac_option|sed -e 's/-*with-//' -e 's/=.*//'`
+    ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo $ac_package| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if test -n "`echo "$ac_package"| sed 's/[-_a-zA-Z0-9]//g'`"; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_package: invalid package name)
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case "$ac_option" in
-      *=*) ;;
+      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
       *) ac_optarg=yes ;;
     esac
     eval "with_${ac_package}='$ac_optarg'" ;;
 
   -without-* | --without-*)
-    ac_package=`echo $ac_option|sed -e 's/-*without-//'`
+    ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if test -n "`echo "$ac_package"| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_package: invalid package name)
     fi
@@ -1177,7 +1177,7 @@ changequote([, ])dnl
 
   *)
 changequote(, )dnl
-    if test -n "`echo $ac_option| sed 's/[-a-z0-9.]//g'`"; then
+    if test -n "`echo "$ac_option"| sed 's/[-a-z0-9.]//g'`"; then
 changequote([, ])dnl
       AC_MSG_WARN($ac_option: invalid host type)
     fi
@@ -1276,6 +1276,7 @@ changequote(<<, >>)dnl
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
   *" "*|*"	"*|*[\[\]\~\<<#>>\$\^\&\*\(\)\{\}\\\|\;\<\>\?]*)
+  ac_arg=`echo "$ac_arg"|sed "s/'/'\\\\\\\\''/g"`
   ac_configure_args="$ac_configure_args '$ac_arg'" ;;
 changequote([, ])dnl
   *) ac_configure_args="$ac_configure_args $ac_arg" ;;
@@ -1307,7 +1308,7 @@ if test -z "$srcdir"; then
   # Try the directory containing this script, then its parent.
   ac_prog=[$]0
 changequote(, )dnl
-  ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
+  ac_confdir=`echo "$ac_prog"|sed 's%/[^/][^/]*$%%'`
 changequote([, ])dnl
   test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
@@ -2148,7 +2149,7 @@ dnl not every word.  This closes a longstanding sh security hole.
   ac_dummy="ifelse([$4], , $PATH, [$4])"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
+    if test -f "$ac_dir/$ac_word"; then
       ac_cv_path_$1="$ac_dir/$ac_word"
       break
     fi
@@ -2995,7 +2996,7 @@ for ac_option
 do
   case "[\$]ac_option" in
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo "running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args --no-create --no-recursion"
+    echo "running [\$]{CONFIG_SHELL-/bin/sh} [$]0 `echo "[$]ac_configure_args" | sed 's/[[\\"\`\$]]/\\\\&/g'` --no-create --no-recursion"
     exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args --no-create --no-recursion ;;
   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
     echo "[\$]ac_cs_version"; exit 0 ;;
