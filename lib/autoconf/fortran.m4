@@ -418,7 +418,7 @@ define([AC_LANG_INT_SAVE(C++)], defn([AC_LANG_INT_SAVE_TRY(C)]))
 
 
 # ------------------------ #
-# 1d. Fortran 77 sources.  #
+# 2d. Fortran 77 sources.  #
 # ------------------------ #
 
 # AC_LANG_SOURCE(Fortran 77)(BODY)
@@ -833,10 +833,12 @@ AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 dnl Fortran 95 isn't strictly backwards-compatiable with Fortran 77, but
 dnl `f95' is worth trying.
+dnl pgf77 is the Portland Group f77 compiler
+dnl lf95 is the Lahey-Fujitsu compiler 
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_TOOLS(F77,
                m4_default([$1],
-                          [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f95 fc]))
+                          [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc]))
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
@@ -900,16 +902,10 @@ fi[]dnl
 # enable debugging.
 define([_AC_PROG_F77_G],
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
-[cat >conftest.f <<EOF
-       program conftest
-       end
-EOF
-if test -z "`$F77 -g -c conftest.f 2>&1`"; then
-  ac_cv_prog_f77_g=yes
-else
-  ac_cv_prog_f77_g=no
-fi
-rm -f conftest*
+[FFLAGS=-g
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+[ac_cv_prog_f77_g=yes],
+[ac_cv_prog_f77_g=no])
 ])])# _AC_PROG_F77_G
 
 

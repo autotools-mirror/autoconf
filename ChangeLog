@@ -1,3 +1,11 @@
+2000-07-04 Martin Wilck <martin@tropos.de>
+
+	* aclang.m4 (AC_PROG_F77): Add two compilers,
+	lf95 (Lahey/Fujitsu Fortran) and pgf77 (Portland Group Fortran)
+	(_AC_PROG_F77_G): Some Fortran compilers produce stdout/stderr
+	output even if no errors occur - check exit status rather than
+	output.
+
 2000-07-05  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_SHELL_TMPDIR): When using `mktemp -d', be sure
