@@ -38,25 +38,25 @@ use strict;
 use vars qw(@cfiles @makefiles @shfiles %printed);
 
 # The kind of the words we are looking for.
-my @kinds = qw (functions headers identifiers programs
-                makevars libraries);
+my @kinds = qw (function header identifier program
+                makevar librarie);
 
 # For each kind, the default macro.
 my %generic_macro =
   (
-   'functions'   => 'AC_CHECK_FUNCS',
-   'headers'     => 'AC_CHECK_HEADERS',
-   'identifiers' => 'AC_CHECK_TYPES',
-   'programs'    => 'AC_CHECK_PROGS',
-   'libraries'   => 'AC_CHECK_LIB'
+   'function'   => 'AC_CHECK_FUNCS',
+   'header'     => 'AC_CHECK_HEADERS',
+   'identifier' => 'AC_CHECK_TYPES',
+   'program'    => 'AC_CHECK_PROGS',
+   'library'    => 'AC_CHECK_LIB'
   );
 
 my %kind_comment =
   (
-   'functions'   => 'Checks for library functions.',
-   'headers'     => 'Checks for header files.',
-   'identifiers' => 'Checks for typedefs, structures, and compiler characteristics.',
-   'programs'    => 'Checks for programs.',
+   'function'   => 'Checks for library functions.',
+   'header'     => 'Checks for header files.',
+   'identifier' => 'Checks for typedefs, structures, and compiler characteristics.',
+   'program'    => 'Checks for programs.',
   );
 
 # $USED{KIND}{ITEM} is the list of locations where the ITEM (of KIND) was used
@@ -162,7 +162,7 @@ sub init_tables ()
       # '<kind>: <word> warn: <message>'.
       if (/^(\S+):\s+(\S+)\s+(\S.*)$/)
 	{
-	  my ($kind, $word, $macro) = ("$1s", $2, $3);
+	  my ($kind, $word, $macro) = ($1, $2, $3);
 	  error "$file:$.: invalid kind: $_"
 	    unless grep { $_ eq $kind } @kinds;
 	  push @{$macro{$kind}{$word}}, $macro;
@@ -173,6 +173,17 @@ sub init_tables ()
 	}
     }
 
+  if ($debug)
+    {
+      foreach my $kind (@kinds)
+	{
+	  foreach my $word (sort keys %{$macro{$kind}})
+	    {
+	      print "$kind: $word: @{$macro{$kind}{$word}}\n";
+	    }
+	}
+
+    }
 }
 
 
@@ -186,7 +197,7 @@ sub used ($$;$)
   if (
       # Check for all the libraries.  But `-links' is certainly a
       # `find' argument, and `-le', a `test' argument.
-      ($kind eq 'libraries' && $word !~ /^(e|inks)$/)
+      ($kind eq 'library' && $word !~ /^(e|inks)$/)
       # Other than libraries are to be checked only if listed in
       # the Autoscan library files.
       || defined $macro{$kind}{$word}
@@ -238,13 +249,13 @@ sub scan_c_file ($)
 	{
 	  if (/^include\s*<([^>]*)>/)
 	    {
-	      used ('headers', $1);
+	      used ('header', $1);
 	    }
 	  if (s/^(if|ifdef|ifndef|elif)\s+//)
 	    {
 	      foreach my $word (split (/\W+/))
 		{
-		  used ('identifiers', $word)
+		  used ('identifier', $word)
 		    unless $word eq 'defined' || $word !~ /^[a-zA-Z_]/;
 		}
 	    }
@@ -260,11 +271,11 @@ sub scan_c_file ($)
       # Maybe we should ignore function definitions (in column 0)?
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
-	  used ('functions', $1);
+	  used ('function', $1);
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  used ('identifiers', $1);
+	  used ('identifier', $1);
 	}
     }
 
@@ -289,7 +300,7 @@ sub scan_makefile ($)
       # Variable assignments.
       while (s/\b([a-zA-Z_]\w*)\s*=/ /)
 	{
-	  used ('makevars', $1);
+	  used ('makevar', $1);
 	}
       # Be sure to catch a whole word.  For instance `lex$U.$(OBJEXT)'
       # is a single token.  Otherwise we might believe `lex' is needed.
@@ -298,14 +309,14 @@ sub scan_makefile ($)
 	  # Libraries.
 	  if ($word =~ /^-l([a-zA-Z_]\w*)$/)
 	    {
-	      used ('libraries', $1);
+	      used ('library', $1);
 	    }
 	  # Tokens in the code.
 	  # We allow some additional characters, e.g., `+', since
 	  # autoscan/programs includes `c++'.
 	  if ($word =~ /^[a-zA-Z_][\w+]*$/)
 	    {
-	      used ('programs', $word);
+	      used ('program', $word);
 	    }
 	}
     }
@@ -333,7 +344,7 @@ sub scan_sh_file ($)
       # Tokens in the code.
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
-	  used ('programs', $1);
+	  used ('program', $1);
 	}
     }
 
@@ -359,12 +370,12 @@ sub scan_file ()
 
   if (/\.[chlym](\.in)?$/)
     {
-      used 'programs', 'cc', $File::Find::name;
+      used 'program', 'cc', $File::Find::name;
       scan_c_file ($_);
     }
   elsif (/\.(cc|cpp|cxx|CC|C|hh|hpp|hxx|HH|H|yy|ypp|ll|lpp)(\.in)?$/)
     {
-      used 'programs', 'c++', $File::Find::name;
+      used 'program', 'c++', $File::Find::name;
       scan_c_file ($_);
     }
   elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)
@@ -466,7 +477,7 @@ sub output_libraries ($)
   my ($file) = @_;
 
   print $file "\n# Checks for libraries.\n";
-  foreach my $word (sort keys %{$used{'libraries'}})
+  foreach my $word (sort keys %{$used{'library'}})
     {
       print $file "# FIXME: Replace `main' with a function in `-l$word':\n";
       print $file "AC_CHECK_LIB([$word], [main])\n";
@@ -493,12 +504,12 @@ sub output ($)
       print $file "AC_CONFIG_HEADER([config.h])\n";
     }
 
-  output_kind ($file, 'programs');
-  output_kind ($file, 'makevars');
+  output_kind ($file, 'program');
+  output_kind ($file, 'makevar');
   output_libraries ($file);
-  output_kind ($file, 'headers');
-  output_kind ($file, 'identifiers');
-  output_kind ($file, 'functions');
+  output_kind ($file, 'header');
+  output_kind ($file, 'identifier');
+  output_kind ($file, 'function');
 
   # Change DIR/Makefile.in to DIR/Makefile.
   foreach my $m (@makefiles)

@@ -1,5 +1,13 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (@kinds): Make them singular.
+	Adjust all uses.
+	(&init_tables): When --debug, report the list of rules to ease
+	tracking changes in autoscan.list.
+	* lib/autoscan/autoscan.list (function): Strip comments, sort.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoscan/functions, lib/autoscan/headers,
 	* lib/autoscan/identifiers, lib/autoscan/makevars,
 	* lib/autoscan/programs: Merge into...
