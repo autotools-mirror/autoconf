@@ -1,3 +1,11 @@
+2002-12-23  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Define $1 to an
+	innocuous variant befor including <limits.h> or <assert.h>.  This
+	works around a bug reported by Albert Chin: HP-UX 11i
+	(and earlier versions) have a <limits.h> that declares
+	gettimeofday and many other functions.
+
 2002-12-03  Paul Eggert  <eggert@twinsun.com>
 
 	Version 2.57.
