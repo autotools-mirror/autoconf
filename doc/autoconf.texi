@@ -1245,7 +1245,7 @@ AC_PREREQ(@value{VERSION})
 This macro is the only macro that may be used before @code{AC_INIT}.
 @end defmac
 
-@defmac AC_COPYRIGHT(@var{copyright-notice})
+@defmac AC_COPYRIGHT (@var{copyright-notice})
 @maindex COPYRIGHT
 @cindex Copyright Notice
 State that in addition to the Free Software Foundation's copyright over
@@ -2272,7 +2272,7 @@ AC_CONFIG_COMMANDS(time-stamp, [date >time-stamp])
 @end example
 @end defmac
 
-@defmac AC_CONFIG_COMMANDS_PRE(@var{cmds})
+@defmac AC_CONFIG_COMMANDS_PRE (@var{cmds})
 @maindex OUTPUT_COMMANDS_PRE
 Execute the @var{cmds} right before creating @file{config.status}.  A
 typical use is computing values derived from variables built during the
@@ -2285,7 +2285,7 @@ AC_SUBST(LTLIBOBJS)])
 @end example
 @end defmac
 
-@defmac AC_CONFIG_COMMANDS_POST(@var{cmds})
+@defmac AC_CONFIG_COMMANDS_POST (@var{cmds})
 @maindex OUTPUT_COMMANDS_POST
 Execute the @var{cmds} right after creating @file{config.status}.
 @end defmac
@@ -4355,7 +4355,7 @@ If the Fortran 77 identifier contains an underscore
 77 compilers mangle names differently if they contain an underscore.
 @end defmac
 
-@defmac AC_F77_FUNC  (@var{name}, @ovar{shellvar})
+@defmac AC_F77_FUNC (@var{name}, @ovar{shellvar})
 @maindex F77_FUNC
 Given an identifier @var{name}, set the shell variable @var{shellvar} to
 hold the mangled version @var{name} according to the rules of the
