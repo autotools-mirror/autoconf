@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 6 May 1997
+@set lastupdate 04 July 1997
 @c %**end of header
 
 @ifinfo
@@ -3003,9 +3003,9 @@ ignore most of its arguments.
 @node Releases
 @section Making Releases
 
-Package the distribution of Foo version 69.96 up in a gzipped tar file
-named @file{foo-69.96.tar.gz}.  It should unpack into a subdirectory
-named @file{foo-69.96}.
+Package the distribution of @code{Foo version 69.96} up in a gzipped tar
+file with the name @file{foo-69.96.tar.gz}.  It should unpack into a
+subdirectory named @file{foo-69.96}.
 
 Building and installing the program should never modify any of the files
 contained in the distribution.  This means that all the files that form
