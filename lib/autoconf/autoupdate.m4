@@ -50,16 +50,22 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
-## ----------------------------------- ##
-## Defining macros to be autoupdated.  ##
-## ----------------------------------- ##
+## ---------------------------------- ##
+## Macros to define obsolete macros.  ##
+## ---------------------------------- ##
 
 
-# AU_DEFUN(NAME, NEW-CODE)
+# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
 # -----------------------------------
 # Declare that the macro NAME is now obsoleted, and should be replaced
 # by NEW-CODE.  Tell the user she should run autoupdate, and include
 # the additional MESSAGE.
+#
+# FIXME: MESSAGE should be grabbed with autom4te traces, and that's
+# why it is never used in the body of the macro; however, as of 2003-11-25
+# it is never used and it seems that it never was.  Also, MESSAGE is
+# used only once in AC_LINK_FILES, it may be the case to remove it from
+# there.  See the FIXME in AC_LINK_FILES as well.
 #
 # Also define NAME as a macro which code is NEW-CODE.
 #
