@@ -2892,7 +2892,7 @@ rm -f conftest$ac_exeext
 AC_TRY_EVAL(ac_link) &&
   (./conftest$ac_exeext) >&AS_MESSAGE_LOG_FD 2>&1;
 ac_status=$?
-AS_IFELSE([test $ac_status == 0],
+AS_IFELSE([test $ac_status = 0],
           [$2],
 [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
