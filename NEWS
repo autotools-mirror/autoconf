@@ -1,7 +1,16 @@
 Major changes in release 1.6:
 
+* New macro AC_LONG_64_BITS.
+* Multiple .h files can be created.
+* AC_FIND_X looks for X files directly if it doesn't find xmkmf.
+* AC_ALLOCA defines C_ALLOCA if using alloca.c.
 * --with-NAME can take a value, e.g., --with-targets=sun4,hp300bsd.
+* Unused --no-create option to configure removed.
+* autoheader doesn't change the timestamp of its output file if
+  the file didn't change.
 * All macros that look for libraries now use AC_HAVE_LIBRARY.
+* config.status checks three optional environment variables to
+  modify its behavior.
 * The usual bug fixes.
 
 Major changes in release 1.5:
