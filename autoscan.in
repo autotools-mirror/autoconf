@@ -449,7 +449,7 @@ sub output
       $unique_makefiles{$_}++;
     }
   print CONF "\nAC_CONFIG_FILES([",
-        join("\n                 ", keys(%unique_makefiles)), "])\n";
+       join ("\n                 ", keys(%unique_makefiles)), "])\n";
   print CONF "AC_OUTPUT\n";
 
   close CONF;
@@ -509,7 +509,7 @@ sub output_headers
 	  if ($headers_macros{$word} eq 'AC_CHECK_HEADERS')
 	    {
 	      push (@have_headers, $word);
-	      push (@{$needed_macros{"AC_CHECK_HEADERS($word)"}},
+	      push (@{$needed_macros{"AC_CHECK_HEADERS([$word])"}},
 		    @{$headers{$word}});
 	    }
 	  else
@@ -530,14 +530,19 @@ sub output_identifiers
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
   foreach $word (sort keys %identifiers)
     {
-      if (defined $identifiers_macros{$word} &&
-	  $identifiers_macros{$word} eq 'AC_CHECK_TYPES')
+      if (defined $identifiers_macros{$word})
 	{
-	  push (@have_types, $word);
-	}
-      else
-	{
-	  &print_unique ($identifiers_macros{$word}, @{$identifiers{$word}});
+	  if ($identifiers_macros{$word} eq 'AC_CHECK_TYPES')
+	    {
+	      push (@have_types, $word);
+	      push (@{$needed_macros{"AC_CHECK_TYPES([$word])"}},
+		    @{$identifiers{$word}});
+	    }
+	  else
+	    {
+	      &print_unique ($identifiers_macros{$word},
+			     @{$identifiers{$word}});
+	    }
 	}
     }
   print CONF "AC_CHECK_TYPES([" . join(', ', sort(@have_types)) . "])\n"
@@ -552,14 +557,19 @@ sub output_functions
   print CONF "\n# Checks for library functions.\n";
   foreach $word (sort keys %functions)
     {
-      if (defined $functions_macros{$word} &&
-	  $functions_macros{$word} eq 'AC_CHECK_FUNCS')
+      if (defined $functions_macros{$word})
 	{
-	  push(@have_funcs, $word);
-	}
-      else
-	{
-	  &print_unique ($functions_macros{$word}, @{$functions{$word}});
+	  if ($functions_macros{$word} eq 'AC_CHECK_FUNCS')
+	    {
+	      push (@have_funcs, $word);
+	      push (@{$needed_macros{"AC_CHECK_FUNCS([$word])"}},
+		    @{$functions{$word}});
+	    }
+	  else
+	    {
+	      &print_unique ($functions_macros{$word},
+			     @{$functions{$word}});
+	    }
 	}
     }
   print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
@@ -574,7 +584,7 @@ sub check_configure_ac
   my ($configure_ac) = $@;
   my ($trace_option) = '';
   my ($word);
-  my ($macro, $header);
+  my ($macro);
 
   foreach $macro (sort keys %needed_macros)
     {
@@ -589,11 +599,19 @@ sub check_configure_ac
     {
       chomp;
       my ($file, $line, $macro, @args) = split (/:/, $_);
-      if ($macro =~ /^AC_CHECK_HEADERS$/)
+      if ($macro =~ /^AC_CHECK_(HEADER|FUNC|TYPE|MEMBER)S$/)
 	{
-	  foreach $header (split (/ /, $args[0]))
+	  # To be rigorous, we should distinguish between space and comma
+	  # separated macros.  But there is no point.
+	  foreach $word (split (/\s|,/, $args[0]))
 	    {
-	      delete ($needed_macros{"AC_CHECK_HEADERS($header)"});
+	      if ($macro eq "AC_CHECK_MEMBERS"
+		  && $word =~ /^stat.st_/)
+		{
+		  $word = "struct " . $word;
+		}
+	      print STDERR "DELETE: $macro($word)\n";
+	      delete ($needed_macros{"$macro([$word])"});
 	    }
 	}
       else

@@ -1,5 +1,11 @@
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl: Just like the previous patch, but for
+	AC_CHECK_FUNCS, AC_CHECK_TYPES, and AC_CHECK_MEMBERS.
+
+	
+2001-01-24  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl (print_unique): Push all the macro invocation
 	locations.
 	(output_headers): For headers that need to be checked, push either
