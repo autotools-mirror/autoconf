@@ -1,3 +1,8 @@
+2003-09-05  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM): Try -ffree-form too,
+	for the benefit of g77 3.2.  Fix suggested by Steven G. Johnson.
+
 2003-09-04  Akim Demaille  <akim@epita.fr>
 
 	* tests/mktests.sh (ac_exclude_list): Fix the filtering of
