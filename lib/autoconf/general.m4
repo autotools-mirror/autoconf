@@ -484,8 +484,10 @@ exec AS_MESSAGE_FD>&1
 ac_default_prefix=/usr/local
 cross_compiling=no
 subdirs=
-MFLAGS= MAKEFLAGS=
-AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
+MFLAGS=
+MAKEFLAGS=
+AC_SUBST([SHELL], [${CONFIG_SHELL-/bin/sh}])dnl
+AC_SUBST([PATH_SEPARATOR])dnl
 
 # Maximum number of lines to put in a shell here document.
 # This variable seems obsolete.  It should probably be removed, and
@@ -1147,28 +1149,12 @@ _ACEOF
 AS_UNAME >&AS_MESSAGE_LOG_FD
 
 cat >&AS_MESSAGE_LOG_FD <<_ACEOF
+
+
 m4_text_box([Core tests.])
 
 _ACEOF
 ])])# _AC_INIT_CONFIG_LOG
-
-# _AC_INIT_PREPARE_FS_SEPARATORS
-# ------------------------------
-# Compute the directory and path separators.
-# FIXME: Full version should include dir separator, documentation about
-# AC_SUBST'ed variables etc.
-m4_define([_AC_INIT_PREPARE_FS_SEPARATORS],
-[echo "#! $SHELL" >conftest.sh
-echo  "exit 0"   >>conftest.sh
-chmod +x conftest.sh
-if AC_RUN_LOG([PATH=".;."; conftest.sh]); then
-  ac_path_separator=';'
-else
-  ac_path_separator=:
-fi
-AC_SUBST([PATH_SEPARATOR], "$ac_path_separator")dnl
-rm -f conftest.sh
-])
 
 
 # _AC_INIT_PREPARE
@@ -1249,13 +1235,12 @@ echo >confdefs.h
 AC_SITE_LOAD
 AC_CACHE_LOAD
 _AC_ARG_VAR_VALIDATE
-_AC_ARG_VAR_PRECIOUS(build_alias)dnl
-_AC_ARG_VAR_PRECIOUS(host_alias)dnl
-_AC_ARG_VAR_PRECIOUS(target_alias)dnl
+_AC_ARG_VAR_PRECIOUS([build_alias])dnl
+_AC_ARG_VAR_PRECIOUS([host_alias])dnl
+_AC_ARG_VAR_PRECIOUS([target_alias])dnl
 AC_LANG_PUSH(C)
 
 _AC_PROG_ECHO()dnl
-_AC_INIT_PREPARE_FS_SEPARATORS
 
 dnl Substitute for predefined variables.
 AC_SUBST(DEFS)dnl

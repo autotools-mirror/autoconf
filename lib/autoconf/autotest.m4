@@ -83,7 +83,6 @@ top_builddir='$ac_top_builddir'
 AUTOTEST_PATH='m4_default([$2], [$1])'
 
 SHELL=\${CONFIG_SHELL-'$at_shell'}
-PATH_SEPARATOR='$at_path_separator'
 ATEOF
 ],
 [at_package_name='$PACKAGE_NAME'
@@ -95,7 +94,6 @@ at_n='$ECHO_N'
 at_c='$ECHO_C'
 
 at_shell='$SHELL'
-at_path_separator='$PATH_SEPARATOR'
 ])
 
 if test -f $srcdir/$1/atlocal.in; then

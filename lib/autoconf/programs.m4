@@ -55,25 +55,6 @@
 ## ----------------------------- ##
 
 
-# AC_SHELL_PATH_WALK([PATH = $PATH], BODY)
-# ----------------------------------------
-# Walk through PATH running BODY for each `ac_dir'.
-#
-# `$ac_dummy' forces splitting on constant user-supplied paths.
-# POSIX.2 word splitting is done only on the output of word
-# expansions, not every word.  This closes a longstanding sh security
-# hole.
-m4_define([AC_SHELL_PATH_WALK],
-[ac_save_IFS=$IFS; IFS=$ac_path_separator
-ac_dummy="m4_default([$1], [$PATH])"
-for ac_dir in $ac_dummy; do
-  IFS=$ac_save_IFS
-  test -z "$ac_dir" && ac_dir=.
-  $2
-done
-])
-
-
 # AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
 #               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
 #               [PATH], [REJECT])
@@ -88,15 +69,15 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 else
 m4_ifvaln([$6],
 [  ac_prog_rejected=no])dnl
-  AC_SHELL_PATH_WALK([$5],
-[AS_EXECUTABLE_P("$ac_dir/$ac_word") || continue
+  _AS_PATH_WALK([$5],
+[AS_EXECUTABLE_P("$as_dir/$ac_word") || continue
 m4_ifvaln([$6],
-[if test "$ac_dir/$ac_word" = "$6"; then
+[if test "$as_dir/$ac_word" = "$6"; then
   ac_prog_rejected=yes
   continue
 fi])dnl
 ac_cv_prog_$1="$3"
-echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
+echo "$as_me:__oline__: found $as_dir/$ac_word" >&AS_MESSAGE_LOG_FD
 break])
 m4_ifvaln([$6],
 [if test $ac_prog_rejected = yes; then
@@ -108,7 +89,7 @@ m4_ifvaln([$6],
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    set dummy "$ac_dir/$ac_word" ${1+"$[@]"}
+    set dummy "$as_dir/$ac_word" ${1+"$[@]"}
     shift
     ac_cv_prog_$1="$[@]"
 m4_if([$2], [$4],
@@ -158,10 +139,10 @@ AC_CACHE_VAL([ac_cv_path_$1],
   ac_cv_path_$1="$$1" # Let the user override the test with a path.
   ;;
   *)
-  AC_SHELL_PATH_WALK([$4],
-[if AS_EXECUTABLE_P("$ac_dir/$ac_word"); then
-   ac_cv_path_$1="$ac_dir/$ac_word"
-   echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
+  _AS_PATH_WALK([$4],
+[if AS_EXECUTABLE_P("$as_dir/$ac_word"); then
+   ac_cv_path_$1="$as_dir/$ac_word"
+   echo "$as_me:__oline__: found $as_dir/$ac_word" >&AS_MESSAGE_LOG_FD
    break
 fi])
 dnl If no 3rd arg is given, leave the cache variable unset,
@@ -316,37 +297,34 @@ AC_DEFUN([AC_PROG_INSTALL],
 AC_MSG_CHECKING([for a BSD compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
-[  ac_save_IFS=$IFS; IFS=$ac_path_separator
-  for ac_dir in $PATH; do
-    IFS=$ac_save_IFS
-    # Account for people who put trailing slashes in PATH elements.
-    case $ac_dir/ in
-    / | ./ | .// | /[cC]/* \
-    | /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* \
-    | /usr/ucb/* ) ;;
-    *)
-      # OSF1 and SCO ODT 3.0 have their own names for install.
-      # Don't use installbsd from OSF since it installs stuff as root
-      # by default.
-      for ac_prog in ginstall scoinst install; do
-        if AS_EXECUTABLE_P(["$ac_dir/$ac_prog"]); then
-	  if test $ac_prog = install &&
-            grep dspmsg "$ac_dir/$ac_prog" >/dev/null 2>&1; then
-	    # AIX install.  It has an incompatible calling convention.
-	    :
-	  elif test $ac_prog = install &&
-	    grep pwplus "$ac_dir/$ac_prog" >/dev/null 2>&1; then
-	    # program-specific install script used by HP pwplus--don't use.
-	    :
-	  else
-	    ac_cv_path_install="$ac_dir/$ac_prog -c"
-	    break 2
-	  fi
-	fi
-      done
-      ;;
-    esac
-  done
+[_AS_PATH_WALK([$PATH],
+[# Account for people who put trailing slashes in PATH elements.
+case $as_dir/ in
+  ./ | .// | /[cC]/* | \
+  /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+  /usr/ucb/* ) ;;
+  *)
+    # OSF1 and SCO ODT 3.0 have their own names for install.
+    # Don't use installbsd from OSF since it installs stuff as root
+    # by default.
+    for ac_prog in ginstall scoinst install; do
+      if AS_EXECUTABLE_P(["$as_dir/$ac_prog"]); then
+  	if test $ac_prog = install &&
+  	  grep dspmsg "$as_dir/$ac_prog" >/dev/null 2>&1; then
+  	  # AIX install.  It has an incompatible calling convention.
+  	  :
+  	elif test $ac_prog = install &&
+  	  grep pwplus "$as_dir/$ac_prog" >/dev/null 2>&1; then
+  	  # program-specific install script used by HP pwplus--don't use.
+  	  :
+  	else
+  	  ac_cv_path_install="$as_dir/$ac_prog -c"
+  	  break 2
+  	fi
+      fi
+    done
+    ;;
+esac])
 ])dnl
   if test "${ac_cv_path_install+set}" = set; then
     INSTALL=$ac_cv_path_install

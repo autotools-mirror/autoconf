@@ -286,7 +286,7 @@ AT_CHECK_PROGS_PREPARE
 AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
-p="1${ac_path_separator}2${ac_path_separator}3${ac_path_separator}4${ac_path_separator}5${ac_path_separator}6"
+p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
 path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
 fail=false
 
@@ -372,7 +372,7 @@ AT_CHECK_PROGS_PREPARE
 AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
-p="1${ac_path_separator}2${ac_path_separator}3${ac_path_separator}4${ac_path_separator}5${ac_path_separator}6"
+p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
 path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
 fail=false
 

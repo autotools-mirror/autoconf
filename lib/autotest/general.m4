@@ -260,44 +260,38 @@ test -z "$at_tests" && at_tests=$at_tests_all
 #
 # There might be directories that don't exist, but don't redirect
 # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
-at_IFS_save=$IFS
-IFS=$PATH_SEPARATOR
 at_path=
-for at_dir in $AUTOTEST_PATH $PATH
-do
-  case $at_dir in
-    [[\\/]]* | ?:[[\\/]]* )
-      at_path=$at_path$PATH_SEPARATOR$at_dir
-      ;;
-    * )
-      if test -z "$top_builddir"; then
-        # Stand-alone test suite.
-        at_path=$at_path$PATH_SEPARATOR$at_dir
-      else
-        # Embedded test suite.
-        at_path=$at_path$PATH_SEPARATOR$top_builddir/$at_dir
-        at_path=$at_path$PATH_SEPARATOR$top_srcdir/$at_dir
-      fi
-      ;;
-  esac
-done
+_AS_PATH_WALK([$AUTOTEST_PATH $PATH],
+[case $as_dir in
+  [[\\/]]* | ?:[[\\/]]* )
+    at_path=$at_path$PATH_SEPARATOR$as_dir
+    ;;
+  * )
+    if test -z "$top_builddir"; then
+      # Stand-alone test suite.
+      at_path=$at_path$PATH_SEPARATOR$as_dir
+    else
+      # Embedded test suite.
+      at_path=$at_path$PATH_SEPARATOR$top_builddir/$as_dir
+      at_path=$at_path$PATH_SEPARATOR$top_srcdir/$as_dir
+    fi
+    ;;
+esac])
+
 # Now build and simplify PATH.
 at_sep=
 PATH=
-for at_dir in $at_path
-do
-  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  test -d "$at_dir" || continue
-  case $PATH in
-                    $at_dir                 | \
-                    $at_dir$PATH_SEPARATOR* | \
-    *$PATH_SEPARATOR$at_dir                 | \
-    *$PATH_SEPARATOR$at_dir$PATH_SEPARATOR* ) ;;
-    *) PATH=$PATH$at_sep$at_dir
-       at_sep=$PATH_SEPARATOR;;
-  esac
-done
-IFS=$at_IFS_save
+_AS_PATH_WALK([$at_path],
+[as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
+test -d "$as_dir" || continue
+case $PATH in
+                  $as_dir                 | \
+                  $as_dir$PATH_SEPARATOR* | \
+  *$PATH_SEPARATOR$as_dir                 | \
+  *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
+  *) PATH=$PATH$at_sep$as_dir
+     at_sep=$PATH_SEPARATOR;;
+esac])
 export PATH
 
 # Can we diff with `/dev/null'?  DU 5.0 refuses.
@@ -390,16 +384,20 @@ fi
 # what program is being used.
 for at_program in $at_victims
 do
+  _AS_PATH_WALK([$PATH],
+[if test -f $as_dir/$at_program; then
   (
-    echo "AT_LINE: $at_program --version"
-    $at_program --version
+    echo "AT_LINE: $as_dir/$at_program --version"
+    $as_dir/$at_program --version
     echo
   ) >&AS_MESSAGE_LOG_FD 2>&1
   if test -n "$at_package_name" && test -n "$at_package_version"; then
-    ($at_program --version |
+    ($as_dir/$at_program --version |
       grep "$at_package_name.*$at_package_version") >/dev/null 2>&1 ||
-      AS_ERROR([version mismatch (need $at_package_name $at_package_version): $at_program])
+      AS_ERROR([version mismatch (need $at_package_name $at_package_version): $as_dir/$at_program])
   fi
+  break;
+fi])
 done
 
 {

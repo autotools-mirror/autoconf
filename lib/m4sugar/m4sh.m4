@@ -115,9 +115,10 @@ as_me=`AS_BASENAME($[0])`
 
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
+_AS_PATH_SEPARATOR_PREPARE
 _AS_TEST_PREPARE
-_AS_UNSET_PREPARE
 _AS_TR_PREPARE
+_AS_UNSET_PREPARE
 
 # NLS nuisances.
 AS_UNSET([LANG],        [C])
@@ -398,6 +399,49 @@ rm -f conf$$ conf$$.exe conf$$.file
 ])# _AS_LN_S_PREPARE
 
 
+# _AS_PATH_SEPARATOR_PREPARE
+# --------------------------
+# Compute the path separator.
+m4_define([_AS_PATH_SEPARATOR_PREPARE],
+[# The user is always right.
+if test "${PATH_SEPARATOR+set}" != set; then
+  echo "#! $SHELL" >conftest.sh
+  echo  "exit 0"   >>conftest.sh
+  chmod +x conftest.sh
+  if (PATH=".;."; conftest.sh) >/dev/null 2>&1; then
+    PATH_SEPARATOR=';'
+  else
+    PATH_SEPARATOR=:
+  fi
+  rm -f conftest.sh
+fi
+])# _AS_PATH_SEPARATOR_PREPARE
+
+
+# _AS_PATH_WALK([PATH = $PATH], BODY)
+# -----------------------------------
+# Walk through PATH running BODY for each `as_dir'.
+#
+# Still very private as its interface looks quite bad.
+#
+# `$as_dummy' forces splitting on constant user-supplied paths.
+# POSIX.2 word splitting is done only on the output of word
+# expansions, not every word.  This closes a longstanding sh security
+# hole.  Optimize it away when not needed.
+m4_define([_AS_PATH_WALK],
+[as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+AS_LITERAL_IF([m4_default([$1], [$PATH])],
+[as_dummy="$1"
+for as_dir in $as_dummy],
+[for as_dir in m4_default([$1], [$PATH])])
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  $2
+done
+])
+
+
 # AS_LN_S(FILE, LINK)
 # -------------------
 # FIXME: Should we add the glue code to handle properly relative symlinks
@@ -572,13 +616,7 @@ hostinfo               = `(hostinfo) 2>/dev/null               || echo unknown`
 
 _ASUNAME
 
-as_save_IFS=$IFS
-IFS=:
-for as_dir in $PATH
-do
-  echo "PATH: $as_dir"
-done
-IFS=$as_save_IFS
+_AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 }])
 
 

@@ -1,3 +1,21 @@
+2001-09-10  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Don't pass
+	PATH_SEPARATOR, let M4sh compute it.
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): New.
+	* lib/autoconf/programs.m4 (AC_SHELL_PATH_WALK): Use PATH_SEPARATOR.
+	Move to...
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Here.
+	Simplify when the path is not a literal.
+	(AS_UNAME): Use it to report PATH.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE_FS_SEPARATORS): Remove.
+	(_AC_INIT_DEFAULTS): AC_SUBST PATH_SEPARATOR.
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Use _AS_PATH_WALK.
+	* lib/autotest/general.m4 (AT_INIT): Use _AS_PATH_WALK to
+	normalize the path, and to look for victims.
+	* tests/semantics.at (AC_PATH_PROG & AC_PATH_PROGS)
+	(AC_CHECK_PROG & AC_CHECK_PROGS): Use PATH_SEPARATOR.
+
 2001-09-07  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (&handle_m4): `< /dev/null' so that GNU M4 1.5
