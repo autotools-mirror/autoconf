@@ -1,5 +1,11 @@
 2000-12-20  Akim Demaille  <akim@epita.fr>
 
+	* tests/foreign.at (Autoconf & Libtool): Ignore Libtool version
+	1.3.[0-5].
+	* tests/compile.at (GNU Fortran 77): Use AS_EXIT.
+
+2000-12-20  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_CLEANUP_FILE_IFELSE): Fix the regexp: the
 	pattern ` state* ' was added many times for `*' was improperly
 	escaped.

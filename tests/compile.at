@@ -134,4 +134,4 @@ else
   test "$G77" = yes &&
     AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler])
 fi
-exit 0]])
+AS_EXIT(0)]])
