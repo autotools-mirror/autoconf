@@ -28,6 +28,10 @@ might hurt feelings?  In addition, it means that the Messiah has come,
 which might be slightly presumptuous :).  Still, someone fluent in
 English should write it.
 
+** Character intervals
+For safety, we should check that configure scripts do not depend upon
+char intervals.  Introducing ac_A_Z etc. might make it more
+convenient.
 
 * Autoconf 2.51 or so
 

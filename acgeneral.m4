@@ -1275,6 +1275,7 @@ define([AC_PREREQ],
 # Values which defaults can be set from `configure.in'.
 define([_AC_INIT_DEFAULTS],
 [AC_DIVERT_PUSH([DEFAULTS])dnl
+_AC_INIT_PREPARE_ENVIRONMENT
 
 #
 # Initializations.
@@ -2007,7 +2008,6 @@ It was created by configure ifset([AC_PACKAGE_STRING],
 # 5. Required macros (cache, default AC_SUBST etc.)
 define([_AC_INIT_PREPARE],
 [AC_DIVERT_PUSH([INIT_PREPARE])dnl
-_AC_INIT_PREPARE_ENVIRONMENT
 
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
