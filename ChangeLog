@@ -1,3 +1,9 @@
+1999-06-03  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_ACVERSION): Correct version number.
+	* autoconf.texi (EDITION): Likewise.
+	(VERSION): Likewise.
+
 1999-05-27  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Translate the ":" character to a
