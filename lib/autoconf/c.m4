@@ -501,13 +501,25 @@ AC_LANG_POP(C)dnl
 # Check whether -g works, even if CFLAGS is set, in case the package
 # plays around with CFLAGS (such as to build both debugging and normal
 # versions of a library), tasteless as that idea is.
+# Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_CC_G],
 [ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="-g"
 AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
-	       [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_prog_cc_g=yes],
-							[ac_cv_prog_cc_g=no])])
+  [ac_save_c_werror_flag=$ac_c_werror_flag
+   ac_c_werror_flag=yes
+   ac_cv_prog_cc_g=no
+   CFLAGS="-g"
+   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+     [ac_cv_prog_cc_g=yes],
+     [CFLAGS=""
+      _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+        [],
+        [ac_c_werror_flag=$ac_save_c_werror_flag
+	 CFLAGS="-g"
+	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+	   [ac_cv_prog_cc_g=yes])])])
+   ac_c_werror_flag=$ac_save_c_werror_flag])
 if test "$ac_test_CFLAGS" = set; then
   CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
@@ -710,14 +722,25 @@ AC_LANG_POP(C++)dnl
 # Check whether -g works, even if CXXFLAGS is set, in case the package
 # plays around with CXXFLAGS (such as to build both debugging and
 # normal versions of a library), tasteless as that idea is.
+# Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_CXX_G],
 [ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="-g"
 AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
-	       [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-				   [ac_cv_prog_cxx_g=yes],
-				   [ac_cv_prog_cxx_g=no])])
+  [ac_save_cxx_werror_flag=$ac_cxx_werror_flag
+   ac_cxx_werror_flag=yes
+   ac_cv_prog_cxx_g=no
+   CXXFLAGS="-g"
+   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+     [ac_cv_prog_cxx_g=yes],
+     [CXXFLAGS=""
+      _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+        [],
+        [ac_cxx_werror_flag=$ac_save_cxx_werror_flag
+	 CXXFLAGS="-g"
+	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+	   [ac_cv_prog_cxx_g=yes])])])
+   ac_cxx_werror_flag=$ac_save_cxx_werror_flag])
 if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
