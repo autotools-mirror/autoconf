@@ -4,8 +4,8 @@ Major changes in release 2.2:
 * AC_CHECK_LIB and AC_HAVE_LIBRARY check and add the new
   library before existing libs, not after, in case it uses them.
 * New macros: AC_FUNC_GETPGRP, AC_CHECK_TOOL.
-* Many additions to the TODO file :-)
 * Lots of bug fixes.
+* Many additions to the TODO file :-)
 
 Major changes in release 2.1:
 
