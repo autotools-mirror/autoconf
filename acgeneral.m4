@@ -3020,7 +3020,7 @@ m4_define([AC_LIBSOURCES],
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
 m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
-               [AC_LIBSOURCE([$1])],
+               [AC_LIBSOURCE([$1.c])],
                [$2])dnl
 AC_SUBST([LIBOBJS])dnl
 LIBOBJS="$LIBOBJS $1.$ac_objext"])

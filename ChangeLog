@@ -1,3 +1,8 @@
+2001-02-07  +2001-02-06  Derek Price  <derek.price@openavenue.com>
+
+	* acgeneral.m4 (_AC_LIBOBJ): Call AC_LIBSOURCE with '.c' extension
+	appended to function name.
+
 2001-02-06  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_RUN_LOG, _AC_RUN_LOG_STDERR, AC_RUN_LOG): New.
