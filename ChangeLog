@@ -1,5 +1,16 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	The argument of AC_COPYRIGHT should be plain text, not an sh
+	comment.
+
+	* libm4.m4 (m4_quote): s/$@/$*/.
+	* acgeneral.m4 (AC_COPYRIGHT): Prepend `# ' to the lines that goes
+	on the top of `configure'.  Actually, prepend `@%:@ ' so that
+	there are as many evaluations on both sides.
+	(_AC_INIT_VERSION): No longer strip `# '.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	* tests/Makefile.am (all-local): Remove.  It wastes time to have
 	testsuite rebuilt each time an ac*.m4 file changes.  It is enough
 	to build it for each `make check'.

@@ -462,6 +462,7 @@ define(_m4_foreach,
 ## Text processing.  ##
 ## ----------------- ##
 
+
 # m4_quote(STRING)
 # ----------------
 # Return STRING quoted.
@@ -470,7 +471,7 @@ define(_m4_foreach,
 # `[exp]': in the first case you obtain the quoted *result* of the
 # expansion of EXP, while in the latter you just obtain the string
 # `exp'.
-define([m4_quote], [[$@]])
+define([m4_quote], [[$*]])
 
 
 # m4_noquote(STRING)

@@ -552,13 +552,22 @@ AC_DIVERT_POP()dnl to KILL
 
 # AC_COPYRIGHT(TEXT)
 # ------------------
-# Append Copyright information in the top of `configure'.
-# _AC_INIT_VERSION must be run before, exactly like _AC_INIT_BINSH must
-# be run before AC_REVISION.
+
+# Append Copyright information in the top of `configure'.  TEXT is
+# evaluated once, hence TEXT can use macros.  Note that we do not
+# prepend `# ' but `@%:@ ', since m4 does not evaluate the comments.
+# Had we used `# ', the Copyright sent in the beginning of `configure'
+# would have not been evaluated.  Another solution, a bit fragile,
+# would have be to use m4_quote to force an evaluation:
+#
+#     patsubst(m4_quote($1), [^], [@%:@ ])
+#
+# _AC_INIT_VERSION must be run before, exactly like _AC_INIT_BINSH
+# must be run before AC_REVISION.
 AC_DEFUN(AC_COPYRIGHT,
 [AC_REQUIRE([_AC_INIT_VERSION])dnl
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-$1
+patsubst([$1], [^], [@%:@ ])
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH(AC_DIVERSION_VERSION_BEGIN)dnl
 $1
@@ -1019,7 +1028,7 @@ AC_DIVERT_POP()dnl
 AC_DEFUN([_AC_INIT_VERSION],
 [AC_DIVERT_PUSH(AC_DIVERSION_VERSION_BEGIN)dnl
 if $ac_init_version; then
-  sed -e 's/^# *//' <<\EOF
+  cat <<\EOF
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH(AC_DIVERSION_VERSION_END)dnl
 EOF
@@ -1220,15 +1229,16 @@ AC_DEFUN(AC_INIT,
 [m4_sinclude(acsite.m4)dnl
 m4_sinclude(./aclocal.m4)dnl
 AC_REQUIRE([_AC_INIT_BINSH])dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+# Guess values for system-dependent variables and create Makefiles.
+AC_DIVERT_POP()dnl
 AC_COPYRIGHT(
-[# Guess values for system-dependent variables and create Makefiles.
-# Generated automatically using Autoconf version ]AC_ACVERSION[.
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
-# Free Software Foundation, Inc.
-#
-# This configure script is free software; the Free Software Foundation
-# gives unlimited permission to copy, distribute and modify it.
-])dnl
+[Generated automatically using Autoconf version ]AC_ACVERSION[.
+Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+Free Software Foundation, Inc.
+
+This configure script is free software; the Free Software Foundation
+gives unlimited permission to copy, distribute and modify it.])dnl
 _AC_INIT_DEFAULTS()dnl
 AC_DIVERT_POP()dnl to NORMAL
 _AC_INIT_PARSE_ARGS
