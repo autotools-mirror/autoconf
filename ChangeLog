@@ -1,5 +1,10 @@
 2003-04-08  Akim Demaille  <akim@epita.fr>
 
+	* GNUmakefile (SHELL): Don't assume sh is in /bin/.
+	From Ilya Zakharevich.
+
+2003-04-08  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Particular Headers): Some about sys/socket.h,
 	net/if.h, stdlib.h.
 

@@ -22,7 +22,13 @@
 
 # Systems where /bin/sh is not the default shell need this.  The $(shell)
 # command below won't work with e.g. stock DOS/Windows shells.
+ifeq ($(wildcard /bin/s[h]),/bin/sh)
 SHELL = /bin/sh
+else
+# will be used only with the next shell-test line, then overwritten
+# by a configured-in value
+SHELL = sh
+endif
 
 have-Makefile := $(shell test -f Makefile && echo yes)
 
