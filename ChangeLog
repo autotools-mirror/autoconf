@@ -1,3 +1,11 @@
+2004-03-03  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/Makefile.am (edit): Don't use $< in a context where
+	POSIX doesn't require support for it.  Use $@.in instead.
+	Problem reported by Anthony N. Frasso in
+	<http://mail.gnu.org/archive/html/autoconf/2004-03/msg00008.html>.
+	* bin/autoscan.in, bin/autoupdate.in: Add @configure_input@ comment.
+
 2004-02-23  Gary V. Vaughan  <gary@gnu.org>
 
 	* bin/autoreconf.in (autoreconf_current_directory): Recognize LT_INIT
