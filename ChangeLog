@@ -1,3 +1,8 @@
+2000-06-09  Steven G. Johnson  <stevenj@superjdj.mit.edu>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Fixed bug where
+	compiler output to stdout was not caught and interpreted.
+
 2000-06-09  Akim Demaille  <akim@epita.fr>
 
 	`autoconf --trace' dies on filenames with `:'.

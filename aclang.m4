@@ -1334,24 +1334,14 @@ cat >conftest.$ac_ext <<EOF
       end
 EOF
 
-# Save the "compiler output file descriptor" to FD 8.
-exec 8>&AC_FD_LOG
-
-# Temporarily redirect compiler output to stdout, since this is what
-# we want to capture in AC_LINK_OUTPUT.
-exec AC_FD_LOG>&1
-
 # Compile and link our simple test program by passing the "-v" flag
 # to the Fortran 77 compiler in order to get "verbose" output that
 # we can then parse for the Fortran 77 linker flags.  I don't know
 # what to do if your compiler doesn't have -v.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS -v"
-ac_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
+ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
 FFLAGS=$ac_save_FFLAGS
-
-# Restore the "compiler output file descriptor".
-exec AC_FD_LOG>&8
 
 rm -f conftest.*
 
