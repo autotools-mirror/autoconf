@@ -582,23 +582,31 @@ dnl FIXME: there is no checking of a longer PREFIX than WIDTH, but do
 dnl we really want to bother with people trying each single corner
 dnl of a software?
 dnl
-dnl FIXME: Currently this macro leaves a white space behind it, which,
-dnl in some cases is quite a pain.  Remove this trailing space.
+dnl This macro does not leave a trailing space behind the last word,
+dnl what complicates it a bit.  The algorithm is stupid simple: all the
+dnl words are preceded by AC_Separator which is defined to empty for the
+dnl first word, and then ` ' (single space) for all the others.
 define([AC_WRAP],
 [pushdef([AC_Prefix], m4_default([$2], []))dnl
 pushdef([AC_Prefix1], m4_default([$3], [AC_Prefix]))dnl
 pushdef([AC_Width], m4_default([$4], 79))dnl
 pushdef([AC_Cursor], len(AC_Prefix1))dnl
+pushdef([AC_Separator], [])dnl
 AC_Prefix1[]dnl
 ifelse(m4_eval(AC_Cursor > len(AC_Prefix)),
        1, [define([AC_Cursor], len(AC_Prefix))
 AC_Prefix])[]dnl
 AC_FOREACH([AC_Word], [$1],
 [define([AC_Cursor], m4_eval(AC_Cursor + len(AC_Word) + 1))dnl
+dnl New line if too long, else insert a space unless it is the first
+dnl of the words.
 ifelse(m4_eval(AC_Cursor > AC_Width),
        1, [define([AC_Cursor], m4_eval(len(AC_Prefix) + len(AC_Word) + 1))]
-AC_Prefix)dnl
-AC_Word ])dnl
+AC_Prefix,
+       [AC_Separator])[]dnl
+AC_Word[]dnl
+define([AC_Separator], [ ])])dnl
+popdef([AC_Separator])dnl
 popdef([AC_Cursor])dnl
 popdef([AC_Width])dnl
 popdef([AC_Prefix1])dnl

@@ -1,5 +1,10 @@
 1999-09-29  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_WRAP): Don't output an extra space after the
+	last word.
+
+1999-09-29  Akim Demaille  <akim@epita.fr>
+
 	Merged the trunk into the experimental branch.
 
 1999-09-29  Ben Elliston  <bje@cygnus.com>
