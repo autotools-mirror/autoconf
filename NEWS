@@ -20,6 +20,7 @@ Major changes in release 1.8:
 ** New or changed command line options:
 * configure accepts --enable-FEATURE[=ARG] and --disable-FEATURE options.
 * configure accepts --without-PACKAGE, which sets withval=no.
+* configure accepts --x-includes=DIR and --x-libraries=DIR.
 * Giving --with-PACKAGE no argument sets withval=yes instead of withval=1.
 * configure accepts --help, --version, --silent/--quiet, --no-create options.
 * configure accepts and ignores most other Cygnus configure options, and
@@ -28,7 +29,7 @@ Major changes in release 1.8:
 
 ** Paths and other changes:
 * Relative srcdir values are not made absolute.
-* The values of @prefix@ and @exec_prefix@ get substituted.
+* The values of @prefix@ and @exec_prefix@ and @top_srcdir@ get substituted.
 * Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
 * autoheader optionally copies config.h.top to the beginning of config.h.in.
 * The example Makefile dependencies for configure et al. work better.
