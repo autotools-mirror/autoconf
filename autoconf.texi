@@ -1550,13 +1550,24 @@ finds.  It tries @code{mawk} first because that is reported to be the
 fastest implementation.
 @end defmac
 
-@defmac AC_PROG_CC
+@defmac AC_PROG_CC (@r{[} @var{compiler-search-list} @r{]})
 @maindex PROG_CC
 @ovindex CC
 @ovindex CFLAGS
 Determine a C compiler to use.  If @code{CC} is not already set in the
 environment, check for @code{gcc}, and use @code{cc} if that's not found.
 Set output variable @code{CC} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of C compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the C compiler.  For example, if you didn't
+like the default order, then you could invoke @code{AC_PROG_CC} like
+this:
+
+@example
+AC_PROG_CC(cl egcs gcc cc)
+@end example
 
 If using the GNU C compiler, set shell variable @code{GCC} to
 @samp{yes}, empty otherwise.  If output variable @code{CFLAGS} was
@@ -1593,16 +1604,30 @@ specific test macros use the value of @code{CPP} indirectly by calling
 @code{AC_EGREP_CPP}.
 @end defmac
 
-@defmac AC_PROG_CXX
+@defmac AC_PROG_CXX (@r{[} @var{compiler-search-list} @r{]})
 @maindex PROG_CXX
 @ovindex CXX
 @ovindex CXXFLAGS
 Determine a C++ compiler to use.  Check if the environment variable
-@code{CXX} or @code{CCC} (in that order) is set; if so, set output
-variable @code{CXX} to its value.  Otherwise search for a C++ compiler
-under likely names (@code{c++}, @code{g++}, @code{gcc}, @code{CC},
-@code{cxx}, and @code{cc++}).  If none of those checks succeed, as a
-last resort set @code{CXX} to @code{gcc}.
+@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
+variable @code{CXX} to its value.
+
+Otherwise, if the macro is invoked without an argument, then search for
+a C++ compiler under the likely names @code{c++}, @code{g++},
+@code{gcc}, @code{CC}, @code{cxx}, @code{cc++} and @code{cl} (in that
+order).  If none of those checks succeed, then as a last resort set
+@code{CXX} to @code{gcc}.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of C++ compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the C++ compiler.  For example, if you
+didn't like the default order, then you could invoke @code{AC_PROG_CXX}
+like this:
+
+@example
+AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
+@end example
 
 If using the GNU C++ compiler, set shell variable @code{GXX} to
 @samp{yes}, empty otherwise.  If output variable @code{CXXFLAGS} was
@@ -1632,14 +1657,26 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
-@defmac AC_PROG_F77
+@defmac AC_PROG_F77 (@r{[} @var{compiler-search-list} @r{]})
 @maindex PROG_FORTRAN
 @ovindex F77
 @ovindex FFLAGS
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
-set in the environment, check for @code{g77}, @code{f77} and @code{f2c},
-in that order.  Set the output variable @code{F77} to the name of the
-compiler found.
+set in the environment, then check for @code{g77}, @code{f77},
+@code{xlf}, @code{cf77}, @code{fl32}, @code{fort77}, @code{f90},
+@code{xlf90} and @code{f2c}, in that order.  Set the output variable
+@code{F77} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a space separated list of Fortran 77
+compilers to search for.  This just gives the user an opportunity to
+specify an alternative search list for the Fortran 77 compiler.  For
+example, if you didn't like the default order, then you could invoke
+@code{AC_PROG_F77} like this:
+
+@example
+AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90 f2c)
+@end example
 
 If using @code{g77} (the GNU Fortran 77 compiler), then
 @code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes},
