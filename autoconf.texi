@@ -1200,9 +1200,7 @@ define @code{inline} to be @code{__inline}.  This macro calls
 @vindex INT_16_BITS
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
 This macro is obsolete; it is more general to use
-@samp{AC_SIZEOF_TYPE(int, @var{sizevar})} instead (@pxref{General
-Feature Tests}), and define a symbol based on the size returned in
-@var{sizevar}.
+@samp{AC_SIZEOF_TYPE(int)} instead (@pxref{General Feature Tests}).
 @end defmac
 
 @defmac AC_LONG_64_BITS
@@ -1210,9 +1208,7 @@ Feature Tests}), and define a symbol based on the size returned in
 @vindex LONG_64_BITS
 If the C type @code{long int} is 64 bits wide, define
 @code{LONG_64_BITS}.  This macro is obsolete; it is more general to use
-@samp{AC_SIZEOF_TYPE(long, @var{sizevar})} instead (@pxref{General
-Feature Tests}), and define a symbol based on the size returned in
-@var{sizevar}.
+@samp{AC_SIZEOF_TYPE(long)} instead (@pxref{General Feature Tests}).
 @end defmac
 
 @defmac AC_LONG_DOUBLE
@@ -1663,21 +1659,18 @@ might be in libraries other than the default C library, first call
 @code{AC_HAVE_LIBRARY} for those libraries.
 @end defmac
 
-@defmac AC_SIZEOF_TYPE (@var{type}, @var{size-var})
+@defmac AC_SIZEOF_TYPE (@var{type})
 @maindex SIZEOF_TYPE
-Assign to shell variable @var{size-var} the size (in bytes) of the C (or
+Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
-@samp{type} is unknown to the compiler, assign 0 to @var{size-var}.  The
-caller will likely use @code{AC_DEFINE} to define a symbol in the
-package being configured, based on the value of @var{size-var}.  For
-example,
-
+@samp{type} is unknown to the compiler, gets a size of 0.  @var{uctype}
+is @var{type}, with lowercase converted to uppercase, spaces changed to
+underscores, and asterisks changed to @samp{P}.  For example, the call
 @example
-AC_SIZEOF_TYPE(char *, psize)
-if test $psize -eq 8; then
-  AC_DEFINE(BIG_POINTERS)
-fi
+AC_SIZEOF_TYPE(int *)
 @end example
+@noindent
+defines @code{SIZEOF_INT_P} to be 64 on DEC Alpha AXP systems.
 @end defmac
 
 @defmac AC_TEST_PROGRAM (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
