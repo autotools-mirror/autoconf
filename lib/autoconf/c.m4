@@ -475,6 +475,23 @@ define([AC_LANG_CALL(Fortran 77)],
 # 3a. Generic routines in compilers and preprocessors.  #
 # ----------------------------------------------------- #
 
+# AC_LANG_COMPILER
+# ----------------
+# Find a compiler for the current LANG.  Note that because we might
+# AC_REQUIRE `AC_LANG_COMPILER(C)' for instance, the latter must be
+# AC_DEFUN'd, not just define'd.
+define([AC_LANG_COMPILER],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_COMPILER_REQUIRE
+# ------------------------
+# Ensure we have a compiler for the current LANG.
+AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
+[_AC_REQUIRE([AC_LANG_COMPILER(]_AC_LANG[)],
+             [indir([AC_LANG_COMPILER(]_AC_LANG[)])])])
+
+
 # AC_REQUIRE_CPP
 # --------------
 # Require finding the C or C++ preprocessor, whichever is the
@@ -623,6 +640,13 @@ fi
 AC_SUBST(CPP)dnl
 AC_LANG_POP()dnl
 ])# AC_PROG_CPP
+
+
+# AC_LANG_COMPILER(C)
+# -------------------
+# Find the C compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_COMPILER(C)],
+[AC_PROG_CC])
 
 
 # AC_PROG_CC([COMPILER ...])
@@ -836,6 +860,13 @@ AC_LANG_POP()dnl
 ])# AC_PROG_CXXCPP
 
 
+# AC_LANG_COMPILER(C++)
+# ---------------------
+# Find the C++ compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_COMPILER(C++)],
+[AC_PROG_CXX])
+
+
 # AC_PROG_CXX([LIST-OF-COMPILERS])
 # --------------------------------
 # LIST-OF-COMPILERS is a space separated list of C++ compilers to search
@@ -930,6 +961,14 @@ fi[]dnl
 # ----------------------------- #
 # 3d. The Fortran 77 compiler.  #
 # ----------------------------- #
+
+
+# AC_LANG_COMPILER(Fortran 77)
+# ----------------------------
+# Find the Fortran 77 compiler.  Must be AC_DEFUN'd to be
+# AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_COMPILER(Fortran 77)],
+[AC_PROG_F77])
 
 
 # AC_PROG_F77([COMPILERS...])

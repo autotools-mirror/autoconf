@@ -1,3 +1,25 @@
+2000-09-12  Akim Demaille  <akim@epita.fr>
+
+	The test suite fails on some hosts because for instance
+	  AC_INIT
+	  AC_CHECK_FUNC(exit)
+	will not look for a compiler, it will just use `cc'.
+	Macros that need a compiler should require one.
+
+	* acgeneral.m4 (_AC_REQUIRE): New macro, which is actually the
+	previous version of AC_REQUIRE plus the possibility to distinguish
+	the name of the symbol being AC_PROVIDE'd, and the text to expand.
+	(AC_REQUIRE): Reimplement in terms of _AC_REQUIRE.
+	* aclang.m4 (AC_LANG_COMPILER, AC_LANG_COMPILER_REQUIRE)
+	(AC_LANG_COMPILER(C), AC_LANG_COMPILER(C++))
+	(AC_LANG_COMPILER(Fortran 77)):
+	New macros.
+	* acgeneral.m4 (AC_COMPILE_IFELSE, AC_LINK_IFELSE, AC_RUN_IFELSE):
+	Require a compiler.
+	(AC_TRY_RUN): Formatting changes.
+	* acfunctions.m4 (AC_FUNC_SETPGRP): Quote properly.  The previous
+	changes revealed the weaknesses of this macro.
+
 2000-09-12  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_TRY_CPP): New macro. It runs the preprocessor

@@ -562,17 +562,41 @@ define([AC_BEFORE],
 [AC_PROVIDE_IFELSE([$2], [AC_DIAGNOSE([syntax], [$2 was called before $1])])])
 
 
-# AC_REQUIRE(MACRO-NAME)
-# ----------------------
-# If MACRO-NAME has never been expanded, expand it *before* the current
-# macro expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.
-define([AC_REQUIRE],
+# _AC_REQUIRE(NAME-TO-CHECK, BODY-TO-EXPAND)
+# ------------------------------------------
+# If NAME-TO-CHECK has never been expanded (actually, if it is not
+# AC_PROVIDE'd), expand BODY-TO-EXPAND *before* the current macro
+# expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.
+#
+# The normal cases are:
+#
+# - NAME-TO-CHECK == BODY-TO-EXPAND
+#   Which you can use for regular macros with or without arguments, e.g.,
+#     _AC_REQUIRE([AC_PROG_CC], [AC_PROG_CC])
+#     _AC_REQUIRE([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
+#
+# - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
+#   In the case of macros with irregular names.  For instance:
+#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
+#   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
+#   part of the name, it is not an argument) has not been run, then
+#   call it.'
+#   Had you used
+#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
+#   then _AC_REQUIRE would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
+#   call the macro `AC_LANG_COMPILER' with `C' as argument.
+#
+#   You could argue that `AC_LANG_COMPILER', when it receives an argument
+#   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
+#   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
+#   it passes to `AC_LANG_COMPILER(C)'.
+define([_AC_REQUIRE],
 [ifndef([_AC_DIVERT_DUMP],
         [AC_FATAL([$0: cannot be used outside of an AC_DEFUN'd macro])])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
                   [AC_DIVERT_PUSH(m4_eval(_AC_DIVERT_DIVERSION - 1))dnl
-$1
+$2
 divert(_AC_DIVERT_DUMP)undivert(_AC_DIVERT_DIVERSION)dnl
 AC_DIVERT_POP()])dnl
 AC_PROVIDE_IFELSE([$1],
@@ -580,6 +604,13 @@ AC_PROVIDE_IFELSE([$1],
                   [AC_DIAGNOSE([syntax],
                                [$1 is AC_REQUIRE'd but is not AC_DEFUN'd])])dnl
 ])
+
+
+# AC_REQUIRE(STRING)
+# ------------------
+# If STRING has never been AC_PROVIDE'd, then expand it.
+define([AC_REQUIRE],
+[_AC_REQUIRE([$1], [$1])])
 
 
 # AC_EXPAND_ONCE(TEXT)
@@ -3339,7 +3370,8 @@ rm -f conftest*
 # --------------------------------------------------------------------
 # Try to compile PROGRAM.
 AC_DEFUN([AC_COMPILE_IFELSE],
-[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+[AC_LANG_COMPILER_REQUIRE()dnl
+m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
@@ -3368,7 +3400,8 @@ AC_DEFUN([AC_TRY_COMPILE],
 # -----------------------------------------------------------------
 # Try to link PROGRAM.
 AC_DEFUN([AC_LINK_IFELSE],
-[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+[AC_LANG_COMPILER_REQUIRE()dnl
+m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
@@ -3415,7 +3448,8 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # -----------------------------------------------------------
 # Compile, link, and run.
 AC_DEFUN([AC_RUN_IFELSE],
-[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+[AC_LANG_COMPILER_REQUIRE()dnl
+m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) &&
    test -s conftest$ac_exeext && (./conftest; exit) 2>/dev/null; then
   m4_default([$2], :)
@@ -3433,11 +3467,12 @@ rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
 #            [ACTION-IF-CROSS-COMPILING])
 # --------------------------------------------------------
 AC_DEFUN([AC_TRY_RUN],
-[if test "$cross_compiling" = yes; then
+[ifval([$4], [],
+       [AC_DIAGNOSE([cross],
+                    [$0 called without default to allow cross compiling])])dnl
+if test "$cross_compiling" = yes; then
   m4_default([$4],
-   [AC_DIAGNOSE([cross],
-            [AC_TRY_RUN called without default to allow cross compiling])dnl
-AC_MSG_ERROR(cannot run test program while cross compiling)])
+             [AC_MSG_ERROR(cannot run test program while cross compiling)])
 else
   AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])
 fi
