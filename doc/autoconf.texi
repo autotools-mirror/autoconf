@@ -487,8 +487,8 @@ Peter Simons}.
 @node The GNU build system, Making configure Scripts, Introduction, Top
 @chapter The GNU build system
 
-@emph{This chapter is still under work.  It will be ready for the
-release, but most probably not for the next betas.}
+@emph{This chapter is still under construction.  It will hopefully be ready
+for the release.}
 
 I'm unsure about the title.
 
@@ -5316,9 +5316,8 @@ AC_OUTPUT
 @end example
 
 @item No leading dot (@sc{sfn})
-@sc{dos} cannot handle filenames that start with a dot.  This is an especially
-important thing to remember when building a portable configure script,
-as @command{autoconf} uses a .in suffix for template files.
+@sc{dos} cannot handle filenames that start with a dot.  This is usually
+not a very important issue for @command{autoconf}.
 
 @item Case insensitivity (@sc{lfn})
 @sc{dos} is case insensitive, so you cannot, for example, have both a
@@ -5338,7 +5337,8 @@ Note: This is not usually a problem under Windows, as it uses numeric
 tails in the short version of filenames to make them unique.  However,
 a registry setting can turn this behaviour off.  While this makes it
 possible to share file trees containing long file names between @sc{sfn}
-and @sc{lfn} environments, it also means the above problem also applies.
+and @sc{lfn} environments, it also means the above problem applies there
+as well.
 
 @item Illegal characters
 Some characters are illegal in @sc{dos} filenames, and should therefore
