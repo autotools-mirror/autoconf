@@ -16,8 +16,8 @@
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh performs word splitting on ${1+"$@"}, which is contrary to
-  # our usage.  Disable this feature.
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
@@ -84,6 +84,14 @@ echo X/"$0" |
   	  s/.*/./; q'`
 
 
+# PATH needs CR, and LINENO needs CR and PATH.
+# Avoid depending upon Character Ranges.
+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+as_cr_digits='0123456789'
+as_cr_alnum=$as_cr_Letters$as_cr_digits
+
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conftest.sh
@@ -97,6 +105,94 @@ if test "${PATH_SEPARATOR+set}" != set; then
   rm -f conftest.sh
 fi
 
+
+  as_lineno_1=$LINENO
+  as_lineno_2=$LINENO
+  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+  test "x$as_lineno_1" != "x$as_lineno_2" &&
+  test "x$as_lineno_3"  = "x$as_lineno_2"  || {
+  # Find who we are.  Look in the path if we contain no path at all
+  # relative or not.
+  case $0 in
+    *[\\/]* ) as_myself=$0 ;;
+    *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
+done
+
+       ;;
+  esac
+  # We did not find ourselves, most probably we were run as `sh COMMAND'
+  # in which case we are not to be found in the path.
+  if test "x$as_myself" = x; then
+    as_myself=$0
+  fi
+  if test ! -f "$as_myself"; then
+    { echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2
+   { (exit 1); exit 1; }; }
+  fi
+  case $CONFIG_SHELL in
+  '')
+    as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for as_base in sh bash ksh sh5; do
+	 case $as_dir in
+	 /*)
+	   if ("$as_dir/$as_base" -c '
+  as_lineno_1=$LINENO
+  as_lineno_2=$LINENO
+  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+  test "x$as_lineno_1" != "x$as_lineno_2" &&
+  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
+	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
+	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
+	     CONFIG_SHELL=$as_dir/$as_base
+	     export CONFIG_SHELL
+	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
+	   fi;;
+	 esac
+       done
+done
+;;
+  esac
+
+  # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
+  # uniformly replaced by the line number.  The first 'sed' inserts a
+  # line-number line before each line; the second 'sed' does the real
+  # work.  The second script uses 'N' to pair each line-number line
+  # with the numbered line, and appends trailing '-' during
+  # substitution so that $LINENO is not a special case at line end.
+  # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
+  # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
+  sed '=' <$as_myself |
+    sed '
+      N
+      s,$,-,
+      : loop
+      s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
+      t loop
+      s,-$,,
+      s,^['$as_cr_digits']*\n,,
+    ' >$as_me.lineno &&
+  chmod +x $as_me.lineno ||
+    { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
+   { (exit 1); exit 1; }; }
+
+  # Don't try to exec as it changes $[0], causing all sort of problems
+  # (the dirname of $[0] is not the place where we might find the
+  # original and so on.  Autoconf is especially sensible to this).
+  . ./$as_me.lineno
+  # Exit status is that of the last command.
+  exit
+}
+
+
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
 ' ECHO_T='	' ;;
@@ -104,7 +200,53 @@ case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
 esac
 
+if expr a : '\(a\)' >/dev/null 2>&1; then
+  as_expr=expr
+else
+  as_expr=false
+fi
+
+rm -f conf$$ conf$$.exe conf$$.file
+echo >conf$$.file
+if ln -s conf$$.file conf$$ 2>/dev/null; then
+  # We could just check for DJGPP; but this test a) works b) is more generic
+  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
+  if test -f conf$$.exe; then
+    # Don't use ln at all; we don't have any links
+    as_ln_s='cp -p'
+  else
+    as_ln_s='ln -s'
+  fi
+elif ln conf$$.file conf$$ 2>/dev/null; then
+  as_ln_s=ln
+else
+  as_ln_s='cp -p'
+fi
+rm -f conf$$ conf$$.exe conf$$.file
+
+if mkdir -p . 2>/dev/null; then
+  as_mkdir_p=:
+else
+  as_mkdir_p=false
+fi
+
 as_executable_p="test -f"
+
+# Sed expression to map a string onto a valid CPP name.
+as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
+
+# Sed expression to map a string onto a valid variable name.
+as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
+
+
+# IFS
+# We need space, tab and new line, in precisely that order.
+as_nl='
+'
+IFS=" 	$as_nl"
+
+# CDPATH.
+$as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=$PATH_SEPARATOR; export CDPATH; }
 
 
 # Name of the host.
@@ -689,7 +831,7 @@ esac
 # Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
 # absolute.
 ac_abs_builddir=`cd "$ac_dir" && cd $ac_builddir && pwd`
-ac_abs_top_builddir=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_abs_top_builddir=`cd "$ac_dir" && cd ${ac_top_builddir}. && pwd`
 ac_abs_srcdir=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_abs_top_srcdir=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
@@ -982,6 +1124,7 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 
@@ -1734,7 +1877,7 @@ cat >confcache <<\_ACEOF
 # config.status only pays attention to the cache file if you give it
 # the --recheck option to rerun configure.
 #
-# `ac_cv_env_foo' variables (set or unset) will be overriden when
+# `ac_cv_env_foo' variables (set or unset) will be overridden when
 # loading this file, other *unset* `ac_cv_foo' will be assigned the
 # following values.
 
@@ -1857,8 +2000,8 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh performs word splitting on ${1+"$@"}, which is contrary to
-  # our usage.  Disable this feature.
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
@@ -2184,17 +2327,20 @@ do
   --*=*)
     ac_option=`expr "x$1" : 'x\([^=]*\)='`
     ac_optarg=`expr "x$1" : 'x[^=]*=\(.*\)'`
-    shift
-    set dummy "$ac_option" "$ac_optarg" ${1+"$@"}
-    shift
+    ac_shift=:
     ;;
-  -*);;
+  -*)
+    ac_option=$1
+    ac_optarg=$2
+    ac_shift=shift
+    ;;
   *) # This is not an option, so the user has probably given explicit
      # arguments.
+     ac_option=$1
      ac_need_defaults=false;;
   esac
 
-  case $1 in
+  case $ac_option in
   # Handling of the options.
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
@@ -2217,12 +2363,12 @@ Try \`$0 --help' for more information." >&2;}
   --debug | --d* | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
-    shift
-    CONFIG_FILES="$CONFIG_FILES $1"
+    $ac_shift
+    CONFIG_FILES="$CONFIG_FILES $ac_optarg"
     ac_need_defaults=false;;
   --header | --heade | --head | --hea )
-    shift
-    CONFIG_HEADERS="$CONFIG_HEADERS $1"
+    $ac_shift
+    CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
     ac_need_defaults=false;;
 
   # This is an error.
@@ -2498,7 +2644,7 @@ esac
 # Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
 # absolute.
 ac_abs_builddir=`cd "$ac_dir" && cd $ac_builddir && pwd`
-ac_abs_top_builddir=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_abs_top_builddir=`cd "$ac_dir" && cd ${ac_top_builddir}. && pwd`
 ac_abs_srcdir=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_abs_top_srcdir=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
@@ -2638,7 +2784,7 @@ esac
 # Don't blindly perform a `cd "$ac_dir"/$ac_foo && pwd` since $ac_foo can be
 # absolute.
 ac_abs_builddir=`cd "$ac_dir" && cd $ac_builddir && pwd`
-ac_abs_top_builddir=`cd "$ac_dir" && cd $ac_top_builddir && pwd`
+ac_abs_top_builddir=`cd "$ac_dir" && cd ${ac_top_builddir}. && pwd`
 ac_abs_srcdir=`cd "$ac_dir" && cd $ac_srcdir && pwd`
 ac_abs_top_srcdir=`cd "$ac_dir" && cd $ac_top_srcdir && pwd`
 
