@@ -1,5 +1,8 @@
 1998-09-27  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_PROG_INSTALL): Substitute an `INSTALL_SCRIPT'
+	variable.  Contributed by Tom Tromey <tromey@cygnus.com>.
+
 	* testsuite/Makefile.in (check): If DejaGNU is not installed,
 	print a warning and skip the `dejacheck' target (which will fail).
 	(site.exp): Use tests to guard commands from generating error
