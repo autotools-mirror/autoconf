@@ -2744,8 +2744,7 @@ m4_popdef([AC_Lib_Name])dnl
 # This macro can be used during the selection of a preprocessor.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
-if AC_TRY_EVAL(ac_try); then
+if AC_TRY_COMMAND([$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err]); then
   if egrep -v '^ *\+' conftest.err | grep . >/dev/null; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
   else
@@ -2830,13 +2829,11 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
-  m4_default([$2], :)
-else
-  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3],[  $3])dnl
-fi
+AS_IFELSE([AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext],
+          [$2],
+[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+m4_ifvaln([$3],[$3])dnl])
 rm -f conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
@@ -2871,13 +2868,12 @@ AC_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
-  m4_default([$2], :)
-else
-  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3], [  $3])dnl
-fi
+AS_IFELSE([AC_TRY_EVAL(ac_link) &&
+            AC_TRY_COMMAND([test -s conftest$ac_exeext])],
+          [$2],
+          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+m4_ifvaln([$3], [$3])dnl])
 rm -f conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
@@ -2929,10 +2925,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
-AC_TRY_EVAL(ac_link) &&
-  (./conftest$ac_exeext) >&AS_MESSAGE_LOG_FD 2>&1;
-ac_status=$?
-AS_IFELSE([test $ac_status = 0],
+AS_IFELSE([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
           [$2],
 [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
