@@ -1,5 +1,13 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* AUTHORS: Update.
+	* doc/autoconf.texi: Free Franc,ois Pinard from iftex and ifinfo,
+	use @,c.
+	Don't use `@code{m4}' when you mean M4, just as you shall not say
+	`@code{cc}' when you refer to the C language.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Fortran 77)): Set
 	ac_gnu_compiler.
 	(_AC_PROG_CC_GNU, _AC_PROG_CXX_GNU, _AC_PROG_F77_GNU): Compute

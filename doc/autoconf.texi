@@ -109,9 +109,8 @@ approved by the Foundation.
 
 @ifinfo
 This file documents the GNU Autoconf package for creating scripts to
-configure source code packages using templates and an @code{m4} macro
-package.  This is edition @value{EDITION}, for Autoconf version
-@value{VERSION}.
+configure source code packages using templates and GNU M4 macro package.
+This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 
 @end ifinfo
 
@@ -341,14 +340,14 @@ Upgrading From Version 1
 Questions About Autoconf
 
 * Distributing::                Distributing @code{configure} scripts
-* Why GNU m4::                  Why not use the standard @code{m4}?
-* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
+* Why GNU m4::                  Why not use the standard M4?
+* Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 
 History of Autoconf
 
 * Genesis::                     Prehistory and naming of @code{configure}
-* Exodus::                      The plagues of @code{m4} and Perl
+* Exodus::                      The plagues of M4 and Perl
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
@@ -421,10 +420,9 @@ future.
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
-Autoconf requires @sc{gnu} @code{m4} in order to generate the scripts.
-It uses features that some @sc{unix} versions of @code{m4} do not have,
-including @sc{gnu} @code{m4} 1.3.  You must use version 1.4 or later of
-@sc{gnu} @code{m4}.
+Autoconf requires @sc{gnu} M4 in order to generate the scripts.  It uses
+features that some @sc{unix} versions of M4 do not have, including
+@sc{gnu} M4 1.3.  You must use version 1.4 or later of @sc{gnu} M4.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.
@@ -590,8 +588,8 @@ macro expander, i.e., a program which takes a text in input and
 repeatedly performs @dfn{macro expansions}, repeatedly replaces macro
 uses with macro bodies.  Instead of implementing a dedicated Autoconf
 macro expander, it is natural to use an existing general purpose macro
-expander, such as @code{m4}, and implement the extensions as a set of
-@code{m4} macros.
+expander, such as M4, and implement the extensions as a set of M4
+macros.
 
 
 @node Autoconf Language, configure.in Layout, Shell Script Compiler, Writing configure.in
@@ -606,12 +604,12 @@ literal strings from text to be expanded: quotation.
 
 When calling macros that take arguments, there must not be any blank
 space between the macro name and the open parenthesis.  Arguments should
-be enclosed within the @code{m4} quote characters @samp{[} and @samp{]},
-and are separated by a comma.  Any leading space in arguments are
-ignored, unless they are quoted.  You may safely leave out the quotes
-when the argument is simple text, but @emph{always} quote complex
-arguments such as other macro calls.  This rule recursively applies for
-each macro call, including macro called from other macros.
+be enclosed within the M4 quote characters @samp{[} and @samp{]}, and
+are separated by a comma.  Any leading space in arguments are ignored,
+unless they are quoted.  You may safely leave out the quotes when the
+argument is simple text, but @emph{always} quote complex arguments such
+as other macro calls.  This rule recursively applies for each macro
+call, including macro called from other macros.
 
 For instance:
 
@@ -678,8 +676,8 @@ AC_COMPILE_IFELSE([char b[10];],, (exit 1); exit)
 is incorrect: here the first argument of @code{AC_COMPILE_IFELSE}, is
 @samp{char b[10];}, and it will be expanded once, which results in
 @samp{char b10;}.  There was a idiom developed in the Autoconf world to
-address this issue, based on the @code{m4} @code{changequote} primitive,
-but do not use it!  Let's take a closer look: the author meant the first
+address this issue, based on the M4 @code{changequote} primitive, but do
+not use it!  Let's take a closer look: the author meant the first
 argument to be understood as a literal, and therefore it must be quoted
 twice:
 
@@ -956,8 +954,8 @@ The filename from where @var{macro} is called.
 The line number from where @var{macro} is called.
 
 @item $d
-The depth of the @var{macro} call.  This is an @code{m4} technical
-detail which you probably don't want to know about.
+The depth of the @var{macro} call.  This is an M4 technical detail which
+you probably don't want to know about.
 
 @item $n
 The name of the @var{macro}.
@@ -4207,7 +4205,7 @@ can be restarted when interrupted by signals that have no handler.
 @end defmac
 
 @node UNIX Variants,  , System Services, Existing Tests
-@section @sc{unix} Variants
+@section UNIX Variants
 
 The following macros check for certain operating systems that need
 special treatment for some programs, due to exceptional oddities in
@@ -4922,8 +4920,8 @@ shift, but in addition it is not portable: the shell of @sc{RISC/os}
 @cindex @command{test}
 The @code{test} program is the way to perform many file and string
 tests.  It is often invoked by the alternate name @samp{[}, but using
-that name in Autoconf code is asking for trouble since it is an
-@code{m4} quote character.
+that name in Autoconf code is asking for trouble since it is an M4 quote
+character.
 
 If you need to make multiple checks using @code{test}, combine them with
 the shell operators @samp{&&} and @samp{||} instead of using the
@@ -5336,14 +5334,14 @@ set @var{variable} to that value (verbatim), otherwise set it to 1.
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
 characters, as @code{make} tends to eat them.  To use a shell variable
-(which you need to do in order to define a value containing the
-@code{m4} quote characters @samp{[} or @samp{]}), use
-@code{AC_DEFINE_UNQUOTED} instead.  @var{description} is only useful if
-you are using @code{AC_CONFIG_HEADERS}.  In this case, @var{description}
-is put into the generated @file{config.h.in} as the comment before the
-macro define; the macro need not be mentioned in @file{acconfig.h}.  The
-following example defines the C preprocessor variable @code{EQUATION} to
-be the string constant @samp{"$a > $b"}:
+(which you need to do in order to define a value containing the M4 quote
+characters @samp{[} or @samp{]}), use @code{AC_DEFINE_UNQUOTED} instead.
+@var{description} is only useful if you are using
+@code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
+the generated @file{config.h.in} as the comment before the macro define;
+the macro need not be mentioned in @file{acconfig.h}.  The following
+example defines the C preprocessor variable @code{EQUATION} to be the
+string constant @samp{"$a > $b"}:
 
 @example
 AC_DEFINE(EQUATION, "$a > $b")
@@ -5757,10 +5755,9 @@ Here are some instructions and guidelines for writing Autoconf macros.
 
 @maindex DEFUN
 Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
-similar to the @code{m4} builtin @code{define} macro.  In addition to
-defining a macro, @code{AC_DEFUN} adds to it some code which is used to
-constrain the order in which macros are called (@pxref{Prerequisite
-Macros}).
+similar to the M4 builtin @code{define} macro.  In addition to defining
+a macro, @code{AC_DEFUN} adds to it some code which is used to constrain
+the order in which macros are called (@pxref{Prerequisite Macros}).
 
 An Autoconf macro definition looks like this:
 
@@ -5774,14 +5771,14 @@ literally be present in the macro definition to avoid macro expansion
 problems (@pxref{Quoting}).  You can refer to any arguments passed to
 the macro as @samp{$1}, @samp{$2}, etc.
 
-To introduce comments in @code{m4}, use the @code{m4} builtin
-@code{dnl}; it causes @code{m4} to discard the text through the next
-newline.  It is not needed between macro definitions in @file{acsite.m4}
-and @file{aclocal.m4}, because all output is discarded until
-@code{AC_INIT} is called.
+To introduce comments in M4, use the builtin @code{dnl}; it causes
+@code{m4} to discard the text through the next newline.  It is not
+needed between macro definitions in @file{acsite.m4} and
+@file{aclocal.m4}, because all output is discarded until @code{AC_INIT}
+is called.
 
-@xref{Definitions,, How to define new macros, m4.info, GNU m4}, for
-more complete information on writing @code{m4} macros.
+@xref{Definitions,, How to define new macros, m4.info, GNU m4}, for more
+complete information on writing M4 macros.
 
 @node Macro Names, Quoting, Macro Definitions, Writing Macros
 @section Macro Names
@@ -6166,7 +6163,7 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 @end example
 
 @noindent
-The @code{m4} fluent reader noted that these two writings are rigorously
+The M4 fluent reader noted that these two writings are rigorously
 equivalent, since @code{m4} swallows both the @samp{changequote(<<, >>)}
 and @samp{<<} @samp{>>} when it @dfn{collects} the arguments: these
 quotes are not part of the arguments!
@@ -6288,9 +6285,9 @@ called if it is needed, and only called once.
 
 @defmac AC_REQUIRE (@var{macro-name})
 @maindex REQUIRE
-If the @code{m4} macro @var{macro-name} has not already been called,
-call it (without any arguments).  Make sure to quote @var{macro-name}
-with square brackets.  @var{macro-name} must have been defined using
+If the M4 macro @var{macro-name} has not already been called, call it
+(without any arguments).  Make sure to quote @var{macro-name} with
+square brackets.  @var{macro-name} must have been defined using
 @code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
 that it has been called.
 
@@ -6378,7 +6375,7 @@ messages, it is considered obsolete.
 @maindex PROVIDE
 Record the fact that @var{this-macro-name} has been called.
 @var{this-macro-name} should be the name of the macro that is calling
-@code{AC_PROVIDE}.  An easy way to get it is from the @code{m4} builtin
+@code{AC_PROVIDE}.  An easy way to get it is from the M4 builtin
 variable @code{$0}, like this:
 
 @example
@@ -7267,7 +7264,7 @@ setting those values correctly for that system in
 @file{@var{prefix}/etc/config.site}.  To find out the names of the cache
 variables you need to set, look for shell variables with @samp{_cv_} in
 their names in the affected @code{configure} scripts, or in the Autoconf
-@code{m4} source code for those macros.
+M4 source code for those macros.
 
 The cache file is careful to not override any variables set in the site
 files.  Similarly, you should not override command-line options in the
@@ -8486,8 +8483,8 @@ are addressed.
 
 @menu
 * Distributing::                Distributing @code{configure} scripts
-* Why GNU m4::                  Why not use the standard @code{m4}?
-* Bootstrapping::               Autoconf and GNU @code{m4} require each other?
+* Why GNU m4::                  Why not use the standard M4?
+* Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @code{configure} instead of Imake
 @end menu
 
@@ -8516,14 +8513,14 @@ distribute them under the same terms as the rest of your package.
 @file{install-sh} is from the X Consortium and is not copyrighted.
 
 @node Why GNU m4, Bootstrapping, Distributing, Questions
-@section Why Require @sc{gnu} @code{m4}?
+@section Why Require GNU M4?
 
 @display
-Why does Autoconf require @sc{gnu} @code{m4}?
+Why does Autoconf require @sc{gnu} M4?
 @end display
 
-Many @code{m4} implementations have hard-coded limitations on the size
-and number of macros, which Autoconf exceeds.  They also lack several
+Many M4 implementations have hard-coded limitations on the size and
+number of macros, which Autoconf exceeds.  They also lack several
 builtin macros that it would be difficult to get along without in a
 sophisticated application like Autoconf, including:
 
@@ -8535,29 +8532,29 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4 or above of @sc{gnu} @code{m4} because it
-uses frozen state files.
+Autoconf requires version 1.4 or above of @sc{gnu} M4 because it uses
+frozen state files.
 
 Since only software maintainers need to use Autoconf, and since @sc{gnu}
-@code{m4} is simple to configure and install, it seems reasonable to
-require @sc{gnu} @code{m4} to be installed also.  Many maintainers of
-@sc{gnu} and other free software already have most of the @sc{gnu}
-utilities installed, since they prefer them.
+M4 is simple to configure and install, it seems reasonable to require
+@sc{gnu} M4 to be installed also.  Many maintainers of @sc{gnu} and
+other free software already have most of the @sc{gnu} utilities
+installed, since they prefer them.
 
 @node Bootstrapping, Why Not Imake, Why GNU m4, Questions
 @section How Can I Bootstrap?
 
 @display
-If Autoconf requires @sc{gnu} @code{m4} and @sc{gnu} @code{m4} has an
-Autoconf @code{configure} script, how do I bootstrap?  It seems like a
-chicken and egg problem!
+If Autoconf requires @sc{gnu} M4 and @sc{gnu} M4 has an Autoconf
+@code{configure} script, how do I bootstrap?  It seems like a chicken
+and egg problem!
 @end display
 
-This is a misunderstanding.  Although @sc{gnu} @code{m4} does come with
-a @code{configure} script produced by Autoconf, Autoconf is not required
-in order to run the script and install @sc{gnu} @code{m4}.  Autoconf is
-only required if you want to change the @code{m4} @code{configure}
-script, which few people have to do (mainly its maintainer).
+This is a misunderstanding.  Although @sc{gnu} M4 does come with a
+@code{configure} script produced by Autoconf, Autoconf is not required
+in order to run the script and install @sc{gnu} M4.  Autoconf is only
+required if you want to change the M4 @code{configure} script, which few
+people have to do (mainly its maintainer).
 
 @node Why Not Imake,  , Bootstrapping, Questions
 @section Why Not Imake?
@@ -8680,7 +8677,7 @@ then let there be light@dots{}
 
 @menu
 * Genesis::                     Prehistory and naming of @code{configure}
-* Exodus::                      The plagues of @code{m4} and Perl
+* Exodus::                      The plagues of M4 and Perl
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
@@ -8754,11 +8751,11 @@ and complex for my needs (I didn't realize then how much Autoconf would
 eventually have to grow).
 
 I considered using Perl to generate my style of @code{configure}
-scripts, but decided that @code{m4} was better suited to the job of
-simple textual substitutions: it gets in the way less, because output is
+scripts, but decided that M4 was better suited to the job of simple
+textual substitutions: it gets in the way less, because output is
 implicit.  Plus, everyone already has it.  (Initially I didn't rely on
-the @sc{gnu} extensions to @code{m4}.)  Also, some of my friends at the
-University of Maryland had recently been putting @code{m4} front ends on
+the @sc{gnu} extensions to M4.)  Also, some of my friends at the
+University of Maryland had recently been putting M4 front ends on
 several programs, including @code{tvtwm}, and I was interested in trying
 out a new language.
 
@@ -8773,24 +8770,18 @@ so I shortened it to Autoconf.
 
 In the fall of 1991 I called together a group of fellow questers after
 the Holy Grail of portability (er, that is, alpha testers) to give me
-feedback as I encapsulated pieces of my handwritten scripts in @code{m4}
-macros and continued to add features and improve the techniques used in
-the checks.  Prominent among the testers were
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, who came up with the idea of making an @file{autoconf} shell
-script to run @code{m4} and check for unresolved macro calls; Richard
-Pixley, who suggested running the compiler instead of searching the file
-system to find include files and symbols, for more accurate results;
-Karl Berry, who got Autoconf to configure @TeX{} and added the
-macro index to the documentation; and Ian Taylor, who added support for
-creating a C header file as an alternative to putting @option{-D} options
-in a @file{Makefile}, so he could use Autoconf for his UUCP package.  The
-alpha testers cheerfully adjusted their files again and again as the
+feedback as I encapsulated pieces of my handwritten scripts in M4 macros
+and continued to add features and improve the techniques used in the
+checks.  Prominent among the testers were Fran@,cois Pinard, who came up
+with the idea of making an @file{autoconf} shell script to run @code{m4}
+and check for unresolved macro calls; Richard Pixley, who suggested
+running the compiler instead of searching the file system to find
+include files and symbols, for more accurate results; Karl Berry, who
+got Autoconf to configure @TeX{} and added the macro index to the
+documentation; and Ian Lance Taylor, who added support for creating a C
+header file as an alternative to putting @option{-D} options in a
+@file{Makefile}, so he could use Autoconf for his @sc{uucp} package.
+The alpha testers cheerfully adjusted their files again and again as the
 names and calling conventions of the Autoconf macros changed from
 release to release.  They all contributed many specific checks, great
 ideas, and bug fixes.
@@ -8806,30 +8797,23 @@ part of the @sc{gnu} Project (such as TCL, FSP, and Kerberos V5).
 Autoconf continued to improve rapidly, as many people using the
 @code{configure} scripts reported problems they encountered.
 
-Autoconf turned out to be a good torture test for @code{m4}
-implementations.  @sc{unix} @code{m4} started to dump core because of
-the length of the macros that Autoconf defined, and several bugs showed
-up in @sc{gnu} @code{m4} as well.  Eventually, we realized that we
-needed to use some features that only @sc{gnu} @code{m4} has.
-4.3@sc{bsd} @code{m4}, in particular, has an impoverished set of builtin
-macros; the System V version is better, but still doesn't provide
-everything we need.
+Autoconf turned out to be a good torture test for M4 implementations.
+@sc{unix} @code{m4} started to dump core because of the length of the
+macros that Autoconf defined, and several bugs showed up in @sc{gnu}
+@code{m4} as well.  Eventually, we realized that we needed to use some
+features that only @sc{gnu} M4 has.  4.3@sc{bsd} @code{m4}, in
+particular, has an impoverished set of builtin macros; the System V
+version is better, but still doesn't provide everything we need.
 
 More development occurred as people put Autoconf under more stresses
 (and to uses I hadn't anticipated).  Karl Berry added checks for X11.
-david zuhn contributed C++ support.
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard made it diagnose invalid arguments.  Jim Blandy bravely coerced
-it into configuring @sc{gnu} Emacs, laying the groundwork for several
-later improvements.  Roland McGrath got it to configure the @sc{gnu} C
-Library, wrote the @code{autoheader} script to automate the creation of
-C header file templates, and added a @option{--verbose} option to
-@code{configure}.  Noah Friedman added the @option{--macrodir} option and
+david zuhn contributed C++ support.  Fran@,cois Pinard made it diagnose
+invalid arguments.  Jim Blandy bravely coerced it into configuring
+@sc{gnu} Emacs, laying the groundwork for several later improvements.
+Roland McGrath got it to configure the @sc{gnu} C Library, wrote the
+@code{autoheader} script to automate the creation of C header file
+templates, and added a @option{--verbose} option to @code{configure}.
+Noah Friedman added the @option{--macrodir} option and
 @code{AC_MACRODIR} environment variable.  (He also coined the term
 @dfn{autoconfiscate} to mean ``adapt a software package to use
 Autoconf''.)  Roland and Noah improved the quoting protection in
@@ -8871,29 +8855,16 @@ of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
 macros and cleaned up coding style inconsistencies.  I added some
 auxiliary utilities that I had developed to help convert source code
-packages to use Autoconf.  With the help of
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, I made the macros not interrupt each others' messages.  (That
-feature revealed some performance bottlenecks in @sc{gnu} @code{m4},
-which he hastily corrected!)  I reorganized the documentation around
-problems people want to solve.  And I began a test suite, because
-experience had shown that Autoconf has a pronounced tendency to regress
-when we change it.
+packages to use Autoconf.  With the help of Fran@,cois Pinard, I made
+the macros not interrupt each others' messages.  (That feature revealed
+some performance bottlenecks in @sc{gnu} @code{m4}, which he hastily
+corrected!)  I reorganized the documentation around problems people want
+to solve.  And I began a test suite, because experience had shown that
+Autoconf has a pronounced tendency to regress when we change it.
 
 Again, several alpha testers gave invaluable feedback, especially
-@ifinfo
-Franc,ois
-@end ifinfo
-@tex
-Fran\c cois
-@end tex
-Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn, and Mark
-Eichin.
+Fran@,cois Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn,
+and Mark Eichin.
 
 Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
 have free time again.  I think.  Yeah, right.)
