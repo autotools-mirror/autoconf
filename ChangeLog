@@ -1,3 +1,7 @@
+1999-01-29  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_EXEEXT): Ignore C++ source files.
+
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
 	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by 
