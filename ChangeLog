@@ -1,5 +1,16 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	The --help message should have paragraphs starting with a title,
+	the options, and then optionally a small paragraph.
+
+	* acgeneral.m4 (AC_DIVERT_ONCE): New macro.
+	(HELP_VAR_END): New diversion.
+	(AC_ARG_ENABLE, AC_ARG_WITH, AC_ARG_VAR): Use AC_DIVERT_ONCE.
+	(AC_ARG_VAR): Follow the --help style.
+	* acspecific.m4 (AC_PATH_X): Use AC_DIVERT_ONCE.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (AC_PROG_CC): Don't require AC_PROG_F77, require
 	AC_PROG_CC instead.
 	From Martin Wilck.

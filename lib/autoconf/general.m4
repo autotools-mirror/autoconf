@@ -88,6 +88,8 @@ define([sinclude], [builtin([sinclude], $@)])
 #   Help msg from AC_ARG_WITH.
 # - HELP_VAR
 #   Help msg from AC_ARG_VAR.
+# - HELP_VAR_END
+#   A small paragraph on the use of the variables.
 # - HELP_END
 #   Tail of the handling of --help.
 #
@@ -137,7 +139,8 @@ define([_AC_DIVERT(HELP_CANON)],     11)
 define([_AC_DIVERT(HELP_ENABLE)],    12)
 define([_AC_DIVERT(HELP_WITH)],      13)
 define([_AC_DIVERT(HELP_VAR)],       14)
-define([_AC_DIVERT(HELP_END)],       15)
+define([_AC_DIVERT(HELP_VAR_END)],   15)
+define([_AC_DIVERT(HELP_END)],       16)
 
 define([_AC_DIVERT(VERSION_BEGIN)],  20)
 define([_AC_DIVERT(VERSION_END)],    21)
@@ -182,6 +185,14 @@ define([AC_DIVERT],
 $2
 AC_DIVERT_POP()dnl
 ])
+
+
+# AC_DIVERT_ONCE(DIVERSION-NAME, CONTENT)
+# ---------------------------------------
+# Output once CONTENT into DIVERSION-NAME (which may be a number
+# actually).  An end of line is appended for free to CONTENT.
+define([AC_DIVERT_ONCE],
+[AC_EXPAND_ONCE([AC_DIVERT([$1], [$2])])])
 
 
 # Initialize the diversion setup.
@@ -1642,7 +1653,7 @@ if test "$ac_init_help" = "long"; then
 Usage: $[0] [[OPTION]]... [[VAR=VALUE]]...
 
 [To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.  See below for descriptions of useful variables.
+VAR=VALUE.  See below for descriptions of some of the useful variables.
 
 Defaults for the options are specified in brackets.
 
@@ -1706,6 +1717,8 @@ dnl
 dnl - HELP_WITH
 dnl
 dnl - HELP_VAR
+dnl
+dnl - HELP_VAR_END
 dnl
 dnl - HELP_END
 dnl   initialized below, in which we dump the trailer (handling of the
@@ -1976,14 +1989,11 @@ define([AC_PLAIN_SCRIPT],
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_ARG_ENABLE],
-[AC_DIVERT_PUSH([HELP_ENABLE])dnl
-AC_EXPAND_ONCE([[
+[AC_DIVERT_ONCE([HELP_ENABLE], [[
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-]])[]dnl
-$2
-AC_DIVERT_POP()dnl
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
+AC_DIVERT_ONCE([HELP_ENABLE], [$2])dnl
 # Check whether --enable-$1 or --disable-$1 was given.
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
@@ -2008,14 +2018,12 @@ AU_DEFUN([AC_ENABLE],
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN([AC_ARG_WITH],
-[AC_DIVERT_PUSH([HELP_WITH])dnl
-AC_EXPAND_ONCE([[
+[AC_DIVERT_ONCE([HELP_WITH], [[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-]])[]dnl
-$2
-AC_DIVERT_POP()dnl
+]])
+AC_DIVERT_ONCE([HELP_WITH], [$2])dnl
 # Check whether --with-$1 or --without-$1 was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
@@ -2042,18 +2050,15 @@ AU_DEFUN([AC_WITH],
 # Register VARNAME as a variable configure should remember, and
 # document it in `configure --help' (but only once).
 AC_DEFUN([AC_ARG_VAR],
-[AC_DIVERT_PUSH([HELP_VAR])dnl
-AC_EXPAND_ONCE([
-Some relevant environment variables, which you can use to override the
-choices made by the configure script or to help it to find libraries and
-programs with nonstandard names/locations:
-])[]dnl
-ifdef([AC_ARG_VAR_$1],,[AC_HELP_STRING([$1], [$2], [              ])
-define([AC_ARG_VAR_$1])])dnl
-AC_DIVERT_POP()dnl
-dnl Register if set and not yet registered.
-dnl If there are envvars given as arguments, they are already set,
-dnl therefore they won't be set again, which is the right thing.
+[AC_DIVERT_ONCE([HELP_VAR], [
+Some influential environment variables:])dnl
+AC_DIVERT_ONCE([HELP_VAR_END], [
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.])dnl
+AC_DIVERT_ONCE([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
+# Register if set and not yet registered.
+# If there are envvars given as arguments, they are already set,
+# therefore they won't be set again, which is the right thing.
 case "${$1+set} $ac_configure_args" in
  *" $1="* );;
  "set "*) ac_configure_args="$1='[$]$1' $ac_configure_args";;

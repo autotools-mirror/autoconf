@@ -2418,14 +2418,12 @@ fi
 # --without-x overrides everything else, but does not touch the cache.
 AC_DEFUN([AC_PATH_X],
 [AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
-AC_MSG_CHECKING(for X)
-
 dnl Document the X abnormal options inherited from history.
-AC_EXPAND_ONCE([AC_DIVERT([HELP_BEGIN],
-[
+AC_DIVERT_ONCE([HELP_BEGIN], [
 X features:
   --x-includes=DIR    X include files are in DIR
-  --x-libraries=DIR   X library files are in DIR])])dnl
+  --x-libraries=DIR   X library files are in DIR])dnl
+AC_MSG_CHECKING(for X)
 
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
 # $have_x is `yes', `no', `disabled', or empty when we do not yet know.
