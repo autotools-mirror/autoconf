@@ -2283,6 +2283,7 @@ dnl INCLUDES.
 define(AC_INCLUDES_DEFAULT,
 [m4_default([$1],
 [#include <stdio.h>
+#include <sys/types.h>
 #ifdef HAVE_STRING_H
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
