@@ -50,6 +50,8 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
+# Some people depend upon sinclude, disabled by libm4.
+define([sinclude], [buitin([sinclude], $@)])
 
 ## ---------------- ##
 ## The diversions.  ##
