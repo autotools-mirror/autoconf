@@ -7,6 +7,7 @@ Semantics.
 EOF
 
 
+
 dnl AC_CHECK_DECLS
 dnl --------------
 dnl Check that it performs the correct actions:
@@ -66,7 +67,7 @@ dnl Check that it performs the correct actions.
 dnl Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
 dnl `int' and `struct yes' are both checked to test both the compiler
 dnl builtin types, and defined types.
-AT_TEST_MACRO(AC_CHECK_TYPES,
+AT_TEST_MACRO(AC_CHECK_SIZEOF,
 [AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
 [#include <stdio.h>
@@ -96,6 +97,44 @@ AT_TEST_MACRO(AC_CHECK_TYPES,
 /* #undef HAVE_STRUCT_NO */
 #define HAVE_STRUCT_YES 1
 ])])
+
+
+dnl AC_CHECK_TYPES
+dnl --------------
+dnl Check that we properly dispatch properly to the old implementation
+dnl or to the new one.
+AT_SETUP([AC_CHECK_TYPES])
+
+AT_DATA(configure.in,
+[[AC_INIT
+m4_define([_AC_CHECK_TYPE_NEW], [NEW])
+m4_define([_AC_CHECK_TYPE_OLD], [OLD])
+#(cut-from-here
+AC_CHECK_TYPE(ptrdiff_t)
+AC_CHECK_TYPE(ptrdiff_t, int)
+AC_CHECK_TYPE(quad, long long)
+AC_CHECK_TYPE(table_42, [int[42]])
+dnl Nice machine!
+AC_CHECK_TYPE(uint8_t, uint65536_t)
+AC_CHECK_TYPE(a,b,c,d)
+#to-here)
+AC_OUTPUT
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,,
+[configure.in:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
+])
+AT_CHECK([[sed -e '/^#(cut-from-here/, /^#to-here)/!d' -e '/^#/d' configure]],
+         0,
+         [NEW
+OLD
+OLD
+OLD
+NEW
+NEW
+])
+
+AT_CLEANUP(autoconf.err)
 
 
 

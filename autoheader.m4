@@ -215,9 +215,9 @@ AH_DEFUN([AC_CHECK_MEMBERS],
 ])
 
 
-# AC_CHECK_TYPE(TYPE, SUBTITUTE)
-# ------------------------------
-AH_DEFUN([AC_CHECK_TYPE],
+# _AC_CHECK_TYPE_OLD(TYPE, DEFAULT)
+# ---------------------------------
+AH_DEFUN([_AC_CHECK_TYPE_OLD],
 [AH_TEMPLATE([$1], [Define to `$2' if <sys/types.h> does not define.])])
 
 

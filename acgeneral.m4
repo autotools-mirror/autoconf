@@ -2795,15 +2795,33 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 ])
 
 
+
 ## -------------------- ##
 ## Checking for types.  ##
 ## -------------------- ##
 
+# Up to 2.13 included, Autoconf used to provide the macro
+#
+#    AC_CHECK_TYPE(TYPE, DEFAULT)
+#
+# Since, it provides another version which fits better with the other
+# AC_CHECK_ families:
+#
+#    AC_CHECK_TYPE(TYPE,
+#	           [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#	           [INCLUDES])
+#
+# In order to provide backward compatibility, the new scheme is
+# implemented as _AC_CHECK_TYPE_NEW, the old scheme as _AC_CHECK_TYPE_OLD,
+# and AC_CHECK_TYPE branches to one or the other, depending upon its
+# arguments.
 
-# AC_CHECK_TYPE_INTERNAL(TYPE,
-#			 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#			 [INCLUDES])
-# ----------------------------------------------------------------
+
+
+# _AC_CHECK_TYPE_NEW(TYPE,
+#		     [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		     [INCLUDES])
+# ------------------------------------------------------------
 # Check whether the type TYPE is supported by the system, maybe via the
 # the provided includes.  This macro implements the former task of
 # AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
@@ -2864,9 +2882,7 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
-#
-# FIXME: This is *the* macro which ought to be named AC_CHECK_TYPE.
-AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
+AC_DEFUN([_AC_CHECK_TYPE_NEW],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
@@ -2880,35 +2896,66 @@ if (sizeof ($1))
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Type) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
-])# AC_CHECK_TYPE_INTERNAL
+])# _AC_CHECK_TYPE_NEW
 
 
 # AC_CHECK_TYPES((TYPE, ...),
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                [INCLUDES])
 # --------------------------------------------------------
-# TYPEs is an m4 list.
-AC_DEFUN(AC_CHECK_TYPES,
+# TYPEs is an m4 list.  There are no ambiguities here, we mean the newer
+# AC_CHECK_TYPE.
+AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
-  [AC_SPECIALIZE([AC_CHECK_TYPE_INTERNAL], AC_Type,
+  [AC_SPECIALIZE([_AC_CHECK_TYPE_NEW], AC_Type,
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type))
 $2],
                  [$3],
                  [$4])])])
 
 
-# AC_CHECK_TYPE(TYPE, DEFAULT, [INCLUDES])
-# ----------------------------------------
+# _AC_CHECK_TYPE_OLD(TYPE, DEFAULT)
+# ---------------------------------
 # FIXME: This is an extremely badly chosen name, since this
 # macro actually performs an AC_REPLACE_TYPE.  Some day we
-# have to clean this up.  The macro AC_TYPE_PTRDIFF_T shows the
-# need for a checking only macro.
-AC_DEFUN(AC_CHECK_TYPE,
-[AC_CHECK_TYPE_INTERNAL([$1],,
-                        [AC_DEFINE_UNQUOTED($1, $2)],
-                        [$3])dnl
-])# AC_CHECK_TYPE
+# have to clean this up.
+AC_DEFUN([_AC_CHECK_TYPE_OLD],
+[_AC_CHECK_TYPE_NEW([$1],,
+                    [AC_DEFINE_UNQUOTED([$1], [$2])])dnl
+])# _AC_CHECK_TYPE_OLD
 
+
+# _AC_CHECK_TYPE_BUILTIN_P(STRING)
+# --------------------------------
+# Return `1' if STRING seems to be a builtin C/C++ type, i.e., if it
+# starts with `_Bool', `bool', `char', `double', `float', `int',
+# `long', `short', `signed', or `unsigned' followed by characters
+# that are defining types.
+define([_AC_CHECK_TYPE_BUILTIN_P],
+[ifelse(regexp([$1], [^\(_Bool\|bool|\char\|double\|float\|int\|long\|short\|\(un\)?signed\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+	0, 1, 0)dnl
+])# _AC_CHECK_TYPE_BUILTIN_P
+
+
+# AC_CHECK_TYPE(TYPE, DEFAULT)
+#  or
+# AC_CHECK_TYPE(TYPE,
+#	        [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#	        [INCLUDES])
+# -------------------------------------------------------
+#
+# Dispatch respectively to _AC_CHECK_TYPE_OLD or _AC_CHECK_TYPE_NEW.
+# 1. More than two arguments     => NEW
+# 2. $2 seems to be builtin type => OLD
+# 3. $2 seems to be a type       => NEW plus a warning
+# 4. default                     => NEW
+AC_DEFUN([AC_CHECK_TYPE],
+[ifelse($#, 3, [_AC_CHECK_TYPE_NEW($@)],
+        $#, 4, [_AC_CHECK_TYPE_NEW($@)],
+        _AC_CHECK_TYPE_BUILTIN_P([$2]), 1, [_AC_CHECK_TYPE_OLD($@)],
+        regexp([$2], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]), 0, [m4_warn([$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
+        [_AC_CHECK_TYPE_NEW($@)])[]dnl
+])# AC_CHECK_TYPE
 
 
 

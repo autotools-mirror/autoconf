@@ -1,5 +1,27 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Keep `AC_CHECK_TYPE' backward compatibility and provide a proper
+	`AC_CHECK_TYPE',
+	Based on ideas from Paul Eggert and Alexandre Oliva.
+
+	* acgeneral.m4 (AC_CHECK_TYPE_INTERNAL): Renamed as
+	(_AC_CHECK_TYPE_NEW): this.
+	(AC_CHECK_TYPES): Adjusted.
+	(AC_CHECK_TYPE): Renamed as
+	(_AC_CHECK_TYPE_OLD): This.  Adjusted to _AC_CHECK_TYPE_NEW.
+	No longer support extra includes, stick to 2.13's interface.
+	(_AC_CHECK_TYPE_BUILTIN_P): New macro.
+	(AC_CHECK_TYPE): New macro.
+	* autoheader.m4 (autoheader::AC_CHECK_TYPE): Renamed as...
+	(autoheader::_AC_CHECK_TYPE_OLD): this.
+	* tests/atspecific.m4 (TEST_MACRO): Skip /^_AC_/ macros.
+	* tests/semantics.m4: Test the choices of AC_CHECK_TYPE (wrt _NEW
+	or _OLD implemenation).
+	* doc/autoconf.texi (Generic Types): Reorganized.  Explain
+	everything about AC_CHECK_TYPE and Co.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4 (near m4_split): Remove the buggy additional
 	changequote.
 	Quote properly `m4_split' when registering it.
