@@ -13,6 +13,81 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** Check my definition of AC_HAVE_LIBRARY
+The original definition was:
+
+   dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+   dnl                 [, OTHER-LIBRARIES]]])
+   AC_DEFUN(AC_HAVE_LIBRARY,
+   [AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
+   changequote(<<, >>)dnl
+   define(<<AC_LIB_NAME>>, dnl
+   patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
+   define(<<AC_CV_NAME>>, ac_cv_lib_<<>>AC_LIB_NAME)dnl
+   changequote([, ])dnl
+   AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
+   AC_CACHE_VAL(AC_CV_NAME,
+   [ac_save_LIBS="$LIBS"
+   LIBS="-l[]AC_LIB_NAME[] $4 $LIBS"
+   AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)
+   LIBS="$ac_save_LIBS"
+   ])dnl
+   AC_MSG_RESULT($AC_CV_NAME)
+   if test "$AC_CV_NAME" = yes; then
+     ifelse([$2], ,
+   [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
+     LIBS="-l[]AC_LIB_NAME[] $LIBS"
+   ], [$2])
+   ifelse([$3], , , [else
+     $3
+   ])dnl
+   fi
+   undefine([AC_LIB_NAME])dnl
+   undefine([AC_CV_NAME])dnl
+   ])
+
+I used this:
+
+   AU_DEFUN(AC_HAVE_LIBRARY,
+   [pushdef([AC_LIB_NAME],
+   	    patsubst(patsubst([[$1]], [lib\([^\.]*\)\.a], [\1]), [-l], []))dnl
+   AC_CHECK_LIB(AC_LIB_NAME, main, [$2], [$3], [$4])dnl
+   popdef([AC_LIB_NAME])dnl
+   ])
+
+The only difference I see is the name of the cache var, which we can
+easily reflect at the end, but do we want that?
+
+** AU_
+Document.
+
+** m4
+The error messages for indir and dumpdef are uselessly different.  Fix
+this for translators.
+
+** config.log
+Instead of >config.log, how about >>config.log?  This would avoid
+having to tell users to rm config.cache before sending us config.log.
+
+** AC_LANG
+I don't understand why we have this weird system of AC_SAVE and
+RESTORE, why not push/pop etc?
+
+** AC_PROVIDE
+I think it is the epilogue that should provide, not the prologue.  Not
+clear: there are risks of circular dependencies :(.  In fact the
+relationship AC_BEFORE should be given outside the macro themselves.
+
+** AC_SYS_INTERPRETER
+Defines $interpval.  This is not a standard name.  Do we want to keep
+this?
+
+** Automake
+The test for a recent missing doesn't hide the error messages from the
+old missing.
+
+** Document AH_DEFUN
+
 ** automake
 The section for old macros is not completely up to date.  For
 instance, there is still AM_PROG_LIBTOOL.  Anyawy, since autoupdate
@@ -20,10 +95,13 @@ takes care of them, it is no longer the role of Automake to handle
 this.  Most should be removed.
 
 ** AC_INCLUDE
-I think shell globbing is a bad thing.  In particular, this is bad for
-automake.  I think we should make it static, i.e., very much like
-AC_CONFIG_ things.  So there would no problems of localization, some
-macros may AC_INCLUDE files etc.
+m4_include_unique should probably check only for the base name, to
+warn includes of foo/bar.m4 and baz/bar.m4.  AC_INCLUDES could admit
+$2 to specify the directory? Or do we want another macro to define the
+m4/ dir, a la AC_CONFIG_AUXDIR.
+
+** Doc: autoconf
+Document --install.  Should --install `fix' configure.in for the user?
 
 ** AC_ARG_VAR
 If should check that none of the envvar it is in charge of, has
@@ -36,29 +114,9 @@ The info mode of Emacs seems to have problems with this.  The info
 reader catches this properly, so we should report to the X?Emacs teams.
 Bug triggered by looking for `CONFIG_FILES' in the index.
 
-** AC_CONFIG_FILES, AC_CONFIG_COMMANDS, AC_CONFIG_HEADERS, AC_CONFIG_LINKS.
-Will we need both ICMD and CMD as is the case for AC_OUTPUT_COMMANDS?
-If so, they have to be adapted.
-
-** autoconf.texi: Document AC_CONFIG_FILES, AC_CONFIG_COMMANDS.
-I didn't do it, because I don't know where to do that.  I would like
-to have all the AC_CONFIG_ together, but it is not currently the
-case.  An architecture for the docs needs to be decided.
-
-** autoconf.texi: Document the extensions of AC_CONFIG_*
-The fact we can run commands.
-
-** AC_CONFIG_PRE_COMMANDS, AC_CONFIG_POST_COMMANDS.
+** AC_CONFIG_COMMANDS_PRE, AC_CONFIG_COMMANDS_POST.
 We still have to discuss a few issues: should the pre-commands be run
-before the cache is created?  Are the names OK?  Document, see above.
-
-** Generalize the association of commands to an output file.
-See AC_CONFIG_FILES: it is possible to associate a command which is
-run when the file is creating.  This should be extended to all the
-other AC_CONFIG entities.
-
-** Rename AC_CONFIG_HEADER as AC_CONFIG_HEADERS?
-See the FIXME note in the code.
+before the cache is created?  Document, see above.
 
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
@@ -73,7 +131,9 @@ name: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 
 ** We should remove obsolete things.
 Both in the doc and the code.  Looking for the keyword `obsolete'
-proves to be useful.
+proves to be useful.  Hm, RMS is not happy with this, and I fear we
+can't go against his opinion on this.  Now that we have AU_, maybe we
+should restore the macro that are DEFUNCT?
 
 ** Clarify exactly our position wrt `#define' templates.
 The fact that there are `#define' templates forbids many useful
@@ -101,12 +161,27 @@ From: Roland McGrath <roland@gnu.ai.mit.edu>
 
 * Autoconf 3
 
+** Find a solution for LIBOBJS
+Currently Automake has no clean way to get the list of files that are
+required for the distribution.  One aspect of this is LIBOBJS.  But we
+can imagine going further and provide a mean for macro authors to
+specify various files they need to distribute (headers, files to
+compile and others).
+
+** Improve autoupdate
+Autoupdate is precious: it is thanks to it that we are quite free on
+breaking compatibility.
+
+In particular, it is not normal to code twice the mapping from old
+macro to new macro.  We could have a AU_ series which is used both for
+the AC_OBSOLETE messages, and for autoupdate.
+
 ** Split all those &#@! files.
 acgeneral and acspecific is a bad design.  The split should be done
 according to the families.  For instance AC_CHECK_FUNCS,
-AC_CHECK_FUNC, AC_FUNC_FNMATCH etc. *and* AH_CHECK_FUNCS should be in,
-acfunc.m4.  I suppose there should be small exceptions, e.g., the
-family AC_REPLACE_FUNCS should still be in acfunc.m4.
+AC_CHECK_FUNC, AC_FUNC_FNMATCH etc. *and* AH_CHECK_FUNCS, AU_* should
+be in, acfunc.m4.  I suppose there should be small exceptions, e.g.,
+the family AC_REPLACE_FUNCS should still be in acfunc.m4.
 
 ** Cache name spaces.
 Cf the discussion with Kaveh.  One would like to
@@ -296,7 +371,7 @@ disabling the m4 "comment" feature when processing user-supplied strings.
 on hal.gnu.ai.mit.edu, configure is getting the wrong answer for
 AC_CHECK_FUNCS(select).
 
-The problem here is that there's severe namespace pollution: when
+The problem here is that there's severe name space pollution: when
 conftest.c includes <ctype.h> to pick up any __stub macro definitions,
 it's getting a prototype declaration for select(), which collides
 with the dummy declaration in conftest.c.  (The chain of includes
@@ -478,6 +553,10 @@ Slaven Rezic <eserte@cabulja.herceg.de>
 
 ------------------------------------------------------------------------------
 
+Cache consistency checking: ignore cache if environment
+(CC or PATH) differs.
+From Mike Haertel
+
 So we need a general mechanism for storing variables' values in the cache,
 and checking if they are the same after reading the cache.  Then we can add
 to the list of variables as we come across the need.  So far we want
@@ -497,10 +576,9 @@ check the flag variable and always compute the value if it's set.
 
 ------------------------------------------------------------------------------
 
-Every user running
-X11 usually has a directory like *X11* in his PATH variable. By replacing
-bin by include, you can find good places to look for the include files
-or libraries.
+Every user running X11 usually has a directory like *X11* in his PATH
+variable. By replacing bin by include, you can find good places to
+look for the include files or libraries.
 
 From: rcb5@win.tue.nl (Richard Verhoeven)
 
@@ -559,17 +637,6 @@ announce and only those few things will need to be changed.
 Perhaps config.status could be written with comments saying what was
 decided.
 From: Roland McGrath <roland@gnu.ai.mit.edu>
-
-------------------------------------------------------------------------------
-
-I'd much prefer to see the absolute paths substituted for all the
-standard "dir" variables.  It would be nice to have variables in
-configure that held the absolute paths.  And it is nice to be able to
-substitute them into other files without relying on the destination
-file supporting ${...}  syntax.  (It works in Perl, sh, and make --
-but not guile)
-
-From: Tom Tromey <tromey@creche.cygnus.com>
 
 ------------------------------------------------------------------------------
 

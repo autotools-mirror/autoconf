@@ -4,9 +4,12 @@ people:
 
 Aaron Crane		aaronc@pobox.com
 Akim Demaille		akim@epita.fr
-Alexandre Oliva		oliva@lsd.ic.unicamp.br
+Alain Knaff		Alain.Knaff@imag.fr
+Alexandre Oliva		oliva@dcc.unicamp.br
 Andreas Schwab		schwab@issan.informatik.uni-dortmund.de
 Ben Elliston		bje@cygnus.com
+Bruno Haible		haible@ilog.fr
+Carl Edman		cedman@princeton.edu
 Chris Provenzano	proven@cygnus.com
 Christian Krone		krischan@sql.de
 Dave Adams		adams@hpesdwa.fc.hp.com
@@ -16,8 +19,11 @@ Eric Mumpower		nocturne@mit.edu
 Felix Lee		flee@cygnus.com
 Franc,ois Pinard	pinard@iro.umontreal.ca
 Gary V. Vaughan		gvaughan@oranda.demon.co.uk
+Glenn P. Davis		davis@unidata.ucar.edu
 Gordon Matzigkeit	gord@trick.fig.org
+Graham Jenkins          c714553@vus415.telstra.com.au
 H.J. Lu			hjl@gnu.org
+Harlan Stenn		stenn@whimsy.udel.edu
 Ian Lance Taylor	ian@cygnus.com
 J"orn Rennecke		amylaar@cygnus.co.uk
 James A. Lupo		lupoja@feynman.ml.wpafb.af.mil
@@ -26,9 +32,13 @@ Jeff Garzik		jgarzik@pobox.com
 Jeffrey A Law		law@cygnus.com
 Jim Blandy 		jimb@wookumz.gnu.ai.mit.edu
 Jim Meyering		meyering@ascend.com
+John Interrante		interran@uluru.stanford.edu
+Julian Onions		j.onions@nexor.co.uk
 Karl Berry		karl@cs.umb.edu
 Kaveh R. Ghazi		ghazi@caip.rutgers.edu
 Ken Pizzini		ken@halcyon.com
+Larry Schwimmer		rosebud@cyclone.stanford.edu
+Markku Savela		msa@msa.tte.vtt.fi
 Matthew D. Langston	langston@SLAC.Stanford.EDU
 Mike Stump		mrs@wrs.com
 Miles Bader		miles@gnu.ai.mit.edu
@@ -42,7 +52,13 @@ Scott Bambrough		scottb@corelcomputer.com
 Steven G. Johnson	stevenj@alum.mit.edu
 Stu Grossman		grossman@cygnus.com
 Syd Polk		spolk@cygnus.com
+T.E. Dickey		dickey@clark.net
+Tom Lane		tgl@sss.pgh.pa.us
 Tom Tromey		tromey@cygnus.com
 
 Many people are not named here because we lost track of them.  We
 thank them!  Please, help us keeping this list up to date.
+
+Local Variables:
+mode: text
+End:
