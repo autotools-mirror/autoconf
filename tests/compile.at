@@ -113,11 +113,11 @@ AC_LANG_COMPILER
 
 if $F77 --version 2>/dev/null | grep GNU >/dev/null; then
   # Has GNU in --version.
-  test $G77 = no &&
+  test "$G77" != yes &&
     AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler])
 else
   # Has not.
-  test $G77 = yes &&
+  test "$G77" = yes &&
     AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler])
 fi
 exit 0]])
