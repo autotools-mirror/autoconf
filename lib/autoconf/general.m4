@@ -3519,7 +3519,7 @@ ifset([AC_LIST_HEADERS],
 ifset([AC_LIST_LINKS],
       [AC_OUTPUT_LINKS()])dnl
 ifset([AC_LIST_COMMANDS],
-      [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
+      [_AC_OUTPUT_COMMANDS()])dnl
 
 cat >>$CONFIG_STATUS <<\EOF
 
@@ -4020,31 +4020,33 @@ EOF
 ])# AC_OUTPUT_LINKS
 
 
-# AC_OUTPUT_COMMANDS_COMMANDS
-# ---------------------------
+# _AC_OUTPUT_COMMANDS
+# -------------------
 # This is a subroutine of AC_OUTPUT, in charge of issuing the code
-# related to AC_CONFIG_COMMANDS.  The weird name is due to the fact
-# that AC_OUTPUT_COMMANDS is already used.  This should be fixed.
+# related to AC_CONFIG_COMMANDS.
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define(AC_OUTPUT_COMMANDS_COMMANDS,
+define(_AC_OUTPUT_COMMANDS,
 [cat >>$CONFIG_STATUS <<\EOF
 
 #
 # CONFIG_COMMANDS section.
 #
 for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
-  ac_dest=`echo "$ac_file"|sed 's%:.*%%'`
-  ac_source=`echo "$ac_file"|sed 's%@BKL@^:@BKR@*:%%'`
+  ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
+  ac_source=`echo "$ac_file" | sed 's%@BKL@^:@BKR@*:%%'`
 
-  echo "executing commands of $ac_dest"
+dnl FIXME: Until Automake uses the new features of config.status, we
+dnl should keep this silent.  Otherwise, because Automake runs this in
+dnl each directory, it quickly becomes annoying.
+dnl  echo "executing commands of $ac_dest"
   case "$ac_dest" in
 AC_LIST_COMMANDS_COMMANDS()dnl
   esac
 fi;done
 EOF
-])# AC_OUTPUT_COMMANDS_COMMANDS
+])# _AC_OUTPUT_COMMANDS
 
 
 # AC_OUTPUT_SUBDIRS(DIRECTORY...)

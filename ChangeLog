@@ -1,5 +1,13 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_COMMANDS_COMMANDS): Renamed as...
+	(_AC_OUTPUT_COMMANDS): This.  All callers changed.
+	Disable the verbose message until Automake uses the new features
+	of `config.status'.
+	Reported by Jim Meyering.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Clean up a few changequotes.
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Instead of using changequote
