@@ -502,10 +502,7 @@ m4_define([_AC_INIT_SRCDIR],
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
-  ac_prog=$[0]
-dnl FIXME: should use AS_DIRNAME here once it is made DOS-friendly.
-  ac_confdir=`echo "$ac_prog" | sed 's%[[\\/][^\\/][^\\/]]*$%%'`
-  test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
+  ac_confdir=`AS_DIRNAME(["$[0]"])`
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
