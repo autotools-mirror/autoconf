@@ -3747,7 +3747,9 @@ For cache values used by the distributed Autoconf macros, this value is
 @samp{ac}.
 
 @item @code{_cv_}
-Indicates that this shell variable is a cache value.
+Indicates that this shell variable is a cache value. This string
+@emph{must} be present in the variable name, including the leading
+underscore.
 
 @item @var{value-type}
 A convention for classifying cache values, to produce a rational naming

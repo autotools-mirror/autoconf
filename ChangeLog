@@ -1,3 +1,8 @@
+1999-08-25  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (Cache Variable Names): Be more explicit about the
+	requirements for cache variable names. Fix for autoconf/53.
+
 1999-08-25  Alexandre Oliva  <oliva@dcc.unicamp.br>
 
 	* autoreconf.sh: Run aclocal with the -I option only if
