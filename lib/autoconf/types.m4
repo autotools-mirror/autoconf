@@ -605,13 +605,15 @@ if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
              `HAVE_STRUCT_TM_TM_ZONE' instead.])
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
-[AC_TRY_LINK(
-[#include <time.h>
+[AC_LINK_IFELSE([AC_LANG_PROGRAM(
+[[#include <time.h>
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif
-],
-[atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
+]],
+[atoi(*tzname);])],
+                [ac_cv_var_tzname=yes],
+                [ac_cv_var_tzname=no])])
   if test $ac_cv_var_tzname = yes; then
     AC_DEFINE(HAVE_TZNAME, 1,
               [Define to 1 if you don't have `tm_zone' but do have the external

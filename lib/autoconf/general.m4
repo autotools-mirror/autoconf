@@ -2226,13 +2226,7 @@ _AC_LINK_IFELSE($@)])
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------
-# Should the INCLUDES be defaulted here?
 # Contrarily to AC_LINK_IFELSE, this macro double quote its first two args.
-# FIXME: WARNING: The code to compile was different in the case of
-# Fortran between AC_TRY_COMPILE and AC_TRY_LINK, though they should
-# equivalent as far as I can tell from the semantics and the docs.  In
-# the former, $[2] is used as is, in the latter, it is `call' ed.
-# Remove these FIXME: once truth established.
 AU_DEFUN([AC_TRY_LINK],
 [AC_LINK_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 

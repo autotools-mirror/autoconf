@@ -285,7 +285,7 @@ Writing Tests
 * Writing Test Programs::       Forging source files for compilers
 * Running the Preprocessor::    Detecting preprocessor symbols
 * Running the Compiler::        Detecting language or header features
-* Examining Libraries::         Detecting functions and global variables
+* Running the Linker::          Detecting library features
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
@@ -5630,7 +5630,7 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Writing Test Programs::       Forging source files for compilers
 * Running the Preprocessor::    Detecting preprocessor symbols
 * Running the Compiler::        Detecting language or header features
-* Examining Libraries::         Detecting functions and global variables
+* Running the Linker::          Detecting library features
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
@@ -5908,6 +5908,34 @@ fputs (hw, stdout);
 @}
 @end example
 
+
+@defmac AC_LANG_CALL (@var{prologue}, @var{function})
+@acindex LANG_CALL
+Expands into a source file which consists of the @var{prologue}, and
+then a call to the @var{function} as body of the main function (e.g.,
+@code{main} in C).  Since it uses @code{AC_LANG_PROGRAMS}, the feature
+of the latter are available.
+
+This function will probably be replaced in the feature by a version
+which would enable specifying the arguments.  The use of this macro is
+not encouraged, as it violates strongly the typing system.
+@end defmac
+
+
+@defmac AC_LANG_FUNC_LINK_TRY (@var{prologue}, @var{function})
+@acindex LANG_FUNC_LINK_TRY
+Expands into a source file which consists of the @var{prologue}, and
+then a pseudo use of the @var{function} as body of the main function
+(e.g., @code{main} in C): a simple (function pointer) assignment.  Since
+it uses @code{AC_LANG_PROGRAMS}, the feature of the latter are
+available.
+
+As @code{AC_LANG_CALL}, this macro is documented only for completeness.
+It is considered to be severely broken, and in the future will be
+removed in favor of actual function calls (with properly typed
+arguments).
+@end defmac
+
 @node Running the Preprocessor
 @section Running the Preprocessor
 
@@ -6014,67 +6042,56 @@ compiling.  If Fortran 77 is the currently selected language then
 @code{FFLAGS} will be used when compiling.
 
 This macro does not try to link; use @code{AC_LINK_IFELSE} if you need
-to do that (@pxref{Examining Libraries}).
+to do that (@pxref{Running the Linker}).
 @end defmac
 
-@node Examining Libraries
-@section Examining Libraries
+@node Running the Linker
+@section Running the Linker
 
 To check for a library, a function, or a global variable, Autoconf
 @command{configure} scripts try to compile and link a small program that
-uses it.  This is unlike Metaconfig, which by default uses @code{nm}
-or @code{ar} on the C library to try to figure out which functions are
+uses it.  This is unlike Metaconfig, which by default uses @code{nm} or
+@code{ar} on the C library to try to figure out which functions are
 available.  Trying to link with the function is usually a more reliable
 approach because it avoids dealing with the variations in the options
 and output formats of @code{nm} and @code{ar} and in the location of the
 standard libraries.  It also allows configuring for cross-compilation or
-checking a function's run-time behavior if needed.  On the other hand, it
-can be slower than scanning the libraries once.
+checking a function's run-time behavior if needed.  On the other hand,
+it can be slower than scanning the libraries once, but accuracy is more
+important than speed.
 
-A few systems have linkers that do not return a failure exit status when
-there are unresolved functions in the link.  This bug makes the
-configuration scripts produced by Autoconf unusable on those systems.
-However, some of them can be given options that make the exit status
-correct.  This is a problem that Autoconf does not currently handle
-automatically.  If users encounter this problem, they might be able to
-solve it by setting @code{LDFLAGS} in the environment to pass whatever
-options the linker needs (for example, @option{-Wl,-dn} on @sc{mips
-risc/os}).
+@c FIXME: Errr....  I doubt this matters today... --akim, 2002.
+@c A few systems have linkers that do not return a failure exit status when
+@c there are unresolved functions in the link.  This bug makes the
+@c configuration scripts produced by Autoconf unusable on those systems.
+@c However, some of them can be given options that make the exit status
+@c correct.  This is a problem that Autoconf does not currently handle
+@c automatically.  If users encounter this problem, they might be able to
+@c solve it by setting @code{LDFLAGS} in the environment to pass whatever
+@c options the linker needs (for example, @option{-Wl,-dn} on @sc{mips
+@c risc/os}).
 
-@code{AC_TRY_LINK} is used to compile test programs to test for
+@code{AC_LINK_IFELSE} is used to compile test programs to test for
 functions and global variables.  It is also used by @code{AC_CHECK_LIB}
 to check for libraries (@pxref{Libraries}), by adding the library being
 checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
-@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
-@acindex TRY_LINK
-Depending on the current language (@pxref{Language Choice}), create a
-test program to see whether a function whose body consists of
-@var{function-body} can be compiled and linked.  If the file compiles
-and links successfully, run shell commands @var{action-if-found},
-otherwise run @var{action-if-not-found}.
 
-This macro double quotes both @var{includes} and @var{function-body}.
+@defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex LINK_IFELSE
+Run the compiler and the linker of the current language (@pxref{Language
+Choice}) on the @var{input}, run the shell commands @var{action-if-true}
+on success, @var{action-if-false} otherwise. The @var{input} can be made
+by @code{AC_LANG_PROGRAM} and friends.
 
-For C and C++, @var{includes} is any @code{#include} statements needed
-by the code in @var{function-body} (@var{includes} will be ignored if
-the currently selected language is Fortran 77).  This macro also uses
-@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
-selected language, as well as @code{CPPFLAGS}, when compiling.  If
-Fortran 77 is the currently selected language then @code{FFLAGS} will be
-used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
-be used during linking in all cases.
-@end defmac
+This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
+the currently selected language, as well as @code{CPPFLAGS}, when
+compiling.  If Fortran 77 is the currently selected language then
+@code{FFLAGS} will be used when compiling.
 
-@defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
-@acindex TRY_LINK_FUNC
-Depending on the current language (@pxref{Language Choice}), create a
-test program to see whether a program whose body consists of
-a prototype of and a call to @var{function} can be compiled and linked.
-
-If the file compiles and links successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
+This macro does not try to execute the program; use @code{AC_RUN_IFELSE}
+if you need to do that (@pxref{Run Time}).
 @end defmac
 
 
@@ -12402,8 +12419,8 @@ Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
 @acindex COMPILE_CHECK
-This is an obsolete version of @code{AC_TRY_LINK} (@pxref{Examining
-Libraries}), with the addition that it prints @samp{checking for
+This is an obsolete version of @code{AC_TRY_COMPILE} (@pxref{Running the
+Compiler}), with the addition that it prints @samp{checking for
 @var{echo-text}} to the standard output first, if @var{echo-text} is
 non-empty.  Use @code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT} instead
 to print messages (@pxref{Printing Messages}).
@@ -12963,7 +12980,7 @@ issue.
 
 @defmac AC_TEST_CPP
 @acindex TEST_CPP
-@code{AC_TRY_CPP}
+@code{AC_TRY_CPP}, replaced with @code{AC_PREPROC_IFELSE}.
 @end defmac
 
 @defmac AC_TEST_PROGRAM
@@ -13005,6 +13022,40 @@ Same as @samp{AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@var{input}]])],
 Preprocessor}).
 
 This macro double quotes the @var{input}.
+@end defmac
+
+@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex TRY_LINK
+Same as @samp{AC_LINK_IFELSE([AC_LANG_SOURCE([[@var{includes}]],
+[[@var{function-body}]])], [@var{action-if-true}],
+[@var{action-if-false}])} (@pxref{Running the Compiler}).
+
+This macro double quotes both @var{includes} and @var{function-body}.
+
+Depending on the current language (@pxref{Language Choice}), create a
+test program to see whether a function whose body consists of
+@var{function-body} can be compiled and linked.  If the file compiles
+and links successfully, run shell commands @var{action-if-found},
+otherwise run @var{action-if-not-found}.
+
+This macro double quotes both @var{includes} and @var{function-body}.
+
+For C and C++, @var{includes} is any @code{#include} statements needed
+by the code in @var{function-body} (@var{includes} will be ignored if
+the currently selected language is Fortran 77).  This macro also uses
+@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
+selected language, as well as @code{CPPFLAGS}, when compiling.  If
+Fortran 77 is the currently selected language then @code{FFLAGS} will be
+used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
+be used during linking in all cases.
+@end defmac
+
+@defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex TRY_LINK_FUNC
+This macro is equivalent to
+@samp{AC_LINK_IFELSE([AC_LANG_CALL([[@var{includes}]],
+[[@var{function-body}]])], [@var{action-if-true}],
+[@var{action-if-false}])}.
 @end defmac
 
 @defmac AC_UID_T

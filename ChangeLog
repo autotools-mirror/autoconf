@@ -1,5 +1,19 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Generating Sources): Document AC_LANG_CALL
+	and AC_LANG_FUNC_LINK_TRY.
+	(Examining Libraries): Rename as...
+	(Running the Linker): this.
+	Document AC_LINK_IFELSE.
+	Move the documentation of AC_TRY_LINK and AC_TRY_LINK_FUNC to...
+	(Obsolete Macros): here.
+	* lib/autoconf/fortran.m4 (_AC_F77_NAME_MANGLING): Don't use
+	AC_TRY_LINK_FUNC nor AC_TRY_LINK.
+	* lib/autoconf/libs.m4 (AC_CHECK_LIB, AC_PATH_XTRA): Likewise.
+	* lib/autoconf/headers.m4 (AC_USG): Likewise.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Don't use AC_TRY_CPP.
 
 	More `check config.log' messages.

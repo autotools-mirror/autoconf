@@ -729,16 +729,19 @@ AU_DEFUN([AC_UNISTD_H],
 # Define `USG' if string functions are in strings.h.
 AU_DEFUN([AC_USG],
 [AC_DIAGNOSE([obsolete],
-[$0: Remove `AC_MSG_CHECKING', `AC_TRY_LINK' and this `AC_WARNING'
+[$0: Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this `AC_WARNING'
 when you adjust your code to use HAVE_STRING_H.])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
-AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
-  [AC_MSG_RESULT(yes)],
-  [AC_MSG_RESULT(no)
-   AC_DEFINE(USG, 1,
-       [Define to 1 if you do not have <strings.h>, index, bzero, etc...
-        This symbol is obsolete, you should not depend upon it.])])
-AC_CHECK_HEADERS(string.h)])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
+                                [[rindex(0, 0); bzero(0, 0);]])],
+               [AC_MSG_RESULT(yes)],
+               [AC_MSG_RESULT(no)
+                AC_DEFINE(USG, 1,
+                          [Define to 1 if you do not have <strings.h>, index,
+                           bzero, etc... This symbol is obsolete, you should
+                           not depend upon it.])])
+AC_CHECK_HEADERS(string.h)
+])# AU::AC_USG
 
 
 # AU::AC_MEMORY_H

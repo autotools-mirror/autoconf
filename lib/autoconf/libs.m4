@@ -70,12 +70,13 @@ AC_DEFUN([AC_SEARCH_LIBS],
 [AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS=$LIBS
 ac_cv_search_$1=no
-AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
+AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
+               [ac_cv_search_$1="none required"])
 if test "$ac_cv_search_$1" = no; then
   for ac_lib in $2; do
     LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
-    AC_TRY_LINK_FUNC([$1],
-                     [ac_cv_search_$1="-l$ac_lib"
+    AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
+                   [ac_cv_search_$1="-l$ac_lib"
 break])
   done
 fi
@@ -120,9 +121,9 @@ AS_LITERAL_IF([$1],
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
-AC_TRY_LINK_FUNC([$2],
-                 [AS_VAR_SET(ac_Lib, yes)],
-                 [AS_VAR_SET(ac_Lib, no)])
+AC_LINK_IFELSE([AC_LANG_CALL([], [$2])],
+               [AS_VAR_SET(ac_Lib, yes)],
+               [AS_VAR_SET(ac_Lib, no)])
 LIBS=$ac_check_lib_save_LIBS])
 AS_IF([test AS_VAR_GET(ac_Lib) = yes],
       [m4_default([$3], [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
@@ -277,11 +278,12 @@ if test "$ac_x_libraries" = no; then
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
   LIBS="-lXt $LIBS"
-  AC_TRY_LINK([@%:@include <X11/Intrinsic.h>], [XtMalloc (0)],
-[LIBS=$ac_save_LIBS
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Intrinsic.h>],
+                                  [XtMalloc (0)])],
+                 [LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],
-[LIBS=$ac_save_LIBS
+                 [LIBS=$ac_save_LIBS
 for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
@@ -416,7 +418,8 @@ dnl FIXME: banish uname from this macro!
     # libraries were built with DECnet support.  And Karl Berry says
     # the Alpha needs dnet_stub (dnet does not exist).
     ac_xsave_LIBS="$LIBS"; LIBS="$LIBS $X_LIBS -lX11"
-    AC_TRY_LINK_FUNC(XOpenDisplay, ,
+    AC_LINK_IFELSE([AC_LANG_CALL([], [XOpenDisplay])],
+                   [],
     [AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
     if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,

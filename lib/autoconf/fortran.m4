@@ -690,8 +690,8 @@ AC_COMPILE_IFELSE(
   for ac_foobar in foobar FOOBAR; do
     for ac_underscore in "" "_"; do
       ac_func="$ac_foobar$ac_underscore"
-      AC_TRY_LINK_FUNC($ac_func,
-         [ac_success=yes; break 2])
+      AC_LINK_IFELSE([AC_LANG_CALL([], [$ac_func])],
+                     [ac_success=yes; break 2])
     done
   done
 
@@ -710,8 +710,8 @@ AC_COMPILE_IFELSE(
      ac_success_extra=no
      for ac_extra in "" "_"; do
         ac_func="$ac_foo_bar$ac_underscore$ac_extra"
-        AC_TRY_LINK_FUNC($ac_func,
-        [ac_success_extra=yes; break])
+        AC_LINK_IFELSE([AC_LANG_CALL([], [$ac_func])],
+                       [ac_success_extra=yes; break])
      done
 
      if test "$ac_success_extra" = "yes"; then
