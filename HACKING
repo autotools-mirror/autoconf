@@ -46,7 +46,7 @@ release:
   (POSIXLY_CORRECT).
 
 - Try some real world packages
-  Good examples include the File, Shell or Text utils.
+  Good example is the coreutils package.
 
 * Release Procedure
 

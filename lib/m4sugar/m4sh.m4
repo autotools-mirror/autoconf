@@ -1036,10 +1036,10 @@ _AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 # "--with-readline", while the RHS is "support fancy command line
 # editing".
 #
-# If the LHS is contains more than (COLUMN - 3) characters, then the LHS
-# is terminated with a newline so that the RHS starts on a line of its
-# own beginning with COLUMN.  In the default case, this corresponds to
-# an LHS with more than 23 characters.
+# If the LHS contains more than (COLUMN - 3) characters, then the LHS is
+# terminated with a newline so that the RHS starts on a line of its own
+# beginning with COLUMN.  In the default case, this corresponds to an
+# LHS with more than 23 characters.
 #
 # Therefore, in the example, if the LHS were instead
 # "--with-readline-blah-blah-blah", then the AS_HELP_STRING macro would

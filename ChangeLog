@@ -11,6 +11,11 @@
 	* NEWS: Mention that bugs.gnu.org is kaput.
 	* README: Likewise.  Mention where mailing list archives can be found.
 
+2004-11-28  Stepan Kasal  <address@hidden>
+
+	* HACKING: Refer to "coreutils", not "File, Shell or Text utils".
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): A typo in the comment.
+
 2004-11-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Pretty Help Strings): Go back to
