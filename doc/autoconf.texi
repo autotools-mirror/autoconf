@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.9.2
-@set VERSION 1.9.2
-@set UPDATED April 1994
+@set EDITION 1.9.3
+@set VERSION 1.9.3
+@set UPDATED May 1994
 
 @iftex
 @finalout
@@ -254,8 +254,8 @@ General Public License.  This is because they consist almost entirely of
 parts of Autoconf itself, rearranged somewhat, and Autoconf is
 distributed under the terms of the GPL.  As applied to Autoconf, the GPL
 just means that you need to distribute @file{configure.in}, and
-@file{aclocal.m4}, @file{acconfig.h}, and @file{@var{config}.h.top} if
-you use them, along with @file{configure}.
+@file{aclocal.m4}, @file{acconfig.h}, and @file{@var{config}.h.top} and
+@file{@var{config}.h.bot} if you use them, along with @file{configure}.
 
 Programs that use Autoconf scripts to configure themselves do not
 automatically come under the GPL.  Distributing an Autoconf
@@ -294,9 +294,9 @@ Autoconf input file (@file{configure.in}) and run Autoconf on it to
 produce the script.  If you write your own feature tests to supplement
 those that come with Autoconf, you might also write a file called
 @file{aclocal.m4}.  If you use a C header file to contain @code{#define}
-directives, you might also write @file{config.h.top} and
-@file{acconfig.h}, and you will distribute the Autoconf-generated file
-@file{config.h.in} with the package.
+directives, you might also write @file{config.h.top},
+@file{config.h.bot}, and @file{acconfig.h}, and you will distribute the
+Autoconf-generated file @file{config.h.in} with the package.
 
 Here is a diagram showing how the files that can be used in
 configuration are produced.  Programs that are executed are suffixed by
@@ -315,7 +315,8 @@ configure.in --.   .------> autoconf* -----> configure
                        +--> [autoheader*] -> [config.h.in]
 [acconfig.h] ----.     |
                  +-----'
-[config.h.top] --'
+[config.h.top] --+
+[config.h.bot] --'
 
 Makefile.in -------------------------------> Makefile.in
 @end group
@@ -457,7 +458,8 @@ The file that @code{autoheader} creates usually contains only
 @code{#define} and @code{#undef} statements and their accompanying
 comments.  However, if a file called @file{@var{file}.top} (typically
 @file{config.h.top}) exists in the current directory, @code{autoheader}
-copies that file to the beginning of its output.
+copies that file to the beginning of its output.  Similarly, if
+@file{@var{file}.bot} exists, it copies that file to the end of its output.
 
 If you give @code{autoheader} an argument, it uses that file instead of
 @file{configure.in} and writes the header file to the standard output
@@ -1283,7 +1285,7 @@ been called.  Because of the macro dependencies, if you call this macro,
 you should let it call @code{AC_FIND_X} rather than doing that yourself.
 @end defmac
 
-@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-unsupported}@r{]})
+@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-not-supported}@r{]})
 @maindex HAVE_POUNDBANG
 Check whether the system supports starting shell scripts with a line of
 the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
@@ -2630,7 +2632,7 @@ configure: configure.in aclocal.m4
 
 # autoheader might not change config.h.in
 config.h.in: stamp-h.in
-stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top
+stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top config.h.bot
         cd $@{srcdir@} && autoheader
         touch $@{srcdir@}/stamp-h.in
 
