@@ -169,7 +169,7 @@ test \$exitcode = 0) || { (exit 1); exit 1; }
 ") 2> /dev/null; then
   :
 else
-  as_candidate_shells="$SHELL"
+  as_candidate_shells=
     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
 do
@@ -184,7 +184,7 @@ do
 done
 
 
-      for as_shell in $as_candidate_shells; do
+      for as_shell in $as_candidate_shells $SHELL; do
 	 if { $as_shell 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
