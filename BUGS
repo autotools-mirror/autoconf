@@ -12,19 +12,14 @@ address them.
 
 * Status
 
-	/*-----------------------------------------------------.
-	| Don't use this version in production, just test it.  |
-	`-----------------------------------------------------*/
+	/*--------------------------------------------------.
+	| Safe to use but with complex AC_OUTPUT_COMMANDS.  |
+	`--------------------------------------------------*/
 
 
 * Serious bugs
 
 Autoconf must not be used in production if there are serious bugs.
-
-** AC_LANG vs AC_REQUIRE
-Because AC_REQUIRE makes the `time' concept different for Sh and M4,
-it may happen that the currently required language is not the one
-currently set.
 
 
 * Important bugs
