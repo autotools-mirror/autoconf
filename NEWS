@@ -1,5 +1,8 @@
 * Major changes in Autoconf 2.57a                       -*- outline -*-
 
+* New macros
+  AC_C_RESTRICT
+
 * Improve DJGPP portability
   The Autoconf tools and configure behave better under DJGPP.
 
@@ -9,8 +12,7 @@
     configure: WARNING: pi.h: present but cannot be compiled
     configure: WARNING: pi.h: check for missing prerequisite headers?
     configure: WARNING: pi.h: proceeding with the preprocessor's result
-
-  messages.
+      messages.
 
 * Major changes in Autoconf 2.57
 
