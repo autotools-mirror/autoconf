@@ -393,7 +393,7 @@ AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
 # Check for a fully functional grep program that handles
 # the longest lines possible.  Prefer GNU grep if found.
 AC_DEFUN([AC_PROG_GREP],
-[AC_CACHE_CHECK([for grep that handles long lines], oc_cv_path_GREP,
+[AC_CACHE_CHECK([for grep that handles long lines], ac_cv_path_GREP,
    [_$0(GREP, [grep ggrep])])
  GREP="$ac_cv_path_GREP"
  AC_SUBST([GREP])
