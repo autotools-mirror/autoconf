@@ -1,5 +1,10 @@
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Fix shell
+	over-escaping.
+
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm (&debug): New.
 	* bin/autom4te.in ($language): Move to...
 	(parse_args): here.

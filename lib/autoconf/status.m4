@@ -1227,7 +1227,7 @@ exec AS_MESSAGE_FD>&1
 exec AS_MESSAGE_LOG_FD>>config.log
 {
   echo
-  AS_BOX([Running \$as_me.])
+  AS_BOX([Running $as_me.])
 } >&AS_MESSAGE_LOG_FD
 cat >&AS_MESSAGE_LOG_FD <<_CSEOF
 
