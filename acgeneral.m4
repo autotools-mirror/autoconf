@@ -727,10 +727,9 @@ define([AC_SHELL_IFELSE],
 [ifval([$2$3],
 [if $1; then
   ifval([$2], [$2], :)
-ifval([$3],
+m4_ifvanl([$3],
 [else
-  $3
-])dnl
+  $3])dnl
 fi
 ])dnl
 ])# AC_SHELL_IFELSE
@@ -2034,9 +2033,8 @@ AC_DIVERT_ONCE([HELP_ENABLE], [$2])dnl
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
   $3
-ifval([$4], [else
-  $4
-])dnl
+m4_ifvanl([$4], [else
+  $4])dnl
 fi[]dnl
 ])# AC_ARG_ENABLE
 
@@ -2063,9 +2061,8 @@ AC_DIVERT_ONCE([HELP_WITH], [$2])dnl
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
   $3
-ifval([$4], [else
-  $4
-])dnl
+m4_ifvanl([$4], [else
+  $4])dnl
 fi[]dnl
 ])# AC_ARG_WITH
 
@@ -2550,8 +2547,7 @@ define([_AC_SUBST_SED_PROGRAM])
 # Beware that if you change this macro, you also have to change the
 # sed script at the top of _AC_OUTPUT_FILES.
 define([AC_SUBST],
-[ifval([$2], [$1=$2
-])[]dnl
+[m4_ifvanl([$2], [$1=$2])[]dnl
 _AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
 ])# AC_SUBST
 
@@ -2915,20 +2911,18 @@ AC_CACHE_VAL(ac_cv_prog_$1,
 [if test -n "$$1"; then
   ac_cv_prog_$1="$$1" # Let the user override the test.
 else
-ifval([$6],
-[  ac_prog_rejected=no
-])dnl
+m4_ifvanl([$6],
+[  ac_prog_rejected=no])dnl
   AC_SHELL_PATH_WALK([$5],
 [test -f $ac_dir/$ac_word || continue
-ifval([$6],
+m4_ifvanl([$6],
 [if test "$ac_dir/$ac_word" = "$6"; then
   ac_prog_rejected=yes
   continue
-fi
-])dnl
+fi])dnl
 ac_cv_prog_$1="$3"
 break])
-ifval([$6],
+m4_ifvanl([$6],
 [if test $ac_prog_rejected = yes; then
   # We found a bogon in the path, so make sure we never use it.
   set dummy $ac_cv_prog_$1
@@ -2948,13 +2942,11 @@ ifelse([$2], [$4],
 m4_default([$5], [\$PATH])])
 ])dnl
   fi
-fi
-])dnl
+fi])dnl
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_CHECK_PROGS will keep looking.
-ifval([$4],
-[  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"
-])dnl
+m4_ifvanl([$4],
+[  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"])dnl
 fi])dnl
 $1=$ac_cv_prog_$1
 if test -n "$$1"; then
@@ -2975,8 +2967,7 @@ do
 AC_CHECK_PROG([$1], $ac_prog, $ac_prog, , [$4])
 test -n "$$1" && break
 done
-ifval([$3], [test -n "$$1" || $1="$3"
-])])
+m4_ifvanl([$3], [test -n "$$1" || $1="$3"])])
 
 
 # AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
@@ -2998,9 +2989,8 @@ AC_CACHE_VAL(ac_cv_path_$1,
 fi])
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
-ifval([$3],
-[  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"
-])dnl
+m4_ifvanl([$3],
+[  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"])dnl
   ;;
 esac])dnl
 $1=$ac_cv_path_$1
@@ -3022,8 +3012,8 @@ do
 AC_PATH_PROG($1, $ac_prog, , $4)
 test -n "$$1" && break
 done
-ifval([$3], [test -n "$$1" || $1="$3"
-])])
+m4_ifvanl([$3], [test -n "$$1" || $1="$3"])dnl
+])
 
 
 
@@ -3276,9 +3266,8 @@ changequote(, )dnl
   egrep "$1" >/dev/null 2>&1; then
 changequote([, ])dnl
   m4_default([$3], :)
-ifval([$4], [else
-  $4
-])dnl
+m4_ifvanl([$4], [else
+  $4])dnl
 fi
 rm -f conftest*
 ])# AC_EGREP_CPP
@@ -3357,8 +3346,7 @@ AC_DEFUN([AC_TRY_LINK],
 #                  ACTION-IF-FOUND, [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
 AU_DEFUN([AC_COMPILE_CHECK],
-[ifval([$1], [AC_CHECKING([for $1])
-])dnl
+[m4_ifvanl([$1], [AC_CHECKING([for $1])])dnl
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 ])
 
@@ -4222,12 +4210,10 @@ define([_AC_LIST_SUBDIRS])
 # proper modern macros.
 
 AU_DEFUN([AC_OUTPUT],
-[ifval([$1],
-       [AC_CONFIG_FILES([$1])
-])dnl
-ifval([$2$3],
-      [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])
-])dnl
+[m4_ifvanl([$1],
+           [AC_CONFIG_FILES([$1])])dnl
+m4_ifvanl([$2$3],
+          [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])])dnl
 [AC_OUTPUT]],
 [`AC_OUTPUT' should be used without arguments.])
 

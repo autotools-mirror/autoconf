@@ -179,7 +179,17 @@ undefine([sinclude])
 # ----------------------------------
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 # Comparable to ifdef.
-define([ifval], [ifelse([$1],[],[$3],[$2])])
+define([ifval], [ifelse([$1], [], [$3], [$2])])
+
+
+# m4_ifvanl(COND, [IF-TRUE], [IF-FALSE])
+# --------------------------------------
+# Same as `ifval', but add an extra newline to IF-TRUE or IF-FALSE.
+define([m4_ifvanl], [ifelse([$1], [],
+[$3
+],
+[$2
+])])
 
 
 # ifset(MACRO, [IF-TRUE], [IF-FALSE])
@@ -204,8 +214,8 @@ define([ifndef],
 define([m4_default], [ifval([$1], [$1], [$2])])
 
 
-# m4_shiftn( N, ... )
-# -------------------
+# m4_shiftn(N, ...)
+# -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.
 define([m4_shiftn],
 [m4_assert(($1 >= 0) && ($# > $1))dnl

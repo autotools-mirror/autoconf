@@ -1,3 +1,8 @@
+2000-08-04  Akim Demaille  <akim@epita.fr>
+
+	* libm4.m4 (m4_ifvanl): New macro.
+	* acgeneral.m4: Use it.
+
 2000-08-02  Akim Demaille  <akim@epita.fr>
 
 	Release Automake from being a substitute to Autoconf.
