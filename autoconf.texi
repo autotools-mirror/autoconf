@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.90
-@set VERSION 1.90
+@set EDITION 1.91
+@set VERSION 1.91
 @set UPDATED May 1994
 
 @iftex
