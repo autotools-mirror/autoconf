@@ -155,6 +155,13 @@ pushdef([_AC_LANG], _AC_LANG)])
 AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 
 
+# _AC_LANG_ABBREV
+# ---------------
+# Return a short signature of _AC_LANG which can be used in shell
+# variable names, or in M4 macro names.
+define([_AC_LANG_ABBREV],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
 
 # -------------------- #
 # 1b. The C language.  #
@@ -170,7 +177,6 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gcc
-define([AC_LANG_ABBREV], [c])dnl
 ])
 
 
@@ -178,6 +184,10 @@ define([AC_LANG_ABBREV], [c])dnl
 # ---------
 AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
+
+# _AC_LANG_ABBREV(C)
+# ------------------
+define([_AC_LANG_ABBREV(C)], [c])
 
 
 # ---------------------- #
@@ -194,7 +204,6 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gxx
-define([AC_LANG_ABBREV], [cxx])dnl
 ])
 
 
@@ -202,6 +211,10 @@ define([AC_LANG_ABBREV], [cxx])dnl
 # -----------------
 AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 
+
+# _AC_LANG_ABBREV(C++)
+# --------------------
+define([_AC_LANG_ABBREV(C++)], [cxx])
 
 
 # ----------------------------- #
@@ -216,7 +229,6 @@ define([AC_LANG(Fortran 77)],
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_g77
-define([AC_LANG_ABBREV], [f77])dnl
 ])
 
 
@@ -225,7 +237,9 @@ define([AC_LANG_ABBREV], [f77])dnl
 AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 
-
+# _AC_LANG_ABBREV(Fortran 77)
+# ---------------------------
+define([_AC_LANG_ABBREV(Fortran 77)], [f77])
 
 
 
@@ -579,21 +593,21 @@ AC_DEFUN([_AC_PROG_PREPROC_WORKS],
 # not just through cpp. "Syntax error" is here to catch this case.
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[#include <assert.h>
 Syntax error]])])
-ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=maybe
+ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=maybe
 _AC_TRY_CPP()
 # Now check whether non-existent headers can be detected and how
 # Skip if ac_cpp_err is not empty - ac_cpp is broken
 if test -z "$ac_cpp_err"; then
-  AC_LANG_CONFTEST([AC_LANG_SOURCE([[#include <ac_nonexistent.h>]])])
+  AC_LANG_CONFTEST([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])])
   _AC_TRY_CPP()
   if test -z "$ac_cpp_err"; then
     # cannot detect missing includes at all
     ac_cpp_err=yes
   else
     if test "x$ac_cpp_err" = xmaybe; then
-      ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=yes
+      ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=yes
     else
-      ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=
+      ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag=
     fi
     ac_cpp_err=
   fi

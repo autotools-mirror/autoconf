@@ -1,3 +1,12 @@
+2000-10-02  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_LANG_ABBREV, _AC_LANG_ABBREV(C))
+	(_AC_LANG_ABBREV(C++), _AC_LANG_ABBREV(Fortran 77): New macros.
+	(AC_LANG_(C), AC_LANG_(C++), AC_LANG_(Fortran 77)): Don't define
+	AC_LANG_ABBREV.
+	(_AC_PROG_PREPROC_WORKS): Adjust.
+	* acgeneral.m4 (_AC_TRY_CPP): Likewise.
+
 2000-10-02  Pavel Roskin  <proski@gnu.org>
 
 	* acspecific.m4 (AC_PROG_LEX): Use AC_DEFUN_ONCE.
