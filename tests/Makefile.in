@@ -87,6 +87,8 @@ PERL = perl
 # - AC_INIT
 #   AC_INIT includes all the AC_INIT macros.  Note that there is an
 #   infinite m4 recursion if AC_INIT it used twice.
+# - AC_LANG
+#   Requires an argument.
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
@@ -99,7 +101,7 @@ PERL = perl
 #
 # Multiple `-e' to egrep are not portable, so join all the patterns together.
 # We use the fact that automake will replace all the `\\\n' with ` '.
-FILTER_MACROS = egrep -v -e `echo '^AC_ARG_VAR$$ ^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$ ^AC_CONFIG ^AC_INIT ^AC_LINKER_OPTION$$ ^AC_LINK_FILES$$ ^AC_LIST_MEMBER_OF$$ ^AC_PATH_(TOOL|PROG)S?$$ ^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$ ^AC_REPLACE_FUNCS$$ ^AC_SEARCH_LIBS$$ ^AC_TRY _AC_' | tr ' ' '|'`
+FILTER_MACROS = egrep -v -e `echo '^AC_ARG_VAR$$ ^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$ ^AC_CONFIG ^AC_INIT ^AC_LANG ^AC_LINKER_OPTION$$ ^AC_LINK_FILES$$ ^AC_LIST_MEMBER_OF$$ ^AC_PATH_(TOOL|PROG)S?$$ ^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$ ^AC_REPLACE_FUNCS$$ ^AC_SEARCH_LIBS$$ ^AC_TRY _AC_' | tr ' ' '|'`
 
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status config.cache config.log config.h.in config.h

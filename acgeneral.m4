@@ -1379,7 +1379,7 @@ echo >confdefs.h
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
-AC_LANG_C
+AC_LANG(C)
 
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
@@ -2065,14 +2065,45 @@ define(AC_MSG_ERROR_UNQUOTED,
 # Expand into IF-LANG1 if the current language is LANG1 etc. else
 # into default.
 define(AC_LANG_CASE,
-[m4_case(AC_LANG, $@)])
+[m4_case(_AC_LANG_CURRENT, $@)])
 
 
-# AC_LANG_C
-# ---------
-AC_DEFUN(AC_LANG_C,
-[define([AC_LANG], [C])dnl
-ac_ext=c
+# AC_LANG_SAVE
+# ------------
+# Push the current language on a stack.
+define(AC_LANG_SAVE,
+[pushdef([AC_LANG_STACK], _AC_LANG_CURRENT)])
+
+
+# AC_LANG_RESTORE
+# ---------------
+# Restore the current language from the stack.
+pushdef([AC_LANG_RESTORE],
+[ifelse(AC_LANG_STACK, [AC_LANG_STACK],
+        [AC_FATAL([too many AC_LANG_RESTORE])])dnl
+AC_LANG(AC_LANG_STACK)dnl
+popdef([AC_LANG_STACK])])
+
+
+# AC_LANG(LANG)
+# -------------
+# Set the current language to LANG.
+#
+# Do *not* write AC_LANG([$1]), because this pair of parens do not
+# correspond to an evaluation, rather, they are just part of the name.
+# If you add quotes here, they will be part of the name too, yielding
+# `AC_LANG([C])' for instance, which does not exist.
+AC_DEFUN([AC_LANG],
+[ifdef([AC_LANG($1)],
+       [define([_AC_LANG_CURRENT], [$1])dnl
+indir([AC_LANG($1)])],
+       [AC_FATAL([$0: unknown language: $1])])])
+
+
+# AC_LANG(C)
+# ----------
+define([AC_LANG(C)],
+[ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
@@ -2081,11 +2112,15 @@ cross_compiling=$ac_cv_prog_cc_cross
 ])
 
 
-# AC_LANG_CPLUSPLUS
-# -----------------
-AC_DEFUN(AC_LANG_CPLUSPLUS,
-[define([AC_LANG], [CPLUSPLUS])dnl
-ac_ext=C
+# AC_LANG_C
+# ---------
+AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
+
+
+# AC_LANG(C++)
+# ------------
+define([AC_LANG(C++)],
+[ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
@@ -2094,33 +2129,25 @@ cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
 
-# AC_LANG_FORTRAN77
+# AC_LANG_CPLUSPLUS
 # -----------------
-AC_DEFUN(AC_LANG_FORTRAN77,
-[define([AC_LANG], [FORTRAN77])dnl
-ac_ext=f
+AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
+
+
+# AC_LANG(FORTRAN77)
+# ------------------
+define([AC_LANG(FORTRAN77)],
+[ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
 ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
 
-# AC_LANG_SAVE
-# ------------
-# Push the current language on a stack.
-define(AC_LANG_SAVE,
-[pushdef([AC_LANG_STACK], AC_LANG)])
+# AC_LANG_FORTRAN77
+# -----------------
+AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(FORTRAN77)])
 
-
-# AC_LANG_RESTORE
-# ---------------
-# Restore the current language from the stack.
-pushdef([AC_LANG_RESTORE],
-[m4_case(AC_LANG_STACK,
-         [C],         [AC_LANG_C()],
-         [CPLUSPLUS], [AC_LANG_CPLUSPLUS()],
-         [FORTRAN77], [AC_LANG_FORTRAN77()])dnl
-popdef([AC_LANG_STACK])])
 
 
 
@@ -2542,7 +2569,7 @@ AC_DEFUN(AC_TRY_LINK_FUNC,
 AC_LANG_CASE([FORTRAN77], ,
 ifelse([$1], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(C++, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
@@ -2603,7 +2630,7 @@ AC_TRY_LINK(dnl
 AC_LANG_CASE([FORTRAN77], ,
 ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(C++, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
@@ -2839,7 +2866,7 @@ AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
 #line __oline__ "configure"
 #include "confdefs.h"
-AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
+AC_LANG_CASE(C++, [#ifdef __cplusplus
 extern "C" void exit(int);
 #endif
 ])dnl
@@ -2988,7 +3015,7 @@ dnl select.  Similarly for bzero.
     which can conflict with char $1(); below.  */
 #include <assert.h>
 /* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(CPLUSPLUS, [#ifdef __cplusplus
+]AC_LANG_CASE(C++, [#ifdef __cplusplus
 extern "C"
 #endif
 ])dnl
@@ -4527,7 +4554,7 @@ fi
 # FIXME: Get rid of this macro.
 AC_DEFUN(AC_LINKER_OPTION,
 [AC_LANG_CASE([C],         [test x"$GCC" = xyes && using_gnu_compiler=yes],
-              [CPLUSPLUS], [test x"$GXX" = xyes && using_gnu_compiler=yes],
+              [C++],       [test x"$GXX" = xyes && using_gnu_compiler=yes],
               [FORTRAN77], [test x"$G77" = xyes && using_gnu_compiler=yes],
                            [using_gnu_compiler=])
 

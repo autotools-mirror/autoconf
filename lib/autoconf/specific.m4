@@ -221,7 +221,7 @@ fi
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
-AC_LANG_C
+AC_LANG(C)
 AC_TRY_COMPILER([int main(){return(0);}],
                 ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
 AC_LANG_RESTORE
@@ -240,7 +240,7 @@ cross_compiling=$ac_cv_prog_cc_cross
 AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+AC_LANG(C++)
 AC_TRY_COMPILER([int main(){return(0);}],
                 ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
 AC_LANG_RESTORE
@@ -263,7 +263,7 @@ cross_compiling=$ac_cv_prog_cxx_cross
 AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
-AC_LANG_FORTRAN77
+AC_LANG(FORTRAN77)
 AC_TRY_COMPILER(
 [      program conftest
       end
@@ -671,7 +671,7 @@ AC_DEFUN(AC_PROG_CXXCPP,
 if test -z "$CXXCPP"; then
 AC_CACHE_VAL(ac_cv_prog_CXXCPP,
 [AC_LANG_SAVE()dnl
-AC_LANG_CPLUSPLUS()dnl
+AC_LANG(C++)dnl
   CXXCPP="${CXX-g++} -E"
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
   ac_cv_prog_CXXCPP="$CXXCPP"
@@ -2681,7 +2681,7 @@ AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
   AC_REQUIRE([AC_CYGWIN])dnl
 
   AC_LANG_SAVE
-  AC_LANG_FORTRAN77
+  AC_LANG(FORTRAN77)
 
 # This is the simplest of all Fortran 77 programs.
   cat >conftest.$ac_ext <<EOF
@@ -2848,7 +2848,7 @@ AC_DEFUN(AC_F77_NAME_MANGLING,
     AC_REQUIRE([AC_PROG_F77])dnl
 
     AC_LANG_SAVE
-    AC_LANG_FORTRAN77
+    AC_LANG(FORTRAN77)
 
 cat >conftest.$ac_ext <<EOF
       subroutine foobar()
@@ -2864,7 +2864,7 @@ EOF
       mv conftest.${ac_objext} cf77_test.${ac_objext}
 
       AC_LANG_SAVE
-      AC_LANG_C
+      AC_LANG(C)
 
       ac_save_LIBS="$LIBS"
       LIBS="cf77_test.${ac_objext} $LIBS"
@@ -2907,11 +2907,8 @@ EOF
       echo "configure: failed program was:" >&AC_FD_CC
       cat conftest.$ac_ext >&AC_FD_CC
     fi
-dnl Matthew: We need to pop the language stack twice.
-dnl Akim: FIXME: Why?  You've done it above, AFAICT.
 AC_LANG_RESTORE()dnl
-AC_LANG_RESTORE()dnl
-])])
+])])# AC_F77_NAME_MANGLING
 
 
 # AC_F77_WRAPPERS

@@ -54,6 +54,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # - AC_INIT
 #   AC_INIT includes all the AC_INIT macros.  Note that there is an
 #   infinite m4 recursion if AC_INIT it used twice.
+# - AC_LANG
+#   Requires an argument.
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
@@ -71,6 +73,7 @@ FILTER_MACROS = egrep -v -e \
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$\
 ^AC_CONFIG\
 ^AC_INIT\
+^AC_LANG\
 ^AC_LINKER_OPTION$$\
 ^AC_LINK_FILES$$\
 ^AC_LIST_MEMBER_OF$$\
