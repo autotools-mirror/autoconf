@@ -1,3 +1,9 @@
+2003-10-10  Andreas Schwab  <schwab@suse.de>
+
+	* bin/autoheader.in: Avoid empty first line in --version and
+	--help output.
+	* bin/ifnames.in: Likewise.
+
 2003-10-09  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/Autom4te/XFile.pm: Don't assume -j is solo.

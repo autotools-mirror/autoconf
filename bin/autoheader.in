@@ -60,8 +60,7 @@ my @include;
 
 # $HELP
 # -----
-$help = "\
-Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+$help = "Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Create a template file of C \`\#define\' statements for \`configure\' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.ac\' if present,
@@ -86,8 +85,7 @@ Report bugs to <bug-autoconf\@gnu.org>.
 
 # $VERSION
 # --------
-$version = "\
-autoheader (@PACKAGE_NAME@) @VERSION@
+$version = "autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath and Akim Demaille.
 
 Copyright (C) 2003 Free Software Foundation, Inc.

@@ -65,8 +65,7 @@ Report bugs to <bug-autoconf\@gnu.org>.
 
 # $VERSION
 # --------
-$version = "\
-ifnames (@PACKAGE_NAME@) @VERSION@
+$version = "ifnames (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie and Paul Eggert.
 
 Copyright (C) 2003 Free Software Foundation, Inc.
