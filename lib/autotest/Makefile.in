@@ -347,7 +347,7 @@ check-local:
 	  rm -f eof.log; \
 	fi
 
-autotest.m4f: $(autotests_m4f_dependencies)
+autotest.m4f: $(autotest_m4f_dependencies)
 $(AUTOM4TE):
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
 $(AUTOM4TE_CFG):

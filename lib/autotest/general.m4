@@ -252,6 +252,8 @@ while test $[@%:@] -gt 0; do
                              egrep -i "^[[^;]]*;[[^;]]*;.*$at_keyword"`
         done
         at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
+	# Smash the end of lines.
+	at_groups_selected=`echo $at_groups_selected`
         at_groups="$at_groups$at_groups_selected "
         ;;
 
@@ -329,7 +331,7 @@ AT_TESTSUITE_NAME test groups:
       KEYWORDS
 
 _ATEOF
-  # "  1 42  45 " => "^(1|42|45);"
+  # "  1 42  45 " => "^(1|42|45);".
   at_groups_pattern=`echo "$at_groups" | sed 's/^  *//;s/  *$//;s/  */|/g'`
   at_groups_pattern="^(${at_groups_pattern});"
   echo "$at_help_all" |

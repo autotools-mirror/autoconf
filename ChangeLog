@@ -1,5 +1,11 @@
 2002-02-06  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): When handling --keywords, be
+	sure not to introduce newlines in at_groups.
+	* lib/autotest/Makefile.am (autotest.m4f): Typo.
+
+2002-02-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.at (Configuring subdirectories): Skip if aclocal
 	is not available.
 

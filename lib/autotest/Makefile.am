@@ -52,5 +52,5 @@ check-local:
 ## The frozen files.  ##
 ## ------------------ ##
 
-autotest.m4f: $(autotests_m4f_dependencies)
+autotest.m4f: $(autotest_m4f_dependencies)
 include ../freeze.mk
