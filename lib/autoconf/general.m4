@@ -100,7 +100,7 @@ changequote(,)dnl
 changequote([,])dnl
      -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec | --exe | --ex | --e)
 	if test $[#] -eq 1; then
-	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+	  AC_ERROR(missing argument to $ac_arg)
         else shift; exec_prefix=$[1]; fi ;;
 
      -gas | --gas | --ga | --g) ;;
@@ -108,7 +108,7 @@ changequote([,])dnl
      -host=* | --host=* | --hos=* | --ho=* | --h=*) ;;
      -host | --host | --hos | --ho | --h)
 	if test $[#] -eq 1; then
-	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+	  AC_ERROR(missing argument to $ac_arg)
         else shift; fi ;;
 
      -nfp | --nfp | --nf) ;;
@@ -119,7 +119,7 @@ changequote(,)dnl
 changequote([,])dnl
      -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
 	if test $[#] -eq 1; then
-	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+	  AC_ERROR(missing argument to $ac_arg)
         else shift; prefix=$[1]; fi ;;
 
      -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=* | --s=*)
@@ -128,13 +128,13 @@ changequote(,)dnl
 changequote([,])dnl
      -srcdir | --srcdir | --srcdi | --srcd | --src | --sr | --s)
 	if test $[#] -eq 1; then
-	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+	  AC_ERROR(missing argument to $ac_arg)
         else shift; srcdir=$[1]; fi ;;
 
      -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*) ;;
      -target | --target | --targe | --targ | --tar | --ta | --t)
 	if test $[#] -eq 1; then
-	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+	  AC_ERROR(missing argument to $ac_arg)
         else shift; fi ;;
 
      -with-* | --with-*)
@@ -143,7 +143,7 @@ changequote([,])dnl
 changequote(,)dnl
        if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([,])dnl
-         echo "configure: $ac_package: invalid package name" >&2; exit 1
+         AC_ERROR($ac_package: invalid package name)
        fi
        ac_package=`echo $ac_package| sed 's/-/_/g'`
        case "$ac_arg" in
@@ -181,7 +181,7 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 if test "${LC_ALL+set}" = 'set' ; then LC_ALL=C; export LC_ALL; fi
 if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
-dnl We use confdefs.h to avoid OS command line length limits that break DEFS.
+# confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
@@ -205,28 +205,12 @@ changequote([,])dnl
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test x$ac_srcdir_defaulted = xyes; then
-    echo "configure: Can not find sources in \`${ac_confdir}' or \`..'." 1>&2
+    AC_ERROR(can not find sources in \`${ac_confdir}' or \`..')
   else
-    echo "configure: Can not find sources in \`${srcdir}'." 1>&2
+    AC_ERROR(can not find sources in \`${srcdir}')
   fi
-  exit 1
 fi
 ])dnl
-dnl
-dnl Protects the argument from being diverted twice
-dnl if this macro is called twice for it.
-dnl Diversion 0 is the normal output.
-dnl Diversion 1 is sed substitutions for output files.
-dnl Diversion 2 is variable assignments for config.status.
-define(AC_SUBST,
-[ifdef([AC_SUBST_$1], ,
-[define([AC_SUBST_$1], )dnl
-divert(1)dnl
-s%@$1@%[$]$1%g
-divert(2)dnl
-$1='[$]$1'
-divert(0)dnl
-])])dnl
 dnl
 define(AC_WITH,
 [[#] check whether --with-$1 was given
@@ -246,7 +230,7 @@ dnl set `prefix' to /usr/local/gnu.
 define(AC_PREFIX,
 [if test -z "$prefix"
 then
-  echo checking for $1 to derive installation directory prefix
+  AC_CHECKING(for $1 to derive installation directory prefix)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="$IFS:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -259,7 +243,7 @@ changequote([,])dnl
     fi
   done
   IFS="$ac_save_ifs"
-  echo "	chose installation directory prefix ${prefix}"
+  AC_VERBOSE(chose installation directory prefix ${prefix})
 fi
 ])dnl
 dnl
@@ -269,6 +253,9 @@ define(AC_DOREV, [#!/bin/sh
 # From configure.in $1
 ])dnl
 define(AC_REVISION, [AC_DOREV(translit($1,$"))])dnl
+dnl
+dnl
+dnl Setting variables
 dnl
 dnl
 dnl Several simple subroutines to do various flavors of quoting.
@@ -354,6 +341,64 @@ popdef([AC_DEFINE_SEDQUOTE])dnl
 popdef([AC_QUOTE_SQUOTE])dnl
 ])dnl
 dnl
+dnl Protects the argument from being diverted twice
+dnl if this macro is called twice for it.
+dnl Diversion 0 is the normal output.
+dnl Diversion 1 is sed substitutions for output files.
+dnl Diversion 2 is variable assignments for config.status.
+define(AC_SUBST,
+[ifdef([AC_SUBST_$1], ,
+[define([AC_SUBST_$1], )dnl
+divert(1)dnl
+s%@$1@%[$]$1%g
+divert(2)dnl
+$1='[$]$1'
+divert(0)dnl
+])])dnl
+dnl
+dnl
+dnl Printing messages
+dnl
+dnl
+define(AC_CHECKING,
+[echo "checking $1"])dnl
+dnl
+define(AC_VERBOSE,
+[test -n "$ac_verbose" && echo "	$1"])dnl
+dnl
+define(AC_WARN,
+[echo "configure: warning: $1" >&2])dnl
+dnl
+define(AC_ERROR,
+[echo "configure: $1" >&2; exit 1])dnl
+dnl
+dnl
+dnl Selecting which language to use for testing
+dnl
+dnl
+define(AC_LANG_C,
+[define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
+ac_cpp='${CPP} $CFLAGS'
+ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+])dnl
+dnl
+define(AC_LANG_CPLUSPLUS,
+[define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
+ac_cpp='${CXXCPP} $CXXFLAGS'
+ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+])dnl
+dnl
+dnl Push the current language on a stack.
+define(AC_LANG_SAVE, [pushdef([AC_LANG_STACK], AC_LANG)])dnl
+dnl
+dnl Restore the current language from the stack.
+define(AC_LANG_RESTORE,
+[ifelse(AC_LANG_STACK,C,[ifelse(AC_LANG,C,,[AC_LANG_C])],[ifelse(AC_LANG,CPLUSPLUS,,[AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])dnl
+dnl
+dnl
+dnl Enforcing ordering constraints
+dnl
+dnl
 define(AC_BEFORE,
 [ifdef([AC_PROVIDE_$2], [errprint(__file__:__line__: [$2 was called before $1
 ])])])dnl
@@ -369,36 +414,15 @@ define(AC_OBSOLETE,
 [errprint(__file__:__line__: warning: [$1] is obsolete[$2]
 )])dnl
 dnl
-dnl Which compiler do we use to run test checks?
 dnl
-define(AC_LANG_C,
-[define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
-ac_cpp="${CPP} \$CFLAGS"
-ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
-])dnl
-dnl
-define(AC_LANG_CPLUSPLUS,
-[define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
-ac_cpp="${CXXCPP} \$CXXFLAGS"
-ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
-])dnl
-dnl
-dnl Push the current language on a stack.
-define(AC_LANG_SAVE, [pushdef([AC_LANG_STACK], AC_LANG)])dnl
-dnl
-dnl Restore the current language from the stack.
-define(AC_LANG_RESTORE,
-[ifelse(AC_LANG_STACK,C,[ifelse(AC_LANG,C,,[AC_LANG_C])],[ifelse(AC_LANG,CPLUSPLUS,,[AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])dnl
-dnl
-dnl
-dnl Checks for kinds of features
+dnl Checking for kinds of features
 dnl
 dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
-  echo checking for $ac_word
+  AC_CHECKING(for $ac_word)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -410,7 +434,7 @@ define(AC_PROGRAM_CHECK,
   IFS="$ac_save_ifs"
 fi
 ifelse([$4],,, [test -z "[$]$1" && $1="$4"])
-test -n "[$]$1" && test -n "$ac_verbose" && echo "	setting $1 to [$]$1"
+test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
 dnl
@@ -427,7 +451,7 @@ define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
-  echo checking for $ac_word
+  AC_CHECKING(for $ac_word)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -439,7 +463,7 @@ define(AC_PROGRAM_PATH,
   IFS="$ac_save_ifs"
 fi
 ifelse([$3],,, [test -z "[$]$1" && $1="$3"])
-test -n "[$]$1" && test -n "$ac_verbose" && echo "	setting $1 to [$]$1"
+test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
 define(AC_PROGRAMS_PATH,
@@ -487,14 +511,14 @@ rm -f conftest*
 ])dnl
 dnl
 define(AC_HEADER_CHECK,
-[echo checking for $1
+[AC_CHECKING(for $1)
 ifelse([$3], , [AC_TEST_CPP([#include <$1>], [$2])],
 [AC_TEST_CPP([#include <$1>], [$2], [$3])])
 ])dnl
 dnl
 define(AC_COMPILE_CHECK,
 [AC_PROVIDE([$0])dnl
-ifelse([$1], , , [echo checking for $1]
+ifelse([$1], , , [AC_CHECKING(for $1)]
 )dnl
 dnl We use return because because C++ requires a prototype for exit.
 cat > conftest.${ac_ext} <<EOF
@@ -571,7 +595,7 @@ choke me
 extern char ${ac_func}(); ${ac_func}();
 #endif
 ], , [LIBOBJS="$LIBOBJS ${ac_func}.o"
-test -n "$ac_verbose" && echo "	using ${ac_func}.o instead"])
+AC_VERBOSE(using ${ac_func}.o instead)])
 done
 AC_SUBST(LIBOBJS)dnl
 ])dnl
