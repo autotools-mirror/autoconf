@@ -660,7 +660,7 @@ while test $[@%:@] != 1; do
         -lkernel32)
           test x"$CYGWIN" != xyes && ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg"
           ;;
-        -[[LRuY]])
+        -[[LRuYz]])
           # These flags, when seen by themselves, take an argument.
           # We remove the space between option and argument and re-iterate
           # unless we find an empty arg or a new option (starting with -)
@@ -684,6 +684,9 @@ while test $[@%:@] != 1; do
           _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_[]_AC_LANG_ABBREV[]_libs, ,
                              ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg")
           ;;
+	-zallextract*| -zdefaultextract)
+	  ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg"
+	  ;;
           # Ignore everything else.
   esac
 done
