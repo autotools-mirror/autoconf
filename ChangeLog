@@ -1,3 +1,8 @@
+2000-03-20  Jim Meyering  <meyering@lucent.com>
+
+	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT) [setting IFS]: Be careful
+	to use space, tab and new line, in precisely that order.
+
 2000-03-20  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4: Formatting changes.
