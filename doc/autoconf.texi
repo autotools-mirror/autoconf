@@ -2568,9 +2568,10 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @maindex CHECK_TOOL
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
-with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
-followed by a dash (@pxref{Canonicalizing}).  For example, if the user
-runs @samp{configure --host=i386-gnu}, then this call:
+with a prefix of the host type as determined by
+@code{AC_CANONICAL_HOST}, followed by a dash (@pxref{Canonicalizing}).
+For example, if the user runs @samp{configure --host=i386-gnu}, then
+this call:
 @example
 AC_CHECK_TOOL(RANLIB, ranlib, :)
 @end example
@@ -2597,9 +2598,9 @@ found.
 @maindex PATH_TOOL
 Like @code{AC_PATH_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by
-@code{AC_CANONICAL_HOST},
-followed by a dash (@pxref{Canonicalizing}).  For example, if the user
-runs @samp{configure --host=i386-gnu}, then this call:
+@code{AC_CANONICAL_HOST}, followed by a dash (@pxref{Canonicalizing}).
+For example, if the user runs @samp{configure --host=i386-gnu}, then
+this call:
 @example
 AC_PATH_TOOL(FILE, file, :, /usr/bin:$PATH)
 @end example
@@ -4395,6 +4396,8 @@ operators; consequently, POSIX does not specify them, so using them is
 nonportable.  If you combine @samp{&&} and @samp{||} in the same
 statement, keep in mind that they have equal precedence.
 
+
+@c FIXME: Hm, I'd say the `target' here should be `build'.
 To enable @code{configure} scripts to support cross-compilation, they
 shouldn't do anything that tests features of the host system instead of
 the target system.  But occasionally you may find it necessary to check
@@ -5680,17 +5683,15 @@ the type of system for which any compiler tools in the package will
 produce code.
 @end table
 
-@noindent
-If the user gives @code{configure} a non-option argument, it is used as
-the default for the host, target, and build system types if the user
-does not specify them explicitly with options.  The target and build
-types default to the host type if it is given and they are not.  If you
-are cross-compiling, you still have to specify the names of the
+By default, the build is guessed (by @code{config,guess}), the host
+system is the build system, and the target is the build system.
+
+If you are cross-compiling, you still have to specify the names of the
 cross-tools you use, in particular the C compiler, on the
 @code{configure} command line, e.g.,
 
 @example
-CC=m68k-coff-gcc configure --target=m68k-coff
+./configure --target=m68k-coff CC=m68k-coff-gcc
 @end example
 
 @code{configure} recognizes short aliases for many system types; for
@@ -5713,22 +5714,29 @@ those scripts in.  If you do not use either of these macros,
 @code{configure} ignores any @samp{--host}, @samp{--target}, and
 @samp{--build} options given to it.
 
-@defmac AC_CANONICAL_SYSTEM
-@maindex CANONICAL_SYSTEM
-Determine the system type and set output variables to the names of the
-canonical system types.  @xref{System Type Variables}, for details about
-the variables this macro sets.
+
+@defmac AC_CANONICAL_BUILD
+@maindex CANONICAL_BUILD
+Compute the @samp{build} system type variables, see @ref{System Type
+Variables}.  Unless specified to @code{configure} via @samp{--build},
+the build system is guessed by running @code{config.guess}.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
-@defmacx AC_CANONICAL_BUILD
-@defmacx AC_CANONICAL_TARGET
 @maindex CANONICAL_HOST
-@maindex CANONICAL_BUILD
+Compute the @samp{host} system type variables, see @ref{System Type
+Variables}.  Unless specified to @code{configure} via @samp{--host}, the
+host system is the build system.
+@end defmac
+
+@defmac AC_CANONICAL_TARGET
 @maindex CANONICAL_TARGET
-Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
-host or build or target type.  @code{AC_CANONICAL_HOST} is all that is
-needed for programs that are not part of a compiler tool chain.
+Compute the @samp{target} system type variables, see @ref{System Type
+Variables}.  Unless specified to @code{configure} via @samp{--target},
+the target system is the host system.
+
+This macro only makes sense for compilers, debuggers etc. which might
+run on a machine, but work on binaries from another machine.
 @end defmac
 
 @defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
@@ -5741,10 +5749,9 @@ error message.
 @node System Type Variables, Using System Type, Canonicalizing, Manual Configuration
 @section System Type Variables
 
-After calling @code{AC_CANONICAL_SYSTEM}, the following output variables
-contain the system type information.  After @code{AC_CANONICAL_HOST},
-@code{AC_CANONICAL_BUILD}, or @code{AC_CANONICAL_TARGET}, only the
-@code{host}, @code{build}, or @code{target} variables below are set.
+After calling @code{AC_CANONICAL_BUILD}, the following @samp{build}
+output variables contain the build system type information, likewise for
+@code{AC_CANONICAL_HOST} and @code{AC_CANONICAL_TARGET}.
 
 @table @code
 @ovindex build
@@ -6059,10 +6066,10 @@ Place in output variable @code{program_transform_name} a sequence of
 
 If any of the options described below are given to @code{configure},
 program names are transformed accordingly.  Otherwise, if
-@code{AC_CANONICAL_SYSTEM} has been called and a @samp{--target} value
-is given that differs from the host type (specified with @samp{--host}
-or defaulted by @code{config.sub}), the target type followed by a dash
-is used as a prefix.  Otherwise, no program name transformation is done.
+@code{AC_CANONICAL_TARGET} has been called and a @samp{--target} value
+is given that differs from the host type (specified with @samp{--host}),
+the target type followed by a dash is used as a prefix.  Otherwise, no
+program name transformation is done.
 @end defmac
 
 @menu
@@ -7103,6 +7110,18 @@ removed because of limited usefulness
 @defmac AC_C_CROSS
 @maindex C_CROSS
 This macro is obsolete; it does nothing.
+@end defmac
+
+@defmac AC_CANONICAL_SYSTEM
+@maindex CANONICAL_SYSTEM
+Determine the system type and set output variables to the names of the
+canonical system types.  @xref{System Type Variables}, for details about
+the variables this macro sets.
+
+The user is encouraged to explicitly use either
+@code{AC_CANONICAL_BUILD}, or @code{AC_CANONICAL_HOST}, or
+@code{AC_CANONICAL_TARGET}, depending on her needs.  Using
+@code{AC_CANONICAL_TARGET} is enough to run the three macros.
 @end defmac
 
 @defmac AC_CHAR_UNSIGNED

@@ -194,22 +194,6 @@ example:
 will cause the specified gcc to be used as the C compiler (unless it is
 overridden in the site shell script).
 
-Please, note that the former interface:
-
-@example
-CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-@end example
-
-@noindent
-or
-
-@example
-env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-@end example
-
-@noindent
-should be avoided.
-
 
 @node Operation Controls
 @section Operation Controls

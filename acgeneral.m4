@@ -77,6 +77,8 @@ m4_namespace_push(autoconf)
 #   initialization code, option handling loop.
 # - HELP_BEGIN
 #   Handling `configure --help'.
+# - HELP_CANON
+#   Help msg for AC_CANONICAL_*
 # - HELP_ENABLE
 #   Help msg from AC_ARG_ENABLE.
 # - HELP_WITH
@@ -119,20 +121,24 @@ define([_AC_DIVERT(BINSH)],           0)
 define([_AC_DIVERT(NOTICE)],          1)
 define([_AC_DIVERT(DEFAULTS)],        2)
 define([_AC_DIVERT(INIT_PARSE_ARGS)], 3)
-define([_AC_DIVERT(HELP_BEGIN)],      4)
-define([_AC_DIVERT(HELP_ENABLE)],     5)
-define([_AC_DIVERT(HELP_WITH)],       6)
-define([_AC_DIVERT(HELP_VAR)],        7)
-define([_AC_DIVERT(HELP_END)],        8)
-define([_AC_DIVERT(VERSION_BEGIN)],   9)
-define([_AC_DIVERT(VERSION_END)],    10)
-define([_AC_DIVERT(INIT_PREPARE)],   11)
 
-define([_AC_DIVERT(NORMAL_4)],       20)
-define([_AC_DIVERT(NORMAL_3)],       21)
-define([_AC_DIVERT(NORMAL_2)],       22)
-define([_AC_DIVERT(NORMAL_1)],       23)
-define([_AC_DIVERT(NORMAL)],         24)
+define([_AC_DIVERT(HELP_BEGIN)],     10)
+define([_AC_DIVERT(HELP_CANON)],     11)
+define([_AC_DIVERT(HELP_ENABLE)],    12)
+define([_AC_DIVERT(HELP_WITH)],      13)
+define([_AC_DIVERT(HELP_VAR)],       14)
+define([_AC_DIVERT(HELP_END)],       15)
+
+define([_AC_DIVERT(VERSION_BEGIN)],  20)
+define([_AC_DIVERT(VERSION_END)],    21)
+
+define([_AC_DIVERT(INIT_PREPARE)],   30)
+
+define([_AC_DIVERT(NORMAL_4)],       50)
+define([_AC_DIVERT(NORMAL_3)],       51)
+define([_AC_DIVERT(NORMAL_2)],       52)
+define([_AC_DIVERT(NORMAL_1)],       53)
+define([_AC_DIVERT(NORMAL)],         54)
 
 define([_AC_DIVERT],
 [ifdef([_AC_DIVERT($1)],
@@ -290,7 +296,7 @@ define(AC_BEFORE,
 define(AC_REQUIRE,
 [AC_PROVIDE_IFELSE([$1],
                    [],
-                   [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])
+                   [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])dnl
 ])
 
 
@@ -890,12 +896,9 @@ ac_init_help=
 ac_init_version=false
 # The variables have the same names as the options, with
 # dashes changed to underlines.
-build=NONE
 cache_file=/dev/null
 AC_SUBST(exec_prefix, NONE)dnl
-host=NONE
 no_create=
-nonopt=NONE
 no_recursion=
 AC_SUBST(prefix, NONE)dnl
 program_prefix=NONE
@@ -904,7 +907,6 @@ AC_SUBST(program_transform_name, [s,x,x,])dnl
 silent=
 site=
 srcdir=
-target=NONE
 verbose=
 x_includes=NONE
 x_libraries=NONE
@@ -1212,12 +1214,10 @@ Try `configure --help' for more information.])
 
   *)
     if echo "$ac_option" | grep '[[^-a-zA-Z0-9.]]' >/dev/null 2>&1; then
-      AC_MSG_WARN(invalid host type: $ac_option)
+      AC_MSG_WARN([invalid host type: $ac_option])
     fi
-    if test "x$nonopt" != xNONE; then
-      AC_MSG_ERROR(can only configure for one host and one target at a time)
-    fi
-    nonopt=$ac_option
+    AC_MSG_WARN([you should use --build, --host, --target])
+    : ${build=$ac_option} ${host=$ac_option} ${target=$ac_option}
     ;;
 
   esac
@@ -1260,7 +1260,7 @@ if test "$ac_init_help" = "long"; then
                         [AC_PACKAGE_STRING],
                         [this package]) to adapt to many kinds of systems.
 
-Usage: $[0] [[OPTION]... [VAR=VALUE]... [HOST]]
+Usage: $[0] [[OPTION]]... [[VAR=VALUE]]...
 
 [To assign environment variables (e.g., CC, CFLAGS...), specify them as
 VAR=VALUE.
@@ -1275,7 +1275,7 @@ Configuration:
   -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or ..]
+      --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
 EOF
 
@@ -1308,26 +1308,28 @@ Fine tuning of the installation directories:
   --mandir=DIR           man documentation [PREFIX/man]
 EOF
 
-  cat <<\EOF
-
-Host type:
-  --host=HOST        configure for HOST [guessed]
-  --build=BUILD      configure for building on BUILD [BUILD=HOST]
-  --target=TARGET    configure for TARGET [TARGET=HOST]
-EOF
   cat <<\EOF]
 AC_DIVERT_POP()dnl
 dnl The order of the diversions here is
-dnl HELP_BEGIN, which may be prolongated by extra generic options
-dnl             such as with X or AC_ARG_PROGRAM.  Displayed only
-dnl             in long --help.
-dnl HELP_ENABLE, which starts with the trailer of the HELP_BEGIN
-dnl              section, then implements the header of the non
-dnl              generic options.
-dnl HELP_WITH,
-dnl HELP_VAR,
-dnl HELP_END, initialized below, in which we dump the trailer
-dnl           (handling of the recursion for instance).
+dnl - HELP_BEGIN
+dnl   which may be prolongated by extra generic options such as with X or
+dnl   AC_ARG_PROGRAM.  Displayed only in long --help.
+dnl
+dnl - HELP_CANON
+dnl   Support for cross compilation (--build, --host and --target).
+dnl   Display only in long --help.
+dnl
+dnl - HELP_ENABLE
+dnl   which starts with the trailer of the HELP_BEGIN, HELP_CANON section,
+dnl   then implements the header of the non generic options.
+dnl
+dnl - HELP_WITH
+dnl
+dnl - HELP_VAR
+dnl
+dnl - HELP_END
+dnl   initialized below, in which we dump the trailer (handling of the
+dnl   recursion for instance).
 AC_DIVERT_PUSH([HELP_ENABLE])dnl
 EOF
 fi
@@ -1689,9 +1691,9 @@ test -z "$program_transform_name" && program_transform_name="s,x,x,"
 
 
 
-## ----------------------------------- ##
-## Getting the canonical system type.  ##
-## ----------------------------------- ##
+## ------------------------- ##
+## Finding auxiliary files.  ##
+## ------------------------- ##
 
 
 # AC_CONFIG_AUX_DIR(DIR)
@@ -1744,102 +1746,114 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])# AC_CONFIG_AUX_DIRS
 
 
-# AC_CANONICAL_SYSTEM
-# -------------------
-# Canonicalize the host, target, and build system types.
-AC_DEFUN(AC_CANONICAL_SYSTEM,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_REQUIRE([AC_CANONICAL_HOST])dnl
-AC_REQUIRE([AC_CANONICAL_TARGET])dnl
-AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-AC_BEFORE([$0], [AC_ARG_PROGRAM])
-# Do some error checking and defaulting for the host and target type.
+
+
+## ----------------------------------- ##
+## Getting the canonical system type.  ##
+## ----------------------------------- ##
+
 # The inputs are:
-#    configure --host=HOST --target=TARGET --build=BUILD NONOPT
+#    configure --host=HOST --target=TARGET --build=BUILD
 #
 # The rules are:
-# 1. You are not allowed to specify --host, --target, and nonopt at the
-#    same time.
-# 2. Host defaults to nonopt.
-# 3. If nonopt is not specified, then host defaults to the current host,
-#    as determined by config.guess.
-# 4. Target and build default to nonopt.
-# 5. If nonopt is not specified, then target and build default to host.
+# 1. Build defaults to the current host, as determined by config.guess.
+# 2. Host defaults to build.
+# 3. Target defaults to host.
 
-# The aliases save the names the user supplied, while $host etc.
-# will get canonicalized.
-case $host---$target---$nonopt in
-NONE---*---* | *---NONE---* | *---*---NONE) ;;
-*) AC_MSG_ERROR(can only configure for one host and one target at a time) ;;
-esac
 
-test "$host_alias" != "$target_alias" &&
-  test "$program_prefix$program_suffix$program_transform_name" = \
-    NONENONEs,x,x, &&
-  program_prefix=${target_alias}-
-])# AC_CANONICAL_SYSTEM
+# AC_CANONICALIZE(THING)
+# ----------------------
+# Canonicalize the appropriate THING, generating the variables THING,
+# THING_{alias cpu vendor os}, and the associated cache entries.
+AC_DEFUN([AC_CANONICALIZE],
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias` || exit 1
+ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
+ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
+ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
+AC_SUBST([$1],        [$ac_cv_$1])dnl
+AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
+AC_SUBST([$1_cpu],    [$ac_cv_$1_cpu])dnl
+AC_SUBST([$1_vendor], [$ac_cv_$1_vendor])dnl
+AC_SUBST([$1_os],     [$ac_cv_$1_os])dnl
+])# AC_CANONICALIZE
 
 
 # _AC_CANONICAL_THING(THING)
 # --------------------------
-# Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
-# `host', `target', or `build'.  Canonicalize the appropriate thing,
-# generating the variables THING, THING_{alias cpu vendor os}, and the
-# associated cache entries.  We also redo the cache entries if the user
-# specifies something different from ac_cv_$THING_alias on the command line.
-define(_AC_CANONICAL_THING,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-ifelse([$1], [host], , [AC_REQUIRE([AC_CANONICAL_HOST])])dnl
-AC_MSG_CHECKING([$1 system type])
-if test "x$ac_cv_$1" = "x" || (test "x$$1" != "xNONE" && test "x$$1" != "x$ac_cv_$1_alias"); then
-
-  # Make sure we can run config.sub.
-  if $ac_config_sub sun4 >/dev/null 2>&1; then :; else
-    AC_MSG_ERROR(cannot run $ac_config_sub)
-  fi
+# Worker routine for AC_CANONICAL_SYSTEM.  THING is one of `host',
+# `target', or `build'.  Canonicalize the appropriate thing.  We also
+# redo the cache entries if the user specifies something different
+# from ac_cv_$THING_alias on the command line.
+define([_AC_CANONICAL_THING],
+[AC_MSG_CHECKING([$1 system type])
+if test "x$ac_cv_$1" = "x" ||
+   (test "x$$1" != "x" && test "x$$1" != "x$ac_cv_$1_alias"); then
 
 dnl Set $1_alias.
   ac_cv_$1_alias=$$1
-  case "$ac_cv_$1_alias" in
-  NONE)
-    case $nonopt in
-    NONE)
-ifelse([$1], [host],[dnl
-      if ac_cv_$1_alias=`$ac_config_guess`; then :
-      else AC_MSG_ERROR(cannot guess $1 type; you must specify one)
-      fi ;;],[dnl
-      ac_cv_$1_alias=$host_alias ;;
-])dnl
-    *) ac_cv_$1_alias=$nonopt ;;
-    esac ;;
-  esac
-
-dnl Set the other $[1] vars.  Propagate the failures of config.sub.
-  ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias` || exit 1
-  ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
-  ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
-  ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
+  test "x$ac_cv_$1_alias" = "x" &&
+    m4_case([$1],
+[build],
+  [{ ac_cv_build_alias=`$ac_config_guess` ||
+      AC_MSG_ERROR(
+           [cannot guess build (this machine) type; you must specify one]); }],
+[host],
+  [ac_cv_host_alias=$build_alias],
+[target],
+  [ac_cv_target_alias=$host_alias])
 else
   echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG
 fi
-
-AC_MSG_RESULT($ac_cv_$1)
-
-$1=$ac_cv_$1
-$1_alias=$ac_cv_$1_alias
-$1_cpu=$ac_cv_$1_cpu
-$1_vendor=$ac_cv_$1_vendor
-$1_os=$ac_cv_$1_os
-AC_SUBST($1)dnl
-AC_SUBST($1_alias)dnl
-AC_SUBST($1_cpu)dnl
-AC_SUBST($1_vendor)dnl
-AC_SUBST($1_os)dnl
+AC_CANONICALIZE([$1])
+AC_MSG_RESULT($ac_cv_$1)[]dnl
 ])# _AC_CANONICAL_THING
 
-AC_DEFUN(AC_CANONICAL_HOST,   [_AC_CANONICAL_THING([host])])
-AC_DEFUN(AC_CANONICAL_TARGET, [_AC_CANONICAL_THING([target])])
-AC_DEFUN(AC_CANONICAL_BUILD,  [_AC_CANONICAL_THING([build])])
+
+# AC_CANONICAL_BUILD
+# ------------------
+AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
+[AC_DIVERT([HELP_CANON],
+[[
+Hosts type:
+  --build=BUILD     configure for building on BUILD [guessed]]])dnl
+# Make sure we can run config.sub.
+$ac_config_sub sun4 >/dev/null 2>&1 ||
+  AC_MSG_ERROR([cannot run $ac_config_sub])
+
+_AC_CANONICAL_THING(build)[]dnl
+])# AC_CANONICAL_BUILD
+
+
+# AC_CANONICAL_HOST
+# -----------------
+AC_DEFUN_ONCE([AC_CANONICAL_HOST],
+[AC_REQUIRE([AC_CANONICAL_BUILD])dnl
+AC_DIVERT([HELP_CANON],
+[[  --host=HOST       configure for building programs running on HOST [BUILD]]])dnl
+_AC_CANONICAL_THING(host)[]dnl
+])# AC_CANONICAL_HOST
+
+
+# AC_CANONICAL_TARGET
+# -------------------
+AC_DEFUN_ONCE([AC_CANONICAL_TARGET],
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_BEFORE([$0], [AC_ARG_PROGRAM])dnl
+AC_DIVERT([HELP_CANON],
+[[  --target=TARGET   configure for building compilers for TARGET [HOST]]])dnl
+_AC_CANONICAL_THING(target)[]dnl
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+test "$host_alias" != "$target_alias" &&
+  test "$program_prefix$program_suffix$program_transform_name" = \
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-[]dnl
+])# AC_CANONICAL_TARGET
+
+
+AU_DEFUN(AC_CANONICAL_SYSTEM, [AC_CANONICAL_TARGET])
 
 
 # AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])

@@ -80,6 +80,8 @@ PERL = perl
 # and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
 # the macros we don't want to test in syntax.m4.
 #
+# - AC_CANONICALIZE
+#   Needs an argument.
 # - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
 # - AC_CONFIG
@@ -101,7 +103,7 @@ PERL = perl
 #
 # Multiple `-e' to egrep are not portable, so join all the patterns together.
 # We use the fact that automake will replace all the `\\\n' with ` '.
-FILTER_MACROS = egrep -v -e `echo '^AC_ARG_VAR$$ ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TYPE)S?$$ ^AC_CONFIG ^AC_INIT ^AC_LANG ^AC_LINKER_OPTION$$ ^AC_LINK_FILES$$ ^AC_LIST_MEMBER_OF$$ ^AC_PATH_(TOOL|PROG)S?$$ ^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$ ^AC_REPLACE_FUNCS$$ ^AC_SEARCH_LIBS$$ ^AC_TRY _AC_' | tr ' ' '|'`
+FILTER_MACROS = egrep -v -e `echo '^AC_ARG_VAR$$ ^AC_CANONICALIZE$$ ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TYPE)S?$$ ^AC_CONFIG ^AC_INIT ^AC_LANG ^AC_LINKER_OPTION$$ ^AC_LINK_FILES$$ ^AC_LIST_MEMBER_OF$$ ^AC_PATH_(TOOL|PROG)S?$$ ^AC_PROG_(CC|CXX|F77)_(GNU|WORKS)$$ ^AC_REPLACE_FUNCS$$ ^AC_SEARCH_LIBS$$ ^AC_TRY _AC_' | tr ' ' '|'`
 
 
 # The files which contains macro we check for syntax.
