@@ -33,6 +33,8 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 AMTAR = @AMTAR@
 AWK   = @AWK@
 
+MAINTAINERCLEANFILES = COPYING INSTALL configure
+
 ## -------------------- ##
 ## Forwarding targets.  ##
 ## -------------------- ##

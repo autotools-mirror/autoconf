@@ -92,6 +92,7 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 ## 1. Sanitizing the shell.  ##
 ## ------------------------- ##
 
+
 # AS_SHELL_SANITIZE
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.
@@ -112,52 +113,8 @@ fi
 # Name of the executable.
 as_me=`AS_BASENAME($[0])`
 
-# If LINENO is not supported by the shell, produce a version of this
-# script where LINENO is hard coded.  Rewrite if not up to date only.
-# Comparing LINENO against _oline_ is not a good solution, since in
-# the case of embedded executables (such as config.status within
-# configure) you'd compare LINENO wrt config.status vs. _oline_ vs
-# configure.  Hence a useless rewrite (not to mention the risk of
-# ``infinite'' rewrites.  Merely check that LINENO is incremented
-# between two lines, which is a property guaranteed for _oline_, hence
-# it protects us from repetitive rewrites.  Be sure to have a test
-# that does detect non LINENO support...
-as_lineno_1=$LINENO
-as_lineno_2=$LINENO
-as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-if test "x$as_lineno_1"  = "x$as_lineno_2" ||
-   test "x$as_lineno_3" != "x$as_lineno_2";
-  then
-  # Find who we are.
-  case $[0] in
-    *[[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
-    *) _AS_PATH_WALK([],
-                   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
-       ;;
-  esac
-  if test ! -f $as_myself; then
-    AS_ERROR([cannot find myself; rerun with an absolute path])
-  fi
-  if test ! -f $as_me.lineno ||
-     test x`ls -1dt $as_me.lineno $as_myself 2>/dev/null | sed 1q` \
-                != x$as_me.lineno; then
-     # Be sure to write the pattern so that it doesn't replace itself:
-     # it must not match itself.
-     awk <$as_myself '
-           /[[$]]LINENO/ { printf "%d:", NR }
-                         { print }
-         ' |
-       sed ['/[$]LINENO/s/^\([0-9][0-9]*\):\(.*\)[$]LINENO/\2\1/'] \
-         >$as_me.lineno
-    chmod +x $as_me.lineno
-  fi
-
-  # Don't try to exec as it changes $[0], causing all sort of problems
-  # (the dirname of $[0] is not the place where we might find the
-  # original and so on.  Autoconf is especially sensible to this).
-  . ./$as_me.lineno
-  exit 0
-fi
+# Rewrite early.
+_AS_LINENO_PREPARE
 
 _AS_CR_PREPARE
 _AS_ECHO_N_PREPARE
@@ -448,6 +405,59 @@ else
   as_expr=false
 fi
 ])# _AS_EXPR_PREPARE
+
+
+# _AS_LINENO_PREPARE
+# ------------------
+# If LINENO is not supported by the shell, produce a version of this
+# script where LINENO is hard coded.  Rewrite if not up to date only.
+# Comparing LINENO against _oline_ is not a good solution, since in
+# the case of embedded executables (such as config.status within
+# configure) you'd compare LINENO wrt config.status vs. _oline_ vs
+# configure.  Hence a useless rewrite (not to mention the risk of
+# ``infinite'' rewrites.  Merely check that LINENO is incremented
+# between two lines, which is a property guaranteed for _oline_, hence
+# it protects us from repetitive rewrites.  Be sure to have a test
+# that does detect non LINENO support...
+m4_define([_AS_LINENO_PREPARE],
+[as_lineno_1=$LINENO
+as_lineno_2=$LINENO
+as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
+if test "x$as_lineno_1"  = "x$as_lineno_2" ||
+   test "x$as_lineno_3" != "x$as_lineno_2";
+  then
+  # Find who we are.
+  case $[0] in
+    *[[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
+    *) _AS_PATH_WALK([],
+                   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
+       ;;
+  esac
+  if test ! -f $as_myself; then
+    AS_ERROR([cannot find myself; rerun with an absolute path])
+  fi
+  if test ! -f $as_me.lineno ||
+     test x`ls -1dt $as_me.lineno $as_myself 2>/dev/null | sed 1q` \
+                != x$as_me.lineno; then
+     # Be sure to write the pattern so that it doesn't replace itself:
+     # it must not match itself.
+     awk <$as_myself '
+           /[[$]]LINENO/ { printf "%d:", NR }
+                         { print }
+         ' |
+       sed ['/[$]LINENO/s/^\([0-9][0-9]*\):\(.*\)[$]LINENO/\2\1/'] \
+         >$as_me.lineno
+    chmod +x $as_me.lineno
+  fi
+
+  # Don't try to exec as it changes $[0], causing all sort of problems
+  # (the dirname of $[0] is not the place where we might find the
+  # original and so on.  Autoconf is especially sensible to this).
+  . ./$as_me.lineno
+  # Exit status is that of the last command.
+  exit
+fi
+])# _AS_LINENO_PREPARE
 
 
 # _AS_LN_S_PREPARE

@@ -72,7 +72,7 @@ autoscan.x autom4te.x config.guess.x config.sub.x
 
 
 EXTRA_DIST = $(man_aux) common.x
-MAINTAINERCLEANFILES = $(man_MANS)
+MAINTAINERCLEANFILES = $(dist_man_MANS)
 
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x

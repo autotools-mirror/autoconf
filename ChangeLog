@@ -1,3 +1,15 @@
+2001-10-05  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am, config/Makefile.am, lib/emacs/Makefile.am,
+	* m4/Makefile.am, man/Makefile.am: Add/adjust MAINTAINERCLEANFILES.
+
+2001-10-05  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): New, extracted from...
+	(AS_SHELL_SANITIZE): here.  Use it.
+	(_AS_LINENO_PREPARE): Preserve the exit status of $0.lineno.
+	From Paul Eggert.
+
 2001-10-04  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Use a portable

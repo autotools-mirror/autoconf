@@ -78,6 +78,8 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 AMTAR = @AMTAR@
 AWK = @AWK@
 
+MAINTAINERCLEANFILES = COPYING INSTALL configure
+
 pkgdata_DATA = INSTALL
 MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
 
@@ -356,6 +358,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-recursive
 
 clean-am: clean-generic mostlyclean-am

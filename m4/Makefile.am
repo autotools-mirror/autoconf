@@ -18,14 +18,19 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-EXTRA_DIST =					\
+GENERIC_MACROS =				\
 auxdir.m4					\
 cond.m4						\
 depend.m4					\
 init.m4						\
 install-sh.m4					\
-m4.m4						\
 lispdir.m4					\
 missing.m4					\
 sanity.m4					\
 strip.m4
+
+SPECIFIC_MACROS =				\
+m4.m4
+
+EXTRA_DIST = $(GENERIC_MACROS) $(SPECIFIC_MACROS)
+MAINTAINERCLEANFILES = $(GENERIC_MACROS)

@@ -64,6 +64,10 @@ PERL = @PERL@
 VERSION = @VERSION@
 
 EXTRA_DIST = move-if-change prev-version.txt
+
+MAINTAINERCLEANFILES = config.guess config.sub install-sh mdate-sh missing \
+                       mkinstalldirs texinfo.tex
+
 subdir = config
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -135,6 +139,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
 clean-am: clean-generic mostlyclean-am
