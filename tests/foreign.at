@@ -49,7 +49,7 @@ AT_DATA([configure.in],
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])
-AT_CHECK([libtoolize || exit 77, 0, [ignore], [ignore])
+AT_CHECK([libtoolize || exit 77], 0, [ignore], [ignore])
 
 # libtoolize installed everything but install-sh...
 touch install-sh
