@@ -1,3 +1,9 @@
+2004-09-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (auindex): New macro.
+	(AU_DEFUN): Use it to fix the bug when the index contained AC_AU_DEFUN.
+	Problem reported by Stepan Kasal.
+
 2004-09-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix problems reported by Andreas Buening in:
