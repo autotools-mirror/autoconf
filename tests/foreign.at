@@ -49,7 +49,16 @@ AT_DATA([configure.in],
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])
-AT_CHECK([libtoolize || exit 77], 0, [ignore], [ignore])
+AT_CHECK([libtoolize], 0, [stdout], ignore)
+
+# Some broken libtoolize fail to install a functional config.guess.
+AT_CHECK([./config.guess || exit 77], [], [ignore], [ignore])
+
+# Make sure at-path contains something valid, and let the test suite
+# display it when verbose.  And fail, skipping would too easily hide
+# problems.
+AT_CHECK([sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"] stdout], 0, [stdout])
+AT_CHECK([test -f "`cat stdout`"])
 
 # libtoolize installed everything but install-sh...
 touch install-sh
