@@ -10487,7 +10487,7 @@ PS4='+ '
 @item IFS
 @evindex IFS
 Long ago, shell scripts inherited @env{IFS} from the environment,
-but this caused many problems so modern shells any environment
+but this caused many problems so modern shells ignore any environment
 settings for @env{IFS}.
 
 Don't set the first character of @code{IFS} to backslash.  Indeed,
@@ -10650,11 +10650,10 @@ your script might be suspended waiting for data on its standard input.
 On @acronym{DJGPP} systems, the @env{PATH_SEPARATOR} environment
 variable can be set to either @samp{:} or @samp{;} to control the path
 separator Bash uses to set up certain environment variables (such as
-@env{PATH}).  If you want @command{configure} to detect the regular
-@acronym{DOS} path separator (@samp{;}), so it can be safely substituted
-in files that may not support @samp{;} as a path separator, then unset
-this variable or set it to @samp{;}.  @xref{File System Conventions},
-for more information about @code{PATH_SEPARATOR}.
+@env{PATH}).  You can set this variable to @samp{;} if you want
+@command{configure} to use @samp{;} as a separator; this might be useful
+if you plan to use non-Posix shells to execute files.  @xref{File System
+Conventions}, for more information about @code{PATH_SEPARATOR}.
 
 @item PWD
 @evindex PWD
