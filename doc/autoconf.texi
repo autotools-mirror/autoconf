@@ -1,13 +1,36 @@
 \input texinfo @c -*-texinfo-*-
-@c %**start of header
+@comment $Id$
+@comment %**start of header
 @setfilename autoconf.info
+@include version.texi
 @settitle Autoconf
-
-@finalout
 @setchapternewpage odd
 @setcontentsaftertitlepage
+@comment %**end of header
+@copying
 
-@include version.texi
+This manual is for GNU Autoconf
+(version @value{VERSION}, @value{UPDATED}),
+a package for creating scripts to configure source code packages using
+templates and an @code{m4} macro package.
+
+Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
+2001, 2002 Free Software Foundation, Inc.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover texts being ``A GNU Manual,''
+and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled ``GNU Free Documentation
+License.''
+
+(a) The FSF's Back-Cover Text is: ``You have freedom to copy and modify
+this GNU Manual, like GNU software.  Copies published by the Free
+Software Foundation raise funds for GNU development.''
+@end quotation
+@end copying
 
 @c A simple macro for optional variables.
 @macro ovar{varname}
@@ -55,30 +78,11 @@
                                 Running an Autotest test suite
 @end direntry
 
-@ifinfo
-Autoconf: Creating Automatic Configuration Scripts, by David MacKenzie.
-
-This file documents the GNU Autoconf package for creating scripts to
-configure source code packages using templates and an @code{m4} macro
-package.
-
-Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
-Free Software Foundation, Inc.
-
-Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.1
-or any later version published by the Free Software Foundation;
-with no Invariant Sections, with no
-Front-Cover Texts, and with no Back-Cover Texts.
-A copy of the license is included in the section entitled ``GNU
-Free Documentation License''.
-@end ifinfo
-
+@finalout
 @titlepage
 @title Autoconf
 @subtitle Creating Automatic Configuration Scripts
-@subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
-@subtitle @value{UPDATED}
+@subtitle for version @value{VERSION}, @value{UPDATED}
 @author David MacKenzie
 @author Ben Elliston
 @author Akim Demaille
@@ -86,17 +90,10 @@ Free Documentation License''.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002 Free Software Foundation, Inc.
-
-Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.1
-or any later version published by the Free Software Foundation;
-with no Invariant Sections, with no
-Front-Cover Texts, and with no Back-Cover Texts.
-A copy of the license is included in the section entitled ``GNU
-Free Documentation License''.
+@insertcopying
 @end titlepage
+
+@contents
 
 @c Define an environment variable index.
 @defcodeindex ev
@@ -136,15 +133,9 @@ Free Documentation License''.
 @ifnottex
 @node Top
 @top Autoconf
+
+@insertcopying
 @end ifnottex
-
-@ifinfo
-This file documents the GNU Autoconf package for creating scripts to
-configure source code packages using templates and the GNU M4 macro
-package.  This is edition @value{EDITION}, for Autoconf version
-@value{VERSION}.
-
-@end ifinfo
 
 @c The master menu, created with texinfo-master-menu, goes here.
 
@@ -13662,7 +13653,6 @@ introduced in this document.
 
 @printindex cp
 
-@contents
 @bye
 
 @c Local Variables:
