@@ -20,7 +20,7 @@
 - AC_FUNC_SETVBUF_REVERSED no longer fails when cross-compiling.
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
 - AC_PROG_F77 default search no longer includes cf77 and cfg77.
-- New macros: AC_GNU_SOURCE, AC_TYPE_MBSTATE_T.
+- New macros: AC_GNU_SOURCE, AC_PROG_EGREP, AC_PROG_FGREP, AC_TYPE_MBSTATE_T.
 
 ** Bug fixes
 
@@ -34,10 +34,14 @@
 - AC_PATH_PROG
   Now colon in the optional path arguments are properly handled.
 
-** Improved Zsh portability
-  Both Autoconf the package, and the scripts it produces, should run
+** Improved portability
+
+- Both Autoconf the package, and the scripts it produces, should run
   more reliably with Zsh.  Bear in mind it is the default Bourne shell
   on Darwin.
+
+- Autoconf and the scripts it produces no longer assume the existence of
+  the obsolescent commands egrep and fgrep.
 
 ** Documentation
 
