@@ -1,3 +1,8 @@
+2001-12-18  Kevin Ryde  <kevin@user42@zip.com.au>
+
+	* doc/autoconf.texi (Function Portability): Add notes on sscanf
+	sometimes needing writable input.
+
 2001-12-17  Jim Meyering  <meyering@lucent.com>
 
 	* doc/autoconf.texi (New Macros): Tweak wording.
