@@ -1,5 +1,11 @@
 2000-05-24  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_LANG_FUNC_LINK_TRY, AC_LANG_FUNC_LINK_TRY(C),
+	AC_LANG_FUNC_LINK_TRY(C++)): New macros.
+	(AC_CHECK_FUNC): Use it, together with AC_LINK_ELSE.
+
+2000-05-24  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_FUNC_VFORK): Quote properly.
 	(AC_FUNC_STRFTIME, AC_FUNC_VFORK, AC_FUNC_VPRINTF): Don't use
 	AC_DEFINE, just use the AC_CHECK_*S macro.

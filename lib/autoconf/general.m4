@@ -3095,31 +3095,9 @@ $3],
 AC_DEFUN([AC_CHECK_FUNC],
 [AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
 AC_CACHE_CHECK([for $1], ac_var,
-[AC_TRY_LINK(
-dnl Don't include <ctype.h> because on OSF/1 3.0 it includes <sys/types.h>
-dnl which includes <sys/select.h> which contains a prototype for
-dnl select.  Similarly for bzero.
-[/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $1(); below.  */
-#include <assert.h>
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $1();
-char (*f)();
-], [
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$1) || defined (__stub___$1)
-choke me
-#else
-f = $1;
-#endif
-], AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))])
+[AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
+                [AC_VAR_SET(ac_var, yes)],
+                [AC_VAR_SET(ac_var, no)])])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_var) = yes],
                [$2], [$3])dnl
 AC_VAR_POPDEF([ac_var])dnl

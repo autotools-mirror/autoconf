@@ -256,6 +256,13 @@ AC_DEFUN([AC_LANG_CALL],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
+# AC_LANG_FUNC_LINK_TRY(FUNCTION)
+# -------------------------------
+# Produce a source which links correctly iff the FUNCTION exists.
+AC_DEFUN([AC_LANG_FUNC_LINK_TRY],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
 
 # --------------- #
 # 2b. C sources.  #
@@ -301,6 +308,35 @@ extern "C"
 char $2 ();])], [$2 ();])])
 
 
+# AC_LANG_FUNC_LINK_TRY(C)(FUNCTION)
+# ----------------------------------
+# Don't include <ctype.h> because on OSF/1 3.0 it includes
+# <sys/types.h> which includes <sys/select.h> which contains a
+# prototype for select.  Similarly for bzero.
+define([AC_LANG_FUNC_LINK_TRY(C)],
+[AC_LANG_PROGRAM(
+[/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $1 (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $1 ();
+char (*f) ();
+],
+[/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$1) || defined (__stub___$1)
+choke me
+#else
+f = $1;
+#endif
+])])
+
 
 # ----------------- #
 # 2c. C++ sources.  #
@@ -327,6 +363,12 @@ define([AC_LANG_PROGRAM(C++)], defn([AC_LANG_PROGRAM(C)]))
 # -------------------------------------
 # Same as C.
 define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
+
+
+# AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
+# ------------------------------------
+# Same as C.
+define([AC_LANG_FUNC_LINK_TRY(C++)], defn([AC_LANG_FUNC_LINK_TRY(C)]))
 
 
 
