@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.2)dnl
+define(AC_ACVERSION, 1.7.3)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -303,7 +303,7 @@ AC_QUOTE_DQUOTE(AC_QUOTE_HERE(AC_QUOTE_HERE(AC_QUOTE_SED($1))))])dnl
 dnl
 dnl Don't compare $2 to a blank, so we can support "-Dfoo=".
 dnl If creating a configuration header file, we add
-dnl commands to ac_sed_defs to define the variable.  ac_sed_[due][ABCD]
+dnl commands to ac_sed_defs to define the variable.  ac_[due][ABCD]
 dnl get defined in config.status.  Here we just insert the
 dnl variable parts of the string: the variable name to define
 dnl and the value to give it.
@@ -324,9 +324,9 @@ dnl Define DEFS even if AC_CONFIG_NAMES for use in user case statements.
 DEFS="$DEFS -D$1=AC_QUOTE_SQUOTE(AC_VAL)"
 ifdef([AC_CONFIG_NAMES],
 ac_sed_defs="dnl
-${ac_sed_defs}\${ac_sed_dA}$1\${ac_sed_dB}$1\${ac_sed_dC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_dD}
-\${ac_sed_uA}$1\${ac_sed_uB}$1\${ac_sed_uC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_uD}
-\${ac_sed_eA}$1\${ac_sed_eB}$1\${ac_sed_eC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_eD}
+${ac_sed_defs}\${ac_dA}$1\${ac_dB}$1\${ac_dC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_dD}
+\${ac_uA}$1\${ac_uB}$1\${ac_uC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_uD}
+\${ac_eA}$1\${ac_eB}$1\${ac_eC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_eD}
 "
 )dnl
 }
@@ -638,10 +638,9 @@ fi
 # Any assignment to VPATH causes Sun make
 # to only execute the first set of double-colon rules.
 if test "x$srcdir" = x.; then
-changequote(,)
   ac_vpsub='/^[ 	]*VPATH[ 	]*=[ 	]*/d'
-changequote([,])
 fi
+
 # Quote sed substitution magic chars in DEFS.
 cat >conftest.def <<EOF
 $DEFS
@@ -767,21 +766,21 @@ changequote(<<,>>)dnl
 # Hopefully no one uses "!" as a variable value.
 # Other candidates for the sed separators, like , and @, do get used.
 #
-# ac_sed_d sets the value in "#define NAME VALUE" lines.
-ac_sed_dA='s!^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-ac_sed_dB='\([ 	][ 	]*\)[^ 	]*!\1#\2'
-ac_sed_dC='\3'
-ac_sed_dD='!g'
-# ac_sed_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
-ac_sed_uA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_sed_uB='\([ 	]\)!\1#\2define\3'
-ac_sed_uC=' '
-ac_sed_uD='\4!g'
-# ac_sed_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_sed_eA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_sed_eB='<<$>>!\1#\2define\3'
-ac_sed_eC=' '
-ac_sed_eD='!g'
+# ac_d sets the value in "#define NAME VALUE" lines.
+ac_dA='s!^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dB='\([ 	][ 	]*\)[^ 	]*!\1#\2'
+ac_dC='\3'
+ac_dD='!g'
+# ac_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
+ac_uA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_uB='\([ 	]\)!\1#\2define\3'
+ac_uC=' '
+ac_uD='\4!g'
+# ac_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
+ac_eA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_eB='<<$>>!\1#\2define\3'
+ac_eC=' '
+ac_eD='!g'
 changequote([,])dnl
 rm -f conftest.sed
 EOF
