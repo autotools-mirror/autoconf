@@ -34,7 +34,9 @@ cat > conftest.c <<EOF
 EOF
 ${CC-cc} -E conftest.c > conftest.out 2>&1
 if egrep yes conftest.out >/dev/null 2>&1; then
-  GCC=1 # For later tests.
+  GCC=yes
+else
+  GCC=
 fi
 rm -f conftest*
 ])dnl
@@ -50,7 +52,9 @@ cat > conftest.C <<EOF
 EOF
 ${CXX-gcc} -E conftest.C > conftest.out 2>&1
 if egrep yes conftest.out >/dev/null 2>&1; then
-  GXX=1 # For later tests.
+  GXX=yes
+else
+  GXX=
 fi
 rm -f conftest*
 ])dnl
@@ -63,14 +67,14 @@ changequote(,)dnl
 changequote([,])dnl
   ac_prog='#include <sgtty.h>
 Autoconf TIOCGETP'
-  AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=1)
+  AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=yes, ac_need_trad=no)
 
-  if test -z "$ac_need_trad"; then
+  if test "$ac_need_trad" = no; then
     ac_prog='#include <termio.h>
 Autoconf TCGETA'
-    AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=1)
+    AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=yes)
   fi
-  if test -n "$ac_need_trad"; then
+  if test "$ac_need_trad" = yes; then
     CC="$CC -traditional"
     AC_VERBOSE(setting CC to $CC)
   fi
@@ -314,10 +318,20 @@ AC_CHECKING(for ANSI C header files)
 AC_TEST_CPP([#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <float.h>],
-[# SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-AC_HEADER_EGREP(memchr, string.h,
-# SGI's /bin/cc from Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
+#include <float.h>], ac_stdc_hdrs=yes, ac_stdc_hdrs=no)
+
+if test "$ac_stdc_hdrs" = yes; then
+  # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
+AC_HEADER_EGREP(memchr, string.h, , ac_stdc_hdrs=no)
+fi
+
+if test "$ac_stdc_hdrs" = yes; then
+  # ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
+AC_HEADER_EGREP(free, stdlib.h, , ac_stdc_hdrs=no)
+fi
+
+if test "$ac_stdc_hdrs" = yes; then
+  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
 AC_TEST_PROGRAM([#include <ctype.h>
 #define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
 #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
@@ -325,10 +339,12 @@ AC_TEST_PROGRAM([#include <ctype.h>
 int main () { int i; for (i = 0; i < 256; i++)
 if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
 exit (0); }
-],
-[# ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
-AC_HEADER_EGREP(free, stdlib.h, AC_DEFINE(STDC_HEADERS))]))])
-])dnl
+], , ac_stdc_headers=no)
+fi
+
+if test "$ac_stdc_hdrs" = yes; then
+  AC_DEFINE(STDC_HEADERS)
+fi])dnl
 dnl
 define(AC_UNISTD_H, [AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(unistd.h)])AC_HEADER_CHECK(unistd.h,
   AC_DEFINE(HAVE_UNISTD_H))])dnl
@@ -349,11 +365,11 @@ dnl
 define(AC_MAJOR_HEADER,
 [AC_COMPILE_CHECK([major, minor and makedev header],
 [#include <sys/types.h>],
-[return makedev(0, 0);], ac_makedev=1)
-if test -z "$ac_makedev"; then
-AC_HEADER_CHECK(sys/mkdev.h, AC_DEFINE(MAJOR_IN_MKDEV) ac_makedev=1)
+[return makedev(0, 0);], ac_have_makedev=yes, ac_have_makedev=no)
+if test "$ac_have_makedev" = no; then
+AC_HEADER_CHECK(sys/mkdev.h, AC_DEFINE(MAJOR_IN_MKDEV) ac_have_makedev=yes)
 fi
-if test -z "$ac_makedev"; then
+if test "$ac_have_makedev" = no; then
 AC_HEADER_CHECK(sys/sysmacros.h, AC_DEFINE(MAJOR_IN_SYSMACROS))
 fi]
 )dnl
@@ -566,9 +582,9 @@ main()
 ])dnl
 dnl
 define(AC_VPRINTF,
-[AC_COMPILE_CHECK([vprintf], , [vprintf();], AC_DEFINE(HAVE_VPRINTF),
-ac_vprintf_missing=1)
-if test -n "$ac_vprintf_missing"; then
+[AC_COMPILE_CHECK([vprintf], , [vprintf();],
+  [ac_have_vprintf=yes AC_DEFINE(HAVE_VPRINTF)], ac_have_vprintf=no)
+if test "$ac_have_vprintf" = no; then
 AC_COMPILE_CHECK([_doprnt], , [_doprnt();], AC_DEFINE(HAVE_DOPRNT))
 fi
 ])dnl
@@ -695,6 +711,7 @@ define(AC_ALLOCA,
 # for constant arguments.  Useless!
 AC_COMPILE_CHECK(working alloca.h, [#include <alloca.h>],
   [char *p = alloca(2 * sizeof(int));], AC_DEFINE(HAVE_ALLOCA_H))
+
 ac_decl="#ifdef __GNUC__
 #define alloca __builtin_alloca
 #else
@@ -710,20 +727,10 @@ char *alloca ();
 #endif
 "
 AC_COMPILE_CHECK([alloca], $ac_decl,
-[char *p = (char *) alloca(1);], [AC_DEFINE([HAVE_ALLOCA])], [dnl
-ac_alloca_missing=1
-AC_PROGRAM_EGREP(winnitude, [
-#if defined(CRAY) && ! defined(CRAY2)
-winnitude
-#else
-lossage
-#endif
-],
-AC_FUNC_CHECK([_getb67],AC_DEFINE([CRAY_STACKSEG_END],[_getb67]),
-AC_FUNC_CHECK([GETB67],AC_DEFINE([CRAY_STACKSEG_END],[GETB67]),
-AC_FUNC_CHECK([getb67],AC_DEFINE([CRAY_STACKSEG_END],[getb67])))))
-])
-if test -n "$ac_alloca_missing"; then
+[char *p = (char *) alloca(1);],
+[ac_have_alloca=yes AC_DEFINE([HAVE_ALLOCA])], ac_have_alloca=no)
+
+if test "$ac_have_alloca" = no; then
   # The SVR3 libPW and SVR4 libucb both contain incompatible functions
   # that cause trouble.  Some versions do not even contain alloca or
   # contain a buggy version.  If you still want to use their alloca,
@@ -731,8 +738,20 @@ if test -n "$ac_alloca_missing"; then
   ALLOCA=alloca.o
   AC_DEFINE(C_ALLOCA)
 
-  AC_CHECKING(stack direction for C alloca)
-  AC_TEST_PROGRAM([find_stack_direction ()
+AC_CHECKING(whether Cray hooks are needed for C alloca)
+AC_PROGRAM_EGREP(webecray,
+[#if defined(CRAY) && ! defined(CRAY2)
+webecray
+#else
+wenotbecray
+#endif
+],
+AC_FUNC_CHECK([_getb67],AC_DEFINE([CRAY_STACKSEG_END],[_getb67]),
+AC_FUNC_CHECK([GETB67],AC_DEFINE([CRAY_STACKSEG_END],[GETB67]),
+AC_FUNC_CHECK([getb67],AC_DEFINE([CRAY_STACKSEG_END],[getb67])))))
+
+AC_CHECKING(stack direction for C alloca)
+AC_TEST_PROGRAM([find_stack_direction ()
 {
   static char *addr = 0;
   auto char dummy;
@@ -747,8 +766,8 @@ if test -n "$ac_alloca_missing"; then
 main ()
 {
   exit (find_stack_direction() < 0);
-}], dnl
-AC_DEFINE(STACK_DIRECTION,1), AC_DEFINE(STACK_DIRECTION,-1), dnl
+}],
+AC_DEFINE(STACK_DIRECTION,1), AC_DEFINE(STACK_DIRECTION,-1),
 AC_DEFINE(STACK_DIRECTION,0))
 fi
 AC_SUBST(ALLOCA)dnl
@@ -757,19 +776,19 @@ dnl
 define(AC_GETLOADAVG,
 [# Some definitions of getloadavg require that the program be installed setgid.
 AC_SUBST(NEED_SETGID)NEED_SETGID=false
-ac_need_func=true
+ac_need_func=yes
 
 # Check for the 4.4BSD definition of getloadavg.
-AC_HAVE_LIBRARY(util, LIBS="$LIBS -lutil" ac_need_func=false)
+AC_HAVE_LIBRARY(util, LIBS="$LIBS -lutil" ac_need_func=no)
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
 AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm")
 
-if $ac_need_func; then
+if test "$ac_need_func" = yes; then
 # There is a commonly available library for RS/6000 AIX.
 # Since it is not a standard part of AIX, it might be installed locally.
 ac_save_LIBS="$LIBS"
 LIBS="-L/usr/local/lib $LIBS"
-AC_HAVE_LIBRARY(getloadavg, LIBS="$LIBS -lgetloadavg" ac_need_func=false,
+AC_HAVE_LIBRARY(getloadavg, LIBS="$LIBS -lgetloadavg" ac_need_func=no,
 	LIBS="$ac_save_LIBS")
 fi
 
@@ -778,26 +797,26 @@ AC_REPLACE_FUNCS(getloadavg)
 
 case "$LIBOBJS" in
 *getloadavg*)
-ac_need_func=true
+ac_need_func=yes
 AC_HEADER_CHECK(sys/dg_sys_info.h, [dnl
-AC_DEFINE(DGUX) ac_need_func=false
+AC_DEFINE(DGUX) ac_need_func=no
 # Some versions of DGUX need -ldgc for dg_sys_info.
 AC_HAVE_LIBRARY(dgc)])
-if $ac_need_func; then
+if test "$ac_need_func" = yes; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it's still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
-AC_HAVE_LIBRARY(elf, AC_DEFINE(SVR4) LIBS="$LIBS -lelf" ac_need_func=false
+AC_HAVE_LIBRARY(elf, AC_DEFINE(SVR4) LIBS="$LIBS -lelf" ac_need_func=no
   AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm"))
 fi
-if $ac_need_func; then
+if test "$ac_need_func" = yes; then
 AC_HEADER_CHECK(inq_stats/cpustats.h, AC_DEFINE(UMAX4_3) AC_DEFINE(UMAX)
-  ac_need_func=false)
+  ac_need_func=no)
 fi
-if $ac_need_func; then
-AC_HEADER_CHECK(sys/cpustats.h, AC_DEFINE(UMAX) ac_need_func=false)
+if test "$ac_need_func" = yes; then
+AC_HEADER_CHECK(sys/cpustats.h, AC_DEFINE(UMAX) ac_need_func=no)
 fi
-if $ac_need_func; then
+if test "$ac_need_func" = yes; then
 AC_HAVE_HEADERS(mach/mach.h)
 fi
 
@@ -818,7 +837,7 @@ Yowza Am I SETGID yet
 *) AC_DEFINE(HAVE_GETLOADAVG) ;;
 esac
 
-if $NEED_SETGID; then
+if test "$NEED_SETGID" = true; then
   AC_SUBST(KMEM_GROUP)# Figure out what group owns /dev/kmem.
   # The installed program will need to be setgid and owned by that group.
 changequote(,)dnl
@@ -904,8 +923,10 @@ case "$DEFS" in
 " ;;
 esac
 AC_COMPILE_CHECK([tm_zone in struct tm], $ac_decl,
-[struct tm tm; tm.tm_zone;], AC_DEFINE(HAVE_TM_ZONE), ac_no_tm_zone=1)
-if test -n "$ac_no_tm_zone"; then
+[struct tm tm; tm.tm_zone;],
+[ac_have_tm_zone=yes AC_DEFINE(HAVE_TM_ZONE)], ac_have_tm_zone=no)
+
+if test "$ac_have_tm_zone" = no; then
 AC_COMPILE_CHECK(tzname, changequote(<<,>>)dnl
 <<#include <time.h>
 #ifndef tzname /* For SGI.  */
@@ -942,8 +963,8 @@ dnl
 define(AC_CROSS_CHECK,
 [AC_PROVIDE([$0])AC_CHECKING(whether cross-compiling)
 # If we cannot run a trivial program, we must be cross compiling.
-AC_TEST_PROGRAM([main(){exit(0);}], , cross_compiling=1)
-if test -n "$cross_compiling"; then
+AC_TEST_PROGRAM([main(){exit(0);}], cross_compiling=, cross_compiling=yes)
+if test "$cross_compiling" = yes; then
   AC_VERBOSE(we are cross-compiling)
 fi])dnl
 dnl
@@ -1023,7 +1044,7 @@ rm -f core
 ])dnl
 dnl
 define(AC_INLINE,
-[AC_REQUIRE([AC_PROG_CC])if test -n "$GCC"; then
+[AC_REQUIRE([AC_PROG_CC])if test "$GCC" = yes; then
 AC_COMPILE_CHECK([inline], , [} inline foo() {], , AC_DEFINE(inline, __inline))
 fi
 ])dnl
@@ -1092,8 +1113,10 @@ rm -f conftest
 ])dnl
 define(AC_REMOTE_TAPE,
 [AC_CHECKING(for remote tape and socket header files)
-AC_HEADER_CHECK(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H) ac_have_mtio_h=1)
-if test -n "$ac_have_mtio_h"; then
+AC_HEADER_CHECK(sys/mtio.h,
+[ac_have_mtio_h=yes AC_DEFINE(HAVE_SYS_MTIO_H)], ac_have_mtio_h=no)
+
+if test "$ac_have_mtio_h" = yes; then
 AC_TEST_CPP([#include <sgtty.h>
 #include <sys/socket.h>], PROGS="$PROGS rmt")
 fi
@@ -1101,7 +1124,7 @@ fi
 dnl
 define(AC_LONG_FILE_NAMES,
 [AC_CHECKING(for long file names)
-ac_some_dir_failed=false
+ac_some_dir_failed=no
 # Test for long file names in all the places we know might matter:
 #      .		the current directory, where building will happen
 #      /tmp		where it might want to write temporary files
@@ -1116,10 +1139,10 @@ for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` 
   (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
   (echo 2 > $ac_dir/conftest9012346) 2>/dev/null
   val=`cat $ac_dir/conftest9012345 2>/dev/null`
-  test -f $ac_dir/conftest9012345 && test "$val" = 1 || ac_some_dir_failed=true
+  test -f $ac_dir/conftest9012345 && test "$val" = 1 || ac_some_dir_failed=yes
   rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2> /dev/null
 done
-$ac_some_dir_failed || AC_DEFINE(HAVE_LONG_FILE_NAMES)
+test "$ac_some_dir_failed" = yes || AC_DEFINE(HAVE_LONG_FILE_NAMES)
 ])dnl
 dnl
 define(AC_RESTARTABLE_SYSCALLS,
@@ -1145,7 +1168,7 @@ dnl
 define(AC_FIND_X,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_FIND_X_DIRECT conditionally.
 AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
-no_x=true
+no_x=yes
 if test "x$with_x" != xno; then
 AC_FIND_X_XMKMF
 if test -z "$ac_im_usrlibdir"; then
@@ -1298,7 +1321,7 @@ define(AC_FIND_XTRA, [AC_REQUIRE([AC_ISC_POSIX])AC_REQUIRE([AC_FIND_X])
 AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
-elif test -n "$no_x"; then 
+elif test "$no_x" = yes; then 
   # Not all programs may use this symbol, but it won't hurt to define it.
   X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
 fi
@@ -1316,16 +1339,15 @@ fi
 
 # Check for additional X libraries.
 
-if test -n "$ISC"; then
+if test "$ISC" = yes; then
   X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
 else
   # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
   # libraries were built with DECnet support.  And karl@cs.umb.edu's Alpha
   # needs dnet_stub (dnet doesn't exist).
   AC_HAVE_LIBRARY(dnet,
-    [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"
-     ac_have_dnet=t])
-  if test -z "$ac_have_dnet"; then
+    [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet" ac_have_dnet=yes], ac_have_dnet=no)
+  if test "$ac_have_dnet" = no; then
     AC_HAVE_LIBRARY(dnet_stub, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
@@ -1359,9 +1381,13 @@ AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([
 ])dnl
 dnl
 define(AC_MINIX,
-[AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])AC_HEADER_CHECK(minix/config.h, MINIX=1)
+[AC_BEFORE([$0], [AC_COMPILE_CHECK])dnl
+AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
+AC_BEFORE([$0], [AC_HEADER_EGREP])dnl
+AC_BEFORE([$0], [AC_TEST_CPP])dnl
+AC_HEADER_CHECK(minix/config.h, MINIX=yes, MINIX=)
 # The Minix shell can't assign to the same variable on the same line!
-if test -n "$MINIX"; then
+if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE)
   AC_DEFINE(_POSIX_1_SOURCE, 2)
   AC_DEFINE(_MINIX)
@@ -1373,13 +1399,15 @@ define(AC_ISC_POSIX,
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
-  ISC=1 # If later tests want to check for ISC.
+  ISC=yes # If later tests want to check for ISC.
   AC_DEFINE(_POSIX_SOURCE)
   if test -n "$GCC"; then
     CC="$CC -posix"
   else
     CC="$CC -Xp"
   fi
+else
+  ISC=
 fi
 ])dnl
 dnl
@@ -1389,8 +1417,8 @@ AC_PROGRAM_EGREP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes
 #endif
-], XENIX=1)
-if test -n "$XENIX"; then
+], XENIX=yes, XENIX=)
+if test "$XENIX" = yes; then
   LIBS="$LIBS -lx"
   case "$DEFS" in
   *SYSNDIR*) ;;
