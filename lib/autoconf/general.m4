@@ -857,6 +857,7 @@ cat > $cache_file <<\EOF
 # Giving --cache-file=/dev/null disables caching, for debugging configure.
 # config.status only pays attention to the cache file if you give it the
 # --recheck option to rerun configure.
+#
 EOF
 changequote(, )dnl
 dnl Allow a site initialization script to override cache values.
