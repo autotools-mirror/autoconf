@@ -15,14 +15,6 @@ address them.
 
 * Status
 
-	/*-------------.
-	| Do not use.  |
-	`-------------*/
-
-* Serious Problems
-
-** Special characters and config.hin
-
-The handling of special characters, most notable backslashes, of
-course, might be nonportable in addition of being of clearly
-specified.
+	/*--------------------------.
+	| Good for production use.  |
+	`--------------------------*/

@@ -3520,8 +3520,7 @@ AU_DEFUN([AC_OUTPUT],
            [AC_CONFIG_FILES([$1])])dnl
 m4_ifvaln([$2$3],
           [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])])dnl
-[AC_OUTPUT]],
-[`AC_OUTPUT' should be used without arguments.])
+[AC_OUTPUT]])
 
 
 # AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])
@@ -3537,6 +3536,10 @@ m4_ifval([$1],
          [AC_CONFIG_FILES([$1])])dnl
 m4_ifval([$2$3],
          [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
+m4_ifval([$1$2$3],
+         [AC_DIAGNOSE([obsolete],
+                      [$0 should be used witout arguments.
+You should run autoupdate.])])dnl
 AC_CACHE_SAVE
 
 test "x$prefix" = xNONE && prefix=$ac_default_prefix

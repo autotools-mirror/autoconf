@@ -1,3 +1,10 @@
+2001-03-08  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_OUTPUT): In the AU_DEFUN definition, don't try
+	to issue an obsolete message, it can't work for macros being
+	defined both with AC_DEFUN and AU_DEFUN.
+	Hence do it in the AC_DEFUN definition.
+
 2001-03-06  Pavel Roskin  <proski@gnu.org>
 
 	* tests/base.at (AC_TRY_*): Escape `^' - it's a pipe command
