@@ -226,12 +226,12 @@ ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 NUMBERS='0123456789'
 WORDCHAR=_$alphabet$ALPHABET$NUMBERS
 
-m4__warnings=
+m4_warnings=
 for warning in `IFS=,; echo syntax,$WARNINGS,$warnings |
                          tr $ALPHABET $alphabet`
 do
   test -n $warning || continue
-  m4__warnings="$warning"`test -n "$m4__warnings" && echo ",$m4_warnings"`
+  m4_warnings="$warning"`test -n "$m4_warnings" && echo ",$m4_warnings"`
 done
 
 

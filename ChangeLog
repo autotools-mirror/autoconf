@@ -1,3 +1,7 @@
+2000-11-01  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Typo: s/m4__warnings/m4_warnings/.
+
 2000-10-31  Pavel Roskin  <proski@gnu.org>
 
 	* autoupdate.sh: Check that $sed understands the meaning of "\b"
