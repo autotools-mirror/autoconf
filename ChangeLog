@@ -1,3 +1,8 @@
+2000-09-21  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (_AC_SHELL_TMPDIR): Don't check status of variable
+	assignment - it's undefined in ash 0.2.
+
 2000-09-21  Akim Demaille  <akim@epita.fr>
 
 	* src/atgeneral.m4 (AC_CHECK): Display stderr including when the
