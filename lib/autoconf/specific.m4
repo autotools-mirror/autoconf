@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -189,7 +189,7 @@ if test -z "$INSTALL"; then
     # As a last resort, use the slow shell script.
     # We want the top-level source directory, not the subdir's srcdir,
     # so expand srcdir now rather than in the Makefile.
-    INSTALL="${srcdir}/install.sh -c"
+    INSTALL=AC_PROG_INSTALL_INSTALL_SH
   else
     echo "warning: ${srcdir}/install.sh not found; using cp"
     INSTALL=cp
@@ -204,6 +204,8 @@ INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
 AC_SUBST(INSTALL_DATA)dnl
 test -n "$verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
 ])dnl
+dnl Defined separately so a configure.in can redefine if necessary.
+define(AC_PROG_INSTALL_INSTALL_SH, ["${srcdir}/install.sh -c"])dnl
 dnl
 define(AC_LN_S,
 [echo checking for ln -s
