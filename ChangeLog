@@ -1,3 +1,8 @@
+2001-01-29  Akim Demaille  <akim@epita.fr>
+
+	* tests/atgeneral.m4: Don't redirect builtins' stderr as Ultrix
+	hates this: use a subshell.
+
 2001-01-29  Assar Westerlund  <assar@sics.se>
 
 	* m4sh.m4 (_AS_TEST_PREPARE): Discard output when testing `test

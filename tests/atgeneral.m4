@@ -1,6 +1,6 @@
 include(m4sh.m4)					    -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright 2000 Free Software Foundation, Inc.
+# Copyright 2000, 2001 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -109,8 +109,9 @@ at_path=`pwd`
 at_IFS_save=$IFS
 IFS=:
 for at_dir in $AUTOTEST_PATH $PATH; do
-  # There might be directories that don't exist.
-  at_dir=`cd "$at_dir" 2>/dev/null && pwd`
+  # There might be directories that don't exist, but don't redirect
+  # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
+  at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
   test -n "$at_dir" && at_path=$at_path:$at_dir
 done
 IFS=$at_IFS_save
