@@ -1,5 +1,10 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4. Formatting changes.
+	* acspecific.m4: Likewise.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CONFIG_HEADERS, AC_CONFIG_LINKS,
 	AC_CONFIG_SUBDIRS): A space was missing to separate the arguments
 	of m4_append.

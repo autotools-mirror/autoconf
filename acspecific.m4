@@ -2972,8 +2972,8 @@ EOF
       echo "configure: failed program was:" >&AC_FD_CC
       cat conftest.$ac_ext >&AC_FD_CC
     fi
-dnl We need to pop the language stack twice.
-dnl FIXME: Why?  You've done it above, AFAICT.
+dnl Matthew: We need to pop the language stack twice.
+dnl Akim: FIXME: Why?  You've done it above, AFAICT.
 AC_LANG_RESTORE()dnl
 AC_LANG_RESTORE()dnl
 ])])

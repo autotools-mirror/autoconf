@@ -51,27 +51,27 @@
 #
 
 
-## ----------------- ##
-## Defining macros.  ##
-## ----------------- ##
+## ---------------- ##
+## The diversions.  ##
+## ---------------- ##
 
 
 # m4 output diversions.  We let m4 output them all in order at the end,
 # except that we explicitly undivert AC_DIVERSION_SED, AC_DIVERSION_CMDS,
 # and AC_DIVERSION_ICMDS.
 
-define(AC_DIVERSION_KILL, -1)dnl	suppress output
-define(AC_DIVERSION_BINSH, 0)dnl	AC_REQUIRE'd #! /bin/sh line
-define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
-define(AC_DIVERSION_INIT, 2)dnl		initialization code
-define(AC_DIVERSION_NORMAL_4, 3)dnl	AC_REQUIRE'd code, 4 level deep
-define(AC_DIVERSION_NORMAL_3, 4)dnl	AC_REQUIRE'd code, 3 level deep
-define(AC_DIVERSION_NORMAL_2, 5)dnl	AC_REQUIRE'd code, 2 level deep
-define(AC_DIVERSION_NORMAL_1, 6)dnl	AC_REQUIRE'd code, 1 level deep
-define(AC_DIVERSION_NORMAL, 7)dnl	the tests and output code
-define(AC_DIVERSION_SED, 8)dnl		variable substitutions in config.status
-define(AC_DIVERSION_CMDS, 9)dnl		extra shell commands in config.status
-define(AC_DIVERSION_ICMDS, 10)dnl	extra initialization in config.status
+define(AC_DIVERSION_KILL,    -1)# suppress output
+define(AC_DIVERSION_BINSH,    0)# AC_REQUIRE'd #! /bin/sh line
+define(AC_DIVERSION_NOTICE,   1)# copyright notice & option help strings
+define(AC_DIVERSION_INIT,     2)# initialization code
+define(AC_DIVERSION_NORMAL_4, 3)# AC_REQUIRE'd code, 4 level deep
+define(AC_DIVERSION_NORMAL_3, 4)# AC_REQUIRE'd code, 3 level deep
+define(AC_DIVERSION_NORMAL_2, 5)# AC_REQUIRE'd code, 2 level deep
+define(AC_DIVERSION_NORMAL_1, 6)# AC_REQUIRE'd code, 1 level deep
+define(AC_DIVERSION_NORMAL,   7)# the tests and output code
+define(AC_DIVERSION_SED,      8)# variable substitutions in config.status
+define(AC_DIVERSION_CMDS,     9)# extra shell commands in config.status
+define(AC_DIVERSION_ICMDS,   10)# extra initialization in config.status
 
 
 # AC_DIVERT_PUSH(STREAM)
@@ -98,6 +98,12 @@ define([AC_DIVERSION_CURRENT], AC_DIVERSION_NORMAL)
 pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
 
 
+
+## ----------------- ##
+## Defining macros.  ##
+## ----------------- ##
+
+
 # AC_PRO(MACRO-NAME)
 # ------------------
 # The prologue for Autoconf macros.
@@ -107,6 +113,7 @@ ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
        [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))],
        [pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_CURRENT)])dnl
 ])
+
 
 # AC_EPI
 # ------
@@ -124,6 +131,7 @@ undivert(AC_DIVERSION_NORMAL_1)dnl
 
 # AC_DEFUN(NAME, [REPLACED-FUNCTION, ARGUMENT, ]EXPANSION)
 # --------------------------------------------------------
+#
 # Define a macro which automatically provides itself.  Add machinery
 # so the macro automatically switches expansion to the diversion
 # stack if it is not already using it.  In this case, once finished,
@@ -158,6 +166,19 @@ define([AC_DEFUNCT],
 # ------------------------------------------
 define(AC_OBSOLETE,
 [AC_WARNING([$1 is obsolete$2])])
+
+
+# AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
+# --------------------------------------
+#
+# Basically calls the macro MACRO with arguments ARG1, ARGS... But if
+# there exist a specialized version of MACRO for ARG1, use this macro
+# instead with arguments ARGS (i.e., ARG1 is *not* given).  See the
+# definition of `AC_DEFUN'.
+AC_DEFUN(AC_SPECIALIZE,
+[ifdef([$1-$2],
+       [indir([$1-$2], m4_shift(m4_shift($@)))],
+       [indir([$1], m4_shift($@))])])
 
 
 ## ----------------------------- ##
@@ -380,18 +401,6 @@ define(AC_TR_SH,
 define([AC_FOREACH],
 [m4_foreach([$1], (m4_split(m4_strip(m4_join([$2])))), [$3])])
 
-
-# AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
-# --------------------------------------
-#
-# Basically calls the macro MACRO with arguments ARG1, ARGS... But if
-# there exist a specialized version of MACRO for ARG1, use this macro
-# instead with arguments ARGS (i.e., ARG1 is *not* given).  See the
-# definition of `AC_DEFUN'.
-AC_DEFUN(AC_SPECIALIZE,
-[ifdef([$1-$2],
-       [indir([$1-$2], m4_shift(m4_shift($@)))],
-       [indir([$1], m4_shift($@))])])
 
 
 ## ----------------------------------- ##
@@ -924,7 +933,7 @@ done
 if test -n "$ac_prev"; then
   AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
 fi
-])dnl AC_INIT_PARSE_ARGS
+])# AC_INIT_PARSE_ARGS
 
 
 # AC_INIT_BINSH
@@ -943,6 +952,7 @@ AC_DIVERT_POP()dnl to KILL
 # Wrapper around m4_include.
 define(AC_INCLUDE,
 [m4_include([$1])])
+
 
 # AC_INCLUDES((FILE, ...))
 # ------------------------
@@ -1112,7 +1122,10 @@ AC_SUBST(mandir)dnl
 ])
 
 
-dnl ### Selecting optional features
+
+## ----------------------------- ##
+## Selecting optional features.  ##
+## ----------------------------- ##
 
 
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
@@ -1196,8 +1209,8 @@ esac])
 ## ---------------------------- ##
 
 
-# AC_ARG_PROGRAM()
-# ----------------
+# AC_ARG_PROGRAM
+# --------------
 # FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
 AC_DEFUN(AC_ARG_PROGRAM,
 [if test "$program_transform_name" = s,x,x,; then
@@ -1221,9 +1234,9 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 ])
 
 
-## --------------- ##
-## Version numbers ##
-## --------------- ##
+## ----------------- ##
+## Version numbers.  ##
+## ----------------- ##
 
 
 # AC_REVISION(REVISION-INFO)
@@ -1286,9 +1299,9 @@ define(AC_PREREQ,
 
 
 
-## --------------------------------- ##
-## Getting the canonical system type ##
-## --------------------------------- ##
+## ----------------------------------- ##
+## Getting the canonical system type.  ##
+## ----------------------------------- ##
 
 
 # AC_CONFIG_AUX_DIR(DIR)
@@ -1334,7 +1347,7 @@ ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"
 ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-])dnl AC_CONFIG_AUX_DIRS
+])# AC_CONFIG_AUX_DIRS
 
 
 # Canonicalize the host, target, and build system types.
@@ -1429,7 +1442,7 @@ AC_SUBST($1_alias)dnl
 AC_SUBST($1_cpu)dnl
 AC_SUBST($1_vendor)dnl
 AC_SUBST($1_os)dnl
-])dnl AC_CANONICAL_THING
+])# AC_CANONICAL_THING
 
 AC_DEFUN(AC_CANONICAL_HOST, [AC_CANONICAL_THING([host])])
 
@@ -1464,9 +1477,9 @@ ac_cv_target_system_type="$target"dnl
 ])
 
 
-## -------------------- ##
-## Caching test results ##
-## -------------------- ##
+## ---------------------- ##
+## Caching test results.  ##
+## ---------------------- ##
 
 
 # AC_SITE_LOAD
@@ -1580,9 +1593,10 @@ AC_CACHE_VAL([$2], [$3])dnl
 AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 
 
-## ---------------- ##
-## Defining symbols ##
-## ---------------- ##
+
+## ------------------ ##
+## Defining symbols.  ##
+## ------------------ ##
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
@@ -1609,9 +1623,9 @@ EOF
 
 
 
-## ------------------------ ##
-## Setting output variables ##
-## ------------------------ ##
+## -------------------------- ##
+## Setting output variables.  ##
+## -------------------------- ##
 
 
 # AC_SUBST(VARIABLE)
@@ -1642,9 +1656,13 @@ AC_DIVERT_POP()dnl
 
 
 
-## ------------------------------------- ##
-## Printing messages at autoconf runtime ##
-## ------------------------------------- ##
+## --------------------------------------- ##
+## Printing messages at autoconf runtime.  ##
+## --------------------------------------- ##
+
+# In fact, I think we should promote the use of m4_warn and m4_fatal
+# directly.  This will also avoid to some people to get it wrong
+# between AC_FATAL and AC_MSG_ERROR.
 
 # AC_WARNING(MESSAGE)
 define(AC_WARNING, [m4_warn([$1])])
@@ -1654,9 +1672,10 @@ define(AC_FATAL, [m4_fatal([$1], [$2])])
 
 
 
-## -------------------------------------- ##
-## Printing messages at configure runtime ##
-## -------------------------------------- ##
+
+## ---------------------------------------- ##
+## Printing messages at configure runtime.  ##
+## ---------------------------------------- ##
 
 # _AC_SH_QUOTE(STRING)
 # --------------------
@@ -1733,9 +1752,9 @@ define(AC_MSG_ERROR_UNQUOTED,
 [{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 
-## ------------------------------------------- ##
-## Selecting which language to use for testing ##
-## ------------------------------------------- ##
+## --------------------------------------------- ##
+## Selecting which language to use for testing.  ##
+## --------------------------------------------- ##
 
 
 # The current scheme is really not beautiful.  It'd be better to have
@@ -1873,9 +1892,9 @@ define(AC_INCLUDES_DEFAULT,
 [m4_default([$1], [$ac_includes_default])])
 
 
-## ------------------------ ##
-## Generic structure checks ##
-## ------------------------ ##
+## -------------------------- ##
+## Generic structure checks.  ##
+## -------------------------- ##
 
 # AC_CHECK_MEMBER(AGGREGATE.MEMBER,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
@@ -1902,7 +1921,7 @@ foo.patsubst([$1], [.*\.]);,
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Member) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Member])dnl
-])dnl AC_CHECK_MEMBER
+])# AC_CHECK_MEMBER
 
 
 # AC_CHECK_MEMBER((AGGREGATE.MEMBER, ...),
@@ -1924,9 +1943,9 @@ $2],
 
 
 
-## --------------------- ##
-## Checking for programs ##
-## --------------------- ##
+## ----------------------- ##
+## Checking for programs.  ##
+## ----------------------- ##
 
 
 # AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
@@ -1995,7 +2014,7 @@ else
   AC_MSG_RESULT(no)
 fi
 AC_SUBST($1)dnl
-])dnl AC_CHECK_PROG
+])# AC_CHECK_PROG
 
 
 # AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
@@ -2050,7 +2069,7 @@ else
   AC_MSG_RESULT(no)
 fi
 AC_SUBST($1)dnl
-])dnl AC_PATH_PROG
+])# AC_PATH_PROG
 
 
 # AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
@@ -2068,9 +2087,9 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 
 
 
-## ------------------ ##
-## Checking for tools ##
-## ------------------ ##
+## -------------------- ##
+## Checking for tools.  ##
+## -------------------- ##
 
 # Internal subroutine.
 AC_DEFUN(AC_CHECK_TOOL_PREFIX,
@@ -2097,6 +2116,7 @@ if test -z "$ac_cv_prog_$1"; then
   fi
 fi])
 ])
+
 
 # AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
 # -------------------------------------------------------------------------
@@ -2138,7 +2158,7 @@ changequote([, ])dnl
   fi
 fi
 popdef([AC_Prog])dnl
-])dnl AC_PREFIX_PROGRAM
+])# AC_PREFIX_PROGRAM
 
 
 # AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
@@ -2174,9 +2194,9 @@ fi
 rm -fr conftest*])
 
 
-## ---------------------- ##
-## Checking for libraries ##
-## ---------------------- ##
+## ------------------------ ##
+## Checking for libraries.  ##
+## ------------------------ ##
 
 
 # AC_TRY_LINK_FUNC(func, action-if-found, action-if-not-found)
@@ -2268,7 +2288,7 @@ AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
 ]),
                 [$4])dnl
 AC_VAR_POPDEF([ac_Lib])dnl
-])dnl AC_CHECK_LIB
+])# AC_CHECK_LIB
 
 
 
@@ -2277,13 +2297,13 @@ AC_VAR_POPDEF([ac_Lib])dnl
 AC_DEFUNCT(AC_HAVE_LIBRARY, [; instead use AC_CHECK_LIB])
 
 
-## ---------------------- ##
-## Examining declarations ##
-## ---------------------- ##
+## ------------------------ ##
+## Examining declarations.  ##
+## ------------------------ ##
 
 
-# AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
-# ----------------------------------------------------------
+# AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ---------------------------------------------------------
 # INCLUDES are not defaulted.
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
@@ -2311,6 +2331,7 @@ ifelse([$3], , , [  rm -rf conftest*
 ])dnl
 fi
 rm -f conftest*])
+
 
 # AC_EGREP_HEADER(PATTERN, HEADER-FILE,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
@@ -2348,12 +2369,13 @@ ifelse([$4], , , [else
 ])dnl
 fi
 rm -f conftest*
-])dnl AC_EGREP_CPP
+])# AC_EGREP_CPP
 
 
-## ---------------- ##
-## Examining syntax ##
-## ---------------- ##
+
+## ------------------ ##
+## Examining syntax.  ##
+## ------------------ ##
 
 
 # AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
@@ -2394,9 +2416,10 @@ fi
 rm -f conftest*])
 
 
-## ------------------- ##
-## Examining libraries ##
-## ------------------- ##
+
+## --------------------- ##
+## Examining libraries.  ##
+## --------------------- ##
 
 
 # AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
@@ -2408,6 +2431,7 @@ ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
 AC_TRY_LINK([$2], [$3], [$4], [$5])
 ])
+
 
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
@@ -2447,7 +2471,8 @@ ifelse([$4], , , [  rm -rf conftest*
 ])dnl
 fi
 rm -f conftest*
-])dnl AC_TRY_LINK
+])# AC_TRY_LINK
+
 
 
 ## -------------------------------- ##
@@ -2495,7 +2520,8 @@ ifelse([$3], , , [  rm -fr conftest*
 ])dnl
 fi
 rm -fr conftest*
-])dnl AC_TRY_RUN_NATIVE
+])# AC_TRY_RUN_NATIVE
+
 
 
 ## --------------------------- ##
@@ -2503,8 +2529,8 @@ rm -fr conftest*
 ## --------------------------- ##
 
 
-# AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-# -----------------------------------------------------------------------
+# AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ----------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADER,
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
@@ -2514,7 +2540,7 @@ AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Header) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Header])dnl
-])dnl AC_CHECK_HEADER
+])# AC_CHECK_HEADER
 
 
 # AC_CHECK_HEADERS(HEADER-FILE...
@@ -2530,12 +2556,12 @@ done
 ])
 
 
-## ----------------------------------- ##
-## Checking for the existence of files ##
-## ----------------------------------- ##
+## ------------------------------------- ##
+## Checking for the existence of files.  ##
+## ------------------------------------- ##
 
-# AC_CHECK_FILE(FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-# --------------------------------------------------------------
+# AC_CHECK_FILE(FILE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# -------------------------------------------------------------
 #
 # Check for the existence of FILE.
 AC_DEFUN(AC_CHECK_FILE,
@@ -2596,7 +2622,7 @@ AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
-])dnl AC_CHECK_DECL
+])# AC_CHECK_DECL
 
 
 # AC_CHECK_DECLS(SYMBOL,
@@ -2610,7 +2636,7 @@ AC_DEFUN([AC_CHECK_DECLS],
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP([NEED_]AC_Symbol[_DECL]))
 $3],
                  [$4])])
-])dnl AC_CHECK_DECLS
+])# AC_CHECK_DECLS
 
 
 ## -------------------------------- ##
@@ -2652,7 +2678,7 @@ f = $1;
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_var) = yes],
                [$2], [$3])dnl
 AC_VAR_POPDEF([ac_var])dnl
-])dnl AC_CHECK_FUNC
+])# AC_CHECK_FUNC
 
 
 # AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
@@ -2685,8 +2711,7 @@ AC_SUBST(LIBOBJS)dnl
 # AC_CHECK_SIZEOF(TYPE, [CROSS-SIZE], [INCLUDES])
 # -----------------------------------------------
 # This macro will probably be obsoleted by the macros of Kaveh.  In
-# addition `CHECK' is not a proper name (is not boolean). And finally:
-# shouldn't we use the default INCLUDES?
+# addition `CHECK' is not a proper name (is not boolean).
 AC_DEFUN(AC_CHECK_SIZEOF,
 [AC_VAR_PUSHDEF([ac_Sizeof], [ac_cv_sizeof_$1])dnl
 AC_CACHE_CHECK([size of $1], ac_Sizeof,
@@ -2793,7 +2818,7 @@ if (sizeof ($1))
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Type) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
-])dnl AC_CHECK_TYPE_INTERNAL
+])# AC_CHECK_TYPE_INTERNAL
 
 
 # AC_CHECK_TYPES((TYPE, ...),
@@ -2820,7 +2845,7 @@ AC_DEFUN(AC_CHECK_TYPE,
 [AC_CHECK_TYPE_INTERNAL([$1],,
                         [AC_DEFINE_UNQUOTED($1, $2)],
                         [$3])dnl
-])dnl AC_CHECK_TYPE
+])# AC_CHECK_TYPE
 
 
 
@@ -2958,7 +2983,7 @@ define([AC_Dests], m4_quote(m4_shift(AC_Dests)))])dnl
 dnl
 popdef([AC_Sources])dnl
 popdef([AC_Dests])dnl
-])dnl AC_LINK_FILES
+])# AC_LINK_FILES
 
 
 # AC_CONFIG_FILES(FILE...[, COMMANDS])
@@ -3113,7 +3138,7 @@ AC_OUTPUT_COMMANDS_POST()dnl
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
-])dnl AC_OUTPUT
+])# AC_OUTPUT
 
 
 # AC_OUTPUT_CONFIG_STATUS
@@ -3333,7 +3358,7 @@ undivert(AC_DIVERSION_CMDS)dnl
 exit 0
 EOF
 chmod +x $CONFIG_STATUS
-])dnl AC_OUTPUT_CONFIG_STATUS
+])# AC_OUTPUT_CONFIG_STATUS
 
 
 # AC_OUTPUT_MAKE_DEFS
@@ -3558,7 +3583,7 @@ AC_LIST_FILES_COMMANDS()dnl
 fi; done
 rm -f $ac_cs_root.s*
 EOF
-])dnl AC_OUTPUT_FILES
+])# AC_OUTPUT_FILES
 
 
 # AC_OUTPUT_HEADERS
@@ -3756,7 +3781,7 @@ AC_LIST_HEADERS_COMMANDS()dnl
 ])dnl
 fi; done
 EOF
-])dnl AC_OUTPUT_HEADERS
+])# AC_OUTPUT_HEADERS
 
 
 # AC_OUTPUT_LINKS
@@ -3827,7 +3852,7 @@ AC_LIST_LINKS_COMMANDS()dnl
 ])dnl
 fi; done
 EOF
-])dnl AC_OUTPUT_LINKS
+])# AC_OUTPUT_LINKS
 
 
 # AC_OUTPUT_COMMANDS_COMMANDS
@@ -3854,7 +3879,7 @@ AC_LIST_COMMANDS_COMMANDS()dnl
   esac
 fi;done
 EOF
-])dnl AC_OUTPUT_COMMANDS_COMMANDS
+])# AC_OUTPUT_COMMANDS_COMMANDS
 
 
 # AC_OUTPUT_SUBDIRS(DIRECTORY...)
@@ -3973,7 +3998,7 @@ changequote([, ])dnl
     cd $ac_popdir
   done
 fi
-])dnl AC_OUTPUT_SUBDIRS
+])# AC_OUTPUT_SUBDIRS
 
 
 # AC_LINKER_OPTION(LINKER-OPTIONS, SHELL-VARIABLE)
