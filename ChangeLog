@@ -1,5 +1,20 @@
 2000-10-23  Akim Demaille  <akim@epita.fr>
 
+	In order to check that all the CPP symbols which are AC_DEFINE'd
+	are properly templated, autoheader traces
+	AC_DEFINE/AC_DEFINE_UNQUOTED.  Only literals can be traced, and
+	actually tracing non literals produces invalid autoheader input.
+	Hence, provide a means to trace calls to
+	AC_DEFINE/AC_DEFINE_UNQUOTED with literals.
+
+	* acgeneral.m4 (AC_DEFINE_TRACE, AC_DEFINE_TRACE_LITERAL): New
+	macros.
+	(AC_DEFINE, AC_DEFINE_UNQUOTED): Use AC_DEFINE_TRACE.
+	* autoheader.sh: Trace AC_DEFINE_TRACE_LITERAL, not
+	AC_DEFINE/AC_DEFINE_UNQUOTED.
+
+2000-10-23  Akim Demaille  <akim@epita.fr>
+
 	Let autoupdate change AC_PREREQ to require the current version of
 	Autoconf.
 

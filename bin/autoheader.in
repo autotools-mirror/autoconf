@@ -250,8 +250,7 @@ $autoconf  \
   --trace AC_CONFIG_HEADERS:'config_h="$1"' \
   --trace AH_OUTPUT:'ac_verbatim_$1="\
 $2"' \
-  --trace AC_DEFINE:'syms="$$syms $1"' \
-  --trace AC_DEFINE_UNQUOTED:'syms="$$syms $1"' \
+  --trace AC_DEFINE_TRACE_LITERAL:'syms="$$syms $1"' \
   $infile >$tmp/traces.sh || { (exit 1); exit; }
 
 $verbose $me: sourcing $tmp/traces.sh >&2

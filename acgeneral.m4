@@ -2596,25 +2596,41 @@ AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 ## ---------------------- ##
 
 
+# AC_DEFINE_TRACE_LITERAL(LITERAL-CPP-SYMBOL)
+# -------------------------------------------
+# This macro is useless, it is used only with --trace to collect the
+# list of *literals* CPP values passed to AC_DEFINE/AC_DEFINE_UNQUOTED.
+define([AC_DEFINE_TRACE_LITERAL])
+
+
+# AC_DEFINE_TRACE(CPP-SYMBOL)
+# ---------------------------
+# This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
+# out non literal symbols.
+define([AC_DEFINE_TRACE],
+[AC_VAR_INDIR_IFELSE([$1], [], [AC_DEFINE_TRACE_LITERAL([$1])])])
+
+
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
 # -------------------------------------------
 # Set VARIABLE to VALUE, verbatim, or 1.  Remember the value
 # and if VARIABLE is affected the same VALUE, do nothing, else
 # die.  The third argument is used by autoheader.
 define([AC_DEFINE],
-[ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
+[AC_DEFINE_TRACE([$1])dnl
+ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<\EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
 
 
-
 # AC_DEFINE_UNQUOTED(VARIABLE, [VALUE], [DESCRIPTION])
 # ----------------------------------------------------
 # Similar, but perform shell substitutions $ ` \ once on VALUE.
 define([AC_DEFINE_UNQUOTED],
-[ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
+[AC_DEFINE_TRACE([$1])dnl
+ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
