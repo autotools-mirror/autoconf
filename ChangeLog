@@ -1,3 +1,13 @@
+2001-01-24  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	configure -q did not work since 2000-11-03.
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS_FDS): Don't check for $silent,
+	tie AS_MESSAGE_FD to stdout unconditionally.
+	(_AC_INIT_PARSE_ARGS): If $silent redirect AS_MESSAGE_FD to
+	/dev/null.
+	* tests/base.at (AC_CACHE_CHECK): New test.
+
 2001-01-24  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* m4sh.m4 (AS_EXECUTABLE_P, _AS_TEST_PREPARE): New macros.

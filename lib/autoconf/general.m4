@@ -684,14 +684,10 @@ m4_define([_AC_INIT_DEFAULTS_FDS],
 # 0 standard input
 # 1 file creation
 # 2 errors and warnings
-@%:@ AS_MESSAGE_FD checking for... messages and results
 @%:@ AS_MESSAGE_LOG_FD compiler messages saved in config.log
-if test "$silent" = yes; then
-  exec AS_MESSAGE_FD>/dev/null
-else
-  exec AS_MESSAGE_FD>&1
-fi
+@%:@ AS_MESSAGE_FD checking for... messages and results
 exec AS_MESSAGE_LOG_FD>>config.log
+exec AS_MESSAGE_FD>&1
 ])# _AC_INIT_DEFAULTS_FDS
 
 
@@ -1223,6 +1219,8 @@ fi
 
 ac_tool_prefix=
 test -n "$host_alias" && ac_tool_prefix=$host_alias-
+
+test "$silent" = yes && exec AS_MESSAGE_FD>/dev/null
 
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_PARSE_ARGS
