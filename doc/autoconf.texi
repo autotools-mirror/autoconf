@@ -3881,6 +3881,10 @@ should accept @option{-1} for @code{uid} and @code{gid}), define
 If the @code{closedir} function does not return a meaningful value,
 define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
 return value for an error indicator.
+
+Currently this test is implemented by running a test program.  When
+cross compiling the pessimistic assumption that `closedir' does not
+return a meaningful value is made.
 @end defmac
 
 @defmac AC_FUNC_ERROR_AT_LINE
