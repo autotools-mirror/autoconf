@@ -4322,6 +4322,9 @@ On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 @item @file{sys/socket.h}
 On Darwin, @file{stdlib.h} is a prerequisite.
 
+@item @file{sys/ucred.h}
+On HP Tru64 5.1, @file{sys/types.h} is a prerequisite.
+
 @item @file{X11/extensions/scrnsaver.h}
 Using XFree86, this header requires @file{X11/Xlib.h}, which is probably
 so required that you might not even consider looking for it.

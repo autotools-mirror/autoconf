@@ -1,3 +1,8 @@
+2003-05-23  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Header Portability): ucred.h.
+	From Ian Redfern.
+
 2003-05-22  Paolo Bonzini  <bonzini@gnu.org>
 
 	Overhaul Autotest's logging: generate separate log files
@@ -34,7 +39,7 @@
 	* lib/autoconf/autotest.m4, lib/autoconf/autoupdate.m4
 	* lib/autoconf/fortran.m4 lib/autoconf/general.m4
 	* lib/autoconf/headers.m4 lib/autoconf/oldnames.m4
-	* lib/autoconf/status.m4: Fix and adjust copyright notices.	
+	* lib/autoconf/status.m4: Fix and adjust copyright notices.
 
 2003-05-22  Akim Demaille  <akim@epita.fr>
 
