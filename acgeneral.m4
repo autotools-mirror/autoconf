@@ -1459,6 +1459,26 @@ done
 dnl
 define(AC_OUTPUT_CONFIG_SUBDIRS,
 [if test -z "${norecursion}"; then
+
+  # Remove --cache-file arguments so they don't pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    esac
+  done
+
   for ac_config_dir in $1; do
 
     # Don't complain, so a configure script can configure whichever
@@ -1501,9 +1521,21 @@ define(AC_OUTPUT_CONFIG_SUBDIRS,
       ac_sub_configure=
     fi
 
+    # Make the cache file name correct relative to the subdirectory.
+changequote(,)dnl
+    # A "../" for each directory in /${ac_config_dir}.
+    ac_dots=`echo /${ac_config_dir}|sed 's%/[^/]*%../%g'`
+changequote([,])dnl
+    case "$cache_file" in
+    /*) ac_sub_cache_file=$cache_file ;;
+    *) # Relative path.
+      ac_sub_cache_file="$ac_dots$cache_file" ;;
+    esac
+
     # The recursion is here.
     if test -n "${ac_sub_configure}"; then
-      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${configure_args} --cache-file=$cache_file
+      AC_VERBOSE([running ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file])
+      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file
       then :
       else
         AC_ERROR(${ac_sub_configure} failed for ${ac_config_dir})
