@@ -2646,6 +2646,28 @@ of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
 the base of the file name that the lexer generates; usually
 @file{lex.yy}, but sometimes something else.  These results vary
 according to whether @code{lex} or @code{flex} is being used.
+
+You are encouraged to use Flex in your sources, since it is both more
+pleasant to use than plain Lex, and the C source it produces is
+portable.  But in order to ensure portability, you must either provide a
+function @code{yywrap}, or if you don't use it (i.e., your scanner has
+no @samp{#include}-like feature), simply include a @samp{%noyywrap}
+statement in the scanner's source.  Once this done, the scanner is
+portable (well, unless @emph{you} felt free to use nonportable
+constructs) and does not depend on any library.  In this case, and in
+this case only, it is suggested that you use this Autoconf snippet:
+
+@example
+AC_PROG_LEX
+if test "$LEX" != flex; then
+  LEX="$SHELL $missing_dir/missing flex"
+  AC_SUBST(LEX_OUTPUT_ROOT, lex.yy)
+  AC_SUBST(LEXLIB, '')
+fi
+@end example
+
+The shell script @command{missing} can be found in the Automake
+distribution.
 @end defmac
 
 @defmac AC_PROG_LN_S
