@@ -1,5 +1,9 @@
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/foreign.at (Libtool): Reject prehistoric versions.
+
+2001-06-23  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Try to be robust to
 	preexisting files matching a.*.
 
