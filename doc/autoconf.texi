@@ -5738,6 +5738,12 @@ processor super-computer.  It claims to be @sc{posix} certified. More
 information is available on the @href{www.qnx.com, @sc{qnx} home page},
 including the @href{http://support.qnx.com/support/docs/qnx4/, @sc{qnx}
 man pages}.
+
+@item Unix version 7
+@cindex Unix version 7
+@cindex V7
+Documentation is available in the
+@href{http://plan9.bell-labs.com/7thEdMan/index.html, V7 Manual}.
 @end table
 
 
@@ -7997,7 +8003,9 @@ techniques you should avoid in order to make your code portable.  The
 Bourne shell and upward-compatible shells like the Korn shell and Bash
 have evolved over the years, but to prevent trouble, do not take
 advantage of features that were added after @sc{unix} version 7, circa
-1977.  You should not use shell functions, aliases, negated character
+1977 (@pxref{Systemology}).
+
+You should not use shell functions, aliases, negated character
 classes, or other features that are not found in all Bourne-compatible
 shells; restrict yourself to the lowest common denominator.  Even
 @code{unset} is not supported by all shells!  Also, include a space
