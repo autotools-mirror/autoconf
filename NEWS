@@ -7,7 +7,7 @@ Major changes in release 2.0:
 
 ** New macros:
 * AC_CACHE_VAL to share results of tests between configure runs.
-* AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
+* AC_CONFIG_AUX, AC_CANON_SYSTEM, AC_SUBST_FILE, AC_MAKE_LINKS to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
 * AC_TEST_LINK which should be used instead of AC_COMPILE_CHECK, in
@@ -16,8 +16,10 @@ Major changes in release 2.0:
 ** Changed macros:
 * AC_OUTPUT adds the "automatically generated" comment after "#!" lines, 
   not before them.
+* AC_OUTPUT does not replace "prefix" and "exec_prefix" in generated
+  files when they are not enclosed in @ signs.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
-  AC_CONFIG_AUX, or srcdir or srcdir/.. by default.
+  AC_CONFIG_AUX, or srcdir or srcdir/.. or srcdir/../.. by default.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by
