@@ -523,6 +523,19 @@ AT_CLEANUP
 # `-- install-sh
 #
 AT_SETUP([Configuring subdirectories])
+AT_KEYWORDS(autoreconf)
+
+# Move into a fresh testSubDir.  But Autotest is not ready for such
+# tricks, albeit most useful :( It expects to find its files
+# (at-setup-line and so on) in the original `.', and it will complain
+# not to find even one.  So just run mkdir as if it were a test.  This
+# will create at-setup-line blah blah, and Autotest will leave us in
+# peace.
+#
+# FIXME: The more I think about it, the more I am tempted to *always*
+# have test groups run in a subdir, a` la Automake.
+AT_CHECK([AS_MKDIR_P([testSubDir])])
+cd testSubDir
 
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
@@ -545,15 +558,18 @@ top_srcdir=@top_srcdir@
 # The contents of `.'
 AT_DATA([install-sh], [])
 
+# nonexistent is allowed not to exist.
 AT_DATA([configure.ac],
 [AC_INIT(GNU Outer, 1.0)
 AC_ARG_VAR([OUTER], [an outer variable])
+if false; then
+  AC_CONFIG_SUBDIRS([nonexistent])
+fi
 AC_CONFIG_SUBDIRS([inner])
 AC_OUTPUT
 ])
 
-AT_CHECK_AUTOCONF
-AT_CHECK_AUTOCONF([-o inner/configure inner/configure.ac])
+AT_CHECK([autoreconf])
 AT_CHECK([test -f inner/configure])
 
 # Running the outer configure recursively should provide the innermost
@@ -578,4 +594,4 @@ top_srcdir=../../../inner
 ])
 
 
-AT_CLEANUP(inner builddir)
+AT_CLEANUP(testSubDir)

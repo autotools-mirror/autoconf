@@ -240,9 +240,22 @@ sub autoreconf ($)
       $uses_gettext = 1           if /AM_GNU_GETTEXT/;
       $uses_libtool = 1           if /AM_PROG_LIBTOOL/;
       $uses_autoheader = 1        if /AC_CONFIG_HEADERS/;
-      push @ARGV, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
+      push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
     }
 
+  # The subdirs are *optional*, they may not exist.
+  foreach (@subdir)
+    {
+      if (-d)
+	{
+	  verbose "$configure_ac: subdirectory $_ to autoreconf";
+	  push @ARGV, $_;
+	}
+      else
+	{
+	  verbose "$configure_ac: subdirectory $_ not present";
+	}
+    }
 
   # -------------------- #
   # Running gettexitze.  #

@@ -1,3 +1,12 @@
+2001-11-08  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (&autoreconf): AC_CONFIG_SUBIDRS are to be
+	processed only if present.
+	* tests/torture.at (Configuring subdirectories): Use autoreconf
+	instead of successive calls to autoconf.
+	Add a nonexistent subdirectory to exercise the patch above.
+	Reported by Ralf Corsepius.
+
 2001-11-08  Kevin Ryde  <user42@zip.com.au>
 
 	* autoconf.texi (Limitations of Usual Tools): Note HP-UX cc
