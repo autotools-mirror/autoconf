@@ -186,6 +186,7 @@ if test "z${INSTALL}" = "z" ; then
 fi
 if test -z "$INSTALL"; then
   if test -f ${srcdir}/install.sh; then
+    # As a last resort, use the slow shell script.
     # We want the top-level source directory, not the subdir's srcdir,
     # so expand srcdir now rather than in the Makefile.
     INSTALL="${srcdir}/install.sh -c"
@@ -250,7 +251,9 @@ AC_TEST_PROGRAM([#include <ctype.h>
 int main () { int i; for (i = 0; i < 256; i++)
 if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
 exit (0); }
-],AC_DEFINE(STDC_HEADERS)))])
+],
+[# ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
+AC_HEADER_EGREP(free, stdlib.h, AC_DEFINE(STDC_HEADERS))]))])
 ])dnl
 dnl
 define(AC_UNISTD_H, [AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(unistd.h)])AC_HEADER_CHECK(unistd.h,
