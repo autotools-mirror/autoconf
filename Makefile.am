@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = check-news
+AUTOMAKE_OPTIONS = check-news 1.4
 
 SUBDIRS = testsuite
 
@@ -29,11 +29,18 @@ SUFFIXES = .m4 .m4f .pl .sh
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
-dist_pkgdata_DATA = \
+# FIXME:
+# s/distpackageDATA/dist_pkgdata_DATA/
+# s/nodistpackageDATA/nodist_pkgdata_DATA/
+# and adapt dependencies once we use a more recent Automake
+
+distpkgdataDATA = \
 acfunctions acheaders acidentifiers acmakevars acprograms \
 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
 
-nodist_pkgdata_DATA = autoconf.m4f autoheader.m4f acversion.m4
+nodistpkgdataDATA = autoconf.m4f autoheader.m4f acversion.m4
+
+pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = install.texi
@@ -41,8 +48,9 @@ standards_TEXINFOS = make-stds.texi
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
-	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
-	     ifnames.sh autoscan.pl INSTALL.txt
+autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
+ifnames.sh autoscan.pl INSTALL.txt \
+$(distpkgdataDATA)
 
 # Files that should be removed, but which Automake does not know.
 # There are texi2dvi files, frozen files, and the scripts.

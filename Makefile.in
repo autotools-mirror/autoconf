@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4a from Makefile.am
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -9,6 +9,7 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
+
 
 SHELL = @SHELL@
 
@@ -45,10 +46,9 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
-INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -57,24 +57,15 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-AMDEP = @AMDEP@
-AMTAR = @AMTAR@
 AWK = @AWK@
-CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
-DEPDIR = @DEPDIR@
 M4 = @M4@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
 VERSION = @VERSION@
-install_sh = @install_sh@
 standards_texi = @standards_texi@
 
-
-AUTOMAKE_OPTIONS = check-news
+AUTOMAKE_OPTIONS = check-news 1.4
 
 SUBDIRS = testsuite
 
@@ -85,62 +76,57 @@ SUFFIXES = .m4 .m4f .pl .sh
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
-dist_pkgdata_DATA = \
-acfunctions acheaders acidentifiers acmakevars acprograms \
-acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
+# FIXME:
+# s/distpackageDATA/dist_pkgdata_DATA/
+# s/nodistpackageDATA/nodist_pkgdata_DATA/
+# and adapt dependencies once we use a more recent Automake
+
+distpkgdataDATA =  acfunctions acheaders acidentifiers acmakevars acprograms acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
 
 
-nodist_pkgdata_DATA = autoconf.m4f autoheader.m4f acversion.m4
+nodistpkgdataDATA = autoconf.m4f autoheader.m4f acversion.m4
+
+pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = install.texi
 standards_TEXINFOS = make-stds.texi
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
-EXTRA_DIST = $(OLDCHANGELOGS) \
-	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
-	     ifnames.sh autoscan.pl INSTALL.txt
+EXTRA_DIST = $(OLDCHANGELOGS) autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh autoscan.pl INSTALL.txt $(distpkgdataDATA)
 
 
 # Files that should be removed, but which Automake does not know.
 # There are texi2dvi files, frozen files, and the scripts.
-CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
-autoconf.ov autoconf.ovs autoconf.m4f autoheader.m4f $(bin_SCRIPTS)
+CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas autoconf.ov autoconf.ovs autoconf.m4f autoheader.m4f $(bin_SCRIPTS)
 
 
 # The scripts.
 
-editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e \
-	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' \
-	-e 's,@''SHELL''@,$(SHELL),g'
+editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g'
 
 editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g'
-subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  acversion.m4
 SCRIPTS =  $(bin_SCRIPTS)
 
-CFLAGS = @CFLAGS@
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = 
 TEXI2DVI = texi2dvi
 INFO_DEPS = autoconf.info standards.info
 DVIS = autoconf.dvi standards.dvi
 TEXINFOS = autoconf.texi standards.texi
-DATA =  $(dist_pkgdata_DATA) $(nodist_pkgdata_DATA)
+DATA =  $(pkgdata_DATA)
 
-DIST_COMMON =  README $(autoconf_TEXINFOS) $(dist_pkgdata_DATA) \
-$(standards_TEXINFOS) AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-Makefile.in NEWS THANKS TODO aclocal.m4 acversion.m4.in config.guess \
-config.sub configure configure.in depcomp install-sh mdate-sh missing \
-mkinstalldirs stamp-vti texinfo.tex version.texi
+DIST_COMMON =  README $(autoconf_TEXINFOS) $(standards_TEXINFOS) AUTHORS \
+COPYING ChangeLog INSTALL Makefile.am Makefile.in NEWS THANKS TODO \
+aclocal.m4 acversion.m4.in config.guess config.sub configure \
+configure.in install-sh mdate-sh missing mkinstalldirs stamp-vti \
+texinfo.tex version.texi
 
 
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
@@ -166,22 +152,19 @@ install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  f="`echo $$p|sed '$(transform)'`"; \
 	  if test -f $$p; then \
-	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/$$f"; \
-	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/$$f; \
-	  elif test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/$$f"; \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/$$f; \
-	  else :; fi; \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; fi; \
 	done
 
 uninstall-binSCRIPTS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  f="`echo $$p|sed '$(transform)'`"; \
-	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
-	  rm -f $(DESTDIR)$(bindir)/$$f; \
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 
 $(srcdir)/version.texi: stamp-vti
@@ -223,7 +206,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .texi.dvi:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	TEXINPUTS=.:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .texi:
@@ -242,7 +225,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .texinfo.dvi:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	TEXINPUTS=.:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .txi.info:
@@ -251,7 +234,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .txi.dvi:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	TEXINPUTS=.:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .txi:
@@ -267,7 +250,7 @@ install-info-am: $(INFO_DEPS)
 	@list='$(INFO_DEPS)'; \
 	for file in $$list; do \
 	  d=$(srcdir); \
-	  for ifile in `CDPATH=: && cd $$d && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
+	  for ifile in `cd $$d && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
 	    if test -f $$d/$$ifile; then \
 	      echo " $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile"; \
 	      $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile; \
@@ -286,26 +269,24 @@ install-info-am: $(INFO_DEPS)
 uninstall-info:
 	$(PRE_UNINSTALL)
 	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-	  list='$(INFO_DEPS)'; \
-	  for file in $$list; do \
-	    echo " install-info --info-dir=$(DESTDIR)$(infodir) --remove $(DESTDIR)$(infodir)/$$file"; \
-	    install-info --info-dir=$(DESTDIR)$(infodir) --remove $(DESTDIR)$(infodir)/$$file; \
-	  done; \
-	else :; fi
-	@$(NORMAL_UNINSTALL)
-	@list='$(INFO_DEPS)'; \
+	  ii=yes; \
+	else ii=; fi; \
+	list='$(INFO_DEPS)'; \
 	for file in $$list; do \
-	  (if cd $(DESTDIR)$(infodir); then \
-	     echo " rm -f $$file $$file-[0-9] $$file-[0-9][0-9])"; \
-	     rm -f $$file $$file-[0-9] $$file-[0-9][0-9]; \
-	   else :; fi); \
+	  test -z "$ii" \
+	    || install-info --info-dir=$(DESTDIR)$(infodir) --remove $$file; \
+	done
+	@$(NORMAL_UNINSTALL)
+	list='$(INFO_DEPS)'; \
+	for file in $$list; do \
+	  (cd $(DESTDIR)$(infodir) && rm -f $$file $$file-[0-9] $$file-[0-9][0-9]); \
 	done
 
 dist-info: $(INFO_DEPS)
 	list='$(INFO_DEPS)'; \
 	for base in $$list; do \
 	  d=$(srcdir); \
-	  for file in `CDPATH=: && cd $$d && eval echo $$base*`; do \
+	  for file in `cd $$d && eval echo $$base*`; do \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
 	    || cp -p $$d/$$file $(distdir)/$$file; \
@@ -314,16 +295,15 @@ dist-info: $(INFO_DEPS)
 
 mostlyclean-aminfo:
 	-rm -f autoconf.aux autoconf.cp autoconf.cps autoconf.dvi autoconf.fn \
-	  autoconf.fns autoconf.pgs autoconf.ky autoconf.kys \
-	  autoconf.ps autoconf.log autoconf.pg autoconf.toc autoconf.tp \
+	  autoconf.fns autoconf.ky autoconf.kys autoconf.ps \
+	  autoconf.log autoconf.pg autoconf.toc autoconf.tp \
 	  autoconf.tps autoconf.vr autoconf.vrs autoconf.op autoconf.tr \
-	  autoconf.cv autoconf.cn autoconf.cm autoconf.ov standards.aux \
-	  standards.cp standards.cps standards.dvi standards.fn \
-	  standards.fns standards.pgs standards.ky standards.kys \
-	  standards.ps standards.log standards.pg standards.toc \
-	  standards.tp standards.tps standards.vr standards.vrs \
-	  standards.op standards.tr standards.cv standards.cn \
-	  standards.cm standards.ov
+	  autoconf.cv autoconf.cn standards.aux standards.cp \
+	  standards.cps standards.dvi standards.fn standards.fns \
+	  standards.ky standards.kys standards.ps standards.log \
+	  standards.pg standards.toc standards.tp standards.tps \
+	  standards.vr standards.vrs standards.op standards.tr \
+	  standards.cv standards.cn
 
 clean-aminfo:
 
@@ -337,40 +317,23 @@ maintainer-clean-aminfo:
 	  fi; \
 	done
 
-install-dist_pkgdataDATA: $(dist_pkgdata_DATA)
+install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	@list='$(dist_pkgdata_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f; \
+	@list='$(pkgdata_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  fi; fi; \
 	done
 
-uninstall-dist_pkgdataDATA:
+uninstall-pkgdataDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_pkgdata_DATA)'; for p in $$list; do \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " rm -f $(DESTDIR)$(pkgdatadir)/$$f"; \
-	  rm -f $(DESTDIR)$(pkgdatadir)/$$f; \
-	done
-
-install-nodist_pkgdataDATA: $(nodist_pkgdata_DATA)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	@list='$(nodist_pkgdata_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f; \
-	done
-
-uninstall-nodist_pkgdataDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(nodist_pkgdata_DATA)'; for p in $$list; do \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " rm -f $(DESTDIR)$(pkgdatadir)/$$f"; \
-	  rm -f $(DESTDIR)$(pkgdatadir)/$$f; \
+	list='$(pkgdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(pkgdatadir)/$$p; \
 	done
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -409,7 +372,7 @@ maintainer-clean-recursive:
 	dot_seen=no; \
 	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
 	  rev="$$subdir $$rev"; \
-	  if test "$$subdir" = "."; then dot_seen=yes; else :; fi; \
+	  test "$$subdir" = "." && dot_seen=yes; \
 	done; \
 	test "$$dot_seen" = "no" && rev=". $$rev"; \
 	target=`echo $@ | sed s/-recursive//`; \
@@ -430,17 +393,15 @@ tags-recursive:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
-	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '    { files[$$0] = 1; } \
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
-	mkid -f$$here/ID $$unique $(LISP)
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
@@ -448,14 +409,12 @@ TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
    fi; \
 	done; \
-	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '    { files[$$0] = 1; } \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || etags $(ETAGS_ARGS) $$tags  $$unique $(LISP)
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
@@ -469,64 +428,54 @@ maintainer-clean-tags:
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
 
-
 # This target untars the dist file and tries a VPATH configuration.  Then
 # it guarantees that the distribution is self-contained by making another
 # tarfile.
 distcheck: dist
-	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
-	GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(AMTAR) xf -
-	chmod -R a-w $(distdir); chmod a+w $(distdir)
+	-rm -rf $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) zxf $(distdir).tar.gz
 	mkdir $(distdir)/=build
 	mkdir $(distdir)/=inst
-	chmod a-w $(distdir)
-	dc_install_base=`CDPATH=: && cd $(distdir)/=inst && pwd` \
-	  && cd $(distdir)/=build \
+	dc_install_base=`cd $(distdir)/=inst && pwd`; \
+	cd $(distdir)/=build \
 	  && ../configure --srcdir=.. --prefix=$$dc_install_base \
 	  && $(MAKE) $(AM_MAKEFLAGS) \
 	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
 	  && $(MAKE) $(AM_MAKEFLAGS) check \
 	  && $(MAKE) $(AM_MAKEFLAGS) install \
 	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
-	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
-	  && test `find $$dc_install_base -type f -print | wc -l` -le 1 \
-	  && $(MAKE) $(AM_MAKEFLAGS) dist \
-	  && $(MAKE) $(AM_MAKEFLAGS) distclean \
-	  && rm -f $(distdir).tar.gz \
-	  && test `find . -type f -print | wc -l` -eq 0
-	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
+	  && $(MAKE) $(AM_MAKEFLAGS) dist
+	-rm -rf $(distdir)
 	@banner="$(distdir).tar.gz is ready for distribution"; \
 	dashes=`echo "$$banner" | sed s/./=/g`; \
 	echo "$$dashes"; \
 	echo "$$banner"; \
 	echo "$$dashes"
 dist: distdir
-	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
-	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -444 -exec $(SHELL) $(install_sh) -c -m a+r {} {} \; \
-	|| chmod -R a+r $(distdir)
-	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c > $(distdir).tar.gz
-	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
 dist-all: distdir
-	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
-	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -444 -exec $(SHELL) $(install_sh) -c -m a+r {} {} \; \
-	|| chmod -R a+r $(distdir)
-	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c > $(distdir).tar.gz
-	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
+	-chmod -R a+r $(distdir)
+	GZIP=$(GZIP_ENV) $(TAR) chozf $(distdir).tar.gz $(distdir)
+	-rm -rf $(distdir)
 distdir: $(DISTFILES)
 	@if sed 15q $(srcdir)/NEWS | fgrep -e "$(VERSION)" > /dev/null; then :; else \
 	  echo "NEWS not updated; not releasing" 1>&2; \
 	  exit 1; \
 	fi
-	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
+	-rm -rf $(distdir)
 	mkdir $(distdir)
+	-chmod 777 $(distdir)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pR $$d/$$file $(distdir); \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -538,6 +487,7 @@ distdir: $(DISTFILES)
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \
 	    || exit 1; \
+	    chmod 777 $(distdir)/$$subdir; \
 	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir=../$(distdir) distdir=../$(distdir)/$$subdir distdir) \
 	      || exit 1; \
 	  fi; \
@@ -554,8 +504,7 @@ installcheck: installcheck-recursive
 install-exec-am: install-binSCRIPTS
 install-exec: install-exec-recursive
 
-install-data-am: install-info-am install-dist_pkgdataDATA \
-		install-nodist_pkgdataDATA
+install-data-am: install-info-am install-pkgdataDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-data: install-data-recursive
@@ -563,18 +512,16 @@ install-data: install-data-recursive
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am: uninstall-binSCRIPTS uninstall-info \
-		uninstall-dist_pkgdataDATA uninstall-nodist_pkgdataDATA
+uninstall-am: uninstall-binSCRIPTS uninstall-info uninstall-pkgdataDATA
 uninstall: uninstall-recursive
 all-am: Makefile $(INFO_DEPS) $(SCRIPTS) $(DATA)
 all-redirect: all-recursive
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
 	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(infodir) \
-		$(DESTDIR)$(dist_pkgdatadir) \
-		$(DESTDIR)$(nodist_pkgdatadir)
+		$(DESTDIR)$(pkgdatadir)
 
 
 mostlyclean-generic:
@@ -587,7 +534,6 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	-rm -f Makefile.in
 mostlyclean-am:  mostlyclean-vti mostlyclean-aminfo mostlyclean-tags \
 		mostlyclean-generic
 
@@ -616,9 +562,7 @@ maintainer-clean: maintainer-clean-recursive
 .PHONY: uninstall-binSCRIPTS install-binSCRIPTS mostlyclean-vti \
 distclean-vti clean-vti maintainer-clean-vti install-info-am \
 uninstall-info mostlyclean-aminfo distclean-aminfo clean-aminfo \
-maintainer-clean-aminfo uninstall-dist_pkgdataDATA \
-install-dist_pkgdataDATA uninstall-nodist_pkgdataDATA \
-install-nodist_pkgdataDATA install-recursive uninstall-recursive \
+maintainer-clean-aminfo uninstall-pkgdataDATA install-pkgdataDATA \
 install-data-recursive uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
@@ -627,10 +571,9 @@ maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
 dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
 install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all install-strip \
-installdirs-am installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+uninstall-am uninstall all-redirect all-am all installdirs-am \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # INSTALL is a special case.  Automake seems to have a single name space

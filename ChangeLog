@@ -1,5 +1,15 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Work properly with Automake 1.4.
+
+	* Makefile.am (distpkgdataDATA): Replaces dist_pkgdata_DATA.
+	(nodistpkgdataDATA): Replaces nodist_pkgdata_DATA.
+	(EXTRA_DIST): Added $(distpkgdataDATA).
+	(pkgdata_DATA): Adapted.
+	(AUTOMAKE_OPTION): Require 1.4.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Fix a bug in templates of AC_CHECK_LIB.
 
 	* autoheader.m4 (AH_CHECK_LIB): Template HAVE_LIBFOO, not
