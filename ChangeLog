@@ -1,3 +1,7 @@
+2001-01-18  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* m4sh.m4 (AS_MKDIR_P): Properly support DOS-style paths.
+
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
 	* tests/foreign.at (Autoconf & Libtool): `configure.in', not `.ac'

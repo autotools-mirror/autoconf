@@ -1927,9 +1927,15 @@ echo X"$ac_file" |
   *)                      ac_incr_dir=.;;
 esac
 ac_dummy="$ac_dir"
-for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$@"`; do
-  ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
-  test -d $ac_incr_dir || mkdir $ac_incr_dir
+for ac_mkdir_dir in `IFS='\\/'; set X $ac_dummy; shift; echo "$@"`; do
+  case $ac_mkdir_dir in
+    # Skip DOS drivespec
+    ?:) ac_incr_dir=$ac_mkdir_dir ;;
+    *)
+      ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
+      test -d "$ac_incr_dir" || mkdir "$ac_incr_dir"
+    ;;
+  esac
 done; }
 
     ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
@@ -1957,7 +1963,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1960: creating $ac_file" >&5
+    { echo "$as_me:1966: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -1975,7 +1981,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]* | ?:[\\/]*)
          # Absolute
-         test -f "$f" || { { echo "$as_me:1978: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:1984: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -1988,7 +1994,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $ac_given_srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:1991: error: cannot find input file: $f" >&5
+           { { echo "$as_me:1997: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
