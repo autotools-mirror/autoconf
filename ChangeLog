@@ -1,3 +1,9 @@
+2000-06-27  Jim Meyering  <meyering@lucent.com>
+
+	* acspecific.m4 (_AC_LIBOBJ_GETLOADAVG): Put quotes around use of
+	`$ac_cv_lib_elf_elf_begin', since that variable may not be defined.
+	From Volker Borchert.
+
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi: Fix various typos.
