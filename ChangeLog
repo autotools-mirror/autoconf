@@ -1,3 +1,7 @@
+2001-06-14  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Portable Shell): Move after `Writing Macros'.
+
 2001-06-13  Akim Demaille  <akim@epita.fr>
 
 	* m4/missing.m4, config/missing: Updated to Automake 1.4g's.

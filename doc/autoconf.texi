@@ -137,9 +137,9 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Setup::                       Initialization and output
 * Existing Tests::              Macros that check for particular features
 * Writing Tests::               How to write new feature checks
-* Portable Shell::              Shell script portability pitfalls
 * Results::                     What to do with results from feature checks
 * Writing Macros::              Adding new macros to Autoconf
+* Portable Shell::              Shell script portability pitfalls
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @code{configure}
 * Running configure scripts::   How to use the Autoconf output
@@ -270,19 +270,6 @@ Checking Run Time Behavior
 * Guidelines::                  General rules for writing test programs
 * Test Functions::              Avoiding pitfalls in test programs
 
-Portable Shell Programming
-
-* Shellology::                  A zoology of shells
-* Here-Documents::              Quirks and tricks
-* File Descriptors::            FDs and redirections
-* File System Conventions::     File- and pathnames
-* Shell Substitutions::         Variable and command expansions
-* Assignments::                 Varying side effects of assignments
-* Special Shell Variables::     Variables you should not change
-* Limitations of Builtins::     Portable use of not so portable /bin/sh
-* Limitations of Usual Tools::  Portable use of portable tools
-* Limitations of Make::         Portable Makefiles
-
 Results of Tests
 
 * Defining Symbols::            Defining C preprocessor symbols
@@ -317,6 +304,19 @@ Dependencies Between Macros
 
 * Prerequisite Macros::         Ensuring required information
 * Suggested Ordering::          Warning about possible ordering problems
+
+Portable Shell Programming
+
+* Shellology::                  A zoology of shells
+* Here-Documents::              Quirks and tricks
+* File Descriptors::            FDs and redirections
+* File System Conventions::     File- and pathnames
+* Shell Substitutions::         Variable and command expansions
+* Assignments::                 Varying side effects of assignments
+* Special Shell Variables::     Variables you should not change
+* Limitations of Builtins::     Portable use of not so portable /bin/sh
+* Limitations of Usual Tools::  Portable use of portable tools
+* Limitations of Make::         Portable Makefiles
 
 Manual Configuration
 
@@ -731,9 +731,9 @@ use.  Autoconf macros already exist to check for many features; see
 you can use Autoconf template macros to produce custom checks; see
 @ref{Writing Tests}, for information about them.  For especially tricky
 or specialized features, @file{configure.ac} might need to contain some
-hand-crafted shell commands.  The @code{autoscan} program can give you a
-good start in writing @file{configure.ac} (@pxref{autoscan Invocation},
-for more information).
+hand-crafted shell commands; see @ref{Portable Shell}.  The
+@code{autoscan} program can give you a good start in writing
+@file{configure.ac} (@pxref{autoscan Invocation}, for more information).
 
 Previous versions of Autoconf promoted the name @file{configure.in},
 which is somewhat ambiguous (the tool needed to produce this file is not
@@ -4826,7 +4826,7 @@ facilities.  Should be called before any macros that run the C compiler.
 
 @c ========================================================= Writing Tests
 
-@node Writing Tests, Portable Shell, Existing Tests, Top
+@node Writing Tests, Results, Existing Tests, Top
 @chapter Writing Tests
 
 If the existing feature tests don't do something you need, you have to
@@ -5275,9 +5275,1409 @@ depending on which language is current.
 
 
 
+@c ====================================================== Results of Tests.
+
+@node Results, Writing Macros, Writing Tests, Top
+@chapter Results of Tests
+
+Once @code{configure} has determined whether a feature exists, what can
+it do to record that information?  There are four sorts of things it can
+do: define a C preprocessor symbol, set a variable in the output files,
+save the result in a cache file for future @code{configure} runs, and
+print a message letting the user know the result of the test.
+
+@menu
+* Defining Symbols::            Defining C preprocessor symbols
+* Setting Output Variables::    Replacing variables in output files
+* Caching Results::             Speeding up subsequent @code{configure} runs
+* Printing Messages::           Notifying @code{configure} users
+@end menu
+
+@node Defining Symbols, Setting Output Variables, Results, Results
+@section Defining C Preprocessor Symbols
+
+A common action to take in response to a feature test is to define a C
+preprocessor symbol indicating the results of the test.  That is done by
+calling @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}.
+
+By default, @code{AC_OUTPUT} places the symbols defined by these macros
+into the output variable @code{DEFS}, which contains an option
+@option{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
+Autoconf version 1, there is no variable @code{DEFS} defined while
+@code{configure} is running.  To check whether Autoconf macros have
+already defined a certain C preprocessor symbol, test the value of the
+appropriate cache variable, as in this example:
+
+@example
+AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF)])
+if test "$ac_cv_func_vprintf" != yes; then
+  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
+fi
+@end example
+
+If @code{AC_CONFIG_HEADERS} has been called, then instead of creating
+@code{DEFS}, @code{AC_OUTPUT} creates a header file by substituting the
+correct values into @code{#define} statements in a template file.
+@xref{Configuration Headers}, for more information about this kind of
+output.
+
+@defmac AC_DEFINE (@var{variable}, @ovar{value}, @ovar{description})
+@maindex DEFINE
+Define C preprocessor variable @var{variable}.  If @var{value} is given,
+set @var{variable} to that value (verbatim), otherwise set it to 1.
+@var{value} should not contain literal newlines, and if you are not
+using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
+characters, as @code{make} tends to eat them.  To use a shell variable
+(which you need to do in order to define a value containing the M4 quote
+characters @samp{[} or @samp{]}), use @code{AC_DEFINE_UNQUOTED} instead.
+@var{description} is only useful if you are using
+@code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
+the generated @file{config.h.in} as the comment before the macro define.
+The following example defines the C preprocessor variable
+@code{EQUATION} to be the string constant @samp{"$a > $b"}:
+
+@example
+AC_DEFINE(EQUATION, "$a > $b")
+@end example
+@end defmac
+
+@defmac AC_DEFINE_UNQUOTED (@var{variable}, @ovar{value}, @ovar{description})
+@maindex DEFINE_UNQUOTED
+Like @code{AC_DEFINE}, but three shell expansions are
+performed---once---on @var{variable} and @var{value}: variable expansion
+(@samp{$}), command substitution (@samp{`}), and backslash escaping
+(@samp{\}).  Single and double quote characters in the value have no
+special meaning.  Use this macro instead of @code{AC_DEFINE} when
+@var{variable} or @var{value} is a shell variable.  Examples:
+
+@example
+AC_DEFINE_UNQUOTED(config_machfile, "$machfile")
+AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
+AC_DEFINE_UNQUOTED($ac_tr_hdr)
+@end example
+@end defmac
+
+Due to the syntactical bizarreness of the Bourne shell, do not use
+semicolons to separate @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}
+calls from other macro calls or shell code; that can cause syntax errors
+in the resulting @code{configure} script.  Use either spaces or
+newlines.  That is, do this:
+
+@example
+AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4) LIBS="$LIBS -lelf"])
+@end example
+
+@noindent
+or this:
+
+@example
+AC_CHECK_HEADER(elf.h,
+ [AC_DEFINE(SVR4)
+  LIBS="$LIBS -lelf"])
+@end example
+
+@noindent
+instead of this:
+
+@example
+AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
+@end example
+
+@node Setting Output Variables, Caching Results, Defining Symbols, Results
+@section Setting Output Variables
+
+Another way to record the results of tests is to set @dfn{output
+variables}, which are shell variables whose values are substituted into
+files that @code{configure} outputs.  The two macros below create new
+output variables.  @xref{Preset Output Variables}, for a list of output
+variables that are always available.
+
+@defmac AC_SUBST (@var{variable}, @ovar{value})
+@maindex SUBST
+Create an output variable from a shell variable.  Make @code{AC_OUTPUT}
+substitute the variable @var{variable} into output files (typically one
+or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
+replace instances of @samp{@@@var{variable}@@} in input files with the
+value that the shell variable @var{variable} has when @code{AC_OUTPUT}
+is called.  This value of @var{variable} should not contain literal
+newlines.
+
+If @var{value} is given, in addition assign it to @samp{variable}.
+@end defmac
+
+@defmac AC_SUBST_FILE (@var{variable})
+@maindex SUBST_FILE
+Another way to create an output variable from a shell variable.  Make
+@code{AC_OUTPUT} insert (without substitutions) the contents of the file
+named by shell variable @var{variable} into output files.  This means
+that @code{AC_OUTPUT} will replace instances of
+@samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
+with the contents of the file that the shell variable @var{variable}
+names when @code{AC_OUTPUT} is called.  Set the variable to
+@file{/dev/null} for cases that do not have a file to insert.
+
+This macro is useful for inserting @file{Makefile} fragments containing
+special dependencies or other @code{make} directives for particular host
+or target types into @file{Makefile}s.  For example, @file{configure.ac}
+could contain:
+
+@example
+AC_SUBST_FILE(host_frag)
+host_frag=$srcdir/conf/sun4.mh
+@end example
+
+@noindent
+and then a @file{Makefile.in} could contain:
+
+@example
+@@host_frag@@
+@end example
+@end defmac
+
+@node Caching Results, Printing Messages, Setting Output Variables, Results
+@section Caching Results
+@cindex Cache
+
+To avoid checking for the same features repeatedly in various
+@code{configure} scripts (or in repeated runs of one script),
+@code{configure} can optionally save the results of many checks in a
+@dfn{cache file} (@pxref{Cache Files}).  If a @code{configure} script
+runs with caching enabled and finds a cache file, it reads the results
+of previous runs from the cache and avoids rerunning those checks.  As a
+result, @code{configure} can then run much faster than if it had to
+perform all of the checks every time.
+
+@defmac AC_CACHE_VAL (@var{cache-id}, @var{commands-to-set-it})
+@maindex CACHE_VAL
+Ensure that the results of the check identified by @var{cache-id} are
+available.  If the results of the check were in the cache file that was
+read, and @code{configure} was not given the @option{--quiet} or
+@option{--silent} option, print a message saying that the result was
+cached; otherwise, run the shell commands @var{commands-to-set-it}.  If
+the shell commands are run to determine the value, the value will be
+saved in the cache file just before @code{configure} creates its output
+files.  @xref{Cache Variable Names}, for how to choose the name of the
+@var{cache-id} variable.
+
+The @var{commands-to-set-it} @emph{must have no side effects} except for
+setting the variable @var{cache-id}, see below.
+@end defmac
+
+@defmac AC_CACHE_CHECK (@var{message}, @var{cache-id}, @var{commands-to-set-it})
+@maindex CACHE_CHECK
+A wrapper for @code{AC_CACHE_VAL} that takes care of printing the
+messages.  This macro provides a convenient shorthand for the most
+common way to use these macros.  It calls @code{AC_MSG_CHECKING} for
+@var{message}, then @code{AC_CACHE_VAL} with the @var{cache-id} and
+@var{commands} arguments, and @code{AC_MSG_RESULT} with @var{cache-id}.
+
+The @var{commands-to-set-it} @emph{must have no side effects} except for
+setting the variable @var{cache-id}, see below.
+@end defmac
+
+It is very common to find buggy macros using @code{AC_CACHE_VAL} or
+@code{AC_CACHE_CHECK}, because people are tempted to call
+@code{AC_DEFINE} in the @var{commands-to-set-it}. Instead, the code that
+@emph{follows} the call to @code{AC_CACHE_VAL} should call
+@code{AC_DEFINE}, by examining the value of the cache variable.  For
+instance, the following macro is broken:
+
+@example
+@group
+AC_DEFUN([AC_SHELL_TRUE],
+[AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes
+                 if test $ac_cv_shell_true_works = yes; then
+                   AC_DEFINE([TRUE_WORKS], 1
+                             [Define if `true(1)' works properly.])
+                 fi])
+])
+@end group
+@end example
+
+@noindent
+This fails if the cache is enabled: the second time this macro is run,
+@code{TRUE_WORKS} @emph{will not be defined}.  The proper implementation
+is:
+
+@example
+@group
+AC_DEFUN([AC_SHELL_TRUE],
+[AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
+                [ac_cv_shell_true_works=no
+                 true && ac_cv_shell_true_works=yes])
+ if test $ac_cv_shell_true_works = yes; then
+   AC_DEFINE([TRUE_WORKS], 1
+             [Define if `true(1)' works properly.])
+ fi
+])
+@end group
+@end example
+
+Also, @var{commands-to-set-it} should not print any messages, for
+example with @code{AC_MSG_CHECKING}; do that before calling
+@code{AC_CACHE_VAL}, so the messages are printed regardless of whether
+the results of the check are retrieved from the cache or determined by
+running the shell commands.
+
+@menu
+* Cache Variable Names::        Shell variables used in caches
+* Cache Files::                 Files @code{configure} uses for caching
+* Cache Checkpointing::         Loading and saving the cache file
+@end menu
+
+@node Cache Variable Names, Cache Files, Caching Results, Caching Results
+@subsection Cache Variable Names
+@cindex Cache variable
+
+The names of cache variables should have the following format:
+
+@example
+@var{package-prefix}_cv_@var{value-type}_@var{specific-value}_@ovar{additional-options}
+@end example
+
+@noindent
+for example, @samp{ac_cv_header_stat_broken} or
+@samp{ac_cv_prog_gcc_traditional}.  The parts of the variable name are:
+
+@table @asis
+@item @var{package-prefix}
+An abbreviation for your package or organization; the same prefix you
+begin local Autoconf macros with, except lowercase by convention.
+For cache values used by the distributed Autoconf macros, this value is
+@samp{ac}.
+
+@item @code{_cv_}
+Indicates that this shell variable is a cache value. This string
+@emph{must} be present in the variable name, including the leading
+underscore.
+
+@item @var{value-type}
+A convention for classifying cache values, to produce a rational naming
+system.  The values used in Autoconf are listed in @ref{Macro Names}.
+
+@item @var{specific-value}
+Which member of the class of cache values this test applies to.
+For example, which function (@samp{alloca}), program (@samp{gcc}), or
+output variable (@samp{INSTALL}).
+
+@item @var{additional-options}
+Any particular behavior of the specific member that this test applies to.
+For example, @samp{broken} or @samp{set}.  This part of the name may
+be omitted if it does not apply.
+@end table
+
+The values assigned to cache variables may not contain newlines.
+Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
+names of files or functions; so this is not an important restriction.
+
+@node Cache Files, Cache Checkpointing, Cache Variable Names, Caching Results
+@subsection Cache Files
+
+A cache file is a shell script that caches the results of configure
+tests run on one system so they can be shared between configure scripts
+and configure runs.  It is not useful on other systems.  If its contents
+are invalid for some reason, the user may delete or edit it.
+
+By default, @code{configure} uses no cache file (technically, it uses
+@option{--cache-file=/dev/null}), to avoid problems caused by accidental
+use of stale cache files.
+
+To enable caching, @code{configure} accepts @option{--config-cache} (or
+@option{-C}) to cache results in the file @file{config.cache}.
+Alternatively, @option{--cache-file=@var{file}} specifies that
+@var{file} be the cache file.  The cache file is created if it does not
+exist already.  When @code{configure} calls @code{configure} scripts in
+subdirectories, it uses the @option{--cache-file} argument so that they
+share the same cache.  @xref{Subdirectories}, for information on
+configuring subdirectories with the @code{AC_CONFIG_SUBDIRS} macro.
+
+@file{config.status} only pays attention to the cache file if it is
+given the @option{--recheck} option, which makes it rerun
+@code{configure}.
+
+It is wrong to try to distribute cache files for particular system types.
+There is too much room for error in doing that, and too much
+administrative overhead in maintaining them.  For any features that
+can't be guessed automatically, use the standard method of the canonical
+system type and linking files (@pxref{Manual Configuration}).
+
+The site initialization script can specify a site-wide cache file to
+use, instead of the usual per-program cache.  In this case, the cache
+file will gradually accumulate information whenever someone runs a new
+@code{configure} script.  (Running @code{configure} merges the new cache
+results with the existing cache file.)  This may cause problems,
+however, if the system configuration (e.g. the installed libraries or
+compilers) changes and the stale cache file is not deleted.
+
+@node Cache Checkpointing,  , Cache Files, Caching Results
+@subsection Cache Checkpointing
+
+If your configure script, or a macro called from configure.ac, happens
+to abort the configure process, it may be useful to checkpoint the cache
+a few times at key points using @code{AC_CACHE_SAVE}.  Doing so will
+reduce the amount of time it takes to re-run the configure script with
+(hopefully) the error that caused the previous abort corrected.
+
+@c FIXME: Do we really want to document this guy?
+@defmac AC_CACHE_LOAD
+@maindex CACHE_LOAD
+Loads values from existing cache file, or creates a new cache file if a
+cache file is not found.  Called automatically from @code{AC_INIT}.
+@end defmac
+
+@defmac AC_CACHE_SAVE
+@maindex CACHE_SAVE
+Flushes all cached values to the cache file.  Called automatically from
+@code{AC_OUTPUT}, but it can be quite useful to call
+@code{AC_CACHE_SAVE} at key points in configure.ac.
+@end defmac
+
+For instance:
+
+@example
+@r{ @dots{} AC_INIT, etc. @dots{}}
+@group
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_GCC_TRADITIONAL
+@r{ @dots{} more program checks @dots{}}
+AC_CACHE_SAVE
+@end group
+
+@group
+# Checks for libraries.
+AC_CHECK_LIB(nsl, gethostbyname)
+AC_CHECK_LIB(socket, connect)
+@r{ @dots{} more lib checks @dots{}}
+AC_CACHE_SAVE
+@end group
+
+@group
+# Might abort...
+AM_PATH_GTK(1.0.2,, (exit 1); exit)
+AM_PATH_GTKMM(0.9.5,, (exit 1); exit)
+@end group
+@r{ @dots{} AC_OUTPUT, etc. @dots{}}
+@end example
+
+@node Printing Messages,  , Caching Results, Results
+@section Printing Messages
+@cindex Messages, from @code{configure}
+
+@code{configure} scripts need to give users running them several kinds
+of information.  The following macros print messages in ways appropriate
+for each kind.  The arguments to all of them get enclosed in shell
+double quotes, so the shell performs variable and back-quote
+substitution on them.
+
+These macros are all wrappers around the @code{echo} shell command.
+@code{configure} scripts should rarely need to run @code{echo} directly
+to print messages for the user.  Using these macros makes it easy to
+change how and when each kind of message is printed; such changes need
+only be made to the macro definitions and all of the callers will change
+automatically.
+
+To diagnose static issues, i.e., when @code{autoconf} is run, see
+@ref{Reporting Messages}.
+
+@defmac AC_MSG_CHECKING (@var{feature-description})
+@maindex MSG_CHECKING
+Notify the user that @code{configure} is checking for a particular
+feature.  This macro prints a message that starts with @samp{checking }
+and ends with @samp{...} and no newline.  It must be followed by a call
+to @code{AC_MSG_RESULT} to print the result of the check and the
+newline.  The @var{feature-description} should be something like
+@samp{whether the Fortran compiler accepts C++ comments} or @samp{for
+c89}.
+
+This macro prints nothing if @code{configure} is run with the
+@option{--quiet} or @option{--silent} option.
+@end defmac
+
+@defmac AC_MSG_RESULT (@var{result-description})
+@maindex MSG_RESULT
+Notify the user of the results of a check.  @var{result-description} is
+almost always the value of the cache variable for the check, typically
+@samp{yes}, @samp{no}, or a file name.  This macro should follow a call
+to @code{AC_MSG_CHECKING}, and the @var{result-description} should be
+the completion of the message printed by the call to
+@code{AC_MSG_CHECKING}.
+
+This macro prints nothing if @code{configure} is run with the
+@option{--quiet} or @option{--silent} option.
+@end defmac
+
+@defmac AC_MSG_NOTICE (@var{message})
+@maindex MSG_NOTICE
+Deliver the @var{message} to the user. It is useful mainly to print a
+general description of the overall purpose of a group of feature checks,
+e.g.,
+
+@example
+AC_MSG_NOTICE([checking if stack overflow is detectable])
+@end example
+
+This macro prints nothing if @code{configure} is run with the
+@option{--quiet} or @option{--silent} option.
+@end defmac
+
+@defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
+@maindex MSG_ERROR
+Notify the user of an error that prevents @code{configure} from
+completing.  This macro prints an error message to the standard error
+output and exits @code{configure} with @var{exit-status} (1 by default).
+@var{error-description} should be something like @samp{invalid value
+$HOME for \$HOME}.
+
+The @var{error-description} should start with a lower-case letter, and
+``cannot'' is preferred to ``can't''.
+@end defmac
+
+@defmac AC_MSG_WARN (@var{problem-description})
+@maindex MSG_WARN
+Notify the @code{configure} user of a possible problem.  This macro
+prints the message to the standard error output; @code{configure}
+continues running afterward, so macros that call @code{AC_MSG_WARN} should
+provide a default (back-up) behavior for the situations they warn about.
+@var{problem-description} should be something like @samp{ln -s seems to
+make hard links}.
+@end defmac
+
+
+
+@c ========================================================== Writing Macros.
+
+@node Writing Macros, Portable Shell, Results, Top
+@chapter Writing Macros
+
+When you write a feature test that could be applicable to more than one
+software package, the best thing to do is encapsulate it in a new macro.
+Here are some instructions and guidelines for writing Autoconf macros.
+
+@menu
+* Macro Definitions::           Basic format of an Autoconf macro
+* Macro Names::                 What to call your new macros
+* Quoting::                     Protecting macros from unwanted expansion
+* Reporting Messages::          Notifying @code{autoconf} users
+* Dependencies Between Macros::  What to do when macros depend on other macros
+* Obsoleting Macros::           Warning about old ways of doing things
+* Coding Style::                Writing Autoconf macros @`a la Autoconf
+@end menu
+
+@node Macro Definitions, Macro Names, Writing Macros, Writing Macros
+@section Macro Definitions
+
+@maindex DEFUN
+Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
+similar to the M4 builtin @code{define} macro.  In addition to defining
+a macro, @code{AC_DEFUN} adds to it some code that is used to constrain
+the order in which macros are called (@pxref{Prerequisite Macros}).
+
+An Autoconf macro definition looks like this:
+
+@example
+AC_DEFUN(@var{macro-name}, @var{macro-body})
+@end example
+
+You can refer to any arguments passed to the macro as @samp{$1},
+@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
+GNU m4}, for more complete information on writing M4 macros.
+
+Be sure to properly quote both the @var{macro-body} @emph{and} the
+@var{macro-name} to avoid any problems if the macro happens to have
+been previously defined.
+
+Each macro should have a header comment that gives its prototype, and a
+brief description.  When arguments have default values, display them in
+the prototype.  For example:
+
+@example
+# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
+# --------------------------------------
+define([AC_MSG_ERROR],
+[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
+@end example
+
+Comments about the macro should be left in the header comment.  Most
+other comments will make their way into @file{configure}, so just keep
+using @samp{#} to introduce comments.
+
+@cindex @code{dnl}
+If you have some very special comments about pure M4 code, comments
+that make no sense in @file{configure} and in the header comment, then
+use the builtin @code{dnl}: it causes @code{m4} to discard the text
+through the next newline.
+
+Keep in mind that @code{dnl} is rarely needed to introduce comments;
+@code{dnl} is more useful to get rid of the newlines following macros
+that produce no output, such as @code{AC_REQUIRE}.
+
+
+@node Macro Names, Quoting, Macro Definitions, Writing Macros
+@section Macro Names
+
+All of the Autoconf macros have all-uppercase names starting with
+@samp{AC_} to prevent them from accidentally conflicting with other
+text.  All shell variables that they use for internal purposes have
+mostly-lowercase names starting with @samp{ac_}.  To ensure that your
+macros don't conflict with present or future Autoconf macros, you should
+prefix your own macro names and any shell variables they use with some
+other sequence.  Possibilities include your initials, or an abbreviation
+for the name of your organization or software package.
+
+Most of the Autoconf macros' names follow a structured naming convention
+that indicates the kind of feature check by the name.  The macro names
+consist of several words, separated by underscores, going from most
+general to most specific.  The names of their cache variables use the
+same convention (@pxref{Cache Variable Names}, for more information on
+them).
+
+The first word of the name after @samp{AC_} usually tells the category
+of feature being tested.  Here are the categories used in Autoconf for
+specific test macros, the kind of macro that you are more likely to
+write.  They are also used for cache variables, in all-lowercase.  Use
+them where applicable; where they're not, invent your own categories.
+
+@table @code
+@item C
+C language builtin features.
+@item DECL
+Declarations of C variables in header files.
+@item FUNC
+Functions in libraries.
+@item GROUP
+@sc{unix} group owners of files.
+@item HEADER
+Header files.
+@item LIB
+C libraries.
+@item PATH
+The full path names to files, including programs.
+@item PROG
+The base names of programs.
+@item MEMBER
+Members of aggregates.
+@item SYS
+Operating system features.
+@item TYPE
+C builtin or declared types.
+@item VAR
+C variables in libraries.
+@end table
+
+After the category comes the name of the particular feature being
+tested.  Any further words in the macro name indicate particular aspects
+of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
+behavior of the @code{utime} function when called with a @code{NULL}
+pointer.
+
+An internal macro should have a name that starts with an underscore;
+Autoconf internals should therefore start with @samp{_AC_}.
+Additionally, a macro that is an internal subroutine of another macro
+should have a name that starts with an underscore and the name of that
+other macro, followed by one or more words saying what the internal
+macro does.  For example, @code{AC_PATH_X} has internal macros
+@code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
+
+@node Quoting, Reporting Messages, Macro Names, Writing Macros
+@section Quoting
+@cindex quotation
+
+@c FIXME: Grmph, yet another quoting myth: quotation has *never*
+@c prevented `expansion' of $1.  Unless it refers to the expansion
+@c of the value of $1?  Anyway, we need a rewrite here@dots{}
+
+The most common brokenness of existing macros is an improper quotation.
+This section, which users of Autoconf can skip, but which macro writers
+@emph{must} read, first justifies the quotation scheme that was chosen
+for Autoconf and then ends with a rule of thumb.  Understanding the
+former helps one to follow the latter.
+
+@menu
+* Active Characters::           Characters that change the behavior of m4
+* One Macro Call::              Quotation and one macro call
+* Quotation and Nested Macros::  Macros calling macros
+* Quotation Rule Of Thumb::     One parenthesis, one quote
+@end menu
+
+@node Active Characters, One Macro Call, Quoting, Quoting
+@subsection Active Characters
+
+To fully understand where proper quotation is important, you first need
+to know what are the special characters in Autoconf: @samp{#} introduces
+a comment inside which no macro expansion is performed, @samp{,}
+separates arguments, @samp{[} and @samp{]} are the quotes themselves,
+and finally @samp{(} and @samp{)} (which @code{m4} tries to match by
+pairs).
+
+In order to understand the delicate case of macro calls, we first have
+to present some obvious failures.  Below they are ``obvious-ified'',
+although you find them in real life, they are usually in disguise.
+
+Comments, introduced by a hash and running up to the newline, are opaque
+tokens to the top level: active characters are turned off, and there is
+no macro expansion:
+
+@example
+# define([def], ine)
+@result{}# define([def], ine)
+@end example
+
+Each time there can be a macro expansion, there is a quotation
+expansion; i.e., one level of quotes is stripped:
+
+@example
+int tab[10];
+@result{}int tab10;
+[int tab[10];]
+@result{}int tab[10];
+@end example
+
+Without this in mind, the reader will try hopelessly to use her macro
+@code{array}:
+
+@example
+define([array], [int tab[10];])
+array
+@result{}int tab10;
+[array]
+@result{}array
+@end example
+
+@noindent
+How can you correctly output the intended results@footnote{Using
+@code{defn}.}?
+
+
+@node One Macro Call, Quotation and Nested Macros, Active Characters, Quoting
+@subsection One Macro Call
+
+Let's proceed on the interaction between active characters and macros
+with this small macro, which just returns its first argument:
+
+@example
+define([car], [$1])
+@end example
+
+@noindent
+The two pairs of quotes above are not part of the arguments of
+@code{define}; rather, they are understood by the top level when it
+tries to find the arguments of @code{define}.  Therefore, it is
+equivalent to write:
+
+@example
+define(car, $1)
+@end example
+
+@noindent
+But, while it is acceptable for a @file{configure.ac} to avoid unneeded
+quotes, it is bad practice for Autoconf macros which must both be more
+robust and also advocate perfect style.
+
+At the top level, there are only two possible quotings: either you
+quote or you don't:
+
+@example
+car(foo, bar, baz)
+@result{}foo
+[car(foo, bar, baz)]
+@result{}car(foo, bar, baz)
+@end example
+
+Let's pay attention to the special characters:
+
+@example
+car(#)
+@error{}EOF in argument list
+@end example
+
+The closing parenthesis is hidden in the comment; with a hypothetical
+quoting, the top level understood it this way:
+
+@example
+car([#)]
+@end example
+
+@noindent
+Proper quotation, of course, fixes the problem:
+
+@example
+car([#])
+@result{}#
+@end example
+
+The reader will easily understand the following examples:
+
+@example
+car(foo, bar)
+@result{}foo
+car([foo, bar])
+@result{}foo, bar
+car((foo, bar))
+@result{}(foo, bar)
+car([(foo], [bar)])
+@result{}(foo
+car([], [])
+@result{}
+car([[]], [[]])
+@result{}[]
+@end example
+
+With this in mind, we can explore the cases where macros invoke
+macros@dots{}
+
+
+@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, Quoting
+@subsection Quotation and Nested Macros
+
+The examples below use the following macros:
+
+@example
+define([car], [$1])
+define([active], [ACT, IVE])
+define([array], [int tab[10]])
+@end example
+
+Each additional embedded macro call introduces other possible
+interesting quotations:
+
+@example
+car(active)
+@result{}ACT
+car([active])
+@result{}ACT, IVE
+car([[active]])
+@result{}active
+@end example
+
+In the first case, the top level looks for the arguments of @code{car},
+and finds @samp{active}.  Because @code{m4} evaluates its arguments
+before applying the macro, @samp{active} is expanded, which results in:
+
+@example
+car(ACT, IVE)
+@result{}ACT
+@end example
+
+@noindent
+In the second case, the top level gives @samp{active} as first and only
+argument of @code{car}, which results in:
+
+@example
+active
+@result{}ACT, IVE
+@end example
+
+@noindent
+i.e., the argument is evaluated @emph{after} the macro that invokes it.
+In the third case, @code{car} receives @samp{[active]}, which results in:
+
+@example
+[active]
+@result{}active
+@end example
+
+@noindent
+exactly as we already saw above.
+
+The example above, applied to a more realistic example, gives:
+
+@example
+car(int tab[10];)
+@result{}int tab10;
+car([int tab[10];])
+@result{}int tab10;
+car([[int tab[10];]])
+@result{}int tab[10];
+@end example
+
+@noindent
+Huh?  The first case is easily understood, but why is the second wrong,
+and the third right?  To understand that, you must know that after
+@code{m4} expands a macro, the resulting text is immediately subjected
+to macro expansion and quote removal.  This means that the quote removal
+occurs twice---first before the argument is passed to the @code{car}
+macro, and second after the @code{car} macro expands to the first
+argument.
+
+As the author of the Autoconf macro @code{car}, you then consider it to
+be incorrect that your users have to double-quote the arguments of
+@code{car}, so you ``fix'' your macro.  Let's call it @code{qar} for
+quoted car:
+
+@example
+define([qar], [[$1]])
+@end example
+
+@noindent
+and check that @code{qar} is properly fixed:
+
+@example
+qar([int tab[10];])
+@result{}int tab[10];
+@end example
+
+@noindent
+Ahhh!  That's much better.
+
+But note what you've done: now that the arguments are literal strings,
+if the user wants to use the results of expansions as arguments, she has
+to use an @emph{unquoted} macro call:
+
+@example
+qar(active)
+@result{}ACT
+@end example
+
+@noindent
+where she wanted to reproduce what she used to do with @code{car}:
+
+@example
+car([active])
+@result{}ACT, IVE
+@end example
+
+@noindent
+Worse yet: she wants to use a macro that produces a set of @code{cpp}
+macros:
+
+@example
+define([my_includes], [#include <stdio.h>])
+car([my_includes])
+@result{}#include <stdio.h>
+qar(my_includes)
+@error{}EOF in argument list
+@end example
+
+This macro, @code{qar}, because it double quotes its arguments, forces
+its users to leave their macro calls unquoted, which is dangerous.
+Commas and other active symbols are interpreted by @code{m4} before
+they are given to the macro, often not in the way the users expect.
+Also, because @code{qar} behaves differently from the other macros,
+it's an exception that should be avoided in Autoconf.
+
+@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, Quoting
+@subsection Quotation Rule Of Thumb
+
+To conclude, the quotation rule of thumb is:
+
+@center @emph{One pair of quotes per pair of parentheses.}
+
+Never over-quote, never under-quote, in particular in the definition of
+macros.  In the few places where the macros need to use brackets
+(usually in C program text or regular expressions), properly quote
+@emph{the arguments}!
+
+It is common to read Autoconf programs with snippets like:
+
+@example
+AC_TRY_LINK(
+changequote(<<, >>)dnl
+<<#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif>>,
+changequote([, ])dnl
+[atoi (*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)
+@end example
+
+@noindent
+which is incredibly useless since @code{AC_TRY_LINK} is @emph{already}
+double quoting, so you just need:
+
+@example
+AC_TRY_LINK(
+[#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif],
+            [atoi (*tzname);],
+            [ac_cv_var_tzname=yes],
+            [ac_cv_var_tzname=no])
+@end example
+
+@noindent
+The M4-fluent reader will note that these two examples are rigorously
+equivalent, since @code{m4} swallows both the @samp{changequote(<<, >>)}
+and @samp{<<} @samp{>>} when it @dfn{collects} the arguments: these
+quotes are not part of the arguments!
+
+Simplified, the example above is just doing this:
+
+@example
+changequote(<<, >>)dnl
+<<[]>>
+changequote([, ])dnl
+@end example
+
+@noindent
+instead of simply:
+
+@example
+[[]]
+@end example
+
+
+With macros that do not double quote their arguments (which is the
+rule), double-quote the (risky) literals:
+
+@example
+AC_LINK_IFELSE([AC_LANG_PROGRAM(
+[[#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif]],
+                                [atoi (*tzname);])],
+               [ac_cv_var_tzname=yes],
+               [ac_cv_var_tzname=no])
+@end example
+
+@c FIXME: Quadrigraphs and hopeless cases.
+
+When you create a @code{configure} script using newly written macros,
+examine it carefully to check whether you need to add more quotes in
+your macros.  If one or more words have disappeared in the @code{m4}
+output, you need more quotes.  When in doubt, quote.
+
+However, it's also possible to put on too many layers of quotes.  If
+this happens, the resulting @code{configure} script will contain
+unexpanded macros.  The @code{autoconf} program checks for this problem
+by doing @samp{grep AC_ configure}.
+
+
+@node Reporting Messages, Dependencies Between Macros, Quoting, Writing Macros
+@section Reporting Messages
+@cindex Messages, from @code{autoconf}
+
+When macros statically diagnose abnormal situations, benign or fatal,
+they should report them using these macros.  For dynamic issues, i.e.,
+when @code{configure} is run, see @ref{Printing Messages}.
+
+@defmac AC_DIAGNOSE (@var{category}, @var{message})
+@maindex DIAGNOSE
+Report @var{message} as a warning (or as an error if requested by the
+user) if it falls into the @var{category}.  You are encouraged to use
+standard categories, which currently include:
+
+@table @samp
+@item all
+messages that don't fall into one of the following category.  Use of an
+empty @var{category} is equivalent.
+
+@item cross
+related to cross compilation issues.
+
+@item obsolete
+use of an obsolete construct.
+
+@item syntax
+dubious syntactic constructs, incorrectly ordered macro calls.
+@end table
+@end defmac
+
+@defmac AC_WARNING (@var{message})
+@maindex WARNING
+Equivalent to @samp{AC_DIAGNOSE([syntax], @var{message})}, but you are
+strongly encouraged to use a finer grained category.
+@end defmac
+
+@defmac AC_FATAL (@var{message})
+@maindex FATAL
+Report a severe error @var{message}, and have @code{autoconf} die.
+@end defmac
+
+When the user runs @samp{autoconf -W error}, warnings from
+@code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
+@ref{autoconf Invocation}.
+
+@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Macros
+@section Dependencies Between Macros
+
+Some Autoconf macros depend on other macros having been called first in
+order to work correctly.  Autoconf provides a way to ensure that certain
+macros are called if needed and a way to warn the user if macros are
+called in an order that might cause incorrect operation.
+
+@menu
+* Prerequisite Macros::         Ensuring required information
+* Suggested Ordering::          Warning about possible ordering problems
+@end menu
+
+@node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
+@subsection Prerequisite Macros
+
+A macro that you write might need to use values that have previously
+been computed by other macros.  For example, @code{AC_DECL_YYTEXT}
+examines the output of @code{flex} or @code{lex}, so it depends on
+@code{AC_PROG_LEX} having been called first to set the shell variable
+@code{LEX}.
+
+Rather than forcing the user of the macros to keep track of the
+dependencies between them, you can use the @code{AC_REQUIRE} macro to do
+it automatically.  @code{AC_REQUIRE} can ensure that a macro is only
+called if it is needed, and only called once.
+
+@defmac AC_REQUIRE (@var{macro-name})
+@maindex REQUIRE
+If the M4 macro @var{macro-name} has not already been called, call it
+(without any arguments).  Make sure to quote @var{macro-name} with
+square brackets.  @var{macro-name} must have been defined using
+@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
+that it has been called.
+
+@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro; it
+must not be called from the top level.
+@end defmac
+
+@code{AC_REQUIRE} is often misunderstood.  It really implements
+dependencies between macros in the sense that if one macro depends upon
+another, the latter will be expanded @emph{before} the body of the
+former.  In particular, @samp{AC_REQUIRE(FOO)} is not replaced with the
+body of @code{FOO}.  For instance, this definition of macros:
+
+@example
+@group
+AC_DEFUN([TRAVOLTA],
+[test "$body_temparature_in_celsius" -gt "38" &&
+  dance_floor=occupied])
+AC_DEFUN([NEWTON_JOHN],
+[test "$hair_style" = "curly" &&
+  dance_floor=occupied])
+@end group
+
+@group
+AC_DEFUN([RESERVE_DANCE_FLOOR],
+[if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+  AC_REQUIRE([TRAVOLTA])
+  AC_REQUIRE([NEWTON_JOHN])
+fi])
+@end group
+@end example
+
+@noindent
+with this @file{configure.ac}
+
+@example
+AC_INIT
+RESERVE_DANCE_FLOOR
+if test "$dance_floor" = occupied; then
+  AC_MSG_ERROR([cannot pick up here, let's move])
+fi
+@end example
+
+@noindent
+will not leave you with a better chance to meet a kindred soul at
+other times than Saturday night since it expands into:
+
+@example
+@group
+test "$body_temperature_in_Celsius" -gt "38" &&
+  dance_floor=occupied
+test "$hair_style" = "curly" &&
+  dance_floor=occupied
+fi
+if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+
+
+fi
+@end group
+@end example
+
+This behavior was chosen on purpose: (i) it prevents messages in
+required macros from interrupting the messages in the requiring macros;
+(ii) it avoids bad surprises when shell conditionals are used, as in:
+
+@example
+@group
+if @dots{}; then
+  AC_REQUIRE([SOME_CHECK])
+fi
+@dots{}
+SOME_CHECK
+@end group
+@end example
+
+
+You are encouraged to put all @code{AC_REQUIRE}s at the beginning of a
+macro.  You can use @code{dnl} to avoid the empty lines they leave.
+
+@node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
+@subsection Suggested Ordering
+
+Some macros should be run before another macro if both are called, but
+neither @emph{requires} that the other be called.  For example, a macro
+that changes the behavior of the C compiler should be called before any
+macros that run the C compiler.  Many of these dependencies are noted in
+the documentation.
+
+Autoconf provides the @code{AC_BEFORE} macro to warn users when macros
+with this kind of dependency appear out of order in a
+@file{configure.ac} file.  The warning occurs when creating
+@code{configure} from @file{configure.ac}, not when running
+@code{configure}.
+
+For example, @code{AC_PROG_CPP} checks whether the C compiler
+can run the C preprocessor when given the @option{-E} option.  It should
+therefore be called after any macros that change which C compiler is
+being used, such as @code{AC_PROG_CC}.  So @code{AC_PROG_CC} contains:
+
+@example
+AC_BEFORE([$0], [AC_PROG_CPP])dnl
+@end example
+
+@noindent
+This warns the user if a call to @code{AC_PROG_CPP} has already occurred
+when @code{AC_PROG_CC} is called.
+
+@defmac AC_BEFORE (@var{this-macro-name}, @var{called-macro-name})
+@maindex BEFORE
+Make @code{m4} print a warning message to the standard error output if
+@var{called-macro-name} has already been called.  @var{this-macro-name}
+should be the name of the macro that is calling @code{AC_BEFORE}.  The
+macro @var{called-macro-name} must have been defined using
+@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
+that it has been called.
+@end defmac
+
+@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Macros
+@section Obsoleting Macros
+
+Configuration and portability technology has evolved over the years.
+Often better ways of solving a particular problem are developed, or
+ad-hoc approaches are systematized.  This process has occurred in many
+parts of Autoconf.  One result is that some of the macros are now
+considered @dfn{obsolete}; they still work, but are no longer considered
+the best thing to do, hence they should be replaced with more modern
+macros.  Ideally, @code{autoupdate} should substitute the old macro calls
+with their modern implementation.
+
+Autoconf provides a simple means to obsolete a macro.
+
+@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
+@maindex DEFUN
+@maindex AU_DEFUN
+Define @var{old-macro} as @var{implementation}.  The only difference
+with @code{AC_DEFUN} is that the user will be warned that
+@var{old-macro} is now obsolete.
+
+If she then uses @code{autoupdate}, the call to @var{old-macro} will be
+replaced by the modern @var{implementation}.  The additional
+@var{message} is then printed.
+@end defmac
+
+@node Coding Style,  , Obsoleting Macros, Writing Macros
+@section Coding Style
+
+The Autoconf macros follow a strict coding style.  You are encouraged to
+follow this style, especially if you intend to distribute your macro,
+either by contributing it to Autoconf itself, or via other means.
+
+The first requirement is to pay great attention to the quotation, for
+more details, see @ref{Autoconf Language}, and @ref{Quoting}.
+
+Do not try to invent new interfaces.  It is likely that there is a macro
+in Autoconf that resembles the macro you are defining: try to stick to
+this existing interface (order of arguments, default values, etc.).  We
+@emph{are} conscious that some of these interfaces are not perfect;
+nevertheless, when harmless, homogeneity should be preferred over
+creativity.
+
+Be careful about clashes both between M4 symbols and between shell
+variables.
+
+If you stick to the suggested M4 naming scheme (@pxref{Macro Names}),
+you are unlikely to generate conflicts.  Nevertheless, when you need to
+set a special value, @emph{avoid using a regular macro name}; rather,
+use an ``impossible'' name.  For instance, up to version 2.13, the macro
+@code{AC_SUBST} used to remember what @var{symbol}s were already defined
+by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
+But since there is a macro named @code{AC_SUBST_FILE}, it was just
+impossible to @samp{AC_SUBST(FILE)}!  In this case,
+@code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
+have been used (yes, with the parentheses)@dots{}or better yet, high-level
+macros such as @code{AC_EXPAND_ONCE}.
+
+No Autoconf macro should ever enter the user-variable name space; i.e.,
+except for the variables that are the actual result of running the
+macro, all shell variables should start with @code{ac_}.  In
+addition, small macros or any macro that is likely to be embedded in
+other macros should be careful not to use obvious names.
+
+@cindex @code{dnl}
+Do not use @code{dnl} to introduce comments: most of the comments you
+are likely to write are either header comments which are not output
+anyway, or comments that should make their way into @file{configure}.
+There are exceptional cases where you do want to comment special M4
+constructs, in which case @code{dnl} is right, but keep in mind that it
+is unlikely.
+
+M4 ignores the leading spaces before each argument, use this feature to
+indent in such a way that arguments are (more or less) aligned with the
+opening parenthesis of the macro being called.  For instance, instead of
+
+@example
+AC_CACHE_CHECK(for EMX OS/2 environment,
+ac_cv_emxos2,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, [return __EMX__;])],
+[ac_cv_emxos2=yes], [ac_cv_emxos2=no])])
+@end example
+
+@noindent
+write
+
+@example
+AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
+@end example
+
+@noindent
+or even
+
+@example
+AC_CACHE_CHECK([for EMX OS/2 environment],
+               [ac_cv_emxos2],
+               [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+                                                   [return __EMX__;])],
+                                  [ac_cv_emxos2=yes],
+                                  [ac_cv_emxos2=no])])
+@end example
+
+When using @code{AC_TRY_RUN} or any macro that cannot work when
+cross-compiling, provide a pessimistic value (typically @samp{no}).
+
+Feel free to use various tricks to prevent auxiliary tools, such as
+syntax-highlighting editors, from behaving improperly.  For instance,
+instead of:
+
+@example
+patsubst([$1], [$"])
+@end example
+
+@noindent
+use
+
+@example
+patsubst([$1], [$""])
+@end example
+
+@noindent
+so that Emacsen do not open a endless ``string'' at the first quote.
+For the same reasons, avoid:
+
+@example
+test $[#] != 0
+@end example
+
+@noindent
+and use:
+
+@example
+test $[@@%:@@] != 0
+@end example
+
+@noindent
+Otherwise, the closing bracket would be hidden inside a @samp{#}-comment,
+breaking the bracket-matching highlighting from Emacsen.  Note the
+preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]}, etc.  Do
+not escape when it is unneeded.  Common examples of useless quotation
+are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
+etc.  If you add portability issues to the picture, you'll prefer
+@samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
+better than hacking Autoconf @code{:-)}.
+
+When using @command{sed}, don't use @option{-e} except for indenting
+purpose.  With the @code{s} command, the preferred separator is @samp{/}
+unless @samp{/} itself is used in the command, in which case you should
+use @samp{,}.
+
+@xref{Macro Definitions}, for details on how to define a macro.  If a
+macro doesn't use @code{AC_REQUIRE} and it is expected to never be the
+object of an @code{AC_REQUIRE} directive, then use @code{define}.  In
+case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
+statements should be at the beginning of the macro, @code{dnl}'ed.
+
+You should not rely on the number of arguments: instead of checking
+whether an argument is missing, test that it is not empty.  It provides
+both a simpler and a more predictable interface to the user, and saves
+room for further arguments.
+
+Unless the macro is short, try to leave the closing @samp{])} at the
+beginning of a line, followed by a comment that repeats the name of the
+macro being defined.  This introduces an additional newline in
+@code{configure}; normally, that is not a problem, but if you want to
+remove it you can use @samp{[]dnl} on the last line.  You can similarly
+use @samp{[]dnl} after a macro call to remove its newline.  @samp{[]dnl}
+is recommended instead of @samp{dnl} to ensure that M4 does not
+interpret the @samp{dnl} as being attached to the preceding text or
+macro output.  For example, instead of:
+
+@example
+AC_DEFUN([AC_PATH_X],
+[AC_MSG_CHECKING([for X])
+AC_REQUIRE_CPP()
+@r{# @dots{}omitted@dots{}}
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+fi])
+@end example
+
+@noindent
+you would write:
+
+@example
+AC_DEFUN([AC_PATH_X],
+[AC_REQUIRE_CPP()[]dnl
+AC_MSG_CHECKING([for X])
+@r{# @dots{}omitted@dots{}}
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+fi[]dnl
+])# AC_PATH_X
+@end example
+
+If the macro is long, try to split it into logical chunks.  Typically,
+macros that check for a bug in a function and prepare its
+@code{AC_LIBOBJ} replacement should have an auxiliary macro to perform
+this setup.  Do not hesitate to introduce auxiliary macros to factor
+your code.
+
+In order to highlight the recommended coding style, here is a macro
+written the old way:
+
+@example
+dnl Check for EMX on OS/2.
+dnl _AC_EMXOS2
+AC_DEFUN(_AC_EMXOS2,
+[AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, return __EMX__;)],
+ac_cv_emxos2=yes, ac_cv_emxos2=no)])
+test "$ac_cv_emxos2" = yes && EMXOS2=yes])
+@end example
+
+@noindent
+and the new way:
+
+@example
+# _AC_EMXOS2
+# ----------
+# Check for EMX on OS/2.
+define([_AC_EMXOS2],
+[AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
+test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
+])# _AC_EMXOS2
+@end example
+
+
+
+
 @c ============================================= Portable Shell Programming
 
-@node Portable Shell, Results, Writing Tests, Top
+@node Portable Shell, Manual Configuration, Writing Macros, Top
 @chapter Portable Shell Programming
 
 When writing your own checks, there are some shell-script programming
@@ -6945,1406 +8345,9 @@ Don't use it!  For instance any assignment to @code{VPATH} causes Sun
 
 
 
-@c ====================================================== Results of Tests.
-
-@node Results, Writing Macros, Portable Shell, Top
-@chapter Results of Tests
-
-Once @code{configure} has determined whether a feature exists, what can
-it do to record that information?  There are four sorts of things it can
-do: define a C preprocessor symbol, set a variable in the output files,
-save the result in a cache file for future @code{configure} runs, and
-print a message letting the user know the result of the test.
-
-@menu
-* Defining Symbols::            Defining C preprocessor symbols
-* Setting Output Variables::    Replacing variables in output files
-* Caching Results::             Speeding up subsequent @code{configure} runs
-* Printing Messages::           Notifying @code{configure} users
-@end menu
-
-@node Defining Symbols, Setting Output Variables, Results, Results
-@section Defining C Preprocessor Symbols
-
-A common action to take in response to a feature test is to define a C
-preprocessor symbol indicating the results of the test.  That is done by
-calling @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}.
-
-By default, @code{AC_OUTPUT} places the symbols defined by these macros
-into the output variable @code{DEFS}, which contains an option
-@option{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
-Autoconf version 1, there is no variable @code{DEFS} defined while
-@code{configure} is running.  To check whether Autoconf macros have
-already defined a certain C preprocessor symbol, test the value of the
-appropriate cache variable, as in this example:
-
-@example
-AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF)])
-if test "$ac_cv_func_vprintf" != yes; then
-  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
-fi
-@end example
-
-If @code{AC_CONFIG_HEADERS} has been called, then instead of creating
-@code{DEFS}, @code{AC_OUTPUT} creates a header file by substituting the
-correct values into @code{#define} statements in a template file.
-@xref{Configuration Headers}, for more information about this kind of
-output.
-
-@defmac AC_DEFINE (@var{variable}, @ovar{value}, @ovar{description})
-@maindex DEFINE
-Define C preprocessor variable @var{variable}.  If @var{value} is given,
-set @var{variable} to that value (verbatim), otherwise set it to 1.
-@var{value} should not contain literal newlines, and if you are not
-using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
-characters, as @code{make} tends to eat them.  To use a shell variable
-(which you need to do in order to define a value containing the M4 quote
-characters @samp{[} or @samp{]}), use @code{AC_DEFINE_UNQUOTED} instead.
-@var{description} is only useful if you are using
-@code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
-the generated @file{config.h.in} as the comment before the macro define.
-The following example defines the C preprocessor variable
-@code{EQUATION} to be the string constant @samp{"$a > $b"}:
-
-@example
-AC_DEFINE(EQUATION, "$a > $b")
-@end example
-@end defmac
-
-@defmac AC_DEFINE_UNQUOTED (@var{variable}, @ovar{value}, @ovar{description})
-@maindex DEFINE_UNQUOTED
-Like @code{AC_DEFINE}, but three shell expansions are
-performed---once---on @var{variable} and @var{value}: variable expansion
-(@samp{$}), command substitution (@samp{`}), and backslash escaping
-(@samp{\}).  Single and double quote characters in the value have no
-special meaning.  Use this macro instead of @code{AC_DEFINE} when
-@var{variable} or @var{value} is a shell variable.  Examples:
-
-@example
-AC_DEFINE_UNQUOTED(config_machfile, "$machfile")
-AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
-AC_DEFINE_UNQUOTED($ac_tr_hdr)
-@end example
-@end defmac
-
-Due to the syntactical bizarreness of the Bourne shell, do not use
-semicolons to separate @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}
-calls from other macro calls or shell code; that can cause syntax errors
-in the resulting @code{configure} script.  Use either spaces or
-newlines.  That is, do this:
-
-@example
-AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4) LIBS="$LIBS -lelf"])
-@end example
-
-@noindent
-or this:
-
-@example
-AC_CHECK_HEADER(elf.h,
- [AC_DEFINE(SVR4)
-  LIBS="$LIBS -lelf"])
-@end example
-
-@noindent
-instead of this:
-
-@example
-AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
-@end example
-
-@node Setting Output Variables, Caching Results, Defining Symbols, Results
-@section Setting Output Variables
-
-Another way to record the results of tests is to set @dfn{output
-variables}, which are shell variables whose values are substituted into
-files that @code{configure} outputs.  The two macros below create new
-output variables.  @xref{Preset Output Variables}, for a list of output
-variables that are always available.
-
-@defmac AC_SUBST (@var{variable}, @ovar{value})
-@maindex SUBST
-Create an output variable from a shell variable.  Make @code{AC_OUTPUT}
-substitute the variable @var{variable} into output files (typically one
-or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
-replace instances of @samp{@@@var{variable}@@} in input files with the
-value that the shell variable @var{variable} has when @code{AC_OUTPUT}
-is called.  This value of @var{variable} should not contain literal
-newlines.
-
-If @var{value} is given, in addition assign it to @samp{variable}.
-@end defmac
-
-@defmac AC_SUBST_FILE (@var{variable})
-@maindex SUBST_FILE
-Another way to create an output variable from a shell variable.  Make
-@code{AC_OUTPUT} insert (without substitutions) the contents of the file
-named by shell variable @var{variable} into output files.  This means
-that @code{AC_OUTPUT} will replace instances of
-@samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
-with the contents of the file that the shell variable @var{variable}
-names when @code{AC_OUTPUT} is called.  Set the variable to
-@file{/dev/null} for cases that do not have a file to insert.
-
-This macro is useful for inserting @file{Makefile} fragments containing
-special dependencies or other @code{make} directives for particular host
-or target types into @file{Makefile}s.  For example, @file{configure.ac}
-could contain:
-
-@example
-AC_SUBST_FILE(host_frag)
-host_frag=$srcdir/conf/sun4.mh
-@end example
-
-@noindent
-and then a @file{Makefile.in} could contain:
-
-@example
-@@host_frag@@
-@end example
-@end defmac
-
-@node Caching Results, Printing Messages, Setting Output Variables, Results
-@section Caching Results
-@cindex Cache
-
-To avoid checking for the same features repeatedly in various
-@code{configure} scripts (or in repeated runs of one script),
-@code{configure} can optionally save the results of many checks in a
-@dfn{cache file} (@pxref{Cache Files}).  If a @code{configure} script
-runs with caching enabled and finds a cache file, it reads the results
-of previous runs from the cache and avoids rerunning those checks.  As a
-result, @code{configure} can then run much faster than if it had to
-perform all of the checks every time.
-
-@defmac AC_CACHE_VAL (@var{cache-id}, @var{commands-to-set-it})
-@maindex CACHE_VAL
-Ensure that the results of the check identified by @var{cache-id} are
-available.  If the results of the check were in the cache file that was
-read, and @code{configure} was not given the @option{--quiet} or
-@option{--silent} option, print a message saying that the result was
-cached; otherwise, run the shell commands @var{commands-to-set-it}.  If
-the shell commands are run to determine the value, the value will be
-saved in the cache file just before @code{configure} creates its output
-files.  @xref{Cache Variable Names}, for how to choose the name of the
-@var{cache-id} variable.
-
-The @var{commands-to-set-it} @emph{must have no side effects} except for
-setting the variable @var{cache-id}, see below.
-@end defmac
-
-@defmac AC_CACHE_CHECK (@var{message}, @var{cache-id}, @var{commands-to-set-it})
-@maindex CACHE_CHECK
-A wrapper for @code{AC_CACHE_VAL} that takes care of printing the
-messages.  This macro provides a convenient shorthand for the most
-common way to use these macros.  It calls @code{AC_MSG_CHECKING} for
-@var{message}, then @code{AC_CACHE_VAL} with the @var{cache-id} and
-@var{commands} arguments, and @code{AC_MSG_RESULT} with @var{cache-id}.
-
-The @var{commands-to-set-it} @emph{must have no side effects} except for
-setting the variable @var{cache-id}, see below.
-@end defmac
-
-It is very common to find buggy macros using @code{AC_CACHE_VAL} or
-@code{AC_CACHE_CHECK}, because people are tempted to call
-@code{AC_DEFINE} in the @var{commands-to-set-it}. Instead, the code that
-@emph{follows} the call to @code{AC_CACHE_VAL} should call
-@code{AC_DEFINE}, by examining the value of the cache variable.  For
-instance, the following macro is broken:
-
-@example
-@group
-AC_DEFUN([AC_SHELL_TRUE],
-[AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-                [ac_cv_shell_true_works=no
-                 true && ac_cv_shell_true_works=yes
-                 if test $ac_cv_shell_true_works = yes; then
-                   AC_DEFINE([TRUE_WORKS], 1
-                             [Define if `true(1)' works properly.])
-                 fi])
-])
-@end group
-@end example
-
-@noindent
-This fails if the cache is enabled: the second time this macro is run,
-@code{TRUE_WORKS} @emph{will not be defined}.  The proper implementation
-is:
-
-@example
-@group
-AC_DEFUN([AC_SHELL_TRUE],
-[AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
-                [ac_cv_shell_true_works=no
-                 true && ac_cv_shell_true_works=yes])
- if test $ac_cv_shell_true_works = yes; then
-   AC_DEFINE([TRUE_WORKS], 1
-             [Define if `true(1)' works properly.])
- fi
-])
-@end group
-@end example
-
-Also, @var{commands-to-set-it} should not print any messages, for
-example with @code{AC_MSG_CHECKING}; do that before calling
-@code{AC_CACHE_VAL}, so the messages are printed regardless of whether
-the results of the check are retrieved from the cache or determined by
-running the shell commands.
-
-@menu
-* Cache Variable Names::        Shell variables used in caches
-* Cache Files::                 Files @code{configure} uses for caching
-* Cache Checkpointing::         Loading and saving the cache file
-@end menu
-
-@node Cache Variable Names, Cache Files, Caching Results, Caching Results
-@subsection Cache Variable Names
-@cindex Cache variable
-
-The names of cache variables should have the following format:
-
-@example
-@var{package-prefix}_cv_@var{value-type}_@var{specific-value}_@ovar{additional-options}
-@end example
-
-@noindent
-for example, @samp{ac_cv_header_stat_broken} or
-@samp{ac_cv_prog_gcc_traditional}.  The parts of the variable name are:
-
-@table @asis
-@item @var{package-prefix}
-An abbreviation for your package or organization; the same prefix you
-begin local Autoconf macros with, except lowercase by convention.
-For cache values used by the distributed Autoconf macros, this value is
-@samp{ac}.
-
-@item @code{_cv_}
-Indicates that this shell variable is a cache value. This string
-@emph{must} be present in the variable name, including the leading
-underscore.
-
-@item @var{value-type}
-A convention for classifying cache values, to produce a rational naming
-system.  The values used in Autoconf are listed in @ref{Macro Names}.
-
-@item @var{specific-value}
-Which member of the class of cache values this test applies to.
-For example, which function (@samp{alloca}), program (@samp{gcc}), or
-output variable (@samp{INSTALL}).
-
-@item @var{additional-options}
-Any particular behavior of the specific member that this test applies to.
-For example, @samp{broken} or @samp{set}.  This part of the name may
-be omitted if it does not apply.
-@end table
-
-The values assigned to cache variables may not contain newlines.
-Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
-names of files or functions; so this is not an important restriction.
-
-@node Cache Files, Cache Checkpointing, Cache Variable Names, Caching Results
-@subsection Cache Files
-
-A cache file is a shell script that caches the results of configure
-tests run on one system so they can be shared between configure scripts
-and configure runs.  It is not useful on other systems.  If its contents
-are invalid for some reason, the user may delete or edit it.
-
-By default, @code{configure} uses no cache file (technically, it uses
-@option{--cache-file=/dev/null}), to avoid problems caused by accidental
-use of stale cache files.
-
-To enable caching, @code{configure} accepts @option{--config-cache} (or
-@option{-C}) to cache results in the file @file{config.cache}.
-Alternatively, @option{--cache-file=@var{file}} specifies that
-@var{file} be the cache file.  The cache file is created if it does not
-exist already.  When @code{configure} calls @code{configure} scripts in
-subdirectories, it uses the @option{--cache-file} argument so that they
-share the same cache.  @xref{Subdirectories}, for information on
-configuring subdirectories with the @code{AC_CONFIG_SUBDIRS} macro.
-
-@file{config.status} only pays attention to the cache file if it is
-given the @option{--recheck} option, which makes it rerun
-@code{configure}.
-
-It is wrong to try to distribute cache files for particular system types.
-There is too much room for error in doing that, and too much
-administrative overhead in maintaining them.  For any features that
-can't be guessed automatically, use the standard method of the canonical
-system type and linking files (@pxref{Manual Configuration}).
-
-The site initialization script can specify a site-wide cache file to
-use, instead of the usual per-program cache.  In this case, the cache
-file will gradually accumulate information whenever someone runs a new
-@code{configure} script.  (Running @code{configure} merges the new cache
-results with the existing cache file.)  This may cause problems,
-however, if the system configuration (e.g. the installed libraries or
-compilers) changes and the stale cache file is not deleted.
-
-@node Cache Checkpointing,  , Cache Files, Caching Results
-@subsection Cache Checkpointing
-
-If your configure script, or a macro called from configure.ac, happens
-to abort the configure process, it may be useful to checkpoint the cache
-a few times at key points using @code{AC_CACHE_SAVE}.  Doing so will
-reduce the amount of time it takes to re-run the configure script with
-(hopefully) the error that caused the previous abort corrected.
-
-@c FIXME: Do we really want to document this guy?
-@defmac AC_CACHE_LOAD
-@maindex CACHE_LOAD
-Loads values from existing cache file, or creates a new cache file if a
-cache file is not found.  Called automatically from @code{AC_INIT}.
-@end defmac
-
-@defmac AC_CACHE_SAVE
-@maindex CACHE_SAVE
-Flushes all cached values to the cache file.  Called automatically from
-@code{AC_OUTPUT}, but it can be quite useful to call
-@code{AC_CACHE_SAVE} at key points in configure.ac.
-@end defmac
-
-For instance:
-
-@example
-@r{ @dots{} AC_INIT, etc. @dots{}}
-@group
-# Checks for programs.
-AC_PROG_CC
-AC_PROG_GCC_TRADITIONAL
-@r{ @dots{} more program checks @dots{}}
-AC_CACHE_SAVE
-@end group
-
-@group
-# Checks for libraries.
-AC_CHECK_LIB(nsl, gethostbyname)
-AC_CHECK_LIB(socket, connect)
-@r{ @dots{} more lib checks @dots{}}
-AC_CACHE_SAVE
-@end group
-
-@group
-# Might abort...
-AM_PATH_GTK(1.0.2,, (exit 1); exit)
-AM_PATH_GTKMM(0.9.5,, (exit 1); exit)
-@end group
-@r{ @dots{} AC_OUTPUT, etc. @dots{}}
-@end example
-
-@node Printing Messages,  , Caching Results, Results
-@section Printing Messages
-@cindex Messages, from @code{configure}
-
-@code{configure} scripts need to give users running them several kinds
-of information.  The following macros print messages in ways appropriate
-for each kind.  The arguments to all of them get enclosed in shell
-double quotes, so the shell performs variable and back-quote
-substitution on them.
-
-These macros are all wrappers around the @code{echo} shell command.
-@code{configure} scripts should rarely need to run @code{echo} directly
-to print messages for the user.  Using these macros makes it easy to
-change how and when each kind of message is printed; such changes need
-only be made to the macro definitions and all of the callers will change
-automatically.
-
-To diagnose static issues, i.e., when @code{autoconf} is run, see
-@ref{Reporting Messages}.
-
-@defmac AC_MSG_CHECKING (@var{feature-description})
-@maindex MSG_CHECKING
-Notify the user that @code{configure} is checking for a particular
-feature.  This macro prints a message that starts with @samp{checking }
-and ends with @samp{...} and no newline.  It must be followed by a call
-to @code{AC_MSG_RESULT} to print the result of the check and the
-newline.  The @var{feature-description} should be something like
-@samp{whether the Fortran compiler accepts C++ comments} or @samp{for
-c89}.
-
-This macro prints nothing if @code{configure} is run with the
-@option{--quiet} or @option{--silent} option.
-@end defmac
-
-@defmac AC_MSG_RESULT (@var{result-description})
-@maindex MSG_RESULT
-Notify the user of the results of a check.  @var{result-description} is
-almost always the value of the cache variable for the check, typically
-@samp{yes}, @samp{no}, or a file name.  This macro should follow a call
-to @code{AC_MSG_CHECKING}, and the @var{result-description} should be
-the completion of the message printed by the call to
-@code{AC_MSG_CHECKING}.
-
-This macro prints nothing if @code{configure} is run with the
-@option{--quiet} or @option{--silent} option.
-@end defmac
-
-@defmac AC_MSG_NOTICE (@var{message})
-@maindex MSG_NOTICE
-Deliver the @var{message} to the user. It is useful mainly to print a
-general description of the overall purpose of a group of feature checks,
-e.g.,
-
-@example
-AC_MSG_NOTICE([checking if stack overflow is detectable])
-@end example
-
-This macro prints nothing if @code{configure} is run with the
-@option{--quiet} or @option{--silent} option.
-@end defmac
-
-@defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
-@maindex MSG_ERROR
-Notify the user of an error that prevents @code{configure} from
-completing.  This macro prints an error message to the standard error
-output and exits @code{configure} with @var{exit-status} (1 by default).
-@var{error-description} should be something like @samp{invalid value
-$HOME for \$HOME}.
-
-The @var{error-description} should start with a lower-case letter, and
-``cannot'' is preferred to ``can't''.
-@end defmac
-
-@defmac AC_MSG_WARN (@var{problem-description})
-@maindex MSG_WARN
-Notify the @code{configure} user of a possible problem.  This macro
-prints the message to the standard error output; @code{configure}
-continues running afterward, so macros that call @code{AC_MSG_WARN} should
-provide a default (back-up) behavior for the situations they warn about.
-@var{problem-description} should be something like @samp{ln -s seems to
-make hard links}.
-@end defmac
-
-
-
-@c ========================================================== Writing Macros.
-
-@node Writing Macros, Manual Configuration, Results, Top
-@chapter Writing Macros
-
-When you write a feature test that could be applicable to more than one
-software package, the best thing to do is encapsulate it in a new macro.
-Here are some instructions and guidelines for writing Autoconf macros.
-
-@menu
-* Macro Definitions::           Basic format of an Autoconf macro
-* Macro Names::                 What to call your new macros
-* Quoting::                     Protecting macros from unwanted expansion
-* Reporting Messages::          Notifying @code{autoconf} users
-* Dependencies Between Macros::  What to do when macros depend on other macros
-* Obsoleting Macros::           Warning about old ways of doing things
-* Coding Style::                Writing Autoconf macros @`a la Autoconf
-@end menu
-
-@node Macro Definitions, Macro Names, Writing Macros, Writing Macros
-@section Macro Definitions
-
-@maindex DEFUN
-Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
-similar to the M4 builtin @code{define} macro.  In addition to defining
-a macro, @code{AC_DEFUN} adds to it some code that is used to constrain
-the order in which macros are called (@pxref{Prerequisite Macros}).
-
-An Autoconf macro definition looks like this:
-
-@example
-AC_DEFUN(@var{macro-name}, @var{macro-body})
-@end example
-
-You can refer to any arguments passed to the macro as @samp{$1},
-@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
-GNU m4}, for more complete information on writing M4 macros.
-
-Be sure to properly quote both the @var{macro-body} @emph{and} the
-@var{macro-name} to avoid any problems if the macro happens to have
-been previously defined.
-
-Each macro should have a header comment that gives its prototype, and a
-brief description.  When arguments have default values, display them in
-the prototype.  For example:
-
-@example
-# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
-# --------------------------------------
-define([AC_MSG_ERROR],
-[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
-@end example
-
-Comments about the macro should be left in the header comment.  Most
-other comments will make their way into @file{configure}, so just keep
-using @samp{#} to introduce comments.
-
-@cindex @code{dnl}
-If you have some very special comments about pure M4 code, comments
-that make no sense in @file{configure} and in the header comment, then
-use the builtin @code{dnl}: it causes @code{m4} to discard the text
-through the next newline.
-
-Keep in mind that @code{dnl} is rarely needed to introduce comments;
-@code{dnl} is more useful to get rid of the newlines following macros
-that produce no output, such as @code{AC_REQUIRE}.
-
-
-@node Macro Names, Quoting, Macro Definitions, Writing Macros
-@section Macro Names
-
-All of the Autoconf macros have all-uppercase names starting with
-@samp{AC_} to prevent them from accidentally conflicting with other
-text.  All shell variables that they use for internal purposes have
-mostly-lowercase names starting with @samp{ac_}.  To ensure that your
-macros don't conflict with present or future Autoconf macros, you should
-prefix your own macro names and any shell variables they use with some
-other sequence.  Possibilities include your initials, or an abbreviation
-for the name of your organization or software package.
-
-Most of the Autoconf macros' names follow a structured naming convention
-that indicates the kind of feature check by the name.  The macro names
-consist of several words, separated by underscores, going from most
-general to most specific.  The names of their cache variables use the
-same convention (@pxref{Cache Variable Names}, for more information on
-them).
-
-The first word of the name after @samp{AC_} usually tells the category
-of feature being tested.  Here are the categories used in Autoconf for
-specific test macros, the kind of macro that you are more likely to
-write.  They are also used for cache variables, in all-lowercase.  Use
-them where applicable; where they're not, invent your own categories.
-
-@table @code
-@item C
-C language builtin features.
-@item DECL
-Declarations of C variables in header files.
-@item FUNC
-Functions in libraries.
-@item GROUP
-@sc{unix} group owners of files.
-@item HEADER
-Header files.
-@item LIB
-C libraries.
-@item PATH
-The full path names to files, including programs.
-@item PROG
-The base names of programs.
-@item MEMBER
-Members of aggregates.
-@item SYS
-Operating system features.
-@item TYPE
-C builtin or declared types.
-@item VAR
-C variables in libraries.
-@end table
-
-After the category comes the name of the particular feature being
-tested.  Any further words in the macro name indicate particular aspects
-of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
-behavior of the @code{utime} function when called with a @code{NULL}
-pointer.
-
-An internal macro should have a name that starts with an underscore;
-Autoconf internals should therefore start with @samp{_AC_}.
-Additionally, a macro that is an internal subroutine of another macro
-should have a name that starts with an underscore and the name of that
-other macro, followed by one or more words saying what the internal
-macro does.  For example, @code{AC_PATH_X} has internal macros
-@code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
-
-@node Quoting, Reporting Messages, Macro Names, Writing Macros
-@section Quoting
-@cindex quotation
-
-@c FIXME: Grmph, yet another quoting myth: quotation has *never*
-@c prevented `expansion' of $1.  Unless it refers to the expansion
-@c of the value of $1?  Anyway, we need a rewrite here@dots{}
-
-The most common brokenness of existing macros is an improper quotation.
-This section, which users of Autoconf can skip, but which macro writers
-@emph{must} read, first justifies the quotation scheme that was chosen
-for Autoconf and then ends with a rule of thumb.  Understanding the
-former helps one to follow the latter.
-
-@menu
-* Active Characters::           Characters that change the behavior of m4
-* One Macro Call::              Quotation and one macro call
-* Quotation and Nested Macros::  Macros calling macros
-* Quotation Rule Of Thumb::     One parenthesis, one quote
-@end menu
-
-@node Active Characters, One Macro Call, Quoting, Quoting
-@subsection Active Characters
-
-To fully understand where proper quotation is important, you first need
-to know what are the special characters in Autoconf: @samp{#} introduces
-a comment inside which no macro expansion is performed, @samp{,}
-separates arguments, @samp{[} and @samp{]} are the quotes themselves,
-and finally @samp{(} and @samp{)} (which @code{m4} tries to match by
-pairs).
-
-In order to understand the delicate case of macro calls, we first have
-to present some obvious failures.  Below they are ``obvious-ified'',
-although you find them in real life, they are usually in disguise.
-
-Comments, introduced by a hash and running up to the newline, are opaque
-tokens to the top level: active characters are turned off, and there is
-no macro expansion:
-
-@example
-# define([def], ine)
-@result{}# define([def], ine)
-@end example
-
-Each time there can be a macro expansion, there is a quotation
-expansion; i.e., one level of quotes is stripped:
-
-@example
-int tab[10];
-@result{}int tab10;
-[int tab[10];]
-@result{}int tab[10];
-@end example
-
-Without this in mind, the reader will try hopelessly to use her macro
-@code{array}:
-
-@example
-define([array], [int tab[10];])
-array
-@result{}int tab10;
-[array]
-@result{}array
-@end example
-
-@noindent
-How can you correctly output the intended results@footnote{Using
-@code{defn}.}?
-
-
-@node One Macro Call, Quotation and Nested Macros, Active Characters, Quoting
-@subsection One Macro Call
-
-Let's proceed on the interaction between active characters and macros
-with this small macro, which just returns its first argument:
-
-@example
-define([car], [$1])
-@end example
-
-@noindent
-The two pairs of quotes above are not part of the arguments of
-@code{define}; rather, they are understood by the top level when it
-tries to find the arguments of @code{define}.  Therefore, it is
-equivalent to write:
-
-@example
-define(car, $1)
-@end example
-
-@noindent
-But, while it is acceptable for a @file{configure.ac} to avoid unneeded
-quotes, it is bad practice for Autoconf macros which must both be more
-robust and also advocate perfect style.
-
-At the top level, there are only two possible quotings: either you
-quote or you don't:
-
-@example
-car(foo, bar, baz)
-@result{}foo
-[car(foo, bar, baz)]
-@result{}car(foo, bar, baz)
-@end example
-
-Let's pay attention to the special characters:
-
-@example
-car(#)
-@error{}EOF in argument list
-@end example
-
-The closing parenthesis is hidden in the comment; with a hypothetical
-quoting, the top level understood it this way:
-
-@example
-car([#)]
-@end example
-
-@noindent
-Proper quotation, of course, fixes the problem:
-
-@example
-car([#])
-@result{}#
-@end example
-
-The reader will easily understand the following examples:
-
-@example
-car(foo, bar)
-@result{}foo
-car([foo, bar])
-@result{}foo, bar
-car((foo, bar))
-@result{}(foo, bar)
-car([(foo], [bar)])
-@result{}(foo
-car([], [])
-@result{}
-car([[]], [[]])
-@result{}[]
-@end example
-
-With this in mind, we can explore the cases where macros invoke
-macros@dots{}
-
-
-@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, Quoting
-@subsection Quotation and Nested Macros
-
-The examples below use the following macros:
-
-@example
-define([car], [$1])
-define([active], [ACT, IVE])
-define([array], [int tab[10]])
-@end example
-
-Each additional embedded macro call introduces other possible
-interesting quotations:
-
-@example
-car(active)
-@result{}ACT
-car([active])
-@result{}ACT, IVE
-car([[active]])
-@result{}active
-@end example
-
-In the first case, the top level looks for the arguments of @code{car},
-and finds @samp{active}.  Because @code{m4} evaluates its arguments
-before applying the macro, @samp{active} is expanded, which results in:
-
-@example
-car(ACT, IVE)
-@result{}ACT
-@end example
-
-@noindent
-In the second case, the top level gives @samp{active} as first and only
-argument of @code{car}, which results in:
-
-@example
-active
-@result{}ACT, IVE
-@end example
-
-@noindent
-i.e., the argument is evaluated @emph{after} the macro that invokes it.
-In the third case, @code{car} receives @samp{[active]}, which results in:
-
-@example
-[active]
-@result{}active
-@end example
-
-@noindent
-exactly as we already saw above.
-
-The example above, applied to a more realistic example, gives:
-
-@example
-car(int tab[10];)
-@result{}int tab10;
-car([int tab[10];])
-@result{}int tab10;
-car([[int tab[10];]])
-@result{}int tab[10];
-@end example
-
-@noindent
-Huh?  The first case is easily understood, but why is the second wrong,
-and the third right?  To understand that, you must know that after
-@code{m4} expands a macro, the resulting text is immediately subjected
-to macro expansion and quote removal.  This means that the quote removal
-occurs twice---first before the argument is passed to the @code{car}
-macro, and second after the @code{car} macro expands to the first
-argument.
-
-As the author of the Autoconf macro @code{car}, you then consider it to
-be incorrect that your users have to double-quote the arguments of
-@code{car}, so you ``fix'' your macro.  Let's call it @code{qar} for
-quoted car:
-
-@example
-define([qar], [[$1]])
-@end example
-
-@noindent
-and check that @code{qar} is properly fixed:
-
-@example
-qar([int tab[10];])
-@result{}int tab[10];
-@end example
-
-@noindent
-Ahhh!  That's much better.
-
-But note what you've done: now that the arguments are literal strings,
-if the user wants to use the results of expansions as arguments, she has
-to use an @emph{unquoted} macro call:
-
-@example
-qar(active)
-@result{}ACT
-@end example
-
-@noindent
-where she wanted to reproduce what she used to do with @code{car}:
-
-@example
-car([active])
-@result{}ACT, IVE
-@end example
-
-@noindent
-Worse yet: she wants to use a macro that produces a set of @code{cpp}
-macros:
-
-@example
-define([my_includes], [#include <stdio.h>])
-car([my_includes])
-@result{}#include <stdio.h>
-qar(my_includes)
-@error{}EOF in argument list
-@end example
-
-This macro, @code{qar}, because it double quotes its arguments, forces
-its users to leave their macro calls unquoted, which is dangerous.
-Commas and other active symbols are interpreted by @code{m4} before
-they are given to the macro, often not in the way the users expect.
-Also, because @code{qar} behaves differently from the other macros,
-it's an exception that should be avoided in Autoconf.
-
-@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, Quoting
-@subsection Quotation Rule Of Thumb
-
-To conclude, the quotation rule of thumb is:
-
-@center @emph{One pair of quotes per pair of parentheses.}
-
-Never over-quote, never under-quote, in particular in the definition of
-macros.  In the few places where the macros need to use brackets
-(usually in C program text or regular expressions), properly quote
-@emph{the arguments}!
-
-It is common to read Autoconf programs with snippets like:
-
-@example
-AC_TRY_LINK(
-changequote(<<, >>)dnl
-<<#include <time.h>
-#ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif>>,
-changequote([, ])dnl
-[atoi (*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)
-@end example
-
-@noindent
-which is incredibly useless since @code{AC_TRY_LINK} is @emph{already}
-double quoting, so you just need:
-
-@example
-AC_TRY_LINK(
-[#include <time.h>
-#ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif],
-            [atoi (*tzname);],
-            [ac_cv_var_tzname=yes],
-            [ac_cv_var_tzname=no])
-@end example
-
-@noindent
-The M4-fluent reader will note that these two examples are rigorously
-equivalent, since @code{m4} swallows both the @samp{changequote(<<, >>)}
-and @samp{<<} @samp{>>} when it @dfn{collects} the arguments: these
-quotes are not part of the arguments!
-
-Simplified, the example above is just doing this:
-
-@example
-changequote(<<, >>)dnl
-<<[]>>
-changequote([, ])dnl
-@end example
-
-@noindent
-instead of simply:
-
-@example
-[[]]
-@end example
-
-
-With macros that do not double quote their arguments (which is the
-rule), double-quote the (risky) literals:
-
-@example
-AC_LINK_IFELSE([AC_LANG_PROGRAM(
-[[#include <time.h>
-#ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif]],
-                                [atoi (*tzname);])],
-               [ac_cv_var_tzname=yes],
-               [ac_cv_var_tzname=no])
-@end example
-
-@c FIXME: Quadrigraphs and hopeless cases.
-
-When you create a @code{configure} script using newly written macros,
-examine it carefully to check whether you need to add more quotes in
-your macros.  If one or more words have disappeared in the @code{m4}
-output, you need more quotes.  When in doubt, quote.
-
-However, it's also possible to put on too many layers of quotes.  If
-this happens, the resulting @code{configure} script will contain
-unexpanded macros.  The @code{autoconf} program checks for this problem
-by doing @samp{grep AC_ configure}.
-
-
-@node Reporting Messages, Dependencies Between Macros, Quoting, Writing Macros
-@section Reporting Messages
-@cindex Messages, from @code{autoconf}
-
-When macros statically diagnose abnormal situations, benign or fatal,
-they should report them using these macros.  For dynamic issues, i.e.,
-when @code{configure} is run, see @ref{Printing Messages}.
-
-@defmac AC_DIAGNOSE (@var{category}, @var{message})
-@maindex DIAGNOSE
-Report @var{message} as a warning (or as an error if requested by the
-user) if it falls into the @var{category}.  You are encouraged to use
-standard categories, which currently include:
-
-@table @samp
-@item all
-messages that don't fall into one of the following category.  Use of an
-empty @var{category} is equivalent.
-
-@item cross
-related to cross compilation issues.
-
-@item obsolete
-use of an obsolete construct.
-
-@item syntax
-dubious syntactic constructs, incorrectly ordered macro calls.
-@end table
-@end defmac
-
-@defmac AC_WARNING (@var{message})
-@maindex WARNING
-Equivalent to @samp{AC_DIAGNOSE([syntax], @var{message})}, but you are
-strongly encouraged to use a finer grained category.
-@end defmac
-
-@defmac AC_FATAL (@var{message})
-@maindex FATAL
-Report a severe error @var{message}, and have @code{autoconf} die.
-@end defmac
-
-When the user runs @samp{autoconf -W error}, warnings from
-@code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
-@ref{autoconf Invocation}.
-
-@node Dependencies Between Macros, Obsoleting Macros, Reporting Messages, Writing Macros
-@section Dependencies Between Macros
-
-Some Autoconf macros depend on other macros having been called first in
-order to work correctly.  Autoconf provides a way to ensure that certain
-macros are called if needed and a way to warn the user if macros are
-called in an order that might cause incorrect operation.
-
-@menu
-* Prerequisite Macros::         Ensuring required information
-* Suggested Ordering::          Warning about possible ordering problems
-@end menu
-
-@node Prerequisite Macros, Suggested Ordering, Dependencies Between Macros, Dependencies Between Macros
-@subsection Prerequisite Macros
-
-A macro that you write might need to use values that have previously
-been computed by other macros.  For example, @code{AC_DECL_YYTEXT}
-examines the output of @code{flex} or @code{lex}, so it depends on
-@code{AC_PROG_LEX} having been called first to set the shell variable
-@code{LEX}.
-
-Rather than forcing the user of the macros to keep track of the
-dependencies between them, you can use the @code{AC_REQUIRE} macro to do
-it automatically.  @code{AC_REQUIRE} can ensure that a macro is only
-called if it is needed, and only called once.
-
-@defmac AC_REQUIRE (@var{macro-name})
-@maindex REQUIRE
-If the M4 macro @var{macro-name} has not already been called, call it
-(without any arguments).  Make sure to quote @var{macro-name} with
-square brackets.  @var{macro-name} must have been defined using
-@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
-that it has been called.
-
-@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro; it
-must not be called from the top level.
-@end defmac
-
-@code{AC_REQUIRE} is often misunderstood.  It really implements
-dependencies between macros in the sense that if one macro depends upon
-another, the latter will be expanded @emph{before} the body of the
-former.  In particular, @samp{AC_REQUIRE(FOO)} is not replaced with the
-body of @code{FOO}.  For instance, this definition of macros:
-
-@example
-@group
-AC_DEFUN([TRAVOLTA],
-[test "$body_temparature_in_celsius" -gt "38" &&
-  dance_floor=occupied])
-AC_DEFUN([NEWTON_JOHN],
-[test "$hair_style" = "curly" &&
-  dance_floor=occupied])
-@end group
-
-@group
-AC_DEFUN([RESERVE_DANCE_FLOOR],
-[if date | grep '^Sat.*pm' >/dev/null 2>&1; then
-  AC_REQUIRE([TRAVOLTA])
-  AC_REQUIRE([NEWTON_JOHN])
-fi])
-@end group
-@end example
-
-@noindent
-with this @file{configure.ac}
-
-@example
-AC_INIT
-RESERVE_DANCE_FLOOR
-if test "$dance_floor" = occupied; then
-  AC_MSG_ERROR([cannot pick up here, let's move])
-fi
-@end example
-
-@noindent
-will not leave you with a better chance to meet a kindred soul at
-other times than Saturday night since it expands into:
-
-@example
-@group
-test "$body_temperature_in_Celsius" -gt "38" &&
-  dance_floor=occupied
-test "$hair_style" = "curly" &&
-  dance_floor=occupied
-fi
-if date | grep '^Sat.*pm' >/dev/null 2>&1; then
-
-
-fi
-@end group
-@end example
-
-This behavior was chosen on purpose: (i) it prevents messages in
-required macros from interrupting the messages in the requiring macros;
-(ii) it avoids bad surprises when shell conditionals are used, as in:
-
-@example
-@group
-if @dots{}; then
-  AC_REQUIRE([SOME_CHECK])
-fi
-@dots{}
-SOME_CHECK
-@end group
-@end example
-
-
-You are encouraged to put all @code{AC_REQUIRE}s at the beginning of a
-macro.  You can use @code{dnl} to avoid the empty lines they leave.
-
-@node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
-@subsection Suggested Ordering
-
-Some macros should be run before another macro if both are called, but
-neither @emph{requires} that the other be called.  For example, a macro
-that changes the behavior of the C compiler should be called before any
-macros that run the C compiler.  Many of these dependencies are noted in
-the documentation.
-
-Autoconf provides the @code{AC_BEFORE} macro to warn users when macros
-with this kind of dependency appear out of order in a
-@file{configure.ac} file.  The warning occurs when creating
-@code{configure} from @file{configure.ac}, not when running
-@code{configure}.
-
-For example, @code{AC_PROG_CPP} checks whether the C compiler
-can run the C preprocessor when given the @option{-E} option.  It should
-therefore be called after any macros that change which C compiler is
-being used, such as @code{AC_PROG_CC}.  So @code{AC_PROG_CC} contains:
-
-@example
-AC_BEFORE([$0], [AC_PROG_CPP])dnl
-@end example
-
-@noindent
-This warns the user if a call to @code{AC_PROG_CPP} has already occurred
-when @code{AC_PROG_CC} is called.
-
-@defmac AC_BEFORE (@var{this-macro-name}, @var{called-macro-name})
-@maindex BEFORE
-Make @code{m4} print a warning message to the standard error output if
-@var{called-macro-name} has already been called.  @var{this-macro-name}
-should be the name of the macro that is calling @code{AC_BEFORE}.  The
-macro @var{called-macro-name} must have been defined using
-@code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
-that it has been called.
-@end defmac
-
-@node Obsoleting Macros, Coding Style, Dependencies Between Macros, Writing Macros
-@section Obsoleting Macros
-
-Configuration and portability technology has evolved over the years.
-Often better ways of solving a particular problem are developed, or
-ad-hoc approaches are systematized.  This process has occurred in many
-parts of Autoconf.  One result is that some of the macros are now
-considered @dfn{obsolete}; they still work, but are no longer considered
-the best thing to do, hence they should be replaced with more modern
-macros.  Ideally, @code{autoupdate} should substitute the old macro calls
-with their modern implementation.
-
-Autoconf provides a simple means to obsolete a macro.
-
-@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
-@maindex DEFUN
-@maindex AU_DEFUN
-Define @var{old-macro} as @var{implementation}.  The only difference
-with @code{AC_DEFUN} is that the user will be warned that
-@var{old-macro} is now obsolete.
-
-If she then uses @code{autoupdate}, the call to @var{old-macro} will be
-replaced by the modern @var{implementation}.  The additional
-@var{message} is then printed.
-@end defmac
-
-@node Coding Style,  , Obsoleting Macros, Writing Macros
-@section Coding Style
-
-The Autoconf macros follow a strict coding style.  You are encouraged to
-follow this style, especially if you intend to distribute your macro,
-either by contributing it to Autoconf itself, or via other means.
-
-The first requirement is to pay great attention to the quotation, for
-more details, see @ref{Autoconf Language}, and @ref{Quoting}.
-
-Do not try to invent new interfaces.  It is likely that there is a macro
-in Autoconf that resembles the macro you are defining: try to stick to
-this existing interface (order of arguments, default values, etc.).  We
-@emph{are} conscious that some of these interfaces are not perfect;
-nevertheless, when harmless, homogeneity should be preferred over
-creativity.
-
-Be careful about clashes both between M4 symbols and between shell
-variables.
-
-If you stick to the suggested M4 naming scheme (@pxref{Macro Names}),
-you are unlikely to generate conflicts.  Nevertheless, when you need to
-set a special value, @emph{avoid using a regular macro name}; rather,
-use an ``impossible'' name.  For instance, up to version 2.13, the macro
-@code{AC_SUBST} used to remember what @var{symbol}s were already defined
-by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
-But since there is a macro named @code{AC_SUBST_FILE}, it was just
-impossible to @samp{AC_SUBST(FILE)}!  In this case,
-@code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
-have been used (yes, with the parentheses)@dots{}or better yet, high-level
-macros such as @code{AC_EXPAND_ONCE}.
-
-No Autoconf macro should ever enter the user-variable name space; i.e.,
-except for the variables that are the actual result of running the
-macro, all shell variables should start with @code{ac_}.  In
-addition, small macros or any macro that is likely to be embedded in
-other macros should be careful not to use obvious names.
-
-@cindex @code{dnl}
-Do not use @code{dnl} to introduce comments: most of the comments you
-are likely to write are either header comments which are not output
-anyway, or comments that should make their way into @file{configure}.
-There are exceptional cases where you do want to comment special M4
-constructs, in which case @code{dnl} is right, but keep in mind that it
-is unlikely.
-
-M4 ignores the leading spaces before each argument, use this feature to
-indent in such a way that arguments are (more or less) aligned with the
-opening parenthesis of the macro being called.  For instance, instead of
-
-@example
-AC_CACHE_CHECK(for EMX OS/2 environment,
-ac_cv_emxos2,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, [return __EMX__;])],
-[ac_cv_emxos2=yes], [ac_cv_emxos2=no])])
-@end example
-
-@noindent
-write
-
-@example
-AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
-                   [ac_cv_emxos2=yes],
-                   [ac_cv_emxos2=no])])
-@end example
-
-@noindent
-or even
-
-@example
-AC_CACHE_CHECK([for EMX OS/2 environment],
-               [ac_cv_emxos2],
-               [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
-                                                   [return __EMX__;])],
-                                  [ac_cv_emxos2=yes],
-                                  [ac_cv_emxos2=no])])
-@end example
-
-When using @code{AC_TRY_RUN} or any macro that cannot work when
-cross-compiling, provide a pessimistic value (typically @samp{no}).
-
-Feel free to use various tricks to prevent auxiliary tools, such as
-syntax-highlighting editors, from behaving improperly.  For instance,
-instead of:
-
-@example
-patsubst([$1], [$"])
-@end example
-
-@noindent
-use
-
-@example
-patsubst([$1], [$""])
-@end example
-
-@noindent
-so that Emacsen do not open a endless ``string'' at the first quote.
-For the same reasons, avoid:
-
-@example
-test $[#] != 0
-@end example
-
-@noindent
-and use:
-
-@example
-test $[@@%:@@] != 0
-@end example
-
-@noindent
-Otherwise, the closing bracket would be hidden inside a @samp{#}-comment,
-breaking the bracket-matching highlighting from Emacsen.  Note the
-preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]}, etc.  Do
-not escape when it is unneeded.  Common examples of useless quotation
-are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
-etc.  If you add portability issues to the picture, you'll prefer
-@samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
-better than hacking Autoconf @code{:-)}.
-
-When using @command{sed}, don't use @option{-e} except for indenting
-purpose.  With the @code{s} command, the preferred separator is @samp{/}
-unless @samp{/} itself is used in the command, in which case you should
-use @samp{,}.
-
-@xref{Macro Definitions}, for details on how to define a macro.  If a
-macro doesn't use @code{AC_REQUIRE} and it is expected to never be the
-object of an @code{AC_REQUIRE} directive, then use @code{define}.  In
-case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
-statements should be at the beginning of the macro, @code{dnl}'ed.
-
-You should not rely on the number of arguments: instead of checking
-whether an argument is missing, test that it is not empty.  It provides
-both a simpler and a more predictable interface to the user, and saves
-room for further arguments.
-
-Unless the macro is short, try to leave the closing @samp{])} at the
-beginning of a line, followed by a comment that repeats the name of the
-macro being defined.  This introduces an additional newline in
-@code{configure}; normally, that is not a problem, but if you want to
-remove it you can use @samp{[]dnl} on the last line.  You can similarly
-use @samp{[]dnl} after a macro call to remove its newline.  @samp{[]dnl}
-is recommended instead of @samp{dnl} to ensure that M4 does not
-interpret the @samp{dnl} as being attached to the preceding text or
-macro output.  For example, instead of:
-
-@example
-AC_DEFUN([AC_PATH_X],
-[AC_MSG_CHECKING([for X])
-AC_REQUIRE_CPP()
-@r{# @dots{}omitted@dots{}}
-  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
-fi])
-@end example
-
-@noindent
-you would write:
-
-@example
-AC_DEFUN([AC_PATH_X],
-[AC_REQUIRE_CPP()[]dnl
-AC_MSG_CHECKING([for X])
-@r{# @dots{}omitted@dots{}}
-  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
-fi[]dnl
-])# AC_PATH_X
-@end example
-
-If the macro is long, try to split it into logical chunks.  Typically,
-macros that check for a bug in a function and prepare its
-@code{AC_LIBOBJ} replacement should have an auxiliary macro to perform
-this setup.  Do not hesitate to introduce auxiliary macros to factor
-your code.
-
-In order to highlight the recommended coding style, here is a macro
-written the old way:
-
-@example
-dnl Check for EMX on OS/2.
-dnl _AC_EMXOS2
-AC_DEFUN(_AC_EMXOS2,
-[AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, return __EMX__;)],
-ac_cv_emxos2=yes, ac_cv_emxos2=no)])
-test "$ac_cv_emxos2" = yes && EMXOS2=yes])
-@end example
-
-@noindent
-and the new way:
-
-@example
-# _AC_EMXOS2
-# ----------
-# Check for EMX on OS/2.
-define([_AC_EMXOS2],
-[AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
-                   [ac_cv_emxos2=yes],
-                   [ac_cv_emxos2=no])])
-test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
-])# _AC_EMXOS2
-@end example
-
 @c ================================================== Manual Configuration
 
-@node Manual Configuration, Site Configuration, Writing Macros, Top
+@node Manual Configuration, Site Configuration, Portable Shell, Top
 @chapter Manual Configuration
 
 A few kinds of features can't be guessed automatically by running test
