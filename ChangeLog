@@ -1,3 +1,8 @@
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_PLAIN_SCRIPT): AF_INET, AF_UNIX, AR_FLAGS,
+	AS_FLAGS are OK.
+
 2001-01-18  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* m4sh.m4 (AS_MKDIR_P): Properly support DOS-style paths.
