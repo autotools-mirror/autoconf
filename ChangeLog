@@ -1,5 +1,15 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4: Updated.
+	(AT_CASE): new macro.
+	(AT_CHECK): Use it.  Don't changequote for patsubst, there is no
+	need.
+	* tests/syntax.m4 (TEST_MACRO): Don't run AC_ARG_VAR.
+	Reported by Jim Meyering.
+	Use AT_CASE.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	Test that the macros respect the user variable name space.
 
 	* acgeneral.m4 (AC_CANONICAL_THING): define, not AC_DEFUN.

@@ -28,10 +28,10 @@ AC_ENV_SAVE(env-after)
 AC_OUTPUT
 ])
 
-# FIXME: Here we just don't consider the stderr from Autoconf.
-# Maybe some day we could be more precise and filter out warnings.
-# The problem is that currently some warnings are spread on several
-# lines, so grepping -v warning is not enough.
+dnl  FIXME: Here we just don't consider the stderr from Autoconf.
+dnl  Maybe some day we could be more precise and filter out warnings.
+dnl  The problem is that currently some warnings are spread on several
+dnl  lines, so grepping -v warning is not enough.
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([./configure], 0, ignore, ignore)
