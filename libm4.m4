@@ -95,12 +95,6 @@ m4exit(2)])
 # meaning, it is an expensive operations that should be limited to
 # macros.  Use `m4_define' for temporaries.
 
-m4_define([m4_namespace_push], [pushdef([m4_namespace], [$1])])
-m4_define([m4_namespace_pop],  [popdef([m4_namespace])])
-
-m4_namespace_push([libm4])
-
-
 # Private copies of the macros we used in entering / exiting the
 # libm4 name space.  It is much more convenient than fighting with
 # the renamed version of define etc.
@@ -110,7 +104,16 @@ define([m4_define],      defn([define]))
 define([m4_defn],        defn([defn]))
 define([m4_dnl],         defn([dnl]))
 define([m4_indir],       defn([indir]))
+define([m4_popdef],      defn([popdef]))
+define([m4_pushdef],     defn([pushdef]))
 define([m4_undefine],    defn([undefine]))
+
+
+m4_define([m4_namespace_push], [m4_pushdef([m4_namespace], [$1])])
+m4_define([m4_namespace_pop],  [m4_popdef([m4_namespace])])
+
+m4_namespace_push([libm4])
+
 
 
 # m4_namespace_register(NAMESPACE, NAME)
@@ -151,6 +154,7 @@ m4_namespace_register(libm4, [define])
 
 # Put the m4 builtins into the `libm4' name space.  We cannot use `define'
 # here because of the very special handling of `defn' for builtins.
+
 # The following macro is useless but here, so undefine once done.
 m4_define(m4_namespace_builtin,
 [m4_define([libm4::$1], defn([$1]))
@@ -196,6 +200,11 @@ m4_define([m4_enable], [m4_indir([m4_enable($1)])])
 define([m4_rename],
 [m4_define([$2], m4_defn([$1]))m4_undefine([$1])])
 
+# Some m4 internals have names colliding with tokens we might use.
+# Rename them a` la `m4 --prefix-builtins'.
+m4_rename([eval],   [m4_eval])
+m4_rename([shift],  [m4_shift])
+m4_rename([format], [m4_format])
 
 
 ## --------------------------------------------- ##
@@ -414,7 +423,7 @@ define([_m4_for],
 # | define(`_arg1', ``$1'')
 # | define(`_foreach',
 # |  `ifelse($2, `()', ,
-# | 	       `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
+# | 	     `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
 #
 # which this time answers
 #
@@ -661,9 +670,3 @@ popdef([m4_Width])dnl
 popdef([m4_Prefix1])dnl
 popdef([m4_Prefix])dnl
 ])
-
-# Some m4 internals have names colliding with tokens we might use.
-# Rename them a` la `m4 --prefix-builtins'.
-m4_rename([eval],   [m4_eval])
-m4_rename([shift],  [m4_shift])
-m4_rename([format], [m4_format])

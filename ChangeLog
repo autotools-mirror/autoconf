@@ -1,5 +1,11 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4 (m4_namespace_push, m4_namespace_pop): Use the private
+	macros to be robust to name space changes.
+	(m4_popdef, m4_pushdef): New private macros.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Let the doc catch up.
 
 	* doc/autoconf.texi (Common Behavior): New section, to document
