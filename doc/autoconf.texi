@@ -4321,6 +4321,10 @@ know of any implementation that has @file{stdint.h} but not
 @hdrindex linux/irda.h
 It requires @file{linux/types.h} and @file{sys/socket.h}.
 
+@item @file{linux/random.h}
+@hdrindex linux/random.h
+It requires @file{asm/types.h}.
+
 @item @file{net/if.h}
 @hdrindex net/if.h
 On Darwin, this file requires that @file{sys/socket.h} be included
