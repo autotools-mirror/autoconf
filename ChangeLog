@@ -1,3 +1,7 @@
+2001-02-21  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.pl (&find_configure_ac): New.
+
 2001-02-20  Paul Martinolich <martinol@datasync.com>
 
 	* autoscan.pl (check_configure_ac): Pretty missing macro warnings

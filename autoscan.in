@@ -75,16 +75,38 @@ sub find_autoconf
   # We test "$dir/autoconf" in case we are in the build tree, in which case
   # the names are not transformed yet.
   foreach my $file ($ENV{"AUTOCONF"} || '',
-	         "$dir/@autoconf-name@",
-	         "$dir/autoconf",
-	         "@bindir@/@autoconf-name@")
+		    "$dir/@autoconf-name@",
+		    "$dir/autoconf",
+		    "@bindir@/@autoconf-name@")
     {
-      if (-f $file)
+      if (-x $file)
 	{
 	  $autoconf = $file;
 	  last;
 	}
     }
+}
+
+
+# $CONFIGURE_AC
+# &find_configure_ac ()
+# ---------------------
+sub find_configure_ac ()
+{
+  if (-f 'configure.ac')
+    {
+      if (-f 'configure.in')
+	{
+	  warn "warning: `configure.ac' and `configure.in' both present.\n";
+	  warn "warning: proceeding with `configure.ac'.\n";
+	}
+      return 'configure.ac';
+    }
+  elsif (-f 'configure.in')
+    {
+      return 'configure.in';
+    }
+  return;
 }
 
 
@@ -632,25 +654,15 @@ sub check_configure_ac ($)
 
 # Find the lib files and autoconf.
 find_autoconf;
-
+my $configure_ac = find_configure_ac;
 parse_args;
 init_tables;
 find ('.');
 scan_files;
 output ('configure.scan');
-
-if (-f 'configure.ac')
+if ($configure_ac)
   {
-    if (-f 'configure.in')
-      {
-	warn "warning: `configure.ac' and `configure.in' both present.\n";
-	warn "warning: proceeding with `configure.ac'.\n";
-      }
-    check_configure_ac ('configure.ac');
-  }
-elsif (-f 'configure.in')
-  {
-    check_configure_ac ('configure.in');
+    check_configure_ac ($configure_ac);
   }
 
 exit 0;
