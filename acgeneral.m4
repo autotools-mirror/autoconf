@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
-# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
+# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -662,7 +662,7 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 # ------------------
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
-[Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
+[Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.])dnl
@@ -1361,6 +1361,25 @@ fi])dnl
 ])# _AC_INIT_VERSION
 
 
+# _AC_INIT_PREPARE_FS_SEPARATORS
+# ------------------------------
+# Compute the directory and path separators.
+# FIXME: Full version should include dir separator, documentation about
+# AC_SUBST'ed variables etc.
+m4_define([_AC_INIT_PREPARE_FS_SEPARATORS],
+[echo "#! $SHELL" >conftest.sh
+echo  "exit 0"   >>conftest.sh
+chmod +x conftest.sh
+if AC_TRY_COMMAND([PATH=".;`pwd`"; conftest.sh]); then
+  ac_path_separator=';'
+else
+  ac_path_separator=:
+fi
+AC_SUBST([PATH_SEPARATOR], "$ac_path_separator")dnl
+rm -f conftest.sh
+])
+
+
 # _AC_INIT_PREPARE
 # ----------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
@@ -1446,6 +1465,8 @@ _AC_ARG_VAR_PRECIOUS(target_alias)dnl
 AC_LANG_PUSH(C)
 
 _AC_PROG_ECHO()dnl
+_AC_INIT_PREPARE_FS_SEPARATORS
+
 dnl Substitute for predefined variables.
 AC_SUBST(DEFS)dnl
 AC_SUBST(LIBS)dnl
@@ -2301,7 +2322,7 @@ $ac_includes_default])])
 # expansions, not every word.  This closes a longstanding sh security
 # hole.
 m4_define([AC_SHELL_PATH_WALK],
-[ac_save_IFS=$IFS; IFS=':'
+[ac_save_IFS=$IFS; IFS=$ac_path_separator
 ac_dummy="m4_default([$1], [$PATH])"
 for ac_dir in $ac_dummy; do
   IFS=$ac_save_IFS

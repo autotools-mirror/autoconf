@@ -15,9 +15,9 @@ address them.
 
 * Status
 
-	/*------------.
-	| Don't use.  |
-	`------------*/
+	/*-------------.
+	| Do not use.  |
+	`-------------*/
 
 * Serious Problems
 
@@ -37,4 +37,17 @@ specified.
 
 ** AC_TRY_EVAL of multi line commands
 
-Is broken.
+Is broken.  The problem is mostly that, again, the policy wrt special
+characters is not clearly defined.  Because of this,
+_AC_INIT_PREPARE_FS_SEPARATORS will output undesired messages, but is
+not guilty.
+
+./configure: /home/lrde/prof/akim/src/ace/tests; conftest.sh: Aucun fichier ou répertoire de ce type
+
+AC_TRY_COMMAND is.
+
+** AC_CHECK_PROG
+
+and all the macros that use it, are paying the change for test -f to
+test -x to determine whether a candidate path is an executable: now we
+have false positives with directories which, indeed, are test -x.
