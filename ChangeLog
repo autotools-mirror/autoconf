@@ -1,3 +1,13 @@
+2003-02-24  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix typo in
+	2002-09-01 patch by replacing "test -n" with "test -z".
+	This fixes a bug reported by Tom Epperly in
+	<http://mail.gnu.org/archive/html/autoconf/2003-02/msg00139.html>.
+
+	* doc/autoconf.texi (Shell Substitutions): test -n -> test -z,
+	to fix a mismatch between example and discussion.
+
 2003-02-24  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Limitations of Builtins): Add notes on printf
