@@ -71,6 +71,7 @@ case $ac_objext in
   'o' | 'obj' ) ;;
   * ) AC_MSG_ERROR([suspicious object suffix: $ac_objext]);;
 esac
+AS_EXIT([0])
 ]])
 
 
@@ -92,7 +93,7 @@ AC_PROG_CC
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([], 77)
+AT_CHECK_CONFIGURE([], 77, ignore, ignore)
 
 AT_CLEANUP
 

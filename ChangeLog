@@ -1,3 +1,15 @@
+2001-02-19  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_LANG_COMPILER_WORKS): Rename as...
+	(_AC_COMPILER_EXEEXT_WORKS): this.  Use the `a.out' or `a.exe'
+	left by _AC_COMPILER_EXEEXT_DEFAULT to check if the compiler works.
+	(_AC_COMPILER_EXEEXT_CROSS): Extract from the above macro.
+	(_AC_COMPILER_EXEEXT): Use them.
+	Adjust all the compiler looking macros to check for EXEEXT
+	*first*, then OBJEXT.
+	Set ac_exeext yourself.
+	(_AC_COMPILER_EXEEXT_O): Don't.
+
 2001-02-07  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atspecific.m4 (AT_CONFIGURE_AC): Double quote constant

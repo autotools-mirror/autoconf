@@ -529,32 +529,6 @@ AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
             [AC_LANG_COMPILER])])
 
 
-# _AC_LANG_COMPILER_WORKS
-# -----------------------
-m4_define([_AC_LANG_COMPILER_WORKS],
-[AC_MSG_CHECKING([whether the _AC_LANG compiler works])
-_AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-[# FIXME: these cross compiler hacks should be removed for autoconf 3.0
-# If not cross compiling, check that we can run a simple program.
-if test "$cross_compiling" != yes; then
-  if AC_TRY_COMMAND(./conftest$ac_exeext); then
-    cross_compiling=no
-  else
-    if test "$cross_compiling" = maybe; then
-      cross_compiling=yes
-    else
-      AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
-To enable cross compilation, use `--host'.])
-    fi
-  fi
-fi
-AC_MSG_RESULT([yes])],
-[AC_MSG_RESULT([no])
-AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])
-AC_MSG_CHECKING([whether we are cross compiling])
-AC_MSG_RESULT([$cross_compiling])
-])# _AC_LANG_COMPILER_WORKS
-
 
 # _AC_LANG_COMPILER_GNU
 # ---------------------
@@ -669,14 +643,22 @@ AC_DEFUN([AC_OBJEXT],   [])
 # _AC_COMPILER_EXEEXT_DEFAULT
 # ---------------------------
 # Check for the extension used for the default name for executables.
-# Beware of `expr' that may return `0' or `'.
+# Beware of `expr' that may return `0' or `'.  Since this macro is
+# the first one in touch with the compiler, it should also check that
+# it compiles properly.
 m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
-[# Try without -o first, disregard a.out.
+[# Try to create an executable without -o first, disregard a.out.
+# It will help us diagnose broken compiler, and finding out an intuition
+# of exeext.
+AC_MSG_CHECKING([for _AC_LANG compiler default output])
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
 AS_IF([AC_TRY_EVAL(ac_link_default)],
 [for ac_file in `ls a.exe conftest.exe a.* conftest conftest.* 2>/dev/null`; do
   case $ac_file in
-    *.$ac_ext | *.out | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    a.out ) # We found the default executable, but exeext='' is most
+            # certainly right.
+            break;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
           export ac_cv_exeext
           break;;
@@ -684,9 +666,45 @@ AS_IF([AC_TRY_EVAL(ac_link_default)],
   esac
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD])
-rm -f a.out a.exe conftest$ac_cv_exeext
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])
+ac_exeext=$ac_cv_exeext
+AC_MSG_RESULT([$ac_file])
 ])# _AC_COMPILER_EXEEXT_DEFAULT
+
+
+# _AC_COMPILER_EXEEXT_WORKS
+# -------------------------
+m4_define([_AC_COMPILER_EXEEXT_WORKS],
+[# Check the compiler produces executables we can run.  If not, either
+# the compiler is broken, or we cross compile.
+AC_MSG_CHECKING([whether the _AC_LANG compiler works])
+# FIXME: These cross compiler hacks should be removed for Autoconf 3.0
+# If not cross compiling, check that we can run a simple program.
+if test "$cross_compiling" != yes; then
+  if AC_TRY_COMMAND([./$ac_file]); then
+    cross_compiling=no
+  else
+    if test "$cross_compiling" = maybe; then
+	cross_compiling=yes
+    else
+	AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
+If you meant to cross compile, use `--host'.])
+    fi
+  fi
+fi
+AC_MSG_RESULT([yes])
+])# _AC_COMPILER_EXEEXT_WORKS
+
+
+# _AC_COMPILER_EXEEXT_CROSS
+# -------------------------
+m4_define([_AC_COMPILER_EXEEXT_CROSS],
+[# Check the compiler produces executables we can run.  If not, either
+# the compiler is broken, or we cross compile.
+AC_MSG_CHECKING([whether we are cross compiling])
+AC_MSG_RESULT([$cross_compiling])
+])# _AC_COMPILER_EXEEXT_CROSS
 
 
 # _AC_COMPILER_EXEEXT_O
@@ -694,8 +712,7 @@ rm -f a.out a.exe conftest$ac_cv_exeext
 # Check for the extension used when `-o foo'.  Try to see if ac_cv_exeext,
 # as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
 m4_define([_AC_COMPILER_EXEEXT_O],
-[# We have not set ac_exeext yet which is needed by `ac_link'.
-ac_exeext=$ac_cv_exeext
+[AC_MSG_CHECKING([for executable suffix])
 AS_IF([AC_TRY_EVAL(ac_link)],
 [# If both `conftest.exe' and `conftest' are `present' (well, observable)
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
@@ -711,7 +728,8 @@ for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
   esac
 done],
               [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])
-rm -f conftest.$ac_ext conftest$ac_cv_exeext
+rm -f conftest$ac_cv_exeext
+AC_MSG_RESULT([$ac_cv_exeext])
 ])# _AC_COMPILER_EXEEXT_O
 
 
@@ -724,11 +742,20 @@ rm -f conftest.$ac_ext conftest$ac_cv_exeext
 # Note that some compilers (cross or not), strictly obey to `-o foo' while
 # the host requires `foo.exe', so we should not depend upon `-o' to
 # test EXEEXT.  But then, be sure no to destroy user files.
+#
+# Must be run before _AC_COMPILER_OBJEXT because _AC_COMPILER_EXEEXT_DEFAULT
+# checks whether the compiler works.
 m4_define([_AC_COMPILER_EXEEXT],
-[AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
-                [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+ac_clean_files_save=$ac_clean_files
+ac_clean_files="$ac_clean_files a.out a.exe"
 _AC_COMPILER_EXEEXT_DEFAULT
-_AC_COMPILER_EXEEXT_O])
+_AC_COMPILER_EXEEXT_WORKS
+rm -f a.out a.exe conftest$ac_cv_exeext
+ac_clean_files=$ac_clean_files_save
+_AC_COMPILER_EXEEXT_CROSS
+_AC_COMPILER_EXEEXT_O
+rm -f conftest.$ac_ext
 AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
 ac_exeext=$EXEEXT
 ])# _AC_COMPILER_EXEEXT
@@ -892,9 +919,8 @@ fi
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
-m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
-_AC_LANG_COMPILER_WORKS
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
@@ -1103,9 +1129,8 @@ AC_CHECK_TOOLS(CXX,
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
                g++)
 
-m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
-_AC_LANG_COMPILER_WORKS
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CXX_G
@@ -1234,9 +1259,8 @@ AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 xlf95 lf95 g95 fc])])
 
-m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
-_AC_LANG_COMPILER_WORKS
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 # If we don't use `.F' as extension, the preprocessor is not run on the
 # input file.
 ac_save_ext=$ac_ext
