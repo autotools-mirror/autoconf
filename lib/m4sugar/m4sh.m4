@@ -507,6 +507,8 @@ m4_define([_AS_LINENO_PREPARE],
 	 case $as_dir in
 	 /*)
 	   if ("$as_dir/$as_base" -c '_AS_LINENO_WORKS') 2>/dev/null; then
+	     AS_UNSET(BASH_ENV)
+	     AS_UNSET(ENV)
 	     CONFIG_SHELL=$as_dir/$as_base
 	     export CONFIG_SHELL
 	     exec "$CONFIG_SHELL" "$[0]" ${1+"$[@]"}
