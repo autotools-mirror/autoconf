@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 21 September 1994
+@set lastupdate 07 November 1994
 @c %**end of header
 
 @ifinfo
@@ -1275,12 +1275,6 @@ the requested information.
 
 @table @samp
 
-@item auto-check
-@samp{-a} in @code{recode}.
-
-@item auto-reference
-@samp{-A} in @code{ptx}.
-
 @item after-date
 @samp{-N} in @code{tar}.
 
@@ -1315,6 +1309,18 @@ and @code{unexpand}.
 
 @item assume-old
 @samp{-o} in Make.
+
+@item auto-check
+@samp{-a} in @code{recode}.
+
+@item auto-pager
+@samp{-a} in @code{wdiff}.
+
+@item auto-reference
+@samp{-A} in @code{ptx}.
+
+@item avoid-wraps
+@samp{-n} in @code{wdiff}.
 
 @item backward-search
 @samp{-B} in etags.
@@ -1390,7 +1396,7 @@ Used in various programs to specify the directory to use.
 Used in @code{diff}.
 
 @item copyright
-@samp{-C} in @code{ptx} and @code{recode}.
+@samp{-C} in @code{ptx}, @code{recode}, and @code{wdiff}.
 
 @item core
 Used in GDB.
@@ -1457,9 +1463,6 @@ specially.
 @item discard-locals
 @samp{-X} in @code{strip}.
 
-@item diversions
-@samp{-N} in @code{m4}.
-
 @item dry-run
 @samp{-n} in Make.
 
@@ -1468,6 +1471,12 @@ specially.
 
 @item elide-empty-files
 @samp{-z} in @code{csplit}.
+
+@item end-delete
+@samp{-x} in @code{wdiff}.
+
+@item end-insert
+@samp{-z} in @code{wdiff}.
 
 @item entire-new-file
 @samp{-N} in @code{diff}.
@@ -1565,6 +1574,9 @@ Used in @code{ls}, @code{time}, and @code{ptx}.
 @item forward-search
 @samp{-F} in @code{etags}.
 
+@item freeze-state
+@samp{-F} in @code{m4}.
+
 @item fullname
 Used in GDB.
 
@@ -1625,7 +1637,7 @@ Used to ask for brief usage information.
 
 @item ignore-case
 @samp{-f} in @code{look} and @code{ptx};
-@samp{-i} in @code{diff}.
+@samp{-i} in @code{diff} and @code{wdiff}.
 
 @item ignore-errors
 @samp{-i} in Make.
@@ -1696,6 +1708,9 @@ Used to ask for brief usage information.
 
 @item kilobytes
 @samp{-k} in @code{du} and @code{ls}.
+
+@item less-mode
+@samp{-l} in @code{wdiff}.
 
 @item level-for-gzip
 @samp{-g} in @code{shar}.
@@ -1802,14 +1817,23 @@ Used in GDB.
 @item no-check-existing
 @samp{-x} in @code{shar}.
 
+@item no-common
+@samp{-3} in @code{wdiff}.
+
 @item no-create
 @samp{-c} in @code{touch}.
 
 @item no-defines
 @samp{-D} in @code{etags}.
 
+@item no-deleted
+@samp{-1} in @code{wdiff}.
+
 @item no-dereference
 @samp{-d} in @code{cp}.
+
+@item no-inserted
+@samp{-2} in @code{wdiff}.
 
 @item no-keep-going
 @samp{-S} in Make.
@@ -1840,9 +1864,6 @@ Used in Makeinfo.
 
 @item no-validate
 Used in Makeinfo.
-
-@item no-verbose
-@samp{-v} in @code{shar}.
 
 @item no-warn
 Used in various programs to inhibit warnings.
@@ -1970,6 +1991,9 @@ Used in @code{tar} and @code{cp}.
 @item print-symdefs
 @samp{-s} in @code{nm}.
 
+@item printer
+@samp{-p} in @code{wdiff}.
+
 @item query-user
 @samp{-X} in @code{shar}.
 
@@ -1980,6 +2004,9 @@ Used in @code{tar} and @code{cp}.
 Used in many programs to inhibit the usual output.  @strong{Note:} every
 program accepting @samp{--quiet} should accept @samp{--silent} as a
 synonym.
+
+@item quiet-unshar
+@samp{-Q} in @code{shar}
 
 @item quote-name
 @samp{-Q} in @code{ls}.
@@ -2014,6 +2041,9 @@ Used in Makeinfo.
 
 @item release
 @samp{-r} in @code{uname}.
+
+@item reload-state
+@samp{-R} in @code{m4}.
 
 @item relocation
 @samp{-r} in @code{objdump}.
@@ -2107,9 +2137,18 @@ Used in @code{ls}.
 @item squeeze-blank
 @samp{-s} in @code{cat}.
 
+@item start-delete
+@samp{-w} in @code{wdiff}.
+
+@item start-insert
+@samp{-y} in @code{wdiff}.
+
 @item starting-file
 Used in @code{tar} and @code{diff} to specify which file within
 a directory to start processing with.
+
+@item statistics
+@samp{-s} in @code{wdiff}.
 
 @item stdin-file-list
 @samp{-S} in @code{shar}.
@@ -2164,6 +2203,7 @@ Used in GDB and @code{objdump}.
 
 @item terminal
 @samp{-T} in @code{tput} and @code{ul}.
+@samp{-t} in @code{wdiff}.
 
 @item text
 @samp{-a} in @code{diff}.
