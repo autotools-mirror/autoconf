@@ -1,3 +1,8 @@
+1999-11-09  Akim Demaille  <akim@epita.fr>
+
+	* autoheader.m4 (AH_CHECK_LIB): Template HAVE_LIBFOO, not
+	HAVE_FOO.
+
 1999-11-09  Ben Elliston  <bje@cygnus.com>
 
 	* testsuite/config/unix.exp (autoconf_version): Detect version
@@ -473,6 +478,13 @@
 	* acgeneral.m4: Rename the occurences of the variable `confstat'
  	as `ac_cs_root'.  The previous name was breaking the naming
 	scheme.
+
+	Fix a bug in templates of AC_CHECK_LIB.
+
+	* autoheader.m4 (AH_CHECK_LIB): Template HAVE_LIBFOO, not
+ 	HAVE_FOO.
+
+1999-10-24  Akim Demaille  <akim@epita.fr>
 
 	* TODO: Updated.
 	Added a section for 2.15 and 3.

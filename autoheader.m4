@@ -73,8 +73,10 @@ ac_verbatim_$1="\
 @@@
 ])])
 
+dnl FIXME: To be rigorous, this should not be systematic: depending
+dnl upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
 define([AH_CHECK_LIB],
-[AH_TEMPLATE(AC_TR_CPP(HAVE_$1),
+[AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
              [Define if you have the `]$1[' library (-l]$1[).])
 # Success
 $3
