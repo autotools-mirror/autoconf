@@ -184,13 +184,6 @@ Conversely:
 
 * Autoconf 3
 
-** Split all those &#@! files.
-acgeneral and acspecific is a bad design.  The split should be done
-according to the families.  For instance AC_CHECK_FUNCS,
-AC_CHECK_FUNC, AC_FUNC_FNMATCH etc. *and* AH_CHECK_FUNCS, AU_* should
-be in, acfunc.m4.  I suppose there should be small exceptions, e.g.,
-the family AC_REPLACE_FUNCS should still be in acfunc.m4.
-
 ** Cache name spaces.
 Cf the discussion with Kaveh.  One would like to
 AC_CHECK_FUNCS(bar)
