@@ -5975,7 +5975,7 @@ set the exit status to 42 for Zsh, and the second to trigger the trap
 and pass 42 as exit status for Bash.
 
 The shell in FreeBSD 4.0 has the following bug: @samp{$?} is reset to 0
-by empty lines if the code in inside trap.
+by empty lines if the code is inside trap.
 
 @example
 $ trap 'false

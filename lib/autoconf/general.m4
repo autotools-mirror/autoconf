@@ -716,7 +716,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 # ---------------------
 # At the end of configure, dump some useful information in the
 # log, even if AC_OUTPUT was not called.
-AC_DEFUN([_AC_INIT_LOG_COMPLETE],
+m4_define([_AC_INIT_LOG_COMPLETE],
 [# Save into config.log some information that might help in debugging.
 cat <<_ACEOF >&AS_MESSAGE_LOG_FD
 
@@ -776,7 +776,6 @@ cat >>config.log <<EOF
 ## ------------ ##
 
 EOF
-m4_wrap([AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])[]])dnl
 
 _AC_INIT_DEFAULTS_FDS
 #
@@ -1452,8 +1451,30 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 done
 
 # When interrupted or exit'd, cleanup temporary files, and complete
-# config.log.
+# config.log.  We remove comments because anyway the quotes in there
+# would cause problems or look ugly.
 trap 'exit_status=$?
+  # Save into config.log some information that might help in debugging.
+  echo cat <<_ACEOF >&AS_MESSAGE_LOG_FD
+  echo >&AS_MESSAGE_LOG_FD
+  echo "## ----------------- ##" >&AS_MESSAGE_LOG_FD
+  echo "## Cache variables.  ##" >&AS_MESSAGE_LOG_FD
+  echo "## ----------------- ##" >&AS_MESSAGE_LOG_FD
+  echo >&AS_MESSAGE_LOG_FD
+  m4_patsubst(m4_patsubst(m4_dquote(m4_defn([_AC_CACHE_DUMP])),
+                          [^ *\(#.*\)?
+]),
+              ['], ['"'"']) >&AS_MESSAGE_LOG_FD
+  sed "/^$/d" confdefs.h >conftest.log
+  if test -s conftest.log; then
+    echo >&AS_MESSAGE_LOG_FD
+    echo "## ------------ ##" >&AS_MESSAGE_LOG_FD
+    echo "## confdefs.h.  ##" >&AS_MESSAGE_LOG_FD
+    echo "## ------------ ##" >&AS_MESSAGE_LOG_FD
+    echo >&AS_MESSAGE_LOG_FD
+    cat conftest.log >&AS_MESSAGE_LOG_FD
+  fi
+  (echo; echo) >&AS_MESSAGE_LOG_FD
   test "$ac_signal" != 0 &&
     echo "$as_me: caught signal $ac_signal" >&AS_MESSAGE_LOG_FD
   echo "$as_me: exit $exit_status" >&AS_MESSAGE_LOG_FD
@@ -1461,7 +1482,7 @@ trap 'exit_status=$?
     exit $exit_status
      ' 0
 for ac_signal in 1 2 13 15; do
-  trap 'ac_status=$?; ac_signal='$ac_signal'; exit $ac_status' $ac_signal
+  trap 'ac_status=$?; ac_signal='$ac_signal'; AS_EXIT([$ac_status])' $ac_signal
 done
 ac_signal=0
 
@@ -3769,8 +3790,6 @@ m4_ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
 
 dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
-
-AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
