@@ -160,13 +160,13 @@ uninstall:
 	  rm -f $(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 	rm -fr $(acdatadir)
-	cd $(infodir); rm -f autoconf.info*
+	cd $(infodir) && rm -f autoconf.info*
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
-	then cd $(infodir); rm -f standards.info*; fi
+	then cd $(infodir) && rm -f standards.info*; fi
 
 ${srcdir}/configure: configure.in $(M4FILES)
-	cd $(srcdir); \
-	rm -f $@ $@.tmp; \
+	cd $(srcdir) && \
+	rm -f $@ $@.tmp && \
 	$(M4) autoconf.m4 configure.in > $@.tmp && \
 	chmod +x $@.tmp && mv $@.tmp $@
 Makefile: Makefile.in config.status
@@ -182,7 +182,7 @@ maintainer-clean::
 clean mostlyclean distclean maintainer-clean::
 	for dir in $(SUBDIRS); do \
 	  echo making $@ in $$dir ; \
-	  (cd $$dir; $(MAKE) $@) ; \
+	  (cd $$dir && $(MAKE) $@) ; \
 	done
 
 clean mostlyclean distclean maintainer-clean::
