@@ -1,3 +1,11 @@
+2004-12-03  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_DEFINE, AC_DEFINE_UNQUOTED): Factor
+	  out the common code to ...
+	(_AC_DEFINE_Q): ... a new macro; simplify the condition about the
+	  value of the #define--default to 1, iff the macro was called
+	  with exactly one parameter.
+
 2004-12-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MEMCMP): Use
