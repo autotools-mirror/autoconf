@@ -1891,11 +1891,13 @@ individual @file{config.h.in}.
 @itemx -h
 Print a summary of the command line options and exit.
 
-@item --localdir=@var{dir}
-@itemx -l @var{dir}
-Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
-not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
-@var{dir} instead of in the current directory.
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files.
 
 @item --macrodir=@var{dir}
 @itemx -m @var{dir}
@@ -1904,9 +1906,33 @@ Look for the installed macro files and @file{acconfig.h} in directory
 @var{dir}.  You can also set the @code{AC_MACRODIR} environment variable
 to a directory; this option overrides the environment variable.
 
-@item --version
-@itemx -V
-Print the version number of Autoconf and exit.
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
+not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
+@var{dir} instead of in the current directory.
+
+@item --warnings=@var{category}
+@itemx -W @var{category}
+@evindex WARNINGS
+Report the warnings related to @var{category} (which can actually be a
+comma separated list). Current categories include:
+
+@table @samp
+@item @samp{obsolete}
+report the uses of obsolete constructs
+
+@item @samp{all}
+report all the warnings
+
+@item @samp{error}
+treats warnings as errors
+@end table
+
+The soon-do-be-standard environment variable @code{WARNINGS} is
+supported: it consists in a comma separated list of categories.  It is
+honored iff @samp{--warnings} was not used.
+
 @end table
 
 @node Configuration Commands, Configuration Links, Configuration Headers, Setup

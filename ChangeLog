@@ -1,5 +1,16 @@
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
+	Simplify the handling of `acconfig.h'.
+
+	* autoheader.sh: No longer try to select the needed paragraphs of
+	`acconfig.h', just dump everything into `config.h.in'.
+	Implement support for `--warnings'.
+	Warn the users that these auxiliary files are obsolete when `-W
+	obsolete'.
+	* doc/autoconf.texi (Invoking autoheader): Adjust.
+
+2000-05-03  Akim Demaille  <akim@epita.fr>
+
 	Support of acconfig.h was broken.  Fix and test.
 	Reported by Jim Meyering.
 

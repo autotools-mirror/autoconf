@@ -42,7 +42,7 @@ Operation modes:
 
 Warning categories include:
   \`cross'      cross compilation issues
-  \`obsolete'   use of obsolete macros
+  \`obsolete'   obsolete constructs
   \`syntax'     dubious syntactic constructs
   \`all'        all the warnings
   \`error'      warnings are error

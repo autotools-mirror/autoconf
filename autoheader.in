@@ -32,13 +32,18 @@ Create a template file of C \`#define' statements for \`configure' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
 given.
 
-  -h, --help            print this help, then exit
-  -V, --version         print version number, then exit
-  -v, --verbose         verbosely report processing
-  -d, --debug           don't remove temporary files
-  -m, --macrodir=DIR    directory storing Autoconf's macro files
-  -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
+  -h, --help               print this help, then exit
+  -V, --version            print version number, then exit
+  -v, --verbose            verbosely report processing
+  -d, --debug              don't remove temporary files
+  -m, --macrodir=DIR       directory storing Autoconf's macro files
+  -l, --localdir=DIR       directory storing \`aclocal.m4' and \`acconfig.h'
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
+Warning categories include:
+  \`obsolete'   obsolete constructs
+  \`all'        all the warnings
+  \`error'      warnings are error
 Report bugs to <bug-autoconf@gnu.org>."
 
 version="\
@@ -62,21 +67,15 @@ if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
 if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
-# ac_LF_and_DOT
-# We use echo to avoid assuming a particular line-breaking character.
-# The extra dot is to prevent the shell from consuming trailing
-# line-breaks from the sub-command output.  A line-break within
-# single-quotes doesn't work because, if this script is created in a
-# platform that uses two characters for line-breaks (e.g., DOS), tr
-# would break.
-ac_LF_and_DOT=`echo; echo .`
-
 # Variables.
 : ${AC_MACRODIR=@datadir@}
 debug=false
 localdir=.
 tmp=
 verbose=:
+warning_all=false
+warning_error=false
+warning_obsolete=false
 
 while test $# -gt 0 ; do
   case "$1" in
@@ -109,6 +108,18 @@ while test $# -gt 0 ; do
        AC_MACRODIR=$1
        shift ;;
 
+    --warnings | -W )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       warnings="$warnings "`echo $1 | sed -e 's/,/ /g'`
+       shift ;;
+    --warnings=* )
+       warnings="$warnings "`echo "$1" | sed -e 's/^[^=]*=//;s/,/ /g'`
+       shift ;;
+    -W* ) # People are used to -Wall, -Werror etc.
+       warnings="$warnings "`echo "$1" | sed -e 's/^-W//;s/,/ /g'`
+       shift ;;
+
     -- )     # Stop option processing
       shift; break ;;
     - )     # Use stdin as input.
@@ -121,6 +132,13 @@ while test $# -gt 0 ; do
     * )
       break ;;
   esac
+done
+
+# Decode `$warnings'.
+for i in :$warnings
+do
+  test "$i" = : && continue
+  eval "warning_$i=:"
 done
 
 # Trap on 0 to stop playing with `rm'.
@@ -143,6 +161,29 @@ $debug ||
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
    exit 1;
 }
+
+# Preach.
+if ($warning_all || $warning_obsolete) &&
+    (test -f $config_h.top ||
+     test -f $config_h.bot ||
+     test -f $localdir/acconfig.h); then
+  sed -e "s/^    //;s/^/$me: warning: /" >&2 <<\EOF
+    Using auxiliary files such as `acconfig.h', `config.h.bot'
+    and `config.h.top', to define templates for `config.h.in'
+    is deprecated and discouraged.
+
+    Using the third argument of `AC_DEFINE' and
+    `AC_DEFINE_UNQUOTED' allows to define a template without
+    `acconfig.h':
+
+      AC_DEFINE([NEED_MAIN], 1,
+                [Define if a function `main' is needed.])
+
+    More sophisticated templates can also be produced, see the
+    documentation.
+EOF
+  $warning_error && exit 1
+fi
 
 acconfigs=
 test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
@@ -197,55 +238,20 @@ case "$config_h" in
 *) config_h_in="$config_h.in" ;;
 esac
 
-
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmp/config.hin
 /* $config_h_in.  Generated automatically from $infile by autoheader.  */
 EOF
 
-test -r ${config_h}.top && cat ${config_h}.top  >>$tmp/config.hin
+# Dump the top.
+test -r $config_h.top && cat $config_h.top >>$tmp/config.hin
+
+# Dump `acconfig.h' but its bottom.
 test -r $localdir/acconfig.h &&
-  grep @TOP@ $localdir/acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmp/config.hin
+  sed -e '/@BOTTOM@/,$d' -e 's/@TOP@//' $localdir/acconfig.h >>$tmp/config.hin
 
-# This puts each template paragraph on its own line, separated by @s.
-if test -n "$syms"; then
-  # Make sure the boundary of template files is also the boundary
-  # of the paragraph.  Extra newlines don't hurt since they will
-  # be removed.
-  # Stuff outside of @TOP@ and @BOTTOM@ is ignored in all the acconfig.hs.
-  for t in $acconfigs; do
-    sedscript=""
-    grep @TOP@ $t >/dev/null && sedscript="1,/@TOP@/d;"
-    grep @BOTTOM@ $t >/dev/null && sedscript="$sedscript /@BOTTOM@/,\$d;"
-    # This substitution makes "#undef<TAB>FOO" in acconfig.h work.
-    sed -n -e "$sedscript s/	/ /g; p" $t
-    echo; echo
-  done |
-  # The sed script is suboptimal because it has to take care of
-  # some broken seds (e.g. AIX) that remove '\n' from the
-  # pattern/hold space if the line is empty. (junio@twinsun.com).
-  sed -n -e '
-	/^[ 	]*$/{
-		x
-		s/\n/@/g
-		p
-		s/.*/@/
-		x
-	}
-	H' | sed -e 's/@@*/@/g' |
-  # Select each paragraph that refers to a symbol we picked out above.
-  # Some fgrep's have limits on the number of lines that can be in the
-  # pattern on the command line, so use a temporary file containing the
-  # pattern.
-  (cat > $tmp/syms.fgrep <<EOF
-$syms
-EOF
-   fgrep -f $tmp/syms.fgrep) |
-  tr @. "$ac_LF_and_DOT" >>$tmp/config.hin
-fi
-
+# Dump the templates from `configure.in'.
 for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
   echo >>$tmp/config.hin
   eval echo '"${'$verb'}"' >>$tmp/config.hin
@@ -255,7 +261,7 @@ done
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmp/config.hin
-test -f ${config_h}.bot && cat ${config_h}.bot >>$tmp/config.hin
+test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
 
 
 # Check that all the symbols have a template.
@@ -267,7 +273,7 @@ if test -n "$syms"; then
     if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmp/config.hin >/dev/null; then
       : # All is well.
     else
-      echo "$0: No template for symbol \`$sym'" >&2
+      echo "$me: No template for symbol \`$sym'" >&2
       status=1
     fi
   done
@@ -280,7 +286,7 @@ if test $status = 0; then
     # Output is a file
     if test -f $config_h_in && cmp -s $tmp/config.hin $config_h_in; then
       # File didn't change, so don't update its mod time.
-      echo "$0: $config_h_in is unchanged" >&2
+      echo "$me: $config_h_in is unchanged" >&2
     else
       mv -f $tmp/config.hin $config_h_in
     fi
