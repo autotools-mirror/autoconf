@@ -18,7 +18,7 @@ dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
 dnl Written by David MacKenzie, with help from
 dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
-dnl Roland McGrath, and Noah Friedman.
+dnl Roland McGrath, Noah Friedman, and david d zuhn.
 dnl
 changequote([,])dnl
 undefine([eval])dnl
@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.6)dnl
+define(AC_ACVERSION, 1.7.7)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -80,11 +80,6 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-# Usage: configure [--srcdir=DIR] [--prefix=PREFIX] [--exec-prefix=PREFIX]
-#        [--with-PACKAGE[=VALUE]] [--quiet] [--silent] [--verbose]
-#        [--version] [--help] [host]
-# Ignores all other options.
-
 # Save the original args to write them into config.status later.
 ac_configure_args="[$]*"
 ac_prog=[$]0
@@ -92,85 +87,150 @@ ac_prog=[$]0
 dnl
 define(AC_PARSEARGS,
 [changequote(,)dnl
+# Only options that might do something get documented.
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets]
+--enable-FEATURE[=VAL]	enable FEATURE (optional parameter VAL)
+--exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
+--gas			obsolete form of --with-gnu-as
+--help			print this message
+--nfp			do not use a floating point processor [use it]
+--prefix=PREFIX		install host independent files in PREFIX [/usr/local]
+--program-prefix=PREF	install programs with PREF prepended to their names []
+--program-suffix=SUFF	install programs with SUFF appended to their names []
+--quiet, --silent	do not print \`checking for...' messages
 --srcdir=DIR		find the sources in DIR [. or ..]
---prefix=PREFIX		configure to install host independent files in PREFIX
-			[/usr/local]
---exec-prefix=PREFIX	configure to install host dependent files in PREFIX
-			[/usr/local]
---with-PACKAGE[=VALUE]	use PACKAGE (with parameter VALUE)
---quiet, --silent	do not print \`checking for' messages
 --verbose		print results of checks
---version		print the version number of autoconf used
---help			print this message"
+--version		print the version of autoconf that created configure
+--with-PACKAGE[=VAL]	external PACKAGE is available (optional parameter VAL)
+--without-PACKAGE	same as --with-PACKAGE=no
+--x			obsolete form of --with-x"
 changequote([,])dnl
 
 ac_get_optarg='
-if test -z "$ac_optarg"; then
+case "$ac_option" in
+changequote(,)dnl
+  *=*) ac_optarg=`echo $ac_option | sed 's/[-a-z_]*=//'` ;;
+changequote([,])dnl
+  *) 
   if test $[#] -eq 0; then
     AC_ERROR(missing argument to $ac_option)
   else
-    ac_optarg=$[1]; shift
+    ac_optarg="$[1]"; shift
   fi
-fi
+  ;;
+esac
 '
 
-while :
+while test $[#] -gt 0
 do
-  case $[#] in
-  0) break ;;
-  esac
-  ac_option="$[1]"
-  shift
+  ac_option="$[1]"; shift
+
+  # Accept but ignore most of the Cygnus configure options,
+  # so we can diagnose typos and other invalid options.
 
   case "$ac_option" in
+
+  -build | --build | --buil | --bui | --bu | --b \
+  | -build=* | --build=* | --buil=* | --bui=* | --bu=* | --b=*)
+    eval "$ac_get_optarg" ;;
+
+  -enable-* | --enable-*)
+    ac_feature=`echo $ac_option|sed -e 's/-*enable-//' -e 's/=.*//'`
+    # Reject names that aren't valid shell variable names.
 changequote(,)dnl
-  -*=*) ac_optarg=`echo $ac_option | sed 's/[-a-z_]*=//'`
+    if test -n "`echo $ac_feature| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([,])dnl
-        ac_option=`echo $ac_option | sed 's/=.*//'`
-    ;;
-  *) ac_optarg= ;;
-  esac
-
-  case "$ac_option" in
+      AC_ERROR($ac_feature: invalid feature name)
+    fi
+    ac_feature=`echo $ac_feature| sed 's/-/_/g'`
+    case "$ac_option" in
+changequote(,)dnl
+      *=*) ac_optarg="`echo $ac_option|sed 's/[^=]*=//'`" ;;
+changequote([,])dnl
+      *) ac_optarg=yes ;;
+    esac
+    eval "enable_${ac_feature}='$ac_optarg'" ;;
 
   # For backward compatibility, recognize -exec-prefix and --exec_prefix.
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
-  | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec \
-  | --exe | --ex | --e)
+  | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
+  | --exec | --exe | --ex \
+  | -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
+  | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* \
+  | --exec=* | --exe=* | --ex=*)
     eval "$ac_get_optarg"; exec_prefix="$ac_optarg" ;;
 
-  -gas | --gas | --ga | --g) ;;
+  -gas | --gas | --ga | --g) with_gnu_as=1 ;;
 
   -help | --help | --hel | --he)
-    echo "$ac_usage"; exit 0 ;;
+    cat << EOF
+$ac_usage
+EOF
+    exit 0 ;;
 
-  -host | --host | --hos | --ho)
+  -host | --host | --hos | --ho \
+  | -host=* | --host=* | --hos=* | --ho=*)
     eval "$ac_get_optarg" ;;
 
-  -nfp | --nfp | --nf | --n) ;;
+  -nfp | --nfp | --nf) floating_point=no ;;
 
-  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+  -norecursion | --norecursion | --norecursio | --norecursi \
+  | --norecurs | --norecur | --norecu | --norec | --nore | --nor | --no)
+  norecursion=yes ;;
+
+  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p \
+  | -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
     eval "$ac_get_optarg"; prefix="$ac_optarg" ;;
 
-  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-    eval "$ac_get_optarg"; srcdir="$ac_optarg" ;;
+  -program-prefix | --program-prefix | --program-prefi | --program-pref \
+  | --program-pre | --program-pr | --program-p \
+  | -program-prefix=* | --program-prefix=* | --program-prefi=* \
+  | --program-pref=* | --program-pre=* | --program-pr=* | --program-p=*)
+    eval "$ac_get_optarg"; program_prefix="$ac_optarg" ;;
 
-  -target | --target | --targe | --targ | --tar | --ta | --t)
+  -program-suffix | --program-suffix | --program-suffi | --program-suff \
+  | --program-suf | --program-su | --program-s \
+  | -program-suffix=* | --program-suffix=* | --program-suffi=* \
+  | --program-suff=* | --program-suf=* | --program-su=* | --program-s=*)
+    eval "$ac_get_optarg"; program_suffix="$ac_optarg" ;;
+
+  # For paranoia about old sh size limits, split this case up.
+  -program-transform-name | --program-transform-name \
+  | --program-transform-nam | --program-transform-na \
+  | --program-transform-n | --program-transform- \
+  | --program-transform | --program-transfor \
+  | --program-transfo | --program-transf \
+  | --program-trans | --program-tran \
+  | --progr-tra | --program-tr | --program-t)
     eval "$ac_get_optarg" ;;
 
-  -with-* | --with-*)
-    ac_package=`echo $ac_option|sed -e 's/-*with-//'`
-    # Reject names that aren't valid shell variable names.
-changequote(,)dnl
-    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
-changequote([,])dnl
-      AC_ERROR($ac_package: invalid package name)
-    fi
-    ac_package=`echo $ac_package| sed 's/-/_/g'`
-    test -z "$ac_optarg" && ac_optarg=1
-    eval "with_$ac_package='$ac_optarg'" ;;
+  -program-transform-name=* | --program-transform-name=* \
+  | --program-transform-nam=* | --program-transform-na=* \
+  | --program-transform-n=* | --program-transform-=* \
+  | --program-transform=* | --program-transfor=* \
+  | --program-transfo=* | --program-transf=* \
+  | --program-trans=* | --program-tran=* \
+  | --progr-tra=* | --program-tr=* | --program-t=*)
+    eval "$ac_get_optarg" ;;
+
+  --rm | --r) ;;
+
+  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+  | -silent | --silent | --silen | --sile | --sil)
+    ac_silent=yes ;;
+
+  -site | --site | --sit \
+  | --site=* | --sit=*)
+    eval "$ac_get_optarg" ;;
+
+  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr \
+  | -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+    eval "$ac_get_optarg"; srcdir="$ac_optarg" ;;
+
+  -target | --target | --targe | --targ | --tar | --ta | --t \
+  | -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
+    eval "$ac_get_optarg" ;;
 
   -v | -verbose | --verbose | --verbos | --verbo | --verb)
       ac_verbose=yes ;;
@@ -179,15 +239,44 @@ changequote([,])dnl
     echo "configure generated by autoconf version AC_ACVERSION"
     exit 0 ;;
 
-  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
-     | -silent | --silent | --silen | --sile | --sil | --si)
-    ac_silent=yes ;;
+  -with-* | --with-*)
+    ac_package=`echo $ac_option|sed -e 's/-*with-//' -e 's/=.*//'`
+    # Reject names that aren't valid shell variable names.
+changequote(,)dnl
+    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+changequote([,])dnl
+      AC_ERROR($ac_package: invalid package name)
+    fi
+    ac_package=`echo $ac_package| sed 's/-/_/g'`
+    case "$ac_option" in
+changequote(,)dnl
+      *=*) ac_optarg="`echo $ac_option|sed 's/[^=]*=//'`" ;;
+changequote([,])dnl
+      *) ac_optarg=yes ;;
+    esac
+    eval "with_${ac_package}='$ac_optarg'" ;;
+
+  -without-* | --without-*)
+    ac_package=`echo $ac_option|sed -e 's/-*without-//'`
+    # Reject names that aren't valid shell variable names.
+changequote(,)dnl
+    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+changequote([,])dnl
+      AC_ERROR($ac_package: invalid package name)
+    fi
+    ac_package=`echo $ac_package| sed 's/-/_/g'`
+    eval "with_${ac_package}=no" ;;
+
+  --x) with_x=1 ;;
+
+  -*) AC_WARN([$ac_option: invalid option; use --help to show usage])
+    ;;
 
   *) 
 changequote(,)dnl
     if test -n "`echo $ac_option| sed 's/[-a-z0-9]//g'`"; then
 changequote([,])dnl
-      AC_ERROR($ac_option: invalid host type)
+      AC_WARN($ac_option: invalid host type)
     fi
     ;;
 
@@ -209,8 +298,8 @@ trap 'rm -fr confdefs* $ac_clean_files' 0
 # NLS nuisances.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
-if test "${LC_ALL+set}" = 'set' ; then LC_ALL=C; export LC_ALL; fi
-if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = 'set'; then LC_ALL=C; export LC_ALL; fi
+if test "${LANG+set}"   = 'set'; then LANG=C;   export LANG;   fi
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -228,7 +317,7 @@ if test -z "$srcdir"; then
 changequote(,)dnl
   ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
-  test "X$ac_confdir" = "X$ac_prog" && ac_confdir=.
+  test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
@@ -236,10 +325,21 @@ changequote([,])dnl
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test x$ac_srcdir_defaulted = xyes; then
-    AC_ERROR(can not find sources in \`${ac_confdir}' or \`..')
+    AC_ERROR(can not find sources in ${ac_confdir} or ..)
   else
-    AC_ERROR(can not find sources in \`${srcdir}')
+    AC_ERROR(can not find sources in ${srcdir})
   fi
+fi
+])dnl
+dnl
+define(AC_ENABLE,
+[[#] check whether --enable-$1 was given
+enableval="[$enable_]patsubst($1,-,_)"
+if test -n "$enableval"; then
+  ifelse([$2], , :, [$2])
+ifelse([$3], , , [else
+  $3
+])dnl
 fi
 ])dnl
 dnl
@@ -744,8 +844,8 @@ dnl
 define(AC_OUTPUT,
 [changequote(,)dnl
 # Set default prefixes.
-if test "z$prefix" != 'z' ; then
-  test "z$exec_prefix" = 'z' && exec_prefix='${prefix}'
+if test -n "$prefix"; then
+  test -z "$exec_prefix" && exec_prefix='${prefix}' # Let make expand it.
   ac_prsub="s%^prefix\\([ 	]*\\)=\\([ 	]*\\).*$%prefix\\1=\\2$prefix%"
 fi
 if test -n "$exec_prefix"; then
@@ -770,6 +870,8 @@ rm -f conftest.def
 changequote([,])dnl
 AC_SUBST(LIBS)dnl
 AC_SUBST(srcdir)dnl
+AC_SUBST(prefix)dnl
+AC_SUBST(exec_prefix)dnl
 dnl Substituting for DEFS would confuse sed if it contains multiple lines.
 ifdef([AC_CONFIG_NAMES],
 [divert(1)dnl
