@@ -2096,7 +2096,7 @@ first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
 @cvindex SETVBUF_REVERSED
 If @code{setvbuf} takes the buffering type as its second argument and
 the buffer pointer as the third, instead of the other way around, define
-@code{SETVBUF_REVERSED}.  This is the case on System V before release 3.
+@code{SETVBUF_REVERSED}.
 @end defmac
 
 @defmac AC_FUNC_STRCOLL

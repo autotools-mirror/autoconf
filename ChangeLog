@@ -1,5 +1,9 @@
 1999-09-25  Ben Elliston  <bje@cygnus.com>
 
+	* autoconf.texi (AC_FUNC_SETVBUF): Do not mention which systems
+	might have their setvbuf() arguments reordered. It's difficult to
+	accurately determine and is not essential. Fix for autoconf/7.
+
 	* acgeneral.m4 (AC_LINK_FILES): Emit an error if an incorrect
 	number of arguments are collected. Fix for autoconf/10.
 
