@@ -8,7 +8,7 @@
 
 @set EDITION 1.121
 @set VERSION 1.121
-@set UPDATED September 1994
+@set UPDATED October 1994
 
 @iftex
 @finalout
@@ -775,8 +775,10 @@ substitutions performed on them in @code{configure}.  You can use
 If you run @code{make} on subdirectories, you should run it using the
 @code{make} variable @code{MAKE}.  Most versions of @code{make} set
 @code{MAKE} to the name of the @code{make} program plus any options it
-was given.  However, some old versions do not set it.  The following
-macro allows you to use it even with those versions.
+was given.  (But many do not include in it the values of any variables
+set on the command line, so those are not passed on.)  Some old versions
+of @code{make} do not set this variable.  The following macro allows you
+to use it even with those versions.
 
 @defmac AC_PROG_MAKE_SET
 @maindex PROG_MAKE_SET
