@@ -171,7 +171,7 @@ syms=
 # Extract assignments of `ah_verbatim_SYMBOL' from the modified
 # autoconf processing of the input file.  The sed hair is necessary to
 # win for multi-line macro invocations.
-$run_m4 $infile >$tmpbase.exp
+$run_m4f $infile >$tmpbase.exp
 sed -n -e '
 	: again
 	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
