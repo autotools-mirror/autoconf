@@ -1,5 +1,15 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	Some tests are failing with srcdir != builddir, because they can't
+	find config.guess, install-sh etc.
+	Reported by Erez Zadok.
+
+	* tests/atspecific.m4 (AT_TEST_MACRO): Set AC_CONFIG_AUX_DIR to
+	top_srcdir in configure.in, and pass the value of top_srcdir to
+	configure.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH, AC_PATH_PROG,
 	AC_PATH_PROGS, AC_PATH_TOOL, AC_CHECK_TOOL, AC_PREFIX_PROGRAM,
 	AC_EGREP_CPP, AC_TRY_LINK, AC_COMPILE_CHECK, AC_TRY_RUN_NATIVE):

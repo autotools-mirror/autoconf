@@ -77,6 +77,8 @@ define(_m4_foreach,
 # Create a minimalist configure.in running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
+# `config.guess' etc.).
 AT_DEFINE(AT_TEST_MACRO,
 [AT_SETUP([$1])
 
@@ -84,6 +86,7 @@ dnl Produce the configure.in
 AT_DATA(configure.in,
 [AC_INCLUDE(actest.m4)
 AC_INIT
+AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_ENV_SAVE(expout)
 ifelse([$2],,[$1], [$2])
@@ -97,7 +100,7 @@ dnl The problem is that currently some warnings are spread on several
 dnl lines, so grepping -v warning is not enough.
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
-AT_CHECK([./configure], 0, ignore, ignore)
+AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, ignore)
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
 AT_CHECK([cat env-after], 0, expout)
 $3
