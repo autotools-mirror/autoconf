@@ -4616,7 +4616,7 @@ variable @code{CXX} to its value.
 Otherwise, if the macro is invoked without an argument, then search for
 a C++ compiler under the likely names (first @code{g++} and @code{c++}
 then other names).  If none of those checks succeed, then as a last
-resort set @code{CXX} to @code{gcc}.
+resort set @code{CXX} to @code{g++}.
 
 This macro may, however, be invoked with an optional first argument
 which, if specified, must be a space separated list of C++ compilers to
