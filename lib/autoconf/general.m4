@@ -2213,18 +2213,16 @@ AC_VAR_IF_INDIR([$1],
 [AC_FATAL([$0: requires manifest arguments])])
 ifelse(regexp([$1], [\.]), -1,
        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
-pushdef(AC_Member_Aggregate, [patsubst([$1], [\.[^.]*])])dnl
-pushdef(AC_Member_Member,    [patsubst([$1], [.*\.])])dnl
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
-ac_Member_Aggregate foo;
-foo.ac_Member_Member;,
+dnl AGGREGATE foo;
+patsubst([$1], [\.[^.]*]) foo;
+dnl foo.MEMBER;
+foo.patsubst([$1], [.*\.]);,
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Member) = yes,
                 [$2], [$3])dnl
-popdef([AC_Member_Member])dnl
-popdef([AC_Member_Aggregate])dnl
 AC_VAR_POPDEF([ac_Member])dnl
 ])dnl AC_CHECK_MEMBER
 
@@ -2846,7 +2844,8 @@ dnl -----------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADER,
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
-[AC_TRY_CPP([#include <$1>],
+[AC_TRY_CPP([#include <$1>
+],
 AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Header) = yes,
                 [$2], [$3])dnl
@@ -2881,7 +2880,7 @@ AC_CACHE_VAL(ac_var,
 [if test "$cross_compiling" = yes; then
   AC_WARNING([Cannot check for file existence when cross compiling])dnl
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
-  fi
+fi
 if test -r "[$1]"; then
   AC_VAR_SET(ac_var, yes)
 else
@@ -2935,7 +2934,7 @@ dnl                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 dnl                [INCLUDES])
 dnl --------------------------------------------------------
 AC_DEFUN([AC_CHECK_DECLS],
-[AC_FOREACH([AC_Symbol], [$1],
+[m4_foreach([AC_Symbol], [$1],
   [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
                  [$2],
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP([NEED_]AC_Symbol[_DECL]))
@@ -2947,8 +2946,8 @@ $3],
 dnl ### Checking for library functions
 
 
-dnl AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-dnl ------------------------------------------------------------------
+dnl AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl -----------------------------------------------------------------
 AC_DEFUN(AC_CHECK_FUNC,
 [AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
 AC_CACHE_CHECK([for $1], ac_var,
@@ -2999,6 +2998,7 @@ done
 
 
 dnl AC_REPLACE_FUNCS(FUNCTION...)
+dnl -----------------------------
 AC_DEFUN(AC_REPLACE_FUNCS,
 [AC_CHECK_FUNCS([$1], , [LIBOBJS="$LIBOBJS ${ac_func}.${ac_objext}"])
 AC_SUBST(LIBOBJS)dnl
@@ -3056,9 +3056,9 @@ AC_DEFUN(AC_CHECK_TYPE_INTERNAL,
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
 [AC_TRY_COMPILE(AC_INCLUDES_DEFAULT([$4]),
-               [$1 foo;],
-               AC_VAR_SET(ac_Type, yes),
-               AC_VAR_SET(ac_Type, no))])
+                [$1 foo;],
+                AC_VAR_SET(ac_Type, yes),
+                AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
@@ -3074,7 +3074,7 @@ AC_DEFUN(AC_CHECK_TYPES,
 [m4_foreach([AC_Type], [$1],
   [AC_SPECIALIZE([AC_CHECK_TYPE_INTERNAL], AC_Type,
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type))
-$2]
+$2],
                  [$3],
                  [$4])])])
 
@@ -3092,7 +3092,10 @@ AC_DEFUN(AC_CHECK_TYPE,
 ])dnl AC_CHECK_TYPE
 
 
+
+
 dnl ### Creating output files
+
 
 dnl AC_CONFIG_IF_MEMBER(DEST[:SOURCE], LIST, ACTION-IF-TRUE, ACTION-IF-FALSE)
 dnl -------------------------------------------------------------------------

@@ -9,4 +9,36 @@
 
 AT_INIT(autoconf)
 
+dnl AT_TEST_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
+dnl ----------------------------------------------------------------
+dnl Create a minimalist configure.in running the macro named
+dnl NAME-OF-THE-MACRO, check that autoconf runs on that script,
+dnl and that the shell runs correctly the configure.
+AT_DEFINE(AT_TEST_MACRO,
+[AT_SETUP($1)
+
+# An extremely simple configure.in
+AT_DATA(configure.in,
+[AC_INIT
+AC_CONFIG_HEADER(config.h)
+ifelse([$2],,[$1], [$2])
+AC_OUTPUT
+])
+
+# FIXME: Here we just don't consider the stderr from Autoconf.
+# Maybe some day we could be more precise and filter out warnings.
+# The problem is that currently some warnings are spread on several
+# lines, so grepping -v warning is not enough.
+AT_CHECK([../autoconf -m ..], 0,, ignore)
+AT_CHECK([../autoheader -m ..], 0,, ignore)
+AT_CHECK([./configure], 0, ignore, ignore)
+$3
+AT_CLEANUP(configure config.status config.log config.cache config.h.in config.h)dnl
+])dnl AT_TEST_MACRO
+
+
+dnl Run semantics before, since there are little chances that syntax
+dnl fails.
+
+AT_INCLUDE(semantics.m4)
 AT_INCLUDE(syntax.m4)

@@ -153,7 +153,7 @@ AH_DEFUN([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
 AH_DEFUN([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
 
 AH_DEFUN([AC_CHECK_DECLS],
-[AC_FOREACH([AC_Symbol], [$1],
+[m4_foreach([AC_Symbol], [$1],
   [AH_TEMPLATE(AC_TR_CPP([NEED_]AC_Symbol[_DECL]),
                [Define if you need the declaration of `]AC_Symbol['.])
    # Success

@@ -20,7 +20,7 @@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = syntax.m4
+SUITE = syntax.m4 semantics.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.

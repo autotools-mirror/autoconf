@@ -1,3 +1,19 @@
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
+	Start a new series of tests which check the semantics.
+
+	* acgeneral.m4 (AC_CHECK_MEMBER): It is not smart to define
+	ac_Foo, and use AC_Foo.  Got rid of AC_Member_Aggregate and
+	AC_Member_Member which were complicating more than simplifying.
+	(AC_CHECK_DECLS): Use m4 lists.
+	(AC_CHECK_TYPES): A comma was missing.
+	* autoheader.m4: (AC_CHECK_DECLS): Use m4 lists.
+	* doc/autoconf.texi (Generic Declarations): AC_CHECK_DELCS uses m4
+	lists.
+	* tests/semantics.m4: New file.  Collection of semantical tests:
+	verify that the tests are positive and negative when appropriate.
+	Test AC_CHECK_MEMBERS, AC_CHECK_DECLS and AC_CHECK_TYPES.
+
 2000-02-04  Akim Demaille  <akim@epita.fr>
 
 	* tests/Makefile.am (macros.m4): Fix the sed snippet.
