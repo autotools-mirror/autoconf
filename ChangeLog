@@ -1,5 +1,9 @@
 2005-01-03  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Add a comment about nesting.
+
+2005-01-03  Stepan Kasal  <kasal@ucw.cz>
+
 	A cleanup of the diversion support in m4sugar.
 
 	* lib/m4sugar/m4sugar.m4 (_m4_divert): A typo in description.

@@ -131,6 +131,11 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 #      bar1=`echo $bar`
 #      bar2=`echo $bar`
 #
+# Due to the simple implementation, all the AS_REQUIRE calls have to be at
+# the very beginning of the macro body, or the AS_REQUIREs may not be nested.
+# More exactly, if a macro doesn't have all AS_REQUIREs at its beginning,
+# it may not be AS_REQUIREd.
+#
 m4_define([AS_REQUIRE],
 [m4_provide_if([$1], [],
 	       [m4_divert_text([M4SH-INIT], [m4_default([$2], [$1])])])])
