@@ -1,5 +1,10 @@
 2001-08-03  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoconf.in ($@): Work around the usual sh bug.
+	From Nicolas Joly.
+
+2001-08-03  Akim Demaille  <akim@epita.fr>
+
 	Clean up the handling of the M4 builtins tracing exception.
 
 	* bin/autom4te.in (Request::request): Don't complete M4 builtins

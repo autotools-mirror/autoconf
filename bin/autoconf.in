@@ -232,8 +232,8 @@ run_autom4te="$autom4te "\
 # Autom4te expansion.
 eval set dummy "$traces"
 shift
-$verbose "$me: running $run_autom4te ""$@"" $infile --output $outfile" >&2
-$run_autom4te "$@" $infile --output $outfile ||
+$verbose "$me: running $run_autom4te "${1+"$@"}" $infile --output $outfile" >&2
+$run_autom4te ${1+"$@"} $infile --output $outfile ||
   { (exit 1); exit 1; }
 
 if test -z "$traces" && test "x$outfile" != x-; then
