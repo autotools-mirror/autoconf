@@ -166,6 +166,7 @@ then
   *) LEXLIB="-ll" ;;
   esac
 fi
+AC_VERBOSE(setting LEXLIB to $LEXLIB)
 AC_SUBST(LEXLIB)])dnl
 dnl
 define(AC_YYTEXT_POINTER,[dnl
