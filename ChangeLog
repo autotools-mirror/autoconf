@@ -1,5 +1,12 @@
 2000-09-19  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (AU_ALIAS): Do not use `defn' since then autoupdate
+	would replace an old macro call with the new macro body instead of
+	the new macro call.
+	* tests/tools.m4 (autoupdate): Test an AU_ALIAS'd macro update.
+
+2000-09-19  Pavel Roskin  <proski@gnu.org>
+
 	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): New macro.
 	(AT_TEST_MACRO): Use it.
 	* tests/semantics.m4 (AC_PROG_CPP with warnings, AC_PROG_CPP

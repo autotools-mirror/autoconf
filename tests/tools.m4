@@ -159,11 +159,11 @@ AT_CLEANUP
 ## ------------ ##
 
 # Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
-# actest.m4 AU_ defines OSBOLETE to UPDATED.
 AT_SETUP(autoupdate)
 
 AT_DATA(configure.in,
 [[AC_INIT
+AC_CANONICAL_SYSTEM
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
@@ -172,6 +172,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 # Checking `autoupdate'.
 AT_CHECK([../autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
 [[AC_INIT
+AC_CANONICAL_TARGET()
 dnl The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])

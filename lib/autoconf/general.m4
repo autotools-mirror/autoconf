@@ -682,8 +682,11 @@ $2],
 # little difference with using AU_DEFUN but the fact there is little
 # interest in running the test suite on both OLD-NAME and NEW-NAME.
 # This macro makes it possible to distinguish such cases.
+#
+# Do not use `defn' since then autoupdate would replace an old macro
+# call with the new macro body instead of the new macro call.
 define([AU_ALIAS],
-[AU_DEFUN([$1], defn([$2]))])
+[AU_DEFUN([$1], [$2])])
 
 
 
