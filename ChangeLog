@@ -1,5 +1,10 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* man/config.guess.x: New file.
+	* man/config.sub.x: New file.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/aclocal.m4 (AT_STATE_SAVE): Don't even try to preserve
 	egrep error messages, AT_CHECK will find them.
 
