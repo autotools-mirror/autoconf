@@ -1,0 +1,9 @@
+Makefile
+autoheader autoconf autoreconf autoscan autoupdate ifnames
+acversion.m4
+*.m4f
+config.cache
+config.log
+config.status
+INSTALL.txt
+configure.scan

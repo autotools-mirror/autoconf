@@ -1,0 +1,18 @@
+*.aux
+*.cp *.cps
+*.cv *.cvs
+*.dvi
+*.ev *.evs
+*.fn *.fns
+*.info
+*.ky
+*.log
+*.ma *.mas
+*.ov *.ovs
+*.pg
+*.tmp
+*.toc
+*.tp
+*.vr *.vrs
+Makefile
+stamp-vti
