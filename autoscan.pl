@@ -1,6 +1,6 @@
 #! @PERL@ -w
 # autoscan - Create configure.scan (a preliminary configure.ac) for a package.
-# Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
+# Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,9 +30,6 @@ use vars qw($autoconf $datadir $initfile $me $name $verbose
             %c_keywords %programs %headers %identifiers %makevars
             %libraries %functions %printed);
 
-# Find the lib files and autoconf.
-&find_autoconf;
-
 ($me = $0) =~ s,.*/,,;
 $verbose = 0;
 
@@ -55,28 +52,6 @@ my %generic_macro =
   );
 
 
-
-&parse_args;
-&init_tables;
-&find('.');
-&scan_files;
-&output;
-
-if (-f 'configure.ac')
-  {
-    if (-f 'configure.in')
-      {
-	print STDERR "warning: `configure.ac' and `configure.in' both present.\n";
-	print STDERR "warning: proceeding with `configure.ac'.\n";
-      }
-    &check_configure_ac ('configure.in');
-  }
-elsif (-f 'configure.in')
-  {
-    &check_configure_ac ('configure.in');
-  }
-
-exit 0;
 
 # find_autoconf
 # -------------
@@ -103,8 +78,11 @@ sub find_autoconf
     }
 }
 
+
+# print_usage ()
+# --------------
 # Display usage (--help).
-sub print_usage
+sub print_usage ()
 {
   print "Usage: $0 [OPTION] ... [SRCDIR]
 
@@ -125,20 +103,26 @@ Report bugs to <bug-autoconf\@gnu.org>.\n";
   exit 0;
 }
 
+
+# print_version ()
+# ----------------
 # Display version (--version).
 sub print_version
 {
   print "autoscan (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie.
 
-Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
+Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
   exit 0;
 }
 
+
+# parse_args ()
+# -------------
 # Process any command line arguments.
-sub parse_args
+sub parse_args ()
 {
   my $srcdir;
   Getopt::Long::config ("bundling");
@@ -157,13 +141,13 @@ Try `$me --help' for more information.\n"
 
   print "srcdir=$srcdir\n" if $verbose;
   chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
-
-  open (CONF, ">configure.scan") ||
-    die "$me: cannot create configure.scan: $!\n";
 }
 
+
+# init_tables ()
+# --------------
 # Put values in the tables of what to do with each token.
-sub init_tables
+sub init_tables ()
 {
   my ($kind, $word, $macro);
 
@@ -206,38 +190,44 @@ sub init_tables
     }
 }
 
+
+# wanted ()
+# ---------
 # Collect names of various kinds of files in the package.
 # Called by &find on each file.
-sub wanted
+sub wanted ()
 {
   # Strip a useless leading `./'.
   $name =~ s,^\./,,;
 
   if (/^.*\.[chlymC]$/ || /^.*\.cc$/)
     {
-      push(@cfiles, $name);
+      push (@cfiles, $name);
     }
   elsif (/^[Mm]akefile$/ || /^GNUmakefile$/)
     {
       # Wanted only if there is no corresponding Makefile.in.
       # Using Find, $_ contains the current filename with the current
       # directory of the walk through.
-      push(@makefiles, $name)
+      push (@makefiles, $name)
 	if ! -f "$_.in";
     }
   elsif (/^[Mm]akefile\.in$/)
     {
-      push(@makefiles, $name);
+      push (@makefiles, $name);
     }
   elsif (/^.*\.sh$/)
     {
-      push(@shfiles, $name);
+      push (@shfiles, $name);
     }
 }
 
+
+# scan_files ()
+# -------------
 # Read through the files and collect lists of tokens in them
 # that might create nonportabilities.
-sub scan_files
+sub scan_files ()
 {
   my $file;
   if (defined $cfiles[0])
@@ -255,23 +245,24 @@ sub scan_files
   foreach $file (@cfiles)
     {
       push (@{$programs{"cc"}}, $file);
-      &scan_c_file($file);
+      scan_c_file ($file);
     }
 
   foreach $file (@makefiles)
     {
-      &scan_makefile($file);
+      scan_makefile ($file);
     }
 
   foreach $file (@shfiles)
     {
-      &scan_sh_file($file);
+      scan_sh_file ($file);
     }
 }
 
+
 # scan_c_file(FILE)
 # -----------------
-sub scan_c_file
+sub scan_c_file ($)
 {
   my ($file) = @_;
   my ($in_comment) = 0;	# Nonzero if in a multiline comment.
@@ -347,7 +338,10 @@ sub scan_c_file
     }
 }
 
-sub scan_makefile
+
+# scan_makefile(MAKEFILE)
+# -----------------------
+sub scan_makefile ($)
 {
   my ($file) = @_;
 
@@ -402,7 +396,10 @@ sub scan_makefile
     }
 }
 
-sub scan_sh_file
+
+# scan_sh_file(SHELL-SCRIPT)
+# --------------------------
+sub scan_sh_file ($)
 {
   my ($file) = @_;
 
@@ -434,44 +431,12 @@ sub scan_sh_file
     }
 }
 
-# Print a proto configure.ac.
-sub output
-{
-  my %unique_makefiles;
 
-  print CONF "# Process this file with autoconf to produce a configure script.\n";
-  print CONF "AC_INIT\n";
-  if (defined $initfile)
-    {
-      print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
-    }
-  if (defined $cfiles[0])
-    {
-      print CONF "AC_CONFIG_HEADER([config.h])\n";
-    }
-
-  &output_programs;
-  &output_libraries;
-  &output_headers;
-  &output_identifiers;
-  &output_functions;
-
-  # Change DIR/Makefile.in to DIR/Makefile.
-  foreach $_ (@makefiles)
-    {
-      s/\.in$//;
-      $unique_makefiles{$_}++;
-    }
-  print CONF "\nAC_CONFIG_FILES([",
-       join ("\n                 ", keys(%unique_makefiles)), "])\n";
-  print CONF "AC_OUTPUT\n";
-
-  close CONF ||
-    die "$me: closing configure.scan: $!\n";
-}
-
-# Print Autoconf macro $1 if it's not undef and hasn't been printed already.
-sub print_unique
+# print_unique ($MACRO, @WHERE)
+# -----------------------------
+# $MACRO is wanted from $WHERE, hence (i) print $MACRO in configure.scan
+# if it exists and hasn't been printed already, (ii), remember it's needed.
+sub print_unique ($@)
 {
   my ($macro, @where) = @_;
 
@@ -484,22 +449,28 @@ sub print_unique
     }
 }
 
-sub output_programs
+
+# output_programs ()
+# ------------------
+sub output_programs ()
 {
   my $word;
 
   print CONF "\n# Checks for programs.\n";
   foreach $word (sort keys %programs)
     {
-      &print_unique($programs_macros{$word}, @{$programs{$word}});
+      print_unique ($programs_macros{$word}, @{$programs{$word}});
     }
   foreach $word (sort keys %makevars)
     {
-      &print_unique($makevars_macros{$word}, @{$makevars{$word}});
+      print_unique ($makevars_macros{$word}, @{$makevars{$word}});
     }
 }
 
-sub output_libraries
+
+# output_libraries ()
+# -------------------
+sub output_libraries ()
 {
   my ($word);
 
@@ -511,7 +482,10 @@ sub output_libraries
     }
 }
 
-sub output_headers
+
+# output_headers ()
+# -----------------
+sub output_headers ()
 {
   my $word;
   my @have_headers;
@@ -529,7 +503,7 @@ sub output_headers
 	    }
 	  else
 	    {
-	      &print_unique ($headers_macros{$word}, @{$headers{$word}});
+	      print_unique ($headers_macros{$word}, @{$headers{$word}});
 	    }
 	}
     }
@@ -537,7 +511,10 @@ sub output_headers
     if @have_headers;
 }
 
-sub output_identifiers
+
+# output_identifiers ()
+# ---------------------
+sub output_identifiers ()
 {
   my $word;
   my @have_types;
@@ -555,8 +532,8 @@ sub output_identifiers
 	    }
 	  else
 	    {
-	      &print_unique ($identifiers_macros{$word},
-			     @{$identifiers{$word}});
+	      print_unique ($identifiers_macros{$word},
+			    @{$identifiers{$word}});
 	    }
 	}
     }
@@ -564,7 +541,10 @@ sub output_identifiers
     if @have_types;
 }
 
-sub output_functions
+
+# output_functions ()
+# -------------------
+sub output_functions ()
 {
   my $word;
   my @have_funcs;
@@ -582,8 +562,8 @@ sub output_functions
 	    }
 	  else
 	    {
-	      &print_unique ($functions_macros{$word},
-			     @{$functions{$word}});
+	      print_unique ($functions_macros{$word},
+			    @{$functions{$word}});
 	    }
 	}
     }
@@ -592,9 +572,54 @@ sub output_functions
 }
 
 
+# output (CONFIGURE_SCAN)
+# -----------------------
+# Print a proto configure.ac.
+sub output ($)
+{
+  my $configure_scan = shift;
+  my %unique_makefiles;
+
+  open (CONF, ">$configure_scan") ||
+    die "$me: cannot create $configure_scan: $!\n";
+
+  print CONF "# Process this file with autoconf to produce a configure script.\n";
+  print CONF "AC_INIT\n";
+  if (defined $initfile)
+    {
+      print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
+    }
+  if (defined $cfiles[0])
+    {
+      print CONF "AC_CONFIG_HEADER([config.h])\n";
+    }
+
+  output_programs;
+  output_libraries;
+  output_headers;
+  output_identifiers;
+  output_functions;
+
+  # Change DIR/Makefile.in to DIR/Makefile.
+  foreach $_ (@makefiles)
+    {
+      s/\.in$//;
+      $unique_makefiles{$_}++;
+    }
+  print CONF "\nAC_CONFIG_FILES([",
+       join ("\n                 ", keys(%unique_makefiles)), "])\n";
+  print CONF "AC_OUTPUT\n";
+
+  close CONF ||
+    die "$me: closing configure.scan: $!\n";
+}
+
+
+# check_configure_ac (CONFIGURE_AC)
+# ---------------------------------
 # Use autoconf to check if all the suggested macros are included
-# in `configure.ac'
-sub check_configure_ac
+# in CONFIGURE_AC.
+sub check_configure_ac ($)
 {
   my ($configure_ac) = $@;
   my ($trace_option) = '';
@@ -643,3 +668,33 @@ sub check_configure_ac
       print STDERR "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
     }
 }
+
+
+## -------------- ##
+## Main program.  ##
+## -------------- ##
+
+# Find the lib files and autoconf.
+find_autoconf;
+
+parse_args;
+init_tables;
+find ('.');
+scan_files;
+output ('configure.scan');
+
+if (-f 'configure.ac')
+  {
+    if (-f 'configure.in')
+      {
+	print STDERR "warning: `configure.ac' and `configure.in' both present.\n";
+	print STDERR "warning: proceeding with `configure.ac'.\n";
+      }
+    check_configure_ac ('configure.in');
+  }
+elsif (-f 'configure.in')
+  {
+    check_configure_ac ('configure.in');
+  }
+
+exit 0;

@@ -1,5 +1,15 @@
 2001-01-29  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl: `Formatting++' changes: prototypes all the
+	functions, no longer use `&' to call functions as it disables
+	prototype checking, topological sort so that functions are defined
+	before being used, and put an Autoconf like nice comment to
+	describe the functions.
+	(output): Accept an CONFIGURE_SCAN parameters, and open CONF.
+
+	
+2001-01-29  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_SITE_LOAD): Let config.log know what you load.
 
 2001-01-27  Akim Demaille  <akim@epita.fr>
