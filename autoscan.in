@@ -69,14 +69,12 @@ sub END
 # Find the lib files and autoconf.
 sub find_autoconf
 {
-  my $dir;
-  my $file;
   $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
-  ($dir = $0) =~ s,[^/]*$,,;
+  (my $dir = $0) =~ s,[^/]*$,,;
   $autoconf = '';
   # We test "$dir/autoconf" in case we are in the build tree, in which case
   # the names are not transformed yet.
-  foreach $file ($ENV{"AUTOCONF"} || '',
+  foreach my $file ($ENV{"AUTOCONF"} || '',
 	         "$dir/@autoconf-name@",
 	         "$dir/autoconf",
 	         "@bindir@/@autoconf-name@")
@@ -160,17 +158,14 @@ Try `$me --help' for more information.\n"
 # Put values in the tables of what to do with each token.
 sub init_tables ()
 {
-  my ($kind, $word, $macro);
-
   # Initialize a table of C keywords (to ignore).
   # Taken from K&R 1st edition p. 180.
   # ANSI C, GNU C, and C++ keywords can introduce portability problems,
   # so don't ignore them.
-  foreach $word ('int', 'char', 'float', 'double', 'struct', 'union',
-		 'long', 'short', 'unsigned', 'auto', 'extern', 'register',
-		 'typedef', 'static', 'goto', 'return', 'sizeof', 'break',
-		 'continue', 'if', 'else', 'for', 'do', 'while', 'switch',
-		 'case', 'default')
+  foreach my $word (qw (int char float double struct union long short
+                        unsigned auto extern register typedef static
+                        goto return sizeof break continue if else for
+                        do while switch case default))
     {
       $c_keywords{$word} = 0;
     }
@@ -180,10 +175,11 @@ sub init_tables ()
   # a new Autoconf macro should probably be written for that case,
   # instead of duplicating the code in lots of configure.ac files.
 
-  foreach $kind (@kinds)
+  foreach my $kind (@kinds)
     {
-      open(TABLE, "<$datadir/ac$kind") ||
-	die "$me: cannot open $datadir/ac$kind: $!\n";
+      my $file = "$datadir/ac$kind";
+      open TABLE, $file or
+	die "$me: cannot open $file: $!\n";
       while (<TABLE>)
 	{
 	  # Ignore blank lines and comments.
@@ -191,10 +187,10 @@ sub init_tables ()
 	    if /^\s*$/ || /^\s*\#/;
 	  unless (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
 	    {
-	      die "$me: cannot parse definition in $datadir/ac$kind:\n$_\n";
+	      die "$me: cannot parse definition in $file:\n$_\n";
 	    }
-	  $word = $1;
-	  $macro = $2 || $generic_macro{$kind};
+	  my $word = $1;
+	  my $macro = $2 || $generic_macro{$kind};
 	  eval "\$$kind" . "_macros{\$word} = \$macro";
 	}
       close(TABLE);
@@ -419,14 +415,12 @@ sub print_unique ($@)
 # ------------------
 sub output_programs ()
 {
-  my $word;
-
   print CONF "\n# Checks for programs.\n";
-  foreach $word (sort keys %programs)
+  foreach my $word (sort keys %programs)
     {
       print_unique ($programs_macros{$word}, @{$programs{$word}});
     }
-  foreach $word (sort keys %makevars)
+  foreach my $word (sort keys %makevars)
     {
       print_unique ($makevars_macros{$word}, @{$makevars{$word}});
     }
@@ -437,10 +431,8 @@ sub output_programs ()
 # -------------------
 sub output_libraries ()
 {
-  my ($word);
-
   print CONF "\n# Checks for libraries.\n";
-  foreach $word (sort keys %libraries)
+  foreach my $word (sort keys %libraries)
     {
       print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
       print CONF "AC_CHECK_LIB([$word], [main])\n";
@@ -452,11 +444,10 @@ sub output_libraries ()
 # -----------------
 sub output_headers ()
 {
-  my $word;
   my @have_headers;
 
   print CONF "\n# Checks for header files.\n";
-  foreach $word (sort keys %headers)
+  foreach my $word (sort keys %headers)
     {
       if (defined $headers_macros{$word})
 	{
@@ -481,11 +472,10 @@ sub output_headers ()
 # ---------------------
 sub output_identifiers ()
 {
-  my $word;
   my @have_types;
 
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
-  foreach $word (sort keys %identifiers)
+  foreach my $word (sort keys %identifiers)
     {
       if (defined $identifiers_macros{$word})
 	{
@@ -511,11 +501,10 @@ sub output_identifiers ()
 # -------------------
 sub output_functions ()
 {
-  my $word;
   my @have_funcs;
 
   print CONF "\n# Checks for library functions.\n";
-  foreach $word (sort keys %functions)
+  foreach my $word (sort keys %functions)
     {
       if (defined $functions_macros{$word})
 	{
@@ -566,10 +555,10 @@ sub output ($)
   output_functions;
 
   # Change DIR/Makefile.in to DIR/Makefile.
-  foreach $_ (@makefiles)
+  foreach my $m (@makefiles)
     {
-      s/\.in$//;
-      $unique_makefiles{$_}++;
+      $m =~ s/\.in$//;
+      $unique_makefiles{$m}++;
     }
   print CONF "\nAC_CONFIG_FILES([",
        join ("\n                 ", keys(%unique_makefiles)), "])\n";
@@ -588,10 +577,8 @@ sub check_configure_ac ($)
 {
   my ($configure_ac) = $@;
   my ($trace_option) = '';
-  my ($word);
-  my ($macro);
 
-  foreach $macro (sort keys %needed_macros)
+  foreach my $macro (sort keys %needed_macros)
     {
       $macro =~ s/\(.*//;
       $trace_option .= " -t $macro";
@@ -608,7 +595,7 @@ sub check_configure_ac ($)
 	{
 	  # To be rigorous, we should distinguish between space and comma
 	  # separated macros.  But there is no point.
-	  foreach $word (split (/\s|,/, $args[0]))
+	  foreach my $word (split (/\s|,/, $args[0]))
 	    {
 	      # AC_CHECK_MEMBERS wants `struct' or `union'.
 	      if ($macro eq "AC_CHECK_MEMBERS"
@@ -628,7 +615,7 @@ sub check_configure_ac ($)
   close (TRACES) ||
     die "$me: cannot close traces: $!\n";
 
-  foreach $macro (sort keys %needed_macros)
+  foreach my $macro (sort keys %needed_macros)
     {
       warn "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
     }
