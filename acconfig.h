@@ -65,6 +65,9 @@
 /* Define if you support file names longer than 14 characters.  */
 #undef HAVE_LONG_FILE_NAMES
 
+/* Define if you have a working `mmap' system call.  */
+#undef HAVE_MMAP
+
 /* Define if you have netdb.h (and thus the rexec function).  */
 #undef HAVE_NETDB_H
 
