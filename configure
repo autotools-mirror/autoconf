@@ -2000,25 +2000,11 @@ echo "$as_me:$LINENO: result: $ac_cv_sh_n_works" >&5
 echo "${ECHO_T}$ac_cv_sh_n_works" >&6
 
 
-# Initialize the test suite and build position independent wrappers.
+# Initialize the test suite.
           ac_config_commands="$ac_config_commands tests/atconfig"
 
 
                     ac_config_files="$ac_config_files tests/Makefile tests/atlocal"
-
-          ac_config_files="$ac_config_files tests/autoconf:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/autoheader:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/autom4te:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/autoreconf:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/autoscan:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/autoupdate:tests/wrapper.in"
-
-          ac_config_files="$ac_config_files tests/ifnames:tests/wrapper.in"
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
@@ -3039,13 +3025,6 @@ do
   "config/Makefile" ) CONFIG_FILES="$CONFIG_FILES config/Makefile" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
   "tests/atlocal" ) CONFIG_FILES="$CONFIG_FILES tests/atlocal" ;;
-  "tests/autoconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoconf:tests/wrapper.in" ;;
-  "tests/autoheader" ) CONFIG_FILES="$CONFIG_FILES tests/autoheader:tests/wrapper.in" ;;
-  "tests/autom4te" ) CONFIG_FILES="$CONFIG_FILES tests/autom4te:tests/wrapper.in" ;;
-  "tests/autoreconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoreconf:tests/wrapper.in" ;;
-  "tests/autoscan" ) CONFIG_FILES="$CONFIG_FILES tests/autoscan:tests/wrapper.in" ;;
-  "tests/autoupdate" ) CONFIG_FILES="$CONFIG_FILES tests/autoupdate:tests/wrapper.in" ;;
-  "tests/ifnames" ) CONFIG_FILES="$CONFIG_FILES tests/ifnames:tests/wrapper.in" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
   "lib/emacs/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/emacs/Makefile" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
@@ -3412,16 +3391,6 @@ s,@INSTALL@,$ac_INSTALL,;t t
     rm -f $tmp/out
   fi
 
-  # Run the commands associated with the file.
-  case $ac_file in
-    tests/autoconf ) chmod +x tests/autoconf ;;
-    tests/autoheader ) chmod +x tests/autoheader ;;
-    tests/autom4te ) chmod +x tests/autom4te ;;
-    tests/autoreconf ) chmod +x tests/autoreconf ;;
-    tests/autoscan ) chmod +x tests/autoscan ;;
-    tests/autoupdate ) chmod +x tests/autoupdate ;;
-    tests/ifnames ) chmod +x tests/ifnames ;;
-  esac
 done
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF

@@ -70,6 +70,7 @@ ECHO_T = @ECHO_T@
 EMACS = @EMACS@
 EMACSLOADPATH = @EMACSLOADPATH@
 EXPR = @EXPR@
+GREP = @GREP@
 HELP2MAN = @HELP2MAN@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -124,20 +125,24 @@ EXTRA_DIST = autoscan.pre
 nodist_autoscanlib_DATA = autoscan.list
 CLEANFILES = autoscan.list
 SUFFIXES = .m4 .m4f
+AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 
 # Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
 # checks if we are independent of Autoconf by defining AUTOM4TE (and
-# others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
+# others) to `false'.  Autoconf provides autom4te, so that doesn't
 # apply to us.
-MY_AUTOM4TE = $(top_builddir)/tests/autom4te
-AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
+MY_AUTOM4TE = \
+	autom4te_perllibdir='$(top_srcdir)'/lib					\
+	AUTOM4TE_CFG='$(AUTOM4TE_CFG)'         $(top_builddir)/bin/autom4te	\
+		-B '$(top_builddir)'/lib -B '$(top_srcdir)'/lib        # keep ` '
+
 
 # Factor the dependencies between all the frozen files.
 # Some day we should explain to Automake how to use autom4te to compute
 # the dependencies...
 src_libdir = $(top_srcdir)/lib
 build_libdir = $(top_builddir)/lib
-m4f_dependencies = $(MY_AUTOM4TE) $(AUTOM4TE_CFG)
+m4f_dependencies = $(top_builddir)/bin/autom4te $(AUTOM4TE_CFG)
 m4sugar_m4f_dependencies = \
 	$(m4f_dependencies)			\
 	$(src_libdir)/m4sugar/m4sugar.m4	\
@@ -185,7 +190,6 @@ ETAGS_FOR_AUTOCONF = \
   --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)\]/\2/' \
   --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
 
-GREP = @GREP@
 all: all-am
 
 .SUFFIXES:
@@ -360,8 +364,6 @@ uninstall-am: uninstall-info-am uninstall-nodist_autoscanlibDATA
 	pdf-am ps ps-am uninstall uninstall-am uninstall-info-am \
 	uninstall-nodist_autoscanlibDATA
 
-$(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
-	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
 $(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
 
