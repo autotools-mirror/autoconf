@@ -281,17 +281,17 @@ Compilers and Preprocessors
 
 Writing Tests
 
+* Language Choice::             Selecting which language to use for testing
+* Writing Test Programs::       Forging source files for compilers
 * Examining Declarations::      Detecting header files and declarations
 * Examining Syntax::            Detecting language syntax features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
-* Language Choice::             Selecting which language to use for testing
 
-Checking Run Time Behavior
+Writing Test Programs
 
-* Test Programs::               Running test programs
 * Guidelines::                  General rules for writing test programs
 * Test Functions::              Avoiding pitfalls in test programs
 
@@ -5620,27 +5620,181 @@ something goes wrong in one or more of the Autoconf tests, this
 information can help you understand the assumptions behind them, which
 might help you figure out how to best solve the problem.
 
-These macros check the output of the C compiler system.  They do
-not cache the results of their tests for future use (@pxref{Caching
-Results}), because they don't know enough about the information they are
-checking for to generate a cache variable name.  They also do not print
-any messages, for the same reason.  The checks for particular kinds of C
-features call these macros and do cache their results and print messages
-about what they're checking for.
+These macros check the output of the compiler system of the current
+language (@pxref{Language Choice}).  They do not cache the results of
+their tests for future use (@pxref{Caching Results}), because they don't
+know enough about the information they are checking for to generate a
+cache variable name.  They also do not print any messages, for the same
+reason.  The checks for particular kinds of features call these macros
+and do cache their results and print messages about what they're
+checking for.
 
 When you write a feature test that could be applicable to more than one
 software package, the best thing to do is encapsulate it in a new macro.
 @xref{Writing Autoconf Macros}, for how to do that.
 
 @menu
+* Language Choice::             Selecting which language to use for testing
+* Writing Test Programs::       Forging source files for compilers
 * Examining Declarations::      Detecting header files and declarations
 * Examining Syntax::            Detecting language syntax features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
-* Language Choice::             Selecting which language to use for testing
 @end menu
+
+@node Language Choice
+@section Language Choice
+@cindex Language
+
+Autoconf-generated @command{configure} scripts check for the C compiler and
+its features by default.  Packages that use other programming languages
+(maybe more than one, e.g., C and C++) need to test features of the
+compilers for the respective languages.  The following macros determine
+which programming language is used in the subsequent tests in
+@file{configure.ac}.
+
+@defmac AC_LANG (@var{language})
+Do compilation tests using the compiler, preprocessor, and file
+extensions for the specified @var{language}.
+
+Supported languages are:
+
+@table @samp
+@item C
+Do compilation tests using @code{CC} and @code{CPP} and use extension
+@file{.c} for test programs.
+
+@item C++
+Do compilation tests using @code{CXX} and @code{CXXCPP} and use
+extension @file{.C} for test programs.
+
+@item Fortran 77
+Do compilation tests using @code{F77} and use extension @file{.f} for
+test programs.
+@end table
+@end defmac
+
+@defmac AC_LANG_PUSH (@var{language})
+@acindex LANG_PUSH
+Remember the current language (as set by @code{AC_LANG}) on a stack, and
+then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
+in macros that need to temporarily switch to a particular language.
+@end defmac
+
+@defmac AC_LANG_POP (@ovar{language})
+@acindex LANG_POP
+Select the language that is saved on the top of the stack, as set by
+@code{AC_LANG_PUSH}, and remove it from the stack.
+
+If given, @var{language} specifies the language we just @emph{quit}.  It
+is a good idea to specify it when it's known (which should be the
+case@dots{}), since Autoconf will detect inconsistencies.
+
+@example
+AC_LANG_PUSH(Fortran 77)
+# Perform some tests on Fortran 77.
+# @dots{}
+AC_LANG_POP(Fortran 77)
+@end example
+@end defmac
+
+@defmac AC_REQUIRE_CPP
+@acindex REQUIRE_CPP
+Ensure that whichever preprocessor would currently be used for tests has
+been found.  Calls @code{AC_REQUIRE} (@pxref{Prerequisite Macros}) with an
+argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
+depending on which language is current.
+@end defmac
+
+
+@node Writing Test Programs
+@section Writing Test Programs
+
+Autoconf tests follow is common scheme: feeding some program with some
+input, and most of the time, feeding a compiler with some source file.
+This section is dedicated to these source samples.
+
+@menu
+* Guidelines::                  General rules for writing test programs
+* Test Functions::              Avoiding pitfalls in test programs
+@end menu
+
+@node Guidelines
+@subsection Guidelines for Test Programs
+
+Test programs should not write anything to the standard output.  They
+should return 0 if the test succeeds, nonzero otherwise, so that success
+can be distinguished easily from a core dump or other failure;
+segmentation violations and other failures produce a nonzero exit
+status.  Test programs should @code{exit}, not @code{return}, from
+@code{main}, because on some systems (old Suns, at least) the argument
+to @code{return} in @code{main} is ignored.
+
+Test programs can use @code{#if} or @code{#ifdef} to check the values of
+preprocessor macros defined by tests that have already run.  For
+example, if you call @code{AC_HEADER_STDC}, then later on in
+@file{configure.ac} you can have a test program that includes an
+@sc{ansi} C header file conditionally:
+
+@example
+@group
+#if STDC_HEADERS
+# include <stdlib.h>
+#endif
+@end group
+@end example
+
+If a test program needs to use or create a data file, give it a name
+that starts with @file{conftest}, such as @file{conftest.data}.  The
+@command{configure} script cleans up by running @samp{rm -rf conftest*}
+after running test programs and if the script is interrupted.
+
+@node Test Functions
+@subsection Test Functions
+
+Function declarations in test programs should have a prototype
+conditionalized for C++.  In practice, though, test programs rarely need
+functions that take arguments.
+
+@example
+#ifdef __cplusplus
+foo (int i)
+#else
+foo (i) int i;
+#endif
+@end example
+
+Functions that test programs declare should also be conditionalized for
+C++, which requires @samp{extern "C"} prototypes.  Make sure to not
+include any header files containing clashing prototypes.
+
+@example
+#ifdef __cplusplus
+extern "C" void *malloc (size_t);
+#else
+char *malloc ();
+#endif
+@end example
+
+If a test program calls a function with invalid parameters (just to see
+whether it exists), organize the program to ensure that it never invokes
+that function.  You can do this by calling it in another function that is
+never invoked.  You can't do it by putting it after a call to
+@code{exit}, because GCC version 2 knows that @code{exit} never returns
+and optimizes out any code that follows it in the same block.
+
+If you include any header files, be sure to call the functions
+relevant to them with the correct number of arguments, even if they are
+just 0, to avoid compilation errors due to prototypes.  GCC version 2
+has internal prototypes for several functions that it automatically
+inlines; for example, @code{memcpy}.  To avoid errors when checking for
+them, either pass them the correct number of arguments or redeclare them
+with a different return type (such as @code{char}).
+
+
+
 
 @node Examining Declarations
 @section Examining Declarations
@@ -5809,18 +5963,6 @@ run it using @code{AC_TRY_RUN}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
 cross-compiling.
 
-@menu
-* Test Programs::               Running test programs
-* Guidelines::                  General rules for writing test programs
-* Test Functions::              Avoiding pitfalls in test programs
-@end menu
-
-@node Test Programs
-@subsection Running Test Programs
-
-Use the following macro if you need to test run-time behavior of the
-system while configuring.
-
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex TRY_RUN
 If @var{program} compiles and links successfully and returns an exit
@@ -5870,77 +6012,6 @@ variable @code{cross_compiling} is set to @samp{yes}, use an alternate
 method to get the results instead of calling the macros.
 
 
-@node Guidelines
-@subsection Guidelines for Test Programs
-
-Test programs should not write anything to the standard output.  They
-should return 0 if the test succeeds, nonzero otherwise, so that success
-can be distinguished easily from a core dump or other failure;
-segmentation violations and other failures produce a nonzero exit
-status.  Test programs should @code{exit}, not @code{return}, from
-@code{main}, because on some systems (old Suns, at least) the argument
-to @code{return} in @code{main} is ignored.
-
-Test programs can use @code{#if} or @code{#ifdef} to check the values of
-preprocessor macros defined by tests that have already run.  For
-example, if you call @code{AC_HEADER_STDC}, then later on in
-@file{configure.ac} you can have a test program that includes an
-@sc{ansi} C header file conditionally:
-
-@example
-@group
-#if STDC_HEADERS
-# include <stdlib.h>
-#endif
-@end group
-@end example
-
-If a test program needs to use or create a data file, give it a name
-that starts with @file{conftest}, such as @file{conftest.data}.  The
-@command{configure} script cleans up by running @samp{rm -rf conftest*}
-after running test programs and if the script is interrupted.
-
-@node Test Functions
-@subsection Test Functions
-
-Function declarations in test programs should have a prototype
-conditionalized for C++.  In practice, though, test programs rarely need
-functions that take arguments.
-
-@example
-#ifdef __cplusplus
-foo (int i)
-#else
-foo (i) int i;
-#endif
-@end example
-
-Functions that test programs declare should also be conditionalized for
-C++, which requires @samp{extern "C"} prototypes.  Make sure to not
-include any header files containing clashing prototypes.
-
-@example
-#ifdef __cplusplus
-extern "C" void *malloc (size_t);
-#else
-char *malloc ();
-#endif
-@end example
-
-If a test program calls a function with invalid parameters (just to see
-whether it exists), organize the program to ensure that it never invokes
-that function.  You can do this by calling it in another function that is
-never invoked.  You can't do it by putting it after a call to
-@code{exit}, because GCC version 2 knows that @code{exit} never returns
-and optimizes out any code that follows it in the same block.
-
-If you include any header files, be sure to call the functions
-relevant to them with the correct number of arguments, even if they are
-just 0, to avoid compilation errors due to prototypes.  GCC version 2
-has internal prototypes for several functions that it automatically
-inlines; for example, @code{memcpy}.  To avoid errors when checking for
-them, either pass them the correct number of arguments or redeclare them
-with a different return type (such as @code{char}).
 
 @node Systemology
 @section Systemology
@@ -6028,72 +6099,6 @@ fi
 AC_MSG_RESULT([$fstype])
 @end group
 @end example
-
-@node Language Choice
-@section Language Choice
-@cindex Language
-
-Autoconf-generated @command{configure} scripts check for the C compiler and
-its features by default.  Packages that use other programming languages
-(maybe more than one, e.g., C and C++) need to test features of the
-compilers for the respective languages.  The following macros determine
-which programming language is used in the subsequent tests in
-@file{configure.ac}.
-
-@defmac AC_LANG (@var{language})
-Do compilation tests using the compiler, preprocessor, and file
-extensions for the specified @var{language}.
-
-Supported languages are:
-
-@table @samp
-@item C
-Do compilation tests using @code{CC} and @code{CPP} and use extension
-@file{.c} for test programs.
-
-@item C++
-Do compilation tests using @code{CXX} and @code{CXXCPP} and use
-extension @file{.C} for test programs.
-
-@item Fortran 77
-Do compilation tests using @code{F77} and use extension @file{.f} for
-test programs.
-@end table
-@end defmac
-
-@defmac AC_LANG_PUSH (@var{language})
-@acindex LANG_PUSH
-Remember the current language (as set by @code{AC_LANG}) on a stack, and
-then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
-in macros that need to temporarily switch to a particular language.
-@end defmac
-
-@defmac AC_LANG_POP (@ovar{language})
-@acindex LANG_POP
-Select the language that is saved on the top of the stack, as set by
-@code{AC_LANG_PUSH}, and remove it from the stack.
-
-If given, @var{language} specifies the language we just @emph{quit}.  It
-is a good idea to specify it when it's known (which should be the
-case@dots{}), since Autoconf will detect inconsistencies.
-
-@example
-AC_LANG_PUSH(Fortran 77)
-# Perform some tests on Fortran 77.
-# @dots{}
-AC_LANG_POP(Fortran 77)
-@end example
-@end defmac
-
-@defmac AC_REQUIRE_CPP
-@acindex REQUIRE_CPP
-Ensure that whichever preprocessor would currently be used for tests has
-been found.  Calls @code{AC_REQUIRE} (@pxref{Prerequisite Macros}) with an
-argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
-depending on which language is current.
-@end defmac
-
-
 
 @c ====================================================== Results of Tests.
 
@@ -7553,9 +7558,6 @@ begin-language: "Autoconf"
 args: --cache=''
 end-language: "Autoconf"
 @end verbatim
-
-The most typical
-use is probably to disable caches with Autoconf
 
 
 @node Programming in M4sugar
