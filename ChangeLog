@@ -4,6 +4,12 @@
 
 2002-04-22  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Pretty Help Strings): Remove a spurious
+	comma.
+	Reported by Gregory Giannoni.
+
+2002-04-22  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (LINENO): Skip the test if LINENO cannot be unset.
 	Fixes false failures on Darwin.
 

@@ -10770,13 +10770,13 @@ Expands into an help string that looks pretty when the user executes
 Options}).  The following example will make this clearer.
 
 @example
-AC_DEFUN(TEST_MACRO,
-[AC_ARG_WITH(foo,
+AC_DEFUN([TEST_MACRO],
+[AC_ARG_WITH([foo],
              AC_HELP_STRING([--with-foo],
                             [use foo (default is NO)]),
-             ac_cv_use_foo=$withval, ac_cv_use_foo=no),
-AC_CACHE_CHECK(whether to use foo,
-               ac_cv_use_foo, ac_cv_use_foo=no)])
+             [ac_cv_use_foo=$withval], [ac_cv_use_foo=no])
+AC_CACHE_CHECK([whether to use foo],
+               [ac_cv_use_foo], [ac_cv_use_foo=no])])
 @end example
 
 Please note that the call to @code{AC_HELP_STRING} is @strong{unquoted}.
