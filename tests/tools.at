@@ -530,14 +530,15 @@ AT_CLEANUP(src1 src2 configure.ac~)
 # ----------------------
 AT_SETUP([autoupdating AC_PREREQ])
 
-cat >expout <<EOF
-AC_PREREQ($at_version)
-EOF
+# Produce `AC_PREREQ(<AUTOUPDATE VERSION>)'.
+AT_CHECK([autoupdate --version | sed 's/.*) //;q'], 0, [stdout])
+autoupdate_version=`cat stdout`
+echo "AC_PREREQ($autoupdate_version)" >expout
 
 AT_CHECK([echo "AC_PREREQ(1.0)" | autoupdate -],
          0, [expout], [])
 
-AT_CHECK([echo "AC_PREREQ($at_version)" | autoupdate -],
+AT_CHECK([echo "AC_PREREQ($autoupdate_version)" | autoupdate -],
          0, [expout], [])
 
 AT_CHECK([echo "AC_PREREQ(999.99)" | autoupdate -],

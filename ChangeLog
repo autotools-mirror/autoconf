@@ -1,5 +1,18 @@
 2001-09-07  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&handle_m4): `< /dev/null' so that GNU M4 1.5
+	doesn't neutralize SIGINT, making autoconf etc. non interruptible.
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Move the package
+	related variables into `at_package_*'.
+	* lib/autotest/general.m4 (AT_VICTIMS): New.
+	(AT_INIT): Adjust for stand-alone/embedded test suites.
+	(AS_MESSAGE_LOG_FD): Define and use it.
+	* tests/suite.at (AT_VICTIMS): Use it.
+	* tests/tools.at (autoupdating AC_PREREQ): Don't depend upon
+	at_version.
+
+2001-09-07  Akim Demaille  <akim@epita.fr>
+
 	Move toward possibly stand-alone test suites.
 
 	* lib/autotest/general.m4: Stop displaying srcdir everywhere as,
@@ -13,7 +26,6 @@
 	* lib/autoconf/Makefile.am (autoconf.m4f): Depends upon
 	m4sugar/version.m4.
 
-	
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Use `_array_'
@@ -48,7 +60,6 @@
 
 	* bin/autoupdate.in (&handle_m4_macros) <unm4.m4>: Undefine iff
 	defined.
-
 
 2001-09-05  Akim Demaille  <akim@epita.fr>
 

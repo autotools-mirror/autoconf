@@ -90,10 +90,9 @@ m4_define([AT_LINE],
 [m4_patsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
-# AT_INIT(PROGRAM)
-# ----------------
-# Begin test suite, using PROGRAM to check version.  The search path
-# should be already preset so the proper executable will be selected.
+# AT_INIT([TESTSUITE-NAME], [BUG-REPORT])
+# ---------------------------------------
+# Begin test suite.
 m4_define([AT_INIT],
 [AS_INIT
 m4_pattern_forbid([^_?AT_])
@@ -108,7 +107,10 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
 at_cli_args=${1+"$[@]"}
-at_debug_args=
+
+# Who are we?
+at_testsuite_name='$1'
+at_bugreport='$2'
 
 # Load the config file.
 for at_file in atconfig atlocal
@@ -126,6 +128,8 @@ at_top_srcdir=`cd "$top_srcdir" && pwd`
 at_times=:
 (times) >/dev/null 2>&1 && at_times=times
 
+# CLI Arguments to pass to the debugging scripts.
+at_debug_args=
 # -e sets to true
 at_stop_on_error=false
 # Shall we be verbose?
@@ -144,7 +148,15 @@ m4_divert([OPTIONS])
 while test $[@%:@] -gt 0; do
   case $[1] in
     --help | -h) at_help=: ;;
-    --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
+    --version)
+        if test -n "$at_package_string"; then
+          echo "$as_me ($at_package_string)"
+          echo "Embedded test suite."
+        else
+          echo "$as_me ($at_testsuite_name)"
+          echo "Stand-alone test suite."
+        fi
+        exit 0 ;;
     --clean | -c )
         rm -rf $at_data_files debug-*.sh $as_me.log devnull
 	exit 0;;
@@ -230,6 +242,7 @@ _ATEOF
   egrep -e "$at_tests_pattern" <<_ATEOF
 m4_divert([HELP])dnl Help message inserted here.
 m4_divert([SETUP])dnl
+Report bugs to <$at_bugreport>.
 _ATEOF
   exit 0
 fi
@@ -261,7 +274,7 @@ do
         # Stand-alone test suite.
         at_path=$at_path$PATH_SEPARATOR$at_dir
       else
-        # Embbeded test suite.
+        # Embedded test suite.
         at_path=$at_path$PATH_SEPARATOR$top_builddir/$at_dir
         at_path=$at_path$PATH_SEPARATOR$top_srcdir/$at_dir
       fi
@@ -311,28 +324,37 @@ else
 fi
 
 # 6 is the log file.  To be preserved if `-d'.
+m4_define([AS_MESSAGE_LOG_FD], [6])
 if $at_debug; then
-  exec 6>/dev/null
+  exec AS_MESSAGE_LOG_FD>/dev/null
 else
-  exec 6>$as_me.log
+  exec AS_MESSAGE_LOG_FD>$as_me.log
 fi
 
-# Tester and tested.
-if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
-  AS_BOX([Test suite for $at_package $at_version])
-  {
-    AS_BOX([     Test suite log for $at_package $at_version.      ])
-    echo
+# Banners and logs.
+if test -n "$at_package_string"; then
+  AS_BOX([$at_package_string test suite.])
+else
+  AS_BOX([$at_testsuite_name test suite.])
+fi
+{
+  if test -n "$at_package_string"; then
+    AS_BOX([Embedded $at_package_string test suite.])
+  else
+    AS_BOX([$at_testsuite_name test suite.])
+  fi
+  echo
 
-    echo "$as_me: command line was:"
-    echo "  $ $[0] $at_cli_args"
-    echo
+  echo "$as_me: command line was:"
+  echo "  $ $[0] $at_cli_args"
+  echo
 
-    # Try to find a few ChangeLogs in case it might help determining the
-    # exact version.  Use the relative dir: if the top dir is a symlink,
-    # find will not follow it (and options to follow the links are not
-    # portable), which would result in no output here.
+  # Try to find a few ChangeLogs in case it might help determining the
+  # exact version.  Use the relative dir: if the top dir is a symlink,
+  # find will not follow it (and options to follow the links are not
+  # portable), which would result in no output here.
 
+  if test -n "$top_srcdir"; then
     AS_BOX([ChangeLogs.])
     echo
     find "$top_srcdir" -name ChangeLog \
@@ -349,26 +371,44 @@ if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
       -exec echo "$as_me: {}:" ';' \
       -exec sed 's/^/| /' {} ';' \
       -exec echo ';'
+  fi
 
-    # Inform about the contents of the config files.
-    for at_file in atconfig atlocal
-    do
-      test -r $at_file || continue
-      echo "$as_me: $at_file:" >&6
-      sed 's/^/| /' $at_file >&6
-      echo
-    done
+  # Inform about the contents of the config files.
+  for at_file in atconfig atlocal
+  do
+    test -r $at_file || continue
+    echo "$as_me: $at_file:"
+    sed 's/^/| /' $at_file
+    echo
+  done
 
-    AS_BOX([Silently running the tests])
-  } >&6
-else
-  AS_BOX([ERROR: Version mismatch (need $at_package $at_version); no tests performed.])
-  exit 1
-fi
+  AS_BOX([Victims.])
+} >&AS_MESSAGE_LOG_FD
+
+# If we are an embedded test suite, be sure to check we are running
+# the proper version of the programs.  And in either case, report
+# what program is being used.
+for at_program in $at_victims
+do
+  (
+    echo "AT_LINE: $at_program --version"
+    $at_program --version
+    echo
+  ) >&AS_MESSAGE_LOG_FD 2>&1
+  if test -n "$at_package_name" && test -n "$at_package_version"; then
+    ($at_program --version |
+      grep "$at_package_name.*$at_package_version") >/dev/null 2>&1 ||
+      AS_ERROR([version mismatch (need $at_package_name $at_package_version): $at_program])
+  fi
+done
+
+{
+  AS_BOX([Silently running the tests.])
+} >&AS_MESSAGE_LOG_FD
 
 at_start_date=`date`
 at_start_time=`(date +%s) 2>/dev/null`
-echo "$as_me: starting at: $at_start_date" >&6
+echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
 at_fail_list=
 at_skip_list=
 at_test_count=0
@@ -416,7 +456,7 @@ _ATEOF
       at_log_msg="$at_test. $at_setup_line: $at_msg"
       # If the test failed, at-times is not available.
       test -f at-times && at_log_msg="$at_log_msg	(`sed 1d at-times`)"
-      echo "$at_log_msg" >&6
+      echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
       $at_stop_on_error && test -n "$at_fail_list" && break
       ;;
   esac
@@ -424,7 +464,7 @@ done
 
 at_stop_date=`date`
 at_stop_time=`(date +%s) 2>/dev/null`
-echo "$as_me: ending at: $at_stop_date" >&6
+echo "$as_me: ending at: $at_stop_date" >&AS_MESSAGE_LOG_FD
 at_duration_s=`(expr $at_stop_time - $at_start_time) 2>/dev/null`
 at_duration_m=`(expr $at_duration_s / 60) 2>/dev/null`
 at_duration_h=`(expr $at_duration_m / 60) 2>/dev/null`
@@ -432,7 +472,7 @@ at_duration_s=`(expr $at_duration_s % 60) 2>/dev/null`
 at_duration_m=`(expr $at_duration_m % 60) 2>/dev/null`
 at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
 if test "$at_duration" != "h m s"; then
-  echo "$as_me: test suite duration: $at_duration" >&6
+  echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD
 fi
 
 # Cleanup everything unless the user wants the files.
@@ -495,7 +535,7 @@ elif test $at_debug = false; then
 
     AS_BOX([Verbosely re-running the failing tests])
     echo
-  } >&6
+  } >&AS_MESSAGE_LOG_FD
 
   $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $as_me.log
   AS_BOX([$as_me.log is created.])
@@ -515,6 +555,19 @@ at_tests_all="AT_TESTS_ALL "
 at_data_files="AT_data_files "])])dnl
 ])# AT_INIT
 
+
+# AT_VICTIMS(PROGRAMS)
+# --------------------
+# Specify the list of programs exercised by the test suite.  Their
+# versions are logged, and in the case of embedded test suite, they
+# must correspond to the version of the package..  The PATH should be
+# already preset so the proper executable will be selected.
+m4_define([AT_VICTIMS],
+[m4_divert_text([DEFAULT],
+[# List of the tested programs.
+at_victims="$1"
+])
+])# AT_VICTIMS
 
 
 # AT_SETUP(DESCRIPTION)

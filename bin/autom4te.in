@@ -572,6 +572,9 @@ sub handle_m4 ($@)
   unlink ($tcache . $req->id);
 
   # Run m4.
+  #
+  # Neutralize its stdin, so that GNU M4 1.5 doesn't neutralize SIGINT.
+  #
   # Be extremely cautious to reverse the includes when talking to M4:
   # it doesn't speak the same --include as we do.
   my $command = ("$m4"
@@ -581,6 +584,7 @@ sub handle_m4 ($@)
 		 . " --error-output=$tcache" . $req->id
 		 . join (' --trace=',   '', sort @macro)
 		 . $files
+		 . ' </dev/null'
 		 . " >$ocache" . $req->id);
   verbose "running: $command";
   system $command;

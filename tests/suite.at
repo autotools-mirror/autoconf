@@ -29,7 +29,10 @@ m4_include([atspecific.m4])
 # like contributing new tests?  If you do, you may tell your intent to
 # `autoconf@gnu.org', so no two people work at the same thing.
 
-AT_INIT([autoconf])
+AT_INIT
+
+AT_VICTIMS([autom4te autoconf autoheader autoupdate
+            autoreconf])
 
 AT_BANNER(
 [Some tests might be skipped if you don't have the software which the
