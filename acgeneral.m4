@@ -2323,7 +2323,7 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 define([AC_CACHE_VAL],
-[ifelse(regexp([AC_DEFINE], [$2]), [-1],
+[ifelse(regexp([$2], [AC_DEFINE]), [-1],
                [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
