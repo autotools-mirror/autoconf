@@ -2489,17 +2489,22 @@ fi
 
 
 
-dnl AC_C_INLINE
-dnl -----------
-dnl Do nothing if the compiler accepts the inline keyword.
-dnl Otherwise define inline to __inline__ or __inline if one of those work,
-dnl otherwise define inline to be empty.
+# AC_C_INLINE
+# -----------
+# Do nothing if the compiler accepts the inline keyword.
+# Otherwise define inline to __inline__ or __inline if one of those work,
+# otherwise define inline to be empty.
 AC_DEFUN(AC_C_INLINE,
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
-  AC_TRY_COMPILE(, [} $ac_kw int foo() {], [ac_cv_c_inline=$ac_kw; break])
+  AC_TRY_COMPILE(,
+[#ifndef __cplusplus
+  } $ac_kw int foo() {
+#endif
+],
+[ac_cv_c_inline=$ac_kw; break])
 done
 ])
 case "$ac_cv_c_inline" in
@@ -2507,15 +2512,13 @@ case "$ac_cv_c_inline" in
   no) AC_DEFINE(inline,,
                 [Define as `__inline' if that's what the C compiler calls it,
                  or to nothing if it is not supported.]) ;;
-  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline,
-                         [Define as `__inline' if that's what the C compiler
-                          calls it, or to nothing if it is not supported.]) ;;
+  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
 esac
 ])dnl AC_C_INLINE
 
 
-dnl AC_C_CONST
-dnl ----------
+# AC_C_CONST
+# ----------
 AC_DEFUN(AC_C_CONST,
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,

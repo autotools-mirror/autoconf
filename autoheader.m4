@@ -261,7 +261,7 @@ AH_TEMPLATE([F77_FUNC_],
               scheme of the Fortran 77 compiler.])])
 
 
-AH_DEFUN([AC_CONFIG_HEADER],
+AH_DEFUN([AC_CONFIG_HEADERS],
 [@@@config_h=patsubst($1, [ .*$], [])@@@
 ])
 

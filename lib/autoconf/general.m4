@@ -491,6 +491,9 @@ dnl If the REPLACED-FUNCTION and ARGUMENT are defined, then declare that
 dnl NAME is a specialized version of REPLACED-FUNCTION when its first
 dnl argument is ARGUMENT.  For instance AC_TYPE_SIZE_T is a specialization
 dnl of AC_CHECK_TYPE applied to `size_t'.
+dnl
+dnl This feature is not documented on purpose.  It might change in the
+dnl future.
 define([AC_DEFUN],
 [ifelse([$3],,
 [define([$1], [AC_PRO([$1])$2[]AC_EPI()])],

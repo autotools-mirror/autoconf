@@ -163,7 +163,7 @@ syms=`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`
 
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
-undefined) echo "error: AC_CONFIG_HEADER not found in $infile" >&2; exit 1 ;;
+undefined) echo "error: AC_CONFIG_HEADERS not found in $infile" >&2; exit 1 ;;
 *:*) config_h_in=`echo "$config_h"|sed 's%.*:%%'`
      config_h=`echo "$config_h"|sed 's%:.*%%'` ;;
 *) config_h_in="${config_h}.in" ;;
