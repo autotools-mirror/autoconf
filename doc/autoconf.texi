@@ -6544,7 +6544,7 @@ arguments).
 Sometimes one might need to run the preprocessor on some source file.
 @emph{Usually it is a bad idea}, as you typically need to @emph{compile}
 your project, not merely run the preprocessor on it; therefore you
-certainly want to run the compiler, not the preprocessor.  Resist to the
+certainly want to run the compiler, not the preprocessor.  Resist the
 temptation of following the easiest path.
 
 Nevertheless, if you need to run the preprocessor, then use
