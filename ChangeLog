@@ -1,5 +1,9 @@
 2001-05-31  Akim Demaille  <akim@epita.fr>
 
+	* tests/base.at: Adjust line numbers in error messages.
+
+2001-05-31  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.at, tests/m4sh.at: When using AC_PLAIN_SCRIPT be sure
 	to emit the bangshe line.
 	Reported by David Carter.
