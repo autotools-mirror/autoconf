@@ -111,17 +111,10 @@ MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
               $(top_srcdir)/lib/autoconf/programs.m4
 
 
-CLEANFILES = \
-	debug-*.sh state-* at-* stderr stdout \
-	script.s4g script.as script			\
-	configure configure.in configure.ac config.status config.cache \
-	config.log config.h.in config.hin config.h \
-	config.guess config.sub install-sh	\
-	expr					\
-	libtool ltconfig ltmain.sh
+DISTCLEANFILES = atconfig atlocal testsuite
 
-
-DISTCLEANFILES = atconfig atlocal testsuite testsuite.log
+# The hairy heredoc is more robust than using echo.
+CLEANFILES = expr
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
@@ -258,8 +251,6 @@ $(SUITE_GENERATED): mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 maintainer-check: maintainer-check-posix maintainer-check-c++
-
-# The hairy heredoc is more robust than using echo.
 expr:
 	echo '#! $(SHELL)'            >expr
 	echo 'result=`@EXPR@ "$$@"`' >>expr
@@ -280,7 +271,8 @@ maintainer-check-c++:
 	CC=g++ make check
 
 clean-local:
-	-rm -rf autom4te.cache builddir inner
+	./testsuite --clean
+	-rm -rf autom4te.cache
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

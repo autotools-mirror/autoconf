@@ -1,5 +1,13 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Output the definition of
+	at_data_files earlier.
+	(--clean, -c): New option.
+	* tests/Makefile.am: Use this option.
+
+	
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Rename `ac_dots' as
 	`ac_top_builddir' to mimic Automake's vocabulary, which much more
 	readable.

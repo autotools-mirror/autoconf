@@ -131,6 +131,9 @@ while test $[@%:@] -gt 0; do
   case $[1] in
     --help | -h) at_help=: ;;
     --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
+    --clean | -c )
+        rm -rf $at_data_files debug-*.sh $as_me.log
+	exit 0;;
 
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
@@ -158,6 +161,7 @@ Run all the tests, or the selected TESTS.
 
 Options:
   -h  Display this help message and the description of TESTS
+  -c  Remove all the files this test suite might create and exit
   -e  Abort the full suite and inhibit normal clean up if a test fails
   -v  Force more detailed output, default for debugging scripts
   -d  Inhibit clean up and debug script creation, default for debugging scripts
@@ -401,9 +405,8 @@ exit 0
 m4_divert_pop([TAIL])dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
-at_tests_all="AT_TESTS_ALL "])])dnl
-m4_wrap([m4_divert_text([SETUP],
-                        [# List of the output files.
+at_tests_all="AT_TESTS_ALL "
+# List of the output files.
 at_data_files="AT_data_files "])])dnl
 ])# AT_INIT
 
