@@ -1,5 +1,9 @@
 2004-12-17  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Fix comment.
+
+2004-12-17  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (_AC_LIBOBJ): We can use AC_SUBST/2,
 	  remove the comment which said we cannot.
 

@@ -866,11 +866,11 @@ m4_define([AS_MKDIR_P],
 
 # _AS_TEST_PREPARE
 # ----------------
-# Find out ahead of time whether we want test -x (preferred) or test -f
-# to check whether a file is executable.
+# Find out ahead of time whether ``test -x'' can be used to distinguish
+# executables from other regular files.
 m4_defun([_AS_TEST_PREPARE],
-[# Find out how to test for executable files. Don't use a zero-byte file,
-# as systems may use methods other than mode bits to determine executability.
+[# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
+# systems may use methods other than mode bits to determine executability.
 cat >conf$$.file <<_ASEOF
 #! /bin/sh
 exit 0
