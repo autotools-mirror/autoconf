@@ -41,6 +41,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -136,12 +137,12 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 .texi.dvi:
 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
-	$(TEXI2DVI) `test -f '$<' || echo '$(srcdir)/'`$< -o $@
+	$(TEXI2DVI) `test -f '$<' || echo '$(srcdir)/'`$<
 
 .texi.pdf:
 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
-	$(TEXI2PDF) `test -f '$<' || echo '$(srcdir)/'`$< -o $@
+	$(TEXI2PDF) `test -f '$<' || echo '$(srcdir)/'`$<
 autoconf.info: version.texi $(autoconf_TEXINFOS)
 autoconf.dvi: version.texi $(autoconf_TEXINFOS)
 autoconf.pdf: version.texi $(autoconf_TEXINFOS)
@@ -169,7 +170,7 @@ standards.dvi: $(standards_TEXINFOS)
 standards.pdf: $(standards_TEXINFOS)
 TEXI2DVI = texi2dvi
 
-TEXI2PDF = $(TEXI2DVI) --pdf
+TEXI2PDF = $(TEXI2DVI) --pdf --batch
 DVIPS = dvips
 .dvi.ps:
 	$(DVIPS) $< -o $@
@@ -234,7 +235,11 @@ top_distdir = ..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	@list='$(DISTFILES)'; for file in $$list; do \
+	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+	list='$(DISTFILES)'; for file in $$list; do \
+	  case $$file in \
+	    $(srcdir)/*) file=`echo "$$file" | sed "s|^$$srcdirstrip/||"`;; \
+	  esac; \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
 	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
