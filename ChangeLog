@@ -1,3 +1,8 @@
+2005-02-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Special Shell Variables): Clarify
+	PATH_SEPARATOR wording; fix typo in IFS.  Reported by Gary V. Vaughan.
+
 2005-02-07  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Use @acronym for DJGPP.
