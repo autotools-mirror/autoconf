@@ -22,8 +22,9 @@
 # With one arg, create a header file on standard output from
 # the given template file.
 
-usage="Usage: autoheader [-h] [--help] [-m dir] [--macrodir=dir] 
-                  [-v] [--version] [template-file]" 
+usage="\
+Usage: autoheader [-h] [--help] [-m dir] [--macrodir=dir] 
+       [-v] [--version] [template-file]" 
 
 # NLS nuisances.
 # Only set `LANG' and `LC_ALL' to "C" if already set.
