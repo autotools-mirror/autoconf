@@ -1,3 +1,8 @@
+2000-05-28  Jim Meyering  <meyering@lucent.com>
+
+	* doc/autoconf.texi (Particular Functions): Give better description of
+	AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK.  From Paul Eggert.
+
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Document `ln -s'
