@@ -2495,11 +2495,39 @@ manual in the Texinfo formatting language.  See the Texinfo manual,
 either the hardcopy, or the on-line version available through
 @code{info} or the Emacs Info subsystem (@kbd{C-h i}).
 
-The manual should document all of the program's command-line options and
-all of its commands.  It should give examples of their use.  But don't
-organize the manual as a list of features.  Instead, organize it
-logically, by subtopics.  Address the goals that a user will have in
-mind, and explain how to accomplish them.
+Programmers often find it most natural to structure the documentation
+following the structure of the implementation, which they know.  But
+this structure is not necessarily good for explaining how to use the
+program; it may be irrelevant and confusing for a user.
+
+At every level, from the sentences in a paragraph to the grouping of
+topics into separate manuals, the right way to structure documentation
+is according to the concepts and questions that a user will have in mind
+when reading it.  Sometimes this structure of ideas matches the
+structure of the implementation of the software being documented---but
+often they are different.  Often the most important part of learning to
+write good documentation is learning to notice when you are structuring
+the documentation like the implementation, and think about better
+alternatives.
+
+For example, each program in the GNU system probably ought to be
+documented in one manual; but this does not mean each program should
+have its own manual.  That would be following the structure of the
+implementation, rather than the structure that helps the user
+understand.
+
+Instead, each manual should cover a coherent @emph{topic}.  For example,
+instead of a manual for @code{diff} and a manual for @code{diff3}, we
+have one manual for ``comparison of files'' which covers both of those
+programs, as well as @code{cmp}.  By documenting these programs
+together, we can make the whole subject clearer.
+
+The manual which discusses a program should document all of the
+program's command-line options and all of its commands.  It should give
+examples of their use.  But don't organize the manual as a list of
+features.  Instead, organize it logically, by subtopics.  Address the
+questions that a user will ask when thinking about the job that the
+program does.
 
 In general, a GNU manual should serve both as tutorial and reference.
 It should be set up for convenient access to each topic through Info,
@@ -2520,33 +2548,35 @@ the framework for a beginner to understand the rest of the manual.  The
 Bison manual provides a good example of how to do this.
 
 Don't use Unix man pages as a model for how to write GNU documentation;
-they are a bad example to follow.
+most of them are terse, badly structured, and give inadequate
+explanation of the underlying concepts.  (There are, of course
+exceptions.)  Also Unix man pages use a particular format which is
+different from what we use in GNU manuals.
 
 Please do not use the term ``pathname'' that is used in Unix
 documentation; use ``file name'' (two words) instead.  We use the term
 ``path'' only for search paths, which are lists of file names.
 
 Please do not use the term ``illegal'' to refer to erroneous input to a
-computer program.  Use ``invalid'' instead, and reserve the term
+computer program.  Please use ``invalid'' for this, and reserve the term
 ``illegal'' for violations of law.
 
 @node Manual Structure Details, NEWS File, GNU Manuals, Documentation
 @section Manual Structure Details
 
-The title page of the manual should state the version of the program
-to which the manual applies.  The Top node of the manual should also
-contain this information.  If the manual is changing more frequently
-than or independent of the program, also state a version number for
-the manual in both of these places.
+The title page of the manual should state the version of the programs or
+packages documented in the manual.  The Top node of the manual should
+also contain this information.  If the manual is changing more
+frequently than or independent of the program, also state a version
+number for the manual in both of these places.
 
-The manual should have a node named @samp{@var{program} Invocation} or
-@samp{Invoking @var{program}}, where @var{program} stands for the name
-of the program being described, as you would type it in the shell to run
-the program.  This node (together with its subnodes, if any) should
-describe the program's command line arguments and how to run it (the
-sort of information people would look in a man page for).  Start with an
-@samp{@@example} containing a template for all the options and arguments
-that the program uses.
+Each program documented in the manual should should have a node named
+@samp{@var{program} Invocation} or @samp{Invoking @var{program}}.  This
+node (together with its subnodes, if any) should describe the program's
+command line arguments and how to run it (the sort of information people
+would look in a man page for).  Start with an @samp{@@example}
+containing a template for all the options and arguments that the program
+uses.
 
 Alternatively, put a menu item in some menu whose item name fits one of
 the above patterns.  This identifies the node which that item points to
