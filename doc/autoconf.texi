@@ -11306,7 +11306,7 @@ There are two things one should remember about @samp{t} in @command{sed}.
 Firstly, always remember that @samp{t} jumps if @emph{some} substitution
 succeeded, not only the immediately preceding substitution.  Therefore,
 always use a fake @samp{t clear; : clear} to reset the t flag where
-indeed.
+needed.
 
 Secondly, you cannot rely on @command{sed} to clear the flag at each new
 cycle.
