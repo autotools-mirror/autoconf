@@ -1,5 +1,23 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Create man pages for the executables.
+
+	* Makefile.am (SUBDIRS): Add `man' and prepend `.' so that
+	executables be built before help2man is run.
+	* configure.in (AC_OUTPUT): Add man/Makefile.
+	AC_MSG_ERROR, not AC_ERROR.
+	Check for missing help2man.
+	* man/Makefile.am: New file.
+	* man/autoconf.x: Likewise.
+	* man/autoreconf.x: Likewise.
+	* man/autoheader.x: Likewise.
+	* man/autoscan.x: Likewise.
+	* man/autoupdate.x: Likewise.
+	* man/ifnames.x: Likewise.
+	* man/common.x: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Reformating of configure and
 	config.status --help.
 

@@ -8,12 +8,17 @@ dnl first and get that path embedded in the installed autoconf and
 dnl autoheader scripts.
 AC_PROG_GNU_M4
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  AC_ERROR([GNU m4 is required])
+  AC_MSG_ERROR([GNU m4 is required])
 fi
 dnl This is needed because Automake does not seem to realize there is
 dnl an AC_SUBST inside AC_PROG_GNU_M4.  Grmph!
 AC_SUBST(M4)
+
+dnl `autoconf' and `ifnames' use AWK.
 AC_PROG_AWK
+
+dnl Generating man pages.
+AM_MISSING_PROG(HELP2MAN, help2man)
 
 dnl We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)
@@ -33,4 +38,4 @@ if test -f $srcdir/standards.texi; then
 fi
 AC_SUBST(standards_texi)dnl
 
-AC_OUTPUT(acversion.m4 Makefile testsuite/Makefile)
+AC_OUTPUT(acversion.m4 Makefile man/Makefile testsuite/Makefile)

@@ -57,6 +57,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+
+@SET_MAKE@
 AMDEP = @AMDEP@
 AMTAR = @AMTAR@
 AWK = @AWK@
@@ -65,6 +67,7 @@ CPP = @CPP@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 DEPDIR = @DEPDIR@
+HELP2MAN = @HELP2MAN@
 M4 = @M4@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
@@ -76,7 +79,7 @@ standards_texi = @standards_texi@
 
 AUTOMAKE_OPTIONS = check-news 1.4
 
-SUBDIRS = testsuite
+SUBDIRS = . man testsuite
 
 MAKEINFO = makeinfo --no-split
 TEXI2HTML = texi2html
@@ -372,8 +375,6 @@ uninstall-pkgdataDATA:
 # (1) if the variable is set in `config.status', edit `config.status'
 #     (which will cause the Makefiles to be regenerated when you run `make');
 # (2) otherwise, pass the desired values on the `make' command line.
-
-@SET_MAKE@
 
 all-recursive install-data-recursive install-exec-recursive \
 installdirs-recursive install-recursive uninstall-recursive  \

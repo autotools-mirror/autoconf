@@ -952,10 +952,12 @@ fi
 test -n "$AWK" && break
 done
 
+HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
+
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
 echo $ac_n "checking for $ac_word... $ac_c" 1>&6
-echo "configure:959: checking for $ac_word" 1>&5
+echo "configure:961: checking for $ac_word" 1>&5
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1003,7 +1005,7 @@ fi
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install... $ac_c" 1>&6
-echo "configure:1007: checking for a BSD compatible install" 1>&5
+echo "configure:1009: checking for a BSD compatible install" 1>&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -1167,7 +1169,7 @@ cat >$CONFIG_STATUS <<EOF
 
 # Files that config.status was made for.
 config_files="\\
-  acversion.m4 Makefile testsuite/Makefile"
+  acversion.m4 Makefile man/Makefile testsuite/Makefile"
 
 ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
@@ -1240,6 +1242,7 @@ do
   # Handling of arguments.
   'acversion.m4' ) CONFIG_FILES="\$CONFIG_FILES acversion.m4" ;;
   'Makefile' ) CONFIG_FILES="\$CONFIG_FILES Makefile" ;;
+  'man/Makefile' ) CONFIG_FILES="\$CONFIG_FILES man/Makefile" ;;
   'testsuite/Makefile' ) CONFIG_FILES="\$CONFIG_FILES testsuite/Makefile" ;;
 
   # This is an error.
@@ -1324,6 +1327,7 @@ s%@AMDEP@%$AMDEP%;t t
 s%@AMDEPBACKSLASH@%$AMDEPBACKSLASH%;t t
 s%@DEPDIR@%$DEPDIR%;t t
 s%@M4@%$M4%;t t
+s%@HELP2MAN@%$HELP2MAN%;t t
 s%@PERL@%$PERL%;t t
 s%@PERLSCRIPTS@%$PERLSCRIPTS%;t t
 s%@standards_texi@%$standards_texi%;t t
