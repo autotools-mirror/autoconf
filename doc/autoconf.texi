@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.13.1
-@set VERSION 2.13.1
+@set EDITION 2.14.1
+@set VERSION 2.14.1
 @set UPDATED June 1999
 
 @iftex
@@ -868,7 +868,7 @@ not the parents of that directory).  Usually, @file{Makefile}s are
 created this way, but other files, such as @file{.gdbinit}, can be
 specified as well.
 
-If @code{AC_CONFIG_HEADER}, @code{AC_LINK_FILES}, or
+If @code{AC_CONFIG_HEADER}, @code{AC_CONFIG_LINKS}, or
 @code{AC_CONFIG_SUBDIRS} has been called, this macro also creates the
 files named as their arguments.
 
@@ -4629,24 +4629,42 @@ i960-*-bout) obj_format=bout ;;
 esac
 @end example
 
-@defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
-@maindex LINK_FILES
+@defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{})
+@maindex CONFIG_LINKS
 Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
 possible, otherwise a hard link.  The @var{dest} and @var{source} names
-should be relative to the top level source or build directory.
-This macro may be called multiple times.
+should be relative to the top level source or build directory.  This
+macro may be called multiple times.
 
 For example, this call:
 
 @example
-AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h, host.h object.h)
+AC_LINK_FILES(host.h:config/$@{machine@}.h object.h:config/$@{obj_format@}.h)
 @end example
 
 @noindent
 creates in the current directory @file{host.h}, which is a link to
 @file{@var{srcdir}/config/$@{machine@}.h}, and @file{object.h}, which is a link
 to @file{@var{srcdir}/config/$@{obj_format@}.h}.
+
+The tempting value @samp{.} for @var{dest} is made illegal: it makes it
+impossible for @samp{config.status} to guess the links to establish.  It
+is there legal to run
+@example
+./config.status host.h object.h
+@end example
+to establish the links.
+@end defmac
+
+@defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
+@maindex LINK_FILES
+This is an obsolete version of the previous macro.  The previous example
+would have been written:
+
+@example
+AC_LINK_FILES(config/$@{machine@}.h config/$@{obj_format@}.h, host.h object.h)
+@end example
 @end defmac
 
 You can also use the host system type to find cross-compilation tools.
@@ -5205,6 +5223,13 @@ default is the arguments given to @code{AC_CONFIG_HEADER}; if that macro
 was not called, @file{config.status} ignores this variable.
 @end defvar
 
+@defvar CONFIG_LINKS
+@evindex CONFIG_LINKS
+The symbolic links to establish.  The default is the arguments given to
+@code{AC_CONFIG_LINKS}; if that macro was not called,
+@file{config.status} ignores this variable.
+@end defvar
+
 These variables also allow you to write @file{Makefile} rules that
 regenerate only some of the files.  For example, in the dependencies
 given above (@pxref{Automatic Remaking}), @file{config.status} is run
@@ -5215,11 +5240,11 @@ can make each run only regenerate the files for that rule:
 @group
 config.h: stamp-h
 stamp-h: config.h.in config.status
-        CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
+        CONFIG_LINKS= CONFIG_FILES= CONFIG_HEADERS=config.h ./config.status
         echo > stamp-h
 
 Makefile: Makefile.in config.status
-        CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
+        CONFIG_LINKS CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
 @end group
 @end example
 

@@ -1,5 +1,38 @@
 1999-10-01  Akim Demaille  <akim@epita.fr>
 
+	Make the handling of the configuration links (AC_LINK_FILES)
+	exactly the same as that of configurations files (AC_OUTPUT_FILES)
+	and headers (AC_CONFIG_HEADERS).  As a result, it is sane to run
+		./config.status src/libmy_lib
+	or
+		CONFIG_LINKS=src/lib_mylib:lib/lib_mylib ./config.status
+
+	* acgeneral.m4 (AC_LINK_FILES): Use AC_FATAL to diagnose bad
+	number of argument.
+	Obsoleted (but implemented) in favor of AC_CONFIG_LINKS.
+
+	* acgeneral.m4 (AC_CONFIG_LINKS): New macro.  Takes space
+	separated list of DEST:SOURCES arguments.
+
+	* acgeneral.m4: Rename each occurence of AC_LIST_HEADER as
+ 	AC_LIST_HEADERS for consistency.
+
+	* acgeneral.m4 (AC_OUTPUT, config.status prologue): Move the
+	definition of config_files and config_headers to the top.
+	Add the definition of config_links.
+	Change the help message to use the aforementioned variables.
+
+	* acgeneral.m4 (AC_OUTPUT_LINKS): Adapted to the new scheme of
+	AC_LIST_LINKS.
+
+	* autoconf.texi (Output, AC_OUTPUT): Mention AC_CONFIG_LINKS.
+	(Invoking config.status): Mention CONFIG_LINKS.
+
+	* autoconf.texi (Using System Type): Document AC_CONFIG_LINKS.
+	Explicit the obsoleteness of AC_LINK_FILES.
+
+1999-10-01  Akim Demaille  <akim@epita.fr>
+
 	Moving most of the task of creating config.h.in from sh to m4.
 	Getting rid of acconfig.h by supply a major new family of macros:
 	AH_* which make it possible to insert arbitrary text into

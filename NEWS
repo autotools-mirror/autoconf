@@ -4,12 +4,15 @@ Major changes in release 2.15:
   - much faster on most architectures
   - has a useful --help
   - concurrent executions
-    It is safe to use `make -j' with configure.
+    It is safe to use `make -j' with config.status.
+  - files to links (AC_LINK_FILES) can be specified via CONFIG_LINKS.
   - human interface improved
     It is possible to invoke
       ./config.status foobar
     instead of the former form (still valid)
-      CONFIG_HEADERS= CONFIG_FILES=foobar:foo.in:bar.in
+      CONFIG_HEADERS= CONFIG_LINKS= CONFIG_FILES=foobar:foo.in:bar.in \
+      ./config.status
+    The same holds for configuration headers and links.
 * New macros
   - AC_CHECK_DECL and AC_CHECK_DECLS
     To check whether a symbol is declared.
@@ -18,6 +21,8 @@ Major changes in release 2.15:
     when the user executes `configure --help'.
   - AC_ARG_VAR
     Document and ask for the registration of an envvar.
+  - AC_CONFIG_LINKS
+    Replaces the now obsolete AC_LINK_FILES.
 * Environment variables are kept when reconfiguring.
   The previous scheme to set envvar before running configure was
     ENV=VAL ./configure
