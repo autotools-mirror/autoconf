@@ -211,7 +211,7 @@ AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
          [autoupdate: `configure.in' is updated
 ])
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0)
-AT_CHECK([./configure], 0, ignore)
+AT_CHECK_CONFIGURE
 AT_CHECK([cat src1], 0, [dst1
 ])
 AT_CHECK([cat src2], 0, [dst2

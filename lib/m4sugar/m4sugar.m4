@@ -1323,7 +1323,7 @@ m4_define([m4_strip],
 #    => active
 m4_define([m4_append],
 [m4_define([$1],
-ifdef([$1], [m4_defn([$1])])[$2])])
+           ifdef([$1], [m4_defn([$1])])[$2])])
 
 
 # m4_list_append(MACRO-NAME, STRING)
@@ -1331,7 +1331,7 @@ ifdef([$1], [m4_defn([$1])])[$2])])
 # Same as `m4_append', but each element is separated by `, '.
 m4_define([m4_list_append],
 [m4_define([$1],
-ifdef([$1], [m4_defn([$1]), ])[$2])])
+           ifdef([$1], [m4_defn([$1]), ])[$2])])
 
 
 # m4_foreach_quoted(VARIABLE, LIST, EXPRESSION)

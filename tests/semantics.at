@@ -272,10 +272,10 @@ $fail &&
 AS_EXIT(0)
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0, ignore)
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
 
-AT_CLEANUP(path config.log config.cache configure)
+AT_CLEANUP(path)
 
 
 # ------------------------------ #
@@ -312,10 +312,10 @@ $fail &&
 AS_EXIT(0)
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0, ignore)
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
 
-AT_CLEANUP(path config.log config.cache configure)
+AT_CLEANUP(path)
 
 
 
@@ -369,7 +369,7 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP()dnl
 
 
 # Non-strict preprocessors work if they produce no warnings.
@@ -399,4 +399,4 @@ AT_CHECK_DEFINES(
 #define HAVE_STDIO_H 1
 ])
 
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP()dnl

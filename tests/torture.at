@@ -33,7 +33,7 @@ esac
 AC_OUTPUT
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 
 # Create a header
 AT_CHECK([./configure what_to_test=header], 0, ignore)
@@ -71,7 +71,7 @@ AC_CONFIG_FILES([nonexistent])
 AC_OUTPUT
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 1, ignore,
 [[config.status: error: cannot find input file `nonexistent.in'
 ]])
@@ -101,7 +101,7 @@ echo "result=$one$enable_two$with_three"
 AC_OUTPUT
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 
 AT_CHECK([./configure one=one --enable-two=two --with-three=three |
           sed -n -e 's/^result=//p'], 0,
@@ -170,7 +170,7 @@ AT_DATA(config.hin,
 ]])
 
 AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0)
-AT_CHECK([./configure], 0, ignore)
+AT_CHECK_CONFIGURE
 
 AT_DATA(expout,
 [[/* config.h.  Generated automatically by configure.  */
@@ -261,9 +261,9 @@ m4_for(AT_Count, 1, 100, 1,
 AC_OUTPUT
 ])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([../autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([./configure], 0, ignore)
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
 
 # Checking that AC_DEFINE worked properly.
 AT_DATA(expout,

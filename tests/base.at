@@ -43,7 +43,7 @@ test -z "$test1" &&
 AS_EXIT(0)
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure)

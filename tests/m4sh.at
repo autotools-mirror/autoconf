@@ -49,7 +49,7 @@ AS_DIRNAME_TEST([../../2//3/],	[../../2])
 AS_EXIT(0)
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure)
@@ -79,7 +79,7 @@ test -d a/b/c/d/e/f ||
 AS_EXIT(0)
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure 1 a)
@@ -108,7 +108,7 @@ case without in
 esac
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure)

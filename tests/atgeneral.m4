@@ -248,9 +248,7 @@ m4_wrap([m4_divert_text(0,
 # The group is testing what DESCRIPTION says.
 AT_DEFINE([AT_SETUP],
 [AT_DEFINE([AT_ordinal], m4_eval(AT_ordinal + 1))
-m4_pushdef([AT_data_files], )
-m4_pushdef([AT_data_expout], )
-m4_pushdef([AT_data_experr], )
+m4_pushdef([AT_data_files], [stdout stderr ])
 m4_divert_pop()dnl
   AT_ordinal )
 dnl Here will be inserted the `rm' corresponding to AT_CLEANUP.
@@ -268,25 +266,48 @@ m4_divert(2)[]dnl
 ])
 
 
+# AT_CLEANUP_FILE_IFELSE(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
+# --------------------------------------------------------------
+AT_DEFINE([AT_CLEANUP_FILE_IFELSE],
+[ifelse(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [\([\[\]*.]\)], [\\\1])),
+        -1,
+        [$3], [$2])])
+
+
+# AT_CLEANUP_FILE(FILE)
+# ---------------------
+# Register FILE for AT_CLEANUP.
+AT_DEFINE([AT_CLEANUP_FILE],
+[AT_CLEANUP_FILE_IFELSE([$1], [],
+                        [m4_append([AT_data_files], [$1 ])])])
+
+
+# AT_CLEANUP_FILES(FILES)
+# -----------------------
+# Declare a list of FILES to clean.
+AT_DEFINE([AT_CLEANUP_FILES],
+[m4_foreach([AT_File], m4_quote(m4_patsubst([$1], [  *], [,])),
+            [AT_CLEANUP_FILE(AT_File)])])
+
+
 # AT_CLEANUP(FILES)
 # -----------------
 # Complete a group of related tests, recursively remove those FILES
 # created within the test.  There is no need to list stdout, stderr,
 # nor files created with AT_DATA.
 AT_DEFINE([AT_CLEANUP],
-[      $at_traceoff
+[AT_CLEANUP_FILES([$1])dnl
+      $at_traceoff
     )
     at_status=$?
     at_test_count=`expr 1 + $at_test_count`
     if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-      rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
+      rm -rf AT_data_files
     fi
     ;;
 m4_divert(1)[]dnl
-    rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
+    rm -rf AT_data_files
 m4_undivert(2)[]dnl
-m4_popdef([AT_data_experr])dnl
-m4_popdef([AT_data_expout])dnl
 m4_popdef([AT_data_files])dnl
 m4_divert_push([KILL])dnl
 ])# AT_CLEANUP
@@ -299,7 +320,7 @@ m4_divert_push([KILL])dnl
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
 # If you don't want CONTENT to be evaluated, quote it twice.
 AT_DEFINE([AT_DATA],
-[AT_DEFINE([AT_data_files], AT_data_files[ ]$1)
+[AT_CLEANUP_FILES([$1])dnl
 cat >$1 <<'_ATEOF'
 $2[]_ATEOF
 ])
@@ -339,17 +360,17 @@ if $at_check_stds; then
 dnl Restore stdout to fd1 and stderr to fd2.
   exec 1>&5 2>&6
 dnl If not verbose, neutralize the output of diff.
-  test $at_verbose = echo && exec 1>/dev/null 2>/dev/null
+  test $at_verbose = : && exec 1>/dev/null 2>/dev/null
   at_failed=false;
   m4_case([$4],
           ignore, [$at_verbose = echo && cat stderr;:],
-          experr, [AT_DEFINE([AT_data_experr], [ experr])dnl
+          experr, [AT_CLEANUP_FILE([experr])dnl
 $at_diff experr stderr || at_failed=:],
           [], [$at_diff empty stderr || at_failed=:],
           [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
   m4_case([$3],
           ignore, [test $at_verbose = echo && cat stdout;:],
-          expout, [AT_DEFINE([AT_data_expout], [ expout])dnl
+          expout, [AT_CLEANUP_FILES([expout])dnl
 $at_diff expout stdout || at_failed=:],
           [], [$at_diff empty stdout || at_failed=:],
           [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || at_failed=:])

@@ -1,5 +1,14 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_CLEAN_FILE_IFELSE, AT_CLEANUP_FILE)
+	(AT_CLEANUP_FILES): New	macros.
+	(AT_SETUP, AT_CHECK, AT_CLEANUP): Use them.
+	(AT_CHECK): Fix a use of at_verbose.
+	* tests/atspecific.m4 (AT_CHECK_AUTOCONF, AT_CHECK_AUTOHEADER)
+	(AT_CHECK_CONFIGURE): New macros.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_INIT) <at_verbose>: Be a :/echo variable.
 	<at_silent>: Remove.
 	(AT_CLEANUP): Clean up the diversion use.

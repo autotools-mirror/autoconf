@@ -25,6 +25,30 @@ include(atgeneral.m4)m4_divert(-1)
 ## ---------------------------------------- ##
 
 
+# AT_CHECK_AUTOCONF
+# -----------------
+AT_DEFINE([AT_CHECK_AUTOCONF],
+[AT_CLEANUP_FILES(configure)dnl
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])])
+
+
+# AT_CHECK_AUTOHEADER
+# -------------------
+AT_DEFINE([AT_CHECK_AUTOHEADER],
+[AT_CLEANUP_FILES(config.hin)dnl
+AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])])
+
+
+# AT_CHECK_CONFIGURE
+# -------------------
+AT_DEFINE([AT_CHECK_CONFIGURE],
+[AT_CLEANUP_FILE_IFELSE([config.hin],
+                        [AT_CLEANUP_FILE(config.h)])dnl
+AT_CLEANUP_FILES(config.log config.status config.cache)dnl
+AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
+test $at_verbose = echo && echo "--- config.log" && cat config.log])
+
+
 # _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
 # --------------------------------------
 # Create a minimalist configure.in running the macro named
@@ -34,6 +58,7 @@ include(atgeneral.m4)m4_divert(-1)
 # `config.guess' etc.).
 AT_DEFINE([_AT_CHECK_AC_MACRO],
 [dnl Produce the configure.in
+AT_CLEANUP_FILES(env-after state*)dnl
 AT_DATA([configure.in],
 [AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
@@ -44,11 +69,9 @@ AC_STATE_SAVE(after)
 AC_OUTPUT
 ])
 $2
-rm -f state*
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
-AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
-test $at_verbose = echo && echo "--- config.log" && cat config.log
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
 
 dnl Some tests might exit prematurely when they find a problem, in
 dnl which case `env-after' is probably missing.  Don't check it then.
@@ -58,7 +81,6 @@ if test -f state-env.after; then
   cp -f state-ls.before expout
   AT_CHECK([cat state-ls.after], 0, expout)
 fi
-rm -f state*
 ])# _AT_CHECK_AC_MACRO
 
 
@@ -74,7 +96,7 @@ AT_DEFINE([AT_CHECK_MACRO],
 
 _AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
 $3
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP()dnl
 ])# AT_CHECK_MACRO
 
 
@@ -93,7 +115,7 @@ _AT_CHECK_AC_MACRO([$1],
           [], [autoupdate: `configure.in' is updated
 ])])
 
-AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+AT_CLEANUP()dnl
 ])# AT_CHECK_UPDATE
 
 
