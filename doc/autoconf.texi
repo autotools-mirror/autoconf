@@ -739,7 +739,7 @@ has continuously been misunderstood...  The rule of thumb is that
 i.e., expect one level of quotes to be lost.  For instance
 
 @example
-AC_COMPILE_IFELSE([char b[10];],, (exit 1); exit)
+AC_COMPILE_IFELSE([char b[10];],, [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
@@ -752,7 +752,7 @@ argument to be understood as a literal, and therefore it must be quoted
 twice:
 
 @example
-AC_COMPILE_IFELSE([[char b[10];]],, (exit 1); exit)
+AC_COMPILE_IFELSE([[char b[10];]],, [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
@@ -5313,8 +5313,8 @@ invoker can tell that an error occurred.
 Unfortunately, in some shells, such as Solaris 8 @command{sh}, an exit
 trap ignores the @code{exit} command's status.  In these shells, a trap
 cannot determine whether it was invoked by plain @code{exit} or by
-@code{exit 1}.  To work around this problem, use @code{(exit 1); exit}
-instead of @samp{exit 1}.
+@code{exit 1}.  Instead of calling @code{exit} directly, use the
+@code{AC_MSG_ERROR} macro that has a workaround for this problem.
 
 @item @command{export}
 @cindex @command{export}

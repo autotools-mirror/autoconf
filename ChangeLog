@@ -1,5 +1,11 @@
 2000-10-27  Pavel Roskin  <proski@gnu.org>
 
+	* doc/autoconf.texi (Limitations of Builtins): Recommend using
+	AC_MSG_ERROR instead of	exit.
+	(Autoconf Language): Fix examples.
+
+2000-10-27  Pavel Roskin  <proski@gnu.org>
+
 	* tests/suite.at: Move "-*- Autoconf -*-" to the second line.
 
 2000-10-27  Akim Demaille  <akim@epita.fr>
