@@ -1,3 +1,8 @@
+2001-08-12  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* tests/semantics.at (AC_C_BIGENDIAN): Explicitelly save and load
+	endianness for comparison instead of relying on AT_CHECK_ENV.
+
 2001-08-11  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi, doc/install.texi: Add a copyright notice

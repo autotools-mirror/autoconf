@@ -329,38 +329,33 @@ AT_CLEANUP(path)
 AT_SETUP(AC_C_BIGENDIAN)
 
 # Make sure that AC_C_BIGENDIAN behave the same whether we are
-# cross-compiling or not.  Actually, the tests are differents in both
-# case, and the cross-compiling case is allowed to fail (BTW, it might
-# be interesting to replace [:] by [touch at-uendian] to cach systems for
-# which AC_C_BIGENDIAN does fail, just to know if such a system
-# exists.)
+# cross-compiling or not.
 
-# The following is an manually-expansed call to _AT_CHECK_AC_MACRO
-# with the call to AC_CHECK_ENV removed.  We don't want AC_CHECK_ENV
-# because we are creating a new file (at-bendian or at-lendian)
-# as a side effect of AT_CHECK_CONFIGURE.
-AT_CONFIGURE_AC([AC_C_BIGENDIAN([touch at-bendian],[touch at-lendian],[:])])
-AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
+_AT_CHECK_AC_MACRO(
+  [AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
+   echo $ac_endian > at-endian
+])
 
 rm -f config.hin  # So that next run of autoheader is quiet.
-# The last run of AC_CHECK_CONFIGURE has created at-bendian or at-lendian.
-# Now we'll perform the same in cross-compiling mode, and make sure
-# that no new file is created (if a new file is created it means
-# AC_C_BIGENDIAN computed a different result).  Checking for a new
-# file is done using AC_CHECK_ENV which is called by _AT_CHECK_AC_MACRO.
 _AT_CHECK_AC_MACRO(
   [cross_compiling=yes
-   AC_C_BIGENDIAN([touch at-bendian],[touch at-lendian],[:])])
-
+   AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
+   ac_prevendian=`cat at-endian`
+   # Chech we have found the same result as in the previous run
+   # or unknown (because the cross-compiling check is allowed to fail;
+   # although it might be interesting to suppress this comparison, just
+   # to know on which system it fails if it ever does).
+   if test $ac_endian != $ac_prevendian -a $ac_endian != unknow; then
+     AC_MSG_ERROR([unexpected endianness: first run found '$ac_prevendian' but second run found '$ac_endian'])
+   fi
+])
 
 # Make sure AC_C_BIGENDIAN with no argument will define WORDS_BIGENDIAN
 AT_CONFIGURE_AC([AC_C_BIGENDIAN])
 AT_CHECK_AUTOHEADER
 AT_CHECK([grep WORDS_BIGENDIAN config.hin], [], [ignore])
 
-AT_CLEANUP(at-bendian at-lendian)
+AT_CLEANUP(at-endian)
 
 # ------------------------------ #
 # AC_PATH_PROG & AC_PATH_PROGS.  #
