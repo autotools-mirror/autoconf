@@ -236,6 +236,7 @@ run_autom4te="$autom4te "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`\
 `$force && echo "--force "`\
+"--normalize "\
 "--include $autoconf_dir --include $localdir "\
 "--warning syntax,$warnings "\
 "$preselect"\

@@ -255,6 +255,9 @@ my @preselect = ('include', 'm4_pattern_allow', 'm4_pattern_forbid');
 
 my $output = '-';
 
+# Should we normalize the output?
+my $normalize = 0;
+
 # Autom4te's default warnings, and the actual list of warnings.
 my @my_warning = ('syntax');
 my @warning;
@@ -388,6 +391,7 @@ Operation modes:
   -v, --verbose            verbosely report processing
   -d, --debug              don\'t remove temporary files
   -o, --output=FILE        save output in FILE (defaults to \`-\', stdout)
+      --normalize          smash successive empty lines
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
@@ -579,7 +583,7 @@ sub handle_output ($$)
   while ($_ = $in->getline)
     {
       s/\s+$//;
-      if (/^$/)
+      if ($normalize && /^$/)
 	{
 	  $separate = 1;
 	  next;

@@ -1,5 +1,10 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in: --normalize is a new option.
+	* bin/autoconf.in: Use it.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* bin/Makefile.am, lib/Autom4te/Makefile.am, lib/autoconf/Makefile.am
 	* lib/autotest/Makefile.am, lib/m4sugar/Makefile.am: Add TAGS support.
 
