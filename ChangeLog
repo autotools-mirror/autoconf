@@ -1,3 +1,8 @@
+1999-08-25  Alexandre Oliva  <oliva@dcc.unicamp.br>
+
+	* autoreconf.sh: Run aclocal with the -I option only if
+	aclocal_dir != `.'.  Fix for autoconf/44.
+	
 1999-08-05  Jeffrey A Law  <law@cygnus.com>
 
 	* config.sub (-wrs case): Use os=-vxworks, not os=vxworks.

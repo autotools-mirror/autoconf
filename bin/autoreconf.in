@@ -170,8 +170,12 @@ while read dir; do
      then
 	:
      else
+	if test x"$aclocal_dir" != x.
+	then
+	   aclocal_flags="$aclocal_flags -I $aclocal_dir"
+	fi
 	$verbose "running aclocal $aclocal_flags in $dir, creating $aclocal_m4"
-	aclocal $aclocal_flags --output=$aclocal_m4 -I $aclocal_dir
+	aclocal $aclocal_flags --output=$aclocal_m4
      fi
   fi
 
