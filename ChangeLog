@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Avoid to use double quotes
+	inside "`...`": some shells parse this inccorrectly.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (pkgdata_DATA, EXTRA_DIST): Removed acconfig.h.
 	* testsuite/autoconf.s/defines.exp: Commented out, there is no
 	longer an acconfig.h.

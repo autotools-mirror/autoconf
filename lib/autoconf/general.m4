@@ -892,7 +892,7 @@ changequote([, ])dnl
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo "$ac_feature"| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_feature: invalid feature name)
     fi
@@ -903,7 +903,7 @@ changequote([, ])dnl
     ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo "$ac_feature"| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_feature: invalid feature name)
     fi
@@ -1156,7 +1156,7 @@ Some of the influent environment variables:$ac_arg_var_help"
     ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo "$ac_package"| sed 's/[-_a-zA-Z0-9]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_package: invalid package name)
     fi
@@ -1171,7 +1171,7 @@ changequote([, ])dnl
     ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
 changequote(, )dnl
-    if test -n "`echo "$ac_package"| sed 's/[-a-zA-Z0-9_]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
 changequote([, ])dnl
       AC_MSG_ERROR($ac_package: invalid package name)
     fi
@@ -1212,7 +1212,7 @@ changequote([, ])dnl
 
   *)
 changequote(, )dnl
-    if test -n "`echo "$ac_option"| sed 's/[-a-z0-9.]//g'`"; then
+    if echo "$ac_feature" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
 changequote([, ])dnl
       AC_MSG_WARN($ac_option: invalid host type)
     fi
