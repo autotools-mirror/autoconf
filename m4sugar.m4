@@ -1097,8 +1097,8 @@ m4_define([m4_before],
                    [m4_warn([syntax], [$2 was called before $1])])])
 
 
-# _m4_require(NAME-TO-CHECK, BODY-TO-EXPAND)
-# ------------------------------------------
+# m4_require(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
+# -----------------------------------------------------------
 # If NAME-TO-CHECK has never been expanded (actually, if it is not
 # m4_provide'd), expand BODY-TO-EXPAND *before* the current macro
 # expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
@@ -1108,35 +1108,38 @@ m4_define([m4_before],
 #
 # - NAME-TO-CHECK == BODY-TO-EXPAND
 #   Which you can use for regular macros with or without arguments, e.g.,
-#     _m4_require([AC_PROG_CC], [AC_PROG_CC])
-#     _m4_require([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
+#     m4_require([AC_PROG_CC], [AC_PROG_CC])
+#     m4_require([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
+#   which is just the same as
+#     m4_require([AC_PROG_CC])
+#     m4_require([AC_CHECK_HEADERS(limits.h)])
 #
 # - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
 #   In the case of macros with irregular names.  For instance:
-#     _m4_require([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
+#     m4_require([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
 #   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
 #   part of the name, it is not an argument) has not been run, then
 #   call it.'
 #   Had you used
-#     _m4_require([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
-#   then _m4_require would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
+#     m4_require([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
+#   then m4_require would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
 #   call the macro `AC_LANG_COMPILER' with `C' as argument.
 #
 #   You could argue that `AC_LANG_COMPILER', when it receives an argument
 #   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
-m4_define([_m4_require],
+m4_define([m4_require],
 [m4_pushdef([_m4_expansion_stack],
             m4_location[: $1 is required by...])dnl
 ifdef([_m4_expanding($1)],
-      [m4_fatal([m4_require: circular dependency of $1])])dnl
+      [m4_fatal([$0: circular dependency of $1])])dnl
 ifndef([_m4_divert_dump],
-    [m4_fatal([m4_require: cannot be used outside of an m4_defun'd macro])])dnl
+    [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
 m4_provide_ifelse([$1],
                   [],
                   [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
-$2
+m4_default([$2], [$1])
 divert(_m4_divert_dump)undivert(_m4_divert_diversion)dnl
 m4_divert_pop()])dnl
 m4_provide_ifelse([$1],
@@ -1145,13 +1148,6 @@ m4_provide_ifelse([$1],
                            [$1 is m4_require'd but is not m4_defun'd])])dnl
 m4_popdef([_m4_expansion_stack])dnl
 ])
-
-
-# m4_require(STRING)
-# ------------------
-# If STRING has never been m4_provide'd, then expand it.
-m4_define([m4_require],
-[_m4_require([$1], [$1])])
 
 
 # m4_expand_once(TEXT)

@@ -508,8 +508,8 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 # ------------------------
 # Ensure we have a compiler for the current LANG.
 AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
-[_AC_REQUIRE([AC_LANG_COMPILER(]_AC_LANG[)],
-             [AC_LANG_COMPILER])])
+[m4_require([AC_LANG_COMPILER(]_AC_LANG[)],
+            [AC_LANG_COMPILER])])
 
 
 # _AC_LANG_COMPILER_WORKS
@@ -570,8 +570,8 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 # -----------------------
 # Ensure we have a preprocessor for the current language.
 AC_DEFUN([AC_LANG_PREPROC_REQUIRE],
-[_AC_REQUIRE([AC_LANG_PREPROC(]_AC_LANG[)],
-             [AC_LANG_PREPROC])])
+[m4_require([AC_LANG_PREPROC(]_AC_LANG[)],
+            [AC_LANG_PREPROC])])
 
 
 # AC_REQUIRE_CPP

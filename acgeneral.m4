@@ -167,20 +167,14 @@ m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 ## Defining macros in autoconf::.  ##
 ## ------------------------------- ##
 
-# `AC_DEFUN' is basically `define' but it equips the macro with the
-# needed machinery for `AC_REQUIRE'.  A macro must be AC_DEFUN'd if
-# either it is AC_REQUIRE'd, or it AC_REQUIRE's.
 
 # AC_DEFUN(NAME, EXPANSION)
 # -------------------------
-# Define a macro which automatically provides itself.  Add machinery
-# so the macro automatically switches expansion to the diversion
-# stack if it is not already using it.  In this case, once finished,
-# it will bring back all the code accumulated in the diversion stack.
-# This, combined with AC_REQUIRE, achieves the topological ordering of
-# macros.  We don't use this macro to define some frequently called
-# macros that are not involved in ordering constraints, to save m4
-# processing.
+# Same as `m4_define' but equip the macro with the needed machinery
+# for `AC_REQUIRE'.
+#
+# We don't use this macro to define some frequently called macros that
+# are not involved in ordering constraints, to save m4 processing.
 m4_define([AC_DEFUN],
 [m4_defun([$1], [$2[]AC_PROVIDE([$1])])])
 
@@ -213,44 +207,12 @@ m4_define([AC_BEFORE],
 [AC_PROVIDE_IFELSE([$2], [AC_DIAGNOSE([syntax], [$2 was called before $1])])])
 
 
-# _AC_REQUIRE(NAME-TO-CHECK, BODY-TO-EXPAND)
-# ------------------------------------------
-# If NAME-TO-CHECK has never been expanded (actually, if it is not
-# AC_PROVIDE'd), expand BODY-TO-EXPAND *before* the current macro
-# expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
-# of the AC_REQUIRE chain in _AC_EXPANSION_STACK.
-#
-# The normal cases are:
-#
-# - NAME-TO-CHECK == BODY-TO-EXPAND
-#   Which you can use for regular macros with or without arguments, e.g.,
-#     _AC_REQUIRE([AC_PROG_CC], [AC_PROG_CC])
-#     _AC_REQUIRE([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
-#
-# - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
-#   In the case of macros with irregular names.  For instance:
-#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [m4_indir([AC_LANG_COMPILER(C)])])
-#   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
-#   part of the name, it is not an argument) has not been run, then
-#   call it.'
-#   Had you used
-#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
-#   then _AC_REQUIRE would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
-#   call the macro `AC_LANG_COMPILER' with `C' as argument.
-#
-#   You could argue that `AC_LANG_COMPILER', when it receives an argument
-#   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
-#   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
-#   it passes to `AC_LANG_COMPILER(C)'.
-m4_define([_AC_REQUIRE],
-[_m4_require($@)])
-
-
 # AC_REQUIRE(STRING)
 # ------------------
-# If STRING has never been AC_PROVIDE'd, then expand it.
+# If STRING has never been AC_PROVIDE'd, then expand it. A macro must
+# be AC_DEFUN'd if either it is AC_REQUIRE'd, or it AC_REQUIRE's.
 m4_define([AC_REQUIRE],
-[m4_require($@)])
+[m4_require([$1])])
 
 
 # AC_EXPAND_ONCE(TEXT)

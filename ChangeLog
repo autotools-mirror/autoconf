@@ -1,5 +1,15 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	A single m4_require is enough.
+
+	* m4sugar.m4 (_m4_require): $2 defaults to $1.
+	Rename as...
+	(m4_require): this.
+	* acgeneral.m4 (_AC_REQUIRE): Remove, use m4_require if you want
+	to get into the gory details.
+	
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_DEFAULTS_ENVIRONMENT): Rename as...
 	* m4sh.m4 (AS_SHELL_SANITIZE): this.
 	
