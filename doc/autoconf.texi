@@ -5239,7 +5239,7 @@ echo "Don't use it: $?"
 don't use command substitution within variable expansion:
 
 @example
-echo $@{FOO=`bar`@}
+cat $@{FOO=`bar`@}
 @end example
 
 @item
@@ -5259,7 +5259,7 @@ details.
 @item @command{/bin/sh} on OpenBSD
 @cindex @command{/bin/sh} on OpenBSD
 
-@samp{\"} expands to @samp{"} in here-in documents with unquoted
+@samp{\"} expands to @samp{"} in here-documents with unquoted
 delimiter in the native @command{/bin/sh} on OpenBSD 2.7.  As a general
 rule, if @samp{\\} expands to @samp{\} use @samp{\\} to get @samp{\}.
 Don't rely on @samp{\} being preserved just because it has no special
@@ -5343,8 +5343,8 @@ In each case the expected result is of course @file{fullness} containing
 
 Don't try to redirect the standard error of a command substitution: it
 must be done @emph{inside} the command substitution: when running
-@samp{echo `cd /zorglub` 2>/dev/null} expect the error message to
-escape, while @samp{echo `cd /zorglub 2>/dev/null`} works properly.
+@samp{: `cd /zorglub` 2>/dev/null} expect the error message to
+escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
@@ -5958,6 +5958,22 @@ Please note that the problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
 @samp{n}.
 
+Because of these problems, do not pass a string containing arbitrary
+characters to @command{echo}.  For example, @samp{echo "$foo"} is safe
+if you know that @var{foo}'s value cannot contain backslashes and cannot
+start with @samp{-}, but otherwise you should use a here-document like
+this:
+
+@example
+cat <<EOF
+$foo
+EOF
+@end example
+
+Many older shells (including the Bourne shell) implement here-documents
+inefficiently.  Users can generally speed things up by using a faster
+shell, e.g., by using the command @samp{bash ./configure} rather than
+plain @samp{./configure}.
 
 @item @command{exit}
 @c -----------------

@@ -1,3 +1,9 @@
+2001-06-01  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi: Talk about here documents and speedups.
+	Do not use "echo" on arbitrary strings.
+	Spell "here-documents" consistently with the standard.
+
 2001-06-09  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Concept Index): Introduce it.
