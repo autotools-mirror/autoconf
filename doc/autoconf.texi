@@ -1502,6 +1502,14 @@ oversight that we use the word @code{PROGRAM} in Autoconf macro names to
 sometimes mean C source code and sometimes mean a UNIX command.)
 @end defmac
 
+@defmac AC_PROGRAM_PATH (@var{variable}, @var{prog-to-check-for}, @var{value-if-not-found})
+@maindex PROGRAM_PATH
+Similar to @code{AC_PROGRAM_CHECK}, but set @var{variable} to the entire path of 
+@var{prog-to-check-for} if found.  Otherwise, just set @var{variable} to
+the value of @var{value-if-not-found}; no path checking is performed.
+Calls @code{AC_SUBST} for @var{variable}.
+@end defmac
+
 @defmac AC_PROGRAMS_CHECK (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex PROGRAMS_CHECK
 Check for each program in the whitespace-separated list
@@ -1511,6 +1519,13 @@ checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 will not be changed.  Calls @code{AC_SUBST} for @var{variable}.
+@end defmac
+
+@defmac AC_PROGRAMS_PATH (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
+@maindex PROGRAMS_PATH
+Like @code{AC_PROGRAMS_CHECK}, but if any of @var{progs-to-check-for}
+are found, @var{variable} is set to the entire pathname of the found
+program.
 @end defmac
 
 @defmac AC_REPLACE_FUNCS (@var{function-name}@dots{})
