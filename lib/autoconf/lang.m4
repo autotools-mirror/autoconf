@@ -1236,6 +1236,7 @@ $ac_declaration],
                                       [exit (42);])],
                      [break])
 done
+rm -f conftest*
 if test -n "$ac_declaration"; then
   echo '#ifdef __cplusplus' >>confdefs.h
   echo $ac_declaration      >>confdefs.h
@@ -1760,7 +1761,7 @@ ac_f77_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&AS_MESSAGE_LOG_FD
 FFLAGS=$ac_save_FFLAGS
 
-rm -f conftest.*
+rm -f conftest*
 AC_LANG_POP(Fortran 77)dnl
 
 # If we are using xlf then replace all the commas with spaces.
