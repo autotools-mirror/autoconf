@@ -1,5 +1,13 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	Get rid of the ICMDS diversion.
+
+	* acgeneral.m4 (AC_DIVERT): Remove ICMDS.
+	(_AC_OUTPUT_COMMANDS_INIT): New growing string.
+	(_AC_CONFIG_COMMANDS_INIT, _AC_OUTPUT_CONFIG_STATUS): Adjust.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.sh: Use run_m4f, not run_m4.
 
 2000-03-14  Akim Demaille  <akim@epita.fr>

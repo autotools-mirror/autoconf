@@ -107,10 +107,6 @@ m4_namespace_push(autoconf)
 #   AC_REQUIRE'd code, 1 level deep
 # - NORMAL
 #   the tests and output code
-#
-# Finally, this is just a convenience diversions.  Undiverted by hand.
-# - ICMDS
-#   extra initialization in config.status
 
 
 # AC_DIVERT(DIVERSION-NAME)
@@ -140,7 +136,6 @@ define([AC_DIVERT],
          [NORMAL_1],       23,
          [NORMAL],         24,
 
-         [ICMDS],          30,
          [$1])])
 
 
@@ -3266,8 +3261,8 @@ AC_DIVERT_POP()dnl
 ])
 
 
-# _AC_CONFIG_COMMANDS_INIT(INIT-COMMANDS)
-# ---------------------------------------
+# _AC_CONFIG_COMMANDS_INIT([INIT-COMMANDS])
+# -----------------------------------------
 #
 # Register INIT-COMMANDS as command pasted *unquoted* in
 # `config.status'.  This is typically used to pass variables from
@@ -3275,9 +3270,11 @@ AC_DIVERT_POP()dnl
 # was the case in AC_OUTPUT_COMMANDS.
 define(_AC_CONFIG_COMMANDS_INIT,
 [ifval([$1],
-[AC_DIVERT_PUSH([ICMDS])dnl
-$1
-AC_DIVERT_POP()])])
+[m4_append([_AC_OUTPUT_COMMANDS_INIT], [$1
+])])])
+
+# Initialize.
+define([_AC_OUTPUT_COMMANDS_INIT])
 
 
 # AC_CONFIG_COMMANDS(NAME...,[COMMANDS], [INIT-CMDS])
@@ -3755,14 +3752,14 @@ EOF
 ])[]dnl ifval
 
 dnl We output the INIT-CMDS first for obvious reasons :)
-
-cat >>$CONFIG_STATUS <<EOF
+ifset([_AC_OUTPUT_COMMANDS_INIT],
+[cat >>$CONFIG_STATUS <<EOF
 #
 # INIT-COMMANDS section.
 #
 
-undivert(AC_DIVERT([ICMDS]))dnl
-EOF
+_AC_OUTPUT_COMMANDS_INIT()
+EOF])
 
 
 dnl The following three sections are in charge of their own here
