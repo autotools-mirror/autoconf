@@ -1,5 +1,14 @@
 2001-08-15  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (@m4_warning): New.
+	(&handle_m4): Use it.
+	* tests/m4sugar.at (m4_warn): Pass `-f' to autom4te to ensure the
+	warnings are issued at each run.
+	* tests/atspecific.m4 (AT_CHECK_M4SUGAR, AT_CHECK_M4SH): M4sugar
+	is in the src tree.
+
+2001-08-15  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (AT_CHECK_AUTOUPDATE): Perl is now required:
 	don't waste time running `autoupdate --version' works.
 	* tests/tools.at (autoupdating AC_PREREQ): Likewise.

@@ -97,7 +97,7 @@ CLEANFILES = 				\
 	expr					\
 	libtool ltconfig ltmain.sh
 
-DISTCLEANFILES = atconfig testsuite
+DISTCLEANFILES = atconfig testsuite testsuite.log
 
 
 ## ------------------ ##

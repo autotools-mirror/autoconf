@@ -20,6 +20,25 @@ should be removed.
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
 
+** ifnames
+Rewrite in Perl.  Drop the AWK dependency.  Remove the AWK portability
+tests.  Add ifnames to the Perl sanity checks.
+
+** autom4te and warnings.
+Decide what must be done.
+
+** Automake 1.6
+*** AC_LIBOBJ_DECL
+Decide with the Automake team whether this macro should list only `.c'
+files, or it should include the `.h' too.  For instance the
+AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
+the macro which allows to choose a regex engine.
+
+*** Auxiliary files
+It is AC_PROG_LIBTOOL that should tell Automake what are the files to
+ship.  We need something similar to AC_LIBOBJ_DECL for all these
+situations.
+
 
 * Later
 
@@ -97,13 +116,6 @@ user, just the Autoconf library files.  But conversely autoupdate must
 be opened to user macros, i.e., for instance libtool itself must be
 able to say that AM_PROG_LIBTOOL is now AC_PROG_LIBTOOL, and have
 autoupdate do its job on old configure.ac.
-
-** AC_LIBOBJ_DECL
-Decide with the Automake team whether this macro should list only `.c'
-files, or it should include the `.h' too.  For instance the
-AC_FUNC_GNU_GETOPT macro could provide the three files, likewise for
-the macro which allows to choose a regex engine.
-
 
 * Even later
 

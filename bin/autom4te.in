@@ -254,6 +254,9 @@ my %trace;
 my @preselect = ('include', 'm4_pattern_allow', 'm4_pattern_forbid');
 
 my $output = '-';
+
+# Autom4te's default warnings, and the actual list of warnings.
+my @my_warning = ('syntax');
 my @warning;
 
 # M4 include path.
@@ -516,7 +519,8 @@ sub handle_m4 ($@)
   # 2. $WARNINGS, $3 command line options, in that order.
   # Set them in the order expected by the M4 macros: the converse.
   my $m4_warnings =
-    lc join (',', reverse (split (',', ($ENV{'WARNINGS'} || '')),
+    lc join (',', reverse (@my_warning,
+			   split (',', ($ENV{'WARNINGS'} || '')),
 			   map { split /,/ } @warning));
 
   # GNU m4 appends when using --error-output.

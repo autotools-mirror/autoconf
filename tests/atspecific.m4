@@ -28,7 +28,7 @@ changequote()changequote([, ])include(autotest/general.m4)# -*- Autoconf -*-
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
 [AT_CLEANUP_FILES([script.4s script autom4te.cache])dnl
-AT_CHECK([autom4te -I ../lib m4sugar/m4sugar.m4 script.s4g -o script $1],
+AT_CHECK([autom4te -I $top_srcdir/lib m4sugar/m4sugar.m4 script.s4g -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -36,7 +36,7 @@ AT_CHECK([autom4te -I ../lib m4sugar/m4sugar.m4 script.s4g -o script $1],
 # -------------------------------------------------------
 m4_define([AT_CHECK_M4SH],
 [AT_CLEANUP_FILES([script.as script autom4te.cache])dnl
-AT_CHECK([autom4te -I ../lib m4sugar/m4sh.m4 script.as -o script $1],
+AT_CHECK([autom4te -I $top_srcdir/lib m4sugar/m4sh.m4 script.as -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 

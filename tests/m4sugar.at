@@ -38,6 +38,9 @@ AT_SETUP([[m4_warn]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
+# FIXME: For the time being we use -f to make sure we do issue the
+# warnings.  But maybe autom4te should handle that by itself?
+
 AT_DATA([script.s4g],
 [[m4_warn([foo],  [foo])
 m4_warn([bar],    [bar])
@@ -48,17 +51,17 @@ AT_CHECK_M4SUGAR([-o-], 0, [],
 [script.s4g:3: warning: syntax
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wall], 0, [],
+AT_CHECK_M4SUGAR([-o- -Wall -f], 0, [],
 [script.s4g:1: warning: foo
 script.s4g:2: warning: bar
 script.s4g:3: warning: syntax
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,bar], 0, [],
+AT_CHECK_M4SUGAR([-o- -Wnone,bar -f], 0, [],
 [script.s4g:2: warning: bar
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,bar,error], 1, [],
+AT_CHECK_M4SUGAR([-o- -Wnone,bar,error -f], 1, [],
 [script.s4g:2: error: bar
 script.s4g:2: the top level
 ])
