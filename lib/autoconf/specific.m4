@@ -2664,7 +2664,7 @@ else
   if AC_TRY_EVAL(ac_link); then
     for file in conftest.*; do
       case $file in
-      *.c | *.C | *.o | *.obj) ;;
+      *.c | *.C | *.o | *.obj | *.xcoff) ;;
       *) ac_cv_exeext=`echo $file | sed -e s/conftest//` ;;
       esac
     done

@@ -6,6 +6,9 @@
 	script belonging to HP `pwplus' when running the install
 	program. Contributed by Steven G. Johnson <stevenj@alum.mit.edu>
 	and Dave Adams <adams@hpesdwa.fc.hp.com>.
+	(AC_EXEEXT): Do not consider `.xcoff' as a possible executable
+	filename extension. Contributed by Robert S. Maier
+	<rsm@math.arizona.edu>.
 
 1999-03-28  Tom Tromey  <tromey@cygnus.com>
 
