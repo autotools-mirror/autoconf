@@ -117,10 +117,10 @@ fi
 
 # Put the real line numbers into configure to make config.log more helpful.
 awk '
-/__LINE__/ { printf "%d:", NR + 1 }
+/__oline__/ { printf "%d:", NR + 1 }
            { print }
 ' $tmpout | sed '
-/__LINE__/s/^\([0-9][0-9]*\):\(.*\)__LINE__\(.*\)$/\2\1\3/
+/__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__\(.*\)$/\2\1\3/
 '
 
 rm -f $tmpout

@@ -494,7 +494,7 @@ fi
 dnl
 AC_DEFUN(AC_ENABLE,
 [AC_OBSOLETE([$0], [; instead use AC_ARG_ENABLE])dnl
-AC_ARG_ENABLE([$1], [--enable-$1], [$2], [$3])dnl
+AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])dnl
 ])dnl
 dnl
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
@@ -515,7 +515,7 @@ fi
 dnl
 AC_DEFUN(AC_WITH,
 [AC_OBSOLETE([$0], [; instead use AC_ARG_WITH])dnl
-AC_ARG_WITH([$1], [--with-$1], [$2], [$3])dnl
+AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
 ])dnl
 dnl
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
@@ -1121,7 +1121,7 @@ dnl              ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.${ac_ext} <<EOF
-#line __LINE__ "configure"
+[#]line __oline__ "configure"
 #include "confdefs.h"
 [$2]
 EOF
@@ -1152,8 +1152,8 @@ dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_TRY_LINK,
 [cat > conftest.${ac_ext} <<EOF
 dnl This sometimes fails to find confdefs.h, for some reason.
-dnl [#]line __LINE__ "[$]0"
-#line __LINE__ "configure"
+dnl [#]line __oline__ "[$]0"
+[#]line __oline__ "configure"
 #include "confdefs.h"
 ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
@@ -1187,7 +1187,7 @@ $4
 ])
 else
 cat > conftest.${ac_ext} <<EOF
-#line __LINE__ "configure"
+[#]line __oline__ "configure"
 #include "confdefs.h"
 ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
@@ -1209,7 +1209,7 @@ dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.${ac_ext} <<EOF
-#line __LINE__ "configure"
+[#]line __oline__ "configure"
 #include "confdefs.h"
 [$1]
 EOF
