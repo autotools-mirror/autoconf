@@ -366,7 +366,7 @@ AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
    [if echo a | ($GREP -E '(a|b)') >/dev/null 2>&1
    then ac_cv_path_EGREP="$GREP -E"
    else
-     _AC_PROG_GREP(EGREP, egrep, [EGREP$])
+     _AC_PROG_GREP(EGREP, egrep, ['EGREP$'])
    fi])
  EGREP="$ac_cv_path_EGREP"
  AC_SUBST([EGREP])
@@ -381,7 +381,7 @@ AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
    [if echo 'ab*c' | ($GREP -F 'ab*c') >/dev/null 2>&1
    then ac_cv_path_FGREP="$GREP -F"
    else
-     _AC_PROG_GREP(FGREP, fgrep, FGREP)
+     _AC_PROG_GREP(FGREP, fgrep, [FGREP])
    fi])
  FGREP="$ac_cv_path_FGREP"
  AC_SUBST([FGREP])
@@ -393,16 +393,19 @@ AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
 # Check for a fully functional grep program that handles
 # the longest lines possible.  Prefer GNU grep if found.
 AC_DEFUN([AC_PROG_GREP],
-[AC_CACHE_CHECK([for grep that handles long lines], ac_cv_path_GREP,
-   [_$0(GREP, [grep ggrep], [GREP$])])
+[AC_CACHE_CHECK([for grep that handles long lines and -e], ac_cv_path_GREP,
+   [_$0(GREP, [grep ggrep], [-e 'GREP$' -e '-(cannot match)-'])])
  GREP="$ac_cv_path_GREP"
  AC_SUBST([GREP])
 ])
-# _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, MATCH-EXPRESSION)
+# _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, PROG-ARGUMENTS)
 m4_define([_AC_PROG_GREP],
 [_AC_PATH_PROG_FEATURE_CHECK([$1], [$2],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
-		["$ac_path_$1" '$3'], [$1])])
+		["$ac_path_$1" $3], [$1])],
+	dnl Add /usr/xpg4/bin/*grep as it is typically found on Solaris
+	dnl along with a /usr/bin/*grep that lacks -e.
+	[$PATH:/usr/xpg4/bin])
 ])
 
 
@@ -720,7 +723,7 @@ AC_DEFUN([AC_PROG_SED],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
 		["$ac_path_SED" -e 's/a$//'])],
 	dnl Add /usr/xpg4/bin/sed as it is typically found on Solaris
-	dnl along with a /bin/sed that truncates output.
+	dnl along with a /usr/bin/sed that truncates output.
 	[$PATH:/usr/xpg4/bin])])
  SED="$ac_cv_path_SED"
  AC_SUBST([SED])

@@ -192,7 +192,7 @@ m4_define([AT_CONFIGURE_AC],
 # to keep the error message but we can't: that would break AT_CHECK.
 m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
-  grep -E -v -e 'm4_join([|],
+  $GREP -E -v -e 'm4_join([|],
       [^a[cs]_],
       [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
@@ -209,7 +209,7 @@ m4_defun([AC_STATE_SAVE],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.
-  grep '^m4_defn([m4_re_word])=' >state-env.$][1
+  $GREP '^m4_defn([m4_re_word])=' >state-env.$][1
 test $? = 0 || rm -f state-env.$][1
 ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 ])# AC_STATE_SAVE
@@ -219,6 +219,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/config)
 AC_CONFIG_HEADER(config.h:config.hin)
+AC_PROG_GREP
 AC_STATE_SAVE(before)]
 $1
 [AC_OUTPUT

@@ -1,3 +1,31 @@
+2004-05-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Programs): AC_PROG_GREP
+	now prefers 'grep' implementations that accept -e.
+	(Limitations of Usual Tools): Describe problems of traditional
+	egrep and fgrep with long input lines, and of traditional grep
+	with -e.
+	* lib/autoconf/programs.m4 (AC_PROG_GREP): Check for -e, too.
+	(_AC_PROG_GREP): Assume 3rd arg is properly quoted for the shell.
+	All callers changed.  Append /usr/xpg4/bin to the PATH, for
+	Solaris.
+	* tests/local.at (AC_STATE_SAVE): Use $GREP, not grep.
+	Define it with AC_PROG_GREP.
+
+2004-05-02  Eric Sunshine <sunshine@sunshineco.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Consult $SHELL as
+	a possible candidate only after all others fail, rather than
+	consulting it first.  This improves backward compatibility by
+	better reflecting the way shell selection occurred in previous
+	versions of Autoconf, and should help to avoid triggering latent
+	problems in other packages, such as the one in Automake where zsh
+	is not handled robustly:
+	http://mail.gnu.org/archive/html/automake/2004-04/msg00095.html
+	Although it is not Autoconf's responsibility to work around
+	problems in Automake, it nevertheless makes sense to avoid
+	introducing unnecessary incompatibilites.
+
 2004-04-22  Albert Chin-A-Young <china@thewrittenword.com>,
 	    Gary V. Vaughan  <gary@gnu.org>
 

@@ -3239,9 +3239,11 @@ best implementation.
 @acindex{PROG_GREP}
 @ovindex GREP
 On AIX the default @code{grep} silently truncates long lines on the
-input before matching.  This macro looks for @sc{gnu} Grep or
+input before matching.  On Solaris 9 @code{/usr/bin/grep} does not
+understand the @option{-e} option.  This macro looks for @sc{gnu} Grep or
 else the best available @code{grep} or @code{ggrep} in the user's
-@code{$PATH}, which accepts the longest input lines possible.  Set the
+@code{$PATH}, which accepts the longest input lines possible and which
+accepts @option{-e}.  Set the
 output variable @code{GREP} to whatever is chosen.
 @end defmac
 
@@ -11132,7 +11134,8 @@ of Unix.
 @prindex @command{egrep}
 @acronym{POSIX} 1003.1-2001 no longer requires @command{egrep},
 but many older hosts do not yet support the @acronym{POSIX}
-replacement @code{grep -E}.  To work around this problem, invoke
+replacement @code{grep -E}.  Also, some traditional implementations do
+not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
 
 The empty alternative is not portable, use @samp{?} instead.  For
@@ -11253,7 +11256,8 @@ set to @command{expr} or to @command{false} according to the result.
 @prindex @command{fgrep}
 @acronym{POSIX} 1003.1-2001 no longer requires @command{fgrep},
 but many older hosts do not yet support the @acronym{POSIX}
-replacement @code{grep -F}.  To work around this problem, invoke
+replacement @code{grep -F}.  Also, some traditional implementations do
+not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
 
 
@@ -11287,10 +11291,12 @@ redirect the standard output and standard error (in case the file
 doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
 
-Don't use multiple regexps with @option{-e}, as some @code{grep} will only
-honor the last pattern (e.g., @sc{irix} 6.5 and Solaris 2.5.1).  Anyway,
-Stardent Vistra SVR4 @code{grep} lacks @option{-e}@dots{}  Instead, use
-extended regular expressions and alternation.
+Some traditional @command{grep} implementations do not work on long
+input lines.  Also, many implementations do not support multiple regexps
+with @option{-e}: they either reject @samp{-e} entirely (e.g., Solaris
+9) or honor only the the last pattern (e.g., @acronym{IRIX} 6.5).  To
+work around these problems, invoke @code{AC_PROG_GREP} and then use
+@code{$GREP}.
 
 Don't rely on @option{-w}, as Irix 6.5.16m's @command{grep} does not
 support it.
