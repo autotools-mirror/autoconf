@@ -1156,7 +1156,7 @@ sub freeze ($)
 mktmpdir ('am4t');
 load_configuration ($ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg");
 load_configuration ("$ENV{'HOME'}/.autom4te.cfg")
-  if -f "$ENV{'HOME'}/.autom4te.cfg";
+  if exists $ENV{'HOME'} && -f "$ENV{'HOME'}/.autom4te.cfg";
 load_configuration (".autom4te.cfg")
   if -f ".autom4te.cfg";
 parse_args;

@@ -1,5 +1,10 @@
 2003-06-20  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in: Don't rely on $HOME being defined.
+	Reported by Marc Espie as PR/233.
+
+2003-06-20  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4: Use at_times_file only if used.
 	From Nicolas Joly.
 
