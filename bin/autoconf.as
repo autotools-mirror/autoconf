@@ -1,6 +1,6 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003, 2004
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003, 2004, 2005
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -91,9 +91,9 @@ while test $# -gt 0 ; do
 	       "x$1" : 'x-.\(.*\)'`]
   case $1 in
     --version | -V )
-       echo "$version" ; exit 0 ;;
+       echo "$version" ; exit ;;
     --help | -h )
-       echo "$usage"; exit 0 ;;
+       echo "$usage"; exit ;;
 
     --verbose | -v )
        verbose=echo
