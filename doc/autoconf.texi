@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.123
-@set VERSION 1.123
+@set EDITION 1.124
+@set VERSION 1.124
 @set UPDATED October 1994
 
 @iftex
@@ -4205,6 +4205,15 @@ covered by the GNU General Public License.  We still encourage software
 authors to distribute their work under terms like those of the GPL, but
 doing so is not required to use Autoconf.
 
+Of the other files that might be used with @code{configure},
+@file{config.sub} and @file{config.guess} have an exception to the GPL
+when they are used with an Autoconf-generated @code{configure} script,
+which permits you to distribute them under the same terms as the rest of
+your package.  @file{install.sh} is not copyrighted.  @file{config.h.in}
+is under whatever copyright you use for your @file{configure.in}, since
+it is derived from that file and from the public domain file
+@file{acconfig.h}.
+
 @node Why GNU m4, Bootstrapping, Copyright, Questions
 @section Why Require GNU @code{m4}?
 
@@ -4731,9 +4740,11 @@ improvements.  Roland McGrath got it to configure the GNU C Library,
 wrote the @code{autoheader} script to automate the creation of C header
 file templates, and added a @samp{--verbose} option to @code{configure}.
 Noah Friedman added the @samp{--macrodir} option and @code{AC_MACRODIR}
-environment variable.  Roland and Noah improved the quoting protection
-in @code{AC_DEFINE} and fixed many bugs, especially when I got sick of
-dealing with portability problems from February through June, 1993.
+environment variable.  (He also coined the term @dfn{autoconfiscate} to
+mean ``adapt a software package to use Autoconf''.)  Roland and Noah
+improved the quoting protection in @code{AC_DEFINE} and fixed many bugs,
+especially when I got sick of dealing with portability problems from
+February through June, 1993.
 
 @node Deuteronomy, , Numbers, History
 @section Deuteronomy
