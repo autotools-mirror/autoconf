@@ -1,11 +1,17 @@
 2002-05-08  Paul Eggert  <eggert@twinsun.com>
 
+	* lib/autoconf/headers.m4 (AC_HEADER_TIOCGWINSZ):
+	Don't require AC_SYS_POSIX_TERMIOS.  The test is unnecessary,
+	and it causes a 'test' syntax error if it fails.
+	Bug reported by Stephen Gildea.
+	
 	* lib/autoconf/functions.m4 (AC_FUNC_SETVBUF_REVERSED):
 	If prototypes are supported, use them to check this at compile-time,
 	instead of trying to check it at run-time.  If we must do a run-time
 	check, assume that setvbuf is standard when cross-compiling, as
 	nonstandard setvbuf occurs only on ancient and unlikely hosts.
-
+	Bug reported by Paul D. Smith.
+	
 2002-05-03  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (autoreconf): Rewrite to use Gettext's
