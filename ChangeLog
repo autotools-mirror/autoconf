@@ -1,3 +1,10 @@
+2002-05-27  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/types.m4 (AC_TYPE_MBSTATE_T): New macro.
+	* NEWS, doc/autoconf.texi (Particular Types): Document it.
+	* lib/autoconf/functions.m4 (_AC_FUNC_FNMATCH): Require it
+	instead of AC_MBSTATE_T, which never existed.
+
 2002-05-23  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Hosts and Cross-Compilation): Specify the
