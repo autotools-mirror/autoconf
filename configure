@@ -150,7 +150,7 @@ do
   -help | --help | --hel | --he)
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
-    cat << EOF
+    cat << \EOF
 `configure' configures software source code packages to adapt to many
 kinds of systems.
 
@@ -197,7 +197,7 @@ Program names:
                           run sed PROGRAM on installed program names
 
 EOF
-    cat << EOF
+    cat << \EOF
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]

@@ -1,5 +1,10 @@
 1999-09-21  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS, --help message): Use quoted
+	heredocs to avoid problems with quotes.
+
+1999-09-21  Akim Demaille  <akim@epita.fr>
+
 	* NEWS: Updated.
 	* THANKS: Likewise.
 

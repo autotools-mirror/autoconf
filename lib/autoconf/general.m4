@@ -765,10 +765,10 @@ changequote([, ])dnl
   -help | --help | --hel | --he)
     # Omit some internal or obsolete options to make the list less imposing.
     # This message is too long to be a string in the A/UX 3.1 sh.
-    cat << EOF
 changequote(, )dnl
-`configure' configures software source code packages to adapt to many
-kinds of systems.
+    cat << \EOF
+`configure' configures software source code packages to adapt to many kinds
+of systems.
 
 Usage: configure [OPTION]... [VAR=VALUE]... [HOST]
 
@@ -813,7 +813,7 @@ Program names:
                           run sed PROGRAM on installed program names
 
 EOF
-    cat << EOF
+    cat << \EOF
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
@@ -826,8 +826,8 @@ Features and packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --x-includes=DIR        X include files are in DIR
   --x-libraries=DIR       X library files are in DIR
-changequote([, ])dnl
 EOF
+changequote([, ])dnl
     if test -n "$ac_help"; then
       echo "
 --enable and --with options recognized:$ac_help"
