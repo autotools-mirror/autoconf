@@ -157,8 +157,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * M4 Macro Index::              Index of M4, M4sugar, and M4sh macros
 * Concept Index::               General index
 
-@detailmenu
- --- The Detailed Node Listing ---
+@detailmenu --- The Detailed Node Listing ---
 
 The GNU build system
 
@@ -373,6 +372,7 @@ Obsolete Constructs
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
+* Autoconf 2.13::               Some fresher tips
 
 Upgrading From Version 1
 
@@ -381,6 +381,11 @@ Upgrading From Version 1
 * Changed Macros::              Macro calls you might replace
 * Changed Results::             Changes in how to check test results
 * Changed Macro Writing::       Better ways to write your own macros
+
+Upgrading From Version 2.13
+
+* Changed Quotation::           Broken code which used to work
+* New Macros::                  Interaction with foreign macros
 
 Questions About Autoconf
 
@@ -9436,6 +9441,7 @@ understanding how to move to more modern constructs.
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
+* Autoconf 2.13::
 @end menu
 
 @node Obsolete config.status Use, acconfig.h, Obsolete Constructs, Obsolete Constructs
@@ -10372,7 +10378,7 @@ AC_EGREP_CPP(yes,
 @code{AC_DECL_YYTEXT}
 @end defmac
 
-@node Autoconf 1,  , Obsolete Macros, Obsolete Constructs
+@node Autoconf 1, Autoconf 2.13, Obsolete Macros, Obsolete Constructs
 @section Upgrading From Version 1
 
 Autoconf version 2 is mostly backward compatible with version 1.
@@ -10553,6 +10559,154 @@ To speed up your locally written feature tests, add caching to them.
 See whether any of your tests are of general enough usefulness to
 encapsulate into macros that you can share.
 
+
+@node Autoconf 2.13,  , Autoconf 1, Obsolete Constructs
+@section Upgrading From Version 2.13
+
+The introduction of the previous section (@pxref{Autoconf 1}) perfectly
+suits this section...
+
+@quotation
+Autoconf version 2.50 is mostly backward compatible with version 2.13.
+However, it introduces better ways to do some things, and doesn't
+support some of the ugly things in version 2.13.  So, depending on how
+sophisticated your @file{configure.ac} files are, you might have to do
+some manual work in order to upgrade to version 2.50.  This chapter
+points out some problems to watch for when upgrading.  Also, perhaps
+your @code{configure} scripts could benefit from some of the new
+features in version 2.50; the changes are summarized in the file
+@file{NEWS} in the Autoconf distribution.
+@end quotation
+
+@menu
+* Changed Quotation::           Broken code which used to work
+* New Macros::                  Interaction with foreign macros
+@end menu
+
+@node Changed Quotation, New Macros, Autoconf 2.13, Autoconf 2.13
+@subsection Changed Quotation
+
+The most important changes are invisible to you: the implementation of
+most macros have completely changed.  This allowed more factorization of
+the code, better error messages, a higher uniformity of the user's
+interface etc.  Unfortunately, as a side effect, some construct which
+used to (miraculously) work might break starting with Autoconf 2.50.
+The most common culprit is bad quotation.
+
+For instance, in the following example, the message is not properly
+quoted:
+
+@example
+AC_INIT
+AC_CHECK_HEADERS(foo.h,,
+AC_MSG_ERROR(cannot find foo.h, bailing out))
+AC_OUTPUT
+@end example
+
+@noindent
+Autoconf 2.13 simply ignores it:
+
+@example
+$ autoconf-2.13; ./configure --silent
+creating cache ./config.cache
+configure: error: cannot find foo.h
+$
+@end example
+
+@noindent
+while Autoconf 2.50 will produce a broken @file{configure}:
+
+@example
+$ autoconf-2.50; ./configure --silent
+configure: error: cannot find foo.h
+./configure: exit: bad non-numeric arg `bailing'
+./configure: exit: bad non-numeric arg `bailing'
+$
+@end example
+
+The message needs to be quoted, and the @code{AC_MSG_ERROR} invocation
+too!
+
+@example
+AC_INIT
+AC_CHECK_HEADERS(foo.h,,
+                 [AC_MSG_ERROR([cannot find foo.h, bailing out])])
+AC_OUTPUT
+@end example
+
+Many many (and many more) Autoconf macros were lacking proper quotation,
+including no less than... @code{AC_DEFUN} itself!
+
+@example
+$ cat configure.in
+AC_DEFUN([AC_PROG_INSTALL],
+[# My own much better version
+])
+AC_INIT
+AC_PROG_INSTALL
+AC_OUTPUT
+$ autoconf-2.13
+autoconf: Undefined macros:
+***BUG in Autoconf--please report*** AC_FD_MSG
+***BUG in Autoconf--please report*** AC_EPI
+configure.in:1:AC_DEFUN([AC_PROG_INSTALL],
+configure.in:5:AC_PROG_INSTALL
+$ autoconf-2.50
+$
+@end example
+
+
+@node New Macros,  , Changed Quotation, Autoconf 2.13
+@subsection New Macros
+
+@cindex @code{undefined macro: _m4_divert_diversion}
+
+Because Autoconf has been dormant for years, Automake provided
+Autoconf-like macros for a while.  Autoconf 2.50 now provides better
+versions of these macros, integrated in the @code{AC_} namespace,
+instead of @code{AM_}.  But in order to ease the upgrading via
+@command{autoupdate}, bindings to such @code{AM_} macros are provided.
+
+Unfortunately Automake did not quote the name of these macros!
+Therefore, when @command{m4} find in @file{aclocal.m4} something like
+@samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, ...)}, @code{AM_TYPE_PTRDIFF_T} is
+expanded, replaced with its Autoconf definition.
+
+Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and will
+complain, in its own words:
+
+@example
+$ cat configure.in
+AC_INIT
+AM_TYPE_PTRDIFF_T
+$ aclocal-1.4
+$ autoconf
+./aclocal.m4:17: error: m4_defn: undefined macro: _m4_divert_diversion
+actypes.m4:289: AM_TYPE_PTRDIFF_T is expanded from...
+./aclocal.m4:17: the top level
+$
+@end example
+
+Future versions of Automake will simply no longer define most of these
+macros, and will properly quote the names of the remaining macros.
+But you don't have to wait for it to happen to do the right thing right
+now: do not depend upon macros from Automake as it is simply not its job
+to provide macros (but the one it requires by itself):
+
+@example
+$ cat configure.in
+AC_INIT
+AM_TYPE_PTRDIFF_T
+$ rm aclocal.m4
+$ autoupdate
+autoupdate: `configure.in' is updated
+$ cat configure.in
+AC_INIT
+AC_CHECK_TYPES([ptrdiff_t])
+$ aclocal-1.4
+$ autoconf
+$
+@end example
 
 @c ================================================ Questions About Autoconf.
 

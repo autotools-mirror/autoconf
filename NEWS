@@ -7,6 +7,7 @@
   is useful when writing strings that contain unbalanced quotes, or
   other hard-to-quote constructs.
 - m4_pattern_forbid, m4_pattern_allow
+- Tips for upgrading from 2.13.
 
 ** Default includes
 - Now include stdint.h.
@@ -38,6 +39,10 @@
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.
 - AC_FUNC_WAIT3 and AC_SYS_RESTARTABLE_SYSCALLS are obsoleted.
+- AM_FUNC_ERROR_AT_LINE, AM_FUNC_FNMATCH, AM_FUNC_MKTIME,
+  AM_FUNC_OBSTACK, and AM_FUNC_STRTOD are now activated.
+  Be sure to read `Upgrading from Version 2.13' to understand why
+  running `autoupdate' is needed.
 
 * Major changes in Autoconf 2.50
 

@@ -1,5 +1,11 @@
 2001-06-24  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AM_FUNC_ERROR_AT_LINE, AM_FUNC_FNMATCH)
+	(AM_FUNC_MKTIME, AM_FUNC_OBSTACK, AM_FUNC_STRTOD): Reactivated.
+	* doc/autoconf.texi (Autoconf 2.13): New section.
+
+2001-06-24  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in (Task traces): Separate the error messages from the
 	traces to improve robustness.
 
