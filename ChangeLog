@@ -1,3 +1,10 @@
+1998-10-02  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_VALIDATE_CACHED_SYSTEM_TUPLE): New macro. This
+	macro can be used to ensure that a configure script will not run
+	on a second system without removing the cache and re-running
+	configure. Contributed by Alexandre Oliva <oliva@dcc.unicamp.br>.
+
 1998-09-29  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_SEARCH_LIBS): New macro. Searches a series of
