@@ -927,14 +927,14 @@ fi
 ])dnl
 dnl
 define(AC_INT_16_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(int, sizevar)])
+[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(int)])
 AC_CHECKING(integer size)
 AC_TEST_PROGRAM([main() { exit(sizeof(int) != 2); }],
  AC_DEFINE(INT_16_BITS))
 ])dnl
 dnl
 define(AC_LONG_64_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(long, sizevar)])
+[AC_OBSOLETE([$0], [; instead use AC_SIZEOF_TYPE(long)])
 AC_CHECKING(for 64-bit long ints)
 AC_TEST_PROGRAM([main() { exit(sizeof(long int) != 8); }],
  AC_DEFINE(LONG_64_BITS))
