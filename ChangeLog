@@ -1,3 +1,16 @@
+1999-02-22  Stu Grossman  <grossman@cygnus.com>
+
+	* acgeneral.m4 (AC_CANONICAL_SYSTEM): Explicitly require
+	AC_CANONICAL_HOST, AC_CANONICAL_TARGET and AC_CONICAL_BUILD.
+	(AC_CONFIG_AUX_DIR): Run auxillary shell scripts through $SHELL.
+	Do not rely on their magic number.
+	(AC_CANONICAL_THING): New macro. Cache results.
+	(AC_CANONICAL_HOST): Reimplement; use AC_CANONICAL_THING.
+	(AC_CANONICAL_TARGET): Likewise.
+	(AC_CANONICAL_BUILD): Likewise.
+	(AC_OUTPUT): Use $SHELL.
+	(AC_OUTPUT_SUBDIRS): Likewise.
+
 1999-02-19  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Make C code clean for C++ compilers. Contributed

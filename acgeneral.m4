@@ -873,15 +873,18 @@ done
 if test -z "$ac_aux_dir"; then
   AC_MSG_ERROR([can not find install-sh or install.sh in $1])
 fi
-ac_config_guess=$ac_aux_dir/config.guess
-ac_config_sub=$ac_aux_dir/config.sub
-ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
+ac_config_guess="$SHELL $ac_aux_dir/config.guess"
+ac_config_sub="$SHELL $ac_aux_dir/config.sub"
+ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])
 
 dnl Canonicalize the host, target, and build system types.
 AC_DEFUN(AC_CANONICAL_SYSTEM,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_REQUIRE([AC_CANONICAL_TARGET])dnl
+AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_BEFORE([$0], [AC_ARG_PROGRAM])
 # Do some error checking and defaulting for the host and target type.
 # The inputs are:
@@ -903,9 +906,6 @@ NONE---*---* | *---NONE---* | *---*---NONE) ;;
 *) AC_MSG_ERROR(can only configure for one host and one target at a time) ;;
 esac
 
-AC_CANONICAL_HOST
-AC_CANONICAL_TARGET
-AC_CANONICAL_BUILD
 test "$host_alias" != "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
     NONENONEs,x,x, &&
@@ -913,105 +913,73 @@ test "$host_alias" != "$target_alias" &&
 ])
 
 dnl Subroutines of AC_CANONICAL_SYSTEM.
+  
+dnl Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
+dnl `host', `target', or `build'.  Canonicalize the appropriate thing,
+dnl generating the variables THING, THING_{alias cpu vendor os}, and the
+dnl associated cache entries.  We also redo the cache entries if the user 
+dnl specifies something different from ac_cv_$THING_alias on the command line.
 
-AC_DEFUN(AC_CANONICAL_HOST,
+dnl AC_CANONICAL_THING(THING)
+AC_DEFUN(AC_CANONICAL_THING,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+
+ifelse($1, [host], ,AC_REQUIRE([AC_CANONICAL_HOST]))dnl
+AC_MSG_CHECKING([$1 system type])
+if test "x$ac_cv_$1" = "x" || (test "x$$1" != "xNONE" && test "x$$1" != "x$ac_cv_$1_alias"); then
 
 # Make sure we can run config.sub.
-if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
-else AC_MSG_ERROR(can not run $ac_config_sub)
+  if $ac_config_sub sun4 >/dev/null 2>&1; then :
+    else AC_MSG_ERROR(can not run $ac_config_sub)
+  fi
+
+dnl Set $1_alias.
+  ac_cv_$1_alias=$$1
+  case "$ac_cv_$1_alias" in
+  NONE)
+    case $nonopt in
+    NONE)
+ifelse($1, [host],[dnl
+      if ac_cv_$1_alias=`$ac_config_guess`; then :
+      else AC_MSG_ERROR(can not guess $1 type; you must specify one)
+      fi ;;],[dnl
+      ac_cv_$1_alias=$host_alias ;;
+])
+    *) ac_cv_$1_alias=$nonopt ;;
+    esac ;;
+  esac
+
+dnl Set the other $1 vars.
+  ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias`
+  ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
+  ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
+  ac_cv_$1_os=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`
+else
+  echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
 fi
 
-AC_MSG_CHECKING(host system type)
+AC_MSG_RESULT($ac_cv_$1)
 
-dnl Set host_alias.
-host_alias=$host
-case "$host_alias" in
-NONE)
-  case $nonopt in
-  NONE)
-    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
-    else AC_MSG_ERROR(can not guess host type; you must specify one)
-    fi ;;
-  *) host_alias=$nonopt ;;
-  esac ;;
-esac
+$1=$ac_cv_$1
+$1_alias=$ac_cv_$1_alias
+$1_cpu=$ac_cv_$1_cpu
+$1_vendor=$ac_cv_$1_vendor
+$1_os=$ac_cv_$1_os
 
-dnl Set the other host vars.
-changequote(<<, >>)dnl
-host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
-host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-changequote([, ])dnl
-AC_MSG_RESULT($host)
-AC_SUBST(host)dnl
-AC_SUBST(host_alias)dnl
-AC_SUBST(host_cpu)dnl
-AC_SUBST(host_vendor)dnl
-AC_SUBST(host_os)dnl
-])
+AC_SUBST($1)dnl
+AC_SUBST($1_alias)dnl
+AC_SUBST($1_cpu)dnl
+AC_SUBST($1_vendor)dnl
+AC_SUBST($1_os)dnl
+
+AC_PROVIDE([$0])
+])dnl end of AC_CANONICAL_THING
+
+AC_DEFUN(AC_CANONICAL_HOST, [AC_CANONICAL_THING([host])])
 
 dnl Internal use only.
-AC_DEFUN(AC_CANONICAL_TARGET,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_MSG_CHECKING(target system type)
-
-dnl Set target_alias.
-target_alias=$target
-case "$target_alias" in
-NONE)
-  case $nonopt in
-  NONE) target_alias=$host_alias ;;
-  *) target_alias=$nonopt ;;
-  esac ;;
-esac
-
-dnl Set the other target vars.
-changequote(<<, >>)dnl
-target=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $target_alias`
-target_cpu=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-target_vendor=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-changequote([, ])dnl
-AC_MSG_RESULT($target)
-AC_SUBST(target)dnl
-AC_SUBST(target_alias)dnl
-AC_SUBST(target_cpu)dnl
-AC_SUBST(target_vendor)dnl
-AC_SUBST(target_os)dnl
-])
-
-dnl Internal use only.
-AC_DEFUN(AC_CANONICAL_BUILD,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_MSG_CHECKING(build system type)
-
-dnl Set build_alias.
-build_alias=$build
-case "$build_alias" in
-NONE)
-  case $nonopt in
-  NONE) build_alias=$host_alias ;;
-  *) build_alias=$nonopt ;;
-  esac ;;
-esac
-
-dnl Set the other build vars.
-changequote(<<, >>)dnl
-build=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $build_alias`
-build_cpu=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-build_vendor=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-build_os=`echo $build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-changequote([, ])dnl
-AC_MSG_RESULT($build)
-AC_SUBST(build)dnl
-AC_SUBST(build_alias)dnl
-AC_SUBST(build_cpu)dnl
-AC_SUBST(build_vendor)dnl
-AC_SUBST(build_os)dnl
-])
-
+AC_DEFUN(AC_CANONICAL_TARGET, [AC_CANONICAL_THING([target])])
+AC_DEFUN(AC_CANONICAL_BUILD, [AC_CANONICAL_THING([build])])
 
 dnl AC_VALIDATE_CACHED_SYSTEM_TUPLE[(cmd)]
 dnl if the cache file is inconsistent with the current host,
@@ -2149,7 +2117,7 @@ exit 0
 EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
-test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
+test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
 ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])dnl
@@ -2566,7 +2534,7 @@ changequote([, ])dnl
 
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure=$ac_sub_srcdir/configure
+      ac_sub_configure="$SHELL $ac_sub_srcdir/configure"
     elif test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
@@ -2592,9 +2560,9 @@ changequote([, ])dnl
         esac
 ])dnl
 
-      echo "[running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
+      echo "[running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
       # The eval makes quoting arguments work.
-      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
+      if eval $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
       then :
       else
         AC_MSG_ERROR($ac_sub_configure failed for $ac_config_dir)
