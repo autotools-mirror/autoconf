@@ -222,7 +222,7 @@ Running @code{configure} Scripts
 * Basic Installation::          Instructions for typical cases.
 * Compilers and Options::       Selecting compilers and optimization.
 * Build Directory::             Configuring in a different directory.
-* Installation Directories::    Installing in different directories.
+* Installation Names::          Installing in different directories.
 * System Type::                 Specifying the system type.
 * Optional Features::           Selecting optional features.
 
@@ -456,7 +456,7 @@ space between the macro name and the open parentheses.  Arguments can be
 more than one line long if they are enclosed within the @code{m4} quote
 characters @samp{[} and @samp{]}.  Several macros handle two cases: what
 to do if the given condition is met, and what to do if the condition is
-not met.  In some places you you might want to do something if a
+not met.  In some places you might want to do something if a
 condition is true but do nothing if it's false, or vice versa.  To omit
 the true case, pass an empty value for the @var{action-if-found}
 argument to the macro.  To omit the false case, omit the
@@ -1418,7 +1418,7 @@ define @code{VOID_CLOSEDIR}.
 @cvindex HAVE_NDIR_H
 @cvindex HAVE_SYS_DIR_H
 @cvindex HAVE_SYS_NDIR_H
-Check for the the following header files, and for the first one that is
+Check for the following header files, and for the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
 @table @file
@@ -3414,7 +3414,7 @@ given to it.
 @section System Name Variables
 
 After calling @code{AC_CANONICAL_SYSTEM} or @code{AC_CANONICAL_HOST},
-the the shell and @code{make} variables that contain the system type
+the shell and @code{make} variables that contain the system type
 information are:
 
 @table @code
@@ -3678,7 +3678,7 @@ file in the package.
 * Basic Installation::          Instructions for typical cases.
 * Compilers and Options::       Selecting compilers and optimization.
 * Build Directory::             Configuring in a different directory.
-* Installation Directories::    Installing in different directories.
+* Installation Names::          Installing in different directories.
 * System Type::                 Specifying the system type.
 * Optional Features::           Selecting optional features.
 @end menu
