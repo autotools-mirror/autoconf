@@ -68,6 +68,209 @@ AT_CLEANUP
 
 
 
+## ----------------- ##
+## AWK portability.  ##
+## ----------------- ##
+
+AT_SETUP([AWK portability])
+
+AT_DATA([configure.in],
+[[AC_INIT
+]])
+
+if (gawk --version) >/dev/null 2>&1; then
+  # Generation of the script.
+  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir], 0,
+           [], [])
+  # Tracing.
+  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
+           ignore, [])
+  # Syntax correctness of ifnames.
+  AT_CHECK([AWK='gawk --posix' ifnames empty], 0,
+           [], [])
+fi
+
+AT_CLEANUP(configure)
+
+
+
+
+
+
+## ------------------ ##
+## autoconf --trace.  ##
+## ------------------ ##
+
+
+# autoconf --trace: user macros
+# -----------------------------
+AT_SETUP([autoconf --trace: user macros])
+
+AT_DATA(configure.in,
+[[define([active], [ACTIVE])
+AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
+AC_DEFUN([TRACE2], [[$2], $1])
+TRACE1(foo, bar, baz)
+TRACE1(foo, AC_TRACE1(bar, baz))
+TRACE1(foo, active, baz)
+TRACE1(foo, [active], TRACE1(active, [active]))
+]])
+
+# Several --traces.
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
+[[configure.in:4:TRACE1:foo:bar:baz
+configure.in:4:TRACE2:bar:baz
+configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
+configure.in:5:TRACE2:AC_TRACE1(bar, baz)
+configure.in:6:TRACE1:foo:ACTIVE:baz
+configure.in:6:TRACE2:ACTIVE:baz
+configure.in:7:TRACE1:ACTIVE:active
+configure.in:7:TRACE2:active
+configure.in:7:TRACE1:foo:active::ACTIVE
+configure.in:7:TRACE2:active::ACTIVE
+]])
+
+# Several line requests.
+AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
+[$1], [$2], [$3].']], 0,
+[[
+[foo], [bar], [baz].
+
+[foo], [AC_TRACE1(bar, baz)], [].
+
+[foo], [ACTIVE], [baz].
+
+[ACTIVE], [active], [].
+
+[foo], [active], [].
+]])
+
+# ${sep}@.
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
+[[[bar])===([baz]
+[AC_TRACE1(bar, baz)]
+[ACTIVE])===([baz]
+[active]
+[active])===([])===([ACTIVE]
+]])
+
+AT_CLEANUP
+
+
+# autoconf --trace: builtins
+# --------------------------
+AT_SETUP([autoconf --trace: builtins])
+
+AT_DATA(configure.in,
+[[define([active], [ACTIVE])
+]])
+
+AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define |
+            sed -n '$p']],
+         0,
+[[configure.in:1:define:active:ACTIVE
+]])
+
+# FIXME: Without `$1' the following test dies.  Groumphf, once again to
+# dive into obscure feature interaction...
+# Note that using `-i' means we need the *.m4 files, not the *.m4f files,
+# hence we need srcdir, not builddir.
+AT_CHECK([[autoconf --autoconf-dir $top_srcdir -l $at_srcdir -t define:'$1' -i|
+            sed -n '$p']],
+         0,
+[[active
+]])
+
+AT_CLEANUP
+
+
+
+
+## ------------------ ##
+## Forbidden tokens.  ##
+## ------------------ ##
+
+AT_SETUP([Forbidden tokens])
+
+AT_DATA([configure.in],
+[[AC_PLAIN_SCRIPT()dnl
+
+# This is allowed in spite of the name.
+m4_pattern_allow([^AC_ALLOWED$])
+NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
+
+# Test forbidding.
+m4_pattern_forbid([^FORBIDDEN$])
+NOT_FORBIDDEN FORBIDDEN FORBIDDEN_NOT
+
+# Test Autoconf's patterns.
+AC_THIS_IS_INVALID and AZ_THIS_IS_INVALID_TOO
+BUT_AZ_THIS_IS_NOT ALTHOUGH_AC_THIS_IS
+# This is legal, although there is `AC_DEFINE' in there.
+BAC_DEFINE
+# AC_THIS_IS_A_COMMENT so just shut up.
+It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
+[[configure.in:5: error: undefined macro: NOT_AC_ALLOWED
+configure.in:5: error: undefined macro: AC_ALLOWED_NOT
+configure.in:8: error: undefined macro: FORBIDDEN
+configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
+configure.in:12: error: undefined macro: AZ_THIS_IS_INVALID_TOO
+configure.in:13: error: undefined macro: ALTHOUGH_AC_THIS_IS
+configure:16: error: undefined macro: AC_OUTPUT
+]])
+
+AT_CLEANUP(configure)
+
+
+
+
+
+## --------- ##
+## ifnames.  ##
+## --------- ##
+
+AT_SETUP([ifnames])
+
+AT_DATA([iftest1.c],
+[[#ifdef DEF1
+#ifndef DEF2
+#if !defined(DEF3) && defined(DEF4) /* but not defined(DEF5) */
+    # if SPACES
+	#	if	TABS
+/* #if C_COMMENTS */
+// #if CXX_COMMENTS
+#if LINE1 = \
+LINE2
+#if (VAL1*VAL2)==VAL3+VAL4 /* Not VAL5 !!! */
+]])
+
+AT_DATA([iftest2.c],
+[[#ifdef IFTEST2
+#if VAL1
+]])
+
+AT_CHECK([ifnames iftest1.c iftest2.c], 0,
+[DEF1 iftest1.c
+DEF2 iftest1.c
+DEF3 iftest1.c
+DEF4 iftest1.c
+IFTEST2 iftest2.c
+LINE1 iftest1.c
+LINE2 iftest1.c
+SPACES iftest1.c
+TABS iftest1.c
+VAL1 iftest1.c iftest2.c
+VAL2 iftest1.c
+VAL3 iftest1.c
+VAL4 iftest1.c
+], [])
+
+AT_CLEANUP(configure)
+
+
 
 ## ------------ ##
 ## autoheader.  ##
@@ -75,6 +278,7 @@ AT_CLEANUP
 
 # autoheader is intensively used in its modern form throught this
 # test suite.  But we also have to check that acconfig.h still works.
+# autoheader uses autoconf --trace, so traces first.
 
 AT_SETUP([autoheader])
 
@@ -246,207 +450,3 @@ AT_CHECK([echo "AC_PREREQ(999.99)" |
          1, [], [ignore])
 
 AT_CLEANUP
-
-
-
-
-## ------------------ ##
-## autoconf --trace.  ##
-## ------------------ ##
-
-
-# Tracing user defined macros
-# ---------------------------
-AT_SETUP([autoconf --trace])
-
-AT_DATA(configure.in,
-[[define([active], [ACTIVE])
-AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
-AC_DEFUN([TRACE2], [[$2], $1])
-TRACE1(foo, bar, baz)
-TRACE1(foo, AC_TRACE1(bar, baz))
-TRACE1(foo, active, baz)
-TRACE1(foo, [active], TRACE1(active, [active]))
-]])
-
-# Several --traces.
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
-[[configure.in:4:TRACE1:foo:bar:baz
-configure.in:4:TRACE2:bar:baz
-configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
-configure.in:5:TRACE2:AC_TRACE1(bar, baz)
-configure.in:6:TRACE1:foo:ACTIVE:baz
-configure.in:6:TRACE2:ACTIVE:baz
-configure.in:7:TRACE1:ACTIVE:active
-configure.in:7:TRACE2:active
-configure.in:7:TRACE1:foo:active::ACTIVE
-configure.in:7:TRACE2:active::ACTIVE
-]])
-
-# Several line requests.
-AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
-[$1], [$2], [$3].']], 0,
-[[
-[foo], [bar], [baz].
-
-[foo], [AC_TRACE1(bar, baz)], [].
-
-[foo], [ACTIVE], [baz].
-
-[ACTIVE], [active], [].
-
-[foo], [active], [].
-]])
-
-# ${sep}@.
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
-[[[bar])===([baz]
-[AC_TRACE1(bar, baz)]
-[ACTIVE])===([baz]
-[active]
-[active])===([])===([ACTIVE]
-]])
-
-AT_CLEANUP
-
-
-# Tracing builtins
-# ----------------
-AT_SETUP([Tracing M4 builtins])
-
-AT_DATA(configure.in,
-[[define([active], [ACTIVE])
-]])
-
-AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define |
-            sed -n '$p']],
-         0,
-[[configure.in:1:define:active:ACTIVE
-]])
-
-# FIXME: Without `$1' the following test dies.  Groumphf, once again to
-# dive into obscure feature interaction...
-# Note that using `-i' means we need the *.m4 files, not the *.m4f files,
-# hence we need srcdir, not builddir.
-AT_CHECK([[autoconf --autoconf-dir $top_srcdir -l $at_srcdir -t define:'$1' -i|
-            sed -n '$p']],
-         0,
-[[active
-]])
-
-AT_CLEANUP
-
-
-
-
-## ------------------ ##
-## Forbidden tokens.  ##
-## ------------------ ##
-
-AT_SETUP([Forbidden tokens])
-
-AT_DATA([configure.in],
-[[AC_PLAIN_SCRIPT()dnl
-
-# This is allowed in spite of the name.
-m4_pattern_allow([^AC_ALLOWED$])
-NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
-
-# Test forbidding.
-m4_pattern_forbid([^FORBIDDEN$])
-NOT_FORBIDDEN FORBIDDEN FORBIDDEN_NOT
-
-# Test Autoconf's patterns.
-AC_THIS_IS_INVALID and AZ_THIS_IS_INVALID_TOO
-BUT_AZ_THIS_IS_NOT ALTHOUGH_AC_THIS_IS
-# This is legal, although there is `AC_DEFINE' in there.
-BAC_DEFINE
-# AC_THIS_IS_A_COMMENT so just shut up.
-It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
-]])
-
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
-[[configure.in:5: error: undefined macro: NOT_AC_ALLOWED
-configure.in:5: error: undefined macro: AC_ALLOWED_NOT
-configure.in:8: error: undefined macro: FORBIDDEN
-configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
-configure.in:12: error: undefined macro: AZ_THIS_IS_INVALID_TOO
-configure.in:13: error: undefined macro: ALTHOUGH_AC_THIS_IS
-configure:16: error: undefined macro: AC_OUTPUT
-]])
-
-AT_CLEANUP(configure)
-
-
-
-
-
-## ---------------------------- ##
-## autoconf's AWK portability.  ##
-## ---------------------------- ##
-
-AT_SETUP([AWK portability])
-
-AT_DATA([configure.in],
-[[AC_INIT
-]])
-
-if (gawk --version) >/dev/null 2>&1; then
-  # Generation of the script.
-  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir], 0,
-           [], [])
-  # Tracing.
-  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
-           ignore, [])
-  # Syntax correctness of ifnames.
-  AT_CHECK([AWK='gawk --posix' ifnames empty], 0,
-           [], [])
-fi
-
-AT_CLEANUP(configure)
-
-
-
-
-
-## --------- ##
-## ifnames.  ##
-## --------- ##
-
-AT_SETUP([ifnames])
-
-AT_DATA([iftest1.c],
-[[#ifdef DEF1
-#ifndef DEF2
-#if !defined(DEF3) && defined(DEF4) /* but not defined(DEF5) */
-    # if SPACES
-	#	if	TABS
-/* #if C_COMMENTS */
-// #if CXX_COMMENTS
-#if LINE1 = \
-LINE2
-#if (VAL1*VAL2)==VAL3+VAL4 /* Not VAL5 !!! */
-]])
-
-AT_DATA([iftest2.c],
-[[#ifdef IFTEST2
-#if VAL1
-]])
-
-AT_CHECK([ifnames iftest1.c iftest2.c], 0,
-[DEF1 iftest1.c
-DEF2 iftest1.c
-DEF3 iftest1.c
-DEF4 iftest1.c
-IFTEST2 iftest2.c
-LINE1 iftest1.c
-LINE2 iftest1.c
-SPACES iftest1.c
-TABS iftest1.c
-VAL1 iftest1.c iftest2.c
-VAL2 iftest1.c
-VAL3 iftest1.c
-VAL4 iftest1.c
-], [])
-
-AT_CLEANUP(configure)

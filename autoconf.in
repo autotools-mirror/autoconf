@@ -668,7 +668,7 @@ EOF
     # sometimes and `m4_BUILTIN' at others.  We should render a unique name,
     # the one specified by the user.
     base_name=`echo "$macro_name" | sed 's/^m4_//'`
-    if echo "ifdef(\`$base_name', \`', \`m4exit(-1)')" | m4; then
+    if echo "ifdef(\`$base_name', \`', \`m4exit(-1)')" | $M4; then
       # BASE_NAME is a builtin.
       trace_opt="$trace_opt -t $base_name -t m4_$base_name"
       echo "$base_name$trace_format" |

@@ -1,5 +1,13 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (task trace): s/m4/$M4/.
+	* autoheader.sh: When loading trace.sh, catch errors and exit with
+	a decent error message.
+	* tests/tools.at: Be sure to test autoconf --trace before
+	autoheader.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_CHECK): Fix the m4_ifval invocation.
 
 2000-12-06  Akim Demaille  <akim@epita.fr>

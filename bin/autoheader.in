@@ -256,7 +256,13 @@ $2"' \
   $infile >$tmp/traces.sh || { (exit 1); exit; }
 
 $verbose $me: sourcing $tmp/traces.sh >&2
-. $tmp/traces.sh
+if (set -e && . $tmp/traces.sh) >/dev/null 2>&1; then
+  . $tmp/traces.sh
+else
+  echo "$me: error: shell error while sourcing $tmp/trace.sh" >&2
+  (exit 1); exit
+fi
+
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
