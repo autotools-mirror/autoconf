@@ -1,3 +1,8 @@
+Wed Aug 30 17:34:48 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acspecific.m4 (AC_PROG_CC_C_O): If $CC groks it and cc doesn't
+	exist, choose yes.
+
 Wed Jul 26 00:03:26 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Test release 2.4.2.
