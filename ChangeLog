@@ -1,3 +1,8 @@
+2001-02-25  Tim Van Holder <tim.van.holder@pandora.be>
+
+	* autoupdate.in: Support DOS paths.  Initialize $tmp to
+	avoid warnings.  Default $autoconf to 'autoconf'.
+
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
 	* autoupdate.in (&END): Try to preserve the exit status.
@@ -34,7 +39,7 @@
 
 	* autoupdate.in (&parse_args): Support `-'.
 
-	
+
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
 	* autoupdate.in: Less Bournisms, more Wallisms.

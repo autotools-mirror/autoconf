@@ -24,7 +24,7 @@ require 5.005;
 use Getopt::Long;
 use strict;
 
-(my $me = $0) =~ s,.*/,,;
+(my $me = $0) =~ s,.*[\\/],,;
 
 # Lib files.
 my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
@@ -35,7 +35,7 @@ my $localdir = '.';
 my $m4 = $ENV{"M4"} || "@M4@";
 my $verbose = 0;
 my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
-my $tmp;
+my $tmp = '';
 
 
 ## ---------- ##
@@ -205,7 +205,7 @@ sub find_slaves ()
     if system "$m4 --help </dev/null 2>&1 | fgrep reload-state >/dev/null";
 
   # autoconf.
-  (my $dir = $0) =~ s,[^/]*$,,;
+  (my $dir = $0) =~ s,[^\\/]*$,,;
 
   # We test "$dir/autoconf" in case we are in the build tree, in which case
   # the names are not transformed yet.
@@ -220,6 +220,11 @@ sub find_slaves ()
 	  last;
 	}
     }
+
+  # This is needed because perl's '-x' isn't a smart as bash's; that
+  # is, it won't find autoconf.sh.
+  $autoconf = 'autoconf'
+    if !$autoconf;
 }
 
 
