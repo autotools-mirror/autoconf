@@ -62,6 +62,28 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])
 
+
+dnl m4_errprint(MSG)
+dnl ----------------
+dnl Same as `errprint', but reports the file and line.
+define(m4_errprint, [errprint(__file__:__line__: [$1
+])])
+
+
+dnl m4_warn(MSG)
+dnl ------------
+dnl Warn the user.
+define(m4_warn, [m4_errprint([warning: $1])])
+
+
+dnl m4_fatal(MSG, [EXIT-STATUS])
+dnl ----------------------------
+dnl Fatal the user.                                                      :)
+define(m4_fatal,
+[m4_errprint([error: $1])dnl
+m4exit(ifelse([$2],, 1, [$2]))])
+
+
 dnl Some m4 internals have names colliding with tokens we might use.
 dnl Rename them a` la `m4 --prefix-builtins'.
 define([m4_prefix],
@@ -69,10 +91,50 @@ define([m4_prefix],
 undefine([$1])])
 
 m4_prefix([eval])
-m4_prefix([include])
 m4_prefix([shift])
 m4_prefix([format])
 
+
+dnl We also want to neutralize include (and sinclude for symmetry),
+dnl but we want to extend them slightly: warn when a file is included
+dnl several times.  This is in general a dangerous operation because
+dnl quite nobody quotes the first argument of define.
+dnl
+dnl For instance in the following case:
+dnl   define(foo, [bar])
+dnl then a second reading will turn into
+dnl   define(bar, [bar])
+dnl which is certainly not what was meant.
+
+
+dnl m4_include_unique(FILE)
+dnl -----------------------
+dnl Declare that the FILE was loading; and warn if it has already
+dnl been included.
+define(m4_include_unique,
+[ifdef([m4_include($1)],
+       [m4_warn([file `$1' included several times])])dnl
+define([m4_include($1)])])
+
+
+dnl m4_include(FILE)
+dnl ----------------
+dnl As the builtin include, but warns against multiple inclusions.
+define(m4_include,
+[m4_include_unique([$1])dnl
+builtin([include], [$1])])
+
+
+dnl m4_sinclude(FILE)
+dnl -----------------
+dnl As the builtin sinclude, but warns against multiple inclusions.
+define(m4_sinclude,
+[m4_include_unique([$1])dnl
+builtin([sinclude], [$1])])
+
+dnl Neutralize include and sinclude.
+undefine([include])
+undefine([sinclude])
 
 dnl ------------------------------------------------------------
 dnl Text processing in m4.
@@ -575,7 +637,7 @@ define(AC_TR_SH,
 
 
 
-dnl ### Implementing m4 loops
+dnl ### Implementing Autoconf loops
 
 dnl AC_FOREACH(VARIABLE, LIST, EXPRESSION)
 dnl --------------------------------------
@@ -1212,12 +1274,24 @@ AC_DIVERT_POP()dnl to KILL
 ])
 
 
+dnl AC_INCLUDE(FILE)
+dnl ----------------
+dnl Wrapper around m4_include.
+define(AC_INCLUDE,
+[m4_include([$1])])
+
+dnl AC_INCLUDES((FILE, ...))
+dnl ------------------------
+define(AC_INCLUDES,
+[m4_foreach([File], [$1], [AC_INCLUDE(File)])])
+
+
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
 dnl ----------------------------------
 dnl Output the preamble of the `configure' script.
 AC_DEFUN(AC_INIT,
-[sinclude(acsite.m4)dnl
-sinclude(./aclocal.m4)dnl
+[m4_sinclude(acsite.m4)dnl
+m4_sinclude(./aclocal.m4)dnl
 AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 AC_INIT_NOTICE
@@ -1229,14 +1303,6 @@ AC_INIT_PREPARE($1)dnl
 AC_DIVERT_POP()dnl to NORMAL
 ])
 
-dnl AC_INCLUDE(FILES...)
-dnl --------------------
-dnl Note that there is shell expansion, hence AC_INCLUDE(m4/*.m4) is
-dnl legal.
-AC_DEFUN(AC_INCLUDE,
-[ifelse($1, [], [], [dnl
-  esyscmd([for file in $1; do echo "m4_include($file)dnl"; done])dnl
-])])
 
 
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
@@ -1903,18 +1969,11 @@ AC_DIVERT_POP()dnl
 
 dnl ### Printing messages at autoconf runtime
 
-dnl _AC_ERRPRINT(MESSAGE)
-dnl Report the MESSAGE at m4 time, with line and filename.
-define(_AC_ERRPRINT, [errprint(__file__:__line__: [$1
-])])
-
 dnl AC_WARNING(MESSAGE)
-define(AC_WARNING, [_AC_ERRPRINT([warning: $1])])
+define(AC_WARNING, [m4_warn([$1])])
 
-dnl AC_FATAL(MESSAGE [, EXIT-STATUS])
-define(AC_FATAL,
-[_AC_ERRPRINT([error: $1])
-m4exit(ifdef([$2], [$2], 1))])
+dnl AC_FATAL(MESSAGE, [EXIT-STATUS])
+define(AC_FATAL, [m4_fatal([$1], [$2])])
 
 
 dnl ### Printing messages at configure runtime
@@ -2134,7 +2193,7 @@ dnl                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
 dnl                 [INCLUDES])
 dnl --------------------------------------------------------
 dnl The first argument is an m4 list.  First because we want to
-dnl promote m4 list, and second because anyway there can be spaces
+dnl promote m4 lists, and second because anyway there can be spaces
 dnl in some types (struct etc.).
 AC_DEFUN(AC_CHECK_MEMBERS,
 [m4_foreach([AC_Member], [$1],
@@ -2697,9 +2756,9 @@ rm -f conftest*
 dnl ### Checking for run-time features
 
 
-dnl AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE
-dnl            [, ACTION-IF-CROSS-COMPILING]]])
-dnl ------------------------------------------------------
+dnl AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE],
+dnl            [ACTION-IF-CROSS-COMPILING])
+dnl --------------------------------------------------------
 AC_DEFUN(AC_TRY_RUN,
 [if test "$cross_compiling" = yes; then
   ifelse([$4], ,
@@ -2712,8 +2771,8 @@ fi
 ])
 
 
-dnl AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
-dnl ----------------------------------------------------------------
+dnl AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+dnl ---------------------------------------------------------------
 dnl Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF

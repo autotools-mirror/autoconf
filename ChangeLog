@@ -1,3 +1,18 @@
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
+	New version of AC_INCLUDE, which does not glob, nor rely upon the
+	shell.  Add AC_INCLUDES too.  Help tracking multiple inclusions.
+
+	* acgeneral.m4 (m4_errprint, m4_warn, m4_fatal): New macros,
+	variations around errprint.
+	(m4_include_unique): New macro which registers what are the files
+	already included, and warns if some are included several times.
+	(m4_include, m4_sinclude): New macro, using m4_include_unique.
+	(AC_INCLUDE): Is now just a wrapper of m4_include.
+	(AC_INIT): Use m4_sinclude, not sinclude.
+	(_AC_ERRPRINT): Removed, m4_errprint is here!
+	(AC_WARNING, AC_FATAL): Wrappers of m4_warn and m4_fatal.
+
 1999-11-01  Akim Demaille  <akim@epita.fr>
 
 	* autoheader.sh: No longer rely on a system acconfig.h.
