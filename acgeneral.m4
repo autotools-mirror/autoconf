@@ -353,7 +353,7 @@ m4_define([AH_OUTPUT], [])
 # output as is, with no formating.
 m4_define([AH_VERBATIM],
 [AC_VAR_INDIR_IFELSE([$1],,
-                     [AH_OUTPUT([$1], _AC_SH_QUOTE([[$2]]))])
+                     [AH_OUTPUT([$1], _AS_QUOTE([[$2]]))])
 ])
 
 
@@ -781,10 +781,11 @@ AS_UNSET([CDPATH], [:])
 # ---------------------
 # Set up the file descriptors used by `configure'.
 
-m4_define([AC_FD_MSG], 6)
-m4_define([AC_FD_LOG], 5)
-# That's how it used to be named.
-AU_ALIAS([AC_FD_CC], [AC_FD_LOG])
+m4_define([AS_MESSAGE_FD], 6)
+m4_define([AS_MESSAGE_LOG_FD], 5)
+# That's how trey used to be named.
+AU_ALIAS([AC_FD_CC],  [AS_MESSAGE_LOG_FD])
+AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 
 m4_define([_AC_INIT_DEFAULTS_FDS],
 [# File descriptor usage:
@@ -793,14 +794,14 @@ m4_define([_AC_INIT_DEFAULTS_FDS],
 # 2 errors and warnings
 # 3 some systems may open it to /dev/tty
 # 4 used on the Kubota Titan
-@%:@ AC_FD_MSG checking for... messages and results
-@%:@ AC_FD_LOG compiler messages saved in config.log
+@%:@ AS_MESSAGE_FD checking for... messages and results
+@%:@ AS_MESSAGE_LOG_FD compiler messages saved in config.log
 if test "$silent" = yes; then
-  exec AC_FD_MSG>/dev/null
+  exec AS_MESSAGE_FD>/dev/null
 else
-  exec AC_FD_MSG>&1
+  exec AS_MESSAGE_FD>&1
 fi
-exec AC_FD_LOG>>config.log
+exec AS_MESSAGE_LOG_FD>>config.log
 ])# _AC_INIT_DEFAULTS_FDS
 
 
@@ -1539,8 +1540,8 @@ done
 # config.log.
 trap 'exit_status=$?
   test "$ac_signal" != 0 &&
-    echo "$as_me: caught signal $ac_signal" >&AC_FD_LOG
-  echo "$as_me: exit $exit_status" >&AC_FD_LOG
+    echo "$as_me: caught signal $ac_signal" >&AS_MESSAGE_LOG_FD
+  echo "$as_me: exit $exit_status" >&AS_MESSAGE_LOG_FD
   rm -rf conftest* confdefs* core core.* *.core $ac_clean_files &&
     exit $exit_status
      ' 0
@@ -2082,7 +2083,7 @@ m4_define([AC_CACHE_VAL],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AC_VAR_SET_IFELSE([$1],
-                  [echo $ECHO_N "(cached) $ECHO_C" >&AC_FD_MSG],
+                  [echo $ECHO_N "(cached) $ECHO_C" >&AS_MESSAGE_FD],
                   [$2])])
 
 
@@ -2223,70 +2224,18 @@ m4_define([AC_FATAL],
 ## ---------------------------------------- ##
 
 
-# _AC_SH_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
-# ------------------------------------------------------------------
-# Compatibility glue between the old AC_MSG suite which did not
-# quote anything, and the modern suite which quotes the quotes.
-# If STRING contains `\\' or `\$', it's modern.
-# If STRING contains `\"' or `\`', it's old.
-# Otherwise it's modern.
-# We use two quotes in the pattern to keep highlighting tools at peace.
-m4_define([_AC_SH_QUOTE_IFELSE],
-[ifelse(m4_regexp([$1], [\\[\\$]]),
-        [-1], [ifelse(m4_regexp([$1], [\\[`""]]),
-                      [-1], [$2],
-                      [$3])],
-        [$2])])
-
-
-# _AC_SH_QUOTE(STRING)
-# --------------------
-# If there are quoted (via backslash) backquotes do nothing, else
-# backslash all the quotes.
-# FIXME: In a distant future (2.51 or +), this warning should be
-# classified as `syntax'.  It is claissified as `obsolete' to ease
-# the transition (for Libtool for instance).
-m4_define([_AC_SH_QUOTE],
-[_AC_SH_QUOTE_IFELSE([$1],
-                     [m4_patsubst([$1], [\([`""]\)], [\\\1])],
-                     [AC_DIAGNOSE([obsolete],
-           [backquotes and double quotes should not be backslashed in: $1])dnl
-$1])])
-
-
-# _AC_ECHO_UNQUOTED(STRING, [FD = AC_FD_MSG])
-# -------------------------------------------
-# Perform shell expansions on STRING and echo the string to FD.
-m4_define([_AC_ECHO_UNQUOTED],
-[echo "$1" >&m4_default([$2], [AC_FD_MSG])])
-
-
-# _AC_ECHO(STRING, [FD = AC_FD_MSG])
-# ----------------------------------
-# Protect STRING from backquote expansion, echo the result to FD.
-m4_define([_AC_ECHO],
-[_AC_ECHO_UNQUOTED([_AC_SH_QUOTE([$1])], $2)])
-
-
-# _AC_ECHO_N(STRING, [FD = AC_FD_MSG])
+# _AC_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
 # ------------------------------------
-# Same as _AC_ECHO, but echo doesn't return to a new line.
+# Same as _AS_ECHO, but echo doesn't return to a new line.
 m4_define([_AC_ECHO_N],
-[echo $ECHO_N "_AC_SH_QUOTE([$1])$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
-
-
-# AC_MSG_NOTICE(STRING)
-# ---------------------
-m4_define([AC_MSG_NOTICE],
-[_AC_ECHO([$as_me:__oline__: notice: $1], AC_FD_LOG)
-_AC_ECHO([$1])[]dnl
-])
+[echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
+                                                    [AS_MESSAGE_FD])])
 
 
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
-[_AC_ECHO([$as_me:__oline__: checking $1], AC_FD_LOG)
+[_AS_ECHO([$as_me:__oline__: checking $1], AS_MESSAGE_LOG_FD)
 _AC_ECHO_N([checking $1... ])[]dnl
 ])
 
@@ -2294,8 +2243,8 @@ _AC_ECHO_N([checking $1... ])[]dnl
 # AC_MSG_RESULT(RESULT)
 # ---------------------
 m4_define([AC_MSG_RESULT],
-[_AC_ECHO([$as_me:__oline__: result: $1], AC_FD_LOG)
-_AC_ECHO([${ECHO_T}$1])[]dnl
+[_AS_ECHO([$as_me:__oline__: result: $1], AS_MESSAGE_LOG_FD)
+_AS_ECHO([${ECHO_T}$1])[]dnl
 ])
 
 
@@ -2303,30 +2252,24 @@ _AC_ECHO([${ECHO_T}$1])[]dnl
 # ------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
 m4_define([AC_MSG_RESULT_UNQUOTED],
-[_AC_ECHO_UNQUOTED([$as_me:__oline__: result: $1], AC_FD_LOG)
-_AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
+[_AS_ECHO_UNQUOTED([$as_me:__oline__: result: $1], AS_MESSAGE_LOG_FD)
+_AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
 
 
 # AC_MSG_WARN(PROBLEM)
-# --------------------
-m4_define([AC_MSG_WARN],
-[{ _AC_ECHO([$as_me:__oline__: WARNING: $1], AC_FD_LOG)
-_AC_ECHO([$as_me: WARNING: $1], 2); }])
-
-
+# AC_MSG_NOTICE(STRING)
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
-m4_define([AC_MSG_ERROR],
-[{ _AC_ECHO([$as_me:__oline__: error: $1], AC_FD_LOG)
-  _AC_ECHO([$as_me: error: $1], 2)
-  AS_EXIT([$2]); }])
+m4_define([AC_MSG_WARN],   [AS_WARN($@)])
+m4_define([AC_MSG_NOTICE], [AS_MESSAGE($@)])
+m4_define([AC_MSG_ERROR],  [AS_ERROR($@)])
 
 
 # AU::AC_CHECKING(FEATURE)
 # ------------------------
 AU_DEFUN([AC_CHECKING],
-[AC_MSG_NOTICE([checking $1...])])
+[AS_MESSAGE([checking $1...])])
 
 
 # AU::AC_VERBOSE(STRING)
@@ -2348,8 +2291,8 @@ AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
 AC_DEFUN([AC_TRY_EVAL],
-[{ (eval echo $as_me:__oline__: \"[$]$1\") >&AC_FD_LOG; dnl
-(eval [$]$1) 2>&AC_FD_LOG; }])
+[{ (eval echo $as_me:__oline__: \"[$]$1\") >&AS_MESSAGE_LOG_FD; dnl
+(eval [$]$1) 2>&AS_MESSAGE_LOG_FD; }])
 
 
 # AC_TRY_COMMAND(COMMAND)
@@ -2700,7 +2643,7 @@ AC_DEFUN([AC_PREFIX_PROGRAM],
 m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-  echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
+  echo $ECHO_N "checking for prefix by $ECHO_C" >&AS_MESSAGE_FD
   AC_PATH_PROG(m4_quote(AC_Prog), [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
     prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
@@ -2860,9 +2803,9 @@ _AC_TRY_CPP()
 if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
-  cat conftest.err >&AC_FD_LOG
-  echo "$as_me: failed program was:" >&AC_FD_LOG
-  cat conftest.$ac_ext >&AC_FD_LOG
+  cat conftest.err >&AS_MESSAGE_LOG_FD
+  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
   $3
 fi
 rm -f conftest*
@@ -2888,7 +2831,7 @@ AC_DEFUN([AC_EGREP_CPP],
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
-if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_LOG |
+if (eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
 dnl Quote $1 to prevent m4 from eating character classes
   egrep "[$1]" >/dev/null 2>&1; then
   m4_default([$3], :)
@@ -2915,8 +2858,8 @@ rm -f conftest.$ac_objext
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
-  echo "$as_me: failed program was:" >&AC_FD_LOG
-  cat conftest.$ac_ext >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvanl([$3],[  $3])dnl
 fi
 rm -f conftest.$ac_objext ifval([$1], [conftest.$ac_ext])[]dnl
@@ -2956,8 +2899,8 @@ rm -f conftest.$ac_objext conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
-  echo "$as_me: failed program was:" >&AC_FD_LOG
-  cat conftest.$ac_ext >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvanl([$3], [  $3])dnl
 fi
 rm -f conftest$ac_exeext ifval([$1], [conftest.$ac_ext])[]dnl
@@ -3015,8 +2958,8 @@ if AC_TRY_EVAL(ac_link) &&
    test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
-  echo "$as_me: failed program was:" >&AC_FD_LOG
-  cat conftest.$ac_ext >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvanl([$3], [  $3])dnl
 fi
 rm -f conftest$ac_exeext ifval([$1], [conftest.$ac_ext])[]dnl
@@ -3910,12 +3853,12 @@ dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
 # Save into config.log some information that might help in debugging.
-echo >&AC_FD_LOG
-echo "Cache variables:" >&AC_FD_LOG
-_AC_CACHE_DUMP | sed 's/^/| /' >&AC_FD_LOG
-echo >&AC_FD_LOG
-echo "confdefs.h:" >&AC_FD_LOG
-sed '/^$/d;s/^/| /' confdefs.h >&AC_FD_LOG
+echo >&AS_MESSAGE_LOG_FD
+echo "Cache variables:" >&AS_MESSAGE_LOG_FD
+_AC_CACHE_DUMP | sed 's/^/| /' >&AS_MESSAGE_LOG_FD
+echo >&AS_MESSAGE_LOG_FD
+echo "confdefs.h:" >&AS_MESSAGE_LOG_FD
+sed '/^$/d;s/^/| /' confdefs.h >&AS_MESSAGE_LOG_FD
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -3952,7 +3895,7 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 
 _AC_INIT_DEFAULTS_ENVIRONMENT
 _AC_INIT_DEFAULTS_FDS
-cat >&AC_FD_LOG << EOF
+cat >&AS_MESSAGE_LOG_FD << EOF
 
 ----------------------------------------------------------------------
 

@@ -174,8 +174,8 @@ m4_define([_AC_LANG_ABBREV],
 m4_define([AC_LANG(C)],
 [ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -201,8 +201,8 @@ m4_define([_AC_LANG_ABBREV(C)], [c])
 m4_define([AC_LANG(C++)],
 [ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -226,8 +226,8 @@ m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 # -------------------
 m4_define([AC_LANG(Fortran 77)],
 [ac_ext=f
-ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 ])
 
@@ -794,15 +794,15 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
+ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
 if AC_TRY_EVAL(ac_try) &&
    test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AC_FD_LOG); then
-      ac_try='cc -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
+    if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AS_MESSAGE_LOG_FD); then
+      ac_try='cc -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
       if AC_TRY_EVAL(ac_try) &&
 	 test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
       then
@@ -1048,7 +1048,7 @@ AC_CACHE_CHECK([whether $F77 understand -c and -o together],
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
-ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
+ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
 if AC_TRY_EVAL(ac_try) && test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try); then
   ac_cv_prog_f77_c_o=yes
 else
@@ -1427,9 +1427,9 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # Fortran 77 linker flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS m4_default([$1], [$ac_cv_prog_f77_v])"
-(eval echo $as_me:__oline__: \"$ac_link\") >&AC_FD_LOG
-ac_f77_v_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
-echo "$ac_f77_v_output" >&AC_FD_LOG
+(eval echo $as_me:__oline__: \"$ac_link\") >&AS_MESSAGE_LOG_FD
+ac_f77_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 | grep -v 'Driving:'`
+echo "$ac_f77_v_output" >&AS_MESSAGE_LOG_FD
 FFLAGS=$ac_save_FFLAGS
 
 rm -f conftest.*

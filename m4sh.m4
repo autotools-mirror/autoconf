@@ -118,8 +118,93 @@ m4_define([AS_EXIT],
 
 
 
+## ------------------------------------------ ##
+## 2. Error and warnings at the shell level.  ##
+## ------------------------------------------ ##
+
+# If AS_MESSAGE_LOG_FD is defined, shell messages are duplicated there
+# too.
+
+
+# _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
+# ---------------------------------------------------------------
+# Compatibility glue between the old AS_MSG suite which did not
+# quote anything, and the modern suite which quotes the quotes.
+# If STRING contains `\\' or `\$', it's modern.
+# If STRING contains `\"' or `\`', it's old.
+# Otherwise it's modern.
+# We use two quotes in the pattern to keep highlighting tools at peace.
+m4_define([_AS_QUOTE_IFELSE],
+[ifelse(m4_regexp([$1], [\\[\\$]]),
+        [-1], [ifelse(m4_regexp([$1], [\\[`""]]),
+                      [-1], [$2],
+                      [$3])],
+        [$2])])
+
+
+# _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
+# ---------------------------------------------------
+# Perform shell expansions on STRING and echo the string to FD.
+m4_define([_AS_ECHO_UNQUOTED],
+[echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
+
+
+# _AS_QUOTE(STRING)
+# -----------------
+# If there are quoted (via backslash) backquotes do nothing, else
+# backslash all the quotes.
+# FIXME: In a distant future (2.51 or +), this warning should be
+# classified as `syntax'.  It is classified as `obsolete' to ease
+# the transition (for Libtool for instance).
+m4_define([_AS_QUOTE],
+[_AS_QUOTE_IFELSE([$1],
+                  [m4_patsubst([$1], [\([`""]\)], [\\\1])],
+                  [m4_warn([obsolete],
+           [back quotes and double quotes should not be escaped in: $1])dnl
+$1])])
+
+
+# _AS_ECHO(STRING, [FD = AS_FD_MSG])
+# ----------------------------------
+# Protect STRING from backquote expansion, echo the result to FD.
+m4_define([_AS_ECHO],
+[_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], $2)])
+
+
+# AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
+# --------------------------------------------
+m4_define([AS_MESSAGE],
+[ifset([AS_MESSAGE_LOG_FD],
+       [{ _AS_ECHO([$as_me:__oline__: $1], [AS_MESSAGE_LOG_FD])
+_AS_ECHO($@);}],
+       [_AS_ECHO($@)])[]dnl
+])
+
+
+# AS_WARN(PROBLEM)
+# ----------------
+m4_define([AS_WARN],
+[ifset([AS_MESSAGE_LOG_FD],
+       [{ _AS_ECHO([$as_me:__oline__: WARNING: $1], [AS_MESSAGE_LOG_FD])
+_AS_ECHO([$as_me: warning: $1], 2); }],
+       [_AS_ECHO([$as_me: warning: $1], 2)])[]dnl
+])# AS_WARN
+
+
+# AS_ERROR(ERROR, [EXIT-STATUS = 1])
+# ----------------------------------
+m4_define([AS_ERROR],
+[{ifset([AC_LOG_FD],
+        [_AS_ECHO([$as_me:__oline__: error: $1], [AS_MESSAGE_LOG_FD])
+])[]dnl
+  _AS_ECHO([$as_me: error: $1], 2)
+  AS_EXIT([$2]); }[]dnl
+])# AS_ERROR
+
+
+
 ## ------------------------------------------- ##
-## 2. Portable versions of common file utils.  ##
+## 3. Portable versions of common file utils.  ##
 ## ------------------------------------------- ##
 
 # This section is lexicographically sorted.
@@ -174,7 +259,7 @@ AS_DIRNAME_SED([$1])])
 
 
 ## ------------------ ##
-## 3. Common idioms.  ##
+## 4. Common idioms.  ##
 ## ------------------ ##
 
 # This section is lexicographically sorted.

@@ -1,5 +1,18 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	Move AC_MSG_* into M4sh.
+
+	* acgeneral.m4 (_AC_SH_QUOTE, _AC_SH_QUOTE_IFELSE, _AC_ECHO): Move
+	to...
+	* m4sh.m4 (_AS_QUOTE, _AS_QUOTE_IFELSE, _AS_ECHO): here.
+	(AS_MESSAGE, AS_WARN, AS_ERROR): New.
+	* acgeneral.m4 (AC_MSG_NOTICE, AC_MSG_WARN, AC_MSG_ERROR): Use them.
+	(AC_FD_MSG, AC_FD_LOG): Be AU_ALIAS'es of...
+	(AS_MESSAGE_FD, AS_MESSAGE_LOG_FD): new.
+	Adjust all dependencies.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Spread some AS_EXIT and AC_MSG_ERROR.
 	(AC_OUTPUT): Don't play with trap, use ac_clean_files.
 
