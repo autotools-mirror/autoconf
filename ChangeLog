@@ -70,7 +70,7 @@
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Fix copy n' paste typos in
 	`--with-*', `--without-*' and `*' decoding.
 	Reported by Raja R Harinath.
-	Fixes autoconf/119.
+	Fixes autoconf/118.
 
 2000-03-08  Akim Demaille  <akim@epita.fr>
 

@@ -169,7 +169,7 @@ install-am: all-am
 install: install-am
 uninstall-am:
 uninstall: uninstall-am
-all-am: Makefile all-local
+all-am: Makefile
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
@@ -208,12 +208,10 @@ maintainer-clean: maintainer-clean-am
 .PHONY: tags distdir info-am info dvi-am dvi check-local check check-am \
 installcheck-am installcheck install-exec-am install-exec \
 install-data-am install-data install-am install uninstall-am uninstall \
-all-local all-redirect all-am all installdirs mostlyclean-generic \
+all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
-
-all-local: atconfig testsuite
 
 check-local: atconfig testsuite
 	$(SHELL) testsuite
