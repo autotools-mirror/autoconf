@@ -244,12 +244,15 @@ AT_CLEANUP
 ## autoconf --trace.  ##
 ## ------------------ ##
 
+
+# Tracing user defined macros
+# ---------------------------
 AT_SETUP(autoconf --trace)
 
 AT_DATA(configure.in,
-[[define(active, ACTIVE)
-AC_DEFUN(TRACE1, [TRACE2(m4_shift($@))])
-AC_DEFUN(TRACE2, [[$2], $1])
+[[define([active], [ACTIVE])
+AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
+AC_DEFUN([TRACE2], [[$2], $1])
 TRACE1(foo, bar, baz)
 TRACE1(foo, AC_TRACE1(bar, baz))
 TRACE1(foo, active, baz)
@@ -292,6 +295,31 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
 [ACTIVE])===([baz]
 [active]
 [active])===([])===([ACTIVE]
+]])
+
+AT_CLEANUP
+
+
+# Tracing builtins
+# ----------------
+AT_SETUP(Tracing M4 builtins)
+
+AT_DATA(configure.in,
+[[define([active], [ACTIVE])
+]])
+
+AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define |
+            sed -n '$p']],
+         0,
+[[configure.in:1:define:active:ACTIVE
+]])
+
+# FIXME: Without `$1' the following test dies.  Groumphf, once again to
+# dive into obscure feature interaction...
+AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define:'$1' -i |
+            sed -n '$p']],
+         0,
+[[active
 ]])
 
 AT_CLEANUP

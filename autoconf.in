@@ -570,7 +570,14 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     macro_name=`echo "$trace" | sed 's/:.*//;q'`
-    trace_format=`echo "$trace" | sed '1s/^[^:]*:/:/'`
+    # If for instance TRACE is `define', be sure to have an empty
+    # TRACE_FORMAT.
+    case $trace in
+      $macro_name:* )
+         trace_format=`echo "$trace" | sed "1s/^$macro_name:/:/"`;;
+      * )
+         trace_format=;;
+    esac
 
     # GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
     #
