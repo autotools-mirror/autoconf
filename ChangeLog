@@ -1,3 +1,11 @@
+2003-05-23  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/Autom4te/General.pm (END): Rewrite exit code processing.
+	Do not call `_exit()', simply modify `$?'.
+	(xsystem): Reset $! before running system, and check it afterward.
+	* tests/tools.at (autoupdating AC_PREREQ): Expect exit status
+	63 for version mismatches.
+
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4: Prefer "TAB-SP" to "SP-TAB", because of
@@ -5,7 +13,7 @@
 	the middle of a line).
 	* lib/m4sugar/m4sugar.m4: Likewise.
 	Remove useless spaces in comments.
-	
+
 2003-05-23  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sugar.m4 (m4_version_prereq): Failure causes an

@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -89,34 +89,59 @@ sub verbose (@);
 
 # END
 # ---
-# Exit nonzero whenever closing STDOUT fails.
-# Ideally we should `exit ($? >> 8)', unfortunately, for some reason
-# I don't understand, whenever we `exit (1)' somewhere in the code,
-# we arrive here with `$? = 29'.  I suspect some low level END routine
-# might be responsible.  In this case, be sure to exit 1, not 29.
+# Filter Perl's exit codes, delete any temporary directory, and exit
+# nonzero whenever closing STDOUT fails.
 sub END
 {
-  my $exit_status = $? ? 1 : 0;
-
-  use POSIX qw (_exit);
+  # $? contains the exit status we will return.
+  # It was set using one of the following ways:
+  #
+  #  1) normal termination
+  #     this sets $? = 0
+  #  2) calling `exit (n)'
+  #     this sets $? = n
+  #  3) calling die or friends (croak, confess...):
+  #     a) when $! is non-0
+  #        this set $? = $!
+  #     b) when $! is 0 but $? is not
+  #        this sets $? = ($? >> 8)   (i.e., the exit code of the
+  #        last program executed)
+  #     c) when both $! and $? are 0
+  #        this sets $? = 255
+  #
+  # Cases 1), 2), and 3b) are fine, but we prefer $? = 1 for 3a) and 3c).
+  $? = 1 if ($! && $! == $?) || $? == 255;
+  # (Note that we cannot safely distinguish calls to `exit (n)'
+  # from calls to die when `$! = n'.  It's not big deal because
+  # we only call `exit (0)' or `exit (1)'.)
 
   if (!$debug && defined $tmp && -d $tmp)
     {
       if (<$tmp/*>)
 	{
-	  unlink <$tmp/*>
-	    or carp ("$me: cannot empty $tmp: $!\n"), _exit (1);
+	  if (! unlink <$tmp/*>)
+	    {
+	      print "$me: cannot empty $tmp: $!\n";
+	      $? = 1;
+	      return;
+	    }
 	}
-      rmdir $tmp
-	or carp ("$me: cannot remove $tmp: $!\n"), _exit (1);
+      if (! rmdir $tmp)
+	{
+	  print "$me: cannot remove $tmp: $!\n";
+	  $? = 1;
+	  return;
+	}
     }
 
   # This is required if the code might send any output to stdout
   # E.g., even --version or --help.  So it's best to do it unconditionally.
-  close STDOUT
-    or (carp "$me: closing standard output: $!\n"), _exit (1);
-
-  _exit ($exit_status);
+  if (! close STDOUT)
+    {
+      print "$me: closing standard output: $!\n";
+      $? = 1;
+      return;
+    }
 }
 
 
@@ -495,10 +520,20 @@ sub xsystem ($)
 
   verbose "running: $command";
 
-  (system $command) == 0
-    or error ((split (' ', $command))[0]
-	      . " failed with exit status: "
-	      . WEXITSTATUS ($?));
+  $! = 0;
+
+  if (system $command)
+  {
+    $command = (split (' ', $command))[0];
+    if ($!)
+      {
+	error "failed to run $command: $!";
+      }
+    else
+      {
+	error "$command failed with exit status: " . WEXITSTATUS ($?);
+      }
+  }
 }
 
 

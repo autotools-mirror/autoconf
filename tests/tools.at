@@ -599,6 +599,6 @@ AT_CHECK([echo "AC_PREREQ($autoupdate_version)" | autoupdate -],
 	 0, [expout], [])
 
 AT_CHECK([echo "AC_PREREQ(999.99)" | autoupdate -],
-	 1, [], [ignore])
+	 63, [], [ignore])
 
 AT_CLEANUP
