@@ -29,7 +29,10 @@ PS2='> '
 PS4='+ '
 
 # NLS nuisances.
-for as_var in LANG LANGUAGE LC_ALL LC_COLLATE LC_CTYPE LC_NUMERIC LC_MESSAGES LC_TIME
+for as_var in \
+  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
+  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
+  LC_TELEPHONE LC_TIME
 do
   if (set +x; test -n "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
