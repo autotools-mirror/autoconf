@@ -10,22 +10,12 @@ these suggestions... their presence here doesn't imply my endorsement.
 * Autoconf 2.50
 
 ** AC_INIT(PACKAGE)
-Decide with the team whether they prefer that AC_PACKAGE_NAME etc. be
-a macro, or a shell variable ac_package_name.  Had we used AC_PACKAGE
-anywhere in configure.in, we would have had to use an shvar.  Also,
-think of the capitalization!  For instance this package is named
-`Autoconf', but the tarball is `autoconf-'.  What of the space?
-Do we need another user input for the name of the tarball?
-
-** Doc: autoconf
-Document --install.  Should --install `fix' configure.in for the user?
-
-** DJGPP
-2.15 cannot be released without having `make check' succeed under
-DJGPP.  EMX will be a requirement for the next release, not this one.
-
-** autoconf --install
-We must finalize the interface we want.
+Decide with the Automake team whether they prefer that AC_PACKAGE_NAME
+etc. be a macro, or a shell variable ac_package_name.  Had we used
+AC_PACKAGE anywhere in configure.in, we would have had to use an
+shvar.  Also, think of the capitalization!  For instance this package
+is named `Autoconf', but the tarball is `autoconf-'.  What of the
+space?  Do we need another user input for the name of the tarball?
 
 ** Portability
 ${1+"$@"}, set dummy.
@@ -77,8 +67,6 @@ If should check that none of the envvar it is in charge of, has
 changed.  The configure.in writer may supply what to do (FATAL, WARN
 etc.).  See VALIDATE CACHE TUPLE.  Document.  Where?
 
-Document more variables: CC, CXX etc.
-
 ** autoupdate
 We should probably install the files which do not depend upon the
 user, just the Autoconf library files.  But conversely autoupdate must
@@ -94,16 +82,6 @@ the macro which allows to choose a regex engine.
 
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
-
-** config.status
-Lars seemed to need to be able to apply both the AC_SUBST and
-AC_DEFINE transformation on a single file, which implies that we must
-be able to have `.in' files either in srcdir or in builddir.  In fact,
-have a look at the configuration of Zsh: they patch config.status on
-the fly to have it look for the files in builddir instead of srcdir!!!
-There is a real problem, Autoconf must help.  BTW, why do they need
-that?
-
 
 ------------------------------------------------------------------------------
 
@@ -314,12 +292,6 @@ Andreas Schwab
 
 ------------------------------------------------------------------------------
 
-put all the config.* stuff somewhere like config/?
-All these extraneous files sure clutter up a top level directory.
-From: "Randall S. Winchester" <rsw@eng.umd.edu>
-
-------------------------------------------------------------------------------
-
 It would be nice if I could (in the Makefile.in files) set
 the path to config.h. You have config.h ../config.h ../../config.h's all
 over the place, in the findutils-4.1 directory.
@@ -375,11 +347,11 @@ From: Randall Winchester
 
 ------------------------------------------------------------------------------
 
-AC_C_CROSS assumes that configure was
-called like 'CC=target-gcc; ./configure'. I want to write a package
-that has target dependent libraries and host dependent tools. So I
-don't like to lose the distinction between CC and [G]CC_FOR_TARGET.
-AC_C_CROSS should check for equality of target and host.
+AC_C_CROSS assumes that configure was called like 'CC=target-gcc;
+./configure'. I want to write a package that has target dependent
+libraries and host dependent tools. So I don't like to lose the
+distinction between CC and [G]CC_FOR_TARGET.  AC_C_CROSS should check
+for equality of target and host.
 
 It would be great if
 
@@ -474,13 +446,6 @@ From: roland@gnu.ai.mit.edu (Roland McGrath)
 Hmm.  That list might include LD_LIBRARY_PATH, LD_RUN_PATH (for solaris),
 and PATH.  I can't think of any others so far.
 From: friedman@splode.com (Noah Friedman)
-
-------------------------------------------------------------------------------
-
-So how about an option to configure --reset-cache, that says to ignore all
-existing cached values for tests that configure runs, and then update the
-cache normally.  This should be utterly trivial to do in AC_CACHE_VAL;
-check the flag variable and always compute the value if it's set.
 
 ------------------------------------------------------------------------------
 
