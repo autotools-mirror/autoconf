@@ -4,14 +4,12 @@
 @node Basic Installation
 @section Basic Installation
 
-These are generic installation instructions.  If this package does not
-come with, e.g., self-tests, installable documentation, or data files,
-please ignore the references to them below.
+These are generic installation instructions.
 
 The @code{configure} shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses
 those values to create a @file{Makefile} in each directory of the
-package.  It may also create one or more C files containing
+package.  It may also create one or more @file{.h} files containing
 system-dependent definitions.  Finally, it creates a shell script
 @file{config.status} that you can run in the future to recreate the
 current configuration, and a file @file{config.log} containing compiler
@@ -23,8 +21,8 @@ diffs or instructions to the address given in the @file{README} so they
 can be considered for the next release.
 
 The file @file{configure.in} is used to create @file{configure} by a
-program called @code{autoconf}.  You only need it if you want to change
-@file{configure.in}, or regenerate @file{configure} using a newer
+program called @code{autoconf}.  You only need @file{configure.in} if
+you want to change it or regenerate @file{configure} using a newer
 version of @code{autoconf}.
 
 @noindent
@@ -55,7 +53,8 @@ documentation.
 @item
 You can remove the program binaries and object files from the source
 directory by typing @samp{make clean}.  To also remove the files that
-@code{configure} created, type @samp{make distclean}.
+@code{configure} created (so you can compile the package for a different
+kind of computer), type @samp{make distclean}.
 @end enumerate
 
 @node Compilers and Options
@@ -86,13 +85,14 @@ make CFLAGS=-O2 LDFLAGS=-s
 @node Build Directory
 @section Using a Different Build Directory
 
-To compile the package in a different directory from the one containing
-the source code, you must use a version of @code{make} that supports the
-@code{VPATH} variable, such as GNU @code{make}.  @code{cd} to the
-directory where you want the object files and executables to go and run
-the @code{configure} script.  @code{configure} automatically checks for
-the source code in the directory that @code{configure} is in and in
-@file{..}.
+You can compile the package in a different directory from the one
+containing the source code.  Doing so allows you to compile it on more
+than one kind of computer at the same time.  To do this, you must use a
+version of @code{make} that supports the @code{VPATH} variable, such as
+GNU @code{make}.  @code{cd} to the directory where you want the object
+files and executables to go and run the @code{configure} script.
+@code{configure} automatically checks for the source code in the
+directory that @code{configure} is in and in @file{..}.
 
 @node Installation Directories
 @section Installation Directories
@@ -116,8 +116,8 @@ variable @samp{exec_prefix} to @var{path}, the package will use
 Documentation and other data files will still use the regular prefix.
 
 If you use an unusual directory layout in which some of the installation
-directory names are not based on the prefix or exec prefix, you can set
-the individual variables @code{bindir}, @code{libdir}, etc. on the
+directory names are not based on a single prefix, you can set the
+individual variables @code{bindir}, @code{libdir}, etc. on the
 @code{make} command line:
 @example
 make bindir=/bin libdir=/usr/lib
@@ -140,6 +140,8 @@ fields:
 @end example
 @noindent
 See the file @file{config.sub} for the possible values of each field.
+If @file{config.sub} isn't included in this package, then this package
+doesn't need to know the host type.
 
 If you are building compiler tools for cross-compiling, you can also use
 the @samp{--target=@var{type}} option to select the type of system
@@ -163,8 +165,9 @@ optional part of the package.  The README should mention any
 @item --help
 Print a summary of the options to @code{configure}, and exit.
 
-@itemx --quiet
-@item --silent
+@item --quiet
+@itemx --silent
+@itemx -q
 Do not print messages saying which checks are being made.
 
 @item --srcdir=@var{dir}
@@ -172,6 +175,7 @@ Look for the package's source code in directory @var{dir}.  Usually
 @code{configure} can determine that directory automatically.
 
 @item --verbose
+@itemx -v
 Print the results of the checks.
 
 @item --version

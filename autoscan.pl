@@ -39,7 +39,7 @@ exit 0;
 # Process any command line arguments.
 sub parse_args
 {
-    local ($usage) = \
+    local ($usage) =
 	"Usage: $0 [--macrodir=dir] [--help] [--verbose] [--version] [srcdir]\n"; 
 
     foreach $_ (@ARGV) {

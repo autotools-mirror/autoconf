@@ -509,17 +509,17 @@ summary of the command-line options and exits.
 
 The @code{autoscan} program can help you create a @file{configure.in}
 file for a software package.  @code{autoscan} examines source files in
-the directory given as a command line argument, or the current directory
-if none is given.  It searches the source files for common portability
-problems and creates a file @file{configure.scan} which is a preliminary
-@file{configure.in} for that package.  You should manually examine
-@file{configure.scan} before renaming it to @file{configure.in}; it will
-probably need some adjustments.  If you want the package to use a
-configuration header file, you will have to add a call to
-@code{AC_CONFIG_HEADER}.  You might have to change or add some
-@code{#if} directives in order to make the package work with Autoconf
-(@pxref{Invoking ifnames}, for information about a program that might
-help with that job).
+the directory tree rooted at a directory given as a command line
+argument, or the current directory if none is given.  It searches the
+source files for common portability problems and creates a file
+@file{configure.scan} which is a preliminary @file{configure.in} for
+that package.  You should manually examine @file{configure.scan} before
+renaming it to @file{configure.in}; it will probably need some
+adjustments.  If you want the package to use a configuration header
+file, you will have to add a call to @code{AC_CONFIG_HEADER}.  You might
+have to change or add some @code{#if} directives in order to make the
+package work with Autoconf (@pxref{Invoking ifnames}, for information
+about a program that might help with that job).
 
 @code{autoscan} uses several data files, which are installed with the
 distributed Autoconf macro files, to determine which macros to output
