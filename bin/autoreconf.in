@@ -117,6 +117,8 @@ my $install = 0;
 my $symlink = 0;
 # Does aclocal support --force?
 my $aclocal_supports_force = 0;
+# Does automake support --force-missing?
+my $automake_supports_force_missing = 0;
 
 my @prepend_include;
 my @include;
@@ -172,6 +174,7 @@ sub parse_args ()
     }
 
   $aclocal_supports_force = `$aclocal --help` =~ /--force/;
+  $automake_supports_force_missing = `$automake --help` =~ /--force-missing/;
 
   # Dispatch autoreconf's option to the tools.
   # --include;
@@ -194,7 +197,8 @@ sub parse_args ()
 	if $aclocal_supports_force;
       $autoconf   .= ' --force';
       $autoheader .= ' --force';
-      $automake   .= ' --force-missing';
+      $automake   .= ' --force-missing'
+	if $automake_supports_force_missing;
       $autopoint  .= ' --force';
       $libtoolize .= ' --force';
     }

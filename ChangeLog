@@ -1,5 +1,11 @@
 2003-11-12  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (&parse_args): Don't call automake with
+	--force-missing unless it actually supports it.
+	From Debian #219336.
+
+2003-11-12  Akim Demaille  <akim@epita.fr>
+
 	* configure.ac: Bump to 2.59a.
 	Require 2.59.
 
