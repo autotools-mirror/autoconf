@@ -359,12 +359,12 @@ sub scan_file ()
 
   if (/\.[chlym](\.in)?$/)
     {
-      used 'programs', 'cc';
+      used 'programs', 'cc', $File::Find::name;
       scan_c_file ($_);
     }
   elsif (/\.(cc|cpp|cxx|CC|C|hh|hpp|hxx|HH|H|yy|ypp|ll|lpp)(\.in)?$/)
     {
-      used 'programs', 'c++';
+      used 'programs', 'c++', $File::Find::name;
       scan_c_file ($_);
     }
   elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)

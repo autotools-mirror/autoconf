@@ -1,5 +1,11 @@
 2002-03-19  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (scan_file): Specify the location in `&used'
+	invocations.
+	From Nicolas Joly.
+
+2002-03-19  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Adjust @code/@command, @xref/@ref usage.
 	From Nishio Futoshi.
 
