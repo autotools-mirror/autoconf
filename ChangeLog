@@ -1,5 +1,10 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* man/Makefile.am (.x.1): Use @PATH_SEPARATOR@, not ':' to set up
+	$PATH.  Also set AUTOM4TE_CFG, so we can process autom4te properly.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* bin/autoscan.in: Add 'exec-perl-if-not-run-by-perl'.
 	* bin/autoupdate.in: Ditto.
 	* bin/autoheader.in: Reworded a few comments.

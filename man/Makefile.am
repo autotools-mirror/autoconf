@@ -46,10 +46,12 @@ SUFFIXES = .x .1
 
 .x.1:
 	echo "Updating man page $@"
-	PATH=$(top_builddir)/bin:$(top_srcdir)/config:$$PATH ;\
-	export PATH ;\
-	autom4te_perllibdir=$(top_srcdir)/lib;\
+	PATH="$(top_builddir)/bin@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
+	export PATH; \
+	autom4te_perllibdir=$(top_srcdir)/lib; \
 	export autom4te_perllibdir; \
+	AUTOM4TE_CFG=$(top_srcdir)/lib/autom4te.cfg; \
+	export AUTOM4TE_CFG; \
 	$(HELP2MAN) \
 	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/common.x \
