@@ -257,17 +257,10 @@ AC_DEFUN([AC_FUNC_CHOWN],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
-[AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
-#include <sys/stat.h>
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
 #include <fcntl.h>
-#ifdef HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-
-int
-main ()
-{
-  char *f = "conftest.chown";
+],
+[[  char *f = "conftest.chown";
   struct stat before, after;
 
   if (creat (f, 0600) < 0)
@@ -280,7 +273,7 @@ main ()
     exit (1);
   exit ((before.st_uid == after.st_uid
          && before.st_gid == after.st_gid) ? 0 : 1);
-}]])],
+]])],
                [ac_cv_func_chown_works=yes],
                [ac_cv_func_chown_works=no],
                [ac_cv_func_chown_works=no])
@@ -301,16 +294,13 @@ AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK([whether closedir returns void],
                [ac_cv_func_closedir_void],
-[AC_RUN_IFELSE([AC_LANG_SOURCE(
-[#include <sys/types.h>
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
 #include <$ac_header_dirent>
-
+#ifndef __cplusplus
 int closedir ();
-int
-main ()
-{
-  exit (closedir (opendir (".")) != 0);
-}])],
+#endif
+],
+                                [[exit (closedir (opendir (".")) != 0);]])],
                [ac_cv_func_closedir_void=no],
                [ac_cv_func_closedir_void=yes],
                [ac_cv_func_closedir_void=yes])])
@@ -600,15 +590,14 @@ AC_CHECK_FUNC(getmntent,
 # ---------------
 AC_DEFUN([AC_FUNC_GETPGRP],
 [AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
-[AC_RUN_IFELSE([AC_LANG_SOURCE([[
+[AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
+[[
 /*
  * If this system has a BSD-style getpgrp(),
  * which takes a pid argument, exit unsuccessfully.
  *
  * Snarfed from Chet Ramey's bash pgrp.c test program
  */
-#include <stdio.h>
-#include <sys/types.h>
 
 int     pid;
 int     pg1, pg2, pg3, pg4;
@@ -673,8 +662,7 @@ AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
 [rm -f conftest.sym conftest.file
 echo >conftest.file
 if ln -s conftest.file conftest.sym; then
-  AC_RUN_IFELSE([AC_LANG_PROGRAM([@%:@include <sys/types.h>
-@%:@include <sys/stat.h>],
+  AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
     [struct stat sbuf;
      /* Linux will dereference the symlink and fail.
         That is better in the sense that it means we will not
@@ -939,7 +927,7 @@ AC_DEFUN([AC_FUNC_MMAP],
 [AC_CHECK_HEADERS(stdlib.h unistd.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
-[AC_RUN_IFELSE([AC_LANG_SOURCE(
+[AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
 [[/* Thanks to Mike Haertel and Jim Avera for this test.
    Here is a matrix of mmap possibilities:
 	mmap private not fixed
@@ -961,19 +949,13 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
    The main things grep needs to know about mmap are:
    * does it exist and is it safe to write into the mmap'd area
    * how to use it (BSD variants)  */
-#include <sys/types.h>
+
 #include <fcntl.h>
 #include <sys/mman.h>
 
-#if STDC_HEADERS || HAVE_STDLIB_H
-# include <stdlib.h>
-#else
+#if !STDC_HEADERS && !HAVE_STDLIB_H
 char *malloc ();
 #endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
-#include <sys/stat.h>
 
 /* This mess was copied from the GNU getpagesize.h.  */
 #if !HAVE_GETPAGESIZE
@@ -1121,18 +1103,19 @@ AC_CACHE_CHECK([types of arguments for select],
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
  for ac_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
   for ac_arg5 in 'struct timeval *' 'const struct timeval *'; do
-   AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-[#include <sys/types.h>
-#if HAVE_SYS_TIME_H
-# include <sys/time.h>
-#endif
+   AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM(
+[AC_INCLUDES_DEFAULT
 #if HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
 #if HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
-extern int select ($ac_arg1,$ac_arg234,$ac_arg234,$ac_arg234,$ac_arg5);])],
+],
+                        [extern int select ($ac_arg1,
+                                            $ac_arg234, $ac_arg234, $ac_arg234,
+                                            $ac_arg5);])],
               [ac_cv_func_select_args="$ac_arg1,$ac_arg234,$ac_arg5"; break 3])
   done
  done
@@ -1190,16 +1173,9 @@ m4_define([_AC_FUNC_STAT],
 [AC_REQUIRE([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])dnl
 AC_CACHE_CHECK([whether $1 accepts an empty string],
                [ac_cv_func_$1_empty_string_bug],
-[AC_TRY_RUN(
-[#include <sys/types.h>
-#include <sys/stat.h>
-
-int
-main ()
-{
-  struct stat sbuf;
-  exit ($1 ("", &sbuf) ? 1 : 0);
-}],
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+[[struct stat sbuf;
+  exit ($1 ("", &sbuf) ? 1 : 0);]])],
             [ac_cv_func_$1_empty_string_bug=yes],
             [ac_cv_func_$1_empty_string_bug=no],
             [ac_cv_func_$1_empty_string_bug=yes])])
@@ -1414,20 +1390,16 @@ AC_DEFUN([AC_FUNC_UTIME_NULL],
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftest.data; >conftest.data
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
-AC_TRY_RUN(
-[#include <sys/types.h>
-#include <sys/stat.h>
-int
-main ()
-{
-  struct stat s, t;
+AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+[[struct stat s, t;
   exit (!(stat ("conftest.data", &s) == 0
           && utime ("conftest.data", (long *)0) == 0
           && stat ("conftest.data", &t) == 0
           && t.st_mtime >= s.st_mtime
-          && t.st_mtime - s.st_mtime < 120));
-}], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
-  ac_cv_func_utime_null=no)
+          && t.st_mtime - s.st_mtime < 120));]])],
+              ac_cv_func_utime_null=yes,
+              ac_cv_func_utime_null=no,
+              ac_cv_func_utime_null=no)
 rm -f core core.* *.core])
 if test $ac_cv_func_utime_null = yes; then
   AC_DEFINE(HAVE_UTIME_NULL, 1,

@@ -1,5 +1,16 @@
 2001-06-18  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_CHOWN, AC_FUNC_CLOSEDIR_VOID)
+	(AC_FUNC_GETPGRP, AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK)
+	(AC_FUNC_MMAP, AC_FUNC_SELECT_ARGTYPES, _AC_FUNC_STAT)
+	(AC_FUNC_UTIME_NULL): Use AC_INCLUDES_DEFAULT.
+	Don't use AC_TRY_RUN, which double quotes, prefer AC_RUN_IFELSE,
+	and either AC_LANG_SOURCE or AC_LANG_PROGRAM.
+	(AC_FUNC_CLOSEDIR_VOID): Protect C++ from `int closedir ();' (or
+	the converse).
+
+2001-06-18  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (ms): New index.
 	(Macro Index): Rename as...
 	(Autoconf Macro Index): this.
