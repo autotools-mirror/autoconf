@@ -298,7 +298,7 @@ update="@SHELL@ $tmp/update.sh"
 
 # Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
-find . -name configure.ac -o -name configure.in -print |
+find . '(' -name configure.ac -o -name configure.in ')' -print |
 xargs grep -l AC_INIT |
 sed 's,/configure\.ac$,,;s,/configure\.in$,,;s,^./,,' |
 while read dir; do
@@ -312,10 +312,10 @@ while read dir; do
 
   # uses_aclocal -- is this package using aclocal?
   uses_aclocal=false
-  if grep 'generated .* by aclocal' $localdir/aclocal.m4 >/dev/null 2>&1 ||
-     test -f "$localdir/acinclude.m4"; then
+  grep 'generated .* by aclocal' $localdir/aclocal.m4 >/dev/null 2>&1 &&
      uses_aclocal=:
-  fi
+  test -f "$localdir/aclocal.m4" ||
+     uses_aclocal=:
   if $uses_aclocal &&
      { $force ||
        $update $localdir/aclocal.m4 $localdir/acinclude.m4; } then

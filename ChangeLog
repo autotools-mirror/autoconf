@@ -1,3 +1,8 @@
+2001-01-26  Assar Westerlund  <assar@sics.se>
+
+	* autoreconf.sh (find): Fix precedence.
+	(aclocal): Same as below for autoheader.
+
 2001-01-26  Akim Demaille  <akim@epita.fr>
 
 	* autoreconf.sh (autoheader): Run it when there is no template, as
