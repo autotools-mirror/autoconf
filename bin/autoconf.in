@@ -95,8 +95,8 @@ ac_LF_and_DOT=`echo; echo .`
 # Handle the case that m4 has moved since we were configured.
 # It may have been found originally in a build directory.
 : ${M4=@M4@}
-case "$M4" in
-/*) test -f "$M4" || M4=m4 ;;
+case $M4 in
+/*|[a-zA-Z]:*) test -f "$M4" || M4=m4 ;;
 esac
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help </dev/null 2>&1` in
@@ -297,8 +297,8 @@ elif test ! -r "$infile"; then
 fi
 
 # Output is produced into FD 4.  Prepare it.
-case "x$outfile" in
- x-)  # Output to stdout
+case $outfile in
+ -)  # Output to stdout
   exec 4>&1 ;;
  * )
   exec 4>$outfile;;
