@@ -1,3 +1,9 @@
+1999-09-27  Ben Elliston  <bje@cygnus.com>
+
+	* autoscan.pl (scan_files): Emit an AC_PROG_CC invocation to
+	configure.scan if there are any C files present. Fix for
+	autoconf/19.
+
 1999-09-26  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_OUTPUT_LINKS): Eliminate gratuitous spaces from
