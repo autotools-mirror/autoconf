@@ -228,7 +228,7 @@ m4_define([AS_WARN],
 # ----------------------------------
 m4_define([AS_ERROR],
 [{ AS_MESSAGE([error: $1], [2])
-   AS_EXIT([$2]); }
+   AS_EXIT([$2]); }[]dnl
 ])# AS_ERROR
 
 

@@ -1,3 +1,7 @@
+2000-12-15  Pavel Roskin  <proski@gnu.org>
+
+	* m4sh.sh (AS_ERROR): Restore dnl at the end of the macro.
+
 2000-12-14  Pavel Roskin  <proski@gnu.org>
 
 	* tests/semantics.at (AC_CHECK_TYPES): There are two tests with
