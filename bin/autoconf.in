@@ -71,14 +71,14 @@ if test -z "$print_version"; then
 
   if test z$infile = z-; then
     infile=/tmp/acin.$$
-    trap 'rm -f $infile' 1 3 15
+    trap 'rm -f $infile' 1 2 15
     cat > $infile
   elif test ! -s "${infile}"; then
     echo "autoconf: ${infile}: No such file or directory" >&2
     exit 1
   fi
 
-  trap 'rm -f $tmpout; exit 1' 1 3 15
+  trap 'rm -f $tmpout; exit 1' 1 2 15
 fi
 
 MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4"

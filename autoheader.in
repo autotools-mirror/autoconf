@@ -135,7 +135,7 @@ syms="`for sym in $syms; do echo $sym; done | sort | uniq`"
 
 if test $# -eq 0; then
   tmpout=autoh$$
-  trap "rm -f $tmpout; exit 1" 1 3 15
+  trap "rm -f $tmpout; exit 1" 1 2 15
   exec > $tmpout
 fi
 
