@@ -103,7 +103,7 @@ Report bugs to <bug-autoconf\@gnu.org>.\n";
 # $version
 # --------
 $version = "autoscan (@PACKAGE_NAME@) @VERSION@
-Written by David J. MacKenzie.
+Written by David J. MacKenzie and Akim Demaille.
 
 Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO

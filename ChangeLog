@@ -1,5 +1,10 @@
 2002-01-24  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoheader.in, bin/autoconf.in, bin/autoscan.in,
+	* doc/autoconf.texi: Finally add Akim as an author.
+
+2002-01-24  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Use PATH_SEPARATOR.
 	(_AS_PATH_SEPARATOR_PREPARE): Don't expect $SHELL to be
 	Bourne. Use /bin/sh.
