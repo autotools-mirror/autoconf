@@ -1017,8 +1017,8 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-gcc} $CXXFLAGS $CPPFLAGS conftest.$ac_ext -c 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='${CXX-gcc} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_compile='${CXX-g++} $CXXFLAGS $CPPFLAGS conftest.$ac_ext -c 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='${CXX-g++} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl Push the current language on a stack.
