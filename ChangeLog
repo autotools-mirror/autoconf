@@ -1,3 +1,7 @@
+2002-04-12  Akim Demaille  <akim@epita.fr>
+
+	* tests/wrappl.as: New, M4sh precursor of wrappl.in.
+
 2002-04-10  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Install the Zsh

@@ -21,7 +21,7 @@
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
 EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
-             atlocal.in package.m4 wrapsh.as
+             atlocal.in package.m4 wrappl.as wrapsh.as
 
 # Running the uninstalled scripts.
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
@@ -54,6 +54,9 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 
 $(srcdir)/wrapsh.in: $(srcdir)/wrapsh.as
 	./autom4te --language=M4sh $(srcdir)/wrapsh.as -o $@
+
+$(srcdir)/wrappl.in: $(srcdir)/wrappl.as
+	./autom4te --language=M4sh $(srcdir)/wrappl.as -o $@
 
 
 ## ------------ ##
