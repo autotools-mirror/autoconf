@@ -1,5 +1,11 @@
 2002-04-19  Paul Eggert  <eggert@twinsun.com>
 
+	* doc/autoconf.texi: Follow the outline suggested in the GNU
+	Sample Texts sections of the Texinfo 4.2 manual.  Most
+	importantly, this makes sure that the copyright notices appear in
+	all output formats.  You probably need Texinfo 4.2 to generate
+	the manual now.
+
 	Fix some bugs when using "$@" when there might be zero positional
 	arguments in cases where this matters.
 
