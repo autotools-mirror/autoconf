@@ -1,5 +1,10 @@
 2002-10-11  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Include the failed test
+	numbers in the Subject suggestion.
+
+2002-10-11  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/specific.m4 (AC_DECL_SYS_SIGLIST): Obsolete.
 	Suggest using AC_CHECK_DECLS instead.
 
