@@ -7,4 +7,4 @@ config.log
 config.status
 INSTALL.txt
 configure.scan
-autoconf-*.tar.gz
+autoconf-[0-9].*
