@@ -3109,13 +3109,21 @@ fi
 
 # AC_PATH_X
 # ---------
-AC_DEFUN(AC_PATH_X,
-[AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
 # If we find X, set shell vars x_includes and x_libraries to the
 # paths, otherwise set no_x=yes.
 # Uses ac_ vars as temps to allow command line to override cache and checks.
 # --without-x overrides everything else, but does not touch the cache.
+AC_DEFUN(AC_PATH_X,
+[AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
 AC_MSG_CHECKING(for X)
+
+dnl Document the X abnormal options inherited from history.
+AC_EXPAND_ONCE([AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+
+X features:
+  --x-includes=DIR    X include files are in DIR
+  --x-libraries=DIR   X library files are in DIR
+AC_DIVERT_POP()])dnl
 
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
 # $have_x is `yes', `no', `disabled', or empty when we do not yet know.

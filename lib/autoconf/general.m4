@@ -1018,10 +1018,6 @@ Host type:
   --build=BUILD      configure for building on BUILD [BUILD=HOST]
   --host=HOST        configure for HOST [guessed]
   --target=TARGET    configure for TARGET [TARGET=HOST]
-
-X features:
-  --x-includes=DIR    X include files are in DIR
-  --x-libraries=DIR   X library files are in DIR
 EOF
   cat <<\EOF]
 AC_DIVERT_POP()dnl

@@ -1,5 +1,12 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	Don't dump X help messages when `configure' does not check for X.
+
+	* acgeneral.m4 (_AC_INIT_HELP): Don't dump X help messages.
+	* acspecific.m4 (AC_PATH_X): Do it.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	No longer rely on /bin/sh to compose the optional parts of
 	`configure --help'.
 
