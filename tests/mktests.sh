@@ -38,6 +38,11 @@ test $# != 0
 # We need these arguments.
 src="$@"
 
+# Set locale to C so that `sort' behaves in a uniform way.
+export LANGUAGE; LANGUAGE=C
+export LANG; LANG=C
+export LC_ALL; LC_ALL=C
+
 
 # --------- #
 # syntax.m4 #
