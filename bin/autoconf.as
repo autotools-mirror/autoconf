@@ -182,10 +182,7 @@ esac
 # Unless specified, the output is stdout.
 test -z "$outfile" && outfile=-
 
-# Running autom4te.
-run_autom4te="$AUTOM4TE --language=autoconf --output=$outfile"
-# Autom4te expansion.
-eval set dummy "$traces"
-shift
-$verbose "$me: running $run_autom4te "${1+"$@"}" $infile" >&2
-exec $run_autom4te ${1+"$@"} $infile
+# Run autom4te with expansion.
+eval set \$AUTOM4TE --language=autoconf --output=\$outfile "$traces" \$infile
+$verbose "$me: running $*" >&2
+exec "$@"
