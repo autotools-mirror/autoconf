@@ -111,10 +111,17 @@ m4_define([_AC_LANG_DISPATCH],
 # _AC_LANG_SET(OLD, NEW)
 # ----------------------
 # Output the shell code needed to switch from OLD language to NEW language.
-# Optimize if OLD == NEW.
+# Do not try to optimize like this:
+#
+# m4_defun([_AC_LANG_SET],
+# [m4_if([$1], [$2], [],
+#        [_AC_LANG_DISPATCH([AC_LANG], [$2])])])
+#
+# as it can introduce differences between the sh-current language and the
+# m4-current-language when m4_require is used.  Something more subtle
+# might be possible, but at least for the time being, play it safe.
 m4_defun([_AC_LANG_SET],
-[m4_if([$1], [$2], [],
-       [_AC_LANG_DISPATCH([AC_LANG], [$2])])])
+[_AC_LANG_DISPATCH([AC_LANG], [$2])])
 
 
 # AC_LANG(LANG)

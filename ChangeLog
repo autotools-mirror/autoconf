@@ -1,5 +1,9 @@
 2001-01-23  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_LANG_SET): Turn off optimizations.
+
+2001-01-23  Akim Demaille  <akim@epita.fr>
+
 	* configure.in: If this is a beta, dump the core of BUGS.
 	* tests/base.at (AC_REQUIRE & AC_LANG): New test, currently failing.
 
