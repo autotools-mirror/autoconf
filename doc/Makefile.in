@@ -53,7 +53,7 @@ SUBDIRS = testsuite
 DISTDEP = info Makefile
 # Files to distribute.
 DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL Makefile.in NEWS \
-	README TODO \ 
+	README TODO \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
 	autoconf.sh autoconf.texi install.texi \
