@@ -1,3 +1,9 @@
+1999-01-19  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_PROG_CXXCPP): Substitute @CXXCPP@ correctly
+	when $CXXCPP is overridden in the supervisory shell. Contributed
+	by Michael Schoene <mrs@mlc.de>.
+
 1999-01-16  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_ACVERSION): Bump to 2.14.1 for prereleases.

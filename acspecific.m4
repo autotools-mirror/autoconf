@@ -528,8 +528,9 @@ AC_LANG_CPLUSPLUS[]dnl
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
   ac_cv_prog_CXXCPP="$CXXCPP"
 AC_LANG_RESTORE[]dnl
-fi])dnl
+])dnl
 CXXCPP="$ac_cv_prog_CXXCPP"
+fi
 AC_MSG_RESULT($CXXCPP)
 AC_SUBST(CXXCPP)dnl
 ])
