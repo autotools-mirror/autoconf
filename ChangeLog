@@ -2,7 +2,7 @@
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix typo in
 	2002-09-01 patch by replacing "test -n" with "test -z".
-	This fixes a bug reported by Tom Epperly in
+	This fixes a bug found by Jeff Painter and reported by Tom Epperly in
 	<http://mail.gnu.org/archive/html/autoconf/2003-02/msg00139.html>.
 
 	* doc/autoconf.texi (Shell Substitutions): test -n -> test -z,
