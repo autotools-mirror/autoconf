@@ -993,7 +993,7 @@
 
 2002-09-05  Kevin Ryde  <user42@zip.com.au>
 
-	* autoconf.texi (Limitations of Make): HP-UX trailing backslashes
+	* doc/autoconf.texi (Limitations of Make): HP-UX trailing backslashes
 	doesn't seem to be confined to ia64, just say "some versions".
 
 2002-09-04  Akim Demaille  <akim@epita.fr>
@@ -1169,7 +1169,7 @@
 
 2002-07-24  Kevin Ryde  <user42@zip.com.au>
 
-	* autoconf.texi (Limitations of Make, Making testsuite Scripts):
+	* doc/autoconf.texi (Limitations of Make, Making testsuite Scripts):
 	Untabify, since tabs are not enjoyed by texi2dvi and makeinfo.
 
 2002-07-23  Paul Eggert  <eggert@twinsun.com>
@@ -1441,7 +1441,7 @@
 	from the default list of compilers to try.  Suggested by
 	Kate Hedstrom.
 	* NEWS: Document the above.
-	* autoconf.texi (Fortran 77 Compiler): Don't suggest cf77.
+	* doc/autoconf.texi (Fortran 77 Compiler): Don't suggest cf77.
 
 2002-05-17  Paul Eggert  <eggert@twinsun.com>
 
@@ -2535,7 +2535,7 @@
 
 2001-11-08  Kevin Ryde  <user42@zip.com.au>
 
-	* autoconf.texi (Limitations of Usual Tools): Note HP-UX cc
+	* doc/autoconf.texi (Limitations of Usual Tools): Note HP-UX cc
 	doesn't accept .S files.
 
 2001-11-07  Akim Demaille  <akim@epita.fr>
@@ -4915,7 +4915,7 @@
 	(_AC_F77_NAME_MANGLING): Require AC_F77_DUMMY_MAIN.  Also put $FLIBS
 	after $LIBS, for consistency; this should be the general rule since
 	the user may want to link to Fortran libraries that require $FLIBS.
-	* autoconf.texi: Document AC_F77_DUMMY_MAIN and AC_F77_MAIN.
+	* doc/autoconf.texi: Document AC_F77_DUMMY_MAIN and AC_F77_MAIN.
 
 2001-06-29  Pavel Roskin  <proski@gnu.org>
 
