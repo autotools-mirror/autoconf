@@ -5352,8 +5352,8 @@ b.c:
 
 @noindent
 This can cause problems if you observe the output of the compiler to
-detect failures.  Invoking @samp{cc -c a.c -o a.o; cc -c b.c -o b.o; cc
-a.o b.o -o c} solves the issue.
+detect failures.  Invoking @samp{cc -c a.c && cc -c b.c && cc -o c a.o
+b.o} solves the issue.
 
 @item Don't rely on correct @code{#line} support
 On Solaris 8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
@@ -6442,7 +6442,7 @@ AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
-gcc -E -dD conftest.c -o -
+gcc -E -dD -o - conftest.c
 @end example
 
 @noindent
@@ -6481,7 +6481,7 @@ AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
 AC_LANG_CONFTEST(
 [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
                  [[fputs (hw, stdout);]])])
-gcc -E -dD conftest.c -o -
+gcc -E -dD -o - conftest.c
 @end example
 
 @noindent
@@ -10840,7 +10840,14 @@ non-printing characters, @emph{seems} portable, though.
 @item @command{cc}
 @c ---------------
 @prindex @command{cc}
-When a compilation such as @samp{cc foo.c -o foo} fails, some compilers
+The command @samp{cc -c foo.c} traditionally produces an object file
+named @file{foo.o}.  Most compilers allow @option{-c} to be combined
+with @option{-o} to specify a different object file name, but
+@acronym{POSIX} does not require this combination and a few compilers
+lack support for it.  @xref{C Compiler}, for how @acronym{GNU} Make
+tests for this feature with @code{AC_PROG_CC_C_O}.
+
+When a compilation such as @samp{cc -o foo foo.c} fails, some compilers
 (such as @sc{cds} on Reliant @sc{unix}) leave a @file{foo.o}.
 
 HP-UX @command{cc} doesn't accept @file{.S} files to preprocess and
@@ -10856,6 +10863,14 @@ The default executable, produced by @samp{cc foo.c}, can be
 @item @file{a_out.exe} --- GNV @command{cc} wrapper for DEC C on OpenVMS.
 @item @file{foo.exe} --- various MS-DOS compilers.
 @end itemize
+
+The C compiler's traditional name is @command{cc}, but other names like
+@command{gcc} are common.  @acronym{POSIX} 1003.1-2001 specifies the
+name @command{c99}, but older @acronym{POSIX} editions specified
+@command{c89} and anyway these standard names are rarely used in
+practice.  Typically the C compiler is invoked from makefiles that use
+@samp{$(CC)}, so the value of the @samp{CC} make variable selects the
+compiler name.
 
 
 @item @command{cmp}
@@ -11732,8 +11747,8 @@ whole thing manually.  For instance, using the following pattern:
 
 @example
 VPATH = ../pkg/src
-foo.o: foo.c
-        cc -c `test -f foo.c || echo ../pkg/src/`foo.c -o foo.o
+foo.c: ifoo.c
+        cp `test -f ifoo.c || echo ../pkg/src/`ifoo.c foo.c
 @end example
 
 @item Automatic rule rewriting
@@ -11748,12 +11763,12 @@ For instance
 
 @example
 VPATH = ../pkg/src
-foo.o: foo.c
-        cc -c foo.c -o foo.o
+foo.c: ifoo.c
+        cp ifoo.c foo.c
 @end example
 
 @noindent
-would execute @code{cc -c ../pkg/src/foo.c -o foo.o} if @file{foo.c} was
+would execute @code{cp ../pkg/src/ifoo.c foo.c} if @file{ifoo.c} was
 found in @file{../pkg/src}.  That sounds great.
 
 However, for the sake of other @command{make} implementations, we can't
@@ -11761,40 +11776,40 @@ rely on this, and we have to search @code{VPATH} manually:
 
 @example
 VPATH = ../pkg/src
-foo.o: foo.c
-        cc -c `test -f foo.c || echo ../pkg/src/`foo.c -o foo.o
+foo.c: ifoo.c
+        cp `test -f ifoo.c || echo ../pkg/src/`ifoo.c foo.c
 @end example
 
 @noindent
 However the "prerequisite rewriting" still applies here.  So if
-@file{foo.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
+@file{ifoo.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
 @command{make} will execute
 
 @example
-@code{cc -c `test -f ../pkg/src/foo.c || echo ../pkg/src/`foo.c -o foo.o}
+@code{cp `test -f ../pkg/src/ifoo.c || echo ../pkg/src/`ifoo.c foo.c}
 @end example
 
 @noindent
 which reduces to
 
 @example
-cc -c foo.c -o foo.o
+cp ifoo.c foo.c
 @end example
 
 @noindent
 and thus fails.  Oops.
 
-One workaround is to make sure that foo.c never appears as a plain word
+One workaround is to make sure that ifoo.c never appears as a plain word
 in the rule.  For instance these three rules would be safe.
 
 @example
 VPATH = ../pkg/src
-foo.o: foo.c
-        cc -c `test -f ./foo.c || echo ../pkg/src/`foo.c -o foo.o
-foo2.o: foo2.c
-        cc -c `test -f 'foo2.c' || echo ../pkg/src/`foo2.c -o foo2.o
-foo3.o: foo3.c
-        cc -c `test -f "foo3.c" || echo ../pkg/src/`foo3.c -o foo3.o
+foo.c: ifoo.c
+        cp `test -f ./ifoo.c || echo ../pkg/src/`ifoo.c foo.c
+foo2.c: ifoo2.c
+        cp `test -f 'ifoo2.c' || echo ../pkg/src/`ifoo2.c foo2.c
+foo3.c: ifoo3.c
+        cp `test -f "ifoo3.c" || echo ../pkg/src/`ifoo3.c foo3.c
 @end example
 
 Things get worse when your prerequisites are in a macro.
@@ -15190,7 +15205,7 @@ check-local: atconfig atlocal $(TESTSUITE)
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
-        $(AUTOTEST) -I $(srcdir) $@@.at -o $@@.tmp
+        $(AUTOTEST) -I $(srcdir) -o $@@.tmp $@@.at
         mv $@@.tmp $@@
 @end example
 
