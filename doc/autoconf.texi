@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.101
-@set VERSION 1.101
+@set EDITION 1.102
+@set VERSION 1.102
 @set UPDATED August 1994
 
 @iftex
@@ -77,6 +77,10 @@ by the Foundation.
 
 @c Define a macro index that @@defmac doesn't write to.
 @defcodeindex ma
+@c Define a CPP variable index that @@defvar doesn't write to.
+@defcodeindex cv
+@c Define an environment variable index that @@defvar doesn't write to.
+@defcodeindex ev
 
 @node Top, Introduction, , (dir)
 @comment  node-name,  next,  previous,  up
@@ -104,8 +108,8 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * Invoking config.status::      Recreating a configuration.
 * Site Default Values::         Providing local defaults for @code{configure}.
 * Old Macro Names::		Backward compatibility macros.
-* Example::                     Sample Autoconf input files.
 * History::                     History of Autoconf.
+* Environment Variable Index::  Index of environment variables used.
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined.
 * Macro Index::                 Index of Autoconf macros.
 
@@ -185,22 +189,33 @@ Running @code{configure} Scripts
 * System Type::                 Specifying the system type.
 * Optional Features::           Selecting optional features.
 
-An Example
-
-* Sample configure.in::		An example of a @file{configure} template.
-* Sample Makefile.in::		An example of a @file{Makefile} template.
-
 History of Autoconf
 
 * Genesis::			Prehistory and naming of @code{configure}.
 * Exodus::			The plagues of @code{m4} and Perl.
 * Leviticus::			The priestly code of portability arrives.
-* Numbers::			Listing of growth and contributors.
+* Numbers::			Growth and contributors.
 * Deuteronomy::			Approaching the promises of easy configuration.
 @end menu
 
 @node Introduction, Distributing, Top, Top
 @chapter Introduction
+
+@display
+A physicist, an engineer, and a computer scientist were
+discussing the nature of God.  Surely a Physicist, said the
+physicist, because early in the Creation, God made Light; and you
+know, the Maxwell's equations, the dual nature of
+electro-magnetic waves, the relativist consequences@dots{} An
+Engineer!, said the engineer, because before making Light, God
+split the Chaos into Land and Water; it takes a hell of an
+engineer to handle that big amount of mud, and orderly separation
+of solids from liquids@dots{} The computer scientist shouted: And
+the Chaos, where do you think it was it coming from, hmm?
+
+---Anonymous
+@end display
+@c (via Franc,ois Pinard)
 
 Autoconf is a tool for producing shell scripts that automatically
 configure software source code packages to adapt to many kinds of
@@ -439,9 +454,6 @@ through the next newline.  These comments do not appear in the generated
 dnl Process this file with autoconf to produce a configure script.
 @end example
 
-@xref{Sample configure.in}, for an example of a real @file{configure.in}
-script.
-
 @node Invoking autoconf, Invoking autoheader, Writing configure.in, Making configure Scripts
 @section Invoking @code{autoconf}
 
@@ -465,6 +477,7 @@ your site's own locally written Autoconf macro definitions
 in more than one of the files that @code{autoconf} reads, the last
 definition it reads overrides the earlier ones.
 
+@evindex AC_MACRODIR
 You can override the directory where @code{autoconf} looks for the
 installed macro files by setting the @code{AC_MACRODIR} environment
 variable to a different directory.  You can also give @code{autoconf}
@@ -519,6 +532,7 @@ instead of to @file{config.h.in}.  If you give @code{autoheader} an
 argument of @samp{-}, it reads the standard input instead of
 @file{configure.in} and writes the header file to the standard output.
 
+@evindex AC_MACRODIR
 You can override the directory where @code{autoheader} looks for the
 installed macro and @file{acconfig.h} files by setting the
 @code{AC_MACRODIR} environment variable to a different directory.  You
@@ -647,6 +661,7 @@ corresponding new names), you can make your @file{configure.in} files
 more readable and make it easier to use the current Autoconf
 documentation if you update them to use the new macro names.
 
+@evindex SIMPLE_BACKUP_SUFFIX
 If given no arguments, @code{autoupdate} updates @file{configure.in},
 backing up the original version with the suffix @file{~} (or the value
 of the environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is
@@ -714,7 +729,7 @@ programs:
 
 @defmac AC_DECL_YYTEXT
 @maindex DECL_YYTEXT
-@vindex YYTEXT_POINTER
+@cvindex YYTEXT_POINTER
 Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
 of a @samp{char []}.  This depends on whether @code{lex} or @code{flex}
 is being used.  This macro calls @code{AC_PROG_CPP} (or
@@ -740,7 +755,7 @@ set @code{GCC} to be empty.
 
 @defmac AC_PROG_CC_C_O
 @maindex PROG_CC_C_O
-@vindex NO_MINUS_C_MINUS_O
+@cvindex NO_MINUS_C_MINUS_O
 If the C compiler does not accept the @samp{-c} and @samp{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 @end defmac
@@ -855,18 +870,6 @@ Set @code{make} variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
 is found, otherwise to @samp{:} (do nothing).
 @end defmac
 
-@defmac AC_PROG_RSH
-@maindex PROG_RSH
-@vindex RSH
-@vindex NO_REMOTE
-@vindex HAVE_NETDB_H
-If a remote shell is available, set @code{make} variable @code{RSH} to
-its pathname.  Otherwise, if @file{netdb.h} exists (implying the
-@code{rexec} function), define @code{HAVE_NETDB_H}.  If either is true,
-also put @samp{rtapelib.o} in @code{make} variable @code{RTAPELIB}.
-Otherwise, define @code{NO_REMOTE}.
-@end defmac
-
 @defmac AC_PROG_YACC
 @maindex PROG_YACC
 If @code{bison} is found, set @code{make} variable @code{YACC} to
@@ -881,7 +884,7 @@ The following macros check for the presence of certain C header files:
 
 @defmac AC_DECL_SYS_SIGLIST
 @maindex DECL_SYS_SIGLIST
-@vindex SYS_SIGLIST_DECLARED
+@cvindex SYS_SIGLIST_DECLARED
 Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
 declared in a system header file, either @file{signal.h} or
 @file{unistd.h}.
@@ -889,11 +892,11 @@ declared in a system header file, either @file{signal.h} or
 
 @defmac AC_DIR_HEADER
 @maindex DIR_HEADER
-@vindex DIRENT
-@vindex SYSDIR
-@vindex SYSNDIR
-@vindex NDIR
-@vindex VOID_CLOSEDIR
+@cvindex DIRENT
+@cvindex SYSDIR
+@cvindex SYSNDIR
+@cvindex NDIR
+@cvindex VOID_CLOSEDIR
 Like @code{AC_HEADER_DIRENT}, but defines a different set of C
 preprocessor macros to indicate which header file is found.  This macro
 and the names it defines are considered obsolete.  The names it defines are:
@@ -919,11 +922,11 @@ Also, if the directory library header file contains a declaration of the
 
 @defmac AC_HEADER_DIRENT
 @maindex HEADER_DIRENT
-@vindex HAVE_DIRENT_H
-@vindex HAVE_NDIR_H
-@vindex HAVE_SYS_DIR_H
-@vindex HAVE_SYS_NDIR_H
-@vindex CLOSEDIR_VOID
+@cvindex HAVE_DIRENT_H
+@cvindex HAVE_NDIR_H
+@cvindex HAVE_SYS_DIR_H
+@cvindex HAVE_SYS_NDIR_H
+@cvindex CLOSEDIR_VOID
 Check for the the following header files, and for the first one that is
 found, define the listed C preprocessor macro:
 
@@ -983,8 +986,8 @@ the length of a directory entry name by passing a pointer to a
 
 @defmac AC_HEADER_MAJOR
 @maindex HEADER_MAJOR
-@vindex MAJOR_IN_MKDEV
-@vindex MAJOR_IN_SYSMACROS
+@cvindex MAJOR_IN_MKDEV
+@cvindex MAJOR_IN_SYSMACROS
 If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{makedev}, but @file{sys/mkdev.h} does, define
 @code{MAJOR_IN_MKDEV}; otherwise, if @file{sys/sysmacros.h} does, define
@@ -993,7 +996,7 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 
 @defmac AC_HEADER_STDC
 @maindex HEADER_STDC
-@vindex STDC_HEADERS
+@cvindex STDC_HEADERS
 Define @code{STDC_HEADERS} if the system has ANSI C header files.
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
 @file{string.h}, and @file{float.h}; if the system has those, it
@@ -1060,7 +1063,7 @@ been called already.
 
 @defmac AC_MEMORY_H
 @maindex MEMORY_H
-@vindex NEED_MEMORY_H
+@cvindex NEED_MEMORY_H
 Define @code{NEED_MEMORY_H} if @code{memcpy}, @code{memcmp}, etc. are
 not declared in @file{string.h} and @file{memory.h} exists.  This macro
 is obsolete; instead, use @code{AC_CHECK_HEADERS(memory.h)}.  See the
@@ -1069,7 +1072,7 @@ example for @code{AC_HEADER_STDC}.
 
 @defmac AC_UNISTD_H
 @maindex UNISTD_H
-@vindex HAVE_UNISTD_H
+@cvindex HAVE_UNISTD_H
 Define @code{HAVE_UNISTD_H} if the system has @file{unistd.h}.  This
 macro is obsolete; instead, use @samp{AC_CHECK_HEADERS(unistd.h)}.
 
@@ -1088,7 +1091,7 @@ The way to check if the system supports POSIX.1 is:
 @end group
 @end example
 
-@vindex _POSIX_VERSION
+@cvindex _POSIX_VERSION
 @code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
 POSIX.1 systems.  If there is no @file{unistd.h}, it is definitely not a
 POSIX.1 system.  However, some non-POSIX.1 systems do have @file{unistd.h}.
@@ -1096,7 +1099,7 @@ POSIX.1 system.  However, some non-POSIX.1 systems do have @file{unistd.h}.
 
 @defmac AC_USG
 @maindex USG
-@vindex USG
+@cvindex USG
 Define @code{USG} if the system does not have @file{strings.h},
 @code{rindex}, @code{bzero}, etc.  This implies that it has
 @file{string.h}, @code{strrchr}, @code{memset}, etc.
@@ -1113,35 +1116,35 @@ The following macros check for predefined C types:
 
 @defmac AC_TYPE_GETGROUPS
 @maindex TYPE_GETGROUPS
-@vindex GETGROUPS_T
+@cvindex GETGROUPS_T
 Define @code{GETGROUPS_T} to be whichever of @code{gid_t} or @code{int}
 is the base type of the array argument to @code{getgroups}.
 @end defmac
 
 @defmac AC_TYPE_MODE_T
 @maindex TYPE_MODE_T
-@vindex mode_t
+@cvindex mode_t
 If @code{mode_t} is not defined in @file{sys/types.h}, define
 @code{mode_t} to be @code{int}.
 @end defmac
 
 @defmac AC_TYPE_OFF_T
 @maindex TYPE_OFF_T
-@vindex off_t
+@cvindex off_t
 If @code{off_t} is not defined in @file{sys/types.h}, define
 @code{off_t} to be @code{long}.
 @end defmac
 
 @defmac AC_TYPE_PID_T
 @maindex TYPE_PID_T
-@vindex pid_t
+@cvindex pid_t
 If @code{pid_t} is not defined in @file{sys/types.h}, define
 @code{pid_t} to be @code{int}.
 @end defmac
 
 @defmac AC_TYPE_SIGNAL
 @maindex TYPE_SIGNAL
-@vindex RETSIGTYPE
+@cvindex RETSIGTYPE
 If @file{signal.h} declares @code{signal} as returning a pointer to a
 function returning @code{void}, define @code{RETSIGTYPE} to be
 @code{void}; otherwise, define it to be @code{int}.
@@ -1161,15 +1164,15 @@ hup_handler ()
 
 @defmac AC_TYPE_SIZE_T
 @maindex TYPE_SIZE_T
-@vindex size_t
+@cvindex size_t
 If @code{size_t} is not defined in @file{sys/types.h}, define
 @code{size_t} to be @code{unsigned}.
 @end defmac
 
 @defmac AC_TYPE_UID_T
 @maindex TYPE_UID_T
-@vindex uid_t
-@vindex gid_t
+@cvindex uid_t
+@cvindex gid_t
 If @code{uid_t} is not defined in @file{sys/types.h}, define
 @code{uid_t} to be @code{int} and @code{gid_t} to be @code{int}.
 @end defmac
@@ -1181,8 +1184,8 @@ The following macros check for particular C library functions:
 
 @defmac AC_FUNC_ALLOCA
 @maindex FUNC_ALLOCA
-@vindex C_ALLOCA
-@vindex HAVE_ALLOCA_H
+@cvindex C_ALLOCA
+@cvindex HAVE_ALLOCA_H
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If that fails, it looks for a function
@@ -1234,14 +1237,14 @@ char *alloca ();
 
 @defmac AC_FUNC_GETLOADAVG
 @maindex FUNC_GETLOADAVG
-@vindex SVR4
-@vindex DGUX
-@vindex UMAX
-@vindex UMAX4_3
-@vindex NLIST_STRUCT
-@vindex NLIST_NAME_UNION
-@vindex GETLODAVG_PRIVILEGED
-@vindex NEED_SETGID
+@cvindex SVR4
+@cvindex DGUX
+@cvindex UMAX
+@cvindex UMAX4_3
+@cvindex NLIST_STRUCT
+@cvindex NLIST_NAME_UNION
+@cvindex GETLODAVG_PRIVILEGED
+@cvindex NEED_SETGID
 Check how to get the system load averages.  If the system has the
 @code{getloadavg} function, this macro defines @code{HAVE_GETLOADAVG},
 and adds to @code{LIBS} any libraries needed to get that function.
@@ -1278,14 +1281,14 @@ to the name of the group that should own the installed program.
 
 @defmac AC_FUNC_MMAP
 @maindex FUNC_MMAP
-@vindex HAVE_MMAP
+@cvindex HAVE_MMAP
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.
 @end defmac
 
 @defmac AC_FUNC_SETVBUF_REVERSED
 @maindex FUNC_SETVBUF_REVERSED
-@vindex SETVBUF_REVERSED
+@cvindex SETVBUF_REVERSED
 If @code{setvbuf} takes the buffering type as its second argument and
 the buffer pointer as the third, instead of the other way around, define
 @code{SETVBUF_REVERSED}.  This is the case on System V before release 3.
@@ -1293,7 +1296,7 @@ the buffer pointer as the third, instead of the other way around, define
 
 @defmac AC_FUNC_STRCOLL
 @maindex FUNC_STRCOLL
-@vindex HAVE_STRCOLL
+@cvindex HAVE_STRCOLL
 If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
 @samp{AC_CHECK_FUNCS(strcoll)}, because some systems have incorrect
@@ -1302,15 +1305,15 @@ definitions of @code{strcoll}, which should not be used.
 
 @defmac AC_FUNC_UTIME_NULL
 @maindex FUNC_UTIME_NULL
-@vindex HAVE_UTIME_NULL
+@cvindex HAVE_UTIME_NULL
 If @samp{utime(@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
 @end defmac
 
 @defmac AC_FUNC_VFORK
 @maindex FUNC_VFORK
-@vindex HAVE_VFORK_H
-@vindex vfork
+@cvindex HAVE_VFORK_H
+@cvindex vfork
 If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
 @code{vfork} is not found, define @code{vfork} to be @code{fork}.  This
 macro checks for several known errors in implementations of @code{vfork}
@@ -1320,8 +1323,8 @@ detects any of them.
 
 @defmac AC_FUNC_VPRINTF
 @maindex FUNC_VPRINTF
-@vindex HAVE_VPRINTF
-@vindex HAVE_DOPRNT
+@cvindex HAVE_VPRINTF
+@cvindex HAVE_DOPRNT
 If @code{vprintf} is found, define @code{HAVE_VPRINTF}.  Otherwise, if
 @code{_doprnt} is found, define @code{HAVE_DOPRNT}.  (If @code{vprintf}
 is available, you may assume that @code{vfprintf} and @code{vsprintf}
@@ -1330,7 +1333,7 @@ are also available.)
 
 @defmac AC_FUNC_WAIT3
 @maindex FUNC_WAIT3
-@vindex HAVE_WAIT3
+@cvindex HAVE_WAIT3
 If @code{wait3} is found and fills in the contents of its third argument
 (a @samp{struct rusage *}), which HP-UX does not do, define
 @code{HAVE_WAIT3}.
@@ -1352,7 +1355,7 @@ Amdahl UTS and Motorola System V/88.
 
 @defmac AC_HEADER_TIME
 @maindex HEADER_TIME
-@vindex TIME_WITH_SYS_TIME
+@cvindex TIME_WITH_SYS_TIME
 If a program may include both @file{time.h} and @file{sys/time.h},
 define @code{TIME_WITH_SYS_TIME}.  On some older systems,
 @file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
@@ -1378,14 +1381,14 @@ example, @code{struct timeval} or @code{struct timezone} as well as
 
 @defmac AC_STRUCT_ST_BLKSIZE
 @maindex STRUCT_ST_BLKSIZE
-@vindex HAVE_ST_BLKSIZE
+@cvindex HAVE_ST_BLKSIZE
 If @code{struct stat} contains an @code{st_blksize} member, define
 @code{HAVE_ST_BLKSIZE}.
 @end defmac
 
 @defmac AC_STRUCT_ST_BLOCKS
 @maindex STRUCT_ST_BLOCKS
-@vindex HAVE_ST_BLOCKS
+@cvindex HAVE_ST_BLOCKS
 If @code{struct stat} contains an @code{st_blocks} member, define
 @code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
 @code{make} variable @code{LIBOBJS}.
@@ -1393,14 +1396,14 @@ If @code{struct stat} contains an @code{st_blocks} member, define
 
 @defmac AC_STRUCT_ST_RDEV
 @maindex STRUCT_ST_RDEV
-@vindex HAVE_ST_RDEV
+@cvindex HAVE_ST_RDEV
 If @code{struct stat} contains an @code{st_rdev} member, define
 @code{HAVE_ST_RDEV}.
 @end defmac
 
 @defmac AC_STRUCT_TM
 @maindex STRUCT_TM
-@vindex TM_IN_SYS_TIME
+@cvindex TM_IN_SYS_TIME
 If @file{time.h} does not define @code{struct tm}, define
 @code{TM_IN_SYS_TIME}, which means that including @file{sys/time.h}
 defines @code{struct tm}.
@@ -1408,8 +1411,8 @@ defines @code{struct tm}.
 
 @defmac AC_STRUCT_TIMEZONE
 @maindex STRUCT_TIMEZONE
-@vindex HAVE_TM_ZONE
-@vindex HAVE_TZNAME
+@cvindex HAVE_TM_ZONE
+@cvindex HAVE_TZNAME
 Figure out how to get the current timezone.  If @code{struct tm} has a
 @code{tm_zone} member, define @code{HAVE_TM_ZONE}.  Otherwise, if the
 external array @code{tzname} is found, define @code{HAVE_TZNAME}.  This
@@ -1424,7 +1427,7 @@ features:
 
 @defmac AC_C_ARG_ARRAY
 @maindex C_ARG_ARRAY
-@vindex NO_ARG_ARRAY
+@cvindex NO_ARG_ARRAY
 If the address of an argument to a C function can not be used like
 the start of an array, define @code{NO_ARG_ARRAY}.  This ability allows
 a sequence of arguments with the same type to be accessed as if they
@@ -1433,21 +1436,21 @@ were an array of values.
 
 @defmac AC_C_BIGENDIAN
 @maindex C_BIGENDIAN
-@vindex WORDS_BIGENDIAN
+@cvindex WORDS_BIGENDIAN
 If words are stored with the most significant byte first (like Motorola
 and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 @end defmac
 
 @defmac AC_C_CHAR_UNSIGNED
 @maindex C_CHAR_UNSIGNED
-@vindex __CHAR_UNSIGNED__
+@cvindex __CHAR_UNSIGNED__
 If the C type @code{char} is unsigned, define @code{__CHAR_UNSIGNED__},
 unless the C compiler predefines it.
 @end defmac
 
 @defmac AC_C_CONST
 @maindex C_CONST
-@vindex const
+@cvindex const
 If the C compiler does not fully support the keyword @code{const},
 define @code{const} to be empty.  Some C compilers that do not define
 @code{__STDC__} do support @code{const}; some compilers that define
@@ -1471,7 +1474,7 @@ to take a default action instead of trying to run a test program
 
 @defmac AC_C_INLINE
 @maindex C_INLINE
-@vindex inline
+@cvindex inline
 If the C compiler is a version of GCC that supports the keyword
 @code{__inline} but not @code{inline} (such as some NeXT versions),
 define @code{inline} to be @code{__inline}.  This macro calls
@@ -1480,7 +1483,7 @@ define @code{inline} to be @code{__inline}.  This macro calls
 
 @defmac AC_INT_16_BITS
 @maindex INT_16_BITS
-@vindex INT_16_BITS
+@cvindex INT_16_BITS
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
 This macro is obsolete; it is more general to use
 @samp{AC_CHECK_SIZEOF(int)} instead (@pxref{C Features}).
@@ -1488,7 +1491,7 @@ This macro is obsolete; it is more general to use
 
 @defmac AC_LONG_64_BITS
 @maindex LONG_64_BITS
-@vindex LONG_64_BITS
+@cvindex LONG_64_BITS
 If the C type @code{long int} is 64 bits wide, define
 @code{LONG_64_BITS}.  This macro is obsolete; it is more general to use
 @samp{AC_CHECK_SIZEOF(long)} instead (@pxref{C Features}).
@@ -1496,7 +1499,7 @@ If the C type @code{long int} is 64 bits wide, define
 
 @defmac AC_C_LONG_DOUBLE
 @maindex C_LONG_DOUBLE
-@vindex HAVE_LONG_DOUBLE
+@cvindex HAVE_LONG_DOUBLE
 If the C compiler supports the @code{long double} type, define
 @code{HAVE_LONG_DOUBLE}.  Some C compilers that do not define
 @code{__STDC__} do support the @code{long double} type; some compilers
@@ -1552,14 +1555,14 @@ you should let it call @code{AC_PATH_X} rather than doing that yourself.
 
 @defmac AC_SYS_LONG_FILE_NAMES
 @maindex SYS_LONG_FILE_NAMES
-@vindex HAVE_LONG_FILE_NAMES
+@cvindex HAVE_LONG_FILE_NAMES
 If the system supports file names longer than 14 characters, define
 @code{HAVE_LONG_FILE_NAMES}.
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS
 @maindex SYS_RESTARTABLE_SYSCALLS
-@vindex HAVE_RESTARTABLE_SYSCALLS
+@cvindex HAVE_RESTARTABLE_SYSCALLS
 If the system automatically restarts a system call that is interrupted
 by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}.
 @end defmac
@@ -1575,7 +1578,7 @@ functions they make available or the environments they provide.
 
 @defmac AC_OS_AIX
 @maindex OS_AIX
-@vindex _ALL_SOURCE
+@cvindex _ALL_SOURCE
 If on AIX, define @code{_ALL_SOURCE}.  Allows the use of some BSD
 functions.  Should be called before any macros that run the C compiler.
 @end defmac
@@ -1599,7 +1602,7 @@ so on.
 
 @defmac AC_OS_ISC
 @maindex OS_ISC
-@vindex _POSIX_SOURCE
+@cvindex _POSIX_SOURCE
 If on a POSIXized ISC UNIX, define @code{_POSIX_SOURCE} and add
 @samp{-posix} (for the GNU C compiler) or @samp{-Xp} (for other C
 compilers) to @code{make} variable @code{CC}.  This allows the use of
@@ -1609,9 +1612,9 @@ any other macros that run the C compiler.
 
 @defmac AC_OS_MINIX
 @maindex OS_MINIX
-@vindex _MINIX
-@vindex _POSIX_SOURCE
-@vindex _POSIX_1_SOURCE
+@cvindex _MINIX
+@cvindex _POSIX_SOURCE
+@cvindex _POSIX_1_SOURCE
 If on Minix, define @code{_MINIX} and @code{_POSIX_SOURCE} and define
 @code{_POSIX_1_SOURCE} to be 2.  This allows the use of POSIX
 facilities.  Should be called before any macros that run the C compiler.
@@ -1701,7 +1704,7 @@ other auxiliary files.
 
 @defmac AC_CONFIG_HEADER (@var{header-to-create} @dots{})
 @maindex CONFIG_HEADER
-@vindex HAVE_CONFIG_H
+@cvindex HAVE_CONFIG_H
 Make @code{AC_OUTPUT} create the file(s) in the whitespace-separated
 list @var{header-to-create} containing C preprocessor @code{#define}
 statements and replace @samp{@@DEFS@@} in generated files with
@@ -2044,7 +2047,7 @@ define a symbol if the function is available, consider using
 
 @defmac AC_CHECK_FUNCS (@var{function}@dots{} @r{[}, @var{action}@r{]})
 @maindex CHECK_FUNCS
-@vindex HAVE_@var{function}
+@cvindex HAVE_@var{function}
 For each given @var{function} in the whitespace-separated argument list
 that is available, define @code{HAVE_@var{function}} (in all caps).
 @xref{Specific Tests}, for a precise definition of ``define'' as it
@@ -2065,7 +2068,7 @@ consider using @code{AC_CHECK_HEADERS} instead.
 
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{} @r{[}, @var{action}@r{]})
 @maindex CHECK_HEADERS
-@vindex HAVE_@var{header}
+@cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
 whitespace-separated argument list that exists, define
 @code{HAVE_@var{header-file}} (in all caps).  @xref{Specific Tests}, for
@@ -3179,7 +3182,6 @@ redundant.
 
 @xref{Makefile Conventions, , Makefile Conventions, standards.info, The
 GNU Coding Standards}, for more information on what to put in Makefiles.
-@xref{Sample Makefile.in}, for an example of a real @file{Makefile.in}.
 
 @menu
 * Predefined Variables::	Heavily used @code{make} variables.
@@ -3373,11 +3375,13 @@ the @code{configure} script that generated @file{config.status}.
 can alter its behavior:
 
 @defvar CONFIG_SHELL
+@evindex CONFIG_SHELL
 The shell with which to run @code{configure} for the @samp{--recheck}
 option.  The default is @file{/bin/sh}.
 @end defvar
 
 @defvar CONFIG_STATUS
+@evindex CONFIG_STATUS
 The file name to use for the shell script that records the
 configuration.  The default is @file{./config.status}.  This variable is
 useful when one package uses parts of another and the @file{configure}
@@ -3392,11 +3396,13 @@ one of them, perhaps a common library, does.  These variables allow a
 @file{configure.in} specifies, so it can be used for a different package.
 
 @defvar CONFIG_FILES
+@evindex CONFIG_FILES
 The files in which to perform @samp{@@@var{variable}@@} substitutions.
 The default is the arguments given to @code{AC_OUTPUT} in @file{configure.in}.
 @end defvar
 
 @defvar CONFIG_HEADERS
+@evindex CONFIG_HEADERS
 The files in which to substitute C @code{#define} statements.
 The default is the arguments given to @code{AC_CONFIG_HEADER}; if that
 macro was not called, @file{config.status} ignores this variable.
@@ -3433,6 +3439,7 @@ initialization files.  You can create these files to provide default
 values for some configuration values, both on all of your systems and
 separately for each architecture.
 
+@evindex CONFIG_SITE
 If the environment variable @code{CONFIG_SITE} is set and contains the
 name of a readable file, @code{configure} reads that file as a shell
 script.  Otherwise, it reads the shell script
@@ -3478,7 +3485,7 @@ test $cache_file = ./config.cache &&
 test $exec_prefix = NONE && exec_prefix=/usr/local/gnu
 @end example
 
-@node Old Macro Names, Example, Site Default Values, Top
+@node Old Macro Names, History, Site Default Values, Top
 @chapter Old Macro Names
 
 In version 2 of Autoconf, most of the macros were renamed to use a more
@@ -3490,468 +3497,209 @@ for backward compatibility, the old names are considered obsolete.
 
 @table @code
 @item AC_AIX
-@vindex AIX
-@vindex OS_AIX
+@maindex AIX
 @code{AC_OS_AIX}
 @item AC_ALLOCA
-@vindex ALLOCA
-@vindex FUNC_ALLOCA
+@maindex ALLOCA
 @code{AC_FUNC_ALLOCA}
 @item AC_ARG_ARRAY
-@vindex ARG_ARRAY
-@vindex C_ARG_ARRAY
+@maindex ARG_ARRAY
 @code{AC_C_ARG_ARRAY}
 @item AC_CHAR_UNSIGNED
-@vindex CHAR_UNSIGNED
-@vindex C_CHAR_UNSIGNED
+@maindex CHAR_UNSIGNED
 @code{AC_C_CHAR_UNSIGNED}
 @item AC_CONST
-@vindex CONST
-@vindex C_CONST
+@maindex CONST
 @code{AC_C_CONST}
 @item AC_CROSS_CHECK
-@vindex CROSS_CHECK
-@vindex C_CROSS
+@maindex CROSS_CHECK
 @code{AC_C_CROSS}
 @item AC_DYNIX_SEQ
-@vindex DYNIX_SEQ
-@vindex OS_DYNIX
+@maindex DYNIX_SEQ
 @code{AC_OS_DYNIX}
 @item AC_ERROR
-@vindex ERROR
-@vindex MSG_ERROR
+@maindex ERROR
 @code{AC_MSG_ERROR}
 @item AC_FIND_X
-@vindex FIND_X
-@vindex PATH_X
+@maindex FIND_X
 @code{AC_PATH_X}
 @item AC_FIND_XTRA
-@vindex FIND_XTRA
-@vindex PATH_XTRA
+@maindex FIND_XTRA
 @code{AC_PATH_XTRA}
-@item AC_FIND_X_DIRECT
-@vindex FIND_X_DIRECT
-@vindex PATH_X_DIRECT
-@code{AC_PATH_X_DIRECT}
-@item AC_FIND_X_XMKMF
-@vindex FIND_X_XMKMF
-@vindex PATH_X_XMKMF
-@code{AC_PATH_X_XMKMF}
 @item AC_FUNC_CHECK
-@vindex FUNC_CHECK
-@vindex CHECK_FUNC
+@maindex FUNC_CHECK
 @code{AC_CHECK_FUNC}
 @item AC_GCC_TRADITIONAL
-@vindex GCC_TRADITIONAL
-@vindex PROG_GCC_TRADITIONAL
+@maindex GCC_TRADITIONAL
 @code{AC_PROG_GCC_TRADITIONAL}
 @item AC_GETGROUPS_T
-@vindex GETGROUPS_T
-@vindex TYPE_GETGROUPS
+@maindex GETGROUPS_T
 @code{AC_TYPE_GETGROUPS}
 @item AC_GETLOADAVG
-@vindex GETLOADAVG
-@vindex FUNC_GETLOADAVG
+@maindex GETLOADAVG
 @code{AC_FUNC_GETLOADAVG}
 @item AC_HAVE_FUNCS
-@vindex HAVE_FUNCS
-@vindex CHECK_FUNCS
+@maindex HAVE_FUNCS
 @code{AC_CHECK_FUNCS}
 @item AC_HAVE_HEADERS
-@vindex HAVE_HEADERS
-@vindex CHECK_HEADERS
+@maindex HAVE_HEADERS
 @code{AC_CHECK_HEADERS}
 @item AC_HAVE_POUNDBANG
-@vindex HAVE_POUNDBANG
-@vindex SYS_INTERPRETER
+@maindex HAVE_POUNDBANG
 @code{AC_SYS_INTERPRETER} (different calling convention)
 @item AC_HEADER_CHECK
-@vindex HEADER_CHECK
-@vindex CHECK_HEADER
+@maindex HEADER_CHECK
 @code{AC_CHECK_HEADER}
 @item AC_HEADER_EGREP
-@vindex HEADER_EGREP
-@vindex EGREP_HEADER
+@maindex HEADER_EGREP
 @code{AC_EGREP_HEADER}
 @item AC_INLINE
-@vindex INLINE
-@vindex C_INLINE
+@maindex INLINE
 @code{AC_C_INLINE}
 @item AC_IRIX_SUN
-@vindex IRIX_SUN
-@vindex OS_IRIX
+@maindex IRIX_SUN
 @code{AC_OS_IRIX}
 @item AC_ISC_POSIX
-@vindex ISC_POSIX
-@vindex OS_ISC
+@maindex ISC_POSIX
 @code{AC_OS_ISC}
 @item AC_LN_S
-@vindex LN_S
-@vindex PROG_LN_S
+@maindex LN_S
 @code{AC_PROG_LN_S}
 @item AC_LONG_DOUBLE
-@vindex LONG_DOUBLE
-@vindex C_LONG_DOUBLE
+@maindex LONG_DOUBLE
 @code{AC_C_LONG_DOUBLE}
 @item AC_LONG_FILE_NAMES
-@vindex LONG_FILE_NAMES
-@vindex SYS_LONG_FILE_NAMES
+@maindex LONG_FILE_NAMES
 @code{AC_SYS_LONG_FILE_NAMES}
 @item AC_MAJOR_HEADER
-@vindex MAJOR_HEADER
-@vindex HEADER_MAJOR
+@maindex MAJOR_HEADER
 @code{AC_HEADER_MAJOR}
 @item AC_MINIX
-@vindex MINIX
-@vindex OS_MINIX
+@maindex MINIX
 @code{AC_OS_MINIX}
 @item AC_MINUS_C_MINUS_O
-@vindex MINUS_C_MINUS_O
-@vindex PROG_CC_C_O
+@maindex MINUS_C_MINUS_O
 @code{AC_PROG_CC_C_O}
 @item AC_MMAP
-@vindex MMAP
-@vindex FUNC_MMAP
+@maindex MMAP
 @code{AC_FUNC_MMAP}
 @item AC_MODE_T
-@vindex MODE_T
-@vindex TYPE_MODE_T
+@maindex MODE_T
 @code{AC_TYPE_MODE_T}
-@item AC_NOTICE
-@vindex NOTICE
-@vindex INIT_NOTICE
-@code{AC_INIT_NOTICE}
 @item AC_OFF_T
-@vindex OFF_T
-@vindex TYPE_OFF_T
+@maindex OFF_T
 @code{AC_TYPE_OFF_T}
 @item AC_PID_T
-@vindex PID_T
-@vindex TYPE_PID_T
+@maindex PID_T
 @code{AC_TYPE_PID_T}
 @item AC_PREPARE
-@vindex PREPARE
-@vindex INIT_PREPARE
+@maindex PREPARE
 @code{AC_INIT_PREPARE}
 @item AC_PROGRAMS_CHECK
-@vindex PROGRAMS_CHECK
-@vindex CHECK_PROGS
+@maindex PROGRAMS_CHECK
 @code{AC_CHECK_PROGS}
 @item AC_PROGRAMS_PATH
-@vindex PROGRAMS_PATH
-@vindex PATH_PROGS
+@maindex PROGRAMS_PATH
 @code{AC_PATH_PROGS}
 @item AC_PROGRAM_CHECK
-@vindex PROGRAM_CHECK
-@vindex CHECK_PROG
+@maindex PROGRAM_CHECK
 @code{AC_CHECK_PROG}
 @item AC_PROGRAM_EGREP
-@vindex PROGRAM_EGREP
-@vindex EGREP_CPP
+@maindex PROGRAM_EGREP
 @code{AC_EGREP_CPP}
 @item AC_PROGRAM_PATH
-@vindex PROGRAM_PATH
-@vindex PATH_PROG
+@maindex PROGRAM_PATH
 @code{AC_PATH_PROG}
 @item AC_REMOTE_TAPE
-@vindex REMOTE_TAPE
+@maindex REMOTE_TAPE
 removed because of limited usefulness
 @item AC_RESTARTABLE_SYSCALLS
-@vindex RESTARTABLE_SYSCALLS
-@vindex SYS_RESTARTABLE_SYSCALLS
+@maindex RESTARTABLE_SYSCALLS
 @code{AC_SYS_RESTARTABLE_SYSCALLS}
 @item AC_RETSIGTYPE
-@vindex RETSIGTYPE
-@vindex TYPE_SIGNAL
+@maindex RETSIGTYPE
 @code{AC_TYPE_SIGNAL}
 @item AC_RSH
-@vindex RSH
-@vindex PROG_RSH
-@code{AC_PROG_RSH}
+@maindex RSH
+removed because of limited usefulness
 @item AC_SCO_INTL
-@vindex SCO_INTL
-@vindex OS_SCO
+@maindex SCO_INTL
 @code{AC_OS_SCO}
 @item AC_SETVBUF_REVERSED
-@vindex SETVBUF_REVERSED
-@vindex FUNC_SETVBUF_REVERSED
+@maindex SETVBUF_REVERSED
 @code{AC_FUNC_SETVBUF_REVERSED}
 @item AC_SET_MAKE
-@vindex SET_MAKE
-@vindex PROG_MAKE_SET
+@maindex SET_MAKE
 @code{AC_PROG_MAKE_SET}
 @item AC_SIZEOF_TYPE
-@vindex SIZEOF_TYPE
-@vindex CHECK_SIZEOF
+@maindex SIZEOF_TYPE
 @code{AC_CHECK_SIZEOF}
 @item AC_SIZE_T
-@vindex SIZE_T
-@vindex TYPE_SIZE_T
+@maindex SIZE_T
 @code{AC_TYPE_SIZE_T}
 @item AC_STAT_MACROS_BROKEN
-@vindex STAT_MACROS_BROKEN
-@vindex HEADER_STAT
+@maindex STAT_MACROS_BROKEN
 @code{AC_HEADER_STAT}
 @item AC_STDC_HEADERS
-@vindex STDC_HEADERS
-@vindex HEADER_STDC
+@maindex STDC_HEADERS
 @code{AC_HEADER_STDC}
 @item AC_STRCOLL
-@vindex STRCOLL
-@vindex FUNC_STRCOLL
+@maindex STRCOLL
 @code{AC_FUNC_STRCOLL}
 @item AC_ST_BLKSIZE
-@vindex ST_BLKSIZE
-@vindex STRUCT_ST_BLKSIZE
+@maindex ST_BLKSIZE
 @code{AC_STRUCT_ST_BLKSIZE}
 @item AC_ST_BLOCKS
-@vindex ST_BLOCKS
-@vindex STRUCT_ST_BLOCKS
+@maindex ST_BLOCKS
 @code{AC_STRUCT_ST_BLOCKS}
 @item AC_ST_RDEV
-@vindex ST_RDEV
-@vindex STRUCT_ST_RDEV
+@maindex ST_RDEV
 @code{AC_STRUCT_ST_RDEV}
 @item AC_SYS_SIGLIST_DECLARED
-@vindex SYS_SIGLIST_DECLARED
-@vindex DECL_SYS_SIGLIST
+@maindex SYS_SIGLIST_DECLARED
 @code{AC_DECL_SYS_SIGLIST}
 @item AC_TEST_CPP
-@vindex TEST_CPP
-@vindex TRY_CPP
+@maindex TEST_CPP
 @code{AC_TRY_CPP}
 @item AC_TEST_PROGRAM
-@vindex TEST_PROGRAM
-@vindex TRY_RUN
+@maindex TEST_PROGRAM
 @code{AC_TRY_RUN}
 @item AC_TIMEZONE
-@vindex TIMEZONE
-@vindex STRUCT_TIMEZONE
+@maindex TIMEZONE
 @code{AC_STRUCT_TIMEZONE}
 @item AC_TIME_WITH_SYS_TIME
-@vindex TIME_WITH_SYS_TIME
-@vindex HEADER_TIME
+@maindex TIME_WITH_SYS_TIME
 @code{AC_HEADER_TIME}
 @item AC_UID_T
-@vindex UID_T
-@vindex TYPE_UID_T
+@maindex UID_T
 @code{AC_TYPE_UID_T}
 @item AC_UTIME_NULL
-@vindex UTIME_NULL
-@vindex FUNC_UTIME_NULL
+@maindex UTIME_NULL
 @code{AC_FUNC_UTIME_NULL}
 @item AC_VFORK
-@vindex VFORK
-@vindex FUNC_VFORK
+@maindex VFORK
 @code{AC_FUNC_VFORK}
 @item AC_VPRINTF
-@vindex VPRINTF
-@vindex FUNC_VPRINTF
+@maindex VPRINTF
 @code{AC_FUNC_VPRINTF}
 @item AC_WAIT3
-@vindex WAIT3
-@vindex FUNC_WAIT3
+@maindex WAIT3
 @code{AC_FUNC_WAIT3}
 @item AC_WARN
-@vindex WARN
-@vindex MSG_WARN
+@maindex WARN
 @code{AC_MSG_WARN}
 @item AC_WORDS_BIGENDIAN
-@vindex WORDS_BIGENDIAN
-@vindex C_BIGENDIAN
+@maindex WORDS_BIGENDIAN
 @code{AC_C_BIGENDIAN}
 @item AC_XENIX_DIR
-@vindex XENIX_DIR
-@vindex OS_XENIX
+@maindex XENIX_DIR
 @code{AC_OS_XENIX}
 @item AC_YYTEXT_POINTER
-@vindex YYTEXT_POINTER
-@vindex DECL_YYTEXT
+@maindex YYTEXT_POINTER
 @code{AC_DECL_YYTEXT}
 @end table
 
-@node Example, History, Old Macro Names, Top
-@chapter An Example
-
-Here are sample @file{configure.in} and @file{Makefile.in} files, to
-give a real illustration of using Autoconf.  They are from the GNU
-@code{cpio} package, which also includes the @code{mt} and @code{rmt}
-programs.  This package does not use a configuration header file; it
-passes @samp{-D} options to the C compiler on the command line.
-
-@menu
-* Sample configure.in::		An example of a @file{configure} template.
-* Sample Makefile.in::		An example of a @file{Makefile} template.
-@end menu
-
-@node Sample configure.in, Sample Makefile.in, , Example
-@section Sample @file{configure.in}
-
-@noindent
-Here is @file{configure.in} from GNU @code{cpio}.  The @code{dnl} macro
-after @code{AC_SUBST} is suppresses an extra (though harmless) newline
-in the generated @code{configure} script (because the @code{AC_SUBST}
-macro does not produce any output where it is called).
-
-@example
-dnl Process this file with autoconf to produce a configure script.
-AC_INIT(cpio.h)
-PROGS="cpio"
-AC_SUBST(PROGS)dnl
-AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_GCC_TRADITIONAL
-AC_PROG_INSTALL
-AC_OS_AIX
-AC_OS_MINIX
-AC_OS_ISC
-AC_TYPE_SIGNAL
-AC_HEADER_MAJOR
-
-AC_CHECKING(for remote tape and socket header files)
-AC_HEADER_CHECK(sys/mtio.h,
-[AC_DEFINE(HAVE_SYS_MTIO_H)
-PROGS="$PROGS mt"
-AC_TEST_CPP([#include <sgtty.h>
-#include <sys/socket.h>], PROGS="$PROGS rmt")])
-
-AC_PROG_RSH
-AC_C_CONST
-AC_TYPE_UID_T
-AC_HEADER_STDC
-AC_CHECK_HEADERS(string.h fcntl.h utime.h unistd.h sys/io/trioctl.h)
-AC_REPLACE_FUNCS(fnmatch bcopy mkdir strdup)
-AC_CHECK_FUNCS(strerror lchown)
-AC_FUNC_VPRINTF
-AC_FUNC_ALLOCA
-AC_OS_XENIX
-AC_CHECK_LIB(socket, [LIBS="$LIBS -lsocket"])
-AC_CHECK_LIB(nsl, [LIBS="$LIBS -lnsl"])
-AC_OUTPUT(Makefile)
-@end example
-
-@node Sample Makefile.in, , Sample configure.in, Example
-@section Sample @file{Makefile.in}
-
-@noindent
-Here is @file{Makefile.in} from GNU @code{cpio}, with some irrelevant
-lines omitted, for brevity.
-
-@example
-srcdir = @@srcdir@@
-VPATH = @@srcdir@@
-
-CC = @@CC@@
-
-INSTALL = @@INSTALL@@
-INSTALL_PROGRAM = @@INSTALL_PROGRAM@@
-INSTALL_DATA = @@INSTALL_DATA@@
-
-DEFS = @@DEFS@@
-LIBS = @@LIBS@@
-RTAPELIB = @@RTAPELIB@@
-
-CFLAGS = -g
-LDFLAGS = -g
-
-prefix = @@prefix@@
-exec_prefix = @@exec_prefix@@
-binprefix =
-manprefix =
-
-bindir = $(exec_prefix)/bin
-libdir = $(exec_prefix)/lib
-mandir = $(prefix)/man/man1
-manext = 1
-
-SHELL = /bin/sh
-
-SRCS = copyin.c copyout.c copypass.c defer.c dstring.c global.c \
-main.c tar.c util.c error.c getopt.c getopt1.c filemode.c version.c \
-rtapelib.c dirname.c idcache.c makepath.c xmalloc.c stripslash.c \
-userspec.c xstrdup.c bcopy.c fnmatch.c mkdir.c strdup.c
-OBJS = copyin.o copyout.o copypass.o defer.o dstring.o global.o \
-main.o tar.o util.o error.o getopt.o getopt1.o filemode.o version.o \
-$(RTAPELIB) dirname.o idcache.o makepath.o xmalloc.o stripslash.o \
-userspec.o xstrdup.o @@LIBOBJS@@ @@ALLOCA@@
-# mt source files not shared with cpio.
-MT_SRCS = mt.c argmatch.c
-MT_OBJS = mt.o argmatch.o error.o getopt.o getopt1.o \
-xmalloc.o version.o $(RTAPELIB) @@ALLOCA@@
-HDRS = cpio.h cpiohdr.h tar.h tarhdr.h defer.h dstring.h extern.h filetypes.h \
-system.h fnmatch.h getopt.h rmt.h 
-DISTFILES = $(SRCS) $(HDRS) COPYING COPYING.LIB ChangeLog Makefile.in \
-README NEWS INSTALL cpio.1 mt.1 makefile.pc makefile.os2 cpio.def \
-configure configure.in mkinstalldirs $(MT_SRCS) rmt.c tcexparg.c alloca.c
-
-all: @@PROGS@@
-
-.c.o:
-        $(CC) -c $(CPPFLAGS) $(DEFS) -I$(srcdir) $(CFLAGS) $<
-
-install: installdirs all $(srcdir)/cpio.1 $(srcdir)/mt.1
-        $(INSTALL_PROGRAM) cpio $(bindir)/$(binprefix)cpio
-        test ! -f mt || $(INSTALL_PROGRAM) mt $(bindir)/$(binprefix)mt
-        -test ! -f rmt || $(INSTALL_PROGRAM) rmt $(libdir)/rmt
-        $(INSTALL_DATA) $(srcdir)/cpio.1 $(mandir)/$(manprefix)cpio.$(manext)
-        test ! -f mt || \
-        $(INSTALL_DATA) $(srcdir)/mt.1 $(mandir)/$(manprefix)mt.$(manext)
-
-installdirs:
-        $(srcdir)/mkinstalldirs $(bindir) $(libdir) $(mandir)
-
-uninstall:
-        cd $(bindir); rm -f $(binprefix)cpio $(binprefix)mt
-        -rm -f $(libdir)/rmt
-        cd $(mandir); rm -f $(manprefix)cpio.$(manext) $(manprefix)mt.$(manext)
-
-check:
-        @@echo No tests are supplied.
-
-cpio: $(OBJS)
-        $(CC) $(LDFLAGS) -o $@@ $(OBJS) $(LIBS)
-
-rmt: rmt.o
-        $(CC) $(LDFLAGS) -o $@@ rmt.o $(LIBS)
-
-mt: $(MT_OBJS)
-        $(CC) $(LDFLAGS) -o $@@ $(MT_OBJS) $(LIBS)
-
-Makefile: Makefile.in config.status
-        $(SHELL) config.status
-config.status: configure
-        $(SHELL) config.status --recheck
-configure: configure.in
-        cd $(srcdir); autoconf
-
-TAGS: $(SRCS)
-        etags $(SRCS)
-
-clean:
-        rm -f cpio rmt mt *.o core
-
-mostlyclean: clean
-
-distclean: clean
-        rm -f Makefile config.status
-
-realclean: distclean
-        rm -f TAGS
-
-dist: $(DISTFILES)
-        echo cpio-`sed -e '/version_string/!d' \
-        -e 's/[^0-9.]*\([0-9.]*\).*/\1/' -e q version.c` > .fname
-        rm -rf `cat .fname`
-        mkdir `cat .fname`
-        -ln $(DISTFILES) `cat .fname`
-        for file in $(DISTFILES); do \
-          test -r `cat .fname`/$$file || cp -p $$file `cat .fname`; \
-        done
-        tar chzf `cat .fname`.tar.gz `cat .fname`
-        rm -rf `cat .fname` .fname
-@end example
-
-@node History, Preprocessor Symbol Index, Example, Top
+@node History, Environment Variable Index, Old Macro Names, Top
 @chapter History of Autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
@@ -3964,7 +3712,7 @@ then let there be light.
 * Genesis::			Prehistory and naming of @code{configure}.
 * Exodus::			The plagues of @code{m4} and Perl.
 * Leviticus::			The priestly code of portability arrives.
-* Numbers::			Listing of growth and contributors.
+* Numbers::			Growth and contributors.
 * Deuteronomy::			Approaching the promises of easy configuration.
 @end menu
 
@@ -4004,6 +3752,22 @@ I should!  So I started to work out how to generate them.  And the
 journey from the bondage of hand-written @file{configure} scripts to the
 promise of Autoconf began.
 
+Cygnus @code{configure}, which was being developed at around that
+time, is table driven; it is meant to deal mainly with a discrete number
+of system types with a small number of mainly unguessable features (such
+as details of the object file format).  For general use, it seems to me
+a hopeless cause to try to maintain an up to date database of which
+features each variant of each operating system has.  It's easier and
+more reliable to check for most features on the fly---especially on
+hybrid systems that people have hacked on locally.
+
+I considered using an architecture similar to that of Cygnus
+@code{configure}, where there is a single @code{configure} script that
+reads pieces of @file{configure.in} when run.  But I didn't want to have
+to distribute all of the feature tests with every package, so I settled
+on having a different @code{configure} made from each
+@file{configure.in} by a preprocessor.
+
 I looked briefly into using Larry Wall's Metaconfig program, but I
 decided not to for several reasons.  The @code{Configure} scripts it
 produces are interactive, which I find quite inconvenient; I didn't like
@@ -4012,8 +3776,9 @@ was not being maintained, and its scripts didn't work on many modern
 systems (such as System V R4 and NeXT); it wasn't very flexible in what
 it could do in response to a feature's presence or absence; I found it
 confusing to learn; and it was too big and complex for my needs (I
-didn't realize then how much Autoconf would eventually have to grow).  I
-considered using Perl to generate my style of @code{configure} scripts,
+didn't realize then how much Autoconf would eventually have to grow).
+
+I considered using Perl to generate my style of @code{configure} scripts,
 but decided that @code{m4} was better suited to the job of simple
 textual substitutions: it gets in the way less, because output is
 implicit.  Plus, everyone already has it.  (Initially I didn't rely on
@@ -4031,10 +3796,11 @@ the program that generates them Autoconfig.  But with a version number
 tacked on, that name would be too long for System V R3 file systems, so
 I shortened it to Autoconf.
 
-I called together a group of priests of portability (er, alpha testers)
-to give me feedback as I encapsulated pieces of my handwritten scripts
-in @code{m4} macros and continued to add features and improve the
-techniques used in the checks.  Prominent among the testers were
+In the fall of 1991 I called together a group of priests of portability
+(er, alpha testers) to give me feedback as I encapsulated pieces of my
+handwritten scripts in @code{m4} macros and continued to add features
+and improve the techniques used in the checks.  Prominent among the
+testers were
 @ifinfo
 Franc,ois
 @end ifinfo
@@ -4072,7 +3838,7 @@ particular, has an impoverished set of builtin macros; the System V
 version is better, but still doesn't have everything we need.
 
 More development occurred as people put Autoconf under more stresses
-(and to uses I'd never imagined).  Karl Berry added checks for X11.
+(and to uses I hadn't anticipated).  Karl Berry added checks for X11.
 david zuhn contributed C++ support.
 @ifinfo
 Franc,ois
@@ -4111,8 +3877,8 @@ source tree, like Cygnus does) they were frustratingly slow.  Mike
 Haertel suggested adding site-specific initialization scripts.  People
 distributing software that had to unpack on MS-DOS asked for a way to
 override the @file{.in} extension on the file names.  Jim Avera did an
-extensive examination of the problems with quoting in @code{AC_DEFINE}
-and contributed significant improvements to it.  Richard Stallman asked
+extensive examination of the problems with quoting in @code{AC_DEFINE};
+his insights led to significant improvements.  Richard Stallman asked
 that compiler output be sent to @file{config.log} instead of
 @file{/dev/null}, to help people debug the Emacs @code{configure}
 script.
@@ -4120,11 +3886,11 @@ script.
 I made some other changes because of my dissatisfaction with the quality
 of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
-macros and cleaned up coding style inconsistencies.  I added several
+macros and cleaned up coding style inconsistencies.  I added some
 useful auxiliary utilities that I had developed to help convert source
 code packages to use Autoconf.  And I began a testsuite, because
-experience had shown that Autoconf had a pronounced tendency to regress
-when we changed it.
+experience had shown that Autoconf has a pronounced tendency to regress
+when we change it.
 
 Again, several alpha testers gave invaluable feedback, especially
 @ifinfo
@@ -4135,16 +3901,25 @@ Fran\c cois
 @end tex
 Pinard, Rob Savoye, and Ken Raeburn.
 
-Finally, version 2.0 was ready.
+Finally, version 2.0 was ready.  And there was much rejoicing.
+(And I have free time again.  I think.)
 
-@node Preprocessor Symbol Index, Macro Index, History, Top
+@node Environment Variable Index, Preprocessor Symbol Index, History, Top
+@unnumbered Environment Variable Index
+
+This is an alphabetical list of the environment variables that Autoconf
+uses in some way.  Some it sets, others it only checks.
+
+@printindex ev
+
+@node Preprocessor Symbol Index, Macro Index, Environment Variable Index, Top
 @unnumbered Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
 Autoconf macros define.  To work with Autoconf, C source code needs to
 use these names in @code{#if} directives.
 
-@printindex vr
+@printindex cv
 
 @node Macro Index, , Preprocessor Symbol Index, Top
 @unnumbered Macro Index

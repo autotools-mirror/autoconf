@@ -14,7 +14,7 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Document chapter addressing misconceptions.
+* Doc: chapter addressing misconceptions and migration from v1.
 
 ------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ functions (POSIX, NIS) that do everything necessary, instead.
 
 ------------------------------------------------------------------------------
 
-* Doc: Add indexes of concepts, env vars.
+* Doc: Add index of concepts.
 
 ------------------------------------------------------------------------------
 

@@ -123,13 +123,14 @@ installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
 
 # References to install-info have been removed until it's released.
-install: all acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
+install: all autoconf.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 acconfig.h \
 	installdirs install-info 
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
 	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
 	$(INSTALL_PROGRAM) autoupdate $(bindir)/autoupdate
 	$(INSTALL_PROGRAM) ifnames $(bindir)/ifnames
+	$(INSTALL_DATA) $(srcdir)/autoconf.m4 $(acdatadir)/autoconf.m4
 	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(acdatadir)/acgeneral.m4
 	$(INSTALL_DATA) $(srcdir)/acoldnames.m4 $(acdatadir)/acoldnames.m4
 	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(acdatadir)/acspecific.m4
@@ -181,7 +182,8 @@ clean mostlyclean distclean realclean::
 clean mostlyclean distclean realclean::
 	rm -f autoconf autoheader autoscan autoreconf autoupdate ifnames *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
-	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
+	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
+	rm -f *.ma *.mas *.cv *.cvs *.ev *.evs
 
 distclean realclean::
 	rm -f Makefile config.status config.cache config.log

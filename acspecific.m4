@@ -342,30 +342,6 @@ fi
 AC_SUBST(LN_S)dnl
 ])dnl
 dnl
-AC_DEFUN(AC_PROG_RSH,
-[AC_MSG_CHECKING(for remote shell)
-AC_CACHE_VAL(ac_cv_path_RSH,
-[ac_cv_path_RSH=no
-for ac_file in \
-  /usr/ucb/rsh /usr/bin/remsh /usr/bin/rsh /usr/bsd/rsh /usr/bin/nsh
-do
-  if test -f $ac_file; then
-    ac_cv_path_RSH=$ac_file
-    break
-  fi
-done])dnl
-RSH="$ac_cv_path_RSH"
-AC_MSG_RESULT($RSH)
-if test $RSH != true; then
-  RTAPELIB=rtapelib.o
-else
-  AC_CHECK_HEADER(netdb.h, [RTAPELIB=rtapelib.o AC_DEFINE(HAVE_NETDB_H)],
-    [RTAPELIB= AC_DEFINE(NO_REMOTE)])
-fi
-AC_SUBST(RSH)dnl
-AC_SUBST(RTAPELIB)dnl
-])dnl
-dnl
 dnl
 dnl ### Checks for header files
 dnl

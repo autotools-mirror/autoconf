@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.101)dnl
+define(AC_ACVERSION, 1.102)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl

@@ -43,7 +43,8 @@ Major changes in release 2.0:
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
 * AC_CHECK_FUNCS and AC_CHECK_HEADERS take optional shell commands to
   execute on success.
-* AC_REMOTE_TAPE removed; it was too specific to tar and cpio.
+* AC_REMOTE_TAPE and AC_RSH removed; too specific to tar and cpio, and
+  better maintained with them.
 * AC_HAVE_POUNDBANG replaced with AC_SYS_INTERPRETER, which doesn't
   take arguments.
 
