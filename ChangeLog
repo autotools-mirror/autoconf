@@ -1,3 +1,15 @@
+2004-12-13  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autotest/general.m4 (_AT_CHECK) [--trace]: Do not enable shell
+	tracing on commands with possibly-escaped newlines.
+	* doc/autoconf.texi (Writing testsuite.at): Delete documentation of the
+	discontinued behavior and its implications.
+	* tests/autotest.at (BS-newline in command, ^BS-newline in command)
+	(BSx641-newline in command, BS-BS-newline in command)
+	(BSx640-newline in command, Newline-CODE-BS-newline in command)
+	(Single-quote-BS-newline in command)
+	(Single-quote-newline-BS-newline in command): New tests.
+
 2004-12-13  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (AS_EXECUTABLE_P): Use test -f && test -x
