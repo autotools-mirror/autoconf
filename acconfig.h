@@ -124,6 +124,9 @@
 /* Define if int is 16 bits instead of 32.  */
 #undef INT_16_BITS
 
+/* Define if long int is 64 bits.  */
+#undef LONG_64_BITS
+
 /* Define if major, minor, and makedev are declared in mkdev.h.  */
 #undef MAJOR_IN_MKDEV
 
