@@ -1,3 +1,9 @@
+2003-03-31  Derek Price  <derek@ximbiot.com>
+
+	* lib/autotest/general.m4: Revert the checkin from 3-27 which removed
+	the main loop.
+	Thanks to Akim Demaille.
+
 2003-03-29  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Skip OS/2's install,
