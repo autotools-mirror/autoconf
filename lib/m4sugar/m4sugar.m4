@@ -437,6 +437,20 @@ m4_define([m4_map],
 m4_map([$1], m4_cdr($2))])])
 
 
+# m4_map_sep(MACRO, SEPARATOR, LIST)
+# ----------------------------------
+# Invoke MACRO($1), SEPARATOR, MACRO($2), ..., MACRO($N) where $1, $2... $N
+# are the elements of LIST (which can be lists themselves, for multiple
+# arguments MACROs).
+m4_define([m4_map_sep],
+[m4_if([$3], [[]], [],
+       [$1(m4_fst($3))[]dnl
+m4_if(m4_cdr($3),
+      [[]], [],
+      [$2])[]dnl
+m4_map_sep([$1], [$2], m4_cdr($3))])])
+
+
 ## ---------------------------------------- ##
 ## 6. Enhanced version of some primitives.  ##
 ## ---------------------------------------- ##
