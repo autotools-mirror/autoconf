@@ -3552,6 +3552,20 @@ common way to use these macros.  It calls @code{AC_MSG_CHECKING} for
 @var{commands} arguments, and @code{AC_MSG_RESULT} with @var{cache-id}.
 @end defmac
 
+@defmac AC_CACHE_LOAD
+@maindex CACHE_LOAD
+Loads values from existing cache file, or creates a new cache file if
+a cache file is not found.  Called automatically from @code{AC_INIT}.
+@end defmac
+
+@defmac AC_CACHE_SAVE
+@maindex CACHE_SAVE
+Flushes all cached values to the cache file.  Called automatically
+from @code{AC_OUTPUT}, but it can be quite useful to call
+@code{AC_CACHE_SAVE} at key points in configure.in.  Doing so
+checkpoints the cache in case of an early configure script abort.
+@end defmac
+
 @menu
 * Cache Variable Names::        Shell variables used in caches.
 * Cache Files::                 Files @code{configure} uses for caching.
@@ -3642,6 +3656,31 @@ the existing cache file.  The site initialization script can specify a
 site-wide cache file to use instead of the default, to make it work
 transparently, as long as the same C compiler is used every time
 (@pxref{Site Defaults}).
+
+If your configure script, or a macro called from configure.in, happens to
+abort the configure process, it may be useful to checkpoint the cache a
+few times at key points.  Doing so will reduce the amount of time it
+takes to re-run the configure script with (hopefully) the error that
+caused the previous abort corrected.
+
+@example
+@r{ ... AC_INIT, etc. ...}
+dnl checks for programs
+AC_PROG_CC
+AC_PROG_GCC_TRADITIONAL
+@r{ ... more program checks ...}
+AC_CACHE_SAVE
+
+dnl checks for libraries
+AC_CHECK_LIB(nsl, gethostbyname)
+AC_CHECK_LIB(socket, connect)
+@r{ ... more lib checks ...}
+AC_CACHE_SAVE
+
+dnl Might abort...
+AM_PATH_GTK(1.0.2, , exit 1)
+AM_PATH_GTKMM(0.9.5, , exit 1)
+@end example
 
 @node Printing Messages,  , Caching Results, Results
 @section Printing Messages

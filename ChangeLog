@@ -1,3 +1,9 @@
+1998-10-30  Jeff Garzik <jgarzik@pobox.com>
+
+	* autoconf.texi: Document AC_CACHE_LOAD and AC_CACHE_SAVE. Explain
+	how AC_CACHE_SAVE can be used as a means of syncing the cache to
+	disk prior to doing something potentially fatal in configure.
+
 1998-10-29  Alexandre Oliva  <oliva@dcc.unicamp.br>
 
 	* autoreconf.sh: Support several automake command line options,
