@@ -19,6 +19,7 @@
   that contains getloadavg.c, and it tests whether getloadavg.c exists.
 - AC_FUNC_SETVBUF_REVERSED no longer fails when cross-compiling.
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
+- AC_PROG_F77 default search no longer includes cf77 and cfg77.
 - New macro: AC_GNU_SOURCE.
 
 ** Bug fixes
