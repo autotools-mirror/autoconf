@@ -120,6 +120,14 @@
 @end macro
 @end ifclear
 
+@c @auindex{MACRO}
+@c ---------------
+@c Registering an AU_\MACRO\.
+@macro auindex{macro}
+@ACindex AU_\macro\
+@c
+@end macro
+
 @c @hdrindex{MACRO}
 @c ----------------
 @c Indexing a header.
@@ -9094,8 +9102,7 @@ with their modern implementation.
 Autoconf provides a simple means to obsolete a macro.
 
 @defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
-@acindex{DEFUN}
-@acindex{AU_DEFUN}
+@auindex{DEFUN}
 Define @var{old-macro} as @var{implementation}.  The only difference
 with @code{AC_DEFUN} is that the user will be warned that
 @var{old-macro} is now obsolete.
