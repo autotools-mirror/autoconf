@@ -1125,6 +1125,7 @@ AU_DEFUN([ac_cv_prog_gxx],
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
 # aCC	HP-UX C++ compiler much better than `CC', so test before.
+# FCC   Fujitsu C++ compiler
 # KCC	KAI C++ compiler
 # RCC	Rational C++
 # xlC_r	AIX C Set++ (with support for reentrant code)
@@ -1137,7 +1138,7 @@ _AC_ARG_VAR_LDFLAGS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 AC_CHECK_TOOLS(CXX,
                [$CCC m4_default([$1],
-                          [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
+                          [g++ c++ gpp aCC CC cxx cc++ cl FCC KCC RCC xlC_r xlC])],
                g++)
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
@@ -1253,6 +1254,7 @@ AU_DEFUN([ac_cv_prog_g77],
 # It is believed that under HP-UX `fort77' is the name of the native
 # compiler.  On some Cray systems, fort77 is a native compiler.
 # cf77 and cft77 are (older) Cray F77 compilers.
+# frt is the Fujitsu F77 compiler.
 # pgf77 and pgf90 are the Portland Group F77 and F90 compilers.
 # xlf/xlf90/xlf95 are IBM (AIX) F77/F90/F95 compilers.
 # lf95 is the Lahey-Fujitsu compiler.
@@ -1267,7 +1269,7 @@ AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95 fc])])
+                  [g77 f77 xlf cf77 cft77 frt pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95 fc])])
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
@@ -1739,7 +1741,7 @@ fi[]dnl
 # Determine the flag that causes the Fortran 77 compiler to print
 # information of library and object files (normally -v)
 # Needed for AC_F77_LIBRARY_FLAGS
-# Some compilers don't accept -v (Lahey: -verbose, xlf: -V)
+# Some compilers don't accept -v (Lahey: -verbose, xlf: -V, Fujitsu: -###)
 AC_DEFUN([_AC_PROG_F77_V],
 [AC_CACHE_CHECK([how to get verbose linking output from $F77],
                 [ac_cv_prog_f77_v],
@@ -1747,7 +1749,7 @@ AC_DEFUN([_AC_PROG_F77_V],
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_v=
 # Try some options frequently used verbose output
-for ac_verb in -v -verbose --verbose -V; do
+for ac_verb in -v -verbose --verbose -V -\#\#\#; do
   _AC_PROG_F77_V_OUTPUT($ac_verb)
   # look for -l* and *.a constructs in the output
   for ac_arg in $ac_f77_v_output; do

@@ -1,3 +1,12 @@
+2001-06-02  Christian Marquardt  <marq@gfz-potsdam.de>
+
+	* aclang.m4 (AC_PROG_F77): Add Fujitsu's "frt" to the list of
+	Fortran compilers to check.
+	(_AC_PROG_F77_V): Add '-###' as a possible option to print
+	information on library and object files.
+	(AC_PROG_CXX): Add Fujitsu's "FCC" to the list of C++ compilers
+	to check.
+
 2001-06-02  Akim Demaille  <akim@epita.fr>
 
 	* autom4te.in (Request::@request): Declare with `vars', not `my',
