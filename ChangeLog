@@ -1,5 +1,9 @@
 1999-08-05  Ben Elliston  <bje@cygnus.com>
 
+	* config.guess: Update patch submission address.
+
+1999-08-05  Ben Elliston  <bje@cygnus.com>
+
 	* config.sub: Accept version number appended to OS name for MiNT.
 	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
 
