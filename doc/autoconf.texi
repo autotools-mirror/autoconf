@@ -5150,6 +5150,33 @@ portable, use @samp{$@{1+"$@@"@}}.
 Old @sc{bsd} shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 
+@item $@{@var{var}='@var{value}'@}
+@cindex $@{@var{var}='@var{value}'@}
+Solaris' @command{/bin/sh} has a frightening bug in its understanding
+this.  Imagine you need set a variable to a string containing @samp{@}}.
+This @samp{@}} character got Solaris' @command{/bin/sh} confused when
+the affected variable was already set.  This bug can be exercised by
+running:
+
+@example
+% /bin/sh
+$ unset foo
+$ foo=$@{foo='@}'@}
+$ echo $foo
+@}
+$ foo=$@{foo='@}'   # no error; this hints to what the bug is
+$ echo $foo
+@}
+$ foo=$@{foo='@}'@}
+$ echo $foo
+@}@}
+ ^ ugh!
+@end example
+
+It seems that @samp{@}} is considered to match @samp{$@{}, even though
+it is enclosed in single quotes.  The problem doesn't happen using
+double quotes.
+
 @item $(@var{commands})
 @cindex $(@var{commands})
 This construct is meant to replace @samp{`@var{commands}`}; they can be
