@@ -111,7 +111,7 @@ Software Foundation raise funds for GNU development.''
                                 Remaking multiple @command{configure} scripts
 * autoheader: (autoconf)autoheader Invocation.
                                 How to create configuration templates
-* autom4te: (autoconf)Invoking autom4te.
+* autom4te: (autoconf)autom4te Invocation.
                                 The Autoconf executables backbone
 * configure: (autoconf)configure Invocation.
                                 Configuring a package
@@ -327,7 +327,7 @@ M4 Quotation
 
 Using @command{autom4te}
 
-* Invoking autom4te::           A GNU M4 wrapper
+* autom4te Invocation::         A GNU M4 wrapper
 * Customizing autom4te::        Customizing the Autoconf package
 
 Programming in M4sugar
@@ -1221,23 +1221,17 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @code{WARNINGS}, a comma separated list of categories, is
-honored.  @samp{autoconf -W @var{category}} will actually
-behave as if you had run:
-
-@example
-autoconf --warnings=syntax,$WARNINGS,@var{category}
-@end example
-
-@noindent
-If you want to disable @command{autoconf}'s defaults and @code{WARNINGS},
-but (for example) enable the warnings about obsolete constructs, you
-would use @option{-W none,obsolete}.
+honored.  Passing @samp{-W @var{category}} will actually behave as if
+you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
+you want to disable the defaults and @code{WARNINGS}, but (for example)
+enable the warnings about obsolete constructs, you would use @option{-W
+none,obsolete}.
 
 @cindex Back trace
 @cindex Macro invocation stack
 Because @command{autoconf} uses @command{autom4te} behind the scenes, it
 displays a back trace for errors, but not for warnings; if you want
-them, just pass @option{-W error}.  @xref{Invoking autom4te}, for some
+them, just pass @option{-W error}.  @xref{autom4te Invocation}, for some
 examples.
 
 @item --trace=@var{macro}[:@var{format}]
@@ -1250,7 +1244,7 @@ just make @var{format} as long as needed.
 
 The @var{format} is a regular string, with newlines if desired, and
 several special escape codes.  It defaults to @samp{$f:$l:$n:$%}; see
-@ref{Invoking autom4te}, for details on the @var{format}.
+@ref{autom4te Invocation}, for details on the @var{format}.
 
 @item --initialization
 @itemx -i
@@ -1398,6 +1392,46 @@ Append @var{dir} to the include path.  Multiple invocations accumulate.
 @item --prepend-include=@var{dir}
 @item -B @var{dir}
 Prepend @var{dir} to the include path.  Multiple invocations accumulate.
+
+@item --warnings=@var{category}
+@itemx -W @var{category}
+@evindex WARNINGS
+Report the warnings related to @var{category} (which can actually be a
+comma separated list).
+
+@table @samp
+@item cross
+related to cross compilation issues.
+
+@item obsolete
+report the uses of obsolete constructs.
+
+@item portability
+portability issues
+
+@item syntax
+dubious syntactic constructs.
+
+@item all
+report all the warnings
+
+@item none
+report none
+
+@item error
+treats warnings as errors
+
+@item no-@var{category}
+disable warnings falling into @var{category}
+@end table
+
+Warnings about @samp{syntax} are enabled by default, and the environment
+variable @code{WARNINGS}, a comma separated list of categories, is
+honored.  Passing @samp{-W @var{category}} will actually behave as if
+you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
+you want to disable the defaults and @code{WARNINGS}, but (for example)
+enable the warnings about obsolete constructs, you would use @option{-W
+none,obsolete}.
 @end table
 
 
@@ -7275,11 +7309,11 @@ Yet another great name from Lars J. Aas.
 @command{m4} itself.
 
 @menu
-* Invoking autom4te::           A GNU M4 wrapper
+* autom4te Invocation::         A GNU M4 wrapper
 * Customizing autom4te::        Customizing the Autoconf package
 @end menu
 
-@node Invoking autom4te
+@node autom4te Invocation
 @subsection Invoking @command{autom4te}
 
 The command line arguments are modeled after M4's:
@@ -7629,10 +7663,11 @@ lines are ignored.  Customization is performed on a per-language basis,
 wrapped in between a @samp{begin-language: "@var{language}"},
 @samp{end-language: "@var{language}"} pair.
 
-Customizing a language stands for appending options (@pxref{Invoking
-autom4te}) to the current definition of the language.  Options, and more
-generally arguments, are introduced by @samp{args: @var{arguments}}.
-You may use the traditional shell syntax to quote the @var{arguments}.
+Customizing a language stands for appending options (@pxref{autom4te
+Invocation}) to the current definition of the language.  Options, and
+more generally arguments, are introduced by @samp{args:
+@var{arguments}}.  You may use the traditional shell syntax to quote the
+@var{arguments}.
 
 As an example, to disable Autoconf caches (@file{autom4te.cache})
 globally, include the following lines in @file{~/.autom4te.cfg}:
@@ -14461,7 +14496,7 @@ actually means to compile it with M4, which can be a very long process
 for complex @file{configure.ac}.
 
 This is why all these tools, instead of running directly M4, invoke
-@command{autom4te} (@pxref{Invoking autom4te}) which, while answering to
+@command{autom4te} (@pxref{autom4te Invocation}) which, while answering to
 a specific demand, stores additional information in
 @file{autom4te.cache} for future runs.  For instance, if you run
 @command{autoconf}, behind the scenes, @command{autom4te} will also

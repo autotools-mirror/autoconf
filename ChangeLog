@@ -1,5 +1,11 @@
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (&parse_args, $help): Support --warnings.
+	* doc/autoconf.texi (Invoking autom4te): Rename as...
+	(autom4te Invocation): this, for consistency with the other nodes.
+
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
 	* lib/autom4te.in (Autoconf): s/automate/autom4te/.
 	Reported by Ralf Corsepius.
 

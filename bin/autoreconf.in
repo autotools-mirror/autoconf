@@ -57,13 +57,27 @@ running `autoreconf' remakes all of the files by giving it the
 `--force' option.
 
 Operation modes:
-  -h, --help      print this help, then exit
-  -V, --version   print version number, then exit
-  -v, --verbose   verbosely report processing
-  -d, --debug     don't remove temporary files
-  -f, --force     consider all files obsolete
-  -i, --install   copy missing auxiliary files
-  -s, --symlink   with -i, install symbolic links instead of copies
+  -h, --help               print this help, then exit
+  -V, --version            print version number, then exit
+  -v, --verbose            verbosely report processing
+  -d, --debug              don't remove temporary files
+  -f, --force              consider all files obsolete
+  -i, --install            copy missing auxiliary files
+  -s, --symlink            with -i, install symbolic links instead of copies
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
+
+Warning categories include:
+  \`cross\'         cross compilation issues
+  \`obsolete\'      obsolete constructs
+  \`portability\'   portability issues
+  \`syntax\'        dubious syntactic constructs
+  \`all\'           all the warnings
+  \`no-CATEGORY\'   turn off the warnings on CATEGORY
+  \`none\'          turn off all the warnings
+  \`error\'         warnings are error
+
+The environment variable \`WARNINGS\' is honored.  Some subtools might
+support other warning types, using \`all' is encouraged.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
@@ -104,6 +118,8 @@ my $symlink = 0;
 # The directory where autoreconf was run.
 my $cwd = cwd;
 
+# List of warnings.
+my @warning;
 
 
 ## ---------- ##
@@ -118,10 +134,15 @@ sub parse_args ()
 {
   my $srcdir;
 
-  getopt ('I|include=s'           => \@include,
-	  'B|prepend-include=s'	  => \@prepend_include,
-	  'i|install'             => \$install,
-	  's|symlink'             => \$symlink);
+  getopt ("W|warnings=s"         => \@warning,
+	  'I|include=s'          => \@include,
+	  'B|prepend-include=s'	 => \@prepend_include,
+	  'i|install'            => \$install,
+	  's|symlink'            => \$symlink);
+
+  # Split the warnings as a list of elements instead of a list of
+  # lists.
+  @warning = map { split /,/ } @warning;
 
   # Even if the user specified a configure.ac, trim to get the
   # directory, and look for configure.ac again.  Because (i) the code
@@ -177,6 +198,14 @@ sub parse_args ()
       $automake   .= ' --verbose';
       $aclocal    .= ' --verbose';
       $libtoolize .= ' --debug';
+    }
+  # --warnings;
+  if (@warning)
+    {
+      $autoconf   .= ' --warnings=' . join (',', @warning);
+      $autoheader .= ' --warnings=' . join (',', @warning);
+      $automake   .= ' --warnings=' . join (',', @warning)
+	if `$automake --help` =~ /--warnings/;
     }
 }
 

@@ -28,6 +28,8 @@ Release tips:
 - Produces messages (when --verbose) to be understood by Emacs'
   compile mode.
 
+- Supports -W/--warnings.
+
 ** Obsolete options
 
   Support for the obsoleted options -m, --macrodir, -l, --localdir is
