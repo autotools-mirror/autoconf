@@ -1,5 +1,15 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	QNX 4.2.5's expr always exits 1 when `:' is used with parens.
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <expr>: More
+	information, thanks to Paul Berrevoets, Paul Eggert and David
+	Morgan.
+	* sh.m4 (_AS_EXPR_PREPARE): New.
+	(AS_DIRNAME): Use it.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	sizeof (struct {char a,b; }) is not required to be 2.
 	Reported by Johan Danielsson.
 

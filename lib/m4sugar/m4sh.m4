@@ -66,6 +66,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
+_AS_EXPR_PREPARE
 _AS_UNSET_PREPARE
 
 # NLS nuisances.
@@ -94,6 +95,23 @@ AS_UNSET([CDPATH], [:])
 ## ----------------------------- ##
 
 # This section is lexicographically sorted.
+
+# AS_EXIT([EXIT-CODE = 1])
+# ------------------------
+# Exit and set exit code to EXIT-CODE in the way that it's seen
+# within "trap 0".
+#
+# We cannot simply use "exit N" because some shells (zsh and Solaris sh)
+# will not set $? to N while running the code set by "trap 0"
+# So we set $? by executing "exit N" in the subshell and then exit.
+# "false" is used for exit code 1 (default), ":" is used for 0
+m4_define([AS_EXIT],
+[{ m4_case([$1],
+           [0], [:; exit],
+           [],  [false; exit],
+           [1], [false; exit],
+           [(exit $1); exit]); }])
+
 
 # AS_IFELSE(TEST, [IF-TRUE], [IF-FALSE])
 # --------------------------------------
@@ -138,21 +156,6 @@ m4_defun([AS_UNSET],
 $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
-# AS_EXIT([EXIT-CODE = 1])
-# ------------------------
-# Exit and set exit code to EXIT-CODE in the way that it's seen
-# within "trap 0".
-#
-# We cannot simply use "exit N" because some shells (zsh and Solaris sh)
-# will not set $? to N while running the code set by "trap 0"
-# So we set $? by executing "exit N" in the subshell and then exit.
-# "false" is used for exit code 1 (default), ":" is used for 0
-m4_define([AS_EXIT],
-[{ m4_case([$1],
-           [0], [:; exit],
-           [],  [false; exit],
-           [1], [false; exit],
-           [(exit $1); exit]); }])
 
 
 
@@ -242,11 +245,62 @@ m4_define([AS_ERROR],
 
 
 
-## ------------------------------------------- ##
-## 4. Portable versions of common file utils.  ##
-## ------------------------------------------- ##
+## -------------------------------------- ##
+## 4. Portable versions of common tools.  ##
+## -------------------------------------- ##
 
 # This section is lexicographically sorted.
+
+
+# AS_DIRNAME(PATHNAME)
+# --------------------
+# Simulate running `dirname(1)' on PATHNAME, not all systems have it.
+# This macro must be usable from inside ` `.
+#
+# Prefer expr to echo|sed, since expr is usually faster and it handles
+# backslashes and newlines correctly.  However, older expr
+# implementations (e.g. SunOS 4 expr and Solaris 8 /usr/ucb/expr) have
+# a silly length limit that causes expr to fail if the matched
+# substring is longer than 120 bytes.  So fall back on echo|sed if
+# expr fails.
+#
+# FIXME: Please note the following m4_require is quite wrong: if the first
+# occurrence of AS_DIRNAME_EXPR is in a backquoted expression, the
+# shell will be lost.  We might have to introduce diversions for
+# setting up an M4sh script: required macros will them be expanded there.
+m4_defun([AS_DIRNAME_EXPR],
+[m4_require([_AS_EXPR_PREPARE])dnl
+$as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
+         X[]$1 : 'X\(//\)[[^/]]' \| \
+         X[]$1 : 'X\(//\)$' \| \
+         X[]$1 : 'X\(/\)' \| \
+         .     : '\(.\)'])
+
+m4_defun([AS_DIRNAME_SED],
+[echo X[]$1 |
+    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q']])
+
+m4_defun([AS_DIRNAME],
+[AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
+AS_DIRNAME_SED([$1])])
+
+
+# _AS_EXPR_PREPARE
+# ----------------
+# Some expr work properly (i.e. compute and issue the right result),
+# but exit with failure.  When a fall back to expr (as in AS_DIRNAME)
+# is provided, you get twice the result.  Prevent this.
+m4_defun([_AS_EXPR_PREPARE],
+[as_expr=`expr a : '\(a\)'`
+case $as_expr,$? in
+  a,0) as_expr=expr;;
+    *) as_expr=false;;
+esac[]dnl
+])# _AS_EXPR_PREPARE
 
 
 # AS_MKDIR_P(PATH)
@@ -263,37 +317,6 @@ for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$[@]"`; do
   test -d $ac_incr_dir || mkdir $ac_incr_dir
 done; }
 ])# AS_MKDIR_P
-
-
-# AS_DIRNAME(PATHNAME)
-# --------------------
-# Simulate running `dirname(1)' on PATHNAME, not all systems have it.
-# This macro must be usable from inside ` `.
-#
-# Prefer expr to echo|sed, since expr is usually faster and it handles
-# backslashes and newlines correctly.  However, older expr
-# implementations (e.g. SunOS 4 expr and Solaris 8 /usr/ucb/expr) have
-# a silly length limit that causes expr to fail if the matched
-# substring is longer than 120 bytes.  So fall back on echo|sed if
-# expr fails.
-m4_define([AS_DIRNAME_EXPR],
-[expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
-      X[]$1 : 'X\(//\)[[^/]]' \| \
-      X[]$1 : 'X\(//\)$' \| \
-      X[]$1 : 'X\(/\)' \| \
-      .     : '\(.\)'])
-
-m4_define([AS_DIRNAME_SED],
-[echo X[]$1 |
-    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q']])
-
-m4_define([AS_DIRNAME],
-[AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
-AS_DIRNAME_SED([$1])])
 
 
 
