@@ -352,3 +352,31 @@ AT_CHECK_M4SH
 AT_CHECK([./script])
 
 AT_CLEANUP
+
+## -------------- ##
+## AS_HELP_STRING ##
+## -------------- ##
+
+# I'm not totally certain that we want to enforce the defaults here,
+# but at least it is being tested.
+
+AT_SETUP([[AS@&t@_HELP_STRING]])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+_AS_LINENO_PREPARE
+
+echo "AS_HELP_STRING([--an-option],[some text])"
+echo "AS_HELP_STRING([--another-much-longer-option],
+[some other text which should wrap at our default of 80 characters.])"
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [0],
+[  --an-option             some text
+  --another-much-longer-option
+                          some other text which should wrap at our default of
+                          80 characters.
+])
+
+AT_CLEANUP

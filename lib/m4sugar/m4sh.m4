@@ -850,6 +850,59 @@ _AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 }])
 
 
+# AS_HELP_STRING(LHS, RHS, [COLUMN])
+# ----------------------------------
+#
+# Format a help string so that it looks pretty when
+# the user executes "script --help".  This macro takes three
+# arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
+# the COLUMN which is a string of white spaces which leads to the
+# the RHS column (default: 26 white spaces).
+#
+# The resulting string is suitable for use in other macros that require
+# a help string (e.g. AC_ARG_WITH).
+#
+# Here is the sample string from the Autoconf manual (Node: External
+# Software) which shows the proper spacing for help strings.
+#
+#    --with-readline         support fancy command line editing
+#  ^ ^                       ^
+#  | |                       |
+#  | column 2                column 26
+#  |
+#  column 0
+#
+# A help string is made up of a "left hand side" (LHS) and a "right
+# hand side" (RHS).  In the example above, the LHS is
+# "--with-readline", while the RHS is "support fancy command line
+# editing".
+#
+# If the LHS is contains more than (COLUMN - 3) characters, then the LHS
+# is terminated with a newline so that the RHS starts on a line of its
+# own beginning with COLUMN.  In the default case, this corresponds to
+# an LHS with more than 23 characters.
+#
+# Therefore, in the example, if the LHS were instead
+# "--with-readline-blah-blah-blah", then the AS_HELP_STRING macro would
+# expand into:
+#
+#
+#    --with-readline-blah-blah-blah
+#  ^ ^                       support fancy command line editing
+#  | |                       ^
+#  | column 2                |
+#  column 0                  column 26
+#
+m4_define([AS_HELP_STRING],
+[m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
+m4_pushdef([AS_Prefix_Format],
+           [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
+m4_text_wrap([$2], AS_Prefix, m4_format(AS_Prefix_Format, [$1]))dnl
+m4_popdef([AS_Prefix_Format])dnl
+m4_popdef([AS_Prefix])dnl
+])
+
+
 
 ## ------------------------------------ ##
 ## Common m4/sh character translation.  ##

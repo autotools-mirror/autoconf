@@ -214,54 +214,10 @@ m4_define([AC_FOREACH],
 ## ----------------------------------- ##
 
 
-# AC_HELP_STRING(LHS, RHS, [COLUMN])
+# AU::AC_HELP_STRING(LHS, RHS, [COLUMN])
 # ----------------------------------
-#
-# Format an Autoconf macro's help string so that it looks pretty when
-# the user executes "configure --help".  This macro takes three
-# arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
-# the COLUMN which is a string of white spaces which leads to the
-# the RHS column (default: 26 white spaces).
-#
-# The resulting string is suitable for use in other macros that require
-# a help string (e.g. AC_ARG_WITH).
-#
-# Here is the sample string from the Autoconf manual (Node: External
-# Software) which shows the proper spacing for help strings.
-#
-#    --with-readline         support fancy command line editing
-#  ^ ^                       ^
-#  | |                       |
-#  | column 2                column 26
-#  |
-#  column 0
-#
-# A help string is made up of a "left hand side" (LHS) and a "right
-# hand side" (RHS).  In the example above, the LHS is
-# "--with-readline", while the RHS is "support fancy command line
-# editing".
-#
-# If the LHS extends past column 24, then the LHS is terminated with a
-# newline so that the RHS is on a line of its own beginning in column
-# 26.
-#
-# Therefore, if the LHS were instead "--with-readline-blah-blah-blah",
-# then the AC_HELP_STRING macro would expand into:
-#
-#
-#    --with-readline-blah-blah-blah
-#  ^ ^                       support fancy command line editing
-#  | |                       ^
-#  | column 2                |
-#  column 0                  column 26
-#
-m4_define([AC_HELP_STRING],
-[m4_pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
-m4_pushdef([AC_Prefix_Format],
-           [  %-]m4_eval(m4_len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
-m4_text_wrap([$2], AC_Prefix, m4_format(AC_Prefix_Format, [$1]))dnl
-m4_popdef([AC_Prefix_Format])dnl
-m4_popdef([AC_Prefix])dnl
+AU_DEFUN([AC_HELP_STRING],
+[AS_HELP_STRING([$@])dnl
 ])
 
 
@@ -1484,7 +1440,7 @@ m4_divert_once([HELP_VAR_END], [[
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.]])dnl
 m4_expand_once([m4_divert_once([HELP_VAR],
-                               [AC_HELP_STRING([$1], [$2], [              ])])],
+                               [AS_HELP_STRING([$1], [$2], [              ])])],
                [$0($1)])dnl
 _AC_ARG_VAR_PRECIOUS([$1])dnl
 ])# AC_ARG_VAR

@@ -1,5 +1,15 @@
 2003-03-26  Derek Price  <derek@ximbiot.com>
 
+	* lib/autoconf/general.m4 (AC_ARG_VAR): Use AS_HELP_STRING instead of
+	obsolete AC_HELP_STRING.
+	(AC_HELP_STRING): AU_DEFUN to...
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): ...here.
+	* tests/m4sh.at (AS_HELP_STRING): New test.
+
+	* tests/acgeneral.at: Regenerated.
+
+2003-03-26  Derek Price  <derek@ximbiot.com>
+
 	* lib/autotest/general.m4: s/DEFAULT/DEFAULTS/ since it makes more
 	sense.  Verbosify the diversion definitions comment.
 
