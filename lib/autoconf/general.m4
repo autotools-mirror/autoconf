@@ -1843,7 +1843,7 @@ AC_SUBST(subdirs)dnl
 ])
 
 dnl The big finish.
-dnl Produce config.status, config.h, and links, and configure subdirs.
+dnl Produce config.status, config.h, and links; and configure subdirs.
 dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS] [, INIT-CMDS])
 define(AC_OUTPUT,
 [trap '' 1 2 15
@@ -1977,6 +1977,42 @@ dnl Insert the sed substitutions of variables.
 undivert(AC_DIVERSION_SED)
 CEOF
 EOF
+
+cat >> $CONFIG_STATUS <<\EOF
+
+# Split the substitutions into bite-sized pieces for seds with
+# small command number limits, like on Digital OSF/1 and HP-UX.
+ac_file=1 # Number of current file.
+ac_inc=90 # Lines per file.
+ac_beg=1 # First line for current file.
+ac_end=$ac_inc # Line after last line for current file.
+ac_more_lines=:
+ac_sed_cmds=""
+while $ac_more_lines; do
+  if test $ac_beg -gt 1; then
+    sed "1,${ac_beg}d; ${ac_end}q" conftest.subs > conftest.s$ac_file
+  else
+    sed "${ac_end}q" conftest.subs > conftest.s$ac_file
+  fi
+  if ! test -s conftest.s$ac_file; then
+    ac_more_lines=false
+    rm -f conftest.s$ac_file
+  else
+    if test -z "$ac_sed_cmds"; then
+      ac_sed_cmds="sed -f conftest.s$ac_file"
+    else
+      ac_sed_cmds="$ac_sed_cmds | sed -f conftest.s$ac_file"
+    fi
+    ac_file=`expr $ac_file + 1`
+    ac_beg=$ac_end
+    ac_end=`expr $ac_end + $ac_inc`
+  fi
+done
+if test -z "$ac_sed_cmds"; then
+  ac_sed_cmds=cat
+fi
+EOF
+
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"$1"}
@@ -1992,7 +2028,7 @@ dnl but that's not a huge problem.
   *) ac_file_in="${ac_file}.in" ;;
   esac
 
-  # Adjust relative srcdir, etc. for subdirectories.
+  # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
 
   # Remove last slash and all that follows it.  Not all systems have dirname.
 changequote(, )dnl
@@ -2028,6 +2064,7 @@ changequote([, ])dnl
   *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
 ])dnl
+
   echo creating "$ac_file"
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
@@ -2042,7 +2079,7 @@ s%@srcdir@%$srcdir%g
 s%@top_srcdir@%$top_srcdir%g
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%g
 ])dnl
-" -f conftest.subs $ac_given_srcdir/$ac_file_in > $ac_file
+" $ac_given_srcdir/$ac_file_in | eval "$ac_sed_cmds" > $ac_file
 dnl This would break Makefile dependencies.
 dnl  if cmp -s $ac_file conftest.out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
@@ -2052,7 +2089,7 @@ dnl     rm -f $ac_file
 dnl    mv conftest.out $ac_file
 dnl  fi
 fi; done
-rm -f conftest.subs
+rm -f conftest.s*
 ])
 
 dnl Create the config.h files from the config.h.in files.

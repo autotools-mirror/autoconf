@@ -1,5 +1,13 @@
 Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* acgeneral.m4 (AC_OUTPUT_FILES): Split the list of sed commands in
+	conftest.subs into multiple files named conftest.s[1-9][0-9]*.
+	Create a pipeline of sed commands that use these files, then delete
+	the temporary files.  From John W. Eaton <jwe@bevo.che.wisc.edu>.
+
+	* acspecific.m4 (AC_AIX, AC_MINIX): Remove warnings about AC_TRY_LINK.
+	These macros don't change the linkage options.
+
 	* Test release 2.10.2.
 	
 	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX) [GCC]: Use -O2 instead

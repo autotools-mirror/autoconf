@@ -52,8 +52,6 @@ these suggestions... their presence here doesn't imply my endorsement.
   I'm not sure whether the limit is on lines or bytes; if bytes, it
   will be less of a problem than it was with the long lines used for
   creating a header file.
-  There has also been a report that HPUX and OSF/1 seds only allow 100
-  commands.
 
 ------------------------------------------------------------------------------
 

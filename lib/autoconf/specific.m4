@@ -2096,7 +2096,6 @@ dnl They aren't cached, to discourage their use.
 
 AC_DEFUN(AC_AIX,
 [AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for AIX)
 AC_EGREP_CPP(yes,
@@ -2108,7 +2107,6 @@ AC_EGREP_CPP(yes,
 
 AC_DEFUN(AC_MINIX,
 [AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
-AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
