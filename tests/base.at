@@ -196,11 +196,11 @@ AT_CHECK_CONFIGURE
 AT_CLEANUP
 
 
-## -------------- ##
-## AC_CACHE_CHECK ##
-## -------------- ##
+## ---------------- ##
+## AC_CACHE_CHECK.  ##
+## ---------------- ##
 
-# make sure AC_CACH_CHECK is silent with -q
+# Make sure AC_CACHE_CHECK is silent with -q.
 
 AT_SETUP([AC_CACHE_CHECK])
 
@@ -210,7 +210,7 @@ AC_CACHE_CHECK([for nothing],[ac_nothing],[ac_nothing=found])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK([./configure -q], 0)
+AT_CHECK_CONFIGURE([-q])
 AT_CHECK_CONFIGURE([], 0, [checking for nothing... found
 ])
 

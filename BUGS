@@ -15,6 +15,26 @@ address them.
 
 * Status
 
-	/*----------------------------------.
-	| No known bug, release candidate.  |
-	`----------------------------------*/
+	/*------------.
+	| Don't use.  |
+	`------------*/
+
+* Serious Problems
+
+** Broken compilers
+
+configure does not properly diagnose broken compilers (because it
+finds the failure before the code that checks whether the compiler
+works).  It is not to serious a bug, but most notably the test suite
+will fail to handle gracefully missing compilers (typically the
+Fortran compiler).
+
+** Special characters and config.hin
+
+The handling of special characters, most notable backslashes, of
+course, might be nonportable in addition of being of clearly
+specified.
+
+** AC_TRY_EVAL of multi line commands
+
+Is broken.
