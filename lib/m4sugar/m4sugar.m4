@@ -750,6 +750,14 @@ m4_divert_pop([$1])dnl
 ])
 
 
+# m4_divert_once(DIVERSION-NAME, CONTENT)
+# ---------------------------------------
+# Output once CONTENT into DIVERSION-NAME (which may be a number
+# actually).  An end of line is appended for free to CONTENT.
+m4_define([m4_divert_once],
+[m4_expand_once([m4_divert_text([$1], [$2])])])
+
+
 # m4_undivert(DIVERSION-NAME)
 # ---------------------------
 # Undivert DIVERSION-NAME.

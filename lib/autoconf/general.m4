@@ -134,14 +134,6 @@ m4_define([_m4_divert(PREPARE)],       100)
 
 
 
-# AC_DIVERT_ONCE(DIVERSION-NAME, CONTENT)
-# ---------------------------------------
-# Output once CONTENT into DIVERSION-NAME (which may be a number
-# actually).  An end of line is appended for free to CONTENT.
-m4_define([AC_DIVERT_ONCE],
-[AC_EXPAND_ONCE([m4_divert_text([$1], [$2])])])
-
-
 # AC_DIVERT_PUSH(DIVERSION-NAME)
 # AC_DIVERT_POP
 # ------------------------------
@@ -199,15 +191,6 @@ m4_define([AC_BEFORE],
 # If STRING has never been AC_PROVIDE'd, then expand it. A macro must
 # be AC_DEFUN'd if either it is AC_REQUIRE'd, or it AC_REQUIRE's.
 m4_copy([m4_require], [AC_REQUIRE])
-
-
-# AC_EXPAND_ONCE(TEXT)
-# --------------------
-# If TEXT has never been expanded, expand it *here*.
-m4_define([AC_EXPAND_ONCE],
-[m4_expand_once([$1],
-                [],
-                [AC_PROVIDE([$1])[]$1])])
 
 
 # AC_PROVIDE(MACRO-NAME)
@@ -1572,11 +1555,11 @@ m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_ARG_ENABLE],
-[AC_DIVERT_ONCE([HELP_ENABLE], [[
+[m4_divert_once([HELP_ENABLE], [[
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
-AC_DIVERT_ONCE([HELP_ENABLE], [$2])dnl
+m4_divert_once([HELP_ENABLE], [$2])dnl
 # Check whether --enable-$1 or --disable-$1 was given.
 if test "[${enable_]m4_patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]m4_patsubst([$1], -, _)"
@@ -1600,11 +1583,11 @@ AU_DEFUN([AC_ENABLE],
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN([AC_ARG_WITH],
-[AC_DIVERT_ONCE([HELP_WITH], [[
+[m4_divert_once([HELP_WITH], [[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
-AC_DIVERT_ONCE([HELP_WITH], [$2])dnl
+m4_divert_once([HELP_WITH], [$2])dnl
 # Check whether --with-$1 or --without-$1 was given.
 if test "[${with_]m4_patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]m4_patsubst([$1], -, _)"
@@ -1639,7 +1622,7 @@ AU_DEFUN([AC_WITH],
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
 m4_define([_AC_ARG_VAR_PRECIOUS],
-[AC_DIVERT_ONCE([PARSE_ARGS],
+[m4_divert_once([PARSE_ARGS],
 [ac_env_$1_set=${$1+set}
 ac_env_$1_value=$$1
 ac_cv_env_$1_set=${$1+set}
@@ -1688,12 +1671,12 @@ fi
 # Register VARNAME as a precious variable, and document it in
 # `configure --help' (but only once).
 AC_DEFUN([AC_ARG_VAR],
-[AC_DIVERT_ONCE([HELP_VAR], [
-Some influential environment variables:])dnl
-AC_DIVERT_ONCE([HELP_VAR_END], [
+[m4_divert_once([HELP_VAR], [[
+Some influential environment variables:]])dnl
+m4_divert_once([HELP_VAR_END], [
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.])dnl
-AC_DIVERT_ONCE([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
+m4_divert_once([HELP_VAR], [AC_HELP_STRING([$1], [$2], [              ])])dnl
 _AC_ARG_VAR_PRECIOUS([$1])dnl
 ])# AC_ARG_VAR
 
@@ -2104,7 +2087,7 @@ EOF
 # If VARIABLE has not already been AC_SUBST'ed, append the sed PROGRAM
 # to `_AC_SUBST_SED_PROGRAM'.
 m4_define([_AC_SUBST],
-[AC_EXPAND_ONCE([m4_append([_AC_SUBST_SED_PROGRAM],
+[m4_expand_once([m4_append([_AC_SUBST_SED_PROGRAM],
 [$2
 ])])dnl
 ])

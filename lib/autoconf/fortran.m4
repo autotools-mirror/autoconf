@@ -885,8 +885,8 @@ fi
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
@@ -1089,8 +1089,8 @@ AC_CHECK_TOOLS(CXX,
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
                g++)
 
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
@@ -1211,8 +1211,8 @@ AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 pgf90 fc])])
 
-AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
-AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_WORKS
 # If we don't use `.F' as extension, the preprocessor is not run on the
 # input file.

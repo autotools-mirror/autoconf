@@ -1,5 +1,11 @@
 2001-01-23  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_EXPAND_ONCE): Remove, use m4_expand_once.
+	(AC_DIVERT_ONCE): Move to...
+	* m4sugar.m4 (m4_expand_once): here.
+
+2001-01-23  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_LANG_SET): Turn off optimizations.
 
 2001-01-23  Akim Demaille  <akim@epita.fr>

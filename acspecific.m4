@@ -733,7 +733,7 @@ fi])dnl
 # --without-x overrides everything else, but does not touch the cache.
 AC_DEFUN([AC_PATH_X],
 [dnl Document the X abnormal options inherited from history.
-AC_DIVERT_ONCE([HELP_BEGIN], [
+m4_divert_once([HELP_BEGIN], [
 X features:
   --x-includes=DIR    X include files are in DIR
   --x-libraries=DIR   X library files are in DIR])dnl
