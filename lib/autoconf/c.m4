@@ -197,8 +197,8 @@ f = $1;
 # Be sure to use this array to avoid `unused' warnings, which are even
 # errors with `-W error'.
 m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
-[AC_LANG_PROGRAM([$1], [int _array_ @<:@1 - 2 * !($2)@:>@;
-_array_ @<:@0@:>@ = 0
+[AC_LANG_PROGRAM([$1], [static int test_array @<:@1 - 2 * !($2)@:>@;
+test_array @<:@0@:>@ = 0
 ])])
 
 
@@ -828,25 +828,21 @@ fi
 # AC_C_LONG_DOUBLE
 # ----------------
 AC_DEFUN([AC_C_LONG_DOUBLE],
-[AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
-[if test "$GCC" = yes; then
-  ac_cv_c_long_double=yes
-else
-AC_TRY_RUN(
-[int
-main ()
-{
-  /* The Stardent Vistra knows sizeof(long double), but does not
-     support it.  */
-  long double foo = 0.0;
-  /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
-  exit (sizeof (long double) < sizeof (double));
-}],
-ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
-fi])
+[AC_CACHE_CHECK(
+   [for working long double with more range or precision than double],
+   [ac_cv_c_long_double],
+   [AC_COMPILE_IFELSE(
+      [AC_LANG_BOOL_COMPILE_TRY(
+	 [#include <float.h>
+	  long double foo = 0.0;],
+	 [/* Using '|' rather than '||' catches a GCC 2.95.2 x86 bug.  */
+          (DBL_MAX < LDBL_MAX) | (LDBL_EPSILON < DBL_EPSILON)
+	  | (DBL_MAX_EXP < LDBL_MAX_EXP) | (DBL_MANT_DIG < LDBL_MANT_DIG)])],
+      ac_cv_c_long_double=yes,
+      ac_cv_c_long_double=no)])
 if test $ac_cv_c_long_double = yes; then
   AC_DEFINE(HAVE_LONG_DOUBLE, 1,
-            [Define to 1 if the `long double' type works.])
+            [Define to 1 if long double works and has more range or precision than double.])
 fi
 ])# AC_C_LONG_DOUBLE
 
