@@ -1,3 +1,9 @@
+2002-10-11  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Use $$ in the
+	file name to enable parallel executions.
+	From Sam Varshavchik.
+
 2002-10-08  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (&autoreconf): Run autopoint before the first

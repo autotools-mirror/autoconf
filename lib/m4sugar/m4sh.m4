@@ -633,15 +633,15 @@ rm -f conf$$ conf$$.exe conf$$.file
 m4_defun([_AS_PATH_SEPARATOR_PREPARE],
 [# The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! /bin/sh" >conftest.sh
-  echo  "exit 0"   >>conftest.sh
-  chmod +x conftest.sh
-  if (PATH="/nonexistent;."; conftest.sh) >/dev/null 2>&1; then
+  echo "#! /bin/sh" >conf$$.sh
+  echo  "exit 0"   >>conf$$.sh
+  chmod +x conf$$.sh
+  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
   fi
-  rm -f conftest.sh
+  rm -f conf$$.sh
 fi
 ])# _AS_PATH_SEPARATOR_PREPARE
 

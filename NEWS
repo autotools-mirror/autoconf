@@ -19,6 +19,9 @@
 
   could be issued.  This is fixed.
 
+- Parallel Builds
+  Simultaneous executions of config.status are possible again.
+
 * Major changes in Autoconf 2.54
 
   Released September 13th, 2002.
