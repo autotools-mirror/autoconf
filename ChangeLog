@@ -1,3 +1,8 @@
+2004-12-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Prefer -qlanglvl=extc89
+	to -qlanglvl=ansi.  We don't want to disable extensions.
+
 2004-11-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Programs): @code{$PATH} -> @env{PATH}.
