@@ -163,9 +163,9 @@ pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([KILL]))
 
 
 
-## ----------------- ##
-## Defining macros.  ##
-## ----------------- ##
+## ------------------------------- ##
+## Defining macros in autoconf::.  ##
+## ------------------------------- ##
 
 
 # AC_PRO(MACRO-NAME)
@@ -256,42 +256,6 @@ define(AC_SPECIALIZE,
        [indir([$1], m4_shift($@))])])
 
 
-# AU_DEFINE(NAME, GLUE-CODE, [MESSAGE])
-# -------------------------------------
-#
-# Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
-# wrapping actions required by `autoupdate'.
-# We do not define anything in `autoconf::'.
-define(AU_DEFINE,
-[m4_namespace_define(autoupdate, [$1],
-[m4_changequote([, ])m4_dnl
-m4_enable(libm4)m4_dnl
-m4_warn([Updating use of `$1'. $3])m4_dnl
-$2[]m4_dnl
-m4_disable(libm4)m4_dnl
-m4_changequote(, )m4_dnl
-])])
-
-
-# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
-# -----------------------------------
-# Declare that the macro NAME is now obsoleted, and should be replaced
-# by NEW-CODE.  Tell the user she should run autoupdate, and include
-# the additional MESSAGE.
-#
-# Also define NAME as a macro which code is NEW-CODE.
-#
-# This allows to share the same code for both supporting obsoleted macros,
-# and to update a configure.in.
-# See `acobsolete.m4' for a longer description.
-define(AU_DEFUN,
-[define([$1],
-[m4_warn([The macro `$1' is obsolete.
-You should run autoupdate.])dnl
-$2])dnl
-AU_DEFINE([$1], [$2], [$3])dnl
-])
-
 
 
 ## ----------------------------- ##
@@ -345,6 +309,51 @@ define(AC_PROVIDE,
 define(AC_PROVIDE_IF,
 [ifdef([AC_PROVIDE_$1],
        [$2], [$3])])
+
+
+
+
+## --------------------------------- ##
+## Defining macros in autoupdate::.  ##
+## --------------------------------- ##
+
+
+# AU_DEFINE(NAME, GLUE-CODE, [MESSAGE])
+# -------------------------------------
+#
+# Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
+# wrapping actions required by `autoupdate'.
+# We do not define anything in `autoconf::'.
+define(AU_DEFINE,
+[m4_namespace_define(autoupdate, [$1],
+[m4_changequote([, ])m4_dnl
+m4_enable(libm4)m4_dnl
+m4_warn([Updating use of `$1'. $3])m4_dnl
+$2[]m4_dnl
+m4_disable(libm4)m4_dnl
+m4_changequote(, )m4_dnl
+])])
+
+
+# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
+# -----------------------------------
+# Declare that the macro NAME is now obsoleted, and should be replaced
+# by NEW-CODE.  Tell the user she should run autoupdate, and include
+# the additional MESSAGE.
+#
+# Also define NAME as a macro which code is NEW-CODE.
+#
+# This allows to share the same code for both supporting obsoleted macros,
+# and to update a configure.in.
+# See `acobsolete.m4' for a longer description.
+define(AU_DEFUN,
+[define([$1],
+[m4_warn([The macro `$1' is obsolete.
+You should run autoupdate.])dnl
+$2])dnl
+AU_DEFINE([$1], [$2], [$3])dnl
+])
+
 
 
 ## --------------------- ##
@@ -473,6 +482,7 @@ define(AC_VAR_PUSHDEF,
 [ac_$1=AC_TR_SH($2)
 pushdef([$1], [$ac_[$1]])],
 [pushdef([$1], [AC_TR_SH($2)])])])
+
 
 # AC_VAR_POPDEF(VARNAME)
 # ----------------------
@@ -1781,9 +1791,9 @@ AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 
 
 
-## ------------------ ##
-## Defining symbols.  ##
-## ------------------ ##
+## ---------------------- ##
+## Defining CPP symbols.  ##
+## ---------------------- ##
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
@@ -3924,7 +3934,7 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too.
+dnl to be created too).
     test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
@@ -4214,7 +4224,7 @@ cat >>$CONFIG_STATUS <<\EOF
     if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
       # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too.
+dnl to be created too).
       test ! -d "$ac_dir" && mkdir "$ac_dir"
     fi
     rm -f $ac_file
@@ -4265,7 +4275,7 @@ for ac_file in : $CONFIG_LINKS; do if test "x$ac_file" != x:; then
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     # The dest file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too.
+dnl to be created too).
     test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
@@ -4349,7 +4359,8 @@ if test "$no_recursion" != yes; then
     | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
       ac_prev=cache_file ;;
     -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
-    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+    | --c=*)
       ;;
     -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
       ac_prev=srcdir ;;
@@ -4376,7 +4387,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  ac_given_INSTALL="$INSTALL"
     .) ;;
     *)
 dnl FIXME: should actually be mkinstalldirs (parents may have
-dnl to be created too.
+dnl to be created too).
       if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
       else
         AC_MSG_ERROR(cannot create `pwd`/$ac_config_dir)
@@ -4387,9 +4398,9 @@ dnl to be created too.
     ac_popdir=`pwd`
     cd $ac_config_dir
 
-      # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir |
-               sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
+    # A "../" for each directory in /$ac_config_dir.
+    ac_dots=`echo $ac_config_dir |
+             sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
 
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
