@@ -81,6 +81,7 @@ check:
 installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(datadir)
 
+# References to install-info have been removed until it's released.
 install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
@@ -89,15 +90,9 @@ install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(datadir)/acconfig.h
 	test ! -r $(srcdir)/aclocal.m4 || $(INSTALL_DATA) $(srcdir)/aclocal.m4 $(datadir)/aclocal.m4
 	-if test -f autoconf.info; then d=.; else d=$(srcdir); fi; \
-	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info; \
-        if install-info --version >/dev/null 2>&1; then \
-          install-info --infodir=$(infodir) $$d/autoconf.info; \
-        else true; fi
+	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info
 	-if test -f standards.info; then d=.; else d=$(srcdir); fi; \
-	$(INSTALL_DATA) $$d/standards.info $(infodir)/standards.info; \
-        if install-info --version >/dev/null 2>&1; then \
-          install-info --infodir=$(infodir) $$d/standards.info; \
-        else true; fi
+	$(INSTALL_DATA) $$d/standards.info $(infodir)/standards.info
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader
@@ -108,7 +103,7 @@ uninstall:
 Makefile: Makefile.in config.status
 	$(SHELL) config.status
 config.status: configure
-	$(SHELL) $(srcdir)/configure --no-create
+	$(SHELL) config.status --recheck
 configure: configure.in acgeneral.m4 acspecific.m4
 	cd $(srcdir); \
 	$(M4) acgeneral.m4 acspecific.m4 configure.in > configure && \
