@@ -544,15 +544,15 @@ sub output ($)
 sub check_configure_ac ($)
 {
   my ($configure_ac) = @_;
-  my ($trace_option) = '';
 
   # Find what needed macros are invoked in CONFIGURE_AC.
-  foreach my $macro (sort keys %needed_macros)
-    {
-      $macro =~ s/\(.*//;
-      $trace_option .= " -t $macro";
-    }
+  # I'd be very happy if someone could explain to me why sort (uniq ...)
+  # doesn't work properly: I need `uniq (sort ...)'.  --akim
+  my $trace_option =
+    join (' -t ', '',
+	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
 
+  verbose "running: $autoconf -A $datadir $trace_option $configure_ac";
   my $traces =
     new IO::File "$autoconf -A $datadir $trace_option $configure_ac|"
       or die "$me: cannot create read traces: $!\n";

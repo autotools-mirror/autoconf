@@ -26,7 +26,7 @@ use strict;
 use vars qw (@ISA @EXPORT $me);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &find_peer &mktmpdir &verbose &xsystem
+@EXPORT = qw (&find_configure_ac &find_peer &mktmpdir &uniq &verbose &xsystem
 	      $me $verbose $debug $tmp);
 
 # Variable we share with the main package.  Be sure to have a single
@@ -128,6 +128,26 @@ sub mktmpdir ($)
 
   print STDERR "$me:$$: working in $tmp\n"
     if $debug;
+}
+
+
+# @RES
+# uniq (@LIST)
+# ------------
+# Return LIST with no duplicates.
+sub uniq (@)
+{
+   my @res = ();
+   my %seen = ();
+   foreach my $item (@_)
+     {
+       if (! exists $seen{$item})
+	 {
+	   $seen{$item} = 1;
+	   push (@res, $item);
+	 }
+     }
+   return wantarray ? @res : "@res";
 }
 
 

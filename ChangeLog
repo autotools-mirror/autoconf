@@ -1,5 +1,10 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm (&unique): New.
+	* bin/autoscan.in (&output): Use it to issue trace requests once.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/General.pm: New.
 	* bin/autom4te.in (Autom4te::General): Use it.
 	($me, $tmp, $verbose, $debug, &mktmpdir, &verbose, &xsystem)

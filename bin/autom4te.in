@@ -379,7 +379,7 @@ Tracing:
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
-  # Help font-lock-mode find an closing back quote: `
+  # Help font-lock-mode find a closing back quote: `
   exit 0;
 }
 
