@@ -1,5 +1,13 @@
 2004-05-24  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_MBRTOWC): Don't assume that a
+	function F exists if the compiler and linker let you compile an
+	expression like (F != 0).  Recent versions of GCC optimize away
+	the reference to F in that case, since every function address must
+	be nonzero, so the link succeeds even if F does not exist.
+	Problem reported by Manu in
+	<http://mail.gnu.org/archive/html/bug-gnu-utils/2004-05/msg00060.html>.
+
 	* doc/autoconf.texi (Systemology): Standardize on the spelling of
 	"Unix".  Many uses changed.
 	(Limitations of Builtins): Explain better why the ! command isn't

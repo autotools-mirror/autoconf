@@ -889,7 +889,11 @@ AC_DEFUN([AC_FUNC_MBRTOWC],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
 	    [[@%:@include <wchar.h>]],
-	    [[mbstate_t state; return ! (sizeof state && mbrtowc);]])],
+	    [[wchar_t wc;
+	      char const s[] = "";
+	      size_t n = 1;
+	      mbstate_t state;
+	      return ! (sizeof state && (mbrtowc) (&wc, s, n, &state));]])],
        ac_cv_func_mbrtowc=yes,
        ac_cv_func_mbrtowc=no)])
   if test $ac_cv_func_mbrtowc = yes; then
