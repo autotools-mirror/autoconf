@@ -272,6 +272,9 @@ my @include;
 # 0 for EXIT_SUCCESS.
 my $exit_status = 0;
 
+# Do we freeze?
+my $freeze = 0;
+
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
@@ -344,8 +347,8 @@ my %m4_builtin_alternate_name;
 $help = << "EOF";
 Usage: $0 [OPTION] ... [FILES]
 
-Run GNU M4 on the FILES, avoiding useless runs.  If tracing, the output
-consists of the traces only, otherwise output the expansion of the FILES.
+Run GNU M4 on the FILES, avoiding useless runs.  Output the traces if tracing,
+the frozen file if freezing, otherwise the expansion of the FILES.
 
 If some of the FILES are named \`FILE.m4f\' they are considered to be M4
 frozen files of all the previous files (which are therefore not loaded).
@@ -391,6 +394,9 @@ Library directories:
 Tracing:
   -t, --trace=MACRO      report the MACRO invocations
   -p, --preselect=MACRO  prepare to trace MACRO in a future run
+
+Freezing:
+  -F, --freeze   produce an M4 frozen state file for FILES
 
 Report bugs to <bug-autoconf\@gnu.org>.
 EOF
@@ -496,11 +502,24 @@ sub parse_args ()
      # by hand.
      "t|trace=s"     => \@trace,
      "p|preselect=s" => \@preselect,
+
+     # Freezing.
+     "F|freeze"  => \$freeze,
     );
 
   die "$me: too few arguments
 Try `$me --help' for more information.\n"
     unless @ARGV;
+
+  # Freezing:
+  # We cannot trace at the same time (well, we can, but it sounds insane).
+  # And it implies melting: there is risk not to update properly using
+  # old frozen files, and worse yet: we could load a frozen file and
+  # refreeze it!  A sort of caching :)
+  die "$me: cannot freeze and trace\n"
+    if $freeze && @trace;
+  $melt = 1
+    if $freeze;
 
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
@@ -1003,6 +1022,56 @@ sub up_to_date ($)
 }
 
 
+## ---------- ##
+## Freezing.  ##
+## ---------- ##
+
+# freeze ($OUTPUT)
+# ----------------
+sub freeze ($)
+{
+  my ($output) = @_;
+
+  # When processing the file with diversion disabled, there must be no
+  # output but comments and empty lines.
+  my $command = ("$m4"
+		 . ' --fatal-warning'
+		 . join (' --include=', '', reverse @include)
+		 . ' --define=divert'
+		 . " @ARGV"
+		 . ' </dev/null');
+  verbose "running: $command";
+  my $result = `$command`;
+  $result =~ s/#.*\n//g;
+  $result =~ s/^\n//mg;
+  if ($?)
+    {
+      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
+      exit $? >> 8;
+    }
+  if ($result)
+    {
+      print STDERR "$me: freezing produced output:\n$result";
+      exit 1;
+    }
+
+  # If freezing produces output, something went wrong: a bad `divert',
+  # or an improper paren etc.
+  $command = ("$m4"
+	      . ' --fatal-warning'
+	      . join (' --include=', '', reverse @include)
+	      . " --freeze-state=$output"
+	      . " @ARGV"
+	      . ' </dev/null');
+  verbose "running: $command";
+  system $command;
+  if ($?)
+    {
+      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
+      exit $? >> 8;
+    }
+}
+
 ## -------------- ##
 ## Main program.  ##
 ## -------------- ##
@@ -1010,6 +1079,13 @@ sub up_to_date ($)
 mktmpdir ('t4');
 load_configuration;
 parse_args;
+
+# Freezing does not involve the cache.
+if ($freeze)
+  {
+    freeze ($output);
+    exit 0;
+  }
 
 # We need our cache directory.
 if (! -d "$cache")

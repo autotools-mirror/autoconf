@@ -1,7 +1,6 @@
-divert(-1)#	   					-*- Autoconf -*-
-# This file is part of Autoconf.
+# This file is part of Autoconf.			-*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +44,4 @@ divert(-1)#	   					-*- Autoconf -*-
 # such potential, you must delete any notice of this special exception
 # to the GPL from your modified version.
 
-changequote()
-changequote([, ])
-include([m4sugar/m4sh.m4])
 m4_include([autotest/general.m4])
