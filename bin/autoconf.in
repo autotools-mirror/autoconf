@@ -7,8 +7,8 @@
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh performs word splitting on ${1+"$@"}, which is contrary to
-  # our usage.  Disable this feature.
+  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
@@ -278,10 +278,7 @@ esac
 # Unless specified, the output is stdout.
 test -z "$outfile" && outfile=-
 
-# Running autom4te.
-run_autom4te="$AUTOM4TE --language=autoconf --output=$outfile"
-# Autom4te expansion.
-eval set dummy "$traces"
-shift
-$verbose "$me: running $run_autom4te "${1+"$@"}" $infile" >&2
-exec $run_autom4te ${1+"$@"} $infile
+# Run autom4te with expansion.
+eval set \$AUTOM4TE --language=autoconf --output=\$outfile "$traces" \$infile
+$verbose "$me: running $*" >&2
+exec "$@"

@@ -94,7 +94,7 @@ ETAGS_ARGS = --lang=none \
 SUFFIXES = .m4 .m4f
 
 # Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
-# checks if we are independant of Autoconf by defining AUTOM4TE (and
+# checks if we are independent of Autoconf by defining AUTOM4TE (and
 # others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
 # apply to us.
 MY_AUTOM4TE = $(top_builddir)/tests/autom4te
