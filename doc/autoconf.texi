@@ -11223,20 +11223,11 @@ newline encoding.
 @item @command{cp}
 @c ---------------
 @prindex @command{cp}
-@cindex timestamp resolution
-Traditionally, file timestamps had 1-second resolution, and @samp{cp
--p} copied the timestamps exactly.  However, many modern filesystems
-have timestamps with 1-nanosecond resolution.  Unfortunately, @samp{cp
--p} implementations truncate timestamps when copying files, so this
-can result in the destination file appearing to be older than the
-source.  The exact amount of truncation depends on the resolution of
-the system calls that @command{cp} uses; traditionally this was
-@code{utime}, which has 1-second resolution, but some newer
-@command{cp} implementations use @code{utimes}, which has
-1-microsecond resolution.  These newer implementations include GNU
-coreutils 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
-later.  Unfortunately as of September 2003 there is still no system
-call to set time stamps to the full nanosecond resolution.
+Some @command{cp} implementations (e.g., BSD/OS 4.2) do not allow
+trailing slashes at the end of nonexistent destination directories.  To
+avoid this problem, omit the trailing slashes.  For example, use
+@samp{cp -r source /tmp/newdir} rather than @samp{cp -r source
+/tmp/newdir/} if @file{/tmp/newdir} does not exist.
 
 @c This is thanks to Ian.
 SunOS @command{cp} does not support @option{-f}, although its
@@ -11252,6 +11243,21 @@ write access, whereas @command{mv} simply calls @code{link} (or, in
 newer systems, @code{rename}).
 @c Ian said: ``I don't think -p or -r are portable''!!! How can you live
 @c without -r???
+
+@cindex timestamp resolution
+Traditionally, file timestamps had 1-second resolution, and @samp{cp
+-p} copied the timestamps exactly.  However, many modern filesystems
+have timestamps with 1-nanosecond resolution.  Unfortunately, @samp{cp
+-p} implementations truncate timestamps when copying files, so this
+can result in the destination file appearing to be older than the
+source.  The exact amount of truncation depends on the resolution of
+the system calls that @command{cp} uses; traditionally this was
+@code{utime}, which has 1-second resolution, but some newer
+@command{cp} implementations use @code{utimes}, which has
+1-microsecond resolution.  These newer implementations include GNU
+coreutils 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
+later.  Unfortunately as of September 2003 there is still no system
+call to set time stamps to the full nanosecond resolution.
 
 Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
 ownerships.  But whether it actually does copy ownerships or not is a
