@@ -1,5 +1,15 @@
 2001-01-19  Akim Demaille  <akim@epita.fr>
 
+	Optimizing AC_LANG was broken.  Test and fix.
+
+	* aclang.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Fortran 77)): Don't
+	use _AC_LANG_ABBREV so that you don't depend upon _AC_LANG.
+	(_AC_LANG_SET): New.
+	(AC_LANG, AC_LANG_PUSH, AC_LANG_POP): Use it.
+	* tests/compile.at: Test AC_LANG, AC_LANG_PUSH & AC_LANG_POP.
+
+2001-01-19  Akim Demaille  <akim@epita.fr>
+
 	* sugar.m4 (m4_require): Missing dnl.
 
 2001-01-18  Akim Demaille  <akim@epita.fr>

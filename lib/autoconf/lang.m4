@@ -108,37 +108,46 @@ m4_define([_AC_LANG_DISPATCH],
        [AC_FATAL([$1: unknown language: $2])])])
 
 
+# _AC_LANG_SET(OLD, NEW)
+# ----------------------
+# Output the shell code needed to switch from OLD language to NEW language.
+# Optimize if OLD == NEW.
+m4_defun([_AC_LANG_SET],
+[m4_if([$1], [$2], [],
+       [_AC_LANG_DISPATCH([AC_LANG], [$2])])])
+
+
 # AC_LANG(LANG)
 # -------------
 # Set the current language to LANG.
-AC_DEFUN([AC_LANG],
-[m4_ifdef([_AC_LANG],
-          [m4_if(m4_defn([_AC_LANG]), [$1], [],
-                 [m4_define([_AC_LANG], [$1])])dnl
-_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
+m4_defun([AC_LANG],
+[_AC_LANG_SET(m4_ifdef([_AC_LANG], [m4_defn([_AC_LANG])]),
+              [$1])dnl
+m4_define([_AC_LANG], [$1])])
 
 
 # AC_LANG_PUSH(LANG)
 # ------------------
 # Save the current language, and use LANG.
-m4_define([AC_LANG_PUSH],
-[m4_pushdef([_AC_LANG],
-            m4_ifdef([_AC_LANG],
-                     [m4_defn([_AC_LANG])]))dnl
-AC_LANG([$1])])
+m4_defun([AC_LANG_PUSH],
+[_AC_LANG_SET(m4_ifdef([_AC_LANG], [m4_defn([_AC_LANG])]),
+              [$1])dnl
+m4_pushdef([_AC_LANG], [$1])])
 
 
 # AC_LANG_POP([LANG])
 # -------------------
 # If given, check that the current language is LANG, and restore the
 # previous language.
-m4_define([AC_LANG_POP],
+m4_defun([AC_LANG_POP],
 [m4_ifval([$1],
-     [m4_if([$1], m4_defn([_AC_LANG]), [],
-            [m4_fatal([$0($1): unexpected current language: ]_AC_LANG)])])dnl
+ [m4_if([$1], m4_defn([_AC_LANG]), [],
+  [m4_fatal([$0($1): unexpected current language: ]m4_defn([_AC_LANG]))])])dnl
+m4_pushdef([$0 OLD], m4_defn([_AC_LANG]))dnl
 m4_popdef([_AC_LANG])dnl
-m4_if(_AC_LANG, [_AC_LANG], [AC_FATAL([too many $0])])dnl
-AC_LANG(_AC_LANG)])
+_AC_LANG_SET(m4_defn([$0 OLD]), m4_defn([_AC_LANG]))dnl
+m4_popdef([$0 OLD])dnl
+])
 
 
 # AC_LANG_SAVE
@@ -161,14 +170,14 @@ AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 # ---------------
 # Return a short signature of _AC_LANG which can be used in shell
 # variable names, or in M4 macro names.
-m4_define([_AC_LANG_ABBREV],
+m4_defun([_AC_LANG_ABBREV],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_ASSERT(LANG)
 # --------------------
 # Current language must be LANG.
-m4_define([AC_LANG_ASSERT],
+m4_defun([AC_LANG_ASSERT],
 [m4_if(_AC_LANG, $1, [],
        [m4_fatal([$0: current language is not $1: ] _AC_LANG)])])
 
@@ -187,7 +196,7 @@ m4_define([AC_LANG(C)],
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ])
 
 
@@ -214,7 +223,7 @@ m4_define([AC_LANG(C++)],
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 ])
 
 
@@ -239,7 +248,7 @@ m4_define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 ])
 
 

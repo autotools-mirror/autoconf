@@ -7,7 +7,77 @@ AT_BANNER([Low level compiling/preprocessing macros.])
 # primitive, so check those first.
 
 
-##- ----------- ##
+## --------- ##
+## AC_LANG.  ##
+## --------- ##
+
+# Check that AC_LANG is optimizing, i.e., we don't output useless
+# language changes.  Still, make sure we do change the language when
+# needed :)
+
+AT_SETUP([AC_LANG])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_LANG(C)
+AC_LANG(C++)
+AC_LANG(C++)
+AC_LANG(Fortran 77)
+AC_LANG(Fortran 77)
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK([sed -n 's/^ac_ext=//p' configure], 0,
+[c
+cc
+f
+])
+
+AT_CLEANUP
+
+
+## ------------------------------------- ##
+## AC_LANG, AC_LANG_PUSH & AC_LANG_POP.  ##
+## ------------------------------------- ##
+
+AT_SETUP([AC_LANG, AC_LANG_PUSH & AC_LANG_POP])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+# C
+AC_LANG(C)
+# C
+AC_LANG_PUSH(C)
+# C C
+AC_LANG_PUSH(C++)
+# C++ C C
+AC_LANG(C++)
+# C++ C C
+AC_LANG_PUSH(Fortran 77)
+# F77 C++ C C
+AC_LANG_POP(Fortran 77)
+# C++ C C
+AC_LANG(C++)
+# C++ C C
+AC_LANG_POP(C++)
+# C C
+AC_LANG_POP(C)
+# C
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK([sed -n 's/^ac_ext=//p' configure], 0,
+[c
+cc
+f
+cc
+c
+])
+
+AT_CLEANUP
+
+
+## ------------ ##
 ## Extensions.  ##
 ## ------------ ##
 
