@@ -235,13 +235,6 @@ sub scan_files ()
       $initfile = $cfiles[0];		# Pick one at random.
     }
 
-  if ($verbose)
-    {
-      print "cfiles:", join(" ", @cfiles), "\n";
-      print "makefiles:", join(" ", @makefiles), "\n";
-      print "shfiles:", join(" ", @shfiles), "\n";
-    }
-
   foreach $file (@cfiles)
     {
       push (@{$programs{"cc"}}, $file);
@@ -256,6 +249,24 @@ sub scan_files ()
   foreach $file (@shfiles)
     {
       scan_sh_file ($file);
+    }
+
+  if ($verbose)
+    {
+      print "cfiles:", join(" ", @cfiles), "\n";
+      print "makefiles:", join(" ", @makefiles), "\n";
+      print "shfiles:", join(" ", @shfiles), "\n";
+
+      foreach my $class (qw (functions identifiers headers
+                       makevars libraries programs))
+	{
+	  print "\n$class:\n";
+	  my $h = eval "\\\%$class";
+	  foreach my $word (sort keys %$h)
+	    {
+	      print "$word: @{$h->{$word}}\n";
+	    }
+	}
     }
 }
 
@@ -313,29 +324,6 @@ sub scan_c_file ($)
 	}
     }
   close(CFILE);
-
-  if ($verbose)
-    {
-      my ($word);
-
-      print "\n$file functions:\n";
-      foreach $word (sort keys %functions)
-	{
-	  print "$word: @{$functions{$word}}\n";
-	}
-
-      print "\n$file identifiers:\n";
-      foreach $word (sort keys %identifiers)
-	{
-	  print "$word: @{$identifiers{$word}}\n";
-	}
-
-      print "\n$file headers:\n";
-      foreach $word (sort keys %headers)
-	{
-	  print "$word: @{$headers{$word}}\n";
-	}
-    }
 }
 
 
@@ -371,29 +359,6 @@ sub scan_makefile ($)
 	}
     }
   close(MFILE);
-
-  if ($verbose)
-    {
-      my ($word);
-
-      print "\n$file makevars:\n";
-      foreach $word (sort keys %makevars)
-	{
-	  print "$word: @{$makevars{$word}}\n";
-	}
-
-      print "\n$file libraries:\n";
-      foreach $word (sort keys %libraries)
-	{
-	  print "$word: @{$libraries{$word}}\n";
-	}
-
-      print "\n$file programs:\n";
-      foreach $word (sort keys %programs)
-	{
-	  print "$word: @{$programs{$word}}\n";
-	}
-    }
 }
 
 
@@ -418,17 +383,6 @@ sub scan_sh_file ($)
 	}
     }
   close(MFILE);
-
-  if ($verbose)
-    {
-      my ($word);
-
-      print "\n$file programs:\n";
-      foreach $word (sort keys %programs)
-	{
-	  print "$word: @{$programs{$word}}\n";
-	}
-    }
 }
 
 

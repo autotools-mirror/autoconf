@@ -1,3 +1,12 @@
+2001-02-02  Pavel Roskin  <proski@gnu.org>
+
+	* autoscan.pl (scan_c_file): When in verbose mode, don't print
+	out hashes common for the whole package. Do it in scan_files()
+	instead.
+	(scan_makefile): Likewise.
+	(scan_sh_file): Likewise.
+	Thanks to Jim Meyering for improved implementation.
+
 2001-02-01  Pavel Roskin  <proski@gnu.org>
 
 	* autoreconf.sh: Fix the case when the verbose output was not
