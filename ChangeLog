@@ -1,3 +1,9 @@
+2003-10-09  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/Autom4te/XFile.pm: Don't assume -j is solo.
+	Issue a more-informative diagnostic.
+	Problems reported by Eric Sunshine.
+
 2003-10-08  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Omit quoted
@@ -66,7 +72,7 @@
 2003-10-02  Akim Demaille  <akim@epita.fr>
 
 	* bin/ifnames.in (&scan_file): Skip C++ comments.
-        From Jeremy Yallop.
+	From Jeremy Yallop.
 
 2003-10-01  Pavel Roskin  <proski@gnu.org>
 
@@ -183,8 +189,8 @@
 	    Paul Eggert <eggert@twinsun.com>
 
 	Trivial change to support GCC's configuration procedure.
-        * lib/autoconf/c.m4 (AC_PROG_CPP_WERROR): New macro.
-        * lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Don't warn
+	* lib/autoconf/c.m4 (AC_PROG_CPP_WERROR): New macro.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Don't warn
 	about inconsistency if the preprocessor is set to give errors for
 	any warning.
 	* doc/autoconf.texi (C Compiler Characteristics): Document this.
@@ -714,7 +720,7 @@
 	White spaces cleanup.
 
 2003-05-22  Jim Meyering  <jim@meyering.net>
-            and Paul Eggert <eggert@twinsun.com>
+	    Paul Eggert <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
 	Remove `#include <stdlib.h>' from the list; we should never
@@ -4285,7 +4291,7 @@
 	`{}'.
 	* lib/autotest/general.m4 (AT_INIT): Adjust.
 
-2001-09-18  Paul Wagland   <paul@wagland.net>
+2001-09-18  Paul Wagland  <paul@wagland.net>
 
 	* tests/m4sh.at: Ensure that AS_DIRNAME handles '/', '//' and '///'
 	correctly.

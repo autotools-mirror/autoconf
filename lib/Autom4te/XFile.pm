@@ -223,12 +223,15 @@ sub lock
   # perl was not built with -Ud_flock.  Normally, this problem is harmless,
   # so ignore the ENOLCK errors that are reported in that situation,
   # However, if the invoker is using "make -j", the problem is not harmless,
-  # so report it in that case.  Admittedly this is a bit of a hack.
+  # so report it in that case, by inspecting MAKEFLAGS and looking for
+  # any arguments indicating that the invoker used -j.
+  # Admittedly this is a bit of a hack.
   if (!flock ($fh, $mode)
-      && (!$!{ENOLCK} || " $ENV{'MAKEFLAGS'}" =~ / (-j|--jobs)/))
+      && (!$!{ENOLCK}
+	  || " -$ENV{'MAKEFLAGS'}" =~ / (-[BdeikrRsSw]*j|---?jobs)/))
     {
       my $file = $fh->name;
-      fatal "cannot lock $file with mode $mode: $!";
+      fatal "cannot lock $file with mode $mode (perhaps you are running make -j on a lame NFS client?): $!";
     }
 }
 
