@@ -41,7 +41,7 @@ use strict;
 use vars qw ($config_h %verbatim %symbol);
 
 # Lib files.
-my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 local $config_h;
 my $config_h_in;
 my @include;

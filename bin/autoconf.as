@@ -74,7 +74,7 @@ echo \"\$help\" >&2
 exit 1"
 
 # Variables.
-: ${AUTOM4TE=@autom4te-name@}
+: ${AUTOM4TE='@bindir@/@autom4te-name@'}
 dir=`AS_DIRNAME([$0])`
 outfile=
 verbose=:

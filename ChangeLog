@@ -1,5 +1,13 @@
 2002-06-12  Paul Eggert  <eggert@twinsun.com>
 
+	* bin/autoconf.as (AUTOM4TE): Default to a fully qualified path
+	name, so that symlinks to 'autoconf' work properly.  Bug reported
+	by Bruno Haible.
+	* bin/autoheader.in (AUTOM4TE): Likewise.
+	* bin/autoreconf.in (autoconf, autoheader): Likewise.
+	* bin/autoscan.in (autom4te): Likewise.
+	* bin/autoupdate.in (autom4te): Likewise.
+	
 	* lib/autoconf/functions.m4 (_AC_LIBOBJ_FNMATCH): Also check for
 	btowc, to fix a portability bug with diffutils-2.8.2/lib/fnmatch.c
 	on Solaris 2.5.1.

@@ -78,7 +78,7 @@ my $configure_scan = 'configure.scan';
 my $log = new Autom4te::XFile ">$me.log";
 
 # Autoconf and lib files.
-my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 my $autoconf = "$autom4te --language=autoconf";
 my @include = ('@datadir@');
 

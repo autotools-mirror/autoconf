@@ -84,8 +84,8 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ";
 
 # Lib files.
-my $autoconf   = $ENV{'AUTOCONF'}   || '@autoconf-name@';
-my $autoheader = $ENV{'AUTOHEADER'} || '@autoheader-name@';
+my $autoconf   = $ENV{'AUTOCONF'}   || '@bindir@/@autoconf-name@';
+my $autoheader = $ENV{'AUTOHEADER'} || '@bindir@/@autoheader-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';

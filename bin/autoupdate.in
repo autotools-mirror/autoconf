@@ -36,7 +36,7 @@ use Autom4te::XFile;
 use strict;
 
 # Lib files.
-my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
+my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 my $autoconf = "$autom4te --language=autoconf";
 # We need to find m4sugar.
 my @include = ('@datadir@');
