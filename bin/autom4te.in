@@ -636,6 +636,7 @@ sub handle_m4 ($@)
 # $WORD is forbidden.  Warn with a dedicated error message if in
 # %FORBIDDEN, otherwise, a simple `error: possibly undefined macro'
 # will do.
+my $first_warn_forbidden = 1;
 sub warn_forbidden ($$%)
 {
   my ($where, $word, %forbidden) = @_;
@@ -651,6 +652,14 @@ sub warn_forbidden ($$%)
     }
   $message ||= "possibly undefined macro: $word";
   warn "$where: error: $message\n";
+  if ($first_warn_forbidden)
+    {
+      warn <<EOF;
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+EOF
+      $first_warn_forbidden = 0;
+    }
 }
 
 

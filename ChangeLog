@@ -1,5 +1,11 @@
 2002-06-07  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (warn_forbidden): When rejecting a token,
+	suggest m4_pattern_allow.
+	Suggested by Adam J. Richter.
+
+2002-06-07  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Initialize
 	ac_config_libobj_dir.
 	(AC_CONFIG_LIBOBJ_DIR): New.
