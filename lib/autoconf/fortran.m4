@@ -512,7 +512,8 @@ AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 # current language.
 AC_DEFUN([AC_REQUIRE_CPP],
 [AC_LANG_CASE(C, [AC_REQUIRE([AC_PROG_CPP])],
-                 [AC_REQUIRE([AC_PROG_CXXCPP])])])
+              C++, [AC_REQUIRE([AC_PROG_CXXCPP])],
+              [AC_FATAL([No preprocessor defined for ]_AC_LANG)])])
 
 
 # _AC_LANG_COMPILER_WORKS

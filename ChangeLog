@@ -1,3 +1,8 @@
+2000-10-28  Pavel Roskin  <proski@gnu.org>
+
+	* aclang.m4 (AC_REQUIRE_CPP): Don't default to C++ - call AC_FATAL
+	for unsupported languages.
+
 2000-10-27  Pavel Roskin  <proski@gnu.org>
 
 	* acfunctions.m4 (AC_FUNC_MMAP): Remove conftestmmap from the
