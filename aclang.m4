@@ -819,7 +819,7 @@ AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_TOOLS(F77,
-               m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c]))
+               m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90]))
 
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU

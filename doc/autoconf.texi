@@ -3756,8 +3756,8 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @ovindex FFLAGS
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
 set in the environment, then check for @code{g77} and @code{f77}, and
-then some other names, and finally @code{f2c}.  Set the output variable
-@code{F77} to the name of the compiler found.
+then some other names.  Set the output variable @code{F77} to the name
+of the compiler found.
 
 This macro may, however, be invoked with an optional first argument
 which, if specified, must be a space separated list of Fortran 77
@@ -3767,7 +3767,7 @@ example, if you didn't like the default order, then you could invoke
 @code{AC_PROG_F77} like this:
 
 @example
-AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90 f2c)
+AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90)
 @end example
 
 If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then

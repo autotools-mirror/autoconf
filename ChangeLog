@@ -1,3 +1,11 @@
+2000-05-25  Steven G. Johnson <stevenj@alum.mit.edu>
+
+	Don't use f2c as a possible Fortran compiler, since by itself it
+	cannot produce object code.
+
+	* aclang.m4 (AC_PROG_F77): Remove f2c from the search list.
+	* doc/autoconf.texi: Excise mentions of f2c in AC_PROG_F77 docs.
+
 2000-05-26 Mark Elbrecht <snowball3@bigfoot.com>
 
 	Currently, AC_PROG_LN_S incorrectly reports yes with DJGPP. This
