@@ -739,6 +739,14 @@ m4_define([_AC_INIT_DEFAULTS],
 
 AS_SHELL_SANITIZE
 
+# Name of the host.
+# hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+# so uname gets run too.
+ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
+
+# Name of the executable.
+as_me=`echo "$[0]" | sed 's,.*/,,'`
+
 cat >config.log << EOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -747,8 +755,12 @@ It was created by $as_me m4_ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
  > $[0] $[@]
 
-on `(hostname || uname -n) 2>/dev/null | sed 1q`:
 
+## ---------- ##
+## Platform.  ##
+## ---------- ##
+
+hostname = $ac_hostname
 uname -m = `(uname -m) 2>/dev/null || echo unknown`
 uname -r = `(uname -r) 2>/dev/null || echo unknown`
 uname -s = `(uname -s) 2>/dev/null || echo unknown`
@@ -766,6 +778,11 @@ hostinfo               = `(hostinfo) 2>/dev/null`
 /bin/universe          = `(/bin/universe) 2>/dev/null`
 
 PATH = $PATH
+
+## ------------ ##
+## Core tests.  ##
+## ------------ ##
+
 EOF
 
 _AC_INIT_DEFAULTS_FDS
@@ -782,14 +799,6 @@ AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
 # This variable seems obsolete.  It should probably be removed, and
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
-
-# Name of the host.
-# hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
-# so uname gets run too.
-ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
-
-# Name of the executable.
-as_me=`echo "$[0]" | sed 's,.*/,,'`
 
 # Avoid depending upon Character Ranges.
 ac_cr_az='abcdefghijklmnopqrstuvwxyz'
@@ -3721,7 +3730,6 @@ m4_define([_AC_LIST_SUBDIRS])
 #
 # If there are arguments given to AC_OUTPUT, dispatch them to the
 # proper modern macros.
-
 AU_DEFUN([AC_OUTPUT],
 [m4_ifvaln([$1],
            [AC_CONFIG_FILES([$1])])dnl
@@ -3763,12 +3771,22 @@ dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
 # Save into config.log some information that might help in debugging.
-echo >&AS_MESSAGE_LOG_FD
-echo "Cache variables:" >&AS_MESSAGE_LOG_FD
-_AC_CACHE_DUMP | sed 's/^/| /' >&AS_MESSAGE_LOG_FD
-echo >&AS_MESSAGE_LOG_FD
-echo "confdefs.h:" >&AS_MESSAGE_LOG_FD
-sed '/^$/d;s/^/| /' confdefs.h >&AS_MESSAGE_LOG_FD
+cat <<_ACEOF >&AS_MESSAGE_LOG_FD
+
+## ----------------- ##
+## Cache variables.  ##
+## ----------------- ##
+
+_ACEOF
+_AC_CACHE_DUMP >&AS_MESSAGE_LOG_FD
+cat <<_ACEOF >&AS_MESSAGE_LOG_FD
+
+## ------------ ##
+## confdefs.h.  ##
+## ------------ ##
+
+_ACEOF
+sed '/^$/d' confdefs.h >&AS_MESSAGE_LOG_FD
 
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
@@ -3807,7 +3825,9 @@ AS_SHELL_SANITIZE
 _AC_INIT_DEFAULTS_FDS
 cat >&AS_MESSAGE_LOG_FD << EOF
 
-----------------------------------------------------------------------
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
 
 This file was extended by $as_me m4_ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with

@@ -180,7 +180,7 @@ m4_define([_AS_QUOTE_IFELSE],
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
-# ---------------------------------------------------
+# -----------------------------------------------
 # Perform shell expansions on STRING and echo the string to FD.
 m4_define([_AS_ECHO_UNQUOTED],
 [echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
@@ -205,37 +205,30 @@ $1])])
 # ----------------------------------
 # Protect STRING from backquote expansion, echo the result to FD.
 m4_define([_AS_ECHO],
-[_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], $2)])
+[_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], [$2])])
 
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
-# --------------------------------------------
+# ----------------------------------------
 m4_define([AS_MESSAGE],
 [m4_ifset([AS_MESSAGE_LOG_FD],
           [{ _AS_ECHO([$as_me:__oline__: $1], [AS_MESSAGE_LOG_FD])
-_AS_ECHO($@);}],
-          [_AS_ECHO($@)])[]dnl
+_AS_ECHO([$as_me: $1], [$2]);}],
+          [_AS_ECHO([$as_me: $1], [$2])])[]dnl
 ])
 
 
 # AS_WARN(PROBLEM)
 # ----------------
 m4_define([AS_WARN],
-[m4_ifset([AS_MESSAGE_LOG_FD],
-          [{ _AS_ECHO([$as_me:__oline__: WARNING: $1], [AS_MESSAGE_LOG_FD])
-_AS_ECHO([$as_me: warning: $1], 2); }],
-          [_AS_ECHO([$as_me: warning: $1], 2)])[]dnl
-])# AS_WARN
+[AS_MESSAGE([WARNING: $1], [2])])# AS_WARN
 
 
 # AS_ERROR(ERROR, [EXIT-STATUS = 1])
 # ----------------------------------
 m4_define([AS_ERROR],
-[{m4_ifset([AC_LOG_FD],
-           [_AS_ECHO([$as_me:__oline__: error: $1], [AS_MESSAGE_LOG_FD])
-])[]dnl
-  _AS_ECHO([$as_me: error: $1], 2)
-  AS_EXIT([$2]); }[]dnl
+[{ AS_MESSAGE([error: $1], [2])
+   AS_EXIT([$2]); }
 ])# AS_ERROR
 
 
