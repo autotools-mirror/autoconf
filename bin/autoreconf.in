@@ -490,7 +490,7 @@ sub autoreconf_current_directory ()
   if (defined $aux_dir && ! -d $aux_dir)
     {
       verb "$configure_ac: creating directory $aux_dir";
-      mkdir $aux_dir
+      mkdir $aux_dir, 0755
 	or error "cannot create $aux_dir: $!";
     }
 
