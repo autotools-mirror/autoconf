@@ -90,11 +90,13 @@ changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
 --build=BUILD		configure for building on BUILD [BUILD=HOST]
+--cache-file=FILE	cache test results in FILE
 --disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
 --enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
 --exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
 --help			print this message
 --host=HOST		configure for HOST [guessed]
+--no-create		do not create output files
 --prefix=PREFIX		install host independent files in PREFIX [/usr/local]
 --quiet, --silent	do not print \`checking for...' messages
 --srcdir=DIR		find the sources in DIR [configure dir or ..]
@@ -111,6 +113,7 @@ changequote([,])dnl
 # The variables have the same names as the options, with
 # dashes changed to underlines.
 build=NONE
+cache_file=config.cache
 exec_prefix=
 host=NONE
 no_create=
@@ -154,6 +157,13 @@ changequote([,])dnl
     ac_prev=build ;;
   -build=* | --build=* | --buil=* | --bui=* | --bu=* | --b=*)
     build="$ac_optarg" ;;
+
+  -cache-file | --cache-file | --cache-fil | --cache-fi \
+  | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+    ac_prev=cache_file ;;
+  -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+  | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+    cache_file="$ac_optarg" ;;
 
   -disable-* | --disable-*)
     ac_feature=`echo $ac_option|sed -e 's/-*disable-//'`
@@ -399,6 +409,7 @@ if test ! -r $srcdir/$ac_unique_file; then
     AC_ERROR(can not find sources in ${srcdir})
   fi
 fi
+AC_CACHE_LOAD
 AC_LANG_C
 ])dnl
 dnl
@@ -479,67 +490,9 @@ define(AC_PREREQ,
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
 dnl
 dnl Run configure in subdirectories $1.
-dnl FIXME It would be better to define a macro here, and
-dnl do the subdir configuring in AC_OUTPUT if that macro is defined.
-dnl
+dnl Not actually done until AC_OUTPUT_CONFIG_SUBDIRS.
 define(AC_CONFIG_SUBDIRS,
-[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
-if test -z "${norecursion}"; then
-  for ac_config_dir in $1; do
-
-    # Don't complain, so a configure script can configure a large
-    # source tree, or only the parts of it that are there.
-    if test ! -d ${srcdir}/${ac_config_dir}; then
-      continue
-    fi
-
-    echo configuring ${ac_config_dir}
-
-    case "${srcdir}" in
-    .) ;;
-    *)
-      if test -d ./${ac_config_dir} || mkdir ./${ac_config_dir}; then :;
-      else
-        AC_ERROR(can not create `pwd`/${ac_config_dir})
-      fi
-      ;;
-    esac
-
-    ac_popdir=`pwd`
-    cd ${ac_config_dir}
-
-    case "${srcdir}" in
-    .) # No --srcdir option.  We're building in place.
-      ac_sub_srcdir=${srcdir} ;;
-    /*) # Absolute path.
-      ac_sub_srcdir=${srcdir}/${ac_config_dir} ;;
-    *) # Relative path.
-      ac_sub_srcdir=../${srcdir}/${ac_config_dir} ;;
-    esac
-
-    # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f ${ac_sub_srcdir}/configure; then
-      ac_sub_configure=${ac_sub_srcdir}/configure
-    elif test -f ${ac_sub_srcdir}/configure.in; then
-      ac_sub_configure=${ac_configure}
-    else
-      AC_WARN(no configuration information is in ${ac_config_dir})
-      ac_sub_configure=
-    fi
-
-    # The recursion is here.
-    if test -n "${ac_sub_configure}"; then
-      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${configure_args}
-      then :
-      else
-        AC_ERROR(${ac_sub_configure} failed for ${ac_config_dir})
-      fi
-    fi
-
-    cd ${ac_popdir}
-  done
-fi
-])dnl
+[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])define([AC_SUBDIR_LIST],[$1])])dnl
 dnl
 dnl
 dnl ### Canonicalizing the system type.
@@ -690,6 +643,51 @@ dnl link name in $1.
 dnl Not actually done until AC_OUTPUT_MAKE_LINKS.
 define(AC_MAKE_LINKS,
 [define([AC_LINK_LIST],[$1])define([AC_FILE_LIST],[$2])])dnl
+dnl
+dnl
+dnl ### Caching test results
+dnl
+dnl
+define(AC_CACHE_LOAD,
+[if test -r $cache_file; then
+  AC_VERBOSE(loading test results from cache file $cache_file)
+  . $cache_file
+else
+  AC_VERBOSE(creating new cache file $cache_file)
+  > $cache_file
+fi])dnl
+dnl
+define(AC_CACHE_SAVE,
+[if test -w $cache_file; then
+AC_VERBOSE(saving test results in cache file $cache_file)
+cat <<\CEOF > $cache_file
+# This file is a shell script that stores the results of configure
+# tests run on this system so they can be shared between configure
+# scripts and configure runs.  It is not useful on other systems.
+# If its contents are invalid for some reason, you may edit or delete it.
+#
+# By default, configure uses `./config.cache' as the cache file,
+# creating it if it does not exist already.  You can give configure
+# the --cache-file=FILE option to use a different cache file; that is
+# what configure does when it calls configure scripts in
+# subdirectories, so they share the cache.
+# config.status only pays attention to this file if you give it the
+# --recheck option to rerun configure.
+CEOF
+changequote(,)dnl
+set | sed -n "/^[a-zA-Z0-9_]*_cv_/s/=\(.*\)/='\1'/p" >> $cache_file
+changequote([,])dnl
+fi])dnl
+dnl
+dnl AC_CACHE_USE(cache-id, commands-to-set-it)
+dnl The name cache-id must contain the string `_cv_' in order to get saved.
+define(AC_CACHE_USE,
+[if test "x${$1-unset}" != xunset; then 
+  AC_VERBOSE(using cached value for $1)
+else
+  $2
+fi
+])dnl
 dnl
 dnl
 dnl ### Setting variables
@@ -859,20 +857,22 @@ dnl
 dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
-  # Extract the first word of `$2', so it can be a program name with args.
+  AC_CACHE_USE(ac_cv_program_$1,
+[# Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      $1="$3"
+      ac_cv_program_$1="$3"
       break
     fi
   done
   IFS="$ac_save_ifs"
 fi
-ifelse([$4],,, [test -z "[$]$1" && $1="$4"])
+ifelse([$4],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$4"])])dnl
+$1="$ac_cv_program_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -888,20 +888,22 @@ ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
-  # Extract the first word of `$2', so it can be a program name with args.
+  AC_CACHE_USE(ac_cv_program_$1,
+[# Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
   AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      $1="$ac_dir/$ac_word"
+      ac_cv_program_$1="$ac_dir/$ac_word"
       break
     fi
   done
   IFS="$ac_save_ifs"
 fi
-ifelse([$3],,, [test -z "[$]$1" && $1="$3"])
+ifelse([$3],,, [test -z "[$]ac_cv_program_$1" && ac_cv_program_$1="$3"])])dnl
+$1="$ac_cv_program_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
@@ -1131,7 +1133,8 @@ dnl ### The big finish
 dnl
 dnl
 define(AC_OUTPUT,
-[changequote(,)dnl
+[AC_CACHE_SAVE
+changequote(,)dnl
 # Set default prefixes.
 if test -n "$prefix"; then
   test -z "$exec_prefix" && exec_prefix='${prefix}' # Let make expand it.
@@ -1198,8 +1201,8 @@ for ac_option
 do
   case "[\$]ac_option" in
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args --no-create
-    exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args --no-create ;;
+    echo running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args --no-create --norecursion
+    exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args --no-create --norecursion ;;
   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
     echo "config.status generated by autoconf version AC_ACVERSION"
     exit 0 ;;
@@ -1284,11 +1287,12 @@ exit 0
 EOF
 chmod +x config.status
 test -n "$no_create" || ${CONFIG_SHELL-/bin/sh} config.status
+dnl config.status should never do recursion.
+ifdef([AC_SUBDIR_LIST],[AC_OUTPUT_CONFIG_SUBDIRS(AC_SUBDIR_LIST)])dnl
 ])dnl
 dnl
 dnl Create the header files listed in $1.
-dnl This is a subroutine of AC_OUTPUT, broken out primarily to avoid bugs
-dnl with long definitions in GNU m4 1.0.  This is called inside a quoted
+dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
 define(AC_OUTPUT_HEADER,[dnl
 changequote(<<,>>)dnl
@@ -1418,5 +1422,63 @@ while test -n "${ac_files}"; do
     AC_ERROR(can not link ${ac_link} to ${srcdir}/${ac_file})
   fi
 done
+])dnl
+dnl
+define(AC_OUTPUT_CONFIG_SUBDIRS,
+[if test -z "${norecursion}"; then
+  for ac_config_dir in $1; do
+
+    # Don't complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    if test ! -d ${srcdir}/${ac_config_dir}; then
+      continue
+    fi
+
+    echo configuring ${ac_config_dir}
+
+    case "${srcdir}" in
+    .) ;;
+    *)
+      if test -d ./${ac_config_dir} || mkdir ./${ac_config_dir}; then :;
+      else
+        AC_ERROR(can not create `pwd`/${ac_config_dir})
+      fi
+      ;;
+    esac
+
+    ac_popdir=`pwd`
+    cd ${ac_config_dir}
+
+    case "${srcdir}" in
+    .) # No --srcdir option.  We're building in place.
+      ac_sub_srcdir=${srcdir} ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=${srcdir}/${ac_config_dir} ;;
+    *) # Relative path.
+      ac_sub_srcdir=../${srcdir}/${ac_config_dir} ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f ${ac_sub_srcdir}/configure; then
+      ac_sub_configure=${ac_sub_srcdir}/configure
+    elif test -f ${ac_sub_srcdir}/configure.in; then
+      ac_sub_configure=${ac_configure}
+    else
+      AC_WARN(no configuration information is in ${ac_config_dir})
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "${ac_sub_configure}"; then
+      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${configure_args} --cache-file=$cache_file
+      then :
+      else
+        AC_ERROR(${ac_sub_configure} failed for ${ac_config_dir})
+      fi
+    fi
+
+    cd ${ac_popdir}
+  done
+fi
 ])dnl
 dnl
