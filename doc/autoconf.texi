@@ -556,6 +556,8 @@ and set shell variable @code{GCC} to @samp{yes} for use by macros such as
 @maindex PROG_CPP
 Set shell and @code{make} variable @code{CPP} to a command that runs the
 C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
+It is only portable to run @code{CPP} on files with a @file{.c}
+extension.
 
 If the current language is C (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CPP} indirectly by calling
@@ -580,6 +582,8 @@ found the GNU C++ compiler, the empty string if not.
 @maindex PROG_CXXCPP
 Set shell and @code{make} variable @code{CXXCPP} to a command that runs the
 C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
+It is only portable to run @code{CXXCPP} on files with a @file{.c},
+@file{.C}, or @file{.cc} extension.
 
 If the current language is C++ (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CXXCPP} indirectly by
