@@ -40,12 +40,15 @@ testsuite: atgeneral.m4 suite.m4 macros.m4 $(SUITE)
 
 macros.m4: $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
-	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\).*/\1/p' | \
+	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\)/\1/p' | \
 	  sort >macros
+	rm -f $@-t
 	for macro in `cat macros`; do \
-	  echo "TEST_MACRO([$$macro])" >>$@; \
+	  echo "TEST_MACRO([$$macro])" >>$@-t; \
 	done
 	rm macros
+	mv $@-t $@
 
-clean-local:
-	rm -f debug-*.sh
+CLEANFILES = debug-*.sh macro configure configure.in config.status \
+config.cache config.log config.h.in config.h
+DISTCLEANFILES = atconfig testsuite

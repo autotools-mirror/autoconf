@@ -1,5 +1,11 @@
 2000-02-04  Akim Demaille  <akim@epita.fr>
 
+	* tests/syntax.m4: Test AC_CHECK_SIZEOF.
+	* tests/Makefile.am (CLEANFILES, DISTCLEANFILES): Adjusted.
+	(macros.m4): Use tmp dest files ($@-t), not directly `$@'.
+
+2000-02-04  Akim Demaille  <akim@epita.fr>
+
 	Hide AH_HOOK behind AH_DEFUN.
 
 	* autoheader.m4 (AH_DEFUN): New macro.  Combination of define and

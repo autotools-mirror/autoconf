@@ -55,3 +55,9 @@ echo 'Syntax of macros and completeness of the header templates.'
 echo
 
 AT_INCLUDE(macros.m4)
+
+echo
+echo 'More specific tests.'
+echo
+
+TEST_MACRO([AC_CHECK_SIZEOF(long *)])
