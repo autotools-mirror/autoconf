@@ -617,7 +617,11 @@ sub check_configure_ac ($)
 
   foreach my $macro (sort keys %needed_macros)
     {
-      warn "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
+      warn "$me: warning: missing $macro wanted by: \n";
+      foreach my $need (@{$needed_macros{$macro}})
+        {
+          warn "\t$need\n";
+        }
     }
 }
 
