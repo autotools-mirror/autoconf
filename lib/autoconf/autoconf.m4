@@ -31,6 +31,8 @@ m4_include(m4sh.m4)
 
 m4_copy([m4_define],   [define])
 m4_copy([m4_defn],     [defn])
+m4_copy([m4_popdef],   [popdef])
+m4_copy([m4_pushdef],  [pushdef])
 m4_copy([m4_undefine], [undefine])
 
 m4_include(acversion.m4)

@@ -125,7 +125,7 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 # ------------------
 # Save the current language, and use LANG.
 define([AC_LANG_PUSH],
-[pushdef([_AC_LANG])dnl
+[m4_pushdef([_AC_LANG])dnl
 AC_LANG([$1])])
 
 
@@ -133,7 +133,7 @@ AC_LANG([$1])])
 # -----------
 # Restore the previous language.
 define([AC_LANG_POP],
-[popdef([_AC_LANG])dnl
+[m4_popdef([_AC_LANG])dnl
 ifelse(_AC_LANG, [_AC_LANG],
         [AC_FATAL([too many $0])])dnl
 AC_LANG(_AC_LANG)])
@@ -146,7 +146,7 @@ AU_DEFUN([AC_LANG_SAVE],
 [AC_DIAGNOSE([obsolete],
              [instead of using `AC_LANG', `AC_LANG_SAVE',
 and `AC_LANG_RESTORE', you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
-pushdef([_AC_LANG], _AC_LANG)])
+m4_pushdef([_AC_LANG], _AC_LANG)])
 
 
 # AC_LANG_RESTORE

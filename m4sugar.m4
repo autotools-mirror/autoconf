@@ -95,6 +95,8 @@ m4_define([m4_rename],
 # Rename them a` la `m4 --prefix-builtins'.
 m4_rename([eval],    [m4_eval])
 m4_rename([format],  [m4_format])
+m4_rename([popdef],    [m4_popdef])
+m4_rename([pushdef],   [m4_pushdef])
 m4_rename([shift],   [m4_shift])
 m4_rename([symbols], [m4_symbols])
 
@@ -402,9 +404,9 @@ m4_define([_m4_shiftn],
 # ---------------------
 m4_define([_m4_dumpdefs_up],
 [ifdef([$1],
-       [pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
+       [m4_pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
 dumpdef([$1])dnl
-popdef([$1])dnl
+m4_popdef([$1])dnl
 _m4_dumpdefs_up([$1])])])
 
 
@@ -412,14 +414,14 @@ _m4_dumpdefs_up([$1])])])
 # -----------------------
 m4_define([_m4_dumpdefs_down],
 [ifdef([_m4_dumpdefs],
-       [pushdef([$1], m4_defn([_m4_dumpdefs]))dnl
-popdef([_m4_dumpdefs])dnl
+       [m4_pushdef([$1], m4_defn([_m4_dumpdefs]))dnl
+m4_popdef([_m4_dumpdefs])dnl
 _m4_dumpdefs_down([$1])])])
 
 
 # m4_dumpdefs(NAME)
 # -----------------
-# Similar to `dumpdef(NAME)', but if NAME was pushdef'ed, display its
+# Similar to `dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
 # value stack (most recent displayed first).
 m4_define([m4_dumpdefs],
 [_m4_dumpdefs_up([$1])dnl
@@ -461,11 +463,11 @@ m4_define([m4_for],
 [m4_case(m4_sign(m4_eval($3 - $2)),
          1, [m4_assert(m4_sign(m4_default($4, 1)) == 1)],
         -1, [m4_assert(m4_sign(m4_default($4, -1)) == -1)])dnl
-pushdef([$1], [$2])dnl
+m4_pushdef([$1], [$2])dnl
 ifelse(m4_eval([$3 > $2]), 1,
        [_m4_for([$1], [$3], m4_default([$4], 1), [$5])],
        [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
-popdef([$1])])
+m4_popdef([$1])])
 
 m4_define([_m4_for],
 [$4[]dnl
@@ -482,7 +484,7 @@ ifelse($1, [$2], [],
 #
 # | # foreach(VAR, (LIST), STMT)
 # | m4_define([foreach],
-# |        [pushdef([$1])_foreach([$1], [$2], [$3])popdef([$1])])
+# |        [m4_pushdef([$1])_foreach([$1], [$2], [$3])m4_popdef([$1])])
 # | m4_define([_arg1], [$1])
 # | m4_define([_foreach],
 # | 	      [ifelse([$2], [()], ,
@@ -512,7 +514,7 @@ ifelse($1, [$2], [],
 # apply to the maintenance of m4sugar!).
 #
 # | # foreach(VAR, (LIST), STMT)
-# | m4_define([foreach], [pushdef([$1])_foreach($@)popdef([$1])])
+# | m4_define([foreach], [m4_pushdef([$1])_foreach($@)m4_popdef([$1])])
 # | m4_define([_arg1], [[$1]])
 # | m4_define([_foreach],
 # |  [ifelse($2, [()], ,
@@ -537,7 +539,7 @@ ifelse($1, [$2], [],
 # simplifies the use:
 #
 # | # foreach(VAR, (LIST), STMT)
-# | m4_define([foreach], [pushdef([$1])_foreach($@)popdef([$1])])
+# | m4_define([foreach], [m4_pushdef([$1])_foreach($@)m4_popdef([$1])])
 # | m4_define([_arg1], [$1])
 # | m4_define([_foreach],
 # |  [ifelse($2, [], ,
@@ -570,7 +572,7 @@ ifelse($1, [$2], [],
 #      | m4_foreach(Var, [[[active]], [[active]]], [-Var-])
 #     => -active--active-
 m4_define([m4_foreach],
-[pushdef([$1])_m4_foreach($@)popdef([$1])])
+[m4_pushdef([$1])_m4_foreach($@)m4_popdef([$1])])
 
 # Low level macros used to define m4_foreach.
 m4_define([m4_car], [$1])
@@ -601,7 +603,7 @@ m4_define([_m4_divert],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[pushdef([_m4_divert_diversion], _m4_divert([$1]))dnl
+[m4_pushdef([_m4_divert_diversion], _m4_divert([$1]))dnl
 divert(_m4_divert_diversion)dnl
 ])
 
@@ -610,7 +612,7 @@ divert(_m4_divert_diversion)dnl
 # -------------
 # Change the diversion stream to its previous value, unstacking it.
 m4_define([m4_divert_pop],
-[popdef([_m4_divert_diversion])dnl
+[m4_popdef([_m4_divert_diversion])dnl
 ifndef([_m4_divert_diversion],
        [m4_fatal([too many m4_divert_pop])])dnl
 divert(_m4_divert_diversion)dnl
@@ -938,8 +940,8 @@ m4_divert_pop()dnl
 # not for define'd macros.
 #
 # The scheme is simplistic: each time we enter an m4_defun'd macros,
-# we pushdef its name in _m4_expansion_stack, and when we exit the
-# macro, we popdef _m4_expansion_stack.
+# we m4_pushdef its name in _m4_expansion_stack, and when we exit the
+# macro, we m4_popdef _m4_expansion_stack.
 #
 # In addition, we want to use the expansion stack to detect circular
 # m4_require dependencies.  This means we need to browse the stack to
@@ -984,7 +986,7 @@ m4_define([_m4_divert(GROW)],       10000)
 m4_define([_m4_expansion_stack_dump],
 [ifdef([_m4_expansion_stack],
        [m4_errprint(m4_defn([_m4_expansion_stack]))dnl
-popdef([_m4_expansion_stack])dnl
+m4_popdef([_m4_expansion_stack])dnl
 _m4_expansion_stack_dump()],
        [m4_errprint(m4_location[: the top level])])])
 
@@ -993,9 +995,9 @@ _m4_expansion_stack_dump()],
 # -------------------------
 # The prologue for Autoconf macros.
 m4_define([_m4_defun_pro],
-[pushdef([_m4_expansion_stack],
+[m4_pushdef([_m4_expansion_stack],
          m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
-pushdef([_m4_expanding($1)])dnl
+m4_pushdef([_m4_expanding($1)])dnl
 ifdef([_m4_divert_dump],
       [m4_divert_push(m4_defn([_m4_divert_diversion]))],
       [m4_copy([_m4_divert_diversion], [_m4_divert_dump])dnl
@@ -1012,8 +1014,8 @@ m4_define([_m4_defun_epi],
 ifelse(_m4_divert_dump, _m4_divert_diversion,
        [undivert(_m4_divert([GROW]))dnl
 m4_undefine([_m4_divert_dump])])dnl
-popdef([_m4_expansion_stack])dnl
-popdef([_m4_expanding($1)])dnl
+m4_popdef([_m4_expansion_stack])dnl
+m4_popdef([_m4_expanding($1)])dnl
 m4_provide([$1])dnl
 ])
 
@@ -1087,7 +1089,7 @@ m4_define([m4_before],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([_m4_require],
-[pushdef([_m4_expansion_stack],
+[m4_pushdef([_m4_expansion_stack],
          m4_location[: $1 is required by...])dnl
 ifdef([_m4_expanding($1)],
       [m4_fatal([m4_require: circular dependency of $1])])dnl
@@ -1103,7 +1105,7 @@ m4_provide_ifelse([$1],
                   [],
                   [m4_warn([syntax],
                            [$1 is m4_require'd but is not m4_defun'd])])dnl
-popdef([_m4_expansion_stack])dnl
+m4_popdef([_m4_expansion_stack])dnl
 ])
 
 
@@ -1289,7 +1291,7 @@ ifdef([$1], [m4_defn([$1]), ])[$2])])
 # FIXME: This macro should not exists.  Currently it's used only in
 # m4_wrap, which needs to be rewritten.  But it's godam hard.
 m4_define([m4_foreach_quoted],
-[pushdef([$1], [])_m4_foreach_quoted($@)popdef([$1])])
+[m4_pushdef([$1], [])_m4_foreach_quoted($@)m4_popdef([$1])])
 
 # Low level macros used to define m4_foreach.
 m4_define([m4_car_quoted], [[$1]])
@@ -1338,11 +1340,11 @@ m4_define([_m4_foreach_quoted],
 # words are preceded by m4_Separator which is defined to empty for the
 # first word, and then ` ' (single space) for all the others.
 m4_define([m4_wrap],
-[pushdef([m4_Prefix], m4_default([$2], []))dnl
-pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
-pushdef([m4_Width], m4_default([$4], 79))dnl
-pushdef([m4_Cursor], len(m4_Prefix1))dnl
-pushdef([m4_Separator], [])dnl
+[m4_pushdef([m4_Prefix], m4_default([$2], []))dnl
+m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
+m4_pushdef([m4_Width], m4_default([$4], 79))dnl
+m4_pushdef([m4_Cursor], len(m4_Prefix1))dnl
+m4_pushdef([m4_Separator], [])dnl
 m4_Prefix1[]dnl
 ifelse(m4_eval(m4_Cursor > len(m4_Prefix)),
        1, [m4_define([m4_Cursor], len(m4_Prefix))
@@ -1357,11 +1359,11 @@ m4_Prefix,
        [m4_Separator])[]dnl
 m4_Word[]dnl
 m4_define([m4_Separator], [ ])])dnl
-popdef([m4_Separator])dnl
-popdef([m4_Cursor])dnl
-popdef([m4_Width])dnl
-popdef([m4_Prefix1])dnl
-popdef([m4_Prefix])dnl
+m4_popdef([m4_Separator])dnl
+m4_popdef([m4_Cursor])dnl
+m4_popdef([m4_Width])dnl
+m4_popdef([m4_Prefix1])dnl
+m4_popdef([m4_Prefix])dnl
 ])
 
 

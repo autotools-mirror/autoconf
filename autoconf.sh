@@ -570,7 +570,7 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     macro_name=`echo "$trace" | sed 's/:.*//;q'`
-    trace_format=`echo "$trace" | sed '1s/^[^:]*://'`
+    trace_format=`echo "$trace" | sed '1s/^[^:]*:/:/'`
 
     # GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
     #
@@ -605,10 +605,10 @@ EOF
     if echo "ifdef(\`$base_name', \`', \`m4exit(-1)')" | m4; then
       # BASE_NAME is a builtin.
       trace_opt="$trace_opt -t $base_name -t m4_$base_name"
-      echo "$base_name:$trace_format" |
+      echo "$base_name$trace_format" |
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
           { (exit 1); exit; }
-      echo "m4_$base_name:$trace_format" |
+      echo "m4_$base_name$trace_format" |
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
           { (exit 1); exit; }
     else

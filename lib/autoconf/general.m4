@@ -162,7 +162,7 @@ define([AC_DIVERT_POP],
 # Initialize the diversion setup.
 define([_m4_divert_diversion], _m4_divert([BODY]))
 # Throw away output until AC_INIT is called.
-pushdef([_m4_divert_diversion], _m4_divert([KILL]))
+m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 
 
 
@@ -487,15 +487,15 @@ define([AC_VAR_SET_IFELSE],
 define([AC_VAR_PUSHDEF],
 [AC_VAR_INDIR_IFELSE([$2],
                      [ac_$1=AC_TR_SH($2)
-pushdef([$1], [$ac_[$1]])],
-                     [pushdef([$1], [AC_TR_SH($2)])])])
+m4_pushdef([$1], [$ac_[$1]])],
+                     [m4_pushdef([$1], [AC_TR_SH($2)])])])
 
 
 # AC_VAR_POPDEF(VARNAME)
 # ----------------------
 # Free the shell variable accessor VARNAME.  To be dnl'ed.
 define([AC_VAR_POPDEF],
-[popdef([$1])])
+[m4_popdef([$1])])
 
 
 
@@ -606,11 +606,11 @@ define([AC_FOREACH],
 #  column 0                  column 26
 #
 define([AC_HELP_STRING],
-[pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
-pushdef([AC_Prefix_Format], [  %-]m4_eval(len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
+[m4_pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
+m4_pushdef([AC_Prefix_Format], [  %-]m4_eval(len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
 m4_wrap([$2], AC_Prefix, m4_format(AC_Prefix_Format, [$1]))dnl
-popdef([AC_Prefix_Format])dnl
-popdef([AC_Prefix])dnl
+m4_popdef([AC_Prefix_Format])dnl
+m4_popdef([AC_Prefix])dnl
 ])
 
 
@@ -2691,7 +2691,7 @@ fi
 # No big loss, I think, since most configures don't use this macro anyway.
 AC_DEFUN([AC_PREFIX_PROGRAM],
 [dnl Get an upper case version of $[1].
-pushdef([AC_Prog], m4_toupper([$1]))dnl
+m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
@@ -2700,7 +2700,7 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
     prefix=`AS_DIRNAME([$ac_cv_path_[]AC_Prog])`
   fi
 fi
-popdef([AC_Prog])dnl
+m4_popdef([AC_Prog])dnl
 ])# AC_PREFIX_PROGRAM
 
 
@@ -2803,11 +2803,11 @@ define([AH_CHECK_LIB],
 # is passed `-lfoo'.  However, LIBRARY cannot be a shell variable;
 # it must be a literal name.
 AU_DEFUN([AC_HAVE_LIBRARY],
-[pushdef([AC_Lib_Name],
+[m4_pushdef([AC_Lib_Name],
          patsubst(patsubst([[$1]], [lib\([^\.]*\)\.a], [\1]), [-l], []))dnl
 AC_CHECK_LIB(AC_Lib_Name, main, [$2], [$3], [$4])dnl
 ac_cv_lib_[]AC_Lib_Name()=ac_cv_lib_[]AC_Lib_Name()_main
-popdef([AC_Lib_Name])dnl
+m4_popdef([AC_Lib_Name])dnl
 ])
 
 
@@ -3585,7 +3585,7 @@ m4_divert_pop()dnl
 define([_AC_CONFIG_UNIQUE],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
-[pushdef([AC_Dest], patsubst(AC_File, [:.*]))
+[m4_pushdef([AC_Dest], patsubst(AC_File, [:.*]))
 AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
@@ -3596,7 +3596,7 @@ AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_COMMANDS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])
-popdef([AC_Dest])])
+m4_popdef([AC_Dest])])
 m4_divert_pop()dnl
 ])
 
