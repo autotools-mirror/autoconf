@@ -1,3 +1,10 @@
+2002-09-04  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am, doc/Makefile.am: Remove pdf targets, handled by
+	Automake 1.6c.
+	* Makefile.am (maintainer-clean-local): Remove.
+	(MAINTAINERCLEANFILES): Remove COPYING.
+
 2002-09-03  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Configuration Commands): Remove obsolete

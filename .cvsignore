@@ -1,9 +1,7 @@
 Makefile
-autoheader autoconf autom4te autoreconf autoscan autoupdate ifnames
 config.cache
 config.log
 config.status
-INSTALL.txt
 configure.scan
 autoconf-[0-9].*
 *.log log

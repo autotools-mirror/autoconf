@@ -30,16 +30,16 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS \
              GNUmakefile Makefile.maint
 
-MAINTAINERCLEANFILES = COPYING INSTALL
+MAINTAINERCLEANFILES = INSTALL
 
 ## -------------------- ##
 ## Forwarding targets.  ##
 ## -------------------- ##
 
-html pdf:
+html:
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@
 
-.PHONY: html pdf
+.PHONY: html
 
 
 ## --------- ##
@@ -51,9 +51,6 @@ AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 INSTALL: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
 	  $(top_srcdir)/doc/install.texi
-
-maintainer-clean-local:
-	-rm -rf autom4te.cache
 
 ## maintainer-check ##
 maintainer-check: maintainer-check-tests

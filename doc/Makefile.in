@@ -103,8 +103,7 @@ standards_TEXINFOS = make-stds.texi
 CLEANFILES = autoconf.acs  autoconf.cvs  autoconf.mss  autoconf.prs \
 	     autoconf.ats  autoconf.evs  autoconf.fns  autoconf.ovs \
              autoconf.tmp \
-	     autoconf*.html standards*.html \
-	     autoconf*.pdf standards*.pdf
+	     autoconf*.html standards*.html
 
 subdir = doc
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -145,6 +144,7 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	$(TEXI2PDF) `test -f '$<' || echo '$(srcdir)/'`$< -o $@
 autoconf.info: version.texi $(autoconf_TEXINFOS)
 autoconf.dvi: version.texi $(autoconf_TEXINFOS)
+autoconf.pdf: version.texi $(autoconf_TEXINFOS)
 version.texi:  stamp-vti
 stamp-vti: autoconf.texi $(top_srcdir)/configure.ac
 	@(dir=.; test -f ./autoconf.texi || dir=$(srcdir); \
@@ -166,6 +166,7 @@ maintainer-clean-vti:
 	-rm -f stamp-vti version.texi
 standards.info: $(standards_TEXINFOS)
 standards.dvi: $(standards_TEXINFOS)
+standards.pdf: $(standards_TEXINFOS)
 TEXI2DVI = texi2dvi
 
 TEXI2PDF = $(TEXI2DVI) --pdf
@@ -375,15 +376,7 @@ autoconf_1.html: autoconf.texi install.texi
 standards_1.html: standards.texi make-stds.texi
 	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/standards.texi
 
-pdf: autoconf.pdf standards.pdf
-
-autoconf.pdf: autoconf.texi install.texi
-	$(TEXI2DVI) --pdf --batch $(srcdir)/autoconf.texi
-
-standards.pdf: standards.texi make-stds.texi
-	$(TEXI2DVI) --pdf --batch $(srcdir)/standards.texi
-
-.PHONY: html pdf
+.PHONY: html
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in.
 
 ## Makefile for Autoconf.
-## Copyright 2000, 2001 Free Software Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002  Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -31,8 +31,7 @@ standards_TEXINFOS = make-stds.texi
 CLEANFILES = autoconf.acs  autoconf.cvs  autoconf.mss  autoconf.prs \
 	     autoconf.ats  autoconf.evs  autoconf.fns  autoconf.ovs \
              autoconf.tmp \
-	     autoconf*.html standards*.html \
-	     autoconf*.pdf standards*.pdf
+	     autoconf*.html standards*.html
 
 
 ## ----------------------------- ##
@@ -48,12 +47,4 @@ standards_1.html: standards.texi make-stds.texi
 	$(TEXI2HTML) $(TEXI2HTML_FLAGS) $(srcdir)/standards.texi
 
 
-pdf: autoconf.pdf standards.pdf
-
-autoconf.pdf: autoconf.texi install.texi
-	$(TEXI2DVI) --pdf --batch $(srcdir)/autoconf.texi
-
-standards.pdf: standards.texi make-stds.texi
-	$(TEXI2DVI) --pdf --batch $(srcdir)/standards.texi
-
-.PHONY: html pdf
+.PHONY: html

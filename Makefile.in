@@ -103,7 +103,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              GNUmakefile Makefile.maint
 
 
-MAINTAINERCLEANFILES = COPYING INSTALL
+MAINTAINERCLEANFILES = INSTALL
 
 pkgdata_DATA = INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
@@ -480,8 +480,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf autom4te.cache
-maintainer-clean-am: distclean-am maintainer-clean-generic \
-	maintainer-clean-local
+maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
@@ -511,24 +510,20 @@ uninstall-info: uninstall-info-recursive
 	install-recursive install-strip installcheck installcheck-am \
 	installdirs installdirs-am installdirs-recursive \
 	maintainer-clean maintainer-clean-generic \
-	maintainer-clean-local maintainer-clean-recursive mostlyclean \
-	mostlyclean-generic mostlyclean-recursive pdf pdf-am \
-	pdf-recursive ps ps-am ps-recursive tags tags-recursive \
-	uninstall uninstall-am uninstall-info-am \
-	uninstall-info-recursive uninstall-pkgdataDATA \
-	uninstall-recursive
+	maintainer-clean-recursive mostlyclean mostlyclean-generic \
+	mostlyclean-recursive pdf pdf-am pdf-recursive ps ps-am \
+	ps-recursive tags tags-recursive uninstall uninstall-am \
+	uninstall-info-am uninstall-info-recursive \
+	uninstall-pkgdataDATA uninstall-recursive
 
 
-html pdf:
+html:
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@
 
-.PHONY: html pdf
+.PHONY: html
 INSTALL: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
 	  $(top_srcdir)/doc/install.texi
-
-maintainer-clean-local:
-	-rm -rf autom4te.cache
 
 maintainer-check: maintainer-check-tests
 maintainer-check-tests:
