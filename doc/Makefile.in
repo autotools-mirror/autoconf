@@ -35,10 +35,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__configure_deps = $(top_srcdir)/config/m4.m4
+am__aclocal_m4_deps = $(top_srcdir)/config/m4.m4 \
+	$(top_srcdir)/configure.ac
+am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
+	$(ACLOCAL_M4)
 DIST_COMMON = $(autoconf_TEXINFOS) $(srcdir)/Makefile.in \
-	$(standards_TEXINFOS) Makefile.am stamp-vti texinfo.tex \
-	version.texi
+	$(standards_TEXINFOS) Makefile.am stamp-vti version.texi
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 SOURCES =
@@ -133,9 +135,9 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .dvi .html .info .pdf .ps .texi
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)
+$(srcdir)/Makefile.in:  Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
-	  case '$(top_srcdir)/configure.ac $(ACLOCAL_M4) $(am__configure_deps)' in \
+	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
 	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh \
 		&& exit 0; \
@@ -157,9 +159,9 @@ Makefile:  $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) $(am__configure_deps)
+$(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4):  $(top_srcdir)/configure.ac  $(am__configure_deps)
+$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
 .texi.info:
@@ -227,7 +229,7 @@ standards.html: standards.texi $(standards_TEXINFOS)
 uninstall-info-am:
 	$(PRE_UNINSTALL)
 	@if (install-info --version && \
-	     install-info --version | grep -i -v debian) >/dev/null 2>&1; then \
+	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/dev/null 2>&1; then \
 	  list='$(INFO_DEPS)'; \
 	  for file in $$list; do \
 	    relfile=`echo "$$file" | sed 's|^.*/||'`; \
@@ -331,7 +333,7 @@ install-am: all-am
 installcheck: installcheck-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
-	  INSTALL_STRIP_FLAG=-s \
+	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
 	  `test -z '$(STRIP)' || \
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
@@ -387,7 +389,7 @@ install-info-am: $(INFO_DEPS)
 	done
 	@$(POST_INSTALL)
 	@if (install-info --version && \
-	     install-info --version | grep -i -v debian) >/dev/null 2>&1; then \
+	     install-info --version 2>&1 | sed 1q | grep -i -v debian) >/dev/null 2>&1; then \
 	  list='$(INFO_DEPS)'; \
 	  for file in $$list; do \
 	    relfile=`echo "$$file" | sed 's|^.*/||'`; \

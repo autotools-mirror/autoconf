@@ -1,3 +1,10 @@
+2003-11-05  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): Fix use of AS_SET_CATFILE
+	so that ac_abs_builddir, ac_abs_top_builddir, ac_abs_srcdir,
+	and ac_abs_top_srcdir are absolute paths.
+	* lib/m4sugar/m4sh.m4 (AS_SET_CATFILE): Remove misleading comment.
+
 2003-11-05  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Bump to 2.58a.

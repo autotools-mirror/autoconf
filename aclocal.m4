@@ -11,7 +11,8 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# Copyright 2002  Free Software Foundation, Inc.
+#                                                        -*- Autoconf -*-
+# Copyright (C) 2002, 2003  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -310,7 +311,10 @@ AC_SUBST([am__leading_dot])])
 # AM_PATH_LISPDIR
 # ---------------
 AC_DEFUN([AM_PATH_LISPDIR],
-[AC_ARG_WITH([lispdir],
+[AC_CHECK_PROGS([EMACS], [emacs xemacs], [no])
+ AC_ARG_VAR([EMACS], [the Emacs editor command])
+ AC_ARG_VAR([EMACSLOADPATH], [the Emacs library search path])
+ AC_ARG_WITH([lispdir],
  [  --with-lispdir          Override the default lisp directory ],
  [ lispdir="$withval"
    AC_MSG_CHECKING([where .elc files should go])
@@ -319,13 +323,10 @@ AC_DEFUN([AM_PATH_LISPDIR],
  # If set to t, that means we are running in a shell under Emacs.
  # If you have an Emacs named "t", then use the full path.
  test x"$EMACS" = xt && EMACS=
- AC_CHECK_PROGS([EMACS], [emacs xemacs], [no])
- AC_ARG_VAR([EMACS], [the Emacs editor command])
- AC_ARG_VAR([EMACSLOADPATH], [the Emacs library search path])
- if test $EMACS != "no"; then
-   if test x${lispdir+set} != xset; then
-     AC_CACHE_CHECK([where .elc files should go], [am_cv_lispdir],
-       [# If $EMACS isn't GNU Emacs or XEmacs, this can blow up pretty badly
+ AC_CACHE_CHECK([where .elc files should go], [am_cv_lispdir], [
+   if test $EMACS != "no"; then
+     if test x${lispdir+set} != xset; then
+  # If $EMACS isn't GNU Emacs or XEmacs, this can blow up pretty badly
   # Some emacsen will start up in interactive mode, requiring C-x C-c to exit,
   #  which is non-obvious for non-emacs users.
   # Redirecting /dev/null should help a bit; pity we can't detect "broken"
@@ -337,13 +338,11 @@ AC_DEFUN([AM_PATH_LISPDIR],
        -e '/.*\/share\/x\?emacs\/site-lisp$/{s,.*/share/\(x\?emacs/site-lisp\),${datadir}/\1,;p;q;}' \
        conftest.out`
        rm conftest.out
-       if test -z "$am_cv_lispdir"; then
-	 am_cv_lispdir='${datadir}/emacs/site-lisp'
-       fi
-     ])
-     lispdir="$am_cv_lispdir"
+     fi
    fi
- fi
+   test -z "$am_cv_lispdir" && am_cv_lispdir='${datadir}/emacs/site-lisp'
+  ])
+  lispdir="$am_cv_lispdir"
 ])
 AC_SUBST([lispdir])
 ])# AM_PATH_LISPDIR

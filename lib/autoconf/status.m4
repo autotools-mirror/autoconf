@@ -160,10 +160,14 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
-AS_SET_CATFILE([ac_abs_builddir],     [$1], [$ac_builddir])
-AS_SET_CATFILE([ac_abs_top_builddir], [$1], [${ac_top_builddir}.])
-AS_SET_CATFILE([ac_abs_srcdir],       [$1], [$ac_srcdir])
-AS_SET_CATFILE([ac_abs_top_srcdir],   [$1], [$ac_top_srcdir])
+
+# Do not use `cd foo && pwd` to compute absolute paths, because
+# the directories may not exist.
+AS_SET_CATFILE([ac_abs_builddir],   [`pwd`],            [$1])
+AS_SET_CATFILE([ac_abs_top_builddir],
+	                            [$ac_abs_builddir], [${ac_top_builddir}.])
+AS_SET_CATFILE([ac_abs_srcdir],     [$ac_abs_builddir], [$ac_srcdir])
+AS_SET_CATFILE([ac_abs_top_srcdir], [$ac_abs_builddir], [$ac_top_srcdir])
 ])# _AC_SRCPATHS
 
 
