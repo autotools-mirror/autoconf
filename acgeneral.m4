@@ -184,7 +184,7 @@ no_recursion=
 prefix=NONE
 program_prefix=NONE
 program_suffix=NONE
-program_transform_name=NONE
+program_transform_name=s,x,x,
 silent=
 srcdir=
 target=NONE
@@ -534,6 +534,7 @@ AC_SUBST(LDFLAGS)dnl
 AC_SUBST(LIBS)dnl
 AC_SUBST(exec_prefix)dnl
 AC_SUBST(prefix)dnl
+AC_SUBST(program_transform_name)dnl
 ])
 
 
@@ -592,8 +593,9 @@ dnl ### Transforming program names.
 
 dnl AC_ARG_PROGRAM()
 AC_DEFUN(AC_ARG_PROGRAM,
-[test "$program_transform_name" = NONE && program_transform_name=
-if test -n "$program_transform_name"; then
+[if test "$program_transform_name" = s,x,x,; then
+  program_transform_name=
+else
   # Double any \ or $.
   echo 's,\\,\\\\,g; s,\$,$$,g' > conftestsed
   program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
@@ -607,7 +609,6 @@ test "$program_suffix" != NONE &&
 
 # sed with no file args requires a program.
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
-AC_SUBST(program_transform_name)dnl
 ])
 
 
@@ -720,7 +721,7 @@ AC_CANONICAL_TARGET
 AC_CANONICAL_BUILD
 test "$host_alias" != "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
-    NONENONENONE && program_prefix=${target_alias}-
+    NONENONEs,x,x, && program_prefix=${target_alias}-
 ])
 
 dnl Subroutines of AC_CANONICAL_SYSTEM.
