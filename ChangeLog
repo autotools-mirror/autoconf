@@ -1,3 +1,16 @@
+2002-01-28  Akim Demaille  <akim@epita.fr>
+
+	* lib/autotest/general.m4 (AT_INIT): Don't be ridiculous: adjust
+	AUTOTEST_PATH *after* it was set.
+	Don't put `.' in the PATH: the user should be precise and `./' if
+	needed.  In addition, given that the test suite does some `cd', if
+	`.' is in the path, the `tested programs' sections will report
+	programs found in the test suite's directory, while during the
+	tests (performed in their own directory), these programs are no
+	longer visible.  In other words, the results is confusing and
+	useless.
+	* tests/m4sh.at: Adjust: don't rely on `.' being in the PATH.
+
 2002-01-24  Akim Demaille  <akim@epita.fr>
 
 	Version 2.52g.

@@ -71,16 +71,16 @@ AT_CHECK([mkdir test || exit 77])
 
 AT_DATA_LINENO([test/test-1.as], [false], [$@&t@LINENO], [LINENO])
 AT_CHECK([autom4te -l m4sh test/test-1.as -o test/test-1])
-AT_CHECK([test/test-1],                            0, [expout])
+AT_CHECK([./test/test-1],                          0, [expout])
 AT_CHECK([PATH=test$PATH_SEPARATOR$PATH test-1],   0, [expout])
-AT_CHECK([sh test/test-1],                         0, [expout])
+AT_CHECK([sh ./test/test-1],                       0, [expout])
 
 # Now using a disabled LINENO, with different call conventions.
 AT_DATA_LINENO([test/test-2.as], [true], [$@&t@LINENO], [LINENO])
 AT_CHECK([autom4te -l m4sh test/test-2.as -o test/test-2])
-AT_CHECK([test/test-2],                            0, [expout])
+AT_CHECK([./test/test-2],                          0, [expout])
 AT_CHECK([PATH=test$PATH_SEPARATOR$PATH test-2],   0, [expout])
-AT_CHECK([sh test/test-2],                         0, [expout])
+AT_CHECK([sh ./test/test-2],                       0, [expout])
 
 # Beware that *.lineno scripts can be *here* while the masters are in test/.
 AT_CLEANUP(reference test test-1.lineno test-2.lineno)
@@ -141,7 +141,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([script])
+AT_CHECK([./script])
 
 AT_CLEANUP
 
@@ -198,7 +198,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([script])
+AT_CHECK([./script])
 
 AT_CLEANUP
 
@@ -228,7 +228,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([script])
+AT_CHECK([./script])
 
 AT_CLEANUP(1 a)
 
@@ -258,6 +258,6 @@ esac
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([script])
+AT_CHECK([./script])
 
 AT_CLEANUP

@@ -120,8 +120,6 @@ if test -n "$at_top_srcdir"; then
   done
 fi
 
-AUTOTEST_PATH=`echo $AUTOTEST_PATH | tr ':' $PATH_SEPARATOR`
-
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.
 at_times=:
@@ -352,6 +350,7 @@ fi
 #
 # There might be directories that don't exist, but don't redirect
 # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
+AUTOTEST_PATH=`echo $AUTOTEST_PATH | tr ':' $PATH_SEPARATOR`
 at_path=
 _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
 [case $as_dir in
@@ -371,9 +370,7 @@ _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
 esac])
 
 # Now build and simplify PATH.
-# Be sure to put `.' in front too: we will `cd', and we must be
-# run to run what is in the current directory (e.g., in a group directory).
-PATH=.
+PATH=
 _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
 test -d "$as_dir" || continue
@@ -382,7 +379,9 @@ case $PATH in
                   $as_dir$PATH_SEPARATOR* | \
   *$PATH_SEPARATOR$as_dir                 | \
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
-  *) PATH=$PATH$PATH_SEPARATOR$as_dir ;;
+
+  '') PATH=$as_dir ;;
+   *) PATH=$PATH$PATH_SEPARATOR$as_dir ;;
 esac])
 export PATH
 
