@@ -2098,7 +2098,7 @@ define a symbol if the function is available, consider using
 For each given @var{function} in the whitespace-separated argument list
 that is available, define @code{HAVE_@var{function}} (in all caps).
 @xref{Specific Tests}, for a precise definition of ``define'' as it
-is used here.  If @var{action} is given, it is shell code to execute
+is used here.  If @var{action} is given, it is additional shell code to execute
 when one of the functions is found.  You can give an @var{action} of
 @samp{break} to break out of the loop on the first match.
 If the functions might be in libraries other than the
@@ -2120,7 +2120,7 @@ For each given system header file @var{header-file} in the
 whitespace-separated argument list that exists, define
 @code{HAVE_@var{header-file}} (in all caps).  @xref{Specific Tests}, for
 a precise definition of ``define'' as it is used here.
-If @var{action} is given, it is shell code to execute
+If @var{action} is given, it is additional shell code to execute
 when one of the header files is found.  You can give an @var{action} of
 @samp{break} to break out of the loop on the first match.
 @end defmac
