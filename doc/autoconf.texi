@@ -3223,7 +3223,7 @@ If the @code{error_at_line} function is not found, require an
 @defmac AC_FUNC_FNMATCH
 @maindex FUNC_FNMATCH
 If the @code{fnmatch} function is available and works (unlike the one on
-SunOS 5.4), define @code{HAVE_FNMATCH}.
+Solaris 2.4), define @code{HAVE_FNMATCH}.
 @end defmac
 
 @defmac AC_FUNC_FSEEKO
@@ -3396,7 +3396,7 @@ first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
 @cvindex HAVE_LSTAT_EMPTY_STRING_BUG
 Determine whether @code{stat} or @code{lstat} have the bug that it
 succeeds when given the zero-length file name argument.  The @code{stat}
-and @code{lstat} from SunOS4.1.4 and the Hurd (as of 1998-11-01) do
+and @code{lstat} from SunOS 4.1.4 and the Hurd (as of 1998-11-01) do
 this.
 
 If it does, then define @code{HAVE_STAT_EMPTY_STRING_BUG} (or
@@ -5671,8 +5671,8 @@ Unfortunately it is not yet widely supported.  Most notably, even recent
 releases of Solaris don't support it:
 
 @example
-$ uname -a
-SunOS shelby 5.7 Generic_106541-10 sun4u sparc SUNW,Ultra-1
+$ showrev -c /bin/sh | grep version    
+Command version: SunOS 5.8 Generic 109324-02 February 2001
 $ echo $(echo blah)
 syntax error: `(' unexpected
 @end example
@@ -6025,7 +6025,7 @@ that you update.
 @c ------------------
 @cindex @command{false}
 Don't expect @command{false} to exit with status 1: in the native Bourne
-shell of Solaris 2.8, it exits with status 255.
+shell of Solaris 8, it exits with status 255.
 
 
 @item @command{for}
