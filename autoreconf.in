@@ -251,14 +251,9 @@ EOF
 
 # update.sh --
 # Exit 0 iff the first argument is not the most recent of all or is missing.
-# FIXME: Why do we need -l?  Dropping it would allow using fgrep.
 cat >$tmp/update.sh <<\EOF
 test -f "$1" || exit 0
-ls -lt "$@" |
-  sed 1q |
-  # This is not exact: we should be quoting the `.' etc. in $1.
-  grep "$1$" >/dev/null 2>&1 || exit 0
-exit 1
+test x`ls -1dt "$@" | sed 1q` != x"$1"
 EOF
 update="@SHELL@ $tmp/update.sh"
 
@@ -316,8 +311,10 @@ while read dir; do
   uses_automake=false
   test -f "Makefile.am" &&
     uses_automake=:
-  if $uses_automake &&
-     { $force || $install || $update Makefile.in Makefile.am; } then
+  # We should always run automake, and let it decide whether it shall
+  # update the file or not.  In fact, the effect of `$force' is already
+  # included in `$automake' via `--no-force'.
+  if $uses_automake; then
     $verbose running $automake in $dir >&2
     $automake
   fi
