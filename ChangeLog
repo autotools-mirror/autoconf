@@ -1,5 +1,12 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT): When dispatching your arguments, use
+	ifval, not ifset!
+	Dispatch actions to AC_CONFIG_COMMANDS not AC_OUTPUT_COMMANDS, to
+	avoid unneeded warnings for obsolete use of AC_OUTPUT_COMMANDS.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_VERBOSE): This is a tab, not spaces.
 
 2000-02-10  Akim Demaille  <akim@epita.fr>

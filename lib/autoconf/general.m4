@@ -3313,8 +3313,8 @@ define(AC_OUTPUT,
 [dnl Dispatch the extra arguments to their native macros.
 ifval([$1],
       [AC_CONFIG_FILES([$1])])dnl
-ifset([$2$3],
-      [AC_OUTPUT_COMMANDS([$2], [$3])])dnl
+ifval([$2$3],
+      [AC_CONFIG_COMMANDS(default, [[$2]], [[$3]])])dnl
 trap '' 1 2 15
 AC_CACHE_SAVE
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
