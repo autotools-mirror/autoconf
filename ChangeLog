@@ -1,5 +1,11 @@
 2000-07-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PREPARE_FDS): New macro, pulled out of
+	(_AC_INIT_PREPARE): here, where it is called from.
+	* aclang.m4 (_AC_PROG_CC_G, _AC_PROG_CXX_G): Don't test -z "`foo`".
+
+2000-07-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_DIVERT(INIT_PARSE_ARGS)): Rename as...
 	(_AC_DIVERT(PARSE_ARGS)): this.  Adjust dependencies.
 	(AC_ARG_WITH): Remove spurious newline.

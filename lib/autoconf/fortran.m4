@@ -616,7 +616,7 @@ ac_save_CFLAGS=$CFLAGS
 CFLAGS=
 AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-if test -z "`${CC-cc} -g -c conftest.$ac_ext 2>&1`"; then
+if ${CC-cc} -g -c conftest.$ac_ext 2>&1 | grep . >/dev/null 2>&1; then
   ac_cv_prog_cc_g=yes
 else
   ac_cv_prog_cc_g=no
@@ -808,7 +808,7 @@ ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS=
 AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-if test -z "`${CXX-g++} -g -c conftest.$ac_ext 2>&1`"; then
+if ${CXX-g++} -g -c conftest.$ac_ext 2>&1 | grep . >/dev/null 2>&1; then
   ac_cv_prog_cxx_g=yes
 else
   ac_cv_prog_cxx_g=no

@@ -1829,6 +1829,42 @@ AC_SHELL_UNSET([CDPATH], [:])
 ])
 
 
+# _AC_INIT_PREPARE_FDS
+# --------------------
+# Set up the file descriptors used by `configure'.
+
+define([AC_FD_MSG], 6)
+define([AC_FD_LOG], 5)
+# That's how it used to be named.
+AU_DEFUN([AC_FD_CC], [AC_FD_LOG])
+
+define([_AC_INIT_PREPARE_FDS],
+[# File descriptor usage:
+# 0 standard input
+# 1 file creation
+# 2 errors and warnings
+# 3 some systems may open it to /dev/tty
+# 4 used on the Kubota Titan
+@%:@ AC_FD_MSG checking for... messages and results
+@%:@ AC_FD_LOG compiler messages saved in config.log
+if test "$silent" = yes; then
+  exec AC_FD_MSG>/dev/null
+else
+  exec AC_FD_MSG>&1
+fi
+exec AC_FD_LOG>./config.log
+
+echo "\
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+It was created by configure ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
+ > $[0] $ac_configure_args
+" >&AC_FD_LOG
+])# _AC_INIT_PREPARE_FDS
+
+
 # _AC_INIT_PREPARE
 # ----------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
@@ -1867,32 +1903,7 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
   # Get rid of the leading space.
 done
 
-# File descriptor usage:
-# 0 standard input
-# 1 file creation
-# 2 errors and warnings
-# 3 some systems may open it to /dev/tty
-# 4 used on the Kubota Titan
-define([AC_FD_MSG], 6)dnl
-@%:@ AC_FD_MSG checking for... messages and results
-define([AC_FD_LOG], 5)dnl
-AU_DEFUN([AC_FD_CC], [AC_FD_LOG])dnl That's how it used to be named.
-@%:@ AC_FD_LOG compiler messages saved in config.log
-if test "$silent" = yes; then
-  exec AC_FD_MSG>/dev/null
-else
-  exec AC_FD_MSG>&1
-fi
-exec AC_FD_LOG>./config.log
-
-echo "\
-This file contains any messages produced by compilers while
-running configure, to aid debugging if configure makes a mistake.
-
-It was created by configure ifset([AC_PACKAGE_STRING],
-                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
- > $[0] $ac_configure_args
-" >&AC_FD_LOG
+_AC_INIT_PREPARE_FDS
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
