@@ -94,7 +94,7 @@ $PERL -e 'require 5.005_03;' || {
 AC_CONFIG_FILES([lib/emacs/Makefile])
 TEST_EMACS=$EMACS
 test x"$TEST_EMACS" = xt && TEST_EMACS=
-AC_CHECK_PROGS([TEST_EMACS], [macs xemacs], [no])
+AC_CHECK_PROGS([TEST_EMACS], [emacs xemacs], [no])
 
 # autoconf-mode.el and autotest-mode.el do not work with older version of
 # Emacs (i.e. 18.x.x).  During byte-compilation, Emacs complains:

@@ -1,5 +1,10 @@
 2003-10-03  Akim Demaille  <akim@epita.fr>
 
+	* configure.ac: Look for emacs, not macs.
+	Reported by Eric Sunshine.
+
+2003-10-03  Akim Demaille  <akim@epita.fr>
+
 	* lib/autom4te.in (Autoreconf-preselections): Trace AC_CONFIG_AUX_DIR.
 	* bin/autoreconf.in (autoreconf_current_directory): Create the
 	AUX_DIR if needed, for sake of automake --add-missing etc.
