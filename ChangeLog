@@ -11,7 +11,7 @@
 	AC_CHECK_PROGS.
 	* tests/Makefile.am (FILTER_MACROS): Adjust.
 
-2000-04-07  Akim Demaille  <akim@epita.fr>
+2000-05-24  Akim Demaille  <akim@epita.fr>
 
 	The night of the living dead...
 
