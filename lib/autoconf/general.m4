@@ -2729,16 +2729,22 @@ AC_SHELL_IFELSE([test "$ac_cv_search_$1" != no],
 # FIXME: This macro is extremely suspicious.  It DEFINEs unconditionnally,
 # whatever the FUNCTION, in addition to not being a *S macro.  Note
 # that the cache does depend upon the function we are looking for.
+#
+# It is on purpose we used `ac_check_lib_save_LIBS' and not just
+# `ac_save_LIBS': there are many macros which don't want to see `LIBS'
+# changed but still want to use AC_CHECK_LIB, so they save `LIBS'.
+# And ``ac_save_LIBS' is too tempting a name, so let's leave them some
+# freedom.
 AC_DEFUN([AC_CHECK_LIB],
 [AH_CHECK_LIB([$1])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
-[ac_save_LIBS=$LIBS
+[ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK_FUNC([$2],
                  [AC_VAR_SET(ac_Lib, yes)],
                  [AC_VAR_SET(ac_Lib, no)])
-LIBS=$ac_save_LIBS])
+LIBS=$ac_check_lib_save_LIBS])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
                 [m4_default([$3],
                             [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
