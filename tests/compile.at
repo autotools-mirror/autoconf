@@ -7,23 +7,6 @@ AT_BANNER([Low level compiling/preprocessing macros.])
 # primitive, so check those first.
 
 
-## ------------ ##
-## C keywords.  ##
-## ------------ ##
-
-# GCC supports `const', `volatile', and `inline'.
-AT_CHECK_MACRO([C keywords],
-[[AC_PROG_CC
-AC_C_CONST
-AC_C_INLINE
-AC_C_VOLATILE
-case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
- yes,*no*)
-   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
-esac]])
-
-
-
 ## --------------------------- ##
 ## AC_PROG_CPP with warnings.  ##
 ## --------------------------- ##
@@ -99,3 +82,38 @@ AT_CHECK_MACRO([AC_TRY_LINK_FUNC],
                   [AC_MSG_ERROR([cannot find `exit'])])
 AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
                  [AC_MSG_ERROR([found a nonexistent function])])])
+
+
+
+## ------------ ##
+## C keywords.  ##
+## ------------ ##
+
+# GCC supports `const', `volatile', and `inline'.
+AT_CHECK_MACRO([C keywords],
+[[AC_PROG_CC
+AC_C_CONST
+AC_C_INLINE
+AC_C_VOLATILE
+case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
+ yes,*no*)
+   AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
+esac]])
+
+
+
+## --------------------- ##
+## Fortran 77 Compiler.  ##
+## --------------------- ##
+
+
+AT_CHECK_MACRO([GNU Fortran 77],
+[[AC_LANG(Fortran 77)
+AC_LANG_COMPILER
+
+case `$F77 --version`,$G77 in
+  *GNU*,yes) ;;
+  *GNU*,no ) AC_MSG_ERROR([failed to recognize GNU Fortran 77 compiler]);;
+     *,yes ) AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler]);;
+esac
+exit 0]])

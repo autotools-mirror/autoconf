@@ -1030,7 +1030,12 @@ AC_CHECK_TOOLS(F77,
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 fc])])
 
 _AC_LANG_COMPILER_WORKS
+# If we don't use `.F' as extension, the preprocessor is not run on the
+# input file.
+ac_save_ext=$ac_ext
+ac_ext=F
 _AC_LANG_COMPILER_GNU
+ac_ext=$ac_save_ext
 G77=`test $ac_compiler_gnu = yes && echo yes`
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])

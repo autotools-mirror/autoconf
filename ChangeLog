@@ -1,5 +1,12 @@
 2000-12-05  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_PROG_F77): Temporarily set ac_ext to F to run
+	_AC_LANG_COMPILER_GNU.
+	From Steven G. Johnson.
+	* tests/compile.at (GNU Fortran 77): New test.
+
+2000-12-05  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (autoupdate): Strengthen and check autoupdate's
 	idempotency.
 
