@@ -6,8 +6,8 @@
 @c %**end of header
 @c For single-sided printing, use on instead of odd in the setchapternewpage.
 
-@set EDITION 1.7.10
-@set VERSION 1.7.10
+@set EDITION 1.7.11
+@set VERSION 1.7.11
 @set UPDATED April 1994
 
 @iftex
@@ -1244,6 +1244,9 @@ variables @code{x_includes} and @code{x_libraries} to their locations,
 unless they are in directories the compiler searches by default.  If
 both methods fail, set the shell variable @code{no_x} to @samp{true};
 otherwise set it to the empty string.
+
+The command line options @samp{--x-includes=@var{dir}} and
+@samp{--x-libraries=@var{dir}} override the values chosen by this macro.
 @end defmac
 
 @defmac AC_FIND_XTRA
@@ -2690,6 +2693,12 @@ Print the results of the checks.
 @item --version
 Print the version of Autoconf used to generate the @code{configure}
 script, and exit.
+
+@item --x-includes=@var{dir}
+X include files are in @var{dir}.
+
+@item --x-libraries=@var{dir}
+X library files are in @var{dir}.
 @end table
 
 @code{configure} also accepts and ignores some other options.
