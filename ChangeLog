@@ -1,3 +1,11 @@
+2001-06-15  Akim Demaille  <akim@epita.fr>
+
+	`build_alias' and so on are not AC_SUBST'd.
+	Reported by Bruno Haible.
+
+	* acgeneral.m4 (AC_ARG_VAR): Move the AC_SUBST, from here...
+	 (_AC_ARG_VAR_PRECIOUS): to here.
+
 2001-06-15  Pavel Roskin  <proski@gnu.org>
 
 	* acheaders.m4 (_AC_CHECK_HEADER_DIRENT): Instead of defining

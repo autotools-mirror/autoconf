@@ -11,6 +11,7 @@
   literal.
 - HAVE_INTTYPES_H is defined only if not conflicting with previous
   headers.
+- build_, host_, and target_alias are AC_SUBST as in 2.13.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to

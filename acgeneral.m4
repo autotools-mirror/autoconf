@@ -1502,7 +1502,8 @@ AU_DEFUN([AC_WITH],
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
 m4_define([_AC_ARG_VAR_PRECIOUS],
-[m4_divert_once([PARSE_ARGS],
+[AC_SUBST([$1])dnl
+m4_divert_once([PARSE_ARGS],
 [ac_env_$1_set=${$1+set}
 ac_env_$1_value=$$1
 ac_cv_env_$1_set=${$1+set}
@@ -1560,7 +1561,6 @@ m4_expand_once([m4_divert_once([HELP_VAR],
                                [AC_HELP_STRING([$1], [$2], [              ])])],
                [$0($1)])dnl
 _AC_ARG_VAR_PRECIOUS([$1])dnl
-AC_SUBST([$1])dnl
 ])# AC_ARG_VAR
 
 
