@@ -948,11 +948,25 @@ AC_DEFUN([AC_C_LONG_DOUBLE],
    [ac_cv_c_long_double],
    [AC_COMPILE_IFELSE(
       [AC_LANG_BOOL_COMPILE_TRY(
-	 [#include <float.h>
-	  long double foo = 0.0;],
-	 [/* Using '|' rather than '||' catches a GCC 2.95.2 x86 bug.  */
-	  (DBL_MAX < LDBL_MAX) | (LDBL_EPSILON < DBL_EPSILON)
-	  | (DBL_MAX_EXP < LDBL_MAX_EXP) | (DBL_MANT_DIG < LDBL_MANT_DIG)])],
+	 [[#include <float.h>
+	   long double const a[] =
+	     {
+		0.0L, DBL_MIN, DBL_MAX, DBL_EPSILON,
+		LDBL_MIN, LDBL_MAX, LDBL_EPSILON
+	     };
+	   long double
+	   f (long double x)
+	   {
+	      return ((x + (unsigned long int) 10) * (-1 / x) + a[0]
+	               + (x ? f (x) : 'c'));
+	   }
+	 ]],
+	 [[(0 < ((DBL_MAX_EXP < LDBL_MAX_EXP)
+		  + (DBL_MANT_DIG < LDBL_MANT_DIG)
+		  - (LDBL_MAX_EXP < DBL_MAX_EXP)
+		  - (LDBL_MANT_DIG < DBL_MANT_DIG)))
+	   && (int) LDBL_EPSILON == 0
+         ]])],
       ac_cv_c_long_double=yes,
       ac_cv_c_long_double=no)])
 if test $ac_cv_c_long_double = yes; then

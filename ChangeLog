@@ -1,3 +1,14 @@
+2004-06-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (AC_C_LONG_DOUBLE): Don't check LDBL_MAX
+	and LDBL_EPSILON, as the resulting expression isn't an
+	integer constant expression and violates the C standard.
+	Problem reported by Nelson H. F. Beebe.  Also, check
+	for "L" suffix, and check that long double doesn't have
+	worse range or precision than double, that mixed-mode
+	arithmetic doesn't generate a diagnostic, that double
+	constants fit in long double.
+
 2004-06-03  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Function Portability): Add notes on free(NULL),
