@@ -4,8 +4,6 @@
 
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
-	* autoheader.sh (syms):
-
 	Introduce AC_SUBST(VAR, VAL).
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Stop global double quoting,
