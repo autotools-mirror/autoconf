@@ -1,5 +1,12 @@
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PREPARE): Remove conf$$* on exit.
+	* m4sh.m4 (_AS_LN_S_PREPARE, _AS_BROKEN_TEST_PREPARE):
+	s/conftest/conf$$/ to avoid race conditions.
+	From Lars J. Aas.
+
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_PROG_INSTALL): Use ac_path_separator.
 	Restore the IFS earlier.
 	Suggested by Tim Van Holder.

@@ -317,25 +317,27 @@ fi
 # _AS_LN_S_PREPARE
 # ----------------
 # Don't use conftest.sym to avoid filename issues on DJGPP, where this
-# would yield conftest.sym.exe for DJGPP < 2.04.
+# would yield conftest.sym.exe for DJGPP < 2.04.  And do use `conftest'
+# as base name to avoid prohibiting concurrency (e.g., concurrent
+# config.statuses).
 m4_defun([_AS_LN_S_PREPARE],
-[rm -f conftest conftest.exe conftest.file
-echo >conftest.file
-if ln -s conftest.file conftest 2>/dev/null; then
+[rm -f conf$$ conf$$.exe conf$$.file
+echo >conf$$.file
+if ln -s conf$$.file conf$$ 2>/dev/null; then
   # We could just check for DJGPP; but this test a) works b) is more generic
   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
-  if test -f conftest.exe; then
+  if test -f conf$$.exe; then
     # Don't use ln at all; we don't have any links
     as_ln_s='cp -p'
   else
     as_ln_s='ln -s'
   fi
-elif ln conftest.file conftest 2>/dev/null; then
+elif ln conf$$.file conf$$ 2>/dev/null; then
   as_ln_s=ln
 else
   as_ln_s='cp -p'
 fi
-rm -f conftest conftest.exe conftest.file
+rm -f conf$$ conf$$.exe conf$$.file
 ])# _AS_LN_S_PREPARE
 
 
@@ -384,19 +386,19 @@ done; }
 m4_defun([_AS_BROKEN_TEST_PREPARE],
 [# Find out how to test for executable files. Don't use a zero-byte file,
 # as systems may use methods other than mode bits to determine executability.
-cat >conftest.file <<_ASEOF
+cat >conf$$.file <<_ASEOF
 @%:@! /bin/sh
 exit 0
 _ASEOF
-chmod +x conftest.file
-if test -x conftest.file >/dev/null 2>&1; then
+chmod +x conf$$.file
+if test -x conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -x"
-elif test -f conftest.file >/dev/null 2>&1; then
+elif test -f conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -f"
 else
   AS_ERROR([cannot check whether a file is executable on this system])
 fi
-rm -f conftest.file
+rm -f conf$$.file
 ])# _AS_BROKEN_TEST_PREPARE
 
 
