@@ -1,3 +1,15 @@
+2000-10-23  Akim Demaille  <akim@epita.fr>
+
+	Let autoupdate change AC_PREREQ to require the current version of
+	Autoconf.
+
+	* acgeneral.m4 (_AC_VERSION_UNLETTER, _AC_VERSION_COMPARE): Move
+	to...
+	* libm4.m4 (m4_version_unletter, m4_version_compare): here.
+	Adjust dependencies.
+	* acgeneral.m4 (AU::AC_PREREQ): New macro.
+	* autoupdate.sh: Fail when `m4 input.m4' fails.
+
 2000-10-21  Pavel Roskin  <proski@gnu.org>
 
 	* acfunctions.m4 (AC_FUNC_CHOWN): Remove temporary files on exit.

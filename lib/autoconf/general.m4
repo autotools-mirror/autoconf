@@ -1221,43 +1221,28 @@ define([AC_REVISION],
 ## ---------------------------------------- ##
 
 
-# _AC_VERSION_UNLETTER(VERSION)
-# -----------------------------
-# Normalize beta version numbers with letters to numbers only for comparison.
+# AU::AC_PREREQ(VERSION)
+# ----------------------
+# Update this `AC_PREREQ' statement to require the current version of
+# Autoconf.  But fail if ever this autoupdate is too old.
 #
-#   Nl -> (N+1).-1.(l#)
-#
-#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
-# This macro is absolutely not robust to active macro, it expects
-# reasonable version numbers and is valid up to `z', no double letters.
-define([_AC_VERSION_UNLETTER],
-[translit(patsubst(patsubst(patsubst([$1],
-                                     [\([0-9]+\)\([abcdefghi]\)],
-                                     [m4_eval(\1 + 1).-1.\2]),
-                            [\([0-9]+\)\([jklmnopqrs]\)],
-                            [m4_eval(\1 + 1).-1.1\2]),
-          [\([0-9]+\)\([tuvwxyz]\)],
-          [m4_eval(\1 + 1).-1.2\2]),
-          abcdefghijklmnopqrstuvwxyz,
-          12345678901234567890123456)])
-
-
-# _AC_VERSION_COMPARE(VERSION-1, VERSION-2)
-# -----------------------------------------
-# Compare the two version numbers and expand into
-#  -1 if VERSION-1 < VERSION-2
-#   0 if           =
-#   1 if           >
-define([_AC_VERSION_COMPARE],
-[m4_list_cmp((m4_split(_AC_VERSION_UNLETTER([$1]), [\.])),
-             (m4_split(_AC_VERSION_UNLETTER([$2]), [\.])))])
+# Note that `defn([AC_ACVERSION])' below are expanded before calling
+# `AU_DEFUN', i.e., it is hard coded.  Otherwise it would be quite
+# complex for autoupdate to import the value of `AC_ACVERSION'.  We
+# could `AU_DEFUN' `AC_ACVERSION', but this would replace all its
+# occurrences with the current version of Autoconf, which is certainly
+# not what mean the user.
+AU_DEFUN([AC_PREREQ],
+[ifelse(m4_version_compare(]defn([AC_ACVERSION])[, [$1]), -1,
+    [m4_fatal([Autoconf version $1 or higher is required for this script])])dnl
+[AC_PREREQ(]]defn([AC_ACVERSION])[[)]])
 
 
 # AC_PREREQ(VERSION)
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
 define([AC_PREREQ],
-[ifelse(_AC_VERSION_COMPARE(AC_ACVERSION, [$1]), -1,
+[ifelse(m4_version_compare(defn([AC_ACVERSION]), [$1]), -1,
      [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
 

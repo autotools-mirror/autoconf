@@ -616,6 +616,44 @@ ifdef([$1], [defn([$1]), ])[$2])])
 
 
 
+## -------------------- ##
+## Version processing.  ##
+## -------------------- ##
+
+
+# m4_version_unletter(VERSION)
+# ----------------------------
+# Normalize beta version numbers with letters to numbers only for comparison.
+#
+#   Nl -> (N+1).-1.(l#)
+#
+#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
+# This macro is absolutely not robust to active macro, it expects
+# reasonable version numbers and is valid up to `z', no double letters.
+define([m4_version_unletter],
+[translit(patsubst(patsubst(patsubst([$1],
+                                     [\([0-9]+\)\([abcdefghi]\)],
+                                     [m4_eval(\1 + 1).-1.\2]),
+                            [\([0-9]+\)\([jklmnopqrs]\)],
+                            [m4_eval(\1 + 1).-1.1\2]),
+          [\([0-9]+\)\([tuvwxyz]\)],
+          [m4_eval(\1 + 1).-1.2\2]),
+          abcdefghijklmnopqrstuvwxyz,
+          12345678901234567890123456)])
+
+
+# m4_version_compare(VERSION-1, VERSION-2)
+# ----------------------------------------
+# Compare the two version numbers and expand into
+#  -1 if VERSION-1 < VERSION-2
+#   0 if           =
+#   1 if           >
+define([m4_version_compare],
+[m4_list_cmp((m4_split(m4_version_unletter([$1]), [\.])),
+             (m4_split(m4_version_unletter([$2]), [\.])))])
+
+
+
 ## ----------------------------------- ##
 ## Helping macros to display strings.  ##
 ## ----------------------------------- ##
