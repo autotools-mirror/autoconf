@@ -1,5 +1,16 @@
 2001-08-07  Akim Demaille  <akim@epita.fr>
 
+	Always produce testsuite.log, including when there are no
+	failures.  This helps getting information on skipped tests, and
+	duration of the tests.  Err, implement the latter btw.
+
+	* lib/autotest/general.m4 (AT_INIT): Set up fd 6 for the log.
+	Dump information on the first run of each test.
+	(AT_CLEANUP): Create `at-times' containing the duration of the
+	test group.
+
+2001-08-07  Akim Demaille  <akim@epita.fr>
+
 	The use of `dumpstat' revealed that `len' was used although it
 	should not.  m4_text_wrap was using it, but in the Autoconf world
 	where it is legal.  Hence (i) test M4sh in its own world, not

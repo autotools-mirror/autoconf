@@ -124,7 +124,7 @@ at_stop_on_error=false
 # Shall we be verbose?
 at_verbose=:
 at_quiet=echo
-# Shall we keep the debug scripts?  Must be `:' when testsuite is
+# Shall we keep the debug scripts?  Must be `:' when test suite is
 # run by a debug script, so that the script doesn't remove itself.
 at_debug=false
 # Display help message?
@@ -218,6 +218,30 @@ else
   exec 5>/dev/null
 fi
 
+# 6 is the log file.  To be preserved if `-d'.
+if $at_debug; then
+  exec 6>/dev/null
+else
+  exec 6>$[0].log
+  {
+    AS_BOX([Test suite log for $at_package $at_version])
+    echo
+
+    # Try to find a few ChangeLogs in case it might help determining the
+    # exact version.
+    find "$at_top_srcdir" -name ChangeLog \
+      -exec echo {} : ';' \
+      -exec sed 's/^/| /;10q' {} ';' \
+      -exec echo ';'
+
+    AS_UNAME
+    echo
+
+    AS_BOX([Running silently the tests])
+  } >&6
+fi
+
+
 at_fail_list=
 at_skip_list=
 at_test_count=0
@@ -252,16 +276,20 @@ m4_divert([TAIL])[]dnl
       at_test_count=`expr 1 + $at_test_count`
       $at_verbose $at_n "$at_test. $srcdir/`cat at-setup-line`: $at_c"
       case $at_status in
-        0) echo ok
+        0) at_msg="ok"
            ;;
-        77) echo "ok (skipped near \``cat at-check-line`')"
+        77) at_msg="ok (skipped near \``cat at-check-line`')"
             at_skip_list="$at_skip_list $at_test"
             ;;
-        *) echo "FAILED near \``cat at-check-line`'"
+        *) at_msg="FAILED near \``cat at-check-line`'"
            at_fail_list="$at_fail_list $at_test"
-           $at_stop_on_error && break
            ;;
       esac
+      echo $at_msg
+      at_log_msg="$at_test. $srcdir/`cat at-setup-line`: $at_msg"
+      at_log_msg="$at_log_msg	(`cat at-times`)"
+      echo "$at_log_msg" >&6
+      $at_stop_on_error && test -n "$at_fail_list" && break
       $at_debug || rm -rf $at_data_files
       ;;
   esac
@@ -286,7 +314,7 @@ elif test $at_debug = false; then
   fi
 
   # Remove any debugging script resulting from a previous run.
-  rm -f debug-*.sh $[0].log
+  rm -f debug-*.sh
   echo
   echo $at_n "Writing \`debug-NN.sh' scripts, NN =$at_c"
   for at_group in $at_fail_list; do
@@ -300,21 +328,15 @@ elif test $at_debug = false; then
   echo ', done'
   echo
   echo 'You may investigate any problem if you feel able to do so, in which'
-  echo 'case the testsuite provide a good starting point.'
+  echo 'case the test suite provides a good starting point.'
   echo
   echo 'Now, failed tests will be executed again, verbosely, and logged'
   echo 'in the file '$[0]'.log.'
 
   {
-    AS_BOX([Test suite log for $at_package $at_version])
     echo
-
-    # Try to find a few ChangeLogs in case it might help determining the
-    # exact version.
-    find "$at_top_srcdir" -name ChangeLog \
-      -exec echo {} : ';' \
-      -exec sed 's/^/| /;10q' {} ';' \
-      -exec echo ';'
+    echo
+    AS_BOX([Summary of the failures])
 
     # Summary of failed and skipped tests.
     if test $at_fail_count != 0; then
@@ -328,8 +350,9 @@ elif test $at_debug = false; then
       echo
     fi
 
-    AS_UNAME
-  } >>$[0].log
+    AS_BOX([Running verbosely the failing tests])
+    echo
+  } >&6
 
   $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $[0].log
   AS_BOX([$[0].log is created])
@@ -418,6 +441,7 @@ m4_define([AT_CLEANUP_FILES],
 # AT_DATA.
 m4_define([AT_CLEANUP],
 [AT_CLEANUP_FILES([$1])dnl
+    times >at-times
     )
     at_status=$?
     ;;
