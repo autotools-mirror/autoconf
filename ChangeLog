@@ -12,8 +12,9 @@
 
 2000-12-20  Akim Demaille  <akim@epita.fr>
 
-	* aclang.m4 (_AC_LANG_COMPILER_GNU): Use a tabulation to indent
-	`choke me' so that the SGI Fortran compiler really chokes on it.
+	* aclang.m4 (_AC_LANG_COMPILER_GNU): Be sure to have `choke me' on
+	the seventh column so that the SGI Fortran compiler really chokes
+	on it.
 	From Ezra Peisach.
 
 2000-12-20  Akim Demaille  <akim@epita.fr>
