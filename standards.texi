@@ -105,7 +105,7 @@ even if you write in another programming language.  The rules often
 state reasons for writing in a certain way.
 
 Corrections or suggestions for this document should be sent to
-@code{gnu@@gnu.org}.  If you make a suggestion, please include a
+@email{gnu@@gnu.org}.  If you make a suggestion, please include a
 suggested new wording for it; our time is limited.  We prefer a context
 diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
 you don't have those files, please mail your suggestion anyway.
@@ -678,7 +678,7 @@ Report bugs to @var{mailing-address}.
 Here is a table of long options used by GNU programs.  It is surely
 incomplete, but we aim to list all the options that a new program might
 want to be compatible with.  If you use names not already in the table,
-please send @samp{gnu@@gnu.org} a list of them, with their
+please send @email{gnu@@gnu.org} a list of them, with their
 meanings, so we can update the table.
 
 @c Please leave newlines between items in this table; it's much easier
@@ -1173,7 +1173,7 @@ Used in @code{su}.
 @item machine
 No listing of which programs already use this;
 someone should check to
-see if any actually do and tell @code{gnu@@gnu.org}.
+see if any actually do, and tell @email{gnu@@gnu.org}.
 
 @item macro-name
 @samp{-M} in @code{ptx}.
