@@ -1553,40 +1553,7 @@ ccp = (char const *const *) p;
 }
 >>,
 changequote([, ])dnl
-ac_cv_c_const=yes, ac_cv_c_const=no)
-dnl
-dnl If the above compile succeeds, there may still be a problem.
-dnl At least one compiler, gcc-2.7.x, generates bad code for the following
-dnl program.  If not cross-compiling then compile, link, and run the
-dnl following program to detect this.  Otherwise, resort to using cpp
-dnl to check gcc's preprocessor symbols.
-dnl
-if test $ac_cv_c_const = yes; then
-  AC_TRY_RUN(dnl
-    [dnl
-      /* Thanks to Paul Eggert for this test.  */
-      static void set (p) char *p; {*p = 'x';}
-      int
-      main ()
-      {
-	int i;
-	for (i = 0; i < 1; ++i)
-	  {
-	    char x;
-	    set (&x);
-	    if (*(const char *) &x != 'x')
-	      exit (1);
-	  }
-	exit (0);
-      }
-    ], , ac_cv_c_const=no,
-      AC_EGREP_CPP(syntax-error,
-        [#if __GNUC__ == 2 && __GNUC_MINOR__ == 7
-	  syntax-error
-#endif
-	], ac_cv_c_const=no))
-fi
-])
+ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const, )
 fi
