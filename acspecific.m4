@@ -39,6 +39,21 @@ fi
 rm -f conftest*
 ])dnl
 dnl
+define(AC_PROG_CXX,
+[AC_BEFORE([$0], [AC_PROG_CXXCPP])AC_PROVIDE([$0])AC_PROGRAMS_CHECK(CXX, $CCC c++ g++ gcc CC, gcc)
+# Find out if we are using GNU C++, under whatever name.
+cat > conftest.C <<EOF
+#ifdef __GNUC__
+  yes
+#endif
+EOF
+${CXX-gcc} -E conftest.C > conftest.out 2>&1
+if egrep yes conftest.out >/dev/null 2>&1; then
+  GXX=1 # For later tests.
+fi
+rm -f conftest*
+])dnl
+dnl
 define(AC_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])AC_REQUIRE([AC_PROG_CPP])if test -n "$GCC"; then
   echo checking whether -traditional is needed
@@ -97,7 +112,7 @@ if test -z "$CPP"; then
   # substituted into the Makefile and ``${CC-cc}'' will simply confuse
   # make.  It must be expanded now.
   CPP="${CC-cc} -E"
-dnl On the NeXT, cc -E appears to run the code through the compiler's parser,
+dnl On the NeXT, cc -E runs the code through the compiler's parser,
 dnl not just through cpp.
   AC_TEST_CPP([#include <stdio.h>
 Syntax Error], ,
@@ -109,6 +124,25 @@ CPP="$CPP \$CFLAGS"
 test ".${ac_verbose}" != "." && echo "	setting CPP to $CPP"
 AC_SUBST(CPP)dnl
 ])dnl
+dnl
+define(AC_PROG_CXXCPP,
+[AC_PROVIDE([$0])echo checking how to run the C++ preprocessor
+AC_LANG_SAVE[]dnl
+AC_LANG_CPLUSPLUS[]dnl
+if test -z "$CXXCPP"; then
+  CXXCPP="${CXX-c++} -E"
+  AC_TEST_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
+fi
+CXXCPP="$CXXCPP \$CXXFLAGS"
+test ".${ac_verbose}" != "." && echo "	setting CXXCPP to $CXXCPP"
+AC_LANG_RESTORE[]dnl
+AC_SUBST(CXXCPP)dnl
+])dnl
+dnl
+dnl Require finding the C or C++ preprocessor, whichever is the
+dnl current language.
+define(AC_REQUIRE_CPP,
+[ifelse(AC_LANG,C,[AC_REQUIRE([AC_PROG_CPP])],[AC_REQUIRE([AC_PROG_CXXCPP])])])dnl
 dnl
 define(AC_PROG_LEX,
 [AC_PROVIDE([$0])AC_PROGRAM_CHECK(LEX, flex, flex, lex)
@@ -122,7 +156,9 @@ fi
 AC_SUBST(LEXLIB)])dnl
 dnl
 define(AC_DECLARE_YYTEXT,
-[AC_REQUIRE([AC_PROG_CPP])AC_REQUIRE([AC_PROG_LEX])dnl
+[AC_REQUIRE_CPP()AC_REQUIRE([AC_PROG_LEX])dnl
+errprint(warning: [$0] is currently broken due to a quoting quagmire
+)dnl
 echo checking how to declare yytext
 # Figure out what yytext is by creating a minimal parser and
 # examining the (preprocessed, in case macros are used) output.
@@ -246,7 +282,7 @@ dnl checks for header files
 dnl
 dnl
 define(AC_STDC_HEADERS,
-[AC_REQUIRE([AC_PROG_CPP])dnl
+[AC_REQUIRE_CPP()dnl
 echo checking for ANSI C header files
 AC_TEST_CPP([#include <stdlib.h>
 #include <stdarg.h>
@@ -395,6 +431,73 @@ dnl
 dnl
 dnl checks for functions
 dnl
+dnl
+define(AC_MMAP, [
+echo checking for working mmap
+AC_TEST_PROGRAM([/* Thanks to Mike Haertel and Jim Avera for this test. */
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+
+#ifdef BSD
+#ifndef BSD4_1
+#define HAVE_GETPAGESIZE
+#endif
+#endif
+#ifndef HAVE_GETPAGESIZE
+#include <sys/param.h>
+#ifdef EXEC_PAGESIZE
+#define getpagesize() EXEC_PAGESIZE
+#else
+#ifdef NBPG
+#define getpagesize() NBPG * CLSIZE
+#ifndef CLSIZE
+#define CLSIZE 1
+#endif /* no CLSIZE */
+#else /* no NBPG */
+#define getpagesize() NBPC
+#endif /* no NBPG */
+#endif /* no EXEC_PAGESIZE */
+#endif /* not HAVE_GETPAGESIZE */
+
+#ifdef __osf__
+#define valloc malloc
+#endif
+
+extern char *valloc();
+extern char *malloc();
+
+int
+main()
+{
+  char *buf1, *buf2, *buf3;
+  int i = getpagesize(), j;
+  int i2 = getpagesize()*2;
+  int fd;
+
+  buf1 = valloc(i2);
+  buf2 = valloc(i);
+  buf3 = malloc(i2);
+  for (j = 0; j < i2; ++j)
+    *(buf1 + j) = rand();
+  fd = open("conftestmmap", O_CREAT | O_RDWR, 0666);
+  write(fd, buf1, i2);
+  mmap(buf2, i, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd, 0);
+  for (j = 0; j < i; ++j)
+    if (*(buf1 + j) != *(buf2 + j))
+      exit(1);
+  lseek(fd, (long)i, 0);
+  read(fd, buf2, i); /* read into mapped memory -- file should not change */
+  /* (it does in i386 SVR4.0 - Jim Avera) */
+  lseek(fd, (long)0, 0);
+  read(fd, buf3, i2);
+  for (j = 0; j < i2; ++j)
+    if (*(buf1 + j) != *(buf3 + j))
+      exit(1);
+  exit(0);
+}
+], AC_DEFINE(HAVE_MMAP))
+])dnl
 dnl
 define(AC_VPRINTF,
 [AC_COMPILE_CHECK([vprintf], , [vprintf();], AC_DEFINE(HAVE_VPRINTF),
