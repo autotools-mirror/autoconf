@@ -1521,6 +1521,8 @@ if test -z "$ac_err"; then
   $2])
 else
   echo "$ac_err" >&AC_FD_CC
+  echo "configure: input program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
 ifelse([$3], , , [  rm -rf conftest*
   $3
 ])dnl
@@ -1580,8 +1582,10 @@ EOF
 if AC_TRY_EVAL(ac_compile); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
-ifelse([$4], , , [else
-  rm -rf conftest*
+else
+  echo "configure: input program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
+ifelse([$4], , , [  rm -rf conftest*
   $4
 ])dnl
 fi
@@ -1617,8 +1621,10 @@ EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
-ifelse([$4], , , [else
-  rm -rf conftest*
+else
+  echo "configure: input program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
+ifelse([$4], , , [  rm -rf conftest*
   $4
 ])dnl
 fi
@@ -1659,8 +1665,10 @@ EOF
 AC_TRY_EVAL(ac_link)
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2])
-ifelse([$3], , , [else
-  rm -fr conftest*
+else
+  echo "configure: input program was:" >&AC_FD_CC
+  cat conftest.$ac_ext >&AC_FD_CC
+ifelse([$3], , , [  rm -fr conftest*
   $3
 ])dnl
 fi
@@ -1927,6 +1935,7 @@ dnl config.status should not do recursion.
 ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])dnl
 
+dnl Set the DEFS variable to the -D options determined earlier.
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called inside configure, outside of config.status.
 dnl AC_OUTPUT_MAKE_DEFS()
@@ -1948,8 +1957,10 @@ DEFS=`sed -f conftest.defs confdefs.h | tr '\012' ' '`
 rm -f conftest.defs
 ])
 
+dnl Do the variable substitutions to create the Makefiles or whatever.
 dnl This is a subroutine of AC_OUTPUT.  It is called inside an unquoted
-dnl here document whose contents are going into config.status.
+dnl here document whose contents are going into config.status, but
+dnl upon returning, the here document is being quoted.
 dnl AC_OUTPUT_FILES(FILE...)
 define(AC_OUTPUT_FILES,
 [# Protect against being on the right side of a sed subst in config.status.
@@ -2044,6 +2055,7 @@ fi; done
 rm -f conftest.subs
 ])
 
+dnl Create the config.h files from the config.h.in files.
 dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_HEADER(HEADER-FILE...)
@@ -2069,7 +2081,14 @@ ac_eC=' '
 ac_eD='%g'
 changequote([, ])dnl
 
-CONFIG_HEADERS=${CONFIG_HEADERS-"$1"}
+if test -z "$CONFIG_HEADERS"; then
+EOF
+dnl Support passing AC_CONFIG_HEADER a value containing shell variables.
+cat >> $CONFIG_STATUS <<EOF
+  CONFIG_HEADERS="$1"
+EOF
+cat >> $CONFIG_STATUS <<\EOF
+fi
 for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile]", defaulting infile="outfile.in".
   case "$ac_file" in

@@ -115,12 +115,6 @@ or two of the cache variables are set?
 
 ------------------------------------------------------------------------------
 
-Look at contributions:
-	ac_include (Karl Berry)
-	aclocal.h tom@basil.icce.rug.NL (Tom R.Hageman)
-
-------------------------------------------------------------------------------
-
      The argument HELP-STRING is a description of the option which
      ...
      Avoid tabs in the help string.  You'll need to enclose it in `['
@@ -429,6 +423,7 @@ Mention automake, libtool, etc. in the autoconf manual.
 ------------------------------------------------------------------------------
 
 configure-time pasting together of output files from multiple pieces.
+Or ac_include?
 
 ------------------------------------------------------------------------------
 
@@ -446,5 +441,13 @@ Whichever AC_LINK_FILES directive comes last is that one that gets
 done.
 
 From Jim Meyering
+
+------------------------------------------------------------------------------
+
+Question: at least one common UNIX variant has a "cc" that is old K&R
+and "c89" for ANSI C.  Is there any reason why AC_PROG_CC couldn't
+check for c89 before cc if it can't find gcc?
+
+hpa@yggdrasil.com (H. Peter Anvin)
 
 ------------------------------------------------------------------------------

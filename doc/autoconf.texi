@@ -1186,7 +1186,7 @@ however, you can override the input file name by appending it to
 AC_CONFIG_HEADER(defines.h:defines.hin)
 @end example
 @noindent
-Doing this allows you to keep your filenames acceptable to MS-DOS.
+Doing this allows you to keep your file names acceptable to MS-DOS.
 @end defmac
 
 @menu

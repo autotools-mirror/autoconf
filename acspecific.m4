@@ -111,9 +111,9 @@ rm -f conftest*
   if test "$ac_test_CFLAGS" = set; then
     CFLAGS="$ac_save_CFLAGS"
   elif test $ac_cv_prog_gcc_g = yes; then
-    CFLAGS="-g -O"
+    CFLAGS="-g -O2"
   else
-    CFLAGS="-O"
+    CFLAGS="-O2"
   fi
 else
   GCC=
@@ -160,9 +160,9 @@ dnl
   if test "$ac_test_CXXFLAGS" = set; then
     CXXFLAGS="$ac_save_CXXFLAGS"
   elif test $ac_cv_prog_gxx_g = yes; then
-    CXXFLAGS="-g -O"
+    CXXFLAGS="-g -O2"
   else
-    CXXFLAGS="-O"
+    CXXFLAGS="-O2"
   fi
 else
   GXX=
@@ -172,7 +172,6 @@ fi
 AC_PROG_CXX_WORKS
 ])
 
-dnl This check is derived from macros from Bruno Haible and Cygnus.
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $LDFLAGS) works])
 AC_LANG_SAVE

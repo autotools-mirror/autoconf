@@ -1,3 +1,19 @@
+Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX) [GCC]: Use -O2 instead
+	of -O.  Suggested by fnf@ninemoons.com (Fred Fish).
+	
+	* acgeneral.m4 (AC_OUTPUT_HEADER): Support passing
+ 	AC_CONFIG_HEADER a value containing shell variables.  Suggested by
+ 	Markku Savela <msa@msa.tte.vtt.fi> and Julian Onions
+	<j.onions@nexor.co.uk>.
+	* acgeneral.m4 (AC_TRY_RUN_NATIVE, AC_TRY_LINK, AC_TRY_COMPILE,
+        AC_TRY_CPP): Show the test program in config.log if the test fails.
+	From Karl Berry <karl@cs.umb.edu>.
+	
+	* testsuite/config/unix.exp: Run the configure script as "./script"
+	in case the user doesn't have "." in their PATH.
+	
 Mon Nov 11 18:02:58 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_TRY_COMPILE, AC_TRY_LINK): Deal with smart
@@ -22,7 +38,7 @@ Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	* Test release 2.10.1.
 
 	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): New macros
-	adapted from Jim Meyering and automake.
+	adapted from Bruno Haible <haible@ilog.fr>.
 	(AC_PROG_CC, AC_PROG_CXX): Use them.
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Split out of AC_TRY_RUN.
 	(AC_TRY_LINK): Check that the executable exists after linking.
