@@ -1,5 +1,14 @@
 2001-10-05  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sh.at (LINENO): New.
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Be sure to set
+	PATH_SEPARATOR before using it.
+	Fix the absolute path case/esac pattern.
+	Provide $0 as fallback for as_myself.
+	Reported by Raja R Harinath.
+
+2001-10-05  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am, config/Makefile.am, lib/emacs/Makefile.am,
 	* m4/Makefile.am, man/Makefile.am: Add/adjust MAINTAINERCLEANFILES.
 

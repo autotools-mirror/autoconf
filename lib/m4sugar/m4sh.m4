@@ -113,14 +113,14 @@ fi
 # Name of the executable.
 as_me=`AS_BASENAME($[0])`
 
-# Rewrite early.
+# Rewrite early, but we need PATH_SEPARATOR.
+_AS_PATH_SEPARATOR_PREPARE
 _AS_LINENO_PREPARE
 
 _AS_CR_PREPARE
 _AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
-_AS_PATH_SEPARATOR_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
@@ -428,17 +428,22 @@ if test "x$as_lineno_1"  = "x$as_lineno_2" ||
   then
   # Find who we are.
   case $[0] in
-    *[[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
+    [[\\/]]* | ?:[[\\/]]* ) as_myself=$[0] ;;
     *) _AS_PATH_WALK([],
                    [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
        ;;
   esac
-  if test ! -f $as_myself; then
+  # We did not find ourselves, most probably we were run as `sh COMMAND'
+  # in which case we are not to be found in the path.
+  if test "x$as_myself" = x; then
+    as_myself=$[0]
+  fi
+  if test ! -f "$as_myself"; then
     AS_ERROR([cannot find myself; rerun with an absolute path])
   fi
-  if test ! -f $as_me.lineno ||
-     test x`ls -1dt $as_me.lineno $as_myself 2>/dev/null | sed 1q` \
-                != x$as_me.lineno; then
+  if test ! -f "$as_me.lineno" ||
+     test x`ls -1dt "$as_me.lineno" "$as_myself" 2>/dev/null | sed 1q` \
+                != x"$as_me.lineno"; then
      # Be sure to write the pattern so that it doesn't replace itself:
      # it must not match itself.
      awk <$as_myself '
