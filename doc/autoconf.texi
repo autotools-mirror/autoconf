@@ -6171,7 +6171,7 @@ then a call to the @var{function} as body of the main function (e.g.,
 @code{main} in C).  Since it uses @code{AC_LANG_PROGRAMS}, the feature
 of the latter are available.
 
-This function will probably be replaced in the feature by a version
+This function will probably be replaced in the future by a version
 which would enable specifying the arguments.  The use of this macro is
 not encouraged, as it violates strongly the typing system.
 @end defmac
