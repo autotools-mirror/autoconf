@@ -567,7 +567,7 @@ if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
 else
   at_devnull=$at_suite_dir/devnull
-  cp /dev/null "$at_devnull"
+  >"$at_devnull"
 fi
 
 # Use `diff -u' when possible.
