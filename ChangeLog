@@ -4,10 +4,10 @@
 
 	* Makefile.maint: Update from the Coreutils.
 	(AMTAR): Remove, obsolete.
-	(-automake_repo): Update to redhat.com.
+	(automake_repo): Update to redhat.com.
 	(cvs_file): New.
 	Adjust to the fact that ansi2knr is now hosted by Automake.
-	* Maekfile.am (cvs_files): Add install-sh and mkinstalldirs.
+	* Makefile.am (cvs_files): Add install-sh and mkinstalldirs.
 	* config/config.guess, config/mkinstalldirs, config/texinfo.tex:
 	Update from masters.
 
