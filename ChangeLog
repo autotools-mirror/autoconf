@@ -1,3 +1,8 @@
+2000-02-15  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (options handling): --v* of --version was shadowing
+	--verbose.
+
 2000-02-11  Akim Demaille  <akim@epita.fr>
 
 	* tests/torture.m4: Nuke the trailing space in defs.

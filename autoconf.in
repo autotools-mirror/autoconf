@@ -104,10 +104,11 @@ verbose=:
 # Parse command line
 while test $# -gt 0 ; do
   case "$1" in
-    --version | --v* )
+    --version | --vers* )
        echo "$version" ; exit 0 ;;
     --help | --h* | -h )
        echo "$usage"; exit 0 ;;
+
     --localdir=* | --l*=* )
        localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
@@ -116,6 +117,7 @@ while test $# -gt 0 ; do
        test $# -eq 0 && { echo "$help" >&2; exit 1; }
        localdir="$1"
        shift ;;
+
     --macrodir=* | --m*=* )
        AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
@@ -124,12 +126,15 @@ while test $# -gt 0 ; do
        test $# -eq 0 && { echo "$help" >&2; exit 1; }
        AC_MACRODIR="$1"
        shift ;;
+
     --install )
        task=install
        shift;;
-    --verbose )
+
+    --verbose | --verb* )
        verbose=echo
        shift;;
+
     --trace | -t )
        task=trace
        shift
@@ -139,6 +144,7 @@ while test $# -gt 0 ; do
        task=trace
        traces="$traces -t `echo \"$1\" | sed -e 's/^[^=]*=//'`"
        shift ;;
+
     --output | -o )
        shift
        outfile="$1"
@@ -146,6 +152,7 @@ while test $# -gt 0 ; do
     --output=* )
        outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
+
     -- )     # Stop option processing
        shift; break ;;
     - )	# Use stdin as input.
