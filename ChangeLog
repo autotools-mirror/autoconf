@@ -1,3 +1,8 @@
+Tue Jun 27 13:29:54 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS, AC_INIT_PREPARE): Add options
+	  --bindir, --libdir, etc.
+
 Mon Jun 26 20:54:36 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Put the command

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.3
-@set VERSION 2.3
+@set EDITION 2.4.1
+@set VERSION 2.4.1
 @set UPDATED June 1995
 
 @iftex
@@ -871,7 +871,7 @@ distributed with a file @file{Makefile.in}, but no @file{Makefile}; that
 way, the user has to properly configure the package for the local system
 before compiling it.
 
-@xref{Makefile Conventions, , Makefile Conventions, standards.info, The
+@xref{Makefile Conventions, , Makefile Conventions, standards, The
 GNU Coding Standards}, for more information on what to put in
 @file{Makefile}s.
 
@@ -888,7 +888,14 @@ Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
 complete list of output variables.  Here is what each of the preset ones
-contains.
+contains.  @xref{Directory Variables, , Variables for Installation Directories,
+standards, The GNU Coding Standards}, for more information about
+the variables with names that end in @samp{dir}.
+
+@defvar bindir
+@ovindex bindir
+The directory for installing executables that users run.
+@end defvar
 
 @defvar configure_input
 @ovindex configure_input
@@ -909,9 +916,49 @@ The presence of that line also reminds people editing the file that it
 needs to be processed by @code{configure} in order to be used.
 @end defvar
 
+@defvar datadir
+@ovindex datadir
+The directory for installing read-only architecture-independent data.
+@end defvar
+
 @defvar exec_prefix
 @ovindex exec_prefix
 The installation prefix for architecture-dependent files.
+@end defvar
+
+@defvar includedir
+@ovindex includedir
+The directory for installing C header files.
+@end defvar
+
+@defvar infodir
+@ovindex infodir
+The directory for installing documentation in Info format.
+@end defvar
+
+@defvar libdir
+@ovindex libdir
+The directory for installing object code libraries.
+@end defvar
+
+@defvar libexecdir
+@ovindex libexecdir
+The directory for installing executables that other programs run.
+@end defvar
+
+@defvar localstatedir
+@ovindex localstatedir
+The directory for installing modifiable single-machine data.
+@end defvar
+
+@defvar mandir
+@ovindex mandir
+The top-level directory for installing documentation in man format.
+@end defvar
+
+@defvar oldincludedir
+@ovindex oldincludedir
+The directory for installing C header files for non-gcc compilers.
 @end defvar
 
 @defvar prefix
@@ -919,9 +966,25 @@ The installation prefix for architecture-dependent files.
 The installation prefix for architecture-independent files.
 @end defvar
 
+@defvar sbindir
+@ovindex sbindir
+The directory for installing executables that system
+administrators run.
+@end defvar
+
+@defvar sharedstatedir
+@ovindex sharedstatedir
+The directory for installing modifiable architecture-independent data.
+@end defvar
+
 @defvar srcdir
 @ovindex srcdir
 The directory that contains the source code for that @file{Makefile}.
+@end defvar
+
+@defvar sysconfdir
+@ovindex sysconfdir
+The directory for installing read-only single-machine data.
 @end defvar
 
 @defvar top_srcdir
@@ -2960,7 +3023,7 @@ as a 4-byte magic number.
 
 The set of external programs you should run in a @code{configure} script
 is fairly small.  @xref{Utilities in Makefiles, , Utilities in
-Makefiles, standards.info, GNU Coding Standards}, for the list.  This
+Makefiles, standards, GNU Coding Standards}, for the list.  This
 restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
 packages. 
