@@ -336,14 +336,20 @@ AT_SETUP(unexpanded macros)
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
-AC_THIS_IS_PROBABLY_NOT_DEFINED
+AB_THIS_IS_PROBABLY_NOT_DEFINED
+AND_AZ_THAT_EITHER
+and_AZ_that_too
+# This is legal, also there is `AC_DEFINE' in there.
+BAC_DEFINE
 # AC_THIS_IS_A_COMMENT so just shut up.
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
-[[configure.in:2: error: undefined macro: AC_THIS_IS_PROBABLY_NOT_DEFINED
-configure:3: error: undefined macro: AC_OUTPUT
+[[configure.in:2: error: undefined macro: AB_THIS_IS_PROBABLY_NOT_DEFINED
+configure.in:3: error: undefined macro: AND_AZ_THAT_EITHER
+configure.in:4: error: undefined macro: and_AZ_that_too
+configure:7: error: undefined macro: AC_OUTPUT
 ]])
 
 AT_CLEANUP(configure)

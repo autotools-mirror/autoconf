@@ -346,9 +346,11 @@ case $task in
         continue
       # Dubious feature: we tolerate macro names when commented.
       code_part = \$0
-      comment_start = index (code_part, "#")
-      if (comment_start)
-        code_part = substr (\$0, 0, comment_start)
+      sub (/#.*/, "", code_part)
+
+      # We don't \`if ... else if ...' because a single line may contain
+      # several unexpanded names.  That's also why the last two \`match'
+      # are not grouped together.
       if (match (code_part, /[^$WORDCHAR](A[$ALPHABET]|m4)_[$WORDCHAR]*/))
         {
            macros [substr (code_part, RSTART + 1, RLENGTH - 1)] = oline

@@ -1,5 +1,12 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.at (unexpanded macros): Strengthen.
+	* autoconf.sh (finalize.awk): Use `sub' instead of `index' +
+	`substr'.
+	More comments.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (.m4.m4f): Check that processing produces only
 	comments and empty lines.
 	Check that freezing produced no output.
