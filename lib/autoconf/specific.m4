@@ -199,6 +199,9 @@ then
       then
         eval ac_cv_prog_cc_${ac_cc}_c_o=yes
       fi
+    else
+      # There is no cc, so we don't care about it.
+      eval ac_cv_prog_cc_${ac_cc}_c_o=yes
     fi
   fi
 fi
