@@ -808,7 +808,7 @@ dnl Look for site or system specific initialization scripts.
 dnl AC_SITE_LOAD()
 define(AC_SITE_LOAD,
 [# Prefer explicitly selected file to automatically selected ones.
-if test ! -r "$CONFIG_SITE"; then
+if test -z "$CONFIG_SITE"; then
   if test "x$prefix" != xNONE; then
     CONFIG_SITE=$prefix/lib/config.site
   else
