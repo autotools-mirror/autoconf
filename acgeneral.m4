@@ -3025,23 +3025,23 @@ m4_define([AC_LIBOBJ],
 m4_define([_AC_COMPUTE_INT_COMPILE],
 [# Depending upon the size, compute the lo and hi bounds.
 AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
- [ac_lo=0 ac_try=0
+ [ac_lo=0 ac_mid=0
   while :; do
-    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_try])],
-                   [ac_hi=$ac_try; break],
-                   [ac_lo=`expr $ac_try + 1`; ac_try=`expr 2 '*' $ac_try + 1`])
+    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
+                   [ac_hi=$ac_mid; break],
+                   [ac_lo=`expr $ac_mid + 1`; ac_mid=`expr 2 '*' $ac_mid + 1`])
   done],
- [ac_hi=-1 ac_try=-1
+ [ac_hi=-1 ac_mid=-1
   while :; do
-    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_try])],
-                      [ac_lo=$ac_try; break],
-                      [ac_hi=`expr $ac_try - 1`; ac_try=`expr 2 '*' $ac_try`])
+    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_mid])],
+                      [ac_lo=$ac_mid; break],
+                      [ac_hi=`expr $ac_mid - 1`; ac_mid=`expr 2 '*' $ac_mid`])
   done])
 # Binary search between lo and hi bounds.
 while test "x$ac_lo" != "x$ac_hi"; do
-  ac_try=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
-  AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_try])],
-                     [ac_hi=$ac_try], [ac_lo=`expr $ac_try + 1`])
+  ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
+  AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
+                     [ac_hi=$ac_mid], [ac_lo=`expr $ac_mid + 1`])
 done
 $2=$ac_lo[]dnl
 ])# _AC_COMPUTE_INT_COMPILE

@@ -1,5 +1,10 @@
 2001-02-02  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE): Rename all occurences
+	of ac_try to ac_mid to avoid a name clash.
+
+2001-02-02  Pavel Roskin  <proski@gnu.org>
+
 	* autoscan.pl (scan_c_file): When in verbose mode, don't print
 	out hashes common for the whole package. Do it in scan_files()
 	instead.
