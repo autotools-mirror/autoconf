@@ -1827,9 +1827,9 @@ directives:
 
 @example
 @group
-#include "conf.h"
+#include <conf.h>
 
-#if HAVE_UNISTD_D
+#if HAVE_UNISTD_H
 # include <unistd.h>
 #else
 /* We are in trouble. */
@@ -5824,8 +5824,8 @@ the type of system for which any compiler tools in the package will
 produce code.
 @end table
 
-By default, the build is guessed (by @code{config,guess}), the host
-system is the build system, and the target is the build system.
+By default, the build is guessed (by @code{config.guess}), the host
+system is the build system, and the target is the host system.
 
 If you are cross-compiling, you still have to specify the names of the
 cross-tools you use, in particular the C compiler, on the
