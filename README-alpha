@@ -3,6 +3,10 @@
 This is a test release of this package.  Using it more or less
 implicitly signs you up to help us find whatever problems you report.
 
+You need up-to-date build tools.  To avoid some bootstrapping issues
+you may need to run the command "autoreconf -fvim" first, before
+running "configure".
+
 The documentation still needs more work.  Suggestions welcome.
 Patches even more welcome.
 
@@ -18,7 +22,7 @@ users.
 
 -----
 
-Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 
