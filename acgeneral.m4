@@ -2237,15 +2237,9 @@ ac_includes_default="\
 AC_REQUIRE([AC_HEADER_STDC])dnl
 # On IRIX 5.3, sys/types and inttypes.h are conflicting.
 AC_CHECK_HEADERS([sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
-                  stdint.h unistd.h],
+                  inttypes.h stdint.h unistd.h],
                  [], [], $ac_includes_default)
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#define HAVE_INTTYPES_H 1
-$ac_includes_default])],
-                  [ac_cv_header_inttypes_h=yes,
-AC_DEFINE([HAVE_INTTYPES_H], 1,
-          [Define if you have the <inttypes.h> header file.])],
-                  [ac_cv_header_inttypes_h=no])
-])
+])# _AC_INCLUDES_DEFAULT_REQUIREMENTS
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])

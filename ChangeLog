@@ -1,5 +1,15 @@
 2001-07-03  Akim Demaille  <akim@epita.fr>
 
+	* acheaders.m4 (AC_CHECK_HEADER): When INCLUDES are set, use the
+	compiler, not the preprocessor.
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): No longer use
+	dedicated code to check for inttypes.h, as AC_CHECK_HEADERS does
+	the right thing.
+	* Makefile.am (.m4.m4f): Emphasize M4 error messages and fail
+	earlier if there are.
+
+2001-07-03  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.in ($initfile): Remove.
 	(&find_file): Rename as...
 	(&scan_file): this.

@@ -923,8 +923,8 @@ argument explicit, or you may simply omit the trailing commas.  The
 three lines below are equivalent:
 
 @example
-AC_CHECK_HEADERS(stdio.h, [], [])
-AC_CHECK_HEADERS(stdio.h,,)
+AC_CHECK_HEADERS(stdio.h, [], [], [])
+AC_CHECK_HEADERS(stdio.h,,,)
 AC_CHECK_HEADERS(stdio.h)
 @end example
 
@@ -3935,15 +3935,42 @@ test for it (@pxref{Writing Tests}).
 
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_HEADER
-If the system header file @var{header-file} exists, execute shell commands
-@var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
-you just want to define a symbol if the header file is available,
-consider using @code{AC_CHECK_HEADERS} instead.
+If the system header file @var{header-file} is usable, execute shell
+commands @var{action-if-found}, otherwise execute
+@var{action-if-not-found}.  If you just want to define a symbol if the
+header file is available, consider using @code{AC_CHECK_HEADERS}
+instead.
 
-This macro actually checks whether @var{header-file} can be included
-without error.  If @var{includes} is specified, they are included before
-@var{header-file}.  Note that the @var{includes} are @emph{not}
-defaulted.  They might be in future releases.
+The meaning of ``usable'' depends upon the content of @var{includes}:
+
+@table @asis
+@item if @var{includes} is empty
+check whether
+
+@example
+@var{header-file}
+@end example
+
+@noindent
+can be @emph{preprocessed} without error.
+
+@item if @var{include} is set
+Check whether
+
+@example
+@var{includes}
+#include <@var{header-file}>
+@end example
+
+@noindent
+can be @emph{compiled} without error.  You may use
+@code{AC_CHECK_HEADER} (and @code{AC_CHECK_HEADERS}) to check whether
+two headers are compatible.
+@end table
+
+You may pass any kind of dummy content for @var{includes}, such as a
+single space, a comment, to check whether @var{header-file} compiles
+with success.
 @end defmac
 
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
@@ -3957,10 +3984,8 @@ files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
 
-This macro actually checks whether @var{header-file} can be included
-without error.  If @var{includes} is specified, they are included before
-@var{header-file}.  Note that the @var{includes} are @emph{not}
-defaulted.  They might be in future releases.
+Be sure to read the documentation of @code{AC_CHECK_HEADER} to
+understand the influence of @var{includes}.
 @end defmac
 
 @node Declarations, Structures, Header Files, Existing Tests

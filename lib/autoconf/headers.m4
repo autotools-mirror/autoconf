@@ -60,17 +60,26 @@
 ## 1. Generic tests for headers.  ##
 ## ------------------------------ ##
 
+
 # AC_CHECK_HEADER(HEADER-FILE,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                 [INCLUDES])
 # ---------------------------------------------------------
+# If INCLUDES is empty and strictly empty, use the preprocessor to
+# check whether HEADER-FILE exists.  If INCLUDES is set, then use the
+# compiler to check whether INCLUDES followed by HEADER-FILE compiles
+# with success.
 AC_DEFUN([AC_CHECK_HEADER],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
-               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([m4_n([$4])dnl
+            [m4_ifval([$4],
+                      [AC_COMPILE_IFELSE([AC_LANG_SOURCE([$4
 @%:@include <$1>])],
-                                  [AS_VAR_SET(ac_Header, yes)],
-                                  [AS_VAR_SET(ac_Header, no)])])
+                                         [AS_VAR_SET(ac_Header, yes)],
+                                         [AS_VAR_SET(ac_Header, no)])],
+                      [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+                                         [AS_VAR_SET(ac_Header, yes)],
+                                         [AS_VAR_SET(ac_Header, no)])])])
 AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
 ])# AC_CHECK_HEADER
@@ -85,8 +94,8 @@ m4_define([AH_CHECK_HEADERS],
 
 
 # AC_CHECK_HEADERS(HEADER-FILE...
-#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-#                 [INCLUDES])
+#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                  [INCLUDES])
 # ----------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADERS],
 [AH_CHECK_HEADERS([$1])dnl
@@ -97,7 +106,7 @@ AC_CHECK_HEADER($ac_header,
                 [$3],
                 [$4])dnl
 done
-])
+])# AC_CHECK_HEADERS
 
 
 

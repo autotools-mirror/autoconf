@@ -495,11 +495,19 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 # force an end of line when reporting errors.
 .m4.m4f:
 	$(M4) --include $(srcdir) --fatal-warning --define divert \
-	      $(srcdir)/$*.m4 | \
+	      $(srcdir)/$*.m4 2>error.log | \
 	  sed 's/#.*//;/^$$/d' >process.log
+	if grep . error.log >/dev/null 2>&1; then \
+	  echo "ERROR: Processing $(srcdir)/$*.m4 produced errors:" >&2; \
+	  sed "s,^,$(srcdir)/$*.m4: ," <error.log >&2; \
+	  echo >&2; \
+	  exit 1; \
+	else \
+	  rm -f error.log; \
+	fi
 	if grep . process.log >/dev/null 2>&1; then \
-	  echo "Processing $(srcdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$(srcdir)/$*.m4: ," < process.log >&2; \
+	  echo "ERROR: Processing $(srcdir)/$*.m4 produced output:" >&2; \
+	  sed "s,^,$(srcdir)/$*.m4: ," <process.log >&2; \
 	  echo >&2; \
 	  exit 1; \
 	else \
@@ -508,8 +516,8 @@ autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
 	$(M4) --include $(srcdir) --fatal-warning --freeze-state=$*.m4f \
 	      $(srcdir)/$*.m4 >freeze.log
 	if grep . freeze.log >/dev/null 2>&1; then \
-	  echo "Freezing $(srcdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$(srcdir)/$*.m4: ," < freeze.log >&2; \
+	  echo "ERROR: Freezing $(srcdir)/$*.m4 produced output:" >&2; \
+	  sed "s,^,$(srcdir)/$*.m4: ," <freeze.log >&2; \
 	  echo >&2; \
 	  exit 1; \
 	else \
