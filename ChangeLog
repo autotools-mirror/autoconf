@@ -1,3 +1,8 @@
+2000-06-05  Mo DeJong  <mdejong@cygnus.com>
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Move the setting
+	of ac_tool_prefix before the call to AC_DIVERT_POP.
+
 2000-06-05  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX): AU define it.

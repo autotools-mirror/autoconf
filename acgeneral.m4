@@ -1289,10 +1289,10 @@ build=$build_alias
 host=$host_alias
 target=$target_alias
 
-AC_DIVERT_POP()dnl
-
 ac_tool_prefix=
 test -n "$host_alias" && ac_tool_prefix=$host_alias-
+
+AC_DIVERT_POP()dnl
 ])# _AC_INIT_PARSE_ARGS
 
 
