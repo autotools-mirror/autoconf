@@ -89,8 +89,7 @@ CLEANFILES = debug-*.sh macro configure configure.in configure.ac              c
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in config.guess \
-config.sub configure.in install-sh ltmain.sh
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
