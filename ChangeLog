@@ -1,5 +1,11 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_CHECK): Check stderr first, since if both
+	stdout and stderr fail, differences on the latter are probably
+	more significant than on the former.
+
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (task trace) [debug]: Instead of a long pipe, extend
 	trace.m4.
 
