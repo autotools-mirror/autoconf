@@ -50,9 +50,14 @@ $(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 SUFFIXES = .x .1
 
 .x.1:
-	@case $* in \
-	  config.* | */config.*) ;; \
-	  *) $(MAKE) $*-bin-prereq $*-tests-prereq;; \
+	@program=`expr "/$*" : '.*/\(.*\)'` && \
+	case $$program in \
+	config.*) ;; \
+	*) \
+	  for dir in $(top_builddir)/bin $(top_builddir)/tests; do \
+	    echo cd $$dir '&&' $(MAKE) $(AM_MAKEFLAGS) $$program && \
+	    (cd $$dir && $(MAKE) $(AM_MAKEFLAGS) $$program) || exit; \
+	  done;; \
 	esac
 	echo "Updating man page $@"
 	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
@@ -60,19 +65,4 @@ SUFFIXES = .x .1
 	$(HELP2MAN) \
 	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ `echo "$*" | sed 's,^$(srcdir)/,,'`
-
-
-# While building man page prerequisites, avoid explicit dependencies
-# on any file that is not distributed, so that installers do not
-# unnecessarily attempt to run $(HELP2MAN), a tool that they may not
-# have.
-
-$(dist_man_MANS:.1=-bin-prereq) $(dist_man_MANS:.1=-tests-prereq):
-	@$(MAKE) $(AM_MAKEFLAGS) \
-	  builddir=$(top_builddir)/`expr 'X$@' : '.*-\([^-]*\)-prereq$$'` \
-	  program=`expr '/$@' : '.*/\([^-]*\)'` \
-	  implicit-man-prerequisites
-
-implicit-man-prerequisites:
-	cd $(builddir) && $(MAKE) $(AM_MAKEFLAGS) $(program)
+	    --output=$@ `echo '$*' | sed 's,.*/,,'`
