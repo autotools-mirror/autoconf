@@ -16,6 +16,9 @@ easy), or remove (obsoleted since then).
 ** AU_, AH_
 Document.
 
+** AC_COPYRIGHT
+Document.
+
 ** m4
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.

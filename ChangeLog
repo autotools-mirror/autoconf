@@ -13,6 +13,28 @@
 
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	Provide a means to specify more Copyright information in
+	`configure'.  And after all, it suits to `configure --version' too.
+
+	* acgeneral.m4 (AC_DIVERSION_DEFAULTS, AC_DIVERSION_INIT_PREPARE):
+	New diversion numbers.
+	(AC_DIVERSION_INIT): Renamed as...
+	(AC_DIVERSION_INIT_PARSE_ARGS): this.
+	(AC_DIVERT_POP): Instead of going into wild endless loops when
+	there are more pops than pushes, die with dignity.
+	(AC_COPYRIGHT): New macro.
+	(_AC_INIT_NOTICE): Move definition of `ac_includes_default' from
+	here...
+	(_AC_INIT_PREPARE): to here.
+	(_AC_INIT_NOTICE): Remove.
+	(AC_INIT): Use it to install Autoconf's Copyright.
+	(_AC_INIT_DEFAULTS): New macro.
+	(AC_INIT): Use it.
+	(AC_PREFIX_DEFAULTS): Dump in AC_DIVERSION_DEFAULTS.
+	(_AC_INIT_PARSE_ARGS): Dump in AC_DIVERSION_INIT_PREPARE.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	We don't need _AC_ARG_*_HELP_PROLOGUE.
 
 	* acgeneral.m4 (AC_EXPAND_ONCE): AC_PROVIDE yourself, in case
