@@ -54,12 +54,12 @@ editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
 all: autoconf autoheader autoconf.info standards.info
 
 autoconf: autoconf.sh
-	rm -f $@
-	$(editsh) $(srcdir)/autoconf.sh > $@ && chmod +x $@
+	rm -f $@ $@.tmp
+	$(editsh) $(srcdir)/autoconf.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
 autoheader: autoheader.sh
-	rm -f $@
-	$(editsh) $(srcdir)/autoheader.sh > $@ && chmod +x $@
+	rm -f $@ $@.tmp
+	$(editsh) $(srcdir)/autoheader.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
 info: autoconf.info standards.info
 
@@ -107,11 +107,13 @@ config.status: configure
 	$(SHELL) config.status --recheck
 configure: configure.in acgeneral.m4 acspecific.m4
 	cd $(srcdir); \
-	$(M4) acgeneral.m4 acspecific.m4 configure.in > configure && \
-	chmod +x configure
+	rm -f $@ $@.tmp; \
+	$(M4) acgeneral.m4 acspecific.m4 configure.in > $@.tmp && \
+	mv $@.tmp $@ && \
+	chmod +x $@
 
 clean:
-	rm -f autoconf autoheader
+	rm -f autoconf autoheader *.tmp
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
 
