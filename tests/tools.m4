@@ -131,3 +131,60 @@ AC_OUTPUT
 ]], ignore)
 
 AT_CLEANUP
+
+
+## ------------------ ##
+## autoconf --trace.  ##
+## ------------------ ##
+
+AT_SETUP(autoconf --trace)
+
+AT_DATA(configure.in,
+[[define(active, ACTIVE)
+AC_DEFUN(TRACE1, [TRACE2(m4_shift($@))])
+AC_DEFUN(TRACE2, [[$2], $1])
+TRACE1(foo, bar, baz)
+TRACE1(foo, AC_TRACE1(bar, baz))
+TRACE1(foo, active, baz)
+TRACE1(foo, [active], TRACE1(active, [active]))
+]])
+
+# Several --traces.
+AT_CHECK([../autoconf -m .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
+[[configure.in:4:TRACE1:foo:bar:baz
+configure.in:4:TRACE2:bar:baz
+configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
+configure.in:5:TRACE2:AC_TRACE1(bar, baz)
+configure.in:6:TRACE1:foo:ACTIVE:baz
+configure.in:6:TRACE2:ACTIVE:baz
+configure.in:7:TRACE1:ACTIVE:active
+configure.in:7:TRACE2:active
+configure.in:7:TRACE1:foo:active::ACTIVE
+configure.in:7:TRACE2:active::ACTIVE
+]])
+
+# Several line requests.
+AT_CHECK([[../autoconf -m .. -l $at_srcdir -t TRACE1:'
+[$1], [$2], [$3].']], 0,
+[[
+[foo], [bar], [baz].
+
+[foo], [AC_TRACE1(bar, baz)], [].
+
+[foo], [ACTIVE], [baz].
+
+[ACTIVE], [active], [].
+
+[foo], [active], [].
+]])
+
+# ${sep}@.
+AT_CHECK([../autoconf -m .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
+[[[bar])===([baz]
+[AC_TRACE1(bar, baz)]
+[ACTIVE])===([baz]
+[active]
+[active])===([])===([ACTIVE]
+]])
+
+AT_CLEANUP
