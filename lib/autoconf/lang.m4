@@ -655,7 +655,7 @@ AC_DEFUN([AC_OBJEXT],   [])
 m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try without -o first, disregard a.out.
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
-AS_IFELSE([AC_TRY_EVAL(ac_link_default)],
+AS_IF([AC_TRY_EVAL(ac_link_default)],
 [for ac_file in `ls a.exe conftest.exe a.* conftest conftest.* 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.out | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
@@ -664,7 +664,7 @@ AS_IFELSE([AC_TRY_EVAL(ac_link_default)],
     * ) break;;
   esac
 done],
-          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD])
 rm -f a.out a.exe conftest$ac_cv_exeext
 ])# _AC_COMPILER_EXEEXT_DEFAULT
@@ -728,7 +728,7 @@ m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 rm -f conftest.o conftest.obj
-AS_IFELSE([AC_TRY_EVAL(ac_compile)],
+AS_IF([AC_TRY_EVAL(ac_compile)],
 [for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
@@ -736,7 +736,7 @@ AS_IFELSE([AC_TRY_EVAL(ac_compile)],
        break;;
   esac
 done],
-          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 AC_MSG_ERROR([cannot compute OBJEXT: cannot compile])])
 rm -f conftest.$ac_cv_objext conftest.$ac_ext])
@@ -1255,7 +1255,9 @@ AC_CACHE_CHECK([whether $F77 understand -c and -o together],
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
 ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
-if AC_TRY_EVAL(ac_try) && test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try); then
+if AC_TRY_EVAL(ac_try) &&
+     test -f conftest.$ac_objext &&
+     AC_TRY_EVAL(ac_try); then
   ac_cv_prog_f77_c_o=yes
 else
   ac_cv_prog_f77_c_o=no

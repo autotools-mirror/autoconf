@@ -312,8 +312,8 @@ m4_define([AH_OUTPUT], [])
 # TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
 # output as is, with no formating.
 m4_define([AH_VERBATIM],
-[AC_VAR_INDIR_IFELSE([$1],,
-                     [AH_OUTPUT([$1], _AS_QUOTE([[$2]]))])
+[AS_LITERAL_IF([$1],
+               [AH_OUTPUT([$1], _AS_QUOTE([[$2]]))])
 ])
 
 
@@ -361,14 +361,6 @@ m4_define([_AH_COUNTER], [0])
 #   AC_VAR_SET(ac_$var, val)
 # and expect the right thing to happen.
 
-# AC_VAR_INDIR_IFELSE(EXPRESSION, IF-INDIR, IF-NOT-INDIR)
-# -------------------------------------------------------
-# If EXPRESSION has shell indirections ($var or `expr`), expand
-# IF-INDIR, else IF-NOT-INDIR.
-m4_define([AC_VAR_INDIR_IFELSE],
-[m4_if(m4_regexp([$1], [[`$]]),
-       -1, [$3],
-       [$2])])
 
 # AC_VAR_SET(VARIABLE, VALUE)
 # ---------------------------
@@ -376,9 +368,9 @@ m4_define([AC_VAR_INDIR_IFELSE],
 # If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
 # perform whenever possible at m4 level, otherwise sh level.
 m4_define([AC_VAR_SET],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [eval "$1=$2"],
-                     [$1=$2])])
+[AS_LITERAL_IF([$1],
+               [$1=$2],
+               [eval "$1=$2"])])
 
 
 # AC_VAR_GET(VARIABLE)
@@ -387,9 +379,9 @@ m4_define([AC_VAR_SET],
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
 m4_define([AC_VAR_GET],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`],
-                     [$[]$1])])
+[AS_LITERAL_IF([$1],
+               [$[]$1],
+               [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`])])
 
 
 # AC_VAR_TEST_SET(VARIABLE)
@@ -397,9 +389,9 @@ m4_define([AC_VAR_GET],
 # Expands into the `test' expression which is true if VARIABLE
 # is set.  Polymorphic.  Should be dnl'ed.
 m4_define([AC_VAR_TEST_SET],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [eval "test \"\${$1+set}\" = set"],
-                     [test "${$1+set}" = set])])
+[AS_LITERAL_IF([$1],
+               [test "${$1+set}" = set],
+               [eval "test \"\${$1+set}\" = set"])])
 
 
 # AC_VAR_SET_IFELSE(VARIABLE, IF-TRUE, IF-FALSE)
@@ -407,7 +399,7 @@ m4_define([AC_VAR_TEST_SET],
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 m4_define([AC_VAR_SET_IFELSE],
-[AS_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
+[AS_IF([AC_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
 # AC_VAR_PUSHDEF and AC_VAR_POPDEF
@@ -442,10 +434,10 @@ m4_define([AC_VAR_SET_IFELSE],
 # named VALUE.  VALUE does not need to be a valid shell variable name:
 # the transliteration is handled here.  To be dnl'ed.
 m4_define([AC_VAR_PUSHDEF],
-[AC_VAR_INDIR_IFELSE([$2],
-                     [ac_$1=AC_TR_SH($2)
-m4_pushdef([$1], [$ac_[$1]])],
-                     [m4_pushdef([$1], [AC_TR_SH($2)])])])
+[AS_LITERAL_IF([$2],
+               [m4_pushdef([$1], [AC_TR_SH($2)])],
+               [ac_$1=AC_TR_SH($2)
+m4_pushdef([$1], [$ac_[$1]])])])
 
 
 # AC_VAR_POPDEF(VARNAME)
@@ -471,12 +463,12 @@ m4_define([AC_VAR_POPDEF],
 # `#define'.  sh/m4 polymorphic.  Make sure to update the definition
 # of `$ac_tr_cpp' if you change this.
 m4_define([AC_TR_CPP],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [`echo "$1" | $ac_tr_cpp`],
-                     [m4_patsubst(m4_translit([[$1]],
-                                              [*abcdefghijklmnopqrstuvwxyz],
-                                              [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-                                  [[^A-Z0-9_]], [_])])])
+[AS_LITERAL_IF([$1],
+               [m4_patsubst(m4_translit([[$1]],
+                                        [*abcdefghijklmnopqrstuvwxyz],
+                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+                            [[^A-Z0-9_]], [_])],
+               [`echo "$1" | $ac_tr_cpp`])])
 
 
 # AC_TR_SH(EXPRESSION)
@@ -485,10 +477,10 @@ m4_define([AC_TR_CPP],
 # sh/m4 polymorphic.
 # Make sure to update the definition of `$ac_tr_sh' if you change this.
 m4_define([AC_TR_SH],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [`echo "$1" | $ac_tr_sh`],
-                     [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
-                                  [[^a-zA-Z0-9_]], [_])])])
+[AS_LITERAL_IF([$1],
+               [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
+                            [[^a-zA-Z0-9_]], [_])],
+               [`echo "$1" | $ac_tr_sh`])])
 
 
 
@@ -2067,7 +2059,7 @@ m4_define([AC_DEFINE_TRACE_LITERAL])
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.
 m4_define([AC_DEFINE_TRACE],
-[AC_VAR_INDIR_IFELSE([$1], [], [AC_DEFINE_TRACE_LITERAL([$1])])])
+[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL([$1])])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
@@ -2342,8 +2334,8 @@ m4_define([AC_INCLUDES_DEFAULT],
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
 AC_DEFUN([AC_CHECK_MEMBER],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [AC_FATAL([$0: requires literal arguments])])dnl
+[AS_LITERAL_IF([$1], [],
+               [AC_FATAL([$0: requires literal arguments])])dnl
 m4_if(m4_regexp([$1], [\.]), -1,
       [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 AC_REQUIRE([AC_HEADER_STDC])dnl
@@ -2357,8 +2349,7 @@ dnl foo.MEMBER;
 foo.m4_patsubst([$1], [^[^.]*\.]);])],
                 [AC_VAR_SET(ac_Member, yes)],
                 [AC_VAR_SET(ac_Member, no)])])
-AS_IFELSE([test AC_VAR_GET(ac_Member) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_Member) = yes], [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
@@ -2650,10 +2641,10 @@ AC_TRY_LINK_FUNC([$1],
 break])
 done
 LIBS=$ac_func_search_save_LIBS])
-AS_IFELSE([test "$ac_cv_search_$1" != no],
+AS_IF([test "$ac_cv_search_$1" != no],
   [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
   $3],
-                [$4])[]dnl
+      [$4])dnl
 ])
 
 
@@ -2688,12 +2679,11 @@ AC_TRY_LINK_FUNC([$2],
                  [AC_VAR_SET(ac_Lib, yes)],
                  [AC_VAR_SET(ac_Lib, no)])
 LIBS=$ac_check_lib_save_LIBS])
-AS_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
-          [m4_default([$3],
-                      [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
+AS_IF([test AC_VAR_GET(ac_Lib) = yes],
+      [m4_default([$3], [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],
-                [$4])dnl
+      [$4])dnl
 AC_VAR_POPDEF([ac_Lib])dnl
 ])# AC_CHECK_LIB
 
@@ -2831,11 +2821,11 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IFELSE([AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext],
-          [$2],
-[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+AS_IF([AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext],
+      [$2],
+      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3],[$3])dnl])
+m4_ifvaln([$3],[$3])dnl])dnl
 rm -f conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
@@ -2870,12 +2860,12 @@ AC_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IFELSE([AC_TRY_EVAL(ac_link) &&
-            AC_TRY_COMMAND([test -s conftest$ac_exeext])],
-          [$2],
-          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+AS_IF([AC_TRY_EVAL(ac_link) &&
+         AC_TRY_COMMAND([test -s conftest$ac_exeext])],
+      [$2],
+      [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3], [$3])dnl])
+m4_ifvaln([$3], [$3])dnl])[]dnl
 rm -f conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
@@ -2927,12 +2917,12 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
-AS_IFELSE([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
-          [$2],
-[echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
+AS_IF([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
+      [$2],
+      [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3], [$3])dnl])
+m4_ifvaln([$3], [$3])dnl])[]dnl
 rm -f conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
@@ -2984,8 +2974,7 @@ if test -r "$1"; then
 else
   AC_VAR_SET(ac_File, no)
 fi])
-AS_IFELSE([test AC_VAR_GET(ac_File) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_File) = yes], [$2], [$3])[]dnl
 AC_VAR_POPDEF([ac_File])dnl
 ])# AC_CHECK_FILE
 
@@ -3021,8 +3010,7 @@ AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
 ])],
                    [AC_VAR_SET(ac_Symbol, yes)],
                    [AC_VAR_SET(ac_Symbol, no)])])
-AS_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_Symbol) = yes], [$2], [$3])[]dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
 
@@ -3063,9 +3051,9 @@ m4_define([AC_LIBOBJ_DECL], [])
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
 m4_define([_AC_LIBOBJ],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [$2],
-                     [AC_LIBOBJ_DECL([$1])])dnl
+[AS_LITERAL_IF([$1],
+               [AC_LIBOBJ_DECL([$1])],
+               [$2])dnl
 AC_SUBST([LIBOBJS])dnl
 LIBOBJS="$LIBOBJS $1.$ac_objext"])
 
@@ -3139,8 +3127,8 @@ rm -f conftestval[]dnl
 # AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES])
 # --------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
-[AC_VAR_INDIR_IFELSE([$1],
-                     [AC_FATAL([$0: requires literal arguments])])dnl
+[AS_LITERAL_IF([$1], [],
+               [AC_FATAL([$0: requires literal arguments])])dnl
 AC_CHECK_TYPE([$1], [], [], [$3])
 AC_CACHE_CHECK([size of $1], AC_TR_SH([ac_cv_sizeof_$1]),
 [if test "$AC_TR_SH([ac_cv_type_$1])" = yes; then
@@ -3253,8 +3241,7 @@ if (sizeof ($1))
   return 0;])],
                    [AC_VAR_SET(ac_Type, yes)],
                    [AC_VAR_SET(ac_Type, no)])])
-AS_IFELSE([test AC_VAR_GET(ac_Type) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_Type) = yes], [$2], [$3])[]dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
@@ -3729,9 +3716,8 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 [_AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
-AC_VAR_INDIR_IFELSE([$1],
-                    [AC_DIAGNOSE(syntax,
-                                [$0: you should use literals])])
+AS_LITERAL_IF([$1], [],
+              [AC_DIAGNOSE(syntax, [$0: you should use literals])])
 m4_divert_text([DEFAULTS], [ac_subdirs_all="$ac_subdirs_all $1"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
@@ -4797,5 +4783,5 @@ m4_if([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
     fi
   done
 
-  AS_IFELSE([test x"$ac_exists" = xtrue], [$3], [$4])
+  AS_IF([test x"$ac_exists" = xtrue], [$3], [$4])[]dnl
 ])

@@ -466,7 +466,7 @@ m4_case([$2],
    *) $at_verbose "$srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])" >&2
       at_failed=:;;])
 esac
-AS_IFELSE($at_failed, [$5], [$6])
+AS_IF($at_failed, [$5], [$6])
 $at_failed && exit 1
 $at_traceon
 ])# AT_CHECK

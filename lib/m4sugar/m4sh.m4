@@ -108,8 +108,8 @@ m4_define([AS_EXIT],
 [{ (exit m4_default([$1], 1)); exit; }])
 
 
-# AS_IFELSE(TEST, [IF-TRUE], [IF-FALSE])
-# --------------------------------------
+# AS_IF(TEST, [IF-TRUE], [IF-FALSE])
+# ----------------------------------
 # Expand into
 # | if TEST; then
 # |   IF-TRUE
@@ -117,7 +117,7 @@ m4_define([AS_EXIT],
 # |   IF-FALSE
 # | fi
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
-m4_define([AS_IFELSE],
+m4_define([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then
   m4_ifval([$2], [$2], :)
@@ -126,7 +126,7 @@ m4_ifvaln([$3],
   $3])dnl
 fi
 ])dnl
-])# AS_IFELSE
+])# AS_IF
 
 
 # _AS_UNSET_PREPARE
@@ -313,6 +313,18 @@ done; }
 ## ------------------ ##
 
 # This section is lexicographically sorted.
+
+# AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
+# -----------------------------------------------------
+# If EXPRESSION has shell indirections ($var or `expr`), expand
+# IF-INDIR, else IF-NOT-INDIR.
+# This is an *approximation*: for instance EXPRESSION = `\$' is
+# definitely a literal, but will not be recognized as such.
+m4_define([AS_LITERAL_IF],
+[m4_if(m4_regexp([$1], [[`$]]),
+       -1, [$2],
+       [$3])])
+
 
 # AS_TMPDIR(PREFIX)
 # -----------------

@@ -1,3 +1,10 @@
+2001-01-15  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_VAR_INDIR_IFELSE): Move as...
+	* m4sh.m4 (AS_LITERAL_IF): this.
+	(AS_IFELSE): Rename as...
+	(AS_IF): this.
+
 2001-01-12  Akim Demaille  <akim@epita.fr>
 
 	With `expr's that return `0' on failures, the executable suffix is

@@ -70,8 +70,7 @@ AC_CACHE_CHECK([for $1], ac_Header,
                [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
                                   [AC_VAR_SET(ac_Header, yes)],
                                   [AC_VAR_SET(ac_Header, no)])])
-AS_IFELSE([test AC_VAR_GET(ac_Header) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
 AC_VAR_POPDEF([ac_Header])dnl
 ])# AC_CHECK_HEADER
 
@@ -120,8 +119,7 @@ AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
                                     [DIR *dirp = 0;])],
                    [AC_VAR_SET(ac_Header, yes)],
                    [AC_VAR_SET(ac_Header, no)])])
-AS_IFELSE([test AC_VAR_GET(ac_Header) = yes],
-          [$2], [$3])dnl
+AS_IF([test AC_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
 AC_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_DIRENT
 
