@@ -2707,16 +2707,16 @@ AC_DEFUN(AC_TRY_LINK_FUNC,
 AC_DEFUN(AC_SEARCH_LIBS,
 [AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS=$LIBS
-ac_cv_search_$1="no"
+ac_cv_search_$1=no
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
-test "$ac_cv_search_$1" = "no" && for ac_lib in $2; do
+test "$ac_cv_search_$1" = no && for ac_lib in $2; do
 LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
 AC_TRY_LINK_FUNC([$1],
 [ac_cv_search_$1="-l$ac_lib"
 break])
 done
 LIBS=$ac_func_search_save_LIBS])
-AC_SHELL_IFELSE([test "$ac_cv_search_$1" != "no"],
+AC_SHELL_IFELSE([test "$ac_cv_search_$1" != no],
   [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
   $3],
                 [$4])[]dnl
