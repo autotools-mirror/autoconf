@@ -720,7 +720,7 @@ fi
 
 
 # _AC_SHELL_TMPDIR(PREFIX)
-# ----------------------
+# ------------------------
 # Create as safely as possible a temporary directory which name is
 # inspired by PREFIX (should be 2-4 chars max), and set trap
 # mechanisms to remove it.
@@ -736,7 +736,7 @@ $debug ||
 : ${TMPDIR=/tmp}
 {
   tmp=`(umask 077 && mktemp -d -q "$TMPDIR/$1XXXXXX") 2>/dev/null` &&
-  test -n "$tmp" && tmp -d "$tmp"
+  test -n "$tmp" && test -d "$tmp"
 }  ||
 {
   tmp=$TMPDIR/$1$$-$RANDOM && (umask 077 && mkdir $tmp)

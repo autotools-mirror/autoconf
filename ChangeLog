@@ -1,3 +1,7 @@
+2000-07-06  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_SHELL_TMPDIR): Typo.
+
 2000-07-06  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
 	* acgeneral.m4 (_AC_SHELL_DIRNAME): Behave properly when the
