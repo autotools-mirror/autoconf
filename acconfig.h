@@ -45,6 +45,21 @@
 /* Define if you have <dirent.h>.  */
 #undef DIRENT
 
+/*
+ * Define to a macro that performs the appropriate name mangling on its
+ * argument to make the C identifier, which *does not* contain
+ * underscores, match the name mangling scheme of the Fortran 77
+ * compiler.
+ */
+#undef F77_FUNC
+
+/*
+ * Define to a macro that performs the appropriate name mangling on its
+ * argument to make the C identifier, which *does* contain underscores,
+ * match the name mangling scheme of the Fortran 77 compiler.
+ */
+#undef F77_FUNC_
+
 /* Define to the type of elements in the array set by `getgroups'.
    Usually this is either `int' or `gid_t'.  */
 #undef GETGROUPS_T
