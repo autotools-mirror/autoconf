@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7)dnl
+define(AC_ACVERSION, 1.7.1)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -66,15 +66,15 @@ dnl [#] Generated automatically using autoconf.
 dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Copyright (C) 1991, 1992, 1993 Free Software Foundation, Inc.
 
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
+# This configure script is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; either version 2, or (at your option)
 # any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# This script is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
@@ -171,7 +171,7 @@ trap 'rm -f confdefs*' 0
 if test "${LC_ALL+set}" = 'set' ; then LC_ALL=C; export LC_ALL; fi
 if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
-rm -f conftest* confdefs.h
+rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
 compile='${CC-cc} $CFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
@@ -635,8 +635,8 @@ dnl
 define(AC_OUTPUT,
 [changequote(,)dnl
 # Set default prefixes.
-if test -n "$prefix"; then
-  test -z "$exec_prefix" && exec_prefix='${prefix}'
+if test "z$prefix" != 'z' ; then
+  test "z$exec_prefix" = 'z' && exec_prefix='${prefix}'
   prsub="s%^prefix\\([ 	]*\\)=\\([ 	]*\\).*$%prefix\\1=\\2$prefix%"
 fi
 if test -n "$exec_prefix"; then
