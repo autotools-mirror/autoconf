@@ -103,10 +103,11 @@ define([AH_CHECK_FUNCS],
 [AC_FOREACH([AC_Func], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
                [Define if you have the `]AC_Func[' function.])
-# Success
-$2
-# Failure
-$3])])
+                # Success
+                $2
+                # Failure
+                $3])
+])
 
 define([AH_CHECK_SIZEOF],
 [AH_TEMPLATE(AC_TR_CPP(SIZEOF_$1),
@@ -115,6 +116,22 @@ define([AH_CHECK_SIZEOF],
 define([AH_PROG_LEX],
 [AH_CHECK_LIB(fl)
 AH_CHECK_LIB(l)])
+
+define([AH_CHECK_MEMBERS],
+[m4_foreach([AC_Member], [$1],
+  [pushdef(AC_Member_Aggregate, [patsubst(AC_Member, [\.[^.]*])])
+   pushdef(AC_Member_Member,    [patsubst(AC_Member, [.*\.])])
+   AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Member),
+              [Define if `]AC_Member_Member[' is member of]
+               [`]AC_Member_Aggregate['.])
+   popdef([AC_Member_Member])
+   popdef([AC_Member_Aggregate])
+                # Success
+                $2
+                # Failure
+                $3])
+])
+
 
 define([AH_FUNC_ALLOCA],
 [AH_TEMPLATE(HAVE_ALLOCA_H,
@@ -188,6 +205,7 @@ define([AC_CHECK_SIZEOF], [AH_CHECK_SIZEOF($@)])
 define([AC_CHECK_FUNCS], [AH_CHECK_FUNCS($@)])
 define([AC_CHECK_HEADERS], [AH_CHECK_HEADERS($@)])
 define([AC_CHECK_HEADERS_DIRENT], [AH_CHECK_HEADERS($@)])
+define([AC_CHECK_MEMBERS], [AH_CHECK_MEMBERS($@)])
 define([AC_CHECK_LIB], [AH_CHECK_LIB($@)])
 define([AC_PROG_LEX], [AH_PROG_LEX($@)])
 define([AC_FUNC_ALLOCA], [AH_FUNC_ALLOCA($@)])

@@ -1,10 +1,16 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_CHECK_MEMBER, AC_CHECK_MEMBERS): New macros.
+	* autoheader.m4 (AH_CHECK_MEMBERS): New macro.
+	(epilogue): Hook AH_CHECK_MEMBERS on AC_CHECK_MEMBERS.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.m4 (AC_FUNC_ALLOCA): Rename from this ...
 	(AH_FUNC_ALLOCA): ... to this.  Includes all the needed templates.
 	(AC_C_CHAR_UNSIGNED): Rename from this ...
 	(AH_C_CHAR_UNSIGNED): ... to this.
-	
+
 1999-10-31  Ben Elliston  <bje@cygnus.com>
 
 	* Makefile.am (CLEANFILES): New explicit variable.
@@ -630,7 +636,7 @@
 	* config.guess: Eliminate the trailing dot if ${UNAME_RELEASE} is
 	1.4-<SOMETHING>. Fix for PR autoconf/22.
 
-1999-09-17  Akim Demaille  <akim@epita.fr>       
+1999-09-17  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Improve configure's --help.
 

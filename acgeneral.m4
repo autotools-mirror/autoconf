@@ -2034,6 +2034,52 @@ define(AC_HASBEEN,
 
 dnl ### Generic structure checks
 
+dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER
+dnl                 [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                 [, INCLUDES ]]])
+dnl ---------------------------------------------------------
+dnl AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
+dnl variables are not a valid argument.
+AC_DEFUN(AC_CHECK_MEMBER,
+[AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
+dnl Extract the aggregate name, and the member name
+AC_VAR_IF_INDIR([$1],
+[AC_FATAL([$0: requires manifest arguments])],
+[pushdef(AC_Member_Aggregate, [patsubst([$1], [\.[^.]*])])dnl
+pushdef(AC_Member_Member,     [patsubst([$1], [.*\.])])])dnl
+AC_CACHE_CHECK([for $1], ac_Member,
+[AC_TRY_COMPILE(m4_default([$4
+], [#include <stdio.h>
+#include <sys/types.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#endif
+]),
+ac_Member_Aggregate foo;
+foo.ac_Member_Member;,
+AC_VAR_SET(ac_Member, yes), AC_VAR_SET(ac_Member, no))])
+AC_SHELL_IFELSE(test AC_VAR_GET(ac_Member) = yes,
+                [$2], [$3])dnl
+popdef([AC_Member_Member])dnl
+popdef([AC_Member_Aggregate])dnl
+AC_VAR_POPDEF([ac_Member])dnl
+])dnl AC_CHECK_MEMBER
+
+dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER...
+dnl                 [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                 [, INCLUDES ]]])
+dnl ---------------------------------------------------------
+AC_DEFUN(AC_CHECK_MEMBERS,
+[m4_foreach([AC_Member], [$1],
+  [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member))
+$2],
+                 [$3],
+                 [$4])])])
+
+
 dnl Check if a particular structure member exists.
 dnl AC_C_STRUCT_MEMBER(VARIABLE, INCLUDES, TYPE, MEMBER)
 AC_DEFUN(AC_C_STRUCT_MEMBER,
