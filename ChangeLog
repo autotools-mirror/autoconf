@@ -1,3 +1,10 @@
+2001-06-12  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.in (%functions_macros %headers_macros)
+	(%identifiers_macros %programs_macros %makevars_macros): Remove,
+	replaced by...
+	(%macro): New.
+
 2001-06-11  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* aclang.m4 (AC_NO_EXECUTABLES): Override

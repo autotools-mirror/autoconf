@@ -27,19 +27,17 @@ use strict;
 
 use vars qw($autoconf $datadir $initfile $me $name $verbose
             @cfiles @makefiles @shfiles
-            %functions_macros %headers_macros %identifiers_macros
-            %programs_macros %makevars_macros %needed_macros
             %c_keywords %programs %headers %identifiers %makevars
             %libraries %functions %printed);
 
 ($me = $0) =~ s,.*/,,;
 $verbose = 0;
 
-# Reference these variables to pacify perl -w.
-%identifiers_macros = ();
-%makevars_macros = ();
-%programs_macros = ();
-%needed_macros = ();
+# $MACRO{KIND}{ITEM} is the macro to use to test ITEM.
+my %macro = ();
+
+# $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
+my %needed_macros = ();
 
 my @kinds = qw (functions headers identifiers programs makevars);
 
@@ -215,7 +213,7 @@ sub init_tables ()
 	    }
 	  my $word = $1;
 	  my $macro = $2 || $generic_macro{$kind};
-	  eval "\$$kind" . "_macros{\$word} = \$macro";
+	  $macro{$kind}{$word} = $macro;
 	}
       close(TABLE);
     }
@@ -289,7 +287,7 @@ sub scan_files ()
       print "shfiles:", join(" ", @shfiles), "\n";
 
       foreach my $class (qw (functions identifiers headers
-                       makevars libraries programs))
+			     makevars libraries programs))
 	{
 	  print "\n$class:\n";
 	  my $h = eval "\\\%$class";
@@ -442,11 +440,11 @@ sub output_programs ()
   print CONF "\n# Checks for programs.\n";
   foreach my $word (sort keys %programs)
     {
-      print_unique ($programs_macros{$word}, @{$programs{$word}});
+      print_unique ($macro{'programs'}{$word}, @{$programs{$word}});
     }
   foreach my $word (sort keys %makevars)
     {
-      print_unique ($makevars_macros{$word}, @{$makevars{$word}});
+      print_unique ($macro{'makevars'}{$word}, @{$makevars{$word}});
     }
 }
 
@@ -473,9 +471,9 @@ sub output_headers ()
   print CONF "\n# Checks for header files.\n";
   foreach my $word (sort keys %headers)
     {
-      if (defined $headers_macros{$word})
+      if (defined $macro{'headers'}{$word})
 	{
-	  if ($headers_macros{$word} eq 'AC_CHECK_HEADERS')
+	  if ($macro{'headers'}{$word} eq 'AC_CHECK_HEADERS')
 	    {
 	      push (@have_headers, $word);
 	      push (@{$needed_macros{"AC_CHECK_HEADERS([$word])"}},
@@ -483,7 +481,7 @@ sub output_headers ()
 	    }
 	  else
 	    {
-	      print_unique ($headers_macros{$word}, @{$headers{$word}});
+	      print_unique ($macro{'headers'}{$word}, @{$headers{$word}});
 	    }
 	}
     }
@@ -501,9 +499,9 @@ sub output_identifiers ()
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
   foreach my $word (sort keys %identifiers)
     {
-      if (defined $identifiers_macros{$word})
+      if (defined $macro{'identifiers'}{$word})
 	{
-	  if ($identifiers_macros{$word} eq 'AC_CHECK_TYPES')
+	  if ($macro{'identifiers'}{$word} eq 'AC_CHECK_TYPES')
 	    {
 	      push (@have_types, $word);
 	      push (@{$needed_macros{"AC_CHECK_TYPES([$word])"}},
@@ -511,7 +509,7 @@ sub output_identifiers ()
 	    }
 	  else
 	    {
-	      print_unique ($identifiers_macros{$word},
+	      print_unique ($macro{'identifiers'}{$word},
 			    @{$identifiers{$word}});
 	    }
 	}
@@ -530,9 +528,9 @@ sub output_functions ()
   print CONF "\n# Checks for library functions.\n";
   foreach my $word (sort keys %functions)
     {
-      if (defined $functions_macros{$word})
+      if (defined $macro{'functions'}{$word})
 	{
-	  if ($functions_macros{$word} eq 'AC_CHECK_FUNCS')
+	  if ($macro{'functions'}{$word} eq 'AC_CHECK_FUNCS')
 	    {
 	      push (@have_funcs, $word);
 	      push (@{$needed_macros{"AC_CHECK_FUNCS([$word])"}},
@@ -540,7 +538,7 @@ sub output_functions ()
 	    }
 	  else
 	    {
-	      print_unique ($functions_macros{$word},
+	      print_unique ($macro{'functions'}{$word},
 			    @{$functions{$word}});
 	    }
 	}
