@@ -47,9 +47,10 @@ html pdf:
 ## --------- ##
 
 pkgdata_DATA = INSTALL
-MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
+AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $(srcdir)/INSTALL \
+	  $(top_srcdir)/doc/install.texi
 
 maintainer-clean-local:
 	-rm -rf autom4te.cache
