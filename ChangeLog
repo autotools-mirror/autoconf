@@ -1,5 +1,12 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools) <awk>: `for' on
+	arrays is nondeterministic across AWK implementations.
+	* tests/tools.at (autoconf: forbidden tokens): Sort the error
+	message to guarantee its uniqueness.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	The SunOS' egrep fails to process properly the `egrep' invocations
 	of the test suite.
 

@@ -5920,6 +5920,25 @@ $ gawk 'function die () @{ print "Aaaaarg!"  @}
 Aaaaarg!
 @end example
 
+If you want your program to be deterministic, don't depend on @code{for}
+on arrays:
+
+@example
+$ cat for.awk
+END @{
+  arr["foo"] = 1
+  arr["bar"] = 1
+  for (i in arr)
+    print i
+@}
+$ gawk -f for.awk </dev/null
+foo
+bar
+$ nawk -f for.awk </dev/null
+bar
+foo
+@end example
+
 
 @item @command{cat}
 @c ----------------

@@ -186,16 +186,18 @@ AT_CLEANUP
 
 
 
-## ------------------ ##
-## Forbidden tokens.  ##
-## ------------------ ##
+## ---------------------------- ##
+## autoconf: forbidden tokens.  ##
+## ---------------------------- ##
 
-AT_SETUP([Forbidden tokens])
+AT_SETUP([autoconf: forbidden tokens])
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
 
 # This is allowed in spite of the name.
+# It is on purpose that we check the case where there are several
+# tokens on the same line.
 m4_pattern_allow([^AC_ALLOWED$])
 NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
 
@@ -212,17 +214,20 @@ BAC_DEFINE
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
-[[configure.in:5: error: undefined macro: NOT_AC_ALLOWED
-configure.in:5: error: undefined macro: AC_ALLOWED_NOT
-configure.in:8: error: undefined macro: FORBIDDEN
-configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
+# The output of autoconf is not deterministic here because it
+# uses `for (ind in array)'.  So be sure to have a unique representation.
+AT_CHECK([sort <err], 0,
+[[configure.in:12: error: undefined macro: AC_THIS_IS_INVALID
 configure.in:12: error: undefined macro: AZ_THIS_IS_INVALID_TOO
 configure.in:13: error: undefined macro: ALTHOUGH_AC_THIS_IS
+configure.in:5: error: undefined macro: AC_ALLOWED_NOT
+configure.in:5: error: undefined macro: NOT_AC_ALLOWED
+configure.in:8: error: undefined macro: FORBIDDEN
 configure:16: error: undefined macro: AC_OUTPUT
 ]])
 
-AT_CLEANUP(configure)
+AT_CLEANUP(configure err)
 
 
 
