@@ -1,3 +1,9 @@
+2000-03-17  Joseph S. Myers  <jsm28@cam.ac.uk>
+
+	* acspecific.m4 (AC_SYS_LONG_FILE_NAMES): Security fixes: create
+	the temp files in a private temporary directory, not directly in
+	TMPDIR.
+
 2000-03-17  Akim Demaille  <akim@epita.fr>
 
 	Install the IFS we need once for all.

@@ -3005,6 +3005,17 @@ AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
 
 # AC_SYS_LONG_FILE_NAMES
 # ----------------------
+# Security: use a temporary directory as the most portable way of
+# creating files in /tmp securely.  Removing them leaves a race
+# condition, set -C is not portably guaranteed to use O_EXCL, so still
+# leaves a race, and not all systems have the `mktemp' utility.  We
+# still test for existence first in case of broken systems where the
+# mkdir succeeds even when the directory exists.  Broken systems may
+# retain a race, but they probably have other security problems
+# anyway; this should be secure on well-behaved systems.  In any case,
+# use of `mktemp' is probably inappropriate here since it would fail in
+# attempting to create different file names differing after the 14th
+# character on file systems without long file names.
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,
 [ac_cv_sys_long_file_names=yes
@@ -3019,22 +3030,27 @@ AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 #      /var/tmp		likewise
 #      /usr/tmp		likewise
 if test -n "$TMPDIR" && test -d "$TMPDIR" && test -w "$TMPDIR"; then
-  ac_tmpdirs="$TMPDIR"
+  ac_tmpdirs=$TMPDIR
 else
   ac_tmpdirs='/tmp /var/tmp /usr/tmp'
 fi
 for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   test -d $ac_dir || continue
   test -w $ac_dir || continue # It is less confusing to not echo anything here.
-  (echo 1 >$ac_dir/conftest9012345) 2>/dev/null
-  (echo 2 >$ac_dir/conftest9012346) 2>/dev/null
-  ac_val=`cat $ac_dir/conftest9012345 2>/dev/null`
-  if test ! -f $ac_dir/conftest9012345 || test "$ac_val" != 1; then
+  ac_xdir=$ac_dir/cf$$
+  test -e $ac_xdir && continue
+  (umask 077 && mkdir $ac_xdir 2>/dev/null) || continue
+  ac_tf1=$ac_xdir/conftest9012345
+  ac_tf2=$ac_xdir/conftest9012346
+  (echo 1 >$ac_tf1) 2>/dev/null
+  (echo 2 >$ac_tf2) 2>/dev/null
+  ac_val=`cat $ac_tf1 2>/dev/null`
+  if test ! -f $ac_tf1 || test "$ac_val" != 1; then
     ac_cv_sys_long_file_names=no
-    rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
+    rm -rf $ac_xdir 2>/dev/null
     break
   fi
-  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
+  rm -rf $ac_xdir 2>/dev/null
 done])
 if test $ac_cv_sys_long_file_names = yes; then
   AC_DEFINE(HAVE_LONG_FILE_NAMES, 1,
