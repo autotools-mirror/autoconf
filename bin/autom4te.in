@@ -134,10 +134,10 @@ sub request ($%)
   foreach (@{$request{'macro'}})
     {
       if (! exists ${$req->macro}{$_})
-        {
-          ${$req->macro}{$_} = 1;
-          $req->valid (0);
-        }
+	{
+	  ${$req->macro}{$_} = 1;
+	  $req->valid (0);
+	}
     }
 
   # It would be great to have $REQ check that it up to date wrt its
@@ -864,7 +864,7 @@ sub trace_format_to_m4 ($)
 	}
       # $x, no separator given.
       elsif (s/^\$([fldn\$])//)
-        {
+	{
 	  $res .= $escape{$1};
 	}
       # $.x or ${sep}x.
@@ -888,14 +888,14 @@ sub trace_format_to_m4 ($)
 	    }
 	}
       elsif (/^(\$.)/)
-        {
+	{
 	  error "invalid escape: $1";
-        }
+	}
       else
-        {
+	{
 	  s/^([^\$]+)//;
 	  $res .= $1;
-        }
+	}
     }
 
   $_ = $underscore;
@@ -935,26 +935,26 @@ sub handle_traces ($$%)
   #                and no new line remains.
   define([_at_at],
   [at_ifelse([$#], [1], [],
-             [$#], [2], [[[$2]]],
-             [[[$2]][$1]$0([$1], at_shift(at_shift($@)))])])
+	     [$#], [2], [[[$2]]],
+	     [[[$2]][$1]$0([$1], at_shift(at_shift($@)))])])
 
   define([_at_percent],
   [at_ifelse([$#], [1], [],
-             [$#], [2], [at_flatten([$2])],
-             [at_flatten([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
+	     [$#], [2], [at_flatten([$2])],
+	     [at_flatten([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
 
   define([_at_star],
   [at_ifelse([$#], [1], [],
-             [$#], [2], [[$2]],
-             [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
+	     [$#], [2], [[$2]],
+	     [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
 
   # FLATTEN quotes its result.
   # Note that the second pattern is `newline, tab or space'.  Don't lose
   # the tab!
   define([at_flatten],
   [at_patsubst(at_patsubst(at_patsubst(at_patsubst([[[[$1]]]], [\\\n]),
-                                       [[\n\t ]+], [ ]),
-                           [ *\(.\)$], [\1]),
+				       [[\n\t ]+], [ ]),
+			   [ *\(.\)$], [\1]),
 	       [^ *\(.*\)], [[\1]])])
 
   define([at_args],    [at_shift(at_shift(at_shift(at_shift(at_shift($@)))))])

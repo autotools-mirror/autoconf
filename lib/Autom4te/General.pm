@@ -18,6 +18,21 @@
 
 package Autom4te::General;
 
+=head1 NAME
+
+Autom4te::General - general support functions for Autoconf and Automake
+
+=head1 SYNOPSIS
+
+  use Autom4te::General
+
+=head1 DESCRIPTION
+
+This perl module provides various general purpose support functions
+used in several executables of the Autoconf and Automake packages.
+
+=cut
+
 use 5.005_03;
 use Exporter;
 use File::Basename;
@@ -37,7 +52,7 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&backname &catfile &canonpath &debug &error
+  qw (&catfile &canonpath &contents &debug &error
       &file_name_is_absolute &find_configure_ac &find_file
       &getopt &mktmpdir &mtime
       &uniq &update_file &up_to_date_p &verbose &xsystem &xqx);
@@ -48,31 +63,87 @@ my @export_forward_subs =
 
 @EXPORT = (@export_vars, @export_subs, @export_forward_subs);
 
+
 # Variable we share with the main package.  Be sure to have a single
 # copy of them: using `my' together with multiple inclusion of this
 # package would introduce several copies.
+
+=head2 Global Variables
+
+=over 4
+
+=item C<$debug>
+
+Set this variable to 1 if debug messages should be enabled.  Debug
+messages are meant for developpers only, or when tracking down an
+incorrect execution.
+
+=cut
+
 use vars qw ($debug);
 $debug = 0;
 
-# Recreate all the files, or consider all the output files are obsolete.
+=item C<$force>
+
+Set this variable to 1 to recreate all the files, or to consider all
+the output files are obsolete.
+
+=cut
+
 use vars qw ($force);
 $force = undef;
+
+=item C<$help>
+
+Set to the help message associated to the option C<--help>.
+
+=cut
 
 use vars qw ($help);
 $help = undef;
 
+=item C<$me>
+
+The name of this application, as should be used in diagostic messages.
+
+=cut
+
 use vars qw ($me);
 $me = basename ($0);
+
+=item C<$tmp>
+
+The name of the temporary directory created by C<mktmpdir>.  Left
+C<undef> otherwise.
+
+=cut
 
 # Our tmp dir.
 use vars qw ($tmp);
 $tmp = undef;
 
+=item C<$verbose>
+
+Enable verbosity messages.  These messages are meant for ordinary
+users, and typically make explicit the steps being performed.
+
+=cut
+
 use vars qw ($verbose);
 $verbose = 0;
 
+=item C<$version>
+
+Set to the version message associated to the option C<--version>.
+
+=cut
+
 use vars qw ($version);
 $version = undef;
+
+=back
+
+=cut
 
 
 ## ------------ ##
@@ -86,11 +157,19 @@ sub verbose (@);
 ## END.  ##
 ## ----- ##
 
+=head2 Functions
+
+=over 4
+
+=item C<END>
+
+Filter Perl's exit codes, delete any temporary directory (unless
+C<$debug>), and exit nonzero whenever closing C<STDOUT> fails.
+
+=cut
 
 # END
 # ---
-# Filter Perl's exit codes, delete any temporary directory, and exit
-# nonzero whenever closing STDOUT fails.
 sub END
 {
   # $? contains the exit status we will return.
@@ -149,36 +228,13 @@ sub END
 ## Functions.  ##
 ## ----------- ##
 
+=item C<catfile ()>
 
-# $BACKPATH
-# &backname ($REL-DIR)
-# --------------------
-# If I `cd $REL-DIR', then to come back, I should `cd $BACKPATH'.
-# For instance `src/foo' => `../..'.
-# Works with non strictly increasing paths, i.e., `src/../lib' => `..'.
-sub backname ($)
-{
-  my ($file) = @_;
-  my $underscore = $_;
-  my @res;
+Wrapper around C<File::Spec->catfile>.  Concatenate one or more
+directory names and a filename to form a complete path ending with a
+filename.
 
-  foreach (split (/\//, $file))
-    {
-      next if $_ eq '.' || $_ eq '';
-      if ($_ eq '..')
-	{
-	  pop @res;
-	}
-      else
-	{
-	  push (@res, '..');
-	}
-    }
-
-  $_ = $underscore;
-  return canonpath (catfile (@res))
-}
-
+=cut
 
 # $FILE
 # &catfile (@COMPONENT)
@@ -190,6 +246,16 @@ sub catfile (@)
 }
 
 
+=item C<canonpath ()>
+
+Wrapper around C<File::Spec->canonpath>.  No physical check on the
+filesystem, but a logical cleanup of a path. On UNIX eliminates
+successive slashes and successive "/.".
+
+    $cpath = canonpath ($path) ;
+
+=cut
+
 # $FILE
 # &canonpath ($FILE)
 # ------------------
@@ -200,6 +266,34 @@ sub canonpath ($)
 }
 
 
+=item C<contents ($filename)>
+
+Return the contents of c<$filename>.  Exit with diagnostic on failure.
+
+=cut
+
+# &contents ($FILENAME)
+# ---------------------
+# Swallow the contents of file $FILENAME.
+sub contents ($)
+{
+  my ($file) = @_;
+  verbose "reading $file";
+  local $/;			# Turn on slurp-mode.
+  my $f = new Autom4te::XFile "< $file";
+  my $contents = $f->getline;
+  $f->close;
+  return $contents;
+}
+
+
+=item C<debug (@message)>
+
+If the debug mode is enabled (C<$debug> and C<$verbose>), report the
+C<@message> on C<STDERR>, signed with the name of the program.
+
+=cut
+
 # &debug(@MESSAGE)
 # ----------------
 # Messages displayed only if $DEBUG and $VERBOSE.
@@ -209,6 +303,14 @@ sub debug (@)
     if $verbose && $debug;
 }
 
+
+=item C<error (@message)>
+
+Report the C<@message> on C<STDERR>, signed with the name of the
+program, and exit with failure.  If the debug mode is enabled
+(C<$debug>), then in addition dump the call stack.
+
+=cut
 
 # &error (@MESSAGE)
 # -----------------
@@ -226,6 +328,13 @@ sub error (@)
 }
 
 
+=item C<file_name_is_absolute ($filename)>
+
+Wrapper around C<File::Spec->file_name_is_absolute>.  Return true iff
+C<$filename> is absolute.
+
+=cut
+
 # $BOOLEAN
 # &file_name_is_absolute ($FILE)
 # ------------------------------
@@ -235,6 +344,14 @@ sub file_name_is_absolute ($)
   return File::Spec->file_name_is_absolute ($file);
 }
 
+
+=item C<find_configure_ac ([$directory = C<.>])>
+
+Look for C<configure.ac> or C<configure.in> in the C<$directory> and
+return the one which should be used.  Report ambiguities to the user,
+but prefer C<configure.ac>.
+
+=cut
 
 # $CONFIGURE_AC
 # &find_configure_ac ([$DIRECTORY = `.'])
@@ -263,15 +380,22 @@ sub find_configure_ac (;$)
 }
 
 
+=item C<find_file ($filename, @include)>
+
+Return the first path for a C<$filename> in the C<include>s.
+
+We match exactly the behavior of GNU M4: first look in the current
+directory (which includes the case of absolute file names), and, if
+the file is not absolute, just fail.  Otherwise, look in C<@include>.
+
+If the file is flagged as optional (ends with C<?>), then return undef
+if absent, otherwise exit with error.
+
+=cut
+
 # $FILENAME
 # find_file ($FILENAME, @INCLUDE)
 # -------------------------------
-# We match exactly the behavior of GNU M4: first look in the current
-# directory (which includes the case of absolute file names), and, if
-# the file is not absolute, just fail.  Otherwise, look in @INCLUDE.
-#
-# If the file is flagged as optional (ends with `?'), then return undef
-# if absent.
 sub find_file ($@)
 {
   my ($filename, @include) = @_;
@@ -303,6 +427,17 @@ sub find_file ($@)
 }
 
 
+=item C<getopt (%option)>
+
+Wrapper around C<Getopt::Long>.  In addition to the user C<option>s,
+support C<-h>/C<--help>, C<-V>/C<--version>, C<-v>/C<--verbose>,
+C<-d>/C<--debug>, C<-f>/C<--force>.  Conform to the GNU Coding
+Standards for error messages.  Try to work around a weird behavior
+from C<Getopt::Long> to preserve C<-> as an C<@ARGV> instead of
+rejecting it as a broken option.
+
+=cut
+
 # getopt (%OPTION)
 # ----------------
 # Handle the %OPTION, plus all the common options.
@@ -317,10 +452,10 @@ sub getopt (%)
   my $stdin = grep /^-$/, @ARGV;
   @ARGV = grep !/^-$/, @ARGV;
   %option = ("h|help"     => sub { print $help; exit 0 },
-             "V|version"  => sub { print $version; exit 0 },
+	     "V|version"  => sub { print $version; exit 0 },
 
-             "v|verbose"    => \$verbose,
-             "d|debug"      => \$debug,
+	     "v|verbose"    => \$verbose,
+	     "d|debug"      => \$debug,
 	     'f|force'      => \$force,
 
 	     # User options last, so that they have precedence.
@@ -341,9 +476,16 @@ sub getopt (%)
 }
 
 
+=item C<mktmpdir ($signature)>
+
+Create a temporary directory which name is based on C<$signature>.
+Store its name in C<$tmp>.  C<END> is in charge of removing it, unless
+C<$debug>.
+
+=cut
+
 # mktmpdir ($SIGNATURE)
 # ---------------------
-# Create a temporary directory which name is based on $SIGNATURE.
 sub mktmpdir ($)
 {
   my ($signature) = @_;
@@ -351,7 +493,7 @@ sub mktmpdir ($)
 
   # If mktemp supports dirs, use it.
   $tmp = `(umask 077 &&
-           mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
+	   mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
   chomp $tmp;
 
   if (!$tmp || ! -d $tmp)
@@ -366,11 +508,16 @@ sub mktmpdir ($)
 }
 
 
+=item C<mtime ($file)>
+
+Return the mtime of C<$file>.  Missing files, or C<-> standing for
+C<STDIN> or C<STDOUT> are ``obsolete'', i.e., as old as possible.
+
+=cut
+
 # $MTIME
 # MTIME ($FILE)
 # -------------
-# Return the mtime of $FILE.  Missing files, or `-' standing for STDIN
-# or STDOUT are ``obsolete'', i.e., as old as possible.
 sub mtime ($)
 {
   my ($file) = @_;
@@ -385,10 +532,16 @@ sub mtime ($)
 }
 
 
+=item C<uniq (@list)>
+
+Return C<@list> with no duplicates, keeping only the first
+occurrences.
+
+=cut
+
 # @RES
 # uniq (@LIST)
 # ------------
-# Return LIST with no duplicates.
 sub uniq (@)
 {
   my @res = ();
@@ -405,10 +558,15 @@ sub uniq (@)
 }
 
 
+=item C<up_to_date_p ($file, @dep)>
+
+Is C<$file> more recent than C<@dep>?
+
+=cut
+
 # $BOOLEAN
-# &up_to_date_p ($FILE, @DEPS)
-# ----------------------------
-# Is $FILE more recent than @DEPS?
+# &up_to_date_p ($FILE, @DEP)
+# ---------------------------
 sub up_to_date_p ($@)
 {
   my ($file, @dep) = @_;
@@ -428,10 +586,16 @@ sub up_to_date_p ($@)
 }
 
 
+=item C<update_file ($from, $to)>
+
+Rename C<$from> as C<$to>, preserving C<$to> timestamp if it has not
+changed.  Recognize C<$to> = C<-> standing for C<STDIN>.  C<$from> is
+always removed/renamed.
+
+=cut
+
 # &update_file ($FROM, $TO)
 # -------------------------
-# Rename $FROM as $TO, preserving $TO timestamp if it has not changed.
-# Recognize `$TO = -' standing for stdin.  $FROM is always removed/renamed.
 sub update_file ($$)
 {
   my ($from, $to) = @_;
@@ -480,6 +644,15 @@ sub update_file ($$)
 }
 
 
+=item C<verbose (@message)>
+
+If the verbose mode is enabled (C<$verbose>), report the C<@message>
+on C<STDERR>, signed with the name of the program.  These messages are
+meant for ordinary users, and typically make explicit the steps being
+performed.
+
+=cut
+
 # verbose(@MESSAGE)
 # -----------------
 sub verbose (@)
@@ -488,9 +661,17 @@ sub verbose (@)
     if $verbose;
 }
 
+
+=item C<handle_exec_errors ($command)>
+
+Display an error message for C<$command>, based on the content of
+C<$?> and C<$!>. 
+
+=cut
+
+
 # handle_exec_errors ($COMMAND)
 # -----------------------------
-# Display an error message for $COMMAND, based on the content of $? and $!.
 sub handle_exec_errors ($)
 {
   my ($command) = @_;
@@ -526,9 +707,15 @@ sub handle_exec_errors ($)
     }
 }
 
+
+=item C<xqx ($command)>
+
+Same as C<qx> (but in scalar context), but fails on errors.
+
+=cut
+
 # xqx ($COMMAND)
 # --------------
-# Same as `qx' (but in scalar context), but fails on errors.
 sub xqx ($)
 {
   my ($command) = @_;
@@ -544,6 +731,13 @@ sub xqx ($)
 }
 
 
+=item C<xqx ($command)>
+
+Same as C<xsystem>, but fails on errors, and reports the C<$command>
+in verbose mode.
+
+=cut
+
 # xsystem ($COMMAND)
 # ------------------
 sub xsystem ($)
@@ -556,6 +750,20 @@ sub xsystem ($)
   handle_exec_errors $command
     if system $command;
 }
+
+=back
+
+=head1 SEE ALSO
+
+L<Autom4te::XFile>
+
+=head1 HISTORY
+
+Written by Alexandre Duret-Lutz E<lt>F<adl@gnu.org>E<gt> and Akim
+Demaille E<lt>F<akim@freefriends.org>E<gt>.
+
+=cut
+
 
 
 1; # for require

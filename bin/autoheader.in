@@ -150,7 +150,7 @@ if ($config_h_top || $config_h_bot || $acconfig_h)
     \`acconfig.h\':
 
       AC_DEFINE([NEED_MAIN], 1,
-                [Define if a function \`main\' is needed.])
+		[Define if a function \`main\' is needed.])
 
     More sophisticated templates can also be produced, see the
     documentation.

@@ -1,3 +1,18 @@
+2003-06-02  Akim Demaille  <akim@epita.fr>
+
+	* bin/autom4te.in, bin/autoscan.in, bin/autoheader.in: White space
+	changes.
+	* lib/Autom4te/General.pm (&backname): Remove, no longer used by
+	Autoconf nor Automake.
+	(&contents): New, from Automake.
+	PODify.
+
+-            and Paul Eggert <eggert@twinsun.com>
++	    and Paul Eggert <eggert@twinsun.com>
+ 
+	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
+	Remove `#include <stdlib.h>' from the list; we should never
+
 2003-05-28  Paul Eggert  <eggert@twinsun.com>
 
 	* NEWS, doc/autoconf.texi (Particular Functions),
