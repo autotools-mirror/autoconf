@@ -787,10 +787,7 @@ AC_DEFUN(AC_FUNC_FNMATCH,
 ac_cv_func_fnmatch=yes, ac_cv_func_fnmatch=no, ac_cv_func_fnmatch=no)])
 if test $ac_cv_func_fnmatch = yes; then
   AC_DEFINE(HAVE_FNMATCH)
-else
-  LIBOBJS="$LIBOBJS fnmatch.o"
 fi
-AC_SUBST(LIBOBJS)dnl
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
@@ -1746,7 +1743,9 @@ EOF
         ac_im_usrlibdir=$ac_im_libdir; break
       fi
     done
-    # Screen out bogus values from the imake configuration.
+    # Screen out bogus values from the imake configuration.  They are
+    # bogus both because they are the default anyway, and because
+    # using them would break gcc on systems where it needs fixed includes.
     case "$ac_im_incroot" in
 	/usr/include) ;;
 	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes="$ac_im_incroot" ;;
@@ -1773,6 +1772,7 @@ AC_TRY_CPP([#include <$x_direct_test_include>],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
 [# Look for the header file in a standard set of common directories.
+# Check X11 before X11Rn because it is often a symlink to the current release.
   for ac_dir in               \
     /usr/X11/include          \
     /usr/X11R6/include        \
@@ -1832,6 +1832,7 @@ AC_TRY_LINK(, [${x_direct_test_function}()],
 ac_x_libraries=],
 [LIBS="$ac_save_LIBS"
 # First see if replacing the include by lib works.
+# Check X11 before X11Rn because it is often a symlink to the current release.
 for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
     /usr/X11/lib          \
     /usr/X11R6/lib        \
@@ -1863,12 +1864,13 @@ for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
     /usr/athena/lib       \
     /usr/local/x11r5/lib  \
     /usr/lpp/Xamples/lib  \
+    /lib/usr/lib/X11	  \
                           \
     /usr/openwin/lib      \
     /usr/openwin/share/lib \
     ; \
 do
-dnl XXX Shouldn't this really use AC_TRY_LINK to be portable & robust??
+dnl Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
       ac_x_libraries=$ac_dir
@@ -1891,15 +1893,12 @@ else
     X_CFLAGS="$X_CFLAGS -I$x_includes"
   fi
 
-  # It would be nice to have a more robust check for the -R ld option than
-  # just checking for Solaris.
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
     X_LIBS="$X_LIBS -L$x_libraries"
-    if test "`(uname) 2>/dev/null`" = SunOS &&
-      uname -r | grep '^5' >/dev/null; then
-      X_LIBS="$X_LIBS -R $x_libraries"
-    fi
+    # For Solaris; some versions of Sun CC require a space after -R and
+    # others require no space, so we take a different approach.
+    LD_RUN_PATH="$x_libraries"; export LD_RUN_PATH
   fi
 
   # Check for libraries that X11R6 Xt/Xaw programs need.

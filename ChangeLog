@@ -1,3 +1,10 @@
+Sat Nov  9 01:54:04 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+        * acspecific.m4 (AC_PATH_X_DIRECT): Try /lib/usr/lib/X11 for A/UX.
+        From Guillermo Gomez <gomez@mi.uni-erlangen.de>.
+	(AC_PATH_XTRA): Replace -R with LD_RUN_PATH in the
+	Solaris kludge.  From Paul Eggert <eggert@twinsun.com>.
+
 Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Search for /usr/X11 before

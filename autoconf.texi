@@ -1830,10 +1830,8 @@ return value for an error indicator.
 @defmac AC_FUNC_FNMATCH
 @maindex FUNC_FNMATCH
 @ovindex LIBOBJS
-If the @code{fnmatch} function is not available, or does not work (like
-the one on SunOS 5.4), add @samp{fnmatch.o} to output variable
-@code{LIBOBJS}.  If a working @code{fnmatch} is found, define
-@code{HAVE_FNMATCH}.
+If the @code{fnmatch} function is available and works (unlike the one on
+SunOS 5.4), define @code{HAVE_FNMATCH}.
 @end defmac
 
 @defmac AC_FUNC_GETLOADAVG
