@@ -153,7 +153,8 @@ esac
 run_m4="$M4 --reload $AC_MACRODIR/autoheader.m4f $use_localdir"
 
 # Trap on 0 to stop playing with `rm'.
-$debug || trap "rm -f $ah_base*" 0 1 2 15
+$debug || trap 'ah_status=$?; rm -f $ah_base* && exit $ah_status' 0
+$debug || trap exit 1 2 13 15
 
 # Extract assignments of `ah_verbatim_SYMBOL' from the modified
 # autoconf processing of the input file.  The sed hair is necessary to
@@ -169,7 +170,7 @@ sed -n -e '
 		b again
 	}' $ah_base.exp >$ah_base.decls
 . $ah_base.decls
-$debug || rm $ah_base.exp $ah_base.decls
+$debug || rm -f $ah_base.exp $ah_base.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
