@@ -152,7 +152,7 @@ EOF
 		echo pyramid-pyramid-bsd
 	fi
 	exit 0 ;;
-    NILE:*:*:dcosx)
+    NILE*:*:*:dcosx)
 	echo pyramid-pyramid-svr4
 	exit 0 ;;
     sun4H:SunOS:5.*:*)

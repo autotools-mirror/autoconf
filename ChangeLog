@@ -1,5 +1,8 @@
 1999-01-23  Ben Elliston  <bje@cygnus.com>
 
+	* config.guess: Catch more NILE system models. Contributed by
+	Akim Demaille <demaille@inf.enst.fr> and probably Graham Jenkins.
+
 	* autoheader.sh: Force $tmpout to close to avoid Windows file
 	sharing conflicts. From Mark Elbrecht <snowball3@usa.net>.
 
