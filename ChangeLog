@@ -1,5 +1,10 @@
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (parse_args): There can be several invocations
+	of --language now.
+
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Top): Wrap in @ifnottex.
 
 2001-09-23  Akim Demaille  <akim@epita.fr>

@@ -461,20 +461,21 @@ sub parse_args ()
   # We want to look for the early options, which should not be found
   # in the configuration file.  Prepend to the user arguments.
   # Perform this repeatedly so that we can use --language in language
-  # definitions.
-  my $language;
+  # definitions.  Beware that there can be several --language
+  # invocations.
+  my @language;
   do {
-    $language = undef;
+    @language = ();
     Getopt::Long::Configure ("pass_through");
-    getopt ("l|language=s" => \$language);
+    getopt ("l|language=s" => \@language);
 
-    if ($language)
+    foreach (@language)
       {
-	die "$me: unknown language: $language\n"
-	  unless exists $language{lc $language};
-	unshift @ARGV, @{$language{lc $language}};
+	die "$me: unknown language: $_\n"
+	  unless exists $language{lc $_};
+	unshift @ARGV, @{$language{lc $_}};
       }
-  } while $language;
+  } while @language;
 
   debug "arguments: @ARGV\n";
 
