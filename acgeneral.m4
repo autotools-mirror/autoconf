@@ -617,9 +617,20 @@ popdef([AC_Prefix])dnl
 
 
 
-## ---------------- ##
-## Initialization.  ##
-## ---------------- ##
+
+## ---------------------------------------------- ##
+## Information on the package being Autoconf'ed.  ##
+## ---------------------------------------------- ##
+
+
+# It is suggested that the macros in this section appear before
+# AC_INIT in `configure.in'.  Nevertheless, this is just stylistic,
+# and from the implementation point of, AC_INIT *must* be expanded
+# beforehand: it puts data in diversions which must appear before the
+# data provided by the macros of this section.
+
+# The solution is to require AC_INIT in each of these macros.  AC_INIT
+# has the needed magic so that it can't be expanded twice.
 
 
 
@@ -654,6 +665,72 @@ define([_AC_COPYRIGHT_SEPARATOR],
 
 ])dnl
 ])# _AC_INIT_COPYRIGHT
+
+
+# AC_REVISION(REVISION-INFO)
+# --------------------------
+# The quote in the comment below is just to cope with font-lock-mode
+# which sees the opening of a string.
+AC_DEFUN(AC_REVISION,
+[AC_REQUIRE([AC_INIT])dnl
+AC_DIVERT([BINSH], [@%:@ From configure.in translit([$1], $")])dnl "
+])
+
+
+
+
+## ---------------------------------------- ##
+## Requirements over the Autoconf version.  ##
+## ---------------------------------------- ##
+
+
+# _AC_VERSION_UNLETTER(VERSION)
+# -----------------------------
+# Normalize beta version numbers with letters to numbers only for comparison.
+#
+#   Nl -> (N+1).-1.(l#)
+#
+#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
+# This macro is absolutely not robust to active macro, it expects
+# reasonable version numbers and is valid up to `z', no double letters.
+define(_AC_VERSION_UNLETTER,
+[translit(patsubst(patsubst(patsubst([$1],
+                                     [\([0-9]+\)\([abcdefghi]\)],
+                                     [m4_eval(\1 + 1).-1.\2]),
+                            [\([0-9]+\)\([jklmnopqrs]\)],
+                            [m4_eval(\1 + 1).-1.1\2]),
+          [\([0-9]+\)\([tuvwxyz]\)],
+          [m4_eval(\1 + 1).-1.2\2]),
+          abcdefghijklmnopqrstuvwxyz,
+          12345678901234567890123456)])
+
+
+# _AC_VERSION_COMPARE(VERSION-1, VERSION-2)
+# -----------------------------------------
+# Compare the two version numbers and expand into
+#  -1 if VERSION-1 < VERSION-2
+#   0 if           =
+#   1 if           >
+define(_AC_VERSION_COMPARE,
+[m4_list_cmp((m4_split(_AC_VERSION_UNLETTER([$1]), [\.])),
+             (m4_split(_AC_VERSION_UNLETTER([$2]), [\.])))])
+
+
+# AC_PREREQ(VERSION)
+# ------------------
+# Complain and exit if the Autoconf version is less than VERSION.
+define(AC_PREREQ,
+[ifelse(_AC_VERSION_COMPARE([AC_ACVERSION], [$1]), -1,
+       [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
+
+
+
+
+
+
+## ---------------- ##
+## Initialization.  ##
+## ---------------- ##
 
 
 # _AC_INIT_DEFAULTS
@@ -1461,61 +1538,6 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 ])# AC_ARG_PROGRAM
 
-
-
-## ----------------- ##
-## Version numbers.  ##
-## ----------------- ##
-
-
-# AC_REVISION(REVISION-INFO)
-# --------------------------
-# The quote in the comment below is just to cope with font-lock-mode
-# which sees the opening of a string.
-AC_DEFUN(AC_REVISION,
-[AC_REQUIRE([AC_INIT])dnl
-AC_DIVERT([BINSH], [@%:@ From configure.in translit([$1], $")])dnl "
-])
-
-
-# _AC_VERSION_UNLETTER(VERSION)
-# -----------------------------
-# Normalize beta version numbers with letters to numbers only for comparison.
-#
-#   Nl -> (N+1).-1.(l#)
-#
-#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
-# This macro is absolutely not robust to active macro, it expects
-# reasonable version numbers and is valid up to `z', no double letters.
-define(_AC_VERSION_UNLETTER,
-[translit(patsubst(patsubst(patsubst([$1],
-                                     [\([0-9]+\)\([abcdefghi]\)],
-                                     [m4_eval(\1 + 1).-1.\2]),
-                            [\([0-9]+\)\([jklmnopqrs]\)],
-                            [m4_eval(\1 + 1).-1.1\2]),
-          [\([0-9]+\)\([tuvwxyz]\)],
-          [m4_eval(\1 + 1).-1.2\2]),
-          abcdefghijklmnopqrstuvwxyz,
-          12345678901234567890123456)])
-
-
-# _AC_VERSION_COMPARE(VERSION-1, VERSION-2)
-# -----------------------------------------
-# Compare the two version numbers and expand into
-#  -1 if VERSION-1 < VERSION-2
-#   0 if           =
-#   1 if           >
-define(_AC_VERSION_COMPARE,
-[m4_list_cmp((m4_split(_AC_VERSION_UNLETTER([$1]), [\.])),
-             (m4_split(_AC_VERSION_UNLETTER([$2]), [\.])))])
-
-
-# AC_PREREQ(VERSION)
-# ------------------
-# Complain and exit if the Autoconf version is less than VERSION.
-define(AC_PREREQ,
-[ifelse(_AC_VERSION_COMPARE([AC_ACVERSION], [$1]), -1,
-       [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
 
 
 
