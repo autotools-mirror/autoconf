@@ -6430,18 +6430,34 @@ M4sugar''.
 @node Redefined M4 Macros, Forbidden Patterns, Programming in M4sugar, Programming in M4sugar
 @subsection Redefined M4 Macros
 
-All the M4 native macros are moved in the @samp{m4_} pseudo-namespace,
-e.g., M4sugar renames @code{define} as @code{m4_define} etc.  There is
-one exception: @code{dnl} kept its original name, and no @code{m4_dnl}
-is defined.
+With a few exceptions, all the M4 native macros are moved in the
+@samp{m4_} pseudo-namespace, e.g., M4sugar renames @code{define} as
+@code{m4_define} etc.
 
-M4sugar redefines some M4 macros, and made them slightly incompatible
-with their native equivalent.
+Some M4 macros are redefined, and are slightly incompatible with their
+native equivalent.
+
+@defmac dnl
+@msindex dnl
+This macro kept its original name: no @code{m4_dnl} is defined.
+@end defmac
 
 @defmac m4_defn (@var{macro})
 @msindex defn
 Contrary to the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
+@end defmac
+
+@defmac m4_exit (@var{exit-status})
+@msindex m4_exit
+This macro corresponds to @code{m4exit}.
+@end defmac
+
+@defmac m4_if (@var{comment})
+@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @ovar{not-equal})
+@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, ...)
+@msindex m4_if
+This macro corresponds to @code{ifelse}.
 @end defmac
 
 @defmac m4_undefine (@var{macro})
@@ -6461,6 +6477,24 @@ to recover the behavior of the builtin.
 @msindex defn
 Contrary to the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
+@end defmac
+
+@defmac m4_wrap (@var{text})
+@msindex m4_wrap
+This macro corresponds to @code{m4wrap}.
+
+You are encouraged to end @var{text} with @samp{[]}, so that there are
+no risks that two consecutive invocations of @code{m4_wrap} result in an
+unexpected pasting of tokens, as in
+
+@example
+m4_define([foo], [Foo])
+m4_define([bar], [Bar])
+m4_define([foobar], [FOOBAR])
+m4_wrap([bar])
+m4_wrap([foo])
+@result{}FOOBAR
+@end example
 @end defmac
 
 @node Forbidden Patterns,  , Redefined M4 Macros, Programming in M4sugar

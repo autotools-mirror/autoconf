@@ -1,5 +1,10 @@
 2001-08-03  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Redefined M4 Macros): Document m4_exit,
+	m4_if, and m4_wrap.
+
+2001-08-03  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_init): Also forbid `_m4_*' tokens.
 	(m4_divert_pop): Dump the whole diversion stack when a diversion
 	mismatch happens.
