@@ -436,11 +436,15 @@ test \$exitcode = 0") || {
 }
 
 
-case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
-  *c*,-n*) ECHO_N= ECHO_C='
-' ECHO_T='	' ;;
-  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
-  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+ECHO_C= ECHO_N= ECHO_T=
+case `echo -n x` in
+-n*)
+  case `echo 'x\c'` in
+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *)   ECHO_C='\c';;
+  esac;;
+*)
+  ECHO_N='-n';;
 esac
 
 if expr a : '\(a\)' >/dev/null 2>&1; then
@@ -505,12 +509,12 @@ IFS=" 	$as_nl"
 $as_unset CDPATH
 
 
+exec 7<&0 </dev/null 6>&1
+
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
-
-exec 6>&1
 
 #
 # Initializations.
@@ -2548,7 +2552,7 @@ do
     { test -f "$ac_path_GREP" && $as_executable_p "$ac_path_GREP"; } || continue
     # Check for GNU ac_path_GREP and select it if it is found.
   # Check for GNU $ac_path_GREP
-case `"$ac_path_GREP" --version </dev/null 2>&1` in
+case `"$ac_path_GREP" --version 2>&1` in
 *GNU*)
   ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
 *)
@@ -2920,11 +2924,15 @@ echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;
 }
 
 
-case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
-  *c*,-n*) ECHO_N= ECHO_C='
-' ECHO_T='	' ;;
-  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
-  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
+ECHO_C= ECHO_N= ECHO_T=
+case `echo -n x` in
+-n*)
+  case `echo 'x\c'` in
+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  *)   ECHO_C='\c';;
+  esac;;
+*)
+  ECHO_N='-n';;
 esac
 
 if expr a : '\(a\)' >/dev/null 2>&1; then
