@@ -210,6 +210,7 @@ Existing Tests
 
 * Common Behavior::             Macros' standard schemes
 * Alternative Programs::        Selecting between alternative programs
+* Files::                       Checking for the existence of files
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
 * Header Files::                Header files that might be missing
@@ -2732,6 +2733,7 @@ Symbols}, for how to get those symbol definitions into your program.
 @menu
 * Common Behavior::             Macros' standard schemes
 * Alternative Programs::        Selecting between alternative programs
+* Files::                       Checking for the existence of files
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
 * Header Files::                Header files that might be missing
@@ -2856,7 +2858,7 @@ For instance, on some systems @file{string.h} and @file{strings.h} both
 exist, but conflict.  Then @code{HAVE_STRING_H} will be defined, but
 @code{HAVE_STRINGS_H} won't.
 
-@node Alternative Programs, Libraries, Common Behavior, Existing Tests
+@node Alternative Programs, Files, Common Behavior, Existing Tests
 @section Alternative Programs
 @cindex Programs, checking
 
@@ -3100,7 +3102,9 @@ path of the program if it is found.
 @end defmac
 
 
-@c FIXME: Not the proper place for these guys.
+@node Files, Libraries, Alternative Programs, Existing Tests
+@section Files
+@cindex File, checking
 
 You might also need to check for the existence of files.  Before using
 these macros, ask yourself whether a run time test might not be a better
@@ -3122,7 +3126,7 @@ for each file found.
 @end defmac
 
 
-@node Libraries, Library Functions, Alternative Programs, Existing Tests
+@node Libraries, Library Functions, Files, Existing Tests
 @section Library Files
 @cindex Library, checking
 
