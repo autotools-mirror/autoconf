@@ -1377,7 +1377,7 @@ commands are run each time a @var{tag} request is given to
 @item init-cmds
 They are output via an @emph{unquoted} here-doc.  As a consequence
 @samp{$var} will be output as the value of @var{var}.  This is typically
-used by @file{configure} to give @file{config,.status} some variables it
+used by @file{configure} to give @file{config.status} some variables it
 needs to run the @var{cmds}.  At the difference of @var{cmds}, the
 @var{init-cmds} are always run.
 @end table
