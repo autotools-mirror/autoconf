@@ -691,7 +691,7 @@ AC_WARNING([$0:
         your code should no longer depend upon `INT_16_BITS', but upon
         `SIZEOF_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when you
         adjust the code.])dnl
-test $ac_check_sizeof_int = 2 &&
+test $ac_cv_sizeof_int = 2 &&
   AC_DEFINE(INT_16_BITS, 1,
             [Define if `sizeof (int)' = 2.  Obsolete, use `SIZEOF_INT'.])
 ])
@@ -705,7 +705,7 @@ AC_WARNING([$0:
         your code should no longer depend upon `LONG_64_BITS', but upon
         `SIZEOF_LONG_INT'.  Remove this AC_WARNING and the `AC_DEFINE' when
         you adjust the code.])dnl
-test $ac_check_sizeof_long_int = 8 &&
+test $ac_cv_sizeof_long_int = 8 &&
   AC_DEFINE(LONG_64_BITS, 1,
             [Define if `sizeof (long int)' = 8.  Obsolete, use
              `SIZEOF_LONG_INT'.])

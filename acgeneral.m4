@@ -4631,18 +4631,25 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that
   # updating is atomic, and doesn't need trapping.
+
+  # First look for the input files in the build tree, otherwise in the
+  # src tree.
   ac_file_inputs=`IFS=:
-                  for f in $ac_file_in; do
-                    case $f in
-                    -) echo $tmp/stdin ;;
-                    *) echo $ac_given_srcdir/$f ;;
-                    esac
-                  done`
-  for ac_file_input in $ac_file_inputs;
-  do
-    test -f "$ac_file_input" ||
-        AC_MSG_ERROR(cannot find input file `$ac_file_input')
-  done
+     for f in $ac_file_in; do
+       case $f in
+       -) echo $tmp/stdin ;;
+       *) if test -f "$f"; then
+	    # Build tree or absolute
+            echo $f
+          elif test -f "$ac_given_srcdir/$f"; then
+            # Source tree
+            echo $ac_given_srcdir/$f
+          else
+            # /dev/null tree
+            AC_MSG_ERROR([cannot find input file \\`$f'])
+          fi;;
+       esac
+     done`
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
@@ -4767,18 +4774,24 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
 
   test x"$ac_file" != x- && echo creating $ac_file
 
+  # First look for the input files in the build tree, otherwise in the
+  # src tree.
   ac_file_inputs=`IFS=:
-                  for f in $ac_file_in; do
-                    case $f in
-                    -) echo $tmp/stdin ;;
-                    *) echo $ac_given_srcdir/$f ;;
-                    esac
-                  done`
-  for ac_file_input in $ac_file_inputs;
-  do
-    test -f "$ac_file_input" ||
-        AC_MSG_ERROR(cannot find input file `$ac_file_input')
-  done
+     for f in $ac_file_in; do
+       case $f in
+       -) echo $tmp/stdin ;;
+       *) if test -f "$f"; then
+            # Build tree or absolute
+            echo $f
+          elif test -f "$ac_given_srcdir/$f"; then
+            # Source tree
+            echo $ac_given_srcdir/$f
+          else
+            # /dev/null tree
+            AC_MSG_ERROR([cannot find input file \\`$f'])
+          fi;;
+       esac
+     done`
   # Remove the trailing spaces.
   sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 

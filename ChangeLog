@@ -1,3 +1,13 @@
+2000-07-11  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_INT_16_BITS, AC_LONG_64_BITS): s/ac_check/ac_cv/.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS): Look for
+	the input files first in $builddir, then $srcdir.
+	Suggested by Lars J. Aas, designed by Alexandre Oliva.
+
 2000-07-10  Lars J. Aas  <larsa@sim.no>
 
 	* acgeneral.m4 (_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS):
