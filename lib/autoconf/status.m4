@@ -777,10 +777,11 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
       *) ac_rel_source=$ac_top_builddir$srcdir/$ac_source ;;
   esac
 
-  # Make a symlink if possible; otherwise try a hard link.
+  # Try a symlink, then a hard link, then a copy.
   ln -s $ac_rel_source $ac_dest 2>/dev/null ||
-    ln $srcdir/$ac_source $ac_dest ||
-    AC_MSG_ERROR([cannot link $ac_dest to $srcdir/$ac_source])
+    ln $srcdir/$ac_source $ac_dest 2>/dev/null ||
+    cp -p $srcdir/$ac_source $ac_dest ||
+    AC_MSG_ERROR([cannot link or copy $srcdir/$ac_source to $ac_dest])
 m4_ifset([AC_LIST_LINKS_COMMANDS],
 [  # Run the commands associated with the file.
   case $ac_file in
