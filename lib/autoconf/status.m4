@@ -1516,7 +1516,10 @@ m4_ifset([AC_LIST_COMMANDS],
 ])dnl
 fi
 
-AS_TMPDIR(cs)
+# Have a temporary directory for convenience.  Make it in the build tree
+# simply because there is no reason to put it here, and in addition,
+# creating and moving files from /tmp can sometimes cause problems.
+AS_TMPDIR([confstat], [.])
 
 _ACEOF
 ])[]dnl m4_ifval

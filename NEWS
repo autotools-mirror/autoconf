@@ -5,6 +5,15 @@
 
 - Portability of the Autoconf package to Solaris.
 
+- Spurious warnings caused by config.status.
+  This bug is benign, but painful: on some systems (typically
+  FreeBSD), warnings such as:
+
+     config.status: creating Makefile
+     mv: Makefile: set owner/group (was: 1357/0): Operation not permitted
+
+  could be issued.  This is fixed.
+
 * Major changes in Autoconf 2.54
 
   Released September 13th, 2002.

@@ -1,5 +1,15 @@
 2002-09-27  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): Some about mv
+	from /tmp.
+	Thanks to Bill Moseley and Paul Eggert.
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): $2 is the directory into which
+	the tmpdir must be created.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Have the tmp
+	dir be in the build tree, instead of $TMPDIR.
+
+2002-09-27  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in: Improve the comments.
 	(&parse_args): Drop obsolete undocumented options.
 	(&output_kind): Output warnings.

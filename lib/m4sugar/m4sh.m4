@@ -789,11 +789,11 @@ m4_define([AS_LITERAL_IF],
            [$3], [$2])])
 
 
-# AS_TMPDIR(PREFIX)
-# -----------------
-# Create as safely as possible a temporary directory which name is
-# inspired by PREFIX (should be 2-4 chars max), and set trap
-# mechanisms to remove it.
+# AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
+# -------------------------------------------------
+# Create as safely as possible a temporary directory in DIRECTORY
+# which name is inspired by PREFIX (should be 2-4 chars max), and set
+# trap mechanisms to remove it.
 m4_define([AS_TMPDIR],
 [# Create a temporary directory, and hook for its removal unless debugging.
 $debug ||
@@ -803,17 +803,17 @@ $debug ||
 }
 
 # Create a (secure) tmp directory for tmp files.
-: ${TMPDIR=/tmp}
+m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
-  tmp=`(umask 077 && mktemp -d -q "$TMPDIR/$1XXXXXX") 2>/dev/null` &&
+  tmp=`(umask 077 && mktemp -d -q "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {
-  tmp=$TMPDIR/$1$$-$RANDOM
+  tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
   (umask 077 && mkdir $tmp)
 } ||
 {
-   echo "$me: cannot create a temporary directory in $TMPDIR" >&2
+   echo "$me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])" >&2
    AS_EXIT
 }dnl
 ])# AS_TMPDIR

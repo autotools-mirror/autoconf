@@ -10198,7 +10198,6 @@ None of @command{mkdir}'s options are portable.  Instead of
 @samp{mkdir -p @var{filename}}, you should use use
 @code{AS_MKDIR_P(@var{filename})} (@pxref{Programming in M4sh}).
 
-
 @item @command{mv}
 @c ---------------
 @prindex @command{mv}
@@ -10209,6 +10208,31 @@ Moving individual files between file systems is portable (it was in V6),
 but it is not always atomic: when doing @samp{mv new existing}, there's
 a critical section where neither the old nor the new version of
 @file{existing} actually exists.
+
+Be aware that moving files from @file{/tmp} can sometimes cause
+undesirable (but perfectly valid) warnings, even if you created these
+files.  On some systems, creating the file in @file{/tmp} is setting a
+guid @code{wheel} which you may not be part of.  So the file is copied,
+and then the @code{chgrp} fails:
+
+@example
+$ @kbd{touch /tmp/foo}
+$ @kbd{mv /tmp/foo .}
+@error{}mv: ./foo: set owner/group (was: 3830/0): Operation not permitted
+$ @kbd{echo $?}
+0
+$ @kbd{ls foo}
+foo
+@end example
+
+@noindent
+This behavior conforms to @acronym{POSIX}:
+
+@quotation
+If the duplication of the file characteristics fails for any reason, mv
+shall write a diagnostic message to standard error, but this failure
+shall not cause mv to modify its exit status.''
+@end quotation
 
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
