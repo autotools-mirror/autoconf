@@ -538,14 +538,14 @@ m4_case([$4],
         ignore, [(echo stderr:; cat at-stderr) >&5],
         experr, [$at_diff experr at-stderr >&5 || at_failed=:],
         [],     [$at_diff $at_devnull  at-stderr >&5 || at_failed=:],
-        [echo $at_n "AS_ESCAPE([$4])$at_c" | $at_diff - at-stderr >&5 || at_failed=:])
+        [echo >>at-stderr; echo "AS_ESCAPE([$4])" | $at_diff - at-stderr >&5 || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
         stdout, [(echo stdout:; tee stdout <at-stdout) >&5],
         ignore, [(echo stdout:; cat at-stdout) >&5],
         expout, [$at_diff expout at-stdout >&5 || at_failed=:],
         [],     [$at_diff $at_devnull  at-stdout >&5 || at_failed=:],
-        [echo $at_n "AS_ESCAPE([$3])$at_c" | $at_diff - at-stdout >&5 || at_failed=:])
+        [echo >>at-stdout; echo "AS_ESCAPE([$3])" | $at_diff - at-stdout >&5 || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],
