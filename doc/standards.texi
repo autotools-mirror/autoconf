@@ -2,8 +2,8 @@
 @c %**start of header
 @setfilename standards.info
 @settitle GNU Coding Standards
-@c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 18 February 1998
+@c This date is automagically updated when you save this file:
+@set lastupdate March 13, 1998
 @c %**end of header
 
 @ifinfo
@@ -28,7 +28,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -59,7 +59,7 @@ by the Free Software Foundation.
 @page
 
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -3085,3 +3085,9 @@ other files to get.
 @contents
 
 @bye
+Local variables:
+update-date-leading-regexp: "@c This date is automagically updated when you save this file:\n@set lastupdate "
+update-date-trailing-regexp: ""
+eval: (load "/gd/gnuorg/update-date.el")
+eval: (add-hook 'write-file-hooks 'update-date)
+End:
