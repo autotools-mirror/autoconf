@@ -105,6 +105,7 @@ changequote([,])dnl
 build=NONE
 exec_prefix=
 host=NONE
+nonopt=NONE
 norecursion=
 prefix=
 program_prefix=
@@ -287,6 +288,10 @@ changequote(,)dnl
 changequote([,])dnl
       AC_WARN($ac_option: invalid host type)
     fi
+    if test "x$nonopt" -ne xNONE; then
+      AC_WARN(can only configure for one host and one target at a time)
+    fi
+    nonopt="$ac_option"
     ;;
 
   esac
