@@ -64,7 +64,7 @@ PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
 standards_texi = @standards_texi@
 
-AUTOMAKE_OPTIONS = check-news 1.4
+AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
 SUBDIRS = . m4 man tests
 
@@ -121,10 +121,10 @@ TEXINFOS = autoconf.texi standards.texi
 DATA =  $(pkgdata_DATA)
 
 DIST_COMMON =  README $(autoconf_TEXINFOS) $(standards_TEXINFOS) AUTHORS \
-COPYING ChangeLog INSTALL Makefile.am Makefile.in NEWS THANKS TODO \
-aclocal.m4 acversion.m4.in config.guess config.sub configure \
-configure.in install-sh mdate-sh missing mkinstalldirs stamp-vti \
-texinfo.tex version.texi
+COPYING ChangeLog INSTALL Makefile.am Makefile.in NEWS README-alpha \
+THANKS TODO aclocal.m4 acversion.m4.in config.guess config.sub \
+configure configure.in install-sh mdate-sh missing mkinstalldirs \
+stamp-vti texinfo.tex version.texi
 
 
 PACKAGE = @PACKAGE@

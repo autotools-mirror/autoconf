@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = check-news 1.4
+AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
 SUBDIRS = . m4 man tests
 

@@ -1,5 +1,10 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	* README-alpha: New file, based on Automake's.
+	* Makefile.am: Tuned.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	Extend the concept of `INIT-CMDS' to the AC_CONFIG_FOOS.
 
 	* acgeneral.m4 (_AC_CONFIG_COMMANDS_INIT): New macro which will
