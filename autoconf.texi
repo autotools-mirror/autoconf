@@ -205,7 +205,7 @@ Declarations
 
 Structures
 
-* Particular Structures::       Macros to check for certain stucture members
+* Particular Structures::       Macros to check for certain structure members
 * Generic Structures::          How to find other structure members
 
 Typedefs
@@ -1799,8 +1799,8 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 @maindex PROG_LN_S
 @ovindex LN_S
 If @samp{ln -s} works on the current filesystem (the operating system
-and filesystem support symbolic links), set output
-variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
+and filesystem support symbolic links), set output variable @code{LN_S}
+to @samp{ln -s}, otherwise set it to @samp{ln}.
 
 If the link is put in a directory other than the current directory, its
 meaning depends on whether @samp{ln} or @samp{ln -s} is used.  To safely
@@ -2669,7 +2669,7 @@ member you need, then you can use the general structure member macro
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
 
 @menu
-* Particular Structures::       Macros to check for certain stucture members
+* Particular Structures::       Macros to check for certain structure members
 * Generic Structures::          How to find other structure members
 @end menu
 
@@ -2730,11 +2730,11 @@ Check whether @var{member} is a member of the C aggregate @var{type}.
 The value of @var{type} may be the name of any legitimate C data type
 including the keywords @code{struct} and @code{union}. @var{includes} is
 any @code{#include} statements needed to obtain the definition of the
-aggregate type. If @var{member} is present, set @var{variable} to @samp{yes},
-otherwise @samp{no}.  An example:
+aggregate type. If @var{member} is present, set @var{variable} to
+@samp{yes}, otherwise @samp{no}.  An example:
 @example
-AC_C_STRUCT_MEMBER(gecos,
-  [#include <pwd.h>], [struct passwd], gecos)
+AC_C_STRUCT_MEMBER(pw_gecos,
+  [#include <pwd.h>], [struct passwd], pw_gecos)
 @end example
 @end defmac
 
@@ -2940,7 +2940,7 @@ If the C type @code{long int} is 64 bits wide, define
 The following macros check for Fortran 77 compiler characteristics.  To
 check for characteristics not listed here, use @code{AC_TRY_COMPILE}
 (@pxref{Examining Syntax}) or @code{AC_TRY_RUN} (@pxref{Run Time}),
-making sure to first set the current lanuage to Fortran 77
+making sure to first set the current language to Fortran 77
 @code{AC_LANG_FORTRAN77} (@pxref{Language Choice}).
 
 @defmac AC_F77_LIBRARY_LDFLAGS
@@ -4541,7 +4541,7 @@ the variables this macro sets.
 @maindex CANONICAL_HOST
 Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
 host type.  This is all that is needed for programs that are not part of
-a compiler toolchain.
+a compiler tool chain.
 @end defmac
 
 @defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
@@ -5097,7 +5097,7 @@ may use comes with Autoconf.
 @chapter Recreating a Configuration
 
 The @code{configure} script creates a file named @file{config.status},
-which actually configures, @dfn{intanciates}, the template files.  It
+which actually configures, @dfn{instantiates}, the template files.  It
 also keeps the configuration options that were specified when the
 package was last configured in case reconfiguring is needed.
 
@@ -5108,7 +5108,7 @@ Synopsis:
 @end example
 
 In the first form, it configures the @var{files}, if none are specified,
-all the templates are instanciated.  The files may be specified with or
+all the templates are instantiated.  The files may be specified with or
 without their dependencies, i.e., if the files  @file{foo.in} and
 @file{bar.in} are precursors of @file{foobar}, the two following lines
 are equivalent:
@@ -5117,7 +5117,7 @@ are equivalent:
 ./config.status foobar:foo.in:bar.in
 @end example
 
-In the second form, no file is instanciated, but a specific action is
+In the second form, no file is instantiated, but a specific action is
 taken:
 @table @code
 @item --recheck
@@ -5825,13 +5825,12 @@ Franc,ois
 @tex
 Fran\c cois
 @end tex
-Pinard, I made the macros not interrupt each others' messages.
-(That feature revealed some performance bottlenecks in GNU @code{m4},
-which he hastily corrected!)
-I reorganized the documentation around problems people want to solve.
-And I began a testsuite, because experience
-had shown that Autoconf has a pronounced tendency to regress when we
-change it.
+Pinard, I made the macros not interrupt each others' messages.  (That
+feature revealed some performance bottlenecks in GNU @code{m4}, which he
+hastily corrected!)  I reorganized the documentation around problems
+people want to solve.  And I began a testsuite, because experience had
+shown that Autoconf has a pronounced tendency to regress when we change
+it.
 
 Again, several alpha testers gave invaluable feedback, especially
 @ifinfo

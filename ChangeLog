@@ -1,5 +1,22 @@
 1999-09-28  Akim Demaille  <akim@epita.fr>
 
+	Make AC_FOREACH be robust to active symbols.
+
+	* acgeneral.m4 (m4_split, m4_join, m4_strip): New macros.
+	(AC_FOREACH_COMMA): Renamed as...
+	(m4_foreach): this.
+	(_AC_CAR): Renamed as...
+	(_m4_car): this.
+	(_AC_FOREACH): Renamed as...
+	(_m4_foreach): this.
+	(_AC_COMMATIZE): Removed.
+	(AC_FOREACH): Rewritten using m4_split, m4_join, m4_strip, and
+	m4_foreach.
+	* acgeneral.m4: Spell checked.
+	* autoconf.texi: Likewise.
+
+1999-09-28  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_NEED_DECL): When $4 is given, don't provide
 	defaults headers.
 	Change the message from `have' to `need'.

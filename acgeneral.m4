@@ -81,8 +81,154 @@ define([ifset], [ifelse([$1],,[$3],[$2])])
 
 dnl m4_default(EXP1, EXP2)
 dnl ----------------------
-dnl Returns EXP1 if non empty, otherwisee EXP2.
+dnl Returns EXP1 if non empty, otherwise EXP2.
 define([m4_default], [ifset([$1], [$1], [$2])])
+
+dnl m4_split(STRING)
+dnl ----------------
+dnl Split STRING into an m4 list of quoted elements.  The elements are
+dnl quoted with [ and ].  Beginning spaces and end spaces *are kept*.
+dnl Use m4_strip to remove them.
+dnl
+dnl Pay attention to the changequotes.  Inner changequotes exist for
+dnl obvious reasons (we want to insert square brackets).  Outer
+dnl changequotes are needed because otherwise the m4 parser, when it
+dnl sees the closing bracket we add to the result, believes it is the
+dnl end of the body of the macro we define.
+dnl
+dnl Also, notice that $1 is quoted twice, since we want the result to be
+dnl quoted.  Then you should understand that the argument of patsubst is
+dnl ``STRING'' (i.e., with additional `` and '').
+dnl
+dnl This macro is safe on active symbols, i.e.:
+dnl   define(active, ACTIVE)
+dnl   m4_split([active active ])end
+dnl   => [active], [active], []end
+changequote(<<, >>)
+define(<<m4_split>>,
+<<changequote(``, '')dnl
+[patsubst(````$1'''', ``[ 	]+'', ``], ['')]dnl
+changequote([, ])>>)
+changequote([, ])
+
+
+dnl m4_join(STRING)
+dnl ---------------
+dnl If STRING contains end of lines, replace them with spaces.  If there
+dnl are backslashed end of lines, remove them.  This macro is safe with
+dnl active symbols.
+dnl    define(active, ACTIVE)
+dnl    m4_join([active
+dnl    act\
+dnl    ive])end
+dnl    => active activeend
+define([m4_join],
+[translit(patsubst([[[$1]]], [\\
+]), [
+], [ ])])
+
+
+dnl m4_strip(STRING)
+dnl ----------------
+dnl Expands into STRING with tabs and spaces singled out into a single
+dnl space, and removing leading and trailing spaces.
+dnl
+dnl This macro is robust to active symbols.
+dnl    define(active, ACTIVE)
+dnl    m4_strip([  active  		active ])end
+dnl    => active activeend
+dnl
+dnl This macro is fun!  Because we want to preserve active symbols, STRING
+dnl must be quoted for each evaluation, which explains there are 4 levels
+dnl of brackets around $1 (don't forget that the result must be quoted
+dnl too, hence one more quoting than applications).
+dnl
+dnl Then notice the patsubst of the middle: it is in charge of removing
+dnl the leading space.  Why not just `patsubst(..., [^ ])'?  Because this
+dnl macro will receive the output of the preceding patsubst, i.e. more or
+dnl less [[STRING]].  So if there is a leading space in STRING, then it is
+dnl the *third* character, since there are two leading `['; Equally for
+dnl the outer patsubst.
+define([m4_strip],
+[patsubst(patsubst(patsubst([[[[$1]]]],
+                            [[ 	]+], [ ]),
+                   [^\(..\) ], [\1]),
+          [ \(.\)$], [\1])])
+
+
+dnl ### Implementing m4 loops
+
+
+dnl Implementing loops (`foreach' loops) in m4 is much more tricky than it
+dnl may seem.  Actually, the example of a `foreach' loop in the m4
+dnl documentation is wrong: it does not quote the arguments properly,
+dnl which leads to undesired expansions.
+dnl
+dnl The example in the documentation is:
+dnl
+dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
+dnl | define(`foreach',
+dnl |        `pushdef(`$1', `')_foreach(`$1', `$2', `$3')popdef(`$1')')
+dnl | define(`_arg1', `$1')
+dnl | define(`_foreach',
+dnl | 	  `ifelse(`$2', `()', ,
+dnl | 		  `define(`$1', _arg1$2)$3`'_foreach(`$1', (shift$2), `$3')')')
+dnl
+dnl But then if you run
+dnl
+dnl | define(a, 1)
+dnl | define(b, 2)
+dnl | define(c, 3)
+dnl | foreach(`f', `(`a', `(b', `c)')', `echo f
+dnl | ')
+dnl
+dnl it gives
+dnl
+dnl  => echo 1
+dnl  => echo (2,3)
+dnl
+dnl which is not what is expected.
+dnl
+dnl Once you understood this, you turn yourself into a quoting wizard,
+dnl and come up with the following solution:
+dnl
+dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
+dnl | define(`foreach', `pushdef(`$1', `')_foreach($@)popdef(`$1')')
+dnl | define(`_arg1', ``$1'')
+dnl | define(`_foreach',
+dnl |  `ifelse($2, `()', ,
+dnl | 	       `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
+dnl
+dnl which this time answers
+dnl
+dnl  => echo a
+dnl  => echo (b
+dnl  => echo c)
+dnl
+dnl Bingo!
+
+dnl M4_FOREACH(VARIABLE, LIST, EXPRESSION)
+dnl --------------------------------------
+dnl Expand EXPRESSION assigning to VARIABLE each value of the LIST
+dnl (LIST should have the form `[(item_1, item_2, ..., item_n)]'),
+dnl i.e. the whole list should be *quoted*.  Quote members too if
+dnl you don't want them to be expanded.
+dnl
+dnl This macro is robust to active symbols:
+dnl    define(active, ACTIVE)
+dnl    m4_foreach([Var], [([active], [b], [active])], [-Var-])end
+dnl    => -active--b--active-end
+define(m4_foreach,
+[pushdef([$1], [])_m4_foreach($@)popdef([$1])])
+
+dnl Low level macros used to define m4_foreach
+define(_m4_car, [[$1]])
+define(_m4_foreach,
+[ifelse($2, [()], ,
+        [define([$1], [_m4_car$2])$3[]_m4_foreach([$1],
+                                                [(m4_shift$2)],
+                                                [$3])])])
+
 
 dnl ### Defining macros
 
@@ -177,7 +323,7 @@ dnl | 	IF-TRUE;
 dnl | else
 dnl | 	IF-FALSE
 dnl | fi
-dnl | with simplifications is IF-TRUE and/or IF-FALSE is empty.
+dnl with simplifications is IF-TRUE and/or IF-FALSE is empty.
 define([AC_SHELL_IFELSE],
 [ifset([$2$3],
 [if [$1]; then
@@ -322,7 +468,7 @@ dnl   that it takes `a-' as the C string "a-\0", and when expanding
 dnl   from `a' to `\0' never ends...
 dnl
 dnl Include a protection against `%' (used as a sed separator) in FROM and TO.
-dnl Forbid appearence of `-' in FROM elsewhere than in the last position,
+dnl Forbid appearance of `-' in FROM elsewhere than in the last position,
 dnl since we might otherwise trigger a GNU m4 bug (version 1.4 included).
 dnl ALPHABET may contain characters interval.
 dnl define(AC_TR,
@@ -368,122 +514,21 @@ define(AC_TR_SH,
 
 dnl ### Implementing m4 loops
 
-
-dnl Implementing loops (`foreach' loops) in m4 is much more tricky than it
-dnl may seem.  Actually, the example of a `foreach' loop in the m4
-dnl documentation is wrong: it does not quote the arguments properly,
-dnl which leads to undesired expansions.
-dnl
-dnl The example in the documentation is:
-dnl
-dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-dnl | define(`foreach',
-dnl |        `pushdef(`$1', `')_foreach(`$1', `$2', `$3')popdef(`$1')')
-dnl | define(`_arg1', `$1')
-dnl | define(`_foreach',
-dnl | 	  `ifelse(`$2', `()', ,
-dnl | 		  `define(`$1', _arg1$2)$3`'_foreach(`$1', (shift$2), `$3')')')
-dnl
-dnl But then if you run
-dnl
-dnl | define(a, 1)
-dnl | define(b, 2)
-dnl | define(c, 3)
-dnl | foreach(`f', `(`a', `(b', `c)')', `echo f
-dnl | ')
-dnl
-dnl it gives
-dnl
-dnl | echo 1
-dnl | echo (2,3)
-dnl
-dnl which is not what is expected.
-dnl
-dnl Once you understood this, you turn yourself into a quoting wizard,
-dnl and come up with the following solution:
-dnl
-dnl | # foreach(x, (item_1, item_2, ..., item_n), stmt)
-dnl | define(`foreach', `pushdef(`$1', `')_foreach($@)popdef(`$1')')
-dnl | define(`_arg1', ``$1'')
-dnl | define(`_foreach',
-dnl |  `ifelse($2, `()', ,
-dnl | 	       `define(`$1', `_arg1$2')$3`'_foreach(`$1', `(shift$2)', `$3')')')
-dnl
-dnl which this time answers
-dnl
-dnl | echo a
-dnl | echo (b
-dnl | echo c)
-dnl
-dnl Bingo!
-
-dnl AC_FOREACH_COMMA(VARIABLE, LIST, EXPRESSION)
-dnl --------------------------------------------
-dnl Expand EXPRESSION assigning to VARIABLE each value of the LIST
-dnl (LIST should have the form `[(item_1, item_2, ..., item_n)]'),
-dnl i.e. the whole list should be *quoted*.  Quote members too if
-dnl you don't want them to be expanded.
-define(AC_FOREACH_COMMA,
-[pushdef([$1], [])_AC_FOREACH($@)popdef([$1])])
-
-dnl Low level macros used to define AC_FOREACH_COMMA.
-define(_AC_CAR, [[$1]])
-define(_AC_FOREACH,
-[ifelse($2, [()], ,
-        [define([$1], [_AC_CAR$2])$3[]_AC_FOREACH([$1],
-                                                [(m4_shift$2)],
-                                                [$3])])])
-
-dnl _AC_COMMATIZE(LIST)
-dnl -------------------
-
-dnl Transform a shell LIST (i.e., white space separated) into a m4 list
-dnl (i.e., separated with commas).  This is used to implement AC_FOREACH
-dnl with AC_FOREACH_COMMA.
-dnl
-dnl It quite tricky for several reasons:
-dnl - if there are quoted active symbols in input, on the output they
-dnl   should still be quoted.  I didn't manage to reach this goal yet,
-dnl   but it doesn't seem to be such a necessity. FIXME: do it.
-dnl - if there are parentheses in the input, make sure *not* to think
-dnl   this is an m4 list.  This is especially important for
-dnl   AC_HELP_STRING.
-dnl
-dnl This means that `_AC_COMMATIZE([a] [(b] [c)])' should expand into
-dnl `[a], [(b], [c)]'.  Currently parentheses are correctly handled, but
-dnl the macro are expanded, i.e., the output is `[1],[(2],[3)]'.
-dnl
-dnl Do not use `patsubst([$2], [\>\W+\<], [,])', since it swallows
-dnl the `$' from the variable names, so, 1. swallow `\[CR]' (I don't
-dnl understand why I need two backslashes), 2. remove trailing spaces, 3.
-dnl replace remaining sequences of spaces with commas.
-dnl
-dnl Pay attention to the changequotes.  Inner changequotes exist for
-dnl obvious reasons (we want to insert square brackets).  Outer
-dnl changequotes are needed because otherwise the m4 parser, when it
-dnl sees the closing bracket we add to the result, believes it is the
-dnl end of the body of the macro we define.
-changequote(<<, >>)
-define(<<_AC_COMMATIZE>>,
-<<changequote(``, '')dnl
-pushdef(``one_line'', translit(patsubst(``$1'', ``\\
-''), ``
-'', `` ''))dnl
-pushdef(``no_trailing_space'', patsubst(one_line, ``[	]+$''))dnl
-[patsubst(no_trailing_space, ``[ 	]+'', ``],['')]dnl
-changequote([, ])dnl
-popdef(``no_trailing_space'')dnl
-popdef(``one_line'')>>)
-changequote([, ])
-
 dnl AC_FOREACH(VARIABLE, LIST, EXPRESSION)
 dnl --------------------------------------
 dnl
 dnl Compute EXPRESSION assigning to VARIABLE each value of the LIST.
-dnl (LIST has the form `item_1 item_2 ... item_n': there are no commas.)
+dnl LIST is a /bin/sh list, i.e., it has the form ` item_1 item_2
+dnl ... item_n ': white spaces are separators, and leading and trailing
+dnl spaces are meaningless.
 dnl
+dnl This macro is robust to active symbols:
+dnl    AC_FOREACH([Var], [ active
+dnl    b	act\
+dnl    ive  ], [-Var-])end
+dnl    => -active--b--active-end
 define([AC_FOREACH],
-[AC_FOREACH_COMMA([$1], (_AC_COMMATIZE([$2])), [$3])])
+[m4_foreach([$1], (m4_split(m4_strip(m4_join([$2])))), [$3])])
 
 
 dnl AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
@@ -515,27 +560,27 @@ dnl
 dnl Typical outputs are:
 dnl
 dnl AC_WRAP([Short string */], [   ], [/* ], 20)
-dnl | /* Short string */
+dnl  => /* Short string */
 dnl
 dnl AC_WRAP([Much longer string */], [   ], [/* ], 20)
-dnl | /* Much longer
-dnl |    string */
+dnl  => /* Much longer
+dnl  =>    string */
 dnl
 dnl AC_WRAP([Short doc.], [          ], [  --short ], 30)
-dnl |   --short Short doc.
+dnl  =>   --short Short doc.
 dnl
 dnl AC_WRAP([Short doc.], [          ], [  --too-wide ], 30)
-dnl |   --too-wide
-dnl |           Short doc.
+dnl  =>   --too-wide
+dnl  =>           Short doc.
 dnl
 dnl AC_WRAP([Super long documentation.], [          ], [  --too-wide ], 30)
-dnl |   --too-wide
-dnl | 	    Super long
-dnl | 	    documentation.
+dnl  =>   --too-wide
+dnl  => 	  Super long
+dnl  => 	  documentation.
 dnl
-dnl dnl FIXME: there is no checking of a longer PREFIX than WIDTH, but do
-dnl dnl we really want to bother with people trying each single corner
-dnl dnl of a software?
+dnl FIXME: there is no checking of a longer PREFIX than WIDTH, but do
+dnl we really want to bother with people trying each single corner
+dnl of a software?
 define([AC_WRAP],
 [pushdef([AC_Prefix], m4_default([$2], []))dnl
 pushdef([AC_Prefix1], m4_default([$3], [AC_Prefix]))dnl
@@ -564,7 +609,7 @@ dnl
 dnl Format an Autoconf macro's help string so that it looks pretty when
 dnl the user executes "configure --help".  This macro takes three
 dnl arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
-dnl the COLUMN which is a string of wide spaces which leads to the
+dnl the COLUMN which is a string of white spaces which leads to the
 dnl the RHS column (default: 26 white spaces).
 dnl
 dnl The resulting string is suitable for use in other macros that require
@@ -613,7 +658,7 @@ dnl ### Initialization
 dnl AC_INIT_NOTICE()
 AC_DEFUN(AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
-# Generated automatically using autoconf version] AC_ACVERSION [
+# Generated automatically using Autoconf version] AC_ACVERSION [
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 #
 # This configure script is free software; the Free Software Foundation
@@ -1107,7 +1152,7 @@ AC_DEFUN(AC_INCLUDE,
 
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 dnl ------------------------------------------
-dnl Called by AC_INIT to buid the preamble of the `configure' scripts.
+dnl Called by AC_INIT to build the preamble of the `configure' scripts.
 dnl 1. Trap and clean up various tmp files.
 dnl 2. Set up the fd and output files
 dnl 3. Remember the options given to `configure' for `config.status --recheck'.
@@ -1141,7 +1186,7 @@ running configure, to aid debugging if configure makes a mistake.
 " 1>&AC_FD_CC
 
 # Strip out --no-create and --no-recursion so they do not pile up.
-# Also quote any args containing shell metacharacters.
+# Also quote any args containing shell meta-characters.
 ac_configure_args=
 for ac_arg
 do
@@ -2642,7 +2687,7 @@ dnl ### Checking for typedefs
 
 dnl AC_CHECK_TYPE(TYPE, DEFAULT[, INCLUDES])
 dnl ----------------------------------------
-dnl FIXME: This is an extremely badly choosen name, since this
+dnl FIXME: This is an extremely badly chosen name, since this
 dnl macro actually performs an AC_REPLACE_TYPE.  Some day we
 dnl have to clean this up.
 AC_DEFUN(AC_CHECK_TYPE,
@@ -2658,7 +2703,7 @@ changequote([,]), [#include <stdio.h>
 # include <stdlib.h>
 # include <stddef.h>
 #endif
-[$3]
+$3
 ], AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,,
                 [AC_DEFINE_UNQUOTED($1, $2)])dnl
@@ -2751,7 +2796,7 @@ dnl so uname gets run too.
 # configure, is in ./config.log if it exists.
 
 ac_cs_usage="\\
-\\\`$CONFIG_STATUS' instanciates files from templates according to the
+\\\`$CONFIG_STATUS' instantiates files from templates according to the
 current configuration.
 
 Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
@@ -2760,9 +2805,9 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
 
-dnl Output this only if there are files to instanciate.
+dnl Output this only if there are files to instantiate.
 ifset(ifdef([AC_LIST_HEADER], 1)$1,
-[Files to instanciate:
+[Files to instantiate:
 ifset($1, [  Configuration files:
 AC_WRAP($1, [    ])
 ])dnl
@@ -3135,7 +3180,7 @@ rm -f conftest.vals
 dnl Using a here document instead of a string reduces the quoting nightmare.
 dnl Putting comments in sed scripts is not portable.
 dnl One may be tempted to use the same trick to speed up the sed script
-dnl as for CONFIG_FILES (combinasion of :t and t t).  Here we cannot,
+dnl as for CONFIG_FILES (combination of :t and t t).  Here we cannot,
 dnl because of the `#define' templates: we may enter in infinite loops
 dnl replacing `#define foo bar' by itself.
 dnl We ought to get rid of the #define templates.
@@ -3166,6 +3211,8 @@ s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
 changequote([, ])dnl
 EOF
 
+# Break up conftest.vals because some shells have a limit on the size
+# of here documents, and old seds have small limits too (100 cmds).
 rm -f conftest.tail
 while :
 do
