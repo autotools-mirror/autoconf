@@ -9390,8 +9390,21 @@ you'll need to use @command{bash} 2.05 for all other build tasks as well.
 The Korn shell is compatible with the Bourne family and it mostly
 conforms to @acronym{POSIX}.  It has two major variants commonly
 called @samp{ksh88} and @samp{ksh93}, named after the years of initial
-release.  It is usually called @command{ksh}, but Solaris systems have
-three variants:
+release.  It is usually called @command{ksh}, but is called @command{sh}
+on some hosts if you set your path appropriately.
+
+@itemize @minus
+@item
+@prindex @samp{pdksh}
+A public-domain clone of the Korn shell called @samp{pdksh} is
+widely available: it has most of the @samp{ksh88} features along with
+a few of its own.
+Similarly to @command{bash}, you can detect whether you are running
+@samp{pdksh} by testing whether @code{KSH_VERSION} is set, and you can
+require @acronym{POSIX} compatibility by running @samp{set -o posix}.
+
+@item
+Solaris systems have three variants:
 @prindex @command{/usr/bin/ksh} on Solaris
 @command{/usr/bin/ksh} is @samp{ksh88},
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
@@ -9403,13 +9416,14 @@ is standard on Solaris; the other variants are parts of optional
 packages.  There is no extra charge for these packages, but they are
 not part of a minimal OS install and therefore some installations may
 not have it.
-@prindex @samp{pdksh}
-A public-domain clone of the Korn shell called @samp{pdksh} is also
-widely available: it has most of the @samp{ksh88} features along with
-a few of its own.
-Similarly to @command{bash}, you can detect whether you are running
-@samp{pdksh} by testing whether @code{KSH_VERSION} is set, and you can
-require @acronym{POSIX} compatibility by running @samp{set -o posix}.
+
+@item
+Starting with Tru64 Version 4.0, the Korn shell @command{/usr/bin/ksh}
+is also available as @command{/usr/bin/posix/sh}.  If the environment
+variable @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
+the standard shell conform to @acronym{POSIX}.
+
+@end itemize
 
 @item Zsh
 @cindex Zsh
