@@ -1,5 +1,10 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Input) <AC_INIT>: Move to..
+	(Initializing configure): this new node.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (EXTRA_DIST): INSTALL.txt is a dead hack.
 
 2001-08-27  Akim Demaille  <akim@epita.fr>

@@ -190,6 +190,7 @@ Writing @file{configure.ac}
 
 Initialization and Output Files
 
+* Initializing configure::      Option processing etc.
 * Notices::                     Copyright, version numbers in @code{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
@@ -1496,6 +1497,7 @@ about the output files to produce.  The following sections describe
 initialization and the creation of output files.
 
 @menu
+* Initializing configure::      Option processing etc.
 * Notices::                     Copyright, version numbers in @code{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
@@ -1509,7 +1511,54 @@ initialization and the creation of output files.
 * Default Prefix::              Changing the default installation prefix
 @end menu
 
-@node Notices, Input, Setup, Setup
+@node Initializing configure
+@section Initializing @command{configure}
+
+Every @code{configure} script must call @code{AC_INIT} before doing
+anything else.  The only other required macro is @code{AC_OUTPUT}
+(@pxref{Output}).
+
+@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report-address})
+@acindex INIT
+Process any command-line arguments and perform various initializations
+and verifications.  Set the name of the @var{package} and its
+@var{version}.  The optional argument @var{bug-report-address} should be
+the email to which users should send bug reports.
+
+These three arguments must be @emph{static}, i.e., there must not be any
+shell computation, but they can be computed by M4.  The following macros
+and output variables are then defined:
+
+@table @asis
+@item @code{AC_PACKAGE_NAME}, @code{PACKAGE_NAME}
+@acindex PACKAGE_NAME
+@ovindex PACKAGE_NAME
+Exactly @var{package}.
+
+@item @code{AC_PACKAGE_TARNAME}, @code{PACKAGE_TARNAME}
+@acindex PACKAGE_TARNAME
+@ovindex PACKAGE_TARNAME
+@var{package} once @samp{GNU } strip, and lower cased.
+
+@item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
+@acindex PACKAGE_VERSION
+@ovindex PACKAGE_VERSION
+Exactly @var{version}.
+
+@item @code{AC_PACKAGE_STRING}, @code{PACKAGE_STRING}
+@acindex PACKAGE_STRING
+@ovindex PACKAGE_STRING
+Exactly @samp{@var{package} @var{version}}.
+
+@item @code{AC_PACKAGE_BUGREPORT}, @code{PACKAGE_BUGREPORT}
+@acindex PACKAGE_BUGREPORT
+@ovindex PACKAGE_BUGREPORT
+Exactly @var{bug-report-address}.
+@end table
+@end defmac
+
+
+@node Notices
 @section Notices in @code{configure}
 
 The following macros manage version numbers for @code{configure}
@@ -1574,48 +1623,6 @@ produces this in @code{configure}:
 @node Input, Output, Notices, Setup
 @section Finding @code{configure} Input
 
-Every @code{configure} script must call @code{AC_INIT} before doing
-anything else.  The only other required macro is @code{AC_OUTPUT}
-(@pxref{Output}).
-
-@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report-address})
-@acindex INIT
-Process any command-line arguments and perform various initializations
-and verifications.  Set the name of the @var{package} and its
-@var{version}.  The optional argument @var{bug-report-address} should be
-the email to which users should send bug reports.
-
-These three arguments must be @emph{static}, i.e., there must not be any
-shell computation, but they can be computed by M4.  The following macros
-and output variables are then defined:
-
-@table @asis
-@item @code{AC_PACKAGE_NAME}, @code{PACKAGE_NAME}
-@acindex PACKAGE_NAME
-@ovindex PACKAGE_NAME
-Exactly @var{package}.
-
-@item @code{AC_PACKAGE_TARNAME}, @code{PACKAGE_TARNAME}
-@acindex PACKAGE_TARNAME
-@ovindex PACKAGE_TARNAME
-@var{package} once @samp{GNU } strip, and lower cased.
-
-@item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
-@acindex PACKAGE_VERSION
-@ovindex PACKAGE_VERSION
-Exactly @var{version}.
-
-@item @code{AC_PACKAGE_STRING}, @code{PACKAGE_STRING}
-@acindex PACKAGE_STRING
-@ovindex PACKAGE_STRING
-Exactly @samp{@var{package} @var{version}}.
-
-@item @code{AC_PACKAGE_BUGREPORT}, @code{PACKAGE_BUGREPORT}
-@acindex PACKAGE_BUGREPORT
-@ovindex PACKAGE_BUGREPORT
-Exactly @var{bug-report-address}.
-@end table
-@end defmac
 
 @defmac AC_CONFIG_SRCDIR (@var{unique-file-in-source-dir})
 @acindex CONFIG_SRCDIR
