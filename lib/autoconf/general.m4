@@ -3450,6 +3450,7 @@ rm -f conftest*
 # This macro can be used during the selection of a compiler.
 define([_AC_COMPILE_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+rm -f conftest.$ac_objext
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
@@ -3490,6 +3491,7 @@ AC_DEFUN([AC_TRY_COMPILE],
 # This macro can be used during the selection of a compiler.
 define([_AC_LINK_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+rm -f conftest.$ac_objext conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
@@ -3497,8 +3499,7 @@ else
   cat conftest.$ac_ext >&AC_FD_LOG
 m4_ifvanl([$3], [  $3])dnl
 fi
-rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
-                                                   [conftest.$ac_ext])[]dnl
+rm -f conftest$ac_exeext ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
 
@@ -3548,6 +3549,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # This macro can be used during the selection of a compiler.
 define([_AC_RUN_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+rm -f conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) &&
    test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
   m4_default([$2], :)
@@ -3556,8 +3558,7 @@ else
   cat conftest.$ac_ext >&AC_FD_LOG
 m4_ifvanl([$3], [  $3])dnl
 fi
-rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
-                                                   [conftest.$ac_ext])[]dnl
+rm -f conftest$ac_exeext ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
 

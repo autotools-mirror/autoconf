@@ -1,5 +1,14 @@
 2000-10-17  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE)
+	(_AC_RUN_IFELSE): Before compiling, remove the files expected to
+	be produced.
+	(_AC_LINK_IFELSE, _AC_RUN_IFELSE): You don't create object files,
+	so don't remove them.
+
+	
+2000-10-17  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_FATAL): Use _AC_EXPANSION_STACK_DUMP.
 	(_AC_REQUIRE): Use AC_FATAL.
 
