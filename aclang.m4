@@ -797,6 +797,27 @@ ac_objext=$OBJEXT
 # -------------------- #
 
 
+# _AC_ARG_VAR_CPPFLAGS
+# --------------------
+# Document and register CPPFLAGS, which is used by
+# AC_PROG_{CC, CPP, CXX, CXXCPP}.
+AC_DEFUN([_AC_ARG_VAR_CPPFLAGS],
+[AC_ARG_VAR([CPPFLAGS],
+            [C/C++ preprocessor flags, e.g. -I<include dir> if you have
+             headers in a nonstandard directory <include dir>])])
+
+
+# _AC_ARG_VAR_LDFLAGS
+# -------------------
+# Document and register LDFLAGS, which is used by
+# AC_PROG_{CC, CXX, F77}.
+AC_DEFUN([_AC_ARG_VAR_LDFLAGS],
+[AC_ARG_VAR([LDFLAGS],
+            [linker flags, e.g. -L<lib dir> if you have libraries in a
+             nonstandard directory <lib dir>])])
+
+
+
 # AC_LANG_PREPROC(C)
 # -------------------
 # Find the C preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
@@ -844,9 +865,7 @@ m4_default([$2], :)])])# _AC_PROG_PREPROC_WORKS_IFELSE
 AC_DEFUN([AC_PROG_CPP],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_ARG_VAR([CPP],      [C preprocessor])dnl
-AC_ARG_VAR([CPPFLAGS],
-           [C/C++ preprocessor flags, e.g. -I<include dir> if you have
-            headers in a nonstandard directory <include dir>])dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
 AC_LANG_PUSH(C)dnl
 AC_MSG_CHECKING([how to run the C preprocessor])
 # On Suns, sometimes $CPP names a directory.
@@ -898,9 +917,8 @@ AC_DEFUN([AC_PROG_CC],
 [AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC],     [C compiler command])dnl
 AC_ARG_VAR([CFLAGS], [C compiler flags])dnl
-AC_ARG_VAR([LDFLAGS],
-           [linker flags, e.g. -L<lib dir> if you have libraries in a
-            nonstandard directory <lib dir>])dnl
+_AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
 m4_ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
 [AC_CHECK_TOOL(CC, gcc)
@@ -1058,9 +1076,7 @@ AC_DEFUN([AC_LANG_PREPROC(C++)],
 AC_DEFUN([AC_PROG_CXXCPP],
 [AC_REQUIRE([AC_PROG_CXX])dnl
 AC_ARG_VAR([CXXCPP],   [C++ preprocessor])dnl
-AC_ARG_VAR([CPPFLAGS],
-           [C/C++ preprocessor flags, e.g. -I<include dir> if you have
-            headers in a nonstandard directory <include dir>])dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
 AC_LANG_PUSH(C++)dnl
 AC_MSG_CHECKING([how to run the C++ preprocessor])
 if test -z "$CXXCPP"; then
@@ -1114,9 +1130,8 @@ AC_DEFUN([AC_PROG_CXX],
 [AC_LANG_PUSH(C++)dnl
 AC_ARG_VAR([CXX],      [C++ compiler command])dnl
 AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])dnl
-AC_ARG_VAR([LDFLAGS],
-           [linker flags, e.g. -L<lib dir> if you have libraries in a
-            nonstandard directory <lib dir>])dnl
+_AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
 AC_CHECK_TOOLS(CXX,
                [$CCC m4_default([$1],
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
@@ -1245,9 +1260,7 @@ AC_DEFUN([AC_PROG_F77],
 [AC_LANG_PUSH(Fortran 77)dnl
 AC_ARG_VAR([F77],    [Fortran 77 compiler command])dnl
 AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
-AC_ARG_VAR([LDFLAGS],
-           [linker flags, e.g. -L<lib dir> if you have libraries in a
-            nonstandard directory <lib dir>])dnl
+_AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 xlf95 lf95 g95 fc])])

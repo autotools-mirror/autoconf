@@ -1,5 +1,15 @@
 2001-04-27  Akim Demaille  <akim@epita.fr>
 
+	If AC_PROG_CC is invoked but not AC_PROG_CPP, then CPPFLAGS is not
+	AC_SUBST'ed.
+	Reported by Ralf Corsepius.
+
+	* aclang.m4 (_AC_ARG_VAR_CPPFLAGS, _AC_ARG_VAR_LDFLAGS): New.
+	(AC_PROG_CC, AC_PROG_CPP, AC_PROG_CXX, AC_PROG_CXXCPP)
+	(AC_PROG_F77): Use them.
+
+2001-04-27  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4 (_AC_PROG_PREPROC_WORKS): Rename and extend as...
 	(_AC_PROG_PREPROC_WORKS_IFELSE): this.
 	Adjust to admit
