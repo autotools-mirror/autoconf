@@ -1,3 +1,9 @@
+2001-10-05  Paul Eggert  <eggert@twinsun.com>
+
+	* tests/Makefile.am (clean-local): Don't invoke $(TESTSUITE) if it
+	doesn't exist.  Remove *.tmp, as a .tmp file is created during the
+	build of $(TESTSUITE).
+
 2001-10-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Look in the path
