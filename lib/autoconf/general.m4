@@ -2420,7 +2420,7 @@ AC_VAR_SET(ac_Lib, yes), AC_VAR_SET(ac_Lib, no))
 LIBS="$ac_save_LIBS"])
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Lib) = yes,
                 m4_default([$3],
-                          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
+                           [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ]),
                 [$4])dnl
@@ -2623,6 +2623,7 @@ dnl ### Checking for header files
 
 
 dnl AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl -----------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADER,
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
@@ -2635,6 +2636,7 @@ AC_VAR_POPDEF([ac_Header])dnl
 
 dnl AC_CHECK_HEADERS(HEADER-FILE...
 dnl                  [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl -------------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADERS,
 [for ac_header in $1
 do
@@ -2850,7 +2852,8 @@ AC_CACHE_CHECK([for $1], ac_Type,
 [AC_EGREP_CPP(dnl
 changequote(<<,>>)dnl
 <<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
-changequote([,]), m4_default([$3], [#include <stdio.h>
+changequote([,]),
+m4_default([$3], [#include <stdio.h>
 #include <sys/types.h>
 #if STDC_HEADERS
 # include <stdlib.h>
@@ -2860,7 +2863,7 @@ changequote([,]), m4_default([$3], [#include <stdio.h>
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,,
                 [AC_DEFINE_UNQUOTED($1, $2,
                                     [Define to `$2' if <sys/types.h>
-                                     does not define.])])dnl
+                                     does not define `$1'.])])dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])dnl AC_CHECK_TYPE
 

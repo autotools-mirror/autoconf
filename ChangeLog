@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4: Formating changes.
+	* acgeneral.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_CHECK_MEMBER, AC_CHECK_MEMBERS): New macros.
 	* autoheader.m4 (AH_CHECK_MEMBERS): New macro.
 	(epilogue): Hook AH_CHECK_MEMBERS on AC_CHECK_MEMBERS.

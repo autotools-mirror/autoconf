@@ -994,6 +994,9 @@ fi
 ])
 
 
+dnl AC_HEADER_STAT
+dnl --------------
+dnl FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
 AC_DEFUN(AC_HEADER_STAT,
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,
@@ -1029,7 +1032,7 @@ if test $ac_cv_header_stat_broken = yes; then
             [Define if the `S_IS*' macros in <sys/stat.h> do not
              work properly.])
 fi
-])
+])dnl AC_HEADER_STAT
 
 dnl AC_DECL_SYS_SIGLIST
 dnl -------------------
@@ -1050,6 +1053,9 @@ if test $ac_cv_decl_sys_siglist = yes; then
 fi
 ])dnl AC_DECL_SYS_SIGLIST
 
+
+dnl AC_HEADER_SYS_WAIT
+dnl ------------------
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
@@ -1068,7 +1074,8 @@ if test $ac_cv_header_sys_wait_h = yes; then
   AC_DEFINE(HAVE_SYS_WAIT_H, 1,
             [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
 fi
-])
+])dnl AC_HEADER_SYS_WAIT
+
 
 dnl A few hasbeen'd macros.
 
@@ -1155,6 +1162,7 @@ AC_DEFUN(AC_TYPE_OFF_T,
 
 AC_DEFUN(AC_TYPE_MODE_T,
 [AC_CHECK_TYPE(mode_t, int)])
+
 
 dnl AC_TYPE_SIGNAL
 dnl --------------
@@ -2139,6 +2147,10 @@ if test $ac_cv_header_time = yes; then
 fi
 ])
 
+dnl AC_STRUCT_TM
+dnl ------------
+dnl FIXME: This macro is badly named, it should be AC_CHECK_TYPE_STRUCT_TM.
+dnl Or something else, but what? AC_CHECK_TYPE_STRUCT_TM_IN_SYS_TIME?
 AC_DEFUN(AC_STRUCT_TM,
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,
