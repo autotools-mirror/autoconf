@@ -1,10 +1,10 @@
-* Major changes in Autoconf 2.54a                       -*- outline -*-
+* Major changes in Autoconf 2.54b                       -*- outline -*-
 
 
-Tip of the release:
+Release tips:
 
-           Did you have your configure.ac checked by autoscan?
-	   Did you try the warning options?
+           Have your configure.ac checked by autoscan ("autoscan").
+	   Try the warning options ("autoreconf -fv -Wall").
 
 ** Documentation
 
