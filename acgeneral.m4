@@ -1335,7 +1335,7 @@ Optional Features:
 ])[]dnl
 $2
 AC_DIVERT_POP()dnl
-@%:@ Check whether --enable-[$1] or --disable-[$1] was given.
+# Check whether --enable-$1 or --disable-$1 was given.
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
   $3
@@ -1367,7 +1367,7 @@ Optional Packages:
 ])[]dnl
 $2
 AC_DIVERT_POP()dnl
-@%:@ Check whether --with-[$1] or --without-[$1] was given.
+# Check whether --with-$1 or --without-$1 was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
   $3
