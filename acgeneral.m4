@@ -1408,7 +1408,7 @@ dnl Use a cache variable name containing both the library and function name,
 dnl because the test really is for library $1 defining function $2, not
 dnl just for library $1.  Separate tests with the same $1 and different $2s
 dnl may have different results.
-ac_lib_var=`echo $1['_']$2 | tr '-./+' '___p'`
+ac_lib_var=`echo $1['_']$2 | tr './+-' '__p_'`
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
@@ -1419,7 +1419,7 @@ ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 extern "C"
 #endif
 ])dnl
-[/* We use `char' because `int' might match the return type of a gcc2
+[/* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
 char $2();
 ]),
@@ -1689,7 +1689,7 @@ dnl select.  Similarly for bzero.
 extern "C"
 #endif
 ])dnl
-[/* We use `char' because `int' might match the return type of a gcc2
+[/* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
 char $1();
 ], [
