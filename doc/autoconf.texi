@@ -3486,14 +3486,6 @@ is available, you may assume that @code{vfprintf} and @code{vsprintf}
 are also available.)
 @end defmac
 
-@defmac AC_FUNC_WAIT3
-@maindex FUNC_WAIT3
-@cvindex HAVE_WAIT3
-If @code{wait3} is found and fills in the contents of its third argument
-(a @samp{struct rusage *}), which HP-UX does not do, define
-@code{HAVE_WAIT3}.
-@end defmac
-
 @node Generic Functions,  , Particular Functions, Library Functions
 @subsection Generic Function Checks
 
@@ -4771,17 +4763,6 @@ If the system supports file names longer than 14 characters, define
 Check to see if POSIX termios headers and functions are available on the
 system.  If so, set the shell variable @code{am_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
-@end defmac
-
-@defmac AC_SYS_RESTARTABLE_SYSCALLS
-@maindex SYS_RESTARTABLE_SYSCALLS
-@cvindex HAVE_RESTARTABLE_SYSCALLS
-If the system automatically restarts a system call that is interrupted
-by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}. This macro does
-not check if system calls are restarted in general--it tests whether a
-signal handler installed with @code{signal} (but not @code{sigaction})
-causes system calls to be restarted. It does not test if system calls
-can be restarted when interrupted by signals that have no handler.
 @end defmac
 
 @node UNIX Variants,  , System Services, Existing Tests
@@ -9553,6 +9534,18 @@ and sets @code{EMXOS2}.
 @code{AC_CHECK_FUNC}
 @end defmac
 
+@defmac AC_FUNC_WAIT3
+@maindex FUNC_WAIT3
+@cvindex HAVE_WAIT3
+If @code{wait3} is found and fills in the contents of its third argument
+(a @samp{struct rusage *}), which HP-UX does not do, define
+@code{HAVE_WAIT3}.
+
+These days portable programs should use @code{waitpid}, not
+@code{wait3}, as @code{wait3} is being removed from the Open Group
+standards, and will not appear in the next revision of POSIX.
+@end defmac
+
 @defmac AC_GCC_TRADITIONAL
 @maindex GCC_TRADITIONAL
 @code{AC_PROG_GCC_TRADITIONAL}
@@ -9956,6 +9949,23 @@ now it just calls @code{AC_FUNC_STRFTIME} instead.
 @defmac AC_ST_RDEV
 @maindex ST_RDEV
 @code{AC_STRUCT_ST_RDEV}
+@end defmac
+
+@defmac AC_SYS_RESTARTABLE_SYSCALLS
+@maindex SYS_RESTARTABLE_SYSCALLS
+@cvindex HAVE_RESTARTABLE_SYSCALLS
+If the system automatically restarts a system call that is interrupted
+by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}. This macro does
+not check if system calls are restarted in general--it tests whether a
+signal handler installed with @code{signal} (but not @code{sigaction})
+causes system calls to be restarted. It does not test if system calls
+can be restarted when interrupted by signals that have no handler.
+
+These days portable programs should use @code{sigaction} with
+@code{SA_RESTART} if they want restartable system calls.  They should
+not rely on @code{HAVE_RESTARTABLE_SYSCALLS}, since nowadays whether a
+system call is restartable is a dynamic issue, not a configuration-time
+issue.
 @end defmac
 
 @defmac AC_SYS_SIGLIST_DECLARED

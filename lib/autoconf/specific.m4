@@ -494,7 +494,11 @@ fi
 # If the system automatically restarts a system call that is
 # interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
-[AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
+[AC_DIAGNOSE([obsolete],
+[$0: System call restartability is now typically set at runtime.
+Remove this `AC_SYS_RESTARTABLE_SYSCALLS'
+and adjust your code to use `sigaction' with `SA_RESTART' instead.])dnl
+AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(

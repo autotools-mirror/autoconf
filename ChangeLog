@@ -1,3 +1,11 @@
+2001-06-15  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi: Move AC_FUNC_WAIT3 and
+	AC_SYS_RESTARTABLE_SYSCALLS to the obsolete section,
+	and explain why and how to replace them.
+	* acfunctions.m4 (AC_FUNC_WAIT3): Warn as obsolete.
+	* acspecific.m4 (AC_SYS_RESTARTABLE_SYSCALLS): Likewise.
+
 2001-06-15  Akim Demaille  <akim@epita.fr>
 
 	`build_alias' and so on are not AC_SUBST'd.

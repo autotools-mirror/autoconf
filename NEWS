@@ -19,6 +19,7 @@
 
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.
+- AC_FUNC_WAIT3 and AC_SYS_RESTARTABLE_SYSCALLS are obsoleted.
 
 * Major changes in Autoconf 2.50
 

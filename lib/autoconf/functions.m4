@@ -1578,7 +1578,10 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 # AC_FUNC_WAIT3
 # -------------
 AC_DEFUN([AC_FUNC_WAIT3],
-[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
+[AC_DIAGNOSE([obsolete],
+[$0: `wait3' is being removed from the Open Group standards.
+Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
+AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
 [AC_TRY_RUN(
 [#include <sys/types.h>
 #include <sys/time.h>
