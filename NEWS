@@ -27,6 +27,10 @@
 
 - Limitations of Make
   More of them.
+
+- GNATS
+  The GNATS base has moved to
+  http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf
 
 * Major changes in Autoconf 2.53
 
