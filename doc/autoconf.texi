@@ -1738,7 +1738,10 @@ The argument is available to the shell commands @var{action-if-true} in
 the shell variable @code{enableval}.  If no argument was given to
 @samp{--enable-@var{feature}}, @code{enableval} is @samp{yes}.
 @samp{--disable-@var{feature}} is equivalent to
-@samp{--enable-@var{feature}=no}.
+@samp{--enable-@var{feature}=no}.  At present, arguments containing blanks
+are not handled correctly; if you need an argument to contain a list,
+require the items to be separated by commas instead.  (This restriction
+might disappear in the future.)
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -1778,7 +1781,10 @@ The argument is available to the shell commands @var{action-if-true} in
 the shell variable @code{withval}.  If no argument was given to
 @samp{--with-@var{package}}, @code{withval} is @samp{yes}.
 @samp{--without-@var{package}} is equivalent to
-@samp{--with-@var{package}=no}.
+@samp{--with-@var{package}=no}.  At present, arguments containing blanks
+are not handled correctly; if you need an argument to contain a list,
+require the items to be separated by commas instead.  (This restriction
+might disappear in the future.)
 @end defmac
 
 @node Setting Variables, Printing Messages, Command Line, General Purpose Macros
