@@ -1,3 +1,12 @@
+2004-03-28  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Particular Structures): AC_STRUCT_TIMEZONE
+	now defines HAVE_DECL_TZNAME if it is declared, when
+	HAVE_STRUCT_TM_TM_ZONE is not defined.
+	* lib/autoconf/types.m4 (AC_STRUCT_TIMEZONE): Implement this.
+	Do not assume atoi.  Rely on HAVE_DECL_TZNAME when testing
+	for HAVE_TZNAME.
+
 2004-03-28  Steven G. Johnson  <stevenj@fftw.org>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Corrected

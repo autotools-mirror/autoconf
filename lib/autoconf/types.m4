@@ -614,14 +614,15 @@ if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
 	    [Define to 1 if your `struct tm' has `tm_zone'. Deprecated, use
 	     `HAVE_STRUCT_TM_TM_ZONE' instead.])
 else
+  AC_CHECK_DECLS([tzname], , , [#include <time.h>])
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_LINK_IFELSE([AC_LANG_PROGRAM(
 [[#include <time.h>
-#ifndef tzname /* For SGI.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#if !HAVE_DECL_TZNAME
+extern char *tzname[];
 #endif
 ]],
-[atoi(*tzname);])],
+[[return tzname[0][0];]])],
 		[ac_cv_var_tzname=yes],
 		[ac_cv_var_tzname=no])])
   if test $ac_cv_var_tzname = yes; then

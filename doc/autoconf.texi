@@ -5094,7 +5094,8 @@ had better define @code{struct tm}.
 Figure out how to get the current timezone.  If @code{struct tm} has a
 @code{tm_zone} member, define @code{HAVE_STRUCT_TM_TM_ZONE} (and the
 obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
-@code{tzname} is found, define @code{HAVE_TZNAME}.
+@code{tzname} is found, define @code{HAVE_TZNAME}; if it is declared,
+define @code{HAVE_DECL_TZNAME}.
 @end defmac
 
 @node Generic Structures
