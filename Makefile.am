@@ -41,17 +41,18 @@ m4sources =  m4sugar.m4 m4sh.m4  \
              acfunctions.m4 acheaders.m4
 
 distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
-                 $(m4sources)
+                  $(m4sources)
 
 nodistpkgdataDATA = autoconf.m4f
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
-EXTRA_DIST = $(OLDCHANGELOGS) \
-acversion.m4.in autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
-ifnames.sh autoscan.pl INSTALL.txt \
-$(distpkgdataDATA)
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 \
+             BUGS INSTALL.txt \
+             acversion.m4.in \
+             autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh \
+             autoscan.pl \
+             $(distpkgdataDATA)
 
 # Files that should be removed, but which Automake does not know:
 # the frozen files and the scripts.
@@ -72,9 +73,8 @@ CLEANFILES = autoconf.m4f \
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
 acversion.m4: $(srcdir)/acversion.m4.in $(srcdir)/configure.in
-	sed -e 's,@''VERSION@,$(VERSION),' $(srcdir)/acversion.m4.in > acversion.tm4
-	cp acversion.tm4 $(srcdir)/acversion.m4
-	rm -f acversion.tm4
+	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.m4.in >acversion.tm4
+	mv acversion.tm4 $(srcdir)/acversion.m4
 
 ## INSTALL.  ##
 

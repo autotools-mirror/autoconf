@@ -1,0 +1,32 @@
+-*- outline -*-
+
+This file lists the bugs you must be aware ofBe sure to check this
+file before using Autoconf, and especially CVS versions of Autoconf.
+
+Many other bugs are registered on the GNATS server:
+
+     http://sources.redhat.com/cgi-bin/gnatsweb.pl?database=autoconf
+
+Please, don't register bugs listed below: we already know we have to
+address them.
+
+* Status
+
+	/*----------------------------------------.
+	| DO NOT USE THIS VERSION IN PRODUCTION.  |
+	`----------------------------------------*/
+
+* Serious bugs
+
+Autoconf must not be used in production if there are `grave' bugs.
+
+** Portability of expr
+AS_DIRNAME is not portable on QNX.
+
+** : ${foo=$val}
+There are problems on Ultrix and I don't recall which architecture.
+
+** : foo=${foo='${MAGIC}'}
+Solaris behaves very improperly here and adds braces.  This affects
+the cache mechanism.  Fortunately it is uncommon to have such cache
+entries, but Libtool is affected.

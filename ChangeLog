@@ -1,5 +1,14 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* BUGS: New file.
+	Be sure to read this file if you're using a non released Autoconf.
+	* tests/tools.at (Syntax of the scripts): The non built tools are
+	in `$top_srcdir', not `..'.
+	(autoconf --trace): When using `-i' we need the src tree, not the
+	build tree.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	A single m4_require is enough.
 
 	* m4sugar.m4 (_m4_require): $2 defaults to $1.
@@ -7,17 +16,17 @@
 	(m4_require): this.
 	* acgeneral.m4 (_AC_REQUIRE): Remove, use m4_require if you want
 	to get into the gory details.
-	
+
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_INIT_DEFAULTS_ENVIRONMENT): Rename as...
 	* m4sh.m4 (AS_SHELL_SANITIZE): this.
-	
+
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Don't neutralize
 	autoconf's warnings.
-	
+
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	Set AC_LANG_PREPROC_REQUIRE which replaces AC_REQUIRE_CPP.
@@ -61,7 +70,7 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	* tests/m4sh.at (AS_DIRNAME & AS_DIRNAME_SED): Simplify.
-	
+
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
 	* acfunctions.m4 (AC_FUNC_ALLOCA): Don't require AC_PROG_CPP,

@@ -2,7 +2,7 @@
 
 cat <<EOF
 
-Autoheader, autoupdate...
+Executables (autoheader, autoupdate...)
 
 EOF
 
@@ -31,7 +31,7 @@ EOF
 # So before using `/bin/sh -n' to check our scripts, we first check
 # that `/bin/sh -n' is not broken to death.
 
-AT_SETUP(Syntax of the scripts)
+AT_SETUP([Syntax of the scripts])
 
 # A script that never returns.  We don't care that it never returns,
 # broken /bin/sh loop equally with `false', but it makes it easier to
@@ -61,9 +61,11 @@ if /bin/sh ./syntax.sh; then
   AT_CHECK([/bin/sh -n ../autoreconf], 0)
   AT_CHECK([/bin/sh -n ../autoupdate], 0)
   AT_CHECK([/bin/sh -n ../ifnames],    0)
-  AT_CHECK([/bin/sh -n ../install-sh], 0)
-  AT_CHECK([/bin/sh -n ../mkinstalldirs], 0)
-  AT_CHECK([/bin/sh -n ../missing], 0)
+
+  # These are not built, they are in the src tree.
+  AT_CHECK([/bin/sh -n $top_srcdir/install-sh], 0)
+  AT_CHECK([/bin/sh -n $top_srcdir/mkinstalldirs], 0)
+  AT_CHECK([/bin/sh -n $top_srcdir/missing], 0)
 fi
 
 AT_CLEANUP
@@ -79,7 +81,7 @@ AT_CLEANUP
 # autoheader is intensively used in its modern form throught this
 # test suite.  But we also have to check that acconfig.h still works.
 
-AT_SETUP(autoheader)
+AT_SETUP([autoheader])
 
 AT_DATA(acconfig.h,
 [[/* Define this to whatever you want. */
@@ -165,7 +167,7 @@ AT_CLEANUP
 ## ------------ ##
 
 # Check that AC_CANONICAL_SYSTEM and AC_OUTPUT are properly updated.
-AT_SETUP(autoupdate)
+AT_SETUP([autoupdate])
 
 AT_DATA(configure.in,
 [[AC_INIT
@@ -250,7 +252,7 @@ AT_CLEANUP
 
 # Tracing user defined macros
 # ---------------------------
-AT_SETUP(autoconf --trace)
+AT_SETUP([autoconf --trace])
 
 AT_DATA(configure.in,
 [[define([active], [ACTIVE])
@@ -305,7 +307,7 @@ AT_CLEANUP
 
 # Tracing builtins
 # ----------------
-AT_SETUP(Tracing M4 builtins)
+AT_SETUP([Tracing M4 builtins])
 
 AT_DATA(configure.in,
 [[define([active], [ACTIVE])
@@ -319,7 +321,9 @@ AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define |
 
 # FIXME: Without `$1' the following test dies.  Groumphf, once again to
 # dive into obscure feature interaction...
-AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define:'$1' -i |
+# Note that using `-i' means we need the *.m4 files, not the *.m4f files,
+# hence we need srcdir, not builddir.
+AT_CHECK([[autoconf --autoconf-dir $top_srcdir -l $at_srcdir -t define:'$1' -i|
             sed -n '$p']],
          0,
 [[active
@@ -334,7 +338,7 @@ AT_CLEANUP
 ## autoconf's ability to catch unexpanded macros.  ##
 ## ----------------------------------------------- ##
 
-AT_SETUP(unexpanded macros)
+AT_SETUP([unexpanded macros])
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
@@ -364,7 +368,7 @@ AT_CLEANUP(configure)
 ## autoconf's AWK portability.  ##
 ## ---------------------------- ##
 
-AT_SETUP(AWK portability)
+AT_SETUP([AWK portability])
 
 AT_DATA([configure.in],
 [[AC_INIT
@@ -392,7 +396,7 @@ AT_CLEANUP(configure)
 ## ifnames.  ##
 ## --------- ##
 
-AT_SETUP(ifnames)
+AT_SETUP([ifnames])
 
 AT_DATA([iftest1.c],
 [[#ifdef DEF1

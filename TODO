@@ -36,6 +36,10 @@ convenient.
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
 
+** Forbidden patterns
+Chose a means to declare patterns to catch, means to escape the
+control, and document it.
+
 * Autoconf 2.51 or so
 
 ** AC_FUNC_GETLOADAVG

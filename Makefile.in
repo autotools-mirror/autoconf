@@ -83,15 +83,14 @@ EXTRA_SCRIPTS = autoscan
 m4sources = m4sugar.m4 m4sh.m4               autoconf.m4              acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 acversion.m4              acfunctions.m4 acheaders.m4
 
 
-distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms                  $(m4sources)
+distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms                   $(m4sources)
 
 
 nodistpkgdataDATA = autoconf.m4f
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
-EXTRA_DIST = $(OLDCHANGELOGS) acversion.m4.in autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh autoscan.pl INSTALL.txt $(distpkgdataDATA)
+EXTRA_DIST = ChangeLog.0 ChangeLog.1              BUGS INSTALL.txt              acversion.m4.in              autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh              autoscan.pl              $(distpkgdataDATA)
 
 
 # Files that should be removed, but which Automake does not know:
@@ -419,9 +418,8 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
 acversion.m4: $(srcdir)/acversion.m4.in $(srcdir)/configure.in
-	sed -e 's,@''VERSION@,$(VERSION),' $(srcdir)/acversion.m4.in > acversion.tm4
-	cp acversion.tm4 $(srcdir)/acversion.m4
-	rm -f acversion.tm4
+	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.m4.in >acversion.tm4
+	mv acversion.tm4 $(srcdir)/acversion.m4
 
 # INSTALL is a special case.  Automake seems to have a single name space
 # for both targets and variables.  If we just use INSTALL, then the var
