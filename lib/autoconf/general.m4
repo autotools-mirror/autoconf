@@ -915,7 +915,7 @@ define([_AC_INIT_SRCDIR],
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
-  ac_prog=[$]0
+  ac_prog=$[0]
   ac_confdir=`echo "$ac_prog" | sed 's%/[[^/][^/]]*$%%'`
   test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
@@ -1543,7 +1543,7 @@ running configure, to aid debugging if configure makes a mistake.
 
 It was created by configure ifset([AC_PACKAGE_STRING],
                             [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
- > [$]0 $ac_configure_args
+ > $[0] $ac_configure_args
 " >&AC_FD_LOG
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
@@ -2533,12 +2533,12 @@ ifval([$3], [test -n "$$1" || $1="$3"
 # -----------------------------------------------------------------------
 AC_DEFUN(AC_PATH_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
-set dummy $2; ac_word=[$]2
+set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_path_$1,
-[case "[$]$1" in
+[case "$$1" in
   [[\\/]]* | ?:[[\\/]]*)
-  ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
+  ac_cv_path_$1="$$1" # Let the user override the test with a path.
   ;;
   *)
   ac_save_ifs=$IFS; IFS=':'
@@ -2556,13 +2556,13 @@ dnl not every word.  This closes a longstanding sh security hole.
   IFS=$ac_save_ifs
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
-ifval([$3], [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
+ifval([$3], [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"
 ])dnl
   ;;
 esac])dnl
 $1=$ac_cv_path_$1
-if test -n "[$]$1"; then
-  AC_MSG_RESULT([$]$1)
+if test -n "$$1"; then
+  AC_MSG_RESULT($$1)
 else
   AC_MSG_RESULT(no)
 fi
@@ -2576,10 +2576,10 @@ AC_SUBST($1)dnl
 AC_DEFUN(AC_PATH_PROGS,
 [for ac_prog in $2
 do
-AC_PATH_PROG($1, [$]ac_prog, , $4)
-test -n "[$]$1" && break
+AC_PATH_PROG($1, $ac_prog, , $4)
+test -n "$$1" && break
 done
-ifval([$3], [test -n "[$]$1" || $1="$3"
+ifval([$3], [test -n "$$1" || $1="$3"
 ])])
 
 
@@ -3693,8 +3693,8 @@ define([_AC_LINK_FILES_CNT], incr(_AC_LINK_FILES_CNT))dnl
 ac_sources="$1"
 ac_dests="$2"
 while test -n "$ac_sources"; do
-  set $ac_dests; ac_dest=[$]1; shift; ac_dests=[$]*
-  set $ac_sources; ac_source=[$]1; shift; ac_sources=[$]*
+  set $ac_dests; ac_dest=$[1]; shift; ac_dests=$[*]
+  set $ac_sources; ac_source=$[1]; shift; ac_sources=$[*]
   [ac_config_links_]_AC_LINK_FILES_CNT="$[ac_config_links_]_AC_LINK_FILES_CNT $ac_dest:$ac_source"
 done
 AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
@@ -3947,7 +3947,7 @@ do
     ac_option=`echo "$[1]" | sed -e 's/=.*//'`
     ac_optarg=`echo "$[1]" | sed -e ['s/[^=]*=//']`
     shift
-    set dummy "[\$]ac_option" "$ac_optarg" ${1+"$[@]"}
+    set dummy "$ac_option" "$ac_optarg" ${1+"$[@]"}
     shift
     ;;
   -*);;

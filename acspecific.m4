@@ -100,7 +100,7 @@ fi])])
 # Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
-set dummy ${MAKE-make}; ac_make=`echo "[$]2" | sed 'y%./+-%__p_%'`
+set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y%./+-%__p_%'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftestmake <<\EOF
 all:
@@ -1426,11 +1426,11 @@ ac_save_IFS=$IFS; IFS=','
 set dummy `echo "$ac_cv_func_select_args" | sed -e 's/\*/\*/g'`
 IFS=$ac_save_IFS
 shift
-AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, [$]1,
+AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $[1],
                    [Define to the type of arg 1 for `select'.])
-AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ([$]2),
+AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ($[2]),
                    [Define to the type of args 2, 3 and 4 for `select'.])
-AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ([$]3),
+AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($[3]),
                    [Define to the type of arg 5 for `select'.])
 ])# AC_FUNC_SELECT_ARGTYPES
 

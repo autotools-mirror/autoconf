@@ -1,5 +1,13 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Simplify all the unjustified `[\$]foo' into
+	`\$foo', the quotes are needed only for `\$[1]', `\$[@]' etc.
+	Prefer `$$1' to `[$]$1', `$foo' to `[$]foo', `$[1]' to `[$]1' etc.
+	* aclang.m4: Likewise.
+	* acspecific.m4: Likewise.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_TRY_COMPILER): Fix quotation.
 
 2000-05-19  Akim Demaille  <akim@epita.fr>

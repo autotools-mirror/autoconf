@@ -193,7 +193,7 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
 # This sometimes fails to find confdefs.h, for some reason.
-# #line __oline__ "[$]0"
+# #line __oline__ "$[0]"
 define([AC_LANG_SOURCE(C)],
 [#line __oline__ "configure"
 #include "confdefs.h"
@@ -517,7 +517,7 @@ AC_DEFUN(AC_PROG_CC_C_O,
 else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
-set dummy $CC; ac_cc=`echo [$]2 |
+set dummy $CC; ac_cc=`echo $[2] |
 		      sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [echo 'foo(){}' >conftest.c
@@ -811,7 +811,7 @@ rm -f conftest*
 AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
-set dummy $F77; ac_f77=`echo [$]2 |
+set dummy $F77; ac_f77=`echo $[2] |
 sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
 [cat >conftest.f <<EOF
