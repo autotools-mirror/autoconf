@@ -201,11 +201,11 @@ m4_define([AT_CHECK_CONFIGURE],
 # me tests might exit prematurely when they find a problem, in
 # which case `env-after' is probably missing.  Don't check it then.
 m4_define([AT_CHECK_ENV],
-[if test -f state-env.before -a -f state-env.after; then
+[if test -f state-env.before && test -f state-env.after; then
   mv -f state-env.before expout
   AT_CHECK([cat state-env.after], 0, expout)
 fi
-if test -f state-ls.before -a -f state-ls.after; then
+if test -f state-ls.before && test -f state-ls.after; then
   mv -f state-ls.before expout
   AT_CHECK([cat state-ls.after], 0, expout)
 fi
