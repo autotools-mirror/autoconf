@@ -179,7 +179,7 @@
 	* tests/base.m4 (m4_wrap, AC_REQUIRE, AC_SHELL_MKDIR_P): Use it.
 	* autoconf.sh: Properly handle the case where `$output' is `-'
 	(i.e., stdout).
-	Handle `-ofile', not only `-o file'.
+	Handle `-ofile', not just `-o file'.
 
 2000-07-10  Akim Demaille  <akim@epita.fr>
 

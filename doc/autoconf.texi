@@ -6544,11 +6544,11 @@ The first requirement is to pay great attention to the quotation, for
 more details, see @ref{Autoconf Language}, and @ref{Quoting}.
 
 Do not try to invent new interfaces, it is likely that there is a macro
-in Autoconf which resembles to the macro you are defining: try to stick
-to this existing interface (order of the arguments, default values
-etc.).  We @emph{are} conscious than some of these interfaces are not
-perfect, nevertheless, when harmless, homogeneity should be privileged
-over creativity.
+in Autoconf which resembles the macro you are defining: try to stick to
+this existing interface (order of arguments, default values etc.).  We
+@emph{are} conscious that some of these interfaces are not perfect,
+nevertheless, when harmless, homogeneity should be preferred over
+creativity.
 
 Be careful about clashes both between M4 symbols, and shell variables.
 
@@ -6575,8 +6575,8 @@ Do not use @code{dnl} to introduce comments: most of the comments you
 are likely to write are either header comments which are not output
 anyway, or comments that should make their way into @file{configure}.
 There are exceptional cases where you do want to comment special M4
-constructs, in which case @code{dnl} is right, but keep in mind it is
-unlikely.
+constructs, in which case @code{dnl} is right, but keep in mind that it
+is unlikely.
 
 M4 ignores the leading spaces before each argument, use this feature to
 indent in such a way that arguments are (more or less) aligned with the
@@ -6612,8 +6612,9 @@ AC_CACHE_CHECK([for EMX OS/2 environment],
 @end example
 
 
-Be free to use various tricks to avoid that auxiliary tools, such as
-editors, behave improperly.  For instance, instead of
+Feel free to use various tricks to avoid that auxiliary tools, such as
+syntax-highlighting editors, behave improperly.  For instance, instead
+of
 
 @example
 patsubst([$1], [$"])
@@ -6642,7 +6643,7 @@ test $[@@%:@@] != 0
 @end example
 
 @noindent
-to avoid that the closing bracket be hidden inside a @samp{#}-comment,
+otherwise, the closing bracket would be hidden inside a @samp{#}-comment
 breaking the bracket matching highlighting from Emacsen.
 
 When using @command{sed}, don't use @option{-e} but for indenting
@@ -6667,13 +6668,13 @@ All the @code{AC_REQUIRE} should be at the beginning of the macro,
 @code{dnl}'ed.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
-beginning of a line, followed by a comment which reminds the name of the
+beginning of a line, followed by a comment which repeats the name of the
 macro being defined.  If you want to avoid the new-line which is then
 introduced, use @code{dnl}.  Better yet, use @samp{[]dnl} @emph{even}
 behind of parenthesis, since because of the M4 evaluation rule the
 @samp{dnl} might be appended to the result of the evaluation of the
-macro before it (leading to @samp{yesdnl} instead of @samp{yes}).  For
-instance, instead of:
+macro before it (e.g., leading to @samp{yesdnl} instead of @samp{yes}).
+For instance, instead of:
 
 @example
 AC_DEFUN([AC_PATH_X],
