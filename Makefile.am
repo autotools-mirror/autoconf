@@ -124,6 +124,11 @@ editpl = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE\@,$(PACKAGE),g'
 
+## All the scripts below depend on configure.in so that they are rebuilt
+## when the Autoconf version changes. Unfortunately, suffix rules cannot
+## have additional dependencies, so we have to use explicit rules for
+## every script.
+
 autoconf: $(srcdir)/autoconf.sh $(srcdir)/configure.in
 	rm -f autoconf autoconf.tmp
 	$(editsh) $(srcdir)/autoconf.sh >autoconf.tmp
