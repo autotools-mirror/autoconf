@@ -89,7 +89,7 @@ install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(acdatadir)/acgeneral.m4
 	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(acdatadir)/acspecific.m4
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(acdatadir)/acconfig.h
-	$(INSTALL_DATA) $(srcdir)/install.sh $(acdatadir)/install.sh
+	$(INSTALL_DATA) $(srcdir)/INSTALL $(acdatadir)/install.sh
 	-if test -f autoconf.info; then d=.; else d=$(srcdir); fi; \
 	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info
 	-if test -f standards.info; then d=.; else d=$(srcdir); fi; \
