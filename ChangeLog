@@ -1,3 +1,9 @@
+2001-03-06  Pavel Roskin  <proski@gnu.org>
+
+	* tests/base.at (AC_TRY_*): Escape `^' - it's a pipe command
+	separator on Tru64 v5.1.
+	Reported by Nicolas Joly.
+
 2001-03-05  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_INIT): Register at-setup-line and
