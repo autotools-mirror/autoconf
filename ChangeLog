@@ -1,3 +1,7 @@
+2000-10-12  Morten Eriksen <mortene@sim.no>
+
+	* acgeneral.m4 (AC_CONFIG_SUBDIRS): Fixed nasty typo.
+
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
 	* tests/mktests.sh: Backslash the quote in the heredocs to help

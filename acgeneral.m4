@@ -4384,9 +4384,9 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 [_AC_CONFIG_UNIQUE([$1])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
-AC_VAR_INDIR_IELSE([$1],
-                   [AC_DIAGNOSE(syntax,
-                               [$0: you should use literals])])
+AC_VAR_INDIR_IFELSE([$1],
+                    [AC_DIAGNOSE(syntax,
+                                [$0: you should use literals])])
 AC_DIVERT([DEFAULTS], [ac_subdirs_all="$ac_subdirs_all $1"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
 ])
