@@ -1,6 +1,6 @@
 dnl Parameterized macros that do not check for something specific.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -771,10 +771,6 @@ define(AC_OUTPUT_HEADER,[dnl
 ifdef([AC_CONFIG_NAMES],[dnl
 changequote(<<,>>)dnl
 
-CONFIG_HEADERS=${CONFIG_HEADERS-"AC_CONFIG_NAMES"}
-for file in .. ${CONFIG_HEADERS}; do if test "x$file" != x..; then
-echo creating $file
-
 # These sed commands are put into SEDDEFS when defining a macro.
 # They are broken into pieces to make the sed script easier to manage.
 # They are passed to sed as "A NAME B NAME C VALUE D", where NAME
@@ -844,31 +840,36 @@ CONFEOF
 rm -f conftest.h
 # Break up the sed commands because old seds have small limits.
 maxsedlines=20
-cp $top_srcdir/$file.in conftest.h1
-while :
-do
-  lines=`grep -c . conftest.sed`
-  if test -z "$lines" || test "$lines" -eq 0; then break; fi
-  rm -f conftest.s1 conftest.s2 conftest.h2
-  sed ${maxsedlines}q conftest.sed > conftest.s1 # Like head -20.
-  sed 1,${maxsedlines}d conftest.sed > conftest.s2 # Like tail +21.
-  sed -f conftest.s1 < conftest.h1 > conftest.h2
-  rm -f conftest.s1 conftest.h1 conftest.sed
-  mv conftest.h2 conftest.h1
-  mv conftest.s2 conftest.sed
-done
-rm -f conftest.sed conftest.h
-echo "/* $file.  Generated automatically by configure.  */" > conftest.h
-cat conftest.h1 >> conftest.h
-rm -f conftest.h1
-if cmp -s $file conftest.h 2>/dev/null; then
-  # The file exists and we would not be changing it.
-  echo "$file is unchanged"
-  rm -f conftest.h
-else
-  rm -f $file
-  mv conftest.h $file
-fi
+
+CONFIG_HEADERS=${CONFIG_HEADERS-"AC_CONFIG_NAMES"}
+for file in .. ${CONFIG_HEADERS}; do if test "x$file" != x..; then
+  echo creating $file
+
+  cp $top_srcdir/$file.in conftest.h1
+  while :
+  do
+    lines=`grep -c . conftest.sed`
+    if test -z "$lines" || test "$lines" -eq 0; then break; fi
+    rm -f conftest.s1 conftest.s2 conftest.h2
+    sed ${maxsedlines}q conftest.sed > conftest.s1 # Like head -20.
+    sed 1,${maxsedlines}d conftest.sed > conftest.s2 # Like tail +21.
+    sed -f conftest.s1 < conftest.h1 > conftest.h2
+    rm -f conftest.s1 conftest.h1 conftest.sed
+    mv conftest.h2 conftest.h1
+    mv conftest.s2 conftest.sed
+  done
+  rm -f conftest.sed conftest.h
+  echo "/* $file.  Generated automatically by configure.  */" > conftest.h
+  cat conftest.h1 >> conftest.h
+  rm -f conftest.h1
+  if cmp -s $file conftest.h 2>/dev/null; then
+    # The file exists and we would not be changing it.
+    echo "$file is unchanged"
+    rm -f conftest.h
+  else
+    rm -f $file
+    mv conftest.h $file
+  fi
 fi; done
 
 ])])dnl
