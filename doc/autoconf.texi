@@ -8177,6 +8177,13 @@ details about what this returns and why it is more portable than the
 @command{dirname} command.
 @end defmac
 
+@defmac AS_IF (@var{test}, @ovar{RUN-IF-TRUE}, @ovar{RUN-IF-FALSE})
+@asindex{IF}
+Run shell code TEST.  If TEST exits with a zero status then run shell code
+RUN-IF-TRUE, else run shell code RUN-IF-FALSE, with simplifications if either
+RUN-IF-TRUE or RUN-IF-FALSE is empty.
+@end defmac
+
 @defmac AS_MKDIR_P (@var{filename})
 @asindex{MKDIR_P}
 Make the directory @var{filename}, including intervening directories
