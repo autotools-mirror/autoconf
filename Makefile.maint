@@ -262,7 +262,7 @@ define emit-rsync-commands
 	echo =====================================
 endef
 
-$(xd-delta): $(release-archive-dir)/$(prev-tgz) $(distdir).tar.gz
+$(xd-delta): $(release_archive_dir)/$(prev-tgz) $(distdir).tar.gz
 	xdelta delta -9 $^ $@ || :
 
 alpha: local-check

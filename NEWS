@@ -1,4 +1,6 @@
-* Major changes in Autoconf 2.51                       -*- outline -*-
+* Major changes in Autoconf 2.51a                       -*- outline -*-
+[2.51]
+* Major changes in Autoconf 2.51
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs

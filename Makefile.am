@@ -66,8 +66,6 @@ CLEANFILES = autoconf.m4f \
 ## Maintainer rules.  ##
 ## ------------------ ##
 
-move_if_change = $(top_srcdir)/config/move-if-change
-
 ## acversion.m4.  ##
 
 # - acversion.m4 needs to be updated only once, since it depends on
@@ -137,37 +135,37 @@ autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp
 	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
-	$(move_if_change) autoconf.tmp autoconf
+	mv autoconf.tmp autoconf
 
 autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.ac
 	rm -f autoheader autoheader.tmp
 	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
 	chmod +x autoheader.tmp
-	$(move_if_change) autoheader.tmp autoheader
+	mv autoheader.tmp autoheader
 
 autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.ac
 	rm -f autoreconf autoreconf.tmp
 	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
 	chmod +x autoreconf.tmp
-	$(move_if_change) autoreconf.tmp autoreconf
+	mv autoreconf.tmp autoreconf
 
 autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.ac
 	rm -f autoupdate autoupdate.tmp
 	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
-	$(move_if_change) autoupdate.tmp autoupdate
+	mv autoupdate.tmp autoupdate
 
 ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.ac
 	rm -f ifnames ifnames.tmp
 	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
 	chmod +x ifnames.tmp
-	$(move_if_change) ifnames.tmp ifnames
+	mv ifnames.tmp ifnames
 
 autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.ac
 	rm -f autoscan autoscan.tmp
 	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
 	chmod +x autoscan.tmp
-	$(move_if_change) autoscan.tmp autoscan
+	mv autoscan.tmp autoscan
 
 
 ## ------------------ ##
