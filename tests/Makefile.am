@@ -20,7 +20,7 @@
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
              atlocal.in
 
 # Running the uninstalled scripts.

@@ -1,26 +1,11 @@
 Makefile
-AT-* at-* atlocal atconfig experr expout stderr stdout
-config.h config.hin
-config.log
-config.status
-configure configure.ac configure.in configure.scan
-confdefs.h
-conftest*
-dst1 dst2 src1 src2
-empty
-endless.sh
 macros.m4
-mycc mycpp
-state*
-syntax.sh expr
+expr
 *.log
-testsuite testsuite.tmp testsuite.[0-9][0-9][0-9]
+testsuite testsuite.tmp testsuite.dir
 autom4te.cache
-command.in header.in link.in
-script.s4g
 package.m4
 ifnames
-install-sh
 autoupdate
 autoscan
 autoreconf

@@ -72,7 +72,7 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
              atlocal.in
 
 
