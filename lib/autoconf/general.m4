@@ -354,7 +354,7 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 # user copyrights, and after the setup of the --version handling.
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
-[Copyright (C) 2003 Free Software Foundation, Inc.
+[Copyright (C) 2004 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.],
 	      [VERSION_FSF])dnl

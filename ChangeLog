@@ -3,7 +3,8 @@
 	* bin/autoconf.as ($version): Update copyright from 2003 to 2004.
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
 	bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in: Likewise.
-
+	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Likewise.
+	
 	* Makefile.in, aclocal.m4, configure, bin/Makefile.in,
 	bin/autoconf.in, config/Makefile.in, config/config.guess,
 	config/config.sub, config/install-sh, config/mdate-sh,
