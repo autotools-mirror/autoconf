@@ -691,17 +691,9 @@ if test "$enable_largefile" != no; then
   _AC_SYS_LARGEFILE_MACRO_VALUE(_FILE_OFFSET_BITS, 64,
     ac_cv_sys_file_offset_bits,
     [Number of bits in a file offset, on hosts where this is settable.])
-  _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
-    ac_cv_sys_largefile_source,
-    [Define to make ftello visible on some hosts (e.g. HP-UX 10.20).],
-    [@%:@include <stdio.h>], [return !ftello;])
   _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1,
     ac_cv_sys_large_files,
     [Define for large files, on AIX-style hosts.])
-  _AC_SYS_LARGEFILE_MACRO_VALUE(_XOPEN_SOURCE, 500,
-    ac_cv_sys_xopen_source,
-    [Define to make ftello visible on some hosts (e.g. glibc 2.1.3).],
-    [@%:@include <stdio.h>], [return !ftello;])
 fi
 ])# AC_SYS_LARGEFILE
 

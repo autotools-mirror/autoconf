@@ -3080,6 +3080,13 @@ If the @code{fnmatch} function is available and works (unlike the one on
 SunOS 5.4), define @code{HAVE_FNMATCH}.
 @end defmac
 
+@defmac AC_FUNC_FSEEKO
+@maindex FUNC_FSEEKO
+@cvindex _LARGEFILE_SOURCE
+If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
+Define @code{_LARGEFILE_SOURCE} if necessary.
+@end defmac
+
 @defmac AC_FUNC_GETGROUPS
 @maindex FUNC_GETGROUPS
 @ovindex GETGROUPS_LIBS
@@ -4573,17 +4580,14 @@ if the system supports @samp{#!}, @samp{no} if not.
 @defmac AC_SYS_LARGEFILE
 @maindex SYS_LARGEFILE
 @cvindex _FILE_OFFSET_BITS
-@cvindex _LARGEFILE_SOURCE
 @cvindex _LARGE_FILES
-@cvindex _XOPEN_SOURCE
 @ovindex CC
 Arrange for
 @uref{http://www.sas.com/standards/large.file/x_open.20Mar96.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
-@code{_FILE_OFFSET_BITS}, @code{_LARGEFILE_SOURCE}, @code{_LARGE_FILES},
-and @code{_XOPEN_SOURCE} if necessary.
+@code{_FILE_OFFSET_BITS} and @code{_LARGE_FILES} if necessary.
 
 The user can disable large-file support by configuring with the
 @option{--disable-largefile} option.

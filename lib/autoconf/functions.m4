@@ -374,6 +374,29 @@ fi
 AU_ALIAS([fp_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 
 
+# AC_FUNC_FSEEKO
+# --------------
+AC_DEFUN([AC_FUNC_FSEEKO],
+[_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
+   [ac_cv_sys_largefile_source],
+   [Define to make fseeko visible on some hosts (e.g. HP-UX 10.20).],
+   [@%:@include <stdio.h>], [return !fseeko;])
+
+# We used to try defining _XOPEN_SOURCE=500 too, to work around a bug
+# in glibc 2.1.3, but that breaks too many other things.
+# If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
+AC_CACHE_CHECK([for fseeko], [ac_cv_func_fseeko],
+               [AC_TRY_LINK([@%:@include <stdio.h>],
+                            [return fseeko && fseeko (stdin, 0, 0);],
+                            [ac_cv_func_fseeko=yes],
+                            [ac_cv_func_fseeko=no])])
+if test $ac_cv_func_fseeko = yes; then
+  AC_DEFINE(HAVE_FSEEKO, 1,
+    [Define if fseeko (and presumably ftello) exists and is declared.])
+fi
+])# AC_FUNC_FSEEKO
+
+
 # AC_FUNC_GETGROUPS
 # -----------------
 # Try to find `getgroups', and check that it works.

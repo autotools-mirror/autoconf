@@ -7,6 +7,8 @@ chown		AC_FUNC_CHOWN
 error		AC_FUNC_ERROR_AT_LINE
 error_at_line	AC_FUNC_ERROR_AT_LINE
 fnmatch		AC_FUNC_FNMATCH
+fseeko		AC_FUNC_FSEEKO
+ftello		AC_FUNC_FSEEKO
 getgroups	AC_FUNC_GETGROUPS
 getloadavg	AC_FUNC_GETLOADAVG
 getpgrp		AC_FUNC_GETPGRP
