@@ -26,6 +26,14 @@
 ;; A major mode for editing autoconf input (like configure.in).
 ;; Derived from m4-mode.el by Andrew Csillag (drew@staff.prodigy.com)
 
+;;; Your should add the following to your Emacs configuration file:
+
+;;  (autoload 'autoconf-mode "autoconf-mode"
+;;            "Major mode for editing autoconf files." t)
+;;  (setq auto-mode-alist
+;;        (cons '("\\.ac\\'\\|configure\\.in\\'" . autoconf-mode)
+;;              auto-mode-alist))
+
 ;;; Code:
 
 ;;thank god for make-regexp.el!

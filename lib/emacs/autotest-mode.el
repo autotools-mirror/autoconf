@@ -27,6 +27,13 @@
 ;; A major mode for editing autotest input (like testsuite.at).
 ;; Derived from autoconf-mode.el, by Martin Buchholz (martin@xemacs.org).
 
+;;; Your should add the following to your Emacs configuration file:
+
+;;   (autoload 'autotest-mode "autotest-mode"
+;;             "Major mode for editing autotest files." t)
+;;   (setq auto-mode-alist
+;;         (cons '("\\.at\\'" . autotest-mode) auto-mode-alist))
+
 ;;; Code:
 
 (defvar autotest-font-lock-keywords
