@@ -1,5 +1,26 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	Have the test suite list of the test groups and their references.
+
+	* tests/atgeneral.m4 (_m4_divert(SUITE_PRO)): Remove, replaced
+	by...
+	(_m4_divert(DEFAULT), _m4_divert(OPTIONS), _m4_divert(HELP))
+	(_m4_divert(SETUP)): these.
+	(_m4_divert(SUITE_EPI)): Rename as...
+	(_m4_divert(TAIL)): this.
+	(AT_INIT): Adjust to the new diversions.
+	Insert the magic number.
+	Accept test groups as cli argument.
+	List the test groups.
+	Rename TESTS, test, and tests as at_tests_all, at_test, and
+	at_tests.
+	Have the debug scripts pass options to test suite.
+	Remove their banner.
+	* tests/atspecific.m4: Don't divert to 0.
+	* suite.at: Don't insert the magic number.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_divert, m4_undivert): Support named diversions.
 	* tests/atgeneral.m4 (_m4_divert(SUITE_PRO), _m4_divert(TESTS))
 	(_m4_divert(SUITE_EPI), _m4_divert(TEST)): New diversions.

@@ -127,5 +127,3 @@ AT_CLEANUP()dnl
 # AT_CHECK_HEADER is a better name, but too close from AC_CHECK_HEADER.
 AT_DEFINE(AT_CHECK_DEFINES,
 [AT_CHECK([[fgrep '#' config.h | grep -v 'STDC_HEADERS']],, [$1])])
-
-m4_divert(0)dnl

@@ -55,11 +55,18 @@ m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
 
 # Use of diversions:
 #
-#  - SUITE_PRO
-#    overall initialization
+#  - DEFAULT
+#    Overall initialization, value of $at_tests_all.
+#  - OPTIONS
+#    Option processing
+#  - HELP
+#    Help message.  Of course it is useless, you could just push into
+#    OPTIONS, but that's much clearer this way.
+#  - SETUP
+#    Be ready to run the tests.
 #  - TESTS
 #    The core of the test suite, the ``normal'' diversion.
-#  - SUITE_EPI
+#  - TAIL
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
 #
@@ -67,11 +74,14 @@ m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
 #    for each test group: proper code, to reinsert between cleanups;
 #    undiverted into TESTS once at_data_files diverted.
 
-m4_define([_m4_divert(SUITE_PRO)],        0)
-m4_define([_m4_divert(TESTS)],           10)
-m4_define([_m4_divert(SUITE_EPI)],       20)
+m4_define([_m4_divert(DEFAULT)],       0)
+m4_define([_m4_divert(OPTIONS)],      10)
+m4_define([_m4_divert(HELP)],         20)
+m4_define([_m4_divert(SETUP)],        30)
+m4_define([_m4_divert(TESTS)],        50)
+m4_define([_m4_divert(TAIL)],         60)
 
-m4_define([_m4_divert(TEST)],           100)
+m4_define([_m4_divert(TEST)],        100)
 
 m4_divert_push([TESTS])
 m4_divert_push([KILL])
@@ -89,8 +99,9 @@ AT_DEFINE([AT_LINE],
 # Begin testing suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 AT_DEFINE([AT_INIT],
-[m4_divert_push([SUITE_PRO])dnl
-AT_DEFINE([AT_ordinal], 0)
+[AT_DEFINE([AT_ordinal], 0)
+m4_divert_push([DEFAULT])dnl
+#! /bin/sh
 . ./atconfig
 # -e sets to true
 at_stop_on_error=false;
@@ -102,28 +113,58 @@ at_verbose=:
 # Shall we keep the debug scripts?  Must be `:' when testsuite is
 # run by a debug script, so that the script doesn't remove itself.
 at_debug=false
-
-at_usage="Usage: $[0] [OPTION]...
-
-  -e  Abort the full suite and inhibit normal clean up if a test fails
-  -n  Do not redirect stdout and stderr and do not test their contents
-  -v  Force more detailed output, default for debugging scripts
-  -x  Have the shell to trace command execution; also implies option -n"
+# Display help message?
+at_help=false
+# Tests to run
+at_tests=
+m4_divert([OPTIONS])dnl Other vars inserted here.
 
 while test $[#] -gt 0; do
   case $[1] in
-    --help) echo "$at_usage"; exit 0 ;;
+    --help | -h) at_help=:; break ;;
     --version) echo "$[0] ($at_package) $at_version"; exit 0 ;;
+
     -d) at_debug=:;;
     -e) at_stop_on_error=:;;
     -n) at_check_stds=false;;
     -v) at_verbose=echo;;
     -x) at_traceon='set -vx'; at_traceoff='set +vx'; at_check_stds=false;;
-    *) echo 1>&2 "Try \`$[0] --help' for more information."; exit 1 ;;
+
+    [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
+        at_tests="$at_tests$[1] ";;
+
+     *) echo 1>&2 "Try \`$[0] --help' for more information."; exit 1 ;;
   esac
   shift
 done
 
+test -z "$at_tests" && at_tests=$at_tests_all
+
+# Help message.
+# Display only the title of selected tests.
+if $at_help; then
+  cat <<EOF
+Usage: $[0] [[OPTION]]... [[TESTS]]
+
+Run all the tests, or the selected TESTS.
+
+Options:
+  -h  Display this help message and the list of tests
+  -e  Abort the full suite and inhibit normal clean up if a test fails
+  -n  Do not redirect stdout and stderr and do not test their contents
+  -v  Force more detailed output, default for debugging scripts
+  -x  Have the shell to trace command execution; also implies option -n
+
+Tests:
+EOF
+  # "1 42 45 " => " (1|42|45|dummy): "
+  at_tests_pattern=`echo "$at_tests" | tr ' ' '|'`
+  egrep -e " (${at_tests_pattern}dummy): " <<EOF
+m4_divert([HELP])dnl Help message inserted here.
+m4_divert([SETUP])dnl
+EOF
+  exit 0
+fi
 
 # To check whether a test succeeded or not, we compare an expected
 # output with a reference.  In the testing suite, we just need `cmp'
@@ -168,15 +209,14 @@ at_ignore_count=0
 at_test_count=0
 m4_divert([TESTS])dnl
 
-: ${tests="$TESTS"}
-for test in $tests
+for at_test in $at_tests
 do
   at_status=0;
-  case $test in
-m4_divert([SUITE_EPI])[]dnl
+  case $at_test in
+m4_divert([TAIL])[]dnl
   esac
   at_test_count=`expr 1 + $at_test_count`
-  $at_verbose $at_n "     $test. $srcdir/`cat at-setup-line`: $at_c"
+  $at_verbose $at_n "     $at_test. $srcdir/`cat at-setup-line`: $at_c"
   case $at_status in
     0) echo ok
        ;;
@@ -184,7 +224,7 @@ m4_divert([SUITE_EPI])[]dnl
         at_ignore_count=`expr $at_ignore_count + 1`
         ;;
     *) echo "FAILED near \``cat at-check-line`'"
-       at_failed_list="$at_failed_list $test"
+       at_failed_list="$at_failed_list $at_test"
        $at_stop_on_error && break
        ;;
   esac
@@ -209,14 +249,7 @@ elif test $at_debug = false; then
   for at_group in $at_failed_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
-      echo 'at_banner="$[0]: '$at_desc'"'
-      echo 'at_dashes=`echo $at_banner | sed s/./=/g`'
-      echo 'echo'
-      echo 'echo "$at_dashes"'
-      echo 'echo "$at_banner"'
-      echo 'echo "$at_dashes"'
-      echo "export tests=$at_group"
-      echo "exec $[0] -v -d"
+      echo 'exec '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
@@ -251,8 +284,9 @@ fi
 
 exit 0
 m4_divert_pop()dnl
-m4_wrap([m4_divert_text([SUITE_PRO],
-                        [TESTS="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
+m4_wrap([m4_divert_text([DEFAULT],
+                        [# List of the tests.
+at_tests_all="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
 ])# AT_INIT
 
 
@@ -262,14 +296,16 @@ m4_wrap([m4_divert_text([SUITE_PRO],
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
 AT_DEFINE([AT_SETUP],
-[AT_DEFINE([AT_ordinal], m4_eval(AT_ordinal + 1))
+[m4_define([AT_ordinal], m4_eval(AT_ordinal + 1))
+m4_divert_text([HELP],
+               [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
 m4_pushdef([AT_data_files], [stdout stderr ])
 m4_divert_push([TESTS])dnl
   AT_ordinal )
 dnl Here will be inserted the definition of at_data_files.
 m4_divert([TEST])[]dnl
     rm -rf $at_data_files
-    echo AT_LINE > at-setup-line
+    echo AT_LINE >at-setup-line
     $at_verbose 'testing $1'
     $at_verbose $at_n "     $at_c"
     if test $at_verbose = echo; then
@@ -352,7 +388,7 @@ $2[]_ATEOF
 AT_DEFINE([AT_CHECK],
 [$at_traceoff
 $at_verbose "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
-echo AT_LINE > at-check-line
+echo AT_LINE >at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
 $1

@@ -1,6 +1,4 @@
-#! /bin/sh
-# -*- Autoconf -*-
-# Validation suite for Autoconf
+# Validation suite for Autoconf                           -*- Autoconf -*-
 # Copyright 2000 Free Software Foundation, Inc.
 
 # Still many parts of `autoconf' are not exercised by the test suite.  A few
