@@ -1,6 +1,9 @@
 -*- outline -*-
 
-Things it might be nice to do someday:
+Things it might be nice to do someday.  I haven't evaluated all of
+these suggestions... their presence here doesn't imply my endorsement,
+just that I haven't looked at them closely enough to reject them yet.
+-djm
 
 ------------------------------------------------------------------------------
 
@@ -209,6 +212,12 @@ From Roland McGrath.
 
 ------------------------------------------------------------------------------
 
+In a future version (after 2.2), make AC_PROG_{CC,RANLIB,anything else}
+use AC_CHECK_TOOL.
+From Roland McGrath.
+
+------------------------------------------------------------------------------
+
 	ls -lt configure configure.in | sort
 doesn't work right if configure.in is from a symlink farm, where the
 symlink has either a timestamp of it's own, or under BSD 4.4, it has
@@ -248,6 +257,61 @@ and an AC_PKG_CHK_FUNCTION
 so one can give alternate paths to check for stuff ($PKG-ROOT/lib for 
 example)
 From: Randall Winchester
+
+------------------------------------------------------------------------------
+
+AC_C_CROSS assumes that configure was
+called like 'CC=target-gcc; ./configure'. I want to write a package
+that has target dependend libraries and host dependend tools. So I
+dont't like to lose the distinction between CC and [G]CC_FOR_TARGET. 
+AC_C_CROSS should check for equality of target and host.
+
+It would be great if 
+
+GCC_FOR_TARGET
+AR_FOR_TARGET
+RANLIB_FOR_TARGET
+
+would be set automatically if host != target.
+AC_LANG_CROSS_C would be nice too, to check header files
+etc. with GCC_FOR_TARGET instead of CC
+
+Here is one simple test
+
+if test "x$host" != "x$target"; then
+AC_PROGRAMS_CHECK(AR_FOR_TARGET, $target-ar, $target-ar, ar)
+AC_PROGRAMS_CHECK(RANLIB_FOR_TARGET, $target-ranlib, $target-ranlib, ranlib)
+AC_PROGRAMS_CHECK(GCC_FOR_TARGET, $target-gcc, $target-gcc, gcc)
+fi
+
+This could be improved to also look for gcc in PATH, but require the
+prefix to contain the target e.g.:
+
+target=m68k-coff -->GCC_FOR_TARGET = /usr/gnu/m68k-coff/bin/gcc
+
+From: nennker@cs.tu-berlin.DE (Axel Nennker)
+
+------------------------------------------------------------------------------
+
+The problem occurs with the following libc functions in SunOS 5.4:
+
+	fnmatch glob globfree regcomp regexec regerror regfree wordexp wordfree
+
+It also occurs with a bunch more libposix4 functions that most people
+probably aren't worried about yet, e.g. shm_open.
+
+All of these functions fail with errno set to 59.  errno 59 is not
+documented and is not in /usr/include/sys/errno.h, but perror claims
+that it means ``Operation not applicable''.
+
+Perhaps autoconf should have a
+specific macro for fnmatch, another for glob+globfree, another for
+regcomp+regexec+regerror+regfree, and another for wordexp+wordfree.
+This wouldn't solve the problem in general, but it should work for
+Solaris 2.4.  Or autoconf could limit itself to fnmatch and regcomp,
+the only two functions that I know have been a problem so far.
+
+From Paul Eggert.
 
 ------------------------------------------------------------------------------
 

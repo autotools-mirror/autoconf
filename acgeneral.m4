@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.1.1)
+define(AC_ACVERSION, 2.1.2)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -926,7 +926,8 @@ define(AC_CACHE_VAL,
 [dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
-if eval "test \"`echo '${'$1'+set}'`\" = set"; then
+dnl the '' avoids an AIX 4.1 sh bug ("invalid expansion").
+if eval "test \"`echo '$''{'$1'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
 else
   $2

@@ -217,10 +217,10 @@ if test -n "$libs"; then
   done
 fi
 
-# The echo and cat are in case @BOTTOM@ is the first line of acconfig.h.
+# Handle the case where @BOTTOM@ is the first line of acconfig.h.
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  (echo; cat $localdir/acconfig.h | sed '1,/@BOTTOM@/d')
+  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
 
 status=0

@@ -596,24 +596,26 @@ AC_DEFUN(AC_HEADER_STAT,
 AC_CACHE_VAL(ac_cv_header_stat_broken,
 [AC_EGREP_CPP([You lose], [#include <sys/types.h>
 #include <sys/stat.h>
-#ifdef S_ISBLK
+
+#if defined(S_ISBLK) && defined(S_IFDIR)
 # if S_ISBLK (S_IFDIR)
 You lose.
 # endif
-# ifdef S_IFCHR
-#  if S_ISBLK (S_IFCHR)
+#endif
+
+#if defined(S_ISBLK) && defined(S_IFCHR)
+# if S_ISBLK (S_IFCHR)
 You lose.
-#  endif
 # endif
 #endif
 
-#ifdef S_ISLNK
+#if defined(S_ISLNK) && defined(S_IFREG)
 # if S_ISLNK (S_IFREG)
 You lose.
 # endif
 #endif
 
-#ifdef S_ISSOCK
+#if defined(S_ISSOCK) && defined(S_IFREG)
 # if S_ISSOCK (S_IFREG)
 You lose.
 # endif
@@ -1160,19 +1162,23 @@ AC_SUBST(ALLOCA)dnl
 ])
 
 AC_DEFUN(AC_FUNC_GETLOADAVG,
-[ac_have_func=no
+[ac_have_func=no # yes means we've found a way to get the load average.
 
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
-AC_CHECK_LIB(kvm, kvm_open,  LIBS="-lkvm $LIBS")
+# On Solaris, -lkvm requires nlist from -lelf, so check that first
+# to get the right answer into the cache.
+AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
+AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
 # Check for the 4.4BSD definition of getloadavg.
 AC_CHECK_LIB(util, getloadavg,
   [LIBS="-lutil $LIBS" ac_have_func=yes ac_cv_func_getloadavg_setgid=yes])
 
 if test $ac_have_func = no; then
-# There is a commonly available library for RS/6000 AIX.
-# Since it is not a standard part of AIX, it might be installed locally.
-ac_save_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
-AC_CHECK_LIB(getloadavg, getloadavg, LIBS="-lgetloadavg $LIBS", LIBS="$ac_save_LIBS")
+  # There is a commonly available library for RS/6000 AIX.
+  # Since it is not a standard part of AIX, it might be installed locally.
+  ac_save_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
+  AC_CHECK_LIB(getloadavg, getloadavg,
+    LIBS="-lgetloadavg $LIBS", LIBS="$ac_save_LIBS")
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -1180,44 +1186,48 @@ AC_REPLACE_FUNCS(getloadavg)
 
 if test $ac_cv_func_getloadavg = yes; then
   AC_DEFINE(HAVE_GETLOADAVG)
+  ac_have_func=yes
 else
-ac_have_func=no
-AC_CHECK_HEADER(sys/dg_sys_info.h,
-[ac_have_func=yes; AC_DEFINE(DGUX)
-AC_CHECK_LIB(dgc, dg_sys_info)])
-if test $ac_have_func = no; then
-# We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
-# uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
-# Irix 4.0.5F has the header but not the library.
-AC_CHECK_LIB(elf, elf_begin,
-  [LIBS="-lelf $LIBS" ac_have_func=yes; AC_DEFINE(SVR4)])
-fi
-if test $ac_have_func = no; then
-AC_CHECK_HEADER(inq_stats/cpustats.h,
-  [ac_have_func=yes; AC_DEFINE(UMAX)
-   AC_DEFINE(UMAX4_3)])
-fi
-if test $ac_have_func = no; then
-AC_CHECK_HEADER(sys/cpustats.h,
-  [ac_have_func=yes; AC_DEFINE(UMAX)])
-fi
-if test $ac_have_func = no; then
-AC_CHECK_HEADERS(mach/mach.h)
-fi
+  # Figure out what our getloadavg.c needs.
+  ac_have_func=no
+  AC_CHECK_HEADER(sys/dg_sys_info.h,
+  [ac_have_func=yes; AC_DEFINE(DGUX)
+  AC_CHECK_LIB(dgc, dg_sys_info)])
 
-AC_CHECK_HEADER(nlist.h,
-[AC_DEFINE(NLIST_STRUCT)
-AC_MSG_CHECKING([for n_un in struct nlist])
-AC_CACHE_VAL(ac_cv_struct_nlist_n_un,
-[AC_TRY_COMPILE([#include <nlist.h>],
-[struct nlist n; n.n_un.n_name = 0;],
-ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])dnl
-AC_MSG_RESULT($ac_cv_struct_nlist_n_un)
-if test $ac_cv_struct_nlist_n_un = yes; then
-  AC_DEFINE(NLIST_NAME_UNION)
-fi
-])dnl
+  # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
+  # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
+  # Irix 4.0.5F has the header but not the library.
+  if test $ac_have_func = no && test $ac_cv_lib_elf = yes; then
+    ac_have_func=yes; AC_DEFINE(SVR4)
+  fi
 
+  if test $ac_have_func = no; then
+    AC_CHECK_HEADER(inq_stats/cpustats.h,
+    [ac_have_func=yes; AC_DEFINE(UMAX)
+    AC_DEFINE(UMAX4_3)])
+  fi
+
+  if test $ac_have_func = no; then
+    AC_CHECK_HEADER(sys/cpustats.h,
+    [ac_have_func=yes; AC_DEFINE(UMAX)])
+  fi
+
+  if test $ac_have_func = no; then
+    AC_CHECK_HEADERS(mach/mach.h)
+  fi
+
+  AC_CHECK_HEADER(nlist.h,
+  [AC_DEFINE(NLIST_STRUCT)
+  AC_MSG_CHECKING([for n_un in struct nlist])
+  AC_CACHE_VAL(ac_cv_struct_nlist_n_un,
+  [AC_TRY_COMPILE([#include <nlist.h>],
+  [struct nlist n; n.n_un.n_name = 0;],
+  ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])dnl
+  AC_MSG_RESULT($ac_cv_struct_nlist_n_un)
+  if test $ac_cv_struct_nlist_n_un = yes; then
+    AC_DEFINE(NLIST_NAME_UNION)
+  fi
+  ])dnl
 fi # Do not have getloadavg in system libraries.
 
 # Some definitions of getloadavg require that the program be installed setgid.
