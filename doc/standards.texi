@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate April 29, 2003
+@set lastupdate February 20, 2004
 @c %**end of header
 
 @dircategory GNU organization
@@ -33,7 +33,7 @@
 The GNU coding standards, last updated @value{lastupdate}.
 
 Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-2001, 2002 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.1
@@ -796,9 +796,9 @@ multi-column format.
 @section Standards for Graphical Interfaces
 @cindex graphical user interface
 
-@cindex gtk
+@cindex gtk+
 When you write a program that provides a graphical user interface,
-please make it work with X Windows and the GTK toolkit unless the
+please make it work with X Windows and the GTK+ toolkit unless the
 functionality specifically requires some alternative (for example,
 ``displaying jpeg images while in console mode'').
 
@@ -1779,7 +1779,7 @@ Specify an HTTP proxy.
 @samp{-q} in Make.
 
 @item quiet
-Used in many programs to inhibit the usual output.  @strong{Note:} every
+Used in many programs to inhibit the usual output.  Every
 program accepting @samp{--quiet} should accept @samp{--silent} as a
 synonym.
 
@@ -1894,7 +1894,7 @@ Used by @code{recode} to chose files or pipes for sequencing passes.
 
 @item silent
 Used in many programs to inhibit the usual output.
-@strong{Note:} every program accepting
+Every program accepting
 @samp{--silent} should accept @samp{--quiet} as a synonym.
 
 @item size
@@ -2422,7 +2422,7 @@ functions.
 @cindex temporary variables
 It used to be common practice to use the same local variables (with
 names like @code{tem}) over and over for different values within one
-function.  Instead of doing this, it is better declare a separate local
+function.  Instead of doing this, it is better to declare a separate local
 variable for each distinct purpose, and give it a name which is
 meaningful.  This not only makes programs easier to understand, it also
 facilitates optimization by good compilers.  You can also move the
