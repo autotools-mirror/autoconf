@@ -50,7 +50,7 @@ TESTSUITE = ./testsuite
 # Don't use AUTOM4TE since `make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
 AUTOTEST = ./autom4te --language=autotest
-testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
+$(TESTSUITE): $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \

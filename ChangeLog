@@ -1,3 +1,9 @@
+2001-11-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/Makefile.am (testsuite): Rename this target as...
+	($(TESTSUITE)): this.
+	From Nicolas Joly.
+
 2001-11-05  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): When removing
