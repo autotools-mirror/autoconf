@@ -1,5 +1,12 @@
 2000-11-01  Akim Demaille  <akim@epita.fr>
 
+	GNU M4 1.4 improperly handle the traces of copies of builtins.
+
+	* autoconf.sh (task trace): When tracing `BUILTIN' also trace
+	`m4_BUILTIN'.
+
+2000-11-01  Akim Demaille  <akim@epita.fr>
+
 	Autoupdate should not depend upon foreign macros.
 
 	* autoupdate.sh (ac.m4): Use `_au_define', not `define'.

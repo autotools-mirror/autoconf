@@ -131,13 +131,36 @@ error.m4, obstack.m4, ptrdiff.m4, strtod.m4, termios.m4, winsz.m4.
 
 * m4
 
-** m4
+** I18n
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
 
-** m4
+** Tracing `builtin'
 F**k!  --trace FOO does not catch indir([FOO], $@)!
 
+** Tracing builtins
+GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
+
+| divert(-1)
+| changequote([, ])
+| define([m4_eval], defn([eval]))
+| eval(1)
+| m4_eval(2)
+| undefine([eval])
+| m4_eval(3)
+
+it behaves this way:
+
+| % m4 input.m4 -da -t eval
+| m4trace: -1- eval(1)
+| m4trace: -1- m4_eval(2)
+| m4trace: -1- m4_eval(3)
+| %
+
+Conversely:
+
+| % m4 input.m4 -da -t m4_eval
+| %
 
 ------------------------------------------------------------------------------
 

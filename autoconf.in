@@ -561,15 +561,63 @@ EOF
     close("cat >&2")
   }
 EOF
+
+
   # Extract both the m4 program and the m4 options from TRACES.
   eval set dummy "$traces"
   shift
   for trace
   do
     # The request may be several lines long, hence sed has to quit.
-    trace_opt="$trace_opt -t "`echo "$trace" | sed -e 's/:.*//;q'`
-    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
-      { (exit 1); exit; }
+    macro_name=`echo "$trace" | sed 's/:.*//;q'`
+    trace_format=`echo "$trace" | sed '1s/^[^:]*://'`
+
+    # GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
+    #
+    # | divert(-1)
+    # | changequote([, ])
+    # | define([m4_eval], defn([eval]))
+    # | eval(1)
+    # | m4_eval(2)
+    # | undefine([eval])
+    # | m4_eval(3)
+    #
+    # it behaves this way:
+    #
+    # | % m4 input.m4 -da -t eval
+    # | m4trace: -1- eval(1)
+    # | m4trace: -1- m4_eval(2)
+    # | m4trace: -1- m4_eval(3)
+    # | %
+    #
+    # Conversely:
+    #
+    # | % m4 input.m4 -da -t m4_eval
+    # | %
+    #
+    # So we will merge them, i.e.  tracing `BUILTIN' or tracing
+    # `m4_BUILTIN' will be the same: tracing both, but honoring the
+    # *last* trace specification.
+    # FIXME: This is not enough: in the output `$0' will be `BUILTIN'
+    # sometimes and `m4_BUILTIN' at others.  We should render a unique name,
+    # the one specified by the user.
+    base_name=`echo "$macro_name" | sed 's/^m4_//'`
+    if echo "ifdef(\`$base_name', \`', \`m4exit(-1)')" | m4; then
+      # BASE_NAME is a builtin.
+      trace_opt="$trace_opt -t $base_name -t m4_$base_name"
+      echo "$base_name:$trace_format" |
+        $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
+          { (exit 1); exit; }
+      echo "m4_$base_name:$trace_format" |
+        $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
+          { (exit 1); exit; }
+    else
+      # MACRO_NAME is not a builtin.
+      trace_opt="$trace_opt -t $macro_name"
+      echo "$trace" |
+        $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
+          { (exit 1); exit; }
+    fi
   done
   echo "divert(0)dnl" >>$tmp/trace.m4
 
