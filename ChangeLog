@@ -30,7 +30,7 @@
 2000-02-24  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh (AC_ACLOCALDIR): Use `(aclocal) 2>/dev/null`, not
-	`aclocal 2>/dev/null` if you want no complains for missing
+	`aclocal 2>/dev/null` if you want no complaints for missing
 	aclocal.
 	From Nicolas Joly.
 
@@ -66,7 +66,7 @@
 2000-02-18  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (at_diff): Don't use `cmp -s', on DOS it
-	makes the difference between Unix and DOS EOL. `diff' does not.
+	differentiate between Unix and DOS EOL. `diff' does not.
 	Reported by Eli Zaretski.
 	Also, be ready to use a diff that does not support `-u'.
 
