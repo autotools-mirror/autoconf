@@ -2036,7 +2036,7 @@ Used in Makeinfo.
 @samp{-r} in @code{ptx}.
 
 @item regex
-@samp{-r} in @code{tac}.
+@samp{-r} in @code{tac} and @code{etags}.
 
 @item release
 @samp{-r} in @code{uname}.
