@@ -719,7 +719,7 @@ changequote([,])dnl
   rm -f "$file"
   comment_str="Generated automatically from `echo $file|sed 's|.*/||'`.in by configure."
   case "$file" in
-    *.c | *.h )  echo "/* $comment_str */" > "$file" ;;
+    *.c | *.h | *.C | *.cc | *.m )  echo "/* $comment_str */" > "$file" ;;
     * )          echo "# $comment_str"     > "$file" ;;
   esac
   sed -e "
