@@ -328,13 +328,16 @@ write in @sc{ansi} C.
 Using a language other than C is like using a non-standard feature: it
 will cause trouble for users.  Even if GCC supports the other language,
 users may find it inconvenient to have to install the compiler for that
-other language in order to build your program.  So please write in C.
+other language in order to build your program.  For example, if you
+write your program in C++, people will have to install the C++ compiler
+in order to compile your program.  Thus, it is better if you write in C.
 
-There are three exceptions for this rule:
+But there are three situations when there is no disadvantage in using
+some other language:
 
 @itemize @bullet
 @item
-It is okay to use a special language if the same program contains an
+It is okay to use another language if your program contains an
 interpreter for that language.
 
 For example, if your program links with GUILE, it is ok to write part of
@@ -348,9 +351,13 @@ This is okay because the only people who want to build the tool will be
 those who have installed the other language anyway.
 
 @item
-If an application is not of extremely widespread interest, then perhaps
+If an application is of interest to a narrow community, then perhaps
 it's not important if the application is inconvenient to install.
 @end itemize
+
+C has one other advantage over C++ and other compiled languages: more
+people know C, so more people will find it easy to read and modify the
+program if it is written in C.
 
 @node Program Behavior
 @chapter Program Behavior for All Programs
