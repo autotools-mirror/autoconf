@@ -215,11 +215,8 @@ m4_define([AC_FOREACH],
 
 
 # AU::AC_HELP_STRING(LHS, RHS, [COLUMN])
-# ----------------------------------
-AU_DEFUN([AC_HELP_STRING],
-[AS_HELP_STRING([$@])dnl
-])
-
+# --------------------------------------
+AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 
 
