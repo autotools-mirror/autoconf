@@ -1204,7 +1204,7 @@ AC_DEFUN([AC_AIX],
    System headers sometimes define this.
    We just want to avoid a redefinition error message.  */
 @%:@ifndef _ALL_SOURCE
-@$:@ undef _ALL_SOURCE
+@%:@ undef _ALL_SOURCE
 @%:@endif])dnl
 AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
 AC_BEFORE([$0], [AC_RUN_IFELSE])dnl

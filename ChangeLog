@@ -1,3 +1,9 @@
+2001-01-22  Raja R Harinath  <harinath@cs.umn.edu>,
+	Tim Van Holder  <tim.van.holder@pandora.be>,
+	Jim Meyering <jim@meyering.net>
+
+	* acspecific.m4 (AC_AIX): Fix typo: s/@\$/@%/.
+
 2001-01-19  Akim Demaille  <akim@epita.fr>
 
 	Catch only used patterns.
