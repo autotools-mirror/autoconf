@@ -1,3 +1,9 @@
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_NOTICE): Adjust so that there are no
+	empty lines in the header comments (should be `#' alone instead).
+	Reported by Didier Verna.
+
 2000-08-01  Greg A. Woods  <woods@weird.com>
 
 	* doc/autoconf.texi (Installation Directory Variables):
