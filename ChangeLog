@@ -1,3 +1,13 @@
+1999-09-05  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (CONFIG_AUX_DIRS): Try running `shtool install'.
+	Contributed by Ralf S. Engelschall <rse@engelschall.com>.
+
+1999-09-04  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Use POSIX compliant shell code on DG/UX.
+	Suggested by Stephen Gildea <gildea@alum.mit.edu>.
+
 1999-09-04  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): Output comment to not only
