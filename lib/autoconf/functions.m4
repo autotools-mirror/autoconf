@@ -348,7 +348,7 @@ AC_DEFUN([_AC_FUNC_FNMATCH],
 [m4_ifval([$1],
    [AC_REQUIRE([AC_C_CONST])
     AC_REQUIRE([AC_FUNC_ALLOCA])
-    AC_REQUIRE([AC_MBSTATE_T])])
+    AC_REQUIRE([AC_TYPE_MBSTATE_T])])
  AC_CACHE_CHECK(
    [for working $2 fnmatch],
    [$3],
