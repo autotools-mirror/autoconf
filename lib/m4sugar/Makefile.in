@@ -34,8 +34,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = $(srcdir)/../freeze.mk Makefile.in Makefile.am \
-	$(dist_m4sugarlib_DATA)
+DIST_COMMON = $(dist_m4sugarlib_DATA) $(srcdir)/../freeze.mk \
+	Makefile.am Makefile.in
 subdir = lib/m4sugar
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4

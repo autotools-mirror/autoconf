@@ -33,9 +33,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am config.guess config.sub \
+DIST_COMMON = Makefile.am Makefile.in config.guess config.sub \
 	elisp-comp install-sh mdate-sh missing mkinstalldirs \
-	texinfo.tex config.guess config.sub
+	texinfo.tex
 subdir = config
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4

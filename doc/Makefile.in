@@ -33,8 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am $(autoconf_TEXINFOS) \
-	version.texi stamp-vti $(standards_TEXINFOS)
+DIST_COMMON = $(autoconf_TEXINFOS) $(standards_TEXINFOS) Makefile.am \
+	Makefile.in stamp-vti version.texi
 subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4

@@ -33,9 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = $(srcdir)/../lib/freeze.mk Makefile.in Makefile.am \
-	atlocal.in wrapper.in wrapper.in wrapper.in wrapper.in \
-	wrapper.in wrapper.in wrapper.in
+DIST_COMMON = $(srcdir)/../lib/freeze.mk Makefile.am Makefile.in \
+	atlocal.in wrapper.in
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
