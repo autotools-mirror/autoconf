@@ -135,7 +135,7 @@ m4_text_wrap([Super long documentation.], [          ], [  --too-wide], 30)
 m4_text_wrap([First, second  , third, [,quoted]])
 ]])
 
-AT_DATA(expout,
+AT_DATA([expout],
 [[/* Short string */
 
 /* Much longer

@@ -28,7 +28,7 @@ AT_BANNER([Autoconf base layer.])
 
 AT_SETUP([AC_REQUIRE: topological sort])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[define([REQUIRE_AND_CHECK],
 [AC_REQUIRE([$1])
 test -z "$m4@__@_translit([$1], [A-Z], [a-z])" && AS_EXIT(1)])

@@ -106,7 +106,7 @@ AT_CLEANUP
 
 AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 rm -rf header var-header file var-file link var-link command var-command
 echo 'OK' >input
@@ -191,7 +191,7 @@ AT_CLEANUP(header file link commandvar-header var-file var-link var-command
 # Check that config.status detects missing input files
 AT_SETUP([Missing templates])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_FILES([nonexistent])
 AC_OUTPUT
@@ -222,7 +222,7 @@ AT_CLEANUP
 
 AT_SETUP([configure invocation])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 echo "result=$one$enable_two$with_three"
 AC_OUTPUT
@@ -424,7 +424,7 @@ AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
 
 # Checking that AC_DEFINE worked properly.
-AT_DATA(expout,
+AT_DATA([expout],
 [m4_for(AT_Count, 1, 100, 1,
 [
 /* AT_DESCRIPTION */
@@ -433,7 +433,7 @@ AT_DATA(expout,
 AT_CHECK([sed -n '3,$ p' config.h], 0, expout)
 
 # Checking that AC_SUBST worked properly.
-AT_DATA(expout,
+AT_DATA([expout],
 [m4_for(AT_Count, 1, 100, 1,
 [AT_BIG_VALUE
 ])])

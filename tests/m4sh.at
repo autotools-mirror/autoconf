@@ -30,7 +30,7 @@ m4_pattern_allow([^AS_EXIT$])
 m4_pattern_allow([^AS_DIRNAME(_SED)?$])
 AT_SETUP([[AS_DIRNAME & AS_DIRNAME_SED]])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()
 #! /bin/sh
 

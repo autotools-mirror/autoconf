@@ -202,7 +202,7 @@ AT_CHECK_MACRO([AC_CHECK_TYPES],
 # or to the new one.
 AT_SETUP([AC_CHECK_TYPES: backward compatibility])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 define([_AC_CHECK_TYPE_NEW], [NEW])
 define([_AC_CHECK_TYPE_OLD], [OLD])
@@ -283,7 +283,7 @@ AT_SETUP([AC_CHECK_PROG & AC_CHECK_PROGS])
 
 AT_CHECK_PROGS_PREPARE
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${ac_path_separator}2${ac_path_separator}3${ac_path_separator}4${ac_path_separator}5${ac_path_separator}6"
@@ -365,7 +365,7 @@ AT_SETUP(AC_PATH_PROG & AC_PATH_PROGS)
 
 AT_CHECK_PROGS_PREPARE
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${ac_path_separator}2${ac_path_separator}3${ac_path_separator}4${ac_path_separator}5${ac_path_separator}6"

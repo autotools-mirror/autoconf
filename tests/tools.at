@@ -49,7 +49,7 @@ AT_SETUP([Syntax of the shell scripts])
 # A script that never returns.  We don't care that it never returns,
 # broken /bin/sh loop equally with `false', but it makes it easier to
 # test the robusteness in a good environment: just remove the `-n'.
-AT_DATA(endless.sh,
+AT_DATA([endless.sh],
 [[while :
 do
   :
@@ -57,7 +57,7 @@ done
 ]])
 
 # A script in charge of testing `/bin/sh -n'.
-AT_DATA(syntax.sh,
+AT_DATA([syntax.sh],
 [[(/bin/sh -n endless.sh) &
 sleep 2
 if kill $! >/dev/null 2>&1; then
@@ -134,7 +134,7 @@ AT_CLEANUP
 AT_SETUP([autoconf --trace: user macros])
 
 m4_pattern_allow([^m4_(define|shift)$])
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[m4_define([active], [ACTIVE])
 m4_define([TRACE1], [TRACE2(m4_shift($@))])
 m4_define([TRACE2], [[$2], $1])
@@ -221,7 +221,7 @@ AT_CLEANUP
 # --------------------------
 AT_SETUP([autoconf --trace: builtins])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[define([active], [ACTIVE])
 ]])
 
@@ -377,14 +377,14 @@ AT_CLEANUP
 
 AT_SETUP([autoheader])
 
-AT_DATA(acconfig.h,
+AT_DATA([acconfig.h],
 [[/* Define this to whatever you want. */
 #undef this
 ]])
 
 
 # 1. Check that `acconfig.h' is still honored.
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(this, "whatever you want.")
@@ -398,7 +398,7 @@ AT_CHECK([autoheader --autoconf-dir ../lib -<configure.ac], 0,
 
 
 # 2. Check that missing templates are a fatal error.
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
@@ -410,7 +410,7 @@ AT_CHECK([autoheader --autoconf-dir ../lib -<configure.ac], 1, [],
 
 
 # 3. Check TOP and BOTTOM.
-AT_DATA(acconfig.h,
+AT_DATA([acconfig.h],
 [[/* Top from acconfig.h. */
 @TOP@
 /* Middle from acconfig.h. */
@@ -418,7 +418,7 @@ AT_DATA(acconfig.h,
 /* Bottom from acconfig.h. */
 ]])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AH_TOP([Top1 from configure.ac.])
@@ -463,7 +463,7 @@ AT_CLEANUP
 # Check that AC_CANONICAL_SYSTEM and AC_OUTPUT are properly updated.
 AT_SETUP([autoupdate])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT(Test, 1.0)
 AC_CANONICAL_SYSTEM
 # The doc says 27 is a valid fubar.
@@ -497,15 +497,15 @@ AT_CLEANUP(configure.ac~)
 # --------------------------
 AT_SETUP([autoupdating AC_LINK_FILES])
 
-AT_DATA(configure.ac,
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_LINK_FILES(dst1 dst2, src1 src2)
 AC_OUTPUT
 ]])
 
-AT_DATA(dst1, dst1
+AT_DATA([dst1], dst1
 )
-AT_DATA(dst2, dst2
+AT_DATA([dst2], dst2
 )
 
 # Checking `autoupdate'.
