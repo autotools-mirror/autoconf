@@ -458,9 +458,9 @@ define(_m4_foreach,
                                                     [$3])])])
 
 
-## ----------------------- ##
-## Text processing in m4.  ##
-## ----------------------- ##
+## ----------------- ##
+## Text processing.  ##
+## ----------------- ##
 
 # m4_quote(STRING)
 # ----------------
@@ -676,3 +676,50 @@ popdef([m4_Width])dnl
 popdef([m4_Prefix1])dnl
 popdef([m4_Prefix])dnl
 ])
+
+
+
+## ------------------- ##
+## Number processing.  ##
+## ------------------- ##
+
+# m4_sign(A)
+# ----------
+#
+# The sign of the integer A.
+define(m4_sign,
+[m4_match([$1],
+          [^-], -1,
+          [^0+], 0,
+                 1)])
+
+# m4_cmp(A, B)
+# ------------
+#
+# Compare two integers.
+# A < B -> -1
+# A = B ->  0
+# A > B ->  1
+define(m4_cmp,
+[m4_sign(m4_eval([$1 - $2]))])
+
+
+# m4_list_cmp(A, B)
+# -----------------
+#
+# Compare the two lists of integers A and B.  For instance:
+#   m4_list_cmp((1, 0),     (1))    ->  0
+#   m4_list_cmp((1, 0),     (1, 0)) ->  0
+#   m4_list_cmp((1, 2),     (1, 0)) ->  1
+#   m4_list_cmp((1, 2, 3),  (1, 2)) ->  1
+#   m4_list_cmp((1, 2, -3), (1, 2)) -> -1
+#   m4_list_cmp((1, 0),     (1, 2)) -> -1
+#   m4_list_cmp((1),        (1, 2)) -> -1
+define(m4_list_cmp,
+[ifelse([$1$2], [()()], 0,
+        [$1], [()], [m4_list_cmp((0), [$2])],
+        [$2], [()], [m4_list_cmp([$1], (0))],
+        [m4_case(m4_cmp(m4_car$1, m4_car$2),
+                 -1, -1,
+                  1, 1,
+                  0, [m4_list_cmp((m4_shift$1), (m4_shift$2))])])])

@@ -1303,51 +1303,41 @@ AC_DIVERT_POP()dnl to KILL
 
 # Subroutines of AC_PREREQ.
 
-# m4_compare(VERSION-1, VERSION-2)
-# --------------------------------
+# _AC_VERSION_UNLETTER(VERSION)
+# -----------------------------
+# Normalize beta version numbers with letters to numbers only for comparison.
+#
+#   Nl -> (N+1).-1.(l#)
+#
+#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
+# This macro is absolutely not robust to active macro, it expects
+# reasonable version numbers and is valid up to `z', no double letters.
+define(_AC_VERSION_UNLETTER,
+[translit(patsubst(patsubst(patsubst([$1],
+                                     [\([0-9]+\)\([abcdefghi]\)],
+                                     [m4_eval(\1 + 1).-1.\2]),
+                            [\([0-9]+\)\([jklmnopqrs]\)],
+                            [m4_eval(\1 + 1).-1.1\2]),
+          [\([0-9]+\)\([tuvwxyz]\)],
+          [m4_eval(\1 + 1).-1.2\2]),
+          abcdefghijklmnopqrstuvwxyz,
+          12345678901234567890123456)])
+
+# _AC_VERSION_COMPARE(VERSION-1, VERSION-2)
+# -----------------------------------------
 # Compare the two version numbers and expand into
 #  -1 if VERSION-1 < VERSION-2
 #   0 if           =
 #   1 if           >
-# The handling of the special values [[]] is a pain, but seems necessary.
-# This macro is a excellent tutorial on the order of evaluation of ifelse.
-define(m4_compare,
-[ifelse([$1],,      [ifelse([$2],,      0,
-                            [$2], [[]], 0,
-                            1)],
-        [$1], [[]], [ifelse([$2],, 0,
-                            [$2], [[]], 0,
-                            1)],
-        [$2],,      -1,
-        [$2], [[]], -1,
-        [ifelse(m4_eval(m4_car($1) < m4_car($2)), 1, 1,
-                [ifelse(m4_eval(m4_car($1) > m4_car($2)), 1, -1,
-                        [m4_compare(m4_quote(m4_shift($1)),
-                                    m4_quote(m4_shift($2)))])])])])
-
-
-# AC_UNGNITS(VERSION)
-# -------------------
-# Replace .a, .b etc. by .0.1, .0.2 in VERSION.  For instance, version
-# 2.14a is understood as 2.14.0.1 for version comparison.
-# This macro is absolutely not robust to active macro, it expects
-# reasonable version numbers.
-# Warning: Valid up to `z', no double letters.
-define(AC_UNGNITS,
-[translit(patsubst(patsubst(patsubst([$1],
-                                     [\([abcdefghi]\)], [.0.\1]),
-                            [\([jklmnopqrs]\)], [.0.1\1]),
-          [\([tuvwxyz]\)], [.0.2\1]),
-          abcdefghijklmnopqrstuvwxyz,
-          12345678901234567890123456)])
-
+define(_AC_VERSION_COMPARE,
+[m4_list_cmp((m4_split(_AC_VERSION_UNLETTER([$1]), [\.])),
+             (m4_split(_AC_VERSION_UNLETTER([$2]), [\.])))])
 
 # AC_PREREQ(VERSION)
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
 define(AC_PREREQ,
-[ifelse(m4_compare(m4_split(AC_UNGNITS([$1]),         [\.]),
-                   m4_split(AC_UNGNITS(AC_ACVERSION), [\.])), -1,
+[ifelse(_AC_VERSION_COMPARE([AC_ACVERSION], [$1]), -1,
        [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
 
 

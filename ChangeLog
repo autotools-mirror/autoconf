@@ -1,5 +1,15 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4 (m4_sign, m4_cmp, m4_list_cmp): New macros.
+	* acgeneral.m4 (AC_UNGNITS): Renamed as...
+	(_AC_VERSION_UNLETTER): this.  All callers changed.
+	Implement the scheme proposed by Alexandre Oliva:
+		Nl -> (N+1).-1.(l#)
+	(_AC_VERSION_COMPARE): New macro.
+	(AC_PREREQ): Use it.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.m4: Really added to the CVS repository.
 	* tests/tools.m4: Likewise.
 
