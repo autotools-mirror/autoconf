@@ -1,3 +1,7 @@
+1999-09-21  Nick Clifton  <nickc@cygnus.com>
+
+	* config.sub: Add fr30 target.
+
 1999-09-21  Ben Elliston  <bje@cygnus.com>
 
 	* configure.in: Check if an appropriate version of GNU m4 is
