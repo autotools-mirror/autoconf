@@ -150,6 +150,13 @@ General Purpose Macros
 * Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 
+Manual Configuration
+
+* Specifying Names::            Specifying the system type.
+* Canonicalizing::              Getting the canonical system type.
+* System Name Variables::       Variables containing the system type.
+* Using System Type::           What to do with the system type.
+
 Writing Macros
 
 * Macro Format::		Basic format of an Autoconf macro.
@@ -2531,13 +2538,23 @@ is only called if it is needed, and only called once.
 @chapter Manual Configuration
 
 Some kinds of features can't be guessed automatically by running test
-programs.  For example, how to allocate a pty, or the details of the
-object file format, or special options that need to be passed to the
+programs.  For example, how to allocate a pseudo tty, or the details of
+the object file format, or special options that need to be passed to the
 compiler or linker to provide a POSIX or ANSI C environment.  It is
 possible to check for such features using ad-hoc means, such as having
 @code{configure} check the output of the @code{uname} program, or
 looking for libraries that are unique to particular systems.  However,
 Autoconf provides a uniform method for handling unguessable features.
+
+@menu
+* Specifying Names::            Specifying the system type.
+* Canonicalizing::              Getting the canonical system type.
+* System Name Variables::       Variables containing the system type.
+* Using System Type::           What to do with the system type.
+@end menu
+
+@node Specifying Names, Canonicalizing, , Manual Configuration
+@section Specifying The System Type
 
 Like other GNU @code{configure} scripts, Autoconf-generated
 @code{configure} scripts can make decisions based on a canonical name
@@ -2588,6 +2605,19 @@ example, @samp{decstation} can be given on the command line instead of
 @samp{mips-dec-ultrix4.2}.  @code{configure} runs a script called
 @code{config.sub} to canonicalize system type aliases.
 
+@node Canonicalizing, System Name Variables, Specifying Names, Manual Configuration
+@section Getting The Canonical System Type 
+
+The following macros make the name of the system type available in
+@code{configure} scripts.
+
+@defmac AC_CANONICAL_HOST
+@maindex CANONICAL_HOST
+Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
+host type.  This is all that is needed for programs that are not part of
+a compiler toolchain.
+@end defmac
+
 @defmac AC_CANONICAL_SYSTEM
 @maindex CANONICAL_SYSTEM
 Set shell and @code{make} variables to the names of the canonical system
@@ -2599,7 +2629,14 @@ source code (@pxref{Setup}, for information about the
 @code{AC_CONFIG_AUX_DIR} macro which you can use to control which
 directory @code{configure} looks for those scripts in).  If you do not
 run this macro, @code{configure} ignores any @samp{--host}, etc. options
-given to it.  The variables set are:
+given to it.
+@end defmac
+
+@node System Name Variables, Using System Type, Canonicalizing, Manual Configuration
+@section System Name Variables
+
+The shell and @code{make} variables that contain the system type
+information are:
 
 @table @code
 @item @code{build}, @code{host}, @code{target}
@@ -2614,7 +2651,9 @@ the names the user specified, or the canonical names if
 @itemx @code{target_cpu}, @code{target_vendor}, @code{target_os}
 the individual parts of the canonical names (for convenience).
 @end table
-@end defmac
+
+@node Using System Type, , System Name Variables, Manual Configuration
+@section Using The System Type
 
 How do you use a canonical system type?  Usually, you use it in one or
 more @code{case} statements in @file{configure.in} to select
