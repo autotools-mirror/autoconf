@@ -1,5 +1,10 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_DEFAULTS_ENVIRONMENT): Rename as...
+	* m4sh.m4 (AS_SHELL_SANITIZE): this.
+	
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Don't neutralize
 	autoconf's warnings.
 	

@@ -742,41 +742,6 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 ])
 
 
-# _AC_INIT_DEFAULTS_ENVIRONMENT
-# -----------------------------
-# Tune the behavior of the shell.
-m4_define([_AC_INIT_DEFAULTS_ENVIRONMENT],
-[# Be Bourne compatible
-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-  emulate sh
-  NULLCMD=:
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
-  set -o posix
-fi
-
-_AS_UNSET_PREPARE
-
-# NLS nuisances.
-AS_UNSET([LANG],        [C])
-AS_UNSET([LC_ALL],      [C])
-AS_UNSET([LC_TIME],     [C])
-AS_UNSET([LC_CTYPE],    [C])
-AS_UNSET([LANGUAGE],    [C])
-AS_UNSET([LC_COLLATE],  [C])
-AS_UNSET([LC_NUMERIC],  [C])
-AS_UNSET([LC_MESSAGES], [C])
-
-# IFS
-# We need space, tab and new line, in precisely that order.
-ac_nl='
-'
-IFS=" 	$ac_nl"
-
-# CDPATH.
-AS_UNSET([CDPATH], [:])
-])# _AC_INIT_DEFAULTS_ENVIRONMENT
-
-
 # _AC_INIT_DEFAULTS_FDS
 # ---------------------
 # Set up the file descriptors used by `configure'.
@@ -811,7 +776,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
-_AC_INIT_DEFAULTS_ENVIRONMENT
+AS_SHELL_SANITIZE
 
 cat >config.log << EOF
 This file contains any messages produced by compilers while
@@ -3857,7 +3822,7 @@ debug=false
 as_me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
-_AC_INIT_DEFAULTS_ENVIRONMENT
+AS_SHELL_SANITIZE
 _AC_INIT_DEFAULTS_FDS
 cat >&AS_MESSAGE_LOG_FD << EOF
 

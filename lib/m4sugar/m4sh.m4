@@ -50,8 +50,47 @@ divert(-1)#                                                  -*- Autoconf -*-
 # and many other people.
 
 
+## ------------------------- ##
+## 1. Sanitizing the shell.  ##
+## ------------------------- ##
+
+# AS_SHELL_SANITIZE
+# -----------------
+# Try to be as Bourne and/or POSIX as possible.
+m4_defun([AS_SHELL_SANITIZE],
+[# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+  set -o posix
+fi
+
+_AS_UNSET_PREPARE
+
+# NLS nuisances.
+AS_UNSET([LANG],        [C])
+AS_UNSET([LC_ALL],      [C])
+AS_UNSET([LC_TIME],     [C])
+AS_UNSET([LC_CTYPE],    [C])
+AS_UNSET([LANGUAGE],    [C])
+AS_UNSET([LC_COLLATE],  [C])
+AS_UNSET([LC_NUMERIC],  [C])
+AS_UNSET([LC_MESSAGES], [C])
+
+# IFS
+# We need space, tab and new line, in precisely that order.
+ac_nl='
+'
+IFS=" 	$ac_nl"
+
+# CDPATH.
+AS_UNSET([CDPATH], [:])
+])
+
+
 ## ----------------------------- ##
-## 1. Wrappers around builtins.  ##
+## 2. Wrappers around builtins.  ##
 ## ----------------------------- ##
 
 # This section is lexicographically sorted.
@@ -119,7 +158,7 @@ m4_define([AS_EXIT],
 
 
 ## ------------------------------------------ ##
-## 2. Error and warnings at the shell level.  ##
+## 3. Error and warnings at the shell level.  ##
 ## ------------------------------------------ ##
 
 # If AS_MESSAGE_LOG_FD is defined, shell messages are duplicated there
@@ -204,7 +243,7 @@ m4_define([AS_ERROR],
 
 
 ## ------------------------------------------- ##
-## 3. Portable versions of common file utils.  ##
+## 4. Portable versions of common file utils.  ##
 ## ------------------------------------------- ##
 
 # This section is lexicographically sorted.
@@ -259,7 +298,7 @@ AS_DIRNAME_SED([$1])])
 
 
 ## ------------------ ##
-## 4. Common idioms.  ##
+## 5. Common idioms.  ##
 ## ------------------ ##
 
 # This section is lexicographically sorted.
