@@ -1,3 +1,9 @@
+2000-11-10  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Builtins): Some information
+	about `trap'.
+	Document the Free BSD bug observed by Pavel.
+
 2000-11-10  Pavel Roskin  <proski@gnu.org>
 
 	* autoscan.pl (scan_files): Eliminate a warning if no C files
