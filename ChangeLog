@@ -1,3 +1,7 @@
+1999-04-07  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Add more CLIX machines. From Thomas Dickey.
+
 1999-04-06  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Avoid the possibility of `ld' on GNU/Linux systems
