@@ -400,7 +400,7 @@ AC_DEFUN([_AC_LIBOBJ_FNMATCH],
 AC_REQUIRE([AC_FUNC_ALLOCA])dnl
 AC_REQUIRE([AC_TYPE_MBSTATE_T])dnl
 AC_CHECK_DECLS([getenv])
-AC_CHECK_FUNCS([mbsrtowcs mempcpy wmempcpy])
+AC_CHECK_FUNCS([btowc mbsrtowcs mempcpy wmempcpy])
 AC_CHECK_HEADERS([wchar.h wctype.h])
 AC_LIBOBJ([fnmatch])
 AC_CONFIG_LINKS([$ac_config_libobj_dir/fnmatch.h:$ac_config_libobj_dir/fnmatch_.h])
