@@ -2698,18 +2698,20 @@ define([_AC_ECHO_N],
 [echo $ECHO_N "_AC_SH_QUOTE([$1])$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
 
 
+# AC_MSG_NOTICE(STRING)
+# ---------------------
+define([AC_MSG_NOTICE],
+[_AC_ECHO([configure:__oline__: notice: $1], AC_FD_LOG)
+_AC_ECHO([$1])[]dnl
+])
+
+
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 define([AC_MSG_CHECKING],
 [_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)
 _AC_ECHO_N([checking $1... ])[]dnl
 ])
-
-
-# autoupdate::AC_CHECKING(FEATURE)
-# --------------------------------
-AU_DEFUN([AC_CHECKING],
-[AC_MSG_CHECKING([$1])])
 
 
 # AC_MSG_RESULT(RESULT)
@@ -2729,12 +2731,6 @@ _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
 
 
-# autoupdate::AC_VERBOSE(RESULT)
-# ------------------------------
-AU_DEFUN([AC_VERBOSE],
-[AC_MSG_RESULT([	$1])])
-
-
 # AC_MSG_WARN(PROBLEM)
 # --------------------
 define([AC_MSG_WARN],
@@ -2746,6 +2742,16 @@ define([AC_MSG_WARN],
 define([AC_MSG_ERROR],
 [{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
+
+# AU::AC_CHECKING(FEATURE)
+# ------------------------
+AU_ALIAS([AC_CHECKING],
+[AC_MSG_NOTICE([checking $1...])])
+
+
+# AU::AC_VERBOSE(STRING)
+# ----------------------
+AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 
 
 

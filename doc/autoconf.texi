@@ -6061,6 +6061,20 @@ This macro prints nothing if @code{configure} is run with the
 @option{--quiet} or @option{--silent} option.
 @end defmac
 
+@defmac AC_MSG_NOTICE (@var{message})
+@maindex MSG_NOTICE
+Deliver the @var{message} to the user. It is useful mainly to print a
+general description of the overall purpose of a group of feature checks,
+e.g.,
+
+@example
+AC_MSG_NOTICE(checking if stack overflow is detectable)
+@end example
+
+This macro prints nothing if @code{configure} is run with the
+@option{--quiet} or @option{--silent} option.
+@end defmac
+
 @defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
 @maindex MSG_ERROR
 Notify the user of an error that prevents @code{configure} from
@@ -8081,14 +8095,7 @@ typedef loff_t off_t;
 
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
-This macro is similar to @code{AC_MSG_CHECKING}, except that it prints a
-newline after the @var{feature-description}.  It is useful mainly to
-print a general description of the overall purpose of a group of feature
-checks, e.g.,
-
-@example
-AC_CHECKING(if stack overflow is detectable)
-@end example
+Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}...]}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
@@ -8107,7 +8114,8 @@ to print messages (@pxref{Printing Messages}).
 
 @defmac AC_CROSS_CHECK
 @maindex CROSS_CHECK
-@code{AC_C_CROSS}
+Same as @code{AC_C_CROSS}, which is obsolete too, and does nothing
+@code{:-)}.
 @end defmac
 
 @defmac AC_CYGWIN
@@ -8665,10 +8673,7 @@ This is now handled by default.
 
 @defmac AC_VERBOSE (@var{result-description})
 @maindex VERBOSE
-This macro is similar to @code{AC_MSG_RESULT}, except that it is meant
-to follow a call to @code{AC_CHECKING} instead of
-@code{AC_MSG_CHECKING}; it starts the message it prints with a tab.  It
-is considered obsolete.
+@code{AC_MSG_RESULT}.
 @end defmac
 
 @defmac AC_VFORK
