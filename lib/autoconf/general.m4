@@ -4846,13 +4846,16 @@ echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
 while grep . conftest.defines >/dev/null
 do
-  # Write a limited-size here document to $tmp/frag.
-  echo '  cat >$tmp/frag <<CEOF' >>$CONFIG_STATUS
-dnl Speed up: don't consider the non `#define' lines.
+  # Write a limited-size here document to $tmp/defines.sed.
+  echo '  cat >$tmp/defines.sed <<CEOF' >>$CONFIG_STATUS
+  # Speed up: don't consider the non `#define' lines.
   echo ['/^[ 	]*#[ 	]*define/!b'] >>$CONFIG_STATUS
+  # Work around the forget-to-reset-the-flag bug.
+  echo 't clr' >>$CONFIG_STATUS
+  echo ': clr' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f $tmp/frag $tmp/in >$tmp/out
+  sed -f $tmp/defines.sed $tmp/in >$tmp/out
   rm -f $tmp/in
   mv $tmp/out $tmp/in
 ' >>$CONFIG_STATUS
@@ -4870,13 +4873,16 @@ echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
 rm -f conftest.tail
 while grep . conftest.undefs >/dev/null
 do
-  # Write a limited-size here document to $tmp/frag.
-  echo '  cat >$tmp/frag <<CEOF' >>$CONFIG_STATUS
-dnl Speed up: don't consider the non `#undef'
+  # Write a limited-size here document to $tmp/undefs.sed.
+  echo '  cat >$tmp/undefs.sed <<CEOF' >>$CONFIG_STATUS
+  # Speed up: don't consider the non `#undef'
   echo ['/^[ 	]*#[ 	]*undef/!b'] >>$CONFIG_STATUS
+  # Work around the forget-to-reset-the-flag bug.
+  echo 't clr' >>$CONFIG_STATUS
+  echo ': clr' >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f $tmp/frag $tmp/in >$tmp/out
+  sed -f $tmp/undefs.sed $tmp/in >$tmp/out
   rm -f $tmp/in
   mv $tmp/out $tmp/in
 ' >>$CONFIG_STATUS

@@ -1,5 +1,13 @@
 2000-07-11  Akim Demaille  <akim@epita.fr>
 
+	!*^&$@ sed portability problems...  The test on AC_CHECK_TYPES is
+	failing on RISC/OS 4.52 because of the forget-to-reset-the-flag
+	bug in its sed.
+
+	* acgeneral.m4 (_AC_OUTPUT_HEADERS): Work around this bug.
+
+2000-07-11  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_INT_16_BITS, AC_LONG_64_BITS): s/ac_check/ac_cv/.
 
 2000-07-10  Akim Demaille  <akim@epita.fr>
