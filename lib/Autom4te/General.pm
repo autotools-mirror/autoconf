@@ -53,8 +53,8 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&catfile &canonpath &debug &error
-      &file_name_is_absolute &find_configure_ac
+  qw (&debug &error
+      &file_name_is_absolute
       &getopt &mktmpdir
       &uniq &verbose);
 
@@ -229,43 +229,6 @@ sub END
 ## Functions.  ##
 ## ----------- ##
 
-=item C<catfile ()>
-
-Wrapper around C<File::Spec->catfile>.  Concatenate one or more
-directory names and a filename to form a complete path ending with a
-filename.
-
-=cut
-
-# $FILE
-# &catfile (@COMPONENT)
-# ---------------------
-sub catfile (@)
-{
-  my (@component) = @_;
-  return File::Spec->catfile (@component);
-}
-
-
-=item C<canonpath ()>
-
-Wrapper around C<File::Spec->canonpath>.  No physical check on the
-filesystem, but a logical cleanup of a path. On UNIX eliminates
-successive slashes and successive "/.".
-
-    $cpath = canonpath ($path) ;
-
-=cut
-
-# $FILE
-# &canonpath ($FILE)
-# ------------------
-sub canonpath ($)
-{
-  my ($file) = @_;
-  return File::Spec->canonpath ($file);
-}
-
 
 =item C<debug (@message)>
 
@@ -299,42 +262,6 @@ sub file_name_is_absolute ($)
   my ($file) = @_;
   return File::Spec->file_name_is_absolute ($file);
 }
-
-
-=item C<find_configure_ac ([$directory = C<.>])>
-
-Look for C<configure.ac> or C<configure.in> in the C<$directory> and
-return the one which should be used.  Report ambiguities to the user,
-but prefer C<configure.ac>.
-
-=cut
-
-# $CONFIGURE_AC
-# &find_configure_ac ([$DIRECTORY = `.'])
-# ---------------------------------------
-sub find_configure_ac (;$)
-{
-  my ($directory) = @_;
-  $directory ||= '.';
-  my $configure_ac = canonpath (catfile ($directory, 'configure.ac'));
-  my $configure_in = canonpath (catfile ($directory, 'configure.in'));
-
-  if (-f $configure_ac)
-    {
-      if (-f $configure_in)
-	{
-	  carp "$me: warning: `$configure_ac' and `$configure_in' both present.\n";
-	  carp "$me: warning: proceeding with `$configure_ac'.\n";
-	}
-      return $configure_ac;
-    }
-  elsif (-f $configure_in)
-    {
-      return $configure_in;
-    }
-  return;
-}
-
 
 
 

@@ -36,6 +36,7 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
+use Autom4te::Configure_ac;
 use Autom4te::General;
 use Autom4te::XFile;
 use File::Basename;

@@ -25,7 +25,7 @@ use Autom4te::ChannelDefs;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw ($configure_ac &find_configure_ac &require_configure_ac);
+@EXPORT = qw (&find_configure_ac &require_configure_ac);
 
 =head1 NAME
 
@@ -42,37 +42,45 @@ Autom4te::Configure_ac - Locate configure.ac or configure.in.
   # Likewise, but bomb out if the file does not exist.
   my $filename = require_configure_ac;
 
-In both cases, the name of the file found is also put in the
-C<$configure_ac> global variable.
+  # Likewise, but in $dir.
+  my $filename = find_configure_ac ($dir);
+  my $filename = require_configure_ac ($dir);
 
 =cut
 
-use vars '$configure_ac';
-
-sub find_configure_ac ()
+sub find_configure_ac (;@)
 {
-  if (-f 'configure.ac')
+  my ($directory) = @_;
+  $directory ||= '.';
+  my $configure_ac =
+    File::Spec->canonpath (File::Spec->catfile ($directory, 'configure.ac'));
+  my $configure_in =
+    File::Spec->canonpath (File::Spec->catfile ($directory, 'configure.in'));
+
+  if (-f $configure_ac)
     {
-      if (-f 'configure.in')
+      if (-f $configure_in)
 	{
 	  msg ('unsupported',
-	       "`configure.ac' and `configure.in' both present.\n"
-	       . "proceeding with `configure.ac'.");
+	       "`$configure_ac' and `$configure_in' both present.\n"
+	       . "proceeding with `$configure_ac'.");
 	}
-      $configure_ac = 'configure.ac';
+      return $configure_ac
     }
   elsif (-f 'configure.in')
     {
-      $configure_ac = 'configure.in';
+      return $configure_in;
     }
   return $configure_ac;
 }
 
-sub require_configure_ac ()
+
+sub require_configure_ac (;$)
 {
+  my $res = find_configure_ac (@_);
   fatal "`configure.ac' or `configure.in' is required"
-    unless find_configure_ac;
-  return $configure_ac;
+    unless defined $res;
+  return $res
 }
 
 1;

@@ -1,3 +1,13 @@
+2003-08-21  Akim Demaille  <akim@epita.fr>
+
+	* lib/Autom4te/Configure_ac.pm (&find_configure_ac)
+	(&require_configure_ac): Accept an optional directory argument.
+	($configure_ac): Remove.
+	* lib/Autom4te/General.pm (&find_configure_ac, &canonfile)
+	(&catfile): Remove.
+	* bin/autoheader.in, bin/autoreconf.in, bin/autoupdate.in,
+	* bin/autoscan.in: Adjust.
+
 2003-08-20  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoheader.in: Remove duplicate 'use Autom4te::FileUtils'.
