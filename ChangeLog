@@ -1,5 +1,15 @@
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
+	AC_PROG_GNU_M4 should actually be private to the package
+	Autoconf.
+
+	* acspecific.m4 (AC_PROG_GNU_M4): Move to...
+	* m4/m4.m4: here.
+	* m4/Makefile.am (EXTRA_DIST): Adjust.
+	* doc/autoconf.texi (Particular Programs): Adjust.
+
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Exiting from Shell Scripts): Move contents
 	into...
 	(Limitations of Builtins): this new node.

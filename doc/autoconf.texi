@@ -2550,13 +2550,6 @@ not found in standard @code{install} programs, there is no reason to use
 @file{Makefile.in} files.
 @end defmac
 
-@defmac AC_PROG_GNU_M4
-@maindex PROG_GNU_M4
-@ovindex GNU_M4
-If @sc{gnu} @code{m4} version 1.4 or above is found, set output variable
-@code{M4} to @samp{m4}.
-@end defmac
-
 @defmac AC_PROG_LEX
 @maindex PROG_LEX
 @ovindex LEX
