@@ -1,3 +1,9 @@
+2005-02-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Document that
+	grep -q isn't portable.  Improve grep -s explanation.
+	Problem reported by Dan Manthey.
+
 2005-02-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Special Shell Variables): Clarify
