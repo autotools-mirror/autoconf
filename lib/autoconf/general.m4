@@ -1173,7 +1173,8 @@ trap 'exit_status=$?
       echo "$as_me: caught signal $ac_signal"
     echo "$as_me: exit $exit_status"
   } >&AS_MESSAGE_LOG_FD
-  rm -rf conftest* confdefs* core core.* *.core conf$[$]* $ac_clean_files &&
+  rm -f core core.* *.core &&
+  rm -rf conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
      ' 0
 for ac_signal in 1 2 13 15; do

@@ -1,3 +1,10 @@
+2001-12-14  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): We cleaning up the
+	trailing files, don't apply `-rf' to files which might not be
+	created by configure (core, core.*, and *.core), but just `rm -f'.
+	Suggested by Jonathan Kamens.
+
 2001-12-14  Aaron M. Ucko  <amu@alum.mit.edu>
 
 	* lib/autoconf/general.m4: Avoid duplicates in `$ac_configure_args'.
