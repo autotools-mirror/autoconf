@@ -2445,8 +2445,8 @@ AC_DEFUN([_AC_LIBOBJS_NORMALIZE],
 ac_ltlibobjs=
 for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
-  ac_i=`echo "$ac_i" |
-	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
+  ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
+  ac_i=`echo "$ac_i" | sed "$ac_script"`
   # 2. Add them.
   ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
   ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'

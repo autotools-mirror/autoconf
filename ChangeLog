@@ -1,3 +1,11 @@
+2004-01-07  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): Avoid \$ inside
+	`"'...'"`, as it's confusing (and I suspect it may not work on
+	some platforms).  The code was incorrect anyway, as it assumed
+	that \$ evaluated to itself in that context.  Reported by
+	Alexandre Duret-Lutz.
+
 2004-01-07  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autom4te.in (Automake-preselections): Preselect AC_LIBTOOL_TAGS
@@ -12,7 +20,7 @@
 
 	* doc/autoconf.texi (Limitations of Usual Tools):
 	Remove warning against "rm -fr" introduced yesterday; it
-	seems to have been a false alarm.
+	was a false alarm.
 
 	* bin/Makefile.am (autoconf, autoheader, autom4te, autoreconf,
 	autoscan, autoupdate, ifnames): Don't use chmod -w.
