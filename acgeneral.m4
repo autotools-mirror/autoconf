@@ -2088,86 +2088,81 @@ define(AC_FATAL, [m4_fatal([$1], [$2])])
 #   | error-->c.in:8: warning: backquotes should not be backslashed\
 #   ...                        in: \`active'
 #
-define(_AC_SH_QUOTE,
+define([_AC_SH_QUOTE],
 [ifelse(regexp([[$1]], [\\`]),
         -1, [patsubst([[$1]], [`], [\\`])],
         [AC_WARNING([backquotes should not be backslashed in: $1])dnl
 [$1]])])
 
 
-# _AC_ECHO_UNQUOTED(STRING, [FD])
-# -------------------------------
-# Expands into a sh call to echo onto FD (default is AC_FD_MSG).
-# The shell performs its expansions on STRING.
+# _AC_ECHO_UNQUOTED(STRING, [FD = AC_FD_MSG])
+# -------------------------------------------
+# Perform shell expansions on STRING and echo the string to FD.
 define([_AC_ECHO_UNQUOTED],
 [echo "[$1]" >&m4_default([$2], [AC_FD_MSG])])
 
 
-# _AC_ECHO(STRING, [FD])
-# ----------------------
-# Expands into a sh call to echo onto FD (default is AC_FD_MSG),
-# protecting STRING from backquote expansion.
+# _AC_ECHO(STRING, [FD = AC_FD_MSG])
+# ----------------------------------
+# Protect STRING from backquote expansion, echo the result to FD.
 define([_AC_ECHO],
 [_AC_ECHO_UNQUOTED(_AC_SH_QUOTE([$1]), $2)])
 
 
-# _AC_ECHO_N(STRING, [FD])
-# ------------------------
+# _AC_ECHO_N(STRING, [FD = AC_FD_MSG])
+# ------------------------------------
 # Same as _AC_ECHO, but echo doesn't return to a new line.
 define([_AC_ECHO_N],
 [echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" >&m4_default([$2], [AC_FD_MSG])])
 
 
-# AC_MSG_CHECKING(FEATURE-DESCRIPTION)
-# ------------------------------------
+# AC_MSG_CHECKING(FEATURE)
+# ------------------------
 define([AC_MSG_CHECKING],
-[_AC_ECHO_N([checking $1... ])
-_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)])
+[_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)
+_AC_ECHO_N([checking $1... ])[]dnl
+])
 
 
-# AC_CHECKING(FEATURE-DESCRIPTION)
+# autoupdate::AC_CHECKING(FEATURE)
 # --------------------------------
-define([AC_CHECKING],
-[_AC_ECHO([checking $1])
-_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)])
+AU_DEFUN([AC_CHECKING],
+[AC_MSG_CHECKING([$1])])
 
 
-# AC_MSG_RESULT(RESULT-DESCRIPTION)
-# ---------------------------------
+# AC_MSG_RESULT(RESULT)
+# ---------------------
 define([AC_MSG_RESULT],
-[_AC_ECHO([$ECHO_T""$1])])
+[_AC_ECHO([configure:__oline__: result: $1], AC_FD_LOG)
+_AC_ECHO([$ECHO_T""$1])[]dnl
+])
 
 
-# AC_MSG_RESULT_UNQUOTED(RESULT-DESCRIPTION)
-# ------------------------------------------
+# AC_MSG_RESULT_UNQUOTED(RESULT)
+# ------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
 define([AC_MSG_RESULT_UNQUOTED],
-[_AC_ECHO_UNQUOTED([$ECHO_T""$1])])
+[_AC_ECHO_UNQUOTED([configure:__oline__: result: $1], AC_FD_LOG)
+_AC_ECHO_UNQUOTED([$ECHO_T""$1])[]dnl
+])
 
 
-# AC_VERBOSE(RESULT-DESCRIPTION)
+# autoupdate::AC_VERBOSE(RESULT)
 # ------------------------------
-define([AC_VERBOSE],
-[AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
-_AC_ECHO([	$1])])
+AU_DEFUN([AC_VERBOSE],
+[AC_MSG_RESULT([	$1])])
 
 
-# AC_MSG_WARN(PROBLEM-DESCRIPTION)
-# --------------------------------
+# AC_MSG_WARN(PROBLEM)
+# --------------------
 define([AC_MSG_WARN],
 [_AC_ECHO([configure: warning: $1], 2)])
 
 
-# AC_MSG_ERROR(ERROR-DESCRIPTION, [EXIT-STATUS])
-# ----------------------------------------------
+# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
+# --------------------------------------
 define([AC_MSG_ERROR],
 [{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
-
-
-# AC_MSG_ERROR_UNQUOTED(ERROR-DESCRIPTION, [EXIT-STATUS])
-# -------------------------------------------------------
-define([AC_MSG_ERROR_UNQUOTED],
-[{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
 
 

@@ -1,3 +1,9 @@
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_MSG_ERROR_UNQUOTED): Remove.
+	(AC_MSG_RESULT, AC_MSG_RESULT_UNQUOTED): Output to the log too.
+	(AC_CHECKING, AC_VERBOSE): AU_ define.
+
 2000-04-07  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4:	s/1>&/>&/g.
