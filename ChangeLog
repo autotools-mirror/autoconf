@@ -1,5 +1,17 @@
 2000-04-28  Akim Demaille  <akim@epita.fr>
 
+	mawk suffers a severe performance loss when using `sub' with a
+	changing value.  On the `configure' script of the fileutils:
+	mawk '{ sub (/foo/, foo++) }'                  -> 14s.
+	mawk '{ if ($0 ~ /foo/) sub (/foo/, foo++) }'  -> 0.03s.
+	mawk '{ sub (/foo/, foo) }'                    -> 0.03s.
+
+	* autoconf.sh (task script, AWK script): Run `sub (__oline__,
+	oline)' only in the lines that match `__oline__'.
+	Suggested by Paul Eggert.
+
+2000-04-28  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (options handling::-W*): Strip two leading chars, not
 	just one.
 

@@ -308,8 +308,9 @@ case $task in
         }
       duplicate = 0
       oline++
-      while (sub(/__oline__/, oline))
-        continue
+      if ($0 ~ /__oline__/)
+        while (sub(/__oline__/, oline))
+          continue
       while (sub(/@<:@/, "["))
         continue
       while (sub(/@:>@/, "]"))
