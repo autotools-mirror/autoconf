@@ -1902,7 +1902,8 @@ test -z "$ac_cv_build_alias" &&
   ac_cv_build_alias=`$ac_config_guess`
 test -z "$ac_cv_build_alias" &&
   AC_MSG_ERROR([cannot guess build type; you must specify one])
-ac_cv_build=`$ac_config_sub $ac_cv_build_alias` || exit 1
+ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
+  AC_MSG_ERROR([$ac_config_sub $ac_cv_build_alias failed.])
 ])
 _AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD
@@ -1918,7 +1919,8 @@ AC_CACHE_CHECK([host system type], [ac_cv_host],
 [ac_cv_host_alias=$host_alias
 test -z "$ac_cv_host_alias" &&
   ac_cv_host_alias=$ac_cv_build_alias
-ac_cv_host=`$ac_config_sub $ac_cv_host_alias` || exit 1
+ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
+  AC_MSG_ERROR([$ac_config_sub $ac_cv_host_alias failed])
 ])
 _AC_CANONICAL_SPLIT([host])
 ])# AC_CANONICAL_HOST
@@ -1936,7 +1938,8 @@ AC_CACHE_CHECK([target system type], [ac_cv_target],
 ac_cv_target_alias=$target_alias
 test "x$ac_cv_target_alias" = "x" &&
   ac_cv_target_alias=$ac_cv_host_alias
-ac_cv_target=`$ac_config_sub $ac_cv_target_alias` || exit 1
+ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
+  AC_MSG_ERROR([$ac_config_sub $ac_cv_target_alias failed])
 ])
 _AC_CANONICAL_SPLIT([target])
 
@@ -3915,15 +3918,15 @@ echo "confdefs.h:" >&AC_FD_LOG
 sed '/^$/d;s/^/| /' confdefs.h >&AC_FD_LOG
 
 : ${CONFIG_STATUS=./config.status}
-trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
+ac_clean_files_save=$ac_clean_files
+ac_clean_files="$ac_clean_files $CONFIG_STATUS"
 _AC_OUTPUT_CONFIG_STATUS()dnl
-rm -fr confdefs* $ac_clean_files
-trap 'exit 1' 1 2 15
+ac_clean_files=$ac_clean_files_save
 
 dnl Commands to run after config.status was created
 AC_OUTPUT_COMMANDS_POST()dnl
 
-test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
+test "$no_create" = yes || $SHELL $CONFIG_STATUS || AS_EXIT([1])
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 ])# AC_OUTPUT
@@ -4351,7 +4354,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
            AC_MSG_ERROR([cannot find input file \\`$f'])
          fi;;
       esac
-    done` || { (exit 1); exit; }
+    done` || AS_EXIT([1])
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
@@ -4498,7 +4501,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
            AC_MSG_ERROR([cannot find input file \\`$f'])
          fi;;
       esac
-    done` || { (exit 1); exit; }
+    done` || AS_EXIT([1])
   # Remove the trailing spaces.
   sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 

@@ -1,5 +1,10 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Spread some AS_EXIT and AC_MSG_ERROR.
+	(AC_OUTPUT): Don't play with trap, use ac_clean_files.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	Use AC_MSG_ERROR in `config.status', but adjust AC_MSG_* to use $0
 	instead of hard coded `configure'.
 
