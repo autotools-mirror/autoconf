@@ -1,5 +1,14 @@
 2003-05-17  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4: Use the default includes so that
+	memcmp be declared before being tested.
+	Reported by Sander Niemeijer.
+	(AC_FUNC_ERROR_AT_LINE, AC_FUNC_GETGROUPS, AC_FUNC_STRNLEN): Likewise.
+	* doc/autoconf.texi (Default Includes): Document
+	AC_INCLUDES_DEFAULT.
+
+2003-05-17  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/specific.m4: Include signal.h and unistd.h.
 	* doc/autoconf.texi (Obsolete Macros): Adjust.
 	Reported by Werner LEMBERG and Debian Bug 190886.
