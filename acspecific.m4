@@ -80,7 +80,7 @@ cat > conftest.c <<EOF
   yes;
 #endif
 EOF
-if ${CC-cc} -E conftest.c 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -120,7 +120,7 @@ cat > conftest.C <<EOF
   yes;
 #endif
 EOF
-if ${CXX-g++} -E conftest.C 2>&AC_FD_CC | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
@@ -187,16 +187,17 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-if ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC &&
-  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC
+ac_try='${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC'
+if AC_TRY_EVAL(ac_try) &&
+   test -f conftest.o && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if cc -c conftest.c 1>&AC_FD_CC 2>&AC_FD_CC; then
-      if cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC &&
-	 test -f conftest2.o &&
-	 cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC
+    if AC_TRY_COMMAND(cc -c conftest.c 1>&AC_FD_CC); then
+      ac_try='cc -c conftest.c -o conftest.o 1>&AC_FD_CC'
+      if AC_TRY_EVAL(ac_try) &&
+	 test -f conftest.o && AC_TRY_EVAL(ac_try);
       then
         # cc works too.
         :
