@@ -712,9 +712,9 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
-_AC_PROG_CC_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
+_AC_PROG_CC_G
 AC_LANG_POP
 ])# AC_PROG_CC
 
@@ -727,16 +727,10 @@ AC_LANG_POP
 define([_AC_PROG_CC_G],
 [ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS=
+CFLAGS="-g"
 AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-if ${CC-cc} -g -c conftest.$ac_ext 2>&1 | grep . >/dev/null; then
-  ac_cv_prog_cc_g=no
-else
-  ac_cv_prog_cc_g=yes
-fi
-rm -f conftest*
-])
+               [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_prog_cc_g=yes],
+                                                        [ac_cv_prog_cc_g=no])])
 if test "$ac_test_CFLAGS" = set; then
   CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
@@ -907,9 +901,9 @@ AC_CHECK_TOOLS(CXX,
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
-_AC_PROG_CXX_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
+_AC_PROG_CXX_G
 AC_LANG_POP
 ])# AC_PROG_CXX
 
@@ -922,16 +916,11 @@ AC_LANG_POP
 define([_AC_PROG_CXX_G],
 [ac_test_CXXFLAGS=${CXXFLAGS+set}
 ac_save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS=
+CXXFLAGS="-g"
 AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-if ${CXX-g++} -g -c conftest.$ac_ext 2>&1 | grep . >/dev/null; then
-  ac_cv_prog_cxx_g=no
-else
-  ac_cv_prog_cxx_g=yes
-fi
-rm -f conftest*
-])
+               [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+                                   [ac_cv_prog_cxx_g=yes],
+                                   [ac_cv_prog_cxx_g=no])])
 if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
@@ -997,9 +986,9 @@ AC_CHECK_TOOLS(F77,
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 G77=`test $ac_compiler_gnu = yes && echo yes`
-_AC_PROG_F77_G
 AC_EXPAND_ONCE([_AC_OBJEXT])
 AC_EXPAND_ONCE([_AC_EXEEXT])
+_AC_PROG_F77_G
 AC_LANG_POP
 ])# AC_PROG_F77
 

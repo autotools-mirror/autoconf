@@ -1,3 +1,15 @@
+2000-10-18  Morten Eriksen  <mortene@sim.no>
+
+	* aclang.m4 (_AC_PROG_CC_G): Use the _AC_COMPILE_IFELSE macro
+	instead of reinventing the wheel. This also takes care of a bug
+	where the "-g" option was accepted if the compiler silently exits
+	with status unequal to 0.
+	(_AC_PROG_CXX_G): Likewise.
+	(AC_PROG_CC): As _AC_PROG_CC_G depends on $ac_objext and
+	$ac_exeext, move the expansion of _AC_OBJEXT and _AC_EXEEXT in
+	front of _AC_PROG_CC_G.
+	(AC_PROG_CXX, AC_PROG_F77): Likewise.
+
 2000-10-18  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_INIT): Avoid foo="`bar`", foo=`bar` is
