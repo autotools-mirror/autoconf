@@ -723,19 +723,24 @@ fi[]dnl
 
 # _AC_PROG_CXX_EXIT_DECLARATION
 # -----------------------------
-# Find a valid prototype for exit and declare it in confdefs.h.
+# If <stdlib.h> doesn't already provide a valid prototype for exit,
+# determine the appropriate prototype and put it in confdefs.h.
+# This macro is run only when testing a C++ compiler, but it generates
+# a prototype that is also appropriate for C compilers in order to
+# support a mixed C/C++ configuration environment.
+# We don't need to worry about this for C, since we include <stdlib.h>
+# if it is available, and that method works for all C compilers.
 m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
 [for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
+   '' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
    'extern "C" void exit (int);' \
    'void exit (int);'
 do
-  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@include <stdlib.h>
-$ac_declaration],
+  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration
+@%:@include <stdlib.h>],
 				      [exit (42);])],
 		     [],
 		     [continue])
