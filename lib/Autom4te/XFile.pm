@@ -225,7 +225,7 @@ sub lock
   # However, if the invoker is using "make -j", the problem is not harmless,
   # so report it in that case.  Admittedly this is a bit of a hack.
   if (!flock ($fh, $mode)
-      && (!$!{ENOLCK} || " $ENV{'MAKEFLAGS'} " =~ / -j /))
+      && (!$!{ENOLCK} || " $ENV{'MAKEFLAGS'}" =~ / (-j|--jobs)/))
     {
       my $file = $fh->name;
       fatal "cannot lock $file with mode $mode: $!";
