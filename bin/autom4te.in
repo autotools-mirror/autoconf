@@ -23,24 +23,19 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-require 5.005;
-use File::Basename;
 
-my $me = basename ($0);
+BEGIN
+{
+  my $prefix = "@prefix@";
+  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
+  unshift @INC, "$perllibdir";
+}
 
 ## --------- ##
 ## Request.  ##
 ## --------- ##
 
 package Request;
-
-BEGIN
-{
-  my $prefix = "@prefix@";
-  # FIXME: Import Struct into Autoconf.
-  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
-  unshift @INC, "$perllibdir";
-}
 
 use Data::Dumper;
 use Autom4te::General;
@@ -62,7 +57,7 @@ struct
   (
    # The key of the cache file.
    'cache' => "\$",
-   # True if the cache file is up to date.
+   # True iff %MACRO contains all the macros we want to trace.
    'valid' => "\$",
    # The include path.
    'path' => '@',
@@ -75,7 +70,11 @@ struct
   );
 
 
+# $REQUEST-OBJ
+# retrieve ($SELF, %ATTR)
+# -----------------------
 # Find a request with the same path and source.
+# Private.
 sub retrieve
 {
   my ($self, %attr) = @_;
@@ -97,8 +96,13 @@ sub retrieve
   return undef;
 }
 
+
+# $REQUEST-OBJ
+# register ($SELF, %ATTR)
+# -----------------------
 # NEW should not be called directly.
-sub register
+# Private.
+sub register ($%)
 {
   my ($self, %attr) = @_;
 
@@ -114,27 +118,33 @@ sub register
 }
 
 
-# request(%REQUEST)
-# -----------------
+# $REQUEST-OBJ
+# request($SELF, %REQUEST)
+# ------------------------
 # Return a request corresponding to $REQUEST{path} and $REQUEST{source},
 # using a cache value if it exists.
-sub request
+sub request ($%)
 {
   my ($self, %request) = @_;
 
-  my $obj = Request->retrieve (%request) || Request->register (%request);
+  my $req = Request->retrieve (%request) || Request->register (%request);
 
   # If there are new traces to produce, then we are not valid.
   foreach (@{$request{'macro'}})
     {
-      if (! exists ${$obj->macro}{$_})
+      if (! exists ${$req->macro}{$_})
         {
-	  ${$obj->macro}{$_} = 1;
-          $obj->valid (0);
-	}
+          ${$req->macro}{$_} = 1;
+          $req->valid (0);
+        }
     }
 
-  return $obj;
+  # It would be great to have $REQ check that it up to date wrt its
+  # dependencies, but that requires gettting traces (to fetch the
+  # included files), which is out of the scope of Request
+  # (currently?).
+
+  return $req;
 }
 
 # Serialize a request or all the current requests.
@@ -848,23 +858,24 @@ EOF
 
 
 # $BOOL
-# up_to_date_p ($REQ, $FILE)
-# --------------------------
-# If $FILE up to date?
-# We need $REQ since we check $FILE against all its dependencies,
-# and we use the traces on `include' to find them.
-sub up_to_date_p ($$)
+# up_to_date_p ($REQ)
+# -------------------
+# Is the cache file of $REQ up to date?
+# $REQ is `valid' if it corresponds to the request and exists, which
+# does not mean it is up to date.  It is up to date if, in addition,
+# it's younger than its dependencies.
+sub up_to_date_p ($)
 {
-  my ($req, $file) = @_;
+  my ($req) = @_;
 
-  # If STDOUT or doesn't exist, it sure is outdated!
   return 0
-    if $file eq '-' || ! -f $file;
+    if ! $req->valid;
 
   # We can't answer properly if the traces are not computed since we
   # need to know what other files were included.
+  my $file = "$me.cache/" . $req->cache;
   return 0
-    if ! -f "$me.cache/" . $req->cache;
+    if ! -f $file;
 
   # We depend at least upon the arguments.
   my @dep = @ARGV;
@@ -875,13 +886,13 @@ sub up_to_date_p ($$)
   handle_traces ($req, "$tmp/dependencies",
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
-  my $mtime = (stat ($file))[9];
+  my $mtime = mtime ($file);
   my $deps = new IO::File ("$tmp/dependencies");
   push @dep, map { chomp; find_file ($_) } $deps->getlines;
   foreach (@dep)
     {
       verbose "$file depends on $_";
-      if ($mtime < (stat ($_))[9])
+      if ($mtime < mtime ($_))
 	{
 	  verbose "$file depends on $_ which is more recent";
 	  return 0;
@@ -912,45 +923,51 @@ Request->load ("$me.cache/requests")
 
 # Add the new trace requests.
 my $req = Request->request ('source' => \@ARGV,
-			    'path' => \@include,
-			    'macro' => [keys %trace, @preselect]);
+			    'path'   => \@include,
+			    'macro'  => [keys %trace, @preselect]);
 
+# If $REQ is not up to date, declare it invalid.
+$req->valid (0)
+  if ! up_to_date_p ($req);
+
+# We now know whether we can trust the Request object.  Say it.
 if ($verbose)
   {
     print STDERR "$me: the trace request object is:\n";
     print STDERR $req->marshall;
   }
 
-# We need to run M4 if
-# - for traces
-#   + there is no cache, or
-#   + it does not include the traces we need, or
-#   + it exists but is outdated
-# - for output if it is not /dev/null and
-#   + it doesn't exist, or
-#   + it is outdated
+# We need to run M4 if (i) $REQ is invalid, or (ii) we are expanding
+# (i.e., not tracing) and the output is older than the cache file
+# (since the later is valid if it's older than the dependencies).
+# STDOUT is pretty old.
+my $output_mtime = mtime ($output);
+
 handle_m4 ($req, keys %{$req->macro})
   if (! $req->valid
-      || ! up_to_date_p ($req, "$me.cache/" . $req->cache)
-      || (! %trace && ! up_to_date_p ($req, "$output")));
+      || (! %trace && $output_mtime < mtime ("$me.cache/" . $req->cache)));
 
+
+# Now output...
 if (%trace)
   {
-    # Producing traces.
-    # Trying to produce the output only when needed is very
-    # error prone here, as you'd have to check that the trace
-    # requests have not changed etc.
+    # Always produce traces, since even if the output is young enough,
+    # there is no guarantee that the traces use the same *format*
+    # (e.g., `-t FOO:foo' and `-t FOO:bar' are both using the same M4
+    # traces, hence the M4 traces cache is usable, but its formating
+    # will yield different results).
     handle_traces ($req, $output, %trace);
   }
 else
   {
-    # Actual M4 expansion.
+    # Actual M4 expansion, only if $output is too old.
     handle_output ($output)
-      if ! up_to_date_p ($req, $output);
+      if $output_mtime < mtime ("$me.cache/" . $req->cache);
   }
 
-# All went fine, the cache is valid.
-$req->valid (1);
+# If all went fine, the cache is valid.
+$req->valid (1)
+  if $exit_status == 0;
 
 Request->save ("$me.cache/requests");
 

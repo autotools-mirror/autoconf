@@ -21,12 +21,9 @@
 # Originally written by David MacKenzie <djm@gnu.ai.mit.edu>.
 # Rewritten by Akim Demaille <akim@freefriends.org>.
 
-use 5.005;
-
 BEGIN
 {
   my $prefix = "@prefix@";
-  # FIXME: Import Struct into Autoconf.
   my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
   unshift @INC, "$perllibdir";
 }

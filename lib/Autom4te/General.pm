@@ -21,12 +21,15 @@ package Autom4te::General;
 use 5.005;
 use Exporter;
 use File::Basename;
+use File::stat;
 use Carp;
 use strict;
-use vars qw (@ISA @EXPORT $me);
+
+use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &find_peer &mktmpdir &uniq &verbose &xsystem
+@EXPORT = qw (&find_configure_ac &find_peer &mktmpdir &mtime
+              &uniq &verbose &xsystem
 	      $me $verbose $debug $tmp);
 
 # Variable we share with the main package.  Be sure to have a single
@@ -161,6 +164,25 @@ sub mktmpdir ($)
 
   print STDERR "$me:$$: working in $tmp\n"
     if $debug;
+}
+
+
+# $MTIME
+# MTIME ($FILE)
+# -------------
+# Return the mtime of $FILE.  Missing files, or `-' standing for STDIN
+# or STDOUT are ``obsolete'', i.e., as old as possible.
+sub mtime ($)
+{
+  my ($file) = @_;
+
+  return 0
+    if $file eq '-' || ! -f $file;
+
+  my $stat = stat ($file)
+    or croak "$me: cannot stat $file: $!\n";
+
+  return $stat->mtime;
 }
 
 

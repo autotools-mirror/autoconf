@@ -1,5 +1,22 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	Don't let autom4te compute the `include' traces several times:
+	first check that the trace cache file is up to date, and then
+	compare its timestamp with that of the output.
+
+	* bin/autom4te.in, bin/autoupdate.in, bin/autoscan.in: Normalize
+	the preamble.  Don't require 5.005 as Autom4te::General does it,
+	and better yet (use `use', not `require'!).
+	* lib/Autom4te/Struct.pm: Rename the last occurrences of
+	Class::Struct as Autom4te::Struct.
+	* lib/Autom4te/General.pm (File::stat): Use it.
+	(&mtime): New, export it.
+	* bin/autom4te.in: Use it.
+	Declare `$req' is invalid if it is outdated.
+	Don't declare it valid before saving it if something went wrong.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	Autom4te shall not encode Autoconf data, and preselecting traces
 	must be proposed to the users.
 
