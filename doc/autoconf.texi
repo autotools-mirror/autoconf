@@ -4286,7 +4286,7 @@ Amdahl UTS and Motorola System V/88.
 @cvindex HAVE_STDBOOL_H
 @cvindex HAVE__BOOL
 If @file{stdbool.h} exists and is conformant to C99, define
-@code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} define
+@code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
 @file{system.h} should contain the following code:
 
