@@ -10,8 +10,8 @@
 	http://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00006.html
 	for bug reported by Nelson H. F. Beebe in:
 	http://mail.gnu.org/archive/html/bug-autoconf/2003-12/msg00090.html
-	
-2004-02-04   Paolo Bonzini  <bonzini@gnu.org>
+
+2004-02-04  Paolo Bonzini  <bonzini@gnu.org>
 
 	* doc/autoconf.texi (AU_DEFUN): Fix English,
 	suggested by Paul Eggert.
@@ -30,29 +30,29 @@
 	warning message when the third argument includes $0
 	(reported by Alexandre Duret-Lutz).
 
-2004-01-30 Paolo Bonzini <bonzini@gnu.org>
-           Eric Sunshine <sunshine@sunshineco.com>
-           Paul Eggert <eggert@twinsun.com>
+2004-01-30  Paolo Bonzini <bonzini@gnu.org>
+	    Eric Sunshine <sunshine@sunshineco.com>
+	    Paul Eggert <eggert@twinsun.com>
 
-        * lib/m4sugar/m4sh.m4 (M4SH-SANITIZE): New diversion.
-        (AS_INIT): Output shell initialization there. Removed optional
-        parameter. Expand _AS_SHELL_FN_SPY.
-        (AS_INIT_WITH_SHELL_FN): Removed.
-        (_AS_SHELL_FN_SPY): New macro.
-        (AS_DETECT_REQUIRED, AS_DETECT_SUGGESTED): New
-        macros.
-        (AS_SHELL_SANITIZE): Remove loop to find better shell
-        and documentation for the parameter.
-        (_AS_DETECT_BETTER_SHELL): Move it here.
-        (_AS_SHELL_FN_WORK): Remove shell invocation, reformat.
-        (_AS_RUN): Move it here, support testing with eval.
-        (AS_REQUIRE_SHELL_FN): Require shell functions when
-        it is used.
-        (_AS_LINENO_WORKS): Put around braces, we do not
-        trigger the bash bug anymore.
-        * lib/autotest/general.m4: Document M4SH-SANITIZE, do not
-        use AS_INIT_WITH_SHELL_FN.
-        * bin/autoconf.in, tests/wrapper.in: Regenerated.
+	* lib/m4sugar/m4sh.m4 (M4SH-SANITIZE): New diversion.
+	(AS_INIT): Output shell initialization there. Removed optional
+	parameter. Expand _AS_SHELL_FN_SPY.
+	(AS_INIT_WITH_SHELL_FN): Removed.
+	(_AS_SHELL_FN_SPY): New macro.
+	(AS_DETECT_REQUIRED, AS_DETECT_SUGGESTED): New
+	macros.
+	(AS_SHELL_SANITIZE): Remove loop to find better shell
+	and documentation for the parameter.
+	(_AS_DETECT_BETTER_SHELL): Move it here.
+	(_AS_SHELL_FN_WORK): Remove shell invocation, reformat.
+	(_AS_RUN): Move it here, support testing with eval.
+	(AS_REQUIRE_SHELL_FN): Require shell functions when
+	it is used.
+	(_AS_LINENO_WORKS): Put around braces, we do not
+	trigger the bash bug anymore.
+	* lib/autotest/general.m4: Document M4SH-SANITIZE, do not
+	use AS_INIT_WITH_SHELL_FN.
+	* bin/autoconf.in, tests/wrapper.in: Regenerated.
 
 2004-01-30  Paolo Bonzini  <bonzini@gnu.org>
 
