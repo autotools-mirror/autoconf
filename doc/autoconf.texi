@@ -1637,6 +1637,23 @@ If the C compiler does not accept the @samp{-c} and @samp{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 @end defmac
 
+@defmac AC_PROG_CC_STDC
+@maindex PROG_CC_STDC
+@ovindex CC
+If the C compiler in not in ANSI C mode by default, try to add an option
+to output variable @code{CC} to make it so.  This macro tries various
+options that select ANSI C on some system or another.  It considers the
+compiler to be in ANSI C mode if it handles function prototypes
+correctly.
+
+If you use this macro, you should check after calling it whether the C
+compiler has been set to accept ANSI C; if not, the shell variable
+@code{ac_cv_prog_cc_stdc} is set to @samp{no}.  If you wrote your source
+code in ANSI C, you can make an un-ANSIfied copy of it by using the
+program @code{ansi2knr}, which comes with Ghostscript.
+@end defmac
+
+
 @defmac AC_PROG_CPP
 @maindex PROG_CPP
 @ovindex CPP
@@ -2844,7 +2861,6 @@ is defined.  However, Ultrix 4.3's native compiler does support
 volatile, but does not defined @code{__STDC__}.
 @end defmac
 
-
 @defmac AC_C_INLINE
 @maindex C_INLINE
 @cvindex inline
@@ -2881,6 +2897,32 @@ found in macros such as this:
 @end example
 @end defmac
 
+@defmac AC_C_PROTOTYPES
+@maindex C_PROTOTYPES
+@cvindex PROTOTYPES
+@cvindex PARAMS
+Check to see if function prototypes are understood by the compiler.  If
+so, define @samp{PROTOTYPES}.  In the case the compiler does not handle
+prototypes, you should use @code{ansi2knr}, which comes with the
+Ghostscript distribution, to unprotoize function definitions.  For
+function prototypes, you should first define @code{PARAMS}:
+@example
+#ifndef PARAMS
+#  if PROTOTYPES
+#    define PARAMS(protos) protos
+#  else /* no PROTOTYPES */
+#    define PARAMS(protos) ()
+#  endif /* no PROTOTYPES */
+#endif
+@end example
+then use it this way:
+@example
+size_t my_strlen PARAMS ((const char *));
+@end example
+@end defmac
+
+@c FIXME: What the heck is this macro doing here?  Move it out of
+@c the way, in its proper section!!!
 @defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{[}, @var{includes}@r{]]})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or

@@ -28,6 +28,8 @@ so that we  can run ./config.status name-of-the command.
 ** Move AM_PROG_CC_STDC into Autoconf.
 Autoconf should provide the means to determine the ANSIsm of the
 compiler, not Automake.
+I've done it, but this is the last opportunity to change this macro
+name: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 
 ** Provide means to provides commands to run before AC_OUTPUT.
 This is what is needed for LTLIBOBJS and others.

@@ -1,5 +1,10 @@
 1999-10-31  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_PROG_CC_STDC, AC_C_PROTOTYPES): Inherit from
+	Automake. From Franc,ois Pinard.
+	* autoconf.texi (Particular Programs): Document AC_PROG_CC_STDC.
+	(C Compiler Characteristics): Document AC_C_PROTOTYPES.
+
 	* testsuite/autoconf.s/defines.exp: Changed `fail' and `pass' in
 	`xfail' and `xpass'. The testsuite checks that acconfig.h
 	templates the AC_DEFINEs. Since we no longer rely on acconfig.h,
@@ -9,8 +14,6 @@
 	syntax. From Akim Demaille <akim@epita.fr>.
 
 1999-10-27  Ben Elliston  <bje@cygnus.com>
-
-	* THANKS: Updated Alexandre's address.
 
 	* autoconf.texi (Generic Programs): @defmac for AC_PATH_TOOL may
 	not span multiple lines.

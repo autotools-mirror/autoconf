@@ -203,6 +203,7 @@ else
 fi
 ])
 
+
 dnl AC_PROG_CC_WORKS
 dnl ----------------
 AC_DEFUN(AC_PROG_CC_WORKS,
@@ -221,6 +222,7 @@ AC_MSG_RESULT($ac_cv_prog_cc_cross)
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
+
 dnl AC_PROG_CXX_WORKS
 dnl -----------------
 AC_DEFUN(AC_PROG_CXX_WORKS,
@@ -238,6 +240,7 @@ AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) is
 AC_MSG_RESULT($ac_cv_prog_cxx_cross)
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
+
 
 dnl AC_PROG_F77_WORKS
 dnl -----------------
@@ -263,6 +266,7 @@ AC_MSG_RESULT($ac_cv_prog_f77_cross)
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
+
 dnl AC_PROG_CC_GNU
 dnl --------------
 AC_DEFUN(AC_PROG_CC_GNU,
@@ -279,6 +283,7 @@ else
   ac_cv_prog_gcc=no
 fi])])
 
+
 dnl AC_PROG_CXX_GNU
 dnl ---------------
 AC_DEFUN(AC_PROG_CXX_GNU,
@@ -294,6 +299,7 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gxx=no
 fi])])
+
 
 dnl AC_PROG_F77_GNU
 dnl ---------------
@@ -360,6 +366,9 @@ fi
 rm -f conftest*
 ])])
 
+
+dnl AC_PROG_GCC_TRADITIONAL
+dnl -----------------------
 AC_DEFUN(AC_PROG_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
@@ -380,7 +389,8 @@ Autoconf TCGETA],
     CC="$CC -traditional"
   fi
 fi
-])
+])dnl AC_PROG_GCC_TRADITIONAL
+
 
 dnl AC_PROG_CC_C_O
 dnl --------------
@@ -434,14 +444,14 @@ fi
 ])dnl AC_PROG_CC_C_O
 
 
+dnl AC_PROG_F77_C_O
+dnl ---------------
 dnl Test if the Fortran 77 compiler accepts the options `-c' and `-o'
 dnl simultaneously, and define `F77_NO_MINUS_C_MINUS_O' if it does not.
 dnl
 dnl The usefulness of this macro is questionable, as I can't really see
 dnl why anyone would use it.  The only reason I include it is for
 dnl completeness, since a similar test exists for the C compiler.
-dnl
-dnl AC_PROG_F77_C_O
 AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
@@ -472,7 +482,87 @@ else
   AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
             [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
 fi
+])dnl AC_PROG_F77_C_O
+
+
+dnl AC_PROG_CC_STDC
+dnl ---------------
+dnl If the C compiler in not in ANSI C mode by default, try to add an
+dnl option to output variable @code{CC} to make it so.  This macro tries
+dnl various options that select ANSI C on some system or another.  It
+dnl considers the compiler to be in ANSI C mode if it handles function
+dnl prototypes correctly.
+AC_DEFUN(AC_PROG_CC_STDC,
+[AC_REQUIRE([AC_PROG_CC])dnl
+AC_BEFORE([$0], [AC_C_INLINE])dnl
+AC_BEFORE([$0], [AC_C_CONST])dnl
+dnl Force this before AC_PROG_CPP.  Some cpp's, eg on HPUX, require
+dnl a magic option to avoid problems with ANSI preprocessor commands
+dnl like #elif.
+dnl FIXME: can't do this because then AC_AIX won't work due to a
+dnl circular dependency.
+dnl AC_BEFORE([$0], [AC_PROG_CPP])
+AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
+AC_CACHE_VAL(ac_cv_prog_cc_stdc,
+[ac_cv_prog_cc_stdc=no
+ac_save_CC="$CC"
+# Don't try gcc -ansi; that turns off useful extensions and
+# breaks some systems' header files.
+# AIX			-qlanglvl=ansi
+# Ultrix and OSF/1	-std1
+# HP-UX 10.20 and later	-Ae
+# HP-UX older versions	-Aa -D_HPUX_SOURCE
+# SVR4			-Xc -D__EXTENSIONS__
+for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+do
+  CC="$ac_save_CC $ac_arg"
+  AC_TRY_COMPILE(
+[#include <stdarg.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+/* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
+struct buf { int x; };
+FILE * (*rcsopen) (struct buf *, struct stat *, int);
+static char *e (p, i)
+     char **p;
+     int i;
+{
+  return p[i];
+}
+static char *f (char * (*g) (char **, int), char **p, ...)
+{
+  char *s;
+  va_list v;
+  va_start (v,p);
+  s = g (p, va_arg (v,int));
+  va_end (v);
+  return s;
+}
+int test (int i, double x);
+struct s1 {int (*f) (int a);};
+struct s2 {int (*f) (double a);};
+int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
+int argc;
+char **argv;
+], [
+return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
+],
+[ac_cv_prog_cc_stdc="$ac_arg"; break])
+done
+CC="$ac_save_CC"
 ])
+if test -z "$ac_cv_prog_cc_stdc"; then
+  AC_MSG_RESULT([none needed])
+else
+  AC_MSG_RESULT($ac_cv_prog_cc_stdc)
+fi
+case "x$ac_cv_prog_cc_stdc" in
+  x|xno) ;;
+  *) CC="$CC $ac_cv_prog_cc_stdc" ;;
+esac
+])dnl AC_PROG_CC_STDC
+
 
 dnl AC_PROG_MAKE_SET
 dnl ----------------
@@ -2202,6 +2292,8 @@ if test $ac_cv_c_bigendian = yes; then
 fi
 ])
 
+dnl AC_C_INLINE
+dnl -----------
 dnl Do nothing if the compiler accepts the inline keyword.
 dnl Otherwise define inline to __inline__ or __inline if one of those work,
 dnl otherwise define inline to be empty.
@@ -2223,6 +2315,9 @@ case "$ac_cv_c_inline" in
 esac
 ])
 
+
+dnl AC_C_CONST
+dnl ----------
 AC_DEFUN(AC_C_CONST,
 [dnl This message is consistent in form with the other checking messages,
 dnl and with the result message.
@@ -2278,7 +2373,8 @@ if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
             [Define to empty if the keyword `const' does not work.])
 fi
-])
+])dnl AC_C_CONST
+
 
 dnl AC_C_VOLATILE
 dnl -------------
@@ -2302,6 +2398,7 @@ if test $ac_cv_c_volatile = no; then
 fi
 ])
 
+
 dnl AC_C_STRINGIZE
 dnl --------------
 dnl Checks if `#' can be used to glue strings together at the CPP level.
@@ -2320,7 +2417,26 @@ if test "${ac_cv_c_stringize}" = yes; then
             [Define if you have the ANSI # stringizing operator in cpp.])
 fi
 AC_MSG_RESULT([${ac_cv_c_stringize}])
-])dnl
+])dnl AC_C_STRINGIZE
+
+
+dnl AC_C_PROTOTYPES
+dnl ---------------
+dnl Check if the C compiler supports prototypes, included if it needs
+dnl options.
+AC_DEFUN(AC_C_PROTOTYPES,
+[AC_REQUIRE([AC_PROG_CC_STDC])dnl
+AC_REQUIRE([AC_PROG_CPP])dnl
+AC_MSG_CHECKING([for function prototypes])
+if test "$ac_cv_prog_cc_stdc" != no; then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(PROTOTYPES, 1,
+            [Define if the compiler supports function prototypes.])
+else
+  AC_MSG_RESULT(no)
+fi
+])dnl AC_C_PROTOTYPES
+
 
 define(AC_ARG_ARRAY,
 [AC_FATAL([$0 has been removed; don't do non-portable things with arguments], 4)])

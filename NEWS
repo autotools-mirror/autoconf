@@ -23,6 +23,10 @@ Major changes in release 2.15:
     Document and ask for the registration of an envvar.
   - AC_CONFIG_LINKS
     Replaces the now obsolete AC_LINK_FILES.
+  - AC_PROG_CC_STDC
+    Checks if the compiler supports ISO C, included when needs special
+    options.
+  
 * Environment variables are kept when reconfiguring.
   The previous scheme to set envvar before running configure was
     ENV=VAL ./configure
