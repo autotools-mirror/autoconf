@@ -223,6 +223,9 @@ done
 # Set them in the order expected by the M4 macros: the converse.
 alphabet='abcdefghijklmnopqrstuvwxyz'
 ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+NUMBERS='0123456789'
+WORDCHAR=_$alphabet$ALPHABET$NUMBERS
+
 _ac_warnings=
 for warning in `IFS=,; echo syntax,$WARNINGS,$warnings |
                          tr $ALPHABET $alphabet`
@@ -303,10 +306,6 @@ case $task in
   $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure ||
     { (exit 1); exit; }
 
-  # You can add your own prefixes to pattern if you want to check for
-  # them too.
-  pattern="_?A[CHM]_|m4_"
-
   if test "x$outfile" != x-; then
     chmod +x $outfile
   fi
@@ -346,10 +345,23 @@ case $task in
       while (sub (/@%:@/, "#"))
         continue
       # Dubious feature: we tolerate macro names when commented.
-      if (/^[^#]*($pattern)/)
+      code_part = \$0
+      comment_start = index (code_part, "#")
+      if (comment_start)
+        code_part = substr (\$0, 0, comment_start)
+      if (match (code_part, /[^$WORDCHAR](A[$ALPHABET]|m4)_[$WORDCHAR]*/))
         {
-           match (\$0, /([_A-Za-z0-9]*($pattern)[_A-Za-z0-9]*)/)
-           macros [substr (\$0, RSTART, RLENGTH)] = oline
+           macros [substr (code_part, RSTART + 1, RLENGTH - 1)] = oline
+           some_macros_were_not_expanded = 1
+        }
+      if (match (code_part, /^(A[$ALPHABET]|m4)_[$WORDCHAR]*/))
+        {
+           macros [substr (code_part, RSTART, RLENGTH)] = oline
+           some_macros_were_not_expanded = 1
+        }
+      if (match (code_part, /[$WORDCHAR]*_A[$ALPHABET]_[$WORDCHAR]*/))
+        {
+           macros [substr (code_part, RSTART, RLENGTH)] = oline
            some_macros_were_not_expanded = 1
         }
       print
