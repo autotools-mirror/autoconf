@@ -472,7 +472,7 @@ sub parse_args ()
   do {
     @language = ();
     use Getopt::Long;
-    Getopt::Long::Configure ("pass_through");
+    Getopt::Long::Configure ("pass_through", "permute");
     GetOptions ("l|language=s" => \@language);
 
     foreach (@language)
