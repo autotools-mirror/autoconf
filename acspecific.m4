@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 93, 94, 95, 96, 1998 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -70,19 +70,26 @@ else
 fi
 ])
 
+dnl AC_PROG_CC([COMPILER ...])
+dnl --------------------------
+dnl COMPILER ... is a space separated list of C compilers to search for.
+dnl This just gives the user an opportunity to specify an alternative
+dnl search list for the C compiler.
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-AC_CHECK_PROG(CC, gcc, gcc)
-if test -z "$CC"; then
-  AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
+ifelse([$1], ,
+[
+  AC_CHECK_PROG(CC, gcc, gcc)
   if test -z "$CC"; then
-    case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN*)
-      AC_CHECK_PROG(CC, cl, cl) ;;
-    esac
+    AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+    if test -z "$CC"; then
+      AC_CHECK_PROGS(CC, cl)
+    fi
   fi
-  test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
-fi
+], [AC_CHECK_PROGS(CC, [$1])])
+
+test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 AC_PROG_CC_WORKS
 AC_PROG_CC_GNU
@@ -117,9 +124,15 @@ else
 fi
 ])
 
+dnl AC_PROG_CXX([LIST-OF-COMPILERS])
+dnl --------------------------------
+dnl LIST-OF-COMPILERS is a space separated list of C++ compilers to search
+dnl for (if not specified, a default list is used).  This just gives the
+dnl user an opportunity to specify an alternative search list for the C++
+dnl compiler.
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gpp CC cxx cc++ cl, g++)
+AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
 
 AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
@@ -154,24 +167,16 @@ else
 fi
 ])
 
-dnl Determine a Fortran 77 compiler to use.  If `F77' is not already set
-dnl in the environment, check for `g77', `f77' and `f2c', in that order.
-dnl Set the output variable `F77' to the name of the compiler found.
-dnl 
-dnl If using `g77' (the GNU Fortran 77 compiler), then `AC_PROG_F77'
-dnl will set the shell variable `G77' to `yes', and empty otherwise.  If
-dnl the output variable `FFLAGS' was not already set in the environment,
-dnl then set it to `-g -02' for `g77' (or `-O2' where `g77' does not
-dnl accept `-g').  Otherwise, set `FFLAGS' to `-g' for all other Fortran
-dnl 77 compilers.
-dnl 
+dnl AC_PROG_F77 takes an optional first argument which, if specified,
+dnl must be a space separated list of Fortran 77 compilers to search
+dnl for.  This just gives the user an opportunity to specify an
+dnl alternative search list for the Fortran 77 compiler.
+dnl
 dnl AC_PROG_F77()
 AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-if test -z "$F77"; then
-  AC_CHECK_PROGS(F77, g77 f77 f2c)
-    test -z "$F77" && AC_MSG_ERROR([no acceptable Fortran 77 compiler found in \$PATH])
-fi
+AC_CHECK_PROGS(F77,
+               m4_default([$1], [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c]))
 
 AC_PROG_F77_WORKS
 AC_PROG_F77_GNU
@@ -198,11 +203,14 @@ else
 fi
 ])
 
+dnl AC_PROG_CC_WORKS
+dnl ----------------
 AC_DEFUN(AC_PROG_CC_WORKS,
 [AC_MSG_CHECKING([whether the C compiler ($CC $CFLAGS $CPPFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_C
-AC_TRY_COMPILER([main(){return(0);}], ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
+AC_TRY_COMPILER([int main(){return(0);}],
+                ac_cv_prog_cc_works, ac_cv_prog_cc_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cc_works)
 if test $ac_cv_prog_cc_works = no; then
@@ -213,11 +221,14 @@ AC_MSG_RESULT($ac_cv_prog_cc_cross)
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
+dnl AC_PROG_CXX_WORKS
+dnl -----------------
 AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_TRY_COMPILER([int main(){return(0);}], ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
+AC_TRY_COMPILER([int main(){return(0);}],
+                ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then
@@ -228,12 +239,12 @@ AC_MSG_RESULT($ac_cv_prog_cxx_cross)
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
+dnl AC_PROG_F77_WORKS
+dnl -----------------
 dnl Test whether the Fortran 77 compiler can compile and link a trivial
 dnl Fortran program.  Also, test whether the Fortran 77 compiler is a
 dnl cross-compiler (which may realistically be the case if the Fortran
 dnl compiler is `g77').
-dnl 
-dnl AC_PROG_F77_WORKS()
 AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
@@ -252,6 +263,8 @@ AC_MSG_RESULT($ac_cv_prog_f77_cross)
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
+dnl AC_PROG_CC_GNU
+dnl --------------
 AC_DEFUN(AC_PROG_CC_GNU,
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
@@ -266,6 +279,8 @@ else
   ac_cv_prog_gcc=no
 fi])])
 
+dnl AC_PROG_CXX_GNU
+dnl ---------------
 AC_DEFUN(AC_PROG_CXX_GNU,
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
@@ -280,11 +295,11 @@ else
   ac_cv_prog_gxx=no
 fi])])
 
+dnl AC_PROG_F77_GNU
+dnl ---------------
 dnl Test whether for Fortran 77 compiler is `g77' (the GNU Fortran 77
 dnl Compiler).  This test depends on whether the Fortran 77 compiler can
 dnl do CPP pre-processing.
-dnl 
-dnl AC_PROG_F77_GNU()
 AC_DEFUN(AC_PROG_F77_GNU,
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
 [cat > conftest.fpp <<EOF
@@ -298,6 +313,9 @@ else
   ac_cv_prog_g77=no
 fi])])
 
+
+dnl AC_PROG_CC_G
+dnl ------------
 AC_DEFUN(AC_PROG_CC_G,
 [AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [echo 'void f(){}' > conftest.c
@@ -309,6 +327,9 @@ fi
 rm -f conftest*
 ])])
 
+
+dnl AC_PROG_CXX_G
+dnl -------------
 AC_DEFUN(AC_PROG_CXX_G,
 [AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
 [echo 'void f(){}' > conftest.cc
@@ -320,10 +341,11 @@ fi
 rm -f conftest*
 ])])
 
+
+dnl AC_PROG_F77_G
+dnl -------------
 dnl Test whether the Fortran 77 compiler can accept the `-g' option to
 dnl enable debugging.
-dnl 
-dnl AC_PROG_F77_G()
 AC_DEFUN(AC_PROG_F77_G,
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [cat > conftest.f << EOF
@@ -360,6 +382,8 @@ Autoconf TCGETA],
 fi
 ])
 
+dnl AC_PROG_CC_C_O
+dnl --------------
 AC_DEFUN(AC_PROG_CC_C_O,
 [if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
@@ -404,9 +428,11 @@ if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE(NO_MINUS_C_MINUS_O)
+  AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
+            [Define if your C compiler doesn't accept -c and -o together.])
 fi
-])
+])dnl AC_PROG_CC_C_O
+
 
 dnl Test if the Fortran 77 compiler accepts the options `-c' and `-o'
 dnl simultaneously, and define `F77_NO_MINUS_C_MINUS_O' if it does not.
@@ -414,7 +440,7 @@ dnl
 dnl The usefulness of this macro is questionable, as I can't really see
 dnl why anyone would use it.  The only reason I include it is for
 dnl completeness, since a similar test exists for the C compiler.
-dnl 
+dnl
 dnl AC_PROG_F77_C_O
 AC_DEFUN(AC_PROG_F77_C_O,
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
@@ -443,10 +469,13 @@ if eval "test \"`echo '$ac_cv_prog_f77_'${ac_f77}_c_o`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE(F77_NO_MINUS_C_MINUS_O)
+  AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
+            [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
 fi
 ])
 
+dnl AC_PROG_MAKE_SET
+dnl ----------------
 dnl Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
@@ -483,9 +512,70 @@ dnl Check for mawk first since it's generally faster.
 AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
+
+dnl AC_PROG_SED
+dnl -----------
+dnl Check whether the first sed in the path supports long scripts.
+dnl Set the variable $ac_cv_prog_sed_max_cmd to the maximum number
+dnl of commands to put in a sed script, `infinite' meaning a priori
+dnl infinite.
+dnl This macro is not documented on purpose.
+AC_DEFUN([AC_PROG_SED],
+[AC_CACHE_CHECK([for max sed script length], ac_cv_prog_sed_max_cmd,
+[echo >conftest.s "\
+s/0/1/;s/1/2/;s/2/3/;s/3/4/;s/4/5/;s/5/6/;s/6/7/;s/7/8/;s/8/9/;s/9/0/;s/9/O/;"
+dnl 2^4 = 16 lines of 10 commands.
+for ac_cnt in 0 1 2 3
+do
+  cat conftest.s conftest.s >conftest.s1
+  mv conftest.s1 conftest.s
+done
+if test "`echo 0 | sed -f conftest.s`" != 0; then
+dnl HP-UX sed dies with scripts longer than 100 commands.
+  ac_cv_prog_sed_max_cmd=100
+else
+  ac_cv_prog_sed_max_cmd=infinite
+fi
+])dnl
+])
+
+dnl AC_PROG_BINSH
+dnl -------------
+dnl Check the maximum length of an here document.
+dnl FIXME: Is this test really reliable?
+AC_DEFUN([AC_PROG_BINSH],
+[AC_CACHE_CHECK([for max here document length], ac_cv_prog_binsh_max_heredoc,
+[echo >conftest.s1 "\
+ac_test='This is a sample string to test here documents.'"
+dnl 2^8 = 256 lines
+for ac_cnt in 0 1 2 3 4 5 6 7
+do
+  cat conftest.s1 conftest.s1 >conftest.sh
+  mv conftest.sh conftest.s1
+done
+echo 'cat >conftest.s1 <<CEOF' >conftest.sh
+cat conftest.s1 >>conftest.sh
+echo 'echo "Success"' >>conftest.sh
+echo 'CEOF' >>conftest.sh
+$SHELL ./conftest.sh
+if test "`$SHELL ./conftest.s1`" != Success; then
+dnl Some people say to limit oneself to 12, which seems incredibly small.
+  ac_cv_prog_binsh_max_heredoc=12
+else
+  ac_cv_prog_binsh_max_heredoc=infinite
+fi
+])dnl
+])dnl AC_PROG_BINSH
+
+
+dnl AC_PROG_YACC
+dnl ------------
 AC_DEFUN(AC_PROG_YACC,
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)])
 
+
+dnl AC_PROG_CPP
+dnl -----------
 AC_DEFUN(AC_PROG_CPP,
 [AC_MSG_CHECKING(how to run the C preprocessor)
 # On Suns, sometimes $CPP names a directory.
@@ -516,8 +606,11 @@ else
 fi
 AC_MSG_RESULT($CPP)
 AC_SUBST(CPP)dnl
-])
+])dnl AC_PROG_CPP
 
+
+dnl AC_PROG_CXXCPP
+dnl --------------
 AC_DEFUN(AC_PROG_CXXCPP,
 [AC_MSG_CHECKING(how to run the C++ preprocessor)
 if test -z "$CXXCPP"; then
@@ -538,8 +631,12 @@ AC_SUBST(CXXCPP)dnl
 dnl Require finding the C or C++ preprocessor, whichever is the
 dnl current language.
 AC_DEFUN(AC_REQUIRE_CPP,
-[ifelse(AC_LANG, C, [AC_REQUIRE([AC_PROG_CPP])], [AC_REQUIRE([AC_PROG_CXXCPP])])])
+[ifelse(AC_LANG,
+        C, [AC_REQUIRE([AC_PROG_CPP])],
+        [AC_REQUIRE([AC_PROG_CXXCPP])])])
 
+dnl AC_PROG_LEX
+dnl -----------
 AC_DEFUN(AC_PROG_LEX,
 [AC_CHECK_PROG(LEX, flex, flex, lex)
 if test -z "$LEXLIB"
@@ -552,7 +649,10 @@ then
 fi
 AC_SUBST(LEXLIB)])
 
+dnl AC_DECL_YYTEXT
+dnl --------------
 dnl Check if lex declares yytext as a char * by default, not a char[].
+dnl FIXME: Why the heck is there the following line?
 undefine([AC_DECL_YYTEXT])
 AC_DEFUN(AC_DECL_YYTEXT,
 [AC_REQUIRE_CPP()dnl
@@ -586,9 +686,11 @@ rm -f "${LEX_OUTPUT_ROOT}.c"
 ])
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
-  AC_DEFINE(YYTEXT_POINTER)
+  AC_DEFINE(YYTEXT_POINTER, 1,
+            [Define if `lex' declares `yytext' as a `char *' by default,
+             not a `char[]'.])
 fi
-])
+])dnl AC_DECL_YYTEXT
 
 AC_DEFUN(AC_PROG_INSTALL,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
@@ -683,8 +785,7 @@ AC_SUBST(LN_S)dnl
 ])
 
 define(AC_RSH,
-[errprint(__file__:__line__: [$0] has been removed; replace it with equivalent code
-)m4exit(4)])
+[AC_FATAL([$0 has been removed; replace it with equivalent code], 4)])
 
 
 dnl ### Checks for header files
@@ -727,31 +828,7 @@ exit (0); }
 ], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
-  AC_DEFINE(STDC_HEADERS)
-fi
-])
-
-AC_DEFUN(AC_UNISTD_H,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(unistd.h)])dnl
-AC_CHECK_HEADER(unistd.h, AC_DEFINE(HAVE_UNISTD_H))])
-
-AC_DEFUN(AC_USG,
-[AC_OBSOLETE([$0],
-  [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])dnl
-AC_MSG_CHECKING([for BSD string and memory functions])
-AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);],
-  [AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no); AC_DEFINE(USG)])])
-
-
-dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
-dnl To avoid problems, don't check for gcc2 built-ins.
-AC_DEFUN(AC_MEMORY_H,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])dnl
-AC_MSG_CHECKING(whether string.h declares mem functions)
-AC_EGREP_HEADER(memchr, string.h, ac_found=yes, ac_found=no)
-AC_MSG_RESULT($ac_found)
-if test $ac_found = no; then
-  AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
+  AC_DEFINE(STDC_HEADERS, 1, [Define if you have the ANSI C header files.])
 fi
 ])
 
@@ -763,29 +840,24 @@ AC_DEFUN(AC_HEADER_MAJOR,
 ])
 
 if test $ac_cv_header_sys_types_h_makedev = no; then
-AC_CHECK_HEADER(sys/mkdev.h, [AC_DEFINE(MAJOR_IN_MKDEV)])
+AC_CHECK_HEADER(sys/mkdev.h,
+                [AC_DEFINE(MAJOR_IN_MKDEV, 1,
+                           [Define if `major', `minor', and `makedev' are
+                            declared in <mkdev.h>.])])
 
   if test $ac_cv_header_sys_mkdev_h = no; then
-AC_CHECK_HEADER(sys/sysmacros.h, [AC_DEFINE(MAJOR_IN_SYSMACROS)])
+    AC_CHECK_HEADER(sys/sysmacros.h,
+                    [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
+                               [Define if `major', `minor', and `makedev' are
+                                declared in <sysmacros.h>.])])
   fi
 fi
 ])
 
-AC_DEFUN(AC_HEADER_DIRENT,
-[ac_header_dirent=no
-AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
-  [ac_header_dirent=$ac_hdr; break])
-# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
-if test $ac_header_dirent = dirent.h; then
-AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
-else
-AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
-fi
-])
-
+dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
+dnl ----------------------------------------------------
 dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
-dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 AC_DEFUN(AC_CHECK_HEADER_DIRENT,
 [ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1 that defines DIR])
@@ -802,9 +874,10 @@ else
 fi
 ])
 
+dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
+dnl --------------------------------------------------
 dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
 dnl defines `DIR'.
-dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
 define(AC_CHECK_HEADERS_DIRENT,
 [for ac_hdr in $1
 do
@@ -815,29 +888,18 @@ changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
 
-AC_DEFUN(AC_DIR_HEADER,
-[AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
-ac_header_dirent=no
-for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
-  AC_CHECK_HEADER_DIRENT($ac_hdr, [ac_header_dirent=$ac_hdr; break])
-done
-
-case "$ac_header_dirent" in
-dirent.h) AC_DEFINE(DIRENT) ;;
-sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
-sys/dir.h) AC_DEFINE(SYSDIR) ;;
-ndir.h) AC_DEFINE(NDIR) ;;
-esac
-
-AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
-[AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_header_dirent>
-int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
-if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(VOID_CLOSEDIR)
+AC_DEFUN(AC_HEADER_DIRENT,
+[ac_header_dirent=no
+AC_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h,
+  [ac_header_dirent=$ac_hdr; break])
+# Two versions of opendir et al. are in -ldir and -lx on SCO Xenix.
+if test $ac_header_dirent = dirent.h; then
+  AC_CHECK_LIB(dir, opendir, LIBS="$LIBS -ldir")
+else
+  AC_CHECK_LIB(x, opendir, LIBS="$LIBS -lx")
 fi
 ])
+
 
 AC_DEFUN(AC_HEADER_STAT,
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
@@ -870,10 +932,14 @@ You lose.
 #endif
 ], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
 if test $ac_cv_header_stat_broken = yes; then
-  AC_DEFINE(STAT_MACROS_BROKEN)
+  AC_DEFINE(STAT_MACROS_BROKEN, 1,
+            [Define if the `S_IS*' macros in <sys/stat.h> do not
+             work properly.])
 fi
 ])
 
+dnl AC_DECL_SYS_SIGLIST
+dnl -------------------
 AC_DEFUN(AC_DECL_SYS_SIGLIST,
 [AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
   ac_cv_decl_sys_siglist,
@@ -882,12 +948,14 @@ AC_DEFUN(AC_DECL_SYS_SIGLIST,
 /* NetBSD declares sys_siglist in unistd.h.  */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif], [char *msg = *(sys_siglist + 1);],
+#endif
+], [char *msg = *(sys_siglist + 1);],
   ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
 if test $ac_cv_decl_sys_siglist = yes; then
-  AC_DEFINE(SYS_SIGLIST_DECLARED)
+  AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
+            [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
 fi
-])
+])dnl AC_DECL_SYS_SIGLIST
 
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
@@ -904,9 +972,28 @@ wait (&s);
 s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
 ac_cv_header_sys_wait_h=yes, ac_cv_header_sys_wait_h=no)])
 if test $ac_cv_header_sys_wait_h = yes; then
-  AC_DEFINE(HAVE_SYS_WAIT_H)
+  AC_DEFINE(HAVE_SYS_WAIT_H, 1,
+            [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
 fi
 ])
+
+dnl A few hasbeen'd macros.
+
+AC_DEFUN(AC_UNISTD_H,
+[AC_HASBEEN([$0], [; instead use AC_CHECK_HEADERS(unistd.h)])])
+
+AC_DEFUN(AC_USG,
+[AC_HASBEEN([$0],
+            [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])])
+
+dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
+dnl To avoid problems, don't check for gcc2 built-ins.
+AC_DEFUN(AC_MEMORY_H,
+[AC_HASBEEN([$0],
+            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])])
+
+AC_DEFUN(AC_DIR_HEADER,
+[AC_HASBEEN([$0], [; instead use AC_HEADER_DIRENT])])
 
 
 dnl ### Checks for typedefs
@@ -949,16 +1036,18 @@ if test $ac_cv_type_getgroups = cross; then
   AC_EGREP_HEADER([getgroups.*int.*gid_t], unistd.h,
 		  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)
 fi])
-AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
-])
+AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
+                   [Define to the type of elements in the array set by
+                    `getgroups'. Usually this is either `int' or `gid_t'.])
+])dnl AC_TYPE_GETGROUPS
 
 AC_DEFUN(AC_TYPE_UID_T,
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
   ac_cv_type_uid_t=yes, ac_cv_type_uid_t=no)])
 if test $ac_cv_type_uid_t = no; then
-  AC_DEFINE(uid_t, int)
-  AC_DEFINE(gid_t, int)
+  AC_DEFINE(uid_t, int, [Define to `int' if <sys/types.h> doesn't define.])
+  AC_DEFINE(gid_t, int, [Define to `int' if <sys/types.h> doesn't define.])
 fi
 ])
 
@@ -974,6 +1063,8 @@ AC_DEFUN(AC_TYPE_OFF_T,
 AC_DEFUN(AC_TYPE_MODE_T,
 [AC_CHECK_TYPE(mode_t, int)])
 
+dnl AC_TYPE_SIGNAL
+dnl --------------
 dnl Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN(AC_TYPE_SIGNAL,
 [AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
@@ -989,22 +1080,31 @@ void (*signal ()) ();
 #endif
 ],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])
-AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
+AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
+                   [Define as the return type of signal handlers
+                    (`int' or `void').])
 ])
 
 
 dnl ### Checks for functions
 
 
+dnl AC_FUNC_CLOSEDIR_VOID
+dnl ---------------------
+dnl Check whether closedir returns void, and #define CLOSEDIR_VOID in
+dnl that case.
 AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <$ac_header_dirent>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
-  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes, ac_cv_func_closedir_void=yes)])
+  ac_cv_func_closedir_void=no,
+  ac_cv_func_closedir_void=yes,
+  ac_cv_func_closedir_void=yes)])
 if test $ac_cv_func_closedir_void = yes; then
-  AC_DEFINE(CLOSEDIR_VOID)
+  AC_DEFINE(CLOSEDIR_VOID, 1,
+            [Define if the `closedir' function returns void instead of `int'.])
 fi
 ])
 
@@ -1017,10 +1117,13 @@ AC_DEFUN(AC_FUNC_FNMATCH,
 ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
 ac_cv_func_fnmatch_works=no)])
 if test $ac_cv_func_fnmatch_works = yes; then
-  AC_DEFINE(HAVE_FNMATCH)
+  AC_DEFINE(HAVE_FNMATCH, 1,
+            [Define if your system has a working `fnmatch' function.])
 fi
 ])
 
+dnl AC_FUNC_MMAP
+dnl ------------
 AC_DEFUN(AC_FUNC_MMAP,
 [AC_CHECK_HEADERS(unistd.h)
 AC_CHECK_FUNCS(getpagesize)
@@ -1038,7 +1141,7 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
    back from the file, nor mmap's back from the file at a different
    address.  (There have been systems where private was not correctly
    implemented like the infamous i386 svr4.0, and systems where the
-   VM page cache was not coherent with the filesystem buffer cache
+   VM page cache was not coherent with the file system buffer cache
    like early versions of FreeBSD and possibly contemporary NetBSD.)
    For shared mappings, we should conversely verify that changes get
    propogated back to all the places they're supposed to be.
@@ -1164,10 +1267,14 @@ main()
 ], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
 ac_cv_func_mmap_fixed_mapped=no)])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
-  AC_DEFINE(HAVE_MMAP)
+  AC_DEFINE(HAVE_MMAP, 1,
+            [Define if you have a working `mmap' system call.])
 fi
-])
+])dnl AC_FUNC_MMAP
 
+
+dnl AC_FUNC_GETPGRP
+dnl ---------------
 AC_DEFUN(AC_FUNC_GETPGRP,
 [AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
 [AC_TRY_RUN([
@@ -1225,9 +1332,10 @@ main()
    AC_MSG_ERROR(cannot check getpgrp if cross compiling))
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
-  AC_DEFINE(GETPGRP_VOID)
+  AC_DEFINE(GETPGRP_VOID, 1,
+            [Define if the `getpgrp' function takes no argument.])
 fi
-])
+])dnl AC_FUNC_GETPGRP
 
 AC_DEFUN(AC_FUNC_SETPGRP,
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
@@ -1251,20 +1359,32 @@ main()
    AC_MSG_ERROR(cannot check setpgrp if cross compiling))
 )
 if test $ac_cv_func_setpgrp_void = yes; then
-  AC_DEFINE(SETPGRP_VOID)
+  AC_DEFINE(SETPGRP_VOID, 1,
+            [Define if the `setpgrp' function takes no argument.])
 fi
 ])
 
+dnl Why the heck is that _doprnt does not define HAVE__DOPRNT???
+dnl That the logical name!  In addition, why doesn't it use
+dnl AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
+dnl FIXME: To be changed in Autoconf 3?
 AC_DEFUN(AC_FUNC_VPRINTF,
-[AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
+[AC_CHECK_FUNC(vprintf,
+               AC_DEFINE(HAVE_VPRINTF, 1,
+               [Define if you have the `vprintf' function.]))
 if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
+AC_CHECK_FUNC(_doprnt,
+              AC_DEFINE(HAVE_DOPRNT, 1,
+                        [Define if you don't have `vprintf' but do have
+                         `_doprnt.']))
 fi
 ])
 
 AC_DEFUN(AC_FUNC_VFORK,
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADER(vfork.h, AC_DEFINE(HAVE_VFORK_H))
+AC_CHECK_HEADER(vfork.h,
+                AC_DEFINE(HAVE_VFORK_H, 1,
+                          [Define if you have <vfork.h>.]))
 AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
@@ -1361,7 +1481,7 @@ main() {
 ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork)
 ac_cv_func_vfork_works=$ac_cv_func_vfork)])
 if test "x$ac_cv_func_vfork_works" = xno; then
-  AC_DEFINE(vfork, fork)
+  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
 fi
 ])
 
@@ -1397,9 +1517,10 @@ main() {
 }], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
 ac_cv_func_wait3_rusage=no)])
 if test $ac_cv_func_wait3_rusage = yes; then
-  AC_DEFINE(HAVE_WAIT3)
+  AC_DEFINE(HAVE_WAIT3, 1,
+            [Define if you have the `wait3' system call.])
 fi
-])
+])dnl AC_FUNC_WAIT3
 
 AC_DEFUN(AC_FUNC_ALLOCA,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
@@ -1409,7 +1530,9 @@ AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 [AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
   ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
 if test $ac_cv_working_alloca_h = yes; then
-  AC_DEFINE(HAVE_ALLOCA_H)
+  AC_DEFINE(HAVE_ALLOCA_H, 1,
+            [Define if you have <alloca.h> and it should be used
+             (not on Ultrix).])
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
@@ -1437,7 +1560,8 @@ char *alloca ();
 ], [char *p = (char *) alloca(1);],
   ac_cv_func_alloca_works=yes, ac_cv_func_alloca_works=no)])
 if test $ac_cv_func_alloca_works = yes; then
-  AC_DEFINE(HAVE_ALLOCA)
+  AC_DEFINE(HAVE_ALLOCA, 1,
+            [Define if you have `alloca', as a function or macro.])
 fi
 
 if test $ac_cv_func_alloca_works = no; then
@@ -1446,7 +1570,7 @@ if test $ac_cv_func_alloca_works = no; then
   # contain a buggy version.  If you still want to use their alloca,
   # use ar to extract alloca.o from them instead of compiling alloca.c.
   ALLOCA=alloca.${ac_objext}
-  AC_DEFINE(C_ALLOCA)
+  AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
 
 AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
 [AC_EGREP_CPP(webecray,
@@ -1458,7 +1582,12 @@ wenotbecray
 ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
 if test $ac_cv_os_cray = yes; then
 for ac_func in _getb67 GETB67 getb67; do
-  AC_CHECK_FUNC($ac_func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func)
+  AC_CHECK_FUNC($ac_func,
+                [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func,
+                                    [Define to one of _getb67, GETB67, getb67
+                                     for Cray-2 and Cray-YMP systems.
+                                     This function is required for alloca.c
+                                     support on those systems.])
   break])
 done
 fi
@@ -1484,7 +1613,7 @@ main ()
 AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 fi
 AC_SUBST(ALLOCA)dnl
-])
+])dnl AC_FUNC_ALLOCA
 
 AC_DEFUN(AC_FUNC_GETLOADAVG,
 [ac_have_func=no # yes means we've found a way to get the load average.
@@ -1511,26 +1640,34 @@ fi
 AC_REPLACE_FUNCS(getloadavg)
 
 if test $ac_cv_func_getloadavg = yes; then
-  AC_DEFINE(HAVE_GETLOADAVG)
+  AC_DEFINE(HAVE_GETLOADAVG, 1,
+            [Define if your system has its own `getloadavg' function.])
   ac_have_func=yes
 else
   # Figure out what our getloadavg.c needs.
   ac_have_func=no
   AC_CHECK_HEADER(sys/dg_sys_info.h,
-  [ac_have_func=yes; AC_DEFINE(DGUX)
-  AC_CHECK_LIB(dgc, dg_sys_info)])
+  [ac_have_func=yes;
+   AC_DEFINE(DGUX, 1, [Define for DGUX with <sys/dg_sys_info.h>.])
+   AC_CHECK_LIB(dgc, dg_sys_info)])
 
   # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
   # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
   # Irix 4.0.5F has the header but not the library.
   if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
-    ac_have_func=yes; AC_DEFINE(SVR4)
+    ac_have_func=yes;
+    AC_DEFINE(SVR4, 1,
+              [Define on System V Release 4.])
   fi
 
   if test $ac_have_func = no; then
     AC_CHECK_HEADER(inq_stats/cpustats.h,
-    [ac_have_func=yes; AC_DEFINE(UMAX)
-    AC_DEFINE(UMAX4_3)])
+    [ac_have_func=yes;
+     AC_DEFINE(UMAX, 1,
+               [Define for Encore UMAX.])
+     AC_DEFINE(UMAX4_3, 1,
+               [Define for Encore UMAX 4.3 that has <inq_status/cpustats.h>
+                instead of <sys/cpustats.h>.])])
   fi
 
   if test $ac_have_func = no; then
@@ -1543,13 +1680,14 @@ else
   fi
 
   AC_CHECK_HEADER(nlist.h,
-  [AC_DEFINE(NLIST_STRUCT)
+  [AC_DEFINE(NLIST_STRUCT, 1, [Define if you have <nlist.h>.])
   AC_CACHE_CHECK([for n_un in struct nlist], ac_cv_struct_nlist_n_un,
   [AC_TRY_COMPILE([#include <nlist.h>],
   [struct nlist n; n.n_un.n_name = 0;],
   ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])
   if test $ac_cv_struct_nlist_n_un = yes; then
-    AC_DEFINE(NLIST_NAME_UNION)
+    AC_DEFINE(NLIST_NAME_UNION, 1,
+              [Define if your `struct nlist' has an `n_un' member.])
   fi
   ])dnl
 fi # Do not have getloadavg in system libraries.
@@ -1565,7 +1703,10 @@ Yowza Am I SETGID yet
 #endif],
   ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])
 if test $ac_cv_func_getloadavg_setgid = yes; then
-  NEED_SETGID=true; AC_DEFINE(GETLOADAVG_PRIVILEGED)
+  NEED_SETGID=true;
+  AC_DEFINE(GETLOADAVG_PRIVILEGED, 1,
+            [Define if the `getloadavg' function needs to be run setuid
+             or setgid.])
 else
   NEED_SETGID=false
 fi
@@ -1604,7 +1745,9 @@ exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
   ac_cv_func_utime_null=no)
 rm -f core core.* *.core])
 if test $ac_cv_func_utime_null = yes; then
-  AC_DEFINE(HAVE_UTIME_NULL)
+  AC_DEFINE(HAVE_UTIME_NULL, 1,
+            [Define if `utime(file, NULL)' sets file's timestamp to the
+             present.])
 fi
 ])
 
@@ -1619,7 +1762,9 @@ main ()
 }], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
 ac_cv_func_strcoll_works=no)])
 if test $ac_cv_func_strcoll_works = yes; then
-  AC_DEFINE(HAVE_STRCOLL)
+  AC_DEFINE(HAVE_STRCOLL, 1,
+            [Define if you have the `strcoll' function and it is properly
+             defined.])
 fi
 ])
 
@@ -1639,7 +1784,10 @@ main () {
 }], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
 rm -f core core.* *.core])
 if test $ac_cv_func_setvbuf_reversed = yes; then
-  AC_DEFINE(SETVBUF_REVERSED)
+  AC_DEFINE(SETVBUF_REVERSED, 1,
+            [Define if the `setvbuf' function takes the buffering type as
+             its second argument and the buffer pointer as the third, as on
+             System V before release 3.])
 fi
 ])
 
@@ -1648,7 +1796,9 @@ AC_DEFUN(AC_FUNC_GETMNTENT,
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
   [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
     [AC_CHECK_LIB(gen, getmntent, LIBS="-lgen $LIBS")])])
-AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
+AC_CHECK_FUNC(getmntent,
+              [AC_DEFINE(HAVE_GETMNTENT, 1,
+                         [Define if you have the `getmntent' function.])])])
 
 AC_DEFUN(AC_FUNC_MKTIME,
 [AC_REQUIRE([AC_HEADER_TIME])dnl
@@ -1813,10 +1963,13 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_STRFTIME,
-[AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)],
+[AC_CHECK_FUNC(strftime,
+               [AC_DEFINE(HAVE_STRFTIME, 1,
+                          [Define if you have the `strftime' function.])],
 [# strftime is in -lintl on SCO UNIX.
-AC_CHECK_LIB(intl, strftime, 
-[AC_DEFINE(HAVE_STRFTIME)
+AC_CHECK_LIB(intl, strftime,
+[AC_DEFINE(HAVE_STRFTIME, 1,
+           [Define if you have the `strftime' function.])
 LIBS="-lintl $LIBS"])])])
 
 AC_DEFUN(AC_FUNC_MEMCMP,
@@ -1863,14 +2016,17 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
   ])dnl AC_CACHE_VAL
  ])dnl AC_CACHE_VAL
  if test "$ac_not_found" = yes; then
-  ac_cv_func_select_arg1=int 
-  ac_cv_func_select_arg234='int *' 
+  ac_cv_func_select_arg1=int
+  ac_cv_func_select_arg234='int *'
   ac_cv_func_select_arg5='struct timeval *'
  fi
  AC_MSG_RESULT([$ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5])
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1,$ac_cv_func_select_arg1)
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234,($ac_cv_func_select_arg234))
- AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5,($ac_cv_func_select_arg5))
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $ac_cv_func_select_arg1,
+                    [Define to the type of arg1 for `select'.])
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ($ac_cv_func_select_arg234),
+                    [Define to the type of args 2, 3 and 4 for `select'.])
+ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($ac_cv_func_select_arg5),
+                    [Define to the type of arg5 for `select'.])
 ])
 
 
@@ -1885,7 +2041,8 @@ AC_DEFUN(AC_HEADER_TIME,
 #include <time.h>],
 [struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
 if test $ac_cv_header_time = yes; then
-  AC_DEFINE(TIME_WITH_SYS_TIME)
+  AC_DEFINE(TIME_WITH_SYS_TIME, 1,
+            [Define if you can safely include both <sys/time.h> and <time.h>.])
 fi
 ])
 
@@ -1897,7 +2054,8 @@ AC_DEFUN(AC_STRUCT_TM,
 [struct tm *tp; tp->tm_sec;],
   ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])
 if test $ac_cv_struct_tm = sys/time.h; then
-  AC_DEFINE(TM_IN_SYS_TIME)
+  AC_DEFINE(TM_IN_SYS_TIME, 1,
+            [Define if your <sys/time.h> declares `struct tm'.])
 fi
 ])
 
@@ -1906,7 +2064,8 @@ AC_DEFUN(AC_STRUCT_TIMEZONE,
 AC_C_STRUCT_MEMBER(tm_zone, [#include <sys/types.h>
 #include <$ac_cv_struct_tm>], [struct tm], tm_zone)
 if test "$ac_cv_c_struct_member_tm_zone" = yes; then
-  AC_DEFINE(HAVE_TM_ZONE)
+  AC_DEFINE(HAVE_TM_ZONE, 1,
+            [Define if your `struct tm' has `tm_zone'.])
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_TRY_LINK(
@@ -1918,8 +2077,19 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 changequote([, ])dnl
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
   if test $ac_cv_var_tzname = yes; then
-    AC_DEFINE(HAVE_TZNAME)
+    AC_DEFINE(HAVE_TZNAME, 1,
+              [Define if you don't have `tm_zone' but do have the external
+               array `tzname'.])
   fi
+fi
+])
+
+AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
+[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
+#include <sys/stat.h>], [struct stat], st_blksize)
+if test $ac_cv_c_struct_member_st_blksize = yes; then
+  AC_DEFINE(HAVE_ST_BLKSIZE, 1,
+            [Define if your `struct stat' has `st_blksize'.])
 fi
 ])
 
@@ -1927,26 +2097,20 @@ AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 [AC_C_STRUCT_MEMBER(st_blocks, [#include <sys/types.h>
 #include <sys/stat.h>], [struct stat], st_blocks)
 if test $ac_cv_c_struct_member_st_blocks = yes; then
-  AC_DEFINE(HAVE_ST_BLOCKS)
+  AC_DEFINE(HAVE_ST_BLOCKS, 1,
+            [Define if your `struct stat' has `st_blocks'.])
 else
   LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
 fi
 AC_SUBST(LIBOBJS)dnl
 ])
 
-AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
-[AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
-#include <sys/stat.h>], [struct stat], st_blksize)
-if test $ac_cv_c_struct_member_st_blksize = yes; then
-  AC_DEFINE(HAVE_ST_BLKSIZE)
-fi
-])
-
 AC_DEFUN(AC_STRUCT_ST_RDEV,
 [AC_C_STRUCT_MEMBER(st_rdev, [#include <sys/types.h>
 #include <sys/stat.h>], [struct stat], st_rdev)
 if test $ac_cv_c_struct_member_st_rdev = yes; then
-  AC_DEFINE(HAVE_ST_RDEV)
+  AC_DEFINE(HAVE_ST_RDEV, 1,
+            [Define if your `struct stat' has `st_rdev'.])
 fi
 ])
 
@@ -1979,7 +2143,7 @@ fi])
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
-])
+])dnl AC_C_CHAR_UNSIGNED
 
 AC_DEFUN(AC_C_LONG_DOUBLE,
 [AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
@@ -1994,25 +2158,16 @@ exit(sizeof(long double) < sizeof(double)); }],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
-  AC_DEFINE(HAVE_LONG_DOUBLE)
+  AC_DEFINE(HAVE_LONG_DOUBLE, 1,
+            [Define if the `long double' type works.])
 fi
 ])
 
 AC_DEFUN(AC_INT_16_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])dnl
-AC_MSG_CHECKING(whether int is 16 bits)
-AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
- [AC_MSG_RESULT(yes)
- AC_DEFINE(INT_16_BITS)], AC_MSG_RESULT(no))
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(int)])])
 
 AC_DEFUN(AC_LONG_64_BITS,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])dnl
-AC_MSG_CHECKING(whether long int is 64 bits)
-AC_TRY_RUN([main() { exit(sizeof(long int) != 8); }],
- [AC_MSG_RESULT(yes)
- AC_DEFINE(LONG_64_BITS)], AC_MSG_RESULT(no))
-])
+[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(long)])])
 
 AC_DEFUN(AC_C_BIGENDIAN,
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
@@ -2041,7 +2196,9 @@ AC_TRY_RUN([main () {
 }], ac_cv_c_bigendian=no, ac_cv_c_bigendian=yes)
 fi])
 if test $ac_cv_c_bigendian = yes; then
-  AC_DEFINE(WORDS_BIGENDIAN)
+  AC_DEFINE(WORDS_BIGENDIAN, 1,
+            [Define if your processor stores words with the most significant
+             byte first (like Motorola and SPARC, unlike Intel and VAX).])
 fi
 ])
 
@@ -2057,8 +2214,12 @@ done
 ])
 case "$ac_cv_c_inline" in
   inline | yes) ;;
-  no) AC_DEFINE(inline, ) ;;
-  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
+  no) AC_DEFINE(inline,,
+                [Define as `__inline' if that's what the C compiler calls it,
+                 or to nothing if it is not supported.]) ;;
+  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline,
+                         [Define as `__inline' if that's what the C compiler
+                          calls it, or to nothing if it is not supported.]) ;;
 esac
 ])
 
@@ -2070,7 +2231,7 @@ AC_CACHE_CHECK([for working const], ac_cv_c_const,
 changequote(<<, >>)dnl
 <<
 /* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x;
+typedef int charset[2]; const charset x = {0, 0};
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
 char **p;
@@ -2114,34 +2275,39 @@ ccp = (char const *const *) p;
 changequote([, ])dnl
 ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
-  AC_DEFINE(const, )
+  AC_DEFINE(const,,
+            [Define to empty if the keyword `const' does not work.])
 fi
 ])
 
-dnl   Note that, unlike const, #defining volatile to be the empty
-dnl   string can actually turn a correct program into an incorrect
-dnl   one, since removing uses of volatile actually grants the
-dnl   compiler permission to perform optimizations that could break
-dnl   the user's code.  So, do not #define volatile away unless it is
-dnl   really necessary to allow the user's code to compile cleanly.
-dnl   Benign compiler failures should be tolerated.
+dnl AC_C_VOLATILE
+dnl -------------
+dnl Note that, unlike const, #defining volatile to be the empty string can
+dnl actually turn a correct program into an incorrect one, since removing
+dnl uses of volatile actually grants the compiler permission to perform
+dnl optimizations that could break the user's code.  So, do not #define
+dnl volatile away unless it is really necessary to allow the user's code
+dnl to compile cleanly.  Benign compiler failures should be tolerated.
 AC_DEFUN(AC_C_VOLATILE,
 [AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
-[AC_TRY_COMPILE(,
-changequote(<<, >>)dnl
-<<
+[AC_TRY_COMPILE(,[
 volatile int x;
-int * volatile y;
->>,
-changequote([, ])dnl
+int * volatile y;],
 ac_cv_c_volatile=yes, ac_cv_c_volatile=no)])
 if test $ac_cv_c_volatile = no; then
-  AC_DEFINE(volatile, )
+  AC_DEFINE(volatile,,
+            [Define to empty if the keyword `volatile' does not work.
+             Warning: valid code using `volatile' can become incorrect
+             without.  Disable with care.])
 fi
 ])
 
-AC_DEFUN(AC_C_STRINGIZE, [
-AC_REQUIRE([AC_PROG_CPP])
+dnl AC_C_STRINGIZE
+dnl --------------
+dnl Checks if `#' can be used to glue strings together at the CPP level.
+dnl Defines HAVE_STRINGIZE if positive.
+AC_DEFUN(AC_C_STRINGIZE,
+[AC_REQUIRE([AC_PROG_CPP])
 AC_MSG_CHECKING([for preprocessor stringizing operator])
 AC_CACHE_VAL(ac_cv_c_stringize,
 AC_EGREP_CPP([#teststring],[
@@ -2149,16 +2315,15 @@ AC_EGREP_CPP([#teststring],[
 
 char *s = x(teststring);
 ], ac_cv_c_stringize=no, ac_cv_c_stringize=yes))
-if test "${ac_cv_c_stringize}" = yes
-then
-        AC_DEFINE(HAVE_STRINGIZE)
+if test "${ac_cv_c_stringize}" = yes; then
+  AC_DEFINE(HAVE_STRINGIZE, 1,
+            [Define if you have the ANSI # stringizing operator in cpp.])
 fi
 AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])dnl
 
 define(AC_ARG_ARRAY,
-[errprint(__file__:__line__: [$0] has been removed; don't do unportable things with arguments
-)m4exit(4)])
+[AC_FATAL([$0 has been removed; don't do non-portable things with arguments], 4)])
 
 dnl Check the object extension used by the compiler: typically .o or
 dnl .obj.  If this is called, some other behaviour will change,
@@ -2184,216 +2349,350 @@ OBJEXT=$ac_cv_objext
 ac_objext=$ac_cv_objext
 AC_SUBST(OBJEXT)])
 
-dnl Determine the linker flags (e.g. `-L' and `-l') for the Fortran 77
+
+dnl AC_F77_LIBRARY_LDFLAGS
+dnl ----------------------
+dnl
+dnl Determine the linker flags (e.g. "-L" and "-l") for the Fortran 77
 dnl intrinsic and run-time libraries that are required to successfully
 dnl link a Fortran 77 program or shared library.  The output variable
 dnl FLIBS is set to these flags.
-dnl 
+dnl
 dnl This macro is intended to be used in those situations when it is
 dnl necessary to mix, e.g. C++ and Fortran 77, source code into a single
 dnl program or shared library.
-dnl 
+dnl
 dnl For example, if object files from a C++ and Fortran 77 compiler must
 dnl be linked together, then the C++ compiler/linker must be used for
 dnl linking (since special C++-ish things need to happen at link time
 dnl like calling global constructors, instantiating templates, enabling
 dnl exception support, etc.).
-dnl 
+dnl
 dnl However, the Fortran 77 intrinsic and run-time libraries must be
 dnl linked in as well, but the C++ compiler/linker doesn't know how to
 dnl add these Fortran 77 libraries.  Hence, the macro
-dnl `AC_F77_LIBRARY_LDFLAGS' was created to determine these Fortran 77
+dnl "AC_F77_LIBRARY_LDFLAGS" was created to determine these Fortran 77
 dnl libraries.
 dnl
 dnl This macro was packaged in its current form by Matthew D. Langston
 dnl <langston@SLAC.Stanford.EDU>.  However, nearly all of this macro
-dnl came from the `OCTAVE_FLIBS' macro in `octave-2.0.13/aclocal.m4',
+dnl came from the "OCTAVE_FLIBS" macro in "octave-2.0.13/aclocal.m4",
 dnl and full credit should go to John W. Eaton for writing this
 dnl extremely useful macro.  Thank you John.
 dnl
 dnl AC_F77_LIBRARY_LDFLAGS()
+
+dnl We have to "pushdef" this macro for now, because I haven't checked
+dnl this version of the macro into the Autoconf repository yet.  --MDL
 AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
-[AC_MSG_CHECKING([for Fortran 77 libraries])
-AC_REQUIRE([AC_PROG_F77])
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_VAL(ac_cv_flibs,
-[changequote(, )dnl
-dnl Write a minimal program and compile it with -v.  I don't know what
-dnl to do if your compiler doesn't have -v...
-echo "      END" > conftest.f
-foutput=`${F77} -v -o conftest conftest.f 2>&1`
-dnl
-dnl The easiest thing to do for xlf output is to replace all the commas
-dnl with spaces.  Try to only do that if the output is really from xlf,
-dnl since doing that causes problems on other systems.
-dnl
-xlf_p=`echo $foutput | grep xlfentry`
-if test -n "$xlf_p"; then
-  foutput=`echo $foutput | sed 's/,/ /g'`
-fi
-dnl
-ld_run_path=`echo $foutput | \
-  sed -n -e 's/^.*LD_RUN_PATH *= *\([^ ]*\).*/\1/p'`
-dnl
-dnl We are only supposed to find this on Solaris systems...
-dnl Uh, the run path should be absolute, shouldn't it?
-dnl
-case "$ld_run_path" in
-  /*)
-    if test "$ac_cv_prog_gcc" = yes; then
-      ld_run_path="-Xlinker -R -Xlinker $ld_run_path"
-    else
-      ld_run_path="-R $ld_run_path"
+[
+  AC_CACHE_CHECK([for Fortran 77 libraries],
+                 ac_cv_flibs,
+  [
+    AC_REQUIRE([AC_PROG_F77])
+    AC_REQUIRE([AC_CYGWIN])
+
+    AC_LANG_SAVE
+    AC_LANG_FORTRAN77
+
+# This is the simplest of all Fortran 77 programs.
+    cat > conftest.$ac_ext <<EOF
+      end
+EOF
+
+    # Save the "compiler output file descriptor" to FD 8.
+    exec 8>&AC_FD_CC
+
+    # Temporarily redirect compiler output to stdout, since this is what
+    # we want to capture in "f77_link_output".
+    exec AC_FD_CC>&1
+
+    # Compile and link our simple test program by passing the "-v" flag
+    # to the Fortran 77 compiler in order to get "verbose" output that
+    # we can then parse for the Fortran 77 linker flags.  I don't know
+    # what to do if your compiler doesn't have -v.
+    FFLAGS_SAVE="$FFLAGS"
+    FFLAGS="$FFLAGS -v"
+    f77_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
+    FFLAGS="$FFLAGS_SAVE"
+
+    # Restore the "compiler output file descriptor".
+    exec AC_FD_CC>&8
+
+    rm -f conftest.*
+
+    AC_LANG_RESTORE
+
+    # This will ultimately be our output variable.
+    FLIBS=
+
+changequote(, )dnl
+
+    # If we are using xlf then replace all the commas with spaces.
+    if test `echo $f77_link_output | grep xlfentry > /dev/null 2>&1`; then
+        f77_link_output=`echo $f77_link_output | sed 's/,/ /g'`
     fi
-  ;;
-  *)
-    ld_run_path=
-  ;;
-esac
-dnl
-flibs=
-lflags=
-dnl
-dnl If want_arg is set, we know we want the arg to be added to the list,
-dnl so we don't have to examine it.
-dnl
-want_arg=
-dnl
-for arg in $foutput; do
-  old_want_arg=$want_arg
-  want_arg=
-dnl
-dnl None of the options that take arguments expect the argument to
-dnl start with a -, so pretend we didn't see anything special.
-dnl
-  if test -n "$old_want_arg"; then
-    case "$arg" in
-      -*)
-        old_want_arg=
-      ;;
-    esac
-  fi
-  case "$old_want_arg" in
-    '')
-      case $arg in
-        /*.a)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            lflags="$lflags $arg"
-          fi
-        ;;
-        -bI:*)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            if test "$ac_cv_prog_gcc" = yes; then
-              lflags="$lflags -Xlinker $arg"
-            else
-              lflags="$lflags $arg"
-            fi
-          fi
-        ;;
-        -lang* | -lcrt0.o | -lc | -lgcc)
-          arg=
-        ;;
-        -[lLR])
-          want_arg=$arg
-          arg=
-        ;;
-        -[lLR]*)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            case "$arg" in
-              -lkernel32)
-                case "$canonical_host_type" in
-                  *-*-cygwin*)
-                    arg=
-                  ;;
-                  *)
-                    lflags="$lflags $arg"
-                  ;;
+
+    # The "save_arg" variable will be set to the current option
+    # (i.e. something beginning with a "-") when we come across an
+    # option that we think will take an argument (e.g. -L
+    # /usr/local/lib/foo).  When "save_arg" is set, we append "arg" to
+    # "seen" without any further examination.
+    save_arg=
+
+
+    # This is just a "list" (i.e. space delimited elements) of flags
+    # that we've already seen.  This just help us not add the same
+    # linker flags twice to "FLIBS".
+    seen=
+
+    # The basic algorithm is that if "arg" makes it all the way through
+    # down to the bottom of the the "for" loop, then it is added to
+    # "FLIBS".
+    for arg in $f77_link_output; do
+        # Assume that none of the options that take arguments expect the
+        # argument to start with a "-".  If we ever see this case, then
+        # reset "previous_arg" so that we don't try and process "arg" as
+        # an argument.
+        previous_arg="$save_arg"
+        test -n "`echo $arg | sed -n -e '/^-/!p'`" && previous_arg=
+        case "$previous_arg" in
+            '')
+                case "$arg" in
+                    /*.a)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, seen="$seen $arg")
+                        changequote(, )dnl
+                        ;;
+                    -bI:*)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, [AC_LINKER_OPTION([$arg], seen)])
+                        changequote(, )dnl
+                        ;;
+                        # Ignore these flags.
+                    -lang* | -lcrt0.o | -l[cm] | -lgcc | -LANG:=*)
+                        arg=
+                        ;;
+                    -lkernel32)
+                        # Only ignore this flag under the Cygwin
+                        # environment.
+                        if test x"$CYGWIN" = xyes; then arg=; else seen="$seen $arg"; fi
+                        ;;
+                    -[LRu])
+                        # These flags, when seen by themselves, take an
+                        # argument.
+                        save_arg=$arg
+                        arg=
+                        ;;
+                    -YP,*)
+                        temp_arg=
+                        for i in `echo $arg | sed -e 's%^P,%-L%' -e 's%:% -L%g'`; do
+                            # Append to "seen" if it's not already
+                            # there.
+                            changequote([, ])dnl
+                            AC_LIST_MEMBER_OF($i, $seen, temp_arg="$temp_arg $i", seen="$seen $i")
+                            changequote(, )dnl
+                        done
+                        arg="$temp_arg"
+                        ;;
+                    -[lLR]*)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, seen="$seen $arg")
+                        changequote(, )dnl
+                        ;;
+                    *)
+                        # Ignore everything else.
+                        arg=
+                        ;;
                 esac
-              ;;
-              -lm)
-              ;;
-              *)
-                lflags="$lflags $arg"
-              ;;
-            esac
-          fi
-        ;;
-        -u)
-          want_arg=$arg
-          arg=
-        ;;
-        -Y)
-          want_arg=$arg
-          arg=
-        ;;
-        *)
-          arg=
-        ;;
-      esac
-    ;;
-    -[lLR])
-      arg="$old_want_arg $arg"
-    ;;
-    -u)
-      arg="-u $arg"
-    ;;
-    -Y)
-dnl
-dnl Should probably try to ensure unique directory options here too.
-dnl This probably only applies to Solaris systems, and then will only
-dnl work with gcc...
-dnl
-      arg=`echo $arg | sed -e 's%^P,%%'`
-      SAVE_IFS=$IFS
-      IFS=:
-      list=
-      for elt in $arg; do
-        list="$list -L$elt"
-      done
-      IFS=$SAVE_IFS
-      arg="$list"
-    ;;
-  esac
-dnl
-  if test -n "$arg"; then
-    flibs="$flibs $arg"
-  fi
-done
-if test -n "$ld_run_path"; then
-  flibs_result="$ld_run_path $flibs"
-else
-  flibs_result="$flibs"
-fi
+                ;;
+            -[LRu])
+                arg="$previous_arg $arg"
+                ;;
+        esac
+
+        # If "arg" has survived up until this point, then put it in
+        # "FLIBS".
+        test -n "$arg" && FLIBS="$FLIBS $arg"
+    done
+
+    # Assumption: We only see "LD_RUN_PATH" on Solaris systems.  If this
+    # is seen, then we insist that the "run path" must be an absolute
+    # path (i.e. it must begin with a "/").
+    ld_run_path=`echo $f77_link_output | sed -n -e 's%^.*LD_RUN_PATH *= *\(/[^ ]*\).*$%\1%p'`
+    test -n "$ld_run_path" && FLIBS="$ld_run_path $FLIBS"
+
 changequote([, ])dnl
-ac_cv_flibs="$flibs_result"])
-FLIBS="$ac_cv_flibs"
-AC_SUBST(FLIBS)dnl
-AC_MSG_RESULT($FLIBS)
+
+    ac_cv_flibs="$FLIBS"
+  ])
+
+  AC_SUBST(FLIBS)
+
 ])
+
+
+dnl Test for the name mangling scheme used by the Fortran 77 compiler.
+dnl Two variables are set by this macro:
+dnl
+dnl        f77_case: Set to either "upper" or "lower", depending on the
+dnl                  case of the name mangling.
+dnl
+dnl  f77_underscore: Set to either "no", "single" or "double", depending
+dnl                  on how underscores (i.e. "_") are appended to
+dnl                  identifiers, if at all.
+dnl
+dnl                  If no underscores are appended, then the value is
+dnl                  "no".
+dnl
+dnl                  If a single underscore is appended, even with
+dnl                  identifiers which already contain an underscore
+dnl                  somewhere in their name, then the value is
+dnl                  "single".
+dnl
+dnl                  If a single underscore is appended *and* two
+dnl                  underscores are appended to identifiers which
+dnl                  already contain an underscore somewhere in their
+dnl                  name, then the value is "double".
+dnl
+dnl AC_F77_NAME_MANGLING()
+AC_DEFUN(AC_F77_NAME_MANGLING,
+[
+  AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
+                 ac_cv_f77_mangling,
+  [
+    AC_REQUIRE([AC_PROG_CC])
+    AC_REQUIRE([AC_PROG_F77])
+
+    AC_LANG_SAVE
+    AC_LANG_FORTRAN77
+
+cat > conftest.$ac_ext <<EOF
+      subroutine foobar()
+      return
+      end
+      subroutine foo_bar()
+      return
+      end
+EOF
+
+    if AC_TRY_EVAL(ac_compile); then
+
+      mv conftest.${ac_objext} cf77_test.${ac_objext}
+
+      AC_LANG_SAVE
+      AC_LANG_C
+
+      ac_save_LIBS="$LIBS"
+      LIBS="cf77_test.${ac_objext} $LIBS"
+
+      f77_case=
+      f77_underscore=
+
+      AC_TRY_LINK_FUNC(foobar,
+        f77_case=lower
+        f77_underscore=no
+        foo_bar=foo_bar_,
+        AC_TRY_LINK_FUNC(foobar_,
+          f77_case=lower
+          f77_underscore=single
+          foo_bar=foo_bar__,
+          AC_TRY_LINK_FUNC(FOOBAR,
+            f77_case=upper
+            f77_underscore=no
+            foo_bar=FOO_BAR_,
+            AC_TRY_LINK_FUNC(FOOBAR_,
+              f77_case=upper
+              f77_underscore=single
+              foo_bar=FOO_BAR__))))
+
+      AC_TRY_LINK_FUNC(${foo_bar}, f77_underscore=double)
+
+      if test x"$f77_case" = x -o x"$f77_underscore" = x; then
+        ac_cv_f77_mangling="unknown"
+      else
+        ac_cv_f77_mangling="$f77_case case, $f77_underscore underscores"
+      fi
+
+      LIBS="$ac_save_LIBS"
+      AC_LANG_RESTORE
+
+      rm -f conftest*
+      rm -f cf77_test*
+
+    else
+      echo "configure: failed program was:" >&AC_FD_CC
+      cat conftest.$ac_ext >&AC_FD_CC
+    fi
+
+dnl We need to pop the language stack twice.
+    AC_LANG_RESTORE
+    AC_LANG_RESTORE
+])])
+
+
+dnl Defines C macros F77_FUNC(name,NAME) and F77_FUNC_(name,NAME) to
+dnl properly mangle the names of C identifiers, and C identifiers with
+dnl underscores, respectively, so that they match the name mangling
+dnl scheme used by the Fortran 77 compiler.
+dnl
+dnl AC_F77_WRAPPERS()
+AC_DEFUN(AC_F77_WRAPPERS,
+[
+  AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
+                 ac_cv_f77_wrappers,
+  [
+dnl Be optimistic at first.
+    ac_cv_f77_wrappers="yes"
+
+    AC_REQUIRE([AC_F77_NAME_MANGLING])
+    case "$f77_case" in
+        lower)
+            case "$f77_underscore" in
+                no)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name])
+                    ;;
+                single)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _])
+                    ;;
+                double)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __])
+                    ;;
+                *)
+                    AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+                    ;;
+            esac
+            ;;
+        upper)
+            case "$f77_underscore" in
+                no)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME])
+                    ;;
+                single)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _])
+                    ;;
+                double)
+                    AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
+                    AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __])
+                    ;;
+                *)
+                    AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+                    ;;
+            esac
+            ;;
+        *)
+            AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+            ;;
+    esac
+])])
 
 
 dnl ### Checks for operating system services
@@ -2418,8 +2717,7 @@ interpval="$ac_cv_sys_interpreter"
 ])
 
 define(AC_HAVE_POUNDBANG,
-[errprint(__file__:__line__: [$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments
-])m4exit(4)])
+[AC_FATAL([$0 has been replaced by AC_SYS_INTERPRETER, taking no arguments], 4)])
 
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,
@@ -2453,7 +2751,8 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2>/dev/null
 done])
 if test $ac_cv_sys_long_file_names = yes; then
-  AC_DEFINE(HAVE_LONG_FILE_NAMES)
+  AC_DEFINE(HAVE_LONG_FILE_NAMES, 1,
+            [Define if you support file names longer than 14 characters.])
 fi
 ])
 
@@ -2476,7 +2775,9 @@ main () {
 }
 ], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
 if test $ac_cv_sys_restartable_syscalls = yes; then
-  AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS)
+  AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS, 1,
+            [Define if system calls automatically restart after interruption
+             by a signal.])
 fi
 ])
 
@@ -2693,7 +2994,8 @@ AC_DEFUN(AC_PATH_XTRA,
 [AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
-  AC_DEFINE(X_DISPLAY_MISSING)
+  AC_DEFINE(X_DISPLAY_MISSING, 1,
+            [Define if the X Window System is missing or not being used.])
   X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
 else
   if test -n "$x_includes"; then
@@ -2887,19 +3189,27 @@ AC_EGREP_CPP(yes,
 [#ifdef _AIX
   yes
 #endif
-], [AC_MSG_RESULT(yes); AC_DEFINE(_ALL_SOURCE)], AC_MSG_RESULT(no))
-])
+],
+[AC_MSG_RESULT(yes)
+AC_DEFINE(_ALL_SOURCE)],
+AC_MSG_RESULT(no))
+])dnl AC_AIX
 
 AC_DEFUN(AC_MINIX,
 [AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
-  AC_DEFINE(_POSIX_SOURCE)
-  AC_DEFINE(_POSIX_1_SOURCE, 2)
-  AC_DEFINE(_MINIX)
+  AC_DEFINE(_POSIX_SOURCE, 1,
+            [Define if you need to in order for `stat' and other things to
+             work.])
+  AC_DEFINE(_POSIX_1_SOURCE, 2,
+            [Define if the system does not provide POSIX.1 features except
+             with this defined.])
+  AC_DEFINE(_MINIX, 1,
+            [Define if on MINIX.])
 fi
-])
+])dnl AC_MINIX
 
 AC_DEFUN(AC_ISC_POSIX,
 [AC_REQUIRE([AC_PROG_CC])dnl
@@ -2911,7 +3221,9 @@ if test -d /etc/conf/kconfig.d &&
 then
   AC_MSG_RESULT(yes)
   ISC=yes # If later tests want to check for ISC.
-  AC_DEFINE(_POSIX_SOURCE)
+  AC_DEFINE(_POSIX_SOURCE, 1,
+            [Define if you need to in order for stat and other things to
+             work.])
   if test "$GCC" = yes; then
     CC="$CC -posix"
   else
@@ -2921,7 +3233,7 @@ else
   AC_MSG_RESULT(no)
   ISC=
 fi
-])
+])dnl AC_ISC_POSIX
 
 AC_DEFUN(AC_XENIX_DIR,
 [AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
@@ -2937,7 +3249,7 @@ if test "$XENIX" = yes; then
   test $ac_header_dirent = dirent.h && LIBS="-ldir $LIBS"
   LIBS="$LIBS -lx"
 fi
-])
+])dnl AC_XENIX_DIR
 
 AC_DEFUN(AC_DYNIX_SEQ,
 [AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl

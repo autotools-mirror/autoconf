@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992, 1993, 1994, 1996, 1998 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ Create a template file of C \`#define' statements for \`configure' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
 given.
 
+  -d, --debug           don't remove temporary files
   -m, --macrodir=DIR    directory storing macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -v, --verbose         verbosely report processing
@@ -56,15 +57,27 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
+# ac_LF_and_DOT
+# We use echo to avoid assuming a particular line-breaking character.
+# The extra dot is to prevent the shell from consuming trailing
+# line-breaks from the sub-command output.  A line-break within
+# single-quotes doesn't work because, if this script is created in a
+# platform that uses two characters for line-breaks (e.g., DOS), tr
+# would break.
 ac_LF_and_DOT="`echo; echo .`"
 
 localdir=.
 show_version=no
+debug=0
+# Basename for temporary files.
+ah_base=autoh$$
 
 while test $# -gt 0 ; do
    case "${1}" in
       -h | --help | --h* )
          echo "${usage}"; exit 0 ;;
+      -d | --debug | --d* )
+         debug=1; shift ;;
       --localdir=* | --l*=* )
          localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
@@ -101,8 +114,8 @@ if test $show_version = yes; then
   exit 0
 fi
 
-TEMPLATES="${AC_MACRODIR}/acconfig.h"
-test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
+acconfigs="${AC_MACRODIR}/acconfig.h"
+test -r $localdir/acconfig.h && acconfigs="${acconfigs} $localdir/acconfig.h"
 
 case $# in
   0) infile=configure.in ;;
@@ -116,6 +129,7 @@ types=
 funcs=
 headers=
 libs=
+decls=
 
 if test "$localdir" != .; then
   use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
@@ -132,19 +146,21 @@ case `$M4 --help < /dev/null 2>&1` in
 *) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
 esac
 
-# Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
+# Extract assignments of `ah_verbatim_SYMBOL' and `syms' from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-eval "`$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
-       sed -n -e '
-		: again
-		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
-		/^@@@/{
-			s/^@@@//p
-			n
-			s/^/@@@/
-			b again
-		}'`"
+$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
+ sed -n -e '
+	: again
+	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
+	/^@@@/{
+		s/^@@@//p
+		n
+		s/^/@@@/
+		b again
+	}' >$ah_base.decls
+. ./$ah_base.decls
+if test $debug -eq 0; then rm ./$ah_base.decls; fi
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -160,31 +176,27 @@ undefined) echo "error: AC_CONFIG_HEADER not found in $infile" >&2; exit 1 ;;
 *) config_h_in="${config_h}.in" ;;
 esac
 
-if test $# -eq 0; then
-  tmpout=autoh$$
-  trap "rm -f $tmpout; exit 1" 1 2 15
-  exec > $tmpout
-fi
-
+tmpout=$ah_base.out
+if test $debug -eq 0; then trap "rm -f $ah_base*; exit 1" 1 2 15; fi 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
-cat <<EOF
+cat <<EOF >$tmpout
 /* ${config_h_in}.  Generated automatically from $infile by autoheader.  */
 EOF
 
-test -r ${config_h}.top && cat ${config_h}.top
+test -r ${config_h}.top && cat ${config_h}.top  >>$tmpout
 test -r $localdir/acconfig.h &&
   grep @TOP@ $localdir/acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' $localdir/acconfig.h
+  sed '/@TOP@/,$d' $localdir/acconfig.h >>$tmpout
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
   # Make sure the boundary of template files is also the boundary
   # of the paragraph.  Extra newlines don't hurt since they will
   # be removed.
-  # Undocumented useless feature: stuff outside of @TOP@ and @BOTTOM@ 
+  # Undocumented useless feature: stuff outside of @TOP@ and @BOTTOM@
   # is ignored in the systemwide acconfig.h too.
-  for t in $TEMPLATES; do
+  for t in $acconfigs; do
     sedscript=""
     grep @TOP@ $t >/dev/null && sedscript="1,/@TOP@/d;"
     grep @BOTTOM@ $t >/dev/null && sedscript="$sedscript /@BOTTOM@/,\$d;"
@@ -208,94 +220,55 @@ if test -n "$syms"; then
   # Some fgrep's have limits on the number of lines that can be in the
   # pattern on the command line, so use a temporary file containing the
   # pattern.
-  (fgrep_tmp=${TMPDIR-/tmp}/autoh$$
+  (fgrep_tmp=$ah_base.fgrep
    trap "rm -f $fgrep_tmp; exit 1" 1 2 15
    cat > $fgrep_tmp <<EOF
 $syms
 EOF
    fgrep -f $fgrep_tmp
    rm -f $fgrep_tmp) |
-  tr @. "$ac_LF_and_DOT"
-# We use echo to avoid assuming a particular line-breaking character.
-# The extra dot is to prevent the shell from consuming trailing
-# line-breaks from the sub-command output.  A line-break within
-# single-quotes doesn't work because, if this script is created in a
-# platform that uses two characters for line-breaks (e.g., DOS), tr
-# would break.
+  tr @. "$ac_LF_and_DOT" >>$tmpout
 fi
 
-echo "$types" | tr ,. "$ac_LF_and_DOT" | sort | uniq | while read ctype; do
-  test -z "$ctype" && continue
-  sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
-  echo "
-/* The number of bytes in a ${ctype}.  */
-#undef SIZEOF_${sym}"
+for verb in `(set) 2>&1 | sed -n -e '/^ac_verbatim/s/^\([^=]*\)=.*$/\1/p'`; do
+  echo >>$tmpout
+  eval echo >>$tmpout '"${'$verb'}"'
 done
-
-# /bin/sh on the Alpha gives `for' a random value if $funcs is empty.
-if test -n "$funcs"; then
-  for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
-    sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the ${func} function.  */
-#undef HAVE_${sym}"
-  done
-fi
-
-if test -n "$headers"; then
-  for header in `for x in $headers; do echo $x; done | sort | uniq`; do
-
-    sym="`echo ${header} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the <${header}> header file.  */
-#undef HAVE_${sym}"
-  done
-fi
-
-if test -n "$libs"; then
-  for lib in `for x in $libs; do echo $x; done | sort | uniq`; do
-   sym="`echo ${lib} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
-    echo "
-/* Define if you have the ${lib} library (-l${lib}).  */
-#undef HAVE_LIB${sym}"
-  done
-fi
-
-if test -n "$verbatim"; then
-  echo "$verbatim"
-fi
 
 # Handle the case where @BOTTOM@ is the first line of acconfig.h.
 test -r $localdir/acconfig.h &&
   grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
-  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
-test -f ${config_h}.bot && cat ${config_h}.bot
+  sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmpout
+test -f ${config_h}.bot && cat ${config_h}.bot >>$tmpout
 
+# Check that all the symbols have a template
 status=0
 
 if test -n "$syms"; then
   for sym in $syms; do
-    if fgrep $sym $TEMPLATES >/dev/null; then
+    if grep "^#[a-z]*[ 	][ 	]*$sym[ 	]*$" $tmpout >/dev/null; then
       : # All is well.
     else
-      echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2
+      echo "$0: No template for symbol \`${sym}'" >&2
       status=1
     fi
   done
 fi
 
-if test $# -eq 0; then
-  # Force $tmpout to close to avoid Windows file sharing conflicts.
-  exec 1>&2
-  if test $status -eq 0; then
+# If the run was successful, output the result.
+if test $status -eq 0; then
+  if test $# -eq 0; then
+    # Output is a file
     if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
-      rm -f $tmpout # File didn't change, so don't update its mod time.
+      : # File didn't change, so don't update its mod time.
     else
       mv -f $tmpout ${config_h_in}
     fi
   else
-    rm -f $tmpout
+    # Output is stdout
+    cat $tmpout
   fi
 fi
 
+rm -f $tmpout
 exit $status
