@@ -32,7 +32,7 @@ AT_SETUP([LINENO])
 # unsetting LINENO to compare its result when (i) LINENO is supported
 # and when (ii) it is not.
 # So just skip if the shell is ZSH.
-AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77])
+AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77], ignore)
 
 # AT_DATA_LINENO(FILENAME,
 #                UNSET-LINENO = true | false, COUNTER, COUNTER-RE)
