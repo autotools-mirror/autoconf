@@ -1,3 +1,8 @@
+2001-02-26  Pavel Roskin  <proski@gnu.org>
+
+	* autoupdate.in: Preserve exit status of the failed command when
+	die() follows system() by dividing $! by 256.
+
 2001-02-26  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AH_VERBATIM, AH_TEMPLATE): New, use AS_ESCAPE, not

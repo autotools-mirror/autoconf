@@ -461,8 +461,8 @@ EOF
        if $verbose;
     if (system ("$m4 $tmp/input.m4 >$tmp/updated"))
        {
-	 # FIXME: This guy is supposed to exit with a proper
-	 # exit status, but it does not.  Help is needed.
+	 # Exit status of system() is in the upper byte.
+	 $! >>= 8;
 	 die "$me: cannot update \`$filename'\n";
        };
 
