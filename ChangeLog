@@ -1,3 +1,9 @@
+2003-11-24  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Quote $ac_popdir
+	uses.
+	From Debian Autoconf 2.58.
+
 2003-11-24  Paolo Bonzini  <bonzini@gnu.org>
 
 	* TODO: Remove already done things.  Update the part about finding
