@@ -1,14 +1,9 @@
-* Major changes in Autoconf 2.57h                       -*- outline -*-
+* Major changes in Autoconf 2.58                       -*- outline -*-
+
+  Released 2003-11-04, by Akim Demaille
 
 ** core.*
   core.* files are no longer removed, as they may be valid user files.
-
-** New macros
-  AC_LANG_ASSERT, AS_SET_CATFILE.
-
-* Major changes in Autoconf 2.57g
-
-  Released 2003-10-24, by Akim Demaille
 
 ** autoreconf and auxiliary directory
   Autoreconf creates the auxiliary directory if needed.  This is
@@ -17,20 +12,9 @@
 ** AC_CONFIG_MACRO_DIR
   Use this macro to declare the directory for local m4 macros for aclocal.
 
-** New macros
-  AC_LANG_WERROR
-
 ** AC_LIBOBJS
   No longer includes twice the same file in LIBOBJS if invoked
   multiple times.
-
-* Major changes in Autoconf 2.57f
-
-  Released 2003-10-01, by Akim Demaille.
-
-* Major changes in Autoconf 2.57e
-
-  Released 2003-09-29, by Akim Demaille.
 
 ** AC_CONFIG_COMMANDS
   The directory for its first argument is automatically created.  For
@@ -39,14 +23,6 @@
       AC_CONFIG_COMMANDS([src/modules.hh], [...])
 
   $top_builddir/src/ is created if needed.
-
-* Major changes in Autoconf 2.57d
-
-  Released 2003-09-25, by Akim Demaille.
-
-* Major changes in Autoconf 2.57b
-
-  Released 2003-08-24, by Akim Demaille.
 
 ** Autotest and local.at
   The optional file local.at is always included in Autotest test suites.
@@ -61,12 +37,9 @@
   For instance, -Wno-obsolete disables the complaints about acconfig.h
   and other deprecated constructs.
 
-* Major changes in Autoconf 2.57a
-
-  Released 2003-06-20 by Akim Demaille.
-
 ** New macros
-  AC_C_RESTRICT, AC_INCLUDES_DEFAULT.
+  AC_C_RESTRICT, AC_INCLUDES_DEFAULT, AC_LANG_ASSERT, AC_LANG_WERROR,
+  AS_SET_CATFILE.
 
 ** AC_DECL_SYS_SIGLIST
   Works again.

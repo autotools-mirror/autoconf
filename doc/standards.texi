@@ -229,18 +229,27 @@ packages or documentation.
 
 Trademark acknowledgements are the statements that such-and-such is a
 trademark of so-and-so.  The GNU Project has no objection to the basic
-idea of trademarks, but these acknowledgements feel like kowtowing, so
-we don't use them.  There is no legal requirement for them.
+idea of trademarks, but these acknowledgements feel like kowtowing, 
+and there is no legal requirement for them, so we don't use them.
 
 What is legally required, as regards other people's trademarks, is to
-avoid using them in ways which a reader might read as naming or labeling
-our own programs or activities.  For example, since ``Objective C'' is
-(or at least was) a trademark, we made sure to say that we provide a
-``compiler for the Objective C language'' rather than an ``Objective C
-compiler''.  The latter is meant to be short for the former, but it does
-not explicitly state the relationship, so it could be misinterpreted as
-using ``Objective C'' as a label for the compiler rather than for the
-language.
+avoid using them in ways which a reader might reasonably understand as
+naming or labeling our own programs or activities.  For example, since
+``Objective C'' is (or at least was) a trademark, we made sure to say
+that we provide a ``compiler for the Objective C language'' rather
+than an ``Objective C compiler''.  The latter would have been meant as
+a shorter way of saying the former, but it does not explicitly state
+the relationship, so it could be misinterpreted as using ``Objective
+C'' as a label for the compiler rather than for the language.
+
+Please don't use ``win'' as an abbreviation for Microsoft Windows in
+GNU software or documentation.  In hacker terminology, calling
+something a "win" is a form of praise.  If you wish to praise
+Microsoft Windows when speaking on your own, by all means do so, but
+not in GNU software.  Usually we write the word ``windows'' in full,
+but when brevity is very important (as in file names and sometimes
+symbol names), we abbreviate it to ``w''.  For instance, the files and
+functions in Emacs that deal with Windows start with @samp{w32}.
 
 @node Design Advice
 @chapter General Program Design

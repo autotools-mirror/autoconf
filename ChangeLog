@@ -1,5 +1,10 @@
 2003-11-04  Akim Demaille  <akim@epita.fr>
 
+	Version 2.58.
+	* doc/standards.texi: Update from master.
+
+2003-11-04  Akim Demaille  <akim@epita.fr>
+
 	AC_CONFIG_FILE([d1/foo:d2/foo]) triggers error messages when
 	computing the absolute path to d1 in the source hierarchy: it may
 	not exist at all.  So don't cd into it.
