@@ -1,5 +1,11 @@
 1999-09-14  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
 
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Don't assume LF is \012,
+	use `echo` followed by a non-blank, within quotes.
+	* autoheader.sh (syms): Likewise.
+	* configure: Rebuilt.
+	Reported by Christian Krone <krischan@sql.de>
+
 	* acgeneral.m4 (AC_INCLUDE): New macro.
 	* autoconf.texi: Document it.
 

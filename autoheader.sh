@@ -213,10 +213,16 @@ $syms
 EOF
    fgrep -f $fgrep_tmp
    rm -f $fgrep_tmp) |
-  tr @ \\012
+  tr @. "`echo`."
+# We use echo to avoid assuming a particular line-breaking character.
+# The extra dot is to prevent the shell from consuming trailing
+# line-breaks from the sub-command output.  A line-break within
+# single-quotes doesn't work because, if this script is created in a
+# platform that uses two characters for line-breaks (e.g., DOS), tr
+# would break.
 fi
 
-echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
+echo "$types" | tr ,. "`echo`." | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
   sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
   echo "

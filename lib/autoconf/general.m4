@@ -2689,7 +2689,14 @@ s%\]%\\&%g
 s%\$%$$%g
 changequote([, ])dnl
 EOF
-DEFS=`sed -f $conftest.defs confdefs.h | tr '\012' ' '`
+# We use echo to avoid assuming a particular line-breaking character.
+# The extra dot is to prevent the shell from consuming trailing
+# line-breaks from the sub-command output.  A line-break within
+# single-quotes doesn't work because, if this script is created in a
+# platform that uses two characters for line-breaks (e.g., DOS), tr
+# would break.
+ac_LF_and_DOT="`echo; echo .`"
+DEFS=`sed -f $conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f $conftest.defs
 ])
 
