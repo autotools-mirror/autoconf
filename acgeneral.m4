@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.3)dnl
+define(AC_ACVERSION, 1.7.4)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -80,38 +80,36 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-# Usage: configure [--srcdir=DIR] [--host=HOST] [--gas] [--nfp]
-#        [--prefix=PREFIX] [--exec-prefix=PREFIX] [--with-PACKAGE[=VALUE]]
-# Ignores all args except --srcdir, --prefix, --exec-prefix, and
-# --with-PACKAGE[=VALUE] unless this script has special code to handle it.
+# Usage: configure [--srcdir=DIR] [--prefix=PREFIX] [--exec-prefix=PREFIX]
+#        [--with-PACKAGE[=VALUE]]
+# Ignores all other arguments.
+
+# Save the original args to write them into config.status later.
+ac_configure_args="[$]*"
+ac_prog=[$]0
 ])dnl
 dnl
 define(AC_PARSEARGS,
-[for ac_arg
-do
-  # Handle --exec-prefix with a space before the argument.
-  if test x$ac_next_exec_prefix = xyes; then exec_prefix=$ac_arg; ac_next_exec_prefix=
-  # Handle --host with a space before the argument.
-  elif test x$ac_next_host = xyes; then ac_next_host=
-  # Handle --prefix with a space before the argument.
-  elif test x$ac_next_prefix = xyes; then prefix=$ac_arg; ac_next_prefix=
-  # Handle --srcdir with a space before the argument.
-  elif test x$ac_next_srcdir = xyes; then srcdir=$ac_arg; ac_next_srcdir=
-  else
-    case $ac_arg in
+[while test $[#] -ge 1; do
+  ac_arg="$[1]"
+  case "$ac_arg" in
      # For backward compatibility, recognize -exec-prefix and --exec_prefix.
      -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* | --exec=* | --exe=* | --ex=* | --e=*)
 changequote(,)dnl
 	exec_prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec | --exe | --ex | --e)
-	ac_next_exec_prefix=yes ;;
+	if test $[#] -eq 1; then
+	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+        else shift; exec_prefix=$[1]; fi ;;
 
      -gas | --gas | --ga | --g) ;;
 
      -host=* | --host=* | --hos=* | --ho=* | --h=*) ;;
      -host | --host | --hos | --ho | --h)
-	ac_next_host=yes ;;
+	if test $[#] -eq 1; then
+	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+        else shift; fi ;;
 
      -nfp | --nfp | --nf) ;;
 
@@ -120,14 +118,24 @@ changequote(,)dnl
 	prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-	ac_next_prefix=yes ;;
+	if test $[#] -eq 1; then
+	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+        else shift; prefix=$[1]; fi ;;
 
      -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=* | --s=*)
 changequote(,)dnl
 	srcdir=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -srcdir | --srcdir | --srcdi | --srcd | --src | --sr | --s)
-	ac_next_srcdir=yes ;;
+	if test $[#] -eq 1; then
+	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+        else shift; srcdir=$[1]; fi ;;
+
+     -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*) ;;
+     -target | --target | --targe | --targ | --tar | --ta | --t)
+	if test $[#] -eq 1; then
+	  echo "configure: missing argument to $ac_arg" >&2; exit 1
+        else shift; fi ;;
 
      -with-* | --with-*)
        ac_package=`echo $ac_arg|sed -e 's/-*with-//' -e 's/=.*//'`
@@ -150,8 +158,9 @@ changequote([,])dnl
        ac_verbose=yes ;;
 
      *) ;;
-    esac
-  fi
+  esac
+
+  shift
 done
 ])dnl
 dnl
@@ -159,11 +168,12 @@ define(AC_INIT,
 [#!/bin/sh
 AC_NOTICE
 AC_PARSEARGS
-AC_PREPARE($1)])dnl
+AC_PREPARE($1)
+AC_LANG_C])dnl
 dnl
 define(AC_PREPARE,
 [trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
-trap 'rm -f confdefs* $ac_clean_files' 0
+trap 'rm -fr confdefs* $ac_clean_files' 0
 
 # NLS nuisances.
 # These must not be set unconditionally because not all systems understand
@@ -174,7 +184,6 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
-compile='${CC-cc} $CFLAGS $LDFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
@@ -184,7 +193,6 @@ ac_unique_file=$1
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then `..'.
-  ac_prog=[$]0
 changequote(,)dnl
   ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
@@ -202,9 +210,6 @@ if test ! -r $srcdir/$ac_unique_file; then
   fi
   exit 1
 fi
-
-# Save the original args to write them into config.status later.
-ac_configure_args="[$]*"
 ])dnl
 dnl
 dnl Protects the argument from being diverted twice
@@ -363,6 +368,27 @@ define(AC_OBSOLETE,
 [errprint(__file__:__line__: warning: [$1] is obsolete[$2]
 )])dnl
 dnl
+dnl Which compiler do we use to run test checks?
+dnl
+define(AC_LANG_C,
+[define([AC_LANG],[C])AC_PROVIDE([$0])ac_ext=c
+ac_cpp='${CPP}'
+ac_compile='${CC-cc} $CFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+])dnl
+dnl
+define(AC_LANG_CPLUSPLUS,
+[define([AC_LANG],[CPLUSPLUS])AC_PROVIDE([$0])ac_ext=C
+ac_cpp='${CXXCPP}'
+ac_compile='${CXX-gcc} $CXXFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS >/dev/null 2>&1'
+])dnl
+dnl
+dnl Push the current language on a stack.
+define(AC_LANG_SAVE, [pushdef([AC_LANG_STACK], AC_LANG)])dnl
+dnl
+dnl Restore the current language from the stack.
+define(AC_LANG_RESTORE,
+[ifelse(AC_LANG_STACK,C,[AC_LANG_C],[AC_LANG_CPLUSPLUS])[]popdef([AC_LANG_STACK])])dnl
+dnl
 dnl
 dnl Checks for kinds of features
 dnl
@@ -424,9 +450,9 @@ done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
 define(AC_HEADER_EGREP,
-[AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])echo '#include "confdefs.h"
-#include <$2>' > conftest.c
-eval "$CPP conftest.c > conftest.out 2>&1"
+[AC_REQUIRE_CPP()AC_PROVIDE([$0])echo '#include "confdefs.h"
+#include <$2>' > conftest.${ac_ext}
+eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
 if egrep "$1" conftest.out >/dev/null 2>&1; then
   ifelse([$3], , :, [rm -rf conftest*
   $3
@@ -442,11 +468,11 @@ dnl
 dnl Because this macro is used by AC_GCC_TRADITIONAL, which must come early,
 dnl it is not included in AC_BEFORE checks.
 define(AC_PROGRAM_EGREP,
-[AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])cat > conftest.c <<EOF
+[AC_REQUIRE_CPP()AC_PROVIDE([$0])cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
 EOF
-eval "$CPP conftest.c > conftest.out 2>&1"
+eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
 if egrep "$1" conftest.out >/dev/null 2>&1; then
   ifelse([$3], , :, [rm -rf conftest*
   $3
@@ -469,14 +495,15 @@ define(AC_COMPILE_CHECK,
 [AC_PROVIDE([$0])dnl
 ifelse([$1], , , [echo checking for $1]
 )dnl
-cat > conftest.c <<EOF
+dnl We use return because because C++ requires a prototype for exit.
+cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
-int main() { exit(0); }
+int main() { return 0; }
 int t() { [$3] }
 EOF
 dnl Don't try to run the program, which would prevent cross-configuring.
-if eval $compile; then
+if eval $ac_compile; then
   ifelse([$4], , :, [rm -rf conftest*
   $4
 ])
@@ -494,11 +521,11 @@ then
   $4
 else
 ])dnl
-cat > conftest.c <<EOF
+cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
-eval $compile
+eval $ac_compile
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2
 ])
@@ -511,13 +538,13 @@ ifelse([$4], , , fi
 rm -fr conftest*])dnl
 dnl
 define(AC_TEST_CPP,
-[AC_REQUIRE([AC_PROG_CPP])cat > conftest.c <<EOF
+[AC_REQUIRE_CPP()cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 EOF
 dnl Some shells (Coherent) do redirections in the wrong order, so need
 dnl the parens.
-ac_err=`eval "($CPP conftest.c >/dev/null) 2>&1"`
+ac_err=`eval "($ac_cpp conftest.${ac_ext} >/dev/null) 2>&1"`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
   $2
@@ -798,7 +825,7 @@ ac_max_sh_lines=9
 
 while :
 do
-  # wc gives bogus results for an empty file on some systems.
+  # wc gives bogus results for an empty file on some AIX systems.
   ac_lines=`grep -c . conftest.sh`
   if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   rm -f conftest.s1 conftest.s2
