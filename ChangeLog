@@ -1,5 +1,14 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): This is a routine of
+	`configure', not `config.status', hence use `conftest' for tmp
+	files, not `$ac_cs_root'.
+	Removed forgotten developer comment.
+	Double quoting the whole body is nicer than just the part that
+	needs to be.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* tests/torture.m4: Also check the value of @DEFS@ when no
 	CONFIG_HEADER is used.
 

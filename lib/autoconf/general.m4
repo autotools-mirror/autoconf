@@ -3600,25 +3600,24 @@ chmod +x $CONFIG_STATUS
 # Set the DEFS variable to the -D options determined earlier.
 # This is a subroutine of AC_OUTPUT.
 # It is called inside configure, outside of config.status.
-# FIXME: This has to be fixed the same way as in _AC_OUTPUT_HEADERS.
+# Using a here document instead of a string reduces the quoting nightmare.
 define(AC_OUTPUT_MAKE_DEFS,
-[# Transform confdefs.h into DEFS.
-dnl Using a here document instead of a string reduces the quoting nightmare.
+[[# Transform confdefs.h into DEFS.
 # Protect against shell expansion while executing Makefile rules.
 # Protect against Makefile macro expansion.
 #
 # If the first sed substitution is executed (which looks for macros that
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat >$ac_cs_root.defs <<\EOF
-[s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
+cat >conftest.defs <<\EOF
+s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
 s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
 : cleanup
 s%[ 	`~#$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
-s%\$%$$%g]
+s%\$%$$%g
 EOF
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
@@ -3627,9 +3626,9 @@ EOF
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
 ac_LF_and_DOT=`echo; echo .`
-DEFS=`sed -f $ac_cs_root.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
-rm -f $ac_cs_root.defs
-])
+DEFS=`sed -f conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
+rm -f conftest.defs
+]])# AC_OUTPUT_MAKE_DEFS
 
 
 # AC_OUTPUT_FILES
