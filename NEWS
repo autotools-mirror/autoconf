@@ -8,6 +8,8 @@
 - --force, -f
 ** autoheader
 - --force, -f
+** Bug fixes
+- The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
 
 * Major changes in Autoconf 2.52
 ** Documentation

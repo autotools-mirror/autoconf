@@ -2671,12 +2671,25 @@ script found by @code{AC_CONFIG_AUX_DIR} is used.
 
 The subdirectory @code{configure} scripts are given the same command
 line options that were given to this @code{configure} script, with minor
-changes if needed (e.g., to adjust a relative path for the cache file or
-source directory).  This macro also sets the output variable
-@code{subdirs} to the list of directories @samp{@var{dir} @dots{}}.
-@file{Makefile} rules can use this variable to determine which
-subdirectories to recurse into.  This macro may be called multiple
-times.
+changes if needed, which include:
+
+@itemize @minus
+@item
+adjusting a relative path for the cache file;
+
+@item
+adjusting a relative path for the source directory;
+
+@item
+propagating the current value of @code{$prefix}, including if it was
+defaulted, and if default values of the top level and of sub directory
+@file{configure} differ.
+@end itemize
+
+This macro also sets the output variable @code{subdirs} to the list of
+directories @samp{@var{dir} @dots{}}.  @file{Makefile} rules can use
+this variable to determine which subdirectories to recurse into.  This
+macro may be called multiple times.
 @end defmac
 
 @node Default Prefix,  , Subdirectories, Setup

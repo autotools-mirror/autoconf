@@ -4377,9 +4377,17 @@ if test "$no_recursion" != yes; then
       ac_prev=srcdir ;;
     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
       ;;
+    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+      ;;
+    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+      ;;
     *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
     esac
   done
+
+  # Always prepend --prefix to ensure using the same prefix
+  # in subdir configurations.
+  ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
 
   for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
 
