@@ -3400,6 +3400,27 @@ that are open.  For example, on Windows 9x and ME, such a call would fail;
 on DOS it could even lead to file system corruption, as the file might end
 up being written to after the OS has removed it.
 
+@item @code{va_copy}
+@c @fuindex va_copy
+@prindex @code{va_copy}
+The ISO C99 standard provides @code{va_copy} for copying
+@code{va_list} variables.  It may be available in older environments
+too, though possibly as @code{__va_copy} (eg. @command{gcc} in strict
+C89 mode).  These can be tested with @code{#ifdef}.  A fallback to
+@code{memcpy (&dst, &src, sizeof(va_list))} will give maximum
+portability.
+
+@item @code{va_list}
+@c @fuindex va_list
+@prindex @code{va_list}
+@code{va_list} is not necessarily just a pointer.  It can be a
+@code{struct} (eg. @command{gcc} on Alpha), which means @code{NULL} is
+not portable.  Or it can be an array (eg. @command{gcc} in some
+PowerPC configurations), which means as a function parameter it can be
+effectively call-by-reference and library routines might modify the
+value back in the caller (eg. @code{vsnprintf} in the GNU C Library
+2.1).
+
 @item Signed @code{>>}
 Normally the C @code{>>} right shift of a signed type replicates the
 high bit, giving a so-called ``arithmetic'' shift.  But care should be
