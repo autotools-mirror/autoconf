@@ -1,5 +1,12 @@
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
+	* tests/tools.m4 (autoheader): Don't pass `-l at_srcdir' to
+	`autoheader', since `acconfig.h' is created in the build dir.
+	There's one empty line less in `config.h.in' than before when
+	using `acconfig.h'.
+
+2000-05-03  Akim Demaille  <akim@epita.fr>
+
 	Simplify the handling of `acconfig.h'.
 
 	* autoheader.sh: No longer try to select the needed paragraphs of

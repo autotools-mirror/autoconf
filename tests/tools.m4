@@ -90,9 +90,8 @@ AC_DEFINE(this, "whatever you want.")
 ]])
 
 
-AT_CHECK([../autoheader -m .. -l $at_srcdir -<configure.in], 0,
+AT_CHECK([../autoheader -m .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
-
 /* Define this to whatever you want. */
 #undef this
 ]], ignore)
@@ -104,7 +103,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader -m .. -l $at_srcdir -<configure.in], 1, ignore, ignore)
+AT_CHECK([../autoheader -m .. -<configure.in], 1, ignore, ignore)
 
 AT_CLEANUP
 
