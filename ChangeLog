@@ -1,3 +1,42 @@
+2005-01-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (config.status Invocation): Warn about
+	discrepancy between CONFIG_SHELL and shell used to invoke 'configure'.
+	* doc/install.texi (Defining Variables): Likewise.
+	Based on a proposed patch by Ralf Wildenhues.
+
+	* man/Makefile.am (.x.1): Make sure the required generated files
+	are up to date.  Problem and original solution proposed by Stepan Kasal.
+	$(dist_man_MANS:.1=-bin-prereq), $(dist_man_MANS:.1=-tests-prereq),
+	implicit-man-prerequisites): New rules, used by the above.
+
+	* doc/make-stds.texi, doc/standards.texi: Sync from gnulib.
+	* config/config.guess, config/config.sub, config/install-sh: Likewise.
+	* config/missing, config/texinfo.tex: Likewise.
+
+2005-01-29  Stepan Kasal  <kasal@ucw.cz>
+
+	Simplify the implementation of m4_require (a.k.a. AC_REQUIRE).
+	Update the long comment explaining it.
+
+	m4_require no longer writes an ``is required by'' line to the
+	execution stack.  It contains only one bit of non-redundant
+	information: that the macro was required, not called.  And even
+	this bit is useless in most situations: have you ever met a macro
+	which both calls and requires the same macro?
+
+	* lib/m4sugar/m4sugar.m4 (_m4_defun_pro): Don't push a diversion...
+	(_m4_defun_pro_outer): ... only via this macro, for the outermost
+	  macro.
+	(_m4_defun_epi, _m4_defun_epi_outer): Complementarily.
+	(m4_expansion_stack_pop): Remove the misplaced comment.
+	(m4_require): Don't put the ``is required by'' line to the
+	  execution stack; slightly improve the out-of-a-defun error message.
+	(_m4_divert_grow): New macro, counter for the temporary diversions.
+	(_m4_require_call): Use it.
+	* tests/m4sugar.at (m4_require): Expect output without the
+	  ``is required by'' messages.
+
 2005-01-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Recommend X
