@@ -31,9 +31,9 @@ AC_PATH_PROG(PERL, perl, no)
 AC_SUBST(PERL)dnl
 AC_SUBST(PERLSCRIPTS)dnl
 if test "$PERL" != no; then
-  PERLSCRIPTS=autoscan
+  PERLSCRIPTS="autoscan autoupdate"
 else
-  AC_MSG_WARN([autoscan will not be built since perl is not found])
+  AC_MSG_WARN([autoscan and autoupdate will not be built since perl is not found])
 fi
 
 AC_PROG_INSTALL

@@ -27,8 +27,8 @@ SUFFIXES = .m4 .m4f
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 WGET = wget
 
-bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
-EXTRA_SCRIPTS = autoscan
+bin_SCRIPTS = autoconf autoheader autoreconf ifnames @PERLSCRIPTS@
+EXTRA_SCRIPTS = autoscan autoupdate
 
 # FIXME: Current Automakes are blind and cannot see inner AC_SUBST,
 # so help it.

@@ -1,3 +1,7 @@
+2001-03-27  Tim Van Holder <tim.van.holder@pandora.be>
+
+	* Makefile.am, configure.in: autoupdate is a Perl script.
+
 2001-03-20  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Some about

@@ -1376,10 +1376,10 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" != no; then
-  PERLSCRIPTS=autoscan
+  PERLSCRIPTS="autoscan autoupdate"
 else
-  { echo "$as_me:1381: WARNING: autoscan will not be built since perl is not found" >&5
-echo "$as_me: WARNING: autoscan will not be built since perl is not found" >&2;}
+  { echo "$as_me:1381: WARNING: autoscan and autoupdate will not be built since perl is not found" >&5
+echo "$as_me: WARNING: autoscan and autoupdate will not be built since perl is not found" >&2;}
 fi
 
 # Find a good install program.  We prefer a C program (faster),
