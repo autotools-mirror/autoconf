@@ -80,7 +80,7 @@ esac
 ac_LF_and_DOT=`echo; echo .`
 
 localdir=.
-debug=0
+debug=false
 # Basename for temporary files.
 ah_base=ah$$
 
@@ -181,7 +181,7 @@ case "$config_h" in
 esac
 
 tmpout=$ah_base.out
-if test $debug -eq 0; then trap "rm -f $ah_base*; exit 1" 1 2 15; fi
+$debug || trap "rm -f $ah_base*; exit 1" 1 2 15
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmpout
