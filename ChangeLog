@@ -27,7 +27,7 @@
 	(AU_DEFUN): Use it.
 	(AC_OUTPUT): When dispatching your arguments, use ifval, not
 	ifset!
-	Dispath actions to AC_CONFIG_COMMANDS not AC_OUTPUT_COMMANDS, to
+	Dispatch actions to AC_CONFIG_COMMANDS not AC_OUTPUT_COMMANDS, to
 	avoid unneeded warnings for obsolete use of AC_OUTPUT_COMMANDS.
 	(autoupdate::AC_OUTPUT): New macro.
 	* doc/autoconf.texi (Writing configure.in, the example): Don't
@@ -120,7 +120,7 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_PROVIDE): Use `m4_define', not `define'.
-	Because of the namespace machinery this change makes `autoconf'
+	Because of the names pace machinery this change makes `autoconf'
 	about four times faster on complex `configure.in's.
 
 2000-02-08  Akim Demaille  <akim@epita.fr>
@@ -167,7 +167,7 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
 	* autoupdate.sh: Don't dump --help on --wrong-option.
-	* autoconf.sh: Reformating, and use >&2 instead of 1>&2.
+	* autoconf.sh: Reformatting, and use >&2 instead of 1>&2.
 	* autoreconf.sh: Likewise.
 	* autoheader.sh: Likewise.
 
@@ -226,7 +226,7 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
 	Revamp the autoupdate/AC_OBSOLETE chain.  All the details are
-	given in the prologue of acobsolete.m4.
+	given in the prologue of acoldnames.m4.
 
 	* acgeneral.m4 (Prologue): Enter the `autoconf' name space.
 	(AU_DEFUN): New macro.
@@ -302,7 +302,7 @@
 
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
-	Adapt autoheader to use libm4's namespaces.
+	Adapt autoheader to use libm4's name spaces.
 
 	* autoheader.m4 (AH_HOOK): Removed.
 	(AH_DEFUN): Define in the `autoheader' name space.
@@ -1440,11 +1440,11 @@
 	(C Compiler Characteristics): Document AC_C_PROTOTYPES.
 
 	* testsuite/autoconf.s/defines.exp: Changed `fail' and `pass' in
-	`xfail' and `xpass'. The testsuite checks that acconfig.h
+	`xfail' and `xpass'. The test suite checks that acconfig.h
 	templates the AC_DEFINEs. Since we no longer rely on acconfig.h,
 	the test is obsolete.
 	* acspecific.m4 (AC_PROG_BINSH, AC_PROG_SED): Don't quote the name
-	of the macro defined; the testsuite does not recognize this
+	of the macro defined; the test suite does not recognize this
 	syntax. From Akim Demaille <akim@epita.fr>.
 
 1999-10-27  Ben Elliston  <bje@cygnus.com>
@@ -1463,7 +1463,7 @@
 
 1999-10-13  Ben Elliston  <bje@cygnus.com>
 
-	* acconfig.h: Reintroduce missing definitions due to testsuite
+	* acconfig.h: Reintroduce missing definitions due to test suite
 	regressions.
 
 	* autoconf.texi (Configuration Headers): Document the potential
@@ -2222,10 +2222,10 @@
 	instead of the shell's loop.
 
 	* acgeneral.m4 (AC_TR): In addition to transliteration, provide a
-	mean to specify the valid destination alphabet and a default
+	means to specify the valid destination alphabet and a default
 	character for aliens characters.  This is in order to remove
-	characters such as `+:-' etc. that may appear in file names,
-	but are not valid for shell variables or #defines.
+	characters such as `+:-' etc. that may appear in file names, but
+	are not valid for shell variables or #defines.
 	(AC_TR_DEFINE): New macro, maps anything to a valid uppercase
 	#define rhs.
 	(AC_TR_UPCASE_NAME): Replaced by AC_TR_DEFINE.  All callers
@@ -2880,20 +2880,20 @@
 1998-12-28  Jeff Garzik  <jgarzik@pobox.com>
 
 	* autoconf.texi:
-	  (AC_SEARCH_LIBS, AC_CHECK_FILE, AC_CHECK_FILES,
-	   AC_TRY_LINK_FUNC): Document.
-	  (AC_CHECK_LIB): Indicate the absence of
+	 (AC_SEARCH_LIBS, AC_CHECK_FILE, AC_CHECK_FILES,
+	  AC_TRY_LINK_FUNC): Document.
+	 (AC_CHECK_LIB): Indicate the absence of
 		action-if-not-found will not kill default action.
-	  (AC_SYS_INTERPRETER): Alphabetize with rest of section,
+	 (AC_SYS_INTERPRETER): Alphabetize with rest of section,
 		s/ac_cv_sys_interpreter/interpval/
 
 	* acgeneral.m4:
-	  (AC_TRY_LINK_FUNC): Fix arg transposition.
-	  (AC_SEARCH_LIBS): Require autoconf 2.13, add other-libs arg.
-	  (AC_CHECK_FILES): Add underscore to HAVE_file define.
+	 (AC_TRY_LINK_FUNC): Fix arg transposition.
+	 (AC_SEARCH_LIBS): Require autoconf 2.13, add other-libs arg.
+	 (AC_CHECK_FILES): Add underscore to HAVE_file define.
 
 	* acspecific.m4:
-	  (AC_SYS_INTERPRETER): New shell var 'interpval' stores
+	 (AC_SYS_INTERPRETER): New shell var 'interpval' stores
 		internal var ac_cv_sys_interpreter.
 
 1998-12-27  Ben Elliston  <bje@cygnus.com>
@@ -2954,8 +2954,8 @@
 1998-10-24  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_LANG_FORTRAN77): Remove [] (i.e. the m4 quotes)
-	since it was confusing the testsuite.  Also make `f77' the default
-	for FC, otherwise the testsuite fails.
+	since it was confusing the test suite.  Also make `f77' the default
+	for FC, otherwise the test suite fails.
 
 	* autoconf.texi (Fortran 77 Compiler Characteristics): Added new
 	node documenting the new AC_F77_LIBRARY_LDFLAGS macro.
@@ -3662,7 +3662,7 @@ Wed Nov 22 11:01:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	* Version 2.7.
 
 	* autoheader.m4 (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Expand the
-	  optional action args.  From jj@jfch.vc.cvut.cz (Jakub Jelinek).
+	 optional action args.  From jj@jfch.vc.cvut.cz (Jakub Jelinek).
 
 	* acgeneral.m4 (AC_CHECK_LIB): Translate - in library names to _.
 	(AC_ARG_PROGRAM): Use cat instead of echo to avoid SysV echo
@@ -3718,16 +3718,16 @@ Fri Nov 17 15:05:44 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 Fri Nov 17 15:23:04 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Don't start tr argument with '+',
-	  so as not to confuse old GNU tr's.  From
-	  Ian Lance Taylor <ian@cygnus.com>.
-	  (AC_INIT_PARSE_ARGS): Make sure MFLAGS and MAKEFLAGS are empty.
-	  From Paul Townsend (aab@cc.purdue.edu).
-	  (AC_CHECK_LIB, AC_CHECK_HEADERS, AC_CHECK_FUNC): Remove
-	  duplicate `d' from alphabets.
+	 so as not to confuse old GNU tr's.  From
+	 Ian Lance Taylor <ian@cygnus.com>.
+	 (AC_INIT_PARSE_ARGS): Make sure MFLAGS and MAKEFLAGS are empty.
+	 From Paul Townsend (aab@cc.purdue.edu).
+	 (AC_CHECK_LIB, AC_CHECK_HEADERS, AC_CHECK_FUNC): Remove
+	 duplicate `d' from alphabets.
 
 	* acspecific.m4 (AC_USG): Define USG if we don't have rindex and
-	  bzero, not if we do have them.
-	  From Viktor Dukhovni <viktor@anaheim.esm.com>.
+	 bzero, not if we do have them.
+	 From Viktor Dukhovni <viktor@anaheim.esm.com>.
 
 Sun Oct 29 15:13:37 1995  Richard Stallman  <rms@mole.gnu.ai.mit.edu>
 
@@ -3743,32 +3743,32 @@ Wed Jul 26 00:03:26 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	* Test release 2.4.2.
 
 	* acgeneral.m4 (AC_CHECK_SIZEOF): Take an optional size to
-	  use when cross-compiling.
+	 use when cross-compiling.
 
 	* acspecific.m4 (AC_FUNC_CLOSEDIR_VOID, AC_DIR_HEADER): If
-	  cross-compiling, assume it returns void.  It's not a big loss.
-	  From Karl Berry.
+	 cross-compiling, assume it returns void.  It's not a big loss.
+	 From Karl Berry.
 
 	* acgeneral.m4 autoheader.sh: Change tr [a-z] [A-Z] into expansion
-	  of the full alphabet, to combat losing AIX 4.1.1 tr when LANG
-	  isn't set the way it likes.
+	 of the full alphabet, to combat losing AIX 4.1.1 tr when LANG
+	 isn't set the way it likes.
 
 	* acspecific.m4 (AC_FUNC_GETMNTENT): Check in -lgen for Unixware.
 	From miguel@roxanne.nuclecu.unam.mx (Miguel de Icaza).
 
 	* autoheader.m4 (AC_CONFIG_HEADER): Set config_h to the first
-	  argument.  From ghudson@mit.edu (Greg Hudson).
+	 argument.  From ghudson@mit.edu (Greg Hudson).
 
 	* Makefile.in (all): Depend on info.
 
 	* acgeneral.m4 (AC_CHECK_PROG, AC_PATH_PROG, AC_CHECK_PROGS,
-	  AC_PATH_PROGS, AC_CHECK_TOOL): Add optional PATH
-	  parameter.
+	 AC_PATH_PROGS, AC_CHECK_TOOL): Add optional PATH
+	 parameter.
 
 Mon Jul 24 17:27:11 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Don't enclose tr args in [], for
-	  SysV and POSIX.  From Karl Heuer.
+	 SysV and POSIX.  From Karl Heuer.
 
 Wed Jul 19 17:43:44 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
@@ -3777,19 +3777,19 @@ Wed Jul 19 17:43:44 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 Wed Jun 28 13:45:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Allow an empty value
-	  for --enable and --with args.
-	  (AC_CACHE_CHECK): New macro.
+	 for --enable and --with args.
+	 (AC_CACHE_CHECK): New macro.
 	* acspecific.m4: Use it where possible.
 
 Tue Jun 27 13:29:54 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS, AC_INIT_PREPARE): Add options
-	  --bindir, --libdir, etc.
+	 --bindir, --libdir, etc.
 
 Mon Jun 26 20:54:36 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Put the command
-	  being run into the log file.
+	 being run into the log file.
 
 Thu Jun 22 22:33:23 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
@@ -3824,21 +3824,21 @@ Mon Mar 27 10:48:36 1995  David J. MacKenzie  <djm@churchy.gnu.ai.mit.edu>
 Thu Mar 23 18:02:25 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Put "-c" right
-	  after compiler name.  Same for "-o conftest".
+	 after compiler name.  Same for "-o conftest".
 
 	* ifnames.sh (AC_MACRODIR): Default to @datadir@, not a hardcoded
-	  path.
+	 path.
 
 	* Test release 2.2.1.
 
 	* acgeneral.m4 (AC_OUTPUT): Use sed, not tr, so we only remove the
-	  output config header, not the input one too.  From
-	  muessig@ipf.bau-verm.uni-karlsruhe.DE (Peter Muessig).
-	  (AC_LANG_C): Undo Feb 7 change.  According to Roland McGrath,
-	  most compilers require all options but -l... and -o to come first.
+	 output config header, not the input one too.  From
+	 muessig@ipf.bau-verm.uni-karlsruhe.DE (Peter Muessig).
+	 (AC_LANG_C): Undo Feb 7 change.  According to Roland McGrath,
+	 most compilers require all options but -l... and -o to come first.
 
 	* Makefile.in (uninstall): Don't use $@, since the cd makes it
-	  invalid when srcdir is relative.
+	 invalid when srcdir is relative.
 
 Wed Mar  8 17:05:06 1995  David J. MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
@@ -3851,7 +3851,7 @@ Wed Mar  8 12:44:34 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 Tue Mar  7 11:48:19 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
-	* acspecific.m4 (AC_FUNC_ALLOCA): Keep sh variable namespace
+	* acspecific.m4 (AC_FUNC_ALLOCA): Keep sh variable name space
 	clean.  Put newline after AC_DEFINE_UNQUOTED call to avoid Irix
 	syntax error.
 
@@ -3860,24 +3860,24 @@ Mon Mar  6 15:07:00 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	* Test release 2.1.3.
 
 	* acspecific.m4 (AC_FUNC_ALLOCA): Replace nested AC_FUNC_CHECK
-	  calls with a loop.
+	 calls with a loop.
 
 	* acspecific.m4 (AC_FUNC_VPRINTF): Don't check for signal munging.
-	  From Paul Eggert.
+	 From Paul Eggert.
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Tell the user whether the cache
-	  changed or not.  From gnu@toad.com (John Gilmore).
+	 changed or not.  From gnu@toad.com (John Gilmore).
 
 	* Makefile.in (install-info): Don't cd, to avoid breaking
-	  install-sh references.
+	 install-sh references.
 
 Fri Mar  3 11:41:01 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Makefile.in (autoconf.info, standards.info): Use --no-split to
-	  avoid creating filenames > 14 chars.
+	 avoid creating filenames > 14 chars.
 
 	* acgeneral.m4 (AC_CHECK_FUNC): Use assert.h,
-	  to avoid protype conflicts from ctype.h (!!) on OSF/1 3.0.
+	 to avoid protype conflicts from ctype.h (!!) on OSF/1 3.0.
 
 Sat Feb 25 01:56:57 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
@@ -3897,7 +3897,7 @@ Wed Feb 22 18:01:27 1995  David J. MacKenzie  <djm@geech.gnu.ai.mit.edu>
 Tue Feb 21 13:00:07 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CACHE_VAL): Add extra quotes to work around AIX
-	  4.1 bug reported by hyc@locus.com (Howard Chu).
+	 4.1 bug reported by hyc@locus.com (Howard Chu).
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for -lelf before -lkvm.
 	Reported by Kaveh R. Ghazi <ghazi@caip.rutgers.edu>.
@@ -3935,10 +3935,10 @@ Fri Feb 10 17:45:53 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 Thu Feb  9 14:42:20 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* testsuite/config/unix.exp (autoconf_load): Run the script with
-	  /dev/null as the cache.
+	 /dev/null as the cache.
 
 	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX, AC_CHECK_TOOL): New macros,
-	  from Roland McGrath.
+	 from Roland McGrath.
 
 	* acspecific.m4 (AC_DECL_YYTEXT): Cache the output file root.
 	(AC_C_INLINE): If the compiler doesn't recognize it, define it
@@ -3950,31 +3950,31 @@ Thu Feb  9 14:42:20 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	* Makefile.in (editsh): Substitute in AWK.
 
 	* acspecific.m4 (AC_PROG_INSTALL): Allow trailing slashes in PATH
-	  elements.
+	 elements.
 	* acgeneral.m4 (AC_PREFIX_PROGRAM): Ditto.
 
 Tue Feb  7 11:32:09 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CHECK_LIB, AC_HAVE_LIBRARY): Check and add the new
-	  library before existing libs, not after, in case it uses them.
+	 library before existing libs, not after, in case it uses them.
 	* acspecific.m4 (AC_FUNC_GETLOADAVG, AC_FUNC_GETMNTENT,
-	  AC_FUNC_STRFTIME, AC_DYNIX_SEQ, AC_IRIX_SUN, AC_SCO_INTL): Ditto.
+	 AC_FUNC_STRFTIME, AC_DYNIX_SEQ, AC_IRIX_SUN, AC_SCO_INTL): Ditto.
 
 	* autoheader.sh: Allow @BOTTOM@ to be the first line in
-	  acconfig.h.  From iwj10@cus.cam.ac.uk (Ian Jackson).
+	 acconfig.h.  From iwj10@cus.cam.ac.uk (Ian Jackson).
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Add semicolons before
-	  AC_DEFINE.  Check for -lkvm before -lutil.  Assume it needs setgid
-	  if using -lutil.
+	 AC_DEFINE.  Check for -lkvm before -lutil.  Assume it needs setgid
+	 if using -lutil.
 
 	* acgeneral.m4 (ac_compile, ac_link): Put the file name before the
-	  variables, so they can contain -l options.
+	 variables, so they can contain -l options.
 
 	* acspecific.m4 (AC_FUNC_WAIT3): Sleep longer for HPUX.
 	(AC_TYPE_SIGNAL): Declare signal as extern "C" for C++.
 
 	* Makefile.in testsuite/Makefile.in (maintainer-clean): Renamed
-	  from realclean.
+	 from realclean.
 
 	* autoconf.sh (TMPDIR): Inherit from environment, or set if not.
 
@@ -3990,12 +3990,12 @@ Thu Feb  2 11:32:07 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	From marcus@ee.pdx.edu (Marcus Daniels).
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Workaround Ultrix and 4.3BSD sh
-	  bug in setting the high bit on variable values.
-	  From Ken Raeburn.
-	  (AC_OUTPUT_FILES, AC_OUTPUT_SUBDIRS): Ignore initial "./" to
-	  avoid messing up the dot-dot counts.
-	  (AC_OUTPUT_SUBDIRS): Pass INSTALL magic to subdirectories.
-	  From Karl Berry.
+	 bug in setting the high bit on variable values.
+	 From Ken Raeburn.
+	 (AC_OUTPUT_FILES, AC_OUTPUT_SUBDIRS): Ignore initial "./" to
+	 avoid messing up the dot-dot counts.
+	 (AC_OUTPUT_SUBDIRS): Pass INSTALL magic to subdirectories.
+	 From Karl Berry.
 
 	* ifnames.sh: Speed up drastically by folding 3N+2 processes into 2.
 	From Paul Eggert.
@@ -4003,8 +4003,8 @@ Thu Feb  2 11:32:07 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 Wed Feb  1 11:58:27 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Add additional
-	  quoting for internal consistency.
-	  From junio@twinsun.COM (Jun Hamano).
+	 quoting for internal consistency.
+	 From junio@twinsun.COM (Jun Hamano).
 
 	* acspecific.m4 (AC_PATH_XTRA): R6 function name was wrong.
 	From Karl Berry.
@@ -4016,11 +4016,11 @@ Wed Feb  1 11:58:27 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	From interran@uluru.stanford.edu (John Interrante).
 
 	* acgeneral.m4 (AC_CHECK_SIZEOF): If test program fails, set the
-	  variable to 0 as the doc sez.
-	  From eisen@cc.gatech.edu (Greg Eisenhauer).
+	 variable to 0 as the doc sez.
+	 From eisen@cc.gatech.edu (Greg Eisenhauer).
 
 	* acgeneral.m4, acspecific.m4: Remove *.core and core.* as well as
-	  core, for recent BSD's.
+	 core, for recent BSD's.
 
 	* acspecific.m4 (AC_SYS_INTERPRETER): Use `#! /' instead of `#!/'.
 	* acgeneral.m4 (AC_INIT_BINSH): Likewise.
@@ -4028,17 +4028,17 @@ Wed Feb  1 11:58:27 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 	From woods@kuma.web.net (Greg A. Woods).
 
 	* acgeneral.m4 (AC_INIT_PREPARE): Use fd 6 instead of 4, to
-	  prevent a conflict on the Kubota Titan.  From
-	  muessig@ipf.bau-verm.uni-karlsruhe.DE (Peter Muessig).
+	 prevent a conflict on the Kubota Titan.  From
+	 muessig@ipf.bau-verm.uni-karlsruhe.DE (Peter Muessig).
 
 	* autoconf.sh: Use a more concise syntax to set variables.
 	From Karl Berry.
 
 	* acspecific.m4 (AC_FUNC_WAIT3): Check page fault measurements to
-	  catch Linux.  From tobias@server.et-inf.fho-emden.de (Peter Tobias).
+	 catch Linux.  From tobias@server.et-inf.fho-emden.de (Peter Tobias).
 
 	* acgeneral.m4 (AC_OUTPUT): If running config.status
-	  fails, exit with a nonzero status.  From Ken Raeburn.
+	 fails, exit with a nonzero status.  From Ken Raeburn.
 
 Tue Dec  6 19:07:07 1994  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
@@ -4062,27 +4062,27 @@ Thu Nov  3 10:24:08 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 	* acgeneral.m4 (AC_TRY_RUN): Reword warning.
 
 	* acspecific.m4 (AC_PROG_CXX): Notify the user of the check for
-	  GNU C++.
-	  (AC_PROG_CXX, AC_PROG_CXXCPP): Use g++, not gcc, as default C++
-	  compiler.
+	 GNU C++.
+	 (AC_PROG_CXX, AC_PROG_CXXCPP): Use g++, not gcc, as default C++
+	 compiler.
 	* acgeneral.m4 (AC_LANG_CPLUSPLUS): Ditto.
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Move ac_usage string directly
-	  into the here document to work around A/UX shell limitation.
+	 into the here document to work around A/UX shell limitation.
 
 	* acgeneral.m4 (AC_COMPILE_CHECK): Mention the MSG macros in the
-	  obsolete warning.
+	 obsolete warning.
 
 	* autoscan.pl (output_programs): Use AC_CHECK_LIB, not
-	  AC_HAVE_LIBRARY.
+	 AC_HAVE_LIBRARY.
 
 	* acgeneral.m4 (AC_CHECK_FUNC): Move prototype outside of function
-	  so it works with C++.  From ejb@era.COM (E. Jay Berkenbilt).
+	 so it works with C++.  From ejb@era.COM (E. Jay Berkenbilt).
 
 Fri Oct 28 11:23:30 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_CHECK_HEADERS_DIRENT): Use define, not
-	AC_DEFUN, so the testsuite doesn't call it with no arguments,
+	AC_DEFUN, so the test suite doesn't call it with no arguments,
 	leading to a syntax error in the real Bourne shell.
 
 Wed Oct 26 18:40:41 1994  David J. MacKenzie  <djm@duality.gnu.ai.mit.edu>
@@ -4191,13 +4191,13 @@ Tue Sep 27 08:00:38 1994  David MacKenzie  <djm@geech.gnu.ai.mit.edu>
 	From Paul Eggert.
 	* testsuite/autoconf.s/defines.exp: New file.
 	* testsuite/autoconf.s/specific.exp: Extract the list of macros to
-	  test from acspecific.m4 instead of hardcoding it.
+	 test from acspecific.m4 instead of hardcoding it.
 	* acspecific.m4 (AC_PROG_CXXCPP): Default CXX to gcc, not c++.
 
 Mon Sep 26 12:32:46 1994  David MacKenzie  <djm@churchy.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_HEADER_DIRENT): Only check for -lx if not
-	  using dirent.
+	 using dirent.
 	* autoreconf.sh: Shorten sed label for OSF/1.
 	* acgeneral.m4 acspecific.m4: Change licensing terms for output.
 
@@ -4208,13 +4208,13 @@ Thu Sep 22 15:36:56 1994  David MacKenzie  <djm@churchy.gnu.ai.mit.edu>
 Wed Sep 21 13:12:10 1994  David MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_INIT_PREPARE): Remove trailing slashes from
-	  srcdir.
+	 srcdir.
 
 Mon Sep 19 17:11:39 1994  David MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_INIT, AC_INIT_PARSE_ARGS, AC_CANONICAL_SYSTEM,
-	  AC_ARG_PROGRAM): Make the default for program_transform_name be
-	  a valid sed script, and substitute it always.
+	 AC_ARG_PROGRAM): Make the default for program_transform_name be
+	 a valid sed script, and substitute it always.
 
 Sat Sep 17 08:27:58 1994  David MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
@@ -4227,10 +4227,10 @@ Sat Sep 17 08:27:58 1994  David MacKenzie  <djm@geech.gnu.ai.mit.edu>
 Fri Sep 16 11:20:02 1994  David MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
 	* acspecific.m4 (AC_TYPE_GETGROUPS): Provide a cross compiling
-	  default.  From Jim Meyering.
+	 default.  From Jim Meyering.
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Document
-	  --program-transform-name.
+	 --program-transform-name.
 
 Thu Sep 15 16:26:36 1994  David MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
@@ -4253,7 +4253,7 @@ Thu Sep 15 09:06:40 1994  David MacKenzie  (djm@churchy.gnu.ai.mit.edu)
 	* Makefile.in (check): Copy install-sh from srcdir if needed.
 
 	* autoreconf.sh: Only regenerate autoheader-generated header file
-	  templates.  Pass relative macrodir properly.
+	 templates.  Pass relative macrodir properly.
 	* autoconf.sh autoheader.sh autoreconf.sh: Add -l --localdir option.
 	Based on work by Mark Eichin.
 
@@ -4261,7 +4261,7 @@ Thu Sep 15 09:06:40 1994  David MacKenzie  (djm@churchy.gnu.ai.mit.edu)
 	* autoconf.sh autoheader.sh: Remove -v option.
 
 	* acgeneral.m4 (AC_CHECK_TYPE): Require AC_HEADER_STDC and check
-	  stdlib.h if present.
+	 stdlib.h if present.
 
 	* acgeneral.m4 (AC_OUTPUT): Protect cache save from interruptions.
 
@@ -4270,28 +4270,28 @@ Tue Sep 13 09:46:23 1994  David J. MacKenzie  (djm@churchy.gnu.ai.mit.edu)
 	* Makefile.in (install): Use srcdir.  From Mark Eichin.
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): Automatically add
-	  configure_input comment to Makefiles again.
+	 configure_input comment to Makefiles again.
 	* Makefile.in testsuite/Makefile.in: Remove configure_input ref.
 
 	* acgeneral.m4 (AC_LINK_FILES, AC_OUTPUT_LINKS): Reverse the order
-	  of the arguments.  Support relative symlinks.
+	 of the arguments.  Support relative symlinks.
 
 	* acgeneral.m4 acspecific.m4: Remove some gratuitous {} in shell
-	  variable references.
+	 variable references.
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): New output variable
-	  configure_input replaces big kludge for adding output comment.
+	 configure_input replaces big kludge for adding output comment.
 	* Makefile.in, testsuite/Makefile.in: Use it.
 
 Mon Sep 12 23:06:08 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
 	* acgeneral.m4 (AC_INIT_PREPARE, AC_OUTPUT_SUBDIRS): Make command
-	  line quoting work for shell metachars besides blanks.
+	 line quoting work for shell metachars besides blanks.
 
 Sun Sep 11 23:34:24 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
 	* acspecific.m4 (AC_PATH_XTRA): Link with X_EXTRA_LIBS when
-	  checking for -lSM.
+	 checking for -lSM.
 
 	* acfunctions (memcmp): Use AC_FUNC_MEMCMP.  From Paul Eggert.
 
@@ -4304,12 +4304,12 @@ Sat Sep 10 10:59:19 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 	* autoscan.pl: Check AC_MACRODIR.
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS, AC_INIT_PREPARE,
-	  AC_CONFIG_SUBDIRS, AC_OUTPUT_SUBDIRS): Make quoting of command
-	  line options work.
-	  (AC_CONFIG_AUX_DIRS): Check for install-sh over install.sh.
+	 AC_CONFIG_SUBDIRS, AC_OUTPUT_SUBDIRS): Make quoting of command
+	 line options work.
+	 (AC_CONFIG_AUX_DIRS): Check for install-sh over install.sh.
 
 	* acspecific.m4 (AC_FUNC_GETMNTENT): Only check for second lib if
-	  first lib isn't found.  From Jim Meyering.
+	 first lib isn't found.  From Jim Meyering.
 
 Fri Sep  9 10:41:42 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
@@ -4319,13 +4319,13 @@ Fri Sep  9 10:41:42 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 	* testsuite/Makefile.in (site.exp): Simplify.
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Use a shorter syntax for setting
-	  the variables.  Idea from Karl Berry.
-	  (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Take an action-if-not-found.
-	  From Jim Meyering.
+	 the variables.  Idea from Karl Berry.
+	 (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Take an action-if-not-found.
+	 From Jim Meyering.
 
 	* acconfig.h: Add entries for getmntent and strftime.
 	* acspecific.m4 (AC_C_CHAR_UNSIGNED): If GCC, don't run a test
-	  program.
+	 program.
 
 Thu Sep  8 10:53:53 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
@@ -4338,10 +4338,10 @@ Thu Sep  8 10:53:53 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 	* testsuite/autoconf.s/specific.exp: Check them.
 
 	* acgeneral.m4 (AC_ARG_PROGRAM): Use `;' instead of `-e' to
-	  separate sed arguments, to simplify Makefile usage and support
-	  sed arguments containing spaces.
-	  (AC_CANONICAL_HOST): Move check for config.sub here from
-	  AC_CANONICAL_SYSTEM.
+	 separate sed arguments, to simplify Makefile usage and support
+	 sed arguments containing spaces.
+	 (AC_CANONICAL_HOST): Move check for config.sub here from
+	 AC_CANONICAL_SYSTEM.
 
 	* autoheader.m4 (AC_CHECK_HEADERS_DIRENT): Redefine.  From Paul Eggert.
 	(AC_CHECK_SIZEOF): Redefine this, not the old name.
@@ -4355,7 +4355,7 @@ Wed Sep  7 09:32:31 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* Makefile.in (*clean): Remove the new index.
 	(dist): Undo adding write perms.  Screws up RCS.
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Remove comments from sed
-	  program.
+	 program.
 	* acoldnames.m4: Change a couple of AC_DEFUN to define.
 
 Wed Sep  7 01:27:19 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
@@ -4368,10 +4368,10 @@ Tue Sep  6 09:55:30 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 	(AC_INIT_PARSE_ARGS, AC_CANONICAL_SYSTEM): Do a little setup for it.
 
 	* acspecific.m4 (AC_PROG_INSTALL): Clarify comment.  Remove check
-	  for bsdinst, since it's no better than our install.sh.
-	  (AC_CHECK_HEADER_DIRENT, AC_CHECK_HEADERS_DIRENT): New macros.
-	  (AC_HEADER_DIRENT, AC_DIR_HEADER): Use them.
-	  (AC_PROG_CC, AC_PROG_CXX): Check whether GCC accepts -g.
+	 for bsdinst, since it's no better than our install.sh.
+	 (AC_CHECK_HEADER_DIRENT, AC_CHECK_HEADERS_DIRENT): New macros.
+	 (AC_HEADER_DIRENT, AC_DIR_HEADER): Use them.
+	 (AC_PROG_CC, AC_PROG_CXX): Check whether GCC accepts -g.
 
 	* acgeneral.m4 (AC_INIT_PREPARE): Call AC_PROG_ECHO_N.
 	Use define instead of AC_DEFUN for some frequently called or
@@ -4395,8 +4395,8 @@ Fri Sep  2 09:30:41 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 	* Makefile.in (dist): Make distribution files writable.
 
 	* acgeneral.m4 (AC_OUTPUT): Move trap 0 commands to near the end
-	  of configure, to work around shell bug in failing to execute the
-	  trap when there are commands after AC_OUTPUT.
+	 of configure, to work around shell bug in failing to execute the
+	 trap when there are commands after AC_OUTPUT.
 
 Sat Sep  3 19:47:06 1994  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
@@ -4406,26 +4406,26 @@ Sat Sep  3 19:47:06 1994  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 Thu Sep  1 15:34:15 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
 	* acgeneral.m4 (AC_TRY_RUN): Always warn if no cross-compile
-	  default is given.
+	 default is given.
 	* acspecific.m4 (AC_FUNC_MMAP, AC_FUNC_VFORK, AC_FUNC_WAIT3,
-	  AC_FUNC_UTIME_NULL, AC_FUNC_STRCOLL): Provide a default
-	  for AC_TRY_RUN.
-	  (AC_FUNC_CLOSEDIR_VOID): New macro, broken out of AC_HEADER_DIRENT.
+	 AC_FUNC_UTIME_NULL, AC_FUNC_STRCOLL): Provide a default
+	 for AC_TRY_RUN.
+	 (AC_FUNC_CLOSEDIR_VOID): New macro, broken out of AC_HEADER_DIRENT.
 
 Thu Sep  1 00:06:38 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acgeneral.m4 acspecific.m4: Discard all output until AC_INIT is
-	  called.  Remove now-unnecessary dnl's between macro definitions.
-	  (AC_OUTPUT): Add exit 0 and optional unquoted here document to
-	  end of config.status.
+	 called.  Remove now-unnecessary dnl's between macro definitions.
+	 (AC_OUTPUT): Add exit 0 and optional unquoted here document to
+	 end of config.status.
 
 Wed Aug 31 00:11:28 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acspecific.m4 (AC_PATH_X_DIRECT): Use AC_TRY_LINK instead of
-	  AC_CHECK_LIB, so we don't add the library to $LIBS or print anything.
-	  (AC_PATH_XTRA): Remove initial checking message.
-	  (AC_HEADER_STDC): In test program, default to no STDC headers if
-	  cross compiling.
+	 AC_CHECK_LIB, so we don't add the library to $LIBS or print anything.
+	 (AC_PATH_XTRA): Remove initial checking message.
+	 (AC_HEADER_STDC): In test program, default to no STDC headers if
+	 cross compiling.
 
 Tue Aug 30 16:16:29 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
@@ -4433,15 +4433,15 @@ Tue Aug 30 16:16:29 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* autoupdate.sh: Remove -v option.
 
 	* acgeneral.m4 (AC_EGREP_CPP, AC_TRY_CPP): Add parens around eval
-	  for old shells.  From Kaveh Ghazi.
-	  (AC_TRY_RUN): Warn when generating configure, if called without
-	  a default parameter and AC_CANONICAL_SYSTEM has been called.
+	 for old shells.  From Kaveh Ghazi.
+	 (AC_TRY_RUN): Warn when generating configure, if called without
+	 a default parameter and AC_CANONICAL_SYSTEM has been called.
 
 	* autoheader.sh: Don't run `for' loops on empty lists.
 	From Ken Raeburn.
 
 	* autoconf.sh autoheader.sh: Print the version number using grep
-	  like the other scripts, not using m4.
+	 like the other scripts, not using m4.
 	* acgeneral.m4: Remove conditional for printing version number.
 	It broke with frozen files.
 
@@ -4477,14 +4477,14 @@ Mon Aug 29 16:18:22 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 Sun Aug 28 17:37:26 1994  David J. MacKenzie  (djm@bennett.eng.umd.edu)
 
 	* acspecific.m4 (AC_C_CHAR_UNSIGNED, AC_C_LONG_DOUBLE,
-	  AC_C_INLINE): Don't AC_REQUIRE AC_PROG_CC.
+	 AC_C_INLINE): Don't AC_REQUIRE AC_PROG_CC.
 
 	* acspecific.m4 (AC_RSH, AC_ARG_ARRAY, AC_HAVE_POUNDBANG): Define
-	  to print error messages.
+	 to print error messages.
 
 	* acgeneral.m4 (AC_OUTPUT_LINKS): Insert ac_links and ac_files
-	  into config.status using an *un*quoted here document.
-	  From Ken Raeburn.
+	 into config.status using an *un*quoted here document.
+	 From Ken Raeburn.
 
 Sat Aug 27 13:31:58 1994  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
@@ -4528,8 +4528,8 @@ Fri Aug 26 00:34:11 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 Thu Aug 25 09:26:36 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acspecific.m4 (AC_SYS_INTERPRETER): Move hash mark out of macro
-	  call.
-	  (AC_FUNC_MMAP): If C++, put malloc decls in extern "C".
+	 call.
+	 (AC_FUNC_MMAP): If C++, put malloc decls in extern "C".
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Untabify help message
 	and indent options.
@@ -4537,18 +4537,18 @@ Thu Aug 25 09:26:36 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* Makefile.in (DISTFILES): Remove ChangeLog.0.
 
 	* acgeneral.m4 (AC_CHECK_LIB): Do uppercasing of library name at
-	  runtime.
-	  (AC_HAVE_LIBRARY): Retain old behavior.
+	 runtime.
+	 (AC_HAVE_LIBRARY): Retain old behavior.
 
 	* acspecific.m4 (AC_FUNC_VFORK): If C++, use a prototype for the
-	  function in the test program.
-	  (AC_C_ARG_ARRAY): Macro deleted.
+	 function in the test program.
+	 (AC_C_ARG_ARRAY): Macro deleted.
 	* acoldnames.m4, acconfig.h, testsuite/autoconf.s/specific.exp:
-	  Remove references to it.
+	 Remove references to it.
 
 	* autoupdate.sh: Make sure $infile can be read, and $tmpout has
-	  the same permissions.  Make sure $infile can be written.  From
-	  Paul Eggert.
+	 the same permissions.  Make sure $infile can be written.  From
+	 Paul Eggert.
 
 	* acgeneral.m4 (AC_INIT*): Remove now-incorrect AC_BEFORE calls.
 	(AC_CHECK_FUNC): If C++, use extern "C".
@@ -4561,31 +4561,31 @@ Thu Aug 25 09:26:36 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	(AC_LANG_C, AC_LANG_CPLUSPLUS): Include CPPFLAGS in the commands.
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): Move protection for right side
-	  of sed substitution here from AC_MAKE_DEFS, so it applies to all
-	  AC_SUBST'd variables.
+	 of sed substitution here from AC_MAKE_DEFS, so it applies to all
+	 AC_SUBST'd variables.
 
 	* Makefile.in (install): Use for loops.  From Jim Meyering.
 
 	* acgeneral.m4: Revise diversions to rely on implicit flushing at
-	  the end of the m4 run.  Idea from Franc,ois Pinard.
-	  (AC_INIT_PREPARE, AC_ARG_ENABLE, AC_ARG_WITH, AC_PREFIX_PROGRAM):
-	  Write to the appropriate diversions.
-	  (AC_ENABLE, AC_WITH): Supply default help string.
-	  (AC_ENABLE_INTERNAL, AC_WITH_INTERNAL, AC_PREFIX_INTERNAL):
-	  Macros removed.
-	  (AC_CONFIG_SUBDIRS): Set `subdirs' here instead of in
-	  AC_INIT_PREPARE.
-	  (AC_PREFIX): Macro removed.
+	 the end of the m4 run.  Idea from Franc,ois Pinard.
+	 (AC_INIT_PREPARE, AC_ARG_ENABLE, AC_ARG_WITH, AC_PREFIX_PROGRAM):
+	 Write to the appropriate diversions.
+	 (AC_ENABLE, AC_WITH): Supply default help string.
+	 (AC_ENABLE_INTERNAL, AC_WITH_INTERNAL, AC_PREFIX_INTERNAL):
+	 Macros removed.
+	 (AC_CONFIG_SUBDIRS): Set `subdirs' here instead of in
+	 AC_INIT_PREPARE.
+	 (AC_PREFIX): Macro removed.
 	* acoldnames.m4 (AC_PREFIX): Make it an alias for AC_PREFIX_PROGRAM.
 
 	* acoldnames.m4: We don't officially support calling
-	  the subroutines of AC_INIT directly, or replacing them, so don't
-	  document it.
+	 the subroutines of AC_INIT directly, or replacing them, so don't
+	 document it.
 
 Wed Aug 24 00:19:05 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acgeneral.m4 (AC_EGREP_CPP, AC_TRY_LINK, AC_TRY_RUN,
-	  AC_TRY_CPP): Add #line directives.
+	 AC_TRY_CPP): Add #line directives.
 	* autoconf.sh: Make the #line directives accurate.
 	From Franc,ois Pinard.
 
@@ -4607,8 +4607,8 @@ Wed Aug 24 00:19:05 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* Makefile.in (install): Install autoconf.m4.
 
 	* acspecific.m4 (AC_SYS_INTERPRETER): New name and calling
-	  convention for AC_HAVE_POUNDBANG.
-	  (AC_OS_XENIX): Check ac_header_dir instead of DEFS.
+	 convention for AC_HAVE_POUNDBANG.
+	 (AC_OS_XENIX): Check ac_header_dir instead of DEFS.
 
 	* testsuite/autoconf.s/specific.exp: Add AC_HEADER_DIRENT.
 	Remove AC_SYS_REMOTE_TAPE.  Replace AC_HAVE_POUNDBANG with
@@ -4617,14 +4617,14 @@ Wed Aug 24 00:19:05 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* acspecific.m4 (AC_INT_16_BITS, AC_LONG_64_BITS): Reword messages.
 
 	* acgeneral.m4 (AC_CHECK_LIB): Use our standard alternate m4 quote
-	  characters << and >> instead of /.
+	 characters << and >> instead of /.
 
 	* acspecific.m4 (AC_C_CONST, AC_TYPE_GETGROUPS,
-	  AC_PROG_GCC_TRADITIONAL): Don't put the test program in a
-	  temporary variable.
+	 AC_PROG_GCC_TRADITIONAL): Don't put the test program in a
+	 temporary variable.
 
 	* acgeneral.m4 (AC_CHECK_HEADERS, AC_CHECK_FUNCS): Use
-	  AC_DEFINE_UNQUOTED.
+	 AC_DEFINE_UNQUOTED.
 	* autoheader.sh (AC_DEFINE_UNQUOTED): Define.
 
 Tue Aug 23 00:03:06 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
@@ -4647,16 +4647,16 @@ Tue Aug 23 00:03:06 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* acspecific.m4 (AC_PROG_ECHO_N): Work around some greps lacking -e.
 
 	* acspecific.m4 (AC_PATH_X, AC_PATH_X_XMKMF, AC_PATH_X_DIRECT,
-	  AC_PATH_XTRA): Fix cache use and message printing.
+	 AC_PATH_XTRA): Fix cache use and message printing.
 
 	* acgeneral.m4 (AC_SITE_LOAD): Check env var CONFIG_SITE first.
 	(AC_OUTPUT_HEADER): New macro broken out of AC_OUTPUT.
 
 	* acgeneral.m4, acspecific.m4 (AC_FD_MSG, AC_FD_CC): New
-	  symbolic constants.
+	 symbolic constants.
 
 	* acgeneral.m4, acoldnames.m4 (AC_INIT_PARSE_ARGS): Renamed from
-	  AC_INIT_PARSEARGS.
+	 AC_INIT_PARSEARGS.
 
 	* autoupdate.sh: Use $SIMPLE_BACKUP_SUFFIX, if set.
 
@@ -4669,17 +4669,17 @@ Tue Aug 23 00:03:06 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* acspecific.m4 (AC_SYS_REMOTE_TAPE): Macro removed.
 
 	* acfunctions, acheaders, acidentifiers, acmakevars, acprograms,
-	  autoscan.pl: Use new macro names.
+	 autoscan.pl: Use new macro names.
 
 	* acgeneral.m4 (AC_MSG_ERROR): Enclose within {} so it acts like a
-	  single statement.  From mjshield@nyx.cs.du.edu (Michael Shields).
-	  (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Only compute the uppercase
-	  name if we're going to define that symbol.
-	  (global): Remove AC_DIVERSION_VAR.
-	  (AC_OUTPUT): Adjust quoting and substitutions to replace most
-	  variable values directly in the sed script.  Handle srcdir,
-	  top_srcdir, and INSTALL specially.
-	  Add .cpp and .hpp to c-ish suffixes list.
+	 single statement.  From mjshield@nyx.cs.du.edu (Michael Shields).
+	 (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Only compute the uppercase
+	 name if we're going to define that symbol.
+	 (global): Remove AC_DIVERSION_VAR.
+	 (AC_OUTPUT): Adjust quoting and substitutions to replace most
+	 variable values directly in the sed script.  Handle srcdir,
+	 top_srcdir, and INSTALL specially.
+	 Add .cpp and .hpp to c-ish suffixes list.
 
 	* configure.in: Use the new macro names.
 
@@ -4687,7 +4687,7 @@ Tue Aug 23 00:03:06 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* Makefile.in (DISTFILES): Add it.
 
 	* autoupdate.sh: Update the regexps to account for changes to
-	  acoldnames.m4.
+	 acoldnames.m4.
 
 Mon Aug 22 23:57:18 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
@@ -4696,21 +4696,21 @@ Mon Aug 22 23:57:18 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 Fri Aug 12 10:15:51 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acspecific.m4 (AC_HEADER_DIRENT, AC_DIR_HEADER): Use one cache
-	  variable for each header file, not one for all of them.
+	 variable for each header file, not one for all of them.
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Print a message noting when cache
-	  is unwritable.
-	  (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Take an optional arg to
-	  execute on a match.
+	 is unwritable.
+	 (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Take an optional arg to
+	 execute on a match.
 
 	* acspecific (AC_OS_AIX, AC_OS_MINIX, AC_OS_ISC): Don't need to be
-	  called before AC_TRY_CPP, since that doesn't use CFLAGS.
+	 called before AC_TRY_CPP, since that doesn't use CFLAGS.
 
 	* acgeneral.m4 (AC_CHECK_PROG, AC_PATH_PROG): Print a result
-	  whether or not we found the program.
-	  (AC_CHECKING): Not obsolete.
-	  (AC_WITH, AC_ENABLE, AC_INIT_PREPARE): Merge the --enable and
-	  --with diversions.
+	 whether or not we found the program.
+	 (AC_CHECKING): Not obsolete.
+	 (AC_WITH, AC_ENABLE, AC_INIT_PREPARE): Merge the --enable and
+	 --with diversions.
 
 	* acgeneral.m4 (AC_DEFUN): New macro.
 	Use it globally to define macros that are used as functions,
@@ -4720,17 +4720,17 @@ Fri Aug 12 10:15:51 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 Thu Aug 11 08:25:08 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acspecific.m4 (AC_OS_XENIX): Fix assignments.  From Franc,ois
-	  Pinard.
-	  (AC_SYS_REMOTE_TAPE): Fix typo.
+	 Pinard.
+	 (AC_SYS_REMOTE_TAPE): Fix typo.
 
 Wed Aug 10 09:30:11 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acspecific.m4 (AC_C_CHAR_UNSIGNED): Don't lie about the result
-	  if gcc, just ignore it.
+	 if gcc, just ignore it.
 
 	* acgeneral.m4 (AC_CHECK_LIB): Add a function argument.
 	* acgeneral.m4 (AC_HAVE_LIBRARY): Make it a wrapper around
-	  AC_CHECK_LIB.
+	 AC_CHECK_LIB.
 	* acoldnames.m4: Remove its alias.
 	* acspecific.m4: Add argument to callers.
 
@@ -4738,14 +4738,14 @@ Wed Aug 10 09:30:11 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* acgeneral.m4: Callers changed.
 
 	* acgeneral.m4 (AC_CACHE_LOAD, AC_CACHE_SAVE, AC_SITE_LOAD,
-	  AC_MSG_CHECKING): Aesthetic changes to messages, suggested by
-	  Franc,ois Pinard.
+	 AC_MSG_CHECKING): Aesthetic changes to messages, suggested by
+	 Franc,ois Pinard.
 
 	* acspecific.m4 acgeneral.m4 acoldnames.m4: Rename
 	AC_TRY_CROSS to AC_C_CROSS.
 
 	* acgeneral.m4 (AC_INIT_PARSEARGS): Don't mention --verbose in
-	  help message.
+	 help message.
 	(AC_INIT_PREPARE): Use file descriptor 5 for config.log, and 6 for
 	nothing.  --verbose no longer does anything.
 	(AC_MSG_ECHO_N): New macro.
@@ -4756,14 +4756,14 @@ Wed Aug 10 09:30:11 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	(AC_DEFINE): Don't echo anything.
 	(AC_CACHE_VAL): Use a custom echo instead of AC_MSG_RESULT.
 	* acgeneral.m4 (AC_CHECKING, AC_VERBOSE): Put back real versions,
-	  marked obsolete.
+	 marked obsolete.
 	* acoldnames.m4: Delete their aliases.
 	* acgeneral.m4, acspecific.m4 (many macros): Make sure each call
-	  to AC_MSG_CHECKING has exactly one matching AC_MSG_RESULT, and
-	  make the result messages make sense with the checking messages.
+	 to AC_MSG_CHECKING has exactly one matching AC_MSG_RESULT, and
+	 make the result messages make sense with the checking messages.
 
 	* acgeneral.m4 (AC_OUTPUT_SUBDIRS): Use echo, not AC_MSG_RESULT,
-	  to print recursion notice.
+	 to print recursion notice.
 
 Tue Aug  9 00:17:28 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
@@ -4773,29 +4773,29 @@ Tue Aug  9 00:17:28 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	* Makefile.in (DISTFILES): Add it.
 
 	* acgeneral.m4 (AC_OUTPUT, AC_OUTPUT_HEADER), autoheader.sh:
-	  Support optional input-file specification in output-file names.
+	 Support optional input-file specification in output-file names.
 	* autoheader.sh: Support top and bottom comments for config.h.in
-	  in acconfig.h.
+	 in acconfig.h.
 
 	* acgeneral.m4, README: Say more about requiring GNU m4.
 
 	* autoheader.sh: In the list of symbols to get template entries
-	  for, start each symbol with a blank.
+	 for, start each symbol with a blank.
 
 	* autoupdate.sh: Add sed substitutions for replacing macro
-	  calls without parameters.
+	 calls without parameters.
 
 	* acgeneral.m4 (AC_CACHE_VAL): Omit the cache var name from the
-	  result message.
+	 result message.
 
 	* acspecific.m4 (AC_DIR_HEADER): Define to be similar to
-	  AC_HEADER_DIRENT, but only define the old cpp macros.
-	  (AC_HEADER_DIRENT): Only define the new ones.
+	 AC_HEADER_DIRENT, but only define the old cpp macros.
+	 (AC_HEADER_DIRENT): Only define the new ones.
 	* acoldnames.m4: Don't say that those two macros are synonyms.
 	* acconfig.h: Add the new cpp macros.  Add <> to some comments.
 
 	* acgeneral.m4 (AC_OUTPUT): Don't mess with $INSTALL if it starts
-	  with a $, due to user intervention.
+	 with a $, due to user intervention.
 
 	* Makefile.in, testsuite/Makefile.in: Fix *clean targets.
 
@@ -4821,29 +4821,29 @@ Tue Aug  2 19:54:26 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 Sat Jul 30 09:53:38 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 
 	* acgeneral.m4 acspecific.m4: The Great Renaming.
-	  (Well, I think it's great.  You may have your own opinion.)
+	 (Well, I think it's great.  You may have your own opinion.)
 
 	* acspecific.m4 (AC_DIR_HEADER): Define HAVE_<path>_H as well as
-	  the old DIRENT, SYSDIR, etc.
+	 the old DIRENT, SYSDIR, etc.
 
 	* acgeneral.m4 acspecific.m4: Add missing spaces between arguments
-	  to m4 calls.  From Franc,ois Pinard.
+	 to m4 calls.  From Franc,ois Pinard.
 
 	* autoconf.sh: Read acoldnames.m4.
 	* Makefile.in (DISTFILES, PROGS, install, clean): Add
-	  acoldnames.m4 and autoupdate.sh.
+	 acoldnames.m4 and autoupdate.sh.
 
 Tue Jul 26 08:52:17 1994  David J. MacKenzie  (djm@aria.eng.umd.edu)
 
 	* testsuite/Makefile.in (check): Print a message noting that
-	  runtest is part of DejaGNU.
+	 runtest is part of DejaGNU.
 
 	* autoscan.pl: Remove unneeded backslash.
 
 Sun Jul 24 23:30:27 1994  David J. MacKenzie  (djm@aria.eng.umd.edu)
 
 	* Makefile.in (clean mostlyclean distclean realclean): Recurse
-	  into testsuite directory.
+	 into testsuite directory.
 
 Wed Jul 20 09:38:29 1994  David J. MacKenzie  (djm@aria.eng.umd.edu)
 
@@ -4857,17 +4857,17 @@ Tue Jul 19 14:49:02 1994  David J. MacKenzie  (djm@aria.eng.umd.edu)
 	* acspecific.m4 (AC_MEMORY_H): Add more quotes.
 
 	* acgeneral.m4 (AC_TEST_RUN): Check for cross_compiling = yes, not
-	  whether it's non-empty.
+	 whether it's non-empty.
 
 	* acspecific.m4 (AC_MINUS_C_MINUS_O, AC_SET_MAKE): Eval the cache var
-	  assignments.
-	  (AC_YYTEXT_POINTER): Fix typo.
+	 assignments.
+	 (AC_YYTEXT_POINTER): Fix typo.
 
 	* testsuite/autoconf.s/specific.exp,
 	testsuite/autoconf.g/sizeof_type.exp,
 	testsuite/autoconf.g/init.exp: New files.
 	* testsuite/lib/common.exp, testsuite/config/unix.exp: Many
-	  changes to make them work.
+	 changes to make them work.
 
 	* acgeneral.m4 (AC_DEFINE): Use redirection for echo, not $verbose.
 
@@ -5185,7 +5185,7 @@ Wed May  4 10:40:56 1994  David J. MacKenzie  (djm@burnout.eng.umd.edu)
 
 	* acspecific.m4 (AC_GCC_TRADITIONAL, AC_SET_MAKE, AC_RSH,
 	AC_GETLOADAVG, AC_CROSS_CHECK): Print results verbosely.
-	(AC_GETLOADAVG): Namespace cleanup.
+	(AC_GETLOADAVG): Name space cleanup.
 
 Wed May  4 09:32:04 1994  David J. MacKenzie  (djm@aria.eng.umd.edu)
 
