@@ -1,3 +1,39 @@
+Wed Nov 22 11:01:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Version 2.7.
+
+	* autoheader.m4 (AC_CHECK_FUNCS, AC_CHECK_HEADERS): Expand the
+	  optional action args.  From jj@jfch.vc.cvut.cz (Jakub Jelinek).
+
+	* acgeneral.m4 (AC_CHECK_LIB): Translate - in library names to _.
+	(AC_ARG_PROGRAM): Use cat instead of echo to avoid SysV echo
+	interpreting backslashes.  From kim@tac.nyc.ny.US (Kimmo Suominen).
+	(AC_OUTPUT_FILES): Quote $ and \ for being in an unquoted here
+	document.  From Paul Eggert <eggert@twinsun.com>.
+
+	* acspecific.m4 (AC_PATH_X_XMKMF): Use ${MAKE-make}, not plain make.
+	(AC_C_CONST): Avoid a warning from g++.
+	From tgl@sss.pgh.pa.us (Tom Lane).
+	(AC_FUNC_MMAP): Check for valloc and getpagesize; don't rely on
+	predefines.
+	(AC_HEADER_STDC): If cross-compiling, assume the ctype macros are
+	ANSI.  From dje@cygnus.com (Doug Evans).
+	(AC_TYPE_SIGNAL) [__cplusplus]: Give a full prototype.
+	From churritz@cts.com (Chad Hurwitz).
+	(AC_FUNC_VFORK): If cross-compiling, use AC_CHECK_FUNC instead.
+	From steve chamberlain <sac@cygnus.com>.
+
+Tue Sep  5 20:37:48 1995  Paul Eggert  <eggert@twinsun.com>
+
+	* acspecific.m4 (X_LIBS): Use `-R lib', not `-Rlib', since Sun
+	CC 3.0 requires this.
+
+Tue Aug  8 20:10:12 1995  Paul Eggert  <eggert@twinsun.com>
+
+	* acgeneral.m4: When creating config.status, start a new
+	here-script just before building conftest.subs, to work around
+	a bug in the HP-UX 9 HP9000-800 sh.
+
 Tue Nov 21 17:36:41 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* Makefile.in (install): Undo last ASCRIPTS panic change.

@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.6)
+define(AC_ACVERSION, 2.7)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -759,8 +759,10 @@ AC_DEFUN(AC_ARG_PROGRAM,
 [if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
-  # Double any \ or $.
-  echo 's,\\,\\\\,g; s,\$,$$,g' > conftestsed
+  # Double any \ or $.  echo might interpret backslashes.
+  cat <<\EOF_SED > conftestsed
+s,\\,\\\\,g; s,\$,$$,g
+EOF_SED
   program_transform_name="`echo $program_transform_name|sed -f conftestsed`"
   rm -f conftestsed
 fi
@@ -1365,7 +1367,7 @@ dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
 changequote(, )dnl
-ac_lib_var=`echo $1 | tr './+' '__p'`
+ac_lib_var=`echo $1 | tr '.-/+' '___p'`
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
@@ -1424,7 +1426,7 @@ undefine([AC_CV_NAME])dnl
 dnl ### Examining declarations
 
 
-dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
+dnl AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
 AC_DEFUN(AC_TRY_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.$ac_ext <<EOF
@@ -1456,8 +1458,8 @@ AC_DEFUN(AC_EGREP_HEADER,
 
 dnl Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must
 dnl come early, it is not included in AC_BEFORE checks.
-dnl AC_EGREP_CPP(PATTERN, PROGRAM, ACTION-IF-FOUND [,
-dnl              ACTION-IF-NOT-FOUND])
+dnl AC_EGREP_CPP(PATTERN, PROGRAM, [ACTION-IF-FOUND [,
+dnl              ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_EGREP_CPP,
 [AC_REQUIRE_CPP()dnl
 cat > conftest.$ac_ext <<EOF
@@ -1484,7 +1486,7 @@ dnl ### Examining syntax
 
 
 dnl AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
-dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
+dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_COMPILE,
 [cat > conftest.$ac_ext <<EOF
 dnl This sometimes fails to find confdefs.h, for some reason.
@@ -1522,7 +1524,7 @@ AC_TRY_LINK([$2], [$3], [$4], [$5])dnl
 ])
 
 dnl AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
-dnl             ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
+dnl             [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_TRY_LINK,
 [cat > conftest.$ac_ext <<EOF
 dnl This sometimes fails to find confdefs.h, for some reason.
@@ -1550,8 +1552,8 @@ rm -f conftest*]
 dnl ### Checking for run-time features
 
 
-dnl AC_TRY_RUN(PROGRAM, ACTION-IF-TRUE [, ACTION-IF-FALSE
-dnl            [, ACTION-IF-CROSS-COMPILING]])
+dnl AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE
+dnl            [, ACTION-IF-CROSS-COMPILING]]])
 AC_DEFUN(AC_TRY_RUN,
 [AC_REQUIRE([AC_C_CROSS])dnl
 if test "$cross_compiling" = yes; then
@@ -1584,7 +1586,7 @@ rm -fr conftest*])
 dnl ### Checking for header files
 
 
-dnl AC_CHECK_HEADER(HEADER-FILE, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
+dnl AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_HEADER,
 [dnl Do the transliteration at runtime so arg 1 can be a shell variable.
 ac_safe=`echo "$1" | tr './\055' '___'`
@@ -1618,7 +1620,7 @@ done
 dnl ### Checking for library functions
 
 
-dnl AC_CHECK_FUNC(FUNCTION, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
+dnl AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_FUNC,
 [AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_func_$1,
@@ -1816,6 +1818,8 @@ ifdef(<<AC_LIST_HEADER>>,
 <<trap 'rm -fr `echo "$1 AC_LIST_HEADER" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15>>,
 <<trap 'rm -fr `echo "$1" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15>>)
 changequote([, ])dnl
+EOF
+cat >> $CONFIG_STATUS <<EOF
 
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
@@ -1863,8 +1867,8 @@ dnl AC_OUTPUT_FILES(FILE...)
 define(AC_OUTPUT_FILES,
 [# Protect against being on the right side of a sed subst in config.status.
 changequote(, )dnl
-sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@g$/%g/' > conftest.subs <<\CEOF
+sed 's/%@/@@/; s/@%/@@/; s/%g\$/@g/; /@g\$/s/[\\\\&%]/\\\\&/g;
+ s/@@/%@/; s/@@/@%/; s/@g\$/%g/' > conftest.subs <<\\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.

@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.6
-@set VERSION 2.6
+@set EDITION 2.7
+@set VERSION 2.7
 @set UPDATED November 1995
 
 @iftex
@@ -61,7 +61,7 @@ by the Foundation.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -1974,7 +1974,7 @@ If you need to check the behavior of a function as well as find out
 whether it is present, you have to write your own test for
 it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@defmac AC_CHECK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex CHECK_FUNC
 If C function @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If you just
@@ -2270,7 +2270,7 @@ particular test macros.  If you need to check the contents of a header
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_HEADER (@var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@defmac AC_CHECK_HEADER (@var{header-file}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex CHECK_HEADER
 If the system header file @var{header-file} exists, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
@@ -2735,7 +2735,7 @@ The macro @code{AC_TRY_CPP} is used to check whether particular header
 files exist.  You can check for one at a time, or more than one if you
 need several header files to all exist for some purpose.
 
-@defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
+@defmac AC_TRY_CPP (@var{includes}, @r{[}@var{action-if-true} @r{[}, @var{action-if-false}@r{]]})
 @maindex TRY_CPP
 @var{includes} is C or C++ @code{#include} statements and declarations,
 on which shell variable, backquote, and backslash substitutions are
@@ -2775,7 +2775,7 @@ AC_EGREP_CPP(yes,
 ], is_aix=yes, is_aix=no)
 @end example
 
-@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex EGREP_CPP
 @var{program} is the text of a C or C++ program, on which shell
 variable, backquote, and backslash substitutions are performed.  If the
@@ -2797,7 +2797,7 @@ compile a small program that uses that feature.  You can also use it to
 check for structures and structure members that are not present on all
 systems.
 
-@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex TRY_COMPILE
 Create a test C program to see whether a function whose body consists of
 @var{function-body} can be compiled; @var{includes} is any
@@ -2838,7 +2838,7 @@ functions and global variables.  It is also used (by
 checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
-@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
 @maindex TRY_LINK
 Create a test C program to see whether a function whose body consists of
 @var{function-body} can be compiled and linked; @var{includes} is any
@@ -2884,7 +2884,7 @@ package for cross-compiling.
 Use the following macro if you need to test run-time behavior of the
 system while configuring.
 
-@defmac AC_TRY_RUN (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
+@defmac AC_TRY_RUN (@var{program}, @r{[}@var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]]})
 @maindex TRY_RUN
 @var{program} is the text of a C program, on which shell variable and
 backquote substitutions are performed.  If it compiles and links

@@ -472,7 +472,7 @@ AC_TRY_RUN([#include <ctype.h>
 int main () { int i; for (i = 0; i < 256; i++)
 if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
 exit (0); }
-], , ac_cv_header_stdc=no, ac_cv_header_stdc=no)
+], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
   AC_DEFINE(STDC_HEADERS)
@@ -731,9 +731,11 @@ AC_DEFUN(AC_TYPE_SIGNAL,
 #undef signal
 #endif
 #ifdef __cplusplus
-extern "C"
+extern "C" void (*signal (int, void (*)(int)))(int);
+#else
+void (*signal ()) ();
 #endif
-void (*signal ()) ();],
+],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
 ])
@@ -755,18 +757,13 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
-[AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap,
+[AC_CHECK_FUNCS(valloc getpagesize)
+AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap,
 [AC_TRY_RUN([
 /* Thanks to Mike Haertel and Jim Avera for this test. */
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/mman.h>
-
-#ifdef BSD
-# ifndef BSD4_1
-#  define HAVE_GETPAGESIZE
-# endif
-#endif
 
 #ifndef HAVE_GETPAGESIZE
 # include <sys/param.h>
@@ -788,7 +785,7 @@ AC_DEFUN(AC_FUNC_MMAP,
 # endif
 #endif
 
-#ifdef __osf__
+#ifndef HAVE_VALLOC
 # define valloc malloc
 #endif
 
@@ -803,7 +800,7 @@ main()
 {
   char *buf1, *buf2, *buf3;
   int i = getpagesize(), j;
-  int i2 = getpagesize()*2;
+  int i2 = i * 2;
   int fd;
 
   buf1 = (char *)valloc(i2);
@@ -994,7 +991,8 @@ main() {
 	 || fstat(fileno(stdout), &st) != 0
 	 );
   }
-}], ac_cv_func_vfork=yes, ac_cv_func_vfork=no, ac_cv_func_vfork=no)])
+}],
+ac_cv_func_vfork=yes, ac_cv_func_vfork=no, AC_CHECK_FUNC(vfork))])
 if test $ac_cv_func_vfork = no; then
   AC_DEFINE(vfork, fork)
 fi
@@ -1511,7 +1509,7 @@ char const *const *ccp;
 char **p;
 /* NEC SVR4.0.2 mips cc rejects this.  */
 struct point {int x, y;};
-static struct point const zero;
+static struct point const zero = {0,0};
 /* AIX XL C 1.02.0.0 rejects this.
    It does not let you subtract one const X* pointer from another in an arm
    of an if-expression whose if-part is not a constant expression */
@@ -1689,7 +1687,7 @@ EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-    eval `make acfindx 2>/dev/null | grep -v make`
+    eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
     for ac_extension in a so sl; do
       if test ! -f $ac_im_usrlibdir/libX11.$ac_extension &&
@@ -1836,7 +1834,7 @@ else
     X_LIBS="$X_LIBS -L$x_libraries"
     if test "`(uname) 2>/dev/null`" = SunOS &&
       uname -r | grep '^5' >/dev/null; then
-      X_LIBS="$X_LIBS -R$x_libraries"
+      X_LIBS="$X_LIBS -R $x_libraries"
     fi
   fi
 

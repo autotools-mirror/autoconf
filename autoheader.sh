@@ -182,7 +182,6 @@ fi
 
 echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
   test -z "$ctype" && continue
-  # Solaris 2.3 tr rejects noncontiguous characters in character classes.
   sym="`echo "${ctype}" | tr 'abcdefghijklmnopqrstuvwxyz *' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_P'`"
   echo "
 /* The number of bytes in a ${ctype}.  */
