@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Build some of the Autoconf test files.
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ _AC_'
 
 # ac_exclude_egrep
 # ----------------
-# Build a single egrep pattern out of filter_macros_list.
+# Build a single extended regular expression out of filter_macros_list.
 # Sed is used to get rid of the trailing `|' coming from the trailing
 # `\n' from `echo'.
 ac_exclude_egrep=`echo "$exclude_list$ac_exclude_list" | tr '
@@ -165,12 +165,19 @@ au_exclude_list='^AC_LANG_RESTORE$
 
 # au_exclude_egrep
 # ----------------
-# Build a single egrep pattern out of filter_macros_list.
+# Build a single extended regular expression out of filter_macros_list.
 # Sed is used to get rid of the trailing `|' coming from the trailing
 # `\n' from `echo'.
 au_exclude_egrep=`echo "$exclude_list$au_exclude_list" | tr '
 ' '|' | sed 's/.$//'`
 
+
+# egrep
+# -----
+if echo a | (grep -E '(a|b)') >/dev/null 2>&1
+then egrep='grep -E'
+else egrep='egrep'
+fi
 
 
 ## ------------------------- ##
@@ -188,14 +195,14 @@ do
     sort |
     uniq |
     # Watch out we are `set -e': don't fail.
-    ( egrep -v "$ac_exclude_egrep" || true) >acdefuns
+    ($egrep -v "$ac_exclude_egrep" || true) >acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
   cat $file |
     sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' |
     sort |
     uniq |
-    ( egrep -v "$au_exclude_egrep" || true) > audefuns
+    ($egrep -v "$au_exclude_egrep" || true) > audefuns
 
   # Filter out required macros.
   {
