@@ -26,8 +26,9 @@ Major changes in release 2.0:
 ** Changed macros:
 * Many macros renamed systematically, but old names are accepted for
   backward compatibility.
-* AC_OUTPUT adds the "automatically generated" comment after "#!" lines, 
-  not before them.
+* AC_OUTPUT adds the "automatically generated" comment only where it
+  find @configure_input@ in an input file, to support files with
+  various comment syntaxes.
 * AC_OUTPUT does not replace "prefix" and "exec_prefix" in generated
   files when they are not enclosed in @ signs.
 * AC_OUTPUT allows the optional environment variable CONFIG_STATUS to

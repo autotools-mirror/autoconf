@@ -299,7 +299,7 @@ AC_CACHE_VAL(ac_cv_prog_lex_yytext_pointer,
 # (Solaris, I think it was) want two %% lines, so accommodate them.
 ac_cv_prog_lex_yytext_pointer=no
   echo '%%
-%%' | ${LEX}
+%%' | $LEX
 if test -f lex.yy.c; then
   LEX_OUTPUT_ROOT=lex.yy
 elif test -f lexyy.c; then
@@ -333,7 +333,7 @@ AC_DEFUN(AC_PROG_INSTALL,
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 AC_MSG_CHECKING(for a BSD compatible install)
-if test -z "${INSTALL}"; then
+if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
@@ -517,11 +517,11 @@ dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
 AC_DEFUN(AC_CHECK_HEADERS_DIRENT,
 [for ac_hdr in $1
 do
-AC_CHECK_HEADER_DIRENT(${ac_hdr},
+AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
   ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([, ])dnl
-  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
+  AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
 
 AC_DEFUN(AC_DIR_HEADER,
@@ -1090,7 +1090,7 @@ dnl and not checking whether a getloadavg from a library needs privileges.
 AC_MSG_CHECKING(whether getloadavg requires setgid)
 AC_CACHE_VAL(ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
-[#include "${srcdir}/getloadavg.c"
+[#include "$srcdir/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
 #endif],
@@ -1682,11 +1682,11 @@ AC_TRY_CPP([#include <$x_direct_test_include>],
 # Check for the libraries.
 # See if we find them without any special options.
 # Don't add to $LIBS permanently.
-ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l$x_direct_test_library"
+ac_save_LIBS="$LIBS"
+LIBS="$LIBS -l$x_direct_test_library"
 AC_TRY_LINK(, [${x_direct_test_function}()],
-[LIBS="${ac_save_LIBS}" no_x= ac_x_libraries=],
-[LIBS="${ac_save_LIBS}"
+[LIBS="$ac_save_LIBS" no_x= ac_x_libraries=],
+[LIBS="$ac_save_LIBS"
 # First see if replacing the include by lib works.
 for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
     /usr/X11R6/lib        \

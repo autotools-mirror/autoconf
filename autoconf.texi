@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.117
-@set VERSION 1.117
+@set EDITION 1.118
+@set VERSION 1.118
 @set UPDATED September 1994
 
 @iftex
@@ -788,7 +788,24 @@ GNU Coding Standards}, for more information on what to put in
 Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
-complete list of output variables.
+complete list of output variables.  Here is what each of the preset ones
+contains.
+
+@defvar configure_input
+@ovindex configure_input
+A comment saying that the file was generated automatically by configure
+and giving the name of the input file.  You should reference this
+variable in a comment at the top of each input file.  For example, a
+@file{Makefile.in} should begin like this:
+
+@example
+# @@configure_input@@
+@end example
+
+@noindent
+The presence of that line also reminds people editing the file that it
+needs to be processed by @code{configure} in order to be used.
+@end defvar
 
 @defvar exec_prefix
 @ovindex exec_prefix
@@ -3603,11 +3620,14 @@ i960-*-bout) obj_format=bout ;;
 esac
 @end example
 
-@defmac AC_LINK_FILES (@var{dest} @dots{}, @var{source} @dots{})
+@defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
 @maindex LINK_FILES
 Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
-possible, otherwise a hard link.  For example, this call:
+possible, otherwise a hard link.  The @var{dest} and @var{source} names
+should be relative to the top level source or build directory.
+
+For example, this call:
 
 @example
 AC_LINK_FILES(config/sun3.h config/aout.h, host.h object.h)
@@ -4145,6 +4165,12 @@ Add @samp{@@CFLAGS@@}, @samp{@@CPPFLAGS@@}, and @samp{@@LDFLAGS@@} in
 your @file{Makefile.in} files, so they can take advantage of the values
 of those variables in the environment when @code{configure} is run.
 Doing this isn't necessary, but it's a convenience for users.
+
+Also add @samp{@@configure_input@@} in a comment to each input file for
+@code{AC_OUTPUT}, so that the output files will contain a comment saying
+they were produced by @code{configure}.  Automatically selecting the
+right comment syntax for all the kinds of files that people call
+@code{AC_OUTPUT} on became too much work.
 
 Add @file{config.log} and @file{config.cache} to the list of files you
 remove in @code{distclean} targets.
