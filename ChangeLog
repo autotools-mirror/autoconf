@@ -1,5 +1,11 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Less adventurous use of
+	`test'.
+	Fixes Autoconf/108.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Particular Headers): Some more sorting.
 	Use `@multitable'.
 

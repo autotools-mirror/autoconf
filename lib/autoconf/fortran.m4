@@ -1241,7 +1241,7 @@ AC_LANG_RESTORE()dnl
 FLIBS=
 
 # If we are using xlf then replace all the commas with spaces.
-if test `echo $ac_link_output | grep xlfentry >/dev/null 2>&1`; then
+if echo $ac_link_output | grep xlfentry >/dev/null 2>&1; then
   ac_link_output=`echo $ac_link_output | sed 's/,/ /g'`
 fi
 
@@ -1266,7 +1266,7 @@ for ac_arg in $ac_link_output; do
   # reset AC_PREVIOUS_ARG so that we don't try and process AC_ARG as
   # an argument.
   ac_previous_arg=$ac_save_arg
-  test -n "`echo $ac_arg | sed -n -e '/^-/!p'`" && ac_previous_arg=
+  echo $ac_arg | grep '^[^-]' >/dev/null 2>&1 && ac_previous_arg=
   case "$ac_previous_arg" in
     '')
       case "$ac_arg" in
@@ -1324,7 +1324,7 @@ for ac_arg in $ac_link_output; do
   esac
 
   # If "ac_arg" has survived up until this point, then put it in FLIBS.
-  test -n "$ac_arg" && FLIBS="$FLIBS $ac_arg"
+  test "x$ac_arg" != x && FLIBS="$FLIBS $ac_arg"
 done
 
 # Assumption: We only see "LD_RUN_PATH" on Solaris systems.  If this
@@ -1332,7 +1332,7 @@ done
 # path (i.e. it must begin with a "/").
 ac_ld_run_path=`echo $ac_link_output |
                 sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
-test -n "$ac_ld_run_path" && FLIBS="$ac_ld_run_path $FLIBS"
+test "x$ac_ld_run_path" != x && FLIBS="$ac_ld_run_path $FLIBS"
 
 ac_cv_flibs=$FLIBS
 ])
