@@ -66,9 +66,9 @@ for arg
 do
 sed -n '
 # Remove comments.  Not perfect, but close enough.
-s,/\*[^/]*\*/,,g
+s%/\*[^/]*\*/%%g
 # Comments that end on a later line.
-s,/\*[^/]*,,g
+s%/\*[^/]*%%g
 /^[ 	]*#[ 	]*ifn*def[ 	][ 	]*\([A-Za-z0-9_]*\).*/s//\1/p
 /^[ 	]*#[ 	]*e*l*if[ 	]/{
 	s///
@@ -87,7 +87,7 @@ s,/\*[^/]*,,g
 /g
 	p
 }
-' $arg | sort -u | sed 's,$, '$arg','
+' $arg | sort -u | sed 's%$% '$arg'%'
 done | awk '
 { files[$1] = files[$1] " " $2 }
 END { for (sym in files) print sym files[sym] }' | sort

@@ -40,7 +40,7 @@ exit 0;
 sub parse_args
 {
     local ($usage) =
-	"Usage: $0 [--macrodir=dir] [--help] [--verbose] [--version] [srcdir]\n"; 
+	"Usage: autoscan [--macrodir=dir] [--help] [--verbose] [--version] [srcdir]\n"; 
 
     foreach $_ (@ARGV) {
 	if (/^--m[a-z]*=(.*)/) {
@@ -369,7 +369,7 @@ sub output_identifiers
 {
     local ($word);
 
-    print CONF "dnl Checks for identifiers.\n";
+    print CONF "dnl Checks for typedefs, structures, and compiler characteristics.\n";
     foreach $word (sort keys %identifiers) {
 	&print_unique($identifiers_macros{$word});
     }
@@ -379,7 +379,7 @@ sub output_functions
 {
     local ($word);
 
-    print CONF "dnl Checks for functions.\n";
+    print CONF "dnl Checks for library functions.\n";
     foreach $word (sort keys %functions) {
 	if ($functions_macros{$word} eq 'AC_CHECK_FUNCS') {
 	    push(@have_funcs, $word);
