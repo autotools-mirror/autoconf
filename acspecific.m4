@@ -21,7 +21,7 @@ dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 dnl Roland McGrath, and Noah Friedman.
 dnl
 dnl
-dnl ### checks for programs
+dnl ### Checks for programs
 dnl
 dnl
 define(AC_PROG_CC,
@@ -65,7 +65,7 @@ dnl
 define(AC_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
-if test -n "$GCC"; then
+if test "$GCC" = yes; then
   AC_CHECKING(whether -traditional is needed)
 changequote(,)dnl
   ac_pattern="Autoconf.*'x'"
@@ -129,6 +129,7 @@ else
   SET_MAKE="MAKE=${MAKE-make}"
   AC_VERBOSE(setting MAKE to ${MAKE-make} in Makefiles)
 fi
+rm -f conftestmake
 AC_SUBST([SET_MAKE])dnl
 ])dnl
 dnl
@@ -215,7 +216,7 @@ if test -n "$LEX_OUTPUT_ROOT"; then
   echo 'extern char *yytext; main () { exit (0); }' >>$LEX_OUTPUT_ROOT.c
   ac_save_LIBS="$LIBS"
   LIBS="$LIBS $LEXLIB"
-  AC_TEST_PROGRAM(`cat $LEX_OUTPUT_ROOT.c`, AC_DEFINE(YYTEXT_POINTER))
+  AC_TEST_LINK(`cat $LEX_OUTPUT_ROOT.c`, AC_DEFINE(YYTEXT_POINTER))
   LIBS="$ac_save_LIBS"
   rm -f "${LEX_OUTPUT_ROOT}.c"
 fi
@@ -318,7 +319,7 @@ AC_SUBST(RTAPELIB)dnl
 ])dnl
 dnl
 dnl
-dnl ### checks for header files
+dnl ### Checks for header files
 dnl
 dnl
 define(AC_STDC_HEADERS,
@@ -450,7 +451,7 @@ AC_TEST_LINK([#include <signal.h>
 		 AC_DEFINE(SYS_SIGLIST_DECLARED))])dnl
 dnl
 dnl
-dnl ### checks for typedefs
+dnl ### Checks for typedefs
 dnl
 dnl
 define(AC_GETGROUPS_T,
@@ -480,8 +481,7 @@ main()
 }'
 changequote([,])dnl
 AC_TEST_PROGRAM([$ac_prog],
-		AC_DEFINE(GETGROUPS_T, gid_t),
-		AC_DEFINE(GETGROUPS_T, int))
+		AC_DEFINE(GETGROUPS_T, gid_t), AC_DEFINE(GETGROUPS_T, int))
 ])dnl
 dnl
 define(AC_UID_T,
@@ -524,7 +524,7 @@ extern void (*signal ()) ();],
 )dnl
 dnl
 dnl
-dnl ### checks for functions
+dnl ### Checks for functions
 dnl
 dnl
 define(AC_MMAP, [
@@ -720,6 +720,7 @@ main() {
   case -1: _exit(0); /* What can we do?  */
   default: /* Parent.  */
     wait3(&i, 0, &r);
+    sleep(1); /* Avoid "text file busy" from rm on fast HP-UX machines.  */
     exit(r.ru_nvcsw == 0
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
@@ -861,7 +862,8 @@ Yowza Am I SETGID yet
 esac
 
 if test "$NEED_SETGID" = true; then
-  AC_SUBST(KMEM_GROUP)# Figure out what group owns /dev/kmem.
+AC_SUBST(KMEM_GROUP)dnl
+  # Figure out what group owns /dev/kmem.
   # The installed program will need to be setgid and owned by that group.
 changequote(,)dnl
   # On Solaris, /dev/kmem is a symlink.  Get info on the real file.
@@ -918,7 +920,7 @@ rm -f core
 ])dnl
 dnl
 dnl
-dnl ### checks for structure members
+dnl ### Checks for structure members
 dnl
 dnl
 define(AC_STRUCT_TM,
@@ -984,7 +986,7 @@ AC_TEST_LINK([#include <sys/types.h>
 AC_DEFINE(HAVE_ST_RDEV))])dnl
 dnl
 dnl
-dnl ### checks for compiler characteristics
+dnl ### Checks for compiler characteristics
 dnl
 dnl
 define(AC_CROSS_CHECK,
@@ -1125,7 +1127,7 @@ AC_CHECKING([for lack of working const])
 AC_TEST_LINK( , [$ac_prog], , AC_DEFINE(const,))])dnl
 dnl
 dnl
-dnl ### checks for operating system services
+dnl ### Checks for operating system services
 dnl
 dnl
 define(AC_HAVE_POUNDBANG, [dnl
@@ -1401,7 +1403,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 ])dnl
 dnl
 dnl
-dnl ### checks for UNIX variants
+dnl ### Checks for UNIX variants
 dnl These are kludges; we need a better approach.
 dnl
 dnl
