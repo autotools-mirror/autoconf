@@ -9846,6 +9846,7 @@ The default executable, produced by @samp{cc foo.c}, can be
 
 @itemize
 @item @file{a.out} --- usual Unix convention.
+@item @file{b.out} --- i960 compilers (including @command{gcc}).
 @item @file{a.exe} --- DJGPP port of @command{gcc}.
 @item @file{a_out.exe} --- GNV @command{cc} wrapper for DEC C on OpenVMS.
 @item @file{foo.exe} --- various MS-DOS compilers.

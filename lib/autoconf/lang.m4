@@ -426,6 +426,10 @@ AC_DEFUN([AC_OBJEXT],   [])
 # _AC_COMPILER_EXEEXT_DEFAULT
 # ---------------------------
 # Check for the extension used for the default name for executables.
+#
+# We do this in order to find out what is the extension we must for
+# compiling executables (see _AC_COMPILER_EXEEXT's comments).
+#
 # Beware of `expr' that may return `0' or `'.  Since this macro is
 # the first one in touch with the compiler, it should also check that
 # it compiles properly.
@@ -447,18 +451,29 @@ AS_IF([AC_TRY_EVAL(ac_link_default)],
 # Be careful to initialize this variable, since it used to be cached.
 # Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
 ac_cv_exeext=
-for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.*; do
+# b.out is created by i960 compilers.
+for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out
+do
   test -f "$ac_file" || continue
   case $ac_file in
-    _AC_COMPILER_EXEEXT_REJECT ) ;;
-    a.out ) # We found the default executable, but exeext='' is most
-            # certainly right.
-            break;;
-    *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-          # FIXME: I believe we export ac_cv_exeext for Libtool --akim.
-          export ac_cv_exeext
-          break;;
-    * ) break;;
+    _AC_COMPILER_EXEEXT_REJECT )
+        ;;
+    conftest.$ac_ext )
+        # This is the source file.
+        ;;
+    [[ab]].out )
+        # We found the default executable, but exeext='' is most
+        # certainly right.
+        break;;
+    *.* )
+        ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+        # FIXME: I believe we export ac_cv_exeext for Libtool,
+        # but it would be cool to find out if it's true.  Does anybody
+        # maintain Libtool? --akim.
+        export ac_cv_exeext
+        break;;
+    * )
+        break;;
   esac
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
@@ -546,10 +561,10 @@ AC_MSG_RESULT([$ac_cv_exeext])
 m4_define([_AC_COMPILER_EXEEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files a.out a.exe"
+ac_clean_files="$ac_clean_files a.out a.exe b.out"
 _AC_COMPILER_EXEEXT_DEFAULT
 _AC_COMPILER_EXEEXT_WORKS
-rm -f a.out a.exe conftest$ac_cv_exeext
+rm -f a.out a.exe conftest$ac_cv_exeext b.out
 ac_clean_files=$ac_clean_files_save
 _AC_COMPILER_EXEEXT_CROSS
 _AC_COMPILER_EXEEXT_O
