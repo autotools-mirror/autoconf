@@ -1,3 +1,15 @@
+Wed Mar 20 09:37:31 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Omit `char $2' decl when $2 is `main'.
+
+	* acgeneral.m4 (AC_CHECK_LIB): Use \055 for - in tr command.
+
+Wed Mar 13 22:10:42 1996  Andreas Schwab  <schwab@issan.informatik.uni-dortmund.de>
+
+	* acgeneral.m4 (AC_CHECK_LIB): Put quotes around _ when
+	constructing cache variable name, to separate it from preceding
+	text.
+
 Sat Mar 16 15:53:22 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* Version 2.9 released.
