@@ -90,7 +90,7 @@ changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets]
 --disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
---enable-FEATURE[=VAL]	include FEATURE [VAL=yes]
+--enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
 --exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
 --help			print this message
 --prefix=PREFIX		install host independent files in PREFIX [/usr/local]
@@ -98,8 +98,8 @@ Options: [defaults in brackets]
 --srcdir=DIR		find the sources in DIR [configure dir or ..]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
---with-PACKAGE		use external PACKAGE
---without-PACKAGE	do not use external PACKAGE"
+--with-PACKAGE[=ARG]	use PACKAGE [ARG=yes]
+--without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)"
 changequote([,])dnl
 
 # Initialize some variables set by options.
