@@ -1,5 +1,11 @@
 2001-02-03  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_ERROR_AT_LINE, AC_FUNC_ONSTACK): Use
+	AC_LIBSOURCES.
+
+	
+2001-02-03  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_LIBOBJ_DECL): Remove.
 	(AC_LIBSOURCES, AC_LIBSOURCE): New.
 

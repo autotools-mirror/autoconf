@@ -324,10 +324,11 @@ fi
 # AC_FUNC_ERROR_AT_LINE
 # ---------------------
 AC_DEFUN([AC_FUNC_ERROR_AT_LINE],
-[AC_CACHE_CHECK([for error_at_line], ac_cv_lib_error_at_line,
+[AC_LIBSOURCES([error.h, error.c])dnl
+AC_CACHE_CHECK([for error_at_line], ac_cv_lib_error_at_line,
 [AC_TRY_LINK([],[error_at_line (0, 0, "", 0, "");],
-              ac_cv_lib_error_at_line=yes,
-              ac_cv_lib_error_at_line=no)])
+             [ac_cv_lib_error_at_line=yes],
+             [ac_cv_lib_error_at_line=no])])
 if test $ac_cv_lib_error_at_line = no; then
   AC_LIBOBJ(error)
 fi
@@ -1090,11 +1091,12 @@ AU_ALIAS([AC_MMAP], [AC_FUNC_MMAP])
 # ---------------
 # Ensure obstack support.  Yeah, this is not exactly a `FUNC' check.
 AC_DEFUN([AC_FUNC_OBSTACK],
-[AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
- [AC_TRY_LINK([@%:@include "obstack.h"],
-              [struct obstack *mem;obstack_free(mem,(char *) 0)],
-              ac_cv_func_obstack=yes,
-              ac_cv_func_obstack=no)])
+[AC_LIBSOURCES([obstack.h, obstack.c])dnl
+AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
+[AC_TRY_LINK([@%:@include "obstack.h"],
+             [struct obstack *mem; obstack_free(mem,(char *) 0)],
+             [ac_cv_func_obstack=yes],
+             [ac_cv_func_obstack=no])])
 if test $ac_cv_func_obstack = yes; then
   AC_DEFINE(HAVE_OBSTACK, 1, [Define if libc includes obstacks.])
 else
