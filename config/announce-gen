@@ -210,13 +210,13 @@ sub print_changelog_deltas ($$)
 
   GetOptions
     (
-     'release-type=s' => \$release_type,
-     'package-name=s' => \$package_name,
+     'release-type=s'     => \$release_type,
+     'package-name=s'     => \$package_name,
      'previous-version=s' => \$prev_version,
-     'current-version=s' => \$curr_version,
+     'current-version=s'  => \$curr_version,
      'release-archive-directory=s' => \$release_archive_dir,
-     'url-directory=s' => \@url_dir_list,
-     'news=s@' => \@news_file,
+     'url-directory=s'    => \@url_dir_list,
+     'news=s'             => \@news_file,
 
      help => sub { usage 0 },
      version => sub { print "$ME version $VERSION\n"; exit },
@@ -252,7 +252,7 @@ sub print_changelog_deltas ($$)
 
   my %size;
 
-  foreach my $f (($tgz, $tbz, $xd))
+  foreach my $f ($tgz, $tbz, $xd)
     {
       my $cmd = "du --human $f";
       my $t = `$cmd`;
@@ -334,7 +334,8 @@ EOF
     or die "$ME: $tmp: while writing: $!\n";
   chmod 0400, $tmp;  # ignore failure
 
-  print_news_deltas ($_, $prev_version, $curr_version) foreach @news_file;
+  print_news_deltas ($_, $prev_version, $curr_version)
+    foreach @news_file;
 
   $release_type eq 'major'
     or print_changelog_deltas ($package_name, $prev_version);

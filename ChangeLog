@@ -1,3 +1,10 @@
+2003-09-30  Akim Demaille  <akim@epita.fr>
+
+	* config/announce-gen (&print_news_deltas): Extracted from...
+	(&print_changelog_deltas): here.
+	(&news_file): Rename as...
+	(@news_file): this.
+
 2003-09-30  Nicolas Joly  <njoly@pasteur.fr>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Remove files which might
