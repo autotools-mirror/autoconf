@@ -89,17 +89,22 @@ ac_configure_args="[$]*"
 changequote(,)dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets]
+--build=BUILD		configure for building on BUILD [BUILD=HOST]
 --disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
 --enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
 --exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
 --help			print this message
+--host=HOST		configure for HOST [guessed]
 --prefix=PREFIX		install host independent files in PREFIX [/usr/local]
 --quiet, --silent	do not print \`checking for...' messages
 --srcdir=DIR		find the sources in DIR [configure dir or ..]
+--target=TARGET		configure for TARGET [TARGET=HOST]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
 --with-PACKAGE[=ARG]	use PACKAGE [ARG=yes]
---without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)"
+--without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)
+--x-includes=DIR	X include files are in DIR
+--x-libraries=DIR	X library files are in DIR"
 changequote([,])dnl
 
 # Initialize some variables set by options.
@@ -117,6 +122,8 @@ ac_silent=
 site=
 srcdir=
 target=NONE
+x_includes=
+x_libraries=
 ac_verbose=
 
 ac_prev=
@@ -292,6 +299,20 @@ changequote([,])dnl
     eval "with_${ac_package}=no" ;;
 
   --x) with_x=1 ;; # Obsolete; use --with-x.
+
+  -x-includes | --x-includes | --x-include | --x-includ | --x-inclu \
+  | --x-incl | --x-inc | --x-in | --x-i)
+    ac_prev=x_includes ;;
+  -x-includes=* | --x-includes=* | --x-include=* | --x-includ=* | --x-inclu=* \
+  | --x-incl=* | --x-inc=* | --x-in=* | --x-i=*)
+    x_includes="$ac_optarg" ;;
+
+  -x-libraries | --x-libraries | --x-librarie | --x-librari \
+  | --x-librar | --x-libra | --x-libr | --x-lib | --x-li | --x-l)
+    ac_prev=x_libraries ;;
+  -x-libraries=* | --x-libraries=* | --x-librarie=* | --x-librari=* \
+  | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
+    x_libraries="$ac_optarg" ;;
 
   -*) AC_WARN([$ac_option: invalid option; use --help to show usage])
     ;;
