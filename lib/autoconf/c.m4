@@ -166,15 +166,25 @@ char $2 ();])], [$2 ();])])
 # <sys/types.h> which includes <sys/select.h> which contains a
 # prototype for select.  Similarly for bzero.
 #
-# This test used to assign f=$1 in main(), but that was optimized away by HP
-# unbundled cc A.05.36 for ia64 under +O3, presumably on the basis that
-# there's no need to do that store if the program is about to exit.
+# This test used to merely assign f=$1 in main(), but that was
+# optimized away by HP unbundled cc A.05.36 for ia64 under +O3,
+# presumably on the basis that there's no need to do that store if the
+# program is about to exit.  Conversely, the AIX linker optimizes an
+# unused external declaration that initializes f=$1.  So this test
+# program has both an external initialization of f, and a use of f in
+# main that affects the exit status.
 #
 m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 [AC_LANG_PROGRAM(
 [/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $1 (); below.  */
-#include <assert.h>
+    which can conflict with char $1 (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
@@ -194,7 +204,7 @@ char (*f) () = $1;
 #ifdef __cplusplus
 }
 #endif
-])])
+], [return f != $1;])])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
@@ -323,9 +333,15 @@ for ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in '' yes
 do
   # Use a header file that comes with gcc, so configuring glibc
   # with a fresh cross-compiler works.
+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+  # <limits.h> exists even on freestanding compilers.
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp. "Syntax error" is here to catch this case.
-  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <assert.h>
+  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@ifdef __STDC__
+@%:@ include <limits.h>
+@%:@else
+@%:@ include <assert.h>
+@%:@endif
                      Syntax error]])],
                      [],
                      [# Broken: fails on valid input.
