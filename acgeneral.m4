@@ -3253,6 +3253,28 @@ popdef([AC_Lib_Name])dnl
 ## ------------------------ ##
 
 
+# _AC_TRY_CPP
+# -----------
+# Run cpp and set ac_cpp_err to "yes" for an error, to
+# "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if neither
+# warnings nor errors have been detected.
+# eval is necessary to expand ac_cpp.  It may put trace lines to conftest.err
+# when run under sh -x (e.g. when zsh is used), so we filter them out.
+AC_DEFUN([_AC_TRY_CPP],
+[ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.err"
+if AC_TRY_EVAL(ac_try); then
+  if egrep -v '^( *\+|conftest.'"$ac_ext"'$)' conftest.err | grep . >/dev/null
+  then
+    ac_cpp_err=$ac_[]AC_LANG_ABBREV[]_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+])# _AC_TRY_CPP
+
+
 # AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------
 # Capture the stderr of cpp.  eval is necessary to expand ac_cpp.  We
@@ -3264,18 +3286,17 @@ popdef([AC_Lib_Name])dnl
 AC_DEFUN([AC_TRY_CPP],
 [AC_REQUIRE_CPP()dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-AC_TRY_EVAL(ac_try)
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.$ac_ext\$"`
-if test -z "$ac_err"; then
+_AC_TRY_CPP()
+if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
-  echo "$ac_err" >&AC_FD_LOG
+  cat conftest.err >&AC_FD_LOG
   echo "configure: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
   $3
 fi
-rm -f conftest*])
+rm -f conftest*
+])# AC_TRY_CPP
 
 
 # AC_EGREP_HEADER(PATTERN, HEADER-FILE,

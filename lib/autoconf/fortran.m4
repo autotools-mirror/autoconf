@@ -170,6 +170,7 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gcc
+define([AC_LANG_ABBREV], [c])dnl
 ])
 
 
@@ -193,6 +194,7 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gxx
+define([AC_LANG_ABBREV], [cxx])dnl
 ])
 
 
@@ -214,6 +216,7 @@ define([AC_LANG(Fortran 77)],
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_g77
+define([AC_LANG_ABBREV], [f77])dnl
 ])
 
 
@@ -546,38 +549,79 @@ AC_DIVERT_POP()dnl
 # -------------------- #
 
 
+# _AC_PROG_CPP_WORKS
+# ------------------
+# Check if $ac_cpp is a working preprocessor that can flag absent
+# includes either by the exit status or by warnings
+# Set ac_cpp_err to a non-empty value if the preprocessor failed
+# This macro is for all languages, not only C
+AC_DEFUN([_AC_PROG_CPP_WORKS],
+[AC_REQUIRE_CPP()dnl
+# Use a header file that comes with gcc, so configuring glibc
+# with a fresh cross-compiler works.
+# On the NeXT, cc -E runs the code through the compiler's parser,
+# not just through cpp. "Syntax error" is here to catch this case.
+AC_LANG_CONFTEST([AC_LANG_SOURCE([[#include <assert.h>
+Syntax error]])])
+ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=maybe
+_AC_TRY_CPP()
+# Now check whether non-existent headers can be detected and how
+# Skip if ac_cpp_err is not empty - ac_cpp is broken
+if test -z "$ac_cpp_err"; then
+  AC_LANG_CONFTEST([AC_LANG_SOURCE([[#include <ac_nonexistent.h>]])])
+  _AC_TRY_CPP()
+  if test -z "$ac_cpp_err"; then
+    # cannot detect missing includes at all
+    ac_cpp_err=yes
+  else
+    if test "x$ac_cpp_err" = xmaybe; then
+      ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=yes
+    else
+      ac_[]AC_LANG_ABBREV[]_preproc_warn_flag=
+    fi
+    ac_cpp_err=
+  fi
+fi
+rm -f conftest*
+])# _AC_PROG_CPP_WORKS
+
+
 # AC_PROG_CPP
 # -----------
+# Find a working C preprocessor
 AC_DEFUN([AC_PROG_CPP],
 [AC_MSG_CHECKING(how to run the C preprocessor)
+AC_LANG_PUSH(C)dnl
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
   CPP=
 fi
 if test -z "$CPP"; then
-AC_CACHE_VAL(ac_cv_prog_CPP,
-[  # This must be in double quotes, not single quotes, because CPP may get
-  # substituted into the Makefile and "${CC-cc}" will confuse make.
-  CPP="${CC-cc} -E"
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp.
-  # Use a header file that comes with gcc, so configuring glibc
-  # with a fresh cross-compiler works.
-  AC_TRY_CPP([#include <assert.h>
-Syntax Error], ,
-  CPP="${CC-cc} -E -traditional-cpp"
-  AC_TRY_CPP([#include <assert.h>
-Syntax Error], ,
-  CPP="${CC-cc} -nologo -E"
-  AC_TRY_CPP([#include <assert.h>
-Syntax Error], , CPP=/lib/cpp)))
-  ac_cv_prog_CPP=$CPP])dnl
+  AC_CACHE_VAL(ac_cv_prog_CPP,
+  [dnl
+    for ac_tmp_cpp in '${CC-cc} -E' '${CC-cc} -E -traditional-cpp' \
+                      '${CC-cc} -nologo -E' '/lib/cpp'
+    do
+      # CPP needs to be expanded
+      eval "CPP=\"$ac_tmp_cpp\""
+      _AC_PROG_CPP_WORKS()
+      if test -z "$ac_cpp_err"; then
+        break
+      fi
+    done
+    ac_cv_prog_CPP=$CPP
+  ])dnl
   CPP=$ac_cv_prog_CPP
 else
+  _AC_PROG_CPP_WORKS()
   ac_cv_prog_CPP=$CPP
 fi
 AC_MSG_RESULT($CPP)
+if test -n "$ac_cpp_err"; then
+  AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
+fi
 AC_SUBST(CPP)dnl
+AC_LANG_POP()dnl
 ])# AC_PROG_CPP
 
 
@@ -760,22 +804,36 @@ fi
 
 # AC_PROG_CXXCPP
 # --------------
+# Find a working C++ preprocessor
 AC_DEFUN([AC_PROG_CXXCPP],
 [AC_MSG_CHECKING(how to run the C++ preprocessor)
+AC_LANG_PUSH(C++)dnl
 if test -z "$CXXCPP"; then
-AC_CACHE_VAL(ac_cv_prog_CXXCPP,
-[AC_LANG_PUSH(C++)
-  CXXCPP="${CXX-g++} -E"
-  AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
+  AC_CACHE_VAL(ac_cv_prog_CXXCPP,
+  [dnl
+    for ac_tmp_cxxcpp in '${CXX-g++} -E' '/lib/cpp'
+    do
+      # CXXCPP needs to be expanded
+      eval "CXXCPP=\"$ac_tmp_cxxcpp\""
+      _AC_PROG_CPP_WORKS()
+      if test -z "$ac_cpp_err"; then
+        break
+      fi
+    done
+    ac_cv_prog_CXXCPP=$CXXCPP
+  ])dnl
+  CXXCPP=$ac_cv_prog_CXXCPP
+else
+  _AC_PROG_CPP_WORKS()
   ac_cv_prog_CXXCPP=$CXXCPP
-AC_LANG_POP()dnl
-])dnl
-CXXCPP=$ac_cv_prog_CXXCPP
 fi
 AC_MSG_RESULT($CXXCPP)
+if test -n "$ac_cpp_err"; then
+  AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
+fi
 AC_SUBST(CXXCPP)dnl
-])
-# AC_PROG_CXXCPP
+AC_LANG_POP()dnl
+])# AC_PROG_CXXCPP
 
 
 # AC_PROG_CXX([LIST-OF-COMPILERS])

@@ -1,3 +1,20 @@
+2000-09-12  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (_AC_TRY_CPP): New macro. It runs the preprocessor
+	and checks whether it produces errors or warnings. Don't put grep
+	output into a variable, use another grep instead.
+	(AC_TRY_CPP): Use _AC_TRY_CPP. Copy conftest.err to config.log
+	if the case of an error.
+	* aclang.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Fortran 77)):
+	define AC_LANG_ABBREV to the short language name.
+	(_AC_PROG_CPP_WORKS): New macro. It checks whether the current
+	preprocessor can be used to check for existance of headers.
+	Most code taken from ...
+	(AC_PROG_CPP): ... here. Use _AC_PROG_CPP_WORKS. Use shell
+	"for" to find working CPP. Use AC_LANG_PUSH(C) and AC_LANG_POP -
+	it's a macro for C only.
+	(AC_PROG_CXXCPP): Rewritten using _AC_PROG_CPP_WORKS.
+
 2000-09-12  Akim Demaille  <akim@epita.fr>
 
 	* autoupdate.sh (sed): Look for GNU sed.
