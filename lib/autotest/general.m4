@@ -122,8 +122,8 @@ fi
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.
-at_times=:
-(times) >/dev/null 2>&1 && at_times=times
+at_times_skip=:
+(times) >/dev/null 2>&1 && at_times_skip=false
 
 # CLI Arguments to pass to the debugging scripts.
 at_debug_args=
@@ -734,7 +734,7 @@ m4_define([AT_CLEANUP],
 [m4_append([AT_help],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
 )dnl
-    $at_times >$at_times_file
+    $at_times_skip || times >$at_times_file
     )
     at_status=$?
     ;;
