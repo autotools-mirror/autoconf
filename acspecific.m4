@@ -2226,12 +2226,11 @@ AC_DEFUN([AC_PATH_X],
 AC_MSG_CHECKING(for X)
 
 dnl Document the X abnormal options inherited from history.
-AC_EXPAND_ONCE([AC_DIVERT_PUSH([HELP_BEGIN])dnl
-
+AC_EXPAND_ONCE([AC_DIVERT([HELP_BEGIN],
+[
 X features:
   --x-includes=DIR    X include files are in DIR
-  --x-libraries=DIR   X library files are in DIR
-AC_DIVERT_POP()])dnl
+  --x-libraries=DIR   X library files are in DIR])])dnl
 
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
 # $have_x is `yes', `no', `disabled', or empty when we do not yet know.
@@ -2245,10 +2244,10 @@ else
   else
 AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
-ac_x_includes=NO ac_x_libraries=NO
+ac_x_includes=no ac_x_libraries=no
 _AC_PATH_X_XMKMF
 _AC_PATH_X_DIRECT
-if test "$ac_x_includes" = NO || test "$ac_x_libraries" = NO; then
+if test "$ac_x_includes" = no || test "$ac_x_libraries" = no; then
   # Didn't find X anywhere.  Cache the known absence of X.
   ac_cv_have_x="have_x=no"
 else
@@ -2294,7 +2293,7 @@ EOF
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
     for ac_extension in a so sl; do
       if test ! -f $ac_im_usrlibdir/libX11.$ac_extension &&
-        test -f $ac_im_libdir/libX11.$ac_extension; then
+         test -f $ac_im_libdir/libX11.$ac_extension; then
         ac_im_usrlibdir=$ac_im_libdir; break
       fi
     done
@@ -2321,7 +2320,44 @@ fi
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 AC_DEFUN([_AC_PATH_X_DIRECT],
-[if test "$ac_x_includes" = NO; then
+[# Standard set of common directories for X headers.
+# Check X11 before X11Rn because it is often a symlink to the current release.
+ac_x_header_dirs='
+/usr/X11/include
+/usr/X11R6/include
+/usr/X11R5/include
+/usr/X11R4/include
+
+/usr/include/X11
+/usr/include/X11R6
+/usr/include/X11R5
+/usr/include/X11R4
+
+/usr/local/X11/include
+/usr/local/X11R6/include
+/usr/local/X11R5/include
+/usr/local/X11R4/include
+
+/usr/local/include/X11
+/usr/local/include/X11R6
+/usr/local/include/X11R5
+/usr/local/include/X11R4
+
+/usr/X386/include
+/usr/x386/include
+/usr/XFree86/include/X11
+
+/usr/include
+/usr/local/include
+/usr/unsupported/include
+/usr/athena/include
+/usr/local/x11r5/include
+/usr/lpp/Xamples/include
+
+/usr/openwin/include
+/usr/openwin/share/include'
+
+if test "$ac_x_includes" = no; then
   # Guess where to find include files, by looking for this one X11 .h file.
   test -z "$ac_x_direct_test_include" &&
     ac_x_direct_test_include=X11/Intrinsic.h
@@ -2330,52 +2366,15 @@ AC_DEFUN([_AC_PATH_X_DIRECT],
 AC_TRY_CPP([#include <$ac_x_direct_test_include>],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
-[# Look for the header file in a standard set of common directories.
-# Check X11 before X11Rn because it is often a symlink to the current release.
-  for ac_dir in               \
-    /usr/X11/include          \
-    /usr/X11R6/include        \
-    /usr/X11R5/include        \
-    /usr/X11R4/include        \
-                              \
-    /usr/include/X11          \
-    /usr/include/X11R6        \
-    /usr/include/X11R5        \
-    /usr/include/X11R4        \
-                              \
-    /usr/local/X11/include    \
-    /usr/local/X11R6/include  \
-    /usr/local/X11R5/include  \
-    /usr/local/X11R4/include  \
-                              \
-    /usr/local/include/X11    \
-    /usr/local/include/X11R6  \
-    /usr/local/include/X11R5  \
-    /usr/local/include/X11R4  \
-                              \
-    /usr/X386/include         \
-    /usr/x386/include         \
-    /usr/XFree86/include/X11  \
-                              \
-    /usr/include              \
-    /usr/local/include        \
-    /usr/unsupported/include  \
-    /usr/athena/include       \
-    /usr/local/x11r5/include  \
-    /usr/lpp/Xamples/include  \
-                              \
-    /usr/openwin/include      \
-    /usr/openwin/share/include \
-    ; \
-  do
-    if test -r "$ac_dir/$ac_x_direct_test_include"; then
-      ac_x_includes=$ac_dir
-      break
-    fi
-  done])
-fi # $ac_x_includes = NO
+[for ac_dir in $ac_x_header_dirs; do
+  if test -r "$ac_dir/$ac_x_direct_test_include"; then
+    ac_x_includes=$ac_dir
+    break
+  fi
+done])
+fi # $ac_x_includes = no
 
-if test "$ac_x_libraries" = NO; then
+if test "$ac_x_libraries" = no; then
   # Check for the libraries.
 
   test -z "$ac_x_direct_test_library" && ac_x_direct_test_library=Xt
@@ -2390,46 +2389,9 @@ AC_TRY_LINK(, [${ac_x_direct_test_function}()],
 # We can link X programs with no special library path.
 ac_x_libraries=],
 [LIBS=$ac_save_LIBS
-# First see if replacing the include by lib works.
-# Check X11 before X11Rn because it is often a symlink to the current release.
-for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
-    /usr/X11/lib          \
-    /usr/X11R6/lib        \
-    /usr/X11R5/lib        \
-    /usr/X11R4/lib        \
-                          \
-    /usr/lib/X11          \
-    /usr/lib/X11R6        \
-    /usr/lib/X11R5        \
-    /usr/lib/X11R4        \
-                          \
-    /usr/local/X11/lib    \
-    /usr/local/X11R6/lib  \
-    /usr/local/X11R5/lib  \
-    /usr/local/X11R4/lib  \
-                          \
-    /usr/local/lib/X11    \
-    /usr/local/lib/X11R6  \
-    /usr/local/lib/X11R5  \
-    /usr/local/lib/X11R4  \
-                          \
-    /usr/X386/lib         \
-    /usr/x386/lib         \
-    /usr/XFree86/lib/X11  \
-                          \
-    /usr/lib              \
-    /usr/local/lib        \
-    /usr/unsupported/lib  \
-    /usr/athena/lib       \
-    /usr/local/x11r5/lib  \
-    /usr/lpp/Xamples/lib  \
-    /lib/usr/lib/X11	  \
-                          \
-    /usr/openwin/lib      \
-    /usr/openwin/share/lib \
-    ; \
+for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
-dnl Don't even attempt the hair of trying to link an X program!
+  # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${ac_x_direct_test_library}.$ac_extension; then
       ac_x_libraries=$ac_dir
@@ -2437,7 +2399,7 @@ dnl Don't even attempt the hair of trying to link an X program!
     fi
   done
 done])
-fi # $ac_x_libraries = NO
+fi # $ac_x_libraries = no
 ])# _AC_PATH_X_DIRECT
 
 
@@ -2462,7 +2424,7 @@ else
 dnl FIXME: banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space.  Words are not sufficient . . . .
-    case "`(uname -sr) 2>/dev/null`" in
+    case `(uname -sr) 2>/dev/null` in
     "SunOS 5"*)
       AC_MSG_CHECKING(whether -R must be followed by a space)
       ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"

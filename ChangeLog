@@ -1,3 +1,12 @@
+2000-06-07  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_PATH_X): Use AC_DIVERT.
+	Use `no', not `NO' for ac_x_includes and ac_x_libraries.
+	Adjust dependencies.
+	(_AC_PATH_X_DIRECT): Introduce ac_x_header_dirs to factor the list
+	of places where headers and libs might be.
+	(AC_PATH_XTRA): Don't quote the argument of `case'.
+
 2000-06-07  Jim Meyering  <meyering@lucent.com>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Put the expansion of
