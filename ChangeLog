@@ -1,5 +1,12 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	Fix Autoconf/FIXME.
+
+	* aclang.m4 (AC_PROG_F77): Follow strictly the same scheme as
+	AC_PROG_CC to compute the default FFLAGS.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	Either we cross-compile the whole package, or we don't.
 	Using --host enables cross-compilation.
 

@@ -707,23 +707,31 @@ AC_PROG_F77_GNU
 
 if test $ac_cv_prog_g77 = yes; then
   G77=yes
+else
+  G77=
+fi
+
 dnl Check whether -g works, even if FFLAGS is set, in case the package
 dnl plays around with FFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-  ac_test_FFLAGS=${FFLAGS+set}
-  ac_save_FFLAGS=$FFLAGS
-  FFLAGS=
-  AC_PROG_F77_G
-  if test "$ac_test_FFLAGS" = set; then
-    FFLAGS=$ac_save_FFLAGS
-  elif test $ac_cv_prog_f77_g = yes; then
+ac_test_FFLAGS=${FFLAGS+set}
+ac_save_FFLAGS=$FFLAGS
+FFLAGS=
+AC_PROG_F77_G
+if test "$ac_test_FFLAGS" = set; then
+  FFLAGS=$ac_save_FFLAGS
+elif test $ac_cv_prog_f77_g = yes; then
+  if test "$G77" = yes; then
     FFLAGS="-g -O2"
   else
-    FFLAGS="-O2"
+    FFLAGS="-g"
   fi
 else
-  G77=
-  test "${FFLAGS+set}" = set || FFLAGS="-g"
+  if test "$G77" = yes; then
+    FFLAGS="-O2"
+  else
+    FFLAGS=
+  fi
 fi
 ])# AC_PROG_F77
 
