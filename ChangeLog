@@ -1,3 +1,12 @@
+2003-07-06  Bill Clarke  <llib@computer.org>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_MMAP): Cast pointer to
+	'long', not 'int', for benefit of Sun's recent C++ compilers
+	(trivial change).  See:
+	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00007.html
+	(This really should be 'intptr_t', not 'long', but that would
+	take more work.)
+	
 2003-06-25  Akim Demaille  <akim@epita.fr>
 
 	* lib/Makefile.am (autom4te.cfg): Make it read only.
