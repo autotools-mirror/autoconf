@@ -45,9 +45,9 @@ infodir = $(prefix)/info
 SHELL = /bin/sh
 
 DISTFILES = README Makefile.in INSTALL NEWS COPYING ChangeLog \
-autoconf.texi autoconf.info standards.texi make-stds.texi standards.info \
-texinfo.tex acconfig.h autoconf.sh acgeneral.m4 acspecific.m4 \
-configure configure.in autoheader.sh mkinstalldirs install.sh
+autoconf.texi acconfig.h autoconf.sh acgeneral.m4 acspecific.m4 \
+configure configure.in autoheader.sh mkinstalldirs install.sh \
+autoconf.info standards.texi make-stds.texi standards.info texinfo.tex
 
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
 
