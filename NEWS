@@ -1,3 +1,9 @@
+Major changes in release 1.7:
+
+* New macro AC_OBSOLETE.
+* Bugs in Makefile.in fixed.
+* AC_LONG_FILE_NAMES improved.
+
 Major changes in release 1.6:
 
 * New macro AC_LONG_64_BITS.
