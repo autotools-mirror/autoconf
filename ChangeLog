@@ -1,3 +1,15 @@
+2000-07-18  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Fixed bug where the F77 compiler output was parsed differently
+	when detecting the verbose flag than when scanning for linker
+	options, and as a result the former test failed (under AIX/xlf).
+
+	* aclang.m4 (_AC_PROG_F77_V_OUTPUT): New macro to get the
+	output of linking an F77 program with a given verbose flag,
+	and preprocess it as required to scan for linker flags.
+	(_AC_PROG_F77_V): Use the above macro here...
+	(AC_F77_LIBRARY_LDFLAGS): ...and here, enforcing consistency.
+
 2000-07-17  Martin Wilck  <martin@tropos.de>
 
 	* autoupdate.sh (autoconf): s,$updated,$tmp/updated,.

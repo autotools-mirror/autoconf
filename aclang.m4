@@ -1302,6 +1302,51 @@ fi
 # 4d. Fortan 77 compiler characteristics.  #
 # ---------------------------------------- #
 
+
+# _AC_PROG_F77_V_OUTPUT([FLAG = $ac_cv_prog_f77_v])
+# -------------------------------------------------
+# Link a trivial Fortran program, compiling with a verbose output FLAG
+# (which default value, $ac_cv_prog_f77_v, is computed by
+# _AC_PROG_F77_V), and return the output in $ac_f77_v_output.  This
+# output is processed in the way expected by AC_F77_LIBRARY_LDFLAGS,
+# so that any link flags that are echoed by the compiler appear as
+# space-separated items.
+AC_DEFUN([_AC_PROG_F77_V_OUTPUT],
+[AC_REQUIRE([AC_PROG_F77])dnl
+AC_LANG_PUSH(Fortran 77)
+
+cat >conftest.$ac_ext <<EOF
+AC_LANG_PROGRAM()
+EOF
+
+# Compile and link our simple test program by passing a flag
+# (argument 1 to this macro) to the Fortran 77 compiler in
+# order to get "verbose" output that we can then parse for the
+# Fortran 77 linker flags.
+ac_save_FFLAGS=$FFLAGS
+FFLAGS="$FFLAGS m4_default([$1], [$ac_cv_prog_f77_v])"
+(eval echo configure:__oline__: \"$ac_link\") >&AC_FD_LOG
+ac_f77_v_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
+echo "$ac_f77_v_output" >&AC_FD_LOG
+FFLAGS=$ac_save_FFLAGS
+
+rm -f conftest.*
+AC_LANG_POP()dnl
+
+# If we are using xlf then replace all the commas with spaces.
+if echo $ac_f77_v_output | grep xlfentry >/dev/null 2>&1; then
+  ac_f77_v_output=`echo $ac_f77_v_output | sed 's/,/ /g'`
+fi
+
+# If we are using Cray Fortran then delete quotes.
+# Use "\"" instead of '"' for font-lock-mode.
+# FIXME: a more general fix for quoted arguments with spaces?
+if echo $ac_f77_v_output | grep cft90 >/dev/null 2>&1; then
+  ac_f77_v_output=`echo $ac_f77_v_output | sed "s/\"//g"`
+fi[]dnl
+])# _AC_PROG_F77_V_OUTPUT
+
+
 # _AC_PROG_F77_V
 # ---------------
 #
@@ -1309,38 +1354,32 @@ fi
 # information of library and object files (normally -v)
 # Needed for AC_F77_LIBRARY_FLAGS
 # Some compilers don't accept -v (Lahey: -verbose, xlf: -V)
-#
 AC_DEFUN([_AC_PROG_F77_V],
 [AC_REQUIRE([AC_PROG_F77])dnl
 AC_CACHE_CHECK([how to get verbose linking output from $F77],
-  ac_cv_prog_f77_v,
+               [ac_cv_prog_f77_v],
 [AC_LANG_PUSH(Fortran 77)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_v=
-ac_save_FFLAGS=$FFLAGS
 # Try some options frequently used verbose output
 for ac_verb in -v -verbose --verbose -V; do
-  FFLAGS="$ac_save_FFLAGS $ac_verb"
-  ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
+  _AC_PROG_F77_V_OUTPUT($ac_verb)
   # look for -l* and *.a constructs in the output
-  for ac_arg in $ac_link_output; do
+  for ac_arg in $ac_f77_v_output; do
      case $ac_arg in
         [[\\/]]*.a | ?:[[\\/]]*.a | -[[lLRu]]*)
-            ac_cv_prog_f77_v=$ac_verb
-            break 2
-           ;;
+          ac_cv_prog_f77_v=$ac_verb
+          break 2 ;;
      esac
   done
 done
-FFLAGS=$ac_save_FFLAGS
-if test "x$ac_cv_prog_f77_v" = "x"; then
+if test -z "$ac_cv_prog_f77_v"; then
    AC_MSG_WARN([cannot determine how to obtain linking information from $F77])
-fi ],
-[AC_MSG_WARN([compilation failed])
-ac_cv_prog_f77_v=
-]) # AC_COMPILE_IFELSE
+fi],
+                  [AC_MSG_WARN([compilation failed])])
 AC_LANG_POP()dnl
 ])]) # _AC_PROG_F77_V
+
 
 # AC_F77_LIBRARY_LDFLAGS
 # ----------------------
@@ -1377,42 +1416,15 @@ AC_CACHE_CHECK([for Fortran 77 libraries], ac_cv_flibs,
 [if test "x$FLIBS" != "x"; then
   ac_cv_flibs="$FLIBS" # Let the user override the test.
 else
-AC_LANG_PUSH(Fortran 77)
 
-cat >conftest.$ac_ext <<EOF
-AC_LANG_PROGRAM()
-EOF
-
-# Compile and link our simple test program by passing a flag
-# (determined by _AC_PROG_F77_V)
-# to the Fortran 77 compiler in order to get "verbose" output that
-# we can then parse for the Fortran 77 linker flags.
-ac_save_FFLAGS=$FFLAGS
-FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
-FFLAGS=$ac_save_FFLAGS
-
-rm -f conftest.*
-AC_LANG_POP()dnl
-
-# If we are using xlf then replace all the commas with spaces.
-if echo $ac_link_output | grep xlfentry >/dev/null 2>&1; then
-  ac_link_output=`echo $ac_link_output | sed 's/,/ /g'`
-fi
-
-# If we are using Cray Fortran then delete quotes.
-# Use "\"" instead of '"' for font-lock-mode.
-# FIXME: a more general fix for quoted arguments with spaces?
-if echo $ac_link_output | grep cft90 >/dev/null 2>&1; then
-  ac_link_output=`echo $ac_link_output | sed "s/\"//g"`
-fi
+_AC_PROG_F77_V_OUTPUT
 
 ac_cv_flibs=
 
 # Save positional arguments (if any)
 ac_save_positional="$[@]"
 
-set X $ac_link_output
+set X $ac_f77_v_output
 while test $[@%:@] != 1; do
   shift
   ac_arg=$[1]
@@ -1466,7 +1478,7 @@ set X $ac_save_positional; shift
 # must begin with a "/").
 case `(uname -sr) 2>/dev/null` in
    "SunOS 5"*)
-      ac_ld_run_path=`echo $ac_link_output |
+      ac_ld_run_path=`echo $ac_f77_v_output |
                         sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
       test "x$ac_ld_run_path" != x &&
         AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
