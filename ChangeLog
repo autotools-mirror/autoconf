@@ -1,5 +1,11 @@
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoscan.in (%c_keywords): Build it at top level.
+	Map to 1 in order to simplify its uses.
+
+	
+2001-11-26  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (&scan_c_file, &scan_sh_file, &scan_makefile):
 	Remove $filepath, useless.
 	(&scan_makefile): Don't remove the $(FOO), ${FOO} and @FOO@

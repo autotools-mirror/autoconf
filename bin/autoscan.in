@@ -35,7 +35,13 @@ use File::Basename;
 use File::Find;
 use strict;
 
-use vars qw(@cfiles @makefiles @shfiles %c_keywords %printed);
+use vars qw(@cfiles @makefiles @shfiles %printed);
+
+# The list of C keywords.
+my %c_keywords = map { $_ => 1}
+  qw (int char float double struct union long short unsigned
+      auto extern register typedef static goto return sizeof break
+      continue if else for do while switch case default);
 
 # $USED{KIND}{ITEM} is set if ITEM is used in the program.
 # It is set to its list of locations.
@@ -137,13 +143,6 @@ sub init_tables ()
   # Taken from K&R 1st edition p. 180.
   # ANSI C, GNU C, and C++ keywords can introduce portability problems,
   # so don't ignore them.
-
-  foreach (qw (int char float double struct union long short unsigned
-	       auto extern register typedef static goto return sizeof break
-	       continue if else for do while switch case default))
-    {
-      $c_keywords{$_} = 0;
-    }
 
   # The data file format supports only one line of macros per function.
   # If more than that is required for a common portability problem,
@@ -260,12 +259,12 @@ sub scan_c_file ($)
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
 	  used ('functions', $1)
-	    if !defined $c_keywords{$1};
+	    if !$c_keywords{$1};
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
 	  used ('identifiers', $1)
-	    if !defined $c_keywords{$1};
+	    if !$c_keywords{$1};
 	}
     }
 
