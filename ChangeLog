@@ -1,3 +1,9 @@
+2004-01-13  Paul Hilfinger  <hilfinger@CS.Berkeley.EDU>
+
+	* lib/autoconf/autoupdate.m4 (AU_DEFUN): Grammar fix in comment.
+	* bin/autoheader.in: Grammar fix in message.
+	(trivial changes)
+	
 2004-01-13  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Obsolete Macros): In AC_TRY_COMPILE and

@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with autoupdate.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2003
-# Free Software Foundation, Inc.
+
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+# 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,7 +70,7 @@
 #
 # Also define NAME as a macro which code is NEW-CODE.
 #
-# This allows to share the same code for both supporting obsoleted macros,
+# This allows sharing the same code for both supporting obsoleted macros,
 # and to update a configure.ac.
 # See `acobsolete.m4' for a longer description.
 m4_define([AU_DEFUN],

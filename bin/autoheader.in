@@ -6,8 +6,9 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autoheader -- create `config.h.in' from `configure.ac'
-# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001, 2002, 2003
-# Free Software Foundation, Inc.
+
+# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001, 2002,
+# 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -142,7 +143,7 @@ if ($config_h_top || $config_h_bot || $acconfig_h)
     is deprecated and discouraged.
 
     Using the third argument of \`AC_DEFINE\' and
-    \`AC_DEFINE_UNQUOTED\' allows to define a template without
+    \`AC_DEFINE_UNQUOTED\' allows one to define a template without
     \`acconfig.h\':
 
       AC_DEFINE([NEED_FUNC_MAIN], 1,
