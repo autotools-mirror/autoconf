@@ -252,8 +252,7 @@ Checking Run Time Behavior
 
 Portable Shell Programming
 
-* Special Shell Variables::
-* Testing Values and Files::    Checking strings and files
+* Special Shell Variables::     Variables you should not change
 * Shell Substitutions::         Test and assign
 * Limitations of Usual Tools::  Portable use of portable tools
 * Exiting from Shell Scripts::  How to exit from an autoconf shell script
@@ -4528,13 +4527,12 @@ well; for example, don't rely on @code{ln} having a @samp{-f} option or
 
 @menu
 * Special Shell Variables::     Variables you should not change
-* Testing Values and Files::    Checking strings and files
 * Shell Substitutions::         Test and assign
 * Limitations of Usual Tools::  Portable use of portable tools
 * Exiting from Shell Scripts::  How to exit from an autoconf shell script
 @end menu
 
-@node Special Shell Variables, Testing Values and Files, Portable Shell, Portable Shell
+@node Special Shell Variables, Shell Substitutions, Portable Shell, Portable Shell
 @subsection Special Shell Variables
 
 Some shell variables shall not be used.  Since currently Autoconf does
@@ -4554,17 +4552,26 @@ Setting @code{CDPATH} to the empty value is not enough for most shells.
 A simple colon is enough but for @code{zsh}, which prefers a leading dot:
 
 @example
-~ % mkdir foo && CDPATH=: cd foo
-~/foo
-~ % CDPATH=:. cd foo
-~/foo
-~ % CDPATH=.: cd foo
-~ %
+zsh-3.1.6 % mkdir foo && (CDPATH=: cd foo)
+/tmp/foo
+zsh-3.1.6 % (CDPATH=:. cd foo)
+/tmp/foo
+zsh-3.1.6 % (CDPATH=.: cd foo)
+zsh-3.1.6 %
 @end example
 
 @noindent
 (of course we could just @code{unset} @code{CDPATH}, it also behaves
 properly if set to the empty string).
+
+Life wouldn't be so much fun if @command{bash} abd @command{zsh} had the
+same behavior:
+
+@example
+bash-2.02 % (CDPATH=:. cd foo)
+bash-2.02 % (CDPATH=.: cd foo)
+/tmp/foo
+@end example
 
 Therefore a portable solution to neutralize @samp{CDPATH} is
 @samp{CDPATH=$@{ZSH_VERSION+.@}:}.
@@ -4579,7 +4586,7 @@ Therefore a portable solution to neutralize @samp{CDPATH} is
 @evindex LC_CTYPE
 
 These must not be set unconditionally because not all systems understand
-e.g. @strong{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
+e.g. @samp{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
 Solaris @command{sh} from translating var values in @code{set}!  Non-C
 @code{LC_CTYPE} values break the ctype check.  Therefore, run:
 
@@ -4597,35 +4604,7 @@ hence read-only.  Do not use it.
 @end table
 
 
-@node Testing Values and Files, Shell Substitutions, Special Shell Variables, Portable Shell
-@subsection Testing Values and Files
-
-@code{configure} scripts need to test properties of many files and
-strings.  Here are some portability problems to watch out for when doing
-those tests.
-
-The @code{test} program is the way to perform many file and string
-tests.  It is often invoked by the alternate name @samp{[}, but using
-that name in Autoconf code is asking for trouble since it is an
-@code{m4} quote character.
-
-If you need to make multiple checks using @code{test}, combine them with
-the shell operators @samp{&&} and @samp{||} instead of using the
-@code{test} operators @samp{-a} and @samp{-o}.  On System V, the
-precedence of @samp{-a} and @samp{-o} is wrong relative to the unary
-operators; consequently, @sc{posix} does not specify them, so using them
-is nonportable.  If you combine @samp{&&} and @samp{||} in the same
-statement, keep in mind that they have equal precedence.
-
-@c FIXME: Hm, I'd say the `target' here should be `build'.
-To enable @code{configure} scripts to support cross-compilation, they
-shouldn't do anything that tests features of the host system instead of
-the target system.  But occasionally you may find it necessary to check
-whether some arbitrary file exists.  To do so, use @samp{test -f} or
-@samp{test -r}.  Do not use @samp{test -x}, because 4.3@sc{bsd} does not
-have it.
-
-@node Shell Substitutions, Limitations of Usual Tools, Testing Values and Files, Portable Shell
+@node Shell Substitutions, Limitations of Usual Tools, Special Shell Variables, Portable Shell
 @subsection Shell Substitutions
 
 A nonportable shell programming construct is
@@ -4655,6 +4634,35 @@ If the value is a literal string, it should be quoted:
 otherwise some shells, such as on Digital Unix V 5.0, will die because
 of a @emph{bad substitution}.
 
+Contrary to a persistent urban legend, the Bourne shell does not
+systematically split variables and backquoted expressions, in
+particular, the following code:
+
+@example
+case "$given_srcdir" in
+.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`"
+*)  top_srcdir="$dots$given_srcdir" ;;
+esac
+@end example
+
+@noindent
+is more readable with the right-hand side of the assignments, and the
+argument of @code{case} left without quotes:
+
+@example
+case $given_srcdir in
+.)  top_srcdir=`echo "$dots" | sed 's,/$,,'`
+*)  top_srcdir=$dots$given_srcdir ;;
+esac
+@end example
+
+@noindent
+and in fact it is even @emph{more} portable: in the first case of the
+first attempt, the computation of @code{top_srcdir} is not portable,
+since not all the shells understand properly @samp{"`... "foo"... `"}.
+Worse yet, not all the shells understand @samp{"`... \"foo\"... `"} the
+same way: there is just no portable way to use double-quoted strings
+inside double-quoted backquoted expressions (Pfew!).
 
 @node Limitations of Usual Tools, Exiting from Shell Scripts, Shell Substitutions, Portable Shell
 @subsection Limitations of Usual Tools
@@ -4662,22 +4670,26 @@ of a @emph{bad substitution}.
 The small set of tools you can expect to find on any machine can still
 find some limitations you should be aware of.
 
-@table @code
-@item egrep
+@table @asis
+@item @command{egrep}
+@cindex @command{egrep}
 The empty alternative is not portable, use @samp{?} instead. For
 instance with Digital Unix v5.0:
 
 @example
-> printf "foo\n|foo" | egrep '^(|foo|bar)$'
+> printf "foo\n|foo\n" | egrep '^(|foo|bar)$'
 |foo
-> printf "bar\nbar|" | egrep '^(foo|bar|)$'
+> printf "bar\nbar|\n" | egrep '^(foo|bar|)$'
 bar|
-> printf "foo\nfoo|\n|bar\nbar" | egrep '^(foo||bar)$'
+> printf "foo\nfoo|\n|bar\nbar\n" | egrep '^(foo||bar)$'
 foo
 |bar
 @end example
 
-@item grep
+@command{egrep} also suffers the limitations of @command{grep}.
+
+@item @command{grep}
+@cindex @command{grep}
 Don't use @samp{grep -s} to suppress output, because @samp{grep -s} on
 System V does not suppress output, only error messages.  Instead,
 redirect the standard output and standard error (in case the file
@@ -4689,14 +4701,87 @@ honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
 Stardent Vistra SVR4 @code{grep} lacks @samp{-e}...  Instead, use
 alternation and @code{egrep}.
 
-@item sed
+@item @command{sed}
+@cindex @command{sed}
 @code{sed} scripts should not use branch labels longer than 8 characters
 and should not contain comments.
 
 @code{sed} input should have reasonably long lines, since some
 @code{sed} have an input buffer limited to 4000 bytes.
 
-Alternation, @samp{\|}, is not portable.
+Alternation, @samp{\|}, is common but not portable.
+
+@item @command{test}
+@cindex @command{test}
+The @code{test} program is the way to perform many file and string
+tests.  It is often invoked by the alternate name @samp{[}, but using
+that name in Autoconf code is asking for trouble since it is an
+@code{m4} quote character.
+
+If you need to make multiple checks using @code{test}, combine them with
+the shell operators @samp{&&} and @samp{||} instead of using the
+@code{test} operators @samp{-a} and @samp{-o}.  On System V, the
+precedence of @samp{-a} and @samp{-o} is wrong relative to the unary
+operators; consequently, @sc{posix} does not specify them, so using them
+is nonportable.  If you combine @samp{&&} and @samp{||} in the same
+statement, keep in mind that they have equal precedence.
+
+@item @command{test} (files)
+@c FIXME: Hm, I'd say the sentence should be
+@c  To enable @code{configure} scripts to support cross-compilation, they
+@c  shouldn't do anything that tests features of the build system instead of
+@c  the host system.
+To enable @code{configure} scripts to support cross-compilation, they
+shouldn't do anything that tests features of the host system instead of
+the target system.  But occasionally you may find it necessary to check
+whether some arbitrary file exists.  To do so, use @samp{test -f} or
+@samp{test -r}.  Do not use @samp{test -x}, because @sc{4.3bsd} does not
+have it.
+
+@item @command{test} (strings)
+Avoid @samp{test "@var{string}"}, in particular if @var{string} might
+start with a dash, since @code{test} might interpret its argument as an
+option (e.g., @samp{@var{string} = "-n"}).
+
+Contrary to a common belief, @samp{test -n @var{string}} and @samp{test
+-z @var{string}} @strong{are} portable, nevertheless many shells (e.g.,
+FIXME: AIX IIRC) have bizarre precedence and may be confused if
+@var{string} looks like an operator:
+
+@example
+@c FIXME: Hm, IIRC:
+$ test -n "="
+error: missing argument
+@end example
+
+If there are risks, use @samp{test "x@var{string}" = x} or @samp{test
+"x@var{string}" != x} instead.
+
+It is frequent to find variations of the following idiom:
+
+@example
+test -n "`echo $ac_feature | sed 's/[-a-zA-Z0-9_]//g'`" &&
+  @var{action}
+@end example
+
+@noindent
+to take an action when a token matches a given pattern.  Such constructs
+are always avoidable, and should always be.  Rather, use:
+
+@example
+echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1 &&
+  @var{action}
+@end example
+
+@noindent
+Where possible, use @code{case} since, being a shell builtin, it is
+faster:
+
+@example
+case $ac_feature in
+  *[^-a-zA-Z0-9_]*) @var{action};;
+esac
+@end example
 @end table
 
 
