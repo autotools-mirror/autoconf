@@ -3608,24 +3608,13 @@ cat >$CONFIG_STATUS <<_ACEOF
 
 debug=false
 SHELL=\${CONFIG_SHELL-$SHELL}
+ac_cs_invocation="\$[0] \$[@]"
 
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
 AS_SHELL_SANITIZE
 _AC_INIT_DEFAULTS_FDS
-cat >&AS_MESSAGE_LOG_FD << EOF
-
-## ----------------------- ##
-## Running config.status.  ##
-## ----------------------- ##
-
-This file was extended by $as_me m4_ifset([AC_PACKAGE_STRING],
-                            [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
- > $[0] $[@]
-on `(hostname || uname -n) 2>/dev/null | sed 1q`
-
-EOF
 
 _ACEOF
 
@@ -3777,6 +3766,19 @@ Try `$[0] --help' for more information.]) ;;
   shift
 done
 
+exec AS_MESSAGE_LOG_FD>>config.log
+cat >&AS_MESSAGE_LOG_FD << _ACEOF
+
+## ----------------------- ##
+## Running config.status.  ##
+## ----------------------- ##
+
+This file was extended by $as_me m4_ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
+  > $ac_cs_invocation
+on `(hostname || uname -n) 2>/dev/null | sed 1q`
+
+_ACEOF
 EOF
 
 dnl Issue this section only if there were actually config files.
