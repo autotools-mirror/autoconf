@@ -1168,10 +1168,19 @@ else
 fi
 ])
 
-dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR)
+dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_TOOL,
 [AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
-AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, $2)
+AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, 
+	      ifelse([$3], , [$2], ))
+ifelse([$3], , , [
+if test -z "$ac_cv_prog_$1"; then
+if test -n "$ac_tool_prefix"; then
+  AC_CHECK_PROG($1, $2, $2, $3)
+else
+  $1="$3"
+fi
+fi])
 ])
 
 dnl Guess the value for the `prefix' variable by looking for
