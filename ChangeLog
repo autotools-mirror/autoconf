@@ -1,5 +1,9 @@
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
+	* tests/mktests.sh: Remove tmp files.
+
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
 	Macros used by AC_LANG_COMPILER macros shall not AC_REQUIRE
 	AC_LANG_COMPILER by the way of AC_COMPILE_IFELSE etc.
 

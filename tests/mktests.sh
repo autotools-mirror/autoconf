@@ -168,5 +168,5 @@ cat $src |
 
 mv update.tm4 update.m4
 
-# rm -f acdefuns audefuns requires
+rm -f acdefuns audefuns requires
 exit 0
