@@ -193,6 +193,11 @@
 
 	* standards.texi: Update from FSF.
 
+1999-02-10  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* autoheader.m4: Do not complain about using AC_TRY_RUN without a
+	cross-compilation action--only autoconf should do this.
+	
 1999-02-10  Tom Tromey  <tromey@cygnus.com>
 
 	* acgeneral.m4 (AC_CACHE_LOAD): Avoid sourcing special files.
