@@ -122,6 +122,7 @@ dnl lines, so grepping -v warning is not enough.
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([./configure], 0, ignore, ignore)
+test -n "$at_verbose" && echo "--- config.log" && cat config.log
 AT_CHECK([cat env-after], 0, expout)
 $3
 AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
