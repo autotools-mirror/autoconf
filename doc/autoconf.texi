@@ -5548,6 +5548,14 @@ Note that since @command{zsh} supports @command{unset}, you may unset
 @samp{CDPATH} using @samp{:} as a fallback, see
 @ref{Limitations of Builtins}.
 
+@item IFS
+@evindex IFS
+Don't set the first character of @code{IFS} to backslash.  Indeed,
+Bourne shells use the first character (backslash) when joining the
+components in @samp{"$@"} and some shells then re-interpret (!) the
+backslash escapes, so you can end up with backspace and other strange
+characters.
+
 @item LANG
 @itemx LC_ALL
 @itemx LC_TIME

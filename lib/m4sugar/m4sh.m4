@@ -352,13 +352,17 @@ $as_ln_s $1 $2
 # AS_MKDIR_P(PATH)
 # ----------------
 # Emulate `mkdir -p' with plain `mkdir'.
+#
+# Don't set IFS to '\\/' (see the doc): you would end up with
+# directories called foo\bar and foo?az and others depending upon the
+# shell.
 m4_define([AS_MKDIR_P],
 [{ case $1 in
   [[\\/]]* | ?:[[\\/]]* ) as_incr_dir=;;
   *)                      as_incr_dir=.;;
 esac
 as_dummy=$1
-for as_mkdir_dir in `IFS='\\/'; set X $as_dummy; shift; echo "$[@]"`; do
+for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$[@]"`; do
   case $as_mkdir_dir in
     # Skip DOS drivespec
     ?:) as_incr_dir=$as_mkdir_dir ;;
@@ -383,9 +387,9 @@ cat >conftest.file <<_ASEOF
 exit 0
 _ASEOF
 chmod +x conftest.file
-if test -x conftest.file; then
+if test -x conftest.file >/dev/null 2>&1; then
   as_executable_p="test -x"
-elif test -f conftest.file; then
+elif test -f conftest.file >/dev/null 2>&1; then
   as_executable_p="test -f"
 else
   AS_ERROR([cannot check whether a file is executable on this system])

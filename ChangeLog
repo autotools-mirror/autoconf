@@ -1,3 +1,12 @@
+2001-01-29  Assar Westerlund  <assar@sics.se>
+
+	* m4sh.m4 (_AS_TEST_PREPARE): Discard output when testing `test
+	-x' and `test -f' to avoid confusing users with error messages.
+	(AS_MKDIR_P): Invert order of separators in IFS to avoid problem
+	with some shells adding backslash between fields and parsing the
+	result for escapes.
+	* doc/autoconf.texi (Special Shell Variables): Document IFS.
+
 2001-01-29  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_PROG_F77): Improve documentation of the compilers
