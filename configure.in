@@ -21,7 +21,7 @@ dnl `autoconf' and `ifnames' use AWK.
 AC_PROG_AWK
 
 dnl Generating man pages.
-AM_MISSING_PROG(HELP2MAN, help2man)
+AM_MISSING_PROG(HELP2MAN, help2man, [\${SHELL} \${top_srcdir}])
 
 dnl We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)

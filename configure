@@ -956,7 +956,7 @@ if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
    echo "$ac_t""found" 1>&6
 else
-   HELP2MAN="/missing help2man"
+   HELP2MAN="\${SHELL} \${top_srcdir}/missing help2man"
    echo "$ac_t""missing" 1>&6
 fi
 

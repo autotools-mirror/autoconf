@@ -1,3 +1,8 @@
+2000-02-22  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* configure.in (HELP2MAN): Specify the third argument of
+	AM_MISSING_PROG.  Fixes autoconf/116.
+
 2000-02-21  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.m4 (syntax.sh): The logic of the previous patch was
