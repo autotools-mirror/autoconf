@@ -1,5 +1,12 @@
 2000-11-07  Akim Demaille  <akim@epita.fr>
 
+	m4_syscmd was reestablished as `syscd' intead of `syscmd' because
+	instead of `s/^m4_//', m4_copy_unm4 was running `s/[m4_]//'.
+
+	* m4sugar.m4 (m4_copy_unm4): Fix.
+
+2000-11-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CHECKING): Is not an alias of AC_MSG_NOTICE,
 	hence use AU_DEFUN, not AU_ALIAS.
 

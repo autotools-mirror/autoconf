@@ -103,7 +103,7 @@ m4_define([m4_rename_m4],
 # ---------------------------
 # Copy m4_MACRO-NAME as MACRO-NAME.
 m4_define([m4_copy_unm4],
-[m4_copy([$1], m4_patsubst([[$1]], [[m4_]]))])
+[m4_copy([$1], m4_patsubst([$1], [^m4_\(.*\)], [[\1]]))])
 
 
 # Some m4 internals have names colliding with tokens we might use.
