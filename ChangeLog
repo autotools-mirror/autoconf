@@ -1,3 +1,16 @@
+2000-05-26 Mark Elbrecht <snowball3@bigfoot.com>
+
+	Currently, AC_PROG_LN_S incorrectly reports yes with DJGPP. This
+	is because the DJGPP `ln' emulates soft links for executables by
+	generating a stub that in turn calls the real program.  This
+	feature also works with nonexistent files like in the Unix
+	spec. So `ln -s X conftestdata' will generate `conftestdata.exe'
+	which will attempt to call 'X.exe'. But this feature only works
+	for executables.  Fix it.
+
+	* acspecific.m4 (AC_PROG_LN_S): Create a sample file and use it to
+	test `ln -s'.
+
 2000-05-26  Ossama Othman <ossama@ece.uci.edu>
 
 	* aclang.m4 (AC_PROG_CXX): Look for aCC before CC.

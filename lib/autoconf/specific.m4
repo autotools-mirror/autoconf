@@ -272,9 +272,9 @@ AC_SUBST(INSTALL_DATA)dnl
 AC_DEFUN([AC_PROG_LN_S],
 [AC_MSG_CHECKING(whether ln -s works)
 AC_CACHE_VAL(ac_cv_prog_LN_S,
-[rm -f conftestdata
-if ln -s X conftestdata 2>/dev/null; then
-  rm -f conftestdata
+[rm -f conftest.sym conftest.file
+echo >conftest.file
+if ln -s conftest.file conftest.sym 2>/dev/null; then
   ac_cv_prog_LN_S="ln -s"
 else
   ac_cv_prog_LN_S=ln
