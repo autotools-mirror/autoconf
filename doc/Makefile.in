@@ -86,7 +86,7 @@ INFO_DEPS = autoconf.info standards.info
 DVIS = autoconf.dvi standards.dvi
 TEXINFOS = autoconf.texi standards.texi
 DIST_COMMON =  $(autoconf_TEXINFOS) $(standards_TEXINFOS) Makefile.am \
-Makefile.in stamp-vti texinfo.tex version.texi
+Makefile.in stamp-vti version.texi
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)

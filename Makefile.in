@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4-p3 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -115,7 +115,7 @@ alpha_host = alpha.gnu.org
 alpha_url_dir = gnu/autoconf
 
 # Files to update automatically.
-wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub 	     $(srcdir)/doc/texinfo.tex 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
+wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub 	     $(srcdir)/config/texinfo.tex 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
 
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -144,7 +144,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+config.status: $(srcdir)/configure.in $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
 $(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)

@@ -218,5 +218,5 @@ alpha_url_dir = gnu/autoconf
 
 # Files to update automatically.
 wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
-	     $(srcdir)/doc/texinfo.tex \
+	     $(srcdir)/config/texinfo.tex \
 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi

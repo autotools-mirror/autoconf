@@ -28,7 +28,7 @@ standards_TEXINFOS = make-stds.texi
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
 CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas \
-             autoconf.ov autoconf.ovs autoconf.tmp
+             autoconf.ov autoconf.ovs autoconf.ms autoconf.mss autoconf.tmp
 
 # The documentation
 
