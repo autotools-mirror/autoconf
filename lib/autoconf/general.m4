@@ -320,11 +320,11 @@ changequote([,])dnl
 
   *) 
 changequote(,)dnl
-    if test -n "`echo $ac_option| sed 's/[-a-z0-9]//g'`"; then
+    if test -n "`echo $ac_option| sed 's/[-a-z0-9.]//g'`"; then
 changequote([,])dnl
       AC_WARN($ac_option: invalid host type)
     fi
-    if test "x$nonopt" -ne xNONE; then
+    if test "x$nonopt" != xNONE; then
       AC_ERROR(can only configure for one host and one target at a time)
     fi
     nonopt="$ac_option"
@@ -875,20 +875,20 @@ done
 dnl
 define(AC_HAVE_LIBRARY, [dnl
 changequote(/,/)dnl
-define(/libname/, dnl
+define(/AC_LIB_NAME/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 changequote([,])dnl
 ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l[]libname[]"
+LIBS="${LIBS} -l[]AC_LIB_NAME[]"
 ac_have_lib=""
-AC_COMPILE_CHECK([-l[]libname[]], , [main();], [ac_have_lib="1"])dnl
+AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();], [ac_have_lib="1"])dnl
 LIBS="${ac_save_LIBS}"
 ifelse($#, 1, [dnl
 if test -n "${ac_have_lib}"; then
-   AC_DEFINE([HAVE_LIB]translit(libname, [a-z], [A-Z]))
-   LIBS="${LIBS} -l[]libname[]"
+   AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
+   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
 fi
-undefine(libname)dnl
+undefine(AC_LIB_NAME)dnl
 ], [dnl
 if test -n "${ac_have_lib}"; then
    :; $2
