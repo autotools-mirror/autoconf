@@ -105,7 +105,7 @@ AT_CLEANUP()dnl
 # TOP_SRCDIR is needed to set the auxdir (some macros need
 # `install-sh', `config.guess' etc.).
 m4_define([AT_CHECK_UPDATE],
-[AT_SETUP([the autoupdating of $1])
+[AT_SETUP([autoupdating $1])
 
 _AT_CHECK_AC_MACRO([$1],
 [AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
