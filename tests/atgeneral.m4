@@ -171,7 +171,7 @@ fi
 # over files, the full test suite cleans up both before and after test groups.
 # Snippet )4
 
-if test -n "`$1 --version | sed -n s/$at_package.*$at_version/OK/p`"; then
+if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
   at_banner="Testing suite for $at_package, version $at_version"
   at_dashes=`echo $at_banner | sed s/./=/g`
   echo "$at_dashes"
@@ -213,9 +213,9 @@ else
       test -z "$at_silent" && echo 'at_verbose=:'
       sed -n "/^[#] Snippet (4/,/^[#] Snippet )4/p" $[0]
       sed -n "/^[#] Snippet (c$at_group(/,/^[#] Snippet )c$at_group)/p" $[0]
-      at_desc="`sed -n \
+      at_desc=`sed -n \
         '/^[#] Snippet (d'$at_group'(/,/^[#] Snippet )d'$at_group')/p' $[0] \
-        | sed -n '2s/^[#] //p'`"
+        | sed -n '2s/^[#] //p'`
       echo 'if $at_verbose; then'
       echo '  at_banner="$[0]: '$at_desc'"'
       echo '  at_dashes=`echo $at_banner | sed s/./=/g`'
