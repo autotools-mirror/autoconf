@@ -1,3 +1,20 @@
+2002-07-17  Mark D. Roth  <roth@feep.net>
+ 
+	* configure.ac: Add --enable-site-macro-dir option.
+	* bin/Makefile.am: Expand @SITE_MACRO_DIR@.
+	* bin/autom4te.in: Add --prepend-include, --include-envvar, and
+	--site-macro-subdir options.
+	* bin/autoconf.in: Add --prepend-include option.
+	* bin/autoheader.in: Add --prepend-include option.
+	* bin/autoreconf.in: Add --prepend-include option.
+	* bin/autoscan.in: Add --prepend-include option.
+	* bin/autoupdate.in: Add --prepend-include option.
+	* doc/autoconf.texi: Document use of $AC_MACRO_PATH and site
+	macro directory, remove note that include path directories are
+	used in reverse order, and document --prepend-include option.
+	* lib/autom4te.in: Use --prepend-include instead of --include.
+	* tests/wrapsh.in: Use --prepend-include instead of --include.
+
 2002-07-17  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): `_' is allowed in

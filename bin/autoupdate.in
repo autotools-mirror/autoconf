@@ -39,6 +39,7 @@ use strict;
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 my $autoconf = "$autom4te --language=autoconf";
 # We need to find m4sugar.
+my @prepend_include;
 my @include = ('@datadir@');
 my $force = 0;
 # m4.
@@ -58,7 +59,8 @@ Operation modes:
   -V, --version        print version number, then exit
   -v, --verbose        verbosely report processing
   -d, --debug          don't remove temporary files
-  -I, --include=DIR    look for input files in DIR (cumulative)
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
   -f, --force          consider all files obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
@@ -87,6 +89,7 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+	  'B|prepend-include=s' => \@prepend_include,
 	  'f|force' => \$force);
 
   if (! @ARGV)
@@ -226,6 +229,7 @@ $autoconf .= " --debug" if $debug;
 $autoconf .= " --force" if $force;
 $autoconf .= " --verbose" if $verbose;
 $autoconf .= join (' --include=', '', @include);
+$autoconf .= join (' --prepend-include=', '', @prepend_include);
 
 mktmpdir ('au');
 handle_m4_macros;
@@ -382,9 +386,9 @@ EOF
        or die "$me: cannot close $tmp/input.m4: $!\n";
 
     # Now ask m4 to perform the update.
-    # M4 and I don't agree on the associativity of `--include': reverse!
-    xsystem ("$m4"
-	     . join (' --include=', '', reverse (@include, $tmp))
+    xsystem ("$m4 --include=$tmp"
+	     . join (' --include=', '', reverse (@prepend_include))
+	     . join (' --include=', '', @include)
 	     . " $tmp/input.m4 >$tmp/updated");
     update_file ("$tmp/updated",
 		 "$file" eq "$tmp/stdin" ? '-' : "$file");

@@ -44,6 +44,7 @@ use vars qw ($config_h %verbatim %symbol);
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 local $config_h;
 my $config_h_in;
+my @prepend_include;
 my @include;
 my @warning;
 
@@ -72,7 +73,8 @@ Warning categories include:
   \`error\'         warnings are error
 
 Library directories:
-  -I, --include=DIR  look for files in DIR (cumulative)
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
 
 Report bugs to <bug-autoconf\@gnu.org>.
 END
@@ -103,6 +105,7 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+	  'B|prepend-include=s' => \@prepend_include,
 	  'W|warning=s' => \@warning);
 
   if (! @ARGV)
@@ -123,9 +126,12 @@ mktmpdir ('ah');
 parse_args;
 
 # Preach.
-my $config_h_top = find_file ("config.h.top?", @include);
-my $config_h_bot = find_file ("config.h.bot?", @include);
-my $acconfig_h = find_file ("acconfig.h?", @include);
+my $config_h_top = find_file ("config.h.top?",
+			      reverse(@prepend_include), @include);
+my $config_h_bot = find_file ("config.h.bot?",
+			      reverse(@prepend_include), @include);
+my $acconfig_h = find_file ("acconfig.h?",
+			    reverse(@prepend_include), @include);
 if ($config_h_top || $config_h_bot || $acconfig_h)
   {
     my $msg = << "END";
@@ -150,6 +156,7 @@ END
 # Set up autoconf.
 my $autoconf = "$autom4te --language=autoconf ";
 $autoconf .= join (' ', map { "--include=$_" } @include);
+$autoconf .= join (' ', map { "--prepend-include=$_" } @prepend_include);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;

@@ -65,7 +65,8 @@ Operation modes:
   -s, --symlink   instead of copying, install symbolic links
 
 Library directories:
-  -I, --include=DIR  look for FILES in DIR (cumulative)
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
 AUTOPOINT, LIBTOOLIZE are honored.
@@ -93,6 +94,7 @@ my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
+my @prepend_include;
 my @include;
 my $status = 0;
 # symlink -- when --install, use symlinks instead.
@@ -116,6 +118,7 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
+	  'B|prepend-include=s'			     => \@prepend_include,
 	  'i|install'                                        => \$install,
 	  's|symlink'                                        => \$symlink);
 
@@ -145,7 +148,9 @@ sub parse_args ()
   # Dispatch autoreconf's option to the tools.
   # --include;
   $autoconf   .= join (' --include=', '', @include);
+  $autoconf   .= join (' --prepend-include=', '', @prepend_include);
   $autoheader .= join (' --include=', '', @include);
+  $autoheader .= join (' --prepend-include=', '', @prepend_include);
 
   # --install and --symlink;
   if ($install)

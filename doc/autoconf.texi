@@ -1089,8 +1089,11 @@ symbols it finds in them.  This output can be voluminous.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Directories are browsed from last to first.
+Append @var{dir} to the include path.  Multiple invocations accumulate.
+
+@item --prepend-include=@var{dir}
+@item -B @var{dir}
+Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 @end table
 
 @node ifnames Invocation
@@ -1174,8 +1177,18 @@ Remake @file{configure} even if newer than its input files.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Directories are browsed from last to first.
+Append @var{dir} to the include path.  Multiple invocations accumulate.
+
+@item --prepend-include=@var{dir}
+@item -B @var{dir}
+Prepend @var{dir} to the include path.  Multiple invocations accumulate.
+
+After searching any directories specified using @option{--prepend-include}
+or @option{--include}, @command{autoconf} will also search the directories
+specified in the @code{AC_MACRO_PATH} environment variable, if set.
+And finally, @command{autoconf} will also search the system-wide site
+macro directory, which is set to
+@samp{$@{datadir@}/autoconf/site_macros/autoconf} by default.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -1447,8 +1460,11 @@ Instead of copying missing auxiliary files, install symbolic links.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Directories are browsed from last to first.
+Append @var{dir} to the include path.  Multiple invocations accumulate.
+
+@item --prepend-include=@var{dir}
+@item -B @var{dir}
+Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 @end table
 
 
@@ -2533,8 +2549,11 @@ Remake the template file even if newer than its input files.
 
 @item --include=@var{dir}
 @itemx -I @var{dir}
-Also look for input files in @var{dir}.  Multiple invocations accumulate.
-Directories are browsed from last to first.
+Append @var{dir} to include path.  Multiple invocations accumulate.
+
+@item --prepend-include=@var{dir}
+@item -B @var{dir}
+Prepend @var{dir} to include path.  Multiple invocations accumulate.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -7114,8 +7133,7 @@ Don't remove the temporary files and be even more verbose.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations
-accumulate.  Contrary to M4 but in agreement with common sense,
-directories are browsed from last to first.
+accumulate.
 
 @item --output=@var{file}
 @itemx -o @var{file}
@@ -7375,18 +7393,31 @@ create Autotest executable test suites.
 @item Autoconf
 create Autoconf executable configure scripts.
 @end table
+
+@item --prepend-include=@var{dir}
+@item -B @var{dir}
+Prepend directory @var{dir} to the search path.  This is used to include
+the language-specific files before any third-party macros.
+
+@item --include-envvar=@var{envvar}
+Add directories specified in the environment variable @var{envvar} to
+the search path.
+
+@item --site-macro-subdir=@var{subdir}
+If the site macro directory is set, add the subdirectory @var{subdir}
+of the site macro directory to the search path.
 @end table
 
 @cindex @file{autom4te.cfg}
 As an example, if Autoconf is installed in its default location,
-@file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is strictly
-equivalent to running @samp{autom4te --include /usr/local/share/autoconf
-m4sugar/m4sugar.m4f --warning syntax foo.m4}.  Recursive expansion
-applies: running @samp{autom4te -l m4sh foo.m4}, is the same as
-@samp{autom4te --language M4sugar m4sugar/m4sh.m4f foo.m4}, i.e.,
-@samp{autom4te --include /usr/local/share/autoconf m4sugar/m4sugar.m4f
-m4sugar/m4sh.m4f --mode 777 foo.m4}.  The definition of the languages is
-stored in @file{autom4te.cfg}.
+@file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is
+strictly equivalent to running @samp{autom4te --prepend-include
+/usr/local/share/autoconf m4sugar/m4sugar.m4f --warning syntax foo.m4}.
+Recursive expansion applies: running @samp{autom4te -l m4sh foo.m4},
+is the same as @samp{autom4te --language M4sugar m4sugar/m4sh.m4f
+foo.m4}, i.e., @samp{autom4te --prepend-include /usr/local/share/autoconf
+m4sugar/m4sugar.m4f m4sugar/m4sh.m4f --mode 777 foo.m4}.  The definition
+of the languages is stored in @file{autom4te.cfg}.
 
 
 @node Programming in M4sugar

@@ -77,4 +77,4 @@ echo X/"$0" |
 
 # @configure_input@
 # Running `$0' as if it were installed.
-exec @abs_top_builddir@/bin/$as_me --include @abs_top_builddir@/lib ${1+"$@"}
+exec @abs_top_builddir@/bin/$as_me --prepend-include @abs_top_builddir@/lib ${1+"$@"}

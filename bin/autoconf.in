@@ -107,7 +107,8 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
-  -I, --include=DIR        look for input files in DIR (cumulative)
+  -B, --prepend-include=DIR   prepend directory DIR to search path
+  -I, --include=DIR           append directory DIR to search path
   -f, --force              consider all files obsolete
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
@@ -195,11 +196,13 @@ while test $# -gt 0 ; do
     --debug      | -d   | \
     --force      | -f   | \
     --include=*  | -I?* | \
+    --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
        AUTOM4TE="$AUTOM4TE $1"; shift ;;
 
     # Options with separated arg passed as is to autom4te.
     --include | -I | \
+    --prepend-include | -B | \
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        AUTOM4TE="$AUTOM4TE $option $2"

@@ -31,6 +31,13 @@ AC_CONFIG_FILES([config/Makefile])
 
 AM_INIT_AUTOMAKE
 
+AC_ARG_ENABLE([site-macro-dir],
+  AC_HELP_STRING([--enable-site-macro-dir=DIR],
+    [use site macro directory DIR @<:@DATADIR/autoconf/site_macros@:>@]),
+  ,
+  [enable_site_macro_dir='${datadir}/autoconf/site_macros'])
+AC_SUBST([SITE_MACRO_DIR], "${enable_site_macro_dir}")
+
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])
 AC_CONFIG_FILES([tests/Makefile tests/atlocal])

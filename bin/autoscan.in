@@ -80,6 +80,7 @@ my $log = new Autom4te::XFile ">$me.log";
 # Autoconf and lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 my $autoconf = "$autom4te --language=autoconf";
+my @prepend_include;
 my @include = ('@datadir@');
 
 # $help
@@ -96,7 +97,8 @@ preliminary `configure.ac' for that package.
   -V, --version       print version number, then exit
   -v, --verbose       verbosely report processing
   -d, --debug         don't remove temporary files
-  -I, --include=DIR   look for input files in DIR (cumulative)
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
 
 Report bugs to <bug-autoconf\@gnu.org>.\n";
 
@@ -121,7 +123,8 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 # Process any command line arguments.
 sub parse_args ()
 {
-  getopt ("I|include|A|autoconf-dir|m|macrodir=s" => \@include);
+  getopt ('I|include|A|autoconf-dir|m|macrodir=s' => \@include,
+	  'B|prepend-include=s' => @prepend_include);
 
   die "$me: too many arguments
 Try `$me --help' for more information.\n"
@@ -151,7 +154,8 @@ sub init_tables ()
   my $tables_are_consistent = 1;
   foreach my $kind (@kinds)
     {
-      my $file = find_file ("autoscan/$kind", @include);
+      my $file = find_file ("autoscan/$kind",
+                            reverse(@prepend_include), @include);
       my $table = new Autom4te::XFile $file;
       while ($_ = $table->getline)
 	{
@@ -586,6 +590,7 @@ parse_args;
 $autoconf .= " --debug" if $debug;
 $autoconf .= " --verbose" if $verbose;
 $autoconf .= join (' --include=', '', @include);
+$autoconf .= join (' --prepend-include=', '', @prepend_include);
 
 my $configure_ac = find_configure_ac;
 init_tables;

@@ -389,7 +389,8 @@ Warning categories include:
 The environment variable \`WARNINGS\' is honored.
 
 Library directories:
-  -I, --include=DIR  look for FILES in DIR (cumulative)
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
 
 Tracing:
   -t, --trace=MACRO      report the MACRO invocations
@@ -484,6 +485,9 @@ sub parse_args ()
 
   # Process the arguments for real this time.
   my @trace;
+  my @prepend_include;
+  my $include_envvar;
+  my @site_macro_subdirs;
   getopt
     (
      # Operation modes:
@@ -493,7 +497,10 @@ sub parse_args ()
      "M|melt"       => \$melt,
 
      # Library directories:
+     "B|prepend-include=s" => \@prepend_include,
      "I|include=s" => \@include,
+     "include-envvar=s" => \$include_envvar,
+     "site-macro-subdir=s" => \@site_macro_subdirs,
 
      # Tracing:
      # Using a hash for traces is seducing.  Unfortunately, upon `-t FOO',
@@ -521,11 +528,19 @@ Try `$me --help' for more information.\n"
   $melt = 1
     if $freeze;
 
+  # Add directories from the appropriate env var to the include path.
+  @include = (@include, split(/:/, $ENV{$include_envvar}))
+    if defined($include_envvar) && exists($ENV{$include_envvar});
+
+  # Also add the site macro directory, if applicable.
+  map { @include = (@include, "@SITE_MACRO_DIR@/$_"); } @site_macro_subdirs
+    if ('@SITE_MACRO_DIR@' ne 'no') && @site_macro_subdirs;
+
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
   # invalidates the cache.  And strip `.' which is implicit and always
   # first.
-  @include = grep { !/^\.$/ } uniq (@include);
+  @include = grep { !/^\.$/ } uniq (reverse(@prepend_include), @include);
 
   # Convert @trace to %trace, and work around the M4 builtins tracing
   # problem.
@@ -599,13 +614,10 @@ sub handle_m4 ($@)
   #
   # Neutralize its stdin, so that GNU M4 1.5 doesn't neutralize SIGINT.
   #
-  # Be extremely cautious to reverse the includes when talking to M4:
-  # it doesn't speak the same --include as we do.
-  #
   # We don't output directly to the cache files, to avoid problems
   # when we are interrupted (that leaves corrupted files).
   my $command = ("$m4"
-		 . join (' --include=', '', reverse @include)
+		 . join (' --include=', '', @include)
 		 . " --define=m4_warnings=$m4_warnings"
 		 . ' --debug=aflq'
 		 . " --error-output=$tcache" . $req->id . "t"
@@ -1056,7 +1068,7 @@ sub freeze ($)
   # output but comments and empty lines.
   my $command = ("$m4"
 		 . ' --fatal-warning'
-		 . join (' --include=', '', reverse @include)
+		 . join (' --include=', '', @include)
 		 . ' --define=divert'
 		 . " @ARGV"
 		 . ' </dev/null');
@@ -1079,7 +1091,7 @@ sub freeze ($)
   # or an improper paren etc.
   $command = ("$m4"
 	      . ' --fatal-warning'
-	      . join (' --include=', '', reverse @include)
+	      . join (' --include=', '', @include)
 	      . " --freeze-state=$output"
 	      . " @ARGV"
 	      . ' </dev/null');
