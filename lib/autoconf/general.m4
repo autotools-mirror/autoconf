@@ -3525,10 +3525,19 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
 test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
-# VPATH is dangerous, but if there is a colon in the path, we need to
-# keep it.
+# VPATH may cause trouble with some makes, so we remove $(srcdir),
+# ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
+# trailing colons and then remove the whole line if VPATH becomes empty
+# (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub=['/^[ 	]*VPATH[ 	]*=[^:]*$/d']
+  ac_vpsub=['/^[ 	]*VPATH[ 	]*=/{
+s/:*\$(srcdir):*/:/;
+s/:*\${srcdir}:*/:/;
+s/:*@srcdir@:*/:/;
+s/^\([^=]*=[ 	]*\):*/\1/;
+s/:*$//;
+s/^[^=]*=[ 	]*$//;
+}']
 fi
 
 m4_ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
