@@ -165,6 +165,11 @@ char $2 ();])], [$2 ();])])
 # Don't include <ctype.h> because on OSF/1 3.0 it includes
 # <sys/types.h> which includes <sys/select.h> which contains a
 # prototype for select.  Similarly for bzero.
+#
+# This test used to assign f=$1 in main(), but that was optimized away by HP
+# unbundled cc A.05.36 for ia64 under +O3, presumably on the basis that
+# there's no need to do that store if the program is about to exit.
+#
 m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 [AC_LANG_PROGRAM(
 [/* System header to define __stub macros and hopefully few prototypes,
@@ -178,18 +183,16 @@ extern "C"
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
 char $1 ();
-char (*f) ();
-#ifdef __cplusplus
-}
-#endif
-],
-[/* The GNU C library defines this for functions which it implements
+/* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
 #if defined (__stub_$1) || defined (__stub___$1)
 choke me
 #else
-f = $1;
+char (*f) () = $1;
+#endif
+#ifdef __cplusplus
+}
 #endif
 ])])
 

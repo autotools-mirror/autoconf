@@ -1,3 +1,8 @@
+2002-11-14  Kevin Ryde  <user42@zip.com.au>
+
+	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Initialize f=$1 rather
+	than assigning in main, to avoid HP cc +O3 optimizing it away.
+
 2002-11-12  Peter Eisentraut  <peter_e@gmx.net>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Add -q
