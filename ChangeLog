@@ -1,3 +1,10 @@
+2004-09-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Give AC_DEFINE and AC_DEFINE_UNQUOTED
+	three args in examples.  Problem reported by Frederik Fouvry in:
+	http://lists.gnu.org/archive/html/bug-autoconf/2004-09/msg00017.html
+	Also, fix some minor spacing and punctuation bugs.
+
 2004-09-02  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Builtins): Swap "cd" and
