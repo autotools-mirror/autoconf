@@ -1,3 +1,7 @@
+1999-10-16  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_PROG_CXX): gcc is not a C++ compiler.
+
 1999-10-13  Ben Elliston  <bje@cygnus.com>
 
 	* acconfig.h: Reintroduce missing definitions due to testsuite
