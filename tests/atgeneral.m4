@@ -139,9 +139,12 @@ done
 # environments, `diff' considers that two files are equal included
 # when there are only differences on the coding of new lines. `cmp'
 # does not.
-# Finally, not all the `diff' support `-u'.
+#
+# Finally, not all the `diff' support `-u', and some, like Tru64, even
+# refuse to `diff' /dev/null.
+: >empty
 
-if diff -u /dev/null /dev/null >/dev/null 2>&1; then
+if diff -u empty empty >/dev/null 2>&1; then
   at_diff='diff -u'
 else
   at_diff='diff'
@@ -370,13 +373,13 @@ if test -z "$at_no_redirs"; then
           ignore, [test -n "$at_verbose" && cat stdout;:],
           expout, [AT_DEFINE([AT_data_expout], [ expout])dnl
 $at_diff expout stdout || exit 1],
-          [], [$at_diff /dev/null stdout || exit 1],
+          [], [$at_diff empty stdout || exit 1],
           [echo $at_n "patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || exit 1])
   AT_CASE([$4],
           ignore, [test -n "$at_verbose" && cat stderr;:],
           experr, [AT_DEFINE([AT_data_experr], [ experr])dnl
 $at_diff experr stderr || exit 1],
-          [], [$at_diff /dev/null stderr || exit 1],
+          [], [$at_diff empty stderr || exit 1],
           [echo $at_n "patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || exit 1])
 fi
 $at_traceon

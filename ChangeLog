@@ -1,5 +1,13 @@
 2000-02-18  Akim Demaille  <akim@epita.fr>
 
+	Some `diff' refuse to diff with /dev/null, such as Tru64's.
+	Reported by Nicolas Joly.
+
+	* tests/atgeneral.m4 (empty): New dummy file.
+	Changed various `diff /dev/null' as `diff empty'.
+
+2000-02-18  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (TEST_MACRO): Don't run AC_PATH_TOOL and
 	AC_PATH_PROG.
 
