@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.116
-@set VERSION 1.116
+@set EDITION 1.117
+@set VERSION 1.117
 @set UPDATED September 1994
 
 @iftex
@@ -51,7 +51,7 @@ by the Foundation.
 
 @titlepage
 @title Autoconf
-@subtitle Generating Automatic Configuration Scripts
+@subtitle Creating Automatic Configuration Scripts
 @subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
 @subtitle @value{UPDATED}
 @author by David MacKenzie
@@ -132,15 +132,15 @@ Initialization and Output Files
 
 * Input::                       Where Autoconf should find files.
 * Output::			Creating output files.
-* Makefiles::                   Information Autoconf uses in @file{Makefile}s.
+* Makefile Substitutions::      Using output variables in @file{Makefile}s.
 * Configuration Headers::       Creating a configuration header file.
 * Subdirectories::              Configuring independent packages together.
 * Versions::                    Version numbers in @code{configure}.
 
 Substitutions in Makefiles
 
-* Preset Variables::	        Output variables that are always set.
-* Object Directories::		Compiling in a different directory.
+* Preset Output Variables::	Output variables that are always set.
+* Build Directories::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 
 Configuration Header Files
@@ -199,19 +199,19 @@ Checking Run Time Behavior
 Results of Tests
 
 * Defining Symbols::            Defining C preprocessor symbols.
-* Setting Variables::		Setting variables in output files.
-* Caching Values::              Speeding up subsequent @code{configure} runs.
+* Setting Output Variables::	Replacing variables in output files.
+* Caching Results::             Speeding up subsequent @code{configure} runs.
 * Printing Messages::           Notifying users of progress or problems.
 
-Caching Values
+Caching Results
 
-* Cache Variables::             Shell variables used in caches.
+* Cache Variable Names::        Shell variables used in caches.
 * Cache Files::	        	Files @code{configure} uses for caching.
 
 Writing Macros
 
-* Macro Format::		Basic format of an Autoconf macro.
-* Macro Naming::                What to call your new macros.
+* Macro Definitions::		Basic format of an Autoconf macro.
+* Macro Names::                 What to call your new macros.
 * Quoting::			Protecting macros from unwanted expansion.
 * Dependencies Between Macros::	What to do when macros depend on other macros.
 
@@ -225,7 +225,7 @@ Manual Configuration
 
 * Specifying Names::            Specifying the system type.
 * Canonicalizing::              Getting the canonical system type.
-* System Name Variables::       Variables containing the system type.
+* System Type Variables::       Variables containing the system type.
 * Using System Type::           What to do with the system type.
 
 Site Configuration
@@ -330,9 +330,9 @@ overflows internal limits of some versions of @code{m4}, including GNU
 @code{m4} 1.0.  You must use version 1.1 or later of GNU @code{m4}.
 Using version 1.3 or later will be much faster than 1.1 or 1.2.
 
-@xref{Concerns}, for answers to some common questions about Autoconf.
 @xref{Upgrading}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.
+@xref{Concerns}, for answers to some common questions about Autoconf.
 
 Mail suggestions and bug reports for Autoconf to
 @code{bug-gnu-utils@@prep.ai.mit.edu}.  Please include the Autoconf version
@@ -349,7 +349,7 @@ values.  The files that @code{configure} creates are:
 @itemize @bullet
 @item
 one or more @file{Makefile} files, one in each subdirectory of the
-package (@pxref{Makefiles});
+package (@pxref{Makefile Substitutions});
 
 @item
 optionally, a C header file, the name of which is configurable,
@@ -662,7 +662,7 @@ initialization and creating output files.
 @menu
 * Input::                       Where Autoconf should find files.
 * Output::			Creating output files.
-* Makefiles::                   Information Autoconf uses in @file{Makefile}s.
+* Makefile Substitutions::      Using output variables in @file{Makefile}s.
 * Configuration Headers::       Creating a configuration header file.
 * Subdirectories::              Configuring independent packages together.
 * Versions::                    Version numbers in @code{configure}.
@@ -704,25 +704,30 @@ name is obsolete because some @code{make} programs have a rule that
 creates @file{install} from it if there is no @file{Makefile}.
 @end defmac
 
-@node Output, Makefiles, Input, Setup
+@node Output, Makefile Substitutions, Input, Setup
 @section Creating Output Files
 
 Every Autoconf-generated @code{configure} script must finish by calling
-@code{AC_OUTPUT}.  The only other required macro is @code{AC_INIT}
-(@pxref{Input}).
+@code{AC_OUTPUT}.  It is the macro that creates the @file{Makefile}s and
+optional other files resulting from configuration.  The only other
+required macro is @code{AC_INIT} (@pxref{Input}).
 
 @defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{] [,}@var{init-cmds}@r{]})
 @maindex OUTPUT
 Create output files.  The @var{file}@dots{} argument is a
-whitespace-separated list of files to create; it may be empty.  This
-macro creates each file @file{@var{file}} by copying an input file (by
-default named @file{@var{file}.in}), substituting the output variable
-values that have been selected by calling @code{AC_SUBST}
-(@pxref{Setting Variables}).  It creates the directory that the file is
-in if it doesn't exist (but not the parents of that directory).
+whitespace-separated list of output files; it may be empty.  This macro
+creates each file @file{@var{file}} by copying an input file (by default
+named @file{@var{file}.in}), substituting the output variable values.
+@xref{Makefile Substitutions}, for more information on using output variables.
+@xref{Setting Output Variables}, for more information on creating them.  This
+macro creates the directory that the file is in if it doesn't exist (but
+not the parents of that directory).  Usually, @file{Makefile}s are
+created this way, but other files, such as @file{.gdbinit}, can be
+specified as well.
 
-If @code{AC_CONFIG_HEADER} has been called, this macro also creates the
-header file that was named as its argument (@pxref{Configuration Headers}).
+If @code{AC_CONFIG_HEADER}, @code{AC_LINK_FILES}, or
+@code{AC_CONFIG_SUBDIRS} has been called, this macro also creates the
+files named as their arguments.
 
 A typical call to @code{AC_OUTPUT} looks like this:
 @example
@@ -744,52 +749,46 @@ substitutions performed on them in @code{configure}.  You can use
 @var{extra-cmds}.
 @end defmac
 
-@node Makefiles, Configuration Headers, Output, Setup
+@node Makefile Substitutions, Configuration Headers, Output, Setup
 @section Substitutions in Makefiles
 
 Each subdirectory in a distribution that contains something to be
 compiled or installed should come with a file @file{Makefile.in}, from
-which @code{configure} will produce a @file{Makefile} in that directory.
-The substitutions that @code{configure} does are simple: for each output
-variable that the package sets, it replaces occurrences of
-@samp{@@@var{variable}@@} with the value that @code{configure} has
-determined for that variable.  Any occurrences of
-@samp{@@@var{variable}@@} for variables that @code{configure} does not
-know about are passed through unchanged.
-
-Every variable that the @code{configure} script might set a value for
-should appear in a @samp{@@@var{variable}@@} reference in at least one
-@file{Makefile.in}.  There is no point in checking for the correct value
-to give a variable that is never used.
-
-@xref{Makefile Conventions, , Makefile Conventions, standards.info, The
-GNU Coding Standards}, for more information on what to put in Makefiles.
+which @code{configure} will create a @file{Makefile} in that directory.
+To create a @file{Makefile}, @code{configure} performs a simple variable
+substitution, replacing occurrences of @samp{@@@var{variable}@@} in
+@file{Makefile.in} with the value that @code{configure} has determined
+for that variable.  Variables that are substituted into output files in
+this way are called @dfn{output variables}.  They are ordinary shell
+variables that are set in @code{configure}.  To make @code{configure}
+substitute a particular variable into the output files, the macro
+@code{AC_SUBST} must be called with that variable name as an argument.
+Any occurrences of @samp{@@@var{variable}@@} for other variables are
+left unchanged.  @xref{Setting Output Variables}, for more information on
+creating output variables with @code{AC_SUBST}.
 
 A software package that uses a @code{configure} script should be
 distributed with a file @file{Makefile.in}, but no @file{Makefile}; that
 way, the user has to properly configure the package for the local system
 before compiling it.
 
+@xref{Makefile Conventions, , Makefile Conventions, standards.info, The
+GNU Coding Standards}, for more information on what to put in
+@file{Makefile}s.
+
 @menu
-* Preset Variables::	        Output variables that are always set.
-* Object Directories::		Compiling in a different directory.
+* Preset Output Variables::	Output variables that are always set.
+* Build Directories::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 @end menu
 
-@node Preset Variables, Object Directories, , Makefiles
+@node Preset Output Variables, Build Directories, , Makefile Substitutions
 @subsection Preset Output Variables
 
-Some output variables are preset by the Autoconf macros.
-@code{AC_SUBST} is called for them automatically (@pxref{Setting
-Variables}), so in your @file{Makefile.in} files you can get their
-values by enclosing their names in @samp{@@} characters.
-@ifinfo
-@xref{Makefiles}, for more information on @samp{@@} substitutions.
-@end ifinfo
-The variables that are automatically defined by the Autoconf macros are
-listed here.  Some of the Autoconf macros set additional output variables,
-which are mentioned in the descriptions for those macros.  @xref{Output
-Variable Index}, for a complete list of output variables.
+Some output variables are preset by the Autoconf macros.  Some of the
+Autoconf macros set additional output variables, which are mentioned in
+the descriptions for those macros.  @xref{Output Variable Index}, for a
+complete list of output variables.
 
 @defvar exec_prefix
 @ovindex exec_prefix
@@ -844,7 +843,7 @@ C++ features.
 is called, @code{configure} replaces @samp{@@DEFS@@} with
 @samp{-DHAVE_CONFIG_H} instead (@pxref{Configuration Headers}).  This
 variable is not defined while @code{configure} is performing its tests,
-only when creating the output files.  @xref{Setting Variables}, for
+only when creating the output files.  @xref{Setting Output Variables}, for
 how to check the results of previous tests.
 @end defvar
 
@@ -861,8 +860,8 @@ linking programs to test for C features.
 @samp{-l} and @samp{-L} options to pass to the linker.
 @end defvar
 
-@node Object Directories, Automatic Remaking, Preset Variables, Makefiles
-@subsection Object Directories
+@node Build Directories, Automatic Remaking, Preset Output Variables, Makefile Substitutions
+@subsection Build Directories
 
 You might want to compile a software package in a different directory
 from the one that contains the source code.  Doing this allows you to
@@ -906,7 +905,7 @@ time.info: time.texinfo
         $(MAKEINFO) $(srcdir)/time.texinfo
 @end example
 
-@node Automatic Remaking, , Object Directories, Makefiles
+@node Automatic Remaking, , Build Directories, Makefile Substitutions
 @subsection Automatic Remaking
 
 You can put rules like the following in the top-level @file{Makefile.in}
@@ -956,7 +955,7 @@ information about @code{AC_OUTPUT}.
 @xref{Invoking config.status}, for more examples of handling
 configuration-related dependencies.
 
-@node Configuration Headers, Subdirectories, Makefiles, Setup
+@node Configuration Headers, Subdirectories, Makefile Substitutions, Setup
 @section Configuration Header Files
 
 When a package tests more than a few C preprocessor symbols, the command
@@ -1112,26 +1111,26 @@ packages in subdirectories.
 @defmac AC_CONFIG_SUBDIRS (@var{dir} @dots{})
 @maindex CONFIG_SUBDIRS
 @ovindex subdirs
-Run @code{configure} in each subdirectory @var{dir} in the given
-whitespace-separated list.  If a given @var{dir} is not found, no error
-is reported, so a @code{configure} script can configure whichever parts
-of a large source tree are present.  If a given @var{dir} contains
-@file{configure.in} but no @code{configure}, the Cygnus @code{configure}
-script found by @code{AC_CONFIG_AUXDIR} is used.  The subdirectory
-@code{configure} scripts are given the same command line options that
-were given to this @code{configure} script, with minor changes if needed
-(e.g., to adjust a relative path for the cache file or source
-directory).  This macro also sets the output variable
-@code{subdirs} to the list of directories @samp{@var{dir} @dots{}}.
-@file{Makefile} rules can use this variable to determine which
-subdirectories to recurse into.
+Make @code{AC_OUTPUT} run @code{configure} in each subdirectory
+@var{dir} in the given whitespace-separated list.  If a given @var{dir}
+is not found, no error is reported, so a @code{configure} script can
+configure whichever parts of a large source tree are present.  If a
+given @var{dir} contains @file{configure.in} but no @code{configure},
+the Cygnus @code{configure} script found by @code{AC_CONFIG_AUXDIR} is
+used.  The subdirectory @code{configure} scripts are given the same
+command line options that were given to this @code{configure} script,
+with minor changes if needed (e.g., to adjust a relative path for the
+cache file or source directory).  This macro also sets the output
+variable @code{subdirs} to the list of directories @samp{@var{dir}
+@dots{}}.  @file{Makefile} rules can use this variable to determine
+which subdirectories to recurse into.
 @end defmac
 
 @node Versions, , Subdirectories, Setup
 @section Version Numbers in @code{configure}
 
 The following macros manage version numbers for @code{configure}
-scripts.  They are optional.
+scripts.  Using them is optional.
 
 @defmac AC_PREREQ (@var{version})
 @maindex PREREQ
@@ -1191,14 +1190,14 @@ might need or want to use.  If you need to test for a kind of feature
 that none of these macros check for, you can probably do it by calling
 primitive test macros with appropriate arguments (@pxref{Writing Tests}).
 
-Some of these macros set variables whose values can be substituted into
-output files.  @xref{Setting Variables}, for details on how this is
-done.  The phrase ``define @var{name}'' is used below as a shorthand to
-mean either add @samp{-D@var{name}=1} to the output variable
-@code{DEFS}, or put @samp{#define @var{name} 1} in the configuration
-header file, depending on whether @code{AC_CONFIG_HEADER} has been
-called.  @xref{Configuration Headers}, for more information on
-@code{AC_CONFIG_HEADER}.
+These tests print messages telling the user which feature they're
+checking for, and what they find.  They cache their results for future
+@code{configure} runs (@pxref{Caching Results}).
+
+Some of these macros set output variables.  @xref{Setting Output Variables},
+for details on how this is done.  The phrase ``define @var{name}'' is
+used below as a shorthand to mean ``define C preprocessor symbol
+@var{name} to have the value 1''.
 
 @menu
 * Alternative Programs::	Selecting between alternative programs.
@@ -1228,9 +1227,10 @@ it, then you can use one of the general program check macros.
 @end menu
 
 @node Particular Programs, Generic Programs, , Alternative Programs
-@subsection Checks For Particular Programs
+@subsection Particular Program Checks
 
-These macros check for particular programs.
+These macros check for particular programs---whether they exist, and
+in some cases whether they support certain features.
 
 @defmac AC_DECL_YYTEXT
 @maindex DECL_YYTEXT
@@ -1414,7 +1414,9 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @subsection Generic Program Checks
 
 These macros are used to find programs not covered by the particular
-test macros.
+test macros.  If you need to check the behavior of a program as well as
+find out whether it is present, you have to write your own test for
+it (@pxref{Writing Tests}).
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found}@r{]})
 @maindex CHECK_PROG
@@ -1514,9 +1516,10 @@ it, then you can use one of the general function check macros.
 @end menu
 
 @node Particular Functions, Generic Functions, , Library Functions
-@subsection Checks For Particular Functions
+@subsection Particular Function Checks
 
-These macros check for particular C functions.
+These macros check for particular C functions---whether they exist, and
+in some cases how they respond when given certain arguments.
 
 @defmac AC_FUNC_ALLOCA
 @maindex FUNC_ALLOCA
@@ -1717,6 +1720,9 @@ If @code{wait3} is found and fills in the contents of its third argument
 These macros are used to find functions not covered by the particular
 test macros.  If the functions might be in libraries other than the
 default C library, first call @code{AC_CHECK_LIB} for those libraries.
+If you need to check the behavior of a function as well as find out
+whether it is present, you have to write your own test for
+it (@pxref{Writing Tests}).
 
 @defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex CHECK_FUNC
@@ -1763,9 +1769,10 @@ it, then you can use one of the general header file check macros.
 @end menu
 
 @node Particular Headers, Generic Headers, , Header Files
-@subsection Checks For Particular Headers
+@subsection Particular Header Checks
 
-These macros check for particular system header files.
+These macros check for particular system header files---whether they
+exist, and in some cases whether they declare certain symbols.
 
 @defmac AC_DECL_SYS_SIGLIST
 @maindex DECL_SYS_SIGLIST
@@ -1983,7 +1990,9 @@ example for @code{AC_HEADER_STDC}.
 @subsection Generic Header Checks
 
 These macros are used to find system header files not covered by the
-particular test macros.
+particular test macros.  If you need to check the contents of a header
+as well as find out whether it is present, you have to write your own
+test for it (@pxref{Writing Tests}).
 
 @defmac AC_CHECK_HEADER (@var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex CHECK_HEADER
@@ -2009,9 +2018,9 @@ is executed when one of the header files is not found.
 @section Structures
 
 The following macros check for certain structures or structure members.
-You can use @code{AC_EGREP_CPP} (@pxref{Examining Declarations}) or
-@code{AC_TRY_LINK} (@pxref{Examining Libraries}) to check structures not
-listed here.
+To check structures not listed here, you can use @code{AC_EGREP_CPP}
+(@pxref{Examining Declarations}) or @code{AC_TRY_LINK} (@pxref{Examining
+Libraries})
 
 @defmac AC_HEADER_STAT
 @maindex HEADER_STAT
@@ -2105,9 +2114,9 @@ typedef check macro.
 @end menu
 
 @node Particular Typedefs, Generic Typedefs, , Typedefs
-@subsection Checks For Particular Typedefs
+@subsection Particular Typedef Checks
 
-These macros check for particular C types.
+These macros check for particular C typedefs.
 
 @defmac AC_TYPE_GETGROUPS
 @maindex TYPE_GETGROUPS
@@ -2175,8 +2184,8 @@ If @code{uid_t} is not defined in @file{sys/types.h}, define
 @node Generic Typedefs, , Particular Typedefs, Typedefs
 @subsection Generic Typedef Checks
 
-This macro is used to find types not covered by the particular test
-macros.
+This macro is used to check for typedefs not covered by the particular
+test macros.
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default})
 @maindex CHECK_TYPE
@@ -2410,9 +2419,9 @@ something goes wrong in one or more of the Autoconf tests, this
 information can help you understand the assumptions behind them, which
 might help you figure out how to best solve the problem.
 
-These macros check the output of the C compiler system.  They @emph{do
-not} cache the results of their tests for future use (@pxref{Caching
-Values}), because they don't know enough about the information they are
+These macros check the output of the C compiler system.  They do
+not cache the results of their tests for future use (@pxref{Caching
+Results}), because they don't know enough about the information they are
 checking for to generate a cache variable name.  They also do not print
 any messages, for the same reason.  The checks for particular kinds of C
 features call these macros and do cache their results and print messages
@@ -2592,11 +2601,11 @@ distributed with Autoconf produce this warning message.
 To configure for cross-compiling you can also choose a value for those
 parameters based on the canonical system name (@pxref{Manual
 Configuration}).  Alternatively, set up a test results cache file with
-the correct values for the target system (@pxref{Caching Values}).
+the correct values for the target system (@pxref{Caching Results}).
 
 To provide a default for calls of @code{AC_TRY_RUN} that are embedded in
 other macros, including a few of the ones that come with Autoconf, you
-can call @code{AC_C_CROSS} before running them.  Then if the shell
+can call @code{AC_C_CROSS} before running them.  Then, if the shell
 variable @code{cross_compiling} is set to @samp{yes}, use an alternate
 method to get the results instead of calling the macros.
 
@@ -2837,12 +2846,12 @@ print a message letting the user know the result of the test.
 
 @menu
 * Defining Symbols::            Defining C preprocessor symbols.
-* Setting Variables::		Setting variables in output files.
-* Caching Values::              Speeding up subsequent @code{configure} runs.
+* Setting Output Variables::	Replacing variables in output files.
+* Caching Results::             Speeding up subsequent @code{configure} runs.
 * Printing Messages::           Notifying users of progress or problems.
 @end menu
 
-@node Defining Symbols, Setting Variables, , Results
+@node Defining Symbols, Setting Output Variables, , Results
 @section Defining C Preprocessor Symbols
 
 A common action to take in response to a feature test is to define a C
@@ -2929,22 +2938,24 @@ instead of this:
 AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4); LIBS="$LIBS -lelf")
 @end example
 
-@node Setting Variables, Caching Values, Defining Symbols, Results
+@node Setting Output Variables, Caching Results, Defining Symbols, Results
 @section Setting Output Variables
 
-These macros help other macros to define variables that are used in the
-@code{configure} shell script and substituted into output files.  These
-variables are called @dfn{output variables}.
+One way to record the results of tests is to set @dfn{output variables},
+which are shell variables whose values are substituted into files that
+@code{configure} outputs.  The two macros below create new output
+variables.  @xref{Preset Output Variables}, for a list of output
+variables that are always available.
 
 @defmac AC_SUBST (@var{variable})
 @maindex SUBST
-Create an output variable from a shell variable.
-Make @code{AC_OUTPUT} substitute the variable @var{variable} into output
-files (typically one or more @file{Makefile}s).  This means that
-@code{AC_OUTPUT} will replace instances of @samp{@@@var{variable}@@} in
-the @file{Makefile.in} files with the value that the shell variable
-@var{variable} has when @code{AC_OUTPUT} is called.  The value of
-@var{variable} should not contain literal newlines.
+Create an output variable from a shell variable.  Make @code{AC_OUTPUT}
+substitute the variable @var{variable} into output files (typically one
+or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
+replace instances of @samp{@@@var{variable}@@} in input files with the
+value that the shell variable @var{variable} has when @code{AC_OUTPUT}
+is called.  The value of @var{variable} should not contain literal
+newlines.
 @end defmac
 
 @defmac AC_SUBST_FILE (@var{variable})
@@ -2975,8 +2986,8 @@ and then a @file{Makefile.in} could contain:
 @end example
 @end defmac
 
-@node Caching Values, Printing Messages, Setting Variables, Results
-@section Caching Values
+@node Caching Results, Printing Messages, Setting Output Variables, Results
+@section Caching Results
 
 To avoid checking for the same features repeatedly in various
 @code{configure} scripts (or repeated runs of one script),
@@ -3003,16 +3014,16 @@ whether the results of the check are retrieved from the cache or
 determined by running the shell commands.  If the shell commands are run
 to determine the value, the value will be saved in the cache file just
 before @code{configure} creates its output files.  @xref{Cache
-Variables}, for how to choose the name of the @var{cache-id} variable.
+Variable Names}, for how to choose the name of the @var{cache-id} variable.
 @end defmac
 
 @menu
-* Cache Variables::             Shell variables used in caches.
+* Cache Variable Names::        Shell variables used in caches.
 * Cache Files::	        	Files @code{configure} uses for caching.
 @end menu
 
-@node Cache Variables, Cache Files, , Caching Values
-@subsection Cache Variables
+@node Cache Variable Names, Cache Files, , Caching Results
+@subsection Cache Variable Names
 
 The names of cache variables should have the following format:
 
@@ -3036,7 +3047,7 @@ Indicates that this shell variable is a cache value.
 
 @item @var{value-type}
 A convention for classifying cache values, to produce a rational naming
-system.  The values used in Autoconf are listed in @ref{Macro Naming}.
+system.  The values used in Autoconf are listed in @ref{Macro Names}.
 
 @item @var{specific-value}
 Which member of the class of cache values this test applies to.
@@ -3055,7 +3066,7 @@ curly braces.  Usually, their values will be boolean (@samp{yes} or
 @samp{no}) or the names of files or functions; so this is not an
 important restriction.
 
-@node Cache Files, ,  Cache Variables, Caching Values
+@node Cache Files, ,  Cache Variable Names, Caching Results
 @subsection Cache Files
 
 A cache file is a shell script that caches the results of configure
@@ -3089,7 +3100,7 @@ site-wide cache file to use instead of the default, to make it work
 transparently, as long as the same C compiler is used every time
 (@pxref{Site Defaults}).
 
-@node Printing Messages, , Caching Values, Results
+@node Printing Messages, , Caching Results, Results
 @section Printing Messages
 
 @code{configure} scripts need to give users running them several kinds
@@ -3182,14 +3193,14 @@ software package, the best thing to do is encapsulate it in a new macro.
 Here are some instructions and guidelines for writing Autoconf macros.
 
 @menu
-* Macro Format::		Basic format of an Autoconf macro.
-* Macro Naming::                What to call your new macros.
+* Macro Definitions::		Basic format of an Autoconf macro.
+* Macro Names::                 What to call your new macros.
 * Quoting::			Protecting macros from unwanted expansion.
 * Dependencies Between Macros::	What to do when macros depend on other macros.
 @end menu
 
-@node Macro Format, Macro Naming, , Writing Macros
-@section Macro Format
+@node Macro Definitions, Macro Names, , Writing Macros
+@section Macro Definitions
 
 @maindex DEFUN
 Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
@@ -3219,8 +3230,8 @@ and @file{aclocal.m4}, because all output is discarded until
 @xref{Definitions, , How to define new macros, m4.info, GNU m4}, for
 more complete information on writing @code{m4} macros.
 
-@node Macro Naming, Quoting, Macro Format, Writing Macros
-@section Macro Naming
+@node Macro Names, Quoting, Macro Definitions, Writing Macros
+@section Macro Names
 
 All of the Autoconf macros have all-uppercase names starting with
 @samp{AC_} to prevent them from accidentally conflicting with other
@@ -3235,7 +3246,7 @@ Most of the Autoconf macros' names follow a structured naming convention
 that indicates the kind of feature check by the name.  The macro names
 consist of several words, separated by underscores, going from most
 general to most specific.   The names of their cache variables use the
-same convention (@pxref{Cache Variables}, for more information on them).
+same convention (@pxref{Cache Variable Names}, for more information on them).
 
 The first word of the name after @samp{AC_} usually tells the category
 of feature being tested.  Here are the categories used in Autoconf for
@@ -3282,7 +3293,7 @@ more words saying what the internal macro does.  For example,
 @code{AC_PATH_X} has internal macros @code{AC_PATH_X_XMKMF} and
 @code{AC_PATH_X_DIRECT}.
 
-@node Quoting, Dependencies Between Macros, Macro Naming, Writing Macros
+@node Quoting, Dependencies Between Macros, Macro Names, Writing Macros
 @section Quoting
 
 Macros that are called by other macros are evaluated by @code{m4}
@@ -3454,7 +3465,7 @@ Autoconf provides a uniform method for handling unguessable features.
 @menu
 * Specifying Names::            Specifying the system type.
 * Canonicalizing::              Getting the canonical system type.
-* System Name Variables::       Variables containing the system type.
+* System Type Variables::       Variables containing the system type.
 * Using System Type::           What to do with the system type.
 @end menu
 
@@ -3510,7 +3521,7 @@ example, @samp{decstation} can be given on the command line instead of
 @samp{mips-dec-ultrix4.2}.  @code{configure} runs a script called
 @code{config.sub} to canonicalize system type aliases.
 
-@node Canonicalizing, System Name Variables, Specifying Names, Manual Configuration
+@node Canonicalizing, System Type Variables, Specifying Names, Manual Configuration
 @section Getting the Canonical System Type 
 
 The following macros make the system type available to @code{configure}
@@ -3538,8 +3549,8 @@ host type.  This is all that is needed for programs that are not part of
 a compiler toolchain.
 @end defmac
 
-@node System Name Variables, Using System Type, Canonicalizing, Manual Configuration
-@section System Name Variables
+@node System Type Variables, Using System Type, Canonicalizing, Manual Configuration
+@section System Type Variables
 
 After calling @code{AC_CANONICAL_SYSTEM}, the following output variables
 contain the system type information.  After @code{AC_CANONICAL_HOST},
@@ -3574,7 +3585,7 @@ the names the user specified, or the canonical names if
 the individual parts of the canonical names (for convenience).
 @end table
 
-@node Using System Type, , System Name Variables, Manual Configuration
+@node Using System Type, , System Type Variables, Manual Configuration
 @section Using the System Type
 
 How do you use a canonical system type?  Usually, you use it in one or
@@ -3593,9 +3604,9 @@ esac
 
 @defmac AC_LINK_FILES (@var{dest} @dots{}, @var{source} @dots{})
 @maindex LINK_FILES
-Link each of the existing files @var{source} to the corresponding link
-name @var{dest}.  Makes a symbolic link if possible, otherwise a hard
-link.  For example, this call:
+Make @code{AC_OUTPUT} link each of the existing files @var{source} to
+the corresponding link name @var{dest}.  Makes a symbolic link if
+possible, otherwise a hard link.  For example, this call:
 
 @example
 AC_LINK_FILES(config/sun3.h config/aout.h, host.h object.h)
@@ -4176,7 +4187,7 @@ changed.  If you were using @code{echo} or @code{AC_VERBOSE}, your
 @code{configure} script's output will look better if you switch to
 @code{AC_MSG_CHECKING} and @code{AC_MSG_RESULT}.  @xref{Printing
 Messages}.  Those macros work best in conjunction with cache variables.
-@xref{Caching Values}.
+@xref{Caching Results}.
 
 @node Invoking autoupdate, Changed Results, Changed Macros, Upgrading
 @section Using @code{autoupdate} to Modernize @code{configure}
@@ -4184,7 +4195,7 @@ Messages}.  Those macros work best in conjunction with cache variables.
 The @code{autoupdate} program updates a @file{configure.in} file that
 calls Autoconf macros by their old names to use the current macro names.
 In version 2 of Autoconf, most of the macros were renamed to use a more
-uniform and descriptive naming scheme.  @xref{Macro Naming}, for a
+uniform and descriptive naming scheme.  @xref{Macro Names}, for a
 description of the new scheme.  Although the old names still work
 (@pxref{Old Macro Names}, for a list of the old macro names and the
 corresponding new names), you can make your @file{configure.in} files
@@ -4230,7 +4241,7 @@ the cache variables for those tests.  @code{DEFS} no longer exists while
 files.  This difference from version 1 is because properly quoting the
 contents of that variable turned out to be too cumbersome and
 inefficient to do every time @code{AC_DEFINE} is called.  @xref{Cache
-Variables}.
+Variable Names}.
 
 For example, here is a @file{configure.in} fragment written for Autoconf
 version 1:
@@ -4270,7 +4281,7 @@ fi
 If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
 backslashes before quotes, you need to remove them.  It now works
 predictably, and does not treat quotes (except backquotes) specially.
-@xref{Setting Variables}.
+@xref{Setting Output Variables}.
 
 All of the boolean shell variables set by Autoconf macros now use
 @samp{yes} for the true value.  Most of them use @samp{no} for false,
@@ -4287,7 +4298,7 @@ instead of @code{define}.  @code{AC_DEFUN} automatically calls
 do not interrupt other macros, to prevent nested @samp{checking@dots{}}
 messages on the screen.  There's no actual harm in continuing to use the
 older way, but it's less convenient and attractive.  @xref{Macro
-Format}.
+Definitions}.
 
 You probably looked at the macros that came with Autoconf as a guide for
 how to do things.  It would be a good idea to take a look at the new
@@ -4536,7 +4547,7 @@ uniform and descriptive naming scheme.  Here are the old names of the
 macros that were renamed, followed by the current names of those macros.
 Although the old names are still accepted by the @code{autoconf} program
 for backward compatibility, the old names are considered obsolete.
-@xref{Macro Naming}, for a description of the new naming scheme.
+@xref{Macro Names}, for a description of the new naming scheme.
 
 @table @code
 @item AC_ALLOCA
@@ -4734,7 +4745,7 @@ checks.
 
 This is an alphabetical list of the variables that Autoconf can
 substitute into files that it creates, typically one or more
-@file{Makefile}s.  @xref{Setting Variables}, for more information on how
+@file{Makefile}s.  @xref{Setting Output Variables}, for more information on how
 this is done.
 
 @printindex ov
