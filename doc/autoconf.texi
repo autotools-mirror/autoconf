@@ -9112,6 +9112,12 @@ being listed here.  First of all, remember that since commands are
 executed by the shell, all its weaknesses are inherited@dots{}
 
 @table @asis
+@item @code{$<}
+@sc{posix} says that the @samp{$<} construct in makefiles can be used
+only in inference rules and in the @samp{.DEFAULT} rule; its meaning in
+ordinary rules is unspecified.  Solaris 8's @command{make} for instance
+will replace it with the argument.
+
 @item Leading underscore in macro names
 Some Make don't support leading underscores in macro names, such as on
 NEWS-OS 4.2R.
