@@ -565,7 +565,7 @@ dnl AC_TR_SH(EXPRESSION)
 dnl --------------------
 dnl Transform EXPRESSION into a valid shell variable name.
 dnl sh/m4 polymorphic.
-dnl Make sure to update the definition of `$ac_tr_cpp' if you change this.
+dnl Make sure to update the definition of `$ac_tr_sh' if you change this.
 define(AC_TR_SH,
 [AC_VAR_IF_INDIR([$1],
   [`echo "$1" | $ac_tr_sh`],
@@ -1543,10 +1543,11 @@ define(AC_PREREQ,
 dnl ### Getting the canonical system type
 
 
+dnl AC_CONFIG_AUX_DIR(DIR)
+dnl ----------------------
 dnl Find install-sh, config.sub, config.guess, and Cygnus configure
 dnl in directory DIR.  These are auxiliary files used in configuration.
 dnl DIR can be either absolute or relative to $srcdir.
-dnl AC_CONFIG_AUX_DIR(DIR)
 AC_DEFUN(AC_CONFIG_AUX_DIR,
 [AC_CONFIG_AUX_DIRS($1 $srcdir/$1)])
 
@@ -1555,11 +1556,12 @@ dnl There's no need to call this macro explicitly; just AC_REQUIRE it.
 AC_DEFUN(AC_CONFIG_AUX_DIR_DEFAULT,
 [AC_CONFIG_AUX_DIRS($srcdir $srcdir/.. $srcdir/../..)])
 
+dnl AC_CONFIG_AUX_DIRS(DIR ...)
+dnl ---------------------------
 dnl Internal subroutine.
 dnl Search for the configuration auxiliary files in directory list $1.
 dnl We look only for install-sh, so users of AC_PROG_INSTALL
 dnl do not automatically need to distribute the other auxiliary files.
-dnl AC_CONFIG_AUX_DIRS(DIR ...)
 AC_DEFUN(AC_CONFIG_AUX_DIRS,
 [ac_aux_dir=
 for ac_dir in $1; do
@@ -1584,7 +1586,8 @@ ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"
 ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-])
+])dnl AC_CONFIG_AUX_DIRS
+
 
 dnl Canonicalize the host, target, and build system types.
 AC_DEFUN(AC_CANONICAL_SYSTEM,
@@ -1628,6 +1631,7 @@ dnl associated cache entries.  We also redo the cache entries if the user
 dnl specifies something different from ac_cv_$THING_alias on the command line.
 
 dnl AC_CANONICAL_THING(THING)
+dnl -------------------------
 AC_DEFUN(AC_CANONICAL_THING,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 
@@ -1656,7 +1660,7 @@ ifelse($1, [host],[dnl
     esac ;;
   esac
 
-dnl Set the other $1 vars.
+dnl Set the other $[1] vars.
   ac_cv_$1=`$ac_config_sub $ac_cv_$1_alias`
   ac_cv_$1_cpu=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`
   ac_cv_$1_vendor=`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`
@@ -1680,7 +1684,7 @@ AC_SUBST($1_vendor)dnl
 AC_SUBST($1_os)dnl
 
 AC_PROVIDE([$0])
-])dnl end of AC_CANONICAL_THING
+])dnl AC_CANONICAL_THING
 
 AC_DEFUN(AC_CANONICAL_HOST, [AC_CANONICAL_THING([host])])
 
@@ -1689,6 +1693,7 @@ AC_DEFUN(AC_CANONICAL_TARGET, [AC_CANONICAL_THING([target])])
 AC_DEFUN(AC_CANONICAL_BUILD, [AC_CANONICAL_THING([build])])
 
 dnl AC_VALIDATE_CACHED_SYSTEM_TUPLE[(cmd)]
+dnl --------------------------------------
 dnl if the cache file is inconsistent with the current host,
 dnl target and build system types, execute CMD or print a default
 dnl error message.
@@ -1716,8 +1721,9 @@ AC_DEFUN(AC_VALIDATE_CACHED_SYSTEM_TUPLE, [
 dnl ### Caching test results
 
 
+dnl AC_SITE_LOAD
+dnl ------------
 dnl Look for site or system specific initialization scripts.
-dnl AC_SITE_LOAD()
 define(AC_SITE_LOAD,
 [# Prefer explicitly selected file to automatically selected ones.
 if test -z "$CONFIG_SITE"; then
@@ -1735,7 +1741,9 @@ for ac_site_file in $CONFIG_SITE; do
 done
 ])
 
-dnl AC_CACHE_LOAD()
+
+dnl AC_CACHE_LOAD
+dnl -------------
 define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
   echo "loading cache $cache_file"
@@ -1747,6 +1755,7 @@ else
   >$cache_file
 fi
 ])
+
 
 dnl AC_CACHE_SAVE()
 define(AC_CACHE_SAVE,
@@ -1814,6 +1823,7 @@ AC_VAR_IF_SET([$1],
               [echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG],
               [$2])])
 
+
 dnl AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)
 dnl -------------------------------------------
 dnl Do not call this macro with a dnl right behind.
@@ -1878,6 +1888,7 @@ AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
 s%@$1@%%;t t
 AC_DIVERT_POP()dnl
 ])])
+
 
 
 dnl ### Printing messages at autoconf runtime
@@ -1976,7 +1987,8 @@ define(AC_MSG_ERROR_UNQUOTED,
 dnl ### Selecting which language to use for testing
 
 
-dnl AC_LANG_C()
+dnl AC_LANG_C
+dnl ---------
 AC_DEFUN(AC_LANG_C,
 [define([AC_LANG], [C])dnl
 ac_ext=c
@@ -1987,7 +1999,8 @@ ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$a
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
-dnl AC_LANG_CPLUSPLUS()
+dnl AC_LANG_CPLUSPLUS
+dnl -----------------
 AC_DEFUN(AC_LANG_CPLUSPLUS,
 [define([AC_LANG], [CPLUSPLUS])dnl
 ac_ext=C
@@ -1998,7 +2011,8 @@ ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftes
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
-dnl AC_LANG_FORTRAN77()
+dnl AC_LANG_FORTRAN77
+dnl -----------------
 AC_DEFUN(AC_LANG_FORTRAN77,
 [define([AC_LANG], [FORTRAN77])dnl
 ac_ext=f
@@ -2007,13 +2021,15 @@ ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
+dnl AC_LANG_SAVE
+dnl ------------
 dnl Push the current language on a stack.
-dnl AC_LANG_SAVE()
 define(AC_LANG_SAVE,
 [pushdef([AC_LANG_STACK], AC_LANG)])
 
+dnl AC_LANG_RESTORE
+dnl ---------------
 dnl Restore the current language from the stack.
-dnl AC_LANG_RESTORE()
 pushdef([AC_LANG_RESTORE],
 [ifelse(AC_LANG_STACK, [C], [AC_LANG_C],dnl
 AC_LANG_STACK, [CPLUSPLUS], [AC_LANG_CPLUSPLUS],dnl
@@ -2023,14 +2039,16 @@ AC_LANG_STACK, [FORTRAN77], [AC_LANG_FORTRAN77])[]popdef([AC_LANG_STACK])])
 dnl ### Compiler-running mechanics
 
 
+dnl AC_TRY_EVAL(VARIABLE)
+dnl ---------------------
 dnl The purpose of this macro is to "configure:123: command line"
 dnl written into config.log for every test run.
-dnl AC_TRY_EVAL(VARIABLE)
 AC_DEFUN(AC_TRY_EVAL,
 [{ (eval echo configure:__oline__: \"[$]$1\") 1>&AC_FD_CC; dnl
 (eval [$]$1) 2>&AC_FD_CC; }])
 
 dnl AC_TRY_COMMAND(COMMAND)
+dnl -----------------------
 AC_DEFUN(AC_TRY_COMMAND,
 [{ ac_try='$1'; AC_TRY_EVAL(ac_try); }])
 
@@ -2039,10 +2057,12 @@ dnl ### Dependencies between macros
 
 
 dnl AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
+dnl ---------------------------------------------
 define(AC_BEFORE,
 [ifdef([AC_PROVIDE_$2], [AC_WARNING([$2 was called before $1])])])
 
 dnl AC_REQUIRE(MACRO-NAME)
+dnl ----------------------
 define(AC_REQUIRE,
 [ifdef([AC_PROVIDE_$1], ,
 [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))dnl
@@ -2051,14 +2071,17 @@ AC_DIVERT_POP()dnl
 ])])
 
 dnl AC_PROVIDE(MACRO-NAME)
+dnl ----------------------
 define(AC_PROVIDE,
 [define([AC_PROVIDE_$1], )])
 
 dnl AC_OBSOLETE(THIS-MACRO-NAME [, SUGGESTION])
+dnl -------------------------------------------
 define(AC_OBSOLETE,
 [AC_WARNING([$1] is obsolete[$2])])
 
 dnl AC_HASBEEN(THIS-MACRO-NAME [, SUGGESTION])
+dnl ------------------------------------------
 define(AC_HASBEEN,
 [AC_FATAL([$1] is obsolete[$2])])
 
@@ -2098,6 +2121,7 @@ popdef([AC_Member_Member])dnl
 popdef([AC_Member_Aggregate])dnl
 AC_VAR_POPDEF([ac_Member])dnl
 ])dnl AC_CHECK_MEMBER
+
 
 dnl AC_CHECK_MEMBER(AGGREGATE.MEMBER...
 dnl                 [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
@@ -2309,6 +2333,9 @@ if test -z "$ac_cv_prog_$1"; then
 fi])
 ])
 
+
+dnl AC_PREFIX_PROGRAM(PROGRAM)
+dnl --------------------------
 dnl Guess the value for the `prefix' variable by looking for
 dnl the argument program along PATH and taking its parent.
 dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
@@ -2739,14 +2766,6 @@ AC_DEFUN(AC_CHECK_FILES,
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_FILE_NAME))
 $2],
                  [$3])])])
-
-dnl [for ac_file in $1
-dnl do
-dnl AC_CHECK_FILE($ac_file,
-dnl 		  [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_file)) $2],
-dnl 		  [$3])dnl
-dnl done
-dnl ])
 
 
 dnl ### Checking for declared symbols
@@ -3412,8 +3431,8 @@ rm -f $ac_cs_root.defs
 ])
 
 
-dnl AC_OUTPUT_FILES(CONFIG_FILES...)
-dnl --------------------------------
+dnl AC_OUTPUT_FILES
+dnl ---------------
 dnl Do the variable substitutions to create the Makefiles or whatever.
 dnl This is a subroutine of AC_OUTPUT.
 dnl
@@ -3588,8 +3607,8 @@ EOF
 ])dnl AC_OUTPUT_FILES
 
 
-dnl AC_OUTPUT_HEADERS(HEADER-FILE...)
-dnl ---------------------------------
+dnl AC_OUTPUT_HEADERS
+dnl -----------------
 dnl Create the config.h files from the config.h.in files.
 dnl This is a subroutine of AC_OUTPUT.
 dnl
@@ -3778,8 +3797,8 @@ EOF
 ])dnl AC_OUTPUT_HEADERS
 
 
-dnl AC_OUTPUT_LINKS(DEST:SOURCE...)
-dnl -------------------------------
+dnl AC_OUTPUT_LINKS
+dnl ---------------
 dnl This is a subroutine of AC_OUTPUT.
 dnl
 dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
@@ -3838,6 +3857,12 @@ changequote([, ])dnl
   else
     AC_MSG_ERROR(cannot link $ac_dest to $srcdir/$ac_source)
   fi
+ifset([AC_LIST_LINKS_COMMANDS],
+[  # Run the commands associated with the file.
+  case "$ac_file" in
+AC_LIST_LINKS_COMMANDS()dnl
+  esac
+])dnl
 fi; done
 EOF
 ])dnl AC_OUTPUT_LINKS
