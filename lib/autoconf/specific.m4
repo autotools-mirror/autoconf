@@ -182,6 +182,10 @@ AC_DEFUN(AC_PROG_YACC,
 dnl
 AC_DEFUN(AC_PROG_CPP,
 [AC_MSG_CHECKING(how to run the C preprocessor)
+# On Suns, sometimes $CPP names a directory.
+if test -n "$CPP" && test -d "$CPP"; then
+  CPP=
+fi
 if test -z "$CPP"; then
 AC_CACHE_VAL(ac_cv_prog_CPP,
 [  # This must be in double quotes, not single quotes, because CPP may get
