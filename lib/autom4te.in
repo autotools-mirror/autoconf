@@ -48,6 +48,7 @@ args: --preselect AC_CONFIG_LIBOBJ_DIR
 args: --preselect AC_CONFIG_LINKS
 args: --preselect AC_INIT
 args: --preselect AC_LIBSOURCE
+args: --preselect AC_REQUIRE_AUX_FILE
 args: --preselect AC_SUBST
 args: --preselect AM_AUTOMAKE_VERSION
 args: --preselect AM_CONDITIONAL

@@ -512,6 +512,7 @@ AN_MAKEVAR([INSTALL], [AC_PROG_INSTALL])
 AN_PROGRAM([install], [AC_PROG_INSTALL])
 AC_DEFUN([AC_PROG_INSTALL],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_REQUIRE_AUX_FILE([install-sh])dnl
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:

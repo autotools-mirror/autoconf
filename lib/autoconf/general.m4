@@ -1563,6 +1563,19 @@ fi
 
 
 
+## --------------------- ##
+## Requiring aux files.  ##
+## --------------------- ##
+
+# AC_REQUIRE_AUX_FILE(FILE)
+# -------------------------
+# This macro does nothing, it's a hook to be read with `autoconf --trace'.
+# It announces FILE is required in the auxdir.
+m4_define([AC_REQUIRE_AUX_FILE],
+[AS_LITERAL_IF([$1], [],
+               [AC_FATAL([$0: requires a literal argument])])])
+
+
 
 ## ----------------------------------- ##
 ## Getting the canonical system type.  ##
@@ -1596,6 +1609,8 @@ AC_SUBST([$1_os],
 # ------------------
 AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_REQUIRE_AUX_FILE([config.sub])dnl
+AC_REQUIRE_AUX_FILE([config.guess])dnl
 m4_divert_text([HELP_CANON],
 [[
 System types:

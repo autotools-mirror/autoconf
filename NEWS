@@ -13,6 +13,9 @@
   New macros that detect programs whose name is prefixed with the
   target type, if the build type and target type are different.
 
+** AC_REQUIRE_AUX_FILE
+  New trace macro that declares expected auxiliary files.
+
 * Major changes in Autoconf 2.59a
 
 ** AC_PROG_GREP

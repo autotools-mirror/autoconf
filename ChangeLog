@@ -1,3 +1,12 @@
+2004-08-04  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/general.m4 (AC_REQUIRE_AUX_FILE): New empty macro.
+	(AC_CANONICAL_BUILD): Call it to require config.sub and config.guess.
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Likewise for install-sh.
+	* doc/autoconf.texi (Input): Document AC_REQUIRE_AUX_FILE.
+	* lib/autom4te.in (Automake-preselections): Preselect
+	AC_REQUIRE_AUX_FILE.  Automake 1.10 will trace it.
+
 2004-08-02  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autom4te.in (Automake-preselections): Preselect

@@ -1765,6 +1765,16 @@ The auxiliary directory should not be named @file{aux} for portability
 to MS-DOS, because the filename @file{aux} is reserved under MS-DOS.
 @end defmac
 
+@defmac AC_REQUIRE_AUX_FILE (@var{file})
+@acindex{REQUIRE_AUX_FILE}
+Declares that @var{file} is expected in the directory defined above.  In
+Autoconf proper, this macro does nothing: its sole purpose is to be
+traced by third-party tools to produce a list of expected auxiliary
+files.  For instance it is called by macros like @code{AC_PROG_INSTALL}
+(@pxref{Particular Programs}) or @code{AC_CANONICAL_BUILD}
+(@pxref{Canonicalizing}) to register the auxiliary files they need.
+@end defmac
+
 Similarly, packages that use @command{aclocal} should declare where
 local macros can be found using @code{AC_CONFIG_MACRO_DIR}.
 
