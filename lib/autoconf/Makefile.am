@@ -17,15 +17,12 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-distautoconflibdir = $(pkgdatadir)/autoconf
-distautoconflib_DATA = autoconf.m4 \
+autoconflibdir = $(pkgdatadir)/autoconf
+dist_autoconflib_DATA = autoconf.m4 \
                        general.m4 oldnames.m4 specific.m4 \
 		       lang.m4 c.m4 fortran.m4 \
                        functions.m4 headers.m4 types.m4 libs.m4 programs.m4
-nodistautoconflibdir = $(pkgdatadir)/autoconf
-nodistautoconflib_DATA = autoconf.m4f
-
-EXTRA_DIST = $(distautoconflib_DATA)
+nodist_autoconflib_DATA = autoconf.m4f
 
 
 
@@ -33,7 +30,7 @@ EXTRA_DIST = $(distautoconflib_DATA)
 ## Building TAGS.  ##
 ## --------------- ##
 
-TAGS_FILES = $(distautoconflib_DATA)
+TAGS_FILES = $(dist_autoconflib_DATA)
 
 ETAGS_ARGS = --lang=none \
   --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
@@ -48,7 +45,7 @@ ETAGS_ARGS = --lang=none \
 
 check-local:
 	if (cd $(srcdir) && \
-	    egrep '^_?EOF' $(distautoconflib_DATA)) >eof.log; then \
+	    egrep '^_?EOF' $(dist_autoconflib_DATA)) >eof.log; then \
 	  echo "ERROR: user EOF tags were used:" >&2; \
 	  sed "s,^,$*.m4: ," <eof.log >&2; \
 	  echo >&2; \

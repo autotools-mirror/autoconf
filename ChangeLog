@@ -1,5 +1,21 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	Automake 1.5.
+
+	* Makefile.am (AUTOMAKE_OPTIONS): Add 1.5 and dist-bzip2.
+	(AMTAR): Help automake define it.
+	(INSTALL, install-data-hook): The INSTALL.txt trick is no longer
+	needed, 1.5 can have a macro and a target with the same name.
+	* m4/auxdir.m4, m4/cond.m4, m4/depend.m4, m4/install-sh.m4,
+	* m4/strip.m4: New.
+	* m4/init.m4, m4/sanity.m4: Update.
+	* doc/Makefile.am (CLEANFILES): 1.5 knows the texi2dvi files.
+	* lib/autoconf/Makefile.am, lib/autotest/Makefile.am,
+	* lib/m4sugar/Makefile.am, lib/autoscan/Makefile.am,
+	* lib/Autom4te/Makefile.am, man/Makefile.am: Use dist/nodist.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	Provide a mean to ``AC_PREREQ'' for M4sugar, M4sh and Autotest.
 
 	* lib/autoconf/version.in: Remove.

@@ -1,6 +1,7 @@
-# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
+# Makefile.in generated automatically by automake 1.5 from Makefile.am.
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+# Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -10,6 +11,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
+@SET_MAKE@
 
 SHELL = @SHELL@
 
@@ -31,13 +33,9 @@ infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
-
-DESTDIR =
-
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
@@ -46,11 +44,11 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
-
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
@@ -66,178 +64,210 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-bin_SCRIPTS = autom4te               autoconf autoheader autoreconf ifnames autoscan autoupdate
+bin_SCRIPTS = autom4te \
+              autoconf autoheader autoreconf ifnames autoscan autoupdate
 
 
-EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in              autoscan.in autom4te.in
+EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
+             autoscan.in autom4te.in
 
 
 # Files that should be removed, but which Automake does not know.
 CLEANFILES = $(bin_SCRIPTS)
 
-edit = sed 	-e 's,@SHELL\@,$(SHELL),g' 	-e 's,@PERL\@,$(PERL),g' 	-e 's,@bindir\@,$(bindir),g' 	-e 's,@datadir\@,$(pkgdatadir),g' 	-e 's,@prefix\@,$(prefix),g' 	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' 	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' 	-e 's,@M4\@,$(M4),g' 	-e 's,@AWK\@,$(AWK),g' 	-e 's,@VERSION\@,$(VERSION),g' 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
+edit = sed \
+	-e 's,@SHELL\@,$(SHELL),g' \
+	-e 's,@PERL\@,$(PERL),g' \
+	-e 's,@bindir\@,$(bindir),g' \
+	-e 's,@datadir\@,$(pkgdatadir),g' \
+	-e 's,@prefix\@,$(prefix),g' \
+	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
+	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
+	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
+	-e 's,@M4\@,$(M4),g' \
+	-e 's,@AWK\@,$(AWK),g' \
+	-e 's,@VERSION\@,$(VERSION),g' \
+	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
 
 TAGS_DEPENDENCIES = $(EXTRA_DIST)
 
-ETAGS_PERL = --lang=perl   autoreconf.in autoupdate.in autoscan.in autom4te.in
+ETAGS_PERL = --lang=perl \
+  autoreconf.in autoupdate.in autoscan.in autom4te.in
 
-ETAGS_SH = --lang=none --regex='/\([a-zA-Z_][a-zA-Z_0-9]*\)=/\1/'   autoconf.in autoheader.in ifnames.in
+ETAGS_SH = --lang=none --regex='/\([a-zA-Z_][a-zA-Z_0-9]*\)=/\1/' \
+  autoconf.in autoheader.in ifnames.in
 
 
 ETAGS_ARGS = $(ETAGS_PERL) $(ETAGS_SH)
+subdir = bin
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES = 
-SCRIPTS =  $(bin_SCRIPTS)
+CONFIG_CLEAN_FILES =
+SCRIPTS = $(bin_SCRIPTS)
 
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_SOURCES =
+DIST_COMMON = Makefile.am Makefile.in
+all: all-am
 
-
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
-
-TAR = tar
-GZIP_ENV = --best
-all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu bin/Makefile
-
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+	cd $(top_srcdir) && \
+	  $(AUTOMAKE) --gnu  bin/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	  CONFIG_HEADERS= CONFIG_LINKS= \
+	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  f="`echo $$p|sed '$(transform)'`"; \
 	  if test -f $$p; then \
-	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
-	  else if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
-	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
-	  else :; fi; fi; \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/$$f"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/$$f; \
+	  elif test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/$$f"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/$$f; \
+	  else :; fi; \
 	done
 
 uninstall-binSCRIPTS:
 	@$(NORMAL_UNINSTALL)
-	list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  f="`echo $$p|sed '$(transform)'`"; \
+	  echo " rm -f $(DESTDIR)$(bindir)/$$f"; \
+	  rm -f $(DESTDIR)$(bindir)/$$f; \
 	done
+uninstall-info-am:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES) $(LISP)
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
-	here=`pwd` && cd $(srcdir) \
-	  && mkid -f$$here/ID $$unique $(LISP)
+	mkid -fID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || etags $(ETAGS_ARGS) $$tags  $$unique $(LISP)
 
-mostlyclean-tags:
-
-clean-tags:
+GTAGS:
+	here=`CDPATH=: && cd $(top_builddir) && pwd` \
+	  && cd $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
-maintainer-clean-tags:
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
-
-subdir = bin
+top_distdir = ..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu bin/Makefile
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
+	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
+	    $(mkinstalldirs) "$(distdir)/$$dir"; \
+	  fi; \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pR $$d/$$file $(distdir) \
+	    || exit 1; \
 	  else \
 	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	    || cp -p $$d/$$file $(distdir)/$$file \
+	    || exit 1; \
 	  fi; \
 	done
-info-am:
-info: info-am
-dvi-am:
-dvi: dvi-am
 check-am: all-am
 check: check-am
-installcheck-am:
-installcheck: installcheck-am
-install-exec-am: install-binSCRIPTS
-install-exec: install-exec-am
+all-am: Makefile $(SCRIPTS)
 
-install-data-am:
+installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+
+install: install-am
+install-exec: install-exec-am
 install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am: uninstall-binSCRIPTS
-uninstall: uninstall-am
-all-am: Makefile $(SCRIPTS)
-all-redirect: all-am
+
+installcheck: installcheck-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
-installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(bindir)
-
-
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	  `test -z '$(STRIP)' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
 clean-generic:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
-	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-tags mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-tags clean-generic mostlyclean-am
-
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-distclean-am:  distclean-tags distclean-generic clean-am
+clean-am: clean-generic mostlyclean-am
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-generic distclean-tags
+
+dvi: dvi-am
+
+dvi-am:
+
+info: info-am
+
+info-am:
+
+install-data-am:
+
+install-exec-am: install-binSCRIPTS
+
+install-info: install-info-am
+
+install-man:
+
+installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-binSCRIPTS install-binSCRIPTS tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-generic
+
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-generic
+
+uninstall-am: uninstall-binSCRIPTS uninstall-info-am
+
+.PHONY: GTAGS all all-am check check-am clean clean-generic distclean \
+	distclean-generic distclean-tags distdir dvi dvi-am info \
+	info-am install install-am install-binSCRIPTS install-data \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic tags \
+	uninstall uninstall-am uninstall-binSCRIPTS uninstall-info-am
 
 
 autoconf: $(srcdir)/autoconf.in $(top_srcdir)/configure.ac
@@ -281,7 +311,6 @@ autom4te: $(srcdir)/autom4te.in $(top_srcdir)/configure.ac
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod +x autom4te.tmp
 	mv autom4te.tmp autom4te
-
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -18,13 +18,13 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 \
+dist_man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 \
 autoscan.1 autom4te.1 config.guess.1 config.sub.1
 
 man_aux = autoconf.x autoreconf.x autoheader.x autoupdate.x ifnames.x \
 autoscan.x autom4te.x config.guess.x config.sub.x
 
-EXTRA_DIST = $(man_MANS) $(man_aux) common.x
+EXTRA_DIST = $(man_aux) common.x
 MAINTAINERCLEANFILES = $(man_MANS)
 
 # Depend on configure.ac to get version number changes.

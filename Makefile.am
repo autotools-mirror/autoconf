@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
-AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
+AUTOMAKE_OPTIONS = check-news 1.5 dist-bzip2 readme-alpha
 
 SUBDIRS = . lib bin config m4 man doc tests
 
@@ -28,6 +28,9 @@ ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
              GNUmakefile Makefile.maint
+
+# Automake is unable to look into our special aclocal.m4...
+AMTAR = @AMTAR@
 
 
 ## -------------------- ##
@@ -39,21 +42,15 @@ html pdf:
 
 .PHONY: html pdf
 
-## ------------------ ##
-## Maintainer rules.  ##
-## ------------------ ##
 
+## --------- ##
 ## INSTALL.  ##
+## --------- ##
 
-# INSTALL is a special case.  Automake seems to have a single name space
-# for both targets and variables.  If we just use INSTALL, then the var
-# $(INSTALL) is not defined, and the install target fails.
+pkgdata_DATA = INSTALL
 MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
-INSTALL.txt: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL.txt
-	cp $(srcdir)/INSTALL.txt $(srcdir)/INSTALL
-
-MAINTAINERCLEANFILES = INSTALL.txt
+INSTALL: $(top_srcdir)/doc/install.texi
+	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL
 
 maintainer-clean-local:
 	-rm -rf autom4te.cache
@@ -63,19 +60,6 @@ maintainer-check: maintainer-check-tests
 maintainer-check-tests:
 	cd tests && make maintainer-check
 
-## ----------------------------------- ##
-## Special installation instructions.  ##
-## ----------------------------------- ##
-
-install-data-hook: INSTALL.txt
-	@$(NORMAL_INSTALL)
-	@list='INSTALL'; for p in $$list; do \
-	  if test -f "$$p.txt"; then d= ; else d="$(srcdir)/"; fi; \
-	  f=`echo $$p | sed -e 's,^.*/,,'`; \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir) ; \
-	  echo " $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f"; \
-	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
-	done
 
 
 ## ---------------------------- ##

@@ -1,11 +1,11 @@
 ## Process this file with automake to create Makefile.in
 
-distm4sugarlibdir = $(pkgdatadir)/m4sugar
+m4sugarlibdir = $(pkgdatadir)/m4sugar
 # We ship version.m4 so that it's in src.  `autoconf' wants all the sources
 # at the same place...
-distm4sugarlib_DATA = version.m4 m4sugar.m4 m4sh.m4
+dist_m4sugarlib_DATA = version.m4 m4sugar.m4 m4sh.m4
 
-EXTRA_DIST = $(distm4sugarlib_DATA) version.in
+EXTRA_DIST = version.in
 
 
 ## ------------ ##
@@ -29,7 +29,7 @@ $(srcdir)/version.m4: $(srcdir)/version.in $(top_srcdir)/configure.ac
 ## Building TAGS.  ##
 ## --------------- ##
 
-TAGS_FILES = $(m4sugarlib_DATA)
+TAGS_FILES = $(dist_m4sugarlib_DATA)
 
 ETAGS_ARGS = --lang=none \
   --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
@@ -41,7 +41,7 @@ ETAGS_ARGS = --lang=none \
 
 check-local:
 	if (cd $(srcdir) && \
-	    egrep '^_?EOF' $(distm4sugarlib_DATA)) >eof.log; then \
+	    egrep '^_?EOF' $(dist_m4sugarlib_DATA)) >eof.log; then \
 	  echo "ERROR: user EOF tags were used:" >&2; \
 	  sed "s,^,$*.m4: ," <eof.log >&2; \
 	  echo >&2; \
