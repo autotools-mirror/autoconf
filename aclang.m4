@@ -1427,7 +1427,7 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # Fortran 77 linker flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS m4_default([$1], [$ac_cv_prog_f77_v])"
-(eval echo configure:__oline__: \"$ac_link\") >&AC_FD_LOG
+(eval echo $as_me:__oline__: \"$ac_link\") >&AC_FD_LOG
 ac_f77_v_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&AC_FD_LOG
 FFLAGS=$ac_save_FFLAGS

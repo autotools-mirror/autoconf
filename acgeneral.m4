@@ -666,7 +666,7 @@ $1])dnl
 # which sees the opening of a string.
 m4_define([AC_REVISION],
 [m4_divert([REVISION],
-           [@%:@ From configure.in m4_translit([$1], $"").])dnl
+           [@%:@ From __file__ m4_translit([$1], [$""]).])dnl
 ])
 
 
@@ -800,14 +800,24 @@ if test "$silent" = yes; then
 else
   exec AC_FD_MSG>&1
 fi
-exec AC_FD_LOG>./config.log
+exec AC_FD_LOG>>config.log
+])# _AC_INIT_DEFAULTS_FDS
 
-echo "\
+
+# _AC_INIT_DEFAULTS
+# -----------------
+# Values which defaults can be set from `configure.in'.
+m4_define([_AC_INIT_DEFAULTS],
+[m4_divert_push([DEFAULTS])dnl
+
+_AC_INIT_DEFAULTS_ENVIRONMENT
+
+cat >config.log << EOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
 
-It was created by configure ifset([AC_PACKAGE_STRING],
-                            [(AC_PACKAGE_STRING)]) AC_ACVERSION, executed with
+It was created by $as_me ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
  > $[0] $[@]
 
 on `(hostname || uname -n) 2>/dev/null | sed 1q`:
@@ -826,20 +836,9 @@ hostinfo               = `(hostinfo) 2>/dev/null`
 /bin/arch              = `(/bin/arch) 2>/dev/null`
 /usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
 /usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
-" >&AC_FD_LOG
-])# _AC_INIT_DEFAULTS_FDS
+EOF
 
-
-# _AC_INIT_DEFAULTS
-# -----------------
-# Values which defaults can be set from `configure.in'.
-m4_define([_AC_INIT_DEFAULTS],
-[m4_divert_push([DEFAULTS])dnl
-
-_AC_INIT_DEFAULTS_ENVIRONMENT
 _AC_INIT_DEFAULTS_FDS
-
-
 #
 # Initializations.
 #
@@ -858,6 +857,9 @@ AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
+
+# Name of the executable.
+as_me=`echo "$[0]" | sed 's,.*/,,'`
 
 # Avoid depending upon Character Ranges.
 ac_cr_az='abcdefghijklmnopqrstuvwxyz'
@@ -1269,7 +1271,7 @@ do
     x_libraries=$ac_optarg ;;
 
   -*) AC_MSG_ERROR([unrecognized option: $ac_option
-Try `configure --help' for more information.])
+Try `$[0] --help' for more information.])
     ;;
 
   *=*)
@@ -1537,8 +1539,8 @@ done
 # config.log.
 trap 'exit_status=$?
   test "$ac_signal" != 0 &&
-    echo "configure: caught signal $ac_signal" >&AC_FD_LOG
-  echo "configure: exit $exit_status" >&AC_FD_LOG
+    echo "$as_me: caught signal $ac_signal" >&AC_FD_LOG
+  echo "$as_me: exit $exit_status" >&AC_FD_LOG
   rm -rf conftest* confdefs* core core.* *.core $ac_clean_files &&
     exit $exit_status
      ' 0
@@ -1991,14 +1993,14 @@ m4_define([AC_CACHE_LOAD],
   # Some versions of bash will fail to source /dev/null (special
   # files actually), so we avoid doing that.
   if test -f "$cache_file"; then
-    echo "loading cache $cache_file"
+    AC_MSG_NOTICE([loading cache $cache_file])
     case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) . $cache_file;;
       *)                      . ./$cache_file;;
     esac
   fi
 else
-  echo "creating cache $cache_file"
+  AC_MSG_NOTICE([creating cache $cache_file])
   >$cache_file
 fi
 ])# AC_CACHE_LOAD
@@ -2273,7 +2275,7 @@ m4_define([_AC_ECHO_N],
 # AC_MSG_NOTICE(STRING)
 # ---------------------
 m4_define([AC_MSG_NOTICE],
-[_AC_ECHO([configure:__oline__: notice: $1], AC_FD_LOG)
+[_AC_ECHO([$as_me:__oline__: notice: $1], AC_FD_LOG)
 _AC_ECHO([$1])[]dnl
 ])
 
@@ -2281,7 +2283,7 @@ _AC_ECHO([$1])[]dnl
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
-[_AC_ECHO([configure:__oline__: checking $1], AC_FD_LOG)
+[_AC_ECHO([$as_me:__oline__: checking $1], AC_FD_LOG)
 _AC_ECHO_N([checking $1... ])[]dnl
 ])
 
@@ -2289,7 +2291,7 @@ _AC_ECHO_N([checking $1... ])[]dnl
 # AC_MSG_RESULT(RESULT)
 # ---------------------
 m4_define([AC_MSG_RESULT],
-[_AC_ECHO([configure:__oline__: result: $1], AC_FD_LOG)
+[_AC_ECHO([$as_me:__oline__: result: $1], AC_FD_LOG)
 _AC_ECHO([${ECHO_T}$1])[]dnl
 ])
 
@@ -2298,7 +2300,7 @@ _AC_ECHO([${ECHO_T}$1])[]dnl
 # ------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
 m4_define([AC_MSG_RESULT_UNQUOTED],
-[_AC_ECHO_UNQUOTED([configure:__oline__: result: $1], AC_FD_LOG)
+[_AC_ECHO_UNQUOTED([$as_me:__oline__: result: $1], AC_FD_LOG)
 _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
 
@@ -2306,15 +2308,15 @@ _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 # AC_MSG_WARN(PROBLEM)
 # --------------------
 m4_define([AC_MSG_WARN],
-[{ _AC_ECHO([configure:__oline__: WARNING: $1], AC_FD_LOG)
-_AC_ECHO([configure: WARNING: $1], 2); }])
+[{ _AC_ECHO([$as_me:__oline__: WARNING: $1], AC_FD_LOG)
+_AC_ECHO([$as_me: WARNING: $1], 2); }])
 
 
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
 m4_define([AC_MSG_ERROR],
-[{ _AC_ECHO([configure:__oline__: error: $1], AC_FD_LOG)
-  _AC_ECHO([configure: error: $1], 2)
+[{ _AC_ECHO([$as_me:__oline__: error: $1], AC_FD_LOG)
+  _AC_ECHO([$as_me: error: $1], 2)
   AS_EXIT([$2]); }])
 
 
@@ -2343,7 +2345,7 @@ AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
 AC_DEFUN([AC_TRY_EVAL],
-[{ (eval echo configure:__oline__: \"[$]$1\") >&AC_FD_LOG; dnl
+[{ (eval echo $as_me:__oline__: \"[$]$1\") >&AC_FD_LOG; dnl
 (eval [$]$1) 2>&AC_FD_LOG; }])
 
 
@@ -2856,7 +2858,7 @@ if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
 else
   cat conftest.err >&AC_FD_LOG
-  echo "configure: failed program was:" >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
   $3
 fi
@@ -2910,7 +2912,7 @@ rm -f conftest.$ac_objext
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
 m4_ifvanl([$3],[  $3])dnl
 fi
@@ -2951,7 +2953,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
 m4_ifvanl([$3], [  $3])dnl
 fi
@@ -3010,7 +3012,7 @@ if AC_TRY_EVAL(ac_link) &&
    test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
-  echo "configure: failed program was:" >&AC_FD_LOG
+  echo "$as_me: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
 m4_ifvanl([$3], [  $3])dnl
 fi
@@ -3910,7 +3912,7 @@ echo "Cache variables:" >&AC_FD_LOG
 _AC_CACHE_DUMP | sed 's/^/| /' >&AC_FD_LOG
 echo >&AC_FD_LOG
 echo "confdefs.h:" >&AC_FD_LOG
-cat confdefs.h | sed 's/^/| /' >&AC_FD_LOG
+sed '/^$/d;s/^/| /' confdefs.h >&AC_FD_LOG
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
@@ -3933,20 +3935,32 @@ AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
 m4_define([_AC_OUTPUT_CONFIG_STATUS],
-[echo creating $CONFIG_STATUS
-cat >$CONFIG_STATUS <<\EOF
+[AC_MSG_NOTICE([creating $CONFIG_STATUS])
+cat >$CONFIG_STATUS <<\_ACEOF
 #! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # Compiler output produced by configure, useful for debugging
-# configure, is in ./config.log if it exists.
+# configure, is in config.log if it exists.
 
-_AC_INIT_DEFAULTS_ENVIRONMENT
 debug=false
-me=`echo "$[0]" | sed 's,.*/,,'`
+as_me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
+_AC_INIT_DEFAULTS_ENVIRONMENT
+_AC_INIT_DEFAULTS_FDS
+cat >&AC_FD_LOG << EOF
+
+----------------------------------------------------------------------
+
+This file was extended by $as_me ifset([AC_PACKAGE_STRING],
+                            [(AC_PACKAGE_STRING) ])AC_ACVERSION, executed with
+ > $[0] $[@]
+on `(hostname || uname -n) 2>/dev/null | sed 1q`
+
 EOF
+
+_ACEOF
 
 # Files that config.status was made for.
 if test -n "$ac_config_files"; then
@@ -3968,7 +3982,7 @@ fi
 cat >>$CONFIG_STATUS <<\EOF
 
 ac_cs_usage="\
-\`$me' instantiates files from templates according to the
+\`$as_me' instantiates files from templates according to the
 current configuration.
 
 Usage: $[0] [[OPTIONS]] [[FILE]]...
@@ -3976,7 +3990,7 @@ Usage: $[0] [[OPTIONS]] [[FILE]]...
   -h, --help       print this help, then exit
   -V, --version    print version number, then exit
   -d, --debug      don't remove temporary files
-      --recheck    update $me by reconfiguring in the same conditions
+      --recheck    update $as_me by reconfiguring in the same conditions
 ifset([AC_LIST_FILES],
 [[  --file=FILE[:TEMPLATE]
                    instantiate the configuration file FILE
@@ -4011,7 +4025,7 @@ EOF
 
 cat >>$CONFIG_STATUS <<EOF
 ac_cs_version="\\
-$CONFIG_STATUS generated by autoconf version AC_ACVERSION.
+$CONFIG_STATUS generated by $as_me (Autoconf AC_ACVERSION).
 Configured on host $ac_hostname by
   `echo "[$]0 $ac_configure_args" | sed 's/[[\\""\`\$]]/\\\\&/g'`"
 
@@ -4056,8 +4070,8 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    echo "$me: ambiguous option: $ac_option
-Try \`$me --help' for more information."; exit 1 ;;
+    AC_MSG_ERROR([ambiguous option: $ac_option
+Try \`$[0] --help' for more information.]);;
   --help | --hel | -h )
     echo "$ac_cs_usage"; exit 0 ;;
   --debug | --d* | -d )
@@ -4090,9 +4104,9 @@ AC_FOREACH([AC_File], AC_LIST_HEADERS,
 ])dnl
 
   # This is an error.
-  -*) echo "$me: unrecognized option: $[1]
-Try \`$me --help' for more information."; exit 1 ;;
-  *) echo "$me: invalid argument: $[1]"; exit 1 ;;
+  -*) AC_MSG_ERROR([unrecognized option: $[1]
+Try \`$[0] --help' for more information.]) ;;
+  *) AC_MSG_ERROR([invalid argument: $[1]]);;
   esac
   shift
 done
@@ -4303,9 +4317,12 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 ])dnl
 
   if test x"$ac_file" != x-; then
-    echo creating $ac_file
+    AC_MSG_NOTICE([creating $ac_file])
     rm -f "$ac_file"
   fi
+  # Let's still pretend it is `configure' which instantiates (i.e., don't
+  # use $as_me), people would be surprised to read:
+  #    /* config.h.  Generated automatically by config.status.  */
   configure_input="Generated automatically from `echo $ac_file_in |
                                                  sed 's,.*/,,'` by configure."
 
@@ -4457,7 +4474,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   * )   ac_file_in=$ac_file.in ;;
   esac
 
-  test x"$ac_file" != x- && echo creating $ac_file
+  test x"$ac_file" != x- && AC_MSG_NOTICE([creating $ac_file])
 
   # First look for the input files in the build tree, otherwise in the
   # src tree.
@@ -4584,6 +4601,9 @@ rm -f conftest.undefs
 
 dnl Now back to your regularly scheduled config.status.
 cat >>$CONFIG_STATUS <<\EOF
+  # Let's still pretend it is `configure' which instantiates (i.e., don't
+  # use $as_me), people would be surprised to read:
+  #    /* config.h.  Generated automatically by config.status.  */
   if test x"$ac_file" = x-; then
     echo "/* Generated automatically by configure.  */" >$tmp/config.h
   else
@@ -4593,7 +4613,7 @@ cat >>$CONFIG_STATUS <<\EOF
   rm -f $tmp/in
   if test x"$ac_file" != x-; then
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
-      echo "$ac_file is unchanged"
+      AC_MSG_NOTICE([$ac_file is unchanged])
     else
       ac_dir=`AS_DIRNAME(["$ac_file"])`
       if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
@@ -4638,7 +4658,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
 
-  echo "linking $srcdir/$ac_source to $ac_dest"
+  AC_MSG_NOTICE([linking $srcdir/$ac_source to $ac_dest])
 
   if test ! -r $srcdir/$ac_source; then
     AC_MSG_ERROR([$srcdir/$ac_source: File not found])
@@ -4663,8 +4683,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
 
   # Make a symlink if possible; otherwise try a hard link.
   if ln -s $ac_rel_source $ac_dest 2>/dev/null ||
-     ln $srcdir/$ac_source $ac_dest; then :
-  else
+     ln $srcdir/$ac_source $ac_dest; then :; else
     AC_MSG_ERROR([cannot link $ac_dest to $srcdir/$ac_source])
   fi
 ifset([AC_LIST_LINKS_COMMANDS],
@@ -4754,7 +4773,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     # parts of a large source tree are present.
     test -d $srcdir/$ac_subdir || continue
 
-    echo configuring in $ac_subdir
+    AC_MSG_NOTICE([configuring in $ac_subdir])
     case $srcdir in
     .) ;;
     *) AS_MKDIR_P(["./$ac_subdir"])
@@ -4808,7 +4827,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       esac
 ])dnl
 
-      echo "[running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file] --srcdir=$ac_sub_srcdir"
+      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
       # The eval makes quoting arguments work.
       if eval $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
       then :
