@@ -1746,7 +1746,7 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @node Generic Programs,  , Particular Programs, Alternative Programs
-@subsection Generic Program Checks
+@subsection Generic Program and File Checks
 
 These macros are used to find programs not covered by the particular
 test macros.  If you need to check the behavior of a program as well as
@@ -1760,6 +1760,19 @@ instead, like this:
 AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
   $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
 @end example
+
+@defmac AC_CHECK_FILE (@var{file} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILE
+Check whether file @var{file} exists on the native system.
+If it is found, execute @var{action-if-found}, otherwise do
+@var{action-if-not-found}, if given.
+@end defmac
+
+@defmac AC_CHECK_FILES (@var{files}@r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILES
+Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
+Additionally, defines @samp{HAVE@var{file}} for each file found, set to 1.
+@end defmac
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found} @r{[}, @var{path}, @r{[} @var{reject} @r{]]]})
 @maindex CHECK_PROG
@@ -1866,6 +1879,15 @@ as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
 -lX11}.  Otherwise this macro will fail to detect that @var{function} is
 present, because linking the test program will always fail with
 unresolved symbols.
+@end defmac
+
+@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}@r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex SEARCH_LIBS
+This macro is equivalent to calling @code{AC_TRY_LINK_FUNC} once for each
+library listed in @var{search-libs}.  Add @samp{-l@var{library}} to
+@code{LIBS} for the first library found to contain @var{function}, and
+execute @var{action-if-found}.  Otherwise execute
+@var{action-if-not-found}.
 @end defmac
 
 @node Library Functions, Header Files, Libraries, Existing Tests
@@ -2038,10 +2060,15 @@ memory.
 
 @defmac AC_FUNC_SELECT_ARGTYPES
 @maindex FUNC_SELECT_ARGTYPES
-@cvindex SELECT_TYPE_ARG1, SELECT_TYPE_ARG234, SELECT_TYPE_ARG5
-If the @code{select} function exists, @code{SELECT_TYPE_ARG1},
-@code{SELECT_TYPE_ARG234} and @code{SELECT_TYPE_ARG5} are defined to
-be the types of the formal arguments to @code{select}.
+@cvindex SELECT_TYPE_ARG1
+@cvindex SELECT_TYPE_ARG234
+@cvindex SELECT_TYPE_ARG5
+Determines the correct type to be passed to each of the
+@code{select} function's arguments, and defines those types
+in @code{SELECT_TYPE_ARG1}, @code{SELECT_TYPE_ARG234}, and
+@code{SELECT_TYPE_ARG5} respectively.  @code{SELECT_TYPE_ARG1} defaults
+to @samp{int}, @code{SELECT_TYPE_ARG234} defaults to @samp{int *},
+and @code{SELECT_TYPE_ARG5} defaults to @samp{struct timeval *}.
 @end defmac
 
 @defmac AC_FUNC_SETPGRP
@@ -2679,8 +2706,13 @@ that define @code{__STDC__} do not support @code{long double}.
 @defmac AC_C_STRINGIZE
 @maindex C_STRINGIZE
 @cvindex HAVE_STRINGIZE
-If the preprocessor supports the @code{##} stringizing operator, define
-@code{HAVE_STRINGIZE}.
+If the C preprocessor supports the stringizing operator, define
+@code{HAVE_STRINGIZE}.  The stringizing operator is @samp{#} and is
+found in macros such as this:
+
+@example
+#define x(y) #y
+@end example
 @end defmac
 
 @defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{]})
@@ -2759,26 +2791,34 @@ libraries.
 
 The following macros check for operating system services or capabilities.
 
-
-@defmac AC_CHECK_FILE (@var{file}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
-@maindex CHECK_FILE
-Checks for the existence of @var{file} in the native file system.
-This macro will generate a fatal error if cross-compiling.
-
-If the file is found and readable, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@defmac AC_CYGWIN
+@maindex CYGWIN
+Checks for the Cygwin environment.  If present, sets shell variable
+@code{CYGWIN} to @samp{yes}.  If not present, sets @code{CYGWIN}
+to the empty string.
 @end defmac
 
-@defmac AC_CHECK_FILES (@var{files}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
-@maindex CHECK_FILES
-Checks for the existence of @var{files} in the native file system.
-This is equivalent to running @code{AC_CHECK_FILE} for each file
-in @var{files}.  This macro will generate a fatal error if
-cross-compiling.
+@defmac AC_EXEEXT
+@maindex EXEEXT
+@ovindex EXEEXT
+Defines substitute variable @code{EXEEXT} based on the output of the
+compiler, after .c, .o, and .obj files have been excluded.  Typically
+set to empty string if Unix, @samp{.exe} or @samp{.EXE} if Win32.
+@end defmac
 
-For each readable file found, run shell commands @var{action-if-found}
-and define @samp{HAVE_@var{file}} (in all capitals), otherwise run
-@var{action-if-not-found}.
+@defmac AC_OBJEXT
+@maindex OBJEXT
+@ovindex OBJEXT
+Defines substitute variable @code{OBJEXT} based on the output of the
+compiler, after .c files have been excluded.  Typically
+set to @samp{.o} if Unix, @samp{.obj} if Win32.
+@end defmac
+
+@defmac AC_MINGW32
+@maindex MINGW32
+Checks for the MingW32 compiler environment.  If present, sets shell
+variable @code{MINGW32} to @samp{yes}.  If not present, sets
+@code{MINGW32} to the empty string.
 @end defmac
 
 @defmac AC_PATH_X
@@ -2819,7 +2859,7 @@ found to the output variable @code{X_PRE_LIBS}.
 @c This is an incomplete kludge.  Make a real way to do it.
 @c If you need to check for other X functions or libraries yourself, then
 @c after calling this macro, add the contents of @code{X_EXTRA_LIBS} to
-@c @code{LIBS} temporarily, like this:
+@c @code{LIBS} temporarily, like this: (FIXME - add example)
 @end defmac
 
 @defmac AC_SYS_INTERPRETER
@@ -3097,6 +3137,14 @@ a prototype of and a call to @var{function} can be compiled and linked.
 
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
+@end defmac
+
+@defmac AC_TRY_LINK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex TRY_LINK_FUNC
+Attempt to compile and link a small program that links with
+@var{function}.  If the file compiles and links successfully,
+run shell commands @var{action-if-found}, otherwise run
+@var{action-if-not-found}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -3627,16 +3675,6 @@ Flushes all cached values to the cache file.  Called automatically
 from @code{AC_OUTPUT}, but it can be quite useful to call
 @code{AC_CACHE_SAVE} at key points in configure.in.  Doing so
 checkpoints the cache in case of an early configure script abort.
-@end defmac
-
-@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{commands})
-@maindex VALIDATE_CACHED_SYSTEM_TUPLE
-If any of the system tuples for the build, host or target system is cached and does
-not match the tuples for the current invocation of ``configure'', @var{commands}
-are executed.  If no @var{commands} are given, then an error message is emitted
-and the script is halted. This is useful for catching users who, unaware of the
-effects of result caching, accidentally run ``configure'' on two different kinds
-of systems.
 @end defmac
 
 @menu
@@ -4208,6 +4246,13 @@ the variables this macro sets.
 Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
 host type.  This is all that is needed for programs that are not part of
 a compiler toolchain.
+@end defmac
+
+@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
+@maindex VALIDATE_CACHED_SYSTEM_TUPLE
+If the cache file is inconsistent with the current host,
+target and build system types, execute @var{cmd} or print a default
+error message.
 @end defmac
 
 @node System Type Variables, Using System Type, Canonicalizing, Manual Configuration

@@ -1,3 +1,17 @@
+1999-01-04  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (AC_CHECK_FILE): Document.
+	(AC_CHECK_FILES): Likewise.
+	(AC_SEARCH_LIBS): Likewise.
+	(AC_FUNC_SELECT_ARGTYPES): Use Jeff Garzik's version.
+	(AC_C_STRINGIZE): Likewise.
+	(AC_CYGWIN): Document.
+	(AC_EXEEXT): Likewise.
+	(AC_OBJEXT): Likewise.
+	(AC_MINGW32): Likewise.
+	(AC_TRY_LINK_FUNC): Likewise.
+	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
+	
 1999-01-01  Ben Elliston  <bje@cygnus.com>
 
 	* NEWS: Update.
