@@ -1931,8 +1931,7 @@ _AC_INIT_PREPARE_FDS
 
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.
-trap '
-  exit_status=$?
+trap 'exit_status=$?
   test "$ac_signal" != 0 &&
     echo "configure: caught signal $ac_signal" >&AC_FD_LOG
   echo "configure: exit $exit_status" >&AC_FD_LOG
