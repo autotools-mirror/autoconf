@@ -1,5 +1,15 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_LANG): Be `smart': don't issue the sh code if the
+	current language did not change.
+	(AC_LANG_ASSERT): New.
+	(AC_PROG_CPP, AC_PROG_CXXCPP): Assert the language.
+	(_AC_PROG_F77_V, _AC_F77_NAME_MANGLING): Don't require
+	AC_PROG_F77, the code you include does it.
+	(AC_F77_LIBRARY_LDFLAGS): Set the language.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (ifelse): Rename as...
 	(m4_if): this.
 	* autoconf.m4 (ifelse): Restore.

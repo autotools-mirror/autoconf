@@ -117,8 +117,9 @@ m4_define([_AC_LANG_DISPATCH],
 # If you add quotes here, they will be part of the name too, yielding
 # `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[m4_define([_AC_LANG], [$1])dnl
-_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[m4_if(m4_defn([_AC_LANG]), [$1], [],
+       [m4_define([_AC_LANG], [$1])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 
 # AC_LANG_PUSH(LANG)
@@ -160,6 +161,15 @@ AU_DEFUN([AC_LANG_RESTORE], [AC_LANG_POP($@)])
 # variable names, or in M4 macro names.
 m4_define([_AC_LANG_ABBREV],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_ASSERT(LANG)
+# --------------------
+# Current language must be LANG.
+m4_define([AC_LANG_ASSERT],
+[m4_if(_AC_LANG, $1, [],
+       [m4_fatal([$0: current language is not $1: ] _AC_LANG)])])
+
 
 
 # -------------------- #
@@ -669,7 +679,7 @@ rm -f conftest*
 # Find a working C preprocessor
 AC_DEFUN([AC_PROG_CPP],
 [AC_MSG_CHECKING([how to run the C preprocessor])
-AC_LANG_PUSH(C)dnl
+AC_LANG_ASSERT(C)dnl
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
   CPP=
@@ -697,7 +707,6 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
 fi
 AC_SUBST(CPP)dnl
-AC_LANG_POP()dnl
 ])# AC_PROG_CPP
 
 
@@ -872,7 +881,7 @@ AC_DEFUN([AC_LANG_PREPROC(C++)],
 # Find a working C++ preprocessor
 AC_DEFUN([AC_PROG_CXXCPP],
 [AC_MSG_CHECKING([how to run the C++ preprocessor])
-AC_LANG_PUSH(C++)dnl
+AC_LANG_ASSERT(C++)dnl
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
   [dnl
@@ -896,7 +905,6 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
 fi
 AC_SUBST(CXXCPP)dnl
-AC_LANG_POP()dnl
 ])# AC_PROG_CXXCPP
 
 
@@ -1501,10 +1509,9 @@ fi[]dnl
 # Needed for AC_F77_LIBRARY_FLAGS
 # Some compilers don't accept -v (Lahey: -verbose, xlf: -V)
 AC_DEFUN([_AC_PROG_F77_V],
-[AC_REQUIRE([AC_PROG_F77])dnl
-AC_CACHE_CHECK([how to get verbose linking output from $F77],
-               [ac_cv_prog_f77_v],
-[AC_LANG_PUSH(Fortran 77)
+[AC_CACHE_CHECK([how to get verbose linking output from $F77],
+                [ac_cv_prog_f77_v],
+[AC_LANG_ASSERT(Fortran 77)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_f77_v=
 # Try some options frequently used verbose output
@@ -1523,7 +1530,6 @@ if test -z "$ac_cv_prog_f77_v"; then
    AC_MSG_WARN([cannot determine how to obtain linking information from $F77])
 fi],
                   [AC_MSG_WARN([compilation failed])])
-AC_LANG_POP()dnl
 ])])# _AC_PROG_F77_V
 
 
@@ -1556,7 +1562,7 @@ AC_LANG_POP()dnl
 # in "octave-2.0.13/aclocal.m4", and full credit should go to John
 # W. Eaton for writing this extremely useful macro.  Thank you John.
 AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
-[AC_REQUIRE([AC_PROG_F77])dnl
+[AC_LANG_PUSH(Fortran 77)dnl
 _AC_PROG_F77_V
 AC_CACHE_CHECK([for Fortran 77 libraries], ac_cv_flibs,
 [if test "x$FLIBS" != "x"; then
@@ -1634,6 +1640,7 @@ fi # test "x$FLIBS" = "x"
 ])
 FLIBS="$ac_cv_flibs"
 AC_SUBST(FLIBS)
+AC_LANG_POP()dnl
 ])# AC_F77_LIBRARY_LDFLAGS
 
 
@@ -1641,7 +1648,8 @@ AC_SUBST(FLIBS)
 # ---------------------
 # Test for the name mangling scheme used by the Fortran 77 compiler.
 #
-# Sets ac_cv_f77_mangling. The value contains three fields, separated by commas:
+# Sets ac_cv_f77_mangling. The value contains three fields, separated
+# by commas:
 #
 # lower case / upper case:
 #    case translation of the Fortan 77 symbols
@@ -1652,9 +1660,7 @@ AC_SUBST(FLIBS)
 #    containing at least one underscore
 #
 AC_DEFUN([_AC_F77_NAME_MANGLING],
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_REQUIRE([AC_PROG_F77])dnl
-AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
+[AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_CACHE_CHECK([for Fortran 77 name-mangling scheme],
                ac_cv_f77_mangling,
 [AC_LANG_PUSH(Fortran 77)
