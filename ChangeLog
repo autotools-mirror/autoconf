@@ -1,3 +1,8 @@
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
+	* libm4.m4 (m4_dumpdefs, _m4_dumpdefs_up, _m4_dumpdefs_down): New
+	macros.
+
 2000-10-11  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atgeneral.m4 (AT_CHECK): Make sure that $? is set to 0

@@ -276,16 +276,45 @@ define([m4_match],
         regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
         [$3])])
 
+
 # m4_do(STRING, ...)
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is
 # useful for making your macros more structured and readable by dropping
 # unecessary dnl's and have the macros indented properly.
-
 define([m4_do],
   [ifelse($#, 0, [],
           $#, 1, [$1],
           [$1[]m4_do(m4_shift($@))])])
+
+
+# _m4_dumpdefs_up(NAME)
+# ---------------------
+define([_m4_dumpdefs_up],
+[ifdef([$1],
+       [pushdef([_m4_dumpdefs], defn([$1]))dnl
+dumpdef([$1])dnl
+popdef([$1])dnl
+_m4_dumpdefs_up([$1])])])
+
+
+# _m4_dumpdefs_down(NAME)
+# -----------------------
+define([_m4_dumpdefs_down],
+[ifdef([_m4_dumpdefs],
+       [pushdef([$1], defn([_m4_dumpdefs]))dnl
+popdef([_m4_dumpdefs])dnl
+_m4_dumpdefs_down([$1])])])
+
+
+# m4_dumpdefs(NAME)
+# -----------------
+# Similar to `dumpdef(NAME)', but if NAME was pushdef'ed, display its
+# value stack (most recent displayed first).
+define([m4_dumpdefs],
+[_m4_dumpdefs_up([$1])dnl
+_m4_dumpdefs_down([$1])])
+
 
 ## --------------------- ##
 ## Implementing m4 loops ##
