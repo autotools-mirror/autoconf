@@ -1,3 +1,11 @@
+2001-11-01  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix NLS before
+	invoking AS_BASENAME.  Set the locale variables to 'C' if
+	possible, as POSIX requires this to get the traditional
+	behavior.
+	* doc/autoconf.texi (Special Shell Variables): Describe the above.
+
 2001-10-31  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_LINENO_WORKS): Do not surround body
