@@ -1,5 +1,10 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): Document `ln -s'
+	on DJGPP, based on the comments from Mark Elbrecht.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh (autoconf, autoheader): Be more conscientious when
 	looking for the executable.
 	* autoupdate.sh: Likewise.

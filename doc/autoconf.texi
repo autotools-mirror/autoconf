@@ -5010,7 +5010,15 @@ alternation and @code{egrep}.
 
 @item @command{ln}
 @cindex @command{ln}
-Don't rely on @code{ln} having a @samp{-f} option.
+Don't rely on @command{ln} having a @samp{-f} option.  Symbolic links
+are not available on old systems, use @samp{ln} as a fall back.
+
+The @sc{djgpp} @command{ln} emulates soft links for executables by
+generating a stub that in turn calls the real program.  This feature
+also works with nonexistent files like in the Unix spec. So @samp{ln -s
+src dst} will generate @file{src.exe} which will attempt to call
+@file{dst.exe}. But this feature only works for executables, therefore,
+don't rely on symbolic links on @sc{djgpp}.
 
 @item @command{sed}
 @cindex @command{sed}
