@@ -1,6 +1,6 @@
 Major changes in release 1.5:
 
-* New macro AC_FIND_X.
+* New macros AC_FIND_X, AC_OFF_T.
 * autoconf and autoheader scripts have GNU standards conforming
   --version and --help options (they print their message and exit).
 * Many bug fixes.
