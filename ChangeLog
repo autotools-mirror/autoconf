@@ -1,3 +1,33 @@
+1999-06-02  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acconfig.h (F77_FUNC): Add.
+	(F77_FUNC_): Likewise.
+
+1999-05-30  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* autoheader.m4 (AC_DEFINE): Ignore CPP macro arguments.
+	(AC_DEFINE_UNQUOTED): Likewise.
+	
+	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): Change sed regexps to
+	recognize CPP macros that take arguments.  Reported, and based on
+	a patch, by Steven G. Johnson <stevenj@alum.mit.edu>.
+	(AC_OUTPUT_HEADER): Likewise.
+
+	* autoconf.texi (Fortran 77 Compiler Characteristics): Document
+	new AC_F77_NAME_MANGLING macro.
+
+1999-05-30  Steven G. Johnson <stevenj@alum.mit.edu>
+
+	* autoconf.texi (Fortran 77 Compiler Characteristics): Document
+	new AC_F77_FUNC_WRAPPER macro.
+
+	* acspecific.m4 (AC_F77_WRAPPERS): New macro to define the
+	F77_FUNC and F77_FUNC_ CPP macros to properly mangle the names of
+	C identifiers so that they match the name mangling scheme used by
+	the Fortran 77 compiler.
+	(AC_F77_NAME_MANGLING): New macro to test for the name mangling
+	scheme used by the Fortran 77 compiler.
+
 1999-05-27  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Translate the ":" character to a

@@ -6,6 +6,18 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
+* Matthew D. Langston's suggestions:
+
+** Ensure that "make check" uses only the files from the build tree.  It
+   currently uses some of the installed files from previously installed
+   versions of Autoconf, like autoheader.m4f.
+
+** Give autoheader.sh the capability to use a local version of
+   autoheader.m4.  It currently always uses the installed frozen version
+   autoheader.m4f.
+
+------------------------------------------------------------------------------
+
 * Write an automake Makefile.am to replace the existing Makefile.in.
 
 ------------------------------------------------------------------------------
