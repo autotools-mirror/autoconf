@@ -10382,6 +10382,11 @@ such code, e.g.:
 cmp file1 file2 >/dev/null 2>&1 || echo files differ or trouble
 @end example
 
+More generally, one can always rewrite @samp{! @var{command}} as:
+
+@example
+if @var{command}; then (exit 1); else :; fi
+@end example
 
 @item @command{break}
 @c ------------------
