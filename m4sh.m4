@@ -77,12 +77,26 @@ fi
 ])# AS_IFELSE
 
 
+# _AS_UNSET_PREPARE
+# -----------------
+# AS_UNSET depends upon $as_unset: compute it.
+m4_defun([_AS_UNSET_PREPARE],
+[# Support unset when possible.
+if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
+  as_unset=unset
+else
+  as_unset=false
+fi
+])
+
+
 # AS_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
 # --------------------------------------------------
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
-m4_define([AS_UNSET],
-[$ac_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
+m4_defun([AS_UNSET],
+[m4_require([_AS_UNSET_PREPARE])dnl
+$as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 
 
 # AS_EXIT([EXIT-CODE = 1])

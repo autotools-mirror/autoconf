@@ -1,5 +1,13 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* m4sh.m4 (_AS_UNSET_PREPARE): New macro, eved from
+	_AC_INIT_PREPARE_ENVIRONMENT, and fixed: set `FOO' before trying
+	to unset it: `unset' exits 1 if the variable is not defined.
+	(AS_UNSET): Require it.  Use `as_unset' not `ac_unset'.
+	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT): Use it.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (builtin, changecom, changequote, decr, dumpdef)
 	(incr, index, indir, len, syscmd, sysval, traceoff, traceon):
 	Rename as...
@@ -9,7 +17,6 @@
 	* autoconf.m4 (builtin, changecom, decr, incr, index, indir, len)
 	(syscmd, sysval, traceoff, traceon): Reactivate.
 
-	
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
 	* m4sugar.m4 (m4_rename_m4, m4_copy_unm4): New macros.

@@ -1386,12 +1386,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
-# Support unset when possible.
-if (unset FOO) >/dev/null 2>&1; then
-  ac_unset=unset
-else
-  ac_unset=false
-fi
+_AS_UNSET_PREPARE
 
 # NLS nuisances.
 AS_UNSET([LANG],        [C])
