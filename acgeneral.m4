@@ -2271,7 +2271,9 @@ changequote([, ])dnl
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
   case "$ac_file" in
-  *Makefile*) ac_comsub="1i\\
+changequote(, )dnl
+  *[Mm]akefile*) ac_comsub="1i\\
+changequote([, ])dnl
 # $configure_input" ;;
   *) ac_comsub= ;;
   esac
