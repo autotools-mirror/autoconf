@@ -1,3 +1,11 @@
+2002-11-04  Akim Demaille  <akim@epita.fr>
+
+	Version 2.54c.
+
+	* Makefile.maint (update, cvs-update, po-update, do-po-update):
+	New.
+	* config/texinfo.tex: Update.
+
 2002-11-03  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (&autoreconf_current_directory): New, extracted
