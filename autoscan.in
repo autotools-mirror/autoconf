@@ -46,8 +46,8 @@ sub print_usage
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
-common portability problems and create a file \`configure.scan\' which
-is a preliminary \`configure.in' for that package.
+common portability problems and create a file `configure.scan' which
+is a preliminary `configure.in' for that package.
 
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
@@ -55,7 +55,7 @@ is a preliminary \`configure.in' for that package.
 
 Library directories:
   -A, --autoconf-dir=ACDIR  Autoconf's files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
+  -l, --localdir=DIR        location of `aclocal.m4' and `acconfig.h'
 
 Report bugs to <bug-autoconf\@gnu.org>.\n";
   exit 0;
@@ -84,7 +84,7 @@ sub parse_args
     or exit 1;
 
   die "$me: too many arguments
-Try \`$me --help' for more information.\n"
+Try `$me --help' for more information.\n"
     if (@ARGV > 1);
   ($srcdir) = @ARGV;
   $srcdir = "."
@@ -330,7 +330,7 @@ sub output
     s/\.in$//;
     $unique_makefiles{$_}++;
   }
-  print CONF "\nAC_OUTPUT(", join(" ", keys(%unique_makefiles)), ")\n";
+  print CONF "\nAC_OUTPUT([", join("\n           ", keys(%unique_makefiles)), "])\n";
 
   close CONF;
 }
@@ -359,8 +359,8 @@ sub output_programs
   }
   print CONF "\n# Checks for libraries.\n";
   foreach $word (sort keys %libraries) {
-    print CONF "# Replace `\main\' with a function in -l$word:\n";
-    print CONF "AC_CHECK_LIB($word, main)\n";
+    print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
+    print CONF "AC_CHECK_LIB([$word], [main])\n";
   }
 }
 
@@ -377,7 +377,7 @@ sub output_headers
       &print_unique($headers_macros{$word});
     }
   }
-  print CONF "AC_CHECK_HEADERS(" . join(' ', sort(@have_headers)) . ")\n"
+  print CONF "AC_CHECK_HEADERS([" . join(' ', sort(@have_headers)) . "])\n"
     if defined(@have_headers);
 }
 
@@ -387,8 +387,15 @@ sub output_identifiers
 
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
   foreach $word (sort keys %identifiers) {
-    &print_unique($identifiers_macros{$word});
+    if (defined ($identifiers_macros{$word}) &&
+	$identifiers_macros{$word} eq 'AC_CHECK_TYPES') {
+      push (@have_types, $word);
+    } else {
+      &print_unique ($identifiers_macros{$word});
+    }
   }
+  print CONF "AC_CHECK_TYPES([" . join(', ', sort(@have_types)) . "])\n"
+    if defined (@have_types);
 }
 
 sub output_functions
@@ -404,6 +411,6 @@ sub output_functions
       &print_unique($functions_macros{$word});
     }
   }
-  print CONF "AC_CHECK_FUNCS(" . join(' ', sort(@have_funcs)) . ")\n"
+  print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
     if defined(@have_funcs);
 }
