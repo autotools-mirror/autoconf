@@ -1,34 +1,116 @@
-* Major changes in release 2.14a			-*- outline -*-
+* Major changes in Autoconf 2.14a			-*- outline -*-
+
+** Use of Automake
+All the standard GNU Makefile targets are supported.  The layout has
+changed: m4/ holds the m4 extensions Autoconf needs for its
+configuration, doc/ contains the documentation, and tests/ the test
+suite.
+
+** Man pages are provided
+For autoconf, autoreconf, autoupdate, autoheader, autoscan and ifnames.
+
+** autoconf
+- --trace
+  Provides a safe and powerful means to trace the macro uses.  This
+  provide the parsing layer for tools which need to `study'
+  configure.in.
+
+** autoupdate
+autoupdate is now much more powerful, and is able to provide the glue
+code which might be needed to move from an old macro to its newer
+equivalent.
+
+** configure
+- --help, --help=long, -hl
+  no longer dumps useless items.
+- --help=short, -hs
+  lists only specific options.
+- --help=recursive, -hr
+  displays the help of all the embedded packages.
 
 ** config.status
-- much faster on most architectures
-- has a useful --help
+- faster
+  Much faster on most architectures
 - concurrent executions
-It is safe to use `make -j' with config.status.
-- files to links (AC_LINK_FILES) can be specified via CONFIG_LINKS.
-- commands to run can be specified via CONFIG_COMMANDS.
+  It is safe to use `make -j' with config.status.
+- files to links (AC_CONFIG_LINKS) can be specified via CONFIG_LINKS.
+- commands to run (AC_CONFIG_COMMANDS) can be specified via CONFIG_COMMANDS.
 - human interface improved
-It is possible to invoke
-  ./config.status foobar
-instead of the former form (still valid)
-  CONFIG_COMMANDS= CONFIG_HEADERS= CONFIG_LINKS= \
-  CONFIG_FILES=foobar:foo.in:bar.in \
-  ./config.status
-The same holds for configuration headers and links.
+  It is possible to invoke
+    ./config.status foobar
+  instead of the former form (still valid)
+    CONFIG_COMMANDS= CONFIG_HEADERS= CONFIG_LINKS= \
+    CONFIG_FILES=foobar:foo.in:bar.in \
+    ./config.status
+  The same holds for configuration headers and links.
+  You can instantiate unknown files and headers:
+    ./config.status --header foo.h:foo.h.in --file bar:baz
+- has a useful --help
 
-** New macros
-- AC_CHECK_DECL and AC_CHECK_DECLS
-To check whether a symbol is declared.
+
+** Identity Macros
+- AC_COPYRIGHT
+  Specify additional copyright information.
+
+- AC_PACKAGE
+  Identify the configure.in's package.
+
+** General changes.
+- Uniform quotation
+  Most macros, if not all, now strictly follow the `one quotation
+  level' rule.  This results in a more predictable expansion.
+
+** Generic Macros
+- AC_CHECK families
+  The interface of the AC_CHECK families of macros (decl, header,
+  type, member, func) is now uniform.  They support the same set of
+  default includes.
+
+- AC_CHECK_DECL, AC_CHECK_DECLS
+  To check whether a symbol is declared.
+
+- AC_CHECK_TYPE
+  The test it performs is much more robust than previously, and makes
+  it possible to test builtin types in addition to typedefs.
+  It is now schizophrenic:
+    - AC_CHECK_TYPE(TYPE, REPLACEMENT)
+      remains for backward compatibility, but its use is discouraged.
+    - AC_CHECK_TYPE(TYPE, IF-FOUND, IF-NOT-FOUND, INCLUDES)
+      behaves exactly like the other AC_CHECK macros.
+
+- AC_CHECK_TYPES
+  Checks whether given types are supported by the system.
+
+- AC_CHECK_MEMBER, AC_CHECK_MEMBERS
+  Check for given members in aggregates (e.g., pw_gecos in struct
+  passwd).
+
 - AC_HELP_STRING
-To format an Autoconf macro's help string so that it looks pretty when
-the user executes `configure --help'.
+  To format an Autoconf macro's help string so that it looks pretty
+  when the user executes `configure --help'.
+
 - AC_ARG_VAR
-Document and ask for the registration of an envvar.
+  Document and ask for the registration of an envvar.
+
 - AC_CONFIG_LINKS
-Replaces the now obsolete AC_LINK_FILES.
+  Replaces the now obsolete AC_LINK_FILES.
+
 - AC_CONFIG_COMMANDS
-To add new actions to config.status.  Should be used instead of
-AC_OUTPUT_COMMANDS.
+  To add new actions to config.status.  Should be used instead of
+  AC_OUTPUT_COMMANDS.
+
+- AC_PROG_CC_STDC
+  Checks if the compiler supports ISO C, included when needs special
+  options.
+
+** Test suite
+The testsuite no longer uses DejaGNU.  It should be easy to submit
+test cases in this new frame work.
+
+** Autoheader
+The internal machinery of Autoheader has completely changed.  As a
+result, using an `acconfig.h' should be considered as obsoleted, and
+you are encouraged to get rid of it using the AH_DEFUN macro.
 
 ** Environment variables are kept when reconfiguring.
 The previous scheme to set envvar before running configure was
@@ -47,10 +129,10 @@ provided to wrap C/C++ identifiers, thus making it easier and more
 transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
 call C/C++ routines.  See the Texinfo documentation for details.
 
-Major changes in release 2.14:
+Major changes in Autoconf 2.14:
   There was no release of GNU Autoconf 2.14.
 
-Major changes in release 2.13:
+Major changes in Autoconf 2.13:
 
 * Support for building on Win32 systems where the only available C or
   C++ compiler is the Microsoft Visual C++ command line compiler
@@ -81,7 +163,7 @@ Major changes in release 2.13:
 * Support for Fortran 77. See the Texinfo documentation for details.
 * Bug fixes and workarounds for quirky bugs in vendor utilities.
 
-Major changes in release 2.12:
+Major changes in Autoconf 2.12:
 
 * AC_OUTPUT and AC_CONFIG_HEADER can create output files by
   concatenating multiple input files separated by colons, like so:
@@ -92,7 +174,7 @@ Major changes in release 2.12:
 * New macro AC_OUTPUT_COMMANDS adds more commands to run in config.status.
 * Bug fixes.
 
-Major changes in release 2.11:
+Major changes in Autoconf 2.11:
 
 * AC_PROG_CC and AC_PROG_CXX check whether the compiler works.
   They also default CFLAGS/CXXFLAGS to "-g -O2" for gcc, instead of "-g -O".
@@ -105,17 +187,17 @@ Major changes in release 2.11:
 * config.sub and config.guess recognize more system types.
 * Bug fixes.
 
-Major changes in release 2.10:
+Major changes in Autoconf 2.10:
 
 * Bug fixes.
 * The cache variable names used by `AC_CHECK_LIB(LIB, FUNC, ...)' has
   changed: now $ac_cv_lib_LIB_FUNC, previously $ac_cv_lib_LIB.
 
-Major changes in releases 2.6 through 2.9:
+Major changes in Autoconfs 2.6 through 2.9:
 
 * Bug fixes.
 
-Major changes in release 2.5:
+Major changes in Autoconf 2.5:
 
 * New configure options --bindir, --libdir, --datadir, etc., with
   corresponding output variables.
@@ -127,17 +209,17 @@ Major changes in release 2.5:
   AC_CHECK_TOOL can search a path other than $PATH.
 * AC_CHECK_SIZEOF takes an optional size to use when cross-compiling.
 
-Major changes in release 2.4:
+Major changes in Autoconf 2.4:
 
 * Fix a few bugs found by Emacs testers.
 
-Major changes in release 2.3:
+Major changes in Autoconf 2.3:
 
 * Fix the cleanup trap in several ways.
 * Handle C compilers that are picky about option placement.
 * ifnames gets the version number from the right directory.
 
-Major changes in release 2.2:
+Major changes in Autoconf 2.2:
 
 * The ifnames utility is much faster but requires a "new awk" interpreter.
 * AC_CHECK_LIB and AC_HAVE_LIBRARY check and add the new
@@ -146,7 +228,7 @@ Major changes in release 2.2:
 * Lots of bug fixes.
 * Many additions to the TODO file :-)
 
-Major changes in release 2.1:
+Major changes in Autoconf 2.1:
 
 * Fix C++ problems.
 * More explanations in the manual.
@@ -172,7 +254,7 @@ It's best to use GNU m4 1.3 (or later) with Autoconf version 2.
 Autoconf now makes heavy use of m4 diversions, which were implemented
 inefficiently in GNU m4 releases before 1.3.
 
-Major changes in release 2.0:
+Major changes in Autoconf 2.0:
 
 ** New copyright terms:
 * There are no restrictions on distribution or use of configure scripts.
@@ -266,7 +348,7 @@ Major changes in release 2.0:
 * acsite.m4 is the new name for the system-wide aclocal.m4.
 * Has a DejaGnu test suite.
 
-Major changes in release 1.11:
+Major changes in Autoconf 1.11:
 
 * AC_PROG_INSTALL calls install.sh with the -c option.
 * AC_SET_MAKE cleans up after itself.
@@ -275,7 +357,7 @@ Major changes in release 1.11:
 
 Plus a few other bug fixes.
 
-Major changes in release 1.10:
+Major changes in Autoconf 1.10:
 
 * autoheader uses config.h.bot if present, analogous to config.h.top.
 * AC_PROG_INSTALL looks for install.sh in srcdir or srcdir/.. and
@@ -284,7 +366,7 @@ Major changes in release 1.10:
 
 Plus several bugs fixed.
 
-Major changes in release 1.9:
+Major changes in Autoconf 1.9:
 
 * AC_YYTEXT_POINTER replaces AC_DECLARE_YYTEXT.
 * AC_SIZEOF_TYPE generates the cpp symbol name automatically,
@@ -294,7 +376,7 @@ Major changes in release 1.9:
 * AC_FIND_XTRA adds libraries to the variable X_EXTRA_LIBS.
 * AC_PROG_INSTALL finds OSF/1 installbsd.
 
-Major changes in release 1.8:
+Major changes in Autoconf 1.8:
 
 ** New macros:
 * New macros AC_LANG_C, AC_LANG_CPLUSPLUS, AC_LANG_SAVE, AC_LANG_RESTORE,
@@ -336,13 +418,13 @@ More big improvements are in process for future releases, but have not
 yet been (variously) finished, integrated, tested, or documented enough
 to release yet.
 
-Major changes in release 1.7:
+Major changes in Autoconf 1.7:
 
 * New macro AC_OBSOLETE.
 * Bugs in Makefile.in fixed.
 * AC_LONG_FILE_NAMES improved.
 
-Major changes in release 1.6:
+Major changes in Autoconf 1.6:
 
 * New macro AC_LONG_64_BITS.
 * Multiple .h files can be created.
@@ -357,14 +439,14 @@ Major changes in release 1.6:
   modify its behavior.
 * The usual bug fixes.
 
-Major changes in release 1.5:
+Major changes in Autoconf 1.5:
 
 * New macros AC_FIND_X, AC_OFF_T, AC_STAT_MACROS_BROKEN, AC_REVISION.
 * autoconf and autoheader scripts have GNU standards conforming
   --version and --help options (they print their message and exit).
 * Many bug fixes.
 
-Major changes in release 1.4:
+Major changes in Autoconf 1.4:
 
 * New macros AC_HAVE_POUNDBANG, AC_TIME_WITH_SYS_TIME, AC_LONG_DOUBLE,
   AC_GETGROUPS_T, AC_DEFINE_UNQUOTED.
@@ -393,7 +475,7 @@ Major changes in release 1.4:
 * AC_CONST works much more reliably on more systems.
 * Many bug fixes.
 
-Major changes in release 1.3:
+Major changes in Autoconf 1.3:
 
 configure no longer requires awk for packages that use a config.h.
 Support handling --with-PACKAGE options.
@@ -404,7 +486,7 @@ Improve detection of STDC library.
 Add AC_HAVE_LIBRARY to check for non-default libraries.
 Function checking should work with future GNU libc releases.
 
-Major changes in release 1.2:
+Major changes in Autoconf 1.2:
 
 The --srcdir option is now usually unnecessary.
 Add a file containing sample comments describing CPP macros.
@@ -412,7 +494,7 @@ A comment in config.status tells which host it was configured on.
 Substituted variable values can now contain commas.
 Fix bugs in various feature checks.
 
-Major changes in release 1.1:
+Major changes in Autoconf 1.1:
 
 Added AC_STRCOLL macro.
 Made AC_GETLOADAVG check for more things.
