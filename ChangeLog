@@ -1,3 +1,8 @@
+2000-10-25  Pavel Roskin  <proski@gnu.org>
+
+	* autoupdate.sh: Redirect stdin for sed to /dev/null to avoid
+	hangs with non-GNU versions of sed.
+
 2000-10-25  Akim Demaille  <akim@epita.fr>
 
 	Move the Autoconf independent shell macros into the file
