@@ -99,18 +99,14 @@ outfile=
 # Exit status.
 status=0
 # Tasks:
+# - install
+#   Install links to the needed *.m4 extensions.
 # - trace
 #   Trace the first arguments of some macros
 # - script
 #   Produce the configure script (default)
 task=script
-: ${TMPDIR=/tmp}
-tmpbase=$TMPDIR/ac$$
-tmpin=${tmpbase}.in
-tmpout=${tmpbase}.out
-silent_m4=${tmpbase}silent.m4
-trace_m4=${tmpbase}trace.m4
-translate_awk=${tmpbase}trans.awk
+tmp=
 verbose=:
 
 # Parse command line
@@ -186,6 +182,19 @@ while test $# -gt 0 ; do
   esac
 done
 
+# Trap on 0 to stop playing with `rm'.
+$debug ||
+{
+  trap 'status=$?; rm -rf $tmp && exit $status' 0
+  trap 'exit $?' 1 2 13 15
+}
+
+# Temporary files.
+: ${TMPDIR=/tmp}
+{ tmp=`(mktemp -d -q "$TMPDIR/acXXXXXX") 2>/dev/null` && test -n "$tmp"; }  ||
+  { tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp); } ||
+  { echo "$me: cannot create a temporary directory in $TMPDIR" >&2; exit 1; }
+
 # Running m4.
 test -n "$localdir" && use_localdir="-I$localdir"
 run_m4="$M4 $use_localdir -I $AC_MACRODIR autoconf.m4"
@@ -202,15 +211,9 @@ case $# in
      exit 1 ;;
 esac
 
-# Trap on 0 to stop playing with `rm'.
-$debug ||
-{
-  trap 'status=$?; rm -f $tmpbase* && exit $status' 0
-  trap 'exit $?' 1 2 13 15
-}
-
+# We need an actual file.
 if test z$infile = z-; then
-  infile=$tmpin
+  infile=$tmp/stdin
   cat >$infile
 elif test ! -r "$infile"; then
   echo "$me: $infile: No such file or directory" >&2
@@ -232,16 +235,16 @@ case $task in
   ## Generate the script.  ##
   ## --------------------- ##
   script)
-  $run_m4f $infile >$tmpout || exit 2
+  $run_m4f $infile >$tmp/configure || exit 2
 
   # You could add your own prefixes to pattern if you wanted to check for
   # them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do
   # alternation.
   pattern="A[CHM]_"
 
-  if grep "^[^#]*$pattern" $tmpout >/dev/null 2>&1; then
+  if grep "^[^#]*$pattern" $tmp/configure >/dev/null 2>&1; then
     echo "$me: undefined macros:" >&2
-    sed -n "s/^[^#]*\\($pattern[_A-Za-z0-9]*\\).*/\\1/p" $tmpout |
+    sed -n "s/^[^#]*\\($pattern[_A-Za-z0-9]*\\).*/\\1/p" $tmp/configure |
       while read macro; do
   	grep -n "^[^#]*$macro" $infile /dev/null
   	test $? = 1 && echo "***BUG in Autoconf--please report*** $macro"
@@ -279,7 +282,7 @@ case $task in
       while (sub(/@%:@/, "#"))
         continue
       print
-    }' <$tmpout >&4
+    }' <$tmp/configure >&4
   ;; # End of the task script.
 
 
@@ -290,11 +293,11 @@ case $task in
   trace)
   # `errprint' must be silent when we run `m4 --trace', otherwise there
   # can be warnings mixed with traces in m4's stderr.
-  cat >$silent_m4 <<\EOF
+  cat >$tmp/silent.m4 <<\EOF
 define(`errprint')dnl
 EOF
   # A program to trace m4 macros.
-  cat >$trace_m4 <<\EOF
+  cat >$tmp/trace.m4 <<\EOF
 divert(-1)
   changequote([, ])
   define([_at],
@@ -323,7 +326,7 @@ divert(-1)
          [_star([$1], args($@))])
 EOF
   # A program to translate user tracing requests into m4 macros.
-  cat >$translate_awk <<\EOF
+  cat >$tmp/translate.awk <<\EOF
 function trans (arg, sep)
 {
   # File name.
@@ -428,24 +431,24 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     trace_opt="$trace_opt -t "`echo "$trace" | sed -e 's/:.*//;q'`
-    echo "$trace" | $AWK -f $translate_awk >>$trace_m4 || exit 1
+    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 || exit 1
   done
-  echo "divert(0)dnl" >>$trace_m4
+  echo "divert(0)dnl" >>$tmp/trace.m4
 
   # Do we trace the initialization?
   if $initialization; then
-    run_m4_trace="$run_m4 $trace_opt -daflq $silent"
+    run_m4_trace="$run_m4 $trace_opt -daflq $tmp/silent.m4"
   else
-    run_m4_trace="$run_m4f $trace_opt -daflq $silent"
+    run_m4_trace="$run_m4f $trace_opt -daflq $tmp/silent.m4"
   fi
 
   # Run m4 on the input file to get traces.
-  $verbose "Running $run_m4_trace $infile | $M4 $trace_m4" >&2
+  $verbose "Running $run_m4_trace $infile | $M4 $tmp/trace.m4" >&2
   $run_m4_trace $infile 2>&1 >/dev/null |
     sed -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \([^(][^(]*\)(\(.*\)$/AT_\4([\1], [\2], [\3], [\4], \5/' \
         -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' |
   # Now we are ready to run m4 to process the trace file.
-  $M4 $trace_m4 - |
+  $M4 $tmp/trace.m4 - |
   # It makes no sense to try to transform __oline__.
   sed '
     s/@<:@/[/g
@@ -464,7 +467,7 @@ EOF
   install)
   # An m4 program that reports what macros are requested, and where
   # they were defined.
-  cat >$tmpin <<\EOF
+  cat >$tmp/request.m4 <<\EOF
 dnl Keep the definition of the old AC_DEFUN
 define([AC_DEFUN_OLD], defn([AC_DEFUN]))
 
@@ -482,17 +485,20 @@ dnl protect the first argument of AC_DEFUN, then, if read a second time
 dnl this argument will be expanded, and we'll get pure junk out of m4.
 define([AC_INCLUDE])
 EOF
-  # Run m4 with all the library files, discard stdout, save stderr.
-  $verbose Running $run_m4f -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >&2
-  $run_m4f -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >/dev/null 2>$tmpout
-  # Keep only the good lines, there may be other outputs
-  grep '^[^: ]*:[0-9][0-9]*:[^:]*$' $tmpout >$tmpin
+
+  # Run m4 with all the library files, discard stdout, save stderr in
+  # $requested.
+  run_m4_request="$run_m4f -dipa -t m4_include -t m4_sinclude $tmp/request.m4"
+  $verbose $run_m4_request $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >&2
+  $run_m4_request $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile 2>&1 >/dev/null |
+    # Keep only the good lines, there may be other outputs
+    grep '^[^: ]*:[0-9][0-9]*:[^:]*$' >$tmp/requested
+
   # Extract the files that are not in the local dir, and install the links.
-  # Save in $tmpout the list of installed links.
-  >$tmpout
+  # Save in `installed' the list of installed links.
   $verbose "Required macros:" >&2
-  $verbose "`sed -e 's/^/| /' $tmpin`" >&2
-  cat $tmpin |
+  $verbose "`sed -e 's/^/| /' $tmp/requested`" >&2
+  cat $tmp/requested |
     while read line
     do
       file=`echo "$line" | sed -e 's/:.*//'`
@@ -510,7 +516,7 @@ EOF
   	    exit 1
   	  }
   	fi
-        echo "$localdir/$filename" >>$tmpout
+        echo "$localdir/$filename" >>$tmp/installed
       fi
     done
   # Now that we have installed the links, and that we know that the
@@ -520,21 +526,20 @@ EOF
   export AC_MACRODIR
   # Not m4_s?include, because it would catch acsite and aclocal, which
   # we don't care about.
-  $0 -l "$localdir" -t AC_INCLUDE $infile |
-    sed -e 's/^[^:]*:[^:]*:[^:]*://g' |
+  $0 -l "$localdir" -t AC_INCLUDE:'$1' $infile |
     sort |
-    uniq >$tmpin
+    uniq >$tmp/included
   # All the included files are needed.
-  for file in `cat $tmpin`;
+  for file in `cat $tmp/included`;
   do
-    if fgrep "$file" $tmpout >/dev/null 2>&1; then :; else
+    if fgrep "$file" $tmp/installed >/dev/null 2>&1; then :; else
       echo "\`$file' is uselessly included" >&2
     fi
   done
   # All the needed files are included.
-  for file in `sort $tmpout | uniq`;
+  for file in `sort $tmp/installed | uniq`;
   do
-    if fgrep "$file" $tmpin >/dev/null 2>&1; then :; else
+    if fgrep "$file" $tmp/included >/dev/null 2>&1; then :; else
       echo "\`$file' is not included" >&2
     fi
   done

@@ -499,7 +499,7 @@ if test "$ac_init_help" = "recursive"; then
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.
       ac_sub_srcdir=$srcdir ;;
-    [/\\]* | ?:[/\\]* ) # Absolute path.
+    [\\/]* | ?:[\\/]* ) # Absolute path.
       ac_sub_srcdir=$srcdir/$ac_subdir ;;
     *) # Relative path.
       ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
@@ -905,7 +905,7 @@ if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
   case "$M4" in
-  [/\\]* | ?:[/\\]*)
+  [\\/]* | ?:[\\/]*)
   ac_cv_path_M4="$M4" # Let the user override the test with a path.
   ;;
   *)
@@ -1008,7 +1008,7 @@ if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
   case "$PERL" in
-  [/\\]* | ?:[/\\]*)
+  [\\/]* | ?:[\\/]*)
   ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
   ;;
   *)
@@ -1446,7 +1446,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   .)  srcdir=.
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
-  [/\\]* | ?:[/\\]* )
+  [\\/]* | ?:[\\/]* )
       srcdir="$ac_given_srcdir$ac_dir_suffix";
       top_srcdir=$ac_given_srcdir ;;
   *) # Relative path.
@@ -1455,7 +1455,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   case "$ac_given_INSTALL" in
-  [/\\$]* | ?:[/\\]* ) INSTALL="$ac_given_INSTALL" ;;
+  [\\/$]* | ?:[\\/]* ) INSTALL="$ac_given_INSTALL" ;;
   *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
 
