@@ -178,33 +178,36 @@ AC_DEFUN(AC_PROG_CC_C_O,
 else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
-set dummy $CC; ac_cc="`echo [$]2 | 
+set dummy $CC; ac_cc="`echo [$]2 |
 changequote(, )dnl
 		       sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
 changequote([, ])dnl
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
-[eval ac_cv_prog_cc_${ac_cc}_c_o=no
-echo 'foo(){}' > conftest.c
+[echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
 if ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC &&
   test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&AC_FD_CC 2>&AC_FD_CC
 then
+  eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if cc -c conftest.c 1>&AC_FD_CC 2>&AC_FD_CC
-    then
+    if cc -c conftest.c 1>&AC_FD_CC 2>&AC_FD_CC; then
       if cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC &&
-        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC
+	 test -f conftest2.o &&
+	 cc -c conftest.c -o conftest2.o 1>&AC_FD_CC 2>&AC_FD_CC
       then
-        eval ac_cv_prog_cc_${ac_cc}_c_o=yes
+        # cc works too.
+        :
+      else
+        # cc exists but doesn't like -o.
+        eval ac_cv_prog_cc_${ac_cc}_c_o=no
       fi
-    else
-      # There is no cc, so we don't care about it.
-      eval ac_cv_prog_cc_${ac_cc}_c_o=yes
     fi
   fi
+else
+  eval ac_cv_prog_cc_${ac_cc}_c_o=no
 fi
 rm -f conftest*
 ])dnl
@@ -405,7 +408,7 @@ AC_CACHE_VAL(ac_cv_path_install,
   fi
 fi
 dnl We do special magic for INSTALL instead of AC_SUBST, to get
-dnl relative paths right. 
+dnl relative paths right.
 AC_MSG_RESULT($INSTALL)
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -504,7 +507,7 @@ fi
 ])
 
 AC_DEFUN(AC_HEADER_MAJOR,
-[AC_CACHE_CHECK(whether sys/types.h defines makedev, 
+[AC_CACHE_CHECK(whether sys/types.h defines makedev,
   ac_cv_header_sys_types_h_makedev,
 [AC_TRY_LINK([#include <sys/types.h>], [return makedev(0, 0);],
   ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
@@ -1819,7 +1822,7 @@ dnl Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
 [AC_REQUIRE([AC_ISC_POSIX])dnl
 AC_REQUIRE([AC_PATH_X])dnl
-if test "$no_x" = yes; then 
+if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
   X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
 else
