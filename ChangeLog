@@ -1,3 +1,22 @@
+2002-05-16  Paul Eggert  <eggert@twinsun.com>
+
+	AC_FUNC_FNMATCH now tests only for POSIX compatibility.
+	AC_FUNC_FNMATCH_GNU also tests for GNU extensions.
+	Both macros now accept an optional source-dir arg.
+	New macro AC_GNU_SOURCE to define _GNU_SOURCE.
+	
+	* NEWS: Document this.
+	* doc/autoconf.texi (Particular Functions, UNIX Variants): Likewise.
+	
+	* lib/autoconf/functions.m4 (_AC_FUNC_FNMATCH): New macro.
+	(AC_FUNC_FNMATCH): Use it.  Test only for POSIX conformance,
+	not for GNU extensions; this undoes part of the 2000-11-03 change,
+	reverting to 2.13-compatible behavior.
+	Add new optional argument DIR.
+	(AC_FUNC_FNMATCH_GNU): New macro.
+
+	* lib/autoconf/specific.m4 (AC_GNU_SOURCE): New macro.
+
 2002-05-08  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/headers.m4 (AC_HEADER_TIOCGWINSZ):
