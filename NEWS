@@ -2,7 +2,6 @@ Major changes in release 2.0:
 
 ** New files:
 * Comes with config.sub and config.guess.
-* Uses config.h.bot if present, analogous to config.h.top.
 * Uses config.cache to cache test results.  An alternate cache file
   can be selected with the --cache-file=FILE option.
 
@@ -17,7 +16,6 @@ Major changes in release 2.0:
   not before them.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
   AC_CONFIG_AUX, or srcdir or srcdir/.. by default.
-* AC_OUTPUT correctly creates multiple header files.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by
@@ -25,6 +23,15 @@ Major changes in release 2.0:
   programs, and header files.
 * autoreconf to recursively remake configure and configuration header
   files in a source tree.
+
+Major changes in release 1.10:
+
+* autoheader uses config.h.bot if present, analogous to config.h.top.
+* AC_PROG_INSTALL looks for install.sh in srcdir or srcdir/.. and
+  never uses cp.
+* AC_PROG_CXX looks for cxx as a C++ compiler.
+
+Plus several bugs fixed.
 
 Major changes in release 1.9:
 
