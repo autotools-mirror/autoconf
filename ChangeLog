@@ -1,5 +1,15 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Interrupting autoheader left temp files.
+	From Jim Meyering.
+
+	* autoheader.sh (usage): The usage is to use $0 here.
+	(ah_base): Be in TMPDIR.
+	Install the `trap' before creating the first tmp file.
+	Also trap on 0.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_OUTPUT_MAKE_DEFS): This is a routine of
 	`configure', not `config.status', hence use `conftest' for tmp
 	files, not `$ac_cs_root'.

@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992-1994, 1996, 1998-1999 Free Software Foundation, Inc.
+# Copyright (C) 1992-94, 96, 98, 99, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
-Usage: autoheader [OPTION] ... [TEMPLATE-FILE]
+Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Create a template file of C \`#define' statements for \`configure' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
@@ -45,7 +45,7 @@ version="\
 autoheader (GNU @PACKAGE@) @VERSION@
 Written by Roland McGrath.
 
-Copyright (C) 1992-1994, 1996, 1998-1999 Free Software Foundation, Inc.
+Copyright (C) 1992-94, 96, 98, 99, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
@@ -82,7 +82,9 @@ ac_LF_and_DOT=`echo; echo .`
 localdir=.
 debug=false
 # Basename for temporary files.
-ah_base=ah$$
+: ${TMPDIR=/tmp}
+ah_base=$TMPDIR/ah$$
+tmpout=$ah_base.out
 
 while test $# -gt 0 ; do
    case "$1" in
@@ -150,6 +152,9 @@ case `$M4 --help < /dev/null 2>&1` in
 esac
 run_m4="$M4 --reload $AC_MACRODIR/autoheader.m4f $use_localdir"
 
+# Trap on 0 to stop playing with `rm'.
+$debug || trap "rm -f $ah_base*" 0 1 2 15
+
 # Extract assignments of `ah_verbatim_SYMBOL' from the modified
 # autoconf processing of the input file.  The sed hair is necessary to
 # win for multi-line macro invocations.
@@ -163,7 +168,7 @@ sed -n -e '
 		s/^/@@@/
 		b again
 	}' $ah_base.exp >$ah_base.decls
-. ./$ah_base.decls
+. $ah_base.decls
 $debug || rm $ah_base.exp $ah_base.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
@@ -224,7 +229,6 @@ if test -n "$syms"; then
   # pattern on the command line, so use a temporary file containing the
   # pattern.
   (fgrep_tmp=$ah_base.fgrep
-   trap "rm -f $fgrep_tmp; exit 1" 1 2 15
    cat > $fgrep_tmp <<EOF
 $syms
 EOF
@@ -274,5 +278,4 @@ if test $status -eq 0; then
   fi
 fi
 
-rm -f $tmpout
 exit $status
