@@ -533,7 +533,7 @@ and @code{#undef} statements and their accompanying comments.  If
 @samp{@@TOP@@} into the top of the file that it generates.  Similarly,
 if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
 @code{autoheader} copies the lines after that line to the end of the
-file it generates.  Either of those strings may be omitted.
+file it generates.  Either or both of those strings may be omitted.
 
 An obsolete way to produce the same effect is to create the files
 @file{@var{file}.top} (typically @file{config.h.top}) and/or
@@ -1652,7 +1652,7 @@ to be the C (or C++) builtin type @var{default}, e.g. @samp{short} or
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
-@samp{type} is unknown to the compiler, gets a size of 0.  @var{uctype}
+@samp{type} is unknown to the compiler, it gets a size of 0.  @var{uctype}
 is @var{type}, with lowercase converted to uppercase, spaces changed to
 underscores, and asterisks changed to @samp{P}.  For example, the call
 @example
@@ -1686,7 +1686,7 @@ These macros check for particular C functions.
 @cvindex HAVE_ALLOCA_H
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
-@code{__GNUC__} and @code{_AIX}.  If that fails, it looks for a function
+@code{__GNUC__} and @code{_AIX}.  If that fails, it looks for the function
 in the standard C library.  If any of those methods succeed, it defines
 @code{HAVE_ALLOCA}.  Otherwise, it sets the @code{make}
 variable @code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA}
@@ -3443,7 +3443,9 @@ C++ features.
 @defvar DEFS
 @samp{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADER}
 is called, @code{configure} replaces @samp{@@DEFS@@} with
-@samp{-DHAVE_CONFIG_H} instead.
+@samp{-DHAVE_CONFIG_H} instead.  This variable is not defined while
+@code{configure} is performing its tests, only when creating the output
+files.  @xref{Setting Variables}, for more information.
 @end defvar
 
 @defvar LDFLAGS
@@ -4015,8 +4017,8 @@ Rich Murphey, the maintainer of the GNU graphics utilities, sent me mail
 saying that the @code{configure} scripts were great, and asking if I had
 a tool for generating them that I could send him.  No, I thought, but
 I should!  So I started to work out how to generate them.  And the
-journey from the bondage of hand-written @file{configure} scripts to the
-ease of Autoconf began.
+journey from the slavery of hand-written @file{configure} scripts to the
+freedom of Autoconf began.
 
 Cygnus @code{configure}, which was being developed at around that time,
 is table driven; it is meant to deal mainly with a discrete number of
@@ -4040,11 +4042,12 @@ I looked briefly into using Larry Wall's Metaconfig program, but I
 decided not to for several reasons.  The @code{Configure} scripts it
 produces are interactive, which I find quite inconvenient; I didn't like
 the ways it checked for some features (such as library functions); it
-was not being maintained, and its scripts didn't work on many modern
-systems (such as System V R4 and NeXT); it wasn't very flexible in what
-it could do in response to a feature's presence or absence; I found it
-confusing to learn; and it was too big and complex for my needs (I
-didn't realize then how much Autoconf would eventually have to grow).
+was not being maintained at that time, and its scripts didn't work on
+many modern systems (such as System V R4 and NeXT); it wasn't very
+flexible in what it could do in response to a feature's presence or
+absence; I found it confusing to learn; and it was too big and complex
+for my needs (I didn't realize then how much Autoconf would eventually
+have to grow).
 
 I considered using Perl to generate my style of @code{configure} scripts,
 but decided that @code{m4} was better suited to the job of simple
@@ -4061,7 +4064,7 @@ out a new language.
 Since my @code{configure} scripts determine the system's capabilities
 automatically, with no interactive user intervention, I decided to call
 the program that generates them Autoconfig.  But with a version number
-tacked on, that name would be too long for System V R3 file systems, so
+tacked on, that name would be too long for old Unix file systems, so
 I shortened it to Autoconf.
 
 In the fall of 1991 I called together a group of priests of portability
