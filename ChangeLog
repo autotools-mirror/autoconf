@@ -1,5 +1,11 @@
 2001-06-21  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_ARG_VAR_VALIDATE): Die instead of warning when
+	precious variables have changed.
+	* tests/torture.at (AC_ARG_VAR): Adjust.
+
+2001-06-21  Akim Demaille  <akim@epita.fr>
+
 	./configure --program-suffix=foo produces `transform=s,$$,foo,;',
 	but some sed choke on multiple `;', and other tools (e.g.,
 	Automake), include the separator themselves.

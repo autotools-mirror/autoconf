@@ -14,10 +14,13 @@ AT_BANNER([[Testing config.status.
 ## AC_ARG_VAR.  ##
 ## ------------ ##
 
+# AT_CHECK_AC_ARG_VAR(TITLE, FIRST-VALUE, SECOND-VALUE)
+# -----------------------------------------------------
 # Check that AC_ARG_VAR caches the latest values, diagnoses
 # inconsistances, and arms config.status.
-
-AT_SETUP([AC_ARG_VAR])
+m4_define([AT_CHECK_AC_ARG_VAR],
+[
+AT_SETUP([AC_ARG_VAR: $1])
 
 # We don't want to run this test if this shell doesn't support
 # `unset'.
@@ -41,75 +44,36 @@ AT_DATA([file.in],
 
 AT_CHECK_AUTOCONF
 
-# Initially unset.
-unset precious
+# Initial value.
+m4_ifval([$2],
+         [precious='$2'; export precious],
+         [unset precious])
 AT_CHECK_CONFIGURE([--config-cache])
-AT_CHECK([cat file], [], [`'
+AT_CHECK([cat file], [], [`$2'
 ])
 
+# Testing --recheck.
 unset precious
 AT_CHECK([./config.status --recheck], [], [ignore])
 AT_CHECK([./config.status], [], [ignore])
-AT_CHECK([cat file], [], [`'
+AT_CHECK([cat file], [], [`$2'
 ])
 
-
-# Set to `diamonds'.
-precious=diamonds; export precious
-AT_CHECK_CONFIGURE([--config-cache], [], [],
-[configure: WARNING: `precious' was not set in the previous run
-configure: WARNING: changes in the environment can compromise the build
-configure: WARNING: consider removing config.cache and starting over
-])
-AT_CHECK([cat file], [], [`diamonds'
-])
-
-unset precious
-AT_CHECK([./config.status --recheck], [], [ignore])
-AT_CHECK([./config.status], [], [ignore])
-AT_CHECK([cat file], [], [`diamonds'
-])
-
-
-# Set to `apple of my eye'.
-precious='apple of my eye'; export precious
-AT_CHECK_CONFIGURE([--config-cache], [], [],
-[configure: WARNING: `precious' has changed since the previous run:
-configure: WARNING:   former value:  diamonds
-configure: WARNING:   current value: apple of my eye
-configure: WARNING: changes in the environment can compromise the build
-configure: WARNING: consider removing config.cache and starting over
-])
-AT_CHECK([cat file], [], [`apple of my eye'
-])
-
-unset precious
-AT_CHECK([./config.status --recheck], [], [ignore])
-AT_CHECK([./config.status], [], [ignore])
-AT_CHECK([cat file], [], [`apple of my eye'
-])
-
-
-# Don't set at all.
-unset precious
-AT_CHECK_CONFIGURE([--config-cache], [], [],
-[configure: WARNING: `precious' was set to `apple of my eye' in the previous run
-configure: WARNING: changes in the environment can compromise the build
-configure: WARNING: consider removing config.cache and starting over
-])
-AT_CHECK([cat file], [], [`'
-])
-
-unset precious
-AT_CHECK([./config.status --recheck], [], [ignore])
-AT_CHECK([./config.status], [], [ignore])
-AT_CHECK([cat file], [], [`'
-])
-
-
+# Second value.
+m4_ifval([$3],
+         [precious='$3'; export precious],
+         [unset precious])
+AT_CHECK_CONFIGURE([--config-cache], [1], [], [ignore])
 
 AT_CLEANUP
+])# AT_CHECK_AC_ARG_VAR
 
+AT_CHECK_AC_ARG_VAR([set a precious variable],
+                    [], [apple of my eye])
+AT_CHECK_AC_ARG_VAR([unset a precious variable],
+                    [apple of my eye], [])
+AT_CHECK_AC_ARG_VAR([change a precious variable],
+                    [apple of my eye], [orange of my eye])
 
 ## ---------------------------------------------- ##
 ## AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS.  ##

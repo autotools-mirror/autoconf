@@ -1522,14 +1522,12 @@ ac_cv_env_$1_value=$$1])dnl
 # content of the cached values, while `ac_env_' represents that of the
 # current values.
 #
-# So we check that `ac_env_' and `ac_cv_env_' are consistant.  But if
-# they aren't, be sure to update the `ac_cv_env_' values with the
-# `ac_env_' ones, otherwise, we would save again the old values in the
-# cache.
+# So we check that `ac_env_' and `ac_cv_env_' are consistant.  If
+# they aren't, die.
 m4_define([_AC_ARG_VAR_VALIDATE],
 [# Check that the precious variables saved in the cache have kept the same
 # value.
-ac_suggest_removing_cache=false
+ac_cache_corrupted=false
 for ac_var in `(set) 2>&1 |
                sed -n 's/^ac_env_\([[a-zA-Z_0-9]]*\)_set=.*/\1/p'`; do
   eval ac_old_set=\$ac_cv_env_${ac_var}_set
@@ -1538,25 +1536,22 @@ for ac_var in `(set) 2>&1 |
   eval ac_new_val="\$ac_env_${ac_var}_value"
   case $ac_old_set,$ac_new_set in
     set,)
-      AC_MSG_WARN([`$ac_var' was set to `$ac_old_val' in the previous run])
-      ac_suggest_removing_cache=: ;;
+      AS_MESSAGE([error: `$ac_var' was set to `$ac_old_val' in the previous run])
+      ac_cache_corrupted=: ;;
     ,set)
-      AC_MSG_WARN([`$ac_var' was not set in the previous run])
-      ac_suggest_removing_cache=: ;;
+      AS_MESSAGE([error: `$ac_var' was not set in the previous run])
+      ac_cache_corrupted=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-        AC_MSG_WARN([`$ac_var' has changed since the previous run:])
-        AC_MSG_WARN([  former value:  $ac_old_val])
-        AC_MSG_WARN([  current value: $ac_new_val])
-        ac_suggest_removing_cache=:
+        AS_MESSAGE([error: `$ac_var' has changed since the previous run:])
+        AS_MESSAGE([  former value:  $ac_old_val])
+        AS_MESSAGE([  current value: $ac_new_val])
+        ac_cache_corrupted=:
       fi;;
   esac
-  # Synchronize cached values with current values.
-  eval ac_cv_env_${ac_var}_set=\${$ac_var+set}
-  eval ac_cv_env_${ac_var}_value=\$${ac_var}
   # Pass precious variables to config.status.  It doesn't matter if
-  # we pass it a second time (in addition to the command line arguments).
+  # we pass some twice (in addition to the command line arguments).
   if test "$ac_new_set" = set; then
     case $ac_new_val in
 dnl If you change this globbing pattern, test it on an old shell --
@@ -1572,7 +1567,7 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 done
 if $ac_cache_corrupted; then
   AS_MESSAGE([error: changes in the environment can compromise the build])
-  AS_ERROR([run `make distclean' and/or `rm $config_cache' and start over])
+  AS_ERROR([run `make distclean' and/or `rm $cache_file' and start over])
 fi
 ])# _AC_ARG_VAR_VALIDATE
 
