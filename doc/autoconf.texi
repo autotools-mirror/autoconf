@@ -503,7 +503,7 @@ for your software.
 
 @menu
 * Automake::                    Escaping Makefile hell
-* Libtool::                     Portable shared libraries
+* Libtool::                     Building libraries portably
 * Pointers::                    More info on the GNU build system
 @end menu
 
