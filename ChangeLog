@@ -3,6 +3,8 @@
 	Version 2.58.
 	* doc/standards.texi: Update from master.
 
+	* tests/mktests.sh (ac_exclude_list): Add AC_FC_FREEFORM.
+
 2003-11-04  Akim Demaille  <akim@epita.fr>
 
 	AC_CONFIG_FILE([d1/foo:d2/foo]) triggers error messages when
