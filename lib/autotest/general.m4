@@ -1,4 +1,4 @@
-include(m4sh.m4)					    -*- Autoconf -*-
+include(m4sugar/m4sh.m4)#				    -*- Autoconf -*-
 # M4 macros used in building test suites.
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 

@@ -22,7 +22,6 @@ AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
 SUBDIRS = . lib config m4 man doc tests
 
-SUFFIXES = .m4 .m4f
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 WGET = wget
@@ -35,48 +34,27 @@ bin_SCRIPTS = autom4te \
 # s/nodistpackageDATA/nodist_pkgdata_DATA/
 # and adapt dependencies once we use a more recent Automake
 
-m4sources =  m4sugar.m4 m4sh.m4  \
-             $(srcdir)/acversion.m4 \
-             autoconf.m4 \
-             acgeneral.m4 acoldnames.m4 acspecific.m4 aclang.m4 \
-             acfunctions.m4 acheaders.m4 actypes.m4
-
-distpkgdataDATA = acfunctions acheaders acidentifiers acmakevars acprograms \
-                  aclibraries $(m4sources)
-
-nodistpkgdataDATA = autoconf.m4f
-
-pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
+m4sources =  lib/m4sugar/m4sugar.m4 lib/m4sugar/m4sh.m4  \
+             $(srcdir)/lib/autoconf/version.m4 \
+             lib/autoconf/autoconf.m4 \
+             lib/autoconf/general.m4 lib/autoconf/oldnames.m4 \
+	     lib/autoconf/specific.m4 lib/autoconf/lang.m4 \
+             lib/autoconf/functions.m4 lib/autoconf/headers.m4 \
+	     lib/autoconf/types.m4
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
-             acversion.in \
              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
              autoscan.in autom4te.in \
-             $(distpkgdataDATA) \
              GNUmakefile Makefile.maint
 
-# Files that should be removed, but which Automake does not know:
-# the frozen files and the scripts.
-CLEANFILES = autoconf.m4f \
-             $(bin_SCRIPTS)
+# Files that should be removed, but which Automake does not know.
+CLEANFILES = $(bin_SCRIPTS)
 
 
 ## ------------------ ##
 ## Maintainer rules.  ##
 ## ------------------ ##
-
-## acversion.m4.  ##
-
-# - acversion.m4 needs to be updated only once, since it depends on
-#   configure.ac, not on the results of a 'configure' run.
-# - It is guaranteed (with GNU Make) that when the version in configure.ac
-#   is changed, acversion.m4 is built only after the new version number is
-#   propagated to the Makefile.  (Libtool uses the same guarantee.)
-
-$(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.ac
-	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
-	mv acversion.tm4 $(srcdir)/acversion.m4
 
 ## INSTALL.  ##
 
@@ -88,7 +66,7 @@ INSTALL.txt: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(top_srcdir)/doc/install.texi --output=$(srcdir)/INSTALL.txt
 	cp $(srcdir)/INSTALL.txt $(srcdir)/INSTALL
 
-MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
+MAINTAINERCLEANFILES = INSTALL.txt
 
 
 ## maintainer-check ##
@@ -104,7 +82,8 @@ install-data-hook: INSTALL.txt
 	@$(NORMAL_INSTALL)
 	@list='INSTALL'; for p in $$list; do \
 	  if test -f "$$p.txt"; then d= ; else d="$(srcdir)/"; fi; \
-	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  f=`echo $$p | sed -e 's,^.*/,,'`; \
+	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir) ; \
 	  echo " $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f"; \
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
@@ -174,50 +153,6 @@ autom4te: $(srcdir)/autom4te.in $(srcdir)/configure.ac
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod +x autom4te.tmp
 	mv autom4te.tmp autom4te
-
-## ------------------ ##
-## The frozen files.  ##
-## ------------------ ##
-
-
-# When processing the file with diversion disabled, there must be no
-# output but comments and empty lines.
-# If freezing produces output, something went wrong: a bad `divert',
-# or an improper paren etc.
-# It may happen that the output does not end with a end of line, hence
-# force an end of line when reporting errors.
-.m4.m4f:
-	$(M4) --include $(srcdir) --fatal-warning --define divert \
-	      $(srcdir)/$*.m4 2>error.log | \
-	  sed 's/#.*//;/^$$/d' >process.log
-	if grep . error.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $(srcdir)/$*.m4 produced errors:" >&2; \
-	  sed "s,^,$(srcdir)/$*.m4: ," <error.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f error.log; \
-	fi
-	if grep . process.log >/dev/null 2>&1; then \
-	  echo "ERROR: Processing $(srcdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$(srcdir)/$*.m4: ," <process.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f process.log; \
-	fi
-	$(M4) --include $(srcdir) --fatal-warning --freeze-state=$*.m4f \
-	      $(srcdir)/$*.m4 >freeze.log
-	if grep . freeze.log >/dev/null 2>&1; then \
-	  echo "ERROR: Freezing $(srcdir)/$*.m4 produced output:" >&2; \
-	  sed "s,^,$(srcdir)/$*.m4: ," <freeze.log >&2; \
-	  echo >&2; \
-	  exit 1; \
-	else \
-	  rm -f freeze.log; \
-	fi
-
-autoconf.m4f: $(m4sources)
 
 
 ## ---------------------------- ##

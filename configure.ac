@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
 AC_INIT(GNU Autoconf, 2.52a, bug-autoconf@gnu.org)
-AC_CONFIG_SRCDIR(acgeneral.m4)
+AC_CONFIG_SRCDIR(autoconf.in)
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52a)
 
@@ -49,7 +49,9 @@ AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
 AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
-                lib/Makefile lib/Autoconf/Makefile
+                lib/Makefile lib/Autoconf/Makefile lib/autoscan/Makefile
+                lib/m4sugar/Makefile
+                lib/autoconf/Makefile lib/autotest/Makefile
                 tests/Makefile tests/atconfig)
 
 AC_OUTPUT

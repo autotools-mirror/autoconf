@@ -1,4 +1,4 @@
-include(atgeneral.m4)					-*- Autoconf -*-
+changequote()changequote([, ])include(autotest/general.m4)# -*- Autoconf -*-
 # M4 macros used in building Autoconf test suites.
 
 # This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ AC_STATE_SAVE(after)
 # run.
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1],
+AT_CHECK([autoconf --autoconf-dir ../lib -l $at_srcdir $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -53,7 +53,7 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1],
 # -------------------
 m4_define([AT_CHECK_AUTOHEADER],
 [AT_CLEANUP_FILES(config.hin)dnl
-AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])])
+AT_CHECK([autoheader --autoconf-dir ../lib -l $at_srcdir], 0, [], [])])
 
 
 # AT_CHECK_CONFIGURE(END-COMMAND,
@@ -106,7 +106,7 @@ m4_define([AT_CHECK_DEFINES],
 # -------------------
 m4_define([AT_CHECK_AUTOUPDATE],
 [AT_CHECK([autoupdate --version || exit 77], ignore, ignore, ignore)
- AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
+ AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir/lib], 0,
           [], [autoupdate: `configure.ac' is updated
 ])])
 

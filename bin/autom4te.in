@@ -188,7 +188,8 @@ sub save
   croak "$me: cannot save a single request\n"
     if ref ($self);
 
-  my $requests = new IO::File ("> $filename");
+  my $requests = new IO::File ("> $filename")
+    or die "$me: cannot create $filename: $!\n";
   print $requests
     "# This file was created by $me.\n",
     "# It contains the lists of macros which have been traced.\n",
@@ -371,7 +372,7 @@ sub find_file ($)
   return File::Spec->canonpath ($filename)
     if -f $filename;
 
-  die "$me: no such for or directory: $filename\n"
+  die "$me: no such file or directory: $filename\n"
     if File::Spec->file_name_is_absolute ($filename);
 
   foreach my $path (@include)
@@ -380,7 +381,7 @@ sub find_file ($)
 	if -f File::Spec->catfile ($path, $filename)
     }
 
-  die "$me: programming error: $filename";
+  die "$me: no such file or directory: $filename\n";
 }
 
 

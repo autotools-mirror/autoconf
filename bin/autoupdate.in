@@ -422,7 +422,7 @@ foreach my $file (@ARGV)
 
       # Enable the m4 builtins, m4sugar and the autoquoting AC macros.
       _au_include([$tmp/m4.m4])
-      _au_include([$autoconf_dir/m4sugar.m4])
+      _au_include([$autoconf_dir/m4sugar/m4sugar.m4])
       _au_include([$tmp/ac.m4])
 
       _au_divert(0)])

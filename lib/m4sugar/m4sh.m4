@@ -1,4 +1,4 @@
-changequote()changequote([, ])include(m4sugar.m4)#         -*- Autoconf -*-
+changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 # This file is part of Autoconf.
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.

@@ -220,7 +220,7 @@ sub init_tables ()
   my $tables_are_consistent = 1;
   foreach my $kind (@kinds)
     {
-      my $file = "$datadir/ac$kind";
+      my $file = "$datadir/autoscan/$kind";
       my $table = new IO::File $file
 	or die "$me: cannot open $file: $!\n";
       while ($_ = $table->getline)
@@ -239,7 +239,7 @@ sub init_tables ()
 	  # consistency checks.
 	  if (!defined $2 && exists $macro{$kind}{$word})
 	    {
-	      warn ("$datadir/ac$kind:$.: "
+	      warn ("$datadir/autoscan/$kind:$.: "
 		    . "ignoring implicit call to the generic macro for $word\n");
 	      $tables_are_consistent = 0;
 	    }

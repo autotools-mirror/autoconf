@@ -1,4 +1,4 @@
-changequote()changequote([, ])include(m4sh.m4)#            -*- Autoconf -*-
+changequote()changequote([, ])include(m4sugar/m4sh.m4)#      -*- Autoconf -*-
 # This file is part of Autoconf.
 # Driver that loads the Autoconf macro files.
 # Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
@@ -24,14 +24,14 @@ changequote()changequote([, ])include(m4sh.m4)#            -*- Autoconf -*-
 # yet when Autoconf is frozen.
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 
-m4_include([acversion.m4])
-m4_include([acgeneral.m4])
-m4_include([aclang.m4])
-m4_include([acfunctions.m4])
-m4_include([acheaders.m4])
-m4_include([actypes.m4])
-m4_include([acspecific.m4])
-m4_include([acoldnames.m4])
+m4_include([autoconf/version.m4])
+m4_include([autoconf/general.m4])
+m4_include([autoconf/lang.m4])
+m4_include([autoconf/functions.m4])
+m4_include([autoconf/headers.m4])
+m4_include([autoconf/types.m4])
+m4_include([autoconf/specific.m4])
+m4_include([autoconf/oldnames.m4])
 
 # We discourage the use of the non prefixed macro names: M4sugar maps
 # all the builtins into `m4_'.  Autoconf has been converted to these

@@ -30,18 +30,21 @@ SUITE = suite.at \
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
 EXTRA_DIST = README \
-             atgeneral.m4 atspecific.m4 aclocal.m4 \
+             atspecific.m4 aclocal.m4 \
              $(SUITE) mktests.sh
 
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
-testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
-           atgeneral.m4 atspecific.m4 \
+AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../autom4te
+testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
+	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
+           $(top_srcdir)/lib/autotest/general.m4 \
+	   atspecific.m4 \
            $(SUITE)
-	$(M4) -I $(srcdir) -I $(top_srcdir) atspecific.m4 suite.at | \
-          sed -e 's/[ 	]*$$//' | \
-	  sed -e '/^$$/N;/\n$$/D' >$@.tmp
+	$(AUTOM4TE) \
+	  -I $(srcdir) -I $(top_srcdir) -I $(top_srcdir)/lib \
+	  atspecific.m4 suite.at -o $@.tmp
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
@@ -49,12 +52,12 @@ testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
 # thanks God for VPATH.  Hm...
-MACRO_FILES = ../acgeneral.m4 \
-              ../acspecific.m4 \
-              ../acfunctions.m4 \
-              ../aclang.m4 \
-              ../acheaders.m4 \
-              ../actypes.m4
+MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
+              $(top_srcdir)/lib/autoconf/specific.m4 \
+              $(top_srcdir)/lib/autoconf/functions.m4 \
+              $(top_srcdir)/lib/autoconf/lang.m4 \
+              $(top_srcdir)/lib/autoconf/headers.m4 \
+              $(top_srcdir)/lib/autoconf/types.m4
 
 acgeneral.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)

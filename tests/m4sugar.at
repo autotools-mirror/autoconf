@@ -27,24 +27,24 @@ m4_warn([bar],    [bar])
 m4_warn([syntax], [syntax])
 ]])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o-],
+AT_CHECK_AUTOCONF([-o-],
          0, [],
 [configure.ac:3: warning: syntax
 ])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wall],
+AT_CHECK_AUTOCONF([-o- -Wall],
          0, [],
 [configure.ac:1: warning: foo
 configure.ac:2: warning: bar
 configure.ac:3: warning: syntax
 ])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar],
+AT_CHECK_AUTOCONF([-o- -Wnone,bar],
          0, [],
 [configure.ac:2: warning: bar
 ])
 
-AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar,error],
+AT_CHECK_AUTOCONF([-o- -Wnone,bar,error],
          1, [],
 [configure.ac:2: error: bar
 configure.ac:2: the top level
@@ -94,6 +94,14 @@ AT_CLEANUP
 ## -------------- ##
 ## m4_text_wrap.  ##
 ## -------------- ##
+#							-*- Autoconf -*-
+
+AT_BANNER([M4sugar.])
+
+## -------------- ##
+## m4_text_wrap.  ##
+## -------------- ##
+
 
 AT_SETUP([[m4_text_wrap]])
 

@@ -106,7 +106,7 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
 
-ac_unique_file="acgeneral.m4"
+ac_unique_file="autoconf.in"
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -1404,7 +1404,7 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 # Automake can't see inner AC_SUBSTS (`aclocal' is bypassed), so we tag the
 # AC_SUBSTS here too.
 
-ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile lib/Makefile lib/Autoconf/Makefile tests/Makefile tests/atconfig"
+ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile lib/Makefile lib/Autoconf/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile tests/Makefile tests/atconfig"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -1744,9 +1744,13 @@ do
   "config/Makefile" ) CONFIG_FILES="$CONFIG_FILES config/Makefile" ;;
   "lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
   "lib/Autoconf/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/Autoconf/Makefile" ;;
+  "lib/autoscan/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autoscan/Makefile" ;;
+  "lib/m4sugar/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/m4sugar/Makefile" ;;
+  "lib/autoconf/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autoconf/Makefile" ;;
+  "lib/autotest/Makefile" ) CONFIG_FILES="$CONFIG_FILES lib/autotest/Makefile" ;;
   "tests/Makefile" ) CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
   "tests/atconfig" ) CONFIG_FILES="$CONFIG_FILES tests/atconfig" ;;
-  *) { { echo "$as_me:1749: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:1753: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -1957,7 +1961,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1960: creating $ac_file" >&5
+    { echo "$as_me:1964: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -1975,7 +1979,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:1978: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:1982: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -1988,7 +1992,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:1991: error: cannot find input file: $f" >&5
+           { { echo "$as_me:1995: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
