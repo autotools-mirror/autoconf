@@ -8187,10 +8187,19 @@ builtin @command{unset}, for more details.
 @item LINENO
 @evindex LINENO
 Most modern shells provide the current line number in @code{LINENO}.
-Its value is the line number of the beginning of the current command
-(see below the output of the here document).  The behavior wrt
-@command{eval} differs according to the shell, but, amusingly, not in
-the case of sub shells:
+Its value is the line number of the beginning of the current command.
+Autoconf attempts to execute @command{configure} with a modern shell.
+If no such shell is available, it attempts to implement @code{LINENO}
+with a simple Awk+Sed prepass that replaces the first instance of the
+string @code{$LINENO} in each line with the line's number.
+
+You should not rely on @code{LINENO} within @command{eval}, as the
+behavior differs in practice.  Also, the possibility of the Awk+Sed
+prepass means that you should not rely on @code{$LINENO} when quoted,
+when in here-documents, or when in long commands that cross line
+boundaries or that have multiple instances of $LINENO.  Subshells
+should be OK, though.  In the following example, lines 1, 6, and 10
+are portable, but the other instances of @code{LINENO} are not:
 
 @example
 @group
@@ -8202,30 +8211,34 @@ cat <<EOF
 EOF
 ( echo 6. $LINENO )
 eval 'echo 7. $LINENO'
+echo 8. $LINENO $LINENO
+echo 9. '$LINENO'
+echo 10. $LINENO '
+11.' $LINENO
 @end group
 @group
-$ @kbd{ash lineno}
-1.
-3.
-4.
-6.
-7.
-@end group
-@group
-$ @kbd{bash-2.03 lineno}
+$ @kbd{bash-2.05 lineno}
 1. 1
 3. 2
 4. 2
 6. 6
 7. 1
+8. 8 8
+9. $LINENO
+10. 10 
+11. 10
 @end group
 @group
-$ @kbd{zsh-3.1.9 lineno}
+$ @kbd{zsh-3.0.6 lineno}
 1. 1
 3. 2
 4. 2
 6. 6
 7. 7
+8. 8 8
+9. $LINENO
+10. 10 
+11. 10
 @end group
 @group
 $ @kbd{pdksh-5.2.14 lineno}
@@ -8234,6 +8247,24 @@ $ @kbd{pdksh-5.2.14 lineno}
 4. 2
 6. 6
 7. 0
+8. 8 8
+9. $LINENO
+10. 10 
+11. 10
+@end group
+@group
+$ @kbd{awk '/\$LINENO/@{printf "%d:", NR@}; @{print@}' lineno |}
+> @kbd{sed '/\$LINENO/s/^\([^:]*\):\(.*\)\$LINENO/\2\1/' |}
+> @kbd{sh}
+1. 1
+3. 3
+4. 4
+6. 6
+7. 7
+8. 8
+9. 9
+10. 10 
+11. 11
 @end group
 @end example
 
