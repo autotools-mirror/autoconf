@@ -127,6 +127,7 @@ General Purpose Macros
 * Setup::			Controlling Autoconf operation.
 * General Tests::		Check for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
+* Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 
 Writing Macros
@@ -1333,7 +1334,7 @@ These macros are defined in the file @file{acgeneral.m4}.
 * Setup::			Controlling Autoconf operation.
 * General Tests::		Check for kinds of features.
 * Setting Variables::		Setting shell and @code{make} variables.
-* Language Choice::             Determining which language to use for testing.
+* Language Choice::             Selecting which language to use for testing.
 * Macro Ordering::		Enforcing ordering constraints.
 @end menu
 
