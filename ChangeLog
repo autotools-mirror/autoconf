@@ -1,9 +1,16 @@
+2001-04-04  Lars J. Aas  <larsa@sim.no>
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS): Produce better version
+	information for config.log header.
+	(_AC_INIT_VERSION): Produce better version information for
+	`configure --version'.
+
 2001-03-30  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: Use "invalid" instead of "illegal," as
 	suggested by the GNU coding standards.
 
-2001-03-30  Tim Van Holder <tim.van.holder@pandora.be>
+2001-03-30  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* m4sh.m4 (AS_BASENAME): New.
 	(AS_SHELL_SANITIZE): Set `$as_me'.
