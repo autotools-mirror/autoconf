@@ -1,5 +1,12 @@
 2000-02-18  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (at_diff): Don't use `cmp -s', on DOS it
+	makes the difference between Unix and DOS EOL. `diff' does not.
+	Reported by Eli Zaretski.
+	Also, be ready to use a diff that does not support `-u'.
+
+2000-02-18  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.m4 (Syntax of the scripts): Be robust to shells that
 	never return on some `/bin/sh -n foo.sh'.
 	Reported by Nicolas Joly.

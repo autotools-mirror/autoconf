@@ -131,16 +131,23 @@ while test [$][#] -gt 0; do
   esac
 done
 
-# In the testing suite, we only want to know if the test succeeded or failed.
-# But in debugging scripts, we want more information, so we prefer `diff -u'
-# to the silent `cmp', even if it may happen that we compare binary files.
-# Option `-u' might be less portable, so either change it or use GNU `diff'.
 
-if test -n "$at_verbose"; then
+# To check whether a test succeeded or not, we compare an expected
+# output with a reference.  In the testing suite, we just need `cmp'
+# but in debugging scripts, we want more information, so we prefer
+# `diff -u'.  Nonetheless we will use `diff' only, because in DOS
+# environments, `diff' considers that two files are equal included
+# when there are only differences on the coding of new lines. `cmp'
+# does not.
+# Finally, not all the `diff' support `-u'.
+
+if diff -u /dev/null /dev/null >/dev/null 2>&1; then
   at_diff='diff -u'
 else
-  at_diff='cmp -s'
+  at_diff='diff'
 fi
+
+
 
 # Each generated debugging script, containing a single test group, cleans
 # up files at the beginning only, not at the end.  This is so we can repeat
