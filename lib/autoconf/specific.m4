@@ -770,6 +770,8 @@ if test -n "$GCC"; then
 AC_DEFINE(HAVE_LONG_DOUBLE)
 else
 AC_TEST_PROGRAM([int main() {
+/* The Stardent Vistra knows sizeof(long double), but doesn't support it.  */
+long double foo = 0.0;
 /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
 exit(sizeof(long double) < sizeof(double)); }],
 AC_DEFINE(HAVE_LONG_DOUBLE))
