@@ -7,6 +7,9 @@
 	(local-checks-available): this.
 	(local-check): New.
 
+	* Makefile.am (EXTRA_DIST): Add Makefile.cfg.
+	* configure.ac: Require Automake 1.7.6.
+
 2003-08-22  Akim Demaille  <akim@epita.fr>
 
 	Output stack traces in warnings.

@@ -29,7 +29,7 @@ AC_CONFIG_SRCDIR([ChangeLog])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_FILES([config/Makefile])
 
-AM_INIT_AUTOMAKE([check-news 1.7.2 dist-bzip2 readme-alpha])
+AM_INIT_AUTOMAKE([check-news 1.7.6 dist-bzip2 readme-alpha])
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])

@@ -26,7 +26,7 @@ ACLOCAL_AMFLAGS = -I config
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
-	     GNUmakefile Makefile.maint
+	     GNUmakefile Makefile.maint Makefile.cfg
 
 MAINTAINERCLEANFILES = INSTALL
 
