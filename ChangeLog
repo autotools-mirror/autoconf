@@ -1,3 +1,8 @@
+2002-04-09  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Make): Mention the issue
+	with indented comments in rules.
+
 2002-04-09  Andreas Schwab  <schwab@suse.de>
 
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Handle empty

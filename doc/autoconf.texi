@@ -9943,7 +9943,7 @@ ordinary rules is unspecified.  Solaris 8's Make for instance
 will replace it with the argument.
 
 @item Leading underscore in macro names
-Some Make don't support leading underscores in macro names, such as on
+Some Makes don't support leading underscores in macro names, such as on
 NEWS-OS 4.2R.
 
 @example
@@ -9963,10 +9963,11 @@ this is test
 
 @item @code{make macro=value} and sub-@command{make}s.
 
-A command argument definition such as @code{foo=bar} overrides any foo
-definition in the Makefile.  Some Make implementations (such as @sc{gnu}
-Make) will propagate this override to sub-invocations of @command{make},
-but @sc{posix} conformant implementations won't.
+A command-line variable definition such as @code{foo=bar} overrides any
+definition of @code{foo} in the @file{Makefile}.  Some Make
+implementations (such as @sc{gnu} Make) will propagate this override to
+sub-invocations of @command{make}, this is allowed but not required by
+@sc{posix}.
 
 @example
 % @kbd{cat Makefile}
@@ -10000,7 +10001,7 @@ variable:
 
 The @code{-e} option is propagated to sub-@command{make}s automatically,
 and since the environment is inherited between @command{make}
-invocations the @code{foo} macro will be overridden in
+invocations, the @code{foo} macro will be overridden in
 sub-@code{make}s as expected.
 
 Using @code{-e} could have unexpected side-effects if your environment
@@ -10029,10 +10030,10 @@ you do that.
 POSIX Makes internally use the @code{$(SHELL)} macro to spawn shell
 processes and execute @file{Makefile} rules.  This is a built-in
 macro supplied by Make, but it can be modified from the Makefile or a
-command line argument.
+command-line argument.
 
 Not all Makes will define this @code{SHELL} macro.  OSF/Tru64 Make is
-an example, this implementation will always use @code{/bin/sh}.  So it's
+an example; this implementation will always use @code{/bin/sh}.  So it's
 a good idea to always define @code{SHELL} in your @file{Makefile}s.  If
 you use Autoconf, do
 
@@ -10040,7 +10041,7 @@ you use Autoconf, do
 SHELL = @@SHELL@@
 @end example
 
-@sc{posix} compliant makes should never acquire the value of $(SHELL)
+@sc{posix}-compliant makes should never acquire the value of $(SHELL)
 from the environment, even when @code{make -e} is used (otherwise, think
 about what would happen to your rules if @code{SHELL=/bin/tcsh}).
 
@@ -10063,6 +10064,23 @@ bar
 bar
 @end example
 
+@item Comments in rules
+@cindex Comments in @file{Makefile} rules
+@cindex @file{Makefile} rules and comments
+
+Never put comments in a rule.
+
+Some Makes treat anything starting with a tab as a command for the
+current rule, even if the tab is immediately followed by a @code{#}.
+The Make from Tru64 Unix V5.1 is one of them.  The following
+@file{Makefile} will run @code{# foo} through the shell.
+
+@example
+all:
+        # foo
+@end example
+
+
 @item @code{VPATH}
 @cindex @code{VPATH}
 
@@ -10072,7 +10090,7 @@ consistent amongst Makes.
 
 Maybe the best suggestion to give to people who need the @code{VPATH}
 feature is to choose a Make implementation and stick to it.  Since the
-resulting @file{Makefile}s are not portable anyway, better chose a
+resulting @file{Makefile}s are not portable anyway, better choose a
 portable Make (hint, hint).
 
 Here are a couple of known issues with some @code{VPATH}
@@ -10084,9 +10102,9 @@ implementations.
 @cindex @code{VPATH} and double-colon rules
 @cindex double-colon rules and @code{VPATH}
 Any assignment to @code{VPATH} causes Sun Make to only execute the first
-set of double-colon rules.  (This comments has been here since 1994 and the
-context has been lost.  It's probably about SunOS 4.  If you can
-reproduce this, please send us a testcase for illustration.)
+set of double-colon rules.  (This comment has been here since 1994 and
+the context has been lost.  It's probably about SunOS 4.  If you can
+reproduce this, please send us a test case for illustration.)
 
 @item @code{$<} in inference rules:
 @cindex suffix rules, @code{$<}, and @code{VPATH}
@@ -10114,7 +10132,7 @@ VPATH = ../src
 @end example
 
 This kludge was introduced in Automake in 2000, but the exact context
-have has lost.  If you know which make implementation is involved here,
+have been lost.  If you know which make implementation is involved here,
 please drop us a note.
 
 
@@ -10124,8 +10142,9 @@ please drop us a note.
 @cindex @code{VPATH}, explicit rules, and @code{$<}
 
 As said elsewhere, using @code{$<} in explicit rules is not portable.
-You have to perform a @code{VPATH} search manually.  For instance, using
-the same pattern as above:
+The prerequisite file must be named explicitly in the rule.  If you want
+to find the prerequisite via a @code{VPATH} search, you have to code the
+whole thing manually.  For instance, using the same pattern as above:
 
 @example
 VPATH = ../src
@@ -10206,11 +10225,11 @@ install-HEADERS: $(HEADERS)
 @end example
 
 The above @code{install-HEADERS} rule is not sun-proof because @code{for
-i in $(HEADERS);} will expanded as @code{for i in foo.h foo2.h foo3.h;}
+i in $(HEADERS);} will be expanded as @code{for i in foo.h foo2.h foo3.h;}
 where @code{foo.h} and @code{foo2.h} are plain words and are hence
 subject to @code{VPATH} adjustments.
 
-If the three files are in @file{../src}, the rule is run as
+If the three files are in @file{../src}, the rule is run as:
 
 @example
 for i in ../src/foo.h ../src/foo2.h foo3.h; do \
@@ -10219,12 +10238,12 @@ for i in ../src/foo.h ../src/foo2.h foo3.h; do \
 done
 @end example
 
-where the two first @command{install} calls will fails.  For instance,
+where the two first @command{install} calls will fail.  For instance,
 consider the @code{foo.h} installation:
 
 @example
 install -m 644 `test -f ../src/foo.h || echo ../src/`../src/foo.h \
-  /usr/local/inclue/../src/foo.h;
+  /usr/local/include/../src/foo.h;
 @end example
 @noindent
 It reduces to:
@@ -10233,11 +10252,10 @@ It reduces to:
 install -m 644 ../src/foo.h /usr/local/include/../src/foo.h;
 @end example
 
-Note that the manual @code{VPATH} search did not cause any problem here;
-however this command fails to install @file{foo.h} in the correct
-directory.
+Note that the manual @code{VPATH} search did not cause any problems here;
+however this command installs @file{foo.h} in an incorrect directory.
 
-Trying to quote @code{$(HEADERS)} in some way, like we did for
+Trying to quote @code{$(HEADERS)} in some way, as we did for
 @code{foo.c} a few @file{Makefile}s ago, does not help:
 
 @example
@@ -10250,7 +10268,7 @@ install-HEADERS: $(HEADERS)
 
 Indeed, @code{headers='$(HEADERS)'} expands to @code{headers='foo.h
 foo2.h foo3.h'} where @code{foo2.h} is still a plain word.  (Aside: the
-@code{headers='$(HEADERS)'; for i in $$headers;} idiom is this a good
+@code{headers='$(HEADERS)'; for i in $$headers;} idiom is a good
 idea if @code{$(HEADERS)} can be empty, because some shell produce a
 syntax error on @code{for i in;}.)
 
@@ -10296,7 +10314,7 @@ all : foo/bar
 @end example
 
 The above @command{command} will be run on the empty @file{foo/bar}
-directory created in the current directory.
+directory that was created in the current directory.
 
 @end table
 @end table

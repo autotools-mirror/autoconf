@@ -8,6 +8,10 @@
 
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
 
+** Documentation
+
+- Limitations of Make
+  More of them.
 
 * Major changes in Autoconf 2.53
 
