@@ -153,14 +153,23 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 
-# NLS nuisances.
 _AS_UNSET_PREPARE
-m4_foreach([_AS_var],
-  [LANG, LC_ALL, LC_TIME, LC_CTYPE, LANGUAGE,
-   LC_COLLATE, LC_NUMERIC, LC_MESSAGES],
-  [(set +x; test -n "`(_AS_var=C; export _AS_var) 2>&1`") &&
-    { AS_UNSET(_AS_var, C); }
-])
+
+# Work around bugs in pre-3.0 UWIN ksh.
+$as_unset ENV MAIL MAILPATH
+PS1='$ '
+PS2='> '
+PS4='+ '
+
+# NLS nuisances.
+for as_var in LANG LANGUAGE LC_ALL LC_COLLATE LC_CTYPE LC_NUMERIC LC_MESSAGES LC_TIME
+do
+  if (set +x; test -n "`(eval $as_var=C; export $as_var) 2>&1`"); then
+    eval $as_var=C; export $as_var
+  else
+    $as_unset $as_var
+  fi
+done
 
 # Required to use basename.
 _AS_EXPR_PREPARE
