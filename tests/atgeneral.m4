@@ -83,7 +83,7 @@ m4_define([AT_LINE],
 
 # AT_INIT(PROGRAM)
 # ----------------
-# Begin testing suite, using PROGRAM to check version.  The search path
+# Begin test suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 m4_define([AT_INIT],
 [m4_define([AT_ordinal], 0)
@@ -149,7 +149,9 @@ while test $[#] -gt 0; do
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
         at_tests="$at_tests$[1] ";;
 
-     *) echo 1>&2 "Try \`$[0] --help' for more information."; exit 1 ;;
+     *) echo "$as_me: invalid option: $[1]" >&2
+        echo "Try \`$[0] --help' for more information." >&2
+        exit 1 ;;
   esac
   shift
 done
@@ -204,7 +206,7 @@ fi
 
 # Tester and tested.
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
-  AS_BOX([Testing suite for $at_package $at_version])
+  AS_BOX([Test suite for $at_package $at_version])
 else
   AS_BOX([ERROR: Not using the proper version, no tests performed])
   exit 1
@@ -267,7 +269,7 @@ m4_divert([TAIL])[]dnl
   esac
 done
 
-# Wrap up the testing suite with summary statistics.
+# Wrap up the test suite with summary statistics.
 
 rm -f at-check-line at-setup-line
 at_skip_count=`set dummy $at_skip_list; shift; echo $[#]`
@@ -306,7 +308,7 @@ elif test $at_debug = false; then
   echo 'in the file '$[0]'.log.'
 
   {
-    AS_BOX([Testing suite log for $at_package $at_version])
+    AS_BOX([Test suite log for $at_package $at_version])
     echo
 
     # Try to find a few ChangeLogs in case it might help determining the
