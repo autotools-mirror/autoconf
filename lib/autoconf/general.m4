@@ -30,10 +30,10 @@ ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
 )m4exit(2)])dnl
 dnl
 dnl
-dnl Utility functions for stamping the configure script.
+dnl ### Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.9)dnl
+define(AC_ACVERSION, 1.9.1)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -54,7 +54,7 @@ dnl
 define(AC_DATE, [esyscmd(date|tr -d '\012')])dnl
 dnl
 dnl
-dnl Controlling Autoconf operation
+dnl ### Controlling Autoconf operation
 dnl
 dnl
 dnl This is separate from AC_INIT to prevent GNU m4 1.0 from coredumping
@@ -138,15 +138,15 @@ do
     continue
   fi
 
-  # Accept (but ignore some of) the important Cygnus configure
-  # options, so we can diagnose typos.
-
   case "$ac_option" in
 changequote(,)dnl
   -*=*) ac_optarg=`echo "$ac_option" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
 changequote([,])dnl
   *) ac_optarg= ;;
   esac
+
+  # Accept (but ignore some of) the important Cygnus configure
+  # options, so we can diagnose typos.
 
   case "$ac_option" in
 
@@ -477,8 +477,215 @@ define(AC_PREREQ,
 [AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])),[$1])])dnl
 dnl
+dnl Run configure in subdirectories $1.
 dnl
-dnl Setting variables
+define(AC_CONFIG_SUBDIRS,
+[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
+if test -z "${norecursion}"; then
+  for ac_config_dir in $1; do
+
+    if test ! -d ${srcdir}/${ac_config_dir}; then
+      continue
+    fi
+
+    echo configuring ${ac_config_dir}
+
+    case "${srcdir}" in
+    .) ;;
+    *)
+      if test -d ./${ac_config_dir} || mkdir ./${ac_config_dir}; then :;
+      else
+        AC_ERROR(can not create `pwd`/${ac_config_dir})
+      fi
+      ;;
+    esac
+
+    ac_popdir=`pwd`
+    cd ${ac_config_dir}
+
+    case "${srcdir}" in
+    .) # No --srcdir option.  We're building in place.
+      ac_sub_srcdir=${srcdir} ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=${srcdir}/${ac_config_dir} ;;
+    *) # Relative path.
+      ac_sub_srcdir=../${srcdir}/${ac_config_dir} ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f ${ac_sub_srcdir}/configure; then
+      ac_sub_configure=${ac_sub_srcdir}/configure
+    elif test -f ${ac_sub_srcdir}/configure.in; then
+      ac_sub_configure=${ac_configure}
+    else
+      AC_WARN(no configuration information is in ${ac_config_dir})
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "${ac_sub_configure}"; then
+      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${configure_args}
+      then :
+      else
+        AC_ERROR(${ac_sub_configure} failed for ${ac_config_dir})
+      fi
+    fi
+
+    cd ${ac_popdir}
+  done
+fi
+])dnl
+dnl
+dnl
+dnl ### Canonicalizing the system type.
+dnl
+dnl
+dnl Find Cygnus configure, config.sub, and config.guess in directory $1.
+dnl These are auxiliary files used in configuration.
+dnl $1 can be either absolute or relative to ${srcdir}.
+define(AC_CONFIG_AUX,
+[AC_CONFIG_AUX_DIRS($1 ${srcdir}/$1)])dnl
+dnl
+dnl The default is `${srcdir}' or `${srcdir}/..'.
+dnl There's no need to call this macro explicitly; just AC_REQUIRE it.
+define(AC_CONFIG_AUX_DEFAULT,
+[AC_CONFIG_AUX_DIRS(${srcdir} ${srcdir}/..)])dnl
+dnl
+dnl Internal subroutine.
+dnl Search for the configuration auxiliary files in directory list $1.
+define(AC_CONFIG_AUX_DIRS,
+[ac_aux_dir=
+for ac_dir in $1; do
+  if test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir; break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  AC_ERROR(can not find install.sh in $1)
+fi
+ac_config_guess=${ac_aux_dir}/config.guess
+ac_config_sub=${ac_aux_dir}/config.sub
+ac_configure=${ac_aux_dir}/configure # This should be Cygnus configure.
+ac_install_sh="${ac_aux_dir}/install.sh -c"
+AC_PROVIDE([AC_CONFIG_AUX_DEFAULT])dnl
+])dnl
+dnl
+dnl Canonicalize the host, target, and build system types.
+define(AC_SYSTEM_TYPE,
+[AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])dnl
+# Do some error checking and defaulting for the host and target type.
+# The inputs are:
+#    configure --host=HOST --target=TARGET NONOPT
+#
+# The rules are:
+# 1. You aren't allowed to specify --host, --target, and nonopt at the
+#    same time. 
+# 2. Host defaults to nonopt.
+# 3. If nonopt is not specified, then host defaults to the current host,
+#    as determined by config.guess.
+# 4. Target defaults to nonopt.
+# 5. If nonopt is not specified, then target defaults to host.
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+build_alias=$build
+host_alias=$host
+target_alias=$target
+case $host_alias---$target_alias---$nonopt in
+NONE---*---* | *---NONE---* | *---*---NONE) ;;
+*) AC_ERROR(can only configure for one host and one target at a time) ;;
+esac
+
+# Make sure we can run config.sub.
+if ${ac_config_sub} sun4 >/dev/null 2>&1; then :
+else AC_ERROR(can not run ${ac_config_sub})
+fi
+
+AC_HOST_TYPE
+AC_TARGET_TYPE
+AC_BUILD_TYPE
+])dnl
+dnl
+dnl Subroutines of AC_SYSTEM_TYPE.
+dnl
+define(AC_HOST_TYPE,
+[AC_CHECKING(host type)
+
+case "${host_alias}" in
+NONE)
+  case $nonopt in
+  NONE)
+    if host_alias=`${ac_config_guess}`; then :
+    else AC_ERROR(can not guess host type; you must specify one)
+    fi ;;
+  *) host_alias=$nonopt ;;
+  esac ;;
+esac
+
+host=`${ac_config_sub} ${host_alias}`
+host_cpu=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
+host_vendor=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
+host_os=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+test -n "$host" && AC_VERBOSE(setting host to $host)
+AC_SUBST(host)dnl
+AC_SUBST(host_alias)dnl
+])dnl
+dnl
+define(AC_TARGET_TYPE,
+[AC_CHECKING(target type)
+
+case "${target_alias}" in
+NONE)
+  case $nonopt in
+  NONE) target_alias=$host_alias ;;
+  *) target_alias=$nonopt ;;
+  esac ;;
+esac
+
+target=`${ac_config_sub} ${target_alias}`
+target_cpu=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
+target_vendor=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
+target_os=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+test -n "$target" && AC_VERBOSE(setting target to $target)
+AC_SUBST(target)dnl
+AC_SUBST(target_alias)dnl
+])dnl
+dnl
+define(AC_BUILD_TYPE,
+[AC_CHECKING(build type)
+
+case "${build_alias}" in
+NONE) build= build_alias= ;;
+*)
+build=`${ac_config_sub} ${build_alias}`
+build_cpu=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
+build_vendor=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
+build_os=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
+;;
+esac
+test -n "$build" && AC_VERBOSE(setting build to $build)
+AC_SUBST(build)dnl
+AC_SUBST(build_alias)dnl
+])dnl
+dnl
+dnl Put the contents of file $2 into Makefile variable $1.
+dnl Useful for inserting Makefile fragments into Makefiles.
+define(AC_SUBST_FILE,
+[AC_SUBST($1)dnl
+if test -f ${srcdir}/$2; then
+  AC_VERBOSE(using $2 for $1)
+  $1=`cat ${srcdir}/$2`
+fi
+])dnl
+dnl
+dnl Link each of the existing files in $2 to the corresponding
+dnl link name in $1.
+dnl Not actually done until AC_OUTPUT_MAKE_LINKS.
+define(AC_MAKE_LINKS,
+[define([AC_LINK_LIST],[$1])define([AC_FILE_LIST],[$2])])dnl
+dnl
+dnl
+dnl ### Setting variables
 dnl
 dnl
 dnl Several simple subroutines to do various flavors of quoting.
@@ -580,7 +787,7 @@ divert(0)dnl
 ])])dnl
 dnl
 dnl
-dnl Printing messages
+dnl ### Printing messages
 dnl
 dnl
 define(AC_CHECKING,
@@ -596,7 +803,7 @@ define(AC_ERROR,
 [echo "configure: $1" >&2; exit 1])dnl
 dnl
 dnl
-dnl Selecting which language to use for testing
+dnl ### Selecting which language to use for testing
 dnl
 dnl
 define(AC_LANG_C,
@@ -621,7 +828,7 @@ define(AC_LANG_RESTORE,
 [ifelse(AC_LANG_STACK,C,[ifelse(AC_LANG,C,,[AC_LANG_C])],[ifelse(AC_LANG,CPLUSPLUS,,[AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])dnl
 dnl
 dnl
-dnl Enforcing ordering constraints
+dnl ### Enforcing ordering constraints
 dnl
 dnl
 define(AC_BEFORE,
@@ -640,7 +847,7 @@ define(AC_OBSOLETE,
 )])dnl
 dnl
 dnl
-dnl Checking for kinds of features
+dnl ### Checking for kinds of features
 dnl
 dnl
 define(AC_PROGRAM_CHECK,
@@ -913,7 +1120,7 @@ main()
 AC_DEFINE_UNQUOTED(changequote(<<,>>) translit(sizeof_$1, [a-z *], [A-Z_P])<<>>changequote([,]), $ac_size)])dnl
 dnl
 dnl
-dnl The big finish
+dnl ### The big finish
 dnl
 dnl
 define(AC_OUTPUT,
@@ -1035,10 +1242,26 @@ changequote([,])dnl
   rm -f "$ac_file"
   comment_str="Generated automatically from `echo $ac_file|sed 's|.*/||'`.in by configure."
   case "$ac_file" in
-    *.c | *.h | *.C | *.cc | *.m )  echo "/* $comment_str */" > "$ac_file" ;;
-    * )          echo "# $comment_str"     > "$ac_file" ;;
+    *.c | *.h | *.C | *.cc | *.m )
+    ac_comsub="1i\\
+/* $comment_str */" ;;
+    * ) # Add the comment on the second line of scripts, first line of others.
+    ac_comsub="
+1{
+s/^#!/&/
+t script
+i\\
+# $comment_str
+b done
+: script
+a\\
+# $comment_str
+: done
+}
+" ;;
   esac
   sed -e "
+$ac_comsub
 $ac_prsub
 $ac_vpsub
 dnl Shell code in configure.in might set extrasub.
@@ -1047,18 +1270,20 @@ dnl Insert the sed substitutions.
 undivert(1)dnl
 " $ac_given_srcdir/${ac_file}.in >> $ac_file
 fi; done
-AC_OUTPUT_HEADER
+ifdef([AC_CONFIG_NAMES],[AC_OUTPUT_HEADER(AC_CONFIG_NAMES)])dnl
+ifdef([AC_LINK_LIST],[AC_OUTPUT_MAKE_LINKS(AC_LINK_LIST,AC_FILE_LIST)])dnl
 $2
 exit 0
 EOF
 chmod +x config.status
 test -n "$no_create" || ${CONFIG_SHELL-/bin/sh} config.status
 ])dnl
+dnl
+dnl Create the header files listed in $1.
 dnl This is a subroutine of AC_OUTPUT, broken out primarily to avoid bugs
 dnl with long definitions in GNU m4 1.0.  This is called inside a quoted
 dnl here document whose contents are going into config.status.
 define(AC_OUTPUT_HEADER,[dnl
-ifdef([AC_CONFIG_NAMES],[dnl
 changequote(<<,>>)dnl
 
 # These sed commands are put into ac_sed_defs when defining a macro.
@@ -1105,8 +1330,8 @@ do
   ac_lines=`grep -c . conftest.sh`
   if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   rm -f conftest.s1 conftest.s2
-  sed ${ac_max_sh_lines}q conftest.sh > conftest.s1 # Like head -20.
-  sed 1,${ac_max_sh_lines}d conftest.sh > conftest.s2 # Like tail +21.
+  sed ${ac_max_sh_lines}q conftest.sh > conftest.s1 # Like head -9.
+  sed 1,${ac_max_sh_lines}d conftest.sh > conftest.s2 # Like tail +10.
   # Write a limited-size here document to append to conftest.sed.
   echo 'cat >> conftest.sed <<CONFEOF' >> config.status
   cat conftest.s1 >> config.status
@@ -1121,7 +1346,7 @@ cat >> config.status <<\EOF
 # This sed command replaces #undef's with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it in
-[#] AC_CONFIG_NAMES.
+[#] $1.
 cat >> conftest.sed <<\CONFEOF
 changequote(,)dnl
 s,^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,
@@ -1131,24 +1356,25 @@ rm -f conftest.h
 # Break up the sed commands because old seds have small limits.
 ac_max_sed_lines=20
 
-CONFIG_HEADERS=${CONFIG_HEADERS-"AC_CONFIG_NAMES"}
+CONFIG_HEADERS=${CONFIG_HEADERS-"$1"}
 for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
   echo creating $ac_file
 
   cp $ac_given_srcdir/$ac_file.in conftest.h1
+  cp conftest.sed conftest.stm
   while :
   do
-    ac_lines=`grep -c . conftest.sed`
+    ac_lines=`grep -c . conftest.stm`
     if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
     rm -f conftest.s1 conftest.s2 conftest.h2
-    sed ${ac_max_sed_lines}q conftest.sed > conftest.s1 # Like head -20.
-    sed 1,${ac_max_sed_lines}d conftest.sed > conftest.s2 # Like tail +21.
+    sed ${ac_max_sed_lines}q conftest.stm > conftest.s1 # Like head -20.
+    sed 1,${ac_max_sed_lines}d conftest.stm > conftest.s2 # Like tail +21.
     sed -f conftest.s1 < conftest.h1 > conftest.h2
-    rm -f conftest.s1 conftest.h1 conftest.sed
+    rm -f conftest.s1 conftest.h1 conftest.stm
     mv conftest.h2 conftest.h1
-    mv conftest.s2 conftest.sed
+    mv conftest.s2 conftest.stm
   done
-  rm -f conftest.sed conftest.h
+  rm -f conftest.stm conftest.h
   echo "/* $ac_file.  Generated automatically by configure.  */" > conftest.h
   cat conftest.h1 >> conftest.h
   rm -f conftest.h1
@@ -1161,5 +1387,29 @@ for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
     mv conftest.h $ac_file
   fi
 fi; done
+rm -f conftest.sed
 
-])])dnl
+])dnl
+dnl
+define(AC_OUTPUT_MAKE_LINKS,
+[ac_links="$1"
+ac_files="$2"
+while test -n "${ac_files}"; do
+  set ${ac_links}; ac_link=[$]1; shift; ac_links=[$]*
+  set ${ac_files}; ac_file=[$]1; shift; ac_files=[$]*
+
+  echo "linking ${ac_link} to ${srcdir}/${ac_file}"
+
+  if test ! -r ${srcdir}/${ac_file}; then
+    AC_ERROR(${srcdir}/${ac_file}: File not found)
+  fi
+  rm -f ${ac_link}
+  # Make a symlink if possible; otherwise try a hard link.
+  if ln -s ${srcdir}/${ac_file} ${ac_link} 2>/dev/null ||
+    ln ${srcdir}/${ac_file} ${ac_link}; then :
+  else
+    AC_ERROR(can not link ${ac_link} to ${srcdir}/${ac_file})
+  fi
+done
+])dnl
+dnl
