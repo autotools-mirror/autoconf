@@ -1,3 +1,8 @@
+2001-05-10  Akim Demaille  <akim@epita.fr>
+
+	* tests/compile.at (AC_PROG_CPP via CC): New.
+	From Daniel Carroll.
+
 2001-04-27  Akim Demaille  <akim@epita.fr>
 
 	If AC_PROG_CC is invoked but not AC_PROG_CPP, then CPPFLAGS is not

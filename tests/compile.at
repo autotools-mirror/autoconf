@@ -168,6 +168,9 @@ AT_CLEANUP
 
 AT_SETUP([AC_PROG_CPP without warnings])
 
+# Ignore if /lib/cpp doesn't work
+AT_CHECK([/lib/cpp </dev/null || exit 77], [], [ignore], [ignore])
+
 AT_DATA([mycpp],
 [[#! /bin/sh
 /lib/cpp ${1+"$@"}
@@ -177,11 +180,7 @@ exit 0
 chmod +x mycpp
 
 _AT_CHECK_AC_MACRO(
-[[# Ignore if /lib/cpp doesn't work
-if AC_TRY_COMMAND([/lib/cpp </dev/null >&2]); then :; else
-  AC_MSG_ERROR([preprocessor doesn't work], 77)
-fi
-CPP=./mycpp
+[[CPP=./mycpp
 AC_PROG_CPP
 test "x$ac_c_preproc_warn_flag" != xyes &&
   AC_MSG_ERROR([failed to detect preprocessor warning option])
@@ -194,6 +193,57 @@ AT_CHECK_DEFINES(
 
 AT_CLEANUP
 
+
+
+## -------------------- ##
+## AC_PROG_CPP via CC.  ##
+## -------------------- ##
+
+
+# It's Ok for strict preprocessors to produce warnings.
+
+AT_SETUP([AC_PROG_CPP via CC])
+
+# Ignore if /lib/cpp doesn't work
+AT_CHECK([/lib/cpp </dev/null || exit 77], [], [ignore], [ignore])
+
+AT_DATA([mycc],
+[[#! /bin/sh
+echo "Annoying copyright message" >&2
+if test "$1" != "-E"; then
+  exec cc $*
+else
+  if test "$2" = "-traditional-cpp"; then
+    exec cc $*
+  else
+    exec /lib/cpp ${1+"$@"}
+  fi
+fi
+]])
+
+chmod +x mycc
+
+_AT_CHECK_AC_MACRO(
+[[# We go through the following contortions, in order to
+#   have the configure script go down the same codepaths
+#   as it would during a normal CPP selection check.  If
+#   we explicitly set CPP, it goes down a different codepath.
+CC=mycc
+AC_PROG_CPP
+# The test $CC compiler should have been selected.
+test "$CPP" != "mycc -E" &&
+  AC_MSG_ERROR([error messages on stderr cause the preprocessor selection to fail])
+# If the preprocessor is not strict, just ignore
+test "x$ac_c_preproc_warn_flag" = xyes &&
+  AC_MSG_ERROR([preprocessor has no warning option], 77)
+AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
+
+AT_CHECK_DEFINES(
+[/* #undef HAVE_AUTOCONF_IO_H */
+#define HAVE_STDIO_H 1
+])
+
+AT_CLEANUP
 
 
 ## ------------------ ##
