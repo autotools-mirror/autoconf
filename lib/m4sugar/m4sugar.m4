@@ -2,7 +2,7 @@ divert(-1)#                                                  -*- Autoconf -*-
 # This file is part of Autoconf.
 # Base M4 layer.
 # Requires GNU M4.
-# Copyright 1999, 2000, 2001 Free Software Foundation, Inc.
+# Copyright 1999, 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -426,6 +426,16 @@ m4_define([m4_bmatch],
        [$3])])
 
 
+# m4_map(MACRO, LIST)
+# -------------------
+# Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
+# of LIST (which can be lists themselves, for multiple arguments MACROs).
+m4_define([m4_fst], [$1])
+m4_define([m4_map],
+[m4_if([$2], [[]], [],
+       [$1(m4_fst($2))[]dnl
+m4_map([$1], m4_cdr($2))])])
+
 
 ## ---------------------------------------- ##
 ## 6. Enhanced version of some primitives.  ##
@@ -464,6 +474,13 @@ m4_define([m4_do],
 [m4_if($#, 0, [],
        $#, 1, [$1],
        [$1[]m4_do(m4_shift($@))])])
+
+
+# m4_define_default(MACRO, VALUE)
+# -------------------------------
+# If MACRO is undefined, set it to VALUE.
+m4_define([m4_define_default],
+[m4_ifndef([$1], [m4_define($@)])])
 
 
 # m4_default(EXP1, EXP2)
@@ -531,6 +548,7 @@ m4_builtin([popdef], $@)])
 # `exp'.
 m4_define([m4_quote],  [[$*]])
 m4_define([m4_dquote],  [[$@]])
+
 
 # m4_noquote(STRING)
 # ------------------

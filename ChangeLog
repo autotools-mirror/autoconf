@@ -1,3 +1,7 @@
+2002-03-19  Akim Demaille  <akim@epita.fr>
+
+	* lib/m4sugar/m4sugar.m4 (m4_define_default, m4_fst, m4_map): New.
+
 2002-03-18  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Programming in M4sh): Add AS_MKDIR_P.
