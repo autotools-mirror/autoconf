@@ -6,11 +6,6 @@
 
 	* doc/fdl.texi: Upgrade to FDL version 1.2.
 
-	* bin/autom4te.in (handle_traces): [^ *\(.*\) *$] ->
-	[^ *\(.*[^ ]\)? *].  The old regular expression was obviously wrong,
-	and it blunders into a GNU m4 bug as noted by Martin Frydl in
-	<http://mail.gnu.org/pipermail/autoconf/2002-November/014524.html>.
-
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Use the function f
 	nontrivially in main's body, so that f's external declaration is
 	not optimized away in AIX.  This should fix the bug reported by
@@ -32,6 +27,12 @@
 	* Makefile.maint (www-gnu): New macro.
 	(standards.texi-url_prefix, make-stds.texi-url_prefix): Use it, as
 	the location has moved.
+
+2002-12-02  Martin Frydl  <martin@systinet.com>
+	
+	* bin/autom4te.in (at_flatten): rewritten to avoid M4 problem when
+	\(.*\) match is too long and there is something more to be checked.
+	<http://mail.gnu.org/pipermail/autoconf/2002-November/014524.html>
 
 2002-11-15  Akim Demaille  <akim@epita.fr>
 
