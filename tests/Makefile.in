@@ -87,7 +87,7 @@ TESTSUITE_HAND_AT = \
 	suite.at \
         m4sugar.at m4sh.at \
         base.at tools.at torture.at \
-	compile.at \
+	compile.at c.at fortran.at \
 	semantics.at \
 	foreign.at
 
@@ -129,7 +129,7 @@ CONFIG_CLEAN_FILES = autoconf autoheader autom4te autoreconf autoscan \
 	autoupdate ifnames
 DIST_SOURCES =
 DIST_COMMON = README Makefile.am Makefile.in autom4te.in autoreconf.in \
-	autoupdate.in wrappl.in wrapsh.in
+	autoupdate.in configure configure.ac wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:

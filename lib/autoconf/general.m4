@@ -2337,7 +2337,9 @@ AS_IF([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
       [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvaln([$3], [$3])dnl])[]dnl
+m4_ifvaln([$3],
+          [( exit $ac_status )
+$3])dnl])[]dnl
 rm -f core core.* *.core conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
                                                      [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE

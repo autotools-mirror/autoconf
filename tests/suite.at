@@ -60,7 +60,9 @@ m4_include([compile.at])
 
 # Language support.
 m4_include([aclang.at])
+m4_include([c.at])
 m4_include([acc.at])
+m4_include([fortran.at])
 m4_include([acfortran.at])
 
 # Checking that AC_CHECK_FOO macros work properly.

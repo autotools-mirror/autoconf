@@ -36,6 +36,8 @@
 
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
+- AC_TRY_RUN
+  Under the user pressure, $? is finally available.  Probably a mistake.
 
 ** C Macros
 - AC_C_BIGENDIAN supports the cross-compiling case.

@@ -1,5 +1,28 @@
 2001-09-27  Akim Demaille  <akim@epita.fr>
 
+	Fix the passing of $? to ACTION-IF-FAILED in AC_TRY_RUN, that
+	generates too many bug reports.
+
+	* lib/autoconf/general.m4 (_AC_RUN_IFELSE): Pass the right exit
+	status when executing the ACTION-IF-FALSE.
+	* tests/base.at (AC_TRY_*): Rename as...
+	(AC_TRY_COMMAND): this.
+	(AC_RUN_IFELSE): New.
+	* tests/compile.at (Extensions, C keywords)
+	(AC_PROG_CPP requires AC_PROG_CC, GNU Fortran 77)
+	(Broken/missing compilers, AC_PROG_CPP with warnings)
+	(AC_PROG_CPP without warnings, AC_PROG_CPP via CC): Move to...
+	* tests/c.at (Extensions, C keywords)
+	(Broken/missing compilers, AC_PROG_CPP with warnings)
+	(AC_PROG_CPP without warnings, AC_PROG_CPP via CC)
+	(AC_PROG_CPP requires AC_PROG_CC): here and...
+	* tests/fortran.at (GNU Fortran 77): there.
+	* doc/autoconf.texi (autoconf Invocation): Fix the example:
+	AC_TRY_RUN is about compilation, not shell commands.
+	(Test Programs): AC_TRY_RUN works as used to be advertised.
+
+2001-09-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix bugs spotted by
 	Raja R Harinath:
 	Be sure to detect when $LINENO always returns the same value.

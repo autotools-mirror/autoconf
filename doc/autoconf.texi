@@ -1214,7 +1214,7 @@ on this @file{configure.ac}:
 
 @example
 AC_DEFUN([INNER],
-[AC_TRY_RUN([true])])
+[AC_TRY_RUN([exit (0)])])
 
 AC_DEFUN([OUTER],
 [INNER])
@@ -5489,9 +5489,7 @@ system while configuring.
 @acindex TRY_RUN
 If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
-Otherwise, run shell commands @var{action-if-false}; the exit status of
-the program should be available in the shell variable @samp{$?}, but has
-never been: don't depend on this.
+Otherwise, run shell commands @var{action-if-false}.
 
 This macro double quotes @var{program}, the text of a program in the
 current language (@pxref{Language Choice}), on which shell variable and
@@ -5504,6 +5502,15 @@ the system where @code{configure} is being run, then the test program is
 not run.  If the optional shell commands @var{action-if-cross-compiling}
 are given, they are run instead.  Otherwise, @code{configure} prints
 an error message and exits.
+
+In the @var{action-if-false} section, the exit status of the program is
+available in the shell variable @samp{$?}, but be very careful to limit
+yourself to positive values smaller than 127; bigger values shall be
+saved into a file by the @var{program}.  Note also that you have simply
+no guarantee that this exit status is issued by the @var{program}, or by
+the failure of its compilation.  In other words, use this feature if
+sadist only, it was reestablished because the Autoconf maintainers grew
+tired of receiving ``bug reports''.
 @end defmac
 
 Try to provide a pessimistic default value to use when cross-compiling
