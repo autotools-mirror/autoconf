@@ -1,5 +1,11 @@
 2001-07-04  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_STRTOD, AC_FUNC_STRERROR_R)
+	(AC_FUNC_STRCOLL, AC_FUNC_WAIT3): Use AC_RUN_IFELSE and
+	AC_COMPILE_IFELSE.
+
+2001-07-04  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Actually apply
 	the ``strings.h'' change claimed below.
 

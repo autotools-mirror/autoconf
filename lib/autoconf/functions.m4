@@ -1203,7 +1203,7 @@ fi
 # --------------
 AC_DEFUN([AC_FUNC_STRTOD],
 [AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
-[AC_TRY_RUN([
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[
 double strtod ();
 int
 main()
@@ -1229,10 +1229,10 @@ main()
   }
   exit (0);
 }
-],
-            ac_cv_func_strtod=yes,
-            ac_cv_func_strtod=no,
-            ac_cv_func_strtod=no)])
+]])],
+               ac_cv_func_strtod=yes,
+               ac_cv_func_strtod=no,
+               ac_cv_func_strtod=no)])
 if test $ac_cv_func_strtod = no; then
   _AC_LIBOBJ_STRTOD
 fi
@@ -1250,24 +1250,16 @@ AC_DEFUN([AC_FUNC_STRERROR_R],
 [AC_CHECK_DECLS([strerror_r])
 AC_CHECK_FUNCS([strerror_r])
 if test $ac_cv_func_strerror_r = yes; then
-  AC_CHECK_HEADERS(string.h)
   AC_CACHE_CHECK([for working strerror_r],
                  ac_cv_func_strerror_r_works,
    [
-    AC_TRY_COMPILE(
-     [
-#       include <stdio.h>
-#       if HAVE_STRING_H
-#        include <string.h>
-#       endif
-     ],
-     [
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+     [[
        char buf[100];
        char x = *strerror_r (0, buf, sizeof buf);
-     ],
-     ac_cv_func_strerror_r_works=yes,
-     ac_cv_func_strerror_r_works=no
-    )
+     ]])],
+                      ac_cv_func_strerror_r_works=yes,
+                      ac_cv_func_strerror_r_works=no)
     if test $ac_cv_func_strerror_r_works = no; then
       # strerror_r seems not to work, but now we have to choose between
       # systems that have relatively inaccessible declarations for the
@@ -1275,25 +1267,14 @@ if test $ac_cv_func_strerror_r = yes; then
       # former has a strerror_r that returns char*, while the latter
       # has a strerror_r that returns `int'.
       # This test should segfault on the DEC system.
-      AC_TRY_RUN(
-       [
-#       include <stdio.h>
-#       include <string.h>
-#       include <ctype.h>
-
-	extern char *strerror_r ();
-
-	int
-	main ()
-	{
-	  char buf[100];
+      AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
+	extern char *strerror_r ();],
+	[[char buf[100];
 	  char x = *strerror_r (0, buf, sizeof buf);
-	  exit (!isalpha (x));
-	}
-       ],
-       ac_cv_func_strerror_r_works=yes,
-       ac_cv_func_strerror_r_works=no,
-       ac_cv_func_strerror_r_works=no)
+	  exit (!isalpha (x));]])],
+                    ac_cv_func_strerror_r_works=yes,
+                    ac_cv_func_strerror_r_works=no,
+                    ac_cv_func_strerror_r_works=no)
     fi
   ])
   if test $ac_cv_func_strerror_r_works = yes; then
@@ -1352,15 +1333,13 @@ AU_ALIAS([AC_SETVBUF_REVERSED], [AC_FUNC_SETVBUF_REVERSED])
 # ---------------
 AC_DEFUN([AC_FUNC_STRCOLL],
 [AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
-[AC_TRY_RUN([#include <string.h>
-int
-main ()
-{
-  exit (strcoll ("abc", "def") >= 0 ||
-	strcoll ("ABC", "DEF") >= 0 ||
-	strcoll ("123", "456") >= 0);
-}], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
-ac_cv_func_strcoll_works=no)])
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+  [[exit (strcoll ("abc", "def") >= 0 ||
+	 strcoll ("ABC", "DEF") >= 0 ||
+	 strcoll ("123", "456") >= 0)]])],
+               ac_cv_func_strcoll_works=yes,
+               ac_cv_func_strcoll_works=no,
+               ac_cv_func_strcoll_works=no)])
 if test $ac_cv_func_strcoll_works = yes; then
   AC_DEFINE(HAVE_STRCOLL, 1,
             [Define if you have the `strcoll' function and it is properly
@@ -1601,13 +1580,17 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 
 # AC_FUNC_WAIT3
 # -------------
+# Don't bother too hard maintaining this macro, as it's obsoleted.
+# We don't AU define it, since we don't have any alternative to propose,
+# any invocation should be removed, and the code adjusted.
 AC_DEFUN([AC_FUNC_WAIT3],
 [AC_DIAGNOSE([obsolete],
 [$0: `wait3' is being removed from the Open Group standards.
 Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
-AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
-[AC_TRY_RUN(
-[#include <sys/types.h>
+AC_CACHE_CHECK([for wait3 that fills in rusage],
+               [ac_cv_func_wait3_rusage],
+[AC_RUN_IFELSE([AC_LANG_SOURCE(
+[[#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <stdio.h>
@@ -1639,11 +1622,14 @@ main ()
       exit (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
 	    && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
     }
-}], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
-ac_cv_func_wait3_rusage=no)])
+}]])],
+               [ac_cv_func_wait3_rusage=yes],
+               [ac_cv_func_wait3_rusage=no],
+               [ac_cv_func_wait3_rusage=no])])
 if test $ac_cv_func_wait3_rusage = yes; then
   AC_DEFINE(HAVE_WAIT3, 1,
-            [Define if you have the `wait3' system call.])
+            [Define if you have the `wait3' system call.
+             Deprecated, you should no longer depend upon `wait3'.])
 fi
 ])# AC_FUNC_WAIT3
 
