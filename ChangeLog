@@ -1,3 +1,9 @@
+1999-04-10  Ben Elliston  <bje@cygnus.com>
+
+	* mkinstalldirs: Add `-m' flag to specify the mode of a newly
+	created directory. Add command line usage and `-h', `--help'
+	options. Contributed by Jeff Garzik <jgarzik@pobox.com>.
+	
 1999-04-08  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_PROG_CC): Try using the `cl' C compiler under
