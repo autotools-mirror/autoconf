@@ -1,3 +1,9 @@
+1999-08-28  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_C_INLINE): Qualify the return type of the
+	dummy inlined function to satisfy newer C++ compilers. Fix for
+	autoconf/49.
+
 1999-08-26  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (Changed Results): Correct an error in one of the
