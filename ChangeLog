@@ -1,3 +1,15 @@
+2000-03-15  Akim Demaille  <akim@epita.fr>
+
+	Revamp AC_FUNC_SELECT_ARGTYPES.
+
+	* acspecific.m4 (AC_FUNC_SELECT_ARGTYPES): Use a single cache
+	variable instead of three.
+	Use AC_CACHE_CHECK.
+	Shorten the name of the var loops, they are no longer cached.
+	Include sys/types.h unconditionally.
+	`select' returns an int, fixes Autoconf/46.
+	Don't display parens in the user messages.
+
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
 	* autoheader.sh: Use run_m4f, not run_m4.
