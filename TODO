@@ -4,6 +4,16 @@ Things it might be nice to do someday:
 
 ------------------------------------------------------------------------------
 
+* Make AC_CHECK_LIB check whether the function is already available
+  before checking for the library.  This might involve adding another
+  kind of cache variable to indicate whether a given function needs a
+  given library.  The current ac_cv_func_ variables are intended to
+  indicate whether the function is in the default libraries, but
+  actually also take into account whatever value LIBS had when they
+  were checked for.
+
+------------------------------------------------------------------------------
+
 * Add AC_PROG_CC_POSIX to replace the current ad-hoc macros for AIX,
   Minix, ISC, etc.
 
@@ -36,11 +46,11 @@ Things it might be nice to do someday:
   (a consistent ANSI C/POSIX.1 environment).  Lessons learned.
   Advantages to not requiring special external libraries or config
   files or programs.
-  Mention site files in install.texi.
 
 ------------------------------------------------------------------------------
 
 * Make autoconf diagnose giving too few or too many arguments to macros.
+Maybe even use a scheme that supports naming the formals.
 
 ------------------------------------------------------------------------------
 

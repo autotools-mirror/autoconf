@@ -1533,19 +1533,17 @@ files.
 
 @defmac AC_CHECK_LIB (@var{library}, @var{function} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
 @maindex CHECK_LIB
-See whether a test C program can be linked with the library
-@var{library}.  @var{function} should be the name of a function that the
-library contains, to force the linker to try to link with the library to
-resolve the name.  @var{library} is the base name of the library;
-e.g., to check for @samp{-lmp}, use @samp{mp} as the @var{library}
-argument.
+Try to ensure that C function @var{function} is available by checking
+whether a test C program can be linked with the library @var{library} to
+get the function.  @var{library} is the base name of the library; e.g.,
+to check for @samp{-lmp}, use @samp{mp} as the @var{library} argument.
 
 @var{action-if-found} is a list of shell commands to run if the link
-succeeds (which means that the library is present);
-@var{action-if-not-found} is a list of shell commands to run if the link
-fails.  If @var{action-if-found} and @var{action-if-not-found} are not
-specified, the default action is to add @samp{-l@var{library}} to
-@code{LIBS} and define @samp{HAVE_LIB@var{library}}.
+with the library succeeds; @var{action-if-not-found} is a list of shell
+commands to run if the link fails.  If @var{action-if-found} and
+@var{action-if-not-found} are not specified, the default action is to
+add @samp{-l@var{library}} to @code{LIBS} and define
+@samp{HAVE_LIB@var{library}} (in all capitals).
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
@@ -1802,7 +1800,7 @@ information about selecting the language for checks.)
 @maindex CHECK_FUNCS
 @cvindex HAVE_@var{function}
 For each given @var{function} in the whitespace-separated argument list
-that is available, define @code{HAVE_@var{function}} (in all caps).  If
+that is available, define @code{HAVE_@var{function}} (in all capitals).  If
 @var{action-if-found} is given, it is additional shell code to execute
 when one of the functions is found.  You can give it a value of
 @samp{break} to break out of the loop on the first match.  If
@@ -2070,7 +2068,7 @@ consider using @code{AC_CHECK_HEADERS} instead.
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
 whitespace-separated argument list that exists, define
-@code{HAVE_@var{header-file}} (in all caps).  If @var{action-if-found}
+@code{HAVE_@var{header-file}} (in all capitals).  If @var{action-if-found}
 is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
