@@ -8298,29 +8298,11 @@ the @samp{x} into account later in the pipe.
 @table @asis
 @item @command{.}
 @prindex @command{.}
-@prindex @command{source}
 Use @command{.} only with regular files (use @samp{test -f}).  Bash
 2.03, for instance, chokes on @samp{. /dev/null}.  Also, remember that
-@command{.} is not expected to look in the current directory, hence you
-might need some wrapper code for relative paths:
-
-@example
-# Some versions of Bash will fail to source /dev/null (special
-# files actually), so we avoid doing that.
-if test -r "$file" && test -f "$file"; then
-  case $file in
-    [\\/]* | ?:[\\/]* ) . $file;;
-    *)                  . ./$file;;
-  esac
-fi
-@end example
-
-Almost all the shells have a special handling for filenames containing
-no slash, but they are not portable.  For instance, Zsh sticks to
-@code{$PATH} for @command{.}, while it first looks in the current
-directory with @command{source}.  Bash makes no difference between
-@command{.} and @command{source} and looks in the current directory if
-the file was not found in the @code{$PATH}.
+@command{.} uses @env{PATH} if its argument contains no slashes, so if
+you want to use @command{.} on a file @file{foo} in the current
+directory, you must use @samp{. ./foo}.
 
 @item @command{!}
 @prindex @command{!}
@@ -8561,7 +8543,9 @@ risc/os} 4.52 refuses to do it.
 
 @item @command{source}
 @c -------------------
-See the item @command{.} above.
+@prindex @command{source}
+This command is not portable, as @sc{posix} does not require it; use
+@command{.} instead.
 
 
 @item @command{test}
