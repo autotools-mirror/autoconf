@@ -1,4 +1,4 @@
-2001-04-05  Lars J. Aas  <larsa@sim.no>
+2001-04-06  Lars J. Aas  <larsa@sim.no>
 
 	* Makefile.am: Manual addition of @VERSION@ substitution variable
 	as a temporary Automake fix.  Reported by Raja R Harinath.
