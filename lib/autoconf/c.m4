@@ -922,6 +922,10 @@ esac
 # Do nothing if the compiler accepts the inline keyword.
 # Otherwise define inline to __inline__ or __inline if one of those work,
 # otherwise define inline to be empty.
+#
+# HP C version B.11.11.04 doesn't allow a typedef as the return value for an
+# inline function, only builtin types.
+#
 AC_DEFUN([AC_C_INLINE],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for inline], ac_cv_c_inline,
@@ -929,8 +933,9 @@ AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 for ac_kw in inline __inline__ __inline; do
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 [#ifndef __cplusplus
-static $ac_kw int static_foo () {return 0; }
-$ac_kw int foo () {return 0; }
+typedef int foo_t;
+static $ac_kw foo_t static_foo () {return 0; }
+$ac_kw foo_t foo () {return 0; }
 #endif
 ])],
                     [ac_cv_c_inline=$ac_kw; break])

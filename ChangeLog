@@ -1,3 +1,8 @@
+2002-03-28  Kevin Ryde  <user42@zip.com.au>
+
+	* lib/autoconf/c.m4 (AC_C_INLINE): Test with a typedef return value,
+	to avoid versions of HP C which don't allow that.
+
 2002-03-27  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_BASENAME_PREPARE): New macro.
