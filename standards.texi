@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 18 January 1995
+@set lastupdate 24 January 1995
 @c %**end of header
 
 @ifinfo
@@ -49,7 +49,7 @@ by the Free Software Foundation.
 @page
 
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -635,7 +635,7 @@ Also explain the significance of the return value, if there is one.
 Please put two spaces after the end of a sentence in your comments, so
 that the Emacs sentence commands will work.  Also, please write
 complete sentences and capitalize the first word.  If a lower-case
-identifer comes at the beginning of a sentence, don't capitalize it!
+identifier comes at the beginning of a sentence, don't capitalize it!
 Changing the spelling makes it a different identifier.  If you don't
 like starting a sentence with a lower case letter, write the sentence
 differently (e.g., ``The identifier lower-case is @dots{}'').
