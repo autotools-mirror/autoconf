@@ -289,12 +289,19 @@ m4_define([_AC_INIT_PACKAGE],
 [AS_LITERAL_IF([$1], [], [m4_warn([syntax], [AC_INIT: not a literal: $1])])
 AS_LITERAL_IF([$2], [],  [m4_warn([syntax], [AC_INIT: not a literal: $2])])
 AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
-m4_define([AC_PACKAGE_NAME],     [$1])
-m4_define([AC_PACKAGE_TARNAME],
-          m4_tolower(m4_bpatsubst([[[$1]]], [GNU ])))
-m4_define([AC_PACKAGE_VERSION],   [$2])
-m4_define([AC_PACKAGE_STRING],    [$1 $2])
-m4_define([AC_PACKAGE_BUGREPORT], [$3])
+m4_ifndef([AC_PACKAGE_NAME],
+          [m4_define([AC_PACKAGE_NAME],     [$1])])
+m4_ifndef([AC_PACKAGE_TARNAME],
+          [m4_define([AC_PACKAGE_TARNAME],
+                     m4_bpatsubst(m4_tolower(m4_bpatsubst([[[$1]]], [GNU ])),
+                                  [[^abcdefghijklmnopqrstuvwxyz0123456789]],
+                                  [_]))])
+m4_ifndef([AC_PACKAGE_VERSION],
+          [m4_define([AC_PACKAGE_VERSION],   [$2])])
+m4_ifndef([AC_PACKAGE_STRING],
+          [m4_define([AC_PACKAGE_STRING],    [$1 $2])])
+m4_ifndef([AC_PACKAGE_BUGREPORT],
+          [m4_define([AC_PACKAGE_BUGREPORT], [$3])])
 ])
 
 

@@ -1502,7 +1502,8 @@ Exactly @var{package}.
 @acindex PACKAGE_TARNAME
 @ovindex PACKAGE_TARNAME
 @cvindex PACKAGE_TARNAME
-@var{package} once @samp{GNU } strip, and lower cased.
+@var{package} once @samp{GNU } strip, lower cased, and all non
+alphanumeric character mapped onto @samp{_}.
 
 @item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
 @acindex PACKAGE_VERSION
@@ -1522,6 +1523,24 @@ Exactly @samp{@var{package} @var{version}}.
 @cvindex PACKAGE_BUGREPORT
 Exactly @var{bug-report-address}.
 @end table
+
+All these values may be changed.  For instance if the default value for
+@code{AC_PACKAGE_NAME} does not suit your application, you can either
+use:
+
+@example
+m4_define([AC_PACKAGE_TARNAME], [GNU-Foo-Bar-1.0])
+AC_INIT([GNU Foo Bar], [1.0])
+@end example
+
+@noindent
+or
+
+@example
+AC_INIT([GNU Foo Bar], [1.0])
+m4_define([AC_PACKAGE_TARNAME], [GNU-Foo-Bar-1.0])
+AC_SUBST([PACKAGE_TARNAME], ['AC_PACKAGE_TARNAME'])
+@end example
 @end defmac
 
 

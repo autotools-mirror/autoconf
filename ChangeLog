@@ -1,3 +1,10 @@
+2002-01-30  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): Support pre-defined
+	values.
+	* doc/autoconf.texi (Initializing configure): Explain how to
+	change AC_INIT default values.
+
 2002-01-29  Akim Demaille  <akim@epita.fr>
 
 	* tests/torture.at (Configuring subdirectories): Use configure.in,
