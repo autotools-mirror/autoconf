@@ -1,12 +1,19 @@
-* Major changes in Autoconf 2.53b                       -*- outline -*-
+* Major changes in Autoconf 2.53c                       -*- outline -*-
 
 ** Executables
 
 - autoreconf is adjusted to GNU Gettext 0.11.3.
   Warning: It now relies on autopoint, available since 0.11.3.
+
   This is much safer and much more satisfying than the previous
-  scheme based on gettextize.  Don't expect proper functioning
-  with older Gettexts.
+  scheme based on gettextize.
+
+  Please, note that Gettext 0.11.3 supports all the previous
+  versions of Gettext: if you don't want to upgrade your package
+  to using a more recent gettext, Gettext 0.11.3 will keep (and
+  install if needed) older versions of Gettext.
+  *But*, autoreconf *requires* Gettext 0.11.3.
+
   Many thanks to Bruno Haible for autopoint!
 
 - The -I DIR or --include=DIR option now appends DIR to the include path
