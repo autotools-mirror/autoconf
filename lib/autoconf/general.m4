@@ -2212,7 +2212,8 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # Compile, link, and run.
 # This macro can be used during the selection of a compiler.
 # We also remove conftest.o as if the compilation fails, some compilers
-# don't remove it.
+# don't remove it.  We remove gmon.out and bb.out, which may be
+# created during the run if the program is built with profiling support.
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
@@ -2224,7 +2225,7 @@ cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvaln([$3],
           [( exit $ac_status )
 $3])dnl])[]dnl
-rm -f core core.* *.core conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
+rm -f core core.* *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
                                                      [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 

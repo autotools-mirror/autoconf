@@ -1,3 +1,8 @@
+2002-04-22  Peter Eisentraut  <peter_e@gmx.net>
+
+	* lib/autoconf/general.m4 (_AC_RUN_IFELSE): Remove gmon.out
+	and bb.out when cleaning up.
+
 2002-04-22  Akim Demaille  <akim@epita.fr>
 
 	Version 2.53a.
