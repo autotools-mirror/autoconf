@@ -1,5 +1,15 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	No library nor special privilege is needed to run `getloadavg'
+	under FreeBSD.
+	Reported by Alec Wolman.
+
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for `getloadavg'
+	without any additional library.
+	Fixes Autoconf/109.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools, Limitations of
 	Builtins): Integrate comments from Paul Eggert and Jim Meyering.
 	Add the sed limitation discovered by Philippe De Muyter.

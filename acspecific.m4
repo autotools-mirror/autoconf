@@ -895,6 +895,46 @@ fi
 ])# AC_FUNC_FNMATCH
 
 
+# AC_FUNC_GETGROUPS
+# -----------------
+# Try to find `getgroups', and check that it works.
+# When crosscompiling, assume getgroups is broken.
+AC_DEFUN([AC_FUNC_GETGROUPS],
+[AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
+AC_REQUIRE([AC_TYPE_SIZE_T])dnl
+AC_CHECK_FUNC(getgroups)
+
+# If we don't yet have getgroups, see if it's in -lbsd.
+# This is reported to be necessary on an ITOS 3000WS running SEIUX 3.1.
+ac_save_LIBS=$LIBS
+if test $ac_cv_func_getgroups = no; then
+  AC_CHECK_LIB(bsd, getgroups, [GETGROUPS_LIB=-lbsd])
+fi
+
+# Run the program to test the functionality of the system-supplied
+# getgroups function only if there is such a function.
+if test $ac_cv_func_getgroups = yes; then
+  AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
+   [AC_TRY_RUN([
+     int
+     main ()
+     {
+       /* On Ultrix 4.3, getgroups (0, 0) always fails.  */
+       exit (getgroups (0, 0) == -1 ? 1 : 0);
+     }],
+               ac_cv_func_getgroups_works=yes,
+               ac_cv_func_getgroups_works=no,
+               ac_cv_func_getgroups_works=no)
+   ])
+  if test $ac_cv_func_getgroups_works = yes; then
+    AC_DEFINE(HAVE_GETGROUPS, 1,
+              [Define if your system has a working `getgroups' function.])
+  fi
+fi
+LIBS=$ac_save_LIBS
+])# AC_FUNC_GETGROUPS
+
+
 # _AC_LIBOBJ_GETLOADAVG
 # ---------------------
 # Set up the AC_LIBOBJ replacement of `getloadavg'.
@@ -948,52 +988,15 @@ AC_CHECK_HEADERS(nlist.h,
 ])# _AC_LIBOBJ_GETLOADAVG
 
 
-# AC_FUNC_GETGROUPS
-# -----------------
-# Try to find `getgroups', and check that it works.
-# When crosscompiling, assume getgroups is broken.
-AC_DEFUN([AC_FUNC_GETGROUPS],
-[AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
-AC_REQUIRE([AC_TYPE_SIZE_T])dnl
-AC_CHECK_FUNC(getgroups)
-
-# If we don't yet have getgroups, see if it's in -lbsd.
-# This is reported to be necessary on an ITOS 3000WS running SEIUX 3.1.
-ac_save_LIBS=$LIBS
-if test $ac_cv_func_getgroups = no; then
-  AC_CHECK_LIB(bsd, getgroups, [GETGROUPS_LIB=-lbsd])
-fi
-
-# Run the program to test the functionality of the system-supplied
-# getgroups function only if there is such a function.
-if test $ac_cv_func_getgroups = yes; then
-  AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
-   [AC_TRY_RUN([
-     int
-     main ()
-     {
-       /* On Ultrix 4.3, getgroups (0, 0) always fails.  */
-       exit (getgroups (0, 0) == -1 ? 1 : 0);
-     }],
-               ac_cv_func_getgroups_works=yes,
-               ac_cv_func_getgroups_works=no,
-               ac_cv_func_getgroups_works=no)
-   ])
-  if test $ac_cv_func_getgroups_works = yes; then
-    AC_DEFINE(HAVE_GETGROUPS, 1,
-              [Define if your system has a working `getgroups' function.])
-  fi
-fi
-LIBS=$ac_save_LIBS
-])# AC_FUNC_GETGROUPS
-
-
 # AC_FUNC_GETLOADAVG
 # ------------------
 AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
 ac_save_LIBS=$LIBS
+
+# Check for getloadavg, but be sure not to touch the cache variable.
+(AC_CHECK_FUNC(getloadavg, exit 0, exit 1)) && ac_have_func=yes
 
 # On HPUX9, an unprivileged user can get load averages through this function.
 AC_CHECK_FUNCS(pstat_getdynamic)
@@ -1006,7 +1009,9 @@ test $ac_cv_lib_kstat_kstat_open = yes && ac_have_func=yes
 # On Solaris, -lkvm requires nlist from -lelf, so check that first
 # to get the right answer into the cache.
 # For kstat on solaris, we need libelf to force the definition of SVR4 below.
-AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
+if test $ac_have_func = no; then
+  AC_CHECK_LIB(elf, elf_begin, LIBS="-lelf $LIBS")
+fi
 if test $ac_have_func = no; then
   AC_CHECK_LIB(kvm, kvm_open, LIBS="-lkvm $LIBS")
   # Check for the 4.4BSD definition of getloadavg.
