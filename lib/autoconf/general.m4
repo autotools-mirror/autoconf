@@ -3451,6 +3451,34 @@ define(AC_CONFIG_IF_MEMBER,
         -1, [$4], [$3])])
 
 
+# AT_FILE_DEPENDENCY(DEST, SOURCE1, [SOURCE2...])
+# -----------------------------------------------
+# This macro does nothing, it's a hook to be read with `autoconf --trace'.
+# It announces DEST depends upon the SOURCE1 etc.
+define([AT_FILE_DEPENDENCY], [])
+
+
+# _AC_CONFIG_DEPENDENCY(DEST, [SOURCE1], [SOURCE2...])
+# ----------------------------------------------------
+# Be sure that a missing dependency is expressed as a dependency upon
+# `DEST.in'.
+define([_AC_CONFIG_DEPENDENCY],
+[ifval([$2],
+       [AT_FILE_DEPENDENCY($@)],
+       [AT_FILE_DEPENDENCY([$1], [$1.in])])])
+
+
+# _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]]...)
+# -------------------------------------------------------
+# Declare the DESTs depend upon their SOURCE1 etc.
+define([_AC_CONFIG_DEPENDENCIES],
+[AC_DIVERT_PUSH([KILL])
+AC_FOREACH([AC_File], [$1],
+  [_AC_CONFIG_DEPENDENCY(patsubst(AC_File, [:], [,]))])
+AC_DIVERT_POP()dnl
+])
+
+
 # _AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
 # -----------------------------------
 #
@@ -3582,6 +3610,7 @@ define([AC_OUTPUT_COMMANDS_POST])
 AC_DEFUN([AC_CONFIG_HEADERS],
 [AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_DEPENDENCIES([$1])
 m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
@@ -3615,6 +3644,7 @@ AC_DEFUN(AC_CONFIG_HEADER,
 AC_DEFUN(AC_CONFIG_LINKS,
 [AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_DEPENDENCIES([$1])
 ifelse(regexp([$1], [^\.:\| \.:]), -1,,
        [AC_FATAL([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
@@ -3688,6 +3718,7 @@ m4_namespace_define(autoupdate,
 AC_DEFUN([AC_CONFIG_FILES],
 [AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
+_AC_CONFIG_DEPENDENCIES([$1])
 m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],

@@ -1,5 +1,14 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	Provide a means to track the dependencies of files created by
+	`configure'.
+
+	* acgeneral.m4 (AT_FILE_DEPENDENCY, _AC_CONFIG_DEPENDENCY,
+	_AC_CONFIG_DEPENDENCIES): New macros.
+	(AC_CONFIG_FILES, AC_CONFIG_HEADERS, AC_CONFIG_LINKS): Use them.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	Merge AC_DECL_YYTEXT into AC_PROG_LEX.
 
 	* acgeneral.m4 (AC_DECL_YYTEXT): Rename as
