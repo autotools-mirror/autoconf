@@ -1431,7 +1431,11 @@ else
   cat conftest.$ac_ext >&AC_FD_CC
 fi
 AC_LANG_RESTORE()dnl
-])])# AC_F77_NAME_MANGLING
+])
+dnl Get case/underscore from cache variable, in case above tests were skipped:
+f77_case=`echo "$ac_cv_f77_mangling" | sed 's/ case.*$//'`
+f77_underscore=`echo "$ac_cv_f77_mangling" | sed 's/^.*, \(.*\) .*$/\1/'`
+])# AC_F77_NAME_MANGLING
 
 
 # AC_F77_WRAPPERS
@@ -1441,63 +1445,33 @@ AC_LANG_RESTORE()dnl
 # underscores, respectively, so that they match the name mangling
 # scheme used by the Fortran 77 compiler.
 AC_DEFUN(AC_F77_WRAPPERS,
-[AH_TEMPLATE([F77_FUNC],
-             [Define to a macro that performs the appropriate name
-              mangling on its argument to make the C identifier, which
-              *does not* contain underscores, match the name mangling
-              scheme of the Fortran 77 compiler.])dnl
+[AC_REQUIRE([AC_F77_NAME_MANGLING])dnl
+AH_TEMPLATE([F77_FUNC],
+    [Define to a macro mangling the given C identifier (in lower and upper
+     case), which must not contain underscores, for linking with Fortran.])dnl
 AH_TEMPLATE([F77_FUNC_],
-             [Define to a macro that performs the appropriate name
-              mangling on its argument to make the C identifier, which
-              *does* contain underscores, match the name mangling
-              scheme of the Fortran 77 compiler.])dnl
-AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
-                 ac_cv_f77_wrappers,
-[# Be optimistic at first.
-ac_cv_f77_wrappers="yes"
-
-AC_REQUIRE([AC_F77_NAME_MANGLING])dnl
-case "$f77_case" in
-  lower)
-    case "$f77_underscore" in
-      no)
+    [As F77_FUNC, but for C identifiers containing underscores.])dnl
+case "$f77_case,$f77_underscore" in
+  lower,no)
           AC_DEFINE([F77_FUNC(name,NAME)],  [name])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name])
-          ;;
-      single)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [name]) ;;
+  lower,single)
           AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _])
-          ;;
-      double)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
+  lower,double)
           AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __])
-          ;;
-      *)
-          AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
-          ;;
-    esac
-    ;;
-  upper)
-    case "$f77_underscore" in
-      no)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __]) ;;
+  upper,no)
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME])
-          ;;
-      single)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME]) ;;
+  upper,single)
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _])
-          ;;
-      double)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
+  upper,double)
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
-          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __])
-          ;;
-      *)
+          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __]) ;;
+  *)
           AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
           ;;
-    esac
-    ;;
-  *)
-    AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
-    ;;
 esac
-])])# AC_F77_WRAPPERS
+])# AC_F77_WRAPPERS

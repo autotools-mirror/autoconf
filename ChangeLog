@@ -1,3 +1,14 @@
+2000-03-30  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	Fix F77 name-mangling macros to work with cached values (so
+	they don't break the second time you run configure).
+
+	* aclang.m4 (AC_F77_NAME_MANGLING): Extract f77_case,
+	f77_underscore from cache variable.
+	(AC_F77_WRAPPERS): Get rid of ac_cv_f77_wrappers, it's useless.
+	Simplify the nested case-esac into a single one.
+	Simplify the documentation strings of CPP symbols.
+
 2000-03-31  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Fix the accumulation in
