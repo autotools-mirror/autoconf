@@ -56,12 +56,12 @@ by the Foundation.
 @subtitle Creating Automatic Configuration Scripts
 @subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
 @subtitle @value{UPDATED}
-@author by David MacKenzie
+@author by David MacKenzie and Ben Elliston
 @c I think I've rewritten all of Noah and Roland's contributions by now.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 93, 94, 95, 96, 98 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -1665,13 +1665,14 @@ is becoming a less prevalent problem.
 @ovindex INSTALL
 @ovindex INSTALL_PROGRAM
 @ovindex INSTALL_DATA
+@ovindex INSTALL_SCRIPT
 Set output variable @code{INSTALL} to the path of a BSD compatible
 @code{install} program, if one is found in the current @code{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
 checking the directories specified to @code{AC_CONFIG_AUX_DIR} (or its
 default directories) to determine @var{dir} (@pxref{Output}).  Also set
-the variable @code{INSTALL_PROGRAM} to @samp{$@{INSTALL@}} and
-@code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
+the variables @code{INSTALL_PROGRAM} and @code{INSTALL_SCRIPT} to
+@samp{$@{INSTALL@}} and @code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
 
 This macro screens out various instances of @code{install} known to not
 work.  It prefers to find a C program rather than a shell script, for
@@ -1906,9 +1907,7 @@ rather than choke on it.
 @example
 @group
 /* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
+#ifndef __GNUC__
 # if HAVE_ALLOCA_H
 #  include <alloca.h>
 # else
@@ -2019,6 +2018,14 @@ variable @code{LIBOBJS}.
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.  Only checks private fixed mapping of already-mapped
 memory.
+@end defmac
+
+@defmac AC_FUNC_SELECT_ARGTYPES
+@maindex FUNC_SELECT_ARGTYPES
+@cvindex SELECT_TYPE_ARG1, SELECT_TYPE_ARG234, SELECT_TYPE_ARG5
+If the @code{select} function exists, @code{SELECT_TYPE_ARG1},
+@code{SELECT_TYPE_ARG234} and @code{SELECT_TYPE_ARG5} are defined to
+be the types of the formal arguments to @code{select}.
 @end defmac
 
 @defmac AC_FUNC_SETPGRP
@@ -2651,6 +2658,13 @@ If the C compiler supports the @code{long double} type, define
 @code{HAVE_LONG_DOUBLE}.  Some C compilers that do not define
 @code{__STDC__} do support the @code{long double} type; some compilers
 that define @code{__STDC__} do not support @code{long double}.
+@end defmac
+
+@defmac AC_C_STRINGIZE
+@maindex C_STRINGIZE
+@cvindex HAVE_STRINGIZE
+If the preprocessor supports the @code{##} stringizing operator, define
+@code{HAVE_STRINGIZE}.
 @end defmac
 
 @defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{]})
@@ -3565,6 +3579,16 @@ Flushes all cached values to the cache file.  Called automatically
 from @code{AC_OUTPUT}, but it can be quite useful to call
 @code{AC_CACHE_SAVE} at key points in configure.in.  Doing so
 checkpoints the cache in case of an early configure script abort.
+@end defmac
+
+@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{commands})
+@maindex VALIDATE_CACHED_SYSTEM_TUPLE
+If any of the system tuples for the build, host or target system is cached and does
+not match the tuples for the current invocation of ``configure'', @var{commands}
+are executed.  If no @var{commands} are given, then an error message is emitted
+and the script is halted. This is useful for catching users who, unaware of the
+effects of result caching, accidentally run ``configure'' on two different kinds
+of systems.
 @end defmac
 
 @menu

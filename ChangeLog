@@ -1,5 +1,11 @@
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
+	* autoconf.texi (AC_PROG_INSTALL): Update.
+	(AC_FUNC_ALLOCA): Correct code fragment.
+	(AC_FUNC_SELECT_ARGTYPES): Document.
+	(AC_C_STRINGIZE): Likewise.
+	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
+	
 	* acspecific.m4 (AC_CYGWIN): Rename from `AC_CYGWIN32'.
 	(AC_CYGWIN32): Warn about deprecated usage. Forward to AC_CYGWIN.
 
