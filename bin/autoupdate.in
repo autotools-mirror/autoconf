@@ -167,12 +167,11 @@ sub handle_autoconf_macros ()
       my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
       # ../lib/m4sugar/m4sugar.m4  -> m4sugar
       # ../lib/autoconf/general.m4 -> autoconf
-      # aclocal.m4 -> ignore
-      next
-	if $file eq 'aclocal.m4';
+      # aclocal.m4 -> aclocal
       my $set = basename (dirname ($file));
+      $set = 'aclocal' if $file eq 'aclocal.m4';
       die "$me: unknown set: $set: $_\n"
-	unless $set =~ /^(m4sugar|autoconf)$/;
+	unless $set =~ /^(m4sugar|aclocal|autoconf)$/;
       if ($domain eq "AC")
 	{
 	  $ac_macros{$macro} = $set;

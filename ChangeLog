@@ -1,3 +1,8 @@
+2002-04-19  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* bin/autoupdate.in (handle_autoconf_macros): Honor AU_DEFUNs
+	from aclocal.m4 too.
+
 2002-04-12  Akim Demaille  <akim@epita.fr>
 
 	* tests/wrappl.as: New, M4sh precursor of wrappl.in.
