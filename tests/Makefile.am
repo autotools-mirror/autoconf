@@ -24,7 +24,7 @@ SUITE = syntax.m4 semantics.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
+EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 actest.m4 $(SUITE)
 
 PERL = perl
 
@@ -33,8 +33,8 @@ all-local: atconfig testsuite
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
-testsuite: atgeneral.m4 suite.m4 macros.m4 $(SUITE)
-	m4 -I $(srcdir) atgeneral.m4 suite.m4 | cat -s > $@-tmp
+testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
+	m4 -I $(srcdir) atspecific.m4 suite.m4 | cat -s > $@-tmp
 	chmod +x $@-tmp
 	mv $@-tmp $@
 

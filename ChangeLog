@@ -1,5 +1,17 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	* tests/atspecific.m4: New file, for AT macros specific to
+	Autoconf testing.
+	* tests/suite.m4 (AT_TEST_MACRO): Moved to
+	* tests/atspecific.m4 (AT_TEST_MACRO): here.
+	* tests/syntax.m4 (TEST_MACRO): Moved to
+	* tests/atspecific.m4 (TEST_MACRO): here.  Don't test /^AC_INIT/,
+	nor /^AC_PROG_\(CC\|CXX\|F77\)_\(GNU\|WORKS\)$/: they are already
+	tried elsewhere.
+	* tests/Makefile.am: Adjusted.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (m4_case): Fixed a typo and a bug: one shift was
 	missing.
 	(m4_match): New macro.
