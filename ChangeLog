@@ -10,6 +10,12 @@
 
 2000-03-20  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_SUBDIRS): Rename as _AC_OUTPUT_SUBDIRS.
+	No argument, use AC_LIST_SUBDIRS.
+	Adjust callers.
+
+2000-03-18  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Double quote the head
 	of the help snippet.
 

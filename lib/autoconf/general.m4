@@ -3604,7 +3604,7 @@ AC_OUTPUT_COMMANDS_POST()dnl
 
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || exit 1
 dnl config.status should not do recursion.
-ifset([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
+ifset([AC_LIST_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 ])# AC_OUTPUT
 
 
@@ -4367,11 +4367,11 @@ EOF
 ])# _AC_OUTPUT_COMMANDS
 
 
-# AC_OUTPUT_SUBDIRS(DIRECTORY...)
-# -------------------------------
+# _AC_OUTPUT_SUBDIRS
+# ------------------
 # This is a subroutine of AC_OUTPUT, but it does not go into
 # config.status, rather, it is called after running config.status.
-define(AC_OUTPUT_SUBDIRS,
+define(_AC_OUTPUT_SUBDIRS,
 [
 #
 # CONFIG_SUBDIRS section.
@@ -4402,10 +4402,10 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],[  ac_given_INSTALL="$INSTALL"
+ifdef([AC_PROVIDE_AC_PROG_INSTALL], [  ac_given_INSTALL="$INSTALL"
 ])dnl
 
-  for ac_config_dir in $1; do
+  for ac_config_dir in AC_LIST_SUBDIRS; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
@@ -4481,7 +4481,7 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],
     cd $ac_popdir
   done
 fi
-])# AC_OUTPUT_SUBDIRS
+])# _AC_OUTPUT_SUBDIRS
 
 
 # AC_LINKER_OPTION(LINKER-OPTIONS, SHELL-VARIABLE)
