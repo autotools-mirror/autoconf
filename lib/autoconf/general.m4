@@ -1824,7 +1824,7 @@ fi
 for ac_site_file in $CONFIG_SITE; do
   if test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
-    cat "$ac_site_file" >&AS_MESSAGE_LOG_FD
+    sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD
     . "$ac_site_file"
   fi
 done
@@ -4405,15 +4405,7 @@ if test "$no_recursion" != yes; then
     test -d $srcdir/$ac_subdir || continue
 
     AC_MSG_NOTICE([configuring in $ac_subdir])
-    case $srcdir in
-    .) ;;
-    *) AS_MKDIR_P(["./$ac_subdir"])
-       if test -d ./$ac_subdir; then :;
-       else
-         AC_MSG_ERROR([cannot create `pwd`/$ac_subdir])
-       fi
-       ;;
-    esac
+    AS_MKDIR_P(["./$ac_subdir"])
 
     ac_popdir=`pwd`
     cd $ac_subdir

@@ -427,7 +427,9 @@ for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$[@]"`; do
     ?:) as_incr_dir=$as_mkdir_dir ;;
     *)
       as_incr_dir=$as_incr_dir/$as_mkdir_dir
-      test -d "$as_incr_dir" || mkdir "$as_incr_dir"
+      test -d "$as_incr_dir" ||
+        mkdir "$as_incr_dir" ||
+	AS_ERROR([cannot create $1])
     ;;
   esac
 done; }
