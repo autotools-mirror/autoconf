@@ -20,7 +20,8 @@
 2000-06-09  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi: Use `@option' for options, not `@samp' nor
-	`@code'.  * doc/install.texi: Likewise.
+	`@code'.
+	* doc/install.texi: Likewise.
 
 2000-06-09  Akim Demaille  <akim@epita.fr>
 
@@ -46,7 +47,7 @@
 2000-06-09  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE): Always initialize
-	$3 to no
+	$3 to no.
 
 2000-06-08  Paul Eggert  <eggert@twinsun.com>
 
