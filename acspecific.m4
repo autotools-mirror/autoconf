@@ -142,7 +142,9 @@ AC_DEFUN(AC_PROG_YACC,
 
 # AC_PROG_LEX
 # -----------
-AC_DEFUN(AC_PROG_LEX,
+# Look for flex or lex.  Set its associated library to LEXLIB.
+# Check if lex declares yytext as a char * by default, not a char[].
+AC_DEFUN([AC_PROG_LEX],
 [AH_CHECK_LIB(fl)dnl
 AH_CHECK_LIB(l)dnl
 AC_CHECK_PROG(LEX, flex, flex, lex)
@@ -154,15 +156,15 @@ then
   esac
   AC_CHECK_LIB($ac_lib, yywrap, LEXLIB="-l$ac_lib")
 fi
-AC_SUBST(LEXLIB)])
+AC_SUBST(LEXLIB)
+_AC_DECL_YYTEXT])
 
 
-# AC_DECL_YYTEXT
-# --------------
+# _AC_DECL_YYTEXT
+# ---------------
 # Check if lex declares yytext as a char * by default, not a char[].
-AC_DEFUN([AC_DECL_YYTEXT],
+AC_DEFUN([_AC_DECL_YYTEXT],
 [AC_REQUIRE_CPP()dnl
-AC_REQUIRE([AC_PROG_LEX])dnl
 AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
 [# The minimal lex program is just a single line: %%.  But some broken lexes
 # (Solaris, I think it was) want two %% lines, so accommodate them.
@@ -196,7 +198,12 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
             [Define if `lex' declares `yytext' as a `char *' by default,
              not a `char[]'.])
 fi
-])# AC_DECL_YYTEXT
+])# _AC_DECL_YYTEXT
+
+
+# Require AC_PROG_LEX in case some people were just calling this macro.
+AU_DEFUN([AC_DECL_YYTEXT],
+[AC_REQUIRE([AC_PROG_LEX])])
 
 
 # AC_PROG_INSTALL

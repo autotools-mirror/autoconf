@@ -2302,17 +2302,6 @@ general program check macros.
 These macros check for particular programs---whether they exist, and
 in some cases whether they support certain features.
 
-@defmac AC_DECL_YYTEXT
-@maindex DECL_YYTEXT
-@cvindex YYTEXT_POINTER
-@ovindex LEX_OUTPUT_ROOT
-Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
-of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
-the base of the file name that the lexer generates; usually
-@file{lex.yy}, but sometimes something else.  These results vary
-according to whether @code{lex} or @code{flex} is being used.
-@end defmac
-
 @defmac AC_PROG_AWK
 @maindex PROG_AWK
 @ovindex AWK
@@ -2547,10 +2536,18 @@ If @sc{gnu} @code{m4} version 1.4 or above is found, set output variable
 @maindex PROG_LEX
 @ovindex LEX
 @ovindex LEXLIB
-If @code{flex} is found, set output variable @code{LEX} to
-@samp{flex} and @code{LEXLIB} to @samp{-lfl}, if that library is in a
-standard place.  Otherwise set @code{LEX} to @samp{lex} and
-@code{LEXLIB} to @samp{-ll}.
+@cvindex YYTEXT_POINTER
+@ovindex LEX_OUTPUT_ROOT
+If @code{flex} is found, set output variable @code{LEX} to @samp{flex}
+and @code{LEXLIB} to @samp{-lfl}, if that library is in a standard
+place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
+@samp{-ll}.
+
+Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
+of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
+the base of the file name that the lexer generates; usually
+@file{lex.yy}, but sometimes something else.  These results vary
+according to whether @code{lex} or @code{flex} is being used.
 @end defmac
 
 @defmac AC_PROG_LN_S
@@ -7412,6 +7409,10 @@ to print messages (@pxref{Printing Messages}).
 @defmac AC_CROSS_CHECK
 @maindex CROSS_CHECK
 @code{AC_C_CROSS}
+@end defmac
+
+@defmac AC_DECL_YYTEXT
+Does nothing, now integrated in @code{AC_PROG_LEX}.
 @end defmac
 
 @defmac AC_DYNIX_SEQ

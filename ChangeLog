@@ -1,3 +1,13 @@
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
+	Merge AC_DECL_YYTEXT into AC_PROG_LEX.
+
+	* acgeneral.m4 (AC_DECL_YYTEXT): Rename as
+	(_AC_DECL_YYTEXT): this.
+	(AC_PROG_LEX): Use it.
+	(AC_DECL_YYTEXT): New AU macro.
+	* doc/autoconf.texi: Adjust.
+
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_F77_NAME_MANGLING): Use AC_COMPILE_IFELSE.

@@ -27,6 +27,15 @@ equivalent.
   lists only specific options.
 - --help=recursive, -hr
   displays the help of all the embedded packages.
+- Remembers environment variables when reconfiguring.
+  The previous scheme to set envvar before running configure was
+    ENV=VAL ./configure
+  what prevented configure from remembering the environment in which
+  it was run, therefore --recheck was run in an inconsistent
+  environment.  Now, one should run
+    ./configure ENV=VAR
+  and then --recheck will work properly.  Variables declared with
+  AC_ARG_VAR are also preserved.
 
 ** config.status
 - faster
@@ -93,7 +102,7 @@ equivalent.
   Document and ask for the registration of an envvar.
 
 - AC_CONFIG_LINKS
-  Replaces the now obsolete AC_LINK_FILES.
+  Replaces AC_LINK_FILES.
 
 - AC_CONFIG_COMMANDS
   To add new actions to config.status.  Should be used instead of
@@ -103,6 +112,20 @@ equivalent.
   Checks if the compiler supports ISO C, included when needs special
   options.
 
+- AC_LANG
+  Takes a language as argument and replaces AC_LANG_C,
+  AC_LANG_CPLUSPLUS and AC_LANG_FORTRAN77.
+
+
+** Specific Macros
+
+- AC_PROG_LEX
+  Now integrates `AC_DECL_YYTEXT' which is obsoleted.
+
+- C++ compatibility
+  Almost every single macros has been revisited in order to support at
+  best CC=c++.
+
 ** Test suite
 The testsuite no longer uses DejaGNU.  It should be easy to submit
 test cases in this new frame work.
@@ -110,17 +133,7 @@ test cases in this new frame work.
 ** Autoheader
 The internal machinery of Autoheader has completely changed.  As a
 result, using an `acconfig.h' should be considered as obsoleted, and
-you are encouraged to get rid of it using the AH_DEFUN macro.
-
-** Environment variables are kept when reconfiguring.
-The previous scheme to set envvar before running configure was
-  ENV=VAL ./configure
-what prevented configure from remembering the environment in which
-it was run, therefore --recheck was run in an inconsistent environment.
-Now, one runs
-  ./configure ENV=VAR
-and the --recheck works correctly.  Variables declared with AC_ARG_VAR
-are also preserved.
+you are encouraged to get rid of it using the AH macros.
 
 ** Fortran 77 compilers
 Support for automatically determining a Fortran 77 compilers
