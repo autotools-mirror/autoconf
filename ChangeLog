@@ -1,5 +1,10 @@
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
+	* tests/actest.m4 (AC_ENV_SAVE): Use multiple -e instead of
+	multiple egrep.
+
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
 	* config.guess: Updated for master repository.
 	* config.sub: Likewise.
 
