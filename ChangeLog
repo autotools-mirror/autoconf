@@ -1,5 +1,11 @@
 2003-03-28  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (Configuring subdirectories): Require aclocal
+	1.4, otherwise the test fails, as it does support configure.ac.
+	This fixes the "test 40 failed" bug reports.
+
+2003-03-28  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (C Compiler): `#line' portability.
 	From Paul Eggert and Nelson H. F. Beebe.
 

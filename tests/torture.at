@@ -1,6 +1,6 @@
 #							-*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -559,7 +559,9 @@ AT_SETUP([Configuring subdirectories])
 AT_KEYWORDS(autoreconf)
 
 # We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
+# It should understand configure.ac.
+AT_CHECK([grep 1.4 stdout && exit 77], [1], [ignore])
 
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
