@@ -1,5 +1,11 @@
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
+	* tests/torture.at (Deep Package): New test.
+	(Configuring subdirectories): Don't use a testSubDir as Autotest
+	now does it itself.
+
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoreconf.in (&parse_args, $help): Support --warnings.
 	* doc/autoconf.texi (Invoking autom4te): Rename as...
 	(autom4te Invocation): this, for consistency with the other nodes.
