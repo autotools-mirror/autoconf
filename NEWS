@@ -1,4 +1,8 @@
-* Major changes in Autoconf 2.57g                       -*- outline -*-
+* Major changes in Autoconf 2.57h                       -*- outline -*-
+
+* Major changes in Autoconf 2.57g
+
+  Released 2003-10-24, by Akim Demaille
 
 ** autoreconf and auxiliary directory
   Autoreconf creates the auxiliary directory if needed.  This is

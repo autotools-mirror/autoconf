@@ -22,14 +22,14 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ([2.57])
 
-AC_INIT([GNU Autoconf], [2.57g], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], [2.57h], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_FILES([config/Makefile])
 
-AM_INIT_AUTOMAKE([check-news 1.7.7 dist-bzip2 readme-alpha])
+AM_INIT_AUTOMAKE([check-news 1.7.8 dist-bzip2 readme-alpha])
 
 # Initialize the test suite and build position independent wrappers.
 AC_CONFIG_TESTDIR([tests])
