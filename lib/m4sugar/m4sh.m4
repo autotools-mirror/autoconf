@@ -788,7 +788,7 @@ fi
 m4_define([AS_MKDIR_P],
 [AS_REQUIRE([_$0_PREPARE])dnl
 { if $as_mkdir_p; then
-    mkdir -p $1
+    test -d $1 || mkdir -p $1
   else
     as_dir=$1
     as_dirs=

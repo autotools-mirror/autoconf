@@ -1,9 +1,18 @@
+2004-01-14  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Programming in M4sh): Document that
+	AS_MKDIR_P succeeds if the destination is a symbolic link
+	to an existing directory.
+	(Limitations of Usual Tools): Note that mkdir -p might not
+	succeed on symlinks to directories.
+
 2004-01-13  Paul Hilfinger  <hilfinger@CS.Berkeley.EDU>
 
 	* lib/autoconf/autoupdate.m4 (AU_DEFUN): Grammar fix in comment.
 	* bin/autoheader.in: Grammar fix in message.
-	(trivial changes)
-	
+	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P):
+	Test for dir before calling mkdir -p.  (trivial changes)
+
 2004-01-13  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Obsolete Macros): In AC_TRY_COMPILE and

@@ -8547,7 +8547,10 @@ RUN-IF-TRUE or RUN-IF-FALSE is empty.
 Make the directory @var{filename}, including intervening directories
 as necessary.  This is equivalent to @samp{mkdir -p @var{filename}},
 except that it is portable to older versions of @command{mkdir} that
-lack support for the @option{-p} option.
+lack support for the @option{-p} option.  Also, @code{AS_MKDIR_P}
+succeeds if @var{filename} is a symbolic link to an existing directory,
+even though @acronym{POSIX} is unclear whether @samp{mkdir -p} should
+succeed in that case.
 @end defmac
 
 @defmac AS_SET_CATFILE (@var{var}, @var{dir}, @var{file})
@@ -11237,9 +11240,14 @@ found"} if there are no @samp{.c} files.
 @c ------------------
 @prindex @command{mkdir}
 @cindex Making directories
-None of @command{mkdir}'s options are portable.  Instead of
+None of @command{mkdir}'s options are portable to older systems.  Instead of
 @samp{mkdir -p @var{filename}}, you should use use
 @code{AS_MKDIR_P(@var{filename})} (@pxref{Programming in M4sh}).
+
+@acronym{POSIX} does not clearly specify whether @samp{mkdir -p foo}
+should succeed when @file{foo} is a symbolic link to an already-existing
+directory.  GNU Coreutils 5.1.0 @command{mkdir} succeeds, but Solaris 9
+@command{mkdir} fails.
 
 @item @command{mv}
 @c ---------------
