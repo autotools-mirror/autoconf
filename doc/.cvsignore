@@ -1,10 +1,10 @@
-*.ac *.acs
-*.at *.ats
+*.AC *.ACs
+*.AT *.ATs
 *.cp *.cps
 *.cv *.cvs
 *.ev *.evs
 *.fn *.fns
-*.ms *.mss
+*.MS *.MSs
 *.ov *.ovs
 *.pr *.prs
 *.vr *.vrs
