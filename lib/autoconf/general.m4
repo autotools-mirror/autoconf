@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.4)dnl
+define(AC_ACVERSION, 1.7.5)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -671,6 +671,18 @@ else
    :; $3
 fi
 ])])dnl
+dnl
+define(AC_SIZEOF_TYPE,
+[AC_CHECKING(size of $1)
+$2=0
+AC_TEST_PROGRAM([#include <stdio.h>
+main()
+{
+  FILE *f=fopen("conftestval", "w");
+  if (!f) exit(1);
+  fprintf(f, "%d\n", sizeof($1));
+  exit(0);
+}], $2=`cat conftestval`)])dnl
 dnl
 dnl
 dnl The big finish
