@@ -1,3 +1,8 @@
+1999-10-07  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_CHECK_HEADER_DIRENT): Reintroduce its
+	AC_DEFUN.
+
 1999-10-05  Andreas Schwab  <schwab@issan.cs.uni-dortmund.de>
 
 	Shell meta characters in an argument causes the configure script

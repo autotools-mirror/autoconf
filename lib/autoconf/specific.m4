@@ -831,6 +831,7 @@ dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 dnl ----------------------------------------------------
 dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
+AC_DEFUN(AC_CHECK_HEADER_DIRENT,
 [ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,

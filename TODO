@@ -25,10 +25,6 @@ so that we  can run ./config.status name-of-the command.
 
 ** Allow --header, --command, --file to config.status.
 
-** Fix the two sed quoting snippets for config.status.
-That of #defines has in addition a problem of sed portability on Irix.
-That of the AC_SUBST is broken since when went from s%%%g to s%%%;t t.
-
 ** Move AM_PROG_CC_STDC into Autoconf.
 Autoconf should provide the means to determine the ANSIsm of the
 compiler, not Automake.
