@@ -1,3 +1,8 @@
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Some about
+	dirname.
+
 2000-11-02  Pavel Roskin  <proski@gnu.org>
 
 	* ifnames.sh: Put the opening brace on the same line with
