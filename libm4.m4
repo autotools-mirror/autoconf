@@ -184,12 +184,13 @@ define([ifval], [ifelse([$1], [], [$3], [$2])])
 
 # m4_ifvanl(COND, [IF-TRUE], [IF-FALSE])
 # --------------------------------------
-# Same as `ifval', but add an extra newline to IF-TRUE or IF-FALSE.
+# Same as `ifval', but add an extra newline to IF-TRUE or IF-FALSE
+# unless that argument is empty.
 define([m4_ifvanl], [ifelse([$1], [],
-[$3
-],
-[$2
-])])
+[ifelse([$3], [], [], [$3
+])],
+[ifelse([$2], [], [], [$2
+])])])
 
 
 # ifset(MACRO, [IF-TRUE], [IF-FALSE])

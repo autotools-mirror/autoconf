@@ -1,3 +1,8 @@
+2000-09-20  Pavel Roskin  <proski@gnu.org>
+
+	* libm4.m4 (m4_ifvanl): Don't output a newline for empty
+	arguments
+
 2000-09-19  Akim Demaille  <akim@epita.fr>
 
 	* tests/atspecific.m4 (AT_TEST_MACRO): Rename as...
