@@ -1992,10 +1992,12 @@ _ACEOF
 
 _AC_CACHE_DUMP() |
   sed ['
+     t clear
+     : clear
      s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
-     t cleanup
+     t end
      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
-     : cleanup'] >>confcache
+     : end'] >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
@@ -4021,15 +4023,15 @@ m4_define([AC_OUTPUT_MAKE_DEFS],
 # Protect against Makefile macro expansion.
 #
 # If the first sed substitution is executed (which looks for macros that
-# take arguments), then we branch to the cleanup section.  Otherwise,
+# take arguments), then we branch to the quote section.  Otherwise,
 # look for a macro that doesn't take arguments.
 cat >confdef2opt.sed <<\EOF
 t clear
 : clear
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
-t cleanup
+t quote
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
-: cleanup
+: quote
 s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
@@ -4362,9 +4364,8 @@ rm -f conftest.defines conftest.undefs
 # Using a here document instead of a string reduces the quoting nightmare.
 # Putting comments in sed scripts is not portable.
 #
-# `cleanup' is used to avoid that the second main sed command (meant for
-# 0-ary CPP macros) applies to n-ary macro definitions.  So we use
-# `t cleanup' to jump over the second main sed command when it succeeded.
+# `end' is used to avoid that the second main sed command (meant for
+# 0-ary CPP macros) applies to n-ary macro definitions.
 # See the Autoconf documentation for `clear'.
 cat >confdef2sed.sed <<\EOF
 dnl Double quote for `[ ]' and `define'.
@@ -4373,9 +4374,9 @@ s,[\\$`],\\&,g
 t clear
 : clear
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$,${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD},gp
-t cleanup
+t end
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
-: cleanup]
+: end]
 EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to

@@ -1,5 +1,12 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CACHE_SAVE): Use the `clear' trick to work
+	around broken seds.
+	(_AC_OUTPUT_HEADERS, _AC_OUTPUT_FILES): Rename the sed labels to
+	match the Autoconf documentation.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Shell Substitutions): More on the variations
 	around ${foo=bar}.
 	(Assignments): Rewrite as a summary of the previous section.
