@@ -1,5 +1,12 @@
 2001-10-19  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Name the generated
+	file in @configure_input@.
+	Don't mention `automatically' in addition to `generated'.
+	* tests/torture.at (#define header templates): Adjust.
+
+2001-10-19  Akim Demaille  <akim@epita.fr>
+
 	* lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el: In a
 	comment, explain how to install automatic mode selection.
 	From Russ Allbery.
