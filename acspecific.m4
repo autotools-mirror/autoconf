@@ -958,9 +958,9 @@ define(AC_FIND_X_XMKMF,
 rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
-  cat > Imakefile <<\EOF
+  cat > Imakefile <<'EOF'
 acfindx:
-	@echo "im_incroot=$(INCROOT); im_usrlibdir=$(USRLIBDIR); im_libdir=$(LIBDIR)"
+	@echo 'im_incroot="$(INCROOT)"; im_usrlibdir="$(USRLIBDIR)"; im_libdir="$(LIBDIR)"'
 EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
