@@ -157,9 +157,9 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 The GNU build system
 
-* Automake::
-* Libtool::
-* Pointers::
+* Automake::                    Escaping Makefile hell
+* Libtool::                     Building libraries portably
+* Pointers::                    More info on the GNU build system
 
 Making @code{configure} Scripts
 
@@ -5671,7 +5671,7 @@ Unfortunately it is not yet widely supported.  Most notably, even recent
 releases of Solaris don't support it:
 
 @example
-$ showrev -c /bin/sh | grep version    
+$ showrev -c /bin/sh | grep version
 Command version: SunOS 5.8 Generic 109324-02 February 2001
 $ echo $(echo blah)
 syntax error: `(' unexpected
@@ -10586,7 +10586,8 @@ easier to use, the macros are listed without their preceding @samp{AC_}.
 @node Concept Index,  , Macro Index, Top
 @unnumbered Concept Index
 
-@c FIXME: Find some nice wording to introduce this section.
+This is an alphabetical list of the files, tools, and concepts
+introduced in this document.
 
 @printindex cp
 

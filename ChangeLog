@@ -1,5 +1,10 @@
 2001-06-09  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Concept Index): Introduce it.
+	Regenerate the menus.
+
+2001-06-09  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.maint, GNUmakefile: New, from Jim Meyering.
 	* config/prev-version.txt: New.
 	* config/move-if-change: New, for GNU libc.
