@@ -1,4 +1,28 @@
-2003-11-26  Paolo Bonzini  <bonzini@bogus.example.com>
+2004-01-30 Paolo Bonzini <bonzini@bogus.example.com>
+           Eric Sunshine <sunshine@sunshineco.com>
+           Paul Eggert <eggert@twinsun.com>
+
+        * lib/m4sugar/m4sh.m4 (M4SH-SANITIZE): New diversion.
+        (AS_INIT): Output shell initialization there. Removed optional
+        parameter. Expand _AS_SHELL_FN_SPY.
+        (AS_INIT_WITH_SHELL_FN): Removed.
+        (_AS_SHELL_FN_SPY): New macro.
+        (AS_DETECT_REQUIRED, AS_DETECT_SUGGESTED): New
+        macros.
+        (AS_SHELL_SANITIZE): Remove loop to find better shell
+        and documentation for the parameter.
+        (_AS_DETECT_BETTER_SHELL): Move it here.
+        (_AS_SHELL_FN_WORK): Remove shell invocation, reformat.
+        (_AS_RUN): Move it here, support testing with eval.
+        (AS_REQUIRE_SHELL_FN): Require shell functions when
+        it is used.
+        (_AS_LINENO_WORKS): Put around braces, we do not
+        trigger the bash bug anymore.
+        * lib/autotest/general.m4: Document M4SH-SANITIZE, do not
+        use AS_INIT_WITH_SHELL_FN.
+        * bin/autoconf.in, tests/wrapper.in: Regenerated.
+
+2004-01-30  Paolo Bonzini  <bonzini@gnu.org>
 
 	* bin/autoupdate.in: Trace AU_DEFINE instead of AU_DEFUN.
 	* doc/autoconf.texi: Don't say that the third parameter

@@ -64,9 +64,10 @@
 #   Purpose of the script etc.
 # - HEADER-COPYRIGHT
 #   Copyright notice(s)
+# - M4SH-SANITIZE
+#   M4sh's shell setup
 # - M4SH-INIT
-#   M4sh's initializations
-#
+#   M4sh initialization
 # - BODY
 #   The body of the script.
 
@@ -81,7 +82,8 @@ m4_define([_m4_divert(BINSH)],             0)
 m4_define([_m4_divert(HEADER-REVISION)],   1)
 m4_define([_m4_divert(HEADER-COMMENT)],    2)
 m4_define([_m4_divert(HEADER-COPYRIGHT)],  3)
-m4_define([_m4_divert(M4SH-INIT)],         4)
+m4_define([_m4_divert(M4SH-SANITIZE)],     4)
+m4_define([_m4_divert(M4SH-INIT)],         5)
 m4_define([_m4_divert(BODY)],           1000)
 
 # Aaarg.  Yet it starts with compatibility issues...  Libtool wants to
@@ -141,8 +143,7 @@ m4_define([AS_REQUIRE],
 # xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
 #
 m4_define([AS_REQUIRE_SHELL_FN],
-[m4_provide_if([AS_INIT_WITH_SHELL_FN],
-	       [m4_warn([syntax], [AS_INIT_WITH_SHELL_FN not called.])])dnl
+[AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 m4_provide_if([AS_SHELL_FN_$1], [],
                [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
 $2
@@ -167,58 +168,126 @@ DUALCASE=1; export DUALCASE # for MKS sh
 ])
 
 
-# _AS_SHELL_FN_WORK(TESTED-SHELL)
-# --------------------------------------------------
+# _AS_RUN(TEST, [SHELL])
+# ----------------------
+# Run TEST under the current shell (if one parameter is used)
+# or under the given SHELL, protecting it from syntax errors.
+m4_define([_AS_RUN],
+[m4_ifval([$2],
+[{ $2 <<\_ASEOF
+_AS_BOURNE_COMPATIBLE
+$1
+_ASEOF
+}],
+[(eval "AS_ESCAPE(m4_quote($1))")])])
+
+# AS_DETECT_REQUIRED(TEST)
+# ------------------------
+# Refuse to execute under a shell that does not pass
+# the given TEST.
+m4_define([_AS_DETECT_REQUIRED_BODY], [:])
+m4_defun([AS_DETECT_REQUIRED],
+[m4_require([_AS_DETECT_BETTER_SHELL])dnl
+m4_expand_once([m4_append([_AS_DETECT_REQUIRED_BODY], [
+($1) || AS_EXIT(1)
+])], [AS_DETECT_REQUIRED_provide($1)])])
+
+# AS_DETECT_SUGGESTED(TEST)
+# -------------------------
+# Prefer to execute under a shell that passes the given TEST.
+m4_define([_AS_DETECT_SUGGESTED_BODY], [:])
+m4_defun([AS_DETECT_SUGGESTED],
+[m4_require([_AS_DETECT_BETTER_SHELL])dnl
+m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
+($1) || AS_EXIT(1)
+])], [AS_DETECT_SUGGESTED_provide($1)])])
+
+# _AS_DETECT_BETTER_SHELL
+# -----------------------
+# The real workhorse for detecting a shell with the correct
+# features.
+m4_defun_once([_AS_DETECT_BETTER_SHELL],
+[m4_wrap([m4_divert_text([M4SH-SANITIZE], [
+if test "x$CONFIG_SHELL" = x; then
+  AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
+        [as_have_required=yes],
+	[as_have_required=no])
+  AS_IF([test $as_have_required = yes && dnl
+	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
+    [],
+    [as_candidate_shells="$SHELL"
+    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
+      [case $as_dir in
+	 /*)
+	   for as_base in sh bash ksh sh5; do
+	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
+	   done
+       esac])
+
+      for as_shell in $as_candidate_shells; do
+	 AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY], [$as_shell 2> /dev/null])],
+	       [CONFIG_SHELL=$as_shell
+	       as_have_required=yes
+	       AS_IF([_AS_RUN([_AS_DETECT_SUGGESTED_BODY], [$as_shell 2> /dev/null])],
+		     [break])])
+      done
+
+      AS_IF([test "x$CONFIG_SHELL" != x],
+        [AS_UNSET([ENV])
+        AS_UNSET([BASH_ENV])
+        export CONFIG_SHELL
+        exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
+
+    AS_IF([test $as_have_required = no],
+      [echo This script requires a shell more modern than all the
+      echo shells that I found on your system.  Please install a
+      echo modern shell, or manually run the script under such a
+      echo shell if you do have one.
+      AS_EXIT(1)])
+    ])
+fi
+])])])
+
+
+# _AS_SHELL_FN_WORK
+# -----------------
 # This is a spy to detect "in the wild" shells that do not support shell
 # functions correctly.  It is based on the m4sh.at Autotest testcases.
 m4_define([_AS_SHELL_FN_WORK],
-[{ $1 2>/dev/null <<\_ASEOF
-_AS_BOURNE_COMPATIBLE
-func_return () {
+[func_return () {
   (exit [$]1)
 }
-
 func_success () {
   func_return 0
 }
-
 func_failure () {
   func_return 1
 }
-
 func_ret_success () {
   return 0
 }
-
 func_ret_failure () {
   return 1
 }
 
 exitcode=0
-AS_IF([func_success], [], [
-  exitcode=1
-  echo func_failure succeeded.
-])
-AS_IF([func_failure], [
-  exitcode=1
-  echo func_success failed.
-])
-AS_IF([func_ret_success], [], [
-  exitcode=1
-  echo func_ret_success failed.
-])
-AS_IF([func_ret_failure], [
-  exitcode=1
-  echo func_ret_failure succeeded.
-])
-AS_EXIT($exitcode)
-_ASEOF
-}])
+AS_IF([func_success], [],
+  [exitcode=1
+  echo func_failure succeeded.])
+AS_IF([func_failure],
+  [exitcode=1
+  echo func_success failed.])
+AS_IF([func_ret_success], [],
+  [exitcode=1
+  echo func_ret_success failed.])
+AS_IF([func_ret_failure],
+  [exitcode=1
+  echo func_ret_failure succeeded.])
+test $exitcode = 0])
 
-# AS_SHELL_SANITIZE(WHAT-IF-SHELL-FUNCTIONS-DO-NOT-WORK)
-# ------------------------------------------------------
-# The parameter is temporary; it will go away and you
-# should not rely on it.
+
+# AS_SHELL_SANITIZE
+# -----------------
 m4_defun([AS_SHELL_SANITIZE],
 [## --------------------- ##
 ## M4sh Initialization.  ##
@@ -247,28 +316,6 @@ fi
 if test ! -f "$as_myself"; then
   AS_ERROR([cannot find myself; rerun with an absolute path])
 fi
-
-dnl In the future, the `else' branch will be that in AS_INIT_WITH_SHELL_FN.
-AS_IF([_AS_SHELL_FN_WORK([$SHELL])], [], [
-  case $CONFIG_SHELL in
-  '')
-    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
-      [for as_base in sh bash ksh sh5; do
-	 case $as_dir in
-	 /*)
-	   AS_IF([_AS_SHELL_FN_WORK([$as_dir/$as_base])], [
-	     AS_UNSET(BASH_ENV)
-	     AS_UNSET(ENV)
-	     CONFIG_SHELL=$as_dir/$as_base
-	     export CONFIG_SHELL
-	     exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}
-	   ]);;
-	 esac
-       done]);;
-  *)
-    $1;;
-  esac
-])
 
 # Work around bugs in pre-3.0 UWIN ksh.
 $as_unset ENV MAIL MAILPATH
@@ -649,6 +696,7 @@ m4_define([_AS_LINENO_WORKS],
 # configure.
 m4_define([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
+AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
 _AS_LINENO_WORKS || {
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
@@ -1188,16 +1236,29 @@ m4_define([AS_VAR_POPDEF],
 [m4_popdef([$1])])
 
 
-
 ## ----------------- ##
 ## Setting M4sh up.  ##
 ## ----------------- ##
 
 
-# AS_INIT(WHAT-IF-SHELL-FUNCTIONS-DO-NOT-WORK)
-# --------------------------------------------
-# The parameter is temporary; it will go away and you
-# should not rely on it.
+# _AS_SHELL_FN_SPY
+# ----------------
+# This temporary macro checks "in the wild" for shells that do
+# not support shell functions.
+m4_define([_AS_SHELL_FN_SPY],
+[AS_DETECT_SUGGESTED([_AS_SHELL_FN_WORK])
+_AS_RUN([_AS_SHELL_FN_WORK]) || {
+  echo No shell found that supports shell functions.
+  echo Please tell autoconf@gnu.org about your system,
+  echo including any error possibly output before this
+  echo message
+}
+])
+
+
+# AS_INIT
+# -------
+# Initialize m4sh.
 m4_define([AS_INIT],
 [m4_init
 
@@ -1206,26 +1267,10 @@ m4_pattern_forbid([^_?AS_])
 
 # Bangshe and minimal initialization.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
-m4_divert_text([M4SH-INIT], [AS_SHELL_SANITIZE([m4_default([$1], [
-echo Found no shell that has working shell functions.
-echo
-echo Please tell autoconf@gnu.org about your system.
-])])])
+m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
+AS_REQUIRE([_AS_SHELL_FN_SPY])
 
 # Let's go!
 m4_wrap([m4_divert_pop([BODY])[]])
 m4_divert_push([BODY])[]dnl
 ])
-
-# AS_INIT_WITH_SHELL_FN
-# ---------------------
-# Same as AS_INIT, but exit if shell functions are
-# not supported.
-m4_define([AS_INIT_WITH_SHELL_FN],
-[AS_INIT([
-echo Shell functions are not supported on any shell I could find 
-echo on your system.  This script requires shell functions: please
-echo install a modern shell, or manually run the script under such
-echo a shell if you do have one.
-AS_EXIT(1)
-])])

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,8 @@
 #    1. HEADER-REVISION
 #    2. HEADER-COMMENT
 #    3. HEADER-COPYRIGHT
-#    4. M4SH-INIT
+#    4. M4SH-SANITIZE
+#    5. M4SH-INIT
 # 1000. BODY
 #
 # Defined below:
@@ -142,7 +143,7 @@ m4_define([AT_TESTSUITE_NAME],
 	  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-AS_INIT_WITH_SHELL_FN
+AS_INIT
 AS_PREPARE
 m4_divert_push([DEFAULTS])dnl
 
