@@ -1,3 +1,11 @@
+2002-05-22  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/fortran.m4 (AC_PROG_F77): Remove cf77 and cft77
+	from the default list of compilers to try.  Suggested by
+	Kate Hedstrom.
+	* NEWS: Document the above.
+	* autoconf.texi (Fortran 77 Compiler): Don't suggest cf77.
+
 2002-05-17  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/types.m4 (AC_CHECK_MEMBER): Work correctly even if
