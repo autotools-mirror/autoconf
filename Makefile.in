@@ -53,6 +53,7 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 M4 = @M4@
@@ -122,7 +123,10 @@ wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
 	     $(srcdir)/config/texinfo.tex \
 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
 
-cvs_files = $(srcdir)/config/missing
+cvs_files = $(srcdir)/config/missing \
+            $(srcdir)/config/install-sh \
+            $(srcdir)/config/mkinstalldirs
+
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -139,7 +143,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 	Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 configure \
 	configure.ac
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = bin tests . lib config man doc
 all: all-recursive
 
 .SUFFIXES:
@@ -154,7 +158,7 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES) 
 	cd $(srcdir) && $(AUTOCONF)
 
 $(ACLOCAL_M4):  configure.ac config/m4.m4
@@ -321,9 +325,11 @@ distdir: $(DISTFILES)
 	mkdir $(distdir)
 	$(mkinstalldirs) $(distdir)/tests
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
 	  case $$file in \
 	    $(srcdir)/*) file=`echo "$$file" | sed "s|^$$srcdirstrip/||"`;; \
+	    $(top_srcdir)/*) file=`echo "$$file" | sed "s|^$$topsrcdirstrip/|$(top_builddir)/|"`;; \
 	  esac; \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -344,7 +350,7 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	list='$(SUBDIRS)'; for subdir in $$list; do \
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
 	  if test "$$subdir" = .; then :; else \
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \
@@ -387,7 +393,6 @@ distcheck: dist
 	chmod a-w $(distdir)
 	dc_install_base=`$(am__cd) $(distdir)/=inst && pwd` \
 	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
-	  && $(mkinstalldirs) $$dc_destdir \
 	  && cd $(distdir)/=build \
 	  && ../configure --srcdir=.. --prefix="$$dc_install_base" \
 	    $(DISTCHECK_CONFIGURE_FLAGS) \
@@ -400,7 +405,9 @@ distcheck: dist
 	  && $(MAKE) $(AM_MAKEFLAGS) distuninstallcheck_dir="$$dc_install_base" \
 	        distuninstallcheck \
 	  && chmod -R a-w "$$dc_install_base" \
-	  && ({   $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
+	  && ({ \
+	       (cd ../.. && $(mkinstalldirs) "$$dc_destdir") \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
 	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" uninstall \
 	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" \
 	            distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \

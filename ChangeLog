@@ -1,5 +1,18 @@
 2002-10-25  Akim Demaille  <akim@epita.fr>
 
+	Version 2.54a.
+
+	* Makefile.maint: Update from the Coreutils.
+	(AMTAR): Remove, obsolete.
+	(-automake_repo): Update to redhat.com.
+	(cvs_file): New.
+	Adjust to the fact that ansi2knr is now hosted by Automake.
+	* Maekfile.am (cvs_files): Add install-sh and mkinstalldirs.
+	* config/config.guess, config/mkinstalldirs, config/texinfo.tex:
+	Update from masters.
+
+2002-10-25  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&load_configuration): Take the file as
 	argument.
 	(&parse_args): Handle -C, --cache.
