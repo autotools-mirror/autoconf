@@ -1227,8 +1227,10 @@ exec AS_MESSAGE_FD>&1
 # report actual input values of CONFIG_FILES etc. instead of their
 # values after options handling.  Logging --version etc. is OK.
 exec AS_MESSAGE_LOG_FD>>config.log
-echo >&AS_MESSAGE_LOG_FD
-AS_BOX([Running \$as_me.]) >&AS_MESSAGE_LOG_FD
+{
+  echo
+  AS_BOX([Running \$as_me.])
+} >&AS_MESSAGE_LOG_FD
 cat >&AS_MESSAGE_LOG_FD <<_CSEOF
 
 This file was extended by m4_ifset([AC_PACKAGE_NAME], [AC_PACKAGE_NAME ])dnl

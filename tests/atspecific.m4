@@ -73,7 +73,7 @@ AT_CHECK([autoconf --include=$srcdir $1],
 #                     STDOUT, [STDERR = `autoheader: `config.hin' is created'])
 # -----------------------------------------------------------------------------
 m4_define([AT_CHECK_AUTOHEADER],
-[AT_CLEANUP_FILES(config.hin)dnl
+[AT_CLEANUP_FILES(config.hin config.hin~)dnl
 AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
          [$3],
          m4_default([$4], [[autoheader: `config.hin' is created
