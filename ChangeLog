@@ -1,5 +1,8 @@
 1999-08-28  Ben Elliston  <bje@cygnus.com>
 
+	* config.guess: Once and for all, emit the correct string for
+	Unixware 7! Contributed by Mike Hopkirk <hops@sco.com>.
+
 	* acspecific.m4 (AC_C_INLINE): Qualify the return type of the
 	dummy inlined function to satisfy newer C++ compilers. Fix for
 	autoconf/49.
