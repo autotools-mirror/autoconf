@@ -495,7 +495,7 @@ define(AC_CONFIG_SUBDIRS,
 [AC_REQUIRE([AC_CONFIG_AUX_DEFAULT])define([AC_SUBDIR_LIST],[$1])])dnl
 dnl
 dnl
-dnl ### Canonicalizing the system type.
+dnl ### Canonicalizing the system type
 dnl
 dnl
 dnl Find install.sh, config.sub, config.guess, and Cygnus configure
@@ -852,7 +852,7 @@ define(AC_OBSOLETE,
 )])dnl
 dnl
 dnl
-dnl ### Checking for files - fundamental (no caching)
+dnl ### Checking for files - fundamental (caching)
 dnl
 dnl
 define(AC_PROGRAM_CHECK,
