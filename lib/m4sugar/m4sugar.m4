@@ -1193,9 +1193,9 @@ m4_define([$1],
 m4_define([m4_defun_once],
 [m4_define([m4_location($1)], m4_location)dnl
 m4_define([$1],
-          [m4_provide_ifelse([$1],
-                             [m4_warn([syntax], [$1 invoked multiple times])],
-                             [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
+          [m4_provide_if([$1],
+                         [m4_warn([syntax], [$1 invoked multiple times])],
+                         [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
 
 
 # m4_pattern_forbid(ERE)
@@ -1220,8 +1220,8 @@ m4_define([m4_pattern_allow], [])
 # m4_before(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 # ---------------------------------------------
 m4_define([m4_before],
-[m4_provide_ifelse([$2],
-                   [m4_warn([syntax], [$2 was called before $1])])])
+[m4_provide_if([$2],
+               [m4_warn([syntax], [$2 was called before $1])])])
 
 
 # m4_require(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
@@ -1262,17 +1262,17 @@ m4_ifdef([_m4_expanding($1)],
          [m4_fatal([$0: circular dependency of $1])])dnl
 m4_ifndef([_m4_divert_dump],
           [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
-m4_provide_ifelse([$1],
-                  [],
-                  [m4_divert_push(m4_eval(m4_divnum - 1))dnl
+m4_provide_if([$1],
+              [],
+              [m4_divert_push(m4_eval(m4_divnum - 1))dnl
 m4_default([$2], [$1])
 m4_divert(m4_defn([_m4_divert_dump]))dnl
 m4_undivert(m4_defn([_m4_divert_diversion]))dnl
 m4_divert_pop(m4_defn([_m4_divert_dump]))])dnl
-m4_provide_ifelse([$1],
-                  [],
-                  [m4_warn([syntax],
-                           [$1 is m4_require'd but is not m4_defun'd])])dnl
+m4_provide_if([$1],
+              [],
+              [m4_warn([syntax],
+                       [$1 is m4_require'd but is not m4_defun'd])])dnl
 m4_expansion_stack_pop()dnl
 ])
 
@@ -1282,9 +1282,9 @@ m4_expansion_stack_pop()dnl
 # If TEXT has never been expanded, expand it *here*.  Use WITNESS as
 # as a memory that TEXT has already been expanded.
 m4_define([m4_expand_once],
-[m4_provide_ifelse(m4_ifval([$2], [[$2]], [[$1]]),
-                   [],
-                   [m4_provide(m4_ifval([$2], [[$2]], [[$1]]))[]$1])])
+[m4_provide_if(m4_ifval([$2], [[$2]], [[$1]]),
+               [],
+               [m4_provide(m4_ifval([$2], [[$2]], [[$1]]))[]$1])])
 
 
 # m4_provide(MACRO-NAME)
@@ -1293,13 +1293,13 @@ m4_define([m4_provide],
 [m4_define([m4_provide($1)])])
 
 
-# m4_provide_ifelse(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
-# -----------------------------------------------------------
+# m4_provide_if(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
+# -------------------------------------------------------
 # If MACRO-NAME is provided do IF-PROVIDED, else IF-NOT-PROVIDED.
 # The purpose of this macro is to provide the user with a means to
 # check macros which are provided without letting her know how the
 # information is coded.
-m4_define([m4_provide_ifelse],
+m4_define([m4_provide_if],
 [m4_ifdef([m4_provide($1)],
           [$2], [$3])])
 

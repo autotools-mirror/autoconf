@@ -96,6 +96,43 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 ## ------------------------- ##
 
 
+# AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
+# -----------------------------------------------------------
+# BODY-TO-EXPAND is some initialization which must be expanded in the
+# M4SH-INIT section when expanded (required or not).  For instance:
+#
+#      m4_defun([_FOO_PREPARE], [foo=foo])
+#      m4_defun([FOO],
+#      [m4_require([_FOO_PREPARE])dnl
+#      echo $foo])
+#
+#      m4_defun([_BAR_PREPARE], [bar=bar])
+#      m4_defun([BAR],
+#      [AS_REQUIRE([_BAR_PREPARE])dnl
+#      echo $bar])
+#
+#      AS_INIT
+#      foo1=`FOO`
+#      foo2=`FOO`
+#      bar1=`BAR`
+#      bar2=`BAR`
+#
+# gives
+#
+#      #! /bin/sh
+#      bar=bar
+#
+#      foo1=`foo=foo
+#      echo $foo`
+#      foo2=`echo $foo`
+#      bar1=`echo $bar`
+#      bar2=`echo $bar`
+#
+m4_define([AS_REQUIRE],
+[m4_provide_if([$1], [],
+               [m4_divert_text([M4SH-INIT], [$1])])])
+
+
 # AS_SHELL_SANITIZE
 # -----------------
 # Try to be as Bourne and/or POSIX as possible.

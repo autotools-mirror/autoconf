@@ -1,5 +1,14 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sugar.m4 (m4_provide_ifelse): Rename as...
+	(m4_provide_if): this.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): New.
+	* lib/autoconf/general.m4 (AS_DEFUN, AC_DEFUN_ONCE, AC_BEFORE)
+	(AC_REQUIRE, AC_PROVIDE, AC_PROVIDE_IFELSE): Be exact copy of the
+	M4sugar peer, i.e., drop the `AC_PROVIDE_$1' broken marker.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	Use `add-log-current-defun-function' for ChangeLog creation.
 	Suggested by Tom Tromey.
 

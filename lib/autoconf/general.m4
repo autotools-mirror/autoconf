@@ -157,76 +157,31 @@ m4_copy([m4_divert_push],[AC_DIVERT_PUSH])
 m4_copy([m4_divert_pop], [AC_DIVERT_POP])
 
 
-## ------------------------------- ##
-## Defining macros in autoconf::.  ##
-## ------------------------------- ##
+
+## ------------------------------------ ##
+## Defining/requiring Autoconf macros.  ##
+## ------------------------------------ ##
 
 
 # AC_DEFUN(NAME, EXPANSION)
-# -------------------------
-# Same as `m4_define' but equip the macro with the needed machinery
-# for `AC_REQUIRE'.
-#
-# We don't use this macro to define some frequently called macros that
-# are not involved in ordering constraints, to save m4 processing.
-m4_define([AC_DEFUN],
-[m4_defun([$1], [$2[]AC_PROVIDE([$1])])])
-
-
 # AC_DEFUN_ONCE(NAME, EXPANSION)
-# ------------------------------
-# As AC_DEFUN, but issues the EXPANSION only once, and warns if used
-# several times.
-m4_define([AC_DEFUN_ONCE],
-[m4_defun_once([$1], [$2[]AC_PROVIDE([$1])])])
+# AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
+# AC_REQUIRE(STRING)
+# AC_PROVIDE(MACRO-NAME)
+# AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
+# -----------------------------------------------------------
+m4_copy([m4_defun],       [AC_DEFUN])
+m4_copy([m4_defun_once],  [AC_DEFUN_ONCE])
+m4_copy([m4_before],      [AC_BEFORE])
+m4_copy([m4_require],     [AC_REQUIRE])
+m4_copy([m4_provide],     [AC_PROVIDE])
+m4_copy([m4_provide_if],  [AC_PROVIDE_IFELSE])
 
 
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
 # ------------------------------------------
 m4_define([AC_OBSOLETE],
 [AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
-
-
-
-
-
-
-## ----------------------------- ##
-## Dependencies between macros.  ##
-## ----------------------------- ##
-
-
-# AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
-# ---------------------------------------------
-m4_define([AC_BEFORE],
-[AC_PROVIDE_IFELSE([$2], [AC_DIAGNOSE([syntax], [$2 was called before $1])])])
-
-
-# AC_REQUIRE(STRING)
-# ------------------
-# If STRING has never been AC_PROVIDE'd, then expand it. A macro must
-# be AC_DEFUN'd if either it is AC_REQUIRE'd, or it AC_REQUIRE's.
-m4_copy([m4_require], [AC_REQUIRE])
-
-
-# AC_PROVIDE(MACRO-NAME)
-# ----------------------
-# Ideally we should just use `m4_provide($1)', but unfortunately many
-# third party macros know that we use `AC_PROVIDE_$1' and they depend
-# on it.
-m4_define([AC_PROVIDE],
-[m4_define([AC_PROVIDE_$1])m4_provide([$1])])
-
-
-# AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
-# -----------------------------------------------------------
-# If MACRO-NAME is provided do IF-PROVIDED, else IF-NOT-PROVIDED.
-# The purpose of this macro is to provide the user with a means to
-# check macros which are provided without letting her know how the
-# information is coded.
-m4_define([AC_PROVIDE_IFELSE],
-[m4_ifdef([AC_PROVIDE_$1],
-          [$2], [$3])])
 
 
 
