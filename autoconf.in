@@ -234,7 +234,7 @@ done
 $debug ||
 {
   trap 'status=$?; rm -rf $tmp && exit $status' 0
-  trap 'exit $?' 1 2 13 15
+  trap '(exit $?); exit' 1 2 13 15
 }
 
 # Create a (secure) tmp directory for tmp files.
@@ -248,7 +248,7 @@ $debug ||
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
-   exit 1;
+   (exit 1); exit;
 }
 
 # Running m4.
@@ -266,7 +266,7 @@ case $# in
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
-     exit 1 ;;
+     (exit 1); exit ;;
 esac
 
 # Unless specified, the output is stdout.
@@ -278,7 +278,7 @@ if test z$infile = z-; then
   cat >$infile
 elif test ! -r "$infile"; then
   echo "$me: $infile: No such file or directory" >&2
-  exit 1
+  (exit 1); exit
 fi
 
 # Output is produced into FD 4.  Prepare it.
@@ -297,7 +297,7 @@ case $task in
   ## --------------------------------- ##
   script)
   # M4 expansion.
-  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure || exit 2
+  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure || exit
 
   # You can add your own prefixes to pattern if you want to check for
   # them too.
@@ -552,7 +552,7 @@ EOF
   do
     # The request may be several lines long, hence sed has to quit.
     trace_opt="$trace_opt -t "`echo "$trace" | sed -e 's/:.*//;q'`
-    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 || exit 1
+    echo "$trace" | $AWK -f $tmp/translate.awk >>$tmp/trace.m4 || exit
   done
   echo "divert(0)dnl" >>$tmp/trace.m4
 
@@ -586,7 +586,7 @@ EOF
   ## ------------ ##
 
   *)echo "$me: internal error: unknown task: $task" >&2
-    exit 1
+    (exit 1); exit
 esac
 
-exit $status
+(exit $status); exit

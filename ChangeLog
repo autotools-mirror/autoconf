@@ -1,3 +1,8 @@
+2000-08-11  J. David Anglin  <dave@hiauly1.hia.nrc.ca>
+
+	* autoconf.sh: Change `exit N' to `(exit N); exit' to provide
+	the correct exit status when an exit trap is taken.
+
 2000-08-11  Akim Demaille  <akim@epita.fr>
 
 	* acfunctions.m4 (AM_FUNC_ERROR_AT_LINE, AM_FUNC_FNMATCH,
