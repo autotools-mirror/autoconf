@@ -168,14 +168,18 @@ contributor to a program must sign some sort of legal papers in order
 for us to have clear title to the program.  The main author alone is not
 enough.
 
-So, before adding in any contributions from other people, tell us
-so we can arrange to get the papers.  Then wait until we tell you
+So, before adding in any contributions from other people, please tell
+us, so we can arrange to get the papers.  Then wait until we tell you
 that we have received the signed papers, before you actually use the
 contribution.
 
 This applies both before you release the program and afterward.  If
 you receive diffs to fix a bug, and they make significant changes, we
-need legal papers for it.
+need legal papers for that change.
+
+This also applies to comments and documentation files.  For copyright
+law, comments and code are just text.  Copyright applies to all kinds of
+text, so we need legal papers for all kinds.
 
 You don't need papers for changes of a few lines here or there, since
 they are not significant for copyright purposes.  Also, you don't need
@@ -191,6 +195,10 @@ that code out again!
 The very worst thing is if you forget to tell us about the other
 contributor.  We could be very embarrassed in court some day as a
 result.
+
+We have more detailed advice for maintainers of programs; if you have
+reached the stage of actually maintaining a program for GNU (whether
+released or not), please ask us for a copy.
 
 @node Design Advice, Program Behavior, Intellectual Property, Top
 @chapter General Program Design
