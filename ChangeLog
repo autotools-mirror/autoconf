@@ -1,3 +1,12 @@
+2002-04-29  Akim Demaille  <akim@epita.fr>
+
+	* tests/m4sh.at (LINENO): If testsuite itself is rewritten because
+	of lack of $LINENO support, then the test will compare the $LINENO
+	in testsuite vs. the lineno in the test file.  This is wrong, of
+	course.
+	Be sure to protect it.
+	Reported by Patrick Welche.
+
 2002-04-25  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Obsolete Macros): Typo.

@@ -37,18 +37,21 @@ AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77], ignore)
 # AT_DATA_LINENO(FILENAME,
 #                UNSET-LINENO = true | false, COUNTER, COUNTER-RE)
 # ----------------------------------------------------------------
-# Produce FILENAME which uses the COUNTER LINENO or _oline_, which
-# we can recognized via COUNTER-RE.  Unset LINENO is UNSET-LINENO.
+# Produce the FILENAME M4sh script which uses the COUNTER LINENO or
+# _oline_, which we can recognized via COUNTER-RE.  Unset LINENO is
+# UNSET-LINENO.
 #
-# Use COUNTER, COUNTER-RE = [$@&t@LINENO],   [LINENO]
-#  or                     = [__@&t@oline__], [_oline__]
-# to make sure we are not replace in the test suite itself and to avoid
-# seeing the COUNTER-RE being replaced.
+# Use COUNTER, COUNTER-RE = [__LINENO__], [LINENO]
+#  or                     = [__OLINE__],  [_oline__]
+#
+# instead of the obvious $LINENO and __oline__, because they would
+# be replaced in the test suite itself, even before creating these
+# scripts.  For the same reason, grep for LINENO and _oline__ (sic).
 #
 # UNSET-LINENO is a shell condition to make sure the scripts have the
 # same number of lines in the output, so that their outputs be identical.
 m4_define([AT_DATA_LINENO],
-[AT_DATA([$1],
+[AT_DATA([$1.tas],
 [[AS@&t@_INIT
 if $2; then
   AS@&t@_UNSET([LINENO])
@@ -59,13 +62,15 @@ grep 'Line: .*$4' $[0] >/dev/null ||
   AS@&t@_ERROR([cannot find original script])
 exit 0
 ]])
+# If occurrences of $LINENO or __oline__ were wanted, create them.
+sed 's/__LINENO__/$''LINENO/g;s/__OLINE__/__''oline__/g' $1.tas >$1.as
+AT_CHECK([autom4te -l m4sh $1.as -o $1])
 ])# AT_DATA_LINENO
 
 # `_oline_', once processed and ran, produces our reference.
 # We check that we find ourselves by looking at a string which is
 # available only in the original script: `_oline_'.
-AT_DATA_LINENO([reference.as], [false], [__@&t@oline__], [_oline__])
-AT_CHECK([autom4te -l m4sh reference.as -o reference])
+AT_DATA_LINENO([reference], [false], [__OLINE__], [_oline__])
 AT_CHECK([./reference], 0, [stdout])
 
 # The reference:
@@ -75,16 +80,14 @@ mv stdout expout
 # Be sure to be out of the PATH.
 AT_CHECK([mkdir test || exit 77])
 
-AT_DATA_LINENO([test/test-1.as], [false], [$@&t@LINENO], [LINENO])
-AT_CHECK([autom4te -l m4sh test/test-1.as -o test/test-1])
+AT_DATA_LINENO([test/test-1], [false], [__LINENO__], [LINENO])
 AT_CHECK([./test/test-1],                          0, [expout])
 AT_CHECK([(PATH=test$PATH_SEPARATOR$PATH; export PATH; exec test-1)],
 						   0, [expout])
 AT_CHECK([sh ./test/test-1],                       0, [expout])
 
 # Now using a disabled LINENO, with different call conventions.
-AT_DATA_LINENO([test/test-2.as], [true], [$@&t@LINENO], [LINENO])
-AT_CHECK([autom4te -l m4sh test/test-2.as -o test/test-2])
+AT_DATA_LINENO([test/test-2], [true], [__LINENO__], [LINENO])
 AT_CHECK([./test/test-2],                          0, [expout])
 AT_CHECK([(PATH=test$PATH_SEPARATOR$PATH; export PATH; exec test-2)],
 						   0, [expout])
