@@ -1,3 +1,8 @@
+2001-04-22  Jim Meyering  <meyering@lucent.com>
+
+	* acfunctions.m4 (AC_FUNC_MEMCMP): Remove `int main () {' and the
+	trailing `}', since AC_LANG_PROGRAM provides them.
+
 2001-04-20  Akim Demaille  <akim@epita.fr>
 
 	* configure.in: Bump to 2.49f.
