@@ -1,10 +1,16 @@
+2002-07-25  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Make): Escaped newlines in
+	comments do not always work. Never trust the exit status of
+	`make -k'.
+
 2002-07-23  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE):
 	Use PATH="/nonexistent;.", not PATH=".;.", as FreeBSD ksh2002
 	apparently treats PATH="nonexistent" as if it contained ".".
 	Bug reported by Stefan `Sec' Zehl.
-	
+
 2002-07-22  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Make): Mention the special

@@ -10276,6 +10276,44 @@ test:
 shows @code{FOO} equal to @code{one BAR = two}.  Other Makes sensibly
 let a backslash continue only to the immediately following line.
 
+@item Escaped newline in comments
+
+According to @sc{posix}, Makefile comments start with @code{#} and
+continue until an unescaped newline is reached.
+
+@example
+% @kbd{cat Makefile}
+# A = foo \
+      bar \
+      baz
+
+all:
+        @@echo ok
+% @kbd{make}   # GNU make
+ok
+@end example
+
+@noindent
+However in Real World this is not always the case.  Some implementations
+discards anything from @code{#} up to the end of line, ignoring any
+trailing backslash.
+
+@example
+% @kbd{pmake}  # BSD make
+"Makefile", line 3: Need an operator
+Fatal errors encountered -- cannot continue
+@end example
+
+@noindent
+Therefore, if you want to comment a multi-line definition, prefix each
+line with @code{#}, not only the first.
+
+@example
+# A = foo \
+#     bar \
+#     baz
+@end example
+
 @item @code{make macro=value} and sub-@command{make}s.
 
 A command-line variable definition such as @code{foo=bar} overrides any
@@ -10419,6 +10457,27 @@ Hello
 % @kbd{pmake}     # BSD make
 echo World
 World
+@end example
+
+@item @code{make -k}
+@cindex @code{make -k}
+
+Do not rely on the exit status of @code{make -k}.  Some implementations
+reflect whether they encountered an error in their exit status; other
+implementations always succeed.
+
+@example
+% @kbd{cat Makefile}
+all:
+        false
+% @kbd{make -k; echo exit status: $?}    # GNU make
+false
+make: *** [all] Error 1
+exit status: 2
+% @kbd{pmake -k; echo exit status: $?}   # BSD make
+false
+*** Error code 1 (continuing)
+exit status: 0
 @end example
 
 @item @code{VPATH}
