@@ -2698,23 +2698,16 @@ popdef([AC_Prog])dnl
 # `AC_TRY_COMPILER()', call `AC_LANG_*' to set-up for the right
 # language.
 AC_DEFUN(AC_TRY_COMPILER,
-[cat >conftest.$ac_ext <<EOF
-AC_LANG_SOURCE([[$1]])
-EOF
-if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
-  [$2]=yes
+[AC_LINK_IFELSE([AC_LANG_SOURCE([[$1]])],
+[[$2]=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
     [$3]=no
   else
     [$3]=yes
-  fi
-else
-  echo "configure: failed program was:" >&AC_FD_CC
-  cat conftest.$ac_ext >&AC_FD_CC
-  [$2]=no
-fi
-rm -fr conftest*])
+  fi],
+[[$2]=no])[]dnl
+])# AC_TRY_COMPILER
 
 
 
@@ -2731,16 +2724,15 @@ rm -fr conftest*])
 AC_DEFUN(AC_TRY_LINK_FUNC,
 [AC_TRY_LINK(
 AC_LANG_CASE([FORTRAN77], ,
-ifelse([$1], [main], , dnl Avoid conflicting decl of main.
+[ifelse([$1], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(C++, [#ifdef __cplusplus
+#ifdef __cplusplus
 extern "C"
 #endif
-])dnl
-[/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
 char $1();
-])),
+])]),
 [$1()],
 [$2],
 [$3])])
@@ -2792,16 +2784,15 @@ AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK(dnl
 AC_LANG_CASE([FORTRAN77], ,
-ifelse([$2], [main], , dnl Avoid conflicting decl of main.
+[ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(C++, [#ifdef __cplusplus
+#ifdef __cplusplus
 extern "C"
 #endif
-])dnl
-[/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
 char $2();
-])),
+])]),
 [$2()],
 AC_VAR_SET(ac_Lib, yes), AC_VAR_SET(ac_Lib, no))
 LIBS="$ac_save_LIBS"])
@@ -2963,7 +2954,7 @@ rm -f conftest*[]dnl
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------
 # Should the INCLUDES be defaulted here?
-# Contrarily to AC_LINK_IF, this macro double quote its first two args.
+# Contrarily to AC_LINK_IFELSE, this macro double quote its first two args.
 # FIXME: WARNING: The code to compile was different in the case of
 # Fortran between AC_TRY_COMPILE and AC_TRY_LINK, though they should
 # equivalent as far as I can tell from the semantics and the docs.  In
@@ -3155,12 +3146,11 @@ dnl select.  Similarly for bzero.
     which can conflict with char $1(); below.  */
 #include <assert.h>
 /* Override any gcc2 internal prototype to avoid an error.  */
-]AC_LANG_CASE(C++, [#ifdef __cplusplus
+#ifdef __cplusplus
 extern "C"
 #endif
-])dnl
-[/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
 char $1();
 char (*f)();
 ], [

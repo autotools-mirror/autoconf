@@ -1,5 +1,12 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_TRY_COMPILER): Use AC_LINK_IFELSE.
+	(AC_TRY_LINK_FUNC, AC_CHECK_LIB, AC_CHECK_FUNC): Don't check that
+	the current language is C++ to output `extern "C"': the CPP
+	condition is enough.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_LINK_IFELSE, AC_COMPILE_IFELSE): New macros.
 	(AC_TRY_LINK, AC_TRY_COMPILE): Use them.
 	(AC_CHECK_MEMBER, AC_COMPILE_CHECK, AC_CHECK_DECL,
