@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.11.1)
+define(AC_ACVERSION, 2.11.2)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1979,13 +1979,12 @@ cat >> $CONFIG_STATUS <<EOF
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
-ifelse([$3][AC_LIST_INIT], , ,
-[EOF
+EOF
 cat >> $CONFIG_STATUS <<EOF
 undivert(AC_DIVERSION_ICMDS)dnl
 $3
 EOF
-cat >> $CONFIG_STATUS <<\EOF])
+cat >> $CONFIG_STATUS <<\EOF
 undivert(AC_DIVERSION_CMDS)dnl
 $2
 exit 0

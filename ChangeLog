@@ -1,10 +1,15 @@
 Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* Test release 2.11.2.
+
+	* acgeneral.m4 (AC_OUTPUT): Remove a now-wrong test for whether to
+	make an unquoted here document.
+
 	* Test release 2.11.1.
 
 	* acgeneral.m4 (AC_TRY_LIB): Remove an erroneous dnl.
-	(AC_TRY_COMPILE): Make the final newline consistent with the
-	other AC_TRY_* macros.
+	(AC_TRY_COMPILE, AC_TRY_LINK): Make the final newline consistent
+	with the other AC_TRY_* macros.
 	(AC_DIVERSION_CMDS, AC_DIVERSION_ICMDS): New macros.
 	(AC_OUTPUT_COMMANDS, AC_OUTPUT): Use them instead of appending to
 	list macros.
