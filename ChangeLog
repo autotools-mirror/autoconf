@@ -1,6 +1,14 @@
+1999-01-10  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Detect Rhapsody on PowerPC and other machines.
+	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+	
+	* config.sub: Add rhapsody and openstep aliases.
+
 1999-01-09  Ben Elliston  <bje@cygnus.com>
 
 	* Makefile.in (html): New target. Generate HTML documentation.
+	(install-strip): Add.
 	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
 	
 	* autoconf.texi (AC_CHECK_LIB): Explain more. Contributed by Bob
