@@ -350,11 +350,11 @@ dnl can use AC_QUOTE_* manually if they want to.
 test -n "$verbose" && \
 ifelse($#, 2,
 [define([AC_VAL], $2)dnl
-echo "	defining" $1 to be ifelse(AC_VAL,, empty, AC_DEFINE_QUOTE(AC_VAL))],
+echo "	defining $1 to be ifelse(AC_VAL,, empty, AC_DEFINE_QUOTE(AC_VAL))"],
 [define([AC_VAL], 1)dnl
 echo "	defining $1"])
 dnl
-echo "[#][define]" $1 AC_DEFINE_QUOTE(AC_VAL) >> confdefs.h
+echo "[#][define] $1 AC_DEFINE_QUOTE(AC_VAL)" >> confdefs.h
 dnl Define DEFS even if AC_CONFIG_NAMES for use in user case statements.
 DEFS="$DEFS -D$1=AC_DEFINE_QUOTE(AC_VAL)"
 ifdef([AC_CONFIG_NAMES],
@@ -431,6 +431,33 @@ done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
 dnl
+define(AC_PROGRAM_PATH,
+[if test -z "[$]$1"; then
+  # Extract the first word of `$2', so it can be a program name with args.
+  set dummy $2; word=[$]2
+  echo checking for $word
+  IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
+  for dir in $PATH; do
+    test -z "$dir" && dir=.
+    if test -f $dir/$word; then
+      $1="$dir/$word"
+      break
+    fi
+  done
+  IFS="$saveifs"
+fi
+ifelse([$3],,, [test -z "[$]$1" && $1="$3"])
+test -n "[$]$1" && test -n "$verbose" && echo "	setting $1 to [$]$1"
+AC_SUBST($1)dnl
+])dnl
+define(AC_PROGRAMS_PATH,
+[for p in $2
+do
+AC_PROGRAM_PATH($1, [$]p)
+test -n "[$]$1" && break
+done
+ifelse([$3],,, [test -n "[$]$1" || $1="$3"
+])])dnl
 define(AC_HEADER_EGREP,
 [AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])echo '#include "confdefs.h"
 #include <$2>' > conftest.c
