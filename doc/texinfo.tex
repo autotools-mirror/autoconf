@@ -3,7 +3,7 @@
 % Load plain if necessary, i.e., if running under initex.
 \expandafter\ifx\csname fmtname\endcsname\relax\input plain\fi
 %
-\def\texinfoversion{1999-10-01.07}
+\def\texinfoversion{2000-05-28.15}
 %
 % Copyright (C) 1985, 86, 88, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99
 % Free Software Foundation, Inc.
@@ -214,6 +214,9 @@
     \normalturnoffactive  % \ in index entries must not stay \, e.g., if
                    % the page break happens to be in the middle of an example.
     \shipout\vbox{%
+      % Do this early so pdf references go to the beginning of the page.
+      \ifpdfmakepagedest \pdfmkdest{\the\pageno} \fi
+      %
       \ifcropmarks \vbox to \outervsize\bgroup
         \hsize = \outerhsize
         \vskip-\topandbottommargin
@@ -242,8 +245,6 @@
         \vskip 2\baselineskip
         \unvbox\footlinebox
       \fi
-      %
-      \ifpdfmakepagedest \pdfmkdest{\the\pageno} \fi
       %
       \ifcropmarks
           \egroup % end of \vbox\bgroup
@@ -745,7 +746,7 @@ where each line of input produces a line of output.}
 % @paragraphindent NCHARS
 % We'll use ems for NCHARS, close enough.
 % We cannot implement @paragraphindent asis, though.
-%
+% 
 \def\asisword{asis} % no translation, these are keywords
 \def\noneword{none}
 %
@@ -891,7 +892,7 @@ where each line of input produces a line of output.}
     \fi}
   \def\pdfmkdest#1{\pdfdest name{#1@} xyz}
   \def\pdfmkpgn#1{#1@}
-  \let\linkcolor = \Cyan
+  \let\linkcolor = \Blue  % was Cyan, but that seems light?
   \def\endlink{\Black\pdfendlink}
   % Adding outlines to PDF; macros for calculating structure of outlines
   % come from Petr Olsak
@@ -903,10 +904,11 @@ where each line of input produces a line of output.}
   \def\pdfmakeoutlines{{%
     \openin 1 \jobname.toc
     \ifeof 1\else\bgroup
-      \closein 1
+      \closein 1 
       \indexnofonts
       \def\tt{}
-      % thanh's hack / proper braces in bookmarks
+      \let\_ = \normalunderscore
+      % Thanh's hack / proper braces in bookmarks  
       \edef\mylbrace{\iftrue \string{\else}\fi}\let\{=\mylbrace
       \edef\myrbrace{\iffalse{\else\string}\fi}\let\}=\myrbrace
       %
@@ -946,7 +948,7 @@ where each line of input produces a line of output.}
       \let\nextmakelinks=\makelinks
       \ifnum\lnkcount>0,\fi
       \picknum{#1}%
-      \startlink attr{/Border [0 0 0]}
+      \startlink attr{/Border [0 0 0]} 
         goto name{\pdfmkpgn{\the\pgn}}%
       \linkcolor #1%
       \advance\lnkcount by 1%
@@ -1000,7 +1002,7 @@ where each line of input produces a line of output.}
     \ifx\first0\adn0
     \else\ifx\first1\adn1 \else\ifx\first2\adn2 \else\ifx\first3\adn3
     \else\ifx\first4\adn4 \else\ifx\first5\adn5 \else\ifx\first6\adn6
-    \else\ifx\first7\adn7 \else\ifx\first8\adn8 \else\ifx\first9\adn9
+    \else\ifx\first7\adn7 \else\ifx\first8\adn8 \else\ifx\first9\adn9 
     \else
       \ifnum0=\countA\else\makelink\fi
       \ifx\first.\let\next=\done\else
@@ -1015,7 +1017,7 @@ where each line of input produces a line of output.}
   \def\pdflink#1{%
     \startlink attr{/Border [0 0 0]} goto name{\mkpgn{#1}}
     \linkcolor #1\endlink}
-  \def\mkpgn#1{#1@}
+  \def\mkpgn#1{#1@} 
   \def\done{\edef\st{\global\noexpand\toksA={\the\toksB}}\st}
 \fi % \ifx\pdfoutput
 
@@ -1403,7 +1405,7 @@ where each line of input produces a line of output.}
 
 % rms does not like angle brackets --karl, 17may97.
 % So now @email is just like @uref, unless we are pdf.
-%
+% 
 %\def\email#1{\angleleft{\tt #1}\angleright}
 \ifpdf
   \def\email#1{\doemail#1,,\finish}
@@ -1670,7 +1672,10 @@ where each line of input produces a line of output.}
 }
 
 % Subroutines used in generating headings
-% Produces Day Month Year style of output.
+% This produces Day Month Year style of output.
+% Only define if not already defined, in case a txi-??.tex file has set
+% up a different format (e.g., txi-cs.tex does this).
+\ifx\today\undefined
 \def\today{%
   \number\day\space
   \ifcase\month
@@ -1679,6 +1684,7 @@ where each line of input produces a line of output.}
   \or\putwordMSep\or\putwordMOct\or\putwordMNov\or\putwordMDec
   \fi
   \space\number\year}
+\fi
 
 % @settitle line...  specifies the title of the document, for headings.
 % It generates no output of its own.
@@ -2644,14 +2650,38 @@ width0pt\relax} \fi
 
 \def\indexdummies{%
 \def\ { }%
-\writeletters
+% Take care of the plain tex accent commands.
+\def\"{\realbackslash "}%
+\def\`{\realbackslash `}%
+\def\'{\realbackslash '}%
+\def\^{\realbackslash ^}%
+\def\~{\realbackslash ~}%
+\def\={\realbackslash =}%
+\def\b{\realbackslash b}%
+\def\c{\realbackslash c}%
+\def\d{\realbackslash d}%
+\def\u{\realbackslash u}%
+\def\v{\realbackslash v}%
+\def\H{\realbackslash H}%
+% Take care of the plain tex special European modified letters.
+\def\oe{\realbackslash oe}%
+\def\ae{\realbackslash ae}%
+\def\aa{\realbackslash aa}%
+\def\OE{\realbackslash OE}%
+\def\AE{\realbackslash AE}%
+\def\AA{\realbackslash AA}%
+\def\o{\realbackslash o}%
+\def\O{\realbackslash O}%
+\def\l{\realbackslash l}%
+\def\L{\realbackslash L}%
+\def\ss{\realbackslash ss}%
 % Take care of texinfo commands likely to appear in an index entry.
 % (Must be a way to avoid doing expansion at all, and thus not have to
 % laboriously list every single command here.)
 \def\@{@}% will be @@ when we switch to @ as escape char.
 % Need these in case \tex is in effect and \{ is a \delimiter again.
 % But can't use \lbracecmd and \rbracecmd because texindex assumes
-% braces and backslashes are used only as delimiters.
+% braces and backslashes are used only as delimiters.  
 \let\{ = \mylbrace
 \let\} = \myrbrace
 \def\_{{\realbackslash _}}%
@@ -2720,7 +2750,33 @@ width0pt\relax} \fi
 \def\indexdummydots{...}
 
 \def\indexnofonts{%
-\sortletters
+% Just ignore accents.
+\let\,=\indexdummyfont
+\let\"=\indexdummyfont
+\let\`=\indexdummyfont
+\let\'=\indexdummyfont
+\let\^=\indexdummyfont
+\let\~=\indexdummyfont
+\let\==\indexdummyfont
+\let\b=\indexdummyfont
+\let\c=\indexdummyfont
+\let\d=\indexdummyfont
+\let\u=\indexdummyfont
+\let\v=\indexdummyfont
+\let\H=\indexdummyfont
+\let\dotless=\indexdummyfont
+% Take care of the plain tex special European modified letters.
+\def\oe{oe}%
+\def\ae{ae}%
+\def\aa{aa}%
+\def\OE{OE}%
+\def\AE{AE}%
+\def\AA{AA}%
+\def\o{o}%
+\def\O{O}%
+\def\l{l}%
+\def\L{L}%
+\def\ss{ss}%
 \let\w=\indexdummyfont
 \let\t=\indexdummyfont
 \let\r=\indexdummyfont
@@ -3330,21 +3386,21 @@ width0pt\relax} \fi
 \outer\def\appendix{\parsearg\appendixyyy}
 \def\appendixyyy #1{\apphead0{#1}} % normally apphead0 calls appendixzzz
 \def\appendixzzz #1{%
-  \secno=0 \subsecno=0 \subsubsecno=0
-  \global\advance \appendixno by 1
-  \message{\putwordAppendix\space \appendixletter}%
-  \chapmacro {#1}{\putwordAppendix{} \appendixletter}%
-  \gdef\thissection{#1}%
-  \gdef\thischaptername{#1}%
-  \xdef\thischapter{\putwordAppendix{} \appendixletter: \noexpand\thischaptername}%
-  \toks0 = {#1}%
-  \edef\temp{\noexpand\writetocentry{\realbackslash chapentry{\the\toks0}%
-                         {\putwordAppendix{} \appendixletter}}}%
-  \temp
-  \appendixnoderef
-  \global\let\section = \appendixsec
-  \global\let\subsection = \appendixsubsec
-  \global\let\subsubsection = \appendixsubsubsec
+\secno=0 \subsecno=0 \subsubsecno=0
+\global\advance \appendixno by 1
+\message{\putwordAppendix\space \appendixletter}%
+\chapmacro {#1}{\putwordAppendix{} \appendixletter}%
+\gdef\thissection{#1}%
+\gdef\thischaptername{#1}%
+\xdef\thischapter{\putwordAppendix{} \appendixletter: \noexpand\thischaptername}%
+\toks0 = {#1}%
+\edef\temp{\noexpand\writetocentry{\realbackslash chapentry{\the\toks0}%
+                       {\putwordAppendix{} \appendixletter}}}%
+\temp
+\appendixnoderef
+\global\let\section = \appendixsec
+\global\let\subsection = \appendixsubsec
+\global\let\subsubsection = \appendixsubsubsec
 }
 
 % @centerchap is like @unnumbered, but the heading is centered.
@@ -4389,7 +4445,7 @@ width0pt\relax} \fi
 % to account for this both in the \...x definition and in parsing the
 % input at hand.  Thus also need a control sequence (passed as #5) for
 % the \E... definition to assign the category name to.
-%
+% 
 \def\deftypeopparsebody#1#2#3#4#5 #6 {\begingroup\inENV
   \medbreak
   \def#1{\endgraf\endgroup\medbreak}%
@@ -4660,7 +4716,8 @@ width0pt\relax} \fi
 \def\deftypeivarheader#1#2#3{%
   \dosubind{vr}{\code{#3}}{\putwordof\ \code{#1}}% entry in variable index
   \begingroup
-    \defname{#3}{\putwordInstanceVariableof\ \code{#1}}%
+    \defname{\defheaderxcond#2\relax$$$#3}
+            {\putwordInstanceVariableof\ \code{#1}}%
     \defvarargs{#3}%
   \endgroup
 }
@@ -4772,7 +4829,7 @@ width0pt\relax} \fi
 
 % These definitions are used if you use @defunx (etc.)
 % anywhere other than immediately after a @defun or @defunx.
-%
+% 
 \def\defcvx#1 {\errmessage{@defcvx in invalid context}}
 \def\deffnx#1 {\errmessage{@deffnx in invalid context}}
 \def\defivarx#1 {\errmessage{@defivarx in invalid context}}
@@ -5584,7 +5641,7 @@ width0pt\relax} \fi
         \nobreak\bigskip
         % Usually we'll have text after the image which will insert
         % \parskip glue, so insert it here too to equalize the space
-        % above and below.
+        % above and below. 
         \nobreak\vskip\parskip
         \nobreak
         \centerline{\epsfbox{#1.eps}}%
@@ -5625,227 +5682,10 @@ width0pt\relax} \fi
 is empty.  Maybe you need to install it?  In the current directory
 should work if nowhere else does.}
 
-% Handle non-ASCII character input encodings.
-% From Ralph <rs@purple.UL.BaWue.DE>.
 
-% Automatically translating non-ASCII characters to the corresponding
-% TeX control sequence is simple.  All you have to say is, e.g.,
-%
-%     \catcode`^^ff=\active \def^^ff{\"y}
-%
-% but this actually expands to `{\accent "7F y}' and not only to `\"y'.
-% To get more control over what have to be expanded at which time, the
-% `\action' command is put before all relevant control sequences.
-
-\let\origgrave\`
-\let\origacute\'
-\let\origcircumflex\^
-\let\origdieresis\"
-\let\origtilde\~
-\let\origmacron\=
-\let\origdot\.
-\let\origbreve\u
-\let\orighacek\v
-\let\origlongumlaut\H
-\let\origtieafter\ptext
-\let\origcedilla\ptexc
-\let\origdotunder\d
-\let\origbarunder\btexb
-
-\let\origdotlessi\ptexi
-\let\origdotlessj\j
-
-\let\origoeligature\oe
-\let\origOEligature\OE
-\let\origaeligature\ae
-\let\origAEligature\AE
-\let\origawithcircle\aa
-\let\origAwithcircle\AA
-\let\origowithslash\o
-\let\origOwithslash\O
-\let\origsuppressedl\l
-\let\origsuppressedL\L
-\let\origsharps\ss
-
-\def\grave{\action\origgrave}
-\def\acute{\action\origacute}
-\def\circumflex{\action\origcircumflex}
-\def\dieresis{\action\origdieresis}
-\def\tilde{\action\origtilde}
-\def\macron{\action\origmacron}
-\def\dot{\action\origdot}
-\def\breve{\action\origbreve}
-\def\hacek{\action\orighacek}
-\def\longumlaut{\action\origlongumlaut}
-\def\tieafter{\action\origtieafter}
-\def\cedilla{\action\origcedilla}
-\def\dotunder{\action\origdotunder}
-\def\barunder{\action\origbarunder}
-
-\def\dotlessi{\action\origdotlessi}
-\def\dotlessj{\action\origdotlessj}
-
-\def\oeligature{\action\origoeligature}
-\def\OEligature{\action\origOEligature}
-\def\aeligature{\action\origaeligature}
-\def\AEligature{\action\origAEligature}
-\def\awithcircle{\action\origawithcircle}
-\def\Awithcircle{\action\origAwithcircle}
-\def\owithslash{\action\origowithslash}
-\def\Owithslash{\action\origOwithslash}
-\def\suppressedl{\action\origsuppressedl}
-\def\suppressedL{\action\origsuppressedL}
-\def\sharps{\action\origsharps}
-
-\let\`\grave
-\let\'\acute
-\let\^\circumflex
-\let\"\dieresis
-\let\~\tilde
-\let\=\macron
-\let\.\dot
-\let\u\breve
-\let\v\hacek
-\let\H\longumlaut
-\let\ptext\tieafter
-\let\ptexc\cedilla
-\let\d\dotunder
-\let\ptexb\barunder
-
-\let\ptexi\dotlessi
-\let\j\dotlessj
-
-\let\oe\oeligature
-\let\OE\OEligature
-\let\ae\aeligature
-\let\AE\AEligature
-\let\aa\awithcircle
-\let\AA\Awithcircle
-\let\o\owithslash
-\let\O\Owithslash
-\let\l\suppressedl
-\let\L\suppressedL
-\let\ss\sharps
-
-% Low-level expansion is enabled with `\expandletters' command and
-% disabled with `\parseletters'.
-
-\def\expandletters{\let\action\relax}
-\def\parseletters{\let\action\noexpand}
-
-\expandletters
-
-% Writing letters back to a file requires a more sophisticated method
-% (ditto for sorting, see below).  Non-ASCII characters should not be
-% written because `\jobname.aux' may be loaded before a character
-% encoding is defined.
-
-\def\writeletters{%
-  \def\grave{\realbackslash grave }%
-  \def\acute{\realbackslash acute }%
-  \def\circumflex{\realbackslash circumflex }%
-  \def\dieresis{\realbackslash dieresis }%
-  \def\tilde{\realbackslash tilde }%
-  \def\macron{\realbackslash macron }%
-  \def\dot{\realbackslash dot }%
-  \def\breve{\realbackslash breve }%
-  \def\hacek{\realbackslash hacek }%
-  \def\longumlaut{\realbackslash longumlaut }%
-  \def\tieafter{\realbackslash tieafter }%
-  \def\cedilla{\realbackslash cedilla }%
-  \def\dotunder{\realbackslash dotunder }%
-  \def\barunder{\realbackslash barunder }%
-  \def\dotlessi{\realbackslash dotlessi }%
-  \def\dotlessj{\realbackslash dotlessj }%
-  \def\oeligature{\realbackslash oeligature }%
-  \def\OEligature{\realbackslash OEligature }%
-  \def\aeligature{\realbackslash aeligature }%
-  \def\AEligature{\realbackslash AEligature }%
-  \def\awithcircle{\realbackslash awithcircle }%
-  \def\Awithcircle{\realbackslash Awithcircle }%
-  \def\owithslash{\realbackslash owithslash }%
-  \def\Owithslash{\realbackslash Owithslash }%
-  \def\suppressedl{\realbackslash suppressedl }%
-  \def\suppressedL{\realbackslash suppressedL }%
-  \def\sharps{\realbackslash sharps }%
-  \writelettershook}
-\def\writelettershook{}
-
-\def\sortletters{%
-  \let\grave\sortgrave
-  \let\acute\sortacute
-  \let\circumflex\sortcircumflex
-  \let\dieresis\sortdieresis
-  \let\tilde\sorttilde
-  \let\macron\sortmacron
-  \let\dot\sortdot
-  \let\breve\sortbreve
-  \let\hacek\sorthacek
-  \let\longumlaut\sortlongumlaut
-  \let\tieafter\sorttieafter
-  \let\cedilla\sortcedilla
-  \let\dotunder\sortdotunder
-  \let\barunder\sortbarunder
-  \let\dotlessi\sortdotlessi
-  \let\dotlessj\sortdotlessj
-  \let\oeligature\sortoeligature
-  \let\OEligature\sortOEligature
-  \let\aeligature\sortaeligature
-  \let\AEligature\sortAEligature
-  \let\awithcircle\sortawithcircle
-  \let\Awithcircle\sortAwithcircle
-  \let\owithslash\sortowithslash
-  \let\Owithslash\sortOwithslash
-  \let\suppressedl\sortsuppressedl
-  \let\suppressedL\sortsuppressedL
-  \let\sharps\sortsharps
-  \sortlettershook}
-\def\sortlettershook{}
-
-\def\sortgrave{}
-\def\sortacute{}
-\def\sortcircumflex{}
-\def\sortdieresis{}
-\def\sorttilde{}
-\def\sortmacron{}
-\def\sortdot{}
-\def\sortbreve{}
-\def\sorthacek{}
-\def\sortlongumlaut{}
-\def\sorttieafter{}
-\def\sortcedilla{}
-\def\sortdotunder{}
-\def\sortbarunder{}
-\def\sortdotlessi{i\eatempty}
-\def\sortdotlessj{j\eatempty}
-\def\sortoeligature{oe\eatempty}
-\def\sortOEligature{OE\eatempty}
-\def\sortaeligature{ae\eatempty}
-\def\sortAEligature{AE\eatempty}
-\def\sortawithcircle{a\eatempty}
-\def\sortAwithcircle{A\eatempty}
-\def\sortowithslash{o\eatempty}
-\def\sortOwithslash{O\eatempty}
-\def\sortsuppressedl{l\eatempty}
-\def\sortsuppressedL{L\eatempty}
-\def\sortsharps{ss\eatempty}
-
-\def\doletters{}
-
-% \def\documentencoding{\parsearg\dodocumentencoding}
-% \def\dodocumentencoding#1{%
-%   \def\do##1{\catcode`##1\other}\doletters\ginput txi-inenc-#1.tex
-%   \def\do##1{\catcode`##1\active}\doletters}
+% @documentencoding should change something in TeX eventually, most
+% likely, but for now just recognize it.
 \let\documentencoding = \comment
-
-\def\ginput #1 {\tex\catcode`\@\other
-  \let\def\gdef\let\let\glet\input #1\relax\Etex}
-
-% Syntactic sugar.
-\def\glet{\global\let}
-
-% Ignore an empty group.
-\def\eatempty#1{\if!#1!\else#1\fi}
 
 
 % Page size parameters.
@@ -6140,7 +5980,7 @@ should work if nowhere else does.}
 % Say @foo, not \foo, in error messages.
 @escapechar = `@@
 
-% These look ok in all fonts, so just make them not special.
+% These look ok in all fonts, so just make them not special.  
 @catcode`@& = @other
 @catcode`@# = @other
 @catcode`@% = @other
@@ -6151,6 +5991,7 @@ should work if nowhere else does.}
 
 
 @c Local variables:
+@c eval: (add-hook 'write-file-hooks 'time-stamp)
 @c page-delimiter: "^\\\\message"
 @c time-stamp-start: "def\\\\texinfoversion{"
 @c time-stamp-format: "%:y-%02m-%02d.%02H"

@@ -1,4 +1,4 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+ This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
 # Free Software Foundation, Inc.
@@ -2630,26 +2630,19 @@ fi])
 # AC_CHECK_TOOLS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
 #                [PATH])
 # ------------------------------------------------------------------
-# Check for each compiler in PROGS-TO-CHECK-FOR with the cross
-# prefix. If none can be found with a cross prefix, then use
-# the first one that was found without the cross prefix.
+# Check for each tool in PROGS-TO-CHECK-FOR with the cross prefix. If
+# none can be found with a cross prefix, then use the first one that
+# was found without the cross prefix.
 AC_DEFUN([AC_CHECK_TOOLS],
-[ac_check_tools_first_found=
-for ac_prog in $2
+[for ac_prog in $2
 do
-AC_CHECK_PROG([$1], ${ac_tool_prefix}$ac_prog,
-	       ${ac_tool_prefix}$ac_prog, , [$4])
-if test -z "$$1" && test -z "$ac_check_tools_first_found" ; then
-  AC_CHECK_PROG(ac_check_tools_first_found, $ac_prog, $ac_prog, , [$4])
-elif test -n "$$1" ; then
-  break
-fi
+  AC_CHECK_PROG([$1], $ac_tool_prefix$ac_prog, $ac_tool_prefix$ac_prog, [$3])
+  test "$$1" != "$3" && break
 done
-if test -z "$$1" ; then
-  $1=$ac_check_tools_first_found
+if test "$$1" = "$3"; then
+  AC_CHECK_PROGS([$1], [$2], [$3])
 fi
-ifval([$3], [test -n "$$1" || $1="$3"
-])])
+])# AC_CHECK_TOOLS
 
 
 # AC_PREFIX_PROGRAM(PROGRAM)
