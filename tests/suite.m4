@@ -9,6 +9,11 @@
 
 AT_INIT(autoconf)
 
+cat <<EOF
+Some tests might be ignored if you don't have the software which the
+macros are supposed to test (e.g., a Fortran compiler).
+EOF
+
 dnl AT_TEST_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
 dnl ----------------------------------------------------------------
 dnl Create a minimalist configure.in running the macro named
@@ -28,10 +33,10 @@ AC_ENV_SAVE(env-after)
 AC_OUTPUT
 ])
 
-dnl  FIXME: Here we just don't consider the stderr from Autoconf.
-dnl  Maybe some day we could be more precise and filter out warnings.
-dnl  The problem is that currently some warnings are spread on several
-dnl  lines, so grepping -v warning is not enough.
+dnl FIXME: Here we just don't consider the stderr from Autoconf.
+dnl Maybe some day we could be more precise and filter out warnings.
+dnl The problem is that currently some warnings are spread on several
+dnl lines, so grepping -v warning is not enough.
 AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([./configure], 0, ignore, ignore)

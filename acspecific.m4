@@ -550,14 +550,12 @@ char **argv;],
 done
 CC="$ac_save_CC"
 ])
-if test -z "$ac_cv_prog_cc_stdc"; then
-  AC_MSG_RESULT([none needed])
-else
-  AC_MSG_RESULT($ac_cv_prog_cc_stdc)
-fi
 case "x$ac_cv_prog_cc_stdc" in
-  x|xno) ;;
-  *) CC="$CC $ac_cv_prog_cc_stdc" ;;
+  x|xno)
+    AC_MSG_RESULT([none needed]) ;;
+  *)
+    AC_MSG_RESULT($ac_cv_prog_cc_stdc)
+    CC="$CC $ac_cv_prog_cc_stdc" ;;
 esac
 ])dnl AC_PROG_CC_STDC
 
@@ -2497,7 +2495,8 @@ dnl Do nothing if the compiler accepts the inline keyword.
 dnl Otherwise define inline to __inline__ or __inline if one of those work,
 dnl otherwise define inline to be empty.
 AC_DEFUN(AC_C_INLINE,
-[AC_CACHE_CHECK([for inline], ac_cv_c_inline,
+[AC_REQUIRE([AC_PROG_CC_STDC])dnl
+AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
   AC_TRY_COMPILE(, [} $ac_kw int foo() {], [ac_cv_c_inline=$ac_kw; break])
@@ -2518,13 +2517,14 @@ esac
 dnl AC_C_CONST
 dnl ----------
 AC_DEFUN(AC_C_CONST,
-[dnl This message is consistent in form with the other checking messages,
-dnl and with the result message.
-AC_CACHE_CHECK([for working const], ac_cv_c_const,
+[AC_REQUIRE([AC_PROG_CC_STDC])dnl
+AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
 [AC_TRY_COMPILE(,
-changequote(<<, >>)dnl
-<<  /* Ultrix mips cc rejects this.  */
-  typedef int charset[2]; const charset x = {0, 0};
+[/* FIXME: Include the comments suggested by Paul. */
+#ifndef __cplusplus
+  /* Ultrix mips cc rejects this.  */
+  typedef int charset[2];
+  const charset x;
   /* SunOS 4.1.1 cc rejects this.  */
   char const *const *ccp;
   char **p;
@@ -2564,12 +2564,13 @@ changequote(<<, >>)dnl
   }
   { /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
     const int foo = 10;
-  }>>,
-changequote([, ])dnl
-ac_cv_c_const=yes, ac_cv_c_const=no)])
+  }
+#endif
+],
+                ac_cv_c_const=yes, ac_cv_c_const=no)])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
-            [Define to empty if the keyword `const' does not work.])
+            [Define to empty if `const' does not conform to ANSI C.])
 fi
 ])dnl AC_C_CONST
 
@@ -2583,7 +2584,8 @@ dnl optimizations that could break the user's code.  So, do not #define
 dnl volatile away unless it is really necessary to allow the user's code
 dnl to compile cleanly.  Benign compiler failures should be tolerated.
 AC_DEFUN(AC_C_VOLATILE,
-[AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
+[AC_REQUIRE([AC_PROG_CC_STDC])dnl
+AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_TRY_COMPILE(,[
 volatile int x;
 int * volatile y;],
@@ -2636,8 +2638,8 @@ fi
 ])dnl AC_C_PROTOTYPES
 
 
-AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
-
+dnl AC_OBJEXT
+dnl ---------
 dnl Check the object extension used by the compiler: typically .o or
 dnl .obj.  If this is called, some other behaviour will change,
 dnl determined by ac_objext.
@@ -3028,6 +3030,7 @@ interpval="$ac_cv_sys_interpreter"
 ])
 
 AC_DEFUNCT(AC_HAVE_POUNDBANG, [;use AC_SYS_INTERPRETER, taking no arguments])
+AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
 
 
 dnl AC_SYS_LONG_FILE_NAMES

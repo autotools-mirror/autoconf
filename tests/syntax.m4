@@ -28,9 +28,11 @@ AT_DEFINE(TEST_MACRO,
 
          [AT_TEST_MACRO([$1])])])
 
-echo
-echo 'Syntax of macros and completeness of the header templates.'
-echo
+cat <<EOF
+
+Syntax of macros and completeness of the header templates.
+
+EOF
 
 AT_INCLUDE(macros.m4)
 dnl That miserable test comes from the old DejaGNU testsuite.

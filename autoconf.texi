@@ -2921,13 +2921,28 @@ and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 @defmac AC_C_CONST
 @maindex C_CONST
 @cvindex const
-If the C compiler does not fully support the keyword @code{const},
-define @code{const} to be empty.  Some C compilers that do not define
-@code{__STDC__} do support @code{const}; some compilers that define
-@code{__STDC__} do not completely support @code{const}.  Programs can
-simply use @code{const} as if every C compiler supported it; for those
-that don't, the @file{Makefile} or configuration header file will define
-it as empty.
+If the C compiler does not fully support the ANSI C qualifier
+@code{const}, define @code{const} to be empty.  Some C compilers that do
+not define @code{__STDC__} do support @code{const}; some compilers that
+define @code{__STDC__} do not completely support @code{const}.  Programs
+can simply use @code{const} as if every C compiler supported it; for
+those that don't, the @file{Makefile} or configuration header file will
+define it as empty.
+
+Occasionally installers use a C++ compiler to compile C code, typically
+because they lack a C compiler.  This causes problems with @code{const},
+because C and C++ treat @code{const} differently.  For example:
+@example
+const int foo;
+@end example
+is valid in C but not in C++.  These differences unfortunately cannot be
+papered over by defining @code{const} to be empty.
+
+If @code{autoconf} detects this situation, it leaves @code{const} alone,
+as this generally yields better results in practice.  However, using a
+C++ compiler to compile C code is not recommended or supported, and
+installers who run into trouble in this area should get a C compiler
+like GCC to compile their C code.
 @end defmac
 
 @defmac AC_C_VOLATILE
@@ -3167,15 +3182,6 @@ If the Fortran 77 identifier contains an underscore
 The @code{AC_F77_FUNC_WRAPPER} macro uses the
 @code{AC_F77_NAME_MANGLING} macro to determine this automatically
 (@pxref{Fortran 77 Compiler Characteristics}, for more information).
-
-If you use @code{autoheader} to automatically generate your
-@code{config.h.in} (@pxref{Invoking autoheader}), then these macros will
-be included automatically.  However, if you are not using
-@code{autoheader} (i.e. you manually create @code{config.h.in}), then to
-make @code{autoconf} substitute these macros in your @code{config.h}
-file, you should include lines like @code{#undef F77_FUNC} and
-@code{#undef F77_FUNC_} in @code{config.h.in} (@pxref{Configuration
-Headers}).
 @end defmac
 
 @node System Services, UNIX Variants, Fortran 77 Compiler Characteristics, Existing Tests
