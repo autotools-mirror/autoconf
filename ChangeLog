@@ -1,5 +1,11 @@
 2000-11-16  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Usual Tools) <expr>:
+	expr 'a' : '\(b\)'.
+	From Paul Eggert.
+
+2000-11-16  Akim Demaille  <akim@epita.fr>
+
 	Reorder the test suite so that low level features are tested
 	before high level ones.
 
