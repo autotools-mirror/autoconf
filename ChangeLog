@@ -1,5 +1,11 @@
 2001-08-29  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4: s/AT-devnull/devnull/ since there are
+	case insensitive OSes out there :(
+	From Tim Van Holder.
+
+2001-08-29  Akim Demaille  <akim@epita.fr>
+
 	* lib/autom4te.in: New.
 	* lib/Makefile.am (edit, autom4te.cfg): New.
 	* bin/autom4te.in (BEGIN): Simplify.

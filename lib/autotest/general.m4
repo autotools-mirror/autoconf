@@ -126,7 +126,7 @@ while test $[@%:@] -gt 0; do
     --help | -h) at_help=: ;;
     --version) echo "$as_me ($at_package) $at_version"; exit 0 ;;
     --clean | -c )
-        rm -rf $at_data_files debug-*.sh $as_me.log AT-*
+        rm -rf $at_data_files debug-*.sh $as_me.log devnull
 	exit 0;;
 
     -d) at_debug=:;;
@@ -220,7 +220,7 @@ test -z "$at_tests" && at_tests=$at_tests_all
 if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
 else
-  at_devnull=AT-devnull
+  at_devnull=devnull
   cp /dev/null $at_devnull
 fi
 
