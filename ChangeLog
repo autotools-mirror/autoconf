@@ -1,5 +1,10 @@
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
+	* tests/semantics.at (AC_C_BIGENDIAN): Missing eol.
+	* bin/autoheader.in (%symbol): Strip arguments of macros.
+
+2001-08-31  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Catch up -I, --include changes.
 
 2001-08-31  Akim Demaille  <akim@epita.fr>

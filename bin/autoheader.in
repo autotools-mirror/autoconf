@@ -188,6 +188,10 @@ $config_h =~ s/ .*//;
 ($config_h, $config_h_in) = split (':', $config_h, 2);
 $config_h_in ||= "$config_h.in";
 
+# %SYMBOL might contain things like `F77_FUNC(name,NAME)', but we keep
+# only the name of the macro.
+%symbol = map { s/\(.*//; $_ => 1 } keys %symbol;
+
 my $out = new IO::File (">$tmp/config.hin");
 
 # Don't write "do not edit" -- it will get copied into the
