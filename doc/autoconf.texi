@@ -6,8 +6,8 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.7.3
-@set VERSION 1.7.3
+@set EDITION 1.7.5
+@set VERSION 1.7.5
 @set UPDATED March 1994
 
 @iftex
@@ -1165,12 +1165,20 @@ define @code{inline} to be @code{__inline}.  This macro calls
 @maindex INT_16_BITS
 @vindex INT_16_BITS
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
+This macro is obsolete; it is more general to use
+@samp{AC_SIZEOF_TYPE(int, @var{sizevar})} instead (@pxref{General
+Tests}), and define a symbol based on the size returned in
+@var{sizevar}.
 @end defmac
 
 @defmac AC_LONG_64_BITS
 @maindex LONG_64_BITS
 @vindex LONG_64_BITS
-If the C type @code{long int} is 64 bits wide, define @code{LONG_64_BITS}.
+If the C type @code{long int} is 64 bits wide, define
+@code{LONG_64_BITS}.  This macro is obsolete; it is more general to use
+@samp{AC_SIZEOF_TYPE(long, @var{sizevar})} instead (@pxref{General
+Tests}), and define a symbol based on the size returned in
+@var{sizevar}.
 @end defmac
 
 @defmac AC_LONG_DOUBLE
@@ -1610,6 +1618,22 @@ might be in libraries other than the default C library, first call
 @code{AC_HAVE_LIBRARY} for those libraries.
 @end defmac
 
+@defmac AC_SIZEOF_TYPE (@var{type}, @var{size-var})
+@maindex SIZEOF_TYPE
+Assign to shell variable @var{size-var} the size (in bytes) of the C (or
+C++) type @var{type}, e.g. @samp{int} or @samp{char *}.  If @samp{type}
+is unknown to the compiler, assign 0 to @var{size-var}.  The caller will
+likely use @code{AC_DEFINE} to define a symbol in the package being
+configured, based on the value of @var{size-var}.  For example,
+
+@example
+AC_SIZEOF_TYPE(char *, psize)
+if test $psize -eq 8; then
+  AC_DEFINE(BIG_POINTERS)
+fi
+@end example
+@end defmac
+
 @defmac AC_TEST_PROGRAM (@var{program}, @var{action-if-true} @r{[}, @var{action-if-false} @r{[}, @var{action-if-cross-compiling}@r{]]})
 @maindex TEST_PROGRAM
 @var{program} is the text of a C program, on which shell variable and
@@ -1778,7 +1802,9 @@ LIBS="$LIBS -ltermcap"
 of information.  The following macros print messages in ways appropriate
 for different kinds of information.  The arguments to all of them get
 enclosed in shell double quotes, so the shell performs variable and
-backquote substitution on them.
+backquote substitution on them.  These macros are all wrappers around
+the @code{echo} shell command.  Other macros should rarely need to run
+@code{echo} directly to print messages for the @code{configure} user.
 
 @defmac AC_CHECKING (@var{feature-description})
 @maindex CHECKING
