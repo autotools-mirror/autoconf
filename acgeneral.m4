@@ -479,6 +479,31 @@ ac_arg_with_help=
 ac_arg_enable_help=
 ac_arg_var_help=
 ac_default_prefix=/usr/local
+# Factorizing default headers for most tests.
+ac_includes_default="\
+#include <stdio.h>
+#include <sys/types.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif"
 @PND@ Any additions from configure.in:])
 
 
@@ -1802,11 +1827,13 @@ ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_f77_cross
 ])
 
+
 # AC_LANG_SAVE
 # ------------
 # Push the current language on a stack.
 define(AC_LANG_SAVE,
 [pushdef([AC_LANG_STACK], AC_LANG)])
+
 
 # AC_LANG_RESTORE
 # ---------------
@@ -1832,6 +1859,7 @@ AC_DEFUN(AC_TRY_EVAL,
 [{ (eval echo configure:__oline__: \"[$]$1\") 1>&AC_FD_CC; dnl
 (eval [$]$1) 2>&AC_FD_CC; }])
 
+
 # AC_TRY_COMMAND(COMMAND)
 # -----------------------
 AC_DEFUN(AC_TRY_COMMAND,
@@ -1839,9 +1867,9 @@ AC_DEFUN(AC_TRY_COMMAND,
 
 
 
-## ----------------- ##
-## Default headers.  ##
-## ----------------- ##
+## ------------------ ##
+## Default includes.  ##
+## ------------------ ##
 
 # Always use the same set of default headers for all the generic
 # macros.  It is easier to document, to extend, and to understand than
@@ -1854,35 +1882,7 @@ AC_DEFUN(AC_TRY_COMMAND,
 # Therefore, the following *is* buggy, but this is the kind of
 # tradeoff we accept in order to improve configure.
 
-AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
-# Factorizing default headers for most tests.
-# Mandatory included if its is not used.
-ac_includes_default="\
-#include <stdio.h>
-#include <sys/types.h>
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
-#else
-# if HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-#if STDC_HEADERS
-# include <stdlib.h>
-# include <stddef.h>
-#else
-# if HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif"
-AC_DIVERT_POP()
-
+# See AC_INIT_NOTICE to see the value of the default includes.
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
 # -------------------------------
