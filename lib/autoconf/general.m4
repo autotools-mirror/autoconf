@@ -948,25 +948,25 @@ do
   -bindir | --bindir | --bindi | --bind | --bin | --bi)
     ac_prev=bindir ;;
   -bindir=* | --bindir=* | --bindi=* | --bind=* | --bin=* | --bi=*)
-    bindir="$ac_optarg" ;;
+    bindir=$ac_optarg ;;
 
   -build | --build | --buil | --bui | --bu)
     ac_prev=build ;;
   -build=* | --build=* | --buil=* | --bui=* | --bu=*)
-    build="$ac_optarg" ;;
+    build=$ac_optarg ;;
 
   -cache-file | --cache-file | --cache-fil | --cache-fi \
   | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
     ac_prev=cache_file ;;
   -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
   | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
-    cache_file="$ac_optarg" ;;
+    cache_file=$ac_optarg ;;
 
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
   -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
   | --da=*)
-    datadir="$ac_optarg" ;;
+    datadir=$ac_optarg ;;
 
   -disable-* | --disable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
@@ -997,7 +997,7 @@ do
   -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
   | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* \
   | --exec=* | --exe=* | --ex=*)
-    exec_prefix="$ac_optarg" ;;
+    exec_prefix=$ac_optarg ;;
 
   -gas | --gas | --ga | --g)
     # Obsolete; use --with-gas.
@@ -1013,31 +1013,31 @@ do
   -host | --host | --hos | --ho)
     ac_prev=host ;;
   -host=* | --host=* | --hos=* | --ho=*)
-    host="$ac_optarg" ;;
+    host=$ac_optarg ;;
 
   -includedir | --includedir | --includedi | --included | --include \
   | --includ | --inclu | --incl | --inc)
     ac_prev=includedir ;;
   -includedir=* | --includedir=* | --includedi=* | --included=* | --include=* \
   | --includ=* | --inclu=* | --incl=* | --inc=*)
-    includedir="$ac_optarg" ;;
+    includedir=$ac_optarg ;;
 
   -infodir | --infodir | --infodi | --infod | --info | --inf)
     ac_prev=infodir ;;
   -infodir=* | --infodir=* | --infodi=* | --infod=* | --info=* | --inf=*)
-    infodir="$ac_optarg" ;;
+    infodir=$ac_optarg ;;
 
   -libdir | --libdir | --libdi | --libd)
     ac_prev=libdir ;;
   -libdir=* | --libdir=* | --libdi=* | --libd=*)
-    libdir="$ac_optarg" ;;
+    libdir=$ac_optarg ;;
 
   -libexecdir | --libexecdir | --libexecdi | --libexecd | --libexec \
   | --libexe | --libex | --libe)
     ac_prev=libexecdir ;;
   -libexecdir=* | --libexecdir=* | --libexecdi=* | --libexecd=* | --libexec=* \
   | --libexe=* | --libex=* | --libe=*)
-    libexecdir="$ac_optarg" ;;
+    libexecdir=$ac_optarg ;;
 
   -localstatedir | --localstatedir | --localstatedi | --localstated \
   | --localstate | --localstat | --localsta | --localst \
@@ -1046,12 +1046,12 @@ do
   -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
   | --localstate=* | --localstat=* | --localsta=* | --localst=* \
   | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
-    localstatedir="$ac_optarg" ;;
+    localstatedir=$ac_optarg ;;
 
   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
     ac_prev=mandir ;;
   -mandir=* | --mandir=* | --mandi=* | --mand=* | --man=* | --ma=* | --m=*)
-    mandir="$ac_optarg" ;;
+    mandir=$ac_optarg ;;
 
   -nfp | --nfp | --nf)
     # Obsolete; use --without-fp.
@@ -1072,26 +1072,26 @@ do
   -oldincludedir=* | --oldincludedir=* | --oldincludedi=* | --oldincluded=* \
   | --oldinclude=* | --oldinclud=* | --oldinclu=* | --oldincl=* | --oldinc=* \
   | --oldin=* | --oldi=* | --old=* | --ol=* | --o=*)
-    oldincludedir="$ac_optarg" ;;
+    oldincludedir=$ac_optarg ;;
 
   -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
     ac_prev=prefix ;;
   -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
-    prefix="$ac_optarg" ;;
+    prefix=$ac_optarg ;;
 
   -program-prefix | --program-prefix | --program-prefi | --program-pref \
   | --program-pre | --program-pr | --program-p)
     ac_prev=program_prefix ;;
   -program-prefix=* | --program-prefix=* | --program-prefi=* \
   | --program-pref=* | --program-pre=* | --program-pr=* | --program-p=*)
-    program_prefix="$ac_optarg" ;;
+    program_prefix=$ac_optarg ;;
 
   -program-suffix | --program-suffix | --program-suffi | --program-suff \
   | --program-suf | --program-su | --program-s)
     ac_prev=program_suffix ;;
   -program-suffix=* | --program-suffix=* | --program-suffi=* \
   | --program-suff=* | --program-suf=* | --program-su=* | --program-s=*)
-    program_suffix="$ac_optarg" ;;
+    program_suffix=$ac_optarg ;;
 
   -program-transform-name | --program-transform-name \
   | --program-transform-nam | --program-transform-na \
@@ -1108,7 +1108,7 @@ do
   | --program-transfo=* | --program-transf=* \
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
-    program_transform_name="$ac_optarg" ;;
+    program_transform_name=$ac_optarg ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
@@ -1118,7 +1118,7 @@ do
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
   | --sbi=* | --sb=*)
-    sbindir="$ac_optarg" ;;
+    sbindir=$ac_optarg ;;
 
   -sharedstatedir | --sharedstatedir | --sharedstatedi \
   | --sharedstated | --sharedstate | --sharedstat | --sharedsta \
@@ -1129,29 +1129,29 @@ do
   | --sharedstated=* | --sharedstate=* | --sharedstat=* | --sharedsta=* \
   | --sharedst=* | --shareds=* | --shared=* | --share=* | --shar=* \
   | --sha=* | --sh=*)
-    sharedstatedir="$ac_optarg" ;;
+    sharedstatedir=$ac_optarg ;;
 
   -site | --site | --sit)
     ac_prev=site ;;
   -site=* | --site=* | --sit=*)
-    site="$ac_optarg" ;;
+    site=$ac_optarg ;;
 
   -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
     ac_prev=srcdir ;;
   -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-    srcdir="$ac_optarg" ;;
+    srcdir=$ac_optarg ;;
 
   -sysconfdir | --sysconfdir | --sysconfdi | --sysconfd | --sysconf \
   | --syscon | --sysco | --sysc | --sys | --sy)
     ac_prev=sysconfdir ;;
   -sysconfdir=* | --sysconfdir=* | --sysconfdi=* | --sysconfd=* | --sysconf=* \
   | --syscon=* | --sysco=* | --sysc=* | --sys=* | --sy=*)
-    sysconfdir="$ac_optarg" ;;
+    sysconfdir=$ac_optarg ;;
 
   -target | --target | --targe | --targ | --tar | --ta | --t)
     ac_prev=target ;;
   -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
-    target="$ac_optarg" ;;
+    target=$ac_optarg ;;
 
   -v | -verbose | --verbose | --verbos | --verbo | --verb)
     verbose=yes ;;
@@ -1190,14 +1190,14 @@ do
     ac_prev=x_includes ;;
   -x-includes=* | --x-includes=* | --x-include=* | --x-includ=* | --x-inclu=* \
   | --x-incl=* | --x-inc=* | --x-in=* | --x-i=*)
-    x_includes="$ac_optarg" ;;
+    x_includes=$ac_optarg ;;
 
   -x-libraries | --x-libraries | --x-librarie | --x-librari \
   | --x-librar | --x-libra | --x-libr | --x-lib | --x-li | --x-l)
     ac_prev=x_libraries ;;
   -x-libraries=* | --x-libraries=* | --x-librarie=* | --x-librari=* \
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
-    x_libraries="$ac_optarg" ;;
+    x_libraries=$ac_optarg ;;
 
   -*) AC_MSG_ERROR([unrecognized option: $ac_option
 Try `configure --help' for more information.])
@@ -1220,7 +1220,7 @@ Try `configure --help' for more information.])
     if test "x$nonopt" != xNONE; then
       AC_MSG_ERROR(can only configure for one host and one target at a time)
     fi
-    nonopt="$ac_option"
+    nonopt=$ac_option
     ;;
 
   esac
@@ -1844,9 +1844,9 @@ if { test x"${ac_cv_host_system_type+set}" = x"set" &&
 else
   AC_MSG_RESULT(ok)
 fi
-ac_cv_host_system_type="$host"
-ac_cv_build_system_type="$build"
-ac_cv_target_system_type="$target"dnl
+ac_cv_host_system_type=$host
+ac_cv_build_system_type=$build
+ac_cv_target_system_type=$target[]dnl
 ])
 
 
@@ -2385,7 +2385,7 @@ dnl so AC_CHECK_PROGS will keep looking.
 ifval([$4], [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
-$1="$ac_cv_prog_$1"
+$1=$ac_cv_prog_$1
 if test -n "[$]$1"; then
   AC_MSG_RESULT([$]$1)
 else
@@ -2428,7 +2428,7 @@ dnl not every word.  This closes a longstanding sh security hole.
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f "$ac_dir/$ac_word"; then
-      ac_cv_path_$1="$ac_dir/$ac_word"
+      ac_cv_path_$1=$ac_dir/$ac_word
       break
     fi
   done
@@ -2439,7 +2439,7 @@ ifval([$3], [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
 ])dnl
   ;;
 esac])dnl
-$1="$ac_cv_path_$1"
+$1=$ac_cv_path_$1
 if test -n "[$]$1"; then
   AC_MSG_RESULT([$]$1)
 else
@@ -2583,7 +2583,7 @@ AC_DEFUN(AC_TRY_LINK_FUNC,
 # Search for a library defining FUNC, if it's not already available.
 AC_DEFUN(AC_SEARCH_LIBS,
 [AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
-[ac_func_search_save_LIBS="$LIBS"
+[ac_func_search_save_LIBS=$LIBS
 ac_cv_search_$1="no"
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
 test "$ac_cv_search_$1" = "no" && for ac_lib in $2; do
@@ -2592,7 +2592,7 @@ AC_TRY_LINK_FUNC([$1],
 [ac_cv_search_$1="-l$ac_lib"
 break])
 done
-LIBS="$ac_func_search_save_LIBS"])
+LIBS=$ac_func_search_save_LIBS])
 AC_SHELL_IFELSE([test "$ac_cv_search_$1" != "no"],
   [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
   $3],
@@ -2618,12 +2618,12 @@ AC_DEFUN(AC_CHECK_LIB,
 [AH_CHECK_LIB([$1])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
-[ac_save_LIBS="$LIBS"
+[ac_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"
 AC_TRY_LINK_FUNC([$2],
                  [AC_VAR_SET(ac_Lib, yes)],
                  [AC_VAR_SET(ac_Lib, no)])
-LIBS="$ac_save_LIBS"])
+LIBS=$ac_save_LIBS])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
                 [m4_default([$3],
                             [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
@@ -3750,7 +3750,10 @@ dnl files of config.status.
 # Root of the tmp file names.  Use pid to allow concurrent executions.
 ac_cs_root=cs\$\$
 ac_given_srcdir=$srcdir
-ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+[dnl Leave those double quotes here: this $INSTALL is evaluated in a
+dnl here document, wbich might result in `ac_given_srcdir=/bin/install -c'.
+ac_given_INSTALL="$INSTALL"
 ])dnl
 
 # If no file are specified by the user, then we need to provide default
@@ -3994,7 +3997,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   case "$ac_file" in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
        ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
-  *) ac_file_in="${ac_file}.in" ;;
+  *) ac_file_in=$ac_file.in ;;
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
@@ -4018,17 +4021,17 @@ dnl to be created too).
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
   [[\\/]]* | ?:[[\\/]]* )
-      srcdir="$ac_given_srcdir$ac_dir_suffix";
+      srcdir=$ac_given_srcdir$ac_dir_suffix;
       top_srcdir=$ac_given_srcdir ;;
   *) # Relative path.
-    srcdir="$ac_dots$ac_given_srcdir$ac_dir_suffix"
-    top_srcdir="$ac_dots$ac_given_srcdir" ;;
+    srcdir=$ac_dots$ac_given_srcdir$ac_dir_suffix
+    top_srcdir=$ac_dots$ac_given_srcdir ;;
   esac
 
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
 [  case "$ac_given_INSTALL" in
-  [[\\/$]]* | ?:[[\\/]]* ) INSTALL="$ac_given_INSTALL" ;;
-  *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+  [[\\/$]]* | ?:[[\\/]]* ) INSTALL=$ac_given_INSTALL ;;
+  *) INSTALL=$ac_dots$ac_given_INSTALL ;;
   esac
 ])dnl
 
@@ -4163,7 +4166,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   case "$ac_file" in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
        ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
-  *) ac_file_in="${ac_file}.in" ;;
+  *) ac_file_in=$ac_file.in ;;
   esac
 
   echo creating $ac_file
@@ -4355,8 +4358,8 @@ dnl to be created too).
   fi
 
   case "$srcdir" in
-  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source="$srcdir/$ac_source" ;;
-      *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
+  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
+      *) ac_rel_source=$ac_dots$srcdir/$ac_source ;;
   esac
 
   # Make a symlink if possible; otherwise try a hard link.
@@ -4440,7 +4443,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-ifdef([AC_PROVIDE_AC_PROG_INSTALL], [  ac_given_INSTALL="$INSTALL"
+ifdef([AC_PROVIDE_AC_PROG_INSTALL], [  ac_given_INSTALL=$INSTALL
 ])dnl
 
   for ac_subdir in AC_LIST_SUBDIRS; do
@@ -4498,12 +4501,12 @@ dnl to be created too).
       case "$cache_file" in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative path.
-        ac_sub_cache_file="$ac_dots$cache_file" ;;
+        ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
 ifdef([AC_PROVIDE_AC_PROG_INSTALL],
 [      case "$ac_given_INSTALL" in
-        [[\\/$]]* | ?:[[\\/]]*) INSTALL="$ac_given_INSTALL" ;;
-        *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+        [[\\/$]]* | ?:[[\\/]]*) INSTALL=$ac_given_INSTALL ;;
+        *) INSTALL=$ac_dots$ac_given_INSTALL ;;
       esac
 ])dnl
 

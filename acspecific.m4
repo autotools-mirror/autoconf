@@ -184,10 +184,10 @@ AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
 # not all implementations provide the %pointer and %array declarations.
 ac_cv_prog_lex_yytext_pointer=no
 echo 'extern char *yytext;' >>$LEX_OUTPUT_ROOT.c
-ac_save_LIBS="$LIBS"
+ac_save_LIBS=$LIBS
 LIBS="$LIBS $LEXLIB"
 AC_LINK_IFELSE([`cat $LEX_OUTPUT_ROOT.c`], ac_cv_prog_lex_yytext_pointer=yes)
-LIBS="$ac_save_LIBS"
+LIBS=$ac_save_LIBS
 rm -f "${LEX_OUTPUT_ROOT}.c"
 ])
 dnl
@@ -248,13 +248,13 @@ AC_CACHE_VAL(ac_cv_path_install,
   IFS=$ac_save_IFS
 ])dnl
   if test "${ac_cv_path_install+set}" = set; then
-    INSTALL="$ac_cv_path_install"
+    INSTALL=$ac_cv_path_install
   else
     # As a last resort, use the slow shell script.  We don't cache a
     # path for INSTALL within a source directory, because that will
     # break other packages using the cache if that directory is
     # removed, or if the path is relative.
-    INSTALL="$ac_install_sh"
+    INSTALL=$ac_install_sh
   fi
 fi
 dnl We do special magic for INSTALL instead of AC_SUBST, to get
@@ -287,7 +287,7 @@ then
 else
   ac_cv_prog_LN_S=ln
 fi])dnl
-LN_S="$ac_cv_prog_LN_S"
+LN_S=$ac_cv_prog_LN_S
 if test "$ac_cv_prog_LN_S" = "ln -s"; then
   AC_MSG_RESULT(yes)
 else
@@ -864,9 +864,9 @@ AC_CHECK_LIB(util, getloadavg,
 if test $ac_have_func = no; then
   # There is a commonly available library for RS/6000 AIX.
   # Since it is not a standard part of AIX, it might be installed locally.
-  ac_getloadavg_LIBS="$LIBS"; LIBS="-L/usr/local/lib $LIBS"
+  ac_getloadavg_LIBS=$LIBS; LIBS="-L/usr/local/lib $LIBS"
   AC_CHECK_LIB(getloadavg, getloadavg,
-    LIBS="-lgetloadavg $LIBS", LIBS="$ac_getloadavg_LIBS")
+    LIBS="-lgetloadavg $LIBS", LIBS=$ac_getloadavg_LIBS)
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -1853,7 +1853,7 @@ else
    ac_cv_sys_interpreter=no
 fi
 rm -f conftest])
-interpval="$ac_cv_sys_interpreter"
+interpval=$ac_cv_sys_interpreter
 ])
 
 AC_DEFUNCT(AC_HAVE_POUNDBANG, [;use AC_SYS_INTERPRETER, taking no arguments])
@@ -2069,11 +2069,11 @@ EOF
     # using them would break gcc on systems where it needs fixed includes.
     case "$ac_im_incroot" in
 	/usr/include) ;;
-	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes="$ac_im_incroot" ;;
+	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
     esac
     case "$ac_im_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) test -d "$ac_im_usrlibdir" && ac_x_libraries="$ac_im_usrlibdir" ;;
+	*) test -d "$ac_im_usrlibdir" && ac_x_libraries=$ac_im_usrlibdir ;;
     esac
   fi
   cd ..
@@ -2149,13 +2149,13 @@ if test "$ac_x_libraries" = NO; then
 
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
-  ac_save_LIBS="$LIBS"
+  ac_save_LIBS=$LIBS
   LIBS="-l$ac_x_direct_test_library $LIBS"
 AC_TRY_LINK(, [${ac_x_direct_test_function}()],
-[LIBS="$ac_save_LIBS"
+[LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],
-[LIBS="$ac_save_LIBS"
+[LIBS=$ac_save_LIBS
 # First see if replacing the include by lib works.
 # Check X11 before X11Rn because it is often a symlink to the current release.
 for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
@@ -2231,7 +2231,7 @@ dnl FIXME: banish uname from this macro!
     case "`(uname -sr) 2>/dev/null`" in
     "SunOS 5"*)
       AC_MSG_CHECKING(whether -R must be followed by a space)
-      ac_xsave_LIBS="$LIBS"; LIBS="$LIBS -R$x_libraries"
+      ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
       AC_LINK_IFELSE([], ac_R_nospace=yes, ac_R_nospace=no)
       if test $ac_R_nospace = yes; then
 	AC_MSG_RESULT(no)
@@ -2246,7 +2246,7 @@ dnl FIXME: banish uname from this macro!
 	  AC_MSG_RESULT(neither works)
 	fi
       fi
-      LIBS="$ac_xsave_LIBS"
+      LIBS=$ac_xsave_LIBS
     esac
   fi
 
@@ -2309,7 +2309,7 @@ dnl FIXME: banish uname from this macro!
   fi
 
   # Check for libraries that X11R6 Xt/Xaw programs need.
-  ac_save_LDFLAGS="$LDFLAGS"
+  ac_save_LDFLAGS=$LDFLAGS
   test -n "$x_libraries" && LDFLAGS="$LDFLAGS -L$x_libraries"
   # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
   # check for ICE first), but we must link in the order -lSM -lICE or
@@ -2319,7 +2319,7 @@ dnl FIXME: banish uname from this macro!
   # John Interrante, Karl Berry
   AC_CHECK_LIB(ICE, IceConnectionNumber,
     [X_PRE_LIBS="$X_PRE_LIBS -lSM -lICE"], , $X_EXTRA_LIBS)
-  LDFLAGS="$ac_save_LDFLAGS"
+  LDFLAGS=$ac_save_LDFLAGS
 
 fi
 AC_SUBST(X_CFLAGS)dnl

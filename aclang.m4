@@ -353,10 +353,10 @@ Syntax Error], ,
   CPP="${CC-cc} -nologo -E"
   AC_TRY_CPP([#include <assert.h>
 Syntax Error], , CPP=/lib/cpp)))
-  ac_cv_prog_CPP="$CPP"])dnl
-  CPP="$ac_cv_prog_CPP"
+  ac_cv_prog_CPP=$CPP])dnl
+  CPP=$ac_cv_prog_CPP
 else
-  ac_cv_prog_CPP="$CPP"
+  ac_cv_prog_CPP=$CPP
 fi
 AC_MSG_RESULT($CPP)
 AC_SUBST(CPP)dnl
@@ -397,12 +397,12 @@ fi
 dnl Check whether -g works, even if CFLAGS is set, in case the package
 dnl plays around with CFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-ac_test_CFLAGS="${CFLAGS+set}"
-ac_save_CFLAGS="$CFLAGS"
+ac_test_CFLAGS=${CFLAGS+set}
+ac_save_CFLAGS=$CFLAGS
 CFLAGS=
 AC_PROG_CC_G
 if test "$ac_test_CFLAGS" = set; then
-  CFLAGS="$ac_save_CFLAGS"
+  CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
   if test "$GCC" = yes; then
     CFLAGS="-g -O2"
@@ -561,10 +561,10 @@ AC_CACHE_VAL(ac_cv_prog_CXXCPP,
 AC_LANG(C++)dnl
   CXXCPP="${CXX-g++} -E"
   AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
-  ac_cv_prog_CXXCPP="$CXXCPP"
+  ac_cv_prog_CXXCPP=$CXXCPP
 AC_LANG_RESTORE()dnl
 ])dnl
-CXXCPP="$ac_cv_prog_CXXCPP"
+CXXCPP=$ac_cv_prog_CXXCPP
 fi
 AC_MSG_RESULT($CXXCPP)
 AC_SUBST(CXXCPP)dnl
@@ -594,12 +594,12 @@ fi
 dnl Check whether -g works, even if CXXFLAGS is set, in case the package
 dnl plays around with CXXFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-ac_test_CXXFLAGS="${CXXFLAGS+set}"
-ac_save_CXXFLAGS="$CXXFLAGS"
+ac_test_CXXFLAGS=${CXXFLAGS+set}
+ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS=
 AC_PROG_CXX_G
 if test "$ac_test_CXXFLAGS" = set; then
-  CXXFLAGS="$ac_save_CXXFLAGS"
+  CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
     CXXFLAGS="-g -O2"
@@ -690,12 +690,12 @@ if test $ac_cv_prog_g77 = yes; then
 dnl Check whether -g works, even if FFLAGS is set, in case the package
 dnl plays around with FFLAGS (such as to build both debugging and
 dnl normal versions of a library), tasteless as that idea is.
-  ac_test_FFLAGS="${FFLAGS+set}"
-  ac_save_FFLAGS="$FFLAGS"
+  ac_test_FFLAGS=${FFLAGS+set}
+  ac_save_FFLAGS=$FFLAGS
   FFLAGS=
   AC_PROG_F77_G
   if test "$ac_test_FFLAGS" = set; then
-    FFLAGS="$ac_save_FFLAGS"
+    FFLAGS=$ac_save_FFLAGS
   elif test $ac_cv_prog_f77_g = yes; then
     FFLAGS="-g -O2"
   else
@@ -838,7 +838,7 @@ dnl AC_BEFORE([$0], [AC_PROG_CPP])
 AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
-ac_save_CC="$CC"
+ac_save_CC=$CC
 # Don't try gcc -ansi; that turns off useful extensions and
 # breaks some systems' header files.
 # AIX			-qlanglvl=ansi
@@ -879,9 +879,9 @@ int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, i
 int argc;
 char **argv;],
 [return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];],
-[ac_cv_prog_cc_stdc="$ac_arg"; break])
+[ac_cv_prog_cc_stdc=$ac_arg; break])
 done
-CC="$ac_save_CC"
+CC=$ac_save_CC
 ])
 case "x$ac_cv_prog_cc_stdc" in
   x|xno)
@@ -1225,10 +1225,10 @@ exec AC_FD_LOG>&1
 # to the Fortran 77 compiler in order to get "verbose" output that
 # we can then parse for the Fortran 77 linker flags.  I don't know
 # what to do if your compiler doesn't have -v.
-ac_save_FFLAGS="$FFLAGS"
+ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS -v"
 ac_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
-FFLAGS="$ac_save_FFLAGS"
+FFLAGS=$ac_save_FFLAGS
 
 # Restore the "compiler output file descriptor".
 exec AC_FD_LOG>&8
@@ -1265,7 +1265,7 @@ for ac_arg in $ac_link_output; do
   # argument to start with a "-".  If we ever see this case, then
   # reset AC_PREVIOUS_ARG so that we don't try and process AC_ARG as
   # an argument.
-  ac_previous_arg="$ac_save_arg"
+  ac_previous_arg=$ac_save_arg
   test -n "`echo $ac_arg | sed -n -e '/^-/!p'`" && ac_previous_arg=
   case "$ac_previous_arg" in
     '')
@@ -1305,7 +1305,7 @@ for ac_arg in $ac_link_output; do
                               temp_arg="$temp_arg $ac_i",
                               ac_seen="$ac_seen $ac_i")
           done
-          ac_arg="$temp_arg"
+          ac_arg=$temp_arg
           ;;
         -[[lLR]]*)
           # Append to AC_SEEN if it's not already there.
@@ -1334,7 +1334,7 @@ ac_ld_run_path=`echo $ac_link_output |
                 sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
 test -n "$ac_ld_run_path" && FLIBS="$ac_ld_run_path $FLIBS"
 
-ac_cv_flibs="$FLIBS"
+ac_cv_flibs=$FLIBS
 ])
 AC_SUBST(FLIBS)
 ])# AC_F77_LIBRARY_LDFLAGS
@@ -1390,7 +1390,7 @@ if AC_TRY_EVAL(ac_compile); then
   AC_LANG_SAVE()dnl
   AC_LANG(C)
 
-  ac_save_LIBS="$LIBS"
+  ac_save_LIBS=$LIBS
   LIBS="cf77_test.${ac_objext} $FLIBS $LIBS"
 
   f77_case=
@@ -1421,7 +1421,7 @@ if AC_TRY_EVAL(ac_compile); then
     ac_cv_f77_mangling="$f77_case case, $f77_underscore underscores"
   fi
 
-  LIBS="$ac_save_LIBS"
+  LIBS=$ac_save_LIBS
   AC_LANG_RESTORE()dnl
 
   rm -f conftest*

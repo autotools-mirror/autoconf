@@ -1,5 +1,11 @@
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Simplify all the `foo="$bar"' into `foo=$bar'.
+	* acspecific.m4: Likewise.
+	* aclang.m4: Likewise.
+
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
 	Move obsolete macros' definitions out of the way.
 
 	* doc/autoconf.texi (Old Macro Names): Rename as...

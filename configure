@@ -111,25 +111,25 @@ do
   -bindir | --bindir | --bindi | --bind | --bin | --bi)
     ac_prev=bindir ;;
   -bindir=* | --bindir=* | --bindi=* | --bind=* | --bin=* | --bi=*)
-    bindir="$ac_optarg" ;;
+    bindir=$ac_optarg ;;
 
   -build | --build | --buil | --bui | --bu)
     ac_prev=build ;;
   -build=* | --build=* | --buil=* | --bui=* | --bu=*)
-    build="$ac_optarg" ;;
+    build=$ac_optarg ;;
 
   -cache-file | --cache-file | --cache-fil | --cache-fi \
   | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
     ac_prev=cache_file ;;
   -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
   | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
-    cache_file="$ac_optarg" ;;
+    cache_file=$ac_optarg ;;
 
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
   -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
   | --da=*)
-    datadir="$ac_optarg" ;;
+    datadir=$ac_optarg ;;
 
   -disable-* | --disable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
@@ -160,7 +160,7 @@ do
   -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
   | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* \
   | --exec=* | --exe=* | --ex=*)
-    exec_prefix="$ac_optarg" ;;
+    exec_prefix=$ac_optarg ;;
 
   -gas | --gas | --ga | --g)
     # Obsolete; use --with-gas.
@@ -176,31 +176,31 @@ do
   -host | --host | --hos | --ho)
     ac_prev=host ;;
   -host=* | --host=* | --hos=* | --ho=*)
-    host="$ac_optarg" ;;
+    host=$ac_optarg ;;
 
   -includedir | --includedir | --includedi | --included | --include \
   | --includ | --inclu | --incl | --inc)
     ac_prev=includedir ;;
   -includedir=* | --includedir=* | --includedi=* | --included=* | --include=* \
   | --includ=* | --inclu=* | --incl=* | --inc=*)
-    includedir="$ac_optarg" ;;
+    includedir=$ac_optarg ;;
 
   -infodir | --infodir | --infodi | --infod | --info | --inf)
     ac_prev=infodir ;;
   -infodir=* | --infodir=* | --infodi=* | --infod=* | --info=* | --inf=*)
-    infodir="$ac_optarg" ;;
+    infodir=$ac_optarg ;;
 
   -libdir | --libdir | --libdi | --libd)
     ac_prev=libdir ;;
   -libdir=* | --libdir=* | --libdi=* | --libd=*)
-    libdir="$ac_optarg" ;;
+    libdir=$ac_optarg ;;
 
   -libexecdir | --libexecdir | --libexecdi | --libexecd | --libexec \
   | --libexe | --libex | --libe)
     ac_prev=libexecdir ;;
   -libexecdir=* | --libexecdir=* | --libexecdi=* | --libexecd=* | --libexec=* \
   | --libexe=* | --libex=* | --libe=*)
-    libexecdir="$ac_optarg" ;;
+    libexecdir=$ac_optarg ;;
 
   -localstatedir | --localstatedir | --localstatedi | --localstated \
   | --localstate | --localstat | --localsta | --localst \
@@ -209,12 +209,12 @@ do
   -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
   | --localstate=* | --localstat=* | --localsta=* | --localst=* \
   | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
-    localstatedir="$ac_optarg" ;;
+    localstatedir=$ac_optarg ;;
 
   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
     ac_prev=mandir ;;
   -mandir=* | --mandir=* | --mandi=* | --mand=* | --man=* | --ma=* | --m=*)
-    mandir="$ac_optarg" ;;
+    mandir=$ac_optarg ;;
 
   -nfp | --nfp | --nf)
     # Obsolete; use --without-fp.
@@ -235,26 +235,26 @@ do
   -oldincludedir=* | --oldincludedir=* | --oldincludedi=* | --oldincluded=* \
   | --oldinclude=* | --oldinclud=* | --oldinclu=* | --oldincl=* | --oldinc=* \
   | --oldin=* | --oldi=* | --old=* | --ol=* | --o=*)
-    oldincludedir="$ac_optarg" ;;
+    oldincludedir=$ac_optarg ;;
 
   -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
     ac_prev=prefix ;;
   -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
-    prefix="$ac_optarg" ;;
+    prefix=$ac_optarg ;;
 
   -program-prefix | --program-prefix | --program-prefi | --program-pref \
   | --program-pre | --program-pr | --program-p)
     ac_prev=program_prefix ;;
   -program-prefix=* | --program-prefix=* | --program-prefi=* \
   | --program-pref=* | --program-pre=* | --program-pr=* | --program-p=*)
-    program_prefix="$ac_optarg" ;;
+    program_prefix=$ac_optarg ;;
 
   -program-suffix | --program-suffix | --program-suffi | --program-suff \
   | --program-suf | --program-su | --program-s)
     ac_prev=program_suffix ;;
   -program-suffix=* | --program-suffix=* | --program-suffi=* \
   | --program-suff=* | --program-suf=* | --program-su=* | --program-s=*)
-    program_suffix="$ac_optarg" ;;
+    program_suffix=$ac_optarg ;;
 
   -program-transform-name | --program-transform-name \
   | --program-transform-nam | --program-transform-na \
@@ -271,7 +271,7 @@ do
   | --program-transfo=* | --program-transf=* \
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
-    program_transform_name="$ac_optarg" ;;
+    program_transform_name=$ac_optarg ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
@@ -281,7 +281,7 @@ do
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
   | --sbi=* | --sb=*)
-    sbindir="$ac_optarg" ;;
+    sbindir=$ac_optarg ;;
 
   -sharedstatedir | --sharedstatedir | --sharedstatedi \
   | --sharedstated | --sharedstate | --sharedstat | --sharedsta \
@@ -292,29 +292,29 @@ do
   | --sharedstated=* | --sharedstate=* | --sharedstat=* | --sharedsta=* \
   | --sharedst=* | --shareds=* | --shared=* | --share=* | --shar=* \
   | --sha=* | --sh=*)
-    sharedstatedir="$ac_optarg" ;;
+    sharedstatedir=$ac_optarg ;;
 
   -site | --site | --sit)
     ac_prev=site ;;
   -site=* | --site=* | --sit=*)
-    site="$ac_optarg" ;;
+    site=$ac_optarg ;;
 
   -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
     ac_prev=srcdir ;;
   -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-    srcdir="$ac_optarg" ;;
+    srcdir=$ac_optarg ;;
 
   -sysconfdir | --sysconfdir | --sysconfdi | --sysconfd | --sysconf \
   | --syscon | --sysco | --sysc | --sys | --sy)
     ac_prev=sysconfdir ;;
   -sysconfdir=* | --sysconfdir=* | --sysconfdi=* | --sysconfd=* | --sysconf=* \
   | --syscon=* | --sysco=* | --sysc=* | --sys=* | --sy=*)
-    sysconfdir="$ac_optarg" ;;
+    sysconfdir=$ac_optarg ;;
 
   -target | --target | --targe | --targ | --tar | --ta | --t)
     ac_prev=target ;;
   -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
-    target="$ac_optarg" ;;
+    target=$ac_optarg ;;
 
   -v | -verbose | --verbose | --verbos | --verbo | --verb)
     verbose=yes ;;
@@ -353,14 +353,14 @@ do
     ac_prev=x_includes ;;
   -x-includes=* | --x-includes=* | --x-include=* | --x-includ=* | --x-inclu=* \
   | --x-incl=* | --x-inc=* | --x-in=* | --x-i=*)
-    x_includes="$ac_optarg" ;;
+    x_includes=$ac_optarg ;;
 
   -x-libraries | --x-libraries | --x-librarie | --x-librari \
   | --x-librar | --x-libra | --x-libr | --x-lib | --x-li | --x-l)
     ac_prev=x_libraries ;;
   -x-libraries=* | --x-libraries=* | --x-librarie=* | --x-librari=* \
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
-    x_libraries="$ac_optarg" ;;
+    x_libraries=$ac_optarg ;;
 
   -*) { echo "configure: error: unrecognized option: $ac_option
 Try \`configure --help' for more information." >&2; exit 1; }
@@ -383,7 +383,7 @@ Try \`configure --help' for more information." >&2; exit 1; }
     if test "x$nonopt" != xNONE; then
       { echo "configure: error: can only configure for one host and one target at a time" >&2; exit 1; }
     fi
-    nonopt="$ac_option"
+    nonopt=$ac_option
     ;;
 
   esac
@@ -684,8 +684,8 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
+echo "configure:606: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
-echo "configure:607: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -722,15 +722,16 @@ else
 
 fi
   if test "${ac_cv_path_install+set}" = set; then
-    INSTALL="$ac_cv_path_install"
+    INSTALL=$ac_cv_path_install
   else
     # As a last resort, use the slow shell script.  We don't cache a
     # path for INSTALL within a source directory, because that will
     # break other packages using the cache if that directory is
     # removed, or if the path is relative.
-    INSTALL="$ac_install_sh"
+    INSTALL=$ac_install_sh
   fi
 fi
+echo "configure:652: result: $INSTALL" >&5
 echo "$ECHO_T""$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -741,8 +742,8 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 echo "configure:659: checking whether build environment is sane" >&5
+echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -778,6 +779,7 @@ else
 Check your system clock" >&2; exit 1; }
 fi
 rm -f conftest*
+echo "configure:694: result: yes" >&5
 echo "$ECHO_T""yes" >&6
 if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
@@ -798,8 +800,8 @@ test "$program_suffix" != NONE &&
 # sed with no file args requires a program.
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
+echo "configure:713: checking whether ${MAKE-make} sets \${MAKE}" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \${MAKE}... $ECHO_C" >&6
-echo "configure:712: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -818,10 +820,12 @@ fi
 rm -f conftestmake
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  echo "$ECHO_T""yes" >&6
+  echo "configure:733: result: yes" >&5
+echo "$ECHO_T""yes" >&6
   SET_MAKE=
 else
-  echo "$ECHO_T""no" >&6
+  echo "configure:737: result: no" >&5
+echo "$ECHO_T""no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 
@@ -845,69 +849,79 @@ cat >>confdefs.h <<EOF
 EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
+echo "configure:755: checking for working aclocal" >&5
 echo $ECHO_N "checking for working aclocal... $ECHO_C" >&6
-echo "configure:752: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (aclocal --version) < /dev/null > /dev/null 2>&1; then
    ACLOCAL=aclocal
-   echo "$ECHO_T""found" >&6
+   echo "configure:762: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    ACLOCAL="$missing_dir/missing aclocal"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:766: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
+echo "configure:769: checking for working autoconf" >&5
 echo $ECHO_N "checking for working autoconf... $ECHO_C" >&6
-echo "configure:764: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoconf --version) < /dev/null > /dev/null 2>&1; then
    AUTOCONF=autoconf
-   echo "$ECHO_T""found" >&6
+   echo "configure:776: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    AUTOCONF="$missing_dir/missing autoconf"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:780: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
+echo "configure:783: checking for working automake" >&5
 echo $ECHO_N "checking for working automake... $ECHO_C" >&6
-echo "configure:776: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (automake --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake
-   echo "$ECHO_T""found" >&6
+   echo "configure:790: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    AUTOMAKE="$missing_dir/missing automake"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:794: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
+echo "configure:797: checking for working autoheader" >&5
 echo $ECHO_N "checking for working autoheader... $ECHO_C" >&6
-echo "configure:788: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoheader --version) < /dev/null > /dev/null 2>&1; then
    AUTOHEADER=autoheader
-   echo "$ECHO_T""found" >&6
+   echo "configure:804: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    AUTOHEADER="$missing_dir/missing autoheader"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:808: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
+echo "configure:811: checking for working makeinfo" >&5
 echo $ECHO_N "checking for working makeinfo... $ECHO_C" >&6
-echo "configure:800: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
    MAKEINFO=makeinfo
-   echo "$ECHO_T""found" >&6
+   echo "configure:818: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    MAKEINFO="$missing_dir/missing makeinfo"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:822: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
 AT_TESTPATH=..
@@ -916,8 +930,8 @@ for ac_prog in gm4 gnum4 m4
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
+echo "configure:830: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-echo "configure:817: checking for $ac_word" >&5
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -931,7 +945,7 @@ else
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f "$ac_dir/$ac_word"; then
-      ac_cv_path_M4="$ac_dir/$ac_word"
+      ac_cv_path_M4=$ac_dir/$ac_word
       break
     fi
   done
@@ -939,19 +953,21 @@ else
   ;;
 esac
 fi
-M4="$ac_cv_path_M4"
+M4=$ac_cv_path_M4
 if test -n "$M4"; then
-  echo "$ECHO_T""$M4" >&6
+  echo "configure:855: result: $M4" >&5
+echo "$ECHO_T""$M4" >&6
 else
-  echo "$ECHO_T""no" >&6
+  echo "configure:858: result: no" >&5
+echo "$ECHO_T""no" >&6
 fi
 
 test -n "$M4" && break
 done
 test -n "$M4" || M4="m4"
 
+echo "configure:864: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
-echo "configure:849: checking whether m4 supports frozen files" >&5
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -962,6 +978,7 @@ if test x"$M4" != x; then
   esac
 fi
 fi
+echo "configure:876: result: $ac_cv_prog_gnu_m4" >&5
 echo "$ECHO_T""$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   { echo "configure: error: GNU m4 1.4 is required" >&2; exit 1; }
@@ -971,8 +988,8 @@ for ac_prog in mawk gawk nawk awk
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
+echo "configure:885: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-echo "configure:869: checking for $ac_word" >&5
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -994,33 +1011,37 @@ IFS=$ac_save_ifs
   done
 fi
 fi
-AWK="$ac_cv_prog_AWK"
+AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "$ECHO_T""$AWK" >&6
+  echo "configure:910: result: $AWK" >&5
+echo "$ECHO_T""$AWK" >&6
 else
-  echo "$ECHO_T""no" >&6
+  echo "configure:913: result: no" >&5
+echo "$ECHO_T""no" >&6
 fi
 
 test -n "$AWK" && break
 done
 
+echo "configure:918: checking for working help2man" >&5
 echo $ECHO_N "checking for working help2man... $ECHO_C" >&6
-echo "configure:900: checking for working help2man" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
-   echo "$ECHO_T""found" >&6
+   echo "configure:925: result: found" >&5
+echo "$ECHO_T""found" >&6
 else
    HELP2MAN="\${SHELL} \${top_srcdir}/missing help2man"
-   echo "$ECHO_T""missing" >&6
+   echo "configure:929: result: missing" >&5
+echo "$ECHO_T""missing" >&6
 fi
 
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
+echo "configure:934: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-echo "configure:914: checking for $ac_word" >&5
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -1034,7 +1055,7 @@ else
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f "$ac_dir/$ac_word"; then
-      ac_cv_path_PERL="$ac_dir/$ac_word"
+      ac_cv_path_PERL=$ac_dir/$ac_word
       break
     fi
   done
@@ -1043,11 +1064,13 @@ else
   ;;
 esac
 fi
-PERL="$ac_cv_path_PERL"
+PERL=$ac_cv_path_PERL
 if test -n "$PERL"; then
-  echo "$ECHO_T""$PERL" >&6
+  echo "configure:960: result: $PERL" >&5
+echo "$ECHO_T""$PERL" >&6
 else
-  echo "$ECHO_T""no" >&6
+  echo "configure:963: result: no" >&5
+echo "$ECHO_T""no" >&6
 fi
 
 if test "$PERL" != no; then
@@ -1067,8 +1090,8 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
+echo "configure:982: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
-echo "configure:960: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1105,15 +1128,16 @@ else
 
 fi
   if test "${ac_cv_path_install+set}" = set; then
-    INSTALL="$ac_cv_path_install"
+    INSTALL=$ac_cv_path_install
   else
     # As a last resort, use the slow shell script.  We don't cache a
     # path for INSTALL within a source directory, because that will
     # break other packages using the cache if that directory is
     # removed, or if the path is relative.
-    INSTALL="$ac_install_sh"
+    INSTALL=$ac_install_sh
   fi
 fi
+echo "configure:1028: result: $INSTALL" >&5
 echo "$ECHO_T""$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1217,7 +1241,7 @@ ac_LF_and_DOT=`echo; echo .`
 DEFS=`sed -f conftest.defs confdefs.h | tr "$ac_LF_and_DOT" ' .'`
 rm -f conftest.defs
 
-# Save into config.log some information that might help in debugging
+# Save into config.log some information that might help in debugging.
 echo >&5
 echo "Cache variables:" >&5
 # The following way of writing the cache mishandles newlines in values,
@@ -1472,7 +1496,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   case "$ac_file" in
   *:*) ac_file_in=`echo "$ac_file" | sed 's%[^:]*:%%'`
        ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
-  *) ac_file_in="${ac_file}.in" ;;
+  *) ac_file_in=$ac_file.in ;;
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
@@ -1494,16 +1518,16 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
       if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
   [\\/]* | ?:[\\/]* )
-      srcdir="$ac_given_srcdir$ac_dir_suffix";
+      srcdir=$ac_given_srcdir$ac_dir_suffix;
       top_srcdir=$ac_given_srcdir ;;
   *) # Relative path.
-    srcdir="$ac_dots$ac_given_srcdir$ac_dir_suffix"
-    top_srcdir="$ac_dots$ac_given_srcdir" ;;
+    srcdir=$ac_dots$ac_given_srcdir$ac_dir_suffix
+    top_srcdir=$ac_dots$ac_given_srcdir ;;
   esac
 
   case "$ac_given_INSTALL" in
-  [\\/$]* | ?:[\\/]* ) INSTALL="$ac_given_INSTALL" ;;
-  *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
+  [\\/$]* | ?:[\\/]* ) INSTALL=$ac_given_INSTALL ;;
+  *) INSTALL=$ac_dots$ac_given_INSTALL ;;
   esac
 
   echo creating "$ac_file"
