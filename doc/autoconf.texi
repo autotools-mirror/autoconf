@@ -1634,7 +1634,8 @@ your programs.
 @maindex PROGRAM_CHECK
 Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
-@var{value-if-not-found}.  Calls @code{AC_SUBST} for @var{variable}.
+@var{value-if-not-found}.  If @var{variable} was already set, do nothing.
+Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_PROGRAM_EGREP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
