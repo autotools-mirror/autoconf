@@ -356,7 +356,7 @@ with arguments. Remove this warning when you adjust your code.])])
 # -------------------------------
 m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
 [@%:@include <sys/types.h>
-int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];[]dnl
+int a[[(off_t) 9223372036854775807ULL == 9223372036854775807ULL ? 1 : -1]];[]dnl
 ])
 
 
