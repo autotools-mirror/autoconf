@@ -28,8 +28,8 @@ Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir]
 # Only set `LANG' and `LC_ALL' to "C" if already set.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
-if test "${LC_ALL-unset}" != unset; then LC_ALL=C; export LC_ALL; fi
-if test "${LANG-unset}"   != unset; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
 
 test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
 test -z "${M4}" && M4=@M4@

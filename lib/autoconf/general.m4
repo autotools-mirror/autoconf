@@ -376,8 +376,8 @@ done
 # Only set `LANG' and `LC_ALL' to "C" if already set.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
-if test "${LC_ALL-unset}" != unset; then LC_ALL=C; export LC_ALL; fi
-if test "${LANG-unset}"   != unset; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -684,7 +684,7 @@ dnl
 dnl AC_CACHE_VAL(cache-id, commands-to-set-it)
 dnl The name cache-id must contain the string `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
-[if test "x${$1-unset}" != xunset; then 
+[if test "${$1+set}" = set; then 
 dnl This verbose message is just for testing the caching code.
   AC_VERBOSE(using cached value for $1)
 else
