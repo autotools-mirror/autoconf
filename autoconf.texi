@@ -101,9 +101,9 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * Operation::                   Controlling Autoconf operation.
 * Existing Tests::              Macros that check for particular features.
 * Primitives::                  Macros used to build other checks.
-* Manual Configuration::        Selecting features that can't be guessed.
 * Writing Macros::              How to add your own macros to Autoconf.
 * Caching Values::              Speeding up subsequent @code{configure} runs.
+* Manual Configuration::        Selecting features that can't be guessed.
 * Makefiles::                   Information Autoconf uses in @file{Makefile}s.
 * Invoking configure::          How to use the Autoconf output.
 * Invoking config.status::      Recreating a configuration.
@@ -132,7 +132,7 @@ Controlling Autoconf Operation
 
 * Input::                       Where Autoconf should find files.
 * Output::			Controlling Autoconf output files.
-* Command Line::                Checking command line arguments.
+* Package Options::             Selecting optional features.
 * Versions::                    Version numbers in producing @code{configure}.
 
 Existing Tests
@@ -174,13 +174,6 @@ Primitives For Building Tests
 * Printing Messages::           Notifying users of progress or problems.
 * Language Choice::             Selecting which language to use for testing.
 
-Manual Configuration
-
-* Specifying Names::            Specifying the system type.
-* Canonicalizing::              Getting the canonical system type.
-* System Name Variables::       Variables containing the system type.
-* Using System Type::           What to do with the system type.
-
 Writing Macros
 
 * Macro Format::		Basic format of an Autoconf macro.
@@ -208,6 +201,13 @@ Caching Values
 
 * Cache Files::	        	Files @code{configure} uses for caching.
 * Cache Variables::             Shell variables used in caches.
+
+Manual Configuration
+
+* Specifying Names::            Specifying the system type.
+* Canonicalizing::              Getting the canonical system type.
+* System Name Variables::       Variables containing the system type.
+* Using System Type::           What to do with the system type.
 
 Makefiles
 
@@ -273,8 +273,8 @@ UNIX-like systems.  The configuration scripts produced by Autoconf are
 independent of Autoconf when they are run, so their users do not need to
 have Autoconf.
 
-The configuration scripts produced by Autoconf normally require no
-manual user intervention when run; they do not even take an argument
+The configuration scripts produced by Autoconf require no manual user
+intervention when run; they do not normally even take an argument
 specifying the system type.  Instead, they test for the presence of each
 feature that the software package they are for might need individually.
 (Before each check, they print a one-line message stating what they are
@@ -706,14 +706,14 @@ Print the version number of @code{autoupdate} and exit.
 @node Operation, Existing Tests, Making configure Scripts, Top
 @chapter Controlling Autoconf Operation
 
-These macros control the operation of Autoconf: where it finds
-files, which output files it produces, how it responds to certain
-command line arguments.
+These macros control the operation of Autoconf: where it finds files,
+which output files it produces, whether it configures in certain
+optional features of the user's package.
 
 @menu
 * Input::                       Where Autoconf should find files.
 * Output::			Controlling Autoconf output files.
-* Command Line::                Checking command line arguments.
+* Package Options::             Selecting optional features.
 * Versions::                    Version numbers in producing @code{configure}.
 @end menu
 
@@ -744,7 +744,7 @@ make sure that the directory that it is told contains the source code in
 fact does (@pxref{Invoking configure}, for more information).
 @end defmac
 
-@node Output, Command Line, Input, Operation
+@node Output, Package Options, Input, Operation
 @section Controlling Autoconf Output
 
 The following macros control the kind of output that Autoconf produces.
@@ -823,12 +823,13 @@ If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.
 @end defmac
 
-@node Command Line, Versions, Output, Operation
-@section Checking Command Line Arguments
+@node Package Options, Versions, Output, Operation
+@section Checking for Package Options
 
-These macros check whether the user gave @code{configure} various
-command line arguments.  They may take an argument to use if the argument
-was given and one for if it was not given.
+These macros check whether the user gave @code{configure} command line
+arguments to select optional features of the package.  These macros may
+take an argument to use if the argument was given and one for if it was
+not given.
 
 @defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex ARG_ENABLE
@@ -919,7 +920,7 @@ This is an obsolete version of @code{AC_ARG_WITH} that does not
 provide a help string.
 @end defmac
 
-@node Versions, , Command Line, Operation
+@node Versions, , Package Options, Operation
 @section Controlling Autoconf Versions
 
 The following macros manage version numbers for @code{configure} scripts.
@@ -2165,7 +2166,7 @@ Needed when using the directory reading functions.  This macro calls
 @code{AC_DIR_HEADER} if it has not been called already.
 @end defmac
 
-@node Primitives, Manual Configuration, Existing Tests, Top
+@node Primitives, Writing Macros, Existing Tests, Top
 @chapter Primitives For Building Tests
 
 These macros provide ways for other macros to check whether various
@@ -2553,159 +2554,7 @@ argument of either @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP},
 depending on which language is current.
 @end defmac
 
-@node Manual Configuration, Writing Macros, Primitives, Top
-@chapter Manual Configuration
-
-Some kinds of features can't be guessed automatically by running test
-programs.  For example, how to allocate a pseudo tty, or the details of
-the object file format, or special options that need to be passed to the
-compiler or linker to provide a POSIX or ANSI C environment.  It is
-possible to check for such features using ad-hoc means, such as having
-@code{configure} check the output of the @code{uname} program, or
-looking for libraries that are unique to particular systems.  However,
-Autoconf provides a uniform method for handling unguessable features.
-
-@menu
-* Specifying Names::            Specifying the system type.
-* Canonicalizing::              Getting the canonical system type.
-* System Name Variables::       Variables containing the system type.
-* Using System Type::           What to do with the system type.
-@end menu
-
-@node Specifying Names, Canonicalizing, , Manual Configuration
-@section Specifying the System Type
-
-Like other GNU @code{configure} scripts, Autoconf-generated
-@code{configure} scripts can make decisions based on a canonical name
-for the system type, which has the form:
-
-@example
-@var{cpu}-@var{company}-@var{system}
-@end example
-
-@code{configure} can usually guess the canonical name for the type of
-system it's running on.  To do so it runs a script called
-@code{config.guess}, which derives the name using the @code{uname}
-command or symbols predefined by the C preprocessor.
-
-Alternately, the user can specify the system type with command line
-arguments to @code{configure}.  Doing so is necessary when
-cross-compiling.  In the most complex case of cross-compiling, three
-system types are involved.  The options to specify them are:
-
-@table @code
-@item --build=@var{build-type}
-the type of system on which the package is being configured and
-compiled (rarely needed);
-
-@item --host=@var{host-type}
-the type of system on which the package will run;
-
-@item --target=@var{target-type}
-the type of system for which any compiler tools in the package will
-produce code.
-@end table
-
-@noindent
-If the user gives @code{configure} a non-option argument, it is used as
-the default for the host, target, and build system types if the user
-does not specify them explicitly with options.  The target and build
-types default to the host type if it is given and they are not.  Note
-that if you are cross-compiling, you still have to specify the names of
-the cross-tools you use, in particular the C compiler, on the
-@code{configure} and @code{make} command lines, e.g.,
-
-@example
-CC=m68k-coff-gcc configure --target=m68k-coff; CC=m68k-coff-gcc make
-@end example
-
-@code{configure} recognizes short aliases for many system types; for
-example, @samp{decstation} can be given on the command line instead of
-@samp{mips-dec-ultrix4.2}.  @code{configure} runs a script called
-@code{config.sub} to canonicalize system type aliases.
-
-@node Canonicalizing, System Name Variables, Specifying Names, Manual Configuration
-@section Getting the Canonical System Type 
-
-The following macros make the name of the system type available in
-@code{configure} scripts.
-
-@defmac AC_CANONICAL_HOST
-@maindex CANONICAL_HOST
-Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
-host type.  This is all that is needed for programs that are not part of
-a compiler toolchain.
-@end defmac
-
-@defmac AC_CANONICAL_SYSTEM
-@maindex CANONICAL_SYSTEM
-Set shell and @code{make} variables to the names of the canonical system
-types.  If the user did not specify one or more of those values on the
-command line, run @code{config.guess} to determine them.  Run
-@code{config.sub} to canonicalize any aliases the user gave.  If you use
-this macro, you must distribute those two shell scripts along with your
-source code (@pxref{Output}, for information about the
-@code{AC_CONFIG_AUX_DIR} macro which you can use to control which
-directory @code{configure} looks for those scripts in).  If you do not
-run this macro, @code{configure} ignores any @samp{--host}, etc. options
-given to it.
-@end defmac
-
-@node System Name Variables, Using System Type, Canonicalizing, Manual Configuration
-@section System Name Variables
-
-After calling @code{AC_CANONICAL_SYSTEM} or @code{AC_CANONICAL_HOST},
-the the shell and @code{make} variables that contain the system type
-information are:
-
-@table @code
-@item @code{build}, @code{host}, @code{target}
-the canonical system names;
-
-@item @code{build_alias}, @code{host_alias}, @code{target_alias}
-the names the user specified, or the canonical names if
-@code{config.guess} was used;
-
-@item @code{build_cpu}, @code{build_vendor}, @code{build_os}
-@itemx @code{host_cpu}, @code{host_vendor}, @code{host_os}
-@itemx @code{target_cpu}, @code{target_vendor}, @code{target_os}
-the individual parts of the canonical names (for convenience).
-@end table
-
-@node Using System Type, , System Name Variables, Manual Configuration
-@section Using the System Type
-
-How do you use a canonical system type?  Usually, you use it in one or
-more @code{case} statements in @file{configure.in} to select
-system-specific C files.  Then link those files, which have names based
-on the system name, to generic names, such as @file{host.h} or
-@file{target.c}.  The @code{case} statement patterns can use shell
-wildcards to group several cases together, like in this fragment:
-
-@example
-case "$target" in
-i386-*-mach* | i386-*-gnu*) obj_format=aout emulation=mach bfd_gas=yes ;;
-i960-*-bout) obj_format=bout ;;
-esac
-@end example
-
-@defmac AC_LINK_FILES (@var{link} @dots{}, @var{file} @dots{})
-@maindex LINK_FILES
-Link each of the existing files @var{file} to the corresponding link
-name @var{link}.  Makes a symbolic link if possible, otherwise a hard
-link.  For example, this call:
-
-@example
-AC_LINK_FILES(config/sun3.h config/aout.h, host.h object.h)
-@end example
-
-@noindent
-creates in the current directory @file{host.h}, which is a link to
-@file{@var{srcdir}/config/sun3.h}, and @file{object.h}, which is a link
-to @file{@var{srcdir}/config/aout.h}.
-@end defmac
-
-@node Writing Macros, Caching Values, Manual Configuration, Top
+@node Writing Macros, Caching Values, Primitives, Top
 @chapter Writing Macros
 
 If your package needs to test for some feature that none of the macros
@@ -2801,7 +2650,7 @@ Declarations of C variables in header files.
 @item FUNC
 Functions in libraries.
 @item GROUP
-Unix group owners of files.
+UNIX group owners of files.
 @item HEADER
 Header files.
 @item LIB
@@ -3018,7 +2867,7 @@ techniques you should avoid in order to make your code portable.
 
 The Bourne shell and upward-compatible shells like Bash and the Korn
 shell have evolved over the years, but to prevent trouble, do not take
-advantage of features that were added after Unix version 7, circa 1977.
+advantage of features that were added after UNIX version 7, circa 1977.
 You should not use shell functions, aliases, or other features that are
 not found in all Bourne-compatible shells; restrict yourself to the
 lowest common denominator.  Even @code{unset} is not found in all shells!
@@ -3244,7 +3093,7 @@ fi
 @end group
 @end example
 
-@node Caching Values, Makefiles, Writing Macros, Top
+@node Caching Values, Manual Configuration, Writing Macros, Top
 @chapter Caching Values
 
 To avoid checking for the same features repeatedly in various
@@ -3357,7 +3206,159 @@ a few restrictions.  The values may not contain single quotes or curly braces.
 Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
 names of files or functions; so this is not an important restriction.
 
-@node Makefiles, Invoking configure, Caching Values, Top
+@node Manual Configuration, Makefiles, Caching Values, Top
+@chapter Manual Configuration
+
+Some kinds of features can't be guessed automatically by running test
+programs.  For example, how to allocate a pseudo tty, or the details of
+the object file format, or special options that need to be passed to the
+compiler or linker to provide a POSIX or ANSI C environment.  It is
+possible to check for such features using ad-hoc means, such as having
+@code{configure} check the output of the @code{uname} program, or
+looking for libraries that are unique to particular systems.  However,
+Autoconf provides a uniform method for handling unguessable features.
+
+@menu
+* Specifying Names::            Specifying the system type.
+* Canonicalizing::              Getting the canonical system type.
+* System Name Variables::       Variables containing the system type.
+* Using System Type::           What to do with the system type.
+@end menu
+
+@node Specifying Names, Canonicalizing, , Manual Configuration
+@section Specifying the System Type
+
+Like other GNU @code{configure} scripts, Autoconf-generated
+@code{configure} scripts can make decisions based on a canonical name
+for the system type, which has the form:
+
+@example
+@var{cpu}-@var{company}-@var{system}
+@end example
+
+@code{configure} can usually guess the canonical name for the type of
+system it's running on.  To do so it runs a script called
+@code{config.guess}, which derives the name using the @code{uname}
+command or symbols predefined by the C preprocessor.
+
+Alternately, the user can specify the system type with command line
+arguments to @code{configure}.  Doing so is necessary when
+cross-compiling.  In the most complex case of cross-compiling, three
+system types are involved.  The options to specify them are:
+
+@table @code
+@item --build=@var{build-type}
+the type of system on which the package is being configured and
+compiled (rarely needed);
+
+@item --host=@var{host-type}
+the type of system on which the package will run;
+
+@item --target=@var{target-type}
+the type of system for which any compiler tools in the package will
+produce code.
+@end table
+
+@noindent
+If the user gives @code{configure} a non-option argument, it is used as
+the default for the host, target, and build system types if the user
+does not specify them explicitly with options.  The target and build
+types default to the host type if it is given and they are not.  Note
+that if you are cross-compiling, you still have to specify the names of
+the cross-tools you use, in particular the C compiler, on the
+@code{configure} and @code{make} command lines, e.g.,
+
+@example
+CC=m68k-coff-gcc configure --target=m68k-coff; CC=m68k-coff-gcc make
+@end example
+
+@code{configure} recognizes short aliases for many system types; for
+example, @samp{decstation} can be given on the command line instead of
+@samp{mips-dec-ultrix4.2}.  @code{configure} runs a script called
+@code{config.sub} to canonicalize system type aliases.
+
+@node Canonicalizing, System Name Variables, Specifying Names, Manual Configuration
+@section Getting the Canonical System Type 
+
+The following macros make the name of the system type available in
+@code{configure} scripts.
+
+@defmac AC_CANONICAL_HOST
+@maindex CANONICAL_HOST
+Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
+host type.  This is all that is needed for programs that are not part of
+a compiler toolchain.
+@end defmac
+
+@defmac AC_CANONICAL_SYSTEM
+@maindex CANONICAL_SYSTEM
+Set shell and @code{make} variables to the names of the canonical system
+types.  If the user did not specify one or more of those values on the
+command line, run @code{config.guess} to determine them.  Run
+@code{config.sub} to canonicalize any aliases the user gave.  If you use
+this macro, you must distribute those two shell scripts along with your
+source code (@pxref{Output}, for information about the
+@code{AC_CONFIG_AUX_DIR} macro which you can use to control which
+directory @code{configure} looks for those scripts in).  If you do not
+run this macro, @code{configure} ignores any @samp{--host}, etc. options
+given to it.
+@end defmac
+
+@node System Name Variables, Using System Type, Canonicalizing, Manual Configuration
+@section System Name Variables
+
+After calling @code{AC_CANONICAL_SYSTEM} or @code{AC_CANONICAL_HOST},
+the the shell and @code{make} variables that contain the system type
+information are:
+
+@table @code
+@item @code{build}, @code{host}, @code{target}
+the canonical system names;
+
+@item @code{build_alias}, @code{host_alias}, @code{target_alias}
+the names the user specified, or the canonical names if
+@code{config.guess} was used;
+
+@item @code{build_cpu}, @code{build_vendor}, @code{build_os}
+@itemx @code{host_cpu}, @code{host_vendor}, @code{host_os}
+@itemx @code{target_cpu}, @code{target_vendor}, @code{target_os}
+the individual parts of the canonical names (for convenience).
+@end table
+
+@node Using System Type, , System Name Variables, Manual Configuration
+@section Using the System Type
+
+How do you use a canonical system type?  Usually, you use it in one or
+more @code{case} statements in @file{configure.in} to select
+system-specific C files.  Then link those files, which have names based
+on the system name, to generic names, such as @file{host.h} or
+@file{target.c}.  The @code{case} statement patterns can use shell
+wildcards to group several cases together, like in this fragment:
+
+@example
+case "$target" in
+i386-*-mach* | i386-*-gnu*) obj_format=aout emulation=mach bfd_gas=yes ;;
+i960-*-bout) obj_format=bout ;;
+esac
+@end example
+
+@defmac AC_LINK_FILES (@var{link} @dots{}, @var{file} @dots{})
+@maindex LINK_FILES
+Link each of the existing files @var{file} to the corresponding link
+name @var{link}.  Makes a symbolic link if possible, otherwise a hard
+link.  For example, this call:
+
+@example
+AC_LINK_FILES(config/sun3.h config/aout.h, host.h object.h)
+@end example
+
+@noindent
+creates in the current directory @file{host.h}, which is a link to
+@file{@var{srcdir}/config/sun3.h}, and @file{object.h}, which is a link
+to @file{@var{srcdir}/config/aout.h}.
+@end defmac
+
+@node Makefiles, Invoking configure, Manual Configuration, Top
 @chapter Makefiles
 
 Each subdirectory in a distribution should come with a file
@@ -3795,7 +3796,7 @@ How do I configure in policy decisions, since the
 
 There are two ways to do it.  Simple decisions can be specified using
 @samp{--with} and @samp{--enable} options to @code{configure}
-(@pxref{Command Line}).
+(@pxref{Package Options}).
 
 More sophisticated site configuration information---company names, email
 addresses to contact, etc.---should be put in a file that is edited
@@ -4060,7 +4061,7 @@ out a new language.
 Since my @code{configure} scripts determine the system's capabilities
 automatically, with no interactive user intervention, I decided to call
 the program that generates them Autoconfig.  But with a version number
-tacked on, that name would be too long for old Unix file systems, so
+tacked on, that name would be too long for old UNIX file systems, so
 I shortened it to Autoconf.
 
 In the fall of 1991 I called together a group of priests of portability
@@ -4099,7 +4100,7 @@ Autoconf continued to improve rapidly, as many people using the
 @code{configure} scripts reported problems they encountered.
 
 Autoconf turned out to be a good torture test for @code{m4}
-implementations.  Unix @code{m4} started to dump core because of the
+implementations.  UNIX @code{m4} started to dump core because of the
 length of the macros that Autoconf defined, and several bugs showed up
 in GNU @code{m4} as well.  Eventually, we realized that we needed to use
 some features that only GNU @code{m4} has.  4.3BSD @code{m4}, in
