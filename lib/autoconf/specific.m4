@@ -439,29 +439,7 @@ fi
 
 # AC_ISC_POSIX
 # ------------
-AC_DEFUN([AC_ISC_POSIX],
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
-AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
-AC_MSG_CHECKING([for POSIXized ISC])
-if test -d /etc/conf/kconfig.d &&
-   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
-then
-  AC_MSG_RESULT([yes])
-  ISC=yes # If later tests want to check for ISC.
-  AC_DEFINE(_POSIX_SOURCE, 1,
-            [Define if you need to in order for stat and other things to
-             work.])
-  if test "$GCC" = yes; then
-    CC="$CC -posix"
-  else
-    CC="$CC -Xp"
-  fi
-else
-  AC_MSG_RESULT([no])
-  ISC=
-fi
-])# AC_ISC_POSIX
+AC_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS(strerror, cposix)])
 
 
 # AC_XENIX_DIR
