@@ -1,3 +1,8 @@
+1998-10-20  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_LANG_RESTORE): Fix a typo spotted by Noah
+	Elliott <elliott@hera.llnl.gov>.
+
 1998-10-09  Tom Tromey  <tromey@cygnus.com>
 
 	* Makefile.in (autoconf.m4f): New target.
