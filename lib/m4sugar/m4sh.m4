@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -690,6 +690,7 @@ m4_defun([_AS_MKDIR_P_PREPARE],
 [if mkdir -p . 2>/dev/null; then
   as_mkdir_p=:
 else
+  rm -fr ./-p
   as_mkdir_p=false
 fi
 ])# _AS_MKDIR_P_PREPARE
