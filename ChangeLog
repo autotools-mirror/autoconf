@@ -1,3 +1,9 @@
+2004-07-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Set BIN_SH, for
+	Tru64.
+	* doc/autoconf.texi (Shellology): Mention BIN_SH.
+
 2004-07-27  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Use "set -o posix"
