@@ -1,5 +1,9 @@
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Make): Macro names and underscore.
+
+2001-07-14  Akim Demaille  <akim@epita.fr>
+
 	* config/config.guess, config/config.sub, config/texinfo.tex
 	* doc/standards.texi, doc/make-stds.texi: Update.
 

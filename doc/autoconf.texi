@@ -8748,6 +8748,28 @@ being listed here.  First of all, remember that since commands are
 executed by the shell, all its weaknesses are inherited@dots{}
 
 @table @asis
+@item Leading underscore in macro names
+Some Make don't support leading underscores in macro names, such as on
+NEWS-OS 4.2R.
+
+@example
+$ cat Makefile
+_am_include = #
+_am_quote =
+all:; @@echo this is test
+
+% make
+Make: Must be a separator on rules line 2.  Stop.
+
+$ cat Makefile2
+am_include = #
+am_quote =
+all:; @@echo this is test
+
+$ make -f Makefile2
+this is test
+@end example
+
 @item @code{VPATH}
 @cindex @code{VPATH}
 Don't use it!  For instance any assignment to @code{VPATH} causes Sun
