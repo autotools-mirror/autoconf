@@ -91,7 +91,7 @@ my %needed_macros =
   );
 
 my $configure_scan = 'configure.scan';
-my $log = new Autom4te::XFile ">$me.log";
+my $log;
 
 # Autoconf and lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
@@ -620,6 +620,8 @@ sub check_configure_ac ($)
 ## -------------- ##
 
 parse_args;
+$log = new Autom4te::XFile ">$me.log";
+
 $autoconf .= " --debug" if $debug;
 $autoconf .= " --verbose" if $verbose;
 $autoconf .= join (' --include=', '', @include);

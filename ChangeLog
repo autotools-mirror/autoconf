@@ -1,3 +1,8 @@
+2004-12-17  Stepan Kasal  <kasal@ucw.cz>
+
+	* bin/autoscan.in: Open autoscan.log only after ``parse_args'';
+	  so that eg. ``autoscan --help'' doesn't truncate it.
+
 2004-12-15  Nicolas Joly  <njoly@pasteur.fr>
 
 	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Remove
