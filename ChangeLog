@@ -1,5 +1,10 @@
 2000-07-28  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_LANG_CONFTEST, _AC_PROG_CC_GNU, _AC_PROG_CXX_GNU,
+	_AC_PROG_F77_GNU): Use ac_ext.  Use _ACEOF instead of ACEOF.
+
+2000-07-28  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (--warnings): Catch `no-category', not `nocategory'.
 	* autoheader.sh: Likewise.
 	* acgeneral.m4 (_AC_WARNING_IFELSE): Adjust.

@@ -240,9 +240,9 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 # ---------------------
 # Save the BODY in `conftest.$acext'.  Add a trailing new line.
 define([AC_LANG_CONFTEST],
-[cat >conftest.$ac_ext <<ACEOF
+[cat >conftest.$ac_ext <<_ACEOF
 $1
-ACEOF])
+_ACEOF])
 
 
 # AC_LANG_SOURCE(BODY)
@@ -586,11 +586,11 @@ AC_LANG_POP
 define([_AC_PROG_CC_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.$ac_ext <<ACEOF
+cat >conftest.$ac_ext <<_ACEOF
 #ifdef __GNUC__
   yes;
 #endif
-ACEOF
+_ACEOF
 if AC_TRY_COMMAND(${CC-cc} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
@@ -778,11 +778,11 @@ AC_LANG_POP
 define([_AC_PROG_CXX_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.$ac_ext <<ACEOF
+cat >conftest.$ac_ext <<_ACEOF
 #ifdef __GNUC__
   yes;
 #endif
-ACEOF
+_ACEOF
 if AC_TRY_COMMAND(${CXX-g++} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
@@ -880,11 +880,11 @@ AC_LANG_POP
 # do CPP pre-processing.
 define([_AC_PROG_F77_GNU],
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
-[cat >conftest.$ac_ext <<ACEOF
+[cat >conftest.$ac_ext <<_ACEOF
 #ifdef __GNUC__
   yes
 #endif
-ACEOF
+_ACEOF
 if AC_TRY_COMMAND($F77 -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_g77=yes
 else
@@ -1585,6 +1585,7 @@ AC_LANG_POP()dnl
 # The replacement is empty.
 AU_DEFUN([AC_F77_NAME_MANGLING], [])
 
+
 # AC_F77_WRAPPERS
 # ---------------
 # Defines C macros F77_FUNC(name,NAME) and F77_FUNC_(name,NAME) to
@@ -1629,8 +1630,9 @@ case $ac_cv_f77_mangling in
 esac
 ])# AC_F77_WRAPPERS
 
+
 # AC_F77_FUNC(NAME, [SHELLVAR = NAME])
-# -------------------
+# ------------------------------------
 # For a Fortran subroutine of given NAME, define a shell variable
 # $SHELLVAR to the Fortran-77 mangled name.  If the SHELLVAR
 # argument is not supplied, it defaults to NAME.
@@ -1647,5 +1649,3 @@ ifelse(index([$1],[_]),-1,[],
 ])
 m4_default([$2],[$1])="$ac_val"
 ]) # AC_F77_FUNC
-
-
