@@ -1,3 +1,10 @@
+2002-11-06  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (Configuring subdirectories): Don't use grep
+	-w.
+	* doc/autoconf.texi (Limitations of Usual Tools): Grep -w.
+	Reported by Ezra Peisach.
+
 2002-11-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/autoheader.m4 (_AH_TEMPLATE_OLD, _AH_VERBATIM_OLD):

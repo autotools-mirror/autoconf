@@ -687,8 +687,8 @@ AT_CHECK([test -f inner/innermost/config.hin])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
-AT_CHECK([./configure --help=recursive | grep -w INNER],     0, [ignore])
-AT_CHECK([./configure --help=recursive | grep -w INNERMOST], 0, [ignore])
+AT_CHECK([./configure --help=recursive | grep " INNER "],     0, [ignore])
+AT_CHECK([./configure --help=recursive | grep " INNERMOST "], 0, [ignore])
 
 # Running the outer configure should trigger the inner.
 AT_CHECK_CONFIGURE([INNERMOST=tsomrenni])

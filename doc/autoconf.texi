@@ -10387,6 +10387,9 @@ honor the last pattern (e.g., @sc{irix} 6.5 and Solaris 2.5.1).  Anyway,
 Stardent Vistra SVR4 @code{grep} lacks @option{-e}@dots{}  Instead, use
 extended regular expressions and alternation.
 
+Don't rely on @option{-w}, as Irix 6.5.16m's @command{grep} does not
+support it.
+
 
 @item @command{ln}
 @c ---------------
