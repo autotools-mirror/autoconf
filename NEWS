@@ -2,6 +2,14 @@ Thanks to everybody who's submitted changes and additions to Autoconf!
 I've incorporated many of them, and am still considering others for
 future releases -- but I didn't want to postpone this release indefinitely.
 
+Caution: don't indiscriminantly rebuild configure scripts with
+Autoconf version 2.  Some configure.in files need minor adjustments to
+work with it; the documentation has a chapter on upgrading.  A few
+configure.in files, including those for GNU Emacs and the GNU C
+Library, need major changes because they relied on undocumented
+internals of version 1.  Future releases of those packages will have
+updated configure.in files.
+
 Major changes in release 2.0:
 
 ** New macros:

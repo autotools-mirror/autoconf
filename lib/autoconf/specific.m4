@@ -275,7 +275,6 @@ AC_DEFUN(AC_REQUIRE_CPP,
 
 AC_DEFUN(AC_PROG_LEX,
 [AC_CHECK_PROG(LEX, flex, flex, lex)
-AC_MSG_CHECKING(for $LEX library)
 if test -z "$LEXLIB"
 then
   case "$LEX" in
@@ -283,7 +282,6 @@ then
   *) LEXLIB="-ll" ;;
   esac
 fi
-AC_MSG_RESULT($LEXLIB)
 AC_SUBST(LEXLIB)])
 
 AC_DEFUN(AC_DECL_YYTEXT,

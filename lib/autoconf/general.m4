@@ -109,7 +109,7 @@ define([AC_DEFUN],
 [define($1, [AC_PRO([$1])$2[]AC_EPI()])])
 
 
-dnl ### Controlling Autoconf operation
+dnl ### Initialization
 
 
 dnl AC_INIT_NOTICE()
@@ -129,8 +129,11 @@ AC_DEFUN(AC_INIT_NOTICE,
 # Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
+# along with this script; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+# The copying terms for this script do not affect the copying terms
+# for software that it configures.
 
 ac_help=])
 
@@ -557,6 +560,10 @@ AC_DEFUN(AC_ENABLE,
 AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])dnl
 ])
 
+
+dnl ### Working with optional software
+
+
 dnl AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_WITH,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
@@ -800,13 +807,6 @@ AC_SUBST(build_vendor)dnl
 AC_SUBST(build_os)dnl
 ])
 
-dnl Link each of the existing files SOURCE... to the corresponding
-dnl link name in DEST...
-dnl Not actually done until AC_OUTPUT_LINKS.
-dnl AC_LINK_FILES(SOURCE..., DEST...)
-AC_DEFUN(AC_LINK_FILES,
-[define([AC_LIST_FILES], [$1])define([AC_LIST_LINKS], [$2])])
-
 
 dnl ### Caching test results
 
@@ -891,7 +891,7 @@ fi
 ])
 
 
-dnl ### Setting variables
+dnl ### Defining symbols
 
 
 dnl Set VARIABLE to VALUE, verbatim, or 1.
@@ -908,6 +908,10 @@ define(AC_DEFINE_UNQUOTED,
 [#define] $1 ifelse($#, 2, [$2], 1)
 EOF
 ])
+
+
+dnl ### Setting output variables
+
 
 dnl This macro protects VARIABLE from being diverted twice
 dnl if this macro is called twice for it.
@@ -992,7 +996,7 @@ define(AC_LANG_RESTORE,
 [ifelse(AC_LANG_STACK, C, [ifelse(AC_LANG, C, , [AC_LANG_C])], [ifelse(AC_LANG, CPLUSPLUS, , [AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])
 
 
-dnl ### Enforcing ordering constraints
+dnl ### Dependencies between macros
 
 
 dnl AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
@@ -1018,7 +1022,7 @@ define(AC_OBSOLETE,
 )])
 
 
-dnl ### Checking for files (caching)
+dnl ### Checking for programs
 
 
 dnl AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR, VALUE-IF-FOUND
@@ -1132,6 +1136,10 @@ fi
 undefine([AC_VAR_NAME])dnl
 ])
 
+
+dnl ### Checking for libraries
+
+
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
@@ -1189,8 +1197,33 @@ undefine([AC_CV_NAME])dnl
 ])
 
 
-dnl ### Checking C system output (no caching)
+dnl ### Examining declarations
 
+
+dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
+AC_DEFUN(AC_TRY_CPP,
+[AC_REQUIRE_CPP()dnl
+cat > conftest.$ac_ext <<EOF
+[#]line __oline__ "configure"
+#include "confdefs.h"
+[$1]
+EOF
+dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
+dnl We used to copy stderr to stdout and capture it in a variable, but
+dnl that breaks under sh -x, which writes compile commands starting
+dnl with ` +' to stderr in eval and subshells.
+eval "$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
+ac_err=`grep -v '^ *+' conftest.out`
+if test -z "$ac_err"; then
+  ifelse([$2], , :, [rm -rf conftest*
+  $2])
+else
+  echo "$ac_err" >&AC_FD_CC
+ifelse([$3], , , [  rm -rf conftest*
+  $3
+])dnl
+fi
+rm -f conftest*])
 
 dnl AC_EGREP_HEADER(PATTERN, HEADER-FILE, ACTION-IF-FOUND [,
 dnl                 ACTION-IF-NOT-FOUND])
@@ -1221,6 +1254,10 @@ ifelse([$4], , , [else
 fi
 rm -f conftest*
 ])
+
+
+dnl ### Examining libraries
+
 
 dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
@@ -1260,6 +1297,10 @@ fi
 rm -f conftest*]
 )
 
+
+dnl ### Checking for run-time features
+
+
 dnl AC_TRY_RUN(PROGRAM, ACTION-IF-TRUE [, ACTION-IF-FALSE
 dnl            [, ACTION-IF-CROSS-COMPILING]])
 AC_DEFUN(AC_TRY_RUN,
@@ -1290,33 +1331,8 @@ fi
 fi
 rm -fr conftest*])
 
-dnl AC_TRY_CPP(INCLUDES, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-AC_DEFUN(AC_TRY_CPP,
-[AC_REQUIRE_CPP()dnl
-cat > conftest.$ac_ext <<EOF
-[#]line __oline__ "configure"
-#include "confdefs.h"
-[$1]
-EOF
-dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
-dnl We used to copy stderr to stdout and capture it in a variable, but
-dnl that breaks under sh -x, which writes compile commands starting
-dnl with ` +' to stderr in eval and subshells.
-eval "$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-ac_err=`grep -v '^ *+' conftest.out`
-if test -z "$ac_err"; then
-  ifelse([$2], , :, [rm -rf conftest*
-  $2])
-else
-  echo "$ac_err" >&AC_FD_CC
-ifelse([$3], , , [  rm -rf conftest*
-  $3
-])dnl
-fi
-rm -f conftest*])
 
-
-dnl ### Checking for C features (caching)
+dnl ### Checking for header files
 
 
 dnl AC_CHECK_HEADER(HEADER-FILE, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
@@ -1348,6 +1364,10 @@ changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2], $3)dnl
 done
 ])
+
+
+dnl ### Checking for library functions
+
 
 dnl AC_CHECK_FUNC(FUNCTION, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_FUNC,
@@ -1400,6 +1420,10 @@ done
 AC_SUBST(LIBOBJS)dnl
 ])
 
+
+dnl ### Checking compiler characteristics
+
+
 dnl AC_CHECK_SIZEOF(TYPE)
 AC_DEFUN(AC_CHECK_SIZEOF,
 [changequote(<<, >>)dnl
@@ -1424,6 +1448,10 @@ undefine([AC_TYPE_NAME])dnl
 undefine([AC_CV_NAME])dnl
 ])
 
+
+dnl ### Checking for typedefs
+
+
 dnl AC_CHECK_TYPE(TYPE, DEFAULT)
 AC_DEFUN(AC_CHECK_TYPE,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
@@ -1440,12 +1468,18 @@ fi
 ])
 
 
-dnl ### Controlling Autoconf output
+dnl ### Creating output files
 
 
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
 AC_DEFUN(AC_CONFIG_HEADER,
 [define(AC_LIST_HEADER, $1)])
+
+dnl Link each of the existing files SOURCE... to the corresponding
+dnl link name in DEST...
+dnl AC_LINK_FILES(SOURCE..., DEST...)
+AC_DEFUN(AC_LINK_FILES,
+[define([AC_LIST_FILES], [$1])define([AC_LIST_LINKS], [$2])])
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 AC_DEFUN(AC_CONFIG_SUBDIRS,
