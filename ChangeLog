@@ -1,3 +1,8 @@
+2003-07-25  John W. Eaton  <jwe@bevo.che.wisc.edu>
+
+	* lib/autoconf/fortran.m4 (AC_F77_LIBRARY_LDFLAGS): Also ignore
+	-lcrt1.o, for OS X.  (trivial change)
+
 2003-07-07  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (AC_C_INLINE): Wrap the '#define inline ...'
