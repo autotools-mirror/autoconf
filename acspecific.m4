@@ -347,8 +347,8 @@ if test $RSH != true; then
   RTAPELIB=rtapelib.o
 else
   AC_MSG_RESULT(found no remote shell)
-  AC_CHECK_HEADER(netdb.h, RTAPELIB=rtapelib.o AC_DEFINE(HAVE_NETDB_H),
-    RTAPELIB= AC_DEFINE(NO_REMOTE))
+  AC_CHECK_HEADER(netdb.h, [RTAPELIB=rtapelib.o AC_DEFINE(HAVE_NETDB_H)],
+    [RTAPELIB= AC_DEFINE(NO_REMOTE)])
 fi
 AC_SUBST(RSH)dnl
 AC_SUBST(RTAPELIB)dnl
@@ -441,14 +441,40 @@ AC_TRY_LINK([#include <sys/types.h>
 done])dnl
 
 case "$ac_cv_header_dir" in
-dirent.h) AC_DEFINE(DIRENT)
-AC_DEFINE(HAVE_DIRENT_H) ;;
-sys/ndir.h) AC_DEFINE(SYSNDIR)
-AC_DEFINE(HAVE_SYS_NDIR_H) ;;
-sys/dir.h) AC_DEFINE(SYSDIR)
-AC_DEFINE(HAVE_SYS_DIR_H) ;;
-ndir.h) AC_DEFINE(NDIR)
-AC_DEFINE(HAVE_NDIR_H) ;;
+dirent.h) AC_DEFINE(HAVE_DIRENT_H) ;;
+sys/ndir.h) AC_DEFINE(HAVE_SYS_NDIR_H) ;;
+sys/dir.h) AC_DEFINE(HAVE_SYS_DIR_H) ;;
+ndir.h) AC_DEFINE(HAVE_NDIR_H) ;;
+esac
+
+AC_MSG_CHECKING(for closedir return value)
+AC_CACHE_VAL(ac_cv_func_closedir_void,
+[AC_TRY_RUN([#include <sys/types.h>
+#include <$ac_cv_header_dir>
+int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
+  ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
+if test $ac_cv_func_closedir_void = yes; then
+  AC_DEFINE(CLOSEDIR_VOID)
+fi
+])dnl
+dnl
+dnl Obsolete.
+define(AC_DIR_HEADER,
+[AC_PROVIDE([$0])dnl
+AC_MSG_CHECKING(for directory library header)
+AC_CACHE_VAL(ac_cv_header_dir,
+[ac_cv_header_dir=no
+for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
+  AC_MSG_CHECKING([for $ac_hdr])
+AC_TRY_LINK([#include <sys/types.h>
+#include <$ac_hdr>], [DIR *dirp = 0;], ac_cv_header_dir=$ac_hdr; break)
+done])dnl
+
+case "$ac_cv_header_dir" in
+dirent.h) AC_DEFINE(DIRENT) ;;
+sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
+sys/dir.h) AC_DEFINE(SYSDIR) ;;
+ndir.h) AC_DEFINE(NDIR) ;;
 esac
 
 AC_MSG_CHECKING(for closedir return value)

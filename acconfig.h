@@ -27,6 +27,9 @@
 /* Define if type char is unsigned and you are not using gcc.  */
 #undef __CHAR_UNSIGNED__
 
+/* Define if the closedir function returns void instead of int.  */
+#undef CLOSEDIR_VOID
+
 /* Define to empty if the keyword does not work.  */
 #undef const
 
@@ -37,7 +40,7 @@
 /* Define for DGUX with <sys/dg_sys_info.h>.  */
 #undef DGUX
 
-/* Define if you have dirent.h.  */
+/* Define if you have <dirent.h>.  */
 #undef DIRENT
 
 /* Define to the type of elements in the array set by `getgroups'.
@@ -50,8 +53,11 @@
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
 
-/* Define if you have alloca.h and it should be used (not Ultrix).  */
+/* Define if you have <alloca.h> and it should be used (not on Ultrix).  */
 #undef HAVE_ALLOCA_H
+
+/* Define if you have <dirent.h>.  */
+#undef HAVE_DIRENT_H
 
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
@@ -68,7 +74,10 @@
 /* Define if you have a working `mmap' system call.  */
 #undef HAVE_MMAP
 
-/* Define if you have netdb.h (and thus the rexec function).  */
+/* Define if you don't have <dirent.h>, but have <ndir.h>.  */
+#undef HAVE_NDIR_H
+
+/* Define if you have <netdb.h> (and thus the rexec function).  */
 #undef HAVE_NETDB_H
 
 /* Define if system calls automatically restart after interruption
@@ -87,8 +96,14 @@
 /* Define if your struct stat has st_rdev.  */
 #undef HAVE_ST_RDEV
 
-/* Define if you have sys/mtio.h.  */
+/* Define if you don't have <dirent.h>, but have <sys/dir.h>.  */
+#undef HAVE_SYS_DIR_H
+
+/* Define if you have <sys/mtio.h>.  */
 #undef HAVE_SYS_MTIO_H
+
+/* Define if you don't have <dirent.h>, but have <sys/ndir.h>.  */
+#undef HAVE_SYS_NDIR_H
 
 /* Define if you have a <sys/wait.h> with `union wait'.  */
 #undef HAVE_SYS_WAIT
@@ -103,13 +118,13 @@
 /* Define if `union wait' is the type of the first arg to wait functions.  */
 #undef HAVE_UNION_WAIT
 
-/* Define if you have unistd.h.  */
+/* Define if you have <unistd.h>.  */
 #undef HAVE_UNISTD_H
 
 /* Define if utime(file, NULL) sets file's timestamp to the present.  */
 #undef HAVE_UTIME_NULL
 
-/* Define if you have vfork.h.  */
+/* Define if you have <vfork.h>.  */
 #undef HAVE_VFORK_H
 
 /* Define if you have the vprintf function.  */
@@ -130,10 +145,10 @@
 /* Define if long int is 64 bits.  */
 #undef LONG_64_BITS
 
-/* Define if major, minor, and makedev are declared in mkdev.h.  */
+/* Define if major, minor, and makedev are declared in <mkdev.h>.  */
 #undef MAJOR_IN_MKDEV
 
-/* Define if major, minor, and makedev are declared in sysmacros.h.  */
+/* Define if major, minor, and makedev are declared in <sysmacros.h>.  */
 #undef MAJOR_IN_SYSMACROS
 
 /* Define if on MINIX.  */
@@ -142,17 +157,17 @@
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef mode_t
 
-/* Define if you don't have dirent.h, but have ndir.h.  */
+/* Define if you don't have <dirent.h>, but have <ndir.h>.  */
 #undef NDIR
 
-/* Define if you have memory.h, and string.h doesn't declare the
+/* Define if you have <memory.h>, and <string.h> doesn't declare the
    mem* functions.  */
 #undef NEED_MEMORY_H
 
 /* Define if your struct nlist has an n_un member.  */
 #undef NLIST_NAME_UNION
 
-/* Define if you have nlist.h.  */
+/* Define if you have <nlist.h>.  */
 #undef NLIST_STRUCT
 
 /* Define if you can't use the address of an argument to a function
@@ -207,10 +222,10 @@
 /* Define on System V Release 4.  */
 #undef SVR4
 
-/* Define if you don't have dirent.h, but have sys/dir.h.  */
+/* Define if you don't have <dirent.h>, but have <sys/dir.h>.  */
 #undef SYSDIR
 
-/* Define if you don't have dirent.h, but have sys/ndir.h.  */
+/* Define if you don't have <dirent.h>, but have <sys/ndir.h>.  */
 #undef SYSNDIR
 
 /* Define if `sys_siglist' is declared by <signal.h>.  */
@@ -232,7 +247,7 @@
    instead of <sys/cpustats.h>.  */
 #undef UMAX4_3
 
-/* Define if you do not have strings.h, index, bzero, etc..  */
+/* Define if you do not have <strings.h>, index, bzero, etc..  */
 #undef USG
 
 /* Define vfork as fork if vfork does not work.  */

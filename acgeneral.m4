@@ -29,7 +29,7 @@ dnl
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.96)dnl
+define(AC_ACVERSION, 1.97)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -78,20 +78,24 @@ configure_args="[$]@"
 changequote(, )dnl
 ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets after descriptions]
---build=BUILD		configure for building on BUILD [BUILD=HOST]
+Configuration:
 --cache-file=FILE	cache test results in FILE
---disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
---enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
---exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
 --help			print this message
---host=HOST		configure for HOST [guessed]
 --no-create		do not create output files
---prefix=PREFIX		install host independent files in PREFIX [/usr/local]
 --quiet, --silent	do not print \`checking for...' messages
---srcdir=DIR		find the sources in DIR [configure dir or ..]
---target=TARGET		configure for TARGET [TARGET=HOST]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
+Directories:
+--exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
+--prefix=PREFIX		install host independent files in PREFIX [/usr/local]
+--srcdir=DIR		find the sources in DIR [configure dir or ..]
+Host type:
+--build=BUILD		configure for building on BUILD [BUILD=HOST]
+--host=HOST		configure for HOST [guessed]
+--target=TARGET		configure for TARGET [TARGET=HOST]
+Features and packages:
+--disable-FEATURE	do not include FEATURE (same as --enable-FEATURE=no)
+--enable-FEATURE[=ARG]	include FEATURE [ARG=yes]
 --with-PACKAGE[=ARG]	use PACKAGE [ARG=yes]
 --without-PACKAGE	do not use PACKAGE (same as --with-PACKAGE=no)
 --x-includes=DIR	X include files are in DIR
@@ -756,7 +760,7 @@ fi
 for ac_site_dir in $ac_site_dirs; do
   ac_site_file=$ac_site_dir/lib/config.site
   if test -r "$ac_site_file"; then
-    AC_MSG_RESULT(loading site initialization script $ac_site_file)
+    echo "loading site initialization script $ac_site_file"
     . $ac_site_file
   fi
 done
@@ -764,16 +768,16 @@ done
 dnl
 define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
-  AC_MSG_RESULT(loading test results from cache file $cache_file)
+  echo "loading test results from cache file $cache_file"
   . $cache_file
 else
-  AC_MSG_RESULT(creating new cache file $cache_file)
+  echo "creating new cache file $cache_file"
   > $cache_file
 fi])dnl
 dnl
 define(AC_CACHE_SAVE,
 [if test -w $cache_file; then
-AC_MSG_RESULT(saving test results in cache file $cache_file)
+echo "saving test results in cache file $cache_file"
 cat > $cache_file <<\CEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -1435,6 +1439,7 @@ EOF
 cat >> ${CONFIG_STATUS} <<\EOF
 
 ac_given_srcdir=$srcdir
+ac_given_INSTALL=$INSTALL
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
@@ -1446,22 +1451,29 @@ changequote([, ])dnl
     # The file is in a subdirectory.
     test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/$ac_dir"
+    # A "../" for each directory in $ac_dir_suffix.
+changequote(, )dnl
+    ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
+changequote([, ])dnl
   else
-    ac_dir_suffix=
+    ac_dir_suffix= ac_dots=
   fi
 
-changequote(, )dnl
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
-changequote([, ])dnl
   case "$ac_given_srcdir" in
   .)  srcdir=.
-      if test -z "$ac_dir_suffix"; then top_srcdir=.
+      if test -z "$ac_dots"; then top_srcdir=.
       else top_srcdir=`echo $ac_dots|sed 's%/$%%'`; fi ;;
   /*) srcdir="$ac_given_srcdir$ac_dir_suffix"; top_srcdir="$ac_given_srcdir" ;;
   *) # Relative path.
     srcdir="$ac_dots$ac_given_srcdir$ac_dir_suffix"
     top_srcdir="$ac_dots$ac_given_srcdir" ;;
+  esac
+
+  case "$ac_given_INSTALL" in
+changequote(, )dnl
+  [/$]*) INSTALL="$ac_given_INSTALL" ;;
+changequote([, ])dnl
+  *)  INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
 
   echo creating "$ac_file"

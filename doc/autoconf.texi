@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.96
-@set VERSION 1.96
+@set EDITION 1.97
+@set VERSION 1.97
 @set UPDATED August 1994
 
 @iftex
@@ -146,6 +146,7 @@ General Purpose Macros
 Writing Macros
 
 * Macro Format::		Basic format of an Autoconf macro.
+* Macro Naming::                What to call your new macros.
 * Quoting::			Protecting macros from unwanted expansion.
 * Dependencies Between Macros::	What to do when macros depend on other macros.
 * Checking for Files::		Finding whether a file exists.
@@ -162,6 +163,11 @@ Test Programs
 
 * Guidelines::			General rules for writing test programs.
 * Tricks::			Special ways to work around problems.
+
+Caching Values
+
+* Cache Files::	        	Files @code{configure} uses for caching.
+* Cache Variables::             Shell variables used in caches.
 
 Makefiles
 
@@ -618,8 +624,9 @@ Print the version number of @code{autoreconf} and exit.
 The @code{autoupdate} program updates a @file{configure.in} file that
 calls Autoconf macros by their old names to use the current macro names.
 In version 2 of Autoconf, most of the macros were renamed to use a more
-uniform and descriptive naming scheme.  Although the old names still
-work (@pxref{Old Macro Names}, for a list of the old macro names and the
+uniform and descriptive naming scheme.  @xref{Macro Naming}, for a
+description of the new scheme.  Although the old names still work
+(@pxref{Old Macro Names}, for a list of the old macro names and the
 corresponding new names), you can make your @file{configure.in} files
 more readable and make it easier to use the current Autoconf
 documentation if you update them to use the new macro names.
@@ -737,7 +744,7 @@ The following macros check for the presence or behavior of particular
 programs:
 
 @defmac AC_PROG_GCC_TRADITIONAL
-@maindex GCC_TRADITIONAL
+@maindex PROG_GCC_TRADITIONAL
 Add @samp{-traditional} to @code{make} variable @code{CC} if using the
 GNU C compiler and @code{ioctl} does not work properly without
 @samp{-traditional}.  This macro calls @code{AC_PROG_CC} and
@@ -745,14 +752,14 @@ GNU C compiler and @code{ioctl} does not work properly without
 @end defmac
 
 @defmac AC_PROG_LN_S
-@maindex LN_S
+@maindex PROG_LN_S
 If @samp{ln -s} works on the current filesystem (the operating system
 and filesystem support symbolic links), set shell and @code{make}
 variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
-@maindex MINUS_C_MINUS_O
+@maindex PROG_CC_C_O
 @vindex NO_MINUS_C_MINUS_O
 If the C compiler does not accept the @samp{-c} and @samp{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.
@@ -855,7 +862,7 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @defmac AC_PROG_RSH
-@maindex RSH
+@maindex PROG_RSH
 @vindex RSH
 @vindex NO_REMOTE
 @vindex HAVE_NETDB_H
@@ -867,7 +874,7 @@ Otherwise, define @code{NO_REMOTE}.
 @end defmac
 
 @defmac AC_PROG_MAKE_SET
-@maindex SET_MAKE
+@maindex PROG_MAKE_SET
 If @code{make} predefines the variable @code{MAKE}, define @code{make}
 variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
 to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
@@ -887,7 +894,7 @@ If you use this macro, simply place a line like this in your
 @end defmac
 
 @defmac AC_DECL_YYTEXT
-@maindex YYTEXT_POINTER
+@maindex DECL_YYTEXT
 @vindex YYTEXT_POINTER
 Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
 of a @samp{char []}.  This depends on whether @code{lex} or @code{flex}
@@ -903,38 +910,63 @@ This macro replaces @code{AC_DECLARE_YYTEXT}, which didn't work.
 
 The following macros check for the presence of certain C header files:
 
-@defmac AC_HEADER_DIRENT
+@defmac AC_DIR_HEADER
 @maindex DIR_HEADER
 @vindex DIRENT
-@vindex HAVE_DIRENT_H
-@vindex HAVE_NDIR_H
-@vindex HAVE_SYS_DIR_H
-@vindex HAVE_SYS_NDIR_H
 @vindex SYSDIR
 @vindex SYSNDIR
 @vindex NDIR
 @vindex VOID_CLOSEDIR
-Check for the the following header files, and for the first one that is
-found, define the listed macros (the second macros listed are for
-backward compatibility, and are considered obsolete):
+Like @code{AC_HEADER_DIRENT}, but defines a different set of C
+preprocessor macros to indicate which header file is found.  This macro
+and the names it defines are considered obsolete.  The names it defines are:
 
 @table @file
 @item dirent.h
-Define @code{HAVE_DIRENT_H} and @code{DIRENT}.
+@code{DIRENT}
 
 @item sys/ndir.h
-Define @code{HAVE_SYS_NDIR_H} and @code{SYSNDIR}.
+@code{SYSNDIR}
 
 @item sys/dir.h
-Define @code{HAVE_SYS_DIR_H} and @code{SYSDIR}.
+@code{SYSDIR}
 
 @item ndir.h
-Define @code{HAVE_NDIR_H} and @code{NDIR}.
+@code{NDIR}
 @end table
 
 Also, if the directory library header file contains a declaration of the
 @code{closedir} function with a @code{void} return type, define
 @code{VOID_CLOSEDIR}.
+@end defmac
+
+@defmac AC_HEADER_DIRENT
+@maindex HEADER_DIRENT
+@vindex HAVE_DIRENT_H
+@vindex HAVE_NDIR_H
+@vindex HAVE_SYS_DIR_H
+@vindex HAVE_SYS_NDIR_H
+@vindex CLOSEDIR_VOID
+Check for the the following header files, and for the first one that is
+found, define the listed C preprocessor macro:
+
+@table @file
+@item dirent.h
+@code{HAVE_DIRENT_H}
+
+@item sys/ndir.h
+@code{HAVE_SYS_NDIR_H}
+
+@item sys/dir.h
+@code{HAVE_SYS_DIR_H}
+
+@item ndir.h
+@code{HAVE_NDIR_H}
+@end table
+
+Also, if the directory library header file contains a declaration of the
+@code{closedir} function with a @code{void} return type, define
+@code{CLOSEDIR_VOID}.
 
 The directory library declarations in the source code should look
 something like the following, which assumes that you have also called
@@ -973,7 +1005,7 @@ the length of a directory entry name by passing a pointer to a
 @end defmac
 
 @defmac AC_HEADER_MAJOR
-@maindex MAJOR_HEADER
+@maindex HEADER_MAJOR
 @vindex MAJOR_IN_MKDEV
 @vindex MAJOR_IN_SYSMACROS
 If @file{sys/types.h} does not define @code{major}, @code{minor}, and
@@ -992,7 +1024,7 @@ example for @code{AC_HEADER_STDC}.
 @end defmac
 
 @defmac AC_HEADER_STDC
-@maindex STDC_HEADERS
+@maindex HEADER_STDC
 @vindex STDC_HEADERS
 Define @code{STDC_HEADERS} if the system has ANSI C header files.
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
@@ -1098,7 +1130,7 @@ code.  See the example for @code{AC_HEADER_STDC}.
 @end defmac
 
 @defmac AC_DECL_SYS_SIGLIST
-@maindex SYS_SIGLIST_DECLARED
+@maindex DECL_SYS_SIGLIST
 @vindex SYS_SIGLIST_DECLARED
 Define @code{SYS_SIGLIST_DECLARED} if the variable @code{sys_siglist} is
 declared in a system header file, either @file{signal.h} or
@@ -1111,35 +1143,35 @@ declared in a system header file, either @file{signal.h} or
 The following macros check for predefined C types:
 
 @defmac AC_TYPE_GETGROUPS
-@maindex GETGROUPS_T
+@maindex TYPE_GETGROUPS
 @vindex GETGROUPS_T
 Define @code{GETGROUPS_T} to be whichever of @code{gid_t} or @code{int}
 is the base type of the array argument to @code{getgroups}.
 @end defmac
 
 @defmac AC_TYPE_MODE_T
-@maindex MODE_T
+@maindex TYPE_MODE_T
 @vindex mode_t
 If @code{mode_t} is not defined in @file{sys/types.h}, define
 @code{mode_t} to be @code{int}.
 @end defmac
 
 @defmac AC_TYPE_OFF_T
-@maindex OFF_T
+@maindex TYPE_OFF_T
 @vindex off_t
 If @code{off_t} is not defined in @file{sys/types.h}, define
 @code{off_t} to be @code{long}.
 @end defmac
 
 @defmac AC_TYPE_PID_T
-@maindex PID_T
+@maindex TYPE_PID_T
 @vindex pid_t
 If @code{pid_t} is not defined in @file{sys/types.h}, define
 @code{pid_t} to be @code{int}.
 @end defmac
 
 @defmac AC_TYPE_SIGNAL
-@maindex RETSIGTYPE
+@maindex TYPE_SIGNAL
 @vindex RETSIGTYPE
 If @file{signal.h} declares @code{signal} as returning a pointer to a
 function returning @code{void}, define @code{RETSIGTYPE} to be
@@ -1159,14 +1191,14 @@ hup_handler ()
 @end defmac
 
 @defmac AC_TYPE_SIZE_T
-@maindex SIZE_T
+@maindex TYPE_SIZE_T
 @vindex size_t
 If @code{size_t} is not defined in @file{sys/types.h}, define
 @code{size_t} to be @code{unsigned}.
 @end defmac
 
 @defmac AC_TYPE_UID_T
-@maindex UID_T
+@maindex TYPE_UID_T
 @vindex uid_t
 @vindex gid_t
 If @code{uid_t} is not defined in @file{sys/types.h}, define
@@ -1179,7 +1211,7 @@ If @code{uid_t} is not defined in @file{sys/types.h}, define
 The following macros check for particular C library functions:
 
 @defmac AC_FUNC_ALLOCA
-@maindex ALLOCA
+@maindex FUNC_ALLOCA
 @vindex C_ALLOCA
 @vindex HAVE_ALLOCA_H
 Check how to get @code{alloca}.  Tries to get a builtin version by
@@ -1232,7 +1264,7 @@ char *alloca ();
 @end defmac
 
 @defmac AC_FUNC_GETLOADAVG
-@maindex GETLOADAVG
+@maindex FUNC_GETLOADAVG
 @vindex SVR4
 @vindex DGUX
 @vindex UMAX
@@ -1276,14 +1308,14 @@ to the name of the group that should own the installed program.
 @end defmac
 
 @defmac AC_FUNC_MMAP
-@maindex MMAP
+@maindex FUNC_MMAP
 @vindex HAVE_MMAP
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.
 @end defmac
 
 @defmac AC_FUNC_SETVBUF_REVERSED
-@maindex SETVBUF_REVERSED
+@maindex FUNC_SETVBUF_REVERSED
 @vindex SETVBUF_REVERSED
 If @code{setvbuf} takes the buffering type as its second argument and
 the buffer pointer as the third, instead of the other way around, define
@@ -1291,7 +1323,7 @@ the buffer pointer as the third, instead of the other way around, define
 @end defmac
 
 @defmac AC_FUNC_STRCOLL
-@maindex STRCOLL
+@maindex FUNC_STRCOLL
 @vindex HAVE_STRCOLL
 If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
@@ -1300,14 +1332,14 @@ definitions of @code{strcoll}, which should not be used.
 @end defmac
 
 @defmac AC_FUNC_UTIME_NULL
-@maindex UTIME_NULL
+@maindex FUNC_UTIME_NULL
 @vindex HAVE_UTIME_NULL
 If @samp{utime(@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
 @end defmac
 
 @defmac AC_FUNC_VFORK
-@maindex VFORK
+@maindex FUNC_VFORK
 @vindex HAVE_VFORK_H
 @vindex vfork
 If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
@@ -1318,7 +1350,7 @@ detects any of them.
 @end defmac
 
 @defmac AC_FUNC_VPRINTF
-@maindex VPRINTF
+@maindex FUNC_VPRINTF
 @vindex HAVE_VPRINTF
 @vindex HAVE_DOPRNT
 If @code{vprintf} is found, define @code{HAVE_VPRINTF}.  Otherwise, if
@@ -1328,7 +1360,7 @@ are also available.)
 @end defmac
 
 @defmac AC_FUNC_WAIT3
-@maindex WAIT3
+@maindex FUNC_WAIT3
 @vindex HAVE_WAIT3
 If @code{wait3} is found and fills in the contents of its third argument
 (a @samp{struct rusage *}), which HP-UX does not do, define
@@ -1341,7 +1373,7 @@ If @code{wait3} is found and fills in the contents of its third argument
 The following macros check for certain structures or structure members:
 
 @defmac AC_HEADER_STAT
-@maindex STAT_MACROS_BROKEN
+@maindex HEADER_STAT
 @maindex STAT_MACROS_BROKEN
 If the macros @code{S_ISDIR}, @code{S_ISREG} et al. defined in
 @file{sys/stat.h} do not work properly (returning false positives),
@@ -1350,14 +1382,14 @@ Amdahl UTS and Motorola System V/88.
 @end defmac
 
 @defmac AC_STRUCT_ST_BLKSIZE
-@maindex ST_BLKSIZE
+@maindex STRUCT_ST_BLKSIZE
 @vindex HAVE_ST_BLKSIZE
 If @code{struct stat} contains an @code{st_blksize} member, define
 @code{HAVE_ST_BLKSIZE}.
 @end defmac
 
 @defmac AC_STRUCT_ST_BLOCKS
-@maindex ST_BLOCKS
+@maindex STRUCT_ST_BLOCKS
 @vindex HAVE_ST_BLOCKS
 If @code{struct stat} contains an @code{st_blocks} member, define
 @code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
@@ -1365,14 +1397,14 @@ If @code{struct stat} contains an @code{st_blocks} member, define
 @end defmac
 
 @defmac AC_STRUCT_ST_RDEV
-@maindex ST_RDEV
+@maindex STRUCT_ST_RDEV
 @vindex HAVE_ST_RDEV
 If @code{struct stat} contains an @code{st_rdev} member, define
 @code{HAVE_ST_RDEV}.
 @end defmac
 
 @defmac AC_HEADER_TIME
-@maindex TIME_WITH_SYS_TIME
+@maindex HEADER_TIME
 @vindex TIME_WITH_SYS_TIME
 If a program may include both @file{time.h} and @file{sys/time.h},
 define @code{TIME_WITH_SYS_TIME}.  On some older systems,
@@ -1406,7 +1438,7 @@ defines @code{struct tm}.
 @end defmac
 
 @defmac AC_STRUCT_TIMEZONE
-@maindex TIMEZONE
+@maindex STRUCT_TIMEZONE
 @vindex HAVE_TM_ZONE
 @vindex HAVE_TZNAME
 Figure out how to get the current timezone.  If @code{struct tm} has a
@@ -1422,7 +1454,7 @@ The following macros check for C compiler or machine architecture
 features:
 
 @defmac AC_C_ARG_ARRAY
-@maindex ARG_ARRAY
+@maindex C_ARG_ARRAY
 @vindex NO_ARG_ARRAY
 If the address of an argument to a C function can not be used like
 the start of an array, define @code{NO_ARG_ARRAY}.  This ability allows
@@ -1431,7 +1463,7 @@ were an array of values.
 @end defmac
 
 @defmac AC_TRY_CROSS
-@maindex CROSS_CHECK
+@maindex TRY_CROSS
 If the C compiler being used does not produce executables that can run
 on the system where @code{configure} is being run, set the shell
 variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
@@ -1441,14 +1473,14 @@ to take a default action instead of trying to run a test program
 @end defmac
 
 @defmac AC_C_CHAR_UNSIGNED
-@maindex CHAR_UNSIGNED
+@maindex C_CHAR_UNSIGNED
 @vindex __CHAR_UNSIGNED__
 If the C type @code{char} is unsigned, define @code{__CHAR_UNSIGNED__},
 unless the C compiler predefines it.
 @end defmac
 
 @defmac AC_C_CONST
-@maindex CONST
+@maindex C_CONST
 @vindex const
 If the C compiler does not fully support the keyword @code{const},
 define @code{const} to be empty.  Some C compilers that do not define
@@ -1462,7 +1494,7 @@ declarations.)
 @end defmac
 
 @defmac AC_C_INLINE
-@maindex INLINE
+@maindex C_INLINE
 @vindex inline
 If the C compiler is a version of GCC that supports the keyword
 @code{__inline} but not @code{inline} (such as some NeXT versions),
@@ -1487,7 +1519,7 @@ If the C type @code{long int} is 64 bits wide, define
 @end defmac
 
 @defmac AC_C_LONG_DOUBLE
-@maindex HAVE_LONG_DOUBLE
+@maindex C_LONG_DOUBLE
 @vindex HAVE_LONG_DOUBLE
 If the C compiler supports the @code{long double} type, define
 @code{HAVE_LONG_DOUBLE}.  Some C compilers that do not define
@@ -1496,7 +1528,7 @@ that define @code{__STDC__} do not support @code{long double}.
 @end defmac
 
 @defmac AC_C_BIGENDIAN
-@maindex WORDS_BIGENDIAN
+@maindex C_BIGENDIAN
 @vindex WORDS_BIGENDIAN
 If words are stored with the most significant byte first (like Motorola
 and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
@@ -1508,7 +1540,7 @@ and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 The following macros check for operating system services:
 
 @defmac AC_PATH_X
-@maindex FIND_X
+@maindex PATH_X
 Try to locate the X Window System include files and libraries.  Try
 first by running @code{xmkmf} on a trivial @file{Imakefile} and
 examining the @file{Makefile} that it produces.  If that fails (such as
@@ -1526,7 +1558,7 @@ The command line options @samp{--x-includes=@var{dir}} and
 @end defmac
 
 @defmac AC_PATH_XTRA
-@maindex FIND_XTRA
+@maindex PATH_XTRA
 An enhanced version of @code{AC_PATH_X}.  Put the C compiler flags that
 X needs into @code{make} variable @code{X_CFLAGS}, and the X linker
 flags into @code{X_LIBS}.  If X is not available, put
@@ -1540,7 +1572,8 @@ been called.  Because of the macro dependencies, if you call this macro,
 you should let it call @code{AC_PATH_X} rather than doing that yourself.
 @end defmac
 
-@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-not-supported}@r{]})
+@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[},
+@var{action-if-not-supported}@r{]})
 @maindex HAVE_POUNDBANG
 Check whether the system supports starting shell scripts with a line of
 the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
@@ -1549,14 +1582,14 @@ works, execute shell commands @var{action-if-supported}; if not, execute
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
-@maindex LONG_FILE_NAMES
+@maindex SYS_LONG_FILE_NAMES
 @vindex HAVE_LONG_FILE_NAMES
 If the system supports file names longer than 14 characters, define
 @code{HAVE_LONG_FILE_NAMES}.
 @end defmac
 
 @defmac AC_SYS_REMOTE_TAPE
-@maindex REMOTE_TAPE
+@maindex SYS_REMOTE_TAPE
 @vindex HAVE_SYS_MTIO_H
 If BSD tape drive ioctls are available, define @code{HAVE_SYS_MTIO_H},
 and if sockets are available add @code{rmt} to @code{make} variable
@@ -1564,7 +1597,7 @@ and if sockets are available add @code{rmt} to @code{make} variable
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS
-@maindex RESTARTABLE_SYSCALLS
+@maindex SYS_RESTARTABLE_SYSCALLS
 @vindex HAVE_RESTARTABLE_SYSCALLS
 If the system automatically restarts a system call that is interrupted
 by a signal, define @code{HAVE_RESTARTABLE_SYSCALLS}.
@@ -1580,21 +1613,21 @@ be replaced someday with a more systematic approach, based either on the
 functions they make available or the environments they provide.
 
 @defmac AC_OS_AIX
-@maindex AIX
+@maindex OS_AIX
 @vindex _ALL_SOURCE
 If on AIX, define @code{_ALL_SOURCE}.  Allows the use of some BSD
 functions.  Should be called before any macros that run the C compiler.
 @end defmac
 
 @defmac AC_OS_DYNIX
-@maindex DYNIX_SEQ
+@maindex OS_DYNIX
 If on DYNIX/ptx (Sequent UNIX), add @samp{-lseq} to @code{make}
 variable @code{LIBS}.  Allows use of some BSD system calls and
 @code{getmntent}.
 @end defmac
 
 @defmac AC_OS_IRIX
-@maindex IRIX_SUN
+@maindex OS_IRIX
 If on IRIX (Silicon Graphics UNIX), add @samp{-lsun} to @code{make}
 variable @code{LIBS}.  Needed to get @code{getmntent}.  At sites using
 Yellow Pages/NIS, it is also needed to get properly working
@@ -1604,7 +1637,7 @@ so on.
 @end defmac
 
 @defmac AC_OS_ISC
-@maindex ISC_POSIX
+@maindex OS_ISC
 @vindex _POSIX_SOURCE
 If on a POSIXized ISC UNIX, define @code{_POSIX_SOURCE} and add
 @samp{-posix} (for the GNU C compiler) or @samp{-Xp} (for other C
@@ -1614,7 +1647,7 @@ any other macros that run the C compiler.
 @end defmac
 
 @defmac AC_OS_MINIX
-@maindex MINIX
+@maindex OS_MINIX
 @vindex _MINIX
 @vindex _POSIX_SOURCE
 @vindex _POSIX_1_SOURCE
@@ -1624,20 +1657,18 @@ facilities.  Should be called before any macros that run the C compiler.
 @end defmac
 
 @defmac AC_OS_SCO
-@maindex SCO_INTL
+@maindex OS_SCO
 If on SCO UNIX, add @samp{-lintl} to @code{make} variable @code{LIBS}.
 Used to get @code{strftime}.  It must be called before checking for
 @code{strftime}.
 @end defmac
 
 @defmac AC_OS_XENIX
-@maindex XENIX_DIR
-@vindex VOID_CLOSEDIR
-If on Xenix, define @code{VOID_CLOSEDIR} and add @samp{-lx} to
-@code{make} variable @code{LIBS}.  Also, if @file{sys/ndir.h} is not
-being used, add @samp{-ldir} to @code{LIBS}.  Needed when using the
-directory reading functions.  This macro must be called after
-@code{AC_HEADER_DIRENT}.
+@maindex OS_XENIX
+If on Xenix, add @samp{-lx} to @code{make} variable @code{LIBS}.  Also,
+if @file{sys/ndir.h} is not being used, add @samp{-ldir} to @code{LIBS}.
+Needed when using the directory reading functions.  This macro must be
+called after @code{AC_HEADER_DIRENT}.
 @end defmac
 
 @node General Purpose Macros, Manual Configuration, Specific Tests, Top
@@ -1788,7 +1819,7 @@ set the prefix to @file{/usr/local/gnu}.
 @end defmac
 
 @defmac AC_INIT_PREPARE (@var{unique-file-in-source-dir})
-@maindex PREPARE
+@maindex INIT_PREPARE
 Find the source code directory and set up shell variables necessary for
 other Autoconf macros to work.  @var{unique-file-in-source-dir} is some
 file that is in the package's source directory; @code{configure} checks
@@ -1850,7 +1881,7 @@ produces this in @file{configure}:
 These macros check whether particular files exist.
 
 @defmac AC_CHECK_LIB (@var{library} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
-@maindex HAVE_LIBRARY
+@maindex CHECK_LIB
 Create a test C program to see whether that program can be linked with
 the library @var{library}.  @var{action-if-found} is a list of shell
 commands to run if the link succeeds (which means that the library is
@@ -1877,7 +1908,7 @@ finding the site-wide defaults file correctly, so it is obsolete.
 @end defmac
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found}@r{]})
-@maindex PROGRAM_CHECK
+@maindex CHECK_PROG
 Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
 @var{value-if-not-found}, if given.  If @var{variable} was already set,
@@ -1885,7 +1916,7 @@ do nothing.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
-@maindex PROGRAM_PATH
+@maindex PATH_PROG
 Similar to @code{AC_CHECK_PROG}, but set @var{variable} to the entire
 path of @var{prog-to-check-for} if found.  Otherwise, set @var{variable}
 to @var{value-if-not-found}, if given.  If @var{variable} was already
@@ -1893,7 +1924,7 @@ set, do nothing.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
-@maindex PROGRAMS_CHECK
+@maindex CHECK_PROGS
 Check for each program in the whitespace-separated list
 @var{progs-to-check-for} exists in @code{PATH}.  If it is found, set
 @var{variable} to the name of that program.  Otherwise, continue
@@ -1904,7 +1935,7 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
-@maindex PROGRAMS_PATH
+@maindex PATH_PROGS
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the entire pathname of the program
 found.
@@ -1929,7 +1960,7 @@ prints @samp{checking for @var{echo-text}} to the standard output first.
 @end defmac
 
 @defmac AC_CHECK_FUNC (@var{function}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex FUNC_CHECK
+@maindex CHECK_FUNC
 If @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If the
 functions might be in libraries other than the default C library, first
@@ -1939,7 +1970,7 @@ define a symbol if the function is available, consider using
 @end defmac
 
 @defmac AC_CHECK_FUNCS (@var{function}@dots{})
-@maindex HAVE_FUNCS
+@maindex CHECK_FUNCS
 @vindex HAVE_@var{function}
 For each given @var{function} in the whitespace-separated argument list
 that is available, define @code{HAVE_@var{function}} (in all caps).
@@ -1949,7 +1980,7 @@ default C library, first call @code{AC_CHECK_LIB} for those libraries.
 @end defmac
 
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{})
-@maindex HAVE_HEADERS
+@maindex CHECK_HEADERS
 @vindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
 whitespace-separated argument list that exists, define
@@ -1958,7 +1989,7 @@ a precise definition of ``define'' as it is used here.
 @end defmac
 
 @defmac AC_CHECK_HEADER (@var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex HEADER_CHECK
+@maindex CHECK_HEADER
 If the system header file @var{header-file} exists, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
 you just want to define a symbol if the header file is available,
@@ -1966,7 +1997,7 @@ consider using @code{AC_CHECK_HEADERS} instead.
 @end defmac
 
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex HEADER_EGREP
+@maindex EGREP_HEADER
 If the output of running the preprocessor on the system header file
 @var{header-file} contains the @code{egrep} regular expression
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
@@ -1984,7 +2015,7 @@ your programs.
 @end defmac
 
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex PROGRAM_EGREP
+@maindex EGREP_CPP
 @var{program} is the text of a C or C++ program, on which shell variable and
 backquote substitutions are performed.  If the output of running the
 preprocessor on @var{program} contains the @code{egrep} regular
@@ -2008,7 +2039,7 @@ might be in libraries other than the default C library, first call
 @end defmac
 
 @defmac AC_CHECK_SIZEOF (@var{type})
-@maindex SIZEOF_TYPE
+@maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
 @samp{type} is unknown to the compiler, gets a size of 0.  @var{uctype}
@@ -2022,7 +2053,7 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
 @defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
-@maindex TEST_CPP
+@maindex TRY_CPP
 @var{includes} is C or C++ @code{#include} statements and declarations, on
 which shell variable and backquote substitutions are performed.
 (Actually, it can be any C program, but other statements are probably
@@ -2285,7 +2316,7 @@ changes need only be made to the macro definitions, and all of the
 callers change automatically.
 
 @defmac AC_MSG_CHECKING (@var{feature-description})
-@maindex CHECKING
+@maindex MSG_CHECKING
 Notify the user that @code{configure} is checking for a particular
 feature.  This macro prints a message that starts with @samp{checking }.
 It prints nothing if @code{configure} is run with the @samp{--silent} or
@@ -2295,7 +2326,7 @@ or @samp{for c89}.
 @end defmac
 
 @defmac AC_MSG_ERROR (@var{error-description})
-@maindex ERROR
+@maindex MSG_ERROR
 Notify the user of an error that prevents @code{configure} from
 completing.  This macro prints an error message on the standard error
 stream and exits @code{configure} with a nonzero status.
@@ -2304,7 +2335,7 @@ $HOME for \$HOME}.
 @end defmac
 
 @defmac AC_MSG_RESULT (@var{result-description})
-@maindex VERBOSE
+@maindex MSG_RESULT
 Notify the user of the results of a check.  This information is
 only printed if @code{configure} is run with the @samp{--verbose}
 option.  @var{result-description} should be something like @samp{setting
@@ -2312,7 +2343,7 @@ ADA to $ADA}.
 @end defmac
 
 @defmac AC_MSG_WARN (@var{problem-description})
-@maindex WARN
+@maindex MSG_WARN
 Notify the @code{configure} user of a possible problem.  This macro
 prints the message on the standard error stream; @code{configure}
 continues running afterward, so macros that call @code{AC_MSG_WARN} should
@@ -2583,6 +2614,7 @@ number, which you can get by running @samp{autoconf --version}.
 
 @menu
 * Macro Format::		Basic format of an Autoconf macro.
+* Macro Naming::                What to call your new macros.
 * Quoting::			Protecting macros from unwanted expansion.
 * Dependencies Between Macros::	What to do when macros depend on other macros.
 * Checking for Files::		Finding whether a file exists.
@@ -2591,7 +2623,7 @@ number, which you can get by running @samp{autoconf --version}.
 * Multiple Cases::		Tests for several possible values.
 @end menu
 
-@node Macro Format, Quoting, , Writing Macros
+@node Macro Format, Macro Naming, , Writing Macros
 @section Macro Format
 
 Autoconf macros are defined as arguments to the @code{m4} builtin
@@ -2604,15 +2636,6 @@ define(@var{macro-name}, [@var{macro-body}])dnl
 @noindent
 The square brackets here do not indicate optional text: they should
 literally be present in the macro definition.
-
-All of the Autoconf macros have names starting with @samp{AC_} to
-prevent them from accidentally conflicting with other text.  All shell
-variables that they use for internal purposes have names starting with
-@samp{ac_}.  To ensure that your macros don't conflict with present or
-future Autoconf macros, you should prefix your own macro names and any
-shell variables they use with some other sequence.  Possibilities
-include your initials, or an abbreviation for the name of your
-organization or software package.
 
 The @code{m4} builtin @code{dnl} prevents a newline from being inserted
 in the output where the macro is defined; without it, the generated
@@ -2627,7 +2650,59 @@ arguments passed to the macro as @samp{$1}, @samp{$2}, etc.
 @xref{Definitions, , How to define new macros, m4.info, GNU m4}, for
 more complete information on writing @code{m4} macros.
 
-@node Quoting, Dependencies Between Macros, Macro Format, Writing Macros
+@node Macro Naming, Quoting, Macro Format, Writing Macros
+@section Macro Naming
+
+All of the Autoconf macros have all-uppercase names starting with
+@samp{AC_} to prevent them from accidentally conflicting with other
+text.  All shell variables that they use for internal purposes have
+mostly-lowercase names starting with @samp{ac_}.  To ensure that your
+macros don't conflict with present or future Autoconf macros, you should
+prefix your own macro names and any shell variables they use with some
+other sequence.  Possibilities include your initials, or an abbreviation
+for the name of your organization or software package.
+
+Most of the Autoconf macros' names follow a structured naming convention
+that indicates the kind of feature check by the name.  The macro names
+consist of several words, separated by underscores, going from most
+general to most specific.   The names of their cache variables use the
+same convention (@pxref{Cache Variables}, for more information on them).
+
+The first word of the name after @samp{AC_} usually tells the category
+of feature being tested.  Here are the categories for specific test
+macros, the kind of macro that you are more likely to write.  You are
+not required to use these names, but consistency helps readability.
+
+@table @code
+@item C
+C language builtin features.
+@item DECL
+Declarations of C variables in header files.
+@item FUNC
+Functions in libraries.
+@item HEADER
+Header files.
+@item OS
+Quirks of particular operating systems.
+@item PATH
+The full path names to files.
+@item PROG
+The names of programs.
+@item STRUCT
+Definitions of C structures in header files.
+@item SYS
+Operating system features.
+@item TYPE
+C builtin or declared types. 
+@end table
+
+After the category comes the name of the particular feature being
+tested.  Any further words in the macro name indicate particular aspects
+of the feature.  For example, @code{AC_FUNC_UTIME_NULL} checks the
+behavior of the @code{utime} function when called with a @code{NULL}
+pointer.
+
+@node Quoting, Dependencies Between Macros, Macro Naming, Writing Macros
 @section Quoting
 
 Macros that are called by other macros are evaluated by @code{m4}
@@ -2646,7 +2721,7 @@ the @code{m4} builtin command @code{changequote} to temporarily disable
 quoting before the code that uses brackets, like this:
 
 @example
-changequote(,)dnl
+changequote(, )dnl
 @end example
 
 @noindent
@@ -2654,7 +2729,7 @@ Then they turn quoting back on again with another call to
 @code{changequote}:
 
 @example
-changequote([,])dnl
+changequote([, ])dnl
 @end example
 
 When you create a @code{configure} script using newly written macros,
@@ -2928,6 +3003,31 @@ it reads from it the results from previous runs and avoids rerunning
 those checks.  As a result, @code{configure} can run much faster than if
 it had to perform all of the checks every time.
 
+@defmac AC_CACHE_VAL (@var{cache-id}, @var{commands-to-set-it})
+@maindex CACHE_VAL
+Ensure that the results of the check identified by @var{cache-id} are
+available.  If the results of the check were in the cache file that was
+read, print a verbose message saying so; otherwise, run the shell
+commands @var{commands-to-set-it}.  Those commands should have no side
+effects except for setting the variable @var{cache-id}.  In particular,
+they should not call @code{AC_DEFINE}; the code that follows the call to
+@code{AC_CACHE_VAL} should do that, based on the cached value.  Also,
+they should not print any messages, for example with @code{AC_MSG_CHECKING};
+do that before calling @code{AC_CACHE_VAL}, so the messages are printed
+regardless of whether the results of the check are retrieved from the
+cache or determined by running the shell commands.  If the shell
+commands are run to determine the value, the value will be saved in the
+cache file just before @code{configure} creates its output files.
+@end defmac
+
+@menu
+* Cache Files::	        	Files @code{configure} uses for caching.
+* Cache Variables::             Shell variables used in caches.
+@end menu
+
+@node Cache Files, Cache Variables, , Caching Values
+@section Cache Files
+
 The cache file is a shell script that caches the results of configure
 tests run on one system so they can be shared between configure scripts
 and configure runs.  It is not useful on other systems.  If its contents
@@ -2956,24 +3056,10 @@ the existing cache file.  The site initialization script can specify a
 site-wide cache file to use instead of the default, to make it work
 transparently (@pxref{Site Default Values}).
 
-@defmac AC_CACHE_VAL (@var{cache-id}, @var{commands-to-set-it})
-@maindex CACHE_VAL
-Ensure that the results of the check identified by @var{cache-id} are
-available.  If the results of the check were in the cache file that was
-read, print a verbose message saying so; otherwise, run the shell
-commands @var{commands-to-set-it}.  Those commands should have no side
-effects except for setting the variable @var{cache-id}.  In particular,
-they should not call @code{AC_DEFINE}; the code that follows the call to
-@code{AC_CACHE_VAL} should do that, based on the cached value.  Also,
-they should not print any messages, for example with @code{AC_MSG_CHECKING};
-do that before calling @code{AC_CACHE_VAL}, so the messages are printed
-regardless of whether the results of the check are retrieved from the
-cache or determined by running the shell commands.  If the shell
-commands are run to determine the value, the value will be saved in the
-cache file just before @code{configure} creates its output files.
+@node Cache Variables, , Cache Files, Caching Values
+@section Cache Variables
 
-@noindent
-The names of cache variables should have this format:
+The names of cache variables should have the following format:
 
 @example
 @var{package-prefix}_cv_@var{value-type}_@var{specific-value}@r{[}_@var{additional-options}@r{]}
@@ -3051,7 +3137,6 @@ Like their names, the values the may be assigned to cache variables have
 a few restrictions.  The values may not contain single quotes or curly braces.
 Usually, their values will be boolean (@samp{yes} or @samp{no}) or the
 names of files or functions; so this is not an important restriction.
-@end defmac
 
 @node Makefiles, Invoking configure, Caching Values, Top
 @chapter Makefiles
@@ -3367,6 +3452,7 @@ uniform and descriptive naming scheme.  Here are the old names of the
 macros that were renamed, followed by the current names of those macros.
 Although the old names are still accepted by the @code{autoconf} program
 for backward compatibility, the old names are considered obsolete.
+@xref{Macro Naming}, for a description of the new naming scheme.
 
 @table @code
 @item AC_NOTICE
@@ -3425,8 +3511,6 @@ for backward compatibility, the old names are considered obsolete.
 @vindex PROGRAM_EGREP
 @vindex EGREP_CPP
 @code{AC_EGREP_CPP}
-@vindex TRY_LINK
-@code{AC_TRY_LINK}
 @item AC_TEST_PROGRAM
 @vindex TEST_PROGRAM
 @vindex TRY_RUN
@@ -3487,10 +3571,6 @@ for backward compatibility, the old names are considered obsolete.
 @vindex MAJOR_HEADER
 @vindex HEADER_MAJOR
 @code{AC_HEADER_MAJOR}
-@item AC_DIR_HEADER
-@vindex DIR_HEADER
-@vindex HEADER_DIRENT
-@code{AC_HEADER_DIRENT}
 @item AC_STAT_MACROS_BROKEN
 @vindex STAT_MACROS_BROKEN
 @vindex HEADER_STAT

@@ -52,7 +52,7 @@ SUBDIRS = testsuite
 # Files that can be generated, but should be up to date for a distribution.
 DISTDEP = info Makefile
 # Files to distribute.
-DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README \
+DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README TODO \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acoldnames.m4 acprograms acspecific.m4 autoconf.info* \
 	autoconf.sh autoconf.texi install.texi \
@@ -180,25 +180,22 @@ Makefile: Makefile.in config.status
 config.status: configure
 	./config.status --recheck
 
-# FIXME this doesn't work.
 clean mostlyclean distclean realclean::
 	for dir in $(SUBDIRS); do \
 	  echo making $@ in $$dir ; \
 	  (cd $$dir; $(MAKE) $@) ; \
 	done
 
-clean::
+clean mostlyclean distclean realclean::
 	rm -f autoconf autoheader autoscan autoreconf autoupdate
 	rm -f shindent ifnames *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
 
-mostlyclean:: clean
-
-distclean:: clean
+distclean realclean::
 	rm -f Makefile config.status config.cache config.log
 
-realclean:: distclean
+realclean::
 	rm -f TAGS *.info* INSTALL
 
 TAGS:
