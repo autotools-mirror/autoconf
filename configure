@@ -915,7 +915,7 @@ fi
 fi
 echo "$ac_t""$ac_cv_prog_gnu_m4" 1>&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { echo "configure: error: GNU m4 is required" 1>&2; exit 1; }
+  { echo "configure: error: GNU m4 1.4 is required" 1>&2; exit 1; }
 fi
 
 for ac_prog in mawk gawk nawk awk

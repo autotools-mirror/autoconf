@@ -132,19 +132,17 @@ else
   use_localdir=
 fi
 
-# Use the frozen version of Autoconf if available.
-r= f=
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help < /dev/null 2>&1` in
-*reload-state*) test -r $AC_MACRODIR/autoheader.m4f && { r=--reload f=f; } ;;
-*traditional*) ;;
-*) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
+*reload-state*);;
+*) echo Autoconf requires GNU m4 1.4 or later >&2; exit 1 ;;
 esac
+run_m4="$M4 --reload $AC_MACRODIR/autoheader.m4f $use_localdir"
 
 # Extract assignments of `ah_verbatim_SYMBOL' and `syms' from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
+$run_m4 $infile |
  sed -n -e '
 	: again
 	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p

@@ -1,5 +1,21 @@
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
+	Require GNU m4 1.4 (well 1.3 in fact).
+
+	Because we are ready to handle the case where there are no frozen
+	files, we *have* to pass a -I, which is dangerous in conjunction
+	with the silent including of `aclocal.m4': you may include things
+	that were not expected.  Since anyway handling pre 1.3 complicates
+	the task, just require an m4 which supports reloading of frozen
+	files.
+
+	* acspecific.m4 (AC_PROG_GNU_M4): Check for --reload.
+	* autoconf.sh: Likewise
+	* autoheader.sh: Likewise.
+	* configure.in: Explicitly state the m4 version you want.
+
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
 	No need for foo="`bar`", foo=`bar` is fine.
 	Simplify ${foo} and ${1} into $foo and $1.
 

@@ -165,15 +165,12 @@ else
   use_localdir=
 fi
 
-# Use the frozen version of Autoconf if available.
-r= f=
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
 case `$M4 --help < /dev/null 2>&1` in
-*reload-state*) test -r $AC_MACRODIR/autoconf.m4f && { r=--reload f=f; } ;;
-*traditional*) ;;
-*) echo Autoconf requires GNU m4 1.1 or later >&2; exit 1 ;;
+*reload-state*);;
+*) echo Autoconf requires GNU m4 1.4 or later >&2; exit 1 ;;
 esac
-run_m4="$M4 -I$AC_MACRODIR $use_localdir $r autoconf.m4$f"
+run_m4="$M4 --reload $AC_MACRODIR/autoconf.m4f $use_localdir"
 
 # Output is produced into FD 4.  Prepare it.
 case "x$outfile" in
