@@ -1,5 +1,21 @@
 2000-05-10  Akim Demaille  <akim@epita.fr>
 
+	Update and polish the documentation.
+
+	* doc/autoconf.texi: Use @sc where upper case names were used.
+	Remove a few useless `dnl'.
+	Convert some `dnl' into comments.
+	Promote `$(foo)' in Makefiles, not `${foo}'.
+	Promote `$foo' in shell scripts, not `${foo}'.
+	Promote `foo = bar' in Makefiles, not `foo=bar'.
+	(Language Choice): Document `AC_LANG', move `AC_LANG_C',
+	`AC_LANG_CPLUSPLUS' and `AC_LANG_FORTRAN77' to
+	(Old Macros): here.
+	* doc/install.texi: Fix a typo in the specification of the system
+	quadruples.
+
+2000-05-10  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4 (m4_foreach): Rewritten so that it does not require
 	lists in between parens.
 	(m4_foreach_quoted): new copy of the previous `m4_foreach' which

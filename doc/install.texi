@@ -152,6 +152,7 @@ for the system type, such as @samp{sun4}, or a canonical name with three
 fields:
 @example
 @var{cpu}-@var{company}-@var{system}
+@var{cpu}-@var{company}-@var{kernel}-@var{system}
 @end example
 @noindent
 See the file @file{config.sub} for the possible values of each field.
