@@ -1,5 +1,16 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	The runtime test for AC_FUNC_GETPGRP fails when prototypes are
+	used.  Well, then use the prototypes when you can, and runtime as
+	a last resort.
+	Reported by Artur Frysiak
+
+	* acfunctions.m4 (_AC_FUNC_GETPGRP_TEST): New.
+	(AC_FUNC_GETPGRP): Use it.
+	First try to compile with 0-ary or 1-ary calls.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	* actypes.m4 (_AC_CHECK_TYPE_REPLACEMENT_TYPE_P): `foo_t' is a
 	replacement type.
 	From Paul Eggert.

@@ -582,11 +582,12 @@ AC_CHECK_FUNC(getmntent,
                          [Define if you have the `getmntent' function.])])])
 
 
-# AC_FUNC_GETPGRP
-# ---------------
-AC_DEFUN([AC_FUNC_GETPGRP],
-[AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
-[AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
+# _AC_FUNC_GETPGRP_TEST
+# ---------------------
+# A program that exits with success iff `getpgrp' seems to ignore its
+# argument.
+m4_define([_AC_FUNC_GETPGRP_TEST],
+[AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
 [[
 /*
  * If this system has a BSD-style getpgrp(),
@@ -634,10 +635,34 @@ main ()
       wait (&s);
       exit (s>>8);
     }
-}]])],
-               [ac_cv_func_getpgrp_void=yes],
-               [ac_cv_func_getpgrp_void=no],
-               [AC_MSG_ERROR([cannot check getpgrp if cross compiling])])
+}]])
+])# _AC_FUNC_GETPGRP_TEST
+
+
+# AC_FUNC_GETPGRP
+# ---------------
+# Figure out whether getpgrp takes an argument or not.  Try first using
+# prototypes (AC_COMPILE), and if the compiler is of no help, try a runtime
+# test.
+AC_DEFUN([AC_FUNC_GETPGRP],
+[AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
+[# Use it with a single arg.
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [getpgrp (0);])],
+                  [ac_func_getpgrp_1=yes],
+                  [ac_func_getpgrp_1=no])
+# Use it with no arg.
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [getpgrp ();])],
+                  [ac_func_getpgrp_0=yes],
+                  [ac_func_getpgrp_0=no])
+# If both static checks agree, we are done.
+case $ac_func_getpgrp_0:$ac_func_getpgrp_1 in
+  yes:no) ac_cv_func_getpgrp_void=yes;;
+  no:yes) ac_cv_func_getpgrp_void=false;;
+  *) AC_RUN_IFELSE([_AC_FUNC_GETPGRP_TEST],
+                   [ac_cv_func_getpgrp_void=yes],
+                   [ac_cv_func_getpgrp_void=no],
+                   [AC_MSG_ERROR([cannot check getpgrp if cross compiling])]);;
+esac # $ac_func_getpgrp_0:$ac_func_getpgrp_1
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID, 1,
