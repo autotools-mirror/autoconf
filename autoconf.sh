@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993, 1994, 1996 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1996, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -145,7 +145,7 @@ if grep "^[^#]*${pattern}" $tmpout > /dev/null 2>&1; then
   sed -n "s/^[^#]*\\(${pattern}[_A-Za-z0-9]*\\).*/\\1/p" $tmpout |
     while read macro; do
       grep -n "^[^#]*$macro" $infile /dev/null
-      test $? -eq 1 && echo >&2 "***BUG in Autoconf--please report*** $macro"
+      test $? -eq 1 && echo "***BUG in Autoconf--please report*** $macro"
     done | sort -u >&2
   status=1
 fi
@@ -157,11 +157,17 @@ else
 fi
 
 # Put the real line numbers into configure to make config.log more helpful.
+# Because quoting can sometimes get really painful in m4, there are special
+# tokens to substitute.
 $AWK '
 /__oline__/ { printf "%d:", NR + 1 }
            { print }
 ' $tmpout | sed '
 /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
+s/@BKL@/[/g
+s/@BKR@/]/g
+s/@DLR@/$/g
+s/@PND@/#/g
 ' >&4
 
 rm -f $tmpout
