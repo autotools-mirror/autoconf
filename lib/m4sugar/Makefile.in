@@ -98,9 +98,7 @@ CLEANFILES = $(nodist_m4sugarlib_DATA)
 
 TAGS_FILES = $(dist_m4sugarlib_DATA)
 
-ETAGS_ARGS = --lang=none \
-  --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
-
+ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
 
 SUFFIXES = .m4 .m4f
 
@@ -156,6 +154,22 @@ autoconf_m4f_dependencies = \
 	$(src_libdir)/autoconf/libs.m4		\
 	$(src_libdir)/autoconf/programs.m4	\
 	$(src_libdir)/autoconf/autoconf.m4
+
+
+ETAGS_FOR_M4 = \
+  --lang=none \
+  --regex='/\(m4_define\|define\)(\[\([^]]*\)\]/\2/'
+
+
+ETAGS_FOR_M4SUGAR = \
+  $(ETAGS_FOR_M4) \
+  --regex='/m4_defun(\[\([^]]*\)\]/\1/'
+
+
+ETAGS_FOR_AUTOCONF = \
+  $(ETAGS_FOR_M4SUGAR) \
+  --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)\]/\2/' \
+  --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
 
 subdir = lib/m4sugar
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs

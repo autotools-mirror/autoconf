@@ -35,11 +35,7 @@ CLEANFILES = $(nodist_autoconflib_DATA)
 
 TAGS_FILES = $(dist_autoconflib_DATA)
 
-ETAGS_ARGS = --lang=none \
-  --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
-
-
-
+ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
 
 
 ## -------- ##

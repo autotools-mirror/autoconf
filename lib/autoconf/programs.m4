@@ -255,6 +255,11 @@ fi
 # (But of course when keeping related things together).
 
 # Check for gawk first since it's generally better.
+AN_MAKEVAR([AWK],  [AC_PROG_AWK])
+AN_PROGRAM([awk],  [AC_PROG_AWK])
+AN_PROGRAM([gawk], [AC_PROG_AWK])
+AN_PROGRAM([mawk], [AC_PROG_AWK])
+AN_PROGRAM([nawk], [AC_PROG_AWK])
 AC_DEFUN([AC_PROG_AWK],
 [AC_CHECK_PROGS(AWK, gawk mawk nawk awk, )])
 
@@ -271,6 +276,7 @@ AC_DEFUN([AC_PROG_EGREP],
  AC_SUBST([EGREP])
 ])# AC_PROG_EGREP
 
+
 # AC_PROG_FGREP
 # -------------
 AC_DEFUN([AC_PROG_FGREP],
@@ -286,6 +292,8 @@ AC_DEFUN([AC_PROG_FGREP],
 
 # AC_PROG_INSTALL
 # ---------------
+AN_MAKEVAR([INSTALL], [AC_PROG_INSTALL])
+AN_PROGRAM([install], [AC_PROG_INSTALL])
 AC_DEFUN([AC_PROG_INSTALL],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Find a good install program.  We prefer a C program (faster),
@@ -365,6 +373,9 @@ AC_SUBST(INSTALL_DATA)dnl
 # -----------
 # Look for flex or lex.  Set its associated library to LEXLIB.
 # Check if lex declares yytext as a char * by default, not a char[].
+AN_MAKEVAR([LEX],  [AC_PROG_LEX])
+AN_PROGRAM([lex],  [AC_PROG_LEX])
+AN_PROGRAM([flex], [AC_PROG_LEX])
 AC_DEFUN_ONCE([AC_PROG_LEX],
 [AC_CHECK_PROGS(LEX, flex lex, :)
 if test -z "$LEXLIB"
@@ -427,6 +438,8 @@ AU_DEFUN([AC_DECL_YYTEXT],  [AC_PROG_LEX])
 
 # AC_PROG_LN_S
 # ------------
+AN_MAKEVAR([LN], [AC_PROG_LN_S])
+AN_PROGRAM([ln], [AC_PROG_LN_S])
 AC_DEFUN([AC_PROG_LN_S],
 [AC_MSG_CHECKING([whether ln -s works])
 AC_SUBST([LN_S], [$as_ln_s])dnl
@@ -441,6 +454,8 @@ fi
 # AC_PROG_MAKE_SET
 # ----------------
 # Define SET_MAKE to set ${MAKE} if make doesn't.
+AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
+AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \${MAKE}])
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
@@ -470,6 +485,8 @@ AC_SUBST([SET_MAKE])dnl
 
 # AC_PROG_RANLIB
 # --------------
+AN_MAKEVAR([RANLIB], [AC_PROG_RANLIB])
+AN_PROGRAM([ranlib], [AC_PROG_RANLIB])
 AC_DEFUN([AC_PROG_RANLIB],
 [AC_CHECK_TOOL(RANLIB, ranlib, :)])
 
@@ -484,5 +501,10 @@ Remove this warning when you adjust the code.])])
 
 # AC_PROG_YACC
 # ------------
+AN_MAKEVAR([BISON],  [AC_PROG_YACC])
+AN_MAKEVAR([YACC],  [AC_PROG_YACC])
+AN_PROGRAM([yacc],  [AC_PROG_YACC])
+AN_PROGRAM([byacc], [AC_PROG_YACC])
+AN_PROGRAM([bison], [AC_PROG_YACC])
 AC_DEFUN([AC_PROG_YACC],
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)])

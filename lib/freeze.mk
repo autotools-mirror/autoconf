@@ -17,6 +17,11 @@
 ## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ## 02111-1307, USA.
 
+
+## ----------------- ##
+## Freeze M4 files.  ##
+## ----------------- ##
+
 SUFFIXES = .m4 .m4f
 
 # Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
@@ -88,3 +93,21 @@ autoconf_m4f_dependencies =			\
 	$(src_libdir)/autoconf/libs.m4		\
 	$(src_libdir)/autoconf/programs.m4	\
 	$(src_libdir)/autoconf/autoconf.m4
+
+
+## --------------------------- ##
+## Run ETAGS on some M4 code.  ##
+## --------------------------- ##
+
+ETAGS_FOR_M4 = \
+  --lang=none \
+  --regex='/\(m4_define\|define\)(\[\([^]]*\)\]/\2/'
+
+ETAGS_FOR_M4SUGAR = \
+  $(ETAGS_FOR_M4) \
+  --regex='/m4_defun(\[\([^]]*\)\]/\1/'
+
+ETAGS_FOR_AUTOCONF = \
+  $(ETAGS_FOR_M4SUGAR) \
+  --regex='/\(A[CU]_DEFUN\|AU_ALIAS\)(\[\([^]]*\)\]/\2/' \
+  --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'

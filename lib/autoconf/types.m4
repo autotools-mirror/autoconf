@@ -483,9 +483,14 @@ $2],
                  [$4])])])
 
 
-# ----------------- #
-# Specific checks.  #
-# ----------------- #
+
+# ------------------------------------------------------- #
+# Members that ought to be tested with AC_CHECK_MEMBERS.  #
+# ------------------------------------------------------- #
+
+AN_IDENTIFIER([st_blksize], [AC_CHECK_MEMBERS([struct stat.st_blksize])])
+AN_IDENTIFIER([st_rdev],    [AC_CHECK_MEMBERS([struct stat.st_rdev])])
+
 
 # Alphabetic order, please.
 
@@ -518,6 +523,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize],
 # Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
 # and not `HAVE_ST_BLOCKS'.])dnl
 #
+AN_IDENTIFIER([st_blocks],  [AC_STRUCT_ST_BLOCKS])
 AC_DEFUN([AC_STRUCT_ST_BLOCKS],
 [AC_CHECK_MEMBERS([struct stat.st_blocks],
                   [AC_DEFINE(HAVE_ST_BLOCKS, 1,
@@ -568,6 +574,7 @@ fi
 # Figure out how to get the current timezone.  If `struct tm' has a
 # `tm_zone' member, define `HAVE_TM_ZONE'.  Otherwise, if the
 # external array `tzname' is found, define `HAVE_TZNAME'.
+AN_IDENTIFIER([tm_zone], [AC_STRUCT_TIMEZONE])
 AC_DEFUN([AC_STRUCT_TIMEZONE],
 [AC_REQUIRE([AC_STRUCT_TM])dnl
 AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#include <sys/types.h>

@@ -47,8 +47,7 @@ version.m4: $(top_srcdir)/configure.ac
 
 TAGS_FILES = $(dist_m4sugarlib_DATA)
 
-ETAGS_ARGS = --lang=none \
-  --regex='/\(A[CU]_DEFUN\|m4_\(defun\|define\)\|define\)(\[\([^]]*\)\]/\3/'
+ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
 
 
 ## -------- ##

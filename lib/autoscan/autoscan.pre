@@ -86,40 +86,13 @@ identifier: tm              AC_STRUCT_TM
 identifier: uid_t           AC_TYPE_UID_T
 
 
-# Members of structures.
-identifier: st_blksize      AC_CHECK_MEMBERS([struct stat.st_blksize])
-identifier: st_blocks       AC_STRUCT_ST_BLOCKS
-identifier: st_rdev         AC_CHECK_MEMBERS([struct stat.st_rdev])
-identifier: tm_zone         AC_STRUCT_TIMEZONE
-
-makevar: AWK             AC_PROG_AWK
-makevar: BISON           AC_PROG_YACC
 makevar: CC              AC_PROG_CC
 makevar: CPP             AC_PROG_CPP
 makevar: CXX             AC_PROG_CXX
-makevar: INSTALL         AC_PROG_INSTALL
-makevar: LEX             AC_PROG_LEX
-makevar: LN              AC_PROG_LN_S
-makevar: MAKE            AC_PROG_MAKE_SET
-makevar: RANLIB          AC_PROG_RANLIB
-makevar: YACC            AC_PROG_YACC
 
 program: CC              AC_PROG_CXX
-program: awk             AC_PROG_AWK
-program: bison           AC_PROG_YACC
-program: byacc           AC_PROG_YACC
 program: c++             AC_PROG_CXX
 program: cc              AC_PROG_CC
 program: cpp             AC_PROG_CPP
-program: flex            AC_PROG_LEX
 program: g++             AC_PROG_CXX
-program: gawk            AC_PROG_AWK
 program: gcc             AC_PROG_CC
-program: install         AC_PROG_INSTALL
-program: lex             AC_PROG_LEX
-program: ln              AC_PROG_LN_S
-program: make            AC_PROG_MAKE_SET
-program: mawk            AC_PROG_AWK
-program: nawk            AC_PROG_AWK
-program: ranlib          AC_PROG_RANLIB
-program: yacc            AC_PROG_YACC

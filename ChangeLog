@@ -1,5 +1,18 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoscan/autoscan.pre (st_blksize, st_blocks, st_rdev)
+	(tm_zone): Move their rules to...
+	* lib/autoconf/types.m4: here, using AN_ macros.
+	* lib/autoscan/autoscan.pre (AWK, BISON, INSTALL, LEX, LN, MAKE)
+	(RANLIB, YACC, awk, bison, byacc, flex, gawk, install, lex, ln)
+	(make, mawk, nawk, ranlib, yacc): Similarly, move to...
+	* lib/autoconf/programs.m4: here.
+	* lib/freeze.mk (ETAGS_FOR_M4, ETAGS_FOR_M4SUGAR)
+	(ETAGS_FOR_AUTOCONF): New.
+	Use it.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autoscan.m4: New file.
 	* lib/autoconf/autoconf.m4: Include it.
 	* lib/autoconf/functions.m4: Use AN_FUNCTION for all the functions
