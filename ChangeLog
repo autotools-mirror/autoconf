@@ -1,5 +1,15 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (AU_DEFINE, AU_DEFUN, AU_ALIAS): Move
+	to...
+	* lib/autoconf/autoheader.m4: this new file.
+	* lib/autoconf/general.m4 (AH_OUTPUT, AH_VERBATIM)
+	(_AH_VERBATIM_OLD, AH_TEMPLATE, _AH_TEMPLATE_OLD, AH_TOP, AH_BOTTOM):
+	Move to...
+	* lib/autoconf/autoupdate.m4: this new file.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): New.
 	(_AC_OUTPUT_LINKS, _AC_OUTPUT_FILES, _AC_OUTPUT_SUBDIRS): Use it.
 	Standardize the var names (ac_sub_srcdir -> ac_srcdir, ac_subdir

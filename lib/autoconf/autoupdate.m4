@@ -1,8 +1,8 @@
-divert(-1)#                                                -*- Autoconf -*-
-# This file is part of Autoconf.
-# Driver that loads the Autoconf macro files.
-# Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
-#
+# This file is part of Autoconf.                       -*- Autoconf -*-
+# Interface with autoupdate.
+# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
+# Free Software Foundation, Inc.
+
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2, or (at your option)
@@ -17,7 +17,7 @@ divert(-1)#                                                -*- Autoconf -*-
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
-#
+
 # As a special exception, the Free Software Foundation gives unlimited
 # permission to copy, distribute and modify the configure scripts that
 # are the output of Autoconf.  You need not follow the terms of the GNU
@@ -45,61 +45,54 @@ divert(-1)#                                                -*- Autoconf -*-
 # such potential, you must delete any notice of this special exception
 # to the GPL from your modified version.
 #
-# Written by David MacKenzie and many others.
+# Written by David MacKenzie, with help from
+# Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
+# Roland McGrath, Noah Friedman, david d zuhn, and many others.
+
+
+## --------------------------------- ##
+## Defining macros in autoupdate::.  ##
+## --------------------------------- ##
+
+
+# AU_DEFINE(NAME, GLUE-CODE, [MESSAGE])
+# -------------------------------------
 #
-# Do not sinclude acsite.m4 here, because it may not be installed
-# yet when Autoconf is frozen.
-# Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
+# Declare `autoupdate::NAME' to be `GLUE-CODE', with all the needed
+# wrapping actions required by `autoupdate'.
+# We do not define anything in `autoconf::'.
+m4_define([AU_DEFINE],
+[AC_DEFUN([$1], [$2])])
 
-changequote()
-changequote([, ])
-include([m4sugar/m4sh.m4])
-# general includes some AU_DEFUN.
-m4_include([autoconf/autoupdate.m4])
 
-m4_include([autoconf/general.m4])
-m4_include([autoconf/status.m4])
-m4_include([autoconf/autoheader.m4])
-m4_include([autoconf/programs.m4])
-m4_include([autoconf/lang.m4])
-m4_include([autoconf/c.m4])
-m4_include([autoconf/fortran.m4])
-m4_include([autoconf/functions.m4])
-m4_include([autoconf/headers.m4])
-m4_include([autoconf/types.m4])
-m4_include([autoconf/libs.m4])
-m4_include([autoconf/specific.m4])
-m4_include([autoconf/oldnames.m4])
+# AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
+# -----------------------------------
+# Declare that the macro NAME is now obsoleted, and should be replaced
+# by NEW-CODE.  Tell the user she should run autoupdate, and include
+# the additional MESSAGE.
+#
+# Also define NAME as a macro which code is NEW-CODE.
+#
+# This allows to share the same code for both supporting obsoleted macros,
+# and to update a configure.ac.
+# See `acobsolete.m4' for a longer description.
+m4_define([AU_DEFUN],
+[AU_DEFINE([$1],
+           [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
+You should run autoupdate.])dnl
+$2],
+           [$3])dnl
+])
 
-# We discourage the use of the non prefixed macro names: M4sugar maps
-# all the builtins into `m4_'.  Autoconf has been converted to these
-# names too.  But users may still depend upon these, so reestablish
-# them.
 
-m4_copy_unm4([m4_builtin])
-m4_copy_unm4([m4_changequote])
-m4_copy_unm4([m4_decr])
-m4_copy_unm4([m4_define])
-m4_copy_unm4([m4_defn])
-m4_copy_unm4([m4_divert])
-m4_copy_unm4([m4_divnum])
-m4_copy_unm4([m4_errprint])
-m4_copy_unm4([m4_esyscmd])
-m4_copy_unm4([m4_ifdef])
-m4_copy([m4_if], [ifelse])
-m4_copy_unm4([m4_incr])
-m4_copy_unm4([m4_index])
-m4_copy_unm4([m4_indir])
-m4_copy_unm4([m4_len])
-m4_copy_unm4([m4_patsubst])
-m4_copy_unm4([m4_popdef])
-m4_copy_unm4([m4_pushdef])
-m4_copy_unm4([m4_regexp])
-m4_copy_unm4([m4_sinclude])
-m4_copy_unm4([m4_syscmd])
-m4_copy_unm4([m4_sysval])
-m4_copy_unm4([m4_traceoff])
-m4_copy_unm4([m4_traceon])
-m4_copy_unm4([m4_translit])
-m4_copy_unm4([m4_undefine])
-m4_copy_unm4([m4_undivert])
+# AU_ALIAS(OLD-NAME, NEW-NAME)
+# ----------------------------
+# The OLD-NAME is no longer used, just use NEW-NAME instead.  There is
+# little difference with using AU_DEFUN but the fact there is little
+# interest in running the test suite on both OLD-NAME and NEW-NAME.
+# This macro makes it possible to distinguish such cases.
+#
+# Do not use `defn' since then autoupdate would replace an old macro
+# call with the new macro body instead of the new macro call.
+m4_define([AU_ALIAS],
+[AU_DEFUN([$1], [$2($][@)])])

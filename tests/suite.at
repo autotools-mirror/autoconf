@@ -74,6 +74,8 @@ m4_include([semantics.at])
 # for types requires looking for headers etc.
 m4_include([acgeneral.at])
 m4_include([acstatus.at])
+m4_include([acautoheader.at])
+m4_include([acautoupdate.at])
 m4_include([acspecific.at])
 m4_include([acprograms.at])
 m4_include([acheaders.at])

@@ -23,6 +23,7 @@ AUTOMAKE_OPTIONS = gnits
 SUITE_GENERATED = \
 	aclang.at acc.at acfortran.at \
 	acgeneral.at acstatus.at \
+	acautoheader.at acautoupdate.at \
 	acspecific.at acfunctions.at acheaders.at actypes.at \
 	aclibs.at acprograms.at
 
@@ -62,6 +63,8 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 # thanks God for VPATH.  Hm...
 MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
               $(top_srcdir)/lib/autoconf/status.m4 \
+              $(top_srcdir)/lib/autoconf/autoheader.m4 \
+              $(top_srcdir)/lib/autoconf/autoupdate.m4 \
               $(top_srcdir)/lib/autoconf/specific.m4 \
               $(top_srcdir)/lib/autoconf/functions.m4 \
               $(top_srcdir)/lib/autoconf/lang.m4 \
