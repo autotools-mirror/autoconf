@@ -86,7 +86,7 @@ CLEANFILES = debug-*.sh macro configure configure.in configure.ac              c
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in configure
 
 
 PACKAGE = @PACKAGE@
@@ -203,9 +203,9 @@ testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
            $(SUITE)
 	$(M4) -I $(srcdir) -I $(top_srcdir) atspecific.m4 suite.at | \
           sed -e 's/[ 	]*$$//' | \
-	  sed -e '/^$$/N;/\n$$/D' > $@-tmp
-	chmod +x $@-tmp
-	mv $@-tmp $@
+	  sed -e '/^$$/N;/\n$$/D' >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
 acgeneral.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)

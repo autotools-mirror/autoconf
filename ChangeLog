@@ -1,3 +1,10 @@
+2001-01-26  Akim Demaille  <akim@epita.fr>
+
+	* tests/mktests.sh: Handle DOS issues: directory separator, single
+	dot in file names, and one actual bug: when set -e, running
+	(false; true) will of course fail, use (false || true).
+	From Tim Van Holder.
+
 2001-01-26  Tim Van Holder <tim.van.holder@pandora.be>
 
 	* tests/Makefile.am (testsuite): Use testsuite.tmp, not

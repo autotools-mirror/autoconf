@@ -22,13 +22,13 @@
 # because we used some non portable tool, but we just don't care: this
 # shell script is a maintainer tool, and we do expect good tools.
 
-as_me=`echo "$0" | sed 's,.*/,,'`
+as_me=`echo "$0" | sed 's,.*[\\/],,'`
 
 trap 'echo "'"$as_me"': failed.  To proceed run make check." >&2
-      rm -f acdefuns audefuns requires $as_me.tat
+      rm -f acdefuns audefuns requires *.tat
       for file in "$@"
       do
-        touch `echo "$file" | sed "s,.*/,,;s/\..*/.at/"`
+        touch `echo "$file" | sed "s,.*[\\/],,;s/\..*/.at/"`
       done
       trap 0
       exit 1' \
@@ -70,6 +70,7 @@ cat $src |
 #   Not macros, just mapping from old variable name to a new one.
 exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 '
+
 
 # ac_exclude_list
 # ---------------
@@ -171,7 +172,7 @@ au_exclude_egrep=`echo "$exclude_list$au_exclude_list" | tr '
 
 for file in $src
 do
-  base=`echo "$file" | sed 's,.*/,,;s/\..*//'`
+  base=`echo "$file" | sed 's,.*[\\/],,;s/\..*//'`
   # Get the list of macros which are defined in Autoconf level.
   # Get rid of the macros we are not interested in.
   cat $file |
@@ -180,14 +181,14 @@ do
     sort |
     uniq |
     # Watch out we are `set -e': don't fail.
-    ( egrep -v "$ac_exclude_egrep";: ) >acdefuns
+    ( egrep -v "$ac_exclude_egrep" || true) >acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
   cat $file |
     sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' |
     sort |
     uniq |
-    ( egrep -v "$au_exclude_egrep";: ) > audefuns
+    ( egrep -v "$au_exclude_egrep" || true) > audefuns
 
   # Filter out required macros.
   {
@@ -211,11 +212,11 @@ MK_EOF
   	echo "AT_CHECK_AU_MACRO([$macro])"
       fi
     done
-  } >$as_me.tat
+  } >$base.tat
 
   # In one atomic step so that if something above fails, the trap
   # preserves the old version of the file.
-  mv $as_me.tat $base.at
+  mv $base.tat $base.at
 done
 
 rm -f acdefuns audefuns requires
