@@ -28,6 +28,8 @@
 
 - Empty top_builddirs are properly handled.
 
+- AC_CHECK_MEMBER works correctly when the member is an aggregate.
+
 - AC_PATH_PROG
   Now colon in the optional path arguments are properly handled.
 
