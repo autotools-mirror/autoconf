@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.ac'
-# Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000
+# Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -52,7 +52,7 @@ version="\
 autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath.
 
-Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000
+Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001
 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -256,7 +256,7 @@ export autoconf_dir
 # Source what the traces are trying to tell us.
 $verbose $me: running $autoconf to trace from $infile >&2
 $autoconf  \
-  --trace AC_CONFIG_HEADERS:'config_h="$1"' \
+  --trace AC_CONFIG_HEADERS:': $${config_h="$1"}' \
   --trace AH_OUTPUT:'ac_verbatim_$1="\
 $2"' \
   --trace AC_DEFINE_TRACE_LITERAL:'syms="$$syms $1"' \
