@@ -1,5 +1,15 @@
 2000-02-15  Akim Demaille  <akim@epita.fr>
 
+	autoreconf had a silly syntax error, test it and fix it.
+	Reported by Franc,ois Pinard and Rainer Orth.
+
+	* autoreconf.sh: Removed spurious `;;'.
+	Formatting changes.
+	* tests/tools.m4 (Syntax of the scripts): Run `sh -n' on all the
+	shell scripts.
+
+2000-02-15  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (options handling): --v* of --version was shadowing
 	--verbose.
 

@@ -6,14 +6,40 @@ Autoheader, autoupdate...
 
 EOF
 
-dnl actest.m4 AU_ defines OSBOLETE to UPDATED.
+
+## -------------------------------------------------------- ##
+## Check that the shell scripts are syntactically correct.  ##
+## -------------------------------------------------------- ##
+
+AT_SETUP(Syntax of the scripts)
+
+AT_DATA(true,
+[[#! /bin/sh
+exit 0
+]])
+
+chmod +x true
+
+if (/bin/sh -n ./true) >/dev/null 2>&1; then
+  AT_CHECK([/bin/sh -n ../autoconf],   0)
+  AT_CHECK([/bin/sh -n ../autoreconf], 0)
+  AT_CHECK([/bin/sh -n ../autoupdate], 0)
+  AT_CHECK([/bin/sh -n ../autoreconf], 0)
+  AT_CHECK([/bin/sh -n ../ifnames],    0)
+fi
+
+AT_CLEANUP
 
 
-dnl AH_DEFUN
-dnl --------
-dnl
-dnl We check that both the AH_DEFUN given in auxiliary files and in
-dnl `configure.in' function properly.
+
+
+
+## ---------- ##
+## AH_DEFUN.  ##
+## ---------- ##
+
+# We check that both the AH_DEFUN given in auxiliary files and in
+# `configure.in' function properly.
 AT_SETUP(AH_DEFUN)
 
 AT_DATA(configure.in,
@@ -43,10 +69,14 @@ AT_CLEANUP(config.hin)
 
 
 
-dnl autoupdate
-dnl ----------
-dnl
-dnl Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
+
+## ------------ ##
+## autoupdate.  ##
+## ------------ ##
+
+# Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
+# actest.m4 AU_ defines OSBOLETE to UPDATED.
+
 AT_SETUP(autoupdate)
 
 AT_DATA(configure.in,

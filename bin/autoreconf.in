@@ -22,9 +22,9 @@ me=`echo "$0" | sed -e 's,.*/,,'`
 usage="\
 Usage: autoreconf [OPTION] ... [TEMPLATE-FILE]
 
-Run \`autoconf' (and \`autoheader' and \`automake', where appropriate)
-repeatedly to remake the Autoconf \`configure' scripts and
-configuration header templates in the directory tree rooted at the
+Run \`autoconf' (and \`autoheader', \`aclocal' and \`automake', where
+appropriate) repeatedly to remake the Autoconf \`configure' scripts
+and configuration header templates in the directory tree rooted at the
 current directory.  By default, it only remakes those files that are
 older than their predecessors.  If you install a new version of
 Autoconf, running \`autoreconf' remakes all of the files by giving it
@@ -69,6 +69,9 @@ while test $# -gt 0; do
   case "$1" in
   --help | --h* | -h )
     echo "$usage"; exit 0 ;;
+  --version | --vers*)
+    echo "$version"; exit 0 ;;
+
   --localdir=* | --l*=* )
     localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
@@ -77,6 +80,7 @@ while test $# -gt 0; do
     test $# -eq 0 && { echo "$help" >&2; exit 1; }
     localdir="${1}"
     shift ;;
+
   --macrodir=* | --m*=* )
     AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
     shift ;;
@@ -85,16 +89,16 @@ while test $# -gt 0; do
     test $# -eq 0 && { echo "help" >&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
+
   -v | --verbose | --verb*)
     verbose=echo; shift ;;
   -f | --force)
     force=yes; shift ;;
-  --version | --vers*)
-    echo "$version"; exit 0 ;;
   --cygnus | --foreign | --gnits | --gnu)
     automake_mode=$1; shift ;;
   --include-deps | -i)
     automake_deps=$1; shift ;;
+
   --)     # Stop option processing.
     shift; break ;;
   -*)
@@ -108,14 +112,14 @@ done
 
 if test $# -ne 0; then
   exec >&2
-  echo "$me: invalid number of arguments."
+  echo "$me: invalid number of arguments"
   echo "$help"
-  exit 1 ;;
+  exit 1
 fi
 
 # The paths to the autoconf and autoheader scripts, at the top of the tree.
-top_autoconf=`echo $0|sed s%autoreconf%autoconf%`
-top_autoheader=`echo $0|sed s%autoreconf%autoheader%`
+top_autoconf=`echo "$0" |sed s%autoreconf%autoconf%`
+top_autoheader=`echo "$0" |sed s%autoreconf%autoheader%`
 
 # Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
@@ -248,6 +252,6 @@ while read dir; do
 done
 
 # Local Variables:
-# mode:shell-script
-# sh-indentation:3
+# mode: shell-script
+# sh-indentation: 2
 # End:
