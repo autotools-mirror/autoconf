@@ -44,7 +44,6 @@ other tools.
 
 Library directories:
   -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
-  -m, --macro-path=PATH     library extensions files
   -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
   -M, --m4dir=M4DIR         this package's Autoconf extensions
 
@@ -57,7 +56,6 @@ The following options are passed to \`automake':
      --gnits           set strictness to gnits
      --gnu             set strictness to gnu
      --include-deps    include generated dependencies in Makefile.in
-  -i                   deprecated alias for --include-deps
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, and ACLOCAL
 are honored.
@@ -152,13 +150,23 @@ while test $# -gt 0; do
        localdir=$1
        shift ;;
 
-    --macrodir | -m )
+    --autoconf-dir=*)
+      autoconf_dir=$optarg
+       shift ;;
+    --autoconf-dir | -A* )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
-    --macrodir=* | -m* )
+    --macrodir=* | --m*=* )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
+       shift ;;
+    --macrodir | --m* | -m )
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
+       test $# = 1 && eval "$exit_missing_arg"
+       shift
+       autoconf_dir=$1
        shift ;;
 
     --m4dir | -M )
@@ -170,12 +178,12 @@ while test $# -gt 0; do
        m4dir=$optarg
        shift ;;
 
-     --force | -f )
+     --force | --forc* | -f )
        force=:; shift ;;
 
-     --install | -i )
+     --install | --ins* | -i )
        install=:; shift ;;
-     --symlink | --symbolic | -s )
+     --symlink | --s* | -s )
        symlink=:; shift ;;
 
      # Options of Automake.

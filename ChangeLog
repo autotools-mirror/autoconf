@@ -1,3 +1,18 @@
+2000-10-26  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Don't show obsolete options on "--help". Report
+	obsolete options to stderr. Adjust list of options. Correct
+	processing of options. Process options with values separated by
+	"=" first, so that abbreviations work. Don't accept "=" with
+	short options.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: There is no "--verbose" option.
+	* doc/autoconf.texi: Option "-A" requires an argument.
+	(autoreconf Invocation): Document "--install", "--symlink",
+	"--m4dir" and the options passed to Automake.
+
 2000-10-26  Akim Demaille  <akim@epita.fr>
 
 	* shell.m4: Rename as...

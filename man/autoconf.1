@@ -23,12 +23,6 @@ verbosely report processing
 \fB\-d\fR, \fB\-\-debug\fR
 don't remove temporary files
 .TP
-\fB\-m\fR, \fB\-\-macrodir\fR=\fIDIR\fR
-directory storing Autoconf's macro files
-.TP
-\fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
-directory storing the `aclocal.m4' file
-.TP
 \fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
 save output in FILE (stdout is the default)
 .TP
@@ -58,6 +52,13 @@ turn off all the warnings
 warnings are error
 .PP
 The environment variable `WARNINGS' is honored.
+.SS "Library directories:"
+.TP
+\fB\-A\fR, \fB\-\-autoconf\-dir\fR=\fIACDIR\fR
+Autoconf's macro files location (rarely needed)
+.TP
+\fB\-l\fR, \fB\-\-localdir\fR=\fIDIR\fR
+location of the `aclocal.m4' file
 .SS "Tracing:"
 .TP
 \fB\-t\fR, \fB\-\-trace\fR=\fIMACRO\fR

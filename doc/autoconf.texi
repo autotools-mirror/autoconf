@@ -877,7 +877,7 @@ Print the names of the files it examines and the potentially interesting
 symbols it finds in them.  This output can be voluminous.
 
 @item --autoconf-dir=@var{dir}
-@itemx -A
+@itemx -A @var{dir}
 @evindex AC_MACRODIR
 Overwrite the location where Autoconf files were installed.  You can
 also set the @code{AC_MACRODIR} environment variable to a directory;
@@ -963,7 +963,7 @@ Report processing steps.
 Don't remove the temporary files.
 
 @item --autoconf-dir=@var{dir}
-@itemx -A
+@itemx -A @var{dir}
 @evindex AC_MACRODIR
 Overwrite the location where Autoconf files were installed.  You can
 also set the @code{AC_MACRODIR} environment variable to a directory;
@@ -1208,6 +1208,15 @@ Remake even @file{configure} scripts and configuration headers that are
 newer than their input files (@file{configure.in} and, if present,
 @file{aclocal.m4}).
 
+@item --install
+@itemx -i
+Copy missing auxiliary files.  This option is similar to the option
+@code{--add-missing} in @code{automake}.
+
+@item --symlink
+@itemx -s
+Instead of copying missing auxiliary files, install symbolic links.
+
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
 Have @code{autoconf} and @code{autoheader} look for the package files
@@ -1216,7 +1225,7 @@ not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
 @var{dir} instead of in the directory containing each @file{configure.in}.
 
 @item --autoconf-dir=@var{dir}
-@itemx -A
+@itemx -A @var{dir}
 @evindex AC_MACRODIR
 Overwrite the location where Autoconf files were installed.  You can
 also set the @code{AC_MACRODIR} environment variable to a directory;
@@ -1224,6 +1233,30 @@ this option overrides the environment variable.
 
 This option is rarely needed and dangerous: only when you play with
 different versions of Autoconf.
+
+@item --m4dir=@var{dir}
+@itemx -M @var{dir}
+Specify location of additional macro files (@file{m4} by default).
+@end table
+
+Additionally, the following options are recognized and passed to
+@code{automake}:
+
+@table @option
+@item --cygnus
+Assume program is part of Cygnus-style tree.
+
+@item --foreign
+Set strictness to foreign.
+
+@item --gnits
+Set strictness to gnits.
+
+@item --gnu
+Set strictness to gnu.
+
+@item --include-deps
+Include generated dependencies in @file{Makefile.in}.
 @end table
 
 
@@ -2153,8 +2186,12 @@ Print the version number of Autoconf and exit.
 @itemx -d
 Don't remove the temporary files.
 
+@item --verbose
+@itemx -v
+Report processing steps.
+
 @item --autoconf-dir=@var{dir}
-@itemx -A
+@itemx -A @var{dir}
 @evindex AC_MACRODIR
 Overwrite the location where Autoconf files were installed.  You can
 also set the @code{AC_MACRODIR} environment variable to a directory;
@@ -8113,7 +8150,7 @@ Report processing steps.
 Don't remove the temporary files.
 
 @item --autoconf-dir=@var{dir}
-@itemx -A
+@itemx -A @var{dir}
 @evindex AC_MACRODIR
 Overwrite the location where Autoconf files were installed.  You can
 also set the @code{AC_MACRODIR} environment variable to a directory;

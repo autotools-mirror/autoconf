@@ -36,7 +36,6 @@ space-separated list of the files in which that identifier occurs.
 
   -h, --help      print this help, then exit
   -V, --version   print version number, then exit
-  -v, --verbose   verbosely report processing
 
 Report bugs to <bug-autoconf@gnu.org>."
 

@@ -40,9 +40,11 @@ given.
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
-  \`obsolete'   obsolete constructs
-  \`all'        all the warnings
-  \`error'      warnings are error
+  \`obsolete'      obsolete constructs
+  \`all'           all the warnings
+  \`no-CATEGORY'   turn off the warnings on CATEGORY
+  \`none'          turn off all the warnings
+  \`error'         warnings are error
 
 Library directories:
   -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
@@ -122,32 +124,32 @@ while test $# -gt 0 ; do
        localdir=$1
        shift ;;
 
-    --autoconf-dir=*)
+    --autoconf-dir=* | --a*=* )
       autoconf_dir=$optarg
        shift ;;
-    --autoconf-dir | -A* )
+    --autoconf-dir | --a* | -A )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
     --macrodir=* | --m*=* )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
        shift ;;
     --macrodir | --m* | -m )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
 
-    --warnings | -W )
+    --warnings=* | --w*=* )
+       warnings=$warnings,$optarg
+       shift ;;
+    --warnings | --w* | -W )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        warnings=$warnings,$1
-       shift ;;
-    --warnings=* | -W*)
-       warnings=$warnings,$optarg
        shift ;;
 
     -- )     # Stop option processing

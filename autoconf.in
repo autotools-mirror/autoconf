@@ -36,8 +36,6 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
-  -m, --macrodir=DIR       directory storing Autoconf's macro files
-  -l, --localdir=DIR       directory storing the \`aclocal.m4' file
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
@@ -51,6 +49,10 @@ Warning categories include:
   \`error'         warnings are error
 
 The environment variable \`WARNINGS' is honored.
+
+Library directories:
+  -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
+  -l, --localdir=DIR        location of the \`aclocal.m4' file
 
 Tracing:
   -t, --trace=MACRO     report the list of calls to MACRO
@@ -151,58 +153,55 @@ while test $# -gt 0 ; do
        localdir=$1
        shift ;;
 
-    --autoconf-dir=*)
+    --autoconf-dir=* | --a*=* )
       autoconf_dir=$optarg
        shift ;;
-    --autoconf-dir | -A* )
+    --autoconf-dir | --a* | -A )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
     --macrodir=* | --m*=* )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
        shift ;;
     --macrodir | --m* | -m )
-       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&1
+       echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
 
-    --trace | -t )
+    --trace=* | --t*=* )
+       task=trace
+       traces="$traces '"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
+       shift ;;
+    --trace | --t* | -t )
        test $# = 1 && eval "$exit_missing_arg"
        task=trace
        shift
        traces="$traces '"`echo "$1" | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
-    --trace=* )
-       task=trace
-       traces="$traces '"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
-       shift ;;
-    --initialization | -i )
+    --initialization | --i* | -i )
        initialization=:
        shift;;
 
-    --output | -o )
+    --output=* | --o*=* )
+       outfile=$optarg
+       shift ;;
+    --output | --o* | -o )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        outfile=$1
        shift ;;
-    --output=* )
-       outfile=$optarg
-       shift ;;
-    -o* )
-       outfile=$optarg
-       shift ;;
 
-    --warnings | -W )
+    --warnings=* | --w*=* )
+       warnings=$warnings,$optarg
+       shift ;;
+    --warnings | --w* | -W )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        warnings=$warnings,$1
-       shift ;;
-    --warnings=* | -W* )
-       warnings=$warnings,$optarg
        shift ;;
 
     -- )     # Stop option processing
