@@ -1,5 +1,16 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	The debug scripts are only wrapper around testsuite, asking for a
+	specific test.
+
+	* tests/atgeneral.m4 (AC_INIT) <at_debug>: New variable, new
+	option, -d, to disable the creation of the debug scripts (when
+	testsuite was already launched from one).
+	<at_test_count>: Really compute it instead of using the number of
+	the last test run.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Transform Autotest's body into a `for test; case $test'.
 	As a known side effect, currently any code outside
 	AT_SETUP/AT_CLEANUP is discarded.

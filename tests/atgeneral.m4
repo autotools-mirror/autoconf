@@ -80,9 +80,13 @@ at_stop_on_error=false;
 # Shall we save and check stdout and stderr?
 # -n sets to false
 at_check_stds=:;
-# Shall we
+# Shall we be verbose
 # -s sets to false, and -v to true
 at_verbose=false
+# Shall we keep the debug scripts?  Must be `:' when testsuite is
+# run by a debug script, so that the script doesn't remove itself.
+# -s sets to false, and -v to true
+at_debug=false
 
 at_usage="Usage: $[0] [OPTION]...
 
@@ -99,6 +103,7 @@ while test $[#] -gt 0; do
   case "$[1]" in
     --help) echo "$at_usage"; exit 0 ;;
     --version) echo "$[0] ($at_package) $at_version"; exit 0 ;;
+    -d) at_debug=:;;
     -e) at_stop_on_error=:;;
     -n) at_check_stds=false;;
     -s) at_verbose=false; at_silent=1;;
@@ -149,11 +154,9 @@ else
   exit 1
 fi
 
-# Remove any debugging script resulting from a previous run.
-rm -f debug-*.sh
-
 at_failed_list=
 at_ignore_count=0
+at_test_count=0
 m4_divert_push(1)dnl
 
 : ${tests="$TESTS"}
@@ -175,34 +178,24 @@ if test -z "$at_failed_list"; then
   else
     at_banner="All $at_test_count tests were successful ($at_ignore_count ignored)"
   fi
-else
+elif test $at_debug = false; then
+  # Remove any debugging script resulting from a previous run.
+  rm -f debug-*.sh
   echo
   echo $at_n "Writing \`debug-NN.sh' scripts, NN =$at_c"
   for at_group in $at_failed_list; do
     echo $at_n " $at_group$at_c"
-    ( echo '#!/bin/sh'
-      sed -n '/^[#] Snippet (1/,/^[#] Snippet )1/p' atconfig
-      sed -n '/^[#] Snippet (2/,/^[#] Snippet )2/p' atconfig
-      sed -n "/^[#] Snippet (3/,/^[#] Snippet )3/p" $[0]
-      test -z "$at_silent" && echo 'at_verbose=:'
-      sed -n "/^[#] Snippet (4/,/^[#] Snippet )4/p" $[0]
-      sed -n "/^[#] Snippet (c$at_group(/,/^[#] Snippet )c$at_group)/p" $[0]
-      at_desc=`sed -n \
-        '/^[#] Snippet (d'$at_group'(/,/^[#] Snippet )d'$at_group')/p' $[0] \
-        | sed -n '2s/^[#] //p'`
-      echo 'if $at_verbose; then'
-      echo '  at_banner="$[0]: '$at_desc'"'
-      echo '  at_dashes=`echo $at_banner | sed s/./=/g`'
-      echo '  echo'
-      echo '  echo "$at_dashes"'
-      echo '  echo "$at_banner"'
-      echo '  echo "$at_dashes"'
-      echo 'fi'
-      echo
-      sed -n "/^[#] Snippet (d$at_group(/,/^[#] Snippet )d$at_group)/p" $[0]
-      sed -n "/^[#] Snippet (s$at_group(/,/^[#] Snippet )s$at_group)/p" $[0]
-      echo 'exit 0'
-    ) | grep -v '^[#] Snippet' > debug-$at_group.sh
+    ( echo "#! /bin/sh"
+      echo 'at_banner="$[0]: '$at_desc'"'
+      echo 'at_dashes=`echo $at_banner | sed s/./=/g`'
+      echo 'echo'
+      echo 'echo "$at_dashes"'
+      echo 'echo "$at_banner"'
+      echo 'echo "$at_dashes"'
+      echo "export tests=$at_group"
+      echo "exec $[0] -v -d"
+      echo 'exit 1'
+    ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
     at_fail_count=`expr $at_fail_count + 1`
   done
@@ -219,7 +212,7 @@ echo "$at_dashes"
 echo "$at_banner"
 echo "$at_dashes"
 
-if test -n "$at_failed_list"; then
+if test $at_debug = false && test -n "$at_failed_list"; then
   if test -z "$at_silent"; then
     echo
     echo 'When reporting failed tests to maintainers, do not merely list test'
@@ -307,7 +300,7 @@ $at_traceoff
     	 echo 'ignored (skipped)'
     	 at_ignore_count=`expr $at_ignore_count + 1`
       fi
-      at_test_count=AT_ordinal
+      at_test_count=`expr 1 + $at_test_count`
       if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 m4_divert(1)[]dnl
 [#] Snippet (c[]AT_ordinal[](
