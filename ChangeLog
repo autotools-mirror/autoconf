@@ -6,7 +6,7 @@
 
 	* acfunctions.m4 (AC_FUNC_FORK): Fix typos.
 
-2001-06-18  Rüdiger Kuhlmann  <autoconf-list-xf3QB=cvz1AP@ruediger-kuhlmann.de>
+2001-06-18  Rüdiger Kuhlmann  <info@ruediger-kuhlmann.de>
 
 	* acfunctions.m4: (AC_FUNC_VFORK) rename as...
 	(_AC_FUNC_VFORK): this.
@@ -77,7 +77,7 @@
 
 2001-06-15  Akim Demaille  <akim@epita.fr>
 
-	`build_alias' and so on are not AC_SUBST'd.
+	`build_alias', `host_alias', and `target_alias' are not AC_SUBST'd.
 	Reported by Bruno Haible.
 
 	* acgeneral.m4 (AC_ARG_VAR): Move the AC_SUBST, from here...
@@ -95,7 +95,8 @@
 
 2001-06-14  Akim Demaille  <akim@epita.fr>
 
-	* doc/autoconf.texi (Portable Shell): Move after `Writing Macros'.
+	* doc/autoconf.texi (Portable Shell): Move to follow `Writing
+	Macros'.
 
 2001-06-13  Akim Demaille  <akim@epita.fr>
 
