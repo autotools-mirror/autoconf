@@ -244,10 +244,13 @@ echo AT_LINE > at-check-line
 test -z "$at_no_redirs" && exec 5>&1 6>&2 1>stdout 2>stderr
 test -n "$at_tracex" && set -x
 $1
-ifelse([$2], , , [if test $? != $2; then
-  # Maybe there was an important message to read before it died.
+ifelse([$2],,,
+[at_status=$?
+if test $at_status != $2; then
+dnl Maybe there was an important message to read before it died.
   test -n "$at_verbose" && cat stderr >&6
-  exit 1
+dnl Exit with the same code, at least to preserve 77.
+  exit $at_status
 fi
 ])dnl
 test -n "$at_tracex" && set +x

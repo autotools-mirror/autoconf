@@ -1,5 +1,25 @@
 1999-11-13  Akim Demaille  <akim@epita.fr>
 
+	Check that the AC_DEFINEs from acspecific.m4 do have a template.
+	Fix the discovered bugs.
+
+	* tests/atgeneral.m4 (AT_CHECK): Don't just exit 1 when you want
+	to propagate the failure of a test: exit with the same exit
+	status, at least to preserve 77 (=ignore).
+	* tests/syntax.m4 (TEST_MACRO): Run also autoheader.  Don't run
+	this test on all the macros, some just cannot run without
+	arguments.
+	* acgeneral.m4 (AC_OUTPUT_CONFIG_STATUS): In the if egrep/fi for
+	#define templates, add a `:' to prevent syntax errors in
+	config.status when there are no AC_DEFINE performed.
+	* autoheader.m4 (AH_TEMPLATE): Don't use _AC_SH_QUOTE here, use it
+	in...
+	(AH_VERBATIM): here.  Now AH_C_UNSIGNED_CHAR is no longer failing
+	(formerly it would produce a non backslashed backquote, which
+	made sh choke).
+
+1999-11-13  Akim Demaille  <akim@epita.fr>
+
 	Introduce a means to distinguish failures of `configure' due to
 	extern software (so that the test suite doesn't fail on them).
 

@@ -53,7 +53,7 @@ dnl Issue an autoheader template for KEY, i.e., a comment composed
 dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
-             AC_WRAP(_AC_SH_QUOTE([$2 */]), [   ], [/* ])[
+             AC_WRAP([$2 */], [   ], [/* ])[
 #undef $1])])
 
 dnl AH_VERBATIM(KEY, TEMPLATE)
@@ -67,7 +67,7 @@ define([AH_VERBATIM],
 [#
 @@@
 ac_verbatim_$1="\
-[$2]"
+_AC_SH_QUOTE([$2])"
 @@@
 ])])
 
