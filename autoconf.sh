@@ -31,6 +31,11 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 
 test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
 test -z "${M4}" && M4=@M4@
+case "${M4}" in
+/*) # Handle the case that m4 has moved since we were configured.
+    # It may have been found originally in a build directory.
+    test -f "${M4}" || M4=m4 ;;
+esac
 
 tmpout=/tmp/acout.$$
 
