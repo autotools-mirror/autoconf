@@ -1,3 +1,26 @@
+2004-01-27  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/autoconf.as ($version): Update copyright from 2003 to 2004.
+	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
+	bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in: Likewise.
+
+	* Makefile.in, aclocal.m4, configure, bin/Makefile.in,
+	bin/autoconf.in, config/Makefile.in, config/config.guess,
+	config/config.sub, config/install-sh, config/mdate-sh,
+	config/mkinstalldirs, config/texinfo.tex, doc/Makefile.in,
+	lib/Makefile.in, lib/Autom4te/Makefile.in,
+	lib/autoconf/Makefile.in, lib/autoscan/Makefile.in,
+	lib/autotest/Makefile.in, lib/emacs/Makefile.in,
+	lib/m4sugar/Makefile.in, man/Makefile.in, man/autoconf.1,
+	man/autoheader.1, man/autom4te.1, man/autoreconf.1,
+	man/autoscan.1, man/autoupdate.1, man/config.guess.1,
+	man/config.sub.1, man/ifnames.1, tests/Makefile.in,
+	tests/acc.at, tests/acfortran.at, tests/acfunctions.at,
+	tests/acgeneral.at, tests/acheaders.at, tests/aclang.at,
+	tests/aclibs.at, tests/acspecific.at, tests/acstatus.at,
+	tests/actypes.at: Regenerate and/or sync with original
+	sources.
+
 2004-01-26  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Default Includes): Include <stdint.h> even if
@@ -7,7 +30,7 @@
 	<http://mail.gnu.org/archive/html/bug-coreutils/2004-01/msg00147.html>.
 	* lib/autoconf/headers.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS):
 	Likewise.
-	
+
 	* lib/autoconf/programs.m4 (AC_PROG_SED): Use diff, not sed;
 	otherwise "make check" fails because it forbids cmp (I guess
 	because cmp treats files as binary on DOS-like systems).
