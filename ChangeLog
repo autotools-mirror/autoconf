@@ -1,5 +1,9 @@
 1999-09-24  Ben Elliston  <bje@cygnus.com>
 
+	* autoreconf.sh: Do not run autoheader if AC_CONFIG_HEADER is
+	commented out in configure.in. Reported by Erez Zadok
+	<ezk@cs.columbia.edu> as a fix for autoconf/21.
+
 	* install.texi: Replace `can not' with `cannot'.
 
 1999-09-22  Ben Elliston  <bje@cygnus.com>

@@ -201,7 +201,7 @@ while read dir; do
     $autoconf $macrodir_opt $localdir_opt
   fi
 
-  if grep 'A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
+  if grep '^[ 	]*A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
     templates=`sed -n '/A[CM]_CONFIG_HEADER/ {
 	s%[^#]*A[CM]_CONFIG_HEADER[ 	]*(\([^)]*\).*%\1%
 	p
