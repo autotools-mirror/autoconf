@@ -580,7 +580,7 @@ If the current language is C++ (@pxref{Language Choice}), many of the
 specific test macros use the value of @code{CXXCPP} indirectly by
 calling @code{AC_TEST_CPP}, @code{AC_HEADER_CHECK},
 @code{AC_HEADER_EGREP}, or @code{AC_PROGRAM_EGREP}.  Those macros call
-this macro first if it hasn't been called already.  It macro calls
+this macro first if it hasn't been called already.  This macro calls
 @code{AC_PROG_CXX} if it hasn't been called already.
 @end defmac
 
@@ -1514,10 +1514,14 @@ argument to the macro.  To omit the false case, omit the
 before it.
 
 One shell programming construction that you should not use in the action
-arguments to these macros is @samp{@var{var}=$@{@var{var}:-@var{value}@}}.
-Old BSD shells, including the Ultrix @code{sh}, don't understand the
-colon, and complain and die.  If you omit the colon, it works fine:
-@samp{@var{var}=$@{@var{var}-@var{value}@}}.
+arguments to these macros is
+@samp{@var{var}=$@{@var{var}:-@var{value}@}}.  Old BSD shells, including
+the Ultrix @code{sh}, don't understand the colon, and complain and die.
+If you omit the colon, it works fine:
+@samp{@var{var}=$@{@var{var}-@var{value}@}}.  Using the form without the
+colon has one small disadvantage.  Users can not select a default value
+by giving a variable an empty value, e.g., @samp{CC= configure}.
+Instead, they must unset the variable, e.g., @samp{unset CC; configure}.
 
 @xref{Writing Macros}, for more information on how best to use these
 macros.
@@ -1797,7 +1801,7 @@ variables.
 @maindex DEFINE
 Define C preprocessor variable @var{variable}.  If @var{value} is given,
 set @var{variable} to that value, otherwise set it to 1.  To use a shell
-variable as the value, use @code{AC_DEFINE_UNQUOTED} instead.  Precede
+variable as the value, use @code{AC_DEFINE_UNQUOTED} instead and precede
 double quotes in the value with backslashes.
 
 This macro adds to the shell variable @code{DEFS}.  @code{AC_OUTPUT}
@@ -1924,8 +1928,8 @@ or @samp{for c89}.
 Notify the user of an error that prevents @code{configure} from
 completing.  This macro prints an error message on the standard error
 stream and exits @code{configure} with a nonzero status.
-@var{error-description} should be something like @samp{invalid value for
-\$HOME}.
+@var{error-description} should be something like @samp{invalid value
+$HOME for \$HOME}.
 @end defmac
 
 @defmac AC_VERBOSE (@var{result-description})
@@ -2603,12 +2607,12 @@ up to date.
 @example
 @group
 configure: configure.in aclocal.m4
-        cd $@{srcdir@}; autoconf
+        cd $@{srcdir@} && autoconf
 
 # autoheader might not change config.h.in
 config.h.in: stamp-h.in
 stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top
-        cd $@{srcdir@}; autoheader
+        cd $@{srcdir@} && autoheader
         touch $@{srcdir@}/stamp-h.in
 
 # config.status might not change config.h
@@ -2643,7 +2647,7 @@ an old version of System V, you might need to type @samp{sh configure}
 instead to prevent @code{csh} from trying to execute @code{configure}
 itself.
 
-Running @code{configure} takes a minute or two.  While it is running, it
+Running @code{configure} takes awhile.  While it is running, it
 prints some messages that tell what it is doing.  If you don't want to
 see any messages, run @code{configure} with its standard output
 redirected to @file{/dev/null}; for example, @samp{./configure >/dev/null}.
