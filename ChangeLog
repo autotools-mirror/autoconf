@@ -1,3 +1,29 @@
+1999-11-11  Akim Demaille  <akim@epita.fr>
+
+	Introduce a new style of testing, independent from DejaGNU.
+
+
+	Introduce the logistics.
+
+	* configure.in: Initialize AT, and output tests/atconfig, and
+	tests/Makefile.
+	* m4/atconfig.m4: New file.
+	* m4/Makefile.am: Adjusted.
+	* aclocal.m4: Include atconfig.m4.
+	* Makefile.am: Adjusted.
+	* tests/Makefile.am: New file.
+	* tests/atgeneral.m4: Likewise.
+	* tests/atconfig.in: Likewise.
+
+
+	Write tests.
+
+	* tests/syntax.m4: New file, in charge of checking the validity of
+	the sh code produced by the macros defined in acspecific.m4.
+	acgeneral.m4 is not checked here, because these macros require
+	arguments.
+	* tests/suite.m4: New file.  Run syntax.m4.
+
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
 	A test suite will be introduced which tries to run all the

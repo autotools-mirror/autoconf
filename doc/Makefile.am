@@ -20,7 +20,7 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4
 
-SUBDIRS = . m4 man testsuite
+SUBDIRS = . m4 man tests testsuite
 
 MAKEINFO = makeinfo --no-split
 TEXI2HTML = texi2html

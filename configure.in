@@ -2,6 +2,9 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(acgeneral.m4)
 AM_INIT_AUTOMAKE(autoconf, 2.14a)
 
+dnl Initialize the test suite.
+AT_CONFIG(..)
+
 dnl We use a path for GNU m4 so even if users have another m4 first in
 dnl their path, the installer can configure with a path that has GNU m4
 dnl first and get that path embedded in the installed autoconf and
@@ -38,4 +41,4 @@ if test -f $srcdir/standards.texi; then
 fi
 AC_SUBST(standards_texi)dnl
 
-AC_OUTPUT(acversion.m4 Makefile m4/Makefile man/Makefile testsuite/Makefile)
+AC_OUTPUT(acversion.m4 Makefile m4/Makefile man/Makefile tests/Makefile tests/atconfig testsuite/Makefile)

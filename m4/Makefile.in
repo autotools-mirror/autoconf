@@ -60,19 +60,18 @@ POST_UNINSTALL = :
 AWK = @AWK@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
-MAKEINFO = @MAKEINFO@
-PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
-VERSION = @VERSION@
 standards_texi = @standards_texi@
 
-EXTRA_DIST = README Makefile.am.in atconfig.m4 init.m4 missing.m4 sanity.m4
-
+EXTRA_DIST = init.m4 missing.m4 sanity.m4 atconfig.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
-DIST_COMMON =  README Makefile.am Makefile.in
+DIST_COMMON =  Makefile.am Makefile.in
 
+
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -171,17 +170,6 @@ all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
-
-Makefile.am: Makefile.am.in
-	rm -f $@ $@t
-	sed -n '1,/^##m4-files-begin/p' $< > $@t
-	( (echo EXTRA_DIST = README Makefile.am.in | tr '\012' @); \
-	  (echo *.m4|tr ' ' @) ) \
-	  |sed 's/@$$/%/;s/@/ \\@/g' |tr @% '\012\012' \
-	  >> $@t
-	sed -n '/^##m4-files-end/,$$p' $< >> $@t
-	chmod a-w $@t
-	mv $@t $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
