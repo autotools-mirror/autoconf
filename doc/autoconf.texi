@@ -5193,6 +5193,14 @@ Ambiguous output redirect.
 In each case the expected result is of course @file{fullness} containing
 @samp{matter} and @file{void} being empty.
 
+Don't try to redirect the standard error of a command substitution: it
+must be done @emph{inside} the command substitution: when running
+@samp{echo `cd /zorglub` 2>/dev/null} expect the error message to
+escape, while @samp{echo `cd /zorglub 2>/dev/null`} works properly.
+
+It is worth noting that Zsh (but not Ash nor Bash) makes it possible
+in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
+
 @node Shell Substitutions, Assignments, File Descriptors, Portable Shell
 @subsection Shell Substitutions
 

@@ -1,5 +1,9 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_data_files): Fix the computation of PATH.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_LOG_COMPLETE): Eve out from AC_OUTPUT.
 	(_AC_INIT_DEFAULTS, AC_OUTPUT): Use it.
 

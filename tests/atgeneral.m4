@@ -106,8 +106,10 @@ at_top_srcdir=`cd "$top_srcdir" && pwd`
 at_path=`pwd`
 at_IFS_save=$IFS
 IFS=:
-for at_dir in $AUTOTEST_PATH:$PATH; do
-  at_path=$at_path:`cd "$at_dir" && pwd`
+for at_dir in $AUTOTEST_PATH $PATH; do
+  # There might be directories that don't exist.
+  at_dir=`cd "$at_dir" 2>/dev/null && pwd`
+  test -n "$at_dir" && at_path=$at_path:$at_dir
 done
 IFS=$at_IFS_save
 PATH=$at_path
