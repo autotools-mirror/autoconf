@@ -1,50 +1,51 @@
-* Major changes in release 2.14.1			-*- outline -*-
+* Major changes in release 2.15				-*- outline -*-
 
-** Use of Automake
-All the standard GNU Makefile targets are supported.
+** config.status
+- much faster on most architectures
+- has a useful --help
+- concurrent executions
+It is safe to use `make -j' with config.status.
+- files to links (AC_LINK_FILES) can be specified via CONFIG_LINKS.
+- commands to run can be specified via CONFIG_COMMANDS.
+- human interface improved
+It is possible to invoke
+  ./config.status foobar
+instead of the former form (still valid)
+  CONFIG_COMMANDS= CONFIG_HEADERS= CONFIG_LINKS= \
+  CONFIG_FILES=foobar:foo.in:bar.in \
+  ./config.status
+The same holds for configuration headers and links.
 
-* config.status
-  - much faster on most architectures
-  - has a useful --help
-  - concurrent executions
-    It is safe to use `make -j' with config.status.
-  - files to links (AC_LINK_FILES) can be specified via CONFIG_LINKS.
-  - human interface improved
-    It is possible to invoke
-      ./config.status foobar
-    instead of the former form (still valid)
-      CONFIG_HEADERS= CONFIG_LINKS= CONFIG_FILES=foobar:foo.in:bar.in \
-      ./config.status
-    The same holds for configuration headers and links.
-* New macros
-  - AC_CHECK_DECL and AC_CHECK_DECLS
-    To check whether a symbol is declared.
-  - AC_HELP_STRING
-    To format an Autoconf macro's help string so that it looks pretty
-    when the user executes `configure --help'.
-  - AC_ARG_VAR
-    Document and ask for the registration of an envvar.
-  - AC_CONFIG_LINKS
-    Replaces the now obsolete AC_LINK_FILES.
-  - AC_PROG_CC_STDC
-    Checks if the compiler supports ISO C, included when needs special
-    options.
-  
-* Environment variables are kept when reconfiguring.
-  The previous scheme to set envvar before running configure was
-    ENV=VAL ./configure
-  what prevented configure from remembering the environment in which
-  it was run, therefore --recheck was run in an inconsistent environment.
-  Now, one runs
-    ./configure ENV=VAR
-  and the --recheck works correctly.  Variable declared with AC_ARG_VAR
-  are also preserved.
-* Support for automatically determining a Fortran 77 compilers
-  name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
-  provided to wrap C/C++ identifiers, thus making it easier and more
-  transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
-  call C/C++ routines.  See the Texinfo documentation for details.
-* Many fixesd to bugs reported to the Autoconf GNATS database.
+** New macros
+- AC_CHECK_DECL and AC_CHECK_DECLS
+To check whether a symbol is declared.
+- AC_HELP_STRING
+To format an Autoconf macro's help string so that it looks pretty when
+the user executes `configure --help'.
+- AC_ARG_VAR
+Document and ask for the registration of an envvar.
+- AC_CONFIG_LINKS
+Replaces the now obsolete AC_LINK_FILES.
+- AC_CONFIG_COMMANDS
+To add new actions to config.status.  Should be used instead of
+AC_OUTPUT_COMMANDS.
+
+** Environment variables are kept when reconfiguring.
+The previous scheme to set envvar before running configure was
+  ENV=VAL ./configure
+what prevented configure from remembering the environment in which
+it was run, therefore --recheck was run in an inconsistent environment.
+Now, one runs
+  ./configure ENV=VAR
+and the --recheck works correctly.  Variables declared with AC_ARG_VAR
+are also preserved.
+
+** Fortran 77 compilers
+Support for automatically determining a Fortran 77 compilers
+name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
+provided to wrap C/C++ identifiers, thus making it easier and more
+transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
+call C/C++ routines.  See the Texinfo documentation for details.
 
 Major changes in release 2.14:
   There was no release of GNU Autoconf 2.14.

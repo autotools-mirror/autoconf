@@ -19,7 +19,7 @@ reader catches that properly, we should not care.  If no info reader
 can handle this, we should change the affected node names.  Bug
 triggered by looking for `CONFIG_FILES' in the index.
 
-** autoconf.texi: Document AC_CONFIG_FILES.
+** autoconf.texi: Document AC_CONFIG_FILES and AC_CONFIG_COMMANDS.
 I didn't do it, because I don't know where to do that.  I would like
 to have all the AC_CONFIG_ together, but it is not currently the
 case.  An architecture for the docs needs to be decided.
@@ -36,10 +36,7 @@ AC_CHECK_MEMBER/AC_CHECK_MEMBERS is a proposal, see the code.
 ** AC_CHECK_HEADER should not template config.h entries.
 Its entry in autoheader.m4 should be removed.
 
-** Allow tags for AC_OUTPUT_COMMANDS
-so that we  can run ./config.status name-of-the command.
-
-** Generalize the association of a commands to an output file.
+** Generalize the association of commands to an output file.
 See AC_CONFIG_FILES: it is possible to associate a command which is
 run when the file is creating.  This should be extended to all the
 other AC_CONFIG entities.  But then there is a question: should the
