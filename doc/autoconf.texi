@@ -9269,6 +9269,7 @@ There are other sources of documentation about shells.  See for instance
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
+* Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
@@ -10036,6 +10037,29 @@ esac
 @noindent
 but the @code{(} in this example is not portable to many older Bourne
 shell implementations.  It can be omitted safely.
+
+@node Slashes
+@section Slashes in Shell Scripts
+@cindex Shell slashes
+
+Unpatched Tru64 5.1 @command{sh} omits the last slash of command-line
+arguments that contain two trailing slashes:
+
+@example
+$ echo / // /// //// .// //.
+/ / // /// ./ //.
+$ x=//
+$ eval "echo \$x"
+/
+$ set -x
+$ echo abc | tr -t ab //
++ echo abc
++ tr -t ab /
+/bc
+@end example
+
+However, our understanding is that patches are available, so perhaps
+it's not worth worrying about working around this horrendous bug.
 
 @node Special Shell Variables
 @section Special Shell Variables
