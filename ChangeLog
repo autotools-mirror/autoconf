@@ -1,3 +1,8 @@
+2000-10-11  Pavel Roskin  <proski@gnu.org>
+
+	* tests/atgeneral.m4 (AT_CHECK): Make sure that $? is set to 0
+	if diffs have succeded.
+
 2000-10-11  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE)

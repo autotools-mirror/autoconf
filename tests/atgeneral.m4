@@ -397,7 +397,11 @@ $at_diff expout stdout || at_failed=:],
 $at_diff experr stderr || at_failed=:],
           [], [$at_diff empty stderr || at_failed=:],
           [echo $at_n "patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
-  $at_failed && exit 1
+  if $at_failed; then
+    exit 1
+  else
+    :
+  fi
 fi
 $at_traceon
 ])# AT_CHECK
