@@ -1114,6 +1114,7 @@ for ac_flag in none -qsuffix=f=$1 -Tf; do
   test "x$ac_flag" != xnone && FCFLAGS_SRCEXT="$ac_flag"
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_fc_srcext_$1=$ac_flag; break])
 done
+rm -f conftest.$ac_objext conftest.$1
 FCFLAGS_SRCEXT=$ac_fc_srcext_FCFLAGS_SRCEXT_save
 AC_LANG_POP(Fortran)dnl
 ])
@@ -1133,8 +1134,9 @@ else
 fi
 ])# AC_FC_SRCEXT
 
+
 # AC_FC_FREEFORM([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
-# ----------------------
+# --------------------------------------------------------
 # Look for a compiler flag to make the Fortran (FC) compiler accept
 # free-format source code, and adds it to FCFLAGS.  Call
 # ACTION-IF-SUCCESS (defaults to nothing) if successful (i.e. can
@@ -1157,6 +1159,7 @@ for ac_flag in none -free -freeform -ffree-form -qfree -Mfree -Mfreeform -FR; do
        end
 ], [ac_cv_fc_freeform=$ac_flag; break])
 done
+rm -f conftest.$ac_objext conftest.$ac_ext
 FCFLAGS=$ac_fc_freeform_FCFLAGS_save
 AC_LANG_POP(Fortran)dnl
 ])

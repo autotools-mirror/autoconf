@@ -98,7 +98,7 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_LANG*
 #   Heavily used by other macros.
 #
-# - AC_PATH_PROGS?, AC_F77_FUNC, AC_FC_FUNC
+# - AC_PATH_PROGS?, AC_F77_FUNC, AC_FC_FUNC, AC_FC_SRCEXT
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
 #
@@ -131,6 +131,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_(F77|FC)_FUNC$
+^AC_FC_(FUNC|SRCEXT)$
 ^AC_FD_CC$
 ^AC_FUNC_(GETLOADAVG|FNMATCH_GNU|WAIT3)$
 ^AC_INIT

@@ -48,4 +48,18 @@ else
   # Has not.
   test "$G77" = yes &&
     AC_MSG_ERROR([incorrectly recognized a GNU Fortran 77 compiler])
-fi]])
+fi
+
+# No Fortran compiler is known not to support "*.f".
+AC_FC_SRCEXT([f])
+
+# GNU Fortran is known to support freeform.
+AC_FC_FREEFORM([],
+               [AC_MSG_WARN([Fortran does not accept free-form source])])
+if test $G77 = yes; then
+  case $FCFLAGS in
+   *-ffree-form*) ;;
+   *) AC_MSG_ERROR([failed to recognize G77's -ffree-form option.]);;
+  esac
+fi
+]])

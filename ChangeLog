@@ -1,3 +1,10 @@
+2003-09-10  Akim Demaille  <akim@epita.fr>
+
+	* tests/fortran.at (GNU Fortran 77): Also exercise AC_FC_SRCEXT
+	and AC_FC_FREEFORM.
+	* tests/mktests.sh: Skip AC_FC_SRCEXT.
+	* lib/autoconf/fortran.m4 (AC_FC_SRCEXT, AC_FC_FREEFORM): Likewise.
+
 2003-09-09  Akim Demaille  <akim@epita.fr>
 
 	* lib/Autom4te/FileUtils.pm (&update_file): s/cannot not/cannot/g.
