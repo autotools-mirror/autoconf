@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 03 December 1994
+@set lastupdate 26 December 1994
 @c %**end of header
 
 @ifinfo
@@ -2309,25 +2309,62 @@ Print the version number.
 @node Documentation
 @chapter Documenting Programs
 
-Please use Texinfo for documenting GNU programs.  See the Texinfo
-manual, either the hardcopy or the version in the GNU Emacs Info
-subsystem (@kbd{C-h i}).  See existing GNU Texinfo files (e.g., those
-under the @file{man/} directory in the GNU Emacs distribution) for
-examples.
+@menu
+* GNU Manuals::                 Writing proper manuals.
+* Manual Structure Details::    Specific structure conventions.
+* NEWS File::                   NEWS files supplement manuals.
+* Man Pages::                   Man pages are secondary.
+* Reading other Manuals::       How far you can go in learning
+                                  from other manuals.
+@end menu
+
+@node GNU Manuals
+@section GNU Manuals
+
+The preferred way to document part of the GNU system is to write a
+manual in the Texinfo formatting language.  See the Texinfo manual,
+either the hardcopy or the version in the Emacs Info subsystem (@kbd{C-h
+i}).
+
+The manual should document all of the program's command-line options and
+all of its commands.  It should give examples of their use.  But don't
+organize the manual as a list of features.  Instead, organize it
+logically, by subtopics.  Address the goals that a user will have in
+mind, and explain how to accomplish them.
+
+In general, a GNU manual should serve both as tutorial and reference.
+It should be set up for convenient access to each topic through Info,
+and for reading straight through (appendixes aside).  A GNU manual
+should give a good introduction to a beginner reading through from the
+start, and should also provide all the details that hackers want.
+
+That is not as hard as it sounds at first.  Arrange each chapter as a
+logical breakdown of its topic, but order the sections, and write their
+text, so that reading the chapter straight through makes sense.  Do
+likewise when structuring the book into chapters, and when structuring a
+section into paragraphs.  The watchword is, @emph{at each point, address
+the most fundamental and important issue raised by the preceding text.}
+
+If necessary, add extra chapters at the beginning of the manual which
+are purely tutorial and cover the basics of the subject.  These provide
+the framework for a beginner to understand the rest of the manual.  The
+Bison manual provides a good example of how to do this.
+
+Don't use Unix man pages as a model for how to write GNU documentation;
+they are a bad example to follow.
+
+Please do not use the term ``pathname'' that is used in Unix
+documentation; use ``file name'' (two words) instead.  We use the term
+``path'' only for search paths, which are lists of file names.
+
+@node Manual Structure Details
+@section Manual Structure Details
 
 The title page of the manual should state the version of the program
 which the manual applies to.  The Top node of the manual should also
 contain this information.  If the manual is changing more frequently
 than or independent of the program, also state a version number for
 the manual in both of these places.
-
-The manual should document all command-line arguments and all
-commands.  It should give examples of their use.  But don't organize
-the manual as a list of features.  Instead, organize it by the
-concepts a user will have before reaching that point in the manual.
-Address the goals that a user will have in mind, and explain how to
-accomplish them.  Don't use Unix man pages as a model for how to
-write GNU documentation; they are a bad example to follow.
 
 The manual should have a node named @samp{@var{program} Invocation} or
 @samp{Invoking @var{program}}, where @var{program} stands for the name
@@ -2348,6 +2385,9 @@ quickly reading just this part of its manual.
 If one manual describes several programs, it should have such a node for
 each program described.
 
+@node NEWS File
+@section The NEWS File
+
 In addition to its manual, the package should have a file named
 @file{NEWS} which contains a list of user-visible changes worth
 mentioning.  In each new release, add items to the front of the file and
@@ -2359,9 +2399,8 @@ If the @file{NEWS} file gets very long, move some of the older items
 into a file named @file{ONEWS} and put a note at the end referring the
 user to that file.
 
-Please do not use the term ``pathname'' that is used in Unix
-documentation; use ``file name'' (two words) instead.  We use the term
-``path'' only for search paths, which are lists of file names.
+@node Man Pages
+@section Man Pages
 
 It is ok to supply a man page for the program as well as a Texinfo
 manual if you wish to.  But keep in mind that supporting a man page
@@ -2382,6 +2421,21 @@ the man page remains useful, put a prominent note near the beginning of
 the man page explaining that you don't maintain it and that the Texinfo
 manual is more authoritative, and describing how to access the Texinfo
 documentation.
+
+@node Reading other Manuals
+@section Reading other Manuals
+
+There may be non-free books or documentation files that describe the
+program you are documenting.
+
+It is ok to use these documents for reference, just as the author of a
+new algebra textbook can read other books on algebra.  A large portion
+of any non-fiction book consists of facts, in this case facts about how
+a certain program works, and these facts are necessarily the same for
+everyone who writes about the subject.  But be careful not to copy your
+outline structure, wording, tables or examples from preexisting non-free
+documentation.  Copying from free documentation may be ok; please check
+with the FSF about the individual case.
 
 @node Releases
 @chapter Making Releases
