@@ -279,6 +279,8 @@ PACKAGE_STRING='GNU Autoconf 2.53b'
 PACKAGE_BUGREPORT='bug-autoconf@gnu.org'
 
 ac_unique_file="ChangeLog"
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE EXPR M4 HELP2MAN PERL EMACS lispdir'
+ac_subst_files=''
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -956,6 +958,7 @@ trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
     echo
+
     cat <<\_ASBOX
 ## ---------------- ##
 ## Cache variables. ##
@@ -978,6 +981,19 @@ _ASBOX
     esac;
 }
     echo
+
+    cat <<\_ASBOX
+## ----------------- ##
+## Output variables. ##
+## ----------------- ##
+_ASBOX
+    for ac_var in $ac_subst_vars
+    do
+      eval ac_val=$`echo $ac_var`
+      echo "$ac_var='"'"'$ac_val'"'"'"
+    done | sort
+    echo
+
     if test -s confdefs.h; then
       cat <<\_ASBOX
 ## ----------- ##
@@ -985,7 +1001,7 @@ _ASBOX
 ## ----------- ##
 _ASBOX
       echo
-      sed "/^$/d" confdefs.h
+      sed "/^$/d" confdefs.h | sort
       echo
     fi
     test "$ac_signal" != 0 &&
@@ -2853,4 +2869,3 @@ Below you will find information on the status of this version of Autoconf.
 
 EOF
     sed -n '/^\* Status/,$p' $srcdir/BUGS
-
