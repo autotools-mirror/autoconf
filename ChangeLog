@@ -1,5 +1,10 @@
 2002-10-29  Akim Demaille  <akim@epita.fr>
 
+	* lib/autom4te.in (Autoconf): s/automate/autom4te/.
+	Reported by Ralf Corsepius.
+
+2002-10-29  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sh.m4 (_AS_QUOTE): The warning about quoted
 	characters is a back as an `obsolete' warning now.
 	Reported by Ralf Corsepius.
