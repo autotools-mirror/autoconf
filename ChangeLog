@@ -1,3 +1,13 @@
+2001-07-03  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.in ($initfile): Remove.
+	(&find_file): Rename as...
+	(&scan_file): this.
+	Immediately scan the current file, instead of gathering them, and
+	later having them handled by &scan_files.
+	(&scan_files): Merely invoke Find::File.
+	Adjust.
+
 2001-07-02  Akim Demaille  <akim@epita.fr>
 
 	* autoscan.in: Formatting changes, matching the invocation order.
