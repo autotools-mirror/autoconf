@@ -5075,15 +5075,6 @@ To be compatible with @command{ash} 0.2
 
 @itemize @bullet
 @item
-don't rely on variable assignment setting @samp{$?} unless the
-assignment involves command substitution:
-
-@example
-false || foo=bar && echo "Not portable"
-false || foo=`bar` && echo "Portable"
-@end example
-
-@item
 don't use @samp{$?} after expanding empty or unset variables:
 
 @example
@@ -5345,6 +5336,24 @@ evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
 gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
 
+Don't rely on the exit status of an assignment: Ash 0.2 does not change
+the status and propagates that of the last statement:
+
+@example
+$ false || foo=bar; echo $?
+1
+$ false || foo=`:`; echo $?
+0
+@end example
+
+@noindent
+and to make things even worse, @sc{qnx 4.25} just sets the exit status
+to 0 in any case:
+
+@example
+$ foo=`exit 1`; echo $?
+0
+@end example
 
 To assign default values follow this algorithm:
 
