@@ -247,7 +247,7 @@ check-copyright:
 	  || { echo 'out of date copyright in $<; update it' 1>&2; exit 1; }; \
 	fi
 
-alpha: static-check
+alpha: local-check
 	$(MAKE) cvs-dist
 	$(MAKE) -s announcement > /tmp/announce-$(my_distdir)
 	ln $(distdir).tar.gz $(release-archive-dir)

@@ -1,6 +1,7 @@
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
 	Version 2.50c.
+	* Makefile.maint (alpha): Typo.
 
 2001-07-14  Akim Demaille  <akim@epita.fr>
 
