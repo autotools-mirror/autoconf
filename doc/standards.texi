@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate March  2, 2000
+@set lastupdate June 27, 2000
 @c %**end of header
 
 @ifinfo
@@ -28,7 +28,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -92,6 +92,7 @@ Last updated @value{lastupdate}.
 * Documentation::           Documenting Programs
 * Managing Releases::       The Release Process
 * References::              References to Non-Free Software or Documentation
+* Index::
 @end menu
 
 @node Preface
@@ -113,6 +114,15 @@ you don't have those files, please mail your suggestion anyway.
 
 This release of the GNU Coding Standards was last updated
 @value{lastupdate}.
+
+If you did not obtain this file directly from the GNU project and
+recently, please check for a newer version.  You can ftp the GNU Coding
+Standards from any GNU FTP host in the directory
+@file{/pub/gnu/standards/}.  The GNU Coding Standards are available
+there in several different formats: @file{standards.text},
+@file{standards.texi}, @file{standards.info}, and @file{standards.dvi}.
+The GNU Coding Standards are also available on the GNU World Wide Web
+server: @uref{http://www.gnu.org/prep/standards_toc.html}.
 
 @node Legal Issues
 @chapter Keeping Free Software Free
@@ -433,7 +443,9 @@ command line interface, and how libraries should behave.
 * Semantics::                   Writing robust programs
 * Libraries::                   Library behavior
 * Errors::                      Formatting error messages
-* User Interfaces::             Standards for command line interfaces
+* User Interfaces::             Standards about interfaces generally
+* Graphical Interfaces::        Standards for graphical interfaces
+* Command-Line Interfaces::     Standards for command line interfaces
 * Option Table::                Table of long options.
 * Memory Usage::                When and how to care about memory needs
 @end menu
@@ -526,6 +538,19 @@ If you make temporary files, check the @code{TMPDIR} environment
 variable; if that variable is defined, use the specified directory
 instead of @file{/tmp}.
 
+In addition, be aware that there is a possible security problem when
+creating temporary files in world-writable directories.  In C, you can
+avoid this problem by creating temporary files in this manner:
+
+@example
+fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0600);
+@end example
+
+@noindent
+or by using the @code{mkstemps} function from libiberty.
+
+In bash, use @code{set -C} to avoid this problem.
+
 @node Libraries
 @section Library Behavior
 
@@ -616,7 +641,7 @@ usage messages, should start with a capital letter.  But they should not
 end with a period.
 
 @node User Interfaces
-@section Standards for Command Line Interfaces
+@section Standards for Interfaces Generally
 
 Please don't make the behavior of a utility depend on the name used
 to invoke it.  It is useful sometimes to make a link to a utility
@@ -645,6 +670,28 @@ program with a preferred alternate version that does not depend on the
 output device type.  For example, we provide a @code{dir} program much
 like @code{ls} except that its default output format is always
 multi-column format.
+
+@node Graphical Interfaces
+@section Standards for Graphical Interfaces
+
+When you write a program that provides a graphical user interface,
+please make it work with X Windows and the GTK toolkit unless the
+functionality specifically requires some alternative (for example,
+``displaying jpeg images while in console mode'').
+
+In addition, please provide a command-line interface to control the
+functionality.  (In many cases, the graphical user interface can be a
+separate program which invokes the command-line program.)  This is
+so that the same jobs can be done from scripts.
+
+Please also consider providing a CORBA interface (for use from GNOME), a
+library interface (for use from C), and perhaps a keyboard-driven
+console interface (for use by users from console mode).  Once you are
+doing the work to provide the functionality and the graphical interface,
+these won't be much extra work.
+
+@node Command-Line Interfaces
+@section Standards for Command Line Interfaces
 
 It is a good idea to follow the @sc{posix} guidelines for the
 command-line options of a program.  The easiest way to do this is to use
@@ -1230,6 +1277,9 @@ init file.
 
 @item intermix-type
 @samp{-p} in @code{shar}.
+
+@item iso-8601
+Used in @code{date}
 
 @item jobs
 @samp{-j} in Make.
@@ -1921,6 +1971,7 @@ when writing GNU software.
 
 @node Formatting
 @section Formatting Your Source Code
+@cindex formatting source code
 
 It is important to put the open-brace that starts the body of a C
 function in column zero, and avoid putting any other open-brace or
@@ -1990,12 +2041,14 @@ else
   @}
 @end example
 
+@cindex spaces before open-paren
 We find it easier to read a program when it has spaces before the
 open-parentheses and after the commas.  Especially after the commas.
 
 When you split an expression into multiple lines, split it
 before an operator, not after one.  Here is the right way:
 
+@cindex expressions, splitting
 @example
 if (foo_this_is_long && bar > win (x, y, z)
     && remaining_condition)
@@ -2045,6 +2098,8 @@ do
 while (a > 0);
 @end example
 
+@cindex formfeed
+@cindex control-L
 Please use formfeed characters (control-L) to divide the program into
 pages at logical places (but not within a function).  It does not matter
 just how long the pages are, since they do not have to fit on a printed
@@ -2052,6 +2107,7 @@ page.  The formfeeds should appear alone on lines by themselves.
 
 @node Comments
 @section Commenting Your Work
+@cindex commenting
 
 Every program should start with a comment saying briefly what it is for.
 Example: @samp{fmt - filter for simple filling of text}.
@@ -2145,9 +2201,11 @@ but, by contrast, write the comments this way for a @samp{#ifndef}:
 @node Syntactic Conventions
 @section Clean Use of C Constructs
 
+@cindex function argument, declaring
 Please explicitly declare all arguments to functions.
 Don't omit them just because they are @code{int}s.
 
+@cindex compiler warnings
 Some programmers like to use the GCC @samp{-Wall} option, and change the
 code whenever it issues a warning.  If you want to do this, then do.
 Other programmers prefer not to use @samp{-Wall}, because it gives
@@ -2172,6 +2230,7 @@ all its uses.  This makes the program even cleaner.
 
 Don't use local variables or parameters that shadow global identifiers.
 
+@cindex multiple variables in a line
 Don't declare multiple variables in one declaration that spans lines.
 Start a new declaration on each line, instead.  For example, instead
 of this:
@@ -2279,6 +2338,7 @@ pointer constant, except when calling a varargs function.
 @node Names
 @section Naming Variables and Functions
 
+@cindex names of variables and functions
 The names of global variables and functions in a program serve as
 comments of a sort.  So don't choose terse names---instead, look for
 names that give useful information about the meaning of the variable or
@@ -2670,6 +2730,11 @@ all these kinds of files.
 @node Documentation
 @chapter Documenting Programs
 
+A GNU program should ideally come with full free documentation, adequate
+for both reference and tutorial purposes.  If the package can be
+programmed or extended, the documentation should cover programming or
+extending it, as well as just using it.
+
 @menu
 * GNU Manuals::                 Writing proper manuals.
 * Manual Structure Details::    Specific structure conventions.
@@ -2793,14 +2858,11 @@ each program described.
 @node License for Manuals
 @section License for Manuals
 
-If the manual contains a copy of the GNU GPL or GNU LGPL, or if it
-contains chapters that make political or personal statements, please
-copy the distribution terms of the GNU Emacs Manual, and adapt it by
-modifying appropriately the list of special chapters that may not be
-modified or deleted.
-
-If the manual does not contain any such chapters, then imitate the
-simpler distribution terms of the Texinfo manual.
+Please use the GNU Free Documentation License for all GNU manuals that
+are more than a few pages long.  Likewise for a collection of short
+documents---you only need one copy of the GNU FDL for the whole
+collection.  For a single short document, you can use a very permissive
+non-copyleft license, to avoid taking up space with a long license.
 
 @node NEWS File
 @section The NEWS File
@@ -2832,6 +2894,7 @@ history of how the conflicting concepts arose and who they came from.
 * Style of Change Logs::        
 * Simple Changes::              
 * Conditional Changes::         
+* Indicating the Part Changed::
 @end menu
 
 @node Change Log Concepts
@@ -2888,6 +2951,9 @@ Restart the tex shell if process is gone or stopped.
 * expr.c (store_one_arg): Round size up for move_block_to_reg.
 (expand_call): Round up when emitting USE insns.
 * stmt.c (assign_parms): Round size up for move_block_from_reg.
+
+* keyboard.c (menu_bar_items, tool_bar_items)
+(Fexecute_extended_command): Deal with `keymap' property.
 @end example
 
 It's important to name the changed function or variable in full.  Don't
@@ -2905,6 +2971,10 @@ Separate unrelated change log entries with blank lines.  When two
 entries represent parts of the same change, so that they work together,
 then don't put blank lines between them.  Then you can omit the file
 name and the asterisk when successive entries are in the same file.
+
+Break long lists of function names by closing continued lines with
+@samp{)}, rather than @samp{,}, and opening the continuation with
+@samp{(} as in the example above.
 
 @node Simple Changes
 @subsection Simple Changes
@@ -2973,6 +3043,20 @@ a certain macro is @emph{not} defined:
 @example
 (gethostname) [!HAVE_SOCKETS]: Replace with winsock version.
 @end example
+
+@node Indicating the Part Changed
+@subsection Indicating the Part Changed
+
+Indicate the part of a function which changed by using angle brackets
+enclosing an indication of what the changed part does.  Here is an entry
+for a change in the part of the function that deals with @code{sh}
+commands.
+
+@example
+* progmodes/sh-script.el (sh-while-getopts) <sh>: Handle case that
+user-specified option string is empty.
+@end example
+
 
 @node Man Pages
 @section Man Pages
@@ -3107,7 +3191,7 @@ The @code{configure} script needs to be able to decode all plausible
 alternatives for how to describe a machine.  Thus, @samp{sun3-sunos4.1}
 would be a valid alias.  For many programs, @samp{vax-dec-ultrix} would
 be an alias for @samp{vax-dec-bsd}, simply because the differences
-between Ultrix and @sc{BSD} are rarely noticeable, but a few programs
+between Ultrix and @sc{bsd} are rarely noticeable, but a few programs
 might need to distinguish them.
 @c Real 4.4BSD now runs on some Suns.
 
@@ -3313,6 +3397,10 @@ with free software is now a major focus of the GNU project; to show that
 we are serious about the need for free documentation, we must not
 undermine our position by recommending use of documentation that isn't
 free.
+
+@node Index
+@unnumbered Index
+@printindex cp
 
 @contents
 
