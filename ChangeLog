@@ -1,5 +1,13 @@
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_COMMANDS): Make sure the
+	directory for AC_CONFIG_COMMANDS' first argument exists.
+	This makes valid the invocation of _AC_SRCPATH that follows.
+	Reported by Eric Sunshine.
+	* doc/autoconf.texi (Configuration Commands): Adjust.
+
+2003-09-26  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (Autom4te::FileUtils): Use it for find_file.
 	Reported by Ralf Corsepius.
 

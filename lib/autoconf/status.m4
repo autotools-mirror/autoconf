@@ -366,6 +366,7 @@ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
   ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
   ac_dir=`AS_DIRNAME(["$ac_dest"])`
+  AS_MKDIR_P(["$ac_dir"])  
   _AC_SRCPATHS(["$ac_dir"])
 
   AC_MSG_NOTICE([executing $ac_dest commands])

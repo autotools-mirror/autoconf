@@ -1,5 +1,13 @@
 * Major changes in Autoconf 2.57e                       -*- outline -*-
 
+** AC_CONFIG_COMMANDS
+  The directory for its first argument is automatically created.  For
+  instance, with
+
+      AC_CONFIG_COMMANDS([src/modules.hh], [...])
+
+  $top_builddir/src/ is created if needed.
+
 * Major changes in Autoconf 2.57d
 
   Released 2003-09-25, by Akim Demaille.

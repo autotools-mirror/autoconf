@@ -2805,9 +2805,10 @@ commands to run when they are called multiple times.
 @acindex{CONFIG_COMMANDS}
 Specify additional shell commands to run at the end of
 @file{config.status}, and shell commands to initialize any variables
-from @command{configure}.  Associate the commands with @var{tag}.  Since
-typically the @var{cmds} create a file, @var{tag} should naturally be
-the name of that file.  This macro is one of the instantiating macros;
+from @command{configure}.  Associate the commands with @var{tag}.
+Since typically the @var{cmds} create a file, @var{tag} should
+naturally be the name of that file.  If needed, the directory hosting
+@var{tag} is created. This macro is one of the instantiating macros;
 see @ref{Configuration Actions}.
 
 Here is an unrealistic example:
