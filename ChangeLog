@@ -1,5 +1,10 @@
 2003-03-27  Derek Price  <derek@ximbiot.com>
 
+	* lib/autotest/general.m4: Eliminate main loop and reorganize test
+	layout in order to allow scripting around test groups.
+
+2003-03-27  Derek Price  <derek@ximbiot.com>
+
 	* lib/autotest/general.m4: Define and use new diversions in preparation
 	for accepting new arguments and allowing scripting around tests.
 

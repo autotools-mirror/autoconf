@@ -81,10 +81,10 @@
 #    optimization.  Do anything else that needs to be done to prepare for
 #    tests.  Sets up verbose and log file descriptors.  Sets and logs PATH.
 #  - TESTS
-#    The core of the test suite, the ``normal'' diversion.
+#    The core of the test suite, the ``normal'' diversion.  Scripting in the
+#    source *.at file ends up here too.
 #  - TESTS_END
-#    tail of the core for;case, overall wrap up, generation of debugging
-#    scripts and statistics.
+#    overall wrap up, generation of debugging scripts and statistics.
 
 m4_define([_m4_divert(DEFAULTS)],           100)
 m4_define([_m4_divert(PARSE_ARGS)],         200)
@@ -568,101 +568,9 @@ if diff -u $at_devnull $at_devnull >/dev/null 2>&1; then
 else
   at_diff=diff
 fi
-
-
-for at_group in $at_groups
-do
-  # Be sure to come back to the top test directory.
-  cd $at_suite_dir
-
-  case $at_group in
-    banner-*) ;;
-    *)
-     # Skip tests we already run (using --keywords makes it easy to get
-     # duplication).
-     case " $at_pass_test $at_skip_test $at_fail_test " in
-       *" $at_group "* ) continue;;
-     esac
-
-     # Normalize the test group number.
-     at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
-
-     # Create a fresh directory for the next test group, and enter.
-     at_group_dir=$at_suite_dir/$at_group_normalized
-     rm -rf $at_group_dir
-     mkdir $at_group_dir ||
-       AS_ERROR([cannot create $at_group_dir])
-     cd $at_group_dir
-    ;;
-  esac
-
-  at_status=0
-  # Clearly separate the test groups when verbose.
-  test $at_group_count != 0 && $at_verbose
-  case $at_group in
-dnl Test groups inserted here (TESTS).
-m4_divert_pop([TESTS])[]dnl
-m4_divert_push([TESTS_END])[]dnl
-
-  * )
-    echo "$as_me: no such test group: $at_group" >&2
-    continue
-    ;;
-  esac
-
-  # Be sure to come back to the suite directory, in particular
-  # since below we might `rm' the group directory we are in currently.
-  cd $at_suite_dir
-
-  case $at_group in
-    banner-*) ;;
-    *)
-      if test ! -f $at_check_line_file; then
-        sed "s/^ */$as_me: warning: /" <<_ATEOF
-        A failure happened in a test group before any test could be
-        run. This means that test suite is improperly designed.  Please
-        report this failure to <AT_PACKAGE_BUGREPORT>.
-_ATEOF
-    	echo "$at_setup_line" >$at_check_line_file
-      fi
-      at_group_count=`expr 1 + $at_group_count`
-      $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"
-      case $at_status in
-        0)  at_msg="ok"
-            at_pass_list="$at_pass_list $at_group"
-            # Cleanup the group directory, unless the user wants the files.
-            $at_debug_p || rm -rf $at_group_dir
-            ;;
-        77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
-            at_skip_list="$at_skip_list $at_group"
-            # Cleanup the group directory, unless the user wants the files.
-            $at_debug_p || rm -rf $at_group_dir
-            ;;
-        *)  at_msg="FAILED near \``cat $at_check_line_file`'"
-            at_fail_list="$at_fail_list $at_group"
-            # Up failure, keep the group directory for autopsy.
-            # Create the debugging script.
-            {
-              echo "#! /bin/sh"
-              echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-              echo "cd $at_dir"
-              echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-                   '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
-              echo 'exit 1'
-            } >$at_group_dir/run
-            chmod +x $at_group_dir/run
-            ;;
-      esac
-      echo $at_msg
-      at_log_msg="$at_group. $at_setup_line: $at_msg"
-      # If the group failed, $at_times_file is not available.
-      test -f $at_times_file &&
-        at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
-      echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
-      $at_errexit_p && test -n "$at_fail_list" && break
-      ;;
-  esac
-done
+m4_divert_pop([TESTS])dnl
+dnl Individual tests are inserted here.
+m4_divert_push([TESTS_END])dnl
 
 # Back to the top directory, in particular because we might
 # rerun the suite verbosely.
@@ -759,11 +667,11 @@ fi
 
 exit 0
 m4_divert_pop([TESTS_END])dnl
-dnl End of AT_INIT: divert to KILL, only test groups are to be
-dnl output, the rest is ignored.  Current diversion is BODY, inherited
-dnl from M4sh.
-m4_divert_push([KILL])
-m4_wrap([m4_divert_pop([KILL])[]])
+dnl End of AT_INIT: divert to TESTS, script in the file is output into
+dnl the standard diversion with the tests.
+dnl Current diversion is BODY, inherited from M4sh.
+m4_divert_push([TESTS])dnl
+m4_wrap([m4_divert_pop([TESTS])[]])
 ])# AT_INIT
 
 
@@ -782,19 +690,42 @@ m4_define([AT_TESTED],
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
 m4_define([AT_SETUP],
-[m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
-m4_define([AT_line], AT_LINE)
-m4_define([AT_description], [$1])
-m4_define([AT_ordinal], m4_incr(AT_ordinal))
-m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
-m4_divert_push([TESTS])dnl
-  AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
-    at_setup_line='m4_defn([AT_line])'
-    $at_verbose "AT_ordinal. m4_defn([AT_line]): testing $1..."
-    $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
-                       AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
-    (
-      $at_traceon
+[m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])dnl
+m4_define([AT_line], AT_LINE)dnl
+m4_define([AT_description], [$1])dnl
+m4_define([AT_ordinal], m4_incr(AT_ordinal))dnl
+m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))dnl
+
+if $at_errexit_p && test -n "$at_fail_list"; then
+  :
+else
+  # Be sure to come back to the top test directory.
+  cd $at_suite_dir
+
+  # Skip this test if it isn't in our list of tests to run
+  case " $at_groups " in
+    *" AT_ordinal "*)
+      # Normalize the test group number.
+      at_group_normalized=`expr "00000[]AT_ordinal" : ".*\($at_format\)"`
+
+      # Create a fresh directory for the next test group, and enter.
+      at_group_dir=$at_suite_dir/$at_group_normalized
+      rm -rf $at_group_dir
+      mkdir $at_group_dir ||
+        AS_ERROR([cannot create $at_group_dir])
+      cd $at_group_dir
+
+      at_status=0
+      # Clearly separate the test groups when verbose.
+      test $at_group_count != 0 && $at_verbose
+
+      @%:@ AT_ordinal. m4_defn([AT_line]): $1
+      at_setup_line='m4_defn([AT_line])'
+      $at_verbose "AT_ordinal. m4_defn([AT_line]): testing $1..."
+      $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
+                         AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
+      (
+        $at_traceon
 ])
 
 
@@ -813,12 +744,59 @@ m4_define([AT_CLEANUP],
 at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
 '
 )dnl
-    $at_times_skip || times >$at_times_file
-    )
-    at_status=$?
-    ;;
+      $at_times_skip || times >$at_times_file
+      )
+      at_status=$?
 
-m4_divert_pop([TESTS])dnl Back to KILL.
+      # Be sure to come back to the suite directory, in particular
+      # since below we might `rm' the group directory we are in currently.
+      cd $at_suite_dir
+
+      if test ! -f $at_check_line_file; then
+        sed "s/^ */$as_me: warning: /" <<_ATEOF
+        A failure happened in a test group before any test could be
+        run. This means that test suite is improperly designed.  Please
+        report this failure to <AT_PACKAGE_BUGREPORT>.
+_ATEOF
+    	echo "$at_setup_line" >$at_check_line_file
+      fi
+      at_group_count=`expr 1 + $at_group_count`
+      $at_verbose $ECHO_N "AT_ordinal. $at_setup_line: $ECHO_C"
+      case $at_status in
+        0)  at_msg="ok"
+            at_pass_list="$at_pass_list AT_ordinal"
+            # Cleanup the group directory, unless the user wants the files.
+            $at_debug_p || rm -rf $at_group_dir
+            ;;
+        77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
+            at_skip_list="$at_skip_list AT_ordinal"
+            # Cleanup the group directory, unless the user wants the files.
+            $at_debug_p || rm -rf $at_group_dir
+            ;;
+        *)  at_msg="FAILED near \``cat $at_check_line_file`'"
+            at_fail_list="$at_fail_list AT_ordinal"
+            # Up failure, keep the group directory for autopsy.
+            # Create the debugging script.
+            {
+              echo "#! /bin/sh"
+              echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
+              echo "cd $at_dir"
+              echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
+                   '-v -d' "$at_debug_args" "AT_ordinal" '${1+"$[@]"}'
+              echo 'exit 1'
+            } >$at_group_dir/run
+            chmod +x $at_group_dir/run
+            ;;
+      esac
+      echo $at_msg
+      at_log_msg="AT_ordinal. $at_setup_line: $at_msg"
+      # If the group failed, $at_times_file is not available.
+      test -f $at_times_file &&
+        at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
+      echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
+      ;;
+  esac
+fi
 ])# AT_CLEANUP
 
 
@@ -826,18 +804,19 @@ m4_divert_pop([TESTS])dnl Back to KILL.
 # ---------------
 # Output TEXT without any shell expansion.
 m4_define([AT_BANNER],
-[m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
-m4_append([AT_groups_all], [ banner-]m4_defn([AT_banner_ordinal]))
-m4_divert_text([TESTS],
-[
-  banner-AT_banner_ordinal ) @%:@ Banner AT_banner_ordinal. AT_LINE
+[m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))dnl
+m4_append([AT_groups_all], [ banner-]m4_defn([AT_banner_ordinal]))dnl
+
+case " $at_groups " in
+  *" banner-AT_banner_ordinal "* )
+    @%:@ Banner AT_banner_ordinal. AT_LINE
     cat <<\_ATEOF
 
 $1
 
 _ATEOF
     ;;
-])dnl
+esac
 ])# AT_BANNER
 
 
