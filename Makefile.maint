@@ -25,6 +25,9 @@ release_archive_dir ?= ../release
 ## Sanity checks.  ##
 ## --------------- ##
 
+# Checks that don't require cvs.
+local-check: changelog-check po-check writable-files copyright-check
+
 changelog-check:
 	if head ChangeLog | grep 'Version $(VERSION)' >/dev/null; then \
 	  :; \
@@ -56,8 +59,13 @@ writable-files:
 	done;								\
 	test "$$fail" && exit 1 || :
 
-# Checks that don't require cvs.
-local-check: changelog-check po-check writable-files check-copyright
+# Make sure that the copyright date in lib/version-etc.c is up to date.
+copyright-check:
+	@if test -f lib/version-etc.c; then \
+	  grep 'N_("Copyright (C) $(shell date +%Y) Free' lib/version-etc.c \
+	    >/dev/null \
+	  || { echo 'out of date copyright in $<; update it' 1>&2; exit 1; }; \
+	fi
 
 
 # Sanity checks with the CVS repository.
@@ -137,10 +145,13 @@ real_dir = fetish-ftp
 
 url_dir_list = $(foreach x,$(hosts),ftp://$($(x)_host)/$($(x)_url_dir))
 
-md5 = $(shell md5sum < $(my_distdir).tar.gz|sed 's/  -//')
-sha1 = $(shell sha1sum < $(my_distdir).tar.gz|sed 's/  -//')
-tgz-size = $(shell du --human $(my_distdir).tar.gz|sed 's/M.*/MB/')
-xd-size = $(shell du --human $(xd-delta)|sed 's/M.*/MB/')
+tgz-md5 = $(shell md5sum < $(my_distdir).tar.gz|sed 's/  -//')
+tgz-sha1 = $(shell sha1sum < $(my_distdir).tar.gz|sed 's/  -//')
+bz2-md5 = $(shell md5sum < $(my_distdir).tar.bz2|sed 's/  -//')
+bz2-sha1 = $(shell sha1sum < $(my_distdir).tar.bz2|sed 's/  -//')
+tgz-size = $(shell du --human $(my_distdir).tar.gz|sed 's/\([Mk]\).*/ \1B/')
+bz2-size = $(shell du --human $(my_distdir).tar.bz2|sed 's/\([Mk]\).*/ \1B/')
+xd-size = $(shell du --human $(xd-delta)|sed 's/\([Mk]\).*/ \1B/')
 
 rel-check:
 	tarz=/tmp/rel-check-tarz-$$$$; \
@@ -154,7 +165,15 @@ rel-check:
 prev-tgz = $(PACKAGE)-$(PREV_VERSION).tar.gz
 xd-delta = $(PACKAGE)-$(PREV_VERSION)-$(VERSION).xdelta
 
-announcement: NEWS ChangeLog $(distdir).tar.gz
+GZIP = gzip
+BZIP2 = bzip2
+$(my_distdir).tar.bz2: $(my_distdir).tar.gz
+	$(GZIP) -dc $< > $(my_distdir).tar
+	rm -f $@
+	$(BZIP2) -9 $(my_distdir).tar
+
+rel-files = $(xd-delta) $(distdir).tar.bz2 $(distdir).tar.gz
+announcement: NEWS ChangeLog $(rel-files)
 	@( \
 	  echo Subject: $(my_distdir) released; \
 	  echo; \
@@ -162,6 +181,7 @@ announcement: NEWS ChangeLog $(distdir).tar.gz
 	  echo; \
 	  for url in $(url_dir_list); do \
 	    echo "  $$url/$(my_distdir).tar.gz   ($(tgz-size))"; \
+	    echo "  $$url/$(my_distdir).tar.bz2  ($(bz2-size))"; \
 	  done; \
 	  echo; \
 	  echo And here are xdelta-style diffs; \
@@ -170,13 +190,15 @@ announcement: NEWS ChangeLog $(distdir).tar.gz
 	    echo "  $$url/$(xd-delta)   ($(xd-size))"; \
 	  done; \
 	  echo; \
-	  echo "Here are the MD5 and SHA1 signatures for the .tar.gz file"; \
+	  echo "Here are the MD5 and SHA1 signatures for the compressed tar files:"; \
 	  echo; \
-	  echo "$(md5)  $(my_distdir).tar.gz"; \
-	  echo "$(sha1)  $(my_distdir).tar.gz"; \
+	  echo "$(tgz-md5)  $(my_distdir).tar.gz"; \
+	  echo "$(bz2-md5)  $(my_distdir).tar.bz2"; \
+	  echo "$(tgz-sha1)  $(my_distdir).tar.gz"; \
+	  echo "$(bz2-sha1)  $(my_distdir).tar.bz2"; \
 	  echo; \
 	  echo NEWS:; \
-	  sed -n "/$(THIS_VERSION_REGEXP)/,/^\[$(PREV_VERSION_REGEXP)/p" NEWS \
+	  sed -n "/$(THIS_VERSION_REGEXP)[]:]/,/$(PREV_VERSION_REGEXP)[]:]/p" NEWS \
 	    | grep -v '^\['; \
 	  echo; \
 	  echo ChangeLog entries:; \
@@ -233,29 +255,22 @@ define emit-rsync-commands
 	echo =====================================
 	echo =====================================
 	echo 'for host in $(a_host) $(b_host); do \'
-	echo '  rsync -e ssh --pro -av $(xd-delta) $(my_distdir).tar.gz \'
-	echo '    $$host:$(real_dir); done'
+	echo '  rsync -e ssh --pro -av $(xd-delta) $(my_distdir).tar.bz2 \'
+	echo '    $(my_distdir).tar.gz $$host:$(real_dir); done'
 	echo '# send the /tmp/announcement e-mail'
 	echo =====================================
 	echo =====================================
 endef
 
-# Make sure that the copyright date in lib/version-etc.c is up to date.
-check-copyright:
-	@if test -f lib/version-etc.c; then \
-	  grep 'N_("Copyright (C) $(shell date +%Y) Free' lib/version-etc.c > /dev/null \
-	  || { echo 'out of date copyright in $<; update it' 1>&2; exit 1; }; \
-	fi
+$(xd-delta): $(release-archive-dir)/$(prev-tgz) $(distdir).tar.gz
+	xdelta delta -9 $^ $@ || :
 
 alpha: local-check
 	$(MAKE) cvs-dist
+	$(MAKE) $(xd-delta)
 	$(MAKE) -s announcement > /tmp/announce-$(my_distdir)
-	ln $(distdir).tar.gz $(release_archive_dir)
-	chmod a-w $(distdir).tar.gz
-	cd $(release_archive_dir) \
-	  && xdelta delta -9 $(prev-tgz) $(distdir).tar.gz $(xd-delta) || :
-	ln $(release_archive_dir)/$(xd-delta) .
-	chmod a-w $(release_archive_dir)/$(xd-delta)
+	ln $(rel-files) $(release_archive_dir)
+	chmod a-w $(rel-files)
 	echo $(VERSION) > $(prev_version_file)
 	cvs ci -m. $(prev_version_file)
 	@$(emit-rsync-commands)
