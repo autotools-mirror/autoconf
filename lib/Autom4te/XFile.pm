@@ -17,6 +17,11 @@
 
 # Written by Akim Demaille <akim@freefriends.org>.
 
+###############################################################
+# The main copy of this file is in Autoconf's CVS repository. #
+# Updates should be sent to autoconf-patches@gnu.org.         #
+###############################################################
+
 package Autom4te::XFile;
 
 =head1 NAME
@@ -59,7 +64,8 @@ Autom4te::XFile - supply object methods for filehandles with error handling
 =head1 DESCRIPTION
 
 C<Autom4te::XFile> inherits from C<IO::File>.  It provides dying
-version of the methods C<open>, C<new>, and C<close>.
+version of the methods C<open>, C<new>, and C<close>.  It also overrides
+the C<getline> and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =head1 SEE ALSO
 
@@ -86,7 +92,7 @@ require DynaLoader;
 
 @ISA = qw(IO::File Exporter DynaLoader);
 
-$VERSION = "1.0";
+$VERSION = "1.1";
 
 @EXPORT = @IO::File::EXPORT;
 
@@ -156,6 +162,33 @@ sub close
       my $file = ${*$fh}{'autom4te_xfile_file'};
       croak "$me: cannot close $file: $!\n";
     }
+}
+
+################################################
+## Getline
+##
+
+# Some Win32/perl installations fail to translate \r\n to \n on input
+# so we do that here.
+sub getline
+{
+    local $_ = $_[0]->SUPER::getline;
+    # Perform a _global_ replacement: $_ may can contains many lines
+    # in slurp mode ($/ = undef).
+    s/\015\012/\n/gs if defined $_;
+    return $_;
+}
+
+################################################
+## Getlines
+##
+
+sub getlines
+{
+    my @res = ();
+    my $line;
+    push @res, $line while $line = $_[0]->getline;
+    return @res;
 }
 
 1;
