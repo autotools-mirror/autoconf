@@ -99,6 +99,21 @@ fi
 rm -f conftest*
 ])dnl
 dnl
+dnl Define SET_MAKE to set ${MAKE} if make doesn't.
+define(AC_SET_MAKE,
+[cat > conftestmake <<'EOF'
+all:
+	@echo 'ac_maketemp="${MAKE}"'
+EOF
+changequote(,)dnl
+# GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+eval `make -f conftestmake 2>/dev/null | grep temp=`
+changequote([,])dnl
+if test -n "$ac_maketemp"; then SET_MAKE=
+else SET_MAKE='MAKE=make'; fi
+AC_SUBST([SET_MAKE])dnl
+])dnl
+dnl
 define(AC_PROG_RANLIB, [AC_PROGRAM_CHECK(RANLIB, ranlib, ranlib, :)])dnl
 dnl
 define(AC_PROG_AWK, [AC_PROGRAMS_CHECK(AWK, mawk gawk nawk awk,)])dnl
@@ -200,28 +215,25 @@ define(AC_PROG_INSTALL,
 # Avoid using ./install, which might have been erroneously created
 # by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
-  AC_CHECKING(for install)
+  AC_CHECKING(for a BSD compatible install)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
     ''|.|/etc|/sbin|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
     *)
-      if test -f $ac_dir/installbsd; then
-	INSTALL="$ac_dir/installbsd -c" # OSF1
-	INSTALL_PROGRAM='$(INSTALL)'
-	INSTALL_DATA='$(INSTALL) -m 644'
-	break
-      fi
-      if test -f $ac_dir/install; then
-	if grep dspmsg $ac_dir/install >/dev/null 2>&1; then
-	  : # AIX
-	else
-	  INSTALL="$ac_dir/install -c"
-	  INSTALL_PROGRAM='$(INSTALL)'
-	  INSTALL_DATA='$(INSTALL) -m 644'
-	  break
+      # OSF1 and SCO ODT 3.0 have their own names for install.
+      for ac_prog in installbsd scoinst install; do
+        if test -f $ac_dir/$ac_prog; then
+	  if grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    : # AIX
+	  else
+	    INSTALL="$ac_dir/$ac_prog -c"
+	    INSTALL_PROGRAM='$(INSTALL)'
+	    INSTALL_DATA='$(INSTALL) -m 644'
+	    break 2
+	  fi
 	fi
-      fi
+      done
       ;;
     esac
   done
