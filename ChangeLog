@@ -1,5 +1,23 @@
 2001-08-07  Akim Demaille  <akim@epita.fr>
 
+	The use of `dumpstat' revealed that `len' was used although it
+	should not.  m4_text_wrap was using it, but in the Autoconf world
+	where it is legal.  Hence (i) test M4sh in its own world, not
+	Autoconf's, and (ii), ahem, fix the bug :)
+
+	* lib/autotest/general.m4: Be sure the set good quotes, as tracing
+	does not like `' instead of [].
+	(AT_INIT): Forbid `^_?AT_'.
+	And don't output such tokens.
+	* tests/Makefile.am (CLEANFILES): Add `script', `script.s4g',
+	`script.as', and `autom4te.cache'.
+	Remove `empty' and `macro' which are no longer used.
+	* tests/atspecific.m4 (AT_CHECK_M4SUGAR, AT_CHECK_M4SH): New.
+	* tests/m4sugar.at: Use it.
+	* lib/m4sugar/m4sugar.m4: Use `m4_len' not `len'.
+
+2001-08-07  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoconf.in, bin/autoheader.in: --force, -f is a new option.
 
 2001-08-07  Alexandre Duret-Lutz  <duret_g@epita.fr>

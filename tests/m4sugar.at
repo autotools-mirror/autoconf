@@ -21,33 +21,29 @@ AT_SETUP([[m4_warn]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA(configure.ac,
+AT_DATA([script.s4g],
 [[m4_warn([foo],  [foo])
 m4_warn([bar],    [bar])
 m4_warn([syntax], [syntax])
 ]])
 
-AT_CHECK_AUTOCONF([-o-],
-         0, [],
-[configure.ac:3: warning: syntax
+AT_CHECK_M4SUGAR([-o-], 0, [],
+[script.s4g:3: warning: syntax
 ])
 
-AT_CHECK_AUTOCONF([-o- -Wall],
-         0, [],
-[configure.ac:1: warning: foo
-configure.ac:2: warning: bar
-configure.ac:3: warning: syntax
+AT_CHECK_M4SUGAR([-o- -Wall], 0, [],
+[script.s4g:1: warning: foo
+script.s4g:2: warning: bar
+script.s4g:3: warning: syntax
 ])
 
-AT_CHECK_AUTOCONF([-o- -Wnone,bar],
-         0, [],
-[configure.ac:2: warning: bar
+AT_CHECK_M4SUGAR([-o- -Wnone,bar], 0, [],
+[script.s4g:2: warning: bar
 ])
 
-AT_CHECK_AUTOCONF([-o- -Wnone,bar,error],
-         1, [],
-[configure.ac:2: error: bar
-configure.ac:2: the top level
+AT_CHECK_M4SUGAR([-o- -Wnone,bar,error], 1, [],
+[script.s4g:2: error: bar
+script.s4g:2: the top level
 ])
 
 AT_CLEANUP
@@ -63,7 +59,7 @@ AT_SETUP([[m4_require: circular dependencies]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA([configure.ac],
+AT_DATA([script.s4g],
 [[m4_defun([foo],
 [m4_require([bar])])
 
@@ -77,15 +73,15 @@ m4_init
 baz
 ]])
 
-AT_CHECK_AUTOCONF([], 1, [],
-[[configure.ac:11: error: m4_require: circular dependency of foo
-configure.ac:11: foo is required by...
-configure.ac:5: bar is expanded from...
-configure.ac:11: bar is required by...
-configure.ac:2: foo is expanded from...
-configure.ac:11: foo is required by...
-configure.ac:8: baz is expanded from...
-configure.ac:11: the top level
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.s4g:11: error: m4_require: circular dependency of foo
+script.s4g:11: foo is required by...
+script.s4g:5: bar is expanded from...
+script.s4g:11: bar is required by...
+script.s4g:2: foo is expanded from...
+script.s4g:11: foo is required by...
+script.s4g:8: baz is expanded from...
+script.s4g:11: the top level
 ]])
 
 AT_CLEANUP
@@ -101,8 +97,8 @@ AT_SETUP([[m4_text_wrap]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()dnl
+AT_DATA([script.s4g],
+[[m4_divert_push([0])m4_wrap([m4_divert_pop([0])])dnl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)
@@ -134,6 +130,6 @@ AT_DATA(expout,
 First, second , third, [,quoted]
 ]])
 
-AT_CHECK_AUTOCONF([-o-], 0, [expout])
+AT_CHECK_M4SUGAR([-o-], 0, [expout])
 
 AT_CLEANUP

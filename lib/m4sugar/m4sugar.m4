@@ -1586,7 +1586,7 @@ m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
 m4_foreach_quoted([m4_Word], (m4_split(m4_normalize([$1]))),
-[m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
+[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 m4_if(m4_eval(m4_Cursor > m4_Width),

@@ -87,11 +87,16 @@ acheaders.at: mktests.sh $(MACRO_FILES)
 actypes.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
-CLEANFILES = debug-*.sh macro configure configure.in configure.ac \
-             config.status config.cache config.log config.h.in config.h \
-             config.hin state-* at-* \
-             stderr stdout empty \
-	     config.guess config.sub expr libtool ltconfig ltmain.sh install-sh
+CLEANFILES = 				\
+	debug-*.sh state-* at-* stderr stdout \
+	autom4te.cache				\
+	script.s4g script.as script			\
+	configure configure.in configure.ac config.status config.cache \
+	config.log config.h.in config.hin config.h \
+	config.guess config.sub install-sh	\
+	expr					\
+	libtool ltconfig ltmain.sh
+
 DISTCLEANFILES = atconfig testsuite
 
 

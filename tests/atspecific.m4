@@ -1,5 +1,6 @@
 changequote()changequote([, ])include(autotest/general.m4)# -*- Autoconf -*-
 # M4 macros used in building Autoconf test suites.
+# Copyright 2000, 2001 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,6 +16,26 @@ changequote()changequote([, ])include(autotest/general.m4)# -*- Autoconf -*-
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
+
+
+## ------------------------------------ ##
+## Macros specialized in testing M4sh.  ##
+## ------------------------------------ ##
+
+# AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# ----------------------------------------------------------
+m4_define([AT_CHECK_M4SUGAR],
+[AT_CLEANUP_FILES([script.4s script autom4te.cache])dnl
+AT_CHECK([autom4te -I ../lib m4sugar/m4sugar.m4 script.s4g -o script $1],
+         m4_default([$2], [0]), [$3], [$4])])
+
+
+# AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# -------------------------------------------------------
+m4_define([AT_CHECK_M4SH],
+[AT_CLEANUP_FILES([script.as script autom4te.cache])dnl
+AT_CHECK([autom4te -I ../lib m4sugar/m4sh.m4 script.as -o script $1],
+         m4_default([$2], [0]), [$3], [$4])])
 
 
 ## ---------------------------------------- ##
@@ -41,8 +62,6 @@ AC_STATE_SAVE(after)
 
 # AT_CHECK_AUTOCONF(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -----------------------------------------------------------
-# Also remove `configure.in', just in case one remained from a previous
-# run.
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
 AT_CHECK([autoconf --autoconf-dir ../lib -l $at_srcdir $1],

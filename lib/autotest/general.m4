@@ -1,4 +1,4 @@
-include(m4sugar/m4sh.m4)#				    -*- Autoconf -*-
+changequote()changequote([, ])include(m4sugar/m4sh.m4)#	   -*- Autoconf -*-
 # M4 macros used in building test suites.
 # Copyright 2000, 2001 Free Software Foundation, Inc.
 
@@ -86,7 +86,8 @@ m4_define([AT_LINE],
 # Begin test suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 m4_define([AT_INIT],
-[m4_define([AT_ordinal], 0)
+[m4_pattern_forbid([^_?AT_])
+m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files],
           [stdout expout at-setup-line at-check-line at-stdout stderr experr
@@ -242,8 +243,8 @@ m4_divert([TAIL])[]dnl
     *)
       if test ! -f at-check-line; then
     	echo "$as_me: warning: no at-check-line which means a failure happened"
-    	echo "$as_me: warning: in a [AT_SETUP/AT_CLEANUP] pair before any"
-    	echo "$as_me: warning: [AT_CHECK] could be run.  This test suite is"
+    	echo "$as_me: warning: in a [AT""_SETUP/AT""_CLEANUP] pair before any"
+    	echo "$as_me: warning: [AT""_CHECK] could be run.  This test suite is"
     	echo "$as_me: warning: improperly designed, please report to"
     	echo "$as_me: warning: <$at_bugreport>."
     	cp at-setup-line at-check-line
