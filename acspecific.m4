@@ -227,7 +227,7 @@ fi
 dnl Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
-set dummy ${MAKE-make}; ac_make=[$]2
+set dummy ${MAKE-make}; ac_make=`echo "[$]2" | tr './\055' '___'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat > conftestmake <<\EOF
 all:
