@@ -1,3 +1,11 @@
+2004-01-23  Gary V. Vaugan  <gary@gnu.org>
+
+	* lib/autoconf/programs.m4 (AC_PROG_SED):  New macro to test for a
+	non-truncating sed or gsed program in PATH.
+	* tests/acprograms.at: Add it.
+	* doc/autoconf.texi (Particular Programs): Document it.
+	* NEWS: Updated.
+
 2004-01-15  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Try -std, not -std1, since

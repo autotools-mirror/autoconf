@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.59a
 
+** AC_PROG_SED
+  New macro that tests for a sed program that truncates as few characters
+  as possible.
+
 * Major changes in Autoconf 2.59
 
   Released 2003-11-04, by Akim Demaille

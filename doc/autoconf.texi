@@ -3366,6 +3366,14 @@ Set output variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
 is found, and otherwise to @samp{:} (do nothing).
 @end defmac
 
+@defmac AC_PROG_SED
+@acindex {PROG_SED}
+@ovindex SED
+Set output variable @code{SED} to a @code{sed} on @samp{PATH} that
+truncates as few characters as possible.  If @sc{GNU} Sed is found,
+use that instead.
+@end defmac
+
 @defmac AC_PROG_YACC
 @acindex{PROG_YACC}
 @ovindex YACC

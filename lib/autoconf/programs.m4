@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for programs.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2004
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -499,6 +499,63 @@ AC_DEFUN([AC_PROG_RANLIB],
 AU_DEFUN([AC_RSH],
 [AC_DIAGNOSE([obsolete], [$0: is no longer supported.
 Remove this warning when you adjust the code.])])
+
+
+# AC_PROG_SED
+# -----------
+# Check for a fully functional sed program that truncates
+# as few characters as possible.  Prefer GNU sed if found.
+AC_DEFUN([AC_PROG_SED],
+[AC_MSG_CHECKING([for a sed that does not truncate output])
+if test -z "$SED"; then
+AC_CACHE_VAL(ac_cv_path_sed,
+[AS_TMPDIR([sed])
+ac_max=0
+# Loop through the user's path and test for sed and gsed.
+# Add /usr/xpg4/bin/sed as it is typically found on Solaris
+# along with a /bin/sed that truncates output.
+_AS_PATH_WALK([$PATH:/usr/xpg4/bin],
+[ac_fini=false
+for ac_prog in sed gsed; do
+  for ac_exec_ext in '' $ac_executable_extensions; do
+    ac_sed="$as_dir/$ac_prog$ac_exec_ext"
+    if test -f "$ac_sed" && AS_EXECUTABLE_P(["$ac_sed"]); then
+      # Check for GNU sed and select it if it is found.
+      if "$ac_sed" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
+        ac_cv_path_sed="$ac_sed"
+	ac_fini=:
+        break
+      fi
+
+      ac_count=0
+      echo $ECHO_N "0123456789$ECHO_C" >conftest.in
+      while :
+      do
+        cat conftest.in conftest.in >conftest.tmp
+        mv conftest.tmp conftest.in
+        cp conftest.in conftest.nl
+        echo '' >> conftest.nl
+        "$ac_sed" -e 's/a$//' < conftest.nl >conftest.out || break
+        cmp conftest.out conftest.nl >/dev/null 2>&1 || break
+        ac_count=`expr $ac_count + 1`
+        if test $ac_count -gt $ac_max; then
+          ac_max=$ac_count
+          ac_cv_path_sed="$ac_sed"
+        fi
+        # 10*(2^10) chars as input seems more than enough
+        test $ac_count -gt 10 && break
+      done
+    fi
+  done
+  $ac_fini && break
+done])
+rm -rf "$tmp"
+])
+fi
+SED="$ac_cv_path_sed"
+AC_SUBST([SED])
+AC_MSG_RESULT([$SED])
+])
 
 
 # AC_PROG_YACC
