@@ -1967,7 +1967,8 @@ AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
 
  if test $ac_cv_f77_dummy_main = unknown; then
    for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
-     AC_TRY_LINK_FUNC($ac_func, [ac_cv_f77_dummy_main=$ac_func; break])
+     AC_TRY_LINK([#define F77_DUMMY_MAIN $ac_func], 
+                 [], [ac_cv_f77_dummy_main=$ac_func; break])
    done
  fi
  rm -f conftest*

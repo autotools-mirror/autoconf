@@ -1,3 +1,9 @@
+2001-07-05  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_DUMMY_MAIN): Use AC_TRY_LINK, not
+	AC_TRY_LINK_FUNC, to check whether defining a dummy
+	main-like routine is needed for linking with F77 libs.
+
 2001-07-05  Pavel Roskin  <proski@gnu.org>
 
 	* aclocal.m4 (_AC_PROG_CXX_EXIT_DECLARATION): Remove conftest*
