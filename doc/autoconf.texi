@@ -10253,10 +10253,10 @@ locally or that have patches from vendors installed.
 
 I considered using an architecture similar to that of Cygnus
 @code{configure}, where there is a single @code{configure} script that
-reads pieces of @file{configure.ac} when run.  But I didn't want to have
+reads pieces of @file{configure.in} when run.  But I didn't want to have
 to distribute all of the feature tests with every package, so I settled
 on having a different @code{configure} made from each
-@file{configure.ac} by a preprocessor.  That approach also offered more
+@file{configure.in} by a preprocessor.  That approach also offered more
 control and flexibility.
 
 I looked briefly into using the Metaconfig package, by Larry Wall,
