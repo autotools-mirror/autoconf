@@ -48,9 +48,9 @@ cat >conftest.file <<_ASEOF
 exit 0
 _ASEOF
 chmod +x conftest.file
-if test -x conftest.file; then
+if test -x conftest.file >/dev/null 2>&1; then
   as_executable_p="test -x"
-elif test -f conftest.file; then
+elif test -f conftest.file >/dev/null 2>&1; then
   as_executable_p="test -f"
 else
   { { echo "$as_me:56: error: cannot check whether a file is executable on this system" >&5
@@ -996,20 +996,20 @@ echo "$as_me:995: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
-echo timestamp > conftestfile
+echo timestamp > conftest.file
 # Do `set' in a subshell so we don't clobber the current shell's
 # arguments.  Must try -L first in case configure is actually a
 # symlink; some systems play weird games with the mod time of symlinks
 # (eg FreeBSD returns the mod time of the symlink's containing
 # directory).
 if (
-   set X `ls -Lt $srcdir/configure conftestfile 2> /dev/null`
+   set X `ls -Lt $srcdir/configure conftest.file 2> /dev/null`
    if test "$*" = "X"; then
       # -L didn't work.
-      set X `ls -t $srcdir/configure conftestfile`
+      set X `ls -t $srcdir/configure conftest.file`
    fi
-   if test "$*" != "X $srcdir/configure conftestfile" \
-      && test "$*" != "X conftestfile $srcdir/configure"; then
+   if test "$*" != "X $srcdir/configure conftest.file" \
+      && test "$*" != "X conftest.file $srcdir/configure"; then
 
       # If neither matched, then we have a broken ls.  This can happen
       # if, for instance, CONFIG_SHELL is bash and it inherits a
@@ -1022,7 +1022,7 @@ alias in your environment" >&2;}
    { (exit 1); exit 1; }; }
    fi
 
-   test "$2" = conftestfile
+   test "$2" = conftest.file
    )
 then
    # Ok.
@@ -1041,11 +1041,11 @@ if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
-  cat <<\EOF >conftestsed
+  cat <<\EOF >conftest.sed
 s,\\,\\\\,g; s,\$,$$,g
 EOF
-  program_transform_name=`echo $program_transform_name | sed -f conftestsed`
-  rm -f conftestsed
+  program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
+  rm -f conftest.sed
 fi
 test "$program_prefix" != NONE &&
   program_transform_name="s,^,${program_prefix},;$program_transform_name"
@@ -1062,18 +1062,18 @@ set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftestmake <<\EOF
+  cat >conftest.make <<\EOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-eval `${MAKE-make} -f conftestmake 2>/dev/null | grep temp=`
+eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
 if test -n "$ac_maketemp"; then
   eval ac_cv_prog_make_${ac_make}_set=yes
 else
   eval ac_cv_prog_make_${ac_make}_set=no
 fi
-rm -f conftestmake
+rm -f conftest.make
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
   echo "$as_me:1079: result: yes" >&5
@@ -1611,9 +1611,9 @@ cat >conftest.file <<_ASEOF
 exit 0
 _ASEOF
 chmod +x conftest.file
-if test -x conftest.file; then
+if test -x conftest.file >/dev/null 2>&1; then
   as_executable_p="test -x"
-elif test -f conftest.file; then
+elif test -f conftest.file >/dev/null 2>&1; then
   as_executable_p="test -f"
 else
   { { echo "$as_me:1619: error: cannot check whether a file is executable on this system" >&5
@@ -1957,7 +1957,7 @@ echo X"$ac_file" |
   *)                      as_incr_dir=.;;
 esac
 as_dummy="$ac_dir"
-for as_mkdir_dir in `IFS='\\/'; set X $as_dummy; shift; echo "$@"`; do
+for as_mkdir_dir in `IFS='/\\'; set X $as_dummy; shift; echo "$@"`; do
   case $as_mkdir_dir in
     # Skip DOS drivespec
     ?:) as_incr_dir=$as_mkdir_dir ;;
