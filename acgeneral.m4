@@ -1002,23 +1002,16 @@ Directories:
   --infodir=DIR           info documentation in DIR [PREFIX/info]
   --mandir=DIR            man documentation in DIR [PREFIX/man]
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
-
 EOF
 
   cat <<\EOF
-Program names:
-  --program-prefix=PREFIX prepend PREFIX to installed program names
-  --program-suffix=SUFFIX append SUFFIX to installed program names
-  --program-transform-name=PROGRAM
-                          run sed PROGRAM on installed program names
 
-EOF
-  cat <<\EOF
 Host type:
   --build=BUILD      configure for building on BUILD [BUILD=HOST]
   --host=HOST        configure for HOST [guessed]
   --target=TARGET    configure for TARGET [TARGET=HOST]
 EOF
+
   cat <<\EOF]
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH(AC_DIVERSION_HELP_END)dnl
@@ -1332,7 +1325,16 @@ esac[]dnl
 # --------------
 # FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
 AC_DEFUN(AC_ARG_PROGRAM,
-[if test "$program_transform_name" = s,x,x,; then
+[dnl Document the options.
+AC_EXPAND_ONCE([AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+
+Program names:
+  --program-prefix=PREFIX prepend PREFIX to installed program names
+  --program-suffix=SUFFIX append SUFFIX to installed program names
+  --program-transform-name=PROGRAM
+                          run sed PROGRAM on installed program names
+AC_DIVERT_POP])[]dnl
+if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
   # Double any \ or $.  echo might interpret backslashes.
