@@ -523,7 +523,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM()],
 [# FIXME: these cross compiler hacks should be removed for autoconf 3.0
 # If not cross compiling, check that we can run a simple program.
 if test "$cross_compiling" != yes; then
-  if AC_TRY_COMMAND(./conftest); then
+  if AC_TRY_COMMAND(./conftest$ac_exeext); then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
@@ -796,9 +796,9 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$objext >&AC_FD_LOG'
+ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
 if AC_TRY_EVAL(ac_try) &&
-   test -f conftest.$objext && AC_TRY_EVAL(ac_try);
+   test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
@@ -806,7 +806,7 @@ then
     if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AC_FD_LOG); then
       ac_try='cc -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
       if AC_TRY_EVAL(ac_try) &&
-	 test -f conftest.$objext && AC_TRY_EVAL(ac_try);
+	 test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
       then
         # cc works too.
         :
@@ -1089,8 +1089,8 @@ AC_CACHE_CHECK([whether $F77 understand -c and -o together],
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
-ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$objext >&AC_FD_LOG'
-if AC_TRY_EVAL(ac_try) && test -f conftest.$objext && AC_TRY_EVAL(ac_try); then
+ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
+if AC_TRY_EVAL(ac_try) && test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try); then
   ac_cv_prog_f77_c_o=yes
 else
   ac_cv_prog_f77_c_o=no

@@ -3455,7 +3455,7 @@ AC_DEFUN([AC_RUN_IFELSE],
 [AC_LANG_COMPILER_REQUIRE()dnl
 m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) &&
-   test -s conftest$ac_exeext && (./conftest; exit) 2>/dev/null; then
+   test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG

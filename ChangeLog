@@ -1,3 +1,10 @@
+2000-10-11  Morten Eriksen <mortene@sim.no>
+
+	* acgeneral.m4 (AC_RUN_IFELSE): Add missing executable suffix.
+	* aclang.m4 (_AC_LANG_COMPILER_WORKS): Likewise.
+	* aclang.m4 (AC_PROG_CC_C_O, AC_PROG_F77_C_O): Fix typos where
+	$objext were used instead of $ac_objext.
+
 2000-10-05  Akim Demaille  <akim@epita.fr>
 
 	Check that updated scripts are valid scripts.
