@@ -330,7 +330,8 @@ EOF
 	fi
 	exit 0 ;;
     *:AIX:*:4)
-	if /usr/sbin/lsattr -EHl proc0 | grep POWER >/dev/null 2>&1; then
+	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | head -1 | awk '{ print $1 }'`
+	if /usr/sbin/lsattr -EHl ${IBM_CPU_ID} | grep POWER >/dev/null 2>&1; then
 		IBM_ARCH=rs6000
 	else
 		IBM_ARCH=powerpc
