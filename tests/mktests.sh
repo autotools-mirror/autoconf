@@ -18,6 +18,24 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+# If we fail, clean up, but touch the output files.  We probably failed
+# because we used some non portable tool, but we just don't care: this
+# shell script is a maintainer tool, and we do expect good tools.
+trap 'echo "'$0': failed.  To proceed run make check." >&2
+      rm -f acdefuns audefuns requires syntax.tm4 update.tm4
+      touch syntax.m4
+      touch update.m4
+      trap 0
+      exit 1' \
+     0 1 2 15
+
+# If ever something goes wrong, fail, so that the trap be launched.
+set -e
+
+# We need arguments.
+test $# != 0
+
+# We need these arguments.
 src="$@"
 
 
@@ -169,4 +187,7 @@ cat $src |
 mv update.tm4 update.m4
 
 rm -f acdefuns audefuns requires
+
+trap 0
+
 exit 0
