@@ -1,5 +1,8 @@
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
+	* install-sh: Use $mkdirprog, not `mkdir' directly. Contributed by 
+	Jeff Garzik <jgarzik@pobox.com>.
+
 	* Makefile.in (clean mostlyclean distclean maintainer-clean):
 	Remove .m4f files.
 
