@@ -653,21 +653,28 @@ _AS_LINENO_WORKS || {
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
   # uniformly replaced by the line number.  The first 'sed' inserts a
-  # line-number line before each line; the second 'sed' does the real
-  # work.  The second script uses 'N' to pair each line-number line
-  # with the numbered line, and appends trailing '-' during
-  # substitution so that $LINENO is not a special case at line end.
+  # line-number line after each line using $LINENO; the second 'sed'
+  # does the real work.  The second script uses 'N' to pair each
+  # line-number line with the line containing $LINENO, and appends
+  # trailing '-' during substitution so that $LINENO is not a special
+  # case at line end.
   # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
-  # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
-  sed '=' <$as_myself |
+  # scripts with optimization help from Paolo Bonzini.  Blame Lee
+  # E. McMahon (1931-1989) for sed's syntax.  :-)
+  sed -n '
+    p
+    /[[$]]LINENO/=
+  ' <$as_myself |
     sed '
+      s,[[$]]LINENO.*,&-,
+      t lineno
+      b
+      : lineno
       N
-      s,$,-,
       : loop
-      s,^\([['$as_cr_digits']]*\)\(.*\)[[$]]LINENO\([[^'$as_cr_alnum'_]]\),\1\2\1\3,
+      s,[[$]]LINENO\([[^'$as_cr_alnum'_]].*\n\)\(.*\),\2\1\2,
       t loop
-      s,-$,,
-      s,^[['$as_cr_digits']]*\n,,
+      s,-\n.*,,
     ' >$as_me.lineno &&
   chmod +x $as_me.lineno ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])

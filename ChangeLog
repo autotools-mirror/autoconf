@@ -1,4 +1,10 @@
 2004-01-04  Paul Eggert  <eggert@twinsun.com>
+	    Paolo Bonzini  <bonzini@gnu.org>
+
+	* libc/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Speed up sed scripts
+	by doing lineno substitution only on lines containing "$LINENO".
+
+2004-01-04  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/general.m4 (AC_ARG_PROGRAM):
 	Use "rm -f" to remove conftest.sed, not plain "rm".
