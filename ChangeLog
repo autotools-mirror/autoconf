@@ -1,3 +1,9 @@
+2001-03-13  Tim Van Holder <tim.van.holder@pandora.be>
+
+	* doc/autoconf.texi: Expand section on DOS issues.
+	Add link to the `doschk' package.  Fix minor typo.
+	Clean up white spaces.
+
 2001-03-13  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_PROG_F77_C_O): define F77_NO_MINUS_C_MINUS_O
