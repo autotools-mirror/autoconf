@@ -1,3 +1,7 @@
+2001-08-09  Akim Demaille  <akim@epita.fr>
+
+	* bin/autom4te.in ($icache): Load it only if older than autom4te.
+
 2001-08-07  Akim Demaille  <akim@epita.fr>
 
 	* lib/autotest/general.m4 (AT_INIT): All the `at-*' are to be

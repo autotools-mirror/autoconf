@@ -958,8 +958,11 @@ if (! -d "$cache")
       or die "$me: cannot create $cache: $!\n";
   }
 
+# Read the cache index if available and older than autom4te itself.
+# If autom4te is younger, then some structures such as Request, might
+# have changed, which would corrupt its processing.
 Request->load ($icache)
-  if -f $icache;
+  if -f $icache && mtime ($icache) > mtime ($0);
 
 # Add the new trace requests.
 my $req = Request->request ('input' => \@ARGV,
