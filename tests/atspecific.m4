@@ -36,8 +36,7 @@ m4_define([AT_DATA_M4SUGAR],
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
-[AT_CLEANUP_FILES([script.4s script autom4te.cache])dnl
-AT_CHECK([autom4te --language=m4sugar script.4s -o script $1],
+[AT_CHECK([autom4te --language=m4sugar script.4s -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -60,8 +59,7 @@ m4_define([AT_DATA_M4SH],
 # AT_CHECK_M4SH(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -------------------------------------------------------
 m4_define([AT_CHECK_M4SH],
-[AT_CLEANUP_FILES([script.as script autom4te.cache])dnl
-AT_CHECK([autom4te --language=m4sh script.as -o script $1],
+[AT_CHECK([autom4te --language=m4sh script.as -o script $1],
          m4_default([$2], [0]), [$3], [$4])])
 
 
@@ -76,8 +74,7 @@ AT_CHECK([autom4te --language=m4sh script.as -o script $1],
 # Create a full configure.ac running BODY, with a config header set up,
 # AC_OUTPUT, and environement checking hooks.
 m4_define([AT_CONFIGURE_AC],
-[AT_CLEANUP_FILES(env-after state*)dnl
-AT_DATA([configure.ac],
+[AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/config)
 AC_CONFIG_HEADER(config.h:config.hin)
@@ -91,8 +88,7 @@ AC_STATE_SAVE(after)
 # AT_CHECK_AUTOCONF(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CLEANUP_FILES(configure.in configure autom4te.cache)dnl
-AT_CHECK([autoconf --include=$srcdir $1],
+[AT_CHECK([autoconf --include=$srcdir $1],
          [$2], [$3], [$4])])
 
 
@@ -100,8 +96,7 @@ AT_CHECK([autoconf --include=$srcdir $1],
 #                     STDOUT, [STDERR = `autoheader: `config.hin' is created'])
 # -----------------------------------------------------------------------------
 m4_define([AT_CHECK_AUTOHEADER],
-[AT_CLEANUP_FILES(config.hin config.hin~)dnl
-AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
+[AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
          [$3],
          m4_default([$4], [[autoheader: `config.hin' is created
 ]]))])
@@ -114,8 +109,7 @@ AT_CHECK([autoheader --localdir=$srcdir $1], [$2],
 # `top_srcdir' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
-[AT_CLEANUP_FILES(config.h defs config.log config.status config.cache)dnl
-AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
+[AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
          [$2],
          m4_default([$3], [ignore]), [$4],
          [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])

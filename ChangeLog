@@ -1,5 +1,17 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	Now that tests are running in their own private dir, there is no
+	need to list the files to remove at the end of tests groups.
+
+	* lib/autotest/general.m4 (_AT_CLEANUP_FILE, AT_CLEANUP_FILES):
+	(AT_data_files, at_data_files): Remove.
+	(AT_CLEANUP, AT_DATA): Simplify.
+	(AT_INIT): Adjust.
+	Remove the group dir if !debug && !failed.
+	* tests/atspecific.m4: Adjust.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	Start a new layout for Autotest: `testsuite' creates
 	`testsuite.dir' in which the at-check-line etc. files are to be
 	found, and `testsuite.dir/003' where the test group 3 is run.

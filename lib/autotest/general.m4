@@ -94,7 +94,6 @@ m4_define([AT_TESTSUITE_NAME],
           m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-m4_define([AT_data_files], [stdout expout at-* stderr experr])
 AS_INIT
 m4_divert_push([DEFAULT])dnl
 
@@ -151,9 +150,7 @@ at_last_test=AT_ordinal
 # numerical order.
 at_format=`echo $at_last_test | sed 's/././g'`
 # Description of all the tests.
-at_help_all='AT_help'
-# List of the output files.
-at_data_files='AT_data_files'])])dnl
+at_help_all='AT_help'])])dnl
 m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
@@ -172,9 +169,7 @@ while test $[@%:@] -gt 0; do
         ;;
 
     --clean | -c )
-        rm -rf $at_data_files \
-               $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]] \
-               $as_me.log devnull
+        rm -rf $at_tests_dir $as_me.log devnull
         exit 0
         ;;
 
@@ -516,6 +511,11 @@ m4_divert([TAIL])[]dnl
     continue
     ;;
   esac
+
+  # Be sure to come back to the top test directory, in particular
+  # since below we might `rm' the directory we are in currently.
+  cd $at_tests_dir
+
   case $at_test in
     banner-*) ;;
     *)
@@ -532,12 +532,17 @@ _ATEOF
       case $at_status in
         0)  at_msg="ok"
             at_pass_list="$at_pass_list $at_test"
+            # Cleanup the group directory, unless the user wants the files.
+            $at_debug_p || rm -rf $at_group_dir
             ;;
         77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
             at_skip_list="$at_skip_list $at_test"
+            # Cleanup the group directory, unless the user wants the files.
+            $at_debug_p || rm -rf $at_group_dir
             ;;
         *)  at_msg="FAILED near \``cat $at_check_line_file`'"
             at_fail_list="$at_fail_list $at_test"
+            # Up failure, keep the group directory for autopsy.
             ;;
       esac
       echo $at_msg
@@ -563,9 +568,6 @@ at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
 if test "$at_duration" != "h m s"; then
   echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD
 fi
-
-# Cleanup everything unless the user wants the files.
-$at_debug_p || rm -rf $at_data_files
 
 # Wrap up the test suite with summary statistics.
 at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
@@ -707,29 +709,11 @@ m4_define([AT_KEYWORDS],
 [m4_append_uniq([AT_keywords], [$1], [,])])
 
 
-# _AT_CLEANUP_FILE(FILE)
-# ----------------------
-# Register FILE for AT_CLEANUP.
-m4_define([_AT_CLEANUP_FILE],
-[m4_append_uniq([AT_data_files], [$1], [ ])])
-
-
-# AT_CLEANUP_FILES(FILES)
-# -----------------------
-# Declare a list of FILES to clean.
-m4_define([AT_CLEANUP_FILES],
-[m4_foreach([AT_File], m4_quote(m4_bpatsubst([$1], [  *], [,])),
-            [_AT_CLEANUP_FILE(AT_File)])])
-
-
-# AT_CLEANUP(FILES)
-# -----------------
-# Complete a group of related tests, recursively remove those FILES
-# created within the test.  There is no need to list files created with
-# AT_DATA.
+# AT_CLEANUP
+# ----------
+# Complete a group of related tests.
 m4_define([AT_CLEANUP],
-[AT_CLEANUP_FILES([$1])dnl
-m4_append([AT_help],
+[m4_append([AT_help],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
 )dnl
     $at_times >$at_tests_dir/at-times
@@ -767,8 +751,7 @@ _ATEOF
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
 # If you don't want CONTENT to be evaluated, quote it twice.
 m4_define([AT_DATA],
-[AT_CLEANUP_FILES([$1])dnl
-cat >$1 <<'_ATEOF'
+[cat >$1 <<'_ATEOF'
 $2[]_ATEOF
 ])
 
