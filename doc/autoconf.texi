@@ -10123,6 +10123,24 @@ The portable options are @option{-acdilrtu}.  Modern practice is for
 @option{-l} to output both owner and group, but traditional
 @command{ls} omits the group.
 
+@c From Bruce Lilly:
+@c
+@c # telnet dim
+@c [...]
+@c   UNIX System V (TWG-TCP/IP) (dim.blilly.com)
+@c [...]
+@c $ mkdir foo
+@c $ cd foo
+@c $ /bin/ls a.exe 2>/dev/null
+@c a.exe not found
+@c $ what /bin/ls
+@c /bin/ls:
+@c           fndcmd:fndcmd.sl 1.68
+@c $ uname -a
+@c UNIX dim SYSTEM5 3.51m mc68k
+@c
+@c It's an AT&T 3B1.  See http://www.faqs.org/faqs/3b1-faq/ or any
+@c mirror of the 3B1 FAQ.  It's actually SVR2.2.
 Modern practice is for all diagnostics to go to standard error, but
 traditional @samp{ls foo} prints the message @samp{foo not found} to
 standard output if @file{foo} does not exist.  Be careful when writing
