@@ -1544,12 +1544,32 @@ define(m4_compare,
                         [m4_compare(m4_quote(m4_shift($1)),
                                     m4_quote(m4_shift($2)))])])])])
 
-dnl Complain and exit if the Autoconf version is less than VERSION.
+
+dnl AC_UNGNITS(VERSION)
+dnl -------------------
+dnl Replace .a, .b etc. by .0.1, .0.2 in VERSION.  For instance, version
+dnl 2.14a is understood as 2.14.0.1 for version comparison.
+dnl This macro is absolutely not robust to active macro, it expects
+dnl reasonable version numbers.
+dnl Warning: Valid up to `z', no double letters.
+define(AC_UNGNITS,
+[translit(patsubst(patsubst(patsubst([$1],
+                                     [\([abcdefghi]\)], [.0.\1]),
+                            [\([jklmnopqrs]\)], [.0.1\1]),
+          [\([tuvwxyz]\)], [.0.2\1]),
+          abcdefghijklmnopqrstuvwxyz,
+          12345678901234567890123456)])
+
+
 dnl AC_PREREQ(VERSION)
+dnl ------------------
+dnl Complain and exit if the Autoconf version is less than VERSION.
 define(AC_PREREQ,
-[ifelse(m4_compare(m4_split([$1],         [\.]),
-                   m4_split(AC_ACVERSION, [\.])), -1,
+[ifelse(m4_compare(m4_split(AC_UNGNITS([$1]),         [\.]),
+                   m4_split(AC_UNGNITS(AC_ACVERSION), [\.])), -1,
        [AC_FATAL(Autoconf version $1 or higher is required for this script)])])
+
+
 
 
 dnl ### Getting the canonical system type

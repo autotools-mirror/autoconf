@@ -1,5 +1,15 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Allow standard beta version numbers.
+
+	* configure.in: Declare version 2.14a.
+	* acgeneral.m4 (AC_UNGNITS): New macro which transform version
+	numbers to pure digits (2.14a to 2.14.0.1, 2.15z to 2.15.0.26
+	etc.).
+	(AC_PREREQ): Normalize argument and AC_ACVERSION via AC_UNGNITS.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Fix the --version of all the executables.
 
 	* Makefile.am (editsh, editpl): Substitute also PACKAGE and
