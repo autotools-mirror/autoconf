@@ -1,3 +1,10 @@
+2002-03-14  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autotest/general.m4 (at_times_skip):
+	Renamed from at_times.  Now a boolean.
+	ksh93 Version M-12/28/93d doesn't like 'x=times; $x'; it
+	says 'times: not found'.
+
 2002-03-14  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (&study_gettextize): New.
