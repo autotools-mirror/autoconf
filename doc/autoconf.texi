@@ -6087,8 +6087,7 @@ output.
 
 @defmac AC_DEFINE (@var{variable}, @ovar{value}, @ovar{description})
 @acindex DEFINE
-Define C preprocessor variable @var{variable}.  If @var{value} is given,
-set @var{variable} to that value (verbatim), otherwise set it to 1.
+Define the C preprocessor variable @var{variable} to @var{value} (verbatim).
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
 characters, as @command{make} tends to eat them.  To use a shell variable
@@ -6103,6 +6102,12 @@ The following example defines the C preprocessor variable
 @example
 AC_DEFINE(EQUATION, "$a > $b")
 @end example
+
+If neither @var{value} nor @var{description} are given, then
+@var{value} defaults to 1 instead of to the empty string.  This is for
+backwards compatiblity with older versions of Autoconf, but this usage
+is obsolescent and may be withdrawn in future versions of Autoconf.
+
 @end defmac
 
 @defmac AC_DEFINE_UNQUOTED (@var{variable}, @ovar{value}, @ovar{description})
