@@ -1,5 +1,15 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (translate_awk): `> "/dev/stderr"' is not portable
+	to systems without a real /dev/stderr in the file system or if not
+	using one of the three free awks.  Use
+	print message | "cat >&2"
+	...
+	END { close("cat >&2") }
+	From Aharon Robbins.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* autoheader.sh (checking completeness): Be ready to recognize
 	patterns with a value, and spaces between `#' and the directive, e.g.
 	# define FOO FIXME:

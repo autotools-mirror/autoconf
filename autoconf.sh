@@ -352,7 +352,7 @@ function trans (arg, sep)
 
 function error (message)
 {
-  print message >"/dev/stderr"
+  print message | "cat >&2"
   exit 1
 }
 
@@ -409,6 +409,7 @@ END {
 	res = res char
     }
   print res
+  close("cat >&2")
 }
 EOF
   # Extract both the m4 program and the m4 options from TRACES.
