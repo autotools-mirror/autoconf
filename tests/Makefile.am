@@ -24,9 +24,10 @@ EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
              atlocal.in package.m4
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
+check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(WRAPPERS)
+# FIXME: Why doesn't Automake clean these?
+DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
 
 ## ------------ ##
 ## package.m4.  ##

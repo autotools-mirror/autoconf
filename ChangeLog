@@ -1,5 +1,10 @@
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
+	* tests/Makefile.am (check_SCRIPTS): Use it, instead of WRAPPERS,
+	to make sure they are up to date when `check' is run.
+
+2002-02-05  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Making testsuite Scripts): Document
 	package.m4.
 

@@ -86,9 +86,10 @@ EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
 
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
+check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(WRAPPERS)
+# FIXME: Why doesn't Automake clean these?
+DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -197,6 +198,7 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_SCRIPTS)
 	$(MAKE) $(AM_MAKEFLAGS) check-local
 check: check-am
 all-am: Makefile
