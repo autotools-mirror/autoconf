@@ -4688,7 +4688,7 @@ AC_DEFUN(TEST_MACRO,
 ])
 @end example
 
-The will casue the last few lines of @samp{configure --help} to appear
+This will cause the last few lines of @samp{configure --help} to appear
 like this:
 
 @example
