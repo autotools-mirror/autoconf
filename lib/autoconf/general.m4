@@ -920,6 +920,7 @@ rm -f conftest.def
 changequote([,])dnl
 AC_SUBST(LIBS)dnl
 AC_SUBST(srcdir)dnl
+AC_SUBST(top_srcdir)dnl
 AC_SUBST(prefix)dnl
 AC_SUBST(exec_prefix)dnl
 dnl Substituting for DEFS would confuse sed if it contains multiple lines.
@@ -977,7 +978,7 @@ undivert(2)dnl
 EOF
 cat >> config.status <<\EOF
 
-ac_top_srcdir=$srcdir
+ac_given_srcdir=$srcdir
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
@@ -993,15 +994,16 @@ changequote([,])dnl
     ac_dir_suffix=
   fi
 
-  case "$ac_top_srcdir" in
-  .)  srcdir=. ;;
-  /*) srcdir="$ac_top_srcdir$ac_dir_suffix" ;;
-  *)
-    # Relative path.  Prepend a "../" for each directory in $ac_dir_suffix.
 changequote(,)dnl
-    ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
+  # A "../" for each directory in $ac_dir_suffix.
+  ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
 changequote([,])dnl
-    srcdir="$ac_dots$ac_top_srcdir$ac_dir_suffix" ;;
+  case "$ac_given_srcdir" in
+  .)  srcdir=.; top_srcdir="$ac_dots." ;;
+  /*) srcdir="$ac_given_srcdir$ac_dir_suffix"; top_srcdir="$ac_given_srcdir" ;;
+  *) # Relative path.
+    srcdir="$ac_dots$ac_given_srcdir$ac_dir_suffix"
+    top_srcdir="$ac_dots$ac_given_srcdir" ;;
   esac
 
   echo creating "$ac_file"
@@ -1018,7 +1020,7 @@ dnl Shell code in configure.in might set extrasub.
 $extrasub
 dnl Insert the sed substitutions.
 undivert(1)dnl
-" $ac_top_srcdir/${ac_file}.in >> $ac_file
+" $ac_given_srcdir/${ac_file}.in >> $ac_file
 fi; done
 AC_OUTPUT_HEADER
 $2
@@ -1108,7 +1110,7 @@ CONFIG_HEADERS=${CONFIG_HEADERS-"AC_CONFIG_NAMES"}
 for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
   echo creating $ac_file
 
-  cp $ac_top_srcdir/$ac_file.in conftest.h1
+  cp $ac_given_srcdir/$ac_file.in conftest.h1
   while :
   do
     ac_lines=`grep -c . conftest.sed`
