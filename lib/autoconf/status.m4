@@ -1250,8 +1250,11 @@ AC_OUTPUT_COMMANDS_POST()dnl
 # need to make the FD available again.
 if test "$no_create" != yes; then
   ac_cs_success=:
+  ac_config_status_args=
+  test "$silent" = yes &&
+    ac_config_status_args="$ac_config_status_args --quiet"
   exec AS_MESSAGE_LOG_FD>/dev/null
-  $SHELL $CONFIG_STATUS || ac_cs_success=false
+  $SHELL $CONFIG_STATUS $ac_config_status_args || ac_cs_success=false
   exec AS_MESSAGE_LOG_FD>>config.log
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
@@ -1277,6 +1280,8 @@ cat >$CONFIG_STATUS <<_ACEOF
 # configure, is in config.log if it exists.
 
 debug=false
+ac_cs_recheck=false
+ac_cs_silent=false
 SHELL=\${CONFIG_SHELL-$SHELL}
 _ACEOF
 
@@ -1340,6 +1345,7 @@ Usage: $[0] [[OPTIONS]] [[FILE]]...
 
   -h, --help       print this help, then exit
   -V, --version    print version number, then exit
+  -q, --quiet      do not print progress messages
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions
 m4_ifset([AC_LIST_FILES],
@@ -1419,12 +1425,9 @@ do
   case $ac_option in
   # Handling of the options.
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
-  -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo "running $SHELL $[0] " $ac_configure_args " --no-create --no-recursion"
-    exec $SHELL $[0] $ac_configure_args --no-create --no-recursion ;;
-_ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF
+  -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+    ac_cs_recheck=: ;;
   --version | --vers* | -V )
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
@@ -1443,6 +1446,9 @@ Try `$[0] --help' for more information.]);;
     $ac_shift
     CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
     ac_need_defaults=false;;
+  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+  | -silent | --silent | --silen | --sile | --sil | --si | --s)
+    ac_cs_silent=: ;;
 
   # This is an error.
   -*) AC_MSG_ERROR([unrecognized option: $[1]
@@ -1453,6 +1459,20 @@ Try `$[0] --help' for more information.]) ;;
   esac
   shift
 done
+
+ac_configure_extra_args=
+
+if $ac_cs_silent; then
+  exec AS_MESSAGE_FD>/dev/null
+  ac_configure_extra_args="$ac_configure_extra_args --silent"
+fi
+
+_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF
+if \$ac_cs_recheck; then
+  echo "running $SHELL $[0] " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&AS_MESSAGE_FD
+  exec $SHELL $[0] $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+fi
 
 _ACEOF
 

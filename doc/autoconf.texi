@@ -12052,6 +12052,11 @@ files, and exit.
 @itemx -V
 Print the version number of Autoconf and exit.
 
+@item --silent
+@itemx --quiet
+@itemx -q
+Do not print progress messages.
+
 @item --debug
 @itemx -d
 Don't remove the temporary files.

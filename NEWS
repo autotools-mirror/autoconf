@@ -41,6 +41,9 @@ Release tips:
 - ~/.autom4te.cfg makes it possible to disable the caching mechanism
   (autom4te.cache).  See `Customizing autom4te' in the documentation.
 
+** config.status
+  Supports --quiet.
+
 ** Obsolete options
 
   Support for the obsoleted options -m, --macrodir, -l, --localdir is

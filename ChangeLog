@@ -1,3 +1,14 @@
+2002-11-12  Peter Eisentraut  <peter_e@gmx.net>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Add -q
+	option.  Process --recheck after parsing all options.  Pass -q
+	option to configure on --recheck.
+	(AC_OUTPUT): Pass -q from configure to config.status.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Strip -q from
+	arguments to record.
+	* doc/autoconf.texi (config.status Invocation): Document
+	config.status -q option.
+
 2002-11-07  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* bin/autoscan.in (scan_file): Scan Makefile.am too. Ignore

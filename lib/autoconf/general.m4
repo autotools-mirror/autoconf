@@ -1134,6 +1134,7 @@ m4_define([_AC_INIT_PREPARE],
 
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
+# Strip out --silent because we don't want to record it for future runs.
 # Also quote any args containing shell meta-characters.
 # Make two passes to allow for proper duplicate-argument suppression.
 ac_configure_args=
@@ -1147,6 +1148,9 @@ do
   do
     case $ac_arg in
     -no-create | --no-c* | -n | -no-recursion | --no-r*) continue ;;
+    -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+    | -silent | --silent | --silen | --sile | --sil)
+      continue ;;
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
   [  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
