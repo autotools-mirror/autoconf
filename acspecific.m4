@@ -1118,8 +1118,9 @@ wenotbecray
 ], ac_cv_os_cray=yes, ac_cv_os_cray=no)])dnl
 AC_MSG_RESULT($ac_cv_os_cray)
 if test $ac_cv_os_cray = yes; then
-for func in _getb67 GETB67 getb67; do
-  AC_CHECK_FUNC($func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $func); break])
+for ac_func in _getb67 GETB67 getb67; do
+  AC_CHECK_FUNC($ac_func, [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func)
+  break])
 done
 fi
 
