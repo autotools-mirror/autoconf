@@ -392,7 +392,7 @@ rm -f "${LEX_OUTPUT_ROOT}.c"
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER, 1,
-            [Define if `lex' declares `yytext' as a `char *' by default,
+            [Define to 1 if `lex' declares `yytext' as a `char *' by default,
              not a `char[]'.])
 fi
 ])# _AC_PROG_LEX_YYTEXT_DECL

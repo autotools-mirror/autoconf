@@ -1,5 +1,14 @@
 2001-11-12  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/c.m4, lib/autoconf/fortran.m4,
+	* lib/autoconf/functions.m4, lib/autoconf/general.m4,
+	* lib/autoconf/headers.m4, lib/autoconf/libs.m4,
+	* lib/autoconf/programs.m4, lib/autoconf/specific.m4,
+	* lib/autoconf/types.m4: When invoking AC_DEFINE and friends,
+	specify to what the macro should be defined (typically to 1).
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/functions.m4 (AC_FUNC_STRTOD): AC_SUBST POW_LIB.
 	From Jim Meyering.
 

@@ -174,7 +174,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 m4_define([AH_CHECK_HEADERS],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
-               [Define if you have the <]AC_Header[> header file.])])])
+               [Define to 1 if you have the <]AC_Header[> header file.])])])
 
 
 # AC_CHECK_HEADERS(HEADER-FILE...
@@ -304,7 +304,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 m4_define([AH_CHECK_HEADERS_DIRENT],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
-               [Define if you have the <]AC_Header[> header file, and
+               [Define to 1 if you have the <]AC_Header[> header file, and
                 it defines `DIR'.])])])
 
 
@@ -341,14 +341,14 @@ AC_DEFUN([AC_HEADER_MAJOR],
 if test $ac_cv_header_sys_types_h_makedev = no; then
 AC_CHECK_HEADER(sys/mkdev.h,
                 [AC_DEFINE(MAJOR_IN_MKDEV, 1,
-                           [Define if `major', `minor', and `makedev' are
+                           [Define to 1 if `major', `minor', and `makedev' are
                             declared in <mkdev.h>.])])
 
   if test $ac_cv_header_sys_mkdev_h = no; then
     AC_CHECK_HEADER(sys/sysmacros.h,
                     [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
-                               [Define if `major', `minor', and `makedev' are
-                                declared in <sysmacros.h>.])])
+                               [Define to 1 if `major', `minor', and `makedev'
+                                are declared in <sysmacros.h>.])])
   fi
 fi
 ])# AC_HEADER_MAJOR
@@ -389,7 +389,7 @@ You lose.
 ], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
 if test $ac_cv_header_stat_broken = yes; then
   AC_DEFINE(STAT_MACROS_BROKEN, 1,
-            [Define if the `S_IS*' macros in <sys/stat.h> do not
+            [Define to 1 if the `S_IS*' macros in <sys/stat.h> do not
              work properly.])
 fi
 ])# AC_HEADER_STAT
@@ -442,7 +442,8 @@ main ()
 }], , ac_cv_header_stdc=no, :)
 fi])
 if test $ac_cv_header_stdc = yes; then
-  AC_DEFINE(STDC_HEADERS, 1, [Define if you have the ANSI C header files.])
+  AC_DEFINE(STDC_HEADERS, 1,
+            [Define to 1 if you have the ANSI C header files.])
 fi
 ])# AC_HEADER_STDC
 
@@ -469,7 +470,7 @@ AC_DEFUN([AC_HEADER_SYS_WAIT],
                  [ac_cv_header_sys_wait_h=no])])
 if test $ac_cv_header_sys_wait_h = yes; then
   AC_DEFINE(HAVE_SYS_WAIT_H, 1,
-            [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
+            [Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible.])
 fi
 ])# AC_HEADER_SYS_WAIT
 
@@ -489,7 +490,8 @@ return 0;])],
                    [ac_cv_header_time=no])])
 if test $ac_cv_header_time = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME, 1,
-            [Define if you can safely include both <sys/time.h> and <time.h>.])
+            [Define to 1 if you can safely include both <sys/time.h>
+             and <time.h>.])
 fi
 ])# AC_HEADER_TIME
 
@@ -542,7 +544,7 @@ if test $ac_cv_sys_tiocgwinsz_in_termios_h != yes; then
   _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
   if test $ac_cv_sys_tiocgwinsz_in_sys_ioctl_h = yes; then
     AC_DEFINE(GWINSZ_IN_SYS_IOCTL,1,
-              [Define if `TIOCGWINSZ' requires <sys/ioctl.h>])
+              [Define to 1 if `TIOCGWINSZ' requires <sys/ioctl.h>.])
   fi
 fi
 ])# AC_HEADER_TIOCGWINSZ
@@ -566,7 +568,7 @@ AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
   [AC_MSG_RESULT(yes)],
   [AC_MSG_RESULT(no)
    AC_DEFINE(USG, 1,
-       [Define if you do not have <strings.h>, index, bzero, etc...
+       [Define to 1 if you do not have <strings.h>, index, bzero, etc...
         This symbol is obsolete, you should not depend upon it.])])
 AC_CHECK_HEADERS(string.h)])
 

@@ -332,7 +332,8 @@ fi
 rm -f conftest*])
 if test $ac_cv_prog_f77_c_o = no; then
   AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
-            [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
+            [Define to 1 if your Fortran 77 compiler doesn't accept
+             -c and -o together.])
 fi
 ])# AC_PROG_F77_C_O
 

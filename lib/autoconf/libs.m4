@@ -137,7 +137,7 @@ AS_VAR_POPDEF([ac_Lib])dnl
 # ---------------------
 m4_define([AH_CHECK_LIB],
 [AH_TEMPLATE(AS_TR_CPP(HAVE_LIB$1),
-             [Define if you have the `]$1[' library (-l]$1[).])])
+             [Define to 1 if you have the `]$1[' library (-l]$1[).])])
 
 
 # AC_HAVE_LIBRARY(LIBRARY,
@@ -369,7 +369,7 @@ AC_DEFUN([AC_PATH_XTRA],
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
   AC_DEFINE([X_DISPLAY_MISSING], 1,
-            [Define if the X Window System is missing or not being used.])
+            [Define to 1 if the X Window System is missing or not being used.])
   X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
 else
   if test -n "$x_includes"; then

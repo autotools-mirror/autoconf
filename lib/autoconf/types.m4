@@ -165,8 +165,8 @@ AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
   [_AC_CHECK_TYPE_NEW(AC_Type,
                       [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Type), 1,
-                                          [Define if the system has the type
-                                          `]AC_Type['.])
+                                          [Define to 1 if the system has the
+                                           type `]AC_Type['.])
 $2],
                       [$3],
                       [$4])])])
@@ -384,7 +384,7 @@ AC_DIAGNOSE([obsolete], [$0:
         adjust the code.])dnl
 test $ac_cv_sizeof_int = 2 &&
   AC_DEFINE(INT_16_BITS, 1,
-            [Define if `sizeof (int)' = 2.  Obsolete, use `SIZEOF_INT'.])
+            [Define to 1 if `sizeof (int)' = 2.  Obsolete, use `SIZEOF_INT'.])
 ])
 
 
@@ -398,7 +398,7 @@ AC_DIAGNOSE([obsolete], [$0:
         you adjust the code.])dnl
 test $ac_cv_sizeof_long_int = 8 &&
   AC_DEFINE(LONG_64_BITS, 1,
-            [Define if `sizeof (long int)' = 8.  Obsolete, use
+            [Define to 1 if `sizeof (long int)' = 8.  Obsolete, use
              `SIZEOF_LONG_INT'.])
 ])
 
@@ -449,7 +449,7 @@ AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
   [AC_CHECK_MEMBER(AC_Member,
          [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Member), 1,
-                            [Define if `]m4_bpatsubst(AC_Member,
+                            [Define to 1 if `]m4_bpatsubst(AC_Member,
                                                      [^[^.]*\.])[' is
                              member of `]m4_bpatsubst(AC_Member, [\..*])['.])
 $2],
@@ -472,7 +472,7 @@ AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
         the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS([struct stat.st_blksize],
                  [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
-                            [Define if your `struct stat' has
+                            [Define to 1 if your `struct stat' has
                              `st_blksize'.  Deprecated, use
                              `HAVE_STRUCT_STAT_ST_BLKSIZE' instead.])])
 ])# AC_STRUCT_ST_BLKSIZE
@@ -495,7 +495,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize],
 AC_DEFUN([AC_STRUCT_ST_BLOCKS],
 [AC_CHECK_MEMBERS([struct stat.st_blocks],
                   [AC_DEFINE(HAVE_ST_BLOCKS, 1,
-                             [Define if your `struct stat' has
+                             [Define to 1 if your `struct stat' has
                               `st_blocks'.  Deprecated, use
                               `HAVE_STRUCT_STAT_ST_BLOCKS' instead.])],
                   [AC_LIBOBJ([fileblocks])])
@@ -511,7 +511,7 @@ AU_DEFUN([AC_STRUCT_ST_RDEV],
         the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS([struct stat.st_rdev],
                  [AC_DEFINE(HAVE_ST_RDEV, 1,
-                            [Define if your `struct stat' has `st_rdev'.
+                            [Define to 1 if your `struct stat' has `st_rdev'.
                              Deprecated, use `HAVE_STRUCT_STAT_ST_RDEV'
                              instead.])])
 ])# AC_STRUCT_ST_RDEV
@@ -532,7 +532,7 @@ AC_DEFUN([AC_STRUCT_TM],
                    [ac_cv_struct_tm=sys/time.h])])
 if test $ac_cv_struct_tm = sys/time.h; then
   AC_DEFINE(TM_IN_SYS_TIME, 1,
-            [Define if your <sys/time.h> declares `struct tm'.])
+            [Define to 1 if your <sys/time.h> declares `struct tm'.])
 fi
 ])# AC_STRUCT_TM
 
@@ -549,7 +549,7 @@ AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#include <sys/types.h>
 ])
 if test "$ac_cv_member_struct_tm_tm_zone" = yes; then
   AC_DEFINE(HAVE_TM_ZONE, 1,
-            [Define if your `struct tm' has `tm_zone'. Deprecated, use
+            [Define to 1 if your `struct tm' has `tm_zone'. Deprecated, use
              `HAVE_STRUCT_TM_TM_ZONE' instead.])
 else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
@@ -562,7 +562,7 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])
   if test $ac_cv_var_tzname = yes; then
     AC_DEFINE(HAVE_TZNAME, 1,
-              [Define if you don't have `tm_zone' but do have the external
+              [Define to 1 if you don't have `tm_zone' but do have the external
                array `tzname'.])
   fi
 fi

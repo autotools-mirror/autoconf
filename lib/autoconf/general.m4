@@ -2267,7 +2267,8 @@ AC_DEFUN([AC_CHECK_FILES],
 [AC_FOREACH([AC_FILE_NAME], [$1],
   [AC_CHECK_FILE(AC_FILE_NAME,
                  [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_FILE_NAME), 1,
-                                   [Define if you have the file `]AC_File['.])
+                                    [Define to 1 if you have the
+                                     file `]AC_File['.])
 $2],
                  [$3])])])
 

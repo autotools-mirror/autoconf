@@ -72,7 +72,8 @@ AC_DEFUN([AC_DECL_SYS_SIGLIST],
                    [ac_cv_decl_sys_siglist=no])])
 if test $ac_cv_decl_sys_siglist = yes; then
   AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
-            [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
+            [Define to 1 if `sys_siglist' is declared by <signal.h>
+             or <unistd.h>.])
 fi
 ])# AC_DECL_SYS_SIGLIST
 
@@ -248,7 +249,7 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
 done])
 if test $ac_cv_sys_long_file_names = yes; then
   AC_DEFINE(HAVE_LONG_FILE_NAMES, 1,
-            [Define if you support file names longer than 14 characters.])
+            [Define to 1 if you support file names longer than 14 characters.])
 fi
 ])
 
@@ -312,8 +313,8 @@ main ()
                [ac_cv_sys_restartable_syscalls=no])])
 if test $ac_cv_sys_restartable_syscalls = yes; then
   AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS, 1,
-            [Define if system calls automatically restart after interruption
-             by a signal.])
+            [Define to 1 if system calls automatically restart after
+             interruption by a signal.])
 fi
 ])# AC_SYS_RESTARTABLE_SYSCALLS
 
@@ -398,7 +399,7 @@ esac
 # ------
 AC_DEFUN([AC_AIX],
 [AH_VERBATIM([_ALL_SOURCE],
-[/* Define if on AIX 3.
+[/* Define to 1 if on AIX 3.
    System headers sometimes define this.
    We just want to avoid a redefinition error message.  */
 @%:@ifndef _ALL_SOURCE
@@ -426,13 +427,13 @@ AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
 if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE, 1,
-            [Define if you need to in order for `stat' and other things to
+            [Define to 1 if you need to in order for `stat' and other things to
              work.])
   AC_DEFINE(_POSIX_1_SOURCE, 2,
-            [Define if the system does not provide POSIX.1 features except
+            [Define to 2 if the system does not provide POSIX.1 features except
              with this defined.])
   AC_DEFINE(_MINIX, 1,
-            [Define if on MINIX.])
+            [Define to 1 if on MINIX.])
 fi
 ])# AC_MINIX
 

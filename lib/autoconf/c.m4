@@ -543,7 +543,7 @@ if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
 else
   AC_MSG_RESULT([no])
   AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
-            [Define if your C compiler doesn't accept -c and -o together.])
+           [Define to 1 if your C compiler doesn't accept -c and -o together.])
 fi
 ])# AC_PROG_CC_C_O
 
@@ -811,7 +811,7 @@ AU_DEFUN([AC_C_CROSS], [])
 # ------------------
 AC_DEFUN([AC_C_CHAR_UNSIGNED],
 [AH_VERBATIM([__CHAR_UNSIGNED__],
-[/* Define if type `char' is unsigned and you are not using gcc.  */
+[/* Define to 1 if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
 #endif])dnl
@@ -846,7 +846,7 @@ ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
   AC_DEFINE(HAVE_LONG_DOUBLE, 1,
-            [Define if the `long double' type works.])
+            [Define to 1 if the `long double' type works.])
 fi
 ])# AC_C_LONG_DOUBLE
 
@@ -909,7 +909,7 @@ case $ac_cv_c_bigendian in
   yes)
     m4_default([$1],
       [AC_DEFINE([WORDS_BIGENDIAN], 1,
-        [Define if your processor stores words with the most significant
+        [Define to 1 if your processor stores words with the most significant
 	 byte first (like Motorola and SPARC, unlike Intel and VAX).])]) ;;
   no)
     $2 ;;
@@ -1052,7 +1052,7 @@ char *s = x(teststring);],
               [ac_cv_c_stringize=yes])])
 if test $ac_cv_c_stringize = yes; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
-            [Define if cpp supports the ANSI @%:@ stringizing operator.])
+            [Define to 1 if cpp supports the ANSI @%:@ stringizing operator.])
 fi
 ])# AC_C_STRINGIZE
 
@@ -1067,7 +1067,7 @@ AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT([yes])
   AC_DEFINE(PROTOTYPES, 1,
-            [Define if the C compiler supports function prototypes.])
+            [Define to 1 if the C compiler supports function prototypes.])
 else
   AC_MSG_RESULT([no])
 fi
