@@ -2767,7 +2767,7 @@ test "$ac_cv_mingw32" = yes && MINGW32=yes[]dnl
 AU_DEFUN([AC_CYGWIN],   [])
 AU_DEFUN([AC_CYGWIN32], [])
 AU_DEFUN([AC_EMXOS2],   [])
-AU_DEFUN([AC_MING32],   [])
+AU_DEFUN([AC_MINGW32],  [])
 
 
 # We must not AU define them, because autoupdate would them remove

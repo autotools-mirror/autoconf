@@ -1,3 +1,7 @@
+2000-07-18  Akim Demaille  <akim@epita.fr>
+
+	* acspecific.m4 (AC_MING32): Rename as AC_MINGW32.
+
 2000-07-18  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Fixed bug where the F77 compiler output was parsed differently
