@@ -1,5 +1,10 @@
 2001-02-26  Pavel Roskin  <proski@gnu.org>
 
+	* autoupdate.in (&mktmpdir): Strip the newline from the output
+	of mktemp.
+
+2001-02-26  Pavel Roskin  <proski@gnu.org>
+
 	* man/Makefile.am: autoupdate.1 now depends on autoupdate.in.
 
 2001-02-25  Tim Van Holder <tim.van.holder@pandora.be>

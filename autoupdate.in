@@ -51,6 +51,7 @@ sub mktmpdir ()
 
   # If mktemp supports dirs, use it to please Marc E.
   $tmp = `(umask 077 && mktemp -d -q "$TMPDIR/auXXXXXX") 2>/dev/null`;
+  chomp $tmp;
 
   if (!$tmp || !-d $tmp)
     {
