@@ -72,8 +72,8 @@ AC_SUBST(PERL)dnl
 if test "$PERL" = no; then
   AC_MSG_ERROR([perl is not found])
 fi
-$PERL -e 'require 5.005;' || {
-   AC_MSG_ERROR([Perl 5.005 or better is required])
+$PERL -e 'require 5.005_03;' || {
+   AC_MSG_ERROR([Perl 5.005_03 or better is required])
 }
 
 # Emacs modes.
