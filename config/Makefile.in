@@ -103,7 +103,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 EXTRA_DIST = $(SPECIFIC_MACROS) $(SPECIFIC_TOOLS) \
-              prev-version.txt
+	      prev-version.txt
 
 MAINTAINERCLEANFILES = $(GENERIC_TOOLS)
 SPECIFIC_MACROS = \

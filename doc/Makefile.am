@@ -31,7 +31,7 @@ standards_TEXINFOS = make-stds.texi
 # not know.
 CLEANFILES = autoconf.ACs  autoconf.cvs  autoconf.MSs  autoconf.prs \
 	     autoconf.ATs  autoconf.evs  autoconf.fns  autoconf.ovs \
-             autoconf.tmp \
+	     autoconf.tmp \
 	     autoconf*.html standards*.html
 
 

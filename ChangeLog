@@ -1,3 +1,9 @@
+2003-05-23  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am, bin/Makefile.am, config/Makefile.am,
+	* doc/Makefile.am, lib/autoconf/Makefile.am, tests/Makefile.am:
+	White spaces cleanup.
+
 2003-05-22  Jim Meyering  <jim@meyering.net>
             and Paul Eggert <eggert@twinsun.com>
 

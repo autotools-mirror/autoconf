@@ -21,10 +21,10 @@
 include ../lib/freeze.mk
 
 bin_SCRIPTS = autom4te \
-              autoconf autoheader autoreconf ifnames autoscan autoupdate
+	      autoconf autoheader autoreconf ifnames autoscan autoupdate
 
 EXTRA_DIST = autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
-             autoscan.in autom4te.in \
+	     autoscan.in autom4te.in \
 	     autoconf.as
 
 # Files that should be removed, but which Automake does not know.

@@ -25,8 +25,8 @@ SUBDIRS = bin tests . lib config man doc
 ACLOCAL_AMFLAGS = -I config
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
-             BUGS \
-             GNUmakefile Makefile.maint
+	     BUGS \
+	     GNUmakefile Makefile.maint
 
 MAINTAINERCLEANFILES = INSTALL
 
@@ -73,8 +73,8 @@ wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
 	     $(srcdir)/config/texinfo.tex \
 	     $(srcdir)/doc/standards.texi $(srcdir)/doc/make-stds.texi
 cvs_files = $(srcdir)/config/elisp-comp \
-            $(srcdir)/config/mdate-sh \
-            $(srcdir)/config/missing \
-            $(srcdir)/config/install-sh \
-            $(srcdir)/config/mkinstalldirs
+	    $(srcdir)/config/mdate-sh \
+	    $(srcdir)/config/missing \
+	    $(srcdir)/config/install-sh \
+	    $(srcdir)/config/mkinstalldirs
 local_updates = wget-update cvs-update
