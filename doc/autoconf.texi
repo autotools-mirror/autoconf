@@ -1596,9 +1596,9 @@ specific test macros use the value of @code{CPP} indirectly by calling
 Determine a C++ compiler to use.  Check if the environment variable
 @code{CXX} or @code{CCC} (in that order) is set; if so, set output
 variable @code{CXX} to its value.  Otherwise search for a C++ compiler
-under likely names (@code{c++}, @code{g++}, @code{gcc}, @code{CC},
-@code{cxx}, and @code{cc++}).  If none of those checks succeed, as a
-last resort set @code{CXX} to @code{gcc}.
+under likely names (@code{c++}, @code{g++}, @code{CC}, @code{cxx}, and
+@code{cc++}).  If none of those checks succeed, as a last resort set
+@code{CXX} to @code{gcc}.
 
 If using the GNU C++ compiler, set shell variable @code{GXX} to
 @samp{yes}, empty otherwise.  If output variable @code{CXXFLAGS} was
