@@ -1,3 +1,7 @@
+2005-01-05  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sugar.m4 (m4_copy): Fix the explanation.
+
 2005-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_LANG_INT_SAVE(C)): Declare longval and
@@ -2267,8 +2271,8 @@
 
 2003-05-22  Paolo Bonzini  <bonzini@gnu.org>
 
-	* lib/m4sugar/m4sh.m4 [AS_REQUIRE]: actually use the 2nd
-	parameter
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Actually use the 2nd
+	parameter.
 
 2003-05-22  Akim Demaille  <akim@epita.fr>
 

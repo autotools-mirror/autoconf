@@ -85,12 +85,12 @@ m4_undefine([undefine])
 # Define DST as the definition of SRC.
 # What's the difference between:
 # 1. m4_copy([from], [to])
-# 2. m4_define([from], [to($@)])
-# Well, obviously 1 is more expansive in space.  Maybe 2 is more expansive
+# 2. m4_define([to], [from($@)])
+# Well, obviously 1 is more expensive in space.  Maybe 2 is more expensive
 # in time, but because of the space cost of 1, it's not that obvious.
 # Nevertheless, one huge difference is the handling of `$0'.  If `from'
 # uses `$0', then with 1, `to''s `$0' is `to', while it is `from' in 2.
-# The user will certainly prefer see `from'.
+# The user will certainly prefer to see `to'.
 m4_define([m4_copy],
 [m4_define([$2], m4_defn([$1]))])
 
