@@ -368,7 +368,7 @@ sub scan_file ()
     if -f "$_.in";
 
   # Save $_ as Find::File requires it to be preserved.
-  my $underscore = $_;
+  local $_ = $_;
 
   # Strip a useless leading `./'.
   $File::Find::name =~ s,^\./,,;
@@ -383,7 +383,8 @@ sub scan_file ()
       used 'program', 'c++', $File::Find::name;
       scan_c_file ($_);
     }
-  elsif (/^[Mm]akefile(\.in)?$/ || /^GNUmakefile(\.in)?$/)
+  elsif ((/^((?:GNUm|M|m)akefile)(\.in)?$/ && ! -f "$1.am")
+	 || /^(?:GNUm|M|m)akefile(\.am)?$/)
     {
       scan_makefile ($_);
     }
@@ -391,8 +392,6 @@ sub scan_file ()
     {
       scan_sh_file ($_);
     }
-
-  $_ = $underscore;
 }
 
 
@@ -519,14 +518,18 @@ sub output ($)
   output_kind ($file, 'identifier');
   output_kind ($file, 'function');
 
-  # Change DIR/Makefile.in to DIR/Makefile.
-  foreach my $m (@makefiles)
+  if (@makefiles)
     {
-      $m =~ s/\.in$//;
-      $unique_makefiles{$m}++;
+      # Change DIR/Makefile.in to DIR/Makefile.
+      foreach my $m (@makefiles)
+	{
+	  $m =~ s/\.(?:in|am)$//;
+	  $unique_makefiles{$m}++;
+	}
+      print $file ("\nAC_CONFIG_FILES([",
+		   join ("\n                 ",
+			 sort keys %unique_makefiles), "])\n");
     }
-  print $file "\nAC_CONFIG_FILES([",
-       join ("\n                 ", sort keys %unique_makefiles), "])\n";
   print $file "AC_OUTPUT\n";
 
   $file->close;

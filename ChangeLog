@@ -1,3 +1,10 @@
+2002-11-07  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* bin/autoscan.in (scan_file): Scan Makefile.am too. Ignore
+	Makefile.in if Makefile.am exists.
+	(output): Strip `.am' from Makefiles.  Don't
+	output AC_CONFIG_FILES if no Makefiles were found.
+
 2002-11-07  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.am (cvs_files): Add elisp-comp, mdate-sh.
