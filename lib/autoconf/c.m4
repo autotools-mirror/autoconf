@@ -244,8 +244,8 @@ test_array @<:@0@:>@ = 0
 # But we include them only after the EXPRESSION has been evaluated.
 m4_define([AC_LANG_INT_SAVE(C)],
 [AC_LANG_PROGRAM([$1
-long int longval () { return $2; }
-unsigned long int ulongval () { return $2; }
+static long int longval () { return $2; }
+static unsigned long int ulongval () { return $2; }
 @%:@include <stdio.h>
 @%:@include <stdlib.h>],
 [
