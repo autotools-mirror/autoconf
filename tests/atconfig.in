@@ -71,8 +71,8 @@ top_srcdir=@top_srcdir@
 # Use absolute file notations, as the test might change directories.
 at_srcdir=`cd @srcdir@ && pwd`
 at_top_srcdir=`cd @top_srcdir@ && pwd`
-if test -n "@AT_TESTPATH@"; then
-  export PATH; PATH=`pwd`:`cd @AT_TESTPATH@ && pwd`:$PATH
+if test -n "@AUTOTEST_PATH@"; then
+  export PATH; PATH=`pwd`:`cd @AUTOTEST_PATH@ && pwd`:$PATH
 else
   export PATH; PATH=`pwd`:$PATH
 fi

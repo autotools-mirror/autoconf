@@ -8,6 +8,6 @@
 # built test directory.  Maybe omitted if the same (flat distribution).
 
 AC_DEFUN([AT_CONFIG],
-[AT_TESTPATH=ifelse([$1], [], [.], [$1])
-AC_SUBST(AT_TESTPATH)
+[AUTOTEST_PATH=ifelse([$1], [], [.], [$1])
+AC_SUBST(AUTOTEST_PATH)
 ])

@@ -1,3 +1,9 @@
+2000-11-02  Pavel Roskin  <proski@gnu.org>
+
+	* m4/atconfig.m4 (AT_CONFIG): s/AT_TESTPATH/AUTOTEST_PATH/
+	because AT_TESTPATH looks like a macro.
+	* tests/atconfig.in: Likewise.
+
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh (trace.m4): Move all the M4 builtins into `at_'.
@@ -6,7 +12,7 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
 	* tests/tools.at (Tracing M4 builtins): New test.
-	* autoconh.sh (trace_format): Fix its computation.
+	* autoconf.sh (trace_format): Fix its computation.
 
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
@@ -18,7 +24,6 @@
 
 	* autoconf.sh (task trace) [debug]: Instead of a long pipe, extend
 	trace.m4.
-
 
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
