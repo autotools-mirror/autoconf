@@ -1,3 +1,8 @@
+1998-10-09  Tom Tromey  <tromey@cygnus.com>
+
+	* Makefile.in (autoconf.m4f): New target.
+	(autoheader.m4f): Likewise.
+
 1998-10-08  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_TRY_LINK_FUNC): Fix macro ordering.
