@@ -1,1 +1,1 @@
-autoconf_test AC_SIZEOF_TYPE "AC_SIZEOF_TYPE(long *)"
+autoconf_test AC_CHECK_SIZEOF "AC_CHECK_SIZEOF(long *)"

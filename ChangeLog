@@ -1,11 +1,22 @@
 Tue Nov 19 10:29:06 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
-	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Fail if linking fails, and
-	remove conftest* before running success code, like in AC_TRY_LINK.
+	* testsuite/autoconf.g/sizeof.exp: Use the v2 macro name.
+
+	* acgeneral.m4 (AC_OUTPUT_FILES, AC_OUTPUT_HEADER): Support
+	creating output files from multiple pieces, concatenated.
+	Suggested by "Theodore Ts'o" <tytso@MIT.EDU>.
+	(AC_LINK_FILES): If called more than once, concatenate the
+	arguments.  From Roland McGrath.
+	(AC_CONFIG_SUBDIRS): Likewise.
+	(AC_OUTPUT_COMMANDS): New macro.  Suggested by
+	Tom Tromey <tromey@creche.cygnus.com>.
+	(AC_OUTPUT): Use the lists it sets.
+
+	* acgeneral.m4 (AC_TRY_RUN_NATIVE): Fail if linking fails, like
+	AC_TRY_LINK.
 	(AC_TRY_RUN): Don't require AC_C_CROSS.
 	(AC_TRY_COMPILER): New macro.
 	(AC_LANG_C, AC_LANG_CPLUSPLUS): Set cross_compiling.
-	
 	* acspecific.m4 (AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS): Use
 	AC_TRY_COMPILER instead of AC_TRY_LINK.
 	(AC_PROG_CC_GNU, AC_PROG_CC_G): Split out of AC_PROG_CC.

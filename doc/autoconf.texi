@@ -789,7 +789,7 @@ Every Autoconf-generated @code{configure} script must finish by calling
 optional other files resulting from configuration.  The only other
 required macro is @code{AC_INIT} (@pxref{Input}).
 
-@defmac AC_OUTPUT (@r{[}@var{file}@dots{}@r{] [,}@var{extra-cmds}@r{] [,}@var{init-cmds}@r{]})
+@defmac AC_OUTPUT (@r{[}@var{file}@dots{} @r{[}, @var{extra-cmds} @r{[}, @var{init-cmds}@r{]]]})
 @maindex OUTPUT
 Create output files.  Call this macro once, at the end of @file{configure.in}.
 The @var{file}@dots{} argument is a
@@ -813,11 +813,14 @@ A typical call to @code{AC_OUTPUT} looks like this:
 AC_OUTPUT(Makefile src/Makefile man/Makefile X/Imakefile)
 @end example
 
-You can override an input file name by appending it to @var{file},
-separated by a colon.  For example,
+You can override an input file name by appending to @var{file} a
+colon-separated list of input files.  Examples:
 @example
 AC_OUTPUT(Makefile:templates/top.mk lib/Makefile:templates/lib.mk)
+AC_OUTPUT(Makefile:templates/vars.mk:Makefile.in:templates/rules.mk)
 @end example
+Doing this allows you to keep your file names acceptable to MS-DOS, or
+to prepend and/or append boilerplate to the file.
 
 If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.  If
@@ -825,7 +828,23 @@ If you pass @var{extra-cmds}, those commands will be inserted into
 @var{extra-cmds}, with shell variable, command, and backslash
 substitutions performed on them in @code{configure}.  You can use
 @var{init-cmds} to pass variables from @code{configure} to the
-@var{extra-cmds}.
+@var{extra-cmds}.  If @code{AC_OUTPUT_COMMANDS} has been called, the
+commands given to it are run just before the commands passed to this macro.
+@end defmac
+
+@defmac AC_OUTPUT_COMMANDS (@var{extra-cmds} @r{[}, @var{init-cmds}@r{]})
+Specify additional shell commands to run at the end of
+@file{config.status}, and shell commands to initialize any variables
+from @code{configure}.  This macro may be called multiple times.
+If the shell commands contain commas, you must add an extra layer of
+@code{m4} quotes for each additional time you call this macro, due to
+the insanity of @code{m4} quoting.  Like this:
+
+@example
+fubar=27
+AC_OUTPUT_COMMANDS([[echo this is extra $fubar, and so on.]], fubar=$fubar)
+AC_OUTPUT_COMMANDS([[echo this is another, extra, bit]], [[echo init, bit]])
+@end example
 @end defmac
 
 If you run @code{make} on subdirectories, you should run it using the
@@ -1181,13 +1200,16 @@ allows some changes in configuration without needlessly causing object
 files that depend on the header file to be recompiled.
 
 Usually the input file is named @file{@var{header-to-create}.in};
-however, you can override the input file name by appending it to
-@var{header-to-create}, separated by a colon.  For example,
+however, you can override the input file name by appending to
+@var{header-to-create}, a colon-separated list of input files.
+Examples:
 @example
 AC_CONFIG_HEADER(defines.h:defines.hin)
+AC_CONFIG_HEADER(defines.h:defs.pre:defines.h.in:defs.post)
 @end example
 @noindent
-Doing this allows you to keep your file names acceptable to MS-DOS.
+Doing this allows you to keep your file names acceptable to MS-DOS, or
+to prepend and/or append boilerplate to the file.
 @end defmac
 
 @menu
@@ -1325,13 +1347,16 @@ is not found, no error is reported, so a @code{configure} script can
 configure whichever parts of a large source tree are present.  If a
 given @var{dir} contains @file{configure.in} but no @code{configure},
 the Cygnus @code{configure} script found by @code{AC_CONFIG_AUXDIR} is
-used.  The subdirectory @code{configure} scripts are given the same
+used.
+
+The subdirectory @code{configure} scripts are given the same
 command line options that were given to this @code{configure} script,
 with minor changes if needed (e.g., to adjust a relative path for the
 cache file or source directory).  This macro also sets the output
 variable @code{subdirs} to the list of directories @samp{@var{dir}
 @dots{}}.  @file{Makefile} rules can use this variable to determine
-which subdirectories to recurse into.
+which subdirectories to recurse into.  This macro may be called multiple
+times.
 @end defmac
 
 @node Default Prefix, Versions, Subdirectories, Setup
@@ -4019,6 +4044,7 @@ Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
 possible, otherwise a hard link.  The @var{dest} and @var{source} names
 should be relative to the top level source or build directory.
+This macro may be called multiple times.
 
 For example, this call:
 

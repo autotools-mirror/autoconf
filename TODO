@@ -84,6 +84,7 @@ in a dnl comment.  (Seems to be hard.)
 * Look at user contributed macros:
 	prototypes
 	IEEE double precision math
+	more
 
 ------------------------------------------------------------------------------
 
@@ -365,20 +366,6 @@ Mention automake, libtool, etc. in the autoconf manual.
 
 ------------------------------------------------------------------------------
 
-configure-time pasting together of output files from multiple pieces.
-AC_OUTPUT(Makefile:$pre_in:Makefile.in:$pre_out)
-
-This would concatenate the files $pre_in, Makefile.in, and $pre_out
-before running sed to do the substitutions.
-From: "Theodore Ts'o" <tytso@MIT.EDU>
-
-Support a way of including makefile fragments that then have @var@
-substitutions done on them.
-
-Or ac_include?
-
-------------------------------------------------------------------------------
-
 I wonder if it is possible to get the path for X11's app-defaults
 directory by autoconf. Moreover, I'd like to have a general way of
 accessing imake variables by autoconf, something like
@@ -389,38 +376,11 @@ Slaven Rezic <eserte@cabulja.herceg.de>
 
 ------------------------------------------------------------------------------
 
-Whichever AC_LINK_FILES directive comes last is that one that gets
-done.
-
-From Jim Meyering
-
-This is trivial, but I'm unsure of the m4 quoting reality.  Is it:
-
-AC_DEFUN(AC_LINK_FILES,
-[define([AC_LIST_FILES], ifdef([AC_LIST_FILES], AC_LIST_FILES ,)[$1])dnl
-define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], AC_LIST_LINKS ,)[$2])])
-
-Roland McGrath
-
-------------------------------------------------------------------------------
-
 Question: at least one common UNIX variant has a "cc" that is old K&R
 and "c89" for ANSI C.  Is there any reason why AC_PROG_CC couldn't
 check for c89 before cc if it can't find gcc?
 
 hpa@yggdrasil.com (H. Peter Anvin)
-
-------------------------------------------------------------------------------
-
-Modify the meaning of autoheader --localdir to add an additional
-directory to look for acconfig.h instead of replacing the directory
-containing configure.in.  Also, autoreconf recurses on all
-subdirectories containing a configure.in, not just those given by an
-AC_CONFIG_SUBDIRS directive, so you can't have both directories that
-are parts of a large package, and directories that are independent
-packages.
-
-Marc Horowitz <marc@MIT.EDU>
 
 ------------------------------------------------------------------------------
 
@@ -462,29 +422,6 @@ bin by include, you can find good places to look for the include files
 or libraries.
 
 From: rcb5@win.tue.nl (Richard Verhoeven)
-
-------------------------------------------------------------------------------
-
-in order to use the AC_CANONICAL_SYSTEM macro, I have to
-have install-sh somewhere nearby --- why is this?  I have no real
-reason to distribute install-sh, other than that its absence breaks
-this code.
-
-Shouldn't the above loop be looking for config.sub and config.guess?
-From: jimb@totoro.bio.indiana.edu (Jim Blandy)
-
-adding AC_CANONICAL_HOST to my configure.in script caused
-all sorts of odd/unexplained errors.  Obviously, I had to go
-get copies of config.guess, config.sub and install-sh from the
-autoconf distribution, but the error messages and autoconf docs
-didn't explain that very well.
-From: bostic@bsdi.com (Keith Bostic)
-
-------------------------------------------------------------------------------
-
-Perhaps also have AC_TRY_COMPILER try to link an invalid program, and
-die if the compiler seemed to succeed--in which case it's not usable
-with autoconf scripts.
 
 ------------------------------------------------------------------------------
 
@@ -578,16 +515,6 @@ From: Tom Tromey <tromey@creche.cygnus.com>
 
 ------------------------------------------------------------------------------
 
-It would be nice if there were some way for an autoconf macro to add
-code to be run at the same time as the `EXTRA-CMDS' argument to
-AC_OUTPUT.
-it would be most useful if it could be
-run any number of times (and have all the command concatenated).
-
-From: Tom Tromey <tromey@creche.cygnus.com>
-
-------------------------------------------------------------------------------
-
 I'd much prefer to see the absolute paths substituted for all the
 standard "dir" variables.  It would be nice to have variables in
 configure that held the absolute paths.  And it is nice to be able to
@@ -610,7 +537,37 @@ Merge the two lex macros, AC_PROG_LEX and AC_DECL_YYTEXT?
 
 ------------------------------------------------------------------------------
 
-Is it safe to remove the getpagesize references from AC_FUNC_MMAP?
+Modify the meaning of autoheader --localdir to add an additional
+directory to look for acconfig.h instead of replacing the directory
+containing configure.in.  Also, autoreconf recurses on all
+subdirectories containing a configure.in, not just those given by an
+AC_CONFIG_SUBDIRS directive, so you can't have both directories that
+are parts of a large package, and directories that are independent
+packages.
+
+Marc Horowitz <marc@MIT.EDU>
 
 ------------------------------------------------------------------------------
 
+in order to use the AC_CANONICAL_SYSTEM macro, I have to
+have install-sh somewhere nearby --- why is this?  I have no real
+reason to distribute install-sh, other than that its absence breaks
+this code.
+
+Shouldn't the above loop be looking for config.sub and config.guess?
+From: jimb@totoro.bio.indiana.edu (Jim Blandy)
+
+adding AC_CANONICAL_HOST to my configure.in script caused
+all sorts of odd/unexplained errors.  Obviously, I had to go
+get copies of config.guess, config.sub and install-sh from the
+autoconf distribution, but the error messages and autoconf docs
+didn't explain that very well.
+From: bostic@bsdi.com (Keith Bostic)
+
+------------------------------------------------------------------------------
+
+Perhaps also have AC_TRY_COMPILER try to link an invalid program, and
+die if the compiler seemed to succeed--in which case it's not usable
+with autoconf scripts.
+
+------------------------------------------------------------------------------

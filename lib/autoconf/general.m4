@@ -1422,10 +1422,10 @@ fi
 undefine([AC_VAR_NAME])dnl
 ])
 
-dnl Check whether the current compiler produces executables, and
-dnl whether those executables are native to the build system.
+dnl Sets WORKING_VAR to yes if the current compiler works, else no;
+dnl sets CROSS-VAR to yes if it produces non-native executables, else no.
 dnl Before calling this, call AC_LANG_* to set the right language.
-dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-CACHE-ID, CROSS-CACHE-ID)
+dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
 AC_DEFUN(AC_TRY_COMPILER,
 [cat > conftest.$ac_ext <<EOF
 [#]line __oline__ "configure"
@@ -1691,8 +1691,8 @@ extern "C" void exit(int);
 EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest && (./conftest; exit) 2>/dev/null
 then
-  ifelse([$2], , :, [rm -rf conftest*
-  $2])
+dnl Don't remove the temporary files here, so they can be examined.
+  ifelse([$2], , :, [$2])
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
@@ -1835,8 +1835,8 @@ AC_DEFUN(AC_CHECK_TYPE,
 AC_MSG_CHECKING(for $1)
 AC_CACHE_VAL(ac_cv_type_$1,
 [AC_EGREP_CPP(dnl
-changequote(<<<,>>>)dnl
-<<<$1[^a-zA-Z_0-9]>>>dnl
+changequote(<<,>>)dnl
+<<$1[^a-zA-Z_0-9]>>dnl
 changequote([,]), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
@@ -1860,12 +1860,27 @@ dnl Link each of the existing files SOURCE... to the corresponding
 dnl link name in DEST...
 dnl AC_LINK_FILES(SOURCE..., DEST...)
 AC_DEFUN(AC_LINK_FILES,
-[define([AC_LIST_FILES], [$1])define([AC_LIST_LINKS], [$2])])
+[dnl
+define([AC_LIST_FILES], ifdef([AC_LIST_FILES], [AC_LIST_FILES ],)[$1])dnl
+define([AC_LIST_LINKS], ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2])])
+
+dnl Add additional commands for AC_OUTPUT to put into config.status.
+dnl I have concluded that m4's quoting rules make it impossible to
+dnl make this robust in the presence of commas in $1 or $2 and
+dnl an arbitrary number of calls.  I tried putting the defines
+dnl inside the ifdefs, with no success that way either.  -djm
+dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
+AC_DEFUN(AC_OUTPUT_COMMANDS,
+[dnl
+define([AC_LIST_EXTRA], ifdef([AC_LIST_EXTRA], [AC_LIST_EXTRA
+],)[$1])dnl
+define([AC_LIST_INIT], ifdef([AC_LIST_INIT], [AC_LIST_INIT
+],)[$2])])
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
 AC_DEFUN(AC_CONFIG_SUBDIRS,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-define([AC_LIST_SUBDIRS], [$1])dnl
+define([AC_LIST_SUBDIRS], ifdef([AC_LIST_SUBDIRS], [AC_LIST_SUBDIRS ],)[$1])dnl
 subdirs="AC_LIST_SUBDIRS"
 AC_SUBST(subdirs)dnl
 ])
@@ -1947,12 +1962,16 @@ cat >> $CONFIG_STATUS <<EOF
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
-ifelse([$3], , ,
+ifelse([$3][AC_LIST_INIT], , ,
 [EOF
 cat >> $CONFIG_STATUS <<EOF
+ifdef([AC_LIST_INIT], [AC_LIST_INIT
+],)[]dnl
 $3
 EOF
 cat >> $CONFIG_STATUS <<\EOF])
+ifdef([AC_LIST_EXTRA], [AC_LIST_EXTRA
+],)[]dnl
 $2
 exit 0
 EOF
@@ -2047,11 +2066,10 @@ CONFIG_FILES=\${CONFIG_FILES-"$1"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
-dnl Specifying an input file breaks the trap to clean up on interrupt,
-dnl but that's not a huge problem.
-  # Support "outfile[:infile]", defaulting infile="outfile.in".
+changequote(, )dnl
+  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
-  *:*) ac_file_in=`echo "$ac_file"|sed 's%.*:%%'`
+  *:*) ac_file_in=`echo "$ac_file"|sed 's%[^:]*:%%'`
        ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
   *) ac_file_in="${ac_file}.in" ;;
   esac
@@ -2059,7 +2077,6 @@ dnl but that's not a huge problem.
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
 
   # Remove last slash and all that follows it.  Not all systems have dirname.
-changequote(, )dnl
   ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
 changequote([, ])dnl
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
@@ -2101,6 +2118,8 @@ changequote([, ])dnl
 # $configure_input" ;;
   *) ac_comsub= ;;
   esac
+
+  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
   sed -e "$ac_comsub
 s%@configure_input@%$configure_input%g
 s%@srcdir@%$srcdir%g
@@ -2108,7 +2127,7 @@ s%@top_srcdir@%$top_srcdir%g
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%g
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
-" $ac_given_srcdir/$ac_file_in | (eval "$ac_sed_cmds") > $ac_file
+" $ac_file_inputs | (eval "$ac_sed_cmds") > $ac_file
 dnl This would break Makefile dependencies.
 dnl  if cmp -s $ac_file conftest.out 2>/dev/null; then
 dnl    echo "$ac_file is unchanged"
@@ -2156,17 +2175,20 @@ EOF
 cat >> $CONFIG_STATUS <<\EOF
 fi
 for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
-  # Support "outfile[:infile]", defaulting infile="outfile.in".
+changequote(, )dnl
+  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
-  *:*) ac_file_in=`echo "$ac_file"|sed 's%.*:%%'`
+  *:*) ac_file_in=`echo "$ac_file"|sed 's%[^:]*:%%'`
        ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
   *) ac_file_in="${ac_file}.in" ;;
   esac
+changequote([, ])dnl
 
   echo creating $ac_file
 
   rm -f conftest.frag conftest.in conftest.out
-  cp $ac_given_srcdir/$ac_file_in conftest.in
+  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  cat $ac_file_inputs > conftest.in
 
 EOF
 

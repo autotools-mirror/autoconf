@@ -1,5 +1,12 @@
 Major changes in release 2.12:
 
+* AC_OUTPUT and AC_CONFIG_HEADER can create output files by
+  concatenating multiple input files separated by colons, like so:
+  AC_CONFIG_HEADER(config.h:conf.pre:config.h.in:conf.post)
+  AC_OUTPUT(Makefile:Makefile.in:Makefile.rules)
+  The arguments may be shell variables, to compute the lists on the fly.
+* AC_LINK_FILES and AC_CONFIG_SUBDIRS may be called multiple times.
+* New macro AC_OUTPUT_COMMANDS adds more commands to run in config.status.
 * Bug fixes.
 
 Major changes in release 2.11:
