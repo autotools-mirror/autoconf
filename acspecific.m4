@@ -56,7 +56,7 @@ rm -f conftest*
 dnl
 define(AC_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])AC_REQUIRE([AC_PROG_CPP])if test -n "$GCC"; then
-  echo checking whether -traditional is needed
+  AC_CHECKING(whether -traditional is needed)
 changequote(,)dnl
   ac_pattern="Autoconf.*'x'"
 changequote([,])dnl
@@ -74,7 +74,7 @@ fi
 ])dnl
 dnl
 define(AC_MINUS_C_MINUS_O,
-[echo checking whether $CC and cc understand -c and -o together
+[AC_CHECKING(whether $CC and cc understand -c and -o together)
 echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
@@ -106,7 +106,7 @@ dnl
 define(AC_PROG_YACC,[AC_PROGRAMS_CHECK(YACC, 'bison -y' byacc, yacc)])dnl
 dnl
 define(AC_PROG_CPP,
-[AC_PROVIDE([$0])echo checking how to run the C preprocessor
+[AC_PROVIDE([$0])AC_CHECKING(how to run the C preprocessor)
 if test -z "$CPP"; then
   # This must be in double quotes, not single quotes, because CPP may get
   # substituted into the Makefile and ``${CC-cc}'' will simply confuse
@@ -120,19 +120,19 @@ Syntax Error], ,
   AC_TEST_CPP([#include <stdio.h>
 Syntax Error], ,CPP=/lib/cpp))
 fi
-test ".${ac_verbose}" != "." && echo "	setting CPP to $CPP"
+AC_VERBOSE(setting CPP to $CPP)
 AC_SUBST(CPP)dnl
 ])dnl
 dnl
 define(AC_PROG_CXXCPP,
-[AC_PROVIDE([$0])echo checking how to run the C++ preprocessor
+[AC_PROVIDE([$0])AC_CHECKING(how to run the C++ preprocessor)
 AC_LANG_SAVE[]dnl
 AC_LANG_CPLUSPLUS[]dnl
 if test -z "$CXXCPP"; then
   CXXCPP="${CXX-c++} -E"
   AC_TEST_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
 fi
-test ".${ac_verbose}" != "." && echo "	setting CXXCPP to $CXXCPP"
+AC_VERBOSE(setting CXXCPP to $CXXCPP)
 AC_LANG_RESTORE[]dnl
 AC_SUBST(CXXCPP)dnl
 ])dnl
@@ -157,7 +157,7 @@ define(AC_DECLARE_YYTEXT,
 [AC_REQUIRE_CPP()AC_REQUIRE([AC_PROG_LEX])dnl
 errprint(warning: [$0] is currently broken due to a quoting quagmire
 )dnl
-echo checking how to declare yytext
+AC_CHECKING(how to declare yytext)
 # Figure out what yytext is by creating a minimal parser and
 # examining the (preprocessed, in case macros are used) output.
 if test "z${DECLARE_YYTEXT}" = "z"; then
@@ -170,7 +170,7 @@ changequote(,)dnl
     LEX_OUTPUT_ROOT=lexyy
   else
     # Don't know what to do here.
-    echo "Can't find output from $LEX; assuming lex.yy.c." 1>&2
+    AC_WARN(can not find output from $LEX; assuming lex.yy.c)
     LEX_OUTPUT_ROOT=lex.yy
   fi
   DECLARE_YYTEXT=`eval ${CPP} "${LEX_OUTPUT_ROOT}.c" |
@@ -200,7 +200,7 @@ define(AC_PROG_INSTALL,
 # Avoid using ./install, which might have been erroneously created
 # by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
-  echo checking for install
+  AC_CHECKING(for install)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
@@ -234,24 +234,24 @@ if test -z "$INSTALL"; then
     # so expand srcdir now rather than in the Makefile.
     INSTALL=AC_PROG_INSTALL_INSTALL_SH
   else
-    echo "warning: ${srcdir}/install.sh not found; using cp"
+    AC_WARN(${srcdir}/install.sh not found; using cp)
     INSTALL=cp
   fi
 fi
 AC_SUBST(INSTALL)dnl
-test -n "$ac_verbose" && echo "	setting INSTALL to $INSTALL"
+AC_VERBOSE(setting INSTALL to $INSTALL)
 INSTALL_PROGRAM=${INSTALL_PROGRAM-'$(INSTALL)'}
 AC_SUBST(INSTALL_PROGRAM)dnl
-test -n "$ac_verbose" && echo "	setting INSTALL_PROGRAM to $INSTALL_PROGRAM"
+AC_VERBOSE(setting INSTALL_PROGRAM to $INSTALL_PROGRAM)
 INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
 AC_SUBST(INSTALL_DATA)dnl
-test -n "$ac_verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
+AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
 dnl Defined separately so a configure.in can redefine if necessary.
 define(AC_PROG_INSTALL_INSTALL_SH, ["${srcdir}/install.sh -c"])dnl
 dnl
 define(AC_LN_S,
-[echo checking for ln -s
+[AC_CHECKING(for ln -s)
 rm -f conftestdata
 if ln -s X conftestdata 2>/dev/null
 then
@@ -264,7 +264,7 @@ AC_SUBST(LN_S)
 ])dnl
 dnl
 define(AC_RSH,
-[echo checking for remote shell
+[AC_CHECKING(for remote shell)
 if test -f /usr/ucb/rsh || test -f /usr/bin/remsh || test -f /usr/bin/rsh ||
   test -f /usr/bsd/rsh || test -f /usr/bin/nsh; then
   RTAPELIB=rtapelib.o
@@ -281,7 +281,7 @@ dnl
 dnl
 define(AC_STDC_HEADERS,
 [AC_REQUIRE_CPP()dnl
-echo checking for ANSI C header files
+AC_CHECKING(for ANSI C header files)
 AC_TEST_CPP([#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -312,7 +312,7 @@ dnl
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
 dnl To avoid problems, don't check for gcc2 built-ins.
 define(AC_MEMORY_H,
-[AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(memory.h) and HAVE_MEMORY_H])echo checking whether string.h declares mem functions
+[AC_OBSOLETE([$0], [; instead use AC_HAVE_HEADERS(memory.h) and HAVE_MEMORY_H])AC_CHECKING(whether string.h declares mem functions)
 AC_HEADER_EGREP(memchr, string.h, ,
   AC_HEADER_CHECK(memory.h, AC_DEFINE(NEED_MEMORY_H)))]
 )dnl
@@ -330,14 +330,14 @@ fi]
 )dnl
 dnl
 define(AC_DIR_HEADER,
-[AC_PROVIDE([$0])echo checking for directory library header
+[AC_PROVIDE([$0])AC_CHECKING(for directory library header)
 ac_dir_header=
 AC_DIR_HEADER_CHECK(dirent.h, DIRENT)
 AC_DIR_HEADER_CHECK(sys/ndir.h, SYSNDIR)
 AC_DIR_HEADER_CHECK(sys/dir.h, SYSDIR)
 AC_DIR_HEADER_CHECK(ndir.h, NDIR)
 
-echo checking for closedir return value
+AC_CHECKING(for closedir return value)
 AC_TEST_PROGRAM([#include <sys/types.h>
 #include <$ac_dir_header>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }], ,
@@ -363,7 +363,7 @@ dnl
 dnl
 define(AC_GETGROUPS_T,
 [AC_REQUIRE([AC_UID_T])dnl
-echo checking for type of array argument to getgroups
+AC_CHECKING(for type of array argument to getgroups)
 changequote(,)dnl
 dnl Do not put single quotes in the C program text!!
 ac_prog='/* Thanks to Mike Rendell for this test.  */
@@ -393,24 +393,24 @@ AC_TEST_PROGRAM([$ac_prog],
 ])dnl
 dnl
 define(AC_UID_T,
-[AC_PROVIDE([$0])echo checking for uid_t in sys/types.h
+[AC_PROVIDE([$0])AC_CHECKING(for uid_t in sys/types.h)
 AC_HEADER_EGREP(uid_t, sys/types.h, ,
   AC_DEFINE(uid_t, int) AC_DEFINE(gid_t, int))])dnl
 dnl
 define(AC_SIZE_T,
-[echo checking for size_t in sys/types.h
+[AC_CHECKING(for size_t in sys/types.h)
 AC_HEADER_EGREP(size_t, sys/types.h, , AC_DEFINE(size_t, unsigned))])dnl
 dnl
 define(AC_PID_T,
-[AC_PROVIDE([$0])echo checking for pid_t in sys/types.h
+[AC_PROVIDE([$0])AC_CHECKING(for pid_t in sys/types.h)
 AC_HEADER_EGREP(pid_t, sys/types.h, , AC_DEFINE(pid_t, int))])dnl
 dnl
 define(AC_OFF_T,
-[AC_PROVIDE([$0])echo checking for off_t in sys/types.h
+[AC_PROVIDE([$0])AC_CHECKING(for off_t in sys/types.h)
 AC_HEADER_EGREP(off_t, sys/types.h, , AC_DEFINE(off_t, long))])dnl
 dnl
 define(AC_MODE_T,
-[echo checking for mode_t in sys/types.h
+[AC_CHECKING(for mode_t in sys/types.h)
 AC_HEADER_EGREP(mode_t, sys/types.h, , AC_DEFINE(mode_t, int))])dnl
 dnl
 define(AC_RETSIGTYPE,
@@ -431,7 +431,7 @@ dnl checks for functions
 dnl
 dnl
 define(AC_MMAP, [
-echo checking for working mmap
+AC_CHECKING(for working mmap)
 AC_TEST_PROGRAM([/* Thanks to Mike Haertel and Jim Avera for this test. */
 #include <sys/types.h>
 #include <fcntl.h>
@@ -507,7 +507,7 @@ fi
 dnl
 define(AC_VFORK,
 [AC_REQUIRE([AC_PID_T])AC_HEADER_CHECK(vfork.h, AC_DEFINE(HAVE_VFORK_H))
-echo checking for working vfork
+AC_CHECKING(for working vfork)
 AC_REQUIRE([AC_RETSIGTYPE])
 AC_TEST_PROGRAM([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
@@ -593,7 +593,7 @@ main() {
 ])dnl
 dnl
 define(AC_WAIT3,
-[echo checking for wait3 that fills in rusage
+[AC_CHECKING(for wait3 that fills in rusage)
 AC_TEST_PROGRAM([#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -767,7 +767,7 @@ fi
 ])dnl
 dnl
 define(AC_UTIME_NULL,
-[echo checking utime with null argument
+[AC_CHECKING(utime with null argument)
 rm -f conftestdata; > conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
 AC_TEST_PROGRAM([#include <sys/types.h>
@@ -781,7 +781,7 @@ exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
 rm -f core
 ])dnl
 dnl
-define(AC_STRCOLL, [echo checking for strcoll
+define(AC_STRCOLL, [AC_CHECKING(for strcoll)
 AC_TEST_PROGRAM([#include <string.h>
 main ()
 {
@@ -870,13 +870,13 @@ dnl checks for compiler characteristics
 dnl
 dnl
 define(AC_CROSS_CHECK,
-[AC_PROVIDE([$0])echo checking whether cross-compiling
+[AC_PROVIDE([$0])AC_CHECKING(whether cross-compiling)
 # If we cannot run a trivial program, we must be cross compiling.
 AC_TEST_PROGRAM([main(){exit(0);}], , cross_compiling=1)
 ])dnl
 dnl
 define(AC_CHAR_UNSIGNED,
-[echo checking for unsigned characters
+[AC_CHECKING(for unsigned characters)
 AC_TEST_PROGRAM(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
 #if !__STDC__
@@ -893,7 +893,7 @@ main() {
 dnl
 define(AC_LONG_DOUBLE,
 [AC_REQUIRE([AC_PROG_CC])dnl
-echo checking for long double
+AC_CHECKING(for long double)
 if test -n "$GCC"; then
 AC_DEFINE(HAVE_LONG_DOUBLE)
 else
@@ -907,19 +907,19 @@ fi
 ])dnl
 dnl
 define(AC_INT_16_BITS,
-[echo checking integer size
+[AC_CHECKING(integer size)
 AC_TEST_PROGRAM([main() { exit(sizeof(int) != 2); }],
  AC_DEFINE(INT_16_BITS))
 ])dnl
 dnl
 define(AC_LONG_64_BITS,
-[echo checking for 64-bit long ints
+[AC_CHECKING(for 64-bit long ints)
 AC_TEST_PROGRAM([main() { exit(sizeof(long int) != 8); }],
  AC_DEFINE(LONG_64_BITS))
 ])dnl
 dnl
 define(AC_WORDS_BIGENDIAN,
-[echo checking byte ordering
+[AC_CHECKING(byte ordering)
 AC_TEST_PROGRAM([main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
@@ -933,7 +933,7 @@ AC_TEST_PROGRAM([main () {
 ])dnl
 dnl
 define(AC_ARG_ARRAY,
-[echo checking whether the address of an argument can be used as an array
+[AC_CHECKING(whether the address of an argument can be used as an array)
 AC_TEST_PROGRAM([main() {
 /* Return 0 iff arg arrays are ok.  */
 exit(!x(1, 2, 3, 4));
@@ -1017,7 +1017,7 @@ fi
 rm -f conftest
 ])dnl
 define(AC_REMOTE_TAPE,
-[echo checking for remote tape and socket header files
+[AC_CHECKING(for remote tape and socket header files)
 AC_HEADER_CHECK(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H) ac_have_mtio_h=1)
 if test -n "$ac_have_mtio_h"; then
 AC_TEST_CPP([#include <sgtty.h>
@@ -1026,7 +1026,7 @@ fi
 ])dnl
 dnl
 define(AC_LONG_FILE_NAMES,
-[echo checking for long file names
+[AC_CHECKING(for long file names)
 ac_some_dir_failed=false
 # Test for long file names in all the places we know might matter:
 #      .		the current directory, where building will happen
@@ -1049,7 +1049,7 @@ $ac_some_dir_failed || AC_DEFINE(HAVE_LONG_FILE_NAMES)
 ])dnl
 dnl
 define(AC_RESTARTABLE_SYSCALLS,
-[echo checking for restartable system calls
+[AC_CHECKING(for restartable system calls)
 AC_TEST_PROGRAM(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
@@ -1075,14 +1075,13 @@ AC_FIND_X_XMKMF
 if test -z "$ac_imake_usrlibdir"; then
 AC_FIND_X_DIRECT
 fi
-if test -n "$ac_verbose"; then
-  test -n "$x_includes" && echo "	found X11 headers in $x_includes"
-  test -n "$x_libraries" && echo "	found X11 libraries in $x_libraries"
-fi])dnl
+test -n "$x_includes" && AC_VERBOSE(found X11 headers in $x_includes)
+test -n "$x_libraries" && AC_VERBOSE(found X11 libraries in $x_libraries)
+])dnl
 dnl
 dnl Internal subroutine of AC_FIND_X.
 define(AC_FIND_X_XMKMF,
-[echo checking for X include and library files with xmkmf
+[AC_CHECKING(for X include and library files with xmkmf)
 rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -1114,7 +1113,7 @@ fi
 dnl
 dnl Internal subroutine of AC_FIND_X.
 define(AC_FIND_X_DIRECT,
-[echo checking for X include and library files directly
+[AC_CHECKING(for X include and library files directly)
 if test ".$x_direct_test_library" = . ; then
    x_direct_test_library='Xt'
 fi
@@ -1237,7 +1236,7 @@ fi
 
 if test -n "$ISC"; then
   X_LIBS="$X_LIBS -lnsl_s -linet"
-  test -n "$ac_verbose" && echo "	adding -lnsl_s -linet to X_LIBS"
+  AC_VERBOSE(adding -lnsl_s -linet to X_LIBS)
 else
   # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
   # libraries were built with DECnet support.  And karl@cs.umb.edu's Alpha
@@ -1245,17 +1244,17 @@ else
   AC_HAVE_LIBRARY(dnet,
     [X_LIBS="$X_LIBS -ldnet"
      ac_have_dnet=t
-     test -n "$ac_verbose" && echo "	adding -ldnet to X_LIBS"])
+     AC_VERBOSE(adding -ldnet to X_LIBS)])
   if test -z "$ac_have_dnet"; then
     AC_HAVE_LIBRARY(dnet_stub,
       [X_LIBS="$X_LIBS -ldnet_stub"
-       test -n "$ac_verbose" && echo "	adding -ldnet_stub to X_LIBS"])
+       AC_VERBOSE(adding -ldnet_stub to X_LIBS)])
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
   # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
   AC_HAVE_LIBRARY(socket,
     [X_LIBS="$X_LIBS -lsocket"
-     test -n "$ac_verbose" && echo "	adding -lsocket to X_LIBS"])
+     AC_VERBOSE(adding -lsocket to X_LIBS)])
 fi
 #
 AC_SUBST(X_CFLAGS)dnl
@@ -1267,7 +1266,7 @@ dnl checks for UNIX variants
 dnl
 dnl
 define(AC_AIX,
-[echo checking for AIX
+[AC_CHECKING(for AIX)
 AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])AC_PROGRAM_EGREP(yes,
 [#ifdef _AIX
   yes
@@ -1286,7 +1285,7 @@ fi
 ])dnl
 dnl
 define(AC_ISC_POSIX,
-[AC_PROVIDE([$0])AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])echo checking for POSIXized ISC
+[AC_PROVIDE([$0])AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])AC_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
@@ -1301,7 +1300,7 @@ fi
 ])dnl
 dnl
 define(AC_XENIX_DIR,
-[AC_REQUIRE([AC_DIR_HEADER])echo checking for Xenix
+[AC_REQUIRE([AC_DIR_HEADER])AC_CHECKING(for Xenix)
 AC_PROGRAM_EGREP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes
@@ -1328,7 +1327,7 @@ define(AC_DYNIX_SEQ,
 [AC_HAVE_LIBRARY(seq, LIBS="$LIBS -lseq")
 ])dnl
 dnl
-define(AC_STAT_MACROS_BROKEN,[echo checking for broken stat file mode macros
+define(AC_STAT_MACROS_BROKEN,[AC_CHECKING(for broken stat file mode macros)
 AC_PROGRAM_EGREP([You lose], [#include <sys/types.h>
 #include <sys/stat.h>
 #ifdef S_ISBLK
