@@ -18,6 +18,31 @@
 # 02111-1307, USA.
 
 
+## ------------------ ##
+## Testing autom4te.  ##
+## ------------------ ##
+
+
+# AT_CHECK_AUTOM4TE(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
+# -----------------------------------------------------------
+# If stderr is specified, normalize the observed stderr.  E.g.:
+#
+#  /usr/local/bin/m4: script.4s: 1: Cannot open foo: No such file or directory
+#  autom4te: /usr/local/bin/m4 failed with exit status: 1
+#
+# becomes
+#
+#  m4: script.4s: 1: Cannot open foo: No such file or directory
+#  autom4te: m4 failed with exit status: 1
+
+m4_define([AT_CHECK_AUTOM4TE],
+[AT_CHECK([autom4te $1], [$2], [$3], m4_ifval([$4], [stderr]))
+m4_ifval([$4],
+[AT_CHECK([[sed 's,[^ ]*/m4,m4,' stderr]], [0],[$4])])
+])
+
+
+
 ## ----------------- ##
 ## Testing M4sugar.  ##
 ## ----------------- ##
@@ -37,7 +62,7 @@ m4_define([AT_DATA_M4SUGAR],
 # AT_CHECK_M4SUGAR(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
 m4_define([AT_CHECK_M4SUGAR],
-[AT_CHECK([autom4te --language=m4sugar script.4s -o script $1],
+[AT_CHECK_AUTOM4TE([--language=m4sugar script.4s -o script $1],
           m4_default([$2], [0]), [$3], [$4])])
 
 

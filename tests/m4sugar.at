@@ -61,9 +61,7 @@ AT_CHECK_M4SUGAR([-o- -Wnone,bar -f], 0, [],
 [script.4s:2: warning: bar
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,bar,error -f], 1, [], [stderr])
-# The error message contains the path to m4, which might change.
-AT_CHECK([sed 's/^autom4te.*failed/autom4te: m4 failed/' stderr], 0,
+AT_CHECK_M4SUGAR([-o- -Wnone,bar,error -f], 1, [],
 [[script.4s:2: error: bar
 script.4s:2: the top level
 autom4te: m4 failed with exit status: 1
@@ -96,9 +94,8 @@ m4_init
 baz
 ]])
 
-# Expected stderr.
-AT_DATA_M4SUGAR([expout],
-[[script.4s:11: error: m4_require: circular dependency of foo
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:11: error: m4@&t@_require: circular dependency of foo
 script.4s:11: foo is required by...
 script.4s:5: bar is expanded from...
 script.4s:11: bar is required by...
@@ -108,10 +105,6 @@ script.4s:8: baz is expanded from...
 script.4s:11: the top level
 autom4te: m4 failed with exit status: 1
 ]])
-
-AT_CHECK_M4SUGAR([], 1, [], stderr)
-# The error message contains the path to m4, which might change.
-AT_CHECK([sed 's/^autom4te.*failed/autom4te: m4 failed/' stderr], 0, [expout])
 AT_CLEANUP
 
 

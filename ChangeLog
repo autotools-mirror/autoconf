@@ -1,3 +1,15 @@
+2002-10-18  Akim Demaille  <akim@epita.fr>
+
+	* bin/autom4te.in (handle_m4): Pass --fatal-warning to m4, so that
+	missing included files _are_ errors.
+	Thanks to Alexandre Duret-Lutz.
+	* tests/tools.at (autom4te cache): Adjust.
+	* tests/atspecific.m4 (AT_CHECK_AUTOM4TE): New.
+	(AT_CHECK_M4SUGAR): Use it.
+	* tests/m4sugar.at (m4_warn, m4_require: circular dependencies):
+	Adjust.
+	* tests/tools.at (autom4te): Now it does exit 1.
+
 2002-10-17  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/general.m4 (AC_CACHE_SAVE): Don't use cmp.
