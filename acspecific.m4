@@ -120,7 +120,6 @@ Syntax Error], ,
   AC_TEST_CPP([#include <stdio.h>
 Syntax Error], ,CPP=/lib/cpp))
 fi
-CPP="$CPP \$CFLAGS"
 test ".${ac_verbose}" != "." && echo "	setting CPP to $CPP"
 AC_SUBST(CPP)dnl
 ])dnl
@@ -133,7 +132,6 @@ if test -z "$CXXCPP"; then
   CXXCPP="${CXX-c++} -E"
   AC_TEST_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
 fi
-CXXCPP="$CXXCPP \$CXXFLAGS"
 test ".${ac_verbose}" != "." && echo "	setting CXXCPP to $CXXCPP"
 AC_LANG_RESTORE[]dnl
 AC_SUBST(CXXCPP)dnl
