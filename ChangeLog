@@ -1,3 +1,8 @@
+1999-08-05  Ben Elliston  <bje@cygnus.com>
+
+	* config.sub: Accept version number appended to OS name for MiNT.
+	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
+
 1999-08-04  Ben Elliston  <bje@cygnus.com>
 
 	* Makefile.in (INSTALL_SCRIPT): Substitute.

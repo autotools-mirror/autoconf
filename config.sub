@@ -156,6 +156,10 @@ case $os in
 	-psos*)
 		os=-psos
 		;;
+	-mint | -mint[0-9]*)
+		basic_machine=m68k-atari
+		os=-mint
+		;;
 esac
 
 # Decode aliases for certain CPU-COMPANY combinations.
@@ -489,7 +493,7 @@ case $basic_machine in
 	miniframe)
 		basic_machine=m68000-convergent
 		;;
-	*mint | *MiNT)
+	*mint | -mint[0-9]* | *MiNT | *MiNT[0-9]*)
 		basic_machine=m68k-atari
 		os=-mint
 		;;
