@@ -55,8 +55,8 @@ use vars qw(@request);
 
 struct
   (
-   # The key of the cache file.
-   'cache' => "\$",
+   # The key of the cache files.
+   'id' => "\$",
    # True iff %MACRO contains all the macros we want to trace.
    'valid' => "\$",
    # The include path.
@@ -111,8 +111,8 @@ sub register ($%)
 			'source' => $attr{source});
   push @request, $obj;
 
-  # Assign a cache file.
-  $obj->cache ("traces.$#request");
+  # Assign an id for cache file.
+  $obj->id ("$#request");
 
   return $obj;
 }
@@ -236,6 +236,13 @@ use Getopt::Long;
 use File::Basename;
 use IO::File;
 use strict;
+
+# Names of the cache directory, cache directory index, trace cache
+# prefix, and output cache prefix.
+my $cache = "$me.cache";
+my $icache = "$cache/requests";
+my $tcache = "$cache/traces.";
+my $ocache = "$cache/output.";
 
 # The macros to trace mapped to their format, as specified by the
 # user.
@@ -513,18 +520,18 @@ sub handle_m4 ($@)
 			   map { split /,/ } @warning));
 
   # GNU m4 appends when using --error-output.
-  unlink ("$me.cache/" . $req->cache);
+  unlink ($tcache . $req->id);
 
   # Run m4.
   my $command = ("$m4"
 		 . " --define m4_tmpdir=$tmp"
 		 . " --define m4_warnings=$m4_warnings"
 		 . ' --debug=aflq'
-		 . " --error-output=$me.cache/" . $req->cache
+		 . " --error-output=$tcache" . $req->id
 		 . join (' --trace=',   '', sort @macro)
 		 . join (' --include=', '', @include)
 		 . $files
-		 . " >$tmp/output");
+		 . " >$ocache" . $req->id);
   verbose "running: $command";
   system $command;
   if ($?)
@@ -535,13 +542,13 @@ sub handle_m4 ($@)
 }
 
 
-# handle_output ($OUTPUT)
-# -----------------------
+# handle_output ($REQ, $OUTPUT)
+# -----------------------------
 # Run m4 on the input files, perform quadrigraphs substitution, check for
 # forbidden tokens, and save into $OUTPUT.
-sub handle_output ($)
+sub handle_output ($$)
 {
-  my ($output) = @_;
+  my ($req, $output) = @_;
 
   verbose "creating $output";
 
@@ -560,9 +567,9 @@ sub handle_output ($)
     }
 
   my $out = new IO::File (">$output")
-    or die "$me: cannot open $output: $!\n";
-  my $in = new IO::File ("$tmp/output")
-    or die "$me: cannot read $tmp/output: $!\n";
+    or die "$me: cannot create $output: $!\n";
+  my $in = new IO::File ($ocache . $req->id)
+    or die "$me: cannot read $ocache" . $req->id . ": $!\n";
 
   my $separate = 0;
   my $oline = 0;
@@ -832,8 +839,8 @@ EOF
   #
   # Pay attention that the file name might include colons, if under DOS
   # for instance, so we don't use `[^:]+'.
-  my $traces = new IO::File ("$me.cache/" . $req->cache)
-    or die "$me: cannot open $me.cache/" . $req->cache . ": $!\n";
+  my $traces = new IO::File ($tcache . $req->id)
+    or die "$me: cannot open $tcache" . $req->id . ": $!\n";
   while ($_ = $traces->getline)
     {
       # Trace with arguments, as the example above.  We don't try
@@ -867,10 +874,10 @@ EOF
 # $BOOL
 # up_to_date_p ($REQ)
 # -------------------
-# Is the cache file of $REQ up to date?
+# Are the cache files of $REQ up to date?
 # $REQ is `valid' if it corresponds to the request and exists, which
 # does not mean it is up to date.  It is up to date if, in addition,
-# it's younger than its dependencies.
+# its files are younger than its dependencies.
 sub up_to_date_p ($)
 {
   my ($req) = @_;
@@ -878,35 +885,47 @@ sub up_to_date_p ($)
   return 0
     if ! $req->valid;
 
+  my $tfile = $tcache . $req->id;
+  my $ofile = $ocache . $req->id;
+
   # We can't answer properly if the traces are not computed since we
-  # need to know what other files were included.
-  my $file = "$me.cache/" . $req->cache;
+  # need to know what other files were included.  Actually, if any of
+  # the cache files is missing, we are not up to date.
   return 0
-    if ! -f $file;
+    if ! -f $tfile || ! -f $ofile;
+
+  # The youngest of the cache files must be older than the oldest of
+  # the dependencies.
+  my $tmtime = mtime ($tfile);
+  my $omtime = mtime ($ofile);
+  my ($file, $mtime) = ($tmtime < $omtime
+			? ($ofile, $omtime) : ($tfile, $tmtime));
 
   # We depend at least upon the arguments.
   my @dep = @ARGV;
 
   # Files may include others.  We can use traces since we just checked
   # if they are available.
-  # If $FILE is younger than one of its dependencies, it is outdated.
   handle_traces ($req, "$tmp/dependencies",
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
-  my $mtime = mtime ($file);
   my $deps = new IO::File ("$tmp/dependencies");
   push @dep, map { chomp; find_file ($_) } $deps->getlines;
+
+  # If $FILE is younger than one of its dependencies, it is outdated.
+  verbose "$file is the youngest cache file";
   foreach (@dep)
     {
-      verbose "$file depends on $_";
+      verbose "  dependency: $_";
       if ($mtime < mtime ($_))
 	{
-	  verbose "$file depends on $_ which is more recent";
+	  verbose "cache files are outdated: $_ is more recent";
 	  return 0;
 	}
     }
 
   # Well, really, it's fine!
+  verbose "cache files are up to date";
   return 1;
 }
 
@@ -919,21 +938,21 @@ mktmpdir ('t4');
 parse_args;
 
 # We need our cache directory.
-if (! -d "$me.cache")
+if (! -d "$cache")
   {
-    mkdir "$me.cache", 0755
-      or die "$me: cannot create $me.cache: $!\n";
+    mkdir "$cache", 0755
+      or die "$me: cannot create $cache: $!\n";
   }
 
-Request->load ("$me.cache/requests")
-  if -f "$me.cache/requests";
+Request->load ($icache)
+  if -f $icache;
 
 # Add the new trace requests.
 my $req = Request->request ('source' => \@ARGV,
 			    'path'   => \@include,
 			    'macro'  => [keys %trace, @preselect]);
 
-# If $REQ is not up to date, declare it invalid.
+# If $REQ's cache files are not up to date, declare it invalid.
 $req->valid (0)
   if ! up_to_date_p ($req);
 
@@ -945,16 +964,9 @@ if ($verbose)
   }
 
 # We need to run M4 if (i) the users wants it (--force), (ii) $REQ is
-# invalid, or (iii) we are expanding (i.e., not tracing) and the
-# output is older than the cache file (since the later is valid if
-# it's older than the dependencies).  STDOUT is pretty old.
-my $output_mtime = mtime ($output);
-
+# invalid.
 handle_m4 ($req, keys %{$req->macro})
-  if ($force
-      || ! $req->valid
-      || (! %trace && $output_mtime < mtime ("$me.cache/" . $req->cache)));
-
+  if $force || ! $req->valid;
 
 # Now output...
 if (%trace)
@@ -968,15 +980,16 @@ if (%trace)
   }
 else
   {
-    # Actual M4 expansion, only if $output is too old.
-    handle_output ($output)
-      if $output_mtime < mtime ("$me.cache/" . $req->cache);
+    # Actual M4 expansion, only if $output is too old. STDOUT is
+    # pretty old.
+    handle_output ($req, $output)
+      if mtime ($output) < mtime ($ocache . $req->id);
   }
 
 # If all went fine, the cache is valid.
 $req->valid (1)
   if $exit_status == 0;
 
-Request->save ("$me.cache/requests");
+Request->save ($icache);
 
 exit $exit_status;

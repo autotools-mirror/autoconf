@@ -1,5 +1,19 @@
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
+	`autoconf && autoheader' is sped up.  Now, speed up `autoheader &&
+	autoconf', i.e., in addition to caching traces, cache the output.
+
+	* bin/autom4te.in (Request::cache): Rename as...
+	(Request::id): this.
+	($cache, $icache, $tcache, $ocache): New.
+	(&handle_m4): Save M4 output in the cache instead of $tmp.
+	(&handle_output): Adjust.
+	(&up_to_date_p): Check that the output cache is up to date too.
+	(top level): Run `&handle_m4' iff force or the cache is invalid.
+	Run `&handle_output' if the output cache is more recent.
+
+2001-08-04  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in ($force): New.
 	(&parse_args, &print_usage): -f, --force is a new option.
 	(&handle_output): CPP directives might have spaces after `#'.
