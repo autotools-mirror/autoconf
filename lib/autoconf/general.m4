@@ -910,13 +910,13 @@ CFLAGS...), give to `configure' the definition as VAR=VALUE.
 Defaults for the options are specified in brackets.
 
 Configuration:
-  --cache-file=FILE       cache test results in FILE
-  --help                  print this message
-  --no-create             do not create output files
-  --quiet, --silent       do not print \`checking...' messages
-  --version               print the version of autoconf that created configure
+  --cache-file=FILE   cache test results in FILE
+  --help              print this message
+  --no-create         do not create output files
+  --quiet, --silent   do not print \`checking...' messages
+  --version           print the version of autoconf that created configure
 
-Directory and file names:
+Directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
                           [$ac_default_prefix]
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
@@ -946,27 +946,29 @@ Program names:
 EOF
     cat <<\EOF
 Host type:
-  --build=BUILD           configure for building on BUILD [BUILD=HOST]
-  --host=HOST             configure for HOST [guessed]
-  --target=TARGET         configure for TARGET [TARGET=HOST]
+  --build=BUILD      configure for building on BUILD [BUILD=HOST]
+  --host=HOST        configure for HOST [guessed]
+  --target=TARGET    configure for TARGET [TARGET=HOST]
 
-Features and packages:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --x-includes=DIR        X include files are in DIR
-  --x-libraries=DIR       X library files are in DIR
+X features:
+  --x-includes=DIR    X include files are in DIR
+  --x-libraries=DIR   X library files are in DIR
 EOF
 changequote([, ])dnl
 dnl It would be great to sort, unfortunately, since each entry maybe
 dnl split on several lines, it is not as evident as a simple `| sort'.
     test -n "$ac_arg_enable_help" && echo "
---enable options recognized:$ac_arg_enable_help"
+Optional features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE@BKL@=ARG@BKR@  include FEATURE @BKL@ARG=yes@BKR@\
+$ac_arg_enable_help"
     test -n "$ac_arg_with_help" && echo "
---with options recognized:$ac_arg_with_help"
+Optional packages:
+  --with-PACKAGE@BKL@=ARG@BKR@    use PACKAGE @BKL@ARG=yes@BKR@
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)\
+$ac_arg_with_help"
     test -n "$ac_arg_var_help" && echo "
-Some of the influent environment variables:$ac_arg_var_help"
+Some influent environment variables:$ac_arg_var_help"
     exit 0 ;;
 
   -host | --host | --hos | --ho)
@@ -1430,6 +1432,7 @@ AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
 
 dnl ### Remembering env vars for reconfiguring
 
+
 dnl AC_ARG_VAR(VARNAME, DOCUMENTATION)
 dnl ----------------------------------
 dnl Register VARNAME as a variable configure should remember, and
@@ -1692,12 +1695,14 @@ dnl Internal use only.
 AC_DEFUN(AC_CANONICAL_TARGET, [AC_CANONICAL_THING([target])])
 AC_DEFUN(AC_CANONICAL_BUILD, [AC_CANONICAL_THING([build])])
 
-dnl AC_VALIDATE_CACHED_SYSTEM_TUPLE[(cmd)]
+
+dnl AC_VALIDATE_CACHED_SYSTEM_TUPLE([CMD])
 dnl --------------------------------------
-dnl if the cache file is inconsistent with the current host,
+dnl If the cache file is inconsistent with the current host,
 dnl target and build system types, execute CMD or print a default
 dnl error message.
-AC_DEFUN(AC_VALIDATE_CACHED_SYSTEM_TUPLE, [
+AC_DEFUN(AC_VALIDATE_CACHED_SYSTEM_TUPLE,
+[
   AC_REQUIRE([AC_CANONICAL_SYSTEM])dnl
   AC_MSG_CHECKING([cached system tuple])
   if { test x"${ac_cv_host_system_type+set}" = x"set" &&
@@ -3275,26 +3280,32 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
+ifset([AC_LIST_FILES],
+[  --file=FILE@BKL@:TEMPLATE@BKR@
+               Instantiate the configuration file FILE
+])dnl
 ifset([AC_LIST_HEADERS],
 [  --header=FILE@BKL@:TEMPLATE@BKR@
-               Instantiate the configuration header FILE])
-ifset([AC_LIST_HEADERS],
-[  --file=FILE@BKL@:TEMPLATE@BKR@
-               Instantiate the configuration file FILE])
+               Instantiate the configuration header FILE
+])dnl
 
-ifset([AC_LIST_FILES], [Configuration files:
+ifset([AC_LIST_FILES],
+[Configuration files:
 \$config_files
 
 ])dnl
-ifset([AC_LIST_HEADERS], [Configuration headers:
+ifset([AC_LIST_HEADERS],
+[Configuration headers:
 \$config_headers
 
 ])dnl
-ifset([AC_LIST_LINKS], [Links to install:
+ifset([AC_LIST_LINKS],
+[Links to install:
 \$config_links
 
 ])dnl
-ifset([AC_LIST_COMMANDS], [Individual commands to run:
+ifset([AC_LIST_COMMANDS],
+[Individual commands to run:
 \$config_commands
 
 ])dnl
