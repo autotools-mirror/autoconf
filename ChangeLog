@@ -1,3 +1,9 @@
+2002-10-25  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoscan.in (output): Output AC_PREREQ.
+	(%needed_macros): Add AC_PREREQ so that configure.ac without one
+	be reported.
+
 2002-10-23  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Particular Headers): In AC_HEADER_STDBOOL,

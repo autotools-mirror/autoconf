@@ -73,7 +73,10 @@ my %macro = ();
 # $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
 # E.g., $NEEDED_MACROS{AC_FUNC_ALLOC} the list of `file:line' containing
 # `alloca (...)'.
-my %needed_macros = ();
+my %needed_macros =
+  (
+   'AC_PREREQ' => [$me],
+  );
 
 my $configure_scan = 'configure.scan';
 my $log = new Autom4te::XFile ">$me.log";
@@ -98,6 +101,8 @@ preliminary `configure.ac' for that package.
   -V, --version       print version number, then exit
   -v, --verbose       verbosely report processing
   -d, --debug         don't remove temporary files
+
+Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
@@ -496,8 +501,11 @@ sub output ($)
   my $file = new Autom4te::XFile ">$configure_scan";
 
   print $file
-    ("# Process this file with autoconf to produce a configure script.\n"
-     . "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n");
+    ("#                                               -*- Autoconf -*-\n" .
+     "# Process this file with autoconf to produce a configure script.\n" .
+     "\n" .
+     "AC_PREREQ(@VERSION@)\n" .
+     "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n");
   if (defined $cfiles[0])
     {
       print $file "AC_CONFIG_SRCDIR([$cfiles[0]])\n";
