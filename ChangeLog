@@ -1,5 +1,9 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	Version 2.49b.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	Stop playing with FDs in Autotest.
 
 	* tests/atgeneral.m4 (AT_INIT): Set up FD 5.
