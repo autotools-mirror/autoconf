@@ -1,3 +1,11 @@
+2001-08-07  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoconf.in, bin/autoheader.in: --force, -f is a new option.
+
+2001-08-07  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* bin/autom4te.in (handle_output): Typo in quadrigraph substitution.
+
 2001-08-04  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA, AC_FUNC_ERROR_AT_LINE)

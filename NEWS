@@ -4,6 +4,10 @@
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
   some processing.
+** autoconf
+- --force, -f
+** autoheader
+- --force, -f
 
 * Major changes in Autoconf 2.52
 ** Documentation

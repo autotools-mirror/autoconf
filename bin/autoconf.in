@@ -34,6 +34,7 @@ Operation modes:
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
+  -f, --force              consider all the files are obsolete
   -o, --output=FILE        save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
@@ -86,6 +87,7 @@ if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
 debug=false
+force=false
 dir=`echo "$0" | sed -e 's,[^\\/]*$,,'`
 # Trace Autoconf's initialization?
 initialization=false
@@ -117,6 +119,8 @@ while test $# -gt 0 ; do
 
     --debug | -d )
        debug=:; shift ;;
+    --force | -f )
+       force=:; shift ;;
     --verbose | -v )
        verbose=echo
        shift;;
@@ -231,6 +235,7 @@ done
 run_autom4te="$autom4te "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`\
+`$force && echo "--force "`\
 "--include $autoconf_dir --include $localdir "\
 "--warning syntax,$warnings "\
 "$preselect"\

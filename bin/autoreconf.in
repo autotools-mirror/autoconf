@@ -36,7 +36,7 @@ Operation modes:
   -V, --version   print version number, then exit
   -v, --verbose   verbosely report processing
   -d, --debug     don't remove temporary files
-  -f, --force     consider every files are obsolete
+  -f, --force     consider all the files are obsolete
   -i, --install   copy missing auxiliary files
   -s, --symlink   instead of copying, install symbolic links
 
@@ -229,6 +229,11 @@ autoconf="$autoconf -l $localdir"
 autoheader="$autoheader -l $localdir"
 # --force
 $force || automake="$automake --no-force"
+$force &&
+{
+  autoconf="$autoconf --force"
+  autoheader="$autoheader --force"
+}
 # --verbose
 autoconf="$autoconf `$verbose --verbose`"
 autoheader="$autoheader `$verbose --verbose`"

@@ -1126,6 +1126,10 @@ Report processing steps.
 @itemx -d
 Don't remove the temporary files.
 
+@item --force
+@itemx -f
+Remake @file{configure} even if newer than its input files.
+
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
@@ -2392,13 +2396,17 @@ Print a summary of the command line options and exit.
 @itemx -V
 Print the version number of Autoconf and exit.
 
+@item --verbose
+@itemx -v
+Report processing steps.
+
 @item --debug
 @itemx -d
 Don't remove the temporary files.
 
-@item --verbose
-@itemx -v
-Report processing steps.
+@item --force
+@itemx -f
+Remake the template file even if newer than its input files.
 
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}

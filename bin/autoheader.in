@@ -34,6 +34,7 @@ or else \`configure.in'.
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
   -d, --debug              don't remove temporary files
+  -f, --force              consider all the files are obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
 Warning categories include:
@@ -89,6 +90,7 @@ for autoconf in "$AUTOCONF" \
 done
 debug=false
 localdir=.
+force=false
 status=0
 tmp=
 verbose=:
@@ -108,6 +110,8 @@ while test $# -gt 0 ; do
 
     --debug | -d )
        debug=:; shift ;;
+    --force | -f )
+       force=:; shift ;;
     --verbose | -v )
        verbose=echo
        shift;;
@@ -356,7 +360,9 @@ fi
 if test $status = 0; then
   if test $# = 0; then
     # Output is a file
-    if test -f $config_h_in && cmp -s $tmp/config.hin $config_h_in; then
+    if test -f $config_h_in &&
+        cmp -s $tmp/config.hin $config_h_in &&
+        test "$force" != :; then
       # File didn't change, so don't update its mod time.
       echo "$me: $config_h_in is unchanged" >&2
     else
