@@ -1,3 +1,10 @@
+Thu Jun 22 22:33:23 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acspecific.m4 (AC_PROG_INSTALL): Don't cache a shell script path.
+
+	* acgeneral.m4 (AC_CHECK_LIB): Allow lib name to contain a . or /,
+	by fixing the cache variable name.
+
 Wed Jun 14 23:07:20 1995  David J. MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
 	* Version 2.4.

@@ -1222,13 +1222,17 @@ dnl AC_CHECK_LIB(LIBRARY, FUNCTION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
-AC_CACHE_VAL(ac_cv_lib_$1,
+changequote(, )dnl
+ac_lib_var=`echo $1 | tr '[./]' '[__]'`
+changequote([, ])dnl
+AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
-AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$1=yes", eval "ac_cv_lib_$1=no")dnl
+AC_TRY_LINK(, [$2()], eval "ac_cv_lib_$ac_lib_var=yes",
+  eval "ac_cv_lib_$ac_lib_var=no")dnl
 LIBS="$ac_save_LIBS"
 ])dnl
-if eval "test \"`echo '$ac_cv_lib_'$1`\" = yes"; then
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   AC_MSG_RESULT(yes)
   ifelse([$3], , 
 [changequote(, )dnl

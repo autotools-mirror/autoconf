@@ -384,7 +384,7 @@ AC_CACHE_VAL(ac_cv_path_install,
     /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
-      for ac_prog in ginstall installbsd scoinst install; do
+      for ac_prog in ginstall installbsd scoinst Install; do
         if test -f $ac_dir/$ac_prog; then
 	  if test $ac_prog = install &&
             grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
@@ -401,12 +401,16 @@ AC_CACHE_VAL(ac_cv_path_install,
     esac
   done
   IFS="$ac_save_ifs"
-  # As a last resort, use the slow shell script.
-dnl FIXME We probably shouldn't cache a path within a source directory,
-dnl because that will break other packages using the cache if
-dnl that directory is removed.
-  test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
-  INSTALL="$ac_cv_path_install"
+])dnl
+  if test "${ac_cv_path_install+set}" = set; then
+    INSTALL="$ac_cv_path_install"
+  else
+    # As a last resort, use the slow shell script.  We don't cache a
+    # path for INSTALL within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the path is relative.
+    INSTALL="$ac_install_sh"
+  fi
 fi
 dnl We do special magic for INSTALL instead of AC_SUBST, to get
 dnl relative paths right. 
