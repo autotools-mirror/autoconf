@@ -1,3 +1,18 @@
+2000-06-30  Alexandre Oliva  <oliva@lsd.ic.unicamp.br>
+
+	Re-enable the old behavior of --host and --build.
+
+	* acgeneral.m4 (build_alias): Set to host_alias if --build is not
+	given but --host is, and enable cross-compile auto-detection.  If
+	both are, and are different, enable cross compilation.
+	(AC_CANONICAL_HOST): Adjust help message.
+	(cross_compiling): Enclose in quotes when testing.
+	* aclang.m4 (_AC_LANG_COMPILER_WORKS): If cross_compiling is
+	maybe, set it to yes or no depending on the result of the
+	execution test.
+	* doc/autoconf.texi: Document the change.
+	* doc/install.texi: Likewise.
+
 2000-06-27  Jim Meyering  <meyering@lucent.com>
 
 	* acspecific.m4 (_AC_LIBOBJ_GETLOADAVG): Put quotes around use of

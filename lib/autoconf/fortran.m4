@@ -472,11 +472,17 @@ define([_AC_LANG_COMPILER_WORKS],
 [AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 AC_LINK_IFELSE([AC_LANG_PROGRAM()],
 [# If not cross compiling, check that we can run a simple program.
-if test $cross_compiling != yes; then
-  if AC_TRY_COMMAND(./conftest); then :; else
+if test "$cross_compiling" != yes; then
+  if AC_TRY_COMMAND(./conftest); then
+    cross_compiling=no
+  else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
+    if test "$cross_compiling" = maybe; then
+      cross_compiling=yes
+    else
+      AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
 To enable cross compilation, use `--host'.])
+    fi
   fi
 fi
 AC_MSG_RESULT(yes)],

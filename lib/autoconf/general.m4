@@ -1329,10 +1329,8 @@ do
     ac_init_help=short ;;
 
   -host | --host | --hos | --ho)
-    cross_compiling=yes
     ac_prev=host_alias ;;
   -host=* | --host=* | --hos=* | --ho=*)
-    cross_compiling=yes
     host_alias=$ac_optarg ;;
 
   -includedir | --includedir | --includedi | --included | --include \
@@ -1531,6 +1529,7 @@ Try `configure --help' for more information.])
     export $ac_envvar ;;
 
   *)
+    # FIXME: should be removed in autoconf 3.0.
     AC_MSG_WARN([you should use --build, --host, --target])
     expr "x$ac_option" : "[.*[^a-zA-Z0-9.]]" >/dev/null &&
       AC_MSG_WARN([invalid host type: $ac_option])
@@ -1563,6 +1562,17 @@ done
 build=$build_alias
 host=$host_alias
 target=$target_alias
+
+# FIXME: should be removed in autoconf 3.0.
+if test "x$host_alias" != x; then
+  if test "x$build_alias" = x; then
+    cross_compiling=maybe
+    AC_MSG_WARN([Did you mean --build instead of --host?  Assuming you did.])
+    AC_MSG_WARN([If not, please specify both --build and --host.])
+  elif test "x$build_alias" != "x$host_alias"; then
+    cross_compiling=yes
+  fi
+fi
 
 ac_tool_prefix=
 test -n "$host_alias" && ac_tool_prefix=$host_alias-
@@ -2100,7 +2110,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 #    configure --host=HOST --target=TARGET --build=BUILD
 #
 # The rules are:
-# 1. Build defaults to the current host, as determined by config.guess.
+# 1. Build defaults to the current platform, as determined by config.guess.
 # 2. Host defaults to build.
 # 3. Target defaults to host.
 
@@ -2149,7 +2159,7 @@ _AC_CANONICAL_SPLIT(build)
 AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 [AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_DIVERT([HELP_CANON],
-[[  --host=HOST       cross-compile to build programs running on HOST [BUILD]]])dnl
+[[  --host=HOST       build programs to run on HOST [BUILD]]])dnl
 AC_CACHE_CHECK([host system type], [ac_cv_host],
 [ac_cv_host_alias=$host_alias
 test -z "$ac_cv_host_alias" &&
@@ -3234,7 +3244,7 @@ rm -f conftest*[]dnl
 #            [ACTION-IF-CROSS-COMPILING])
 # --------------------------------------------------------
 AC_DEFUN([AC_TRY_RUN],
-[if test $cross_compiling = yes; then
+[if test "$cross_compiling" = yes; then
   m4_default([$4],
    [AC_DIAGNOSE([cross],
             [AC_TRY_RUN called without default to allow cross compiling])dnl
@@ -3296,11 +3306,10 @@ AC_DEFUN([AC_CHECK_FILE],
 [AC_DIAGNOSE([cross],
              [Cannot check for file existence when cross compiling])dnl
 AC_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
-dnl FIXME: why was there this line? AC_REQUIRE([AC_PROG_CC])dnl
 AC_CACHE_CHECK([for $1], ac_File,
-[test $cross_compiling = yes &&
+[test "$cross_compiling" = yes &&
   AC_MSG_ERROR([Cannot check for file existence when cross compiling])
-if test -r "[$1]"; then
+if test -r "$1"; then
   AC_VAR_SET(ac_File, yes)
 else
   AC_VAR_SET(ac_File, no)
