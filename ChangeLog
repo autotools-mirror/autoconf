@@ -1,5 +1,10 @@
 2000-10-13  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_LINKER_OPTION): Ahem, err, use `$' when
+	consulting a variable...
+
+2000-10-13  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Typos in comments spotted by Pavel.
 
 2000-10-12  Pavel Roskin  <proski@gnu.org>
