@@ -1,5 +1,9 @@
 2002-07-09  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Properly set the ``header'' part.
+
+2002-07-09  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Systemology): Some about Darwin.
 
 2002-07-09  Alexandre Duret-Lutz  <duret_g@epita.fr>
