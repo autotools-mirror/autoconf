@@ -1,7 +1,7 @@
 dnl Parameterized macros.
 dnl Requires GNU m4.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 93, 94, 95, 96, 1998 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -1130,8 +1130,7 @@ define(AC_CACHE_VAL,
 [dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
-dnl the '' avoids an AIX 4.1 sh bug ("invalid expansion").
-if eval "test \"`echo '$''{'$1'+set}'`\" = set"; then
+if eval "test \"\${$1+set}\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&AC_FD_MSG
 else
   $2

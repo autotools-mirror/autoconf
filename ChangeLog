@@ -1,3 +1,9 @@
+1999-02-19  Felix Lee  <flee@cygnus.com>
+
+	* acgeneral.m4 (AC_CACHE_VAL): Don't need backticks. This is a
+	performance enhancement for about a 5% reduction in the runtime of
+	the generated configure script.
+
 1999-02-18  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Detect NEC EWS4800. Contributed by Koji Arai
