@@ -8603,7 +8603,7 @@ as @command{autoconf} uses a .in suffix for template files.
 This is perfectly OK on Unices:
 
 @example
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([source.c foo.bar])
 AC_OUTPUT
 @end example
@@ -8614,7 +8614,7 @@ but it causes problems on @sc{dos}, as it requires @samp{config.h.in},
 to @sc{dos}-based environments, you should use this instead:
 
 @example
-AC_CONFIG_HEADER(config.h:config.hin)
+AC_CONFIG_HEADERS([config.h:config.hin])
 AC_CONFIG_FILES([source.c:source.cin foo.bar:foobar.in])
 AC_OUTPUT
 @end example
@@ -12676,7 +12676,7 @@ Now it just calls @code{AC_FUNC_STRFTIME} instead.
 
 @defmac AC_ST_BLKSIZE
 @acindex ST_BLKSIZE
-@code{AC_STRUCT_ST_BLKSIZE}
+@code{AC_CHECK_MEMBERS}
 @end defmac
 
 @defmac AC_ST_BLOCKS
@@ -12686,7 +12686,7 @@ Now it just calls @code{AC_FUNC_STRFTIME} instead.
 
 @defmac AC_ST_RDEV
 @acindex ST_RDEV
-@code{AC_STRUCT_ST_RDEV}
+@code{AC_CHECK_MEMBERS}
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS

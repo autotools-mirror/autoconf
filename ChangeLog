@@ -1,5 +1,11 @@
 2002-10-22  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Use AC_CONFIG_HEADERS in examples.
+	(AC_ST_BLKSIZE, AC_ST_RDEV): Directly point to AC_CHECK_MEMBERS.
+	From Art Haas.
+
+2002-10-22  Akim Demaille  <akim@epita.fr>
+
 	Restore the 2002-10-11  Akim Demaille  <akim@epita.fr> patch:
 
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL)
