@@ -19,8 +19,8 @@
 usage="\
 Usage: autoreconf [--help] [--macrodir=dir] [--verbose] [--version]
        [directory...]"
-verbose=
-show_version=
+verbose=no
+show_version=no
 
 test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
 export AC_MACRODIR # Pass it down to autoconf and autoheader.
@@ -38,9 +38,9 @@ while test $# -gt 0; do
     AC_MACRODIR="$1"
     shift ;;
   --verbose | --verbos | --verbo | --verb)
-    verbose=t; shift ;;
+    verbose=yes; shift ;;
   --version | --versio | --versi | --vers)
-    show_version=t; shift ;;
+    show_version=yes; shift ;;
   --)     # Stop option processing.
     shift; break ;;
   -*) echo "$usage" 1>&2; exit 1 ;;
@@ -48,7 +48,7 @@ while test $# -gt 0; do
   esac
 done
 
-if test -n "$show_version"; then
+if test $show_version = yes; then
   version=`sed -n 's/define.AC_ACVERSION.[ 	]*\([0-9.]*\).*/\1/p' \
     $AC_MACRODIR/acgeneral.m4`
   echo "Autoconf version $version"
@@ -64,10 +64,11 @@ while read confin; do
   (
   dir=`echo $confin|sed 's%/[^/][^/]*$%%'`
   cd $dir || exit 1
-  test -n "$verbose" && echo running autoconf in $dir
+  test $verbose = yes && echo running autoconf in $dir
   autoconf
+  # FIXME maybe we should have an option to run shindent here.
   if grep AC_CONFIG_HEADER configure.in > /dev/null; then
-    test -n "$verbose" && echo running autoheader in $dir
+    test $verbose = yes && echo running autoheader in $dir
     autoheader
   fi
   )

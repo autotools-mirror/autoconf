@@ -7,16 +7,19 @@ Major changes in release 2.0:
 * Uses optional shell scripts $exec_prefix/lib/config.site and
   $prefix/lib/config.site to perform site or system specific initializations. 
 * configure saves compiler output to ./config.log for debugging.
+* Has the beginnings of a DejaGnu test suite.
 
 ** New macros:
 * AC_CACHE_VAL to share results of tests between configure runs.
 * AC_CONFIG_AUX_DIR, AC_CANONICAL_SYSTEM, AC_LINK_FILES to
   support deciding unguessable features based on the host and target types.
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
+* AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
 * AC_TEST_LINK, which obsoletes AC_COMPILE_CHECK.
 * AC_TEST_RUN, which obsoletes AC_TEST_PROGRAM.
 * AC_PREFIX_PROGRAM, which obsoletes AC_PREFIX.
 * AC_ARG_ENABLE and AC_ARG_WITH, which obsolete AC_ENABLE and AC_WITH.
+* AC_SUBST_FILE, to insert one file into another.
 
 ** Changed macros:
 * AC_OUTPUT adds the "automatically generated" comment after "#!" lines, 
@@ -34,6 +37,10 @@ Major changes in release 2.0:
   programs, and header files.
 * autoreconf to recursively remake configure and configuration header
   files in a source tree.
+* shindent to produce consistent indentation in shell scripts, such as
+  configure. 
+* ifnames to list the symbols used in #if and #ifdef directives in a
+  source tree.
 
 Major changes in release 1.11:
 

@@ -29,10 +29,10 @@ dnl
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.93)dnl
+define(AC_ACVERSION, 1.94)dnl
 dnl This is defined by the --version option of the autoconf script.
-ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
-)m4exit(0)])dnl
+ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
+m4exit(0)])dnl
 dnl
 dnl
 dnl ### Controlling Autoconf operation
@@ -71,7 +71,7 @@ define(AC_PARSEARGS,
 [AC_BEFORE([$0], [AC_ARG_ENABLE])dnl
 AC_BEFORE([$0], [AC_ARG_WITH])dnl
 # Save the original args to write them into config.status later.
-configure_args="[$]*"
+configure_args="[$]@"
 
 # Omit some internal, obsolete, or unimplemented options to make the
 # list less imposing.
@@ -123,6 +123,8 @@ target=NONE
 verbose=
 x_includes=
 x_libraries=
+
+subdirs=
 
 ac_prev=
 for ac_option
@@ -395,8 +397,9 @@ running configure, to aid debugging if configure makes a mistake.
 " 1>&6
 
 # Save the original args if we used an alternate arg parser.
-ac_configure_temp="${configure_args-[$]*}"
+ac_configure_temp="${configure_args-[$]@}"
 # Strip out --no-create and --norecursion so they do not pile up.
+# Also quote any args containing spaces.
 configure_args=
 for ac_arg in $ac_configure_temp; do
   case "$ac_arg" in
@@ -404,6 +407,9 @@ for ac_arg in $ac_configure_temp; do
   | --no-cr | --no-c) ;;
   -norecursion | --norecursion | --norecursio | --norecursi \
   | --norecurs | --norecur | --norecu | --norec | --nore | --nor) ;;
+changequote(,)dnl
+  *[" 	"]*) configure_args="$configure_args '$ac_arg'" ;;
+changequote([,])dnl
   *) configure_args="$configure_args $ac_arg" ;;
   esac
 done
@@ -448,6 +454,8 @@ if test ! -r $srcdir/$ac_unique_file; then
   fi
 fi
 
+ifdef([AC_LIST_SUBDIRS],[subdirs="AC_LIST_SUBDIRS"
+AC_SUBST(subdirs)])dnl
 ifdef([AC_LIST_PREFIX_PROGRAM], [AC_PREFIX(AC_LIST_PREFIX_PROGRAM)])dnl
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
@@ -630,7 +638,7 @@ define(AC_CANONICAL_SYSTEM,
 #    as determined by config.guess.
 # 4. Target defaults to nonopt.
 # 5. If nonopt is not specified, then target defaults to host.
-# 6. build defaults to empty.
+# 6. build defaults to empty (but implicitly to host).
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
@@ -675,6 +683,9 @@ host_os=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
 test -n "$host" && AC_VERBOSE(setting host to $host)
 AC_SUBST(host)dnl
 AC_SUBST(host_alias)dnl
+AC_SUBST(host_cpu)dnl
+AC_SUBST(host_vendor)dnl
+AC_SUBST(host_os)dnl
 ])dnl
 dnl
 define(AC_CANONICAL_TARGET,
@@ -695,6 +706,9 @@ target_os=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
 test -n "$target" && AC_VERBOSE(setting target to $target)
 AC_SUBST(target)dnl
 AC_SUBST(target_alias)dnl
+AC_SUBST(target_cpu)dnl
+AC_SUBST(target_vendor)dnl
+AC_SUBST(target_os)dnl
 ])dnl
 dnl
 define(AC_CANONICAL_BUILD,
@@ -712,6 +726,9 @@ esac
 test -n "$build" && AC_VERBOSE(setting build to $build)
 AC_SUBST(build)dnl
 AC_SUBST(build_alias)dnl
+AC_SUBST(build_cpu)dnl
+AC_SUBST(build_vendor)dnl
+AC_SUBST(build_os)dnl
 ])dnl
 dnl
 dnl Link each of the existing files in $2 to the corresponding
@@ -772,7 +789,8 @@ cat > $cache_file <<\CEOF
 CEOF
 changequote(,)dnl
 dnl Allow a site initialization script to override cache values.
-set | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
+# Ultrix sh set writes to stderr and can't be redirected directly.
+(set) 2>&1 | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
 changequote([,])dnl
 fi])dnl
 dnl
@@ -781,7 +799,7 @@ dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 define(AC_CACHE_VAL,
 [dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
-dnl if test "${$1+set}" = set; then 
+dnl if test "${$1+set}" = set; then
 if eval "test \"`echo '${'$1'+set}'`\" = set"; then
 dnl This verbose message is just for testing the caching code.
   AC_VERBOSE(using cached value for $1)
@@ -888,6 +906,27 @@ divert(AC_DIVERSION_SED)dnl
 s%@$1@%[$]$1%g
 divert(AC_DIVERSION_VAR)dnl
 $1='[$]$1'
+divert(AC_DIVERSION_NORMAL)dnl
+])])dnl
+dnl
+dnl AC_SUBST_FILE(VARIABLE, FILE)
+define(AC_SUBST_FILE,
+[if test -f $2; then
+  AC_VERBOSE(using $2 for $1)
+  AC_INSERT_FILE($1, $2)
+elif test -f ${srcdir}/$2; then
+  AC_VERBOSE(using ${srcdir}/$2 for $1)
+  AC_INSERT_FILE($1, ${srcdir}/$2)
+fi
+])dnl
+define(AC_INSERT_FILE,
+[ifdef([AC_SUBST_$1], ,
+[define([AC_SUBST_$1], )dnl
+divert(AC_DIVERSION_SED)dnl
+/@$1@/r [$]$1
+s%@$1@%%g
+divert(AC_DIVERSION_VAR)dnl
+$1='$2'
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
 dnl
@@ -1051,7 +1090,8 @@ done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
 dnl
-dnl AC_HAVE_LIBRARY(LIBRARY [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl AC_HAVE_LIBRARY(LIBRARY [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl                 [, OTHER-LIBRARIES]]])
 define(AC_HAVE_LIBRARY, [dnl
 changequote(/,/)dnl
 define(/AC_LIB_NAME/, dnl
@@ -1061,23 +1101,21 @@ changequote([,])dnl
 AC_CHECKING([for -l[]AC_LIB_NAME])
 AC_CACHE_VAL(AC_CV_NAME,
 [ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-AC_TEST_LINK( , [main();],
-AC_CV_NAME=yes, AC_CV_NAME=no)dnl
+LIBS="${LIBS} -l[]AC_LIB_NAME[] $4"
+AC_TEST_LINK( , [main();], AC_CV_NAME=yes, AC_CV_NAME=no)dnl
 LIBS="${ac_save_LIBS}"
 ])dnl
 if test "${AC_CV_NAME}" = yes; then
-ifelse($#, 1, [dnl
-   AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
-   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-undefine(AC_LIB_NAME)dnl
-undefine(AC_CV_NAME)dnl
-], [dnl
-   :; $2
-else
-   :; $3
+  ifelse([$2], , 
+[AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
+  LIBS="${LIBS} -l[]AC_LIB_NAME[]"
+], [$2])
+ifelse([$3], , , [else
+  $3
 ])dnl
 fi
+undefine(AC_LIB_NAME)dnl
+undefine(AC_CV_NAME)dnl
 ])dnl
 dnl
 dnl
@@ -1133,7 +1171,9 @@ cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$1]
 int main() { return 0; }
-int t() { [$2]; return 0; }
+int t() {
+[$2]
+; return 0; }
 EOF
 if eval $ac_compile; then
   ifelse([$3], , :, [rm -rf conftest*
@@ -1274,8 +1314,8 @@ AC_SUBST(LIBOBJS)dnl
 ])dnl
 dnl
 dnl AC_SIZEOF_TYPE(TYPE)
-define(AC_SIZEOF_TYPE, [dnl
-changequote(<<,>>)dnl
+define(AC_SIZEOF_TYPE,
+[changequote(<<,>>)dnl
 dnl The name to #define.
 define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
 dnl The cache variable name.
@@ -1294,6 +1334,16 @@ main()
 AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine(AC_TYPE_NAME)dnl
 undefine(AC_CV_NAME)dnl
+])dnl
+dnl
+dnl AC_CHECK_TYPE(TYPE, DEFAULT)
+define(AC_CHECK_TYPE,
+[AC_CHECKING(for $1 in sys/types.h)
+AC_CACHE_VAL(ac_cv_type_$1,
+[AC_HEADER_EGREP($1, sys/types.h, ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
+if test $ac_cv_type_$1 = no; then
+  AC_DEFINE($1, $2)
+fi
 ])dnl
 dnl
 dnl
@@ -1462,8 +1512,8 @@ dnl
 dnl Create the header files listed in $1.
 dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
-define(AC_OUTPUT_HEADER,[dnl
-changequote(<<,>>)dnl
+define(AC_OUTPUT_HEADER,
+[changequote(<<,>>)dnl
 
 # These sed commands are put into ac_sed_defs when defining a macro.
 # They are broken into pieces to make the sed script easier to manage.
@@ -1595,7 +1645,7 @@ dnl
 define(AC_OUTPUT_SUBDIRS,
 [if test -z "${norecursion}"; then
 
-  # Remove --cache-file arguments so they do not pile up.
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
   for ac_arg in $configure_args; do
@@ -1610,6 +1660,13 @@ define(AC_OUTPUT_SUBDIRS,
     -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
     | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
       ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+changequote(,)dnl
+    *[" 	"]*) ac_sub_configure_args="$ac_sub_configure_args '$ac_arg'" ;;
+changequote([,])dnl
     *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
     esac
   done
@@ -1669,8 +1726,8 @@ changequote([,])dnl
 
     # The recursion is here.
     if test -n "${ac_sub_configure}"; then
-      AC_VERBOSE([running ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file])
-      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file
+      AC_VERBOSE([running ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file] --srcdir=${ac_sub_srcdir})
+      if ${CONFIG_SHELL-/bin/sh} ${ac_sub_configure} ${ac_sub_configure_args} --cache-file=$ac_sub_cache_file --srcdir=${ac_sub_srcdir}
       then :
       else
         AC_ERROR(${ac_sub_configure} failed for ${ac_config_dir})

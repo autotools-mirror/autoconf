@@ -27,7 +27,7 @@ MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 M4 = @M4@
 
-PROGS = autoconf autoheader autoreconf @PROGS@
+PROGS = autoconf autoheader autoreconf ifnames @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
@@ -54,9 +54,13 @@ DISTDEP = info Makefile
 DISTFILES = COPYING ChangeLog INSTALL Makefile.in NEWS README \
 	acconfig.h acfunctions acgeneral.m4 acheaders acidentifiers \
 	acmakevars acprograms acspecific.m4 autoconf.info* \
-	autoconf.sh autoconf.texi autoheader.sh autoreconf.sh autoscan.pl \
+	autoconf.sh autoconf.texi install.texi \
+	autoheader.sh autoreconf.sh autoscan.pl shindent.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
 	install.sh mkinstalldirs texinfo.tex \
+	testsuite/Makefile.in testsuite/config/*.exp \
+	testsuite/lib/*.exp \
+	testsuite/autoconf.0/*.exp \
 	standards.texi make-stds.texi standards.info*
 
 editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
@@ -76,14 +80,26 @@ autoreconf: autoreconf.sh
 	rm -f $@ $@.tmp
 	$(editsh) $(srcdir)/autoreconf.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
+shindent: shindent.sh
+	rm -f $@ $@.tmp
+	$(editsh) $(srcdir)/shindent.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
+
+ifnames: ifnames.sh
+	rm -f $@ $@.tmp
+	$(editsh) $(srcdir)/ifnames.sh > $@.tmp && mv $@.tmp $@ && chmod +x $@
+
 autoscan: autoscan.pl
 	rm -f $@ $@.tmp
 	$(editpl) $(srcdir)/autoscan.pl > $@.tmp && mv $@.tmp $@ && chmod +x $@
 
-info: autoconf.info @standards_info@
+info: autoconf.info @standards_info@ INSTALL
 
-autoconf.info: autoconf.texi
+autoconf.info: autoconf.texi install.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --output=$@
+
+INSTALL: install.texi
+	$(MAKEINFO) -I$(srcdir) $(srcdir)/install.texi --output=$@ \
+	--no-headers --no-validate
 
 standards.info: standards.texi make-stds.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --output=$@
@@ -96,8 +112,11 @@ autoconf.dvi: autoconf.texi
 standards.dvi: standards.texi make-stds.texi
 	$(TEXI2DVI) $(srcdir)/standards.texi
 
-check:
-installcheck:
+check: all
+	rootme=`pwd`; cd testsuite && ${MAKE} $@ AUTOCONF=$$rootme/autoconf \
+	AUTOCONFFLAGS="-m $$rootme"
+installcheck: all install
+	cd testsuite && ${MAKE} AUTOCONF=${bindir}/autoconf $@
 
 installdirs:
 	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(acdatadir)
@@ -107,11 +126,14 @@ install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs install-info
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
 	$(INSTALL_PROGRAM) autoreconf $(bindir)/autoreconf
+	$(INSTALL_PROGRAM) ifnames $(bindir)/ifnames
 	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(acdatadir)/acgeneral.m4
 	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(acdatadir)/acspecific.m4
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(acdatadir)/acconfig.h
 	-if test -f autoscan; then \
 	$(INSTALL_PROGRAM) autoscan $(bindir)/autoscan; \
+	-if test -f shindent; then \
+	$(INSTALL_PROGRAM) shindent $(bindir)/shindent; \
 	$(INSTALL_DATA) $(srcdir)/acfunctions $(acdatadir)/acfunctions; \
 	$(INSTALL_DATA) $(srcdir)/acheaders $(acdatadir)/acheaders; \
 	$(INSTALL_DATA) $(srcdir)/acidentifiers $(acdatadir)/acidentifiers; \
@@ -131,7 +153,7 @@ install-info: info installdirs
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader $(bindir)/autoscan 
-	rm -f $(bindir)/autoreconf
+	rm -f $(bindir)/autoreconf $(bindir)/shindent $(bindir)/ifnames
 	rm -fr $(acdatadir)
 	cd $(infodir); rm -f autoconf.info*
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
@@ -149,7 +171,7 @@ config.status: configure
 	./config.status --recheck
 
 clean:
-	rm -f autoconf autoheader autoscan autoreconf *.tmp
+	rm -f autoconf autoheader autoscan autoreconf shindent ifnames *.tmp
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs *.ma *.mas
 
@@ -159,7 +181,7 @@ distclean: clean
 	rm -f Makefile config.status config.cache config.log
 
 realclean: distclean
-	rm -f TAGS *.info*
+	rm -f TAGS *.info* INSTALL
 
 TAGS:
 	etags ${srcdir}/*.m4 ${srcdir}/*.sh ${srcdir}/[a-z]*.in ${srcdir}/*.texi
@@ -169,10 +191,11 @@ dist: $(DISTDEP)
 	distname=`sed -e '/define(AC_ACVERSION,/!d' \
 	-e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' -e q acgeneral.m4`; \
 	rm -fr $$distname; \
-	mkdir $$distname; \
+	mkdir $$distname $$distname/testsuite $$distname/testsuite/config; \
+	mkdir $$distname/testsuite/lib $$distname/testsuite/autoconf.0; \
 	for file in $(DISTFILES); do \
-	  ln $$file $$distname \
-	  || { echo copying $$file instead; cp -p $$file $$distname;}; \
+	  ln $$file $$distname/$$file \
+	  || { echo copying $$file instead; cp -p $$file $$distname/$$file;}; \
 	done; \
 	chmod -R a+rX $$distname; \
 	tar -chz -f $$distname.tar.gz $$distname; \

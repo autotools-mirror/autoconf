@@ -43,26 +43,26 @@ tmpout=/tmp/acout.$$
 
 print_version=
 while test $# -gt 0 ; do
-   case "z${1}" in 
-      z-h | z--help | z--h* )
+   case "${1}" in 
+      -h | --help | --h* )
          echo "${usage}" 1>&2; exit 0 ;;
-      z--macrodir=* | z--m*=* )
+      --macrodir=* | --m*=* )
          AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
-      z-m | z--macrodir | z--m* ) 
+      -m | --macrodir | --m* ) 
          shift
          test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
          AC_MACRODIR="${1}"
          shift ;;
-      z-v | z--version | z--v* )
+      -v | --version | --v* )
          print_version="-DAC_PRINT_VERSION"
-         infile=/dev/null tmpout=/dev/null
+         infile=/dev/null
          shift ;;
-      z-- )     # Stop option processing
+      -- )     # Stop option processing
         shift; break ;;
-      z- )	# Use stdin as input.
+      - )	# Use stdin as input.
         break ;;
-      z-* )
+      -* )
         echo "${usage}" 1>&2; exit 1 ;;
       * )
         break ;;
@@ -82,7 +82,7 @@ if test -z "$print_version"; then
     tmpin=/tmp/acin.$$
     infile=$tmpin
     cat > $infile
-  elif test ! -s "${infile}"; then
+  elif test ! -r "${infile}"; then
     echo "autoconf: ${infile}: No such file or directory" >&2
     exit 1
   fi
@@ -96,7 +96,11 @@ MACROFILES="${print_version} ${MACROFILES}"
 
 $M4 $MACROFILES $infile > $tmpout || { st=$?; rm -f $tmpin $tmpout; exit $st; }
 
-test -n "$print_version" && exit 0
+if test -n "$print_version"; then
+  cat $tmpout
+  rm -f $tmpout
+  exit 0
+fi
 
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do

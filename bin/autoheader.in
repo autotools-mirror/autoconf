@@ -191,7 +191,7 @@ done
 for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
   sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
   echo "
-/* Define if you have ${func}.  */
+/* Define if you have the ${func} function.  */
 #undef HAVE_${sym}"
 done
 

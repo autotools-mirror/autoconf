@@ -39,10 +39,13 @@ exit 0;
 # Process any command line arguments.
 sub parse_args
 {
-    local ($usage) = "Usage: $0 [--help] [--verbose] [--version] [srcdir]\n"; 
+    local ($usage) = \
+	"Usage: $0 [--macrodir=dir] [--help] [--verbose] [--version] [srcdir]\n"; 
 
     foreach $_ (@ARGV) {
-	if (/^--h/) {
+	if (/^--m[a-z]*=(.*)/) {
+	    $datadir = $1;
+	} elsif (/^--h/) {
 	    print "$usage";
 	    exit 0;
 	} elsif (/^--verb/) {

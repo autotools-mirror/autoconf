@@ -17,12 +17,20 @@ else
   AC_VERBOSE(autoscan will not be built since perl is not found)
 fi
 
+AC_PROGRAM_CHECK(BASH, bash, no-bash)
+if test "$BASH" != no-bash; then
+  PROGS="$PROGS shindent"
+else
+  AC_VERBOSE(shindent will not be built since bash is not found)
+fi
+
 AC_PROG_INSTALL
 
 # Work with the GNU or Cygnus source tree layout.
 if test -f $srcdir/standards.texi; then
   standards_info=standards.info standards_dvi=standards.dvi
 fi
-AC_SUBST(standards_info)AC_SUBST(standards_dvi)dnl
+AC_SUBST(standards_info)dnl
+AC_SUBST(standards_dvi)dnl
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT(Makefile testsuite/Makefile)
