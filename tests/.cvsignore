@@ -4,6 +4,8 @@ expr
 *.log
 testsuite testsuite.tmp testsuite.dir
 autom4te.cache
+atconfig
+atlocal
 package.m4
 ifnames
 autoupdate
