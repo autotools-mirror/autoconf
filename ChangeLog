@@ -3,6 +3,7 @@
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): use
 	_AC_INIT_PREPARE_ENVIRONMENT to make the shell running
 	config.status sane and POSIX-compatible.
+	* configure: Regenerate.
 
 2000-09-25  Pavel Roskin  <proski@gnu.org>
 
