@@ -1,5 +1,14 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Don't
+	  : ${FOO="$foo"}
+	but
+	  : ${FOO=$foo}
+	Since Ultrix will also assign the quotes to FOO.
+	Reported by Harlan Stenn.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Keep `AC_CHECK_TYPE' backward compatibility and provide a proper
 	`AC_CHECK_TYPE',
 	Based on ideas from Paul Eggert and Alexandre Oliva.
