@@ -250,7 +250,7 @@ AC_SUBST([SET_MAKE])dnl
 AC_DEFUN(AC_PROG_RANLIB,
 [AC_CHECK_PROG(RANLIB, ranlib, ranlib, :)])
 
-dnl Check for mawk first since it's said to be faster.
+dnl Check for mawk first since it's generally faster.
 AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
@@ -317,27 +317,34 @@ then
 fi
 AC_SUBST(LEXLIB)])
 
+dnl Check if lex declares yytext as a char * by default, not a char[].
+undefine([AC_DECL_YYTEXT])
 AC_DEFUN(AC_DECL_YYTEXT,
 [AC_REQUIRE_CPP()dnl
 AC_REQUIRE([AC_PROG_LEX])dnl
+AC_MSG_CHECKING(lex output file root)
+AC_CACHE_VAL(ac_cv_prog_lex_root,
+[# The minimal lex program is just a single line: %%.  But some broken lexes
+# (Solaris, I think it was) want two %% lines, so accommodate them.
+echo '%%
+%%' | $LEX
+if test -f lex.yy.c; then
+  ac_cv_prog_lex_root=lex.yy
+elif test -f lexyy.c; then
+  ac_cv_prog_lex_root=lexyy
+else
+  AC_MSG_ERROR(cannot find output from $LEX; giving up)
+fi])dnl
+LEX_OUTPUT_ROOT=$ac_cv_prog_lex_root
+AC_MSG_RESULT($ac_cv_prog_lex_root)
+AC_SUBST(LEX_OUTPUT_ROOT)dnl
+
 AC_MSG_CHECKING(whether yytext is a pointer)
 AC_CACHE_VAL(ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent. Figure out which it is, since
 # not all implementations provide the %pointer and %array declarations.
-#
-# The minimal lex program is just a single line: %%.  But some broken lexes
-# (Solaris, I think it was) want two %% lines, so accommodate them.
 ac_cv_prog_lex_yytext_pointer=no
-  echo '%%
-%%' | $LEX
-if test -f lex.yy.c; then
-  LEX_OUTPUT_ROOT=lex.yy
-elif test -f lexyy.c; then
-  LEX_OUTPUT_ROOT=lexyy
-else
-  AC_MSG_ERROR([cannot find output from $LEX, giving up])
-fi
 echo 'extern char *yytext;' >>$LEX_OUTPUT_ROOT.c
 ac_save_LIBS="$LIBS"
 LIBS="$LIBS $LEXLIB"
@@ -348,7 +355,6 @@ AC_MSG_RESULT($ac_cv_prog_lex_yytext_pointer)
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER)
 fi
-AC_SUBST(LEX_OUTPUT_ROOT)dnl
 ])
 
 AC_DEFUN(AC_PROG_INSTALL,
@@ -368,8 +374,9 @@ if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
-    case "$ac_dir" in
-    ''|.|/etc|/usr/sbin|/usr/etc|/sbin|/usr/afsws/bin|/usr/ucb) ;;
+    # Account for people who put trailing slashes in PATH elements.
+    case "$ac_dir/" in
+    /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
       for ac_prog in ginstall installbsd scoinst install; do
@@ -835,6 +842,69 @@ main()
 AC_MSG_RESULT($ac_cv_func_mmap)
 if test $ac_cv_func_mmap = yes; then
   AC_DEFINE(HAVE_MMAP)
+fi
+])
+
+AC_DEFUN(AC_FUNC_GETPGRP,
+[AC_MSG_CHECKING(whether getpgrp takes no argument)
+AC_CACHE_VAL(ac_cv_func_getpgrp_void,
+[AC_TRY_RUN([
+/*
+ * If this system has a BSD-style getpgrp(),
+ * which takes a pid argument, exit unsuccessfully.
+ *
+ * Snarfed from Chet Ramey's bash pgrp.c test program
+ */
+#include <stdio.h>
+#include <sys/types.h>
+
+int     pid;
+int     pg1, pg2, pg3, pg4;
+int     ng, np, s, child;
+
+main()
+{
+        pid = getpid();
+        pg1 = getpgrp(0);
+        pg2 = getpgrp();
+        pg3 = getpgrp(pid);
+        pg4 = getpgrp(1);
+
+        /*
+         * If all of these values are the same, it's pretty sure that
+         * we're on a system that ignores getpgrp's first argument.
+         */
+        if (pg2 == pg4 && pg1 == pg3 && pg2 == pg3)
+                exit(0);
+
+        child = fork();
+        if (child < 0)
+                exit(1);
+        else if (child == 0) {
+                np = getpid();
+                /*
+                 * If this is Sys V, this will not work; pgrp will be
+                 * set to np because setpgrp just changes a pgrp to be
+                 * the same as the pid.
+                 */
+                setpgrp(np, pg1);
+                ng = getpgrp(0);        /* Same result for Sys V and BSD */
+                if (ng == pg1) {
+                        exit(1);
+                } else {
+                        exit(0);
+                }
+        } else {
+                wait(&s);
+                exit(s>>8);
+        }
+}
+], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
+   AC_MSG_ERROR(cannot check getpgrp if cross compiling))
+])
+AC_MSG_RESULT($ac_cv_func_getpgrp_void)
+if test $ac_cv_func_getpgrp_void = yes; then
+  AC_DEFINE(GETPGRP_VOID)
 fi
 ])
 
@@ -1460,18 +1530,23 @@ if test $ac_cv_c_bigendian = yes; then
 fi
 ])
 
+dnl Do nothing if the compiler accepts the inline keyword.
+dnl Otherwise define inline to __inline__ or __inline if one of those work,
+dnl otherwise define inline to be empty.
 AC_DEFUN(AC_C_INLINE,
 [AC_MSG_CHECKING([for inline])
 AC_CACHE_VAL(ac_cv_c_inline,
-[if test "$GCC" = yes; then
-AC_TRY_COMPILE(, [} inline foo() {], ac_cv_c_inline=yes, ac_cv_c_inline=no)
-else
-  ac_cv_c_inline=no
-fi])dnl
+[ac_cv_c_inline=no
+for ac_kw in inline __inline__ __inline; do
+  AC_TRY_COMPILE(, [} $ac_kw foo() {], [ac_cv_c_inline=$ac_kw; break])
+done
+])dnl
 AC_MSG_RESULT($ac_cv_c_inline)
-if test $ac_cv_c_inline = no; then
-  AC_DEFINE(inline, __inline)
-fi
+case "$ac_cv_c_inline" in
+  inline | yes) ;;
+  no) AC_DEFINE(inline, ) ;;
+  *)  AC_DEFINE_UNQUOTED(inline, $ac_cv_c_inline) ;;
+esac
 ])
 
 AC_DEFUN(AC_C_CONST,

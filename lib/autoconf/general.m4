@@ -755,7 +755,8 @@ AC_CANONICAL_TARGET
 AC_CANONICAL_BUILD
 test "$host_alias" != "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
-    NONENONEs,x,x, && program_prefix=${target_alias}-
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-
 ])
 
 dnl Subroutines of AC_CANONICAL_SYSTEM.
@@ -770,6 +771,7 @@ fi
 
 AC_MSG_CHECKING(host system type)
 
+dnl Set host_alias.
 host_alias=$host
 case "$host_alias" in
 NONE)
@@ -782,6 +784,7 @@ NONE)
   esac ;;
 esac
 
+dnl Set the other host vars.
 host=`$ac_config_sub $host_alias`
 host_cpu=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
 host_vendor=`echo $host | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
@@ -799,6 +802,7 @@ AC_DEFUN(AC_CANONICAL_TARGET,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_MSG_CHECKING(target system type)
 
+dnl Set target_alias.
 target_alias=$target
 case "$target_alias" in
 NONE)
@@ -808,6 +812,7 @@ NONE)
   esac ;;
 esac
 
+dnl Set the other target vars.
 target=`$ac_config_sub $target_alias`
 target_cpu=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
 target_vendor=`echo $target | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
@@ -825,6 +830,7 @@ AC_DEFUN(AC_CANONICAL_BUILD,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_MSG_CHECKING(build system type)
 
+dnl Set build_alias.
 build_alias=$build
 case "$build_alias" in
 NONE)
@@ -834,6 +840,7 @@ NONE)
   esac ;;
 esac
 
+dnl Set the other build vars.
 build=`$ac_config_sub $build_alias`
 build_cpu=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
 build_vendor=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
@@ -1151,6 +1158,22 @@ done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])
 
+dnl Internal subroutine.
+AC_DEFUN(AC_CHECK_TOOL_PREFIX,
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+if test $host != $build; then
+  ac_tool_prefix=${host_alias}-
+else
+  ac_tool_prefix=
+fi
+])
+
+dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR)
+AC_DEFUN(AC_CHECK_TOOL,
+[AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
+AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, $2)
+])
+
 dnl Guess the value for the `prefix' variable by looking for
 dnl the argument program along PATH and taking its parent.
 dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
@@ -1168,7 +1191,7 @@ AC_MSG_CHECKING([for prefix by ])
 AC_PATH_PROG(AC_VAR_NAME, $1)
 changequote(<<, >>)dnl
   if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
-    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
+    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*//*[^/][^/]*$%%'`
 changequote([, ])dnl
   fi
 fi

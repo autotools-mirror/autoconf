@@ -1606,6 +1606,20 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
+@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for})
+@maindex CHECK_TOOL
+Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
+with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
+followed by a dash (@pxref{Canonicalizing}).  For example, if the user
+runs @samp{configure --host=i386-gnu}, then this call:
+@example
+AC_CHECK_TOOL(AR, ar)
+@end example
+@noindent
+sets @code{AR} to @file{i386-gnu-ar} if that program exists in
+@code{PATH}, or to @samp{ar} if not.
+@end defmac
+
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for} @r{[}, @var{value-if-not-found}@r{]})
 @maindex PATH_PROG
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the entire
@@ -1789,9 +1803,19 @@ to the name of the group that should own the installed program.
 @defmac AC_FUNC_GETMNTENT
 @maindex FUNC_GETMNTENT
 @cvindex HAVE_GETMNTENT
-Check for the @code{getmntent} in the @file{sun} and @file{seq}
+Check for @code{getmntent} in the @file{sun} and @file{seq}
 libraries, for Irix 4 and PTX, respectively.  Then, if @code{getmntent} is
 available, define @code{HAVE_GETMNTENT}.
+@end defmac
+
+@defmac AC_FUNC_GETPGRP
+@maindex FUNC_GETPGRP
+@cvindex GETPGRP_VOID
+If @code{getpgrp} takes no argument (the POSIX.1 version), define
+@code{GETPGRP_VOID}.  Otherwise, it is the BSD version, which takes a
+process ID as an argument.  This macro does not check whether
+@code{getpgrp} exists at all; if you need to work in that situation,
+first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @end defmac
 
 @defmac AC_FUNC_MEMCMP
@@ -2403,9 +2427,9 @@ it as empty.
 @defmac AC_C_INLINE
 @maindex C_INLINE
 @cvindex inline
-If the C compiler is a version of GCC that supports the keyword
-@code{__inline} but not @code{inline} (such as some NeXT versions),
-define @code{inline} to be @code{__inline}.
+If the C compiler supports the keyword @code{inline}, do nothing.
+Otherwise define @code{inline} to @code{__inline__} or @code{__inline}
+if it accepts one of those, otherwise define @code{inline} to be empty.
 @end defmac
 
 @defmac AC_C_CHAR_UNSIGNED
@@ -3677,8 +3701,8 @@ a suggestion for what to use instead of @var{this-macro-name}.
 
 A few kinds of features can't be guessed automatically by running test
 programs.  For example, the details of the object file format, or
-special options that need to be passed to the compiler or linker.  It is
-possible to check for such features using ad-hoc means, such as having
+special options that need to be passed to the compiler or linker.  You
+can check for such features using ad-hoc means, such as having
 @code{configure} check the output of the @code{uname} program, or
 looking for libraries that are unique to particular systems.  However,
 Autoconf provides a uniform method for handling unguessable features.
@@ -3842,6 +3866,10 @@ creates in the current directory @file{host.h}, which is a link to
 @file{@var{srcdir}/config/$@{machine@}.h}, and @file{object.h}, which is a link
 to @file{@var{srcdir}/config/$@{obj_format@}.h}.
 @end defmac
+
+You can also use the host system type to find cross-compilation tools.
+@xref{Generic Programs}, for information about the @code{AC_CHECK_TOOL}
+macro which does that.
 
 @node Site Configuration, Invoking configure, Manual Configuration, Top
 @chapter Site Configuration

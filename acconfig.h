@@ -52,6 +52,9 @@
 /* Define if the `getloadavg' function needs to be run setuid or setgid.  */
 #undef GETLOADAVG_PRIVILEGED
 
+/* Define if the `getpgrp' function takes no argument.  */
+#undef GETPGRP_VOID
+
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
 

@@ -56,7 +56,7 @@ if test $show_version = yes; then
   exit 0
 fi
 
-mawk '
+@AWK@ '
   # Record that sym was found in FILENAME.
   function file_sym(sym,  i, fs) {
     if (sym ~ /^[A-Za-z_]/) {

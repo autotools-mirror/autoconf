@@ -116,13 +116,8 @@ Have AC_CANONICAL_* cache the host/build/target types.
 ------------------------------------------------------------------------------
 
 Look at contributions:
-	ifnames rewrite using nawk (Paul Eggert)
 	ac_include (Karl Berry)
-	tool_prefix (Roland McGrath)
 	aclocal.h tom@basil.icce.rug.NL (Tom R.Hageman)
-	inline rewrite (Jim Avera)
-	getpgrp and stringize (Arnold Robbins)
-	caching AC_DECL_YYTEXT (Karl Berry, John something)
 
 ------------------------------------------------------------------------------
 
@@ -203,11 +198,6 @@ From: "Randall S. Winchester" <rsw@eng.umd.edu>
 
 ------------------------------------------------------------------------------
 
-Handle trailing slashes in PATH elements in AC_CHECK_PROG,
-AC_PATH_PROG, AC_PROG_INSTALL.
-
-------------------------------------------------------------------------------
-
 In libc and make in aclocal.m4 I have AC_CHECK_SYMBOL, which checks for
 sys_siglist et al.  Using AC_CHECK_FUNC doesn't work on some system that
 winds up caring that you reference it as a function and it is really a
@@ -215,16 +205,7 @@ variable.  My version always declares the symbol as a char *[]; if that
 ends up a bad idea, we can have it take an arg with the C decl, but that is
 a bit verbose to write if it's actually superfluous.
 From Roland McGrath.
-
-------------------------------------------------------------------------------
-
-In /gd4/gnu/hurd/aclocal.m4 I wrote AC_CHECK_TOOL, which is a boon when
-doing a lot of cross compilation, and I think a good thing to use
-generically (AC_PROG_{CC,RANLIB} should use it).  I want this merged so I
-can convert mach4's configure.in to stop using local hack macros, and
-finally get a configure.in up for hurd (and then rewrite its makefiles
-again).
-From Roland McGrath.
+[I'd call it AC_CHECK_VAR, I think. -djm]
 
 ------------------------------------------------------------------------------
 

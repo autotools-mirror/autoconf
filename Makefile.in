@@ -26,6 +26,7 @@ INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
 M4 = @M4@
+AWK = @AWK@
 PERL = @PERL@
 
 # Programs that are always installed.
@@ -70,7 +71,8 @@ DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL \
 	testsuite/lib/*.exp testsuite/autoconf.[gs]/*.exp \
 	standards.texi make-stds.texi standards.info*
 
-editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''M4''@,$(M4),g'
+editsh = sed -e 's,@''datadir''@,$(acdatadir),g' -e \
+	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g'
 editpl = sed -e 's,@''datadir''@,$(acdatadir),g' -e 's,@''PERL''@,$(PERL),g'
 
 all: ${SCRIPTS}
