@@ -1,3 +1,29 @@
+2002-04-19  Paul Eggert  <eggert@twinsun.com>
+
+	Fix some bugs when using "$@" when there might be zero positional
+	arguments in cases where this matters.
+
+	* bin/autoconf.as: Rewrite so that the problem does not come up.
+	* lib/autoconf/programs.m4 (AC_CHECK_PROG): Likewise.
+	* lib/autoconf/status.m4 (AC_OUTPUT): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
+	* bin/autoheader.in: Use 'case' statement to work around problem.
+	* bin/auto4mte.in: Likewise.
+	* bin/autoreconf.in: Likewise.
+	* bin/autoscan.in: Likewise.
+	* bin/autoupdate.in: Likewise.
+	* bin/ifnames.in: Likewise.
+
+	* doc/autoconf.texi (Shell Substitutions): Document the problem.
+
+	* lib/autotest/general.m4 (AT_INIT):
+	Use Zsh alias to work around problem.
+	* tests/atgeneral.m4 (AT_INIT): Likewise.
+
+	* tests/c.at: We can't have zero arguments, so remove workaround
+	that is not portable to Zsh.
+
 2002-04-19  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* bin/autoupdate.in (handle_autoconf_macros): Honor AU_DEFUNs
@@ -764,8 +790,8 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/atspecific.m4 (AT_DATA_AUTOCONF): New.
-        (AT_CONFIGURE_AC): Output the definition of AC_STATE_SAVE in
-        configure.ac.
+	(AT_CONFIGURE_AC): Output the definition of AC_STATE_SAVE in
+	configure.ac.
 	* tests/aclocal.m4: Remove, as it is no longer used.
 
 2001-11-13  Akim Demaille  <akim@epita.fr>
@@ -978,7 +1004,7 @@
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): _AS_CR_PREPARE needs to
 	be invoked before _AS_LINENO_PREPARE.
-        (_AS_LINENO_PREPARE): Use as_cr_digits and as_cr_alnum rather
+	(_AS_LINENO_PREPARE): Use as_cr_digits and as_cr_alnum rather
 	than character ranges.
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix NLS before
@@ -2762,7 +2788,7 @@
 2001-08-03  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* bin/autom4te.in (handle_traces): Fix rewriting of traces without
-        arguments.
+	arguments.
 
 2001-08-03  Akim Demaille  <akim@epita.fr>
 
