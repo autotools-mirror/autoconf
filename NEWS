@@ -20,6 +20,22 @@ autoupdate is now much more powerful, and is able to provide the glue
 code which might be needed to move from an old macro to its newer
 equivalent.
 
+** autoheader
+The internal machinery of autoheader has completely changed.  As a
+result, using an `acconfig.h' should be considered as obsoleted, and
+you are encouraged to get rid of it using the AH macros.
+
+** Fortran 77 compilers
+Support for automatically determining a Fortran 77 compilers
+name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
+provided to wrap C/C++ identifiers, thus making it easier and more
+transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
+call C/C++ routines.  See the Texinfo documentation for details.
+
+** Test suite
+The testsuite no longer uses DejaGNU.  It should be easy to submit
+test cases in this new frame work.
+
 ** configure
 - --help, --help=long, -hl
   no longer dumps useless items.
@@ -140,22 +156,6 @@ equivalent.
 - C++ compatibility
   Almost every single macros has been revisited in order to support at
   best CC=c++.
-
-** Test suite
-The testsuite no longer uses DejaGNU.  It should be easy to submit
-test cases in this new frame work.
-
-** Autoheader
-The internal machinery of Autoheader has completely changed.  As a
-result, using an `acconfig.h' should be considered as obsoleted, and
-you are encouraged to get rid of it using the AH macros.
-
-** Fortran 77 compilers
-Support for automatically determining a Fortran 77 compilers
-name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
-provided to wrap C/C++ identifiers, thus making it easier and more
-transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
-call C/C++ routines.  See the Texinfo documentation for details.
 
 Major changes in Autoconf 2.14:
   There was no release of GNU Autoconf 2.14.

@@ -13,19 +13,9 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
-** AU_, AH_
-Document.
-
-** AC_COPYRIGHT
-Document.
-
 ** m4
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
-
-** AC_LANG
-I don't understand why we have this weird system of AC_SAVE and
-RESTORE, why not push/pop etc?
 
 ** AC_PROVIDE
 I think it is the epilogue that should provide, not the prologue.  Not
@@ -45,12 +35,6 @@ The section for old macros is not completely up to date.  For
 instance, there is still AM_PROG_LIBTOOL.  Anyawy, since autoupdate
 takes care of them, it is no longer the role of Automake to handle
 this.  Most should be removed.
-
-** AC_INCLUDE
-m4_include_unique should probably check only for the base name, to
-warn includes of foo/bar.m4 and baz/bar.m4.  AC_INCLUDES could admit
-$2 to specify the directory? Or do we want another macro to define the
-m4/ dir, a la AC_CONFIG_AUXDIR.
 
 ** Doc: autoconf
 Document --install.  Should --install `fix' configure.in for the user?
@@ -91,13 +75,6 @@ From: Roland McGrath <roland@gnu.ai.mit.edu>
 ------------------------------------------------------------------------------
 
 * Autoconf 3
-
-** Find a solution for LIBOBJS
-Currently Automake has no clean way to get the list of files that are
-required for the distribution.  One aspect of this is LIBOBJS.  But we
-can imagine going further and provide a mean for macro authors to
-specify various files they need to distribute (headers, files to
-compile and others).
 
 ** Split all those &#@! files.
 acgeneral and acspecific is a bad design.  The split should be done
@@ -158,10 +135,6 @@ macros for the listed functions.
 This requires to obsolete the feature `break' in ACTION-IF, since all
 the loops are to be handled by m4, not sh.
 
-** Merge the two lex macros, AC_PROG_LEX and AC_DECL_YYTEXT?
-Add give a mean to *require* Flex instead of Lex.  Or at least explain
-how to do that.
-
 ** Faces of a test
 Each macro can potentially come with several faces: of course the
 configure snippet (AC_foo), a config.h snippet (AH_foo), a system.h
@@ -178,13 +151,6 @@ name) for instance, will have as an effect, via system.h to include
 the header.  But if the test for the header is specific, the generic
 AS_CHECK_HEADER will still be used.  Conversely, some headers may not
 require a specific AC_ tests, but a specialized AS_ macro.
-
-------------------------------------------------------------------------------
-
-* Matthew D. Langston's suggestions:
-
-** Change all of Autoconf's macros that print a help string via
-   "configure --help" to use new AC_HELP_STRING macro.
 
 ------------------------------------------------------------------------------
 
@@ -217,10 +183,6 @@ require a specific AC_ tests, but a specialized AS_ macro.
 
 * Doc: Centralize information on POSIX, MS-DOS, cross-compiling, and
   other important topics.
-
-------------------------------------------------------------------------------
-
-* Allow [ and ] in AC_DEFINE args.
 
 ------------------------------------------------------------------------------
 
@@ -259,23 +221,6 @@ warnings.  (Roland McGrath)
 ------------------------------------------------------------------------------
 
 In config.status comment, put the host/target/build types, if used.
-
-------------------------------------------------------------------------------
-
-The default of unlimited permission is fine, but there should be some easy
-way for configure to have copyright terms passed through from configure.in.
-Maybe AC_LICENSE([...]).
-From: roland@gnu.ai.mit.edu (Roland McGrath)
-
-------------------------------------------------------------------------------
-
-AC_MSG_CHECKING([checking for ANSI #stringize])
-AC_REVISION([ #(@) revision 2.1 ])
-
-causes bogus code to be generated for whatever immediately follows.  The
-problem goes away if the '#' is removed.  Probably the macros are not
-disabling the m4 "comment" feature when processing user-supplied strings.
--Jim Avera jima@netcom.com
 
 ------------------------------------------------------------------------------
 
