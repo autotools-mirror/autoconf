@@ -3727,11 +3727,8 @@ echo '  if egrep "^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define" $ac_cs_root.in >/dev/null;
 echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
 echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
-while :
+while grep . conftest.defines >/dev/null
 do
-  ac_lines=`grep -c . conftest.defines`
-  # grep -c gives empty output for an empty file on some AIX systems.
-  if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#define' lines.
@@ -3755,11 +3752,8 @@ echo >>$CONFIG_STATUS
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
 rm -f conftest.tail
-while :
+while grep . conftest.undefs >/dev/null
 do
-  ac_lines=`grep -c . conftest.undefs`
-  # grep -c gives empty output for an empty file on some AIX systems.
-  if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#undef'

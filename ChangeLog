@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT_HEADERS): Don't use `break' to exit the
+	while loops which are breaking conftest.defines and
+	conftest.undefs into smaller snippets: just use the proper
+	condition for the while.
+	Suggested by Alexandre Oliva.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Configuration Commands): New section, for
 	AC_CONFIG_COMMANDS.
 	Move the definition of AC_OUTPUT_COMMANDS here.
