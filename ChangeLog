@@ -1,3 +1,10 @@
+2003-09-07  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/specific.m4 (AC_SYS_RESTARTABLE_SYSCALLS):
+	Improve the accuracy of the wording about obsolescence.
+	From a suggestion by Ian Lance Taylor in
+	<http://mail.gnu.org/archive/html/autoconf/2003-09/msg00044.html>.
+
 2003-09-05  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM): Try -ffree-form too,
