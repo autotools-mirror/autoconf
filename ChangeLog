@@ -1,3 +1,7 @@
+2001-12-14  Aaron M. Ucko  <amu@alum.mit.edu>
+
+	* lib/autoconf/general.m4: Avoid duplicates in `$ac_configure_args'.
+
 2001-12-14  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.am (MAINTAINERCLEANFILES): Remove configure.

@@ -1130,17 +1130,19 @@ for ac_arg
 do
   case $ac_arg in
   -no-create | --no-create | --no-creat | --no-crea | --no-cre \
-  | --no-cr | --no-c) ;;
+  | --no-cr | --no-c) continue ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
-  | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
+  | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r)
+    continue ;;
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 [  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
-    ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
-    ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-    ac_sep=" " ;;
-  *) ac_configure_args="$ac_configure_args$ac_sep$ac_arg"
-     ac_sep=" " ;;
+    ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+  esac
+  case " $ac_configure_args " in
+    *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
+    *) ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
+       ac_sep=" " ;;
   esac
   # Get rid of the leading space.
 done
@@ -1368,18 +1370,18 @@ for ac_var in `(set) 2>&1 |
         ac_cache_corrupted=:
       fi;;
   esac
-  # Pass precious variables to config.status.  It doesn't matter if
-  # we pass some twice (in addition to the command line arguments).
+  # Pass precious variables to config.status.
   if test "$ac_new_set" = set; then
     case $ac_new_val in
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 [    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
-      ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"`
-      ac_configure_args="$ac_configure_args '$ac_arg'"
-      ;;
-    *) ac_configure_args="$ac_configure_args $ac_var=$ac_new_val"
-       ;;
+      ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
+    *) ac_arg=$ac_var=$ac_new_val ;;
+    esac
+    case " $ac_configure_args " in
+      *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
+      *) ac_configure_args="$ac_configure_args '$ac_arg'" ;;
     esac
   fi
 done

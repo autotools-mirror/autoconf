@@ -61,6 +61,9 @@
 - AC_TRY_RUN
   Under the user pressure, $? is finally available.  Probably a mistake.
 - AC_F77_LIBRARY_LDFLAGS now supports the HP/UX f90 compiler.
+- Precious variables accumulation
+  config.status could stack several copies of the precious variables
+  assignments.
 
 ** C Macros
 
