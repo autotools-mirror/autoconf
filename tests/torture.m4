@@ -53,6 +53,8 @@ AT_DATA(dummy.in,
 AT_TEST_MACRO(config.status under extreme conditions,
 [AC_CONFIG_FILES(dummy)
 [define]([AC_DEFUBST_VALUE], Big_Value)
+dnl The following 4 lines are a transfert from AT_DUMMY_VAR in Autotest
+dnl to AC_DUMMY_VAR in Autoconf.
 [define]([AC_DUMMY_VAR],
 changequote({{, }})dnl
 [defn({{AT_DUMMY_VAR}})]dnl

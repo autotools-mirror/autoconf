@@ -3043,15 +3043,14 @@ dnl shouldn't we use the default INCLUDES?
 AC_DEFUN(AC_CHECK_SIZEOF,
 [AC_VAR_PUSHDEF([ac_Sizeof], [ac_cv_sizeof_$1])dnl
 AC_CACHE_CHECK([size of $1], ac_Sizeof,
-[AC_TRY_RUN([#include <stdio.h>
-[$3]
-int
+[AC_TRY_RUN(AC_INCLUDES_DEFAULT([$3])
+[int
 main ()
 {
   FILE *f = fopen ("conftestval", "w");
   if (!f)
-     exit (1);
-  fprintf (f, "%d\n", sizeof ([$1]));
+    exit (1);
+  fprintf (f, "%d\n", sizeof ($1));
   exit (0);
 }],
   AC_VAR_SET(ac_Sizeof, `cat conftestval`),
@@ -3062,7 +3061,9 @@ AC_VAR_POPDEF([ac_Sizeof])dnl
 ])
 
 
-dnl ### Checking for types
+## ------------------ ##
+## Checking for types ##
+## ------------------ ##
 
 
 # AC_CHECK_TYPE_INTERNAL(TYPE,

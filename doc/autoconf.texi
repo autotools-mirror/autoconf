@@ -3028,15 +3028,20 @@ size_t my_strlen PARAMS ((const char *));
 
 @c FIXME: What the heck is this macro doing here?  Move it out of
 @c the way, in its proper section!!!
+@c FIXME: Explain once for all how the CPP names are built, not everywhere.
 @defmac AC_CHECK_SIZEOF (@var{type}, @ovar{cross-size}, @ovar{includes})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
-C++) builtin type @var{type}, e.g. @samp{int} or @samp{char *}.  If
-@samp{type} is unknown to the compiler, it gets a size of 0.  @var{uctype}
-is @var{type}, with lowercase converted to uppercase, spaces changed to
-underscores, and asterisks changed to @samp{P}.  If cross-compiling, the
-value @var{cross-size} is used if given, otherwise @code{configure}
-exits with an error message.
+C++) type @var{type} (e.g. @samp{int}, @samp{char *} etc.).  If
+@samp{type} is unknown, it gets a size of 0.  If no @var{includes} are
+provided, the default headers are used (FIXME: point to the right
+node).  If you provide default header, make sure to include
+@file{stdio.h} which is required for this macro to run.
+
+@var{uctype} is @var{type}, with lowercase converted to uppercase,
+spaces changed to underscores, and asterisks changed to @samp{P}.  If
+cross-compiling, the value @var{cross-size} is used if given, otherwise
+@code{configure} exits with an error message.
 
 For example, the call
 @example

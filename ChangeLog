@@ -1,5 +1,23 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	AC_CHECK_SIZEOF: Fix a bug, use standard default headers, and
+	test.
+
+	* acgeneral.m4 (AC_CHECK_SIZEOF): Don't over quote $1, some []
+	were left in the C code, and had the macro fail.
+	Use AC_INCLUDES_DEFAULT.
+	* doc/autoconf.texi: Mention default includes.  Explain stdio.h
+	must always be given.
+
+	* tests/atspecific.m4 (TEST_MACRO): Updated the list of
+	exceptions.
+	(AT_CHECK_DEFINES): New macro, to check the content of config.h.
+	* tests/semantics.m4: All the tests are updated to use
+	AT_CHECK_DEFINES.
+	Test AC_CHECK_SIZEOF, AC_CHECK_HEADERS, and AC_CHECK_FUNCS.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	Give explicit diagnostics when an input file (for config headers;
 	config files etc.) does not exist.
 	From Jim Meyering.
