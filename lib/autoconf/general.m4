@@ -2344,8 +2344,8 @@ AC_CACHE_CHECK([for $1], ac_Member,
 m4_patsubst([$1], [\..*]) foo;
 dnl foo.MEMBER;
 foo.m4_patsubst([$1], [^[^.]*\.]);])],
-                AC_VAR_SET(ac_Member, yes),
-                AC_VAR_SET(ac_Member, no))])
+                [AC_VAR_SET(ac_Member, yes)],
+                [AC_VAR_SET(ac_Member, no)])])
 AS_IFELSE([test AC_VAR_GET(ac_Member) = yes],
           [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Member])dnl
@@ -2744,16 +2744,12 @@ fi
 ])# _AC_TRY_CPP
 
 
-# AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-# ---------------------------------------------------------
-# AC_TRY_CPP is used to check whether particular header files exist.
-# You can check for one at a time, or more than one if you need several
-# header files to all exist for some purpose.
-#
-# INCLUDES are not defaulted.
-AC_DEFUN([AC_TRY_CPP],
-[AC_LANG_PREPROC_REQUIRE()dnl
-AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
+# _AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ----------------------------------------------------------------
+# Try to preprocess PROGRAM.
+# This macro can be used during the selection of a preprocessor.
+AC_DEFUN([_AC_PREPROC_IFELSE],
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 _AC_TRY_CPP()
 if test -z "$ac_cpp_err"; then
   m4_default([$2], :)
@@ -2763,8 +2759,29 @@ else
   cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
   $3
 fi
-rm -f conftest*
-])# AC_TRY_CPP
+rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
+])# _AC_PREPROC_IFELSE
+
+
+# AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------------------
+# Try to preprocess PROGRAM.  Requires that the preprocessor for the
+# current language was checked for, hence do not use this macro in macros
+# looking for a preprocessor.
+AC_DEFUN([AC_PREPROC_IFELSE],
+[AC_LANG_PREPROC_REQUIRE()dnl
+_AC_PREPROC_IFELSE($@)])
+
+
+# AC_TRY_CPP(INCLUDES, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ---------------------------------------------------------
+# AC_TRY_CPP is used to check whether particular header files exist.
+# You can check for one at a time, or more than one if you need several
+# header files to all exist for some purpose.
+#
+# INCLUDES are not defaulted and are double quoted.
+AC_DEFUN([AC_TRY_CPP],
+[AC_PREPROC_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])])
 
 
 # AC_EGREP_CPP(PATTERN, PROGRAM,
@@ -3005,7 +3022,8 @@ AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
   char *p = (char *) $1;
 #endif
 ])],
-AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
+                   [AC_VAR_SET(ac_Symbol, yes)],
+                   [AC_VAR_SET(ac_Symbol, no)])])
 AS_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
           [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
@@ -3236,8 +3254,8 @@ AC_CACHE_CHECK([for $1], ac_Type,
   return 0;
 if (sizeof ($1))
   return 0;])],
-                AC_VAR_SET(ac_Type, yes),
-                AC_VAR_SET(ac_Type, no))])
+                   [AC_VAR_SET(ac_Type, yes)],
+                   [AC_VAR_SET(ac_Type, no)])])
 AS_IFELSE([test AC_VAR_GET(ac_Type) = yes],
           [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl

@@ -64,11 +64,12 @@
 # ----------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADER],
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_ARG_VAR([CPPFLAGS], [C/C++ preprocessor flags, e.g. -I<include dir> if you have headers in a nonstandard directory <include dir>])
+AC_ARG_VAR([CPPFLAGS],
+           [C/C++ preprocessor flags, e.g. -I<include dir> if you have headers in a nonstandard directory <include dir>])
 AC_CACHE_CHECK([for $1], ac_Header,
-[AC_TRY_CPP([#include <$1>
-],
-AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
+               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+                                  [AC_VAR_SET(ac_Header, yes)],
+                                  [AC_VAR_SET(ac_Header, no)])])
 AS_IFELSE([test AC_VAR_GET(ac_Header) = yes],
           [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Header])dnl
