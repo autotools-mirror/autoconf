@@ -86,7 +86,7 @@ AC_SUBST(ECHO_T)dnl
 # Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
-set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y%./+-%__p_%'`
+set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftestmake <<\EOF
 all:
@@ -1604,7 +1604,7 @@ done
 : ${ac_cv_func_select_args='int,int *,struct timeval *'}
 ])
 ac_save_IFS=$IFS; IFS=','
-set dummy `echo "$ac_cv_func_select_args" | sed -e 's/\*/\*/g'`
+set dummy `echo "$ac_cv_func_select_args" | sed 's/\*/\*/g'`
 IFS=$ac_save_IFS
 shift
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $[1],
@@ -2684,7 +2684,7 @@ else
   [for ac_file in conftest.*; do
      case $ac_file in
        *.$ac_ext | *.o | *.obj | *.xcoff) ;;
-       *) ac_cv_exeext=`echo $ac_file | sed -e s/conftest//` ;;
+       *) ac_cv_exeext=`echo $ac_file | sed s/conftest//` ;;
      esac
    done],
   [AC_MSG_ERROR([cannot compile and link])])
@@ -2709,7 +2709,7 @@ define([_AC_OBJEXT],
    [for ac_file in conftest.*; do
     case $ac_file in
       *.$ac_ext) ;;
-      *) ac_cv_objext=`echo $ac_file | sed -e s/conftest.//` ;;
+      *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
     esac
   done],
    [AC_MSG_ERROR([cannot compile])])])

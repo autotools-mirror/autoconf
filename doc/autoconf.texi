@@ -5103,6 +5103,23 @@ don't rely on symbolic links on @sc{djgpp}.
 
 @item @command{sed}
 @cindex @command{sed}
+Of course the option @option{-e} is portable, but it is not needed.  No
+valid @command{sed} program can start with a dash, so it does not help
+disambiguating.  Its sole usefulness is helping enforcing indenting as
+in:
+
+@example
+sed -e @var{instruction-1} \
+    -e @var{instruction-2}
+@end example
+
+@noindent
+as opposed to
+
+@example
+sed @var{instruction-1};@var{instruction-2}
+@end example
+
 @command{sed} scripts should not use branch labels longer than 8
 characters and should not contain comments.
 
@@ -6558,6 +6575,11 @@ test $[@@%:@@] != 0
 @noindent
 to avoid that the closing bracket be hidden inside a @samp{#}-comment,
 breaking the bracket matching highlighting from Emacsen.
+
+When using @command{sed}, don't use @option{-e} but for indenting
+purpose.  With the @code{s} command, the preferred separator is @samp{/}
+unless @samp{/} itself is used in the command, in which case you should
+use @samp{,}.
 
 When defining a macro, quote the name being defined.  If the macro is
 never @code{AC_REQUIRE}'d nor @code{AC_REQUIRE}'s, use @code{define}.

@@ -1,5 +1,14 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4: Promote s,,, over s%%%, and `sed prog' over `sed -e
+	prog'.
+	* acgeneral.m4: Likewise.
+	* acspecific.m4: Likewise.
+	* doc/autoconf.texi (Limitations of Usual Tools, Coding Style):
+	Likewise.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh: When using `mktemp -d', be sure that the directory
 	was created.
 	* autoheader.sh: Likewise.

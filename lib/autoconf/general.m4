@@ -1140,8 +1140,8 @@ dnl This variable seems obsolete.  It should probably be removed, and
 dnl only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=48}
 # Sed expression to map a string onto a valid sh and CPP variable names.
-ac_tr_sh='sed -e y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
-ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
+ac_tr_sh='sed y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
+ac_tr_cpp='sed y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
 
 # By default always use an empty string as the executable extension.
 # Only change it if the script calls AC_EXEEXT.
@@ -1718,7 +1718,7 @@ if test "$ac_init_help" = "recursive"; then
     cd $ac_subdir
     # A "../" for each directory in /$ac_subdir.
     ac_dots=`echo $ac_subdir |
-             sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
+             sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g'`
 
     case $srcdir in
     .) # No --srcdir option.  We are building in place.
@@ -2323,7 +2323,7 @@ define([_AC_CACHE_DUMP],
       ;;
     *)
       # `set' quotes correctly as required by POSIX, so do not add quotes.
-      sed -n -e '[s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p]'
+      sed -n '[s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\2/p]'
       ;;
     esac;
 }dnl
@@ -2352,7 +2352,7 @@ define([AC_CACHE_SAVE],
 #
 EOF
 _AC_CACHE_DUMP() |
-  sed -e 's/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
+  sed 's/^\([[^=]]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
@@ -2450,7 +2450,7 @@ define([_AC_SUBST_SED_PROGRAM])
 define([AC_SUBST],
 [ifval([$2], [$1=$2
 ])[]dnl
-_AC_SUBST([$1], [s%@$1@%[$]$1%;t t])dnl
+_AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
 ])# AC_SUBST
 
 
@@ -2459,7 +2459,7 @@ _AC_SUBST([$1], [s%@$1@%[$]$1%;t t])dnl
 # Read the comments of the preceding macro.
 define([AC_SUBST_FILE],
 [_AC_SUBST([$1], [/@$1@/r [$]$1
-s%@$1@%%;t t])])
+s,@$1@,,;t t])])
 
 
 
@@ -2984,7 +2984,7 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
 echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
 AC_PATH_PROG(AC_Prog, $1)
   if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's%/[^/][^/]*//*[^/][^/]*$%%']`
+    prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's,/[^/][^/]*//*[^/][^/]*$,,']`
   fi
 fi
 popdef([AC_Prog])dnl
@@ -4167,10 +4167,10 @@ AC_OUTPUT_COMMANDS_PRE()dnl
 # Save into config.log some information that might help in debugging.
 echo >&AC_FD_LOG
 echo "Cache variables:" >&AC_FD_LOG
-_AC_CACHE_DUMP | sed -e 's/^/| /' >&AC_FD_LOG
+_AC_CACHE_DUMP | sed 's/^/| /' >&AC_FD_LOG
 echo >&AC_FD_LOG
 echo "confdefs.h:" >&AC_FD_LOG
-cat confdefs.h | sed -e 's/^/| /' >&AC_FD_LOG
+cat confdefs.h | sed 's/^/| /' >&AC_FD_LOG
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
@@ -4202,7 +4202,7 @@ cat >$CONFIG_STATUS <<\EOF
 # configure, is in ./config.log if it exists.
 
 debug=false
-me=`echo "$[0]" | sed -e 's,.*/,,'`
+me=`echo "$[0]" | sed 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 EOF
@@ -4426,14 +4426,14 @@ define([AC_OUTPUT_MAKE_DEFS],
 cat >confdef2opt.sed <<\EOF
 t clear
 : clear
-s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
 t cleanup
-s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
 : cleanup
-s%[ 	`~#$^&*(){}\\|;'"<>?]%\\&%g
-s%\[%\\&%g
-s%\]%\\&%g
-s%\$%$$%g
+s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
+s,\[,\\&,g
+s,\],\\&,g
+s,\$,$$,g
 EOF
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
@@ -4468,8 +4468,8 @@ if test -n "\$CONFIG_FILES"; then
 dnl Please, pay attention that this sed code depends a lot on the shape
 dnl of the sed commands issued by AC_SUBST.  So if you change one, change
 dnl the other too.
-[  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
-   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$tmp/subs.sed <<\\CEOF]
+[  sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
+   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF]
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
@@ -4524,8 +4524,8 @@ cat >>$CONFIG_STATUS <<\EOF
 for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
-  *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
-       ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
+  *:*) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+       ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   *) ac_file_in=$ac_file.in ;;
   esac
 
@@ -4533,9 +4533,9 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dir")
-    ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
+    ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dir_suffix.
-    ac_dots=`echo "$ac_dir_suffix" | sed 's%/[[^/]]*%../%g'`
+    ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
   else
     ac_dir_suffix= ac_dots=
   fi
@@ -4543,7 +4543,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   case $ac_given_srcdir in
   .)  srcdir=.
       if test -z "$ac_dots"; then top_srcdir=.
-      else top_srcdir=`echo $ac_dots | sed 's%/$%%'`; fi ;;
+      else top_srcdir=`echo $ac_dots | sed 's,/$,,'`; fi ;;
   [[\\/]]* | ?:[[\\/]]* )
       srcdir=$ac_given_srcdir$ac_dir_suffix;
       top_srcdir=$ac_given_srcdir ;;
@@ -4562,7 +4562,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   echo creating "$ac_file"
   rm -f "$ac_file"
   configure_input="Generated automatically from `echo $ac_file_in |
-                                                 sed 's%.*/%%'` by configure."
+                                                 sed 's,.*/,,'` by configure."
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that
   # updating is atomic, and doesn't need trapping.
@@ -4576,7 +4576,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 EOF
 cat >>$CONFIG_STATUS <<EOF
 dnl Neutralize VPATH when `$srcdir' = `.'.
-  sed -e "$ac_vpsub
+  sed "$ac_vpsub
 dnl Shell code in configure.in might set extrasub.
 dnl FIXME: do we really want to maintain this feature?
 $extrasub
@@ -4584,10 +4584,10 @@ EOF
 cat >>$CONFIG_STATUS <<\EOF
 :t
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
-s%@configure_input@%$configure_input%;t t
-s%@srcdir@%$srcdir%;t t
-s%@top_srcdir@%$top_srcdir%;t t
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
+s,@configure_input@,$configure_input,;t t
+s,@srcdir@,$srcdir,;t t
+s,@top_srcdir@,$top_srcdir,;t t
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$INSTALL,;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
@@ -4667,35 +4667,35 @@ define([_AC_OUTPUT_HEADERS],
 #
 # ac_d sets the value in "#define NAME VALUE" lines.
 dnl Double quote for the `[ ]' and `define'.
-[ac_dA='s%^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-ac_dB='[ 	].*$%\1#\2'
+[ac_dA='s,^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_dB='[ 	].*$,\1#\2'
 ac_dC=' '
-ac_dD='%;t'
+ac_dD=',;t'
 # ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_uA='s%^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-ac_uB='$%\1#\2define\3'
+ac_uA='s,^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_uB='$,\1#\2define\3'
 ac_uC=' '
-ac_uD='%;t']
+ac_uD=',;t']
 
 for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
-  *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
-       ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
+  *:*) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+       ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
   *) ac_file_in=$ac_file.in ;;
   esac
 
   echo creating $ac_file
 
   ac_file_inputs=`echo "$ac_file_in" |
-                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
+                  sed "s,^,$ac_given_srcdir/,;s,:, $ac_given_srcdir/,g"`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
         AC_MSG_ERROR(cannot find input file `$ac_file_input')
   done
   # Remove the trailing spaces.
-  sed -e 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
+  sed 's/[[ 	]]*$//' $ac_file_inputs >$tmp/in
 
 EOF
 
@@ -4716,27 +4716,27 @@ rm -f conftest.defines conftest.undefs
 # See the Autoconf documentation for `clear'.
 cat >confdef2sed.sed <<\EOF
 dnl Double quote for `[ ]' and `define'.
-[s/[\\&%]/\\&/g
-s%[\\$`]%\\&%g
+[s/[\\&,]/\\&/g
+s,[\\$`],\\&,g
 t clear
 : clear
-s%^[ 	]*#[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$,${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD},gp
 t cleanup
-s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
 : cleanup]
 EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
 # sort them, since we want the *last* AC_DEFINE to be honored.
 uniq confdefs.h | sed -n -f confdef2sed.sed >conftest.defines
-sed -e 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
+sed 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
 rm -f confdef2sed.sed
 
 # This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
 cat >>conftest.undefs <<\EOF
-[s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%]
+[s,^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,]
 EOF
 
 # Break up conftest.defines because some shells have a limit on the size
@@ -4832,8 +4832,8 @@ dnl Here we use : instead of .. because if AC_LINK_FILES was used
 dnl with empty parameters (as in gettext.m4), then we obtain here
 dnl `:', which we want to skip.  So let's keep a single exception: `:'.
 for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
-  ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
+  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
+  ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
 
   echo "linking $srcdir/$ac_source to $ac_dest"
 
@@ -4846,9 +4846,9 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   ac_dest_dir=`_AC_SHELL_DIRNAME("$ac_dest")`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dest_dir")
-    ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
+    ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's,^\./,,'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
-    ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[[^/]]*%../%g'`
+    ac_dots=`echo $ac_dest_dir_suffix|sed 's,/[[^/]]*,../,g'`
   else
     ac_dest_dir_suffix= ac_dots=
   fi
@@ -4889,8 +4889,8 @@ define([_AC_OUTPUT_COMMANDS],
 # CONFIG_COMMANDS section.
 #
 for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
-  ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
+  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
+  ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
 
 dnl FIXME: Until Automake uses the new features of config.status, we
 dnl should keep this silent.  Otherwise, because Automake runs this in
@@ -4967,7 +4967,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 
     # A "../" for each directory in /$ac_subdir.
     ac_dots=`echo $ac_subdir |
-             sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
+             sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g'`
 
     case $srcdir in
     .) # No --srcdir option.  We are building in place.

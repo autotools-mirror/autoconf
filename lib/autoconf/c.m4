@@ -662,7 +662,7 @@ else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
 fi
 set dummy $CC; ac_cc=`echo $[2] |
-		      sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
+		      sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [echo 'foo(){}' >conftest.c
 # Make sure it works both with $CC and with simple cc.
@@ -927,7 +927,7 @@ AC_DEFUN([AC_PROG_F77_C_O],
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
 set dummy $F77; ac_f77=`echo $[2] |
-sed -e 's/[[^a-zA-Z0-9_]]/_/g' -e 's/^[[0-9]]/_/'`
+sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
 [cat >conftest.f <<EOF
        program conftest
@@ -1455,7 +1455,7 @@ done
 case `(uname -sr) 2>/dev/null` in
    "SunOS 5"*)
       ac_ld_run_path=`echo $ac_link_output |
-                        sed -n 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%-R\1%p'`
+                        sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
       test "x$ac_ld_run_path" != x &&
         AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
       ;;
