@@ -448,6 +448,7 @@ dnl   AC_VAR_SET(ac_$var, val)
 dnl and expect the right thing to happen.
 
 dnl AC_VAR_IF_INDIR(EXPRESSION, IF-INDIR, IF-NOT-INDIR)
+dnl ---------------------------------------------------
 dnl If EXPRESSION has shell indirections ($var or `expr`), expand
 dnl IF-INDIR, else IF-NOT-INDIR.
 define(AC_VAR_IF_INDIR,
@@ -458,7 +459,7 @@ define(AC_VAR_IF_INDIR,
 dnl AC_VAR_SET(VARIABLE, VALUE)
 dnl ---------------------------
 dnl Set the VALUE of the shell VARIABLE.
-dnl If the variable contains indirections (e.g. `ac_cv_func_$ac_func`)
+dnl If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
 dnl perform whenever possible at m4 level, otherwise sh level.
 define(AC_VAR_SET,
 [AC_VAR_IF_INDIR([$1],
@@ -525,7 +526,7 @@ dnl AC_VAR_PUSHDEF(VARNAME, VALUE)
 dnl ------------------------------
 dnl Define the m4 macro VARNAME to an accessor to the shell variable
 dnl named VALUE.  VALUE does not need to be a valid shell variable name:
-dnl the transliteration is handled here.
+dnl the transliteration is handled here.  To be dnl'ed.
 define(AC_VAR_PUSHDEF,
 [AC_VAR_IF_INDIR([$2],
 [ac_$1=AC_TR_SH($2)
@@ -534,7 +535,7 @@ pushdef([$1], [$ac_[$1]])],
 
 dnl AC_VAR_POPDEF(VARNAME)
 dnl ----------------------
-dnl Free the shell variable accessor VARNAME.
+dnl Free the shell variable accessor VARNAME.  To be dnl'ed.
 define(AC_VAR_POPDEF,
 [popdef([$1])])
 
@@ -542,45 +543,9 @@ define(AC_VAR_POPDEF,
 dnl ### Common m4/sh character translation
 
 dnl The point of this section is to provide high level functions
-dnl comparable to m4's `translit' primitive, but with the following
-dnl features:
-dnl - hiding portability issues
-dnl   tr cannot be used in some cases, because all the tr in this world
-dnl   don't behave the same way.  In particular there is no portable
-dnl   behavior of tr wrt the character `-'.  Sed has to be used in these
-dnl   cases.
-dnl - m4/sh polymorphism
-dnl   Transliteration of manifest strings should be handled by m4, while
-dnl   shell variables' content will be translated at runtime (tr or sed).
-
-dnl AC_TR(STRING, FROM, TO, ALPHABET, DEFAULT)
-dnl ------------------------------------------
-dnl Perform tr 'FROM' 'TO' on STRING by m4 when possible, otherwise
-dnl by the shell at configure time.  After transliteration, any character
-dnl which is not part of ALPHABET is then mapped to DEFAULT.
-dnl
-dnl We use `sed' and not `tr' when there is a `-', because:
-dnl - if `-' is in the middle, it is taken as a range.
-dnl - if `-' is at the beginning, some `tr' think it is an option.
-dnl - if `-' is at the end, Solaris, `/usr/bin/tr' hangs.  I suspect
-dnl   that it takes `a-' as the C string "a-\0", and when expanding
-dnl   from `a' to `\0' never ends...
-dnl
-dnl Include a protection against `%' (used as a sed separator) in FROM and TO.
-dnl Forbid appearance of `-' in FROM elsewhere than in the last position,
-dnl since we might otherwise trigger a GNU m4 bug (version 1.4 included).
-dnl ALPHABET may contain characters interval.
-dnl define(AC_TR,
-dnl [ifelse(regexp([$2$3], [%]), -1,,
-dnl 	    [AC_FATAL([$0: `%' cannot be used.  Change the definition of $0])])dnl
-dnl ifelse(regexp([$2], [-]), -1,, len([$2]),,
-dnl 	   [AC_FATAL([$0: `-' cannot be used but in the last position.])])dnl
-dnl ifelse(len([$2]), len([$3]),,
-dnl 	   [AC_FATAL([$0: argument 2 and 3 should have the same length])])dnl
-dnl AC_VAR_IF_INDIR([$1],
-dnl   [`echo "$1" | sed 'y%$2%$3%;s%[^$4]%$5%g'`],
-dnl   [patsubst(translit([$1], [$2], [$3]),
-dnl 				 [[^$4]], [$5])])])
+dnl comparable to m4's `translit' primitive, but m4:sh polymorphic.
+dnl Transliteration of manifest strings should be handled by m4, while
+dnl shell variables' content will be translated at runtime (tr or sed).
 
 dnl AC_TR_CPP(EXPRESSION)
 dnl ---------------------
@@ -599,9 +564,7 @@ define(AC_TR_CPP,
 dnl AC_TR_SH(EXPRESSION)
 dnl --------------------
 dnl Transform EXPRESSION into a valid shell variable name.
-dnl sh/m4 polymorphic.  Because of a delicate problem of quoting,
-dnl we cannot use the definition we had before:
-dnl    AC_TR([$1],[*+], [pp], [a-zA-Z0-9_], [_])
+dnl sh/m4 polymorphic.
 dnl Make sure to update the definition of `$ac_tr_cpp' if you change this.
 define(AC_TR_SH,
 [AC_VAR_IF_INDIR([$1],
@@ -1938,15 +1901,23 @@ dnl ### Printing messages at configure runtime
 dnl _AC_SH_QUOTE(STRING)
 dnl --------------------
 dnl If there are quoted (via backslash) backquotes do nothing, else
-dnl backslash all the quotes.
-dnl Note: it is important that both case evaluate STRING the same number
-dnl of times so that both _AC_SH_QUOTE([\`Hello world']) and
-dnl _AC_SH_QUOTE([`Hello world']) answer \`Hello world'.
+dnl backslash all the quotes.  This macro is robust to active symbols.
+dnl Both cases (with or without back quotes) *must* evaluate STRING the
+dnl same number of times.
+dnl
+dnl   | define(active, ACTIVE)
+dnl   | _AC_SH_QUOTE([`active'])
+dnl   | => \`active'
+dnl   | _AC_SH_QUOTE([\`active'])
+dnl   | => \`active'
+dnl   | error-->c.in:8: warning: backquotes should not be backslashed\
+dnl   ...                        in: \`active'
+dnl
 define(_AC_SH_QUOTE,
-[ifelse(regexp([$1], [\\`]),
-        -1, [patsubst([$1], [`], [\\`])],
+[ifelse(regexp([[$1]], [\\`]),
+        -1, [patsubst([[$1]], [`], [\\`])],
         [AC_WARNING([backquotes should not be backslashed in: $1])dnl
-$1])])
+[$1]])])
 
 dnl _AC_ECHO_UNQUOTED(STRING [ , FD ])
 dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG).
@@ -1958,7 +1929,7 @@ dnl _AC_ECHO(STRING [ , FD ])
 dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG),
 dnl protecting STRING from backquote expansion.
 define([_AC_ECHO],
-[_AC_ECHO_UNQUOTED(_AC_SH_QUOTE($1), $2)])
+[_AC_ECHO_UNQUOTED(_AC_SH_QUOTE([$1]), $2)])
 
 dnl _AC_ECHO_N(STRING [ , FD ])
 dnl Same as _AC_ECHO, but echo doesn't return to a new line.
@@ -2661,10 +2632,11 @@ dnl ### Checking for run-time features
 
 dnl AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE
 dnl            [, ACTION-IF-CROSS-COMPILING]]])
+dnl ------------------------------------------------------
 AC_DEFUN(AC_TRY_RUN,
 [if test "$cross_compiling" = yes; then
   ifelse([$4], ,
-    [AC_WARNING([[AC_TRY_RUN] called without default to allow cross compiling])dnl
+    [AC_WARNING([AC_TRY_RUN called without default to allow cross compiling])dnl
   AC_MSG_ERROR(cannot run test program while cross compiling)],
   [$4])
 else
@@ -3272,7 +3244,7 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --help       Display this help and exit
 
 dnl Issue this section only if there were actually config files.
-dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
+dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [Files to instantiate:
@@ -3312,6 +3284,7 @@ do
   case "[\$]ac_option" in
   # Handling of the options.
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+dnl FIXME: This line is suspicious, it contains "" inside a "`...`".
     echo "running [\$]{CONFIG_SHELL-/bin/sh} [$]0 `echo "[$]ac_configure_args" | sed 's/[[\\"\`\$]]/\\\\&/g'` --no-create --no-recursion"
     exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args --no-create --no-recursion ;;
   -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
@@ -3343,7 +3316,7 @@ done
 EOF
 
 dnl Issue this section only if there were actually config files.
-dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_CONFIG_COMMANDS,
+dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
 [cat >>$CONFIG_STATUS <<EOF

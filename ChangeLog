@@ -1,5 +1,15 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Clean up dead comments/code.  Clean up the incompatibilities
+	between quoted and non quoted _AC_ECHO and the like.
+
+	* acgeneral.m4: Remove the comments on the no longer defined AC_TR.
+	(_AC_SH_QUOTE): Be robust to active symbols.
+	(_AC_ECHO): Quote properly the argument.
+	(AC_TRY_RUN): Don't quote [AC_TRY_RUN] in the warning.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4: Formatting changes.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
