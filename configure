@@ -599,14 +599,14 @@ else
 fi
 
 # NLS nuisances.
-$ac_unset LANG || test "${LANG+set}" != set || LANG=C && export LANG
-$ac_unset LC_ALL || test "${LC_ALL+set}" != set || LC_ALL=C && export LC_ALL
-$ac_unset LC_TIME || test "${LC_TIME+set}" != set || LC_TIME=C && export LC_TIME
-$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || LC_CTYPE=C && export LC_CTYPE
-$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || LANGUAGE=C && export LANGUAGE
-$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || LC_COLLATE=C && export LC_COLLATE
-$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || LC_NUMERIC=C && export LC_NUMERIC
-$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || LC_MESSAGES=C && export LC_MESSAGES
+$ac_unset LANG || test "${LANG+set}" != set || { LANG=C; export LANG; }
+$ac_unset LC_ALL || test "${LC_ALL+set}" != set || { LC_ALL=C; export LC_ALL; }
+$ac_unset LC_TIME || test "${LC_TIME+set}" != set || { LC_TIME=C; export LC_TIME; }
+$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || { LC_CTYPE=C; export LC_CTYPE; }
+$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || { LANGUAGE=C; export LANGUAGE; }
+$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || { LC_COLLATE=C; export LC_COLLATE; }
+$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || { LC_NUMERIC=C; export LC_NUMERIC; }
+$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; export LC_MESSAGES; }
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -615,7 +615,7 @@ ac_nl='
 IFS=" 	$ac_nl"
 
 # CDPATH.
-$ac_unset CDPATH || test "${CDPATH+set}" != set || CDPATH=: && export CDPATH
+$ac_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
 
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
@@ -797,13 +797,13 @@ else
       # Don't use installbsd from OSF since it installs stuff as root
       # by default.
       for ac_prog in ginstall scoinst install; do
-        if test -f $ac_dir/$ac_prog; then
+        if test -f "$ac_dir/$ac_prog"; then
 	  if test $ac_prog = install &&
-            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+            grep dspmsg "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
 	    :
 	  elif test $ac_prog = install &&
-	    grep pwplus $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    grep pwplus "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
 	  else
@@ -1045,7 +1045,7 @@ for ac_dir in $ac_dummy; do
   IFS=$ac_save_IFS
   test -z "$ac_dir" && ac_dir=.
   if test -f "$ac_dir/$ac_word"; then
-   ac_cv_path_M4=$ac_dir/$ac_word
+   ac_cv_path_M4="$ac_dir/$ac_word"
    break
 fi
 done
@@ -1104,7 +1104,7 @@ ac_dummy="$PATH"
 for ac_dir in $ac_dummy; do
   IFS=$ac_save_IFS
   test -z "$ac_dir" && ac_dir=.
-  test -f $ac_dir/$ac_word || continue
+  test -f "$ac_dir/$ac_word" || continue
 ac_cv_prog_AWK="$ac_prog"
 break
 done
@@ -1158,7 +1158,7 @@ for ac_dir in $ac_dummy; do
   IFS=$ac_save_IFS
   test -z "$ac_dir" && ac_dir=.
   if test -f "$ac_dir/$ac_word"; then
-   ac_cv_path_PERL=$ac_dir/$ac_word
+   ac_cv_path_PERL="$ac_dir/$ac_word"
    break
 fi
 done
@@ -1212,13 +1212,13 @@ else
       # Don't use installbsd from OSF since it installs stuff as root
       # by default.
       for ac_prog in ginstall scoinst install; do
-        if test -f $ac_dir/$ac_prog; then
+        if test -f "$ac_dir/$ac_prog"; then
 	  if test $ac_prog = install &&
-            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+            grep dspmsg "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
 	    :
 	  elif test $ac_prog = install &&
-	    grep pwplus $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    grep pwplus "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
 	  else
@@ -1404,14 +1404,14 @@ else
 fi
 
 # NLS nuisances.
-$ac_unset LANG || test "${LANG+set}" != set || LANG=C && export LANG
-$ac_unset LC_ALL || test "${LC_ALL+set}" != set || LC_ALL=C && export LC_ALL
-$ac_unset LC_TIME || test "${LC_TIME+set}" != set || LC_TIME=C && export LC_TIME
-$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || LC_CTYPE=C && export LC_CTYPE
-$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || LANGUAGE=C && export LANGUAGE
-$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || LC_COLLATE=C && export LC_COLLATE
-$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || LC_NUMERIC=C && export LC_NUMERIC
-$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || LC_MESSAGES=C && export LC_MESSAGES
+$ac_unset LANG || test "${LANG+set}" != set || { LANG=C; export LANG; }
+$ac_unset LC_ALL || test "${LC_ALL+set}" != set || { LC_ALL=C; export LC_ALL; }
+$ac_unset LC_TIME || test "${LC_TIME+set}" != set || { LC_TIME=C; export LC_TIME; }
+$ac_unset LC_CTYPE || test "${LC_CTYPE+set}" != set || { LC_CTYPE=C; export LC_CTYPE; }
+$ac_unset LANGUAGE || test "${LANGUAGE+set}" != set || { LANGUAGE=C; export LANGUAGE; }
+$ac_unset LC_COLLATE || test "${LC_COLLATE+set}" != set || { LC_COLLATE=C; export LC_COLLATE; }
+$ac_unset LC_NUMERIC || test "${LC_NUMERIC+set}" != set || { LC_NUMERIC=C; export LC_NUMERIC; }
+$ac_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; export LC_MESSAGES; }
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -1420,7 +1420,7 @@ ac_nl='
 IFS=" 	$ac_nl"
 
 # CDPATH.
-$ac_unset CDPATH || test "${CDPATH+set}" != set || CDPATH=: && export CDPATH
+$ac_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
 
 debug=false
 me=`echo "$0" | sed 's,.*/,,'`
@@ -1766,7 +1766,7 @@ done; }
            { echo "configure: error: cannot find input file \\\`$f'" >&2; exit 1; }
          fi;;
       esac
-    done` || exit 1
+    done` || { (exit 1); exit; }
 EOF
 cat >>$CONFIG_STATUS <<EOF
   sed "$ac_vpsub
