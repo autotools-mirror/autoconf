@@ -1,5 +1,10 @@
 2000-02-18  Akim Demaille  <akim@epita.fr>
 
+	* tests/atspecific.m4 (TEST_MACRO): Don't run AC_PATH_TOOL and
+	AC_PATH_PROG.
+
+2000-02-18  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (at_diff): Don't use `cmp -s', on DOS it
 	makes the difference between Unix and DOS EOL. `diff' does not.
 	Reported by Eli Zaretski.

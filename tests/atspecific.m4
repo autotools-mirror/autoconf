@@ -145,6 +145,8 @@ AT_CLEANUP(configure config.status config.log config.cache config.hin config.h e
 #   infinite m4 recursion if AC_INIT it used twice.
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
+# - AC_PATH_PROGS?
+#   They produce `= val' because $1 is empty.
 # - AC_TRY
 #   Used in many places.
 # - _AC_
@@ -159,7 +161,7 @@ AT_DEFINE(TEST_MACRO,
  	  [^AC_LINKER_OPTION$],,
  	  [^AC_LINK_FILES$],,
  	  [^AC_LIST_MEMBER_OF$],,
- 	  [^AC_PATH_PROGS$],,
+ 	  [^AC_PATH_\(TOOL\|PROG\)S?$],,
  	  [^AC_PROG_\(CC\|CXX\|F77\)_\(GNU\|WORKS\)$],,
  	  [^AC_REPLACE_FUNCS$],,
  	  [^AC_SEARCH_LIBS$],,
