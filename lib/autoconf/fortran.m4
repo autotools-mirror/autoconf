@@ -560,14 +560,16 @@ AC_ARG_VAR([CC], [C compiler command])
 AC_ARG_VAR([CFLAGS], [C compiler flags])
 ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
-[
-  AC_CHECK_TOOL(CC, gcc)
-  if test -z "$CC"; then
-    AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
-    if test -z "$CC"; then
-      AC_CHECK_PROGS(CC, cl)
-    fi
-  fi
+[AC_CHECK_TOOL(CC, gcc)
+if test -z "$CC"; then
+  AC_CHECK_TOOL(CC, cc)
+fi
+if test -z "$CC"; then
+  AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+fi
+if test -z "$CC"; then
+  AC_CHECK_TOOLS(CC, cl)
+fi
 ])
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])

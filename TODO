@@ -40,13 +40,6 @@ might hurt feelings?  In addition, it means that the Messiah has come,
 which might be slightly presumptuous :).  Still, someone fluent in
 English should write it.
 
-** More C compilers (How come this has never been handled?  --akim)
-Question: at least one common UNIX variant has a "cc" that is old K&R
-and "c89" for ANSI C.  Is there any reason why AC_PROG_CC couldn't
-check for c89 before cc if it can't find gcc?
-
-hpa@yggdrasil.com (H. Peter Anvin)
-
 
 * Autoconf 2.51 or so
 

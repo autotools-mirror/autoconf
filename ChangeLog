@@ -1,5 +1,9 @@
 2000-08-01  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_PROG_CC): Also try to find $target_alias-cc.
+
+2000-08-01  Akim Demaille  <akim@epita.fr>
+
 	AC_VALIDATE_CACHED_SYSTEM_TUPLE no longer works properly since the
 	AC_CANONICAL_* revamping.
 	Reported by Peter Eisentraut.
