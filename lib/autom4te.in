@@ -40,6 +40,8 @@ args: --preselect AC_CANONICAL_SYSTEM
 args: --preselect AC_CONFIG_AUX_DIR
 args: --preselect AC_CONFIG_FILES
 args: --preselect AC_CONFIG_HEADERS
+args: --preselect AC_CONFIG_LIBOBJ_DIR
+args: --preselect AC_CONFIG_LINKS
 args: --preselect AC_INIT
 args: --preselect AC_LIBSOURCE
 args: --preselect AC_SUBST
@@ -49,6 +51,8 @@ args: --preselect AM_GNU_GETTEXT
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
 args: --preselect AM_PROG_CC_C_O
+args: --preselect m4_include
+args: --preselect m4_sinclude
 end-language: "Automake-preselections"
 
 

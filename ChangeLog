@@ -1,5 +1,11 @@
 2003-08-19  Alexandre Duret-Lutz  <adl@gnu.org>
 
+	* lib/autom4te.in (Automake-preselections): Preselect
+	AC_CONFIG_LIBOBJ_DIR, AC_CONFIG_LINKS, m4_include,
+	and m4_sinclude.
+
+2003-08-19  Alexandre Duret-Lutz  <adl@gnu.org>
+
 	* lib/autom4te.in (Autoconf): Move all args except aclocal.m4? into ...
 	(Autoconf-without-aclocal-m4): ... this new language.
 	* doc/autoconf.texi (autom4te Invocation): Mention
