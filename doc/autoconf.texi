@@ -5665,7 +5665,8 @@ Although @sc{posix} is not absolutely clear on that point, it is widely
 admitted that when entering the trap @samp{$?} should be set to the exit
 status of the last command run before the trap.  The ambiguity can be
 summarized as: ``when the trap is launched by an @command{exit}, what is
-the @emph{last} command run: that before @command{exit}, or exit itself.
+the @emph{last} command run: that before @command{exit}, or exit
+itself?''
 
 Bash considers @command{exit} was the last command, while Zsh and
 Solaris 8 @command{sh} consider that when the trap is run it is
