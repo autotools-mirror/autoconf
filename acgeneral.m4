@@ -2911,6 +2911,62 @@ AC_DEFUN(AC_CHECK_TYPE,
 ## ----------------------- ##
 
 
+# This section handles about all the preparation aspects for
+# `config.status': registering the configuration files, the headers, the
+# links, and the commands `config.status' will run.  There is a little
+# mixture though of things actually handled by `configure', such as
+# running the `configure' in the sub directories.  Minor detail.
+#
+# There are two kinds of commands:
+#
+# COMMANDS:
+#
+#   They are output into `config.status' via a quoted here doc.  These
+#   commands are always associated to a tag which the user can use to
+#   tell `config.status' what are the commands she wants to run.
+#
+# INIT-CMDS:
+#
+#   They are output via an *unquoted* here-doc.  As a consequence $var
+#   will be output as the value of VAR.  This is typically used by
+#   `configure' to give `config,.status' some variables it needs to run
+#   the COMMANDS.  At the difference of `COMMANDS', the INIT-CMDS are
+#   always run.
+#
+#
+# Some uniformity exists around here, please respect it!
+#
+# A macro named AC_CONFIG_FOOS has three args: the `TAG...' (or
+# `FILE...'  when it applies), the `COMMANDS' and the `INIT-CMDS'.  It
+# first checks that TAG was not registered elsewhere thanks to
+# AC_CONFIG_UNIQUE.  Then it registers `TAG...' in AC_LIST_FOOS, and for
+# each `TAG', a special line in AC_LIST_FOOS_COMMANDS which is used in
+# `config.status' like this:
+#
+# 	  case $ac_tag in
+# 	    AC_LIST_FOOS_COMMANDS
+# 	  esac
+#
+# Finally, the `INIT-CMDS' are dumped into a special diversion, via
+# `_AC_CONFIG_COMMANDS_INIT'.  While `COMMANDS' are output once per TAG,
+# `INIT-CMDS' are dumpdef only once per call to AC_CONFIG_FOOS.
+#
+# AC_CONFIG_FOOS can be called several times (with different TAGs of
+# course).
+#
+# Because these macros should not output anything, there should be `dnl'
+# everywhere.  A pain my friend, a pain.  So instead in each macro we
+# divert(-1) and restore the diversion at the end.
+#
+#
+# Honorable members of this family are AC_CONFIG_FILES,
+# AC_CONFIG_HEADERS, AC_CONFIG_LINKS and AC_CONFIG_COMMANDS.  Bad boys
+# are AC_LINK_FILES, AC_OUTPUT_COMMANDS and AC_OUTPUT when used with
+# arguments.  False members are AC_CONFIG_SUBDIRS and AC_CONFIG_AUX_DIR.
+# Cousins are AC_CONFIG_COMMANDS_PRE and AC_CONFIG_COMMANDS_POST.
+
+
+
 # AC_CONFIG_IF_MEMBER(DEST, LIST, ACTION-IF-TRUE, ACTION-IF-FALSE)
 # ----------------------------------------------------------------
 # If DEST is member of LIST, expand to ACTION-IF-TRUE, else ACTION-IF-FALSE.
@@ -2934,9 +2990,9 @@ define(AC_CONFIG_IF_MEMBER,
 # Verify that there is no double definition of an output file
 # (precisely, guarantees there is no common elements between
 # CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
-# This macro should output nothing, so we divert to /dev/null.  Note
-# that this macro does not check if the list $[1] itself contains
-# doubles.
+#
+# Note that this macro does not check if the list $[1] itself
+# contains doubles.
 define(AC_CONFIG_UNIQUE,
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
 AC_FOREACH([AC_File], [$1],
@@ -2956,145 +3012,37 @@ AC_DIVERT_POP()dnl
 ])
 
 
-# AC_CONFIG_HEADERS(HEADERS..., [COMMANDS])
-# -----------------------------------------
-# Specify that the HEADERS are to be created by instantiation of the
-# AC_DEFINEs.  Associate the COMMANDS to the HEADERS.  This macro
-# accumulates if called several times.
+# _AC_CONFIG_COMMANDS_INIT(INIT-COMMANDS)
+# ---------------------------------------
 #
-# The commands are stored in a growing string AC_LIST_HEADERS_COMMANDS
-# which should be used like this:
+# Register INIT-COMMANDS as command pasted *unquoted* in
+# `config.status'.  This is typically used to pass variables from
+# `configure' to `config.status'.  Note that $[1] is not over quoted as
+# was the case in AC_OUTPUT_COMMANDS.
+define(_AC_CONFIG_COMMANDS_INIT,
+[ifval([$1],
+[AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
+$1
+AC_DIVERT_POP()])])
+
+
+# AC_CONFIG_COMMANDS(NAME...,[COMMANDS], [INIT-CMDS])
+# ---------------------------------------------------
 #
-#      case $ac_file in
-#        AC_LIST_HEADERS_COMMANDS
-#      esac
-AC_DEFUN([AC_CONFIG_HEADERS],
-[AC_CONFIG_UNIQUE([$1])dnl
-m4_append([AC_LIST_HEADERS], [ $1])dnl
-dnl Register the commands
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
-[m4_append([AC_LIST_HEADERS_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
-])])])dnl
-])dnl
-
-# Initialize to empty.  It is much easier and uniform to have a config
-# list expand to empty when undefined, instead of special casing when
-# not defined (since in this case, AC_CONFIG_FOO expands to AC_CONFIG_FOO).
-define([AC_LIST_HEADERS])
-define([AC_LIST_HEADERS_COMMANDS])
-
-
-# AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
-# --------------------------------------
-# FIXME: Make it obsolete?
-AC_DEFUN(AC_CONFIG_HEADER,
-[AC_CONFIG_HEADERS([$1])])
-
-
-# AC_CONFIG_LINKS(DEST:SOURCE..., [COMMANDS])
-# -------------------------------------------
-# Specify that config.status should establish a (symbolic if possible)
-# link from TOP_SRCDIR/SOURCE to TOP_SRCDIR/DEST.
-# Reject DEST=., because it is makes it hard for ./config.status
-# to guess the links to establish (`./config.status .').
-# This macro may be called multiple times.
-#
-# The commands are stored in a growing string AC_LIST_LINKS_COMMANDS
-# which should be used like this:
-#
-#      case $ac_file in
-#        AC_LIST_LINKS_COMMANDS
-#      esac
-AC_DEFUN(AC_CONFIG_LINKS,
-[AC_CONFIG_UNIQUE([$1])dnl
-ifelse(regexp([$1], [^\.:\| \.:]), -1,,
-       [AC_FATAL([$0: invalid destination: `.'])])dnl
-m4_append([AC_LIST_LINKS], [ $1])dnl
-dnl Register the commands
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
-[m4_append([AC_LIST_LINKS_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
-])])])dnl
-])dnl
-
-
-# Initialize the list.
-define([AC_LIST_LINKS])
-define([AC_LIST_LINKS_COMMANDS])
-
-
-# AC_LINK_FILES(SOURCE..., DEST...)
-# ---------------------------------
-# Link each of the existing files SOURCE... to the corresponding
-# link name in DEST...
-AU_DEFUN([AC_LINK_FILES],
-[ifelse($#, 2, ,
-        [m4_fatal([$0: incorrect number of arguments])])dnl
-pushdef([AC_Srcs], m4_split(m4_strip(m4_join([$1]))))dnl
-pushdef([AC_Dsts], m4_split(m4_strip(m4_join([$2]))))dnl
-dnl
-m4_foreach([AC_Dummy], (AC_Srcs),
-[AC_CONFIG_LINKS(m4_car(AC_Dsts):m4_car(AC_Srcs))dnl
-define([AC_Srcs], m4_shift(AC_Srcs))dnl
-define([AC_Dsts], m4_shift(AC_Dsts))])dnl
-dnl
-popdef([AC_Srcs])dnl
-popdef([AC_Dsts])dnl
-])# AC_LINK_FILES
-
-
-
-# AC_CONFIG_FILES(FILE...[, COMMANDS])
-# ------------------------------------
-# Specify output files, as with AC_OUTPUT, i.e., files that are
-# configured with AC_SUBST.  Associate the COMMANDS to each FILE,
-# i.e., when config.status creates FILE, run COMMANDS afterwards.
-#
-# The commands are stored in a growing string AC_LIST_FILES_COMMANDS
-# which should be used like this:
-#
-#      case $ac_file in
-#        AC_LIST_FILES_COMMANDS
-#      esac
-AC_DEFUN([AC_CONFIG_FILES],
-[AC_CONFIG_UNIQUE([$1])dnl
-m4_append([AC_LIST_FILES], [ $1])dnl
-dnl Register the commands.
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
-[m4_append([AC_LIST_FILES_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
-])])])dnl
-])dnl
-
-# Initialize the lists.
-define([AC_LIST_FILES])
-define([AC_LIST_FILES_COMMANDS])
-
-
-
-# AC_CONFIG_COMMANDS(NAME..., COMMANDS)
-# -------------------------------------
 # Specify additional commands to be run by config.status.  This
 # commands must be associated with a NAME, which should be thought
 # as the name of a file the COMMANDS create.
-#
-# This name must be a unique config key.
-#
-# The commands are stored in a growing string AC_LIST_COMMANDS_COMMANDS
-# which should be used like this:
-#
-#      case $ac_file in
-#        AC_LIST_COMMANDS_COMMANDS
-#      esac
 AC_DEFUN([AC_CONFIG_COMMANDS],
-[AC_CONFIG_UNIQUE([$1])dnl
-m4_append([AC_LIST_COMMANDS], [ $1])dnl
-dnl
+[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+AC_CONFIG_UNIQUE([$1])
+m4_append([AC_LIST_COMMANDS], [ $1])
+
 ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
 [m4_append([AC_LIST_COMMANDS_COMMANDS],
 [    ]patsubst(AC_Name, [:.*])[ ) $2 ;;
-])])])dnl
+])])])
+_AC_CONFIG_COMMANDS_INIT([$3])
+AC_DIVERT_POP()dnl
 ])dnl
 
 # Initialize the lists.
@@ -3137,6 +3085,123 @@ AC_DEFUN([AC_CONFIG_COMMANDS_POST],
 
 # Initialize.
 define([AC_OUTPUT_COMMANDS_POST])
+
+
+# AC_CONFIG_HEADERS(HEADERS..., [COMMANDS], [INIT-CMDS])
+# ------------------------------------------------------
+# Specify that the HEADERS are to be created by instantiation of the
+# AC_DEFINEs.  Associate the COMMANDS to the HEADERS.  This macro
+# accumulates if called several times.
+#
+# The commands are stored in a growing string AC_LIST_HEADERS_COMMANDS
+# which should be used like this:
+#
+#      case $ac_file in
+#        AC_LIST_HEADERS_COMMANDS
+#      esac
+AC_DEFUN([AC_CONFIG_HEADERS],
+[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+AC_CONFIG_UNIQUE([$1])
+m4_append([AC_LIST_HEADERS], [ $1])
+dnl Register the commands
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_HEADERS_COMMANDS],
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])
+_AC_CONFIG_COMMANDS_INIT([$3])
+AC_DIVERT_POP()dnl
+])dnl
+
+# Initialize to empty.  It is much easier and uniform to have a config
+# list expand to empty when undefined, instead of special casing when
+# not defined (since in this case, AC_CONFIG_FOO expands to AC_CONFIG_FOO).
+define([AC_LIST_HEADERS])
+define([AC_LIST_HEADERS_COMMANDS])
+
+
+# AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
+# --------------------------------------
+# FIXME: Make it obsolete?
+AC_DEFUN(AC_CONFIG_HEADER,
+[AC_CONFIG_HEADERS([$1])])
+
+
+# AC_CONFIG_LINKS(DEST:SOURCE..., [COMMANDS], [INIT-CMDS])
+# --------------------------------------------------------
+# Specify that config.status should establish a (symbolic if possible)
+# link from TOP_SRCDIR/SOURCE to TOP_SRCDIR/DEST.
+# Reject DEST=., because it is makes it hard for ./config.status
+# to guess the links to establish (`./config.status .').
+AC_DEFUN(AC_CONFIG_LINKS,
+[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+AC_CONFIG_UNIQUE([$1])
+ifelse(regexp([$1], [^\.:\| \.:]), -1,,
+       [AC_FATAL([$0: invalid destination: `.'])])
+m4_append([AC_LIST_LINKS], [ $1])
+dnl Register the commands
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_LINKS_COMMANDS],
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])
+_AC_CONFIG_COMMANDS_INIT([$3])
+AC_DIVERT_POP()dnl
+])dnl
+
+
+# Initialize the list.
+define([AC_LIST_LINKS])
+define([AC_LIST_LINKS_COMMANDS])
+
+
+# AC_LINK_FILES(SOURCE..., DEST...)
+# ---------------------------------
+# Link each of the existing files SOURCE... to the corresponding
+# link name in DEST...
+AU_DEFUN([AC_LINK_FILES],
+[ifelse($#, 2, ,
+        [m4_fatal([$0: incorrect number of arguments])])dnl
+pushdef([AC_Srcs], m4_split(m4_strip(m4_join([$1]))))dnl
+pushdef([AC_Dsts], m4_split(m4_strip(m4_join([$2]))))dnl
+dnl
+m4_foreach([AC_Dummy], (AC_Srcs),
+[AC_CONFIG_LINKS(m4_car(AC_Dsts):m4_car(AC_Srcs))dnl
+define([AC_Srcs], m4_shift(AC_Srcs))dnl
+define([AC_Dsts], m4_shift(AC_Dsts))])dnl
+dnl
+popdef([AC_Srcs])dnl
+popdef([AC_Dsts])dnl
+])# AC_LINK_FILES
+
+
+
+# AC_CONFIG_FILES(FILE..., [COMMANDS], [INIT-CMDS])
+# -------------------------------------------------
+# Specify output files, as with AC_OUTPUT, i.e., files that are
+# configured with AC_SUBST.  Associate the COMMANDS to each FILE,
+# i.e., when config.status creates FILE, run COMMANDS afterwards.
+#
+# The commands are stored in a growing string AC_LIST_FILES_COMMANDS
+# which should be used like this:
+#
+#      case $ac_file in
+#        AC_LIST_FILES_COMMANDS
+#      esac
+AC_DEFUN([AC_CONFIG_FILES],
+[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+AC_CONFIG_UNIQUE([$1])
+m4_append([AC_LIST_FILES], [ $1])
+dnl Register the commands.
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_FILES_COMMANDS],
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])
+_AC_CONFIG_COMMANDS_INIT([$3])
+AC_DIVERT_POP()dnl
+])dnl
+
+# Initialize the lists.
+define([AC_LIST_FILES])
+define([AC_LIST_FILES_COMMANDS])
 
 
 # AC_CONFIG_SUBDIRS(DIR ...)
@@ -3388,6 +3453,17 @@ trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
 EOF
 ])[]dnl ifval
 
+dnl We output the INIT-CMDS first for obvious reasons :)
+
+cat >>$CONFIG_STATUS <<EOF
+#
+# INIT-COMMANDS section.
+#
+
+undivert(AC_DIVERSION_ICMDS)dnl
+EOF
+
+
 dnl The following three sections are in charge of their own here
 dnl documenting into $CONFIG_STATUS.
 
@@ -3406,15 +3482,12 @@ ifset([AC_LIST_LINKS],
 ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
-cat >>$CONFIG_STATUS <<EOF
+cat >>$CONFIG_STATUS <<\EOF
 
 #
 # CONFIG_COMMANDS section.
 #
 
-undivert(AC_DIVERSION_ICMDS)dnl
-EOF
-cat >>$CONFIG_STATUS <<\EOF
 undivert(AC_DIVERSION_CMDS)dnl
 exit 0
 EOF

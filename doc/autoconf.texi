@@ -4873,7 +4873,7 @@ i960-*-bout) obj_format=bout ;;
 esac
 @end example
 
-@defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{})
+@defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @maindex CONFIG_LINKS
 Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if

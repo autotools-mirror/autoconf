@@ -1,5 +1,26 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	Extend the concept of `INIT-CMDS' to the AC_CONFIG_FOOS.
+
+	* acgeneral.m4 (_AC_CONFIG_COMMANDS_INIT): New macro which will
+	collect the `INIT-CMDS'.
+	(AC_CONFIG_COMMANDS, AC_CONFIG_LINKS, AC_CONFIG_HEADERS,
+	AC_CONFIG_FILES): Use it, and also temporarily divert to -1
+	instead of spamming dnl everywhere.
+	(AC_OUTPUT_CONFIG_STATUS): Make sure to output the INIT-CMDS
+	before the other sections, it'd be a pity to initialize after the
+	use :).
+
+	* doc/autoconf.texi (Configuration Actions): New section,
+	documenting the common behavior of AC_CONFIG_FILES,
+	AC_CONFIG_HEADERS, macro AC_CONFIG_COMMANDS, and AC_CONFIG_LINKS.
+	(Configuration Files): Document $2 and $3 of AC_CONFIG_FILES.
+	(Configuration Headers): Document $2 and $3 of AC_CONFIG_HEADERS.
+	(Configuration Commands): Document $2 and $3 of AC_CONFIG_COMMANDS.
+	(Configuration Links): Document $2 and $3 of AC_CONFIG_FILES.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4 (m4_sign, m4_cmp, m4_list_cmp): New macros.
 	* acgeneral.m4 (AC_UNGNITS): Renamed as...
 	(_AC_VERSION_UNLETTER): this.  All callers changed.
