@@ -1,3 +1,8 @@
+1999-01-23  Ben Elliston  <bje@cygnus.com>
+
+	* autoheader.sh: Force $tmpout to close to avoid Windows file
+	sharing conflicts. From Mark Elbrecht <snowball3@usa.net>.
+
 1999-01-21  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (Introduction): Update bug reporting address.

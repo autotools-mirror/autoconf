@@ -276,6 +276,8 @@ if test -n "$syms"; then
 fi
 
 if test $# -eq 0; then
+  # Force $tmpout to close to avoid Windows file sharing conflicts.
+  exec 1>&2
   if test $status -eq 0; then
     if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
       rm -f $tmpout # File didn't change, so don't update its mod time.
