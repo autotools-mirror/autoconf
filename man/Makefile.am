@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright (C) 2001, 2004 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2004, 2005 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -50,6 +50,10 @@ $(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 SUFFIXES = .x .1
 
 .x.1:
+	@case $* in \
+	  */config.*) ;; \
+	  *) $(MAKE) $*-bin-prereq $*-tests-prereq;; \
+	esac
 	echo "Updating man page $@"
 	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
 	export PATH; \
@@ -57,3 +61,18 @@ SUFFIXES = .x .1
 	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
 	    --output=$@ `echo "$*" | sed 's,^$(srcdir)/,,'`
+
+
+# While building man page prerequisites, avoid explicit dependencies
+# on any file that is not distributed, so that installers do not
+# unnecessarily attempt to run $(HELP2MAN), a tool that they may not
+# have.
+
+$(dist_man_MANS:.1=-bin-prereq) $(dist_man_MANS:.1=-tests-prereq):
+	@$(MAKE) $(AM_MAKEFLAGS) \
+	  builddir=$(top_builddir)/`expr 'X$@' : '.*-\([^-]*\)-prereq$$'` \
+	  program=`expr '/$@' : '.*/\([^-]*\)'` \
+	  implicit-man-prerequisites
+
+implicit-man-prerequisites:
+	cd $(builddir) && $(MAKE) $(AM_MAKEFLAGS) $(program)
