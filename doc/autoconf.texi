@@ -1380,14 +1380,15 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 @cindex @command{autoreconf}
 
 Installing the various components of the @sc{gnu} Build System can be
-tedious: running @command{gettextize}, @command{automake} etc. in each
-directory.  It may be needed either because some tools such as
-@command{automake} have been updated on your system, or because some of
-the sources such as @file{configure.ac} have been updated, or finally,
-simply in order to install the @sc{gnu} Build System in a fresh tree.
+tedious: running @command{autopoint} for Gettext, @command{automake} for
+@file{Makefile.in} etc. in each directory.  It may be needed either
+because some tools such as @command{automake} have been updated on your
+system, or because some of the sources such as @file{configure.ac} have
+been updated, or finally, simply in order to install the @sc{gnu} Build
+System in a fresh tree.
 
 It runs @command{autoconf}, @command{autoheader}, @command{aclocal},
-@command{automake}, @command{libtoolize}, and @command{gettextize} (when
+@command{automake}, @command{libtoolize}, and @command{autopoint} (when
 appropriate) repeatedly to update the @sc{gnu} Build System in specified
 directories, and their subdirectories (@pxref{Subdirectories}).  By
 default, it only remakes those files that are older than their sources.

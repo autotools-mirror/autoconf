@@ -1,5 +1,14 @@
 2002-05-03  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (autoreconf): Rewrite to use Gettext's
+	autopoint instead of gettextize.
+	($uses_alocal): Rename as...
+	($uses_aclocal): this.
+	* doc/autoconf.texi (autoreconf Invocation): Adjust.
+	Suggested by Bruno Haible.
+
+2002-05-03  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_map_sep): New.
 
 2002-04-29  Paul Eggert  <eggert@twinsun.com>

@@ -45,10 +45,10 @@ use strict;
 # -----
 $help = "Usage: $0 [OPTION] ... [CONFIGURE-AC or DIRECTORY] ...
 
-Run `autoconf' (and `autoheader', `aclocal', `automake', `gettextize',
-and `libtoolize' where appropriate) repeatedly to remake the GNU Build
-System files in the DIRECTORIES or the directory trees driven by
-CONFIGURE-AC (defaulting to `.').
+Run `autoconf' (and `autoheader', `aclocal', `automake', `autopoint'
+(formerly `gettextize'), and `libtoolize' where appropriate)
+repeatedly to remake the GNU Build System files in the DIRECTORIES or
+the directory trees driven by CONFIGURE-AC (defaulting to `.').
 
 By default, it only remakes those files that are older than their
 predecessors.  If you install new versions of the GNU Build System,
@@ -68,7 +68,7 @@ Library directories:
   -I, --include=DIR  look for FILES in DIR (cumulative)
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
-GETTEXTIZE, LIBTOOLIZE are honored.
+AUTOPOINT, LIBTOOLIZE are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";
@@ -89,11 +89,7 @@ my $autoheader = $ENV{'AUTOHEADER'} || '@autoheader-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
-my $gettextize = $ENV{'GETTEXTIZE'} || 'gettextize';
-
-# Does gettextize support --no-changelog and --intl?
-my $gettextize_intl_p;
-my $gettextize_no_changelog_p;
+my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -140,7 +136,7 @@ sub parse_args ()
       print STDERR "\n";
       xsystem ("$aclocal --version | sed 1q >&2");
       print STDERR "\n";
-      xsystem ("$gettextize --version | sed 1q >&2");
+      xsystem ("$autopoint --version | sed 1q >&2");
       print STDERR "\n";
       xsystem ("$libtoolize --version | sed 1q >&2");
       print STDERR "\n";
@@ -156,7 +152,6 @@ sub parse_args ()
     {
       $automake   .= ' --add-missing';
       $automake   .= ' --copy' unless $symlink;
-      $gettextize .= ' --copy' unless $symlink;
       $libtoolize .= ' --copy' unless $symlink;
     }
   # --force;
@@ -165,7 +160,7 @@ sub parse_args ()
       $autoconf   .= ' --force';
       $autoheader .= ' --force';
       $automake   .= ' --force-missing';
-      $gettextize .= ' --force';
+      $autopoint  .= ' --force';
       $libtoolize .= ' --force';
     }
   else
@@ -182,29 +177,6 @@ sub parse_args ()
       $libtoolize .= ' --debug';
     }
 }
-
-
-# &study_gettextize
-# -----------------
-# See what options gettextize supports.
-sub study_gettextize ()
-{
-  return
-    if defined $gettextize_no_changelog_p && defined $gettextize_intl_p;
-
-  $gettextize_no_changelog_p = 0;
-  $gettextize_intl_p = 0;
-
-  my $usage = new Autom4te::XFile ("$gettextize --help |");
-  while ($_ = $usage->getline)
-    {
-      $gettextize_no_changelog_p = 1 if /--no-changelog/;
-      $gettextize_intl_p = 1         if /--intl/;
-    }
-
-  $gettextize .= " --no-changelog" if $gettextize_no_changelog_p;
-}
-
 
 
 # &autoreconf ($DIRECTORY)
@@ -306,7 +278,7 @@ sub autoreconf ($)
 
   # We might have to rerun aclocal if Libtool or Gettext import new
   # macros.
-  my $rerun_alocal = 0;
+  my $rerun_aclocal = 0;
 
 
   # ------------------------------- #
@@ -317,8 +289,6 @@ sub autoreconf ($)
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
   my $uses_gettext;
-  # Starting at GNU Gettext 0.11, libintl is optional.
-  my $uses_libintl;
   my $uses_libtool;
   my $uses_autoheader;
   my @subdir;
@@ -332,11 +302,7 @@ sub autoreconf ($)
   while ($_ = $traces->getline)
     {
       $uses_autoconf = 1            if /AC_INIT/;
-      if (/AM_GNU_GETTEXT/)
-	{
-	  $uses_gettext = 1;
-	  $uses_libintl = !/external/;
-	}
+      $uses_gettext = 1             if /AM_GNU_GETTEXT/;
       $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
       $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
@@ -358,9 +324,9 @@ sub autoreconf ($)
 
 
 
-  # -------------------- #
-  # Running gettextize.  #
-  # -------------------- #
+  # ------------------- #
+  # Running autopoint.  #
+  # ------------------- #
 
   if (!$uses_gettext)
     {
@@ -368,52 +334,12 @@ sub autoreconf ($)
     }
   elsif (!$install)
     {
-      verbose "$configure_ac: not running gettextize: --install not given";
+      verbose "$configure_ac: not running autopoint: --install not given";
     }
   else
     {
-      # See if gettextize supports --intl and --no-changelog.
-      study_gettextize;
-
-      # Old and new gettext are really different :(
-      if ($gettextize_intl_p)
-	{
-	  # Gettext >= 0.11.
-	  if ($uses_libintl)
-	    {
-	      if (-d 'intl' && !$force)
-		{
-		  verbose ("$configure_ac: not running gettextize: ",
-			   "`intl' is already present");
-		}
-	      else
-		{
-		  xsystem "$gettextize --intl";
-		  $rerun_alocal = 1;
-		}
-	    }
-	  else
-	    {
-	      # Always run modern gettextizes, as they update/import
-	      # several files.
-	      xsystem "$gettextize";
-	      $rerun_alocal = 1;
-	    }
-	}
-      else
-	{
-	  # Gettext < 0.11.
-	  if (-d 'intl' && !$force)
-	    {
-	      verbose ("$configure_ac: not running gettextize: ",
-		       "`intl' is already present");
-	    }
-	  else
-	    {
-	      xsystem "$gettextize --intl";
-	      $rerun_alocal = 1;
-	    }
-	}
+      xsystem "$autopoint";
+      $rerun_aclocal = 1;
     }
 
 
@@ -428,7 +354,7 @@ sub autoreconf ($)
   elsif ($install)
     {
       xsystem ($libtoolize);
-      $rerun_alocal = 1;
+      $rerun_aclocal = 1;
     }
   else
     {
@@ -442,7 +368,7 @@ sub autoreconf ($)
 
   # If we re-installed Libtool or Gettext, the macros might have changed.
   # Automake also needs an up-to-date aclocal.m4.
-  if ($rerun_alocal)
+  if ($rerun_aclocal)
     {
       if (!$uses_aclocal)
 	{
@@ -462,7 +388,7 @@ sub autoreconf ($)
 	      # aclocal at first (before tracing), which, for instance,
 	      # can find Gettext's macros in .../share/aclocal, so we
 	      # may have had the right aclocal.m4 already.  Then
-	      # gettextize is run, and installs locally these M4
+	      # autopoint is run, and installs locally these M4
 	      # files.  Then autoreconf, via update_file, sees it is
 	      # the _same_ aclocal.m4, and doesn't change its
 	      # timestamp.  But later, Automake's Makefile expresses
