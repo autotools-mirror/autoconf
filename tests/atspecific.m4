@@ -25,20 +25,37 @@
 
 # AT_CHECK_AUTOM4TE(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -----------------------------------------------------------
-# If stderr is specified, normalize the observed stderr.  E.g.:
+# If stderr is specified, normalize the observed stderr.  E.g. (GNU M4 1.5):
 #
 #  /usr/local/bin/m4: script.4s: 1: Cannot open foo: No such file or directory
+#  autom4te: /usr/local/bin/m4 failed with exit status: 1
+#
+# or (using gm4 as GNU M4 1.4):
+#
+#  script.4s:1: /usr/local/bin/gm4: Cannot open foo: No such file or directory
 #  autom4te: /usr/local/bin/m4 failed with exit status: 1
 #
 # becomes
 #
 #  m4: script.4s: 1: Cannot open foo: No such file or directory
 #  autom4te: m4 failed with exit status: 1
-
+#
+# We use the following sed patterns:
+#
+#     (file): (line): (m4):
+# or  (m4): (file): (line):
+# to  m4: (file): (line):
+#
+# and
+#     autom4te: [^ ]m4
+# to  autom4te: m4
 m4_define([AT_CHECK_AUTOM4TE],
 [AT_CHECK([autom4te $1], [$2], [$3], m4_ifval([$4], [stderr]))
 m4_ifval([$4],
-[AT_CHECK([[sed 's,[^ ]*/m4,m4,' stderr]], [0],[$4])])
+[AT_CHECK([[sed -e 's,^\([^:]*\): *\([0-9][0-9]*\): *[^:]*m4: ,m4: \1: \2: ,' \
+                -e 's,^[^:]*m4: *\([^:]*\): *\([0-9][0-9]*\): ,m4: \1: \2: ,' \
+                -e 's/^autom4te: [^ ]*m4 /autom4te: m4 /' \
+           stderr]], [0],[$4])])
 ])
 
 

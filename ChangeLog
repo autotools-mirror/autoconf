@@ -1,3 +1,9 @@
+2002-10-28  Akim Demaille  <akim@epita.fr>
+
+	* tests/atspecific.m4 (AT_CHECK_AUTOM4TE): Be robust to different
+	m4 executable names, and different GNU M4 version.
+	Reported by Ezra Peisach and Paul Jarc.
+
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/functions.m4 (_AC_FUNC_VFORK): Really use
