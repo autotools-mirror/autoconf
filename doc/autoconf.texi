@@ -615,10 +615,11 @@ good start in writing @file{configure.ac} (@pxref{autoscan Invocation},
 for more information).
 
 Previous versions of Autoconf promoted the name @file{configure.in},
-which is somewhat ambiguous (the tool needed to proceed this file is not
-given by the extension), and introduces a slight confusion with
-@file{config.h.in} and so on, for which @samp{.in} means ``to be
-processed by @code{configure}''.  Using @file{configure.ac} is now preferred.
+which is somewhat ambiguous (the tool needed to produce this file is not
+described by its extension), and introduces a slight confusion with
+@file{config.h.in} and so on (for which @samp{.in} means ``to be
+processed by @code{configure}'').  Using @file{configure.ac} is now
+preferred.
 
 @menu
 * Shell Script Compiler::       Autoconf as solution of a problem
@@ -629,66 +630,67 @@ processed by @code{configure}''.  Using @file{configure.ac} is now preferred.
 @node Shell Script Compiler, Autoconf Language, Writing configure.ac, Writing configure.ac
 @subsection A Shell Script Compiler
 
-Like for any other language, to properly program in Autoconf, i.e., the
-language in which you write @file{configure.ac}, you must understand
-@emph{what} is the problem it tries to answer, and @emph{how} it does.
+Just as for any other computer language, in order to properly program
+@file{configure.ac} in Autoconf you must understand @emph{what} problem
+the language tries to address and @emph{how} it does so.
 
-The problem Autoconf addresses is that the world is a mess: after all,
+The problem Autoconf addresses is that the world is a mess.  After all,
 you are using Autoconf in order to have your package compile easily on
-all sort of different systems, some of them being extremely hostile.
-But Autoconf itself suffers from these differences: @code{configure}
-must run on all those systems, hence @code{configure} must use the
-least common divisor between all supported system.
+all sorts of different systems, some of them being extremely hostile.
+Autoconf itself bears the price for these differences: @code{configure}
+must run on all those systems, and thus @code{configure} must limit itself
+to their lowest common denominator of features.
 
-Naturally, you orient yourself towards shell scripts.  And in fact,
-there is not even the need for a tool like @code{autoconf}: a set of
-properly written shell functions is way enough to make it easy to write
-@code{configure} scripts by hand.  Sigh!  Unfortunately, shell functions
-do not belong to the least common divisor, therefore, where you'd define
-a function and use it ten times, you need to write ten times its body.
+Naturally, you might then think of shell scripts; who needs
+@code{autoconf}?  A set of properly written shell functions is enough to
+make it easy to write @code{configure} scripts by hand.  Sigh!
+Unfortunately, shell functions do not belong to the least common
+denominator; therefore, where you would like to define a function and
+use it ten times, you would instead need to copy its body ten times.
 
-Therefore, what is really needed is some kind of compiler,
-@code{autoconf}, which takes an Autoconf program, @file{configure.ac},
-and transform it in a portable shell script, @code{configure}.
+So, what is really needed is some kind of compiler, @code{autoconf},
+that takes an Autoconf program, @file{configure.ac}, and transforms it
+into a portable shell script, @code{configure}.
 
 How does @code{autoconf} perform this task?
 
-Two obvious solutions: creating a brand new language, or extending an
-existing one.  The former option is very attractive: all sort of
-optimizations could easily be implemented in the compiler, many rigorous
-checks could be performed on the Autoconf program, and in particular, it
-would be extremely easy to reject any non portable construct etc.
-Alternatively, you can extend an existing language, of course, the
-@code{sh} language.
+There are two obvious possibilities: creating a brand new language or
+extending an existing one.  The former option is very attractive: all
+sorts of optimizations could easily be implemented in the compiler and
+many rigorous checks could be performed on the Autoconf program
+(e.g. rejecting any non-portable construct).  Alternatively, you can
+extend an existing language, such as the @code{sh} (Bourne shell)
+language.
 
-Autoconf does the latter: it is an layer on top of @code{sh}.  Quite
-naturally then, it has been chosen to implement @code{autoconf} as a
-macro expander, i.e., a program that takes a text in input and
-repeatedly performs @dfn{macro expansions}, repeatedly replaces macro
-uses with macro bodies.  Instead of implementing a dedicated Autoconf
-macro expander, it is natural to use an existing general purpose macro
-expander, such as M4, and implement the extensions as a set of M4
-macros.
+Autoconf does the latter: it is a layer on top of @code{sh}.  It was
+therefore most convenient to implement @code{autoconf} as a macro
+expander: a program that repeatedly performs @dfn{macro expansions} on
+text input, replacing macro calls with macro bodies and producing a pure
+@code{sh} script in the end.  Instead of implementing a dedicated
+Autoconf macro expander, it is natural to use an existing
+general-purpose macro language, such as M4, and implement the extensions
+as a set of M4 macros.
 
 
 @node Autoconf Language, configure.ac Layout, Shell Script Compiler, Writing configure.ac
 @subsection The Autoconf Language
 @cindex quotation
 
-The Autoconf language is very different from usual languages because you
-handle actual code just as plain text.  Where in C for instance, data
-and instructions have very different syntactic status, in Autoconf their
-status is rigorously the same.  Therefore we need a means to distinguish
-literal strings from text to be expanded: quotation.
+The Autoconf language is very different from many other computer
+languages because it treats actual code the same as plain text.  Whereas
+in C, for instance, data and instructions have very different syntactic
+status, in Autoconf their status is rigorously the same.  Therefore, we
+need a means to distinguish literal strings from text to be expanded:
+quotation.
 
 When calling macros that take arguments, there must not be any blank
 space between the macro name and the open parenthesis.  Arguments should
-be enclosed within the M4 quote characters @samp{[} and @samp{]}, and
-are separated by a comma.  Any leading spaces in arguments are ignored,
+be enclosed within the M4 quote characters @samp{[} and @samp{]}, and be
+separated by commas.  Any leading spaces in arguments are ignored,
 unless they are quoted.  You may safely leave out the quotes when the
 argument is simple text, but @emph{always} quote complex arguments such
-as other macro calls.  This rule recursively applies for each macro
-call, including macro called from other macros.
+as other macro calls.  This rule applies recursively for every macro
+call, including macros called from other macros.
 
 For instance:
 
@@ -699,7 +701,7 @@ AC_CHECK_HEADER([stdio.h],
 @end example
 
 @noindent
-is perfectly quoted.  You may safely simplify quotation to
+is quoted properly.  You may safely simplify its quotation to:
 
 @example
 AC_CHECK_HEADER(stdio.h,
@@ -708,8 +710,8 @@ AC_CHECK_HEADER(stdio.h,
 @end example
 
 @noindent
-Notice that the argument of @code{AC_MSG_ERROR} is still quoted,
-otherwise its comma would have been understood as an argument separator.
+Notice that the argument of @code{AC_MSG_ERROR} is still quoted;
+otherwise, its comma would have been interpreted as an argument separator.
 
 The following example is wrong and dangerous, as it is underquoted:
 
@@ -719,8 +721,9 @@ AC_CHECK_HEADER(stdio.h,
 		AC_MSG_ERROR([Sorry, can't do anything for you]))
 @end example
 
-You may have to use text that also resembles a macro call.  In this
-case, you must quote this text at top level:
+In other cases, you may have to use text that also resembles a macro
+call.  You must quote that text even when it is not passed as a macro
+argument:
 
 @example
 echo "Hard rock was here!  --[AC_DC]"
@@ -734,17 +737,18 @@ echo "Hard rock was here!  --AC_DC"
 @end example
 
 @noindent
-in @code{configure}. Since there is an additional quoting level for each
-macro invocation, this results in @emph{double quoting all the literal
-strings}:
+When you use the same text in a macro argument, you must therefore have
+an extra quotation level (since one is stripped away by the macro
+substitution).  In general, then, it is a good idea to @emph{use double
+quoting for all literal string arguments}:
 
 @example
 AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
 @end example
 
 You are now able to understand one of the constructs of Autoconf that
-has continuously been misunderstood...  The rule of thumb is that
-@emph{whenever you expect macro expansion, expect quote expansion},
+has been continually misunderstood...  The rule of thumb is that
+@emph{whenever you expect macro expansion, expect quote expansion};
 i.e., expect one level of quotes to be lost.  For instance
 
 @example
@@ -752,32 +756,30 @@ AC_COMPILE_IFELSE([char b[10];],, [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
-is incorrect: here the first argument of @code{AC_COMPILE_IFELSE}, is
-@samp{char b[10];}, and it will be expanded once, which results in
-@samp{char b10;}.  There was a idiom developed in the Autoconf world to
-address this issue, based on the M4 @code{changequote} primitive, but do
-not use it!  Let's take a closer look: the author meant the first
-argument to be understood as a literal, and therefore it must be quoted
-twice:
+is incorrect: here, the first argument of @code{AC_COMPILE_IFELSE} is
+@samp{char b[10];} and will be expanded once, which results in
+@samp{char b10;}.  (There was a idiom common in Autoconf's past to
+address this issue via the M4 @code{changequote} primitive, but do not
+use it!)  Let's take a closer look: the author meant the first argument
+to be understood as a literal, and therefore it must be quoted twice:
 
 @example
 AC_COMPILE_IFELSE([[char b[10];]],, [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
-and voil@`a!  You really produced @samp{char b[10];}.
+Voil@`a, you actually produce @samp{char b[10];} this time!
 
-The careful reader will note that the so-called perfectly quoted
-@code{AC_CHECK_HEADER} example above is actually lacking three pairs of
-quotes!  Nevertheless, for sake of readability, double quotation of
-literals is used only where needed.
-
+The careful reader will notice that, according to these guidelines, the
+"properly" quoted @code{AC_CHECK_HEADER} example above is actually
+lacking three pairs of quotes!  Nevertheless, for the sake of readability,
+double quotation of literals is used only where needed in this manual.
 
 Some macros take optional arguments, which this documentation represents
-@ovar{arg} (not to be confounded with the quote characters).  You may
-just leave them empty, or use @samp{[]} to make explicit the emptiness
-of the argument.  Finally you may simply leave out the trailing commas.
-The three lines below are equivalent:
+as @ovar{arg} (not to be confused with the quote characters).  You may
+just leave them empty, or use @samp{[]} to make the emptiness of the
+argument explicit, or you may simply omit the trailing commas.  The
+three lines below are equivalent:
 
 @example
 AC_CHECK_HEADERS(stdio.h, [], [])
@@ -801,6 +803,8 @@ with the @samp{#}.  For example, it is helpful to begin
 # Process this file with autoconf to produce a configure script.
 @end example
 
+Such comments will be included in the generated @file{configure} script.
+
 @node configure.ac Layout,  , Autoconf Language, Writing configure.ac
 @subsection Standard @file{configure.ac} Layout
 
@@ -811,13 +815,13 @@ contain a call to @code{AC_INIT} before the checks, and a call to
 rely on other macros having been called first, because they check
 previously set values of some variables to decide what to do.  These
 macros are noted in the individual descriptions (@pxref{Existing
-Tests}), and they also warn you when creating @code{configure} if they
+Tests}), and they also warn you when @code{configure} is created if they
 are called out of order.
 
 To encourage consistency, here is a suggested order for calling the
 Autoconf macros.  Generally speaking, the things near the end of this
-list could depend on things earlier in it.  For example, library
-functions could be affected by types and libraries.
+list are those that could depend on things earlier in it.  For example,
+library functions could be affected by types and libraries.
 
 @display
 @group
@@ -852,7 +856,7 @@ that package.
 
 You should manually examine @file{configure.scan} before renaming it to
 @file{configure.ac}; it will probably need some adjustments.
-Occasionally @code{autoscan} outputs a macro in the wrong order relative
+Occasionally, @code{autoscan} outputs a macro in the wrong order relative
 to another macro, so that @code{autoconf} produces a warning; you need
 to move such macros manually.  Also, if you want the package to use a
 configuration header file, you must add a call to
@@ -861,12 +865,12 @@ have to change or add some @code{#if} directives to your program in
 order to make it work with Autoconf (@pxref{ifnames Invocation}, for
 information about a program that can help with that job).
 
-@code{autoscan} uses several data files, which are installed along with the
-distributed Autoconf macro files, to determine which macros to output
-when it finds particular symbols in a package's source files.  These
-files all have the same format.  Each line consists of a symbol,
-whitespace, and the Autoconf macro to output if that symbol is
-encountered.  Lines starting with @samp{#} are comments.
+@code{autoscan} uses several data files (installed along with Autoconf)
+to determine which macros to output when it finds particular symbols in
+a package's source files.  These data files all have the same format:
+each line consists of a symbol, whitespace, and the Autoconf macro to
+output if that symbol is encountered.  Lines starting with @samp{#} are
+comments.
 
 @code{autoscan} is only installed if you already have Perl installed.
 @code{autoscan} accepts the following options:
@@ -888,24 +892,24 @@ symbols it finds in them.  This output can be voluminous.
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
-Overwrite the location where Autoconf files were installed.  You can
-also set the @code{AC_MACRODIR} environment variable to a directory;
-this option overrides the environment variable.
+Override the location where the installed Autoconf data files are looked
+for.  You can also set the @code{AC_MACRODIR} environment variable to a
+directory; this option overrides the environment variable.
 
-This option is rarely needed and dangerous: only when you play with
-different versions of Autoconf.
+This option is rarely needed and dangerous; it is only used when one
+plays with different versions of Autoconf simultaneously.
 @end table
 
 @node ifnames Invocation, autoconf Invocation, autoscan Invocation, Making configure Scripts
 @section Using @code{ifnames} to List Conditionals
 @cindex @code{ifnames}
 
-@code{ifnames} can help when writing a @file{configure.ac} for a
-software package.  It prints the identifiers that the package already
-uses in C preprocessor conditionals.  If a package has already been set
-up to have some portability, this program can help you figure out what
-its @code{configure} needs to check for.  It may help fill in some gaps
-in a @file{configure.ac} generated by @code{autoscan} (@pxref{autoscan
+@code{ifnames} can help you write @file{configure.ac} for a software
+package.  It prints the identifiers that the package already uses in C
+preprocessor conditionals.  If a package has already been set up to have
+some portability, @code{ifnames} can thus help you figure out what its
+@code{configure} needs to check for.  It may help fill in some gaps in a
+@file{configure.ac} generated by @code{autoscan} (@pxref{autoscan
 Invocation}).
 
 @code{ifnames} scans all of the C source files named on the command line
@@ -938,9 +942,9 @@ To create @code{configure} from @file{configure.ac}, run the
 Autoconf macros.  If you give @code{autoconf} an argument, it reads that
 file instead of @file{configure.ac} and writes the configuration script
 to the standard output instead of to @code{configure}.  If you give
-@code{autoconf} the argument @option{-}, it reads the standard input
-instead of @file{configure.ac} and writes the configuration script on
-the standard output.
+@code{autoconf} the argument @option{-}, it reads from the standard
+input instead of @file{configure.ac} and writes the configuration script
+to the standard output.
 
 The Autoconf macros are defined in several files.  Some of the files are
 distributed with Autoconf; @code{autoconf} reads them first.  Then it
@@ -974,12 +978,12 @@ Don't remove the temporary files.
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
-Overwrite the location where Autoconf files were installed.  You can
-also set the @code{AC_MACRODIR} environment variable to a directory;
-this option overrides the environment variable.
+Override the location where the installed Autoconf data files are looked
+for.  You can also set the @code{AC_MACRODIR} environment variable to a
+directory; this option overrides the environment variable.
 
-This option is rarely needed and dangerous: only when you play with
-different versions of Autoconf.
+This option is rarely needed and dangerous; it is only used when one
+plays with different versions of Autoconf simultaneously.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -1015,32 +1019,33 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @code{WARNINGS}, a comma separated list of categories, is
-honored. @command{autoconf} will actually behave as if you had run
+honored. @command{autoconf -W @var{category}} will actually
+behave as if you had run:
 
 @example
-autoconf --warnings=syntax,$WARNINGS,@var{categories}
+autoconf --warnings=syntax,$WARNINGS,@var{category}
 @end example
 
 @noindent
-If you want to disable @command{autoconf}'s defaults and @code{WARNING}
-but enable the warnings about obsolete constructs, use @option{-W
-none,obsolete}.
+If you want to disable @command{autoconf}'s defaults and @code{WARNING},
+but (for example) enable the warnings about obsolete constructs, you
+would use @option{-W none,obsolete}.
 
 @cindex Back trace
 @cindex Macro invocation stack
 @command{autoconf} displays a back trace for errors, but not for
-warnings; if you want them, just pass @option{-W error}.  For instance
+warnings; if you want them, just pass @option{-W error}.  For instance,
 on this @file{configure.ac}:
 
 @example
 AC_DEFUN([INNER],
 [AC_TRY_RUN([true])])
 
-AC_DEFUN([OUTTER],
+AC_DEFUN([OUTER],
 [INNER])
 
 AC_INIT
-OUTTER
+OUTER
 @end example
 
 @noindent
@@ -1055,32 +1060,34 @@ configure.ac:8: error: AC_TRY_RUN called without default \
 to allow cross compiling
 acgeneral.m4:3044: AC_TRY_RUN is expanded from...
 configure.ac:2: INNER is expanded from...
-configure.ac:5: OUTTER is expanded from...
+configure.ac:5: OUTER is expanded from...
 configure.ac:8: the top level
 @end example
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
 Do not create the @code{configure} script, but list the calls to
-@var{macro} according to the @var{format}.  Multiple @option{--trace} list
-several macros.  Multiple @option{--trace} for a single macro do not
-accumulate, nevertheless, @var{format} can be arbitrarily long.
+@var{macro} according to the @var{format}.  Multiple @option{--trace}
+arguments can be used to list several macros.  Multiple @option{--trace}
+arguments for a single macro are not cumulative; instead, you should
+just make @var{format} as long as needed.
 
-The @var{format} is a regular string, with new lines if wanted.  It
-defaults to @samp{$f:$l:$n:$%}, see below for details on the
-@var{format}.
+The @var{format} is a regular string, with newlines if desired, and
+several special escape codes.  It defaults to @samp{$f:$l:$n:$%}; see
+below for details on the @var{format}.
 
 @item --initialization
 @itemx -i
-By default @option{--trace} does not trace the initialization of the
+By default, @option{--trace} does not trace the initialization of the
 Autoconf macros (typically the @code{AC_DEFUN} definitions).  This
 results in a noticeable speedup, but can be disabled by this option.
 @end table
 
 
-It is often necessary to check the content of a @file{configure.ac} file,
-but it is extremely fragile and error prone to try to parse it.  It is
-suggested to rely upon @option{--trace} to scan @file{configure.ac}.
+It is often necessary to check the content of a @file{configure.ac}
+file, but parsing it yourself is extremely fragile and error-prone.  It
+is suggested that you rely upon @option{--trace} to scan
+@file{configure.ac}.
 
 The @var{format} of @option{--trace} can use the following special
 escapes:
@@ -1090,13 +1097,13 @@ escapes:
 The character @samp{$}.
 
 @item $f
-The filename from where @var{macro} is called.
+The filename from which @var{macro} is called.
 
 @item $l
-The line number from where @var{macro} is called.
+The line number from which @var{macro} is called.
 
 @item $d
-The depth of the @var{macro} call.  This is an M4 technical detail which
+The depth of the @var{macro} call.  This is an M4 technical detail that
 you probably don't want to know about.
 
 @item $n
@@ -1108,9 +1115,9 @@ The @var{num}th argument of the call to @var{macro}.
 @item $@@
 @itemx $@var{sep}@@
 @itemx $@{@var{separator}@}@@
-All the arguments given to the @var{macro} separated by the character
-@var{sep} or the string @var{separator}, @samp{,} by default.  Each
-argument is quoted, i.e. enclosed in a pair of square bracket.
+All the arguments passed to @var{macro}, separated by the character
+@var{sep} or the string @var{separator} (@samp{,} by default).  Each
+argument is quoted, i.e. enclosed in a pair of square brackets.
 
 @item $*
 @itemx $@var{sep}*
@@ -1123,12 +1130,12 @@ As above, but the arguments are not quoted.
 As above, but the arguments are not quoted, all new line characters in
 the arguments are smashed, and the default separator is @samp{:}.
 
-The escape @samp{$%} produces traces that hold in a single line (unless
-you put new lines in the @samp{separator}), while @samp{$@@} and
-@samp{$*} do not.
+The escape @samp{$%} produces single-line trace outputs (unless you put
+newlines in the @samp{separator}), while @samp{$@@} and @samp{$*} do
+not.
 @end table
 
-For instance, to know the list of variables that are substituted:
+For instance, to find the list of variables that are substituted, use:
 
 @example
 @group
@@ -1161,7 +1168,7 @@ $: This:is:an [example]
 @end example
 
 @noindent
-Much freedom is given over the @var{format}:
+The @var{format} gives you a lot of freedom:
 
 @example
 @group
@@ -1174,7 +1181,7 @@ ac_subst@{"ECHO_T"@} = "configure.ac:2";
 @end example
 
 @noindent
-The long @var{separator}s can be used to ease parsing of complex
+A long @var{separator} can be used to improve the readability of complex
 structures:
 
 @example
@@ -1211,11 +1218,11 @@ properly).
 
 @code{autoreconf} does not support having, in the same directory tree,
 both directories that are parts of a larger package (sharing
-@file{aclocal.m4} and @file{acconfig.h}), and directories that are
+@file{aclocal.m4} and @file{acconfig.h}) and directories that are
 independent packages (each with their own @file{aclocal.m4} and
 @file{acconfig.h}).  It assumes that they are all part of the same
-package, if you use @option{--localdir}, or that each directory is a
-separate package, if you don't use it.  This restriction may be removed
+package if you use @option{--localdir}, or that each directory is a
+separate package if you don't use it.  This restriction may be removed
 in the future.
 
 @xref{Automatic Remaking}, for @file{Makefile} rules to automatically
@@ -1269,12 +1276,12 @@ not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
-Overwrite the location where Autoconf files were installed.  You can
-also set the @code{AC_MACRODIR} environment variable to a directory;
-this option overrides the environment variable.
+Override the location where the installed Autoconf data files are looked
+for.  You can also set the @code{AC_MACRODIR} environment variable to a
+directory; this option overrides the environment variable.
 
-This option is rarely needed and dangerous: only when you play with
-different versions of Autoconf.
+This option is rarely needed and dangerous; it is only used when one
+plays with different versions of Autoconf simultaneously.
 
 @item --m4dir=@var{dir}
 @itemx -M @var{dir}
@@ -1310,7 +1317,7 @@ Include generated dependencies in @file{Makefile.in}.
 Autoconf-generated @code{configure} scripts need some information about
 how to initialize, such as how to find the package's source files; and
 about the output files to produce.  The following sections describe
-initialization and creating output files.
+initialization and the creation of output files.
 
 @menu
 * Notices::                     Copyright, version numbers in @code{configure}
@@ -1338,7 +1345,7 @@ scripts.  Using them is optional.
 @cindex Version
 Ensure that a recent enough version of Autoconf is being used.  If the
 version of Autoconf being used to create @code{configure} is earlier
-than @var{version}, print an error message on the standard error output
+than @var{version}, print an error message to the standard error output
 and do not create @code{configure}.  For example:
 
 @example
@@ -1352,12 +1359,12 @@ for consistency, you are invited not to do so.
 @defmac AC_COPYRIGHT (@var{copyright-notice})
 @maindex COPYRIGHT
 @cindex Copyright Notice
-State that in addition to the Free Software Foundation's copyright over
+State that, in addition to the Free Software Foundation's copyright on
 the Autoconf macros, parts of your @code{configure} are covered by the
 @var{copyright-notice}.
 
 The @var{copyright-notice} will show up in both the head of
-@code{configure}, and in @samp{configure --version}.
+@code{configure} and in @samp{configure --version}.
 @end defmac
 
 
@@ -1463,14 +1470,10 @@ creates @file{install} from it if there is no @file{Makefile}.
 @section Outputting Files
 
 Every Autoconf-generated @code{configure} script must finish by calling
-@code{AC_OUTPUT}.  It is the macro that generates @file{config.status}
-which will create the @file{Makefile}s and optional other files
-resulting from configuration.  The only other required macro is
-@code{AC_INIT} (@pxref{Input}).
-
-Because of history, this macro is described twice below.  The first
-definition describes the use that is now recommended.  The second
-describes the former use, and its modern equivalent.
+@code{AC_OUTPUT}.  It is the macro that generates @file{config.status},
+which will create the @file{Makefile}s and any other files resulting
+from configuration.  The only other required macro is @code{AC_INIT}
+(@pxref{Input}).
 
 @defmac AC_OUTPUT
 @maindex OUTPUT
@@ -1488,8 +1491,9 @@ to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
 @end defmac
 
-@xref{Obsolete Macros}, for a description of the arguments @code{AC_OUTPUT}
-used to support.
+Historically, the usage of @code{AC_OUTPUT} was somewhat different.
+@xref{Obsolete Macros}, for a description of the arguments that
+@code{AC_OUTPUT} used to support.
 
 
 If you run @code{make} on subdirectories, you should run it using the
@@ -1520,12 +1524,12 @@ that runs @code{MAKE} on other directories:
 @node Configuration Actions, Configuration Files, Output, Setup
 @section Taking Configuration Actions
 
-While everything is made so that you imagine @file{configure} does
-everything by itself, there is actually a hidden slave:
-@file{config.status}.  @file{configure} is in charge of examining your
-system, but it is @file{config.status} that actually takes the proper
-actions based on the results of @file{configure}.  The most typical task
-of @file{config.status} is to @emph{instantiate} files.
+@file{configure} is designed so that it appears to do everything itself,
+but there is actually a hidden slave: @file{config.status}.
+@file{configure} is in charge of examining your system, but it is
+@file{config.status} that actually takes the proper actions based on the
+results of @file{configure}.  The most typical task of
+@file{config.status} is to @emph{instantiate} files.
 
 This section describes the common behavior of the four standard
 instantiating macros: @code{AC_CONFIG_FILES}, @code{AC_CONFIG_HEADERS},
@@ -1540,25 +1544,26 @@ AC_CONFIG_FOOS(@var{tag}..., [@var{commands}], [@var{init-cmds}])
 
 @noindent
 where the arguments are:
+
 @table @var
 @item @var{tag}@dots{}
 A whitespace-separated list of tags, which are typically the names of
 the files to instantiate.
 
 @item commands
-They are output into @file{config.status} as literally.  These commands
-are always associated to a tag which the user can use to tell
-@file{config.status} what are the commands she wants to run. These
-commands are run each time a @var{tag} request is given to
-@file{config.status}, i.e., typically each time the file
+Shell commands output literally into @file{config.status}, and
+associated with a tag that the user can use to tell @file{config.status}
+which the commands to run.  The commands are run each time a @var{tag}
+request is given to @file{config.status}; typically, each time the file
 @file{@var{tag}} is created.
 
 @item init-cmds
-They are output via an @emph{unquoted} here-doc.  As a consequence
-@samp{$var} will be output as the value of @var{var}.  This is typically
-used by @file{configure} to give @file{config.status} some variables it
-needs to run the @var{cmds}.  At the difference of @var{cmds}, the
-@var{init-cmds} are always run.
+Shell commands output @emph{unquoted} near the beginning of
+@file{config.status}, and executed each time @file{config.status} runs
+(regardless of the tag).  Because they are unquoted, for example,
+@samp{$var} will be output as the value of @var{var}.  @var{init-cmds}
+is typically used by @file{configure} to give @file{config.status} some
+variables it needs to run the @var{commands}.
 @end table
 
 All these macros can be called multiple times, with different
@@ -2053,6 +2058,9 @@ config.status: configure
 @end group
 @end example
 
+(Be careful if you copy these lines directly into your Makefile, as you
+will need to convert the indented lines to start with the tab character.)
+
 In addition, you should use @samp{AC_CONFIG_FILES(stamp-h, echo
 timestamp > stamp-h)} so @file{config.status} will ensure that
 @file{config.h} is considered up to date.  @xref{Output}, for more
@@ -2184,11 +2192,14 @@ The @command{autoheader} program can create a template file of C
 arguments are given, the first one is used.  Otherwise,
 @command{autoheader} creates @file{config.h.in}.
 
-In order to do its job @command{autoheader} needs you to document all
-the symbols that you might use, i.e., that there is at least one
+In order to do its job, @command{autoheader} needs you to document all
+of the symbols that you might use; i.e., there must be at least one
 @code{AC_DEFINE} or one @code{AC_DEFINE_UNQUOTED} using its third
-argument, see @ref{Defining Symbols}.  An additional constraint is that
-the first argument must be a literal.
+argument for each symbol (@pxref{Defining Symbols}).  An additional
+constraint is that the first argument of @code{AC_DEFINE} must be a
+literal.  Note that all symbols defined by Autoconf's built-in tests are
+already documented properly; you only need to document those that you
+define yourself.
 
 You might wonder why @command{autoheader} is needed: after all, why
 would @command{configure} need to ``patch'' a @file{config.h.in} to
@@ -2197,7 +2208,7 @@ scratch?
 
 Well, when everything rocks the answer is just that we are wasting our
 time maintaining @command{autoheader}: generating @file{config.h}
-directly is just what is needed.
+directly is all that is needed.
 
 But when things go wrong, you'll thank the Autoconf team for
 @command{autoheader}...
@@ -2240,12 +2251,12 @@ Report processing steps.
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
-Overwrite the location where Autoconf files were installed.  You can
-also set the @code{AC_MACRODIR} environment variable to a directory;
-this option overrides the environment variable.
+Override the location where the installed Autoconf data files are looked
+for.  You can also set the @code{AC_MACRODIR} environment variable to a
+directory; this option overrides the environment variable.
 
-This option is rarely needed and dangerous: only when you play with
-different versions of Autoconf.
+This option is rarely needed and dangerous; it is only used when one
+plays with different versions of Autoconf simultaneously.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -2287,23 +2298,22 @@ disable warnings falling into @var{category}
 preprocessor symbols it might define.  It knows how to generate
 templates for symbols defined by @code{AC_CHECK_HEADERS},
 @code{AC_CHECK_FUNCS} etc., but if you @code{AC_DEFINE} any additional
-symbol, you must define a template for it.  @code{autoheader} diagnoses
-missing templates, and fails.
+symbol, you must define a template for it.  If there are missing
+templates, @code{autoheader} fails with an error message.
 
-The simplest means to create a template for a @var{symbol} is simply to
-document one of the @samp{AC_DEFINE(@var{symbol})}, see @ref{Defining
-Symbols}.  You may also use one of the following macros.
+The simplest way to create a template for a @var{symbol} is to supply
+the @var{description} argument to an @samp{AC_DEFINE(@var{symbol})}; see
+@ref{Defining Symbols}.  You may also use one of the following macros.
 
 @defmac AH_VERBATIM (@var{key}, @var{template})
 @maindex AH_VERBATIM
 @maindex VERBATIM
-Inform @code{autoheader} that it must include the @var{template} as is
-in the header template file.  This @var{template} is associated to the
-@var{key}, which is used to sort all the different templates, and
-guarantee their uniqueness.  It should be the symbol that can be
-@code{AC_DEFINE}'d.
+Tell @code{autoheader} to include the @var{template} as-is in the header
+template file.  This @var{template} is associated with the @var{key},
+which is used to sort all the different templates and guarantee their
+uniqueness.  It should be the symbol that can be @code{AC_DEFINE}'d.
 
-For instance:
+For example:
 
 @example
 AH_VERBATIM([_GNU_SOURCE],
@@ -2318,11 +2328,11 @@ AH_VERBATIM([_GNU_SOURCE],
 @defmac AH_TEMPLATE (@var{key}, @var{description})
 @maindex AH_TEMPLATE
 @maindex TEMPLATE
-Inform @code{autoheader} that it must generate a template for @var{key}.
-This macro generates standard templates, as @code{AC_DEFINE} does when a
+Tell @code{autoheader} to generate a template for @var{key}.  This macro
+generates standard templates just like @code{AC_DEFINE} when a
 @var{description} is given.
 
-For instance:
+For example:
 
 @example
 AH_TEMPLATE([CRAY_STACKSEG_END],
@@ -2443,12 +2453,13 @@ creates in the current directory @file{host.h} as a link to
 link to @file{@var{srcdir}/config/$obj_format.h}.
 
 The tempting value @samp{.} for @var{dest} is invalid: it makes it
-impossible for @samp{config.status} to guess the links to establish.  It
-is then valid to run:
+impossible for @samp{config.status} to guess the links to establish.
+
+One can then run:
 @example
 ./config.status host.h object.h
 @end example
-to establish the links.
+to create the links.
 @end defmac
 
 
@@ -6373,8 +6384,8 @@ bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 Don't leave, there is some more!
 
 The @sc{qnx} 4.25 @command{expr}, in addition of preferring @samp{0} to
-the empty string, has a funny behavior wrt exit status: it's always 1
-when the parenthesis are used!
+the empty string, has a funny behavior in its exit status: it's always 1
+when parentheses are used!
 
 @example
 $ val=`expr 'a' : 'a'`; echo "$?: $val"
@@ -7150,7 +7161,7 @@ This macro prints nothing if @code{configure} is run with the
 @defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
 @maindex MSG_ERROR
 Notify the user of an error that prevents @code{configure} from
-completing.  This macro prints an error message on the standard error
+completing.  This macro prints an error message to the standard error
 output and exits @code{configure} with @var{exit-status} (1 by default).
 @var{error-description} should be something like @samp{invalid value
 $HOME for \$HOME}.
@@ -7162,7 +7173,7 @@ The @var{error-description} should start with a lower case letter, and
 @defmac AC_MSG_WARN (@var{problem-description})
 @maindex MSG_WARN
 Notify the @code{configure} user of a possible problem.  This macro
-prints the message on the standard error output; @code{configure}
+prints the message to the standard error output; @code{configure}
 continues running afterward, so macros that call @code{AC_MSG_WARN} should
 provide a default (back-up) behavior for the situations they warn about.
 @var{problem-description} should be something like @samp{ln -s seems to
@@ -7857,7 +7868,7 @@ when @code{AC_PROG_CC} is called.
 
 @defmac AC_BEFORE (@var{this-macro-name}, @var{called-macro-name})
 @maindex BEFORE
-Make @code{m4} print a warning message on the standard error output if
+Make @code{m4} print a warning message to the standard error output if
 @var{called-macro-name} has already been called.  @var{this-macro-name}
 should be the name of the macro that is calling @code{AC_BEFORE}.  The
 macro @var{called-macro-name} must have been defined using
@@ -8032,10 +8043,10 @@ Unless the macro is short, try to leave the closing @samp{])} at the
 beginning of a line, followed by a comment that repeats the name of the
 macro being defined.  If you want to avoid the new-line which is then
 introduced, use @code{dnl}.  Better yet, use @samp{[]dnl} @emph{even}
-behind of parenthesis, since because of the M4 evaluation rule the
-@samp{dnl} might be appended to the result of the evaluation of the
-macro before it (e.g., leading to @samp{yesdnl} instead of @samp{yes}).
-For instance, instead of:
+inside of parentheses: because of the M4 evaluation rules, the
+@samp{dnl} might otherwise be appended to the result of the macro
+evaluation (e.g., leading to @samp{yesdnl} instead of @samp{yes}).  For
+instance, instead of:
 
 @example
 AC_DEFUN([AC_PATH_X],
@@ -9070,12 +9081,12 @@ Don't remove the temporary files.
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
 @evindex AC_MACRODIR
-Overwrite the location where Autoconf files were installed.  You can
-also set the @code{AC_MACRODIR} environment variable to a directory;
-this option overrides the environment variable.
+Override the location where the installed Autoconf data files are looked
+for.  You can also set the @code{AC_MACRODIR} environment variable to a
+directory; this option overrides the environment variable.
 
-This option is rarely needed and dangerous: only when you play with
-different versions of Autoconf.
+This option is rarely needed and dangerous; it is only used when one
+plays with different versions of Autoconf simultaneously.
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
@@ -9513,7 +9524,7 @@ this automatically.
 
 @defmac AC_OBSOLETE (@var{this-macro-name}, @ovar{suggestion})
 @maindex OBSOLETE
-Make @code{m4} print a message on the standard error output warning that
+Make @code{m4} print a message to the standard error output warning that
 @var{this-macro-name} is obsolete, and giving the file and line number
 where it was called.  @var{this-macro-name} should be the name of the
 macro that is calling @code{AC_OBSOLETE}.  If @var{suggestion} is given,
