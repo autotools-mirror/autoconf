@@ -1936,7 +1936,7 @@ m4_define([AC_WARNING],
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
-[_AS_ECHO([$as_me:__oline__: checking $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO([$as_me:$LINENO: checking $1], AS_MESSAGE_LOG_FD)
 _AS_ECHO_N([checking $1... ])[]dnl
 ])
 
@@ -1944,7 +1944,7 @@ _AS_ECHO_N([checking $1... ])[]dnl
 # AC_MSG_RESULT(RESULT)
 # ---------------------
 m4_define([AC_MSG_RESULT],
-[_AS_ECHO([$as_me:__oline__: result: $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
 _AS_ECHO([${ECHO_T}$1])[]dnl
 ])
 
@@ -1953,7 +1953,7 @@ _AS_ECHO([${ECHO_T}$1])[]dnl
 # ------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
 m4_define([AC_MSG_RESULT_UNQUOTED],
-[_AS_ECHO_UNQUOTED([$as_me:__oline__: result: $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO_UNQUOTED([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
 _AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 ])
 
@@ -1994,7 +1994,7 @@ AC_DEFUN([_AC_RUN_LOG],
 [{ ($2) >&AS_MESSAGE_LOG_FD
   ($1) 2>&AS_MESSAGE_LOG_FD
   ac_status=$?
-  echo "$as_me:__oline__: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
   (exit $ac_status); }])
 
 
@@ -2010,7 +2010,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   egrep -v '^ *\+' conftest.er1 >conftest.err
   rm -f conftest.er1
   cat conftest.err >&AS_MESSAGE_LOG_FD
-  echo "$as_me:__oline__: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
   (exit $ac_status); }])
 
 
@@ -2019,7 +2019,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
 # Eval COMMAND, save the exit status in ac_status, and log it.
 AC_DEFUN([_AC_EVAL],
 [_AC_RUN_LOG([eval $1],
-             [eval echo "$as_me:__oline__: \"$1\""])])
+             [eval echo "$as_me:$LINENO: \"$1\""])])
 
 
 # _AC_EVAL_STDERR(COMMAND)
@@ -2029,7 +2029,7 @@ AC_DEFUN([_AC_EVAL],
 # Note that when tracing, most shells will leave the traces in stderr
 AC_DEFUN([_AC_EVAL_STDERR],
 [_AC_RUN_LOG_STDERR([eval $1],
-                    [eval echo "$as_me:__oline__: \"$1\""])])
+                    [eval echo "$as_me:$LINENO: \"$1\""])])
 
 
 # AC_TRY_EVAL(VARIABLE)
@@ -2051,7 +2051,7 @@ AC_DEFUN([AC_TRY_COMMAND],
 # -------------------
 AC_DEFUN([AC_RUN_LOG],
 [_AC_RUN_LOG([$1],
-             [echo "$as_me:__oline__: AS_ESCAPE([$1])"])])
+             [echo "$as_me:$LINENO: AS_ESCAPE([$1])"])])
 
 
 ## ------------------ ##

@@ -119,9 +119,9 @@ m4_define([_AC_LANG_ABBREV(C++)], [cxx])
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
 # This sometimes fails to find confdefs.h, for some reason.
-# #line __oline__ "$[0]"
+# #line $LINENO "$[0]"
 m4_define([AC_LANG_SOURCE(C)],
-[#line __oline__ "configure"
+[#line $LINENO "configure"
 #include "confdefs.h"
 $1])
 
@@ -420,7 +420,7 @@ fi
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 # Provide some information about the compiler.
-echo "$as_me:__oline__:" \
+echo "$as_me:$LINENO:" \
      "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
 ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])
@@ -631,7 +631,7 @@ AC_CHECK_TOOLS(CXX,
                g++)
 
 # Provide some information about the compiler.
-echo "$as_me:__oline__:" \
+echo "$as_me:$LINENO:" \
      "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
 ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])

@@ -1,3 +1,17 @@
+2001-09-22  Akim Demaille  <akim@epita.fr>
+
+	Rely on `$LINENO' when possible instead of `__oline__'.
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Provide some form of
+	`$LINENO' support replacement when not supported.
+	(_AS_CR_PREPARE, _AS_TR_CPP_PREPARE, _AS_TR_SH_PREPARE): Invoke
+	them explicitly to be sure they are not output before this section
+	(via m4_require).  Cosmetic only.
+	* lib/autoconf/c.m4, lib/autoconf/general.m4,
+	* lib/autoconf/programs.m4: Replace all the occurrences of
+	`__oline__' with `$LINENO'.
+	* doc/autoconf.texi (Special Shell Variables): Document LINENO.
+
 2001-09-21  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* lib/autoconf/functions.m4 (_AC_FUNC_FORK): Replaceded an 8-bit

@@ -112,12 +112,45 @@ fi
 # Name of the executable.
 as_me=`AS_BASENAME($[0])`
 
+# If LINENO is not supported by the shell, produce a version of this
+# script where LINENO is hard coded.  Rewrite if not up to date only.
+# Comparing LINENO against _oline_ is not a good solution, since in
+# the case of embedded executables (such as config.status within
+# configure) you'd compare LINENO wrt config.status vs. _oline_ vs
+# configure.  Hence a useless rewrite (not to mention the risk of
+# ``infinite'' rewrites.  Merely check that LINENO is incremented
+# between two lines, which is a property guaranteed for _oline_, hence
+# it protects us from repetitive rewrites.
+as_lineno_1=$LINENO
+as_lineno_2=$LINENO
+# Compute as_lineno_1 in two steps: some shells restart LINENO for
+# subshells.
+as_lineno_1=`(expr $as_lineno_1 + 1) 2>/dev/null`
+if test "x$as_lineno_1" != "x$as_lineno_2"; then
+  if test ! -f $as_me.lineno ||
+     test x`ls -1dt $as_me.lineno $as_me 2>/dev/null | sed 1q` \
+                != x$as_me.lineno; then
+     # Be sure to write the pattern so that it doesn't replace itself:
+     # it must not match itself.
+     awk '{
+            if ($[0] ~ /[[$]]LINENO/)
+              while (sub (/[[$]]LINENO/, NR))
+                continue
+            print
+          }' <$as_me >$as_me.lineno
+    chmod +x $as_me.lineno
+  fi
+  exec ${SHELL-/bin/sh} ./$as_me.lineno
+fi
+
+_AS_CR_PREPARE
 _AS_ECHO_N_PREPARE
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 _AS_TEST_PREPARE
-_AS_TR_PREPARE
+_AS_TR_CPP_PREPARE
+_AS_TR_SH_PREPARE
 _AS_UNSET_PREPARE
 
 # NLS nuisances.
@@ -303,7 +336,7 @@ m4_define([_AS_ECHO_N],
 # ----------------------------------------
 m4_define([AS_MESSAGE],
 [m4_ifset([AS_MESSAGE_LOG_FD],
-          [{ _AS_ECHO([$as_me:__oline__: $1], [AS_MESSAGE_LOG_FD])
+          [{ _AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])
 _AS_ECHO([$as_me: $1], [$2]);}],
           [_AS_ECHO([$as_me: $1], [$2])])[]dnl
 ])

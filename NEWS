@@ -1,8 +1,8 @@
 * Major changes in Autoconf 2.52e                       -*- outline -*-
-** Licensing
-  The Autoconf manual is now distributed under the terms of the GNU FDL.
+
 ** Requirements
-  Perl 5.005 is now required to run Autoconf.
+  Perl 5.005 is required.
+
 ** Documentation
 - AC_INIT
   Argument requirements, output variables, defined macros.
@@ -10,23 +10,36 @@
   First sketch of its documentation.
 - Double quoting macros
   AC_TRY_CPP, AC_TRY_COMPILE, AC_TRY_LINK and AC_TRY_RUN.
+- Licensing
+  The Autoconf manual is now distributed under the terms of the GNU FDL.
+
+** $LINENO
+  Is now used instead of hard coded line numbers.
+  This eases the comparison of `configure's, and diminishes the
+  pressure over control version archives.
+  Automatic replacement for shells that don't support this feature.
+
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
-  some processing.
+  most processing.
+
 ** Standardization of the executables interface
 - --force, -f
   Supported by autom4te, autoconf and autoheader.
 - --include, -I
   Replaces --autoconf-dir and --localdir in autoconf, autoheader and
   autoupdate.
+
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.
+
 ** C Macros
 - AC_C_BIGENDIAN supports the cross-compiling case.
 - AC_C_BIGENDIAN accepts ACTION-IF-TRUE, ACTION-IF-FALSE, and
   ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
   for ACTION-IF-TRUE is to define WORDS_BIGENDIAN like AC_C_BIGENDIAN
   always did.
+
 ** Generic macros
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
   Provide the user with srcdir, ac_top_srcdir, ac_top_builddir, ac_srcdir.

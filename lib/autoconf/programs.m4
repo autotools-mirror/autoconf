@@ -78,7 +78,7 @@ m4_ifvaln([$6],
        continue
      fi])dnl
     ac_cv_prog_$1="$3"
-    echo "$as_me:__oline__: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
     break 2
   fi
 done])
@@ -146,7 +146,7 @@ AC_CACHE_VAL([ac_cv_path_$1],
 [for ac_exec_ext in '' $ac_executable_extensions; do
   if AS_EXECUTABLE_P(["$as_dir/$ac_word$ac_exec_ext"]); then
     ac_cv_path_$1="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:__oline__: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&AS_MESSAGE_LOG_FD
     break 2
   fi
 done])
