@@ -144,7 +144,7 @@ define(AC_PROG_CPP,
 AC_CHECKING(how to run the C preprocessor)
 if test -z "$CPP"; then
   # This must be in double quotes, not single quotes, because CPP may get
-  # substituted into the Makefile and ``${CC-cc}'' will simply confuse
+  # substituted into the Makefile and "${CC-cc}" will simply confuse
   # make.  It must be expanded now.
   CPP="${CC-cc} -E"
 dnl On the NeXT, cc -E runs the code through the compiler's parser,
@@ -208,7 +208,7 @@ if test -f lex.yy.c; then
 elif test -f lexyy.c; then
   LEX_OUTPUT_ROOT=lexyy
 else
-  # Don't know what to do here.
+  # Do not know what to do here.
   AC_ERROR(cannot find output from $LEX, giving up on yytext declaration)
   LEX_OUTPUT_ROOT=
 fi
@@ -230,12 +230,12 @@ define(AC_PROG_INSTALL,
 # or the SunOS /usr/etc/install directory, or the AIX /bin/install,
 # or the AFS install, which mishandles nonexistent args, or
 # /usr/ucb/install on SVR4, which tries to use the nonexistent group
-# `staff', or /sbin/install on IRIX which has incompatible command-line
+# "staff", or /sbin/install on IRIX which has incompatible command-line
 # syntax.  Sigh.
 #
 #     On most BSDish systems install is in /usr/bin, not /usr/ucb
 #     anyway.
-# This turns out not to be true, so the mere pathname isn't an indication
+# This turns out not to be true, so the mere pathname is not an indication
 # of whether the program works.  What we really need is a set of tests for
 # the install program to see if it actually works in all the required ways.
 #
@@ -274,7 +274,7 @@ fi
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
 
-# Use test -z because SunOS4 sh mishandles ${INSTALL_PROGRAM-'${INSTALL}'}.
+# Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.
 test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
 AC_SUBST(INSTALL_PROGRAM)dnl
@@ -827,7 +827,7 @@ AC_DEFINE(DGUX) ac_need_func=no
 AC_HAVE_LIBRARY(dgc)])
 if test "$ac_need_func" = yes; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
-# uses stabs), but it's still SVR4.  We cannot check for <elf.h> because
+# uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
 AC_HAVE_LIBRARY(elf, AC_DEFINE(SVR4) LIBS="$LIBS -lelf" ac_need_func=no
   AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm"))
@@ -1131,7 +1131,7 @@ dnl ### Checks for operating system services
 dnl
 dnl
 define(AC_HAVE_POUNDBANG, [dnl
-AC_CHECKING(whether \`[#]!' works in shell scripts)
+AC_CHECKING(whether [#]! works in shell scripts)
 echo '#!/bin/cat
 exit 69
 ' > conftest
@@ -1168,7 +1168,7 @@ ac_some_dir_failed=no
 # eval it to expand exec_prefix.
 for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` ; do
   test -d $ac_dir || continue
-  test -w $ac_dir || continue # It's less confusing to not echo anything here.
+  test -w $ac_dir || continue # It is less confusing to not echo anything here.
   (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
   (echo 2 > $ac_dir/conftest9012346) 2>/dev/null
   val=`cat $ac_dir/conftest9012345 2>/dev/null`
@@ -1301,8 +1301,8 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
     fi
   done)
 
-# Check for the libraries.  First see if replacing the `include' by
-# `lib' works.
+# Check for the libraries.  First see if replacing the include by
+# lib works.
 AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
 for ac_dir in `echo "$x_includes" | sed s/include/lib/` \
     /usr/X11R6/lib        \
@@ -1358,7 +1358,7 @@ AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
 elif test "$no_x" = yes; then 
-  # Not all programs may use this symbol, but it won't hurt to define it.
+  # Not all programs may use this symbol, but it does not hurt to define it.
   X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
 fi
 
@@ -1379,8 +1379,8 @@ if test "$ISC" = yes; then
   X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl_s -linet"
 else
   # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
-  # libraries were built with DECnet support.  And karl@cs.umb.edu's Alpha
-  # needs dnet_stub (dnet doesn't exist).
+  # libraries were built with DECnet support.  And karl@cs.umb.edu says
+  # the Alpha needs dnet_stub (dnet does not exist).
   AC_HAVE_LIBRARY(dnet,
     [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet" ac_have_dnet=yes], ac_have_dnet=no)
   if test "$ac_have_dnet" = no; then
@@ -1424,7 +1424,7 @@ define(AC_MINIX,
 AC_BEFORE([$0], [AC_TEST_PROGRAM])dnl
 AC_BEFORE([$0], [AC_TEST_CPP])dnl
 AC_HEADER_CHECK(minix/config.h, MINIX=yes, MINIX=)
-# The Minix shell can't assign to the same variable on the same line!
+# The Minix shell ca not assign to the same variable on the same line!
 if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE)
   AC_DEFINE(_POSIX_1_SOURCE, 2)
