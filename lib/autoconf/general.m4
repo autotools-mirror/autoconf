@@ -51,43 +51,105 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 #
 
+m4_namespace_push(autoconf)
+
+
 
 ## ---------------- ##
 ## The diversions.  ##
 ## ---------------- ##
 
-m4_namespace_push(autoconf)
 
-# m4 output diversions.  We let m4 output them all in order at the end,
-# except that we explicitly undivert AC_DIVERSION_ICMDS.
+# We heavily use m4's diversions both for the initializations and for
+# required macros (see AC_REQUIRE), because in both cases we have to
+# issue high in `configure' something which is discovered late.
+#
+# KILL is only used to suppress output.
+#
+# The initialization layers of `configure'.  We let m4 undivert them
+# by itself, when it reaches the end of `configure.in'.  They are.
+#
+# - BINSH
+#   AC_REQUIRE'd #! /bin/sh line
+# - NOTICE
+#   copyright notice(s)
+# - DEFAULTS
+#   early initializations (defaults)
+# - INIT_PARSE_ARGS
+#   initialization code, option handling loop.
+# - HELP_BEGIN
+#   Handling `configure --help'.
+# - HELP_ENABLE
+#   Help msg from AC_ARG_ENABLE.
+# - HELP_WITH
+#   Help msg from AC_ARG_WITH.
+# - HELP_VAR
+#   Help msg from AC_ARG_VAR.
+# - HELP_END
+#   Tail of the handling of --help.
+# - VERSION_BEGIN
+#   Copyright notice for --version.
+# - VERSION_END
+#   Tail of the handling of --version.
+# - INIT_PREPARE
+#   Tail of initialization code.
+#
+#
+# These diversions are used by AC_REQUIRE.
+#
+# - NORMAL_4
+#   AC_REQUIRE'd code, 4 level deep
+# - NORMAL_3
+#   AC_REQUIRE'd code, 3 level deep
+# - NORMAL_2
+#   AC_REQUIRE'd code, 2 level deep
+# - NORMAL_1
+#   AC_REQUIRE'd code, 1 level deep
+# - NORMAL
+#   the tests and output code
+#
+# Finally, this is just a convenience diversions.  Undiverted by hand.
+# - ICMDS
+#   extra initialization in config.status
 
-define(AC_DIVERSION_KILL,           -1)# suppress output
-define(AC_DIVERSION_BINSH,           0)# AC_REQUIRE'd #! /bin/sh line
-define(AC_DIVERSION_NOTICE,          1)# copyright notice
-define(AC_DIVERSION_DEFAULTS,        2)# early initializations (defaults)
-define(AC_DIVERSION_INIT_PARSE_ARGS, 3)# initialization code
-define(AC_DIVERSION_HELP_BEGIN,      4)# Handling `configure --help'
-define(AC_DIVERSION_HELP_ENABLE,     5)# Help msg from AC_ARG_ENABLE
-define(AC_DIVERSION_HELP_WITH,       6)# Help msg from AC_ARG_WITH
-define(AC_DIVERSION_HELP_VAR,        7)# Help msg from AC_ARG_VAR
-define(AC_DIVERSION_HELP_END,        8)# Tail of the handling of --help
-define(AC_DIVERSION_VERSION_BEGIN,   9)# Copyright notice for --version.
-define(AC_DIVERSION_VERSION_END,    10)# Tail of the handling of --version.
-define(AC_DIVERSION_INIT_PREPARE,   11)# trail of initialization code
-define(AC_DIVERSION_NORMAL_4,       12)# AC_REQUIRE'd code, 4 level deep
-define(AC_DIVERSION_NORMAL_3,       13)# AC_REQUIRE'd code, 3 level deep
-define(AC_DIVERSION_NORMAL_2,       14)# AC_REQUIRE'd code, 2 level deep
-define(AC_DIVERSION_NORMAL_1,       15)# AC_REQUIRE'd code, 1 level deep
-define(AC_DIVERSION_NORMAL,         16)# the tests and output code
-define(AC_DIVERSION_ICMDS,          17)# extra initialization in config.status
+
+# AC_DIVERT(DIVERSION-NAME)
+# -------------------------
+# Convert a diversion name into its number.  Otherwise, return
+# DIVERSION-NAME which is supposed to be an actual diversion number.
+define([AC_DIVERT],
+[m4_case([$1],
+         [KILL],           -1,
+
+         [BINSH],           0,
+         [NOTICE],          1,
+         [DEFAULTS],        2,
+         [INIT_PARSE_ARGS], 3,
+         [HELP_BEGIN],      4,
+         [HELP_ENABLE],     5,
+         [HELP_WITH],       6,
+         [HELP_VAR],        7,
+         [HELP_END],        8,
+         [VERSION_BEGIN],   9,
+         [VERSION_END],    10,
+         [INIT_PREPARE],   11,
+
+         [NORMAL_4],       20,
+         [NORMAL_3],       21,
+         [NORMAL_2],       22,
+         [NORMAL_1],       23,
+         [NORMAL],         24,
+
+         [ICMDS],          30,
+         [$1])])
 
 
-# AC_DIVERT_PUSH(STREAM)
-# ----------------------
-# Change the diversion stream to STREAM, while stacking old values.
+# AC_DIVERT_PUSH(DIVERSION-NAME)
+# ------------------------------
+# Change the diversion stream to DIVERSION-NAME, while stacking old values.
 define(AC_DIVERT_PUSH,
-[pushdef([AC_DIVERSION_CURRENT], $1)dnl
-divert(AC_DIVERSION_CURRENT)dnl
+[pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([$1]))dnl
+divert(AC_DIVERT_DIVERSION)dnl
 ])
 
 
@@ -95,18 +157,16 @@ divert(AC_DIVERSION_CURRENT)dnl
 # -------------
 # Change the diversion stream to its previous value, unstacking it.
 define(AC_DIVERT_POP,
-[popdef([AC_DIVERSION_CURRENT])dnl
-ifelse(AC_DIVERSION_CURRENT,
-       [AC_DIVERSION_CURRENT],
-       [AC_FATAL([too many AC_DIVERT_POP])])dnl
-divert(AC_DIVERSION_CURRENT)dnl
+[popdef([AC_DIVERT_DIVERSION])dnl
+ifndef([AC_DIVERT_DIVERSION], [AC_FATAL([too many AC_DIVERT_POP])])dnl
+divert(AC_DIVERT_DIVERSION)dnl
 ])
 
 
 # Initialize the diversion setup.
-define([AC_DIVERSION_CURRENT], AC_DIVERSION_NORMAL)
+define([AC_DIVERT_DIVERSION], AC_DIVERT([NORMAL]))
 # Throw away output until AC_INIT is called.
-pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
+pushdef([AC_DIVERT_DIVERSION], AC_DIVERT([KILL]))
 
 
 
@@ -120,9 +180,9 @@ pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
 # The prologue for Autoconf macros.
 define(AC_PRO,
 [AC_PROVIDE([$1])dnl
-ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
-       [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))],
-       [pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_CURRENT)])dnl
+ifelse(AC_DIVERT_DIVERSION, AC_DIVERT([NORMAL]),
+       [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))],
+       [pushdef([AC_DIVERT_DIVERSION], AC_DIVERT_DIVERSION)])dnl
 ])
 
 
@@ -131,11 +191,11 @@ ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
 # The Epilogue for Autoconf macros.
 define(AC_EPI,
 [AC_DIVERT_POP()dnl
-ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
-[undivert(AC_DIVERSION_NORMAL_4)dnl
-undivert(AC_DIVERSION_NORMAL_3)dnl
-undivert(AC_DIVERSION_NORMAL_2)dnl
-undivert(AC_DIVERSION_NORMAL_1)dnl
+ifelse(AC_DIVERT_DIVERSION, AC_DIVERT([NORMAL]),
+[undivert(AC_DIVERT([NORMAL_4]))dnl
+undivert(AC_DIVERT([NORMAL_3]))dnl
+undivert(AC_DIVERT([NORMAL_2]))dnl
+undivert(AC_DIVERT([NORMAL_1]))dnl
 ])dnl
 ])
 
@@ -248,7 +308,7 @@ define(AC_BEFORE,
 define(AC_REQUIRE,
 [AC_PROVIDE_IF([$1],
                [],
-               [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))dnl
+               [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))dnl
 $1
 AC_DIVERT_POP()dnl
 ])])
@@ -544,7 +604,7 @@ popdef([AC_Prefix])dnl
 # Try to have only one #! line, so the script doesn't look funny
 # for users of AC_REVISION.
 AC_DEFUN(_AC_INIT_BINSH,
-[AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
+[AC_DIVERT_PUSH([BINSH])dnl
 #! /bin/sh
 AC_DIVERT_POP()dnl to KILL
 ])
@@ -566,10 +626,10 @@ AC_DIVERT_POP()dnl to KILL
 # must be run before AC_REVISION.
 AC_DEFUN(AC_COPYRIGHT,
 [AC_REQUIRE([_AC_INIT_VERSION])dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+AC_DIVERT_PUSH([NOTICE])dnl
 patsubst([$1], [^], [@%:@ ])
 AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH(AC_DIVERSION_VERSION_BEGIN)dnl
+AC_DIVERT_PUSH([VERSION_BEGIN])dnl
 $1
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_COPYRIGHT
@@ -579,7 +639,7 @@ AC_DIVERT_POP()dnl
 # -----------------
 # Values which defaults can be set from `configure.in'.
 AC_DEFUN(_AC_INIT_DEFAULTS,
-[AC_DIVERT_PUSH(AC_DIVERSION_DEFAULTS)dnl
+[AC_DIVERT_PUSH([DEFAULTS])dnl
 # Defaults:
 ac_default_prefix=/usr/local
 @%:@ Any additions from configure.in:
@@ -590,7 +650,7 @@ AC_DIVERT_POP()dnl
 # AC_PREFIX_DEFAULT(PREFIX)
 # -------------------------
 AC_DEFUN(AC_PREFIX_DEFAULT,
-[AC_DIVERT_PUSH(AC_DIVERSION_DEFAULTS)dnl
+[AC_DIVERT_PUSH([DEFAULTS])dnl
 ac_default_prefix=$1
 AC_DIVERT_POP()])
 
@@ -598,7 +658,7 @@ AC_DIVERT_POP()])
 # _AC_INIT_PARSE_ARGS
 # -------------------
 AC_DEFUN(_AC_INIT_PARSE_ARGS,
-[AC_DIVERT_PUSH(AC_DIVERSION_INIT_PARSE_ARGS)dnl
+[AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
 [
 # Initialize some variables set by options.
 ac_init_help=false
@@ -957,7 +1017,7 @@ AC_DIVERT_POP()dnl
 # -------------
 # Handle the `configure --help' message.
 define([_AC_INIT_HELP],
-[AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+[AC_DIVERT_PUSH([HELP_BEGIN])dnl
 [if $ac_init_help; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
@@ -1014,7 +1074,7 @@ EOF
 
   cat <<\EOF]
 AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH(AC_DIVERSION_HELP_END)dnl
+AC_DIVERT_PUSH([HELP_END])dnl
 EOF
   exit 0
 fi
@@ -1026,11 +1086,11 @@ AC_DIVERT_POP()dnl
 # ----------------
 # Handle the `configure --version' message.
 AC_DEFUN([_AC_INIT_VERSION],
-[AC_DIVERT_PUSH(AC_DIVERSION_VERSION_BEGIN)dnl
+[AC_DIVERT_PUSH([VERSION_BEGIN])dnl
 if $ac_init_version; then
   cat <<\EOF
 AC_DIVERT_POP()dnl
-AC_DIVERT_PUSH(AC_DIVERSION_VERSION_END)dnl
+AC_DIVERT_PUSH([VERSION_END])dnl
 EOF
   exit 0
 fi
@@ -1062,7 +1122,7 @@ define(AC_INCLUDES,
 #    UNIQUE-FILE-IN-SOURCE-DIR.
 # 6. Required macros (cache, default AC_SUBST etc.)
 AC_DEFUN([_AC_INIT_PREPARE],
-[AC_DIVERT_PUSH(AC_DIVERSION_INIT_PREPARE)dnl
+[AC_DIVERT_PUSH([INIT_PREPARE])dnl
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 # File descriptor usage:
@@ -1229,7 +1289,7 @@ AC_DEFUN(AC_INIT,
 [m4_sinclude(acsite.m4)dnl
 m4_sinclude(./aclocal.m4)dnl
 AC_REQUIRE([_AC_INIT_BINSH])dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+AC_DIVERT_PUSH([NOTICE])dnl
 # Guess values for system-dependent variables and create Makefiles.
 AC_DIVERT_POP()dnl
 AC_COPYRIGHT(
@@ -1258,7 +1318,7 @@ _AC_INIT_PREPARE([$1])dnl
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
-[AC_DIVERT_PUSH(AC_DIVERSION_HELP_ENABLE)dnl
+[AC_DIVERT_PUSH([HELP_ENABLE])dnl
 AC_EXPAND_ONCE([
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
@@ -1290,7 +1350,7 @@ AU_DEFUN(AC_ENABLE,
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN(AC_ARG_WITH,
-[AC_DIVERT_PUSH(AC_DIVERSION_HELP_WITH)dnl
+[AC_DIVERT_PUSH([HELP_WITH])dnl
 AC_EXPAND_ONCE([
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1324,7 +1384,7 @@ AU_DEFUN(AC_WITH,
 # Register VARNAME as a variable configure should remember, and
 # document it in `configure --help'.
 AC_DEFUN(AC_ARG_VAR,
-[AC_DIVERT_PUSH(AC_DIVERSION_HELP_VAR)dnl
+[AC_DIVERT_PUSH([HELP_VAR])dnl
 AC_EXPAND_ONCE([
 Some influent environment variables:
 ])[]dnl
@@ -1351,7 +1411,7 @@ esac[]dnl
 # FIXME: Must be run only once.  Introduce AC_DEFUN_ONCE?
 AC_DEFUN(AC_ARG_PROGRAM,
 [dnl Document the options.
-AC_EXPAND_ONCE([AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+AC_EXPAND_ONCE([AC_DIVERT_PUSH([HELP_BEGIN])dnl
 
 Program names:
   --program-prefix=PREFIX prepend PREFIX to installed program names
@@ -1389,7 +1449,7 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 # --------------------------
 AC_DEFUN(AC_REVISION,
 [AC_REQUIRE([_AC_INIT_BINSH])dnl
-AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
+AC_DIVERT_PUSH([BINSH])dnl
 [# From configure.in] translit([$1], $")
 AC_DIVERT_POP()dnl to KILL
 ])
@@ -3199,7 +3259,7 @@ define(AC_CONFIG_IF_MEMBER,
 # Note that this macro does not check if the list $[1] itself
 # contains doubles.
 define(_AC_CONFIG_UNIQUE,
-[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+[AC_DIVERT_PUSH([KILL])
 AC_FOREACH([AC_File], [$1],
 [pushdef([AC_Dest], patsubst(AC_File, [:.*]))
 AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
@@ -3226,7 +3286,7 @@ AC_DIVERT_POP()dnl
 # was the case in AC_OUTPUT_COMMANDS.
 define(_AC_CONFIG_COMMANDS_INIT,
 [ifval([$1],
-[AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
+[AC_DIVERT_PUSH([ICMDS])dnl
 $1
 AC_DIVERT_POP()])])
 
@@ -3238,7 +3298,7 @@ AC_DIVERT_POP()])])
 # commands must be associated with a NAME, which should be thought
 # as the name of a file the COMMANDS create.
 AC_DEFUN([AC_CONFIG_COMMANDS],
-[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+[AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_COMMANDS], [ $1])
 
@@ -3316,7 +3376,7 @@ define([AC_OUTPUT_COMMANDS_POST])
 #        AC_LIST_HEADERS_COMMANDS
 #      esac
 AC_DEFUN([AC_CONFIG_HEADERS],
-[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+[AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
@@ -3349,7 +3409,7 @@ AC_DEFUN(AC_CONFIG_HEADER,
 # Reject DEST=., because it is makes it hard for ./config.status
 # to guess the links to establish (`./config.status .').
 AC_DEFUN(AC_CONFIG_LINKS,
-[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+[AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
 ifelse(regexp([$1], [^\.:\| \.:]), -1,,
        [AC_FATAL([$0: invalid destination: `.'])])
@@ -3422,7 +3482,7 @@ m4_namespace_define(autoupdate,
 #        AC_LIST_FILES_COMMANDS
 #      esac
 AC_DEFUN([AC_CONFIG_FILES],
-[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+[AC_DIVERT_PUSH([KILL])
 _AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
@@ -3712,7 +3772,7 @@ cat >>$CONFIG_STATUS <<EOF
 # INIT-COMMANDS section.
 #
 
-undivert(AC_DIVERSION_ICMDS)dnl
+undivert(AC_DIVERT([ICMDS]))dnl
 EOF
 
 
@@ -3724,7 +3784,7 @@ dnl section, it is better to divert it to void and *call it*, rather
 dnl than not calling it at all
 ifset([AC_LIST_FILES],
       [AC_OUTPUT_FILES()],
-      [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
+      [AC_DIVERT_PUSH([KILL])dnl
        AC_OUTPUT_FILES()dnl
        AC_DIVERT_POP()])dnl
 ifset([AC_LIST_HEADERS],

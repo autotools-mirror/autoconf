@@ -3122,7 +3122,7 @@ AC_DEFUN(AC_PATH_X,
 AC_MSG_CHECKING(for X)
 
 dnl Document the X abnormal options inherited from history.
-AC_EXPAND_ONCE([AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+AC_EXPAND_ONCE([AC_DIVERT_PUSH([HELP_BEGIN])dnl
 
 X features:
   --x-includes=DIR    X include files are in DIR

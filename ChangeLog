@@ -1,5 +1,22 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	Simplify the diversions naming system.
+	Suggested by Alexandre Oliva and Lars J. Aas
+
+	* libm4.m4 (ifndef): New macro.
+	* acgeneral.m4 (AC_DIVERT): New macro, maps a diversion name to
+	its value.  The diversions now have a short name, e.g., `NOTICE',
+	instead of the former macros which had long names, e.g.,
+	`AC_DIVERSION_NOTICE'.
+	(AC_DIVERT_PUSH): Adjust.
+	(AC_DIVERT_POP): Use ifndef.
+	(AC_DIVERSION_CURRENT): Rename as `AC_DIVERT_DIVERSION' to stay
+	within the `AC_DIVERT' name domain.
+	Adjust all callers.
+	* acspecific.m4: Adjust all callers.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Invoking autoconf): Update documentation of
 	`autoconf --trace'.
 

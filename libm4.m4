@@ -292,21 +292,27 @@ undefine([sinclude])
 # it runs TRUE etc.
 
 
-# ifval(COND, IF-TRUE[, IF-FALSE])
-# --------------------------------
+# ifval(COND, [IF-TRUE], [IF-FALSE])
+# ----------------------------------
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 # Comparable to ifdef.
 define([ifval], [ifelse([$1],[],[$3],[$2])])
 
 
-# ifset(MACRO, IF-TRUE[, IF-FALSE])
-# --------------------------------
+# ifset(MACRO, [IF-TRUE], [IF-FALSE])
+# -----------------------------------
 # If MACRO has no definition, or of its definition is the empty string,
 # expand IF-FALSE, otherwise IF-TRUE.
 define([ifset],
 [ifdef([$1],
        [ifelse(defn([$1]), [], [$3], [$2])],
        [$3])])
+
+
+# ifndef(NAME, [IF-NOT-DEFINED], [IF-DEFINED])
+# --------------------------------------------
+define([ifndef],
+[ifdef([$1], [$3], [$2])])
 
 
 # m4_default(EXP1, EXP2)
