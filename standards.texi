@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 26 December 1994
+@set lastupdate 18 January 1995
 @c %**end of header
 
 @ifinfo
@@ -1642,7 +1642,7 @@ Used to ask for brief usage information.
 @samp{-i} in @code{ptx}.
 
 @item ignore-indentation
-@samp{-S} in @code{etags}.
+@samp{-I} in @code{etags}.
 
 @item ignore-init-file
 @samp{-f} in Oleo.
