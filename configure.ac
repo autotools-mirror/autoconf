@@ -20,9 +20,9 @@
 # 02111-1307, USA.
 
 # We need AC_CONFIG_TESTDIR.
-AC_PREREQ([2.53])
+AC_PREREQ([2.54])
 
-AC_INIT([GNU Autoconf], [2.54], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], [2.54a], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 

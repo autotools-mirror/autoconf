@@ -1,4 +1,6 @@
-* Major changes in Autoconf 2.54                       -*- outline -*-
+* Major changes in Autoconf 2.54a                       -*- outline -*-
+
+* Major changes in Autoconf 2.54
 
   Released September 13th, 2002.
 
@@ -97,7 +99,7 @@
 
 * Major changes in Autoconf 2.53
 
-  Released Mars 8th, 2002.
+  Released March 8th, 2002.
 
 ** Requirements
 
@@ -518,6 +520,8 @@ Major changes in Autoconf 2.14:
 
 Major changes in Autoconf 2.13:
 
+  Released May 1st, 1999, by Ben Elliston
+
 * Support for building on Win32 systems where the only available C or
   C++ compiler is the Microsoft Visual C++ command line compiler
   (`cl').  Additional support for building on Win32 systems which are
@@ -549,6 +553,8 @@ Major changes in Autoconf 2.13:
 
 Major changes in Autoconf 2.12:
 
+  Released November 26th, 1996, by David J. MacKenzie
+
 * AC_OUTPUT and AC_CONFIG_HEADER can create output files by
   concatenating multiple input files separated by colons, like so:
   AC_CONFIG_HEADER(config.h:conf.pre:config.h.in:conf.post)
@@ -559,6 +565,8 @@ Major changes in Autoconf 2.12:
 * Bug fixes.
 
 Major changes in Autoconf 2.11:
+
+  Released November 18th, 1996, by David J. MacKenzie
 
 * AC_PROG_CC and AC_PROG_CXX check whether the compiler works.
   They also default CFLAGS/CXXFLAGS to "-g -O2" for gcc, instead of "-g -O".
@@ -573,15 +581,39 @@ Major changes in Autoconf 2.11:
 
 Major changes in Autoconf 2.10:
 
+  Released May 7th, 1996, by Roland McGrath
+
 * Bug fixes.
 * The cache variable names used by `AC_CHECK_LIB(LIB, FUNC, ...)' has
   changed: now $ac_cv_lib_LIB_FUNC, previously $ac_cv_lib_LIB.
 
-Major changes in Autoconfs 2.6 through 2.9:
+Major changes in Autoconf 2.9:
+
+  Released March 16th, 1996, by Roland McGrath
+
+* Bug fixes.
+
+Major changes in Autoconf 2.8:
+
+  Released March 8th, 1996, by Roland McGrath
+
+* Bug fixes.
+
+Major changes in Autoconf 2.7:
+
+  Released November 22nd, 1995, by David J. MacKenzie
+
+* Bug fixes.
+
+Major changes in Autoconf 2.6:
+
+  Released November 20th, 1995, by David J. MacKenzie
 
 * Bug fixes.
 
 Major changes in Autoconf 2.5:
+
+  Released November 17th, 1995, by Roland McGrath
 
 * New configure options --bindir, --libdir, --datadir, etc., with
   corresponding output variables.
@@ -595,15 +627,21 @@ Major changes in Autoconf 2.5:
 
 Major changes in Autoconf 2.4:
 
+  Released June 14th, 1995, by David J. MacKenzie
+
 * Fix a few bugs found by Emacs testers.
 
 Major changes in Autoconf 2.3:
+
+  Released March 27th, 1995, by David J. MacKenzie
 
 * Fix the cleanup trap in several ways.
 * Handle C compilers that are picky about option placement.
 * ifnames gets the version number from the right directory.
 
 Major changes in Autoconf 2.2:
+
+  Released March 8th, 1995, by David J. MacKenzie
 
 * The ifnames utility is much faster but requires a "new awk" interpreter.
 * AC_CHECK_LIB and AC_HAVE_LIBRARY check and add the new
@@ -613,6 +651,8 @@ Major changes in Autoconf 2.2:
 * Many additions to the TODO file :-)
 
 Major changes in Autoconf 2.1:
+
+  Released November 4th, 1994, by David J. MacKenzie
 
 * Fix C++ problems.
 * More explanations in the manual.
@@ -639,6 +679,8 @@ Autoconf now makes heavy use of m4 diversions, which were implemented
 inefficiently in GNU m4 releases before 1.3.
 
 Major changes in Autoconf 2.0:
+
+  Released October 26th, 1994, by David J. MacKenzie
 
 ** New copyright terms:
 * There are no restrictions on distribution or use of configure scripts.
