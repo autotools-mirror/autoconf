@@ -26,7 +26,7 @@ package Autom4te::Struct;
 
 ## See POD after __END__
 
-use 5.005;
+use 5.005_03;
 
 use strict;
 use vars qw(@ISA @EXPORT $VERSION);

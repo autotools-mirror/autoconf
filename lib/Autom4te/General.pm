@@ -18,7 +18,7 @@
 
 package Autom4te::General;
 
-use 5.005;
+use 5.005_03;
 use Exporter;
 use File::Basename;
 use File::stat;
