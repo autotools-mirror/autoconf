@@ -3773,7 +3773,11 @@ yourself in new code:
 @c @fuindex fseeko
 @prindex @code{fseeko}
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
-Define @code{_LARGEFILE_SOURCE} if necessary.
+Define @code{_LARGEFILE_SOURCE} if necessary to make the prototype
+visible on some systems (e.g. glibc 2.2). Otherwise linkage problems
+may occur when compiling with @code{AC_SYS_LARGEFILE} on
+largefile-sensitive systems where @code{off_t} does not default to a
+64bit entity.
 @end defmac
 
 @defmac AC_FUNC_GETGROUPS
@@ -5816,6 +5820,12 @@ If you use this macro, check that your program works even when
 large-file support is enabled.  For example, it is not correct to print
 an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
 (long) X)}.
+
+The LFS introduced the @code{fseeko} and @code{ftello} functions to
+replace their C counterparts @code{fseek} and @code{ftell} that do not
+use @code{off_t}. Take care to use @code{AC_FUNC_FSEEKO} to make their
+prototypes available when using them and large-file support is
+enabled.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
