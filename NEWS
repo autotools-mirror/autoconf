@@ -66,6 +66,8 @@
   assignments.
 - AC_PATH_PROG and family.
   Works properly when given a literal path.
+- AC_FUNC_SETPGRP
+  Somewhere since 2.13, the result had been reversed.
 
 ** C Macros
 

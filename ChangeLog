@@ -1,3 +1,8 @@
+2002-02-25  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_SETPGRP): Fix the test.
+	From Akinori Musha.
+
 2002-02-13  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* lib/Autom4te/XFile.pm (getline, getlines): New functions,

@@ -1109,9 +1109,10 @@ AC_DEFUN([AC_FUNC_SETPGRP],
 # include <unistd.h>
 #endif
 ],
-[/* If this system has a BSD-style setpgrp, which takes arguments, exit
-   successfully.  */
-  exit (setpgrp (1,1) == -1);])],
+[/* If this system has a BSD-style setpgrp which takes arguments,
+  setpgrp(1, 1) will fail with ESRCH and return -1, in that case
+  exit successfully. */
+  exit (setpgrp (1,1) == -1 ? 0 : 1);])],
                [ac_cv_func_setpgrp_void=no],
                [ac_cv_func_setpgrp_void=yes],
                [AC_MSG_ERROR([cannot check setpgrp if cross compiling])])])
