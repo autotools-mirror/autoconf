@@ -1,5 +1,16 @@
 2002-11-14  Akim Demaille  <akim@epita.fr>
 
+	* Makefile.maint: Sync with Bison, i.e.:
+	(po-check): Scan .l and .y files instead of the
+	.c and the .h files that they generate.  This fixes the bug
+	reported by Tim Van Holder in:
+	<http://mail.gnu.org/pipermail/bison-patches/2002-November/001352.html>
+	Look for N_ as well as for _.  Try to avoid matching #define for
+	N_ and _.
+	From Paul Eggert.
+
+2002-11-14  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (C Compiler): Compiling several files at once.
 	From Paul Eggert and Albert Chin-A-Young.
 
