@@ -1,3 +1,9 @@
+2001-04-24  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* doc/autoconf.texi (The GNU build system): Add this chapter
+	introducing Autoconf+Automake+Libtool, and fix references in the
+	introduction.
+
 2001-04-24  Akim Demaille  <akim@epita.fr>
 
 	On HP-UX 10 `ranlib --version' creates `./--version'.
