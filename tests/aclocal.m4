@@ -34,7 +34,7 @@
 m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 |
   egrep -v -e 'm4_join([|],
-      [^ac_],
+      [^a[cs]_],
       [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
       [^(LIBS|LIBOBJS|LDFLAGS)=],

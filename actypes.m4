@@ -141,17 +141,17 @@
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
 m4_define([_AC_CHECK_TYPE_NEW],
-[AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
+[AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [if (($1 *) 0)
   return 0;
 if (sizeof ($1))
   return 0;])],
-                   [AC_VAR_SET(ac_Type, yes)],
-                   [AC_VAR_SET(ac_Type, no)])])
-AS_IF([test AC_VAR_GET(ac_Type) = yes], [$2], [$3])[]dnl
-AC_VAR_POPDEF([ac_Type])dnl
+                   [AS_VAR_SET(ac_Type, yes)],
+                   [AS_VAR_SET(ac_Type, no)])])
+AS_IF([test AS_VAR_GET(ac_Type) = yes], [$2], [$3])[]dnl
+AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
 
@@ -164,7 +164,7 @@ AC_VAR_POPDEF([ac_Type])dnl
 AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
   [_AC_CHECK_TYPE_NEW(AC_Type,
-                      [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type), 1,
+                      [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Type), 1,
                                           [Define if the system has the type
                                           `]AC_Type['.])
 $2],
@@ -350,15 +350,15 @@ AC_DEFUN([AC_CHECK_SIZEOF],
 [AS_LITERAL_IF([$1], [],
                [AC_FATAL([$0: requires literal arguments])])dnl
 AC_CHECK_TYPE([$1], [], [], [$3])
-AC_CACHE_CHECK([size of $1], AC_TR_SH([ac_cv_sizeof_$1]),
-[if test "$AC_TR_SH([ac_cv_type_$1])" = yes; then
+AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
+[if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
   _AC_COMPUTE_INT([sizeof ($1)],
-                  [AC_TR_SH([ac_cv_sizeof_$1])],
+                  [AS_TR_SH([ac_cv_sizeof_$1])],
                   [AC_INCLUDES_DEFAULT([$3])])
 else
-  AC_TR_SH([ac_cv_sizeof_$1])=0
+  AS_TR_SH([ac_cv_sizeof_$1])=0
 fi])dnl
-AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), $AC_TR_SH([ac_cv_sizeof_$1]),
+AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
                    [The size of a `$1', as computed by sizeof.])
 ])# AC_CHECK_SIZEOF
 
@@ -419,7 +419,7 @@ AC_DEFUN([AC_CHECK_MEMBER],
                [AC_FATAL([$0: requires literal arguments])])dnl
 m4_if(m4_regexp([$1], [\.]), -1,
       [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
-AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
+AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
@@ -427,10 +427,10 @@ AC_CACHE_CHECK([for $1], ac_Member,
 m4_patsubst([$1], [\..*]) foo;
 dnl foo.MEMBER;
 foo.m4_patsubst([$1], [^[^.]*\.]);])],
-                [AC_VAR_SET(ac_Member, yes)],
-                [AC_VAR_SET(ac_Member, no)])])
-AS_IF([test AC_VAR_GET(ac_Member) = yes], [$2], [$3])dnl
-AC_VAR_POPDEF([ac_Member])dnl
+                [AS_VAR_SET(ac_Member, yes)],
+                [AS_VAR_SET(ac_Member, no)])])
+AS_IF([test AS_VAR_GET(ac_Member) = yes], [$2], [$3])dnl
+AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
 
@@ -442,7 +442,7 @@ AC_VAR_POPDEF([ac_Member])dnl
 AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
   [AC_CHECK_MEMBER(AC_Member,
-         [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member), 1,
+         [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Member), 1,
                             [Define if `]m4_patsubst(AC_Member,
                                                      [^[^.]*\.])[' is
                              member of `]m4_patsubst(AC_Member, [\..*])['.])

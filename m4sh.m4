@@ -74,6 +74,7 @@ _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_TEST_PREPARE
 _AS_UNSET_PREPARE
+_AS_TR_PREPARE
 
 # NLS nuisances.
 AS_UNSET([LANG],        [C])
@@ -530,6 +531,186 @@ PATH = $PATH
 
 _ASUNAME
 }])
+
+
+
+## ------------------------------------ ##
+## Common m4/sh character translation.  ##
+## ------------------------------------ ##
+
+# The point of this section is to provide high level macros comparable
+# to m4's `translit' primitive, but m4/sh polymorphic.
+# Transliteration of literal strings should be handled by m4, while
+# shell variables' content will be translated at runtime (tr or sed).
+
+
+# _AS_CR_PREPARE
+# --------------
+# Output variables defining common character ranges.
+# See m4_cr_letters etc.
+m4_defun([_AS_CR_PREPARE],
+[# Avoid depending upon Character Ranges.
+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+as_cr_digits='0123456789'
+as_cr_alnum=$as_cr_Letters$as_cr_digits
+])
+
+
+# _AS_TR_SH_PREPARE
+# -----------------
+m4_defun([_AS_TR_SH_PREPARE],
+[m4_require([_AS_CR_PREPARE])dnl
+# Sed expression to map a string onto a valid variable name.
+as_tr_sh="sed y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
+])
+
+
+# AS_TR_SH(EXPRESSION)
+# --------------------
+# Transform EXPRESSION into a valid shell variable name.
+# sh/m4 polymorphic.
+# Be sure to update the definition of `$as_tr_sh' if you change this.
+m4_defun([AS_TR_SH],
+[m4_require([_$0_PREPARE])dnl
+AS_LITERAL_IF([$1],
+              [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
+                           [[^a-zA-Z0-9_]], [_])],
+              [`echo "$1" | $as_tr_sh`])])
+
+
+# _AS_TR_CPP_PREPARE
+# ------------------
+m4_defun([_AS_TR_CPP_PREPARE],
+[m4_require([_AS_CR_PREPARE])dnl
+# Sed expression to map a string onto a valid CPP name.
+as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
+])
+
+
+# AS_TR_CPP(EXPRESSION)
+# ---------------------
+# Map EXPRESSION to an upper case string which is valid as rhs for a
+# `#define'.  sh/m4 polymorphic.  Be sure to update the definition
+# of `$as_tr_cpp' if you change this.
+m4_defun([AS_TR_CPP],
+[m4_require([_$0_PREPARE])dnl
+AS_LITERAL_IF([$1],
+              [m4_patsubst(m4_translit([[$1]],
+                                       [*abcdefghijklmnopqrstuvwxyz],
+                                       [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+                           [[^A-Z0-9_]], [_])],
+              [`echo "$1" | $as_tr_cpp`])])
+
+
+# _AS_TR_PREPARE
+# --------------
+m4_defun([_AS_TR_PREPARE],
+[m4_require([_AS_TR_SH_PREPARE])dnl
+m4_require([_AS_TR_CPP_PREPARE])dnl
+])
+
+
+
+
+## --------------------------------------------------- ##
+## Common m4/sh handling of variables (indirections).  ##
+## --------------------------------------------------- ##
+
+
+# The purpose of this section is to provide a uniform API for
+# reading/setting sh variables with or without indirection.
+# Typically, one can write
+#   AS_VAR_SET(var, val)
+# or
+#   AS_VAR_SET(as_$var, val)
+# and expect the right thing to happen.
+
+
+# AS_VAR_SET(VARIABLE, VALUE)
+# ---------------------------
+# Set the VALUE of the shell VARIABLE.
+# If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
+# perform whenever possible at m4 level, otherwise sh level.
+m4_define([AS_VAR_SET],
+[AS_LITERAL_IF([$1],
+               [$1=$2],
+               [eval "$1=$2"])])
+
+
+# AS_VAR_GET(VARIABLE)
+# --------------------
+# Get the value of the shell VARIABLE.
+# Evaluates to $VARIABLE if there are no indirection in VARIABLE,
+# else into the appropriate `eval' sequence.
+m4_define([AS_VAR_GET],
+[AS_LITERAL_IF([$1],
+               [$[]$1],
+               [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`])])
+
+
+# AS_VAR_TEST_SET(VARIABLE)
+# -------------------------
+# Expands into the `test' expression which is true if VARIABLE
+# is set.  Polymorphic.  Should be dnl'ed.
+m4_define([AS_VAR_TEST_SET],
+[AS_LITERAL_IF([$1],
+               [test "${$1+set}" = set],
+               [eval "test \"\${$1+set}\" = set"])])
+
+
+# AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
+# ------------------------------------------
+# Implement a shell `if-then-else' depending whether VARIABLE is set
+# or not.  Polymorphic.
+m4_define([AS_VAR_SET_IF],
+[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
+
+
+# AS_VAR_PUSHDEF and AS_VAR_POPDEF
+# --------------------------------
+#
+
+# Sometimes we may have to handle literals (e.g. `stdlib.h'), while at
+# other moments, the same code may have to get the value from a
+# variable (e.g., `ac_header').  To have a uniform handling of both
+# cases, when a new value is about to be processed, declare a local
+# variable, e.g.:
+#
+#   AS_VAR_PUSHDEF([header], [ac_cv_header_$1])
+#
+# and then in the body of the macro, use `header' as is.  It is of
+# first importance to use `AS_VAR_*' to access this variable.  Don't
+# quote its name: it must be used right away by m4.
+#
+# If the value `$1' was a literal (e.g. `stdlib.h'), then `header' is
+# in fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect,
+# then `header's value in m4 is in fact `$ac_header', the shell
+# variable that holds all of the magic to get the expansion right.
+#
+# At the end of the block, free the variable with
+#
+#   AS_VAR_POPDEF([header])
+
+
+# AS_VAR_PUSHDEF(VARNAME, VALUE)
+# ------------------------------
+# Define the m4 macro VARNAME to an accessor to the shell variable
+# named VALUE.  VALUE does not need to be a valid shell variable name:
+# the transliteration is handled here.  To be dnl'ed.
+m4_define([AS_VAR_PUSHDEF],
+[AS_LITERAL_IF([$2],
+               [m4_pushdef([$1], [AS_TR_SH($2)])],
+               [as_$1=AS_TR_SH($2)
+m4_pushdef([$1], [$as_[$1]])])])
+
+
+# AS_VAR_POPDEF(VARNAME)
+# ----------------------
+# Free the shell variable accessor VARNAME.  To be dnl'ed.
+m4_define([AS_VAR_POPDEF],
+[m4_popdef([$1])])
 
 
 

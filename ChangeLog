@@ -1,3 +1,16 @@
+2001-06-04  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_VAR_SET, AC_VAR_GET, AC_VAR_TEST_SET)
+	(AC_VAR_SET_IFELSE, AC_VAR_PUSHDEF and AC_VAR_POPDEF, AC_TR_CPP)
+	(AC_TR_SH): Move as...
+	* m4sh.m4 (AS_VAR_SET, AS_VAR_GET, AS_VAR_TEST_SET)
+	(AS_VAR_SET_IF, AC_VAR_PUSHDEF, AS_VAR_POPDEF, AS_TR_CPP)
+	(AS_TR_SH): these.
+	(_AS_TR_PREPARE, _AS_CR_PREPARE, _AS_TR_CPP_PREPARE)
+	(_AS_TR_SH_PREPARE): New.
+	(AS_SHELL_SANITIZE): Invoke _AS_TR_PREPARE.
+	* tests/aclocal.m4 (AC_STATE_SAVE): `as_' vars can be modified.
+
 2001-06-02  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.am (.m4.m4f): Pass the options first.

@@ -64,13 +64,13 @@
 # AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FUNC],
-[AC_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
+[AS_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
 AC_CACHE_CHECK([for $1], ac_var,
 [AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
-                [AC_VAR_SET(ac_var, yes)],
-                [AC_VAR_SET(ac_var, no)])])
-AS_IF([test AC_VAR_GET(ac_var) = yes], [$2], [$3])dnl
-AC_VAR_POPDEF([ac_var])dnl
+                [AS_VAR_SET(ac_var, yes)],
+                [AS_VAR_SET(ac_var, no)])])
+AS_IF([test AS_VAR_GET(ac_var) = yes], [$2], [$3])dnl
+AS_VAR_POPDEF([ac_var])dnl
 ])# AC_CHECK_FUNC
 
 
@@ -78,12 +78,12 @@ AC_VAR_POPDEF([ac_var])dnl
 # ---------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FUNCS],
 [AC_FOREACH([AC_Func], [$1],
-  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
+  [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Func),
                [Define if you have the `]AC_Func[' function.])])dnl
 for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
-              [AC_DEFINE_UNQUOTED([AC_TR_CPP([HAVE_$ac_func])]) $2],
+              [AC_DEFINE_UNQUOTED([AS_TR_CPP([HAVE_$ac_func])]) $2],
               [$3])dnl
 done
 ])
@@ -1204,7 +1204,7 @@ main ()
             [ac_cv_func_$1_empty_string_bug=yes])])
 if test $ac_cv_func_$1_empty_string_bug = yes; then
   AC_LIBOBJ([$1])
-  AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_$1_EMPTY_STRING_BUG]), 1,
+  AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1_EMPTY_STRING_BUG]), 1,
                      [Define if `$1' has the bug that it succeeds when
                       given the zero-length file name argument.])
 fi
