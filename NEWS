@@ -45,6 +45,28 @@
   assignments.
 
 
+** Plans for 2.56
+
+- ./configure <host>
+
+  The compatibility hooks with the old scheme will be completely
+  removed.  Please, advice/use `--build', `--host', and `--target'
+  only.
+
+- AC_CHECK_HEADER, AC_CHECK_HEADERS
+
+  The tests will be stricter, please make sure your invocations are
+  valid.
+
+- shell functions
+
+  Shell functions will gradually be introduced, probably starting with
+  Autotest.  If you know machines which are in use that you suspect
+  *not* to support shell functions, please run the test suite of
+  Autoconf 2.55 on it, and report the results to
+  bug-autoconf@gnu.org.
+
+
 * Major changes in Autoconf 2.54
 
   Released September 13th, 2002.
