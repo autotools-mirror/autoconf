@@ -20,7 +20,7 @@
 
 AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
-SUBDIRS = . m4 man doc tests
+SUBDIRS = . config m4 man doc tests
 
 SUFFIXES = .m4 .m4f
 ## There is currently no means with Automake not to run aclocal.
@@ -209,5 +209,5 @@ wget-update:
 	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/standards.texi -O $(srcdir)/doc/standards.texi
 	$(WGET) ftp://ftp.gnu.org/gnu/GNUinfo/make-stds.texi -O $(srcdir)/doc/make-stds.texi
 	$(WGET) ftp://ftp.gnu.org/gnu/texinfo/texinfo.tex    -O $(srcdir)/doc/texinfo.tex
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config.guess
-	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config.sub
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.guess    -O $(srcdir)/config/config.guess
+	$(WGET) ftp://ftp.gnu.org/gnu/config/config.sub      -O $(srcdir)/config/config.sub

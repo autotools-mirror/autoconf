@@ -1,5 +1,11 @@
 2001-05-22  Akim Demaille  <akim@epita.fr>
 
+	* config: New directory.
+	* configure.in: AC_CONFIG_AUX_DIR it.
+	* tests/atspecific.m4 (AT_CONFIGURE_AC): Adjust.
+
+2001-05-22  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in, autoreconf.in, autoheader.in, autoscan.in, ifnames.in,
 	* autoupdate.in: Specify the Emacs mode.
 	* acversion.m4.in: Rename as...

@@ -79,14 +79,15 @@ standards_TEXINFOS = make-stds.texi
 # not know.
 CLEANFILES = autoconf.cvs autoconf.ev autoconf.evs autoconf.ma autoconf.mas              autoconf.ov autoconf.ovs autoconf.tmp
 
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES = 
 TEXI2DVI = texi2dvi
+TEXINFO_TEX = $(top_srcdir)/config/texinfo.tex
 INFO_DEPS = autoconf.info standards.info
 DVIS = autoconf.dvi standards.dvi
 TEXINFOS = autoconf.texi standards.texi
 DIST_COMMON =  $(autoconf_TEXINFOS) $(standards_TEXINFOS) Makefile.am \
-Makefile.in mdate-sh stamp-vti texinfo.tex version.texi
+Makefile.in stamp-vti texinfo.tex version.texi
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -108,7 +109,7 @@ $(srcdir)/version.texi: stamp-vti
 	@:
 
 $(srcdir)/stamp-vti: autoconf.texi $(top_srcdir)/configure.in
-	@echo "@set UPDATED `$(SHELL) $(srcdir)/mdate-sh $(srcdir)/autoconf.texi`" > vti.tmp
+	@echo "@set UPDATED `$(SHELL) $(top_srcdir)/config/mdate-sh $(srcdir)/autoconf.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
 	@echo "@set VERSION $(VERSION)" >> vti.tmp
 	@cmp -s vti.tmp $(srcdir)/version.texi \
@@ -143,7 +144,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .texi.dvi:
-	TEXINPUTS=.:$$TEXINPUTS \
+	TEXINPUTS=$(top_srcdir)/config/texinfo.tex:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .texi:
@@ -162,7 +163,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .texinfo.dvi:
-	TEXINPUTS=.:$$TEXINPUTS \
+	TEXINPUTS=$(top_srcdir)/config/texinfo.tex:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .txi.info:
@@ -171,7 +172,7 @@ DVIPS = dvips
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
 .txi.dvi:
-	TEXINPUTS=.:$$TEXINPUTS \
+	TEXINPUTS=$(top_srcdir)/config/texinfo.tex:$$TEXINPUTS \
 	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
 
 .txi:

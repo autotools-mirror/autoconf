@@ -2,6 +2,7 @@
 AC_PREREQ(2.50)
 AC_INIT(GNU Autoconf, 2.50a, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(acgeneral.m4)
+AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.50a)
 
 # Initialize the test suite.
@@ -49,7 +50,7 @@ AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
-AC_OUTPUT(Makefile m4/Makefile man/Makefile doc/Makefile
+AC_OUTPUT(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
           tests/Makefile tests/atconfig)
 
 # Report the state of this version of Autoconf if this is a beta.

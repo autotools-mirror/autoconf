@@ -60,9 +60,9 @@ AT_CHECK([/bin/sh -n ../autoreconf], 0)
 AT_CHECK([/bin/sh -n ../ifnames],    0)
 
 # These are not built, they are in the src tree.
-AT_CHECK([/bin/sh -n $top_srcdir/install-sh], 0)
-AT_CHECK([/bin/sh -n $top_srcdir/mkinstalldirs], 0)
-AT_CHECK([/bin/sh -n $top_srcdir/missing], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/install-sh], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/mkinstalldirs], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/missing], 0)
 
 AT_CLEANUP
 

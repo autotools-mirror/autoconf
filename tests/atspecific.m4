@@ -30,7 +30,7 @@ m4_define([AT_CONFIGURE_AC],
 [AT_CLEANUP_FILES(env-after state*)dnl
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir)
+AC_CONFIG_AUX_DIR($top_srcdir/config)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_STATE_SAVE(before)]
 $1

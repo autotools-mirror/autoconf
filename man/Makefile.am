@@ -37,14 +37,15 @@ ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(top_srcdir)/ifnames.in
 autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.in
 
 # Independent from this package.
-config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config.guess
-config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config.sub
+config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config/config.guess
+config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config/config.sub
 
 SUFFIXES = .x .1
 
 .x.1:
 	test -f $(top_builddir)/$* && prog=$(top_builddir)/$*; \
 	test -f $(top_srcdir)/$* && prog=$(top_srcdir)/$*; \
+	test -f $(top_srcdir)/config/$* && prog=$(top_srcdir)/config/$*; \
 	if test -n "$$prog"; then \
 	  echo "Updating man page $@"; \
 	  $(HELP2MAN) \
