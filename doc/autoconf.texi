@@ -3670,6 +3670,58 @@ tradition of it returning @code{int}.
 The ISO C99 standard says a call @code{free(NULL)} does nothing, but
 some old systems don't support this (eg.@: NextStep).
 
+@item @code{isinf}
+@itemx @code{isnan}
+@c @fuindex isinf
+@c @fuindex isnan
+@prindex @code{isinf}
+@prindex @code{isnan}
+The ISO C99 standard specifies that @code{isinf} and @code{isnan} are
+macros.  On some systems just macros are available (e.g., HP-UX), on
+some systems both macros and functions (e.g., glibc 2.3.2), and on some
+systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
+these functions are declared in nonstandard headers like
+@code{<sunmath.h>} and defined in non-default libraries like
+@option{-lm} or @option{-lsunmath}.
+
+The C99 @code{isinf} and @code{isnan} macros work correctly with
+@code{long double} arguments, but pre-C99 systems that use functions
+typically assume @code{double} arguments.  On such a system,
+@code{isinf} incorrectly returns true for a finite @code{long double}
+argument that is outside the range of @code{double}.
+
+To work around this porting mess, you can use code like the following.
+
+@example
+#include <math.h>
+
+#ifndef isnan
+# define isnan(x) \
+    (sizeof (x) == sizeof (long double) ? isnan_ld (x) \
+     : sizeof (x) == sizeof (double) ? isnan_d (x) \
+     : isnan_f (x))
+static inline int isnan_f  (float       x) @{ return x != x; @}
+static inline int isnan_d  (double      x) @{ return x != x; @}
+static inline int isnan_ld (long double x) @{ return x != x; @}
+#endif
+
+#ifndef isinf
+# define isinf(x) \
+    (sizeof (x) == sizeof (long double) ? isinf_ld (x) \
+     : sizeof (x) == sizeof (double) ? isinf_d (x) \
+     : isinf_f (x))
+static inline int isinf_f  (float       x) @{ return isnan (x - x); @}
+static inline int isinf_d  (double      x) @{ return isnan (x - x); @}
+static inline int isinf_ld (long double x) @{ return isnan (x - x); @}
+#endif
+@end example
+
+Use @code{AC_C_INLINE} (@pxref{C Compiler}) so that this code works on
+compilers that lack the @code{inline} keyword.  Some optimizing
+compilers mishandle these definitions, but systems with that bug
+typically have missing or broken @code{isnan} functions anyway, so it's
+probably not worth worrying about.
+
 @item @code{malloc}
 @c @fuindex malloc
 @prindex @code{malloc}
