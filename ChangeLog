@@ -3,6 +3,9 @@
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Set DUALCASE=1, for MKS sh.
 	Problem reported by Lars J. Aas in
 	<http://mail.gnu.org/archive/html/autoconf/2003-07/msg00042.html>.
+	(_AS_MKDIR_P_PREPARE): Change "rm -fr ./-p" to the more-conservative
+	"test -d ./-p && rmdir ./-p".  Suggested by Andreas Schwab in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2003-09/msg00039.html
 	
 2003-09-26  Akim Demaille  <akim@epita.fr>
 

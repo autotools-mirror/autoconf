@@ -691,7 +691,7 @@ m4_defun([_AS_MKDIR_P_PREPARE],
 [if mkdir -p . 2>/dev/null; then
   as_mkdir_p=:
 else
-  rm -fr ./-p
+  test -d ./-p && rmdir ./-p
   as_mkdir_p=false
 fi
 ])# _AS_MKDIR_P_PREPARE
