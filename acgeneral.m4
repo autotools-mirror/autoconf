@@ -29,7 +29,7 @@ dnl
 ifdef([__gnu__], , [errprint(Autoconf requires GNU m4
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.94)dnl
+define(AC_ACVERSION, 1.95)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
