@@ -74,14 +74,16 @@ Major changes in release 2.0:
 * autoscan to generate a preliminary configure.in for a package by
   scanning its source code for commonly used nonportable functions,
   programs, and header files.
-* autoreconf to recursively remake configure and configuration header
-  files in a source tree.
 * autoupdate to update a configure.in to use the new macro names.
 * ifnames to list the symbols used in #if and #ifdef directives in a
   source tree.
+* autoreconf to recursively remake configure and configuration header
+  files in a source tree.
 
 ** Changed utilities:
 * autoheader can take pieces of acconfig.h to replace config.h.{top,bot}.
+* autoconf and autoheader can look for package-local definition files
+  in an alternate directory.
 
 ** Documentation:
 * Autoconf manual is reorganized to make information easier to find

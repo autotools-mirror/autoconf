@@ -16,25 +16,25 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-# Usage: ifnames [--macrodir=dir] [--help] [--version] [file...]
 # Reads from stdin if no files are given.
 # Writes to stdout.
 
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>
 
-usage="Usage: ifnames [--macrodir=dir] [--help] [--version] [file...]"
+usage="\
+Usage: ifnames [-h] [--help] [-m dir] [--macrodir=dir] [--version] [file...]"
 show_version=no
 
 test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
 
 while test $# -gt 0; do
   case "$1" in 
-  --help | --hel | --he | --h)
+  -h | --help | --h* )
     echo "$usage"; exit 0 ;;
   --macrodir=* | --m*=* )
     AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
     shift ;;
-  -m | --macrodir | --m*)
+  -m | --macrodir | --m* )
     shift
     test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
     AC_MACRODIR="$1"

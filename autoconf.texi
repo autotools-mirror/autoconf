@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.118
-@set VERSION 1.118
+@set EDITION 1.119
+@set VERSION 1.119
 @set UPDATED September 1994
 
 @iftex
@@ -481,7 +481,7 @@ argument to the macro.  To omit the false case, omit the
 before it.
 
 You can include comments in @file{configure.in} files by starting them
-with the @code{m4} predefined macro @code{dnl}, which discards text up
+with the @code{m4} builtin macro @code{dnl}, which discards text up
 through the next newline.  These comments do not appear in the generated
 @code{configure} scripts.  For example, it is helpful to begin
 @file{configure.in} files with a line like this:
@@ -562,9 +562,11 @@ files in which that identifier occurs.
 
 @table @code
 @item --help
+@itemx -h
 Print a summary of the command line options and exit.
 
 @item --macrodir=@var{dir}
+@itemx -m @var{dir}
 @evindex AC_MACRODIR
 Look for the Autoconf macro files in directory @var{dir} instead of the
 default installation directory.  Only used to get the version number.
@@ -603,9 +605,16 @@ definition it reads overrides the earlier ones.
 
 @table @code
 @item --help
+@itemx -h
 Print a summary of the command line options and exit.
 
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package file @file{aclocal.m4} in directory @var{dir}
+instead of in the current directory.
+
 @item --macrodir=@var{dir}
+@itemx -m @var{dir}
 @evindex AC_MACRODIR
 Look for the installed macro files in directory @var{dir}.  You can also
 set the @code{AC_MACRODIR} environment variable to a directory; this
@@ -622,8 +631,12 @@ If you have a lot of Autoconf-generated @code{configure} scripts and you
 get a new version of Autoconf, the @code{autoreconf} program can be
 handy.  It runs @code{autoconf} (and @code{autoheader}, where
 appropriate) repeatedly to remake all of the Autoconf @code{configure}
-scripts in a directory tree.  @xref{Automatic Remaking}, for further
-information about automatic remaking of @code{configure} scripts.
+scripts in a directory tree.  If you give the
+@samp{--macrodir=@var{dir}} or @samp{--localdir=@var{dir}} options, it
+passes them down (with relative paths adjusted properly).
+
+@xref{Automatic Remaking}, for information about automatic remaking of
+@code{configure} scripts when their source files change.
 
 @noindent
 @code{autoreconf} accepts the following options:
@@ -632,6 +645,12 @@ information about automatic remaking of @code{configure} scripts.
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
+
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
+not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
+@var{dir} instead of in the directory containing each @file{configure.in}.
 
 @item --macrodir=@var{dir}
 @itemx -m @var{dir}
@@ -644,9 +663,8 @@ environment variable.
 
 @item --verbose
 Print the name of each directory where @code{autoreconf} runs
-@code{autoconf} (and @code{autoheader}, if that directory's
-@file{configure.in} calls @code{AC_CONFIG_HEADER}).
-
+@code{autoconf} (and @code{autoheader}, if appropriate).
+ 
 @item --version
 Print the version number of Autoconf and exit.
 @end table
@@ -1095,21 +1113,32 @@ if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
 @code{autoheader} copies the lines after that line to the end of the
 file it generates.  Either or both of those strings may be omitted.
 
-An obsolete way to produce the same effect is to create the files
+An alternate way to produce the same effect is to create the files
 @file{@var{file}.top} (typically @file{config.h.top}) and/or
 @file{@var{file}.bot} in the current directory.  If they exist,
 @code{autoheader} copies them to the beginning and end, respectively, of
 its output.  Their use is discouraged because they have file names that
 contain two periods, and so can not be stored on MS-DOS; also, they are
-two more files to clutter up the directory.
+two more files to clutter up the directory.  But if you use the
+@samp{--localdir=@var{dir}} option to use an @file{acconfig.h} in another
+directory, they give you a way to put custom boilerplate in each
+individual @file{config.h.in}.
 
 @code{autoheader} accepts the following options:
 
 @table @code
 @item --help
+@itemx -h
 Print a summary of the command line options and exit.
 
+@item --localdir=@var{dir}
+@itemx -l @var{dir}
+Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
+not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
+@var{dir} instead of in the current directory.
+
 @item --macrodir=@var{dir}
+@itemx -m @var{dir}
 @evindex AC_MACRODIR
 Look for the installed macro files and @file{acconfig.h} in directory
 @var{dir}.  You can also set the @code{AC_MACRODIR} environment variable
@@ -1214,10 +1243,11 @@ These tests print messages telling the user which feature they're
 checking for, and what they find.  They cache their results for future
 @code{configure} runs (@pxref{Caching Results}).
 
-Some of these macros set output variables.  @xref{Setting Output Variables},
-for details on how this is done.  The phrase ``define @var{name}'' is
-used below as a shorthand to mean ``define C preprocessor symbol
-@var{name} to have the value 1''.
+Some of these macros set output variables.  @xref{Makefile
+Substitutions}, for how to get their values.  The phrase ``define
+@var{name}'' is used below as a shorthand to mean ``define C
+preprocessor symbol @var{name} to the value 1''.  @xref{Defining
+Symbols}, for how to get those symbol definitions into your program.
 
 @menu
 * Alternative Programs::	Selecting between alternative programs.
@@ -2209,9 +2239,9 @@ test macros.
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default})
 @maindex CHECK_TYPE
-If the type @var{type} is not defined in @file{sys/types.h}, define it
-to be the C (or C++) builtin type @var{default}; e.g., @samp{short} or
-@samp{unsigned}.
+If the type @var{type} is not defined in @file{sys/types.h} or
+@file{stdlib.h} (if that is present), define it to be the C (or C++)
+builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.
 @end defmac
 
 @node Compiler Characteristics, System Services, Typedefs, Existing Tests
@@ -2876,8 +2906,29 @@ print a message letting the user know the result of the test.
 @section Defining C Preprocessor Symbols
 
 A common action to take in response to a feature test is to define a C
-preprocessor symbol indicating the results of the test.  These two
-macros do that.
+preprocessor symbol indicating the results of the test.  That is done by
+calling @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}.
+
+By default, @code{AC_OUTPUT} places the symbols defined by these macros
+into the output variable @code{DEFS}, which contains an option
+@samp{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
+Autoconf version 1, there is no variable @code{DEFS} defined while
+@code{configure} is running.  To check whether Autoconf macros have
+already defined a certain C preprocessor symbol, test the value of the
+appropriate cache variable, as in this example:
+
+@example
+AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
+if test "$ac_cv_func_vprintf" != yes; then
+AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
+fi
+@end example
+
+If @code{AC_CONFIG_HEADER} has been called, then instead of creating
+@code{DEFS}, @code{AC_OUTPUT} creates a header file by substituting the
+correct values into @code{#define} statements in a template file.
+@xref{Configuration Headers}, for more information about this kind of
+output.
 
 @defmac AC_DEFINE (@var{variable} @r{[}, @var{value}@r{]})
 @maindex DEFINE
@@ -2912,26 +2963,6 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
 AC_DEFINE_UNQUOTED($@{ac_tr_hdr@})
 @end example
 @end defmac
-
-By default, @code{AC_OUTPUT} substitutes the symbols defined by these
-macros into the output variable @code{DEFS}, which contains an option
-@samp{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
-Autoconf version 1, there is no variable @code{DEFS} defined while
-@code{configure} is running.  To check whether Autoconf macros have
-already defined a certain C preprocessor symbol, test the value of the
-appropriate cache variable, as in this example:
-
-@example
-AC_CHECK_FUNC(vprintf, AC_DEFINE(HAVE_VPRINTF))
-if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt, AC_DEFINE(HAVE_DOPRNT))
-fi
-@end example
-
-If @code{AC_CONFIG_HEADER} has been called, then instead of substituting
-@code{DEFS}, @code{AC_OUTPUT} creates a header file by substituting the
-correct values into @code{#define} statements in a template file.
-@xref{Configuration Headers}, for more information about this kind of output.
 
 Due to the syntactical bizarreness of the Bourne shell, do not use
 semicolons to separate @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}

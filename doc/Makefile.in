@@ -62,7 +62,7 @@ DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL \
 	acconfig.h acfunctions acheaders acidentifiers \
 	acmakevars acprograms autoconf.info* \
 	autoconf.sh autoconf.texi install.texi \
-	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh ifnames.sh \
+	autoheader.sh autoscan.pl autoreconf.sh autoupdate.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
 	install-sh mkinstalldirs texinfo.tex \
 	testsuite/Makefile.in testsuite/config/*.exp \
@@ -119,8 +119,10 @@ standards.dvi: standards.texi make-stds.texi
 	$(TEXI2DVI) $(srcdir)/standards.texi
 
 check: all
-	rootme=`pwd`; cd testsuite && ${MAKE} $@ AUTOCONF=$$rootme/autoconf \
-	AUTOCONFFLAGS="-m $$rootme"
+	rootme=`pwd`; srcrootme=`cd $(srcdir); pwd`; \
+	test -r install-sh || cp $(srcdir)/install-sh .; \
+	cd testsuite && ${MAKE} $@ AUTOCONF=$$rootme/autoconf \
+	AUTOCONFFLAGS="-m $$srcrootme"
 installcheck: all install
 	cd testsuite && ${MAKE} AUTOCONF=${bindir}/autoconf $@
 
@@ -135,7 +137,7 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	*traditional*) ;; \
 	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
 	esac
-	for i in autoconf autoheader autoreconf autoupdate ifnames; do \
+	for i in $(APROGS); do \
 	  $(INSTALL_PROGRAM) $$i $(bindir)/$$i; \
 	done
 	for i in $(M4FILES) acconfig.h; do \
@@ -160,8 +162,7 @@ install-info: info installdirs
 	done
 
 uninstall:
-	rm -f $(bindir)/autoconf $(bindir)/autoheader $(bindir)/autoscan 
-	rm -f $(bindir)/autoreconf $(bindir)/autoupdate $(bindir)/ifnames 
+	cd $(bindir) && rm -f $(PROGS)
 	rm -fr $(acdatadir)
 	cd $(infodir); rm -f autoconf.info*
 	if test -f standards.info || test -f $(srcdir)/standards.info; \
@@ -185,7 +186,7 @@ clean mostlyclean distclean realclean::
 	done
 
 clean mostlyclean distclean realclean::
-	rm -f autoconf autoheader autoscan autoreconf autoupdate ifnames *.tmp 
+	rm -f $(PROGS) *.tmp 
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
 	rm -f *.ev *.evs *.ov *.ovs *.cv *.cvs *.ma *.mas

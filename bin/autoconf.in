@@ -21,8 +21,8 @@
 # the given template file.
 
 usage="\
-Usage: autoconf [-hv] [--help] [-m dir] [--macrodir=dir] 
-       [--version] [template-file]" 
+Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir] 
+       [-l dir] [--localdir=dir] [--version] [template-file]" 
 
 # NLS nuisances.
 # Only set `LANG' and `LC_ALL' to "C" if already set.
@@ -40,12 +40,21 @@ case "${M4}" in
 esac
 
 tmpout=/tmp/acout.$$
+localdir=
 show_version=no
 
 while test $# -gt 0 ; do
    case "${1}" in 
       -h | --help | --h* )
          echo "${usage}" 1>&2; exit 0 ;;
+      --localdir=* | --l*=* )
+         localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+         shift ;;
+      -l | --localdir | --l*)
+         shift
+         test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
+         localdir="${1}"
+         shift ;;
       --macrodir=* | --m*=* )
          AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
@@ -54,7 +63,7 @@ while test $# -gt 0 ; do
          test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
          AC_MACRODIR="${1}"
          shift ;;
-      -v | --version | --v* )
+      --version | --v* )
          show_version=yes; shift ;;
       -- )     # Stop option processing
         shift; break ;;
@@ -86,9 +95,15 @@ if test z$infile = z-; then
   tmpin=/tmp/acin.$$
   infile=$tmpin
   cat > $infile
-elif test ! -r "${infile}"; then
+elif test ! -r "$infile"; then
   echo "autoconf: ${infile}: No such file or directory" >&2
   exit 1
+fi
+
+if test -n "$localdir"; then
+  use_localdir="-I$localdir"
+else
+  use_localdir=
 fi
 
 # Use the frozen version of Autoconf if available.
@@ -100,7 +115,8 @@ case `$M4 --help < /dev/null 2>&1` in
 *) echo Autoconf requires GNU m4 1.1 or later >&2; rm -f $tmpin; exit 1 ;;
 esac
 
-$M4 -I$AC_MACRODIR $r autoconf.m4$f $infile > $tmpout || { rm -f $tmpin $tmpout; exit 2; }
+$M4 -I$AC_MACRODIR $use_localdir $r autoconf.m4$f $infile > $tmpout ||
+  { rm -f $tmpin $tmpout; exit 2; }
 
 # You could add your own prefixes to pattern if you wanted to check for
 # them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do
@@ -118,7 +134,9 @@ if grep "${pattern}" $tmpout > /dev/null 2>&1; then
 fi
 
 if test $# -eq 0; then
-  exec > configure; chmod +x configure
+  exec 4> configure; chmod +x configure
+else
+  exec 4>&1
 fi
 
 # Put the real line numbers into configure to make config.log more helpful.
@@ -127,7 +145,8 @@ awk '
            { print }
 ' $tmpout | sed '
 /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__\(.*\)$/\2\1\3/
-'
+' >&4
 
 rm -f $tmpout
+
 exit $status

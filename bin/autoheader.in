@@ -24,7 +24,7 @@
 
 usage="\
 Usage: autoheader [-h] [--help] [-m dir] [--macrodir=dir] 
-       [-v] [--version] [template-file]" 
+       [-l dir] [--localdir=dir] [--version] [template-file]" 
 
 # NLS nuisances.
 # Only set `LANG' and `LC_ALL' to "C" if already set.
@@ -41,26 +41,36 @@ case "${M4}" in
     test -f "${M4}" || M4=m4 ;;
 esac
 
+localdir=.
 show_version=no
+
 while test $# -gt 0 ; do
-   case "z${1}" in 
-      z-h | z--help | z--h* )
+   case "${1}" in 
+      -h | --help | --h* )
          echo "${usage}"; exit 0 ;;
-      z--macrodir=* | z--m*=* )
+      --localdir=* | --l*=* )
+         localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+         shift ;;
+      -l | --localdir | --l*)
+         shift
+         test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
+         localdir="${1}"
+         shift ;;
+      --macrodir=* | --m*=* )
          AC_MACRODIR="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
          shift ;;
-      z-m | z--macrodir | z--m* ) 
+      -m | --macrodir | --m* ) 
          shift
          test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
          AC_MACRODIR="${1}"
          shift ;;
-      z-v | z--version | z--v* )
+      --version | --v* )
          show_version=yes; shift ;;
-      z-- )     # Stop option processing
+      -- )     # Stop option processing
         shift; break ;;
-      z- )	# Use stdin as input.
+      - )	# Use stdin as input.
         break ;;
-      z-* )
+      -* )
         echo "${usage}" 1>&2; exit 1 ;;
       * )
         break ;;
@@ -75,7 +85,7 @@ if test $show_version = yes; then
 fi
 
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
-test -r acconfig.h && TEMPLATES="${TEMPLATES} acconfig.h"
+test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
 
 case $# in
   0) infile=configure.in ;;
@@ -90,6 +100,12 @@ funcs=
 headers=
 libs=
 
+if test "$localdir" != .; then
+  use_localdir="-I$localdir"
+else
+  use_localdir=
+fi
+
 # Use the frozen version of Autoconf if available.
 r= f=
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
@@ -102,7 +118,7 @@ esac
 # Extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
-eval "`$M4 -I$AC_MACRODIR $r autoheader.m4$f $infile |
+eval "`$M4 -I$AC_MACRODIR $use_localdir $r autoheader.m4$f $infile |
        sed -n -e '
 		: again
 		/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
@@ -137,8 +153,9 @@ esac
 echo "/* ${config_h_in}.  Generated automatically from $infile by autoheader.  */"
 
 test -r ${config_h}.top && cat ${config_h}.top
-test -r acconfig.h && grep @TOP@ acconfig.h >/dev/null &&
-  sed '/@TOP@/,$d' acconfig.h
+test -r $localdir/acconfig.h &&
+  grep @TOP@ $localdir/acconfig.h >/dev/null &&
+  sed '/@TOP@/,$d' $localdir/acconfig.h
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
@@ -200,8 +217,9 @@ if test -n "$libs"; then
   done
 fi
 
-test -r acconfig.h && grep @BOTTOM@ acconfig.h >/dev/null &&
-  sed '1,/@BOTTOM@/d' acconfig.h
+test -r $localdir/acconfig.h &&
+  grep @BOTTOM@ $localdir/acconfig.h >/dev/null &&
+  sed '1,/@BOTTOM@/d' $localdir/acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
 
 status=0

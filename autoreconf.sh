@@ -18,17 +18,26 @@
 
 usage="\
 Usage: autoreconf [-h] [--help] [-m dir] [--macrodir=dir]
-       [--verbose] [--version] [directory...]"
+       [-l dir] [--localdir=dir] [--verbose] [--version]"
+
+localdir=
 verbose=no
 show_version=no
 
 test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
-export AC_MACRODIR # Pass it down to autoconf and autoheader.
 
 while test $# -gt 0; do
   case "$1" in 
-  -h | --help | --hel | --he | --h)
+  -h | --help | --h*)
     echo "$usage"; exit 0 ;;
+      --localdir=* | --l*=* )
+         localdir="`echo \"${1}\" | sed -e 's/^[^=]*=//'`"
+         shift ;;
+      -l | --localdir | --l*)
+         shift
+         test $# -eq 0 && { echo "${usage}" 1>&2; exit 1; }
+         localdir="${1}"
+         shift ;;
   --macrodir=* | --m*=* )
     AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
     shift ;;
@@ -37,9 +46,9 @@ while test $# -gt 0; do
     test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
     AC_MACRODIR="$1"
     shift ;;
-  --verbose | --verbos | --verbo | --verb)
+  --verbose | --verb*)
     verbose=yes; shift ;;
-  --version | --versio | --versi | --vers)
+  --version | --vers*)
     show_version=yes; shift ;;
   --)     # Stop option processing.
     shift; break ;;
@@ -55,20 +64,59 @@ if test $show_version = yes; then
   exit 0
 fi
 
-if test $# -eq 0; then paths=.; else paths="$@"; fi
+top_autoconf=`echo $0|sed s%autoreconf%autoconf%`
+top_autoheader=`echo $0|sed s%autoreconf%autoheader%`
 
 # The xargs grep filters out Cygnus configure.in files.
-find $paths -name configure.in -print |
+find . -name configure.in -print |
 xargs grep -l AC_OUTPUT |
-while read confin; do
+sed 's%/configure\.in$%%; s%^./%%' |
+while read dir; do
   (
-  dir=`echo $confin|sed 's%/[^/][^/]*$%%'`
-  cd $dir || exit 1
+  cd $dir || continue
+
+  case "$dir" in
+  .) dots= ;;
+  *) # A "../" for each directory in /$dir.
+     dots=`echo /$dir|sed 's%/[^/]*%../%g'` ;;
+  esac
+
+  case "$0" in
+  /*)  autoconf=$top_autoconf; autoheader=$top_autoheader ;;
+  */*) autoconf=$dots$top_autoconf; autoheader=$dots$top_autoheader ;;
+  *)   autoconf=$top_autoconf; autoheader=$top_autoheader ;;
+  esac
+
+  case "$AC_MACRODIR" in
+  /*)  macrodir_opt="--macrodir=$AC_MACRODIR" ;;
+  *)   macrodir_opt="--macrodir=$dots$AC_MACRODIR" ;;
+  esac
+
+  case "$localdir" in
+  "")  localdir_opt= ;;
+  /*)  localdir_opt="--localdir=$localdir" ;;
+  *)   localdir_opt="--localdir=$dots$localdir" ;;
+  esac
+
   test $verbose = yes && echo running autoconf in $dir
-  autoconf
-  if grep AC_CONFIG_HEADER configure.in > /dev/null; then
-    test $verbose = yes && echo running autoheader in $dir
-    autoheader
+  $autoconf $macrodir_opt $localdir_opt
+
+  if grep AC_CONFIG_HEADER configure.in >/dev/null; then
+    template=`sed -n '/AC_CONFIG_HEADER/{
+s%[^#]*AC_CONFIG_HEADER(\([^)]*\).*%\1%
+t here
+: here
+s%.*:%%
+t hascolon
+s%$%.in%
+: hascolon
+p
+q
+}' configure.in`
+    if test ! -f $template || grep autoheader $template >/dev/null; then
+      test $verbose = yes && echo running autoheader in $dir
+      $autoheader $macrodir_opt $localdir_opt
+    fi
   fi
   )
 done
