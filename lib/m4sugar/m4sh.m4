@@ -143,12 +143,12 @@ if test "x$as_lineno_1"  = "x$as_lineno_2" ||
                 != x$as_me.lineno; then
      # Be sure to write the pattern so that it doesn't replace itself:
      # it must not match itself.
-     awk '{
-            if ($[0] ~ /[[$]]LINENO/)
-              while (sub (/[[$]]LINENO/, NR))
-                continue
-            print
-          }' <$as_myself >$as_me.lineno
+     awk <$as_myself '
+           /[[$]]LINENO/ { printf "%d:", NR }
+                         { print }
+         ' |
+       sed ['/[$]LINENO/s/^\([0-9][0-9]*\):\(.*\)[$]LINENO/\2\1/'] \
+         >$as_me.lineno
     chmod +x $as_me.lineno
   fi
 
