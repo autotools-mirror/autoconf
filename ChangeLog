@@ -10,6 +10,18 @@
 
 2000-03-20  Akim Demaille  <akim@epita.fr>
 
+	Give an identity to `configure' scripts.
+
+	* acgeneral.m4 (AC_PACKAGE): New macro.
+	(_AC_COPYRIGHT_SEPARATOR): Remove.
+	(AC_COPYRIGHT): Adjust.
+	(_AC_INIT_HELP, _AC_INIT_VERSION): Name the package you configure
+	when you want.
+	(_AC_INIT): Adjust.
+	* configure.in (AC_PACKAGE): Add.
+
+2000-03-18  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 
 2000-03-20  Akim Demaille  <akim@epita.fr>

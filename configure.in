@@ -1,4 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.14a)
+AC_PACKAGE(Autoconf, 2.14a, bug-autoconf@gnu.org)
+
 AC_INIT(acgeneral.m4)
 AM_INIT_AUTOMAKE(autoconf, 2.14a)
 
