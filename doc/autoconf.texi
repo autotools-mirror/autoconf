@@ -629,7 +629,7 @@ with a @code{Makefile.in} that will work on any system.
 
 The benefits of Automake increase for larger packages (especially ones
 with subdirectories), but even for small programs the added convenience
-and portability can be substantial.  And that's not all@dots{}
+and portability can be substantial.  And that's not all@enddots{}
 
 @node Libtool
 @section Libtool
@@ -1850,7 +1850,7 @@ variables it needs to run the @var{commands}.
 
 You should be extremely cautious in your variable names: all the
 @var{init-cmds} share the same name space and may overwrite each other
-in unpredictable ways.  Sorry@dots{}
+in unpredictable ways.  Sorry@enddots{}
 @end table
 
 All these macros can be called multiple times, with different
@@ -5918,7 +5918,7 @@ case@dots{}), since Autoconf will detect inconsistencies.
 @example
 AC_LANG_PUSH(Fortran 77)
 # Perform some tests on Fortran 77.
-# ...
+# @dots{}
 AC_LANG_POP(Fortran 77)
 @end example
 @end defmac
@@ -6378,7 +6378,7 @@ AC_CACHE_SAVE
 @end group
 
 @group
-# Might abort...
+# Might abort@dots{}
 AM_PATH_GTK(1.0.2,, [AC_MSG_ERROR([GTK not in path])])
 AM_PATH_GTKMM(0.9.5,, [AC_MSG_ERROR([GTK not in path])])
 @end group
@@ -6496,7 +6496,7 @@ and their interface might change in the future.  As a matter of fact,
 
 @c FIXME: Grmph, yet another quoting myth: quotation has *never*
 @c prevented `expansion' of $1.  Unless it refers to the expansion
-@c of the value of $1?  Anyway, we need a rewrite here@dots{}
+@c of the value of $1?  Anyway, we need a rewrite here@enddots{}
 
 The most common problem with existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
@@ -6637,7 +6637,7 @@ car([[]], [[]])
 @end example
 
 With this in mind, we can explore the cases where macros invoke
-macros@dots{}
+macros@enddots{}
 
 
 @node Quotation and Nested Macros
@@ -6806,7 +6806,7 @@ domains: they should be considered like command line options:
 @code{--syntax}.  Nevertheless, they are implemented as M4 builtins, as
 it makes M4 libraries self contained (no need for additional options).
 
-There lies the problem...
+There lies the problem@enddots{}
 
 @sp 1
 
@@ -7366,7 +7366,7 @@ This macro corresponds to @code{m4exit}.
 
 @defmac m4_if (@var{comment})
 @defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @ovar{not-equal})
-@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, ...)
+@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @dots{})
 @msindex m4_if
 This macro corresponds to @code{ifelse}.
 @end defmac
@@ -7429,12 +7429,12 @@ The following macros give some control over the order of the evaluation
 by adding or removing levels of quotes.  They are meant for hard core M4
 programmers.
 
-@defmac m4_dquote (@var{arg1}, ...)
+@defmac m4_dquote (@var{arg1}, @dots{})
 @msindex dquote
 Return the arguments as a quoted list of quoted arguments.
 @end defmac
 
-@defmac m4_quote (@var{arg1}, ...)
+@defmac m4_quote (@var{arg1}, @dots{})
 @msindex quote
 Return the arguments as a single entity, i.e., wrap them into a pair of
 quotes.
@@ -8383,10 +8383,10 @@ foo
 @end example
 
 @noindent
-You'll appreciate the various levels of detail@dots{}
+You'll appreciate the various levels of detail@enddots{}
 
 One workaround is to grep out uninteresting lines, hoping not to remove
-good ones@dots{}
+good ones@enddots{}
 
 Don't try to move/delete open files, such as in @samp{exec >foo; mv foo
 bar}, see @ref{Limitations of Builtins}, @command{mv} for more details.
@@ -10106,7 +10106,7 @@ on SunOS 4.1.3 when the empty file is on an @sc{nfs}-mounted 4.2 volume.
 
 Make itself suffers a great number of limitations, only a few of which
 being listed here.  First of all, remember that since commands are
-executed by the shell, all its weaknesses are inherited@dots{}
+executed by the shell, all its weaknesses are inherited@enddots{}
 
 @table @asis
 @item @code{$<}
@@ -12444,7 +12444,7 @@ encapsulate into macros that you can share.
 @section Upgrading From Version 2.13
 
 The introduction of the previous section (@pxref{Autoconf 1}) perfectly
-suits this section...
+suits this section@enddots{}
 
 @quotation
 Autoconf version 2.50 is mostly backward compatible with version 2.13.
@@ -12517,7 +12517,7 @@ AC_OUTPUT
 @end example
 
 Many many (and many more) Autoconf macros were lacking proper quotation,
-including no less than... @code{AC_DEFUN} itself!
+including no less than@dots{} @code{AC_DEFUN} itself!
 
 @example
 $ @kbd{cat configure.in}
@@ -12552,7 +12552,7 @@ instead of @code{AM_}.  But in order to ease the upgrading via
 
 Unfortunately Automake did not quote the name of these macros!
 Therefore, when @command{m4} finds something like
-@samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, ...)} in @file{aclocal.m4},
+@samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, @dots{})} in @file{aclocal.m4},
 @code{AM_TYPE_PTRDIFF_T} is
 expanded, replaced with its Autoconf definition.
 
@@ -12787,7 +12787,7 @@ AC_SUBST(LTLIBOBJS)
 @end example
 
 @noindent
-Unfortunately, @command{autoupdate} cannot help here, since... this is
+Unfortunately, @command{autoupdate} cannot help here, since@dots{} this is
 not a macro!  Of course, first make sure your release of Automake and/or
 Libtool still requires these.
 
@@ -12990,7 +12990,7 @@ the point of view of the test suite, there remains a single environment,
 state of the build machine, including some important environment
 variables.
 @c FIXME: How about having an M4sh macro to say `hey, log the value
-@c of `...'?  This would help both Autoconf and Autotest.
+@c of `@dots{}'?  This would help both Autoconf and Autotest.
 
 @item tested programs
 The absolute path and answers to @option{--version} of the tested
@@ -13491,7 +13491,7 @@ You may be wondering, Why was Autoconf originally written?  How did it
 get into its present form?  (Why does it look like gorilla spit?)  If
 you're not wondering, then this chapter contains no information useful
 to you, and you might as well skip it.  If you @emph{are} wondering,
-then let there be light@dots{}
+then let there be light@enddots{}
 
 @menu
 * Genesis::                     Prehistory and naming of @command{configure}

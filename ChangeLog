@@ -1,3 +1,7 @@
+2002-07-09  Art Haas  <ahaas@neosoft.com>
+
+	* doc/autoconf.texi: Use @enddots{} or @dots{} where appropriate.
+
 2002-07-02  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
