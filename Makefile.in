@@ -34,11 +34,10 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-DIST_COMMON = Makefile.in Makefile.am COPYING COPYING INSTALL INSTALL \
-	NEWS NEWS README README AUTHORS AUTHORS ChangeLog ChangeLog \
-	THANKS aclocal.m4 configure configure.ac $(am__configure_deps) \
-	README-alpha AUTHORS COPYING ChangeLog INSTALL NEWS README \
-	THANKS TODO configure configure.ac
+DIST_COMMON = Makefile.in Makefile.am COPYING INSTALL NEWS README \
+	AUTHORS ChangeLog THANKS aclocal.m4 configure configure.ac \
+	$(am__configure_deps) README-alpha AUTHORS COPYING ChangeLog \
+	INSTALL NEWS README THANKS TODO configure configure.ac
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__configure_deps = $(top_srcdir)/config/m4.m4
