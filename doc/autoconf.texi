@@ -228,7 +228,7 @@ Autoconf was written by David MacKenzie, with help from Fran\c cois
 @end tex
 Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor, Roland McGrath,
 and Noah Friedman.  It was inspired by Brian Fox's automatic
-configuration system for BASH, by Larry Wall's Metaconfig, and by
+configuration system for Bash, by Larry Wall's Metaconfig, and by
 Richard Stallman, Richard Pixley, and John Gilmore's configuration tools
 for the GNU compiler and object file utilities.
 
@@ -338,14 +338,14 @@ between the macro name and the open parentheses.
 @display
 @group
 @code{AC_INIT(@var{file})}
-checks for programs
-checks for UNIX variants that set @code{DEFS}
+checks for alternative programs
+checks for UNIX variants that set C preprocessor variables
 checks for header files
 checks for typedefs
-checks for functions
-checks for structure members
+checks for library functions
+checks for structures
 checks for compiler characteristics
-checks for operating system services
+checks for system services
 other checks for UNIX variants
 @code{AC_OUTPUT(@r{[}@var{file@dots{}}@r{]})}
 @end group
@@ -378,13 +378,17 @@ instead of @file{configure.in} and writes the configuration script on
 the standard output.
 
 The Autoconf macros are defined in two or more files.  Two of the files
-are distributed with Autoconf: @file{acgeneral.m4} (@pxref{General
-Purpose Macros}) and @file{acspecific.m4} (@pxref{Specific Tests}).
-@code{autoconf} also looks for an optional file called @file{aclocal.m4}
-both in the directory that contains other installed Autoconf macro files and
-in the current directory.  (If both files exist, it uses both of them.)
-Those files can contain your site's own locally written Autoconf macro
-definitions.  @xref{Writing Macros}, for more information.
+are distributed with Autoconf: @code{autoconf} first reads
+@file{acgeneral.m4} (@pxref{General Purpose Macros}), then
+@file{acspecific.m4} (@pxref{Specific Tests}).  After reading them,
+@code{autoconf} looks for an optional file called @file{aclocal.m4},
+first in the directory that contains other installed Autoconf macro
+files, and then in the current directory.  If both files exist, it uses
+both of them.  Those files can contain your site's own locally written
+Autoconf macro definitions (@pxref{Writing Macros}, for more
+information).  If a macro is defined in more than one of the files that
+@code{autoconf} reads, the last definition it reads overrides the
+earlier ones.
 
 You can override the directory where @code{autoconf} looks for the
 installed macro files by setting the @code{AC_MACRODIR} environment
@@ -407,9 +411,10 @@ file that @code{autoheader} creates is called @file{config.h.in}; if
 @code{autoheader} scans @file{configure.in} and figures out which C
 preprocessor symbols it might define.  It copies comments and
 @code{#define} and @code{#undef} statements from a file called
-@file{acconfig.h}, which comes with and is installed with Autoconf; it
+@file{acconfig.h}, which comes with and is installed with Autoconf.  It
 also uses a file called @file{acconfig.h} in the current directory, if
-present.  For symbols that @code{AC_HAVE_HEADERS} or
+present; you must create that file to contain entries for symbols that
+you @code{AC_DEFINE}.  For symbols that @code{AC_HAVE_HEADERS} or
 @code{AC_HAVE_FUNCS} define, @code{autoheader} generates comments and
 @code{#undef} statements itself rather than copying them from a file,
 since the possible symbols are effectively limitless.
@@ -513,8 +518,8 @@ C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
 Many of the specific test macros use the value of @code{CPP} indirectly
 by calling @code{AC_TEST_CPP}, @code{AC_HEADER_CHECK},
 @code{AC_HEADER_EGREP}, or @code{AC_PROGRAM_EGREP}.  Those macros call
-this macro first if it hasn't been called already.  It should be called
-after @code{AC_PROG_CC}.
+this macro first if it hasn't been called already.  It calls
+@code{AC_PROG_CC} if it hasn't been called already.
 @end defmac
 
 @defmac AC_PROG_LEX
@@ -591,12 +596,19 @@ it has @file{sys/ndir.h}, define @code{SYSNDIR}; otherwise, if it has
 @file{sys/dir.h}, define @code{SYSDIR}; otherwise, if it has
 @file{ndir.h}, define @code{NDIR}.  Also, if the directory library
 header file contains a declaration of the @code{closedir} function with
-a @code{void} return type, define @code{VOID_CLOSEDIR}.  The directory
-library declarations in the source code should look something like the
-following:
+a @code{void} return type, define @code{VOID_CLOSEDIR}.
+
+The directory library declarations in the source code should look
+something like the following, which assumes that you have also called
+@samp{AC_HAVE_HEADERS(unistd.h)}:
 
 @example
 @group
+#ifdef HAVE_UNISTD_H
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 /* unistd.h defines _POSIX_VERSION on POSIX.1 systems.  */
 #if defined(DIRENT) || defined(_POSIX_VERSION)
 #include <dirent.h>
@@ -699,8 +711,10 @@ the macro definitions with ones that go in the other direction.
 @defmac AC_UNISTD_H
 @maindex UNISTD_H
 @vindex HAVE_UNISTD_H
-Define @code{HAVE_UNISTD_H} if the system has @file{unistd.h}.  The way
-to check if the system supports POSIX.1 is:
+Define @code{HAVE_UNISTD_H} if the system has @file{unistd.h}.  This
+macro is obsolete; instead, use @samp{AC_HAVE_HEADERS(unistd.h)}.
+
+The way to check if the system supports POSIX.1 is:
 
 @example
 @group
@@ -818,7 +832,7 @@ variable @code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA}
 (so programs can periodically call @samp{alloca(0)} to garbage collect).
 This variable is separate from @code{LIBOBJS} so multiple programs can
 share the value of @code{ALLOCA} without needing to create an actual
-library.
+library, in case only some of them use the code in @code{LIBOBJS}.
 
 If this macro finds @file{alloca.h}, it defines @code{HAVE_ALLOCA_H}.
 
@@ -1446,19 +1460,9 @@ shell commands @var{action-if-found}, otherwise execute
 @var{action-if-not-found}.
 
 You can not check whether preprocessor symbols are defined this way,
-because they get expanded before @code{egrep} sees them.  You can
-probably just put @code{#ifdef} directives in your C programs to detect
-them, but if you want to do the check in @code{configure} for some
-reason (perhaps to determine which of several files to include), then
-use @code{AC_PROGRAM_EGREP}, like this:
-
-@example
-AC_PROGRAM_EGREP(yes, [#include <stdio.h>
-#ifdef P_tmpdir
-yes
-#endif
-], AC_DEFINE(HAVE_P_TMPDIR))
-@end example
+because they get expanded before @code{egrep} sees them.  But you can
+almost always detect them by simply using @code{#ifdef} directives in
+your C programs.
 @end defmac
 
 @defmac AC_PREFIX (@var{program})
@@ -2154,7 +2158,7 @@ contains lines like
 
 @example
 prefix = /usr/local
-exec_prefix = ${prefix}
+exec_prefix = $@{prefix@}
 @end example
 
 @noindent
