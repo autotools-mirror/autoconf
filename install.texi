@@ -155,8 +155,8 @@ If you want to set default values for @code{configure} scripts to share,
 you can create a site shell script called @file{config.site} that gives
 default values for variables like @code{CC}, @code{cache_file}, and
 @code{prefix}.  @code{configure} looks for
-@file{@var{prefix}/lib/config.site} if it exists, then
-@file{@var{exec_prefix}/lib/config.site} if it exists.  Or, you can set
+@file{@var{prefix}/share/config.site} if it exists, then
+@file{@var{prefix}/etc/config.site} if it exists.  Or, you can set
 the @code{CONFIG_SITE} environment variable to the location of the site
 script.  A warning: not all @code{configure} scripts look for a site script.
 
