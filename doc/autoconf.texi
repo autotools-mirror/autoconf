@@ -8190,16 +8190,17 @@ Most modern shells provide the current line number in @code{LINENO}.
 Its value is the line number of the beginning of the current command.
 Autoconf attempts to execute @command{configure} with a modern shell.
 If no such shell is available, it attempts to implement @code{LINENO}
-with a simple Awk+Sed prepass that replaces the first instance of the
-string @code{$LINENO} in each line with the line's number.
+with a Sed prepass that replaces the each instance of the string
+@code{$LINENO} (not followed by an alphanumeric character) with the
+line's number.
 
 You should not rely on @code{LINENO} within @command{eval}, as the
-behavior differs in practice.  Also, the possibility of the Awk+Sed
+behavior differs in practice.  Also, the possibility of the Sed
 prepass means that you should not rely on @code{$LINENO} when quoted,
 when in here-documents, or when in long commands that cross line
-boundaries or that have multiple instances of $LINENO.  Subshells
-should be OK, though.  In the following example, lines 1, 6, and 10
-are portable, but the other instances of @code{LINENO} are not:
+boundaries.  Subshells should be OK, though.  In the following
+example, lines 1, 6, and 9 are portable, but the other instances of
+@code{LINENO} are not:
 
 @example
 @group
@@ -8211,10 +8212,9 @@ cat <<EOF
 EOF
 ( echo 6. $LINENO )
 eval 'echo 7. $LINENO'
-echo 8. $LINENO $LINENO
-echo 9. '$LINENO'
-echo 10. $LINENO '
-11.' $LINENO
+echo 8. '$LINENO'
+echo 9. $LINENO '
+10.' $LINENO
 @end group
 @group
 $ @kbd{bash-2.05 lineno}
@@ -8223,10 +8223,9 @@ $ @kbd{bash-2.05 lineno}
 4. 2
 6. 6
 7. 1
-8. 8 8
-9. $LINENO
-10. 10 
-11. 10
+8. $LINENO
+9. 9
+10. 9
 @end group
 @group
 $ @kbd{zsh-3.0.6 lineno}
@@ -8235,10 +8234,9 @@ $ @kbd{zsh-3.0.6 lineno}
 4. 2
 6. 6
 7. 7
-8. 8 8
-9. $LINENO
-10. 10 
-11. 10
+8. $LINENO
+9. 9
+10. 9
 @end group
 @group
 $ @kbd{pdksh-5.2.14 lineno}
@@ -8247,15 +8245,22 @@ $ @kbd{pdksh-5.2.14 lineno}
 4. 2
 6. 6
 7. 0
-8. 8 8
-9. $LINENO
-10. 10 
-11. 10
+8. $LINENO
+9. 9
+10. 9
 @end group
 @group
-$ @kbd{awk '/\$LINENO/@{printf "%d:", NR@}; @{print@}' lineno |}
-> @kbd{sed '/\$LINENO/s/^\([^:]*\):\(.*\)\$LINENO/\2\1/' |}
-> @kbd{sh}
+$ @kbd{sed '=' <lineno |}
+> @kbd{  sed '}
+> @kbd{    N}
+> @kbd{    s,$,-,}
+> @kbd{    : loop}
+> @kbd{    s,^\([0-9]*\)\(.*\)[$]LINENO\([^a-zA-Z0-9_]\),\1\2\1\3,}
+> @kbd{    t loop}
+> @kbd{    s,-$,,}
+> @kbd{    s,^[0-9]*\n,,}
+> @kbd{  ' |}
+> @kbd{  sh}
 1. 1
 3. 3
 4. 4
@@ -8264,7 +8269,6 @@ $ @kbd{awk '/\$LINENO/@{printf "%d:", NR@}; @{print@}' lineno |}
 8. 8
 9. 9
 10. 10 
-11. 11
 @end group
 @end example
 
