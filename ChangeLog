@@ -1,3 +1,10 @@
+1999-03-11  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Recognise MiNT and TOS on Atari machines.
+	Contributed by Guido Flohr <gufl0000@stud.uni-sb.de>.
+
+	* config.sub: Add aliases for MiNT.
+	
 1999-03-10  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Recognise HP 9000/800. Merged from the master

@@ -624,6 +624,10 @@ case $basic_machine in
         xps | xps100)
 		basic_machine=xps100-honeywell
 		;;
+	*mint | *MiNT)
+		basic_machine=m68k-atari
+		os=-mint
+		;;
 	none)
 		basic_machine=none-none
 		os=-none
@@ -784,6 +788,9 @@ case $os in
 	-xenix)
 		os=-xenix
 		;;
+        -*mint | -*MiNT)
+	        os=-mint
+		;;
 	-none)
 		;;
 	*)
@@ -908,6 +915,9 @@ case $basic_machine in
 	f301-fujitsu)
 		os=-uxpv
 		;;
+	*-atari*)
+		os=-mint
+		;;
 	*)
 		os=-none
 		;;
@@ -961,6 +971,9 @@ case $basic_machine in
 				;;
 			-aux*)
 				vendor=apple
+				;;
+			-*mint | -*MiNT)
+				vendor=atari
 				;;
 		esac
 		basic_machine=`echo $basic_machine | sed "s/unknown/$vendor/"`
