@@ -76,12 +76,14 @@ except that this permission notice may be stated in a translation approved
 by the Foundation.
 @end titlepage
 
+@c Define an environment variable index.
+@defcodeindex ev
+@c Define a Makefile variable index.
+@defcodeindex mv
+@c Define a CPP variable index.
+@defcodeindex cv
 @c Define a macro index that @@defmac doesn't write to.
 @defcodeindex ma
-@c Define a CPP variable index that @@defvar doesn't write to.
-@defcodeindex cv
-@c Define an environment variable index that @@defvar doesn't write to.
-@defcodeindex ev
 
 @node Top, Introduction, , (dir)
 @comment  node-name,  next,  previous,  up
@@ -113,6 +115,7 @@ package.  This is edition @value{EDITION}, for Autoconf version @value{VERSION}.
 * History::                     History of Autoconf.
 * Old Macro Names::		Backward compatibility macros.
 * Environment Variable Index::  Index of environment variables used.
+* Make Variable Index::         Index of @code{make} variables set.
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined.
 * Macro Index::                 Index of Autoconf macros.
 
@@ -213,7 +216,7 @@ Manual Configuration
 
 Makefiles
 
-* Predefined Variables::	Heavily used @code{make} variables.
+* Predefined Variables::	@code{make} variables that are always set.
 * VPATH Substitutions::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 
@@ -793,6 +796,7 @@ You can use the program @code{autoheader} to create the input file
 
 @defmac AC_CONFIG_SUBDIRS (@var{dir} @dots{})
 @maindex CONFIG_SUBDIRS
+@mvindex subdirs
 Run @code{configure} in each subdirectory @var{dir} in the given
 whitespace-separated list.  If a given @var{dir} is not found, no error
 is reported, so a @code{configure} script can configure whichever parts
@@ -952,7 +956,8 @@ must call the macro @code{AC_ARG_PROGRAM}.
 
 @defmac AC_ARG_PROGRAM
 @maindex ARG_PROGRAM
-Place in @file{Makefile} variable @code{program_transform_name} a
+@mvindex program_transform_name
+Place in @code{make} variable @code{program_transform_name} a
 sequence of @code{sed} commands for changing the names of installed
 programs.
 
@@ -1116,6 +1121,7 @@ This macro replaces @code{AC_DECLARE_YYTEXT}, which didn't work reliably.
 
 @defmac AC_PROG_AWK
 @maindex PROG_AWK
+@mvindex AWK
 Check for @code{mawk}, @code{gawk}, @code{nawk}, and @code{awk}, in that
 order, and set @code{make} variable @code{AWK} to the first one that it
 finds.
@@ -1123,6 +1129,8 @@ finds.
 
 @defmac AC_PROG_CC
 @maindex PROG_CC
+@mvindex CC
+@mvindex CFLAGS
 Determine a C compiler to use.  If @code{CC} is not already set in the
 environment, check for @code{gcc}, and use @code{cc} if it's not found.
 Set @code{make} variable @code{CC} to the name of the compiler found.
@@ -1143,6 +1151,7 @@ simultaneously, define @code{NO_MINUS_C_MINUS_O}.
 
 @defmac AC_PROG_CPP
 @maindex PROG_CPP
+@mvindex CPP
 Set shell and @code{make} variable @code{CPP} to a command that runs the
 C preprocessor.  If @samp{$CC -E} doesn't work, it uses @file{/lib/cpp}.
 It is only portable to run @code{CPP} on files with a @file{.c}
@@ -1158,6 +1167,8 @@ been called already.
 
 @defmac AC_PROG_CXX
 @maindex PROG_CXX
+@mvindex CXX
+@mvindex CXXFLAGS
 Determine a C++ compiler to use.  Check if the environment variable
 @code{CXX} or @code{CCC} (in that order) is set; if so, set @code{make}
 variable @code{CXX} to its value.  Otherwise search for a C++ compiler
@@ -1174,6 +1185,7 @@ for other compilers.
 
 @defmac AC_PROG_CXXCPP
 @maindex PROG_CXXCPP
+@mvindex CXXCPP
 Set shell and @code{make} variable @code{CXXCPP} to a command that runs the
 C++ preprocessor.  If @samp{$CXX -E} doesn't work, it uses @file{/lib/cpp}.
 It is only portable to run @code{CXXCPP} on files with a @file{.c},
@@ -1189,6 +1201,7 @@ this macro first if it hasn't been called already.  This macro calls
 
 @defmac AC_PROG_GCC_TRADITIONAL
 @maindex PROG_GCC_TRADITIONAL
+@mvindex CC
 Add @samp{-traditional} to @code{make} variable @code{CC} if using the
 GNU C compiler and @code{ioctl} does not work properly without
 @samp{-traditional}.  That usually happens when the fixed header files
@@ -1201,6 +1214,9 @@ already.
 
 @defmac AC_PROG_INSTALL
 @maindex PROG_INSTALL
+@mvindex INSTALL
+@mvindex INSTALL_PROGRAM
+@mvindex INSTALL_DATA
 Set @code{make} variable @code{INSTALL} to the path of a BSD compatible
 @code{install} program, if one is found in the current @code{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install.sh -c}, where
@@ -1220,6 +1236,8 @@ not found in standard @code{install} programs, there is no reason to use
 
 @defmac AC_PROG_LEX
 @maindex PROG_LEX
+@mvindex LEX
+@mvindex LEXLIB
 If @code{flex} is found, set @code{make} variable @code{LEX} to
 @samp{flex} and @code{LEXLIB} to @samp{-lfl}, if that library is in a
 standard place.  Otherwise set @code{LEX} to @samp{lex} and
@@ -1228,6 +1246,7 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 
 @defmac AC_PROG_LN_S
 @maindex PROG_LN_S
+@mvindex LN_S
 If @samp{ln -s} works on the current filesystem (the operating system
 and filesystem support symbolic links), set shell and @code{make}
 variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
@@ -1235,6 +1254,7 @@ variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
 
 @defmac AC_PROG_MAKE_SET
 @maindex PROG_MAKE_SET
+@mvindex SET_MAKE
 If @code{make} predefines the variable @code{MAKE}, define @code{make}
 variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
 to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
@@ -1255,12 +1275,14 @@ If you use this macro, simply place a line like this in your
 
 @defmac AC_PROG_RANLIB
 @maindex PROG_RANLIB
+@mvindex RANLIB
 Set @code{make} variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
 is found, otherwise to @samp{:} (do nothing).
 @end defmac
 
 @defmac AC_PROG_YACC
 @maindex PROG_YACC
+@mvindex YACC
 If @code{bison} is found, set @code{make} variable @code{YACC} to
 @samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
 to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
@@ -1756,6 +1778,7 @@ These macros check for particular C functions.
 @maindex FUNC_ALLOCA
 @cvindex C_ALLOCA
 @cvindex HAVE_ALLOCA_H
+@mvindex ALLOCA
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
@@ -1826,6 +1849,9 @@ return value for an error indicator.  This macro calls
 @cvindex NLIST_NAME_UNION
 @cvindex GETLODAVG_PRIVILEGED
 @cvindex NEED_SETGID
+@mvindex LIBOBJS
+@mvindex NEED_SETGID
+@mvindex KMEM_GROUP
 Check how to get the system load averages.  If the system has the
 @code{getloadavg} function, this macro defines @code{HAVE_GETLOADAVG},
 and adds to @code{LIBS} any libraries needed to get that function.
@@ -1954,6 +1980,7 @@ default C library, first call @code{AC_CHECK_LIB} for those libraries.
 
 @defmac AC_REPLACE_FUNCS (@var{function-name}@dots{})
 @maindex REPLACE_FUNCS
+@mvindex LIBOBJS
 For each given @var{function-name} in the whitespace-separated argument
 list that is not in the C library, add @samp{@var{function-name}.o} to
 the value of the @code{make} variable @code{LIBOBJS}.  If the functions
@@ -2013,6 +2040,7 @@ If @code{struct stat} contains an @code{st_blksize} member, define
 @defmac AC_STRUCT_ST_BLOCKS
 @maindex STRUCT_ST_BLOCKS
 @cvindex HAVE_ST_BLOCKS
+@mvindex LIBOBJS
 If @code{struct stat} contains an @code{st_blocks} member, define
 @code{HAVE_ST_BLOCKS}.  Otherwise, add @samp{fileblocks.o} to the
 @code{make} variable @code{LIBOBJS}.
@@ -2157,6 +2185,9 @@ otherwise set it to the empty string.
 
 @defmac AC_PATH_XTRA
 @maindex PATH_XTRA
+@mvindex X_CFLAGS
+@mvindex X_LIBS
+@mvindex X_EXTRA_LIBS
 An enhanced version of @code{AC_PATH_X}.  Put the C compiler flags that
 X needs into @code{make} variable @code{X_CFLAGS}, and the X linker
 flags into @code{X_LIBS}.  If X is not available, put
@@ -2220,6 +2251,7 @@ so on.
 @defmac AC_OS_ISC
 @maindex OS_ISC
 @cvindex _POSIX_SOURCE
+@mvindex CC
 If on a POSIXized ISC UNIX, define @code{_POSIX_SOURCE} and add
 @samp{-posix} (for the GNU C compiler) or @samp{-Xp} (for other C
 compilers) to @code{make} variable @code{CC}.  This allows the use of
@@ -2239,6 +2271,7 @@ facilities.  Should be called before any macros that run the C compiler.
 
 @defmac AC_OS_SCO
 @maindex OS_SCO
+@mvindex LIBS
 If on SCO UNIX, add @samp{-lintl} to @code{make} variable @code{LIBS}.
 Used to get @code{strftime}.  It must be called before checking for
 @code{strftime}.
@@ -2246,6 +2279,7 @@ Used to get @code{strftime}.  It must be called before checking for
 
 @defmac AC_OS_XENIX
 @maindex OS_XENIX
+@mvindex LIBS
 If on Xenix, add @samp{-lx} to @code{make} variable @code{LIBS}.  Also,
 if @file{sys/ndir.h} is not being used, add @samp{-ldir} to @code{LIBS}.
 Needed when using the directory reading functions.  This macro calls
@@ -2495,7 +2529,7 @@ LIBS="$LIBS -ltermcap"
 @defmac AC_SUBST_FILE (@var{variable})
 @maindex SUBST_FILE
 Substitute the contents of the file named by shell variable
-@var{variable} into @file{Makefile} variable @var{variable} when
+@var{variable} into @code{make} variable @var{variable} when
 creating the output files (typically one or more @file{Makefile}s).
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host
@@ -3418,16 +3452,31 @@ the shell and @code{make} variables that contain the system type
 information are:
 
 @table @code
+@mvindex build
+@mvindex host
+@mvindex target
 @item @code{build}, @code{host}, @code{target}
 the canonical system names;
 
 @item @code{build_alias}, @code{host_alias}, @code{target_alias}
+@mvindex build_alias
+@mvindex host_alias
+@mvindex target_alias
 the names the user specified, or the canonical names if
 @code{config.guess} was used;
 
 @item @code{build_cpu}, @code{build_vendor}, @code{build_os}
 @itemx @code{host_cpu}, @code{host_vendor}, @code{host_os}
 @itemx @code{target_cpu}, @code{target_vendor}, @code{target_os}
+@mvindex build_cpu
+@mvindex host_cpu
+@mvindex target_cpu
+@mvindex build_vendor
+@mvindex host_vendor
+@mvindex target_vendor
+@mvindex build_os
+@mvindex host_os
+@mvindex target_os
 the individual parts of the canonical names (for convenience).
 @end table
 
@@ -3486,7 +3535,7 @@ in at least one @file{Makefile.in}.
 GNU Coding Standards}, for more information on what to put in Makefiles.
 
 @menu
-* Predefined Variables::	Heavily used @code{make} variables.
+* Predefined Variables::	@code{make} variables that are always set.
 * VPATH Substitutions::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 @end menu
@@ -3506,23 +3555,28 @@ listed here.  Some of the Autoconf macros define additional variables,
 which are mentioned in the descriptions for those macros.
 
 @defvar exec_prefix
+@mvindex exec_prefix
 The installation prefix for architecture-specific files.
 @end defvar
 
 @defvar prefix
+@mvindex prefix
 The installation prefix for architecture-independent files.
 @end defvar
 
 @defvar srcdir
+@mvindex srcdir
 The directory that contains the source code for that @file{Makefile}.
 @end defvar
 
 @defvar top_srcdir
+@mvindex top_srcdir
 The top-level source code directory for the package.  In the top-level
 directory, this is the same as @code{srcdir}.
 @end defvar
 
 @defvar CFLAGS
+@mvindex CFLAGS
 Debugging and optimization options for the C compiler.  If it is not set
 in the environment when @code{configure} runs, the default value is set
 when you call @code{AC_PROG_CC} (or empty if you don't).  @code{configure}
@@ -3530,6 +3584,7 @@ uses this variable when compiling programs to test for C features.
 @end defvar
 
 @defvar CPPFLAGS
+@mvindex CPPFLAGS
 Header file search directory (@samp{-I@var{dir}}) and any other
 miscellaneous options for the C preprocessor and compiler.  If it is not
 set in the environment when @code{configure} runs, the default value is
@@ -3538,6 +3593,7 @@ preprocessing programs to test for C features.
 @end defvar
 
 @defvar CXXFLAGS
+@mvindex CXXFLAGS
 Debugging and optimization options for the C++ compiler.  If it is not
 set in the environment when @code{configure} runs, the default value is
 set when you call @code{AC_PROG_CXX} (or empty if you don't).
@@ -3546,6 +3602,7 @@ C++ features.
 @end defvar
 
 @defvar DEFS
+@mvindex DEFS
 @samp{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADER}
 is called, @code{configure} replaces @samp{@@DEFS@@} with
 @samp{-DHAVE_CONFIG_H} instead.  This variable is not defined while
@@ -3554,6 +3611,7 @@ files.  @xref{Setting Variables}, for more information.
 @end defvar
 
 @defvar LDFLAGS
+@mvindex LDFLAGS
 Stripping (@samp{-s}) and any other miscellaneous options for the
 linker.  If it is not set in the environment when @code{configure} runs,
 the default value is empty.  @code{configure} uses this variable when
@@ -3561,12 +3619,8 @@ linking programs to test for C features.
 @end defvar
 
 @defvar LIBS
+@mvindex LIBS
 @samp{-l} and @samp{-L} options to pass to the linker.
-@end defvar
-
-@defvar LIBOBJS
-Names of object files (ending in @file{.o}).  Set by
-@code{AC_REPLACE_FUNCS} (@pxref{Generic Functions}).
 @end defvar
 
 @node VPATH Substitutions, Automatic Remaking, Predefined Variables, Makefiles
@@ -4525,7 +4579,7 @@ removed because of limited usefulness
 @code{AC_DECL_YYTEXT}
 @end table
 
-@node Environment Variable Index, Preprocessor Symbol Index, Old Macro Names, Top
+@node Environment Variable Index, Make Variable Index, Old Macro Names, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf
@@ -4533,7 +4587,17 @@ checks.
 
 @printindex ev
 
-@node Preprocessor Symbol Index, Macro Index, Environment Variable Index, Top
+@node Make Variable Index, Preprocessor Symbol Index, Environment Variable Index, Top
+@unnumbered @code{make} Variable Index
+
+This is an alphabetical list of the variables that Autoconf can
+substitute into files that it creates, typically one or more
+@file{Makefile}s.  @xref{Setting Variables}, for more information on how
+this is done.
+
+@printindex mv
+
+@node Preprocessor Symbol Index, Macro Index, Make Variable Index, Top
 @unnumbered Preprocessor Symbol Index
 
 This is an alphabetical list of the C preprocessor symbols that the
