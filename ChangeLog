@@ -1,5 +1,13 @@
 2002-09-13  Akim Demaille  <akim@epita.fr>
 
+	Version 2.54.
+
+	* config/config.sub, config/config.guess: Update.
+	* Makefile.maint: Update from bits of the Coreutils 4.5.1.
+	* Makefile.am: Adjust.
+
+2002-09-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Suggest
 	reading config.log when the compiler is rejected.
 	Suggested by Guido Draheim.

@@ -113,10 +113,9 @@ prev_version_file = $(srcdir)/config/prev-version.txt
 move_if_change = $(srcdir)/config/move-if-change
 release_archive_dir = releases
 
-# Uploading betas.
-hosts = alpha
-alpha_host = alpha.gnu.org
-alpha_url_dir = gnu/autoconf
+url_dir_list = \
+  ftp://alpha.gnu.org/gnu/autoconf
+
 
 # Files to update automatically.
 wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
@@ -138,8 +137,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	installdirs-recursive install-recursive uninstall-recursive \
 	check-recursive installcheck-recursive
 DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-	Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 configure \
-	configure.ac
+	Makefile.in NEWS THANKS TODO aclocal.m4 configure configure.ac
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 

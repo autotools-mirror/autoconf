@@ -1,4 +1,6 @@
-* Major changes in Autoconf 2.53d                       -*- outline -*-
+* Major changes in Autoconf 2.54                       -*- outline -*-
+
+  Released September 13th, 2002.
 
 ** Executables
 
@@ -94,6 +96,8 @@
 
 
 * Major changes in Autoconf 2.53
+
+  Released Mars 8th, 2002.
 
 ** Requirements
 
@@ -216,6 +220,9 @@
 
 
 * Major changes in Autoconf 2.52
+
+  Released July 18th, 2001.
+
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs
@@ -274,6 +281,8 @@
 - AC_FUNC_GETPGRG behaves better when cross-compiling.
 
 * Major changes in Autoconf 2.50
+
+  Released May 21st, 2001.
 
 ** Lots of bug fixes
 There have been far too many to enumerate them here.  Check out

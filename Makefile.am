@@ -67,10 +67,8 @@ prev_version_file = $(srcdir)/config/prev-version.txt
 move_if_change = $(srcdir)/config/move-if-change
 release_archive_dir = releases
 
-# Uploading betas.
-hosts = alpha
-alpha_host = alpha.gnu.org
-alpha_url_dir = gnu/autoconf
+url_dir_list = \
+  ftp://alpha.gnu.org/gnu/autoconf
 
 # Files to update automatically.
 wget_files = $(srcdir)/config/config.guess $(srcdir)/config/config.sub \
