@@ -81,7 +81,7 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 lispdir = @lispdir@
 
-MAKEINFO = @MAKEINFO@ --no-split
+AM_MAKEINFOFLAGS = --no-split
 TEXI2HTML = texi2html
 TEXI2HTML_FLAGS = -split_chapter
 
@@ -159,6 +159,8 @@ standards.dvi: standards.texi $(standards_TEXINFOS)
 	cd $(srcdir) \
 	  && $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) \
 	       `echo $< | sed 's,.*/,,'`
+
+MAKEINFO = @MAKEINFO@
 TEXI2DVI = texi2dvi
 DVIPS = dvips
 .dvi.ps:

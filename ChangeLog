@@ -1,3 +1,14 @@
+2002-08-29  Akim Demaille  <akim@epita.fr>
+
+	* lib/Autom4te/General.pm (&xqx): New.
+	(&xsystem): Use WIFEXITED and WEXITSTATUS instead of decoding $? by
+	hand, which is not portable.
+	(&error): New.
+	* bin/autom4te.in: Use them.
+	Use &error instead of die.
+	* tests/m4sugar.at (m4_warn, m4_require: circular dependencies):
+	Adjust.
+
 2002-08-17  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/fortran.m4 (AC_PROG_F77): Remove fc from the

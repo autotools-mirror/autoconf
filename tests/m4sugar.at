@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,10 +61,13 @@ AT_CHECK_M4SUGAR([-o- -Wnone,bar -f], 0, [],
 [script.4s:2: warning: bar
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,bar,error -f], 1, [],
-[script.4s:2: error: bar
+AT_CHECK_M4SUGAR([-o- -Wnone,bar,error -f], 1, [], [stderr])
+# The error message contains the path to m4, which might change.
+AT_CHECK([sed 's/^autom4te.*failed/autom4te: m4 failed/' stderr], 0,
+[[script.4s:2: error: bar
 script.4s:2: the top level
-])
+autom4te: m4 failed with exit status: 1
+]])
 
 AT_CLEANUP
 
@@ -93,7 +96,8 @@ m4_init
 baz
 ]])
 
-AT_DATA_M4SUGAR([experr],
+# Expected stderr.
+AT_DATA_M4SUGAR([expout],
 [[script.4s:11: error: m4_require: circular dependency of foo
 script.4s:11: foo is required by...
 script.4s:5: bar is expanded from...
@@ -102,9 +106,12 @@ script.4s:2: foo is expanded from...
 script.4s:11: foo is required by...
 script.4s:8: baz is expanded from...
 script.4s:11: the top level
+autom4te: m4 failed with exit status: 1
 ]])
 
-AT_CHECK_M4SUGAR([], 1, [], experr)
+AT_CHECK_M4SUGAR([], 1, [], stderr)
+# The error message contains the path to m4, which might change.
+AT_CHECK([sed 's/^autom4te.*failed/autom4te: m4 failed/' stderr], 0, [expout])
 AT_CLEANUP
 
 

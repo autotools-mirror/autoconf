@@ -37,10 +37,10 @@ my @export_vars =
 
 # Functions we define and export.
 my @export_subs =
-  qw (&backname &catfile &canonpath &debug
+  qw (&backname &catfile &canonpath &debug &error
       &file_name_is_absolute &find_configure_ac &find_file
       &getopt &mktmpdir &mtime
-      &uniq &update_file &up_to_date_p &verbose &xsystem);
+      &uniq &update_file &up_to_date_p &verbose &xsystem &xqx);
 
 # Functions we forward (coming from modules we use).
 my @export_forward_subs =
@@ -185,6 +185,22 @@ sub debug (@)
 }
 
 
+# &error (@MESSAGE)
+# -----------------
+# Same as die or confess, depending on $debug.
+sub error (@)
+{
+  if ($debug)
+    {
+      confess "$me: ", @_, "\n";
+    }
+  else
+    {
+      die "$me: ", @_, "\n";
+    }
+}
+
+
 # $BOOLEAN
 # &file_name_is_absolute ($FILE)
 # ------------------------------
@@ -244,7 +260,7 @@ sub find_file ($@)
 
   if (file_name_is_absolute ($filename))
     {
-      die "$me: no such file or directory: $filename\n"
+      error "no such file or directory: $filename"
 	unless $optional;
       return undef;
     }
@@ -255,7 +271,7 @@ sub find_file ($@)
 	if -e catfile ($path, $filename);
     }
 
-  die "$me: no such file or directory: $filename\n"
+  error "no such file or directory: $filename"
     unless $optional;
 
   return undef;
@@ -408,7 +424,7 @@ sub update_file ($$)
 	}
       $in->close;
       unlink ($from)
-	or die "$me: cannot not remove $from: $!\n";
+	or die "cannot not remove $from: $!";
       return;
     }
 
@@ -417,7 +433,7 @@ sub update_file ($$)
       # File didn't change, so don't update its mod time.
       print STDERR "$me: `$to' is unchanged\n";
       unlink ($from)
-	or die "$me: cannot not remove $from: $!\n";
+	or error "cannot not remove $from: $!";
       return
     }
 
@@ -425,15 +441,15 @@ sub update_file ($$)
     {
       # Back up and install the new one.
       move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
-	or die "$me: cannot not backup $to: $!\n";
+	or error "cannot not backup $to: $!";
       move ("$from", "$to")
-	or die "$me: cannot not rename $from as $to: $!\n";
+	or error "cannot not rename $from as $to: $!";
       print STDERR "$me: `$to' is updated\n";
     }
   else
     {
       move ("$from", "$to")
-	or die "$me: cannot not rename $from as $to: $!\n";
+	or error "cannot not rename $from as $to: $!";
       print STDERR "$me: `$to' is created\n";
     }
 }
@@ -448,20 +464,41 @@ sub verbose (@)
 }
 
 
+# xqx ($COMMAND)
+# --------------
+# Same as `qx' (but in scalar context), but fails on errors.
+sub xqx ($)
+{
+  use POSIX qw (WIFEXITED WEXITSTATUS);
+
+  my ($command) = @_;
+
+  verbose "running: $command";
+  my $res = `$command`;
+
+  error ((split (' ', $command))[0]
+	 . " failed with exit status: "
+	 . WEXITSTATUS ($?))
+    if WIFEXITED ($?) && WEXITSTATUS ($?) != 0;
+
+  return $res;
+}
+
+
 # xsystem ($COMMAND)
 # ------------------
 sub xsystem ($)
 {
+  use POSIX qw (WEXITSTATUS);
+
   my ($command) = @_;
 
   verbose "running: $command";
 
   (system $command) == 0
-    or croak ("$me: "
-	      . (split (' ', $command))[0]
+    or error ((split (' ', $command))[0]
 	      . " failed with exit status: "
-	      . ($? >> 8)
-	      . "\n");
+	      . WEXITSTATUS ($?));
 }
 
 

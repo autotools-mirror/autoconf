@@ -278,7 +278,7 @@ my $freeze = 0;
 # $M4.
 my $m4 = $ENV{"M4"} || '@M4@';
 # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-die "$me: need GNU m4 1.4 or later: $m4\n"
+error "need GNU m4 1.4 or later: $m4"
   if system "$m4 --help </dev/null 2>&1 | grep reload-state >/dev/null";
 
 # Set some high recursion limit as the default limit, 250, has already
@@ -443,7 +443,7 @@ sub load_configuration ()
 	}
       elsif ($type eq 'end-language:')
 	{
-	  die "$me: $autom4te_cfg:$.: end-language mismatch: $lang\n"
+	  error "$autom4te_cfg:$.: end-language mismatch: $lang"
 	    if $lang ne lc $words[0];
 	}
       elsif ($type eq 'args:')
@@ -452,7 +452,7 @@ sub load_configuration ()
 	}
       else
 	{
-	  die "$me: $autom4te_cfg:$.: unknown directive: $type\n";
+	  error "$autom4te_cfg:$.: unknown directive: $type";
 	}
     }
 }
@@ -477,7 +477,7 @@ sub parse_args ()
 
     foreach (@language)
       {
-	die "$me: unknown language: $_\n"
+	error "unknown language: $_"
 	  unless exists $language{lc $_};
 	unshift @ARGV, @{$language{lc $_}};
       }
@@ -510,8 +510,8 @@ sub parse_args ()
      "F|freeze"  => \$freeze,
     );
 
-  die "$me: too few arguments
-Try `$me --help' for more information.\n"
+  error "too few arguments
+Try `$me --help' for more information."
     unless @ARGV;
 
   # Freezing:
@@ -519,7 +519,7 @@ Try `$me --help' for more information.\n"
   # And it implies melting: there is risk not to update properly using
   # old frozen files, and worse yet: we could load a frozen file and
   # refreeze it!  A sort of caching :)
-  die "$me: cannot freeze and trace\n"
+  error "cannot freeze and trace"
     if $freeze && @trace;
   $melt = 1
     if $freeze;
@@ -612,29 +612,22 @@ sub handle_m4 ($@)
   #
   # We don't output directly to the cache files, to avoid problems
   # when we are interrupted (that leaves corrupted files).
-  my $command = ("$m4"
-		 . join (' --include=', '', @include)
-		 . " --define=m4_warnings=$m4_warnings"
-		 . ' --debug=aflq'
-		 . " --error-output=$tcache" . $req->id . "t"
-		 . join (' --trace=',   '', sort @macro)
-		 . " @ARGV"
-		 . ' </dev/null'
-		 . " >$ocache" . $req->id . "t");
-  verbose "running: $command";
-  system $command;
-  if ($?)
-    {
-      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
-      exit $? >> 8;
-    }
+  xsystem ("$m4"
+	   . join (' --include=', '', @include)
+	   . " --define=m4_warnings=$m4_warnings"
+	   . ' --debug=aflq'
+	   . " --error-output=$tcache" . $req->id . "t"
+	   . join (' --trace=',   '', sort @macro)
+	   . " @ARGV"
+	   . ' </dev/null'
+	   . " >$ocache" . $req->id . "t");
 
   # Everything went ok: preserve the outputs.
   foreach my $file (map { $_ . $req->id } ($tcache, $ocache))
     {
       use File::Copy;
       move ("${file}t", "$file")
-	or die "$me: cannot not rename ${file}t as $file: $!\n";
+	or error "cannot not rename ${file}t as $file: $!";
     }
 }
 
@@ -710,7 +703,7 @@ sub handle_output ($$)
     {
       $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
     }
-  die "$me: cannot create $output: $!\n"
+  error "cannot create $output: $!"
     unless $out;
   my $in = new Autom4te::XFile ($ocache . $req->id);
 
@@ -837,7 +830,7 @@ sub trace_format_to_m4 ($)
 	}
       elsif (/^(\$.)/)
         {
-	  die "$me: invalid escape: $1\n";
+	  error "invalid escape: $1";
         }
       else
         {
@@ -1062,21 +1055,14 @@ sub freeze ($)
 
   # When processing the file with diversion disabled, there must be no
   # output but comments and empty lines.
-  my $command = ("$m4"
-		 . ' --fatal-warning'
-		 . join (' --include=', '', @include)
-		 . ' --define=divert'
-		 . " @ARGV"
-		 . ' </dev/null');
-  verbose "running: $command";
-  my $result = `$command`;
+  my $result = xqx ("$m4"
+		    . ' --fatal-warning'
+		    . join (' --include=', '', @include)
+		    . ' --define=divert'
+		    . " @ARGV"
+		    . ' </dev/null');
   $result =~ s/#.*\n//g;
   $result =~ s/^\n//mg;
-  if ($?)
-    {
-      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
-      exit $? >> 8;
-    }
   if ($result)
     {
       print STDERR "$me: freezing produced output:\n$result";
@@ -1085,19 +1071,12 @@ sub freeze ($)
 
   # If freezing produces output, something went wrong: a bad `divert',
   # or an improper paren etc.
-  $command = ("$m4"
-	      . ' --fatal-warning'
-	      . join (' --include=', '', @include)
-	      . " --freeze-state=$output"
-	      . " @ARGV"
-	      . ' </dev/null');
-  verbose "running: $command";
-  system $command;
-  if ($?)
-    {
-      verbose "$m4: failed with exit status: " . ($? >> 8) . "\n";
-      exit $? >> 8;
-    }
+  xsystem ("$m4"
+	   . ' --fatal-warning'
+	   . join (' --include=', '', @include)
+	   . " --freeze-state=$output"
+	   . " @ARGV"
+	   . ' </dev/null');
 }
 
 ## -------------- ##
@@ -1119,7 +1098,7 @@ if ($freeze)
 if (! -d "$cache")
   {
     mkdir "$cache", 0755
-      or die "$me: cannot create $cache: $!\n";
+      or error "cannot create $cache: $!";
   }
 
 # Read the cache index if available and older than autom4te itself.
