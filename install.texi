@@ -165,8 +165,9 @@ optional part of the package.  The @file{README} should mention any
 
 @table @code
 @item --cache-file=@var{file}
-Save the results of the tests in @var{file} instead of @file{config.cache}.
-Set @var{file} to @file{/dev/null} to disable caching, for debugging configure.
+Save the results of the tests in @var{file} instead of
+@file{config.cache}.  Set @var{file} to @file{/dev/null} to disable
+caching, for debugging @code{configure}.
 
 @item --help
 Print a summary of the options to @code{configure}, and exit.
@@ -192,4 +193,4 @@ X library files are in directory @var{dir}.
 @end table
 
 @noindent
-@code{configure} also accepts and ignores some other options.
+@code{configure} also accepts some other, not widely useful, options.

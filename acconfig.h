@@ -65,6 +65,9 @@
 /* Define if your system has its own `getloadavg' function.  */
 #undef HAVE_GETLOADAVG
 
+/* Define if you have the getmntent function.  */
+#undef HAVE_GETMNTENT
+
 /* Define if the `long double' type works.  */
 #undef HAVE_LONG_DOUBLE
 
@@ -95,6 +98,9 @@
 
 /* Define if your struct stat has st_rdev.  */
 #undef HAVE_ST_RDEV
+
+/* Define if you have the strftime function.  */
+#undef HAVE_STRFTIME
 
 /* Define if you don't have <dirent.h>, but have <sys/dir.h>.  */
 #undef HAVE_SYS_DIR_H

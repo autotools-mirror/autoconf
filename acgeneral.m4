@@ -24,7 +24,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.112)
+define(AC_ACVERSION, 1.115)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -861,7 +861,9 @@ EOF
 changequote(, )dnl
 dnl Allow a site initialization script to override cache values.
 # Ultrix sh set writes to stderr and can't be redirected directly.
-(set) 2>&1 | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
+(set) 2>&1 |
+  sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/: \${\1='\2'}/p" \
+  >> $cache_file
 changequote([, ])dnl
 else
 echo "not updating unwritable cache $cache_file"
@@ -1329,7 +1331,7 @@ ifelse([$3], , , [$3
 fi
 ])
 
-dnl AC_CHECK_HEADERS(HEADER-FILE... [, ACTION])
+dnl AC_CHECK_HEADERS(HEADER-FILE... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_HEADERS,
 [for ac_hdr in $1
 do
@@ -1337,7 +1339,7 @@ AC_CHECK_HEADER(${ac_hdr},
 [changequote(, )dnl
   ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([, ])dnl
-  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
+  AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2], $3)dnl
 done
 ])
 
@@ -1371,7 +1373,7 @@ ifelse([$3], , , [$3
 fi
 ])
 
-dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION])
+dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
@@ -1379,7 +1381,7 @@ AC_CHECK_FUNC(${ac_func},
 [changequote(, )dnl
   ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
-  AC_DEFINE_UNQUOTED(${ac_tr_func}) $2])dnl
+  AC_DEFINE_UNQUOTED(${ac_tr_func}) $2], $3)dnl
 done
 ])
 

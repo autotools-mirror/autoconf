@@ -19,7 +19,7 @@ Major changes in release 2.0:
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
 * AC_SUBST_FILE, to insert one file into another.
-* AC_PROG_CC_ANSI to try to put the C compiler into ANSI C mode.
+* AC_FUNC_MEMCMP, to check whether memcmp is 8-bit clean.
 * AC_FUNC_STRFTIME, to find strftime even if it's in -lintl.
 * AC_FUNC_GETMNTENT, to find getmntent even if it's in -lsun or -lseq.
 
@@ -45,7 +45,7 @@ Major changes in release 2.0:
   mechanism (AC_MSG_CHECKING and AC_MSG_RESULT).
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
 * AC_CHECK_FUNCS and AC_CHECK_HEADERS take optional shell commands to
-  execute on success.
+  execute on success or failure.
 * Checking for C functions in C++ works.
 
 ** Removed macros:

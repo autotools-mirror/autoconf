@@ -29,38 +29,56 @@ dnl each definition seems to be necessary to prevent m4 from eating
 dnl the newline, which makes the @@@ not always be at the beginning of
 dnl a line.
 
-define([AC_DEFINE],[#
-@@@syms="$syms $1"@@@
-])
-define([AC_DEFINE_UNQUOTED],[#
-@@@syms="$syms $1"@@@
-])
-define([AC_SIZEOF_TYPE],[#
-@@@types="$types,$1"@@@
-])
-define([AC_CHECK_FUNCS],[#
+define([AC_CHECK_FUNCS], [#
 @@@funcs="$funcs $1"@@@
 ])
-define([AC_CHECK_HEADERS],[#
+
+define([AC_CHECK_HEADERS], [#
 @@@headers="$headers $1"@@@
 ])
-define([AC_CHECK_HEADERS_DIRENT],[#
+
+define([AC_CHECK_HEADERS_DIRENT], [#
 @@@headers="$headers $1"@@@
 ])
-define([AC_CONFIG_HEADER],[#
-@@@config_h=$1@@@
-])
+
 define([AC_CHECK_LIB], [#
-changequote(/,/)dnl
-define(/libname/, dnl
-patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
-changequote([,])dnl
   ifelse([$3], , [
-@@@libs="$libs libname"@@@
+@@@libs="$libs $1"@@@
 ], [
 # If it was found, we do:
 $3
 # If it was not found, we do:
 $4
 ])
+])
+
+define([AC_HAVE_LIBRARY], [#
+changequote(<<, >>)dnl
+define(<<AC_LIB_NAME>>, dnl
+patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
+changequote([, ])dnl
+  ifelse([$2], , [
+@@@libs="$libs AC_LIB_NAME"@@@
+], [
+# If it was found, we do:
+$2
+# If it was not found, we do:
+$3
+])
+])
+
+define([AC_CHECK_SIZEOF], [#
+@@@types="$types,$1"@@@
+])
+
+define([AC_CONFIG_HEADER], [#
+@@@config_h=$1@@@
+])
+
+define([AC_DEFINE], [#
+@@@syms="$syms $1"@@@
+])
+
+define([AC_DEFINE_UNQUOTED], [#
+@@@syms="$syms $1"@@@
 ])

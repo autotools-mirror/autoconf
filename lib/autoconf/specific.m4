@@ -150,33 +150,6 @@ Autoconf TCGETA],
 fi
 ])
 
-define(AC_PROG_CC_ANSI,
-[AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
-AC_CACHE_VAL(ac_cv_prog_cc_ansi,
-[ac_cv_prog_cc_ansi=no
-ac_save_CFLAGS="$CFLAGS"
-# Don't try gcc -ansi; that turns off useful extensions and
-# breaks some systems' header files.
-# AIX			-qlanglvl=ansi
-# Ultrix and OSF/1	-std1
-# HP-UX			-Aa
-# SVR4			-Xc
-for ac_arg in "" -qlanglvl=ansi -std1 -Aa -Xc
-do
-  CFLAGS="$ac_save_CFLAGS $ac_arg"
-dnl Don't use CPP directly in case it doesn't take these options.
-  AC_TRY_LINK(,
-[#if !defined(__STDC__) || __STDC__ != 1
-notansi(); /* Produce a link error if not ANSI C.  */
-#endif	
-], [ac_cv_prog_cc_ansi=$ac_arg; break])
-done
-CFLAGS="$ac_save_CFLAGS"
-])
-AC_MSG_RESULT($ac_cv_prog_cc_ansi)
-test "$ac_cv_prog_cc_ansi" != no && CC="$CC $ac_cv_prog_cc_ansi"
-])
-
 AC_DEFUN(AC_PROG_CC_C_O,
 [if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
@@ -551,9 +524,9 @@ changequote([, ])dnl
   AC_DEFINE_UNQUOTED(${ac_tr_hdr}) $2])dnl
 done])
 
-dnl Obsolete.
 AC_DEFUN(AC_DIR_HEADER,
-[ac_header_dirent=no
+[AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
+ac_header_dirent=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
   AC_CHECK_HEADER_DIRENT($ac_hdr, [ac_header_dirent=$ac_hdr; break])
 done
@@ -1218,6 +1191,20 @@ AC_DEFUN(AC_FUNC_STRFTIME,
 AC_CHECK_LIB(intl, strftime, LIBS="$LIBS -lintl")
 AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)])])
 
+AC_DEFUN(AC_FUNC_MEMCMP,
+[AC_MSG_CHECKING(for 8-bit clean memcmp)
+AC_CACHE_VAL(ac_cv_func_memcmp,
+[AC_TRY_RUN([
+main()
+{
+  char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+  exit(memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
+}
+], ac_cv_func_memcmp=yes, ac_cv_func_memcmp=no, ac_cv_func_memcmp=no)])dnl
+AC_MSG_RESULT($ac_cv_func_memcmp)
+test $ac_cv_func_memcmp = no && LIBOBJS="$LIBOBJS memcmp.o"
+AC_SUBST(LIBOBJS)dnl
+])
 
 dnl ### Checks for structure members
 
@@ -1332,17 +1319,25 @@ AC_MSG_RESULT($ac_cv_c_cross)
 AC_DEFUN(AC_C_CHAR_UNSIGNED,
 [AC_MSG_CHECKING(whether char is unsigned)
 AC_CACHE_VAL(ac_cv_c_char_unsigned,
-[AC_TRY_RUN(
+[if test "$GCC" = yes; then
+  # GCC predefines this symbol on systems where it applies.
+AC_EGREP_CPP(yes,
+[#ifdef __CHAR_UNSIGNED__
+  yes
+#endif
+], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)
+else
+AC_TRY_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
-#if !__STDC__
+#if !defined(__STDC__) || __STDC__ != 1
 #define volatile
 #endif
 main() {
   volatile char c = 255; exit(c < 0);
-}], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)])dnl
+}], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)
+fi])dnl
 AC_MSG_RESULT($ac_cv_c_char_unsigned)
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
-  # gcc predefines this symbol on systems where it applies.
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
 ])
@@ -1739,7 +1734,7 @@ done])])
 
 dnl Find additional X libraries, magic flags, etc.
 AC_DEFUN(AC_PATH_XTRA,
-[AC_REQUIRE([AC_OS_ISC])dnl
+[AC_REQUIRE([AC_ISC_POSIX])dnl
 AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then 
   # Not all programs may use this symbol, but it does not hurt to define it.
@@ -1803,10 +1798,10 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 
 
 dnl ### Checks for UNIX variants
-dnl These are kludges; we need a more systematic approach.
+dnl These are kludges which should be replaced by a single POSIX check.
 
 
-AC_DEFUN(AC_OS_AIX,
+AC_DEFUN(AC_AIX,
 [AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for AIX)
@@ -1817,7 +1812,7 @@ AC_EGREP_CPP(yes,
 ], [AC_MSG_RESULT(yes); AC_DEFINE(_ALL_SOURCE)], AC_MSG_RESULT(no))
 ])
 
-AC_DEFUN(AC_OS_MINIX,
+AC_DEFUN(AC_MINIX,
 [AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
@@ -1828,7 +1823,7 @@ if test "$MINIX" = yes; then
 fi
 ])
 
-AC_DEFUN(AC_OS_ISC,
+AC_DEFUN(AC_ISC_POSIX,
 [AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for POSIXized ISC)
@@ -1871,7 +1866,7 @@ AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
 ])
 
 AC_DEFUN(AC_IRIX_SUN,
-[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl
+[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])dnl
 AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
 ])
 
