@@ -70,7 +70,7 @@ AC_OUTPUT
 
 AT_CHECK_AUTOCONF
 AT_CHECK([./configure], 1, ignore,
-[[config.status: error: cannot find input file `nonexistent.in'
+[[config.status: error: cannot find input file: nonexistent.in
 ]])
 # Make sure that the output file doesn't exist
 AT_CHECK([test -f nonexistent], 1)

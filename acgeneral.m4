@@ -4179,7 +4179,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       -) echo $tmp/stdin ;;
       [[\\/$]]* | ?:[[\\/]]*)
          # Absolute
-         test -f "$f" || AC_MSG_ERROR([cannot find input file \\`$f'])
+         test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
          echo $f;;
       *) # Relative
          if test -f "$f"; then
@@ -4190,7 +4190,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
            echo $ac_given_srcdir/$f
          else
            # /dev/null tree
-           AC_MSG_ERROR([cannot find input file \\`$f'])
+           AC_MSG_ERROR([cannot find input file: $f])
          fi;;
       esac
     done` || AS_EXIT([1])
@@ -4326,7 +4326,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
       -) echo $tmp/stdin ;;
       [[\\/$]]* | ?:[[\\/]]*)
          # Absolute
-         test -f "$f" || AC_MSG_ERROR([cannot find input file \\`$f'])
+         test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
          echo $f;;
       *) # Relative
          if test -f "$f"; then
@@ -4337,7 +4337,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
            echo $ac_given_srcdir/$f
          else
            # /dev/null tree
-           AC_MSG_ERROR([cannot find input file \\`$f'])
+           AC_MSG_ERROR([cannot find input file: $f])
          fi;;
       esac
     done` || AS_EXIT([1])
