@@ -945,9 +945,9 @@ else
 fi
 if test ! -r $srcdir/$ac_unique_file; then
   if test "$ac_srcdir_defaulted" = yes; then
-    AC_MSG_ERROR(cannot find sources in $ac_confdir or ..)
+    AC_MSG_ERROR([cannot find sources in $ac_confdir or ..])
   else
-    AC_MSG_ERROR(cannot find sources in $srcdir)
+    AC_MSG_ERROR([cannot find sources in $srcdir])
   fi
 fi
 dnl Double slashes in pathnames in object file debugging info
@@ -1294,7 +1294,7 @@ done
 
 if test -n "$ac_prev"; then
   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
-  AC_MSG_ERROR(missing argument to $ac_option)
+  AC_MSG_ERROR([missing argument to $ac_option])
 fi
 
 # Be sure to have absolute paths.
@@ -2087,7 +2087,7 @@ AC_VAR_SET_IFELSE([$1],
 m4_define([AC_CACHE_CHECK],
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])dnl
-AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
+AC_MSG_RESULT_UNQUOTED([AC_VAR_GET([$2])])])
 
 
 
@@ -3037,7 +3037,7 @@ AC_DEFUN([AC_TRY_RUN],
                     [$0 called without default to allow cross compiling])])dnl
 if test "$cross_compiling" = yes; then
   m4_default([$4],
-             [AC_MSG_ERROR(cannot run test program while cross compiling)])
+             [AC_MSG_ERROR([cannot run test program while cross compiling])])
 else
   AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])
 fi
@@ -4641,7 +4641,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   echo "linking $srcdir/$ac_source to $ac_dest"
 
   if test ! -r $srcdir/$ac_source; then
-    AC_MSG_ERROR($srcdir/$ac_source: File not found)
+    AC_MSG_ERROR([$srcdir/$ac_source: File not found])
   fi
   rm -f $ac_dest
 
@@ -4665,7 +4665,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   if ln -s $ac_rel_source $ac_dest 2>/dev/null ||
      ln $srcdir/$ac_source $ac_dest; then :
   else
-    AC_MSG_ERROR(cannot link $ac_dest to $srcdir/$ac_source)
+    AC_MSG_ERROR([cannot link $ac_dest to $srcdir/$ac_source])
   fi
 ifset([AC_LIST_LINKS_COMMANDS],
 [  # Run the commands associated with the file.
@@ -4789,7 +4789,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
     elif test -f $ac_sub_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
-      AC_MSG_WARN(no configuration information is in $ac_subdir)
+      AC_MSG_WARN([no configuration information is in $ac_subdir])
       ac_sub_configure=
     fi
 
@@ -4813,7 +4813,7 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       if eval $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
       then :
       else
-        AC_MSG_ERROR($ac_sub_configure failed for $ac_subdir)
+        AC_MSG_ERROR([$ac_sub_configure failed for $ac_subdir])
       fi
     fi
 

@@ -81,7 +81,7 @@ AC_SUBST(ECHO_T)dnl
 # ----------------
 # Define SET_MAKE to set ${MAKE} if make doesn't.
 AC_DEFUN([AC_PROG_MAKE_SET],
-[AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
+[AC_MSG_CHECKING([whether ${MAKE-make} sets \${MAKE}])
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftestmake <<\EOF
@@ -97,10 +97,10 @@ else
 fi
 rm -f conftestmake])dnl
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT([yes])
   SET_MAKE=
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 AC_SUBST([SET_MAKE])dnl
@@ -156,7 +156,7 @@ if test -f lex.yy.c; then
 elif test -f lexyy.c; then
   ac_cv_prog_lex_root=lexyy
 else
-  AC_MSG_ERROR(cannot find output from $LEX; giving up)
+  AC_MSG_ERROR([cannot find output from $LEX; giving up])
 fi])
 LEX_OUTPUT_ROOT=$ac_cv_prog_lex_root
 AC_SUBST(LEX_OUTPUT_ROOT)dnl
@@ -203,7 +203,7 @@ AC_DEFUN([AC_PROG_INSTALL],
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-AC_MSG_CHECKING(for a BSD compatible install)
+AC_MSG_CHECKING([for a BSD compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [  ac_save_IFS=$IFS; IFS=':'
@@ -250,7 +250,7 @@ AC_CACHE_VAL(ac_cv_path_install,
 fi
 dnl We do special magic for INSTALL instead of AC_SUBST, to get
 dnl relative paths right.
-AC_MSG_RESULT($INSTALL)
+AC_MSG_RESULT([$INSTALL])
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.
@@ -268,7 +268,7 @@ AC_SUBST(INSTALL_DATA)dnl
 # AC_PROG_LN_S
 # ------------
 AC_DEFUN([AC_PROG_LN_S],
-[AC_MSG_CHECKING(whether ln -s works)
+[AC_MSG_CHECKING([whether ln -s works])
 AC_CACHE_VAL(ac_cv_prog_LN_S,
 [rm -f conftest.sym conftest.file
 echo >conftest.file
@@ -614,8 +614,8 @@ AU_DEFUN([AC_USG],
 when you ajust your code to use HAVE_STRING_H.])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_TRY_LINK([@%:@include <strings.h>], [rindex(0, 0); bzero(0, 0);],
-  [AC_MSG_RESULT(yes)],
-  [AC_MSG_RESULT(no)
+  [AC_MSG_RESULT([yes])],
+  [AC_MSG_RESULT([no])
    AC_DEFINE(USG, 1,
        [Define if you do not have <strings.h>, index, bzero, etc...
         This symbol is obsolete, you should not depend upon it.])])
@@ -1199,7 +1199,7 @@ AC_DIVERT_ONCE([HELP_BEGIN], [
 X features:
   --x-includes=DIR    X include files are in DIR
   --x-libraries=DIR   X library files are in DIR])dnl
-AC_MSG_CHECKING(for X)
+AC_MSG_CHECKING([for X])
 
 AC_ARG_WITH(x, [  --with-x                use the X Window System])
 # $have_x is `yes', `no', `disabled', or empty when we do not yet know.
@@ -1229,7 +1229,7 @@ fi])dnl
 fi # $with_x != no
 
 if test "$have_x" != yes; then
-  AC_MSG_RESULT($have_x)
+  AC_MSG_RESULT([$have_x])
   no_x=yes
 else
   # If each of the values was on the command line, it overrides each guess.
@@ -1388,20 +1388,20 @@ dnl FIXME: banish uname from this macro!
     # others require no space.  Words are not sufficient . . . .
     case `(uname -sr) 2>/dev/null` in
     "SunOS 5"*)
-      AC_MSG_CHECKING(whether -R must be followed by a space)
+      AC_MSG_CHECKING([whether -R must be followed by a space])
       ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
       AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_nospace=yes, ac_R_nospace=no)
       if test $ac_R_nospace = yes; then
-	AC_MSG_RESULT(no)
+	AC_MSG_RESULT([no])
 	X_LIBS="$X_LIBS -R$x_libraries"
       else
 	LIBS="$ac_xsave_LIBS -R $x_libraries"
 	AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_space=yes, ac_R_space=no)
 	if test $ac_R_space = yes; then
-	  AC_MSG_RESULT(yes)
+	  AC_MSG_RESULT([yes])
 	  X_LIBS="$X_LIBS -R $x_libraries"
 	else
-	  AC_MSG_RESULT(neither works)
+	  AC_MSG_RESULT([neither works])
 	fi
       fi
       LIBS=$ac_xsave_LIBS
@@ -1629,15 +1629,15 @@ AC_DEFUN([AC_AIX],
 #endif])dnl
 AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
-AC_MSG_CHECKING(for AIX)
+AC_MSG_CHECKING([for AIX])
 AC_EGREP_CPP(yes,
 [#ifdef _AIX
   yes
 #endif
 ],
-[AC_MSG_RESULT(yes)
+[AC_MSG_RESULT([yes])
 AC_DEFINE(_ALL_SOURCE)],
-AC_MSG_RESULT(no))
+AC_MSG_RESULT([no]))
 ])# AC_AIX
 
 
@@ -1666,11 +1666,11 @@ AC_DEFUN([AC_ISC_POSIX],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
-AC_MSG_CHECKING(for POSIXized ISC)
+AC_MSG_CHECKING([for POSIXized ISC])
 if test -d /etc/conf/kconfig.d &&
    grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT([yes])
   ISC=yes # If later tests want to check for ISC.
   AC_DEFINE(_POSIX_SOURCE, 1,
             [Define if you need to in order for stat and other things to
@@ -1681,7 +1681,7 @@ then
     CC="$CC -Xp"
   fi
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
   ISC=
 fi
 ])# AC_ISC_POSIX
@@ -1691,13 +1691,13 @@ fi
 # ------------
 AU_DEFUN(AC_XENIX_DIR,
 [# You shouldn't need to depend upon XENIX.  Remove this test if useless.
-AC_MSG_CHECKING(for Xenix)
+AC_MSG_CHECKING([for Xenix])
 AC_EGREP_CPP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes
 @%:@endif],
-             [AC_MSG_RESULT(yes); XENIX=yes],
-             [AC_MSG_RESULT(no); XENIX=])
+             [AC_MSG_RESULT([yes]); XENIX=yes],
+             [AC_MSG_RESULT([no]); XENIX=])
 
 AC_HEADER_DIRENT[]dnl
 ])

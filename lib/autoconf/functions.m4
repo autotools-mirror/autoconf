@@ -629,7 +629,7 @@ main ()
       exit (s>>8);
     }
 }], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
-   AC_MSG_ERROR(cannot check getpgrp if cross compiling))
+   AC_MSG_ERROR([cannot check getpgrp if cross compiling]))
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID, 1,
@@ -1221,7 +1221,7 @@ AC_CHECK_FUNC(pow)
 if test $ac_cv_func_pow = no; then
   AC_CHECK_LIB(m, pow,
                [POW_LIB=-lm],
-               [AC_MSG_WARN(can't find library containing definition of pow)])
+               [AC_MSG_WARN([can't find library containing definition of pow])])
 fi
 ])# _AC_LIBOBJ_STRTOD
 

@@ -5958,7 +5958,7 @@ track of whether the remaining cases need to be checked.
 
 @example
 @group
-AC_MSG_CHECKING(how to get file system type)
+AC_MSG_CHECKING([how to get file system type])
 fstype=no
 # The order of these tests is important.
 AC_TRY_CPP([#include <sys/statvfs.h>
@@ -5975,7 +5975,7 @@ if test $fstype = no; then
              [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
 fi
 # (more cases omitted here)
-AC_MSG_RESULT($fstype)
+AC_MSG_RESULT([$fstype])
 @end group
 @end example
 
@@ -6466,7 +6466,7 @@ general description of the overall purpose of a group of feature checks,
 e.g.,
 
 @example
-AC_MSG_NOTICE(checking if stack overflow is detectable)
+AC_MSG_NOTICE([checking if stack overflow is detectable])
 @end example
 
 This macro prints nothing if @code{configure} is run with the
@@ -7362,7 +7362,7 @@ For instance, instead of:
 
 @example
 AC_DEFUN([AC_PATH_X],
-[AC_MSG_CHECKING(for X)
+[AC_MSG_CHECKING([for X])
 AC_REQUIRE_CPP()
 @r{# cut...}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
@@ -7375,7 +7375,7 @@ write:
 @example
 AC_DEFUN([AC_PATH_X],
 [AC_REQUIRE_CPP()dnl
-AC_MSG_CHECKING(for X)
+AC_MSG_CHECKING([for X])
 @r{# cut...}
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi[]dnl
@@ -9126,13 +9126,13 @@ Xenix.  Also, if @file{dirent.h} is being checked for, added
 running @sc{xenix} on which you should not depend:
 
 @example
-AC_MSG_CHECKING(for Xenix)
+AC_MSG_CHECKING([for Xenix])
 AC_EGREP_CPP(yes,
 [#if defined M_XENIX && !defined M_UNIX
   yes
 #endif],
-             [AC_MSG_RESULT(yes); XENIX=yes],
-             [AC_MSG_RESULT(no); XENIX=])
+             [AC_MSG_RESULT([yes]); XENIX=yes],
+             [AC_MSG_RESULT([no]); XENIX=])
 @end example
 @end defmac
 

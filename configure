@@ -1783,7 +1783,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
       X"$ac_file" : 'X\(//\)$' \| \
       X"$ac_file" : 'X\(/\)' \| \
       .     : '\(.\)' 2>/dev/null ||
-echo "X"$ac_file"" |
+echo X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
   	  /^X\(\/\/\)$/{ s//\1/; q; }
@@ -1794,7 +1794,7 @@ echo "X"$ac_file"" |
   [\\/]* | ?:[\\/]* ) ac_incr_dir=;;
   *)                      ac_incr_dir=.;;
 esac
-ac_dummy=""$ac_dir""
+ac_dummy="$ac_dir"
 for ac_mkdir_dir in `IFS=/; set X $ac_dummy; shift; echo "$@"`; do
   ac_incr_dir=$ac_incr_dir/$ac_mkdir_dir
   test -d $ac_incr_dir || mkdir $ac_incr_dir

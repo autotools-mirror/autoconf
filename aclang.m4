@@ -537,11 +537,11 @@ To enable cross compilation, use `--host'.])
     fi
   fi
 fi
-AC_MSG_RESULT(yes)],
-[AC_MSG_RESULT(no)
+AC_MSG_RESULT([yes])],
+[AC_MSG_RESULT([no])
 AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])
 AC_MSG_CHECKING([whether we are cross compiling])
-AC_MSG_RESULT($cross_compiling)
+AC_MSG_RESULT([$cross_compiling])
 ])# _AC_LANG_COMPILER_WORKS
 
 
@@ -640,7 +640,7 @@ rm -f conftest*
 # -----------
 # Find a working C preprocessor
 AC_DEFUN([AC_PROG_CPP],
-[AC_MSG_CHECKING(how to run the C preprocessor)
+[AC_MSG_CHECKING([how to run the C preprocessor])
 AC_LANG_PUSH(C)dnl
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
@@ -664,7 +664,7 @@ else
   _AC_PROG_PREPROC_WORKS()
   ac_cv_prog_CPP=$CPP
 fi
-AC_MSG_RESULT($CPP)
+AC_MSG_RESULT([$CPP])
 if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
 fi
@@ -783,9 +783,9 @@ fi
 AC_DEFUN([AC_PROG_CC_C_O],
 [AC_REQUIRE([AC_PROG_CC])dnl
 if test "x$CC" != xcc; then
-  AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
+  AC_MSG_CHECKING([whether $CC and cc understand -c and -o together])
 else
-  AC_MSG_CHECKING(whether cc understands -c and -o together)
+  AC_MSG_CHECKING([whether cc understands -c and -o together])
 fi
 set dummy $CC; ac_cc=`echo $[2] |
 		      sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
@@ -820,9 +820,9 @@ fi
 rm -f conftest*
 ])dnl
 if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT([yes])
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
   AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
             [Define if your C compiler doesn't accept -c and -o together.])
 fi
@@ -839,7 +839,7 @@ fi
 # --------------
 # Find a working C++ preprocessor
 AC_DEFUN([AC_PROG_CXXCPP],
-[AC_MSG_CHECKING(how to run the C++ preprocessor)
+[AC_MSG_CHECKING([how to run the C++ preprocessor])
 AC_LANG_PUSH(C++)dnl
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
@@ -859,7 +859,7 @@ else
   _AC_PROG_PREPROC_WORKS()
   ac_cv_prog_CXXCPP=$CXXCPP
 fi
-AC_MSG_RESULT($CXXCPP)
+AC_MSG_RESULT([$CXXCPP])
 if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
 fi
@@ -1091,7 +1091,7 @@ dnl like #elif.
 dnl FIXME: can't do this because then AC_AIX won't work due to a
 dnl circular dependency.
 dnl AC_BEFORE([$0], [AC_PROG_CPP])
-AC_MSG_CHECKING(for ${CC-cc} option to accept ANSI C)
+AC_MSG_CHECKING([for ${CC-cc} option to accept ANSI C])
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
 ac_save_CC=$CC
@@ -1144,7 +1144,7 @@ case "x$ac_cv_prog_cc_stdc" in
   x|xno)
     AC_MSG_RESULT([none needed]) ;;
   *)
-    AC_MSG_RESULT($ac_cv_prog_cc_stdc)
+    AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
     CC="$CC $ac_cv_prog_cc_stdc" ;;
 esac
 ])# AC_PROG_CC_STDC
@@ -1391,11 +1391,11 @@ AC_DEFUN([AC_C_PROTOTYPES],
 AC_REQUIRE([AC_PROG_CPP])dnl
 AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT([yes])
   AC_DEFINE(PROTOTYPES, 1,
             [Define if the C compiler supports function prototypes.])
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi
 ])# AC_C_PROTOTYPES
 
@@ -1725,7 +1725,7 @@ case $ac_cv_f77_mangling in
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
           AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __]) ;;
   *)
-          AC_MSG_WARN(unknown Fortran 77 name-mangling scheme)
+          AC_MSG_WARN([unknown Fortran 77 name-mangling scheme])
           ;;
 esac
 ])# AC_F77_WRAPPERS
