@@ -585,7 +585,7 @@ this macro first if it hasn't been called already.  It macro calls
 @maindex PROG_INSTALL
 Set @code{make} variable @code{INSTALL} to @samp{install -c} if
 @code{install} is found and is compatible with the BSD and GNU versions.
-Otherwise, set @code{INSTALL} to @samp{@var{srcdir}/install.sh -c} if that
+Otherwise, set @code{INSTALL} to @samp{@@top_srcdir@@/install.sh -c} if that
 script exists, or to @samp{cp} as a last resort.  Screens out the
 false matches @file{/etc/install}, @file{/usr/sbin/install}, and other
 instances of @code{install} known not to work.  Also sets the variable
@@ -2467,6 +2467,11 @@ The installation prefix for architecture-independent files.
 @defvar srcdir
 The directory that contains the source code for that @file{Makefile}.
 @xref{Installation Prefixes}, for an alternate way to set this variable.
+@end defvar
+
+@defvar top_srcdir
+The top-level source code directory for the package.  In the top-level
+directory, this is the same as @code{srcdir}.
 @end defvar
 
 @defvar DEFS
