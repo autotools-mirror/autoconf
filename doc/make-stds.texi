@@ -810,6 +810,19 @@ installdirs: mkinstalldirs
                                 $(mandir)
 @end smallexample
 
+@noindent
+or, if you wish to support @env{DESTDIR},
+
+@smallexample
+# Make sure all installation directories (e.g. $(bindir))
+# actually exist by making them if necessary.
+installdirs: mkinstalldirs
+        $(srcdir)/mkinstalldirs \
+            $(DESTDIR)$(bindir) $(DESTDIR)$(datadir) \
+            $(DESTDIR)$(libdir) $(DESTDIR)$(infodir) \
+            $(DESTDIR)$(mandir)
+@end smallexample
+
 This rule should not modify the directories where compilation is done.
 It should do nothing but create installation directories.
 @end table

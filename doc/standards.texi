@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate December  1, 2000
+@set lastupdate March  6, 2001
 @c %**end of header
 
 @ifinfo
@@ -34,7 +34,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -65,7 +65,7 @@ by the Free Software Foundation.
 @page
 
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -2883,6 +2883,7 @@ extending it, as well as just using it.
 * Manual Structure Details::    Specific structure conventions.
 * License for Manuals::         Writing the distribution terms for a manual.
 * Manual Credits::              Giving credit to documentation contributors.
+* Printed Manuals::             Mentioning the printed manual.
 * NEWS File::                   NEWS files supplement manuals.
 * Change Logs::                 Recording Changes
 * Man Pages::                   Man pages are secondary.
@@ -3069,6 +3070,19 @@ Please credit the principal human writers of the manual as the authors,
 on the title page of the manual.  If a company sponsored the work, thank
 the company in a suitable place in the manual, but do not cite the
 company as an author.
+
+@node Printed Manuals
+@section Printed Manuals
+
+The FSF publishes some GNU manuals in printed form.  To encourage sales
+of these manuals, the on-line versions of the manual should mention at
+the very start that the printed manual is available and should point at
+information for getting it---for instance, with a link to the page
+@url{http://www.gnu.org/order/order.html}.  This should not be included
+in the printed manual, though, because there it is redundant.
+
+It is also useful to explain in the on-line forms of the manual how the
+user can print out the manual from the sources.
 
 @node NEWS File
 @section The NEWS File
