@@ -1,6 +1,6 @@
 \input texinfo @c -*-texinfo-*-
 @c %**start of header
-@setfilename standards.info
+@setfilename standards.text
 @settitle GNU Coding Standards
 @c %**end of header
 
@@ -34,7 +34,8 @@ by the Free Software Foundation.
 @sp 10
 @titlefont{GNU Coding Standards}
 @author{Richard Stallman}
-@author{last updated 14 Sep 91}
+@author{last updated 16 May 1992}
+@c Note date also appears below.
 @page
 
 @vskip 0pt plus 1filll
@@ -55,31 +56,38 @@ except that this permission notice may be stated in a translation approved
 by Free Software Foundation.
 @end titlepage
 
-@node Top, Other Implementations, (dir), (dir)
+@ifinfo
+@node Top, Reading Non-Free Code, (dir), (dir)
+@top Version
+
+Last updated 16 May 1992.
+@c Note date also appears above.
+@end ifinfo
 
 @menu
-* Other Implementations::	Referring to Other Implementations
+* Reading Non-Free Code::	Referring to Proprietary Programs
 * Contributions::		Accepting Contributions
 * Change Logs::			Recording Changes
-* Compatibility::		Emulating Other Implementations 
-* Makefiles::			Makefile Interfaces
-* Configuration::		Configuring Source
+* Compatibility::		Compatibility with Other Implementations 
+* Makefiles::			Makefile Conventions
+* Configuration::		How Configuration Should Work
+* Source Language::		Using Languages Other Than C
 * Formatting::			Formatting Your Source Code
 * Comments::			Commenting Your Work
 * Syntactic Conventions::	Clean Use of C Constructs
 * Names::			Naming Variables and Functions
+* Using Extensions::		Using Non-standard Features
 * Semantics::			Program Behaviour for All Programs
 * Errors::			Formatting Error Messages
 * Libraries::			Library Behaviour
 * Portability::			Portability As It Applies to GNU
-* Extensions::			Using Non-standard Features
 * User Interfaces::		Standards for Command Line Interfaces
 * Documentation::		Documenting Programs
 * Releases::			Making Releases
 @end menu
 
-@node Other Implementations, Contributions, Top, Top
-@chapter Referring to Other Implementations
+@node Reading Non-Free Code
+@chapter Referring to Proprietary Programs
 
 Don't in any circumstances refer to Unix source code for or during
 your work on GNU!  (Or to any other proprietary programs.)
@@ -112,7 +120,7 @@ Or use a simple garbage collector instead of tracking precisely when
 to free memory, or use a new GNU facility such as obstacks.
 
 
-@node Contributions, Change Logs, Other Implementations, Top
+@node Contributions
 @chapter Accepting Contributions
 
 If someone else sends you a piece of code to add to the program you are
@@ -146,8 +154,8 @@ The very worst thing is if you forget to tell us about the other
 contributor.  We could be very embarrassed in court some day as a
 result.
 
-@node Change Logs, Compatibility, Contributions, Top
-@chapter Recording Changes
+@node Change Logs
+@chapter Change Logs
 
 Keep a change log for each directory, describing the changes made to
 source files in that directory.  The purpose of this is so that people
@@ -208,8 +216,8 @@ interact in a precisely engineered fashion; to correct an error, you
 need not know the history of the erroneous passage.
 
 
-@node Compatibility, Makefiles, Change Logs, Top
-@chapter Emulating Other Implementations 
+@node Compatibility
+@chapter Compatibility with Other Implementations 
 
 With certain exceptions, utility programs and libraries for GNU should
 be upward compatible with those in Berkeley Unix, and upward compatible
@@ -220,8 +228,8 @@ When these standards conflict, it is useful to offer compatibility
 modes for each of them.
 
 @sc{ANSI} C and @sc{POSIX} prohibit many kinds of extensions.  Feel
-free to make the extensions anyway, and include a @samp{-ansi} or
-@samp{-compatible} option to turn them off.  However, if the extension
+free to make the extensions anyway, and include a @samp{--ansi} or
+@samp{--compatible} option to turn them off.  However, if the extension
 has a significant chance of breaking any real programs or scripts,
 then it is not really upward compatible.  Try to redesign its
 interface.
@@ -230,7 +238,7 @@ When a feature is used only by users (not by programs or command
 files), and it is done poorly in Unix, feel free to replace it
 completely with something totally different and better.  (For example,
 vi is replaced with Emacs.)  But it is nice to offer a compatible
-feature as well.  (There is a free vi-clone, so we will offer it.)
+feature as well.  (There is a free vi clone, so we offer it.)
 
 Additional useful features not in Berkeley Unix are welcome.
 Additional programs with no counterpart in Unix may be useful,
@@ -238,10 +246,40 @@ but our first priority is usually to duplicate what Unix already
 has.
 
 
-@node Makefiles, Configuration, Compatibility, Top
-@chapter Makefile Interfaces
+@node Makefiles
+@chapter Makefile Conventions
 
-All GNU programs should have the following targets in their makefiles:
+This chapter describes conventions for writing Makefiles.
+
+@menu
+* Makefile Basics::
+* Standard Targets::
+* Command Variables::
+* Directory Variables::
+@end menu
+
+@node Makefile Basics
+@section General Conventions for Makefiles
+
+Every Makefile should contain this line:
+
+@example
+SHELL = /bin/sh
+@end example
+
+@noindent
+to avoid trouble on systems where the @code{SHELL} variable might be
+inherited from the environment.
+
+Don't assume that @file{.} is in the path for command execution.  When
+you need to run programs that are files in the current directory, always
+use @file{./} to make sure the proper file is run regardless of the
+current path.
+
+@node Standard Targets
+@section Standard Targets for Users
+
+All GNU programs should have the following targets in their Makefiles:
 
 @table @samp
 @item all
@@ -253,16 +291,23 @@ the file names where they should reside for actual use.  If there is a
 simple test to verify that a program is properly installed then run that
 test.
 
+Use @samp{-} before any command for installing a man page, so that
+@code{make} will ignore any errors.  This is in case there are systems
+that don't have the Unix man page documentation system installed.
+
 @item clean
 Delete all files from the current directory that are normally created by
 building the program.  Don't delete the files that record the
 configuration.  Also preserve files that could be made by building, but
 normally aren't because the distribution comes with them.
 
+Delete @file{.dvi} files here if they are not part of the distribution.
+
 @item distclean
 Delete all files from the current directory that are created by
-configuring or building the program.  This should leave only the files
-that would be in the distribution.
+configuring or building the program.  If you have unpacked the source
+and built the program without creating any other files, @samp{make
+distclean} should leave only the files that were in the distribution.
 
 @item mostlyclean
 Like @samp{clean}, but may refrain from deleting a few files that people
@@ -272,7 +317,7 @@ is rarely necessary and takes a lot of time.
 
 @item realclean
 Delete everything from the current directory that can be reconstructed
-with this makefile.  This typically includes everything deleted by
+with this Makefile.  This typically includes everything deleted by
 distclean, plus more: C source files produced by Bison, tags tables,
 info files, and so on.
 
@@ -289,35 +334,30 @@ For example, the distribution tar file of GCC version 1.40 unpacks into
 a subdirectory named @file{gcc-1.40}.
 
 The easiest way to do this is to create a subdirectory appropriately
-named, use ln or cp to install the proper files in it, and then tar that
-subdirectory.
+named, use @code{ln} or @code{cp} to install the proper files in it, and
+then @code{tar} that subdirectory.
+
+The @code{dist} target should explicitly depend on all non-source files
+that are in the distribution, to make sure they are up to date in the
+distribution.  @xref{Releases}.
 
 @item check
-Run any tests that can be run before the program is installed.  Most
-tests should be constructed in way.
+Perform self-tests (if any).  The user must build the program before
+running the tests, but need not install the program; you should write
+the self-tests so that they work when the program is built but not
+installed.
 @end table
 
-Every Makefile should contain the line
-
-@example
-SHELL = /bin/sh
-@end example
-
-@noindent
-to avoid trouble on systems where the @code{SHELL} variable might be
-inherited from the environment.
+@node Command Variables
+@section Variables for Specifying Commands
 
 Makefiles should provide variables for overriding certain commands, options,
 and so on.
 
-In particular, most utility programs should be used through variables.
+In particular, you should run most utility programs via variables.
 Thus, if you use Bison, have a variable named @code{BISON} whose default
 value is set with @samp{BISON = bison}, and refer to it with
 @code{$(BISON)} whenever you need to use Bison.
-
-File-management utilities such as ln, rm, mv, and so on need not be
-referred to through variables in this way, since people don't need to
-replace them with other programs.
 
 Each program-name variable should come with an options variable that is
 used to supply options to the program.  Append @samp{FLAGS} to the
@@ -325,14 +365,18 @@ program-name variable name to get the options variable name---for
 example, @code{BISONFLAGS}.  (The name @code{CFLAGS} is an exception to
 this rule, but we keep it because it is standard.)
 
-The variable @code{INSTALL} should specify the command to use for
-installing a file into the system.
+File-management utilities such as @code{ln}, @code{rm}, @code{mv}, and
+so on need not be referred to through variables in this way, since users
+don't need to replace them with other programs.
 
-The Makefile should define variables @code{INSTALL_PROGRAM} and
+Every Makefile should define the variable @code{INSTALL}, which is the
+basic command for installing a file into the system.
+
+Every Makefile should also define variables @code{INSTALL_PROGRAM} and
 @code{INSTALL_DATA}.  (The default for each of these should be
-@code{$(INSTALL)}.)  Then it should use those variables for actual
-installation, for executables and nonexecutables respectively.  Use
-these variables as follows:
+@code{$(INSTALL)}.)  Then it should use those variables as the commands
+for actual installation, for executables and nonexecutables
+respectively.  Use these variables as follows:
 
 @example
 $(INSTALL_PROGRAM) foo $@{bindir@}/foo
@@ -343,35 +387,60 @@ $(INSTALL_DATA) libfoo.a $@{libdir@}/libfoo.a
 (Always use a file name, not a directory name, as the second argument.
 Use a separate command for each file to be installed.)
 
+@node Directory Variables
+@section Variables for Installation Directories
+
 Installation directories should always be named by variables, so it is
 easy to install in a nonstandard place.  The standard names for these
 variables are:
 
 @table @samp
+@item prefix
+A prefix used in constructing the default values of the variables listed
+below.  The default value of @code{prefix} should be @file{/usr/local}
+(at least for now).
+
+@item exec_prefix
+A prefix used in constructing the default values of the some of the
+variables listed below.  The default value of @code{exec_prefix} should
+be @code{$(prefix)}.
+
+Generally, @code{$(exec_prefix)} is used for directories that contain
+machine-specific files (such as executables and subroutine libraries),
+while @code{$(prefix)} is used directly for other directories.
+
 @item bindir
 The directory for installing executable programs that users can run.
-This should normally be @file{/usr/local/bin}, but it should be based on
-the value of @code{$(prefix)}.
-
-@item datadir
-The directory for installing data files which the programs refer to
-while they run.  This directory is used for files which are independent
-of the type of machine being used.  This should normally be
-@file{/usr/local/lib}, but it should be based on the value of
-@code{$(prefix)}.
+This should normally be @file{/usr/local/bin}, but it should be written
+as @file{$(exec_prefix)/bin}.
 
 @item libdir
 The directory for installing executable files to be run by the program
 rather than by users.  Object files and libraries of object code should
 also go in this directory.  The idea is that this directory is used for
-files that pertain to a specific machine architecture.  This should
-normally be @file{/usr/local/lib}, but it should be based on the value of
-@code{$(prefix)}.
+files that pertain to a specific machine architecture, but need not be
+in the path for commands.  The value of @code{libdir} should normally be
+@file{/usr/local/lib}, but it should be written as
+@file{$(exec_prefix)/lib}.
+
+@item datadir
+The directory for installing read-only data files which the programs
+refer to while they run.  This directory is used for files which are
+independent of the type of machine being used.  This should normally be
+@file{/usr/local/lib}, but it should be written as
+@file{$(prefix)/lib}.
+
+@item statedir
+The directory for installing data files which the programs modify while
+they run.  These files should be independent of the type of machine
+being used, and it should be possible to share them among machines at a
+network installation.  This should normally be @file{/usr/local/lib},
+but it should be written as @file{$(prefix)/lib}.
 
 @item includedir
 The directory for installing @samp{#include} header files to be included
 by user programs.  This should normally be @file{/usr/local/include},
-but it should be based on the value of @code{$(prefix)}.
+but it should be written as @file{$(prefix)/include}.
 
 Most compilers other than GCC do not look for header files in
 @file{/usr/local/include}.  So installing the header files this way is
@@ -385,7 +454,7 @@ specified by oldincludedir
 The directory for installing @samp{#include} header files for use with
 compilers other than GCC.  This should normally be @file{/usr/include}.
 
-The make commands should check whether the value of
+The Makefile commands should check whether the value of
 @code{oldincludedir} is empty.  If it is, they should not try to use
 it; they should cancel the second installation of the header files.
 
@@ -413,17 +482,12 @@ a period followed by the appropriate digit.
 
 @item infodir
 The directory for installing the info files for this package.  By
-default, it should be @file{/usr/local/info}, but it should be based on the
-value of @code{$(prefix)}.
+default, it should be @file{/usr/local/info}, but it should be written
+as @file{$(prefix)/info}.
 
 @item srcdir
 The directory for the sources being compiled.  The value of this
 variable is normally inserted by the @code{configure} shell script.
-
-@item prefix
-A prefix used in constructing the default values of the variables listed
-above.  The default value of @code{prefix} should be @file{/usr/local}
-(at least for now).
 @end table
 
 For example:
@@ -432,16 +496,17 @@ For example:
 # Common prefix for installation directories.
 # NOTE: This directory must exist when you start installation.
 prefix = /usr/local
+exec_prefix = $(prefix)
 # Directory in which to put the executable for the command `gcc'
-bindir = $(prefix)/bin
+bindir = $(exec_prefix)/bin
 # Directory in which to put the directories used by the compiler.
-libdir = $(prefix)/lib
+libdir = $(exec_prefix)/lib
+# Directory in which to put the Info files.
+infodir = $(prefix)/info
 @end example
 
-
-@node Configuration, Formatting, Makefiles, Top
-@chapter Configuring Source
-
+@node Configuration
+@chapter How Configuration Should Work
 
 Each GNU distribution should come with a shell script named
 @code{configure}.  This script is given arguments which describe the
@@ -508,7 +573,7 @@ For example, a Sun 3 might be @samp{m68k-sun-sunos4.1}.
 
 The @code{configure} script needs to be able to decode all plausible
 alternatives for how to describe a machine.  Thus, @samp{sun3-sunos4.1}
-would be a valid alias.  So would @samp{sun3-bsd4.2}, since Sunos is
+would be a valid alias.  So would @samp{sun3-bsd4.2}, since SunOS is
 basically @sc{BSD} and no other @sc{BSD} system is used on a Sun.  For many
 programs, @samp{vax-dec-ultrix} would be an alias for
 @samp{vax-dec-bsd}, simply because the differences between Ultrix and
@@ -522,20 +587,30 @@ Other options are permitted to specify in more detail the software
 or hardware are present on the machine:
 
 @table @samp
+@item --with-@var{package}
+The package @var{package} will be installed, so configure this package
+to work with @var{package}.
+
+Possible values of @var{package} include @samp{x}, @samp{gnu-as} (or
+@samp{gas}), @samp{gnu-ld}, @samp{gnu-libc}, and @samp{gdb}.
+
 @item --nfp
 The target machine has no floating point processor.
 
 @item --gas
 The target machine assembler is GAS, the GNU assembler.
+This is obsolete; use @samp{--with-gnu-as} instead.
 
 @item --x
-The target machine has X windows installed.
+The target machine has the X Window system installed.
+This is obsolete; use @samp{--with-x} instead.
 @end table
 
 All @code{configure} scripts should accept all of these ``detail''
 options, whether or not they make any difference to the particular
-package at hand.  This is so users will be able to configure an entire
-GNU source tree at once with a single set of options.
+package at hand.  In particular, they should accept any option that
+starts with @samp{--with-}.  This is so users will be able to configure
+an entire GNU source tree at once with a single set of options.
 
 Packages that perform part of compilation may support cross-compilation.
 In such a case, the host and target machines for the program may be
@@ -558,7 +633,37 @@ your program is set up to do this, your @code{configure} script can simply
 ignore most of its arguments.
 
 
-@node Formatting, Comments, Configuration, Top
+@node Source Language
+@chapter Using Languages Other Than C
+
+Using a language other than C is like using a non-standard feature: it
+will cause trouble for users.  Even if GCC supports the other language,
+users may find it inconvenient to have to install the compiler for that
+other language in order to build your program.  So please write in C.
+
+There are three exceptions for this rule:
+
+@itemize @bullet
+@item
+It is okay to use a special language if the same program contains an
+interpreter for that language.
+
+Thus, it is not a problem that GNU Emacs contains code written in Emacs
+Lisp, because it comes with a Lisp interpreter.
+
+@item
+It is okay to use another language in a tool specifically intended for
+use with that language.
+
+This is okay because the only people who want to build the tool will be
+those who have installed the other language anyway.
+
+@item
+If an application is not of extremely widespread interest, then perhaps
+it's not important if the application is inconvenient to install.
+@end itemize
+
+@node Formatting
 @chapter Formatting Your Source Code
 
 It is important to put the open-brace that starts the body of a C
@@ -678,7 +783,7 @@ just how long the pages are, since they do not have to fit on a printed
 page.  The formfeeds should appear alone on lines by themselves.
 
 
-@node Comments, Syntactic Conventions, Formatting, Top
+@node Comments
 @chapter Commenting Your Work
 
 Every program should start with a comment saying briefly what it is for.
@@ -751,7 +856,7 @@ but, by contrast, write the comments this way for a @samp{#ifndef}:
 @end example
 
 
-@node  Syntactic Conventions, Names, Comments, Top
+@node Syntactic Conventions
 @chapter Clean Use of C Constructs
 
 Please explicitly declare all arguments to functions.
@@ -815,6 +920,30 @@ if (foo)
   @}
 @end example
 
+If you have an if statement nested inside of an else statement,
+either write @code{else if} on one line, like this,
+
+@example
+if (foo)
+  @dots{}
+else if (bar)
+  @dots{}
+@end example
+
+@noindent
+with its then-part indented like the preceding then-part, or write the
+nested if within braces like this:
+
+@example
+if (foo)
+  @dots{}
+else
+  @{
+    if (bar)
+      @dots{}
+  @}
+@end example
+
 Don't declare both a structure tag and variables or typedefs in the
 same declaration.  Instead, declare the structure tag separately
 and then use it to declare the variables or typedefs.
@@ -841,7 +970,7 @@ casts to void.  Zero without a cast is perfectly fine as a null
 pointer constant.
 
 
-@node  Names, Semantics, Syntactic Conventions, Top
+@node  Names
 @chapter Naming Variables and Functions
 
 Please use underscores to separate words in a name, so that the Emacs
@@ -870,7 +999,43 @@ Use file names of 14 characters or less, to avoid creating gratuitous
 problems on System V.
 
 
-@node Semantics, Errors, Names, Top
+@node Using Extensions
+@chapter Using Non-standard Features
+
+Many GNU facilities that already exist support a number of convenient
+extensions over the comparable Unix facilities.  Whether to use these
+extensions in implementing your program is a difficult question.
+
+On the one hand, using the extensions can make a cleaner program.
+On the other hand, people will not be able to build the program
+unless the other GNU tools are available.  This might cause the 
+program to work on fewer kinds of machines.
+
+With some extensions, it might be easy to provide both alternatives.
+For example, you can define functions with a ``keyword'' @code{INLINE}
+and define that as a macro to expand into either @code{inline} or
+nothing, depending on the compiler.
+
+In general, perhaps it is best not to use the extensions if you can
+straightforwardly do without them, but to use the extensions if they
+are a big improvement.
+
+An exception to this rule are the large, established programs (such as
+Emacs) which run on a great variety of systems.  Such programs would
+be broken by use of GNU extensions.
+
+Another exception is for programs that are used as part of
+compilation: anything that must be compiled with other compilers in
+order to bootstrap the GNU compilation facilities.  If these require
+the GNU compiler, then no one can compile them without having them
+installed already.  That would be no good.
+
+Since most computer systems do not yet implement @sc{ANSI} C, using the
+@sc{ANSI} C features is effectively using a GNU extension, so the
+same considerations apply.  (Except for @sc{ANSI} features that we
+discourage, such as trigraphs---don't ever use them.)
+
+@node Semantics
 @chapter Program Behaviour for All Programs
 
 Avoid arbitrary limits on the length or number of @emph{any} data
@@ -884,7 +1049,7 @@ only sensible exceptions would be utilities specifically intended for
 interface to certain types of printers that can't handle those characters.
 
 Check every system call for an error return, unless you know you wish to
-ignore errors.  Include the system error text (from perror or
+ignore errors.  Include the system error text (from @code{perror} or
 equivalent) in @emph{every} error message resulting from a failing
 system call, as well as the name of the file if any and the name of the
 utility.  Just ``cannot open foo.c'' or ``stat failed'' is not
@@ -905,8 +1070,8 @@ You must expect @code{free} to alter the contents of the block that was
 freed.  Anything you want to fetch from the block, you must fetch before
 calling @code{free}.
 
-Use @code{getopt} to decode arguments, unless the argument syntax makes
-this unreasonable.
+Use @code{getopt_long} to decode arguments, unless the argument syntax
+makes this unreasonable.
 
 When static storage is to be written in during program execution, use
 explicit C code to initialize it.  Reserve C initialized declarations
@@ -915,12 +1080,12 @@ for data that will not be changed.
 Try to avoid low-level interfaces to obscure Unix data structures (such
 as file directories, utmp, or the layout of kernel memory), since these
 are less likely to work compatibly.  If you need to find all the files
-in a directory, use @code{readdir} or some other high-level interface.  These
-will be supported compatibly by GNU.
+in a directory, use @code{readdir} or some other high-level interface.
+These will be supported compatibly by GNU.
 
-By default, the GNU system will provide the signal handling
-functions of @sc{BSD} and of @sc{POSIX}.  So GNU software should be
-written to use these.
+By default, the GNU system will provide the signal handling functions of
+@sc{BSD} and of @sc{POSIX}.  So GNU software should be written to use
+these.
 
 In error checks that detect ``impossible'' conditions, just abort.
 There is usually no point in printing any message.  These checks
@@ -931,7 +1096,7 @@ are easy to examine with the debugger, so there is no point moving them
 elsewhere.
 
 
-@node Errors, Libraries, Semantics, Top
+@node Errors
 @chapter Formatting Error Messages
 
 Error messages from compilers should look like this:
@@ -972,12 +1137,12 @@ usage messages, should start with a capital letter.  But they should not
 end with a period.
 
 
-@node Libraries, Portability, Errors, Top
+@node Libraries
 @chapter Library Behaviour
 
 Try to make library functions reentrant.  If they need to do dynamic
 storage allocation, at least try to avoid any nonreentrancy aside from
-that of malloc itself.
+that of @code{malloc} itself.
 
 Here are certain name conventions for libraries, to avoid name
 conflicts.
@@ -1002,7 +1167,7 @@ Static functions and variables can be used as you like and need not
 fit any naming convention.
 
 
-@node Portability, Extensions, Libraries, Top
+@node Portability
 @chapter Portability As It Applies to GNU
 
 Much of what is called ``portability'' in the Unix world refers to
@@ -1062,44 +1227,7 @@ this is not very hard and users will want to be able to operate on input
 files that are bigger than will fit in core all at once.
 
 
-@node Extensions, User Interfaces, Portability, Top
-@chapter Using Non-standard Features
-
-Many GNU facilities that already exist support a number of convenient
-extensions over the comparable Unix facilities.  Whether to use these
-extensions in implementing your program is a difficult question.
-
-On the one hand, using the extensions can make a cleaner program.
-On the other hand, people will not be able to build the program
-unless the other GNU tools are available.  This might cause the 
-program to work on fewer kinds of machines.
-
-With some extensions, it might easy to provide both alternatives.  For
-example, you can define functions with a ``keyword'' @code{INLINE} and
-define that as a macro to expand into either @code{inline} or nothing,
-depending on the compiler.
-
-In general, perhaps it is best not to use the extensions if you can
-straightforwardly do without them, but to use the extensions if they
-are a big improvement.
-
-An exception to this rule are the large, established programs (such as
-Emacs) which run on a great variety of systems.  Such programs would
-be broken by use of GNU extensions.
-
-Another exception is for programs that are used as part of
-compilation: anything that must be compiled with other compilers in
-order to bootstrap the GNU compilation facilities.  If these require
-the GNU compiler, then no one can compile them without having them
-installed already.  That would be no good.
-
-Since most computer systems do not yet implement @sc{ANSI} C, using the
-@sc{ANSI} C features is effectively using a GNU extension, so the
-same considerations apply.  (Except for @sc{ANSI} features that we
-discourage, such as trigraphs---don't ever use them.)
-
-
-@node User Interfaces, Documentation, Extensions, Top
+@node User Interfaces
 @chapter Standards for Command Line Interfaces
 
 Please don't make the behavior of a utility depend on the name used
@@ -1111,15 +1239,15 @@ to select among the alternate behaviors.
 
 It is a good idea to follow the @sc{POSIX} guidelines for the
 command-line options of a program.  The easiest way to do this is to use
-getopt to parse them.  Note that the GNU version of getopt will normally
-permit options anywhere among the arguments unless the special argument
-@samp{--} is used.  This is not what @sc{POSIX} specifies; it is a GNU
-extension.
+@code{getopt} to parse them.  Note that the GNU version of @code{getopt}
+will normally permit options anywhere among the arguments unless the
+special argument @samp{--} is used.  This is not what @sc{POSIX}
+specifies; it is a GNU extension.
 
 Please define long-named options that are equivalent to the
 single-letter Unix-style options.  We hope to make GNU more user
-friendly this way.  This is easy to do with the GNU version of
-getopt.
+friendly this way.  This is easy to do with the GNU function
+@code{getopt_long}.
 
 It is usually a good idea for file names given as ordinary arguments
 to be input files only; any output files would be specified using
@@ -1134,7 +1262,7 @@ program's version number, and an option @samp{--help} which prints
 option usage information.
 
 
-@node Documentation, Releases, User Interfaces, Top
+@node Documentation
 @chapter Documenting Programs
 
 Please use Texinfo for documenting GNU programs.  See the Texinfo
@@ -1158,20 +1286,52 @@ Address the goals that a user will have in mind, and explain how to
 accomplish them.
 
 
-@node Releases,  , Documentation, Top
+@node Releases
 @chapter Making Releases
 
 Package the distribution of Foo version 69.96 in a tar file named
 @file{foo-69.96.tar}.  It should unpack into a subdirectory named
 @file{foo-69.96}.
 
-Include in your distribution a copy of the texinfo.tex you used to
-test print any @file{*.texinfo} files.
+Building and installing the program should never modify any of the files
+contained in the distribution.  This means that all the files that form
+part of the program in any way must be classified into @dfn{source
+files} and @dfn{non-source files}.  Source files are written by humans
+and never changed automatically; non-source files are produced from
+source files by programs under the control of the Makefile.
 
-Each of our distributions should contain up-to-date output from bison,
-lex or any other source transducer not part of that distribution.
-This helps avoid unnecessary dependencies between our distributions,
-so that users can install whichever packages they want to install.
+Naturally, all the source files must be in the distribution.  It is okay
+to include non-source files in the distribution, provided they are
+up-to-date and machine-independent, so that building the distribution
+normally will never modify them.  We commonly included non-source files
+produced by Bison, Lex, @TeX{}, and Makeinfo; this helps avoid
+unnecessary dependencies between our distributions, so that users can
+install whichever packages they want to install.
 
+Non-source files that might actually be modified by building and
+installing the program should @strong{never} be included in the
+distribution.  So if you do distribute non-source files, always make
+sure they are up to date when you make a new distribution.
+
+Make sure that no file name in the distribution is no more than 14
+characters long.  Nowadays, there are systems that adhere to a foolish
+interpretation of the POSIX standard which holds that they should refuse
+to open a longer name, rather than truncating as they did in the past.
+
+Try to make sure that all the file names will be unique on MS-DOG.  A
+name on MS-DOG consists of up to 8 characters, optionally followed by a
+period and up to three characters.  MS-DOG will truncate extra
+characters both before and after the period.  Thus,
+@file{foobarhacker.c} and @file{foobarhacker.o} are not ambiguous; they
+are truncated to @file{foobarhac.c} and @file{foobarhac.o}, which are
+distinct.
+
+Include in your distribution a copy of the @file{texinfo.tex} you used
+to test print any @file{*.texinfo} files.
+
+Likewise, if your program uses small GNU software packages like regex,
+getopt, obstack, or termcap, include them in the distribution file.
+Leaving them out would make the distribution file a little smaller at
+the expense of possible inconvenience to a user who doesn't know what
+other files to get.
 @bye
-
