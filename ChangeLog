@@ -1,3 +1,18 @@
+Wed Nov 20 13:00:21 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_TRY_LIB): Remove an erroneous dnl.
+	(AC_TRY_COMPILE): Make the final newline consistent with the
+	other AC_TRY_* macros.
+	
+	* acgeneral.m4 (AC_CACHE_SAVE): Handle cache variable values
+	correctly even if they contain single quote, or are quoted by
+	the shell.  From Paul Eggert <eggert@twinsun.com>.
+	(AC_INIT_PREPARE): Set LC_MESSAGES to C if set.
+	From Hans Olsson <Hans.Olsson@dna.lth.se>.
+	Set LC_CTYPE to C if set.
+	From tom@vlsivie.tuwien.ac.AT (Thomas Winder).
+	* autoconf.sh, autoheader.sh: Likewise set LC_MESSAGES and LC_CTYPE.
+
 Tue Nov 19 10:29:06 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* testsuite/autoconf.g/sizeof.exp: Use the v2 macro name.

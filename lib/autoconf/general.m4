@@ -633,11 +633,14 @@ changequote([, ])dnl
 done
 
 # NLS nuisances.
-# Only set LANG and LC_ALL to C if already set.
-# These must not be set unconditionally because not all systems understand
-# e.g. LANG=C (notably SCO).
-if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+# Only set these to C if already set.  These must not be set unconditionally
+# because not all systems understand e.g. LANG=C (notably SCO).
+# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
+# Non-C LC_CTYPE values break the ctype check.
 if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
+if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -1049,14 +1052,27 @@ define(AC_CACHE_SAVE,
 # --recheck option to rerun configure.
 #
 EOF
-changequote(, )dnl
 dnl Allow a site initialization script to override cache values.
+# The following way of writing the cache mishandles newlines in values,
+# but we know of no workaround that is simple, portable, and efficient.
+# So, don't put newlines in cache variables' values.
 # Ultrix sh set writes to stderr and can't be redirected directly,
 # and sets the high bit in the cache file unless we assign to the vars.
-# HP-UX 10.01 sh prints single quotes around any value that contains spaces.
+changequote(, )dnl
 (set) 2>&1 |
-sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)='*\([^']*\)'*/\1=\${\1='\2'}/p"\
-  >> confcache
+  case `(ac_space=' '; set) 2>&1` in
+  *ac_space=\ *)
+    # `set' does not quote correctly, so add quotes (double-quote substitution
+    # turns \\\\ into \\, and sed turns \\ into \).
+    sed -n \
+      -e "s/'/'\\\\''/g" \
+      -e "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1='\2'}/p"
+    ;;
+  *)
+    # `set' quotes correctly as required by POSIX, so do not add quotes.
+    sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1=\2}/p'
+    ;;
+  esac >> confcache
 changequote([, ])dnl
 if cmp -s $cache_file confcache; then
   :
@@ -1476,7 +1492,7 @@ char $2();
 ]),
 	    [$2()],
 	    eval "ac_cv_lib_$ac_lib_var=yes",
-	    eval "ac_cv_lib_$ac_lib_var=no")dnl
+	    eval "ac_cv_lib_$ac_lib_var=no")
 LIBS="$ac_save_LIBS"
 ])dnl
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
@@ -1618,8 +1634,7 @@ ifelse([$4], , , [  rm -rf conftest*
   $4
 ])dnl
 fi
-rm -f conftest*]
-)
+rm -f conftest*])
 
 
 dnl ### Examining libraries

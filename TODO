@@ -291,17 +291,6 @@ Make easy macros for checking for X functions and libraries, such as Motif.
 
 ------------------------------------------------------------------------------
 
-Testing for ANSI header files (AC_HEADER_STDC) fails under linux when
-using the latest libraries (libc-4.6.30, at least libc-4.6.27 works
-ok) when LC_CTYPE is set to ISO-8859-1. The islower/toupper test
-reports errors.
-Anyway, adding a line like 
-if test "${LC_CTYPE+set}"   = set; then LC_CTYPE=C;   export LC_CTYPE;   fi
-to the configure script can solve the problem.
-From: tom@vlsivie.tuwien.ac.AT (Thomas Winder)
-
-------------------------------------------------------------------------------
-
 * Test suite: more things to test:
 ** That the shell scripts produce correct output on some simple data.
 ** Configuration header files.  That autoheader does the right thing,
@@ -537,18 +526,6 @@ Merge the two lex macros, AC_PROG_LEX and AC_DECL_YYTEXT?
 
 ------------------------------------------------------------------------------
 
-Modify the meaning of autoheader --localdir to add an additional
-directory to look for acconfig.h instead of replacing the directory
-containing configure.in.  Also, autoreconf recurses on all
-subdirectories containing a configure.in, not just those given by an
-AC_CONFIG_SUBDIRS directive, so you can't have both directories that
-are parts of a large package, and directories that are independent
-packages.
-
-Marc Horowitz <marc@MIT.EDU>
-
-------------------------------------------------------------------------------
-
 in order to use the AC_CANONICAL_SYSTEM macro, I have to
 have install-sh somewhere nearby --- why is this?  I have no real
 reason to distribute install-sh, other than that its absence breaks
@@ -569,5 +546,34 @@ From: bostic@bsdi.com (Keith Bostic)
 Perhaps also have AC_TRY_COMPILER try to link an invalid program, and
 die if the compiler seemed to succeed--in which case it's not usable
 with autoconf scripts.
+
+------------------------------------------------------------------------------
+
+there is absolutely no guarantee that 'a' to 'z' are
+contiguous, and the ISLOWER macro is not guaranteed to correctly
+reproduce the result of islower. In all variants of ASCII however, it
+will work correctly in the C locale.
+
+There is also no guarantee that toupper(i) - i is the same constant if
+non-zero. TOUPPER, hence, is not correct either. But, in all variants
+of ASCII in the C locale, it works.
+
+Tanmoy Bhattacharya (tanmoy@qcd.lanl.gov>
+
+------------------------------------------------------------------------------
+
+Modify the meaning of autoheader --localdir to add an additional
+directory to look for acconfig.h instead of replacing the directory
+containing configure.in.  You can't have both directories that are
+parts of a large package, and directories that are independent
+packages.  (Also, autoreconf recurses on all subdirectories containing
+a configure.in, not just those given by an AC_CONFIG_SUBDIRS
+directive.)
+
+Marc Horowitz <marc@MIT.EDU>
+
+------------------------------------------------------------------------------
+
+Rewrite AC_OUTPUT_COMMANDS to use diversions.
 
 ------------------------------------------------------------------------------
