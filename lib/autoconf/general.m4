@@ -1977,7 +1977,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
 [{ ($2) >&AS_MESSAGE_LOG_FD
   ($1) 2>conftest.er1
   ac_status=$?
-  egrep -v '^ *\+' conftest.er1 >conftest.err
+  grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
   cat conftest.err >&AS_MESSAGE_LOG_FD
   echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
@@ -2090,12 +2090,13 @@ AC_DEFUN([AC_TRY_CPP],
 # come early, it is not included in AC_BEFORE checks.
 AC_DEFUN([AC_EGREP_CPP],
 [AC_LANG_PREPROC_REQUIRE()dnl
+AC_REQUIRE([AC_PROG_EGREP])dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 if (eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
 dnl Quote $1 to prevent m4 from eating character classes
-  egrep "[$1]" >/dev/null 2>&1; then
+  $EGREP "[$1]" >/dev/null 2>&1; then
   m4_default([$3], :)
 m4_ifvaln([$4], [else
   $4])dnl
