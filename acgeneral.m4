@@ -1032,7 +1032,9 @@ dnl AC_CACHE_LOAD()
 define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
   echo "loading cache $cache_file"
-  . $cache_file
+  dnl Some versions of bash will fail to source /dev/null, so we
+  dnl avoid doing that.
+  test -f "$cache_file" && . $cache_file
 else
   echo "creating cache $cache_file"
   > $cache_file
