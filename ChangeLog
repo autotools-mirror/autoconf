@@ -27,13 +27,13 @@
 
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
-	* doc/autoconf.texi (Assignments): Don't read $? after an
+	* doc/autoconf.texi (Assignments): Don't use $? from an
 	assignment.
 
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
 	* sh.m4 (AS_EXIT): Don't rely on false exiting 1.
-	Actually, always use `(exit $val); exit', don't try smart stuff.
+	Actually, always use `(exit $val); exit', don't try to be tricky.
 	* doc/autoconf.texi (Limitations of Builtins) <false>: new.
 
 2000-11-30  Akim Demaille  <akim@epita.fr>
