@@ -104,20 +104,6 @@ define([sinclude], [builtin([sinclude], $@)])
 # - BODY
 #   the tests and output code
 #
-#
-# This diversion is used by the AC_DEFUN/AC_REQUIRE machinery.  It is
-# important to keep room before PREPARE because for each nested
-# AC_REQUIRE we use an additional diversion (i.e., two AC_REQUIREs
-# will use PREPARE - 2.  More than 3 levels has never seemed to be
-# needed.)
-#
-# ...
-# - PREPARE - 2
-#   AC_REQUIRE'd code, 2 level deep
-# - PREPARE - 1
-#   AC_REQUIRE'd code, 1 level deep
-# - PREPARE
-#   AC_DEFUN'd macros are elaborated here.
 
 
 # _m4_divert(DIVERSION-NAME)
@@ -187,371 +173,6 @@ pushdef([_m4_divert_diversion], _m4_divert([KILL]))
 # `AC_DEFUN' is basically `define' but it equips the macro with the
 # needed machinery for `AC_REQUIRE'.  A macro must be AC_DEFUN'd if
 # either it is AC_REQUIRE'd, or it AC_REQUIRE's.
-#
-# Two things deserve attention and are detailed below:
-#  1. Implementation of AC_REQUIRE
-#  2. Keeping track of the expansion stack
-#
-# 1. Implementation of AC_REQUIRE
-# ===============================
-#
-# Of course AC_DEFUN AC_PROVIDE's the macro, so that a macro which has
-# been expanded is not expanded again when AC_REQUIRE'd, but the
-# difficult part is the proper expansion of macros when they are
-# AC_REQUIRE'd.
-#
-# The implementation is based on two ideas, (i) using diversions to
-# prepare the expansion of the macro and its dependencies (by François
-# Pinard), and (ii) expand the most recently AC_REQUIRE'd macros _after_
-# the previous macros (by Axel Thimm).
-#
-#
-# The first idea: why using diversions?
-# -------------------------------------
-#
-# When a macro requires another, the other macro is expanded in new
-# diversion, PREPARE.  When the outer macro is fully expanded, we first
-# undivert the most nested diversions (PREPARE - 1...), and finally
-# undivert PREPARE.  To understand why we need several diversions,
-# consider the following example:
-#
-# | AC_DEFUN([TEST1], [Test...REQUIRE([TEST2])1])
-# | AC_DEFUN([TEST2], [Test...REQUIRE([TEST3])2])
-# | AC_DEFUN([TEST3], [Test...3])
-#
-# Because AC_REQUIRE is not required to be first in the outer macros, we
-# must keep the expansions of the various level of AC_REQUIRE separated.
-# Right before executing the epilogue of TEST1, we have:
-#
-# 	   PREPARE - 2: Test...3
-# 	   PREPARE - 1: Test...2
-# 	   PREPARE:     Test...1
-# 	   BODY:
-#
-# Finally the epilogue of TEST1 undiverts PREPARE - 2, PREPARE - 1, and
-# PREPARE into the regular flow, BODY.
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1:
-# 	   PREPARE:
-# 	   BODY:        Test...3; Test...2; Test...1
-#
-# (The semicolons are here for clarification, but of course are not
-# emitted.)  This is what Autoconf 2.0 (I think) to 2.13 (I'm sure)
-# implement.
-#
-#
-# The second idea: first required first out
-# -----------------------------------------
-#
-# The natural implementation of the idea above is buggy and produces
-# very surprising results in some situations.  Let's consider the
-# following example to explain the bug:
-#
-# | AC_DEFUN([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
-# | AC_DEFUN([TEST2a], [])
-# | AC_DEFUN([TEST2b], [REQUIRE([TEST3])])
-# | AC_DEFUN([TEST3],  [REQUIRE([TEST2a])])
-# |
-# | AC_INIT
-# | TEST1
-#
-# The dependencies between the macros are:
-#
-# 		 3 --- 2b
-# 		/        \              is AC_REQUIRE'd by
-# 	       /          \       left -------------------- right
-# 	    2a ------------ 1
-#
-# If you strictly apply the rules given in the previous section you get:
-#
-# 	   PREPARE - 2: TEST3
-# 	   PREPARE - 1: TEST2a; TEST2b
-# 	   PREPARE:     TEST1
-# 	   BODY:
-#
-# (TEST2a, although required by TEST3 is not expanded in PREPARE - 3
-# because is has already been expanded before in PREPARE - 1, so it has
-# been AC_PROVIDE'd, so it is not expanded again) so when you undivert
-# the stack of diversions, you get:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1:
-# 	   PREPARE:
-# 	   BODY:        TEST3; TEST2a; TEST2b; TEST1
-#
-# i.e., TEST2a is expanded after TEST3 although the latter required the
-# former.
-#
-# Starting from 2.50, uses an implementation provided by Axel Thimm.
-# The idea is simple: the order in which macros are emitted must be the
-# same as the one in which macro are expanded.  (The bug above can
-# indeed be described as: a macro has been AC_PROVIDE'd, but it is
-# emitted after: the lack of correlation between emission and expansion
-# order is guilty).
-#
-# How to do that?  You keeping the stack of diversions to elaborate the
-# macros, but each time a macro is fully expanded, emit it immediately.
-#
-# In the example above, when TEST2a is expanded, but it's epilogue is
-# not run yet, you have:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1: TEST2a
-# 	   PREPARE:     Elaboration of TEST1
-# 	   BODY:
-#
-# The epilogue of TEST2a emits it immediately:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1:
-# 	   PREPARE:     Elaboration of TEST1
-# 	   BODY:        TEST2a
-#
-# TEST2b then requires TEST3, so right before the epilogue of TEST3, you
-# have:
-#
-# 	   PREPARE - 2: TEST3
-# 	   PREPARE - 1: Elaboration of TEST2b
-# 	   PREPARE:     Elaboration of TEST1
-# 	   BODY:        TEST2a
-#
-# The epilogue of TEST3 emits it:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1: Elaboration of TEST2b
-# 	   PREPARE:     Elaboration of TEST1
-# 	   BODY:        TEST2a; TEST3
-#
-# TEST2b is now completely expanded, and emitted:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1:
-# 	   PREPARE:     Elaboration of TEST1
-# 	   BODY:        TEST2a; TEST3; TEST2b
-#
-# and finally, TEST1 is finished and emitted:
-#
-# 	   PREPARE - 2:
-# 	   PREPARE - 1:
-# 	   PREPARE:
-# 	   BODY:        TEST2a; TEST3; TEST2b: TEST1
-#
-# The idea, is simple, but the implementation is a bit evolved.  If you
-# are like me, you will want to see the actual functioning of this
-# implementation to be convinced.  The next section gives the full
-# details.
-#
-#
-# The Axel Thimm implementation at work
-# -------------------------------------
-#
-# We consider the macros above, and this configure.in:
-#
-# 	    AC_INIT
-# 	    TEST1
-#
-# You should keep the definitions of _AC_DEFUN_PRO, _AC_DEFUN_EPI, and
-# AC_REQUIRE at hand to follow the steps.
-#
-# This implements tries not to assume that of the current diversion is
-# BODY, so as soon as a macro (AC_DEFUN'd) is expanded, we first
-# record the current diversion under the name _m4_divert_dump (denoted
-# DUMP below for short).  This introduces an important difference with
-# the previous versions of Autoconf: you cannot use AC_REQUIRE if you
-# were not inside an AC_DEFUN'd macro, and especially, you cannot
-# AC_REQUIRE directly from the top level.
-#
-# We have not tried to simulate the old behavior (better yet, we
-# diagnose it), because it is too dangerous: a macro AC_REQUIRE'd from
-# the top level is expanded before the body of `configure', i.e., before
-# any other test was run.  I let you imagine the result of requiring
-# AC_STDC_HEADERS for instance, before AC_PROG_CC was actually run....
-#
-# After AC_INIT was run, the current diversion is BODY.
-# * AC_INIT was run
-#   DUMP:                undefined
-#   diversion stack:     BODY |-
-#
-# * TEST1 is expanded
-# The prologue of TEST1 sets AC_DIVERSION_DUMP, which is the diversion
-# where the current elaboration will be dumped, to the current
-# diversion.  It also m4_divert_push to PREPARE, where the full
-# expansion of TEST1 and its dependencies will be elaborated.
-#   DUMP:       BODY
-#   BODY:       empty
-#   diversions: PREPARE, BODY |-
-#
-# * TEST1 requires TEST2a: prologue
-# AC_REQUIRE m4_divert_pushes another temporary diversion PREPARE - 1 (in
-# fact, the diversion whose number is one less than the current
-# diversion), and expands TEST2a in there.
-#   DUMP:       BODY
-#   BODY:       empty
-#   diversions: PREPARE-1, PREPARE, BODY |-
-#
-# * TEST2a is expanded.
-# Its prologue pushes the current diversion again.
-#   DUMP:       BODY
-#   BODY:       empty
-#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-# It is expanded in PREPARE - 1, and PREPARE - 1 is popped by the epilogue
-# of TEST2a.
-#   DUMP:        BODY
-#   BODY:        nothing
-#   PREPARE - 1: TEST2a
-#   diversions:  PREPARE - 1, PREPARE, BODY |-
-#
-# * TEST1 requires TEST2a: epilogue
-# The content of the current diversion is appended to DUMP (and removed
-# from the current diversion).  A diversion is popped.
-#   DUMP:       BODY
-#   BODY:       TEST2a
-#   diversions: PREPARE, BODY |-
-#
-# * TEST1 requires TEST2b: prologue
-# AC_REQUIRE pushes PREPARE - 1 and expands TEST2b.
-#   DUMP:       BODY
-#   BODY:       TEST2a
-#   diversions: PREPARE - 1, PREPARE, BODY |-
-#
-# * TEST2b is expanded.
-# Its prologue pushes the current diversion again.
-#   DUMP:       BODY
-#   BODY:       TEST2a
-#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-# The body is expanded here.
-#
-# * TEST2b requires TEST3: prologue
-# AC_REQUIRE pushes PREPARE - 2 and expands TEST3.
-#   DUMP:       BODY
-#   BODY:       TEST2a
-#   diversions: PREPARE - 2, PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-#
-# * TEST3 is expanded.
-# Its prologue pushes the current diversion again.
-#   DUMP:       BODY
-#   BODY:       TEST2a
-#   diversions: PREPARE-2, PREPARE-2, PREPARE-1, PREPARE-1, PREPARE, BODY |-
-# TEST3 requires TEST2a, but TEST2a has already been AC_PROVIDE'd, so
-# nothing happens.  It's body is expanded here, and its epilogue pops a
-# diversion.
-#   DUMP:         BODY
-#   BODY:         TEST2a
-#   PREPARE - 2:  TEST3
-#   diversions:   PREPARE - 2, PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-#
-# * TEST2b requires TEST3: epilogue
-# The current diversion is appended to DUMP, and a diversion is popped.
-#   DUMP:       BODY
-#   BODY:       TEST2a; TEST3
-#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-# The content of TEST2b is expanded here.
-#   DUMP:        BODY
-#   BODY:        TEST2a; TEST3
-#   PREPARE - 1: TEST2b,
-#   diversions: PREPARE - 1, PREPARE - 1, PREPARE, BODY |-
-# The epilogue of TEST2b pops a diversion.
-#   DUMP:        BODY
-#   BODY:        TEST2a; TEST3
-#   PREPARE - 1: TEST2b,
-#   diversions:  PREPARE - 1, PREPARE, BODY |-
-#
-# * TEST1 requires TEST2b: epilogue
-# The current diversion is appended to DUMP, and a diversion is popped.
-#   DUMP:       BODY
-#   BODY:       TEST2a; TEST3; TEST2b
-#   diversions: PREPARE, BODY |-
-#
-# * TEST1 is expanded: epilogue
-# TEST1's own content is in PREPARE, and it's epilogue pops a diversion.
-#   DUMP:    BODY
-#   BODY:    TEST2a; TEST3; TEST2b
-#   PREPARE: TEST1
-#   diversions: BODY |-
-# Here, the epilogue of TEST1 notices the elaboration is done because
-# DUMP and the current diversion are the same, it then undiverts
-# PREPARE by hand, and undefines DUMP.
-#   DUMP:       undefined
-#   BODY:       TEST2a; TEST3; TEST2b; TEST1
-#   diversions: BODY |-
-#
-#
-# 2. Keeping track of the expansion stack
-# =======================================
-#
-# When M4 expansion goes wrong it is often extremely hard to find the
-# path amongst macros that drove to the failure.  What is needed is
-# the stack of macro `calls'. One could imagine that GNU M4 would
-# maintain a stack of macro expansions, unfortunately it doesn't, so
-# we do it by hand.  This is of course extremely costly, but the help
-# this stack provides is worth it.  Nevertheless to limit the
-# performance penalty this is implemented only for AC_DEFUN'd macros,
-# not for define'd macros.
-#
-# The scheme is simplistic: each time we enter an AC_DEFUN'd macros,
-# we pushdef its name in _AC_EXPANSION_STACK, and when we exit the
-# macro, we popdef _AC_EXPANSION_STACK.
-#
-# In addition, we want to use the expansion stack to detect circular
-# AC_REQUIRE dependencies.  This means we need to browse the stack to
-# check whether a macro being expanded is AC_REQUIRE'd.  For ease of
-# implementation, and certainly for the benefit of performances, we
-# don't browse the _AC_EXPANSION_STACK, rather each time we expand a
-# macro FOO we define _AC_EXPANDING(FOO).  Then AC_REQUIRE(BAR) simply
-# needs to check whether _AC_EXPANDING(BAR) is defined to diagnose a
-# circular dependency.
-#
-# To improve the diagnostic, in addition to keeping track of the stack
-# of macro calls, _AC_EXPANSION_STACK also records the AC_REQUIRE
-# stack.  Note that therefore an AC_DEFUN'd macro being required will
-# appear twice in the stack: the first time because it is required,
-# the second because it is expanded.  We can avoid this, but it has
-# two small drawbacks: (i) the implementation is slightly more
-# complex, and (ii) it hides the difference between define'd macros
-# (which don't appear in _AC_EXPANSION_STACK) and AC_DEFUN'd macros
-# (which do).  The more debugging information, the better.
-
-
-# _AC_EXPANSION_STACK_DUMP
-# ------------------------
-# Dump the expansion stack.
-define([_AC_EXPANSION_STACK_DUMP],
-[ifdef([_AC_EXPANSION_STACK],
-       [m4_errprint(defn([_AC_EXPANSION_STACK]))dnl
-popdef([_AC_EXPANSION_STACK])dnl
-_AC_EXPANSION_STACK_DUMP()],
-       [m4_errprint(m4_location[: the top level])])])
-
-
-# _AC_DEFUN_PRO(MACRO-NAME)
-# -------------------------
-# The prologue for Autoconf macros.
-define([_AC_DEFUN_PRO],
-[AC_PROVIDE([$1])dnl
-pushdef([_AC_EXPANSION_STACK],
-        defn([m4_location($1)])[: $1 is expanded from...])dnl
-pushdef([_AC_EXPANDING($1)])dnl
-ifdef([_m4_divert_dump],
-      [m4_divert_push(defn([_m4_divert_diversion]))],
-      [define([_m4_divert_dump], defn([_m4_divert_diversion]))dnl
-m4_divert_push([PREPARE])])dnl
-])
-
-
-# _AC_DEFUN_EPI(MACRO-NAME)
-# -------------------------
-# The Epilogue for Autoconf macros.  MACRO-NAME only helps tracing
-# the PRO/EPI pairs.
-define([_AC_DEFUN_EPI],
-[m4_divert_pop()dnl
-ifelse(_m4_divert_dump, _m4_divert_diversion,
-       [undivert(_m4_divert([PREPARE]))dnl
-undefine([_m4_divert_dump])])dnl
-popdef([_AC_EXPANSION_STACK])dnl
-popdef([_AC_EXPANDING($1)])dnl
-])
-
 
 # AC_DEFUN(NAME, EXPANSION)
 # -------------------------
@@ -564,9 +185,7 @@ popdef([_AC_EXPANDING($1)])dnl
 # macros that are not involved in ordering constraints, to save m4
 # processing.
 define([AC_DEFUN],
-[define([m4_location($1)], m4_location)dnl
-define([$1],
-       [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])
+[m4_defun([$1], [$2[]AC_PROVIDE([$1])])])
 
 
 # AC_DEFUN_ONCE(NAME, EXPANSION)
@@ -575,9 +194,7 @@ define([$1],
 # several times.
 define([AC_DEFUN_ONCE],
 [define([$1],
-[AC_PROVIDE_IFELSE([$1],
-                   [AC_DIAGNOSE([syntax], [$1 invoked multiple times])],
-                   [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])])
+[m4_defun_once([$1], [$2[]AC_PROVIDE([$1])])])])
 
 
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
@@ -630,40 +247,23 @@ define([AC_BEFORE],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 define([_AC_REQUIRE],
-[pushdef([_AC_EXPANSION_STACK],
-         m4_location[: $1 is required by...])dnl
-ifdef([_AC_EXPANDING($1)],
-      [AC_FATAL([AC_REQUIRE: circular dependency of $1])])dnl
-ifndef([_m4_divert_dump],
-    [AC_FATAL([AC_REQUIRE: cannot be used outside of an AC_DEFUN'd macro])])dnl
-AC_PROVIDE_IFELSE([$1],
-                  [],
-                  [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
-$2
-divert(_m4_divert_dump)undivert(_m4_divert_diversion)dnl
-m4_divert_pop()])dnl
-AC_PROVIDE_IFELSE([$1],
-                  [],
-                  [AC_DIAGNOSE([syntax],
-                               [$1 is AC_REQUIRE'd but is not AC_DEFUN'd])])dnl
-popdef([_AC_EXPANSION_STACK])dnl
-])
+[_m4_require($@)])
 
 
 # AC_REQUIRE(STRING)
 # ------------------
 # If STRING has never been AC_PROVIDE'd, then expand it.
 define([AC_REQUIRE],
-[_AC_REQUIRE([$1], [$1])])
+[m4_require($@)])
 
 
 # AC_EXPAND_ONCE(TEXT)
 # --------------------
 # If TEXT has never been expanded, expand it *here*.
 define([AC_EXPAND_ONCE],
-[AC_PROVIDE_IFELSE([$1],
-                   [],
-                   [AC_PROVIDE([$1])[]$1])])
+[m4_expand_once([$1],
+                [],
+                [AC_PROVIDE([$1])[]$1])])
 
 
 # AC_PROVIDE(MACRO-NAME)
@@ -2609,7 +2209,7 @@ define([AC_WARNING],
 # --------------------------------
 define([AC_FATAL],
 [m4_errprint(m4_location[: $1])
-_AC_EXPANSION_STACK_DUMP()
+_m4_expansion_stack_dump()
 m4exit(m4_default([$2], [1]))])
 
 

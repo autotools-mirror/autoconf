@@ -609,6 +609,518 @@ m4_divert_pop()dnl
 ])
 
 
+## -------------------------------------------- ##
+## 8. Defining macros with bells and whistles.  ##
+## -------------------------------------------- ##
+
+# `m4_defun' is basically `define' but it equips the macro with the
+# needed machinery for `m4_require'.  A macro must be m4_defun'd if
+# either it is m4_require'd, or it m4_require's.
+#
+# Two things deserve attention and are detailed below:
+#  1. Implementation of m4_require
+#  2. Keeping track of the expansion stack
+#
+# 1. Implementation of m4_require
+# ===============================
+#
+# Of course m4_defun AC_PROVIDE's the macro, so that a macro which has
+# been expanded is not expanded again when m4_require'd, but the
+# difficult part is the proper expansion of macros when they are
+# m4_require'd.
+#
+# The implementation is based on two ideas, (i) using diversions to
+# prepare the expansion of the macro and its dependencies (by François
+# Pinard), and (ii) expand the most recently m4_require'd macros _after_
+# the previous macros (by Axel Thimm).
+#
+#
+# The first idea: why using diversions?
+# -------------------------------------
+#
+# When a macro requires another, the other macro is expanded in new
+# diversion, GROW.  When the outer macro is fully expanded, we first
+# undivert the most nested diversions (GROW - 1...), and finally
+# undivert GROW.  To understand why we need several diversions,
+# consider the following example:
+#
+# | m4_defun([TEST1], [Test...REQUIRE([TEST2])1])
+# | m4_defun([TEST2], [Test...REQUIRE([TEST3])2])
+# | m4_defun([TEST3], [Test...3])
+#
+# Because m4_require is not required to be first in the outer macros, we
+# must keep the expansions of the various level of m4_require separated.
+# Right before executing the epilogue of TEST1, we have:
+#
+# 	   GROW - 2: Test...3
+# 	   GROW - 1: Test...2
+# 	   GROW:     Test...1
+# 	   BODY:
+#
+# Finally the epilogue of TEST1 undiverts GROW - 2, GROW - 1, and
+# GROW into the regular flow, BODY.
+#
+# 	   GROW - 2:
+# 	   GROW - 1:
+# 	   GROW:
+# 	   BODY:        Test...3; Test...2; Test...1
+#
+# (The semicolons are here for clarification, but of course are not
+# emitted.)  This is what Autoconf 2.0 (I think) to 2.13 (I'm sure)
+# implement.
+#
+#
+# The second idea: first required first out
+# -----------------------------------------
+#
+# The natural implementation of the idea above is buggy and produces
+# very surprising results in some situations.  Let's consider the
+# following example to explain the bug:
+#
+# | m4_defun([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
+# | m4_defun([TEST2a], [])
+# | m4_defun([TEST2b], [REQUIRE([TEST3])])
+# | m4_defun([TEST3],  [REQUIRE([TEST2a])])
+# |
+# | AC_INIT
+# | TEST1
+#
+# The dependencies between the macros are:
+#
+# 		 3 --- 2b
+# 		/        \              is m4_require'd by
+# 	       /          \       left -------------------- right
+# 	    2a ------------ 1
+#
+# If you strictly apply the rules given in the previous section you get:
+#
+# 	   GROW - 2: TEST3
+# 	   GROW - 1: TEST2a; TEST2b
+# 	   GROW:     TEST1
+# 	   BODY:
+#
+# (TEST2a, although required by TEST3 is not expanded in GROW - 3
+# because is has already been expanded before in GROW - 1, so it has
+# been AC_PROVIDE'd, so it is not expanded again) so when you undivert
+# the stack of diversions, you get:
+#
+# 	   GROW - 2:
+# 	   GROW - 1:
+# 	   GROW:
+# 	   BODY:        TEST3; TEST2a; TEST2b; TEST1
+#
+# i.e., TEST2a is expanded after TEST3 although the latter required the
+# former.
+#
+# Starting from 2.50, uses an implementation provided by Axel Thimm.
+# The idea is simple: the order in which macros are emitted must be the
+# same as the one in which macro are expanded.  (The bug above can
+# indeed be described as: a macro has been AC_PROVIDE'd, but it is
+# emitted after: the lack of correlation between emission and expansion
+# order is guilty).
+#
+# How to do that?  You keeping the stack of diversions to elaborate the
+# macros, but each time a macro is fully expanded, emit it immediately.
+#
+# In the example above, when TEST2a is expanded, but it's epilogue is
+# not run yet, you have:
+#
+# 	   GROW - 2:
+# 	   GROW - 1: TEST2a
+# 	   GROW:     Elaboration of TEST1
+# 	   BODY:
+#
+# The epilogue of TEST2a emits it immediately:
+#
+# 	   GROW - 2:
+# 	   GROW - 1:
+# 	   GROW:     Elaboration of TEST1
+# 	   BODY:     TEST2a
+#
+# TEST2b then requires TEST3, so right before the epilogue of TEST3, you
+# have:
+#
+# 	   GROW - 2: TEST3
+# 	   GROW - 1: Elaboration of TEST2b
+# 	   GROW:     Elaboration of TEST1
+# 	   BODY:      TEST2a
+#
+# The epilogue of TEST3 emits it:
+#
+# 	   GROW - 2:
+# 	   GROW - 1: Elaboration of TEST2b
+# 	   GROW:     Elaboration of TEST1
+# 	   BODY:     TEST2a; TEST3
+#
+# TEST2b is now completely expanded, and emitted:
+#
+# 	   GROW - 2:
+# 	   GROW - 1:
+# 	   GROW:     Elaboration of TEST1
+# 	   BODY:     TEST2a; TEST3; TEST2b
+#
+# and finally, TEST1 is finished and emitted:
+#
+# 	   GROW - 2:
+# 	   GROW - 1:
+# 	   GROW:
+# 	   BODY:     TEST2a; TEST3; TEST2b: TEST1
+#
+# The idea, is simple, but the implementation is a bit evolved.  If you
+# are like me, you will want to see the actual functioning of this
+# implementation to be convinced.  The next section gives the full
+# details.
+#
+#
+# The Axel Thimm implementation at work
+# -------------------------------------
+#
+# We consider the macros above, and this configure.in:
+#
+# 	    AC_INIT
+# 	    TEST1
+#
+# You should keep the definitions of _m4_defun_pro, _m4_defun_epi, and
+# m4_require at hand to follow the steps.
+#
+# This implements tries not to assume that of the current diversion is
+# BODY, so as soon as a macro (m4_defun'd) is expanded, we first
+# record the current diversion under the name _m4_divert_dump (denoted
+# DUMP below for short).  This introduces an important difference with
+# the previous versions of Autoconf: you cannot use m4_require if you
+# were not inside an m4_defun'd macro, and especially, you cannot
+# m4_require directly from the top level.
+#
+# We have not tried to simulate the old behavior (better yet, we
+# diagnose it), because it is too dangerous: a macro m4_require'd from
+# the top level is expanded before the body of `configure', i.e., before
+# any other test was run.  I let you imagine the result of requiring
+# AC_STDC_HEADERS for instance, before AC_PROG_CC was actually run....
+#
+# After AC_INIT was run, the current diversion is BODY.
+# * AC_INIT was run
+#   DUMP:                undefined
+#   diversion stack:     BODY |-
+#
+# * TEST1 is expanded
+# The prologue of TEST1 sets AC_DIVERSION_DUMP, which is the diversion
+# where the current elaboration will be dumped, to the current
+# diversion.  It also m4_divert_push to GROW, where the full
+# expansion of TEST1 and its dependencies will be elaborated.
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: GROW, BODY |-
+#
+# * TEST1 requires TEST2a: prologue
+# m4_require m4_divert_pushes another temporary diversion GROW - 1 (in
+# fact, the diversion whose number is one less than the current
+# diversion), and expands TEST2a in there.
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: GROW-1, GROW, BODY |-
+#
+# * TEST2a is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       BODY
+#   BODY:       empty
+#   diversions: GROW - 1, GROW - 1, GROW, BODY |-
+# It is expanded in GROW - 1, and GROW - 1 is popped by the epilogue
+# of TEST2a.
+#   DUMP:        BODY
+#   BODY:        nothing
+#   GROW - 1:    TEST2a
+#   diversions:  GROW - 1, GROW, BODY |-
+#
+# * TEST1 requires TEST2a: epilogue
+# The content of the current diversion is appended to DUMP (and removed
+# from the current diversion).  A diversion is popped.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: GROW, BODY |-
+#
+# * TEST1 requires TEST2b: prologue
+# m4_require pushes GROW - 1 and expands TEST2b.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: GROW - 1, GROW, BODY |-
+#
+# * TEST2b is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: GROW - 1, GROW - 1, GROW, BODY |-
+# The body is expanded here.
+#
+# * TEST2b requires TEST3: prologue
+# m4_require pushes GROW - 2 and expands TEST3.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: GROW - 2, GROW - 1, GROW - 1, GROW, BODY |-
+#
+# * TEST3 is expanded.
+# Its prologue pushes the current diversion again.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   diversions: GROW-2, GROW-2, GROW-1, GROW-1, GROW, BODY |-
+# TEST3 requires TEST2a, but TEST2a has already been AC_PROVIDE'd, so
+# nothing happens.  It's body is expanded here, and its epilogue pops a
+# diversion.
+#   DUMP:       BODY
+#   BODY:       TEST2a
+#   GROW - 2:   TEST3
+#   diversions: GROW - 2, GROW - 1, GROW - 1, GROW, BODY |-
+#
+# * TEST2b requires TEST3: epilogue
+# The current diversion is appended to DUMP, and a diversion is popped.
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3
+#   diversions: GROW - 1, GROW - 1, GROW, BODY |-
+# The content of TEST2b is expanded here.
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3
+#   GROW - 1:   TEST2b,
+#   diversions: GROW - 1, GROW - 1, GROW, BODY |-
+# The epilogue of TEST2b pops a diversion.
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3
+#   GROW - 1:   TEST2b,
+#   diversions: GROW - 1, GROW, BODY |-
+#
+# * TEST1 requires TEST2b: epilogue
+# The current diversion is appended to DUMP, and a diversion is popped.
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3; TEST2b
+#   diversions: GROW, BODY |-
+#
+# * TEST1 is expanded: epilogue
+# TEST1's own content is in GROW, and it's epilogue pops a diversion.
+#   DUMP:       BODY
+#   BODY:       TEST2a; TEST3; TEST2b
+#   GROW:       TEST1
+#   diversions: BODY |-
+# Here, the epilogue of TEST1 notices the elaboration is done because
+# DUMP and the current diversion are the same, it then undiverts
+# GROW by hand, and undefines DUMP.
+#   DUMP:       undefined
+#   BODY:       TEST2a; TEST3; TEST2b; TEST1
+#   diversions: BODY |-
+#
+#
+# 2. Keeping track of the expansion stack
+# =======================================
+#
+# When M4 expansion goes wrong it is often extremely hard to find the
+# path amongst macros that drove to the failure.  What is needed is
+# the stack of macro `calls'. One could imagine that GNU M4 would
+# maintain a stack of macro expansions, unfortunately it doesn't, so
+# we do it by hand.  This is of course extremely costly, but the help
+# this stack provides is worth it.  Nevertheless to limit the
+# performance penalty this is implemented only for m4_defun'd macros,
+# not for define'd macros.
+#
+# The scheme is simplistic: each time we enter an m4_defun'd macros,
+# we pushdef its name in _m4_expansion_stack, and when we exit the
+# macro, we popdef _m4_expansion_stack.
+#
+# In addition, we want to use the expansion stack to detect circular
+# m4_require dependencies.  This means we need to browse the stack to
+# check whether a macro being expanded is m4_require'd.  For ease of
+# implementation, and certainly for the benefit of performances, we
+# don't browse the _m4_expansion_stack, rather each time we expand a
+# macro FOO we define _AC_EXPANDING(FOO).  Then m4_require(BAR) simply
+# needs to check whether _AC_EXPANDING(BAR) is defined to diagnose a
+# circular dependency.
+#
+# To improve the diagnostic, in addition to keeping track of the stack
+# of macro calls, _m4_expansion_stack also records the m4_require
+# stack.  Note that therefore an m4_defun'd macro being required will
+# appear twice in the stack: the first time because it is required,
+# the second because it is expanded.  We can avoid this, but it has
+# two small drawbacks: (i) the implementation is slightly more
+# complex, and (ii) it hides the difference between define'd macros
+# (which don't appear in _m4_expansion_stack) and m4_defun'd macros
+# (which do).  The more debugging information, the better.
+
+# _m4_divert(GROW)
+# ----------------
+# This diversion is used by the m4_defun/m4_require machinery.  It is
+# important to keep room before GROW because for each nested
+# AC_REQUIRE we use an additional diversion (i.e., two m4_require's
+# will use GROW - 2.  More than 3 levels has never seemed to be
+# needed.)
+#
+# ...
+# - GROW - 2
+#   m4_require'd code, 2 level deep
+# - GROW - 1
+#   m4_require'd code, 1 level deep
+# - GROW
+#   m4_defun'd macros are elaborated here.
+
+define([_m4_divert(GROW)],       10000)
+
+# _m4_expansion_stack_DUMP
+# ------------------------
+# Dump the expansion stack.
+define([_m4_expansion_stack_dump],
+[ifdef([_m4_expansion_stack],
+       [m4_errprint(defn([_m4_expansion_stack]))dnl
+popdef([_m4_expansion_stack])dnl
+_m4_expansion_stack_dump()],
+       [m4_errprint(m4_location[: the top level])])])
+
+
+# _m4_defun_pro(MACRO-NAME)
+# -------------------------
+# The prologue for Autoconf macros.
+define([_m4_defun_pro],
+[pushdef([_m4_expansion_stack],
+        defn([m4_location($1)])[: $1 is expanded from...])dnl
+pushdef([_m4_expanding($1)])dnl
+ifdef([_m4_divert_dump],
+      [m4_divert_push(defn([_m4_divert_diversion]))],
+      [define([_m4_divert_dump], defn([_m4_divert_diversion]))dnl
+m4_divert_push([GROW])])dnl
+])
+
+
+# _m4_defun_epi(MACRO-NAME)
+# -------------------------
+# The Epilogue for Autoconf macros.  MACRO-NAME only helps tracing
+# the PRO/EPI pairs.
+define([_m4_defun_epi],
+[m4_divert_pop()dnl
+ifelse(_m4_divert_dump, _m4_divert_diversion,
+       [undivert(_m4_divert([GROW]))dnl
+undefine([_m4_divert_dump])])dnl
+popdef([_m4_expansion_stack])dnl
+popdef([_m4_expanding($1)])dnl
+m4_provide([$1])dnl
+])
+
+
+# m4_defun(NAME, EXPANSION)
+# -------------------------
+# Define a macro which automatically provides itself.  Add machinery
+# so the macro automatically switches expansion to the diversion
+# stack if it is not already using it.  In this case, once finished,
+# it will bring back all the code accumulated in the diversion stack.
+# This, combined with m4_require, achieves the topological ordering of
+# macros.  We don't use this macro to define some frequently called
+# macros that are not involved in ordering constraints, to save m4
+# processing.
+define([m4_defun],
+[define([m4_location($1)], m4_location)dnl
+define([$1],
+       [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])
+
+
+# m4_defun_once(NAME, EXPANSION)
+# ------------------------------
+# As m4_defun, but issues the EXPANSION only once, and warns if used
+# several times.
+define([m4_defun_once],
+[define([$1],
+[m4_provide_ifelse([$1],
+                   [ac_warn([syntax], [$1 invoked multiple times])],
+                   [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
+
+
+## ----------------------------- ##
+## Dependencies between macros.  ##
+## ----------------------------- ##
+
+
+# m4_before(THIS-MACRO-NAME, CALLED-MACRO-NAME)
+# ---------------------------------------------
+define([m4_before],
+[m4_provide_ifelse([$2],
+                   [m4_warn([syntax], [$2 was called before $1])])])
+
+
+# _m4_require(NAME-TO-CHECK, BODY-TO-EXPAND)
+# ------------------------------------------
+# If NAME-TO-CHECK has never been expanded (actually, if it is not
+# m4_provide'd), expand BODY-TO-EXPAND *before* the current macro
+# expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
+# of the m4_require chain in _m4_expansion_stack.
+#
+# The normal cases are:
+#
+# - NAME-TO-CHECK == BODY-TO-EXPAND
+#   Which you can use for regular macros with or without arguments, e.g.,
+#     _m4_require([AC_PROG_CC], [AC_PROG_CC])
+#     _m4_require([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
+#
+# - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
+#   In the case of macros with irregular names.  For instance:
+#     _m4_require([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
+#   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
+#   part of the name, it is not an argument) has not been run, then
+#   call it.'
+#   Had you used
+#     _m4_require([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
+#   then _m4_require would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
+#   call the macro `AC_LANG_COMPILER' with `C' as argument.
+#
+#   You could argue that `AC_LANG_COMPILER', when it receives an argument
+#   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
+#   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
+#   it passes to `AC_LANG_COMPILER(C)'.
+define([_m4_require],
+[pushdef([_m4_expansion_stack],
+         m4_location[: $1 is required by...])dnl
+ifdef([_m4_expanding($1)],
+      [m4_fatal([m4_require: circular dependency of $1])])dnl
+ifndef([_m4_divert_dump],
+    [m4_fatal([m4_require: cannot be used outside of an m4_defun'd macro])])dnl
+m4_provide_ifelse([$1],
+                  [],
+                  [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
+$2
+divert(_m4_divert_dump)undivert(_m4_divert_diversion)dnl
+m4_divert_pop()])dnl
+m4_provide_ifelse([$1],
+                  [],
+                  [m4_warn([syntax],
+                           [$1 is m4_require'd but is not m4_defun'd])])dnl
+popdef([_m4_expansion_stack])dnl
+])
+
+
+# m4_require(STRING)
+# ------------------
+# If STRING has never been m4_provide'd, then expand it.
+define([m4_require],
+[_m4_require([$1], [$1])])
+
+
+# m4_expand_once(TEXT)
+# --------------------
+# If TEXT has never been expanded, expand it *here*.
+define([m4_expand_once],
+[m4_provide_ifelse([$1],
+                   [],
+                   [m4_provide([$1])[]$1])])
+
+
+# m4_provide(MACRO-NAME)
+# ----------------------
+define([m4_provide],
+[define([m4_provide($1)])])
+
+
+# m4_provide_ifelse(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
+# -----------------------------------------------------------
+# If MACRO-NAME is provided do IF-PROVIDED, else IF-NOT-PROVIDED.
+# The purpose of this macro is to provide the user with a means to
+# check macros which are provided without letting her know how the
+# information is coded.
+define([m4_provide_ifelse],
+[ifdef([m4_provide($1)],
+       [$2], [$3])])
+
+
 ## -------------------- ##
 ## 9. Text processing.  ##
 ## -------------------- ##

@@ -1,3 +1,16 @@
+2000-11-01  Akim Demaille  <akim@epita.fr>
+
+	Move the `defun' handling into M4sugar.
+
+	* m4sugar.m4 (_m4_divert(GROW), _m4_expansion_stack_dump)
+	_m4_defun_pro, _m4_defun_epi, m4_defun, $1, m4_defun_once)
+	m4_before, _m4_require, m4_require, m4_expand_once, m4_provide)
+	m4_provide_ifelse): New macros.
+	* acgeneral.m4 (_AC_EXPANSION_STACK_DUMP, _AC_DEFUN_PRO)
+	_AC_DEFUN_EPI): Removed.
+	(AC_DEFUN, AC_DEFUN_ONCE, _AC_REQUIRE, AC_REQUIRE)
+	AC_PROVIDE_IFELSE, AC_FATAL): Reimplement atop M4sugar.
+
 2000-11-01  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* tests/tools.at (autoupdating AC_LINK_FILES): Invoke autoconf
