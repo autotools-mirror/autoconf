@@ -9,6 +9,19 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 
+# Avoid depending upon Character Ranges.
+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+as_cr_digits='0123456789'
+as_cr_alnum=$as_cr_Letters$as_cr_digits
+
+# Sed expression to map a string onto a valid variable name.
+as_tr_sh="sed y%*+%pp%;s%[^_$as_cr_alnum]%_%g"
+
+# Sed expression to map a string onto a valid CPP name.
+as_tr_cpp="sed y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g"
+
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -92,16 +105,6 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # This variable seems obsolete.  It should probably be removed, and
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
-
-# Avoid depending upon Character Ranges.
-ac_cr_az='abcdefghijklmnopqrstuvwxyz'
-ac_cr_AZ='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-ac_cr_09='0123456789'
-ac_cr_alnum=$ac_cr_az$ac_cr_AZ$ac_cr_09
-
-# Sed expression to map a string onto a valid sh and CPP variable names.
-ac_tr_sh="sed y%*+%pp%;s%[^_$ac_cr_alnum]%_%g"
-ac_tr_cpp="sed y%*$ac_cr_az%P$ac_cr_AZ%;s%[^_$ac_cr_alnum]%_%g"
 
 ac_unique_file="acgeneral.m4"
 
@@ -195,7 +198,7 @@ do
   -disable-* | --disable-*)
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
    { (exit 1); exit 1; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
@@ -204,7 +207,7 @@ do
   -enable-* | --enable-*)
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
       { echo "$as_me: error: invalid feature name: $ac_feature" >&2
    { (exit 1); exit 1; }; }
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
@@ -386,7 +389,7 @@ do
   -with-* | --with-*)
     ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
       { echo "$as_me: error: invalid package name: $ac_package" >&2
    { (exit 1); exit 1; }; }
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -399,7 +402,7 @@ do
   -without-* | --without-*)
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : ".*[^-_$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
       { echo "$as_me: error: invalid package name: $ac_package" >&2
    { (exit 1); exit 1; }; }
     ac_package=`echo $ac_package | sed 's/-/_/g'`
@@ -431,7 +434,7 @@ Try \`$0 --help' for more information." >&2
   *=*)
     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_envvar" : ".*[^_$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
       { echo "$as_me: error: invalid variable name: $ac_envvar" >&2
    { (exit 1); exit 1; }; }
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
@@ -441,7 +444,7 @@ Try \`$0 --help' for more information." >&2
   *)
     # FIXME: should be removed in autoconf 3.0.
     echo "$as_me: WARNING: you should use --build, --host, --target" >&2
-    expr "x$ac_option" : ".*[^-._$ac_cr_alnum]" >/dev/null &&
+    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       echo "$as_me: WARNING: invalid host type: $ac_option" >&2
     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
@@ -739,11 +742,11 @@ trap 'exit_status=$?
     *ac_space=\ *)
       sed -n \
         "s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
-    	  s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
+    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
       ;;
     *)
       sed -n \
-        "s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
+        "s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
       ;;
     esac;
 } >&5
@@ -784,7 +787,7 @@ if test -z "$CONFIG_SITE"; then
 fi
 for ac_site_file in $CONFIG_SITE; do
   if test -r "$ac_site_file"; then
-    { echo "$as_me:787: loading site script $ac_site_file" >&5
+    { echo "$as_me:790: loading site script $ac_site_file" >&5
 echo "$as_me: loading site script $ac_site_file" >&6;}
     cat "$ac_site_file" >&5
     . "$ac_site_file"
@@ -795,7 +798,7 @@ if test -r "$cache_file"; then
   # Some versions of bash will fail to source /dev/null (special
   # files actually), so we avoid doing that.
   if test -f "$cache_file"; then
-    { echo "$as_me:798: loading cache $cache_file" >&5
+    { echo "$as_me:801: loading cache $cache_file" >&5
 echo "$as_me: loading cache $cache_file" >&6;}
     case $cache_file in
       [\\/]* | ?:[\\/]* ) . $cache_file;;
@@ -803,7 +806,7 @@ echo "$as_me: loading cache $cache_file" >&6;}
     esac
   fi
 else
-  { echo "$as_me:806: creating cache $cache_file" >&5
+  { echo "$as_me:809: creating cache $cache_file" >&5
 echo "$as_me: creating cache $cache_file" >&6;}
   >$cache_file
 fi
@@ -819,30 +822,30 @@ for ac_var in `(set) 2>&1 |
   eval ac_new_val="\$ac_env_${ac_var}_value"
   case $ac_old_set,$ac_new_set in
     set,)
-      { echo "$as_me:822: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
+      { echo "$as_me:825: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
 echo "$as_me: WARNING: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
       ac_suggest_removing_cache=: ;;
     ,set)
-      { echo "$as_me:826: WARNING: \`$ac_var' was not set in the previous run" >&5
+      { echo "$as_me:829: WARNING: \`$ac_var' was not set in the previous run" >&5
 echo "$as_me: WARNING: \`$ac_var' was not set in the previous run" >&2;}
       ac_suggest_removing_cache=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-        { echo "$as_me:832: WARNING: \`$ac_var' has changed since the previous run:" >&5
+        { echo "$as_me:835: WARNING: \`$ac_var' has changed since the previous run:" >&5
 echo "$as_me: WARNING: \`$ac_var' has changed since the previous run:" >&2;}
-        { echo "$as_me:834: WARNING:   former value:  $ac_old_val" >&5
+        { echo "$as_me:837: WARNING:   former value:  $ac_old_val" >&5
 echo "$as_me: WARNING:   former value:  $ac_old_val" >&2;}
-        { echo "$as_me:836: WARNING:   current value: $ac_new_val" >&5
+        { echo "$as_me:839: WARNING:   current value: $ac_new_val" >&5
 echo "$as_me: WARNING:   current value: $ac_new_val" >&2;}
         ac_suggest_removing_cache=:
       fi;;
   esac
 done
 if $ac_suggest_removing_cache; then
-  { echo "$as_me:843: WARNING: changes in the environment can compromise the build" >&5
+  { echo "$as_me:846: WARNING: changes in the environment can compromise the build" >&5
 echo "$as_me: WARNING: changes in the environment can compromise the build" >&2;}
-  { echo "$as_me:845: WARNING: consider removing $cache_file and starting over" >&5
+  { echo "$as_me:848: WARNING: consider removing $cache_file and starting over" >&5
 echo "$as_me: WARNING: consider removing $cache_file and starting over" >&2;}
 fi
 
@@ -861,10 +864,10 @@ esac
 echo "#! $SHELL" >conftest.sh
 echo  "exit 0"   >>conftest.sh
 chmod +x conftest.sh
-if { (echo "$as_me:864: PATH=\".;.\"; conftest.sh") >&5
+if { (echo "$as_me:867: PATH=\".;.\"; conftest.sh") >&5
   (PATH=".;."; conftest.sh) 2>&5
   ac_status=$?
-  echo "$as_me:867: \$? = $ac_status" >&5
+  echo "$as_me:870: \$? = $ac_status" >&5
   (exit $ac_status); }; then
   ac_path_separator=';'
 else
@@ -890,7 +893,7 @@ for ac_dir in config $srcdir/config; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:893: error: cannot find install-sh or install.sh in config $srcdir/config" >&5
+  { { echo "$as_me:896: error: cannot find install-sh or install.sh in config $srcdir/config" >&5
 echo "$as_me: error: cannot find install-sh or install.sh in config $srcdir/config" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -910,7 +913,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "$as_me:913: checking for a BSD compatible install" >&5
+echo "$as_me:916: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -959,7 +962,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "$as_me:962: result: $INSTALL" >&5
+echo "$as_me:965: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -970,7 +973,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-echo "$as_me:973: checking whether build environment is sane" >&5
+echo "$as_me:976: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
@@ -993,7 +996,7 @@ if (
       # if, for instance, CONFIG_SHELL is bash and it inherits a
       # broken ls alias from the environment.  This has actually
       # happened.  Such a system could not be considered "sane".
-      { { echo "$as_me:996: error: ls -t appears to fail.  Make sure there is not a broken
+      { { echo "$as_me:999: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&5
 echo "$as_me: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&2;}
@@ -1006,14 +1009,14 @@ then
    # Ok.
    :
 else
-   { { echo "$as_me:1009: error: newly created file is older than distributed files!
+   { { echo "$as_me:1012: error: newly created file is older than distributed files!
 Check your system clock" >&5
 echo "$as_me: error: newly created file is older than distributed files!
 Check your system clock" >&2;}
    { (exit 1); exit 1; }; }
 fi
 rm -f conftest*
-echo "$as_me:1016: result: yes" >&5
+echo "$as_me:1019: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
@@ -1034,7 +1037,7 @@ test "$program_suffix" != NONE &&
 # sed with no file args requires a program.
 test -z "$program_transform_name" && program_transform_name="s,x,x,"
 
-echo "$as_me:1037: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "$as_me:1040: checking whether ${MAKE-make} sets \${MAKE}" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \${MAKE}... $ECHO_C" >&6
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
@@ -1054,11 +1057,11 @@ fi
 rm -f conftest.make
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  echo "$as_me:1057: result: yes" >&5
+  echo "$as_me:1060: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   SET_MAKE=
 else
-  echo "$as_me:1061: result: no" >&5
+  echo "$as_me:1064: result: no" >&5
 echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
@@ -1068,7 +1071,7 @@ PACKAGE=autoconf
 VERSION=2.50a
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
-  { { echo "$as_me:1071: error: source directory already configured; run \"make distclean\" there first" >&5
+  { { echo "$as_me:1074: error: source directory already configured; run \"make distclean\" there first" >&5
 echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1082,78 +1085,78 @@ cat >>confdefs.h <<EOF
 EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
-echo "$as_me:1085: checking for working aclocal" >&5
+echo "$as_me:1088: checking for working aclocal" >&5
 echo $ECHO_N "checking for working aclocal... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (aclocal --version) < /dev/null > /dev/null 2>&1; then
    ACLOCAL=aclocal
-   echo "$as_me:1092: result: found" >&5
+   echo "$as_me:1095: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    ACLOCAL="$SHELL $missing_dir/missing aclocal"
-   echo "$as_me:1096: result: missing" >&5
+   echo "$as_me:1099: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "$as_me:1100: checking for working autoconf" >&5
+echo "$as_me:1103: checking for working autoconf" >&5
 echo $ECHO_N "checking for working autoconf... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoconf --version) < /dev/null > /dev/null 2>&1; then
    AUTOCONF=autoconf
-   echo "$as_me:1107: result: found" >&5
+   echo "$as_me:1110: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOCONF="$SHELL $missing_dir/missing autoconf"
-   echo "$as_me:1111: result: missing" >&5
+   echo "$as_me:1114: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "$as_me:1115: checking for working automake" >&5
+echo "$as_me:1118: checking for working automake" >&5
 echo $ECHO_N "checking for working automake... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (automake --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake
-   echo "$as_me:1122: result: found" >&5
+   echo "$as_me:1125: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOMAKE="$SHELL $missing_dir/missing automake"
-   echo "$as_me:1126: result: missing" >&5
+   echo "$as_me:1129: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "$as_me:1130: checking for working autoheader" >&5
+echo "$as_me:1133: checking for working autoheader" >&5
 echo $ECHO_N "checking for working autoheader... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoheader --version) < /dev/null > /dev/null 2>&1; then
    AUTOHEADER=autoheader
-   echo "$as_me:1137: result: found" >&5
+   echo "$as_me:1140: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOHEADER="$SHELL $missing_dir/missing autoheader"
-   echo "$as_me:1141: result: missing" >&5
+   echo "$as_me:1144: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "$as_me:1145: checking for working makeinfo" >&5
+echo "$as_me:1148: checking for working makeinfo" >&5
 echo $ECHO_N "checking for working makeinfo... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
    MAKEINFO=makeinfo
-   echo "$as_me:1152: result: found" >&5
+   echo "$as_me:1155: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    MAKEINFO="$SHELL $missing_dir/missing makeinfo"
-   echo "$as_me:1156: result: missing" >&5
+   echo "$as_me:1159: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
@@ -1162,7 +1165,7 @@ AUTOTEST_PATH=..
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
-echo "$as_me:1165: checking for $ac_word" >&5
+echo "$as_me:1168: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_EXPR+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1179,7 +1182,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_EXPR="$ac_dir/$ac_word"
-   echo "$as_me:1182: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1185: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1190,10 +1193,10 @@ fi
 EXPR=$ac_cv_path_EXPR
 
 if test -n "$EXPR"; then
-  echo "$as_me:1193: result: $EXPR" >&5
+  echo "$as_me:1196: result: $EXPR" >&5
 echo "${ECHO_T}$EXPR" >&6
 else
-  echo "$as_me:1196: result: no" >&5
+  echo "$as_me:1199: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1205,7 +1208,7 @@ for ac_prog in gm4 gnum4 m4
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1208: checking for $ac_word" >&5
+echo "$as_me:1211: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1222,7 +1225,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_M4="$ac_dir/$ac_word"
-   echo "$as_me:1225: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1228: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1233,10 +1236,10 @@ fi
 M4=$ac_cv_path_M4
 
 if test -n "$M4"; then
-  echo "$as_me:1236: result: $M4" >&5
+  echo "$as_me:1239: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6
 else
-  echo "$as_me:1239: result: no" >&5
+  echo "$as_me:1242: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1244,7 +1247,7 @@ fi
 done
 test -n "$M4" || M4="m4"
 
-echo "$as_me:1247: checking whether m4 supports frozen files" >&5
+echo "$as_me:1250: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1256,10 +1259,10 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-echo "$as_me:1259: result: $ac_cv_prog_gnu_m4" >&5
+echo "$as_me:1262: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { { echo "$as_me:1262: error: GNU m4 1.4 is required" >&5
+  { { echo "$as_me:1265: error: GNU m4 1.4 is required" >&5
 echo "$as_me: error: GNU m4 1.4 is required" >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -1271,7 +1274,7 @@ for ac_prog in mawk gawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "$as_me:1274: checking for $ac_word" >&5
+echo "$as_me:1277: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1286,7 +1289,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   $as_executable_p "$ac_dir/$ac_word" || continue
 ac_cv_prog_AWK="$ac_prog"
-echo "$as_me:1289: found $ac_dir/$ac_word" >&5
+echo "$as_me:1292: found $ac_dir/$ac_word" >&5
 break
 done
 
@@ -1294,10 +1297,10 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "$as_me:1297: result: $AWK" >&5
+  echo "$as_me:1300: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "$as_me:1300: result: no" >&5
+  echo "$as_me:1303: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1305,25 +1308,25 @@ fi
 done
 
 # Generating man pages.
-echo "$as_me:1308: checking for working help2man" >&5
+echo "$as_me:1311: checking for working help2man" >&5
 echo $ECHO_N "checking for working help2man... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
-   echo "$as_me:1315: result: found" >&5
+   echo "$as_me:1318: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    HELP2MAN="$SHELL $missing_dir/missing help2man"
-   echo "$as_me:1319: result: missing" >&5
+   echo "$as_me:1322: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "$as_me:1326: checking for $ac_word" >&5
+echo "$as_me:1329: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1340,7 +1343,7 @@ for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
   if $as_executable_p "$ac_dir/$ac_word"; then
    ac_cv_path_PERL="$ac_dir/$ac_word"
-   echo "$as_me:1343: found $ac_dir/$ac_word" >&5
+   echo "$as_me:1346: found $ac_dir/$ac_word" >&5
    break
 fi
 done
@@ -1352,17 +1355,17 @@ fi
 PERL=$ac_cv_path_PERL
 
 if test -n "$PERL"; then
-  echo "$as_me:1355: result: $PERL" >&5
+  echo "$as_me:1358: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "$as_me:1358: result: no" >&5
+  echo "$as_me:1361: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" != no; then
   PERLSCRIPTS="autoscan autoupdate"
 else
-  { echo "$as_me:1365: WARNING: autoscan and autoupdate will not be built since perl is not found" >&5
+  { echo "$as_me:1368: WARNING: autoscan and autoupdate will not be built since perl is not found" >&5
 echo "$as_me: WARNING: autoscan and autoupdate will not be built since perl is not found" >&2;}
 fi
 
@@ -1378,7 +1381,7 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "$as_me:1381: checking for a BSD compatible install" >&5
+echo "$as_me:1384: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -1427,7 +1430,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "$as_me:1430: result: $INSTALL" >&5
+echo "$as_me:1433: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1471,12 +1474,12 @@ _ACEOF
       # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
         "s/'/'\\\\''/g;
-    	  s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
       ;;
     *)
       # `set' quotes correctly as required by POSIX, so do not add quotes.
       sed -n \
-        "s/^\\([_$ac_cr_alnum]*_cv_[_$ac_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
+        "s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
       ;;
     esac;
 } |
@@ -1551,7 +1554,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:1554: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:1557: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -1719,7 +1722,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:1722: error: ambiguous option: $1
+    { { echo "$as_me:1725: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -1747,12 +1750,12 @@ Try \`$0 --help' for more information." >&2;}
   'tests/atconfig' ) CONFIG_FILES="$CONFIG_FILES tests/atconfig" ;;
 
   # This is an error.
-  -*) { { echo "$as_me:1750: error: unrecognized option: $1
+  -*) { { echo "$as_me:1753: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; } ;;
-  *) { { echo "$as_me:1755: error: invalid argument: $1" >&5
+  *) { { echo "$as_me:1758: error: invalid argument: $1" >&5
 echo "$as_me: error: invalid argument: $1" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -1977,7 +1980,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1980: creating $ac_file" >&5
+    { echo "$as_me:1983: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -1995,7 +1998,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:1998: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:2001: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -2008,7 +2011,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:2011: error: cannot find input file: $f" >&5
+           { { echo "$as_me:2014: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
