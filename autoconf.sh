@@ -226,11 +226,11 @@ case $task in
   # Put the real line numbers into configure to make config.log more helpful.
   # Because quoting can sometimes get really painful in m4, there are special
   # @tokens@ to substitute.
-  cat -s $tmpout |
+  sed -e 's/[ 	]*$//' <$tmpout |
+    sed -e '/^$/N;/\n$/D' |
     $AWK '
       /__oline__/ { printf "%d:", NR + 1 }
-  	         { print }
-      ' |
+  	          { print }' |
     sed '
       /__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
       s/@BKL@/[/g

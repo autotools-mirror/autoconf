@@ -184,9 +184,9 @@ AT_DATA(expout,
 ]])
 AT_CHECK([cat config.h], 0, expout)
 
-# Check the value of DEFS.  Note the leading and trailing spaces.
+# Check the value of DEFS.  Note the leading space.
 AT_DATA(expout,
-[[ -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA ]
+[[ -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA]
 ])
 
 AT_CHECK([cat defs], 0, expout)

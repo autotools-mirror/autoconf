@@ -1,3 +1,12 @@
+2000-02-11  Akim Demaille  <akim@epita.fr>
+
+	Don't use `cat -s' to single out new-lines, it is not portable.
+	Also remove trailing blanks.
+
+	* tests/Makefile.am (testsuite): Use sed instead of cat.
+	* tests/torture.m4: No longer check for a trailing space.
+	* autoconf.sh: Likewise.
+
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
 	* tests/actest.m4 (AC_ENV_SAVE): OpenBSD-2.3's /bin/sh defines an
