@@ -1855,23 +1855,22 @@ m4_define([AC_DEFINE_TRACE],
 # Set VARIABLE to VALUE, verbatim, or 1.  Remember the value
 # and if VARIABLE is affected the same VALUE, do nothing, else
 # die.  The third argument is used by autoheader.
-m4_define([AC_DEFINE],
-[AC_DEFINE_TRACE([$1])dnl
-m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
-cat >>confdefs.h <<\_ACEOF
-[@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
-_ACEOF
-])
+m4_define([AC_DEFINE], [_AC_DEFINE_Q([\], $@)])
 
 
 # AC_DEFINE_UNQUOTED(VARIABLE, [VALUE], [DESCRIPTION])
 # ----------------------------------------------------
 # Similar, but perform shell substitutions $ ` \ once on VALUE.
-m4_define([AC_DEFINE_UNQUOTED],
-[AC_DEFINE_TRACE([$1])dnl
-m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
-cat >>confdefs.h <<_ACEOF
-[@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
+m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([], $@)])
+
+
+# _AC_DEFINE_Q(QUOTE, VARIABLE, [VALUE], [DESCRIPTION])
+# -----------------------------------------------------
+m4_define([_AC_DEFINE_Q],
+[AC_DEFINE_TRACE([$2])dnl
+m4_ifval([$4], [AH_TEMPLATE([$2], [$4])])dnl
+cat >>confdefs.h <<$1_ACEOF
+[@%:@define] $2 m4_if($#, 2, 1, [$3])
 _ACEOF
 ])
 
