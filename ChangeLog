@@ -1,3 +1,10 @@
+2001-07-14  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.maint (maintainer-check): Rename as...
+	(maintainer-distcheck): this.
+	(changelog-check, static-check): New.
+	Use them.
+
 2001-07-14  Kevin Ryde  <user42@zip.com.au>
 
         * doc/autoconf.texi (C++ Compilers Characteristics): Last resort
