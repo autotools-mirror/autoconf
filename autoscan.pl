@@ -465,9 +465,7 @@ sub print_unique
       print CONF "$macro\n";
       $printed{$macro} = 1;
 
-      # For the time being, just don't bother with macros with arguments.
-      push (@{$needed_macros{$macro}}, @where)
-	if ($macro !~ /[][]|^AC_CHECK_.*S/);
+      push (@{$needed_macros{$macro}}, @where);
     }
 }
 
@@ -506,14 +504,18 @@ sub output_headers
   print CONF "\n# Checks for header files.\n";
   foreach $word (sort keys %headers)
     {
-      if (defined $headers_macros{$word} &&
-	  $headers_macros{$word} eq 'AC_CHECK_HEADERS')
+      if (defined $headers_macros{$word})
 	{
-	  push(@have_headers, $word);
-	}
-      else
-	{
-	  &print_unique($headers_macros{$word}, @{$headers{$word}});
+	  if ($headers_macros{$word} eq 'AC_CHECK_HEADERS')
+	    {
+	      push (@have_headers, $word);
+	      push (@{$needed_macros{"AC_CHECK_HEADERS($word)"}},
+		    @{$headers{$word}});
+	    }
+	  else
+	    {
+	      &print_unique ($headers_macros{$word}, @{$headers{$word}});
+	    }
 	}
     }
   print CONF "AC_CHECK_HEADERS([" . join(' ', sort(@have_headers)) . "])\n"
@@ -572,10 +574,11 @@ sub check_configure_ac
   my ($configure_ac) = $@;
   my ($trace_option) = '';
   my ($word);
-  my ($macro);
+  my ($macro, $header);
 
   foreach $macro (sort keys %needed_macros)
     {
+      $macro =~ s/\(.*//;
       $trace_option .= " -t $macro";
     }
 
@@ -584,8 +587,19 @@ sub check_configure_ac
 
   while (<TRACES>)
     {
-      my ($file, $line, $macro, $args) = split (/:/, $_, 4);
-      delete ($needed_macros{$macro});
+      chomp;
+      my ($file, $line, $macro, @args) = split (/:/, $_);
+      if ($macro =~ /^AC_CHECK_HEADERS$/)
+	{
+	  foreach $header (split (/ /, $args[0]))
+	    {
+	      delete ($needed_macros{"AC_CHECK_HEADERS($header)"});
+	    }
+	}
+      else
+	{
+	  delete ($needed_macros{$macro});
+	}
     }
 
   close (TRACES) ||
