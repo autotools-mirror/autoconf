@@ -1,5 +1,17 @@
 2002-09-01  Paul Eggert  <eggert@twinsun.com>
 
+	* bin/autoconf.as: Work even if "ls" outputs "FOO not found" to
+	stdout, as traditional "ls" does.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT,
+	_AC_COMPILER_EXEEXT_O): Likewise.
+	* doc/autoconf.texi (Limitations of Usual Tools): Add "ls".
+
+	* bin/autoconf.as: Add --prepend-include option.  This patch was
+	applied to bin/autoconf.in in the 2002-07-17 patch by Mark D. Roth,
+	but bin/autoconf.in is generated automatically from bin/autoconf.as.
+
+	* bin/autoconf.in, configure: Regenerate.
+
 	* doc/autoconf.texi (Special Shell Variables): Mention
 	ENV, MAIL, MAILPATH, PS1, PS2, PS4.  Index PWD.
 
