@@ -1,5 +1,15 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl (&wanted): Don't register `Makefile' when
+	`Makefile.in' is present.
+	Factor the simplification of $name.
+	(&scan_makefile, &scan_sh_file): Instead of counting the number of
+	occurrences where a program/makevar is wanted, register	file:line.
+	Adjust the verbose output.
+	(&check_configure_ac): Report the location where the macro is required.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Instead of undefined globals, set them to empty
 	values.
 	(%needed_macros): New.

@@ -112,9 +112,10 @@ sub init_tables
 		 'long', 'short', 'unsigned', 'auto', 'extern', 'register',
 		 'typedef', 'static', 'goto', 'return', 'sizeof', 'break',
 		 'continue', 'if', 'else', 'for', 'do', 'while', 'switch',
-		 'case', 'default') {
-    $c_keywords{$word} = 0;
-  }
+		 'case', 'default')
+    {
+      $c_keywords{$word} = 0;
+    }
 
   # The data file format supports only one line of macros per function.
   # If more than that is required for a common portability problem,
@@ -141,15 +142,29 @@ sub init_tables
 # Called by &find on each file.
 sub wanted
 {
-  if (/^.*\.[chlymC]$/ || /^.*\.cc$/) {
-    $name =~ s?^\./??; push(@cfiles, $name);
-  }
-  elsif (/^[Mm]akefile$/ || /^[Mm]akefile\.in$/ || /^GNUmakefile$/) {
-    $name =~ s?^\./??; push(@makefiles, $name);
-  }
-  elsif (/^.*\.sh$/) {
-    $name =~ s?^\./??; push(@shfiles, $name);
-  }
+  # Strip a useless leading `./'.
+  $name =~ s,^\./,,;
+
+  if (/^.*\.[chlymC]$/ || /^.*\.cc$/)
+    {
+      push(@cfiles, $name);
+    }
+  elsif (/^[Mm]akefile$/ || /^GNUmakefile$/)
+    {
+      # Wanted only if there is no corresponding Makefile.in.
+      # Using Find, $_ contains the current filename with the current
+      # directory of the walk through.
+      push(@makefiles, $name)
+	if ! -f "$_.in";
+    }
+  elsif (/^[Mm]akefile\.in$/)
+    {
+      push(@makefiles, $name);
+    }
+  elsif (/^.*\.sh$/)
+    {
+      push(@shfiles, $name);
+    }
 }
 
 # Read through the files and collect lists of tokens in them
@@ -215,12 +230,16 @@ sub scan_c_file
 
     # Tokens in the code.
     # Maybe we should ignore function definitions (in column 0)?
-    while (s/\b([a-zA-Z_]\w*)\s*\(/ /) {
-      $functions{$1}++ if !defined($c_keywords{$1});
-    }
-    while (s/\b([a-zA-Z_]\w*)\b/ /) {
-      $identifiers{$1}++ if !defined($c_keywords{$1});
-    }
+    while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
+      {
+	$functions{$1}++
+	  if !defined($c_keywords{$1});
+      }
+    while (s/\b([a-zA-Z_]\w*)\b/ /)
+      {
+	$identifiers{$1}++
+	  if !defined($c_keywords{$1});
+      }
   }
   close(CFILE);
 
@@ -257,17 +276,20 @@ sub scan_makefile
     s/@[^@]*@//g;
 
     # Variable assignments.
-    while (s/\b([a-zA-Z_]\w*)\s*=/ /) {
-      $makevars{$1}++;
-    }
+    while (s/\b([a-zA-Z_]\w*)\s*=/ /)
+      {
+	push (@{$makevars{$1}}, "$file:$.");
+      }
     # Libraries.
-    while (s/\B-l([a-zA-Z_]\w*)\b/ /) {
-      $libraries{$1}++;
-    }
+    while (s/\B-l([a-zA-Z_]\w*)\b/ /)
+      {
+	$libraries{$1}++;
+      }
     # Tokens in the code.
-    while (s/\b([a-zA-Z_]\w*)\b/ /) {
-      $programs{$1}++;
-    }
+    while (s/\b([a-zA-Z_]\w*)\b/ /)
+      {
+	push (@{$programs{$1}}, "$file:$.");
+      }
   }
   close(MFILE);
 
@@ -275,9 +297,10 @@ sub scan_makefile
     local($word);
 
     print "\n$file makevars:\n";
-    foreach $word (sort keys %makevars) {
-      print "$word $makevars{$word}\n";
-    }
+    foreach $word (sort keys %makevars)
+      {
+	print "$word @{$makevars{$word}}\n";
+      }
 
     print "\n$file libraries:\n";
     foreach $word (sort keys %libraries) {
@@ -285,9 +308,10 @@ sub scan_makefile
     }
 
     print "\n$file programs:\n";
-    foreach $word (sort keys %programs) {
-      print "$word $programs{$word}\n";
-    }
+    foreach $word (sort keys %programs)
+      {
+	print "$word @{$programs{$word}}\n";
+      }
   }
 }
 
@@ -304,7 +328,7 @@ sub scan_sh_file
 
     # Tokens in the code.
     while (s/\b([a-zA-Z_]\w*)\b/ /) {
-      $programs{$1}++;
+      push (@{$programs{$1}}, "$file:$.");
     }
   }
   close(MFILE);
@@ -314,7 +338,7 @@ sub scan_sh_file
 
     print "\n$file programs:\n";
     foreach $word (sort keys %programs) {
-      print "$word $programs{$word}\n";
+      print "$word @{$programs{$word}}\n";
     }
   }
 }
@@ -354,16 +378,17 @@ sub output
 # Print Autoconf macro $1 if it's not undef and hasn't been printed already.
 sub print_unique
 {
-  local($macro) = @_;
+  local($macro, @where) = @_;
 
-  if (defined($macro) && !defined($printed{$macro})) {
-    print CONF "$macro\n";
-    $printed{$macro} = 1;
+  if (defined($macro) && !defined($printed{$macro}))
+    {
+      print CONF "$macro\n";
+      $printed{$macro} = 1;
 
-    # For the time being, just don't bother with macros with arguments.
-    $needed_macros{$macro} = 1
-      if ($macro !~ /]|^AC_CHECK_.*S/);
-  }
+      # For the time being, just don't bother with macros with arguments.
+      push (@{$needed_macros{$macro}}, @where)
+	if ($macro !~ /[][]|^AC_CHECK_.*S/);
+    }
 }
 
 sub output_programs
@@ -371,12 +396,14 @@ sub output_programs
   local ($word);
 
   print CONF "\n# Checks for programs.\n";
-  foreach $word (sort keys %programs) {
-    &print_unique($programs_macros{$word});
-  }
-  foreach $word (sort keys %makevars) {
-    &print_unique($makevars_macros{$word});
-  }
+  foreach $word (sort keys %programs)
+    {
+      &print_unique($programs_macros{$word}, @{$programs{$word}});
+    }
+  foreach $word (sort keys %makevars)
+    {
+      &print_unique($makevars_macros{$word}, @{$makevars{$word}});
+    }
 }
 
 sub output_libraries
@@ -450,8 +477,7 @@ sub check_configure_ac
   local ($trace_option) = '';
   local ($word);
 
-  print STDERR "$trace_option\n";
-  foreach $macro (%needed_macros)
+  foreach $macro (sort keys %needed_macros)
     {
       $trace_option .= " -t $macro";
     }
@@ -467,6 +493,6 @@ sub check_configure_ac
 
   foreach $macro (sort keys %needed_macros)
     {
-      print STDERR "warning: missing $macro\n";
+      print STDERR "warning: missing $macro wanted by: @{$needed_macros{$macro}}\n";
     }
 }
