@@ -2434,6 +2434,7 @@ else
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
   done
+  rm -f conftest.*
 fi
 
 
