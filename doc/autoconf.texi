@@ -896,7 +896,17 @@ but it is extremely fragile and error prone to try to parse it.  It is
 suggested to rely upon @samp{--trace} to scan @file{configure.in}.
 
 The @var{format} is a regular string, with new lines if wanted.  It
-defaults to @samp{$f:$l:$n:$@@}.  Some special escapes are recognized:
+defaults to @samp{$f:$l:$n:$@@}.
+
+@item --output=@var{file}
+@itemx -o @var{file}
+Save output (script or trace) to @var{file}.  The file @samp{-} stands
+for the standard output.
+@end table
+
+
+The @var{format} of @samp{--trace} can use the following special
+escapes:
 
 @table @samp
 @item $$
@@ -939,7 +949,7 @@ For instance, to know the list of variables which are substituted:
 
 @example
 @group
-% autoconf -t AC_INIT
+% autoconf -t AC_SUBST
 configure.in:2:AC_SUBST:ECHO_C
 configure.in:2:AC_SUBST:ECHO_N
 configure.in:2:AC_SUBST:ECHO_T
@@ -990,12 +1000,6 @@ AUTOMAKE:::::::automake:::::::$missing_dir
 @i{More traces deleted}
 @end group
 @end example
-
-@item --output=@var{file}
-@itemx -o @var{file}
-Save output (script or trace) to @var{file}.  The file @samp{-} stands
-for the standard output.
-@end table
 
 @node Invoking autoreconf,  , Invoking autoconf, Making configure Scripts
 @section Using @code{autoreconf} to Update @code{configure} Scripts
@@ -4558,9 +4562,23 @@ of a @emph{bad substitution}.
 @subsection Limitations of Usual Tools
 
 The small set of tools you can expect to find on any machine can still
-meet some limitations you should be aware of.
+find some limitations you should be aware of.
 
 @table @code
+@item egrep
+The empty alternative is not portable, use @samp{?} instead. For
+instance with Digital Unix v5.0:
+
+@example
+> printf "foo\n|foo" | egrep '^(|foo|bar)$'
+|foo
+> printf "bar\nbar|" | egrep '^(foo|bar|)$'
+bar|
+> printf "foo\nfoo|\n|bar\nbar" | egrep '^(foo||bar)$'
+foo
+|bar
+@end example
+
 @item grep
 Don't use @samp{grep -s} to suppress output, because @samp{grep -s} on
 System V does not suppress output, only error messages.  Instead,
@@ -4569,7 +4587,8 @@ doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
 
 Don't use multiple regexps with @samp{-e}, as some @code{grep} will only
-honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Instead, use
+honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
+Stardent Vistra SVR4 @code{grep} lacks @samp{-e}...  Instead, use
 alternation and @code{egrep}.
 
 @item sed
@@ -4578,6 +4597,8 @@ and should not contain comments.
 
 @code{sed} input should have reasonably long lines, since some
 @code{sed} have an input buffer limited to 4000 bytes.
+
+Alternation, @samp{\|}, is not portable.
 @end table
 
 
