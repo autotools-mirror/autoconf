@@ -1265,7 +1265,8 @@ AC_DEFUN(AC_FUNC_ALLOCA,
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
-[AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
+[AC_TRY_LINK([#include <alloca.h>],
+  [char *p = (char *) alloca (2 * sizeof (int));],
   ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
 if test $ac_cv_working_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H, 1,
@@ -1768,7 +1769,7 @@ fi
 # AC_FUNC_MMAP
 # ------------
 AC_DEFUN(AC_FUNC_MMAP,
-[AC_CHECK_HEADERS(unistd.h)
+[AC_CHECK_HEADERS(stdlib.h unistd.h sys/stat.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_TRY_RUN(
@@ -1797,12 +1798,20 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 #include <fcntl.h>
 #include <sys/mman.h>
 
+#if HAVE_STDLIB_H
+# include <stdlib.h>
+#else
+char *malloc ();
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+#if HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+
 /* This mess was copied from the GNU getpagesize.h.  */
 #if !HAVE_GETPAGESIZE
-# if HAVE_UNISTD_H
-#  include <unistd.h>
-# endif
-
 /* Assume that all systems that can run configure have sys/param.h.  */
 # if !HAVE_SYS_PARAM_H
 #  define HAVE_SYS_PARAM_H 1
@@ -1838,12 +1847,6 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 
 #endif /* no HAVE_GETPAGESIZE */
 
-#ifdef __cplusplus
-extern "C" { void *malloc(unsigned); }
-#else
-char *malloc();
-#endif
-
 int
 main ()
 {
@@ -1854,7 +1857,7 @@ main ()
   pagesize = getpagesize ();
 
   /* First, make a file with some known garbage in it. */
-  data = malloc (pagesize);
+  data = (char *) malloc (pagesize);
   if (!data)
     exit (1);
   for (i = 0; i < pagesize; ++i)
@@ -1873,7 +1876,7 @@ main ()
   fd = open ("conftestmmap", O_RDWR);
   if (fd < 0)
     exit (1);
-  data2 = malloc (2 * pagesize);
+  data2 = (char *) malloc (2 * pagesize);
   if (!data2)
     exit (1);
   data2 += (pagesize - ((int) data2 & (pagesize - 1))) & (pagesize - 1);
@@ -1889,7 +1892,7 @@ main ()
      some variants of i386 svr4.0.)  */
   for (i = 0; i < pagesize; ++i)
     *(data2 + i) = *(data2 + i) + 1;
-  data3 = malloc (pagesize);
+  data3 = (char *) malloc (pagesize);
   if (!data3)
     exit (1);
   if (read (fd, data3, pagesize) != pagesize)
