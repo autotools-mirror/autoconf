@@ -63,9 +63,6 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 atconfig: $(top_builddir)/config.status
 	cd $(top_builddir) && ./config.status tests/$@
 
-atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
-	cd $(top_builddir) && ./config.status tests/$@
-
 clean-local:
 	test ! -f $(TESTSUITE) || $(SHELL) $(TESTSUITE) --clean
 	rm -f *.tmp
