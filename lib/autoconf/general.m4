@@ -3298,10 +3298,8 @@ AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_LOG |
-dnl Prevent m4 from eating character classes:
-changequote(, )dnl
-  egrep "$1" >/dev/null 2>&1; then
-changequote([, ])dnl
+dnl Quote $1 to prevent m4 from eating character classes
+  egrep "[$1]" >/dev/null 2>&1; then
   m4_default([$3], :)
 m4_ifvanl([$4], [else
   $4])dnl

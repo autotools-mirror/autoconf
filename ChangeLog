@@ -1,3 +1,8 @@
+2000-09-12  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (AC_EGREP_CPP): Use additional quotes instead of
+	changequote.
+
 2000-09-12  Rüdiger Kuhlmann <autoconf-list@ruediger-kuhlmann.de>
 
 	* acgeneral.m4 (AC_ARG_ENABLE,AC_ARG_WIDTH): Add trailing
