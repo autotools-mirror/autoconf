@@ -274,6 +274,13 @@ Writing Macros
 * Quoting::                     Protecting macros from unwanted expansion
 * Dependencies Between Macros::  What to do when macros depend on other macros
 
+Quoting
+
+* Active Characters::           Characters that change the behavior of m4
+* One Macro Call::              Quotation and one macro call
+* Quotation and Nested Macros::  Macro calling macros
+* Quotation Thumb Rule::        One parenthesis, one quote
+
 Dependencies Between Macros
 
 * Prerequisite Macros::         Ensuring required information
@@ -5214,20 +5221,285 @@ macro does.  For example, @code{AC_PATH_X} has internal macros
 @c prevented `expansion' of $1.  Unless it refers to the expansion
 @c of the value of $1?  Anyway, we need a rewrite here...
 
-Macros that are called by other macros are evaluated by @code{m4}
-several times; each evaluation might require another layer of quotes to
-prevent unwanted expansions of macros or @code{m4} builtins, such as
-@samp{define} and @samp{$1}.  Quotes are also required around macro
-arguments that contain commas, since commas separate the arguments from
-each other.  It's a good idea to quote any macro arguments that contain
-newlines or calls to other macros, as well.
+The most common brokenness of existing macros is an improper quotation.
+This section, which users of Autoconf can skip, but which macro writers
+@emph{must} read, first justifies the quotation scheme which was chosen
+for Autoconf, and ends with the thumb rules.  Understanding the former
+helps following the latter.
 
-Autoconf changes the @code{m4} quote characters from the default
-@samp{`} and @samp{'} to @samp{[} and @samp{]}, because many of the
-macros use @samp{`} and @samp{'}, mismatched.  However, in a few places
-the macros need to use brackets (usually in C program text or regular
-expressions).  In those places, just quote properly!  See @ref{Autoconf
-Language}, for some information on quotation.
+@menu
+* Active Characters::           Characters that change the behavior of m4
+* One Macro Call::              Quotation and one macro call
+* Quotation and Nested Macros::  Macros calling macros
+* Quotation Thumb Rule::        One parenthesis, one quote
+@end menu
+
+@node Active Characters, One Macro Call, Quoting, Quoting
+@subsection Active Characters
+
+To fully understand where proper quotation is precious, you first need
+to know what are the special characters in Autoconf: @samp{#} introduces
+a comment inside which no macro expansion is performed, @samp{,}
+separates arguments, @samp{[} and @samp{]} are the quotes themselves,
+and finally @samp{(} and @samp{)} which @code{m4} tries to match by
+pairs.
+
+In order to understand the delicate case of macro calls, we first have
+to present some obvious failures.  Below they are ``obviousified'',
+although you find them in real life, they are usually in disguise.
+
+Comments, introduced by a hash and running up to the newline, are opaque
+tokens to the top level: active characters are turned off, and there is
+no macro expansion:
+
+@example
+# define([def], ine)
+@result{}# define([def], ine)
+@end example
+
+Each time there can be a macro expansion, there is a quotation
+expansion, i.e., one level of quotes is stripped:
+
+@example
+int tab[10];
+@result{}int tab10;
+[int tab[10];]
+@result{}int tab[10];
+@end example
+
+Without this in mind, the reader will hopelessly try to find a means to
+use her macro @code{array}:
+
+@example
+define([array], [int tab[10];])
+array
+@result{}int tab10;
+[array]
+@result{}array
+@end example
+
+@noindent
+How can you correctly output the intended results@footnote{Using
+@code{defn}.}?
+
+
+@node One Macro Call, Quotation and Nested Macros, Active Characters, Quoting
+@subsection One Macro Call
+
+Let's proceed on the interaction between active characters and macros
+with this small macro which just returns its first argument:
+
+@example
+define([car], [$1])
+@end example
+
+@noindent
+The two pairs of quotes above are not part of the arguments of
+@code{define}, rather, they are understood by the top level when it
+tries to find the arguments of @code{define}, therefore it is equivalent
+to write:
+
+@example
+define(car, $1)
+@end example
+
+@noindent
+But, while it is acceptable for a @file{configure.in} to avoid unneeded
+quotes, it is bad practice for Autoconf macros which must both be more
+robust, and advocate the perfect writing.
+
+At the top level, there are only two possible quoting: either you quote,
+or you don't:
+
+@example
+car(foo, bar, baz)
+@result{}foo
+[car(foo, bar, baz)]
+@result{}car(foo, bar, baz)
+@end example
+
+Let's pay attention to the special characters:
+
+@example
+car(#)
+@error{}EOF in argument list
+@end example
+
+The closing parenthesis is hidden in the comment; with a hypothetical
+quoting, the top level understood this:
+
+@example
+car([#)]
+@end example
+
+@noindent
+Proper quotation, of course, fixes the problem:
+
+@example
+car([#])
+@result{}#
+@end example
+
+The reader will easily understand the following examples:
+
+@example
+car(foo, bar)
+@result{}foo
+car([foo, bar])
+@result{}foo, bar
+car((foo, bar))
+@result{}(foo, bar)
+car([(foo], [bar)])
+@result{}(foo
+car([], [])
+@result{}
+car([[]], [[]])
+@result{}[]
+@end example
+
+With this in mind, we can explore the cases where macros invoke
+macros...
+
+
+@node Quotation and Nested Macros, Quotation Thumb Rule, One Macro Call, Quoting
+@subsection Quotation and Nested Macros
+
+The examples below use the following macros:
+
+@example
+define([car], [$1])
+define([active], [ACT, IVE])
+define([array], [int tab[10]])
+@end example
+
+Each additional embedded macro call introduces other possible
+interesting quotations:
+
+@example
+car(active)
+@result{}ACT
+car([active])
+@result{}ACT, IVE
+car([[active]])
+@result{}active
+@end example
+
+In the first case, the top level looks for the arguments of @code{car},
+and finds @samp{active}.  Because @code{m4} evaluates its arguments
+before applying the macro, @samp{active} is expanded, what results in
+
+@example
+car(ACT, IVE)
+@result{}ACT
+@end example
+
+@noindent
+In the second case, the top level gives @samp{active} as first and only
+argument of @code{car}, what results in
+
+@example
+active
+@result{}ACT, IVE
+@end example
+
+@noindent
+i.e., the argument is evaluated @emph{after} the macro which invokes it.
+In the third case, @code{car} receives @samp{[active]}, what results in
+
+@example
+[active]
+@result{}active
+@end example
+
+@noindent
+exactly as we already saw above.
+
+The example above, applied to a more realistic example, gives:
+
+@example
+car(int tab[10];)
+@result{}int tab10;
+car([int tab[10];])
+@result{}int tab10;
+car([[int tab[10];]])
+@result{}int tab[10];
+@end example
+
+@noindent
+Huh?  The first case is easily understood, but why is the second wrong,
+and the third right?  Just apply the evaluation rules to understand:
+
+@example
+car([int tab[10];])
+@result{}int tab[10];
+@result{}int tab10;
+@end example
+
+As the author of the Autoconf macro @code{car} you then consider it is
+incorrect to require that your users have to double quote the arguments
+of @code{car}, so you ``fix'' your macro.  Let's call it @code{qar} for
+quoted car:
+
+@example
+define([qar], [[$1]])
+@end example
+
+@noindent
+and check that @code{qar} is properly fixed:
+
+@example
+qar([int tab[10];])
+@result{}int tab[10];
+@end example
+
+@noindent
+Ahhh!  That's much better.
+
+But note what you've done: now that the arguments are literal strings,
+if the user wants to use the results of expansions as arguments, she has
+to leave an @emph{unquoted} macro call:
+
+@example
+qar(active)
+@result{}ACT
+@end example
+
+@noindent
+while she wanted to reproduce what she used to do with @code{car}:
+
+@example
+car([active])
+@result{}ACT, IVE
+@end example
+
+@noindent
+Worse yet: she wants to use a macro which produces a set of @code{cpp}
+macros:
+
+@example
+define([my_includes], [#include <stdio.h>])
+car([my_includes])
+@result{}#include <stdio.h>
+qar(my_includes)
+@error{}EOF in argument list
+@end example
+
+This macro, @code{qar}, because it double quotes its arguments, forces
+its users to leave their macro calls unquoted, which is dangerous.
+Also, because it behaves differently from the other macro, it's an
+exception, which we are avoiding in Autoconf.
+
+@node Quotation Thumb Rule,  , Quotation and Nested Macros, Quoting
+@subsection Quotation Thumb Rule
+
+To conclude, the quotation thumb rules are:
+
+@center @emph{One pair of quotes per pair of parentheses.}
+
+Never over-quote, never under-quote, in particular in the definition of
+macros.  In the few places where the macros need to use brackets
+(usually in C program text or regular expressions), quote properly
+@emph{the arguments}!
 
 It is frequent to read Autoconf programs with snippets like:
 
