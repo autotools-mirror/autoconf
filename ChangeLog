@@ -1,3 +1,15 @@
+2001-09-18  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Particular Functions): AC_FUNC_GETPGRP
+	now merely checks whether it is an error to pass an argument
+	to getpgrp.
+
+	* lib/autoconf/functions.m4 (_AC_FUNC_GETPGRP_TEST): Remove.
+	(AC_FUNC_GETPGRP): Don't bother with a runtime test.  Just check
+	whether it is a (compile-time) error to pass an argument to
+	getpgrp.  This simpler test supports the revised documentation,
+	and is all that AC_FUNC_GETPGRP's users really need.
+
 2001-09-18  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Make) <$<>: New.
