@@ -1324,7 +1324,10 @@ AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
 AC_REQUIRE([AC_CYGWIN])dnl
 AC_CACHE_CHECK([for Fortran 77 libraries],
                 ac_cv_flibs,
-[AC_LANG_PUSH(Fortran 77)
+[if test "x$FLIBS" != "x"; then
+  ac_cv_flibs="$FLIBS" # Let the user override the test.
+else
+AC_LANG_PUSH(Fortran 77)
 
 # This is the simplest of all Fortran 77 programs.
 cat >conftest.$ac_ext <<EOF
@@ -1458,7 +1461,9 @@ ac_ld_run_path=`echo $ac_link_output |
                 sed -n -e 's%^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$%\1%p'`
 test "x$ac_ld_run_path" != x && FLIBS="$ac_ld_run_path $FLIBS"
 ac_cv_flibs=$FLIBS
+fi # test "x$FLIBS" = "x"
 ])
+FLIBS="$ac_cv_flibs"
 AC_SUBST(FLIBS)
 ])# AC_F77_LIBRARY_LDFLAGS
 

@@ -1,3 +1,9 @@
+2000-06-08  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Don't override FLIBS if
+	specified by the user.
+	Fix a bug: use the cached value to set FLIBS.
+
 2000-06-07  Dave Love  <fx@gnu.org>
 
 	* aclang.m4 (AC_PROG_F77): Check for f95 and fc too.
