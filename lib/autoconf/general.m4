@@ -1994,8 +1994,6 @@ It was created by configure ifset([AC_PACKAGE_STRING],
 define([_AC_INIT_PREPARE],
 [AC_DIVERT_PUSH([INIT_PREPARE])dnl
 
-trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
-
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
 # Also quote any args containing shell meta-characters.
@@ -2021,6 +2019,21 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 done
 
 _AC_INIT_PREPARE_FDS
+
+# When interrupted or exit'd, cleanup temporary files, and complete
+# config.log.
+trap '
+  exit_status=$?
+  test "$ac_signal" != 0 &&
+    echo "configure: caught signal $ac_signal" >&AC_FD_LOG
+  echo "configure: exit $exit_status" >&AC_FD_LOG
+  rm -rf conftest* confdefs* core core.* *.core $ac_clean_files &&
+    exit $exit_status
+     ' 0
+for ac_signal in 1 2 13 15; do
+  trap 'ac_status=$?; ac_signal='$ac_signal'; exit $ac_status' $ac_signal
+done
+ac_signal=0
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -rf conftest* confdefs.h
@@ -2863,13 +2876,16 @@ _AC_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 # AC_MSG_WARN(PROBLEM)
 # --------------------
 define([AC_MSG_WARN],
-[_AC_ECHO([configure: WARNING: $1], 2)])
+[_AC_ECHO([configure:__oline__: WARNING: $1], AC_FD_LOG)
+_AC_ECHO([configure: WARNING: $1], 2)])
 
 
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
 define([AC_MSG_ERROR],
-[{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
+[{ _AC_ECHO([configure:__oline__: error: $1], AC_FD_LOG)
+  _AC_ECHO([configure: error: $1], 2)
+  exit m4_default([$2], 1); }])
 
 
 # AU::AC_CHECKING(FEATURE)
@@ -4432,9 +4448,7 @@ ifval([$1],
       [AC_CONFIG_FILES([$1])])dnl
 ifval([$2$3],
       [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
-trap '' 1 2 15
 AC_CACHE_SAVE
-trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
