@@ -3766,6 +3766,11 @@ When defining your own macros, you may now use @code{AC_DEFUN} instead of
 @code{AC_PROVIDE}.  There's no harm in continuing to use the older way;
 it's just less convenient.  @xref{Macro Format}.
 
+You probably looked at the macros that came with Autoconf as a guide for
+how to do things.  It would be a good idea to take a look at the new
+versions of them, as the style is somewhat improved and they take
+advantage of some new features.
+
 If you were doing tricky things with undocumented Autoconf internals
 (diversions, macros, variables), check whether you need to change
 anything to account for changes that have been made.  Perhaps you can
