@@ -70,7 +70,8 @@ done
 
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
 test -r acconfig.h && TEMPLATES="${TEMPLATES} acconfig.h"
-MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4"
+MACROFILES="${AC_MACRODIR}/acgeneral.m4 ${AC_MACRODIR}/acspecific.m4 \
+${AC_MACRODIR}/acoldnames.m4"
 test -r ${AC_MACRODIR}/aclocal.m4 \
    && MACROFILES="${MACROFILES} ${AC_MACRODIR}/aclocal.m4"
 test -r aclocal.m4 && MACROFILES="${MACROFILES} aclocal.m4"
@@ -95,26 +96,30 @@ frob='define([AC_DEFINE],[#
 define([AC_SIZEOF_TYPE],[#
 @@@types="$types,$1"@@@
 ])dnl
-define([AC_HAVE_FUNCS],[#
+define([AC_CHECK_FUNCS],[#
 @@@funcs="$funcs $1"@@@
 ])dnl
-define([AC_HAVE_HEADERS],[#
+define([AC_CHECK_HEADERS],[#
 @@@headers="$headers $1"@@@
 ])dnl
 define([AC_CONFIG_HEADER],[#
 @@@config_h=$1@@@
 ])dnl
-define([AC_HAVE_LIBRARY], [#
+define([AC_CHECK_LIB], [#
 changequote(/,/)dnl
 define(/libname/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 changequote([,])dnl
+  ifelse([$2], , [
 @@@libs="$libs libname"@@@
+], [
 # If it was found, we do:
 $2
 # If it was not found, we do:
 $3
+])
 ])dnl
+dnl
 '
 
 config_h=config.h
