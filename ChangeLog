@@ -1,3 +1,22 @@
+2005-01-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in,
+	bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in,
+	bin/ifnames.in, tests/mktests.sh: Update copyright date to 2005.
+
+	Patch from Roger Leigh (with some minor changes) as follows:
+	* NEWS: New macros AC_PROG_CC_C89, AC_PROG_CC_C99.
+	Resurrect AC_PROG_CC_STDC.
+	* doc/autoconf.texi (C Compiler): Add AC_PROG_CC_STDC,
+	AC_PROG_CC_C89, AC_PROG_CC_C99.
+	(Obsolete Macros): Remove AC_PROG_CC_STDC; it's no longer obsolete.
+	* lib/autoconf/c.m4 (_AC_PROG_CC_C89, _AC_PROG_CC_C99, AC_PROG_CC_C89,
+	AC_PROG_CC_C99): New macros.
+	(AC_PROG_CC_STDC): Use them.
+	(_AC_PROG_CC_STDC): Remove.
+	(AC_C_PROTOTYPES): Use ac_cv_prog_cc_c89, not ac_cv_prog_cc_stdc.
+	* THANKS: Add Roger Leigh.
+
 2004-12-30  Noah Misch  <noah@cs.caltech.edu>
 
 	* bin/autoreconf.in (autoreconf_current_directory):  AM_INIT_AUTOMAKE
@@ -7876,7 +7895,7 @@
 
 -----
 
-Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 
