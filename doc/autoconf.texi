@@ -481,8 +481,8 @@ current @sc{cvs} version can be sent for review to the
 Because of its mission, Autoconf includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@href{http://cryp.to/autoconf-archive/, Autoconf Macro
-Repository}, which is kindly run by @email{simons@@computer.org,
+@href{http://www.gnu.org/software/ac-archive/, Autoconf Macro
+Archive}, which is kindly run by @email{simons@@computer.org,
 Peter Simons}.
 
 
@@ -624,8 +624,8 @@ find the entire book on-line at
 
 The @uref{http://sources.redhat.com/autoconf/,Autoconf Developer Page}
 maintains links to a number of Autoconf/Automake tutorials online, and
-also links to the @uref{http://cryp.to/autoconf-archive/,Autoconf Macro
-Archive}.
+also links to the @uref{http://www.gnu.org/software/ac-archive/,
+Autoconf Macro Archive}.
 
 @end itemize
 

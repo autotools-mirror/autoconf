@@ -1,3 +1,8 @@
+2001-05-29  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* doc/autoconf.texi (Introduction, Pointers): Update the Autoconf
+	Macro Archive URL.
+
 2001-05-23  Pavel Roskin  <proski@gnu.org>
 
 	* aclang.m4 (AC_PROG_CPP): Use `break' instead of `break 2' since
