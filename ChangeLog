@@ -1,5 +1,15 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Various Texinfo adjustments.
+	(Specifying Names): When describing the system triplets, use the
+	same names as the shell variables.
+	(System Type Variables): Delete, merge its content into...
+	(Canonicalizing): here.
+	Clarify the difference between the `foo_target' and `foo'
+	variables.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS, _AC_OUTPUT_CONFIG_STATUS):
 	s/echo | sed/expr/.
 

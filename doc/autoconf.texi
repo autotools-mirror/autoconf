@@ -2,15 +2,12 @@
 @c %**start of header
 @setfilename autoconf.info
 @settitle Autoconf
-@c For double-sided printing, uncomment:
-@c @setchapternewpage odd
-@c %**end of header
+
+@finalout
+@setchapternewpage odd
+@setcontentsaftertitlepage
 
 @include version.texi
-
-@iftex
-@finalout
-@end iftex
 
 @c A simple macro for optional variables.
 @macro ovar{varname}
@@ -75,7 +72,7 @@ approved by the Foundation.
 @subtitle Creating Automatic Configuration Scripts
 @subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
 @subtitle @value{UPDATED}
-@author by David MacKenzie and Ben Elliston
+@author David MacKenzie and Ben Elliston
 @c I think I've rewritten all of Noah and Roland's contributions by now.
 
 @page
@@ -295,7 +292,6 @@ Manual Configuration
 
 * Specifying Names::            Specifying the system type
 * Canonicalizing::              Getting the canonical system type
-* System Type Variables::       Variables containing the system type
 * Using System Type::           What to do with the system type
 
 Site Configuration
@@ -4889,7 +4885,7 @@ exec /bin/sh $0
 @end example
 
 @noindent
-when run with FOO=foo in the environment, these shells will print
+when run with @samp{FOO=foo} in the environment, these shells will print
 alternately @samp{foo} and @samp{bar}, although it should only print
 @samp{foo} and then a sequence of @samp{bar}s.
 
@@ -6478,7 +6474,6 @@ Autoconf provides a uniform method for handling unguessable features.
 @menu
 * Specifying Names::            Specifying the system type
 * Canonicalizing::              Getting the canonical system type
-* System Type Variables::       Variables containing the system type
 * Using System Type::           What to do with the system type
 @end menu
 
@@ -6487,19 +6482,9 @@ Autoconf provides a uniform method for handling unguessable features.
 
 Like other @sc{gnu} @code{configure} scripts, Autoconf-generated
 @code{configure} scripts can make decisions based on a canonical name
-for the system type, which has the form:
-
-@example
-@var{cpu}-@var{company}-@var{system}
-@end example
-
-@noindent
-where @var{system} can have one of these forms:
-
-@example
-@var{os}
-@var{kernel}-@var{os}
-@end example
+for the system type, which has the form
+@samp{@var{cpu}-@var{vendor}-@var{os}}, where @var{os} can be
+@samp{@var{system}} or @samp{@var{kernel}-@var{system}}
 
 @code{configure} can usually guess the canonical name for the type of
 system it's running on.  To do so it runs a script called
@@ -6546,90 +6531,88 @@ example, @samp{decstation} can be given on the command line instead of
 @samp{mips-dec-ultrix4.2}.  @code{configure} runs a script called
 @code{config.sub} to canonicalize system type aliases.
 
-@node Canonicalizing, System Type Variables, Specifying Names, Manual Configuration
+@node Canonicalizing, Using System Type, Specifying Names, Manual Configuration
 @section Getting the Canonical System Type
 
 The following macros make the system type available to @code{configure}
-scripts.  They run the shell script @code{config.guess} to determine any
-values for the host, target, and build types that they need and the user
-did not specify on the command line.  They run @code{config.sub} to
-canonicalize any aliases the user gave.  If you use these macros, you
-must distribute those two shell scripts along with your source code.
-@xref{Output}, for information about the @code{AC_CONFIG_AUX_DIR} macro
-which you can use to control which directory @code{configure} looks for
-those scripts in.  If you do not use either of these macros,
-@code{configure} ignores any @option{--host}, @option{--target}, and
-@option{--build} options given to it.
+scripts.
+
+@ovindex build_alias
+@ovindex host_alias
+@ovindex target_alias
+
+The variables @samp{build_alias}, @samp{host_alias}, and
+@samp{target_alias} are always exactly the arguments of @samp{--build},
+@samp{--host}, and @samp{--target}, in particular they are left empty if
+the user did not use them, even if the corresponding @code{AC_CANONICAL}
+macro was run.  Any configure script may use these variables anywhere.
+These are the variables which should be used when in interaction with
+the user.
+
+If you need to recognize some special environments based on their system
+type, run the following macros to get canonical system names.  These
+variables are not set before the macro call.
+
+If you use these macros, you must distribute @code{config.guess} and
+@code{config.sub} along with your source code.  @xref{Output}, for
+information about the @code{AC_CONFIG_AUX_DIR} macro which you can use
+to control which directory @code{configure} looks for those scripts in.
 
 
 @defmac AC_CANONICAL_BUILD
 @maindex CANONICAL_BUILD
-Compute the @samp{build} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @option{--build},
-the build system is guessed by running @code{config.guess}.
+@ovindex build
+@ovindex build_cpu
+@ovindex build_vendor
+@ovindex build_os
+Compute the canonical build system type variable, @code{build}, and its
+three individual parts @code{build_cpu}, @code{build_vendor}, and
+@code{build_os}.
+
+If @samp{--build} was specified, then @code{build} is the
+canonicalization of @code{build_alias} by @command{config.sub},
+otherwise it is determined by the shell script @code{config.guess}.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
 @maindex CANONICAL_HOST
-Compute the @samp{host} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @option{--host}, the
-host system is the build system.
+@ovindex host
+@ovindex host_cpu
+@ovindex host_vendor
+@ovindex host_os
+Compute the canonical host system type variable, @code{host}, and its
+three individual parts @code{host_cpu}, @code{host_vendor}, and
+@code{host_os}.
+
+If @samp{--host} was specified, then @code{host} is the
+canonicalization of @code{host_alias} by @command{config.sub},
+otherwise it defaults to @code{build}.
 @end defmac
 
 @defmac AC_CANONICAL_TARGET
 @maindex CANONICAL_TARGET
-Compute the @samp{target} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @option{--target},
-the target system is the host system.
+@ovindex target
+@ovindex target_cpu
+@ovindex target_vendor
+@ovindex target_os
+Compute the canonical target system type variable, @code{target}, and its
+three individual parts @code{target_cpu}, @code{target_vendor}, and
+@code{target_os}.
 
-This macro only makes sense for compilers, debuggers etc. which might
-run on a machine, but work on binaries from another machine.
+If @samp{--target} was specified, then @code{target} is the
+canonicalization of @code{target_alias} by @command{config.sub},
+otherwise it defaults to @code{host}.
 @end defmac
 
-@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
+@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@ovar{cmd})
 @maindex VALIDATE_CACHED_SYSTEM_TUPLE
 If the cache file is inconsistent with the current host, target and
 build system types, execute @var{cmd} or print a default error message.
 @end defmac
 
-@node System Type Variables, Using System Type, Canonicalizing, Manual Configuration
-@section System Type Variables
-
-After calling @code{AC_CANONICAL_BUILD}, the following @samp{build}
-output variables contain the build system type information, likewise for
-@code{AC_CANONICAL_HOST} and @code{AC_CANONICAL_TARGET}.
-
-@table @code
-@ovindex build
-@ovindex host
-@ovindex target
-@item @code{build}, @code{host}, @code{target}
-the canonical system names;
-
-@item @code{build_alias}, @code{host_alias}, @code{target_alias}
-@ovindex build_alias
-@ovindex host_alias
-@ovindex target_alias
-the names the user specified, or the canonical names if
-@code{config.guess} was used;
-
-@item @code{build_cpu}, @code{build_vendor}, @code{build_os}
-@itemx @code{host_cpu}, @code{host_vendor}, @code{host_os}
-@itemx @code{target_cpu}, @code{target_vendor}, @code{target_os}
-@ovindex build_cpu
-@ovindex host_cpu
-@ovindex target_cpu
-@ovindex build_vendor
-@ovindex host_vendor
-@ovindex target_vendor
-@ovindex build_os
-@ovindex host_os
-@ovindex target_os
-the individual parts of the canonical names (for convenience).
-@end table
 
 
-@node Using System Type,  , System Type Variables, Manual Configuration
+@node Using System Type,  , Canonicalizing, Manual Configuration
 @section Using the System Type
 
 How do you use a canonical system type?  Usually, you use it in one or
@@ -6648,6 +6631,7 @@ i960-*-bout) obj_format=bout ;;
 esac
 @end example
 
+@noindent
 and in @file{configure.in}, use:
 
 @example
@@ -7443,8 +7427,8 @@ This macro is obsolete; it does nothing.
 @defmac AC_CANONICAL_SYSTEM
 @maindex CANONICAL_SYSTEM
 Determine the system type and set output variables to the names of the
-canonical system types.  @xref{System Type Variables}, for details about
-the variables this macro sets.
+canonical system types.  @xref{Canonicalizing}, for details about the
+variables this macro sets.
 
 The user is encouraged to explicitly use either
 @code{AC_CANONICAL_BUILD}, or @code{AC_CANONICAL_HOST}, or
