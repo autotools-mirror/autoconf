@@ -1,5 +1,10 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (_AC_FUNC_VFORK): Really use
+	AC_RUN_IFELSE.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: More AC_MSG_FAILURE promotion.
 	* lib/autoconf/fortran.m4 (_AC_F77_NAME_MANGLING):
 	Die when a simple Fortran program cannot be compiled.

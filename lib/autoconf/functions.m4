@@ -1748,7 +1748,7 @@ AC_DEFUN([_AC_FUNC_FORK],
 # -------------
 AC_DEFUN([_AC_FUNC_VFORK],
 [AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
-[AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1840,7 +1840,7 @@ main ()
 	 || fstat(fileno(stdout), &st) != 0
 	 );
   }
-}],
+}]])],
             [ac_cv_func_vfork_works=yes],
             [ac_cv_func_vfork_works=no],
             [ac_cv_func_vfork_works=cross])])
