@@ -80,6 +80,11 @@ the macro which allows to choose a regex engine.
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
 
+** AC_PROG_CC_STDC
+Well, back onto this one :( See Peter for very useful comments on the
+technology.  Should we make this a new language?  AC_LANG(ISO C).  It
+would be great to introduce AC_LANG_COMPILER in this release too.
+
 ------------------------------------------------------------------------------
 
 * Automake

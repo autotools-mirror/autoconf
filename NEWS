@@ -1,5 +1,12 @@
 * Major changes in Autoconf 2.14a                       -*- outline -*-
 
+** Lots of bug fixes
+Way too many for us to spell them out.  Check out ChangeLog if you
+really want to know more.
+
+** Improved documentation
+In particular portability issues are better covered.
+
 ** Use of Automake
 All the standard GNU Makefile targets are supported.  The layout has
 changed: m4/ holds the m4 extensions Autoconf needs for its
@@ -19,16 +26,24 @@ For autoconf, autoreconf, autoupdate, autoheader, autoscan and ifnames.
   Specify what category of warnings should be enabled.
 
 ** autoupdate
-autoupdate is now much more powerful, and is able to provide the glue
-code which might be needed to move from an old macro to its newer
+autoupdate is much more powerful, and is able to provide the glue code
+which might be needed to move from an old macro to its newer
 equivalent.
+
+You are strongly encouraged to use it both to modernize your
+`configure.in', but also your .m4 extension files.
 
 ** autoheader
 The internal machinery of autoheader has completely changed.  As a
 result, using an `acconfig.h' should be considered as obsoleted, and
 you are encouraged to get rid of it using the AH macros.
 
+** autoreconf
+Deep overhaul.
+
 ** Fortran 77 compilers
+Globally, the support for Fortran 77 is considerably improved.
+
 Support for automatically determining a Fortran 77 compilers
 name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
 provided to wrap C/C++ identifiers, thus making it easier and more
@@ -36,7 +51,7 @@ transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
 call C/C++ routines.  See the Texinfo documentation for details.
 
 ** Test suite
-The testsuite no longer uses DejaGNU.  It should be easy to submit
+The test suite no longer uses DejaGNU.  It should be easy to submit
 test cases in this new frame work.
 
 ** configure
@@ -89,9 +104,8 @@ test cases in this new frame work.
 - AC_COPYRIGHT
   Specify additional copyright information.
 
-- AC_PACKAGE
-  Identify the configure.in's package.
-
+- AC_INIT
+  Now expects the identity of the package as argument.
 
 ** General changes.
 - Uniform quotation
@@ -105,6 +119,10 @@ test cases in this new frame work.
 ** Setup Macros
 - AC_ARG_VAR
   Document and ask for the registration of an envvar.
+
+- AC_CONFIG_SRCDIR
+  Specifies the file which `configure' should look for when trying to
+  find the source tree (used to be handled by AC_INIT).
 
 - AC_CONFIG_COMMANDS
   To add new actions to config.status.  Should be used instead of
