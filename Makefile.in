@@ -112,14 +112,14 @@ info: autoconf.info @standards_info@ INSTALL
 
 # Use --no-split to avoid creating filenames > 14 chars.
 autoconf.info: autoconf.texi install.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --no-split --output=$@
+	$(MAKEINFO) -I$(srcdir) --no-split --output=$@ $(srcdir)/autoconf.texi
 
 INSTALL: install.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/install.texi --output=$@ \
-	--no-headers --no-validate
+	$(MAKEINFO) -I$(srcdir) --output=$@ \
+	--no-headers --no-validate $(srcdir)/install.texi
 
 standards.info: standards.texi make-stds.texi
-	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --no-split --output=$@
+	$(MAKEINFO) -I$(srcdir) --no-split --output=$@ $(srcdir)/standards.texi
 
 dvi: autoconf.dvi @standards_dvi@
 
