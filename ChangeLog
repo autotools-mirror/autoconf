@@ -1,3 +1,10 @@
+1999-09-22  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Clear the CCOPTS environment variable before
+	invoking the C compiler on HP-UX. This is necessary to guarantee
+	that the test program is compiled correctly. Reported by Dietmar
+	P. Schindler <schd@mra.man.de>.
+
 1999-09-22  Linas Vepstas  <linas@linas.org>
 
 	* config.guess: Add OS/390 match pattern.
