@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acoldnames.m4: Remove the obsolete comments.  The technology is
+	now detailed in `autoupdate'.
+	Quote the names being defined.
+	Formatting changes.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_DEFUNCT): Remove.
 	(AC_RSH, AC_UNISTD_H, AC_USG, AC_MEMORY_H, AC_DIR_HEADER,
 	AC_INT_16_BITS, AC_LONG_64_BITS): They're alive!...
