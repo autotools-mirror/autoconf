@@ -4978,6 +4978,21 @@ yields
 
 @noindent
 Removing the lines with solitary backslashes solves the problem.
+
+@item Don't compile several files at once if output matters to you
+Some compilers, such as the HP's, reports the name of the file it is
+compiling @emph{when} they are several.  For instance:
+
+@example
+$ @kbd{cc a.c b.c}
+a.c:
+b.c:
+@end example
+
+@noindent
+This can cause problems if you observe the output of the compiler to
+detect failures.  Invoking @samp{cc -c a.c -o a.o; cc -c b.c -o b.o; cc
+a.o b.o -o c} solves the issue.
 @end table
 
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
