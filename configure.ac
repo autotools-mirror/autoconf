@@ -1,3 +1,4 @@
+#                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
 AC_INIT(GNU Autoconf, 2.50d, bug-autoconf@gnu.org)
@@ -50,8 +51,10 @@ AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE)
 AC_SUBST(VERSION)
 
-AC_OUTPUT(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
-          tests/Makefile tests/atconfig)
+AC_CONFIG_FILES(Makefile m4/Makefile man/Makefile doc/Makefile config/Makefile
+                tests/Makefile tests/atconfig)
+
+AC_OUTPUT
 
 # Report the state of this version of Autoconf if this is a beta.
 case AC_PACKAGE_VERSION in

@@ -76,8 +76,8 @@ man_aux = autoconf.x autoreconf.x autoheader.x autoupdate.x ifnames.x autoscan.x
 EXTRA_DIST = $(man_MANS) $(man_aux) common.x
 MAINTAINERCLEANFILES = $(man_MANS)
 
-# Depend on configure.in to get version number changes.
-common_dep = $(top_srcdir)/configure.in $(srcdir)/common.x
+# Depend on configure.ac to get version number changes.
+common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 
 SUFFIXES = .x .1
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -96,7 +96,7 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .1 .x
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu man/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)

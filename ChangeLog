@@ -1,5 +1,10 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	* configure.in: Rename as...
+	* configure.ac: this.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am (INSTALL.txt): Don't use $@ and $< in non suffix
 	rules.
 	From Marc Espie.

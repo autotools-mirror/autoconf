@@ -133,7 +133,7 @@ DATA =  $(pkgdata_DATA)
 
 DIST_COMMON =  README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 configure \
-configure.in
+configure.ac
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -143,7 +143,7 @@ GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .m4 .m4f
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
@@ -151,9 +151,9 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-config.status: $(srcdir)/configure.in $(CONFIG_STATUS_DEPENDENCIES)
+config.status: $(srcdir)/configure.ac $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
 install-binSCRIPTS: $(bin_SCRIPTS)
@@ -429,12 +429,12 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # - acversion.m4 needs to be updated only once, since it depends on
-#   configure.in, not on the results of a 'configure' run.
-# - It is guaranteed (with GNU Make) that when the version in configure.in
+#   configure.ac, not on the results of a 'configure' run.
+# - It is guaranteed (with GNU Make) that when the version in configure.ac
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
-$(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
+$(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.ac
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
 	mv acversion.tm4 $(srcdir)/acversion.m4
 INSTALL.txt: $(top_srcdir)/doc/install.texi
@@ -454,37 +454,37 @@ install-data-hook: INSTALL.txt
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
 
-autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.in
+autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp
 	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
 	$(move_if_change) autoconf.tmp autoconf
 
-autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.in
+autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.ac
 	rm -f autoheader autoheader.tmp
 	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
 	chmod +x autoheader.tmp
 	$(move_if_change) autoheader.tmp autoheader
 
-autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.in
+autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.ac
 	rm -f autoreconf autoreconf.tmp
 	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
 	chmod +x autoreconf.tmp
 	$(move_if_change) autoreconf.tmp autoreconf
 
-autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.in
+autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.ac
 	rm -f autoupdate autoupdate.tmp
 	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
 	$(move_if_change) autoupdate.tmp autoupdate
 
-ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.in
+ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.ac
 	rm -f ifnames ifnames.tmp
 	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
 	chmod +x ifnames.tmp
 	$(move_if_change) ifnames.tmp ifnames
 
-autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
+autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.ac
 	rm -f autoscan autoscan.tmp
 	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
 	chmod +x autoscan.tmp

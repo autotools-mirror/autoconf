@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.50c                       -*- outline -*-
+* Major changes in Autoconf 2.50d                       -*- outline -*-
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs
@@ -51,7 +51,7 @@
 - AC_F77_DUMMY_MAIN, AC_F77_MAIN: new macros to detect whether
   a main-like routine is required/possible when linking C/C++ with
   Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
-[2.50b]
+[2.50][2.50a][2.50b][2.50c]
 
 * Major changes in Autoconf 2.50
 

@@ -71,12 +71,12 @@ move_if_change = $(top_srcdir)/config/move-if-change
 ## acversion.m4.  ##
 
 # - acversion.m4 needs to be updated only once, since it depends on
-#   configure.in, not on the results of a 'configure' run.
-# - It is guaranteed (with GNU Make) that when the version in configure.in
+#   configure.ac, not on the results of a 'configure' run.
+# - It is guaranteed (with GNU Make) that when the version in configure.ac
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
-$(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
+$(srcdir)/acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.ac
 	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
 	mv acversion.tm4 $(srcdir)/acversion.m4
 
@@ -128,42 +128,42 @@ edit = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
 
-## All the scripts below depend on configure.in so that they are rebuilt
+## All the scripts below depend on configure.ac so that they are rebuilt
 ## when the Autoconf version changes. Unfortunately, suffix rules cannot
 ## have additional dependencies, so we have to use explicit rules for
 ## every script.
 
-autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.in
+autoconf: $(srcdir)/autoconf.in $(srcdir)/configure.ac
 	rm -f autoconf autoconf.tmp
 	$(edit) $(srcdir)/autoconf.in >autoconf.tmp
 	chmod +x autoconf.tmp
 	$(move_if_change) autoconf.tmp autoconf
 
-autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.in
+autoheader: $(srcdir)/autoheader.in $(srcdir)/configure.ac
 	rm -f autoheader autoheader.tmp
 	$(edit) $(srcdir)/autoheader.in >autoheader.tmp
 	chmod +x autoheader.tmp
 	$(move_if_change) autoheader.tmp autoheader
 
-autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.in
+autoreconf: $(srcdir)/autoreconf.in $(srcdir)/configure.ac
 	rm -f autoreconf autoreconf.tmp
 	$(edit) $(srcdir)/autoreconf.in >autoreconf.tmp
 	chmod +x autoreconf.tmp
 	$(move_if_change) autoreconf.tmp autoreconf
 
-autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.in
+autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.ac
 	rm -f autoupdate autoupdate.tmp
 	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
 	$(move_if_change) autoupdate.tmp autoupdate
 
-ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.in
+ifnames: $(srcdir)/ifnames.in $(srcdir)/configure.ac
 	rm -f ifnames ifnames.tmp
 	$(edit) $(srcdir)/ifnames.in >ifnames.tmp
 	chmod +x ifnames.tmp
 	$(move_if_change) ifnames.tmp ifnames
 
-autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.in
+autoscan: $(srcdir)/autoscan.in $(srcdir)/configure.ac
 	rm -f autoscan autoscan.tmp
 	$(edit) $(srcdir)/autoscan.in >autoscan.tmp
 	chmod +x autoscan.tmp
