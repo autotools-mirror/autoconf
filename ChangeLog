@@ -1,3 +1,7 @@
+2000-07-17  Martin Wilck  <martin@tropos.de>
+
+	* autoupdate.sh (autoconf): s,$updated,$tmp/updated,.
+
 2000-07-17  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Configuration Actions): Explain the
