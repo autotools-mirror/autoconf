@@ -3370,12 +3370,12 @@ rm -f conftest*
 ## ------------------ ##
 
 
-# AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------------------
+# _AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ---------------------------------------------------------------------
 # Try to compile PROGRAM.
-AC_DEFUN([AC_COMPILE_IFELSE],
-[AC_LANG_COMPILER_REQUIRE()dnl
-m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+# This macro can be used during the selection of a compiler.
+define([_AC_COMPILE_IFELSE],
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
@@ -3384,7 +3384,17 @@ else
 m4_ifvanl([$3],[  $3])dnl
 fi
 rm -f conftest.$ac_objext ifval([$1], [conftest.$ac_ext])[]dnl
-])# AC_COMPILE_IFELSE
+])# _AC_COMPILE_IFELSE
+
+
+# AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------------------
+# Try to compile PROGRAM.  Requires that the compiler for the current
+# language was checked for, hence do not use this macro in macros looking
+# for a compiler.
+AC_DEFUN([AC_COMPILE_IFELSE],
+[AC_LANG_COMPILER_REQUIRE()dnl
+_AC_COMPILE_IFELSE($@)])
 
 
 # AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
@@ -3400,12 +3410,12 @@ AC_DEFUN([AC_TRY_COMPILE],
 ## --------------------- ##
 
 
-# AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# -----------------------------------------------------------------
+# _AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ------------------------------------------------------------------
 # Try to link PROGRAM.
-AC_DEFUN([AC_LINK_IFELSE],
-[AC_LANG_COMPILER_REQUIRE()dnl
-m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+# This macro can be used during the selection of a compiler.
+define([_AC_LINK_IFELSE],
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
@@ -3415,7 +3425,17 @@ m4_ifvanl([$3], [  $3])dnl
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
                                                    [conftest.$ac_ext])[]dnl
-])# AC_LINK_IFELSE
+])# _AC_LINK_IFELSE
+
+
+# AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# -----------------------------------------------------------------
+# Try to link PROGRAM.  Requires that the compiler for the current
+# language was checked for, hence do not use this macro in macros looking
+# for a compiler.
+AC_DEFUN([AC_LINK_IFELSE],
+[AC_LANG_COMPILER_REQUIRE()dnl
+_AC_LINK_IFELSE($@)])
 
 
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
@@ -3448,12 +3468,12 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 ## -------------------------------- ##
 
 
-# AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-# -----------------------------------------------------------
+# _AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ------------------------------------------------------------
 # Compile, link, and run.
-AC_DEFUN([AC_RUN_IFELSE],
-[AC_LANG_COMPILER_REQUIRE()dnl
-m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
+# This macro can be used during the selection of a compiler.
+define([_AC_RUN_IFELSE],
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) &&
    test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
   m4_default([$2], :)
@@ -3464,7 +3484,17 @@ m4_ifvanl([$3], [  $3])dnl
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
                                                    [conftest.$ac_ext])[]dnl
-])# AC_RUN_IFELSE
+])# _AC_RUN_IFELSE
+
+
+# AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# -----------------------------------------------------------
+# Compile, link, and run. Requires that the compiler for the current
+# language was checked for, hence do not use this macro in macros looking
+# for a compiler.
+AC_DEFUN([AC_RUN_IFELSE],
+[AC_LANG_COMPILER_REQUIRE()dnl
+_AC_RUN_IFELSE($@)])
 
 
 # AC_TRY_RUN(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE],
