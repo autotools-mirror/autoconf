@@ -1,3 +1,9 @@
+2003-07-07  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/c.m4 (AC_C_INLINE): Wrap the '#define inline ...'
+	inside '#ifndef __cplusplus'.  Problem reported by
+	Bob Friesenhahn.
+
 2003-07-06  Bill Clarke  <llib@computer.org>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MMAP): Cast pointer to
