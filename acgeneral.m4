@@ -1246,11 +1246,11 @@ cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
 dnl AC_LANG_FORTRAN77()
-AC_DEFUN([AC_LANG_FORTRAN77],
+AC_DEFUN(AC_LANG_FORTRAN77,
 [define([AC_LANG], [FORTRAN77])dnl
 ac_ext=f
-ac_compile='$FC $FFLAGS -c conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='$FC $FFLAGS $LDFLAGS -c conftest.$ac_ext -o conftest $LIBS 1>&AC_FD_CC'
+ac_compile='${FC-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='${FC-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 cross_compiling=$ac_cv_prog_fc_cross
 ])
 

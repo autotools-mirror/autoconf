@@ -1,9 +1,22 @@
+1998-10-24  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acgeneral.m4 (AC_LANG_FORTRAN77): Remove [] (i.e. the m4 quotes)
+	since it was confusing the testsuite.  Also make `f77' the default
+	for FC, otherwise the testsuite fails.
+
+	* autoconf.texi (Fortran 77 Compiler Characteristics): Added new
+	node documenting the new AC_F77_LIBRARY_LDFLAGS macro.
+
+	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): New macro to determine
+	the linker flags (e.g. `-L' and `-l') for the Fortran 77 intrinsic
+	and run-time libraries.
+
 1998-10-24  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_FUNC_SELECT_ARGTYPES): New macro. Detects the
 	types of formal arguments to select(). Contributed by Lars Hecking
 	<lhecking@nmrc.ucc.ie>.
-	
+
 	* acconfig.h (SELECT_TYPE_ARG1): Add.
 	(SELECT_TYPE_ARG234): Likewise.
 	(SELECT_TYPE_ARG5): Likewise.

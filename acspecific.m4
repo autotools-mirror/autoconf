@@ -1,6 +1,6 @@
 dnl Macros that test for specific features.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 93, 94, 95, 96, 1998 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -245,8 +245,8 @@ AC_DEFUN(AC_PROG_FC_WORKS,
 AC_LANG_SAVE
 AC_LANG_FORTRAN77
 AC_TRY_COMPILER(dnl
-[       program conftest
-       end
+[      program conftest
+      end
 ], ac_cv_prog_fc_works, ac_cv_prog_fc_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_fc_works)
@@ -2000,6 +2000,217 @@ AC_MSG_RESULT($ac_cv_objext)
 OBJEXT=$ac_cv_objext
 ac_objext=$ac_cv_objext
 AC_SUBST(OBJEXT)])
+
+dnl Determine the linker flags (e.g. `-L' and `-l') for the Fortran 77
+dnl intrinsic and run-time libraries that are required to successfully
+dnl link a Fortran 77 program or shared library.  The output variable
+dnl FLIBS is set to these flags.
+dnl 
+dnl This macro is intended to be used in those situations when it is
+dnl necessary to mix, e.g. C++ and Fortran 77, source code into a single
+dnl program or shared library.
+dnl 
+dnl For example, if object files from a C++ and Fortran 77 compiler must
+dnl be linked together, then the C++ compiler/linker must be used for
+dnl linking (since special C++-ish things need to happen at link time
+dnl like calling global constructors, instantiating templates, enabling
+dnl exception support, etc.).
+dnl 
+dnl However, the Fortran 77 intrinsic and run-time libraries must be
+dnl linked in as well, but the C++ compiler/linker doesn't know how to
+dnl add these Fortran 77 libraries.  Hence, the macro
+dnl `AC_F77_LIBRARY_LDFLAGS' was created to determine these Fortran 77
+dnl libraries.
+dnl
+dnl This macro was packaged in its current form by Matthew D. Langston
+dnl <langston@SLAC.Stanford.EDU>.  However, nearly all of this macro
+dnl came from the `OCTAVE_FLIBS' macro in `octave-2.0.13/aclocal.m4',
+dnl and full credit should go to John W. Eaton for writing this
+dnl extremely useful macro.  Thank you John.
+dnl
+dnl AC_F77_LIBRARY_LDFLAGS()
+AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
+[AC_MSG_CHECKING([for Fortran libraries])
+AC_REQUIRE([AC_PROG_FC])
+AC_REQUIRE([AC_CANONICAL_HOST])
+AC_CACHE_VAL(ac_cv_flibs,
+[changequote(, )dnl
+dnl Write a minimal program and compile it with -v.  I don't know what
+dnl to do if your compiler doesn't have -v...
+echo "      END" > conftest.f
+foutput=`${FC} -v -o conftest conftest.f 2>&1`
+dnl
+dnl The easiest thing to do for xlf output is to replace all the commas
+dnl with spaces.  Try to only do that if the output is really from xlf,
+dnl since doing that causes problems on other systems.
+dnl
+xlf_p=`echo $foutput | grep xlfentry`
+if test -n "$xlf_p"; then
+  foutput=`echo $foutput | sed 's/,/ /g'`
+fi
+dnl
+ld_run_path=`echo $foutput | \
+  sed -n -e 's/^.*LD_RUN_PATH *= *\([^ ]*\).*/\1/p'`
+dnl
+dnl We are only supposed to find this on Solaris systems...
+dnl Uh, the run path should be absolute, shouldn't it?
+dnl
+case "$ld_run_path" in
+  /*)
+    if test "$ac_cv_prog_gcc" = yes; then
+      ld_run_path="-Xlinker -R -Xlinker $ld_run_path"
+    else
+      ld_run_path="-R $ld_run_path"
+    fi
+  ;;
+  *)
+    ld_run_path=
+  ;;
+esac
+dnl
+flibs=
+lflags=
+dnl
+dnl If want_arg is set, we know we want the arg to be added to the list,
+dnl so we don't have to examine it.
+dnl
+want_arg=
+dnl
+for arg in $foutput; do
+  old_want_arg=$want_arg
+  want_arg=
+dnl
+dnl None of the options that take arguments expect the argument to
+dnl start with a -, so pretend we didn't see anything special.
+dnl
+  if test -n "$old_want_arg"; then
+    case "$arg" in
+      -*)
+        old_want_arg=
+      ;;
+    esac
+  fi
+  case "$old_want_arg" in
+    '')
+      case $arg in
+        /*.a)
+          exists=false
+          for f in $lflags; do
+            if test x$arg = x$f; then
+              exists=true
+            fi
+          done
+          if $exists; then
+            arg=
+          else
+            lflags="$lflags $arg"
+          fi
+        ;;
+        -bI:*)
+          exists=false
+          for f in $lflags; do
+            if test x$arg = x$f; then
+              exists=true
+            fi
+          done
+          if $exists; then
+            arg=
+          else
+            if test "$ac_cv_prog_gcc" = yes; then
+              lflags="$lflags -Xlinker $arg"
+            else
+              lflags="$lflags $arg"
+            fi
+          fi
+        ;;
+        -lang* | -lcrt0.o | -lc | -lgcc)
+          arg=
+        ;;
+        -[lLR])
+          want_arg=$arg
+          arg=
+        ;;
+        -[lLR]*)
+          exists=false
+          for f in $lflags; do
+            if test x$arg = x$f; then
+              exists=true
+            fi
+          done
+          if $exists; then
+            arg=
+          else
+            case "$arg" in
+              -lkernel32)
+                case "$canonical_host_type" in
+                  *-*-cygwin32)
+                    arg=
+                  ;;
+                  *)
+                    lflags="$lflags $arg"
+                  ;;
+                esac
+              ;;
+              -lm)
+              ;;
+              *)
+                lflags="$lflags $arg"
+              ;;
+            esac
+          fi
+        ;;
+        -u)
+          want_arg=$arg
+          arg=
+        ;;
+        -Y)
+          want_arg=$arg
+          arg=
+        ;;
+        *)
+          arg=
+        ;;
+      esac
+    ;;
+    -[lLR])
+      arg="$old_want_arg $arg"
+    ;;
+    -u)
+      arg="-u $arg"
+    ;;
+    -Y)
+dnl
+dnl Should probably try to ensure unique directory options here too.
+dnl This probably only applies to Solaris systems, and then will only
+dnl work with gcc...
+dnl
+      arg=`echo $arg | sed -e 's%^P,%%'`
+      SAVE_IFS=$IFS
+      IFS=:
+      list=
+      for elt in $arg; do
+        list="$list -L$elt"
+      done
+      IFS=$SAVE_IFS
+      arg="$list"
+    ;;
+  esac
+dnl
+  if test -n "$arg"; then
+    flibs="$flibs $arg"
+  fi
+done
+if test -n "$ld_run_path"; then
+  flibs_result="$ld_run_path $flibs"
+else
+  flibs_result="$flibs"
+fi
+changequote([, ])dnl
+ac_cv_flibs="$flibs_result"])
+FLIBS="$ac_cv_flibs"
+AC_SUBST(FLIBS)dnl
+AC_MSG_RESULT($FLIBS)
+])
 
 
 dnl ### Checks for operating system services
