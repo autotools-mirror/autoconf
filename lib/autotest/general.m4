@@ -125,6 +125,11 @@ at_errexit_p=false
 # Shall we be verbose?
 at_verbose=:
 at_quiet=echo
+# The directory the whole test suite works in.
+# Should be absolutely to let the user `cd' at will.
+at_tests_dir=`pwd`/$as_me.dir
+# The file containing the location of the last AT_CHECK.
+at_check_line_file=$at_tests_dir/at-check-line
 # Shall we keep the debug scripts?  Must be `:' when test suite is
 # run by a debug script, so that the script doesn't remove itself.
 at_debug_p=false
@@ -141,6 +146,10 @@ at_tested='m4_ifdef([AT_tested], [AT_tested])'
 at_tests_all='AT_tests_all'
 # Number of the last test.
 at_last_test=AT_ordinal
+# As many dots as there are digits in the last tests.
+# Use to normalize the test groups numbers so that `ls' lists them in
+# numerical order.
+at_format=`echo $at_last_test | sed 's/././g'`
 # Description of all the tests.
 at_help_all='AT_help'
 # List of the output files.
@@ -464,15 +473,38 @@ at_skip_list=
 at_test_count=0
 m4_divert([TESTS])dnl
 
+# Create the master directory if it doesn't already exist.
+test -d $at_tests_dir ||
+  mkdir $at_tests_dir ||
+  AS_ERROR([cannot create $at_tests_dir])
+
 for at_test in $at_tests
 do
-  at_status=0
-  rm -rf $at_data_files
-  # Skip tests we already run (using --keywords makes it easy to get
-  # duplication).
-  case " $at_pass_test $at_skip_test $at_fail_test " in
-    *" $at_test "* ) continue;;
+  # Be sure to come back to the top test directory.
+  cd $at_tests_dir
+
+  case $at_test in
+    banner-*) ;;
+    *)
+     # Skip tests we already run (using --keywords makes it easy to get
+     # duplication).
+     case " $at_pass_test $at_skip_test $at_fail_test " in
+       *" $at_test "* ) continue;;
+     esac
+
+     # Normalize the test number.
+     at_test_normalized=`expr "00000$at_test" : ".*\($at_format\)"`
+
+     # Create a fresh directory for the next test group, and enter.
+     at_group_dir=$at_tests_dir/$at_test_normalized
+     rm -rf $at_group_dir
+     mkdir $at_group_dir ||
+       AS_ERROR([cannot create $at_group_dir])
+     cd $at_group_dir
+    ;;
   esac
+
+  at_status=0
   # Clearly separate the tests when verbose.
   test $at_test_count != 0 && $at_verbose
   case $at_test in
@@ -487,13 +519,13 @@ m4_divert([TAIL])[]dnl
   case $at_test in
     banner-*) ;;
     *)
-      if test ! -f at-check-line; then
+      if test ! -f $at_check_line_file; then
         sed "s/^ */$as_me: warning: /" <<_ATEOF
         A failure happened in a test group before any test could be
         run. This means that test suite is improperly designed.  Please
         report this failure to <PACKAGE_BUGREPORT>.
 _ATEOF
-    	echo "$at_setup_line" >at-check-line
+    	echo "$at_setup_line" >$at_check_line_file
       fi
       at_test_count=`expr 1 + $at_test_count`
       $at_verbose $ECHO_N "$at_test. $at_setup_line: $ECHO_C"
@@ -501,17 +533,18 @@ _ATEOF
         0)  at_msg="ok"
             at_pass_list="$at_pass_list $at_test"
             ;;
-        77) at_msg="ok (skipped near \``cat at-check-line`')"
+        77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
             at_skip_list="$at_skip_list $at_test"
             ;;
-        *)  at_msg="FAILED near \``cat at-check-line`'"
+        *)  at_msg="FAILED near \``cat $at_check_line_file`'"
             at_fail_list="$at_fail_list $at_test"
             ;;
       esac
       echo $at_msg
       at_log_msg="$at_test. $at_setup_line: $at_msg"
       # If the test failed, at-times is not available.
-      test -f at-times && at_log_msg="$at_log_msg	(`sed 1d at-times`)"
+      test -f $at_tests_dir/at-times &&
+        at_log_msg="$at_log_msg	(`sed 1d $at_tests_dir/at-times`)"
       echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
       $at_errexit_p && test -n "$at_fail_list" && break
       ;;
@@ -554,7 +587,6 @@ elif test $at_debug_p = false; then
   rm -f $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]]
 
   # Normalize the names so that `ls' lists them in order.
-  at_format=`echo $at_last_test | sed 's/././g'`
   at_NNN=`expr "NNN$at_group" : ".*\($at_format\)"`
   echo
   echo $ECHO_N "Writing \`$as_me.$at_NNN' scripts, with $at_NNN =$ECHO_C"
@@ -700,7 +732,7 @@ m4_define([AT_CLEANUP],
 m4_append([AT_help],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])])
 )dnl
-    $at_times >at-times
+    $at_times >$at_tests_dir/at-times
     )
     at_status=$?
     ;;
@@ -809,26 +841,26 @@ $2[]_ATEOF
 m4_define([AT_CHECK],
 [$at_traceoff
 $at_verbose "AT_LINE: AS_ESCAPE([$1])"
-echo AT_LINE >at-check-line
-( $at_traceon; $1 ) >at-stdout 2>at-stder1
+echo AT_LINE >$at_check_line_file
+( $at_traceon; $1 ) >$at_tests_dir/at-stdout 2>$at_tests_dir/at-stder1
 at_status=$?
-egrep '^ *\+' at-stder1 >&2
-egrep -v '^ *\+' at-stder1 >at-stderr
+egrep '^ *\+' $at_tests_dir/at-stder1 >&2
+egrep -v '^ *\+' $at_tests_dir/at-stder1 >$at_tests_dir/at-stderr
 at_failed=false
 dnl Check stderr.
 m4_case([$4],
-        stderr, [(echo stderr:; tee stderr <at-stderr) >&5],
-        ignore, [(echo stderr:; cat at-stderr) >&5],
-        experr, [$at_diff experr at-stderr >&5 || at_failed=:],
-        [],     [$at_diff $at_devnull  at-stderr >&5 || at_failed=:],
-        [echo >>at-stderr; echo "AS_ESCAPE([$4])" | $at_diff - at-stderr >&5 || at_failed=:])
+        stderr, [(echo stderr:; tee stderr <$at_tests_dir/at-stderr) >&5],
+        ignore, [(echo stderr:; cat $at_tests_dir/at-stderr) >&5],
+        experr, [$at_diff experr $at_tests_dir/at-stderr >&5 || at_failed=:],
+        [],     [$at_diff $at_devnull $at_tests_dir/at-stderr >&5 || at_failed=:],
+        [echo >>$at_tests_dir/at-stderr; echo "AS_ESCAPE([$4])" | $at_diff - $at_tests_dir/at-stderr >&5 || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
-        stdout, [(echo stdout:; tee stdout <at-stdout) >&5],
-        ignore, [(echo stdout:; cat at-stdout) >&5],
-        expout, [$at_diff expout at-stdout >&5 || at_failed=:],
-        [],     [$at_diff $at_devnull  at-stdout >&5 || at_failed=:],
-        [echo >>at-stdout; echo "AS_ESCAPE([$3])" | $at_diff - at-stdout >&5 || at_failed=:])
+        stdout, [(echo stdout:; tee stdout <$at_tests_dir/at-stdout) >&5],
+        ignore, [(echo stdout:; cat $at_tests_dir/at-stdout) >&5],
+        expout, [$at_diff expout $at_tests_dir/at-stdout >&5 || at_failed=:],
+        [],     [$at_diff $at_devnull $at_tests_dir/at-stdout >&5 || at_failed=:],
+        [echo >>$at_tests_dir/at-stdout; echo "AS_ESCAPE([$3])" | $at_diff - $at_tests_dir/at-stdout >&5 || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],

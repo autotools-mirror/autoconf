@@ -1,3 +1,16 @@
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
+	Start a new layout for Autotest: `testsuite' creates
+	`testsuite.dir' in which the at-check-line etc. files are to be
+	found, and `testsuite.dir/003' where the test group 3 is run.
+
+	* lib/autotest/general.m4 (AT_INIT): at_tests_dir,
+	at_check_line_file, at_format, at_test_normalized, at_group_dir
+	are new variables.
+	Create the directories.
+	Use absolute paths for at- files.
+	(AT_CHECK): Adjust.
+
 2001-11-11  Michael Matz  <matz@kde.org>
 
 	* m4sugar.m4 (_m4_foreach): Make it linear instead quadratic.
