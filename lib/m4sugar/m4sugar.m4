@@ -469,7 +469,7 @@ m4_define([m4_bpatsubsts],
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is
 # useful for making your macros more structured and readable by dropping
-# unecessary dnl's and have the macros indented properly.
+# unnecessary dnl's and have the macros indented properly.
 m4_define([m4_do],
 [m4_if($#, 0, [],
        $#, 1, [$1],
@@ -615,7 +615,7 @@ m4_if($1, [$2], [],
 # Implementing `foreach' loops in m4 is much more tricky than it may
 # seem.  Actually, the example of a `foreach' loop in the m4
 # documentation is wrong: it does not quote the arguments properly,
-# which leads to undesired expansions.
+# which leads to undesirable expansions.
 #
 # The example in the documentation is:
 #
@@ -1484,7 +1484,7 @@ m4_define([m4_flatten],
 # of brackets around $1 (don't forget that the result must be quoted
 # too, hence one more quoting than applications).
 #
-# Then notice the 2 last pattens: they are in charge of removing the
+# Then notice the 2 last patterns: they are in charge of removing the
 # leading/trailing spaces.  Why not just `[^ ]'?  Because they are
 # applied to doubly quoted strings, i.e. more or less [[STRING]].  So
 # if there is a leading space in STRING, then it is the *third*

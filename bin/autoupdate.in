@@ -758,7 +758,7 @@ exit 0;
 # 	  0)
 #
 # In French, we say `Youpi !', which you might roughly translate as
-# `yipeee!'.
+# `Yippee!'.
 #
 #
 # # First step: computation
@@ -878,7 +878,7 @@ exit 0;
 # Worse yet, if `idem(0)' was used later, then autoupdate sees that
 # `OLD' is used, computes the result for `OLD(0, 0)' and sets up a
 # dispatcher for `OLD'.  Since there was no computed value for `OLD(0,
-# [$1])', the dispatcher would have replaced with... nothinhg, leading
+# [$1])', the dispatcher would have replaced with... nothing, leading
 # to
 #
 # 	  define([idem], [])
@@ -1016,11 +1016,11 @@ exit 0;
 #
 # Well... almost.
 #
-# There is a slight problem that remains: if an AU macro OUTTER includes
-# an AU macro INNER, then _au_enable will be run when entering OUTTER
+# There is a slight problem that remains: if an AU macro OUTER includes
+# an AU macro INNER, then _au_enable will be run when entering OUTER
 # and when entering INNER (not good, but not too bad yet).  But when
 # getting out of INNER, _au_disable will disable everything while we
-# were still in OUTTER.  Badaboom.
+# were still in OUTER.  Badaboom.
 #
 # Therefore _au_enable and _au_disable have to be written to work by
 # pairs: each _au_enable pushdef's _au_enabled, and each _au_disable

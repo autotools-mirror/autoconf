@@ -48,7 +48,7 @@ AT_SETUP([Syntax of the shell scripts])
 
 # A script that never returns.  We don't care that it never returns,
 # broken /bin/sh loop equally with `false', but it makes it easier to
-# test the robusteness in a good environment: just remove the `-n'.
+# test the robustness in a good environment: just remove the `-n'.
 AT_DATA([endless.sh],
 [[while :
 do

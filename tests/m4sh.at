@@ -56,7 +56,7 @@ exit 0
 ])# AT_DATA_LINENO
 
 # `_oline_', once processed and ran, produces our reference.
-# We check that we find ourself by looking at a string which is
+# We check that we find ourselves by looking at a string which is
 # available only in the original script: `_oline_'.
 AT_DATA_LINENO([reference.as], [false], [__@&t@oline__], [_oline__])
 AT_CHECK([autom4te -l m4sh reference.as -o reference])

@@ -1,3 +1,10 @@
+2002-04-21  Paul Eggert  <eggert@twinsun.com>
+
+	* TODO, bin/autoupdate.in, doc/autoconf.texi,
+	lib/autoconf/general.m4, lib/autoconf/libs.m4,
+	lib/autoconf/status.m4, lib/m4sugar/m4sugar.m4, tests/m4sh.at,
+	tests/tools.at: Minor spelling and grammar fixes.
+
 2002-04-20  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Shell Substitutions): Fix typos in yesterday's

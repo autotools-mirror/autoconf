@@ -6488,11 +6488,11 @@ define(car, $1)
 @end example
 
 @noindent
-But, while it is acceptable for a @file{configure.ac} to avoid unneeded
+But, while it is acceptable for a @file{configure.ac} to avoid unnecessary
 quotes, it is bad practice for Autoconf macros which must both be more
 robust and also advocate perfect style.
 
-At the top level, there are only two possible quotings: either you
+At the top level, there are only two possibilities: either you
 quote or you don't:
 
 @example
@@ -7651,7 +7651,7 @@ body of @code{FOO}.  For instance, this definition of macros:
 @example
 @group
 AC_DEFUN([TRAVOLTA],
-[test "$body_temparature_in_celsius" -gt "38" &&
+[test "$body_temperature_in_celsius" -gt "38" &&
   dance_floor=occupied])
 AC_DEFUN([NEWTON_JOHN],
 [test "$hair_style" = "curly" &&
@@ -7894,7 +7894,7 @@ test $[@@%:@@] != 0
 Otherwise, the closing bracket would be hidden inside a @samp{#}-comment,
 breaking the bracket-matching highlighting from Emacsen.  Note the
 preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]}, etc.  Do
-not escape when it is unneeded.  Common examples of useless quotation
+not escape when it is unnecessary.  Common examples of useless quotation
 are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
 etc.  If you add portability issues to the picture, you'll prefer
 @samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
@@ -8265,7 +8265,7 @@ It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
 Most shells, if not all (including Bash, Zsh, Ash), output traces on
-stderr, even for sub-shells.  This might result in undesired content
+stderr, even for sub-shells.  This might result in undesirable content
 if you meant to capture the standard-error output of the inner command:
 
 @example

@@ -170,9 +170,9 @@ ac_abs_top_srcdir=`cd $1 && cd $ac_top_srcdir && pwd`
 
 
 
-## ---------------------------------- ##
-## Ensuring the unicity of the tags.  ##
-## ---------------------------------- ##
+## ------------------------------------- ##
+## Ensuring the uniqueness of the tags.  ##
+## ------------------------------------- ##
 
 # AC_CONFIG_IF_MEMBER(DEST, LIST-NAME, ACTION-IF-TRUE, ACTION-IF-FALSE)
 # ----------------------------------------------------------------
@@ -1149,9 +1149,9 @@ fi
 
 
 
-## ------------------------- ##
-## Outputing config.status.  ##
-## ------------------------- ##
+## -------------------------- ##
+## Outputting config.status.  ##
+## -------------------------- ##
 
 
 # autoupdate::AC_OUTPUT([CONFIG_FILES...], [EXTRA-CMDS], [INIT-CMDS])

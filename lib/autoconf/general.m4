@@ -999,7 +999,7 @@ _ACEOF
 m4_divert_pop([HELP_BEGIN])dnl
 dnl The order of the diversions here is
 dnl - HELP_BEGIN
-dnl   which may be prolongated by extra generic options such as with X or
+dnl   which may be extended by extra generic options such as with X or
 dnl   AC_ARG_PROGRAM.  Displayed only in long --help.
 dnl
 dnl - HELP_CANON
@@ -1723,7 +1723,7 @@ m4_define([AC_CACHE_SAVE],
 # config.status only pays attention to the cache file if you give it
 # the --recheck option to rerun configure.
 #
-# `ac_cv_env_foo' variables (set or unset) will be overriden when
+# `ac_cv_env_foo' variables (set or unset) will be overridden when
 # loading this file, other *unset* `ac_cv_foo' will be assigned the
 # following values.
 
@@ -2362,7 +2362,7 @@ m4_define([AC_LIBSOURCES],
 # _AC_LIBOBJ(FILENAME-NOEXT, ACTION-IF-INDIR)
 # -------------------------------------------
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
-# We don't use AC_SUBST/2 because it forces an unneeded eol.
+# We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
                [AC_LIBSOURCE([$1.c])],
@@ -2374,7 +2374,7 @@ LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext"])
 # AC_LIBOBJ(FILENAME-NOEXT)
 # -------------------------
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
-# We don't use AC_SUBST/2 because it forces an unneeded eol.
+# We don't use AC_SUBST/2 because it forces an unnecessary eol.
 m4_define([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],
             [AC_DIAGNOSE(syntax,

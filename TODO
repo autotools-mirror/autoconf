@@ -648,7 +648,7 @@ name was used, whether X or Xt are in use, etc. The specific
 decisions, and progress messages, should be recorded on the terminal
 only if --verbose is used.
 
-    --silent just supresses the "checking for...result"
+    --silent just suppresses the "checking for...result"
     messages, not the "creating FOO" messages.
 
 I think the default should be to suppress both.
@@ -665,8 +665,8 @@ From: Roland McGrath <roland@gnu.ai.mit.edu>
 ------------------------------------------------------------------------------
 
 Another thing I wish for is a macro which figures out which libraries are
-needed for BSD-sytle sockets.  AC_PATH_X already detects this
-correctly...so it's just a matter of seperating out the socket-related code.
+needed for BSD-style sockets.  AC_PATH_X already detects this
+correctly...so it's just a matter of separating out the socket-related code.
 From: "Joel N. Weber II" <nemo@koa.iolani.honolulu.hi.us>
 
 ------------------------------------------------------------------------------
