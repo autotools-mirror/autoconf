@@ -128,7 +128,7 @@ AC_DEFUN([AC_PROG_YACC],
 # -----------
 # Look for flex or lex.  Set its associated library to LEXLIB.
 # Check if lex declares yytext as a char * by default, not a char[].
-AC_DEFUN([AC_PROG_LEX],
+AC_DEFUN_ONCE([AC_PROG_LEX],
 [AH_CHECK_LIB(fl)dnl
 AH_CHECK_LIB(l)dnl
 AC_CHECK_PROG(LEX, flex, flex, lex)
@@ -187,7 +187,7 @@ fi
 
 # Require AC_PROG_LEX in case some people were just calling this macro.
 AU_DEFUN([AC_DECL_YYTEXT],
-[AC_REQUIRE([AC_PROG_LEX])])
+[AC_PROG_LEX])
 
 
 # AC_PROG_INSTALL

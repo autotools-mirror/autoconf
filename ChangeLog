@@ -1,5 +1,12 @@
 2000-10-02  Pavel Roskin  <proski@gnu.org>
 
+	* acspecific.m4 (AC_PROG_LEX): Use AC_DEFUN_ONCE.
+	(AC_DECL_YYTEXT): Don't use AC_REQUIRE because autoupdate
+	would place it into configure.in but it's not allowed
+	outside AC_DEFUN.
+
+2000-10-02  Pavel Roskin  <proski@gnu.org>
+
 	* tests/Makefile.am: Macros defined by AC_DEFUN_ONCE should
 	go to macros.m4 for testing.
 
