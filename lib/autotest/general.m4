@@ -141,8 +141,12 @@ m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
   case $[1] in
-    --help | -h) at_help=short ;;
-    --full-help | -H ) at_help=long;;
+    --help | -h) at_help=short
+        ;;
+
+    --full-help | -H ) at_help=long
+        ;;
+
     --version)
         if test -n "$at_package_string"; then
           echo "$as_me ($at_package_string)"
@@ -155,8 +159,10 @@ while test $[@%:@] -gt 0; do
         ;;
 
     --clean | -c )
-        rm -rf $at_data_files debug-*.sh $as_me.log devnull
-	exit 0
+        rm -rf $at_data_files \
+               $as_me.[0-9] $as_me.[0-9][0-9] $as_me.[0-9][0-9][0-9] \
+               $as_me.log devnull
+        exit 0
         ;;
 
     -d) at_debug=:
@@ -528,17 +534,22 @@ elif test $at_debug = false; then
   fi
 
   # Remove any debugging script resulting from a previous run.
-  rm -f debug-*.sh
+  rm -f $as_me.[0-9] $as_me.[0-9][0-9] $as_me.[0-9][0-9][0-9]
+
   echo
-  echo $ECHO_N "Writing \`debug-NN.sh' scripts, with NN =$ECHO_C"
-  for at_group in $at_fail_list; do
-    echo $ECHO_N " $at_group$ECHO_C"
+  echo $ECHO_N "Writing \`$as_me.NN' scripts, with NN =$ECHO_C"
+  for at_group in $at_fail_list
+  do
+    # Normalize the names so that `ls' lists them in order.
+    at_format=`echo $at_last_test | sed 's/././g'`
+    at_number=`expr "000$at_group" : ".*\($at_format\)"`
+    echo $ECHO_N " $at_number$ECHO_C"
     ( echo "#! /bin/sh"
       echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
            '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
       echo 'exit 1'
-    ) >debug-$at_group.sh
-    chmod +x debug-$at_group.sh
+    ) >$as_me.$at_number
+    chmod +x $as_me.$at_number
   done
   echo ', done'
   echo
@@ -584,6 +595,8 @@ m4_divert_pop([TAIL])dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
 at_tests_all="AT_TESTS_ALL "
+# Number of the last test.
+at_last_test=AT_ordinal
 # Description of all the tests.
 at_help_all="AT_help"
 # List of the output files.

@@ -1,5 +1,11 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Create and remove
+	`$as_me.[0-9]+' instead of `debug-[0-9]+.sh', so that multiple
+	test suites can cohabit.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* tests/mktests.sh: Don't output banners for empty test files.
 
 2001-09-13  Akim Demaille  <akim@epita.fr>

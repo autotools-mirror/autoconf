@@ -110,7 +110,6 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Name of the executable.
-dnl Moved here because the tests below can use AC_MSG_ERROR, which uses $as_me
 as_me=`AS_BASENAME($[0])`
 
 _AS_ECHO_N_PREPARE
