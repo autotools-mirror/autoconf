@@ -3167,36 +3167,76 @@ AC_CHECK_FUNCS([$1], , [AC_LIBOBJ(${ac_func})])
 ])
 
 
+
 ## ----------------------------------- ##
 ## Checking compiler characteristics.  ##
 ## ----------------------------------- ##
 
 
-# AC_CHECK_SIZEOF(TYPE, [CROSS-SIZE], [INCLUDES])
-# -----------------------------------------------
-# This macro will probably be obsoleted by the macros of Kaveh.  In
-# addition `CHECK' is not a proper name (is not boolean).
+# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, [INCLUDES])
+# ---------------------------------------------------------
+# Compute the integer EXPRESSION and store the result in the VARIABLE.
+# Works OK if cross compiling.
+define([_AC_COMPUTE_INT_COMPILE],
+[# Depending upon the size, compute the lo and hi bounds.
+AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
+ [ac_lo=0 ac_try=0
+  while true; do
+    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_try])],
+                    [ac_hi=$ac_try; break],
+                    [ac_lo=`expr $ac_try + 1` ac_try=`expr 2 '*' $ac_try + 1`])
+  done],
+ [ac_hi=-1 ac_try=-1
+  while true; do
+    AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_try])],
+                      [ac_lo=$ac_try; break],
+                      [ac_hi=`expr $ac_try - 1` ac_try=`expr 2 '*' $ac_try`])
+  done])
+# Binary search between lo and hi bounds.
+while test "x$ac_lo" != "x$ac_hi"; do
+  ac_try=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
+  AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_try])],
+                     [ac_hi=$ac_try], [ac_lo=`expr $ac_try + 1`])
+done
+$2=$ac_lo[]dnl
+])# _AC_COMPUTE_INT_COMPILE
+
+
+# _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, [INCLUDES], [IF-FAILS])
+# -----------------------------------------------------------------
+# Store the evaluation of the integer EXPRESSION in VARIABLE.
+define([_AC_COMPUTE_INT_RUN],
+[AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
+               [$2=`cat conftestval`], [$4])])
+
+
+# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, INCLUDES, IF-FAILS)
+# ---------------------------------------------------------
+define([_AC_COMPUTE_INT],
+[if test "$cross_compiling" = yes; then
+  _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3])
+else
+ _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
+fi[]dnl
+])# _AC_COMPUTE_INT
+
+
+# AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES])
+# --------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
-[AC_VAR_PUSHDEF([ac_Sizeof], [ac_cv_sizeof_$1])dnl
-AC_CACHE_CHECK([size of $1], ac_Sizeof,
-[AC_TRY_RUN(AC_INCLUDES_DEFAULT([$3])
-[int
-main ()
-{
-  FILE *f = fopen ("conftestval", "w");
-  if (!f)
-    exit (1);
-  fprintf (f, "%d\n", sizeof ($1));
-  exit (0);
-}],
-  AC_VAR_SET(ac_Sizeof, `cat conftestval`),
-  AC_VAR_SET(ac_Sizeof, 0),
-  ifval([$2], AC_VAR_SET(ac_Sizeof, $2)))])
-AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1),
-                   AC_VAR_GET(ac_Sizeof),
-                   [The number of bytes in a `]$1['.])
-AC_VAR_POPDEF([ac_Sizeof])dnl
-])
+[AC_VAR_IF_INDIR([$1], [AC_FATAL([$0: requires literal arguments])])dnl
+AC_CHECK_TYPE([$1], [], [], [$3])
+AC_CACHE_CHECK([size of $1], AC_TR_SH([ac_cv_sizeof_$1]),
+[if test "$AC_TR_SH([ac_cv_type_$1])" = yes; then
+  _AC_COMPUTE_INT([sizeof ($1)],
+                  [AC_TR_SH([ac_cv_sizeof_$1])],
+                  [AC_INCLUDES_DEFAULT([$3])])
+else
+  AC_TR_SH([ac_cv_sizeof_$1])=0
+fi])dnl
+AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), $AC_TR_SH([ac_cv_sizeof_$1]),
+                   [The size of a `$1', as computed by sizeof.])
+])# AC_CHECK_SIZEOF
 
 
 

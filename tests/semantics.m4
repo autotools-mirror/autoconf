@@ -84,7 +84,6 @@ AT_TEST_MACRO(AC_CHECK_MEMBERS,
 ])])
 
 
-
 # AC_CHECK_SIZEOF
 # ---------------
 AT_TEST_MACRO(AC_CHECK_SIZEOF,
@@ -95,12 +94,28 @@ typedef struct
 {
   char a;
   char b;
-} charchar;])],
+} charchar;])
+AC_CHECK_SIZEOF(charcharchar)
+
+# Exercize the code used when cross-compiling
+cross_compiling=yes
+AC_CHECK_SIZEOF(unsigned char)
+AC_CHECK_SIZEOF(ucharchar,,
+[#include <stdio.h>
+typedef struct
+{
+  unsigned char a;
+  unsigned char b;
+} ucharchar;])
+AC_CHECK_SIZEOF(ucharcharchar)],
 [AT_CHECK_DEFINES(
 [#define SIZEOF_CHAR 1
 #define SIZEOF_CHARCHAR 2
+#define SIZEOF_CHARCHARCHAR 0
+#define SIZEOF_UCHARCHAR 2
+#define SIZEOF_UCHARCHARCHAR 0
+#define SIZEOF_UNSIGNED_CHAR 1
 ])])
-
 
 
 # AC_CHECK_TYPES

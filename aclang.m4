@@ -263,6 +263,21 @@ AC_DEFUN([AC_LANG_FUNC_LINK_TRY],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
+# AC_LANG_BOOL_COMPILE_TRY(PROLOGUE, EXPRESSION)
+# ----------------------------------------------
+# Produce a program that compiles with success iff the boolean EXPRESSION
+# evaluates to true at compile time.
+AC_DEFUN([AC_LANG_BOOL_COMPILE_TRY],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_INT_SAVE(PROLOGUE, EXPRESSION)
+# --------------------------------------
+# Produce a program that saves the runtime evaluation of the integer
+# EXPRESSION into `conftestval'.
+AC_DEFUN([AC_LANG_INT_SAVE],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
 
 # --------------- #
 # 2b. C sources.  #
@@ -338,6 +353,24 @@ f = $1;
 ])])
 
 
+# AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)
+# -------------------------------------------------
+define([AC_LANG_BOOL_COMPILE_TRY(C)],
+[AC_LANG_PROGRAM([$1], [int _array_ @<:@1 - 2 * !($2)@:>@])])
+
+
+# AC_LANG_INT_SAVE(C)(PROLOGUE, EXPRESSION)
+# -----------------------------------------
+# We need `stdio.h' to open a `FILE', so the prologue defaults to the
+# inclusion of `stdio.h'.
+define([AC_LANG_INT_SAVE(C)],
+[AC_LANG_PROGRAM([m4_default([$1], [@%:@include "stdio.h"])],
+[FILE *f = fopen ("conftestval", "w");
+if (!f)
+  exit (1);
+fprintf (f, "%d\n", ($2));])])
+
+
 # ----------------- #
 # 2c. C++ sources.  #
 # ----------------- #
@@ -369,6 +402,18 @@ define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
 # ------------------------------------
 # Same as C.
 define([AC_LANG_FUNC_LINK_TRY(C++)], defn([AC_LANG_FUNC_LINK_TRY(C)]))
+
+
+# AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
+# ---------------------------------------------------
+# Same as C.
+define([AC_LANG_BOOL_COMPILE_TRY(C++)], defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
+
+
+# AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
+# -------------------------------------------
+# Same as C.
+define([AC_LANG_INT_SAVE(C++)], defn([AC_LANG_INT_SAVE_TRY(C)]))
 
 
 

@@ -1,3 +1,20 @@
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
+	Find a means to extract integers from the compiler.
+	Use this technology to compute `sizeof' even when cross-compiling.
+	Ideas and initial suggestion by Kaveh Ghazi.
+	Binary search by Bruno Haible.
+
+	* aclang.m4 (AC_LANG_BOOL_COMPILE_TRY,
+	AC_LANG_BOOL_COMPILE_TRY(C), AC_LANG_BOOL_COMPILE_TRY(C++),
+	AC_LANG_INT_SAVE, AC_LANG_INT_SAVE(C), AC_LANG_INT_SAVE(C++)): New
+	macros.
+	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE, _AC_COMPUTE_INT_RUN,
+	_AC_COMPUTE_INT): New.
+	(AC_CHECK_SIZEOF): Use them.
+	Check whether the type exists beforehand.
+	* tests/semantics.m4 (AC_CHECK_SIZEOF): Strengthen.
+
 2000-05-26  Ossama Othman <ossama@ece.uci.edu>
 
 	* aclang.m4 (AC_PROG_CXX): Look for aCC KCC RCC xlC_r xlC.

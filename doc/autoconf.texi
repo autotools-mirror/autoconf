@@ -3907,7 +3907,7 @@ size_t my_strlen PARAMS ((const char *));
 
 @c FIXME: What the heck is this macro doing here?  Move it out of
 @c the way, in its proper section!!!
-@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{cross-size}, @ovar{includes})
+@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @ovar{includes})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
 size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
@@ -3915,8 +3915,8 @@ of 0.  If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).  If you provide @var{include}, make sure to
 include @file{stdio.h} which is required for this macro to run.
 
-If cross-compiling, the value @var{cross-size} is used if given,
-otherwise @code{configure} exits with an error message.
+This macro now works even when cross-compiling.  The @var{unused}
+argument was used when cross-compiling.
 
 For example, the call
 

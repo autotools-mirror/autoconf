@@ -173,6 +173,9 @@ test cases in this new frame work.
 - AC_PROG_LEX
   Now integrates `AC_DECL_YYTEXT' which is obsoleted.
 
+- AC_CHECK_SIZEOF
+  No longer needs a cross-compilation size.
+
 ** C++ compatibility
   Every macro has been revisited in order to support at best CC=c++.
 
