@@ -238,7 +238,7 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 # AC_LANG_CONFTEST(BODY)
 # ---------------------
-# Save the BODY in `conftest.$acext'.  Add a trailing new line.
+# Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
 define([AC_LANG_CONFTEST],
 [cat >conftest.$ac_ext <<_ACEOF
 $1
@@ -610,8 +610,8 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CC_GNU
 _AC_PROG_CC_G
-AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
+AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_CC
 
@@ -802,8 +802,8 @@ AC_CHECK_TOOLS(CXX,
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_CXX_GNU
 _AC_PROG_CXX_G
-AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
+AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_CXX
 
@@ -901,9 +901,8 @@ AC_CHECK_TOOLS(F77,
 _AC_LANG_COMPILER_WORKS
 _AC_PROG_F77_GNU
 _AC_PROG_F77_G
-
-AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_EXPAND_ONCE([_AC_OBJEXT])
+AC_EXPAND_ONCE([_AC_EXEEXT])
 AC_LANG_POP
 ])# AC_PROG_F77
 

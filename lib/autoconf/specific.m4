@@ -1588,16 +1588,22 @@ AC_SUBST(EXEEXT)dnl
 # determined by ac_objext.
 define([_AC_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-   [for ac_file in conftest.*; do
-    case $ac_file in
-      *.$ac_ext) ;;
-      *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
-    esac
-  done],
-   [AC_MSG_ERROR([cannot compile])])])
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+ if AC_TRY_EVAL(ac_compile); then
+   for ac_file in conftest.*; do
+   case $ac_file in
+     *.$ac_ext) ;;
+     *) ac_cv_objext=`echo $ac_file | sed s/conftest.//` ;;
+   esac
+   done
+ else
+   rm -f conftest.$ac_ext
+   AC_MSG_ERROR([cannot compile])
+ fi
+])
 AC_SUBST(OBJEXT, $ac_cv_objext)dnl
 ac_objext=$ac_cv_objext
+rm -f conftest.$ac_objext conftest.$ac_ext
 ])# _AC_OBJEXT
 
 
