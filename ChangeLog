@@ -1,5 +1,9 @@
 2000-02-04  Akim Demaille  <akim@epita.fr>
 
+	* tests/Makefile.am (macros.m4): Fix the sed snippet.
+
+2000-02-04  Akim Demaille  <akim@epita.fr>
+
 	* testsuite/autoconf.g/init.exp: Removed, test performed by
 	tests/syntax.m4.
 	* testsuite/autoconf.g/sizeof.exp: Likewise.

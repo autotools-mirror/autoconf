@@ -40,7 +40,7 @@ testsuite: atgeneral.m4 suite.m4 macros.m4 $(SUITE)
 
 macros.m4: $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
 	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
-	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\)/\1/p' | \
+	  sed -ne 's/^AC_DEFUN(\[*\([^],]*\).*/\1/p' | \
 	  sort >macros
 	rm -f $@-t
 	for macro in `cat macros`; do \
