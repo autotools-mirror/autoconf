@@ -675,7 +675,7 @@ Because of its mission, Autoconf includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
 @uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
-Archive}, which is kindly run by @email{simons@@gnu.org,
+Archive}, which is kindly run by @email{simons@@cryp.to,
 Peter Simons}.
 
 

@@ -1,3 +1,7 @@
+2005-01-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Introduction): Update Peter Simons' address.
+
 2005-01-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Clarify that
