@@ -104,49 +104,49 @@ while test $# -gt 0 ; do
   optarg=`expr "x$1" : 'x--[^=]*=\(.*\)' \| \
                "x$1" : 'x-.\(.*\)'`
   case $1 in
-    --version | --vers* | -V )
+    --version | -V )
        echo "$version" ; exit 0 ;;
-    --help | --h* | -h )
+    --help | -h )
        echo "$usage"; exit 0 ;;
 
-    --debug | --d* | -d )
+    --debug | -d )
        debug=:; shift ;;
-    --verbose | --verb* | -v )
+    --verbose | -v )
        verbose=echo
        shift;;
 
-    --localdir=* | --l*=* | -l?* )
+    --localdir=* | -l?* )
        localdir=$optarg
        shift ;;
-    --localdir | --l* | -l )
+    --localdir | -l )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        localdir=$1
        shift ;;
 
-    --autoconf-dir=* | --a*=* | -A?* )
+    --autoconf-dir=* | -A?* )
       autoconf_dir=$optarg
        shift ;;
-    --autoconf-dir | --a* | -A )
+    --autoconf-dir | -A )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
-    --macrodir=* | --m*=* | -m?* )
+    --macrodir=* | -m?* )
        echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        autoconf_dir=$optarg
        shift ;;
-    --macrodir | --m* | -m )
+    --macrodir | -m )
        echo "$me: warning: --macrodir is obsolete, use --autoconf-dir" >&2
        test $# = 1 && eval "$exit_missing_arg"
        shift
        autoconf_dir=$1
        shift ;;
 
-    --warnings=* | --w*=* | -W?* )
+    --warnings=* | -W?* )
        warnings=$warnings,$optarg
        shift ;;
-    --warnings | --w* | -W )
+    --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        warnings=$warnings,$1

@@ -1,3 +1,12 @@
+2000-11-07  Pavel Roskin  <proski@gnu.org>
+
+	* autoconf.sh: Temporarily disable recognizing of abbreviated
+	long options - it's hard to maintain them by hand.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Likewise.
+
 2000-11-07  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (ac_cv_prog_gcc, ac_cv_prog_gxx, ac_cv_prog_g77):

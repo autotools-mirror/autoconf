@@ -52,9 +52,9 @@ Try \`$me --help' for more information."
 
 while test $# -gt 0; do
   case "$1" in
-  --h* | -h )
+  --help | -h )
     echo "$usage"; exit 0 ;;
-  --v* | -V )
+  --version | -V )
     echo "$version"; exit 0 ;;
   --)     # Stop option processing.
     shift; break ;;
