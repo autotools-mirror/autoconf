@@ -329,8 +329,12 @@ AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
 
 # AC_OUTPUT_COMMANDS_PRE
 # ----------------------
+# A *variable* in which we append all the actions that must be
+# performed before *creating* config.status.  For a start, clean
+# up all the LIBOBJ mess.
 m4_define([AC_OUTPUT_COMMANDS_PRE],
-[])
+[_AC_LIBOBJS_NORMALIZE()
+])
 
 
 # AC_CONFIG_COMMANDS_POST(CMDS)

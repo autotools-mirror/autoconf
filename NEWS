@@ -18,7 +18,18 @@
 
 ** Macros
 
+- AC_OUTPUT
+  Now handles all the gory details about LIBOBJS and LTLIBOBJS.
+  Please, remove lines such as
+
+	# This is necessary so that .o files in LIBOBJS are also
+	# built via the ANSI2KNR-filtering rules.
+	LIBOBJS=`echo $LIBOBJS|sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
+
+  and read the `AC_LIBOBJ vs LIBOBJS' section.
+
 - AC_CONFIG_LINKS now makes copies if it can't make links.
+
 - AC_FUNC_FNMATCH now tests only for POSIX compatibility, reverting to
   Autoconf 2.13 behavior.  The new macro AC_FUNC_FNMATCH_GNU also
   tests for GNU extensions to fnmatch, and replaces fnmatch if needed.

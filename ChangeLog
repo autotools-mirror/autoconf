@@ -1,4 +1,13 @@
 2002-07-18  Akim Demaille  <akim@epita.fr>,
+
+	Handle LIBOBJS and LTLIBOBJS once for all, including Libtool's and
+	Automake's parts.
+
+	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): New.
+	* lib/autoconf/status.m4 (AC_OUTPUT_COMMANDS_PRE): Call it.
+	* tests/semantics.at (AC_REPLACE_FUNCS): Adjust.
+
+2002-07-18  Akim Demaille  <akim@epita.fr>,
 	    Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Install

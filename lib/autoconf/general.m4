@@ -1272,7 +1272,7 @@ m4_define([AC_INIT],
 m4_pattern_forbid([^_?A[CHUM]_])
 m4_pattern_forbid([_AC_])
 m4_pattern_forbid([^LIBOBJS$],
-                  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs. LIBOBJS'])
+                  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
 AS_INIT
@@ -2393,6 +2393,7 @@ AC_SUBST([LIB@&t@OBJS])dnl
 LIB@&t@OBJS="$LIB@&t@OBJS $1.$ac_objext"])
 
 
+
 # AC_LIBOBJ(FILENAME-NOEXT)
 # -------------------------
 # We need `FILENAME-NOEXT.o', save this into `LIBOBJS'.
@@ -2403,6 +2404,26 @@ m4_define([AC_LIBOBJ],
                          [$0($1): you should use literals])])dnl
 ])
 
+
+# _AC_LIBOBJS_NORMALIZE
+# ---------------------
+# Clean up LIBOBJS abd LTLIBOBJS so that they work with 1. ac_objext,
+# 2. Automake's ANSI2KNR, 3. Libtool, 4. combination of the three.
+# Used with AC_CONFIG_COMMANDS_PRE.
+AC_DEFUN([_AC_LIBOBJS_NORMALIZE],
+[ac_libobjs=
+ac_ltlibobjs=
+for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
+  # 1. Remove the extension, and $U if already installed.
+  ac_i=`echo "$ac_i" |
+         sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
+  # 2. Add them.
+  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+done
+AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
+AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
+])
 
 
 ## ----------------------------------- ##

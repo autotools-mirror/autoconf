@@ -12815,17 +12815,11 @@ This change is mandated by the unification of the GNU Build System
 components.  In particular, the various fragile techniques used to parse
 a @file{configure.ac} are all replaced with the use of traces.  As a
 consequence, any action must be traceable, which obsoletes critical
-variable assignments.  Fortunately, @code{LIBOBJS} was the only problem.
+variable assignments.  Fortunately, @code{LIBOBJS} was the only problem,
+and it can even be handled gracefully (read, ``without your having to
+change something'').
 
-At the time this documentation is written, Automake does not rely on
-traces yet, but this is planned for a near future.  Nevertheless, to
-ease the transition, and to guarantee this future Automake release will
-be able to use Autoconf 2.53, using @code{LIBOBJS} directly will make
-@command{autoconf} fail.  But note that the output, @command{configure},
-is correct and fully functional: you have some delay to adjust your
-source.
-
-There are two typical uses of @code{LIBOBJS}: asking for a replacement
+There were two typical uses of @code{LIBOBJS}: asking for a replacement
 function, and adjusting @code{LIBOBJS} for Automake and/or Libtool.
 
 @sp 1
@@ -12849,12 +12843,9 @@ AC_LIBOBJ([malloc])
 @sp 1
 
 When asked for automatic de-ANSI-fication, Automake needs
-@code{LIBOBJS}'ed filenames to have @samp{$U} appended to the
-base names.   Libtool requires the definition of @code{LTLIBOBJS}, which
-suffixes are mapped to @samp{.lo}.  Although Autoconf provides them with
-means to free the user to do that by herself, by the time of this
-writing, none do.  Therefore, it is common to see @file{configure.ac}
-end with:
+@code{LIBOBJS}'ed filenames to have @samp{$U} appended to the base
+names.  Libtool requires the definition of @code{LTLIBOBJS}, which
+suffixes are mapped to @samp{.lo}.  People used to run snippets such as:
 
 @example
 # This is necessary so that .o files in LIBOBJS are also built via
@@ -12865,13 +12856,12 @@ AC_SUBST(LTLIBOBJS)
 @end example
 
 @noindent
-First, note that this code is @emph{wrong}, because @samp{.o} is not the
-only possible extension@footnote{
+Note that this code is @emph{wrong}, because @samp{.o} is not the only
+possible extension@footnote{
 @c
 Yet another reason why assigning @code{LIBOBJS} directly is discouraged.
 @c
-}!  Because the token @code{LIBOBJS} is now
-forbidden, you will have to replace this snippet with:
+}!  It should have read:
 
 @example
 # This is necessary so that .o files in LIBOBJS are also built via
@@ -12883,10 +12873,13 @@ LTLIBOBJS=`echo "$LIB@@&t@@OBJS" |
 AC_SUBST(LTLIBOBJS)
 @end example
 
-@noindent
-Unfortunately, @command{autoupdate} cannot help here, since@dots{} this is
-not a macro!  Of course, first make sure your release of Automake and/or
-Libtool still requires these.
+@sp 1
+
+Fortunately, you no longer have to use this: @code{AC_OUTPUT} normalizes
+@code{LIBOBJS} and @code{LTLIBOBJS} (hence it works with any version of
+Automake and Libtool).  So just remove these lines.
+@command{autoupdate} cannot handle this task, since this is not a macro.
+
 
 @c ============================= Generating Test Suites with Autotest
 
