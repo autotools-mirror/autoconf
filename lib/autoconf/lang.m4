@@ -269,9 +269,9 @@ define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
 # ------------------------- #
 
 
-# AC_LANG(FORTRAN77)
-# ------------------
-define([AC_LANG(FORTRAN77)],
+# AC_LANG(Fortran 77)
+# -------------------
+define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
 ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
@@ -281,31 +281,31 @@ cross_compiling=$ac_cv_prog_f77_cross
 
 # AC_LANG_FORTRAN77
 # -----------------
-AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(FORTRAN77)])
+AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 
 
-# AC_LANG_SOURCE(FORTRAN77)(BODY)
-# -------------------------------
+# AC_LANG_SOURCE(Fortran 77)(BODY)
+# --------------------------------
 # FIXME: Apparently, according to former AC_TRY_COMPILER, the CPP
 # directives must not be included.  But AC_TRY_RUN_NATIVE was not
 # avoiding them, so?
-define([AC_LANG_SOURCE(FORTRAN77)],
+define([AC_LANG_SOURCE(Fortran 77)],
 [$1])
 
 
-# AC_LANG_PROGRAM(FORTRAN77)(PROLOGUE, BODY)
-# ------------------------------------------
+# AC_LANG_PROGRAM(Fortran 77)(PROLOGUE, BODY)
+# -------------------------------------------
 # Yes, we discard the PROLOGUE.
-define([AC_LANG_PROGRAM(FORTRAN77)],
+define([AC_LANG_PROGRAM(Fortran 77)],
 [      program main
 $2
       end])
 
 
-# AC_LANG_CALL(FORTRAN77)(PROLOGUE, FUNCTION)
-# -------------------------------------------
+# AC_LANG_CALL(Fortran 77)(PROLOGUE, FUNCTION)
+# --------------------------------------------
 # FIXME: This is a guess, help!
-define([AC_LANG_CALL(FORTRAN77)],
+define([AC_LANG_CALL(Fortran 77)],
 [AC_LANG_PROGRAM([$1],
 [      call $2])])
 
@@ -717,7 +717,7 @@ fi
 AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
 AC_LANG_SAVE()dnl
-AC_LANG(FORTRAN77)
+AC_LANG(Fortran 77)
 AC_TRY_COMPILER(
 [      program conftest
       end
@@ -1207,7 +1207,7 @@ AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
 AC_REQUIRE([AC_CYGWIN])dnl
 
 AC_LANG_SAVE()dnl
-AC_LANG(FORTRAN77)
+AC_LANG(Fortran 77)
 
 # This is the simplest of all Fortran 77 programs.
 cat >conftest.$ac_ext <<EOF
@@ -1373,7 +1373,7 @@ AC_REQUIRE([AC_PROG_F77])dnl
 AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 
 AC_LANG_SAVE()dnl
-AC_LANG(FORTRAN77)
+AC_LANG(Fortran 77)
 
 cat >conftest.$ac_ext <<EOF
       subroutine foobar()

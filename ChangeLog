@@ -1,5 +1,15 @@
 2000-05-03  Akim Demaille  <akim@epita.fr>
 
+	Rename the language FORTRAN77 as Fortran 77.
+
+	* aclang.m4 (AC_LANG(FORTRAN77), AC_LANG_SOURCE(FORTRAN77),
+	AC_LANG_PROGRAM(FORTRAN77), AC_LANG_CALL(FORTRAN77)): Rename as...
+	(AC_LANG(Fortran 77), AC_LANG_SOURCE(Fortran 77),
+	AC_LANG_PROGRAM(Fortran 77), AC_LANG_CALL(Fortran 77)): This.
+	(AC_LANG_FORTRAN77): Adjust.
+
+2000-05-03  Akim Demaille  <akim@epita.fr>
+
 	Provide a macro to canonicalize a configuration name.
 	Suggested by Ralf Corsepius.
 
