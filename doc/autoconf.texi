@@ -12297,7 +12297,7 @@ if possible, but bug workarounds or obscure difficulties might have to
 be driven from @samp{$host}.
 @item
 Assembler code is inevitably highly CPU-specific and is best selected
-according to the CPU part of @samp{$host}.
+according to @samp{$host_cpu}.
 @item
 Assembler variations like underscore prefix on globals or ELF versus
 COFF type directives are however best determined by probing, perhaps
