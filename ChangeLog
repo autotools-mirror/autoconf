@@ -1,5 +1,13 @@
 2000-03-29  Akim Demaille  <akim@epita.fr>
 
+	silent.m4 depends upon the current quotation in m4, which changes
+	if `-i' is used or not.
+
+	* autoconf.sh (trace::silent.m4): Removed.
+	(trace::run_m4_trace): Pass -Derrprint.
+
+2000-03-29  Akim Demaille  <akim@epita.fr>
+
 	Use `mktemp -d' when possible to create securely a tmp work dir.
 
 	* autoconf.sh: Use it when possible to create the dir $tmp.

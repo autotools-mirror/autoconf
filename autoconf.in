@@ -299,11 +299,6 @@ case $task in
   ## Trace macros.  ##
   ## -------------- ##
   trace)
-  # `errprint' must be silent when we run `m4 --trace', otherwise there
-  # can be warnings mixed with traces in m4's stderr.
-  cat >$tmp/silent.m4 <<\EOF
-define(`errprint')dnl
-EOF
   # A program to trace m4 macros.
   cat >$tmp/trace.m4 <<\EOF
 divert(-1)
@@ -444,10 +439,12 @@ EOF
   echo "divert(0)dnl" >>$tmp/trace.m4
 
   # Do we trace the initialization?
+  # `errprint' must be silent, otherwise there can be warnings mixed
+  # with traces in m4's stderr.
   if $initialization; then
-    run_m4_trace="$run_m4 $trace_opt -daflq $tmp/silent.m4"
+    run_m4_trace="$run_m4 $trace_opt -daflq -Derrprint"
   else
-    run_m4_trace="$run_m4f $trace_opt -daflq $tmp/silent.m4"
+    run_m4_trace="$run_m4f $trace_opt -daflq -Derrprint"
   fi
 
   # Run m4 on the input file to get traces.
@@ -455,15 +452,15 @@ EOF
   $run_m4_trace $infile 2>&1 >/dev/null |
     sed -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \([^(][^(]*\)(\(.*\)$/AT_\4([\1], [\2], [\3], [\4], \5/' \
         -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' |
-  # Now we are ready to run m4 to process the trace file.
-  $M4 $tmp/trace.m4 - |
-  # It makes no sense to try to transform __oline__.
-  sed '
-    s/@<:@/[/g
-    s/@:>@/]/g
-    s/@S|@/$/g
-    s/@%:@/#/g
-    ' >&4
+    # Now we are ready to run m4 to process the trace file.
+    $M4 $tmp/trace.m4 - |
+    # It makes no sense to try to transform __oline__.
+    sed '
+      s/@<:@/[/g
+      s/@:>@/]/g
+      s/@S|@/$/g
+      s/@%:@/#/g
+      ' >&4
   ;;
 
 
