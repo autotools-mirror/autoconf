@@ -228,7 +228,8 @@ define(AC_PROG_INSTALL,
 # Avoid using ./install, which might have been erroneously created
 # by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
-  AC_CHECKING(for a BSD compatible install)
+  AC_CACHE_USE(ac_cv_program_INSTALL,
+[  AC_CHECKING(for a BSD compatible install)
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
@@ -243,9 +244,7 @@ if test "z${INSTALL}" = "z" ; then
 	    # OSF/1 installbsd also uses dspmsg, but is usable.
 	    :
 	  else
-	    INSTALL="$ac_dir/$ac_prog -c"
-	    INSTALL_PROGRAM='${INSTALL}'
-	    INSTALL_DATA='${INSTALL} -m 644'
+	    ac_cv_program_INSTALL="$ac_dir/$ac_prog -c"
 	    break 2
 	  fi
 	fi
@@ -255,18 +254,19 @@ if test "z${INSTALL}" = "z" ; then
   done
   IFS="$ac_save_ifs"
 fi
-if test -z "$INSTALL"; then
-  # As a last resort, use the slow shell script.
-  INSTALL="$ac_install_sh"
-fi
+# As a last resort, use the slow shell script.
+test -z "$ac_cv_program_INSTALL" && ac_cv_program_INSTALL="$ac_install_sh"])dnl
+INSTALL="$ac_cv_program_INSTALL"
 AC_SUBST(INSTALL)dnl
 AC_VERBOSE(setting INSTALL to $INSTALL)
+
 # Use test -z because SunOS4 sh mishandles ${INSTALL_PROGRAM-'${INSTALL}'}.
 # It thinks the first close brace ends the variable substitution.
 test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
 AC_SUBST(INSTALL_PROGRAM)dnl
 AC_VERBOSE(setting INSTALL_PROGRAM to $INSTALL_PROGRAM)
-test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL}'
+
+test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 AC_SUBST(INSTALL_DATA)dnl
 AC_VERBOSE(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
@@ -860,7 +860,8 @@ main ()
 }], AC_DEFINE(HAVE_STRCOLL))])dnl
 dnl
 define(AC_SETVBUF_REVERSED,
-[AC_TEST_PROGRAM([#include <stdio.h>
+[AC_CHECKING(whether setvbuf arguments are reversed)
+AC_TEST_PROGRAM([#include <stdio.h>
 /* If setvbuf has the reversed format, exit 0. */
 main () {
   /* This call has the arguments reversed.
