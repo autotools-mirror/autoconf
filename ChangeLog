@@ -1,3 +1,10 @@
+2003-05-16  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
+	* bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in (BEGIN): Make
+	them uniform, and more robust to Perl special characters.
+	Reported by Martin Mokrej.
+
 2003-05-14  Akim Demaille  <akim@epita.fr>
 
 	* tests/foreign.at (Libtool): Skip all Libtools pre 1.4.

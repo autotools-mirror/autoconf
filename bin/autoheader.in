@@ -6,7 +6,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autoheader -- create `config.h.in' from `configure.ac'
-# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1996, 1998, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -29,8 +29,8 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 
 BEGIN
 {
-  my $perllibdir = $ENV{'autom4te_perllibdir'} || '@datadir@';
-  unshift @INC, "$perllibdir";
+  my $datadir = $ENV{'autom4te_perllibdir'} || '@datadir@';
+  unshift @INC, "$datadir";
 
   # Override SHELL.  On DJGPP SHELL may not be set to a shell
   # that can handle redirection and quote arguments correctly,
@@ -92,7 +92,7 @@ $version = <<"END";
 autoheader (@PACKAGE_NAME@) @VERSION@
 Written by Roland McGrath and Akim Demaille.
 
-Copyright 2002 Free Software Foundation, Inc.
+Copyright (C) 2003 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 END
