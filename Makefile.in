@@ -1,5 +1,5 @@
 # Makefile for Autoconf.
-# Copyright (C) 1992, 1993, 1994, 1998 Free Software Foundation, Inc.
+# Copyright (C) 1992, 1993, 1994, 1998, 1999 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -229,14 +229,22 @@ TAGS:
 # Don't depend on DISTFILES because there's no rule for "standards.info*".
 dist: $(DISTDEP)
 	distname=`sed -e '/define(AC_ACVERSION,/!d' \
-	-e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' -e q acgeneral.m4`; \
+		      -e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' \
+		      -e q ${srcdir}/acgeneral.m4`; \
 	rm -fr $$distname; \
 	mkdir $$distname $$distname/testsuite $$distname/testsuite/config \
 	$$distname/testsuite/lib $$distname/testsuite/autoconf.g \
 	$$distname/testsuite/autoconf.s; \
 	for file in $(DISTFILES); do \
-	  ln $$file $$distname/$$file \
-	  || { echo copying $$file instead; cp -p $$file $$distname/$$file;}; \
+	  if test -f $$file; then \
+	    ln $$file $$distname/$$file \
+	    || { echo copying $$file instead; \
+	         cp -p $$file $$distname/$$file; } ; \
+	  else for file in `CDPATH=:; cd $(srcdir) && echo $$file`; do \
+	    ln $(srcdir)/$$file $$distname/$$file \
+	    || { echo copying $$file instead; \
+	         cp -p $(srcdir)/$$file $$distname/$$file; } ; \
+	  done; fi; \
 	done; \
 	chmod -R a+rX $$distname; \
 	tar -chz -f $$distname.tar.gz $$distname; \
