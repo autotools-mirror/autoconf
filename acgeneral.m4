@@ -2578,9 +2578,15 @@ dnl [#]line __oline__ "[$]0"
 [#]line __oline__ "configure"
 #include "confdefs.h"
 [$1]
-int main() {
+int
+main ()
+{
+dnl Do *not* indent the following line: there may be CPP directives.
+dnl Don't move the `;' right after for the same reason.
 [$2]
-; return 0; }
+  ;
+  return 0;
+}
 ])EOF
 if AC_TRY_EVAL(ac_compile); then
   ifelse([$3], , :, [rm -rf conftest*
@@ -2620,13 +2626,19 @@ ifelse(AC_LANG, [FORTRAN77],
       end
 ],
 [dnl This sometimes fails to find confdefs.h, for some reason.
-dnl [#]line __oline__ "[$]0"
-[#]line __oline__ "configure"
+dnl @PND@line __oline__ "[$]0"
+@PND@line __oline__ "configure"
 #include "confdefs.h"
 [$1]
-int main() {
+int
+main()
+{
+dnl Do *not* indent the following line: there may be CPP directives.
+dnl Don't move the `;' right after for the same reason.
 [$2]
-; return 0; }
+  ;
+  return 0;
+}
 ])EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   ifelse([$3], , :, [rm -rf conftest*
@@ -2658,11 +2670,13 @@ else
 fi
 ])
 
-dnl Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
+
 dnl AC_TRY_RUN_NATIVE(PROGRAM, [ACTION-IF-TRUE [, ACTION-IF-FALSE]])
+dnl ----------------------------------------------------------------
+dnl Like AC_TRY_RUN but assumes a native-environment (non-cross) compiler.
 AC_DEFUN(AC_TRY_RUN_NATIVE,
 [cat >conftest.$ac_ext <<EOF
-[#]line __oline__ "configure"
+@PND@line __oline__ "configure"
 #include "confdefs.h"
 ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C" void exit(int);
@@ -2886,7 +2900,8 @@ AC_DEFUN(AC_CHECK_SIZEOF,
 AC_CACHE_CHECK([size of $1], ac_Sizeof,
 [AC_TRY_RUN([#include <stdio.h>
 [$3]
-main()
+int
+main ()
 {
   FILE *f=fopen("conftestval", "w");
   if (!f) exit(1);

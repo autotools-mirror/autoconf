@@ -1,5 +1,21 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Fix the compatibility of the compiling macros with C++.
+
+	* acgeneral.m4 (AC_TRY_COMPILE, AC_TRY_LINK, AC_CHECK_SIZEOF): Use
+	`int main () {...}', instead of `main () {...}'.
+	* acspecific.m4 (AC_TYPE_GETGROUPS, AC_FUNC_CLOSEDIR_VOID,
+	AC_FUNC_FNMATCH, AC_FUNC_GETPGRP, AC_FUNC_SETPGRP, AC_FUNC_VFORK,
+	AC_FUNC_WAIT3, AC_FUNC_ALLOCA, AC_FUNC_UTIME_NULL,
+	AC_FUNC_SETVBUF_REVERSED, AC_FUNC_MEMCMP, AC_C_CHAR_UNSIGNED,
+	AC_C_LONG_DOUBLE, AC_C_BIGENDIAN, AC_SYS_RESTARTABLE_SYSCALLS):
+	Likewise.
+	* acspecific.m4 (AC_FUNC_FNMATCH): Call
+	AC_CHECK_HEADERS(fnmatch.h), and include fnmatch.h in the compiled
+	code.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_COMPILE_CHECK, AC_TRY_COMPILE,
  	AC_TRY_RUN_NATIVE, AC_OUTPUT_CONFIG_STATUS): Use @PND@ instead of
  	[#]: it looses the editors that try to match the pairs of (), []

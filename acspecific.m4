@@ -1141,6 +1141,7 @@ changequote(<<, >>)dnl
 #define NGID 256
 #undef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
+int
 main()
 {
   gid_t gidset[NGID];
@@ -1229,9 +1230,16 @@ dnl that case.
 AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
-[AC_TRY_RUN([#include <sys/types.h>
+[AC_TRY_RUN(
+[#include <sys/types.h>
 #include <$ac_header_dirent>
-int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
+
+int closedir();
+int
+main()
+{
+  exit(closedir(opendir(".")) != 0);
+}],
   ac_cv_func_closedir_void=no,
   ac_cv_func_closedir_void=yes,
   ac_cv_func_closedir_void=yes)])
@@ -1241,19 +1249,33 @@ if test $ac_cv_func_closedir_void = yes; then
 fi
 ])
 
+dnl AC_FUNC_FNMATCH
+dnl ---------------
+dnl We look for fnmatch.h to avoid that the test fails in C++.
 AC_DEFUN(AC_FUNC_FNMATCH,
-[AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
+[AC_CHECK_HEADERS(fnmatch.h)
+AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
 # Some versions of Solaris or SCO have a broken fnmatch function.
 # So we run a test program.  If we are cross-compiling, take no chance.
 # Thanks to John Oleynick and Franc,ois Pinard for this test.
-[AC_TRY_RUN([main() { exit (fnmatch ("a*", "abc", 0) != 0); }],
+[AC_TRY_RUN(
+[#if HAVE_FNMATCH_H
+# include <fnmatch.h>
+#endif
+
+int
+main()
+{
+  exit (fnmatch ("a*", "abc", 0) != 0);
+}],
 ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
 ac_cv_func_fnmatch_works=no)])
 if test $ac_cv_func_fnmatch_works = yes; then
   AC_DEFINE(HAVE_FNMATCH, 1,
             [Define if your system has a working `fnmatch' function.])
 fi
-])
+])dnl AC_FUNC_FNMATCH
+
 
 dnl AC_FUNC_MMAP
 dnl ------------
@@ -1423,7 +1445,8 @@ int     pid;
 int     pg1, pg2, pg3, pg4;
 int     ng, np, s, child;
 
-main()
+int
+main ()
 {
         pid = getpid();
         pg1 = getpgrp(0);
@@ -1468,33 +1491,38 @@ if test $ac_cv_func_getpgrp_void = yes; then
 fi
 ])dnl AC_FUNC_GETPGRP
 
+
+dnl AC_FUNC_SETPGRP
+dnl ---------------
 AC_DEFUN(AC_FUNC_SETPGRP,
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
-AC_TRY_RUN([
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
+AC_TRY_RUN(
+[#ifdef HAVE_UNISTD_H
+# include <unistd.h>
 #endif
 
-/*
- * If this system has a BSD-style setpgrp, which takes arguments, exit
- * successfully.
- */
-main()
+/* If this system has a BSD-style setpgrp, which takes arguments, exit
+   successfully.  */
+
+int
+main ()
 {
-    if (setpgrp(1,1) == -1)
-	exit(0);
-    else
-	exit(1);
-}
-], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes,
+  if (setpgrp (1,1) == -1)
+    exit (0);
+  else
+    exit (1);
+}], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes,
    AC_MSG_ERROR(cannot check setpgrp if cross compiling))
 )
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
             [Define if the `setpgrp' function takes no argument.])
 fi
-])
+])dnl AC_FUNC_SETPGRP
 
+
+dnl AC_FUNC_VPRINTF
+dnl ---------------
 dnl Why the heck is that _doprnt does not define HAVE__DOPRNT???
 dnl That the logical name!  In addition, why doesn't it use
 dnl AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
@@ -1557,7 +1585,10 @@ sparc_address_test (arg) int arg;
     }
   }
 }
-main() {
+
+int
+main ()
+{
   pid_t parent = getpid ();
   pid_t child;
 
@@ -1617,16 +1648,22 @@ ac_cv_func_vfork_works=$ac_cv_func_vfork)])
 if test "x$ac_cv_func_vfork_works" = xno; then
   AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
 fi
-])
+])dnl AC_FUNC_VFORK
 
+
+dnl AC_FUNC_WAIT3
+dnl -------------
 AC_DEFUN(AC_FUNC_WAIT3,
 [AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
-[AC_TRY_RUN([#include <sys/types.h>
+[AC_TRY_RUN(
+[#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <stdio.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
-main() {
+int
+main()
+{
   struct rusage r;
   int i;
   /* Use a field that we can force nonzero --
@@ -1742,6 +1779,7 @@ AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
   else
     return (&dummy > addr) ? 1 : -1;
 }
+int
 main ()
 {
   exit (find_stack_direction() < 0);
@@ -1878,13 +1916,18 @@ AC_DEFUN(AC_FUNC_UTIME_NULL,
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftestdata; >conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
-AC_TRY_RUN([#include <sys/types.h>
+AC_TRY_RUN(
+[#include <sys/types.h>
 #include <sys/stat.h>
-main() {
-struct stat s, t;
-exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
-&& stat("conftestdata", &t) == 0 && t.st_mtime >= s.st_mtime
-&& t.st_mtime - s.st_mtime < 120));
+int
+main()
+{
+  struct stat s, t;
+  exit (!(stat ("conftestdata", &s) == 0
+          && utime ("conftestdata", (long *)0) == 0
+          && stat ("conftestdata", &t) == 0
+          && t.st_mtime >= s.st_mtime
+          && t.st_mtime - s.st_mtime < 120));
 }], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no,
   ac_cv_func_utime_null=no)
 rm -f core core.* *.core])
@@ -1901,6 +1944,7 @@ dnl ---------------
 AC_DEFUN(AC_FUNC_STRCOLL,
 [AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_TRY_RUN([#include <string.h>
+int
 main ()
 {
   exit (strcoll ("abc", "def") >= 0 ||
@@ -1923,7 +1967,9 @@ AC_DEFUN(AC_FUNC_SETVBUF_REVERSED,
   ac_cv_func_setvbuf_reversed,
 [AC_TRY_RUN([#include <stdio.h>
 /* If setvbuf has the reversed format, exit 0. */
-main () {
+int
+main ()
+{
   /* This call has the arguments reversed.
      A reversed system may check and see that the address of main
      is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
@@ -2136,13 +2182,14 @@ dnl AC_FUNC_MEMCMP
 dnl --------------
 AC_DEFUN(AC_FUNC_MEMCMP,
 [AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,
-[AC_TRY_RUN([
+[AC_TRY_RUN(
+[int
 main()
 {
   char c0 = 0x40, c1 = 0x80, c2 = 0x81;
-  exit(memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
-}
-], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
+  exit (memcmp(&c0, &c2, 1) < 0
+        && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
+}], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
 ac_cv_func_memcmp_clean=no)])
 test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.${ac_objext}"
 AC_SUBST(LIBOBJS)dnl
@@ -2327,10 +2374,13 @@ else
 AC_TRY_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
 #if !defined(__STDC__) || __STDC__ != 1
-#define volatile
+# define volatile
 #endif
-main() {
-  volatile char c = 255; exit(c < 0);
+int
+main()
+{
+  volatile char c = 255;
+  exit(c < 0);
 }], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)
 fi])
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
@@ -2393,7 +2443,10 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #endif
 ], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
-AC_TRY_RUN([main () {
+AC_TRY_RUN(
+[int
+main ()
+{
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
@@ -2434,7 +2487,7 @@ case "$ac_cv_c_inline" in
                          [Define as `__inline' if that's what the C compiler
                           calls it, or to nothing if it is not supported.]) ;;
 esac
-])
+])dnl AC_C_INLINE
 
 
 dnl AC_C_CONST
@@ -2992,6 +3045,9 @@ if test $ac_cv_sys_long_file_names = yes; then
 fi
 ])
 
+
+dnl AC_SYS_RESTARTABLE_SYSCALLS
+dnl ---------------------------
 AC_DEFUN(AC_SYS_RESTARTABLE_SYSCALLS,
 [AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 [AC_TRY_RUN(
@@ -3001,22 +3057,26 @@ AC_DEFUN(AC_SYS_RESTARTABLE_SYSCALLS,
 #include <sys/types.h>
 #include <signal.h>
 ucatch (isig) { }
-main () {
+int
+main ()
+{
   int i = fork (), status;
   if (i == 0) { sleep (3); kill (getppid (), SIGINT); sleep (3); exit (0); }
   signal (SIGINT, ucatch);
   status = wait(&i);
   if (status == -1) wait(&i);
   exit (status == -1);
-}
-], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
+}], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])
 if test $ac_cv_sys_restartable_syscalls = yes; then
   AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS, 1,
             [Define if system calls automatically restart after interruption
              by a signal.])
 fi
-])
+])dnl AC_SYS_RESTARTABLE_SYSCALLS
 
+
+dnl AC_PATH_X
+dnl ---------
 AC_DEFUN(AC_PATH_X,
 [AC_REQUIRE_CPP()dnl Set CPP; we run AC_PATH_X_DIRECT conditionally.
 # If we find X, set shell vars x_includes and x_libraries to the
