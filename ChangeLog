@@ -1,5 +1,9 @@
 2000-03-21  Akim Demaille  <akim@epita.fr>
 
+	* tests/semantics.m4 (AC_PATH_PROG, AC_PATH_PROGS): New tests.
+
+2000-03-21  Akim Demaille  <akim@epita.fr>
+
 	Start the language support overhaul: Introduce AC_LANG().
 
 	* acgeneral.m4 (AC_LANG): Renamed as _AC_LANG_CURRENT.

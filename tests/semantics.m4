@@ -155,11 +155,11 @@ rm ac-exists1 ac-exists2],
 
 
 
-## --------------- ##
-## AC_CHECK_PROG.  ##
-## --------------- ##
+## ------------------------------ ##
+## AC_CHECK_PROG & AC_PATH_PROG.  ##
+## ------------------------------ ##
 
-AT_SETUP(AC_CHECK_PROG)
+AT_SETUP(AC_CHECK_PROG & AC_PATH_PROG)
 
 # Create a sub directory `path' with 6 subdirs which all 7 contain
 # an executable `tool'. `6' contains a `better' tool.
@@ -179,10 +179,15 @@ do
 done
 cp path/tool path/6/better
 
-# Perform various tests of AC_CHECK_PROG and AC_CHECK_PROGS.
+
+# -------------------------------- #
+# AC_CHECK_PROG & AC_CHECK_PROGS.  #
+# -------------------------------- #
+
 AT_DATA(configure.in,
 [[AC_INIT
-path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'\`pwd\`'/path/\1,g'`
+pwd=`pwd`
+path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
 fail=0
 
 AC_CHECK_PROG(TOOL1, tool, found, not-found, $path)
@@ -192,10 +197,10 @@ test "$TOOL1" = found || fail=1
 AC_CHECK_PROG(TOOL2, tool,, not-found, $path)
 test "$TOOL2" = not-found || fail=1
 
-AC_CHECK_PROG(TOOL3, tool, tool, not-found, $path, `pwd`/path/1/tool)
-test "$TOOL3" = `pwd`/path/2/tool || fail=1
+AC_CHECK_PROG(TOOL3, tool, tool, not-found, $path, $pwd/path/1/tool)
+test "$TOOL3" = $pwd/path/2/tool || fail=1
 
-AC_CHECK_PROG(TOOL4, better, better, not-found, $path, `pwd`/path/1/tool)
+AC_CHECK_PROG(TOOL4, better, better, not-found, $path, $pwd/path/1/tool)
 test "$TOOL4" = better || fail=1
 
 # When a tool is not found, and no value is given for not-found,
@@ -205,6 +210,38 @@ test -z "$TOOL5" || fail=1
 
 AC_CHECK_PROGS(TOOL6, missing tool better,, $path)
 test "$TOOL6" = tool || fail=1
+
+# no AC_OUTPUT, we don't need config.status.
+exit $fail
+]])
+
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
+AT_CHECK([./configure], 0, ignore)
+
+
+# ------------------------------ #
+# AC_PATH_PROG & AC_PATH_PROGS.  #
+# ------------------------------ #
+
+AT_DATA(configure.in,
+[[AC_INIT
+pwd=`pwd`
+path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
+fail=0
+
+AC_PATH_PROG(TOOL1, tool, not-found, $path)
+test "$TOOL1" = $pwd/path/1/tool || fail=1
+
+AC_PATH_PROG(TOOL2, better, not-found, $path)
+test "$TOOL2" = $pwd/path/6/better || fail=1
+
+# When a tool is not found, and no value is given for not-found,
+# the variable is left empty.
+AC_PATH_PROGS(TOOL3, missing,, $path)
+test -z "$TOOL3" || fail=1
+
+AC_PATH_PROGS(TOOL4, missing tool better,, $path)
+test "$TOOL4" = $pwd/path/1/tool || fail=1
 
 # no AC_OUTPUT, we don't need config.status.
 exit $fail
