@@ -190,8 +190,7 @@ define([AC_DEFUN],
 # As AC_DEFUN, but issues the EXPANSION only once, and warns if used
 # several times.
 define([AC_DEFUN_ONCE],
-[define([$1],
-[m4_defun_once([$1], [$2[]AC_PROVIDE([$1])])])])
+[m4_defun_once([$1], [$2[]AC_PROVIDE([$1])])])
 
 
 # AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])

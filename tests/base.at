@@ -13,7 +13,7 @@ EOF
 
 # Check that dependencies are always properly honored.
 
-AT_SETUP(AC_REQUIRE)
+AT_SETUP(AC_REQUIRE: topological sort)
 
 AT_DATA(configure.in,
 [[define([REQUIRE_AND_CHECK],
@@ -43,7 +43,92 @@ test -z "$test1" &&
 AS_EXIT(0)
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure)
+
+
+
+## ----------------------------------------------- ##
+## AC_REQUIRE and AC_DEFUN_ONCE: Require, expand.  ##
+## ----------------------------------------------- ##
+
+AT_SETUP(AC_REQUIRE & AC_DEFUN_ONCE: Require, expand)
+
+AT_DATA([configure.in],
+[[AC_DEFUN([TEST],
+[AC_REQUIRE([MULTI_TEST])
+AC_REQUIRE([SINGLE_TEST])])
+
+AC_DEFUN([MULTI_TEST],
+[multi_test=".$multi_test"])
+
+AC_DEFUN_ONCE([SINGLE_TEST],
+[single_test=".$single_test"])
+
+AC_PLAIN_SCRIPT
+TEST
+TEST
+MULTI_TEST
+MULTI_TEST
+SINGLE_TEST
+SINGLE_TEST
+
+case $multi_test:$single_test in
+  ...:. ) AS_EXIT(0);;
+  ...:* ) AC_MSG_ERROR([DEFUN_ONCE is broken]);;
+  *:.   ) AC_MSG_ERROR([DEFUN is broken (Wow, congrats!)]);;
+esac
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
+[configure.in:16: warning: SINGLE_TEST invoked multiple times
+configure.in:17: warning: SINGLE_TEST invoked multiple times
+])
+
+AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure)
+
+
+
+## ----------------------------------------------- ##
+## AC_REQUIRE and AC_DEFUN_ONCE: Expand, require.  ##
+## ----------------------------------------------- ##
+
+AT_SETUP(AC_REQUIRE & AC_DEFUN_ONCE: Expand, require)
+
+AT_DATA([configure.in],
+[[AC_DEFUN([TEST],
+[AC_REQUIRE([MULTI_TEST])
+AC_REQUIRE([SINGLE_TEST])])
+
+AC_DEFUN([MULTI_TEST],
+[multi_test=".$multi_test"])
+
+AC_DEFUN_ONCE([SINGLE_TEST],
+[single_test=".$single_test"])
+
+AC_PLAIN_SCRIPT
+MULTI_TEST
+MULTI_TEST
+SINGLE_TEST
+SINGLE_TEST
+TEST
+TEST
+
+case $multi_test:$single_test in
+  ..:. ) AS_EXIT(0);;
+  ..:* ) AC_MSG_ERROR([DEFUN_ONCE is broken]);;
+  *:.  ) AC_MSG_ERROR([DEFUN is broken (Wow, congrats!)]);;
+esac
+]])
+
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [],
+[configure.in:15: warning: SINGLE_TEST invoked multiple times
+])
+AT_CHECK([./configure], 0)
+
 
 AT_CLEANUP(configure)

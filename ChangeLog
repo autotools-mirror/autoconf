@@ -1,5 +1,18 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	AC_REQUIRE and AC_DEFUN_ONCE don't work properly together. This
+	caused strange messages about AC_ARG_PROGRAM.
+	Reported by Jim Meyering.
+
+	* acgeneral.m4 (AC_DEFUN_ONCE): Fix the indirection to
+	m4_defun_once.
+	* m4sugar.m4 (m4_defun_once): Also define
+	`m4_location(MACRO-NAME)'.  s/ac_warn/m4_warn/.
+	Use `m4_defn' to read `m4_location'.
+	* tests/base.at (AC_REQUIRE & AC_DEFUN_ONCE): Two new tests.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	Set up config.log earlier so that AC_MSG_ERROR and AC_MSG_WARN can
 	be used early.
 
