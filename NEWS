@@ -3,6 +3,15 @@
 * Improve DJGPP portability
   The Autoconf tools and configure behave better under DJGPP.
 
+* Present But Cannot Be Compiled
+  New FAQ section dedicated to the mystic
+
+    configure: WARNING: pi.h: present but cannot be compiled
+    configure: WARNING: pi.h: check for missing prerequisite headers?
+    configure: WARNING: pi.h: proceeding with the preprocessor's result
+
+  messages.
+
 * Major changes in Autoconf 2.57
 
   Released 2002-12-03 by Paul Eggert.

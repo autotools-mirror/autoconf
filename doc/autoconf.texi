@@ -172,7 +172,7 @@ published by the Free Software Foundation raise funds for
 @detailmenu
  --- The Detailed Node Listing ---
 
-The GNU Build System
+The @acronym{GNU} Build System
 
 * Automake::                    Escaping Makefile hell
 * Libtool::                     Building libraries portably
@@ -442,6 +442,7 @@ Frequent Autoconf Questions, with answers
 * Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
 * autom4te.cache::              What is it?  Can I remove it?
+* Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
 
 History of Autoconf
 
@@ -453,7 +454,6 @@ History of Autoconf
 
 Copying This Manual
 
-* GNU Free Documentation License::  License for copying this manual
 
 Indices
 
@@ -14367,6 +14367,7 @@ are addressed.
 * Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
 * autom4te.cache::              What is it?  Can I remove it?
+* Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
 @end menu
 
 @node Distributing
@@ -14655,6 +14656,95 @@ the cache @emph{although @option{--force} implies that the cache is
 not fully exploited}, and eight times slower than without
 @option{--force}.
 
+
+@node Present But Cannot Be Compiled
+@section Header Present But Cannot Be Compiled
+
+The most important guideline to bare in mind when checking for
+features is to mock as much as possible the intended use.
+Unfortunately, old versions of @code{AC_CHECK_HEADER} and
+@code{AC_CHECK_HEADERS} failed to follow this idea, and used to call
+the preprocessor, instead of the compiler, to check for headers.  As a
+result, incompatibilities between headers went unnoticed during
+configuration, and maintainers finally had to deal with this issue
+elsewhere.
+
+Since Autoconf 2.56 both checks are performed, and @code{configure}
+complains loudly if the compiler and the preprocessor do not agree.
+For the time being the result is that of the preprocessor, so that
+maintainers can adjust their @file{configure.ac}, but in the near
+future, the compiler only will be considered.
+
+Consider the following example:
+
+@example
+$ @kbd{cat number.h}
+typedef int number;
+$ @kbd{cat pi.h}
+const number pi = 3;
+$ @kbd{cat configure.ac}
+AC_INIT
+AC_CHECK_HEADERS(pi.h)
+$ @kbd{autoconf -Wall}
+$ @kbd{./configure}
+checking for gcc... gcc
+checking for C compiler default output... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+checking how to run the C preprocessor... gcc -E
+checking for egrep... grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking pi.h usability... no
+checking pi.h presence... yes
+configure: WARNING: pi.h: present but cannot be compiled
+configure: WARNING: pi.h: check for missing prerequisite headers?
+configure: WARNING: pi.h: proceeding with the preprocessor's result
+configure: WARNING:     ## ------------------------------------ ##
+configure: WARNING:     ## Report this to bug-autoconf@@gnu.org. ##
+configure: WARNING:     ## ------------------------------------ ##
+checking for pi.h... yes
+@end example
+
+@noindent
+The proper way the handle this case is using the fourth argument
+(@pxref{Generic Headers}):
+
+@example
+$ @kbd{cat configure.ac}
+AC_INIT
+AC_CHECK_HEADERS(number.h pi.h,,,
+[[#if HAVE_NUMBER_H
+# include <number.h>
+#endif
+]])
+$ @kbd{autoconf -Wall}
+$ @kbd{./configure}
+checking for gcc... gcc
+checking for C compiler default output... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+checking for number.h... yes
+checking for pi.h... yes
+@end example
 
 @c ===================================================== History of Autoconf.
 
