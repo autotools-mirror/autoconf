@@ -2,7 +2,7 @@
 
 AT_BANNER([Autotest.])
 
-# Copyright (C) 2004 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,6 +67,18 @@ AT_CLEANUP
 
 # Here documents for these tests contain forbidden macros.
 m4_pattern_allow([^AT_])
+
+
+## ------------------ ##
+## Empty test suite.  ##
+## ------------------ ##
+
+# This is not a sensible thing to do, but the user should not get a unhelpful
+# error message, which is what happens presently.
+AT_CHECK_AT([Empty test suite],
+[[AT_INIT([empty test suite])
+]], [:])
+
 
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##
