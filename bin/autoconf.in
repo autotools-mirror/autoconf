@@ -32,7 +32,7 @@ If the option \`--trace' is used, no configuration script is created.
 
   -h, --help          print this help, then exit
       --version       print version number, then exit
-  -m, --macrodir=DIR  directory storing macro files
+  -m, --macrodir=DIR  directory storing Autoconf's macro files
   -l, --localdir=DIR  directory storing the \`aclocal.m4' file
   -t, --trace=MACRO   report the list of calls to MACRO
   -o, --output=FILE   save output in FILE (stdout is the default)
@@ -64,9 +64,10 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # single-quotes doesn't work because, if this script is created in a
 # platform that uses two characters for line-breaks (e.g., DOS), tr
 # would break.
-ac_LF_and_DOT="`echo; echo .`"
+ac_LF_and_DOT=`echo; echo .`
 
 : ${AC_MACRODIR=@datadir@}
+: ${AC_ACLOCALDIR=`aclocal --print-ac-dir 2>/dev/null`}
 : ${M4=@M4@}
 : ${AWK=@AWK@}
 case "$M4" in
@@ -75,9 +76,6 @@ case "$M4" in
     test -f "$M4" || M4=m4 ;;
 esac
 
-: ${TMPDIR=/tmp}
-tmpin=$TMPDIR/acin.$$
-tmpout=$TMPDIR/acout.$$
 localdir=
 outfile=
 # Tasks:
@@ -86,13 +84,17 @@ outfile=
 # - script
 #   Produce the configure script (default)
 task=script
+: ${TMPDIR=/tmp}
+tmpin=$TMPDIR/acin.$$
+tmpout=$TMPDIR/acout.$$
+verbose=:
 
 while test $# -gt 0 ; do
   case "$1" in
     -h | --help | --h* )
        echo "$usage"; exit 0 ;;
     --localdir=* | --l*=* )
-       localdir="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
+       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     -l | --localdir | --l*)
        shift
@@ -100,13 +102,19 @@ while test $# -gt 0 ; do
        localdir="$1"
        shift ;;
     --macrodir=* | --m*=* )
-       AC_MACRODIR="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
+       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     -m | --macrodir | --m* )
        shift
        test $# -eq 0 && { echo "$usage" 1>&2; exit 1; }
        AC_MACRODIR="$1"
        shift ;;
+    --install )
+       task=install
+       shift;;
+    --verbose )
+       verbose=echo
+       shift;;
     --trace | -t )
        task=trace
        shift
@@ -125,10 +133,10 @@ while test $# -gt 0 ; do
        outfile="$1"
        shift ;;
     --output=* )
-       outfile="`echo \"$1\" | sed -e 's/^[^=]*=//'`"
+       outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     -o* )
-       outfile="`echo \"$1\" | sed -e 's/^-o//'`"
+       outfile=`echo "$1" | sed -e 's/^-o//'`
        shift ;;
     --version | --v* )
        echo "$version" ; exit 0 ;;
@@ -182,9 +190,11 @@ esac
 
 # Initializations are performed.  Perform the task.
 case $task in
-  #
-  # Generate the script
-  #
+
+
+  ## ------------------- ##
+  ## Generate the script ##
+  ## ------------------- ##
   script)
   $run_m4 $infile > $tmpout || exit 2
 
@@ -223,9 +233,9 @@ case $task in
   ' >&4
   ;; # End of the task script.
 
-  #
-  # Trace macros.
-  #
+  ## -------------- ##
+  ## Trace macros.  ##
+  ## -------------- ##
   trace)
   $run_m4 $traces -dafl $infile -o $tmpout>/dev/null || exit 2
   # The output looks like this:
@@ -247,6 +257,99 @@ case $task in
   # The last eof was eaten.
   echo >&4
   ;;
+
+
+
+
+  ## -------------------------------------------------------- ##
+  ## Task --install.  Install links to the library m4 files.  ##
+  ## -------------------------------------------------------- ##
+  install)
+  # An m4 program that reports what macros are requested, and where
+  # they were defined.
+  cat >$tmpin <<\EOF
+dnl Keep the definition of the old AC_DEFUN
+define([AC_DEFUN_OLD], defn([AC_DEFUN]))
+
+dnl Define the macro so that the first time it is expanded, it reports
+dnl on stderr its name, and where it was defined.
+define([AC_DEFUN],
+[AC_DEFUN_OLD([$1],
+   [ifdef([AC_DECLARED{$1}],,
+	  [define([AC_DECLARED{$1}])errprint(]]__file__:__line__:[[ [$1]
+)])dnl
+][$2])])
+
+dnl All the includes must be disabled.  If they are not, since people don't
+dnl protect the first argument of AC_DEFUN, then, if read a second time
+dnl this argument will be expanded, and we'll get pure junk out of m4.
+define([AC_INCLUDE])
+EOF
+  # Run m4 with all the library files, save its report on strderr.
+  $verbose Running $run_m4 -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile
+  $run_m4 -dipa -t m4_include -t m4_sinclude $tmpin $localdir/*.m4 $AC_ACLOCALDIR/*.m4 $infile >the-script 2>$tmpout
+  cp $tmpout LOG
+  cp $tmpin tmpin
+  # Keep only the good lines, there may be other outputs
+  grep '^[^: ]*:[0-9][0-9]*:[^:]*$' $tmpout >$tmpin
+  # Extract the files that are not in the local dir, and install the links.
+  # Save in $tmpout the list of installed links.
+  >$tmpout
+  $verbose "Required macros:"
+  $verbose "`sed -e 's/^/| /' $tmpin`"
+  cat $tmpin |
+    while read line
+    do
+      file=`echo "$line" | sed -e 's/:.*//'`
+      filename=`echo "$file" | sed -e 's,.*/,,'`
+      macro=`echo "$line" | sed -e 's/.*:[ 	]*//'`
+      if test -f "$file" && test "x$file" != "x$infile"; then
+        if test -f $localdir/$filename; then
+          $verbose "$filename already installed"
+  	else
+  	  $verbose "installing $file which provides $macro"
+  	  ln -s "$file" "$localdir/$filename" ||
+  	  cp "$file" "$localdir/$filename" ||
+  	  {
+  	    echo "$0: cannot link from $file to $localdir/$filename" >&2
+  	    exit 1
+  	  }
+  	fi
+        echo "$localdir/$filename" >>$tmpout
+      fi
+    done
+  # Now that we have installed the links, and that we know that the
+  # user needs the FILES, check that there is an exact correspondence.
+  # Use yourself to get the list of the included files.
+  export AC_ACLOCALDIR
+  export AC_MACRODIR
+  # Not m4_s?include, because it would catch acsite and aclocal, which
+  # we don't care of.
+  $0 -l "$localdir" -t AC_INCLUDE $inline |
+    sed -e 's/^[^:]*:[^:]*:[^:]*://g' |
+    sort |
+    uniq >$tmpin
+  # All the included files are needed.
+  for file in `cat $tmpin`;
+  do
+    if fgrep "$file" $tmpout >/dev/null 2>&1; then :; else
+      echo "\`$file' is uselessly included" >&2
+    fi
+  done
+  # All the needed files are included.
+  for file in `sort $tmpout | uniq`;
+  do
+    if fgrep "$file" $tmpin >/dev/null 2>&1; then :; else
+      echo "\`$file' is not included" >&2
+    fi
+  done
+  ;;
+
+
+
+  ## ------------ ##
+  ## Unknown task ##
+  ## ------------ ##
 
   *)echo "$0: internal error: unknown task: $task" >&2
     exit 1

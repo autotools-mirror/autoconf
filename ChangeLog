@@ -1,5 +1,15 @@
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
+	Make autoconf support --install.
+
+	* autoconf.sh (task install): New task.  Extract the set of
+	auxiliary m4 files a configure.in depends upon.  Install links
+	from library files to the local dir so that the packages depends
+	only on local extensions.  Check that the user includes exactly
+	the files she needs.
+
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
 	Require GNU m4 1.4 (well 1.3 in fact).
 
 	Because we are ready to handle the case where there are no frozen
