@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 15 November 1994
+@set lastupdate 17 November 1994
 @c %**end of header
 
 @ifinfo
@@ -1322,7 +1322,7 @@ and @code{unexpand}.
 @samp{-n} in @code{wdiff}.
 
 @item backward-search
-@samp{-B} in etags.
+@samp{-B} in @code{ctags}.
 
 @item basename
 @samp{-f} in @code{shar}.
@@ -1413,7 +1413,7 @@ Used in @code{tar} and @code{cpio}.
 @samp{-c} in @code{shar}.
 
 @item cxref
-@samp{-x} in @code{etags}.
+@samp{-x} in @code{ctags}.
 
 @item date
 @samp{-d} in @code{touch}.
@@ -1426,7 +1426,7 @@ Used in @code{tar} and @code{cpio}.
 @samp{-D} in @code{m4}.
 
 @item defines
-@samp{-d} in Bison and @code{etags}.
+@samp{-d} in Bison and @code{ctags}.
 
 @item delete
 @samp{-D} in @code{tar}.
@@ -1570,9 +1570,6 @@ Used in Makeinfo.
 @item format
 Used in @code{ls}, @code{time}, and @code{ptx}.
 
-@item forward-search
-@samp{-F} in @code{etags}.
-
 @item freeze-state
 @samp{-F} in @code{m4}.
 
@@ -1707,6 +1704,9 @@ Used to ask for brief usage information.
 
 @item kilobytes
 @samp{-k} in @code{du} and @code{ls}.
+
+@item language
+@samp{-l} in @code{etags}.
 
 @item less-mode
 @samp{-l} in @code{wdiff}.
@@ -1845,6 +1845,9 @@ Used in GDB.
 
 @item no-prof
 @samp{-e} in @code{gprof}.
+
+@item no-regex
+@samp{-R} in @code{etags}.
 
 @item no-sort
 @samp{-p} in @code{nm}.
@@ -2233,10 +2236,10 @@ Used in @code{ls} and @code{touch}.
 Used in GDB.
 
 @item typedefs
-@samp{-t} in @code{etags}.
+@samp{-t} in @code{ctags}.
 
 @item typedefs-and-c++
-@samp{-T} in @code{etags}.
+@samp{-T} in @code{ctags}.
 
 @item typeset-mode
 @samp{-t} in @code{ptx}.
@@ -2254,7 +2257,7 @@ Used in GDB.
 @samp{-u} in @code{nm}.
 
 @item update
-@samp{-u} in @code{cp}, @samp{etags}, @samp{mv}, @samp{tar}.
+@samp{-u} in @code{cp}, @code{ctags}, @code{mv}, @code{tar}.
 
 @item uuencode
 @samp{-B} in @code{shar}.
@@ -2275,7 +2278,7 @@ Print the version number.
 @samp{-V} in @code{cp}, @code{ln}, @code{mv}.
 
 @item vgrind
-@samp{-v} in @code{etags}.
+@samp{-v} in @code{ctags}.
 
 @item volume
 @samp{-V} in @code{tar}.
