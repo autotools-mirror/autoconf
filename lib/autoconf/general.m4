@@ -1135,34 +1135,57 @@ m4_define([_AC_INIT_PREPARE],
 # Keep a trace of the command line.
 # Strip out --no-create and --no-recursion so they do not pile up.
 # Also quote any args containing shell meta-characters.
+# Make two passes to allow for proper duplicate-argument suppression.
 ac_configure_args=
+ac_configure_args0=
+ac_configure_args1=
 ac_sep=
-for ac_arg
+ac_must_keep_next=false
+for ac_pass in 1 2
 do
-  case $ac_arg in
-  -no-create | --no-create | --no-creat | --no-crea | --no-cre \
-  | --no-cr | --no-c | -n ) continue ;;
-  -no-recursion | --no-recursion | --no-recursio | --no-recursi \
-  | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r)
-    continue ;;
+  for ac_arg
+  do
+    case $ac_arg in
+    -no-create | --no-c* | -n | -no-recursion | --no-r*) continue ;;
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
-[  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
-    ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-  esac
+  [  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
+      ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+    esac
+    case $ac_pass in
+    1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
+    2)
+      ac_configure_args1="$ac_configure_args1 '$ac_arg'"
 dnl If trying to remove duplicates, be sure to (i) keep the *last*
 dnl value (e.g. --prefix=1 --prefix=2 --prefix=1 might keep 2 only),
 dnl and (ii) not to strip long options (--prefix foo --prefix bar might
 dnl give --prefix foo bar).
-dnl   case " $ac_configure_args " in
-dnl     *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
-dnl     *) ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-dnl        ac_sep=" " ;;
-dnl   esac
-  ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-  # Get rid of the leading space.
-  ac_sep=" "
+      if test $ac_must_keep_next = true; then
+        ac_must_keep_next=false # Got value, back to normal.
+      else
+        case $ac_arg in
+dnl Use broad patterns, as arguments that would have already made configure
+dnl exit don't matter.
+          *=* | --config-cache | -C | -disable-* | --disable-* \
+          | -enable-* | --enable-* | -gas | --g* | -nfp | --nf* \
+          | -q | -quiet | --q* | -silent | --sil* | -v | -verb* \
+          | -with-* | --with-* | -without-* | --without-* | --x)
+            case "$ac_configure_args0 " in
+              "$ac_configure_args1"*" '$ac_arg' "* ) continue ;;
+            esac
+            ;;
+          -* ) ac_must_keep_next=true ;;
+        esac
+      fi
+      ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
+      # Get rid of the leading space.
+      ac_sep=" "
+      ;;
+    esac
+  done
 done
+AS_UNSET(ac_configure_args0)
+AS_UNSET(ac_configure_args1)
 
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
