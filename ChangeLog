@@ -1,5 +1,11 @@
 2003-09-09  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/FileUtils.pm (&update_file): s/cannot not/cannot/g.
+	Reported by Gary Vaughan.
+	* bin/autom4te.in (handle_m4): Likewise.
+
+2003-09-09  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/FileUtils.pm (&update_file): Be sure not to leave
 	trailing files.
 

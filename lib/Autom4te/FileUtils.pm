@@ -145,7 +145,7 @@ sub update_file ($$)
 	  print $out $_;
 	}
       $in->close;
-      unlink ($from) || fatal "cannot not remove $from: $!";
+      unlink ($from) || fatal "cannot remove $from: $!";
       return;
     }
 
@@ -154,7 +154,7 @@ sub update_file ($$)
       # File didn't change, so don't update its mod time.
       msg 'note', "`$to' is unchanged";
       unlink ($from)
-        or fatal "cannot not remove $from: $!";
+        or fatal "cannot remove $from: $!";
       return
     }
 
@@ -162,15 +162,15 @@ sub update_file ($$)
     {
       # Back up and install the new one.
       move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
-	or fatal "cannot not backup $to: $!";
+	or fatal "cannot backup $to: $!";
       move ("$from", "$to")
-	or fatal "cannot not rename $from as $to: $!";
+	or fatal "cannot rename $from as $to: $!";
       msg 'note', "`$to' is updated";
     }
   else
     {
       move ("$from", "$to")
-	or fatal "cannot not rename $from as $to: $!";
+	or fatal "cannot rename $from as $to: $!";
       msg 'note', "`$to' is created";
     }
 }

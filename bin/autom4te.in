@@ -472,7 +472,7 @@ sub handle_m4 ($@)
     {
       use File::Copy;
       move ("${file}t", "$file")
-	or fatal "cannot not rename ${file}t as $file: $!";
+	or fatal "cannot rename ${file}t as $file: $!";
     }
 }
 
