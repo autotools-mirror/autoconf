@@ -10,8 +10,8 @@ Major changes in release 1.8:
   install.sh is distributed with Autoconf.
 * AC_OUTPUT adds its comments in C format when substituting in C files.
 * Relative srcdir values are not made absolute.
-* Autoconf-generated configure scripts are stamped with the version of
-  Autoconf that generated them, to aid debugging.
+* configure accepts --help, --version, --silent/--quiet options.
+* config.status accepts --help, --version options.
 * Namespace cleanup: all shell variables used internally by Autoconf
   have names beginning with `ac_'.
 
