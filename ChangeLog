@@ -10,6 +10,8 @@
 	(AS_BASENAME): Use 'basename' if that works; then try 'expr';
 	and fall back on 'sed' only if the other two fail.  This makes
 	AS_BASENAME act more like AS_DIRNAME.
+	(as_me): Shell-quote the argument of AS_BASENAME, in case $0
+	contains white space.
 	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR):
 	Use AS_DIRNAME, since I think it's now DOS-friendly.
 	* tests/m4sh.at (DIRNAME_TEST): New arg $3.
