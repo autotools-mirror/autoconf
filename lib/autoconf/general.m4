@@ -752,11 +752,11 @@ dnl split on several lines, it is not as evident as a simple `| sort'.
 [[    test -n "$ac_arg_enable_help" && echo "
 Optional features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE@BKL@=ARG@BKR@  include FEATURE @BKL@ARG=yes@BKR@\
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]\
 $ac_arg_enable_help"
     test -n "$ac_arg_with_help" && echo "
 Optional packages:
-  --with-PACKAGE@BKL@=ARG@BKR@    use PACKAGE @BKL@ARG=yes@BKR@
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)\
 $ac_arg_with_help"
     test -n "$ac_arg_var_help" && echo "
@@ -1109,9 +1109,7 @@ if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
   ac_prog=[$]0
-changequote(, )dnl
-  ac_confdir=`echo "$ac_prog"|sed 's%/[^/][^/]*$%%'`
-changequote([, ])dnl
+  ac_confdir=`echo "$ac_prog" | sed 's%/[[^/][^/]]*$%%'`
   test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
@@ -1129,9 +1127,7 @@ if test ! -r $srcdir/$ac_unique_file; then
 fi
 dnl Double slashes in pathnames in object file debugging info
 dnl mess up M-x gdb in Emacs.
-changequote(, )dnl
-srcdir=`echo "${srcdir}" | sed 's%\([^/]\)/*$%\1%'`
-changequote([, ])dnl
+srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
 
 dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
@@ -1564,8 +1560,10 @@ fi
 
 # AC_CACHE_SAVE
 # -------------
+# Save the cache.
+# Allow a site initialization script to override cache values.
 define(AC_CACHE_SAVE,
-[cat >confcache <<\EOF
+[[cat >confcache <<\EOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs.  It is not useful on other systems.
@@ -1581,13 +1579,11 @@ define(AC_CACHE_SAVE,
 # --recheck option to rerun configure.
 #
 EOF
-dnl Allow a site initialization script to override cache values.
 # The following way of writing the cache mishandles newlines in values,
 # but we know of no workaround that is simple, portable, and efficient.
 # So, don't put newlines in cache variables' values.
 # Ultrix sh set writes to stderr and can't be redirected directly,
 # and sets the high bit in the cache file unless we assign to the vars.
-changequote(, )dnl
 (set) 2>&1 |
   case `(ac_space=' '; set | grep ac_space) 2>&1` in
   *ac_space=\ *)
@@ -1602,7 +1598,6 @@ changequote(, )dnl
     sed -n -e 's/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=${\1=\2}/p'
     ;;
   esac >>confcache
-changequote([, ])dnl
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     echo "updating cache $cache_file"
@@ -1612,7 +1607,7 @@ if cmp -s $cache_file confcache; then :; else
   fi
 fi
 rm -f confcache
-])
+]])
 
 # AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 # ------------------------------------------
@@ -2211,10 +2206,8 @@ if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
 echo $ac_n "checking for prefix by $ac_c" 1>&AC_FD_MSG
 AC_PATH_PROG(AC_Prog, $1)
-changequote(<<, >>)dnl
-  if test -n "$ac_cv_path_<<>>AC_Prog"; then
-    prefix=`echo $ac_cv_path_<<>>AC_Prog|sed 's%/[^/][^/]*//*[^/][^/]*$%%'`
-changequote([, ])dnl
+  if test -n "$ac_cv_path_[]AC_Prog"; then
+    prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's%/[^/][^/]*//*[^/][^/]*$%%']`
   fi
 fi
 popdef([AC_Prog])dnl
@@ -3334,9 +3327,7 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # the first set of double-colon rules, so remove it if not needed.
 # If there is a colon in the path, we need to keep it.
 if test "x$srcdir" = x.; then
-changequote(, )dnl
-  ac_vpsub='/^[ 	]*VPATH[ 	]*=[^:]*$/d'
-changequote([, ])dnl
+  ac_vpsub=['/^[ 	]*VPATH[ 	]*=[^:]*$/d']
 fi
 
 ifset([AC_LIST_HEADERS], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEFS()])
@@ -3415,19 +3406,19 @@ ac_cs_usage="\\
 \\\`$CONFIG_STATUS' instantiates files from templates according to the
 current configuration.
 
-Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
+Usage: $CONFIG_STATUS [[OPTIONS]] FILE...
 
   --recheck    Update $CONFIG_STATUS by reconfiguring in the same conditions
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
 ifset([AC_LIST_FILES],
-[  --file=FILE@BKL@:TEMPLATE@BKR@
+[[  --file=FILE[:TEMPLATE]
                Instantiate the configuration file FILE
-])dnl
+]])dnl
 ifset([AC_LIST_HEADERS],
-[  --header=FILE@BKL@:TEMPLATE@BKR@
+[[  --header=FILE[:TEMPLATE]
                Instantiate the configuration header FILE
-])dnl
+]])dnl
 
 ifset([AC_LIST_FILES],
 [Configuration files:
@@ -3474,7 +3465,7 @@ do
   case "[\$]1" in
   --*=*)
     ac_option=\`echo "[\$]1" | sed -e 's/=.*//'\`
-    ac_optarg=\`echo "[\$]1" | sed -e 's/@BKL@^=@BKR@*=//'\`
+    ac_optarg=\`echo "[\$]1" | sed -e ['s/[^=]*=//']\`
     shift
     set dummy "[\$]ac_option" "[\$]ac_optarg" [\$]{1+"[\$]@"}
     shift
@@ -3620,16 +3611,14 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # take arguments), then we branch to the cleanup section.  Otherwise,
 # look for a macro that doesn't take arguments.
 cat >$ac_cs_root.defs <<\EOF
-changequote(<<, >>)dnl
-s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
+[s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\)%-D\1=\2%g
 t cleanup
-s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
+s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)%-D\1=\2%g
 : cleanup
-s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
+s%[ 	`~#$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
-s%\$%$$%g
-changequote([, ])dnl
+s%\$%$$%g]
 EOF
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
@@ -3664,10 +3653,8 @@ if test -n "\$CONFIG_FILES"; then
 dnl Please, pay attention that this sed code depends a lot on the shape
 dnl of the sed commands issued by AC_SUBST.  So if you change one, change
 dnl the other too.
-changequote(, )dnl
-  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
-   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF
-changequote([, ])dnl
+[  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
+   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF]
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
@@ -3701,8 +3688,8 @@ dnl Here, there are 2 cmd per line, and two cmd are added later.
       # speed up the sed processing (if there are no `@' at all, there
       # is no need to browse any of the substitutions).
       # These are the two extra sed commands mentioned above.
-      (echo ':t
-  /@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
+      (echo [':t
+  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b'] && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
       if test -z "$ac_sed_cmds"; then
   	ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
       else
@@ -3721,19 +3708,17 @@ fi # test -n "$CONFIG_FILES"
 EOF
 cat >>$CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
-changequote(, )dnl
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
-  *:*) ac_file_in=`echo "$ac_file"|sed 's%[^:]*:%%'`
-       ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
+  *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
+       ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
   *) ac_file_in="${ac_file}.in" ;;
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
 
   # Remove last slash and all that follows it.  Not all systems have dirname.
-  ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
-changequote([, ])dnl
+  ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
@@ -3741,9 +3726,7 @@ dnl to be created too.
     test ! -d "$ac_dir" && mkdir "$ac_dir"
     ac_dir_suffix="/`echo $ac_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dir_suffix.
-changequote(, )dnl
-    ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
-changequote([, ])dnl
+    ac_dots=`echo "$ac_dir_suffix" | sed 's%/[[^/]]*%../%g'`
   else
     ac_dir_suffix= ac_dots=
   fi
@@ -3770,16 +3753,14 @@ ifdef([AC_PROVIDE_AC_PROG_INSTALL],
   configure_input="Generated automatically from `echo $ac_file_in |
                                                  sed 's%.*/%%'` by configure."
   case "$ac_file" in
-changequote(, )dnl
-  *[Mm]akefile*) ac_comsub="1i\\
-changequote([, ])dnl
+  *[[Mm]]akefile*) ac_comsub="1i\\
 # $configure_input" ;;
   *) ac_comsub= ;;
   esac
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that updating
   # is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo $ac_file_in |
+  ac_file_inputs=`echo "$ac_file_in" |
                   sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
   for ac_file_input in $ac_file_inputs;
   do
@@ -3797,7 +3778,7 @@ $extrasub
 EOF
 cat >>$CONFIG_STATUS <<\EOF
 :t
-/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b
+[/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 s%@configure_input@%$configure_input%;t t
 s%@srcdir@%$srcdir%;t t
 s%@top_srcdir@%$top_srcdir%;t t
@@ -3894,19 +3875,17 @@ ac_uC=' '
 ac_uD='%;t']
 
 for ac_file in .. $CONFIG_HEADERS; do if test "x$ac_file" != x..; then
-changequote(, )dnl
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case "$ac_file" in
-  *:*) ac_file_in=`echo "$ac_file"|sed 's%[^:]*:%%'`
-       ac_file=`echo "$ac_file"|sed 's%:.*%%'` ;;
+  *:*) ac_file_in=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
+       ac_file=`echo "$ac_file" | sed 's%:.*%%'` ;;
   *) ac_file_in="${ac_file}.in" ;;
   esac
-changequote([, ])dnl
 
   echo creating $ac_file
 
   rm -f $ac_cs_root.frag $ac_cs_root.in $ac_cs_root.out
-  ac_file_inputs=`echo $ac_file_in |
+  ac_file_inputs=`echo "$ac_file_in" |
                   sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
     for ac_file_input in $ac_file_inputs;
   do
@@ -3914,7 +3893,7 @@ changequote([, ])dnl
         AC_MSG_ERROR(cannot find input file `$ac_file_input')
   done
   # Remove the trailing spaces.
-  sed -e 's/@BKL@ 	@BKR@*$//' $ac_file_inputs >$ac_cs_root.in
+  sed -e 's/[[ 	]]*$//' $ac_file_inputs >$ac_cs_root.in
 
 EOF
 
@@ -3943,16 +3922,15 @@ dnl
 dnl Additionally, this works around a bug of IRIX' sed which does not
 dnl clear the `t' flag between two cycles.
 cat >$ac_cs_root.hdr <<\EOF
-changequote(<<, >>)dnl
-s/[\\&%]/\\&/g
+dnl Double quote for `[ ]' and `define'.
+[s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
 t clear
 : clear
-s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
+s%^[ 	]*#[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
 t cleanup
-s%^[ 	]*<<#>>[ 	]*<<define>>[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
-: cleanup
-changequote([, ])dnl
+s%^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$%${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+: cleanup]
 EOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
@@ -3965,15 +3943,13 @@ rm -f $ac_cs_root.hdr
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
 cat >>conftest.undefs <<\EOF
-changequote(, )dnl
-s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%
-changequote([, ])dnl
+[s%^[ 	]*#[ 	]*undef[ 	][ 	]*[a-zA-Z_][a-zA-Z_0-9]*%/* & */%]
 EOF
 
 # Break up conftest.defines because some shells have a limit on the size
 # of here documents, and old seds have small limits too (100 cmds).
 echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if egrep "^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define" $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
+echo '  if egrep ["^[ 	]*#[ 	]*define"] $ac_cs_root.in >/dev/null; then' >>$CONFIG_STATUS
 echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
 echo '  :' >>$CONFIG_STATUS
 rm -f conftest.tail
@@ -3982,7 +3958,7 @@ do
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#define' lines.
-  echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*define/!b' >>$CONFIG_STATUS
+  echo ['/^[ 	]*#[ 	]*define/!b'] >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
   sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
@@ -4006,7 +3982,7 @@ do
   # Write a limited-size here document to $ac_cs_root.frag.
   echo '  cat >$ac_cs_root.frag <<CEOF' >>$CONFIG_STATUS
 dnl Speed up: don't consider the non `#undef'
-  echo '/^@BKL@ 	@BKR@*#@BKL@ 	@BKR@*undef/!b' >>$CONFIG_STATUS
+  echo ['/^[ 	]*#[ 	]*undef/!b'] >>$CONFIG_STATUS
   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
   echo 'CEOF
   sed -f $ac_cs_root.frag $ac_cs_root.in >$ac_cs_root.out
@@ -4030,9 +4006,7 @@ cat >>$CONFIG_STATUS <<\EOF
     rm -f $ac_cs_root.h
   else
     # Remove last slash and all that follows it.  Not all systems have dirname.
-  changequote(, )dnl
-    ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
-  changequote([, ])dnl
+    ac_dir=`echo "$ac_file" | sed 's%/[[^/][^/]]*$%%'`
     if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
       # The file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
@@ -4071,8 +4045,8 @@ dnl Here we use : instead of .. because if AC_LINK_FILES was used
 dnl with empty parameters (as in gettext.m4), then we obtain here
 dnl `:', which we want to skip.  So let's keep a single exception: `:'.
 for ac_file in : $CONFIG_LINKS; do if test "x$ac_file" != x:; then
-  ac_dest=`echo "$ac_file"|sed 's%:.*%%'`
-  ac_source=`echo "$ac_file"|sed 's%@BKL@^:@BKR@*:%%'`
+  ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
+  ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
 
   echo "linking $srcdir/$ac_source to $ac_dest"
 
@@ -4083,9 +4057,7 @@ for ac_file in : $CONFIG_LINKS; do if test "x$ac_file" != x:; then
 
   # Make relative symlinks.
   # Remove last slash and all that follows it.  Not all systems have dirname.
-changequote(, )dnl
-  ac_dest_dir=`echo $ac_dest|sed 's%/[^/][^/]*$%%'`
-changequote([, ])dnl
+  ac_dest_dir=`echo $ac_dest | sed 's%/[[^/][^/]]*$%%'`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     # The dest file is in a subdirectory.
 dnl FIXME: should actually be mkinstalldirs (parents may have
@@ -4093,17 +4065,13 @@ dnl to be created too.
     test ! -d "$ac_dest_dir" && mkdir "$ac_dest_dir"
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's%^\./%%'`"
     # A "../" for each directory in $ac_dest_dir_suffix.
-changequote(, )dnl
-    ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[^/]*%../%g'`
-changequote([, ])dnl
+    ac_dots=`echo $ac_dest_dir_suffix|sed 's%/[[^/]]*%../%g'`
   else
     ac_dest_dir_suffix= ac_dots=
   fi
 
   case "$srcdir" in
-changequote(, )dnl
-  [/$]*) ac_rel_source="$srcdir/$ac_source" ;;
-changequote([, ])dnl
+  [[/$]]*) ac_rel_source="$srcdir/$ac_source" ;;
       *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
   esac
 
@@ -4139,7 +4107,7 @@ define(_AC_OUTPUT_COMMANDS,
 #
 for ac_file in .. $CONFIG_COMMANDS; do if test "x$ac_file" != x..; then
   ac_dest=`echo "$ac_file" | sed 's%:.*%%'`
-  ac_source=`echo "$ac_file" | sed 's%@BKL@^:@BKR@*:%%'`
+  ac_source=`echo "$ac_file" | sed 's%[[^:]]*:%%'`
 
 dnl FIXME: Until Automake uses the new features of config.status, we
 dnl should keep this silent.  Otherwise, because Automake runs this in
@@ -4215,10 +4183,9 @@ dnl to be created too.
     ac_popdir=`pwd`
     cd $ac_config_dir
 
-changequote(, )dnl
       # A "../" for each directory in /$ac_config_dir.
-      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
-changequote([, ])dnl
+      ac_dots=`echo $ac_config_dir |
+               sed -e 's%^\./%%;s%[[^/]]$%&/%;s%[[^/]]*/%../%g'`
 
     case "$srcdir" in
     .) # No --srcdir option.  We are building in place.

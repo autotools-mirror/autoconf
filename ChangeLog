@@ -1,5 +1,16 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Changequote-busters!
+	From Dan Ackroyd.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS, AC_INIT_PREPARE,
+	AC_CACHE_SAVE, AC_PREFIX_PROGRAM, AC_OUTPUT,
+	_AC_OUTPUT_CONFIG_STATUS, AC_OUTPUT_MAKE_DEFS, AC_OUTPUT_FILES,
+	_AC_OUTPUT_HEADERS, AC_OUTPUT_LINKS, AC_OUTPUT_SUBDIRS): Quit
+	playing with changequotes, @BKL@ and Co.!  Just quote properly.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Honor properly the `#define' config.h.in templates.
 	Test it.
 
