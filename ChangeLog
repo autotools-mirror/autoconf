@@ -1,5 +1,11 @@
 2003-05-16  Akim Demaille  <akim@epita.fr>
 
+	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): s/FOO/as_foo/ to avoid
+	user name space clashes.
+	Reported by Bruno Haible.
+
+2003-05-16  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoheader.in, bin/autom4te.in, bin/autoreconf.in,
 	* bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in (BEGIN): Make
 	them uniform, and more robust to Perl special characters.

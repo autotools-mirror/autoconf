@@ -278,7 +278,7 @@ fi
 # AS_UNSET depends upon $as_unset: compute it.
 m4_defun([_AS_UNSET_PREPARE],
 [# Support unset when possible.
-if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
+if (as_foo=foo; unset as_foo) >/dev/null 2>&1; then
   as_unset=unset
 else
   as_unset=false
