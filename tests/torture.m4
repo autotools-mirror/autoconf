@@ -141,7 +141,16 @@ AC_DEFINE(fubar, tutu)
 AC_DEFINE(a, A)
 AC_DEFINE(aaa, AAA)
 AC_DEFINE(aa, AA)
+AC_CONFIG_FILES(defs)
+# In addition of config.h output a full DEFS
+AC_OUTPUT_MAKE_DEFS
+DEFS_SAVED=$DEFS
+AC_SUBST(DEFS_SAVED)
 AC_OUTPUT
+]])
+
+AT_DATA(defs.in,
+[[@DEFS_SAVED@
 ]])
 
 AT_DATA(config.hin,
@@ -157,6 +166,9 @@ AT_DATA(config.hin,
 #undef aaa
 ]])
 
+AT_CHECK([../autoconf -m .. -l $at_srcdir], 0)
+AT_CHECK([./configure], 0, ignore)
+
 AT_DATA(expout,
 [[/* config.h.  Generated automatically by configure.  */
 #define foo toto
@@ -170,9 +182,13 @@ AT_DATA(expout,
 #define aa AA
 #define aaa AAA
 ]])
-
-AT_CHECK([../autoconf -m .. -l $at_srcdir], 0)
-AT_CHECK([./configure], 0, ignore)
 AT_CHECK([cat config.h], 0, expout)
 
-AT_CLEANUP(configure config.status config.log config.cache config.h)
+# Check the value of DEFS.  Note the leading and trailing spaces.
+AT_DATA(expout,
+[[ -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA ]
+])
+
+AT_CHECK([cat defs], 0, expout)
+
+AT_CLEANUP(configure config.status config.log config.cache config.h defs)
