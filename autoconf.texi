@@ -799,6 +799,27 @@ with @samp{--srcdir}; this is a safety check.  @xref{Invoking configure},
 for more information.
 @end defmac
 
+Small packages may store all their macros in @code{aclocal.m4}.  As the
+set of macros grows, or for maintenance reasons, a maintainer may prefer 
+to split the macros in several files.  In this case, Autoconf must be
+told which files to load, and in which order.
+
+@defmac AC_INCLUDE (@var{file(s)})
+@maindex AC_INCLUDE
+Read the macro definitions that appear in the listed files.  A list of
+space-separated filenames or shell globbing patterns is expected.  The
+files will be read in the order they're listed.
+
+Because the order of definition of macros is important (only the last
+definition of a macro is used), beware that it is @code{AC_INIT} that
+loads @file{acsite.m4} and @file{aclocal.m4}.  Note that
+@code{AC_INCLUDE}ing a file before @code{AC_INIT} or within
+@file{aclocal.m4} is different from doing so after @code{AC_INIT}: in
+the latter case, non-macro lines from included files may end up in the
+@file{configure} script, whereas in the former case, they'd be discarded
+just like any text that appear before @code{AC_INIT}.
+@end defmac
+
 Packages that do manual configuration or use the @code{install} program
 might need to tell @code{configure} where to find some other shell
 scripts by calling @code{AC_CONFIG_AUX_DIR}, though the default places

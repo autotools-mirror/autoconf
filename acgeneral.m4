@@ -1046,6 +1046,12 @@ AC_INIT_PREPARE($1)dnl
 AC_DIVERT_POP()dnl to NORMAL
 ])
 
+dnl AC_INCLUDE
+AC_DEFUN(AC_INCLUDE,
+[ifelse($1, [], [], [dnl
+  esyscmd([for file in $1; do echo "builtin(include,$file)dnl"; done])dnl
+])])
+
 dnl AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
 AC_DEFUN(AC_INIT_PREPARE,
 [trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
