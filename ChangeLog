@@ -1,5 +1,14 @@
 2000-10-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/mktests.sh (update_exclude_list, syntax_exclude_list): Add
+	`AC_PREREQ'.
+	* tests/tools.m4: Globally, don't use `../' to invoke the tested
+	tools, since the PATH is properly set, and in most cases it
+	obfuscates the test code.
+	(autoupdating AC_PREREQ): New tests.
+
+2000-10-23  Akim Demaille  <akim@epita.fr>
+
 	In order to check that all the CPP symbols which are AC_DEFINE'd
 	are properly templated, autoheader traces
 	AC_DEFINE/AC_DEFINE_UNQUOTED.  Only literals can be traced, and

@@ -50,7 +50,7 @@ src="$@"
 # and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
 # the macros we don't want to test in syntax.m4.
 #
-# - AC_CANONICALIZE, AC_PREFIX_PROGRAM
+# - AC_CANONICALIZE, AC_PREFIX_PROGRAM, AC_PREREQ
 #   Need an argument.
 # - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
@@ -77,7 +77,7 @@ src="$@"
 # - AC_CYGWIN, AC_CYGWIN32, AC_EMXOS2, AC_MING32, AC_EXEEXT, AC_OBJEXT
 #   AU defined to nothing.
 syntax_exclude_list='^AC_ARG_VAR$
-^AC_CANONICALIZE$
+^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$
 ^AC_CONFIG
 ^AC_F77_FUNC$
@@ -88,7 +88,6 @@ syntax_exclude_list='^AC_ARG_VAR$
 ^AC_LIST_MEMBER_OF$
 ^AC_OUTPUT$
 ^AC_PATH_(TOOL|PROG)S?$
-^AC_PREFIX_PROGRAM$
 ^AC_REPLACE_FUNCS$
 ^AC_SEARCH_LIBS$
 ^AC_TRY
@@ -149,11 +148,14 @@ mv syntax.tm4 syntax.m4
 
 # update_exclude_list
 # -------------------
-# AC_LANG_RESTORE alone cannot be used.
-# AC_LINK_FILES needs argument and is tested elsewhere.
-# AC_INIT and AC_OUTPUT are already in `configure.in'.
+# AC_LANG_RESTORE
+#    cannot be used alone.
+# AC_LINK_FILES, AC_PREREQ
+#    need arguments and are tested elsewhere.
+# AC_INIT and AC_OUTPUT
+#    are already in `configure.in'.
 update_exclude_list='^AC_LANG_RESTORE$
-^AC_LINK_FILES$
+^AC_LINK_FILES|AC_PREREQ$
 ^AC_(INIT|OUTPUT)$'
 
 # syntax_exclude_egrep --

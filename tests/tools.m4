@@ -55,11 +55,11 @@ fi
 ]])
 
 if /bin/sh ./syntax.sh; then
-  AT_CHECK([/bin/sh -n ../autoconf],   0)
-  AT_CHECK([/bin/sh -n ../autoreconf], 0)
-  AT_CHECK([/bin/sh -n ../autoupdate], 0)
-  AT_CHECK([/bin/sh -n ../autoreconf], 0)
-  AT_CHECK([/bin/sh -n ../ifnames],    0)
+  AT_CHECK([/bin/sh -n autoconf],   0)
+  AT_CHECK([/bin/sh -n autoreconf], 0)
+  AT_CHECK([/bin/sh -n autoupdate], 0)
+  AT_CHECK([/bin/sh -n autoreconf], 0)
+  AT_CHECK([/bin/sh -n ifnames],    0)
 fi
 
 AT_CLEANUP
@@ -90,7 +90,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(this, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 0,
+AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Define this to whatever you want. */
 #undef this
@@ -104,7 +104,7 @@ AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
 ]])
 
-AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 1, [],
+AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 1, [],
 [autoheader: No template for symbol `that'
 ])
 
@@ -132,7 +132,7 @@ AH_BOTTOM([Bottom2 from configure.in.])
 # Yes, that's right: the `middle' part of `acconfig.h' is still before
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
-AT_CHECK([../autoheader --autoconf-dir .. -<configure.in], 0,
+AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Top from acconfig.h. */
 
@@ -172,7 +172,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 ]])
 
 # Checking `autoupdate'.
-AT_CHECK([../autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
+AT_CHECK([autoupdate --autoconf-dir $top_srcdir -<configure.in], 0,
 [[AC_INIT
 AC_CANONICAL_TARGET()
 dnl The doc says 27 is a valid fubar.
@@ -185,7 +185,9 @@ AC_OUTPUT
 AT_CLEANUP
 
 
-AT_SETUP([autoupdating AC_LINK FILES])
+# autoupdating AC_LINK_FILES
+# --------------------------
+AT_SETUP([autoupdating AC_LINK_FILES])
 
 AT_DATA(configure.in,
 [[AC_INIT
@@ -199,10 +201,10 @@ AT_DATA(dst2, dst2
 )
 
 # Checking `autoupdate'.
-AT_CHECK([../autoupdate --autoconf-dir $top_srcdir], 0, [],
+AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
          [autoupdate: `configure.in' is updated
 ])
-AT_CHECK([../autoconf --autoconf-dir $top_srcdir], 0)
+AT_CHECK([autoconf --autoconf-dir $top_srcdir], 0)
 AT_CHECK([./configure], 0, ignore)
 AT_CHECK([cat src1], 0, [dst1
 ])
@@ -210,6 +212,30 @@ AT_CHECK([cat src2], 0, [dst2
 ])
 
 AT_CLEANUP(src1 src2)
+
+
+# autoupdating AC_PREREQ
+# ----------------------
+AT_SETUP([autoupdating AC_PREREQ])
+
+cat >expout <<EOF
+AC_PREREQ($at_version)
+EOF
+
+AT_CHECK([echo "AC_PREREQ(1.0)" |
+            autoupdate --autoconf-dir $top_srcdir -],
+         0, [expout], [])
+
+AT_CHECK([echo "AC_PREREQ($at_version)" |
+            autoupdate --autoconf-dir $top_srcdir -],
+         0, [expout], [])
+
+AT_CHECK([echo "AC_PREREQ(999.99)" |
+            autoupdate --autoconf-dir $top_srcdir -],
+         1, [], [ignore])
+
+AT_CLEANUP
+
 
 
 ## ------------------ ##
@@ -229,7 +255,7 @@ TRACE1(foo, [active], TRACE1(active, [active]))
 ]])
 
 # Several --traces.
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
 [[configure.in:4:TRACE1:foo:bar:baz
 configure.in:4:TRACE2:bar:baz
 configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
@@ -243,7 +269,7 @@ configure.in:7:TRACE2:active::ACTIVE
 ]])
 
 # Several line requests.
-AT_CHECK([[../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
+AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
 [$1], [$2], [$3].']], 0,
 [[
 [foo], [bar], [baz].
@@ -258,7 +284,7 @@ AT_CHECK([[../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
 ]])
 
 # ${sep}@.
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
 [[[bar])===([baz]
 [AC_TRACE1(bar, baz)]
 [ACTIVE])===([baz]
@@ -284,7 +310,7 @@ AC_THIS_IS_PROBABLY_NOT_DEFINED
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
 ]])
 
-AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
+AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
 [[configure.in:2: error: undefined macro: AC_THIS_IS_PROBABLY_NOT_DEFINED
 configure:3: error: undefined macro: AC_OUTPUT
 ]])
@@ -307,10 +333,10 @@ AT_DATA([configure.in],
 
 if (gawk --version) >/dev/null 2>&1; then
   # Generation of the script.
-  AT_CHECK([AWK='gawk --posix' ../autoconf --autoconf-dir .. -l $at_srcdir], 0,
+  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir], 0,
            [], [])
   # Tracing.
-  AT_CHECK([AWK='gawk --posix' ../autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
+  AT_CHECK([AWK='gawk --posix' autoconf --autoconf-dir .. -l $at_srcdir -t AC_INIT], 0,
            ignore, [])
 fi
 
