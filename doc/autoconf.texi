@@ -9129,9 +9129,9 @@ deletes only lines that contain the literal string @samp{a|b}.
 
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
-Nested groups are extremely portable, but there is at least one
-@command{sed} (System V/68 Base Operating System R3V7.1) that does not
-support it.
+Nested parenthesization in patterns (e.g., @samp{\(\(a*\)b*)\)}) is
+quite portable to modern hosts, but is not supported by some older
+@command{sed} implementations like SVR3.
 
 Of course the option @option{-e} is portable, but it is not needed.  No
 valid Sed program can start with a dash, so it does not help
