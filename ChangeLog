@@ -1,5 +1,12 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CHECK_LIB): Ah ah!  I recognized you, even
+	masked: you are AC_TRY_LINK_FUNC.
+	Fix quotation.
+	(AC_SEARCH_LIBS): Use AC_SHELL_IFELSE.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* tests/semantics.m4 (AC_TRY_LINK_FUNC, AC_CHECK_LIB): New tests.
 
 2000-03-25  Akim Demaille  <akim@epita.fr>

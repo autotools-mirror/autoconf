@@ -2770,12 +2770,11 @@ AC_TRY_LINK_FUNC([$1],
 break])
 done
 LIBS="$ac_func_search_save_LIBS"])
-if test "$ac_cv_search_$1" != "no"; then
-  test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
-  $3
-else :
-  $4
-fi])
+AC_SHELL_IFELSE([test "$ac_cv_search_$1" != "no"],
+  [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+  $3],
+                [$4])[]dnl
+])
 
 
 
@@ -2797,25 +2796,15 @@ AC_DEFUN(AC_CHECK_LIB,
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
-AC_TRY_LINK(dnl
-AC_LANG_CASE([FORTRAN77], ,
-[ifelse([$2], [main], , dnl Avoid conflicting decl of main.
-[/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $2();
-])]),
-[$2()],
-AC_VAR_SET(ac_Lib, yes), AC_VAR_SET(ac_Lib, no))
+AC_TRY_LINK_FUNC([$2],
+                 [AC_VAR_SET(ac_Lib, yes)],
+                 [AC_VAR_SET(ac_Lib, no)])
 LIBS="$ac_save_LIBS"])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
-                m4_default([$3],
+                [m4_default([$3],
                            [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
-]),
+])],
                 [$4])dnl
 AC_VAR_POPDEF([ac_Lib])dnl
 ])# AC_CHECK_LIB
