@@ -9133,11 +9133,11 @@ your script might be suspended waiting for data on its standard input.
 @evindex PS2
 @evindex PS4
 These variables should not matter for shell scripts, since they are
-supposed affect only interactive shells.  However, at least one shell
-(the pre-3.0 UWIN @command{ksh}) gets confused about whether it is
-interactive, which means that (for example) a @env{PS1} with a side
-effect can unexpectedly modify @samp{$?}.  To work around this bug,
-Autoconf-generated scripts do something like this:
+supposed to affect only interactive shells.  However, at least one
+shell (the pre-3.0 @sc{uwin} @command{ksh}) gets confused about
+whether it is interactive, which means that (for example) a @env{PS1}
+with a side effect can unexpectedly modify @samp{$?}.  To work around
+this bug, Autoconf-generated scripts do something like this:
 
 @example
 (unset ENV) >/dev/null 2>&1 && unset ENV MAIL MAILPATH
