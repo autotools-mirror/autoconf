@@ -1,3 +1,8 @@
+2001-01-22  Jim Meyering  <meyering@lucent.com>
+
+	* actypes.m4 (AC_TYPE_GETGROUPS): Double quote the test program
+	body.
+
 2001-01-22  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* aclang.m4 (AC_LANG_INT_SAVE, AC_LANG_INT_SAVE(C)): Use

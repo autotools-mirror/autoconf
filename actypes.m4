@@ -246,11 +246,12 @@ AC_DEFUN([AC_TYPE_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
-[/* Thanks to Mike Rendell for this test.  */
+[[/* Thanks to Mike Rendell for this test.  */
 #include <sys/types.h>
 #define NGID 256
 #undef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
+
 int
 main ()
 {
@@ -266,7 +267,7 @@ main ()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short but getgroups modifies an array of ints.  */
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
-}])],
+}]])],
                [ac_cv_type_getgroups=gid_t],
                [ac_cv_type_getgroups=int],
                [ac_cv_type_getgroups=cross])
