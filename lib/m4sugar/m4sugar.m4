@@ -1318,10 +1318,10 @@ m4_defn([m4_cr_digits])dnl
 
 # m4_re_escape(STRING)
 # --------------------
-# Escape BRE active characters in STRING.
+# Escape RE active characters in STRING.
 m4_define([m4_re_escape],
 [m4_bpatsubst([$1],
-	      [[][+*.]], [\\\&])])
+	      [[][*+.?\^$]], [\\\&])])
 
 
 # m4_re_string
