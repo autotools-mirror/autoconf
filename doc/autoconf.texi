@@ -5624,9 +5624,10 @@ are for newer programs that can (or must) compile under the newer
 Fortran standards, and have output variables like @code{FC},
 @code{FCFLAGS}, and @code{FCLIBS}.
 
-Except for two new macros @code{AC_FC_SRCEXT} and @code{AC_FC_FREEFORM}
-(see below), the @code{FC} and @code{F77} macros behave almost identically, and so
-they are documented together in this section.
+Except for two new macros @code{AC_FC_SRCEXT} and
+@code{AC_FC_FREEFORM} (see below), the @code{FC} and @code{F77} macros
+behave almost identically, and so they are documented together in this
+section.
 
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})
@@ -5957,7 +5958,6 @@ If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
 calls @ovar{action-if-success} (defaults to nothing). If it fails, it
 calls @ovar{action-if-failure} (defaults to exiting with an error
 message).
-
 @end defmac
 
 @node System Services
@@ -6186,8 +6186,6 @@ test programs.  Use compilation flags: @code{FFLAGS}.
 Do compilation tests using @code{FC} and use extension @file{.f} (or
 whatever has been set by @code{AC_FC_SRCEXT}) for test programs.  Use
 compilation flags: @code{FCFLAGS}.
-
-
 @end table
 @end defmac
 
@@ -6214,6 +6212,25 @@ AC_LANG_PUSH(Fortran 77)
 AC_LANG_POP(Fortran 77)
 @end example
 @end defmac
+
+@defmac AC_LANG_ASSERT (@var{language})
+@acindex{LANG_ASSERT} Check statically that the current language is
+@var{language}.  You should use this in your language specific macros
+to avoid that they be called with an inappropriate language.
+
+This macro runs only at @command{autoconf} time, and incurs no cost at
+@command{configure} time.  Sadly enough and because Autoconf is a two
+layer language @footnote{Because M4 is not aware of Sh code,
+especially conditionals, some optimizations that look nice statically
+may produce incorrect results at runtime.}, the macros
+@code{AC_LANG_PUSH}/@code{AC_LANG_POP} cannot be ``optimizing'',
+therefore as much as possible you ought to avoid using them to wrap
+your code, rather, require from the user to run the macro with a
+correct current language, and check it with @code{AC_LANG_ASSERT}.
+And anyway, that may help the user understand she is running a Fortran
+macro while expecting a result about her Fortran 77 compiler...
+@end defmac
+
 
 @defmac AC_REQUIRE_CPP
 @acindex{REQUIRE_CPP}
@@ -15707,5 +15724,6 @@ introduced in this document.
 @bye
 
 @c Local Variables:
+@c fill-column: 72
 @c ispell-local-dictionary: "american"
 @c End:

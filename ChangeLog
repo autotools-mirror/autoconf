@@ -1,5 +1,13 @@
 2003-10-31  Akim Demaille  <akim@epita.fr>
 
+	* tests/fortran.at (GNU Fortran 77): Don't run FC macros.
+	(GNU Fortran): New.
+	* doc/autoconf.texi (Language Choice): Document.
+	* lib/autoconf/fortran.m4 (AC_FC_SRCEXT, AC_FC_FREEFORM): Assert
+	the current language is Fortran.
+
+2003-10-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (&freeze): Use a less likely warning separator
 	than `\n\n', so that `\n\n\n' is valid in warnings.
 	Reported by Steve Huston.

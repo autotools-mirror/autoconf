@@ -699,6 +699,7 @@ fi # test "x$[]_AC_LANG_PREFIX[]LIBS" = "x"
 AC_SUBST([]_AC_LANG_PREFIX[]LIBS)
 ])# _AC_FC_LIBRARY_LDFLAGS
 
+
 # AC_F77_LIBRARY_LDFLAGS
 # ----------------------
 AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
@@ -707,6 +708,7 @@ AC_LANG_PUSH(Fortran 77)dnl
 _AC_FC_LIBRARY_LDFLAGS
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_LIBRARY_LDFLAGS
+
 
 # AC_FC_LIBRARY_LDFLAGS
 # ----------------------
@@ -803,6 +805,7 @@ fi])],
             [AC_MSG_FAILURE([linking to Fortran libraries from C fails])])])
 ])# _AC_FC_DUMMY_MAIN
 
+
 # AC_F77_DUMMY_MAIN
 # ----------------------
 AC_DEFUN([AC_F77_DUMMY_MAIN],
@@ -811,6 +814,7 @@ AC_LANG_PUSH(Fortran 77)dnl
 _AC_FC_DUMMY_MAIN
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_DUMMY_MAIN
+
 
 # AC_FC_DUMMY_MAIN
 # ----------------------
@@ -859,8 +863,9 @@ AC_DEFINE_UNQUOTED([]_AC_FC[]_MAIN, $ac_cv_[]_AC_LANG_ABBREV[]_main,
                     called from a `main' in the Fortran libraries.])
 ])# _AC_FC_MAIN
 
+
 # AC_F77_MAIN
-# ----------------------
+# -----------
 AC_DEFUN([AC_F77_MAIN],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_LANG_PUSH(Fortran 77)dnl
@@ -868,8 +873,9 @@ _AC_FC_MAIN
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_MAIN
 
+
 # AC_FC_MAIN
-# ----------------------
+# ----------
 AC_DEFUN([AC_FC_MAIN],
 [AC_REQUIRE([AC_FC_LIBRARY_LDFLAGS])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -969,6 +975,7 @@ AC_CACHE_CHECK([for Fortran name-mangling scheme],
 # The replacement is empty.
 AU_DEFUN([AC_F77_NAME_MANGLING], [])
 
+
 # _AC_F77_NAME_MANGLING
 # ----------------------
 AC_DEFUN([_AC_F77_NAME_MANGLING],
@@ -978,6 +985,7 @@ AC_LANG_PUSH(Fortran 77)dnl
 __AC_FC_NAME_MANGLING
 AC_LANG_POP(Fortran 77)dnl
 ])# _AC_F77_NAME_MANGLING
+
 
 # _AC_FC_NAME_MANGLING
 # ----------------------
@@ -1034,8 +1042,9 @@ case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in
 esac
 ])# _AC_FC_WRAPPERS
 
+
 # AC_F77_WRAPPERS
-# ----------------------
+# ---------------
 AC_DEFUN([AC_F77_WRAPPERS],
 [AC_REQUIRE([_AC_F77_NAME_MANGLING])dnl
 AC_LANG_PUSH(Fortran 77)dnl
@@ -1043,8 +1052,9 @@ _AC_FC_WRAPPERS
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_WRAPPERS
 
+
 # AC_FC_WRAPPERS
-# ----------------------
+# --------------
 AC_DEFUN([AC_FC_WRAPPERS],
 [AC_REQUIRE([_AC_FC_NAME_MANGLING])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -1118,10 +1128,10 @@ AC_LANG_POP(Fortran)dnl
 # some versions), the $FCFLAGS_<EXT> variable *must* go immediately before
 # the source file on the command line, unlike other $FCFLAGS.  Ugh.
 AC_DEFUN([AC_FC_SRCEXT],
-[AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
+[AC_LANG_ASSERT(Fortran)dnl
+AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
                 ac_cv_fc_srcext_$1,
-[AC_LANG_PUSH(Fortran)dnl
-ac_ext=$1
+[ac_ext=$1
 ac_fc_srcext_FCFLAGS_SRCEXT_save=$FCFLAGS_SRCEXT
 FCFLAGS_SRCEXT=""
 ac_cv_fc_srcext_$1=unknown
@@ -1131,7 +1141,6 @@ for ac_flag in none -qsuffix=f=$1 -Tf; do
 done
 rm -f conftest.$ac_objext conftest.$1
 FCFLAGS_SRCEXT=$ac_fc_srcext_FCFLAGS_SRCEXT_save
-AC_LANG_POP(Fortran)dnl
 ])
 if test "x$ac_cv_fc_srcext_$1" = xunknown; then
   m4_default([$3],[AC_MSG_ERROR([Fortran could not compile .$1 files])])
@@ -1170,10 +1179,10 @@ fi
 # We try to test the "more popular" flags first, by some prejudiced
 # notion of popularity.
 AC_DEFUN_ONCE([AC_FC_FREEFORM],
-[AC_CACHE_CHECK([for Fortran flag needed to allow free-form source],
+[AC_LANG_ASSERT([Fortran])dnl
+AC_CACHE_CHECK([for Fortran flag needed to allow free-form source],
                 ac_cv_fc_freeform,
-[AC_LANG_PUSH(Fortran)dnl
-ac_cv_fc_freeform=unknown
+[ac_cv_fc_freeform=unknown
 ac_fc_freeform_FCFLAGS_save=$FCFLAGS
 for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform \
                -freeform "-f free"
@@ -1189,7 +1198,6 @@ do
 done
 rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 FCFLAGS=$ac_fc_freeform_FCFLAGS_save
-AC_LANG_POP(Fortran)dnl
 ])
 if test "x$ac_cv_fc_freeform" = xunknown; then
   m4_default([$2],
