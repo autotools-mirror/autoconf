@@ -631,9 +631,9 @@ If you have a lot of Autoconf-generated @code{configure} scripts and you
 get a new version of Autoconf, the @code{autoreconf} program can be
 handy.  It runs @code{autoconf} (and @code{autoheader}, where
 appropriate) repeatedly to remake all of the Autoconf @code{configure}
-scripts in a directory tree.  If you give the
-@samp{--macrodir=@var{dir}} or @samp{--localdir=@var{dir}} options, it
-passes them down (with relative paths adjusted properly).
+scripts in the directory tree rooted at the current directory.  If you
+give the @samp{--macrodir=@var{dir}} or @samp{--localdir=@var{dir}}
+options, it passes them down (with relative paths adjusted properly).
 
 @xref{Automatic Remaking}, for information about automatic remaking of
 @code{configure} scripts when their source files change.
