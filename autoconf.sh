@@ -561,11 +561,6 @@ define([AC_DEFUN],
 	  [define([AC_DECLARED{$1}])errprint(]]__file__:__line__:[[ [$1]
 )])dnl
 ][$2])])
-
-dnl All the includes must be disabled.  If they are not, since people don't
-dnl protect the first argument of AC_DEFUN, then, if read a second time
-dnl this argument will be expanded, and we'll get pure junk out of m4.
-define([AC_INCLUDE])
 EOF
 
   # Run m4 with all the library files, discard stdout, save stderr in
@@ -580,6 +575,7 @@ EOF
   # Save in `installed' the list of installed links.
   $verbose "Required macros:" >&2
   $verbose "`sed -e 's/^/| /' $tmp/requested`" >&2
+  : >$tmp/installed
   cat $tmp/requested |
     while read line
     do
@@ -606,9 +602,7 @@ EOF
   # Use yourself to get the list of the included files.
   export AC_ACLOCALDIR
   export AC_MACRODIR
-  # Not m4_s?include, because it would catch acsite and aclocal, which
-  # we don't care about.
-  $0 -l "$localdir" -t AC_INCLUDE:'$1' $infile |
+  $0 -l "$localdir" -t include:'$1' -t m4_include:'$1' -t m4_sinclude:'$1' $infile |
     sort |
     uniq >$tmp/included
   # All the included files are needed.

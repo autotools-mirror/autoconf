@@ -1616,6 +1616,16 @@ set when you call @code{AC_PROG_CXX} (or empty if you don't).
 C++ features.
 @end defvar
 
+@defvar DEFS
+@ovindex DEFS
+@option{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADERS}
+is called, @code{configure} replaces @samp{@@DEFS@@} with
+@option{-DHAVE_CONFIG_H} instead (@pxref{Configuration Headers}).  This
+variable is not defined while @code{configure} is performing its tests,
+only when creating the output files.  @xref{Setting Output Variables}, for
+how to check the results of previous tests.
+@end defvar
+
 @defvar ECHO_C
 @defvarx ECHO_N
 @defvarx ECHO_T
@@ -1643,16 +1653,6 @@ is not set in the environment when @code{configure} runs, the default
 value is set when you call @code{AC_PROG_F77} (or empty if you don't).
 @code{configure} uses this variable when compiling programs to test for
 Fortran 77 features.
-@end defvar
-
-@defvar DEFS
-@ovindex DEFS
-@option{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADERS}
-is called, @code{configure} replaces @samp{@@DEFS@@} with
-@option{-DHAVE_CONFIG_H} instead (@pxref{Configuration Headers}).  This
-variable is not defined while @code{configure} is performing its tests,
-only when creating the output files.  @xref{Setting Output Variables}, for
-how to check the results of previous tests.
 @end defvar
 
 @defvar LDFLAGS
