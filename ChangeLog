@@ -1,5 +1,8 @@
 1999-01-25  Ben Elliston  <bje@cygnus.com>
 
+	* Makefile.in (clean mostlyclean distclean maintainer-clean):
+	Remove .m4f files.
+
 	* config.guess: Synchronise with master FSF version. Add detection
 	for HP MPE/iX.
 
