@@ -2596,11 +2596,12 @@ Symbols}, for how to get those symbol definitions into your program.
 @node Common Behavior, Alternative Programs, Existing Tests, Existing Tests
 @section Common Behavior
 
-Much effort was put into Autoconf to make it easy to learn.  The most
-obvious way to reach this goal is simply to enforce standard and
-rigorous schemes, and to avoid as much as possible exceptions.  Because
-of history and momentum, there are still too many exceptions in
-Autoconf, nevertheless this section describes some of the common rules.
+Much effort has been expended to make Autoconf easy to learn.  The most
+obvious way to reach this goal is simply to enforce standard interfaces
+and behaviors, avoiding exceptions as much as possible.  Because of
+history and inertia, unfortunately, there are still too many exceptions
+in Autoconf; nevertheless, this section describes some of the common
+rules.
 
 @menu
 * Standard Symbols::            Symbols defined by the macros
@@ -2612,27 +2613,27 @@ Autoconf, nevertheless this section describes some of the common rules.
 
 All the generic macros that @code{AC_DEFINE} a symbol as a result of
 their test transform their @var{argument}s to a standard alphabet.
-First, @var{argument} is mapped to upper case and any star @samp{*} to
-@samp{P}.  Any characters that remain that are not alpha-numerical or
-underscores are mapped to underscores.
+First, @var{argument} is converted to upper case and any asterisks
+(@samp{*}) are each converted to @samp{P}.  Any remaining characters
+that are not alphanumeric are converted to underscores.
 
-For instance
+For instance,
 
 @example
 AC_CHECK_TYPES(struct $Expensive*)
 @end example
 
 @noindent
-may define the symbol @samp{HAVE_STRUCT__EXPENSIVEP}.
+will define the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check succeeds.
 
 
 @node Default Includes,  , Standard Symbols, Common Behavior
 @subsection Default Includes
 @cindex Includes, default
 
-Several tests depend upon a set of headers.  Since headers are not
-universally available, you actually have to provide a set of protected
-includes, such as
+Several tests depend upon a set of header files.  Since these headers
+are not universally available, tests actually have to provide a set of
+protected includes, such as:
 
 @example
 @group
@@ -2701,7 +2702,7 @@ They are used to choose between several alternative programs and to
 decide what to do once one has been chosen.  If there is no macro
 specifically defined to check for a program you need, and you don't need
 to check for any special properties of it, then you can use one of the
-general program check macros.
+general program-check macros.
 
 @menu
 * Particular Programs::         Special handling to find certain programs
@@ -2744,7 +2745,7 @@ speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
 but that name is obsolete because some @code{make} programs have a rule
 that creates @file{install} from it if there is no @file{Makefile}.
 
-A copy of @file{install-sh} which you may use comes with Autoconf.  If
+Autoconf comes with a copy of @file{install-sh} that you can use.  If
 you use @code{AC_PROG_INSTALL}, you must include either
 @file{install-sh} or @file{install.sh} in your distribution, or
 @code{configure} will produce an error message saying it can't find
@@ -2777,14 +2778,14 @@ the base of the file name that the lexer generates; usually
 according to whether @code{lex} or @code{flex} is being used.
 
 You are encouraged to use Flex in your sources, since it is both more
-pleasant to use than plain Lex, and the C source it produces is
-portable.  But in order to ensure portability, you must either provide a
-function @code{yywrap}, or if you don't use it (i.e., your scanner has
+pleasant to use than plain Lex and the C source it produces is portable.
+In order to ensure portability, however, you must either provide a
+function @code{yywrap} or, if you don't use it (e.g., your scanner has
 no @samp{#include}-like feature), simply include a @samp{%noyywrap}
 statement in the scanner's source.  Once this done, the scanner is
-portable (well, unless @emph{you} felt free to use nonportable
-constructs) and does not depend on any library.  In this case, and in
-this case only, it is suggested that you use this Autoconf snippet:
+portable (unless @emph{you} felt free to use nonportable constructs) and
+does not depend on any library.  In this case, and in this case only, it
+is suggested that you use this Autoconf snippet:
 
 @example
 AC_PROG_LEX
@@ -2803,22 +2804,22 @@ distribution.
 @maindex PROG_LN_S
 @ovindex LN_S
 If @samp{ln -s} works on the current file system (the operating system
-and file system support symbolic links), set output variable @code{LN_S}
-to @samp{ln -s}, otherwise if @samp{ln} works, set @code{LN_S} to
-@samp{ln}, and otherwise set to @samp{cp -p}.
+and file system support symbolic links), set the output variable
+@code{LN_S} to @samp{ln -s}; otherwise, if @samp{ln} works, set
+@code{LN_S} to @samp{ln} and otherwise set it to @samp{cp -p}.
 
-If the link is put in a directory other than the current directory, its
+If you make a link a directory other than the current directory, its
 meaning depends on whether @samp{ln} or @samp{ln -s} is used.  To safely
 create links using @samp{$(LN_S)}, either find out which form is used
 and adjust the arguments, or always invoke @code{ln} in the directory
 where the link is to be created.
 
-In other words, it does not work to do
+In other words, it does not work to do:
 @example
 $(LN_S) foo /x/bar
 @end example
 
-Instead, do
+Instead, do:
 
 @example
 (cd /x && $(LN_S) foo bar)
@@ -2829,7 +2830,7 @@ Instead, do
 @maindex PROG_RANLIB
 @ovindex RANLIB
 Set output variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
-is found, otherwise to @samp{:} (do nothing).
+is found, and otherwise to @samp{:} (do nothing).
 @end defmac
 
 @defmac AC_PROG_YACC
@@ -2843,7 +2844,7 @@ If @code{bison} is found, set output variable @code{YACC} to @samp{bison
 @node Generic Programs,  , Particular Programs, Alternative Programs
 @subsection Generic Program and File Checks
 
-These macros are used to find programs not covered by the particular
+These macros are used to find programs not covered by the ``particular''
 test macros.  If you need to check the behavior of a program as well as
 find out whether it is present, you have to write your own test for it
 (@pxref{Writing Tests}).  By default, these macros use the environment
@@ -2905,8 +2906,8 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 @end example
 @noindent
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
-@code{PATH}, or to @samp{ranlib} if that program exists in @code{PATH},
-or to @samp{:} if neither program exists.
+@code{PATH}, or otherwise to @samp{ranlib} if that program exists in
+@code{PATH}, or to @samp{:} if neither program exists.
 @end defmac
 
 @defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
@@ -2936,20 +2937,8 @@ found.
 
 @defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @maindex PATH_TOOL
-Like @code{AC_PATH_PROG}, but first looks for @var{prog-to-check-for}
-with a prefix of the host type as determined by
-@code{AC_CANONICAL_HOST}, followed by a dash (@pxref{Canonicalizing}).
-For example, if the user runs @samp{configure --host=i386-gnu}, then
-this call:
-@example
-AC_PATH_TOOL(FILE, file, :, /usr/bin:$PATH)
-@end example
-@noindent
-sets @code{FILE} to @file{/usr/bin/i386-gnu-file}, for example, if
-that program is found at @file{/usr/bin} in @code{PATH}, or to
-@samp{/usr/bin/file}, for example, if @emph{that} program is found at
-@file{/usr/bin} in @code{PATH}, or to @samp{:} if neither program can
-be found.
+Like @code{AC_CHECK_TOOL}, but set @var{variable} to the entire
+path of the program if it is found.
 @end defmac
 
 
@@ -2963,7 +2952,7 @@ The following macros check for the presence of certain C, C++ or Fortran
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @maindex CHECK_LIB
 Depending on the current language(@pxref{Language Choice}), try to
-ensure that the C, C++ or Fortran 77 function @var{function} is
+ensure that the C, C++, or Fortran 77 function @var{function} is
 available by checking whether a test program can be linked with the
 library @var{library} to get the function.  @var{library} is the base
 name of the library; e.g., to check for @option{-lmp}, use @samp{mp} as
@@ -2978,23 +2967,23 @@ capitals). This macro is intended to support building of @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
 library dependencies are satisfied as a natural side-effect of
 consecutive tests. Some linkers are very sensitive to library ordering
-so the order that @code{LIBS} is generated in is important to reliable
+so the order in which @code{LIBS} is generated is important to reliable
 detection of libraries.
 
-If linking with @var{library} results in unresolved symbols, which would
+If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
-as the @var{other-libraries} argument, separated by spaces: @option{-lXt
--lX11}.  Otherwise this macro will fail to detect that @var{library} is
-present, because linking the test program will always fail with
-unresolved symbols. The @var{other-libraries} argument should be limited
-to cases where it is desirable to test for the library in the presence of
-another (which may not already be in @code{LIBS}).
+as the @var{other-libraries} argument, separated by spaces:
+e.g. @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
+that @var{library} is present, because linking the test program will
+always fail with unresolved symbols. The @var{other-libraries} argument
+should be limited to cases where it is desirable to test for one library
+in the presence of another that is not already in @code{LIBS}.
 @end defmac
 
 
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @maindex SEARCH_LIBS
-Search for a library defining @var{function}, if it's not already
+Search for a library defining @var{function} if it's not already
 available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
 with no libraries, then for each library listed in @var{search-libs}.
 
@@ -3002,12 +2991,12 @@ Add @option{-l@var{library}} to @code{LIBS} for the first library found
 to contain @var{function}, and run @var{action-if-found}.  If the
 function is not found, run @var{action-if-not-found}.
 
-If linking with @var{library} results in unresolved symbols, which would
+If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
-as the @var{other-libraries} argument, separated by spaces: @option{-lXt
--lX11}.  Otherwise this macro will fail to detect that @var{function} is
-present, because linking the test program will always fail with
-unresolved symbols.
+as the @var{other-libraries} argument, separated by spaces:
+e.g. @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
+that @var{function} is present, because linking the test program will
+always fail with unresolved symbols.
 @end defmac
 
 
@@ -3018,7 +3007,7 @@ unresolved symbols.
 The following macros check for particular C library functions.
 If there is no macro specifically defined to check for a function you need,
 and you don't need to check for any special properties of
-it, then you can use one of the general function check macros.
+it, then you can use one of the general function-check macros.
 
 @menu
 * Particular Functions::        Special handling to find certain functions
@@ -3087,7 +3076,7 @@ char *alloca ();
 
 @defmac AC_FUNC_CHOWN
 @maindex FUNC_CHOWN
-If the @code{chown} function is available and works (in particular it
+If the @code{chown} function is available and works (in particular, it
 should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.
 @end defmac
@@ -3124,7 +3113,7 @@ Define @code{_LARGEFILE_SOURCE} if necessary.
 @maindex FUNC_GETGROUPS
 @ovindex GETGROUPS_LIBS
 If the @code{getgroups} function is available and works (unlike on
-Ultrix 4.3 where @samp{getgroups (0, 0)} always fails), define
+Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @end defmac
@@ -3149,11 +3138,14 @@ Check how to get the system load averages.  If the system has the
 @code{GETLOADAVG_LIBS} to any libraries needed to get that function.
 Also add @code{GETLOADAVG_LIBS} to @code{LIBS}.
 
-Otherwise, require an @code{AC_LIBOBJ} replacement of @samp{getloadavg},
-and possibly define several other C preprocessor macros and output
-variables:
+Otherwise, require an @code{AC_LIBOBJ} replacement (@file{getloadavg.c})
+of @samp{getloadavg}, and possibly define several other C preprocessor
+macros and output variables:
 
 @enumerate
+@item
+Define @code{C_GETLOADAVG}.
+
 @item
 Define @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if on
 those systems.
@@ -3167,17 +3159,12 @@ If @samp{struct nlist} has an @samp{n_un.n_name} member, define
 @code{NLIST_NAME_UNION} is still defined, but do not depend upon it.
 
 @item
-@c FIXME: I don't understand anything to this sentence :(
-If compiling @file{getloadavg.c} define @code{C_GETLOADAVG} and
-@code{LDAV_PRIVILEGED}, programs need to be installed specially on this
-system for @code{getloadavg} to work, and this macro defines
-@code{GETLOADAVG_PRIVILEGED}.
-
-@item
-This macro sets the output variable @code{NEED_SETGID}.  The value is
-@samp{true} if special installation is required, @samp{false} if not.
-If @code{NEED_SETGID} is @samp{true}, this macro sets @code{KMEM_GROUP}
-to the name of the group that should own the installed program.
+Programs may need to be installed setgid (or setuid) for
+@code{getloadavg} to work.  In this case, define
+@code{GETLOADAVG_PRIVILEGED}, set the output variable @code{NEED_SETGID}
+to @samp{true} (and otherwise to @samp{false}), and set
+@code{KMEM_GROUP} to the name of the group that should own the installed
+program.
 @end enumerate
 @end defmac
 
@@ -3227,7 +3214,7 @@ pointer), define @code{HAVE_MALLOC}.
 If the @code{memcmp} function is not available, or does not work on
 8-bit data (like the one on SunOS 4.1.3), or fails when comparing 16
 bytes or more and with at least one buffer not starting on a 4-byte
-boundary (such as the one on Next x86 OpenStep), require an
+boundary (such as the one on NeXT x86 OpenStep), require an
 @code{AC_LIBOBJ} replacement for @samp{memcmp}.
 @end defmac
 
@@ -3259,7 +3246,7 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @cvindex SELECT_TYPE_ARG1
 @cvindex SELECT_TYPE_ARG234
 @cvindex SELECT_TYPE_ARG5
-Determines the correct type to be passed to each of the
+Determines the correct type to be passed for each of the
 @code{select} function's arguments, and defines those types
 in @code{SELECT_TYPE_ARG1}, @code{SELECT_TYPE_ARG234}, and
 @code{SELECT_TYPE_ARG5} respectively.  @code{SELECT_TYPE_ARG1} defaults
@@ -3379,7 +3366,7 @@ If @code{wait3} is found and fills in the contents of its third argument
 @node Generic Functions,  , Particular Functions, Library Functions
 @subsection Generic Function Checks
 
-These macros are used to find functions not covered by the particular
+These macros are used to find functions not covered by the ``particular''
 test macros.  If the functions might be in libraries other than the
 default C library, first call @code{AC_CHECK_LIB} for those libraries.
 If you need to check the behavior of a function as well as find out
@@ -3392,16 +3379,16 @@ If C function @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If you just
 want to define a symbol if the function is available, consider using
 @code{AC_CHECK_FUNCS} instead.  This macro checks for functions with C
-linkage even when @code{AC_LANG(C++)} has been called, since C++ is more
-standardized than C is.  (@pxref{Language Choice}, for more information
+linkage even when @code{AC_LANG(C++)} has been called, since C is more
+standardized than C++.  (@pxref{Language Choice}, for more information
 about selecting the language for checks.)
 @end defmac
 
 @defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @maindex CHECK_FUNCS
 @cvindex HAVE_@var{function}
-For each given @var{function} in the whitespace-separated argument list
-that is available, define @code{HAVE_@var{function}} (in all capitals).
+For each @var{function} in the whitespace-separated argument list,
+define @code{HAVE_@var{function}} (in all capitals) if it is available.
 If @var{action-if-found} is given, it is additional shell code to
 execute when one of the functions is found.  You can give it a value of
 @samp{break} to break out of the loop on the first match.  If
@@ -3409,15 +3396,14 @@ execute when one of the functions is found.  You can give it a value of
 functions is not found.
 @end defmac
 
-Autoconf follows a philosophy that was formed throughout the years by the
-people who fought for portability: isolate the portability issues in
-specific files, and program as if you were in a @sc{posix} environment.
-Some functions cannot be repaired or are completely missing; your
+Autoconf follows a philosophy that was formed over the years by those
+who have struggled for portability: isolate the portability issues in
+specific files, and then program as if you were in a @sc{posix}
+environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
 
-Use the two following macros to specify the function that might be
-replaced, and use the third one to check and replace a function if
-needed.
+Use the first two following macros to specify a function to be replaced,
+and use the third one to check for and replace the function if needed.
 
 @defmac AC_LIBOBJ (@var{function})
 @maindex LIBOBJ
@@ -3458,13 +3444,12 @@ by a @file{configure.ac}, you should trace @code{AC_LIBOBJ_DECL}.
 @defmac AC_REPLACE_FUNCS (@var{function}@dots{})
 @maindex REPLACE_FUNCS
 @ovindex LIBOBJS
-Like calling @code{AC_CHECK_FUNCS} using
+Like calling @code{AC_CHECK_FUNCS}, but using
 @samp{AC_LIBOBJ(@var{function})} as @var{action-if-not-found}.  You can
-declare a function for which your replacement version is used by
-enclosing the prototype in @samp{#if !HAVE_@var{function}}.  If the
-system has the function, it probably declares it in a header file you
-should be including, so you shouldn't redeclare it, lest your
-declaration conflict.
+declare your replacement function by enclosing the prototype in
+@samp{#if !HAVE_@var{function}}.  If the system has the function, it
+probably declares it in a header file you should be including, so you
+shouldn't redeclare it lest your declaration conflict.
 @end defmac
 
 @node Header Files, Declarations, Library Functions, Existing Tests
@@ -3474,7 +3459,7 @@ declaration conflict.
 The following macros check for the presence of certain C header files.
 If there is no macro specifically defined to check for a header file you need,
 and you don't need to check for any special properties of
-it, then you can use one of the general header file check macros.
+it, then you can use one of the general header-file check macros.
 
 @menu
 * Particular Headers::          Special handling to find certain headers
@@ -3493,7 +3478,7 @@ exist, and in some cases whether they declare certain symbols.
 @cvindex HAVE_NDIR_H
 @cvindex HAVE_SYS_DIR_H
 @cvindex HAVE_SYS_NDIR_H
-Check for the following header files, and for the first one that is
+Check for the following header files.  For the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
 @multitable {@file{sys/ndir.h}} {@code{HAVE_SYS_NDIR_H}}
@@ -3503,7 +3488,7 @@ found and defines @samp{DIR}, define the listed C preprocessor macro:
 @item @file{ndir.h}     @tab @code{HAVE_NDIR_H}
 @end multitable
 
-The directory library declarations in the source code should look
+The directory-library declarations in your source code should look
 something like the following:
 
 @example
@@ -3528,7 +3513,7 @@ something like the following:
 @end example
 
 Using the above declarations, the program would declare variables to be
-type @code{struct dirent}, not @code{struct direct}, and would access
+of type @code{struct dirent}, not @code{struct direct}, and would access
 the length of a directory entry name by passing a pointer to a
 @code{struct dirent} to the @code{NAMLEN} macro.
 
@@ -3727,7 +3712,7 @@ Use:
 @subsection Generic Header Checks
 
 These macros are used to find system header files not covered by the
-particular test macros.  If you need to check the contents of a header
+``particular'' test macros.  If you need to check the contents of a header
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
@@ -3757,7 +3742,7 @@ is executed when one of the header files is not found.
 
 The following macros check for the declaration of variables and
 functions.  If there is no macro specifically defined to check for a
-symbol you need, then you can use the general macro (@pxref{Generic
+symbol you need, then you can use the general macros (@pxref{Generic
 Declarations}) or, for more complex tests, you may use
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
 
@@ -3782,26 +3767,26 @@ is declared in a system header file, either @file{signal.h} or
 @node Generic Declarations,  , Particular Declarations, Declarations
 @subsection Generic Declaration Checks
 
-These macros are used to find declarations not covered by the particular
+These macros are used to find declarations not covered by the ``particular''
 test macros.
 
 @defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECL
-If the declaration of @var{symbol} (a function or a variable) is needed
-because it is not declared in @var{includes}, run the shell commands
+If @var{symbol} (a function or a variable) is not declared in
+@var{includes} and a declaration is needed, run the shell commands
 @var{action-if-not-found}, otherwise @var{action-if-found}.  If no
 @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 
 This macro actually tests whether it is valid to use @var{symbol} as an
 r-value, not if it is really declared, because it is much safer to avoid
-introducing extra declarations when not needed.
+introducing extra declarations when they are not needed.
 @end defmac
 
 @defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_DECLS
 @cvindex HAVE_DECL_@var{symbol}
-For each of the @var{symbols} (comma separated list), define
+For each of the @var{symbols} (@emph{comma}-separated list), define
 @code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
 @var{symbol} is declared, otherwise to @samp{0}.  If
 @var{action-if-not-found} is given, it is additional shell code to
@@ -3817,9 +3802,8 @@ AC_CHECK_DECLS([malloc, realloc, calloc, free])
 
 Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not
 declared, @code{HAVE_DECL_@var{symbol}} is defined to @samp{0} instead
-of leaving @code{HAVE_DECL_@var{symbol}} undeclared.
-
-When you are @emph{sure} that the check was performed, use
+of leaving @code{HAVE_DECL_@var{symbol}} undeclared.  When you are
+@emph{sure} that the check was performed, use
 @code{HAVE_DECL_@var{symbol}} just like any other result of Autoconf:
 
 @example
@@ -3829,7 +3813,7 @@ extern char *symbol;
 @end example
 
 @noindent
-But if the test may have not been performed, because it is safer
+If the test may have not been performed, however, because it is safer
 @emph{not} to declare a symbol than to use a declaration that conflicts
 with the system's one, you should use:
 
@@ -3852,7 +3836,7 @@ the configuration.  In most cases the traditional approach is enough.
 
 The following macros check for the presence of certain members in C
 structures.  If there is no macro specifically defined to check for a
-member you need, then you can use the general structure member macro
+member you need, then you can use the general structure-member macro
 (@pxref{Generic Structures}) or, for more complex tests, you may use
 @code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
 
@@ -3897,10 +3881,10 @@ future.
 @cvindex HAVE_ST_RDEV
 @cvindex HAVE_STRUCT_STAT_ST_RDEV
 If @code{struct stat} contains an @code{st_rdev} member, define
-@code{HAVE_STRUCT_STAT_ST_RDEV}.  The former name, @code{HAVE_ST_RDEV}
-is to be avoided, as its support will cease in the future.
-
-This macro is obsoleted, and should be replaced by
+@code{HAVE_STRUCT_STAT_ST_RDEV}.  The former name for this macro,
+@code{HAVE_ST_RDEV}, is to be avoided as it will cease to be supported
+in the future.  Actually, even the new macro is obsolete, and should be
+replaced by:
 @example
 AC_CHECK_MEMBERS([struct stat.st_rdev])
 @end example
@@ -3928,7 +3912,7 @@ obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
 @subsection Generic Structure Checks
 
 These macros are used to find structure members not covered by the
-particular test macros.
+``particular'' test macros.
 
 @defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_MEMBER
@@ -3942,7 +3926,7 @@ AC_CHECK_MEMBER(struct passwd.pw_gecos,,
                 [#include <pwd.h>])
 @end example
 
-You can use this macro for sub members:
+You can use this macro for sub-members:
 
 @example
 AC_CHECK_MEMBER(struct top.middle.bot)
@@ -3952,9 +3936,9 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 @defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_MEMBERS
 Check for the existence of each @samp{@var{aggregate}.@var{member}} of
-@var{members} using the previous macro.  When @var{member} belong to
+@var{members} using the previous macro.  When @var{member} belongs to
 @var{aggregate}, define @code{HAVE_@var{aggregate}_@var{member}} (in all
-capitals, with spaces and dot replaced by underscore).
+capitals, with spaces and dots replaced by underscores).
 
 This macro uses m4 lists:
 @example
@@ -3969,7 +3953,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev, struct stat.st_blksize])
 The following macros check for C types, either builtin or typedefs.  If
 there is no macro specifically defined to check for a type you need, and
 you don't need to check for any special properties of it, then you can
-use a general type check macro.
+use a general type-check macro.
 
 @menu
 * Particular Types::            Special handling to find certain types
@@ -4044,7 +4028,7 @@ If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @node Generic Types,  , Particular Types, Types
 @subsection Generic Type Checks
 
-These macros are used to check for types not covered by the particular
+These macros are used to check for types not covered by the ``particular''
 test macros.
 
 @defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
@@ -4885,8 +4869,8 @@ your program initializes itself.
 If you really need to test for a run-time behavior while configuring,
 you can write a test program to determine the result, and compile and
 run it using @code{AC_TRY_RUN}.  Avoid running test programs if
-possible, because using them prevents people from configuring your
-package for cross-compiling.
+possible, because this prevents people from configuring your package for
+cross-compiling.
 
 @menu
 * Test Programs::               Running test programs
@@ -4905,7 +4889,7 @@ system while configuring.
 @var{program} is the text of a C program, on which shell variable and
 back quote substitutions are performed.  If it compiles and links
 successfully and returns an exit status of 0 when executed, run shell
-commands @var{action-if-true}.  Otherwise run shell commands
+commands @var{action-if-true}.  Otherwise, run shell commands
 @var{action-if-false}; the exit status of the program is available in
 the shell variable @samp{$?}.  This macro uses @code{CFLAGS} or
 @code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS} when
@@ -5036,7 +5020,7 @@ man pages}.
 @node Portable Shell, Multiple Cases, Systemology, Writing Tests
 @section Portable Shell Programming
 
-When writing your own checks, there are some shell script programming
+When writing your own checks, there are some shell-script programming
 techniques you should avoid in order to make your code portable.  The
 Bourne shell and upward-compatible shells like the Korn shell and Bash
 have evolved over the years, but to prevent trouble, do not take
@@ -5063,7 +5047,7 @@ restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
 packages.
 
-Some of these external utilities have a portable subset of features, see
+Some of these external utilities have a portable subset of features; see
 @ref{Limitations of Usual Tools}.
 
 @menu
@@ -5249,8 +5233,8 @@ remove good ones...
 
 While @command{autoconf} and friends will usually be run on some Unix
 variety, it can and will be used on other systems, most notably @sc{dos}
-variants.  This impacts several assumptions regarding file- and
-pathnames.
+variants.  This impacts several assumptions regarding file and
+path names.
 
 @noindent
 For example, the following code:
@@ -5280,7 +5264,7 @@ esac
 
 @noindent
 Make sure you quote the brackets if appropriate and keep the backslash as
-first char (@pxref{Limitations of Builtins}).
+first character (@pxref{Limitations of Builtins}).
 
 Also, because the colon is used as part of a drivespec, these systems don't
 use it as path separator.  When creating or accessing paths, use
@@ -5365,8 +5349,8 @@ include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 
 Contrary to a persistent urban legend, the Bourne shell does not
 systematically split variables and backquoted expressions, in particular
-on the right-hand side of assignments, and the argument of @code{case}.
-For instance the following code:
+on the right-hand side of assignments and in the argument of @code{case}.
+For instance, the following code:
 
 @example
 case "$given_srcdir" in
@@ -5376,7 +5360,7 @@ esac
 @end example
 
 @noindent
-is more readable written as:
+is more readable when written as:
 
 @example
 case $given_srcdir in
@@ -5388,16 +5372,16 @@ esac
 @noindent
 and in fact it is even @emph{more} portable: in the first case of the
 first attempt, the computation of @code{top_srcdir} is not portable,
-since not all the shells understand properly @samp{"`... "foo"... `"}.
-Worse yet, not all the shells understand @samp{"`... \"foo\"... `"} the
-same way: there is just no portable way to use double-quoted strings
-inside double-quoted backquoted expressions (Pfew!).
+since not all shells properly understand @samp{"`... "foo"... `"}.
+Worse yet, not all shells understand @samp{"`... \"foo\"... `"} the same
+way.  There is just no portable way to use double-quoted strings inside
+double-quoted backquoted expressions (pfew!).
 
 @table @code
 @item $@@
 @cindex @samp{"$@@"}
-One of the most famous shell portability issues is related to
-@samp{"$@@"}: when there are no positional argument, it is supposed to
+One of the most famous shell-portability issues is related to
+@samp{"$@@"}: when there are no positional arguments, it is supposed to
 be equivalent to nothing.  But some shells, for instance under Digital
 Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
 portable, use @samp{$@{1+"$@@"@}}.
@@ -5419,11 +5403,11 @@ Be sure to quote:
 otherwise some shells, such as on Digital Unix V 5.0, will die because
 of a ``bad substitution''.
 
-Solaris' @command{/bin/sh} has a frightening bug in its understanding
-this.  Imagine you need set a variable to a string containing @samp{@}}.
-This @samp{@}} character got Solaris' @command{/bin/sh} confused when
-the affected variable was already set.  This bug can be exercised by
-running:
+Solaris' @command{/bin/sh} has a frightening bug in its interpretation
+of this.  Imagine you need set a variable to a string containing
+@samp{@}}.  This @samp{@}} character confuses Solaris' @command{/bin/sh}
+when the affected variable was already set.  This bug can be exercised
+by running:
 
 @example
 $ unset foo
@@ -5439,9 +5423,9 @@ $ echo $foo
  ^ ugh!
 @end example
 
-It seems that @samp{@}} is considered to match @samp{$@{}, even though
-it is enclosed in single quotes.  The problem doesn't happen using
-double quotes.
+It seems that @samp{@}} is interpreted as matching @samp{$@{}, even
+though it is enclosed in single quotes.  The problem doesn't happen
+using double quotes.
 
 @item $@{@var{var}=@var{expanded-value}@}
 @cindex $@{@var{var}=@var{expanded-value}@}
@@ -5472,7 +5456,7 @@ and
 $ set | grep '^var=' | cat -v
 @end example
 
-One classical incarnation of this bug is:
+One classic incarnation of this bug is:
 
 @example
 default="a b c"
@@ -5487,20 +5471,21 @@ You'll get @samp{a b c} on a single line.  Why?  Because there are no
 spaces in @samp{$list}: there are @samp{M- }, i.e., spaces with the 8th
 bit set, hence no IFS splitting is performed!!!
 
-A good news is that Ultrix works fine with @samp{: $@{list=$default@}},
-i.e., if you @emph{don't} quote.  A bad news is then that @sc{qnx} 4.25
-then sets @var{list} to the @emph{last} item of @var{default}!
+One piece of good news is that Ultrix works fine with @samp{:
+$@{list=$default@}}; i.e., if you @emph{don't} quote.  The bad news is
+then that @sc{qnx} 4.25 then sets @var{list} to the @emph{last} item of
+@var{default}!
 
 The portable way out consists in using a double assignment, to switch
-twice the 8th bit on Ultrix:
+the 8th bit twice on Ultrix:
 
 @example
 list=$@{list="$default"@}
 @end example
 
 @noindent
-but beware of the @samp{@}} bug from Solaris (see above).  For safety,
-use
+...but beware of the @samp{@}} bug from Solaris (see above).  For safety,
+use:
 
 @example
 test "$@{var+set@}" = set || var=@var{@{value@}}
@@ -5511,11 +5496,11 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @cindex `@var{commands}`
 @cindex Command Substitution
 While in general it makes no sense, do not substitute a single builtin
-with side effects as Ash 0.2, trying to optimize, does not fork a sub
-shell to perform the command.
+with side effects as Ash 0.2, trying to optimize, does not fork a
+sub-shell to perform the command.
 
-For instance if you wanted to check that @command{cd} is silent, do not
-use @samp{test -z "`cd /tmp`"} because...
+For instance, if you wanted to check that @command{cd} is silent, do not
+use @samp{test -z "`cd /`"} because the following can happen:
 
 @example
 $ pwd
@@ -5532,7 +5517,7 @@ The result of @samp{foo=`exit 1`} is left as an exercise to the reader.
 @cindex $(@var{commands})
 This construct is meant to replace @samp{`@var{commands}`}; they can be
 nested while this is impossible to do portably with back quotes.
-Unfortunately it is not yet widely supported.  Most notably even recent
+Unfortunately it is not yet widely supported.  Most notably, even recent
 releases of Solaris don't support it:
 
 @example
@@ -5580,20 +5565,20 @@ $ foo=`exit 1`; echo $?
 0
 @end example
 
-To assign default values follow this algorithm:
+To assign default values, follow this algorithm:
 
 @enumerate
 @item
 If the default value is a literal and does not contain any closing
-brace, use
+brace, use:
 
 @example
 : $@{var='my literal'@}
 @end example
 
 @item
-If the default value contains no closing brace, has to be expanded and
-the variable being initialized will never be IFS split (i.e., it's not a
+If the default value contains no closing brace, has to be expanded, and
+the variable being initialized will never be IFS-split (i.e., it's not a
 list), then use:
 
 @example
@@ -5601,16 +5586,16 @@ list), then use:
 @end example
 
 @item
-If the default value contains no closing brace, has to be expanded and
-the variable being initialized will be IFS split (i.e., it's not a
-list), then use:
+If the default value contains no closing brace, has to be expanded, and
+the variable being initialized will be IFS-split (i.e., it's a list),
+then use:
 
 @example
 var=$@{var="$default"@}
 @end example
 
 @item
-If the default value contains a closing brace, then use
+If the default value contains a closing brace, then use:
 
 @example
 test "$@{var+set@}" = set || var='$@{indirection@}'
@@ -5626,23 +5611,24 @@ for the rationale.
 @node Special Shell Variables, Limitations of Builtins, Assignments, Portable Shell
 @subsection Special Shell Variables
 
-Some shell variables shall not be used or have a deep influence on the
-behavior of the shell.  In order to recover a sane behavior from the
-shell, some variables should be unset, but @command{unset} is not
-portable (@pxref{Limitations of Builtins}) and a fall back value is
-needed.  We list these values below.
+Some shell variables should not be used, since they can have a deep
+influence on the behavior of the shell.  In order to recover a sane
+behavior from the shell, some variables should be unset, but
+@command{unset} is not portable (@pxref{Limitations of Builtins}) and a
+fallback value is needed.  We list these values below.
 
 @c Alphabetical order, case insensitive, `A' before `a'.
 @table @code
 @item CDPATH
 @evindex CDPATH
-Because when this variable is set @code{cd} is verbose, idioms such as
-@samp{abs=`cd $rel && pwd`} break, since @code{abs} receives twice the
-path.
+When this variable is set @code{cd} is verbose, so idioms such as
+@samp{abs=`cd $rel && pwd`} break because @code{abs} receives the path
+twice.
 
 @c FIXME: Which shells?  How do they behave?
 Setting @code{CDPATH} to the empty value is not enough for most shells.
-A simple colon is enough but for @code{zsh}, which prefers a leading dot:
+A simple colon is enough except for @code{zsh}, which prefers a leading
+dot:
 
 @example
 zsh-3.1.6 % mkdir foo && (CDPATH=: cd foo)
@@ -5654,8 +5640,8 @@ zsh-3.1.6 %
 @end example
 
 @noindent
-(of course we could just @code{unset} @code{CDPATH}, it also behaves
-properly if set to the empty string).
+(of course we could just @code{unset} @code{CDPATH}, since it also
+behaves properly if set to the empty string).
 
 Life wouldn't be so much fun if @command{bash} and @command{zsh} had the
 same behavior:
@@ -5666,7 +5652,7 @@ bash-2.02 % (CDPATH=.: cd foo)
 /tmp/foo
 @end example
 
-Therefore a portable solution to neutralize @samp{CDPATH} is
+Therefore, a portable solution to neutralize @samp{CDPATH} is
 
 @example
 CDPATH=$@{ZSH_VERSION+.@}:
@@ -5743,17 +5729,17 @@ either unset this variable or set it to @samp{;}.
 
 @item RANDOM
 @evindex RANDOM
-Many shells provide @code{RANDOM}, a variable which returns a different
-integer when used.  Most of the time it values does not change when not
-used, but on @sc{irix 6.5}, the value changes all the time.  This can be
-oberved using @command{set}.
+Many shells provide @code{RANDOM}, a variable that returns a different
+integer when used.  Most of the time, its value does not change when it
+is not used, but on @sc{irix 6.5} the value changes all the time.  This
+can be observed by using @command{set}.
 @end table
 
 
 @node Limitations of Builtins, Limitations of Usual Tools, Special Shell Variables, Portable Shell
 @subsection Limitations of Shell Builtins
 
-No no, we are serious: some shells do have limitations :)
+No, no, we are serious: some shells do have limitations! :)
 
 You should always keep in mind that any built-in or command may support
 options, and therefore have a very different behavior with arguments
@@ -5771,18 +5757,18 @@ You can't use @command{!}, you'll have to rewrite your code.
 @item @command{break}
 @c ------------------
 @cindex @command{break}
-The use of @samp{break 2} etc. is safe.
+The use of @samp{break 2}, etcetera, is safe.
 
 
 @item @command{case}
 @c -----------------
 @cindex @command{case}
-You don't need to quote the argument, no splitting is performed.
+You don't need to quote the argument; no splitting is performed.
 
-You don't need the last @samp{;;}, but you should use it.
+You don't need the final @samp{;;}, but you should use it.
 
-Because of a bug in its @code{fnmatch}, @command{bash} fails to handle
-properly backslashes in character classes:
+Because of a bug in its @code{fnmatch}, @command{bash} fails to properly
+handle backslashes in character classes:
 
 @example
 bash-2.02$ case /tmp in [/\\]*) echo OK;; esac
@@ -5791,8 +5777,8 @@ bash-2.02$
 
 @noindent
 This is extremely unfortunate, since you are likely to use this code to
-handle @sc{unix} or @sc{ms-dos} absolute paths.  To workaround this bug,
-always put the backslash first:
+handle @sc{unix} or @sc{ms-dos} absolute paths.  To work around this
+bug, always put the backslash first:
 
 @example
 bash-2.02$ case '\TMP' in [\\/]*) echo OK;; esac
@@ -5812,20 +5798,19 @@ Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
 etc. for a means to simulate @option{-c}.
 
 Do not use backslashes in the arguments, as there is no consensus on
-their handling:
-
-On @samp{echo '\n' | wc -l}, the @command{sh} of Digital Unix 4.0,
-@sc{mips risc/os} 4.52, answer 2, but the Solaris' @command{sh}, Bash
-and Zsh (in @command{sh} emulation mode) report 1.  Please note that the
-problem is truly @command{echo}: all the shells understand @samp{'\n'}
-as the string composed of a backslash and an n.
+their handling.  On @samp{echo '\n' | wc -l}, the @command{sh} of
+Digital Unix 4.0, @sc{mips risc/os} 4.52, answer 2, but the Solaris'
+@command{sh}, Bash and Zsh (in @command{sh} emulation mode) report 1.
+Please note that the problem is truly @command{echo}: all the shells
+understand @samp{'\n'} as the string composed of a backslash and an
+@samp{n}.
 
 
 @item @command{exit}
 @c -----------------
 @cindex @command{exit}
-The default value of @command{exit} is supposed to be @code{$?},
-unfortunately some shells, such as the DJGPP port of Bash 2.04, just
+The default value of @command{exit} is supposed to be @code{$?};
+unfortunately, some shells, such as the DJGPP port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
@@ -5860,10 +5845,10 @@ the environment variables.  Conversely, each environment variable
 received by the shell when it is launched should be imported as a shell
 variable marked as exported.
 
-Alas, pretty many shells, such as Solaris 2.5, IRIX 6.3, IRIX 5.2, AIX
-4.1.5 and DU 4.0 forget to @command{export} the environment variables
-they receive.  As a result two variables are coexisting: the environment
-variable, and the shell variable.  The following code demonstrates this
+Alas, many shells, such as Solaris 2.5, IRIX 6.3, IRIX 5.2, AIX 4.1.5
+and DU 4.0, forget to @command{export} the environment variables they
+receive.  As a result, two variables are coexisting: the environment
+variable and the shell variable.  The following code demonstrates this
 failure:
 
 @example
@@ -5880,20 +5865,20 @@ alternately @samp{foo} and @samp{bar}, although it should only print
 @samp{foo} and then a sequence of @samp{bar}s.
 
 Therefore you should @command{export} again each environment variable
-you update.
+that you update.
 
 
 @item @command{false}
 @c ------------------
 @cindex @command{false}
-Don't expect @command{false} to exit with status 1: The native Bourne
-shell of Solaris 2.8 exits with status 255.
+Don't expect @command{false} to exit with status 1: in the native Bourne
+shell of Solaris 2.8, it exits with status 255.
 
 
 @item @command{for}
 @c ----------------
 @cindex @command{for}
-To loop over positional arguments, use
+To loop over positional arguments, use:
 
 @example
 for arg
@@ -5904,7 +5889,7 @@ done
 
 @noindent
 You may @emph{not} leave the @code{do} on the same line as @code{for},
-since some shells improperly grok
+since some shells improperly grok:
 
 @example
 for arg; do
@@ -5924,7 +5909,7 @@ done
 @item @command{if}
 @c ---------------
 @cindex @command{if}
-Using @samp{!} is not portable.  Instead of
+Using @samp{!} is not portable.  Instead of:
 
 @example
 if ! cmp -s file file.new; then
@@ -5933,7 +5918,7 @@ fi
 @end example
 
 @noindent
-use
+use:
 
 @example
 if cmp -s file file.new; then :; else
@@ -5941,8 +5926,7 @@ if cmp -s file file.new; then :; else
 fi
 @end example
 
-There are shells which do not reset the exit status out of an
-@command{if}:
+There are shells that do not reset the exit status from an @command{if}:
 
 @example
 $ if (exit 42); then true; fi; echo $?
@@ -5950,7 +5934,7 @@ $ if (exit 42); then true; fi; echo $?
 @end example
 
 @noindent
-while a proper shell should have printed @samp{0}.  This is especially
+whereas a proper shell should have printed @samp{0}.  This is especially
 bad in Makefiles since it produces false failures.  This is why properly
 written Makefiles, such as Automake's, have such hairy constructs:
 
@@ -5967,12 +5951,12 @@ fi
 @c ----------------
 @cindex @command{set}
 This builtin faces the usual problem with arguments starting with a
-dash.  Modern shells, such as Bash or Zsh understand @samp{--} to
-specify the end of the options (any argument behind @samp{--} is an
-parameters, even @samp{-x} for instance), but most shell simply stop the
-option processing as soon as a non option argument is found.  Therefore
-use @samp{dummy} or simply @samp{x} to neutralize the option processing,
-and use @command{shift} to pop it out:
+dash.  Modern shells such as Bash or Zsh understand @option{--} to specify
+the end of the options (any argument after @option{--} is a parameters,
+even @samp{-x} for instance), but most shells simply stop the option
+processing as soon as a non-option argument is found.  Therefore, use
+@samp{dummy} or simply @samp{x} to end the option processing, and use
+@command{shift} to pop it out:
 
 @example
 set x $my_list; shift
@@ -5983,7 +5967,7 @@ set x $my_list; shift
 @cindex @command{shift}
 Not only is @command{shift}ing a bad idea when there is nothing left to
 shift, but in addition it is not portable: the shell of @sc{mips
-risc/os} 4.52 refuses it.
+risc/os} 4.52 refuses to do it.
 
 @item @command{test}
 @c -----------------
@@ -6043,7 +6027,7 @@ test -n "`echo $ac_feature | sed 's/[-a-zA-Z0-9_]//g'`" &&
 
 @noindent
 to take an action when a token matches a given pattern.  Such constructs
-are always avoidable, and should always be.  Rather, use:
+should always be avoided by using:
 
 @example
 echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1 &&
@@ -6051,8 +6035,8 @@ echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1 &&
 @end example
 
 @noindent
-Where possible, use @code{case} since, being a shell builtin, it is
-faster:
+Use @code{case} where possible since it is faster, being a shell builtin:
+
 
 @example
 case $ac_feature in
@@ -6061,11 +6045,11 @@ esac
 @end example
 
 Alas, negated character classes are probably not portable, although no
-shell is known not to support the @sc{posix.2} syntax @samp{[!...]}
+shell is known to not support the @sc{posix.2} syntax @samp{[!...]}
 (when in interactive mode, @command{zsh} is confused by the
 @samp{[!...]} syntax and looks for an event in its history because of
 @samp{!}).  Many shells do not support the alternative syntax
-@samp{[^...]} (Solaris, Digital Unix etc.).
+@samp{[^...]} (Solaris, Digital Unix, etc.).
 
 One solution can be:
 
@@ -6091,17 +6075,17 @@ expr "x$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
 @c -----------------
 @cindex @command{trap}
 It is safe to trap at least the signals 1, 2, 13 and 15.  You can also
-trap 0, i.e., have the trap run when the script ends (either via an
+trap 0, i.e., have the @command{trap} run when the script ends (either via an
 explicit @command{exit}, or the end of the script).
 
-Although @sc{posix} is not absolutely clear on that point, it is widely
+Although @sc{posix} is not absolutely clear on this point, it is widely
 admitted that when entering the trap @samp{$?} should be set to the exit
 status of the last command run before the trap.  The ambiguity can be
 summarized as: ``when the trap is launched by an @command{exit}, what is
-the @emph{last} command run: that before @command{exit}, or exit
-itself?''
+the @emph{last} command run: that before @command{exit}, or
+@command{exit} itself?''
 
-Bash considers @command{exit} was the last command, while Zsh and
+Bash considers @command{exit} to be the last command, while Zsh and
 Solaris 8 @command{sh} consider that when the trap is run it is
 @emph{still} in the @command{exit}, hence it is the previous exit status
 that the trap receives:
@@ -6122,7 +6106,7 @@ set the exit status to 42 for Zsh, and the second to trigger the trap
 and pass 42 as exit status for Bash.
 
 The shell in FreeBSD 4.0 has the following bug: @samp{$?} is reset to 0
-by empty lines if the code is inside trap.
+by empty lines if the code is inside @command{trap}.
 
 @example
 $ trap 'false
@@ -6133,7 +6117,7 @@ $ exit
 @end example
 
 @noindent
-Fortunately this bug affects only trap.
+Fortunately, this bug only affects @command{trap}.
 
 @item @command{true}
 @c -----------------
@@ -6141,9 +6125,9 @@ Fortunately this bug affects only trap.
 @cindex @command{:}
 Don't worry: as far as we know @command{true} is portable.
 Nevertheless, it's not always a builtin (e.g., Bash 1.x), and the
-portable shell community tends to prefer using @command{:}.  This has an
+portable shell community tends to prefer using @command{:}.  This has a
 funny side effect: when asked whether @command{false} is more portable
-than @command{true} Alexandre Oliva answered
+than @command{true} Alexandre Oliva answered:
 
 @quotation
 In a sense, yes, because if it doesn't exist, the shell will produce an
@@ -6157,7 +6141,7 @@ for @command{true}.
 @cindex @command{unset}
 You cannot assume the support of @command{unset}, nevertheless, because
 it is extremely useful to disable embarrassing variables such as
-@code{CDPATH} or @code{LANG}, you can test for its existence, and use
+@code{CDPATH} or @code{LANG}, you can test for its existence and use
 it @emph{provided} you give a neutralizing value when @command{unset} is
 not supported:
 
@@ -6179,7 +6163,7 @@ the case of environment variables.
 @subsection Limitations of Usual Tools
 
 The small set of tools you can expect to find on any machine can still
-find some limitations you should be aware of.
+include some limitations you should be aware of.
 
 @table @asis
 @item @command{awk}
@@ -6221,8 +6205,8 @@ foo
 @item @command{cat}
 @c ----------------
 @cindex @command{cat}
-Don't rely on any option.  The option @option{-v}, which shows
-non printing characters, @emph{seems} portable though.
+Don't rely on any option.  The option @option{-v}, which displays
+non-printing characters, @emph{seems} portable, though.
 
 
 @item @command{cmp}
@@ -6657,7 +6641,7 @@ which programming language is used in the subsequent tests in
 
 @defmac AC_LANG (@var{language})
 Do compilation tests using the compiler, preprocessor and file
-extensions for the @var{language}.
+extensions for the specified @var{language}.
 
 Supported languages are:
 
@@ -6690,7 +6674,7 @@ Select the language that is saved on the top of the stack, as set by
 
 If given, @var{language} specifies the language we just @emph{quit}.  It
 is a good idea to specify it when it's known (which should be the
-case...), since Autoconf will track inconsistencies.
+case...), since Autoconf will detect inconsistencies.
 
 @example
 AC_LANG_PUSH(Fortran 77)
@@ -6820,10 +6804,10 @@ AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
 @node Setting Output Variables, Caching Results, Defining Symbols, Results
 @section Setting Output Variables
 
-One way to record the results of tests is to set @dfn{output variables},
-which are shell variables whose values are substituted into files that
-@code{configure} outputs.  The two macros below create new output
-variables.  @xref{Preset Output Variables}, for a list of output
+Another way to record the results of tests is to set @dfn{output
+variables}, which are shell variables whose values are substituted into
+files that @code{configure} outputs.  The two macros below create new
+output variables.  @xref{Preset Output Variables}, for a list of output
 variables that are always available.
 
 @defmac AC_SUBST (@var{variable}, @ovar{value})
@@ -7103,14 +7087,14 @@ AM_PATH_GTKMM(0.9.5,, (exit 1); exit)
 @code{configure} scripts need to give users running them several kinds
 of information.  The following macros print messages in ways appropriate
 for each kind.  The arguments to all of them get enclosed in shell
-double quotes, so the shell performs variable and back quote
+double quotes, so the shell performs variable and back-quote
 substitution on them.
 
 These macros are all wrappers around the @code{echo} shell command.
 @code{configure} scripts should rarely need to run @code{echo} directly
 to print messages for the user.  Using these macros makes it easy to
 change how and when each kind of message is printed; such changes need
-only be made to the macro definitions, and all of the callers change
+only be made to the macro definitions and all of the callers will change
 automatically.
 
 To diagnose static issues, i.e., when @code{autoconf} is run, see
@@ -7165,7 +7149,7 @@ output and exits @code{configure} with @var{exit-status} (1 by default).
 @var{error-description} should be something like @samp{invalid value
 $HOME for \$HOME}.
 
-The @var{error-description} should start with a lower case letter, and
+The @var{error-description} should start with a lower-case letter, and
 ``cannot'' is preferred to ``can't''.
 @end defmac
 
@@ -7219,13 +7203,13 @@ You can refer to any arguments passed to the macro as @samp{$1},
 @samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
 GNU m4}, for more complete information on writing M4 macros.
 
-Be sure to quote properly both the @var{macro-body} @emph{and} the
-@var{macro-name}, to avoid any problems if the macro happens to have
+Be sure to properly quote both the @var{macro-body} @emph{and} the
+@var{macro-name} to avoid any problems if the macro happens to have
 been previously defined.
 
 Each macro should have a header comment that gives its prototype, and a
 brief description.  When arguments have default values, display them in
-the prototype.  For instance:
+the prototype.  For example:
 
 @example
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
@@ -7235,8 +7219,8 @@ define([AC_MSG_ERROR],
 @end example
 
 Comments about the macro should be left in the header comment.  Most
-other comments should make their way into @file{configure}, hence just
-keep using @samp{#} to introduce comments.
+other comments will make their way into @file{configure}, so just keep
+using @samp{#} to introduce comments.
 
 @cindex @code{dnl}
 If you have some very special comments about pure M4 code, comments
@@ -7244,9 +7228,9 @@ that make no sense in @file{configure} and in the header comment, then
 use the builtin @code{dnl}: it causes @code{m4} to discard the text
 through the next newline.
 
-Keep in mind that @code{dnl} is rarely needed to introduce comments,
-rather it is useful to get rid of the newlines following macros that
-produce no output, such as @code{AC_REQUIRE}.
+Keep in mind that @code{dnl} is rarely needed to introduce comments;
+@code{dnl} is more useful to get rid of the newlines following macros
+that produce no output, such as @code{AC_REQUIRE}.
 
 
 @node Macro Names, Quoting, Macro Definitions, Writing Macros
@@ -7326,8 +7310,8 @@ macro does.  For example, @code{AC_PATH_X} has internal macros
 The most common brokenness of existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
 @emph{must} read, first justifies the quotation scheme that was chosen
-for Autoconf, and ends with the rule of thumb.  Understanding the former
-helps following the latter.
+for Autoconf and then ends with a rule of thumb.  Understanding the
+former helps one to follow the latter.
 
 @menu
 * Active Characters::           Characters that change the behavior of m4
@@ -7343,11 +7327,11 @@ To fully understand where proper quotation is important, you first need
 to know what are the special characters in Autoconf: @samp{#} introduces
 a comment inside which no macro expansion is performed, @samp{,}
 separates arguments, @samp{[} and @samp{]} are the quotes themselves,
-and finally @samp{(} and @samp{)} which @code{m4} tries to match by
-pairs.
+and finally @samp{(} and @samp{)} (which @code{m4} tries to match by
+pairs).
 
 In order to understand the delicate case of macro calls, we first have
-to present some obvious failures.  Below they are ``obviousified'',
+to present some obvious failures.  Below they are ``obvious-ified'',
 although you find them in real life, they are usually in disguise.
 
 Comments, introduced by a hash and running up to the newline, are opaque
@@ -7360,7 +7344,7 @@ no macro expansion:
 @end example
 
 Each time there can be a macro expansion, there is a quotation
-expansion, i.e., one level of quotes is stripped:
+expansion; i.e., one level of quotes is stripped:
 
 @example
 int tab[10];
@@ -7369,8 +7353,8 @@ int tab[10];
 @result{}int tab[10];
 @end example
 
-Without this in mind, the reader will hopelessly try to find a means to
-use her macro @code{array}:
+Without this in mind, the reader will try hopelessly to use her macro
+@code{array}:
 
 @example
 define([array], [int tab[10];])
@@ -7389,7 +7373,7 @@ How can you correctly output the intended results@footnote{Using
 @subsection One Macro Call
 
 Let's proceed on the interaction between active characters and macros
-with this small macro which just returns its first argument:
+with this small macro, which just returns its first argument:
 
 @example
 define([car], [$1])
@@ -7397,9 +7381,9 @@ define([car], [$1])
 
 @noindent
 The two pairs of quotes above are not part of the arguments of
-@code{define}, rather, they are understood by the top level when it
-tries to find the arguments of @code{define}, therefore it is equivalent
-to write:
+@code{define}; rather, they are understood by the top level when it
+tries to find the arguments of @code{define}.  Therefore, it is
+equivalent to write:
 
 @example
 define(car, $1)
@@ -7408,10 +7392,10 @@ define(car, $1)
 @noindent
 But, while it is acceptable for a @file{configure.ac} to avoid unneeded
 quotes, it is bad practice for Autoconf macros which must both be more
-robust, and advocate the perfect writing.
+robust and also advocate perfect style.
 
-At the top level, there are only two possible quoting: either you quote,
-or you don't:
+At the top level, there are only two possible quotings: either you
+quote or you don't:
 
 @example
 car(foo, bar, baz)
@@ -7428,7 +7412,7 @@ car(#)
 @end example
 
 The closing parenthesis is hidden in the comment; with a hypothetical
-quoting, the top level understood this:
+quoting, the top level understood it this way:
 
 @example
 car([#)]
@@ -7488,7 +7472,7 @@ car([[active]])
 
 In the first case, the top level looks for the arguments of @code{car},
 and finds @samp{active}.  Because @code{m4} evaluates its arguments
-before applying the macro, @samp{active} is expanded, which results in
+before applying the macro, @samp{active} is expanded, which results in:
 
 @example
 car(ACT, IVE)
@@ -7497,7 +7481,7 @@ car(ACT, IVE)
 
 @noindent
 In the second case, the top level gives @samp{active} as first and only
-argument of @code{car}, which results in
+argument of @code{car}, which results in:
 
 @example
 active
@@ -7506,7 +7490,7 @@ active
 
 @noindent
 i.e., the argument is evaluated @emph{after} the macro that invokes it.
-In the third case, @code{car} receives @samp{[active]}, which results in
+In the third case, @code{car} receives @samp{[active]}, which results in:
 
 @example
 [active]
@@ -7530,15 +7514,15 @@ car([[int tab[10];]])
 @noindent
 Huh?  The first case is easily understood, but why is the second wrong,
 and the third right?  To understand that, you must know that after
-@code{m4} expands a macro the resulting text is immediately subjected
+@code{m4} expands a macro, the resulting text is immediately subjected
 to macro expansion and quote removal.  This means that the quote removal
-occurs twice - first time before the argument is passed to the @code{car}
-macro, and the second time after the @code{car} macro expands to the
-first argument.
+occurs twice---first before the argument is passed to the @code{car}
+macro, and second after the @code{car} macro expands to the first
+argument.
 
-As the author of the Autoconf macro @code{car} you then consider it is
-incorrect to require that your users have to double quote the arguments
-of @code{car}, so you ``fix'' your macro.  Let's call it @code{qar} for
+As the author of the Autoconf macro @code{car}, you then consider it to
+be incorrect that your users have to double-quote the arguments of
+@code{car}, so you ``fix'' your macro.  Let's call it @code{qar} for
 quoted car:
 
 @example
@@ -7558,7 +7542,7 @@ Ahhh!  That's much better.
 
 But note what you've done: now that the arguments are literal strings,
 if the user wants to use the results of expansions as arguments, she has
-to leave an @emph{unquoted} macro call:
+to use an @emph{unquoted} macro call:
 
 @example
 qar(active)
@@ -7566,7 +7550,7 @@ qar(active)
 @end example
 
 @noindent
-while she wanted to reproduce what she used to do with @code{car}:
+where she wanted to reproduce what she used to do with @code{car}:
 
 @example
 car([active])
@@ -7601,10 +7585,10 @@ To conclude, the quotation rule of thumb is:
 
 Never over-quote, never under-quote, in particular in the definition of
 macros.  In the few places where the macros need to use brackets
-(usually in C program text or regular expressions), quote properly
+(usually in C program text or regular expressions), properly quote
 @emph{the arguments}!
 
-It is frequent to read Autoconf programs with snippets like:
+It is common to read Autoconf programs with snippets like:
 
 @example
 AC_TRY_LINK(
@@ -7633,7 +7617,7 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 @end example
 
 @noindent
-The M4 fluent reader noted that these two writings are rigorously
+The M4-fluent reader will note that these two examples are rigorously
 equivalent, since @code{m4} swallows both the @samp{changequote(<<, >>)}
 and @samp{<<} @samp{>>} when it @dfn{collects} the arguments: these
 quotes are not part of the arguments!
@@ -7647,15 +7631,15 @@ changequote([, ])dnl
 @end example
 
 @noindent
-instead of simply
+instead of simply:
 
 @example
 [[]]
 @end example
 
 
-With macros which do not double quote their arguments (which is the
-rule), double quote the (risky) literals:
+With macros that do not double quote their arguments (which is the
+rule), double-quote the (risky) literals:
 
 @example
 AC_LINK_IFELSE([AC_LANG_PROGRAM(
@@ -7761,15 +7745,15 @@ square brackets.  @var{macro-name} must have been defined using
 @code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
 that it has been called.
 
-@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro, it
+@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro; it
 must not be called from the top level.
 @end defmac
 
-@code{AC_REQUIRE} is often misunderstood, it really implements
-dependencies between macros in the sense that if a macro depends upon
+@code{AC_REQUIRE} is often misunderstood.  It really implements
+dependencies between macros in the sense that if one macro depends upon
 another, the latter will be expanded @emph{before} the body of the
 former.  In particular, @samp{AC_REQUIRE(FOO)} is not replaced with the
-body of @code{FOO}.  For instance, this definition of macros
+body of @code{FOO}.  For instance, this definition of macros:
 
 @example
 @group
@@ -7802,8 +7786,8 @@ fi
 @end example
 
 @noindent
-will not leave you with a better chance to meet the kindred soul the
-other times that the Saturday night since it expands into:
+will not leave you with a better chance to meet a kindred soul at
+other times than Saturday night since it expands into:
 
 @example
 @group
@@ -7819,9 +7803,9 @@ fi
 @end group
 @end example
 
-This behavior was chosen on purpose: (i) it avoids that messages from
-required macros interrupt the messages from the requiring macros, (ii),
-it avoids bad surprises when shell conditionals are used, as in:
+This behavior was chosen on purpose: (i) it prevents messages in
+required macros from interrupting the messages in the requiring macros;
+(ii) it avoids bad surprises when shell conditionals are used, as in:
 
 @example
 @group
@@ -7834,8 +7818,8 @@ SOME_CHECK
 @end example
 
 
-You are encouraged to put all the @code{AC_REQUIRE}s at the beginning of
-the macros.  You can use @code{dnl} to avoid the empty line they leave.
+You are encouraged to put all @code{AC_REQUIRE}s at the beginning of a
+macro.  You can use @code{dnl} to avoid the empty lines they leave.
 
 @node Suggested Ordering,  , Prerequisite Macros, Dependencies Between Macros
 @subsection Suggested Ordering
@@ -7911,32 +7895,33 @@ either by contributing it to Autoconf itself, or via other means.
 The first requirement is to pay great attention to the quotation, for
 more details, see @ref{Autoconf Language}, and @ref{Quoting}.
 
-Do not try to invent new interfaces, it is likely that there is a macro
+Do not try to invent new interfaces.  It is likely that there is a macro
 in Autoconf that resembles the macro you are defining: try to stick to
-this existing interface (order of arguments, default values etc.).  We
-@emph{are} conscious that some of these interfaces are not perfect,
+this existing interface (order of arguments, default values, etc.).  We
+@emph{are} conscious that some of these interfaces are not perfect;
 nevertheless, when harmless, homogeneity should be preferred over
 creativity.
 
-Be careful about clashes both between M4 symbols, and shell variables.
+Be careful about clashes both between M4 symbols and between shell
+variables.
 
-If you stick to the suggested M4 naming scheme (@pxref{Macro Names}) you
-are unlikely to generate conflicts.  Nevertheless, when you need to set
-a special value, @emph{avoid using a regular macro name}, rather, use an
-``impossible'' name.  For instance, up to version 2.13, the macro
+If you stick to the suggested M4 naming scheme (@pxref{Macro Names}),
+you are unlikely to generate conflicts.  Nevertheless, when you need to
+set a special value, @emph{avoid using a regular macro name}; rather,
+use an ``impossible'' name.  For instance, up to version 2.13, the macro
 @code{AC_SUBST} used to remember what @var{symbol}s were already defined
 by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
-But since there is a macro named @code{AC_SUBST_FILE} it was just
+But since there is a macro named @code{AC_SUBST_FILE}, it was just
 impossible to @samp{AC_SUBST(FILE)}!  In this case,
 @code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
-have been used (yes, with the parentheses).  Or better yet, using high
-level macros such as @code{AC_EXPAND_ONCE}.
+have been used (yes, with the parentheses)...or better yet, high-level
+macros such as @code{AC_EXPAND_ONCE}.
 
-No Autoconf macro should ever enter the user variables name space, i.e.,
-but the variables that are the actual result of running the macro, all
-the shell variables should start with @code{ac_}.  In addition, small
-macros or any macro that is likely to be embedded in other macros
-should be careful not to use obvious names.
+No Autoconf macro should ever enter the user-variable name space; i.e.,
+except for the variables that are the actual result of running the
+macro, all shell variables should start with @code{ac_}.  In
+addition, small macros or any macro that is likely to be embedded in
+other macros should be careful not to use obvious names.
 
 @cindex @code{dnl}
 Do not use @code{dnl} to introduce comments: most of the comments you
@@ -7982,9 +7967,9 @@ AC_CACHE_CHECK([for EMX OS/2 environment],
 When using @code{AC_TRY_RUN} or any macro that cannot work when
 cross-compiling, provide a pessimistic value (typically @samp{no}).
 
-Feel free to use various tricks to avoid that auxiliary tools, such as
-syntax-highlighting editors, behave improperly.  For instance, instead
-of
+Feel free to use various tricks to prevent auxiliary tools, such as
+syntax-highlighting editors, from behaving improperly.  For instance,
+instead of:
 
 @example
 patsubst([$1], [$"])
@@ -7999,43 +7984,43 @@ patsubst([$1], [$""])
 
 @noindent
 so that Emacsen do not open a endless ``string'' at the first quote.
-For the same reasons, avoid
+For the same reasons, avoid:
 
 @example
 test $[#] != 0
 @end example
 
 @noindent
-but use
+and use:
 
 @example
 test $[@@%:@@] != 0
 @end example
 
 @noindent
-otherwise, the closing bracket would be hidden inside a @samp{#}-comment
-breaking the bracket matching highlighting from Emacsen.  Note the
-preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]} etc.  Do
+Otherwise, the closing bracket would be hidden inside a @samp{#}-comment,
+breaking the bracket-matching highlighting from Emacsen.  Note the
+preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]}, etc.  Do
 not escape when it is unneeded.  Common examples of useless quotation
 are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
 etc.  If you add portability issues to the picture, you'll prefer
 @samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
 better than hacking Autoconf @code{:-)}.
 
-When using @command{sed}, don't use @option{-e} but for indenting
+When using @command{sed}, don't use @option{-e} except for indenting
 purpose.  With the @code{s} command, the preferred separator is @samp{/}
 unless @samp{/} itself is used in the command, in which case you should
 use @samp{,}.
 
 @xref{Macro Definitions}, for details on how to define a macro.  If a
-macro doesn't use @code{AC_REQUIRE} and it is expected never to be the
+macro doesn't use @code{AC_REQUIRE} and it is expected to never be the
 object of an @code{AC_REQUIRE} directive, then use @code{define}.  In
 case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
 statements should be at the beginning of the macro, @code{dnl}'ed.
 
 You should not rely on the number of arguments: instead of checking
-whether an argument is missing, test that it is not empty.  It both
-provides a simpler and more predictable interface to the user, and saves
+whether an argument is missing, test that it is not empty.  It provides
+both a simpler and a more predictable interface to the user, and saves
 room for further arguments.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
@@ -8111,7 +8096,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 @chapter Manual Configuration
 
 A few kinds of features can't be guessed automatically by running test
-programs.  For example, the details of the object file format, or
+programs.  For example, the details of the object-file format, or
 special options that need to be passed to the compiler or linker.  You
 can check for such features using ad-hoc means, such as having
 @code{configure} check the output of the @code{uname} program, or
@@ -8129,13 +8114,13 @@ Autoconf provides a uniform method for handling unguessable features.
 
 Like other @sc{gnu} @code{configure} scripts, Autoconf-generated
 @code{configure} scripts can make decisions based on a canonical name
-for the system type, which has the form
+for the system type, which has the form:
 @samp{@var{cpu}-@var{vendor}-@var{os}}, where @var{os} can be
 @samp{@var{system}} or @samp{@var{kernel}-@var{system}}
 
 @code{configure} can usually guess the canonical name for the type of
 system it's running on.  To do so it runs a script called
-@code{config.guess}, which derives the name using the @code{uname}
+@code{config.guess}, which infers the name using the @code{uname}
 command or symbols predefined by the C preprocessor.
 
 Alternately, the user can specify the system type with command line
@@ -8168,30 +8153,29 @@ produce code (rarely needed).  By default, it is the same as host.
 @end table
 
 They all default to the result of running @code{config.guess}, unless
-you specify either @samp{--build} or @samp{--host}.  In this case, the
+you specify either @option{--build} or @option{--host}.  In this case, the
 default becomes the system type you specified.  If you specify both, and
 they're different, @code{configure} will enter cross compilation mode,
 so it won't run any tests that require execution.
 
 Hint: if you mean to override the result of @code{config.guess}, prefer
-@samp{--build} over @samp{--host}.  In the future, @samp{--host} will
-not override the name of the build system type.  Also, when you specify
-@samp{--host}, but not @samp{--build}, when @code{configure} performs
-the first compiler test, it will try to run an executable produced by
-the compiler.  If the execution fails, it will enter cross compilation
-mode.  Note, however, that it won't guess the build system type, since
-this may require running test programs.  Moreover, by the time the
-compiler test is performed, it may be too late to modify the build
-system type: other tests may have already been performed.  Therefore,
-whenever you specify @code{--host}, be sure to specify @code{--build}
-too.
+@option{--build} over @option{--host}.  In the future, @option{--host} will
+not override the name of the build system type.  Also, if you specify
+@option{--host}, but not @option{--build}, when @code{configure} performs
+the first compiler test it will try to run an executable produced by the
+compiler.  If the execution fails, it will enter cross-compilation mode.
+Note, however, that it won't guess the build-system type, since this may
+require running test programs.  Moreover, by the time the compiler test
+is performed, it may be too late to modify the build-system type: other
+tests may have already been performed.  Therefore, whenever you specify
+@code{--host}, be sure to specify @code{--build} too.
 
 @example
 ./configure --build=i686-pc-linux-gnu --host=m68k-coff
 @end example
 
 @noindent
-will enter cross compilation mode, but @code{configure} will fail if it
+will enter cross-compilation mode, but @code{configure} will fail if it
 can't run the code generated by the specified compiler if you configure
 as follows:
 
@@ -8217,12 +8201,12 @@ scripts.
 @ovindex target_alias
 
 The variables @samp{build_alias}, @samp{host_alias}, and
-@samp{target_alias} are always exactly the arguments of @samp{--build},
-@samp{--host}, and @samp{--target}, in particular they are left empty if
-the user did not use them, even if the corresponding @code{AC_CANONICAL}
-macro was run.  Any configure script may use these variables anywhere.
-These are the variables that should be used when in interaction with
-the user.
+@samp{target_alias} are always exactly the arguments of @option{--build},
+@option{--host}, and @option{--target}; in particular, they are left empty
+if the user did not use them, even if the corresponding
+@code{AC_CANONICAL} macro was run.  Any configure script may use these
+variables anywhere.  These are the variables that should be used when in
+interaction with the user.
 
 If you need to recognize some special environments based on their system
 type, run the following macros to get canonical system names.  These
@@ -8240,11 +8224,11 @@ to control in which directory @code{configure} looks for those scripts.
 @ovindex build_cpu
 @ovindex build_vendor
 @ovindex build_os
-Compute the canonical build system type variable, @code{build}, and its
+Compute the canonical build-system type variable, @code{build}, and its
 three individual parts @code{build_cpu}, @code{build_vendor}, and
 @code{build_os}.
 
-If @samp{--build} was specified, then @code{build} is the
+If @option{--build} was specified, then @code{build} is the
 canonicalization of @code{build_alias} by @command{config.sub},
 otherwise it is determined by the shell script @code{config.guess}.
 @end defmac
@@ -8255,17 +8239,17 @@ otherwise it is determined by the shell script @code{config.guess}.
 @ovindex host_cpu
 @ovindex host_vendor
 @ovindex host_os
-Compute the canonical host system type variable, @code{host}, and its
+Compute the canonical host-system type variable, @code{host}, and its
 three individual parts @code{host_cpu}, @code{host_vendor}, and
 @code{host_os}.
 
-If @samp{--host} was specified, then @code{host} is the
+If @option{--host} was specified, then @code{host} is the
 canonicalization of @code{host_alias} by @command{config.sub},
 otherwise it defaults to @code{build}.
 
-For temporary backward-compatibility, when @samp{--host} is specified
-by @samp{--build} isn't, the build system will be assumed to be the
-same as @samp{--host}, and @samp{build_alias} will be set to that
+For temporary backward-compatibility, when @option{--host} is specified
+by @option{--build} isn't, the build system will be assumed to be the
+same as @option{--host}, and @samp{build_alias} will be set to that
 value.  Eventually, this historically incorrect behavior will go away.
 
 @end defmac
@@ -8276,11 +8260,11 @@ value.  Eventually, this historically incorrect behavior will go away.
 @ovindex target_cpu
 @ovindex target_vendor
 @ovindex target_os
-Compute the canonical target system type variable, @code{target}, and its
+Compute the canonical target-system type variable, @code{target}, and its
 three individual parts @code{target_cpu}, @code{target_vendor}, and
 @code{target_os}.
 
-If @samp{--target} was specified, then @code{target} is the
+If @option{--target} was specified, then @code{target} is the
 canonicalization of @code{target_alias} by @command{config.sub},
 otherwise it defaults to @code{host}.
 @end defmac
@@ -8394,7 +8378,7 @@ actually just the value of the shell variable @code{with_@var{package}},
 with any @option{-} characters changed into @samp{_}.  You may use that
 variable instead, if you wish.
 
-The argument @var{help-string} is a description of the option which
+The argument @var{help-string} is a description of the option that
 looks like this:
 @example
   --with-readline         support fancy command line editing
