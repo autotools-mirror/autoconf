@@ -1,3 +1,9 @@
+2003-11-15  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Using System Type): Revise, showing $host rather
+	than $target since the latter is not usual, add guidelines on when to
+	use or not use the system type.
+
 2003-11-12  Derek Price  <derek@ximbiot.com>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Fix what looks like a
