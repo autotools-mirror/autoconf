@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_PREFIX_PROGRAM): Don't use define/undefine, but
+	pushdef/podef.  AC_UPCASE_NAME no longer exist.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 
 1999-10-31  Akim Demaille  <akim@epita.fr>

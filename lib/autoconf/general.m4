@@ -2343,21 +2343,22 @@ dnl set `prefix' to /usr/local/gnu.
 dnl This comes too late to find a site file based on the prefix,
 dnl and it might use a cached value for the path.
 dnl No big loss, I think, since most configures don't use this macro anyway.
-dnl AC_PREFIX_PROGRAM(PROGRAM)
 AC_DEFUN(AC_PREFIX_PROGRAM,
-[if test "x$prefix" = xNONE; then
-define([AC_VAR_NAME], AC_UPCASE_NAME([$1])dnl
+[dnl Get an upper case version of $[1].
+pushdef(AC_Prog, translit($1, a-z, A-Z))dnl
+if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
 echo $ac_n "checking for prefix by $ac_c" 1>&AC_FD_MSG
-AC_PATH_PROG(AC_VAR_NAME, $1)
+AC_PATH_PROG(AC_Prog, $1)
 changequote(<<, >>)dnl
-  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
-    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*//*[^/][^/]*$%%'`
+  if test -n "$ac_cv_path_<<>>AC_Prog"; then
+    prefix=`echo $ac_cv_path_<<>>AC_Prog|sed 's%/[^/][^/]*//*[^/][^/]*$%%'`
 changequote([, ])dnl
   fi
 fi
-undefine([AC_VAR_NAME])dnl
-])
+popdef([AC_Prog])dnl
+])dnl AC_PREFIX_PROGRAM
+
 
 dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
 dnl -----------------------------------------------------
