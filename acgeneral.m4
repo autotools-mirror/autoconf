@@ -640,8 +640,9 @@ popdef([AC_Prefix])dnl
 # AC_PACKAGE(PACKAGE, VERSION, [BUG-REPORT])
 # ------------------------------------------
 AC_DEFUN(AC_PACKAGE,
-[define([AC_PACKAGE_NAME], [$1])dnl
-define([AC_PACKAGE_VERSION], [$2])dnl
+[define([AC_PACKAGE_NAME],     [$1])dnl
+define([AC_PACKAGE_VERSION],   [$2])dnl
+define([AC_PACKAGE_STRING],    [$1 $2])dnl
 define([AC_PACKAGE_BUGREPORT], [$3])dnl
 ])
 
@@ -1207,12 +1208,9 @@ if test "$ac_init_help" = "long"; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
   cat <<\EOF
-ifset([AC_PACKAGE_NAME],
-[`configure' configures AC_PACKAGE_NAME AC_PACKAGE_VERSION to adapt to many kinds
-of systems.
-],
-[`configure' configures software source code packages to adapt to many kinds
-of systems.])
+`configure' configures ifset([AC_PACKAGE_STRING],
+                       [AC_PACKAGE_STRING],
+                       [this package]) to adapt to many kinds
 
 [Usage: configure [OPTION]... [VAR=VALUE]... [HOST]
 
@@ -1267,9 +1265,9 @@ EOF
 fi
 
 if test -n "$ac_init_help"; then
-ifset([AC_Package_Name],
+ifset([AC_PACKAGE_STRING],
 [  $ac_init_help ||
-     echo "Configuration of AC_Package_Name AC_Package_Version:"])
+     echo "Configuration of AC_PACKAGE_STRING:"])
   cat <<\EOF
 AC_DIVERT_POP()dnl
 AC_DIVERT_PUSH([HELP_END])dnl
@@ -1320,9 +1318,9 @@ AC_DEFUN([_AC_INIT_VERSION],
 [AC_DIVERT([VERSION_BEGIN],
 [if $ac_init_version; then
   cat <<\EOF])dnl
-ifset([AC_PACKAGE_NAME],
+ifset([AC_PACKAGE_STRING],
 [AC_DIVERT([VERSION_BEGIN],
-           [configure (AC_PACKAGE_NAME AC_PACKAGE_VERSION) AC_ACVERSION])])
+           [configure (AC_PACKAGE_STRING) AC_ACVERSION])])
 AC_DIVERT([VERSION_END],
 [EOF
   exit 0
