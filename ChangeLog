@@ -1,3 +1,10 @@
+2002-09-02  Akim Demaille  <akim@epita.fr>
+
+	* lib/Autom4te/General.pm (&update_file): s/die/error/.
+	Reported by Raja R. Harinath.
+	* bin/autoheader.in, bin/autoreconf.in, bin/autoscan.in,
+	* bin/autoupdate.in: Use error instead of die.
+
 2002-09-01  Paul Eggert  <eggert@twinsun.com>
 
 	* tests/mktests.sh (ac_exclude_egrep, au_exclude_egrep): Use

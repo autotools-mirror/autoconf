@@ -193,10 +193,10 @@ sub autoreconf ($)
 
   verbose "working in `$directory'";
   chdir $directory
-    or die "$me: cannot chdir to $directory: $!\n";
+    or error "cannot chdir to $directory: $!";
 
   my $configure_ac = find_configure_ac;
-  die "$me: cannot find `configure.ac' in `$directory'\n"
+  error "cannot find `configure.ac' in `$directory'"
     unless $configure_ac;
 
   # ---------------------- #
@@ -480,7 +480,7 @@ sub autoreconf ($)
     }
 
   chdir $cwd
-    or die "$me: cannot chdir to $cwd: $!\n";
+    or error "cannot chdir to $cwd: $!";
 }
 
 

@@ -133,7 +133,7 @@ Try `$me --help' for more information.\n"
   my $srcdir = $ARGV[0] || ".";
 
   verbose "srcdir = $srcdir";
-  chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
+  chdir $srcdir || error "cannot cd to $srcdir: $!";
 }
 
 
@@ -164,7 +164,7 @@ sub init_tables ()
 	    if /^\s*$/ || /^\s*\#/;
 	  unless (/^(\S+)\s+(\S.*)$/ || /^(\S+)\s*$/)
 	    {
-	      die "$me: cannot parse definition in $file:\n$_\n";
+	      error "cannot parse definition in $file:\n$_";
 	    }
 	  my $word = $1;
 	  my $macro = $2 || $generic_macro{$kind};
@@ -185,7 +185,7 @@ sub init_tables ()
       $table->close;
     }
 
-  die "$me: some tables are inconsistent\n"
+  error "some tables are inconsistent"
     if !$tables_are_consistent;
 }
 

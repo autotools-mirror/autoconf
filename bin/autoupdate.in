@@ -95,7 +95,7 @@ sub parse_args ()
   if (! @ARGV)
     {
       my $configure_ac = find_configure_ac;
-      die "$me: no input file\n"
+      error "no input file"
 	unless $configure_ac;
       push @ARGV, $configure_ac;
     }
@@ -173,7 +173,7 @@ sub handle_autoconf_macros ()
       # aclocal.m4 -> aclocal
       my $set = basename (dirname ($file));
       $set = 'aclocal' if $file eq 'aclocal.m4';
-      die "$me: unknown set: $set: $_\n"
+      error "unknown set: $set: $_"
 	unless $set =~ /^(m4sugar|aclocal|autoconf)$/;
       if ($domain eq "AC")
 	{
@@ -193,9 +193,9 @@ sub handle_autoconf_macros ()
   # such as `builtin', `changequote' etc.  See autoconf/autoconf.m4.
   delete $ac_macros{$_}
     foreach (@m4_builtins);
-  die "$me: no current Autoconf macros found\n"
+  error "no current Autoconf macros found"
     unless keys %ac_macros;
-  die "$me: no obsolete Autoconf macros found\n"
+  error "no obsolete Autoconf macros found"
     unless keys %au_macros;
 
   if ($debug)
@@ -371,9 +371,9 @@ EOF
 
     # prepared input -- input, but reenables the quote before each AU macro.
     open INPUT_M4, ">$tmp/input.m4"
-       or die "$me: cannot open: $!\n";
+       or error "cannot open: $!";
     open FILE, "<$file"
-       or die "$me: cannot open: $!\n";
+       or error "cannot open: $!";
     print INPUT_M4 "$input_m4";
     while (<FILE>)
        {
@@ -381,9 +381,9 @@ EOF
 	 print INPUT_M4;
        }
     close FILE
-       or die "$me: cannot close $file: $!\n";
+       or error "cannot close $file: $!";
     close INPUT_M4
-       or die "$me: cannot close $tmp/input.m4: $!\n";
+       or error "cannot close $tmp/input.m4: $!";
 
     # Now ask m4 to perform the update.
     xsystem ("$m4 --include=$tmp"

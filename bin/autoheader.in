@@ -111,7 +111,7 @@ sub parse_args ()
   if (! @ARGV)
     {
       my $configure_ac = find_configure_ac;
-      die "$me: no input file\n"
+      error "no input file"
 	unless $configure_ac;
       push @ARGV, $configure_ac;
     }
@@ -176,7 +176,7 @@ xsystem ("$autoconf "
 local (%verbatim, %symbol);
 do "$tmp/traces.pl";
 warn "couldn't parse $tmp/traces.pl: $@" if $@;
-die "$me: error: AC_CONFIG_HEADERS not found in $ARGV[0]\n"
+error "error: AC_CONFIG_HEADERS not found in $ARGV[0]"
   unless $config_h;
 
 # We template only the first CONFIG_HEADER.

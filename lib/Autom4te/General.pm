@@ -424,7 +424,7 @@ sub update_file ($$)
 	}
       $in->close;
       unlink ($from)
-	or die "cannot not remove $from: $!";
+	or error "cannot not remove $from: $!";
       return;
     }
 
