@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright 1992, 93, 94, 95, 96, 98, 99, 2000
+# Copyright 2000
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -493,11 +493,15 @@ m4_define([AC_LANG_CALL(Fortran 77)],
 
 # AC_LANG_COMPILER
 # ----------------
-# Find a compiler for the current LANG.  Note that because we might
-# AC_REQUIRE `AC_LANG_COMPILER(C)' for instance, the latter must be
-# AC_DEFUN'd, not just define'd.
+# Find a compiler for the current LANG.  Be sure to be run before
+# AC_LANG_PREPROC.
+#
+# Note that because we might AC_REQUIRE `AC_LANG_COMPILER(C)' for
+# instance, the latter must be AC_DEFUN'd, not just define'd.
 m4_define([AC_LANG_COMPILER],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[AC_BEFORE([AC_LANG_COMPILER(]_AC_LANG[)],
+           [AC_LANG_PREPROC(]_AC_LANG[)])dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_COMPILER_REQUIRE
@@ -505,17 +509,7 @@ m4_define([AC_LANG_COMPILER],
 # Ensure we have a compiler for the current LANG.
 AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 [_AC_REQUIRE([AC_LANG_COMPILER(]_AC_LANG[)],
-             [m4_indir([AC_LANG_COMPILER(]_AC_LANG[)])])])
-
-
-# AC_REQUIRE_CPP
-# --------------
-# Require finding the C or C++ preprocessor, whichever is the
-# current language.
-AC_DEFUN([AC_REQUIRE_CPP],
-[AC_LANG_CASE(C, [AC_REQUIRE([AC_PROG_CPP])],
-              C++, [AC_REQUIRE([AC_PROG_CXXCPP])],
-              [AC_FATAL([No preprocessor defined for ]_AC_LANG)])])
+             [AC_LANG_COMPILER])])
 
 
 # _AC_LANG_COMPILER_WORKS
@@ -561,6 +555,33 @@ ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
 ])])# _AC_LANG_COMPILER_GNU
 
 
+# AC_LANG_PREPROC
+# ---------------
+# Find a preprocessor for the current language.  Note that because we
+# might AC_REQUIRE `AC_LANG_PREPROC(C)' for instance, the latter must
+# be AC_DEFUN'd, not just define'd.  Since the preprocessor depends
+# upon the compiler, look for the compiler.
+m4_define([AC_LANG_PREPROC],
+[AC_LANG_COMPILER_REQUIRE()dnl
+_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_PREPROC_REQUIRE
+# -----------------------
+# Ensure we have a preprocessor for the current language.
+AC_DEFUN([AC_LANG_PREPROC_REQUIRE],
+[_AC_REQUIRE([AC_LANG_PREPROC(]_AC_LANG[)],
+             [AC_LANG_PREPROC])])
+
+
+# AC_REQUIRE_CPP
+# --------------
+# Require the preprocessor for the current language.
+# FIXME: AU_ALIAS once AC_LANG is officially documented (2.51?).
+AC_DEFUN([AC_REQUIRE_CPP],
+[AC_LANG_PREPROC_REQUIRE])
+
+
 
 # AC_NO_EXECUTABLES
 # -----------------
@@ -598,6 +619,13 @@ m4_divert_pop()dnl
 # -------------------- #
 # 3b. The C compiler.  #
 # -------------------- #
+
+
+# AC_LANG_PREPROC(C)
+# -------------------
+# Find the C preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_PREPROC(C)],
+[AC_REQUIRE([AC_PROG_CPP])])
 
 
 # _AC_PROG_PREPROC_WORKS
@@ -693,8 +721,7 @@ AU_DEFUN([ac_cv_prog_gcc],
 # This just gives the user an opportunity to specify an alternative
 # search list for the C compiler.
 AC_DEFUN([AC_PROG_CC],
-[AC_BEFORE([$0], [AC_PROG_CPP])dnl
-AC_LANG_PUSH(C)
+[AC_LANG_PUSH(C)
 AC_ARG_VAR([CC], [C compiler command])
 AC_ARG_VAR([CFLAGS], [C compiler flags])
 ifval([$1],
@@ -756,9 +783,7 @@ fi[]dnl
 # AC_PROG_GCC_TRADITIONAL
 # -----------------------
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_REQUIRE([AC_PROG_CPP])dnl
-if test $ac_cv_c_compiler_gnu = yes; then
+[if test $ac_cv_c_compiler_gnu = yes; then
     AC_CACHE_CHECK(whether ${CC-cc} needs -traditional,
       ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
@@ -835,6 +860,13 @@ fi
 # ---------------------- #
 
 
+# AC_LANG_PREPROC(C++)
+# ---------------------
+# Find the C++ preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_PREPROC(C++)],
+[AC_REQUIRE([AC_PROG_CXXCPP])])
+
+
 # AC_PROG_CXXCPP
 # --------------
 # Find a working C++ preprocessor
@@ -894,8 +926,7 @@ AU_DEFUN([ac_cv_prog_gxx],
 # xlC_r	AIX C Set++ (with support for reentrant code)
 # xlC	AIX C Set++
 AC_DEFUN([AC_PROG_CXX],
-[AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_LANG_PUSH(C++)
+[AC_LANG_PUSH(C++)
 AC_ARG_VAR([CXX], [C++ compiler command])
 AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])
 AC_CHECK_TOOLS(CXX,
@@ -948,6 +979,14 @@ fi[]dnl
 # ----------------------------- #
 # 3d. The Fortran 77 compiler.  #
 # ----------------------------- #
+
+
+# AC_LANG_PREPROC(Fortran 77)
+# ---------------------------
+# Find the Fortran 77 preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_PREPROC(Fortran 77)],
+[m4_warn([syntax],
+         [$0: No preprocessor defined for ]_AC_LANG)])
 
 
 # AC_LANG_COMPILER(Fortran 77)
@@ -1095,18 +1134,7 @@ AC_MSG_CHECKING([for ${CC-cc} option to accept ANSI C])
 AC_CACHE_VAL(ac_cv_prog_cc_stdc,
 [ac_cv_prog_cc_stdc=no
 ac_save_CC=$CC
-# Don't try gcc -ansi; that turns off useful extensions and
-# breaks some systems' header files.
-# AIX			-qlanglvl=ansi
-# Ultrix and OSF/1	-std1
-# HP-UX 10.20 and later	-Ae
-# HP-UX older versions	-Aa -D_HPUX_SOURCE
-# SVR4			-Xc -D__EXTENSIONS__
-for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
-do
-  CC="$ac_save_CC $ac_arg"
-  AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM(
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -1135,8 +1163,21 @@ struct s2 {int (*f) (double a);};
 int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
 int argc;
 char **argv;]],
-[[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];]])],
-                     [ac_cv_prog_cc_stdc=$ac_arg; break])
+[[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];]])])
+# Don't try gcc -ansi; that turns off useful extensions and
+# breaks some systems' header files.
+# AIX			-qlanglvl=ansi
+# Ultrix and OSF/1	-std1
+# HP-UX 10.20 and later	-Ae
+# HP-UX older versions	-Aa -D_HPUX_SOURCE
+# SVR4			-Xc -D__EXTENSIONS__
+for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+do
+  CC="$ac_save_CC $ac_arg"
+  AC_COMPILE_IFELSE([],
+                    [ac_cv_prog_cc_stdc=$ac_arg
+rm -f conftest.$ac_ext conftest.$ac_objext
+break])
 done
 CC=$ac_save_CC
 ])
@@ -1366,19 +1407,18 @@ fi
 # Checks if `#' can be used to glue strings together at the CPP level.
 # Defines HAVE_STRINGIZE if positive.
 AC_DEFUN([AC_C_STRINGIZE],
-[AC_REQUIRE([AC_PROG_CPP])dnl
-AC_MSG_CHECKING([for preprocessor stringizing operator])
-AC_CACHE_VAL(ac_cv_c_stringize,
-AC_EGREP_CPP([#teststring],[
-#define x(y) #y
+[AC_CACHE_CHECK([for preprocessor stringizing operator],
+                [ac_cv_c_stringize],
+[AC_EGREP_CPP([@%:@teststring],
+              [@%:@define x(y) #y
 
-char *s = x(teststring);
-], ac_cv_c_stringize=no, ac_cv_c_stringize=yes))
+char *s = x(teststring);],
+              [ac_cv_c_stringize=no],
+              [ac_cv_c_stringize=yes])])
 if test "${ac_cv_c_stringize}" = yes; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
-            [Define if cpp supports the ANSI # stringizing operator.])
+            [Define if cpp supports the ANSI @%:@ stringizing operator.])
 fi
-AC_MSG_RESULT([${ac_cv_c_stringize}])
 ])# AC_C_STRINGIZE
 
 
@@ -1388,7 +1428,6 @@ AC_MSG_RESULT([${ac_cv_c_stringize}])
 # options.
 AC_DEFUN([AC_C_PROTOTYPES],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
-AC_REQUIRE([AC_PROG_CPP])dnl
 AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT([yes])

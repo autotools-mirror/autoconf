@@ -2799,7 +2799,7 @@ fi
 #
 # INCLUDES are not defaulted.
 AC_DEFUN([AC_TRY_CPP],
-[AC_REQUIRE_CPP()dnl
+[AC_LANG_PREPROC_REQUIRE()dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
 _AC_TRY_CPP()
 if test -z "$ac_cpp_err"; then
@@ -2820,7 +2820,7 @@ rm -f conftest*
 # Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must
 # come early, it is not included in AC_BEFORE checks.
 AC_DEFUN([AC_EGREP_CPP],
-[AC_REQUIRE_CPP()dnl
+[AC_LANG_PREPROC_REQUIRE()dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.

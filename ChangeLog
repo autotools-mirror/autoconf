@@ -1,5 +1,45 @@
 2000-11-14  Akim Demaille  <akim@epita.fr>
 
+	Set AC_LANG_PREPROC_REQUIRE which replaces AC_REQUIRE_CPP.
+	The main difference is that the former requires AC_LANG_COMPILER.
+
+	* aclang (AC_LANG_PREPROC, AC_LANG_PREPROC(C), AC_LANG_PREPROC(C++))
+	(AC_LANG_PREPROC(Fortran 77), AC_LANG_PREPROC_REQUIRE): New
+	macros.  Issue a warning when looking for the Fortran 77
+	preprocessor instead of an error.
+	(AC_LANG_COMPILER): Check that it is run before the corresponding
+	AC_LANG_PREPROC.
+	(AC_PROG_C
+	(AC_LANG_COMPILER_REQUIRE): Don't call directly
+	AC_LANG_COMPILER(_AC_LANG), rather invoke AC_LANG_COMPILER so that
+	the generic code in AC_LANG_COMPILER is run.
+	(AC_REQUIRE_CPP): Use AC_LANG_PREPROC_REQUIRE.
+	(AC_PROG_CC, AC_PROG_CXX): Don't require being run before the
+	corresponding AC_LANG_PREPROC: AC_LANG_COMPILER does it.
+
+
+	Propagate AC_LANG_PREPROC_REQUIRE.
+
+	* acgeneral.m4 (AC_TRY_CPP, AC_EGREP_CPP): Use it instead of
+	AC_REQUIRE_CPP.
+	* acspecific.m4 (_AC_DECL_YYTEXT, AC_PATH_X): Don't
+	AC_REQUIRE_CPP, inner macro will do it.
+	* aclang.m4 (AC_PROG_GCC_TRADITIONAL, AC_C_STRINGIZE)
+	(AC_C_PROTOTYPES): Likewise.
+	(AC_C_STRINGIZE): Yeeks!  The body of AC_CACHE_CHECK was not
+	quoted.  Use @%:@ do assist Emacs.
+
+
+	For some reason (don't ask), this revamping revealed that
+	AC_PROG_CC_STDC, because of the `break', does not clean its tmp
+	files.
+
+	* aclang.m4 (AC_PROG_CC_STDC): Extract the creation of conftest.c
+	out of AC_COMPILE_IFELSE.
+	Be sure to clean the tmp files.
+
+2000-11-14  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (AS_DIRNAME & AS_DIRNAME_SED): Simplify.
 
 	

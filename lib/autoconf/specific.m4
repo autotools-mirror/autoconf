@@ -145,8 +145,7 @@ fi])
 # ---------------
 # Check if lex declares yytext as a char * by default, not a char[].
 m4_define([_AC_DECL_YYTEXT],
-[AC_REQUIRE_CPP()dnl
-AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
+[AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
 [# The minimal lex program is just a single line: %%.  But some broken lexes
 # (Solaris, I think it was) want two %% lines, so accommodate them.
 echo '%%
@@ -848,8 +847,7 @@ AC_DEFUN([AC_SYS_POSIX_TERMIOS],
 # Uses ac_ vars as temps to allow command line to override cache and checks.
 # --without-x overrides everything else, but does not touch the cache.
 AC_DEFUN([AC_PATH_X],
-[AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
-dnl Document the X abnormal options inherited from history.
+[dnl Document the X abnormal options inherited from history.
 AC_DIVERT_ONCE([HELP_BEGIN], [
 X features:
   --x-includes=DIR    X include files are in DIR
