@@ -3334,6 +3334,7 @@ If words are stored with the most significant byte first (like Motorola
 and SPARC, but not Intel and VAX, CPUs), define @code{WORDS_BIGENDIAN}.
 @end defmac
 
+
 @defmac AC_C_CONST
 @maindex C_CONST
 @cvindex const
@@ -3345,17 +3346,20 @@ can simply use @code{const} as if every C compiler supported it; for
 those that don't, the @file{Makefile} or configuration header file will
 define it as empty.
 
-If ever you happen to have the sad idea to use a C++ compiler for
-@samp{CC}, this test will @strong{not} test the validity of
-@code{const}, and will trust it.  The main difference between C and C++
-is that C++ does not allow to define a @code{const} variable without
-initializer:
+Occasionally installers use a C++ compiler to compile C code, typically
+because they lack a C compiler.  This causes problems with @code{const},
+because C and C++ treat @code{const} differently.  For example:
 @example
 const int foo;
 @end example
-while ANSI C supports this.  After long debates, it has been decided to
-trust the @code{const} of C++ compilers in all the cases, even if it is
-not ANSI C conforming.
+is valid in C but not in C++.  These differences unfortunately cannot be
+papered over by defining @code{const} to be empty.
+
+If @code{autoconf} detects this situation, it leaves @code{const} alone,
+as this generally yields better results in practice.  However, using a
+C++ compiler to compile C code is not recommended or supported, and
+installers who run into trouble in this area should get a C compiler
+like GCC to compile their C code.
 @end defmac
 
 @defmac AC_C_VOLATILE

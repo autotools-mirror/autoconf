@@ -2259,6 +2259,7 @@ fi
 rm -fr conftest*])
 
 
+
 ## ------------------------ ##
 ## Checking for libraries.  ##
 ## ------------------------ ##
@@ -2357,9 +2358,24 @@ AC_VAR_POPDEF([ac_Lib])dnl
 
 
 
-# AC_HAVE_LIBRARY
-# ---------------
-AC_DEFUNCT(AC_HAVE_LIBRARY, [; instead use AC_CHECK_LIB])
+# AC_HAVE_LIBRARY(LIBRARY,
+#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                 [OTHER-LIBRARIES])
+# ---------------------------------------------------------
+#
+# This macro is equivalent to calling `AC_CHECK_LIB' with a FUNCTION
+# argument of `main'.  In addition, LIBRARY can be written as any of
+# `foo', `-lfoo', or `libfoo.a'.  In all of those cases, the compiler
+# is passed `-lfoo'.  However, LIBRARY cannot be a shell variable;
+# it must be a literal name.
+AU_DEFUN(AC_HAVE_LIBRARY,
+[pushdef([AC_Lib_Name],
+         patsubst(patsubst([[$1]], [lib\([^\.]*\)\.a], [\1]), [-l], []))dnl
+AC_CHECK_LIB(AC_Lib_Name, main, [$2], [$3], [$4])dnl
+ac_cv_lib_[]AC_Lib_Name()=ac_cv_lib_[]AC_Lib_Name()_main
+popdef([AC_Lib_Name])dnl
+])
+
 
 
 ## ------------------------ ##

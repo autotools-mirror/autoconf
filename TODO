@@ -13,51 +13,6 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
-** Check my definition of AC_HAVE_LIBRARY
-The original definition was:
-
-   dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-   dnl                 [, OTHER-LIBRARIES]]])
-   AC_DEFUN(AC_HAVE_LIBRARY,
-   [AC_OBSOLETE([$0], [; instead use AC_CHECK_LIB])dnl
-   changequote(<<, >>)dnl
-   define(<<AC_LIB_NAME>>, dnl
-   patsubst(patsubst($1, <<lib\([^\.]*\)\.a>>, <<\1>>), <<-l>>, <<>>))dnl
-   define(<<AC_CV_NAME>>, ac_cv_lib_<<>>AC_LIB_NAME)dnl
-   changequote([, ])dnl
-   AC_MSG_CHECKING([for -l[]AC_LIB_NAME])
-   AC_CACHE_VAL(AC_CV_NAME,
-   [ac_save_LIBS="$LIBS"
-   LIBS="-l[]AC_LIB_NAME[] $4 $LIBS"
-   AC_TRY_LINK( , [main()], AC_CV_NAME=yes, AC_CV_NAME=no)
-   LIBS="$ac_save_LIBS"
-   ])dnl
-   AC_MSG_RESULT($AC_CV_NAME)
-   if test "$AC_CV_NAME" = yes; then
-     ifelse([$2], ,
-   [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
-     LIBS="-l[]AC_LIB_NAME[] $LIBS"
-   ], [$2])
-   ifelse([$3], , , [else
-     $3
-   ])dnl
-   fi
-   undefine([AC_LIB_NAME])dnl
-   undefine([AC_CV_NAME])dnl
-   ])
-
-I used this:
-
-   AU_DEFUN(AC_HAVE_LIBRARY,
-   [pushdef([AC_LIB_NAME],
-   	    patsubst(patsubst([[$1]], [lib\([^\.]*\)\.a], [\1]), [-l], []))dnl
-   AC_CHECK_LIB(AC_LIB_NAME, main, [$2], [$3], [$4])dnl
-   popdef([AC_LIB_NAME])dnl
-   ])
-
-The only difference I see is the name of the cache var, which we can
-easily reflect at the end, but do we want that?
-
 ** AU_
 Document.
 

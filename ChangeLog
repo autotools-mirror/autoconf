@@ -1,3 +1,11 @@
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
+	Restore AC_HAVE_LIBRARY.
+
+	* acgeneral.m4 (AC_HAVE_LIBRARY): AU_DEFUNed in terms of
+	AC_CHECK_LIB.
+	* doc/autoconf.texi (Libraries): Document.
+
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
 	Fix the handling of `./configure foo=bar' and test it.
