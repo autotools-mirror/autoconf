@@ -92,7 +92,8 @@ m4_define([AT_INIT],
 m4_pattern_forbid([^_?AT_])
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
-m4_define([AT_data_files], [stdout expout at-* stderr experr ])
+m4_define([AT_data_files], [stdout expout at-* stderr experr])
+m4_define([AT_victims], [])
 m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_push([DEFAULT])dnl
 

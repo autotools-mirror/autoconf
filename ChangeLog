@@ -1,5 +1,10 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Reset `AT_victims' so that
+	m4_defn'ing is valid.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/m4sugar/m4sugar.m4 (m4_append_uniq): New.
 	* lib/autotest/general.m4 (AT_VICTIMS, AT_KEYWORDS, _AT_CLEANUP_FILE):
 	Use it.
