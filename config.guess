@@ -37,14 +37,14 @@
 #
 
 # Use $HOST_CC if defined. $CC may point to a cross-compiler
-if test x"$BUILD_CC" = x; then
+if test x"$CC_FOR_BUILD" = x; then
   if test x"$HOST_CC" != x; then
-    BUILD_CC="$HOST_CC"
+    CC_FOR_BUILD="$HOST_CC"
   else
     if test x"$CC" != x; then
-      BUILD_CC="$CC"
+      CC_FOR_BUILD="$CC"
     else
-      BUILD_CC=cc
+      CC_FOR_BUILD=cc
     fi
   fi
 fi
@@ -92,7 +92,7 @@ main:
 	ret \$31,(\$26),1
 	.end main
 EOF
-	$BUILD_CC $dummy.s -o $dummy 2>/dev/null
+	$CC_FOR_BUILD $dummy.s -o $dummy 2>/dev/null
 	if test "$?" = 0 ; then
 		./$dummy
 		case "$?" in
@@ -300,7 +300,7 @@ EOF
 	  exit (-1);
 	}
 EOF
-	$BUILD_CC $dummy.c -o $dummy \
+	$CC_FOR_BUILD $dummy.c -o $dummy \
 	  && ./$dummy `echo "${UNAME_RELEASE}" | sed -n 's/\([0-9]*\).*/\1/p'` \
 	  && rm $dummy.c $dummy && exit 0
 	rm -f $dummy.c $dummy
@@ -366,7 +366,7 @@ EOF
 			exit(0);
 			}
 EOF
-		$BUILD_CC $dummy.c -o $dummy && ./$dummy && rm $dummy.c $dummy && exit 0
+		$CC_FOR_BUILD $dummy.c -o $dummy && ./$dummy && rm $dummy.c $dummy && exit 0
 		rm -f $dummy.c $dummy
 		echo rs6000-ibm-aix3.2.5
 	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
@@ -446,7 +446,7 @@ EOF
                   exit (0);
               }
 EOF
-	($BUILD_CC $dummy.c -o $dummy 2>/dev/null ) && HP_ARCH=`./$dummy`
+	($CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null ) && HP_ARCH=`./$dummy`
 	rm -f $dummy.c $dummy
 	esac
 	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
@@ -478,7 +478,7 @@ EOF
 	  exit (0);
 	}
 EOF
-	$BUILD_CC $dummy.c -o $dummy && ./$dummy && rm $dummy.c $dummy && exit 0
+	$CC_FOR_BUILD $dummy.c -o $dummy && ./$dummy && rm $dummy.c $dummy && exit 0
 	rm -f $dummy.c $dummy
 	echo unknown-hitachi-hiuxwe2
 	exit 0 ;;
@@ -643,7 +643,7 @@ EOF
 		.end main
 EOF
 		LIBC=""
-		$BUILD_CC $dummy.s -o $dummy 2>/dev/null
+		$CC_FOR_BUILD $dummy.s -o $dummy 2>/dev/null
 		if test "$?" = 0 ; then
 			./$dummy
 			case "$?" in
@@ -688,7 +688,7 @@ EOF
   return 0;
 }
 EOF
-	  $BUILD_CC $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
+	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
 	  rm -f $dummy.c $dummy
 	else
 	  # Either a pre-BFD a.out linker (linux-gnuoldld)
@@ -731,7 +731,7 @@ EOF
   return 0;
 }
 EOF
-	  $BUILD_CC $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
+	  $CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy "${UNAME_MACHINE}" && rm $dummy.c $dummy && exit 0
 	  rm -f $dummy.c $dummy
 	fi ;;
 # ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.  earlier versions
@@ -995,7 +995,7 @@ main ()
 }
 EOF
 
-$BUILD_CC $dummy.c -o $dummy 2>/dev/null && ./$dummy && rm $dummy.c $dummy && exit 0
+$CC_FOR_BUILD $dummy.c -o $dummy 2>/dev/null && ./$dummy && rm $dummy.c $dummy && exit 0
 rm -f $dummy.c $dummy
 
 # Apollos put the system type in the environment.

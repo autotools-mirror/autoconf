@@ -1,3 +1,8 @@
+1999-03-22  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Rename BUILD_CC to CC_FOR_BUILD; there is a
+	precedent for the usual name of this environment variable.
+
 1999-03-22  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* autoheader.sh: Report an error if AC_CONFIG_HEADER is not
