@@ -1,5 +1,9 @@
 1999-06-02  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
+	* autoconf.texi (Pretty Help Strings): Document and regenerate the
+	indices.
+	* acgeneral.m4 (AC_HELP_STRING): New macro.
+
 	* NEWS: Begin documenting "Major changes" for release 2.14.
 
 	* acconfig.h (F77_FUNC): Add.

@@ -8,6 +8,9 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Matthew D. Langston's suggestions:
 
+** Change all of Autoconf's macros that print a help string via
+   "configure --help" to use new AC_HELP_STRING macro.
+
 ** Ensure that "make check" uses only the files from the build tree.  It
    currently uses some of the installed files from previously installed
    versions of Autoconf, like autoheader.m4f.
