@@ -54,7 +54,7 @@ pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 \
              BUGS INSTALL.txt \
              acversion.m4.in \
-             autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh \
+             autoconf.sh autoheader.sh autoreconf.sh autoupdate.in ifnames.sh \
              autoscan.pl \
              $(distpkgdataDATA)
 
@@ -151,9 +151,9 @@ autoreconf: $(srcdir)/autoreconf.sh $(srcdir)/configure.in
 	chmod +x autoreconf.tmp
 	mv autoreconf.tmp autoreconf
 
-autoupdate: $(srcdir)/autoupdate.sh $(srcdir)/configure.in
+autoupdate: $(srcdir)/autoupdate.in $(srcdir)/configure.in
 	rm -f autoupdate autoupdate.tmp
-	$(edit) $(srcdir)/autoupdate.sh >autoupdate.tmp
+	$(edit) $(srcdir)/autoupdate.in >autoupdate.tmp
 	chmod +x autoupdate.tmp
 	mv autoupdate.tmp autoupdate
 

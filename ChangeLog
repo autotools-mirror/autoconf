@@ -1,5 +1,9 @@
 2001-02-21  Akim Demaille  <akim@epita.fr>
 
+	* autoupdate.in: New.  Replaces autoupdate.sh.
+
+2001-02-21  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl (&find_configure_ac): New.
 
 2001-02-20  Paul Martinolich <martinol@datasync.com>

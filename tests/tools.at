@@ -54,7 +54,6 @@ if /bin/sh ./syntax.sh; then
   # when running `sh PROG'.
   AT_CHECK([/bin/sh -n ../autoconf],   0)
   AT_CHECK([/bin/sh -n ../autoreconf], 0)
-  AT_CHECK([/bin/sh -n ../autoupdate], 0)
   AT_CHECK([/bin/sh -n ../ifnames],    0)
 
   # These are not built, they are in the src tree.
