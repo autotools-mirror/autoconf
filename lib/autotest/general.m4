@@ -1187,6 +1187,110 @@ m4_define([AT_CHECK_NOESCAPE],
 [_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6])])
 
 
+# _AT_DECIDE_TRACEABLE(COMMANDS)
+# ------------------------------
+# Worker for for _AT_CHECK that expands to shell code.  If COMMANDS are safe to
+# trace with `set -x', the shell code will set `at_trace_this=yes'.  Otherwise,
+# the shell code will print a message stating an aspect of COMMANDS that makes
+# tracing them unsafe.
+# 
+# Tracing COMMANDS is not safe if they contain a command that spans multiple
+# lines.  When the test suite user passes `-x' or `--trace', the test suite
+# precedes every command with a `set -x'.  Since most tests expect a specific
+# stderr, if only to confirm that it is empty, the test suite filters ^+ from
+# the captured stderr before comparing with the expected stderr.  If a command
+# spans multiple lines, so will its trace, but a `+' only prefixes the first
+# line of that trace:
+# 
+# $ echo 'foo
+# bar'
+# => stdout
+# foo
+# bar
+# => stderr
+# + foo
+# bar
+# 
+# In a subset of cases, one could filter such extended shell traces from stderr.
+# Since test commands spanning several lines are rare, I chose instead to simply
+# not trace COMMANDS that could yield multiple trace lines.  Distinguishing such
+# COMMANDS became the task at hand.
+# 
+# These features may cause a shell command to span multiple lines:
+# 
+# (a) A quoted literal newline.
+# Example:
+#   echo foo'
+#   'bar
+# M4 is a hostile language for the job of parsing COMMANDS to determine whether
+# each literal newline is quoted, so we simply disable tracing for all COMMANDS
+# that bear literal newlines.
+# 
+# (b) A command substitution not subject to word splitting.
+# Example:
+#   var=$(printf 'foo\nbar')
+# Example:
+#   echo "`printf 'foo\\nbar`"
+# One cannot know in general the number of lines a command substitution will
+# yield without executing the substituted command.  As such, we disable tracing
+# for all COMMANDS containing these constructs.
+# 
+# (c) A parameter expansion not subject to word splitting.
+# Example:
+#   var=foo'
+#   'bar
+#   echo "$var"
+# Parameter expansions appear in COMMANDS with much greater frequency than do
+# newlines and command substitutions, so disabling tracing for all such COMMANDS
+# would much more substantially devalue `testsuite -x'.  To determine which
+# parameter expansions yield multiple lines, we escape all ``', `"', and `\' in
+# a copy of COMMANDS and expand that string within double quotes at runtime.  If
+# the result of that expansion contains multiple lines, the test suite disables
+# tracing for the command in question.
+# 
+# This method leads the test suite to expand some parameters that the shell
+# itself will never expand due to single-quotes or backslash escapes.  This is
+# not a problem for `$foo' expansions, which will simply yield the empty string
+# or some unrelated value.  A `${...}' expansion could actually form invalid
+# shell code, however; consider `${=foo}'.  Therefore, we disable tracing for
+# all COMMANDS containing `${...}'.  This affects few COMMANDS.
+# 
+# This macro falls in a very hot path; the Autoconf test suite expands it 1640
+# times as of this writing.  To give a sense of the impact of the heuristics I
+# just described, the test suite preemptively disables tracing for 31 of those,
+# and 268 contain parameter expansions that require runtime evaluation.  The
+# balance are always safe to trace.
+# 
+# _AT_CHECK expands COMMANDS, but the Autoconf language does not provide a way
+# to safely expand arbitrary COMMANDS in an argument list, so the below tests
+# examine COMMANDS unexpanded.
+m4_define([_AT_DECIDE_TRACEABLE],
+[dnl Utility macros.
+m4_pushdef([at_reason])[]dnl
+m4_pushdef([at_lf], [
+])[]dnl
+dnl
+dnl Examine COMMANDS for a reason to never trace COMMANDS.
+m4_bmatch([$1],
+          [`.*`], [m4_pushdef([at_reason],  [a `...` command substitution])],
+          [\$(],  [m4_pushdef([at_reason], [a $(...) command substitution])],
+          [\${],  [m4_pushdef([at_reason], [a ${...} parameter expansion])],
+          at_lf,  [m4_pushdef([at_reason], [an embedded newline])])[]dnl
+dnl
+m4_ifval(m4_defn([at_reason]),
+[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
+[m4_bmatch([$1], [\$],
+dnl COMMANDS may contain parameter expansions; expand them an runtime.
+[case "AS_ESCAPE([$1], [`"\])" in
+        *'
+'*) echo 'Not enabling shell tracing (command contains an embedded newline)' ;;
+ *) at_trace_this=yes ;;
+    esac],
+dnl We know at build time that tracing COMMANDS is always safe.
+[at_trace_this=yes])])[]dnl
+m4_popdef([at_lf])[]dnl
+m4_popdef([at_reason])])
+
 
 # _AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #           [RUN-IF-FAIL], [RUN-IF-PASS], SHELL_ESCAPE_IO)
@@ -1228,20 +1332,7 @@ echo AT_LINE >"$at_check_line_file"
 
 at_trace_this=
 if test -n "$at_traceon"; then
-    at_lf='
-'
-    at_cmd_expanded="AS_ESCAPE_FOR_EXPAND([$1])"
-    case "$at_cmd_expanded" in
-        *\$\(*\)*)         at_reason='a $(...) command substitution' ;;
-        *\`*\`*)           at_reason='a `...` command substitution' ;;
-        *"$at_lf"*)        at_reason='an embedded newline' ;;
-        *)                 at_reason= ;;
-    esac
-    if test -n "$at_reason"; then
-        echo "Not enabling shell tracing (command contains $at_reason)"
-    else
-        at_trace_this=yes
-    fi
+    _AT_DECIDE_TRACEABLE([$1])
 fi
 
 if test -n "$at_trace_this"; then
