@@ -50,9 +50,6 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
-# Some people depend upon sinclude, disabled by m4sugar.
-define([sinclude], [builtin([sinclude], $@)])
-
 ## ---------------- ##
 ## The diversions.  ##
 ## ---------------- ##

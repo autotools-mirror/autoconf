@@ -1,5 +1,17 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (builtin, changecom, changequote, decr, dumpdef)
+	(incr, index, indir, len, syscmd, sysval, traceoff, traceon):
+	Rename as...
+	(m4_builtin, m4_changecom, m4_changequote, m4_decr, m4_dumpdef)
+	(m4_incr, m4_index, m4_indir, m4_len, m4_syscmd, m4_sysval)
+	(m4_traceoff, m4_traceon): these.
+	* autoconf.m4 (builtin, changecom, decr, incr, index, indir, len)
+	(syscmd, sysval, traceoff, traceon): Reactivate.
+
+	
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_rename_m4, m4_copy_unm4): New macros.
 	Use them.
 	(debugfile, debugmode, m4exit, m4wrap, maketemp, patsubst, regexp)

@@ -108,10 +108,19 @@ m4_define([m4_copy_unm4],
 
 # Some m4 internals have names colliding with tokens we might use.
 # Rename them a` la `m4 --prefix-builtins'.
+m4_rename_m4([builtin])
+m4_rename_m4([changecom])
+m4_rename_m4([changequote])
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
+m4_rename_m4([decr])
+m4_rename_m4([dumpdef])
 m4_rename_m4([eval])
 m4_rename_m4([format])
+m4_rename_m4([incr])
+m4_rename_m4([index])
+m4_rename_m4([indir])
+m4_rename_m4([len])
 m4_rename([m4exit], [m4_exit])
 m4_rename([m4wrap], [m4_wrap])
 m4_rename_m4([maketemp])
@@ -122,6 +131,10 @@ m4_rename_m4([regexp])
 m4_rename_m4([shift])
 m4_rename_m4([substr])
 m4_rename_m4([symbols])
+m4_rename_m4([syscmd])
+m4_rename_m4([sysval])
+m4_rename_m4([traceoff])
+m4_rename_m4([traceon])
 m4_rename_m4([translit])
 
 
@@ -270,7 +283,7 @@ m4_define([m4_include($1)])])
 # As the builtin include, but warns against multiple inclusions.
 m4_define([m4_include],
 [m4_include_unique([$1])dnl
-builtin([include], [$1])])
+m4_builtin([include], [$1])])
 
 
 # m4_sinclude(FILE)
@@ -278,7 +291,7 @@ builtin([include], [$1])])
 # As the builtin sinclude, but warns against multiple inclusions.
 m4_define([m4_sinclude],
 [m4_include_unique([$1])dnl
-builtin([sinclude], [$1])])
+m4_builtin([sinclude], [$1])])
 
 # Neutralize include and sinclude.
 m4_undefine([include])
@@ -429,7 +442,7 @@ m4_define([_m4_shiftn],
 m4_define([_m4_dumpdefs_up],
 [ifdef([$1],
        [m4_pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
-dumpdef([$1])dnl
+m4_dumpdef([$1])dnl
 m4_popdef([$1])dnl
 _m4_dumpdefs_up([$1])])])
 
@@ -445,7 +458,7 @@ _m4_dumpdefs_down([$1])])])
 
 # m4_dumpdefs(NAME)
 # -----------------
-# Similar to `dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
+# Similar to `m4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
 # value stack (most recent displayed first).
 m4_define([m4_dumpdefs],
 [_m4_dumpdefs_up([$1])dnl
@@ -470,7 +483,7 @@ m4_define([m4_quote], [[$*]])
 # invocations inside strings with [] blocks (for instance regexps and
 # help-strings).
 m4_define([m4_noquote],
-[changequote(-=<{,}>=-)$1-=<{}>=-changequote([,])])
+[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
 
 
 ## -------------------------- ##
@@ -1114,7 +1127,7 @@ m4_define([m4_before],
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([_m4_require],
 [m4_pushdef([_m4_expansion_stack],
-         m4_location[: $1 is required by...])dnl
+            m4_location[: $1 is required by...])dnl
 ifdef([_m4_expanding($1)],
       [m4_fatal([m4_require: circular dependency of $1])])dnl
 ifndef([_m4_divert_dump],
@@ -1194,9 +1207,9 @@ m4_define([m4_toupper],
 #
 # REGEXP specifies where to split.  Default is [\t ]+.
 #
-# Pay attention to the changequotes.  Inner changequotes exist for
+# Pay attention to the m4_changequotes.  Inner m4_changequotes exist for
 # obvious reasons (we want to insert square brackets).  Outer
-# changequotes are needed because otherwise the m4 parser, when it
+# m4_changequotes are needed because otherwise the m4 parser, when it
 # sees the closing bracket we add to the result, believes it is the
 # end of the body of the macro we define.
 #
@@ -1209,16 +1222,16 @@ m4_define([m4_toupper],
 #   m4_split([active active ])end
 #   => [active], [active], []end
 
-changequote(<<, >>)
+m4_changequote(<<, >>)
 m4_define(<<m4_split>>,
-<<changequote(``, '')dnl
+<<m4_changequote(``, '')dnl
 [dnl Can't use m4_default here instead of ifelse, because m4_default uses
 dnl [ and ] as quotes.
 m4_patsubst(````$1'''',
 	    ifelse(``$2'',, ``[ 	]+'', ``$2''),
 	    ``], ['')]dnl
-changequote([, ])>>)
-changequote([, ])
+m4_changequote([, ])>>)
+m4_changequote([, ])
 
 
 
@@ -1367,18 +1380,19 @@ m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], m4_default([$2], []))dnl
 m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], len(m4_Prefix1))dnl
+m4_pushdef([m4_Cursor], m4_len(m4_Prefix1))dnl
 m4_pushdef([m4_Separator], [])dnl
 m4_Prefix1[]dnl
-ifelse(m4_eval(m4_Cursor > len(m4_Prefix)),
-       1, [m4_define([m4_Cursor], len(m4_Prefix))
+ifelse(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
+       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
 m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 ifelse(m4_eval(m4_Cursor > m4_Width),
-       1, [m4_define([m4_Cursor], m4_eval(len(m4_Prefix) + len(m4_Word) + 1))]
+       1, [m4_define([m4_Cursor],
+                     m4_eval(m4_len(m4_Prefix) + m4_len(m4_Word) + 1))]
 m4_Prefix,
        [m4_Separator])[]dnl
 m4_Word[]dnl
