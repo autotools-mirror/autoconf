@@ -1,3 +1,7 @@
+1999-09-05  Steve Chamberlain  <sac@pobox.com>
+
+	* config.sub: Add support for configuring for picoJava (pj).
+
 1999-09-05  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (CONFIG_AUX_DIRS): Try running `shtool install'.

@@ -180,7 +180,7 @@ case $basic_machine in
 		| thumb | d10v)
 		basic_machine=$basic_machine-unknown
 		;;
-	m88110 | m680[12346]0 | m683?2 | m68360 | m5200 | z8k | v70 | h8500 | w65)
+	m88110 | m680[12346]0 | m683?2 | m68360 | m5200 | z8k | v70 | h8500 | w65 | pj | pjl)
 		;;
 
 	# We use `pc' rather than `unknown'
