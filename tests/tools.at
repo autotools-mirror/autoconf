@@ -133,6 +133,7 @@ AT_CLEANUP
 # -----------------------------
 AT_SETUP([autoconf --trace: user macros])
 
+m4_pattern_allow([^m4_(define|shift)$])
 AT_DATA(configure.ac,
 [[m4_define([active], [ACTIVE])
 m4_define([TRACE1], [TRACE2(m4_shift($@))])
@@ -252,6 +253,7 @@ AT_CLEANUP
 # ---------------------------------
 AT_SETUP([autoconf: forbidden tokens, basic])
 
+m4_pattern_allow([^(m4_foo|_m4_bar|AS_FOO|_AS_BAR)$])
 AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()
 AC_FOO
@@ -262,7 +264,7 @@ BAC_FOO
 B_AC_FOO
 AS_FOO
 _AS_BAR
-[dnl]
+[d@__@nl]
 ]])
 
 AT_CHECK_AUTOCONF([], 1, [],
@@ -273,7 +275,7 @@ configure.ac:5: error: possibly undefined macro: _m4_bar
 configure.ac:7: error: possibly undefined macro: B_AC_FOO
 configure.ac:8: error: possibly undefined macro: AS_FOO
 configure.ac:9: error: possibly undefined macro: _AS_BAR
-configure.ac:10: error: possibly undefined macro: dnl
+configure.ac:10: error: possibly undefined macro: d@__@nl
 ]])
 
 AT_CLEANUP
@@ -284,16 +286,16 @@ AT_CLEANUP
 AT_SETUP([autoconf: forbidden tokens, exceptions])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()dnl
+[[AC_PLAIN_SCRIPT
 
 # This is allowed in spite of the name.
 # It is on purpose that we check the case where there are several
 # tokens on the same line.
-m4_pattern_allow([^AC_ALLOWED$])
+m4@__@_pattern_allow([^AC_ALLOWED$])
 NOT_AC_ALLOWED AC_ALLOWED AC_ALLOWED_NOT
 
 # Test forbidding.
-m4_pattern_forbid([^FORBIDDEN$])
+m4@__@_pattern_forbid([^FORBIDDEN$])
 NOT_FORBIDDEN FORBIDDEN FORBIDDEN_NOT
 
 # Test Autoconf's patterns.
@@ -464,7 +466,7 @@ AT_SETUP([autoupdate])
 AT_DATA(configure.ac,
 [[AC_INIT(Test, 1.0)
 AC_CANONICAL_SYSTEM
-dnl The doc says 27 is a valid fubar.
+# The doc says 27 is a valid fubar.
 fubar=27
 AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 ]])
@@ -472,7 +474,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 AT_DATA([expout],
 [[AC_INIT([Test],[1.0])
 AC_CANONICAL_TARGET([])
-dnl The doc says 27 is a valid fubar.
+# The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_COMMANDS([default],[[echo $fubar]],[[fubar=$fubar]])

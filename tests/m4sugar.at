@@ -32,6 +32,7 @@ AT_BANNER([M4sugar.])
 ## m4_warn.  ##
 ## --------- ##
 
+m4_pattern_allow([^m4_warn$])
 AT_SETUP([[m4_warn]])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
@@ -73,6 +74,7 @@ AT_CLEANUP
 ## m4_require: circular dependencies.  ##
 ## ----------------------------------- ##
 
+m4_pattern_allow([^m4_(require|defun|init)$])
 AT_SETUP([[m4_require: circular dependencies]])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
@@ -111,6 +113,7 @@ AT_CLEANUP
 ## m4_text_wrap.  ##
 ## -------------- ##
 
+m4_pattern_allow([^m4_text_wrap$])
 AT_SETUP([[m4_text_wrap]])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
@@ -118,7 +121,7 @@ AT_SETUP([[m4_text_wrap]])
 # m4-listification.
 
 AT_DATA([script.s4g],
-[[m4_divert_push([0])m4_wrap([m4_divert_pop([0])])dnl
+[[m4@__@_divert_push([0])m4@__@_wrap([m4@__@_divert_pop([0])])d@__@nl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)

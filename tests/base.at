@@ -30,8 +30,8 @@ AT_SETUP([AC_REQUIRE: topological sort])
 
 AT_DATA(configure.ac,
 [[define([REQUIRE_AND_CHECK],
-[AC_REQUIRE([$1])dnl
-test -z "$m4_translit([$1], [A-Z], [a-z])" && AS_EXIT(1)])
+[AC_REQUIRE([$1])
+test -z "$m4@__@_translit([$1], [A-Z], [a-z])" && AS_EXIT(1)])
 
 AC_DEFUN([TEST1],
 [REQUIRE_AND_CHECK([TEST2a])
@@ -49,7 +49,7 @@ AC_DEFUN([TEST3],
 [REQUIRE_AND_CHECK([TEST2a])
 test3=set])
 
-AC_PLAIN_SCRIPT()dnl
+AC_PLAIN_SCRIPT()
 #! /bin/sh
 
 TEST1
@@ -82,7 +82,7 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT()dnl
+AC_PLAIN_SCRIPT()
 #! /bin/sh
 
 TEST
@@ -127,7 +127,7 @@ AC_DEFUN([MULTI_TEST],
 AC_DEFUN_ONCE([SINGLE_TEST],
 [single_test=".$single_test"])
 
-AC_PLAIN_SCRIPT()dnl
+AC_PLAIN_SCRIPT()
 #! /bin/sh
 
 MULTI_TEST
@@ -167,7 +167,7 @@ AT_DATA([configure.ac],
 AC_DEFUN([INNER_TEST],
 [inner_test=".$inner_test"])
 
-AC_PLAIN_SCRIPT()dnl
+AC_PLAIN_SCRIPT()
 #! /bin/sh
 
 AC_PROVIDE([INNER_TEST])

@@ -1,5 +1,16 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	Autotest invokes M4sh's initialization.
+
+	* lib/autotest/general.m4: Adjust the diversion names.
+	(AT_INIT): Run AS_INIT.
+	Use the BINSH diversion to invoke /bin/sh.
+	* tests/base.at, tests/m4sh.at, tests/m4sugar.at, tests/tools.at:
+	* tests/torture.at: Respect M4sugar and M4sh macro name spaces.
+
+	
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	Let M4sh have its own diversions.
 
 	* lib/autoconf/general.m4 (_m4_divert(BINSH), _m4_divert(REVISION))

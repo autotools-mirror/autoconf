@@ -62,15 +62,12 @@ changequote()changequote([, ])include(m4sugar/m4sh.m4)#	   -*- Autoconf -*-
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
 
-m4_define([_m4_divert(DEFAULT)],       0)
+m4_define([_m4_divert(DEFAULT)],       5)
 m4_define([_m4_divert(OPTIONS)],      10)
 m4_define([_m4_divert(HELP)],         20)
 m4_define([_m4_divert(SETUP)],        30)
 m4_define([_m4_divert(TESTS)],        50)
 m4_define([_m4_divert(TAIL)],         60)
-
-m4_divert_push([TESTS])
-m4_divert_push([KILL])
 
 
 # AT_LINE
@@ -85,12 +82,13 @@ m4_define([AT_LINE],
 # Begin test suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 m4_define([AT_INIT],
-[m4_pattern_forbid([^_?AT_])
+[AS_INIT
+m4_pattern_forbid([^_?AT_])
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files], [stdout expout at-* stderr experr ])
+m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_push([DEFAULT])dnl
-#! /bin/sh
 
 AS_SHELL_SANITIZE
 SHELL=${CONFIG_SHELL-/bin/sh}
@@ -313,8 +311,8 @@ fi
 $at_debug || rm -rf $at_data_files
 
 # Wrap up the test suite with summary statistics.
-at_skip_count=`set dummy $at_skip_list; shift; echo $[#]`
-at_fail_count=`set dummy $at_fail_list; shift; echo $[#]`
+at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
+at_fail_count=`set dummy $at_fail_list; shift; echo $[@%:@]`
 if test $at_fail_count = 0; then
   if test $at_skip_count = 0; then
     AS_BOX([All $at_test_count tests were successful])
@@ -380,7 +378,7 @@ elif test $at_debug = false; then
 fi
 
 exit 0
-m4_divert_pop()dnl
+m4_divert_pop([TAIL])dnl
 m4_wrap([m4_divert_text([DEFAULT],
                         [# List of the tests.
 at_tests_all="AT_TESTS_ALL "])])dnl
