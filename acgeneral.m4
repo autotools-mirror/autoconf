@@ -62,10 +62,16 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])
 
-undefine([eval])
-undefine([include])
-undefine([shift])
-undefine([format])
+dnl Some m4 internals have names colliding with tokens we might use.
+dnl Rename them a` la `m4 --prefix-builtins'.
+define([m4_prefix],
+[define([m4_$1], defn([$1]))
+undefine([$1])])
+
+m4_prefix([eval])
+m4_prefix([include])
+m4_prefix([shift])
+m4_prefix([format])
 
 
 dnl ### Defining macros
