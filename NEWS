@@ -1,10 +1,13 @@
 Major changes in release 2.14:
 
+* New macro AC_HELP_STRING to format an Autoconf macro's help string so
+  that it looks pretty when the user executes "configure --help.  See
+  the Texinfo documentation for details.
 * Support for automatically determining a Fortran 77 compilers
   name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
   provided to wrap C/C++ identifiers, thus making it easier and more
   transparent for C/C++ to call Fortran 77 routines, and Fortran 77 to
-  call C/C++ routines.
+  call C/C++ routines.  See the Texinfo documentation for details.
 
 Major changes in release 2.13:
 
