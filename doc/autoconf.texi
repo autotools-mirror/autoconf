@@ -4283,6 +4283,9 @@ know of any implementation that has @file{stdint.h} but not
 @file{inttypes.h}.  Nor do I know of any free software that includes
 @file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
 
+@item @file{linux/irda.h}
+It requires @file{linux/types.h} and @file{sys/socket.h}.
+
 @item @file{net/if.h}
 On Darwin, this file requires that @file{sys/socket.h} be included
 beforehand.  One should run:
@@ -4304,6 +4307,9 @@ AC_CHECK_HEADERS([net/if.h], [], [],
 #endif
 ])
 @end example
+
+@item @file{stdint.h}
+See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
 
 @item @file{stdlib.h}
 On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
