@@ -226,8 +226,10 @@ else
     echo
 
     # Try to find a few ChangeLogs in case it might help determining the
-    # exact version.
-    find "$at_top_srcdir" -name ChangeLog \
+    # exact version.  Use the relative dir: if the top dir is a symlink,
+    # find will not follow it (and options to follow the links are not
+    # portable), which would result in no output here.
+    find "$top_srcdir" -name ChangeLog \
       -exec echo {} : ';' \
       -exec sed 's/^/| /;10q' {} ';' \
       -exec echo ';'

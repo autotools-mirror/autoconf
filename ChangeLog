@@ -1,5 +1,11 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Writing testsuite.at) <AT_CHECK>: Complete.
+	* lib/autotest/general.m4 (AT_INIT): Use the relative dir when
+	looking for ChangeLogs.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in: --normalize is a new option.
 	* bin/autoconf.in: Use it.
 

@@ -11266,26 +11266,29 @@ with @code{AT_DATA}.
 @defmac AT_DATA (@var{file}, @var{contents})
 @atindex DATA
 Initialize an input data @var{file} with given @var{contents}.  Of
-course, @var{contents} might have to be properly quoted between square
-brackets to protect against included commas or spurious @code{m4}
-expansion.  The contents ought to end with an end of line.
+course, @var{contents} has to be properly quoted between square brackets
+to protect against included commas or spurious @code{m4} expansion.  The
+contents ought to end with an end of line.
 @end defmac
 
 @defmac AT_CHECK (@var{commands}, @ovar{status = 0}, @ovar{stdout}, @ovar{stderr})
 @atindex CHECK
-This macro has up to four arguments: @var{commands}, @var{status},
-@var{stdout} and @var{stderr}.  The @var{commands} argument is
-mandatory, and @code{m4} quoting is often useful.
+Execute a test by performing given shell @var{commands}.  These commands
+should normally exit with @var{status}, while producing expected
+@var{stdout} and @var{stderr} contents.  If @var{commands} exits with
+status 77, then the whole test group is skipped.
 
-The macro executes a test by performing given shell @var{commands}.
-These commands should normally exit with @var{status}, while producing
-expected @var{stdout} and @var{stderr} contents.  Unless empty,
-@var{status} is a decimal integer; exit status is not checked if
-@var{status} is empty.  The special word @code{expout} for @var{stdout}
-means that file @file{expout} contents has been preset to the expected
-standard output.  The special word @code{experr} for @var{stderr} means
-that file @file{experr} contents has been preset to the expected
-standard error output.
+The @var{commands} @emph{must not} redirect the standard output, nor the
+standard error.
+
+If @var{status}, or @var{stdout}, or @var{stderr} is @samp{ignore}, then
+the corresponding value is not checked.
+
+The special value @samp{expout} for @var{stdout} means the expected
+output of the @var{commands} is the content of the file @file{expout}.
+If @var{stdout} is @samp{stdout}, then the standard output of the
+@var{commands} is available for further tests in the file @file{stdout}.
+Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
 @end defmac
 
 
