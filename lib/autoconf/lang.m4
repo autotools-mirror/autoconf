@@ -550,6 +550,13 @@ m4_define([_AC_LANG_COMPILER_GNU],
                    [ac_compiler_gnu=yes],
                    [ac_compiler_gnu=no])
 ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
+if test $ac_compiler_gnu = yes; then
+  echo "$as_me:__oline__:" \
+     "checking for GNU _AC_LANG compiler characterisitics" >&AS_MESSAGE_LOG_FD
+  ac_compiler=`set X $ac_compile; echo $[2]`
+  _AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])
+  _AC_EVAL([$ac_compiler -dumpspecs </dev/null >&AS_MESSAGE_LOG_FD])
+fi
 ])])# _AC_LANG_COMPILER_GNU
 
 

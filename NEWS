@@ -33,8 +33,10 @@
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
   specify pre-includes.
-- AC_ARG_VAR refuses to run configure when precious variable have
+- AC_ARG_VAR refuses to run configure when precious variables have
   changed.
+- When a GNU compiler is found, its characteristics are dumped in the
+  log.
 
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.

@@ -1,3 +1,9 @@
+2001-06-25  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_LANG_COMPILER_GNU): If GNU, dump the compiler
+	characteristics in the logs.
+	Suggested by Mo DeJong.
+
 2001-06-24  Akim Demaille  <akim@epita.fr>
 
 	* acfunctions.m4 (AM_FUNC_ERROR_AT_LINE, AM_FUNC_FNMATCH)
