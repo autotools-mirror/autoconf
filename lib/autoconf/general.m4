@@ -239,9 +239,9 @@ define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
 # several times.
 define([AC_DEFUN_ONCE],
 [define([$1],
-[AC_PROVIDE_IF([$1],
-               [AC_WARNING([$1 invoked multiple times])],
-               [AC_PRO([$1])$2[]AC_EPI()])])])
+[AC_PROVIDE_IFELSE([$1],
+                   [AC_WARNING([$1 invoked multiple times])],
+                   [AC_PRO([$1])$2[]AC_EPI()])])])
 
 
 # AC_DEFUNCT(NAME, COMMENT)
@@ -280,7 +280,7 @@ define(AC_SPECIALIZE,
 # AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 # ---------------------------------------------
 define(AC_BEFORE,
-[AC_PROVIDE_IF([$2], [AC_WARNING([$2 was called before $1])])])
+[AC_PROVIDE_IFELSE([$2], [AC_WARNING([$2 was called before $1])])])
 
 
 # AC_REQUIRE(MACRO-NAME)
@@ -288,9 +288,9 @@ define(AC_BEFORE,
 # If MACRO-NAME has never been expanded, expand it *before* the current
 # macro expansion.
 define(AC_REQUIRE,
-[AC_PROVIDE_IF([$1],
-               [],
-               [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])
+[AC_PROVIDE_IFELSE([$1],
+                   [],
+                   [AC_DIVERT(m4_eval(AC_DIVERT_DIVERSION - 1), [$1])])
 ])
 
 
@@ -298,9 +298,9 @@ define(AC_REQUIRE,
 # --------------------
 # If TEXT has never been expanded, expand it *here*.
 define(AC_EXPAND_ONCE,
-[AC_PROVIDE_IF([$1],
-               [],
-               [AC_PROVIDE([$1])[]$1])])
+[AC_PROVIDE_IFELSE([$1],
+                   [],
+                   [AC_PROVIDE([$1])[]$1])])
 
 
 # AC_PROVIDE(MACRO-NAME)
@@ -312,13 +312,13 @@ define(AC_PROVIDE,
 [m4_define([AC_PROVIDE_$1])])
 
 
-# AC_PROVIDE_IF(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
-# -------------------------------------------------------
+# AC_PROVIDE_IFELSE(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
+# -----------------------------------------------------------
 # If MACRO-NAME is provided do IF-PROVIDED, else IF-NOT-PROVIDED.
 # The purpose of this macro is to provide the user with a means to
 # check macros which are provided without letting her know how the
 # information is coded.
-define(AC_PROVIDE_IF,
+define(AC_PROVIDE_IFELSE,
 [ifdef([AC_PROVIDE_$1],
        [$2], [$3])])
 
@@ -3750,7 +3750,7 @@ dnl files of config.status.
 # Root of the tmp file names.  Use pid to allow concurrent executions.
 ac_cs_root=cs\$\$
 ac_given_srcdir=$srcdir
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [dnl Leave those double quotes here: this $INSTALL is evaluated in a
 dnl here document, wbich might result in `ac_given_srcdir=/bin/install -c'.
 ac_given_INSTALL="$INSTALL"
@@ -4028,7 +4028,7 @@ dnl to be created too).
     top_srcdir=$ac_dots$ac_given_srcdir ;;
   esac
 
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [  case "$ac_given_INSTALL" in
   [[\\/$]]* | ?:[[\\/]]* ) INSTALL=$ac_given_INSTALL ;;
   *) INSTALL=$ac_dots$ac_given_INSTALL ;;
@@ -4069,7 +4069,7 @@ cat >>$CONFIG_STATUS <<\EOF
 s%@configure_input@%$configure_input%;t t
 s%@srcdir@%$srcdir%;t t
 s%@top_srcdir@%$top_srcdir%;t t
-ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s%@INSTALL@%$INSTALL%;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
 " $ac_file_inputs | (eval "$ac_sed_cmds") >$ac_cs_root.out
@@ -4443,7 +4443,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-ifdef([AC_PROVIDE_AC_PROG_INSTALL], [  ac_given_INSTALL=$INSTALL
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [  ac_given_INSTALL=$INSTALL
 ])dnl
 
   for ac_subdir in AC_LIST_SUBDIRS; do
@@ -4503,7 +4503,7 @@ dnl to be created too).
       *) # Relative path.
         ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
-ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [      case "$ac_given_INSTALL" in
         [[\\/$]]* | ?:[[\\/]]*) INSTALL=$ac_given_INSTALL ;;
         *) INSTALL=$ac_dots$ac_given_INSTALL ;;

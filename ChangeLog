@@ -1,5 +1,12 @@
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_PROVIDE_IF): Rename as...
+	(AC_PROVIDE_IFELSE): this.  Change all callers.
+	Spread the use of AC_PROVIDE_IFELSE, no macro should know how
+	AC_PROVIDE names its internal variables.
+
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Simplify all the `foo="$bar"' into `foo=$bar'.
 	* acspecific.m4: Likewise.
 	* aclang.m4: Likewise.
