@@ -7,7 +7,12 @@
 
 	* acspecific.m4 (AC_PROG_INSTALL): Substitute `INSTALL_SCRIPT'.
 	Contributed by Franc,ois Pinard <pinard@iro.umontreal.ca>.
+	(AC_C_STRINGIZE): New macro to test the availability of the
+	stringizing operator in the C preprocessor. Contributed by Arnold
+	Robbins <arnold@gnu.org> on behalf of the GNU AWK project.
 
+	* acconfig.h (HAVE_STRINGIZE): Add for the AC_C_STRINGIZE macro.
+		
 	* testsuite/Makefile.in (check): If DejaGNU is not installed,
 	print a warning and skip the `dejacheck' target (which will fail).
 	(site.exp): Use tests to guard commands from generating error

@@ -104,6 +104,9 @@
 /* Define if you have the strftime function.  */
 #undef HAVE_STRFTIME
 
+/* Define if you have the ANSI # stringizing operator in cpp. */
+#undef HAVE_STRINGIZE
+
 /* Define if you have <sys/wait.h> that is POSIX.1 compatible.  */
 #undef HAVE_SYS_WAIT_H
 
