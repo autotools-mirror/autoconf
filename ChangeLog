@@ -1,3 +1,7 @@
+2001-01-19  Akim Demaille  <akim@epita.fr>
+
+	* sugar.m4 (m4_require): Missing dnl.
+
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_PLAIN_SCRIPT): AF_INET, AF_UNIX, AR_FLAGS,

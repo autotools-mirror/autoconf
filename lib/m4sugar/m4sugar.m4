@@ -1251,7 +1251,7 @@ m4_define([m4_before],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([m4_require],
-[m4_expansion_stack_push(m4_location[: $1 is required by...])
+[m4_expansion_stack_push(m4_location[: $1 is required by...])dnl
 m4_ifdef([_m4_expanding($1)],
          [m4_fatal([$0: circular dependency of $1])])dnl
 m4_ifndef([_m4_divert_dump],
