@@ -680,18 +680,18 @@ AC_SUBST(exec_prefix)dnl
 AC_SUBST(prefix)dnl
 AC_SUBST(program_transform_name)dnl
 dnl Installation directory options.
-AC_SUBST(bindir)
-AC_SUBST(sbindir)
-AC_SUBST(libexecdir)
-AC_SUBST(datadir)
-AC_SUBST(sysconfdir)
-AC_SUBST(sharedstatedir)
-AC_SUBST(localstatedir)
-AC_SUBST(libdir)
-AC_SUBST(includedir)
-AC_SUBST(oldincludedir)
-AC_SUBST(infodir)
-AC_SUBST(mandir)
+AC_SUBST(bindir)dnl
+AC_SUBST(sbindir)dnl
+AC_SUBST(libexecdir)dnl
+AC_SUBST(datadir)dnl
+AC_SUBST(sysconfdir)dnl
+AC_SUBST(sharedstatedir)dnl
+AC_SUBST(localstatedir)dnl
+AC_SUBST(libdir)dnl
+AC_SUBST(includedir)dnl
+AC_SUBST(oldincludedir)dnl
+AC_SUBST(infodir)dnl
+AC_SUBST(mandir)dnl
 ])
 
 
@@ -705,8 +705,8 @@ ac_help="$ac_help
 [$2]"
 AC_DIVERT_POP()dnl
 [#] Check whether --enable-[$1] or --disable-[$1] was given.
-enableval="[$enable_]patsubst([$1], -, _)"
-if test -n "$enableval"; then
+if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
+  enableval="[$enable_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
 ifelse([$4], , , [else
   $4
@@ -730,8 +730,8 @@ ac_help="$ac_help
 [$2]"
 AC_DIVERT_POP()dnl
 [#] Check whether --with-[$1] or --without-[$1] was given.
-withval="[$with_]patsubst([$1], -, _)"
-if test -n "$withval"; then
+if test "[${with_]patsubst([$1], -, _)+set}" = set; then
+  withval="[$with_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
 ifelse([$4], , , [else
   $4

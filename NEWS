@@ -1,6 +1,7 @@
 Major changes in release 2.5:
 
-* New configure options --bindir, --libdir, --datadir, etc.
+* New configure options --bindir, --libdir, --datadir, etc., with
+  corresponding output variables.
 * config.log contains the command being run as well as any output from it.
 * AC_CHECK_LIB can check for libraries with "." or "/" in their name.
 * AC_PROG_INSTALL doesn't cache a path to install-sh, for sharing caches.

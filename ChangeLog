@@ -1,3 +1,8 @@
+Wed Jun 28 13:45:16 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Allow an empty value
+	  for --enable and --with args.
+
 Tue Jun 27 13:29:54 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS, AC_INIT_PREPARE): Add options
