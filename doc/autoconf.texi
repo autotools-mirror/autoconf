@@ -3228,9 +3228,14 @@ on some architectures.  This section tries to make an inventory of these
 portability issues.  By definition, this list will always require
 additions, please help us keeping it as complete as possible
 
-@table @code
+@table @asis
 
-@item unlink
+@item @code{sprintf}
+The ISO C standard says @code{sprintf} and @code{vsprintf} return the
+number of characters written, but on some old systems (SunOS for
+instance) they return the buffer pointer instead.
+
+@item @code{unlink}
 The @sc{posix} spec says that @code{unlink} causes the given files to be
 removed only after there are no more open file handles for it.  Not all
 OS's support this behaviour though.  So even on systems that provide

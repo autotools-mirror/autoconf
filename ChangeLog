@@ -1,5 +1,11 @@
 2001-08-15  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Function Portability): sprintf's return
+	value.
+	From Kevin Ryde.
+
+2001-08-15  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.maint (CVS): New.
 	(local-check): Run changelog-check. last.
 	(alpha): Don't depend upon local-check, since...
