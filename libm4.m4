@@ -84,12 +84,11 @@ define([m4_defn],     defn([defn]))
 # (i.e., all the definitions it holds).
 
 # Technically, to define a MACRO in NAMESPACE means to define the
-# macro named `m4_defn(NAMESPACE, MACRO)' to the VALUE.  At the same
-# time, we append `undefine(NAME)' in the macro named
-# `m4_disable(NAMESPACE)', and similarly a binding of NAME to the
-# value of `m4_defn(NAMESPACE, MACRO)' in `m4_enable(NAMESPACE)'.
-# These mechanisms allow to bind the macro of NAMESPACE and to unbind
-# them at will.
+# macro named `NAMESPACE::MACRO' to the VALUE.  At the same time, we
+# append `undefine(NAME)' in the macro named `m4_disable(NAMESPACE)',
+# and similarly a binding of NAME to the value of `NAMESPACE::MACRO'
+# in `m4_enable(NAMESPACE)'.  These mechanisms allow to bind the
+# macro of NAMESPACE and to unbind them at will.
 
 # Of course this implementation is not really efficient: m4 has to
 # grow strings which can become quickly huge, which slows it
@@ -117,13 +116,13 @@ m4_namespace_push([libm4])
 # Assign VALUE to NAME in NAMESPACE, and append the binding/unbinding
 # in `m4_disable(NAMESPACE)'/`m4_enable(NAMESPACE)'.
 m4_define([m4_namespace_define],
-[m4_define([m4_defn([$1], [$2])], [$3])dnl
+[m4_define([$1::$2], [$3])dnl
 m4_define([m4_disable($1)],
 defn([m4_disable($1)])dnl
 [m4_undefine([$2])])dnl
 m4_define([m4_enable($1)],
-defn([m4_enable(]m4_namespace[)])dnl
-[m4_define([$2], defn([m4_defn([$1], [$2])]))])dnl
+defn([m4_enable($1)])dnl
+[m4_define([$2], defn([$1::$2]))])dnl
 ])
 
 

@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* libm4.m4 (m4_namespace_define): Fix a bug: `m4_namespace'
+	instead of `$1'.
+	Simplify some excess in quoting.
+	Use NAMESPACE::MACRONAME instead of `m4_defn(NAMESPACE,
+	MACRONAME)'.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Adapt autoheader to use libm4's namespaces.
 
 	* autoheader.m4 (AH_HOOK): Removed.
