@@ -1,3 +1,10 @@
+2001-01-11  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4: Use m4_copy to duplicate macros.
+	(AC_LANG_PUSH): In order to have AC_LANG's simplifications
+	effective, be sure to let _AC_LANG be the old language before
+	calling AC_LANG.
+
 2000-12-25  Pavel Roskin  <proski@gnu.org>
 
 	* autoreconf.sh: s/localddir/localdir/.

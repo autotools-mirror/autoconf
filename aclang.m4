@@ -126,7 +126,7 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 # ------------------
 # Save the current language, and use LANG.
 m4_define([AC_LANG_PUSH],
-[m4_pushdef([_AC_LANG])dnl
+[m4_pushdef([_AC_LANG], m4_defn([_AC_LANG]))dnl
 AC_LANG([$1])])
 
 
@@ -431,31 +431,31 @@ $1])
 # AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
 # ----------------------------------------
 # Same as C.
-m4_define([AC_LANG_PROGRAM(C++)], m4_defn([AC_LANG_PROGRAM(C)]))
+m4_copy([AC_LANG_PROGRAM(C)], [AC_LANG_PROGRAM(C++)])
 
 
 # AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
 # -------------------------------------
 # Same as C.
-m4_define([AC_LANG_CALL(C++)], m4_defn([AC_LANG_CALL(C)]))
+m4_copy([AC_LANG_CALL(C)], [AC_LANG_CALL(C++)])
 
 
 # AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
 # ------------------------------------
 # Same as C.
-m4_define([AC_LANG_FUNC_LINK_TRY(C++)], m4_defn([AC_LANG_FUNC_LINK_TRY(C)]))
+m4_copy([AC_LANG_FUNC_LINK_TRY(C)], [AC_LANG_FUNC_LINK_TRY(C++)])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
 # ---------------------------------------------------
 # Same as C.
-m4_define([AC_LANG_BOOL_COMPILE_TRY(C++)], m4_defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
+m4_copy([AC_LANG_BOOL_COMPILE_TRY(C)], [AC_LANG_BOOL_COMPILE_TRY(C++)])
 
 
 # AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
 # -------------------------------------------
 # Same as C.
-m4_define([AC_LANG_INT_SAVE(C++)], m4_defn([AC_LANG_INT_SAVE(C)]))
+m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(C++)])
 
 
 
