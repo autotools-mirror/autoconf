@@ -34,9 +34,9 @@
 
 	Multiple `-e' to egrep are not portable.  On IRIX 6.5 and Solaris
 	2.5.1 only the last one is honored:
-	  > echo "foo\nbar" | egrep -e 'foo' -e 'bar'
+	  > printf "foo\nbar" | egrep -e 'foo' -e 'bar'
 	  bar
-	  > echo "foo\nbar" | egrep -e 'bar' -e 'foo'
+	  > printf "foo\nbar" | egrep -e 'bar' -e 'foo'
 	  foo
 	Reported by Nicolas Joly.
 	An alternative would have been to use `sed', unfortunately
@@ -85,7 +85,7 @@
 	comment.
 
 	* libm4.m4 (m4_quote): s/$@/$*/.
-	* acgeneral.m4 (AC_COPYRIGHT): Prepend `# ' to the lines that goes
+	* acgeneral.m4 (AC_COPYRIGHT): Prepend `# ' to the lines that go
 	on the top of `configure'.  Actually, prepend `@%:@ ' so that
 	there are as many evaluations on both sides.
 	(_AC_INIT_VERSION): No longer strip `# '.

@@ -622,35 +622,6 @@ AC_DEFUN(AC_PROG_AWK,
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
 
-# AC_PROG_BINSH
-# -------------
-# Check the maximum length of an here document.
-# FIXME: Is this test really reliable?
-AC_DEFUN(AC_PROG_BINSH,
-[AC_CACHE_CHECK([for max here document length], ac_cv_prog_binsh_max_heredoc,
-[echo >conftest.s1 "\
-ac_test='This is a sample string to test here documents.'"
-dnl 2^8 = 256 lines
-for ac_cnt in 0 1 2 3 4 5 6 7
-do
-  cat conftest.s1 conftest.s1 >conftest.sh
-  mv conftest.sh conftest.s1
-done
-echo 'cat >conftest.s1 <<CEOF' >conftest.sh
-cat conftest.s1 >>conftest.sh
-echo 'echo "Success"' >>conftest.sh
-echo 'CEOF' >>conftest.sh
-$SHELL ./conftest.sh
-if test "`$SHELL ./conftest.s1`" != Success; then
-dnl Some people say to limit oneself to 12, which seems incredibly small.
-  ac_cv_prog_binsh_max_heredoc=12
-else
-  ac_cv_prog_binsh_max_heredoc=infinite
-fi
-])dnl
-])# AC_PROG_BINSH
-
-
 # AC_PROG_YACC
 # ------------
 AC_DEFUN(AC_PROG_YACC,
