@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.9
-@set VERSION 1.9
+@set EDITION 1.8.1
+@set VERSION 1.8.1
 @set UPDATED April 1994
 
 @iftex
@@ -500,20 +500,6 @@ what existing GNU programs use.  These macros are defined in the file
 The following macros check for the presence or behavior of particular
 programs:
 
-@ignore
-@defmac AC_DECLARE_YYTEXT
-@maindex DECLARE_YYTEXT
-@vindex DECLARE_YYTEXT
-Define @code{DECLARE_YYTEXT} to declare @code{yytext} appropriately,
-depending on whether @code{lex} or @code{flex} is being used.  This
-macro calls @code{AC_PROG_CPP} (or @code{AC_PROG_CXXCPP} if C++ is the
-current language, @pxref{Language Choice}) and @code{AC_PROG_LEX} if
-they haven't been called already.
-
-This macro currently does not work, due to problems with shell quoting.
-@end defmac
-@end ignore
-
 @defmac AC_GCC_TRADITIONAL
 @maindex GCC_TRADITIONAL
 Add @samp{-traditional} to @code{make} variable @code{CC} if using the
@@ -653,6 +639,18 @@ If you use this macro, simply place a line like this in your
 @example
 @@SET_MAKE@@
 @end example
+@end defmac
+
+@defmac AC_YYTEXT_POINTER
+@maindex YYTEXT_POINTER
+@vindex YYTEXT_POINTER
+Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
+of a @samp{char []}.  This depends on whether @code{lex} or @code{flex}
+is being used.  This macro calls @code{AC_PROG_CPP} (or
+@code{AC_PROG_CXXCPP} if C++ is the current language, @pxref{Language
+Choice}) and @code{AC_PROG_LEX} if they haven't been called already.
+
+This macro replaces @code{AC_DECLARE_YYTEXT}, which didn't work.
 @end defmac
 
 @node Header Files, Typedefs, Alternative Programs, Specific Tests
@@ -1242,8 +1240,10 @@ examining the @file{Makefile} that it produces.  If that fails (such as
 if @code{xmkmf} is not present), look for them in several directories
 where they often reside.  If either method is successful, set the shell
 variables @code{x_includes} and @code{x_libraries} to their locations,
-unless they are in directories the compiler searches by default.  If
-both methods fail, set the shell variable @code{no_x} to @samp{true};
+unless they are in directories the compiler searches by default.
+
+If both methods fail, or the user gave the command line option
+@samp{--without-x}, set the shell variable @code{no_x} to @samp{true};
 otherwise set it to the empty string.
 
 The command line options @samp{--x-includes=@var{dir}} and
@@ -1252,11 +1252,16 @@ The command line options @samp{--x-includes=@var{dir}} and
 
 @defmac AC_FIND_XTRA
 @maindex FIND_XTRA
-Check for special options and X libraries that some systems need in
-order to compile X programs.  Add any that the system needs to
-@code{make} variables @code{X_CFLAGS} and @code{X_LIBS}.  This macro
-calls @code{AC_FIND_X} and @code{AC_ISC_POSIX} (@pxref{UNIX Variants})
-if they have not already been called.
+Put the C compiler flags determined by @code{AC_FIND_X} into @code{make}
+variable @code{X_CFLAGS}, and the linker flags it determined into
+@code{X_LIBS}.  If X is not available, put @samp{-DX_DISPLAY_MISSING}
+into @code{X_CFLAGS}.
+
+Also check for special libraries that some systems need in order to
+compile X programs.  Add any that the system needs to @code{make}
+variable @code{X_EXTRA_LIBS}.  This macro calls @code{AC_FIND_X} and
+@code{AC_ISC_POSIX} (@pxref{UNIX Variants}) if they have not already
+been called.
 @end defmac
 
 @defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[}, @var{action-if-unsupported}@r{]})
