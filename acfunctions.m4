@@ -257,12 +257,8 @@ AC_DEFUN([AC_FUNC_CHOWN],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
-[AC_RUN_IFELSE([AC_LANG_SOURCE([[#if SYS_TYPES_H
-# include <sys/types.h>
-#endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
+[AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
+#include <sys/stat.h>
 #include <fcntl.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -306,9 +302,7 @@ AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 AC_CACHE_CHECK([whether closedir returns void],
                [ac_cv_func_closedir_void],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
-[#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+[#include <sys/types.h>
 #include <$ac_header_dirent>
 
 int closedir ();
@@ -605,8 +599,7 @@ AC_CHECK_FUNC(getmntent,
 # AC_FUNC_GETPGRP
 # ---------------
 AC_DEFUN([AC_FUNC_GETPGRP],
-[AC_CHECK_HEADERS(sys/types.h)
-AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
+[AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[
 /*
  * If this system has a BSD-style getpgrp(),
@@ -615,9 +608,7 @@ AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
  * Snarfed from Chet Ramey's bash pgrp.c test program
  */
 #include <stdio.h>
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+#include <sys/types.h>
 
 int     pid;
 int     pg1, pg2, pg3, pg4;
@@ -945,7 +936,7 @@ fi
 # AC_FUNC_MMAP
 # ------------
 AC_DEFUN([AC_FUNC_MMAP],
-[AC_CHECK_HEADERS(sys/types.h sys/stat.h stdlib.h unistd.h)
+[AC_CHECK_HEADERS(stdlib.h unistd.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
@@ -970,10 +961,7 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
    The main things grep needs to know about mmap are:
    * does it exist and is it safe to write into the mmap'd area
    * how to use it (BSD variants)  */
-
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+#include <sys/types.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 
@@ -985,9 +973,7 @@ char *malloc ();
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
+#include <sys/stat.h>
 
 /* This mess was copied from the GNU getpagesize.h.  */
 #if !HAVE_GETPAGESIZE
@@ -1129,17 +1115,14 @@ fi
 # function's arguments, and define those types in `SELECT_TYPE_ARG1',
 # `SELECT_TYPE_ARG234', and `SELECT_TYPE_ARG5'.
 AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
-[AC_REQUIRE([AC_HEADER_TIME])dnl
-AC_CHECK_HEADERS(sys/types.h sys/select.h sys/socket.h)
+[AC_CHECK_HEADERS(sys/select.h sys/socket.h)
 AC_CACHE_CHECK([types of arguments for select],
 [ac_cv_func_select_args],
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
  for ac_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
   for ac_arg5 in 'struct timeval *' 'const struct timeval *'; do
    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-[#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+[#include <sys/types.h>
 #if HAVE_SYS_TIME_H
 # include <sys/time.h>
 #endif
@@ -1204,17 +1187,12 @@ fi
 # HAVE_LSTAT_EMPTY_STRING_BUG) and arrange to compile the wrapper
 # function.
 m4_define([_AC_FUNC_STAT],
-[AC_CHECK_HEADERS(sys/types.h sys/stat.h)
-AC_REQUIRE([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])dnl
+[AC_REQUIRE([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])dnl
 AC_CACHE_CHECK([whether $1 accepts an empty string],
                [ac_cv_func_$1_empty_string_bug],
 [AC_TRY_RUN(
-[#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
+[#include <sys/types.h>
+#include <sys/stat.h>
 
 int
 main ()
@@ -1433,18 +1411,12 @@ AU_ALIAS([AC_STRCOLL], [AC_FUNC_STRCOLL])
 # AC_FUNC_UTIME_NULL
 # ------------------
 AC_DEFUN([AC_FUNC_UTIME_NULL],
-[AC_CHECK_HEADERS(sys/types.h sys/stat.h)
-AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
+[AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftest.data; >conftest.data
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
 AC_TRY_RUN(
-[#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
-
+[#include <sys/types.h>
+#include <sys/stat.h>
 int
 main ()
 {
@@ -1475,16 +1447,12 @@ AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 # -------------
 AC_DEFUN([AC_FUNC_VFORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADERS(sys/types.h sys/stat.h unistd.h vfork.h)
+AC_CHECK_HEADERS(unistd.h vfork.h)
 AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
+#include <sys/types.h>
+#include <sys/stat.h>
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
@@ -1610,16 +1578,12 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 # AC_FUNC_WAIT3
 # -------------
 AC_DEFUN([AC_FUNC_WAIT3],
-[AC_CHECK_HEADERS(sys/types.h)
-AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
+[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
 [AC_TRY_RUN(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+[#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
-
+#include <stdio.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
 int
 main ()

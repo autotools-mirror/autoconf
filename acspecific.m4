@@ -294,13 +294,10 @@ Remove this warning when you adjust the code.])])
 # AC_DECL_SYS_SIGLIST
 # -------------------
 AC_DEFUN([AC_DECL_SYS_SIGLIST],
-[AC_CHECK_HEADERS(sys/types.h unistd.h)
-AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
-               ac_cv_decl_sys_siglist,
+[AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
+  ac_cv_decl_sys_siglist,
 [AC_COMPILE_IFELSE(
-[AC_LANG_PROGRAM([#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+[AC_LANG_PROGRAM([#include <sys/types.h>
 #include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #if HAVE_UNISTD_H
@@ -498,16 +495,14 @@ fi
 # interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
 [AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
-AC_CHECK_HEADERS(sys/types.h unistd.h)
+AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [/* Exit 0 (true) if wait returns something other than -1,
    i.e. the pid of the child, which means that wait was restarted
    after getting the signal.  */
 
-#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
+#include <sys/types.h>
 #include <signal.h>
 #if HAVE_UNISTD_H
 # include <unistd.h>
@@ -558,14 +553,9 @@ fi
 # AC_SYS_POSIX_TERMIOS
 # --------------------
 AC_DEFUN([AC_SYS_POSIX_TERMIOS],
-[AC_CHECK_HEADERS(sys/types.h unistd.h)
-AC_CACHE_CHECK([POSIX termios], ac_cv_sys_posix_termios,
-[AC_TRY_LINK([#if HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
-#if HAVE_UNISTD_H
-# include <unistd.h>
-#endif
+[AC_CACHE_CHECK([POSIX termios], ac_cv_sys_posix_termios,
+[AC_TRY_LINK([#include <sys/types.h>
+#include <unistd.h>
 @%:@include <termios.h>],
              [/* SunOS 4.0.3 has termios.h but not the library calls.  */
    tcgetattr(0, 0);],
