@@ -1,4 +1,8 @@
-* Major changes in Autoconf 2.57b                       -*- outline -*-
+* Major changes in Autoconf 2.57c                       -*- outline -*-
+
+* Major changes in Autoconf 2.57b
+
+  Released 2003-08-24, by Akim Demaille.
 
 ** Autotest and local.at
   The optional file local.at is always included in Autotest test suites.

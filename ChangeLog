@@ -1,3 +1,7 @@
+2003-08-24  Akim Demaille  <akim@epita.fr>
+
+	* configure.ac: Bump to 2.57c.
+
 2003-08-22  Akim Demaille  <akim@epita.fr>
 
 	Version 2.57b.
