@@ -9586,7 +9586,7 @@ understanding how to move to more modern constructs.
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
-* Autoconf 2.13::
+* Autoconf 2.13::               Some fresher tips
 @end menu
 
 @node Obsolete config.status Use, acconfig.h, Obsolete Constructs, Obsolete Constructs

@@ -29,7 +29,7 @@ changelog-check:
 	if head ChangeLog | grep 'Version $(VERSION)' >/dev/null; then \
 	  :; \
 	else \
-	  echo "$(VERSION) not in ChangeLog; not tagging" 1>&2; \
+	  echo "$(VERSION) not in ChangeLog" 1>&2; \
 	  exit 1; \
 	fi
 
@@ -56,8 +56,28 @@ writable-files:
 	done;								\
 	test "$$fail" && exit 1 || :
 
-static-check: changelog-check po-check writable-files check-copyright
+# Checks that don't require cvs.
+local-check: changelog-check po-check writable-files check-copyright
 
+
+# Sanity checks with the CVS repository.
+cvs-tag-check:
+	echo $(this-cvs-tag); \
+	if cvs -n log -h README | grep -e $(this-cvs-tag): >/dev/null; then \
+	  echo "$(this-cvs-tag) as already been used; not tagging" 1>&2; \
+	  exit 1; \
+	else :; fi
+
+cvs-diff-check:
+	if cvs diff >cvs-diffs; then			  	\
+	  rm cvs-diffs;					  	\
+	else						  	\
+	  echo "Some files are locally modified:" 1>&2;  	\
+	  cat cvs-diffs;					\
+	  exit 1;						\
+	fi
+
+cvs-check: cvs-diff-check cvs-tag-check
 
 maintainer-distcheck: changelog-check
 	$(MAKE) distcheck
@@ -73,13 +93,8 @@ AMTAR ?= $(TAR)
 # Tag before making distribution.  Also, don't make a distribution if
 # checks fail.  Also, make sure the NEWS file is up-to-date.
 # FIXME: use dist-hook/my-dist like distcheck-hook/my-distcheck.
-cvs-dist: maintainer-distcheck
-	echo $(this-cvs-tag); \
-	if cvs -n log -h README| grep -e $(this-cvs-tag): > /dev/null; then \
-	  echo "VERSION not new; not tagging" 1>&2; \
-	  exit 1; \
-	fi; \
-	cvs update po; \
+cvs-dist: cvs-check maintainer-distcheck
+	cvs update po
 	cvs tag -c $(this-cvs-tag)
 	$(MAKE) dist
 
@@ -235,7 +250,7 @@ check-copyright:
 alpha: static-check
 	$(MAKE) cvs-dist
 	$(MAKE) -s announcement > /tmp/announce-$(my_distdir)
-	ln $(distdir).tar.gz ../release
+	ln $(distdir).tar.gz $(release-archive-dir)
 	chmod a-w $(distdir).tar.gz
 	cd $(release-archive-dir) \
 	  && xdelta delta -9 $(prev-tgz) $(distdir).tar.gz $(xd-delta) || :
