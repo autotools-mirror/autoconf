@@ -47,15 +47,15 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
 # the macros we don't want to test in syntax.m4.
 #
-# - AC_CHECK decl, file, func, header, member, prog, sizeof, type
+# - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
 # - AC_CONFIG
 #   They fail when the source does not exist.
 # - AC_INIT
 #   AC_INIT includes all the AC_INIT macros.  Note that there is an
 #   infinite m4 recursion if AC_INIT it used twice.
-# - AC_LANG
-#   Requires an argument.
+# - AC_LANG*
+#   Heavily used by other macros.
 # - AC_PROG_(CC|CXX|F77)_(GNU|WORKS)
 #   are used in AC_PROG_CC etc.
 # - AC_PATH_PROGS?
@@ -70,7 +70,7 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # We use the fact that automake will replace all the `\\\n' with ` '.
 FILTER_MACROS = egrep -v -e \
 `echo '^AC_ARG_VAR$$\
-^AC_CHECK_(DECL|FILE|FUNC|HEADER|MEMBER|PROG|SIZEOF|TYPE)S?$$\
+^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TYPE)S?$$\
 ^AC_CONFIG\
 ^AC_INIT\
 ^AC_LANG\

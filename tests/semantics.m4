@@ -7,11 +7,29 @@ Semantics.
 EOF
 
 
+# AC_TRY_LINK_FUNC
+# ----------------
+AT_TEST_MACRO(AC_TRY_LINK_FUNC,
+[AC_TRY_LINK_FUNC(exit,, exit 1)
+AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
+                 exit 1)])
 
-dnl AC_CHECK_DECLS
-dnl --------------
-dnl Check that it performs the correct actions:
-dnl Must define NEED_NO_DECL, but not NEED_YES_DECL.
+
+# AC_CHECK_LIB
+# ------------
+# Well, I can't imagine a system where `cos' is neither in libc, nor
+# in libm.  Nor can I imagine a lib more likely to exists than libm.
+# But there are system without libm, on which we don't want to have
+# this test fail, so exit successfully if `cos' is in libc.
+AT_TEST_MACRO(AC_CHECK_LIB,
+[AC_TRY_LINK_FUNC(cos, exit 0)
+AC_CHECK_LIB(m, cos,, exit 1)])
+
+
+# AC_CHECK_DECLS
+# --------------
+# Check that it performs the correct actions:
+# Must define NEED_NO_DECL, but not NEED_YES_DECL.
 AT_TEST_MACRO(AC_CHECK_DECLS,
 [AC_CHECK_DECLS((yes, no),,,
                 [int yes = 1;])],
@@ -21,10 +39,10 @@ AT_TEST_MACRO(AC_CHECK_DECLS,
 ])])
 
 
-dnl AC_CHECK_FUNCS
-dnl --------------
-dnl Check that it performs the correct actions:
-dnl Must define HAVE_EXIT, but not HAVE_AUTOCONF_TIXE
+# AC_CHECK_FUNCS
+# --------------
+# Check that it performs the correct actions:
+# Must define HAVE_EXIT, but not HAVE_AUTOCONF_TIXE
 AT_TEST_MACRO(AC_CHECK_FUNCS,
 [AC_CHECK_FUNCS(exit autoconf_tixe)],
 [AT_CHECK_DEFINES(
@@ -34,10 +52,10 @@ AT_TEST_MACRO(AC_CHECK_FUNCS,
 
 
 
-dnl AC_CHECK_HEADERS
-dnl ----------------
-dnl Check that it performs the correct actions:
-dnl Must define HAVE_STDIO_H, but not HAVE_AUTOCONF_IO_H.
+# AC_CHECK_HEADERS
+# ----------------
+# Check that it performs the correct actions:
+# Must define HAVE_STDIO_H, but not HAVE_AUTOCONF_IO_H.
 AT_TEST_MACRO(AC_CHECK_HEADERS,
 [AC_CHECK_HEADERS(stdio.h autoconf_io.h)],
 [AT_CHECK_DEFINES(
@@ -47,10 +65,10 @@ AT_TEST_MACRO(AC_CHECK_HEADERS,
 
 
 
-dnl AC_CHECK_MEMBERS
-dnl ----------------
-dnl Check that it performs the correct actions.
-dnl Must define HAVE_STRUCT_YES_YES, but not HAVE_STRUCT_YES_NO.
+# AC_CHECK_MEMBERS
+# ----------------
+# Check that it performs the correct actions.
+# Must define HAVE_STRUCT_YES_YES, but not HAVE_STRUCT_YES_NO.
 AT_TEST_MACRO(AC_CHECK_MEMBERS,
 [AC_CHECK_MEMBERS((struct yes.yes, struct yes.no),,,
                   [struct yes { int yes ;} ;])],
@@ -61,12 +79,12 @@ AT_TEST_MACRO(AC_CHECK_MEMBERS,
 
 
 
-dnl AC_CHECK_SIZEOF
-dnl --------------
-dnl Check that it performs the correct actions.
-dnl Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
-dnl `int' and `struct yes' are both checked to test both the compiler
-dnl builtin types, and defined types.
+# AC_CHECK_SIZEOF
+# --------------
+# Check that it performs the correct actions.
+# Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
+# `int' and `struct yes' are both checked to test both the compiler
+# builtin types, and defined types.
 AT_TEST_MACRO(AC_CHECK_SIZEOF,
 [AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
@@ -83,12 +101,12 @@ typedef struct
 
 
 
-dnl AC_CHECK_TYPES
-dnl --------------
-dnl Check that it performs the correct actions.
-dnl Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
-dnl `int' and `struct yes' are both checked to test both the compiler
-dnl builtin types, and defined types.
+# AC_CHECK_TYPES
+# --------------
+# Check that it performs the correct actions.
+# Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
+# `int' and `struct yes' are both checked to test both the compiler
+# builtin types, and defined types.
 AT_TEST_MACRO(AC_CHECK_TYPES,
 [AC_CHECK_TYPES((int, struct yes, struct no),,,
                 [struct yes { int yes ;} ;])],
@@ -99,10 +117,10 @@ AT_TEST_MACRO(AC_CHECK_TYPES,
 ])])
 
 
-dnl AC_CHECK_TYPES
-dnl --------------
-dnl Check that we properly dispatch properly to the old implementation
-dnl or to the new one.
+# AC_CHECK_TYPES
+# --------------
+# Check that we properly dispatch properly to the old implementation
+# or to the new one.
 AT_SETUP([AC_CHECK_TYPES])
 
 AT_DATA(configure.in,
@@ -114,7 +132,7 @@ AC_CHECK_TYPE(ptrdiff_t)
 AC_CHECK_TYPE(ptrdiff_t, int)
 AC_CHECK_TYPE(quad, long long)
 AC_CHECK_TYPE(table_42, [int[42]])
-dnl Nice machine!
+# Nice machine!
 AC_CHECK_TYPE(uint8_t, uint65536_t)
 AC_CHECK_TYPE(a,b,c,d)
 #to-here)
@@ -138,10 +156,10 @@ AT_CLEANUP(autoconf.err)
 
 
 
-dnl AC_CHECK_FILES
-dnl --------------
-dnl FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
-dnl open AH_TEMPLATE to `configure.in', which is not yet the case.
+# AC_CHECK_FILES
+# --------------
+# FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
+# open AH_TEMPLATE to `configure.in', which is not yet the case.
 AT_TEST_MACRO(AC_CHECK_FILES,
 [touch ac-exists1 ac-exists2
 ac_exists2=ac-exists2
