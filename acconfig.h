@@ -115,9 +115,6 @@
    tzname.  */
 #undef HAVE_TZNAME
 
-/* Define if `union wait' is the type of the first arg to wait functions.  */
-#undef HAVE_UNION_WAIT
-
 /* Define if you have <unistd.h>.  */
 #undef HAVE_UNISTD_H
 
