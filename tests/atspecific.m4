@@ -128,8 +128,8 @@ AT_CHECK_ENV
 ])# _AT_CHECK_AC_MACRO
 
 
-# AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
-# -----------------------------------------------------
+# AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS], [AUTOCONF-FLAGS])
+# -----------------------------------------------------------------------
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
@@ -141,7 +141,7 @@ m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
 AT_CONFIGURE_AC([m4_default([$2], [$1])])
 
-AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOCONF([m4_default([$4], [-W obsolete])])
 AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
 AT_CHECK_ENV

@@ -369,3 +369,12 @@ AT_CHECK_DEFINES(
 ])
 
 AT_CLEANUP
+
+
+## ------------------------------- ##
+## Obsolete non-updatable macros.  ##
+## ------------------------------- ##
+
+
+AT_CHECK_MACRO([AC_SYS_RESTARTABLE_SYSCALLS], , ,[-W no-obsolete])
+AT_CHECK_MACRO([AC_FUNC_WAIT3], , ,[-W no-obsolete])

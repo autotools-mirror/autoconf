@@ -107,6 +107,8 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 #   AU defined to nothing.
 # - AC_PATH_XTRA
 #   Checked in semantics.
+# - AC_SYS_RESTARTABLE_SYSCALLS, AC_FUNC_WAIT3
+#   Obsolete, checked in semantics.
 #
 ac_exclude_list='^AC_ARG_VAR$
 ^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
@@ -128,6 +130,8 @@ ac_exclude_list='^AC_ARG_VAR$
 ^(AC_(PROG_CC|C_CONST|C_INLINE|C_VOLATILE))$
 ^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$
 ^AC_PATH_XTRA$
+^AC_SYS_RESTARTABLE_SYSCALLS$
+^AC_FUNC_WAIT3$
 _AC_'
 
 
