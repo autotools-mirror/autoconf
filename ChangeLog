@@ -1,3 +1,13 @@
+2000-07-28  Akim Demaille  <akim@epita.fr>
+
+	* aclang.m4 (_AC_PROG_CC_GNU, _AC_PROG_CXX_GNU,
+	_AC_PROG_F77_GNU): Use ac_ext.  Use ACEOF instead of EOF.
+	(AC_LANG_CONFTEST): New macro.
+	(_AC_PROG_CC_G, AC_PROG_CC_C_O, _AC_PROG_CXX_G, AC_PROG_F77_C_O,
+	_AC_PROG_F77_V_OUTPUT): Use it.
+	* acgeneral.m4 (AC_TRY_CPP, AC_EGREP_CPP, AC_COMPILE_IFELSE,
+	AC_LINK_IFELSE, AC_RUN_IFELSE): Likewise.
+
 2000-07-24  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_F77_FUNC): New macro to give the user a clean

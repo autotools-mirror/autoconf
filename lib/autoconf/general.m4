@@ -3162,13 +3162,11 @@ popdef([AC_Lib_Name])dnl
 # INCLUDES are not defaulted.
 AC_DEFUN([AC_TRY_CPP],
 [AC_REQUIRE_CPP()dnl
-cat >conftest.$ac_ext <<EOF
-AC_LANG_SOURCE([[$1]])
-EOF
-dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
-dnl We used to copy stderr to stdout and capture it in a variable, but
-dnl that breaks under sh -x, which writes compile commands starting
-dnl with ` +' to stderr in eval and subshells.
+AC_LANG_CONFTEST([AC_LANG_SOURCE([[$1]])])
+# Capture the stderr of cpp.  eval is necessary to expand ac_cpp.  We
+# used to copy stderr to stdout and capture it in a variable, but that
+# breaks under sh -x, which writes compile commands starting with ` +'
+# to stderr in eval and subshells.
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 AC_TRY_EVAL(ac_try)
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
@@ -3199,9 +3197,7 @@ AC_DEFUN([AC_EGREP_HEADER],
 # come early, it is not included in AC_BEFORE checks.
 AC_DEFUN([AC_EGREP_CPP],
 [AC_REQUIRE_CPP()dnl
-cat >conftest.$ac_ext <<EOF
-AC_LANG_SOURCE([[$2]])
-EOF
+AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 if (eval "$ac_cpp conftest.$ac_ext") 2>&AC_FD_LOG |
@@ -3228,9 +3224,7 @@ rm -f conftest*
 # --------------------------------------------------------------------
 # Try to compile PROGRAM.
 AC_DEFUN([AC_COMPILE_IFELSE],
-[cat >conftest.$ac_ext <<EOF
-$1
-EOF
+[AC_LANG_CONFTEST([$1])
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
@@ -3261,9 +3255,7 @@ AC_DEFUN([AC_TRY_COMPILE],
 # -----------------------------------------------------------------
 # Try to link PROGRAM.
 AC_DEFUN([AC_LINK_IFELSE],
-[cat >conftest.$ac_ext <<EOF
-$1
-EOF
+[AC_LANG_CONFTEST([$1])
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
@@ -3312,9 +3304,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # -----------------------------------------------------------
 # Compile, link, and run.
 AC_DEFUN([AC_RUN_IFELSE],
-[cat >conftest.$ac_ext <<EOF
-$1
-EOF
+[AC_LANG_CONFTEST([$1])
 if AC_TRY_EVAL(ac_link) &&
    test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null; then
   m4_default([$2], :)

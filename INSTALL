@@ -13,8 +13,8 @@ file `config.log' containing compiler output (useful mainly for
 debugging `configure').
 
    It can also use an optional file (typically called `config.cache'
-and enabled with `--cache-file=./config.cache' or simply `-C') that
-saves the results of its tests to speed up reconfiguring.  (Caching is
+and enabled with `--cache-file=config.cache' or simply `-C') that saves
+the results of its tests to speed up reconfiguring.  (Caching is
 disabled by default to prevent problems with accidental use of stale
 cache files.)
 
@@ -133,7 +133,7 @@ Specifying the System Type
 automatically, but needs to determine by the type of host the package
 will run on.  Usually `configure' can figure that out, but if it prints
 a message saying it cannot guess the host type, give it the
-`--host=TYPE' option.  TYPE can either be a short name for the system
+`--build=TYPE' option.  TYPE can either be a short name for the system
 type, such as `sun4', or a canonical name which has the form:
 
      CPU-COMPANY-SYSTEM
@@ -147,9 +147,18 @@ where SYSTEM can have one of these forms:
 `config.sub' isn't included in this package, then this package doesn't
 need to know the host type.
 
-   If you are building compiler tools for cross-compiling, you can also
-use the `--target=TYPE' option to select the type of system they will
-produce code for.
+   If you are _building_ compiler tools for cross-compiling, you can
+also use the `--target=TYPE' option to select the type of system they
+will produce code for.
+
+   If you want to _use_ a cross compiler, that generates code for a
+platform different from the build platform, you should specify the host
+platform (i.e., that on which the generated programs will eventually be
+run) with `--host=TYPE'.  In this case, you should also specify the
+build platform with `--build=TYPE', because, in this case, it may not
+be possible to guess the build platform (it sometimes involves
+compiling and running simple test programs, and this can't be done if
+the compiler is a cross compiler).
 
 Sharing Defaults
 ================
@@ -193,7 +202,7 @@ operates.
 
 `--cache-file=FILE'
      Enable the cache: use and save the results of the tests in FILE,
-     traditionally `./config.cache'.  FILE defaults to `/dev/null' to
+     traditionally `config.cache'.  FILE defaults to `/dev/null' to
      disable caching.
 
 `--config-cache'

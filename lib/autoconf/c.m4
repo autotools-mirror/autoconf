@@ -168,7 +168,7 @@ define([AC_LANG(C)],
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_link='${CC-cc} -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gcc
 ])
 
@@ -191,7 +191,7 @@ define([AC_LANG(C++)],
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_link='${CXX-g++} -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_gxx
 ])
 
@@ -212,7 +212,7 @@ AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 define([AC_LANG(Fortran 77)],
 [ac_ext=f
 ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext >&AC_FD_LOG'
-ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
+ac_link='${F77-f77} -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AC_FD_LOG'
 ac_gnu_compiler=$ac_cv_prog_g77
 ])
 
@@ -230,14 +230,26 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(Fortran 77)])
 ## 2.Producing programs.  ##
 ## ---------------------- ##
 
+
 # ---------------------- #
 # 2a. Generic routines.  #
 # ---------------------- #
 
+
+# AC_LANG_CONFTEST(BODY)
+# ---------------------
+# Save the BODY in `conftest.$acext'.  Add a trailing new line.
+define([AC_LANG_CONFTEST],
+[cat >conftest.$ac_ext <<ACEOF
+$1
+ACEOF])
+
+
 # AC_LANG_SOURCE(BODY)
 # --------------------
 # Produce a valid source for the current language, which includes the
-# BODY.  Include the `#line' sync lines.
+# BODY, and as much as possible `confdefs.h' and the `#line' sync
+# lines.
 AC_DEFUN([AC_LANG_SOURCE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
@@ -574,12 +586,12 @@ AC_LANG_POP
 define([_AC_PROG_CC_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.c <<EOF
+cat >conftest.$ac_ext <<ACEOF
 #ifdef __GNUC__
   yes;
 #endif
-EOF
-if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
+ACEOF
+if AC_TRY_COMMAND(${CC-cc} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -603,8 +615,8 @@ define([_AC_PROG_CC_G],
 ac_save_CFLAGS=$CFLAGS
 CFLAGS=
 AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
-[echo 'void f(){}' >conftest.c
-if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
+if test -z "`${CC-cc} -g -c conftest.$ac_ext 2>&1`"; then
   ac_cv_prog_cc_g=yes
 else
   ac_cv_prog_cc_g=no
@@ -666,21 +678,21 @@ fi
 set dummy $CC; ac_cc=`echo $[2] |
 		      sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
-[echo 'foo(){}' >conftest.c
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='${CC-cc} -c conftest.c -o conftest.o >&AC_FD_LOG'
+ac_try='${CC-cc} -c conftest.$ac_ext -o conftest.$objext >&AC_FD_LOG'
 if AC_TRY_EVAL(ac_try) &&
-   test -f conftest.o && AC_TRY_EVAL(ac_try);
+   test -f conftest.$objext && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if AC_TRY_COMMAND(cc -c conftest.c >&AC_FD_LOG); then
-      ac_try='cc -c conftest.c -o conftest.o >&AC_FD_LOG'
+    if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AC_FD_LOG); then
+      ac_try='cc -c conftest.$ac_ext -o conftest.$ac_objext >&AC_FD_LOG'
       if AC_TRY_EVAL(ac_try) &&
-	 test -f conftest.o && AC_TRY_EVAL(ac_try);
+	 test -f conftest.$objext && AC_TRY_EVAL(ac_try);
       then
         # cc works too.
         :
@@ -766,12 +778,12 @@ AC_LANG_POP
 define([_AC_PROG_CXX_GNU],
 [AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [# The semicolon is to pacify NeXT's syntax-checking cpp.
-cat >conftest.cc <<EOF
+cat >conftest.$ac_ext <<ACEOF
 #ifdef __GNUC__
   yes;
 #endif
-EOF
-if AC_TRY_COMMAND(${CXX-g++} -E conftest.cc) | egrep yes >/dev/null 2>&1; then
+ACEOF
+if AC_TRY_COMMAND(${CXX-g++} -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
@@ -795,8 +807,8 @@ define([_AC_PROG_CXX_G],
 ac_save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS=
 AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
-[echo 'void f(){}' >conftest.cc
-if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
+if test -z "`${CXX-g++} -g -c conftest.$ac_ext 2>&1`"; then
   ac_cv_prog_cxx_g=yes
 else
   ac_cv_prog_cxx_g=no
@@ -868,12 +880,12 @@ AC_LANG_POP
 # do CPP pre-processing.
 define([_AC_PROG_F77_GNU],
 [AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
-[cat >conftest.f <<EOF
+[cat >conftest.$ac_ext <<ACEOF
 #ifdef __GNUC__
   yes
 #endif
-EOF
-if AC_TRY_COMMAND($F77 -E conftest.f) | egrep yes >/dev/null 2>&1; then
+ACEOF
+if AC_TRY_COMMAND($F77 -E conftest.$ac_ext) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no
@@ -932,14 +944,12 @@ AC_DEFUN([AC_PROG_F77_C_O],
 [AC_REQUIRE([AC_PROG_F77])dnl
 AC_CACHE_CHECK([whether $F77 understand -c and -o together],
                [ac_cv_prog_f77_c_o],
-[cat >conftest.f <<EOF
-AC_LANG_PROGRAM([])
-EOF
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
-ac_try='$F77 $FFLAGS -c conftest.f -o conftest.o >&AC_FD_LOG'
-if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
+ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest.$objext >&AC_FD_LOG'
+if AC_TRY_EVAL(ac_try) && test -f conftest.$objext && AC_TRY_EVAL(ac_try); then
   ac_cv_prog_f77_c_o=yes
 else
   ac_cv_prog_f77_c_o=no
@@ -1309,9 +1319,7 @@ AC_DEFUN([_AC_PROG_F77_V_OUTPUT],
 [AC_REQUIRE([AC_PROG_F77])dnl
 AC_LANG_PUSH(Fortran 77)
 
-cat >conftest.$ac_ext <<EOF
-AC_LANG_PROGRAM()
-EOF
+AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 
 # Compile and link our simple test program by passing a flag
 # (argument 1 to this macro) to the Fortran 77 compiler in
