@@ -1,5 +1,24 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	Create libm4.m4.
+
+	* Makefile.am: Adjusted for libm4.m4.
+
+	* acgeneral.m4 (m4_errprint, m4_warn, m4_fatal, m4_prefix,
+	m4_eval, m4_shift, m4_format, m4_include_unique, m4_include,
+	m4_sinclude, m4_quote, m4_split, m4_join, m4_strip, m4_append,
+	m4_list_append, ifval, ifset, m4_default, m4_case, m4_match,
+	m4_foreach): Moved from here, to...
+	* libm4.m4: here.
+	* acgeneral.m4 (AC_WRAP): Moved from here, to...
+	* libm4.m4 (m4_wrap): here.  All callers changed.
+
+	* acgeneral.m4: Don't include acversion.m4.
+	* autoconf.m4: Include libm4.m4 and acversion.m4.
+	* autoheader.m4: Likewise.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	AC_CHECK_SIZEOF: Fix a bug, use standard default headers, and
 	test.
 

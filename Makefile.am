@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in.
 
 ## Makefile for Autoconf.
-## Copyright (C) 1999 Free Software Foundation, Inc.
+## Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ EXTRA_SCRIPTS = autoscan
 
 distpkgdataDATA = \
 acfunctions acheaders acidentifiers acmakevars acprograms \
-acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
+libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4
 
 nodistpkgdataDATA = autoconf.m4f autoheader.m4f acversion.m4
 
@@ -95,13 +95,12 @@ editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' \
 .m4.m4f:
 	@case `$(M4) --help </dev/null 2>&1` in \
 	*reload-state*) echo freezing $*.m4; \
-	  $(M4) -F $*.m4f -I${srcdir} ${srcdir}/$*.m4 ;; \
-	*traditional*) ;; \
-	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
+	  $(M4) -F $*.m4f -I$(srcdir) $(srcdir)/$*.m4 ;; \
+	*) echo Error: Autoconf requires GNU m4 1.4 or later; exit 1 ;; \
 	esac
 
-autoconf.m4f: autoconf.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
-autoheader.m4f: autoheader.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
+autoconf.m4f: autoconf.m4 libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
+autoheader.m4f: autoheader.m4 libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
 
 
 # The documentation

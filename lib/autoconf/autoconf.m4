@@ -20,9 +20,11 @@ dnl 02111-1307, USA.
 dnl
 dnl Written by David MacKenzie.
 dnl
-include(acgeneral.m4)dnl
-builtin(include, acspecific.m4)dnl
-builtin(include, acoldnames.m4)dnl
+include(libm4.m4)dnl
+m4_include(acversion.m4)dnl
+m4_include(acgeneral.m4)dnl
+m4_include(acspecific.m4)dnl
+m4_include(acoldnames.m4)dnl
 dnl Do not sinclude acsite.m4 here, because it may not be installed
 dnl yet when Autoconf is frozen.
 dnl Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.

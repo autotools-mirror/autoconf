@@ -19,7 +19,9 @@ dnl 02111-1307, USA.
 dnl
 dnl Written by Roland McGrath.
 dnl
-include(acgeneral.m4)dnl
+include(libm4.m4)dnl
+m4_include(acversion.m4)dnl
+m4_include(acgeneral.m4)dnl
 m4_include(acspecific.m4)dnl
 m4_include(acoldnames.m4)dnl
 
@@ -111,7 +113,7 @@ dnl Issue an autoheader template for KEY, i.e., a comment composed
 dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
-             AC_WRAP([$2 */], [   ], [/* ])[
+             m4_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
 
 
