@@ -1,5 +1,13 @@
 2003-05-22  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Replace AC_HELP_STRING AS_HELP_STRING.
+	Add AC_HELP_STRING  to the obsolete macros section.
+	Typos.
+	Use '@.' for sentences that ended in a capital letter.
+	From Art Haas.
+
+2003-05-22  Akim Demaille  <akim@epita.fr>
+
 	* config/config.guess, config/config.sub, config/elisp-comp,
 	* config/install-sh, config/mdate-sh, config/mkinstalldirs,
 	* config/texinfo.tex, doc/standards.texi: Update from masters.

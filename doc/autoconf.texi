@@ -5563,7 +5563,7 @@ unless one wants to change the default actions.
 As discussed above for @code{AC_F77_DUMMY_MAIN}, many Fortran libraries
 allow you to provide an entry point called (say) @code{MAIN__} instead of
 the usual @code{main}, which is then called by a @code{main} function in
-the Fortran libraries that initializes things like Fortran I/O.  The
+the Fortran libraries that initializes things like Fortran I/O@.  The
 @code{AC_F77_MAIN} macro detects whether it is @emph{possible} to
 utilize such an alternate main function, and defines @code{F77_MAIN} to
 the name of the function.  (If no alternate main function name is found,
@@ -6191,7 +6191,7 @@ OK
 
 The macro @code{AC_TRY_CPP} (@pxref{Obsolete Macros}) used to play the
 role of @code{AC_PREPROC_IFELSE}, but double quotes its argument, making
-it impossible to use it to ellaborate sources.  You are encouraged to
+it impossible to use it to elaborate sources.  You are encouraged to
 get rid of your old use of the macro @code{AC_TRY_CPP} in favor of
 @code{AC_PREPROC_IFELSE}, but, in the first place, are you sure you need
 to run the @emph{preprocessor} and not the compiler?
@@ -6362,7 +6362,7 @@ contains a lot of interesting crossed information on various Unices.
 @table @asis
 @item Darwin
 @cindex Darwin
-Darwin is also known as Mac OS X.  Beware that the file system @emph{can} be
+Darwin is also known as Mac OS X@.  Beware that the file system @emph{can} be
 case-preserving, but case insensitive.  This can cause nasty problems,
 since for instance the installation attempt for a package having an
 @file{INSTALL} file can result in @samp{make install} report that
@@ -6371,7 +6371,7 @@ nothing was to be done!
 That's all dependent on whether the file system is a UFS (case
 sensitive) or HFS+ (case preserving).  By default Apple wants you to
 install the OS on HFS+.  Unfortunately, there are some pieces of
-software which really need to be built on UFS.  We may want to rebuild
+software which really need to be built on UFS@.  We may want to rebuild
 Darwin to have both UFS and HFS+ available (and put the /local/build
 tree on the UFS).
 
@@ -9158,7 +9158,7 @@ like Digital Unix 5.0.
 
 The traditional way to work around this portability problem is to use
 @samp{$@{1+"$@@"@}}.  Unfortunately this method does not work with
-Zsh (3.x and 4.x), which is used on Mac OS X.  When emulating
+Zsh (3.x and 4.x), which is used on Mac OS X@.  When emulating
 the Bourne shell, Zsh performs word splitting on @samp{$@{1+"$@@"@}}:
 
 @example
@@ -10315,7 +10315,7 @@ bar
 
 @noindent
 Either do not depend on such patterns (i.e., use @samp{/^(.*foo|bar)/},
-or use a simple test to reject such AWK.
+or use a simple test to reject such AWK@.
 
 
 @item @command{cat}
@@ -11883,7 +11883,7 @@ help string in @samp{[} and @samp{]} in order to produce the leading
 spaces.
 
 You should format your @var{help-string} with the macro
-@code{AC_HELP_STRING} (@pxref{Pretty Help Strings}).
+@code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
 @end defmac
 
 @defmac AC_WITH (@var{package}, @var{action-if-given}, @ovar{action-if-not-given})
@@ -11951,7 +11951,7 @@ actually just the value of the shell variable
 (@pxref{External Software}).
 
 You should format your @var{help-string} with the macro
-@code{AC_HELP_STRING} (@pxref{Pretty Help Strings}).
+@code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
 @end defmac
 
 @defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @ovar{action-if-not-given})
@@ -11969,9 +11969,9 @@ Properly formatting the @samp{help strings} which are used in
 (@pxref{Package Options}) can be challenging.  Specifically, you want
 your own @samp{help strings} to line up in the appropriate columns of
 @samp{configure --help} just like the standard Autoconf @samp{help
-strings} do.  This is the purpose of the @code{AC_HELP_STRING} macro.
+strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
 
-@defmac AC_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
+@defmac AS_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
 @acindex{HELP_STRING}
 
 Expands into an help string that looks pretty when the user executes
@@ -11982,14 +11982,14 @@ Options}).  The following example will make this clearer.
 @example
 AC_DEFUN([TEST_MACRO],
 [AC_ARG_WITH([foo],
-	     AC_HELP_STRING([--with-foo],
+	     AS_HELP_STRING([--with-foo],
 			    [use foo (default is NO)]),
 	     [ac_cv_use_foo=$withval], [ac_cv_use_foo=no])
 AC_CACHE_CHECK([whether to use foo],
 	       [ac_cv_use_foo], [ac_cv_use_foo=no])])
 @end example
 
-Please note that the call to @code{AC_HELP_STRING} is @strong{unquoted}.
+Please note that the call to @code{AS_HELP_STRING} is @strong{unquoted}.
 Then the last few lines of @samp{configure --help} will appear like
 this:
 
@@ -11998,14 +11998,14 @@ this:
   --with-foo              use foo (default is NO)
 @end example
 
-The @code{AC_HELP_STRING} macro is particularly helpful when the
+The @code{AS_HELP_STRING} macro is particularly helpful when the
 @var{left-hand-side} and/or @var{right-hand-side} are composed of macro
 arguments, as shown in the following example.
 
 @example
 AC_DEFUN(MY_ARG_WITH,
 [AC_ARG_WITH([$1],
-	     AC_HELP_STRING([--with-$1], [use $1 (default is $2)]),
+	     AS_HELP_STRING([--with-$1], [use $1 (default is $2)]),
 	     ac_cv_use_$1=$withval, ac_cv_use_$1=no),
 AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 @end example
@@ -12821,7 +12821,7 @@ If @code{wait3} is found and fills in the contents of its third argument
 
 These days portable programs should use @code{waitpid}, not
 @code{wait3}, as @code{wait3} is being removed from the Open Group
-standards, and will not appear in the next revision of POSIX.
+standards, and will not appear in the next revision of POSIX@.
 @end defmac
 
 @defmac AC_GCC_TRADITIONAL
@@ -12871,6 +12871,11 @@ all of those cases, the compiler is passed @option{-lfoo}.  However,
 @defmac AC_HEADER_EGREP
 @acindex{HEADER_EGREP}
 @code{AC_EGREP_HEADER}
+@end defmac
+
+@defmac AC_HELP_STRING
+@acindex{HELP_STRING}
+@code{AS_HELP_STRING}
 @end defmac
 
 @defmac AC_INIT (@var{unique-file-in-source-dir})
