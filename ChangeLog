@@ -1,5 +1,10 @@
 2001-06-13  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Guard
+	sys/types.h and sys/stat.h, and check for them.
+
+2001-06-13  Akim Demaille  <akim@epita.fr>
+
 	* acheaders.m4 (AC_CHECK_HEADER, AC_CHECK_HEADERS): Support $4 =
 	INCLUDES.
 

@@ -1,6 +1,7 @@
 * Major changes in Autoconf 2.50a                       -*- outline -*-
 ** Default includes
-Now include stdint.h.
+- Now include stdint.h.
+- sys/types.h and sys/stat.h are guarded.
 
 ** Bug fixes
 - Mostly in the test suite.
@@ -8,6 +9,8 @@ Now include stdint.h.
 - configure accepts --prefix='' again.
 - AC_CHECK_LIB works properly when its first argument is not a
   literal.
+- HAVE_INTTYPES_H is defined only if not conflicting with previous
+  headers.
 
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to

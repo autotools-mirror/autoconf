@@ -2778,8 +2778,12 @@ Most generic macros provide the following default set of includes:
 @example
 @group
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#if HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#if HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
