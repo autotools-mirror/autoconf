@@ -1348,7 +1348,7 @@ fi
 
 ac_config_files="$ac_config_files Makefile m4/Makefile man/Makefile doc/Makefile
           tests/Makefile tests/atconfig"
-cat >confcache <<\EOF
+cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs, see configure's option --config-cache.
@@ -1362,7 +1362,8 @@ cat >confcache <<\EOF
 # loading this file, other *unset* `ac_cv_foo' will be assigned the
 # following values.
 
-EOF
+_ACEOF
+
 # The following way of writing the cache mishandles newlines in values,
 # but we know of no workaround that is simple, portable, and efficient.
 # So, don't put newlines in cache variables' values.
@@ -1385,7 +1386,13 @@ EOF
       ;;
     esac;
 } |
-  sed '/^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/' >>confcache
+  sed '
+     t clear
+     : clear
+     s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
+     t end
+     /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
+     : end' >>confcache
 if cmp -s $cache_file confcache; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
@@ -1412,15 +1419,15 @@ fi
 # Protect against Makefile macro expansion.
 #
 # If the first sed substitution is executed (which looks for macros that
-# take arguments), then we branch to the cleanup section.  Otherwise,
+# take arguments), then we branch to the quote section.  Otherwise,
 # look for a macro that doesn't take arguments.
 cat >confdef2opt.sed <<\EOF
 t clear
 : clear
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
-t cleanup
+t quote
 s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
-: cleanup
+: quote
 s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
@@ -1468,7 +1475,7 @@ sed '/^$/d;s/^/| /' confdefs.h >&5
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:1471: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:1478: creating $CONFIG_STATUS" >&5
 echo "creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<\_ACEOF
 #! /bin/sh
@@ -1668,7 +1675,7 @@ cat >>$CONFIG_STATUS <<\EOF
 # If the user did not use the arguments to specify the items to instantiate,
 # then the envvar interface is used.  Set only those that are not.
 if $ac_need_defaults; then
-  : ${CONFIG_FILES=$config_files}
+  CONFIG_FILES=${CONFIG_FILES="$config_files"}
 fi
 
 # Create a temporary directory, and hook for its removal unless debugging.
@@ -1856,7 +1863,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:1859: creating $ac_file" >&5
+    { echo "$as_me:1866: creating $ac_file" >&5
 echo "creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
