@@ -1,5 +1,12 @@
 2004-12-13  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sh.m4 (AS_EXECUTABLE_P): Use test -f && test -x
+	  on platforms where it works.
+	(_AS_TEST_PREPARE): Test for ``test -x''.
+	(_AS_BROKEN_TEST_PREPARE): Nuke.
+
+2004-12-13  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Move the trap commands ...
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): ... here;
 	  give only 4-letter prefix to AS_TMPDIR, comment fixed.

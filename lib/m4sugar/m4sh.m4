@@ -658,7 +658,7 @@ AS_BASENAME_SED([$1])])
 # Check whether a file is executable.
 m4_defun([AS_EXECUTABLE_P],
 [AS_REQUIRE([_AS_TEST_PREPARE])dnl
-$as_executable_p $1[]dnl
+{ test -f $1 && $as_executable_p $1; }dnl
 ])# AS_EXECUTABLE_P
 
 
@@ -864,35 +864,24 @@ m4_define([AS_MKDIR_P],
 ])# AS_MKDIR_P
 
 
-# _AS_BROKEN_TEST_PREPARE
-# -----------------------
-# FIXME: This does not work and breaks way too many things.
-#
+# _AS_TEST_PREPARE
+# ----------------
 # Find out ahead of time whether we want test -x (preferred) or test -f
 # to check whether a file is executable.
-m4_defun([_AS_BROKEN_TEST_PREPARE],
+m4_defun([_AS_TEST_PREPARE],
 [# Find out how to test for executable files. Don't use a zero-byte file,
 # as systems may use methods other than mode bits to determine executability.
 cat >conf$$.file <<_ASEOF
-@%:@! /bin/sh
+#! /bin/sh
 exit 0
 _ASEOF
 chmod +x conf$$.file
 if test -x conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -x"
-elif test -f conf$$.file >/dev/null 2>&1; then
-  as_executable_p="test -f"
 else
-  AS_ERROR([cannot check whether a file is executable on this system])
+  as_executable_p=:
 fi
 rm -f conf$$.file
-])# _AS_BROKEN_TEST_PREPARE
-
-
-# _AS_TEST_PREPARE
-# ----------------
-m4_defun([_AS_TEST_PREPARE],
-[as_executable_p="test -f"
 ])# _AS_TEST_PREPARE
 
 
