@@ -224,14 +224,16 @@ test -f ${config_h}.bot && cat ${config_h}.bot
 
 status=0
 
-for sym in $syms; do
-  if fgrep $sym $TEMPLATES >/dev/null; then
-    : # All is well.
-  else
-    echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2
-    status=1
-  fi
-done
+if test -n "$syms"; then
+  for sym in $syms; do
+    if fgrep $sym $TEMPLATES >/dev/null; then
+      : # All is well.
+    else
+      echo "$0: Symbol \`${sym}' is not covered by $TEMPLATES" >&2
+      status=1
+    fi
+  done
+fi
 
 if test $# -eq 0; then
   if test $status -eq 0; then
