@@ -1012,8 +1012,41 @@ autoconf --warnings=syntax,$WARNINGS,@var{categories}
 
 @noindent
 If you want to disable @command{autoconf}'s defaults and @code{WARNING}
-but enable the warnings about obsolete constructs, use @samp{-W
+but enable the warnings about obsolete constructs, use @option{-W
 none,obsolete}.
+
+@cindex Back trace
+@cindex Macro invocation stack
+@command{autoconf} displays a back trace for errors, but not for
+warnings; if you want them, just pass @option{-W error}.  For instance
+on this @file{configure.in}:
+
+@example
+AC_DEFUN([INNER],
+[AC_TRY_RUN([true])])
+
+AC_DEFUN([OUTTER],
+[INNER])
+
+AC_INIT
+OUTTER
+@end example
+
+@noindent
+you get:
+
+@example
+/tmp % ace -Wcross
+configure.in:8: warning: AC_TRY_RUN called without default to allow \
+cross compiling
+/tmp % ace -Wcross,error
+configure.in:8: error: AC_TRY_RUN called without default to allow \
+cross compiling
+acgeneral.m4:3044: AC_TRY_RUN is expanded from...
+configure.in:2: INNER is expanded from...
+configure.in:5: OUTTER is expanded from...
+configure.in:8: the top level
+@end example
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
