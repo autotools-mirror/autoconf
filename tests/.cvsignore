@@ -20,6 +20,7 @@ command.in header.in link.in
 script.s4g
 package.m4
 ifnames
+install-sh
 autoupdate
 autoscan
 autoreconf
