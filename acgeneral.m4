@@ -3228,7 +3228,8 @@ define([AC_LIST_SUBDIRS])
 # shells die.  Unfortunately the limit is not known precisely...
 define(AC_OUTPUT,
 [dnl Dispatch the extra arguments to their native macros.
-AC_CONFIG_FILES([$1])dnl
+ifval([$1],
+      [AC_CONFIG_FILES([$1])])dnl
 AC_OUTPUT_COMMANDS([$2], [$3])dnl
 trap '' 1 2 15
 AC_CACHE_SAVE
@@ -3331,12 +3332,12 @@ ifset([AC_LIST_HEADERS],
 
 ])dnl
 ifset([AC_LIST_LINKS],
-[Links to install:
+[Configuration links:
 \$config_links
 
 ])dnl
 ifset([AC_LIST_COMMANDS],
-[Individual commands to run:
+[Configuration commands:
 \$config_commands
 
 ])dnl
