@@ -805,6 +805,16 @@ static char *f (char * (*g) (char **, int), char **p, ...)
   va_end (v);
   return s;
 }
+
+/* OSF 4.0 Compaq cc is some sort of almost-ANSI by default.  It has
+   function prototypes and stuff, but not '\xHH' hex character constants.
+   These don't provoke an error unfortunately, instead are silently treated
+   as 'x'.  The following induces an error, until -std1 is added to get
+   proper ANSI mode.  Curiously '\x00'!='x' always comes out true, for an
+   array size at least.  It's necessary to write '\x00'==0 to get something
+   that's true only with -std1.  */
+int osf4_cc_array ['\x00' == 0 ? 1 : -1];
+
 int test (int i, double x);
 struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};
