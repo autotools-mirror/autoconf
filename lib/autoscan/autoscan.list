@@ -257,6 +257,7 @@ identifier: obstack		AC_FUNC_OBSTACK
 identifier: off_t		AC_TYPE_OFF_T
 identifier: pid_t		AC_TYPE_PID_T
 identifier: ptrdiff_t		AC_CHECK_TYPES
+identifier: restrict		AC_C_RESTRICT
 identifier: size_t		AC_TYPE_SIZE_T
 identifier: st_blksize		AC_CHECK_MEMBERS([struct stat.st_blksize])
 identifier: st_blocks		AC_STRUCT_ST_BLOCKS
