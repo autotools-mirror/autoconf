@@ -1,5 +1,11 @@
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/XFile.pm: New lib file.
+	* bin/autoupdate.in, bin/autoscan.pl, bin/autom4te.in,
+	* bin/autoheader.in: Use it.
+
+2001-09-05  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoupdate.in (&handle_m4_macros) <unm4.m4>: Undefine iff
 	defined.
 

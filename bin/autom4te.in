@@ -41,8 +41,8 @@ package Request;
 use Data::Dumper;
 use Autom4te::General;
 use Autom4te::Struct;
+use Autom4te::XFile;
 use Carp;
-use IO::File;
 use strict;
 
 # List of requests.
@@ -194,8 +194,7 @@ sub save
   croak "$me: cannot save a single request\n"
     if ref ($self);
 
-  my $requests = new IO::File ("> $filename")
-    or die "$me: cannot create $filename: $!\n";
+  my $requests = new Autom4te::XFile ("> $filename");
   print $requests
     "# This file was created by $me.\n",
     "# It contains the lists of macros which have been traced.\n",
@@ -230,7 +229,7 @@ package Autom4te;
 
 use Autom4te::General;
 use File::Basename;
-use IO::File;
+use Autom4te::XFile;
 use strict;
 
 # Configuration file.
@@ -426,8 +425,7 @@ sub load_configuration ()
 {
   use Text::ParseWords;
 
-  my $cfg = new IO::File ($autom4te_cfg)
-    or die "$me: cannot read $autom4te_cfg: $!\n";
+  my $cfg = new Autom4te::XFile ($autom4te_cfg);
   my $lang;
   while ($_ = $cfg->getline)
     {
@@ -606,7 +604,7 @@ sub handle_output ($$)
   handle_traces ($req, "$tmp/patterns",
 		 ('m4_pattern_forbid' => 'forbid:$1',
 		  'm4_pattern_allow'  => 'allow:$1'));
-  my @patterns = new IO::File ("$tmp/patterns")->getlines;
+  my @patterns = new Autom4te::XFile ("$tmp/patterns")->getlines;
   chomp @patterns;
   my $forbidden = join ('|', map { /^forbid:(.*)/ } @patterns) || "^\$";
   my $allowed   = join ('|', map { /^allow:(.*)/  } @patterns) || "^\$";
@@ -615,10 +613,10 @@ sub handle_output ($$)
   verbose "allowed   tokens: $allowed";
 
   # Read the (cached) raw M4 output, produce the actual result.  We
-  # have to use the 2nd arg to have IO::File honor the third, but then
+  # have to use the 2nd arg to have Autom4te::XFile honor the third, but then
   # stdout is to be handled by hand :(.  Don't use fdopen as it means
   # we will close STDOUT, which we already do in END.
-  my $out = new IO::File;
+  my $out = new Autom4te::XFile;
   if ($output eq '-')
     {
       $out->open (">$output");
@@ -629,8 +627,7 @@ sub handle_output ($$)
     }
   die "$me: cannot create $output: $!\n"
     unless $out;
-  my $in = new IO::File ($ocache . $req->id)
-    or die "$me: cannot read $ocache" . $req->id . ": $!\n";
+  my $in = new Autom4te::XFile ($ocache . $req->id);
 
   my $separate = 0;
   my $oline = 0;
@@ -685,8 +682,7 @@ sub handle_output ($$)
   # Locate the forbidden words in the last input file.
   # This is unsatisfying but...
   my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
-  my $file = new IO::File ($ARGV[$#ARGV])
-    or die "$me: cannot open $ARGV[$#ARGV]: $!\n";
+  my $file = new Autom4te::XFile ($ARGV[$#ARGV]);
   $exit_status = 1;
 
   while ($_ = $file->getline)
@@ -803,8 +799,7 @@ sub handle_traces ($$%)
   verbose "formatting traces for `$output': ", join (', ', sort keys %trace);
 
   # Processing the traces.
-  my $trace_m4 = new IO::File (">$tmp/traces.m4")
-    or die "$me: cannot create $tmp/traces.m4: $!\n";
+  my $trace_m4 = new Autom4te::XFile (">$tmp/traces.m4");
 
   $_ = <<'EOF';
   divert(-1)
@@ -907,8 +902,7 @@ EOF
   #
   # Pay attention that the file name might include colons, if under DOS
   # for instance, so we don't use `[^:]+'.
-  my $traces = new IO::File ($tcache . $req->id)
-    or die "$me: cannot open $tcache" . $req->id . ": $!\n";
+  my $traces = new Autom4te::XFile ($tcache . $req->id);
   while ($_ = $traces->getline)
     {
       # Trace with arguments, as the example above.  We don't try
@@ -923,10 +917,8 @@ EOF
     }
   $trace_m4->close;
 
-  my $in = new IO::File ("$m4 $tmp/traces.m4 |")
-    or die "$me: cannot run $m4: $!\n";
-  my $out = new IO::File (">$output")
-    or die "$me: cannot run open $output: $!\n";
+  my $in = new Autom4te::XFile ("$m4 $tmp/traces.m4 |");
+  my $out = new Autom4te::XFile (">$output");
 
   # FIXME: Hm... This is dubious: should we really transform the
   # quadrigraphs in traces?  It might break balanced [ ] etc. in the
@@ -981,7 +973,7 @@ sub up_to_date_p ($)
   handle_traces ($req, "$tmp/dependencies",
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
-  my $deps = new IO::File ("$tmp/dependencies");
+  my $deps = new Autom4te::XFile ("$tmp/dependencies");
   push @dep, map { chomp; find_file ($_, @include) } $deps->getlines;
 
   # If $FILE is younger than one of its dependencies, it is outdated.

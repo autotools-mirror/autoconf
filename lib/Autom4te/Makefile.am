@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in
 
 perllibdir = $(pkgdatadir)/Autom4te
-dist_perllib_DATA = General.pm Struct.pm
+dist_perllib_DATA = General.pm Struct.pm XFile.pm
 
 
 ## --------------- ##

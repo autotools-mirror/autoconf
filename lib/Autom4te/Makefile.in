@@ -65,7 +65,7 @@ PERL = @PERL@
 VERSION = @VERSION@
 
 perllibdir = $(pkgdatadir)/Autom4te
-dist_perllib_DATA = General.pm Struct.pm
+dist_perllib_DATA = General.pm Struct.pm XFile.pm
 
 TAGS_FILES = $(dist_perllib_DATA)
 

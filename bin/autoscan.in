@@ -26,10 +26,10 @@ BEGIN
   unshift @INC, "$perllibdir";
 }
 
+use Autom4te::General;
+use Autom4te::XFile;
 use File::Basename;
 use File::Find;
-use IO::File;
-use Autom4te::General;
 use strict;
 
 use vars qw(@cfiles @makefiles @shfiles %c_keywords %printed);
@@ -65,8 +65,7 @@ my %kind_comment =
   );
 
 my $configure_scan = 'configure.scan';
-my $log = new IO::File ">$me.log"
-  or die "$me: cannot open $me.log: $!\n";
+my $log = new Autom4te::XFile ">$me.log";
 
 # Autoconf and lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@autom4te-name@';
@@ -150,8 +149,7 @@ sub init_tables ()
   foreach my $kind (@kinds)
     {
       my $file = find_file ("autoscan/$kind", @include);
-      my $table = new IO::File $file
-	or die "$me: cannot open $file: $!\n";
+      my $table = new Autom4te::XFile $file;
       while ($_ = $table->getline)
 	{
 	  # Ignore blank lines and comments.
@@ -177,8 +175,7 @@ sub init_tables ()
 	      push @{$macro{$kind}{$word}}, $macro;
 	    }
 	}
-      $table->close
-	or die "$me: cannot close $file: $!\n";
+      $table->close;
     }
 
   die "$me: some tables are inconsistent\n"
@@ -203,8 +200,7 @@ sub scan_c_file ($)
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
 
-  my $file = new IO::File "<$filename"
-    or die "$me: cannot open $filename: $!\n";
+  my $file = new Autom4te::XFile "<$filename";
 
   while ($_ = $file->getline)
     {
@@ -251,8 +247,7 @@ sub scan_c_file ($)
 	}
     }
 
-  $file->close
-    or die "$me: cannot close $filename: $!\n";
+  $file->close;
 }
 
 
@@ -263,8 +258,7 @@ sub scan_makefile ($)
   my ($filename) = @_;
   push (@makefiles, $File::Find::name);
 
-  my $file = new IO::File "<$filename"
-    or die "$me: cannot open $filename: $!\n";
+  my $file = new Autom4te::XFile "<$filename";
 
   while ($_ = $file->getline)
     {
@@ -291,8 +285,7 @@ sub scan_makefile ($)
 	}
     }
 
-  $file->close
-    or die "$me: cannot close $filename: $!\n";
+  $file->close;
 }
 
 
@@ -303,8 +296,7 @@ sub scan_sh_file ($)
   my ($filename) = @_;
   push (@shfiles, $File::Find::name);
 
-  my $file = new IO::File "<$filename"
-    or die "$me: cannot open $filename: $!\n";
+  my $file = new Autom4te::XFile "<$filename";
 
   while ($_ = $file->getline)
     {
@@ -321,8 +313,7 @@ sub scan_sh_file ($)
 	}
     }
 
-  $file->close
-    or die "$me: cannot close $filename: $!\n";
+  $file->close;
 }
 
 
@@ -464,8 +455,7 @@ sub output ($)
   my $configure_scan = shift;
   my %unique_makefiles;
 
-  my $file = new IO::File ">$configure_scan"
-    or die "$me: cannot create $configure_scan: $!\n";
+  my $file = new Autom4te::XFile ">$configure_scan";
 
   print $file "# Process this file with autoconf to produce a configure script.\n";
   print $file "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n";
@@ -492,8 +482,7 @@ sub output ($)
        join ("\n                 ", sort keys %unique_makefiles), "])\n";
   print $file "AC_OUTPUT\n";
 
-  $file->close
-    or die "$me: cannot close $configure_scan: $!\n";
+  $file->close;
 }
 
 
@@ -503,8 +492,8 @@ sub output ($)
 ## --------------------------------------- ##
 
 
-# check_configure_ac ($CONFIGURE_AC)
-# ----------------------------------
+# &check_configure_ac ($CONFIGURE_AC)
+# -----------------------------------
 # Use autoconf to check if all the suggested macros are included
 # in CONFIGURE_AC.
 sub check_configure_ac ($)
@@ -520,8 +509,7 @@ sub check_configure_ac ($)
 
   verbose "running: $autoconf $trace_option $configure_ac";
   my $traces =
-    new IO::File "$autoconf $trace_option $configure_ac|"
-      or die "$me: cannot open traces reading pipe: $!\n";
+    new Autom4te::XFile "$autoconf $trace_option $configure_ac|";
 
   while ($_ = $traces->getline)
     {
@@ -539,17 +527,16 @@ sub check_configure_ac ($)
 		{
 		  $word = "struct " . $word;
 		}
-	      delete ($needed_macros{"$macro([$word])"});
+	      delete $needed_macros{"$macro([$word])"};
 	    }
 	}
       else
 	{
-	  delete ($needed_macros{$macro});
+	  delete $needed_macros{$macro};
 	}
     }
 
-  $traces->close
-    or die "$me: cannot close traces reading pipe: $!\n";
+  $traces->close;
 
   # Report the missing macros.
   foreach my $macro (sort keys %needed_macros)
@@ -584,7 +571,6 @@ if ($configure_ac)
     check_configure_ac ($configure_ac);
   }
 
-$log->close
-  or die "$me: cannot close $me.log: $!\n";
+$log->close;
 
 exit 0;

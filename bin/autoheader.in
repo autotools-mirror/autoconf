@@ -34,6 +34,7 @@ BEGIN
 }
 
 use Autom4te::General;
+use Autom4te::XFile;
 use strict;
 
 # Using `do FILE', we need `local' vars.
@@ -186,7 +187,7 @@ $config_h_in ||= "$config_h.in";
 # only the name of the macro.
 %symbol = map { s/\(.*//; $_ => 1 } keys %symbol;
 
-my $out = new IO::File (">$tmp/config.hin");
+my $out = new Autom4te::XFile (">$tmp/config.hin");
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
@@ -195,7 +196,7 @@ print $out "/* $config_h_in.  Generated from $ARGV[0] by autoheader.  */\n";
 # Dump the top.
 if ($config_h_top)
   {
-    my $in = new IO::File ($config_h_top);
+    my $in = new Autom4te::XFile ($config_h_top);
     while ($_ = $in->getline)
       {
 	print $out $_;
@@ -205,7 +206,7 @@ if ($config_h_top)
 # Dump `acconfig.h' but its bottom.
 if ($acconfig_h)
   {
-    my $in = new IO::File ($acconfig_h);
+    my $in = new Autom4te::XFile ($acconfig_h);
     while ($_ = $in->getline)
       {
 	last if /\@BOTTOM\@/;
@@ -223,7 +224,7 @@ foreach (sort keys %verbatim)
 # Dump `acconfig.h' bottom.
 if ($acconfig_h)
   {
-    my $in = new IO::File ($acconfig_h);
+    my $in = new Autom4te::XFile ($acconfig_h);
     my $dump = 0;
     while ($_ = $in->getline)
       {
@@ -235,7 +236,7 @@ if ($acconfig_h)
 # Dump the bottom.
 if ($config_h_bot)
   {
-    my $in = new IO::File ($config_h_bot);
+    my $in = new Autom4te::XFile ($config_h_bot);
     while ($_ = $in->getline)
       {
 	print $out $_;
@@ -246,7 +247,7 @@ $out->close;
 
 # Check that all the symbols have a template.
 {
-  my $in = new IO::File ("$tmp/config.hin");
+  my $in = new Autom4te::XFile ("$tmp/config.hin");
   while ($_ = $in->getline)
     {
       my ($symbol) = /^\#\s*\w+\s+(\w+)/
