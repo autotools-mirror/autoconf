@@ -1,3 +1,7 @@
+1999-06-04  Nick Clifton  <nickc@cygnus.com>
+
+	* config.sub: Add mcore target.
+
 1999-06-03  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_ACVERSION): Correct version number.
