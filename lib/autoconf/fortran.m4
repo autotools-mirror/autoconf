@@ -671,6 +671,7 @@ AS_IF([AC_TRY_EVAL(ac_link_default)],
   case $ac_file in
     *.$ac_ext | *.out | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+          export ac_cv_exeext
           break;;
     * ) break;;
   esac
@@ -697,6 +698,7 @@ for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+          export ac_cv_exeext
           break;;
     * ) break;;
   esac
