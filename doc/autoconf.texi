@@ -2893,8 +2893,9 @@ those systems.
 If @file{nlist.h} is found, define @code{NLIST_STRUCT}.
 
 @item
-If @samp{struct nlist} has an @samp{n_un} member, define
-@code{NLIST_NAME_UNION}.
+If @samp{struct nlist} has an @samp{n_un.n_name} member, define
+@code{HAVE_STRUCT_NLIST_N_UN_N_NAME}.  The obsolete symbol
+@code{NLIST_NAME_UNION} is still defined, but do not depend upon it.
 
 @item
 @c FIXME: I don't understand anything to this sentence :(
@@ -3513,10 +3514,10 @@ If @code{struct stat} contains an @code{st_blksize} member, define
 @code{HAVE_STRUCT_STAT_ST_BLKSIZE}.  The former name,
 @code{HAVE_ST_BLKSIZE} is to be avoided, as its support will cease in
 the future.  This macro is obsoleted, and should be replaced by
+
 @example
 AC_CHECK_MEMBERS((struct stat.st_blksize))
 @end example
-
 @end defmac
 
 @defmac AC_STRUCT_ST_BLOCKS
@@ -3580,6 +3581,12 @@ If no @var{includes} are specified, the default includes are used
 AC_CHECK_MEMBER(struct passwd.pw_gecos,,
                 [AC_MSG_ERROR([We need `struct passwd.pw_gecos'!])],
                 [#include <pwd.h>])
+@end example
+
+You can use this macro for sub members:
+
+@example
+AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
 @end defmac
 

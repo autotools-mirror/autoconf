@@ -1,5 +1,13 @@
 2000-05-19  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_SPECIALIZE): Avoid a useless `indir'.
+	(AC_CHECK_MEMBER, AC_CHECK_MEMBERS): Fix to work properly on
+	`struct f.g.h'.
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Use AC_CHECK_HEADERS and
+	AC_CHECK_MEMBERS instead of performing their task by hand.
+
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
 	Synchronize AC_FUNC_GETLOADAVG with the version of the shellutils
 	1.16f (serial 4).
 

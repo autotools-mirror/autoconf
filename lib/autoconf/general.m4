@@ -273,7 +273,7 @@ define(AC_OBSOLETE,
 define(AC_SPECIALIZE,
 [ifdef([$1-$2],
        [indir([$1-$2], m4_shift(m4_shift($@)))],
-       [indir([$1], m4_shift($@))])])
+       [$1(m4_shift($@))])])
 
 
 
@@ -2399,9 +2399,9 @@ dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE foo;
-patsubst([$1], [\.[^.]*]) foo;
+patsubst([$1], [\..*]) foo;
 dnl foo.MEMBER;
-foo.patsubst([$1], [.*\.]);])],
+foo.patsubst([$1], [^[^.]*\.]);])],
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Member) = yes],
@@ -2410,17 +2410,17 @@ AC_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
 
-# AC_CHECK_MEMBER([AGGREGATE.MEMBER, ...],
-#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
-#                 [INCLUDES])
-# --------------------------------------------------------
+# AC_CHECK_MEMBERS([AGGREGATE.MEMBER, ...],
+#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
+#                  [INCLUDES])
+# ---------------------------------------------------------
 # The first argument is an m4 list.
 AC_DEFUN(AC_CHECK_MEMBERS,
 [m4_foreach([AC_Member], [$1],
   [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member), 1,
-                            [Define if `]patsubst(AC_Member, [.*\.])[' is
-                             member of `]patsubst(AC_Member, [\.[^.]*])['.])
+                            [Define if `]patsubst(AC_Member, [^[^.]*\.])[' is
+                             member of `]patsubst(AC_Member, [\..*])['.])
 $2],
                  [$3],
                  [$4])])])

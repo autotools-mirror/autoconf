@@ -900,7 +900,7 @@ if test $ac_cv_func_getloadavg = yes; then
             [Define if your system has its own `getloadavg' function.])
   ac_have_func=yes
 else
-  AC_DEFINE(C_GETLOADAVG, 1, [Define if using getloadavg.c.])
+  AC_DEFINE(C_GETLOADAVG, 1, [Define if using `getloadavg.c'.])
   # Figure out what our getloadavg.c needs.
   ac_have_func=no
   AC_CHECK_HEADER(sys/dg_sys_info.h,
@@ -937,18 +937,13 @@ else
     AC_CHECK_HEADERS(mach/mach.h)
   fi
 
-  AC_CHECK_HEADER(nlist.h,
-  [AC_DEFINE(NLIST_STRUCT, 1, [Define if you have <nlist.h>.])
-  AC_CACHE_CHECK([for n_un in struct nlist], ac_cv_struct_nlist_n_un,
-  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <nlist.h>
-],
-                                      [struct nlist n; n.n_un.n_name = 0;])],
-                     [ac_cv_struct_nlist_n_un=yes],
-                     [ac_cv_struct_nlist_n_un=no])])
-  if test $ac_cv_struct_nlist_n_un = yes; then
-    AC_DEFINE(NLIST_NAME_UNION, 1,
-              [Define if your `struct nlist' has an `n_un' member.])
-  fi
+  AC_CHECK_HEADERS(nlist.h,
+  [AC_CHECK_MEMBERS([struct nlist.n_un.n_name],
+                    [AC_DEFINE(NLIST_NAME_UNION, 1,
+                               [Define if your `struct nlist' has an
+                                `n_un' member.  Obsolete, depend on
+                                `HAVE_STRUCT_NLIST_N_UN_N_NAME])], [],
+                    [@%:@include <nlist.h>])
   ])dnl
 fi # Do not have getloadavg in system libraries.
 
