@@ -26,7 +26,7 @@ usage="\
 Usage: ifnames [-h] [--help] [-m dir] [--macrodir=dir] [--version] [file...]"
 show_version=no
 
-test -z "$AC_MACRODIR" && AC_MACRODIR=/usr/local/gnu/share/autoconf
+: ${AC_MACRODIR=@datadir@}
 
 while test $# -gt 0; do
   case "$1" in 
