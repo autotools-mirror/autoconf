@@ -1447,7 +1447,7 @@ dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
 dnl We used to copy stderr to stdout and capture it in a variable, but
 dnl that breaks under sh -x, which writes compile commands starting
 dnl with ` +' to stderr in eval and subshells.
-ac_try='$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out'
+ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 AC_TRY_EVAL(ac_try)
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
