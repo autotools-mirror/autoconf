@@ -635,14 +635,19 @@ EOF
   $run_m4_trace $infile 2>&1 >/dev/null |
     sed -f $tmp/trace2m4.sed |
     # Now we are ready to run m4 to process the trace file.
-    $M4 $tmp/trace.m4 - |
-    # It makes no sense to try to transform __oline__.
-    sed '
-      s/@<:@/[/g
-      s/@:>@/]/g
-      s/@S|@/$/g
-      s/@%:@/#/g
-      ' >&4
+    if $debug; then
+      cat >>$tmp/trace.m4
+      $M4 $tmp/trace.m4
+    else
+      $M4 $tmp/trace.m4 -
+    fi |
+      # It makes no sense to try to transform __oline__.
+      sed '
+	s/@<:@/[/g
+	s/@:>@/]/g
+	s/@S|@/$/g
+	s/@%:@/#/g
+	' >&4
   ;;
 
 

@@ -1,5 +1,11 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (task trace) [debug]: Instead of a long pipe, extend
+	trace.m4.
+
+	
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
 	* autoupdate.sh (m4.txt): Use `dumpdef' and m4 to build it.
 
 2000-11-02  Akim Demaille  <akim@epita.fr>
