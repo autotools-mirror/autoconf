@@ -7209,6 +7209,9 @@ newlines.  (There is currently no portable way to escape literal
 newlines.)
 
 If @var{value} is given, in addition assign it to @var{variable}.
+
+The string @var{variable} is passed to @code{m4_pattern_allow}
+(@pxref{Forbidden Patterns}).
 @end defmac
 
 @defmac AC_SUBST_FILE (@var{variable})
@@ -7228,7 +7231,7 @@ or target types into @file{Makefile}s.  For example, @file{configure.ac}
 could contain:
 
 @example
-AC_SUBST_FILE(host_frag)
+AC_SUBST_FILE([host_frag])
 host_frag=$srcdir/conf/sun4.mh
 @end example
 
@@ -7238,6 +7241,9 @@ and then a @file{Makefile.in} could contain:
 @example
 @@host_frag@@
 @end example
+
+The string @var{variable} is passed to @code{m4_pattern_allow}
+(@pxref{Forbidden Patterns}).
 @end defmac
 
 @cindex Previous Variable
