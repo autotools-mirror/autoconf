@@ -1952,6 +1952,7 @@ AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
      AC_TRY_LINK_FUNC($ac_func, [ac_cv_f77_dummy_main=$ac_func; break])
    done
  fi
+ rm -f conftest*
  LIBS=$ac_f77_dm_save_LIBS
  AC_LANG_POP(C)dnl
 ])
@@ -1988,6 +1989,7 @@ AC_CACHE_CHECK([for alternate main to link with Fortran 77 libraries],
    AC_TRY_LINK([#undef F77_DUMMY_MAIN
 #define main $ac_func], [], [ac_cv_f77_main=$ac_func; break])
  done
+ rm -f conftest*
  LIBS=$ac_f77_m_save_LIBS
  AC_LANG_POP(C)dnl
 ])

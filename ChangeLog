@@ -1,3 +1,10 @@
+2001-06-29  Pavel Roskin  <proski@gnu.org>
+
+	* aclang.m4 (AC_F77_DUMMY_MAIN): Remove conftest* after using
+	break in the argument to AC_TRY_LINK_FUNC.
+	(AC_F77_MAIN): Remove conftest* after using break in the
+	argument to AC_TRY_LINK.
+
 2001-07-01  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	Add alternate 'main' routine detection for linking C/C++ with Fortran,
