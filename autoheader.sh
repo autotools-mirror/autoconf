@@ -85,6 +85,9 @@ esac
 frob='define([AC_DEFINE],[#
 @@@syms="$syms $1"@@@
 ])dnl
+define([AC_SIZEOF_TYPE],[#
+@@@types="$types,$1"@@@
+])dnl
 define([AC_HAVE_FUNCS],[#
 @@@funcs="$funcs $1"@@@
 ])dnl
@@ -109,11 +112,12 @@ $3
 
 config_h=config.h
 syms=
+types=
 funcs=
 headers=
 libs=
 
-# We extract assignments of SYMS, FUNCS, HEADERS, and LIBS from the
+# We extract assignments of SYMS, TYPES, FUNCS, HEADERS, and LIBS from the
 # modified autoconf processing of the input file.  The sed hair is
 # necessary to win for multi-line macro invocations.
 eval "`echo \"$frob\" \
@@ -167,6 +171,14 @@ if test -n "$syms"; then
    fgrep "$syms" |
    tr @ \\012
 fi
+
+echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
+  test -z "$ctype" && continue
+  sym="`echo "${ctype}" | tr '[a-z *]' '[A-Z_P]'`"
+  echo "
+/* The number of bytes in a ${ctype}.  */
+#undef SIZEOF_${sym}"
+done
 
 for func in `for x in $funcs; do echo $x; done | sort | uniq`; do
   sym="`echo ${func} | sed 's/[^a-zA-Z0-9_]/_/g' | tr '[a-z]' '[A-Z]'`"
