@@ -1303,6 +1303,45 @@ fi
 # 4d. Fortan 77 compiler characteristics.  #
 # ---------------------------------------- #
 
+# _AC_PROG_F77_V
+# ---------------
+#
+# Determine the flag that causes the Fortran 77 compiler to print
+# information of library and object files (normally -v)
+# Needed for AC_F77_LIBRARY_FLAGS
+# Some compilers don't accept -v (Lahey: -verbose, xlf: -V)
+#
+AC_DEFUN([_AC_PROG_F77_V],
+[AC_REQUIRE([AC_PROG_F77])dnl
+AC_CACHE_CHECK([how to get verbose linking output from $F77],
+  ac_cv_prog_f77_v,
+[AC_LANG_PUSH(Fortran 77)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+[ac_cv_prog_f77_v=
+ac_save_FFLAGS=$FFLAGS
+# Try some options frequently used verbose output
+for ac_verb in -v -verbose --verbose -V; do
+  FFLAGS="$ac_save_FFLAGS $ac_verb"
+  ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
+  # look for -l* and *.a constructs in the output
+  for ac_arg in $ac_link_output; do
+     case $ac_arg in
+        [[\\/]]*.a | ?:[[\\/]]*.a | -[[lLRu]]*)
+            ac_cv_prog_f77_v=$ac_verb
+            break 2
+           ;;
+     esac
+  done
+done
+FFLAGS=$ac_save_FFLAGS
+if test "x$ac_cv_prog_f77_v" = "x"; then
+   AC_MSG_WARN([cannot determine how to obtain linking information from $F77])
+fi ],
+[AC_MSG_WARN([compilation failed])
+ac_cv_prog_f77_v=
+]) # AC_COMPILE_IFELSE
+AC_LANG_POP()dnl
+])]) # _AC_PROG_F77_V
 
 # AC_F77_LIBRARY_LDFLAGS
 # ----------------------
@@ -1334,31 +1373,28 @@ fi
 # W. Eaton for writing this extremely useful macro.  Thank you John.
 AC_DEFUN([AC_F77_LIBRARY_LDFLAGS],
 [AC_REQUIRE([AC_PROG_F77])dnl
+_AC_PROG_F77_V
 AC_CACHE_CHECK([for Fortran 77 libraries], ac_cv_flibs,
 [if test "x$FLIBS" != "x"; then
   ac_cv_flibs="$FLIBS" # Let the user override the test.
 else
 AC_LANG_PUSH(Fortran 77)
 
-# This is the simplest of all Fortran 77 programs.
 cat >conftest.$ac_ext <<EOF
-      end
+AC_LANG_PROGRAM()
 EOF
 
-# Compile and link our simple test program by passing the "-v" flag
+# Compile and link our simple test program by passing a flag
+# (determined by _AC_PROG_F77_V)
 # to the Fortran 77 compiler in order to get "verbose" output that
-# we can then parse for the Fortran 77 linker flags.  I don't know
-# what to do if your compiler doesn't have -v.
+# we can then parse for the Fortran 77 linker flags.
 ac_save_FFLAGS=$FFLAGS
-FFLAGS="$FFLAGS -v"
+FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
 ac_link_output=`eval $ac_link AC_FD_LOG>&1 2>&1 | grep -v 'Driving:'`
 FFLAGS=$ac_save_FFLAGS
 
 rm -f conftest.*
 AC_LANG_POP()dnl
-
-# This will ultimately be our output variable.
-FLIBS=
 
 # If we are using xlf then replace all the commas with spaces.
 if echo $ac_link_output | grep xlfentry >/dev/null 2>&1; then
@@ -1372,87 +1408,59 @@ if echo $ac_link_output | grep cft90 >/dev/null 2>&1; then
   ac_link_output=`echo $ac_link_output | sed "s/\"//g"`
 fi
 
-# AC_SAVE_ARG will be set to the current option (i.e. something
-# beginning with a "-") when we come across an option that we think
-# will take an argument (e.g. -L /usr/local/lib/foo).  When
-# AC_SAVE_ARG is set, we append AC_ARG to AC_SEEN without any
-# further examination.
-ac_save_arg=
+ac_cv_flibs=
 
-# This is just a "list" (i.e. space delimited elements) of flags
-# that we've already seen.  This just help us not add the same
-# linker flags twice to FLIBS.
-ac_seen=
+# Save positional arguments (if any)
+ac_save_positional="$[@]"
 
-# The basic algorithm is that if AC_ARG makes it all the way through
-# down to the bottom of the the "for" loop, then it is added to
-# FLIBS.
-for ac_arg in $ac_link_output; do
-  # Assume that none of the options that take arguments expect the
-  # argument to start with a "-".  If we ever see this case, then
-  # reset AC_PREVIOUS_ARG so that we don't try and process AC_ARG as
-  # an argument.
-  ac_previous_arg=$ac_save_arg
-  echo $ac_arg | grep '^[^-]' >/dev/null 2>&1 && ac_previous_arg=
-  case $ac_previous_arg in
-    '')
-      case $ac_arg in
-        /*.a)
-          # Append to AC_SEEN if it's not already there.
-          AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
-                            ac_arg=, ac_seen="$ac_seen $ac_arg")
+set X $ac_link_output
+while test $[@%:@] != 1; do
+  shift
+  ac_arg=$[1]
+  case $ac_arg in
+        [[\\/]]*.a | ?:[[\\/]]*.a)
+          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
+              ac_cv_flibs="$ac_cv_flibs $ac_arg")
           ;;
         -bI:*)
-          # Append to AC_SEEN if it's not already there.
-          AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
-                            ac_arg=, [AC_LINKER_OPTION([$ac_arg], ac_seen)])
+          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
+             [AC_LINKER_OPTION([$ac_arg], ac_cv_flibs)])
           ;;
           # Ignore these flags.
         -lang* | -lcrt0.o | -lc | -lgcc | -LANG:=*)
-          ac_arg=
           ;;
         -lkernel32)
-          # Only ignore this flag under the Cygwin environment.
-          if test x"$CYGWIN" = xyes; then
-            ac_arg=
-          else
-            ac_seen="$ac_seen $ac_arg"
-          fi
+          test x"$CYGWIN" != xyes && ac_cv_flibs="$ac_cv_flibs $ac_arg"
           ;;
-        -[[LRu]])
+        -[[LRuY]])
           # These flags, when seen by themselves, take an argument.
-          ac_save_arg=$ac_arg
-          ac_arg=
+          # We remove the space between option and argument and re-iterate
+          # unless we find an empty arg or a new option (starting with -)
+	  case $[2] in
+             "" | -*);;
+             *)
+		ac_arg="$ac_arg$[2]"
+		shift; shift
+		set X $ac_arg "$[@]"
+		;;
+	  esac
           ;;
         -YP,*)
-          ac_temp_arg=
-          for ac_j in `echo $ac_arg | sed 's/-YP,/-L/;s/:/ -L/g'`; do
-            # Append to AC_SEEN if it's not already there.
-            AC_LIST_MEMBER_OF($ac_j, $ac_seen, ,
-                              [ac_temp_arg="$ac_temp_arg $ac_j"
-                               ac_seen="$ac_seen $ac_j"])
+          for ac_j in `echo $ac_arg | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
+            AC_LIST_MEMBER_OF($ac_j, $ac_cv_flibs, ,
+                            [ac_arg="$ac_arg $ac_j"
+                             ac_cv_flibs="$ac_cv_flibs $ac_j"])
           done
-          ac_arg=$ac_temp_arg
           ;;
         -[[lLR]]*)
-          # Append to AC_SEEN if it's not already there.
-          AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
-                            ac_arg=, ac_seen="$ac_seen $ac_arg")
+          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
+                          ac_cv_flibs="$ac_cv_flibs $ac_arg")
           ;;
-        *)
           # Ignore everything else.
-          ac_arg=
-          ;;
-      esac
-      ;;
-    -[[LRu]])
-      ac_arg="$ac_previous_arg $ac_arg"
-      ;;
   esac
-
-  # If "ac_arg" has survived up until this point, then put it in FLIBS.
-  test "x$ac_arg" != x && FLIBS="$FLIBS $ac_arg"
 done
+# restore positional arguments
+set X $ac_save_positional; shift
 
 # We only consider "LD_RUN_PATH" on Solaris systems.  If this is seen,
 # then we insist that the "run path" must be an absolute path (i.e. it
@@ -1465,8 +1473,6 @@ case `(uname -sr) 2>/dev/null` in
         AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
       ;;
 esac
-test "x$ac_ld_run_path" != x && FLIBS="$ac_ld_run_path $FLIBS"
-ac_cv_flibs=$FLIBS
 fi # test "x$FLIBS" = "x"
 ])
 FLIBS="$ac_cv_flibs"

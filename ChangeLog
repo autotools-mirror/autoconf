@@ -1,3 +1,19 @@
+2000-07-10  Martin Wilck <martin@tropos.de>
+
+	* aclang.m4 (_AC_PROG_F77_V): New macro to determine the flag that
+	causes the compiler to output verbose linking information.
+	(AC_F77_LIBRARY_LDFLAGS): Use _AC_PROG_F77_V instead of
+	simply "-v"
+	(AC_F77_LIBRARY_LDFLAGS): New algorithm to parse flags, uses
+	set/shift shell commands.
+	(AC_F77_LIBRARY_LDFLAGS): Set FLIBS at end, after determining
+	ac_cv_flibs.
+
+2000-07-11  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS) <ac_max_here_lines>: Set to 38
+	instead of 48, to pass the test on RISC/OS 4.52.
+
 2000-07-11  Akim Demaille  <akim@epita.fr>
 
 	!*^&$@ sed portability problems...  The test on AC_CHECK_TYPES is

@@ -1150,9 +1150,9 @@ subdirs=
 MFLAGS= MAKEFLAGS=
 AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
 # Maximum number of lines to put in a shell here document.
-dnl This variable seems obsolete.  It should probably be removed, and
-dnl only ac_max_sed_lines should be used.
-: ${ac_max_here_lines=48}
+# This variable seems obsolete.  It should probably be removed, and
+# only ac_max_sed_lines should be used.
+: ${ac_max_here_lines=38}
 # Sed expression to map a string onto a valid sh and CPP variable names.
 ac_tr_sh='sed y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
 ac_tr_cpp='sed y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
