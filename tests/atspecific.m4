@@ -187,10 +187,9 @@ m4_defun([AC_STATE_SAVE],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
   # There maybe variables spread on several lines, eg IFS, remove the dead
   # lines.
-  grep '^m4_defn([m4_re_word])=' >state-env.$[@]&t@1
-test $? = 0 || rm -f state-env.$[@]&t@1
-
-ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$[@]&t@1
+  grep '^m4_defn([m4_re_word])=' >state-env.$][1
+test $? = 0 || rm -f state-env.$][1
+ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 ])# AC_STATE_SAVE
 ]])
 
@@ -237,14 +236,16 @@ m4_define([AT_CHECK_CONFIGURE],
 # ------------
 # Check that the full configure run remained in its variable name space,
 # and cleaned up tmp files.
-# me tests might exit prematurely when they find a problem, in
+# Some tests might exit prematurely when they find a problem, in
 # which case `env-after' is probably missing.  Don't check it then.
 m4_define([AT_CHECK_ENV],
-[if test -f state-env.before && test -f state-env.after; then
+[test -f state-ls.before ||
+  AS_ERROR([state-ls.before not present])
+if test -f state-env.before && test -f state-env.after; then
   mv -f state-env.before expout
   AT_CHECK([cat state-env.after], 0, expout)
 fi
-if test -f state-ls.before && test -f state-ls.after; then
+if test -f state-ls.after; then
   mv -f state-ls.before expout
   AT_CHECK([cat state-ls.after], 0, expout)
 fi

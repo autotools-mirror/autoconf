@@ -1,5 +1,12 @@
 2002-10-31  Akim Demaille  <akim@epita.fr>
 
+	The test suite was no longer checking for trailing envvars and files.
+
+	* tests/atspecific.m4 (AC_STATE_SAVE): Don't use quadrigraphs here.
+	(AT_CHECK_ENV): Make sure the `state-ls.before file exists.
+
+2002-10-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Use and display
 	`$(MAKE)' instead of '${MAKE}' to emphasize that we refer to the
 	Make variable, not a shell variable.
