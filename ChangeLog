@@ -1,5 +1,24 @@
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
+	Require a perfect divert push/pop balance.
+
+	* m4sugar.m4 (m4_divert, m4_divert_push, m4_divert_pop): Keep
+	track of them in m4_divert_stack.
+	(m4_divert_pop): Accept the expected current diversion as
+	argument and m4_fatal if incorrect, or if there is nothing to pop.
+	(globally): Specify the known m4_divert_pop.
+	Preserve symbolic values when possible.
+	* acgeneral.m4: No longer push the first diversion.
+	Specify the known m4_divert_pop.
+	(AC_PLAIN_SCRIPT): When m4_divert_push a diversion, m4_wrap its
+	pop.
+	(AC_INIT): Run AC_PLAIN_SCRIPT first, not last.
+	* tests/m4sh.at (AS_DIRNAME & AS_DIRNAME_SED): Can't use m4_defun
+	without m4_init.
+	* m4sugar.m4: Likewise.
+
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_defn, m4_undefine, m4_popdef): Unlike the
 	builtin, fail on undefined symbols.
 	* tests/torture.at (Torturing config.status): Stop playing nasty

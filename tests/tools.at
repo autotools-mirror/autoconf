@@ -106,9 +106,9 @@ AT_CLEANUP(configure)
 AT_SETUP([autoconf --trace: user macros])
 
 AT_DATA(configure.ac,
-[[define([active], [ACTIVE])
-AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
-AC_DEFUN([TRACE2], [[$2], $1])
+[[m4_define([active], [ACTIVE])
+m4_define([TRACE1], [TRACE2(m4_shift($@))])
+m4_define([TRACE2], [[$2], $1])
 TRACE1(foo, bar, baz)
 TRACE1(foo, TRACE1(bar, baz))
 TRACE1(foo, active, baz)

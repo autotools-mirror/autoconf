@@ -702,15 +702,10 @@ m4_define([_m4_divert(KILL)],           -1)
 # -------------------------
 # Change the diversion stream to DIVERSION-NAME.
 m4_define([m4_divert],
-[m4_builtin([divert], _m4_divert([$1]))dnl
-])
-
-
-# m4_undivert(DIVERSION-NAME)
-# ---------------------------
-# Undivert DIVERSION-NAME.
-m4_define([m4_undivert],
-[m4_builtin([undivert], _m4_divert([$1]))dnl
+[m4_define([m4_divert_stack],
+           m4_location[: $0: $1]m4_ifdef([m4_divert_stack], [
+m4_defn([m4_divert_stack])]))dnl
+m4_builtin([divert], _m4_divert([$1]))dnl
 ])
 
 
@@ -718,19 +713,29 @@ m4_define([m4_undivert],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[m4_pushdef([_m4_divert_diversion], _m4_divert([$1]))dnl
-m4_divert(_m4_divert_diversion)dnl
+[m4_pushdef([m4_divert_stack],
+            m4_location[: $0: $1]m4_ifdef([m4_divert_stack], [
+m4_defn([m4_divert_stack])]))dnl
+m4_pushdef([_m4_divert_diversion], [$1])dnl
+m4_builtin([divert], _m4_divert(_m4_divert_diversion))dnl
 ])
 
 
-# m4_divert_pop
-# -------------
+# m4_divert_pop([DIVERSION-NAME])
+# -------------------------------
 # Change the diversion stream to its previous value, unstacking it.
+# If specified, verify we left DIVERSION-NAME.
 m4_define([m4_divert_pop],
-[m4_popdef([_m4_divert_diversion])dnl
-m4_ifndef([_m4_divert_diversion],
-          [m4_fatal([too many m4_divert_pop])])dnl
-m4_divert(_m4_divert_diversion)dnl
+[m4_ifval([$1],
+     [m4_if(_m4_divert([$1]), m4_divnum, [],
+            [m4_fatal([$0($1): unexpected current diversion: ]m4_divnum)])])dnl
+m4_popdef([_m4_divert_diversion])dnl
+dnl m4_ifndef([_m4_divert_diversion],
+dnl           [m4_fatal([too many m4_divert_pop])])dnl
+m4_builtin([divert],
+           m4_ifdef([_m4_divert_diversion],
+                    [_m4_divert(_m4_divert_diversion)], -1))dnl
+m4_popdef([m4_divert_stack])dnl
 ])
 
 
@@ -741,8 +746,16 @@ m4_divert(_m4_divert_diversion)dnl
 m4_define([m4_divert_text],
 [m4_divert_push([$1])dnl
 $2
-m4_divert_pop()dnl
+m4_divert_pop([$1])dnl
 ])
+
+
+# m4_undivert(DIVERSION-NAME)
+# ---------------------------
+# Undivert DIVERSION-NAME.
+m4_define([m4_undivert],
+[m4_builtin([undivert], _m4_divert([$1]))])
+
 
 
 
@@ -1142,7 +1155,7 @@ m4_divert_push([GROW])])dnl
 m4_define([_m4_defun_epi],
 [m4_divert_pop()dnl
 m4_if(_m4_divert_dump, _m4_divert_diversion,
-      [m4_undivert(_m4_divert([GROW]))dnl
+      [m4_undivert([GROW])dnl
 m4_undefine([_m4_divert_dump])])dnl
 m4_expansion_stack_pop()dnl
 m4_popdef([_m4_expanding($1)])dnl
@@ -1245,10 +1258,11 @@ m4_ifndef([_m4_divert_dump],
           [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
 m4_provide_ifelse([$1],
                   [],
-                  [m4_divert_push(m4_eval(_m4_divert_diversion - 1))dnl
+                  [m4_divert_push(m4_eval(m4_divnum - 1))dnl
 m4_default([$2], [$1])
-m4_divert(_m4_divert_dump)m4_undivert(_m4_divert_diversion)dnl
-m4_divert_pop()])dnl
+m4_divert(m4_defn([_m4_divert_dump]))dnl
+m4_undivert(m4_defn([_m4_divert_diversion]))dnl
+m4_divert_pop(m4_defn([_m4_divert_dump]))])dnl
 m4_provide_ifelse([$1],
                   [],
                   [m4_warn([syntax],
@@ -1696,14 +1710,21 @@ m4_if(m4_sysval, [0], [],
 
 # m4_init
 # -------
-m4_defun([m4_init],
+m4_define([m4_init],
 [# We need a tmp directory.
 m4_ifndef([m4_tmpdir],
           [m4_define([m4_tmpdir], [/tmp])])
-
 
 # M4sugar reserves `m4_[A-Za-z0-9_]*'.  We'd need \b and +,
 # but they are not portable.
 m4_pattern_forbid([^m4_])
 m4_pattern_forbid([^dnl$])
+
+# Check the divert push/pop perfect balance.
+m4_wrap([m4_ifdef([_m4_divert_diversion],
+         [m4_fatal([$0: unbalanced m4_divert_push:]
+m4_defn([m4_divert_stack]))])[]])
+
+m4_divert_push([KILL])
+m4_wrap([m4_divert_pop([KILL])[]])
 ])

@@ -12,7 +12,8 @@ AT_BANNER([M4sh.])
 AT_SETUP([[AS_DIRNAME & AS_DIRNAME_SED]])
 
 AT_DATA(configure.ac,
-[[_AS_EXPR_PREPARE
+[[AC_PLAIN_SCRIPT
+_AS_EXPR_PREPARE
 
 define([AS_DIRNAME_TEST],
 [dir=`AS_DIRNAME([$1])`
@@ -23,7 +24,6 @@ dir=`AS_DIRNAME_SED([$1])`
 test "$dir" = "$2" ||
   echo "dirname_sed($1) = $dir instead of $2" >&2])
 
-AC_PLAIN_SCRIPT
 AS_DIRNAME_TEST([//1],		[//])
 AS_DIRNAME_TEST([/1],		[/])
 AS_DIRNAME_TEST([./1],		[.])

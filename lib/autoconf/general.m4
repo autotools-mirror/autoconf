@@ -149,12 +149,6 @@ m4_copy([m4_divert_push],[AC_DIVERT_PUSH])
 m4_copy([m4_divert_pop], [AC_DIVERT_POP])
 
 
-# Throw away output until AC_INIT is called.
-# FIXME: Should not be here.
-m4_pushdef([_m4_divert_diversion], _m4_divert([KILL]))
-
-
-
 ## ------------------------------- ##
 ## Defining macros in autoconf::.  ##
 ## ------------------------------- ##
@@ -782,7 +776,7 @@ cat >>config.log <<EOF
 ## ------------ ##
 
 EOF
-m4_wrap([AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])])dnl
+m4_wrap([AC_EXPAND_ONCE([_AC_INIT_LOG_COMPLETE])[]])dnl
 
 _AC_INIT_DEFAULTS_FDS
 #
@@ -816,7 +810,7 @@ ac_exeext=
 # change it if the script calls AC_OBJEXT.
 ac_objext=o
 
-m4_divert_pop()dnl
+m4_divert_pop([DEFAULTS])dnl
 ])# _AC_INIT_DEFAULTS
 
 
@@ -865,7 +859,7 @@ fi
 dnl Double slashes in pathnames in object file debugging info
 dnl mess up M-x gdb in Emacs.
 srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
-m4_divert_pop()dnl
+m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_SRCDIR
 
 
@@ -1255,7 +1249,7 @@ fi
 ac_tool_prefix=
 test -n "$host_alias" && ac_tool_prefix=$host_alias-
 
-m4_divert_pop()dnl
+m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_PARSE_ARGS
 
 
@@ -1326,7 +1320,7 @@ Fine tuning of the installation directories:
 EOF
 
   cat <<\EOF]
-m4_divert_pop()dnl
+m4_divert_pop([HELP_BEGIN])dnl
 dnl The order of the diversions here is
 dnl - HELP_BEGIN
 dnl   which may be prolongated by extra generic options such as with X or
@@ -1359,7 +1353,7 @@ m4_ifset([AC_PACKAGE_STRING],
      short | recursive ) echo "Configuration of AC_PACKAGE_STRING:";;
    esac])
   cat <<\EOF
-m4_divert_pop()dnl
+m4_divert_pop([HELP_ENABLE])dnl
 m4_divert_push([HELP_END])dnl
 m4_ifset([AC_PACKAGE_BUGREPORT], [
 Report bugs to <AC_PACKAGE_BUGREPORT>.])
@@ -1403,7 +1397,7 @@ if test "$ac_init_help" = "recursive"; then
 fi
 
 test -n "$ac_init_help" && exit 0
-m4_divert_pop()dnl
+m4_divert_pop([HELP_END])dnl
 ])# _AC_INIT_HELP
 
 
@@ -1496,7 +1490,7 @@ AC_SUBST(FFLAGS)dnl
 AC_SUBST(DEFS)dnl
 AC_SUBST(LDFLAGS)dnl
 AC_SUBST(LIBS)dnl
-m4_divert_pop()dnl
+m4_divert_pop([INIT_PREPARE])dnl
 ])# _AC_INIT_PREPARE
 
 
@@ -1520,7 +1514,9 @@ m4_define([AC_PLAIN_SCRIPT],
 [m4_init
 m4_pattern_forbid([^A]m4_dquote(m4_defn([m4_cr_LETTERS]))[_])
 m4_pattern_forbid([_AC_])
-m4_divert_push([BODY])])
+m4_divert_push([BODY])dnl
+m4_wrap([m4_divert_pop([BODY])[]])dnl
+])
 
 
 
@@ -1531,7 +1527,8 @@ m4_divert_push([BODY])])
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 m4_define([AC_INIT],
-[m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
+[AC_PLAIN_SCRIPT
+m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 m4_divert_text([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
@@ -1544,8 +1541,6 @@ dnl it dumps into a diversion prepared by _AC_INIT_VERSION.
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
-# Initialize the diversion setup.
-AC_PLAIN_SCRIPT
 ])
 
 
@@ -1705,7 +1700,7 @@ Program names:
   --program-prefix=PREFIX            prepend PREFIX to installed program names
   --program-suffix=SUFFIX            append SUFFIX to installed program names
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
-m4_divert_pop()dnl
+m4_divert_pop([HELP_BEGIN])dnl
 if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
 else
@@ -3432,7 +3427,7 @@ m4_define([_AC_CONFIG_DEPENDENCIES],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
   [_AC_CONFIG_DEPENDENCY(m4_patsubst(AC_File, [:], [,]))])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ])
 
 
@@ -3460,7 +3455,7 @@ AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])
 m4_popdef([AC_Dest])])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ])
 
 
@@ -3497,7 +3492,7 @@ m4_if([$2],,, [AC_FOREACH([AC_Name], [$1],
 [    ]m4_patsubst(AC_Name, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ac_config_commands="$ac_config_commands $1"
 ])dnl
 
@@ -3575,7 +3570,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ac_config_headers="$ac_config_headers m4_normalize([$1])"
 ])dnl
 
@@ -3612,7 +3607,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ac_config_links="$ac_config_links m4_normalize([$1])"
 ])dnl
 
@@ -3683,7 +3678,7 @@ m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
-m4_divert_pop()dnl
+m4_divert_pop([KILL])dnl
 ac_config_files="$ac_config_files m4_normalize([$1])"
 ])dnl
 
