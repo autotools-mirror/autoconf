@@ -1,3 +1,10 @@
+2002-04-29  Paul Eggert  <eggert@twinsun.com>
+
+	* bin/autoreconf.in (autoreconf): Don't age aclocal.m4's input
+	files to be 1 second older; just set them to be the same time.
+	Also, sleep 1 second after the first aclocal, to work around
+	problems with sub-second time stamps on the input files.
+
 2002-04-29  Thien-Thi Nguyen  <ttn@gnu.org>
 
 	* doc/autoconf.texi: Mention "set -e -x" lossage
