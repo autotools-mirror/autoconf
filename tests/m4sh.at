@@ -272,3 +272,83 @@ AT_CHECK_M4SH
 AT_CHECK([./script])
 
 AT_CLEANUP
+
+
+
+
+## ------------------- ##
+## Functions Support.  ##
+## ------------------- ##
+
+# Hypothesis: the shell we are running, after having checked for
+# $LINENO support, supports functions.
+
+AT_SETUP([Functions Support])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+_AS_LINENO_PREPARE
+
+func_return () {
+  (exit $1)
+}
+
+func_success () {
+  func_return 0
+}
+
+func_failure () {
+  func_return 1
+}
+
+if func_success; then
+  if func_failure; then
+    AS_ERROR([func_failure passed])
+  fi
+else
+  AS_ERROR([func_success failed])
+fi
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
+
+
+
+
+## ------------------------------ ##
+## Functions and return Support.  ##
+## ------------------------------ ##
+
+# Hypothesis: the shell we are running, after having checked for
+# $LINENO support, supports functions, and the `return' keyword.
+
+AT_SETUP([Functions and return Support])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+_AS_LINENO_PREPARE
+
+func_success () {
+  return 0
+}
+
+func_failure () {
+  return 1
+}
+
+if func_success; then
+  if func_failure; then
+    AS_ERROR([func_failure passed])
+  fi
+else
+  AS_ERROR([func_success failed])
+fi
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
