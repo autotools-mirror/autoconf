@@ -1,3 +1,35 @@
+2002-08-30  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Special Shell Variables): Mention POSIX
+	1003.1-2001's requirements for CDPATH.  Give a simpler workaround
+	for the CDPATH problem.  Document PWD.
+	(Limitations of Builtins): Document the problem that "cd $foo" and
+	"ls $foo" may refer to different directories in shells conforming
+	to POSIX 1003.1-2001.  Use PS1 rather than CDPATH for "unset"
+	example, since the old example is now out of date.
+
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Reject FOO if "cd
+	FOO" and "ls FOO" talk about different directories; this catches
+	problems when POSIX 1003.1-2001 "cd" fails due to symlink
+	spaghetti.
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Use AS_UNSET instead
+	of rolling our own unset.
+	(_AS_PREPARE): $as_unset CDPATH instead of AS_UNSETting it, since
+	in practice we needn't worry about CDPATH if unset doesn't work.
+
+	* Makefile.in, aclocal.m4, bin/Makefile.in,
+	config/Makefile.in, doc/Makefile.in, lib/Makefile.in,
+	lib/Autom4te/Makefile.in, lib/autoconf/Makefile.in,
+	lib/autoscan/Makefile.in, lib/autotest/Makefile.in,
+	lib/emacs/Makefile.in, lib/m4sugar/Makefile.in, man/Makefile.in,
+	tests/Makefile.in: Regenerate with Automake 1.6.3.
+
+	* config/config.guess, config/config.sub, config/mkinstalldirs:
+	Update.
+
+	* configure: Regenerate with self.
+
 2002-08-30  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Notes on "cc"
