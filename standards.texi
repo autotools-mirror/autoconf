@@ -2338,24 +2338,32 @@ need not know the history of the erroneous passage.
 @node Man Pages
 @section Man Pages
 
-It is ok to supply a man page for the program as well as a Texinfo
-manual if you wish to.  But keep in mind that supporting a man page
-requires continual effort, each time the program is changed.  Any time
-you spend on the man page is time taken away from more useful things you
-could contribute.
+In the GNU project, man pages are secondary.  It is not necessary or
+expected for every GNU program to have a man page, but some of them do.
+It's your choice whether to include a man page in your program.
 
-Thus, even if a user volunteers to donate a man page, you may find this
-gift costly to accept.  Unless you have time on your hands, it may be
-better to refuse the man page unless the same volunteer agrees to take
-full responsibility for maintaining it---so that you can wash your hands
-of it entirely.  If the volunteer ceases to do the job, then don't feel
-obliged to pick it up yourself; it may be better to withdraw the man
-page until another volunteer offers to carry on with it.
+When you make this decision, consider that supporting a man page
+requires continual effort each time the program is changed.  The time
+you spend on the man page is time taken away from more useful work.
 
-Alternatively, if you expect the discrepancies to be small enough that
-the man page remains useful, put a prominent note near the beginning of
-the man page explaining that you don't maintain it and that the Texinfo
-manual is more authoritative, and describing how to access the Texinfo
+For a simple program which changes little, updating the man page may be
+a small job.  Then there is little reason not to include a man page, if
+you have one.
+
+For a large program that changes a great deal, updating a man page may
+be a substantial burden.  If a user offers to donate a man page, you may
+find this gift costly to accept.  It may be better to refuse the man
+page unless the same person agrees to take full responsibility for
+maintaining it---so that you can wash your hands of it entirely.  If
+this volunteer later ceases to do the job, then don't feel obliged to
+pick it up yourself; it may be better to withdraw the man page from the
+distribution until someone else agrees to update it.
+
+When a program changes only a little, you may feel that the
+discrepancies are small enough that the man page remains useful without
+updating.  If so, put a prominent note near the beginning of the man
+page explaining that you don't maintain it and that the Texinfo manual
+is more authoritative.  The note should say how to access the Texinfo
 documentation.
 
 @node Reading other Manuals
