@@ -193,7 +193,7 @@ divert(2)[]dnl
 
 # Wrap up the testing suite with summary statistics.
 
-rm -f at-check-line
+rm -f at-check-line at-setup-line
 at_fail_count=0
 if test -z "$at_failed_list"; then
   if test "$at_ignore_count" = 0; then
@@ -281,11 +281,16 @@ pushdef([AT_data_experr], )
 if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 divert(1)[]dnl
   echo AT_LINE > at-check-line
+  echo AT_LINE > at-setup-line
   if $at_verbose; then
     echo 'testing AT_group_description'
     echo $at_n "     $at_c"
   fi
-  echo $at_n "substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
+  if $at_verbose; then
+    echo "AT_ordinal. $srcdir/AT_LINE..."
+  else
+    echo $at_n "substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
+  fi
   if test -z "$at_skip_mode"; then
     (
 [#] Snippet (d[]AT_ordinal[](
@@ -306,15 +311,18 @@ AT_DEFINE([AT_CLEANUP],
 $at_traceoff
 [[#] Snippet )s[]AT_ordinal[])
     )
-    case $? in
+    at_status=$?
+    $at_verbose &&
+      echo $at_n "     AT_ordinal. $srcdir/`cat at-setup-line`: $at_c"
+    case $at_status in
       0) echo ok
-	 ;;
+         ;;
       77) echo "ignored near \``cat at-check-line`'"
-	  at_ignore_count=`expr $at_ignore_count + 1`
-	  ;;
+          at_ignore_count=`expr $at_ignore_count + 1`
+          ;;
       *) echo "FAILED near \``cat at-check-line`'"
-	 at_failed_list="$at_failed_list AT_ordinal"
-	 ;;
+         at_failed_list="$at_failed_list AT_ordinal"
+         ;;
     esac
   else
      echo 'ignored (skipped)'
@@ -364,7 +372,7 @@ $2[]_ATEOF
 # their content is not checked.
 AT_DEFINE([AT_CHECK],
 [$at_traceoff
-$at_verbose && echo "$srcdir/AT_LINE: testing..."
+$at_verbose && echo "$srcdir/AT_LINE: patsubst([$1], [\([\"`$]\)], \\\1)"
 echo AT_LINE > at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon

@@ -1,3 +1,8 @@
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
+	* tests/atgeneral.m4 (AT_CHECK, AT_CLEANUP): Be more verbose when
+	`-v' is passed.
+
 2000-11-01  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Using trap-safe "exit".
