@@ -1,5 +1,11 @@
 2001-01-24  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl (generic_macro): s/AC_CHECK_FUNCTIONS/AC_CHECK_FUNCS/.
+	* acfunctions: Just like the previous patch.
+
+	
+2001-01-24  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl (@kinds, %generic_macro): New.
 	(&init_tables): Use them.
 	* acheaders: Run `autoconf -t AC_CHECK_HEADERS:'$1'' on the fileutils,

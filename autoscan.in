@@ -48,7 +48,7 @@ my @kinds =
 # For each kind, the default macro.
 my %generic_macro =
   (
-   "functions"   => "AC_CHECK_FUNCTIONS",
+   "functions"   => "AC_CHECK_FUNCS",
    "headers"     => "AC_CHECK_HEADERS",
    "identifiers" => "AC_CHECK_TYPES",
    "programs"    => "AC_CHECK_PROGS"

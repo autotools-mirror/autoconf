@@ -44,28 +44,111 @@ vsprintf	AC_FUNC_VPRINTF
 wait3		AC_FUNC_WAIT3
 
 # Others.
-ftime		AC_CHECK_FUNCS
-getcwd		AC_CHECK_FUNCS
-gethostname	AC_CHECK_FUNCS
-gettimeofday	AC_CHECK_FUNCS
-getusershell	AC_CHECK_FUNCS
-getwd		AC_CHECK_FUNCS
-mkdir		AC_CHECK_FUNCS
-mkfifo		AC_CHECK_FUNCS
-putenv		AC_CHECK_FUNCS
-re_comp		AC_CHECK_FUNCS
-regcmp		AC_CHECK_FUNCS
-regcomp		AC_CHECK_FUNCS
-rmdir		AC_CHECK_FUNCS
-select		AC_CHECK_FUNCS
-socket		AC_CHECK_FUNCS
-stime		AC_CHECK_FUNCS
-strcspn		AC_CHECK_FUNCS
-strdup		AC_CHECK_FUNCS
-strerror	AC_CHECK_FUNCS
-strspn		AC_CHECK_FUNCS
-strstr		AC_CHECK_FUNCS
-strtod		AC_CHECK_FUNCS
-strtol		AC_CHECK_FUNCS
-strtoul		AC_CHECK_FUNCS
-uname		AC_CHECK_FUNCS
+__argz_count
+__argz_next
+__argz_stringify
+__fpending
+acl
+alarm
+atexit
+btowc
+bzero
+clock_gettime
+dcgettext
+doprnt
+dup2
+endgrent
+endpwent
+euidaccess
+fchdir
+fdatasync
+fesetround
+floor
+fs_stat_dev
+fseeko
+ftime
+ftruncate
+getcwd
+getdelim
+getgroups
+gethostbyaddr
+gethostbyname
+gethostname
+gethrtime
+getloadavg
+getmntent
+getmntinfo
+getpagesize
+getpass
+getspnam
+gettimeofday
+getusershell
+getwd
+hasmntopt
+inet_ntoa
+isascii
+iswprint
+lchown
+listmntent
+localeconv
+localtime_r
+mblen
+mbrlen
+mbrtowc
+memchr
+memmove
+mempcpy
+memset
+mkdir
+mkfifo
+modf
+munmap
+next_dev
+nl_langinfo
+pathconf
+pow
+pstat_getdynamic
+putenv
+re_comp
+realpath
+regcmp
+regcomp
+resolvepath
+rint
+rmdir
+rpmatch
+select
+setenv
+sethostname
+setlocale
+socket
+sqrt
+stime
+stpcpy
+strcasecmp
+strchr
+strcspn
+strdup
+strerror
+strftime
+strncasecmp
+strndup
+strnlen
+strpbrk
+strrchr
+strspn
+strstr
+strtod
+strtol
+strtoul
+strtoull
+strtoumax
+strverscmp
+sysinfo
+tzset
+uname
+utime
+utmpname
+utmpxname
+vprintf
+wcwidth
