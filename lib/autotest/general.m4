@@ -1033,7 +1033,8 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_TESTED],
-[m4_append_uniq([AT_tested], [$1], [ ])])
+[m4_append_uniq([AT_tested], [$1], [
+])])
 
 
 # AT_SETUP(DESCRIPTION)
@@ -1078,7 +1079,8 @@ m4_case([$1],
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 m4_define([AT_KEYWORDS],
-[m4_append_uniq([AT_keywords], [$1], [ ])])
+[m4_append_uniq([AT_keywords], [$1], [
+])])
 
 
 # AT_CAPTURE_FILE(FILE)
@@ -1086,7 +1088,8 @@ m4_define([AT_KEYWORDS],
 # If the current test group does not behave as expected, save the contents of
 # FILE in the test suite log.
 m4_define([AT_CAPTURE_FILE],
-[m4_append_uniq([AT_capture_files], ["$1"], [ ])])
+[m4_append_uniq([AT_capture_files], ["$1"], [ \
+])])
 
 
 # AT_CLEANUP
