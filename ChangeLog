@@ -1,7 +1,8 @@
 2001-09-28  Akim Demaille  <akim@epita.fr>
 
 	* lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el: New.
-	* configure.ac: Adjust.
+	* m4/lispdir.m4: New.
+	* aclocal.m4, configure.ac: Adjust.
 
 2001-09-28  Akim Demaille  <akim@epita.fr>
 
