@@ -787,8 +787,7 @@ not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
 @itemx -m @var{dir}
 @evindex AC_MACRODIR
 Look for the Autoconf macro files in directory @var{dir} instead of the
-default installation directory.
-You can also set the @code{AC_MACRODIR}
+default installation directory.  You can also set the @code{AC_MACRODIR}
 environment variable to a directory; this option overrides the
 environment variable.
 
@@ -912,8 +911,6 @@ to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
 @end defmac
 
-@c FIXME: Currently there is no equivalent to init-cmds, so it is
-@c not really obsolete.
 Actually, the full @code{AC_OUTPUT} interface is given below.  This use
 is strongly discouraged.
 
@@ -1043,12 +1040,10 @@ AC_CONFIG_FILES(autoconf, chmod +x autoconf)
 
 You can override an input file name by appending to @var{file} a
 colon-separated list of input files.  Examples:
-@c FIXME: Hm, this example seem to mean we can use the two lines
-@c together, while obviously it would be wrong.  Clarify?
 
 @example
-AC_CONFIG_FILES(Makefile:boiler/top.mk lib/Makefile:boiler/lib.mk)
-AC_CONFIG_FILES(Makefile:boiler/vars.mk:Makefile.in:boiler/rules.mk)
+AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk
+                lib/Makefile:boiler/lib.mk)
 @end example
 Doing this allows you to keep your file names acceptable to MS-DOS, or
 to prepend and/or append boilerplate to the file.
@@ -1419,10 +1414,12 @@ that depend on the header file to be recompiled.
 Usually the input file is named @file{@var{header}.in}; however, you can
 override the input file name by appending to @var{header}, a
 colon-separated list of input files.  Examples:
+
 @example
-AC_CONFIG_HEADERS(defines.h:defines.hin)
+AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_HEADERS(defines.h:defs.pre:defines.h.in:defs.post)
 @end example
+
 @noindent
 Doing this allows you to keep your file names acceptable to MS-DOS, or
 to prepend and/or append boilerplate to the file.
@@ -1772,13 +1769,14 @@ scripts.  Using them is optional.
 
 @defmac AC_PREREQ (@var{version})
 @maindex PREREQ
+@cindex Version
 Ensure that a recent enough version of Autoconf is being used.  If the
 version of Autoconf being used to create @code{configure} is earlier
 than @var{version}, print an error message on the standard error output
 and do not create @code{configure}.  For example:
 
 @example
-AC_PREREQ(1.8)
+AC_PREREQ(@value{VERSION})
 @end example
 
 This macro is useful if your @file{configure.in} relies on non-obvious
@@ -2254,9 +2252,9 @@ is found, otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_YACC
 @maindex PROG_YACC
 @ovindex YACC
-If @code{bison} is found, set output variable @code{YACC} to
-@samp{bison -y}.  Otherwise, if @code{byacc} is found, set @code{YACC}
-to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
+If @code{bison} is found, set output variable @code{YACC} to @samp{bison
+-y}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
+@samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @node Generic Programs,  , Particular Programs, Alternative Programs
@@ -2277,8 +2275,8 @@ AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
 
 @defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @maindex CHECK_FILE
-Check whether file @var{file} exists on the native system.
-If it is found, execute @var{action-if-found}, otherwise do
+Check whether file @var{file} exists on the native system.  If it is
+found, execute @var{action-if-found}, otherwise do
 @var{action-if-not-found}, if given.
 @end defmac
 
@@ -2730,8 +2728,8 @@ functions is not found.
 Like calling @code{AC_CHECK_FUNCS} using an @var{action-if-not-found}
 that adds @samp{@var{function}.o} to the value of the output variable
 @code{LIBOBJS}.  You can declare a function for which your replacement
-version is used by enclosing the prototype in @samp{#ifndef
-HAVE_@var{function}}.  If the system has the function, it probably
+version is used by enclosing the prototype in @samp{#if
+!HAVE_@var{function}}.  If the system has the function, it probably
 declares it in a header file you should be including, so you shouldn't
 redeclare it, lest your declaration conflict.
 @end defmac
@@ -2901,12 +2899,12 @@ then, in your code, you can put declarations like this:
 #if STDC_HEADERS
 # include <string.h>
 #else
-# ifndef HAVE_STRCHR
+# if !HAVE_STRCHR
 #  define strchr index
 #  define strrchr rindex
 # endif
 char *strchr (), *strrchr ();
-# ifndef HAVE_MEMCPY
+# if !HAVE_MEMCPY
 #  define memcpy(d, s, n) bcopy ((s), (d), (n))
 #  define memmove(d, s, n) bcopy ((s), (d), (n))
 # endif
@@ -3406,9 +3404,12 @@ define it as empty.
 Occasionally installers use a C++ compiler to compile C code, typically
 because they lack a C compiler.  This causes problems with @code{const},
 because C and C++ treat @code{const} differently.  For example:
+
 @example
 const int foo;
 @end example
+
+@noindent
 is valid in C but not in C++.  These differences unfortunately cannot be
 papered over by defining @code{const} to be empty.
 
@@ -3485,6 +3486,7 @@ so, define @samp{PROTOTYPES}.  In the case the compiler does not handle
 prototypes, you should use @code{ansi2knr}, which comes with the
 Ghostscript distribution, to unprotoize function definitions.  For
 function prototypes, you should first define @code{PARAMS}:
+
 @example
 #ifndef PARAMS
 # if PROTOTYPES
@@ -3494,7 +3496,10 @@ function prototypes, you should first define @code{PARAMS}:
 # endif /* no PROTOTYPES */
 #endif
 @end example
+
+@noindent
 then use it this way:
+
 @example
 size_t my_strlen PARAMS ((const char *));
 @end example
@@ -3502,25 +3507,23 @@ size_t my_strlen PARAMS ((const char *));
 
 @c FIXME: What the heck is this macro doing here?  Move it out of
 @c the way, in its proper section!!!
-@c FIXME: Explain once for all how the CPP names are built, not everywhere.
 @defmac AC_CHECK_SIZEOF (@var{type}, @ovar{cross-size}, @ovar{includes})
 @maindex CHECK_SIZEOF
-Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
-C++) type @var{type} (e.g. @samp{int}, @samp{char *} etc.).  If
-@samp{type} is unknown, it gets a size of 0.  If no @var{includes} are
-specified, the default includes are used (@pxref{Default Includes}).  If
-you provide @var{include}, make sure to include @file{stdio.h} which is
-required for this macro to run.
+Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
+size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
+of 0.  If no @var{includes} are specified, the default includes are used
+(@pxref{Default Includes}).  If you provide @var{include}, make sure to
+include @file{stdio.h} which is required for this macro to run.
 
-@var{uctype} is @var{type}, with lowercase converted to uppercase,
-spaces changed to underscores, and asterisks changed to @samp{P}.  If
-cross-compiling, the value @var{cross-size} is used if given, otherwise
-@code{configure} exits with an error message.
+If cross-compiling, the value @var{cross-size} is used if given,
+otherwise @code{configure} exits with an error message.
 
 For example, the call
+
 @example
 AC_CHECK_SIZEOF(int *)
 @end example
+
 @noindent
 defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
@@ -3625,7 +3628,7 @@ You would then declare its prototype in C as:
 
 @example
 #ifdef F77_FUNC
-#  define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
+# define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
 #endif
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
@@ -4191,9 +4194,12 @@ or other features that are not found in all Bourne-compatible shells;
 restrict yourself to the lowest common denominator.  Even @code{unset}
 is not supported by all shells!  Also, include a space after the
 exclamation point in interpreter specifications, like this:
+
 @example
 #! /usr/bin/perl
 @end example
+
+@noindent
 If you omit the space before the path, then 4.2BSD based systems (such
 as Sequent DYNIX) will ignore the line, because they interpret @samp{#! /}
 as a 4-byte magic number.
@@ -4243,14 +4249,17 @@ whether some arbitrary file exists.  To do so, use @samp{test -f} or
 it.
 
 Another nonportable shell programming construction is
+
 @example
 @var{var}=$@{@var{var}:-@var{value}@}
 @end example
+
 @noindent
 The intent is to set @var{var} to @var{value} only if it is not already
 set, but if @var{var} has any value, even the empty string, to leave it
 alone.  Old BSD shells, including the Ultrix @code{sh}, don't accept
 the colon, and complain and die.  A portable equivalent is
+
 @example
 : $@{@var{var}=@var{value}@}
 @end example
@@ -4267,23 +4276,20 @@ way to perform the operation has been found yet.
 Here is an example that uses the shell variable @code{fstype} to keep
 track of whether the remaining cases need to be checked.
 
-@c FIXME: I hate this example, because it does not use the quotes
-@c properly, but it would be terrible to use quotes here.  So?  Should
-@c I just shut up, or advocate the right uses of (useless) quotes?
 @example
 @group
 AC_MSG_CHECKING(how to get file system type)
 fstype=no
 # The order of these tests is important.
 AC_TRY_CPP([#include <sys/statvfs.h>
-#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4)
+#include <sys/fstyp.h>], [AC_DEFINE(FSTYPE_STATVFS) fstype=SVR4])
 if test $fstype = no; then
-AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/fstyp.h>], AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3)
+  AC_TRY_CPP([#include <sys/statfs.h>
+#include <sys/fstyp.h>], [AC_DEFINE(FSTYPE_USG_STATFS) fstype=SVR3])
 fi
 if test $fstype = no; then
-AC_TRY_CPP([#include <sys/statfs.h>
-#include <sys/vmount.h>], AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX)
+  AC_TRY_CPP([#include <sys/statfs.h>
+#include <sys/vmount.h>], [AC_DEFINE(FSTYPE_AIX_STATFS) fstype=AIX])
 fi
 # (more cases omitted here)
 AC_MSG_RESULT($fstype)
@@ -4385,7 +4391,7 @@ appropriate cache variable, as in this example:
 @example
 AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF)])
 if test "$ac_cv_func_vprintf" != yes; then
-AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
+  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT)])
 fi
 @end example
 
@@ -4901,6 +4907,8 @@ expressions).  In those places, they use the @code{m4} builtin command
 anything, they disable quoting entirely instead by setting the quote
 characters to empty strings.)  Here is an example:
 
+@c FIXME: Oh no, please, no, not that crap again.  Well, a new section
+@c on quoting is needed since below the bad thing is advocated.
 @example
 AC_TRY_LINK(
 changequote(<<, >>)dnl

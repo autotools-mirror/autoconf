@@ -1,5 +1,11 @@
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Tune the use of quotes, add missing
+	@noindents, remove dead FIXME:s, promote #if ! over #ifndef,
+	simplify duplicated text.
+
+2000-03-01  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Configuration Commands): Document
 	AC_CONFIG_COMMANDS_PRE and _POST.
 
