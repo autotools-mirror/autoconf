@@ -360,7 +360,7 @@ AC_DEFINE([_GNU_SOURCE])
 # Check for Cygwin.  This is a way to set the right value for
 # EXEEXT.
 AU_DEFUN([AC_CYGWIN],
-[AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
+[AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
             [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
 case $host_os in
@@ -375,7 +375,7 @@ esac
 # Check for EMX on OS/2.  This is another way to set the right value
 # for EXEEXT.
 AU_DEFUN([AC_EMXOS2],
-[AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
+[AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
             [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
 case $host_os in
@@ -390,7 +390,7 @@ esac
 # Check for mingw32.  This is another way to set the right value for
 # EXEEXT.
 AU_DEFUN([AC_MINGW32],
-[AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
+[AC_CANONICAL_HOST
 AC_DIAGNOSE([obsolete],
             [$0 is obsolete: use AC_CANONICAL_HOST and $host_os])dnl
 case $host_os in
