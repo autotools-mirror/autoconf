@@ -1,5 +1,10 @@
 2001-06-02  Akim Demaille  <akim@epita.fr>
 
+	* autom4te.in (Request::@request): Declare with `vars', not `my',
+	as it prevents updates via `do FILENAME'.
+
+2001-06-02  Akim Demaille  <akim@epita.fr>
+
 	* configure.in (standards_texi): Remove, dead code.
 
 2001-06-02  Akim Demaille  <akim@epita.fr>

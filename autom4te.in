@@ -49,8 +49,12 @@ use Getopt::Long;
 use IO::File;
 use strict;
 
-# List of requests
-my @request;
+# List of requests.
+# We can't declare it `my' as the loading, performed via `do',
+# would refer to another scope, and @request would not be updated.
+# It used to work with `my' vars, and I don't know whether the current
+# behavior (5.6) is wanted or not.
+use vars qw(@request);
 
 struct
   (
@@ -200,8 +204,11 @@ sub load
   croak "$me: cannot load a single request\n"
     if ref ($self);
 
-  do "$filename"
-    or croak "$me: cannot source $filename: $!\n";
+  (my $return) = do "$filename";
+
+  croak "$me: cannot parse $filename: $@\n" if $@;
+  croak "$me: cannot do $filename: $!\n"    if $!;
+  croak "$me: cannot run $filename\n"       unless $return;
 }
 
 
@@ -918,6 +925,12 @@ Request->load ("$me.cache/requests")
 my $req = Request->request ('source' => \@ARGV,
 			    'path' => \@include,
 			    'macro' => [keys %trace, @required_trace]);
+
+if ($verbose)
+  {
+    print STDERR "$me: the trace request object is:\n";
+    print STDERR $req->marshall;
+  }
 
 # We need to run M4 if
 # - for traces
