@@ -4310,6 +4310,16 @@ On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 
 @item @file{sys/socket.h}
 On Darwin, @file{stdlib.h} is a prerequisite.
+
+@item @file{X11/extensions/scrnsaver.h}
+Using XFree86, this header requires @file{X11/Xlib.h}, which is probably
+so required that you might not even consider looking for it.
+
+@example
+AC_CHECK_HEADERS([X11/extensions/scrnsaver.h>], [], [],
+[[#include <X11/Xlib.h>
+]])
+@end example
 @end table
 
 

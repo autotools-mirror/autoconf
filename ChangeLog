@@ -1,3 +1,7 @@
+2003-05-14  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Header Portability): X11/extensions/scrnsaver.h.
+
 2003-05-12  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Improve the
