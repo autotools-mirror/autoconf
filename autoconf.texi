@@ -215,8 +215,9 @@ Autoconf imposes some restrictions on the names of macros used with
 @code{#ifdef} in C programs (@pxref{Preprocessor Symbol Index}).
 
 Autoconf requires GNU @code{m4} in order to generate the scripts.  It
-uses features that some UNIX versions of @code{m4} do not have; it is
-also reported to overflow internal limits of some versions of @code{m4}.
+uses features that some UNIX versions of @code{m4} do not have.  It also
+overflows internal limits of some versions of @code{m4}, including GNU
+@code{m4} 1.0; so use a later version of GNU @code{m4}.
 
 Autoconf does not work well with GNU C library releases before 1.06.
 The GNU C library contains stubs (which always return an error) for
