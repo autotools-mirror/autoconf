@@ -1234,9 +1234,8 @@ AC_DEFUN(AC_TRY_RUN,
 [AC_REQUIRE([AC_C_CROSS])dnl
 if test "$cross_compiling" = yes; then
   ifelse([$4], ,
-    [ifdef([AC_PROVIDE_AC_CANONICAL_SYSTEM],
-      [errprint(__file__:__line__: warning: test program without default prevents cross compiling
-)])dnl
+    [errprint(__file__:__line__: warning: test program without default to allow cross compiling
+)dnl
   AC_MSG_ERROR(can not run test program while cross compiling)],
   [$4])
 else
@@ -1532,9 +1531,11 @@ dnl Insert the sed substitutions of variables.
 undivert(AC_DIVERSION_SED)
 CEOF
 EOF
-cat >> ${CONFIG_STATUS} <<\EOF
+cat >> ${CONFIG_STATUS} <<EOF
 
-CONFIG_FILES=${CONFIG_FILES-"$1"}
+CONFIG_FILES=\${CONFIG_FILES-"$1"}
+EOF
+cat >> ${CONFIG_STATUS} <<\EOF
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
   # Support "outfile[:infile]", defaulting infile="outfile.in".
   case "$ac_file" in
