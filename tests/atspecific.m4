@@ -73,9 +73,9 @@ AT_CHECK_CONFIGURE
 dnl Some tests might exit prematurely when they find a problem, in
 dnl which case `env-after' is probably missing.  Don't check it then.
 if test -f state-env.after; then
-  cp -f state-env.before expout
+  mv -f state-env.before expout
   AT_CHECK([cat state-env.after], 0, expout)
-  cp -f state-ls.before expout
+  mv -f state-ls.before expout
   AT_CHECK([cat state-ls.after], 0, expout)
 fi
 ])# _AT_CHECK_AC_MACRO

@@ -1,3 +1,7 @@
+2000-12-05  Akim Demaille  <akim@epita.fr>
+
+	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): s/cp -f/mv -f/.
+
 2000-12-01  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Don't escape
