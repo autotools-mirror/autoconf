@@ -82,7 +82,7 @@
 
 	Stop being ridiculous :*(
 
-	* acgeneral.m4 (AC_SHELL_DIRNAME):  When using m4 the argument
+	* acgeneral.m4 (_AC_SHELL_DIRNAME):  When using m4 the argument
 	is named `$1' not `$dir'.
 	When using m4 you ought to quote properly.
 	When using m4, you should check that there are not too many shell
@@ -272,8 +272,8 @@
 
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
-	* acgeneral.m4 (AC_DIRNAME): Use an `expr' solution instead of
-	echo|sed.
+	* acgeneral.m4 (_AC_SHELL_DIRNAME): Use an `expr' solution instead
+	of echo|sed.
 	From Paul Eggert.
 	* doc/autoconf.texi (Limitations of Usual Tools): Include the
 	words from Paul about `|' with expr(1).
