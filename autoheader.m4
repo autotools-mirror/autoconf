@@ -50,6 +50,8 @@ $3
 ])
 ])
 
+define([AC_CHECK_HEADER], [AC_CHECK_HEADERS($1,$2,$3)])
+
 define([AC_CHECK_HEADERS_DIRENT], [#
 @@@headers="$headers $1"@@@
 ])
