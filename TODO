@@ -449,3 +449,11 @@ check for c89 before cc if it can't find gcc?
 hpa@yggdrasil.com (H. Peter Anvin)
 
 ------------------------------------------------------------------------------
+
+Modify the meaning of autoheader --localdir to add an additional
+directory to look for acconfig.h instead of replacing the directory
+containing configure.in.
+
+Marc Horowitz <marc@MIT.EDU>
+
+------------------------------------------------------------------------------

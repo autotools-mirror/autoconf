@@ -1,3 +1,11 @@
+Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Test release 2.10.3.
+
+	* testsuite/Makefile.in (dejacheck): New target, suggested by Tom
+	Tromey <tromey@creche.cygnus.com>.
+	(check): Depend on dejacheck.
+
 Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): Split the list of sed commands in

@@ -1,9 +1,8 @@
 Issues to resolve before release:
 
-1.  autoreconf problem with finding subdirectory acconfig.h.
-2.  test the new features: AC_PROG_CC_WORKS on Solaris, AC_FUNC_MMAP
-on HP-UX, AC_CACHE_SAVE on HP-UX, AC_FUNC_SETPGRP, AC_PATH_XTRA on
-Solaris and BSDI 2.1, sed command splitting on HP-UX, AC_FUNC_FNMATCH.
+Test the new features: AC_PROG_CC_WORKS on Solaris, AC_CACHE_SAVE
+with spaces in var values on HP-UX, AC_FUNC_SETPGRP, AC_PATH_XTRA on
+Solaris, sed command splitting on HP-UX (many AC_SUBST's), AC_FUNC_FNMATCH.
 
 Major changes in release 2.11:
 

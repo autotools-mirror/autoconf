@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.10.2
-@set VERSION 2.10.2
+@set EDITION 2.10.3
+@set VERSION 2.10.3
 @set UPDATED November 1996
 
 @iftex
@@ -703,7 +703,8 @@ newer than their input files (@file{configure.in} and, if present,
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
-Look for the package files @file{aclocal.m4} and @file{acconfig.h} (but
+Have @code{autoconf} and @code{autoheader} look for the package files
+@file{aclocal.m4} and (@code{autoheader} only) @file{acconfig.h} (but
 not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
 @var{dir} instead of in the directory containing each @file{configure.in}.
 

@@ -86,12 +86,6 @@ if test $show_version = yes; then
 fi
 
 TEMPLATES="${AC_MACRODIR}/acconfig.h"
-# Disabled until I figure out whether it's really right.
-#if test "$localdir" != .; then
-  # When running autoheader from autoreconf, this is how we get
-  # subdirectories' acconfig.h files.
-  #test -r ./acconfig.h && TEMPLATES="${TEMPLATES} ./acconfig.h"
-#fi
 test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
 
 case $# in
