@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 2001, 2002, 2003  Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -183,7 +183,8 @@ sub END
   #        this sets $? = 255
   #
   # Cases 1), 2), and 3b) are fine, but we prefer $? = 1 for 3a) and 3c).
-  $? = 1 if ($! && $! == $?) || $? == 255;
+  my $status = $?;
+  $status = 1 if ($! && $! == $?) || $? == 255;
   # (Note that we cannot safely distinguish calls to `exit (n)'
   # from calls to die when `$! = n'.  It's not big deal because
   # we only call `exit (0)' or `exit (1)'.)
@@ -215,6 +216,8 @@ sub END
       $? = 1;
       return;
     }
+
+  $? = $status;
 }
 
 
