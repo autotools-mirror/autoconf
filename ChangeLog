@@ -1,3 +1,9 @@
+2002-05-17  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/types.m4 (AC_CHECK_MEMBER): Work correctly even if
+	the member is itself an aggregate.  Bug reported by Sergey Poznyakoff.
+	This improves on an earlier suggestion by H. Peter Anvin.
+
 2002-05-16  Paul Eggert  <eggert@twinsun.com>
 
 	AC_FUNC_FNMATCH now tests only for POSIX compatibility.
