@@ -1,7 +1,11 @@
 Major changes in release 1.8:
 
-* AC_PROG_INSTALL uses install.sh instead of cp if it's found.
+* Relative srcdir values are not made absolute.
+* AC_FIND_X looks for X in more places.
+* AC_PROG_INSTALL defaults to install.sh instead of cp, if it's in srcdir.
+  install.sh is distributed with Autoconf.
 * AC_OUTPUT adds its comments in C format when substituting in C files.
+* New macro AC_FIND_XTRA.
 
 Major changes in release 1.7:
 
