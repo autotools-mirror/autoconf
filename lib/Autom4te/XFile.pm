@@ -133,9 +133,9 @@ sub open
   if (!$fh->SUPER::open (@_))
     {
       my $me = basename ($0);
-      my $file = ${*$fh}{'autom4te_xfile_file'};
       croak "$me: cannot open $file: $!\n";
     }
+  binmode $fh if $file =~ /^\s*>/;
 }
 
 ################################################
