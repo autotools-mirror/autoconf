@@ -1,3 +1,9 @@
+2000-07-06  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* aclang.m4 (AC_LANG_INT_SAVE(C++)): Be a copy of
+	AC_LANG_INT_SAVE(C), not AC_LANG_INT_SAVE_TRY(C).
+	Fixes Autoconf PR/133.
+
 2000-07-06  Mo DeJong  <mdejong@cygnus.com>
 
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS, AC_CHECK_TOOLS): Change

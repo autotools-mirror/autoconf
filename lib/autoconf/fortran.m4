@@ -413,7 +413,7 @@ define([AC_LANG_BOOL_COMPILE_TRY(C++)], defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
 # AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
 # -------------------------------------------
 # Same as C.
-define([AC_LANG_INT_SAVE(C++)], defn([AC_LANG_INT_SAVE_TRY(C)]))
+define([AC_LANG_INT_SAVE(C++)], defn([AC_LANG_INT_SAVE(C)]))
 
 
 
