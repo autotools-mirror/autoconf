@@ -1,3 +1,13 @@
+Thu Jan 11 10:38:19 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
+
+	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Removed echo cmds
+	from $ac_cpp, $ac_compile, and $ac_link.
+	(AC_TRY_EVAL, AC_TRY_COMMAND): New macros for running tests' commands.
+	Always put the configure source line and command line into config.log.
+	(AC_TRY_CPP, AC_TRY_COMPILE, AC_TRY_LINK): Use them.
+	* acspecific.m4: Use AC_TRY_EVAL and AC_TRY_COMMAND for running
+	all tests.
+
 Fri Jan  5 17:50:28 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_PATH_X, AC_PATH_X_XMKMF, AC_PATH_X_DIRECT):
