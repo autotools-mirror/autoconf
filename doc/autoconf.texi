@@ -5247,6 +5247,15 @@ To detect whether you are running @command{bash}, test if
 Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
 details.
 
+@item @command{/bin/sh} on OpenBSD
+@cindex @command{/bin/sh} on OpenBSD
+
+@samp{\"} expands to @samp{"} in here-in documents with unquoted
+delimiter in the native @command{/bin/sh} on OpenBSD 2.7.  As a general
+rule, if @samp{\\} expands to @samp{\} use @samp{\\} to get @samp{\}.
+Don't rely on @samp{\} being preserved just because it has no special
+meaning together with the next symbol.
+
 @item @command{/usr/xpg4/bin/sh} on Solaris
 @cindex @command{/usr/xpg4/bin/sh} on Solaris
 The @sc{posix}-compliant Bourne shell on a Solaris system is
