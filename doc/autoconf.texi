@@ -9812,6 +9812,21 @@ fi
 @end example
 
 
+@item @command{printf}
+@c ------------------
+@prindex @command{printf}
+A format string starting with a @samp{-} can cause problems.
+@command{bash} (eg. 2.05b) will interpret it as an options string and
+give an error.  And @samp{--} to mark the end of options is not good
+in the NetBSD Almquist shell (eg. 0.4.6) which will take that
+literally as the format string.  Putting the @samp{-} in a @samp{%c}
+or @samp{%s} is probably the easiest way to avoid doubt,
+
+@example
+printf %s -foo
+@end example
+
+
 @item @command{pwd}
 @c ----------------
 @prindex @command{pwd}

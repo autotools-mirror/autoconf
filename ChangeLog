@@ -1,3 +1,8 @@
+2003-02-24  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Limitations of Builtins): Add notes on printf
+	format starting with "-".
+
 2003-02-20  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* doc/autoconf.texi (Limitations of Make): `foo=bar make -e'
