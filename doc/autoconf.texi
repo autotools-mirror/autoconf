@@ -274,6 +274,7 @@ Writing Macros
 * Quoting::                     Protecting macros from unwanted expansion
 * Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
+* Coding Style::                Writing Autoconf macros @`a la Autoconf
 
 Quoting
 
@@ -5744,6 +5745,7 @@ Here are some instructions and guidelines for writing Autoconf macros.
 * Quoting::                     Protecting macros from unwanted expansion
 * Reporting Messages::          Notifying @code{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
+* Coding Style::                Writing Autoconf macros @`a la Autoconf
 @end menu
 
 @node Macro Definitions, Macro Names, Writing Macros, Writing Macros
@@ -6249,7 +6251,7 @@ When the user runs @samp{autoconf -W error}, warnings from
 @code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
 @ref{autoconf Invocation}.
 
-@node Dependencies Between Macros,  , Reporting Messages, Writing Macros
+@node Dependencies Between Macros, Coding Style, Reporting Messages, Writing Macros
 @section Dependencies Between Macros
 
 Some Autoconf macros depend on other macros having been called first in
@@ -6441,6 +6443,194 @@ replaced by the modern @var{implementation}.  The additional
 @var{message} is then printed.
 @end defmac
 
+@node Coding Style,  , Dependencies Between Macros, Writing Macros
+@section Coding Style
+
+The Autoconf macros follow a strict coding style.  You are encouraged to
+follow this style, especially if you intend to distribute your macro,
+either by contributing it to Autoconf itself, or via other means.
+
+The first requirement is to pay great attention to the quotation, for
+more details, see @ref{Autoconf Language}, and @ref{Quoting}.
+
+Do not try to invent new interfaces, it is likely that there is a macro
+in Autoconf which resembles to the macro you are defining: try to stick
+to this existing interface (order of the arguments, default values
+etc.).  We @emph{are} conscious than some of these interfaces are not
+perfect, nevertheless, when harmless, homogeneity should be privileged
+over creativity.
+
+Be careful about clashes both between M4 symbols, and shell variables.
+
+If you stick to the suggested M4 naming scheme (@pxref{Macro Names}) you
+are unlikely to generate conflicts.  Nevertheless, when you need to set
+a special value, @emph{avoid using a regular macro name}, rather, use an
+``impossible'' name.  For instance, up to version 2.13, the macro
+@code{AC_SUBST} used to remember what @var{symbol}s were already defined
+by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
+But since there is a macro named @code{AC_SUBST_FILE} it was just
+impossible to @samp{AC_SUBST(FILE)}!  In this case,
+@code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
+have been used (yes, with the parentheses).  Or better yet, using high
+level macros such as @code{AC_EXPAND_ONCE}.
+
+No Autoconf macro should ever enter the user variables name space, i.e.,
+but the variables which are the actual result of running the macro, all
+the shell variables should start with @code{ac_}.  In addition, small
+macros or any macro which is likely to be embedded in other macros
+should be careful not to use obvious names.
+
+@cindex @code{dnl}
+Do not use @code{dnl} to introduce comments: most of the comments you
+are likely to write are either header comments which are not output
+anyway, or comments that should make their way into @file{configure}.
+There are exceptional cases where you do want to comment special M4
+constructs, in which case @code{dnl} is right, but keep in mind it is
+unlikely.
+
+M4 ignores the leading spaces before each argument, use this feature to
+indent in such a way that arguments are (more or less) aligned with the
+opening parenthesis of the macro being called.  For instance, instead of
+
+@example
+AC_CACHE_CHECK(for EMX OS/2 environment,
+ac_cv_emxos2,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, [return __EMX__;])],
+[ac_cv_emxos2=yes], [ac_cv_emxos2=no])])
+@end example
+
+@noindent
+write
+
+@example
+AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
+@end example
+
+@noindent
+or even
+
+@example
+AC_CACHE_CHECK([for EMX OS/2 environment],
+               [ac_cv_emxos2],
+               [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+                                                   [return __EMX__;])],
+                                  [ac_cv_emxos2=yes],
+                                  [ac_cv_emxos2=no])])
+@end example
+
+
+Be free to use various tricks to avoid that auxiliary tools, such as
+editors, behave improperly.  For instance, instead of
+
+@example
+patsubst([$1], [$"])
+@end example
+
+@noindent
+use
+
+@example
+patsubst([$1], [$""])
+@end example
+
+@noindent
+so that Emacsen do not open a endless ``string'' at the first quote.
+For the same reasons, avoid
+
+@example
+test $[#] != 0
+@end example
+
+@noindent
+but use
+
+@example
+test $[@@%:@@] != 0
+@end example
+
+@noindent
+to avoid that the closing bracket be hidden inside a @samp{#}-comment,
+breaking the bracket matching highlighting from Emacsen.
+
+When defining a macro, quote the name being defined.  If the macro is
+never @code{AC_REQUIRE}'d nor @code{AC_REQUIRE}'s, use @code{define}.
+In case of doubt, use @code{AC_DEFUN}.  Include the prototype of the
+macro in its header comments.  When arguments have default values,
+display them in the prototype.  For instance:
+
+@example
+# AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
+# --------------------------------------
+define([AC_MSG_ERROR],
+[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
+@end example
+
+All the @code{AC_REQUIRE} should be at the beginning of the macro,
+@code{dnl}'ed.
+
+Unless the macro is short, try to leave the closing @samp{])} at the
+beginning of a line, followed by a comment which reminds the name of the
+macro being defined.  If you want to avoid the new-line which is then
+introduced, use @code{dnl}.  Better yet, use @samp{[]dnl} @emph{even}
+behind of parenthesis, since because of the M4 evaluation rule the
+@samp{dnl} might be appended to the result of the evaluation of the
+macro before it (leading to @samp{yesdnl} instead of @samp{yes}).  For
+instance, instead of:
+
+@example
+AC_DEFUN([AC_PATH_X],
+[AC_MSG_CHECKING(for X)
+AC_REQUIRE_CPP()
+@r{# cut...}
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+fi])
+@end example
+
+@noindent
+write:
+
+@example
+AC_DEFUN([AC_PATH_X],
+[AC_REQUIRE_CPP()dnl
+AC_MSG_CHECKING(for X)
+@r{# cut...}
+  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+fi[]dnl
+])# AC_PATH_X
+@end example
+
+
+In order to highlight this coding style, here is a macro written the old
+way:
+
+@example
+dnl Check for EMX on OS/2.
+dnl _AC_EMXOS2
+AC_DEFUN(_AC_EMXOS2,
+[AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, return __EMX__;)],
+ac_cv_emxos2=yes, ac_cv_emxos2=no)])
+test "$ac_cv_emxos2" = yes && EMXOS2=yes])
+@end example
+
+@noindent
+and the new way:
+
+@example
+# _AC_EMXOS2
+# ----------
+# Check for EMX on OS/2.
+define([_AC_EMXOS2],
+[AC_CACHE_CHECK([for EMX OS/2 environment], [ac_cv_emxos2],
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
+test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
+])# _AC_EMXOS2
+@end example
 
 @c ================================================== Manual Configuration
 

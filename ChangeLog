@@ -1,3 +1,7 @@
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Coding Style): New node.
+
 2000-07-07  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_SHELL_MKDIR_P): s/ac_dir/ac_mkdir_dir/ to avoid
