@@ -1358,7 +1358,7 @@ ac_config_files="$ac_config_files tests/autoheader:tests/wrappl.in"
 
 ac_config_files="$ac_config_files tests/autom4te"
 
-ac_config_files="$ac_config_files tests/autoreconf"
+ac_config_files="$ac_config_files tests/autoreconf:tests/wrappl.in"
 
 ac_config_files="$ac_config_files tests/autoscan:tests/wrappl.in"
 
@@ -2090,7 +2090,7 @@ do
   "tests/autoconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoconf:tests/wrapsh.in" ;;
   "tests/autoheader" ) CONFIG_FILES="$CONFIG_FILES tests/autoheader:tests/wrappl.in" ;;
   "tests/autom4te" ) CONFIG_FILES="$CONFIG_FILES tests/autom4te" ;;
-  "tests/autoreconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoreconf" ;;
+  "tests/autoreconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoreconf:tests/wrappl.in" ;;
   "tests/autoscan" ) CONFIG_FILES="$CONFIG_FILES tests/autoscan:tests/wrappl.in" ;;
   "tests/autoupdate" ) CONFIG_FILES="$CONFIG_FILES tests/autoupdate" ;;
   "tests/ifnames" ) CONFIG_FILES="$CONFIG_FILES tests/ifnames:tests/wrappl.in" ;;

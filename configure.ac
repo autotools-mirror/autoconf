@@ -39,7 +39,7 @@ AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],
                 [chmod +x tests/autoheader])
 AC_CONFIG_FILES([tests/autom4te],
                 [chmod +x tests/autom4te])
-AC_CONFIG_FILES([tests/autoreconf],
+AC_CONFIG_FILES([tests/autoreconf:tests/wrappl.in],
                 [chmod +x tests/autoreconf])
 AC_CONFIG_FILES([tests/autoscan:tests/wrappl.in],
                 [chmod +x tests/autoscan])
@@ -94,7 +94,7 @@ AC_CONFIG_FILES(Makefile m4/Makefile doc/Makefile
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.
-m4_match(m4_defn([AC_PACKAGE_VERSION]),  [[a-z]],
+m4_bmatch(m4_defn([AC_PACKAGE_VERSION]),  [[a-z]],
 [    cat <<EOF
 
 You are about to use an experimental version of Autoconf.  Be sure to
