@@ -11,19 +11,22 @@ dnl Additional Autoconf macros to ease testing.
 # is AC_SUBST.
 AC_DEFUN(AC_ENV_SAVE,
 [(set) 2>&1 |
+  # This is Autoconf's shell name space, OK.
   grep -v '^ac_' |
   # Some variables we are allowed to touch
   egrep -v '^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=' |
   egrep -v '^(LIBS|LIBOBJS|LDFLAGS)=' |
-  egrep -v '^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=' |
   egrep -v '^INSTALL(_(DATA|PROGRAM|SCRIPT))?=' |
   egrep -v '^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=' |
-  egrep -v '^(NEED_SETGID|KMEM_GROUP)=' |
   egrep -v '^(X_(CFLAGS|(|EXTRA_|PRE_)LIBS)|x_(includes|libraries)|have_x)=' |
   egrep -v '^(host|build|target)(_(alias|cpu|vendor|os))?=' |
   egrep -v '^(cross_compiling)=' |
   egrep -v '^(interpval)=' |
   egrep -v '^(f77_(case|underscore))=' |
+  # AC_FUNCs from acspecific.
+  egrep -v '^(ALLOCA|NEED_SETGID|KMEM_GROUP)=' |
+  # AC_PROGs from acspecific.
+  egrep -v '^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=' |
   # Some variables some shells use and change.
   egrep -v '^(_|OLDPWD|PIPESTATUS|SECONDS)=' |
   # There maybe variables spread on several lines, eg IFS, remove the dead

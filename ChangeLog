@@ -1,5 +1,9 @@
 2000-02-17  Akim Demaille  <akim@epita.fr>
 
+	* tests/actest.m4 (AC_ENV_SAVE): Added ALLOCA.
+
+2000-02-17  Akim Demaille  <akim@epita.fr>
+
 	* tests/semantics.m4 (AC_CHECK_TYPES): `addr, addr' is not
 	portable sed: use `addr,addr'.
 
