@@ -90,6 +90,15 @@ fi
     }
   }
 
+  {
+    while (sub(/\\$/, "", $0) > 0) {
+      if ((getline tmp) > 0)
+	$0 = $0 tmp
+      else
+	break
+    }
+  }
+
   /^[\t ]*#/ {
     if (sub(/^[\t ]*#[\t ]*ifn?def[\t ]+/, "", $0)) {
       sub(/[^A-Za-z_0-9].*/, "", $0)

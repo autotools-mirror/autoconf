@@ -1,3 +1,8 @@
+1999-01-19  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	* ifnames.sh: Source lines ending with backslash are prepended to
+ 	the following line before further processing.
+
 1999-01-19  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_PROG_CXXCPP): Substitute @CXXCPP@ correctly
