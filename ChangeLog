@@ -1,3 +1,7 @@
+2000-10-19  Pavel Roskin  <proski@gnu.org>
+
+	* doc/autoconf.texi (Shellology): Documented quirks in ash-0.2.
+
 2000-10-18  Pavel Roskin  <proski@gnu.org>
 
 	* mdate-sh: Removed, its copy remains in the doc/ directory.

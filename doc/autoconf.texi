@@ -4971,6 +4971,55 @@ To detect whether you are running @command{zsh}, test if
 compatible with the Bourne shell: you have to run @samp{emulate sh} and
 set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
+
+@item @command{ash}
+@cindex @command{ash}
+@command{ash} is often used on @sc{gnu}/Linux and @sc{bsd} systems as a
+light-weight Bourne-compatible shell.  @command{ash} version 0.2 has
+some bugs that are fixed in the 0.3.x series, but portable shell scripts
+should workaround them, since version 0.2 is still shipped with many
+@sc{gnu}/Linux distributions.
+
+To be compatible with @command{ash} 0.2
+
+@itemize @bullet
+@item
+don't rely on variable assignment setting @samp{$?} unless the
+assignment involves command substitution:
+
+@example
+false || foo=bar && echo "Not portable"
+false || foo=`bar` && echo "Portable"
+@end example
+
+@item
+don't use @samp{$?} after expanding empty or unset variables:
+
+@example
+foo=
+false
+$foo
+echo "Don't use it: $?"
+@end example
+
+@item
+don't use command substitution within variable expansion:
+
+@example
+echo $@{FOO=`bar`@}
+@end example
+
+@item
+beware that @command{exit} inside command substitution causes the
+current shell exit as well. Use parentheses to prevent @command{ash}
+from exiting:
+
+@example
+(`exit 1`) || echo "All right"
+`exit 1` || echo "ash won't print it"
+@end example
+
+@end itemize
 @end table
 
 
