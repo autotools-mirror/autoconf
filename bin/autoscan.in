@@ -24,6 +24,7 @@ use 5.005;
 use File::Basename;
 use File::Find;
 use Getopt::Long;
+use IO::File;
 use strict;
 
 use vars qw(@cfiles @makefiles @shfiles %c_keywords %printed);
@@ -62,6 +63,8 @@ my %kind_comment =
   );
 
 my $configure_scan = 'configure.scan';
+my $log = new IO::File ">$me.log"
+  or die "$me: cannot open $me.log: $!\n";
 
 # Autoconf and lib files.
 my $autoconf;
@@ -92,8 +95,9 @@ sub print_usage ()
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
-common portability problems and create a file `$configure_scan' which
-is a preliminary `configure.ac' for that package.
+common portability problems, check for incompleteness of
+`configure.ac', and create a file `$configure_scan' which is a
+preliminary `configure.ac' for that package.
 
   -h, --help            print this help, then exit
   -V, --version         print version number, then exit
@@ -217,9 +221,9 @@ sub init_tables ()
   foreach my $kind (@kinds)
     {
       my $file = "$datadir/ac$kind";
-      open TABLE, $file or
-	die "$me: cannot open $file: $!\n";
-      while (<TABLE>)
+      my $table = new IO::File $file
+	or die "$me: cannot open $file: $!\n";
+      while ($_ = $table->getline)
 	{
 	  # Ignore blank lines and comments.
 	  next
@@ -244,7 +248,8 @@ sub init_tables ()
 	      push @{$macro{$kind}{$word}}, $macro;
 	    }
 	}
-      close(TABLE);
+      $table->close
+	or die "$me: cannot close $file: $!\n";
     }
 
   die "$me: some tables are inconsistent\n"
@@ -258,19 +263,21 @@ sub init_tables ()
 ## ----------------------- ##
 
 
-# scan_c_file(FILE)
-# -----------------
+# scan_c_file(FILENAME)
+# ---------------------
 sub scan_c_file ($)
 {
-  my ($file) = @_;
+  my ($filename) = @_;
 
   push (@cfiles, $File::Find::name);
 
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
 
-  open(CFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<CFILE>)
+  my $file = new IO::File "<$filename"
+    or die "$me: cannot open $filename: $!\n";
+
+  while ($_ = $file->getline)
     {
       # Strip out comments, approximately.
       # Ending on this line.
@@ -314,19 +321,23 @@ sub scan_c_file ($)
 	    if !defined $c_keywords{$1};
 	}
     }
-  close(CFILE);
+
+  $file->close
+    or die "$me: cannot close $filename: $!\n";
 }
 
 
-# scan_makefile(MAKEFILE)
-# -----------------------
+# scan_makefile(MAKEFILE-NAME)
+# ----------------------------
 sub scan_makefile ($)
 {
-  my ($file) = @_;
+  my ($filename) = @_;
   push (@makefiles, $File::Find::name);
 
-  open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<MFILE>)
+  my $file = new IO::File "<$filename"
+    or die "$me: cannot open $filename: $!\n";
+
+  while ($_ = $file->getline)
     {
       # Strip out comments and variable references.
       s/#.*//;
@@ -345,26 +356,31 @@ sub scan_makefile ($)
 	  push (@{$used{'libraries'}{$1}}, "$File::Find::name:$.");
 	}
       # Tokens in the code.
-      while (s/\b([a-zA-Z_][\w\+\.-]+)/ /)
+      while (s/(?<![-\w.])([a-zA-Z_][\w+.-]+)/ /)
 	{
 	  push (@{$used{'programs'}{$1}}, "$File::Find::name:$.");
 	}
     }
-  close(MFILE);
+
+  $file->close
+    or die "$me: cannot close $filename: $!\n";
 }
 
 
-# scan_sh_file(SHELL-SCRIPT)
-# --------------------------
+# scan_sh_file(SHELL-SCRIPT-NAME)
+# -------------------------------
 sub scan_sh_file ($)
 {
-  my ($file) = @_;
+  my ($filename) = @_;
   push (@shfiles, $File::Find::name);
 
-  open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<MFILE>)
+  my $file = new IO::File "<$filename"
+    or die "$me: cannot open $filename: $!\n";
+
+  while ($_ = $file->getline)
     {
       # Strip out comments and variable references.
+      s/#.*//;
       s/#.*//;
       s/\${[^\}]*}//g;
       s/@[^@]*@//g;
@@ -375,7 +391,9 @@ sub scan_sh_file ($)
 	  push (@{$used{'programs'}{$1}}, "$File::Find::name:$.");
 	}
     }
-  close(MFILE);
+
+  $file->close
+    or die "$me: cannot close $filename: $!\n";
 }
 
 
@@ -449,15 +467,15 @@ sub scan_files ()
 ## ----------------------- ##
 
 
-# output_kind ($KIND)
-# -------------------
-sub output_kind ($)
+# output_kind ($FILE, $KIND)
+# --------------------------
+sub output_kind ($$)
 {
-  my ($kind) = @_;
+  my ($file, $kind) = @_;
   # Lists of words to be checked with the generic macro.
   my @have;
 
-  print CONF "\n# $kind_comment{$kind}\n"
+  print $file "\n# $kind_comment{$kind}\n"
     if exists $kind_comment{$kind};
   foreach my $word (sort keys %{$used{$kind}})
     {
@@ -481,7 +499,7 @@ sub output_kind ($)
 	    {
 	      if (! $printed{$macro})
 		{
-		  print CONF "$macro\n";
+		  print $file "$macro\n";
 		  $printed{$macro} = 1;
 		}
 	      push (@{$needed_macros{$macro}},
@@ -489,20 +507,22 @@ sub output_kind ($)
 	    }
 	}
     }
-  print CONF "$generic_macro{$kind}([" . join(' ', sort(@have)) . "])\n"
+  print $file "$generic_macro{$kind}([" . join(' ', sort(@have)) . "])\n"
     if @have;
 }
 
 
-# output_libraries ()
-# -------------------
-sub output_libraries ()
+# output_libraries ($FILE)
+# ------------------------
+sub output_libraries ($)
 {
-  print CONF "\n# Checks for libraries.\n";
+  my ($file) = @_;
+
+  print $file "\n# Checks for libraries.\n";
   foreach my $word (sort keys %{$used{'libraries'}})
     {
-      print CONF "# FIXME: Replace `main' with a function in `-l$word':\n";
-      print CONF "AC_CHECK_LIB([$word], [main])\n";
+      print $file "# FIXME: Replace `main' with a function in `-l$word':\n";
+      print $file "AC_CHECK_LIB([$word], [main])\n";
     }
 }
 
@@ -515,23 +535,23 @@ sub output ($)
   my $configure_scan = shift;
   my %unique_makefiles;
 
-  open (CONF, ">$configure_scan") ||
-    die "$me: cannot create $configure_scan: $!\n";
+  my $file = new IO::File ">$configure_scan"
+    or die "$me: cannot create $configure_scan: $!\n";
 
-  print CONF "# Process this file with autoconf to produce a configure script.\n";
-  print CONF "AC_INIT\n";
+  print $file "# Process this file with autoconf to produce a configure script.\n";
+  print $file "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n";
   if (defined $cfiles[0])
     {
-      print CONF "AC_CONFIG_SRCDIR([$cfiles[0]])\n";
-      print CONF "AC_CONFIG_HEADER([config.h])\n";
+      print $file "AC_CONFIG_SRCDIR([$cfiles[0]])\n";
+      print $file "AC_CONFIG_HEADER([config.h])\n";
     }
 
-  output_kind ('programs');
-  output_kind ('makevars');
-  output_libraries;
-  output_kind ('headers');
-  output_kind ('identifiers');
-  output_kind ('functions');
+  output_kind ($file, 'programs');
+  output_kind ($file, 'makevars');
+  output_libraries ($file);
+  output_kind ($file, 'headers');
+  output_kind ($file, 'identifiers');
+  output_kind ($file, 'functions');
 
   # Change DIR/Makefile.in to DIR/Makefile.
   foreach my $m (@makefiles)
@@ -539,12 +559,12 @@ sub output ($)
       $m =~ s/\.in$//;
       $unique_makefiles{$m}++;
     }
-  print CONF "\nAC_CONFIG_FILES([",
+  print $file "\nAC_CONFIG_FILES([",
        join ("\n                 ", sort keys %unique_makefiles), "])\n";
-  print CONF "AC_OUTPUT\n";
+  print $file "AC_OUTPUT\n";
 
-  close CONF ||
-    die "$me: closing $configure_scan: $!\n";
+  $file->close
+    or die "$me: cannot close $configure_scan: $!\n";
 }
 
 
@@ -560,19 +580,21 @@ sub output ($)
 # in CONFIGURE_AC.
 sub check_configure_ac ($)
 {
-  my ($configure_ac) = $@;
+  my ($configure_ac) = @_;
   my ($trace_option) = '';
 
+  # Find what needed macros are invoked in CONFIGURE_AC.
   foreach my $macro (sort keys %needed_macros)
     {
       $macro =~ s/\(.*//;
       $trace_option .= " -t $macro";
     }
 
-  open (TRACES, "$autoconf -A $datadir $trace_option $configure_ac|") ||
-    die "$me: cannot create read traces: $!\n";
+  my $traces =
+    new IO::File "$autoconf -A $datadir $trace_option $configure_ac|"
+      or die "$me: cannot create read traces: $!\n";
 
-  while (<TRACES>)
+  while ($_ = $traces->getline)
     {
       chomp;
       my ($file, $line, $macro, @args) = split (/:/, $_);
@@ -597,15 +619,19 @@ sub check_configure_ac ($)
 	}
     }
 
-  close (TRACES) ||
-    die "$me: cannot close traces: $!\n";
+  $traces->close
+    or die "$me: cannot close: $!\n";
 
+  # Report the missing macros.
   foreach my $macro (sort keys %needed_macros)
     {
-      warn "$me: warning: missing $macro wanted by: \n";
+      warn ("$configure_ac: warning: missing $macro wanted by: "
+	    . (${$needed_macros{$macro}}[0])
+	    . "\n");
+      print $log "$me: warning: missing $macro wanted by: \n";
       foreach my $need (@{$needed_macros{$macro}})
         {
-          warn "\t$need\n";
+          print $log "\t$need\n";
         }
     }
 }
@@ -626,5 +652,8 @@ if ($configure_ac)
   {
     check_configure_ac ($configure_ac);
   }
+
+$log->close
+  or die "$me: cannot close $me.log: $!\n";
 
 exit 0;

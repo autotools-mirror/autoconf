@@ -1,3 +1,14 @@
+2001-07-14  Akim Demaille  <akim@epita.fr>
+
+	* autoscan.in: Use IO::File.
+	Adjust all the routines to use it.
+	($log): New file (autoscan.log).
+	(output): Dump detailed logs into $log, and a shortened version to
+	stderr.
+	(&scan_makefile): Refine the regexp catching tokens in the code.
+	* doc/autoconf.texi (autoscan Invocation): Document `autoscan.log'
+	and the `configure.ac' checking feature.
+
 2001-07-12  Akim Demaille  <akim@epita.fr>
 
 	For some AWK, such as on HPUX 11, `xfoo' does not match `foo|^bar'.

@@ -985,24 +985,30 @@ checks for system services
 @section Using @code{autoscan} to Create @file{configure.ac}
 @cindex @code{autoscan}
 
-The @code{autoscan} program can help you create a @file{configure.ac}
-file for a software package.  @code{autoscan} examines source files in
-the directory tree rooted at a directory given as a command line
-argument, or the current directory if none is given.  It searches the
-source files for common portability problems and creates a file
-@file{configure.scan} which is a preliminary @file{configure.ac} for
-that package.
+The @code{autoscan} program can help you create and/or maintain a
+@file{configure.ac} file for a software package.  @code{autoscan}
+examines source files in the directory tree rooted at a directory given
+as a command line argument, or the current directory if none is given.
+It searches the source files for common portability problems and creates
+a file @file{configure.scan} which is a preliminary @file{configure.ac}
+for that package, and checks a possibly existing @file{configure.ac} for
+completeness.
 
-You should manually examine @file{configure.scan} before renaming it to
+When using @command{autoscan} to create a @file{configure.ac}, you
+should manually examine @file{configure.scan} before renaming it to
 @file{configure.ac}; it will probably need some adjustments.
-Occasionally, @code{autoscan} outputs a macro in the wrong order relative
-to another macro, so that @code{autoconf} produces a warning; you need
-to move such macros manually.  Also, if you want the package to use a
-configuration header file, you must add a call to
-@code{AC_CONFIG_HEADERS} (@pxref{Configuration Headers}).  You might also
-have to change or add some @code{#if} directives to your program in
+Occasionally, @code{autoscan} outputs a macro in the wrong order
+relative to another macro, so that @code{autoconf} produces a warning;
+you need to move such macros manually.  Also, if you want the package to
+use a configuration header file, you must add a call to
+@code{AC_CONFIG_HEADERS} (@pxref{Configuration Headers}).  You might
+also have to change or add some @code{#if} directives to your program in
 order to make it work with Autoconf (@pxref{ifnames Invocation}, for
 information about a program that can help with that job).
+
+When using @command{autoscan} to maintain a @file{configure.ac}, simply
+consider adding its suggestions.  The file @file{autoscan.log} will
+contain detailed information on why a macro is requested.
 
 @code{autoscan} uses several data files (installed along with Autoconf)
 to determine which macros to output when it finds particular symbols in

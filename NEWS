@@ -8,6 +8,7 @@
   other hard-to-quote constructs.
 - m4_pattern_forbid, m4_pattern_allow
 - Tips for upgrading from 2.13.
+- Using autoscan to maintain a configure.ac.
 
 ** Default includes
 - Now include stdint.h.
