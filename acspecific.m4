@@ -543,7 +543,7 @@ fi
 dnl Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
 dnl defines `DIR'.
 dnl AC_CHECK_HEADERS_DIRENT(HEADER-FILE... [, ACTION])
-AC_DEFUN(AC_CHECK_HEADERS_DIRENT,
+define(AC_CHECK_HEADERS_DIRENT,
 [for ac_hdr in $1
 do
 AC_CHECK_HEADER_DIRENT($ac_hdr,
