@@ -1,5 +1,11 @@
 2001-01-23  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl: Don't use `defined' to check whether an array is
+	defined.
+	Don't use parens with `defined'.
+
+2001-01-23  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE): Be sure to quote hashes to
 	avoid M4 thinking it's comments.
 

@@ -139,7 +139,7 @@ Try `$me --help' for more information.\n"
     if (@ARGV > 1);
   ($srcdir) = @ARGV;
   $srcdir = "."
-    if !defined($srcdir);
+    if !defined $srcdir;
 
   print "srcdir=$srcdir\n" if $verbose;
   chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
@@ -299,12 +299,12 @@ sub scan_c_file
       while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
 	{
 	  push (@{$functions{$1}}, "$file:$.")
-	    if !defined($c_keywords{$1});
+	    if !defined $c_keywords{$1};
 	}
       while (s/\b([a-zA-Z_]\w*)\b/ /)
 	{
 	  push (@{$identifiers{$1}}, "$file:$.")
-	    if !defined($c_keywords{$1});
+	    if !defined $c_keywords{$1};
 	}
     }
   close(CFILE);
@@ -460,7 +460,7 @@ sub print_unique
 {
   my ($macro, @where) = @_;
 
-  if (defined($macro) && !defined($printed{$macro}))
+  if (defined $macro && !defined $printed{$macro})
     {
       print CONF "$macro\n";
       $printed{$macro} = 1;
@@ -506,7 +506,7 @@ sub output_headers
   print CONF "\n# Checks for header files.\n";
   foreach $word (sort keys %headers)
     {
-      if (defined($headers_macros{$word}) &&
+      if (defined $headers_macros{$word} &&
 	  $headers_macros{$word} eq 'AC_CHECK_HEADERS')
 	{
 	  push(@have_headers, $word);
@@ -517,7 +517,7 @@ sub output_headers
 	}
     }
   print CONF "AC_CHECK_HEADERS([" . join(' ', sort(@have_headers)) . "])\n"
-    if defined(@have_headers);
+    if @have_headers;
 }
 
 sub output_identifiers
@@ -528,7 +528,7 @@ sub output_identifiers
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
   foreach $word (sort keys %identifiers)
     {
-      if (defined ($identifiers_macros{$word}) &&
+      if (defined $identifiers_macros{$word} &&
 	  $identifiers_macros{$word} eq 'AC_CHECK_TYPES')
 	{
 	  push (@have_types, $word);
@@ -539,7 +539,7 @@ sub output_identifiers
 	}
     }
   print CONF "AC_CHECK_TYPES([" . join(', ', sort(@have_types)) . "])\n"
-    if defined (@have_types);
+    if @have_types;
 }
 
 sub output_functions
@@ -550,18 +550,18 @@ sub output_functions
   print CONF "\n# Checks for library functions.\n";
   foreach $word (sort keys %functions)
     {
-      if (defined($functions_macros{$word}) &&
+      if (defined $functions_macros{$word} &&
 	  $functions_macros{$word} eq 'AC_CHECK_FUNCS')
 	{
 	  push(@have_funcs, $word);
 	}
       else
 	{
-	  &print_unique($functions_macros{$word}, @{$functions{$word}});
+	  &print_unique ($functions_macros{$word}, @{$functions{$word}});
 	}
     }
   print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
-    if defined(@have_funcs);
+    if @have_funcs;
 }
 
 
