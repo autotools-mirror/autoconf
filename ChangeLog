@@ -1,3 +1,8 @@
+2002-09-02  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Limitations of Builtins): Explain why logical
+	directory names are generally preferable to physical names.
+
 2002-09-02  Akim Demaille  <akim@epita.fr>
 
 	* lib/Autom4te/General.pm (&update_file): s/die/error/.
