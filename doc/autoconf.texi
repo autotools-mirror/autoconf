@@ -7587,8 +7587,8 @@ Yet another great name from Lars J. Aas.
 @c
 }.
 
-@command{autom4te} should basically considered as a replacement of
-@command{m4} itself.
+@command{autom4te} is a preprocessor that is like @command{m4}.
+It supports M4 extensions designed for use in tools like Autoconf.
 
 @menu
 * autom4te Invocation::         A @acronym{GNU} M4 wrapper
@@ -11448,7 +11448,8 @@ OpenBSD and FreeBSD @command{make}s, however, will never perform a
 This is extremely annoying.
 
 When attempting a @code{VPATH} build for an autoconfiscated package
-(e.g, @code{mkdir build; ../configure}), this means the @acronym{GNU}
+(e.g,, @code{mkdir build && cd build && ../configure}), this means the
+@acronym{GNU}
 @command{make} will build everything locally in the @file{build}
 directory, while BSD @command{make} will build new files locally and
 update existing files in the source directory.
