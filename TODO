@@ -391,6 +391,11 @@ config.site.
 
 ------------------------------------------------------------------------------
 
+* Provide a way to create a config.h *and* set the DEFS variable from within
+the same configure script.
+
+------------------------------------------------------------------------------
+
 For AC_TYPE_SIGNAL signal handlers, provide a way for code to know
 whether to do "return 0" or "return" (int vs void) to avoid compiler
 warnings.  (Roland McGrath)
