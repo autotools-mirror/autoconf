@@ -1,3 +1,10 @@
+2000-02-24  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (AC_ACLOCALDIR): Use `(aclocal) 2>/dev/null`, not
+	`aclocal 2>/dev/null` if you want no complains for missing
+	aclocal.
+	From Nicolas Joly.
+
 2000-02-22  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* configure.in (HELP2MAN): Specify the third argument of

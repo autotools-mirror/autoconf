@@ -86,7 +86,7 @@ esac
 
 # Variables.
 : ${AC_MACRODIR=@datadir@}
-: ${AC_ACLOCALDIR=`aclocal --print-ac-dir 2>/dev/null`}
+: ${AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`}
 : ${AWK=@AWK@}
 localdir=
 outfile=
