@@ -1,3 +1,21 @@
+2001-09-17  Paul Eggert  <eggert@twinsun.com>
+
+	Fix bug reported by Paul Townsend on AIX 4.3.3.0 with CFLAGS=-O4
+	or CFLAGS=-O5.  In that case, the linker has a relaxed view of
+	fatal errors, and AC_CHECK_LIB causes it to include libraries even
+	when they don't exist.
+
+	* lib/autoconf/headers.m4 (AC_HEADER_DIRENT): Use AC_SEARCH_LIBS,
+	not AC_CHECK_LIB, so that we don't use -ldir or -lx if we don't
+	need it.
+
+	* lib/autoconf/specific.m4 (AC_ISC_POSIX): Replace the old, crufty
+	version with the version used by fileutils 4.1, except use
+	AC_SEARCH_LIBS, not AC_CHECK_LIB, so that we don't use -lcposix if
+	we don't need it.
+	
+	* doc/autoconf.texi (AC_ISC_POSIX): Describe new behavior.
+
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/base.at, tests/m4sh.at: Be sure to issue the bangshe line
