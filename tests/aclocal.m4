@@ -1,10 +1,10 @@
-dnl actest.m4                                              -*- autoconf -*-
-dnl Additional Autoconf macros to ease testing.
+# actest.m4                                              -*- autoconf -*-
+# Additional Autoconf macros to ease testing.
 
 # join(SEP, ARG1, ARG2...)
 # ------------------------
 # Produce ARG1SEPARG2...SEPARGn.
-define(join,
+define([join],
 [ifelse([$#], [1], [],
         [$#], [2], [[$2]],
         [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
@@ -26,7 +26,7 @@ define(join,
 # - _|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
 #   Some variables some shells use and change
 
-AC_DEFUN(AC_ENV_SAVE,
+AC_DEFUN([AC_ENV_SAVE],
 [(set) 2>&1 |
   egrep -v -e \
 'join([|],
@@ -34,7 +34,7 @@ AC_DEFUN(AC_ENV_SAVE,
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
       [^(LIBS|LIBOBJS|LDFLAGS)=],
       [^INSTALL(_(DATA|PROGRAM|SCRIPT))?=],
-      [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=],
+      [^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|XENIX|EXEEXT|OBJEXT)=],
       [^(X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|have_x)=],
       [^(host|build|target)(_(alias|cpu|vendor|os))?=],
       [^(cross_compiling)=],
@@ -54,7 +54,7 @@ AC_DEFUN(AC_ENV_SAVE,
 # ----------------
 # Related VALUE to NAME both with AC_SUBST and AC_DEFINE.  This is
 # used in the torture tests.
-AC_DEFUN(AC_DEFUBST,
+AC_DEFUN([AC_DEFUBST],
 [AC_DUMMY_VAR($1)="AC_DEFUBST_VALUE"
 AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1),
                    "$AC_DUMMY_VAR($1)",

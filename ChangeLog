@@ -1,3 +1,12 @@
+2000-04-07  Akim Demaille  <akim@epita.fr>
+
+	The night of the living dead...
+
+	* acspecific.m4 (AC_XENIX_DIR, AC_DYNIX_SEQ, AC_IRIX_SUN,
+	AC_SCO_INTL): Wake up a few zombies.
+	* doc/autoconf.texi: Adjust.
+	* tests/aclocal.m4 (AC_ENV_SAVE): Likewise.
+
 2000-05-24  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_LANG_FUNC_LINK_TRY, AC_LANG_FUNC_LINK_TRY(C),

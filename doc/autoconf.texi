@@ -7780,8 +7780,14 @@ Does nothing, now integrated in @code{AC_PROG_LEX}.
 @defmac AC_DYNIX_SEQ
 @maindex DYNIX_SEQ
 If on Dynix/PTX (Sequent @sc{unix}), add @samp{-lseq} to output variable
-@code{LIBS}.  This macro is obsolete; instead, use
-@code{AC_FUNC_GETMNTENT}.
+@code{LIBS}.  This macro used to be defined as
+
+@example
+AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")
+@end example
+
+@noindent
+now it is just @code{AC_FUNC_GETMNTENT}.
 @end defmac
 
 @defmac AC_EXEEXT
@@ -7899,10 +7905,22 @@ AC_CONFIG_SRCDIR(@var{unique-file-in-source-dir})
 @defmac AC_IRIX_SUN
 @maindex IRIX_SUN
 If on IRIX (Silicon Graphics @sc{unix}), add @samp{-lsun} to output
-variable @code{LIBS}.  This macro is obsolete.  If you were using it to
-get @code{getmntent}, use @code{AC_FUNC_GETMNTENT} instead.  If you used
-it for the NIS versions of the password and group functions, use
-@samp{AC_CHECK_LIB(sun, getpwnam)}.
+@code{LIBS}.  If you were using it to get @code{getmntent}, use
+@code{AC_FUNC_GETMNTENT} instead.  If you used it for the NIS versions
+of the password and group functions, use @samp{AC_CHECK_LIB(sun,
+getpwnam)}.  Up to Autoconf 2.13, it used to be
+
+@example
+AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS")
+@end example
+
+@noindent
+now it is defined as
+
+@example
+AC_FUNC_GETMNTENT
+AC_CHECK_LIB(sun, getpwnam)
+@end example
 @end defmac
 
 @defmac AC_LANG_C
@@ -8141,8 +8159,15 @@ removed because of limited usefulness
 @defmac AC_SCO_INTL
 @maindex SCO_INTL
 @ovindex LIBS
-If on SCO @sc{unix}, add @samp{-lintl} to output variable @code{LIBS}.
-Use @code{AC_FUNC_STRFTIME} instead.
+If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.  This
+macro used to
+
+@example
+AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
+@end example
+
+@noindent
+now it just calls @code{AC_FUNC_STRFTIME} instead.
 @end defmac
 
 @defmac AC_SETVBUF_REVERSED
@@ -8266,9 +8291,21 @@ is considered obsolete.
 @defmac AC_XENIX_DIR
 @maindex XENIX_DIR
 @ovindex LIBS
-If on Xenix, add @samp{-lx} to output variable @code{LIBS}.  Also, if
-@file{dirent.h} is being used, add @samp{-ldir} to @code{LIBS}.  Use
-@code{AC_HEADER_DIRENT} instead.
+This macro used to add @samp{-lx} to output variable @code{LIBS} if on
+Xenix.  Also, if @file{dirent.h} is being checked for, added
+@samp{-ldir} to @code{LIBS}.  Now it is merely an alias of
+@code{AC_HEADER_DIRENT} instead, plus some code to detect whether
+running @sc{xenix} on which you should not depend:
+
+@example
+AC_MSG_CHECKING(for Xenix)
+AC_EGREP_CPP(yes,
+[#if defined(M_XENIX) && !defined(M_UNIX)
+  yes
+#endif],
+             [AC_MSG_RESULT(yes); XENIX=yes],
+             [AC_MSG_RESULT(no); XENIX=])
+@end example
 @end defmac
 
 @defmac AC_YYTEXT_POINTER

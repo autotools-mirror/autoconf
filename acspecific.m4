@@ -2667,8 +2667,35 @@ else
 fi
 ])# AC_ISC_POSIX
 
-AC_DEFUNCT([AC_XENIX_DIR], [; instead use AC_HEADER_DIRENT])
-AC_DEFUNCT([AC_DYNIX_SEQ], [; instead use AC_FUNC_GETMNTENT])
-AC_DEFUNCT([AC_IRIX_SUN],
-           [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])
-AC_DEFUNCT([AC_SCO_INTL], [; instead use AC_FUNC_STRFTIME])
+
+# AC_XENIX_DIR
+# ------------
+AU_DEFUN(AC_XENIX_DIR,
+[# You shouldn't need to depend upon XENIX.  Remove this test if useless.
+AC_MSG_CHECKING(for Xenix)
+AC_EGREP_CPP(yes,
+[#if defined(M_XENIX) && !defined(M_UNIX)
+  yes
+@%:@endif],
+             [AC_MSG_RESULT(yes); XENIX=yes],
+             [AC_MSG_RESULT(no); XENIX=])
+
+AC_HEADER_DIRENT[]dnl
+])
+
+
+# AC_DYNIX_SEQ
+# ------------
+AU_DEFUN([AC_DYNIX_SEQ], [AC_FUNC_GETMNTENT])
+
+
+# AC_IRIX_SUN
+# -----------
+AU_DEFUN([AC_IRIX_SUN],
+[AC_FUNC_GETMNTENT
+AC_CHECK_LIB(sun, getpwnam)])
+
+
+# AC_SCO_INTL
+# -----------
+AU_DEFUN([AC_SCO_INTL], [AC_FUNC_STRFTIME])
