@@ -2432,9 +2432,8 @@ do
   for ac_prog in grep ggrep; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
-    test -f "$ac_path_GREP" || continue
-    $ac_path_GREP_found || if $as_executable_p "$ac_path_GREP"; then
-  # Check for GNU ac_path_GREP and select it if it is found.
+    $as_executable_p "$ac_path_GREP" || continue
+    # Check for GNU ac_path_GREP and select it if it is found.
   # Check for GNU $ac_path_GREP
 if "$ac_path_GREP" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
   ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:
@@ -2460,7 +2459,6 @@ else
   done
 fi
 
-fi
 
     $ac_path_GREP_found && break 3
   done
