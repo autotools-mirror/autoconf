@@ -25,6 +25,7 @@ include(libm4.m4)#                                          -*- Autoconf -*-
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)
+m4_include(aclang.m4)
 m4_include(acspecific.m4)
 m4_include(acoldnames.m4)
 m4_disable(autoconf)

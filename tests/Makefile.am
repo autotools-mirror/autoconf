@@ -84,14 +84,18 @@ FILTER_MACROS = egrep -v -e \
 ^AC_TRY\
 _AC_' | tr ' ' '|'`
 
-macros.m4: $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 $(srcdir)/Makefile.am
-	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
+# The files which contains macro we check for syntax.
+MACRO_FILES = $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 \
+              $(top_srcdir)/aclang.m4
+
+macros.m4: $(MACRO_FILES) $(srcdir)/Makefile.am
+	cat $(MACRO_FILES) | \
 	  sed -ne 's/^A[CU]_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
 	  sort | uniq | $(FILTER_MACROS) >defuns
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
 # them.
-	cat $(top_srcdir)/acgeneral.m4 $(top_srcdir)/acspecific.m4 | \
+	cat $(MACRO_FILES) | \
 	  sed -ne 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
 	  sort | uniq >requires
 	for macro in `cat defuns`; do \

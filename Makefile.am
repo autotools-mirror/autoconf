@@ -37,7 +37,7 @@ EXTRA_SCRIPTS = autoscan
 distpkgdataDATA = \
 acfunctions acheaders acidentifiers acmakevars acprograms \
 libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4 \
-autoupdate.m4
+autoupdate.m4 aclang.m4
 
 nodistpkgdataDATA = autoconf.m4f autoheader.m4f autoupdate.m4f acversion.m4
 
@@ -94,7 +94,8 @@ editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' \
 	*) echo Error: Autoconf requires GNU m4 1.4 or later; exit 1 ;; \
 	esac
 
-common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4
+common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
+         aclang.m4
 
 autoconf.m4f: autoconf.m4 $(common)
 autoheader.m4f: autoheader.m4 $(common)

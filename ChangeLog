@@ -1,5 +1,35 @@
 2000-03-27  Akim Demaille  <akim@epita.fr>
 
+	Move all the language dependent macros into aclang.m4.
+
+	* aclang.m4: New file.
+	* autoconf.m4: Include it.
+	* autoheader.m4: Likewise.
+	* autoupdate.m4: Likewise.
+	* Makefile.am: Adjust.
+	* test/Makefile.am: Likewise.
+	* acgeneral.m4 (AC_LANG_CASE,AC_LANG_SAVE, _AC_LANG_DISPATCH,
+	AC_LANG, _AC_LANG_CURRENT, AC_LANG_SOURCE, AC_LANG_PROGRAM,
+	AC_LANG_CALL, AC_LANG(C), AC_LANG_SOURCE(C), AC_LANG_PROGRAM(C),
+	AC_LANG_CALL(C), AC_LANG(C++), AC_LANG_SOURCE(C++),
+	AC_LANG_PROGRAM(C++), AC_LANG_CALL(C++), AC_LANG(FORTRAN77),
+	AC_LANG_SOURCE(FORTRAN77), AC_LANG_PROGRAM(FORTRAN77),
+	AC_LANG_CALL(FORTRAN77): Move to...
+	* aclang.m4: here.
+	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77,
+	AC_PROG_CC_WORKS, AC_PROG_CXX_WORKS, AC_PROG_F77_WORKS,
+	AC_PROG_CC_GNU, AC_PROG_CXX_GNU, AC_PROG_F77_GNU, AC_PROG_CC_G,
+	AC_PROG_CXX_G, AC_PROG_F77_G, AC_PROG_GCC_TRADITIONAL,
+	AC_PROG_CC_C_O, AC_PROG_F77_C_O, AC_PROG_CC_STDC, AC_PROG_CPP,
+	AC_PROG_CXXCPP, AC_REQUIRE_CPP, AC_PROG_LEX, AC_TYPE_MODE_T,
+	AC_C_CROSS, AC_C_CHAR_UNSIGNED, AC_C_LONG_DOUBLE, AC_C_BIGENDIAN,
+	AC_C_INLINE, AC_C_CONST, AC_C_VOLATILE, AC_C_STRINGIZE,
+	AC_C_PROTOTYPES, AC_F77_LIBRARY_LDFLAGS, AC_F77_NAME_MANGLING,
+	AC_F77_WRAPPERS): Move to...
+	* aclang.m4: here.
+
+2000-03-27  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (trace): Let translate_awk do the whole translation
 	from `$trace' to the m4 program.
 
