@@ -28,3 +28,17 @@ AC_DEFUN(AC_ENV_SAVE,
   # lines
   fgrep = >$1
 ])
+
+
+
+# AC_DEFUBST(NAME)
+# ----------------
+# Related VALUE to NAME both with AC_SUBST and AC_DEFINE.  This is
+# used in the torture tests.
+AC_DEFUN(AC_DEFUBST,
+[AC_DUMMY_VAR($1)="AC_DEFUBST_VALUE"
+AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1),
+                   "$AC_DUMMY_VAR($1)",
+                   [Define to a long string if your `Autoconf' works
+                    properly.])
+AC_SUBST(AC_DUMMY_VAR($1))])

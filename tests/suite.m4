@@ -14,8 +14,8 @@ Some tests might be ignored if you don't have the software which the
 macros are supposed to test (e.g., a Fortran compiler).
 EOF
 
-dnl Run semantics before, since there are little chances that syntax
-dnl fails.
+dnl Run the tests from the most selective to the easiest.
 
+AT_INCLUDE(torture.m4)
 AT_INCLUDE(semantics.m4)
 AT_INCLUDE(syntax.m4)

@@ -1,5 +1,12 @@
 2000-02-07  Akim Demaille  <akim@epita.fr>
 
+	Torture test config.status, AC_SUBST and AC_DEFINE.
+
+	* tests/torture.m4: New file.
+	* tests/suite.m4: Include it.
+
+2000-02-07  Akim Demaille  <akim@epita.fr>
+
 	* tests/atspecific.m4 (m4_for, m4_foreach): New macros.
 
 2000-02-07  Akim Demaille  <akim@epita.fr>
