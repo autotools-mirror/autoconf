@@ -1,3 +1,8 @@
+2000-11-01  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* tests/tools.at (autoupdating AC_LINK_FILES): Invoke autoconf
+	like in the rest of the tests.
+
 2000-11-01  Pavel Roskin  <proski@gnu.org>
 
 	* autoconf.sh: Typo: s/m4__warnings/m4_warnings/.
