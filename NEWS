@@ -49,7 +49,7 @@ Major changes in release 2.0:
 * AC_ARG_PROGRAM, which uses the options --program-prefix,
   --program-suffix, and --program-transform-name to change the names
   of programs being installed.
-* AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
+* AC_CHECK_TYPEDEF, which checks whether sys/types.h defines a given type.
 * AC_CHECK_LIB, which checks for a particular function in a library.
 * AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
   whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.

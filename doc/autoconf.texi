@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.120
-@set VERSION 1.120
+@set EDITION 1.121
+@set VERSION 1.121
 @set UPDATED September 1994
 
 @iftex
@@ -2250,8 +2250,8 @@ If @code{uid_t} is not defined in @file{sys/types.h}, define
 This macro is used to check for typedefs not covered by the particular
 test macros.
 
-@defmac AC_CHECK_TYPE (@var{type}, @var{default})
-@maindex CHECK_TYPE
+@defmac AC_CHECK_TYPEDEF (@var{type}, @var{default})
+@maindex CHECK_TYPEDEF
 If the type @var{type} is not defined in @file{sys/types.h} or
 @file{stdlib.h} (if that is present), define it to be the C (or C++)
 builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.

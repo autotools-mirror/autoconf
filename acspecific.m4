@@ -7,17 +7,17 @@ dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2, or (at your option)
 dnl any later version.
 dnl
-dnl This program is distributed in the hope that it will be useful,
+dnl This file is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
+dnl along with this file; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
-dnl As a special exception, if you use parts of this file in a
-dnl configure script, doing so does not cause the resulting script to
+dnl As a special exception, using parts of this file in a
+dnl configure script does not cause the resulting script to
 dnl be covered by the GNU General Public License.
 dnl
 dnl Written by David MacKenzie, with help from
@@ -661,16 +661,16 @@ fi
 ])
 
 AC_DEFUN(AC_TYPE_SIZE_T,
-[AC_CHECK_TYPE(size_t, unsigned)])
+[AC_CHECK_TYPEDEF(size_t, unsigned)])
 
 AC_DEFUN(AC_TYPE_PID_T,
-[AC_CHECK_TYPE(pid_t, int)])
+[AC_CHECK_TYPEDEF(pid_t, int)])
 
 AC_DEFUN(AC_TYPE_OFF_T,
-[AC_CHECK_TYPE(off_t, long)])
+[AC_CHECK_TYPEDEF(off_t, long)])
 
 AC_DEFUN(AC_TYPE_MODE_T,
-[AC_CHECK_TYPE(mode_t, int)])
+[AC_CHECK_TYPEDEF(mode_t, int)])
 
 dnl Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN(AC_TYPE_SIGNAL,
@@ -1071,8 +1071,8 @@ AC_CHECK_LIB(elf, elf_read,
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(inq_stats/cpustats.h,
-  [ac_have_func=yes AC_DEFINE(UMAX4_3)
-   AC_DEFINE(UMAX)])
+  [ac_have_func=yes AC_DEFINE(UMAX)
+   AC_DEFINE(UMAX4_3)])
 fi
 if test $ac_have_func = no; then
 AC_CHECK_HEADER(sys/cpustats.h,

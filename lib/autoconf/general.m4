@@ -8,17 +8,17 @@ dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2, or (at your option)
 dnl any later version.
 dnl
-dnl This program is distributed in the hope that it will be useful,
+dnl This file is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
+dnl along with this file; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
-dnl As a special exception, if you use parts of this file in a
-dnl configure script, doing so does not cause the resulting script to
+dnl As a special exception, using parts of this file in a
+dnl configure script does not cause the resulting script to
 dnl be covered by the GNU General Public License.
 dnl
 dnl Written by David MacKenzie, with help from
@@ -28,7 +28,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.120)
+define(AC_ACVERSION, 1.121)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -122,8 +122,8 @@ AC_DEFUN(AC_INIT_NOTICE,
 # Generated automatically using autoconf version] AC_ACVERSION [
 # Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 #
-# This configure script is free software; there are no restrictions on how you
-# can redistribute it and/or modify it.
+# This configure script is free software; there are no restrictions on
+# how you can redistribute it and/or modify it.
 
 ac_help=])
 
@@ -1449,8 +1449,8 @@ undefine([AC_CV_NAME])dnl
 dnl ### Checking for typedefs
 
 
-dnl AC_CHECK_TYPE(TYPE, DEFAULT)
-AC_DEFUN(AC_CHECK_TYPE,
+dnl AC_CHECK_TYPEDEF(TYPE, DEFAULT)
+AC_DEFUN(AC_CHECK_TYPEDEF,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_MSG_CHECKING(for $1)
 AC_CACHE_VAL(ac_cv_type_$1,
