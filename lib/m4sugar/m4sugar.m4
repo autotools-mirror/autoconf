@@ -122,6 +122,7 @@ m4_rename_m4([esyscmd])
 m4_rename_m4([eval])
 m4_rename_m4([format])
 m4_rename_m4([ifdef])
+m4_rename([ifelse], [m4_if])
 m4_rename_m4([incr])
 m4_rename_m4([index])
 m4_rename_m4([indir])
@@ -176,7 +177,7 @@ m4_define([m4_warning],
 m4_define([m4_fatal],
 [m4_errprintn(m4_location[: error: $1])dnl
 m4_expansion_stack_dump()dnl
-m4_exit(ifelse([$2],, 1, [$2]))])
+m4_exit(m4_if([$2],, 1, [$2]))])
 
 
 # m4_assert(EXPRESSION, [EXIT-STATUS = 1])
@@ -184,9 +185,8 @@ m4_exit(ifelse([$2],, 1, [$2]))])
 # This macro ensures that EXPRESSION evaluates to true, and exits if
 # EXPRESSION evaluates to false.
 m4_define([m4_assert],
-[ifelse(m4_eval([$1]), 0,
-        [m4_fatal([assert failed: $1], [$2])],
-        [])])
+[m4_if(m4_eval([$1]), 0,
+       [m4_fatal([assert failed: $1], [$2])])])
 
 
 ## ------------- ##
@@ -215,12 +215,13 @@ m4_define([m4_warning_ifelse],
 # --------------------------------------------------------------
 # Implementation of the loop described above.
 m4_define([_m4_warning_ifelse],
-[ifelse([$4],  [$1],    [$2],
-        [$4],  [all],   [$2],
-        [$4],  [],      [$3],
-        [$4],  [none],  [$3],
-        [$4],  [no-$1], [$3],
-        [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
+[m4_case([$4],
+         [$1],    [$2],
+         [all],   [$2],
+         [],      [$3],
+         [none],  [$3],
+         [no-$1], [$3],
+         [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
 
 
 # _m4_warning_error_ifelse(IF-TRUE, IF-FALSE)
@@ -234,10 +235,11 @@ m4_define([_m4_warning_error_ifelse],
 # --------------------------------------------
 # The same as _m4_warning_ifelse, but scan for `error' only.
 m4_define([__m4_warning_error_ifelse],
-[ifelse([$3],  [error],    [$1],
-        [$3],  [],         [$2],
-        [$3],  [no-error], [$2],
-        [$0([$1], [$2], m4_shiftn(3, $@))])])
+[m4_case([$3],
+         [error],    [$1],
+         [],         [$2],
+         [no-error], [$2],
+         [$0([$1], [$2], m4_shiftn(3, $@))])])
 
 
 
@@ -329,16 +331,16 @@ m4_undefine([sinclude])
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
 # Comparable to m4_ifdef.
 m4_define([m4_ifval],
-[ifelse([$1], [], [$3], [$2])])
+[m4_if([$1], [], [$3], [$2])])
 
 
 # m4_n(TEXT)
 # ----------
 # If TEXT is not empty, return TEXT and a new line, otherwise nothing.
 m4_define([m4_n],
-[ifelse([$1],
-        [], [],
-            [$1
+[m4_if([$1],
+       [], [],
+           [$1
 ])])
 
 
@@ -347,9 +349,9 @@ m4_define([m4_n],
 # Same as `m4_ifval', but add an extra newline to IF-TRUE or IF-FALSE
 # unless that argument is empty.
 m4_define([m4_ifvaln],
-[ifelse([$1],
-        [],   [m4_n([$3])],
-              [m4_n([$2])])])
+[m4_if([$1],
+       [],   [m4_n([$3])],
+             [m4_n([$2])])])
 
 
 # m4_ifset(MACRO, [IF-TRUE], [IF-FALSE])
@@ -358,7 +360,7 @@ m4_define([m4_ifvaln],
 # expand IF-FALSE, otherwise IF-TRUE.
 m4_define([m4_ifset],
 [m4_ifdef([$1],
-          [ifelse(m4_defn([$1]), [], [$3], [$2])],
+          [m4_if(m4_defn([$1]), [], [$3], [$2])],
           [$3])])
 
 
@@ -387,11 +389,11 @@ m4_define([m4_ifndef],
 # All the values are optional, and the macro is robust to active
 # symbols properly quoted.
 m4_define([m4_case],
-[ifelse([$#], 0, [],
-	[$#], 1, [],
-	[$#], 2, [$2],
-        [$1], [$2], [$3],
-        [m4_case([$1], m4_shiftn(3, $@))])])
+[m4_if([$#], 0, [],
+       [$#], 1, [],
+       [$#], 2, [$2],
+       [$1], [$2], [$3],
+       [m4_case([$1], m4_shiftn(3, $@))])])
 
 
 # m4_match(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
@@ -410,11 +412,11 @@ m4_define([m4_case],
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
 m4_define([m4_match],
-[ifelse([$#], 0, [],
-	[$#], 1, [],
-	[$#], 2, [$2],
-        m4_regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
-        [$3])])
+[m4_if([$#], 0, [],
+       [$#], 1, [],
+       [$#], 2, [$2],
+       m4_regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
+       [$3])])
 
 
 
@@ -428,9 +430,9 @@ m4_define([m4_match],
 # useful for making your macros more structured and readable by dropping
 # unecessary dnl's and have the macros indented properly.
 m4_define([m4_do],
-  [ifelse($#, 0, [],
-          $#, 1, [$1],
-          [$1[]m4_do(m4_shift($@))])])
+[m4_if($#, 0, [],
+       $#, 1, [$1],
+       [$1[]m4_do(m4_shift($@))])])
 
 
 # m4_default(EXP1, EXP2)
@@ -448,9 +450,9 @@ m4_define([m4_shiftn],
 _m4_shiftn($@)])
 
 m4_define([_m4_shiftn],
-[ifelse([$1], 0,
-        [m4_shift($@)],
-        [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
+[m4_if([$1], 0,
+       [m4_shift($@)],
+       [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
 
 
 
@@ -520,15 +522,15 @@ m4_define([m4_for],
          1, [m4_assert(m4_sign(m4_default($4, 1)) == 1)],
         -1, [m4_assert(m4_sign(m4_default($4, -1)) == -1)])dnl
 m4_pushdef([$1], [$2])dnl
-ifelse(m4_eval([$3 > $2]), 1,
-       [_m4_for([$1], [$3], m4_default([$4], 1), [$5])],
-       [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
+m4_if(m4_eval([$3 > $2]), 1,
+      [_m4_for([$1], [$3], m4_default([$4], 1), [$5])],
+      [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
 m4_popdef([$1])])
 
 m4_define([_m4_for],
 [$4[]dnl
-ifelse($1, [$2], [],
-       [m4_define([$1], m4_eval($1+[$3]))_m4_for([$1], [$2], [$3], [$4])])])
+m4_if($1, [$2], [],
+      [m4_define([$1], m4_eval($1+[$3]))_m4_for([$1], [$2], [$3], [$4])])])
 
 
 # Implementing `foreach' loops in m4 is much more tricky than it may
@@ -543,10 +545,10 @@ ifelse($1, [$2], [],
 # |        [m4_pushdef([$1])_foreach([$1], [$2], [$3])m4_popdef([$1])])
 # | m4_define([_arg1], [$1])
 # | m4_define([_foreach],
-# | 	      [ifelse([$2], [()], ,
-# | 		      [m4_define([$1], _arg1$2)$3[]_foreach([$1],
-# |                                                         (shift$2),
-# |                                                         [$3])])])
+# | 	      [m4_if([$2], [()], ,
+# | 		     [m4_define([$1], _arg1$2)$3[]_foreach([$1],
+# |                                                        (shift$2),
+# |                                                        [$3])])])
 #
 # But then if you run
 #
@@ -573,10 +575,10 @@ ifelse($1, [$2], [],
 # | m4_define([foreach], [m4_pushdef([$1])_foreach($@)m4_popdef([$1])])
 # | m4_define([_arg1], [[$1]])
 # | m4_define([_foreach],
-# |  [ifelse($2, [()], ,
-# | 	     [m4_define([$1], [_arg1$2])$3[]_foreach([$1],
-# |                                                  [(shift$2)],
-# |                                                  [$3])])])
+# |  [m4_if($2, [()], ,
+# | 	    [m4_define([$1], [_arg1$2])$3[]_foreach([$1],
+# |                                                 [(shift$2)],
+# |                                                 [$3])])])
 #
 # which this time answers
 #
@@ -598,13 +600,13 @@ ifelse($1, [$2], [],
 # | m4_define([foreach], [m4_pushdef([$1])_foreach($@)m4_popdef([$1])])
 # | m4_define([_arg1], [$1])
 # | m4_define([_foreach],
-# |  [ifelse($2, [], ,
-# | 	     [m4_define([$1], [_arg1($2)])$3[]_foreach([$1],
-# |                                                    [shift($2)],
-# |                                                    [$3])])])
+# |  [m4_if($2, [], ,
+# | 	    [m4_define([$1], [_arg1($2)])$3[]_foreach([$1],
+# |                                                   [shift($2)],
+# |                                                   [$3])])])
 #
 #
-# Now, just replace the `$2' with `m4_quote($2)' in the outer `ifelse'
+# Now, just replace the `$2' with `m4_quote($2)' in the outer `m4_if'
 # to improve robustness, and you come up with a quite satisfactory
 # implementation.
 
@@ -633,10 +635,10 @@ m4_define([m4_foreach],
 # Low level macros used to define m4_foreach.
 m4_define([m4_car], [$1])
 m4_define([_m4_foreach],
-[ifelse(m4_quote($2), [], [],
-        [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
-                                                      [m4_shift($2)],
-                                                      [$3])])])
+[m4_if(m4_quote($2), [], [],
+       [m4_define([$1], [m4_car($2)])$3[]_m4_foreach([$1],
+                                                     [m4_shift($2)],
+                                                     [$3])])])
 
 
 
@@ -1087,8 +1089,8 @@ m4_divert_push([GROW])])dnl
 # the PRO/EPI pairs.
 m4_define([_m4_defun_epi],
 [m4_divert_pop()dnl
-ifelse(_m4_divert_dump, _m4_divert_diversion,
-       [m4_undivert(_m4_divert([GROW]))dnl
+m4_if(_m4_divert_dump, _m4_divert_diversion,
+      [m4_undivert(_m4_divert([GROW]))dnl
 m4_undefine([_m4_divert_dump])])dnl
 m4_popdef([_m4_expansion_stack])dnl
 m4_popdef([_m4_expanding($1)])dnl
@@ -1321,10 +1323,10 @@ m4_define([m4_toupper],
 m4_changequote(<<, >>)
 m4_define(<<m4_split>>,
 <<m4_changequote(``, '')dnl
-[dnl Can't use m4_default here instead of ifelse, because m4_default uses
+[dnl Can't use m4_default here instead of m4_if, because m4_default uses
 dnl [ and ] as quotes.
 m4_patsubst(````$1'''',
-	    ifelse(``$2'',, ``[ 	]+'', ``$2''),
+	    m4_if(``$2'',, ``[ 	]+'', ``$2''),
 	    ``], ['')]dnl
 m4_changequote([, ])>>)
 m4_changequote([, ])
@@ -1429,8 +1431,8 @@ m4_define([m4_foreach_quoted],
 # Low level macros used to define m4_foreach.
 m4_define([m4_car_quoted], [[$1]])
 m4_define([_m4_foreach_quoted],
-[ifelse($2, [()], ,
-        [m4_define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
+[m4_if($2, [()], ,
+       [m4_define([$1], [m4_car_quoted$2])$3[]_m4_foreach_quoted([$1],
                                                                [(m4_shift$2)],
                                                                [$3])])])
 
@@ -1479,16 +1481,16 @@ m4_pushdef([m4_Width], m4_default([$4], 79))dnl
 m4_pushdef([m4_Cursor], m4_len(m4_Prefix1))dnl
 m4_pushdef([m4_Separator], [])dnl
 m4_Prefix1[]dnl
-ifelse(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
-       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
+m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
+      1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
 m4_foreach_quoted([m4_Word], (m4_split(m4_strip(m4_join([$1])))),
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + len(m4_Word) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
-ifelse(m4_eval(m4_Cursor > m4_Width),
-       1, [m4_define([m4_Cursor],
-                     m4_eval(m4_len(m4_Prefix) + m4_len(m4_Word) + 1))]
+m4_if(m4_eval(m4_Cursor > m4_Width),
+      1, [m4_define([m4_Cursor],
+                    m4_eval(m4_len(m4_Prefix) + m4_len(m4_Word) + 1))]
 m4_Prefix,
        [m4_Separator])[]dnl
 m4_Word[]dnl
@@ -1539,13 +1541,13 @@ m4_define([m4_cmp],
 #   m4_list_cmp((1, 0),     (1, 2)) -> -1
 #   m4_list_cmp((1),        (1, 2)) -> -1
 m4_define([m4_list_cmp],
-[ifelse([$1$2], [()()], 0,
-        [$1], [()], [m4_list_cmp((0), [$2])],
-        [$2], [()], [m4_list_cmp([$1], (0))],
-        [m4_case(m4_cmp(m4_car$1, m4_car$2),
-                 -1, -1,
-                  1, 1,
-                  0, [m4_list_cmp((m4_shift$1), (m4_shift$2))])])])
+[m4_if([$1$2], [()()], 0,
+       [$1], [()], [m4_list_cmp((0), [$2])],
+       [$2], [()], [m4_list_cmp([$1], (0))],
+       [m4_case(m4_cmp(m4_car$1, m4_car$2),
+                -1, -1,
+                 1, 1,
+                 0, [m4_list_cmp((m4_shift$1), (m4_shift$2))])])])
 
 
 
@@ -1603,8 +1605,8 @@ m4_define([m4_file_append],
 [m4_syscmd([cat >>$1 <<_m4eof
 $2
 _m4eof])
-ifelse(m4_sysval, [0], [],
-       [m4_fatal([$0: cannot write: $1])])])
+m4_if(m4_sysval, [0], [],
+      [m4_fatal([$0: cannot write: $1])])])
 
 
 

@@ -134,8 +134,7 @@ AC_LANG([$1])])
 # Restore the previous language.
 m4_define([AC_LANG_POP],
 [m4_popdef([_AC_LANG])dnl
-ifelse(_AC_LANG, [_AC_LANG],
-        [AC_FATAL([too many $0])])dnl
+m4_if(_AC_LANG, [_AC_LANG], [AC_FATAL([too many $0])])dnl
 AC_LANG(_AC_LANG)])
 
 
@@ -345,7 +344,7 @@ $2
 # Avoid conflicting decl of main.
 m4_define([AC_LANG_CALL(C)],
 [AC_LANG_PROGRAM([$1
-ifelse([$2], [main], ,
+m4_if([$2], [main], ,
 [/* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
 extern "C"
@@ -1789,7 +1788,7 @@ case $ac_cv_f77_mangling in
   *)      ac_val="unknown" ;;
 esac
 case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-ifelse(m4_index([$1],[_]),-1,[],
+m4_if(m4_index([$1],[_]),-1,[],
 [case $ac_cv_f77_mangling in *," extra underscore"*) ac_val="$ac_val"_ ;; esac
 ])
 m4_default([$2],[$1])="$ac_val"

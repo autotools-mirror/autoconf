@@ -91,7 +91,7 @@ fi
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
 
-_AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
+_AT_CHECK_AC_MACRO([m4_default([$2], [$1])])
 $3
 AT_CLEANUP()dnl
 ])# AT_CHECK_MACRO

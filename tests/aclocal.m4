@@ -5,9 +5,10 @@
 # ------------------------
 # Produce ARG1SEPARG2...SEPARGn.
 define([join],
-[ifelse([$#], [1], [],
-        [$#], [2], [[$2]],
-        [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
+[m4_case([$#],
+         [1], [],
+         [2], [[$2]],
+         [[$2][$1]join([$1], m4_shift(m4_shift($@)))])])
 
 
 # AC_STATE_SAVE(FILE)

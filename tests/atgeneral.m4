@@ -338,9 +338,9 @@ m4_divert([TEST])[]dnl
 # AT_CLEANUP_FILE_IFELSE(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
 # --------------------------------------------------------------
 m4_define([AT_CLEANUP_FILE_IFELSE],
-[ifelse(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [\([\[\]*.]\)], [\\\1])),
-        -1,
-        [$3], [$2])])
+[m4_if(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [\([\[\]*.]\)], [\\\1])),
+       -1,
+       [$3], [$2])])
 
 
 # AT_CLEANUP_FILE(FILE)

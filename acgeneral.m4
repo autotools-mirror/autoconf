@@ -366,9 +366,9 @@ m4_define([_AH_COUNTER], [0])
 # If EXPRESSION has shell indirections ($var or `expr`), expand
 # IF-INDIR, else IF-NOT-INDIR.
 m4_define([AC_VAR_INDIR_IFELSE],
-[ifelse(m4_regexp([$1], [[`$]]),
-        -1, [$3],
-        [$2])])
+[m4_if(m4_regexp([$1], [[`$]]),
+       -1, [$3],
+       [$2])])
 
 # AC_VAR_SET(VARIABLE, VALUE)
 # ---------------------------
@@ -649,7 +649,7 @@ m4_define([AC_REVISION],
 # occurrences with the current version of Autoconf, which is certainly
 # not what mean the user.
 AU_DEFUN([AC_PREREQ],
-[ifelse(m4_version_compare(]m4_defn([AC_ACVERSION])[, [$1]), -1,
+[m4_if(m4_version_compare(]m4_defn([AC_ACVERSION])[, [$1]), -1,
     [m4_fatal([Autoconf version $1 or higher is required for this script])])dnl
 [AC_PREREQ(]]m4_defn([AC_ACVERSION])[[)]])
 
@@ -658,7 +658,7 @@ AU_DEFUN([AC_PREREQ],
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
 m4_define([AC_PREREQ],
-[ifelse(m4_version_compare(m4_defn([AC_ACVERSION]), [$1]), -1,
+[m4_if(m4_version_compare(m4_defn([AC_ACVERSION]), [$1]), -1,
      [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
 
@@ -2021,8 +2021,8 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_define([AC_CACHE_VAL],
-[ifelse(m4_regexp([$2], [AC_DEFINE]), [-1], [],
-        [AC_DIAGNOSE(syntax,
+[m4_if(m4_regexp([$2], [AC_DEFINE]), [-1], [],
+      [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AC_VAR_SET_IFELSE([$1],
@@ -2069,7 +2069,7 @@ m4_define([AC_DEFINE],
 [AC_DEFINE_TRACE([$1])dnl
 m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<\EOF
-[#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
+[@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
 
@@ -2081,7 +2081,7 @@ m4_define([AC_DEFINE_UNQUOTED],
 [AC_DEFINE_TRACE([$1])dnl
 m4_ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
 cat >>confdefs.h <<EOF
-[#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
+[@%:@define] $1 m4_if($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
 
@@ -2302,8 +2302,9 @@ AC_DEFUN([AC_TRY_COMMAND],
 # brokenness of AC_TRY_COMPILE, we are doomed to leave a extra new
 # line here.
 m4_define([AC_INCLUDES_DEFAULT],
-[ifelse([$1], [], [$ac_includes_default], [$1
-])])
+[m4_ifval([$1], [$1
+],
+          [$ac_includes_default])])
 
 
 
@@ -2323,8 +2324,8 @@ m4_define([AC_INCLUDES_DEFAULT],
 AC_DEFUN([AC_CHECK_MEMBER],
 [AC_VAR_INDIR_IFELSE([$1],
                      [AC_FATAL([$0: requires literal arguments])])dnl
-ifelse(m4_regexp([$1], [\.]), -1,
-       [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
+m4_if(m4_regexp([$1], [\.]), -1,
+      [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
@@ -2422,7 +2423,7 @@ m4_ifvaln([$6],
     set dummy "$ac_dir/$ac_word" ${1+"$[@]"}
     shift
     ac_cv_prog_$1="$[@]"
-ifelse([$2], [$4],
+m4_if([$2], [$4],
 [  else
     # Default is a loser.
     AC_MSG_ERROR([$1=$6 unacceptable, but no other $4 found in dnl
@@ -3272,9 +3273,9 @@ m4_define([_AC_CHECK_TYPE_OLD],
 # Because many people have used `off_t' and `size_t' too, they are added
 # for better common-useward backward compatibility.
 m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
-[ifelse(m4_regexp([$1],
-               [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
-	0, 1, 0)dnl
+[m4_if(m4_regexp([$1],
+                 [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+       0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
 
 
@@ -3282,8 +3283,8 @@ m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # -----------------------------------
 # Return `1' if STRING looks like a C/C++ type.
 m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
-[ifelse(m4_regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
-	0, 1, 0)dnl
+[m4_if(m4_regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+       0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
 
@@ -3301,16 +3302,16 @@ m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
 # 3. $2 seems to be a type           => NEW plus a warning
 # 4. default                         => NEW
 AC_DEFUN([AC_CHECK_TYPE],
-[ifelse($#, 3,
-           [_AC_CHECK_TYPE_NEW($@)],
-        $#, 4,
-           [_AC_CHECK_TYPE_NEW($@)],
-        _AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2]), 1,
-           [_AC_CHECK_TYPE_OLD($@)],
-        _AC_CHECK_TYPE_MAYBE_TYPE_P([$2]), 1,
-           [AC_DIAGNOSE([syntax],
+[m4_if($#, 3,
+         [_AC_CHECK_TYPE_NEW($@)],
+       $#, 4,
+         [_AC_CHECK_TYPE_NEW($@)],
+       _AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2]), 1,
+         [_AC_CHECK_TYPE_OLD($@)],
+       _AC_CHECK_TYPE_MAYBE_TYPE_P([$2]), 1,
+         [AC_DIAGNOSE([syntax],
                     [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
-        [_AC_CHECK_TYPE_NEW($@)])[]dnl
+       [_AC_CHECK_TYPE_NEW($@)])[]dnl
 ])# AC_CHECK_TYPE
 
 
@@ -3399,9 +3400,9 @@ AC_DEFUN([AC_CHECK_TYPE],
 # matching.  The big problem is then that the active characters should
 # be quoted.  Currently `+*.' are quoted.
 m4_define([AC_CONFIG_IF_MEMBER],
-[ifelse(m4_regexp($2, [\(^\| \)]m4_patsubst([$1],
-                                            [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
-        -1, [$4], [$3])])
+[m4_if(m4_regexp($2, [\(^\| \)]m4_patsubst([$1],
+                                           [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
+       -1, [$4], [$3])])
 
 
 # AC_FILE_DEPENDENCY_TRACE(DEST, SOURCE1, [SOURCE2...])
@@ -3488,7 +3489,7 @@ AC_DEFUN([AC_CONFIG_COMMANDS],
 _AC_CONFIG_UNIQUE([$1])
 m4_append([AC_LIST_COMMANDS], [ $1])
 
-ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
+m4_if([$2],,, [AC_FOREACH([AC_Name], [$1],
 [m4_append([AC_LIST_COMMANDS_COMMANDS],
 [    ]m4_patsubst(AC_Name, [:.*])[ ) $2 ;;
 ])])])
@@ -3566,7 +3567,7 @@ _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
 m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_HEADERS_COMMANDS],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
@@ -3599,11 +3600,11 @@ AC_DEFUN([AC_CONFIG_LINKS],
 [m4_divert_push([KILL])
 _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
-ifelse(m4_regexp([$1], [^\.:\| \.:]), -1,,
-       [AC_FATAL([$0: invalid destination: `.'])])
+m4_if(m4_regexp([$1], [^\.:\| \.:]), -1,,
+      [AC_FATAL([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
 dnl Register the commands
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_LINKS_COMMANDS],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
@@ -3633,8 +3634,8 @@ m4_define([AC_LIST_LINKS_COMMANDS])
 #
 # _AC_LINK_CNT is used to be robust to multiple calls.
 AU_DEFUN([AC_LINK_FILES],
-[ifelse($#, 2, ,
-        [m4_fatal([$0: incorrect number of arguments])])dnl
+[m4_if($#, 2, ,
+       [m4_fatal([$0: incorrect number of arguments])])dnl
 m4_define([_AC_LINK_FILES_CNT], m4_incr(_AC_LINK_FILES_CNT))dnl
 ac_sources="$1"
 ac_dests="$2"
@@ -3674,7 +3675,7 @@ _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
 m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
-ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+m4_ifval([$2], [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_FILES_COMMANDS],
 [    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
@@ -4749,8 +4750,8 @@ fi])
 # ACTION-IF-NOT-FOUND.
 AC_DEFUN([AC_LIST_MEMBER_OF],
 [dnl Do some sanity checking of the arguments.
-ifelse([$1], , [AC_FATAL([$0]: missing argument 1)])dnl
-ifelse([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
+m4_if([$1], , [AC_FATAL([$0]: missing argument 1)])dnl
+m4_if([$2], , [AC_FATAL([$0]: missing argument 2)])dnl
 
   ac_exists=false
   for ac_i in $2; do

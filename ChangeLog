@@ -1,5 +1,11 @@
 2000-12-06  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (ifelse): Rename as...
+	(m4_if): this.
+	* autoconf.m4 (ifelse): Restore.
+
+2000-12-06  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (m4_dquote, m4_pattern_forbid, m4_pattern_allow)
 	(m4_cr_letters, m4_cr_LETTERS, m4_cr_Letters, m4_cr_digits)
 	(m4_cr_symbols1, m4_cr_symbols2, m4_re_string, m4_re_word)

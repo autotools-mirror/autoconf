@@ -172,11 +172,11 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # Otherwise it's modern.
 # We use two quotes in the pattern to keep highlighting tools at peace.
 m4_define([_AS_QUOTE_IFELSE],
-[ifelse(m4_regexp([$1], [\\[\\$]]),
-        [-1], [ifelse(m4_regexp([$1], [\\[`""]]),
-                      [-1], [$2],
-                      [$3])],
-        [$2])])
+[m4_if(m4_regexp([$1], [\\[\\$]]),
+       [-1], [m4_if(m4_regexp([$1], [\\[`""]]),
+                    [-1], [$2],
+                    [$3])],
+       [$2])])
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
