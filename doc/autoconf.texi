@@ -8456,6 +8456,23 @@ bash-2.02$ @kbd{case /tmp in [\\/]*) echo OK;; esac}
 OK
 @end example
 
+Some shells, such as Ash 0.3.8, are confused by empty
+@code{case}/@code{esac}:
+
+@example
+ash-0.3.8 $ @kbd{case foo in esac;}
+@error{}Syntax error: ";" unexpected (expecting ")")
+@end example
+
+Many shells still do not support parenthesized cases, which is a pity
+for those of us using tools that rely on balanced parentheses.  For
+instance, Solaris 2.8's Bourne shell:
+
+@example
+$ @kbd{case foo in (foo) echo foo;; esac}
+@error{}syntax error: `(' unexpected
+@end example
+
 
 @item @command{echo}
 @c -----------------
