@@ -11602,10 +11602,11 @@ are executed by the shell, all its weaknesses are inherited@enddots{}
 
 @table @asis
 @item @code{$<}
-@acronym{POSIX} says that the @samp{$<} construct in makefiles can be used
-only in inference rules and in the @samp{.DEFAULT} rule; its meaning in
-ordinary rules is unspecified.  Solaris 8's @command{make} for instance
-will replace it with the argument.
+@acronym{POSIX} says that the @samp{$<} construct in makefiles can be
+used only in inference rules and in the @samp{.DEFAULT} rule; its
+meaning in ordinary rules is unspecified.  Solaris 8's @command{make}
+for instance will replace it with the empty string.  OpenBSD (3.0 and
+later) @command{make} will diagnose these uses and error out.
 
 @item Leading underscore in macro names
 Some @command{make}s don't support leading underscores in macro names,
@@ -11686,6 +11687,13 @@ line with @code{#}, not only the first.
 #     bar \
 #     baz
 @end example
+
+@item Long lines.
+
+OSF/1 4.0d's @command{make} cannot process @file{Makefile}s with lines
+longer than 38912 bytes.  It exits with a @code{Line too long}
+diagnostic.  A later version, Tru64 5.1's @command{make} has been
+reported to crash with lines around 20KB.
 
 @item @code{make macro=value} and sub-@command{make}s.
 
@@ -11773,6 +11781,14 @@ your @file{Makefile}s.  If you use Autoconf, do
 @example
 SHELL = @@SHELL@@
 @end example
+
+Do not force @code{SHELL = /bin/sh} because that is not correct
+everywhere.  For instance there is no @code{/bin/sh} in DJGPP, and when
+its GNU @code{make} port sees such a setting it enters a special
+emulation mode where features like pipes and redirections are emulated
+on top of DOS's @command{command.com}.  Unfortunately this emulation is
+incomplete; for instance it does not handle command substitutions.
+On DJGPP @code{SHELL} should point the port of Bash.
 
 @acronym{POSIX}-compliant @command{make}s should never acquire the value of
 $(SHELL) from the environment, even when @code{make -e} is used

@@ -1,3 +1,10 @@
+2004-04-21  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* doc/autoconf.texi (Limitations of Make): Update documentation
+	for `$<'.  New entry `Long lines', based on a report from Simon
+	Josefsson.  Augment the documentation for SHELL = @SHELL@ with a
+	paragraph about DJGPP, based on a mail from Richard Dawe.
+
 2004-04-20  Paul Eggert  <eggert@twinsun.com>
 
 	* tests/c.at (C keywords): Don't assume that GCC supports
