@@ -11,6 +11,15 @@
 	check, assume that setvbuf is standard when cross-compiling, as
 	nonstandard setvbuf occurs only on ancient and unlikely hosts.
 	Bug reported by Paul D. Smith.
+
+	* lib/autoconf/functions.m4 (AC_FUNC_GETLOADAVG): Add optional
+	argument specifying location of getloadavg.c.  This removes a
+	FIXME.  This idea was taken from Jim Meyering's implementation in
+	textutils.
+	* doc/autoconf.texi (Particular Functions): Document this.
+	Also, mention HAVE_NLIST_H rather than NLIST_STRUCT, since
+	that's what the code does; this fixes a bug reported by
+	Paul D. Smith.
 	
 2002-05-03  Akim Demaille  <akim@epita.fr>
 
