@@ -1,3 +1,8 @@
+2002-04-03  Andreas Schwab  <schwab@suse.de>
+
+	* bin/autoreconf.in (autoreconf): Run automake after rerunning
+	aclocal.
+
 2002-04-03  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_OBJEXT_REJECT)

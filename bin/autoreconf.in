@@ -426,6 +426,28 @@ sub autoreconf ($)
     }
 
 
+  # ------------------- #
+  # Rerunning aclocal.  #
+  # ------------------- #
+
+  # If we re-installed Libtool or Gettext, the macros might have changed.
+  # Automake also needs an up-to-date aclocal.m4.
+  if ($rerun_alocal)
+    {
+      if (!$uses_aclocal)
+	{
+	  verbose "$configure_ac: not using aclocal";
+	}
+      else
+	{
+	  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
+	  # aclocal may produce no output.
+	  update_file ('aclocal.m4t', 'aclocal.m4')
+	    if -f 'aclocal.m4t';
+	}
+    }
+
+
   # ------------------ #
   # Running automake.  #
   # ------------------ #
@@ -441,27 +463,6 @@ sub autoreconf ($)
       # update the file or not.  In fact, the effect of `$force' is already
       # included in `$automake' via `--no-force'.
       xsystem ($automake);
-    }
-
-
-  # ------------------- #
-  # Rerunning aclocal.  #
-  # ------------------- #
-
-  # If we re-installed Libtool or Gettext, the macros might have changed.
-  if ($rerun_alocal)
-    {
-      if (!$uses_aclocal)
-	{
-	  verbose "$configure_ac: not using aclocal";
-	}
-      else
-	{
-	  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-	  # aclocal may produce no output.
-	  update_file ('aclocal.m4t', 'aclocal.m4')
-	    if -f 'aclocal.m4t';
-	}
     }
 
 
