@@ -3544,6 +3544,21 @@ Did you know that, on some older hosts, @code{exit} returns @code{int}?
 This is because @code{exit} predates @code{void}, and there was a long
 tradition of it returning @code{int}.
 
+@item @code{putenv}
+@c @fuindex putenv
+@prindex @code{putenv}
+POSIX specifies that @code{putenv} puts the given string directly in
+@code{environ}, but some systems make a copy of it instead (eg.@:
+glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
+not free it, causing a memory leak (eg.@: FreeBSD 4).
+
+POSIX specifies that @code{putenv("FOO")} removes @samp{FOO} from the
+environment, but on some systems (eg.@: FreeBSD 4) this is not the
+case and instead @code{unsetenv} must be used.
+
+On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
+environment, rather than inserting it with an empty value.
+
 @item @code{snprintf}
 @c @fuindex snprintf
 @prindex @code{snprintf}
@@ -3608,6 +3623,13 @@ OS's support this behavior though.  So even on systems that provide
 that are open.  For example, on Windows 9x and ME, such a call would fail;
 on DOS it could even lead to file system corruption, as the file might end
 up being written to after the OS has removed it.
+
+@item @code{unsetenv}
+@c @fuindex unsetenv
+@prindex @code{unsetenv}
+On MINGW, @code{unsetenv} is not available, but a variable @samp{FOO}
+can be removed with a call @code{putenv("FOO=")}, as described under
+@code{putenv} above.
 
 @item @code{va_copy}
 @c @fuindex va_copy
