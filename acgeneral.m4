@@ -2491,35 +2491,68 @@ dnl ])
 dnl ### Checking for declared symbols
 
 
-dnl AC_CHECK_DECL(SYMBOL, [, INCLUDES,
-dnl              [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
-dnl --------------------------------------------------------
+dnl AC_NEED_DECL(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl              [, INCLUDES,]]])
+dnl ------------------------------------------------------------
 dnl Check if SYMBOL (a variable or a function) is declared.
-AC_DEFUN([AC_CHECK_DECL],
-[AC_VAR_PUSHDEF([ac_var], [ac_cv_decl_$1])dnl
-AC_CACHE_CHECK([whether $1 is declared], ac_var,
-[AC_TRY_COMPILE($2,
+dnl This macro is not a _CHECK_, because it is better not to declare
+dnl a symbol if you don't really need it.
+AC_DEFUN([AC_NEED_DECL],
+[AC_VAR_PUSHDEF([ac_Symbol], [ac_cv_decl_$1])dnl
+AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
+[AC_TRY_COMPILE([#include <stdio.h>
+#ifdef HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# ifdef HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+$4],
 [#ifndef $1
 char *p = (char *) $1;
 #endif
 ],
-AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_var) = yes,
-               [$3], [$4])dnl
-AC_VAR_POPDEF([ac_var])dnl
-])dnl AC_CHECK_DECL
+AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
+AC_SHELL_IFELSE(test AC_VAR_GET(ac_Symbol) = yes,
+               [$2], [$3])dnl
+AC_VAR_POPDEF([ac_Symbol])dnl
+])dnl AC_NEED_DECL
 
-dnl AC_CHECK_DECLS(SYMBOL... , [, INCLUDES,
-dnl                [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
-AC_DEFUN(AC_CHECK_DECLS,
-[for ac_sym in $1
-do
-AC_CHECK_DECL($ac_sym,
-              [$2],
-              [AC_DEFINE_UNQUOTED(AC_TR_CPP(${ac_sym}_DECLARED)) $3],
-              [$4])dnl
-done
-])
+dnl AC_NEED_DECLS(SYMBOL, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl               [, INCLUDES,]]])
+dnl -------------------------------------------------------------
+AC_DEFUN([AC_NEED_DECLS],
+[AC_FOREACH([ac_Symbol], [$1],
+  [AC_SPECIALIZE([AC_NEED_DECL], ac_Symbol,
+                 [$2],
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(NEED_[]ac_Symbol[]_DECL))
+$3],
+                 [$4])])])
+])dnl AC_NEED_DECLS
+
+dnl This is the pure sh versions of the macro above.
+dnl [for ac_sym in [$1]
+dnl do
+dnl AC_NEED_DECL($ac_sym,
+dnl 		 [$4],
+dnl 		 [AC_DEFINE_UNQUOTED(AC_TR_CPP(${ac_sym}_DECLARED)) $2],
+dnl 		 [$3])dnl
+dnl done
 
 dnl ### Checking for library functions
 
@@ -2619,10 +2652,11 @@ AC_CACHE_CHECK([for $1], ac_Type,
 [AC_EGREP_CPP(dnl
 changequote(<<,>>)dnl
 <<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
-changequote([,]), [#include <sys/types.h>
+changequote([,]), [#include <stdio.h>
+#include <sys/types.h>
 #if STDC_HEADERS
-#include <stdlib.h>
-#include <stddef.h>
+# include <stdlib.h>
+# include <stddef.h>
 #endif
 [$3]
 ], AC_VAR_SET(ac_Type, yes), AC_VAR_SET(ac_Type, no))])

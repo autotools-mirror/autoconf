@@ -1,3 +1,14 @@
+1999-09-27  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_CHECK_DECL): Renamed as...
+	(AC_NEED_DECL): This.
+	(AC_CHECK_DECLS): Renamed as...
+	(AC_NEED_DECLS): This.
+	(AC_NEED_DECL): Include <stdio.h>, <memory.h>, <string.h>,
+ 	<strings.h>, <stdlib.h>, <stddef.h>, and <unistd.h>.
+
+	* autoconf.texi (Generic Declarations): Updated.
+
 1999-09-26  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_WRAP): Rewritten.

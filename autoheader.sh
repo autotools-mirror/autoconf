@@ -264,8 +264,8 @@ if test -n "$decls"; then
   for decl in `for x in $decls; do echo $x; done | sort | uniq`; do
    sym="`echo ${decl} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
     echo "
-/* Define if you have the \`${decl}' declaration.  */
-#undef ${sym}_DECLARED"
+/* Define if you need the \`${decl}' declaration.  */
+#undef NEED_${sym}_DECL"
   done
 fi
 

@@ -2633,21 +2633,30 @@ is declared in a system header file, either @file{signal.h} or
 These macros are used to find declarations not covered by the particular
 test macros.
 
-@defmac AC_CHECK_DECL (@var{symbol}, @r{[}@var{includes}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]]})
-@maindex CHECK_DECL
+@defmac AC_NEED_DECL (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@maindex NEED_DECL
 If @var{symbol} (a function or a variable) is declared in
-@var{includes}, run shell commands @var{action-if-found}, otherwise
-@var{action-if-not-found}.
+@file{stdio.h}, @file{stdlib.h}, @file{stddef.h}, @file{memory.h},
+@file{string.h}, @file{strings.h}, and @file{unistd.h}.  (plus
+@var{includes} if given), run the shell commands @var{action-if-found},
+otherwise @var{action-if-not-found}.
+
+This macro actually tests whether it is valid to use @var{symbol} as an
+r-value, not if it is really declared, because it is much safer to avoid
+introducing extra declarations when not needed.
+
+Please, note that @var{action-if-found} when the symbol is declared, not
+when it is needed.
 @end defmac
 
-@defmac AC_CHECK_DECLS (@var{symbol}@dots{}, @r{[}@var{includes} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]]})
-@maindex CHECK_DECLS
-@cvindex @var{symbol}_DECLARED
+@defmac AC_NEED_DECLS (@var{symbol} @r{[}, @var{action-if-found}@r{[}, @var{action-if-not-found} @r{[},@var{includes} @r{]]]})
+@maindex NEED_DECLS
+@cvindex NEED_@var{symbol}_DECL
 For each given @var{symbol} (whitespace-separated), define
-@code{@var{symbol}_DECLARED} (in all capitals) if @var{symbol} is
-declared.  If @var{action-if-found} is given, it is additional shell
-code to execute when one of the function declarations is found,
-otherwise @var{action-if-not-found} is executed.
+@code{NEED_@var{symbol}_DECL} (in all capitals) if @var{symbol} has to
+be declared to be used as an r-value.  If @var{action-if-found} is
+given, it is additional shell code to execute when one of the function
+declarations is found, otherwise @var{action-if-not-found} is executed.
 @end defmac
 
 

@@ -65,14 +65,14 @@ $4
 ])
 ])
 
-define([AC_CHECK_DECLS], [#
-  ifelse([$3], , [
+define([AC_NEED_DECLS], [#
+  ifelse([$2], , [
 @@@decls="$decls $1"@@@
 ], [
 # If it was found, we do:
-$3
+$2
 # If it was not found, we do:
-$4
+$3
 ])
 ])
 
