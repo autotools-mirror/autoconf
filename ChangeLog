@@ -1,3 +1,8 @@
+2002-09-25  Paul Eggert  <eggert@twinsun.com>
+
+	* BUGS (Interoperability bugs): New section.  Mention libtool
+	1.4.2, configure.ac, and AC_CONFIG_AUX_DIR interoperability bug.
+
 2002-09-24  Paul Eggert  <eggert@twinsun.com>
 
 	Fix a portability bug reported by Alexandre Duret-Lutz: Solaris 8
